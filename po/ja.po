@@ -19,7 +19,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-11 18:28+0000\n"
+"POT-Creation-Date: 2020-06-08 20:51+0000\n"
 "PO-Revision-Date: 2020-05-13 22:00+0900\n"
 "Last-Translator: sicklylife <translation@sicklylife.jp>\n"
 "Language-Team: Japanese <gnome-translation@gnome.gr.jp>\n"
@@ -66,15 +66,15 @@ msgstr "他のアプリケーションからのドラッグ & ドロップはサ
 msgid "No compatible formats to transfer contents."
 msgstr "内容を転送するための、互換性のあるフォーマットはありません。"
 
-#: gdk/gdksurface.c:1035
+#: gdk/gdksurface.c:1071
 msgid "GL support disabled via GDK_DEBUG"
 msgstr "GL サポートは GDK_DEBUG から無効化されています"
 
-#: gdk/gdksurface.c:1046
+#: gdk/gdksurface.c:1082
 msgid "The current backend does not support OpenGL"
 msgstr "現在のバックエンドは OpenGL をサポートしていません"
 
-#: gdk/gdksurface.c:1154
+#: gdk/gdksurface.c:1190
 msgid "Vulkan support disabled via GDK_DEBUG"
 msgstr "Vulkan サポートは GDK_DEBUG から無効化されています"
 
@@ -467,18 +467,18 @@ msgid "No compatible transfer format found"
 msgstr "互換性のある転送フォーマットが見つかりませんでした"
 
 #: gdk/wayland/gdkglcontext-wayland.c:151 gdk/win32/gdkglcontext-win32.c:725
-#: gdk/x11/gdkglcontext-x11.c:672 gdk/x11/gdkglcontext-x11.c:722
+#: gdk/x11/gdkglcontext-x11.c:763 gdk/x11/gdkglcontext-x11.c:813
 msgid "Unable to create a GL context"
 msgstr "GL コンテキストを生成できません"
 
 #: gdk/wayland/gdkglcontext-wayland.c:412
 #: gdk/wayland/gdkglcontext-wayland.c:422 gdk/win32/gdkglcontext-win32.c:679
-#: gdk/x11/gdkglcontext-x11.c:920
+#: gdk/x11/gdkglcontext-x11.c:1048
 msgid "No available configurations for the given pixel format"
 msgstr "指定したピクセルフォーマットの利用可能な設定はありません"
 
 #: gdk/wayland/gdkglcontext-wayland.c:451 gdk/win32/gdkglcontext-win32.c:791
-#: gdk/x11/gdkglcontext-x11.c:1223
+#: gdk/x11/gdkglcontext-x11.c:1351
 msgid "No GL implementation is available"
 msgstr "利用可能な GL 実装がありません"
 
@@ -489,7 +489,9 @@ msgstr ""
 #: gdk/win32/gdkclipdrop-win32.c:717
 #, c-format
 msgid "Cannot claim clipboard ownership. OpenClipboard() timed out."
-msgstr "クリップボードの所有権を取得できません。OpenClipboard() がタイムアウトしました。"
+msgstr ""
+"クリップボードの所有権を取得できません。OpenClipboard() がタイムアウトしまし"
+"た。"
 
 #: gdk/win32/gdkclipdrop-win32.c:727
 #, c-format
@@ -499,75 +501,102 @@ msgstr "クリップボードの所有権を取得できません。他のプロ
 #: gdk/win32/gdkclipdrop-win32.c:741
 #, c-format
 msgid "Cannot claim clipboard ownership. OpenClipboard() failed: 0x%lx."
-msgstr "クリップボードの所有権を取得できません。OpenClipboard() に失敗しました: 0x%lx。"
+msgstr ""
+"クリップボードの所有権を取得できません。OpenClipboard() に失敗しました: 0x"
+"%lx。"
 
 #: gdk/win32/gdkclipdrop-win32.c:753
 #, c-format
 msgid "Cannot claim clipboard ownership. EmptyClipboard() failed: 0x%lx."
-msgstr "クリップボードの所有権を取得できません。EmptyClipboard() に失敗しました: 0x%lx。"
+msgstr ""
+"クリップボードの所有権を取得できません。EmptyClipboard() に失敗しました: 0x"
+"%lx。"
 
 #: gdk/win32/gdkclipdrop-win32.c:796
 #, c-format
 msgid "Cannot set clipboard data. OpenClipboard() timed out."
-msgstr "クリップボードにデータを設定できません。OpenClipboard() がタイムアウトしました。"
+msgstr ""
+"クリップボードにデータを設定できません。OpenClipboard() がタイムアウトしまし"
+"た。"
 
 #: gdk/win32/gdkclipdrop-win32.c:806 gdk/win32/gdkclipdrop-win32.c:837
 #, c-format
 msgid "Cannot set clipboard data. Another process claimed clipboard ownership."
-msgstr "クリップボードにデータを設定できません。他のプロセスがクリップボードの所有権を取得済みです。"
+msgstr ""
+"クリップボードにデータを設定できません。他のプロセスがクリップボードの所有権"
+"を取得済みです。"
 
 #: gdk/win32/gdkclipdrop-win32.c:820
 #, c-format
 msgid "Cannot set clipboard data. OpenClipboard() failed: 0x%lx."
-msgstr "クリップボードにデータを設定できません。OpenClipboard() に失敗しました: 0x%lx。"
+msgstr ""
+"クリップボードにデータを設定できません。OpenClipboard() に失敗しました: 0x"
+"%lx。"
 
 #: gdk/win32/gdkclipdrop-win32.c:872
 #, c-format
 msgid "Cannot get clipboard data. GlobalLock(0x%p) failed: 0x%lx."
-msgstr "クリップボードのデータを取得できません。GlobalLock(0x%p) に失敗しました: 0x%lx。"
+msgstr ""
+"クリップボードのデータを取得できません。GlobalLock(0x%p) に失敗しました: 0x"
+"%lx。"
 
 #: gdk/win32/gdkclipdrop-win32.c:883
 #, c-format
 msgid "Cannot get clipboard data. GlobalSize(0x%p) failed: 0x%lx."
-msgstr "クリップボードのデータを取得できません。GlobalSize(0x%p) に失敗しました: 0x%lx。"
+msgstr ""
+"クリップボードのデータを取得できません。GlobalSize(0x%p) に失敗しました: 0x"
+"%lx。"
 
 #: gdk/win32/gdkclipdrop-win32.c:895
 #, c-format
 msgid ""
 "Cannot get clipboard data. Failed to allocate %lu bytes to store the data."
 msgstr ""
-"クリップボードのデータを取得できません。データを格納するための %lu バイトの確保に失敗しました。"
+"クリップボードのデータを取得できません。データを格納するための %lu バイトの確"
+"保に失敗しました。"
 
 #: gdk/win32/gdkclipdrop-win32.c:926
 #, c-format
 msgid "Cannot get clipboard data. OpenClipboard() timed out."
-msgstr "クリップボードのデータを取得できません。OpenClipboard() がタイムアウトしました。"
+msgstr ""
+"クリップボードのデータを取得できません。OpenClipboard() がタイムアウトしまし"
+"た。"
 
 #: gdk/win32/gdkclipdrop-win32.c:936
 #, c-format
 msgid "Cannot get clipboard data. Clipboard ownership changed."
-msgstr "クリップボードのデータを取得できません。クリップボードの所有権が変更されました。"
+msgstr ""
+"クリップボードのデータを取得できません。クリップボードの所有権が変更されまし"
+"た。"
 
 #: gdk/win32/gdkclipdrop-win32.c:946
 #, c-format
 msgid ""
 "Cannot get clipboard data. Clipboard data changed before we could get it."
-msgstr "クリップボードのデータを取得できません。取得する前にクリップボードのデータが変更されました。"
+msgstr ""
+"クリップボードのデータを取得できません。取得する前にクリップボードのデータが"
+"変更されました。"
 
 #: gdk/win32/gdkclipdrop-win32.c:963
 #, c-format
 msgid "Cannot get clipboard data. OpenClipboard() failed: 0x%lx."
-msgstr "クリップボードのデータを取得できません。OpenClipboard() に失敗しました: 0x%lx。"
+msgstr ""
+"クリップボードのデータを取得できません。OpenClipboard() に失敗しました: 0x"
+"%lx。"
 
 #: gdk/win32/gdkclipdrop-win32.c:988
 #, c-format
 msgid "Cannot get clipboard data. No compatible transfer format found."
-msgstr "クリップボードのデータを取得できません。互換性のある転送フォーマットが見つかりませんでした。"
+msgstr ""
+"クリップボードのデータを取得できません。互換性のある転送フォーマットが見つか"
+"りませんでした。"
 
 #: gdk/win32/gdkclipdrop-win32.c:998
 #, c-format
 msgid "Cannot get clipboard data. GetClipboardData() failed: 0x%lx."
-msgstr "クリップボードのデータを取得できません。GetClipboardData() に失敗しました: 0x%lx。"
+msgstr ""
+"クリップボードのデータを取得できません。GetClipboardData() に失敗しました: 0x"
+"%lx。"
 
 #: gdk/win32/gdkdrop-win32.c:1210
 #, c-format
@@ -582,7 +611,9 @@ msgstr "DnD データを取得できません。GlobalSize(0x%p) に失敗しま
 #: gdk/win32/gdkdrop-win32.c:1229
 #, c-format
 msgid "Cannot get DnD data. Failed to allocate %lu bytes to store the data."
-msgstr "DnD データを取得できません。データを格納するための %lu バイトの確保に失敗しました。"
+msgstr ""
+"DnD データを取得できません。データを格納するための %lu バイトの確保に失敗しま"
+"した。"
 
 #: gdk/win32/gdkdrop-win32.c:1296
 #, c-format
@@ -638,36 +669,6 @@ msgstr "GlobalLock() に失敗しました: "
 msgid "GlobalAlloc() failed: "
 msgstr "GlobalAlloc() に失敗しました: "
 
-#. Description of --sync in --help output
-#: gdk/win32/gdkmain-win32.c:56
-msgid "Don’t batch GDI requests"
-msgstr "GDI のリクエストをまとめない"
-
-#. Description of --no-wintab in --help output
-#: gdk/win32/gdkmain-win32.c:58
-msgid "Don’t use the Wintab API for tablet support"
-msgstr "タブレットのサポートで Wintab API を使用しない"
-
-#. Description of --ignore-wintab in --help output
-#: gdk/win32/gdkmain-win32.c:60
-msgid "Same as --no-wintab"
-msgstr "オプション --no-wintab と同じ"
-
-#. Description of --use-wintab in --help output
-#: gdk/win32/gdkmain-win32.c:62
-msgid "Do use the Wintab API [default]"
-msgstr "Wintab API を使用する [デフォルト]"
-
-#. Description of --max-colors=COLORS in --help output
-#: gdk/win32/gdkmain-win32.c:64
-msgid "Size of the palette in 8 bit mode"
-msgstr "8-ビットモードでのパレットサイズを指定する"
-
-#. Placeholder in --max-colors=COLORS in --help output
-#: gdk/win32/gdkmain-win32.c:65
-msgid "COLORS"
-msgstr "COLORS"
-
 #: gdk/x11/gdkapplaunchcontext-x11.c:292
 #, c-format
 msgid "Starting “%s”"
@@ -692,7 +693,7 @@ msgstr ""
 msgid "Cannot store clipboard. No clipboard manager is active."
 msgstr ""
 
-#: gdk/x11/gdkglcontext-x11.c:948
+#: gdk/x11/gdkglcontext-x11.c:1076
 #, c-format
 msgid "No available configurations for the given RGBA pixel format"
 msgstr ""
@@ -734,12 +735,12 @@ msgctxt "Action name"
 msgid "Toggle"
 msgstr "切り替える"
 
-#: gtk/a11y/gtkbuttonaccessible.c:317
+#: gtk/a11y/gtkbuttonaccessible.c:299
 msgctxt "Action name"
 msgid "Click"
 msgstr "クリック"
 
-#: gtk/a11y/gtkbuttonaccessible.c:326
+#: gtk/a11y/gtkbuttonaccessible.c:308
 msgctxt "Action description"
 msgid "Clicks the button"
 msgstr "ボタンをクリックします"
@@ -754,9 +755,10 @@ msgctxt "Action name"
 msgid "Edit"
 msgstr "編集"
 
-#: gtk/a11y/gtkcellaccessible.c:261 gtk/a11y/gtkcolorswatchaccessible.c:149
-#: gtk/a11y/gtkentryaccessible.c:1556 gtk/a11y/gtkexpanderaccessible.c:281
-#: gtk/a11y/gtktextaccessible.c:986
+#: gtk/a11y/gtkcellaccessible.c:261 gtk/a11y/gtkcolorswatchaccessible.c:152
+#: gtk/a11y/gtkentryaccessible.c:1515 gtk/a11y/gtkexpanderaccessible.c:229
+#: gtk/a11y/gtkpasswordentryaccessible.c:434
+#: gtk/a11y/gtksearchentryaccessible.c:981 gtk/a11y/gtktextaccessible.c:994
 msgctxt "Action name"
 msgid "Activate"
 msgstr "アクティブ化"
@@ -776,27 +778,27 @@ msgctxt "Action description"
 msgid "Activates the cell"
 msgstr "セルをアクティブにします"
 
-#: gtk/a11y/gtkcolorswatchaccessible.c:148
+#: gtk/a11y/gtkcolorswatchaccessible.c:151
 msgctxt "Action name"
 msgid "Select"
 msgstr "選択"
 
-#: gtk/a11y/gtkcolorswatchaccessible.c:150
+#: gtk/a11y/gtkcolorswatchaccessible.c:153
 msgctxt "Action name"
 msgid "Customize"
 msgstr "カスタマイズ"
 
-#: gtk/a11y/gtkcolorswatchaccessible.c:161
+#: gtk/a11y/gtkcolorswatchaccessible.c:164
 msgctxt "Action description"
 msgid "Selects the color"
 msgstr "色を選択します"
 
-#: gtk/a11y/gtkcolorswatchaccessible.c:162
+#: gtk/a11y/gtkcolorswatchaccessible.c:165
 msgctxt "Action description"
 msgid "Activates the color"
 msgstr "色をアクティブにします"
 
-#: gtk/a11y/gtkcolorswatchaccessible.c:163
+#: gtk/a11y/gtkcolorswatchaccessible.c:166
 msgctxt "Action description"
 msgid "Customizes the color"
 msgstr "色をカスタマイズします"
@@ -811,12 +813,13 @@ msgctxt "Action description"
 msgid "Presses the combobox"
 msgstr "コンボボックスを押します"
 
-#: gtk/a11y/gtkentryaccessible.c:1565 gtk/a11y/gtktextaccessible.c:995
+#: gtk/a11y/gtkentryaccessible.c:1524 gtk/a11y/gtkpasswordentryaccessible.c:446
+#: gtk/a11y/gtksearchentryaccessible.c:993 gtk/a11y/gtktextaccessible.c:1003
 msgctxt "Action description"
 msgid "Activates the entry"
 msgstr "エントリをアクティブにします"
 
-#: gtk/a11y/gtkexpanderaccessible.c:290
+#: gtk/a11y/gtkexpanderaccessible.c:238
 msgctxt "Action description"
 msgid "Activates the expander"
 msgstr "エキスパンダーをアクティブにします"
@@ -852,14 +855,17 @@ msgid "_Close"
 msgstr "閉じる(_C)"
 
 #: gtk/a11y/gtkimageaccessible.c:59 gtk/gtkwindowcontrols.c:311
+#: gtk/gtkwindowhandle.c:224
 msgid "Minimize"
 msgstr "最小化"
 
 #: gtk/a11y/gtkimageaccessible.c:60 gtk/gtkwindowcontrols.c:332
+#: gtk/gtkwindowhandle.c:230
 msgid "Maximize"
 msgstr "最大化"
 
 #: gtk/a11y/gtkimageaccessible.c:61 gtk/gtkwindowcontrols.c:332
+#: gtk/gtkwindowhandle.c:217
 msgid "Restore"
 msgstr "元のサイズに戻す"
 
@@ -1202,25 +1208,60 @@ msgstr "縮小(_O)"
 msgid "Menu"
 msgstr "メニュー"
 
-#: gtk/a11y/gtkscalebuttonaccessible.c:140
+#: gtk/a11y/gtkpasswordentryaccessible.c:436
+msgctxt "Action name"
+msgid "Peek"
+msgstr ""
+
+#: gtk/a11y/gtkpasswordentryaccessible.c:449
+#, fuzzy
+#| msgid "Browse the contents of the network"
+msgctxt "Action description"
+msgid "Reveals the contents the entry"
+msgstr "ネットワークの内容を表示します"
+
+#: gtk/a11y/gtkpasswordentryaccessible.c:640
+msgid "Password"
+msgstr "パスワード"
+
+#: gtk/a11y/gtkscalebuttonaccessible.c:168
 msgctxt "Action description"
 msgid "Pops up the slider"
 msgstr "スライダーをポップアップします"
 
-#: gtk/a11y/gtkscalebuttonaccessible.c:142
+#: gtk/a11y/gtkscalebuttonaccessible.c:170
 msgctxt "Action description"
 msgid "Dismisses the slider"
 msgstr "スライダーを破棄します"
 
-#: gtk/a11y/gtkscalebuttonaccessible.c:170
+#: gtk/a11y/gtkscalebuttonaccessible.c:198
 msgctxt "Action name"
 msgid "Popup"
 msgstr "ポップアップ"
 
-#: gtk/a11y/gtkscalebuttonaccessible.c:172
+#: gtk/a11y/gtkscalebuttonaccessible.c:200
 msgctxt "Action name"
 msgid "Dismiss"
 msgstr "破棄"
+
+#: gtk/a11y/gtksearchentryaccessible.c:278
+msgid "Search"
+msgstr "検索"
+
+#: gtk/a11y/gtksearchentryaccessible.c:983
+#, fuzzy
+#| msgctxt "Stock label"
+#| msgid "_Clear"
+msgctxt "Action name"
+msgid "Clear"
+msgstr "クリア(_C)"
+
+#: gtk/a11y/gtksearchentryaccessible.c:996
+#, fuzzy
+#| msgid "Clear entry"
+msgctxt "Action description"
+msgid "Clears the entry"
+msgstr "エントリーを消去する"
 
 #: gtk/a11y/gtkspinneraccessible.c:39
 msgctxt "throbbing progress animation widget"
@@ -1251,120 +1292,120 @@ msgstr "不正な形式のデータです: URL"
 msgid "Could not unescape string"
 msgstr "文字列をアンエスケープできませんでした"
 
-#: gtk/gtkaboutdialog.c:119 gtk/ui/gtkaboutdialog.ui:160
+#: gtk/gtkaboutdialog.c:120 gtk/ui/gtkaboutdialog.ui:160
 msgid "License"
 msgstr "ライセンス"
 
-#: gtk/gtkaboutdialog.c:120
+#: gtk/gtkaboutdialog.c:121
 msgid "Custom License"
 msgstr "その他のライセンス"
 
-#: gtk/gtkaboutdialog.c:121
+#: gtk/gtkaboutdialog.c:122
 msgid "GNU General Public License, version 2 or later"
 msgstr "GNU General Public License, version 2 or later"
 
-#: gtk/gtkaboutdialog.c:122
+#: gtk/gtkaboutdialog.c:123
 msgid "GNU General Public License, version 3 or later"
 msgstr "GNU General Public License, version 3 or later"
 
-#: gtk/gtkaboutdialog.c:123
+#: gtk/gtkaboutdialog.c:124
 msgid "GNU Lesser General Public License, version 2.1 or later"
 msgstr "GNU Lesser General Public License, version 2.1 or later"
 
-#: gtk/gtkaboutdialog.c:124
+#: gtk/gtkaboutdialog.c:125
 msgid "GNU Lesser General Public License, version 3 or later"
 msgstr "GNU Lesser General Public License, version 3 or later"
 
-#: gtk/gtkaboutdialog.c:125
+#: gtk/gtkaboutdialog.c:126
 msgid "BSD 2-Clause License"
 msgstr "BSD 2-Clause License"
 
-#: gtk/gtkaboutdialog.c:126
+#: gtk/gtkaboutdialog.c:127
 msgid "The MIT License (MIT)"
 msgstr "The MIT License (MIT)"
 
-#: gtk/gtkaboutdialog.c:127
+#: gtk/gtkaboutdialog.c:128
 msgid "Artistic License 2.0"
 msgstr "Artistic License 2.0"
 
-#: gtk/gtkaboutdialog.c:128
+#: gtk/gtkaboutdialog.c:129
 msgid "GNU General Public License, version 2 only"
 msgstr "GNU General Public License, version 2 only"
 
-#: gtk/gtkaboutdialog.c:129
+#: gtk/gtkaboutdialog.c:130
 msgid "GNU General Public License, version 3 only"
 msgstr "GNU General Public License, version 3 only"
 
-#: gtk/gtkaboutdialog.c:130
+#: gtk/gtkaboutdialog.c:131
 msgid "GNU Lesser General Public License, version 2.1 only"
 msgstr "GNU Lesser General Public License, version 2.1 only"
 
-#: gtk/gtkaboutdialog.c:131
+#: gtk/gtkaboutdialog.c:132
 msgid "GNU Lesser General Public License, version 3 only"
 msgstr "GNU Lesser General Public License, version 3 only"
 
-#: gtk/gtkaboutdialog.c:132
+#: gtk/gtkaboutdialog.c:133
 msgid "GNU Affero General Public License, version 3 or later"
 msgstr "GNU Affero General Public License, version 3 or later"
 
-#: gtk/gtkaboutdialog.c:133
+#: gtk/gtkaboutdialog.c:134
 msgid "GNU Affero General Public License, version 3 only"
 msgstr "GNU Affero General Public License, version 3 only"
 
-#: gtk/gtkaboutdialog.c:134
+#: gtk/gtkaboutdialog.c:135
 msgid "BSD 3-Clause License"
 msgstr "BSD 3-Clause License"
 
-#: gtk/gtkaboutdialog.c:135
+#: gtk/gtkaboutdialog.c:136
 msgid "Apache License, Version 2.0"
 msgstr "Apache License, Version 2.0"
 
-#: gtk/gtkaboutdialog.c:136
+#: gtk/gtkaboutdialog.c:137
 msgid "Mozilla Public License 2.0"
 msgstr "Mozilla Public License 2.0"
 
-#: gtk/gtkaboutdialog.c:731
+#: gtk/gtkaboutdialog.c:729
 msgid "C_redits"
 msgstr "クレジット(_R)"
 
-#: gtk/gtkaboutdialog.c:738
+#: gtk/gtkaboutdialog.c:736
 msgid "_License"
 msgstr "ライセンス(_L)"
 
-#: gtk/gtkaboutdialog.c:743 gtk/gtkcustompaperunixdialog.c:329
-#: gtk/gtkmessagedialog.c:773 gtk/ui/gtkassistant.ui:38
+#: gtk/gtkaboutdialog.c:741 gtk/gtkcustompaperunixdialog.c:329
+#: gtk/gtkmessagedialog.c:777 gtk/ui/gtkassistant.ui:38
 msgid "_Close"
 msgstr "閉じる(_C)"
 
-#: gtk/gtkaboutdialog.c:1010
+#: gtk/gtkaboutdialog.c:1008
 msgid "Website"
 msgstr "ウェブサイト"
 
-#: gtk/gtkaboutdialog.c:1055 gtk/ui/gtkapplication-quartz.ui:6
+#: gtk/gtkaboutdialog.c:1045 gtk/ui/gtkapplication-quartz.ui:6
 #, c-format
 msgid "About %s"
 msgstr "%s について"
 
-#: gtk/gtkaboutdialog.c:2191
+#: gtk/gtkaboutdialog.c:2181
 msgid "Created by"
 msgstr "作成者"
 
-#: gtk/gtkaboutdialog.c:2194
+#: gtk/gtkaboutdialog.c:2184
 msgid "Documented by"
 msgstr "ドキュメント担当"
 
-#: gtk/gtkaboutdialog.c:2204
+#: gtk/gtkaboutdialog.c:2194
 msgid "Translated by"
 msgstr "翻訳担当"
 
-#: gtk/gtkaboutdialog.c:2209
+#: gtk/gtkaboutdialog.c:2199
 msgid "Design by"
 msgstr "デザイン担当"
 
 #. Translators: this is the license preamble; the string at the end
 #. * contains the name of the license as link text.
 #.
-#: gtk/gtkaboutdialog.c:2376
+#: gtk/gtkaboutdialog.c:2366
 #, c-format
 msgid ""
 "This program comes with absolutely no warranty.\n"
@@ -1378,7 +1419,7 @@ msgstr ""
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccelgroup.c:841 gtk/gtkshortcutlabel.c:102
+#: gtk/gtkaccelgroup.c:835 gtk/gtkshortcutlabel.c:102
 #: gtk/gtkshortcutlabel.c:138
 msgctxt "keyboard label"
 msgid "Shift"
@@ -1389,7 +1430,7 @@ msgstr "Shift"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccelgroup.c:860 gtk/gtkshortcutlabel.c:105
+#: gtk/gtkaccelgroup.c:854 gtk/gtkshortcutlabel.c:105
 #: gtk/gtkshortcutlabel.c:140
 msgctxt "keyboard label"
 msgid "Ctrl"
@@ -1400,7 +1441,7 @@ msgstr "Ctrl"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccelgroup.c:879 gtk/gtkshortcutlabel.c:108
+#: gtk/gtkaccelgroup.c:873 gtk/gtkshortcutlabel.c:108
 #: gtk/gtkshortcutlabel.c:142
 msgctxt "keyboard label"
 msgid "Alt"
@@ -1411,7 +1452,7 @@ msgstr "Alt"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccelgroup.c:897 gtk/gtkshortcutlabel.c:114
+#: gtk/gtkaccelgroup.c:891 gtk/gtkshortcutlabel.c:114
 #: gtk/gtkshortcutlabel.c:144
 msgctxt "keyboard label"
 msgid "Super"
@@ -1422,7 +1463,7 @@ msgstr "Super"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccelgroup.c:911 gtk/gtkshortcutlabel.c:117
+#: gtk/gtkaccelgroup.c:905 gtk/gtkshortcutlabel.c:117
 #: gtk/gtkshortcutlabel.c:146
 msgctxt "keyboard label"
 msgid "Hyper"
@@ -1433,18 +1474,27 @@ msgstr "Hyper"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccelgroup.c:926 gtk/gtkshortcutlabel.c:111
+#: gtk/gtkaccelgroup.c:920 gtk/gtkshortcutlabel.c:111
 #: gtk/gtkshortcutlabel.c:148
 msgctxt "keyboard label"
 msgid "Meta"
 msgstr "Meta"
 
-#: gtk/gtkaccelgroup.c:943
+#. Translators: "KP" means "numeric key pad". This string will
+#. * be used in accelerators such as "Ctrl+Shift+KP 1" in menus,
+#. * and therefore the translation needs to be very short.
+#.
+#: gtk/gtkaccelgroup.c:940
+msgctxt "keyboard label"
+msgid "KP"
+msgstr ""
+
+#: gtk/gtkaccelgroup.c:947
 msgctxt "keyboard label"
 msgid "Space"
 msgstr "Space"
 
-#: gtk/gtkaccelgroup.c:946 gtk/gtkshortcutlabel.c:173
+#: gtk/gtkaccelgroup.c:950 gtk/gtkshortcutlabel.c:173
 msgctxt "keyboard label"
 msgid "Backslash"
 msgstr "\\"
@@ -1504,11 +1554,6 @@ msgstr "関連するアプリケーション"
 #: gtk/gtkappchooserwidget.c:681
 msgid "Other Applications"
 msgstr "別のアプリケーション"
-
-#: gtk/gtkapplicationwindow.c:310 gtk/gtkprintoperation-unix.c:479
-#: gtk/gtkprintoperation-win32.c:1515 gtk/inspector/prop-editor.c:1498
-msgid "Application"
-msgstr "アプリケーション"
 
 #: gtk/gtkbookmarksmanager.c:51
 #, c-format
@@ -1632,215 +1677,215 @@ msgstr "%d %%"
 msgid "Pick a Color"
 msgstr "色の選択"
 
-#: gtk/gtkcolorchooserwidget.c:287
+#: gtk/gtkcolorchooserwidget.c:281
 #, c-format
 msgid "Red %d%%, Green %d%%, Blue %d%%, Alpha %d%%"
 msgstr "赤 %d%%, 緑 %d%%, 青 %d%%, アルファ %d%%"
 
-#: gtk/gtkcolorchooserwidget.c:293
+#: gtk/gtkcolorchooserwidget.c:287
 #, c-format
 msgid "Red %d%%, Green %d%%, Blue %d%%"
 msgstr "赤 %d%%, 緑 %d%%, 青 %d%%"
 
-#: gtk/gtkcolorchooserwidget.c:370
+#: gtk/gtkcolorchooserwidget.c:369
 #, c-format
 msgid "Color: %s"
 msgstr "色: %s"
 
-#: gtk/gtkcolorchooserwidget.c:427
+#: gtk/gtkcolorchooserwidget.c:426
 msgctxt "Color name"
 msgid "Light Scarlet Red"
 msgstr "明るいスカーレットレッド"
 
-#: gtk/gtkcolorchooserwidget.c:428
+#: gtk/gtkcolorchooserwidget.c:427
 msgctxt "Color name"
 msgid "Scarlet Red"
 msgstr "スカーレットレッド"
 
-#: gtk/gtkcolorchooserwidget.c:429
+#: gtk/gtkcolorchooserwidget.c:428
 msgctxt "Color name"
 msgid "Dark Scarlet Red"
 msgstr "暗いスカーレットレッド"
 
-#: gtk/gtkcolorchooserwidget.c:430
+#: gtk/gtkcolorchooserwidget.c:429
 msgctxt "Color name"
 msgid "Light Orange"
 msgstr "明るいオレンジ"
 
-#: gtk/gtkcolorchooserwidget.c:431
+#: gtk/gtkcolorchooserwidget.c:430
 msgctxt "Color name"
 msgid "Orange"
 msgstr "オレンジ"
 
-#: gtk/gtkcolorchooserwidget.c:432
+#: gtk/gtkcolorchooserwidget.c:431
 msgctxt "Color name"
 msgid "Dark Orange"
 msgstr "暗いオレンジ"
 
-#: gtk/gtkcolorchooserwidget.c:433
+#: gtk/gtkcolorchooserwidget.c:432
 msgctxt "Color name"
 msgid "Light Butter"
 msgstr "明るいバター"
 
-#: gtk/gtkcolorchooserwidget.c:434
+#: gtk/gtkcolorchooserwidget.c:433
 msgctxt "Color name"
 msgid "Butter"
 msgstr "バター"
 
-#: gtk/gtkcolorchooserwidget.c:435
+#: gtk/gtkcolorchooserwidget.c:434
 msgctxt "Color name"
 msgid "Dark Butter"
 msgstr "暗いバター"
 
-#: gtk/gtkcolorchooserwidget.c:436
+#: gtk/gtkcolorchooserwidget.c:435
 msgctxt "Color name"
 msgid "Light Chameleon"
 msgstr "明るいカメレオン"
 
-#: gtk/gtkcolorchooserwidget.c:437
+#: gtk/gtkcolorchooserwidget.c:436
 msgctxt "Color name"
 msgid "Chameleon"
 msgstr "カメレオン"
 
-#: gtk/gtkcolorchooserwidget.c:438
+#: gtk/gtkcolorchooserwidget.c:437
 msgctxt "Color name"
 msgid "Dark Chameleon"
 msgstr "暗いカメレオン"
 
-#: gtk/gtkcolorchooserwidget.c:439
+#: gtk/gtkcolorchooserwidget.c:438
 msgctxt "Color name"
 msgid "Light Sky Blue"
 msgstr "明るいスカイブルー"
 
-#: gtk/gtkcolorchooserwidget.c:440
+#: gtk/gtkcolorchooserwidget.c:439
 msgctxt "Color name"
 msgid "Sky Blue"
 msgstr "スカイブルー"
 
-#: gtk/gtkcolorchooserwidget.c:441
+#: gtk/gtkcolorchooserwidget.c:440
 msgctxt "Color name"
 msgid "Dark Sky Blue"
 msgstr "暗いスカイブルー"
 
-#: gtk/gtkcolorchooserwidget.c:442
+#: gtk/gtkcolorchooserwidget.c:441
 msgctxt "Color name"
 msgid "Light Plum"
 msgstr "明るいプラム"
 
-#: gtk/gtkcolorchooserwidget.c:443
+#: gtk/gtkcolorchooserwidget.c:442
 msgctxt "Color name"
 msgid "Plum"
 msgstr "プラム"
 
-#: gtk/gtkcolorchooserwidget.c:444
+#: gtk/gtkcolorchooserwidget.c:443
 msgctxt "Color name"
 msgid "Dark Plum"
 msgstr "暗いプラム"
 
-#: gtk/gtkcolorchooserwidget.c:445
+#: gtk/gtkcolorchooserwidget.c:444
 msgctxt "Color name"
 msgid "Light Chocolate"
 msgstr "明るいチョコレート"
 
-#: gtk/gtkcolorchooserwidget.c:446
+#: gtk/gtkcolorchooserwidget.c:445
 msgctxt "Color name"
 msgid "Chocolate"
 msgstr "チョコレート"
 
-#: gtk/gtkcolorchooserwidget.c:447
+#: gtk/gtkcolorchooserwidget.c:446
 msgctxt "Color name"
 msgid "Dark Chocolate"
 msgstr "暗いチョコレート"
 
-#: gtk/gtkcolorchooserwidget.c:448
+#: gtk/gtkcolorchooserwidget.c:447
 msgctxt "Color name"
 msgid "Light Aluminum 1"
 msgstr "明るいアルミニウム 1"
 
-#: gtk/gtkcolorchooserwidget.c:449
+#: gtk/gtkcolorchooserwidget.c:448
 msgctxt "Color name"
 msgid "Aluminum 1"
 msgstr "アルミニウム 1"
 
-#: gtk/gtkcolorchooserwidget.c:450
+#: gtk/gtkcolorchooserwidget.c:449
 msgctxt "Color name"
 msgid "Dark Aluminum 1"
 msgstr "暗いアルミニウム 1"
 
-#: gtk/gtkcolorchooserwidget.c:451
+#: gtk/gtkcolorchooserwidget.c:450
 msgctxt "Color name"
 msgid "Light Aluminum 2"
 msgstr "明るいアルミニウム 2"
 
-#: gtk/gtkcolorchooserwidget.c:452
+#: gtk/gtkcolorchooserwidget.c:451
 msgctxt "Color name"
 msgid "Aluminum 2"
 msgstr "アルミニウム 2"
 
-#: gtk/gtkcolorchooserwidget.c:453
+#: gtk/gtkcolorchooserwidget.c:452
 msgctxt "Color name"
 msgid "Dark Aluminum 2"
 msgstr "暗いアルミニウム 2"
 
-#: gtk/gtkcolorchooserwidget.c:467
+#: gtk/gtkcolorchooserwidget.c:466
 msgctxt "Color name"
 msgid "Black"
 msgstr "黒"
 
-#: gtk/gtkcolorchooserwidget.c:468
+#: gtk/gtkcolorchooserwidget.c:467
 msgctxt "Color name"
 msgid "Very Dark Gray"
 msgstr "ごく暗い灰色"
 
-#: gtk/gtkcolorchooserwidget.c:469
+#: gtk/gtkcolorchooserwidget.c:468
 msgctxt "Color name"
 msgid "Darker Gray"
 msgstr "より暗い灰色"
 
-#: gtk/gtkcolorchooserwidget.c:470
+#: gtk/gtkcolorchooserwidget.c:469
 msgctxt "Color name"
 msgid "Dark Gray"
 msgstr "暗い灰色"
 
-#: gtk/gtkcolorchooserwidget.c:471
+#: gtk/gtkcolorchooserwidget.c:470
 msgctxt "Color name"
 msgid "Medium Gray"
 msgstr "中位の灰色"
 
-#: gtk/gtkcolorchooserwidget.c:472
+#: gtk/gtkcolorchooserwidget.c:471
 msgctxt "Color name"
 msgid "Light Gray"
 msgstr "明るい灰色"
 
-#: gtk/gtkcolorchooserwidget.c:473
+#: gtk/gtkcolorchooserwidget.c:472
 msgctxt "Color name"
 msgid "Lighter Gray"
 msgstr "より明るい灰色"
 
-#: gtk/gtkcolorchooserwidget.c:474
+#: gtk/gtkcolorchooserwidget.c:473
 msgctxt "Color name"
 msgid "Very Light Gray"
 msgstr "ごく明るい灰色"
 
-#: gtk/gtkcolorchooserwidget.c:475
+#: gtk/gtkcolorchooserwidget.c:474
 msgctxt "Color name"
 msgid "White"
 msgstr "白"
 
 #. translators: label for the custom section in the color chooser
-#: gtk/gtkcolorchooserwidget.c:558
+#: gtk/gtkcolorchooserwidget.c:557
 msgid "Custom"
 msgstr "作成した色"
 
-#: gtk/gtkcolorchooserwidget.c:569
+#: gtk/gtkcolorchooserwidget.c:568
 msgid "Custom color"
 msgstr "色を作成"
 
-#: gtk/gtkcolorchooserwidget.c:570
+#: gtk/gtkcolorchooserwidget.c:569
 msgid "Create a custom color"
 msgstr "色を作成します"
 
-#: gtk/gtkcolorchooserwidget.c:595
+#: gtk/gtkcolorchooserwidget.c:594
 #, c-format
 msgid "Custom color %d: %s"
 msgstr "作成した色 %d: %s"
@@ -1849,17 +1894,17 @@ msgstr "作成した色 %d: %s"
 msgid "Color Plane"
 msgstr "カラープレーン"
 
-#: gtk/gtkcolorscale.c:222
+#: gtk/gtkcolorscale.c:235
 msgctxt "Color channel"
 msgid "Hue"
 msgstr "色相"
 
-#: gtk/gtkcolorscale.c:224
+#: gtk/gtkcolorscale.c:237
 msgctxt "Color channel"
 msgid "Alpha"
 msgstr "アルファ"
 
-#: gtk/gtkcolorswatch.c:223
+#: gtk/gtkcolorswatch.c:222
 msgid "Customize"
 msgstr "カスタマイズ"
 
@@ -1874,7 +1919,7 @@ msgid "default:mm"
 msgstr "default:mm"
 
 #. And show the custom paper dialog
-#: gtk/gtkcustompaperunixdialog.c:403 gtk/gtkprintunixdialog.c:3268
+#: gtk/gtkcustompaperunixdialog.c:403 gtk/gtkprintunixdialog.c:3009
 msgid "Manage Custom Sizes"
 msgstr "その他のサイズの管理"
 
@@ -1927,7 +1972,7 @@ msgstr "右側(_R):"
 msgid "Paper Margins"
 msgstr "用紙のマージン"
 
-#: gtk/gtkentry.c:3609
+#: gtk/gtkentry.c:3603
 msgid "Insert Emoji"
 msgstr "絵文字を挿入"
 
@@ -1935,11 +1980,11 @@ msgstr "絵文字を挿入"
 msgid "Select a File"
 msgstr "ファイルを選択"
 
-#: gtk/gtkfilechooserbutton.c:114 gtk/gtkplacessidebar.c:1055
+#: gtk/gtkfilechooserbutton.c:114 gtk/gtkplacessidebar.c:1056
 msgid "Desktop"
 msgstr "デスクトップ"
 
-#: gtk/gtkfilechooserbutton.c:115
+#: gtk/gtkfilechooserbutton.c:115 gtk/ui/gtkdropdown.ui:19
 msgid "(None)"
 msgstr "(なし)"
 
@@ -1947,7 +1992,7 @@ msgstr "(なし)"
 msgid "Other…"
 msgstr "その他…"
 
-#: gtk/gtkfilechooserdialog.c:556
+#: gtk/gtkfilechooserdialog.c:588
 msgid "_Name"
 msgstr "名前(_N)"
 
@@ -2007,27 +2052,27 @@ msgstr "同じ名前のフォルダーがすでに存在します"
 msgid "A file with that name already exists"
 msgstr "同じ名前のファイルがすでに存在します"
 
-#: gtk/gtkfilechoosernative.c:511 gtk/gtkfilechoosernative.c:582
-#: gtk/gtkfilechooserwidget.c:1255 gtk/gtkfilechooserwidget.c:5750
-#: gtk/gtkmessagedialog.c:777 gtk/gtkmessagedialog.c:786
+#: gtk/gtkfilechoosernative.c:527 gtk/gtkfilechoosernative.c:598
+#: gtk/gtkfilechooserwidget.c:1284 gtk/gtkfilechooserwidget.c:5800
+#: gtk/gtkmessagedialog.c:781 gtk/gtkmessagedialog.c:790
 #: gtk/gtkmountoperation.c:607 gtk/gtkpagesetupunixdialog.c:210
-#: gtk/gtkprintbackend.c:657 gtk/gtkprinteroptionwidget.c:523
-#: gtk/gtkprintunixdialog.c:673 gtk/gtkprintunixdialog.c:736
-#: gtk/gtkwindow.c:6964 gtk/inspector/css-editor.c:248
-#: gtk/inspector/recorder.c:1027 gtk/ui/gtkappchooserdialog.ui:45
+#: gtk/gtkprintbackend.c:643 gtk/gtkprinteroptionwidget.c:521
+#: gtk/gtkprintunixdialog.c:651 gtk/gtkprintunixdialog.c:736
+#: gtk/gtkwindow.c:6673 gtk/inspector/css-editor.c:248
+#: gtk/inspector/recorder.c:1006 gtk/ui/gtkappchooserdialog.ui:45
 #: gtk/ui/gtkassistant.ui:50 gtk/ui/gtkcolorchooserdialog.ui:33
 #: gtk/ui/gtkfontchooserdialog.ui:24
 msgid "_Cancel"
 msgstr "キャンセル(_C)"
 
-#: gtk/gtkfilechoosernative.c:512 gtk/gtkfilechoosernative.c:576
+#: gtk/gtkfilechoosernative.c:528 gtk/gtkfilechoosernative.c:592
 #: gtk/gtkplacessidebar.c:3134 gtk/gtkplacessidebar.c:3219
-#: gtk/gtkplacesview.c:1651
+#: gtk/gtkplacesview.c:1646
 msgid "_Open"
 msgstr "開く(_O)"
 
-#: gtk/gtkfilechoosernative.c:576 gtk/inspector/css-editor.c:249
-#: gtk/inspector/recorder.c:1028
+#: gtk/gtkfilechoosernative.c:592 gtk/inspector/css-editor.c:249
+#: gtk/inspector/recorder.c:1007
 msgid "_Save"
 msgstr "保存(_S)"
 
@@ -2048,269 +2093,269 @@ msgstr "%2$s:%1$s"
 msgid "Type name of new folder"
 msgstr "新しいフォルダー名を入力してください"
 
-#: gtk/gtkfilechooserwidget.c:793
+#: gtk/gtkfilechooserwidget.c:796
 msgid "The folder could not be created"
 msgstr "フォルダーを作成できませんでした"
 
-#: gtk/gtkfilechooserwidget.c:806
+#: gtk/gtkfilechooserwidget.c:809
 msgid "You need to choose a valid filename."
 msgstr "有効なファイル名を指定してください。"
 
-#: gtk/gtkfilechooserwidget.c:809
+#: gtk/gtkfilechooserwidget.c:812
 #, c-format
 msgid "Cannot create a file under %s as it is not a folder"
 msgstr "%s はフォルダーではないため、その配下にファイルを作成できません"
 
-#: gtk/gtkfilechooserwidget.c:819
+#: gtk/gtkfilechooserwidget.c:822
 msgid "Cannot create file as the filename is too long"
 msgstr "ファイル名が長すぎるためファイルを作成できません"
 
-#: gtk/gtkfilechooserwidget.c:820
+#: gtk/gtkfilechooserwidget.c:823
 msgid "Try using a shorter name."
 msgstr "もっと短い名前を使用してください。"
 
-#: gtk/gtkfilechooserwidget.c:830
+#: gtk/gtkfilechooserwidget.c:833
 msgid "You may only select folders"
 msgstr "フォルダーのみ選択できます"
 
-#: gtk/gtkfilechooserwidget.c:831
+#: gtk/gtkfilechooserwidget.c:834
 msgid "The item that you selected is not a folder try using a different item."
 msgstr ""
 "選択したアイテムはフォルダーではありません。他のアイテムを使用してみてくださ"
 "い。"
 
-#: gtk/gtkfilechooserwidget.c:839
+#: gtk/gtkfilechooserwidget.c:842
 msgid "Invalid file name"
 msgstr "無効なファイル名です"
 
-#: gtk/gtkfilechooserwidget.c:848
+#: gtk/gtkfilechooserwidget.c:851
 msgid "The folder contents could not be displayed"
 msgstr "フォルダーの内容を表示できませんでした"
 
-#: gtk/gtkfilechooserwidget.c:856
+#: gtk/gtkfilechooserwidget.c:859
 msgid "The file could not be deleted"
 msgstr "ファイルを削除できませんでした"
 
-#: gtk/gtkfilechooserwidget.c:864
+#: gtk/gtkfilechooserwidget.c:867
 msgid "The file could not be moved to the Trash"
 msgstr "ファイルをゴミ箱へ移動できませんでした"
 
-#: gtk/gtkfilechooserwidget.c:1251
+#: gtk/gtkfilechooserwidget.c:1280
 #, c-format
 msgid "Are you sure you want to permanently delete “%s”?"
 msgstr "本当に“%s”を完全に削除しますか?"
 
-#: gtk/gtkfilechooserwidget.c:1254
+#: gtk/gtkfilechooserwidget.c:1283
 #, c-format
 msgid "If you delete an item, it will be permanently lost."
 msgstr "削除すると、アイテムは完全に失われます。"
 
-#: gtk/gtkfilechooserwidget.c:1256 gtk/gtkfilechooserwidget.c:1868
-#: gtk/gtklabel.c:5397 gtk/gtktext.c:5905 gtk/gtktextview.c:8581
+#: gtk/gtkfilechooserwidget.c:1285 gtk/gtkfilechooserwidget.c:1899
+#: gtk/gtklabel.c:5412 gtk/gtktext.c:5932 gtk/gtktextview.c:8552
 msgid "_Delete"
 msgstr "削除(_D)"
 
-#: gtk/gtkfilechooserwidget.c:1380
+#: gtk/gtkfilechooserwidget.c:1408
 msgid "The file could not be renamed"
 msgstr "ファイル名を変更できませんでした"
 
-#: gtk/gtkfilechooserwidget.c:1637
+#: gtk/gtkfilechooserwidget.c:1668
 msgid "Could not select file"
 msgstr "ファイルを選択できませんでした"
 
-#: gtk/gtkfilechooserwidget.c:1848
+#: gtk/gtkfilechooserwidget.c:1879
 msgid "_Visit File"
 msgstr "ファイルの場所に移動する(_V)"
 
-#: gtk/gtkfilechooserwidget.c:1852
+#: gtk/gtkfilechooserwidget.c:1883
 msgid "_Open With File Manager"
 msgstr "ファイルマネージャーで開く(_O)"
 
-#: gtk/gtkfilechooserwidget.c:1856
+#: gtk/gtkfilechooserwidget.c:1887
 msgid "_Copy Location"
 msgstr "場所をコピー(_C)"
 
-#: gtk/gtkfilechooserwidget.c:1860
+#: gtk/gtkfilechooserwidget.c:1891
 msgid "_Add to Bookmarks"
 msgstr "ブックマークに追加(_A)"
 
-#: gtk/gtkfilechooserwidget.c:1864 gtk/gtkplacessidebar.c:2316
-#: gtk/gtkplacessidebar.c:3255 gtk/ui/gtkfilechooserwidget.ui:471
+#: gtk/gtkfilechooserwidget.c:1895 gtk/gtkplacessidebar.c:2316
+#: gtk/gtkplacessidebar.c:3255 gtk/ui/gtkfilechooserwidget.ui:469
 msgid "_Rename"
 msgstr "名前を変更(_R)"
 
-#: gtk/gtkfilechooserwidget.c:1872
+#: gtk/gtkfilechooserwidget.c:1903
 msgid "_Move to Trash"
 msgstr "ゴミ箱へ移動する(_M)"
 
-#: gtk/gtkfilechooserwidget.c:1881
+#: gtk/gtkfilechooserwidget.c:1912
 msgid "Show _Hidden Files"
 msgstr "隠しファイルを表示する(_H)"
 
-#: gtk/gtkfilechooserwidget.c:1885
+#: gtk/gtkfilechooserwidget.c:1916
 msgid "Show _Size Column"
 msgstr "サイズを表示する(_S)"
 
-#: gtk/gtkfilechooserwidget.c:1889
+#: gtk/gtkfilechooserwidget.c:1920
 msgid "Show T_ype Column"
 msgstr "種類を表示する(_Y)"
 
-#: gtk/gtkfilechooserwidget.c:1893
+#: gtk/gtkfilechooserwidget.c:1924
 msgid "Show _Time"
 msgstr "時刻を表示する(_T)"
 
-#: gtk/gtkfilechooserwidget.c:1897
+#: gtk/gtkfilechooserwidget.c:1928
 msgid "Sort _Folders Before Files"
 msgstr "フォルダーをファイルよりも前に配置する(_F)"
 
 #. this is the header for the location column in the print dialog
-#: gtk/gtkfilechooserwidget.c:2243 gtk/inspector/css-node-tree.ui:135
-#: gtk/ui/gtkfilechooserwidget.ui:190 gtk/ui/gtkprintunixdialog.ui:107
+#: gtk/gtkfilechooserwidget.c:2274 gtk/inspector/css-node-tree.ui:135
+#: gtk/ui/gtkfilechooserwidget.ui:190 gtk/ui/gtkprintunixdialog.ui:127
 msgid "Location"
 msgstr "場所"
 
 #. Label
-#: gtk/gtkfilechooserwidget.c:2330
+#: gtk/gtkfilechooserwidget.c:2361
 msgid "_Name:"
 msgstr "名前(_N):"
 
-#: gtk/gtkfilechooserwidget.c:2879 gtk/gtkfilechooserwidget.c:2893
+#: gtk/gtkfilechooserwidget.c:2904 gtk/gtkfilechooserwidget.c:2918
 #, c-format
 msgid "Searching in %s"
 msgstr "%s 内を検索"
 
-#: gtk/gtkfilechooserwidget.c:2899
+#: gtk/gtkfilechooserwidget.c:2924
 msgid "Searching"
 msgstr "検索"
 
-#: gtk/gtkfilechooserwidget.c:2905
+#: gtk/gtkfilechooserwidget.c:2930
 msgid "Enter location or URL"
 msgstr "場所または URL を指定する"
 
-#: gtk/gtkfilechooserwidget.c:3803 gtk/gtkfilechooserwidget.c:6605
+#: gtk/gtkfilechooserwidget.c:3828 gtk/gtkfilechooserwidget.c:6638
 #: gtk/ui/gtkfilechooserwidget.ui:230
 msgid "Modified"
 msgstr "更新日時"
 
-#: gtk/gtkfilechooserwidget.c:4069
+#: gtk/gtkfilechooserwidget.c:4094
 #, c-format
 msgid "Could not read the contents of %s"
 msgstr "%s の内容を読み取れませんでした"
 
-#: gtk/gtkfilechooserwidget.c:4073
+#: gtk/gtkfilechooserwidget.c:4098
 msgid "Could not read the contents of the folder"
 msgstr "フォルダーの内容を読み取れませんでした"
 
 #. Translators: see g_date_time_format() for details on the format
-#: gtk/gtkfilechooserwidget.c:4221 gtk/gtkfilechooserwidget.c:4264
+#: gtk/gtkfilechooserwidget.c:4246 gtk/gtkfilechooserwidget.c:4289
 msgid "%H:%M"
 msgstr "%H:%M"
 
-#: gtk/gtkfilechooserwidget.c:4223 gtk/gtkfilechooserwidget.c:4266
+#: gtk/gtkfilechooserwidget.c:4248 gtk/gtkfilechooserwidget.c:4291
 msgid "%l:%M %p"
 msgstr "%P%I:%M"
 
-#: gtk/gtkfilechooserwidget.c:4227
+#: gtk/gtkfilechooserwidget.c:4252
 msgid "Yesterday"
 msgstr "昨日"
 
-#: gtk/gtkfilechooserwidget.c:4235
+#: gtk/gtkfilechooserwidget.c:4260
 msgid "%-e %b"
 msgstr "%-m月%-d日"
 
-#: gtk/gtkfilechooserwidget.c:4239
+#: gtk/gtkfilechooserwidget.c:4264
 msgid "%-e %b %Y"
 msgstr "%Y年%-m月%-d日"
 
-#: gtk/gtkfilechooserwidget.c:4328 gtk/gtkfilechooserwidget.c:4336
+#: gtk/gtkfilechooserwidget.c:4353 gtk/gtkfilechooserwidget.c:4361
 msgid "Program"
 msgstr "プログラム"
 
-#: gtk/gtkfilechooserwidget.c:4329
+#: gtk/gtkfilechooserwidget.c:4354
 msgid "Audio"
 msgstr "音声"
 
-#: gtk/gtkfilechooserwidget.c:4330 gtk/gtkfontbutton.c:549
+#: gtk/gtkfilechooserwidget.c:4355 gtk/gtkfontbutton.c:549
 #: gtk/inspector/visual.ui:211
 msgid "Font"
 msgstr "フォント"
 
-#: gtk/gtkfilechooserwidget.c:4331
+#: gtk/gtkfilechooserwidget.c:4356
 msgid "Image"
 msgstr "画像"
 
-#: gtk/gtkfilechooserwidget.c:4332
+#: gtk/gtkfilechooserwidget.c:4357
 msgid "Archive"
 msgstr "アーカイブ"
 
-#: gtk/gtkfilechooserwidget.c:4333
+#: gtk/gtkfilechooserwidget.c:4358
 msgid "Markup"
 msgstr "マークアップ"
 
-#: gtk/gtkfilechooserwidget.c:4334 gtk/gtkfilechooserwidget.c:4335
+#: gtk/gtkfilechooserwidget.c:4359 gtk/gtkfilechooserwidget.c:4360
 msgid "Text"
 msgstr "テキスト"
 
-#: gtk/gtkfilechooserwidget.c:4337
+#: gtk/gtkfilechooserwidget.c:4362
 msgid "Video"
 msgstr "動画"
 
-#: gtk/gtkfilechooserwidget.c:4338
+#: gtk/gtkfilechooserwidget.c:4363
 msgid "Contacts"
 msgstr "連絡先"
 
-#: gtk/gtkfilechooserwidget.c:4339
+#: gtk/gtkfilechooserwidget.c:4364
 msgid "Calendar"
 msgstr "カレンダー"
 
-#: gtk/gtkfilechooserwidget.c:4340
+#: gtk/gtkfilechooserwidget.c:4365
 msgid "Document"
 msgstr "ドキュメント"
 
-#: gtk/gtkfilechooserwidget.c:4341
+#: gtk/gtkfilechooserwidget.c:4366
 msgid "Presentation"
 msgstr "プレゼンテーション"
 
-#: gtk/gtkfilechooserwidget.c:4342
+#: gtk/gtkfilechooserwidget.c:4367
 msgid "Spreadsheet"
 msgstr "表計算"
 
 #. Translators: We don't know whether this printer is
 #. * available to print to.
-#: gtk/gtkfilechooserwidget.c:4373 gtk/gtkfilechooserwidget.c:4560
-#: gtk/inspector/prop-editor.c:1501
+#: gtk/gtkfilechooserwidget.c:4398 gtk/gtkfilechooserwidget.c:4585
+#: gtk/inspector/prop-editor.c:1571
 #: modules/printbackends/gtkprintbackendcloudprint.c:731
 msgid "Unknown"
 msgstr "不明"
 
-#: gtk/gtkfilechooserwidget.c:4599 gtk/gtkplacessidebar.c:1040
+#: gtk/gtkfilechooserwidget.c:4624 gtk/gtkplacessidebar.c:1041
 msgid "Home"
 msgstr "ホーム"
 
-#: gtk/gtkfilechooserwidget.c:5743 gtk/gtkprintunixdialog.c:664
+#: gtk/gtkfilechooserwidget.c:5793 gtk/gtkprintunixdialog.c:642
 #, c-format
 msgid "A file named “%s” already exists.  Do you want to replace it?"
 msgstr "“%s”というファイルはすでに存在します。上書きしますか?"
 
-#: gtk/gtkfilechooserwidget.c:5746 gtk/gtkprintunixdialog.c:668
+#: gtk/gtkfilechooserwidget.c:5796 gtk/gtkprintunixdialog.c:646
 #, c-format
 msgid ""
 "The file already exists in “%s”.  Replacing it will overwrite its contents."
 msgstr "“%s”にファイルがすでに存在します。すべての内容を上書きします。"
 
-#: gtk/gtkfilechooserwidget.c:5751 gtk/gtkprintunixdialog.c:676
+#: gtk/gtkfilechooserwidget.c:5801 gtk/gtkprintunixdialog.c:654
 msgid "_Replace"
 msgstr "置き換える(_R)"
 
-#: gtk/gtkfilechooserwidget.c:5935
+#: gtk/gtkfilechooserwidget.c:5967
 msgid "You do not have access to the specified folder."
 msgstr "指定したフォルダーへのアクセス権がありません。"
 
-#: gtk/gtkfilechooserwidget.c:6534
+#: gtk/gtkfilechooserwidget.c:6567
 msgid "Could not send the search request"
 msgstr "検索結果をプログラム側に送信できませんでした"
 
-#: gtk/gtkfilechooserwidget.c:6844
+#: gtk/gtkfilechooserwidget.c:6877
 msgid "Accessed"
 msgstr "アクセス日時"
 
@@ -2336,51 +2381,51 @@ msgctxt "font"
 msgid "None"
 msgstr "なし"
 
-#: gtk/gtkfontchooserwidget.c:1506
+#: gtk/gtkfontchooserwidget.c:1076
 msgid "Width"
 msgstr ""
 
-#: gtk/gtkfontchooserwidget.c:1507
+#: gtk/gtkfontchooserwidget.c:1077
 msgid "Weight"
 msgstr ""
 
-#: gtk/gtkfontchooserwidget.c:1508
+#: gtk/gtkfontchooserwidget.c:1078
 msgid "Italic"
 msgstr ""
 
-#: gtk/gtkfontchooserwidget.c:1509
+#: gtk/gtkfontchooserwidget.c:1079
 msgid "Slant"
 msgstr ""
 
-#: gtk/gtkfontchooserwidget.c:1510
+#: gtk/gtkfontchooserwidget.c:1080
 msgid "Optical Size"
 msgstr ""
 
-#: gtk/gtkfontchooserwidget.c:2048 gtk/inspector/prop-editor.c:1488
+#: gtk/gtkfontchooserwidget.c:1618 gtk/inspector/prop-editor.c:1558
 msgid "Default"
 msgstr "デフォルト"
 
-#: gtk/gtkfontchooserwidget.c:2092
+#: gtk/gtkfontchooserwidget.c:1662
 msgid "Ligatures"
 msgstr ""
 
-#: gtk/gtkfontchooserwidget.c:2093
+#: gtk/gtkfontchooserwidget.c:1663
 msgid "Letter Case"
 msgstr ""
 
-#: gtk/gtkfontchooserwidget.c:2094
+#: gtk/gtkfontchooserwidget.c:1664
 msgid "Number Case"
 msgstr ""
 
-#: gtk/gtkfontchooserwidget.c:2095
+#: gtk/gtkfontchooserwidget.c:1665
 msgid "Number Spacing"
 msgstr ""
 
-#: gtk/gtkfontchooserwidget.c:2096
+#: gtk/gtkfontchooserwidget.c:1666
 msgid "Number Formatting"
 msgstr ""
 
-#: gtk/gtkfontchooserwidget.c:2097
+#: gtk/gtkfontchooserwidget.c:1667
 msgid "Character Variants"
 msgstr ""
 
@@ -2388,43 +2433,43 @@ msgstr ""
 msgid "OpenGL context creation failed"
 msgstr "OpenGL のコンテキストの生成に失敗しました"
 
-#: gtk/gtkinfobar.c:1116 gtk/gtkmessagedialog.c:297 gtk/inspector/window.ui:492
+#: gtk/gtkinfobar.c:1101 gtk/gtkmessagedialog.c:301 gtk/inspector/window.ui:492
 msgid "Information"
 msgstr "情報"
 
-#: gtk/gtkinfobar.c:1120 gtk/gtkmessagedialog.c:301
+#: gtk/gtkinfobar.c:1105 gtk/gtkmessagedialog.c:305
 msgid "Question"
 msgstr "質問"
 
-#: gtk/gtkinfobar.c:1124 gtk/gtkmessagedialog.c:305
+#: gtk/gtkinfobar.c:1109 gtk/gtkmessagedialog.c:309
 msgid "Warning"
 msgstr "警告"
 
-#: gtk/gtkinfobar.c:1128 gtk/gtkmessagedialog.c:309
+#: gtk/gtkinfobar.c:1113 gtk/gtkmessagedialog.c:313
 msgid "Error"
 msgstr "エラー"
 
-#: gtk/gtklabel.c:5394 gtk/gtktext.c:5893 gtk/gtktextview.c:8569
+#: gtk/gtklabel.c:5409 gtk/gtktext.c:5920 gtk/gtktextview.c:8540
 msgid "Cu_t"
 msgstr "切り取り(_T)"
 
-#: gtk/gtklabel.c:5395 gtk/gtktext.c:5897 gtk/gtktextview.c:8573
+#: gtk/gtklabel.c:5410 gtk/gtktext.c:5924 gtk/gtktextview.c:8544
 msgid "_Copy"
 msgstr "コピー(_C)"
 
-#: gtk/gtklabel.c:5396 gtk/gtktext.c:5901 gtk/gtktextview.c:8577
+#: gtk/gtklabel.c:5411 gtk/gtktext.c:5928 gtk/gtktextview.c:8548
 msgid "_Paste"
 msgstr "貼り付け(_P)"
 
-#: gtk/gtklabel.c:5402 gtk/gtktext.c:5914 gtk/gtktextview.c:8602
+#: gtk/gtklabel.c:5417 gtk/gtktext.c:5941 gtk/gtktextview.c:8573
 msgid "Select _All"
 msgstr "すべて選択(_A)"
 
-#: gtk/gtklabel.c:5407
+#: gtk/gtklabel.c:5422
 msgid "_Open Link"
 msgstr "リンクを開く(_O)"
 
-#: gtk/gtklabel.c:5411
+#: gtk/gtklabel.c:5426
 msgid "Copy _Link Address"
 msgstr "リンクのアドレスをコピー(_L)"
 
@@ -2473,7 +2518,7 @@ msgstr ""
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:965
+#: gtk/gtkmain.c:967
 msgid "default:LTR"
 msgstr "default:LTR"
 
@@ -2483,7 +2528,7 @@ msgstr "default:LTR"
 #. * the separator that your locale uses or use "%Id" instead
 #. * of "%d" if your locale uses localized digits.
 #.
-#: gtk/gtkmediacontrols.c:98
+#: gtk/gtkmediacontrols.c:99
 #, c-format
 msgctxt "long time format"
 msgid "%d:%02d:%02d"
@@ -2495,7 +2540,7 @@ msgstr "%d:%02d:%02d"
 #. * change ":" to the separator that your locale uses or use
 #. * "%Id" instead of "%d" if your locale uses localized digits.
 #.
-#: gtk/gtkmediacontrols.c:106
+#: gtk/gtkmediacontrols.c:107
 #, c-format
 msgctxt "long time format"
 msgid "-%d:%02d:%02d"
@@ -2507,7 +2552,7 @@ msgstr "-%d:%02d:%02d"
 #. * ":" to the separator that your locale uses or use "%Id"
 #. * instead of "%d" if your locale uses localized digits.
 #.
-#: gtk/gtkmediacontrols.c:117
+#: gtk/gtkmediacontrols.c:118
 #, c-format
 msgctxt "short time format"
 msgid "-%d:%02d"
@@ -2519,22 +2564,22 @@ msgstr "-%d:%02d"
 #. * separator that your locale uses or use "%Id" instead of
 #. * "%d" if your locale uses localized digits.
 #.
-#: gtk/gtkmediacontrols.c:126
+#: gtk/gtkmediacontrols.c:127
 #, c-format
 msgctxt "short time format"
 msgid "%d:%02d"
 msgstr "%d:%02d"
 
-#: gtk/gtkmessagedialog.c:769 gtk/gtkmessagedialog.c:787
-#: gtk/gtkprintbackend.c:658 gtk/gtkwindow.c:6965
+#: gtk/gtkmessagedialog.c:773 gtk/gtkmessagedialog.c:791
+#: gtk/gtkprintbackend.c:644 gtk/gtkwindow.c:6674
 msgid "_OK"
 msgstr "OK(_O)"
 
-#: gtk/gtkmessagedialog.c:781
+#: gtk/gtkmessagedialog.c:785
 msgid "_No"
 msgstr "いいえ(_N)"
 
-#: gtk/gtkmessagedialog.c:782
+#: gtk/gtkmessagedialog.c:786
 msgid "_Yes"
 msgstr "はい(_Y)"
 
@@ -2599,12 +2644,12 @@ msgstr "期限なしで記憶する(_F)"
 msgid "Unknown Application (PID %d)"
 msgstr "不明なアプリケーション (PID %d)"
 
-#: gtk/gtkmountoperation.c:1393
+#: gtk/gtkmountoperation.c:1404
 #, c-format
 msgid "Unable to end process"
 msgstr "プロセスを終了できません"
 
-#: gtk/gtkmountoperation.c:1429
+#: gtk/gtkmountoperation.c:1434
 msgid "_End Process"
 msgstr "プロセスを終了(_E)"
 
@@ -2645,7 +2690,7 @@ msgstr ""
 "GTK がメディアモジュールを見つけられませんでした。インストールを確認してくだ"
 "さい。"
 
-#: gtk/gtknotebook.c:4284 gtk/gtknotebook.c:6496
+#: gtk/gtknotebook.c:4233 gtk/gtknotebook.c:6450
 #, c-format
 msgid "Page %u"
 msgstr "%u ページ"
@@ -2681,32 +2726,28 @@ msgstr ""
 " 上側: %s %s\n"
 " 下側: %s %s"
 
-#: gtk/gtkpagesetupunixdialog.c:887 gtk/gtkprintunixdialog.c:3324
+#: gtk/gtkpagesetupunixdialog.c:887 gtk/gtkprintunixdialog.c:3065
 msgid "Manage Custom Sizes…"
 msgstr "その他のサイズの管理…"
 
 #: gtk/gtkpagesetupunixdialog.c:907 gtk/ui/gtkpagesetupunixdialog.ui:22
-#: gtk/ui/gtkprintunixdialog.ui:693
+#: gtk/ui/gtkprintunixdialog.ui:753
 msgid "Page Setup"
 msgstr "ページの設定"
 
-#: gtk/gtkpasswordentry.c:131
+#: gtk/gtkpasswordentry.c:136
 msgid "Hide text"
 msgstr "テキストを隠す"
 
-#: gtk/gtkpasswordentry.c:136 gtk/gtkpasswordentry.c:478
+#: gtk/gtkpasswordentry.c:141 gtk/gtkpasswordentry.c:489
 msgid "Show text"
 msgstr "テキストを表示する"
 
-#: gtk/gtkpasswordentry.c:155
+#: gtk/gtkpasswordentry.c:160
 msgid "Caps Lock is on"
 msgstr "Caps Lock がオンになっています"
 
-#: gtk/gtkpasswordentry.c:347
-msgid "Password"
-msgstr "パスワード"
-
-#: gtk/gtkpasswordentry.c:552
+#: gtk/gtkpasswordentry.c:564
 msgid "_Show Text"
 msgstr "テキストを表示(_S)"
 
@@ -2720,73 +2761,73 @@ msgstr "ファイルシステムのルート"
 msgid "Open %s"
 msgstr "%s を開きます"
 
-#: gtk/gtkplacessidebar.c:1018
+#: gtk/gtkplacessidebar.c:1019
 msgid "Recent"
 msgstr "最近開いたファイル"
 
-#: gtk/gtkplacessidebar.c:1020
+#: gtk/gtkplacessidebar.c:1021
 msgid "Recent files"
 msgstr "最近開いたファイル"
 
-#: gtk/gtkplacessidebar.c:1029
+#: gtk/gtkplacessidebar.c:1030
 msgid "Starred"
 msgstr "星付き"
 
-#: gtk/gtkplacessidebar.c:1031
+#: gtk/gtkplacessidebar.c:1032
 msgid "Starred files"
 msgstr "星を付けたファイル"
 
-#: gtk/gtkplacessidebar.c:1042
+#: gtk/gtkplacessidebar.c:1043
 msgid "Open your personal folder"
 msgstr "ユーザー専用のフォルダーを開きます"
 
-#: gtk/gtkplacessidebar.c:1057
+#: gtk/gtkplacessidebar.c:1058
 msgid "Open the contents of your desktop in a folder"
 msgstr "フォルダー内にあるデスクトップの内容を開きます"
 
-#: gtk/gtkplacessidebar.c:1071
+#: gtk/gtkplacessidebar.c:1072
 msgid "Enter Location"
 msgstr "場所を指定する"
 
-#: gtk/gtkplacessidebar.c:1073
+#: gtk/gtkplacessidebar.c:1074
 msgid "Manually enter a location"
 msgstr "場所を手動で入力します"
 
-#: gtk/gtkplacessidebar.c:1083
+#: gtk/gtkplacessidebar.c:1084
 msgid "Trash"
 msgstr "ゴミ箱"
 
-#: gtk/gtkplacessidebar.c:1085
+#: gtk/gtkplacessidebar.c:1086
 msgid "Open the trash"
 msgstr "ゴミ箱を開きます"
 
-#: gtk/gtkplacessidebar.c:1196 gtk/gtkplacessidebar.c:1224
-#: gtk/gtkplacessidebar.c:1424
+#: gtk/gtkplacessidebar.c:1197 gtk/gtkplacessidebar.c:1225
+#: gtk/gtkplacessidebar.c:1425
 #, c-format
 msgid "Mount and open “%s”"
 msgstr "“%s”をマウントして開きます"
 
-#: gtk/gtkplacessidebar.c:1319
+#: gtk/gtkplacessidebar.c:1320
 msgid "Open the contents of the file system"
 msgstr "ファイルシステムの内容を開きます"
 
-#: gtk/gtkplacessidebar.c:1402
+#: gtk/gtkplacessidebar.c:1403
 msgid "New bookmark"
 msgstr "新しいブックマーク"
 
-#: gtk/gtkplacessidebar.c:1404
+#: gtk/gtkplacessidebar.c:1405
 msgid "Add a new bookmark"
 msgstr "新しいブックマークを追加する"
 
-#: gtk/gtkplacessidebar.c:1469
+#: gtk/gtkplacessidebar.c:1470
 msgid "Other Locations"
 msgstr "他の場所"
 
-#: gtk/gtkplacessidebar.c:1470
+#: gtk/gtkplacessidebar.c:1471
 msgid "Show other locations"
 msgstr "他の場所を表示する"
 
-#: gtk/gtkplacessidebar.c:1970 gtk/gtkplacessidebar.c:2969
+#: gtk/gtkplacessidebar.c:1968 gtk/gtkplacessidebar.c:2969
 #, c-format
 msgid "Unable to start “%s”"
 msgstr "“%s”を起動できません"
@@ -2794,12 +2835,12 @@ msgstr "“%s”を起動できません"
 #. Translators: This means that unlocking an encrypted storage
 #. * device failed. %s is the name of the device.
 #.
-#: gtk/gtkplacessidebar.c:2006
+#: gtk/gtkplacessidebar.c:2004
 #, c-format
 msgid "Error unlocking “%s”"
 msgstr "“%s”のロック解除時にエラー"
 
-#: gtk/gtkplacessidebar.c:2008
+#: gtk/gtkplacessidebar.c:2006
 #, c-format
 msgid "Unable to access “%s”"
 msgstr "“%s”にアクセスできません"
@@ -2808,9 +2849,10 @@ msgstr "“%s”にアクセスできません"
 msgid "This name is already taken"
 msgstr "この名前はすでに使用されています"
 
-#: gtk/gtkplacessidebar.c:2310 gtk/inspector/actions.ui:25
-#: gtk/inspector/css-node-tree.ui:35 gtk/ui/gtkfilechooserwidget.ui:172
-#: gtk/ui/gtkfilechooserwidget.ui:446
+#: gtk/gtkplacessidebar.c:2310 gtk/inspector/actions.ui:20
+#: gtk/inspector/css-node-tree.ui:35 gtk/inspector/prop-list.ui:23
+#: gtk/ui/gtkfilechooserwidget.ui:172 gtk/ui/gtkfilechooserwidget.ui:444
+#: gtk/ui/gtkprintunixdialog.ui:96
 msgid "Name"
 msgstr "名前"
 
@@ -2840,12 +2882,12 @@ msgid "Unable to poll “%s” for media changes"
 msgstr "メディアの変更で“%s”を監視できません"
 
 #: gtk/gtkplacessidebar.c:3140 gtk/gtkplacessidebar.c:3227
-#: gtk/gtkplacesview.c:1655
+#: gtk/gtkplacesview.c:1650
 msgid "Open in New _Tab"
 msgstr "新しいタブで開く(_T)"
 
 #: gtk/gtkplacessidebar.c:3146 gtk/gtkplacessidebar.c:3236
-#: gtk/gtkplacesview.c:1660
+#: gtk/gtkplacesview.c:1655
 msgid "Open in New _Window"
 msgstr "新しいウィンドウで開く(_W)"
 
@@ -2857,11 +2899,11 @@ msgstr "ブックマークを追加(_A)"
 msgid "_Remove"
 msgstr "削除(_R)"
 
-#: gtk/gtkplacessidebar.c:3267 gtk/gtkplacesview.c:1685
+#: gtk/gtkplacessidebar.c:3267 gtk/gtkplacesview.c:1680
 msgid "_Mount"
 msgstr "マウント(_M)"
 
-#: gtk/gtkplacessidebar.c:3276 gtk/gtkplacesview.c:1674
+#: gtk/gtkplacessidebar.c:3276 gtk/gtkplacesview.c:1669
 msgid "_Unmount"
 msgstr "アンマウント(_U)"
 
@@ -2913,94 +2955,94 @@ msgstr "マルチディスクデバイスを停止(_S)"
 msgid "_Lock Device"
 msgstr "デバイスのロック(_L)"
 
-#: gtk/gtkplacessidebar.c:3814 gtk/gtkplacesview.c:1107
+#: gtk/gtkplacessidebar.c:3814 gtk/gtkplacesview.c:1102
 msgid "Computer"
 msgstr "コンピューター"
 
-#: gtk/gtkplacesview.c:893
+#: gtk/gtkplacesview.c:888
 msgid "Searching for network locations"
 msgstr "ネットワークの場所を探しています"
 
-#: gtk/gtkplacesview.c:900
+#: gtk/gtkplacesview.c:895
 msgid "No network locations found"
 msgstr "ネットワークの場所が見つかりませんでした"
 
 #. if it wasn't cancelled show a dialog
-#: gtk/gtkplacesview.c:1214 gtk/gtkplacesview.c:1300
+#: gtk/gtkplacesview.c:1209 gtk/gtkplacesview.c:1295
 msgid "Unable to access location"
 msgstr "要求された場所にアクセスできません"
 
 #. Restore from Cancel to Connect
-#: gtk/gtkplacesview.c:1230 gtk/ui/gtkplacesview.ui:263
+#: gtk/gtkplacesview.c:1225 gtk/ui/gtkplacesview.ui:263
 msgid "Con_nect"
 msgstr "接続(_N)"
 
 #. if it wasn't cancelled show a dialog
-#: gtk/gtkplacesview.c:1359
+#: gtk/gtkplacesview.c:1354
 msgid "Unable to unmount volume"
 msgstr "ボリュームをアンマウントできません"
 
 #. Allow to cancel the operation
-#: gtk/gtkplacesview.c:1451
+#: gtk/gtkplacesview.c:1446
 msgid "Cance_l"
 msgstr "キャンセル(_L)"
 
-#: gtk/gtkplacesview.c:1598
+#: gtk/gtkplacesview.c:1593
 msgid "AppleTalk"
 msgstr "AppleTalk"
 
-#: gtk/gtkplacesview.c:1604
+#: gtk/gtkplacesview.c:1599
 msgid "File Transfer Protocol"
 msgstr "ファイル転送プロトコル"
 
 #. Translators: do not translate ftp:// and ftps://
-#: gtk/gtkplacesview.c:1606
+#: gtk/gtkplacesview.c:1601
 msgid "ftp:// or ftps://"
 msgstr "ftp:// または ftps://"
 
-#: gtk/gtkplacesview.c:1612
+#: gtk/gtkplacesview.c:1607
 msgid "Network File System"
 msgstr "ネットワークファイルシステム"
 
-#: gtk/gtkplacesview.c:1618
+#: gtk/gtkplacesview.c:1613
 msgid "Samba"
 msgstr "Samba"
 
-#: gtk/gtkplacesview.c:1624
+#: gtk/gtkplacesview.c:1619
 msgid "SSH File Transfer Protocol"
 msgstr "SSH ファイル転送プロトコル"
 
 #. Translators: do not translate sftp:// and ssh://
-#: gtk/gtkplacesview.c:1626
+#: gtk/gtkplacesview.c:1621
 msgid "sftp:// or ssh://"
 msgstr "sftp:// または ssh://"
 
-#: gtk/gtkplacesview.c:1632
+#: gtk/gtkplacesview.c:1627
 msgid "WebDAV"
 msgstr "WebDAV"
 
 #. Translators: do not translate dav:// and davs://
-#: gtk/gtkplacesview.c:1634
+#: gtk/gtkplacesview.c:1629
 msgid "dav:// or davs://"
 msgstr "dav:// または davs://"
 
-#: gtk/gtkplacesview.c:1669
+#: gtk/gtkplacesview.c:1664
 msgid "_Disconnect"
 msgstr "切断(_D)"
 
-#: gtk/gtkplacesview.c:1680
+#: gtk/gtkplacesview.c:1675
 msgid "_Connect"
 msgstr "接続(_C)"
 
-#: gtk/gtkplacesview.c:1864
+#: gtk/gtkplacesview.c:1859
 msgid "Unable to get remote server location"
 msgstr "指定したリモートサーバーの場所にアクセスできません"
 
-#: gtk/gtkplacesview.c:2004 gtk/gtkplacesview.c:2013
+#: gtk/gtkplacesview.c:2002 gtk/gtkplacesview.c:2011
 msgid "Networks"
 msgstr "ネットワーク"
 
-#: gtk/gtkplacesview.c:2004 gtk/gtkplacesview.c:2013
+#: gtk/gtkplacesview.c:2002 gtk/gtkplacesview.c:2011
 msgid "On This Computer"
 msgstr "このコンピューター"
 
@@ -3023,19 +3065,19 @@ msgstr "切断"
 msgid "Unmount"
 msgstr "アンマウント"
 
-#: gtk/gtkprintbackend.c:656
+#: gtk/gtkprintbackend.c:642
 msgid "Authentication"
 msgstr "認証"
 
-#: gtk/gtkprintbackend.c:733
+#: gtk/gtkprintbackend.c:719
 msgid "_Remember password"
 msgstr "パスワードを記憶する(_R)"
 
-#: gtk/gtkprinteroptionwidget.c:520
+#: gtk/gtkprinteroptionwidget.c:518
 msgid "Select a filename"
 msgstr "ファイル名を選択"
 
-#: gtk/gtkprinteroptionwidget.c:524 gtk/ui/gtkappchooserdialog.ui:50
+#: gtk/gtkprinteroptionwidget.c:522 gtk/ui/gtkappchooserdialog.ui:50
 #: gtk/ui/gtkcolorchooserdialog.ui:38 gtk/ui/gtkfontchooserdialog.ui:29
 msgid "_Select"
 msgstr "選択(_S)"
@@ -3125,9 +3167,14 @@ msgstr "作業用のファイルを生成できないことが一番考えられ
 
 #. window
 #: gtk/gtkprintoperation-portal.c:236 gtk/gtkprintoperation-portal.c:546
-#: gtk/gtkprintoperation-portal.c:615 gtk/gtkprintunixdialog.c:3344
+#: gtk/gtkprintoperation-portal.c:615 gtk/gtkprintunixdialog.c:3085
 msgid "Print"
 msgstr "印刷"
+
+#: gtk/gtkprintoperation-unix.c:479 gtk/gtkprintoperation-win32.c:1515
+#: gtk/inspector/prop-editor.c:1568
+msgid "Application"
+msgstr "アプリケーション"
 
 #: gtk/gtkprintoperation-win32.c:634
 msgid "Printer offline"
@@ -3139,7 +3186,7 @@ msgstr "用紙の範囲外"
 
 #. Translators: this is a printer status.
 #: gtk/gtkprintoperation-win32.c:638
-#: modules/printbackends/gtkprintbackendcups.c:2610
+#: modules/printbackends/gtkprintbackendcups.c:2603
 msgid "Paused"
 msgstr "一時停止"
 
@@ -3192,11 +3239,11 @@ msgstr "プレビュー(_V)"
 msgid "_Print"
 msgstr "印刷(_P)"
 
-#: gtk/gtkprintunixdialog.c:867
+#: gtk/gtkprintunixdialog.c:859
 msgid "Getting printer information failed"
 msgstr "プリンターの情報の取得に失敗しました。"
 
-#: gtk/gtkprintunixdialog.c:2031
+#: gtk/gtkprintunixdialog.c:1856
 msgid "Getting printer information…"
 msgstr "プリンターの情報を取得中…"
 
@@ -3206,67 +3253,67 @@ msgstr "プリンターの情報を取得中…"
 #. Translators: These strings name the possible arrangements of
 #. * multiple pages on a sheet when printing
 #.
-#: gtk/gtkprintunixdialog.c:3054
-#: modules/printbackends/gtkprintbackendcups.c:5465
+#: gtk/gtkprintunixdialog.c:2795
+#: modules/printbackends/gtkprintbackendcups.c:5460
 msgid "Left to right, top to bottom"
 msgstr "左から右へ、上から下へ"
 
-#: gtk/gtkprintunixdialog.c:3054
-#: modules/printbackends/gtkprintbackendcups.c:5465
+#: gtk/gtkprintunixdialog.c:2795
+#: modules/printbackends/gtkprintbackendcups.c:5460
 msgid "Left to right, bottom to top"
 msgstr "左から右へ、下から上へ"
 
-#: gtk/gtkprintunixdialog.c:3055
-#: modules/printbackends/gtkprintbackendcups.c:5466
+#: gtk/gtkprintunixdialog.c:2796
+#: modules/printbackends/gtkprintbackendcups.c:5461
 msgid "Right to left, top to bottom"
 msgstr "右から左へ、上から下へ"
 
-#: gtk/gtkprintunixdialog.c:3055
-#: modules/printbackends/gtkprintbackendcups.c:5466
+#: gtk/gtkprintunixdialog.c:2796
+#: modules/printbackends/gtkprintbackendcups.c:5461
 msgid "Right to left, bottom to top"
 msgstr "右から左へ、下から上へ"
 
-#: gtk/gtkprintunixdialog.c:3056
-#: modules/printbackends/gtkprintbackendcups.c:5467
+#: gtk/gtkprintunixdialog.c:2797
+#: modules/printbackends/gtkprintbackendcups.c:5462
 msgid "Top to bottom, left to right"
 msgstr "上から下へ、左から右へ"
 
-#: gtk/gtkprintunixdialog.c:3056
-#: modules/printbackends/gtkprintbackendcups.c:5467
+#: gtk/gtkprintunixdialog.c:2797
+#: modules/printbackends/gtkprintbackendcups.c:5462
 msgid "Top to bottom, right to left"
 msgstr "上から下へ、右から左へ"
 
-#: gtk/gtkprintunixdialog.c:3057
-#: modules/printbackends/gtkprintbackendcups.c:5468
+#: gtk/gtkprintunixdialog.c:2798
+#: modules/printbackends/gtkprintbackendcups.c:5463
 msgid "Bottom to top, left to right"
 msgstr "下から上へ、左から右へ"
 
-#: gtk/gtkprintunixdialog.c:3057
-#: modules/printbackends/gtkprintbackendcups.c:5468
+#: gtk/gtkprintunixdialog.c:2798
+#: modules/printbackends/gtkprintbackendcups.c:5463
 msgid "Bottom to top, right to left"
 msgstr "下から上へ、右から左へ"
 
-#: gtk/gtkprintunixdialog.c:3061 gtk/gtkprintunixdialog.c:3074
+#: gtk/gtkprintunixdialog.c:2802 gtk/gtkprintunixdialog.c:2815
 msgid "Page Ordering"
 msgstr "ページの順番"
 
-#: gtk/gtkprintunixdialog.c:3090
+#: gtk/gtkprintunixdialog.c:2831
 msgid "Left to right"
 msgstr "左から右へ"
 
-#: gtk/gtkprintunixdialog.c:3091
+#: gtk/gtkprintunixdialog.c:2832
 msgid "Right to left"
 msgstr "右から左へ"
 
-#: gtk/gtkprintunixdialog.c:3103
+#: gtk/gtkprintunixdialog.c:2844
 msgid "Top to bottom"
 msgstr "上から下へ"
 
-#: gtk/gtkprintunixdialog.c:3104
+#: gtk/gtkprintunixdialog.c:2845
 msgid "Bottom to top"
 msgstr "下から上へ"
 
-#: gtk/gtkprogressbar.c:582
+#: gtk/gtkprogressbar.c:580
 #, c-format
 msgctxt "progress bar label"
 msgid "%.0f %%"
@@ -3284,18 +3331,14 @@ msgstr "URI “%s”のアイテムが見つかりません"
 msgid "Unable to move the item with URI “%s” to “%s”"
 msgstr "URI “%s”のアイテムを“%s”に移動できません"
 
-#: gtk/gtkrecentmanager.c:2322
+#: gtk/gtkrecentmanager.c:2321
 #, c-format
 msgid "No registered application with name “%s” for item with URI “%s” found"
 msgstr ""
 "URI “%2$s”のアイテム用に登録された“%1$s”というアプリケーションが見つかりませ"
 "んでした"
 
-#: gtk/gtksearchentry.c:228
-msgid "Search"
-msgstr "検索"
-
-#: gtk/gtksearchentry.c:515
+#: gtk/gtksearchentry.c:503
 msgid "Clear entry"
 msgstr "エントリーを消去する"
 
@@ -3319,7 +3362,7 @@ msgctxt "keyboard side marker"
 msgid "R"
 msgstr "右"
 
-#: gtk/gtkshortcutssection.c:428
+#: gtk/gtkshortcutssection.c:398
 msgid "_Show All"
 msgstr "すべて表示する(_S)"
 
@@ -3356,26 +3399,26 @@ msgid "Swipe right"
 msgstr "右にスワイプする"
 
 #. Translators: This is the window title for the shortcuts window in normal mode
-#: gtk/gtkshortcutswindow.c:882 gtk/inspector/window.ui:457
+#: gtk/gtkshortcutswindow.c:900 gtk/inspector/window.ui:457
 msgid "Shortcuts"
 msgstr "ショートカット"
 
 #. Translators: This is the window title for the shortcuts window in search mode
-#: gtk/gtkshortcutswindow.c:887
+#: gtk/gtkshortcutswindow.c:905
 msgid "Search Results"
 msgstr "検索結果"
 
 #. Translators: This is placeholder text for the search entry in the shortcuts window
-#: gtk/gtkshortcutswindow.c:917
+#: gtk/gtkshortcutswindow.c:935
 msgid "Search Shortcuts"
 msgstr "ショートカットを検索"
 
-#: gtk/gtkshortcutswindow.c:976 gtk/ui/gtkemojichooser.ui:338
+#: gtk/gtkshortcutswindow.c:994 gtk/ui/gtkemojichooser.ui:338
 #: gtk/ui/gtkfilechooserwidget.ui:301
 msgid "No Results Found"
 msgstr "見つかりませんでした"
 
-#: gtk/gtkshortcutswindow.c:982 gtk/ui/gtkemojichooser.ui:351
+#: gtk/gtkshortcutswindow.c:1000 gtk/ui/gtkemojichooser.ui:351
 #: gtk/ui/gtkfilechooserwidget.ui:314 gtk/ui/gtkplacesview.ui:231
 msgid "Try a different search"
 msgstr "他のキーワードを試してください"
@@ -3384,15 +3427,15 @@ msgstr "他のキーワードを試してください"
 msgid "Could not show link"
 msgstr "リンクを表示できませんでした"
 
-#: gtk/gtktext.c:5919 gtk/gtktextview.c:8607
+#: gtk/gtktext.c:5946 gtk/gtktextview.c:8578
 msgid "Insert _Emoji"
 msgstr "絵文字を挿入(_E)"
 
-#: gtk/gtktextview.c:8589
+#: gtk/gtktextview.c:8560
 msgid "_Undo"
 msgstr "元に戻す(_U)"
 
-#: gtk/gtktextview.c:8593
+#: gtk/gtktextview.c:8564
 msgid "_Redo"
 msgstr "やり直す(_R)"
 
@@ -3400,11 +3443,11 @@ msgstr "やり直す(_R)"
 msgid "Adjusts the volume"
 msgstr "音量を調整します"
 
-#: gtk/gtkvolumebutton.c:236
+#: gtk/gtkvolumebutton.c:233
 msgid "Muted"
 msgstr "ミュート"
 
-#: gtk/gtkvolumebutton.c:240
+#: gtk/gtkvolumebutton.c:237
 msgid "Full Volume"
 msgstr "フル音量"
 
@@ -3413,18 +3456,18 @@ msgstr "フル音量"
 #. * Translate the "%d" to "%Id" if you want to use localised digits,
 #. * or otherwise translate the "%d" to "%d".
 #.
-#: gtk/gtkvolumebutton.c:253
+#: gtk/gtkvolumebutton.c:250
 #, c-format
 msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: gtk/gtkwindow.c:6952
+#: gtk/gtkwindow.c:6661
 #, c-format
 msgid "Do you want to use GTK Inspector?"
 msgstr "GTK インスペクターを使用しますか?"
 
-#: gtk/gtkwindow.c:6954
+#: gtk/gtkwindow.c:6663
 #, c-format
 msgid ""
 "GTK Inspector is an interactive debugger that lets you explore and modify "
@@ -3435,19 +3478,19 @@ msgstr ""
 "デバッガーです。使用方法によっては、アプリケーションの異常動作やクラッシュを"
 "引き起こす可能性があります。"
 
-#: gtk/gtkwindow.c:6959
+#: gtk/gtkwindow.c:6668
 msgid "Don’t show this message again"
 msgstr "このメッセージを今後表示しない"
 
-#: gtk/gtkwindowcontrols.c:349
+#: gtk/gtkwindowcontrols.c:349 gtk/gtkwindowhandle.c:240
 msgid "Close"
 msgstr "閉じる"
 
-#: gtk/inspector/action-editor.c:295
+#: gtk/inspector/action-editor.c:292
 msgid "Activate"
 msgstr "有効化"
 
-#: gtk/inspector/action-editor.c:315
+#: gtk/inspector/action-editor.c:312
 msgid "Set State"
 msgstr ""
 
@@ -3455,31 +3498,31 @@ msgstr ""
 msgid "Enabled"
 msgstr "有効"
 
-#: gtk/inspector/actions.ui:37
+#: gtk/inspector/actions.ui:42
 msgid "Parameter Type"
 msgstr "パラメーターの種類"
 
-#: gtk/inspector/actions.ui:43 gtk/inspector/css-node-tree.ui:74
+#: gtk/inspector/actions.ui:53 gtk/inspector/css-node-tree.ui:74
 #: gtk/inspector/misc-info.ui:121
 msgid "State"
 msgstr "状態"
 
-#: gtk/inspector/controllers.c:138
+#: gtk/inspector/controllers.c:147
 msgctxt "event phase"
 msgid "None"
 msgstr "なし"
 
-#: gtk/inspector/controllers.c:139
+#: gtk/inspector/controllers.c:148
 msgctxt "event phase"
 msgid "Capture"
 msgstr "キャプチャ"
 
-#: gtk/inspector/controllers.c:140
+#: gtk/inspector/controllers.c:149
 msgctxt "event phase"
 msgid "Bubble"
 msgstr "バブル"
 
-#: gtk/inspector/controllers.c:141
+#: gtk/inspector/controllers.c:150
 msgctxt "event phase"
 msgid "Target"
 msgstr "ターゲット"
@@ -3525,8 +3568,8 @@ msgstr "スタイルクラス"
 msgid "CSS Property"
 msgstr "CSS プロパティ"
 
-#: gtk/inspector/css-node-tree.ui:119 gtk/inspector/recorder.ui:115
-#: gtk/ui/gtkcoloreditor.ui:270
+#: gtk/inspector/css-node-tree.ui:119 gtk/inspector/prop-list.ui:56
+#: gtk/inspector/recorder.ui:115 gtk/ui/gtkcoloreditor.ui:270
 msgid "Value"
 msgstr "値"
 
@@ -3534,22 +3577,22 @@ msgstr "値"
 msgid "Show data"
 msgstr "データの表示"
 
-#: gtk/inspector/general.c:347
+#: gtk/inspector/general.c:348
 msgctxt "GL version"
 msgid "None"
 msgstr "なし"
 
-#: gtk/inspector/general.c:348
+#: gtk/inspector/general.c:349
 msgctxt "GL vendor"
 msgid "None"
 msgstr "なし"
 
-#: gtk/inspector/general.c:449
+#: gtk/inspector/general.c:450
 msgctxt "Vulkan device"
 msgid "None"
 msgstr "なし"
 
-#: gtk/inspector/general.c:450 gtk/inspector/general.c:451
+#: gtk/inspector/general.c:451 gtk/inspector/general.c:452
 msgctxt "Vulkan version"
 msgid "None"
 msgstr "なし"
@@ -3590,23 +3633,23 @@ msgstr ""
 msgid "Composited"
 msgstr ""
 
-#: gtk/inspector/general.ui:521
+#: gtk/inspector/general.ui:531
 msgid "GL Version"
 msgstr "GL バージョン"
 
-#: gtk/inspector/general.ui:552
+#: gtk/inspector/general.ui:562
 msgid "GL Vendor"
 msgstr "GL ベンダー"
 
-#: gtk/inspector/general.ui:593
+#: gtk/inspector/general.ui:603
 msgid "Vulkan Device"
 msgstr "Vulkan デバイス"
 
-#: gtk/inspector/general.ui:624
+#: gtk/inspector/general.ui:634
 msgid "Vulkan API version"
 msgstr "Vulkan API バージョン"
 
-#: gtk/inspector/general.ui:655
+#: gtk/inspector/general.ui:665
 msgid "Vulkan driver version"
 msgstr "Vulkan ドライバーバージョン"
 
@@ -3634,8 +3677,8 @@ msgstr "アイコン"
 msgid "Address"
 msgstr "アドレス"
 
-#: gtk/inspector/misc-info.ui:62 gtk/inspector/statistics.ui:46
-#: gtk/ui/gtkfilechooserwidget.ui:218
+#: gtk/inspector/misc-info.ui:62 gtk/inspector/prop-list.ui:34
+#: gtk/inspector/statistics.ui:46 gtk/ui/gtkfilechooserwidget.ui:218
 msgid "Type"
 msgstr "型"
 
@@ -3668,8 +3711,8 @@ msgid "Surface"
 msgstr ""
 
 #: gtk/inspector/misc-info.ui:316 gtk/inspector/misc-info.ui:355
-#: gtk/inspector/misc-info.ui:394 gtk/inspector/prop-editor.c:792
-#: gtk/inspector/prop-editor.c:1047 gtk/inspector/prop-editor.c:1322
+#: gtk/inspector/misc-info.ui:394 gtk/inspector/prop-editor.c:791
+#: gtk/inspector/prop-editor.c:1046 gtk/inspector/prop-editor.c:1392
 #: gtk/inspector/window.ui:362
 msgid "Properties"
 msgstr "プロパティ"
@@ -3723,63 +3766,69 @@ msgstr "トップレベル"
 msgid "Child Visible"
 msgstr "子オブジェクトが表示可能"
 
-#: gtk/inspector/prop-editor.c:656
+#: gtk/inspector/prop-editor.c:657
 #, c-format
 msgid "Pointer: %p"
 msgstr "ポインター: %p"
 
-#: gtk/inspector/prop-editor.c:1104
+#: gtk/inspector/prop-editor.c:1103
 #, c-format
 msgid "Uneditable property type: %s"
 msgstr "編集不可能なプロパティ型: %s"
 
-#: gtk/inspector/prop-editor.c:1220
-msgid "Attribute:"
-msgstr "属性:"
-
-#: gtk/inspector/prop-editor.c:1223
-msgid "Model"
-msgstr "モデル"
-
-#: gtk/inspector/prop-editor.c:1228
-msgid "Column:"
-msgstr "項目:"
-
-#: gtk/inspector/prop-editor.c:1238
-msgctxt "property name"
+#: gtk/inspector/prop-editor.c:1247
+#, fuzzy
+#| msgctxt "font"
+#| msgid "None"
 msgid "None"
 msgstr "なし"
 
-#: gtk/inspector/prop-editor.c:1318
+#: gtk/inspector/prop-editor.c:1284
+msgid "Attribute:"
+msgstr "属性:"
+
+#: gtk/inspector/prop-editor.c:1287
+msgid "Model"
+msgstr "モデル"
+
+#: gtk/inspector/prop-editor.c:1292
+msgid "Column:"
+msgstr "項目:"
+
+#: gtk/inspector/prop-editor.c:1388
 #, c-format
 msgid "Action from: %p (%s)"
 msgstr ""
 
-#: gtk/inspector/prop-editor.c:1421
+#: gtk/inspector/prop-editor.c:1491
 msgid "bidirectional"
 msgstr "双方向"
 
-#: gtk/inspector/prop-editor.c:1440
+#: gtk/inspector/prop-editor.c:1510
 msgid "Setting:"
 msgstr "設定:"
 
-#: gtk/inspector/prop-editor.c:1480
+#: gtk/inspector/prop-editor.c:1550
 msgid "Reset"
 msgstr "リセット"
 
-#: gtk/inspector/prop-editor.c:1491
+#: gtk/inspector/prop-editor.c:1561
 msgid "Theme"
 msgstr "テーマ"
 
-#: gtk/inspector/prop-editor.c:1494
+#: gtk/inspector/prop-editor.c:1564
 msgid "XSettings"
 msgstr "XSettings"
 
-#: gtk/inspector/prop-editor.c:1504
+#: gtk/inspector/prop-editor.c:1574
 msgid "Source:"
 msgstr "ソース:"
 
-#: gtk/inspector/recorder.c:998
+#: gtk/inspector/prop-list.ui:45
+msgid "Defined At"
+msgstr "定義場所"
+
+#: gtk/inspector/recorder.c:977
 #, c-format
 msgid "Saving RenderNode failed"
 msgstr ""
@@ -3804,28 +3853,28 @@ msgstr ""
 msgid "Property"
 msgstr "プロパティ"
 
-#: gtk/inspector/resource-list.ui:69
+#: gtk/inspector/resource-list.ui:64
 msgid "Path"
 msgstr "パス"
 
-#: gtk/inspector/resource-list.ui:87
+#: gtk/inspector/resource-list.ui:76
 msgid "Count"
 msgstr "カウント"
 
-#: gtk/inspector/resource-list.ui:99 gtk/ui/gtkfilechooserwidget.ui:206
-#: gtk/ui/gtkfontchooserwidget.ui:120 gtk/ui/gtkfontchooserwidget.ui:258
+#: gtk/inspector/resource-list.ui:87 gtk/ui/gtkfilechooserwidget.ui:206
+#: gtk/ui/gtkfontchooserwidget.ui:142 gtk/ui/gtkfontchooserwidget.ui:290
 msgid "Size"
 msgstr "サイズ"
 
-#: gtk/inspector/resource-list.ui:134
+#: gtk/inspector/resource-list.ui:126
 msgid "Name:"
 msgstr "名前:"
 
-#: gtk/inspector/resource-list.ui:156
+#: gtk/inspector/resource-list.ui:148
 msgid "Type:"
 msgstr "種類:"
 
-#: gtk/inspector/resource-list.ui:177
+#: gtk/inspector/resource-list.ui:169
 msgid "Size:"
 msgstr "サイズ:"
 
@@ -3833,29 +3882,29 @@ msgstr "サイズ:"
 msgid "Trigger"
 msgstr ""
 
-#: gtk/inspector/size-groups.c:239
-msgid "Mode"
-msgstr "モード"
-
-#: gtk/inspector/size-groups.c:255
+#: gtk/inspector/size-groups.c:225
 msgctxt "sizegroup mode"
 msgid "None"
 msgstr "なし"
 
-#: gtk/inspector/size-groups.c:256
+#: gtk/inspector/size-groups.c:226
 msgctxt "sizegroup mode"
 msgid "Horizontal"
 msgstr "水平"
 
-#: gtk/inspector/size-groups.c:257
+#: gtk/inspector/size-groups.c:227
 msgctxt "sizegroup mode"
 msgid "Vertical"
 msgstr "垂直"
 
-#: gtk/inspector/size-groups.c:258
+#: gtk/inspector/size-groups.c:228
 msgctxt "sizegroup mode"
 msgid "Both"
 msgstr "両方"
+
+#: gtk/inspector/size-groups.c:240
+msgid "Mode"
+msgstr "モード"
 
 #: gtk/inspector/statistics.c:399
 msgid "GLib must be configured with -Dbuildtype=debug"
@@ -3899,19 +3948,19 @@ msgstr "階層"
 msgid "Implements"
 msgstr ""
 
-#: gtk/inspector/visual.c:580 gtk/inspector/visual.c:599
+#: gtk/inspector/visual.c:613 gtk/inspector/visual.c:632
 msgid "Theme is hardcoded by GTK_THEME"
 msgstr "テーマは GTK_THEME によってハードコードされています"
 
-#: gtk/inspector/visual.c:807
+#: gtk/inspector/visual.c:846
 msgid "Backend does not support window scaling"
 msgstr "バックエンドがウィンドウスケーリングをサポートしていません"
 
-#: gtk/inspector/visual.c:905
+#: gtk/inspector/visual.c:944
 msgid "Setting is hardcoded by GTK_TEST_TOUCHSCREEN"
 msgstr "設定は GTK_TEST_TOUCHSCREEN によってハードコードされています"
 
-#: gtk/inspector/visual.c:1013
+#: gtk/inspector/visual.c:1052
 msgid "GL rendering is disabled"
 msgstr "GL レンダリングは無効です"
 
@@ -4035,7 +4084,7 @@ msgstr ""
 msgid "Miscellaneous"
 msgstr "その他"
 
-#: gtk/inspector/window.ui:374 gtk/ui/gtkprintunixdialog.ui:365
+#: gtk/inspector/window.ui:374 gtk/ui/gtkprintunixdialog.ui:425
 msgid "Layout"
 msgstr "レイアウト"
 
@@ -6426,7 +6475,7 @@ msgstr "ファイル %s を保存できません: %s\n"
 msgid "Can’t close stream"
 msgstr "ストリームをクローズできません"
 
-#: gtk/tools/gtk-builder-tool.c:38
+#: gtk/tools/gtk-builder-tool.c:34
 #, c-format
 msgid ""
 "Usage:\n"
@@ -6467,42 +6516,42 @@ msgstr ""
 "\n"
 "GtkBuilder .ui ファイルに関する様々な操作を行います\n"
 
-#: gtk/tools/gtk-builder-tool-simplify.c:457
+#: gtk/tools/gtk-builder-tool-simplify.c:488
 #, c-format
 msgid "%s:%d: Couldn’t parse value for property '%s': %s\n"
 msgstr "%s:%d: プロパティ '%s' の値を解析できませんでした: %s\n"
 
-#: gtk/tools/gtk-builder-tool-simplify.c:650
+#: gtk/tools/gtk-builder-tool-simplify.c:624
 #, c-format
 msgid "%s:%d: %sproperty %s::%s not found\n"
 msgstr "%s:%d: %sプロパティ %s::%s が見つかりません\n"
 
-#: gtk/tools/gtk-builder-tool-simplify.c:1846
+#: gtk/tools/gtk-builder-tool-simplify.c:1884
 #, c-format
 msgid "Can’t load “%s”: %s\n"
 msgstr "“%s”を読み込めません: %s\n"
 
-#: gtk/tools/gtk-builder-tool-simplify.c:1857
+#: gtk/tools/gtk-builder-tool-simplify.c:1895
 #, c-format
 msgid "Can’t parse “%s”: %s\n"
 msgstr "“%s”を解析できません: %s\n"
 
-#: gtk/tools/gtk-builder-tool-simplify.c:1881
+#: gtk/tools/gtk-builder-tool-simplify.c:1919
 #, c-format
 msgid "Failed to read “%s”: %s\n"
 msgstr "“%s”の読み取りに失敗しました: %s\n"
 
-#: gtk/tools/gtk-builder-tool-simplify.c:1887
+#: gtk/tools/gtk-builder-tool-simplify.c:1925
 #, c-format
 msgid "Failed to write %s: “%s”\n"
 msgstr "%s の書き込みに失敗しました: “%s”\n"
 
-#: gtk/tools/gtk-builder-tool-simplify.c:1927
+#: gtk/tools/gtk-builder-tool-simplify.c:1965
 #, c-format
 msgid "No .ui file specified\n"
 msgstr ".ui ファイルを指定していません\n"
 
-#: gtk/tools/gtk-builder-tool-simplify.c:1933
+#: gtk/tools/gtk-builder-tool-simplify.c:1971
 #, c-format
 msgid "Can only simplify a single .ui file without --replace\n"
 msgstr ""
@@ -6782,6 +6831,12 @@ msgstr "V"
 msgid "Saturation"
 msgstr "彩度"
 
+#: gtk/ui/gtkdropdown.ui:57
+#, fuzzy
+#| msgid "Search"
+msgid "Search…"
+msgstr "検索"
+
 #: gtk/ui/gtkemojichooser.ui:61 gtk/ui/gtkemojichooser.ui:228
 msgctxt "emoji category"
 msgid "Smileys & People"
@@ -6844,11 +6899,11 @@ msgstr "ファイル"
 msgid "Remote location — only searching the current folder"
 msgstr "リモートの場所 — 現在のフォルダーのみ検索"
 
-#: gtk/ui/gtkfilechooserwidget.ui:384
+#: gtk/ui/gtkfilechooserwidget.ui:382
 msgid "Folder Name"
 msgstr "フォルダー名"
 
-#: gtk/ui/gtkfilechooserwidget.ui:410
+#: gtk/ui/gtkfilechooserwidget.ui:408
 msgid "_Create"
 msgstr "作成(_C)"
 
@@ -6856,23 +6911,19 @@ msgstr "作成(_C)"
 msgid "Select Font"
 msgstr "フォントの選択"
 
-#: gtk/ui/gtkfontchooserwidget.ui:42
+#: gtk/ui/gtkfontchooserwidget.ui:55
 msgid "Search font name"
 msgstr "フォント名で検索"
 
-#: gtk/ui/gtkfontchooserwidget.ui:85
-msgid "Font Family"
-msgstr "フォントファミリ"
-
-#: gtk/ui/gtkfontchooserwidget.ui:104 gtk/ui/gtkfontchooserwidget.ui:231
+#: gtk/ui/gtkfontchooserwidget.ui:126 gtk/ui/gtkfontchooserwidget.ui:263
 msgid "Preview text"
 msgstr "テキストをプレビュー"
 
-#: gtk/ui/gtkfontchooserwidget.ui:107 gtk/ui/gtkfontchooserwidget.ui:137
+#: gtk/ui/gtkfontchooserwidget.ui:129 gtk/ui/gtkfontchooserwidget.ui:159
 msgid "horizontal"
 msgstr ""
 
-#: gtk/ui/gtkfontchooserwidget.ui:187
+#: gtk/ui/gtkfontchooserwidget.ui:209
 msgid "No Fonts Found"
 msgstr "フォントが見つかりませんでした"
 
@@ -6880,7 +6931,7 @@ msgstr "フォントが見つかりませんでした"
 msgid "_Format for:"
 msgstr "フォーマット(_F):"
 
-#: gtk/ui/gtkpagesetupunixdialog.ui:75 gtk/ui/gtkprintunixdialog.ui:614
+#: gtk/ui/gtkpagesetupunixdialog.ui:75 gtk/ui/gtkprintunixdialog.ui:674
 msgid "_Paper size:"
 msgstr "用紙サイズ(_P):"
 
@@ -6888,19 +6939,19 @@ msgstr "用紙サイズ(_P):"
 msgid "_Orientation:"
 msgstr "用紙の向き(_O):"
 
-#: gtk/ui/gtkpagesetupunixdialog.ui:137 gtk/ui/gtkprintunixdialog.ui:658
+#: gtk/ui/gtkpagesetupunixdialog.ui:137 gtk/ui/gtkprintunixdialog.ui:718
 msgid "Portrait"
 msgstr "縦方向"
 
-#: gtk/ui/gtkpagesetupunixdialog.ui:163 gtk/ui/gtkprintunixdialog.ui:660
+#: gtk/ui/gtkpagesetupunixdialog.ui:163 gtk/ui/gtkprintunixdialog.ui:720
 msgid "Reverse portrait"
 msgstr "縦方向 (逆向き)"
 
-#: gtk/ui/gtkpagesetupunixdialog.ui:189 gtk/ui/gtkprintunixdialog.ui:659
+#: gtk/ui/gtkpagesetupunixdialog.ui:189 gtk/ui/gtkprintunixdialog.ui:719
 msgid "Landscape"
 msgstr "横方向"
 
-#: gtk/ui/gtkpagesetupunixdialog.ui:214 gtk/ui/gtkprintunixdialog.ui:661
+#: gtk/ui/gtkpagesetupunixdialog.ui:214 gtk/ui/gtkprintunixdialog.ui:721
 msgid "Reverse landscape"
 msgstr "横方向 (逆向き)"
 
@@ -6938,37 +6989,33 @@ msgstr "サーバーへ接続(_S)"
 msgid "Enter server address…"
 msgstr "サーバーアドレスを入力…"
 
-#: gtk/ui/gtkprintunixdialog.ui:96
-msgid "Printer"
-msgstr "プリンター"
-
 #. this is the header for the printer status column in the print dialog
-#: gtk/ui/gtkprintunixdialog.ui:118
+#: gtk/ui/gtkprintunixdialog.ui:158
 msgid "Status"
 msgstr "状態"
 
-#: gtk/ui/gtkprintunixdialog.ui:152
+#: gtk/ui/gtkprintunixdialog.ui:212
 msgid "Range"
 msgstr "範囲"
 
-#: gtk/ui/gtkprintunixdialog.ui:168
+#: gtk/ui/gtkprintunixdialog.ui:228
 msgid "_All Pages"
 msgstr "すべてのページ(_A)"
 
-#: gtk/ui/gtkprintunixdialog.ui:180
+#: gtk/ui/gtkprintunixdialog.ui:240
 msgid "C_urrent Page"
 msgstr "現在のページだけ(_U)"
 
-#: gtk/ui/gtkprintunixdialog.ui:193
+#: gtk/ui/gtkprintunixdialog.ui:253
 msgid "Se_lection"
 msgstr "選択(_L)"
 
-#: gtk/ui/gtkprintunixdialog.ui:206
+#: gtk/ui/gtkprintunixdialog.ui:266
 msgid "Pag_es:"
 msgstr "ページ(_E):"
 
-#: gtk/ui/gtkprintunixdialog.ui:207 gtk/ui/gtkprintunixdialog.ui:220
-#: gtk/ui/gtkprintunixdialog.ui:227
+#: gtk/ui/gtkprintunixdialog.ui:267 gtk/ui/gtkprintunixdialog.ui:280
+#: gtk/ui/gtkprintunixdialog.ui:287
 msgid ""
 "Specify one or more page ranges,\n"
 " e.g. 1–3, 7, 11"
@@ -6976,112 +7023,112 @@ msgstr ""
 "1 ページ以上の範囲を指定してください;\n"
 "例: 1–3, 7, 11"
 
-#: gtk/ui/gtkprintunixdialog.ui:226
+#: gtk/ui/gtkprintunixdialog.ui:286
 msgid "Pages"
 msgstr "ページ"
 
-#: gtk/ui/gtkprintunixdialog.ui:253
+#: gtk/ui/gtkprintunixdialog.ui:313
 msgid "Copies"
 msgstr "コピー"
 
-#: gtk/ui/gtkprintunixdialog.ui:271
+#: gtk/ui/gtkprintunixdialog.ui:331
 msgid "Copie_s:"
 msgstr "コピーの数(_S):"
 
-#: gtk/ui/gtkprintunixdialog.ui:294
+#: gtk/ui/gtkprintunixdialog.ui:354
 msgid "C_ollate"
 msgstr "ページを揃える(_O)"
 
-#: gtk/ui/gtkprintunixdialog.ui:305
+#: gtk/ui/gtkprintunixdialog.ui:365
 msgid "_Reverse"
 msgstr "ページを逆順にする(_R)"
 
-#: gtk/ui/gtkprintunixdialog.ui:338
+#: gtk/ui/gtkprintunixdialog.ui:398
 msgid "General"
 msgstr "全般"
 
-#: gtk/ui/gtkprintunixdialog.ui:383
+#: gtk/ui/gtkprintunixdialog.ui:443
 msgid "T_wo-sided:"
 msgstr "両面印刷(_W):"
 
-#: gtk/ui/gtkprintunixdialog.ui:405
+#: gtk/ui/gtkprintunixdialog.ui:465
 msgid "Pages per _side:"
 msgstr "段組み印刷(_S):"
 
-#: gtk/ui/gtkprintunixdialog.ui:429
+#: gtk/ui/gtkprintunixdialog.ui:489
 msgid "Page or_dering:"
 msgstr "ページの順番(_D):"
 
-#: gtk/ui/gtkprintunixdialog.ui:452
+#: gtk/ui/gtkprintunixdialog.ui:512
 msgid "_Only print:"
 msgstr "印刷の対象(_O):"
 
-#: gtk/ui/gtkprintunixdialog.ui:468
+#: gtk/ui/gtkprintunixdialog.ui:528
 msgid "All sheets"
 msgstr "すべてのページ"
 
-#: gtk/ui/gtkprintunixdialog.ui:469
+#: gtk/ui/gtkprintunixdialog.ui:529
 msgid "Even sheets"
 msgstr "偶数ページ"
 
-#: gtk/ui/gtkprintunixdialog.ui:470
+#: gtk/ui/gtkprintunixdialog.ui:530
 msgid "Odd sheets"
 msgstr "奇数ページ"
 
-#: gtk/ui/gtkprintunixdialog.ui:482
+#: gtk/ui/gtkprintunixdialog.ui:542
 msgid "Sc_ale:"
 msgstr "拡大/縮小(_A):"
 
-#: gtk/ui/gtkprintunixdialog.ui:530
+#: gtk/ui/gtkprintunixdialog.ui:590
 msgid "Paper"
 msgstr "用紙"
 
-#: gtk/ui/gtkprintunixdialog.ui:548
+#: gtk/ui/gtkprintunixdialog.ui:608
 msgid "Paper _type:"
 msgstr "種類(_T):"
 
-#: gtk/ui/gtkprintunixdialog.ui:570
+#: gtk/ui/gtkprintunixdialog.ui:630
 msgid "Paper _source:"
 msgstr "用紙のソース(_S):"
 
-#: gtk/ui/gtkprintunixdialog.ui:592
+#: gtk/ui/gtkprintunixdialog.ui:652
 msgid "Output t_ray:"
 msgstr "出力先のトレイ(_R):"
 
-#: gtk/ui/gtkprintunixdialog.ui:641
+#: gtk/ui/gtkprintunixdialog.ui:701
 msgid "Or_ientation:"
 msgstr "用紙の向き(_I):"
 
-#: gtk/ui/gtkprintunixdialog.ui:716
+#: gtk/ui/gtkprintunixdialog.ui:776
 msgid "Job Details"
 msgstr "印刷ジョブの詳細"
 
-#: gtk/ui/gtkprintunixdialog.ui:734
+#: gtk/ui/gtkprintunixdialog.ui:794
 msgid "Pri_ority:"
 msgstr "優先順位(_O):"
 
-#: gtk/ui/gtkprintunixdialog.ui:755
+#: gtk/ui/gtkprintunixdialog.ui:815
 msgid "_Billing info:"
 msgstr "サマリ情報(_B):"
 
-#: gtk/ui/gtkprintunixdialog.ui:791
+#: gtk/ui/gtkprintunixdialog.ui:851
 msgid "Print Document"
 msgstr "ドキュメントの印刷"
 
 #. this is one of the choices for the print at option in the print dialog
-#: gtk/ui/gtkprintunixdialog.ui:807
+#: gtk/ui/gtkprintunixdialog.ui:867
 msgid "_Now"
 msgstr "今すぐ印刷する(_N)"
 
 #. this is one of the choices for the print at option in the print dialog. It also serves as the label for an entry that allows the user to enter a time.
-#: gtk/ui/gtkprintunixdialog.ui:821
+#: gtk/ui/gtkprintunixdialog.ui:881
 msgid "A_t:"
 msgstr "時間を指定する(_T):"
 
 #. Ability to parse the am/pm format depends on actual locale. You can remove the am/pm values below for your locale if they are not supported.
-#: gtk/ui/gtkprintunixdialog.ui:823 gtk/ui/gtkprintunixdialog.ui:825
-#: gtk/ui/gtkprintunixdialog.ui:841 gtk/ui/gtkprintunixdialog.ui:843
-#: gtk/ui/gtkprintunixdialog.ui:848
+#: gtk/ui/gtkprintunixdialog.ui:883 gtk/ui/gtkprintunixdialog.ui:885
+#: gtk/ui/gtkprintunixdialog.ui:901 gtk/ui/gtkprintunixdialog.ui:903
+#: gtk/ui/gtkprintunixdialog.ui:908
 msgid ""
 "Specify the time of print,\n"
 " e.g. 15∶30, 2∶35 pm, 14∶15∶20, 11∶46∶30 am, 4 pm"
@@ -7089,98 +7136,98 @@ msgstr ""
 "印刷する時間を指定してください:\n"
 " (例) 15:30, 2:35 pm, 14:15:20, 11:46:30 am, 4 pm"
 
-#: gtk/ui/gtkprintunixdialog.ui:847
+#: gtk/ui/gtkprintunixdialog.ui:907
 msgid "Time of print"
 msgstr "プリント時間"
 
 #. this is one of the choices for the print at option in the print dialog. It means that the print job will not be printed until it explicitly gets 'released'.
-#: gtk/ui/gtkprintunixdialog.ui:862
+#: gtk/ui/gtkprintunixdialog.ui:922
 msgid "On _hold"
 msgstr "保留する(_H)"
 
-#: gtk/ui/gtkprintunixdialog.ui:864 gtk/ui/gtkprintunixdialog.ui:865
+#: gtk/ui/gtkprintunixdialog.ui:924 gtk/ui/gtkprintunixdialog.ui:925
 msgid "Hold the job until it is explicitly released"
 msgstr "印刷ジョブが完全に解放されるまで保留しておきます"
 
-#: gtk/ui/gtkprintunixdialog.ui:895
+#: gtk/ui/gtkprintunixdialog.ui:955
 msgid "Add Cover Page"
 msgstr "裏表紙の追加"
 
 #. this is the label used for the option in the print dialog that controls the front cover page.
-#: gtk/ui/gtkprintunixdialog.ui:913
+#: gtk/ui/gtkprintunixdialog.ui:973
 msgid "Be_fore:"
 msgstr "前(_F):"
 
 #. this is the label used for the option in the print dialog that controls the back cover page.
-#: gtk/ui/gtkprintunixdialog.ui:934
+#: gtk/ui/gtkprintunixdialog.ui:994
 msgid "_After:"
 msgstr "後(_A):"
 
-#: gtk/ui/gtkprintunixdialog.ui:966
+#: gtk/ui/gtkprintunixdialog.ui:1026
 msgid "Job"
 msgstr "印刷ジョブ"
 
 #. This will appear as a tab label in the print dialog.
-#: gtk/ui/gtkprintunixdialog.ui:996
+#: gtk/ui/gtkprintunixdialog.ui:1056
 msgid "Image Quality"
 msgstr "画像の品質"
 
 #. This will appear as a tab label in the print dialog.
-#: gtk/ui/gtkprintunixdialog.ui:1025
+#: gtk/ui/gtkprintunixdialog.ui:1085
 msgid "Color"
 msgstr "色"
 
 #. This will appear as a tab label in the print dialog. It's a typographical term, as in "Binding and finishing"
-#: gtk/ui/gtkprintunixdialog.ui:1054
+#: gtk/ui/gtkprintunixdialog.ui:1114
 msgid "Finishing"
 msgstr "仕上げ"
 
-#: gtk/ui/gtkprintunixdialog.ui:1083
+#: gtk/ui/gtkprintunixdialog.ui:1143
 msgid "Advanced"
 msgstr "拡張"
 
-#: gtk/ui/gtkprintunixdialog.ui:1099
+#: gtk/ui/gtkprintunixdialog.ui:1159
 msgid "Some of the settings in the dialog conflict"
 msgstr "印刷ダイアログの設定に矛盾があります"
 
-#: gtk/ui/gtkvolumebutton.ui:17
+#: gtk/ui/gtkvolumebutton.ui:18
 msgid "Volume"
 msgstr "音量"
 
-#: gtk/ui/gtkvolumebutton.ui:18
+#: gtk/ui/gtkvolumebutton.ui:19
 msgid "Turns volume up or down"
 msgstr "音量を上げたり下げたりします"
 
-#: gtk/ui/gtkvolumebutton.ui:27
+#: gtk/ui/gtkvolumebutton.ui:28
 msgid "Volume Up"
 msgstr "音量を上げます"
 
-#: gtk/ui/gtkvolumebutton.ui:28
+#: gtk/ui/gtkvolumebutton.ui:29
 msgid "Increases the volume"
 msgstr "音量を上げます"
 
-#: gtk/ui/gtkvolumebutton.ui:37
+#: gtk/ui/gtkvolumebutton.ui:38
 msgid "Volume Down"
 msgstr "音量を下げます"
 
-#: gtk/ui/gtkvolumebutton.ui:38
+#: gtk/ui/gtkvolumebutton.ui:39
 msgid "Decreases the volume"
 msgstr "音量を下げます"
 
-#: modules/media/gtkffmediafile.c:216
+#: modules/media/gtkffmediafile.c:220
 #, c-format
 msgid "Unspecified error decoding video"
 msgstr "動画デコード中に原因不明のエラー"
 
-#: modules/media/gtkffmediafile.c:318 modules/media/gtkffmediafile.c:492
+#: modules/media/gtkffmediafile.c:322 modules/media/gtkffmediafile.c:496
 msgid "Not enough memory"
 msgstr "メモリが足りません"
 
-#: modules/media/gtkffmediafile.c:515
+#: modules/media/gtkffmediafile.c:519
 msgid "Not a video file"
 msgstr "動画ファイルではありません"
 
-#: modules/media/gtkffmediafile.c:534
+#: modules/media/gtkffmediafile.c:538
 msgid "Unsupported video codec"
 msgstr "サポートしていない動画コーデックです"
 
@@ -7208,445 +7255,445 @@ msgstr "休眠"
 msgid "Pages per _sheet:"
 msgstr "段組み印刷(_S):"
 
-#: modules/printbackends/gtkprintbackendcups.c:1120
-#: modules/printbackends/gtkprintbackendcups.c:1429
+#: modules/printbackends/gtkprintbackendcups.c:1119
+#: modules/printbackends/gtkprintbackendcups.c:1428
 msgid "Username:"
 msgstr "ユーザー名:"
 
-#: modules/printbackends/gtkprintbackendcups.c:1121
-#: modules/printbackends/gtkprintbackendcups.c:1438
+#: modules/printbackends/gtkprintbackendcups.c:1120
+#: modules/printbackends/gtkprintbackendcups.c:1437
 msgid "Password:"
 msgstr "パスワード:"
 
-#: modules/printbackends/gtkprintbackendcups.c:1160
-#: modules/printbackends/gtkprintbackendcups.c:1451
+#: modules/printbackends/gtkprintbackendcups.c:1159
+#: modules/printbackends/gtkprintbackendcups.c:1450
 #, c-format
 msgid "Authentication is required to print document “%s” on printer %s"
 msgstr "文書“%s”をプリンター %s で印刷するには認証が必要です"
 
-#: modules/printbackends/gtkprintbackendcups.c:1162
+#: modules/printbackends/gtkprintbackendcups.c:1161
 #, c-format
 msgid "Authentication is required to print a document on %s"
 msgstr "文書を %s で印刷するには認証が必要です"
 
-#: modules/printbackends/gtkprintbackendcups.c:1166
+#: modules/printbackends/gtkprintbackendcups.c:1165
 #, c-format
 msgid "Authentication is required to get attributes of job “%s”"
 msgstr "ジョブ“%s”の属性を取得するには認証が必要です"
 
-#: modules/printbackends/gtkprintbackendcups.c:1168
+#: modules/printbackends/gtkprintbackendcups.c:1167
 msgid "Authentication is required to get attributes of a job"
 msgstr "ジョブの属性を取得するには認証が必要です"
 
-#: modules/printbackends/gtkprintbackendcups.c:1172
+#: modules/printbackends/gtkprintbackendcups.c:1171
 #, c-format
 msgid "Authentication is required to get attributes of printer %s"
 msgstr "プリンター %s の属性を取得するには認証が必要です"
 
-#: modules/printbackends/gtkprintbackendcups.c:1174
+#: modules/printbackends/gtkprintbackendcups.c:1173
 msgid "Authentication is required to get attributes of a printer"
 msgstr "プリンターの属性を取得するには認証が必要です"
 
-#: modules/printbackends/gtkprintbackendcups.c:1177
+#: modules/printbackends/gtkprintbackendcups.c:1176
 #, c-format
 msgid "Authentication is required to get default printer of %s"
 msgstr "%s のデフォルトのプリンターを取得するには認証が必要です"
 
-#: modules/printbackends/gtkprintbackendcups.c:1180
+#: modules/printbackends/gtkprintbackendcups.c:1179
 #, c-format
 msgid "Authentication is required to get printers from %s"
 msgstr "%s からプリンターを取得するには認証が必要です"
 
-#: modules/printbackends/gtkprintbackendcups.c:1185
+#: modules/printbackends/gtkprintbackendcups.c:1184
 #, c-format
 msgid "Authentication is required to get a file from %s"
 msgstr "%s からファイルを取得するには認証が必要です"
 
-#: modules/printbackends/gtkprintbackendcups.c:1187
+#: modules/printbackends/gtkprintbackendcups.c:1186
 #, c-format
 msgid "Authentication is required on %s"
 msgstr "%s には認証が必要です"
 
-#: modules/printbackends/gtkprintbackendcups.c:1423
+#: modules/printbackends/gtkprintbackendcups.c:1422
 msgid "Domain:"
 msgstr "ドメイン:"
 
-#: modules/printbackends/gtkprintbackendcups.c:1453
+#: modules/printbackends/gtkprintbackendcups.c:1452
 #, c-format
 msgid "Authentication is required to print document “%s”"
 msgstr "文書“%s”を印刷するには認証が必要です"
 
-#: modules/printbackends/gtkprintbackendcups.c:1458
+#: modules/printbackends/gtkprintbackendcups.c:1457
 #, c-format
 msgid "Authentication is required to print this document on printer %s"
 msgstr "この文書をプリンター '%s' で印刷するには認証が必要です"
 
-#: modules/printbackends/gtkprintbackendcups.c:1460
+#: modules/printbackends/gtkprintbackendcups.c:1459
 msgid "Authentication is required to print this document"
 msgstr "この文書を印刷するには認証が必要です"
 
-#: modules/printbackends/gtkprintbackendcups.c:2539
+#: modules/printbackends/gtkprintbackendcups.c:2532
 #, c-format
 msgid "Printer “%s” is low on toner."
 msgstr "プリンター“%s”のトナーが少なくなっています。"
 
-#: modules/printbackends/gtkprintbackendcups.c:2543
+#: modules/printbackends/gtkprintbackendcups.c:2536
 #, c-format
 msgid "Printer “%s” has no toner left."
 msgstr "プリンター“%s”のトナーがなくなりました。"
 
 #. Translators: "Developer" like on photo development context
-#: modules/printbackends/gtkprintbackendcups.c:2548
+#: modules/printbackends/gtkprintbackendcups.c:2541
 #, c-format
 msgid "Printer “%s” is low on developer."
 msgstr "プリンター“%s”の現像液が少なくなっています。"
 
 #. Translators: "Developer" like on photo development context
-#: modules/printbackends/gtkprintbackendcups.c:2553
+#: modules/printbackends/gtkprintbackendcups.c:2546
 #, c-format
 msgid "Printer “%s” is out of developer."
 msgstr "プリンター“%s”の現像液がなくなりました。"
 
 #. Translators: "marker" is one color bin of the printer
-#: modules/printbackends/gtkprintbackendcups.c:2558
+#: modules/printbackends/gtkprintbackendcups.c:2551
 #, c-format
 msgid "Printer “%s” is low on at least one marker supply."
 msgstr ""
-"プリンター“%s”にセットされているカートリッジのうち少なくとも 1 本のインクが少な"
-"くなっています。"
+"プリンター“%s”にセットされているカートリッジのうち少なくとも 1 本のインクが少"
+"なくなっています。"
 
 #. Translators: "marker" is one color bin of the printer
-#: modules/printbackends/gtkprintbackendcups.c:2563
+#: modules/printbackends/gtkprintbackendcups.c:2556
 #, c-format
 msgid "Printer “%s” is out of at least one marker supply."
 msgstr ""
-"プリンター“%s”にセットされているカートリッジのうち少なくとも 1 本のインクがなく"
-"なりました。"
+"プリンター“%s”にセットされているカートリッジのうち少なくとも 1 本のインクがな"
+"くなりました。"
 
-#: modules/printbackends/gtkprintbackendcups.c:2567
+#: modules/printbackends/gtkprintbackendcups.c:2560
 #, c-format
 msgid "The cover is open on printer “%s”."
 msgstr "プリンター“%s”のカバーが開いています。"
 
-#: modules/printbackends/gtkprintbackendcups.c:2571
+#: modules/printbackends/gtkprintbackendcups.c:2564
 #, c-format
 msgid "The door is open on printer “%s”."
 msgstr "プリンター“%s”のドアが開いています。"
 
-#: modules/printbackends/gtkprintbackendcups.c:2575
+#: modules/printbackends/gtkprintbackendcups.c:2568
 #, c-format
 msgid "Printer “%s” is low on paper."
 msgstr "プリンター“%s”の用紙が少なくなっています。"
 
-#: modules/printbackends/gtkprintbackendcups.c:2579
+#: modules/printbackends/gtkprintbackendcups.c:2572
 #, c-format
 msgid "Printer “%s” is out of paper."
 msgstr "プリンター“%s”の用紙がなくなりました。"
 
-#: modules/printbackends/gtkprintbackendcups.c:2583
+#: modules/printbackends/gtkprintbackendcups.c:2576
 #, c-format
 msgid "Printer “%s” is currently offline."
 msgstr "プリンター“%s”は現在オフラインです。"
 
-#: modules/printbackends/gtkprintbackendcups.c:2587
+#: modules/printbackends/gtkprintbackendcups.c:2580
 #, c-format
 msgid "There is a problem on printer “%s”."
 msgstr "プリンター“%s”で問題が発生しました。"
 
 #. Translators: this is a printer status.
-#: modules/printbackends/gtkprintbackendcups.c:2607
+#: modules/printbackends/gtkprintbackendcups.c:2600
 msgid "Paused; Rejecting Jobs"
 msgstr "一時停止中 (印刷ジョブを破棄しています)"
 
 #. Translators: this is a printer status.
-#: modules/printbackends/gtkprintbackendcups.c:2613
+#: modules/printbackends/gtkprintbackendcups.c:2606
 msgid "Rejecting Jobs"
 msgstr "印刷ジョブを破棄しています"
 
 #. Translators: this string connects multiple printer states together.
-#: modules/printbackends/gtkprintbackendcups.c:2654
+#: modules/printbackends/gtkprintbackendcups.c:2647
 msgid "; "
 msgstr "; "
 
-#: modules/printbackends/gtkprintbackendcups.c:4402
-#: modules/printbackends/gtkprintbackendcups.c:4469
+#: modules/printbackends/gtkprintbackendcups.c:4397
+#: modules/printbackends/gtkprintbackendcups.c:4464
 msgctxt "printing option"
 msgid "Two Sided"
 msgstr "両面印刷"
 
-#: modules/printbackends/gtkprintbackendcups.c:4403
+#: modules/printbackends/gtkprintbackendcups.c:4398
 msgctxt "printing option"
 msgid "Paper Type"
 msgstr "用紙の種類"
 
-#: modules/printbackends/gtkprintbackendcups.c:4404
+#: modules/printbackends/gtkprintbackendcups.c:4399
 msgctxt "printing option"
 msgid "Paper Source"
 msgstr "用紙のソース"
 
-#: modules/printbackends/gtkprintbackendcups.c:4405
-#: modules/printbackends/gtkprintbackendcups.c:4470
+#: modules/printbackends/gtkprintbackendcups.c:4400
+#: modules/printbackends/gtkprintbackendcups.c:4465
 msgctxt "printing option"
 msgid "Output Tray"
 msgstr "出力トレイ"
 
-#: modules/printbackends/gtkprintbackendcups.c:4406
+#: modules/printbackends/gtkprintbackendcups.c:4401
 msgctxt "printing option"
 msgid "Resolution"
 msgstr "解像度"
 
-#: modules/printbackends/gtkprintbackendcups.c:4407
+#: modules/printbackends/gtkprintbackendcups.c:4402
 msgctxt "printing option"
 msgid "GhostScript pre-filtering"
 msgstr "GhostScript のフィルタリング (前処理)"
 
-#: modules/printbackends/gtkprintbackendcups.c:4416
+#: modules/printbackends/gtkprintbackendcups.c:4411
 msgctxt "printing option value"
 msgid "One Sided"
 msgstr "片面印刷"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/gtkprintbackendcups.c:4418
+#: modules/printbackends/gtkprintbackendcups.c:4413
 msgctxt "printing option value"
 msgid "Long Edge (Standard)"
 msgstr "長辺 (標準)"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/gtkprintbackendcups.c:4420
+#: modules/printbackends/gtkprintbackendcups.c:4415
 msgctxt "printing option value"
 msgid "Short Edge (Flip)"
 msgstr "短辺 (折り返し)"
 
 #. Translators: this is an option of "Paper Source"
-#: modules/printbackends/gtkprintbackendcups.c:4422
-#: modules/printbackends/gtkprintbackendcups.c:4424
-#: modules/printbackends/gtkprintbackendcups.c:4432
+#: modules/printbackends/gtkprintbackendcups.c:4417
+#: modules/printbackends/gtkprintbackendcups.c:4419
+#: modules/printbackends/gtkprintbackendcups.c:4427
 msgctxt "printing option value"
 msgid "Auto Select"
 msgstr "自動選択"
 
 #. Translators: this is an option of "Paper Source"
 #. Translators: this is an option of "Resolution"
-#: modules/printbackends/gtkprintbackendcups.c:4426
-#: modules/printbackends/gtkprintbackendcups.c:4428
-#: modules/printbackends/gtkprintbackendcups.c:4430
-#: modules/printbackends/gtkprintbackendcups.c:4434
+#: modules/printbackends/gtkprintbackendcups.c:4421
+#: modules/printbackends/gtkprintbackendcups.c:4423
+#: modules/printbackends/gtkprintbackendcups.c:4425
+#: modules/printbackends/gtkprintbackendcups.c:4429
 msgctxt "printing option value"
 msgid "Printer Default"
 msgstr "プリンターのデフォルト"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/gtkprintbackendcups.c:4436
+#: modules/printbackends/gtkprintbackendcups.c:4431
 msgctxt "printing option value"
 msgid "Embed GhostScript fonts only"
 msgstr "埋め込みの GhostScript のフォントだけ"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/gtkprintbackendcups.c:4438
+#: modules/printbackends/gtkprintbackendcups.c:4433
 msgctxt "printing option value"
 msgid "Convert to PS level 1"
 msgstr "PS のレベル 1 に変換する"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/gtkprintbackendcups.c:4440
+#: modules/printbackends/gtkprintbackendcups.c:4435
 msgctxt "printing option value"
 msgid "Convert to PS level 2"
 msgstr "PS のレベル 2 に変換する"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/gtkprintbackendcups.c:4442
+#: modules/printbackends/gtkprintbackendcups.c:4437
 msgctxt "printing option value"
 msgid "No pre-filtering"
 msgstr "フィルタリング (前処理) はありません"
 
 #. Translators: "Miscellaneous" is the label for a button, that opens
 #. up an extra panel of settings in a print dialog.
-#: modules/printbackends/gtkprintbackendcups.c:4451
+#: modules/printbackends/gtkprintbackendcups.c:4446
 msgctxt "printing option group"
 msgid "Miscellaneous"
 msgstr "その他"
 
-#: modules/printbackends/gtkprintbackendcups.c:4478
+#: modules/printbackends/gtkprintbackendcups.c:4473
 msgctxt "sides"
 msgid "One Sided"
 msgstr "片面印刷"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/gtkprintbackendcups.c:4480
+#: modules/printbackends/gtkprintbackendcups.c:4475
 msgctxt "sides"
 msgid "Long Edge (Standard)"
 msgstr "長辺 (標準)"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/gtkprintbackendcups.c:4482
+#: modules/printbackends/gtkprintbackendcups.c:4477
 msgctxt "sides"
 msgid "Short Edge (Flip)"
 msgstr "短辺 (折り返し)"
 
 #. Translators: Top output bin
-#: modules/printbackends/gtkprintbackendcups.c:4485
+#: modules/printbackends/gtkprintbackendcups.c:4480
 msgctxt "output-bin"
 msgid "Top Bin"
 msgstr ""
 
 #. Translators: Middle output bin
-#: modules/printbackends/gtkprintbackendcups.c:4487
+#: modules/printbackends/gtkprintbackendcups.c:4482
 msgctxt "output-bin"
 msgid "Middle Bin"
 msgstr ""
 
 #. Translators: Bottom output bin
-#: modules/printbackends/gtkprintbackendcups.c:4489
+#: modules/printbackends/gtkprintbackendcups.c:4484
 msgctxt "output-bin"
 msgid "Bottom Bin"
 msgstr ""
 
 #. Translators: Side output bin
-#: modules/printbackends/gtkprintbackendcups.c:4491
+#: modules/printbackends/gtkprintbackendcups.c:4486
 msgctxt "output-bin"
 msgid "Side Bin"
 msgstr ""
 
 #. Translators: Left output bin
-#: modules/printbackends/gtkprintbackendcups.c:4493
+#: modules/printbackends/gtkprintbackendcups.c:4488
 msgctxt "output-bin"
 msgid "Left Bin"
 msgstr ""
 
 #. Translators: Right output bin
-#: modules/printbackends/gtkprintbackendcups.c:4495
+#: modules/printbackends/gtkprintbackendcups.c:4490
 msgctxt "output-bin"
 msgid "Right Bin"
 msgstr ""
 
 #. Translators: Center output bin
-#: modules/printbackends/gtkprintbackendcups.c:4497
+#: modules/printbackends/gtkprintbackendcups.c:4492
 msgctxt "output-bin"
 msgid "Center Bin"
 msgstr ""
 
 #. Translators: Rear output bin
-#: modules/printbackends/gtkprintbackendcups.c:4499
+#: modules/printbackends/gtkprintbackendcups.c:4494
 msgctxt "output-bin"
 msgid "Rear Bin"
 msgstr ""
 
 #. Translators: Output bin where one sided output is oriented in the face-up position
-#: modules/printbackends/gtkprintbackendcups.c:4501
+#: modules/printbackends/gtkprintbackendcups.c:4496
 msgctxt "output-bin"
 msgid "Face Up Bin"
 msgstr ""
 
 #. Translators: Output bin where one sided output is oriented in the face-down position
-#: modules/printbackends/gtkprintbackendcups.c:4503
+#: modules/printbackends/gtkprintbackendcups.c:4498
 msgctxt "output-bin"
 msgid "Face Down Bin"
 msgstr ""
 
 #. Translators: Large capacity output bin
-#: modules/printbackends/gtkprintbackendcups.c:4505
+#: modules/printbackends/gtkprintbackendcups.c:4500
 msgctxt "output-bin"
 msgid "Large Capacity Bin"
 msgstr ""
 
 #. Translators: Output stacker number %d
-#: modules/printbackends/gtkprintbackendcups.c:4527
+#: modules/printbackends/gtkprintbackendcups.c:4522
 #, c-format
 msgctxt "output-bin"
 msgid "Stacker %d"
 msgstr ""
 
 #. Translators: Output mailbox number %d
-#: modules/printbackends/gtkprintbackendcups.c:4531
+#: modules/printbackends/gtkprintbackendcups.c:4526
 #, c-format
 msgctxt "output-bin"
 msgid "Mailbox %d"
 msgstr ""
 
 #. Translators: Private mailbox
-#: modules/printbackends/gtkprintbackendcups.c:4535
+#: modules/printbackends/gtkprintbackendcups.c:4530
 msgctxt "output-bin"
 msgid "My Mailbox"
 msgstr ""
 
 #. Translators: Output tray number %d
-#: modules/printbackends/gtkprintbackendcups.c:4539
+#: modules/printbackends/gtkprintbackendcups.c:4534
 #, c-format
 msgctxt "output-bin"
 msgid "Tray %d"
 msgstr ""
 
-#: modules/printbackends/gtkprintbackendcups.c:5016
+#: modules/printbackends/gtkprintbackendcups.c:5011
 msgid "Printer Default"
 msgstr "プリンターのデフォルト"
 
 #. Translators: These strings name the possible values of the
 #. * job priority option in the print dialog
 #.
-#: modules/printbackends/gtkprintbackendcups.c:5460
+#: modules/printbackends/gtkprintbackendcups.c:5455
 msgid "Urgent"
 msgstr "緊急"
 
-#: modules/printbackends/gtkprintbackendcups.c:5460
+#: modules/printbackends/gtkprintbackendcups.c:5455
 msgid "High"
 msgstr "高い"
 
-#: modules/printbackends/gtkprintbackendcups.c:5460
+#: modules/printbackends/gtkprintbackendcups.c:5455
 msgid "Medium"
 msgstr "普通"
 
-#: modules/printbackends/gtkprintbackendcups.c:5460
+#: modules/printbackends/gtkprintbackendcups.c:5455
 msgid "Low"
 msgstr "低い"
 
 #. Translators, this string is used to label the job priority option
 #. * in the print dialog
 #.
-#: modules/printbackends/gtkprintbackendcups.c:5490
+#: modules/printbackends/gtkprintbackendcups.c:5485
 msgid "Job Priority"
 msgstr "印刷ジョブの優先順位"
 
 #. Translators, this string is used to label the billing info entry
 #. * in the print dialog
 #.
-#: modules/printbackends/gtkprintbackendcups.c:5501
+#: modules/printbackends/gtkprintbackendcups.c:5496
 msgid "Billing Info"
 msgstr "サマリ情報"
 
 #. Translators, these strings are names for various 'standard' cover
 #. * pages that the printing system may support.
 #.
-#: modules/printbackends/gtkprintbackendcups.c:5525
+#: modules/printbackends/gtkprintbackendcups.c:5520
 msgctxt "cover page"
 msgid "None"
 msgstr "なし"
 
-#: modules/printbackends/gtkprintbackendcups.c:5526
+#: modules/printbackends/gtkprintbackendcups.c:5521
 msgctxt "cover page"
 msgid "Classified"
 msgstr "機密"
 
-#: modules/printbackends/gtkprintbackendcups.c:5527
+#: modules/printbackends/gtkprintbackendcups.c:5522
 msgctxt "cover page"
 msgid "Confidential"
 msgstr "極秘"
 
-#: modules/printbackends/gtkprintbackendcups.c:5528
+#: modules/printbackends/gtkprintbackendcups.c:5523
 msgctxt "cover page"
 msgid "Secret"
 msgstr "秘密"
 
-#: modules/printbackends/gtkprintbackendcups.c:5529
+#: modules/printbackends/gtkprintbackendcups.c:5524
 msgctxt "cover page"
 msgid "Standard"
 msgstr "標準"
 
-#: modules/printbackends/gtkprintbackendcups.c:5530
+#: modules/printbackends/gtkprintbackendcups.c:5525
 msgctxt "cover page"
 msgid "Top Secret"
 msgstr "トップシークレット"
 
-#: modules/printbackends/gtkprintbackendcups.c:5531
+#: modules/printbackends/gtkprintbackendcups.c:5526
 msgctxt "cover page"
 msgid "Unclassified"
 msgstr "機密ではない"
@@ -7654,7 +7701,7 @@ msgstr "機密ではない"
 #. Translators, this string is used to label the pages-per-sheet option
 #. * in the print dialog
 #.
-#: modules/printbackends/gtkprintbackendcups.c:5543
+#: modules/printbackends/gtkprintbackendcups.c:5538
 msgctxt "printer option"
 msgid "Pages per Sheet"
 msgstr "ページ数/用紙"
@@ -7662,7 +7709,7 @@ msgstr "ページ数/用紙"
 #. Translators, this string is used to label the option in the print
 #. * dialog that controls in what order multiple pages are arranged
 #.
-#: modules/printbackends/gtkprintbackendcups.c:5560
+#: modules/printbackends/gtkprintbackendcups.c:5555
 msgctxt "printer option"
 msgid "Page Ordering"
 msgstr "ページの順番"
@@ -7670,7 +7717,7 @@ msgstr "ページの順番"
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
 #.
-#: modules/printbackends/gtkprintbackendcups.c:5602
+#: modules/printbackends/gtkprintbackendcups.c:5597
 msgctxt "printer option"
 msgid "Before"
 msgstr "前"
@@ -7678,7 +7725,7 @@ msgstr "前"
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
 #.
-#: modules/printbackends/gtkprintbackendcups.c:5617
+#: modules/printbackends/gtkprintbackendcups.c:5612
 msgctxt "printer option"
 msgid "After"
 msgstr "後"
@@ -7687,7 +7734,7 @@ msgstr "後"
 #. * a print job is printed. Possible values are 'now', a specified time,
 #. * or 'on hold'
 #.
-#: modules/printbackends/gtkprintbackendcups.c:5637
+#: modules/printbackends/gtkprintbackendcups.c:5632
 msgctxt "printer option"
 msgid "Print at"
 msgstr "印刷先"
@@ -7695,7 +7742,7 @@ msgstr "印刷先"
 #. Translators: this is the name of the option that allows the user
 #. * to specify a time when a print job will be printed.
 #.
-#: modules/printbackends/gtkprintbackendcups.c:5648
+#: modules/printbackends/gtkprintbackendcups.c:5643
 msgctxt "printer option"
 msgid "Print at time"
 msgstr "一度に印刷する"
@@ -7705,24 +7752,24 @@ msgstr "一度に印刷する"
 #. * the width and height in points. E.g: "Custom
 #. * 230.4x142.9"
 #.
-#: modules/printbackends/gtkprintbackendcups.c:5695
+#: modules/printbackends/gtkprintbackendcups.c:5690
 #, c-format
 msgid "Custom %s×%s"
 msgstr "カスタム %s×%s"
 
-#. TRANSLATORS: this this the ICC color profile to use for this job
-#: modules/printbackends/gtkprintbackendcups.c:5806
+#. TRANSLATORS: this is the ICC color profile to use for this job
+#: modules/printbackends/gtkprintbackendcups.c:5801
 msgctxt "printer option"
 msgid "Printer Profile"
 msgstr "プリンタープロファイル"
 
 #. TRANSLATORS: this is when color profile information is unavailable
-#: modules/printbackends/gtkprintbackendcups.c:5813
+#: modules/printbackends/gtkprintbackendcups.c:5808
 msgctxt "printer option value"
 msgid "Unavailable"
 msgstr "利用できません"
 
-#: modules/printbackends/gtkprintbackendfile.c:235
+#: modules/printbackends/gtkprintbackendfile.c:234
 msgid "output"
 msgstr "出力"
 
@@ -7742,11 +7789,11 @@ msgstr "PostScript"
 msgid "SVG"
 msgstr "SVG"
 
-#: modules/printbackends/gtkprintbackendfile.c:709
+#: modules/printbackends/gtkprintbackendfile.c:710
 msgid "File"
 msgstr "ファイル"
 
-#: modules/printbackends/gtkprintbackendfile.c:719
+#: modules/printbackends/gtkprintbackendfile.c:720
 msgid "_Output format"
 msgstr "出力の形式(_O)"
 
@@ -7777,6 +7824,34 @@ msgstr "利用可能なプロファイルがありません"
 #: modules/printbackends/gtkprintercups.c:298
 msgid "Unspecified profile"
 msgstr "不明なプロファイル"
+
+#~ msgid "Don’t batch GDI requests"
+#~ msgstr "GDI のリクエストをまとめない"
+
+#~ msgid "Don’t use the Wintab API for tablet support"
+#~ msgstr "タブレットのサポートで Wintab API を使用しない"
+
+#~ msgid "Same as --no-wintab"
+#~ msgstr "オプション --no-wintab と同じ"
+
+#~ msgid "Do use the Wintab API [default]"
+#~ msgstr "Wintab API を使用する [デフォルト]"
+
+#~ msgid "Size of the palette in 8 bit mode"
+#~ msgstr "8-ビットモードでのパレットサイズを指定する"
+
+#~ msgid "COLORS"
+#~ msgstr "COLORS"
+
+#~ msgctxt "property name"
+#~ msgid "None"
+#~ msgstr "なし"
+
+#~ msgid "Font Family"
+#~ msgstr "フォントファミリ"
+
+#~ msgid "Printer"
+#~ msgstr "プリンター"
 
 #~ msgid "Always on Top"
 #~ msgstr "常に最前面に配置する"
@@ -7849,9 +7924,6 @@ msgstr "不明なプロファイル"
 
 #~ msgid "bidirectional, inverted"
 #~ msgstr "双方向, 反転"
-
-#~ msgid "Defined At"
-#~ msgstr "定義場所"
 
 #~ msgid "Selector"
 #~ msgstr "セレクター"
@@ -7945,8 +8017,8 @@ msgstr "不明なプロファイル"
 #~ "You can enter an HTML-style hexadecimal color value, or simply a color "
 #~ "name such as “orange” in this entry."
 #~ msgstr ""
-#~ "このエントリーに HTML 形式で 16 進数の値、または色の名前 (例:“orange”) を入力"
-#~ "できます"
+#~ "このエントリーに HTML 形式で 16 進数の値、または色の名前 (例:“orange”) を"
+#~ "入力できます"
 
 #~ msgid "_Palette:"
 #~ msgstr "パレット(_P):"
@@ -7958,8 +8030,8 @@ msgstr "不明なプロファイル"
 #~ "The color you’ve chosen. You can drag this color to a palette entry to "
 #~ "save it for use in the future."
 #~ msgstr ""
-#~ "選択した色で、この色を将来使用する色として保存するためパレットのエントリーに"
-#~ "ドラッグできます"
+#~ "選択した色で、この色を将来使用する色として保存するためパレットのエントリー"
+#~ "にドラッグできます"
 
 #~ msgid ""
 #~ "The previously-selected color, for comparison to the color you’re "
@@ -7977,8 +8049,8 @@ msgstr "不明なプロファイル"
 #~ "entry, drag a color swatch here or right-click it and select “Save color "
 #~ "here.”"
 #~ msgstr ""
-#~ "現在の色に指定する場合はこのパレットのエントリーをクリックしてください。この"
-#~ "エントリーを変更する場合は、色の見本をここにドラッグするか、右クリックし"
+#~ "現在の色に指定する場合はこのパレットのエントリーをクリックしてください。こ"
+#~ "のエントリーを変更する場合は、色の見本をここにドラッグするか、右クリックし"
 #~ "て“色をここに保存する”を選択してください"
 
 #~ msgid "abcdefghijk ABCDEFGHIJK"
@@ -8266,9 +8338,6 @@ msgstr "不明なプロファイル"
 
 #~ msgid "Browse Network"
 #~ msgstr "ネットワークを表示"
-
-#~ msgid "Browse the contents of the network"
-#~ msgstr "ネットワークの内容を表示します"
 
 #~ msgid ""
 #~ "No fonts matched your search. You can revise your search and try again."
