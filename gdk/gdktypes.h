@@ -247,6 +247,8 @@ typedef enum {
  * @GDK_AXIS_IGNORE: the axis is ignored.
  * @GDK_AXIS_X: the axis is used as the x axis.
  * @GDK_AXIS_Y: the axis is used as the y axis.
+ * @GDK_AXIS_DELTA_X: the axis is used as the scroll x delta
+ * @GDK_AXIS_DELTA_Y: the axis is used as the scroll y delta
  * @GDK_AXIS_PRESSURE: the axis is used for pressure information.
  * @GDK_AXIS_XTILT: the axis is used for x tilt information.
  * @GDK_AXIS_YTILT: the axis is used for y tilt information.
@@ -269,6 +271,8 @@ typedef enum
   GDK_AXIS_IGNORE,
   GDK_AXIS_X,
   GDK_AXIS_Y,
+  GDK_AXIS_DELTA_X,
+  GDK_AXIS_DELTA_Y,
   GDK_AXIS_PRESSURE,
   GDK_AXIS_XTILT,
   GDK_AXIS_YTILT,
@@ -283,6 +287,8 @@ typedef enum
  * GdkAxisFlags:
  * @GDK_AXIS_FLAG_X: X axis is present
  * @GDK_AXIS_FLAG_Y: Y axis is present
+ * @GDK_AXIS_FLAG_DELTA_X: Scroll X delta axis is present
+ * @GDK_AXIS_FLAG_DELTA_Y: Scroll Y delta axis is present
  * @GDK_AXIS_FLAG_PRESSURE: Pressure axis is present
  * @GDK_AXIS_FLAG_XTILT: X tilt axis is present
  * @GDK_AXIS_FLAG_YTILT: Y tilt axis is present
@@ -297,6 +303,8 @@ typedef enum
 {
   GDK_AXIS_FLAG_X        = 1 << GDK_AXIS_X,
   GDK_AXIS_FLAG_Y        = 1 << GDK_AXIS_Y,
+  GDK_AXIS_FLAG_DELTA_X  = 1 << GDK_AXIS_DELTA_X,
+  GDK_AXIS_FLAG_DELTA_Y  = 1 << GDK_AXIS_DELTA_Y,
   GDK_AXIS_FLAG_PRESSURE = 1 << GDK_AXIS_PRESSURE,
   GDK_AXIS_FLAG_XTILT    = 1 << GDK_AXIS_XTILT,
   GDK_AXIS_FLAG_YTILT    = 1 << GDK_AXIS_YTILT,
