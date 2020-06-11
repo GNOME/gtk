@@ -119,16 +119,17 @@ _gdk_macos_clipboard_read_async (GdkClipboard        *clipboard,
 {
   GDK_BEGIN_MACOS_ALLOC_POOL;
 
+  GdkMacosClipboard *self = (GdkMacosClipboard *)clipboard;
   GdkContentFormats *offer_formats = NULL;
   NSPasteboard *pasteboard;
   const gchar *mime_type;
   GInputStream *stream = NULL;
   GTask *task = NULL;
 
-  g_assert (GDK_IS_MACOS_CLIPBOARD (clipboard));
+  g_assert (GDK_IS_MACOS_CLIPBOARD (self));
   g_assert (formats != NULL);
 
-  task = g_task_new (clipboard, cancellable, callback, user_data);
+  task = g_task_new (self, cancellable, callback, user_data);
   g_task_set_source_tag (task, _gdk_macos_clipboard_read_async);
   g_task_set_priority (task, io_priority);
 
@@ -160,26 +161,33 @@ _gdk_macos_clipboard_read_async (GdkClipboard        *clipboard,
     }
   else if (strcmp (mime_type, "text/uri-list") == 0)
     {
-#if 0
-      if ([[pasteboard types] containsObject:NSPasteboardTypeFileURL])
+      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
+
+      if ([[self->pasteboard types] containsObject:NSPasteboardTypeFileURL])
         {
           GString *str = g_string_new (NULL);
           NSArray *files = [pasteboard propertyListForType:NSFilenamesPboardType];
           gsize n_files = [files count];
-          gchar **uris;
+          gchar *data;
+          guint len;
 
           for (gsize i = 0; i < n_files; ++i)
             {
               NSString* uriString = [files objectAtIndex:i];
               uriString = [@"file://" stringByAppendingString:uriString];
               uriString = [uriString stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-              uris[i] = (gchar *) [uriString cStringUsingEncoding:NSUTF8StringEncoding];
+
+              g_string_append_printf (str,
+                                      "%s\r\n",
+                                      [uriString cStringUsingEncoding:NSUTF8StringEncoding]);
             }
-          uris[i] = NULL;
-          gtk_selection_data_set_uris (selection_data, uris);
-          g_free (uris);
+
+          len = str->len;
+          data = g_string_free (str, FALSE);
+          stream = g_memory_input_stream_new_from_data (data, len, g_free);
         }
-#endif
+
+      G_GNUC_END_IGNORE_DEPRECATIONS;
     }
   else if (strcmp (mime_type, "application/x-color") == 0)
     {
