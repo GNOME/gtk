@@ -65,7 +65,7 @@
  *
  * GtkPrintUnixDialog implements a print dialog for platforms
  * which don’t provide a native print dialog, like Unix. It can
- * be used very much like any other GTK+ dialog, at the cost of
+ * be used very much like any other GTK dialog, at the cost of
  * the portability offered by the
  * [high-level printing API][gtk3-High-level-Printing-API]
  *
@@ -78,8 +78,6 @@
  * - %GTK_RESPONSE_OK: for the “Print” button
  * - %GTK_RESPONSE_APPLY: for the “Preview” button
  * - %GTK_RESPONSE_CANCEL: for the “Cancel” button
- *
- * Printing support was added in GTK+ 2.10.
  *
  * # GtkPrintUnixDialog as GtkBuildable
  *
