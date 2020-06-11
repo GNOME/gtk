@@ -1112,6 +1112,7 @@ end_element (GMarkupParseContext  *context,
             }
 
           object_info->properties = g_slist_prepend (object_info->properties, prop_info);
+          object_info->n_properties++;
         }
       else
         g_assert_not_reached ();
