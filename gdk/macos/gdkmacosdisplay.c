@@ -27,6 +27,7 @@
 #include "gdkeventsprivate.h"
 
 #include "gdkdisplaylinksource.h"
+#include "gdkmacosclipboard-private.h"
 #include "gdkmacoscairocontext-private.h"
 #include "gdkmacoseventsource-private.h"
 #include "gdkmacosdisplay-private.h"
@@ -598,6 +599,14 @@ gdk_macos_display_get_keymap (GdkDisplay *display)
 }
 
 static void
+gdk_macos_display_load_clipboard (GdkMacosDisplay *self)
+{
+  g_assert (GDK_IS_MACOS_DISPLAY (self));
+
+  GDK_DISPLAY (self)->clipboard = _gdk_macos_clipboard_new (self);
+}
+
+static void
 gdk_macos_display_finalize (GObject *object)
 {
   GdkMacosDisplay *self = (GdkMacosDisplay *)object;
@@ -612,6 +621,7 @@ gdk_macos_display_finalize (GObject *object)
                                       CFSTR ("NSUserDefaultsDidChangeNotification"),
                                       NULL);
 
+  g_clear_object (&GDK_DISPLAY (self)->clipboard);
   g_clear_pointer (&self->frame_source, g_source_unref);
   g_clear_object (&self->monitors);
   g_clear_pointer (&self->name, g_free);
@@ -682,6 +692,8 @@ _gdk_macos_display_open (const gchar *display_name)
   self->keymap = _gdk_macos_keymap_new (self);
 
   gdk_macos_display_load_seat (self);
+  gdk_macos_display_load_clipboard (self);
+
   /* Load CVDisplayLink before monitors to access refresh rates */
   gdk_macos_display_load_display_link (self);
   _gdk_macos_display_reload_monitors (self);
