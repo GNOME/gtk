@@ -46,6 +46,7 @@ struct _GtkSearchEnginePrivate {
   GHashTable *hits;
 
   GtkQuery *query;
+  GSequence *items;
 };
 
 enum
@@ -58,7 +59,46 @@ enum
 
 static guint signals[LAST_SIGNAL];
 
-G_DEFINE_TYPE_WITH_PRIVATE (GtkSearchEngine, _gtk_search_engine, G_TYPE_OBJECT);
+static GType
+gtk_search_engine_get_item_type (GListModel *list)
+{
+  return G_TYPE_FILE_INFO;
+}
+
+static guint
+gtk_search_engine_get_n_items (GListModel *list)
+{
+  GtkSearchEngine *self = GTK_SEARCH_ENGINE (list);
+
+  return g_sequence_get_length (self->priv->items);
+}
+
+static gpointer
+gtk_search_engine_get_item (GListModel *list,
+                            guint       position)
+{
+  GtkSearchEngine *self = GTK_SEARCH_ENGINE (list);
+  GSequenceIter *iter;
+
+  iter = g_sequence_get_iter_at_pos (self->priv->items, position);
+
+  if (g_sequence_iter_is_end (iter))
+    return NULL;
+  else
+    return g_object_ref (g_sequence_get (iter));
+}
+
+static void
+gtk_search_engine_list_model_init (GListModelInterface *iface)
+{
+  iface->get_item_type = gtk_search_engine_get_item_type;
+  iface->get_n_items = gtk_search_engine_get_n_items;
+  iface->get_item = gtk_search_engine_get_item;
+}
+
+G_DEFINE_TYPE_WITH_CODE (GtkSearchEngine, _gtk_search_engine, G_TYPE_OBJECT,
+                         G_ADD_PRIVATE (GtkSearchEngine)
+                         G_IMPLEMENT_INTERFACE (G_TYPE_LIST_MODEL, gtk_search_engine_list_model_init))
 
 static void
 set_query (GtkSearchEngine *engine,
@@ -74,8 +114,24 @@ set_query (GtkSearchEngine *engine,
 }
 
 static void
+gtk_search_engine_clear_items (GtkSearchEngine *engine)
+{
+  guint n_items;
+
+  n_items = g_sequence_get_length (engine->priv->items);
+  if (n_items > 0)
+    {
+      g_sequence_remove_range (g_sequence_get_begin_iter (engine->priv->items),
+                               g_sequence_get_end_iter (engine->priv->items));
+
+      g_list_model_items_changed (G_LIST_MODEL (engine), 0, n_items, 0);
+    }
+}
+
+static void
 start (GtkSearchEngine *engine)
 {
+  gtk_search_engine_clear_items (engine);
   g_hash_table_remove_all (engine->priv->hits);
 
   if (engine->priv->native)
@@ -112,6 +168,7 @@ stop (GtkSearchEngine *engine)
 
   engine->priv->running = FALSE;
 
+  gtk_search_engine_clear_items (engine);
   g_hash_table_remove_all (engine->priv->hits);
 }
 
@@ -127,6 +184,7 @@ finalize (GObject *object)
   g_free (engine->priv->model_error);
 
   g_clear_pointer (&engine->priv->hits, g_hash_table_unref);
+  g_clear_pointer (&engine->priv->items, g_sequence_free);
 
   g_clear_object (&engine->priv->query);
 
@@ -201,12 +259,16 @@ hits_added (GtkSearchEngine *engine,
         {
           hit = _gtk_search_hit_dup (hit);
           g_hash_table_add (composite->priv->hits, hit);
+          g_sequence_append (composite->priv->items, g_object_ref (hit->info));
           added = g_list_prepend (added, hit);
         }
     }
 
   if (added)
     {
+      guint n = g_list_length (added);
+      g_list_model_items_changed (G_LIST_MODEL (composite), g_sequence_get_length (composite->priv->items) - n, 0, n);
+
       _gtk_search_engine_hits_added (composite, added);
       g_list_free (added);
     }
@@ -353,6 +415,7 @@ _gtk_search_engine_new (void)
 
   engine->priv->hits = g_hash_table_new_full (search_hit_hash, search_hit_equal,
                                               (GDestroyNotify)_gtk_search_hit_free, NULL);
+  engine->priv->items = g_sequence_new (g_object_unref);
 
   return engine;
 }
