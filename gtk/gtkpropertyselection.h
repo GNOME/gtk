@@ -34,6 +34,11 @@ GDK_AVAILABLE_IN_ALL
 GListModel *    gtk_property_selection_new      (GListModel     *model,
                                                  const char     *property);
 
+GDK_AVAILABLE_IN_ALL
+GListModel *    gtk_property_selection_get_model    (GtkPropertySelection *self);
+
+GDK_AVAILABLE_IN_ALL
+const char *    gtk_property_selection_get_property (GtkPropertySelection *self);
 
 G_END_DECLS
 
