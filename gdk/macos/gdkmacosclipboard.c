@@ -29,6 +29,7 @@ struct _GdkMacosClipboard
   GdkClipboard            parent_instance;
   NSPasteboard           *pasteboard;
   GdkMacosClipboardOwner *owner;
+  NSInteger               last_change_count;
 };
 
 G_DEFINE_TYPE (GdkMacosClipboard, _gdk_macos_clipboard, GDK_TYPE_CLIPBOARD)
@@ -79,12 +80,17 @@ static void
 _gdk_macos_clipboard_load_contents (GdkMacosClipboard *self)
 {
   GdkContentFormats *formats;
+  NSInteger change_count;
 
   g_assert (GDK_IS_MACOS_CLIPBOARD (self));
+
+  change_count = [self->pasteboard changeCount];
 
   formats = load_offer_formats (self);
   gdk_clipboard_claim_remote (GDK_CLIPBOARD (self), formats);
   gdk_content_formats_unref (formats);
+
+  self->last_change_count = change_count;
 }
 
 static gboolean
@@ -315,6 +321,15 @@ _gdk_macos_clipboard_new (GdkMacosDisplay *display)
   _gdk_macos_clipboard_load_contents (self);
 
   return GDK_CLIPBOARD (self);
+}
+
+void
+_gdk_macos_clipboard_check_externally_modified (GdkMacosClipboard *self)
+{
+  g_return_if_fail (GDK_IS_MACOS_CLIPBOARD (self));
+
+  if ([self->pasteboard changeCount] != self->last_change_count)
+    _gdk_macos_clipboard_load_contents (self);
 }
 
 @implementation GdkMacosClipboardOwner

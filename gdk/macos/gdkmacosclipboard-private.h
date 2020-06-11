@@ -31,7 +31,8 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (GdkMacosClipboard, _gdk_macos_clipboard, GDK, MACOS_CLIPBOARD, GdkClipboard)
 
-GdkClipboard *_gdk_macos_clipboard_new (GdkMacosDisplay *display);
+GdkClipboard *_gdk_macos_clipboard_new                       (GdkMacosDisplay   *display);
+void          _gdk_macos_clipboard_check_externally_modified (GdkMacosClipboard *self);
 
 @interface GdkMacosClipboardOwner : NSObject
 {
