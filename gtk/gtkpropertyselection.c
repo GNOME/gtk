@@ -355,10 +355,10 @@ gtk_property_selection_clear_model (GtkPropertySelection *self)
 }
 
 static void
-gtk_property_selection_set_property (GObject      *object,
-                                     guint         prop_id,
-                                     const GValue *value,
-                                     GParamSpec   *pspec)
+gtk_property_selection_real_set_property (GObject      *object,
+                                          guint         prop_id,
+                                          const GValue *value,
+                                          GParamSpec   *pspec)
 
 {
   GtkPropertySelection *self = GTK_PROPERTY_SELECTION (object);
@@ -399,10 +399,10 @@ gtk_property_selection_set_property (GObject      *object,
 }
 
 static void
-gtk_property_selection_get_property (GObject    *object,
-                                     guint       prop_id,
-                                     GValue     *value,
-                                     GParamSpec *pspec)
+gtk_property_selection_real_get_property (GObject    *object,
+                                          guint       prop_id,
+                                          GValue     *value,
+                                          GParamSpec *pspec)
 {
   GtkPropertySelection *self = GTK_PROPERTY_SELECTION (object);
 
@@ -439,8 +439,8 @@ gtk_property_selection_class_init (GtkPropertySelectionClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
 
-  gobject_class->get_property = gtk_property_selection_get_property;
-  gobject_class->set_property = gtk_property_selection_set_property;
+  gobject_class->get_property = gtk_property_selection_real_get_property;
+  gobject_class->set_property = gtk_property_selection_real_set_property;
   gobject_class->dispose = gtk_property_selection_dispose;
 
   /**
@@ -496,4 +496,37 @@ gtk_property_selection_new (GListModel *model,
                        "model", model,
                        "property", property,
                        NULL);
+}
+
+/**
+ * gtk_property_selection_get_model:
+ * @self: a #GtkPropertySelection
+ *
+ * Gets the underlying model.
+ *
+ * Returns: (transfer none): the underlying model
+ */
+GListModel *
+gtk_property_selection_get_model (GtkPropertySelection *self)
+{
+  g_return_val_if_fail (GTK_IS_PROPERTY_SELECTION (self), NULL);
+
+  return self->model;
+}
+
+/**
+ * gtk_property_selection_get_property:
+ * @self: a #GtkPropertySelection
+ *
+ * Gets the name of the item property that @self stores
+ * the selection in.
+ *
+ * Returns: the name of the property
+ */
+const char *
+gtk_property_selection_get_property (GtkPropertySelection *self)
+{
+  g_return_val_if_fail (GTK_IS_PROPERTY_SELECTION (self), NULL);
+
+  return self->property;
 }

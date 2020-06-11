@@ -409,6 +409,8 @@ gtk_multi_selection_get_type
 <TITLE>GtkPropertySelection</TITLE>
 GtkPropertySelection
 gtk_property_selection_new
+gtk_property_selection_get_model
+gtk_property_selection_get_property
 <SUBSECTION Private>
 gtk_property_selection_get_type
 </SECTION>
