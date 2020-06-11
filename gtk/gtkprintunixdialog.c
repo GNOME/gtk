@@ -1580,8 +1580,8 @@ set_paper_size (GtkPrintUnixDialog *dialog,
             {
               gtk_combo_box_set_active_iter (GTK_COMBO_BOX (dialog->paper_size_combo),
                                              &iter);
-              gtk_combo_box_set_active (GTK_COMBO_BOX (dialog->orientation_combo),
-                                        gtk_page_setup_get_orientation (page_setup));
+              gtk_drop_down_set_selected (GTK_DROP_DOWN (dialog->orientation_combo),
+                                          gtk_page_setup_get_orientation (page_setup));
               g_object_unref (list_page_setup);
               return TRUE;
             }
@@ -1603,8 +1603,8 @@ set_paper_size (GtkPrintUnixDialog *dialog,
                           -1);
       gtk_combo_box_set_active_iter (GTK_COMBO_BOX (dialog->paper_size_combo),
                                      &iter);
-      gtk_combo_box_set_active (GTK_COMBO_BOX (dialog->orientation_combo),
-                                gtk_page_setup_get_orientation (page_setup));
+      gtk_drop_down_set_selected (GTK_DROP_DOWN (dialog->orientation_combo),
+                                  gtk_page_setup_get_orientation (page_setup));
       return TRUE;
     }
 
@@ -2218,7 +2218,7 @@ static GtkPageSet
 dialog_get_page_set (GtkPrintUnixDialog *dialog)
 {
   if (gtk_widget_is_sensitive (dialog->page_set_combo))
-    return (GtkPageSet)gtk_combo_box_get_active (GTK_COMBO_BOX (dialog->page_set_combo));
+    return (GtkPageSet)gtk_drop_down_get_selected (GTK_DROP_DOWN (dialog->page_set_combo));
   else
     return GTK_PAGE_SET_ALL;
 }
@@ -2227,7 +2227,7 @@ static void
 dialog_set_page_set (GtkPrintUnixDialog *dialog,
                      GtkPageSet          val)
 {
-  gtk_combo_box_set_active (GTK_COMBO_BOX (dialog->page_set_combo), (int)val);
+  gtk_drop_down_set_selected (GTK_DROP_DOWN (dialog->page_set_combo), (guint)val);
 }
 
 static gint
@@ -2949,16 +2949,17 @@ custom_paper_dialog_response_cb (GtkDialog *custom_paper_dialog,
 }
 
 static void
-orientation_changed (GtkComboBox        *combo_box,
+orientation_changed (GObject            *object,
+                     GParamSpec         *pspec,
                      GtkPrintUnixDialog *dialog)
 {
-  GtkPageOrientation         orientation;
-  GtkPageSetup              *page_setup;
+  GtkPageOrientation orientation;
+  GtkPageSetup *page_setup;
 
   if (dialog->internal_page_setup_change)
     return;
 
-  orientation = (GtkPageOrientation) gtk_combo_box_get_active (GTK_COMBO_BOX (dialog->orientation_combo));
+  orientation = (GtkPageOrientation) gtk_drop_down_get_selected (GTK_DROP_DOWN (dialog->orientation_combo));
 
   if (dialog->page_setup)
     {
@@ -3548,7 +3549,7 @@ gtk_print_unix_dialog_set_embed_page_setup (GtkPrintUnixDialog *dialog,
             g_signal_connect (dialog->paper_size_combo, "changed", G_CALLBACK (paper_size_changed), dialog);
 
           if (dialog->orientation_combo)
-            g_signal_connect (dialog->orientation_combo, "changed", G_CALLBACK (orientation_changed), dialog);
+            g_signal_connect (dialog->orientation_combo, "notify::selected", G_CALLBACK (orientation_changed), dialog);
         }
       else
         {
