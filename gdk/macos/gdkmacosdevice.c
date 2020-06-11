@@ -67,8 +67,7 @@ static GdkSurface *
 gdk_macos_device_surface_at_position (GdkDevice       *device,
                                       gdouble         *win_x,
                                       gdouble         *win_y,
-                                      GdkModifierType *state,
-                                      gboolean         get_toplevel)
+                                      GdkModifierType *state)
 {
   GdkMacosDisplay *display;
   GdkMacosSurface *surface;
@@ -125,20 +124,6 @@ gdk_macos_device_ungrab (GdkDevice *device,
     grab->serial_end = 0;
 
   _gdk_display_device_grab_update (display, device, device, 0);
-}
-
-static gboolean
-gdk_macos_device_get_history (GdkDevice      *device,
-                              GdkSurface     *surface,
-                              guint32         start,
-                              guint32         stop,
-                              GdkTimeCoord ***events,
-                              gint           *n_events)
-{
-  g_assert (GDK_IS_MACOS_DEVICE (device));
-  g_assert (GDK_IS_MACOS_SURFACE (surface));
-
-  return FALSE;
 }
 
 static void
@@ -202,7 +187,6 @@ gdk_macos_device_class_init (GdkMacosDeviceClass *klass)
 {
   GdkDeviceClass *device_class = GDK_DEVICE_CLASS (klass);
 
-  device_class->get_history = gdk_macos_device_get_history;
   device_class->get_state = gdk_macos_device_get_state;
   device_class->grab = gdk_macos_device_grab;
   device_class->query_state = gdk_macos_device_query_state;
@@ -214,6 +198,6 @@ gdk_macos_device_class_init (GdkMacosDeviceClass *klass)
 static void
 gdk_macos_device_init (GdkMacosDevice *self)
 {
-  _gdk_device_add_axis (GDK_DEVICE (self), NULL, GDK_AXIS_X, 0, 0, 1);
-  _gdk_device_add_axis (GDK_DEVICE (self), NULL, GDK_AXIS_Y, 0, 0, 1);
+  _gdk_device_add_axis (GDK_DEVICE (self), GDK_AXIS_X, 0, 0, 1);
+  _gdk_device_add_axis (GDK_DEVICE (self), GDK_AXIS_Y, 0, 0, 1);
 }
