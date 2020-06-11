@@ -88,8 +88,6 @@ gdk_macos_popup_surface_layout (GdkMacosPopupSurface *self,
 static void
 show_popup (GdkMacosPopupSurface *self)
 {
-  NSWindow *nswindow = _gdk_macos_surface_get_native (GDK_MACOS_SURFACE (self));
-
   _gdk_macos_surface_show (GDK_MACOS_SURFACE (self));
 }
 
