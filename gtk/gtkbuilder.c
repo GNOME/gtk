@@ -474,11 +474,11 @@ object_properties_add (ObjectProperties *self,
                        const GValue     *value)
 {
   if (!self->names)
-    self->names = g_ptr_array_new ();
+    self->names = g_ptr_array_sized_new (8);
 
   if (!self->values)
     {
-      self->values = g_array_new (FALSE, FALSE, sizeof (GValue));
+      self->values = g_array_sized_new (FALSE, FALSE, sizeof (GValue), 8);
       g_array_set_clear_func (self->values, (GDestroyNotify) g_value_unset);
     }
 
