@@ -1032,6 +1032,14 @@ _gdk_macos_display_get_surfaces (GdkMacosDisplay *self)
 
       self->sorted_surfaces = sorted;
 
+      /* We don't get notification of clipboard changes from the system so we
+       * instead update it every time the foreground changes (and thusly
+       * rebuild the sorted list).  Things could change other ways, such as
+       * with scripts, but that is currently out of scope for us.
+       */
+      _gdk_macos_clipboard_check_externally_modified (
+        GDK_MACOS_CLIPBOARD (GDK_DISPLAY (self)->clipboard));
+
       GDK_END_MACOS_ALLOC_POOL;
     }
 
