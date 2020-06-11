@@ -4,6 +4,7 @@ gdk_macos_sources = files([
   'gdkdisplaylinksource.c',
   'GdkMacosWindow.c',
   'gdkmacoscairocontext.c',
+  'gdkmacosclipboard.c',
   'gdkmacoscursor.c',
   'gdkmacosdevice.c',
   'gdkmacosdisplay.c',
