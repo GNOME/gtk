@@ -234,6 +234,203 @@ quit_cb (GtkWindow *window,
   return TRUE;
 }
 
+#define GTK_TYPE_STRING_PAIR (gtk_string_pair_get_type ())
+G_DECLARE_FINAL_TYPE (GtkStringPair, gtk_string_pair, GTK, STRING_PAIR, GObject)
+
+struct _GtkStringPair {
+  GObject parent_instance;
+  char *id;
+  char *string;
+};
+
+enum {
+  PROP_ID = 1,
+  PROP_STRING,
+  PROP_NUM_PROPERTIES
+};
+
+G_DEFINE_TYPE (GtkStringPair, gtk_string_pair, G_TYPE_OBJECT);
+
+static void
+gtk_string_pair_init (GtkStringPair *pair)
+{
+}
+
+static void
+gtk_string_pair_finalize (GObject *object)
+{
+  GtkStringPair *pair = GTK_STRING_PAIR (object);
+
+  g_free (pair->id);
+  g_free (pair->string);
+
+  G_OBJECT_CLASS (gtk_string_pair_parent_class)->finalize (object);
+}
+
+static void
+gtk_string_pair_set_property (GObject      *object,
+                              guint         property_id,
+                              const GValue *value,
+                              GParamSpec   *pspec)
+{
+  GtkStringPair *pair = GTK_STRING_PAIR (object);
+
+  switch (property_id)
+    {
+    case PROP_STRING:
+      g_free (pair->string);
+      pair->string = g_value_dup_string (value);
+      break;
+
+    case PROP_ID:
+      g_free (pair->id);
+      pair->id = g_value_dup_string (value);
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
+      break;
+    }
+}
+
+static void
+gtk_string_pair_get_property (GObject      *object,
+                              guint         property_id,
+                              GValue       *value,
+                              GParamSpec   *pspec)
+{
+  GtkStringPair *pair = GTK_STRING_PAIR (object);
+
+  switch (property_id)
+    {
+    case PROP_STRING:
+      g_value_set_string (value, pair->string);
+      break;
+
+    case PROP_ID:
+      g_value_set_string (value, pair->id);
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
+      break;
+    }
+}
+
+static void
+gtk_string_pair_class_init (GtkStringPairClass *class)
+{
+  GObjectClass *object_class = G_OBJECT_CLASS (class);
+  GParamSpec *pspec;
+
+  object_class->finalize = gtk_string_pair_finalize;
+  object_class->set_property = gtk_string_pair_set_property;
+  object_class->get_property = gtk_string_pair_get_property;
+
+  pspec = g_param_spec_string ("string", "String", "String",
+                               NULL,
+                               G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
+
+  g_object_class_install_property (object_class, PROP_STRING, pspec);
+
+  pspec = g_param_spec_string ("id", "ID", "ID",
+                               NULL,
+                               G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
+
+  g_object_class_install_property (object_class, PROP_ID, pspec);
+}
+
+static GtkStringPair *
+gtk_string_pair_new (const char *id,
+                     const char *string)
+{
+  return g_object_new (GTK_TYPE_STRING_PAIR,
+                       "id", id,
+                       "string", string,
+                       NULL);
+}
+
+static const char *
+gtk_string_pair_get_string (GtkStringPair *pair)
+{
+  return pair->string;
+}
+
+static const char *
+gtk_string_pair_get_id (GtkStringPair *pair)
+{
+  return pair->id;
+}
+
+static void
+setup_no_item (GtkSignalListItemFactory *factory,
+               GtkListItem              *item)
+{
+}
+
+static void
+setup_list_item (GtkSignalListItemFactory *factory,
+                 GtkListItem              *item)
+{
+  GtkWidget *label;
+
+  label = gtk_label_new ("");
+  gtk_widget_set_halign (label, GTK_ALIGN_START);
+  gtk_list_item_set_child (item, label);
+}
+
+static void
+bind_list_item (GtkSignalListItemFactory *factory,
+                GtkListItem              *item)
+{
+  GtkStringPair *pair;
+  GtkWidget *label;
+
+  pair = gtk_list_item_get_item (item);
+  label = gtk_list_item_get_child (item);
+
+  gtk_label_set_text (GTK_LABEL (label), gtk_string_pair_get_string (pair));
+}
+
+static void
+selected_changed (GtkDropDown *dropdown,
+                  GParamSpec *pspec,
+                  gpointer data)
+{
+  GListModel *model;
+  guint selected;
+  GtkStringPair *pair;
+
+  model = gtk_drop_down_get_model (dropdown);
+  selected = gtk_drop_down_get_selected (dropdown);
+
+  pair = g_list_model_get_item (model, selected);
+
+  g_print ("selected %s\n", gtk_string_pair_get_id (pair));
+
+  g_object_unref (pair);
+}
+
+static void
+selected_changed2 (GtkDropDown *dropdown,
+                   GParamSpec *pspec,
+                   gpointer data)
+{
+  GListModel *model;
+  guint selected;
+  GtkStringPair *pair;
+  GtkWidget *entry = data;
+
+  model = gtk_drop_down_get_model (dropdown);
+  selected = gtk_drop_down_get_selected (dropdown);
+
+  pair = g_list_model_get_item (model, selected);
+
+  gtk_editable_set_text (GTK_EDITABLE (entry), gtk_string_pair_get_string (pair));
+
+  g_object_unref (pair);
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -253,6 +450,10 @@ main (int argc, char *argv[])
     "Built-in Audio", "Built-in audio", "Thinkpad Tunderbolt 3 Dock USB Audio", "Thinkpad Tunderbolt 3 Dock USB Audio", NULL
   };
   gboolean quit = FALSE;
+  GListStore *store;
+  GtkListItemFactory *factory;
+  GtkWidget *entry;
+  GtkWidget *hbox;
 
   gtk_init ();
 
@@ -311,6 +512,53 @@ main (int argc, char *argv[])
 
   button = drop_down_new_from_strings (device_titles, device_icons, device_descriptions);
   gtk_box_append (GTK_BOX (box), button);
+
+  button = gtk_drop_down_new ();
+
+  store = g_list_store_new (GTK_TYPE_STRING_PAIR);
+  g_list_store_append (store, gtk_string_pair_new ("1", "One"));
+  g_list_store_append (store, gtk_string_pair_new ("2", "Two"));
+  g_list_store_append (store, gtk_string_pair_new ("2.5", "Two ½"));
+  g_list_store_append (store, gtk_string_pair_new ("3", "Three"));
+  gtk_drop_down_set_model (GTK_DROP_DOWN (button), G_LIST_MODEL (store));
+
+  factory = gtk_signal_list_item_factory_new ();
+  g_signal_connect (factory, "setup", G_CALLBACK (setup_list_item), NULL);
+  g_signal_connect (factory, "bind", G_CALLBACK (bind_list_item), NULL);
+  gtk_drop_down_set_factory (GTK_DROP_DOWN (button), factory);
+  g_object_unref (factory);
+
+  g_signal_connect (button, "notify::selected", G_CALLBACK (selected_changed), NULL);
+
+  gtk_box_append (GTK_BOX (box), button);
+
+  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+  gtk_widget_add_css_class (hbox, "linked");
+
+  entry = gtk_entry_new ();
+  button = gtk_drop_down_new ();
+
+  gtk_drop_down_set_model (GTK_DROP_DOWN (button), G_LIST_MODEL (store));
+
+  factory = gtk_signal_list_item_factory_new ();
+  g_signal_connect (factory, "setup", G_CALLBACK (setup_no_item), NULL);
+  gtk_drop_down_set_factory (GTK_DROP_DOWN (button), factory);
+  g_object_unref (factory);
+
+  factory = gtk_signal_list_item_factory_new ();
+  g_signal_connect (factory, "setup", G_CALLBACK (setup_list_item), NULL);
+  g_signal_connect (factory, "bind", G_CALLBACK (bind_list_item), NULL);
+  gtk_drop_down_set_list_factory (GTK_DROP_DOWN (button), factory);
+  g_object_unref (factory);
+
+  g_signal_connect (button, "notify::selected", G_CALLBACK (selected_changed2), entry);
+
+  gtk_box_append (GTK_BOX (hbox), entry);
+  gtk_box_append (GTK_BOX (hbox), button);
+
+  gtk_box_append (GTK_BOX (box), hbox);
+
+  g_object_unref (store);
 
   gtk_window_present (GTK_WINDOW (window));
 
