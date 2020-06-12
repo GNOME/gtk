@@ -2106,6 +2106,7 @@ subdivide_infos (GByteArray                 *array,
                  guint                       n_infos,
                  gint32                      parent_offset)
 {
+  const GtkCssSelector *max_selector;
   GtkCssSelectorRuleSetInfo **matched_infos;
   guint n_matched = 0;
   GtkCssSelectorRuleSetInfo **remaining_infos;
@@ -2113,7 +2114,6 @@ subdivide_infos (GByteArray                 *array,
   GHashTable *ht;
   gint32 tree_offset;
   GtkCssSelectorTree *tree;
-  GtkCssSelector max_selector;
   GHashTableIter iter;
   guint max_count;
   gpointer key, value;
@@ -2143,17 +2143,17 @@ subdivide_infos (GByteArray                 *array,
     {
       GtkCssSelector *selector = key;
       if (GPOINTER_TO_UINT (value) > max_count ||
-	  (GPOINTER_TO_UINT (value) == max_count &&
-	  gtk_css_selector_compare_one (selector, &max_selector) < 0))
-	{
-	  max_count = GPOINTER_TO_UINT (value);
-	  max_selector = *selector;
-	}
+          (GPOINTER_TO_UINT (value) == max_count &&
+           gtk_css_selector_compare_one (selector, max_selector) < 0))
+        {
+          max_count = GPOINTER_TO_UINT (value);
+          max_selector = selector;
+        }
     }
 
   tree = alloc_tree (array, &tree_offset);
   tree->parent_offset = parent_offset;
-  tree->selector = max_selector;
+  tree->selector = *max_selector;
 
   /* Allocate maximum for both of them */
   /* TODO: Potentially dangerous? */
@@ -2165,9 +2165,9 @@ subdivide_infos (GByteArray                 *array,
     {
       GtkCssSelectorRuleSetInfo *info = infos[i];
 
-      if (gtk_css_selectors_has_initial_selector (info->current_selector, &max_selector))
+      if (gtk_css_selectors_has_initial_selector (info->current_selector, max_selector))
 	{
-	  info->current_selector = gtk_css_selectors_skip_initial_selector (info->current_selector, &max_selector);
+	  info->current_selector = gtk_css_selectors_skip_initial_selector (info->current_selector, max_selector);
 	  if (info->current_selector == NULL)
 	    {
 	      /* Matches current node */
