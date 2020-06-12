@@ -217,8 +217,27 @@ _gtk_print_load_custom_papers (GtkListStore *store)
       page_setup = p->data;
       gtk_list_store_append (store, &iter);
       gtk_list_store_set (store, &iter,
-			  0, page_setup,
-			  -1);
+                         0, page_setup,
+                         -1);
+      g_object_unref (page_setup);
+    }
+
+  g_list_free (papers);
+}
+
+void
+gtk_print_load_custom_papers (GListStore *store)
+{
+  GList *papers, *p;
+  GtkPageSetup *page_setup;
+
+  g_list_store_remove_all (store);
+
+  papers = _gtk_load_custom_papers ();
+  for (p = papers; p; p = p->next)
+    {
+      page_setup = p->data;
+      g_list_store_append (store, page_setup);
       g_object_unref (page_setup);
     }
 
@@ -302,8 +321,8 @@ gtk_custom_paper_unix_dialog_init (GtkCustomPaperUnixDialog *dialog)
   priv->request_details_tag = 0;
 
   priv->printer_list = gtk_list_store_new (PRINTER_LIST_N_COLS,
-					   G_TYPE_STRING,
-					   G_TYPE_OBJECT);
+                                           G_TYPE_STRING,
+                                           G_TYPE_OBJECT);
 
   gtk_list_store_append (priv->printer_list, &iter);
 
