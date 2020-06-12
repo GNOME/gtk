@@ -113,14 +113,13 @@
 <interface>
   <template class="GtkListItem">
     <property name="child">
-      <object class="GtkEntry">
-        <signal name="activate" handler="item_value_changed" object="GtkListItem" swapped="yes"/>
-        <property name="xalign">0</property>
-        <binding name="text">
+      <object class="GtkEditableLabel">
+        <binding name="label">
           <lookup name="value" type="SettingsKey">
             <lookup name="item">GtkListItem</lookup>
           </lookup>
         </binding>
+        <signal name="notify::label" handler="item_value_changed"/>
       </object>
     </property>
   </template>
