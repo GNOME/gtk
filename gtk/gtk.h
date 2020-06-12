@@ -100,6 +100,7 @@
 #include <gtk/gtkdroptargetasync.h>
 #include <gtk/gtkdropdown.h>
 #include <gtk/gtkeditable.h>
+#include <gtk/gtkeditablelabel.h>
 #include <gtk/gtkemojichooser.h>
 #include <gtk/gtkentry.h>
 #include <gtk/gtkentrybuffer.h>
