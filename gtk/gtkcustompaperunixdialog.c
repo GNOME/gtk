@@ -49,8 +49,9 @@ typedef struct
   GtkWidget *spin_button;
 } UnitWidget;
 
-struct _GtkCustomPaperUnixDialogPrivate
+struct _GtkCustomPaperUnixDialog
 {
+  GtkDialog parent_instance;
 
   GtkWidget *treeview;
   GtkWidget *values_box;
@@ -80,6 +81,14 @@ struct _GtkCustomPaperUnixDialogPrivate
   gchar *waiting_for_printer;
 };
 
+typedef struct _GtkCustomPaperUnixDialogClass GtkCustomPaperUnixDialogClass;
+
+struct _GtkCustomPaperUnixDialogClass
+{
+  GtkDialogClass parent_class;
+};
+
+
 enum {
   PRINTER_LIST_COL_NAME,
   PRINTER_LIST_COL_PRINTER,
@@ -87,21 +96,21 @@ enum {
 };
 
 
-G_DEFINE_TYPE_WITH_PRIVATE (GtkCustomPaperUnixDialog, gtk_custom_paper_unix_dialog, GTK_TYPE_DIALOG)
+G_DEFINE_TYPE (GtkCustomPaperUnixDialog, gtk_custom_paper_unix_dialog, GTK_TYPE_DIALOG)
 
 
 static void gtk_custom_paper_unix_dialog_constructed (GObject *object);
 static void gtk_custom_paper_unix_dialog_finalize  (GObject                *object);
 static void populate_dialog                        (GtkCustomPaperUnixDialog *dialog);
 static void printer_added_cb                       (GtkPrintBackend        *backend,
-						    GtkPrinter             *printer,
-						    GtkCustomPaperUnixDialog *dialog);
+                                                    GtkPrinter             *printer,
+                                                    GtkCustomPaperUnixDialog *dialog);
 static void printer_removed_cb                     (GtkPrintBackend        *backend,
-						    GtkPrinter             *printer,
-						    GtkCustomPaperUnixDialog *dialog);
+                                                    GtkPrinter             *printer,
+                                                    GtkCustomPaperUnixDialog *dialog);
 static void printer_status_cb                      (GtkPrintBackend        *backend,
-						    GtkPrinter             *printer,
-						    GtkCustomPaperUnixDialog *dialog);
+                                                    GtkPrinter             *printer,
+                                                    GtkCustomPaperUnixDialog *dialog);
 
 
 
@@ -136,10 +145,10 @@ _gtk_print_get_default_user_units (void)
 static char *
 custom_paper_get_legacy_filename (void)
 {
-  gchar *filename;
+  char *filename;
 
   filename = g_build_filename (g_get_home_dir (),
-			       LEGACY_CUSTOM_PAPER_FILENAME, NULL);
+                               LEGACY_CUSTOM_PAPER_FILENAME, NULL);
   g_assert (filename != NULL);
   return filename;
 }
@@ -147,11 +156,11 @@ custom_paper_get_legacy_filename (void)
 static char *
 custom_paper_get_filename (void)
 {
-  gchar *filename;
+  char *filename;
 
   filename = g_build_filename (g_get_user_config_dir (),
                                "gtk-4.0",
-			       CUSTOM_PAPER_FILENAME, NULL);
+                               CUSTOM_PAPER_FILENAME, NULL);
   g_assert (filename != NULL);
   return filename;
 }
@@ -160,8 +169,8 @@ GList *
 _gtk_load_custom_papers (void)
 {
   GKeyFile *keyfile;
-  gchar *filename;
-  gchar **groups;
+  char *filename;
+  char **groups;
   gsize n_groups, i;
   gboolean load_ok;
   GList *result = NULL;
@@ -217,8 +226,8 @@ _gtk_print_load_custom_papers (GtkListStore *store)
       page_setup = p->data;
       gtk_list_store_append (store, &iter);
       gtk_list_store_set (store, &iter,
-                         0, page_setup,
-                         -1);
+                          0, page_setup,
+                          -1);
       g_object_unref (page_setup);
     }
 
@@ -259,18 +268,18 @@ _gtk_print_save_custom_papers (GtkListStore *store)
   if (gtk_tree_model_get_iter_first (model, &iter))
     {
       do
-	{
-	  GtkPageSetup *page_setup;
-	  gchar group[32];
+        {
+          GtkPageSetup *page_setup;
+          gchar group[32];
 
-	  g_snprintf (group, sizeof (group), "Paper%u", i);
+          g_snprintf (group, sizeof (group), "Paper%u", i);
 
-	  gtk_tree_model_get (model, &iter, 0, &page_setup, -1);
+          gtk_tree_model_get (model, &iter, 0, &page_setup, -1);
 
-	  gtk_page_setup_to_key_file (page_setup, keyfile, group);
+          gtk_page_setup_to_key_file (page_setup, keyfile, group);
 
-	  ++i;
-	} while (gtk_tree_model_iter_next (model, &iter));
+          ++i;
+        } while (gtk_tree_model_iter_next (model, &iter));
     }
 
   filename = custom_paper_get_filename ();
@@ -296,38 +305,34 @@ gtk_custom_paper_unix_dialog_class_init (GtkCustomPaperUnixDialogClass *class)
 
 static void
 custom_paper_dialog_response_cb (GtkDialog *dialog,
-				 gint       response,
-				 gpointer   user_data)
+                                 int        response,
+                                 gpointer   user_data)
 {
-  GtkCustomPaperUnixDialogPrivate *priv = GTK_CUSTOM_PAPER_UNIX_DIALOG (dialog)->priv;
+  GtkCustomPaperUnixDialog *self = GTK_CUSTOM_PAPER_UNIX_DIALOG (dialog);
 
-  _gtk_print_save_custom_papers (priv->custom_paper_list);
+  _gtk_print_save_custom_papers (self->custom_paper_list);
 }
 
 static void
 gtk_custom_paper_unix_dialog_init (GtkCustomPaperUnixDialog *dialog)
 {
-  GtkCustomPaperUnixDialogPrivate *priv;
   GtkTreeIter iter;
-
-  dialog->priv = gtk_custom_paper_unix_dialog_get_instance_private (dialog);
-  priv = dialog->priv;
 
   gtk_dialog_set_use_header_bar_from_setting (GTK_DIALOG (dialog));
 
-  priv->print_backends = NULL;
+  dialog->print_backends = NULL;
 
-  priv->request_details_printer = NULL;
-  priv->request_details_tag = 0;
+  dialog->request_details_printer = NULL;
+  dialog->request_details_tag = 0;
 
-  priv->printer_list = gtk_list_store_new (PRINTER_LIST_N_COLS,
-                                           G_TYPE_STRING,
-                                           G_TYPE_OBJECT);
+  dialog->printer_list = gtk_list_store_new (PRINTER_LIST_N_COLS,
+                                             G_TYPE_STRING,
+                                             G_TYPE_OBJECT);
 
-  gtk_list_store_append (priv->printer_list, &iter);
+  gtk_list_store_append (dialog->printer_list, &iter);
 
-  priv->custom_paper_list = gtk_list_store_new (1, G_TYPE_OBJECT);
-  _gtk_print_load_custom_papers (priv->custom_paper_list);
+  dialog->custom_paper_list = gtk_list_store_new (1, G_TYPE_OBJECT);
+  _gtk_print_load_custom_papers (dialog->custom_paper_list);
 
   populate_dialog (dialog);
 
@@ -355,37 +360,36 @@ static void
 gtk_custom_paper_unix_dialog_finalize (GObject *object)
 {
   GtkCustomPaperUnixDialog *dialog = GTK_CUSTOM_PAPER_UNIX_DIALOG (object);
-  GtkCustomPaperUnixDialogPrivate *priv = dialog->priv;
   GtkPrintBackend *backend;
   GList *node;
 
-  if (priv->printer_list)
+  if (dialog->printer_list)
     {
-      g_signal_handler_disconnect (priv->printer_list, priv->printer_inserted_tag);
-      g_signal_handler_disconnect (priv->printer_list, priv->printer_removed_tag);
-      g_object_unref (priv->printer_list);
-      priv->printer_list = NULL;
+      g_signal_handler_disconnect (dialog->printer_list, dialog->printer_inserted_tag);
+      g_signal_handler_disconnect (dialog->printer_list, dialog->printer_removed_tag);
+      g_object_unref (dialog->printer_list);
+      dialog->printer_list = NULL;
     }
 
-  if (priv->request_details_tag)
+  if (dialog->request_details_tag)
     {
-      g_signal_handler_disconnect (priv->request_details_printer,
-				   priv->request_details_tag);
-      g_object_unref (priv->request_details_printer);
-      priv->request_details_printer = NULL;
-      priv->request_details_tag = 0;
+      g_signal_handler_disconnect (dialog->request_details_printer,
+                                   dialog->request_details_tag);
+      g_object_unref (dialog->request_details_printer);
+      dialog->request_details_printer = NULL;
+      dialog->request_details_tag = 0;
     }
 
-  if (priv->custom_paper_list)
+  if (dialog->custom_paper_list)
     {
-      g_object_unref (priv->custom_paper_list);
-      priv->custom_paper_list = NULL;
+      g_object_unref (dialog->custom_paper_list);
+      dialog->custom_paper_list = NULL;
     }
 
-  g_free (priv->waiting_for_printer);
-  priv->waiting_for_printer = NULL;
+  g_free (dialog->waiting_for_printer);
+  dialog->waiting_for_printer = NULL;
 
-  for (node = priv->print_backends; node != NULL; node = node->next)
+  for (node = dialog->print_backends; node != NULL; node = node->next)
     {
       backend = GTK_PRINT_BACKEND (node->data);
 
@@ -397,8 +401,8 @@ gtk_custom_paper_unix_dialog_finalize (GObject *object)
       g_object_unref (backend);
     }
 
-  g_list_free (priv->print_backends);
-  priv->print_backends = NULL;
+  g_list_free (dialog->print_backends);
+  dialog->print_backends = NULL;
 
   G_OBJECT_CLASS (gtk_custom_paper_unix_dialog_parent_class)->finalize (object);
 }
@@ -434,10 +438,9 @@ _gtk_custom_paper_unix_dialog_new (GtkWindow   *parent,
 
 static void
 printer_added_cb (GtkPrintBackend          *backend,
-		  GtkPrinter               *printer,
-		  GtkCustomPaperUnixDialog *dialog)
+                  GtkPrinter               *printer,
+                  GtkCustomPaperUnixDialog *dialog)
 {
-  GtkCustomPaperUnixDialogPrivate *priv = dialog->priv;
   GtkTreeIter iter;
   gchar *str;
 
@@ -445,58 +448,56 @@ printer_added_cb (GtkPrintBackend          *backend,
     return;
 
   str = g_strdup_printf ("<b>%s</b>",
-			 gtk_printer_get_name (printer));
+                         gtk_printer_get_name (printer));
 
-  gtk_list_store_append (priv->printer_list, &iter);
-  gtk_list_store_set (priv->printer_list, &iter,
+  gtk_list_store_append (dialog->printer_list, &iter);
+  gtk_list_store_set (dialog->printer_list, &iter,
                       PRINTER_LIST_COL_NAME, str,
                       PRINTER_LIST_COL_PRINTER, printer,
                       -1);
 
   g_object_set_data_full (G_OBJECT (printer),
-			  "gtk-print-tree-iter",
+                          "gtk-print-tree-iter",
                           gtk_tree_iter_copy (&iter),
                           (GDestroyNotify) gtk_tree_iter_free);
 
   g_free (str);
 
-  if (priv->waiting_for_printer != NULL &&
-      strcmp (priv->waiting_for_printer,
-	      gtk_printer_get_name (printer)) == 0)
+  if (dialog->waiting_for_printer != NULL &&
+      strcmp (dialog->waiting_for_printer,
+              gtk_printer_get_name (printer)) == 0)
     {
-      gtk_combo_box_set_active_iter (GTK_COMBO_BOX (priv->printer_combo),
-				     &iter);
-      priv->waiting_for_printer = NULL;
+      gtk_combo_box_set_active_iter (GTK_COMBO_BOX (dialog->printer_combo),
+                                     &iter);
+      dialog->waiting_for_printer = NULL;
     }
 }
 
 static void
 printer_removed_cb (GtkPrintBackend        *backend,
-		    GtkPrinter             *printer,
-		    GtkCustomPaperUnixDialog *dialog)
+                    GtkPrinter             *printer,
+                    GtkCustomPaperUnixDialog *dialog)
 {
-  GtkCustomPaperUnixDialogPrivate *priv = dialog->priv;
   GtkTreeIter *iter;
 
   iter = g_object_get_data (G_OBJECT (printer), "gtk-print-tree-iter");
-  gtk_list_store_remove (GTK_LIST_STORE (priv->printer_list), iter);
+  gtk_list_store_remove (GTK_LIST_STORE (dialog->printer_list), iter);
 }
 
 
 static void
 printer_status_cb (GtkPrintBackend        *backend,
                    GtkPrinter             *printer,
-		   GtkCustomPaperUnixDialog *dialog)
+                   GtkCustomPaperUnixDialog *dialog)
 {
-  GtkCustomPaperUnixDialogPrivate *priv = dialog->priv;
   GtkTreeIter *iter;
   gchar *str;
 
   iter = g_object_get_data (G_OBJECT (printer), "gtk-print-tree-iter");
 
   str = g_strdup_printf ("<b>%s</b>",
-			 gtk_printer_get_name (printer));
-  gtk_list_store_set (priv->printer_list, iter,
+                         gtk_printer_get_name (printer));
+  gtk_list_store_set (dialog->printer_list, iter,
                       PRINTER_LIST_COL_NAME, str,
                       -1);
   g_free (str);
@@ -504,26 +505,26 @@ printer_status_cb (GtkPrintBackend        *backend,
 
 static void
 printer_list_initialize (GtkCustomPaperUnixDialog *dialog,
-			 GtkPrintBackend        *print_backend)
+                         GtkPrintBackend        *print_backend)
 {
   GList *list, *node;
 
   g_return_if_fail (print_backend != NULL);
 
   g_signal_connect_object (print_backend,
-			   "printer-added",
-			   (GCallback) printer_added_cb,
-			   G_OBJECT (dialog), 0);
+                           "printer-added",
+                           (GCallback) printer_added_cb,
+                           G_OBJECT (dialog), 0);
 
   g_signal_connect_object (print_backend,
-			   "printer-removed",
-			   (GCallback) printer_removed_cb,
-			   G_OBJECT (dialog), 0);
+                           "printer-removed",
+                           (GCallback) printer_removed_cb,
+                           G_OBJECT (dialog), 0);
 
   g_signal_connect_object (print_backend,
-			   "printer-status-changed",
-			   (GCallback) printer_status_cb,
-			   G_OBJECT (dialog), 0);
+                           "printer-status-changed",
+                           (GCallback) printer_status_cb,
+                           G_OBJECT (dialog), 0);
 
   list = gtk_print_backend_get_printer_list (print_backend);
 
@@ -540,13 +541,12 @@ printer_list_initialize (GtkCustomPaperUnixDialog *dialog,
 static void
 load_print_backends (GtkCustomPaperUnixDialog *dialog)
 {
-  GtkCustomPaperUnixDialogPrivate *priv = dialog->priv;
   GList *node;
 
   if (g_module_supported ())
-    priv->print_backends = gtk_print_backend_load_modules ();
+    dialog->print_backends = gtk_print_backend_load_modules ();
 
-  for (node = priv->print_backends; node != NULL; node = node->next)
+  for (node = dialog->print_backends; node != NULL; node = node->next)
     printer_list_initialize (dialog, GTK_PRINT_BACKEND (node->data));
 }
 
@@ -554,8 +554,8 @@ static void unit_widget_changed (GtkCustomPaperUnixDialog *dialog);
 
 static GtkWidget *
 new_unit_widget (GtkCustomPaperUnixDialog *dialog,
-		 GtkUnit                   unit,
-		 GtkWidget                *mnemonic_label)
+                 GtkUnit                   unit,
+                 GtkWidget                *mnemonic_label)
 {
   GtkWidget *hbox, *button, *label;
   UnitWidget *data;
@@ -578,7 +578,7 @@ new_unit_widget (GtkCustomPaperUnixDialog *dialog,
   data->spin_button = button;
 
   g_signal_connect_swapped (button, "value-changed",
-			    G_CALLBACK (unit_widget_changed), dialog);
+                            G_CALLBACK (unit_widget_changed), dialog);
 
   if (unit == GTK_UNIT_INCH)
     label = gtk_label_new (_("inch"));
@@ -600,31 +600,31 @@ unit_widget_get (GtkWidget *unit_widget)
 {
   UnitWidget *data = g_object_get_data (G_OBJECT (unit_widget), "unit-data");
   return _gtk_print_convert_to_mm (gtk_spin_button_get_value (GTK_SPIN_BUTTON (data->spin_button)),
-				   data->display_unit);
+                                   data->display_unit);
 }
 
 static void
 unit_widget_set (GtkWidget *unit_widget,
-		 gdouble    value)
+                 gdouble    value)
 {
   UnitWidget *data;
 
   data = g_object_get_data (G_OBJECT (unit_widget), "unit-data");
   gtk_spin_button_set_value (GTK_SPIN_BUTTON (data->spin_button),
-			     _gtk_print_convert_from_mm (value, data->display_unit));
+                             _gtk_print_convert_from_mm (value, data->display_unit));
 }
 
 static void
 custom_paper_printer_data_func (GtkCellLayout   *cell_layout,
-				GtkCellRenderer *cell,
-				GtkTreeModel    *tree_model,
-				GtkTreeIter     *iter,
-				gpointer         data)
+                                GtkCellRenderer *cell,
+                                GtkTreeModel    *tree_model,
+                                GtkTreeIter     *iter,
+                                gpointer         data)
 {
   GtkPrinter *printer;
 
   gtk_tree_model_get (tree_model, iter,
-		      PRINTER_LIST_COL_PRINTER, &printer, -1);
+                      PRINTER_LIST_COL_PRINTER, &printer, -1);
 
   if (printer)
     g_object_set (cell, "text",  gtk_printer_get_name (printer), NULL);
@@ -638,68 +638,66 @@ custom_paper_printer_data_func (GtkCellLayout   *cell_layout,
 static void
 update_combo_sensitivity_from_printers (GtkCustomPaperUnixDialog *dialog)
 {
-  GtkCustomPaperUnixDialogPrivate *priv = dialog->priv;
   GtkTreeIter iter;
   gboolean sensitive;
   GtkTreeSelection *selection;
   GtkTreeModel *model;
 
   sensitive = FALSE;
-  model = GTK_TREE_MODEL (priv->printer_list);
-  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (priv->treeview));
+  model = GTK_TREE_MODEL (dialog->printer_list);
+  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (dialog->treeview));
   if (gtk_tree_model_get_iter_first (model, &iter) &&
       gtk_tree_model_iter_next (model, &iter) &&
       gtk_tree_selection_get_selected (selection, NULL, &iter))
     sensitive = TRUE;
 
-  gtk_widget_set_sensitive (priv->printer_combo, sensitive);
+  gtk_widget_set_sensitive (dialog->printer_combo, sensitive);
 }
 
 static void
 update_custom_widgets_from_list (GtkCustomPaperUnixDialog *dialog)
 {
-  GtkCustomPaperUnixDialogPrivate *priv = dialog->priv;
   GtkTreeSelection *selection;
   GtkTreeModel *model;
   GtkTreeIter iter;
   GtkPageSetup *page_setup;
 
-  model = gtk_tree_view_get_model (GTK_TREE_VIEW (priv->treeview));
-  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (priv->treeview));
+  model = gtk_tree_view_get_model (GTK_TREE_VIEW (dialog->treeview));
+  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (dialog->treeview));
 
-  priv->non_user_change = TRUE;
+  dialog->non_user_change = TRUE;
   if (gtk_tree_selection_get_selected (selection, NULL, &iter))
     {
       gtk_tree_model_get (model, &iter, 0, &page_setup, -1);
 
-      unit_widget_set (priv->width_widget,
-		       gtk_page_setup_get_paper_width (page_setup, GTK_UNIT_MM));
-      unit_widget_set (priv->height_widget,
-		       gtk_page_setup_get_paper_height (page_setup, GTK_UNIT_MM));
-      unit_widget_set (priv->top_widget,
-		       gtk_page_setup_get_top_margin (page_setup, GTK_UNIT_MM));
-      unit_widget_set (priv->bottom_widget,
-		       gtk_page_setup_get_bottom_margin (page_setup, GTK_UNIT_MM));
-      unit_widget_set (priv->left_widget,
-		       gtk_page_setup_get_left_margin (page_setup, GTK_UNIT_MM));
-      unit_widget_set (priv->right_widget,
-		       gtk_page_setup_get_right_margin (page_setup, GTK_UNIT_MM));
+      unit_widget_set (dialog->width_widget,
+                       gtk_page_setup_get_paper_width (page_setup, GTK_UNIT_MM));
+      unit_widget_set (dialog->height_widget,
+                       gtk_page_setup_get_paper_height (page_setup, GTK_UNIT_MM));
+      unit_widget_set (dialog->top_widget,
+                       gtk_page_setup_get_top_margin (page_setup, GTK_UNIT_MM));
+      unit_widget_set (dialog->bottom_widget,
+                       gtk_page_setup_get_bottom_margin (page_setup, GTK_UNIT_MM));
+      unit_widget_set (dialog->left_widget,
+                       gtk_page_setup_get_left_margin (page_setup, GTK_UNIT_MM));
+      unit_widget_set (dialog->right_widget,
+                       gtk_page_setup_get_right_margin (page_setup, GTK_UNIT_MM));
 
-      gtk_widget_set_sensitive (priv->values_box, TRUE);
+      gtk_widget_set_sensitive (dialog->values_box, TRUE);
     }
   else
     {
-      gtk_widget_set_sensitive (priv->values_box, FALSE);
+      gtk_widget_set_sensitive (dialog->values_box, FALSE);
     }
 
-  if (priv->printer_list)
+  if (dialog->printer_list)
     update_combo_sensitivity_from_printers (dialog);
-  priv->non_user_change = FALSE;
+  dialog->non_user_change = FALSE;
 }
 
 static void
 selected_custom_paper_changed (GtkTreeSelection         *selection,
-			       GtkCustomPaperUnixDialog *dialog)
+                               GtkCustomPaperUnixDialog *dialog)
 {
   update_custom_widgets_from_list (dialog);
 }
@@ -707,32 +705,31 @@ selected_custom_paper_changed (GtkTreeSelection         *selection,
 static void
 unit_widget_changed (GtkCustomPaperUnixDialog *dialog)
 {
-  GtkCustomPaperUnixDialogPrivate *priv = dialog->priv;
   gdouble w, h, top, bottom, left, right;
   GtkTreeSelection *selection;
   GtkTreeIter iter;
   GtkPageSetup *page_setup;
   GtkPaperSize *paper_size;
 
-  if (priv->non_user_change)
+  if (dialog->non_user_change)
     return;
 
-  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (priv->treeview));
+  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (dialog->treeview));
 
   if (gtk_tree_selection_get_selected (selection, NULL, &iter))
     {
-      gtk_tree_model_get (GTK_TREE_MODEL (priv->custom_paper_list), &iter, 0, &page_setup, -1);
+      gtk_tree_model_get (GTK_TREE_MODEL (dialog->custom_paper_list), &iter, 0, &page_setup, -1);
 
-      w = unit_widget_get (priv->width_widget);
-      h = unit_widget_get (priv->height_widget);
+      w = unit_widget_get (dialog->width_widget);
+      h = unit_widget_get (dialog->height_widget);
 
       paper_size = gtk_page_setup_get_paper_size (page_setup);
       gtk_paper_size_set_size (paper_size, w, h, GTK_UNIT_MM);
 
-      top = unit_widget_get (priv->top_widget);
-      bottom = unit_widget_get (priv->bottom_widget);
-      left = unit_widget_get (priv->left_widget);
-      right = unit_widget_get (priv->right_widget);
+      top = unit_widget_get (dialog->top_widget);
+      bottom = unit_widget_get (dialog->bottom_widget);
+      left = unit_widget_get (dialog->left_widget);
+      right = unit_widget_get (dialog->right_widget);
 
       gtk_page_setup_set_top_margin (page_setup, top, GTK_UNIT_MM);
       gtk_page_setup_set_bottom_margin (page_setup, bottom, GTK_UNIT_MM);
@@ -745,30 +742,29 @@ unit_widget_changed (GtkCustomPaperUnixDialog *dialog)
 
 static gboolean
 custom_paper_name_used (GtkCustomPaperUnixDialog *dialog,
-			const gchar              *name)
+                        const gchar              *name)
 {
-  GtkCustomPaperUnixDialogPrivate *priv = dialog->priv;
   GtkTreeModel *model;
   GtkTreeIter iter;
   GtkPageSetup *page_setup;
   GtkPaperSize *paper_size;
 
-  model = gtk_tree_view_get_model (GTK_TREE_VIEW (priv->treeview));
+  model = gtk_tree_view_get_model (GTK_TREE_VIEW (dialog->treeview));
 
   if (gtk_tree_model_get_iter_first (model, &iter))
     {
       do
-	{
-	  gtk_tree_model_get (model, &iter, 0, &page_setup, -1);
-	  paper_size = gtk_page_setup_get_paper_size (page_setup);
-	  if (strcmp (name,
-		      gtk_paper_size_get_name (paper_size)) == 0)
-	    {
-	      g_object_unref (page_setup);
-	      return TRUE;
-	    }
-	  g_object_unref (page_setup);
-	} while (gtk_tree_model_iter_next (model, &iter));
+        {
+          gtk_tree_model_get (model, &iter, 0, &page_setup, -1);
+          paper_size = gtk_page_setup_get_paper_size (page_setup);
+          if (strcmp (name,
+                      gtk_paper_size_get_name (paper_size)) == 0)
+            {
+              g_object_unref (page_setup);
+              return TRUE;
+            }
+          g_object_unref (page_setup);
+        } while (gtk_tree_model_iter_next (model, &iter));
     }
 
   return FALSE;
@@ -777,7 +773,6 @@ custom_paper_name_used (GtkCustomPaperUnixDialog *dialog,
 static void
 add_custom_paper (GtkCustomPaperUnixDialog *dialog)
 {
-  GtkCustomPaperUnixDialogPrivate *priv = dialog->priv;
   GtkListStore *store;
   GtkPageSetup *page_setup;
   GtkPaperSize *paper_size;
@@ -787,8 +782,8 @@ add_custom_paper (GtkCustomPaperUnixDialog *dialog)
   gchar *name;
   gint i;
 
-  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (priv->treeview));
-  store = priv->custom_paper_list;
+  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (dialog->treeview));
+  store = dialog->custom_paper_list;
 
   i = 1;
   name = NULL;
@@ -801,9 +796,9 @@ add_custom_paper (GtkCustomPaperUnixDialog *dialog)
 
   page_setup = gtk_page_setup_new ();
   paper_size = gtk_paper_size_new_custom (name, name,
-					  gtk_page_setup_get_paper_width (page_setup, GTK_UNIT_MM),
-					  gtk_page_setup_get_paper_height (page_setup, GTK_UNIT_MM),
-					  GTK_UNIT_MM);
+                                          gtk_page_setup_get_paper_width (page_setup, GTK_UNIT_MM),
+                                          gtk_page_setup_get_paper_height (page_setup, GTK_UNIT_MM),
+                                          GTK_UNIT_MM);
   gtk_page_setup_set_paper_size (page_setup, paper_size);
   gtk_paper_size_free (paper_size);
 
@@ -813,9 +808,9 @@ add_custom_paper (GtkCustomPaperUnixDialog *dialog)
 
   gtk_tree_selection_select_iter (selection, &iter);
   path = gtk_tree_model_get_path (GTK_TREE_MODEL (store), &iter);
-  gtk_widget_grab_focus (priv->treeview);
-  gtk_tree_view_set_cursor (GTK_TREE_VIEW (priv->treeview), path,
-			    priv->text_column, TRUE);
+  gtk_widget_grab_focus (dialog->treeview);
+  gtk_tree_view_set_cursor (GTK_TREE_VIEW (dialog->treeview), path,
+                            dialog->text_column, TRUE);
   gtk_tree_path_free (path);
   g_free (name);
 }
@@ -823,13 +818,12 @@ add_custom_paper (GtkCustomPaperUnixDialog *dialog)
 static void
 remove_custom_paper (GtkCustomPaperUnixDialog *dialog)
 {
-  GtkCustomPaperUnixDialogPrivate *priv = dialog->priv;
   GtkTreeSelection *selection;
   GtkTreeIter iter;
   GtkListStore *store;
 
-  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (priv->treeview));
-  store = priv->custom_paper_list;
+  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (dialog->treeview));
+  store = dialog->custom_paper_list;
 
   if (gtk_tree_selection_get_selected (selection, NULL, &iter))
     {
@@ -837,9 +831,9 @@ remove_custom_paper (GtkCustomPaperUnixDialog *dialog)
       gtk_list_store_remove (store, &iter);
 
       if (gtk_tree_model_get_iter (GTK_TREE_MODEL (store), &iter, path))
-	gtk_tree_selection_select_iter (selection, &iter);
+        gtk_tree_selection_select_iter (selection, &iter);
       else if (gtk_tree_path_prev (path) && gtk_tree_model_get_iter (GTK_TREE_MODEL (store), &iter, path))
-	gtk_tree_selection_select_iter (selection, &iter);
+        gtk_tree_selection_select_iter (selection, &iter);
 
       gtk_tree_path_free (path);
     }
@@ -847,21 +841,20 @@ remove_custom_paper (GtkCustomPaperUnixDialog *dialog)
 
 static void
 set_margins_from_printer (GtkCustomPaperUnixDialog *dialog,
-			  GtkPrinter               *printer)
+                          GtkPrinter               *printer)
 {
-  GtkCustomPaperUnixDialogPrivate *priv = dialog->priv;
   gdouble top, bottom, left, right;
 
   top = bottom = left = right = 0;
   if (!gtk_printer_get_hard_margins (printer, &top, &bottom, &left, &right))
     return;
 
-  priv->non_user_change = TRUE;
-  unit_widget_set (priv->top_widget, _gtk_print_convert_to_mm (top, GTK_UNIT_POINTS));
-  unit_widget_set (priv->bottom_widget, _gtk_print_convert_to_mm (bottom, GTK_UNIT_POINTS));
-  unit_widget_set (priv->left_widget, _gtk_print_convert_to_mm (left, GTK_UNIT_POINTS));
-  unit_widget_set (priv->right_widget, _gtk_print_convert_to_mm (right, GTK_UNIT_POINTS));
-  priv->non_user_change = FALSE;
+  dialog->non_user_change = TRUE;
+  unit_widget_set (dialog->top_widget, _gtk_print_convert_to_mm (top, GTK_UNIT_POINTS));
+  unit_widget_set (dialog->bottom_widget, _gtk_print_convert_to_mm (bottom, GTK_UNIT_POINTS));
+  unit_widget_set (dialog->left_widget, _gtk_print_convert_to_mm (left, GTK_UNIT_POINTS));
+  unit_widget_set (dialog->right_widget, _gtk_print_convert_to_mm (right, GTK_UNIT_POINTS));
+  dialog->non_user_change = FALSE;
 
   /* Only send one change */
   unit_widget_changed (dialog);
@@ -869,91 +862,87 @@ set_margins_from_printer (GtkCustomPaperUnixDialog *dialog,
 
 static void
 get_margins_finished_callback (GtkPrinter               *printer,
-			       gboolean                  success,
-			       GtkCustomPaperUnixDialog *dialog)
+                               gboolean                  success,
+                               GtkCustomPaperUnixDialog *dialog)
 {
-  GtkCustomPaperUnixDialogPrivate *priv = dialog->priv;
-
-  g_signal_handler_disconnect (priv->request_details_printer,
-			       priv->request_details_tag);
-  g_object_unref (priv->request_details_printer);
-  priv->request_details_tag = 0;
-  priv->request_details_printer = NULL;
+  g_signal_handler_disconnect (dialog->request_details_printer,
+                               dialog->request_details_tag);
+  g_object_unref (dialog->request_details_printer);
+  dialog->request_details_tag = 0;
+  dialog->request_details_printer = NULL;
 
   if (success)
     set_margins_from_printer (dialog, printer);
 
-  gtk_combo_box_set_active (GTK_COMBO_BOX (priv->printer_combo), 0);
+  gtk_combo_box_set_active (GTK_COMBO_BOX (dialog->printer_combo), 0);
 }
 
 static void
 margins_from_printer_changed (GtkCustomPaperUnixDialog *dialog)
 {
-  GtkCustomPaperUnixDialogPrivate *priv = dialog->priv;
   GtkTreeIter iter;
   GtkComboBox *combo;
   GtkPrinter *printer;
 
-  combo = GTK_COMBO_BOX (priv->printer_combo);
+  combo = GTK_COMBO_BOX (dialog->printer_combo);
 
-  if (priv->request_details_tag)
+  if (dialog->request_details_tag)
     {
-      g_signal_handler_disconnect (priv->request_details_printer,
-				   priv->request_details_tag);
-      g_object_unref (priv->request_details_printer);
-      priv->request_details_printer = NULL;
-      priv->request_details_tag = 0;
+      g_signal_handler_disconnect (dialog->request_details_printer,
+                                   dialog->request_details_tag);
+      g_object_unref (dialog->request_details_printer);
+      dialog->request_details_printer = NULL;
+      dialog->request_details_tag = 0;
     }
 
   if (gtk_combo_box_get_active_iter (combo, &iter))
     {
       gtk_tree_model_get (gtk_combo_box_get_model (combo), &iter,
-			  PRINTER_LIST_COL_PRINTER, &printer, -1);
+                          PRINTER_LIST_COL_PRINTER, &printer, -1);
 
       if (printer)
-	{
-	  if (gtk_printer_has_details (printer))
-	    {
-	      set_margins_from_printer (dialog, printer);
-	      gtk_combo_box_set_active (combo, 0);
-	    }
-	  else
-	    {
-	      priv->request_details_printer = g_object_ref (printer);
-	      priv->request_details_tag =
-		g_signal_connect (printer, "details-acquired",
-				  G_CALLBACK (get_margins_finished_callback), dialog);
-	      gtk_printer_request_details (printer);
-	    }
+        {
+          if (gtk_printer_has_details (printer))
+            {
+              set_margins_from_printer (dialog, printer);
+              gtk_combo_box_set_active (combo, 0);
+            }
+          else
+            {
+              dialog->request_details_printer = g_object_ref (printer);
+              dialog->request_details_tag =
+                g_signal_connect (printer, "details-acquired",
+                                  G_CALLBACK (get_margins_finished_callback), dialog);
+              gtk_printer_request_details (printer);
+            }
 
-	  g_object_unref (printer);
-	}
+          g_object_unref (printer);
+        }
     }
 }
 
 static void
 custom_size_name_edited (GtkCellRenderer          *cell,
-			 gchar                    *path_string,
-			 gchar                    *new_text,
-			 GtkCustomPaperUnixDialog *dialog)
+                         gchar                    *path_string,
+                         gchar                    *new_text,
+                         GtkCustomPaperUnixDialog *dialog)
 {
-  GtkCustomPaperUnixDialogPrivate *priv = dialog->priv;
   GtkTreePath *path;
   GtkTreeIter iter;
   GtkListStore *store;
   GtkPageSetup *page_setup;
   GtkPaperSize *paper_size;
 
-  store = priv->custom_paper_list;
+  store = dialog->custom_paper_list;
   path = gtk_tree_path_new_from_string (path_string);
   gtk_tree_model_get_iter (GTK_TREE_MODEL (store), &iter, path);
   gtk_tree_model_get (GTK_TREE_MODEL (store), &iter, 0, &page_setup, -1);
   gtk_tree_path_free (path);
 
   paper_size = gtk_paper_size_new_custom (new_text, new_text,
-					  gtk_page_setup_get_paper_width (page_setup, GTK_UNIT_MM),
-					  gtk_page_setup_get_paper_height (page_setup, GTK_UNIT_MM),
-					  GTK_UNIT_MM);
+                                          gtk_page_setup_get_paper_width (page_setup, GTK_UNIT_MM),
+                                          gtk_page_setup_get_paper_height (page_setup, GTK_UNIT_MM),
+                                          GTK_UNIT_MM);
   gtk_page_setup_set_paper_size (page_setup, paper_size);
   gtk_paper_size_free (paper_size);
 
@@ -962,10 +951,10 @@ custom_size_name_edited (GtkCellRenderer          *cell,
 
 static void
 custom_name_func (GtkTreeViewColumn *tree_column,
-		  GtkCellRenderer   *cell,
-		  GtkTreeModel      *tree_model,
-		  GtkTreeIter       *iter,
-		  gpointer           data)
+                  GtkCellRenderer   *cell,
+                  GtkTreeModel      *tree_model,
+                  GtkTreeIter       *iter,
+                  gpointer           data)
 {
   GtkPageSetup *page_setup;
   GtkPaperSize *paper_size;
@@ -1012,7 +1001,6 @@ wrap_in_frame (const gchar *label,
 static void
 populate_dialog (GtkCustomPaperUnixDialog *dialog)
 {
-  GtkCustomPaperUnixDialogPrivate *priv = dialog->priv;
   GtkDialog *cpu_dialog = GTK_DIALOG (dialog);
   GtkWidget *content_area;
   GtkWidget *grid, *label, *widget, *frame, *combo;
@@ -1046,8 +1034,8 @@ populate_dialog (GtkCustomPaperUnixDialog *dialog)
   gtk_box_append (GTK_BOX (vbox), scrolled);
   gtk_widget_show (scrolled);
 
-  treeview = gtk_tree_view_new_with_model (GTK_TREE_MODEL (priv->custom_paper_list));
-  priv->treeview = treeview;
+  treeview = gtk_tree_view_new_with_model (GTK_TREE_MODEL (dialog->custom_paper_list));
+  dialog->treeview = treeview;
   gtk_tree_view_set_headers_visible (GTK_TREE_VIEW (treeview), FALSE);
   gtk_widget_set_size_request (treeview, 140, -1);
 
@@ -1059,7 +1047,7 @@ populate_dialog (GtkCustomPaperUnixDialog *dialog)
   g_object_set (cell, "editable", TRUE, NULL);
   g_signal_connect (cell, "edited",
                     G_CALLBACK (custom_size_name_edited), dialog);
-  priv->text_column = column =
+  dialog->text_column = column =
     gtk_tree_view_column_new_with_attributes ("paper", cell, NULL);
   gtk_tree_view_column_set_cell_data_func  (column, cell, custom_name_func, NULL, NULL);
 
@@ -1087,7 +1075,7 @@ populate_dialog (GtkCustomPaperUnixDialog *dialog)
   user_units = _gtk_print_get_default_user_units ();
 
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 18);
-  priv->values_box = vbox;
+  dialog->values_box = vbox;
   gtk_box_append (GTK_BOX (hbox), vbox);
   gtk_widget_show (vbox);
 
@@ -1103,7 +1091,7 @@ populate_dialog (GtkCustomPaperUnixDialog *dialog)
   gtk_grid_attach (GTK_GRID (grid), label, 0, 0, 1, 1);
 
   widget = new_unit_widget (dialog, user_units, label);
-  priv->width_widget = widget;
+  dialog->width_widget = widget;
   gtk_grid_attach (GTK_GRID (grid), widget, 1, 0, 1, 1);
   gtk_widget_show (widget);
 
@@ -1114,7 +1102,7 @@ populate_dialog (GtkCustomPaperUnixDialog *dialog)
   gtk_grid_attach (GTK_GRID (grid), label, 0, 1, 1, 1);
 
   widget = new_unit_widget (dialog, user_units, label);
-  priv->height_widget = widget;
+  dialog->height_widget = widget;
   gtk_grid_attach (GTK_GRID (grid), widget, 1, 1, 1, 1);
   gtk_widget_show (widget);
 
@@ -1134,7 +1122,7 @@ populate_dialog (GtkCustomPaperUnixDialog *dialog)
   gtk_widget_show (label);
 
   widget = new_unit_widget (dialog, user_units, label);
-  priv->top_widget = widget;
+  dialog->top_widget = widget;
   gtk_grid_attach (GTK_GRID (grid), widget, 1, 0, 1, 1);
   gtk_widget_show (widget);
 
@@ -1145,7 +1133,7 @@ populate_dialog (GtkCustomPaperUnixDialog *dialog)
   gtk_widget_show (label);
 
   widget = new_unit_widget (dialog, user_units, label);
-  priv->bottom_widget = widget;
+  dialog->bottom_widget = widget;
   gtk_grid_attach (GTK_GRID (grid), widget, 1, 1, 1, 1);
   gtk_widget_show (widget);
 
@@ -1156,7 +1144,7 @@ populate_dialog (GtkCustomPaperUnixDialog *dialog)
   gtk_widget_show (label);
 
   widget = new_unit_widget (dialog, user_units, label);
-  priv->left_widget = widget;
+  dialog->left_widget = widget;
   gtk_grid_attach (GTK_GRID (grid), widget, 1, 2, 1, 1);
   gtk_widget_show (widget);
 
@@ -1167,7 +1155,7 @@ populate_dialog (GtkCustomPaperUnixDialog *dialog)
   gtk_widget_show (label);
 
   widget = new_unit_widget (dialog, user_units, label);
-  priv->right_widget = widget;
+  dialog->right_widget = widget;
   gtk_grid_attach (GTK_GRID (grid), widget, 1, 3, 1, 1);
   gtk_widget_show (widget);
 
@@ -1175,29 +1163,29 @@ populate_dialog (GtkCustomPaperUnixDialog *dialog)
   gtk_grid_attach (GTK_GRID (grid), hbox, 0, 4, 2, 1);
   gtk_widget_show (hbox);
 
-  combo = gtk_combo_box_new_with_model (GTK_TREE_MODEL (priv->printer_list));
-  priv->printer_combo = combo;
+  combo = gtk_combo_box_new_with_model (GTK_TREE_MODEL (dialog->printer_list));
+  dialog->printer_combo = combo;
 
-  priv->printer_inserted_tag =
-    g_signal_connect_swapped (priv->printer_list, "row-inserted",
-			      G_CALLBACK (update_combo_sensitivity_from_printers), dialog);
-  priv->printer_removed_tag =
-    g_signal_connect_swapped (priv->printer_list, "row-deleted",
-			      G_CALLBACK (update_combo_sensitivity_from_printers), dialog);
+  dialog->printer_inserted_tag =
+    g_signal_connect_swapped (dialog->printer_list, "row-inserted",
+                              G_CALLBACK (update_combo_sensitivity_from_printers), dialog);
+  dialog->printer_removed_tag =
+    g_signal_connect_swapped (dialog->printer_list, "row-deleted",
+                              G_CALLBACK (update_combo_sensitivity_from_printers), dialog);
   update_combo_sensitivity_from_printers (dialog);
 
   cell = gtk_cell_renderer_text_new ();
   gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (combo), cell, TRUE);
   gtk_cell_layout_set_cell_data_func (GTK_CELL_LAYOUT (combo), cell,
-				      custom_paper_printer_data_func,
-				      NULL, NULL);
+                                      custom_paper_printer_data_func,
+                                      NULL, NULL);
 
   gtk_combo_box_set_active (GTK_COMBO_BOX (combo), 0);
   gtk_box_append (GTK_BOX (hbox), combo);
   gtk_widget_show (combo);
 
   g_signal_connect_swapped (combo, "changed",
-			    G_CALLBACK (margins_from_printer_changed), dialog);
+                            G_CALLBACK (margins_from_printer_changed), dialog);
 
   frame = wrap_in_frame (_("Paper Margins"), grid);
   gtk_widget_show (grid);
@@ -1207,8 +1195,8 @@ populate_dialog (GtkCustomPaperUnixDialog *dialog)
   update_custom_widgets_from_list (dialog);
 
   /* If no custom sizes, add one */
-  if (!gtk_tree_model_get_iter_first (GTK_TREE_MODEL (priv->custom_paper_list),
-				      &iter))
+  if (!gtk_tree_model_get_iter_first (GTK_TREE_MODEL (dialog->custom_paper_list),
+                                      &iter))
     {
       /* Need to realize treeview so we can start the rename */
       gtk_widget_realize (treeview);
