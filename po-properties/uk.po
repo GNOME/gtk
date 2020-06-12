@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.4.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-07 07:28+0000\n"
-"PO-Revision-Date: 2020-06-07 11:50+0300\n"
+"POT-Creation-Date: 2020-06-11 21:00+0000\n"
+"PO-Revision-Date: 2020-06-12 09:34+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
 "Language: uk\n"
@@ -29,7 +29,7 @@ msgstr ""
 msgid "Display"
 msgstr "Показ"
 
-#: gdk/gdkcursor.c:180 gtk/gtktexttag.c:622
+#: gdk/gdkcursor.c:180 gtk/gtktexttag.c:616
 msgid "Fallback"
 msgstr "Резервний"
 
@@ -71,127 +71,127 @@ msgstr "Текстура"
 msgid "The texture displayed by this cursor"
 msgstr "Текстура, яку показує цей курсор"
 
-#: gdk/gdkdevice.c:130
+#: gdk/gdkdevice.c:128
 msgid "Device Display"
 msgstr "Дисплей пристрою"
 
-#: gdk/gdkdevice.c:131
+#: gdk/gdkdevice.c:129
 msgid "Display which the device belongs to"
 msgstr "Показувати який пристрій кому належить"
 
-#: gdk/gdkdevice.c:142 gdk/gdkdevice.c:143
+#: gdk/gdkdevice.c:140 gdk/gdkdevice.c:141
 msgid "Device name"
 msgstr "Назва пристрою"
 
-#: gdk/gdkdevice.c:154
+#: gdk/gdkdevice.c:152
 msgid "Device type"
 msgstr "Тип пристрою"
 
-#: gdk/gdkdevice.c:155
+#: gdk/gdkdevice.c:153
 msgid "Device role in the device manager"
 msgstr "Роль пристрою в менеджері пристрою"
 
-#: gdk/gdkdevice.c:169
+#: gdk/gdkdevice.c:167
 msgid "Associated device"
 msgstr "Пов'язаний пристрій"
 
-#: gdk/gdkdevice.c:170
+#: gdk/gdkdevice.c:168
 msgid "Associated pointer or keyboard with this device"
 msgstr "Пов'язаний покажчик або клавіатура з цим пристроєм"
 
-#: gdk/gdkdevice.c:181
+#: gdk/gdkdevice.c:179
 msgid "Input source"
 msgstr "Джерело вводу"
 
-#: gdk/gdkdevice.c:182
+#: gdk/gdkdevice.c:180
 msgid "Source type for the device"
 msgstr "Тип джерела для пристрою"
 
-#: gdk/gdkdevice.c:196
+#: gdk/gdkdevice.c:194
 msgid "Whether the device has a cursor"
 msgstr "Чи має пристрій курсор"
 
-#: gdk/gdkdevice.c:197
+#: gdk/gdkdevice.c:195
 msgid "Whether there is a visible cursor following device motion"
 msgstr "Чи видимий курсор при русі пристрою"
 
-#: gdk/gdkdevice.c:209 gdk/gdkdevice.c:210
+#: gdk/gdkdevice.c:207 gdk/gdkdevice.c:208
 msgid "Number of axes in the device"
 msgstr "Кількість осей у пристрої"
 
-#: gdk/gdkdevice.c:222 gdk/gdkdevice.c:223
+#: gdk/gdkdevice.c:220 gdk/gdkdevice.c:221
 msgid "Vendor ID"
 msgstr "Ід. виробника"
 
-#: gdk/gdkdevice.c:235 gdk/gdkdevice.c:236
+#: gdk/gdkdevice.c:233 gdk/gdkdevice.c:234
 msgid "Product ID"
 msgstr "Ід. продукту"
 
-#: gdk/gdkdevice.c:248 gdk/gdkdevice.c:249
+#: gdk/gdkdevice.c:246 gdk/gdkdevice.c:247
 msgid "Seat"
 msgstr "Місце"
 
-#: gdk/gdkdevice.c:263 gdk/gdkdevice.c:264
+#: gdk/gdkdevice.c:261 gdk/gdkdevice.c:262
 msgid "Number of concurrent touches"
 msgstr "Кількість одночасних торкань"
 
-#: gdk/gdkdevice.c:276 gdk/gdkdevice.c:277
+#: gdk/gdkdevice.c:274 gdk/gdkdevice.c:275
 msgid "Axes"
 msgstr "Осі"
 
-#: gdk/gdkdevice.c:283
+#: gdk/gdkdevice.c:281
 msgid "Tool"
 msgstr "Інструмент"
 
-#: gdk/gdkdevice.c:284
+#: gdk/gdkdevice.c:282
 msgid "The tool that is currently used with this device"
 msgstr "Зараз інструмент використовується з цим пристроєм"
 
-#: gdk/gdkdevice.c:290 gtk/gtkmenubutton.c:395 gtk/gtkshortcutsshortcut.c:688
+#: gdk/gdkdevice.c:288 gtk/gtkmenubutton.c:395 gtk/gtkshortcutsshortcut.c:688
 msgid "Direction"
 msgstr "Напрямок"
 
-#: gdk/gdkdevice.c:291
+#: gdk/gdkdevice.c:289
 msgid "The direction of the current layout of the keyboard"
 msgstr "Напрямок поточної розкладки на клавіатурі"
 
-#: gdk/gdkdevice.c:297
+#: gdk/gdkdevice.c:295
 msgid "Has bidi layouts"
 msgstr "Містить двобічні розкладки"
 
-#: gdk/gdkdevice.c:298
+#: gdk/gdkdevice.c:296
 msgid "Whether the keyboard has bidi layouts"
 msgstr "Чи має клавіатура двобічні розкладки"
 
-#: gdk/gdkdevice.c:304
+#: gdk/gdkdevice.c:302
 msgid "Caps lock state"
 msgstr "Стан Caps Lock"
 
-#: gdk/gdkdevice.c:305
+#: gdk/gdkdevice.c:303
 msgid "Whether the keyboard caps lock is on"
 msgstr "Чи увімкнено Caps Lock на клавіатурі"
 
-#: gdk/gdkdevice.c:311
+#: gdk/gdkdevice.c:309
 msgid "Num lock state"
 msgstr "Стан Num Lock"
 
-#: gdk/gdkdevice.c:312
+#: gdk/gdkdevice.c:310
 msgid "Whether the keyboard num lock is on"
 msgstr "Чи увімкнено Num Lock на клавіатурі"
 
-#: gdk/gdkdevice.c:318
+#: gdk/gdkdevice.c:316
 msgid "Scroll lock state"
 msgstr "Стан Scroll Lock"
 
-#: gdk/gdkdevice.c:319
+#: gdk/gdkdevice.c:317
 msgid "Whether the keyboard scroll lock is on"
 msgstr "Чи увімкнено Scroll Lock на клавіатурі"
 
-#: gdk/gdkdevice.c:325
+#: gdk/gdkdevice.c:323
 msgid "Modifier state"
 msgstr "Стан модифікатора"
 
-#: gdk/gdkdevice.c:326
+#: gdk/gdkdevice.c:324
 msgid "The modifier state of the keyboard"
 msgstr "Стан модифікатора клавіатури"
 
@@ -1001,27 +1001,27 @@ msgstr ""
 "GtkPackType вказує, чи комірки упаковані з посиланням на початок або кінець "
 "ділянки комірки"
 
-#: gtk/gtkcellarea.c:779
+#: gtk/gtkcellarea.c:780
 msgid "Focus Cell"
 msgstr "Фокус комірки"
 
-#: gtk/gtkcellarea.c:780
+#: gtk/gtkcellarea.c:781
 msgid "The cell which currently has focus"
 msgstr "Комірка, на якій зараз фокус"
 
-#: gtk/gtkcellarea.c:795
+#: gtk/gtkcellarea.c:796
 msgid "Edited Cell"
 msgstr "Редагована комірка"
 
-#: gtk/gtkcellarea.c:796
+#: gtk/gtkcellarea.c:797
 msgid "The cell which is currently being edited"
 msgstr "Комірка, яка зараз редагуються"
 
-#: gtk/gtkcellarea.c:811
+#: gtk/gtkcellarea.c:812
 msgid "Edit Widget"
 msgstr "Редагувати віджет"
 
-#: gtk/gtkcellarea.c:812
+#: gtk/gtkcellarea.c:813
 msgid "The widget currently editing the edited cell"
 msgstr "Віджет зараз редагує редаговану комірку"
 
@@ -1210,10 +1210,10 @@ msgstr "Встановлення тла комірки"
 msgid "Whether the cell background color is set"
 msgstr "Чи встановлено колір тла комірки"
 
-#: gtk/gtkcellrenderercombo.c:136 gtk/gtkcolumnview.c:628 gtk/gtkdropdown.c:467
+#: gtk/gtkcellrenderercombo.c:136 gtk/gtkcolumnview.c:628 gtk/gtkdropdown.c:471
 #: gtk/gtkfilterlistmodel.c:684 gtk/gtkflattenlistmodel.c:438
 #: gtk/gtkgridview.c:1087 gtk/gtklistview.c:843 gtk/gtkmaplistmodel.c:404
-#: gtk/gtkmultiselection.c:372 gtk/gtkpropertyselection.c:441
+#: gtk/gtkmultiselection.c:381 gtk/gtkpropertyselection.c:453
 #: gtk/gtkshortcutcontroller.c:539 gtk/gtkslicelistmodel.c:287
 #: gtk/gtksortlistmodel.c:394 gtk/gtktreelistmodel.c:716
 msgid "Model"
@@ -1419,11 +1419,11 @@ msgstr "Режим одного абзацу"
 msgid "Whether to keep all text in a single paragraph"
 msgstr "Чи утримувати ввесь текст в одному абзаці"
 
-#: gtk/gtkcellrenderertext.c:283 gtk/gtktexttag.c:219
+#: gtk/gtkcellrenderertext.c:283 gtk/gtktexttag.c:215
 msgid "Background color name"
 msgstr "Назва кольору тла"
 
-#: gtk/gtkcellrenderertext.c:284 gtk/gtktexttag.c:220
+#: gtk/gtkcellrenderertext.c:284 gtk/gtktexttag.c:216
 msgid "Background color as a string"
 msgstr "Колір тла у вигляді рядка"
 
@@ -1431,15 +1431,15 @@ msgstr "Колір тла у вигляді рядка"
 msgid "Background color as RGBA"
 msgstr "Колір тла за RGBA"
 
-#: gtk/gtkcellrenderertext.c:296 gtk/gtktexttag.c:233
+#: gtk/gtkcellrenderertext.c:296 gtk/gtktexttag.c:229
 msgid "Background color as a GdkRGBA"
 msgstr "Колір тла за GdkRGBA"
 
-#: gtk/gtkcellrenderertext.c:301 gtk/gtktexttag.c:248
+#: gtk/gtkcellrenderertext.c:301 gtk/gtktexttag.c:244
 msgid "Foreground color name"
 msgstr "Назва кольору переднього плану"
 
-#: gtk/gtkcellrenderertext.c:302 gtk/gtktexttag.c:249
+#: gtk/gtkcellrenderertext.c:302 gtk/gtktexttag.c:245
 msgid "Foreground color as a string"
 msgstr "Колір переднього плану у вигляді рядка"
 
@@ -1447,74 +1447,74 @@ msgstr "Колір переднього плану у вигляді рядка"
 msgid "Foreground color as RGBA"
 msgstr "Колір тексту за RGBA"
 
-#: gtk/gtkcellrenderertext.c:314 gtk/gtktexttag.c:262
+#: gtk/gtkcellrenderertext.c:314 gtk/gtktexttag.c:258
 msgid "Foreground color as a GdkRGBA"
 msgstr "Колір тексту за GdkRGBA"
 
-#: gtk/gtkcellrenderertext.c:321 gtk/gtkeditable.c:400 gtk/gtktexttag.c:278
+#: gtk/gtkcellrenderertext.c:321 gtk/gtkeditable.c:400 gtk/gtktexttag.c:274
 #: gtk/gtktextview.c:860
 msgid "Editable"
 msgstr "Редагується"
 
-#: gtk/gtkcellrenderertext.c:322 gtk/gtktexttag.c:279 gtk/gtktextview.c:861
+#: gtk/gtkcellrenderertext.c:322 gtk/gtktexttag.c:275 gtk/gtktextview.c:861
 msgid "Whether the text can be modified by the user"
 msgstr "Чи може текст змінюватись користувачем"
 
 #: gtk/gtkcellrenderertext.c:328 gtk/gtkcellrenderertext.c:335
-#: gtk/gtkfontchooser.c:64 gtk/gtktexttag.c:294 gtk/gtktexttag.c:302
+#: gtk/gtkfontchooser.c:64 gtk/gtktexttag.c:290 gtk/gtktexttag.c:298
 msgid "Font"
 msgstr "Шрифт"
 
-#: gtk/gtkcellrenderertext.c:329 gtk/gtkfontchooser.c:65 gtk/gtktexttag.c:295
+#: gtk/gtkcellrenderertext.c:329 gtk/gtkfontchooser.c:65 gtk/gtktexttag.c:291
 msgid "Font description as a string, e.g. “Sans Italic 12”"
 msgstr "Опис шрифту у вигляді рядка, наприклад «Sans Italic 12»"
 
-#: gtk/gtkcellrenderertext.c:336 gtk/gtkfontchooser.c:78 gtk/gtktexttag.c:303
+#: gtk/gtkcellrenderertext.c:336 gtk/gtkfontchooser.c:78 gtk/gtktexttag.c:299
 msgid "Font description as a PangoFontDescription struct"
 msgstr "Опис шрифту у вигляді структури PangoFontDescription"
 
-#: gtk/gtkcellrenderertext.c:342 gtk/gtktexttag.c:310
+#: gtk/gtkcellrenderertext.c:342 gtk/gtktexttag.c:306
 msgid "Font family"
 msgstr "Гарнітура"
 
-#: gtk/gtkcellrenderertext.c:343 gtk/gtktexttag.c:311
+#: gtk/gtkcellrenderertext.c:343 gtk/gtktexttag.c:307
 msgid "Name of the font family, e.g. Sans, Helvetica, Times, Monospace"
 msgstr "Назва родини шрифтів, наприклад, Sans, Helvetica, Times, Monospace"
 
 #: gtk/gtkcellrenderertext.c:349 gtk/gtkcellrenderertext.c:350
-#: gtk/gtktexttag.c:318
+#: gtk/gtktexttag.c:314
 msgid "Font style"
 msgstr "Стиль шрифту"
 
 #: gtk/gtkcellrenderertext.c:357 gtk/gtkcellrenderertext.c:358
-#: gtk/gtktexttag.c:327
+#: gtk/gtktexttag.c:323
 msgid "Font variant"
 msgstr "Варіант шрифту"
 
 #: gtk/gtkcellrenderertext.c:365 gtk/gtkcellrenderertext.c:366
-#: gtk/gtktexttag.c:336
+#: gtk/gtktexttag.c:332
 msgid "Font weight"
 msgstr "Жирність шрифту"
 
 #: gtk/gtkcellrenderertext.c:373 gtk/gtkcellrenderertext.c:374
-#: gtk/gtktexttag.c:347
+#: gtk/gtktexttag.c:343
 msgid "Font stretch"
 msgstr "Ширина шрифту"
 
 #: gtk/gtkcellrenderertext.c:381 gtk/gtkcellrenderertext.c:382
-#: gtk/gtktexttag.c:356
+#: gtk/gtktexttag.c:352
 msgid "Font size"
 msgstr "Розмір шрифту"
 
-#: gtk/gtkcellrenderertext.c:389 gtk/gtktexttag.c:376
+#: gtk/gtkcellrenderertext.c:389 gtk/gtktexttag.c:372
 msgid "Font points"
 msgstr "Пункти шрифту"
 
-#: gtk/gtkcellrenderertext.c:390 gtk/gtktexttag.c:377
+#: gtk/gtkcellrenderertext.c:390 gtk/gtktexttag.c:373
 msgid "Font size in points"
 msgstr "Розмір шрифту у точках"
 
-#: gtk/gtkcellrenderertext.c:397 gtk/gtktexttag.c:366
+#: gtk/gtkcellrenderertext.c:397 gtk/gtktexttag.c:362
 msgid "Font scale"
 msgstr "Масштаб шрифту"
 
@@ -1522,7 +1522,7 @@ msgstr "Масштаб шрифту"
 msgid "Font scaling factor"
 msgstr "Коефіцієнт масштабування шрифту"
 
-#: gtk/gtkcellrenderertext.c:405 gtk/gtktexttag.c:445
+#: gtk/gtkcellrenderertext.c:405 gtk/gtktexttag.c:441
 msgid "Rise"
 msgstr "Підняти"
 
@@ -1531,23 +1531,23 @@ msgid ""
 "Offset of text above the baseline (below the baseline if rise is negative)"
 msgstr "Зсув тексту на лінією шрифту (під лінію шрифту, для від'ємних значень)"
 
-#: gtk/gtkcellrenderertext.c:414 gtk/gtktexttag.c:485
+#: gtk/gtkcellrenderertext.c:414 gtk/gtktexttag.c:481
 msgid "Strikethrough"
 msgstr "Перекреслення"
 
-#: gtk/gtkcellrenderertext.c:415 gtk/gtktexttag.c:486
+#: gtk/gtkcellrenderertext.c:415 gtk/gtktexttag.c:482
 msgid "Whether to strike through the text"
 msgstr "Чи буде текст закресленим"
 
-#: gtk/gtkcellrenderertext.c:421 gtk/gtktexttag.c:493
+#: gtk/gtkcellrenderertext.c:421 gtk/gtktexttag.c:489
 msgid "Underline"
 msgstr "Підкреслення"
 
-#: gtk/gtkcellrenderertext.c:422 gtk/gtktexttag.c:494
+#: gtk/gtkcellrenderertext.c:422 gtk/gtktexttag.c:490
 msgid "Style of underline for this text"
 msgstr "Стиль підкреслення цього тексту"
 
-#: gtk/gtkcellrenderertext.c:429 gtk/gtkfontchooser.c:148 gtk/gtktexttag.c:405
+#: gtk/gtkcellrenderertext.c:429 gtk/gtkfontchooser.c:148 gtk/gtktexttag.c:401
 msgid "Language"
 msgstr "Мова"
 
@@ -1563,14 +1563,15 @@ msgstr ""
 
 #: gtk/gtkcellrenderertext.c:446 gtk/gtklabel.c:867 gtk/gtkprogressbar.c:244
 msgid "Ellipsize"
-msgstr "Овал"
+msgstr "Багатокрапка"
 
 #: gtk/gtkcellrenderertext.c:447
 msgid ""
 "The preferred place to ellipsize the string, if the cell renderer does not "
 "have enough room to display the entire string"
 msgstr ""
-"Бажане місце овалу рядка, якщо механізму відтворення рядка не вистачає місця "
+"Бажане місце обривання рядка багатокрапкою, якщо механізму відтворення рядка"
+" не вистачає місця "
 "для показу всього рядка"
 
 #: gtk/gtkcellrenderertext.c:463 gtk/gtkfilechooserbutton.c:524
@@ -1590,7 +1591,7 @@ msgstr "Максимальна ширина в символах"
 msgid "The maximum width of the cell, in characters"
 msgstr "Максимальна ширина комірки, в символах"
 
-#: gtk/gtkcellrenderertext.c:498 gtk/gtktexttag.c:553
+#: gtk/gtkcellrenderertext.c:498 gtk/gtktexttag.c:547
 msgid "Wrap mode"
 msgstr "Режим переносу"
 
@@ -1629,115 +1630,115 @@ msgstr ""
 "Текст, який буде показано у доступній для редагування комірці, якщо вона "
 "порожня"
 
-#: gtk/gtkcellrenderertext.c:556 gtk/gtktexttag.c:700
+#: gtk/gtkcellrenderertext.c:556 gtk/gtktexttag.c:694
 msgid "Background set"
 msgstr "Встановлення тла"
 
-#: gtk/gtkcellrenderertext.c:557 gtk/gtktexttag.c:701
+#: gtk/gtkcellrenderertext.c:557 gtk/gtktexttag.c:695
 msgid "Whether this tag affects the background color"
 msgstr "Чи впливає цей теґ на колір тла"
 
-#: gtk/gtkcellrenderertext.c:560 gtk/gtktexttag.c:708
+#: gtk/gtkcellrenderertext.c:560 gtk/gtktexttag.c:702
 msgid "Foreground set"
 msgstr "Встановлення переднього плану"
 
-#: gtk/gtkcellrenderertext.c:561 gtk/gtktexttag.c:709
+#: gtk/gtkcellrenderertext.c:561 gtk/gtktexttag.c:703
 msgid "Whether this tag affects the foreground color"
 msgstr "Чи впливатиме цей теґ на колір переднього плану"
 
-#: gtk/gtkcellrenderertext.c:564 gtk/gtktexttag.c:712
+#: gtk/gtkcellrenderertext.c:564 gtk/gtktexttag.c:706
 msgid "Editability set"
 msgstr "Встановлення можливості редагування"
 
-#: gtk/gtkcellrenderertext.c:565 gtk/gtktexttag.c:713
+#: gtk/gtkcellrenderertext.c:565 gtk/gtktexttag.c:707
 msgid "Whether this tag affects text editability"
 msgstr "Чи впливає цей теґ на можливість редагування тексту"
 
-#: gtk/gtkcellrenderertext.c:568 gtk/gtktexttag.c:716
+#: gtk/gtkcellrenderertext.c:568 gtk/gtktexttag.c:710
 msgid "Font family set"
 msgstr "Встановлення гарнітури шрифту"
 
-#: gtk/gtkcellrenderertext.c:569 gtk/gtktexttag.c:717
+#: gtk/gtkcellrenderertext.c:569 gtk/gtktexttag.c:711
 msgid "Whether this tag affects the font family"
 msgstr "Чи впливає цей теґ на гарнітуру шрифту"
 
-#: gtk/gtkcellrenderertext.c:572 gtk/gtktexttag.c:720
+#: gtk/gtkcellrenderertext.c:572 gtk/gtktexttag.c:714
 msgid "Font style set"
 msgstr "Встановлення стилю шрифту"
 
-#: gtk/gtkcellrenderertext.c:573 gtk/gtktexttag.c:721
+#: gtk/gtkcellrenderertext.c:573 gtk/gtktexttag.c:715
 msgid "Whether this tag affects the font style"
 msgstr "Чи впливає цей теґ на стиль шрифту"
 
-#: gtk/gtkcellrenderertext.c:576 gtk/gtktexttag.c:724
+#: gtk/gtkcellrenderertext.c:576 gtk/gtktexttag.c:718
 msgid "Font variant set"
 msgstr "Встановлення варіанту шрифту"
 
-#: gtk/gtkcellrenderertext.c:577 gtk/gtktexttag.c:725
+#: gtk/gtkcellrenderertext.c:577 gtk/gtktexttag.c:719
 msgid "Whether this tag affects the font variant"
 msgstr "Чи впливає цей теґ на варіант шрифту"
 
-#: gtk/gtkcellrenderertext.c:580 gtk/gtktexttag.c:728
+#: gtk/gtkcellrenderertext.c:580 gtk/gtktexttag.c:722
 msgid "Font weight set"
 msgstr "Встановлення жирності шрифту"
 
-#: gtk/gtkcellrenderertext.c:581 gtk/gtktexttag.c:729
+#: gtk/gtkcellrenderertext.c:581 gtk/gtktexttag.c:723
 msgid "Whether this tag affects the font weight"
 msgstr "Чи впливає цей теґ на жирність шрифту"
 
-#: gtk/gtkcellrenderertext.c:584 gtk/gtktexttag.c:732
+#: gtk/gtkcellrenderertext.c:584 gtk/gtktexttag.c:726
 msgid "Font stretch set"
 msgstr "Встановлення ширина шрифту"
 
-#: gtk/gtkcellrenderertext.c:585 gtk/gtktexttag.c:733
+#: gtk/gtkcellrenderertext.c:585 gtk/gtktexttag.c:727
 msgid "Whether this tag affects the font stretch"
 msgstr "Чи впливає цей теґ на ширину шрифту"
 
-#: gtk/gtkcellrenderertext.c:588 gtk/gtktexttag.c:736
+#: gtk/gtkcellrenderertext.c:588 gtk/gtktexttag.c:730
 msgid "Font size set"
 msgstr "Встановлення розміру шрифту"
 
-#: gtk/gtkcellrenderertext.c:589 gtk/gtktexttag.c:737
+#: gtk/gtkcellrenderertext.c:589 gtk/gtktexttag.c:731
 msgid "Whether this tag affects the font size"
 msgstr "Чи впливає цей теґ на розмір шрифту"
 
-#: gtk/gtkcellrenderertext.c:592 gtk/gtktexttag.c:740
+#: gtk/gtkcellrenderertext.c:592 gtk/gtktexttag.c:734
 msgid "Font scale set"
 msgstr "Встановлення масштабу шрифту"
 
-#: gtk/gtkcellrenderertext.c:593 gtk/gtktexttag.c:741
+#: gtk/gtkcellrenderertext.c:593 gtk/gtktexttag.c:735
 msgid "Whether this tag scales the font size by a factor"
 msgstr "Чи впливає масштабує цей теґ розмір шрифту на коефіцієнт"
 
-#: gtk/gtkcellrenderertext.c:596 gtk/gtktexttag.c:760
+#: gtk/gtkcellrenderertext.c:596 gtk/gtktexttag.c:754
 msgid "Rise set"
 msgstr "Встановлення зсуву"
 
-#: gtk/gtkcellrenderertext.c:597 gtk/gtktexttag.c:761
+#: gtk/gtkcellrenderertext.c:597 gtk/gtktexttag.c:755
 msgid "Whether this tag affects the rise"
 msgstr "Чи впливає цей теґ на зсув"
 
-#: gtk/gtkcellrenderertext.c:600 gtk/gtktexttag.c:776
+#: gtk/gtkcellrenderertext.c:600 gtk/gtktexttag.c:770
 msgid "Strikethrough set"
 msgstr "Встановлення перекреслення"
 
-#: gtk/gtkcellrenderertext.c:601 gtk/gtktexttag.c:777
+#: gtk/gtkcellrenderertext.c:601 gtk/gtktexttag.c:771
 msgid "Whether this tag affects strikethrough"
 msgstr "Чи впливає цей теґ на перекреслення"
 
-#: gtk/gtkcellrenderertext.c:604 gtk/gtktexttag.c:784
+#: gtk/gtkcellrenderertext.c:604 gtk/gtktexttag.c:778
 msgid "Underline set"
 msgstr "Встановлення підкреслення"
 
-#: gtk/gtkcellrenderertext.c:605 gtk/gtktexttag.c:785
+#: gtk/gtkcellrenderertext.c:605 gtk/gtktexttag.c:779
 msgid "Whether this tag affects underlining"
 msgstr "Чи впливає цей теґ на підкреслення"
 
-#: gtk/gtkcellrenderertext.c:608 gtk/gtktexttag.c:748
+#: gtk/gtkcellrenderertext.c:608 gtk/gtktexttag.c:742
 msgid "Language set"
 msgstr "Встановлення мови"
 
-#: gtk/gtkcellrenderertext.c:609 gtk/gtktexttag.c:749
+#: gtk/gtkcellrenderertext.c:609 gtk/gtktexttag.c:743
 msgid "Whether this tag affects the language the text is rendered as"
 msgstr "Чи ця мітка впливає на мову відтвореного тексту"
 
@@ -2012,12 +2013,12 @@ msgstr "Перегляд стовпцями"
 msgid "Column view this column is a part of"
 msgstr "Панель зі стовпчиками, частиною якої є цей стовпчик"
 
-#: gtk/gtkcolumnviewcolumn.c:246 gtk/gtkdropdown.c:441 gtk/gtkgridview.c:1047
+#: gtk/gtkcolumnviewcolumn.c:246 gtk/gtkdropdown.c:445 gtk/gtkgridview.c:1047
 #: gtk/gtklistview.c:831
 msgid "Factory"
 msgstr "Фабрика"
 
-#: gtk/gtkcolumnviewcolumn.c:247 gtk/gtkdropdown.c:442 gtk/gtkdropdown.c:456
+#: gtk/gtkcolumnviewcolumn.c:247 gtk/gtkdropdown.c:446 gtk/gtkdropdown.c:460
 #: gtk/gtkgridview.c:1048 gtk/gtklistview.c:832
 msgid "Factory for populating list items"
 msgstr "Фабрика для заповнення пунктів списку"
@@ -2405,36 +2406,36 @@ msgstr "Є вказівник"
 msgid "Whether the pointer is in the controllers widget"
 msgstr "Чи перебуває вказівник у віджеті контролера"
 
-#: gtk/gtkdropdown.c:455
+#: gtk/gtkdropdown.c:459
 msgid "List Factory"
 msgstr "Фабрика списку"
 
-#: gtk/gtkdropdown.c:468
+#: gtk/gtkdropdown.c:472
 msgid "Model for the displayed items"
 msgstr "Модель для показаних пунктів"
 
-#: gtk/gtkdropdown.c:480 gtk/gtklistitem.c:233 gtk/gtksingleselection.c:444
+#: gtk/gtkdropdown.c:484 gtk/gtklistitem.c:233 gtk/gtksingleselection.c:444
 msgid "Selected"
 msgstr "Позначений"
 
-#: gtk/gtkdropdown.c:481 gtk/gtksingleselection.c:445
+#: gtk/gtkdropdown.c:485 gtk/gtksingleselection.c:445
 msgid "Position of the selected item"
 msgstr "Розташування позначеного пункту"
 
-#: gtk/gtkdropdown.c:494
+#: gtk/gtkdropdown.c:498
 msgid "Enable search"
 msgstr "Дозволено пошук"
 
-#: gtk/gtkdropdown.c:495
+#: gtk/gtkdropdown.c:499
 msgid "Whether to show a search entry in the popup"
 msgstr "Чи слід показувати запис пошуку у контекстній підказці"
 
-#: gtk/gtkdropdown.c:509 gtk/gtknumericsorter.c:282 gtk/gtkstringfilter.c:252
+#: gtk/gtkdropdown.c:513 gtk/gtknumericsorter.c:282 gtk/gtkstringfilter.c:252
 #: gtk/gtkstringsorter.c:218
 msgid "Expression"
 msgstr "Вираз"
 
-#: gtk/gtkdropdown.c:510
+#: gtk/gtkdropdown.c:514
 msgid "Expression to determine strings to search for"
 msgstr "Вираз, який визначає рядки для пошуку"
 
@@ -2820,7 +2821,7 @@ msgstr "Підказки з поведінки текстового поля"
 msgid "A list of style attributes to apply to the text of the entry"
 msgstr "Список атрибутів стилю, які буде застосовано до тексту запису"
 
-#: gtk/gtkentry.c:900 gtk/gtktext.c:904 gtk/gtktexttag.c:563
+#: gtk/gtkentry.c:900 gtk/gtktext.c:904 gtk/gtktexttag.c:557
 #: gtk/gtktextview.c:972
 msgid "Tabs"
 msgstr "Табуляції"
@@ -3060,19 +3061,19 @@ msgstr ""
 "Чи селектор файлів у режимі відкривання файлів матиме функцію створення "
 "нових тек."
 
-#: gtk/gtkfilechoosernative.c:787
+#: gtk/gtkfilechoosernative.c:788
 msgid "Accept label"
 msgstr "Мітка прийняття"
 
-#: gtk/gtkfilechoosernative.c:788
+#: gtk/gtkfilechoosernative.c:789
 msgid "The label on the accept button"
 msgstr "Мітка на кнопці прийняття"
 
-#: gtk/gtkfilechoosernative.c:800
+#: gtk/gtkfilechoosernative.c:801
 msgid "Cancel label"
 msgstr "Мітка скасування"
 
-#: gtk/gtkfilechoosernative.c:801
+#: gtk/gtkfilechoosernative.c:802
 msgid "The label on the cancel button"
 msgstr "Мітка на кнопці скасування"
 
@@ -3683,7 +3684,7 @@ msgstr "Текст позначки"
 msgid "A list of style attributes to apply to the text of the label"
 msgstr "Список стильових ознак для застосування до тексту позначки"
 
-#: gtk/gtklabel.c:768 gtk/gtktexttag.c:386 gtk/gtktextview.c:877
+#: gtk/gtklabel.c:768 gtk/gtktexttag.c:382 gtk/gtktextview.c:877
 msgid "Justification"
 msgstr "Вирівнювання"
 
@@ -3748,7 +3749,8 @@ msgid ""
 "The preferred place to ellipsize the string, if the label does not have "
 "enough room to display the entire string"
 msgstr ""
-"Бажане місце для овалу рядка, якщо для показу усього рядка не вистачає місця."
+"Бажане місце для багатокрапки у рядку, якщо для показу усього рядка не"
+" вистачає місця."
 
 #: gtk/gtklabel.c:902
 msgid "Single Line Mode"
@@ -4227,7 +4229,7 @@ msgstr "Чи виводити діалог"
 msgid "The display where this window will be displayed."
 msgstr "Дисплей, на якому буде показано це вікно."
 
-#: gtk/gtkmultiselection.c:373 gtk/gtkpropertyselection.c:442
+#: gtk/gtkmultiselection.c:382 gtk/gtkpropertyselection.c:454
 msgid "List managed by this selection"
 msgstr "Список, який керується цим вибором"
 
@@ -4588,19 +4590,19 @@ msgstr "Може стискатися"
 msgid "Allow self to be smaller than contents"
 msgstr "Дозволити віджету бути меншим за вміст"
 
-#: gtk/gtkplacessidebar.c:4334
+#: gtk/gtkplacessidebar.c:4338
 msgid "Location to Select"
 msgstr "Місце для позначення"
 
-#: gtk/gtkplacessidebar.c:4335
+#: gtk/gtkplacessidebar.c:4339
 msgid "The location to highlight in the sidebar"
 msgstr "Місце підсвічування на бічній панелі"
 
-#: gtk/gtkplacessidebar.c:4340 gtk/gtkplacesview.c:2250
+#: gtk/gtkplacessidebar.c:4344 gtk/gtkplacesview.c:2250
 msgid "Open Flags"
 msgstr "Прапорці відкривання"
 
-#: gtk/gtkplacessidebar.c:4341 gtk/gtkplacesview.c:2251
+#: gtk/gtkplacessidebar.c:4345 gtk/gtkplacesview.c:2251
 msgid ""
 "Modes in which the calling application can open locations selected in the "
 "sidebar"
@@ -4608,54 +4610,54 @@ msgstr ""
 "Режими, у яких програма виклику може відкривати адреси, які позначено на "
 "бічній панелі"
 
-#: gtk/gtkplacessidebar.c:4347
+#: gtk/gtkplacessidebar.c:4351
 msgid "Show recent files"
 msgstr "Показувати нещодавні файли"
 
-#: gtk/gtkplacessidebar.c:4348
+#: gtk/gtkplacessidebar.c:4352
 msgid "Whether the sidebar includes a builtin shortcut for recent files"
 msgstr ""
 "Визначає, чи містить бічна панель вбудований пункт для нещодавно "
 "використаних файлів"
 
-#: gtk/gtkplacessidebar.c:4353
+#: gtk/gtkplacessidebar.c:4357
 msgid "Show “Desktop”"
 msgstr "Показувати «Стільниця»"
 
-#: gtk/gtkplacessidebar.c:4354
+#: gtk/gtkplacessidebar.c:4358
 msgid "Whether the sidebar includes a builtin shortcut to the Desktop folder"
 msgstr "Чи повинна бічна панель містити вбудований пункт теки стільниці"
 
-#: gtk/gtkplacessidebar.c:4359
+#: gtk/gtkplacessidebar.c:4363
 msgid "Show “Enter Location”"
 msgstr "Показувати «Введіть адресу»"
 
-#: gtk/gtkplacessidebar.c:4360
+#: gtk/gtkplacessidebar.c:4364
 msgid ""
 "Whether the sidebar includes a builtin shortcut to manually enter a location"
 msgstr "Чи містить бічна панель вбудований пункт введення адреси вручну"
 
-#: gtk/gtkplacessidebar.c:4365
+#: gtk/gtkplacessidebar.c:4369
 msgid "Show “Trash”"
 msgstr "Показувати «Смітник»"
 
-#: gtk/gtkplacessidebar.c:4366
+#: gtk/gtkplacessidebar.c:4370
 msgid "Whether the sidebar includes a builtin shortcut to the Trash location"
 msgstr "Чи містить бічна панель вбудований пункт теки «Смітник»"
 
-#: gtk/gtkplacessidebar.c:4371
+#: gtk/gtkplacessidebar.c:4375
 msgid "Show “Other locations”"
 msgstr "Показувати «Інші місця»"
 
-#: gtk/gtkplacessidebar.c:4372
+#: gtk/gtkplacessidebar.c:4376
 msgid "Whether the sidebar includes an item to show external locations"
 msgstr "Чи містить бічна панель вбудований пункт зовнішніх місць"
 
-#: gtk/gtkplacessidebar.c:4377
+#: gtk/gtkplacessidebar.c:4381
 msgid "Show “Starred Location”"
 msgstr "Показувати «Позначене місце»"
 
-#: gtk/gtkplacessidebar.c:4378
+#: gtk/gtkplacessidebar.c:4382
 msgid "Whether the sidebar includes an item to show starred files"
 msgstr "Чи включає бічна панель елемент для показу позначених зірками файлів"
 
@@ -5122,7 +5124,8 @@ msgid ""
 "The preferred place to ellipsize the string, if the progress bar does not "
 "have enough room to display the entire string, if at all."
 msgstr ""
-"Бажане місце для овалу рядка, якщо у панелі поступу не вистачає місця для "
+"Бажане місце для багатокрапки у рядку, якщо у панелі поступу не вистачає"
+" місця для "
 "показу всього рядка."
 
 #: gtk/gtkpropertylookuplistmodel.c:388
@@ -5141,12 +5144,11 @@ msgstr "Об'єкт"
 msgid "The root object"
 msgstr "Кореневий об'єкт"
 
-#: gtk/gtkpropertyselection.c:448
-#| msgid "Property name"
+#: gtk/gtkpropertyselection.c:460
 msgid "Property"
 msgstr "Властивість"
 
-#: gtk/gtkpropertyselection.c:449
+#: gtk/gtkpropertyselection.c:461
 msgid "Item property to store selection state in"
 msgstr "Властивість пункту, до якої слід записати стан позначення"
 
@@ -6425,25 +6427,25 @@ msgstr "Притягується ліворуч"
 msgid "Whether the mark has left gravity"
 msgstr "Чи позначка притягується ліворуч"
 
-#: gtk/gtktexttag.c:209
+#: gtk/gtktexttag.c:205
 msgid "Tag name"
 msgstr "Назва ярлика"
 
-#: gtk/gtktexttag.c:210
+#: gtk/gtktexttag.c:206
 msgid "Name used to refer to the text tag. NULL for anonymous tags"
 msgstr ""
 "Назва, що використовуватиметься для посилань на текстовий ярлик. NULL для "
 "ярликів без назви."
 
-#: gtk/gtktexttag.c:232
+#: gtk/gtktexttag.c:228
 msgid "Background RGBA"
 msgstr "Тло RGBA"
 
-#: gtk/gtktexttag.c:240
+#: gtk/gtktexttag.c:236
 msgid "Background full height"
 msgstr "Повна висота тла"
 
-#: gtk/gtktexttag.c:241
+#: gtk/gtktexttag.c:237
 msgid ""
 "Whether the background color fills the entire line height or only the height "
 "of the tagged characters"
@@ -6451,28 +6453,28 @@ msgstr ""
 "Чи буде колір тла застосовано на всю висоту, чи лише на висоту символів, "
 "відзначених тегами."
 
-#: gtk/gtktexttag.c:261
+#: gtk/gtktexttag.c:257
 msgid "Foreground RGBA"
 msgstr "Передній план RGBA"
 
-#: gtk/gtktexttag.c:269
+#: gtk/gtktexttag.c:265
 msgid "Text direction"
 msgstr "Напрям тексту"
 
-#: gtk/gtktexttag.c:270
+#: gtk/gtktexttag.c:266
 msgid "Text direction, e.g. right-to-left or left-to-right"
 msgstr "Напрямок тексту, тобто \"справа наліво\" чи \"зліва направо\""
 
-#: gtk/gtktexttag.c:319
+#: gtk/gtktexttag.c:315
 msgid "Font style as a PangoStyle, e.g. PANGO_STYLE_ITALIC"
 msgstr "Шрифт у вигляді PangoStyle, наприклад, PANGO_STYLE_ITALIC"
 
-#: gtk/gtktexttag.c:328
+#: gtk/gtktexttag.c:324
 msgid "Font variant as a PangoVariant, e.g. PANGO_VARIANT_SMALL_CAPS"
 msgstr ""
 "Варіант шрифту у вигляді PangoVariant, наприклад, PANGO_VARIANT_SMALL_CAPS"
 
-#: gtk/gtktexttag.c:337
+#: gtk/gtktexttag.c:333
 msgid ""
 "Font weight as an integer, see predefined values in PangoWeight; for "
 "example, PANGO_WEIGHT_BOLD"
@@ -6480,17 +6482,17 @@ msgstr ""
 "Варіант шрифту у вигляді цілого числа, дивіться визначені значення у "
 "PangoWeight, наприклад PANGO_WEIGHT_BOLD"
 
-#: gtk/gtktexttag.c:348
+#: gtk/gtktexttag.c:344
 msgid "Font stretch as a PangoStretch, e.g. PANGO_STRETCH_CONDENSED"
 msgstr ""
 "Розтягнутість шрифту у вигляді PangoStretch, наприклад "
 "PANGO_STRETCH_CONDENSED"
 
-#: gtk/gtktexttag.c:357
+#: gtk/gtktexttag.c:353
 msgid "Font size in Pango units"
 msgstr "Розмір шрифту в одиницях Pango"
 
-#: gtk/gtktexttag.c:367
+#: gtk/gtktexttag.c:363
 msgid ""
 "Font size as a scale factor relative to the default font size. This properly "
 "adapts to theme changes etc. so is recommended. Pango predefines some scales "
@@ -6500,11 +6502,11 @@ msgstr ""
 "шрифту. Ця властивість до змін у темі, і тому є рекомендованою. Pango "
 "визначає декілька масштабів, наприклад, PANGO_SCALE_X_LARGE"
 
-#: gtk/gtktexttag.c:387 gtk/gtktextview.c:878
+#: gtk/gtktexttag.c:383 gtk/gtktextview.c:878
 msgid "Left, right, or center justification"
 msgstr "Ліве, праве чи центральне вирівнювання"
 
-#: gtk/gtktexttag.c:406
+#: gtk/gtktexttag.c:402
 msgid ""
 "The language this text is in, as an ISO code. Pango can use this as a hint "
 "when rendering the text. If not set, an appropriate default will be used."
@@ -6513,31 +6515,31 @@ msgstr ""
 "(hint)при візуалізації тексту. Якщо не встановлено, буде використовуватись "
 "типовий параметр."
 
-#: gtk/gtktexttag.c:413
+#: gtk/gtktexttag.c:409
 msgid "Left margin"
 msgstr "Лівий відступ"
 
-#: gtk/gtktexttag.c:414 gtk/gtktextview.c:899
+#: gtk/gtktexttag.c:410 gtk/gtktextview.c:899
 msgid "Width of the left margin in pixels"
 msgstr "Ширина лівого відступу в точках"
 
-#: gtk/gtktexttag.c:423
+#: gtk/gtktexttag.c:419
 msgid "Right margin"
 msgstr "Правий відступ"
 
-#: gtk/gtktexttag.c:424 gtk/gtktextview.c:919
+#: gtk/gtktexttag.c:420 gtk/gtktextview.c:919
 msgid "Width of the right margin in pixels"
 msgstr "Ширина правого відступу в точках"
 
-#: gtk/gtktexttag.c:434 gtk/gtktextview.c:964
+#: gtk/gtktexttag.c:430 gtk/gtktextview.c:964
 msgid "Indent"
 msgstr "Відступ"
 
-#: gtk/gtktexttag.c:435 gtk/gtktextview.c:965
+#: gtk/gtktexttag.c:431 gtk/gtktextview.c:965
 msgid "Amount to indent the paragraph, in pixels"
 msgstr "Величина відступу абзацу в точках"
 
-#: gtk/gtktexttag.c:446
+#: gtk/gtktexttag.c:442
 msgid ""
 "Offset of text above the baseline (below the baseline if rise is negative) "
 "in Pango units"
@@ -6545,316 +6547,316 @@ msgstr ""
 "Зсув тексту над лінією шрифту (під лінією шрифту, для від'ємних значень). У "
 "одиницях Pango"
 
-#: gtk/gtktexttag.c:455
+#: gtk/gtktexttag.c:451
 msgid "Pixels above lines"
 msgstr "Інтервал над рядками"
 
-#: gtk/gtktexttag.c:456 gtk/gtktextview.c:837
+#: gtk/gtktexttag.c:452 gtk/gtktextview.c:837
 msgid "Pixels of blank space above paragraphs"
 msgstr "Інтервал, в точках растру, в просторі над абзацами"
 
-#: gtk/gtktexttag.c:465
+#: gtk/gtktexttag.c:461
 msgid "Pixels below lines"
 msgstr "Інтервал під рядками"
 
-#: gtk/gtktexttag.c:466 gtk/gtktextview.c:845
+#: gtk/gtktexttag.c:462 gtk/gtktextview.c:845
 msgid "Pixels of blank space below paragraphs"
 msgstr "Інтервал, в точках растру, в просторі під абзацами"
 
-#: gtk/gtktexttag.c:475
+#: gtk/gtktexttag.c:471
 msgid "Pixels inside wrap"
 msgstr "Інтервал в абзаці"
 
-#: gtk/gtktexttag.c:476 gtk/gtktextview.c:853
+#: gtk/gtktexttag.c:472 gtk/gtktextview.c:853
 msgid "Pixels of blank space between wrapped lines in a paragraph"
 msgstr "Інтервал, в точках растру, між перенесеними рядками у абзаці"
 
-#: gtk/gtktexttag.c:512
+#: gtk/gtktexttag.c:508
 msgid "Underline RGBA"
 msgstr "Підкреслювання RGBA"
 
-#: gtk/gtktexttag.c:513
+#: gtk/gtktexttag.c:509
 msgid "Color of underline for this text"
 msgstr "Колір підкреслювання для цього тексту"
 
-#: gtk/gtktexttag.c:521
+#: gtk/gtktexttag.c:516
 msgid "Overline"
 msgstr "Надкреслений"
 
-#: gtk/gtktexttag.c:522
+#: gtk/gtktexttag.c:517
 msgid "Style of overline for this text"
 msgstr "Стиль надкреслення цього тексту"
 
-#: gtk/gtktexttag.c:530
+#: gtk/gtktexttag.c:525
 msgid "Overline RGBA"
 msgstr "RGBA надкреслення"
 
-#: gtk/gtktexttag.c:531
+#: gtk/gtktexttag.c:526
 msgid "Color of overline for this text"
 msgstr "Колір надкреслювання для цього тексту"
 
-#: gtk/gtktexttag.c:545
+#: gtk/gtktexttag.c:539
 msgid "Strikethrough RGBA"
 msgstr "Закреслювання RGBA"
 
-#: gtk/gtktexttag.c:546
+#: gtk/gtktexttag.c:540
 msgid "Color of strikethrough for this text"
 msgstr "Колір закреслювання для цього тексту"
 
-#: gtk/gtktexttag.c:554 gtk/gtktextview.c:869
+#: gtk/gtktexttag.c:548 gtk/gtktextview.c:869
 msgid ""
 "Whether to wrap lines never, at word boundaries, or at character boundaries"
 msgstr "Ніколи не переносити рядки, чи переносити по межі слів чи по символам"
 
-#: gtk/gtktexttag.c:564 gtk/gtktextview.c:973
+#: gtk/gtktexttag.c:558 gtk/gtktextview.c:973
 msgid "Custom tabs for this text"
 msgstr "Нетипові табуляції для цього тексту"
 
-#: gtk/gtktexttag.c:580
+#: gtk/gtktexttag.c:574
 msgid "Invisible"
 msgstr "Невидимий"
 
-#: gtk/gtktexttag.c:581
+#: gtk/gtktexttag.c:575
 msgid "Whether this text is hidden."
 msgstr "Чи є текст прихованим."
 
-#: gtk/gtktexttag.c:593
+#: gtk/gtktexttag.c:587
 msgid "Paragraph background color name"
 msgstr "Назва кольору тла абзацу"
 
-#: gtk/gtktexttag.c:594
+#: gtk/gtktexttag.c:588
 msgid "Paragraph background color as a string"
 msgstr "Колір тла абзацу у вигляді рядка"
 
-#: gtk/gtktexttag.c:606
+#: gtk/gtktexttag.c:600
 msgid "Paragraph background RGBA"
 msgstr "Тло абзацу RGBA"
 
-#: gtk/gtktexttag.c:607
+#: gtk/gtktexttag.c:601
 msgid "Paragraph background RGBA as a GdkRGBA"
 msgstr "Тло абзацу RGBA як GdkRGBA"
 
-#: gtk/gtktexttag.c:623
+#: gtk/gtktexttag.c:617
 msgid "Whether font fallback is enabled."
 msgstr "Чи увімкнено резервний шрифт."
 
-#: gtk/gtktexttag.c:635
+#: gtk/gtktexttag.c:629
 msgid "Letter Spacing"
 msgstr "Інтервал між літерами"
 
-#: gtk/gtktexttag.c:636
+#: gtk/gtktexttag.c:630
 msgid "Extra spacing between graphemes"
 msgstr "Додаткова відстань між графемами"
 
-#: gtk/gtktexttag.c:648
+#: gtk/gtktexttag.c:642
 msgid "Font Features"
 msgstr "Параметри шрифту"
 
-#: gtk/gtktexttag.c:649
+#: gtk/gtktexttag.c:643
 msgid "OpenType Font Features to use"
 msgstr "Використовувані параметри шрифту OpenType"
 
-#: gtk/gtktexttag.c:656
+#: gtk/gtktexttag.c:650
 msgid "Allow Breaks"
 msgstr "Дозволити розбиття"
 
-#: gtk/gtktexttag.c:657
+#: gtk/gtktexttag.c:651
 msgid "Whether breaks are allowed."
 msgstr "Чи дозволено розбиття."
 
-#: gtk/gtktexttag.c:664
+#: gtk/gtktexttag.c:658
 msgid "Show spaces"
 msgstr "Візуалізація пробілів"
 
-#: gtk/gtktexttag.c:665
+#: gtk/gtktexttag.c:659
 msgid "How to render invisible characters."
 msgstr "Як показувати невидимі символи."
 
-#: gtk/gtktexttag.c:673
+#: gtk/gtktexttag.c:667
 msgid "Insert hyphens"
 msgstr "Вставити переноси"
 
-#: gtk/gtktexttag.c:674
+#: gtk/gtktexttag.c:668
 msgid "Whether to insert hyphens at breaks."
 msgstr "Чи слід вставляти символи переносу на розривах."
 
-#: gtk/gtktexttag.c:690
+#: gtk/gtktexttag.c:684
 msgid "Margin Accumulates"
 msgstr "Поля акумулюються"
 
-#: gtk/gtktexttag.c:691
+#: gtk/gtktexttag.c:685
 msgid "Whether left and right margins accumulate."
 msgstr "Чи акумулюються ліве та праве поля."
 
-#: gtk/gtktexttag.c:704
+#: gtk/gtktexttag.c:698
 msgid "Background full height set"
 msgstr "Встановлення висоти тла"
 
-#: gtk/gtktexttag.c:705
+#: gtk/gtktexttag.c:699
 msgid "Whether this tag affects background height"
 msgstr "Чи впливає цей теґ на висоту тла"
 
-#: gtk/gtktexttag.c:744
+#: gtk/gtktexttag.c:738
 msgid "Justification set"
 msgstr "Встановлення вирівнювання"
 
-#: gtk/gtktexttag.c:745
+#: gtk/gtktexttag.c:739
 msgid "Whether this tag affects paragraph justification"
 msgstr "Чи цей теґ впливає на вирівнювання абзаців"
 
-#: gtk/gtktexttag.c:752
+#: gtk/gtktexttag.c:746
 msgid "Left margin set"
 msgstr "Встановлення лівої межі"
 
-#: gtk/gtktexttag.c:753
+#: gtk/gtktexttag.c:747
 msgid "Whether this tag affects the left margin"
 msgstr "Чи цей теґ впливає на ліву межу"
 
-#: gtk/gtktexttag.c:756
+#: gtk/gtktexttag.c:750
 msgid "Indent set"
 msgstr "Встановлення відступу"
 
-#: gtk/gtktexttag.c:757
+#: gtk/gtktexttag.c:751
 msgid "Whether this tag affects indentation"
 msgstr "Чи цей теґ впливає на відступи"
 
-#: gtk/gtktexttag.c:764
+#: gtk/gtktexttag.c:758
 msgid "Pixels above lines set"
 msgstr "Встановлення проміжку над рядками"
 
-#: gtk/gtktexttag.c:765 gtk/gtktexttag.c:769
+#: gtk/gtktexttag.c:759 gtk/gtktexttag.c:763
 msgid "Whether this tag affects the number of pixels above lines"
 msgstr "Чи впливає цей теґ на кількість точок над рядками"
 
-#: gtk/gtktexttag.c:768
+#: gtk/gtktexttag.c:762
 msgid "Pixels below lines set"
 msgstr "Встановлення проміжку під рядками"
 
-#: gtk/gtktexttag.c:772
+#: gtk/gtktexttag.c:766
 msgid "Pixels inside wrap set"
 msgstr "Встановлення проміжку в абзаці"
 
-#: gtk/gtktexttag.c:773
+#: gtk/gtktexttag.c:767
 msgid "Whether this tag affects the number of pixels between wrapped lines"
 msgstr "Чи впливає цей теґ на кількість точок між перенесеними рядками"
 
-#: gtk/gtktexttag.c:780
+#: gtk/gtktexttag.c:774
 msgid "Right margin set"
 msgstr "Встановлення правої межі"
 
-#: gtk/gtktexttag.c:781
+#: gtk/gtktexttag.c:775
 msgid "Whether this tag affects the right margin"
 msgstr "Чи цей теґ впливає на праву межу"
 
-#: gtk/gtktexttag.c:793
+#: gtk/gtktexttag.c:787
 msgid "Underline RGBA set"
 msgstr "Встановлення підкреслювання RGBA"
 
-#: gtk/gtktexttag.c:794
+#: gtk/gtktexttag.c:788
 msgid "Whether this tag affects underlining color"
 msgstr "Чи впливає цей теґ на колір підкреслювання"
 
-#: gtk/gtktexttag.c:798
+#: gtk/gtktexttag.c:791
 msgid "Overline set"
 msgstr "Встановлено надкреслення"
 
-#: gtk/gtktexttag.c:799
+#: gtk/gtktexttag.c:792
 msgid "Whether this tag affects overlining"
 msgstr "Чи впливає цей теґ на надкреслення"
 
-#: gtk/gtktexttag.c:802
+#: gtk/gtktexttag.c:795
 msgid "Overline RGBA set"
 msgstr "Встановлено RGBA надкреслення"
 
-#: gtk/gtktexttag.c:803
+#: gtk/gtktexttag.c:796
 msgid "Whether this tag affects overlining color"
 msgstr "Чи впливає цей теґ на колір надкреслювання"
 
-#: gtk/gtktexttag.c:812
+#: gtk/gtktexttag.c:804
 msgid "Strikethrough RGBA set"
 msgstr "Встановлення закреслювання RGBA"
 
-#: gtk/gtktexttag.c:813
+#: gtk/gtktexttag.c:805
 msgid "Whether this tag affects strikethrough color"
 msgstr "Чи впливає цей теґ на колір закреслювання"
 
-#: gtk/gtktexttag.c:816
+#: gtk/gtktexttag.c:808
 msgid "Wrap mode set"
 msgstr "Встановлення режиму переносу"
 
-#: gtk/gtktexttag.c:817
+#: gtk/gtktexttag.c:809
 msgid "Whether this tag affects line wrap mode"
 msgstr "Чи цей теґ впливає на режим переносу"
 
-#: gtk/gtktexttag.c:820
+#: gtk/gtktexttag.c:812
 msgid "Tabs set"
 msgstr "Встановлення табуляцій"
 
-#: gtk/gtktexttag.c:821
+#: gtk/gtktexttag.c:813
 msgid "Whether this tag affects tabs"
 msgstr "Чи цей теґ впливає на табуляції"
 
-#: gtk/gtktexttag.c:824
+#: gtk/gtktexttag.c:816
 msgid "Invisible set"
 msgstr "Встановлення невидимості"
 
-#: gtk/gtktexttag.c:825
+#: gtk/gtktexttag.c:817
 msgid "Whether this tag affects text visibility"
 msgstr "Чи цей теґ впливає на видимість тексту"
 
-#: gtk/gtktexttag.c:828
+#: gtk/gtktexttag.c:820
 msgid "Paragraph background set"
 msgstr "Встановлення тла абзацу"
 
-#: gtk/gtktexttag.c:829
+#: gtk/gtktexttag.c:821
 msgid "Whether this tag affects the paragraph background color"
 msgstr "Чи впливає цей теґ на колір тла абзацу"
 
-#: gtk/gtktexttag.c:832
+#: gtk/gtktexttag.c:824
 msgid "Fallback set"
 msgstr "Встановлено резервний"
 
-#: gtk/gtktexttag.c:833
+#: gtk/gtktexttag.c:825
 msgid "Whether this tag affects font fallback"
 msgstr "Чи впливає цей теґ на резервний шрифт"
 
-#: gtk/gtktexttag.c:836
+#: gtk/gtktexttag.c:828
 msgid "Letter spacing set"
 msgstr "Встановлення інтервалу між літерами"
 
-#: gtk/gtktexttag.c:837
+#: gtk/gtktexttag.c:829
 msgid "Whether this tag affects letter spacing"
 msgstr "Чи впливає цей теґ на відстань між літерами"
 
-#: gtk/gtktexttag.c:840
+#: gtk/gtktexttag.c:832
 msgid "Font features set"
 msgstr "Встановлення параметрів шрифту"
 
-#: gtk/gtktexttag.c:841
+#: gtk/gtktexttag.c:833
 msgid "Whether this tag affects font features"
 msgstr "Визначає, чи впливає цей теґ на параметри шрифту"
 
-#: gtk/gtktexttag.c:844
+#: gtk/gtktexttag.c:836
 msgid "Allow breaks set"
 msgstr "Дозволити встановлення розбиття"
 
-#: gtk/gtktexttag.c:845
+#: gtk/gtktexttag.c:837
 msgid "Whether this tag affects line breaks"
 msgstr "Чи цей теґ впливає на розбиття рядків"
 
-#: gtk/gtktexttag.c:848
+#: gtk/gtktexttag.c:840
 msgid "Show spaces set"
 msgstr "Встановлено візуалізацію пробілів"
 
-#: gtk/gtktexttag.c:849
+#: gtk/gtktexttag.c:841
 msgid "Whether this tag affects rendering of invisible characters"
 msgstr "Чи впливає цей теґ на показ невидимих символів"
 
-#: gtk/gtktexttag.c:852
+#: gtk/gtktexttag.c:844
 msgid "Insert hyphens set"
 msgstr "Встановлено вставляння переносів"
 
-#: gtk/gtktexttag.c:853
+#: gtk/gtktexttag.c:845
 msgid "Whether this tag affects insertion of hyphens"
 msgstr "Чи впливає цей теґ на вставляння переносів"
 
