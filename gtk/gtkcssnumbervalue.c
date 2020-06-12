@@ -460,8 +460,6 @@ gtk_css_dimension_value_new (double     value,
                         unit == GTK_CSS_PX ||
                         unit == GTK_CSS_DEG ||
                         unit == GTK_CSS_S;
-  if (value == 5040)
-  g_critical ("%s: %f", __FUNCTION__, value);
   return result;
 }
 
