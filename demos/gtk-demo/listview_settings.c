@@ -143,8 +143,9 @@ settings_key_new (GSettings          *settings,
 }
 
 static void
-item_value_changed (GtkListItem *item,
-                    GtkEntry    *entry)
+item_value_changed (GtkEditableLabel *label,
+                    GParamSpec       *pspec,
+                    GtkListItem      *item)
 {
   SettingsKey *self;
   const char *text;
@@ -152,8 +153,9 @@ item_value_changed (GtkListItem *item,
   GVariant *variant;
   GError *error = NULL;
   const char *name;
+  char *value;
 
-  text = gtk_editable_get_text (GTK_EDITABLE (entry));
+  text = gtk_editable_label_get_label (label);
 
   g_object_get (item, "item", &self, NULL);
   g_object_unref (self);
@@ -166,17 +168,25 @@ item_value_changed (GtkListItem *item,
     {
       g_warning ("%s", error->message);
       g_clear_error (&error);
-      return;
+      goto revert;
     }
 
   if (!g_settings_schema_key_range_check (self->key, variant))
     {
       g_warning ("Not a valid value for %s", name);
-      return;
+      goto revert;
     }
 
   g_settings_set_value (self->settings, name, variant);
   g_variant_unref (variant);
+  return;
+
+revert:
+  gtk_widget_error_bell (GTK_WIDGET (label));
+
+  g_object_get (self, "value", &value, NULL);
+  gtk_editable_label_set_label (label, value);
+  g_free (value);
 }
 
 static int
