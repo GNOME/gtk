@@ -138,6 +138,8 @@ typedef struct {
   guint transition_duration;
 
   GtkStackPage *last_visible_child;
+  GskRenderNode *last_visible_node;
+  GtkAllocation last_visible_surface_allocation;
   guint tick_id;
   GtkProgressTracker tracker;
   gboolean first_frame_skipped;
@@ -643,6 +645,8 @@ gtk_stack_finalize (GObject *obj)
 
   gtk_stack_unschedule_ticks (stack);
 
+  g_clear_pointer (&priv->last_visible_node, gsk_render_node_unref);
+
   G_OBJECT_CLASS (gtk_stack_parent_class)->finalize (obj);
 }
 
@@ -855,8 +859,7 @@ static inline gboolean
 is_down_transition (GtkStackTransitionType transition_type)
 {
   return (transition_type == GTK_STACK_TRANSITION_TYPE_SLIDE_DOWN ||
-          transition_type == GTK_STACK_TRANSITION_TYPE_OVER_DOWN ||
-          transition_type == GTK_STACK_TRANSITION_TYPE_UNDER_DOWN);
+          transition_type == GTK_STACK_TRANSITION_TYPE_OVER_DOWN);
 }
 
 /* Transitions that cause the bin window to move */
@@ -870,11 +873,7 @@ is_window_moving_transition (GtkStackTransitionType transition_type)
           transition_type == GTK_STACK_TRANSITION_TYPE_OVER_UP ||
           transition_type == GTK_STACK_TRANSITION_TYPE_OVER_DOWN ||
           transition_type == GTK_STACK_TRANSITION_TYPE_OVER_LEFT ||
-          transition_type == GTK_STACK_TRANSITION_TYPE_OVER_RIGHT ||
-          transition_type == GTK_STACK_TRANSITION_TYPE_UNDER_UP ||
-          transition_type == GTK_STACK_TRANSITION_TYPE_UNDER_DOWN ||
-          transition_type == GTK_STACK_TRANSITION_TYPE_UNDER_LEFT ||
-          transition_type == GTK_STACK_TRANSITION_TYPE_UNDER_RIGHT);
+          transition_type == GTK_STACK_TRANSITION_TYPE_OVER_RIGHT);
 }
 
 /* Transitions that change direction depending on the relative order of the
@@ -935,15 +934,44 @@ get_simple_transition_type (gboolean               new_child_first,
     }
 }
 
-static double
-get_transition_progress (GtkStack *stack)
+static gint
+get_bin_window_x (GtkStack *stack)
 {
   GtkStackPrivate *priv = gtk_stack_get_instance_private (stack);
+  int width;
+  int x = 0;
 
-  if (gtk_progress_tracker_get_state (&priv->tracker) == GTK_PROGRESS_STATE_AFTER)
-    return 0;
+  width = gtk_widget_get_width (GTK_WIDGET (stack));
 
-  return gtk_progress_tracker_get_ease_out_cubic (&priv->tracker, FALSE);
+  if (gtk_progress_tracker_get_state (&priv->tracker) != GTK_PROGRESS_STATE_AFTER)
+    {
+      if (is_left_transition (priv->active_transition_type))
+        x = width * (1 - gtk_progress_tracker_get_ease_out_cubic (&priv->tracker, FALSE));
+      if (is_right_transition (priv->active_transition_type))
+        x = -width * (1 - gtk_progress_tracker_get_ease_out_cubic (&priv->tracker, FALSE));
+    }
+
+  return x;
+}
+
+static gint
+get_bin_window_y (GtkStack *stack)
+{
+  GtkStackPrivate *priv = gtk_stack_get_instance_private (stack);
+  int height;
+  int y = 0;
+
+  height = gtk_widget_get_height (GTK_WIDGET (stack));
+
+  if (gtk_progress_tracker_get_state (&priv->tracker) != GTK_PROGRESS_STATE_AFTER)
+    {
+      if (is_up_transition (priv->active_transition_type))
+        y = height * (1 - gtk_progress_tracker_get_ease_out_cubic (&priv->tracker, FALSE));
+      if (is_down_transition(priv->active_transition_type))
+        y = -height * (1 - gtk_progress_tracker_get_ease_out_cubic (&priv->tracker, FALSE));
+    }
+
+  return y;
 }
 
 static void
@@ -953,16 +981,20 @@ gtk_stack_progress_updated (GtkStack *stack)
 
   if (!priv->vhomogeneous || !priv->hhomogeneous)
     gtk_widget_queue_resize (GTK_WIDGET (stack));
-  if (priv->active_transition_type == GTK_STACK_TRANSITION_TYPE_CROSSFADE)
-    gtk_widget_queue_draw (GTK_WIDGET (stack));
-  else
+  else if (is_window_moving_transition (priv->active_transition_type))
     gtk_widget_queue_allocate (GTK_WIDGET (stack));
+  else
+    gtk_widget_queue_draw (GTK_WIDGET (stack));
 
-  if (gtk_progress_tracker_get_state (&priv->tracker) == GTK_PROGRESS_STATE_AFTER &&
-      priv->last_visible_child)
+  if (gtk_progress_tracker_get_state (&priv->tracker) == GTK_PROGRESS_STATE_AFTER)
     {
-      gtk_widget_set_child_visible (priv->last_visible_child->widget, FALSE);
-      priv->last_visible_child = NULL;
+      g_clear_pointer (&priv->last_visible_node, gsk_render_node_unref);
+
+      if (priv->last_visible_child != NULL)
+        {
+          gtk_widget_set_child_visible (priv->last_visible_child->widget, FALSE);
+          priv->last_visible_child = NULL;
+        }
     }
 }
 
@@ -1073,26 +1105,6 @@ effective_transition_type (GtkStack               *stack,
 }
 
 static void
-gtk_stack_get_child_size (GtkStack  *stack,
-                          GtkWidget *child,
-                          int       *out_width,
-                          int       *out_height)
-{
-  GtkStackPrivate *priv = gtk_stack_get_instance_private (stack);
-  const int width = gtk_widget_get_width (GTK_WIDGET (stack));
-  const int height = gtk_widget_get_height (GTK_WIDGET (stack));
-  int min_width, min_height;
-
-  gtk_widget_measure (priv->visible_child->widget, GTK_ORIENTATION_HORIZONTAL,
-                      height, &min_width, NULL, NULL, NULL);
-  *out_width = MAX (width, min_width);
-
-  gtk_widget_measure (priv->visible_child->widget, GTK_ORIENTATION_VERTICAL,
-                      *out_width, &min_height, NULL, NULL, NULL);
-  *out_height = MAX (height, min_height);
-}
-
-static void
 gtk_stack_start_transition (GtkStack               *stack,
                             GtkStackTransitionType  transition_type,
                             guint                   transition_duration)
@@ -1198,13 +1210,15 @@ set_visible_child (GtkStack               *stack,
     gtk_widget_set_child_visible (priv->last_visible_child->widget, FALSE);
   priv->last_visible_child = NULL;
 
+  g_clear_pointer (&priv->last_visible_node, gsk_render_node_unref);
+
   if (priv->visible_child && priv->visible_child->widget)
     {
       if (gtk_widget_is_visible (widget))
         {
           priv->last_visible_child = priv->visible_child;
-          priv->last_visible_widget_width = gtk_widget_get_width (widget);
-          priv->last_visible_widget_height = gtk_widget_get_height (widget);
+          priv->last_visible_widget_width = gtk_widget_get_allocated_width (priv->last_visible_child->widget);
+          priv->last_visible_widget_height = gtk_widget_get_allocated_height (priv->last_visible_child->widget);
         }
       else
         {
@@ -1695,7 +1709,6 @@ gtk_stack_set_transition_duration (GtkStack *stack,
     return;
 
   priv->transition_duration = duration;
-
   g_object_notify_by_pspec (G_OBJECT (stack),
                             stack_props[PROP_TRANSITION_DURATION]);
 }
@@ -2046,185 +2059,237 @@ gtk_stack_snapshot_crossfade (GtkWidget   *widget,
 {
   GtkStack *stack = GTK_STACK (widget);
   GtkStackPrivate *priv = gtk_stack_get_instance_private (stack);
-  const gdouble progress = gtk_progress_tracker_get_progress (&priv->tracker, FALSE);
+  gdouble progress = gtk_progress_tracker_get_progress (&priv->tracker, FALSE);
 
   gtk_snapshot_push_cross_fade (snapshot, progress);
-  gtk_widget_snapshot_child (widget, priv->last_visible_child->widget, snapshot);
+
+  if (priv->last_visible_node)
+    {
+      gtk_snapshot_save (snapshot);
+      gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (
+                              priv->last_visible_surface_allocation.x,
+                              priv->last_visible_surface_allocation.y));
+      gtk_snapshot_append_node (snapshot, priv->last_visible_node);
+      gtk_snapshot_restore (snapshot);
+    }
   gtk_snapshot_pop (snapshot);
-  gtk_widget_snapshot_child (widget, priv->visible_child->widget, snapshot);
+
+  gtk_widget_snapshot_child (widget,
+                             priv->visible_child->widget,
+                             snapshot);
   gtk_snapshot_pop (snapshot);
 }
 
 static void
-gtk_stack_allocate_cube (GtkStack *stack)
+gtk_stack_snapshot_under (GtkWidget   *widget,
+                          GtkSnapshot *snapshot)
 {
+  GtkStack *stack = GTK_STACK (widget);
   GtkStackPrivate *priv = gtk_stack_get_instance_private (stack);
-  GtkWidget *widget = GTK_WIDGET (stack);
-  const int width = gtk_widget_get_width (widget);
-  const int height = gtk_widget_get_height (widget);
+  int widget_width, widget_height;
+  gint x, y, width, height, pos_x, pos_y;
+
+
+  x = y = 0;
+  width = widget_width = gtk_widget_get_width (widget);
+  height = widget_height = gtk_widget_get_height (widget);
+
+  pos_x = pos_y = 0;
+
+  switch ((guint) priv->active_transition_type)
+    {
+    case GTK_STACK_TRANSITION_TYPE_UNDER_DOWN:
+      y = 0;
+      height = widget_height * (gtk_progress_tracker_get_ease_out_cubic (&priv->tracker, FALSE));
+      pos_y = height;
+      break;
+    case GTK_STACK_TRANSITION_TYPE_UNDER_UP:
+      y = widget_height * (1 - gtk_progress_tracker_get_ease_out_cubic (&priv->tracker, FALSE));
+      height = widget_height - y;
+      pos_y = y - widget_height;
+      break;
+    case GTK_STACK_TRANSITION_TYPE_UNDER_LEFT:
+      x = widget_width * (1 - gtk_progress_tracker_get_ease_out_cubic (&priv->tracker, FALSE));
+      width = widget_width - x;
+      pos_x = x - widget_width;
+      break;
+    case GTK_STACK_TRANSITION_TYPE_UNDER_RIGHT:
+      x = 0;
+      width = widget_width * (gtk_progress_tracker_get_ease_out_cubic (&priv->tracker, FALSE));
+      pos_x = width;
+      break;
+    default:
+      g_assert_not_reached ();
+    }
+
+  gtk_snapshot_push_clip (snapshot, &GRAPHENE_RECT_INIT(x, y, width, height));
+
+  gtk_widget_snapshot_child (widget,
+                             priv->visible_child->widget,
+                             snapshot);
+
+  gtk_snapshot_pop (snapshot);
+
+  if (priv->last_visible_node)
+    {
+      gtk_snapshot_save (snapshot);
+      gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (pos_x, pos_y));
+      gtk_snapshot_append_node (snapshot, priv->last_visible_node);
+      gtk_snapshot_restore (snapshot);
+    }
+}
+
+static void
+gtk_stack_snapshot_cube (GtkWidget   *widget,
+                         GtkSnapshot *snapshot)
+{
+  GtkStack *stack = GTK_STACK (widget);
+  GtkStackPrivate *priv = gtk_stack_get_instance_private (stack);
   double progress = gtk_progress_tracker_get_progress (&priv->tracker, FALSE);
-  int last_widget_width, last_widget_height;
-  int visible_widget_width, visible_widget_height;
-  GskTransform *t;
 
   if (priv->active_transition_type == GTK_STACK_TRANSITION_TYPE_ROTATE_RIGHT)
     progress = 1 - progress;
 
-  gtk_stack_get_child_size (stack, priv->last_visible_child->widget,
-                            &last_widget_width, &last_widget_height);
-
-  gtk_stack_get_child_size (stack, priv->visible_child->widget,
-                            &visible_widget_width, &visible_widget_height);
-
-  if (progress > 0.5)
+  if (priv->last_visible_node && progress > 0.5)
     {
-      t = gsk_transform_translate_3d (NULL, &GRAPHENE_POINT3D_INIT (width / 2.0f, height / 2.0f, 0));
-      t = gsk_transform_perspective (t, 2 * width / 1.0f);
-      t = gsk_transform_translate_3d (t, &GRAPHENE_POINT3D_INIT (0, 0, - width / 2.0f));
-      t = gsk_transform_rotate_3d (t, -90.0f * progress, graphene_vec3_y_axis ());
-      t = gsk_transform_translate_3d (t, &GRAPHENE_POINT3D_INIT (- width / 2.0f,
-                                                                 - height / 2.0f,
-                                                                 width / 2.0f));
-
+      gtk_snapshot_save (snapshot);
+      gtk_snapshot_translate_3d (snapshot, &GRAPHENE_POINT3D_INIT (
+                                 gtk_widget_get_width (widget) / 2.f,
+                                 gtk_widget_get_height (widget) / 2.f,
+                                 0));
+      gtk_snapshot_perspective (snapshot, 2 * gtk_widget_get_width (widget) / 1.f);
+      gtk_snapshot_translate_3d (snapshot, &GRAPHENE_POINT3D_INIT (
+                                 0, 0,
+                                 - gtk_widget_get_width (widget) / 2.f));
+      gtk_snapshot_rotate_3d (snapshot, -90 * progress, graphene_vec3_y_axis());
+      gtk_snapshot_translate_3d (snapshot, &GRAPHENE_POINT3D_INIT (
+                                 - gtk_widget_get_width (widget) / 2.f,
+                                 - gtk_widget_get_height (widget) / 2.f,
+                                 gtk_widget_get_width (widget) / 2.f));
+      gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (
+                              priv->last_visible_surface_allocation.x,
+                              priv->last_visible_surface_allocation.y));
       if (priv->active_transition_type == GTK_STACK_TRANSITION_TYPE_ROTATE_LEFT)
-        gtk_widget_allocate (priv->last_visible_child->widget,
-                             last_widget_width, last_widget_height, -1, t);
+        gtk_snapshot_append_node (snapshot, priv->last_visible_node);
       else
-        gtk_widget_allocate (priv->visible_child->widget,
-                             visible_widget_width, visible_widget_height, -1, t);
+        gtk_widget_snapshot_child (widget, priv->visible_child->widget, snapshot);
+      gtk_snapshot_restore (snapshot);
     }
 
-  t = gsk_transform_translate_3d (NULL, &GRAPHENE_POINT3D_INIT (width / 2.0f, height / 2.0f, 0));
-  t = gsk_transform_perspective (t, 2 * width / 1.0f);
-  t = gsk_transform_translate_3d (t, &GRAPHENE_POINT3D_INIT (0, 0, -width / 2.0f));
-  t = gsk_transform_rotate_3d (t, 90 * (1.0 - progress), graphene_vec3_y_axis ());
-  t = gsk_transform_translate_3d (t, &GRAPHENE_POINT3D_INIT (- width / 2.0f, - height / 2.0f, width / 2.0f));
+  gtk_snapshot_save (snapshot);
+  gtk_snapshot_translate_3d (snapshot, &GRAPHENE_POINT3D_INIT (
+                             gtk_widget_get_width (widget) / 2.f,
+                             gtk_widget_get_height (widget) / 2.f,
+                             0));
+  gtk_snapshot_perspective (snapshot, 2 * gtk_widget_get_width (widget) / 1.f);
+  gtk_snapshot_translate_3d (snapshot, &GRAPHENE_POINT3D_INIT (
+                             0, 0,
+                             - gtk_widget_get_width (widget) / 2.f));
+  gtk_snapshot_rotate_3d (snapshot, 90 * (1.0 - progress), graphene_vec3_y_axis());
+  gtk_snapshot_translate_3d (snapshot, &GRAPHENE_POINT3D_INIT (
+                             - gtk_widget_get_width (widget) / 2.f,
+                             - gtk_widget_get_height (widget) / 2.f,
+                             gtk_widget_get_width (widget) / 2.f));
+  gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (
+                          priv->last_visible_surface_allocation.x,
+                          priv->last_visible_surface_allocation.y));
 
   if (priv->active_transition_type == GTK_STACK_TRANSITION_TYPE_ROTATE_LEFT)
-    gtk_widget_allocate (priv->visible_child->widget,
-                         visible_widget_width, visible_widget_height, -1, t);
+    gtk_widget_snapshot_child (widget, priv->visible_child->widget, snapshot);
   else
-    gtk_widget_allocate (priv->last_visible_child->widget,
-                         last_widget_width, last_widget_height, -1, t);
+    gtk_snapshot_append_node (snapshot, priv->last_visible_node);
+  gtk_snapshot_restore (snapshot);
 
-  if (progress <= 0.5)
+  if (priv->last_visible_node && progress <= 0.5)
     {
-      t = gsk_transform_translate_3d (NULL, &GRAPHENE_POINT3D_INIT (width / 2.0f, height / 2.0f, 0));
-      t = gsk_transform_perspective (t, 2 * width / 1.0f);
-      t = gsk_transform_translate_3d (t, &GRAPHENE_POINT3D_INIT (0, 0, - width / 2.0f));
-      t = gsk_transform_rotate_3d (t, -90 * progress, graphene_vec3_y_axis ());
-      t = gsk_transform_translate_3d (t, &GRAPHENE_POINT3D_INIT (- width / 2.0f, - height / 2.0, width / 2.0f));
+      gtk_snapshot_save (snapshot);
+      gtk_snapshot_translate_3d (snapshot, &GRAPHENE_POINT3D_INIT (
+                                 gtk_widget_get_width (widget) / 2.f,
+                                 gtk_widget_get_height (widget) / 2.f,
+                                 0));
+      gtk_snapshot_perspective (snapshot, 2 * gtk_widget_get_width (widget) / 1.f);
+      gtk_snapshot_translate_3d (snapshot, &GRAPHENE_POINT3D_INIT (
+                                 0, 0,
+                                 - gtk_widget_get_width (widget) / 2.f));
+      gtk_snapshot_rotate_3d (snapshot, -90 * progress, graphene_vec3_y_axis());
+      gtk_snapshot_translate_3d (snapshot, &GRAPHENE_POINT3D_INIT (
+                                 - gtk_widget_get_width (widget) / 2.f,
+                                 - gtk_widget_get_height (widget) / 2.f,
+                                 gtk_widget_get_width (widget) / 2.f));
+      gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (
+                              priv->last_visible_surface_allocation.x,
+                              priv->last_visible_surface_allocation.y));
       if (priv->active_transition_type == GTK_STACK_TRANSITION_TYPE_ROTATE_LEFT)
-        gtk_widget_allocate (priv->last_visible_child->widget,
-                             last_widget_width, last_widget_height, -1, t);
+        gtk_snapshot_append_node (snapshot, priv->last_visible_node);
       else
-        gtk_widget_allocate (priv->visible_child->widget,
-                             visible_widget_width, visible_widget_height, -1, t);
+        gtk_widget_snapshot_child (widget, priv->visible_child->widget, snapshot);
+      gtk_snapshot_restore (snapshot);
     }
 }
 
 static void
-gtk_stack_allocate_slide (GtkStack *stack)
+gtk_stack_snapshot_slide (GtkWidget   *widget,
+                          GtkSnapshot *snapshot)
 {
+  GtkStack *stack = GTK_STACK (widget);
   GtkStackPrivate *priv = gtk_stack_get_instance_private (stack);
-  GtkWidget *widget = GTK_WIDGET (stack);
-  const int width = gtk_widget_get_width (widget);
-  const int height = gtk_widget_get_height (widget);
-  const double progress = get_transition_progress (stack);
-  int new_x, new_y;
-  int old_x, old_y;
-  GtkAllocation child_allocation;
 
-  switch ((guint) priv->active_transition_type)
+  if (priv->last_visible_node)
     {
-    case GTK_STACK_TRANSITION_TYPE_SLIDE_LEFT:
-      old_x = - width * progress;
-      old_y = 0;
-      new_x = width - (width * progress);
-      new_y = 0;
-      break;
-    case GTK_STACK_TRANSITION_TYPE_SLIDE_RIGHT:
-      old_x = width * progress;
-      old_y = 0;
-      new_x = - width + (width * progress);
-      new_y = 0;
-      break;
-    case GTK_STACK_TRANSITION_TYPE_OVER_LEFT:
-      old_x = 0;
-      old_y = 0;
-      new_x = width - (width * progress);
-      new_y = 0;
-      break;
-    case GTK_STACK_TRANSITION_TYPE_SLIDE_UP:
-      old_x = 0;
-      old_y = - height * progress;
-      new_x = 0;
-      new_y = height - (height * progress);
-      break;
-    case GTK_STACK_TRANSITION_TYPE_SLIDE_DOWN:
-      old_x = 0;
-      old_y = height * progress;
-      new_x = 0;
-      new_y = - height + (height * progress);
-      break;
-    case GTK_STACK_TRANSITION_TYPE_UNDER_UP:
-      new_x = 0;
-      new_y = 0;
-      old_x = 0;
-      old_y = - height * progress;
-      break;
-    case GTK_STACK_TRANSITION_TYPE_UNDER_DOWN:
-      old_x = 0;
-      old_y = progress * height;
-      new_x = 0;
-      new_y = 0;
-      break;
-    case GTK_STACK_TRANSITION_TYPE_OVER_DOWN:
-      old_x = 0;
-      old_y = 0;
-      new_x = 0;
-      new_y = - height + (height * progress);
-      break;
-    case GTK_STACK_TRANSITION_TYPE_OVER_UP:
-      old_x = 0;
-      old_y = 0;
-      new_x = 0;
-      new_y = height - (height * progress);
-      break;
-    case GTK_STACK_TRANSITION_TYPE_UNDER_RIGHT:
-      old_x = width * progress;
-      old_y = 0;
-      new_x = 0;
-      new_y = 0;
-      break;
-    case GTK_STACK_TRANSITION_TYPE_OVER_RIGHT:
-      old_x = 0;
-      old_y = 0;
-      new_x = - width + (width * progress);
-      new_y = 0;
-      break;
-    case GTK_STACK_TRANSITION_TYPE_UNDER_LEFT:
-      new_x = 0;
-      new_y = 0;
-      old_x = - width * progress;
-      old_y = 0;
-      break;
-    default:
-      g_assert_not_reached ();
-      break;
-    }
+      int x, y;
+      int width, height;
 
-  gtk_stack_get_child_size (stack, priv->visible_child->widget,
-                            &child_allocation.width, &child_allocation.height);
-  child_allocation.x = new_x;
-  child_allocation.y = new_y;
-  gtk_widget_size_allocate (priv->visible_child->widget, &child_allocation, -1);
+      width = gtk_widget_get_width (widget);
+      height = gtk_widget_get_height (widget);
 
-  gtk_stack_get_child_size (stack, priv->last_visible_child->widget,
-                            &child_allocation.width, &child_allocation.height);
-  child_allocation.x = old_x;
-  child_allocation.y = old_y;
-  gtk_widget_size_allocate (priv->last_visible_child->widget, &child_allocation, -1);
+      x = get_bin_window_x (stack);
+      y = get_bin_window_y (stack);
+
+      switch ((guint) priv->active_transition_type)
+        {
+        case GTK_STACK_TRANSITION_TYPE_SLIDE_LEFT:
+          x -= width;
+          break;
+        case GTK_STACK_TRANSITION_TYPE_SLIDE_RIGHT:
+          x += width;
+          break;
+        case GTK_STACK_TRANSITION_TYPE_SLIDE_UP:
+          y -= height;
+          break;
+        case GTK_STACK_TRANSITION_TYPE_SLIDE_DOWN:
+          y += height;
+          break;
+        case GTK_STACK_TRANSITION_TYPE_OVER_UP:
+        case GTK_STACK_TRANSITION_TYPE_OVER_DOWN:
+          y = 0;
+          break;
+        case GTK_STACK_TRANSITION_TYPE_OVER_LEFT:
+        case GTK_STACK_TRANSITION_TYPE_OVER_RIGHT:
+          x = 0;
+          break;
+        default:
+          g_assert_not_reached ();
+          break;
+        }
+
+      if (priv->last_visible_child != NULL)
+        {
+          if (gtk_widget_get_valign (priv->last_visible_child->widget) == GTK_ALIGN_END &&
+              priv->last_visible_widget_height > height)
+            y -= priv->last_visible_widget_height - height;
+          else if (gtk_widget_get_valign (priv->last_visible_child->widget) == GTK_ALIGN_CENTER)
+            y -= (priv->last_visible_widget_height - height) / 2;
+        }
+
+      gtk_snapshot_save (snapshot);
+      gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (x, y));
+      gtk_snapshot_append_node (snapshot, priv->last_visible_node);
+      gtk_snapshot_restore (snapshot);
+     }
+
+  gtk_widget_snapshot_child (widget,
+                             priv->visible_child->widget,
+                             snapshot);
 }
 
 static void
@@ -2234,63 +2299,72 @@ gtk_stack_snapshot (GtkWidget   *widget,
   GtkStack *stack = GTK_STACK (widget);
   GtkStackPrivate *priv = gtk_stack_get_instance_private (stack);
 
-  if (!priv->visible_child)
-    return;
-
-  if (gtk_progress_tracker_get_state (&priv->tracker) != GTK_PROGRESS_STATE_AFTER &&
-      priv->last_visible_child)
+  if (priv->visible_child)
     {
-      gtk_snapshot_push_clip (snapshot,
-                              &GRAPHENE_RECT_INIT(
-                                  0, 0,
-                                  gtk_widget_get_width (widget),
-                                  gtk_widget_get_height (widget)
-                              ));
-
-      switch (priv->active_transition_type)
+      if (gtk_progress_tracker_get_state (&priv->tracker) != GTK_PROGRESS_STATE_AFTER)
         {
-        case GTK_STACK_TRANSITION_TYPE_CROSSFADE:
-          gtk_stack_snapshot_crossfade (widget, snapshot);
-          break;
-        case GTK_STACK_TRANSITION_TYPE_SLIDE_LEFT:
-        case GTK_STACK_TRANSITION_TYPE_SLIDE_RIGHT:
-        case GTK_STACK_TRANSITION_TYPE_SLIDE_UP:
-        case GTK_STACK_TRANSITION_TYPE_SLIDE_DOWN:
-        case GTK_STACK_TRANSITION_TYPE_OVER_UP:
-        case GTK_STACK_TRANSITION_TYPE_OVER_LEFT:
-        case GTK_STACK_TRANSITION_TYPE_OVER_RIGHT:
-        case GTK_STACK_TRANSITION_TYPE_OVER_DOWN:
-        case GTK_STACK_TRANSITION_TYPE_ROTATE_LEFT:
-        case GTK_STACK_TRANSITION_TYPE_ROTATE_RIGHT:
-        case GTK_STACK_TRANSITION_TYPE_NONE:
-        case GTK_STACK_TRANSITION_TYPE_SLIDE_LEFT_RIGHT:
-        case GTK_STACK_TRANSITION_TYPE_SLIDE_UP_DOWN:
-        case GTK_STACK_TRANSITION_TYPE_OVER_UP_DOWN:
-        case GTK_STACK_TRANSITION_TYPE_OVER_DOWN_UP:
-        case GTK_STACK_TRANSITION_TYPE_OVER_LEFT_RIGHT:
-        case GTK_STACK_TRANSITION_TYPE_OVER_RIGHT_LEFT:
-        case GTK_STACK_TRANSITION_TYPE_ROTATE_LEFT_RIGHT:
-          gtk_widget_snapshot_child (widget, priv->last_visible_child->widget, snapshot);
-          gtk_widget_snapshot_child (widget, priv->visible_child->widget, snapshot);
-          break;
-        case GTK_STACK_TRANSITION_TYPE_UNDER_DOWN:
-        case GTK_STACK_TRANSITION_TYPE_UNDER_RIGHT:
-        case GTK_STACK_TRANSITION_TYPE_UNDER_LEFT:
-        case GTK_STACK_TRANSITION_TYPE_UNDER_UP:
-          gtk_widget_snapshot_child (widget, priv->visible_child->widget, snapshot);
-          gtk_widget_snapshot_child (widget, priv->last_visible_child->widget, snapshot);
-          break;
-        default:
-          g_assert_not_reached ();
-        }
+          if (priv->last_visible_node == NULL &&
+              priv->last_visible_child != NULL)
+            {
+              GtkSnapshot *last_visible_snapshot;
 
-      gtk_snapshot_pop (snapshot);
-    }
-  else
-    {
-      gtk_widget_snapshot_child (widget,
-                                 priv->visible_child->widget,
-                                 snapshot);
+              gtk_widget_get_allocation (priv->last_visible_child->widget,
+                                         &priv->last_visible_surface_allocation);
+              last_visible_snapshot = gtk_snapshot_new ();
+              gtk_widget_snapshot (priv->last_visible_child->widget, last_visible_snapshot);
+              priv->last_visible_node = gtk_snapshot_free_to_node (last_visible_snapshot);
+            }
+
+          gtk_snapshot_push_clip (snapshot,
+                                  &GRAPHENE_RECT_INIT(
+                                      0, 0,
+                                      gtk_widget_get_width (widget),
+                                      gtk_widget_get_height (widget)
+                                  ));
+
+          switch (priv->active_transition_type)
+            {
+            case GTK_STACK_TRANSITION_TYPE_CROSSFADE:
+	      gtk_stack_snapshot_crossfade (widget, snapshot);
+              break;
+            case GTK_STACK_TRANSITION_TYPE_SLIDE_LEFT:
+            case GTK_STACK_TRANSITION_TYPE_SLIDE_RIGHT:
+            case GTK_STACK_TRANSITION_TYPE_SLIDE_UP:
+            case GTK_STACK_TRANSITION_TYPE_SLIDE_DOWN:
+            case GTK_STACK_TRANSITION_TYPE_OVER_UP:
+            case GTK_STACK_TRANSITION_TYPE_OVER_DOWN:
+            case GTK_STACK_TRANSITION_TYPE_OVER_LEFT:
+            case GTK_STACK_TRANSITION_TYPE_OVER_RIGHT:
+              gtk_stack_snapshot_slide (widget, snapshot);
+              break;
+            case GTK_STACK_TRANSITION_TYPE_UNDER_UP:
+            case GTK_STACK_TRANSITION_TYPE_UNDER_DOWN:
+            case GTK_STACK_TRANSITION_TYPE_UNDER_LEFT:
+            case GTK_STACK_TRANSITION_TYPE_UNDER_RIGHT:
+	      gtk_stack_snapshot_under (widget, snapshot);
+              break;
+            case GTK_STACK_TRANSITION_TYPE_ROTATE_LEFT:
+            case GTK_STACK_TRANSITION_TYPE_ROTATE_RIGHT:
+	      gtk_stack_snapshot_cube (widget, snapshot);
+              break;
+            case GTK_STACK_TRANSITION_TYPE_NONE:
+            case GTK_STACK_TRANSITION_TYPE_SLIDE_LEFT_RIGHT:
+            case GTK_STACK_TRANSITION_TYPE_SLIDE_UP_DOWN:
+            case GTK_STACK_TRANSITION_TYPE_OVER_UP_DOWN:
+            case GTK_STACK_TRANSITION_TYPE_OVER_DOWN_UP:
+            case GTK_STACK_TRANSITION_TYPE_OVER_LEFT_RIGHT:
+            case GTK_STACK_TRANSITION_TYPE_OVER_RIGHT_LEFT:
+            case GTK_STACK_TRANSITION_TYPE_ROTATE_LEFT_RIGHT:
+            default:
+              g_assert_not_reached ();
+            }
+
+          gtk_snapshot_pop (snapshot);
+        }
+      else
+        gtk_widget_snapshot_child (widget,
+                                   priv->visible_child->widget,
+                                   snapshot);
     }
 }
 
@@ -2302,51 +2376,71 @@ gtk_stack_size_allocate (GtkWidget *widget,
 {
   GtkStack *stack = GTK_STACK (widget);
   GtkStackPrivate *priv = gtk_stack_get_instance_private (stack);
+  GtkAllocation child_allocation;
 
-  if (!priv->visible_child)
-    return;
+  child_allocation.x = get_bin_window_x (stack);
+  child_allocation.y = get_bin_window_y (stack);
 
-  if (gtk_progress_tracker_get_state (&priv->tracker) != GTK_PROGRESS_STATE_AFTER &&
-      priv->last_visible_child)
+  if (priv->last_visible_child)
+    {
+      int min, nat;
+
+      gtk_widget_measure (priv->last_visible_child->widget, GTK_ORIENTATION_HORIZONTAL,
+                          -1,
+                          &min, &nat, NULL, NULL);
+      child_allocation.width = MAX (min, width);
+      gtk_widget_measure (priv->last_visible_child->widget, GTK_ORIENTATION_VERTICAL,
+                          child_allocation.width,
+                          &min, &nat, NULL, NULL);
+      child_allocation.height = MAX (min, height);
+
+      gtk_widget_size_allocate (priv->last_visible_child->widget, &child_allocation, -1);
+
+      if (!gdk_rectangle_equal (&priv->last_visible_surface_allocation,
+                                &child_allocation))
+        {
+          g_clear_pointer (&priv->last_visible_node, gsk_render_node_unref);
+        }
+    }
+
+  child_allocation.width = width;
+  child_allocation.height = height;
+
+  if (priv->visible_child)
     {
       int min_width;
       int min_height;
 
-      if (priv->active_transition_type == GTK_STACK_TRANSITION_TYPE_CROSSFADE)
-        {
-          /* Last visible child */
-          gtk_stack_get_child_size (stack, priv->last_visible_child->widget, &min_width, &min_height);
-          gtk_widget_allocate (priv->last_visible_child->widget, min_width, min_height, -1, NULL);
+      gtk_widget_measure (priv->visible_child->widget, GTK_ORIENTATION_HORIZONTAL,
+                          height, &min_width, NULL, NULL, NULL);
+      child_allocation.width = MAX (child_allocation.width, min_width);
 
-          /* visible child */
-          gtk_stack_get_child_size (stack, priv->visible_child->widget, &min_width, &min_height);
-          gtk_widget_allocate (priv->visible_child->widget, min_width, min_height, -1, NULL);
-        }
-      else if (is_window_moving_transition (priv->active_transition_type))
+      gtk_widget_measure (priv->visible_child->widget, GTK_ORIENTATION_VERTICAL,
+                          child_allocation.width, &min_height, NULL, NULL, NULL);
+      child_allocation.height = MAX (child_allocation.height, min_height);
+
+      if (child_allocation.width > width)
         {
-          gtk_stack_allocate_slide (stack);
-        }
-      else if (priv->active_transition_type == GTK_STACK_TRANSITION_TYPE_ROTATE_RIGHT ||
-               priv->active_transition_type == GTK_STACK_TRANSITION_TYPE_ROTATE_LEFT ||
-               priv->active_transition_type == GTK_STACK_TRANSITION_TYPE_ROTATE_LEFT_RIGHT)
-        {
-          gtk_stack_allocate_cube (stack);
-        }
-      else
-        {
-          g_assert_not_reached ();
+          GtkAlign halign = gtk_widget_get_halign (priv->visible_child->widget);
+
+          if (halign == GTK_ALIGN_CENTER || halign == GTK_ALIGN_FILL)
+            child_allocation.x = (width - child_allocation.width) / 2;
+          else if (halign == GTK_ALIGN_END)
+            child_allocation.x = (width - child_allocation.width);
         }
 
+      if (child_allocation.height > height)
+        {
+          GtkAlign valign = gtk_widget_get_valign (priv->visible_child->widget);
+
+          if (valign == GTK_ALIGN_CENTER || valign == GTK_ALIGN_FILL)
+            child_allocation.y = (height - child_allocation.height) / 2;
+          else if (valign == GTK_ALIGN_END)
+            child_allocation.y = (height - child_allocation.height);
+        }
+
+      gtk_widget_size_allocate (priv->visible_child->widget, &child_allocation, -1);
     }
-  else
-    {
-      int min_width;
-      int min_height;
-
-      gtk_stack_get_child_size (stack, priv->visible_child->widget, &min_width, &min_height);
-      gtk_widget_allocate (priv->visible_child->widget, min_width, min_height, -1, NULL);
-    }
-
 }
 
 #define LERP(a, b, t) ((a) + (((b) - (a)) * (1.0 - (t))))
@@ -2363,8 +2457,11 @@ gtk_stack_measure (GtkWidget      *widget,
   GtkStackPrivate *priv = gtk_stack_get_instance_private (stack);
   GtkStackPage *child_info;
   GtkWidget *child;
-  int child_min, child_nat;
+  gint child_min, child_nat;
   GList *l;
+
+  *minimum = 0;
+  *natural = 0;
 
   for (l = priv->children; l != NULL; l = l->next)
     {
@@ -2389,13 +2486,13 @@ gtk_stack_measure (GtkWidget      *widget,
     {
       if (orientation == GTK_ORIENTATION_VERTICAL && !priv->vhomogeneous)
         {
-          double t = priv->interpolate_size ? gtk_progress_tracker_get_ease_out_cubic (&priv->tracker, FALSE) : 1.0;
+          gdouble t = priv->interpolate_size ? gtk_progress_tracker_get_ease_out_cubic (&priv->tracker, FALSE) : 1.0;
           *minimum = LERP (*minimum, priv->last_visible_widget_height, t);
           *natural = LERP (*natural, priv->last_visible_widget_height, t);
         }
       if (orientation == GTK_ORIENTATION_HORIZONTAL && !priv->hhomogeneous)
         {
-          double t = priv->interpolate_size ? gtk_progress_tracker_get_ease_out_cubic (&priv->tracker, FALSE) : 1.0;
+          gdouble t = priv->interpolate_size ? gtk_progress_tracker_get_ease_out_cubic (&priv->tracker, FALSE) : 1.0;
           *minimum = LERP (*minimum, priv->last_visible_widget_width, t);
           *natural = LERP (*natural, priv->last_visible_widget_width, t);
         }
