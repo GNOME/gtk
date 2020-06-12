@@ -983,6 +983,18 @@ gtk_editable_get_type
 </SECTION>
 
 <SECTION>
+<FILE>gtkeditablelabel</FILE>
+<TITLE>GtkEditableLabel</TITLE>
+GtkEditableLabel
+gtk_editable_label_new
+gtk_editable_label_get_editing
+gtk_editable_label_start_editing
+gtk_editable_label_stop_editing
+<SUBSECTION Private>
+gtk_editable_label_get_type
+</SECTION>
+
+<SECTION>
 <FILE>gtktext</FILE>
 <TITLE>GtkText</TITLE>
 GtkText
