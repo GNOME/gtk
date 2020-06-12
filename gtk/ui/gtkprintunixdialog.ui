@@ -6,17 +6,6 @@
     <property name="value">1</property>
     <property name="step-increment">1</property>
   </object>
-  <object class="GtkListStore" id="custom_paper_list">
-    <columns>
-      <column type="GObject"/>
-    </columns>
-  </object>
-  <object class="GtkListStore" id="page_setup_list">
-    <columns>
-      <column type="GObject"/>
-      <column type="gboolean"/>
-    </columns>
-  </object>
   <object class="GtkAdjustment" id="scale_spin_adjustment">
     <property name="lower">1</property>
     <property name="upper">1000</property>
@@ -519,11 +508,9 @@
                                       </object>
                                     </child>
                                     <child>
-                                      <object class="GtkComboBoxText" id="page_set_combo">
+                                      <object class="GtkDropDown" id="page_set_combo">
                                         <property name="valign">baseline</property>
-                                        <property name="active">0</property>
-                                        <property name="entry-text-column">0</property>
-                                        <property name="id-column">1</property>
+                                        <property name="selected">0</property>
                                         <items>
                                           <item translatable="yes">All sheets</item>
                                           <item translatable="yes">Even sheets</item>
@@ -681,13 +668,9 @@
                                       </object>
                                     </child>
                                     <child>
-                                      <object class="GtkComboBox" id="paper_size_combo">
+                                      <object class="GtkDropDown" id="paper_size_combo">
                                         <property name="sensitive">0</property>
-                                        <property name="model">page_setup_list</property>
                                         <property name="valign">baseline</property>
-                                        <child>
-                                          <object class="GtkCellRendererText" id="paper_size_renderer"/>
-                                        </child>
                                         <layout>
                                           <property name="left-attach">1</property>
                                           <property name="top-attach">3</property>
@@ -708,12 +691,10 @@
                                       </object>
                                     </child>
                                     <child>
-                                      <object class="GtkComboBoxText" id="orientation_combo">
+                                      <object class="GtkDropDown" id="orientation_combo">
                                         <property name="sensitive">0</property>
-                                        <property name="active">0</property>
-                                        <property name="entry-text-column">0</property>
+                                        <property name="selected">0</property>
                                         <property name="valign">baseline</property>
-                                        <property name="id-column">1</property>
                                         <items>
                                           <item translatable="yes">Portrait</item>
                                           <item translatable="yes">Landscape</item>
