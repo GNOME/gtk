@@ -69,6 +69,7 @@ gtk_drop_target_get_type
 gtk_drop_target_async_get_type
 gtk_drop_down_get_type
 gtk_editable_get_type
+gtk_editable_label_get_type
 gtk_emoji_chooser_get_type
 gtk_entry_buffer_get_type
 gtk_entry_completion_get_type
