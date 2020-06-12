@@ -24,44 +24,15 @@ G_BEGIN_DECLS
 
 #define GTK_TYPE_CUSTOM_PAPER_UNIX_DIALOG                  (gtk_custom_paper_unix_dialog_get_type ())
 #define GTK_CUSTOM_PAPER_UNIX_DIALOG(obj)                  (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_CUSTOM_PAPER_UNIX_DIALOG, GtkCustomPaperUnixDialog))
-#define GTK_CUSTOM_PAPER_UNIX_DIALOG_CLASS(klass)          (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_CUSTOM_PAPER_UNIX_DIALOG, GtkCustomPaperUnixDialogClass))
 #define GTK_IS_CUSTOM_PAPER_UNIX_DIALOG(obj)               (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_CUSTOM_PAPER_UNIX_DIALOG))
-#define GTK_IS_CUSTOM_PAPER_UNIX_DIALOG_CLASS(klass)       (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_CUSTOM_PAPER_UNIX_DIALOG))
-#define GTK_CUSTOM_PAPER_UNIX_DIALOG_GET_CLASS(obj)        (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_CUSTOM_PAPER_UNIX_DIALOG, GtkCustomPaperUnixDialogClass))
 
 
 typedef struct _GtkCustomPaperUnixDialog         GtkCustomPaperUnixDialog;
-typedef struct _GtkCustomPaperUnixDialogClass    GtkCustomPaperUnixDialogClass;
-typedef struct _GtkCustomPaperUnixDialogPrivate  GtkCustomPaperUnixDialogPrivate;
-
-struct _GtkCustomPaperUnixDialog
-{
-  GtkDialog parent_instance;
-
-  GtkCustomPaperUnixDialogPrivate *priv;
-};
-
-/**
- * GtkCustomPaperUnixDialogClass:
- * @parent_class: The parent class.
- */
-struct _GtkCustomPaperUnixDialogClass
-{
-  GtkDialogClass parent_class;
-
-  /*< private >*/
-
-  /* Padding for future expansion */
-  void (*_gtk_reserved1) (void);
-  void (*_gtk_reserved2) (void);
-  void (*_gtk_reserved3) (void);
-  void (*_gtk_reserved4) (void);
-};
 
 GDK_AVAILABLE_IN_ALL
 GType             gtk_custom_paper_unix_dialog_get_type           (void) G_GNUC_CONST;
 GtkWidget *       _gtk_custom_paper_unix_dialog_new                (GtkWindow   *parent,
-								   const gchar *title);
+                                                                    const gchar *title);
 GtkUnit           _gtk_print_get_default_user_units                (void);
 void              gtk_print_load_custom_papers                     (GListStore *store);
 void              _gtk_print_load_custom_papers                    (GtkListStore *store);
