@@ -11,6 +11,7 @@
               <object class="GtkStack" id="button_stack">
                 <property name="halign">fill</property>
                 <property name="hexpand">1</property>
+                <property name="hhomogeneous">0</property>
                 <child>
                   <object class="GtkStackPage">
                     <property name="name">empty</property>
