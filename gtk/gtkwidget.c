@@ -3913,6 +3913,8 @@ gtk_widget_allocate (GtkWidget    *widget,
       transform = gsk_transform_translate (transform, &GRAPHENE_POINT_INIT (adjusted.width / 2, adjusted.height / 2));
       transform = gsk_transform_transform (transform, css_transform);
       transform = gsk_transform_translate (transform, &GRAPHENE_POINT_INIT (- adjusted.width / 2, - adjusted.height / 2));
+
+      gsk_transform_unref (css_transform);
     }
 
   adjusted.x += border.left + padding.left;
