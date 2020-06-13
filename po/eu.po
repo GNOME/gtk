@@ -4,7 +4,7 @@
 # Joseba Bidaurrazaga van Dierdonck <gcpbivaj@lg.ehu.es>, 1999-2000.
 # Hizkuntza Politikarako Sailburuordetza <hizpol@ej-gv.es>, 2004.
 # Iñaki Larrañaga Murgoitio <dooteo@zundan.com>, 2004 - 2015, 2016, 2017, 2018.
-# Asier Sarasua Garmendia <asiersarasua@ni.eus>, 2019, 2020.
+# Asier Sarasua Garmendia <asier.sarasua@gmail.com>, 2019, 2020.
 # Ibai Oihanguren Sala <ibai@oihanguren.com>, 2020.
 msgid ""
 msgstr "Project-Id-Version: gtk+ gtk-3-22\n"
@@ -1554,7 +1554,7 @@ msgid ""
 "This program comes with absolutely no warranty.\n"
 "See the <a href=\"%s\">%s</a> for details."
 msgstr "Programa honek ez du inolako bermerik.\n"
-"Xehetasun gehiagorako, ikusi <a href=\"%s\">%s</a>"
+"Xehetasun gehiagorako, ikusi <a href=\"%s\">%s</a>."
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the shift key. If the text on this key isn't typically
