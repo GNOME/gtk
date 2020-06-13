@@ -106,7 +106,7 @@ gsk_transform_has_class (GskTransform            *self,
  * @transform_class: class structure for this self
  * @category: The category of this transform. Will be used to initialize
  *     the result's category together with &next's category
- * @next: (transfer full): Next matrix to multiply with or %NULL if none
+ * @next: (transfer full): Next transform to multiply with or %NULL if none
  *
  * Returns: (transfer full): the newly created #GskTransform
  */
@@ -466,7 +466,7 @@ gsk_transform_matrix_with_category (GskTransform            *next,
  *
  * Multiplies @next with the given @matrix.
  *
- * Returns: The new matrix
+ * Returns: The new transform
  **/
 GskTransform *
 gsk_transform_matrix (GskTransform            *next,
@@ -615,11 +615,11 @@ static const GskTransformClass GSK_TRANSLATE_TRANSFORM_CLASS =
 /**
  * gsk_transform_translate:
  * @next: (allow-none) (transfer full): the next transform
- * @point: the point to translate the matrix by
+ * @point: the point to translate the transform by
  *
  * Translates @next in 2dimensional space by @point.
  *
- * Returns: The new matrix
+ * Returns: The new transform
  **/
 GskTransform *
 gsk_transform_translate (GskTransform           *next,
@@ -635,11 +635,11 @@ gsk_transform_translate (GskTransform           *next,
 /**
  * gsk_transform_translate_3d:
  * @next: (allow-none) (transfer full): the next transform
- * @point: the point to translate the matrix by
+ * @point: the point to translate the transform by
  *
  * Translates @next by @point.
  *
- * Returns: The new matrix
+ * Returns: The new transform
  **/
 GskTransform *
 gsk_transform_translate_3d (GskTransform             *next,
@@ -854,7 +854,7 @@ normalize_angle (float angle)
  *
  * Rotates @next @angle degrees in 2D - or in 3Dspeak, around the z axis.
  *
- * Returns: The new matrix
+ * Returns: The new transform
  **/
 GskTransform *
 gsk_transform_rotate (GskTransform *next,
@@ -981,7 +981,7 @@ static const GskTransformClass GSK_ROTATE3D_TRANSFORM_CLASS =
  *
  * For a rotation in 2D space, use gsk_transform_rotate().
  *
- * Returns: The new matrix
+ * Returns: The new transform
  **/
 GskTransform *
 gsk_transform_rotate_3d (GskTransform          *next,
@@ -1153,7 +1153,7 @@ static const GskTransformClass GSK_SCALE_TRANSFORM_CLASS =
  * Scales @next in 2-dimensional space by the given factors.
  * Use gsk_transform_scale_3d() to scale in all 3 dimensions.
  *
- * Returns: The new matrix
+ * Returns: The new transform
  **/
 GskTransform *
 gsk_transform_scale (GskTransform *next,
@@ -1172,7 +1172,7 @@ gsk_transform_scale (GskTransform *next,
  *
  * Scales @next by the given factors.
  *
- * Returns: The new matrix
+ * Returns: The new transform
  **/
 GskTransform *
 gsk_transform_scale_3d (GskTransform *next,
@@ -1305,7 +1305,7 @@ static const GskTransformClass GSK_PERSPECTIVE_TRANSFORM_CLASS =
  * those with negative Z values towards the origin. Points
  * on the z=0 plane are unchanged.
  *
- * Returns: The new matrix
+ * Returns: The new transform
  **/
 GskTransform *
 gsk_transform_perspective (GskTransform *next,
@@ -1615,7 +1615,7 @@ gsk_transform_to_translate (GskTransform *self,
  *
  * Applies all the operations from @other to @next. 
  *
- * Returns: The new matrix
+ * Returns: The new transform
  **/
 GskTransform *
 gsk_transform_transform (GskTransform *next,
@@ -1723,10 +1723,10 @@ gsk_transform_get_category (GskTransform *self)
 /*
  * gsk_transform_new: (constructor):
  *
- * Creates a new identity matrix. This function is meant to be used by language
- * bindings. For C code, this equivalent to using %NULL.
+ * Creates a new identity transform. This function is meant to be used by language
+ * bindings. For C code, this is equivalent to using %NULL.
  *
- * Returns: A new identity matrix
+ * Returns: A new identity transform
  **/
 GskTransform *
 gsk_transform_new (void)
