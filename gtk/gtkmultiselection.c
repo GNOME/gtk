@@ -21,9 +21,9 @@
 
 #include "gtkmultiselection.h"
 
+#include "gtkbitset.h"
 #include "gtkintl.h"
 #include "gtkselectionmodel.h"
-#include "gtkset.h"
 
 /**
  * SECTION:gtkmultiselection
@@ -47,7 +47,7 @@ struct _GtkMultiSelection
 
   GListModel *model;
 
-  GtkSet *selected;
+  GtkBitset *selected;
 };
 
 struct _GtkMultiSelectionClass
@@ -103,7 +103,7 @@ gtk_multi_selection_is_selected (GtkSelectionModel *model,
 {
   GtkMultiSelection *self = GTK_MULTI_SELECTION (model);
 
-  return gtk_set_contains (self->selected, position);
+  return gtk_bitset_contains (self->selected, position);
 }
 
 static gboolean
@@ -118,12 +118,12 @@ gtk_multi_selection_select_range (GtkSelectionModel *model,
 
   if (exclusive)
     {
-      min = gtk_set_get_min (self->selected);
-      max = gtk_set_get_max (self->selected);
-      gtk_set_remove_all (self->selected);
+      min = gtk_bitset_get_minimum (self->selected);
+      max = gtk_bitset_get_maximum (self->selected);
+      gtk_bitset_remove_all (self->selected);
     }
 
-  gtk_set_add_range (self->selected, position, n_items);
+  gtk_bitset_add_range (self->selected, position, n_items);
 
   min = MIN (position, min);
   max = MAX (max, position + n_items - 1);
@@ -140,7 +140,7 @@ gtk_multi_selection_unselect_range (GtkSelectionModel *model,
 {
   GtkMultiSelection *self = GTK_MULTI_SELECTION (model);
 
-  gtk_set_remove_range (self->selected, position, n_items);
+  gtk_bitset_remove_range (self->selected, position, n_items);
   gtk_selection_model_selection_changed (model, position, n_items);
 
   return TRUE;
@@ -193,9 +193,9 @@ gtk_multi_selection_add_or_remove (GtkSelectionModel    *model,
 
   if (unselect_rest)
     {
-      min = gtk_set_get_min (self->selected);
-      max = gtk_set_get_max (self->selected);
-      gtk_set_remove_all (self->selected);
+      min = gtk_bitset_get_minimum (self->selected);
+      max = gtk_bitset_get_maximum (self->selected);
+      gtk_bitset_remove_all (self->selected);
     }
 
   for (pos = 0; pos < n; pos = start + n_items)
@@ -215,9 +215,9 @@ gtk_multi_selection_add_or_remove (GtkSelectionModel    *model,
             max = start + n_items - 1;
 
           if (add)
-            gtk_set_add_range (self->selected, start, n_items);
+            gtk_bitset_add_range (self->selected, start, n_items);
           else
-            gtk_set_remove_range (self->selected, start, n_items);
+            gtk_bitset_remove_range (self->selected, start, n_items);
         }
 
       pos = start + n_items;
@@ -246,6 +246,7 @@ gtk_multi_selection_unselect_callback (GtkSelectionModel    *model,
   return gtk_multi_selection_add_or_remove (model, FALSE, FALSE, callback, data);
 }
 
+#if 0
 static void
 gtk_multi_selection_query_range (GtkSelectionModel *model,
                                  guint              position,
@@ -258,6 +259,7 @@ gtk_multi_selection_query_range (GtkSelectionModel *model,
 
   gtk_set_find_range (self->selected, position, upper_bound, start_range, n_items, selected);
 }
+#endif
 
 static void
 gtk_multi_selection_selection_model_init (GtkSelectionModelInterface *iface)
@@ -271,7 +273,9 @@ gtk_multi_selection_selection_model_init (GtkSelectionModelInterface *iface)
   iface->unselect_all = gtk_multi_selection_unselect_all;
   iface->select_callback = gtk_multi_selection_select_callback;
   iface->unselect_callback = gtk_multi_selection_unselect_callback;
+#if 0
   iface->query_range = gtk_multi_selection_query_range;
+#endif
 }
 
 G_DEFINE_TYPE_EXTENDED (GtkMultiSelection, gtk_multi_selection, G_TYPE_OBJECT, 0,
@@ -287,8 +291,8 @@ gtk_multi_selection_items_changed_cb (GListModel        *model,
                                       guint              added,
                                       GtkMultiSelection *self)
 {
-  gtk_set_remove_range (self->selected, position, removed);
-  gtk_set_shift (self->selected, position, (int)added - (int)removed);
+  gtk_bitset_slice (self->selected, position, removed, added);
+
   g_list_model_items_changed (G_LIST_MODEL (self), position, removed, added);
 }
 
@@ -357,7 +361,7 @@ gtk_multi_selection_dispose (GObject *object)
 
   gtk_multi_selection_clear_model (self);
 
-  g_clear_pointer (&self->selected, gtk_set_free);
+  g_clear_pointer (&self->selected, gtk_bitset_unref);
 
   G_OBJECT_CLASS (gtk_multi_selection_parent_class)->dispose (object);
 }
@@ -389,7 +393,7 @@ gtk_multi_selection_class_init (GtkMultiSelectionClass *klass)
 static void
 gtk_multi_selection_init (GtkMultiSelection *self)
 {
-  self->selected = gtk_set_new ();
+  self->selected = gtk_bitset_new_empty ();
 }
 
 /**
