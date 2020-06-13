@@ -408,6 +408,8 @@ activate_print (GSimpleAction *action,
   g_signal_connect (op, "draw-page", G_CALLBACK (print_operation_page), window);
   g_signal_connect (op, "done", G_CALLBACK (print_operation_done), NULL);
 
+  gtk_print_operation_set_embed_page_setup (op, TRUE);
+
   res = gtk_print_operation_run (op, GTK_PRINT_OPERATION_ACTION_PRINT_DIALOG, window, NULL);
 
   if (res == GTK_PRINT_OPERATION_RESULT_IN_PROGRESS)
