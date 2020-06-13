@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.4.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-11 21:00+0000\n"
-"PO-Revision-Date: 2020-06-12 09:34+0300\n"
+"POT-Creation-Date: 2020-06-13 10:49+0000\n"
+"PO-Revision-Date: 2020-06-13 14:44+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
 "Language: uk\n"
@@ -806,6 +806,39 @@ msgstr "Сторінки"
 msgid "The pages of the assistant."
 msgstr "Сторінки помічника."
 
+#: gtk/gtkbookmarklist.c:213 gtk/gtkimage.c:173 gtk/gtkrecentmanager.c:281
+msgid "Filename"
+msgstr "Назва файла"
+
+#: gtk/gtkbookmarklist.c:214
+msgid "Bookmark file to load"
+msgstr "Файл закладок, який слід завантажити"
+
+#: gtk/gtkbookmarklist.c:224 gtk/gtkcellrenderertext.c:269 gtk/gtkentry.c:888
+#: gtk/gtklabel.c:747 gtk/gtktext.c:892
+msgid "Attributes"
+msgstr "Атрибути"
+
+#: gtk/gtkbookmarklist.c:225 gtk/gtkdirectorylist.c:240
+msgid "Attributes to query"
+msgstr "Атрибути для запиту"
+
+#: gtk/gtkbookmarklist.c:236 gtk/gtkdirectorylist.c:275
+msgid "IO priority"
+msgstr "Пріоритетність введення-виведення"
+
+#: gtk/gtkbookmarklist.c:237 gtk/gtkdirectorylist.c:276
+msgid "Priority used when loading"
+msgstr "Пріоритетність під час завантаження"
+
+#: gtk/gtkbookmarklist.c:248 gtk/gtkdirectorylist.c:299
+msgid "loading"
+msgstr "завантаження"
+
+#: gtk/gtkbookmarklist.c:249 gtk/gtkdirectorylist.c:300
+msgid "TRUE if files are being loaded"
+msgstr "TRUE, якщо файли завантажуються"
+
 #: gtk/gtkbox.c:258 gtk/gtkboxlayout.c:730 gtk/gtkcellareabox.c:317
 #: gtk/gtkiconview.c:472 gtk/gtktreeviewcolumn.c:304
 msgid "Spacing"
@@ -1210,7 +1243,7 @@ msgstr "Встановлення тла комірки"
 msgid "Whether the cell background color is set"
 msgstr "Чи встановлено колір тла комірки"
 
-#: gtk/gtkcellrenderercombo.c:136 gtk/gtkcolumnview.c:628 gtk/gtkdropdown.c:471
+#: gtk/gtkcellrenderercombo.c:136 gtk/gtkcolumnview.c:628 gtk/gtkdropdown.c:473
 #: gtk/gtkfilterlistmodel.c:684 gtk/gtkflattenlistmodel.c:438
 #: gtk/gtkgridview.c:1087 gtk/gtklistview.c:843 gtk/gtkmaplistmodel.c:404
 #: gtk/gtkmultiselection.c:381 gtk/gtkpropertyselection.c:453
@@ -1402,11 +1435,6 @@ msgstr "Розмітка"
 msgid "Marked up text to render"
 msgstr "Розмітка тексту до візуалізації"
 
-#: gtk/gtkcellrenderertext.c:269 gtk/gtkentry.c:888 gtk/gtklabel.c:747
-#: gtk/gtktext.c:892
-msgid "Attributes"
-msgstr "Атрибути"
-
 #: gtk/gtkcellrenderertext.c:270
 msgid "A list of style attributes to apply to the text of the renderer"
 msgstr "Список атрибутів стилю, які застосовуються до тексту, що відтворюється"
@@ -1570,9 +1598,8 @@ msgid ""
 "The preferred place to ellipsize the string, if the cell renderer does not "
 "have enough room to display the entire string"
 msgstr ""
-"Бажане місце обривання рядка багатокрапкою, якщо механізму відтворення рядка"
-" не вистачає місця "
-"для показу всього рядка"
+"Бажане місце обривання рядка багатокрапкою, якщо механізму відтворення рядка "
+"не вистачає місця для показу всього рядка"
 
 #: gtk/gtkcellrenderertext.c:463 gtk/gtkfilechooserbutton.c:524
 #: gtk/gtklabel.c:885
@@ -2013,12 +2040,12 @@ msgstr "Перегляд стовпцями"
 msgid "Column view this column is a part of"
 msgstr "Панель зі стовпчиками, частиною якої є цей стовпчик"
 
-#: gtk/gtkcolumnviewcolumn.c:246 gtk/gtkdropdown.c:445 gtk/gtkgridview.c:1047
+#: gtk/gtkcolumnviewcolumn.c:246 gtk/gtkdropdown.c:447 gtk/gtkgridview.c:1047
 #: gtk/gtklistview.c:831
 msgid "Factory"
 msgstr "Фабрика"
 
-#: gtk/gtkcolumnviewcolumn.c:247 gtk/gtkdropdown.c:446 gtk/gtkdropdown.c:460
+#: gtk/gtkcolumnviewcolumn.c:247 gtk/gtkdropdown.c:448 gtk/gtkdropdown.c:462
 #: gtk/gtkgridview.c:1048 gtk/gtklistview.c:832
 msgid "Factory for populating list items"
 msgstr "Фабрика для заповнення пунктів списку"
@@ -2296,10 +2323,6 @@ msgstr "Початкове вказане значення потрібне дл
 msgid "attributes"
 msgstr "атрибути"
 
-#: gtk/gtkdirectorylist.c:240
-msgid "Attributes to query"
-msgstr "Атрибути для запиту"
-
 #: gtk/gtkdirectorylist.c:251
 msgid "error"
 msgstr "помилка"
@@ -2317,14 +2340,6 @@ msgstr "Файл"
 msgid "The file to query"
 msgstr "Файл для запиту"
 
-#: gtk/gtkdirectorylist.c:275
-msgid "IO priority"
-msgstr "Пріоритетність введення-виведення"
-
-#: gtk/gtkdirectorylist.c:276
-msgid "Priority used when loading"
-msgstr "Пріоритетність під час завантаження"
-
 #: gtk/gtkdirectorylist.c:287 gtk/gtkfilterlistmodel.c:672
 #: gtk/gtkflattenlistmodel.c:426 gtk/gtkmaplistmodel.c:392
 #: gtk/gtkpropertylookuplistmodel.c:376 gtk/gtkslicelistmodel.c:275
@@ -2337,14 +2352,6 @@ msgstr "Тип запису"
 #: gtk/gtkpropertylookuplistmodel.c:377 gtk/gtkslicelistmodel.c:276
 msgid "The type of elements of this object"
 msgstr "Тип елементів цього об'єкта"
-
-#: gtk/gtkdirectorylist.c:299
-msgid "loading"
-msgstr "завантаження"
-
-#: gtk/gtkdirectorylist.c:300
-msgid "TRUE if files are being loaded"
-msgstr "TRUE, якщо файли завантажуються"
 
 #: gtk/gtkdragicon.c:373
 msgid "The widget to display as drag icon."
@@ -2406,36 +2413,36 @@ msgstr "Є вказівник"
 msgid "Whether the pointer is in the controllers widget"
 msgstr "Чи перебуває вказівник у віджеті контролера"
 
-#: gtk/gtkdropdown.c:459
+#: gtk/gtkdropdown.c:461
 msgid "List Factory"
 msgstr "Фабрика списку"
 
-#: gtk/gtkdropdown.c:472
+#: gtk/gtkdropdown.c:474
 msgid "Model for the displayed items"
 msgstr "Модель для показаних пунктів"
 
-#: gtk/gtkdropdown.c:484 gtk/gtklistitem.c:233 gtk/gtksingleselection.c:444
+#: gtk/gtkdropdown.c:486 gtk/gtklistitem.c:233 gtk/gtksingleselection.c:444
 msgid "Selected"
 msgstr "Позначений"
 
-#: gtk/gtkdropdown.c:485 gtk/gtksingleselection.c:445
+#: gtk/gtkdropdown.c:487 gtk/gtksingleselection.c:445
 msgid "Position of the selected item"
 msgstr "Розташування позначеного пункту"
 
-#: gtk/gtkdropdown.c:498
+#: gtk/gtkdropdown.c:500
 msgid "Enable search"
 msgstr "Дозволено пошук"
 
-#: gtk/gtkdropdown.c:499
+#: gtk/gtkdropdown.c:501
 msgid "Whether to show a search entry in the popup"
 msgstr "Чи слід показувати запис пошуку у контекстній підказці"
 
-#: gtk/gtkdropdown.c:513 gtk/gtknumericsorter.c:282 gtk/gtkstringfilter.c:252
+#: gtk/gtkdropdown.c:515 gtk/gtknumericsorter.c:282 gtk/gtkstringfilter.c:252
 #: gtk/gtkstringsorter.c:218
 msgid "Expression"
 msgstr "Вираз"
 
-#: gtk/gtkdropdown.c:514
+#: gtk/gtkdropdown.c:516
 msgid "Expression to determine strings to search for"
 msgstr "Вираз, який визначає рядки для пошуку"
 
@@ -3612,10 +3619,6 @@ msgstr "Об'єкт малювання"
 msgid "A GdkPaintable to display"
 msgstr "GdkPaintable для показу"
 
-#: gtk/gtkimage.c:173 gtk/gtkrecentmanager.c:281
-msgid "Filename"
-msgstr "Назва файла"
-
 #: gtk/gtkimage.c:174
 msgid "Filename to load and display"
 msgstr "Назва файла для завантаження й показу"
@@ -3749,8 +3752,8 @@ msgid ""
 "The preferred place to ellipsize the string, if the label does not have "
 "enough room to display the entire string"
 msgstr ""
-"Бажане місце для багатокрапки у рядку, якщо для показу усього рядка не"
-" вистачає місця."
+"Бажане місце для багатокрапки у рядку, якщо для показу усього рядка не "
+"вистачає місця."
 
 #: gtk/gtklabel.c:902
 msgid "Single Line Mode"
@@ -4873,11 +4876,11 @@ msgstr "Значення параметра"
 msgid "Value of the option"
 msgstr "Значення самого параметра"
 
-#: gtk/gtkprinteroptionwidget.c:126
+#: gtk/gtkprinteroptionwidget.c:127
 msgid "Source option"
 msgstr "Параметр джерело"
 
-#: gtk/gtkprinteroptionwidget.c:127
+#: gtk/gtkprinteroptionwidget.c:128
 msgid "The PrinterOption backing this widget"
 msgstr "PrinterOption для цього віджета"
 
@@ -4901,7 +4904,7 @@ msgstr "Параметри"
 msgid "Printer settings"
 msgstr "Параметри принтера"
 
-#: gtk/gtkprintjob.c:171 gtk/gtkprintjob.c:172 gtk/gtkprintunixdialog.c:398
+#: gtk/gtkprintjob.c:171 gtk/gtkprintjob.c:172 gtk/gtkprintunixdialog.c:387
 msgid "Page Setup"
 msgstr "Параметри сторінки"
 
@@ -4925,11 +4928,11 @@ msgstr "Типові параметри сторінки"
 msgid "The GtkPageSetup used by default"
 msgstr "Типово використовується GtkPageSetup"
 
-#: gtk/gtkprintoperation.c:1093 gtk/gtkprintunixdialog.c:416
+#: gtk/gtkprintoperation.c:1093 gtk/gtkprintunixdialog.c:405
 msgid "Print Settings"
 msgstr "Параметри сторінки"
 
-#: gtk/gtkprintoperation.c:1094 gtk/gtkprintunixdialog.c:417
+#: gtk/gtkprintoperation.c:1094 gtk/gtkprintunixdialog.c:406
 msgid "The GtkPrintSettings used for initializing the dialog"
 msgstr "Для ініціалізації діалогу використовується GtkPrintSettings"
 
@@ -4949,11 +4952,11 @@ msgstr "Кількість каналів"
 msgid "The number of pages in the document."
 msgstr "Кількість сторінок у документі."
 
-#: gtk/gtkprintoperation.c:1153 gtk/gtkprintunixdialog.c:406
+#: gtk/gtkprintoperation.c:1153 gtk/gtkprintunixdialog.c:395
 msgid "Current Page"
 msgstr "Поточна сторінка"
 
-#: gtk/gtkprintoperation.c:1154 gtk/gtkprintunixdialog.c:407
+#: gtk/gtkprintoperation.c:1154 gtk/gtkprintunixdialog.c:396
 msgid "The current page in the document"
 msgstr "Поточна сторінка у документі"
 
@@ -5029,7 +5032,7 @@ msgstr "Інша позначка вкладки"
 msgid "Label for the tab containing custom widgets."
 msgstr "Позначка для вкладки, що містить інший віджет."
 
-#: gtk/gtkprintoperation.c:1330 gtk/gtkprintunixdialog.c:441
+#: gtk/gtkprintoperation.c:1330 gtk/gtkprintunixdialog.c:430
 msgid "Support Selection"
 msgstr "Підтримка виділення"
 
@@ -5037,7 +5040,7 @@ msgstr "Підтримка виділення"
 msgid "TRUE if the print operation will support print of selection."
 msgstr "TRUE, якщо операція друку підтримуватиме друк виділеного."
 
-#: gtk/gtkprintoperation.c:1345 gtk/gtkprintunixdialog.c:449
+#: gtk/gtkprintoperation.c:1345 gtk/gtkprintunixdialog.c:438
 msgid "Has Selection"
 msgstr "Є виділення"
 
@@ -5045,11 +5048,11 @@ msgstr "Є виділення"
 msgid "TRUE if a selection exists."
 msgstr "TRUE, якщо існує вибір."
 
-#: gtk/gtkprintoperation.c:1359 gtk/gtkprintunixdialog.c:457
+#: gtk/gtkprintoperation.c:1359 gtk/gtkprintunixdialog.c:446
 msgid "Embed Page Setup"
 msgstr "Вбудувати параметри сторінки"
 
-#: gtk/gtkprintoperation.c:1360 gtk/gtkprintunixdialog.c:458
+#: gtk/gtkprintoperation.c:1360 gtk/gtkprintunixdialog.c:447
 msgid "TRUE if page setup combos are embedded in GtkPrintUnixDialog"
 msgstr "TRUE, якщо розкривні списки вбудовані у GtkPrintUnixDialog"
 
@@ -5061,31 +5064,31 @@ msgstr "Кількість сторінок для друку"
 msgid "The number of pages that will be printed."
 msgstr "Кількість сторінок, яку буде надруковано."
 
-#: gtk/gtkprintunixdialog.c:399
+#: gtk/gtkprintunixdialog.c:388
 msgid "The GtkPageSetup to use"
 msgstr "GtkPageSetup, що використовується"
 
-#: gtk/gtkprintunixdialog.c:424
+#: gtk/gtkprintunixdialog.c:413
 msgid "Selected Printer"
 msgstr "Вибраний принтер"
 
-#: gtk/gtkprintunixdialog.c:425
+#: gtk/gtkprintunixdialog.c:414
 msgid "The GtkPrinter which is selected"
 msgstr "GtkPrinter, що виділений"
 
-#: gtk/gtkprintunixdialog.c:432
+#: gtk/gtkprintunixdialog.c:421
 msgid "Manual Capabilities"
 msgstr "Ручні можливості"
 
-#: gtk/gtkprintunixdialog.c:433
+#: gtk/gtkprintunixdialog.c:422
 msgid "Capabilities the application can handle"
 msgstr "Можливості, які програма може опрацьовувати"
 
-#: gtk/gtkprintunixdialog.c:442
+#: gtk/gtkprintunixdialog.c:431
 msgid "Whether the dialog supports selection"
 msgstr "Чи діалогове вікно підтримує вибір"
 
-#: gtk/gtkprintunixdialog.c:450
+#: gtk/gtkprintunixdialog.c:439
 msgid "Whether the application has a selection"
 msgstr "Чи програма має функцію вибору"
 
@@ -5124,9 +5127,8 @@ msgid ""
 "The preferred place to ellipsize the string, if the progress bar does not "
 "have enough room to display the entire string, if at all."
 msgstr ""
-"Бажане місце для багатокрапки у рядку, якщо у панелі поступу не вистачає"
-" місця для "
-"показу всього рядка."
+"Бажане місце для багатокрапки у рядку, якщо у панелі поступу не вистачає "
+"місця для показу всього рядка."
 
 #: gtk/gtkpropertylookuplistmodel.c:388
 msgid "type"
