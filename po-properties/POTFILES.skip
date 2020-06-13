@@ -48,7 +48,6 @@ demos/gtk-demo/spinner.c
 demos/gtk-demo/stack.ui
 demos/gtk-demo/themes.ui
 demos/gtk-demo/theming.ui
-demos/icon-browser/menus.ui
 demos/icon-browser/window.ui
 demos/node-editor/node-editor-window.ui
 demos/widget-factory/menus.ui
