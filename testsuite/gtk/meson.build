@@ -12,6 +12,7 @@ tests = [
   ['accessible'],
   ['action'],
   ['adjustment'],
+  ['bitset'],
   ['bitmask', ['../../gtk/gtkallocatedbitmask.c'], ['-DGTK_COMPILATION', '-UG_ENABLE_DEBUG']],
   ['builder', [], [], gtk_tests_export_dynamic_ldflag],
   ['builderparser'],
