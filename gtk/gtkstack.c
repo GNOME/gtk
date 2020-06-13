@@ -403,9 +403,9 @@ gtk_stack_page_class_init (GtkStackPageClass *class)
                          GTK_PARAM_READWRITE);
 
   /**
-   * GtkStack:needs-attention:
+   * GtkStackPage:needs-attention:
    *
-   * Sets a flag specifying whether the child requires the user attention.
+   * Sets a flag specifying whether the oage requires the user attention.
    * This is used by the #GtkStackSwitcher to change the appearance of the
    * corresponding button when a page needs attention and it is not the
    * current one.
