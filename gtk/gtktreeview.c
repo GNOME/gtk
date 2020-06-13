@@ -5511,25 +5511,6 @@ gtk_tree_view_focus_controller_focus_out (GtkEventController   *focus,
 /* Incremental Reflow
  */
 
-static gboolean
-node_is_visible (GtkTreeView   *tree_view,
-		 GtkTreeRBTree *tree,
-		 GtkTreeRBNode *node)
-{
-  int y;
-  int height;
-
-  y = gtk_tree_rbtree_node_find_offset (tree, node);
-  height = gtk_tree_view_get_row_height (tree_view, node);
-
-  if (y >= gtk_adjustment_get_value (tree_view->vadjustment) &&
-      y + height <= (gtk_adjustment_get_value (tree_view->vadjustment)
-	             + gtk_adjustment_get_page_size (tree_view->vadjustment)))
-    return TRUE;
-
-  return FALSE;
-}
-
 static gint
 get_separator_height (GtkTreeView *tree_view)
 {
@@ -8063,7 +8044,6 @@ gtk_tree_view_row_inserted (GtkTreeModel *model,
   gint i = 0;
   gint height;
   gboolean free_path = FALSE;
-  gboolean node_visible = TRUE;
 
   g_return_if_fail (path != NULL || iter != NULL);
 
@@ -8097,7 +8077,6 @@ gtk_tree_view_row_inserted (GtkTreeModel *model,
       if (tree == NULL)
 	{
 	  /* We aren't showing the node */
-	  node_visible = FALSE;
           goto done;
 	}
 
@@ -8127,7 +8106,6 @@ gtk_tree_view_row_inserted (GtkTreeModel *model,
 
   if (tree == NULL)
     {
-      node_visible = FALSE;
       goto done;
     }
 
@@ -8152,10 +8130,7 @@ gtk_tree_view_row_inserted (GtkTreeModel *model,
       if (tree)
         gtk_tree_rbtree_node_mark_valid (tree, tmpnode);
 
-      if (node_visible && node_is_visible (tree_view, tree, tmpnode))
-	gtk_widget_queue_resize (GTK_WIDGET (tree_view));
-      else
-        gtk_widget_queue_resize (GTK_WIDGET (tree_view));
+      gtk_widget_queue_resize (GTK_WIDGET (tree_view));
     }
   else
     install_presize_handler (tree_view);
