@@ -114,13 +114,48 @@ gtk_selection_model_default_select_item (GtkSelectionModel *model,
                                          guint              position,
                                          gboolean           unselect_rest)
 {
-  return FALSE;
+  GtkBitset *selected;
+  GtkBitset *mask;
+  gboolean result;
+
+  selected = gtk_bitset_new_empty ();
+  gtk_bitset_add (selected, position);
+  if (unselect_rest)
+    {
+      mask = gtk_bitset_new_empty ();
+      gtk_bitset_add_range (mask, 0, g_list_model_get_n_items (G_LIST_MODEL (model)));
+    }
+  else
+    {
+      mask = gtk_bitset_ref (selected);
+    }
+
+  result = gtk_selection_model_set_selection (model, selected, mask);
+
+  gtk_bitset_unref (selected);
+  gtk_bitset_unref (mask);
+
+  return result;
 }
+
 static gboolean
 gtk_selection_model_default_unselect_item (GtkSelectionModel *model,
                                            guint              position)
 {
-  return FALSE;
+  GtkBitset *selected;
+  GtkBitset *mask;
+  gboolean result;
+
+  selected = gtk_bitset_new_empty ();
+  mask = gtk_bitset_new_empty ();
+  gtk_bitset_add (mask, position);
+
+  result = gtk_selection_model_set_selection (model, selected, mask);
+
+  gtk_bitset_unref (selected);
+  gtk_bitset_unref (mask);
+
+  return result;
 }
 
 static gboolean
@@ -129,7 +164,28 @@ gtk_selection_model_default_select_range (GtkSelectionModel *model,
                                           guint              n_items,
                                           gboolean           unselect_rest)
 {
-  return FALSE;
+  GtkBitset *selected;
+  GtkBitset *mask;
+  gboolean result;
+
+  selected = gtk_bitset_new_empty ();
+  gtk_bitset_add_range (selected, position, n_items);
+  if (unselect_rest)
+    {
+      mask = gtk_bitset_new_empty ();
+      gtk_bitset_add_range (mask, 0, g_list_model_get_n_items (G_LIST_MODEL (model)));
+    }
+  else
+    {
+      mask = gtk_bitset_ref (selected);
+    }
+
+  result = gtk_selection_model_set_selection (model, selected, mask);
+
+  gtk_bitset_unref (selected);
+  gtk_bitset_unref (mask);
+
+  return result;
 }
 
 static gboolean
@@ -137,7 +193,20 @@ gtk_selection_model_default_unselect_range (GtkSelectionModel *model,
                                             guint              position,
                                             guint              n_items)
 {
-  return FALSE;
+  GtkBitset *selected;
+  GtkBitset *mask;
+  gboolean result;
+
+  selected = gtk_bitset_new_empty ();
+  mask = gtk_bitset_new_empty ();
+  gtk_bitset_add_range (mask, position, n_items);
+
+  result = gtk_selection_model_set_selection (model, selected, mask);
+
+  gtk_bitset_unref (selected);
+  gtk_bitset_unref (mask);
+
+  return result;
 }
 
 static gboolean
@@ -169,6 +238,14 @@ gtk_selection_model_default_unselect_all (GtkSelectionModel *model)
   return gtk_selection_model_unselect_range (model, 0, g_list_model_get_n_items (G_LIST_MODEL (model)));
 }
 
+static gboolean
+gtk_selection_model_default_set_selection (GtkSelectionModel *model,
+                                           GtkBitset         *selected,
+                                           GtkBitset         *mask)
+{
+  return FALSE;
+}
+
 static void
 gtk_selection_model_default_init (GtkSelectionModelInterface *iface)
 {
@@ -180,6 +257,7 @@ gtk_selection_model_default_init (GtkSelectionModelInterface *iface)
   iface->unselect_range = gtk_selection_model_default_unselect_range;
   iface->select_all = gtk_selection_model_default_select_all;
   iface->unselect_all = gtk_selection_model_default_unselect_all;
+  iface->set_selection = gtk_selection_model_default_set_selection;
   iface->select_callback = gtk_selection_model_default_select_callback;
   iface->unselect_callback = gtk_selection_model_default_unselect_callback;
 
@@ -294,6 +372,9 @@ gtk_selection_model_get_selection_in_range (GtkSelectionModel *model,
  * @unselect_rest: whether previously selected items should be unselected
  *
  * Requests to select an item in the model.
+ *
+ * Returns: %TRUE if this action was supported and no fallback should be
+ *     tried. This does not mean the item was selected.
  */
 gboolean
 gtk_selection_model_select_item (GtkSelectionModel *model,
@@ -302,7 +383,7 @@ gtk_selection_model_select_item (GtkSelectionModel *model,
 {
   GtkSelectionModelInterface *iface;
 
-  g_return_val_if_fail (GTK_IS_SELECTION_MODEL (model), 0);
+  g_return_val_if_fail (GTK_IS_SELECTION_MODEL (model), FALSE);
 
   iface = GTK_SELECTION_MODEL_GET_IFACE (model);
   return iface->select_item (model, position, unselect_rest);
@@ -314,6 +395,9 @@ gtk_selection_model_select_item (GtkSelectionModel *model,
  * @position: the position of the item to unselect
  *
  * Requests to unselect an item in the model.
+ *
+ * Returns: %TRUE if this action was supported and no fallback should be
+ *     tried. This does not mean the item was unselected.
  */
 gboolean
 gtk_selection_model_unselect_item (GtkSelectionModel *model,
@@ -321,7 +405,7 @@ gtk_selection_model_unselect_item (GtkSelectionModel *model,
 {
   GtkSelectionModelInterface *iface;
 
-  g_return_val_if_fail (GTK_IS_SELECTION_MODEL (model), 0);
+  g_return_val_if_fail (GTK_IS_SELECTION_MODEL (model), FALSE);
 
   iface = GTK_SELECTION_MODEL_GET_IFACE (model);
   return iface->unselect_item (model, position);
@@ -335,6 +419,9 @@ gtk_selection_model_unselect_item (GtkSelectionModel *model,
  * @unselect_rest: whether previously selected items should be unselected
  *
  * Requests to select a range of items in the model.
+ *
+ * Returns: %TRUE if this action was supported and no fallback should be
+ *     tried. This does not mean the range was selected.
  */
 gboolean
 gtk_selection_model_select_range (GtkSelectionModel *model,
@@ -344,7 +431,7 @@ gtk_selection_model_select_range (GtkSelectionModel *model,
 {
   GtkSelectionModelInterface *iface;
 
-  g_return_val_if_fail (GTK_IS_SELECTION_MODEL (model), 0);
+  g_return_val_if_fail (GTK_IS_SELECTION_MODEL (model), FALSE);
 
   iface = GTK_SELECTION_MODEL_GET_IFACE (model);
   return iface->select_range (model, position, n_items, unselect_rest);
@@ -357,6 +444,9 @@ gtk_selection_model_select_range (GtkSelectionModel *model,
  * @n_items: the number of items to unselect
  *
  * Requests to unselect a range of items in the model.
+ *
+ * Returns: %TRUE if this action was supported and no fallback should be
+ *     tried. This does not mean the range was unselected.
  */
 gboolean
 gtk_selection_model_unselect_range (GtkSelectionModel *model,
@@ -365,7 +455,7 @@ gtk_selection_model_unselect_range (GtkSelectionModel *model,
 {
   GtkSelectionModelInterface *iface;
 
-  g_return_val_if_fail (GTK_IS_SELECTION_MODEL (model), 0);
+  g_return_val_if_fail (GTK_IS_SELECTION_MODEL (model), FALSE);
 
   iface = GTK_SELECTION_MODEL_GET_IFACE (model);
   return iface->unselect_range (model, position, n_items);
@@ -376,13 +466,16 @@ gtk_selection_model_unselect_range (GtkSelectionModel *model,
  * @model: a #GtkSelectionModel
  *
  * Requests to select all items in the model.
+ *
+ * Returns: %TRUE if this action was supported and no fallback should be
+ *     tried. This does not mean that all items are now selected.
  */
 gboolean
 gtk_selection_model_select_all (GtkSelectionModel *model)
 {
   GtkSelectionModelInterface *iface;
 
-  g_return_val_if_fail (GTK_IS_SELECTION_MODEL (model), 0);
+  g_return_val_if_fail (GTK_IS_SELECTION_MODEL (model), FALSE);
 
   iface = GTK_SELECTION_MODEL_GET_IFACE (model);
   return iface->select_all (model);
@@ -393,16 +486,74 @@ gtk_selection_model_select_all (GtkSelectionModel *model)
  * @model: a #GtkSelectionModel
  *
  * Requests to unselect all items in the model.
+ *
+ * Returns: %TRUE if this action was supported and no fallback should be
+ *     tried. This does not mean that all items are now unselected.
  */
 gboolean
 gtk_selection_model_unselect_all (GtkSelectionModel *model)
 {
   GtkSelectionModelInterface *iface;
 
-  g_return_val_if_fail (GTK_IS_SELECTION_MODEL (model), 0);
+  g_return_val_if_fail (GTK_IS_SELECTION_MODEL (model), FALSE);
 
   iface = GTK_SELECTION_MODEL_GET_IFACE (model);
   return iface->unselect_all (model);
+}
+
+/**
+ * gtk_selection_model_set_selection:
+ * @model: a #GtkSelectionModel
+ * @selected: bitmask specifying if items should be selected or
+ *     unselected
+ * @mask: bitmask specifying which items should be updated
+ *
+ * This is the most advanced selection updating method that allows
+ * the most fine-grained control over selection changes.
+ * If you can, you should try the simpler versions, as implementations
+ * are more likely to implement support for those.
+ *
+ * Requests that the selection state of all positions set in @mask be
+ * updated to the respecitve value in the @selected bitmask.  
+ *
+ * In pseudocode, it would look something like this:
+ *
+ * |[<!-- language="C" -->
+ * for (i = 0; i < n_items; i++)
+ *   {
+ *     // don't change values not in the mask
+ *     if (!gtk_bitset_contains (mask, i))
+ *       continue;
+ *
+ *     if (gtk_bitset_contains (selected, i))
+ *       select_item (i);
+ *     else
+ *       unselect_item (i);
+ *   }
+ *
+ * gtk_selection_model_selection_changed (model, first_changed_item, n_changed_items);
+ * ]|
+ *
+ * @mask and @selected must not be modified. They may refer to the same bitset,
+ * which would mean that every item in the set should be selected.
+ *
+ * Returns: %TRUE if this action was supported and no fallback should be
+ *     tried. This does not mean that all items were updated according
+ *     to the inputs.
+ **/
+gboolean
+gtk_selection_model_set_selection (GtkSelectionModel *model,
+                                   GtkBitset         *selected,
+                                   GtkBitset         *mask)
+{
+  GtkSelectionModelInterface *iface;
+
+  g_return_val_if_fail (GTK_IS_SELECTION_MODEL (model), FALSE);
+  g_return_val_if_fail (selected != NULL, FALSE);
+  g_return_val_if_fail (mask != NULL, FALSE);
+
+  iface = GTK_SELECTION_MODEL_GET_IFACE (model);
+  return iface->set_selection (model, selected, mask);
 }
 
 /**

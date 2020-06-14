@@ -107,70 +107,41 @@ gtk_multi_selection_is_selected (GtkSelectionModel *model,
 }
 
 static gboolean
-gtk_multi_selection_select_range (GtkSelectionModel *model,
-                                  guint              position,
-                                  guint              n_items,
-                                  gboolean           exclusive)
+gtk_multi_selection_set_selection (GtkSelectionModel *model,
+                                   GtkBitset         *selected,
+                                   GtkBitset         *mask)
 {
   GtkMultiSelection *self = GTK_MULTI_SELECTION (model);
-  guint min = G_MAXUINT;
-  guint max = 0;
+  GtkBitset *changes;
+  guint min, max, n_items;
 
-  if (exclusive)
+  /* changes = (self->selected XOR selected) AND mask
+   * But doing it this way avoids looking at all values outside the mask
+   */
+  changes = gtk_bitset_copy (selected);
+  gtk_bitset_difference (changes, self->selected);
+  gtk_bitset_intersect (changes, mask);
+
+  min = gtk_bitset_get_minimum (changes);
+  max = gtk_bitset_get_maximum (changes);
+
+  /* sanity check */
+  n_items = g_list_model_get_n_items (self->model);
+  if (max >= n_items)
     {
-      min = gtk_bitset_get_minimum (self->selected);
-      max = gtk_bitset_get_maximum (self->selected);
-      gtk_bitset_remove_all (self->selected);
+      gtk_bitset_remove_range_closed (changes, n_items, max);
+      max = gtk_bitset_get_maximum (changes);
     }
 
-  gtk_bitset_add_range (self->selected, position, n_items);
+  /* actually do the change */
+  gtk_bitset_difference (self->selected, changes);
 
-  min = MIN (position, min);
-  max = MAX (max, position + n_items - 1);
+  gtk_bitset_unref (changes);
 
-  gtk_selection_model_selection_changed (model, min, max - min + 1);
-
-  return TRUE;
-}
-
-static gboolean
-gtk_multi_selection_unselect_range (GtkSelectionModel *model,
-                                    guint              position,
-                                    guint              n_items)
-{
-  GtkMultiSelection *self = GTK_MULTI_SELECTION (model);
-
-  gtk_bitset_remove_range (self->selected, position, n_items);
-  gtk_selection_model_selection_changed (model, position, n_items);
+  if (min <= max)
+    gtk_selection_model_selection_changed (model, min, max - min + 1);
 
   return TRUE;
-}
-
-static gboolean
-gtk_multi_selection_select_item (GtkSelectionModel *model,
-                                 guint              position,
-                                 gboolean           exclusive)
-{
-  return gtk_multi_selection_select_range (model, position, 1, exclusive);
-}
-
-static gboolean
-gtk_multi_selection_unselect_item (GtkSelectionModel *model,
-                                   guint              position)
-{
-  return gtk_multi_selection_unselect_range (model, position, 1);
-}
-
-static gboolean
-gtk_multi_selection_select_all (GtkSelectionModel *model)
-{
-  return gtk_multi_selection_select_range (model, 0, g_list_model_get_n_items (G_LIST_MODEL (model)), FALSE);
-}
-
-static gboolean
-gtk_multi_selection_unselect_all (GtkSelectionModel *model)
-{
-  return gtk_multi_selection_unselect_range (model, 0, g_list_model_get_n_items (G_LIST_MODEL (model)));
 }
 
 static gboolean
@@ -250,12 +221,7 @@ static void
 gtk_multi_selection_selection_model_init (GtkSelectionModelInterface *iface)
 {
   iface->is_selected = gtk_multi_selection_is_selected;
-  iface->select_item = gtk_multi_selection_select_item;
-  iface->unselect_item = gtk_multi_selection_unselect_item;
-  iface->select_range = gtk_multi_selection_select_range;
-  iface->unselect_range = gtk_multi_selection_unselect_range;
-  iface->select_all = gtk_multi_selection_select_all;
-  iface->unselect_all = gtk_multi_selection_unselect_all;
+  iface->set_selection = gtk_multi_selection_set_selection;
   iface->select_callback = gtk_multi_selection_select_callback;
   iface->unselect_callback = gtk_multi_selection_unselect_callback;
 }
