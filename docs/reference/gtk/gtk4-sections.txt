@@ -398,9 +398,6 @@ gtk_selection_model_unselect_range
 gtk_selection_model_select_all
 gtk_selection_model_unselect_all
 gtk_selection_model_set_selection
-GtkSelectionCallback
-gtk_selection_model_select_callback
-gtk_selection_model_unselect_callback
 <SUBSECTION>
 gtk_selection_model_selection_changed
 <SUBSECTION Standard>
