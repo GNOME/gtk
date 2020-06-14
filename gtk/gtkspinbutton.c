@@ -85,11 +85,12 @@
  *
  * The main properties of a GtkSpinButton are through an adjustment.
  * See the #GtkAdjustment section for more details about an adjustment's
- * properties. Note that GtkSpinButton will by default make its entry
- * large enough to accomodate the lower and upper bounds of the adjustment,
- * which can lead to surprising results. Best practice is to set both
- * the #GtkEntry:width-chars and #GtkEntry:max-width-chars poperties
- * to the desired number of characters to display in the entry.
+ * properties.
+ *
+ * Note that GtkSpinButton will by default make its entry large enough to
+ * accomodate the lower and upper bounds of the adjustment. If this is
+ * not desired, the automatic sizing can be turned off by explicitly
+ * setting #GtkSpinButton::width-chars to a value != -1.
  *
  * # CSS nodes
  *
@@ -204,6 +205,8 @@ struct _GtkSpinButton
   gdouble        climb_rate;
   gdouble        timer_step;
 
+  int            width_chars;
+
   GtkOrientation orientation;
 
   guint          digits        : 10;
@@ -298,6 +301,8 @@ static void gtk_spin_button_real_change_value (GtkSpinButton   *spin,
 static gint gtk_spin_button_default_input  (GtkSpinButton      *spin_button,
                                             gdouble            *new_val);
 static void gtk_spin_button_default_output (GtkSpinButton      *spin_button);
+
+static void gtk_spin_button_update_width_chars (GtkSpinButton *spin_button);
 
 
 static guint spinbutton_signals[LAST_SIGNAL] = {0};
@@ -635,6 +640,13 @@ gtk_spin_button_set_property (GObject      *object,
 {
   GtkSpinButton *spin_button = GTK_SPIN_BUTTON (object);
 
+  if (prop_id == PROP_EDITING_CANCELED + 1 + GTK_EDITABLE_PROP_WIDTH_CHARS)
+    {
+      spin_button->width_chars = g_value_get_int (value);
+      gtk_spin_button_update_width_chars (spin_button);
+      return;
+    }
+
   if (gtk_editable_delegate_set_property (object, prop_id, value, pspec))
     return;
 
@@ -697,6 +709,11 @@ gtk_spin_button_get_property (GObject      *object,
 {
   GtkSpinButton *spin_button = GTK_SPIN_BUTTON (object);
 
+  if (prop_id == PROP_EDITING_CANCELED + 1 + GTK_EDITABLE_PROP_WIDTH_CHARS)
+    {
+      g_value_set_int (value, spin_button->width_chars);
+      return;
+    }
   if (gtk_editable_delegate_get_property (object, prop_id, value, pspec))
     return;
 
@@ -918,6 +935,7 @@ gtk_spin_button_init (GtkSpinButton *spin_button)
   spin_button->numeric = FALSE;
   spin_button->wrap = FALSE;
   spin_button->snap_to_ticks = FALSE;
+  spin_button->width_chars = -1;
 
   spin_button->orientation = GTK_ORIENTATION_HORIZONTAL;
 
@@ -1137,6 +1155,39 @@ gtk_spin_button_format_for_value (GtkSpinButton *spin_button,
   gchar *buf = g_strdup_printf ("%0.*f", spin_button->digits, value);
 
   return weed_out_neg_zero (buf, spin_button->digits);
+}
+
+static void
+gtk_spin_button_update_width_chars (GtkSpinButton *spin_button)
+{
+  char *str;
+  double value;
+  int width_chars, c;
+
+  if (spin_button->width_chars == -1)
+    {
+      width_chars = 0;
+
+      value = gtk_adjustment_get_lower (spin_button->adjustment);
+      str = gtk_spin_button_format_for_value (spin_button, value);
+      c = g_utf8_strlen (str, -1);
+      g_free (str);
+
+      width_chars = MAX (width_chars, c);
+
+      value = gtk_adjustment_get_upper (spin_button->adjustment);
+      str = gtk_spin_button_format_for_value (spin_button, value);
+      c = g_utf8_strlen (str, -1);
+      g_free (str);
+
+      width_chars = MAX (width_chars, c);
+
+      width_chars = MIN (width_chars, 10);
+    }
+  else
+    width_chars = spin_button->width_chars;
+
+  gtk_editable_set_width_chars (GTK_EDITABLE (spin_button->entry), width_chars);
 }
 
 static void
@@ -1536,7 +1587,6 @@ gtk_spin_button_default_output (GtkSpinButton *spin_button)
  ***********************************************************
  ***********************************************************/
 
-
 /**
  * gtk_spin_button_configure:
  * @spin_button: a #GtkSpinButton
@@ -1590,6 +1640,8 @@ gtk_spin_button_configure (GtkSpinButton *spin_button,
       spin_button->climb_rate = climb_rate;
       g_object_notify_by_pspec (G_OBJECT (spin_button), spinbutton_props[PROP_CLIMB_RATE]);
     }
+
+  gtk_spin_button_update_width_chars (spin_button);
 
   g_object_thaw_notify (G_OBJECT (spin_button));
 
