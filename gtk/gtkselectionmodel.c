@@ -21,6 +21,7 @@
 
 #include "gtkselectionmodel.h"
 
+#include "gtkbitset.h"
 #include "gtkintl.h"
 #include "gtkmarshalers.h"
 
@@ -79,7 +80,33 @@ static gboolean
 gtk_selection_model_default_is_selected (GtkSelectionModel *model,
                                          guint              position)
 {
-  return FALSE;
+  GtkBitset *bitset;
+  gboolean selected;
+
+  bitset = gtk_selection_model_get_selection_in_range (model, position, 1);
+  selected = gtk_bitset_contains (bitset, position);
+  gtk_bitset_unref (bitset);
+
+  return selected;
+}
+
+static GtkBitset *
+gtk_selection_model_default_get_selection_in_range (GtkSelectionModel *model,
+                                                    guint              position,
+                                                    guint              n_items)
+{
+  GtkBitset *bitset;
+  guint i;
+
+  bitset = gtk_bitset_new_empty ();
+
+  for (i = position; i < position + n_items; i++)
+    {
+      if (gtk_selection_model_is_selected (model, i))
+        gtk_bitset_add (bitset, i);
+    }
+
+  return bitset;
 }
 
 static gboolean
@@ -143,30 +170,10 @@ gtk_selection_model_default_unselect_all (GtkSelectionModel *model)
 }
 
 static void
-gtk_selection_model_default_query_range (GtkSelectionModel *model,
-                                         guint              position,
-                                         guint             *start_range,
-                                         guint             *n_items,
-                                         gboolean          *selected)
-{
-  *start_range = position;
-
-  if (position >= g_list_model_get_n_items (G_LIST_MODEL (model)))
-    {
-      *n_items = 0;
-      *selected = FALSE;
-    }
-  else
-    {
-      *n_items = 1;
-      *selected = gtk_selection_model_is_selected (model, position);
-    }
-}
-
-static void
 gtk_selection_model_default_init (GtkSelectionModelInterface *iface)
 {
   iface->is_selected = gtk_selection_model_default_is_selected;
+  iface->get_selection_in_range = gtk_selection_model_default_get_selection_in_range;
   iface->select_item = gtk_selection_model_default_select_item;
   iface->unselect_item = gtk_selection_model_default_unselect_item;
   iface->select_range = gtk_selection_model_default_select_range;
@@ -175,7 +182,6 @@ gtk_selection_model_default_init (GtkSelectionModelInterface *iface)
   iface->unselect_all = gtk_selection_model_default_unselect_all;
   iface->select_callback = gtk_selection_model_default_select_callback;
   iface->unselect_callback = gtk_selection_model_default_unselect_callback;
-  iface->query_range = gtk_selection_model_default_query_range;
 
   /**
    * GtkSelectionModel::selection-changed
@@ -223,6 +229,62 @@ gtk_selection_model_is_selected (GtkSelectionModel *model,
 
   iface = GTK_SELECTION_MODEL_GET_IFACE (model);
   return iface->is_selected (model, position);
+}
+
+/**
+ * gtk_selection_model_get_selection:
+ * @model: a #GtkSelectionModel
+ *
+ * Gets the set containing all currently selected items in the model.
+ *
+ * This function may be slow, so if you are only interested in single item,
+ * consider using gtk_selection_model_is_selected() or if you are only
+ * interested in a few consider gtk_selection_model_get_selection_in_range().
+ *
+ * Returns: (transfer full): a #GtkBitset containing all the values currently
+ *     selected in @model. If no items are selected, the bitset is empty.
+ *     The bitset must not be modified.
+ **/
+GtkBitset *
+gtk_selection_model_get_selection (GtkSelectionModel *model)
+{
+  g_return_val_if_fail (GTK_IS_SELECTION_MODEL (model), gtk_bitset_new_empty ());
+
+  return gtk_selection_model_get_selection_in_range (model, 0, g_list_model_get_n_items (G_LIST_MODEL (model)));
+}
+
+/**
+ * gtk_selection_model_get_selection_in_range:
+ * @model: a #GtkSelectionModel
+ * @position: start of the queired range
+ * @n_items: number of items in the queried range
+ *
+ * Gets a set containing a set where the values in the range [position,
+ * position + n_items) match the selected state of the items in that range.
+ * All values outside that range are undefined.
+ *
+ * This function is an optimization for gtk_selection_model_get_selection() when
+ * you are only interested in part of the model's selected state. A common use
+ * case is in response to the :selection-changed signal.
+ *
+ * Returns: A #GtkBitset that matches the selection state for the given state
+ *     with all other values being undefined.
+ *     The bitset must not be modified.
+ **/
+GtkBitset *
+gtk_selection_model_get_selection_in_range (GtkSelectionModel *model,
+                                            guint              position,
+                                            guint              n_items)
+{
+  GtkSelectionModelInterface *iface;
+
+  g_return_val_if_fail (GTK_IS_SELECTION_MODEL (model), gtk_bitset_new_empty ());
+
+  if (n_items == 0)
+    return gtk_bitset_new_empty ();
+
+  iface = GTK_SELECTION_MODEL_GET_IFACE (model);
+  return iface->get_selection_in_range (model, position, n_items);
 }
 
 /**
@@ -381,46 +443,6 @@ gtk_selection_model_unselect_callback (GtkSelectionModel    *model,
   g_return_val_if_fail (GTK_IS_SELECTION_MODEL (model), FALSE);
 
   return GTK_SELECTION_MODEL_GET_IFACE (model)->unselect_callback (model, callback, data);
-}
-
-/**
- * gtk_selection_model_query_range:
- * @model: a #GtkSelectionModel
- * @position: the position inside the range
- * @start_range: (out): returns the position of the first element of the range
- * @n_items: (out): returns the size of the range
- * @selected: (out): returns whether items in @range are selected
- *
- * This function allows to query the selection status of multiple elements at once.
- * It is passed a position and returns a range of elements of uniform selection status.
- *
- * If @position is greater than the number of items in @model, @n_items is set to 0.
- * Otherwise the returned range is guaranteed to include the passed-in position, so
- * @n_items will be >= 1.
- *
- * Positions directly adjacent to the returned range may have the same selection
- * status as the returned range.
- *
- * This is an optimization function to make iterating over a model faster when few
- * items are selected. However, it is valid behavior for implementations to use a
- * naive implementation that only ever returns a single element.
- */
-void
-gtk_selection_model_query_range (GtkSelectionModel *model,
-                                 guint              position,
-                                 guint             *start_range,
-                                 guint             *n_items,
-                                 gboolean          *selected)
-{
-  GtkSelectionModelInterface *iface;
-
-  g_return_if_fail (GTK_IS_SELECTION_MODEL (model));
-  g_return_if_fail (start_range != NULL);
-  g_return_if_fail (n_items != NULL);
-  g_return_if_fail (selected != NULL);
-
-  iface = GTK_SELECTION_MODEL_GET_IFACE (model);
-  return iface->query_range (model, position, start_range, n_items, selected);
 }
 
 /**
