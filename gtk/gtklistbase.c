@@ -22,6 +22,7 @@
 #include "gtklistbaseprivate.h"
 
 #include "gtkadjustment.h"
+#include "gtkbitset.h"
 #include "gtkdropcontrollermotion.h"
 #include "gtkgesturedrag.h"
 #include "gtkgizmoprivate.h"
@@ -30,7 +31,6 @@
 #include "gtkmultiselection.h"
 #include "gtkorientable.h"
 #include "gtkscrollable.h"
-#include "gtkset.h"
 #include "gtksingleselection.h"
 #include "gtksnapshot.h"
 #include "gtkstylecontextprivate.h"
@@ -42,7 +42,7 @@ typedef struct _RubberbandData RubberbandData;
 struct _RubberbandData
 {
   GtkWidget *widget;
-  GtkSet *active;
+  GtkBitset *active;
   double x1, y1;
   double x2, y2;
   gboolean modify;
@@ -55,7 +55,7 @@ rubberband_data_free (gpointer data)
   RubberbandData *rdata = data;
 
   g_clear_pointer (&rdata->widget, gtk_widget_unparent);
-  g_clear_pointer (&rdata->active, gtk_set_free);
+  g_clear_pointer (&rdata->active, gtk_bitset_unref);
   g_free (rdata);
 }
 
@@ -1399,19 +1399,7 @@ gtk_list_base_start_rubberband (GtkListBase *self,
   priv->rubberband->widget = gtk_gizmo_new ("rubberband",
                                             NULL, NULL, NULL, NULL, NULL, NULL);
   gtk_widget_set_parent (priv->rubberband->widget, GTK_WIDGET (self));
-  priv->rubberband->active = gtk_set_new ();
-}
-
-static void
-range_cb (guint     position,
-          guint    *start,
-          guint    *n_items,
-          gboolean *selected,
-          gpointer  data)
-{
-  GtkSet *set = data;
-
-  gtk_set_find_range (set, position, gtk_set_get_max (set) + 1, start, n_items, selected);
+  priv->rubberband->active = gtk_bitset_new_empty ();
 }
 
 static void
@@ -1433,16 +1421,29 @@ gtk_list_base_stop_rubberband (GtkListBase *self)
     }
 
   model = gtk_list_item_manager_get_model (priv->item_manager);
+  if (model != NULL)
+    {
+      GtkBitset *selected, *mask;
 
-  if (priv->rubberband->modify)
-    {
-      gtk_selection_model_unselect_callback (model, range_cb, priv->rubberband->active);
-    }
-  else
-    {
-      gtk_selection_model_select_callback (model,
-                                           !priv->rubberband->extend,
-                                           range_cb, priv->rubberband->active);
+      if (priv->rubberband->extend)
+        {
+          mask = gtk_bitset_ref (priv->rubberband->active);
+        }
+      else
+        {
+          mask = gtk_bitset_new_empty ();
+          gtk_bitset_add_range (mask, 0, g_list_model_get_n_items (G_LIST_MODEL (model)));
+        }
+
+      if (priv->rubberband->modify)
+        selected = gtk_bitset_new_empty ();
+      else
+        selected = gtk_bitset_ref (priv->rubberband->active);
+
+      gtk_selection_model_set_selection (model, selected, mask);
+
+      gtk_bitset_unref (selected);
+      gtk_bitset_unref (mask);
     }
 
   g_clear_pointer (&priv->rubberband, rubberband_data_free);
@@ -1497,12 +1498,12 @@ gtk_list_base_update_rubberband_selection (GtkListBase *self)
 
       if (gdk_rectangle_intersect (&rect, &alloc, &alloc))
         {
-          gtk_set_add_item (priv->rubberband->active, pos);
+          gtk_bitset_add (priv->rubberband->active, pos);
           gtk_widget_set_state_flags (item->widget, GTK_STATE_FLAG_ACTIVE, FALSE);
         }
       else
         {
-          gtk_set_remove_item (priv->rubberband->active, pos);
+          gtk_bitset_remove (priv->rubberband->active, pos);
           gtk_widget_unset_state_flags (item->widget, GTK_STATE_FLAG_ACTIVE);
         }
     }
