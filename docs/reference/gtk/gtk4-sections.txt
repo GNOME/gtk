@@ -344,6 +344,8 @@ gtk_list_box_row_get_type
 <TITLE>GtkSelectionModel</TITLE>
 GtkSelectionModel
 gtk_selection_model_is_selected
+gtk_selection_model_get_selection
+gtk_selection_model_get_selection_in_range
 gtk_selection_model_select_item
 gtk_selection_model_unselect_item
 gtk_selection_model_select_range
@@ -353,7 +355,6 @@ gtk_selection_model_unselect_all
 GtkSelectionCallback
 gtk_selection_model_select_callback
 gtk_selection_model_unselect_callback
-gtk_selection_model_query_range
 <SUBSECTION>
 gtk_selection_model_selection_changed
 <SUBSECTION Standard>

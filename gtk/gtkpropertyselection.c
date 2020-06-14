@@ -21,6 +21,7 @@
 
 #include "gtkpropertyselection.h"
 
+#include "gtkbitset.h"
 #include "gtkintl.h"
 #include "gtkselectionmodel.h"
 
@@ -276,42 +277,6 @@ gtk_property_selection_unselect_callback (GtkSelectionModel    *model,
 }
 
 static void
-gtk_property_selection_query_range (GtkSelectionModel *model,
-                                    guint              position,
-                                    guint             *start_range,
-                                    guint             *n_items,
-                                    gboolean          *selected)
-{
-  GtkPropertySelection *self = GTK_PROPERTY_SELECTION (model);
-  guint n;
-  gboolean sel;
-  guint start, end;
-
-  n = g_list_model_get_n_items (G_LIST_MODEL (self));
-  sel = is_selected (self, position);
-
-  start = position;
-  while (start > 0)
-    {
-      if (is_selected (self, start - 1) != sel)
-        break;
-      start--;
-    }
-
-  end = position;
-  while (end + 1 < n)
-    {
-      if (is_selected (self, end + 1) != sel)
-        break;
-      end++;
-    }
-
-  *start_range = start;
-  *n_items = end - start + 1;
-  *selected = sel;
-}
-
-static void
 gtk_property_selection_selection_model_init (GtkSelectionModelInterface *iface)
 {
   iface->is_selected = gtk_property_selection_is_selected;
@@ -323,7 +288,6 @@ gtk_property_selection_selection_model_init (GtkSelectionModelInterface *iface)
   iface->unselect_all = gtk_property_selection_unselect_all;
   iface->select_callback = gtk_property_selection_select_callback;
   iface->unselect_callback = gtk_property_selection_unselect_callback;
-  iface->query_range = gtk_property_selection_query_range;
 }
 
 G_DEFINE_TYPE_EXTENDED (GtkPropertySelection, gtk_property_selection, G_TYPE_OBJECT, 0,
