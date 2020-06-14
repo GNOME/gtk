@@ -56,8 +56,6 @@ struct _GtkPrintBackendLpr
 
 static GObjectClass *backend_parent_class;
 
-static void                 gtk_print_backend_lpr_class_init      (GtkPrintBackendLprClass *class);
-static void                 gtk_print_backend_lpr_init            (GtkPrintBackendLpr      *impl);
 static void                 lpr_printer_get_settings_from_options (GtkPrinter              *printer,
 								   GtkPrinterOptionSet     *options,
 								   GtkPrintSettings        *settings);
