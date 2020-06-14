@@ -82,6 +82,9 @@ typedef void     (* GtkSelectionCallback) (guint     position,
  *     unsupported or known to fail for all items, return %FALSE.
  * @unselect_all: Unselect all items in the model. If the operation is
  *     unsupported or known to fail for all items, return %FALSE.
+ * @set_selection: Set selection state of all items in mask to selected.
+ *     See gtk_selection_model_set_selection() for a detailed explanation
+ *     of this function.
  *
  * The list of virtual functions for the #GtkSelectionModel interface.
  * No function must be implemented, but unless #GtkSelectionModel::is_selected()
@@ -91,6 +94,10 @@ typedef void     (* GtkSelectionCallback) (guint     position,
  * selecting or unselecting items. Of course, if the model does not do that,
  * it means that users cannot select or unselect items in a list widget
  * using the model.
+ *
+ * All selection functions fall back to #GtkSelectionModel::set_selection()
+ * so it is sufficient to implement just that function for full selection
+ * support.
  */
 struct _GtkSelectionModelInterface
 {
@@ -118,6 +125,9 @@ struct _GtkSelectionModelInterface
                                                                  guint                   n_items);
   gboolean              (* select_all)                          (GtkSelectionModel      *model);
   gboolean              (* unselect_all)                        (GtkSelectionModel      *model);
+  gboolean              (* set_selection)                       (GtkSelectionModel      *model,
+                                                                 GtkBitset              *selected,
+                                                                 GtkBitset              *mask);
   gboolean              (* select_callback)                     (GtkSelectionModel      *model,
                                                                  gboolean                unselect_rest,
                                                                  GtkSelectionCallback    callback,
@@ -158,6 +168,10 @@ GDK_AVAILABLE_IN_ALL
 gboolean                gtk_selection_model_select_all          (GtkSelectionModel      *model);
 GDK_AVAILABLE_IN_ALL
 gboolean                gtk_selection_model_unselect_all        (GtkSelectionModel      *model);
+GDK_AVAILABLE_IN_ALL
+gboolean                gtk_selection_model_set_selection       (GtkSelectionModel      *model,
+                                                                 GtkBitset              *selected,
+                                                                 GtkBitset              *mask);
 
 GDK_AVAILABLE_IN_ALL
 gboolean                gtk_selection_model_select_callback     (GtkSelectionModel      *model,
