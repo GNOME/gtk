@@ -176,7 +176,6 @@ private_headers = [
   'gtkroundedboxprivate.h',
   'gtkscalerprivate.h',
   'gtksearchentryprivate.h',
-  'gtkset.h',
   'gtksettingsprivate.h',
   'gtkshortcutcontrollerprivate.h',
   'gtkshortcutsshortcutprivate.h',
