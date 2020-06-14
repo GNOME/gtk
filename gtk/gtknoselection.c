@@ -21,6 +21,7 @@
 
 #include "gtknoselection.h"
 
+#include "gtkbitset.h"
 #include "gtkintl.h"
 #include "gtkselectionmodel.h"
 
@@ -96,25 +97,19 @@ gtk_no_selection_is_selected (GtkSelectionModel *model,
   return FALSE;
 }
 
-static void
-gtk_no_selection_query_range (GtkSelectionModel *model,
-                              guint              position,
-                              guint             *start_range,
-                              guint             *n_range,
-                              gboolean          *selected)
+static GtkBitset *
+gtk_no_selection_get_selection_in_range (GtkSelectionModel *model,
+                                         guint              pos,
+                                         guint              n_items)
 {
-  GtkNoSelection *self = GTK_NO_SELECTION (model);
-
-  *start_range = 0;
-  *n_range = g_list_model_get_n_items (self->model);
-  *selected = FALSE;
+  return gtk_bitset_new_empty ();
 }
 
 static void
 gtk_no_selection_selection_model_init (GtkSelectionModelInterface *iface)
 {
-  iface->is_selected = gtk_no_selection_is_selected; 
-  iface->query_range = gtk_no_selection_query_range;
+  iface->is_selected = gtk_no_selection_is_selected;
+  iface->get_selection_in_range = gtk_no_selection_get_selection_in_range;
 }
 
 G_DEFINE_TYPE_EXTENDED (GtkNoSelection, gtk_no_selection, G_TYPE_OBJECT, 0,

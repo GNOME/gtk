@@ -246,21 +246,6 @@ gtk_multi_selection_unselect_callback (GtkSelectionModel    *model,
   return gtk_multi_selection_add_or_remove (model, FALSE, FALSE, callback, data);
 }
 
-#if 0
-static void
-gtk_multi_selection_query_range (GtkSelectionModel *model,
-                                 guint              position,
-                                 guint             *start_range,
-                                 guint             *n_items,
-                                 gboolean          *selected)
-{
-  GtkMultiSelection *self = GTK_MULTI_SELECTION (model);
-  guint upper_bound = g_list_model_get_n_items (self->model);
-
-  gtk_set_find_range (self->selected, position, upper_bound, start_range, n_items, selected);
-}
-#endif
-
 static void
 gtk_multi_selection_selection_model_init (GtkSelectionModelInterface *iface)
 {
@@ -273,9 +258,6 @@ gtk_multi_selection_selection_model_init (GtkSelectionModelInterface *iface)
   iface->unselect_all = gtk_multi_selection_unselect_all;
   iface->select_callback = gtk_multi_selection_select_callback;
   iface->unselect_callback = gtk_multi_selection_unselect_callback;
-#if 0
-  iface->query_range = gtk_multi_selection_query_range;
-#endif
 }
 
 G_DEFINE_TYPE_EXTENDED (GtkMultiSelection, gtk_multi_selection, G_TYPE_OBJECT, 0,

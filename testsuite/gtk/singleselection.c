@@ -593,28 +593,30 @@ test_persistence (void)
 }
 
 static void
-check_query_range (GtkSelectionModel *selection)
+check_get_selection (GtkSelectionModel *selection)
 {
-  guint i, j;
-  guint position, n_items;
-  gboolean selected;
+  GtkBitset *set;
+  guint i, n_items;
 
-  /* check that range always contains position, and has uniform selection */
-  for (i = 0; i < g_list_model_get_n_items (G_LIST_MODEL (selection)); i++)
-    {
-      gtk_selection_model_query_range (selection, i, &position, &n_items, &selected);
-      g_assert_cmpint (position, <=, i);
-      g_assert_cmpint (i, <, position + n_items);
-      for (j = position; j < position + n_items; j++)
-        g_assert_true (selected == gtk_selection_model_is_selected (selection, j));
-    }
+  set = gtk_selection_model_get_selection (selection);
   
-  /* check that out-of-range returns the correct invalid values */
-  i = MIN (i, g_random_int ());
-  gtk_selection_model_query_range (selection, i, &position, &n_items, &selected);
-  g_assert_cmpint (position, ==, i);
-  g_assert_cmpint (n_items, ==, 0);
-  g_assert_true (!selected);
+  n_items = g_list_model_get_n_items (G_LIST_MODEL (selection));
+  if (n_items == 0)
+    {
+      g_assert_true (gtk_bitset_is_empty (set));
+    }
+  else
+    {
+      for (i = 0; i < n_items; i++)
+        {
+          g_assert_cmpint (gtk_bitset_contains (set, i), ==, gtk_selection_model_is_selected (selection, i));
+        }
+      
+      /* check that out-of-range has no bits set */
+      g_assert_cmpint (gtk_bitset_get_maximum (set), <, g_list_model_get_n_items (G_LIST_MODEL (selection)));
+    }
+
+  gtk_bitset_unref (set);
 }
 
 static void
@@ -625,16 +627,16 @@ test_query_range (void)
   
   store = new_store (1, 5, 1);
   selection = new_model (store, TRUE, TRUE);
-  check_query_range (selection);
+  check_get_selection (selection);
 
   gtk_selection_model_unselect_item (selection, 0);
-  check_query_range (selection);
+  check_get_selection (selection);
 
   gtk_selection_model_select_item (selection, 2,  TRUE);
-  check_query_range (selection);
+  check_get_selection (selection);
 
   gtk_selection_model_select_item (selection, 4, TRUE);
-  check_query_range (selection);
+  check_get_selection (selection);
 
   ignore_selection_changes (selection);
 
