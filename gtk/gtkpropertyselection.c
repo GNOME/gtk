@@ -138,75 +138,33 @@ gtk_property_selection_is_selected (GtkSelectionModel *model,
 }
 
 static gboolean
-gtk_property_selection_select_range (GtkSelectionModel *model,
-                                     guint              position,
-                                     guint              n_items,
-                                     gboolean           exclusive)
+gtk_property_selection_set_selection (GtkSelectionModel *model,
+                                      GtkBitset         *selected,
+                                      GtkBitset         *mask)
 {
   GtkPropertySelection *self = GTK_PROPERTY_SELECTION (model);
-  guint i;
-  guint n;
+  GtkBitsetIter iter;
+  guint i, n, min, max;
+  gboolean has_value;
 
   n = g_list_model_get_n_items (G_LIST_MODEL (self));
-  if (exclusive)
+  min = G_MAXUINT;
+  max = 0;
+
+  for (has_value = gtk_bitset_iter_init_first (&iter, mask, &i);
+       has_value && i < n;
+       has_value = gtk_bitset_iter_next (&iter, &i))
     {
-      for (i = 0; i < n; i++)
-        set_selected (self, i, FALSE);
+      set_selected (self, i, gtk_bitset_contains (selected, i));
+      /* XXX: Check if something changed? */
+      min = MIN (min, i);
+      max = MAX (max, i);
     }
 
-  for (i = position; i < position + n_items; i++)
-    set_selected (self, i, TRUE);
-
-  /* FIXME: do better here */
-  if (exclusive)
-    gtk_selection_model_selection_changed (model, 0, n);
-  else
-    gtk_selection_model_selection_changed (model, position, n_items);
+  if (min <= max)
+    gtk_selection_model_selection_changed (model, min, max - min + 1);
 
   return TRUE;
-}
-
-static gboolean
-gtk_property_selection_unselect_range (GtkSelectionModel *model,
-                                       guint              position,
-                                       guint              n_items)
-{
-  GtkPropertySelection *self = GTK_PROPERTY_SELECTION (model);
-  guint i;
-
-  for (i = position; i < position + n_items; i++)
-    set_selected (self, i, FALSE);
-
-  gtk_selection_model_selection_changed (model, position, n_items);
-
-  return TRUE;
-}
-
-static gboolean
-gtk_property_selection_select_item (GtkSelectionModel *model,
-                                    guint              position,
-                                    gboolean           exclusive)
-{
-  return gtk_property_selection_select_range (model, position, 1, exclusive);
-}
-
-static gboolean
-gtk_property_selection_unselect_item (GtkSelectionModel *model,
-                                      guint              position)
-{
-  return gtk_property_selection_unselect_range (model, position, 1);
-}
-
-static gboolean
-gtk_property_selection_select_all (GtkSelectionModel *model)
-{
-  return gtk_property_selection_select_range (model, 0, g_list_model_get_n_items (G_LIST_MODEL (model)), FALSE);
-}
-
-static gboolean
-gtk_property_selection_unselect_all (GtkSelectionModel *model)
-{
-  return gtk_property_selection_unselect_range (model, 0, g_list_model_get_n_items (G_LIST_MODEL (model)));
 }
 
 static gboolean
@@ -280,12 +238,7 @@ static void
 gtk_property_selection_selection_model_init (GtkSelectionModelInterface *iface)
 {
   iface->is_selected = gtk_property_selection_is_selected;
-  iface->select_item = gtk_property_selection_select_item;
-  iface->unselect_item = gtk_property_selection_unselect_item;
-  iface->select_range = gtk_property_selection_select_range;
-  iface->unselect_range = gtk_property_selection_unselect_range;
-  iface->select_all = gtk_property_selection_select_all;
-  iface->unselect_all = gtk_property_selection_unselect_all;
+  iface->set_selection = gtk_property_selection_set_selection;
   iface->select_callback = gtk_property_selection_select_callback;
   iface->unselect_callback = gtk_property_selection_unselect_callback;
 }

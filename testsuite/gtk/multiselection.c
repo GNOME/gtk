@@ -396,7 +396,7 @@ test_select_range (void)
   ret = gtk_selection_model_select_range (selection, 3, 2, FALSE);
   g_assert_true (ret);
   assert_selection (selection, "3 4 5");
-  assert_selection_changes (selection, "3:2");
+  assert_selection_changes (selection, "4:1");
 
   ret = gtk_selection_model_select_range (selection, 0, 1, TRUE);
   g_assert_true (ret);
@@ -438,56 +438,13 @@ test_readd (void)
   g_object_unref (selection);
 }
 
-typedef struct {
-  guint start;
-  guint n;
-  gboolean in;
-} SelectionData;
-
 static void
-select_some (guint position,
-             guint *start,
-             guint *n,
-             gboolean *selected,
-             gpointer data)
-{
-  SelectionData *sdata = data;
-  guint i;
-
-  for (i = 0; sdata[i].n != 0; i++)
-    {
-      if (sdata[i].start <= position &&
-          position < sdata[i].start + sdata[i].n)
-        break;
-    }
-
-  *start = sdata[i].start;
-  *n = sdata[i].n;
-  *selected = sdata[i].in;
-}
-
-static void
-test_callback (void)
+test_set_selection (void)
 {
   GtkSelectionModel *selection;
   gboolean ret;
   GListStore *store;
-  SelectionData data[] = {
-    { 0, 2, FALSE },
-    { 2, 3, TRUE },
-    { 5, 2, FALSE },
-    { 6, 3, TRUE },
-    { 9, 1, FALSE },
-    { 0, 0, FALSE }
-  };
-
-  SelectionData more_data[] = {
-    { 0, 3, FALSE },
-    { 3, 1, TRUE },
-    { 4, 3, FALSE },
-    { 7, 1, TRUE },
-    { 0, 0, FALSE }
-  };
+  GtkBitset *selected, *mask;
 
   store = new_store (1, 10, 1);
 
@@ -496,13 +453,26 @@ test_callback (void)
   assert_selection (selection, "");
   assert_selection_changes (selection, "");
 
-  ret = gtk_selection_model_select_callback (selection, FALSE, select_some, data);
+  selected = gtk_bitset_new_empty ();
+  gtk_bitset_add_range (selected, 2, 3);
+  gtk_bitset_add_range (selected, 6, 3);
+  mask = gtk_bitset_new_empty ();
+  gtk_bitset_add_range (mask, 0, 100); /* too big on purpose */
+  ret = gtk_selection_model_set_selection (selection, selected, mask);
   g_assert_true (ret);
+  gtk_bitset_unref (selected);
+  gtk_bitset_unref (mask);
   assert_selection (selection, "3 4 5 7 8 9");
   assert_selection_changes (selection, "2:7");
 
-  ret = gtk_selection_model_unselect_callback (selection, select_some, more_data);
+  selected = gtk_bitset_new_empty ();
+  mask = gtk_bitset_new_empty ();
+  gtk_bitset_add (mask, 3);
+  gtk_bitset_add (mask, 7);
+  ret = gtk_selection_model_set_selection (selection, selected, mask);
   g_assert_true (ret);
+  gtk_bitset_unref (selected);
+  gtk_bitset_unref (mask);
   assert_selection (selection, "3 5 7 9");
   assert_selection_changes (selection, "3:5");
 
@@ -528,7 +498,7 @@ main (int argc, char *argv[])
   g_test_add_func ("/multiselection/selection", test_selection);
   g_test_add_func ("/multiselection/select-range", test_select_range);
   g_test_add_func ("/multiselection/readd", test_readd);
-  g_test_add_func ("/multiselection/callback", test_callback);
+  g_test_add_func ("/multiselection/set_selection", test_set_selection);
 
   return g_test_run ();
 }
