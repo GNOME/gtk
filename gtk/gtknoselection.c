@@ -89,32 +89,9 @@ gtk_no_selection_list_model_init (GListModelInterface *iface)
   iface->get_item = gtk_no_selection_get_item;
 }
 
-static gboolean
-gtk_no_selection_is_selected (GtkSelectionModel *model,
-                              guint              position)
-{
-  return FALSE;
-}
-
-static void
-gtk_no_selection_query_range (GtkSelectionModel *model,
-                              guint              position,
-                              guint             *start_range,
-                              guint             *n_range,
-                              gboolean          *selected)
-{
-  GtkNoSelection *self = GTK_NO_SELECTION (model);
-
-  *start_range = 0;
-  *n_range = g_list_model_get_n_items (self->model);
-  *selected = FALSE;
-}
-
 static void
 gtk_no_selection_selection_model_init (GtkSelectionModelInterface *iface)
 {
-  iface->is_selected = gtk_no_selection_is_selected; 
-  iface->query_range = gtk_no_selection_query_range;
 }
 
 G_DEFINE_TYPE_EXTENDED (GtkNoSelection, gtk_no_selection, G_TYPE_OBJECT, 0,
