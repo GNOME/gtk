@@ -144,86 +144,11 @@ gtk_multi_selection_set_selection (GtkSelectionModel *model,
   return TRUE;
 }
 
-static gboolean
-gtk_multi_selection_add_or_remove (GtkSelectionModel    *model,
-                                   gboolean              unselect_rest,
-                                   gboolean              add,
-                                   GtkSelectionCallback  callback,
-                                   gpointer              data)
-{
-  GtkMultiSelection *self = GTK_MULTI_SELECTION (model);
-  guint pos, start, n_items;
-  gboolean in;
-  guint min, max;
-  guint n;
-
-  n = g_list_model_get_n_items (G_LIST_MODEL (self));
-
-  min = G_MAXUINT;
-  max = 0;
-
-  if (unselect_rest)
-    {
-      min = gtk_bitset_get_minimum (self->selected);
-      max = gtk_bitset_get_maximum (self->selected);
-      gtk_bitset_remove_all (self->selected);
-    }
-
-  for (pos = 0; pos < n; pos = start + n_items)
-    {
-      callback (pos, &start, &n_items, &in, data);
-
-      if (n_items == 0)
-        break;
-
-      g_assert (start <= pos && pos < start + n_items);
-
-      if (in)
-        {
-          if (start < min)
-            min = start;
-          if (start + n_items - 1 > max)
-            max = start + n_items - 1;
-
-          if (add)
-            gtk_bitset_add_range (self->selected, start, n_items);
-          else
-            gtk_bitset_remove_range (self->selected, start, n_items);
-        }
-
-      pos = start + n_items;
-    }
-
-  if (min <= max)
-    gtk_selection_model_selection_changed (model, min, max - min + 1);
-
-  return TRUE;
-}
-
-static gboolean
-gtk_multi_selection_select_callback (GtkSelectionModel    *model,
-                                     gboolean              unselect_rest,
-                                     GtkSelectionCallback  callback,
-                                     gpointer              data)
-{
-  return gtk_multi_selection_add_or_remove (model, unselect_rest, TRUE, callback, data);
-}
-
-static gboolean
-gtk_multi_selection_unselect_callback (GtkSelectionModel    *model,
-                                       GtkSelectionCallback  callback,
-                                       gpointer              data)
-{
-  return gtk_multi_selection_add_or_remove (model, FALSE, FALSE, callback, data);
-}
-
 static void
 gtk_multi_selection_selection_model_init (GtkSelectionModelInterface *iface)
 {
   iface->is_selected = gtk_multi_selection_is_selected;
   iface->set_selection = gtk_multi_selection_set_selection;
-  iface->select_callback = gtk_multi_selection_select_callback;
-  iface->unselect_callback = gtk_multi_selection_unselect_callback;
 }
 
 G_DEFINE_TYPE_EXTENDED (GtkMultiSelection, gtk_multi_selection, G_TYPE_OBJECT, 0,
