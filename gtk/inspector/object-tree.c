@@ -732,14 +732,14 @@ static void
 widget_mapped (GtkWidget *widget,
                GtkWidget *label)
 {
-  gtk_widget_remove_css_class (widget, "dim-label");
+  gtk_widget_remove_css_class (label, "dim-label");
 }
 
 static void
 widget_unmapped (GtkWidget *widget,
                  GtkWidget *label)
 {
-  gtk_widget_add_css_class (widget, "dim-label");
+  gtk_widget_add_css_class (label, "dim-label");
 }
 
 static gboolean
