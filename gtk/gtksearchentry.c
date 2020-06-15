@@ -40,6 +40,7 @@
 #include "gtkmarshalers.h"
 #include "gtkstylecontext.h"
 #include "gtkeventcontrollerkey.h"
+#include "gtkwidgetprivate.h"
 #include "a11y/gtksearchentryaccessible.h"
 
 
@@ -249,6 +250,7 @@ gtk_search_entry_class_init (GtkSearchEntryClass *klass)
   object_class->set_property = gtk_search_entry_set_property;
 
   widget_class->grab_focus = gtk_search_entry_grab_focus;
+  widget_class->focus = gtk_widget_focus_child;
   widget_class->mnemonic_activate = gtk_search_entry_mnemonic_activate;
 
   klass->stop_search = gtk_search_entry_stop_search;
