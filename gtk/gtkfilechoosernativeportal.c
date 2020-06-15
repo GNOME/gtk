@@ -104,6 +104,7 @@ response_cb (GDBusConnection  *connection,
   int i;
   GVariant *response_data;
   GVariant *choices = NULL;
+  GVariant *current_filter = NULL;
 
   g_variant_get (parameters, "(u@a{sv})", &portal_response, &response_data);
   g_variant_lookup (response_data, "uris", "^a&s", &uris);
@@ -119,6 +120,35 @@ response_cb (GDBusConnection  *connection,
           gtk_file_chooser_set_choice (GTK_FILE_CHOOSER (self), id, selected);
         }
       g_variant_unref (choices);
+    }
+
+  current_filter = g_variant_lookup_value (response_data, "current_filter", G_VARIANT_TYPE ("(sa(us))"));
+  if (current_filter)
+    {
+      GtkFileFilter *filter = gtk_file_filter_new_from_gvariant (current_filter);
+      const gchar *current_filter_name = gtk_file_filter_get_name (filter);
+
+      /* Try to find  the given filter in the list of filters.
+       * Since filters are compared by pointer value, using the passed
+       * filter would otherwise not match in a comparison, even if
+       * a filter in the list of filters has been selected.
+       * We'll use the heuristic that if two filters have the same name,
+       * they must be the same.
+       * If there is no match, just set the filter as it was retrieved.
+       */
+      GtkFileFilter *filter_to_select = filter;
+      GSList *filters = gtk_file_chooser_list_filters (GTK_FILE_CHOOSER (self));
+      for (GSList *l = filters; l; l = l->next)
+        {
+          GtkFileFilter *f = l->data;
+          if (g_strcmp0 (gtk_file_filter_get_name (f), current_filter_name) == 0)
+            {
+              filter_to_select = f;
+              break;
+            }
+        }
+      g_slist_free (filters);
+      gtk_file_chooser_set_filter (GTK_FILE_CHOOSER (self), filter_to_select);
     }
 
   g_slist_free_full (self->custom_files, g_object_unref);
