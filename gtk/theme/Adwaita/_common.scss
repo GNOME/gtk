@@ -434,6 +434,13 @@ treeview entry {
   }
 }
 
+/*******************
+ * Editable Labels *
+ *******************/
+editablelabel > stack > text {
+  @include entry(normal);
+}
+
 /***********
  * Buttons *
  ***********/
