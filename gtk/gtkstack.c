@@ -2477,9 +2477,9 @@ gtk_stack_init (GtkStack *stack)
  * @stack: a #GtkStack
  *
  * Returns a #GListModel that contains the pages of the stack,
- * and can be used to keep and up-to-date view. The model also
+ * and can be used to keep an up-to-date view. The model also
  * implements #GtkSelectionModel and can be used to track and
- * modify the visible page..
+ * modify the visible page.
  *
  * Returns: (transfer full): a #GtkSelectionModel for the stack's children
  */
