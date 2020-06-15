@@ -110,10 +110,10 @@ release-build:
       - subprojects/libepoxy/
       - subprojects/pango/
 
-msys2-mingw32:
+msys2-mingw64:
   extends: .mingw-defaults
   variables:
-    MSYSTEM: "MINGW32"
+    MSYSTEM: "MINGW64"
     CHERE_INVOKING: "yes"
 
 .flatpak-defaults:

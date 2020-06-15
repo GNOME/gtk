@@ -883,7 +883,7 @@ gdk_input_other_event (GdkDisplay *display,
   guint translated_buttons, button_diff, button_mask;
 
   GdkEventType event_type;
-  int event_button;
+  int event_button = 0;
   GdkModifierType event_state;
   double event_x, event_y;
   double *axes;

@@ -287,7 +287,7 @@ _gdk_win32_surface_procedure (HWND   hwnd,
 {
   LRESULT retval;
 
-  GDK_NOTE (EVENTS, g_print ("%s%*s%s %p %#x %#lx",
+  GDK_NOTE (EVENTS, g_print ("%s%*s%s %p %#" G_GINTPTR_MODIFIER "x %#" G_GINTPTR_MODIFIER "x",
 			     (debug_indent > 0 ? "\n" : ""),
 			     debug_indent, "",
 			     _gdk_win32_message_to_string (message), hwnd,
@@ -1876,7 +1876,7 @@ handle_wm_sysmenu (GdkSurface *window, MSG *msg, gint *ret_valp)
    * FALSE later) or set *ret_valp to 0 and return TRUE.
    */
   tmp_style = style | additional_styles;
-  GDK_NOTE (EVENTS, g_print (" Handling WM_SYSMENU: style 0x%lx -> 0x%lx\n", style, tmp_style));
+  GDK_NOTE (EVENTS, g_print (" Handling WM_SYSMENU: style 0x%" G_GINTPTR_MODIFIER "x -> 0x%" G_GINTPTR_MODIFIER "x\n", style, tmp_style));
   impl->have_temp_styles = TRUE;
   impl->temp_styles = additional_styles;
   SetWindowLongPtr (msg->hwnd, GWL_STYLE, tmp_style);
@@ -1886,7 +1886,7 @@ handle_wm_sysmenu (GdkSurface *window, MSG *msg, gint *ret_valp)
   tmp_style = GetWindowLongPtr (msg->hwnd, GWL_STYLE);
   style = tmp_style & ~additional_styles;
 
-  GDK_NOTE (EVENTS, g_print (" Handling WM_SYSMENU: style 0x%lx <- 0x%lx\n", style, tmp_style));
+  GDK_NOTE (EVENTS, g_print (" Handling WM_SYSMENU: style 0x%" G_GINTPTR_MODIFIER "x <- 0x%" G_GINTPTR_MODIFIER "x\n", style, tmp_style));
   SetWindowLongPtr (msg->hwnd, GWL_STYLE, style);
   impl->have_temp_styles = FALSE;
 
