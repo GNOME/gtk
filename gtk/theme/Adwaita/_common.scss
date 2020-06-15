@@ -1173,6 +1173,10 @@ combobox {
   }
 }
 
+dropdown > popover listview > row {
+  padding: 6px;
+}
+
 // the combo is a composite widget so the way we do button linking doesn't
 // work, special case needed. See
 // https://bugzilla.gnome.org/show_bug.cgi?id=733979
