@@ -973,6 +973,7 @@ gtk_button_set_icon_name (GtkButton  *button,
     {
       GtkWidget *child = gtk_image_new_from_icon_name (icon_name);
       gtk_button_set_child (GTK_BUTTON (button), child);
+      gtk_widget_set_valign (child, GTK_ALIGN_CENTER);
       gtk_widget_remove_css_class (GTK_WIDGET (button), "text-button");
       gtk_widget_add_css_class (GTK_WIDGET (button), "image-button");
     }
