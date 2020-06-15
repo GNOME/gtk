@@ -378,6 +378,7 @@ gtk_password_entry_class_init (GtkPasswordEntryClass *klass)
   widget_class->size_allocate = gtk_password_entry_size_allocate;
   widget_class->mnemonic_activate = gtk_password_entry_mnemonic_activate;
   widget_class->grab_focus = gtk_widget_grab_focus_child;
+  widget_class->focus = gtk_widget_focus_child;
 
   props[PROP_PLACEHOLDER_TEXT] =
       g_param_spec_string ("placeholder-text",

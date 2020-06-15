@@ -83,13 +83,13 @@
  *
  * To specify a person with an email address, use a string like
  * "Edgar Allan Poe <edgar\@poe.com>". To specify a website with a title,
- * use a string like "GTK+ team http://www.gtk.org".
+ * use a string like "GTK team http://www.gtk.org".
  *
  * To make constructing a GtkAboutDialog as convenient as possible, you can
  * use the function gtk_show_about_dialog() which constructs and shows a dialog
  * and keeps it around so that it can be shown again.
  *
- * Note that GTK+ sets a default title of `_("About %s")` on the dialog
+ * Note that GTK sets a default title of `_("About %s")` on the dialog
  * window (where \%s is replaced by the name of the application, but in
  * order to ensure proper translation of the title, applications should
  * set the title property explicitly when constructing a GtkAboutDialog,
