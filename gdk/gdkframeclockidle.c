@@ -387,8 +387,10 @@ gdk_frame_clock_flush_idle (void *data)
  *
  * The built-in `%` operator returns the former, positive_modulo() returns the latter.
  */
-int positive_modulo(int i, int n) {
-    return (i % n + n) % n;
+static int
+positive_modulo (int i, int n)
+{
+  return (i % n + n) % n;
 }
 
 static gboolean
