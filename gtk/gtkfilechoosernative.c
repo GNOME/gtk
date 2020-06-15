@@ -498,6 +498,7 @@ gtk_file_chooser_native_get_property (GObject    *object,
       break;
 
     case GTK_FILE_CHOOSER_PROP_FILTER:
+      self->current_filter = gtk_file_chooser_get_filter (GTK_FILE_CHOOSER (self->dialog));
       g_value_set_object (value, self->current_filter);
       break;
 
