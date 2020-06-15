@@ -706,14 +706,14 @@ gtk_css_node_get_timestamp (GtkCssNode *cssnode)
 static void
 gtk_css_node_parent_was_unset (GtkCssNode *node)
 {
-  if (node->invalid)
+  if (node->visible && node->invalid)
     GTK_CSS_NODE_GET_CLASS (node)->queue_validate (node);
 }
 
 static void
 gtk_css_node_parent_will_be_set (GtkCssNode *node)
 {
-  if (node->invalid)
+  if (node->visible && node->invalid)
     GTK_CSS_NODE_GET_CLASS (node)->dequeue_validate (node);
 }
 
