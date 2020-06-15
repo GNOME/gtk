@@ -1153,6 +1153,10 @@ combobox {
     min-width: 16px;
   }
 
+  > popover.menu.background > contents {
+   padding: 0;
+  }
+
   // align menu labels with the button label
   > popover.menu > contents modelbutton {
     padding-left: 9px;
@@ -1171,11 +1175,34 @@ combobox {
 
     button.combo { @extend %button_basic_drop_active; }
   }
+
+  // newstyle
+  popover {
+   margin-top: 6px;
+   padding: 0;
+
+   listview {
+
+      margin: 8px 0;
+
+      &>row {
+         padding: 6px;
+
+         &:selected {
+           outline-color: $alt_focus_border_color;
+           color: $text-color;
+           background-color: $menu_selected_color;
+         }
+      }
+   }
+
+    .search { //drodowns with searchboxes on top
+      border-radius: $popover_radius $popover_radius 0 0;
+      margin-top: -1px; //paint over the menu borders
+    }
+  }
 }
 
-dropdown > popover listview > row {
-  padding: 6px;
-}
 
 // the combo is a composite widget so the way we do button linking doesn't
 // work, special case needed. See
