@@ -4843,7 +4843,8 @@ gtk_widget_show (GtkWidget *widget)
             gtk_widget_queue_compute_expand (parent);
         }
 
-      gtk_css_node_set_visible (widget->priv->cssnode, TRUE);
+      gtk_css_node_set_visible (widget->priv->cssnode,
+                                _gtk_widget_get_child_visible (widget));
 
       g_signal_emit (widget, widget_signals[SHOW], 0);
       g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_VISIBLE]);
@@ -10824,6 +10825,9 @@ gtk_widget_set_child_visible (GtkWidget *widget,
       else
 	gtk_widget_unmap (widget);
     }
+
+  gtk_css_node_set_visible (widget->priv->cssnode,
+                            _gtk_widget_get_visible (widget) && is_visible);
 
   gtk_widget_verify_invariants (widget);
   g_object_unref (widget);
