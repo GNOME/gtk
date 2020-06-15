@@ -1171,11 +1171,23 @@ combobox {
 
     button.combo { @extend %button_basic_drop_active; }
   }
+
+  // newstyle
+  popover {
+   margin-top: 6px;
+
+   & > listview > row {
+    padding: 6px;
+
+    &:selected {
+        outline-color: $alt_focus_border_color;
+        color: $text-color;
+        background-color: $menu_selected_color;
+      }
+    }
+  }
 }
 
-dropdown > popover listview > row {
-  padding: 6px;
-}
 
 // the combo is a composite widget so the way we do button linking doesn't
 // work, special case needed. See
