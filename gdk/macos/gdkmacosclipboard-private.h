@@ -31,13 +31,21 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (GdkMacosClipboard, _gdk_macos_clipboard, GDK, MACOS_CLIPBOARD, GdkClipboard)
 
-GdkClipboard *_gdk_macos_clipboard_new                       (GdkMacosDisplay   *display);
-void          _gdk_macos_clipboard_check_externally_modified (GdkMacosClipboard *self);
+GdkClipboard     *_gdk_macos_clipboard_new                       (GdkMacosDisplay   *display);
+void              _gdk_macos_clipboard_check_externally_modified (GdkMacosClipboard *self);
+NSPasteboardType  _gdk_macos_clipboard_to_ns_type                (const char        *mime_type,
+                                                                  NSPasteboardType  *alternate);
+const char       *_gdk_macos_clipboard_from_ns_type              (NSPasteboardType   ns_type);
 
-@interface GdkMacosClipboardOwner : NSObject
+@interface GdkMacosClipboardDataProvider : NSObject <NSPasteboardItemDataProvider>
 {
-  GdkClipboard *clipboard;
+  GdkContentProvider  *contentProvider;
+  char               **mimeTypes;
+  GCancellable        *cancellable;
 }
+
+-(id)initDataProvider:(GdkContentProvider *)contentProvider withMimeTypes:(const char * const *)mime_types;
+-(NSArray<NSPasteboardType> *)types;
 
 @end
 
