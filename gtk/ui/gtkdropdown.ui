@@ -45,8 +45,12 @@
     <child>
   <object class="GtkPopover" id="popup">
     <signal name="closed" handler="popover_closed"/>
+    <property name="halign">start</property>
     <property name="has-arrow">0</property>
     <property name="autohide">1</property>
+    <style>
+     <class name="menu"/>
+    </style>
     <child>
       <object class="GtkBox">
         <property name="orientation">vertical</property>
