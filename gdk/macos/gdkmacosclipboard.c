@@ -26,34 +26,102 @@
 
 struct _GdkMacosClipboard
 {
-  GdkClipboard            parent_instance;
-  NSPasteboard           *pasteboard;
-  GdkMacosClipboardOwner *owner;
-  NSInteger               last_change_count;
+  GdkClipboard  parent_instance;
+  NSPasteboard *pasteboard;
+  NSInteger     last_change_count;
 };
+
+typedef struct
+{
+  GMemoryOutputStream *stream;
+  NSPasteboardItem    *item;
+  NSPasteboardType     type;
+} WriteRequest;
 
 G_DEFINE_TYPE (GdkMacosClipboard, _gdk_macos_clipboard, GDK_TYPE_CLIPBOARD)
 
 static void
-populate_content_formats (GdkContentFormatsBuilder *builder,
-                          NSPasteboardType          type)
+write_request_free (WriteRequest *wr)
+{
+  g_clear_object (&wr->stream);
+  [wr->item release];
+  g_slice_free (WriteRequest, wr);
+}
+
+const char *
+_gdk_macos_clipboard_from_ns_type (NSPasteboardType type)
 {
   G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
 
   if ([type isEqualToString:NSPasteboardTypeString] ||
       [type isEqualToString:NSStringPboardType])
-    gdk_content_formats_builder_add_mime_type (builder, "text/plain;charset=utf-8");
+    return g_intern_string ("text/plain;charset=utf-8");
   else if ([type isEqualToString:NSPasteboardTypeURL] ||
            [type isEqualToString:NSPasteboardTypeFileURL])
-    gdk_content_formats_builder_add_mime_type (builder, "text/uri-list");
+    return g_intern_string ("text/uri-list");
   else if ([type isEqualToString:NSPasteboardTypeColor])
-    gdk_content_formats_builder_add_mime_type (builder, "application/x-color");
+    return g_intern_string ("application/x-color");
   else if ([type isEqualToString:NSPasteboardTypeTIFF])
-    gdk_content_formats_builder_add_mime_type (builder, "image/tiff");
+    return g_intern_string ("image/tiff");
   else if ([type isEqualToString:NSPasteboardTypePNG])
-    gdk_content_formats_builder_add_mime_type (builder, "image/png");
+    return g_intern_string ("image/png");
 
   G_GNUC_END_IGNORE_DEPRECATIONS;
+
+  return NULL;
+}
+
+NSPasteboardType
+_gdk_macos_clipboard_to_ns_type (const char       *mime_type,
+                                 NSPasteboardType *alternate)
+{
+  if (alternate)
+    *alternate = NULL;
+
+  if (g_strcmp0 (mime_type, "text/plain;charset=utf-8") == 0)
+    {
+      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
+      if (alternate)
+        *alternate = NSStringPboardType;
+      G_GNUC_END_IGNORE_DEPRECATIONS;
+
+      return NSPasteboardTypeString;
+    }
+  else if (g_strcmp0 (mime_type, "text/uri-list") == 0)
+    {
+      if (alternate)
+        *alternate = NSPasteboardTypeURL;
+      return NSPasteboardTypeFileURL;
+    }
+  else if (g_strcmp0 (mime_type, "application/x-color") == 0)
+    {
+      return NSPasteboardTypeColor;
+    }
+  else if (g_strcmp0 (mime_type, "image/tiff") == 0)
+    {
+      return NSPasteboardTypeTIFF;
+    }
+  else if (g_strcmp0 (mime_type, "image/png") == 0)
+    {
+      return NSPasteboardTypePNG;
+    }
+
+  return nil;
+}
+
+static void
+populate_content_formats (GdkContentFormatsBuilder *builder,
+                          NSPasteboardType          type)
+{
+  const char *mime_type;
+
+  g_return_if_fail (builder != NULL);
+  g_return_if_fail (type != NULL);
+
+  mime_type = _gdk_macos_clipboard_from_ns_type (type);
+
+  if (mime_type != NULL)
+    gdk_content_formats_builder_add_mime_type (builder, mime_type);
 }
 
 static GdkContentFormats *
@@ -93,19 +161,6 @@ _gdk_macos_clipboard_load_contents (GdkMacosClipboard *self)
   self->last_change_count = change_count;
 }
 
-static gboolean
-_gdk_macos_clipboard_claim (GdkClipboard       *clipboard,
-                            GdkContentFormats  *formats,
-                            gboolean            local,
-                            GdkContentProvider *provider)
-{
-  g_assert (GDK_IS_CLIPBOARD (clipboard));
-  g_assert (formats != NULL);
-  g_assert (!provider || GDK_IS_CONTENT_PROVIDER (provider));
-
-  return GDK_CLIPBOARD_CLASS (_gdk_macos_clipboard_parent_class)->claim (clipboard, formats, local, provider);
-}
-
 static GInputStream *
 create_stream_from_nsdata (NSData *data)
 {
@@ -127,8 +182,7 @@ _gdk_macos_clipboard_read_async (GdkClipboard        *clipboard,
 
   GdkMacosClipboard *self = (GdkMacosClipboard *)clipboard;
   GdkContentFormats *offer_formats = NULL;
-  NSPasteboard *pasteboard;
-  const gchar *mime_type;
+  const char *mime_type;
   GInputStream *stream = NULL;
   GTask *task = NULL;
 
@@ -139,7 +193,6 @@ _gdk_macos_clipboard_read_async (GdkClipboard        *clipboard,
   g_task_set_source_tag (task, _gdk_macos_clipboard_read_async);
   g_task_set_priority (task, io_priority);
 
-  pasteboard = [NSPasteboard generalPasteboard];
   offer_formats = load_offer_formats (GDK_MACOS_CLIPBOARD (clipboard));
   mime_type = gdk_content_formats_match_mime_type (formats, offer_formats);
 
@@ -155,7 +208,7 @@ _gdk_macos_clipboard_read_async (GdkClipboard        *clipboard,
 
   if (strcmp (mime_type, "text/plain;charset=utf-8") == 0)
     {
-      NSString *nsstr = [pasteboard stringForType:NSPasteboardTypeString];
+      NSString *nsstr = [self->pasteboard stringForType:NSPasteboardTypeString];
 
       if (nsstr != NULL)
         {
@@ -172,9 +225,9 @@ _gdk_macos_clipboard_read_async (GdkClipboard        *clipboard,
       if ([[self->pasteboard types] containsObject:NSPasteboardTypeFileURL])
         {
           GString *str = g_string_new (NULL);
-          NSArray *files = [pasteboard propertyListForType:NSFilenamesPboardType];
+          NSArray *files = [self->pasteboard propertyListForType:NSFilenamesPboardType];
           gsize n_files = [files count];
-          gchar *data;
+          char *data;
           guint len;
 
           for (gsize i = 0; i < n_files; ++i)
@@ -202,7 +255,7 @@ _gdk_macos_clipboard_read_async (GdkClipboard        *clipboard,
       guint16 color[4];
 
       colorspace = [NSColorSpace genericRGBColorSpace];
-      nscolor = [[NSColor colorFromPasteboard:pasteboard]
+      nscolor = [[NSColor colorFromPasteboard:self->pasteboard]
                     colorUsingColorSpace:colorspace];
 
       color[0] = 0xffff * [nscolor redComponent];
@@ -216,12 +269,12 @@ _gdk_macos_clipboard_read_async (GdkClipboard        *clipboard,
     }
   else if (strcmp (mime_type, "image/tiff") == 0)
     {
-      NSData *data = [pasteboard dataForType:NSPasteboardTypeTIFF];
+      NSData *data = [self->pasteboard dataForType:NSPasteboardTypeTIFF];
       stream = create_stream_from_nsdata (data);
     }
   else if (strcmp (mime_type, "image/png") == 0)
     {
-      NSData *data = [pasteboard dataForType:NSPasteboardTypePNG];
+      NSData *data = [self->pasteboard dataForType:NSPasteboardTypePNG];
       stream = create_stream_from_nsdata (data);
     }
 
@@ -249,7 +302,7 @@ cleanup:
 static GInputStream *
 _gdk_macos_clipboard_read_finish (GdkClipboard  *clipboard,
                                   GAsyncResult  *result,
-                                  const gchar  **out_mime_type,
+                                  const char   **out_mime_type,
                                   GError       **error)
 {
   GTask *task = (GTask *)result;
@@ -261,6 +314,62 @@ _gdk_macos_clipboard_read_finish (GdkClipboard  *clipboard,
     *out_mime_type = g_strdup (g_task_get_task_data (task));
 
   return g_task_propagate_pointer (task, error);
+}
+
+static void
+_gdk_macos_clipboard_send_to_pasteboard (GdkMacosClipboard *self)
+{
+  GDK_BEGIN_MACOS_ALLOC_POOL;
+
+  GdkMacosClipboardDataProvider *dataProvider;
+  GdkContentProvider *content;
+  NSPasteboardItem *item;
+  const char * const *mime_types;
+  GdkContentFormats *formats;
+  gsize n_mime_types;
+
+  g_return_if_fail (GDK_IS_MACOS_CLIPBOARD (self));
+
+  if (!(content = gdk_clipboard_get_content (GDK_CLIPBOARD (self))))
+    goto cleanup;
+
+  formats = gdk_content_provider_ref_storable_formats (content);
+  formats = gdk_content_formats_union_serialize_mime_types (formats);
+
+  mime_types = gdk_content_formats_get_mime_types (formats, &n_mime_types);
+  dataProvider = [[GdkMacosClipboardDataProvider alloc] initDataProvider:content
+                                                           withMimeTypes:mime_types];
+  item = [[NSPasteboardItem alloc] init];
+  [item setDataProvider:dataProvider forTypes:[item types]];
+
+  [self->pasteboard clearContents];
+  [self->pasteboard writeObjects:[NSArray arrayWithObject:item]];
+
+  g_clear_pointer (&formats, gdk_content_formats_unref);
+
+cleanup:
+  GDK_END_MACOS_ALLOC_POOL;
+}
+
+static gboolean
+_gdk_macos_clipboard_claim (GdkClipboard       *clipboard,
+                            GdkContentFormats  *formats,
+                            gboolean            local,
+                            GdkContentProvider *provider)
+{
+  GdkMacosClipboard *self = (GdkMacosClipboard *)clipboard;
+  gboolean ret;
+
+  g_assert (GDK_IS_CLIPBOARD (clipboard));
+  g_assert (formats != NULL);
+  g_assert (!provider || GDK_IS_CONTENT_PROVIDER (provider));
+
+  ret = GDK_CLIPBOARD_CLASS (_gdk_macos_clipboard_parent_class)->claim (clipboard, formats, local, provider);
+
+  if (local)
+    _gdk_macos_clipboard_send_to_pasteboard (self);
+
+  return ret;
 }
 
 static void
@@ -332,11 +441,117 @@ _gdk_macos_clipboard_check_externally_modified (GdkMacosClipboard *self)
     _gdk_macos_clipboard_load_contents (self);
 }
 
-@implementation GdkMacosClipboardOwner
+@implementation GdkMacosClipboardDataProvider
 
--(void)pasteboard:(NSPasteboard *)pb provideDataForType:(NSString *)type
+-(id)initDataProvider:(GdkContentProvider *)content_provider withMimeTypes:(const char * const *)mime_types
 {
-  //[pb setData:data forType:type];
+  [super init];
+
+  self->mimeTypes = g_strdupv ((char **)mime_types);
+  self->contentProvider = g_object_ref (content_provider);
+
+  return self;
+}
+
+-(void)dealloc
+{
+  g_cancellable_cancel (self->cancellable);
+
+  g_clear_pointer (&self->mimeTypes, g_strfreev);
+  g_clear_object (&self->contentProvider);
+  g_clear_object (&self->cancellable);
+
+  [super dealloc];
+}
+
+-(NSArray<NSPasteboardType> *)types
+{
+  NSMutableArray *ret = [NSMutableArray alloc];
+  const char *mime_type;
+
+  for (guint i = 0; self->mimeTypes[i]; i++)
+    {
+      NSPasteboardType type;
+      NSPasteboardType alternate = nil;
+
+      if ((type = _gdk_macos_clipboard_to_ns_type (mime_type, &alternate)))
+        {
+          [ret addObject:type];
+          if (alternate)
+            [ret addObject:alternate];
+        }
+    }
+
+  return g_steal_pointer (&ret);
+}
+
+static void
+on_data_ready_cb (GObject      *object,
+                  GAsyncResult *result,
+                  gpointer      user_data)
+{
+  GDK_BEGIN_MACOS_ALLOC_POOL;
+
+  GdkContentProvider *content = (GdkContentProvider *)object;
+  WriteRequest *wr = user_data;
+  GError *error = NULL;
+  NSData *data;
+
+  g_assert (GDK_IS_CONTENT_PROVIDER (content));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (wr != NULL);
+  g_assert (G_IS_MEMORY_OUTPUT_STREAM (wr->stream));
+  g_assert ([wr->item isKindOfClass:[NSPasteboardItem class]]);
+
+  if (gdk_content_provider_write_mime_type_finish (content, result, &error))
+    {
+      gsize size = g_memory_output_stream_get_size (wr->stream);
+      gpointer bytes = g_memory_output_stream_steal_data (wr->stream);
+
+      data = [[NSData alloc] initWithBytesNoCopy:bytes
+                                          length:size
+                                     deallocator:^(void *alloc, NSUInteger length) { g_free (alloc); }];
+    }
+  else
+    {
+      data = [NSData data];
+      g_warning ("Failed to serialize clipboard contents: %s", error->message);
+      g_clear_error (&error);
+    }
+
+  [wr->item setData:data forType:wr->type];
+
+  write_request_free (wr);
+
+  GDK_END_MACOS_ALLOC_POOL;
+}
+
+-(void)   pasteboard:(NSPasteboard *)pasteboard
+                item:(NSPasteboardItem *)item
+  provideDataForType:(NSPasteboardType)type
+{
+  GdkContentProvider *content = self->contentProvider;
+  const char *mime_type = _gdk_macos_clipboard_from_ns_type (type);
+  WriteRequest *wr;
+
+  if (content == NULL || mime_type == NULL)
+    {
+      [item setData:[NSData data] forType:type];
+      return;
+    }
+
+  wr = g_slice_new0 (WriteRequest);
+  wr->item = [item retain];
+  wr->stream = G_MEMORY_OUTPUT_STREAM (g_memory_output_stream_new_resizable ());
+  wr->type = type;
+
+  gdk_content_provider_write_mime_type_async (content,
+                                              mime_type,
+                                              G_OUTPUT_STREAM (wr->stream),
+                                              G_PRIORITY_DEFAULT,
+                                              self->cancellable,
+                                              on_data_ready_cb,
+                                              wr);
 }
 
 @end
