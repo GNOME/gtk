@@ -75,11 +75,6 @@
             <property name="active">False</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
-            <child internal-child="accessible">
-              <object class="AtkObject" id="button6-accessible">
-                <property name="accessible-name">Test switch</property>
-              </object>
-            </child>
           </object>
           <packing>
             <property name="left_attach">5</property>

@@ -43,8 +43,6 @@
 #include "gtktypebuiltins.h"
 #include "gtkwidgetprivate.h"
 
-#include "a11y/gtkscaleaccessible.h"
-
 #include <math.h>
 #include <stdlib.h>
 
@@ -817,7 +815,6 @@ gtk_scale_class_init (GtkScaleClass *class)
   add_slider_binding (binding_set, GDK_KEY_KP_End, 0,
                       GTK_SCROLL_END);
 
-  gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_SCALE_ACCESSIBLE);
   gtk_widget_class_set_css_name (widget_class, I_("scale"));
 }
 

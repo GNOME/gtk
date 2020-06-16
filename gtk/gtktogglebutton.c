@@ -34,9 +34,6 @@
 #include "gtkprivate.h"
 #include "gtkstylecontext.h"
 
-#include "a11y/gtktogglebuttonaccessible.h"
-
-
 /**
  * SECTION:gtktogglebutton
  * @Short_description: Create buttons which retain their state
@@ -181,7 +178,6 @@ gtk_toggle_button_class_init (GtkToggleButtonClass *class)
 		  NULL,
 		  G_TYPE_NONE, 0);
 
-  gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_TOGGLE_BUTTON_ACCESSIBLE);
   gtk_widget_class_set_css_name (widget_class, I_("button"));
 }
 

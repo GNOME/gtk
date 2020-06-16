@@ -66,8 +66,6 @@
 #include "gtknative.h"
 #include "gtkactionmuxerprivate.h"
 
-#include "a11y/gtktextaccessible.h"
-
 #include <cairo-gobject.h>
 #include <string.h>
 
@@ -1480,8 +1478,6 @@ gtk_text_class_init (GtkTextClass *class)
                                        GDK_KEY_z, GDK_CONTROL_MASK | GDK_SHIFT_MASK,
                                        "text.redo", NULL);
 
-
-  gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_TEXT_ACCESSIBLE);
   gtk_widget_class_set_css_name (widget_class, I_("text"));
 }
 

@@ -102,12 +102,6 @@ on_selected_children_changed (GtkListBox *self)
 }
 
 static void
-a11y_selection_changed (AtkObject *obj)
-{
-  g_message ("Accessible selection changed");
-}
-
-static void
 selection_mode_changed (GtkComboBox *combo, gpointer data)
 {
   GtkListBox *list = data;
@@ -152,7 +146,6 @@ main (int argc, char *argv[])
 
   g_signal_connect (list, "row-activated", G_CALLBACK (on_row_activated), NULL);
   g_signal_connect (list, "selected-rows-changed", G_CALLBACK (on_selected_children_changed), NULL);
-  g_signal_connect (gtk_widget_get_accessible (list), "selection-changed", G_CALLBACK (a11y_selection_changed), NULL);
 
   sw = gtk_scrolled_window_new ();
   gtk_widget_set_hexpand (sw, TRUE);
