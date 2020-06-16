@@ -21,8 +21,6 @@
 #include <glib/gprintf.h>
 #include <string.h>
 
-#include <atk/atk.h>
-
 #include "gtkfontchooserwidget.h"
 #include "gtkfontchooserwidgetprivate.h"
 

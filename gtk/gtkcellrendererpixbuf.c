@@ -27,8 +27,6 @@
 #include "gtkstylecontextprivate.h"
 #include "gtktypebuiltins.h"
 
-#include "a11y/gtkimagecellaccessible.h"
-
 #include <cairo-gobject.h>
 #include <stdlib.h>
 
@@ -227,10 +225,6 @@ gtk_cell_renderer_pixbuf_class_init (GtkCellRendererPixbufClass *class)
                                                         P_("The GIcon being displayed"),
                                                         G_TYPE_ICON,
                                                         GTK_PARAM_READWRITE));
-
-
-
-  gtk_cell_renderer_class_set_accessible_type (cell_class, GTK_TYPE_IMAGE_CELL_ACCESSIBLE);
 }
 
 static void

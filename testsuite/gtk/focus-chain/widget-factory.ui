@@ -2908,9 +2908,6 @@ bad things might happen.</property>
             <property name="margin-top">20</property>
             <property name="margin-bottom">20</property>
             <property name="label" translatable="yes">To free the princess, you have to slay the dragon.</property>
-            <accessibility>
-              <role type="static"/>
-            </accessibility>
           </object>
         </child>
       </object>
@@ -3110,9 +3107,6 @@ bad things might happen.</property>
           <object class="GtkLabel" id="title_label">
             <property name="label">Title:</property>
             <property name="xalign">1</property>
-            <accessibility>
-              <relation type="label-for" target="open_popover_entry"/>
-            </accessibility>
           </object>
         </child>
         <child>
@@ -3120,9 +3114,6 @@ bad things might happen.</property>
             <property name="valign">start</property>
             <property name="label">Description:</property>
             <property name="xalign">1</property>
-            <accessibility>
-              <relation type="label-for" target="open_popover_textview"/>
-            </accessibility>
             <layout>
               <property name="top-attach">1</property>
             </layout>
@@ -3138,9 +3129,6 @@ bad things might happen.</property>
             <property name="max-content-width">100</property>
             <child>
               <object class="GtkTextView" id="open_popover_textview">
-                <accessibility>
-                  <relation type="labelled-by" target="description_label"/>
-                </accessibility>
               </object>
             </child>
             <layout>
@@ -3153,9 +3141,6 @@ bad things might happen.</property>
         <child>
           <object class="GtkEntry" id="open_popover_entry">
             <property name="activates-default">1</property>
-            <accessibility>
-              <relation type="labelled-by" target="title_label"/>
-            </accessibility>
             <layout>
               <property name="left-attach">1</property>
               <property name="column-span">2</property>
@@ -3234,9 +3219,6 @@ bad things might happen.</property>
     <child>
       <object class="GtkLabel">
         <property name="label">No updates at this time</property>
-        <accessibility>
-          <role type="static"/>
-        </accessibility>
       </object>
     </child>
   </object>
@@ -3245,9 +3227,6 @@ bad things might happen.</property>
     <child>
       <object class="GtkLabel">
         <property name="label">You&apos;re in too deep!</property>
-        <accessibility>
-          <role type="static"/>
-        </accessibility>
       </object>
     </child>
   </object>

@@ -27,9 +27,6 @@
 #include "gtktreeprivate.h"
 #include "gtktypebuiltins.h"
 
-#include "a11y/gtkrenderercellaccessible.h"
-
-
 /**
  * SECTION:gtkcellrenderer
  * @Short_description: An object for rendering a single cell
@@ -136,11 +133,6 @@ struct _GtkCellRendererPrivate
   guint editing             : 1;
 
   GdkRGBA cell_background;
-};
-
-struct _GtkCellRendererClassPrivate
-{
-  GType accessible_type;
 };
 
 enum {
@@ -425,16 +417,6 @@ gtk_cell_renderer_class_init (GtkCellRendererClass *class)
 
   if (GtkCellRenderer_private_offset != 0)
     g_type_class_adjust_private_offset (class, &GtkCellRenderer_private_offset);
-
-  gtk_cell_renderer_class_set_accessible_type (class, GTK_TYPE_RENDERER_CELL_ACCESSIBLE);
-}
-
-static void
-gtk_cell_renderer_base_class_init (gpointer g_class)
-{
-  GtkCellRendererClass *klass = g_class;
-
-  klass->priv = G_TYPE_CLASS_GET_PRIVATE (g_class, GTK_TYPE_CELL_RENDERER, GtkCellRendererClassPrivate);
 }
 
 GType
@@ -447,7 +429,7 @@ gtk_cell_renderer_get_type (void)
       const GTypeInfo cell_renderer_info =
       {
 	sizeof (GtkCellRendererClass),
-	gtk_cell_renderer_base_class_init,
+        NULL,
         NULL,
 	(GClassInitFunc) gtk_cell_renderer_class_init,
 	NULL,		/* class_finalize */
@@ -462,7 +444,6 @@ gtk_cell_renderer_get_type (void)
 
       GtkCellRenderer_private_offset =
         g_type_add_instance_private (cell_renderer_type, sizeof (GtkCellRendererPrivate));
-      g_type_add_class_private (cell_renderer_type, sizeof (GtkCellRendererClassPrivate));
     }
 
   return cell_renderer_type;
@@ -1776,39 +1757,3 @@ gtk_cell_renderer_get_is_expanded (GtkCellRenderer *cell)
 
   return priv->is_expanded;
 }
-
-/**
- * gtk_cell_renderer_class_set_accessible_type:
- * @renderer_class: class to set the accessible type for
- * @type: The object type that implements the accessible for @widget_class.
- *     The type must be a subtype of #GtkRendererCellAccessible
- *
- * Sets the type to be used for creating accessibles for cells rendered by
- * cell renderers of @renderer_class. Note that multiple accessibles will
- * be created.
- *
- * This function should only be called from class init functions of cell
- * renderers.
- **/
-void
-gtk_cell_renderer_class_set_accessible_type (GtkCellRendererClass *renderer_class,
-                                             GType                 type)
-{
-  GtkCellRendererClassPrivate *priv;
-
-  g_return_if_fail (GTK_IS_CELL_RENDERER_CLASS (renderer_class));
-  g_return_if_fail (g_type_is_a (type, GTK_TYPE_RENDERER_CELL_ACCESSIBLE));
-
-  priv = renderer_class->priv;
-
-  priv->accessible_type = type;
-}
-
-GType
-_gtk_cell_renderer_get_accessible_type (GtkCellRenderer *renderer)
-{
-  g_return_val_if_fail (GTK_IS_CELL_RENDERER (renderer), GTK_TYPE_RENDERER_CELL_ACCESSIBLE);
-
-  return GTK_CELL_RENDERER_GET_CLASS (renderer)->priv->accessible_type;
-}
-

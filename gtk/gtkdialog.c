@@ -486,8 +486,6 @@ gtk_dialog_class_init (GtkDialogClass *class)
 
   window_class->close_request = gtk_dialog_close_request;
 
-  gtk_widget_class_set_accessible_role (widget_class, ATK_ROLE_DIALOG);
-
   class->close = gtk_dialog_close;
 
   /**
