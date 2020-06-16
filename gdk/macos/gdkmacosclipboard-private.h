@@ -39,12 +39,12 @@ const char       *_gdk_macos_clipboard_from_ns_type              (NSPasteboardTy
 
 @interface GdkMacosClipboardDataProvider : NSObject <NSPasteboardItemDataProvider>
 {
-  GdkContentProvider  *contentProvider;
-  char               **mimeTypes;
-  GCancellable        *cancellable;
+  GCancellable  *cancellable;
+  GdkClipboard  *clipboard;
+  char         **mimeTypes;
 }
 
--(id)initDataProvider:(GdkContentProvider *)contentProvider withMimeTypes:(const char * const *)mime_types;
+-(id)initClipboard:(GdkClipboard *)gdkClipboard mimetypes:(const char * const *)mime_types;
 -(NSArray<NSPasteboardType> *)types;
 
 @end
