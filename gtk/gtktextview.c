@@ -56,8 +56,6 @@
 #include "gtknative.h"
 #include "gtkwidgetprivate.h"
 
-#include "a11y/gtktextviewaccessibleprivate.h"
-
 /**
  * SECTION:gtktextview
  * @Short_description: Widget that displays a GtkTextBuffer
@@ -1802,7 +1800,6 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
                                        "move-focus",
                                        "(i)", GTK_DIR_TAB_BACKWARD);
 
-  gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_TEXT_VIEW_ACCESSIBLE);
   gtk_widget_class_set_css_name (widget_class, I_("textview"));
 
   quark_text_selection_data = g_quark_from_static_string ("gtk-text-view-text-selection-data");
@@ -2143,7 +2140,6 @@ gtk_text_view_set_buffer (GtkTextView   *text_view,
       gtk_widget_action_set_enabled (GTK_WIDGET (text_view), "text.redo", can_redo);
     }
 
-  _gtk_text_view_accessible_set_buffer (text_view, old_buffer);
   if (old_buffer)
     g_object_unref (old_buffer);
 

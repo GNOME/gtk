@@ -33,9 +33,6 @@
 #include "gtktypebuiltins.h"
 #include "gtkwidgetprivate.h"
 
-#include "a11y/gtklistboxaccessibleprivate.h"
-#include "a11y/gtklistboxrowaccessible.h"
-
 #include <float.h>
 #include <math.h>
 #include <string.h>
@@ -678,8 +675,6 @@ gtk_list_box_class_init (GtkListBoxClass *klass)
                                        NULL);
 
   gtk_widget_class_set_css_name (widget_class, I_("list"));
-
-  gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_LIST_BOX_ACCESSIBLE);
 }
 
 static void
@@ -902,7 +897,6 @@ gtk_list_box_unselect_all (GtkListBox *box)
 static void
 gtk_list_box_selected_rows_changed (GtkListBox *box)
 {
-  _gtk_list_box_accessible_selection_changed (box);
 }
 
 /**
@@ -1524,7 +1518,6 @@ gtk_list_box_update_cursor (GtkListBox    *box,
         gtk_widget_grab_focus (GTK_WIDGET (row));
     }
   gtk_widget_queue_draw (GTK_WIDGET (row));
-  _gtk_list_box_accessible_update_cursor (box, row);
 }
 
 static GtkListBox *
@@ -3463,7 +3456,6 @@ gtk_list_box_row_class_init (GtkListBoxRowClass *klass)
   g_object_class_override_property (object_class, ROW_PROP_ACTION_TARGET, "action-target");
 
   gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BIN_LAYOUT);
-  gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_LIST_BOX_ROW_ACCESSIBLE);
   gtk_widget_class_set_css_name (widget_class, I_("row"));
 }
 

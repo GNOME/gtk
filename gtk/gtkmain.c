@@ -135,7 +135,6 @@
 #include "gtkroot.h"
 #include "gtknative.h"
 
-#include "a11y/gtkaccessibility.h"
 #include "inspector/window.h"
 
 static GtkWindowGroup *gtk_main_get_window_group (GtkWidget   *widget);
@@ -639,7 +638,6 @@ static void
 default_display_notify_cb (GdkDisplayManager *dm)
 {
   debug_flags[0].display = gdk_display_get_default ();
-  _gtk_accessibility_init ();
 }
 
 static void
