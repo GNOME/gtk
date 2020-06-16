@@ -47,8 +47,6 @@
 #include "gtkspinbutton.h"
 #include "gtkstylecontextprivate.h"
 #include "gtktextview.h"
-#include "gtktreeselection.h"
-#include "gtktreeview.h"
 #include "gtkwidgetprivate.h"
 #include "gtksettings.h"
 #include "gtkdialog.h"
