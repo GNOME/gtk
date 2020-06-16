@@ -55,8 +55,6 @@
 #include "gtkboxlayout.h"
 #include "gtktextprivate.h"
 
-#include "a11y/gtkspinbuttonaccessible.h"
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
@@ -549,7 +547,6 @@ gtk_spin_button_class_init (GtkSpinButtonClass *class)
   add_spin_binding (widget_class, GDK_KEY_Page_Up, GDK_CONTROL_MASK, GTK_SCROLL_END);
   add_spin_binding (widget_class, GDK_KEY_Page_Down, GDK_CONTROL_MASK, GTK_SCROLL_START);
 
-  gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_SPIN_BUTTON_ACCESSIBLE);
   gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BOX_LAYOUT);
   gtk_widget_class_set_css_name (widget_class, I_("spinbutton"));
 }

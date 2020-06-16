@@ -367,8 +367,6 @@ gtk_viewport_class_init (GtkViewportClass *class)
   widget_class->compute_expand = gtk_viewport_compute_expand;
   widget_class->get_request_mode = gtk_viewport_get_request_mode;
 
-  gtk_widget_class_set_accessible_role (widget_class, ATK_ROLE_VIEWPORT);
-
   /* GtkScrollable implementation */
   g_object_class_override_property (gobject_class, PROP_HADJUSTMENT,    "hadjustment");
   g_object_class_override_property (gobject_class, PROP_VADJUSTMENT,    "vadjustment");

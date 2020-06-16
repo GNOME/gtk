@@ -98,9 +98,6 @@
 #include "gtkviewport.h"
 #include "gtkwidgetprivate.h"
 
-#include "a11y/gtkflowboxaccessibleprivate.h"
-#include "a11y/gtkflowboxchildaccessible.h"
- 
 /* Forward declarations and utilities {{{1 */
 
 static void gtk_flow_box_update_cursor       (GtkFlowBox      *box,
@@ -537,7 +534,6 @@ gtk_flow_box_child_class_init (GtkFlowBoxChildClass *class)
   widget_class->activate_signal = child_signals[CHILD_ACTIVATE];
 
   gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BIN_LAYOUT);
-  gtk_widget_class_set_accessible_role (widget_class, ATK_ROLE_LIST_ITEM);
   gtk_widget_class_set_css_name (widget_class, I_("flowboxchild"));
 }
 
@@ -961,7 +957,6 @@ gtk_flow_box_update_cursor (GtkFlowBox      *box,
 {
   BOX_PRIV (box)->cursor_child = child;
   gtk_widget_grab_focus (GTK_WIDGET (child));
-  _gtk_flow_box_accessible_update_cursor (GTK_WIDGET (box), GTK_WIDGET (child));
 }
 
 static void
@@ -3379,7 +3374,6 @@ gtk_flow_box_move_cursor (GtkFlowBox      *box,
 static void
 gtk_flow_box_selected_children_changed (GtkFlowBox *box)
 {
-  _gtk_flow_box_accessible_selection_changed (GTK_WIDGET (box));
 }
 
 /* GObject implementation {{{2 */
@@ -3877,7 +3871,6 @@ gtk_flow_box_class_init (GtkFlowBoxClass *class)
                                        "unselect-all",
                                        NULL);
 
-  gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_FLOW_BOX_ACCESSIBLE);
   gtk_widget_class_set_css_name (widget_class, I_("flowbox"));
 }
 

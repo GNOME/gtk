@@ -23,7 +23,6 @@
 #include "demotaggedentry.h"
 
 #include <gtk/gtk.h>
-#include <gtk/gtk-a11y.h>
 
 struct _DemoTaggedEntry
 {
@@ -119,7 +118,6 @@ demo_tagged_entry_class_init (DemoTaggedEntryClass *klass)
   gtk_editable_install_properties (object_class, 1);
 
   gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BIN_LAYOUT);
-  gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_ENTRY_ACCESSIBLE);
   gtk_widget_class_set_css_name (widget_class, "entry");
 }
 

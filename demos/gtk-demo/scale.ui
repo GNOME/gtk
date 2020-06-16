@@ -33,9 +33,6 @@
           <object class="GtkLabel" id="label_plain">
             <property name="label">Plain</property>
             <property name="xalign">0</property>
-            <accessibility>
-              <relation type="label-for" target="scale_plain"/>
-            </accessibility>
             <layout>
               <property name="left-attach">0</property>
               <property name="top-attach">0</property>
@@ -48,9 +45,6 @@
             <property name="draw-value">0</property>
             <property name="adjustment">adjustment1</property>
             <property name="hexpand">1</property>
-            <accessibility>
-              <relation type="labelled-by" target="label_plain"/>
-            </accessibility>
             <layout>
               <property name="left-attach">1</property>
               <property name="top-attach">0</property>
@@ -61,9 +55,6 @@
           <object class="GtkLabel" id="label_marks">
             <property name="label">Marks</property>
             <property name="xalign">0</property>
-            <accessibility>
-              <relation type="label-for" target="scale_marks"/>
-            </accessibility>
             <layout>
               <property name="left-attach">0</property>
               <property name="top-attach">1</property>
@@ -83,9 +74,6 @@
               <mark value="3" position="bottom"></mark>
               <mark value="4" position="bottom"></mark>
             </marks>
-            <accessibility>
-              <relation type="labelled-by" target="label_marks"/>
-            </accessibility>
             <layout>
               <property name="left-attach">1</property>
               <property name="top-attach">1</property>
@@ -96,9 +84,6 @@
           <object class="GtkLabel" id="label_discrete">
             <property name="label">Discrete</property>
             <property name="xalign">0</property>
-            <accessibility>
-              <relation type="label-for" target="scale_discrete"/>
-            </accessibility>
             <layout>
               <property name="left-attach">0</property>
               <property name="top-attach">2</property>
@@ -112,9 +97,6 @@
             <property name="draw-value">0</property>
             <property name="adjustment">adjustment3</property>
             <property name="hexpand">1</property>
-            <accessibility>
-              <relation type="labelled-by" target="label_discrete"/>
-            </accessibility>
             <marks>
               <mark value="0" position="bottom"></mark>
               <mark value="1" position="bottom"></mark>

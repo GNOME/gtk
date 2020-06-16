@@ -293,8 +293,6 @@ gtk_file_chooser_dialog_class_init (GtkFileChooserDialogClass *class)
   widget_class->unmap = gtk_file_chooser_dialog_unmap;
   widget_class->size_allocate = gtk_file_chooser_dialog_size_allocate;
 
-  gtk_widget_class_set_accessible_role (widget_class, ATK_ROLE_FILE_CHOOSER);
-
   _gtk_file_chooser_install_properties (gobject_class);
 
   /* Bind class to template

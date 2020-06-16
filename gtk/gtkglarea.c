@@ -784,8 +784,6 @@ gtk_gl_area_class_init (GtkGLAreaClass *klass)
   widget_class->size_allocate = gtk_gl_area_size_allocate;
   widget_class->snapshot = gtk_gl_area_snapshot;
 
-  gtk_widget_class_set_accessible_role (widget_class, ATK_ROLE_DRAWING_AREA);
-
   /**
    * GtkGLArea:context:
    *

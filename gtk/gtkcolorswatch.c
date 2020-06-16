@@ -40,8 +40,6 @@
 #include "gtkeventcontrollerkey.h"
 #include "gtknative.h"
 
-#include "a11y/gtkcolorswatchaccessibleprivate.h"
-
 /*
  * GtkColorSwatch has two CSS nodes, the main one named colorswatch
  * and a subnode named overlay. The main node gets the .light or .dark
@@ -507,7 +505,6 @@ gtk_color_swatch_class_init (GtkColorSwatchClass *class)
                                        "menu.popup",
                                        NULL);
 
-  gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_COLOR_SWATCH_ACCESSIBLE);
   gtk_widget_class_set_css_name (widget_class, I_("colorswatch"));
 }
 
