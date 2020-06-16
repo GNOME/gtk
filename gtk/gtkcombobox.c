@@ -39,8 +39,6 @@
 #include "gtktypebuiltins.h"
 #include "gtkwidgetprivate.h"
 
-#include "a11y/gtkcomboboxaccessible.h"
-
 #include <gobject/gvaluecollector.h>
 #include <string.h>
 #include <stdarg.h>
@@ -798,7 +796,6 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
   gtk_widget_class_bind_template_callback (widget_class, gtk_combo_box_menu_show);
   gtk_widget_class_bind_template_callback (widget_class, gtk_combo_box_menu_hide);
 
-  gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_COMBO_BOX_ACCESSIBLE);
   gtk_widget_class_set_css_name (widget_class, I_("combobox"));
 }
 
@@ -2531,29 +2528,6 @@ gtk_combo_box_get_popup_fixed_width (GtkComboBox *combo_box)
   g_return_val_if_fail (GTK_IS_COMBO_BOX (combo_box), FALSE);
 
   return priv->popup_fixed_width;
-}
-
-
-/**
- * gtk_combo_box_get_popup_accessible:
- * @combo_box: a #GtkComboBox
- *
- * Gets the accessible object corresponding to the combo box’s popup.
- *
- * This function is mostly intended for use by accessibility technologies;
- * applications should have little use for it.
- *
- * Returns: (transfer none): the accessible object corresponding
- *     to the combo box’s popup.
- */
-AtkObject*
-gtk_combo_box_get_popup_accessible (GtkComboBox *combo_box)
-{
-  GtkComboBoxPrivate *priv = gtk_combo_box_get_instance_private (combo_box);
-
-  g_return_val_if_fail (GTK_IS_COMBO_BOX (combo_box), NULL);
-
-  return gtk_widget_get_accessible (priv->popup_widget);
 }
 
 /**

@@ -66,11 +66,6 @@
             </child>
             <child>
               <object class="GtkEntry" id="entry">
-                <child internal-child="accessible">
-                  <object class="AtkObject" id="entry-atkobject">
-                    <property name="AtkObject::accessible-name" translatable="yes">Color Name</property>
-                  </object>
-                </child>
                 <signal name="activate" handler="entry_apply" swapped="no"/>
                 <signal name="notify::has-focus" handler="entry_focus_changed" swapped="no"/>
                 <signal name="notify::text" handler="entry_text_changed" swapped="no"/>
@@ -157,11 +152,6 @@
             <property name="width-chars">2</property>
             <property name="max-width-chars">2</property>
             <property name="climb-rate">1</property>
-            <child internal-child="accessible">
-              <object class="AtkObject" id="a_entry-atkobject">
-                <property name="AtkObject::accessible-name" translatable="yes">Alpha</property>
-              </object>
-            </child>
             <layout>
               <property name="left-attach">1</property>
               <property name="top-attach">0</property>
@@ -198,11 +188,6 @@
             <property name="width-chars">2</property>
             <property name="max-width-chars">2</property>
             <property name="climb-rate">1</property>
-            <child internal-child="accessible">
-              <object class="AtkObject" id="h_entry-atkobject">
-                <property name="AtkObject::accessible-name" translatable="yes">Hue</property>
-              </object>
-            </child>
             <layout>
               <property name="left-attach">1</property>
               <property name="top-attach">0</property>
@@ -249,11 +234,6 @@
             <property name="width-chars">2</property>
             <property name="max-width-chars">2</property>
             <property name="climb-rate">1</property>
-            <child internal-child="accessible">
-              <object class="AtkObject" id="s_entry-atkobject">
-                <property name="AtkObject::accessible-name" translatable="yes">Saturation</property>
-              </object>
-            </child>
             <layout>
               <property name="left-attach">1</property>
               <property name="top-attach">0</property>
@@ -265,11 +245,6 @@
             <property name="width-chars">2</property>
             <property name="max-width-chars">2</property>
             <property name="climb-rate">1</property>
-            <child internal-child="accessible">
-              <object class="AtkObject" id="v_entry-atkobject">
-                <property name="AtkObject::accessible-name" translatable="yes">Value</property>
-              </object>
-            </child>
             <layout>
               <property name="left-attach">1</property>
               <property name="top-attach">1</property>

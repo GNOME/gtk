@@ -29,7 +29,6 @@
 #include "gtkprivate.h"
 #include "gtkintl.h"
 
-#include "gtkaccessible.h"
 #include "gtkbox.h"
 #include "gtkimage.h"
 #include "gtklabel.h"
@@ -382,7 +381,6 @@ gtk_tooltip_window_class_init (GtkTooltipWindowClass *klass)
   widget_class->hide = gtk_tooltip_window_hide;
 
   gtk_widget_class_set_css_name (widget_class, I_("tooltip"));
-  gtk_widget_class_set_accessible_role (widget_class, ATK_ROLE_TOOL_TIP);
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/libgtk/ui/gtktooltipwindow.ui");
 
   gtk_widget_class_bind_template_child (widget_class, GtkTooltipWindow, box);

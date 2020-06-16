@@ -66,11 +66,6 @@
           <object class="GtkSwitch" id="button6">
             <property name="can_focus">1</property>
             <property name="receives_default">1</property>
-            <child internal-child="accessible">
-              <object class="AtkObject" id="button6-accessible">
-                <property name="accessible-name">Test switch</property>
-              </object>
-            </child>
             <layout>
               <property name="left_attach">5</property>
               <property name="top_attach">0</property>

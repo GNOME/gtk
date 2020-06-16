@@ -84,9 +84,6 @@
 #include "gtkstylecontext.h"
 #include "gtktypebuiltins.h"
 
-#include "a11y/gtkwindowaccessible.h"
-
-
 typedef struct _GtkAssistantPageClass   GtkAssistantPageClass;
 
 struct _GtkAssistantPage
@@ -205,8 +202,6 @@ static void     on_assistant_last                        (GtkWidget          *wi
 static int        gtk_assistant_add_page                 (GtkAssistant     *assistant,
                                                           GtkAssistantPage *page_info,
                                                           gint              position);
-
-GType             _gtk_assistant_accessible_get_type     (void);
 
 enum
 {
@@ -486,8 +481,6 @@ gtk_assistant_class_init (GtkAssistantClass *class)
 
   widget_class->map = gtk_assistant_map;
   widget_class->unmap = gtk_assistant_unmap;
-
-  gtk_widget_class_set_accessible_type (widget_class, _gtk_assistant_accessible_get_type ());
 
   window_class->close_request = gtk_assistant_close_request;
 
@@ -2090,89 +2083,6 @@ gtk_assistant_commit (GtkAssistant *assistant)
   assistant->committed = TRUE;
 
   update_buttons_state (assistant);
-}
-
-/* accessible implementation */
-
-/* dummy typedefs */
-typedef GtkWindowAccessible      GtkAssistantAccessible;
-typedef GtkWindowAccessibleClass GtkAssistantAccessibleClass;
-
-G_DEFINE_TYPE (GtkAssistantAccessible, _gtk_assistant_accessible, GTK_TYPE_WINDOW_ACCESSIBLE);
-
-static gint
-gtk_assistant_accessible_get_n_children (AtkObject *accessible)
-{
-  GtkWidget *widget;
-  GtkAssistant *assistant;
-
-  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (accessible));
-  if (widget == NULL)
-    return 0;
-
-  assistant = GTK_ASSISTANT (widget);
-  return g_list_length (assistant->pages) + 2;
-}
-
-static AtkObject *
-gtk_assistant_accessible_ref_child (AtkObject *accessible,
-                                    gint       index)
-{
-  GtkAssistant *assistant;
-  GtkWidget *widget, *child;
-  gint n_pages;
-  AtkObject *obj;
-  const gchar *title;
-
-  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (accessible));
-  if (widget == NULL)
-    return NULL;
-
-  assistant = GTK_ASSISTANT (widget);
-  n_pages = g_list_length (assistant->pages);
-
-  if (index < 0)
-    return NULL;
-  else if (index < n_pages)
-    {
-      GtkAssistantPage *page = g_list_nth_data (assistant->pages, index);
-
-      child = page->page;
-      title = gtk_assistant_get_page_title (assistant, child);
-    }
-  else if (index == n_pages)
-    {
-      child = assistant->action_area;
-      title = NULL;
-    }
-  else if (index == n_pages + 1)
-    {
-      child = assistant->headerbar;
-      title = NULL;
-    }
-  else
-    return NULL;
-
-  obj = gtk_widget_get_accessible (child);
-
-  if (title)
-    atk_object_set_name (obj, title);
-
-  return g_object_ref (obj);
-}
-
-static void
-_gtk_assistant_accessible_class_init (GtkAssistantAccessibleClass *klass)
-{
-  AtkObjectClass *atk_class = ATK_OBJECT_CLASS (klass);
-
-  atk_class->get_n_children = gtk_assistant_accessible_get_n_children;
-  atk_class->ref_child = gtk_assistant_accessible_ref_child;
-}
-
-static void
-_gtk_assistant_accessible_init (GtkAssistantAccessible *self)
-{
 }
 
 /* buildable implementation */

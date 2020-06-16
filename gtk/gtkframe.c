@@ -36,8 +36,6 @@
 #include "gtkcssstylepropertyprivate.h"
 #include "gtklabel.h"
 
-#include "a11y/gtkframeaccessible.h"
-
 /**
  * SECTION:gtkframe
  * @Short_description: A widget with a decorative frame and optional label
@@ -194,7 +192,6 @@ gtk_frame_class_init (GtkFrameClass *class)
 
   g_object_class_install_properties (gobject_class, LAST_PROP, frame_props);
 
-  gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_FRAME_ACCESSIBLE);
   gtk_widget_class_set_css_name (widget_class, I_("frame"));
 }
 

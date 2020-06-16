@@ -20,7 +20,6 @@
 
 #include "gtkwindowcontrols.h"
 
-#include "gtkaccessible.h"
 #include "gtkactionable.h"
 #include "gtkboxlayout.h"
 #include "gtkbutton.h"
@@ -277,7 +276,6 @@ update_window_buttons (GtkWindowControls *self)
     {
       GtkWidget *button = NULL;
       GtkWidget *image = NULL;
-      AtkObject *accessible;
 
       if (strcmp (tokens[i], "icon") == 0 &&
           is_sovereign_window)
@@ -305,10 +303,6 @@ update_window_buttons (GtkWindowControls *self)
           gtk_widget_set_can_focus (button, FALSE);
           gtk_actionable_set_action_name (GTK_ACTIONABLE (button),
                                           "window.minimize");
-
-          accessible = gtk_widget_get_accessible (button);
-          if (GTK_IS_ACCESSIBLE (accessible))
-            atk_object_set_name (accessible, _("Minimize"));
         }
       else if (strcmp (tokens[i], "maximize") == 0 &&
                resizable &&
@@ -326,10 +320,6 @@ update_window_buttons (GtkWindowControls *self)
           gtk_widget_set_can_focus (button, FALSE);
           gtk_actionable_set_action_name (GTK_ACTIONABLE (button),
                                           "window.toggle-maximized");
-
-          accessible = gtk_widget_get_accessible (button);
-          if (GTK_IS_ACCESSIBLE (accessible))
-            atk_object_set_name (accessible, maximized ? _("Restore") : _("Maximize"));
         }
       else if (strcmp (tokens[i], "close") == 0 &&
                deletable)
@@ -343,10 +333,6 @@ update_window_buttons (GtkWindowControls *self)
           gtk_widget_set_can_focus (button, FALSE);
           gtk_actionable_set_action_name (GTK_ACTIONABLE (button),
                                           "window.close");
-
-          accessible = gtk_widget_get_accessible (button);
-          if (GTK_IS_ACCESSIBLE (accessible))
-            atk_object_set_name (accessible, _("Close"));
         }
 
       if (button)

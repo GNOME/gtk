@@ -68,8 +68,6 @@
 #include "gtktooltip.h"
 #include "gtkwidgetprivate.h"
 
-#include "a11y/gtklinkbuttonaccessible.h"
-
 #include <string.h>
 
 typedef struct _GtkLinkButtonClass GtkLinkButtonClass;
@@ -218,7 +216,6 @@ gtk_link_button_class_init (GtkLinkButtonClass *klass)
                   _gtk_marshal_BOOLEAN__VOID,
                   G_TYPE_BOOLEAN, 0);
 
-  gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_LINK_BUTTON_ACCESSIBLE);
   gtk_widget_class_set_css_name (widget_class, I_("button"));
 
   /**
