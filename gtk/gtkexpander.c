@@ -126,8 +126,6 @@
 #include "gtkstylecontextprivate.h"
 #include "gtkwidgetprivate.h"
 
-#include "a11y/gtkexpanderaccessibleprivate.h"
-
 #include <string.h>
 
 #define TIMEOUT_EXPAND 500
@@ -375,7 +373,6 @@ gtk_expander_class_init (GtkExpanderClass *klass)
                   NULL,
                   G_TYPE_NONE, 0);
 
-  gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_EXPANDER_ACCESSIBLE);
   gtk_widget_class_set_css_name (widget_class, I_("expander-widget"));
 }
 
@@ -880,14 +877,6 @@ gtk_expander_set_expanded (GtkExpander *expander,
       gtk_expander_resize_toplevel (expander);
     }
 
-  {
-    AtkObject *accessible = _gtk_widget_peek_accessible (GTK_WIDGET (expander));
-
-    if (accessible != NULL)
-      gtk_expander_accessible_update_state (GTK_EXPANDER_ACCESSIBLE (accessible),
-                                            expander->expanded);
-  }
-
   g_object_notify (G_OBJECT (expander), "expanded");
 }
 
@@ -940,13 +929,6 @@ gtk_expander_set_label (GtkExpander *expander,
 
       gtk_expander_set_label_widget (expander, child);
     }
-
-  {
-    AtkObject *accessible = _gtk_widget_peek_accessible (GTK_WIDGET (expander));
-
-    if (accessible != NULL)
-      gtk_expander_accessible_update_label (GTK_EXPANDER_ACCESSIBLE (accessible));
-  }
 
   g_object_notify (G_OBJECT (expander), "label");
 }

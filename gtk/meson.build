@@ -1,5 +1,4 @@
 subdir('deprecated')
-subdir('a11y')
 subdir('inspector')
 
 gtk_cargs = [
@@ -150,7 +149,6 @@ gtk_public_sources = files([
   'gtkaboutdialog.c',
   'gtkaccelgroup.c',
   'gtkaccellabel.c',
-  'gtkaccessible.c',
   'gtkactionable.c',
   'gtkactionbar.c',
   'gtkadjustment.c',
@@ -437,7 +435,6 @@ gtk_public_headers = files([
   'gtkaboutdialog.h',
   'gtkaccelgroup.h',
   'gtkaccellabel.h',
-  'gtkaccessible.h',
   'gtkactionable.h',
   'gtkactionbar.h',
   'gtkadjustment.h',
@@ -686,7 +683,6 @@ gtk_public_headers = files([
   'gtkwindowcontrols.h',
   'gtkwindowgroup.h',
   'gtkwindowhandle.h',
-  'gtk-a11y.h',
   'gtk-autocleanups.h',
   'gtk.h',
 ])
@@ -882,7 +878,7 @@ gtkmarshalers = gnome.genmarshal('gtkmarshalers',
 gtkmarshal_h = gtkmarshalers[1]
 
 gtktypebuiltins = gnome.mkenums('gtktypebuiltins',
-                                sources: gtk_public_headers + gtk_deprecated_headers + a11y_headers,
+                                sources: gtk_public_headers + gtk_deprecated_headers,
                                 c_template: 'gtktypebuiltins.c.template',
                                 h_template: 'gtktypebuiltins.h.template',
                                 install_dir: join_paths(gtk_includedir, 'gtk-4.0/gtk'),
@@ -942,7 +938,6 @@ gtk_sources += [
   gtk_dbus_src,
   gtk_deprecated_sources,
   inspector_sources,
-  a11y_sources,
   gtkresources,
   gtkmarshalers,
   gtkprivatetypebuiltins,
@@ -961,7 +956,6 @@ gtk_deps = [
   cairo_dep,
   fontconfig_dep,
   pixbuf_dep,
-  atk_dep,
   epoxy_dep,
   libm,
   graphene_dep,
@@ -1012,8 +1006,6 @@ if win32_enabled
 
   win32res = import('windows').compile_resources(gtkwin32rc, include_directories : win32rcinc)
   gtk_sources += win32res
-else
-  gtk_deps += [ atkbridge_dep, ]
 endif
 
 # So we don't add these twice
@@ -1157,8 +1149,6 @@ if build_gir
     gtk_css_public_sources,
     gtk_deprecated_headers,
     gtk_deprecated_sources,
-    a11y_headers,
-    a11y_sources,
     gtktypebuiltins_h,
     gtkversion,
   ]
@@ -1178,13 +1168,12 @@ if build_gir
                                identifier_prefix: 'Gtk',
                                symbol_prefix: 'gtk',
                                export_packages: 'gtk4',
-                               includes: [ gdk_gir[0], gsk_gir[0], 'Atk-1.0', ],
+                               includes: [ gdk_gir[0], gsk_gir[0], ],
                                header: 'gtk/gtk.h',
                                install: true,
                                dependencies: gsk_gir_dep,
                                extra_args: gir_args + [
                                  '-DGTK_COMPILATION',
-                                 '--c-include=gtk/gtk-a11y.h',
                                ])
   gtk_dep_sources += gtk_gir
 endif

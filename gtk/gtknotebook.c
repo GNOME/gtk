@@ -55,8 +55,6 @@
 #include "gtkwidgetpaintable.h"
 #include "gtknative.h"
 
-#include "a11y/gtknotebookaccessibleprivate.h"
-
 #include <stdio.h>
 #include <string.h>
 #include <math.h>
@@ -1364,7 +1362,6 @@ gtk_notebook_class_init (GtkNotebookClass *class)
   add_tab_bindings (widget_class, GDK_CONTROL_MASK, GTK_DIR_TAB_FORWARD);
   add_tab_bindings (widget_class, GDK_CONTROL_MASK | GDK_SHIFT_MASK, GTK_DIR_TAB_BACKWARD);
 
-  gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_NOTEBOOK_ACCESSIBLE);
   gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BOX_LAYOUT);
   gtk_widget_class_set_css_name (widget_class, I_("notebook"));
 }
@@ -5292,7 +5289,6 @@ gtk_notebook_real_switch_page (GtkNotebook     *notebook,
 {
   GList *list = gtk_notebook_find_child (notebook, GTK_WIDGET (child));
   GtkNotebookPage *page = GTK_NOTEBOOK_PAGE_FROM_LIST (list);
-  AtkObject *accessible;
   gboolean child_has_focus;
 
   if (notebook->cur_page == page || !gtk_widget_get_visible (GTK_WIDGET (child)))
@@ -5337,11 +5333,6 @@ gtk_notebook_real_switch_page (GtkNotebook     *notebook,
     }
 
   update_arrow_state (notebook);
-
-  accessible = _gtk_widget_peek_accessible (GTK_WIDGET (notebook));
-  if (accessible != NULL)
-    gtk_notebook_accessible_update_page (GTK_NOTEBOOK_ACCESSIBLE (accessible),
-                                         gtk_notebook_get_current_page (notebook));
 
   gtk_widget_queue_resize (GTK_WIDGET (notebook));
   gtk_widget_queue_resize (notebook->tabs_widget);

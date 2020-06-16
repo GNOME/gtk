@@ -9,7 +9,6 @@ endif
 
 tests = [
   ['accel'],
-  ['accessible'],
   ['action'],
   ['adjustment'],
   ['bitset'],

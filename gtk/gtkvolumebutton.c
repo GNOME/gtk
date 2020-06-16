@@ -189,10 +189,6 @@ gtk_volume_button_init (GtkVolumeButton *button)
   GtkWidget *widget = GTK_WIDGET (button);
 
   gtk_widget_init_template (widget);
-
-  /* The atk action description is not supported by GtkBuilder */
-  atk_action_set_description (ATK_ACTION (gtk_widget_get_accessible (GTK_WIDGET (widget))),
-                              1, _("Adjusts the volume"));
 }
 
 /**

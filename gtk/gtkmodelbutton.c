@@ -421,15 +421,6 @@ gtk_model_button_update_state (GtkModelButton *self)
   indicator_state = get_start_indicator_state (self);
   if (self->iconic)
     gtk_widget_set_state_flags (GTK_WIDGET (self), indicator_state, TRUE);
-
-  if (self->role == GTK_BUTTON_ROLE_CHECK ||
-      self->role == GTK_BUTTON_ROLE_RADIO)
-    {
-      AtkObject *object = _gtk_widget_peek_accessible (GTK_WIDGET (self));
-      if (object)
-        atk_object_notify_state_change (object, ATK_STATE_CHECKED,
-                                        (indicator_state & GTK_STATE_FLAG_CHECKED));
-    }
 }
 
 static void
@@ -456,21 +447,16 @@ gtk_model_button_direction_changed (GtkWidget        *widget,
 static void
 update_node_name (GtkModelButton *self)
 {
-  AtkObject *accessible;
-  AtkRole a11y_role;
-  const gchar *start_name;
-  const gchar *end_name;
+  const char *start_name;
+  const char *end_name;
 
-  accessible = gtk_widget_get_accessible (GTK_WIDGET (self));
   switch (self->role)
     {
     case GTK_BUTTON_ROLE_TITLE:
-      a11y_role = ATK_ROLE_PUSH_BUTTON;
       start_name = "arrow";
       end_name = NULL;
       break;
     case GTK_BUTTON_ROLE_NORMAL:
-      a11y_role = ATK_ROLE_PUSH_BUTTON;
       start_name = NULL;
       if (self->menu_name || self->popover)
         end_name = "arrow";
@@ -479,13 +465,11 @@ update_node_name (GtkModelButton *self)
       break;
 
     case GTK_BUTTON_ROLE_CHECK:
-      a11y_role = ATK_ROLE_CHECK_BOX;
       start_name = "check";
       end_name = NULL;
       break;
 
     case GTK_BUTTON_ROLE_RADIO:
-      a11y_role = ATK_ROLE_RADIO_BUTTON;
       start_name = "radio";
       end_name = NULL;
       break;
@@ -499,8 +483,6 @@ update_node_name (GtkModelButton *self)
       start_name = NULL;
       end_name = NULL;
     }
-
-  atk_object_set_role (accessible, a11y_role);
 
   if (start_name && !self->start_indicator)
     {
@@ -1067,18 +1049,6 @@ gtk_model_button_focus (GtkWidget        *widget,
   return FALSE;
 }
 
-static AtkObject *
-gtk_model_button_get_accessible (GtkWidget *widget)
-{
-  AtkObject *object;
-
-  object = GTK_WIDGET_CLASS (gtk_model_button_parent_class)->get_accessible (widget);
-
-  gtk_model_button_update_state (GTK_MODEL_BUTTON (widget));
-
-  return object;
-}
-
 static void
 gtk_model_button_class_init (GtkModelButtonClass *class)
 {
@@ -1093,7 +1063,6 @@ gtk_model_button_class_init (GtkModelButtonClass *class)
   widget_class->state_flags_changed = gtk_model_button_state_flags_changed;
   widget_class->direction_changed = gtk_model_button_direction_changed;
   widget_class->focus = gtk_model_button_focus;
-  widget_class->get_accessible = gtk_model_button_get_accessible;
 
   class->clicked = gtk_model_button_clicked;
 
@@ -1231,7 +1200,6 @@ gtk_model_button_class_init (GtkModelButtonClass *class)
 
   widget_class->activate_signal = signals[SIGNAL_CLICKED];
 
-  gtk_widget_class_set_accessible_role (GTK_WIDGET_CLASS (class), ATK_ROLE_PUSH_BUTTON);
   gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BOX_LAYOUT);
   gtk_widget_class_set_css_name (GTK_WIDGET_CLASS (class), I_("modelbutton"));
 }

@@ -22,7 +22,6 @@
 
 #include "gtkpasswordentryprivate.h"
 
-#include "gtkaccessible.h"
 #include "gtktextprivate.h"
 #include "gtkeditable.h"
 #include "gtkgestureclick.h"
@@ -34,8 +33,6 @@
 #include "gtkmarshalers.h"
 #include "gtkstylecontext.h"
 #include "gtkeventcontrollerkey.h"
-
-#include "a11y/gtkpasswordentryaccessibleprivate.h"
 
 /**
  * SECTION:gtkpasswordentry
@@ -130,11 +127,6 @@ gtk_password_entry_toggle_peek (GtkPasswordEntry *entry)
 
   visibility = gtk_text_get_visibility (GTK_TEXT (priv->entry));
   gtk_text_set_visibility (GTK_TEXT (priv->entry), !visibility);
-
-  /* Update the accessible object to reflect the change of visibility */
-  GtkAccessible *accessible = GTK_ACCESSIBLE (_gtk_widget_peek_accessible (GTK_WIDGET (entry)));
-  if (accessible != NULL)
-    gtk_password_entry_accessible_update_visibility (GTK_PASSWORD_ENTRY_ACCESSIBLE (accessible));
 }
 
 static void
@@ -431,7 +423,6 @@ gtk_password_entry_class_init (GtkPasswordEntryClass *klass)
   g_object_class_install_properties (object_class, NUM_PROPERTIES, props);
   gtk_editable_install_properties (object_class, NUM_PROPERTIES);
 
-  gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_PASSWORD_ENTRY_ACCESSIBLE);
   gtk_widget_class_set_css_name (widget_class, I_("entry"));
 }
 

@@ -71,8 +71,6 @@
 #include "gtktypebuiltins.h"
 #include "gtkwidgetprivate.h"
 
-#include "a11y/gtkbuttonaccessible.h"
-
 #include <string.h>
 
 /* Time out before giving up on getting a key release when animating
@@ -292,7 +290,6 @@ gtk_button_class_init (GtkButtonClass *klass)
   widget_class->activate_signal = button_signals[ACTIVATE];
 
   gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BIN_LAYOUT);
-  gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_BUTTON_ACCESSIBLE);
   gtk_widget_class_set_css_name (widget_class, I_("button"));
 }
 
@@ -838,14 +835,6 @@ gtk_button_set_label (GtkButton   *button,
 
   gtk_label_set_label (GTK_LABEL (priv->child), label);
   gtk_button_set_child_type (button, LABEL_CHILD);
-
-  {
-    GtkButtonAccessible *accessible =
-      GTK_BUTTON_ACCESSIBLE (_gtk_widget_peek_accessible (GTK_WIDGET (button)));
-
-    if (accessible != NULL)
-      gtk_button_accessible_update_label (accessible);
-  }
 
   g_object_notify_by_pspec (G_OBJECT (button), props[PROP_LABEL]);
 }

@@ -58,8 +58,6 @@
 #include "gtkdragicon.h"
 #include "gtkcsscolorvalueprivate.h"
 
-#include "a11y/gtklabelaccessibleprivate.h"
-
 #include <math.h>
 #include <string.h>
 
@@ -1074,8 +1072,6 @@ gtk_label_class_init (GtkLabelClass *class)
 				       "activate-current-link",
                                        NULL);
 
-  gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_LABEL_ACCESSIBLE);
-
   gtk_widget_class_set_css_name (widget_class, I_("label"));
 
   quark_mnemonics_visible_connected = g_quark_from_static_string ("gtk-label-mnemonics-visible-connected");
@@ -1690,11 +1686,8 @@ gtk_label_set_text_internal (GtkLabel *self,
       return;
     }
 
-  _gtk_label_accessible_text_deleted (self);
   g_free (self->text);
   self->text = str;
-
-  _gtk_label_accessible_text_inserted (self);
 
   gtk_label_select_region_index (self, 0, 0);
 }
@@ -2291,7 +2284,6 @@ gtk_label_set_markup_internal (GtkLabel    *self,
       gtk_label_ensure_select_info (self);
       self->select_info->links = g_steal_pointer (&links);
       self->select_info->n_links = n_links;
-      _gtk_label_accessible_update_links (self);
       gtk_label_ensure_has_tooltip (self);
       gtk_widget_add_css_class (GTK_WIDGET (self), "link");
     }
@@ -3744,7 +3736,6 @@ gtk_label_grab_focus (GtkWidget *widget)
                 {
                   self->select_info->selection_anchor = link->start;
                   self->select_info->selection_end = link->start;
-                  _gtk_label_accessible_focus_link_changed (self);
                   break;
                 }
             }
@@ -3778,7 +3769,6 @@ gtk_label_focus (GtkWidget        *widget,
                     {
                       info->selection_anchor = focus_link->start;
                       info->selection_end = focus_link->start;
-                      _gtk_label_accessible_focus_link_changed (self);
                     }
                 }
             }
@@ -3813,7 +3803,6 @@ gtk_label_focus (GtkWidget        *widget,
                   if (!range_is_in_ellipsis (self, link->start, link->end))
                     {
                       gtk_label_select_region_index (self, link->start, link->start);
-                      _gtk_label_accessible_focus_link_changed (self);
                       return TRUE;
                     }
                 }
@@ -3831,7 +3820,6 @@ gtk_label_focus (GtkWidget        *widget,
                   if (!range_is_in_ellipsis (self, link->start, link->end))
                     {
                       gtk_label_select_region_index (self, link->start, link->start);
-                      _gtk_label_accessible_focus_link_changed (self);
                       return TRUE;
                     }
                 }
@@ -3897,7 +3885,6 @@ gtk_label_focus (GtkWidget        *widget,
           focus_link = &info->links[new_index];
           info->selection_anchor = focus_link->start;
           info->selection_end = focus_link->start;
-          _gtk_label_accessible_focus_link_changed (self);
           gtk_widget_queue_draw (widget);
 
           return TRUE;
@@ -4509,8 +4496,6 @@ gtk_label_set_selectable (GtkLabel *self,
     {
       g_object_freeze_notify (G_OBJECT (self));
       g_object_notify_by_pspec (G_OBJECT (self), label_props[PROP_SELECTABLE]);
-      _gtk_label_accessible_selection_bound_changed (self);
-      _gtk_label_accessible_cursor_position_changed (self);
       g_object_thaw_notify (G_OBJECT (self));
       gtk_widget_queue_draw (GTK_WIDGET (self));
     }
@@ -4538,8 +4523,6 @@ gtk_label_select_region_index (GtkLabel *self,
                                gint      end_index)
 {
   g_return_if_fail (GTK_IS_LABEL (self));
-  gboolean anchor_changed;
-  gboolean bound_changed;
 
   if (self->select_info && self->select_info->selectable)
     {
@@ -4605,16 +4588,8 @@ gtk_label_select_region_index (GtkLabel *self,
 
       g_object_freeze_notify (G_OBJECT (self));
 
-      anchor_changed = self->select_info->selection_anchor != anchor_index;
-      bound_changed = self->select_info->selection_end != end_index;
-
       self->select_info->selection_anchor = anchor_index;
       self->select_info->selection_end = end_index;
-
-      if (anchor_changed)
-        _gtk_label_accessible_selection_bound_changed (self);
-      if (bound_changed)
-        _gtk_label_accessible_cursor_position_changed (self);
 
       clipboard = gtk_widget_get_primary_clipboard (GTK_WIDGET (self));
 
@@ -5505,8 +5480,6 @@ gtk_label_clear_links (GtkLabel *self)
   self->select_info->n_links = 0;
   self->select_info->active_link = NULL;
   gtk_widget_remove_css_class (GTK_WIDGET (self), "link");
-
-  _gtk_label_accessible_update_links (self);
 }
 
 static gboolean

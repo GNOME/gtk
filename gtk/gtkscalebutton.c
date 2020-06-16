@@ -56,8 +56,6 @@
 #include "gtkwindowprivate.h"
 #include "gtknative.h"
 
-#include "a11y/gtkscalebuttonaccessible.h"
-
 #include <math.h>
 #include <stdlib.h>
 #include <string.h>
@@ -343,7 +341,6 @@ gtk_scale_button_class_init (GtkScaleButtonClass *klass)
   gtk_widget_class_bind_template_callback (widget_class, cb_scale_value_changed);
   gtk_widget_class_bind_template_callback (widget_class, cb_popup_mapped);
 
-  gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_SCALE_BUTTON_ACCESSIBLE);
   gtk_widget_class_set_css_name (widget_class, I_("scalebutton"));
 }
 

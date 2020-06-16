@@ -65,7 +65,6 @@
 #include "gtkcssboxesimplprivate.h"
 #include "gtktooltipprivate.h"
 
-#include "a11y/gtkwindowaccessibleprivate.h"
 #include "inspector/window.h"
 
 #include "gdk/gdktextureprivate.h"
@@ -1114,8 +1113,6 @@ gtk_window_class_init (GtkWindowClass *klass)
   add_tab_bindings (widget_class, GDK_SHIFT_MASK, GTK_DIR_TAB_BACKWARD);
   add_tab_bindings (widget_class, GDK_CONTROL_MASK | GDK_SHIFT_MASK, GTK_DIR_TAB_BACKWARD);
 
-  gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_WINDOW_ACCESSIBLE);
-  gtk_widget_class_set_accessible_role (widget_class, ATK_ROLE_FRAME);
   gtk_widget_class_set_css_name (widget_class, I_("window"));
 }
 
@@ -6393,7 +6390,6 @@ _gtk_window_set_is_active (GtkWindow *window,
   priv->is_active = is_active;
 
   g_object_notify_by_pspec (G_OBJECT (window), window_props[PROP_IS_ACTIVE]);
-  _gtk_window_accessible_set_is_active (window, is_active);
 }
 
 /**
