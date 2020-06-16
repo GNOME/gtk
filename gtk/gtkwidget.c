@@ -27,6 +27,7 @@
 #include "gtkwidgetprivate.h"
 
 #include "gtkaccelgroupprivate.h"
+#include "gtkaccessible.h"
 #include "gtkapplicationprivate.h"
 #include "gtkbuildable.h"
 #include "gtkbuilderprivate.h"
@@ -598,6 +599,8 @@ static void             gtk_widget_real_measure                 (GtkWidget      
 static void             gtk_widget_real_state_flags_changed     (GtkWidget        *widget,
                                                                  GtkStateFlags     old_state);
 
+static void             gtk_widget_accessible_interface_init    (GtkAccessibleInterface *iface);
+
 static void             gtk_widget_buildable_interface_init     (GtkBuildableIface  *iface);
 static void             gtk_widget_buildable_set_name           (GtkBuildable       *buildable,
                                                                  const gchar        *name);
@@ -679,6 +682,13 @@ gtk_widget_get_type (void)
 	NULL,		/* value_table */
       };
 
+      const GInterfaceInfo accessible_info =
+      {
+        (GInterfaceInitFunc) gtk_widget_accessible_interface_init,
+        (GInterfaceFinalizeFunc) NULL,
+        NULL,
+      };
+
       const GInterfaceInfo buildable_info =
       {
 	(GInterfaceInitFunc) gtk_widget_buildable_interface_init,
@@ -701,10 +711,12 @@ gtk_widget_get_type (void)
       GtkWidget_private_offset =
         g_type_add_instance_private (widget_type, sizeof (GtkWidgetPrivate));
 
+      g_type_add_interface_static (widget_type, GTK_TYPE_ACCESSIBLE,
+                                   &accessible_info);
       g_type_add_interface_static (widget_type, GTK_TYPE_BUILDABLE,
-                                   &buildable_info) ;
+                                   &buildable_info);
       g_type_add_interface_static (widget_type, GTK_TYPE_CONSTRAINT_TARGET,
-                                   &constraint_target_info) ;
+                                   &constraint_target_info);
     }
 
   return widget_type;
@@ -8044,6 +8056,14 @@ gtk_widget_set_vexpand_set (GtkWidget      *widget,
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
   gtk_widget_set_expand_set (widget, GTK_ORIENTATION_VERTICAL, set);
+}
+
+/*
+ * GtkAccessible implementation
+ */
+static void
+gtk_widget_accessible_interface_init (GtkAccessibleInterface *iface)
+{
 }
 
 /*
