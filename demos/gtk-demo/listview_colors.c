@@ -23,7 +23,7 @@ struct _GtkColor
   GObject parent_instance;
 
   char *name;
-  GdkRGBA *color;
+  GdkRGBA color;
   int h, s, v;
   gboolean selected;
 };
@@ -51,7 +51,7 @@ gtk_color_snapshot (GdkPaintable *paintable,
 {
   GtkColor *self = GTK_COLOR (paintable);
 
-  gtk_snapshot_append_color (snapshot, self->color, &GRAPHENE_RECT_INIT (0, 0, width, height));
+  gtk_snapshot_append_color (snapshot, &self->color, &GRAPHENE_RECT_INIT (0, 0, width, height));
 }
 
 static int
@@ -99,19 +99,19 @@ gtk_color_get_property (GObject    *object,
       break;
 
     case PROP_COLOR:
-      g_value_set_boxed (value, self->color);
+      g_value_set_boxed (value, &self->color);
       break;
 
     case PROP_RED:
-      g_value_set_float (value, self->color->red);
+      g_value_set_float (value, self->color.red);
       break;
 
     case PROP_GREEN:
-      g_value_set_float (value, self->color->green);
+      g_value_set_float (value, self->color.green);
       break;
 
     case PROP_BLUE:
-      g_value_set_float (value, self->color->blue);
+      g_value_set_float (value, self->color.blue);
       break;
 
     case PROP_HUE:
@@ -151,7 +151,7 @@ gtk_color_set_property (GObject      *object,
       break;
 
     case PROP_COLOR:
-      self->color = g_value_dup_boxed (value);
+      self->color = *(GdkRGBA *) g_value_dup_boxed (value);
       break;
 
     case PROP_HUE:
@@ -182,7 +182,6 @@ gtk_color_finalize (GObject *object)
   GtkColor *self = GTK_COLOR (object);
 
   g_free (self->name);
-  g_clear_pointer (&self->color, gdk_rgba_free);
 
   G_OBJECT_CLASS (gtk_color_parent_class)->finalize (object);
 }
@@ -370,9 +369,9 @@ get_rgb_markup (gpointer this,
     return NULL;
 
   return g_strdup_printf ("<b>R:</b> %d <b>G:</b> %d <b>B:</b> %d",
-                          (int)(color->color->red * 255), 
-                          (int)(color->color->green * 255),
-                          (int)(color->color->blue * 255));
+                          (int)(color->color.red * 255), 
+                          (int)(color->color.green * 255),
+                          (int)(color->color.blue * 255));
 }
 
 static char *
