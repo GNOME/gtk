@@ -85,6 +85,81 @@ G_DEFINE_TYPE_WITH_CODE (GtkColor, gtk_color, G_TYPE_OBJECT,
 static GParamSpec *properties[N_PROPS] = { NULL, };
 
 static void
+rgb_to_hsv (GdkRGBA *rgba,
+            gdouble *h_out,
+            gdouble *s_out,
+            gdouble *v_out)
+{
+  gdouble red, green, blue;
+  gdouble h, s, v;
+  gdouble min, max;
+  gdouble delta;
+
+  red = rgba->red;
+  green = rgba->green;
+  blue = rgba->blue;
+
+  h = 0.0;
+
+  if (red > green)
+    {
+      if (red > blue)
+        max = red;
+      else
+        max = blue;
+
+      if (green < blue)
+        min = green;
+      else
+        min = blue;
+    }
+  else
+    {
+      if (green > blue)
+        max = green;
+      else
+        max = blue;
+
+      if (red < blue)
+        min = red;
+      else
+        min = blue;
+    }
+
+  v = max;
+
+  if (max != 0.0)
+    s = (max - min) / max;
+  else
+    s = 0.0;
+
+  if (s == 0.0)
+    h = 0.0;
+  else
+    {
+      delta = max - min;
+
+      if (red == max)
+        h = (green - blue) / delta;
+      else if (green == max)
+        h = 2 + (blue - red) / delta;
+      else if (blue == max)
+        h = 4 + (red - green) / delta;
+
+      h /= 6.0;
+
+      if (h < 0.0)
+        h += 1.0;
+      else if (h > 1.0)
+        h -= 1.0;
+    }
+
+  *h_out = h;
+  *s_out = s;
+  *v_out = v;
+}
+
+static void
 gtk_color_get_property (GObject    *object,
                         guint       property_id,
                         GValue     *value,
@@ -143,6 +218,7 @@ gtk_color_set_property (GObject      *object,
                         GParamSpec   *pspec)
 {
   GtkColor *self = GTK_COLOR (object);
+  double h, s, v;
 
   switch (property_id)
     {
@@ -152,18 +228,10 @@ gtk_color_set_property (GObject      *object,
 
     case PROP_COLOR:
       self->color = *(GdkRGBA *) g_value_dup_boxed (value);
-      break;
-
-    case PROP_HUE:
-      self->h = g_value_get_int (value);
-      break;
-
-    case PROP_SATURATION:
-      self->s = g_value_get_int (value);
-      break;
-
-    case PROP_VALUE:
-      self->v = g_value_get_int (value);
+      rgb_to_hsv (&self->color, &h, &s, &v);
+      self->h = round (360 * h);
+      self->s = round (100 * s);
+      self->v = round (100 * v);
       break;
 
     case PROP_SELECTED:
@@ -206,11 +274,11 @@ gtk_color_class_init (GtkColorClass *klass)
   properties[PROP_BLUE] =
     g_param_spec_float ("blue", NULL, NULL, 0, 1, 0, G_PARAM_READABLE);
   properties[PROP_HUE] =
-    g_param_spec_int ("hue", NULL, NULL, 0, 360, 0, G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY);
+    g_param_spec_int ("hue", NULL, NULL, 0, 360, 0, G_PARAM_READABLE);
   properties[PROP_SATURATION] =
-    g_param_spec_int ("saturation", NULL, NULL, 0, 100, 0, G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY);
+    g_param_spec_int ("saturation", NULL, NULL, 0, 100, 0, G_PARAM_READABLE);
   properties[PROP_VALUE] =
-    g_param_spec_int ("value", NULL, NULL, 0, 100, 0, G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY);
+    g_param_spec_int ("value", NULL, NULL, 0, 100, 0, G_PARAM_READABLE);
   properties[PROP_SELECTED] =
     g_param_spec_boolean ("selected", NULL, NULL, FALSE, G_PARAM_READWRITE);
 
@@ -224,8 +292,7 @@ gtk_color_init (GtkColor *self)
 
 static GtkColor *
 gtk_color_new (const char *name,
-               float r, float g, float b,
-               int h, int s, int v)
+               float r, float g, float b)
 {
   GtkColor *result;
   GdkRGBA color = { r, g, b, 1.0 };
@@ -233,9 +300,6 @@ gtk_color_new (const char *name,
   result = g_object_new (GTK_TYPE_COLOR,
                          "name", name,
                          "color", &color,
-                         "hue", h,
-                         "saturation", s,
-                         "value", v,
                          NULL);
 
   return result;
@@ -259,7 +323,6 @@ create_colors_model (void)
       const char *name;
       char **fields;
       int red, green, blue;
-      int h, s, v;
 
       if (lines[i][0] == '#' || lines[i][0] == '\0')
         continue;
@@ -269,11 +332,8 @@ create_colors_model (void)
       red = atoi (fields[3]);
       green = atoi (fields[4]);
       blue = atoi (fields[5]);
-      h = atoi (fields[9]);
-      s = atoi (fields[10]);
-      v = atoi (fields[11]);
 
-      color = gtk_color_new (name, red / 255., green / 255., blue / 255., h, s, v);
+      color = gtk_color_new (name, red / 255., green / 255., blue / 255.);
       g_list_store_append (result, color);
       g_object_unref (color);
 
