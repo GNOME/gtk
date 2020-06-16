@@ -39,8 +39,6 @@
 #include "gtkeventcontrollerfocus.h"
 #include "gtkeventcontrollerkey.h"
 
-#include "a11y/gtktreeviewaccessibleprivate.h"
-
 #include <string.h>
 
 
@@ -1814,12 +1812,6 @@ gtk_tree_view_column_set_visible (GtkTreeViewColumn *tree_column,
 
   if (priv->visible)
     _gtk_tree_view_column_cell_set_dirty (tree_column, TRUE);
-
-  if (priv->tree_view)
-    {
-      _gtk_tree_view_accessible_toggle_visibility (GTK_TREE_VIEW (priv->tree_view),
-                                                   tree_column);
-    }
 
   gtk_tree_view_column_update_button (tree_column);
   g_object_notify_by_pspec (G_OBJECT (tree_column), tree_column_props[PROP_VISIBLE]);

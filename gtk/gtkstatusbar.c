@@ -36,7 +36,6 @@
 #include "gtkorientable.h"
 #include "gtktypebuiltins.h"
 #include "gtkwidgetprivate.h"
-#include "a11y/gtkstatusbaraccessible.h"
 
 /**
  * SECTION:gtkstatusbar
@@ -203,7 +202,6 @@ gtk_statusbar_class_init (GtkStatusbarClass *class)
   gtk_widget_class_bind_template_child_internal (widget_class, GtkStatusbar, message_area);
   gtk_widget_class_bind_template_child (widget_class, GtkStatusbar, label);
 
-  gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_STATUSBAR_ACCESSIBLE);
   gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BIN_LAYOUT);
   gtk_widget_class_set_css_name (widget_class, I_("statusbar"));
 }

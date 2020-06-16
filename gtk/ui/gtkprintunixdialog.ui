@@ -202,9 +202,6 @@
                                     <attributes>
                                       <attribute name="weight" value="bold"></attribute>
                                     </attributes>
-                                    <accessibility>
-                                      <relation type="label-for" target="range_table"/>
-                                    </accessibility>
                                   </object>
                                 </child>
                                 <child>
@@ -270,22 +267,12 @@
  e.g. 1–3, 7, 11</property>
                                         <property name="activates-default">1</property>
                                         <signal name="notify::has-focus" handler="page_range_entry_focus_changed" swapped="no"/>
-                                        <child internal-child="accessible">
-                                          <object class="AtkObject" id="page_range_entry-atkobject">
-                                            <property name="AtkObject::accessible-name" translatable="yes">Pages</property>
-                                            <property name="AtkObject::accessible-description" translatable="yes">Specify one or more page ranges,
- e.g. 1–3, 7, 11</property>
-                                          </object>
-                                        </child>
                                         <layout>
                                           <property name="left-attach">1</property>
                                           <property name="top-attach">3</property>
                                         </layout>
                                       </object>
                                     </child>
-                                    <accessibility>
-                                      <relation type="labelled-by" target="label_widget1"/>
-                                    </accessibility>
                                   </object>
                                 </child>
                               </object>
@@ -303,9 +290,6 @@
                                     <attributes>
                                       <attribute name="weight" value="bold"></attribute>
                                     </attributes>
-                                    <accessibility>
-                                      <relation type="label-for" target="grid1"/>
-                                    </accessibility>
                                   </object>
                                 </child>
                                 <child>
@@ -371,9 +355,6 @@
                                         </layout>
                                       </object>
                                     </child>
-                                    <accessibility>
-                                      <relation type="labelled-by" target="label_widget2"/>
-                                    </accessibility>
                                   </object>
                                 </child>
                               </object>
@@ -415,9 +396,6 @@
                                     <attributes>
                                       <attribute name="weight" value="bold"></attribute>
                                     </attributes>
-                                    <accessibility>
-                                      <relation type="label-for" target="grid2"/>
-                                    </accessibility>
                                   </object>
                                 </child>
                                 <child>
@@ -562,9 +540,6 @@
                                         </layout>
                                       </object>
                                     </child>
-                                    <accessibility>
-                                      <relation type="labelled-by" target="label_widget3"/>
-                                    </accessibility>
                                   </object>
                                 </child>
                               </object>
@@ -582,9 +557,6 @@
                                     <attributes>
                                       <attribute name="weight" value="bold"></attribute>
                                     </attributes>
-                                    <accessibility>
-                                      <relation type="label-for" target="grid3"/>
-                                    </accessibility>
                                   </object>
                                 </child>
                                 <child>
@@ -715,9 +687,6 @@
                                         </layout>
                                       </object>
                                     </child>
-                                    <accessibility>
-                                      <relation type="labelled-by" target="label_widget4"/>
-                                    </accessibility>
                                   </object>
                                 </child>
                               </object>
@@ -766,9 +735,6 @@
                                 <attributes>
                                   <attribute name="weight" value="bold"></attribute>
                                 </attributes>
-                                <accessibility>
-                                  <relation type="label-for" target="grid5"/>
-                                </accessibility>
                               </object>
                             </child>
                             <child>
@@ -818,9 +784,6 @@
                                     </layout>
                                   </object>
                                 </child>
-                                <accessibility>
-                                  <relation type="labelled-by" target="label_widget5"/>
-                                </accessibility>
                               </object>
                             </child>
                             <layout>
@@ -841,9 +804,6 @@
                                 <attributes>
                                   <attribute name="weight" value="bold"></attribute>
                                 </attributes>
-                                <accessibility>
-                                  <relation type="label-for" target="grid6"/>
-                                </accessibility>
                               </object>
                             </child>
                             <child>
@@ -891,13 +851,6 @@
  e.g. 15∶30, 2∶35 pm, 14∶15∶20, 11∶46∶30 am, 4 pm</property>
                                     <property name="tooltip-text" translatable="yes" comments="Ability to parse the am/pm format depends on actual locale. You can remove the am/pm values below for your locale if they are not supported.">Specify the time of print,
  e.g. 15∶30, 2∶35 pm, 14∶15∶20, 11∶46∶30 am, 4 pm</property>
-                                    <child internal-child="accessible">
-                                      <object class="AtkObject" id="print_at_entry-atkobject">
-                                        <property name="AtkObject::accessible-name" translatable="yes">Time of print</property>
-                                        <property name="AtkObject::accessible-description" translatable="yes">Specify the time of print,
- e.g. 15∶30, 2∶35 pm, 14∶15∶20, 11∶46∶30 am, 4 pm</property>
-                                      </object>
-                                    </child>
                                     <signal name="changed" handler="update_print_at_option" object="GtkPrintUnixDialog" swapped="yes"/>
                                     <layout>
                                       <property name="left-attach">1</property>
@@ -922,9 +875,6 @@
                                     </layout>
                                   </object>
                                 </child>
-                                <accessibility>
-                                  <relation type="labelled-by" target="label_widget6"/>
-                                </accessibility>
                               </object>
                             </child>
                             <layout>
@@ -945,9 +895,6 @@
                                 <attributes>
                                   <attribute name="weight" value="bold"></attribute>
                                 </attributes>
-                                <accessibility>
-                                  <relation type="label-for" target="grid7"/>
-                                </accessibility>
                               </object>
                             </child>
                             <child>
@@ -997,9 +944,6 @@
                                     </layout>
                                   </object>
                                 </child>
-                                <accessibility>
-                                  <relation type="labelled-by" target="label_widget7"/>
-                                </accessibility>
                               </object>
                             </child>
                             <layout>

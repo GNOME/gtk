@@ -30,8 +30,6 @@
 #include "gtksnapshot.h"
 #include "gtkwidgetprivate.h"
 
-#include "a11y/gtkpictureaccessibleprivate.h"
-
 /**
  * SECTION:gtkpicture
  * @Short_description: A widget displaying a #GdkPaintable
@@ -366,7 +364,6 @@ gtk_picture_class_init (GtkPictureClass *class)
 
   g_object_class_install_properties (gobject_class, NUM_PROPERTIES, properties);
 
-  gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_PICTURE_ACCESSIBLE);
   gtk_widget_class_set_css_name (widget_class, I_("picture"));
 }
 

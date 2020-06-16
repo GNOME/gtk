@@ -133,8 +133,6 @@
 #include "gtktypebuiltins.h"
 #include "gtkwidgetprivate.h"
 
-#include "a11y/gtklevelbaraccessible.h"
-
 #include <math.h>
 #include <stdlib.h>
 
@@ -1007,7 +1005,6 @@ gtk_level_bar_class_init (GtkLevelBarClass *klass)
 
   g_object_class_install_properties (oclass, LAST_PROPERTY, properties);
 
-  gtk_widget_class_set_accessible_type (wclass, GTK_TYPE_LEVEL_BAR_ACCESSIBLE);
   gtk_widget_class_set_layout_manager_type (wclass, GTK_TYPE_BIN_LAYOUT);
   gtk_widget_class_set_css_name (wclass, I_("levelbar"));
 }

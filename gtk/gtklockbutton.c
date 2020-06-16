@@ -28,8 +28,6 @@
 #include "gtkstack.h"
 #include "gtkstylecontext.h"
 
-#include "a11y/gtklockbuttonaccessibleprivate.h"
-
 /**
  * SECTION:gtklockbutton
  * @title: GtkLockButton
@@ -198,12 +196,10 @@ gtk_lock_button_set_property (GObject      *object,
 
     case PROP_TEXT_LOCK:
       gtk_label_set_text (GTK_LABEL (button->label_lock), g_value_get_string (value));
-      _gtk_lock_button_accessible_name_changed (button);
       break;
 
     case PROP_TEXT_UNLOCK:
       gtk_label_set_text (GTK_LABEL (button->label_unlock), g_value_get_string (value));
-      _gtk_lock_button_accessible_name_changed (button);
       break;
 
     case PROP_TOOLTIP_LOCK:
@@ -326,7 +322,6 @@ gtk_lock_button_class_init (GtkLockButtonClass *klass)
   gtk_widget_class_bind_template_child (widget_class, GtkLockButton, label_unlock);
   gtk_widget_class_bind_template_child (widget_class, GtkLockButton, stack);
 
-  gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_LOCK_BUTTON_ACCESSIBLE);
   gtk_widget_class_set_css_name (widget_class, I_("button"));
 }
 
@@ -390,7 +385,6 @@ update_state (GtkLockButton *button)
   gtk_image_set_from_gicon (GTK_IMAGE (button->image), icon);
   gtk_stack_set_visible_child (GTK_STACK (button->stack),
                                allowed ? button->label_lock : button->label_unlock);
-  _gtk_lock_button_accessible_name_changed (button);
   gtk_widget_set_tooltip_markup (GTK_WIDGET (button), tooltip);
   gtk_widget_set_sensitive (GTK_WIDGET (button), sensitive);
   gtk_widget_set_visible (GTK_WIDGET (button), visible);

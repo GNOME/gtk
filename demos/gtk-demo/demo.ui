@@ -95,9 +95,6 @@
     <property name="program-name" translatable="yes">Builder demo</property>
     <property name="logo-icon-name" translatable="yes">gtk3-demo</property>
     <property name="modal">True</property>
-    <accessibility>
-      <relation target="window1" type="subwindow-of"/>
-    </accessibility>
   </object>
   <object class="GtkWindow" id="window1">
     <property name="default-height">250</property>
@@ -113,11 +110,6 @@
         </child>
         <child>
           <object class="GtkBox" id="toolbar1">
-            <child internal-child="accessible">
-              <object class="AtkObject" id="a11y-toolbar">
-                <property name="AtkObject::accessible-name">The toolbar</property>
-              </object>
-            </child>
             <child>
               <object class="GtkButton">
                 <property name="label" translatable="yes">New</property>
@@ -174,14 +166,6 @@
               <object class="GtkTreeView" id="treeview1">
                 <property name="model">liststore1</property>
                 <property name="tooltip-column">3</property>
-                <child internal-child="accessible">
-                  <object class="AtkObject" id="a11y-treeview">
-                    <property name="AtkObject::accessible-name">Name list</property>
-                    <property name="AtkObject::accessible-description">
-                                    A list of person with name, surname and age columns
-                                  </property>
-                  </object>
-                </child>
                 <child>
                   <object class="GtkTreeViewColumn" id="column1">
                     <property name="title">Name</property>
