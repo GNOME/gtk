@@ -17,8 +17,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-08 20:51+0000\n"
-"PO-Revision-Date: 2020-06-09 17:11+0200\n"
+"POT-Creation-Date: 2020-06-15 20:44+0000\n"
+"PO-Revision-Date: 2020-06-16 09:37+0200\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: Spanish - Spain <gnome-es-list@gnome.org>\n"
 "Language: es_ES\n"
@@ -78,128 +78,128 @@ msgstr "Textura"
 msgid "The texture displayed by this cursor"
 msgstr "La textura mostrada por este cursor"
 
-#: gdk/gdkdevice.c:130
+#: gdk/gdkdevice.c:128
 msgid "Device Display"
 msgstr "Pantalla del dispositivo"
 
-#: gdk/gdkdevice.c:131
+#: gdk/gdkdevice.c:129
 msgid "Display which the device belongs to"
 msgstr "Pantalla a la que pertenece el dispositivo"
 
-#: gdk/gdkdevice.c:142 gdk/gdkdevice.c:143
+#: gdk/gdkdevice.c:140 gdk/gdkdevice.c:141
 msgid "Device name"
 msgstr "Nombre del dispositivo"
 
-#: gdk/gdkdevice.c:154
+#: gdk/gdkdevice.c:152
 msgid "Device type"
 msgstr "Tipo de dispositivo"
 
-#: gdk/gdkdevice.c:155
+#: gdk/gdkdevice.c:153
 msgid "Device role in the device manager"
 msgstr "Rol del dispositivo en el gestor de dispositivos"
 
-#: gdk/gdkdevice.c:169
+#: gdk/gdkdevice.c:167
 msgid "Associated device"
 msgstr "Dispositivo asociado"
 
-#: gdk/gdkdevice.c:170
+#: gdk/gdkdevice.c:168
 msgid "Associated pointer or keyboard with this device"
 msgstr "Dispositivo apuntador o teclado asociado con este dispositivo"
 
-#: gdk/gdkdevice.c:181
+#: gdk/gdkdevice.c:179
 msgid "Input source"
 msgstr "Fuente de entrada"
 
-#: gdk/gdkdevice.c:182
+#: gdk/gdkdevice.c:180
 msgid "Source type for the device"
 msgstr "Tipo de la fuente de entrada para el dispositivo"
 
-#: gdk/gdkdevice.c:196
+#: gdk/gdkdevice.c:194
 msgid "Whether the device has a cursor"
 msgstr "Indica si el dispositivo tiene un cursor"
 
-#: gdk/gdkdevice.c:197
+#: gdk/gdkdevice.c:195
 msgid "Whether there is a visible cursor following device motion"
 msgstr ""
 "Indica si existe un cursor disponible siguiendo el movimiento del dispositivo"
 
-#: gdk/gdkdevice.c:209 gdk/gdkdevice.c:210
+#: gdk/gdkdevice.c:207 gdk/gdkdevice.c:208
 msgid "Number of axes in the device"
 msgstr "Número de ejes en el dispositivo"
 
-#: gdk/gdkdevice.c:222 gdk/gdkdevice.c:223
+#: gdk/gdkdevice.c:220 gdk/gdkdevice.c:221
 msgid "Vendor ID"
 msgstr "ID del fabricante"
 
-#: gdk/gdkdevice.c:235 gdk/gdkdevice.c:236
+#: gdk/gdkdevice.c:233 gdk/gdkdevice.c:234
 msgid "Product ID"
 msgstr "ID del producto"
 
-#: gdk/gdkdevice.c:248 gdk/gdkdevice.c:249
+#: gdk/gdkdevice.c:246 gdk/gdkdevice.c:247
 msgid "Seat"
 msgstr "Asiento"
 
-#: gdk/gdkdevice.c:263 gdk/gdkdevice.c:264
+#: gdk/gdkdevice.c:261 gdk/gdkdevice.c:262
 msgid "Number of concurrent touches"
 msgstr "Número de toques concurrentes"
 
-#: gdk/gdkdevice.c:276 gdk/gdkdevice.c:277
+#: gdk/gdkdevice.c:274 gdk/gdkdevice.c:275
 msgid "Axes"
 msgstr "Ejes"
 
-#: gdk/gdkdevice.c:283
+#: gdk/gdkdevice.c:281
 msgid "Tool"
 msgstr "Herramienta"
 
-#: gdk/gdkdevice.c:284
+#: gdk/gdkdevice.c:282
 msgid "The tool that is currently used with this device"
 msgstr "La herramienta usada actualmente con este dispositivo"
 
-#: gdk/gdkdevice.c:290 gtk/gtkmenubutton.c:395 gtk/gtkshortcutsshortcut.c:688
+#: gdk/gdkdevice.c:288 gtk/gtkmenubutton.c:395 gtk/gtkshortcutsshortcut.c:688
 msgid "Direction"
 msgstr "Dirección"
 
-#: gdk/gdkdevice.c:291
+#: gdk/gdkdevice.c:289
 msgid "The direction of the current layout of the keyboard"
 msgstr "La dirección de la distribución del teclado actual"
 
-#: gdk/gdkdevice.c:297
+#: gdk/gdkdevice.c:295
 msgid "Has bidi layouts"
 msgstr "Tiene distribuciones bidireccionales"
 
-#: gdk/gdkdevice.c:298
+#: gdk/gdkdevice.c:296
 msgid "Whether the keyboard has bidi layouts"
 msgstr "Indica si el teclado tiene distribuciones bidireccionales"
 
-#: gdk/gdkdevice.c:304
+#: gdk/gdkdevice.c:302
 msgid "Caps lock state"
 msgstr "Estado del bloqueo de mayúsculas"
 
-#: gdk/gdkdevice.c:305
+#: gdk/gdkdevice.c:303
 msgid "Whether the keyboard caps lock is on"
 msgstr "Indica si la tecla de mayúsculas del teclado está activa"
 
-#: gdk/gdkdevice.c:311
+#: gdk/gdkdevice.c:309
 msgid "Num lock state"
 msgstr "Estado del bloque numérico"
 
-#: gdk/gdkdevice.c:312
+#: gdk/gdkdevice.c:310
 msgid "Whether the keyboard num lock is on"
 msgstr "Indica si el teclado numérico está activo"
 
-#: gdk/gdkdevice.c:318
+#: gdk/gdkdevice.c:316
 msgid "Scroll lock state"
 msgstr "Estado del bloqueo de desplazamiento"
 
-#: gdk/gdkdevice.c:319
+#: gdk/gdkdevice.c:317
 msgid "Whether the keyboard scroll lock is on"
 msgstr "Indica si el bloqueo de desplazamiento está activo"
 
-#: gdk/gdkdevice.c:325
+#: gdk/gdkdevice.c:323
 msgid "Modifier state"
 msgstr "Modificador de estado"
 
-#: gdk/gdkdevice.c:326
+#: gdk/gdkdevice.c:324
 msgid "The modifier state of the keyboard"
 msgstr "El modificador de estado del teclado"
 
@@ -524,7 +524,7 @@ msgid "Controls whether the action bar shows its contents or not"
 msgstr "Controla si la barra de acción muestra o no su contenido"
 
 #: gtk/gtkadjustment.c:139 gtk/gtkcellrendererprogress.c:150
-#: gtk/gtkdroptarget.c:647 gtk/gtkscalebutton.c:207 gtk/gtkspinbutton.c:410
+#: gtk/gtkdroptarget.c:647 gtk/gtkscalebutton.c:207 gtk/gtkspinbutton.c:415
 msgid "Value"
 msgstr "Valor"
 
@@ -815,6 +815,39 @@ msgstr "Páginas"
 #: gtk/gtkassistant.c:606
 msgid "The pages of the assistant."
 msgstr "Las páginas del asistente"
+
+#: gtk/gtkbookmarklist.c:213 gtk/gtkimage.c:173 gtk/gtkrecentmanager.c:281
+msgid "Filename"
+msgstr "Nombre de archivo"
+
+#: gtk/gtkbookmarklist.c:214
+msgid "Bookmark file to load"
+msgstr "Archivo de marcadores que cargar"
+
+#: gtk/gtkbookmarklist.c:224 gtk/gtkcellrenderertext.c:269 gtk/gtkentry.c:888
+#: gtk/gtklabel.c:747 gtk/gtktext.c:892
+msgid "Attributes"
+msgstr "Atributos"
+
+#: gtk/gtkbookmarklist.c:225 gtk/gtkdirectorylist.c:240
+msgid "Attributes to query"
+msgstr "Atributos que consultar"
+
+#: gtk/gtkbookmarklist.c:236 gtk/gtkdirectorylist.c:275
+msgid "IO priority"
+msgstr "Prioridad de E/S"
+
+#: gtk/gtkbookmarklist.c:237 gtk/gtkdirectorylist.c:276
+msgid "Priority used when loading"
+msgstr "Prioridad usada al cargar"
+
+#: gtk/gtkbookmarklist.c:248 gtk/gtkdirectorylist.c:299
+msgid "loading"
+msgstr "cargando"
+
+#: gtk/gtkbookmarklist.c:249 gtk/gtkdirectorylist.c:300
+msgid "TRUE if files are being loaded"
+msgstr "Verdadero si los archivos se están cargando"
 
 #: gtk/gtkbox.c:258 gtk/gtkboxlayout.c:730 gtk/gtkcellareabox.c:317
 #: gtk/gtkiconview.c:472 gtk/gtktreeviewcolumn.c:304
@@ -1225,7 +1258,7 @@ msgstr "Establece el fondo de la celda"
 msgid "Whether the cell background color is set"
 msgstr "Indica si el color de fondo de la celda está establecido"
 
-#: gtk/gtkcellrenderercombo.c:136 gtk/gtkcolumnview.c:628 gtk/gtkdropdown.c:471
+#: gtk/gtkcellrenderercombo.c:136 gtk/gtkcolumnview.c:628 gtk/gtkdropdown.c:473
 #: gtk/gtkfilterlistmodel.c:684 gtk/gtkflattenlistmodel.c:438
 #: gtk/gtkgridview.c:1087 gtk/gtklistview.c:843 gtk/gtkmaplistmodel.c:404
 #: gtk/gtkmultiselection.c:381 gtk/gtkpropertyselection.c:453
@@ -1360,11 +1393,11 @@ msgid "Invert the direction in which the progress bar grows"
 msgstr "Invertir la dirección en la que aumentan las barras de progreso"
 
 #: gtk/gtkcellrendererspin.c:132 gtk/gtkrange.c:373 gtk/gtkscalebutton.c:217
-#: gtk/gtkscrollbar.c:199 gtk/gtkspinbutton.c:360
+#: gtk/gtkscrollbar.c:199 gtk/gtkspinbutton.c:365
 msgid "Adjustment"
 msgstr "Ajuste"
 
-#: gtk/gtkcellrendererspin.c:133 gtk/gtkspinbutton.c:361
+#: gtk/gtkcellrendererspin.c:133 gtk/gtkspinbutton.c:366
 msgid "The adjustment that holds the value of the spin button"
 msgstr "El ajuste que mantiene el valor del botón incrementable"
 
@@ -1376,11 +1409,11 @@ msgstr "Tasa de subida"
 msgid "The acceleration rate when you hold down a button"
 msgstr "La tasa de aceleración cuando mantiene apretado un botón"
 
-#: gtk/gtkcellrendererspin.c:158 gtk/gtkscale.c:677 gtk/gtkspinbutton.c:374
+#: gtk/gtkcellrendererspin.c:158 gtk/gtkscale.c:677 gtk/gtkspinbutton.c:379
 msgid "Digits"
 msgstr "Dígitos"
 
-#: gtk/gtkcellrendererspin.c:159 gtk/gtkspinbutton.c:375
+#: gtk/gtkcellrendererspin.c:159 gtk/gtkspinbutton.c:380
 msgid "The number of decimal places to display"
 msgstr "El número de lugares decimales que mostrar"
 
@@ -1420,11 +1453,6 @@ msgstr "Marcado"
 #: gtk/gtkcellrenderertext.c:263
 msgid "Marked up text to render"
 msgstr "Texto resaltado a renderizar"
-
-#: gtk/gtkcellrenderertext.c:269 gtk/gtkentry.c:888 gtk/gtklabel.c:747
-#: gtk/gtktext.c:892
-msgid "Attributes"
-msgstr "Atributos"
 
 #: gtk/gtkcellrenderertext.c:270
 msgid "A list of style attributes to apply to the text of the renderer"
@@ -1642,8 +1670,8 @@ msgstr "Alineación"
 msgid "How to align the lines"
 msgstr "Cómo alinear las líneas"
 
-#: gtk/gtkcellrenderertext.c:546 gtk/gtkentry.c:578 gtk/gtkpasswordentry.c:384
-#: gtk/gtksearchentry.c:258 gtk/gtktext.c:824
+#: gtk/gtkcellrenderertext.c:546 gtk/gtkentry.c:578 gtk/gtkpasswordentry.c:385
+#: gtk/gtksearchentry.c:260 gtk/gtktext.c:824
 msgid "Placeholder text"
 msgstr "Escribir aquí"
 
@@ -2020,7 +2048,6 @@ msgid "Whether columns are reorderable"
 msgstr "Indica si se pueden ordenar las columnas"
 
 #: gtk/gtkcolumnview.c:700 gtk/gtkgridview.c:1111 gtk/gtklistview.c:879
-#| msgid "Inline selection"
 msgid "Enable rubberband selection"
 msgstr "Activar selección de banda de goma"
 
@@ -2036,12 +2063,12 @@ msgstr "Vista de columna"
 msgid "Column view this column is a part of"
 msgstr "Vista de columna esta columna es parte de"
 
-#: gtk/gtkcolumnviewcolumn.c:246 gtk/gtkdropdown.c:445 gtk/gtkgridview.c:1047
+#: gtk/gtkcolumnviewcolumn.c:246 gtk/gtkdropdown.c:447 gtk/gtkgridview.c:1047
 #: gtk/gtklistview.c:831
 msgid "Factory"
 msgstr "Fábrica"
 
-#: gtk/gtkcolumnviewcolumn.c:247 gtk/gtkdropdown.c:446 gtk/gtkdropdown.c:460
+#: gtk/gtkcolumnviewcolumn.c:247 gtk/gtkdropdown.c:448 gtk/gtkdropdown.c:462
 #: gtk/gtkgridview.c:1048 gtk/gtklistview.c:832
 msgid "Factory for populating list items"
 msgstr "Fábrica para poblar elementos de la lista"
@@ -2081,7 +2108,6 @@ msgid "Whether this column is resizable"
 msgstr "Indica si se puede redimensionar esta columna"
 
 #: gtk/gtkcolumnviewcolumn.c:319
-#| msgid "Column gets share of extra width allocated to the widget"
 msgid "column gets share of extra width"
 msgstr "la columna obtiene compartición de anchura adicional"
 
@@ -2317,10 +2343,6 @@ msgstr "El valor inicial especificado para esta propiedad"
 msgid "attributes"
 msgstr "atributos"
 
-#: gtk/gtkdirectorylist.c:240
-msgid "Attributes to query"
-msgstr "Atributos que consultar"
-
 #: gtk/gtkdirectorylist.c:251
 msgid "error"
 msgstr "error"
@@ -2338,14 +2360,6 @@ msgstr "Archivo"
 msgid "The file to query"
 msgstr "El archivo que consultar"
 
-#: gtk/gtkdirectorylist.c:275
-msgid "IO priority"
-msgstr "Prioridad de E/S"
-
-#: gtk/gtkdirectorylist.c:276
-msgid "Priority used when loading"
-msgstr "Prioridad usada al cargar"
-
 #: gtk/gtkdirectorylist.c:287 gtk/gtkfilterlistmodel.c:672
 #: gtk/gtkflattenlistmodel.c:426 gtk/gtkmaplistmodel.c:392
 #: gtk/gtkpropertylookuplistmodel.c:376 gtk/gtkslicelistmodel.c:275
@@ -2358,14 +2372,6 @@ msgstr "Tipo de elemento"
 #: gtk/gtkpropertylookuplistmodel.c:377 gtk/gtkslicelistmodel.c:276
 msgid "The type of elements of this object"
 msgstr "El tipo de elementos de este objeto"
-
-#: gtk/gtkdirectorylist.c:299
-msgid "loading"
-msgstr "cargando"
-
-#: gtk/gtkdirectorylist.c:300
-msgid "TRUE if files are being loaded"
-msgstr "Verdadero si los archivos se están cargando"
 
 #: gtk/gtkdragicon.c:373
 msgid "The widget to display as drag icon."
@@ -2427,37 +2433,37 @@ msgstr "Es un cursor"
 msgid "Whether the pointer is in the controllers widget"
 msgstr "Indica si el cursor está en el controlador del widget"
 
-#: gtk/gtkdropdown.c:459
+#: gtk/gtkdropdown.c:461
 msgid "List Factory"
 msgstr "Fábrica de lista"
 
-#: gtk/gtkdropdown.c:472
+#: gtk/gtkdropdown.c:474
 msgid "Model for the displayed items"
 msgstr "Modelo para los elementos mostrados"
 
-#: gtk/gtkdropdown.c:484 gtk/gtklistitem.c:233 gtk/gtksingleselection.c:444
+#: gtk/gtkdropdown.c:486 gtk/gtklistitem.c:233 gtk/gtksingleselection.c:444
 msgid "Selected"
 msgstr "Seleccionado"
 
-#: gtk/gtkdropdown.c:485 gtk/gtksingleselection.c:445
+#: gtk/gtkdropdown.c:487 gtk/gtksingleselection.c:445
 msgid "Position of the selected item"
 msgstr "Posición del elemento seleccionado"
 
-#: gtk/gtkdropdown.c:498
+#: gtk/gtkdropdown.c:500
 msgid "Enable search"
 msgstr "Activar búsqueda"
 
-#: gtk/gtkdropdown.c:499
+#: gtk/gtkdropdown.c:501
 msgid "Whether to show a search entry in the popup"
 msgstr ""
 "Indica si se debe mostrar una entrada de búsqueda en la ventana emergente"
 
-#: gtk/gtkdropdown.c:513 gtk/gtknumericsorter.c:282 gtk/gtkstringfilter.c:252
+#: gtk/gtkdropdown.c:515 gtk/gtknumericsorter.c:282 gtk/gtkstringfilter.c:252
 #: gtk/gtkstringsorter.c:218
 msgid "Expression"
 msgstr "Expresión"
 
-#: gtk/gtkdropdown.c:514
+#: gtk/gtkdropdown.c:516
 msgid "Expression to determine strings to search for"
 msgstr "Expresión para determinar qué cadenas buscar"
 
@@ -2606,12 +2612,12 @@ msgstr ""
 "El carácter que usar cuando se enmascaren los contenidos de la entrada (en "
 "«modo contraseña»)"
 
-#: gtk/gtkentry.c:481 gtk/gtkpasswordentry.c:391 gtk/gtksearchentry.c:265
+#: gtk/gtkentry.c:481 gtk/gtkpasswordentry.c:392 gtk/gtksearchentry.c:267
 #: gtk/gtktext.c:767
 msgid "Activates default"
 msgstr "Activar predeterminado"
 
-#: gtk/gtkentry.c:482 gtk/gtkpasswordentry.c:392 gtk/gtksearchentry.c:266
+#: gtk/gtkentry.c:482 gtk/gtkpasswordentry.c:393 gtk/gtksearchentry.c:268
 #: gtk/gtktext.c:768
 msgid ""
 "Whether to activate the default widget (such as the default button in a "
@@ -2679,7 +2685,7 @@ msgstr ""
 "La fracción del ancho total de la entrada para mover el bloque de rebote de "
 "progreso para cada llamada a gtk_entry_progress_pulse()"
 
-#: gtk/gtkentry.c:579 gtk/gtkpasswordentry.c:385 gtk/gtksearchentry.c:259
+#: gtk/gtkentry.c:579 gtk/gtkpasswordentry.c:386 gtk/gtksearchentry.c:261
 msgid "Show text in the entry when it’s empty and unfocused"
 msgstr "Mostrar texto en la entrada cuando esta vacía y no tiene el foco"
 
@@ -2860,12 +2866,12 @@ msgstr "Icono del emoticono"
 msgid "Whether to show an icon for Emoji"
 msgstr "Indica si se debe mostrar un icono para el emoticono"
 
-#: gtk/gtkentry.c:926 gtk/gtklabel.c:949 gtk/gtkpasswordentry.c:411
+#: gtk/gtkentry.c:926 gtk/gtklabel.c:949 gtk/gtkpasswordentry.c:412
 #: gtk/gtktext.c:938 gtk/gtktextview.c:1078
 msgid "Extra menu"
 msgstr "Menú extra"
 
-#: gtk/gtkentry.c:927 gtk/gtkpasswordentry.c:412
+#: gtk/gtkentry.c:927 gtk/gtkpasswordentry.c:413
 msgid "Model menu to append to the context menu"
 msgstr "Modelo de menú que añadir al menú contextual"
 
@@ -3082,19 +3088,19 @@ msgstr ""
 "Indica si un selector de archivos en modo distinto a abrir ofrece al usuario "
 "la posibilidad de crear carpetas nuevas."
 
-#: gtk/gtkfilechoosernative.c:787
+#: gtk/gtkfilechoosernative.c:788
 msgid "Accept label"
 msgstr "Etiqueta de aceptar"
 
-#: gtk/gtkfilechoosernative.c:788
+#: gtk/gtkfilechoosernative.c:789
 msgid "The label on the accept button"
 msgstr "La etiqueta del botón de aceptar"
 
-#: gtk/gtkfilechoosernative.c:800
+#: gtk/gtkfilechoosernative.c:801
 msgid "Cancel label"
 msgstr "Etiqueta de cancelar"
 
-#: gtk/gtkfilechoosernative.c:801
+#: gtk/gtkfilechoosernative.c:802
 msgid "The label on the cancel button"
 msgstr "La etiqueta del botón de cancelar"
 
@@ -3632,10 +3638,6 @@ msgstr "Se puede dibujar"
 #: gtk/gtkimage.c:167
 msgid "A GdkPaintable to display"
 msgstr "Un GdkPaintable que mostrar"
-
-#: gtk/gtkimage.c:173 gtk/gtkrecentmanager.c:281
-msgid "Filename"
-msgstr "Nombre de archivo"
 
 #: gtk/gtkimage.c:174
 msgid "Filename to load and display"
@@ -4567,11 +4569,11 @@ msgstr "Segundo hijo"
 msgid "The second child"
 msgstr "El segundo hijo"
 
-#: gtk/gtkpasswordentry.c:398
+#: gtk/gtkpasswordentry.c:399
 msgid "Show Peek Icon"
 msgstr "Mostrar icono de ojear"
 
-#: gtk/gtkpasswordentry.c:399
+#: gtk/gtkpasswordentry.c:400
 msgid "Whether to show an icon for revealing the content"
 msgstr "Indica si se debe mostrar un icono para el revelar el contenido"
 
@@ -4901,11 +4903,11 @@ msgstr "Valor de la opción"
 msgid "Value of the option"
 msgstr "Valor de la opción"
 
-#: gtk/gtkprinteroptionwidget.c:126
+#: gtk/gtkprinteroptionwidget.c:127
 msgid "Source option"
 msgstr "Opciones de origen"
 
-#: gtk/gtkprinteroptionwidget.c:127
+#: gtk/gtkprinteroptionwidget.c:128
 msgid "The PrinterOption backing this widget"
 msgstr "La PrinterOption que hay por detrás de este widget"
 
@@ -4929,7 +4931,7 @@ msgstr "Configuración"
 msgid "Printer settings"
 msgstr "Configuración de la impresora"
 
-#: gtk/gtkprintjob.c:171 gtk/gtkprintjob.c:172 gtk/gtkprintunixdialog.c:398
+#: gtk/gtkprintjob.c:171 gtk/gtkprintjob.c:172 gtk/gtkprintunixdialog.c:387
 msgid "Page Setup"
 msgstr "Configuración de la página"
 
@@ -4954,11 +4956,11 @@ msgstr "Configuración de la página predeterminada"
 msgid "The GtkPageSetup used by default"
 msgstr "La GtkPageSetup usada por omisión"
 
-#: gtk/gtkprintoperation.c:1093 gtk/gtkprintunixdialog.c:416
+#: gtk/gtkprintoperation.c:1093 gtk/gtkprintunixdialog.c:405
 msgid "Print Settings"
 msgstr "Configuración de impresión"
 
-#: gtk/gtkprintoperation.c:1094 gtk/gtkprintunixdialog.c:417
+#: gtk/gtkprintoperation.c:1094 gtk/gtkprintunixdialog.c:406
 msgid "The GtkPrintSettings used for initializing the dialog"
 msgstr "Los GtkPrintSettings usados para inicializar el diálogo"
 
@@ -4978,11 +4980,11 @@ msgstr "Número de páginas"
 msgid "The number of pages in the document."
 msgstr "El número de páginas en el documento."
 
-#: gtk/gtkprintoperation.c:1153 gtk/gtkprintunixdialog.c:406
+#: gtk/gtkprintoperation.c:1153 gtk/gtkprintunixdialog.c:395
 msgid "Current Page"
 msgstr "Página actual"
 
-#: gtk/gtkprintoperation.c:1154 gtk/gtkprintunixdialog.c:407
+#: gtk/gtkprintoperation.c:1154 gtk/gtkprintunixdialog.c:396
 msgid "The current page in the document"
 msgstr "La página actual en el documento"
 
@@ -5059,7 +5061,7 @@ msgstr "Etiqueta de pestaña personalizada"
 msgid "Label for the tab containing custom widgets."
 msgstr "Etiqueta para la pestaña que contiene widgets personalizados."
 
-#: gtk/gtkprintoperation.c:1330 gtk/gtkprintunixdialog.c:441
+#: gtk/gtkprintoperation.c:1330 gtk/gtkprintunixdialog.c:430
 msgid "Support Selection"
 msgstr "Soportar selección"
 
@@ -5067,7 +5069,7 @@ msgstr "Soportar selección"
 msgid "TRUE if the print operation will support print of selection."
 msgstr "TRUE si la operación de impresión soporta impresión de la selección."
 
-#: gtk/gtkprintoperation.c:1345 gtk/gtkprintunixdialog.c:449
+#: gtk/gtkprintoperation.c:1345 gtk/gtkprintunixdialog.c:438
 msgid "Has Selection"
 msgstr "Tiene selección"
 
@@ -5075,11 +5077,11 @@ msgstr "Tiene selección"
 msgid "TRUE if a selection exists."
 msgstr "TRUE si existe una selección."
 
-#: gtk/gtkprintoperation.c:1359 gtk/gtkprintunixdialog.c:457
+#: gtk/gtkprintoperation.c:1359 gtk/gtkprintunixdialog.c:446
 msgid "Embed Page Setup"
 msgstr "Configuración de página empotrada"
 
-#: gtk/gtkprintoperation.c:1360 gtk/gtkprintunixdialog.c:458
+#: gtk/gtkprintoperation.c:1360 gtk/gtkprintunixdialog.c:447
 msgid "TRUE if page setup combos are embedded in GtkPrintUnixDialog"
 msgstr ""
 "TRUE si los combos de configuración de página están empotrados en "
@@ -5093,31 +5095,31 @@ msgstr "Número de páginas para imprimir"
 msgid "The number of pages that will be printed."
 msgstr "El número de páginas que se imprimirán."
 
-#: gtk/gtkprintunixdialog.c:399
+#: gtk/gtkprintunixdialog.c:388
 msgid "The GtkPageSetup to use"
 msgstr "El GtkPageSetup a usar"
 
-#: gtk/gtkprintunixdialog.c:424
+#: gtk/gtkprintunixdialog.c:413
 msgid "Selected Printer"
 msgstr "Impresora seleccionada"
 
-#: gtk/gtkprintunixdialog.c:425
+#: gtk/gtkprintunixdialog.c:414
 msgid "The GtkPrinter which is selected"
 msgstr "El GtkPrinter que está seleccionado"
 
-#: gtk/gtkprintunixdialog.c:432
+#: gtk/gtkprintunixdialog.c:421
 msgid "Manual Capabilities"
 msgstr "Capacidades manuales"
 
-#: gtk/gtkprintunixdialog.c:433
+#: gtk/gtkprintunixdialog.c:422
 msgid "Capabilities the application can handle"
 msgstr "Capacidades que la aplicación puede manejar"
 
-#: gtk/gtkprintunixdialog.c:442
+#: gtk/gtkprintunixdialog.c:431
 msgid "Whether the dialog supports selection"
 msgstr "Indica si el diálogo soporta selección"
 
-#: gtk/gtkprintunixdialog.c:450
+#: gtk/gtkprintunixdialog.c:439
 msgid "Whether the application has a selection"
 msgstr "Indica si la aplicación tiene una selección"
 
@@ -6162,19 +6164,19 @@ msgstr "El tipo de elementos de esta lista"
 msgid "The model being sorted"
 msgstr "El modelo que se está ordenando"
 
-#: gtk/gtkspinbutton.c:367
+#: gtk/gtkspinbutton.c:372
 msgid "Climb Rate"
 msgstr "Tasa de subida"
 
-#: gtk/gtkspinbutton.c:368
+#: gtk/gtkspinbutton.c:373
 msgid "The acceleration rate when you hold down a button or key"
 msgstr "La tasa de aceleración cuando mantiene pulsado un botón o una tecla"
 
-#: gtk/gtkspinbutton.c:381
+#: gtk/gtkspinbutton.c:386
 msgid "Snap to Ticks"
 msgstr "Ajustarse a los ticks"
 
-#: gtk/gtkspinbutton.c:382
+#: gtk/gtkspinbutton.c:387
 msgid ""
 "Whether erroneous values are automatically changed to a spin button’s "
 "nearest step increment"
@@ -6182,35 +6184,35 @@ msgstr ""
 "Indica si los valores erróneos se cambian por el valor más cercano de un "
 "botón incrementable"
 
-#: gtk/gtkspinbutton.c:388
+#: gtk/gtkspinbutton.c:393
 msgid "Numeric"
 msgstr "Numérico"
 
-#: gtk/gtkspinbutton.c:389
+#: gtk/gtkspinbutton.c:394
 msgid "Whether non-numeric characters should be ignored"
 msgstr "Indica si se ignoran los caracteres no numéricos"
 
-#: gtk/gtkspinbutton.c:395
+#: gtk/gtkspinbutton.c:400
 msgid "Wrap"
 msgstr "Volver al inicio"
 
-#: gtk/gtkspinbutton.c:396
+#: gtk/gtkspinbutton.c:401
 msgid "Whether a spin button should wrap upon reaching its limits"
 msgstr ""
 "Indica si un botón giratorio debe volver al inicio al alcanzar sus límites"
 
-#: gtk/gtkspinbutton.c:402
+#: gtk/gtkspinbutton.c:407
 msgid "Update Policy"
 msgstr "Norma de actualización"
 
-#: gtk/gtkspinbutton.c:403
+#: gtk/gtkspinbutton.c:408
 msgid ""
 "Whether the spin button should update always, or only when the value is legal"
 msgstr ""
 "Indica si el botón incrementable se actualiza siempre, o sólo cuando el "
 "valor es legal"
 
-#: gtk/gtkspinbutton.c:411
+#: gtk/gtkspinbutton.c:416
 msgid "Reads the current value, or sets a new value"
 msgstr "Lee el valor actual, o establece un valor nuevo"
 
@@ -7026,7 +7028,6 @@ msgid "The child widget with the actual contents"
 msgstr "El widget hijo con el contenido actual"
 
 #: gtk/gtktreeexpander.c:462
-#| msgid "The item held in this row"
 msgid "The item held by this expander's row"
 msgstr "El elemento contenido en esta fila del expansor"
 
@@ -7091,7 +7092,6 @@ msgid "The item held in this row"
 msgstr "El elemento contenido en esta fila"
 
 #: gtk/gtktreelistrowsorter.c:244
-#| msgid "The model being sorted"
 msgid "The underlying sorter"
 msgstr "La ordenación subyacente"
 
