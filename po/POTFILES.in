@@ -136,6 +136,7 @@ gtk/gtkdropdown.c
 gtk/gtkdroptargetasync.c
 gtk/gtkdroptarget.c
 gtk/gtkeditable.c
+gtk/gtkeditablelabel.c
 gtk/gtkemojichooser.c
 gtk/gtkemojicompletion.c
 gtk/gtkentrybuffer.c
