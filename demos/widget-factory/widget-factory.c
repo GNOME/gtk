@@ -565,7 +565,6 @@ on_scale_button_value_changed (GtkScaleButton *button,
     }
 
   gtk_widget_set_tooltip_text (GTK_WIDGET (button), str);
-  atk_object_set_description (gtk_widget_get_accessible (GTK_WIDGET (button)), str);
 
   g_free (str);
 }

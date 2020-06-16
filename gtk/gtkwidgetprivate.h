@@ -174,8 +174,6 @@ struct _GtkWidgetPrivate
 
   GPtrArray *controllers;
 
-  AtkObject *accessible;
-
   /* Widget tree */
   GtkWidget *parent;
   GtkWidget *prev_sibling;
@@ -208,8 +206,6 @@ struct _GtkWidgetClassPrivate
 {
   GtkWidgetTemplate *template;
   GListStore *shortcuts;
-  GType accessible_type;
-  AtkRole accessible_role;
   GQuark css_name;
   GType layout_manager_type;
   GtkWidgetAction *actions;
@@ -235,8 +231,6 @@ void         _gtk_widget_add_sizegroup         (GtkWidget    *widget,
 void         _gtk_widget_remove_sizegroup      (GtkWidget    *widget,
 						gpointer      group);
 GSList      *_gtk_widget_get_sizegroups        (GtkWidget    *widget);
-
-AtkObject *       _gtk_widget_peek_accessible              (GtkWidget *widget);
 
 void              _gtk_widget_set_has_default              (GtkWidget *widget,
                                                             gboolean   has_default);

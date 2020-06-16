@@ -19,7 +19,6 @@
 
 #include "gtkiconviewprivate.h"
 
-#include "gtkaccessible.h"
 #include "gtkadjustmentprivate.h"
 #include "gtkcellareabox.h"
 #include "gtkcellareacontext.h"
@@ -47,8 +46,6 @@
 #include "gtkdragsource.h"
 #include "gtkdragicon.h"
 #include "gtknative.h"
-
-#include "a11y/gtkiconviewaccessibleprivate.h"
 
 #include <string.h>
 
@@ -255,9 +252,6 @@ static void                 gtk_icon_view_ensure_cell_area               (GtkIco
                                                                           GtkCellArea            *cell_area);
 
 static GtkCellArea         *gtk_icon_view_cell_layout_get_area           (GtkCellLayout          *layout);
-
-static void                 gtk_icon_view_item_selected_changed          (GtkIconView            *icon_view,
-		                                                          GtkIconViewItem        *item);
 
 static void                 gtk_icon_view_add_editable                   (GtkCellArea            *area,
 									  GtkCellRenderer        *renderer,
@@ -885,7 +879,6 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
   gtk_icon_view_add_move_binding (widget_class, GDK_KEY_KP_Left, 0, 
 				  GTK_MOVEMENT_VISUAL_POSITIONS, -1);
 
-  gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_ICON_VIEW_ACCESSIBLE);
   gtk_widget_class_set_css_name (widget_class, I_("iconview"));
 }
 
@@ -1917,25 +1910,6 @@ gtk_icon_view_remove (GtkIconView *icon_view,
     }
 }
 
-static void 
-gtk_icon_view_item_selected_changed (GtkIconView      *icon_view,
-                                     GtkIconViewItem  *item)
-{
-  AtkObject *obj;
-  AtkObject *item_obj;
-
-  obj = gtk_widget_get_accessible (GTK_WIDGET (icon_view));
-  if (obj != NULL)
-    {
-      item_obj = atk_object_ref_accessible_child (obj, item->index);
-      if (item_obj != NULL)
-        {
-          atk_object_notify_state_change (item_obj, ATK_STATE_SELECTED, item->selected);
-          g_object_unref (item_obj);
-        }
-    }
-}
-
 static void
 gtk_icon_view_add_editable (GtkCellArea            *area,
 			    GtkCellRenderer        *renderer,
@@ -2472,7 +2446,6 @@ gtk_icon_view_unselect_all_internal (GtkIconView  *icon_view)
 	  item->selected = FALSE;
 	  dirty = TRUE;
 	  gtk_icon_view_queue_draw_item (icon_view, item);
-	  gtk_icon_view_item_selected_changed (icon_view, item);
 	}
     }
 
@@ -2551,7 +2524,6 @@ gtk_icon_view_real_toggle_cursor_item (GtkIconView *icon_view)
       icon_view->priv->cursor_item->selected = !icon_view->priv->cursor_item->selected;
       g_signal_emit (icon_view, icon_view_signals[SELECTION_CHANGED], 0); 
       
-      gtk_icon_view_item_selected_changed (icon_view, icon_view->priv->cursor_item);      
       gtk_icon_view_queue_draw_item (icon_view, icon_view->priv->cursor_item);
       break;
     }
@@ -2686,14 +2658,8 @@ gtk_icon_view_adjustment_changed (GtkAdjustment *adjustment,
 
   if (gtk_widget_get_realized (widget))
     {
-      GtkIconViewAccessible *accessible =
-        GTK_ICON_VIEW_ACCESSIBLE (_gtk_widget_peek_accessible (GTK_WIDGET (icon_view)));
-
       if (icon_view->priv->doing_rubberband)
         gtk_icon_view_update_rubberband (icon_view);
-
-      if (accessible != NULL)
-        gtk_icon_view_accessible_adjustment_changed (accessible);
     }
 
   gtk_widget_queue_draw (GTK_WIDGET (icon_view));
@@ -2982,14 +2948,9 @@ _gtk_icon_view_set_cursor_item (GtkIconView     *icon_view,
                                 GtkIconViewItem *item,
                                 GtkCellRenderer *cursor_cell)
 {
-  AtkObject *obj;
-  AtkObject *item_obj;
-  AtkObject *cursor_item_obj;
-
-  /* When hitting this path from keynav, the focus cell is
-   * already set, we dont need to notify the atk object
-   * but we still need to queue the draw here (in the case
-   * that the focus cell changes but not the cursor item).
+  /* When hitting this path from keynav, the focus cell is already set,
+   * but we still need to queue the draw here (in the case that the focus
+   * cell changes but not the cursor item).
    */
   gtk_icon_view_queue_draw_item (icon_view, item);
 
@@ -2997,17 +2958,9 @@ _gtk_icon_view_set_cursor_item (GtkIconView     *icon_view,
       (cursor_cell == NULL || cursor_cell == gtk_cell_area_get_focus_cell (icon_view->priv->cell_area)))
     return;
 
-  obj = gtk_widget_get_accessible (GTK_WIDGET (icon_view));
   if (icon_view->priv->cursor_item != NULL)
-    {
-      gtk_icon_view_queue_draw_item (icon_view, icon_view->priv->cursor_item);
-      if (obj != NULL)
-        {
-          cursor_item_obj = atk_object_ref_accessible_child (obj, icon_view->priv->cursor_item->index);
-          if (cursor_item_obj != NULL)
-            atk_object_notify_state_change (cursor_item_obj, ATK_STATE_FOCUSED, FALSE);
-        }
-    }
+    gtk_icon_view_queue_draw_item (icon_view, icon_view->priv->cursor_item);
+
   icon_view->priv->cursor_item = item;
 
   if (cursor_cell)
@@ -3017,18 +2970,6 @@ _gtk_icon_view_set_cursor_item (GtkIconView     *icon_view,
       /* Make sure there is a cell in focus initially */
       if (!gtk_cell_area_get_focus_cell (icon_view->priv->cell_area))
 	gtk_cell_area_focus (icon_view->priv->cell_area, GTK_DIR_TAB_FORWARD);
-    }
-  
-  /* Notify that accessible focus object has changed */
-  item_obj = atk_object_ref_accessible_child (obj, item->index);
-
-  if (item_obj != NULL)
-    {
-      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-      atk_focus_tracker_notify (item_obj);
-      G_GNUC_END_IGNORE_DEPRECATIONS;
-      atk_object_notify_state_change (item_obj, ATK_STATE_FOCUSED, TRUE);
-      g_object_unref (item_obj); 
     }
 }
 
@@ -3122,7 +3063,6 @@ _gtk_icon_view_select_item (GtkIconView      *icon_view,
 
   item->selected = TRUE;
 
-  gtk_icon_view_item_selected_changed (icon_view, item);
   g_signal_emit (icon_view, icon_view_signals[SELECTION_CHANGED], 0);
 
   gtk_icon_view_queue_draw_item (icon_view, item);
@@ -3145,7 +3085,6 @@ _gtk_icon_view_unselect_item (GtkIconView      *icon_view,
   
   item->selected = FALSE;
 
-  gtk_icon_view_item_selected_changed (icon_view, item);
   g_signal_emit (icon_view, icon_view_signals[SELECTION_CHANGED], 0);
 
   gtk_icon_view_queue_draw_item (icon_view, item);
@@ -3582,7 +3521,6 @@ gtk_icon_view_select_all_between (GtkIconView     *icon_view,
 	    {
 	      dirty = TRUE;
 	      item->selected = TRUE;
-	      gtk_icon_view_item_selected_changed (icon_view, item);
 	    }
 	  gtk_icon_view_queue_draw_item (icon_view, item);
 	}
@@ -4712,14 +4650,6 @@ gtk_icon_view_set_model (GtkIconView *icon_view,
 
       gtk_icon_view_build_items (icon_view);
     }
-
-  {
-    GtkIconViewAccessible *accessible =
-      GTK_ICON_VIEW_ACCESSIBLE (_gtk_widget_peek_accessible (GTK_WIDGET (icon_view)));
-
-    if (accessible != NULL)
-      gtk_icon_view_accessible_update_model (accessible, icon_view->priv->model);
-  }
 
   g_object_notify (G_OBJECT (icon_view), "model");  
 

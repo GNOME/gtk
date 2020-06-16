@@ -43,8 +43,6 @@
 #include "gtktypebuiltins.h"
 #include "gtkwidgetprivate.h"
 
-#include "a11y/gtkrangeaccessible.h"
-
 #include <stdio.h>
 #include <math.h>
 
@@ -429,7 +427,6 @@ gtk_range_class_init (GtkRangeClass *class)
 
   g_object_class_install_properties (gobject_class, LAST_PROP, properties);
 
-  gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_RANGE_ACCESSIBLE);
   gtk_widget_class_set_css_name (widget_class, I_("range"));
 }
 
@@ -662,14 +659,6 @@ gtk_range_set_adjustment (GtkRange      *range,
 
       gtk_range_adjustment_changed (adjustment, range);
       gtk_range_adjustment_value_changed (adjustment, range);
-
-      {
-        GtkRangeAccessible *accessible =
-          GTK_RANGE_ACCESSIBLE (_gtk_widget_peek_accessible (GTK_WIDGET (range)));
-
-        if (accessible != NULL)
-          gtk_range_accessible_update_adjustment (accessible);
-      }
 
       g_object_notify_by_pspec (G_OBJECT (range), properties[PROP_ADJUSTMENT]);
     }

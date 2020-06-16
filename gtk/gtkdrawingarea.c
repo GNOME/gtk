@@ -329,8 +329,6 @@ gtk_drawing_area_class_init (GtkDrawingAreaClass *class)
   g_signal_set_va_marshaller (signals[RESIZE],
                               G_TYPE_FROM_CLASS (class),
                               _gtk_marshal_VOID__INT_INTv);
-
-  gtk_widget_class_set_accessible_role (widget_class, ATK_ROLE_DRAWING_AREA);
 }
 
 static void

@@ -26,8 +26,6 @@
 #include "gtkbitmaskprivate.h"
 #include "gtkcssvalueprivate.h"
 
-#include <atk/atk.h>
-
 G_BEGIN_DECLS
 
 GtkStyleContext *gtk_style_context_new_for_node              (GtkCssNode      *node);
@@ -45,10 +43,6 @@ GtkCssValue   * _gtk_style_context_peek_property             (GtkStyleContext *c
 void           _gtk_style_context_get_cursor_color           (GtkStyleContext    *context,
                                                               GdkRGBA            *primary_color,
                                                               GdkRGBA            *secondary_color);
-
-/* Accessibility support */
-AtkAttributeSet *_gtk_style_context_get_attributes           (AtkAttributeSet    *attributes,
-                                                              GtkStyleContext    *context);
 
 G_END_DECLS
 

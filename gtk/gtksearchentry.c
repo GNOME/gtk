@@ -29,7 +29,6 @@
 
 #include "gtksearchentryprivate.h"
 
-#include "gtkaccessible.h"
 #include "gtkeditable.h"
 #include "gtkboxlayout.h"
 #include "gtkgestureclick.h"
@@ -41,7 +40,6 @@
 #include "gtkstylecontext.h"
 #include "gtkeventcontrollerkey.h"
 #include "gtkwidgetprivate.h"
-#include "a11y/gtksearchentryaccessible.h"
 
 
 /**
@@ -398,7 +396,6 @@ gtk_search_entry_class_init (GtkSearchEntryClass *klass)
                                        "stop-search",
                                        NULL);
 
-  gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_SEARCH_ENTRY_ACCESSIBLE);
   gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BOX_LAYOUT);
   gtk_widget_class_set_css_name (widget_class, I_("entry"));
 }

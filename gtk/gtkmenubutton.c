@@ -110,7 +110,6 @@
 
 #include "config.h"
 
-#include "gtkaccessible.h"
 #include "gtkactionable.h"
 #include "gtkimage.h"
 #include "gtkintl.h"
@@ -127,8 +126,6 @@
 #include "gtkwidgetprivate.h"
 #include "gtkbuttonprivate.h"
 #include "gtknative.h"
-
-#include "a11y/gtkmenubuttonaccessible.h"
 
 typedef struct _GtkMenuButtonClass   GtkMenuButtonClass;
 typedef struct _GtkMenuButtonPrivate GtkMenuButtonPrivate;
@@ -440,7 +437,6 @@ gtk_menu_button_class_init (GtkMenuButtonClass *klass)
 
   g_object_class_install_properties (gobject_class, LAST_PROP, menu_button_props);
 
-  gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_MENU_BUTTON_ACCESSIBLE);
   gtk_widget_class_set_css_name (widget_class, I_("menubutton"));
 }
 
