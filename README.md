@@ -56,7 +56,6 @@ building for:
   - [Pango](https://download.gnome.org/sources/pango)
   - [Epoxy](https://github.com/anholt/libepoxy)
   - [Graphene](https://github.com/ebassi/graphene)
-  - [ATK](https://download.gnome.org/sources/atk)
   - [Xkb-common](https://github.com/xkbcommon/libxkbcommon)
 
 If you are building the X11 backend, you will also need:
@@ -70,7 +69,6 @@ If you are building the X11 backend, you will also need:
     - xcursor
     - xdamage
     - xcomposite
-  - [atk-bridge-2.0](https://download.gnome.org/sources/at-spi2-atk)
 
 If you are building the Wayland backend, you will also need:
 

@@ -70,8 +70,6 @@
 #include "gtkdragicon.h"
 #include "gtkwidgetpaintable.h"
 
-#include "a11y/gtkentryaccessible.h"
-
 #include <cairo-gobject.h>
 #include <string.h>
 
@@ -984,7 +982,6 @@ gtk_entry_class_init (GtkEntryClass *class)
                   G_TYPE_NONE, 1,
                   GTK_TYPE_ENTRY_ICON_POSITION);
 
-  gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_ENTRY_ACCESSIBLE);
   gtk_widget_class_set_css_name (widget_class, I_("entry"));
 }
 

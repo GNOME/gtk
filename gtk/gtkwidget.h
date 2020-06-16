@@ -36,7 +36,6 @@
 #include <gtk/gtkshortcut.h>
 #include <gtk/gtkshortcutaction.h>
 #include <gtk/gtktypes.h>
-#include <atk/atk.h>
 
 G_BEGIN_DECLS
 
@@ -186,8 +185,6 @@ struct _GtkWidget
  * @set_focus_child: Sets the focused child of a widget. Must chain up
  * @move_focus: Signal emitted when a change of focus is requested
  * @keynav_failed: Signal emitted if keyboard navigation fails.
- * @get_accessible: Returns the accessible object that describes the
- *   widget to an assistive technology.
  * @query_tooltip: Signal emitted when “has-tooltip” is %TRUE and the
  *   hover timeout has expired with the cursor hovering “above”
  *   widget; or emitted when widget got focus in keyboard mode.
@@ -255,10 +252,6 @@ struct _GtkWidgetClass
                                          GtkDirectionType     direction);
   gboolean (* keynav_failed)            (GtkWidget           *widget,
                                          GtkDirectionType     direction);
-
-  /* accessibility support
-   */
-  AtkObject *  (* get_accessible)     (GtkWidget       *widget);
 
   gboolean     (* query_tooltip)      (GtkWidget  *widget,
                                        gint        x,
@@ -603,17 +596,6 @@ gboolean         gtk_widget_get_support_multidevice (GtkWidget      *widget);
 GDK_AVAILABLE_IN_ALL
 void             gtk_widget_set_support_multidevice (GtkWidget      *widget,
                                                      gboolean        support_multidevice);
-
-/* Accessibility support */
-GDK_AVAILABLE_IN_ALL
-void             gtk_widget_class_set_accessible_type    (GtkWidgetClass     *widget_class,
-                                                          GType               type);
-GDK_AVAILABLE_IN_ALL
-void             gtk_widget_class_set_accessible_role    (GtkWidgetClass     *widget_class,
-                                                          AtkRole             role);
-GDK_AVAILABLE_IN_ALL
-AtkObject*       gtk_widget_get_accessible               (GtkWidget          *widget);
-
 
 /* Margin and alignment */
 GDK_AVAILABLE_IN_ALL

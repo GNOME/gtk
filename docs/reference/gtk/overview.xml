@@ -62,18 +62,6 @@ other widgets that display text.
 </varlistentry>
 
 <varlistentry>
-<term>ATK</term>
-<listitem><para>
-ATK is the Accessibility Toolkit. It provides a set of generic
-interfaces allowing accessibility technologies to interact with a
-graphical user interface. For example, a screen reader uses ATK to
-discover the text in an interface and read it to blind users.  GTK
-widgets have built-in support for accessibility using the ATK
-framework.
-</para></listitem>
-</varlistentry>
-
-<varlistentry>
 <term>GdkPixbuf</term>
 <listitem><para>
 This is a small library which allows you to create GdkPixbuf
