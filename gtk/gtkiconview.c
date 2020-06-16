@@ -27,7 +27,6 @@
 #include "gtkcellrenderer.h"
 #include "gtkcellrendererpixbuf.h"
 #include "gtkcellrenderertext.h"
-#include "gtkcombobox.h"
 #include "gtkcssnodeprivate.h"
 #include "gtkdragsource.h"
 #include "gtkentry.h"

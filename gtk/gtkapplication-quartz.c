@@ -64,6 +64,7 @@ G_DEFINE_TYPE (GtkApplicationImplQuartz, gtk_application_impl_quartz, GTK_TYPE_A
 
 - (id)initWithImpl:(GtkApplicationImplQuartz*)impl;
 - (NSApplicationTerminateReply) applicationShouldTerminate:(NSApplication *)sender;
+- (void)application:(NSApplication *)theApplication openFiles:(NSArray *)filenames;
 @end
 
 @implementation GtkApplicationQuartzDelegate
@@ -83,6 +84,35 @@ G_DEFINE_TYPE (GtkApplicationImplQuartz, gtk_application_impl_quartz, GTK_TYPE_A
    * Just let the OS show the generic message...
    */
   return quartz->quit_inhibit == 0 ? NSTerminateNow : NSTerminateCancel;
+}
+
+-(void)application:(NSApplication *)theApplication openFiles:(NSArray *)filenames
+{
+  GFile **files;
+  gint i;
+  GApplicationFlags flags;
+
+  flags = g_application_get_flags (G_APPLICATION (quartz->impl.application));
+
+  if (~flags & G_APPLICATION_HANDLES_OPEN)
+    {
+      [theApplication replyToOpenOrPrint:NSApplicationDelegateReplyFailure];
+      return;
+    }
+
+  files = g_new (GFile *, [filenames count]);
+
+  for (i = 0; i < [filenames count]; i++)
+    files[i] = g_file_new_for_path ([(NSString *)[filenames objectAtIndex:i] UTF8String]);
+
+  g_application_open (G_APPLICATION (quartz->impl.application), files, [filenames count], "");
+
+  for (i = 0; i < [filenames count]; i++)
+    g_object_unref (files[i]);
+
+  g_free (files);
+
+  [theApplication replyToOpenOrPrint:NSApplicationDelegateReplySuccess];
 }
 @end
 
