@@ -469,7 +469,7 @@ demo_tagged_entry_tag_set_has_close_button (DemoTaggedEntryTag *tag,
 
       image = gtk_image_new_from_icon_name ("window-close-symbolic");
       tag->button = gtk_button_new ();
-      gtk_box_append (GTK_BOX (tag->button), image);
+      gtk_button_set_child (GTK_BUTTON (tag->button), image);
       gtk_widget_set_halign (tag->button, GTK_ALIGN_CENTER);
       gtk_widget_set_valign (tag->button, GTK_ALIGN_CENTER);
       gtk_button_set_has_frame (GTK_BUTTON (tag->button), FALSE);
