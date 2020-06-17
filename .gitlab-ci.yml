@@ -17,7 +17,11 @@ stages:
 # Common variables
 variables:
   COMMON_MESON_FLAGS: "--fatal-meson-warnings --werror"
+  BACKEND_FLAGS: "-Dx11-backend=true -Dwayland-backend=true -Dbroadway-backend=true -Dvulkan=yes"
   MESON_TEST_TIMEOUT_MULTIPLIER: 2
+  FEDORA_IMAGE: "registry.gitlab.gnome.org/gnome/gtk/fedora:v17"
+  FLATPAK_IMAGE: "registry.gitlab.gnome.org/gnome/gnome-runtime-images/gnome:master"
+  DOCS_IMAGE: "registry.gitlab.gnome.org/gnome/gtk/fedora-docs:v19"
 
 .only-default:
   only:
@@ -27,14 +31,14 @@ variables:
 
 style-check-diff:
   extends: .only-default
-  image: registry.gitlab.gnome.org/gnome/gtk/fedora:v17
+  image: $FEDORA_IMAGE
   stage: .pre
   allow_failure: true
   script:
     - .gitlab-ci/run-style-check-diff.sh
 
 .build-fedora-default:
-  image: registry.gitlab.gnome.org/gnome/gtk/fedora:v17
+  image: $FEDORA_IMAGE
   artifacts:
     when: always
     reports:
@@ -66,11 +70,7 @@ fedora-x86_64:
   variables:
     EXTRA_MESON_FLAGS: "--buildtype=debug --default-library=both"
   script:
-    - meson ${COMMON_MESON_FLAGS} ${EXTRA_MESON_FLAGS}
-            -Dx11-backend=true
-            -Dwayland-backend=true
-            -Dbroadway-backend=true
-            -Dvulkan=yes
+    - meson ${COMMON_MESON_FLAGS} ${EXTRA_MESON_FLAGS} ${BACKEND_FLAGS}
             -Dprofiler=true
             _build
     - ninja -C _build
@@ -84,11 +84,7 @@ release-build:
   variables:
     EXTRA_MESON_FLAGS: "--buildtype=release"
   script:
-    - meson ${COMMON_MESON_FLAGS} ${EXTRA_MESON_FLAGS}
-            -Dx11-backend=true
-            -Dwayland-backend=true
-            -Dbroadway-backend=true
-            -Dvulkan=yes
+    - meson ${COMMON_MESON_FLAGS} ${EXTRA_MESON_FLAGS} ${BACKEND_FLAGS}
             _build
     - ninja -C _build
     - .gitlab-ci/run-tests.sh _build x11
@@ -117,7 +113,7 @@ msys2-mingw64:
     CHERE_INVOKING: "yes"
 
 .flatpak-defaults:
-  image: registry.gitlab.gnome.org/gnome/gnome-runtime-images/gnome:master
+  image: $FLATPAK_IMAGE
   stage: flatpak
   allow_failure: true
   tags:
@@ -171,7 +167,7 @@ flatpak-master:icon-browser:
     APPID: org.gtk.IconBrowser4
 
 static-scan:
-  image: registry.gitlab.gnome.org/gnome/gtk/fedora:v16
+  image: $FEDORA_IMAGE
   stage: analysis
   variables:
     EXTRA_MESON_FLAGS: "--buildtype=debug"
@@ -184,7 +180,7 @@ static-scan:
   allow_failure: true
 
 reference:
-  image: registry.gitlab.gnome.org/gnome/gtk/fedora-docs:v19
+  image: $DOCS_IMAGE
   stage: docs
   variables:
     EXTRA_MESON_FLAGS: "--buildtype=release"
