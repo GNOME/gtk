@@ -1,8 +1,8 @@
-/* Entry/Entry Undo
+/* Entry/Undo and Redo
  *
  * GtkEntry can provide basic Undo/Redo support using standard keyboard
- * accelerators such as Primary+z to undo and Primary+Shift+z to redo.
- * Additionally, Primary+y can be used to redo.
+ * accelerators such as Control+z to undo and Control+Shift+z to redo.
+ * Additionally, Control+y can be used to redo.
  *
  * Use gtk_entry_set_enable_undo() to enable undo/redo support.
  */
@@ -23,7 +23,7 @@ do_entry_undo (GtkWidget *do_widget)
       window = gtk_window_new ();
       gtk_window_set_display (GTK_WINDOW (window),
                               gtk_widget_get_display (do_widget));
-      gtk_window_set_title (GTK_WINDOW (window), "Entry Undo");
+      gtk_window_set_title (GTK_WINDOW (window), "Undo and Redo");
       gtk_window_set_resizable (GTK_WINDOW (window), FALSE);
       g_object_add_weak_pointer (G_OBJECT (window), (gpointer *)&window);
 
