@@ -17,8 +17,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-15 20:44+0000\n"
-"PO-Revision-Date: 2020-06-16 09:37+0200\n"
+"POT-Creation-Date: 2020-06-16 19:54+0000\n"
+"PO-Revision-Date: 2020-06-17 13:52+0200\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: Spanish - Spain <gnome-es-list@gnome.org>\n"
 "Language: es_ES\n"
@@ -825,7 +825,7 @@ msgid "Bookmark file to load"
 msgstr "Archivo de marcadores que cargar"
 
 #: gtk/gtkbookmarklist.c:224 gtk/gtkcellrenderertext.c:269 gtk/gtkentry.c:888
-#: gtk/gtklabel.c:747 gtk/gtktext.c:892
+#: gtk/gtklabel.c:747 gtk/gtktext.c:890
 msgid "Attributes"
 msgstr "Atributos"
 
@@ -1242,7 +1242,7 @@ msgstr "Color de fondo RGBA de la celda"
 msgid "Cell background color as a GdkRGBA"
 msgstr "Color de fondo de la celda como GdkRGBA"
 
-#: gtk/gtkcellrenderer.c:414
+#: gtk/gtkcellrenderer.c:414 gtk/gtkeditablelabel.c:285
 msgid "Editing"
 msgstr "Editando"
 
@@ -1671,7 +1671,7 @@ msgid "How to align the lines"
 msgstr "Cómo alinear las líneas"
 
 #: gtk/gtkcellrenderertext.c:546 gtk/gtkentry.c:578 gtk/gtkpasswordentry.c:385
-#: gtk/gtksearchentry.c:260 gtk/gtktext.c:824
+#: gtk/gtksearchentry.c:260 gtk/gtktext.c:822
 msgid "Placeholder text"
 msgstr "Escribir aquí"
 
@@ -2558,6 +2558,11 @@ msgstr ""
 "La alineación horizontal, desde 0 (izquierda) hasta 1 (derecha). Al revés "
 "para distribuciones D-->I."
 
+#: gtk/gtkeditablelabel.c:286
+#| msgid "Whether the widget is visible"
+msgid "Whether the widget is in editing mode"
+msgstr "Indica si el widget está en modo edición"
+
 #: gtk/gtkentrybuffer.c:352
 msgid "The contents of the buffer"
 msgstr "El contenido del búfer"
@@ -2570,7 +2575,7 @@ msgstr "Longitud del texto"
 msgid "Length of the text currently in the buffer"
 msgstr "Longitud del texto actualmente en el búfer"
 
-#: gtk/gtkentrybuffer.c:375 gtk/gtkentry.c:452 gtk/gtktext.c:752
+#: gtk/gtkentrybuffer.c:375 gtk/gtkentry.c:452 gtk/gtktext.c:750
 msgid "Maximum length"
 msgstr "Longitud máxima"
 
@@ -2578,7 +2583,7 @@ msgstr "Longitud máxima"
 msgid "Maximum number of characters for this entry. Zero if no maximum"
 msgstr "Número máximo de caracteres para esta entrada. Cero si no hay máximo"
 
-#: gtk/gtkentry.c:445 gtk/gtktext.c:745
+#: gtk/gtkentry.c:445 gtk/gtktext.c:743
 msgid "Text Buffer"
 msgstr "Búfer de texto"
 
@@ -2586,11 +2591,11 @@ msgstr "Búfer de texto"
 msgid "Text buffer object which actually stores entry text"
 msgstr "Objeto de búfer de texto que realmente almacena la entrada de texto"
 
-#: gtk/gtkentry.c:460 gtk/gtktext.c:918
+#: gtk/gtkentry.c:460 gtk/gtktext.c:916
 msgid "Visibility"
 msgstr "Visibilidad"
 
-#: gtk/gtkentry.c:461 gtk/gtktext.c:919
+#: gtk/gtkentry.c:461 gtk/gtktext.c:917
 msgid ""
 "FALSE displays the “invisible char” instead of the actual text (password "
 "mode)"
@@ -2602,7 +2607,7 @@ msgstr ""
 msgid "FALSE removes outside bevel from entry"
 msgstr "FALSE quita el bisel exterior de la entrada"
 
-#: gtk/gtkentry.c:474 gtk/gtktext.c:760
+#: gtk/gtkentry.c:474 gtk/gtktext.c:758
 msgid "Invisible character"
 msgstr "Carácter invisible"
 
@@ -2613,12 +2618,12 @@ msgstr ""
 "«modo contraseña»)"
 
 #: gtk/gtkentry.c:481 gtk/gtkpasswordentry.c:392 gtk/gtksearchentry.c:267
-#: gtk/gtktext.c:767
+#: gtk/gtktext.c:765
 msgid "Activates default"
 msgstr "Activar predeterminado"
 
 #: gtk/gtkentry.c:482 gtk/gtkpasswordentry.c:393 gtk/gtksearchentry.c:268
-#: gtk/gtktext.c:768
+#: gtk/gtktext.c:766
 msgid ""
 "Whether to activate the default widget (such as the default button in a "
 "dialog) when Enter is pressed"
@@ -2626,7 +2631,7 @@ msgstr ""
 "Indica si se debe activar el widget predeterminado (como el botón "
 "predeterminado en un diálogo) cuando se pulse INTRO"
 
-#: gtk/gtkentry.c:488 gtk/gtktext.c:774
+#: gtk/gtkentry.c:488 gtk/gtktext.c:772
 msgid "Scroll offset"
 msgstr "Desplazamiento del scroll"
 
@@ -2636,19 +2641,19 @@ msgstr ""
 "Número de píxeles de la entrada desplazados en scroll fuera de la pantalla "
 "hacia la izquierda"
 
-#: gtk/gtkentry.c:501 gtk/gtktext.c:787
+#: gtk/gtkentry.c:501 gtk/gtktext.c:785
 msgid "Truncate multiline"
 msgstr "Truncar multilínea"
 
-#: gtk/gtkentry.c:502 gtk/gtktext.c:788
+#: gtk/gtkentry.c:502 gtk/gtktext.c:786
 msgid "Whether to truncate multiline pastes to one line."
 msgstr "Indica si se truncan las pegadas multilíneas a una línea."
 
-#: gtk/gtkentry.c:513 gtk/gtktext.c:799 gtk/gtktextview.c:996
+#: gtk/gtkentry.c:513 gtk/gtktext.c:797 gtk/gtktextview.c:996
 msgid "Overwrite mode"
 msgstr "Modo de sobrescritura"
 
-#: gtk/gtkentry.c:514 gtk/gtktext.c:800
+#: gtk/gtkentry.c:514 gtk/gtktext.c:798
 msgid "Whether new text overwrites existing text"
 msgstr "Indica si el texto introducido sobrescribe el existente"
 
@@ -2656,11 +2661,11 @@ msgstr "Indica si el texto introducido sobrescribe el existente"
 msgid "Length of the text currently in the entry"
 msgstr "Longitud del texto actualmente en la entrada"
 
-#: gtk/gtkentry.c:538 gtk/gtktext.c:811
+#: gtk/gtkentry.c:538 gtk/gtktext.c:809
 msgid "Invisible character set"
 msgstr "Conjunto de caracteres invisibles"
 
-#: gtk/gtkentry.c:539 gtk/gtktext.c:812
+#: gtk/gtkentry.c:539 gtk/gtktext.c:810
 msgid "Whether the invisible character has been set"
 msgstr ""
 "Indica si se ha establecido la invisibilidad del conjunto de caracteres"
@@ -2809,11 +2814,11 @@ msgstr "Marcado de la sugerencia del icono primario"
 msgid "Secondary icon tooltip markup"
 msgstr "Marcado de la sugerencia del icono secundario"
 
-#: gtk/gtkentry.c:825 gtk/gtktext.c:841 gtk/gtktextview.c:1022
+#: gtk/gtkentry.c:825 gtk/gtktext.c:839 gtk/gtktextview.c:1022
 msgid "IM module"
 msgstr "Módulo ME"
 
-#: gtk/gtkentry.c:826 gtk/gtktext.c:842 gtk/gtktextview.c:1023
+#: gtk/gtkentry.c:826 gtk/gtktext.c:840 gtk/gtktextview.c:1023
 msgid "Which IM module should be used"
 msgstr "Qué módulo de ME se debe usar"
 
@@ -2825,22 +2830,22 @@ msgstr "Completado"
 msgid "The auxiliary completion object"
 msgstr "El objeto de completado auxiliar"
 
-#: gtk/gtkentry.c:856 gtk/gtkimcontext.c:337 gtk/gtktext.c:860
+#: gtk/gtkentry.c:856 gtk/gtkimcontext.c:337 gtk/gtktext.c:858
 #: gtk/gtktextview.c:1038
 msgid "Purpose"
 msgstr "Propósito"
 
-#: gtk/gtkentry.c:857 gtk/gtkimcontext.c:338 gtk/gtktext.c:861
+#: gtk/gtkentry.c:857 gtk/gtkimcontext.c:338 gtk/gtktext.c:859
 #: gtk/gtktextview.c:1039
 msgid "Purpose of the text field"
 msgstr "Propósito del campo de texto"
 
-#: gtk/gtkentry.c:870 gtk/gtkimcontext.c:345 gtk/gtktext.c:874
+#: gtk/gtkentry.c:870 gtk/gtkimcontext.c:345 gtk/gtktext.c:872
 #: gtk/gtktextview.c:1054
 msgid "hints"
 msgstr "pistas"
 
-#: gtk/gtkentry.c:871 gtk/gtkimcontext.c:346 gtk/gtktext.c:875
+#: gtk/gtkentry.c:871 gtk/gtkimcontext.c:346 gtk/gtktext.c:873
 #: gtk/gtktextview.c:1055
 msgid "Hints for the text field behaviour"
 msgstr "Pistas para el comportamiento del campo de texto"
@@ -2849,7 +2854,7 @@ msgstr "Pistas para el comportamiento del campo de texto"
 msgid "A list of style attributes to apply to the text of the entry"
 msgstr "Un lista de atributos de estilos para aplicar al texto de la entrada"
 
-#: gtk/gtkentry.c:900 gtk/gtktext.c:904 gtk/gtktexttag.c:557
+#: gtk/gtkentry.c:900 gtk/gtktext.c:902 gtk/gtktexttag.c:557
 #: gtk/gtktextview.c:972
 msgid "Tabs"
 msgstr "Pestañas"
@@ -2867,7 +2872,7 @@ msgid "Whether to show an icon for Emoji"
 msgstr "Indica si se debe mostrar un icono para el emoticono"
 
 #: gtk/gtkentry.c:926 gtk/gtklabel.c:949 gtk/gtkpasswordentry.c:412
-#: gtk/gtktext.c:938 gtk/gtktextview.c:1078
+#: gtk/gtktext.c:936 gtk/gtktextview.c:1078
 msgid "Extra menu"
 msgstr "Menú extra"
 
@@ -2875,11 +2880,11 @@ msgstr "Menú extra"
 msgid "Model menu to append to the context menu"
 msgstr "Modelo de menú que añadir al menú contextual"
 
-#: gtk/gtkentry.c:933 gtk/gtktext.c:911
+#: gtk/gtkentry.c:933 gtk/gtktext.c:909
 msgid "Enable Emoji completion"
 msgstr "Activar completado de emoticonos"
 
-#: gtk/gtkentry.c:934 gtk/gtktext.c:912
+#: gtk/gtkentry.c:934 gtk/gtktext.c:910
 msgid "Whether to suggest Emoji replacements"
 msgstr "Indica si se deben sugerir reemplazos de emoticonos"
 
@@ -3266,11 +3271,11 @@ msgstr "Características de la tipografía como cadena"
 msgid "Language for which features have been selected"
 msgstr "Idioma para el que se han seleccionado las características"
 
-#: gtk/gtkfontchooserwidget.c:664
+#: gtk/gtkfontchooserwidget.c:662
 msgid "The tweak action"
 msgstr "La acción de ajustar"
 
-#: gtk/gtkfontchooserwidget.c:665
+#: gtk/gtkfontchooserwidget.c:663
 msgid "The toggle action to switch to the tweak page"
 msgstr "La acción de conmutar para cambiar a la página de ajustes"
 
@@ -3797,7 +3802,7 @@ msgstr "Número de líneas"
 msgid "The desired number of lines, when ellipsizing a wrapping label"
 msgstr "El número requerido de líneas, al recortar una etiqueta envolvente"
 
-#: gtk/gtklabel.c:950 gtk/gtktext.c:939 gtk/gtktextview.c:1079
+#: gtk/gtklabel.c:950 gtk/gtktext.c:937 gtk/gtktextview.c:1079
 msgid "Menu model to append to the context menu"
 msgstr "Modelo de menú que añadir al menú contextual"
 
@@ -4931,7 +4936,7 @@ msgstr "Configuración"
 msgid "Printer settings"
 msgstr "Configuración de la impresora"
 
-#: gtk/gtkprintjob.c:171 gtk/gtkprintjob.c:172 gtk/gtkprintunixdialog.c:387
+#: gtk/gtkprintjob.c:171 gtk/gtkprintjob.c:172 gtk/gtkprintunixdialog.c:381
 msgid "Page Setup"
 msgstr "Configuración de la página"
 
@@ -4956,11 +4961,11 @@ msgstr "Configuración de la página predeterminada"
 msgid "The GtkPageSetup used by default"
 msgstr "La GtkPageSetup usada por omisión"
 
-#: gtk/gtkprintoperation.c:1093 gtk/gtkprintunixdialog.c:405
+#: gtk/gtkprintoperation.c:1093 gtk/gtkprintunixdialog.c:399
 msgid "Print Settings"
 msgstr "Configuración de impresión"
 
-#: gtk/gtkprintoperation.c:1094 gtk/gtkprintunixdialog.c:406
+#: gtk/gtkprintoperation.c:1094 gtk/gtkprintunixdialog.c:400
 msgid "The GtkPrintSettings used for initializing the dialog"
 msgstr "Los GtkPrintSettings usados para inicializar el diálogo"
 
@@ -4980,11 +4985,11 @@ msgstr "Número de páginas"
 msgid "The number of pages in the document."
 msgstr "El número de páginas en el documento."
 
-#: gtk/gtkprintoperation.c:1153 gtk/gtkprintunixdialog.c:395
+#: gtk/gtkprintoperation.c:1153 gtk/gtkprintunixdialog.c:389
 msgid "Current Page"
 msgstr "Página actual"
 
-#: gtk/gtkprintoperation.c:1154 gtk/gtkprintunixdialog.c:396
+#: gtk/gtkprintoperation.c:1154 gtk/gtkprintunixdialog.c:390
 msgid "The current page in the document"
 msgstr "La página actual en el documento"
 
@@ -5061,7 +5066,7 @@ msgstr "Etiqueta de pestaña personalizada"
 msgid "Label for the tab containing custom widgets."
 msgstr "Etiqueta para la pestaña que contiene widgets personalizados."
 
-#: gtk/gtkprintoperation.c:1330 gtk/gtkprintunixdialog.c:430
+#: gtk/gtkprintoperation.c:1330 gtk/gtkprintunixdialog.c:424
 msgid "Support Selection"
 msgstr "Soportar selección"
 
@@ -5069,7 +5074,7 @@ msgstr "Soportar selección"
 msgid "TRUE if the print operation will support print of selection."
 msgstr "TRUE si la operación de impresión soporta impresión de la selección."
 
-#: gtk/gtkprintoperation.c:1345 gtk/gtkprintunixdialog.c:438
+#: gtk/gtkprintoperation.c:1345 gtk/gtkprintunixdialog.c:432
 msgid "Has Selection"
 msgstr "Tiene selección"
 
@@ -5077,11 +5082,11 @@ msgstr "Tiene selección"
 msgid "TRUE if a selection exists."
 msgstr "TRUE si existe una selección."
 
-#: gtk/gtkprintoperation.c:1359 gtk/gtkprintunixdialog.c:446
+#: gtk/gtkprintoperation.c:1359 gtk/gtkprintunixdialog.c:440
 msgid "Embed Page Setup"
 msgstr "Configuración de página empotrada"
 
-#: gtk/gtkprintoperation.c:1360 gtk/gtkprintunixdialog.c:447
+#: gtk/gtkprintoperation.c:1360 gtk/gtkprintunixdialog.c:441
 msgid "TRUE if page setup combos are embedded in GtkPrintUnixDialog"
 msgstr ""
 "TRUE si los combos de configuración de página están empotrados en "
@@ -5095,31 +5100,31 @@ msgstr "Número de páginas para imprimir"
 msgid "The number of pages that will be printed."
 msgstr "El número de páginas que se imprimirán."
 
-#: gtk/gtkprintunixdialog.c:388
+#: gtk/gtkprintunixdialog.c:382
 msgid "The GtkPageSetup to use"
 msgstr "El GtkPageSetup a usar"
 
-#: gtk/gtkprintunixdialog.c:413
+#: gtk/gtkprintunixdialog.c:407
 msgid "Selected Printer"
 msgstr "Impresora seleccionada"
 
-#: gtk/gtkprintunixdialog.c:414
+#: gtk/gtkprintunixdialog.c:408
 msgid "The GtkPrinter which is selected"
 msgstr "El GtkPrinter que está seleccionado"
 
-#: gtk/gtkprintunixdialog.c:421
+#: gtk/gtkprintunixdialog.c:415
 msgid "Manual Capabilities"
 msgstr "Capacidades manuales"
 
-#: gtk/gtkprintunixdialog.c:422
+#: gtk/gtkprintunixdialog.c:416
 msgid "Capabilities the application can handle"
 msgstr "Capacidades que la aplicación puede manejar"
 
-#: gtk/gtkprintunixdialog.c:431
+#: gtk/gtkprintunixdialog.c:425
 msgid "Whether the dialog supports selection"
 msgstr "Indica si el diálogo soporta selección"
 
-#: gtk/gtkprintunixdialog.c:439
+#: gtk/gtkprintunixdialog.c:433
 msgid "Whether the application has a selection"
 msgstr "Indica si la aplicación tiene una selección"
 
@@ -6441,43 +6446,43 @@ msgstr ""
 "La lista de destinos que soporta este búfer para pegar desde el portapapeles "
 "y el destino del DND"
 
-#: gtk/gtktext.c:746
+#: gtk/gtktext.c:744
 msgid "Text buffer object which actually stores self text"
 msgstr "Objeto de búfer de texto que actualmente almacena la entrada de texto"
 
-#: gtk/gtktext.c:753
+#: gtk/gtktext.c:751
 msgid "Maximum number of characters for this self. Zero if no maximum"
 msgstr "Número máximo de caracteres para esta entrada. Cero si no hay máximo"
 
-#: gtk/gtktext.c:761
+#: gtk/gtktext.c:759
 msgid "The character to use when masking self contents (in “password mode”)"
 msgstr ""
 "El carácter que usar cuando se enmascaren los contenidos de la entrada (en "
 "«modo contraseña»)"
 
-#: gtk/gtktext.c:775
+#: gtk/gtktext.c:773
 msgid "Number of pixels of the self scrolled off the screen to the left"
 msgstr ""
 "Número de píxeles de la entrada desplazados fuera de la pantalla hacia la "
 "izquierda"
 
-#: gtk/gtktext.c:825
+#: gtk/gtktext.c:823
 msgid "Show text in the self when it’s empty and unfocused"
 msgstr "Mostrar texto en la entrada cuando esta vacía y no tiene el foco"
 
-#: gtk/gtktext.c:893
+#: gtk/gtktext.c:891
 msgid "A list of style attributes to apply to the text of the self"
 msgstr "Un lista de atributos de estilos para aplicar al texto de la etiqueta"
 
-#: gtk/gtktext.c:905
+#: gtk/gtktext.c:903
 msgid "A list of tabstop locations to apply to the text of the self"
 msgstr "Un lista de ubicaciones tabuladas que aplicar al texto de la entrada"
 
-#: gtk/gtktext.c:925
+#: gtk/gtktext.c:923
 msgid "Propagate text width"
 msgstr "Propagar anchura del texto"
 
-#: gtk/gtktext.c:926
+#: gtk/gtktext.c:924
 msgid "Whether the entry should grow and shrink with the content"
 msgstr "Indica si la entrada debe crecer y encogerse con el contenido"
 
