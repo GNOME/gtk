@@ -37,7 +37,7 @@ wayland_proto_req  = '>= 1.20'
 wayland_req        = '>= 1.14.91'
 graphene_req       = '>= 1.9.1'
 epoxy_req          = '>= 1.4'
-cloudproviders_req = '>= 0.2.5'
+cloudproviders_req = '>= 0.3.1'
 xkbcommon_req      = '>= 0.2.0'
 
 gnome = import('gnome')
@@ -666,7 +666,15 @@ endif
 
 cloudproviders_enabled = get_option('cloudproviders')
 if cloudproviders_enabled
-  cloudproviders_dep = dependency('cloudproviders', required: true)
+  cloudproviders_dep = dependency('cloudproviders',
+    version: cloudproviders_req,
+    fallback: [
+      'libcloudproviders',
+      'libcloudproviders_dep',
+    ],
+    default_options: [
+      'vapigen=false',
+    ])
   if cloudproviders_dep.found()
     cdata.set('HAVE_CLOUDPROVIDERS', cloudproviders_dep.found())
   else
