@@ -30,6 +30,7 @@
 #include "gtkpango.h"
 
 #include <math.h>
+#include <float.h>
 
 struct _GtkCssValue {
   GTK_CSS_VALUE_BASE
@@ -685,6 +686,17 @@ corner_mask_equal (CornerMask *mask1,
     mask1->corner.vertical == mask2->corner.vertical;
 }
 
+static double
+quantize (double val)
+{
+  static const double factor = 40.0;
+
+  if (val > DBL_MAX / factor)
+    return val;
+
+  return floor (val * factor) / factor;
+}
+
 static void
 draw_shadow_corner (const GtkCssValue   *shadow,
                     cairo_t             *cr,
@@ -784,7 +796,7 @@ draw_shadow_corner (const GtkCssValue   *shadow,
    *
    * The blur radius (which also defines the clip_radius)
    *
-   * The the horizontal and vertical corner radius
+   * The horizontal and vertical corner radius
    *
    * We apply the first position and orientation when drawing the
    * mask, so we cache rendered masks based on the blur radius and the
@@ -795,8 +807,9 @@ draw_shadow_corner (const GtkCssValue   *shadow,
                                                (GEqualFunc)corner_mask_equal,
                                                g_free, (GDestroyNotify)cairo_surface_destroy);
 
-  key.radius = radius;
-  key.corner = box->corner[corner];
+  key.radius = quantize (radius);
+  key.corner.horizontal = quantize (box->corner[corner].horizontal);
+  key.corner.vertical = quantize (box->corner[corner].vertical);
 
   mask = g_hash_table_lookup (corner_mask_cache, &key);
   if (mask == NULL)
