@@ -57,7 +57,6 @@ do_tagged_entry (GtkWidget *do_widget)
   static GtkWidget *window = NULL;
   GtkWidget *box;
   GtkWidget *box2;
-  GtkWidget *header;
   GtkWidget *entry;
   GtkWidget *button;
 
@@ -66,12 +65,9 @@ do_tagged_entry (GtkWidget *do_widget)
       window = gtk_window_new ();
       gtk_window_set_display (GTK_WINDOW (window),
                               gtk_widget_get_display (do_widget));
-      header = gtk_header_bar_new ();
-      gtk_header_bar_set_show_title_buttons (GTK_HEADER_BAR (header), FALSE);
-      gtk_window_set_titlebar (GTK_WINDOW (window), header);
-      gtk_window_set_title (GTK_WINDOW (window), "A tagged entry");
-      gtk_window_set_resizable (GTK_WINDOW (window), TRUE);
-      gtk_window_set_deletable (GTK_WINDOW (window), FALSE);
+      gtk_window_set_title (GTK_WINDOW (window), "Tagged Entry");
+      gtk_window_set_resizable (GTK_WINDOW (window), FALSE);
+
       g_object_add_weak_pointer (G_OBJECT (window), (gpointer *)&window);
 
       box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 6);
@@ -95,13 +91,6 @@ do_tagged_entry (GtkWidget *do_widget)
       button = gtk_check_button_new_with_mnemonic ("_Spinner");
       g_signal_connect (button, "toggled", G_CALLBACK (toggle_spinner), entry);
       gtk_box_append (GTK_BOX (box2), button);
-      
-      button = gtk_button_new_with_mnemonic ("_Done");
-      gtk_widget_add_css_class (button, "suggested-action");
-      g_signal_connect_swapped (button, "clicked", G_CALLBACK (gtk_window_destroy), window);
-      gtk_header_bar_pack_end (GTK_HEADER_BAR (header), button);
-
-      gtk_window_set_default_widget (GTK_WINDOW (window), button);
     }
 
   if (!gtk_widget_get_visible (window))
