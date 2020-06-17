@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.4.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-13 10:49+0000\n"
-"PO-Revision-Date: 2020-06-13 14:44+0300\n"
+"POT-Creation-Date: 2020-06-16 19:54+0000\n"
+"PO-Revision-Date: 2020-06-17 11:27+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
 "Language: uk\n"
@@ -516,7 +516,7 @@ msgid "Controls whether the action bar shows its contents or not"
 msgstr "Керує тим, чи відображається його вміст на панелі дій"
 
 #: gtk/gtkadjustment.c:139 gtk/gtkcellrendererprogress.c:150
-#: gtk/gtkdroptarget.c:647 gtk/gtkscalebutton.c:207 gtk/gtkspinbutton.c:410
+#: gtk/gtkdroptarget.c:647 gtk/gtkscalebutton.c:207 gtk/gtkspinbutton.c:415
 msgid "Value"
 msgstr "Значення"
 
@@ -815,7 +815,7 @@ msgid "Bookmark file to load"
 msgstr "Файл закладок, який слід завантажити"
 
 #: gtk/gtkbookmarklist.c:224 gtk/gtkcellrenderertext.c:269 gtk/gtkentry.c:888
-#: gtk/gtklabel.c:747 gtk/gtktext.c:892
+#: gtk/gtklabel.c:747 gtk/gtktext.c:890
 msgid "Attributes"
 msgstr "Атрибути"
 
@@ -1227,7 +1227,7 @@ msgstr "Колір тла комірки в RGBA"
 msgid "Cell background color as a GdkRGBA"
 msgstr "Колір тла комірки як GdkRGBA"
 
-#: gtk/gtkcellrenderer.c:414
+#: gtk/gtkcellrenderer.c:414 gtk/gtkeditablelabel.c:285
 msgid "Editing"
 msgstr "Редагування"
 
@@ -1377,11 +1377,11 @@ msgid "Invert the direction in which the progress bar grows"
 msgstr "Перемістити напрямок росту панелі поступу"
 
 #: gtk/gtkcellrendererspin.c:132 gtk/gtkrange.c:373 gtk/gtkscalebutton.c:217
-#: gtk/gtkscrollbar.c:199 gtk/gtkspinbutton.c:360
+#: gtk/gtkscrollbar.c:199 gtk/gtkspinbutton.c:365
 msgid "Adjustment"
 msgstr "Вирівнювання"
 
-#: gtk/gtkcellrendererspin.c:133 gtk/gtkspinbutton.c:361
+#: gtk/gtkcellrendererspin.c:133 gtk/gtkspinbutton.c:366
 msgid "The adjustment that holds the value of the spin button"
 msgstr "Коригування, яке утримує значення кнопки зменшення/збільшення часу"
 
@@ -1393,11 +1393,11 @@ msgstr "Величина прискорення"
 msgid "The acceleration rate when you hold down a button"
 msgstr "Прискорення прокручування значень під час утримання кнопки натиснутою"
 
-#: gtk/gtkcellrendererspin.c:158 gtk/gtkscale.c:677 gtk/gtkspinbutton.c:374
+#: gtk/gtkcellrendererspin.c:158 gtk/gtkscale.c:677 gtk/gtkspinbutton.c:379
 msgid "Digits"
 msgstr "Цифр"
 
-#: gtk/gtkcellrendererspin.c:159 gtk/gtkspinbutton.c:375
+#: gtk/gtkcellrendererspin.c:159 gtk/gtkspinbutton.c:380
 msgid "The number of decimal places to display"
 msgstr "Кількість десяткових місць для показу"
 
@@ -1646,8 +1646,8 @@ msgstr "Вирівнювання"
 msgid "How to align the lines"
 msgstr "Як вирівнювати рядки"
 
-#: gtk/gtkcellrenderertext.c:546 gtk/gtkentry.c:578 gtk/gtkpasswordentry.c:384
-#: gtk/gtksearchentry.c:258 gtk/gtktext.c:824
+#: gtk/gtkcellrenderertext.c:546 gtk/gtkentry.c:578 gtk/gtkpasswordentry.c:385
+#: gtk/gtksearchentry.c:260 gtk/gtktext.c:822
 msgid "Placeholder text"
 msgstr "Заповнення тексту"
 
@@ -2538,6 +2538,11 @@ msgstr ""
 "Горизонтальне вирівнювання, від 0 (ліворуч) до 1 (праворуч). Інвертується "
 "для розташування RTL(справа-наліво)"
 
+#: gtk/gtkeditablelabel.c:286
+#| msgid "Whether the widget is visible"
+msgid "Whether the widget is in editing mode"
+msgstr "Чи перебуває віджет у стані редагування"
+
 #: gtk/gtkentrybuffer.c:352
 msgid "The contents of the buffer"
 msgstr "Вміст буфера"
@@ -2550,7 +2555,7 @@ msgstr "Довжина тексту"
 msgid "Length of the text currently in the buffer"
 msgstr "Довжина теперішнього тексту у буфері"
 
-#: gtk/gtkentrybuffer.c:375 gtk/gtkentry.c:452 gtk/gtktext.c:752
+#: gtk/gtkentrybuffer.c:375 gtk/gtkentry.c:452 gtk/gtktext.c:750
 msgid "Maximum length"
 msgstr "Максимальна довжина"
 
@@ -2558,7 +2563,7 @@ msgstr "Максимальна довжина"
 msgid "Maximum number of characters for this entry. Zero if no maximum"
 msgstr "Максимальна кількість символів у полі. \"0\" — без обмежень."
 
-#: gtk/gtkentry.c:445 gtk/gtktext.c:745
+#: gtk/gtkentry.c:445 gtk/gtktext.c:743
 msgid "Text Buffer"
 msgstr "Буфер тексту"
 
@@ -2566,11 +2571,11 @@ msgstr "Буфер тексту"
 msgid "Text buffer object which actually stores entry text"
 msgstr "Буфер тексту є об'єктом, який зберігає текст елемента"
 
-#: gtk/gtkentry.c:460 gtk/gtktext.c:918
+#: gtk/gtkentry.c:460 gtk/gtktext.c:916
 msgid "Visibility"
 msgstr "Видимість"
 
-#: gtk/gtkentry.c:461 gtk/gtktext.c:919
+#: gtk/gtkentry.c:461 gtk/gtktext.c:917
 msgid ""
 "FALSE displays the “invisible char” instead of the actual text (password "
 "mode)"
@@ -2582,7 +2587,7 @@ msgstr ""
 msgid "FALSE removes outside bevel from entry"
 msgstr "Значення ХИБНІСТЬ(FALSE) вилучає зовнішню фаску поля"
 
-#: gtk/gtkentry.c:474 gtk/gtktext.c:760
+#: gtk/gtkentry.c:474 gtk/gtktext.c:758
 msgid "Invisible character"
 msgstr "Невидимий символ"
 
@@ -2592,13 +2597,13 @@ msgstr ""
 "Символ, що використовуватиметься для маскування вмісту поля (в «режимі "
 "пароля»)"
 
-#: gtk/gtkentry.c:481 gtk/gtkpasswordentry.c:391 gtk/gtksearchentry.c:265
-#: gtk/gtktext.c:767
+#: gtk/gtkentry.c:481 gtk/gtkpasswordentry.c:392 gtk/gtksearchentry.c:267
+#: gtk/gtktext.c:765
 msgid "Activates default"
 msgstr "Активує початковий елемент керування"
 
-#: gtk/gtkentry.c:482 gtk/gtkpasswordentry.c:392 gtk/gtksearchentry.c:266
-#: gtk/gtktext.c:768
+#: gtk/gtkentry.c:482 gtk/gtkpasswordentry.c:393 gtk/gtksearchentry.c:268
+#: gtk/gtktext.c:766
 msgid ""
 "Whether to activate the default widget (such as the default button in a "
 "dialog) when Enter is pressed"
@@ -2606,7 +2611,7 @@ msgstr ""
 "Чи активувати початковий активний віджет (наприклад, початкова активна "
 "кнопка в діалозі), коли натиснута клавіша Enter"
 
-#: gtk/gtkentry.c:488 gtk/gtktext.c:774
+#: gtk/gtkentry.c:488 gtk/gtktext.c:772
 msgid "Scroll offset"
 msgstr "Зміщення прокрутки"
 
@@ -2616,19 +2621,19 @@ msgstr ""
 "Кількість точок поля, що виходитимуть за ліву межу екрана під час "
 "прокручування"
 
-#: gtk/gtkentry.c:501 gtk/gtktext.c:787
+#: gtk/gtkentry.c:501 gtk/gtktext.c:785
 msgid "Truncate multiline"
 msgstr "Обрізати багаторядні"
 
-#: gtk/gtkentry.c:502 gtk/gtktext.c:788
+#: gtk/gtkentry.c:502 gtk/gtktext.c:786
 msgid "Whether to truncate multiline pastes to one line."
 msgstr "Чи обрізати багаторядні вставки у один рядок."
 
-#: gtk/gtkentry.c:513 gtk/gtktext.c:799 gtk/gtktextview.c:996
+#: gtk/gtkentry.c:513 gtk/gtktext.c:797 gtk/gtktextview.c:996
 msgid "Overwrite mode"
 msgstr "Режим заміщення"
 
-#: gtk/gtkentry.c:514 gtk/gtktext.c:800
+#: gtk/gtkentry.c:514 gtk/gtktext.c:798
 msgid "Whether new text overwrites existing text"
 msgstr "Чи текст, що вводиться заміщує наявний"
 
@@ -2636,11 +2641,11 @@ msgstr "Чи текст, що вводиться заміщує наявний"
 msgid "Length of the text currently in the entry"
 msgstr "Довжина поточного тексту у елементі"
 
-#: gtk/gtkentry.c:538 gtk/gtktext.c:811
+#: gtk/gtkentry.c:538 gtk/gtktext.c:809
 msgid "Invisible character set"
 msgstr "Вказати невидимих символів"
 
-#: gtk/gtkentry.c:539 gtk/gtktext.c:812
+#: gtk/gtkentry.c:539 gtk/gtktext.c:810
 msgid "Whether the invisible character has been set"
 msgstr "Чи невидимі символи вказано"
 
@@ -2664,7 +2669,7 @@ msgstr ""
 "Частина загального обсягу робіт, при виконання якої відбувається приріст "
 "індикатора поступу при викликах gtk_entry_progress_pulse()"
 
-#: gtk/gtkentry.c:579 gtk/gtkpasswordentry.c:385 gtk/gtksearchentry.c:259
+#: gtk/gtkentry.c:579 gtk/gtkpasswordentry.c:386 gtk/gtksearchentry.c:261
 msgid "Show text in the entry when it’s empty and unfocused"
 msgstr "Показати текст у записі, коли він порожній і поза фокусом"
 
@@ -2788,11 +2793,11 @@ msgstr "Розмітка контекстної підказки головно�
 msgid "Secondary icon tooltip markup"
 msgstr "Розмітка контекстної підказки додаткового значка"
 
-#: gtk/gtkentry.c:825 gtk/gtktext.c:841 gtk/gtktextview.c:1022
+#: gtk/gtkentry.c:825 gtk/gtktext.c:839 gtk/gtktextview.c:1022
 msgid "IM module"
 msgstr "Модуль вводу"
 
-#: gtk/gtkentry.c:826 gtk/gtktext.c:842 gtk/gtktextview.c:1023
+#: gtk/gtkentry.c:826 gtk/gtktext.c:840 gtk/gtktextview.c:1023
 msgid "Which IM module should be used"
 msgstr "Модуль вводу, що використовується"
 
@@ -2804,22 +2809,22 @@ msgstr "Доповнення"
 msgid "The auxiliary completion object"
 msgstr "Об'єкт допоміжних доповнень"
 
-#: gtk/gtkentry.c:856 gtk/gtkimcontext.c:337 gtk/gtktext.c:860
+#: gtk/gtkentry.c:856 gtk/gtkimcontext.c:337 gtk/gtktext.c:858
 #: gtk/gtktextview.c:1038
 msgid "Purpose"
 msgstr "Призначення"
 
-#: gtk/gtkentry.c:857 gtk/gtkimcontext.c:338 gtk/gtktext.c:861
+#: gtk/gtkentry.c:857 gtk/gtkimcontext.c:338 gtk/gtktext.c:859
 #: gtk/gtktextview.c:1039
 msgid "Purpose of the text field"
 msgstr "Призначення текстового поля"
 
-#: gtk/gtkentry.c:870 gtk/gtkimcontext.c:345 gtk/gtktext.c:874
+#: gtk/gtkentry.c:870 gtk/gtkimcontext.c:345 gtk/gtktext.c:872
 #: gtk/gtktextview.c:1054
 msgid "hints"
 msgstr "підказки"
 
-#: gtk/gtkentry.c:871 gtk/gtkimcontext.c:346 gtk/gtktext.c:875
+#: gtk/gtkentry.c:871 gtk/gtkimcontext.c:346 gtk/gtktext.c:873
 #: gtk/gtktextview.c:1055
 msgid "Hints for the text field behaviour"
 msgstr "Підказки з поведінки текстового поля"
@@ -2828,7 +2833,7 @@ msgstr "Підказки з поведінки текстового поля"
 msgid "A list of style attributes to apply to the text of the entry"
 msgstr "Список атрибутів стилю, які буде застосовано до тексту запису"
 
-#: gtk/gtkentry.c:900 gtk/gtktext.c:904 gtk/gtktexttag.c:557
+#: gtk/gtkentry.c:900 gtk/gtktext.c:902 gtk/gtktexttag.c:557
 #: gtk/gtktextview.c:972
 msgid "Tabs"
 msgstr "Табуляції"
@@ -2846,20 +2851,20 @@ msgstr "Піктограма емодзі"
 msgid "Whether to show an icon for Emoji"
 msgstr "Чи слід показувати піктограму емодзі"
 
-#: gtk/gtkentry.c:926 gtk/gtklabel.c:949 gtk/gtkpasswordentry.c:411
-#: gtk/gtktext.c:938 gtk/gtktextview.c:1078
+#: gtk/gtkentry.c:926 gtk/gtklabel.c:949 gtk/gtkpasswordentry.c:412
+#: gtk/gtktext.c:936 gtk/gtktextview.c:1078
 msgid "Extra menu"
 msgstr "Додаткове меню"
 
-#: gtk/gtkentry.c:927 gtk/gtkpasswordentry.c:412
+#: gtk/gtkentry.c:927 gtk/gtkpasswordentry.c:413
 msgid "Model menu to append to the context menu"
 msgstr "Меню моделі, яке слід долучити до контекстного меню"
 
-#: gtk/gtkentry.c:933 gtk/gtktext.c:911
+#: gtk/gtkentry.c:933 gtk/gtktext.c:909
 msgid "Enable Emoji completion"
 msgstr "Увімкнути завершення емодзі"
 
-#: gtk/gtkentry.c:934 gtk/gtktext.c:912
+#: gtk/gtkentry.c:934 gtk/gtktext.c:910
 msgid "Whether to suggest Emoji replacements"
 msgstr "Чи пропонувати замінники для емодзі"
 
@@ -3244,11 +3249,11 @@ msgstr "Параметри шрифту у форматі рядка"
 msgid "Language for which features have been selected"
 msgstr "Мова, для якої були вибрані параметри"
 
-#: gtk/gtkfontchooserwidget.c:664
+#: gtk/gtkfontchooserwidget.c:662
 msgid "The tweak action"
 msgstr "Дія коригування"
 
-#: gtk/gtkfontchooserwidget.c:665
+#: gtk/gtkfontchooserwidget.c:663
 msgid "The toggle action to switch to the tweak page"
 msgstr "Увімкнути дію для перемикання сторінки коригування"
 
@@ -3775,7 +3780,7 @@ msgstr "Кількість ліній"
 msgid "The desired number of lines, when ellipsizing a wrapping label"
 msgstr "Число рядків при скороченні мітки з використанням трьох крапок"
 
-#: gtk/gtklabel.c:950 gtk/gtktext.c:939 gtk/gtktextview.c:1079
+#: gtk/gtklabel.c:950 gtk/gtktext.c:937 gtk/gtktextview.c:1079
 msgid "Menu model to append to the context menu"
 msgstr "Модель меню для долучення до контекстного меню"
 
@@ -4553,11 +4558,11 @@ msgstr "Другий дочірній"
 msgid "The second child"
 msgstr "Другий дочірній"
 
-#: gtk/gtkpasswordentry.c:398
+#: gtk/gtkpasswordentry.c:399
 msgid "Show Peek Icon"
 msgstr "Показувати піктограму підхоплення"
 
-#: gtk/gtkpasswordentry.c:399
+#: gtk/gtkpasswordentry.c:400
 msgid "Whether to show an icon for revealing the content"
 msgstr "Чи слід показувати піктограму звільнення вмісту"
 
@@ -4904,7 +4909,7 @@ msgstr "Параметри"
 msgid "Printer settings"
 msgstr "Параметри принтера"
 
-#: gtk/gtkprintjob.c:171 gtk/gtkprintjob.c:172 gtk/gtkprintunixdialog.c:387
+#: gtk/gtkprintjob.c:171 gtk/gtkprintjob.c:172 gtk/gtkprintunixdialog.c:381
 msgid "Page Setup"
 msgstr "Параметри сторінки"
 
@@ -4928,11 +4933,11 @@ msgstr "Типові параметри сторінки"
 msgid "The GtkPageSetup used by default"
 msgstr "Типово використовується GtkPageSetup"
 
-#: gtk/gtkprintoperation.c:1093 gtk/gtkprintunixdialog.c:405
+#: gtk/gtkprintoperation.c:1093 gtk/gtkprintunixdialog.c:399
 msgid "Print Settings"
 msgstr "Параметри сторінки"
 
-#: gtk/gtkprintoperation.c:1094 gtk/gtkprintunixdialog.c:406
+#: gtk/gtkprintoperation.c:1094 gtk/gtkprintunixdialog.c:400
 msgid "The GtkPrintSettings used for initializing the dialog"
 msgstr "Для ініціалізації діалогу використовується GtkPrintSettings"
 
@@ -4952,11 +4957,11 @@ msgstr "Кількість каналів"
 msgid "The number of pages in the document."
 msgstr "Кількість сторінок у документі."
 
-#: gtk/gtkprintoperation.c:1153 gtk/gtkprintunixdialog.c:395
+#: gtk/gtkprintoperation.c:1153 gtk/gtkprintunixdialog.c:389
 msgid "Current Page"
 msgstr "Поточна сторінка"
 
-#: gtk/gtkprintoperation.c:1154 gtk/gtkprintunixdialog.c:396
+#: gtk/gtkprintoperation.c:1154 gtk/gtkprintunixdialog.c:390
 msgid "The current page in the document"
 msgstr "Поточна сторінка у документі"
 
@@ -5032,7 +5037,7 @@ msgstr "Інша позначка вкладки"
 msgid "Label for the tab containing custom widgets."
 msgstr "Позначка для вкладки, що містить інший віджет."
 
-#: gtk/gtkprintoperation.c:1330 gtk/gtkprintunixdialog.c:430
+#: gtk/gtkprintoperation.c:1330 gtk/gtkprintunixdialog.c:424
 msgid "Support Selection"
 msgstr "Підтримка виділення"
 
@@ -5040,7 +5045,7 @@ msgstr "Підтримка виділення"
 msgid "TRUE if the print operation will support print of selection."
 msgstr "TRUE, якщо операція друку підтримуватиме друк виділеного."
 
-#: gtk/gtkprintoperation.c:1345 gtk/gtkprintunixdialog.c:438
+#: gtk/gtkprintoperation.c:1345 gtk/gtkprintunixdialog.c:432
 msgid "Has Selection"
 msgstr "Є виділення"
 
@@ -5048,11 +5053,11 @@ msgstr "Є виділення"
 msgid "TRUE if a selection exists."
 msgstr "TRUE, якщо існує вибір."
 
-#: gtk/gtkprintoperation.c:1359 gtk/gtkprintunixdialog.c:446
+#: gtk/gtkprintoperation.c:1359 gtk/gtkprintunixdialog.c:440
 msgid "Embed Page Setup"
 msgstr "Вбудувати параметри сторінки"
 
-#: gtk/gtkprintoperation.c:1360 gtk/gtkprintunixdialog.c:447
+#: gtk/gtkprintoperation.c:1360 gtk/gtkprintunixdialog.c:441
 msgid "TRUE if page setup combos are embedded in GtkPrintUnixDialog"
 msgstr "TRUE, якщо розкривні списки вбудовані у GtkPrintUnixDialog"
 
@@ -5064,31 +5069,31 @@ msgstr "Кількість сторінок для друку"
 msgid "The number of pages that will be printed."
 msgstr "Кількість сторінок, яку буде надруковано."
 
-#: gtk/gtkprintunixdialog.c:388
+#: gtk/gtkprintunixdialog.c:382
 msgid "The GtkPageSetup to use"
 msgstr "GtkPageSetup, що використовується"
 
-#: gtk/gtkprintunixdialog.c:413
+#: gtk/gtkprintunixdialog.c:407
 msgid "Selected Printer"
 msgstr "Вибраний принтер"
 
-#: gtk/gtkprintunixdialog.c:414
+#: gtk/gtkprintunixdialog.c:408
 msgid "The GtkPrinter which is selected"
 msgstr "GtkPrinter, що виділений"
 
-#: gtk/gtkprintunixdialog.c:421
+#: gtk/gtkprintunixdialog.c:415
 msgid "Manual Capabilities"
 msgstr "Ручні можливості"
 
-#: gtk/gtkprintunixdialog.c:422
+#: gtk/gtkprintunixdialog.c:416
 msgid "Capabilities the application can handle"
 msgstr "Можливості, які програма може опрацьовувати"
 
-#: gtk/gtkprintunixdialog.c:431
+#: gtk/gtkprintunixdialog.c:425
 msgid "Whether the dialog supports selection"
 msgstr "Чи діалогове вікно підтримує вибір"
 
-#: gtk/gtkprintunixdialog.c:439
+#: gtk/gtkprintunixdialog.c:433
 msgid "Whether the application has a selection"
 msgstr "Чи програма має функцію вибору"
 
@@ -6104,19 +6109,19 @@ msgstr "Тип пунктів у цьому списку"
 msgid "The model being sorted"
 msgstr "Модель, яка зберігається"
 
-#: gtk/gtkspinbutton.c:367
+#: gtk/gtkspinbutton.c:372
 msgid "Climb Rate"
 msgstr "Прискорення"
 
-#: gtk/gtkspinbutton.c:368
+#: gtk/gtkspinbutton.c:373
 msgid "The acceleration rate when you hold down a button or key"
 msgstr "Величина прискорення при утриманні натиснутої кнопки або клавіші"
 
-#: gtk/gtkspinbutton.c:381
+#: gtk/gtkspinbutton.c:386
 msgid "Snap to Ticks"
 msgstr "Доводити до найближчих"
 
-#: gtk/gtkspinbutton.c:382
+#: gtk/gtkspinbutton.c:387
 msgid ""
 "Whether erroneous values are automatically changed to a spin button’s "
 "nearest step increment"
@@ -6124,35 +6129,35 @@ msgstr ""
 "Чи будуть недозволені значення автоматично замінятися на найближче дозволене "
 "значення"
 
-#: gtk/gtkspinbutton.c:388
+#: gtk/gtkspinbutton.c:393
 msgid "Numeric"
 msgstr "Числове"
 
-#: gtk/gtkspinbutton.c:389
+#: gtk/gtkspinbutton.c:394
 msgid "Whether non-numeric characters should be ignored"
 msgstr "Чи будуть припускатись не цифрові символи"
 
-#: gtk/gtkspinbutton.c:395
+#: gtk/gtkspinbutton.c:400
 msgid "Wrap"
 msgstr "Перенос"
 
-#: gtk/gtkspinbutton.c:396
+#: gtk/gtkspinbutton.c:401
 msgid "Whether a spin button should wrap upon reaching its limits"
 msgstr ""
 "Чи буде лічильник переходити до протилежного кінця шкали під час досягнення "
 "максимальних значень"
 
-#: gtk/gtkspinbutton.c:402
+#: gtk/gtkspinbutton.c:407
 msgid "Update Policy"
 msgstr "Правило оновлення"
 
-#: gtk/gtkspinbutton.c:403
+#: gtk/gtkspinbutton.c:408
 msgid ""
 "Whether the spin button should update always, or only when the value is legal"
 msgstr ""
 "Чи має лічильник поновлюватися постійно, або якщо значення є допустимим"
 
-#: gtk/gtkspinbutton.c:411
+#: gtk/gtkspinbutton.c:416
 msgid "Reads the current value, or sets a new value"
 msgstr "Зчитує поточне чи встановлює нове значення"
 
@@ -6376,44 +6381,44 @@ msgid ""
 msgstr ""
 "Список цілей цього буферу підтримується для вставки та цілі перетягування"
 
-#: gtk/gtktext.c:746
+#: gtk/gtktext.c:744
 msgid "Text buffer object which actually stores self text"
 msgstr "Буфер тексту є об'єктом, який зберігає текст елемента"
 
-#: gtk/gtktext.c:753
+#: gtk/gtktext.c:751
 msgid "Maximum number of characters for this self. Zero if no maximum"
 msgstr "Максимальна кількість символів для цього об'єкта. «0» — без обмежень."
 
-#: gtk/gtktext.c:761
+#: gtk/gtktext.c:759
 msgid "The character to use when masking self contents (in “password mode”)"
 msgstr ""
 "Символ, що використовуватиметься для маскування вмісту поля (у «режимі "
 "пароля»)"
 
-#: gtk/gtktext.c:775
+#: gtk/gtktext.c:773
 msgid "Number of pixels of the self scrolled off the screen to the left"
 msgstr ""
 "Кількість точок об'єкта, що виходитимуть за ліву межу екрана під час гортання"
 
-#: gtk/gtktext.c:825
+#: gtk/gtktext.c:823
 msgid "Show text in the self when it’s empty and unfocused"
 msgstr "Показувати текст у об'єкті, коли він порожній і поза фокусом"
 
-#: gtk/gtktext.c:893
+#: gtk/gtktext.c:891
 msgid "A list of style attributes to apply to the text of the self"
 msgstr "Список стильових ознак для застосування до тексту об'єкта"
 
-#: gtk/gtktext.c:905
+#: gtk/gtktext.c:903
 msgid "A list of tabstop locations to apply to the text of the self"
 msgstr ""
 "Перелік місцезнаходжень зупинок табуляції, що застосовуються до тексту "
 "об'єкта"
 
-#: gtk/gtktext.c:925
+#: gtk/gtktext.c:923
 msgid "Propagate text width"
 msgstr "Передавати ширину тексту"
 
-#: gtk/gtktext.c:926
+#: gtk/gtktext.c:924
 msgid "Whether the entry should grow and shrink with the content"
 msgstr "Чи має об'єкт збільшувати чи зменшувати розміри, залежно від вмісту"
 
