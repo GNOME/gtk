@@ -1046,8 +1046,9 @@ activate (GApplication *app)
                                        NULL);
   selection = gtk_single_selection_new (G_LIST_MODEL (treemodel));
   g_signal_connect (selection, "notify::selected-item", G_CALLBACK (selection_cb), NULL);
-  gtk_list_view_set_model (GTK_LIST_VIEW (listview),
-                           G_LIST_MODEL (selection));
+  gtk_list_view_set_model (GTK_LIST_VIEW (listview), G_LIST_MODEL (selection));
+
+  selection_cb (selection, NULL, NULL);
 
   g_object_unref (builder);
 }
