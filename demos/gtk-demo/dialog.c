@@ -1,6 +1,7 @@
-/* Dialogs and Message Boxes
+/* Dialogs
  *
- * Dialog widgets are used to pop up a transient window for user feedback.
+ * Dialogs are used to pop up transient windows for information
+ * and user feedback.
  */
 
 #include <glib/gi18n.h>
@@ -21,10 +22,9 @@ message_dialog_clicked (GtkButton *button,
                                    GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
                                    GTK_MESSAGE_INFO,
                                    GTK_BUTTONS_OK_CANCEL,
-                                   "This message box has been popped up the following\n"
-                                   "number of times:");
+                                   "Test message");
   gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
-                                            "%d", i);
+                                            ngettext ("Has been shown once", "Has been shown %d times", i), i);
   g_signal_connect (dialog, "response", G_CALLBACK (gtk_window_destroy), NULL);
   gtk_widget_show (dialog);
   i++;
@@ -61,8 +61,6 @@ interactive_dialog_clicked (GtkButton *button,
 {
   GtkWidget *content_area;
   GtkWidget *dialog;
-  GtkWidget *hbox;
-  GtkWidget *image;
   GtkWidget *table;
   GtkWidget *local_entry1;
   GtkWidget *local_entry2;
@@ -71,26 +69,24 @@ interactive_dialog_clicked (GtkButton *button,
 
   dialog = gtk_dialog_new_with_buttons ("Interactive Dialog",
                                         GTK_WINDOW (window),
-                                        GTK_DIALOG_MODAL| GTK_DIALOG_DESTROY_WITH_PARENT,
-                                        _("_OK"),
-                                        GTK_RESPONSE_OK,
-                                        "_Cancel",
-                                        GTK_RESPONSE_CANCEL,
+                                        GTK_DIALOG_MODAL| GTK_DIALOG_DESTROY_WITH_PARENT|GTK_DIALOG_USE_HEADER_BAR,
+                                        _("_OK"), GTK_RESPONSE_OK,
+                                        _("_Cancel"), GTK_RESPONSE_CANCEL,
                                         NULL);
+
+  gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
 
   content_area = gtk_dialog_get_content_area (GTK_DIALOG (dialog));
 
-  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 8);
-  gtk_box_append (GTK_BOX (content_area), hbox);
-
-  image = gtk_image_new_from_icon_name ("dialog-question");
-  gtk_image_set_icon_size (GTK_IMAGE (image), GTK_ICON_SIZE_LARGE);
-  gtk_box_append (GTK_BOX (hbox), image);
-
   table = gtk_grid_new ();
-  gtk_grid_set_row_spacing (GTK_GRID (table), 4);
-  gtk_grid_set_column_spacing (GTK_GRID (table), 4);
-  gtk_box_append (GTK_BOX (hbox), table);
+  gtk_widget_set_hexpand (table, TRUE);
+  gtk_widget_set_vexpand (table, TRUE);
+  gtk_widget_set_halign (table, GTK_ALIGN_CENTER);
+  gtk_widget_set_valign (table, GTK_ALIGN_CENTER);
+  gtk_box_append (GTK_BOX (content_area), table);
+  gtk_grid_set_row_spacing (GTK_GRID (table), 6);
+  gtk_grid_set_column_spacing (GTK_GRID (table), 6);
+
   label = gtk_label_new_with_mnemonic ("_Entry 1");
   gtk_grid_attach (GTK_GRID (table), label, 0, 0, 1, 1);
   local_entry1 = gtk_entry_new ();
@@ -123,7 +119,6 @@ interactive_dialog_clicked (GtkButton *button,
 GtkWidget *
 do_dialog (GtkWidget *do_widget)
 {
-  GtkWidget *frame;
   GtkWidget *vbox;
   GtkWidget *vbox2;
   GtkWidget *hbox;
@@ -136,22 +131,16 @@ do_dialog (GtkWidget *do_widget)
       window = gtk_window_new ();
       gtk_window_set_display (GTK_WINDOW (window),
                               gtk_widget_get_display (do_widget));
-      gtk_window_set_title (GTK_WINDOW (window), "Dialogs and Message Boxes");
+      gtk_window_set_title (GTK_WINDOW (window), "Dialogs");
+      gtk_window_set_resizable (GTK_WINDOW (window), FALSE);
       g_object_add_weak_pointer (G_OBJECT (window), (gpointer *)&window);
-
-      frame = gtk_frame_new ("Dialogs");
-      gtk_widget_set_margin_start (frame, 8);
-      gtk_widget_set_margin_end (frame, 8);
-      gtk_widget_set_margin_top (frame, 8);
-      gtk_widget_set_margin_bottom (frame, 8);
-      gtk_window_set_child (GTK_WINDOW (window), frame);
 
       vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 8);
       gtk_widget_set_margin_start (vbox, 8);
       gtk_widget_set_margin_end (vbox, 8);
       gtk_widget_set_margin_top (vbox, 8);
       gtk_widget_set_margin_bottom (vbox, 8);
-      gtk_frame_set_child (GTK_FRAME (frame), vbox);
+      gtk_window_set_child (GTK_WINDOW (window), vbox);
 
       /* Standard message dialog */
       hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 8);
