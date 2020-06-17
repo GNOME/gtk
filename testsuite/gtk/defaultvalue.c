@@ -469,9 +469,6 @@ main (int argc, char **argv)
 {
   const GType *otypes;
   guint i;
-  GTestDBus *bus;
-  GMainLoop *loop;
-  gint result;
   const char *display, *x_r_d;
 
   /* These must be set before gtk_test_init */
@@ -482,12 +479,6 @@ main (int argc, char **argv)
   /* g_test_dbus_up() helpfully clears these, so we have to re-set it */
   display = g_getenv ("DISPLAY");
   x_r_d = g_getenv ("XDG_RUNTIME_DIR");
-
-  /* Create one test bus for all tests, as we have a lot of very small
-   * and quick tests.
-   */
-  bus = g_test_dbus_new (G_TEST_DBUS_NONE);
-  g_test_dbus_up (bus);
 
   if (display)
     g_setenv ("DISPLAY", display, TRUE);
@@ -515,18 +506,5 @@ main (int argc, char **argv)
       g_free (testname);
     }
 
-  result = g_test_run();
-
-  /* Work around the annoying issue that g_test_dbus_down is giving
-   * us an "Error while sending AddMatch" that comes out of an idle
-   */
-  loop = g_main_loop_new (NULL, FALSE);
-  g_timeout_add (1000, (GSourceFunc)g_main_loop_quit, loop);
-  g_main_loop_run (loop);
-  g_main_loop_unref (loop);
-
-  g_test_dbus_down (bus);
-  g_object_unref (bus);
-
-  return result;
+  return g_test_run();
 }
