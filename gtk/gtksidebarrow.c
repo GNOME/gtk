@@ -30,7 +30,7 @@
 #include "gtkspinner.h"
 
 #ifdef HAVE_CLOUDPROVIDERS
-#include <cloudproviders/cloudprovidersaccount.h>
+#include <cloudproviders.h>
 #endif
 
 struct _GtkSidebarRow

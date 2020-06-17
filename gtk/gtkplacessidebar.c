@@ -25,9 +25,7 @@
 
 #include <gio/gio.h>
 #ifdef HAVE_CLOUDPROVIDERS
-#include <cloudproviders/cloudproviderscollector.h>
-#include <cloudproviders/cloudprovidersaccount.h>
-#include <cloudproviders/cloudprovidersprovider.h>
+#include <cloudproviders.h>
 #endif
 
 #include "gtkplacessidebarprivate.h"
