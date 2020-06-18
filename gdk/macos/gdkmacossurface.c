@@ -1012,6 +1012,16 @@ _gdk_macos_surface_get_view (GdkMacosSurface *self)
 }
 
 void
+_gdk_macos_surface_set_opacity (GdkMacosSurface *self,
+                                double           opacity)
+{
+  g_return_if_fail (GDK_IS_MACOS_SURFACE (self));
+
+  if (self->window != NULL)
+    [self->window setAlphaValue:opacity];
+}
+
+void
 _gdk_macos_surface_get_root_coords (GdkMacosSurface *self,
                                     int             *x,
                                     int             *y)
