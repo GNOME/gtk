@@ -217,8 +217,8 @@ gdk_drag_update (GdkDrag         *drag,
                                 &possible_actions);
 
   _gdk_macos_drag_surface_drag_motion (self->drag_surface,
-                                       x_root,
-                                       y_root,
+                                       x_root - self->hot_x,
+                                       y_root - self->hot_y,
                                        suggested_action,
                                        possible_actions,
                                        evtime);
