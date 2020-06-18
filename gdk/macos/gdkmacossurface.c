@@ -32,6 +32,7 @@
 
 #include "gdkmacosdevice.h"
 #include "gdkmacosdisplay-private.h"
+#include "gdkmacosdrag-private.h"
 #include "gdkmacosdragsurface-private.h"
 #include "gdkmacosmonitor-private.h"
 #include "gdkmacospopupsurface-private.h"
@@ -279,6 +280,54 @@ gdk_macos_surface_get_geometry (GdkSurface *surface,
     *height = surface->height;
 }
 
+static GdkDrag *
+gdk_macos_surface_drag_begin (GdkSurface         *surface,
+                              GdkDevice          *device,
+                              GdkContentProvider *content,
+                              GdkDragAction       actions,
+                              double              dx,
+                              double              dy)
+{
+  GdkMacosSurface *self = (GdkMacosSurface *)surface;
+  GdkMacosSurface *drag_surface;
+  GdkCursor *cursor;
+  GdkSeat *seat;
+  GdkDrag *drag;
+
+  g_assert (GDK_IS_MACOS_SURFACE (self));
+  g_assert (GDK_IS_MACOS_TOPLEVEL_SURFACE (self) ||
+            GDK_IS_MACOS_POPUP_SURFACE (self));
+  g_assert (GDK_IS_MACOS_DEVICE (device));
+  g_assert (GDK_IS_CONTENT_PROVIDER (content));
+
+  seat = gdk_device_get_seat (device);
+  drag_surface = _gdk_macos_surface_new (GDK_MACOS_DISPLAY (surface->display),
+                                         GDK_SURFACE_TEMP,
+                                         surface,
+                                         dx, dy,
+                                         1, 1);
+  drag = g_object_new (GDK_TYPE_MACOS_DRAG,
+                       "drag-surface", drag_surface,
+                       "surface", surface,
+                       "device", device,
+                       "content", content,
+                       "actions", actions,
+                       NULL);
+
+  cursor = gdk_drag_get_cursor (GDK_DRAG (drag),
+                                gdk_drag_get_selected_action (GDK_DRAG (drag)));
+  gdk_drag_set_cursor (GDK_DRAG (drag), cursor);
+
+  gdk_seat_ungrab (seat);
+
+  g_clear_object (&drag_surface);
+
+  /* Hold a reference until drop_done is called */
+  g_object_ref (drag);
+
+  return g_steal_pointer (&drag);
+}
+
 static void
 gdk_macos_surface_destroy (GdkSurface *surface,
                            gboolean    foreign_destroy)
@@ -391,6 +440,7 @@ gdk_macos_surface_class_init (GdkMacosSurfaceClass *klass)
   object_class->set_property = gdk_macos_surface_set_property;
 
   surface_class->destroy = gdk_macos_surface_destroy;
+  surface_class->drag_begin = gdk_macos_surface_drag_begin;
   surface_class->get_device_state = gdk_macos_surface_get_device_state;
   surface_class->get_geometry = gdk_macos_surface_get_geometry;
   surface_class->get_root_coords = gdk_macos_surface_get_root_coords;
@@ -448,7 +498,7 @@ _gdk_macos_surface_new (GdkMacosDisplay   *display,
       break;
 
     case GDK_SURFACE_TEMP:
-      ret = _gdk_macos_drag_surface_new (display, parent, frame_clock, x, y, width, height);
+      ret = _gdk_macos_drag_surface_new (display, frame_clock, x, y, width, height);
       break;
 
     default:
