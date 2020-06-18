@@ -75,7 +75,7 @@
  *       </object>
  *     </child>
  * ]|
- * 
+ *
  * # CSS nodes
  *
  * GtkStack has a single CSS node named stack.
@@ -207,7 +207,7 @@ struct _GtkStackPageClass
 };
 
 static GParamSpec *stack_props[LAST_PROP] = { NULL, };
-static GParamSpec *stack_child_props[LAST_CHILD_PROP] = { NULL, };
+static GParamSpec *stack_page_props[LAST_CHILD_PROP] = { NULL, };
 
 G_DEFINE_TYPE (GtkStackPage, gtk_stack_page, G_TYPE_OBJECT)
 
@@ -249,19 +249,19 @@ gtk_stack_page_get_property (GObject      *object,
       break;
 
     case CHILD_PROP_NAME:
-      g_value_set_string (value, info->name);
+      g_value_set_string (value, gtk_stack_page_get_name (info));
       break;
 
     case CHILD_PROP_TITLE:
-      g_value_set_string (value, info->title);
+      g_value_set_string (value, gtk_stack_page_get_title (info));
       break;
 
     case CHILD_PROP_ICON_NAME:
-      g_value_set_string (value, info->icon_name);
+      g_value_set_string (value, gtk_stack_page_get_icon_name (info));
       break;
 
     case CHILD_PROP_NEEDS_ATTENTION:
-      g_value_set_boolean (value, info->needs_attention);
+      g_value_set_boolean (value, gtk_stack_page_get_needs_attention (info));
       break;
 
     case CHILD_PROP_VISIBLE:
@@ -269,7 +269,7 @@ gtk_stack_page_get_property (GObject      *object,
       break;
 
     case CHILD_PROP_USE_UNDERLINE:
-      g_value_set_boolean (value, info->use_underline);
+      g_value_set_boolean (value, gtk_stack_page_get_use_underline (info));
       break;
 
     default:
@@ -285,17 +285,6 @@ gtk_stack_page_set_property (GObject      *object,
                              GParamSpec   *pspec)
 {
   GtkStackPage *info = GTK_STACK_PAGE (object);
-  GtkWidget *stack = NULL;
-  GtkStackPrivate *priv = NULL;
-  gchar *name;
-  GList *l;
-
-  if (info->widget)
-    {
-      stack = gtk_widget_get_parent (info->widget);
-      if (stack)
-        priv = gtk_stack_get_instance_private (GTK_STACK (stack));
-    }
 
   switch (property_id)
     {
@@ -304,48 +293,19 @@ gtk_stack_page_set_property (GObject      *object,
       break;
 
     case CHILD_PROP_NAME:
-      name = g_value_dup_string (value);
-      for (l = priv ? priv->children : NULL; l != NULL; l = l->next)
-        {
-          GtkStackPage *info2 = l->data;
-          if (info == info2)
-            continue;
-          if (g_strcmp0 (info2->name, name) == 0)
-            {
-              g_warning ("Duplicate child name in GtkStack: %s", name);
-              break;
-            }
-        }
-
-      g_free (info->name);
-      info->name = name;
-
-      g_object_notify_by_pspec (object, pspec);
-
-      if (priv && priv->visible_child == info)
-        g_object_notify_by_pspec (G_OBJECT (stack),
-                                  stack_props[PROP_VISIBLE_CHILD_NAME]);
-
+      gtk_stack_page_set_name (info, g_value_get_string (value));
       break;
 
     case CHILD_PROP_TITLE:
-      g_free (info->title);
-      info->title = g_value_dup_string (value);
-      g_object_notify_by_pspec (object, pspec);
+      gtk_stack_page_set_title (info, g_value_get_string (value));
       break;
 
     case CHILD_PROP_ICON_NAME:
-      g_free (info->icon_name);
-      info->icon_name = g_value_dup_string (value);
-      g_object_notify_by_pspec (object, pspec);
+      gtk_stack_page_set_icon_name (info, g_value_get_string (value));
       break;
 
     case CHILD_PROP_NEEDS_ATTENTION:
-      if (info->needs_attention != g_value_get_boolean (value))
-        {
-          info->needs_attention = g_value_get_boolean (value);
-          g_object_notify_by_pspec (object, pspec);
-        }
+      gtk_stack_page_set_needs_attention (info, g_value_get_boolean (value));
       break;
 
     case CHILD_PROP_VISIBLE:
@@ -353,11 +313,7 @@ gtk_stack_page_set_property (GObject      *object,
       break;
 
     case CHILD_PROP_USE_UNDERLINE:
-      if (info->use_underline != g_value_get_boolean (value))
-        {
-          info->use_underline = g_value_get_boolean (value);
-          g_object_notify_by_pspec (object, pspec);
-        }
+      gtk_stack_page_set_use_underline (info, g_value_get_boolean (value));
       break;
 
     default:
@@ -374,28 +330,28 @@ gtk_stack_page_class_init (GtkStackPageClass *class)
   object_class->get_property = gtk_stack_page_get_property;
   object_class->set_property = gtk_stack_page_set_property;
 
-  stack_child_props[CHILD_PROP_CHILD] =
+  stack_page_props[CHILD_PROP_CHILD] =
     g_param_spec_object ("child",
                          P_("Child"),
                          P_("The child of the page"),
                          GTK_TYPE_WIDGET,
                          GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY);
 
-  stack_child_props[CHILD_PROP_NAME] =
+  stack_page_props[CHILD_PROP_NAME] =
     g_param_spec_string ("name",
                          P_("Name"),
                          P_("The name of the child page"),
                          NULL,
                          GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY);
 
-  stack_child_props[CHILD_PROP_TITLE] =
+  stack_page_props[CHILD_PROP_TITLE] =
     g_param_spec_string ("title",
                          P_("Title"),
                          P_("The title of the child page"),
                          NULL,
                          GTK_PARAM_READWRITE);
 
-  stack_child_props[CHILD_PROP_ICON_NAME] =
+  stack_page_props[CHILD_PROP_ICON_NAME] =
     g_param_spec_string ("icon-name",
                          P_("Icon name"),
                          P_("The icon name of the child page"),
@@ -410,28 +366,28 @@ gtk_stack_page_class_init (GtkStackPageClass *class)
    * corresponding button when a page needs attention and it is not the
    * current one.
    */
-  stack_child_props[CHILD_PROP_NEEDS_ATTENTION] =
+  stack_page_props[CHILD_PROP_NEEDS_ATTENTION] =
     g_param_spec_boolean ("needs-attention",
                          P_("Needs Attention"),
                          P_("Whether this page needs attention"),
                          FALSE,
                          GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
-  stack_child_props[CHILD_PROP_VISIBLE] =
+  stack_page_props[CHILD_PROP_VISIBLE] =
     g_param_spec_boolean ("visible",
                          P_("Visible"),
                          P_("Whether this page is visible"),
                          TRUE,
                          GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
-  stack_child_props[CHILD_PROP_USE_UNDERLINE] =
+  stack_page_props[CHILD_PROP_USE_UNDERLINE] =
     g_param_spec_boolean ("use-underline",
                          P_("Use underline"),
                          P_("If set, an underline in the title indicates the next character should be used for the mnemonic accelerator key"),
                          FALSE,
                          GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
-  g_object_class_install_properties (object_class, LAST_CHILD_PROP, stack_child_props);
+  g_object_class_install_properties (object_class, LAST_CHILD_PROP, stack_page_props);
 }
 
 #define GTK_TYPE_STACK_PAGES (gtk_stack_pages_get_type ())
@@ -2508,11 +2464,11 @@ gtk_stack_get_pages (GtkStack *stack)
  * #GtkWidget.
  */
 gboolean
-gtk_stack_page_get_visible (GtkStackPage *page)
+gtk_stack_page_get_visible (GtkStackPage *self)
 {
-  g_return_val_if_fail (GTK_IS_STACK_PAGE (page), FALSE);
+  g_return_val_if_fail (GTK_IS_STACK_PAGE (self), FALSE);
 
-  return page->visible;
+  return self->visible;
 }
 
 /**
@@ -2524,17 +2480,239 @@ gtk_stack_page_get_visible (GtkStackPage *page)
  * to @visible.
  */
 void
-gtk_stack_page_set_visible (GtkStackPage *page,
+gtk_stack_page_set_visible (GtkStackPage *self,
                             gboolean      visible)
 {
-  g_return_if_fail (GTK_IS_STACK_PAGE (page));
+  g_return_if_fail (GTK_IS_STACK_PAGE (self));
 
   visible = !!visible;
 
-  if (visible != page->visible)
-    {
-      page->visible = visible;
+  if (visible == self->visible)
+    return;
 
-      g_object_notify_by_pspec (G_OBJECT (page), stack_child_props[CHILD_PROP_VISIBLE]);
+  self->visible = visible;
+  g_object_notify_by_pspec (G_OBJECT (self), stack_page_props[CHILD_PROP_VISIBLE]);
+}
+
+/**
+ * gtk_stack_page_get_needs_attention:
+ * @self: a #GtkStackPage
+ *
+ * Returns the current value of the #GtkStackPage:needs-attention property.
+ *
+ * Returns: The value of the #GtkStackPage:needs-attention property.
+ *   See gtk_stack_page_set_needs_attention() for details on how to set a new value.
+ */
+gboolean
+gtk_stack_page_get_needs_attention (GtkStackPage *self)
+{
+  return self->needs_attention;
+}
+
+/**
+ * gtk_stack_page_set_needs_attention:
+ * @self: a #GtkStackPage
+ * @setting: the new value to set
+ *
+ * Sets the new value of the #GtkStackPage:needs-attention property.
+ * See also gtk_stack_page_get_needs_attention()
+ *
+ */
+void
+gtk_stack_page_set_needs_attention (GtkStackPage *self,
+                                    gboolean      setting)
+{
+  setting = !!setting;
+
+  if (setting == self->needs_attention)
+    return;
+
+  self->needs_attention = setting;
+  g_object_notify_by_pspec (G_OBJECT (self), stack_page_props[CHILD_PROP_NEEDS_ATTENTION]);
+}
+
+/**
+ * gtk_stack_page_get_use_underline:
+ * @self: a #GtkStackPage
+ *
+ * Returns the current value of the #GtkStackPage:use-underline property.
+ *
+ * Returns: The value of the #GtkStackPage:use-underline property.
+ *   See gtk_stack_page_set_use_underline() for details on how to set a new value.
+ */
+gboolean
+gtk_stack_page_get_use_underline (GtkStackPage *self)
+{
+  return self->use_underline;
+}
+
+/**
+ * gtk_stack_page_set_use_underline:
+ * @self: a #GtkStackPage
+ * @setting: the new value to set
+ *
+ * Sets the new value of the #GtkStackPage:use-underline property.
+ * See also gtk_stack_page_get_use_underline()
+ *
+ */
+void
+gtk_stack_page_set_use_underline (GtkStackPage *self,
+                                  gboolean      setting)
+{
+  setting = !!setting;
+
+  if (setting == self->use_underline)
+    return;
+
+  self->use_underline = setting;
+  g_object_notify_by_pspec (G_OBJECT (self), stack_page_props[CHILD_PROP_USE_UNDERLINE]);
+}
+
+
+/**
+ * gtk_stack_page_get_name:
+ * @self: a #GtkStackPage
+ *
+ * Returns the current value of the #GtkStackPage:name property.
+ *
+ * Returns: (nullable): The value of the #GtkStackPage:name property.
+ *   See gtk_stack_page_set_name() for details on how to set a new value.
+ */
+const char *
+gtk_stack_page_get_name (GtkStackPage *self)
+{
+  g_return_val_if_fail (GTK_IS_STACK_PAGE (self), NULL);
+
+  return self->name;
+}
+
+/**
+ * gtk_stack_page_set_name:
+ * @self: a #GtkStackPage
+ * @setting: (transfer none): the new value to set
+ *
+ * Sets the new value of the #GtkStackPage:name property.
+ * See also gtk_stack_page_get_name()
+ */
+void
+gtk_stack_page_set_name (GtkStackPage *self,
+                         const char   *setting)
+{
+  GtkStack *stack = NULL;
+  GtkStackPrivate *priv = NULL;
+
+  g_return_if_fail (GTK_IS_STACK_PAGE (self));
+
+  if (self->widget &&
+      gtk_widget_get_parent (self->widget) &&
+      GTK_IS_STACK (gtk_widget_get_parent (self->widget)))
+    {
+      GList *l;
+
+      stack = GTK_STACK (gtk_widget_get_parent (self->widget));
+      priv = gtk_stack_get_instance_private (stack);
+
+      for (l = priv->children; l != NULL; l = l->next)
+        {
+          GtkStackPage *info2 = l->data;
+          if (self == info2)
+            continue;
+
+          if (g_strcmp0 (info2->name, setting) == 0)
+            {
+              g_warning ("Duplicate child name in GtkStack: %s", setting);
+              break;
+            }
+        }
     }
+
+  if (setting == self->name)
+    return;
+
+  g_free (self->name);
+  self->name = g_strdup (setting);
+  g_object_notify_by_pspec (G_OBJECT (self), stack_page_props[CHILD_PROP_NAME]);
+
+  if (priv && priv->visible_child == self)
+    g_object_notify_by_pspec (G_OBJECT (stack),
+                              stack_props[PROP_VISIBLE_CHILD_NAME]);
+}
+
+/**
+ * gtk_stack_page_get_title:
+ * @self: a #GtkStackPage
+ *
+ * Returns the current value of the #GtkStackPage:title property.
+ *
+ * Returns: (nullable): The value of the #GtkStackPage:title property.
+ *   See gtk_stack_page_set_title() for details on how to set a new value.
+ */
+const char *
+gtk_stack_page_get_title (GtkStackPage *self)
+{
+  g_return_val_if_fail (GTK_IS_STACK_PAGE (self), NULL);
+
+  return self->title;
+}
+
+/**
+ * gtk_stack_page_set_title:
+ * @self: a #GtkStackPage
+ * @setting: (transfer none): the new value to set
+ *
+ * Sets the new value of the #GtkStackPage:title property.
+ * See also gtk_stack_page_get_title()
+ */
+void
+gtk_stack_page_set_title (GtkStackPage *self,
+                          const char   *setting)
+{
+  g_return_if_fail (GTK_IS_STACK_PAGE (self));
+
+  if (setting == self->title)
+    return;
+
+  g_free (self->title);
+  self->title = g_strdup (setting);
+  g_object_notify_by_pspec (G_OBJECT (self), stack_page_props[CHILD_PROP_TITLE]);
+}
+
+
+/**
+ * gtk_stack_page_get_icon_name:
+ * @self: a #GtkStackPage
+ *
+ * Returns the current value of the #GtkStackPage:icon-name property.
+ *
+ * Returns: (nullable): The value of the #GtkStackPage:icon-name property.
+ *   See gtk_stack_page_set_icon_name() for details on how to set a new value.
+ */
+const char *
+gtk_stack_page_get_icon_name (GtkStackPage *self)
+{
+  g_return_val_if_fail (GTK_IS_STACK_PAGE (self), NULL);
+
+  return self->icon_name;
+}
+
+/**
+ * gtk_stack_page_set_icon_name:
+ * @self: a #GtkStackPage
+ * @setting: (transfer none): the new value to set
+ *
+ * Sets the new value of the #GtkStackPage:icon-name property.
+ * See also gtk_stack_page_get_icon_name()
+ */
+void
+gtk_stack_page_set_icon_name (GtkStackPage *self,
+                              const char   *setting)
+{
+  g_return_if_fail (GTK_IS_STACK_PAGE (self));
+
+  if (setting == self->icon_name)
+    return;
+
+  g_free (self->icon_name);
+  self->icon_name = g_strdup (setting);
+  g_object_notify_by_pspec (G_OBJECT (self), stack_page_props[CHILD_PROP_ICON_NAME]);
 }
