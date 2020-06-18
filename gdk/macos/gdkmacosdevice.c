@@ -156,8 +156,10 @@ gdk_macos_device_query_state (GdkDevice        *device,
 {
   GdkDisplay *display;
   NSPoint point;
-  gint x_tmp;
-  gint y_tmp;
+  int sx = 0;
+  int sy = 0;
+  int x_tmp;
+  int y_tmp;
 
   g_assert (GDK_IS_MACOS_DEVICE (device));
   g_assert (!surface || GDK_IS_MACOS_SURFACE (surface));
@@ -171,11 +173,14 @@ gdk_macos_device_query_state (GdkDevice        *device,
                                           point.x, point.y,
                                           &x_tmp, &y_tmp);
 
+  if (surface)
+    _gdk_macos_surface_get_root_coords (GDK_MACOS_SURFACE (surface), &sx, &sy);
+
   if (win_x)
-    *win_x = x_tmp;
+    *win_x = x_tmp - sx;
 
   if (win_y)
-    *win_y = y_tmp;
+    *win_y = y_tmp - sy;
 
   if (mask)
     *mask = _gdk_macos_display_get_current_keyboard_modifiers (GDK_MACOS_DISPLAY (display)) |
