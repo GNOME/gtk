@@ -2,7 +2,6 @@ gdk_macos_sources = files([
   'edgesnapping.c',
 
   'gdkdisplaylinksource.c',
-  'GdkMacosWindow.c',
   'gdkmacoscairocontext.c',
   'gdkmacosclipboard.c',
   'gdkmacoscursor.c',
@@ -22,7 +21,7 @@ gdk_macos_sources = files([
   'GdkMacosBaseView.c',
   'GdkMacosCairoView.c',
   'GdkMacosCairoSubview.c',
-  # 'GdkMacosGLView.c',
+  'GdkMacosWindow.c',
 ])
 
 gdk_macos_public_headers = files([
