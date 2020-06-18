@@ -120,6 +120,9 @@ gboolean           _gdk_macos_surface_is_tracking             (GdkMacosSurface  
 void               _gdk_macos_surface_monitor_changed         (GdkMacosSurface    *self);
 GdkMonitor        *_gdk_macos_surface_get_best_monitor        (GdkMacosSurface    *self);
 void               _gdk_macos_surface_reposition_children     (GdkMacosSurface    *self);
+void               _gdk_macos_surface_get_root_coords         (GdkMacosSurface    *self,
+                                                               int                *x,
+                                                               int                *y);
 
 G_END_DECLS
 
