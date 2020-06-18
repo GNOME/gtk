@@ -642,7 +642,7 @@ gtk_label_class_init (GtkLabelClass *class)
    *
    * The default bindings for this signal come in two variants,
    * the variant with the Shift modifier extends the selection,
-   * the variant without the Shift modifer does not.
+   * the variant without the Shift modifier does not.
    * There are too many key combinations to list them all here.
    * - Arrow keys move by individual characters/lines
    * - Ctrl-arrow key combinations move by words/paragraphs

@@ -135,7 +135,7 @@ struct _GdkW32DragMoveResizeContext
   guint32            timestamp;
 
   /* TRUE if during the next redraw we should call SetWindowPos() to push
-   * the window size and poistion to the native window.
+   * the window size and position to the native window.
    */
   gboolean           native_move_resize_pending;
 

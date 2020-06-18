@@ -146,7 +146,7 @@ static void show_variations (GtkEmojiChooser *chooser,
 static void
 gtk_emoji_chooser_child_popup_menu (GtkWidget  *widget,
                                     const char *action_name,
-                                    GVariant   *paramters)
+                                    GVariant   *parameters)
 {
   GtkWidget *chooser;
 

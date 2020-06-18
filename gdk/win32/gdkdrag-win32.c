@@ -1317,7 +1317,7 @@ idataobject_querygetdata (LPDATAOBJECT This,
   GDK_NOTE (DND,
       g_print ("idataobject_querygetdata %p 0x%08x fmt, %p ptd, %lu aspect, %ld lindex, %0lx tymed - %s, return %#lx (%s)\n",
                This, pFormatEtc->cfFormat, pFormatEtc->ptd, pFormatEtc->dwAspect, pFormatEtc->lindex, pFormatEtc->tymed, _gdk_win32_cf_to_string (pFormatEtc->cfFormat),
-               hr, (hr == S_OK) ? "S_OK" : (hr == DV_E_FORMATETC) ? "DV_E_FORMATETC" : (hr == DV_E_LINDEX) ? "DV_E_LINDEX" : (hr == DV_E_TYMED) ? "DV_E_TYMED" : (hr == DV_E_DVASPECT) ? "DV_E_DVASPECT" : "uknown meaning"));
+               hr, (hr == S_OK) ? "S_OK" : (hr == DV_E_FORMATETC) ? "DV_E_FORMATETC" : (hr == DV_E_LINDEX) ? "DV_E_LINDEX" : (hr == DV_E_TYMED) ? "DV_E_TYMED" : (hr == DV_E_DVASPECT) ? "DV_E_DVASPECT" : "unknown meaning"));
 
   return hr;
 }

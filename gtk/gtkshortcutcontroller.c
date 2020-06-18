@@ -523,7 +523,7 @@ gtk_shortcut_controller_class_init (GtkShortcutControllerClass *klass)
    */
   properties[PROP_MNEMONICS_MODIFIERS] =
       g_param_spec_flags ("mnemonic-modifiers",
-                          P_("Mnemonic modifers"),
+                          P_("Mnemonic modifiers"),
                           P_("The modifiers to be pressed to allow mnemonics activation"),
                           GDK_TYPE_MODIFIER_TYPE,
                           GDK_ALT_MASK,

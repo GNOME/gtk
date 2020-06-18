@@ -3765,7 +3765,7 @@ gtk_flow_box_class_init (GtkFlowBoxClass *class)
    *
    * The default bindings for this signal come in two variants,
    * the variant with the Shift modifier extends the selection,
-   * the variant without the Shift modifer does not.
+   * the variant without the Shift modifier does not.
    * There are too many key combinations to list them all here.
    * - Arrow keys move by individual children
    * - Home/End keys move to the ends of the box

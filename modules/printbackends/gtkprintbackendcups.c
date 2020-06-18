@@ -2424,7 +2424,7 @@ cups_create_printer (GtkPrintBackendCups *cups_backend,
   if (info->member_uris)
     {
       cups_printer->printer_uri = g_strdup (info->member_uris);
-      /* TODO if member_uris is a class we need to recursivly find a printer */
+      /* TODO if member_uris is a class we need to recursively find a printer */
       GTK_NOTE (PRINTING,
 		g_print ("CUPS Backend: Found class with printer %s\n",
 			 info->member_uris));

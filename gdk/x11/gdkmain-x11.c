@@ -200,7 +200,7 @@ _gdk_x11_surface_grab_check_destroy (GdkSurface *surface)
  *   The X I/O error handling routine.
  *
  * Arguments:
- *   "display" is the X display the error orignated from.
+ *   "display" is the X display the error originated from.
  *
  * Results:
  *   An X I/O error basically means we lost our connection

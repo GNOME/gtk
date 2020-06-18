@@ -156,7 +156,7 @@ gdk_content_provider_new_typed (GType type,
       g_warning ("%s: %s", G_STRLOC, error);
       g_free (error);
       /* we purposely leak the value here, it might not be
-       * in a sane state if an error condition occoured
+       * in a sane state if an error condition occurred
        */
     }
   va_end (args);

@@ -3907,7 +3907,7 @@ icon_paintable_snapshot (GdkPaintable *paintable,
  *     of the icon or %NULL to use the default color (allow-none)
  *
  * This is similar to the implementation of gdk_paintable_snapshot(), but if the icon is
- * symbolic it will be recolored with the specified colors (which ususally comes from the theme).
+ * symbolic it will be recolored with the specified colors (which usually comes from the theme).
  */
 void
 gtk_icon_paintable_snapshot_with_colors (GtkIconPaintable *icon,
