@@ -518,11 +518,11 @@ create_device (GdkX11DeviceManagerXI2 *device_manager,
     {
     case XIMasterKeyboard:
     case XIMasterPointer:
-      type = GDK_DEVICE_TYPE_MASTER;
+      type = GDK_DEVICE_TYPE_LOGICAL;
       break;
     case XISlaveKeyboard:
     case XISlavePointer:
-      type = GDK_DEVICE_TYPE_SLAVE;
+      type = GDK_DEVICE_TYPE_PHYSICAL;
       break;
     case XIFloatingSlave:
     default:
@@ -532,7 +532,7 @@ create_device (GdkX11DeviceManagerXI2 *device_manager,
 
   GDK_DISPLAY_NOTE (display, INPUT,
             ({
-              const gchar *type_names[] = { "master", "slave", "floating" };
+              const gchar *type_names[] = { "logical", "physical", "floating" };
               const gchar *source_names[] = { "mouse", "pen", "eraser", "cursor", "keyboard", "direct touch", "indirect touch", "trackpoint", "pad" };
               g_message ("input device:\n\tname: %s\n\ttype: %s\n\tsource: %s\n\thas cursor: %d\n\ttouches: %d",
                          dev->name,
@@ -590,7 +590,7 @@ ensure_seat_for_device_pair (GdkX11DeviceManagerXI2 *device_manager,
           keyboard = device2;
         }
 
-      seat = gdk_seat_default_new_for_master_pair (pointer, keyboard);
+      seat = gdk_seat_default_new_for_logical_pair (pointer, keyboard);
       gdk_display_add_seat (display, seat);
       g_object_unref (seat);
     }
@@ -617,20 +617,20 @@ add_device (GdkX11DeviceManagerXI2 *device_manager,
     {
       if (dev->use == XISlavePointer || dev->use == XISlaveKeyboard)
         {
-          GdkDevice *master;
+          GdkDevice *logical;
           GdkSeat *seat;
 
           /* The device manager is already constructed, then
            * keep the hierarchy coherent for the added device.
            */
-          master = g_hash_table_lookup (device_manager->id_table,
-                                        GINT_TO_POINTER (dev->attachment));
+          logical = g_hash_table_lookup (device_manager->id_table,
+                                         GINT_TO_POINTER (dev->attachment));
 
-          _gdk_device_set_associated_device (device, master);
-          _gdk_device_add_slave (master, device);
+          _gdk_device_set_associated_device (device, logical);
+          _gdk_device_add_physical_device (logical, device);
 
-          seat = gdk_device_get_seat (master);
-          gdk_seat_default_add_slave (GDK_SEAT_DEFAULT (seat), device);
+          seat = gdk_device_get_seat (logical);
+          gdk_seat_default_add_physical_device (GDK_SEAT_DEFAULT (seat), device);
         }
       else if (dev->use == XIMasterPointer || dev->use == XIMasterKeyboard)
         {
@@ -659,10 +659,10 @@ detach_from_seat (GdkDevice *device)
   if (!seat)
     return;
 
-  if (gdk_device_get_device_type (device) == GDK_DEVICE_TYPE_MASTER)
+  if (gdk_device_get_device_type (device) == GDK_DEVICE_TYPE_LOGICAL)
     gdk_display_remove_seat (gdk_device_get_display (device), seat);
-  else if (gdk_device_get_device_type (device) == GDK_DEVICE_TYPE_SLAVE)
-    gdk_seat_default_remove_slave (GDK_SEAT_DEFAULT (seat), device);
+  else if (gdk_device_get_device_type (device) == GDK_DEVICE_TYPE_PHYSICAL)
+    gdk_seat_default_remove_physical_device (GDK_SEAT_DEFAULT (seat), device);
 }
 
 static void
@@ -688,9 +688,9 @@ remove_device (GdkX11DeviceManagerXI2 *device_manager,
 }
 
 static void
-relate_masters (gpointer key,
-                gpointer value,
-                gpointer user_data)
+relate_logical_devices (gpointer key,
+                        gpointer value,
+                        gpointer user_data)
 {
   GdkX11DeviceManagerXI2 *device_manager;
   GdkDevice *device, *relative;
@@ -705,23 +705,23 @@ relate_masters (gpointer key,
 }
 
 static void
-relate_slaves (gpointer key,
-               gpointer value,
-               gpointer user_data)
+relate_physical_devices (gpointer key,
+                         gpointer value,
+                         gpointer user_data)
 {
   GdkX11DeviceManagerXI2 *device_manager;
-  GdkDevice *slave, *master;
+  GdkDevice *physical, *logical;
   GdkSeat *seat;
 
   device_manager = user_data;
-  slave = g_hash_table_lookup (device_manager->id_table, key);
-  master = g_hash_table_lookup (device_manager->id_table, value);
+  physical = g_hash_table_lookup (device_manager->id_table, key);
+  logical = g_hash_table_lookup (device_manager->id_table, value);
 
-  _gdk_device_set_associated_device (slave, master);
-  _gdk_device_add_slave (master, slave);
+  _gdk_device_set_associated_device (physical, logical);
+  _gdk_device_add_physical_device (logical, physical);
 
-  seat = gdk_device_get_seat (master);
-  gdk_seat_default_add_slave (GDK_SEAT_DEFAULT (seat), slave);
+  seat = gdk_device_get_seat (logical);
+  gdk_seat_default_add_physical_device (GDK_SEAT_DEFAULT (seat), physical);
 }
 
 static void
@@ -729,7 +729,7 @@ gdk_x11_device_manager_xi2_constructed (GObject *object)
 {
   GdkX11DeviceManagerXI2 *device_manager;
   GdkDisplay *display;
-  GHashTable *masters, *slaves;
+  GHashTable *logical_devices, *physical_devices;
   Display *xdisplay;
   XIDeviceInfo *info, *dev;
   int ndevices, i;
@@ -744,8 +744,8 @@ gdk_x11_device_manager_xi2_constructed (GObject *object)
 
   g_assert (device_manager->major == 2);
 
-  masters = g_hash_table_new (NULL, NULL);
-  slaves = g_hash_table_new (NULL, NULL);
+  logical_devices = g_hash_table_new (NULL, NULL);
+  physical_devices = g_hash_table_new (NULL, NULL);
 
   info = XIQueryDevice (xdisplay, XIAllDevices, &ndevices);
 
@@ -762,14 +762,14 @@ gdk_x11_device_manager_xi2_constructed (GObject *object)
       if (dev->use == XIMasterPointer ||
           dev->use == XIMasterKeyboard)
         {
-          g_hash_table_insert (masters,
+          g_hash_table_insert (logical_devices,
                                GINT_TO_POINTER (dev->deviceid),
                                GINT_TO_POINTER (dev->attachment));
         }
       else if (dev->use == XISlavePointer ||
                dev->use == XISlaveKeyboard)
         {
-          g_hash_table_insert (slaves,
+          g_hash_table_insert (physical_devices,
                                GINT_TO_POINTER (dev->deviceid),
                                GINT_TO_POINTER (dev->attachment));
         }
@@ -778,11 +778,11 @@ gdk_x11_device_manager_xi2_constructed (GObject *object)
   XIFreeDeviceInfo (info);
 
   /* Stablish relationships between devices */
-  g_hash_table_foreach (masters, relate_masters, object);
-  g_hash_table_destroy (masters);
+  g_hash_table_foreach (logical_devices, relate_logical_devices, object);
+  g_hash_table_destroy (logical_devices);
 
-  g_hash_table_foreach (slaves, relate_slaves, object);
-  g_hash_table_destroy (slaves);
+  g_hash_table_foreach (physical_devices, relate_physical_devices, object);
+  g_hash_table_destroy (physical_devices);
 
   /* Connect to hierarchy change events */
   XISetMask (mask, XI_HierarchyChanged);
@@ -917,28 +917,28 @@ handle_hierarchy_changed (GdkX11DeviceManagerXI2 *device_manager,
       else if (ev->info[i].flags & XISlaveAttached ||
                ev->info[i].flags & XISlaveDetached)
         {
-          GdkDevice *master, *slave;
+          GdkDevice *logical, *physical;
           GdkSeat *seat;
 
-          slave = g_hash_table_lookup (device_manager->id_table,
-                                       GINT_TO_POINTER (ev->info[i].deviceid));
+          physical = g_hash_table_lookup (device_manager->id_table,
+                                          GINT_TO_POINTER (ev->info[i].deviceid));
 
-          if (!slave)
+          if (!physical)
             continue;
 
-          /* Remove old master info */
-          master = gdk_device_get_associated_device (slave);
+          /* Remove old logical device info */
+          logical = gdk_device_get_associated_device (physical);
 
-          if (master)
+          if (logical != NULL)
             {
-              _gdk_device_remove_slave (master, slave);
-              _gdk_device_set_associated_device (slave, NULL);
+              _gdk_device_remove_physical_device (logical, physical);
+              _gdk_device_set_associated_device (physical, NULL);
 
-              seat = gdk_device_get_seat (master);
-              gdk_seat_default_remove_slave (GDK_SEAT_DEFAULT (seat), slave);
+              seat = gdk_device_get_seat (logical);
+              gdk_seat_default_remove_physical_device (GDK_SEAT_DEFAULT (seat), physical);
             }
 
-          /* Add new master if it's an attachment event */
+          /* Add new logical device if it's an attachment event */
           if (ev->info[i].flags & XISlaveAttached)
             {
               gdk_x11_display_error_trap_push (display);
@@ -946,18 +946,18 @@ handle_hierarchy_changed (GdkX11DeviceManagerXI2 *device_manager,
               gdk_x11_display_error_trap_pop_ignored (display);
               if (info)
                 {
-                  master = g_hash_table_lookup (device_manager->id_table,
-                                                GINT_TO_POINTER (info->attachment));
+                  logical = g_hash_table_lookup (device_manager->id_table,
+                                                 GINT_TO_POINTER (info->attachment));
                   XIFreeDeviceInfo (info);
                 }
 
-              if (master)
+              if (logical != NULL)
                 {
-                  _gdk_device_set_associated_device (slave, master);
-                  _gdk_device_add_slave (master, slave);
+                  _gdk_device_set_associated_device (physical, logical);
+                  _gdk_device_add_physical_device (logical, physical);
 
-                  seat = gdk_device_get_seat (master);
-                  gdk_seat_default_add_slave (GDK_SEAT_DEFAULT (seat), slave);
+                  seat = gdk_device_get_seat (logical);
+                  gdk_seat_default_add_physical_device (GDK_SEAT_DEFAULT (seat), physical);
                 }
             }
         }
@@ -1722,13 +1722,14 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
 
         /* When scrolling, X might send events twice here; once with both the
          * device and the source device set to the physical device, and once
-         * with the device set to the master device.
+         * with the device set to the logical device.
+         *
          * Since we are only interested in the latter, and
          * scroll_valuators_changed() updates the valuator cache for the
          * source device, we need to explicitly ignore the first event in
          * order to get the correct delta for the second.
          */
-        if (gdk_device_get_device_type (device) != GDK_DEVICE_TYPE_SLAVE &&
+        if (gdk_device_get_device_type (device) != GDK_DEVICE_TYPE_PHYSICAL &&
             scroll_valuators_changed (GDK_X11_DEVICE_XI2 (source_device),
                                       &xev->valuators, &delta_x, &delta_y))
           {
@@ -1894,18 +1895,18 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
             xev->detail != XINotifyInferior && xev->mode != XINotifyPassiveUngrab &&
             GDK_IS_TOPLEVEL (surface))
           {
-            if (gdk_device_get_device_type (source_device) != GDK_DEVICE_TYPE_MASTER)
+            if (gdk_device_get_device_type (source_device) != GDK_DEVICE_TYPE_LOGICAL)
               _gdk_device_xi2_reset_scroll_valuators (GDK_X11_DEVICE_XI2 (source_device));
             else
               {
-                GList *slaves, *l;
+                GList *physical_devices, *l;
 
-                slaves = gdk_device_list_slave_devices (source_device);
+                physical_devices = gdk_device_list_physical_devices (source_device);
 
-                for (l = slaves; l; l = l->next)
+                for (l = physical_devices; l; l = l->next)
                   _gdk_device_xi2_reset_scroll_valuators (GDK_X11_DEVICE_XI2 (l->data));
 
-                g_list_free (slaves);
+                g_list_free (physical_devices);
               }
           }
 

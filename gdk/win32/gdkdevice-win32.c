@@ -147,7 +147,7 @@ gdk_device_win32_grab (GdkDevice    *device,
                        GdkCursor    *cursor,
                        guint32       time_)
 {
-  /* No support for grabbing the slave atm */
+  /* No support for grabbing physical devices atm */
   return GDK_GRAB_NOT_VIEWABLE;
 }
 

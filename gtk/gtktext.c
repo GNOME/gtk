@@ -4191,7 +4191,7 @@ gtk_text_retrieve_surrounding_cb (GtkIMContext *context,
 }
 
 static gboolean
-gtk_text_delete_surrounding_cb (GtkIMContext *slave,
+gtk_text_delete_surrounding_cb (GtkIMContext *context,
                                 int           offset,
                                 int           n_chars,
                                 GtkText      *self)

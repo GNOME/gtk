@@ -54,7 +54,7 @@ create_core_pointer (GdkQuartzDeviceManagerCore *device_manager,
 {
   return g_object_new (GDK_TYPE_QUARTZ_DEVICE_CORE,
                        "name", "Core Pointer",
-                       "type", GDK_DEVICE_TYPE_MASTER,
+                       "type", GDK_DEVICE_TYPE_LOGICAL,
                        "input-source", GDK_SOURCE_MOUSE,
                        "input-mode", GDK_MODE_SCREEN,
                        "has-cursor", TRUE,
@@ -69,7 +69,7 @@ create_core_keyboard (GdkQuartzDeviceManagerCore *device_manager,
 {
   return g_object_new (GDK_TYPE_QUARTZ_DEVICE_CORE,
                        "name", "Core Keyboard",
-                       "type", GDK_DEVICE_TYPE_MASTER,
+                       "type", GDK_DEVICE_TYPE_LOGICAL,
                        "input-source", GDK_SOURCE_KEYBOARD,
                        "input-mode", GDK_MODE_SCREEN,
                        "has-cursor", FALSE,
@@ -112,8 +112,8 @@ gdk_quartz_device_manager_core_constructed (GObject *object)
   _gdk_device_set_associated_device (device_manager->core_pointer, device_manager->core_keyboard);
   _gdk_device_set_associated_device (device_manager->core_keyboard, device_manager->core_pointer);
 
-  seat = gdk_seat_default_new_for_master_pair (device_manager->core_pointer,
-                                               device_manager->core_keyboard);
+  seat = gdk_seat_default_new_for_logical_pair (device_manager->core_pointer,
+                                                device_manager->core_keyboard);
   gdk_display_add_seat (display, seat);
   g_object_unref (seat);
 }

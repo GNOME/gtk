@@ -34,10 +34,10 @@ struct _GdkDeviceManagerWin32
 {
   GObject parent_object;
   GdkDisplay *display;
-  /* Master Devices */
+  /* Logical Devices */
   GdkDevice *core_pointer;
   GdkDevice *core_keyboard;
-  /* Fake slave devices */
+  /* Fake physical devices */
   GdkDevice *system_pointer;
   GdkDevice *system_keyboard;
   GList *wintab_devices;

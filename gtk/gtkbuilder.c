@@ -59,57 +59,50 @@
  * # GtkBuilder UI Definitions # {#BUILDER-UI}
  *
  * GtkBuilder parses textual descriptions of user interfaces which are
- * specified in an XML format which can be roughly described by the
- * RELAX NG schema below. We refer to these descriptions as “GtkBuilder
+ * specified in XML format. We refer to these descriptions as “GtkBuilder
  * UI definitions” or just “UI definitions” if the context is clear.
  *
- * [RELAX NG Compact Syntax](https://gitlab.gnome.org/GNOME/gtk/tree/master/gtk/gtkbuilder.rnc)
- *
- * The toplevel element is <interface>. It optionally takes a “domain”
+ * The toplevel element is `<interface>`. It optionally takes a “domain”
  * attribute, which will make the builder look for translated strings
- * using dgettext() in the domain specified. This can also be done by
+ * using `dgettext()` in the domain specified. This can also be done by
  * calling gtk_builder_set_translation_domain() on the builder.
- * Objects are described by <object> elements, which can contain
- * <property> elements to set properties, <signal> elements which
- * connect signals to handlers, and <child> elements, which describe
+ * Objects are described by `<object>` elements, which can contain
+ * <property> elements to set properties, `<signal>` elements which
+ * connect signals to handlers, and `<child>` elements, which describe
  * child objects (most often widgets inside a container, but also e.g.
- * actions in an action group, or columns in a tree model). A <child>
- * element contains an <object> element which describes the child object.
+ * actions in an action group, or columns in a tree model). A `<child>`
+ * element contains an `<object>` element which describes the child object.
  * The target toolkit version(s) are described by <requires> elements,
  * the “lib” attribute specifies the widget library in question (currently
  * the only supported value is “gtk+”) and the “version” attribute specifies
- * the target version in the form “<major>.<minor>”. The builder will error
+ * the target version in the form “`<major>`.`<minor>`”. The builder will error
  * out if the version requirements are not met.
  *
- * Typically, the specific kind of object represented by an <object>
+ * Typically, the specific kind of object represented by an `<object>`
  * element is specified by the “class” attribute. If the type has not
- * been loaded yet, GTK+ tries to find the get_type() function from the
+ * been loaded yet, GTK tries to find the `get_type()` function from the
  * class name by applying heuristics. This works in most cases, but if
- * necessary, it is possible to specify the name of the get_type() function
- * explicitly with the "type-func" attribute. As a special case, GtkBuilder
- * allows to use an object that has been constructed by a #GtkUIManager in
- * another part of the UI definition by specifying the id of the #GtkUIManager
- * in the “constructor” attribute and the name of the object in the “id”
- * attribute.
+ * necessary, it is possible to specify the name of the `get_type()` function
+ * explicitly with the "type-func" attribute.
  *
  * Objects may be given a name with the “id” attribute, which allows the
  * application to retrieve them from the builder with gtk_builder_get_object().
  * An id is also necessary to use the object as property value in other
- * parts of the UI definition. GTK+ reserves ids starting and ending
- * with ___ (3 underscores) for its own purposes.
+ * parts of the UI definition. GTK reserves ids starting and ending
+ * with `___` (three consecutive underscores) for its own purposes.
  *
  * Setting properties of objects is pretty straightforward with the
  * <property> element: the “name” attribute specifies the name of the
  * property, and the content of the element specifies the value.
- * If the “translatable” attribute is set to a true value, GTK+ uses
- * gettext() (or dgettext() if the builder has a translation domain set)
+ * If the “translatable” attribute is set to a true value, GTK uses
+ * `gettext()` (or `dgettext()` if the builder has a translation domain set)
  * to find a translation for the value. This happens before the value
  * is parsed, so it can be used for properties of any type, but it is
  * probably most useful for string properties. It is also possible to
  * specify a context to disambiguate short strings, and comments which
  * may help the translators.
  *
- * GtkBuilder can parse textual representations for the most common
+ * #GtkBuilder can parse textual representations for the most common
  * property types: characters, strings, integers, floating-point numbers,
  * booleans (strings like “TRUE”, “t”, “yes”, “y”, “1” are interpreted
  * as %TRUE, strings like “FALSE”, “f”, “no”, “n”, “0” are interpreted
@@ -122,9 +115,9 @@
  * and pixbufs can be specified as a filename of an image file to load.
  *
  * Objects can be referred to by their name and by default refer to
- * objects declared in the local xml fragment and objects exposed via
+ * objects declared in the local XML fragment and objects exposed via
  * gtk_builder_expose_object(). In general, GtkBuilder allows forward
- * references to objects — declared in the local xml; an object doesn’t
+ * references to objects — declared in the local XML; an object doesn’t
  * have to be constructed before it can be referred to. The exception
  * to this rule is that an object has to be constructed before it can
  * be used as the value of a construct-only property.
@@ -134,20 +127,20 @@
  * "bind-source" to specify the source object of the binding, and
  * optionally, "bind-property" and "bind-flags" to specify the
  * source property and source binding flags respectively.
- * Internally builder implements this using GBinding objects.
+ * Internally builder implements this using #GBinding objects.
  * For more information see g_object_bind_property()
  *
  * Sometimes it is necessary to refer to widgets which have implicitly
  * been constructed by GTK+ as part of a composite widget, to set
- * properties on them or to add further children (e.g. the @vbox of
- * a #GtkDialog). This can be achieved by setting the “internal-child”
- * property of the <child> element to a true value. Note that GtkBuilder
- * still requires an <object> element for the internal child, even if it
+ * properties on them or to add further children (e.g. the content area
+ * of a #GtkDialog). This can be achieved by setting the “internal-child”
+ * property of the `<child>` element to a true value. Note that #GtkBuilder
+ * still requires an `<object>` element for the internal child, even if it
  * has already been constructed.
  *
  * A number of widgets have different places where a child can be added
  * (e.g. tabs vs. page content in notebooks). This can be reflected in
- * a UI definition by specifying the “type” attribute on a <child>
+ * a UI definition by specifying the “type” attribute on a `<child>`
  * The possible values for the “type” attribute are described in the
  * sections describing the widget-specific portions of UI definitions.
  *

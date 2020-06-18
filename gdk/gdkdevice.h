@@ -71,17 +71,17 @@ typedef enum
 
 /**
  * GdkDeviceType:
- * @GDK_DEVICE_TYPE_MASTER: Device is a master (or virtual) device. There will
- *                          be an associated focus indicator on the screen.
- * @GDK_DEVICE_TYPE_SLAVE: Device is a slave (or physical) device.
- * @GDK_DEVICE_TYPE_FLOATING: Device is a physical device, currently not attached to
- *                            any seat.
+ * @GDK_DEVICE_TYPE_LOGICAL: Device is a logical device. There will
+ *   be an associated focus indicator on the screen.
+ * @GDK_DEVICE_TYPE_PHYSICAL: Device is a physical device.
+ * @GDK_DEVICE_TYPE_FLOATING: Device is a physical device, currently
+ *   not attached to any seat.
  *
  * Indicates the device type.
  */
 typedef enum {
-  GDK_DEVICE_TYPE_MASTER,
-  GDK_DEVICE_TYPE_SLAVE,
+  GDK_DEVICE_TYPE_LOGICAL,
+  GDK_DEVICE_TYPE_PHYSICAL,
   GDK_DEVICE_TYPE_FLOATING
 } GdkDeviceType;
 
@@ -141,7 +141,7 @@ GdkDisplay * gdk_device_get_display (GdkDevice      *device);
 GDK_AVAILABLE_IN_ALL
 GdkDevice  * gdk_device_get_associated_device (GdkDevice     *device);
 GDK_AVAILABLE_IN_ALL
-GList *      gdk_device_list_slave_devices    (GdkDevice     *device);
+GList *      gdk_device_list_physical_devices (GdkDevice     *device);
 
 GDK_AVAILABLE_IN_ALL
 GdkDeviceType gdk_device_get_device_type (GdkDevice *device);

@@ -36,7 +36,7 @@
 typedef struct _GtkIMContextQuartz
 {
   GtkIMContext parent;
-  GtkIMContext *slave;
+  GtkIMContext *helper;
   GdkSurface *client_surface;
   gchar *preedit_str;
   unsigned int cursor_index;
@@ -188,7 +188,7 @@ quartz_filter_keypress (GtkIMContext *context,
         /* update text input changes by mouse events */
         return output_result (context, surface);
       else
-        return gtk_im_context_filter_keypress (qc->slave, event);
+        return gtk_im_context_filter_keypress (qc->helper, event);
     }
 
   if (event->type == GDK_KEY_RELEASE)
@@ -341,8 +341,8 @@ imquartz_finalize (GObject *obj)
   g_free (qc->cursor_rect);
   qc->cursor_rect = NULL;
 
-  g_signal_handlers_disconnect_by_func (qc->slave, (gpointer)commit_cb, qc);
-  g_object_unref (qc->slave);
+  g_signal_handlers_disconnect_by_func (qc->helper, (gpointer)commit_cb, qc);
+  g_object_unref (qc->helper);
 
   gtk_im_context_quartz_parent_class->finalize (obj);
 }
@@ -378,6 +378,6 @@ gtk_im_context_quartz_init (GtkIMContextQuartz *qc)
   qc->cursor_rect = g_malloc (sizeof (GdkRectangle));
   qc->focused = FALSE;
 
-  qc->slave = g_object_new (GTK_TYPE_IM_CONTEXT_SIMPLE, NULL);
-  g_signal_connect (G_OBJECT (qc->slave), "commit", G_CALLBACK (commit_cb), qc);
+  qc->helper = g_object_new (GTK_TYPE_IM_CONTEXT_SIMPLE, NULL);
+  g_signal_connect (G_OBJECT (qc->helper), "commit", G_CALLBACK (commit_cb), qc);
 }

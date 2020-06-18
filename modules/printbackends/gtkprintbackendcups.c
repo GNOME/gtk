@@ -4552,7 +4552,7 @@ static const struct {
 };
 
 /* keep sorted when changing */
-static const char *color_option_whitelist[] = {
+static const char *color_option_allow_list[] = {
   "BRColorEnhancement",
   "BRColorMatching",
   "BRColorMatching",
@@ -4572,7 +4572,7 @@ static const char *color_option_whitelist[] = {
 };
 
 /* keep sorted when changing */
-static const char *color_group_whitelist[] = {
+static const char *color_group_allow_list[] = {
   "ColorPage",
   "FPColorWise1",
   "FPColorWise2",
@@ -4583,7 +4583,7 @@ static const char *color_group_whitelist[] = {
 };
 
 /* keep sorted when changing */
-static const char *image_quality_option_whitelist[] = {
+static const char *image_quality_option_allow_list[] = {
   "BRDocument",
   "BRHalfTonePattern",
   "BRNormalPrt",
@@ -4611,7 +4611,7 @@ static const char *image_quality_option_whitelist[] = {
 };
 
 /* keep sorted when changing */
-static const char *image_quality_group_whitelist[] = {
+static const char *image_quality_group_allow_list[] = {
   "FPImageQuality1",
   "FPImageQuality2",
   "FPImageQuality3",
@@ -4619,7 +4619,7 @@ static const char *image_quality_group_whitelist[] = {
 };
 
 /* keep sorted when changing */
-static const char * finishing_option_whitelist[] = {
+static const char * finishing_option_allow_list[] = {
   "BindColor",
   "BindEdge",
   "BindType",
@@ -4639,7 +4639,7 @@ static const char * finishing_option_whitelist[] = {
 };
 
 /* keep sorted when changing */
-static const char *finishing_group_whitelist[] = {
+static const char *finishing_group_allow_list[] = {
   "FPFinishing1",
   "FPFinishing2",
   "FPFinishing3",
@@ -4649,7 +4649,7 @@ static const char *finishing_group_whitelist[] = {
 };
 
 /* keep sorted when changing */
-static const char *cups_option_blacklist[] = {
+static const char *cups_option_ignore_list[] = {
   "Collate",
   "Copies",
   "OutputOrder",
@@ -5139,7 +5139,7 @@ handle_option (GtkPrinterOptionSet *set,
   char *option_name;
   int i;
 
-  if (STRING_IN_TABLE (ppd_option->keyword, cups_option_blacklist))
+  if (STRING_IN_TABLE (ppd_option->keyword, cups_option_ignore_list))
     return;
 
   option_name = get_ppd_option_name (ppd_option->keyword);
@@ -5159,18 +5159,18 @@ handle_option (GtkPrinterOptionSet *set,
       const char *name;
 
       name = ppd_group_name (toplevel_group);
-      if (STRING_IN_TABLE (name, color_group_whitelist) ||
-	  STRING_IN_TABLE (ppd_option->keyword, color_option_whitelist))
+      if (STRING_IN_TABLE (name, color_group_allow_list) ||
+	  STRING_IN_TABLE (ppd_option->keyword, color_option_allow_list))
 	{
 	  option->group = g_strdup ("ColorPage");
 	}
-      else if (STRING_IN_TABLE (name, image_quality_group_whitelist) ||
-	       STRING_IN_TABLE (ppd_option->keyword, image_quality_option_whitelist))
+      else if (STRING_IN_TABLE (name, image_quality_group_allow_list) ||
+	       STRING_IN_TABLE (ppd_option->keyword, image_quality_option_allow_list))
 	{
 	  option->group = g_strdup ("ImageQualityPage");
 	}
-      else if (STRING_IN_TABLE (name, finishing_group_whitelist) ||
-	       STRING_IN_TABLE (ppd_option->keyword, finishing_option_whitelist))
+      else if (STRING_IN_TABLE (name, finishing_group_allow_list) ||
+	       STRING_IN_TABLE (ppd_option->keyword, finishing_option_allow_list))
 	{
 	  option->group = g_strdup ("FinishingPage");
 	}
@@ -5724,7 +5724,7 @@ cups_printer_get_options (GtkPrinter           *printer,
 
   for (i = 0; i < num_opts; i++)
     {
-      if (STRING_IN_TABLE (opts[i].name, cups_option_blacklist))
+      if (STRING_IN_TABLE (opts[i].name, cups_option_ignore_list))
         continue;
 
       name = get_lpoption_name (opts[i].name);

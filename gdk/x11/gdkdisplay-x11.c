@@ -1765,7 +1765,9 @@ device_grab_update_callback (GdkDisplay *display,
 
   pointer_info = _gdk_display_get_pointer_info (display, device);
   _gdk_display_device_grab_update (display, device,
-                                   pointer_info->last_slave ? pointer_info->last_slave : device,
+                                   pointer_info->last_physical_device != NULL
+                                     ? pointer_info->last_physical_device
+                                     : device,
                                    serial);
 }
 
