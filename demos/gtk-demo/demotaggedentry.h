@@ -25,39 +25,11 @@
 
 G_BEGIN_DECLS
 
-#define DEMO_TYPE_TAGGED_ENTRY                 (demo_tagged_entry_get_type ())
-#define DEMO_TAGGED_ENTRY(obj)                 (G_TYPE_CHECK_INSTANCE_CAST ((obj), DEMO_TYPE_TAGGED_ENTRY, DemoTaggedEntry))
-#define DEMO_TAGGED_ENTRY_CLASS(klass)         (G_TYPE_CHECK_CLASS_CAST ((klass), DEMO_TYPE_TAGGED_ENTRY, DemoTaggedEntryClass))
-#define DEMO_IS_TAGGED_ENTRY(obj)              (G_TYPE_CHECK_INSTANCE_TYPE ((obj), DEMO_TYPE_TAGGED_ENTRY))
-#define DEMO_IS_TAGGED_ENTRY_CLASS(klass)      (G_TYPE_CHECK_CLASS_TYPE ((klass), DEMO_TYPE_TAGGED_ENTRY))
-#define DEMO_TAGGED_ENTRY_GET_CLASS(obj)       (G_TYPE_INSTANCE_GET_CLASS ((obj), DEMO_TYPE_TAGGED_ENTRY, DemoTaggedEntryClass))
+#define DEMO_TYPE_TAGGED_ENTRY (demo_tagged_entry_get_type ())
+G_DECLARE_FINAL_TYPE (DemoTaggedEntry, demo_tagged_entry, DEMO, TAGGED_ENTRY, GtkWidget)
 
-typedef struct _DemoTaggedEntry       DemoTaggedEntry;
-typedef struct _DemoTaggedEntryClass  DemoTaggedEntryClass;
-
-struct _DemoTaggedEntry
-{
-  GtkWidget parent;
-};
-
-struct _DemoTaggedEntryClass
-{
-  GtkWidgetClass parent_class;
-};
-
-#define DEMO_TYPE_TAGGED_ENTRY_TAG                (demo_tagged_entry_tag_get_type ())
-#define DEMO_TAGGED_ENTRY_TAG(obj)                (G_TYPE_CHECK_INSTANCE_CAST ((obj), DEMO_TYPE_TAGGED_ENTRY_TAG, DemoTaggedEntryTag))
-#define DEMO_TAGGED_ENTRY_TAG_CLASS(klass)        (G_TYPE_CHECK_CLASS_CAST ((klass), DEMO_TYPE_TAGGED_ENTRY_TAG, DemoTaggedEntryTag))
-#define DEMO_IS_TAGGED_ENTRY_TAG(obj)             (G_TYPE_CHECK_INSTANCE_TYPE ((obj), DEMO_TYPE_TAGGED_ENTRY_TAG))
-#define DEMO_IS_TAGGED_ENTRY_TAG_CLASS(klass)     (G_TYPE_CHECK_CLASS_TYPE ((klass), DEMO_TYPE_TAGGED_ENTRY_TAG))
-#define DEMO_TAGGED_ENTRY_TAG_GET_CLASS(obj)      (G_TYPE_INSTANCE_GET_CLASS ((obj), DEMO_TYPE_TAGGED_ENTRY_TAG, DemoTaggedEntryTagClass))
-
-typedef struct _DemoTaggedEntryTag       DemoTaggedEntryTag;
-typedef struct _DemoTaggedEntryTagClass  DemoTaggedEntryTagClass;
-
-
-GType           demo_tagged_entry_get_type (void) G_GNUC_CONST;
-GType           demo_tagged_entry_tag_get_type (void) G_GNUC_CONST;
+#define DEMO_TYPE_TAGGED_ENTRY_TAG (demo_tagged_entry_tag_get_type ())
+G_DECLARE_FINAL_TYPE (DemoTaggedEntryTag, demo_tagged_entry_tag, DEMO, TAGGED_ENTRY_TAG, GtkWidget)
 
 GtkWidget *     demo_tagged_entry_new     (void);
 

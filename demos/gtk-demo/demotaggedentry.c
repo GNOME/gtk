@@ -25,31 +25,36 @@
 #include <gtk/gtk.h>
 #include <gtk/gtk-a11y.h>
 
-typedef struct {
+struct _DemoTaggedEntry
+{
+  GtkWidget parent_instance;
+
   GtkWidget *box;
   GtkWidget *entry;
-} DemoTaggedEntryPrivate;
+};
+
+struct _DemoTaggedEntryClass
+{
+  GtkWidgetClass parent_class;
+};
 
 static void demo_tagged_entry_editable_init (GtkEditableInterface *iface);
 
 G_DEFINE_TYPE_WITH_CODE (DemoTaggedEntry, demo_tagged_entry, GTK_TYPE_WIDGET,
-                         G_ADD_PRIVATE (DemoTaggedEntry)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_EDITABLE, demo_tagged_entry_editable_init))
 
 static void
 demo_tagged_entry_init (DemoTaggedEntry *entry)
 {
-  DemoTaggedEntryPrivate *priv = demo_tagged_entry_get_instance_private (entry);
+  entry->box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+  gtk_widget_set_parent (entry->box, GTK_WIDGET (entry));
 
-  priv->box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
-  gtk_widget_set_parent (priv->box, GTK_WIDGET (entry));
-
-  priv->entry = gtk_text_new ();
-  gtk_widget_set_hexpand (priv->entry, TRUE);
-  gtk_widget_set_vexpand (priv->entry, TRUE);
-  gtk_widget_set_hexpand (priv->box, FALSE);
-  gtk_widget_set_vexpand (priv->box, FALSE);
-  gtk_box_append (GTK_BOX (priv->box), priv->entry);
+  entry->entry = gtk_text_new ();
+  gtk_widget_set_hexpand (entry->entry, TRUE);
+  gtk_widget_set_vexpand (entry->entry, TRUE);
+  gtk_widget_set_hexpand (entry->box, FALSE);
+  gtk_widget_set_vexpand (entry->box, FALSE);
+  gtk_box_append (GTK_BOX (entry->box), entry->entry);
   gtk_editable_init_delegate (GTK_EDITABLE (entry));
 }
 
@@ -57,21 +62,14 @@ static void
 demo_tagged_entry_dispose (GObject *object)
 {
   DemoTaggedEntry *entry = DEMO_TAGGED_ENTRY (object);
-  DemoTaggedEntryPrivate *priv = demo_tagged_entry_get_instance_private (entry);
 
-  if (priv->entry)
+  if (entry->entry)
     gtk_editable_finish_delegate (GTK_EDITABLE (entry));
 
-  g_clear_pointer (&priv->entry, gtk_widget_unparent);
-  g_clear_pointer (&priv->box, gtk_widget_unparent);
+  g_clear_pointer (&entry->entry, gtk_widget_unparent);
+  g_clear_pointer (&entry->box, gtk_widget_unparent);
 
   G_OBJECT_CLASS (demo_tagged_entry_parent_class)->dispose (object);
-}
-
-static void
-demo_tagged_entry_finalize (GObject *object)
-{
-  G_OBJECT_CLASS (demo_tagged_entry_parent_class)->finalize (object);
 }
 
 static void
@@ -98,44 +96,12 @@ demo_tagged_entry_get_property (GObject    *object,
   G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
 }
 
-static void
-demo_tagged_entry_measure (GtkWidget      *widget,
-                           GtkOrientation  orientation,
-                           int             for_size,
-                           int            *minimum,
-                           int            *natural,
-                           int            *minimum_baseline,
-                           int            *natural_baseline)
-{
-  DemoTaggedEntry *entry = DEMO_TAGGED_ENTRY (widget);
-  DemoTaggedEntryPrivate *priv = demo_tagged_entry_get_instance_private (entry);
-
-  gtk_widget_measure (priv->box, orientation, for_size,
-                      minimum, natural,
-                      minimum_baseline, natural_baseline);
-}
-
-static void
-demo_tagged_entry_size_allocate (GtkWidget *widget,
-                                 int        width,
-                                 int        height,
-                                 int        baseline)
-{
-  DemoTaggedEntry *entry = DEMO_TAGGED_ENTRY (widget);
-  DemoTaggedEntryPrivate *priv = demo_tagged_entry_get_instance_private (entry);
-
-  gtk_widget_size_allocate (priv->box,
-                            &(GtkAllocation) { 0, 0, width, height },
-                            baseline);
-}
-
 static gboolean
 demo_tagged_entry_grab_focus (GtkWidget *widget)
 {
   DemoTaggedEntry *entry = DEMO_TAGGED_ENTRY (widget);
-  DemoTaggedEntryPrivate *priv = demo_tagged_entry_get_instance_private (entry);
 
-  return gtk_widget_grab_focus (priv->entry);
+  return gtk_widget_grab_focus (entry->entry);
 }
 
 static void
@@ -145,16 +111,14 @@ demo_tagged_entry_class_init (DemoTaggedEntryClass *klass)
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
   object_class->dispose = demo_tagged_entry_dispose;
-  object_class->finalize = demo_tagged_entry_finalize;
   object_class->get_property = demo_tagged_entry_get_property;
   object_class->set_property = demo_tagged_entry_set_property;
 
-  widget_class->measure = demo_tagged_entry_measure;
-  widget_class->size_allocate = demo_tagged_entry_size_allocate;
   widget_class->grab_focus = demo_tagged_entry_grab_focus;
- 
+
   gtk_editable_install_properties (object_class, 1);
 
+  gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BIN_LAYOUT);
   gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_ENTRY_ACCESSIBLE);
   gtk_widget_class_set_css_name (widget_class, "entry");
 }
@@ -162,10 +126,7 @@ demo_tagged_entry_class_init (DemoTaggedEntryClass *klass)
 static GtkEditable *
 demo_tagged_entry_get_delegate (GtkEditable *editable)
 {
-  DemoTaggedEntry *entry = DEMO_TAGGED_ENTRY (editable);
-  DemoTaggedEntryPrivate *priv = demo_tagged_entry_get_instance_private (entry);
-
-  return GTK_EDITABLE (priv->entry);
+  return GTK_EDITABLE (DEMO_TAGGED_ENTRY (editable)->entry);
 }
 
 static void
@@ -184,11 +145,9 @@ void
 demo_tagged_entry_add_tag (DemoTaggedEntry *entry,
                            GtkWidget       *tag)
 {
-  DemoTaggedEntryPrivate *priv = demo_tagged_entry_get_instance_private (entry);
-
   g_return_if_fail (DEMO_IS_TAGGED_ENTRY (entry));
 
-  gtk_box_append (GTK_BOX (priv->box), tag);
+  gtk_box_append (GTK_BOX (entry->box), tag);
 }
 
 void
@@ -196,30 +155,27 @@ demo_tagged_entry_insert_tag_after (DemoTaggedEntry *entry,
                                     GtkWidget       *tag,
                                     GtkWidget       *sibling)
 {
-  DemoTaggedEntryPrivate *priv = demo_tagged_entry_get_instance_private (entry);
-
   g_return_if_fail (DEMO_IS_TAGGED_ENTRY (entry));
 
   if (sibling == NULL)
-    gtk_box_append (GTK_BOX (priv->box), tag);
+    gtk_box_append (GTK_BOX (entry->box), tag);
   else
-    gtk_box_insert_child_after (GTK_BOX (priv->box), tag, sibling); 
+    gtk_box_insert_child_after (GTK_BOX (entry->box), tag, sibling);
 }
 
 void
 demo_tagged_entry_remove_tag (DemoTaggedEntry *entry,
                               GtkWidget       *tag)
 {
-  DemoTaggedEntryPrivate *priv = demo_tagged_entry_get_instance_private (entry);
-
   g_return_if_fail (DEMO_IS_TAGGED_ENTRY (entry));
 
-  gtk_box_remove (GTK_BOX (priv->box), tag);
+  gtk_box_remove (GTK_BOX (entry->box), tag);
 }
 
 struct _DemoTaggedEntryTag
 {
   GtkWidget parent;
+
   GtkWidget *box;
   GtkWidget *label;
   GtkWidget *button;
@@ -250,11 +206,11 @@ static guint signals[LAST_SIGNAL] = { 0, };
 G_DEFINE_TYPE (DemoTaggedEntryTag, demo_tagged_entry_tag, GTK_TYPE_WIDGET)
 
 static void
-on_released (GtkGestureClick      *gesture,
-             int                   n_press,
-             double                x,
-             double                y,
-             DemoTaggedEntryTag   *tag)
+on_released (GtkGestureClick    *gesture,
+             int                 n_press,
+             double              x,
+             double              y,
+             DemoTaggedEntryTag *tag)
 {
   g_signal_emit (tag, signals[SIGNAL_CLICKED], 0);
 }
