@@ -114,7 +114,7 @@
   <template class="GtkListItem">
     <property name="child">
       <object class="GtkEditableLabel">
-        <binding name="label">
+        <binding name="text">
           <lookup name="value" type="SettingsKey">
             <lookup name="item">GtkListItem</lookup>
           </lookup>
