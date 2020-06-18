@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.4.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-16 19:54+0000\n"
-"PO-Revision-Date: 2020-06-17 11:27+0300\n"
+"POT-Creation-Date: 2020-06-18 15:23+0000\n"
+"PO-Revision-Date: 2020-06-18 18:27+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
 "Language: uk\n"
@@ -840,7 +840,7 @@ msgid "TRUE if files are being loaded"
 msgstr "TRUE, якщо файли завантажуються"
 
 #: gtk/gtkbox.c:258 gtk/gtkboxlayout.c:730 gtk/gtkcellareabox.c:317
-#: gtk/gtkiconview.c:472 gtk/gtktreeviewcolumn.c:304
+#: gtk/gtkiconview.c:471 gtk/gtktreeviewcolumn.c:304
 msgid "Spacing"
 msgstr "Інтервал"
 
@@ -1825,12 +1825,12 @@ msgstr "Модель CellView"
 msgid "The model for cell view"
 msgstr "Модель для перегляду комірки"
 
-#: gtk/gtkcellview.c:218 gtk/gtkentrycompletion.c:439 gtk/gtkiconview.c:583
+#: gtk/gtkcellview.c:218 gtk/gtkentrycompletion.c:439 gtk/gtkiconview.c:582
 #: gtk/gtktreepopover.c:213 gtk/gtktreeviewcolumn.c:423
 msgid "Cell Area"
 msgstr "Ділянка комірки"
 
-#: gtk/gtkcellview.c:219 gtk/gtkentrycompletion.c:440 gtk/gtkiconview.c:584
+#: gtk/gtkcellview.c:219 gtk/gtkentrycompletion.c:440 gtk/gtkiconview.c:583
 #: gtk/gtktreepopover.c:214 gtk/gtktreeviewcolumn.c:424
 msgid "The GtkCellArea used to layout cells"
 msgstr "GtkCellArea для компонування комірок"
@@ -2015,7 +2015,7 @@ msgstr "Активація одним клацанням"
 msgid "Activate rows on single click"
 msgstr "Активувати рядки одинарним клацанням"
 
-#: gtk/gtkcolumnview.c:688 gtk/gtkiconview.c:543 gtk/gtktreeview.c:1069
+#: gtk/gtkcolumnview.c:688 gtk/gtkiconview.c:542 gtk/gtktreeview.c:1069
 #: gtk/gtktreeviewcolumn.c:379
 msgid "Reorderable"
 msgstr "Дозволено перестановку"
@@ -2539,7 +2539,6 @@ msgstr ""
 "для розташування RTL(справа-наліво)"
 
 #: gtk/gtkeditablelabel.c:286
-#| msgid "Whether the widget is visible"
 msgid "Whether the widget is in editing mode"
 msgstr "Чи перебуває віджет у стані редагування"
 
@@ -2884,7 +2883,7 @@ msgstr "Мінімальна довжина ключа"
 msgid "Minimum length of the search key in order to look up matches"
 msgstr "Мінімальна довжина ключа, при пошуку відповідностей"
 
-#: gtk/gtkentrycompletion.c:354 gtk/gtkiconview.c:401
+#: gtk/gtkentrycompletion.c:354 gtk/gtkiconview.c:400
 msgid "Text column"
 msgstr "Текстовий стовпчик"
 
@@ -3122,21 +3121,21 @@ msgstr "Перетворення дочірнього об'єкта із фік�
 msgid "The model being flattened"
 msgstr "Модель, яка сплощується"
 
-#: gtk/gtkflowbox.c:3583 gtk/gtkiconview.c:368 gtk/gtklistbox.c:488
+#: gtk/gtkflowbox.c:3583 gtk/gtkiconview.c:367 gtk/gtklistbox.c:488
 #: gtk/gtktreeselection.c:140
 msgid "Selection mode"
 msgstr "Режим виділення"
 
-#: gtk/gtkflowbox.c:3584 gtk/gtkiconview.c:369 gtk/gtklistbox.c:489
+#: gtk/gtkflowbox.c:3584 gtk/gtkiconview.c:368 gtk/gtklistbox.c:489
 msgid "The selection mode"
 msgstr "Режим виділення"
 
-#: gtk/gtkflowbox.c:3597 gtk/gtkiconview.c:597 gtk/gtklistbox.c:496
+#: gtk/gtkflowbox.c:3597 gtk/gtkiconview.c:596 gtk/gtklistbox.c:496
 #: gtk/gtktreeview.c:1203
 msgid "Activate on Single Click"
 msgstr "Активувати одиночним клацанням"
 
-#: gtk/gtkflowbox.c:3598 gtk/gtkiconview.c:598 gtk/gtklistbox.c:497
+#: gtk/gtkflowbox.c:3598 gtk/gtkiconview.c:597 gtk/gtklistbox.c:497
 #: gtk/gtktreeview.c:1204
 msgid "Activate row on a single click"
 msgstr "Активувати рядок одиночним клацанням"
@@ -3249,11 +3248,11 @@ msgstr "Параметри шрифту у форматі рядка"
 msgid "Language for which features have been selected"
 msgstr "Мова, для якої були вибрані параметри"
 
-#: gtk/gtkfontchooserwidget.c:662
+#: gtk/gtkfontchooserwidget.c:661
 msgid "The tweak action"
 msgstr "Дія коригування"
 
-#: gtk/gtkfontchooserwidget.c:663
+#: gtk/gtkfontchooserwidget.c:662
 msgid "The toggle action to switch to the tweak page"
 msgstr "Увімкнути дію для перемикання сторінки коригування"
 
@@ -3511,108 +3510,108 @@ msgstr "Є символічною"
 msgid "If the icon is symbolic"
 msgstr "Чи є піктограма символічною"
 
-#: gtk/gtkiconview.c:385
+#: gtk/gtkiconview.c:384
 msgid "Pixbuf column"
 msgstr "Стовпчик pixbuf"
 
-#: gtk/gtkiconview.c:386
+#: gtk/gtkiconview.c:385
 msgid "Model column used to retrieve the icon pixbuf from"
 msgstr ""
 "Модель стовпця, що використовується для отримання зображення (pixbuf) значка"
 
-#: gtk/gtkiconview.c:402
+#: gtk/gtkiconview.c:401
 msgid "Model column used to retrieve the text from"
 msgstr "Модель стовпчика, що використовується для отримання з неї тексту"
 
-#: gtk/gtkiconview.c:419
+#: gtk/gtkiconview.c:418
 msgid "Markup column"
 msgstr "Розмітка стовпчика"
 
-#: gtk/gtkiconview.c:420
+#: gtk/gtkiconview.c:419
 msgid "Model column used to retrieve the text if using Pango markup"
 msgstr ""
 "Модель стовпчика, що використовується для тримання з неї тексту, якщо "
 "використовується розмітка pango"
 
-#: gtk/gtkiconview.c:427
+#: gtk/gtkiconview.c:426
 msgid "Icon View Model"
 msgstr "Модель Icon View"
 
-#: gtk/gtkiconview.c:428
+#: gtk/gtkiconview.c:427
 msgid "The model for the icon view"
 msgstr "Модель для перегляду у вигляді значків"
 
-#: gtk/gtkiconview.c:442
+#: gtk/gtkiconview.c:441
 msgid "Number of columns"
 msgstr "Кількість стовпчиків"
 
-#: gtk/gtkiconview.c:443
+#: gtk/gtkiconview.c:442
 msgid "Number of columns to display"
 msgstr "Кількість стовпчиків, які показуються"
 
-#: gtk/gtkiconview.c:458
+#: gtk/gtkiconview.c:457
 msgid "Width for each item"
 msgstr "Віджет для кожного елемента"
 
-#: gtk/gtkiconview.c:459
+#: gtk/gtkiconview.c:458
 msgid "The width used for each item"
 msgstr "Ширина, що використовується для кожного елемента"
 
-#: gtk/gtkiconview.c:473
+#: gtk/gtkiconview.c:472
 msgid "Space which is inserted between cells of an item"
 msgstr "Простір, що вставляється між комірками елемента"
 
-#: gtk/gtkiconview.c:486
+#: gtk/gtkiconview.c:485
 msgid "Row Spacing"
 msgstr "Міжрядковий інтервал"
 
-#: gtk/gtkiconview.c:487
+#: gtk/gtkiconview.c:486
 msgid "Space which is inserted between grid rows"
 msgstr "Простір, що вставляється між рядками сітки"
 
-#: gtk/gtkiconview.c:500
+#: gtk/gtkiconview.c:499
 msgid "Column Spacing"
 msgstr "Інтервал між стовпчиками"
 
-#: gtk/gtkiconview.c:501
+#: gtk/gtkiconview.c:500
 msgid "Space which is inserted between grid columns"
 msgstr "Простір, що вставляється між стовпчиками сітки"
 
-#: gtk/gtkiconview.c:514
+#: gtk/gtkiconview.c:513
 msgid "Margin"
 msgstr "Відступ"
 
-#: gtk/gtkiconview.c:515
+#: gtk/gtkiconview.c:514
 msgid "Space which is inserted at the edges of the icon view"
 msgstr "Простір, що вставляється на краях перегляду піктограми"
 
-#: gtk/gtkiconview.c:528
+#: gtk/gtkiconview.c:527
 msgid "Item Orientation"
 msgstr "Орієнтація пункту "
 
-#: gtk/gtkiconview.c:529
+#: gtk/gtkiconview.c:528
 msgid ""
 "How the text and icon of each item are positioned relative to each other"
 msgstr ""
 "Як текст та значки кожного елемента розташовуються один відносно іншого"
 
-#: gtk/gtkiconview.c:544 gtk/gtktreeview.c:1070
+#: gtk/gtkiconview.c:543 gtk/gtktreeview.c:1070
 msgid "View is reorderable"
 msgstr "Перегляд можна перегрупувати"
 
-#: gtk/gtkiconview.c:551 gtk/gtktreeview.c:1189
+#: gtk/gtkiconview.c:550 gtk/gtktreeview.c:1189
 msgid "Tooltip Column"
 msgstr "Стовпчик підказки"
 
-#: gtk/gtkiconview.c:552
+#: gtk/gtkiconview.c:551
 msgid "The column in the model containing the tooltip texts for the items"
 msgstr "Стовпчик у моделі, що містить текстову підказку для елементів"
 
-#: gtk/gtkiconview.c:567
+#: gtk/gtkiconview.c:566
 msgid "Item Padding"
 msgstr "Доповнення елемента"
 
-#: gtk/gtkiconview.c:568
+#: gtk/gtkiconview.c:567
 msgid "Padding around icon view items"
 msgstr "Доповнення навколо значків"
 
@@ -4598,19 +4597,19 @@ msgstr "Може стискатися"
 msgid "Allow self to be smaller than contents"
 msgstr "Дозволити віджету бути меншим за вміст"
 
-#: gtk/gtkplacessidebar.c:4338
+#: gtk/gtkplacessidebar.c:4336
 msgid "Location to Select"
 msgstr "Місце для позначення"
 
-#: gtk/gtkplacessidebar.c:4339
+#: gtk/gtkplacessidebar.c:4337
 msgid "The location to highlight in the sidebar"
 msgstr "Місце підсвічування на бічній панелі"
 
-#: gtk/gtkplacessidebar.c:4344 gtk/gtkplacesview.c:2250
+#: gtk/gtkplacessidebar.c:4342 gtk/gtkplacesview.c:2250
 msgid "Open Flags"
 msgstr "Прапорці відкривання"
 
-#: gtk/gtkplacessidebar.c:4345 gtk/gtkplacesview.c:2251
+#: gtk/gtkplacessidebar.c:4343 gtk/gtkplacesview.c:2251
 msgid ""
 "Modes in which the calling application can open locations selected in the "
 "sidebar"
@@ -4618,54 +4617,54 @@ msgstr ""
 "Режими, у яких програма виклику може відкривати адреси, які позначено на "
 "бічній панелі"
 
-#: gtk/gtkplacessidebar.c:4351
+#: gtk/gtkplacessidebar.c:4349
 msgid "Show recent files"
 msgstr "Показувати нещодавні файли"
 
-#: gtk/gtkplacessidebar.c:4352
+#: gtk/gtkplacessidebar.c:4350
 msgid "Whether the sidebar includes a builtin shortcut for recent files"
 msgstr ""
 "Визначає, чи містить бічна панель вбудований пункт для нещодавно "
 "використаних файлів"
 
-#: gtk/gtkplacessidebar.c:4357
+#: gtk/gtkplacessidebar.c:4355
 msgid "Show “Desktop”"
 msgstr "Показувати «Стільниця»"
 
-#: gtk/gtkplacessidebar.c:4358
+#: gtk/gtkplacessidebar.c:4356
 msgid "Whether the sidebar includes a builtin shortcut to the Desktop folder"
 msgstr "Чи повинна бічна панель містити вбудований пункт теки стільниці"
 
-#: gtk/gtkplacessidebar.c:4363
+#: gtk/gtkplacessidebar.c:4361
 msgid "Show “Enter Location”"
 msgstr "Показувати «Введіть адресу»"
 
-#: gtk/gtkplacessidebar.c:4364
+#: gtk/gtkplacessidebar.c:4362
 msgid ""
 "Whether the sidebar includes a builtin shortcut to manually enter a location"
 msgstr "Чи містить бічна панель вбудований пункт введення адреси вручну"
 
-#: gtk/gtkplacessidebar.c:4369
+#: gtk/gtkplacessidebar.c:4367
 msgid "Show “Trash”"
 msgstr "Показувати «Смітник»"
 
-#: gtk/gtkplacessidebar.c:4370
+#: gtk/gtkplacessidebar.c:4368
 msgid "Whether the sidebar includes a builtin shortcut to the Trash location"
 msgstr "Чи містить бічна панель вбудований пункт теки «Смітник»"
 
-#: gtk/gtkplacessidebar.c:4375
+#: gtk/gtkplacessidebar.c:4373
 msgid "Show “Other locations”"
 msgstr "Показувати «Інші місця»"
 
-#: gtk/gtkplacessidebar.c:4376
+#: gtk/gtkplacessidebar.c:4374
 msgid "Whether the sidebar includes an item to show external locations"
 msgstr "Чи містить бічна панель вбудований пункт зовнішніх місць"
 
-#: gtk/gtkplacessidebar.c:4381
+#: gtk/gtkplacessidebar.c:4379
 msgid "Show “Starred Location”"
 msgstr "Показувати «Позначене місце»"
 
-#: gtk/gtkplacessidebar.c:4382
+#: gtk/gtkplacessidebar.c:4380
 msgid "Whether the sidebar includes an item to show starred files"
 msgstr "Чи включає бічна панель елемент для показу позначених зірками файлів"
 
@@ -5910,7 +5909,8 @@ msgid "The trigger for this shortcut"
 msgstr "Перемикач для цього скорочення"
 
 #: gtk/gtkshortcutcontroller.c:526
-msgid "Mnemonic modifers"
+#| msgid "Mnemonic modifers"
+msgid "Mnemonic modifiers"
 msgstr "Модифікатори мнемоніки"
 
 #: gtk/gtkshortcutcontroller.c:527
