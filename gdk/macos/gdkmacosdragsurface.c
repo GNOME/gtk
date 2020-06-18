@@ -42,8 +42,6 @@ _gdk_macos_drag_surface_present (GdkDragSurface *surface,
 {
   g_assert (GDK_IS_MACOS_SURFACE (surface));
 
-  g_print ("presenting drag surface %dx%d\n", width, height);
-
   _gdk_macos_surface_move_resize (GDK_MACOS_SURFACE (surface),
                                   -1, -1,
                                   width, height);
