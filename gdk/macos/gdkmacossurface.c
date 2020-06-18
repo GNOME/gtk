@@ -1010,3 +1010,27 @@ _gdk_macos_surface_get_view (GdkMacosSurface *self)
 
   return [self->window contentView];
 }
+
+void
+_gdk_macos_surface_get_root_coords (GdkMacosSurface *self,
+                                    int             *x,
+                                    int             *y)
+{
+  GdkSurface *surface;
+  int out_x = 0;
+  int out_y = 0;
+
+  g_return_if_fail (GDK_IS_MACOS_SURFACE (self));
+
+  for (surface = GDK_SURFACE (self); surface; surface = surface->parent)
+    {
+      out_x += surface->x;
+      out_y += surface->y;
+    }
+
+  if (x)
+    *x = out_x;
+
+  if (y)
+    *y = out_y;
+}
