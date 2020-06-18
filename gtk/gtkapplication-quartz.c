@@ -325,6 +325,13 @@ gtk_application_impl_quartz_uninhibit (GtkApplicationImpl *impl,
 static void
 gtk_application_impl_quartz_init (GtkApplicationImplQuartz *quartz)
 {
+  /* This is required so that Cocoa is not going to parse the
+     command line arguments by itself and generate OpenFile events.
+     We already parse the command line ourselves, so this is needed
+     to prevent opening files twice, etc. */
+  [[NSUserDefaults standardUserDefaults] setObject:@"NO"
+                                            forKey:@"NSTreatUnknownArgumentsAsOpen"];
+
   quartz->combined = g_menu_new ();
 }
 
