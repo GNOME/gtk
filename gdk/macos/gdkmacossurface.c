@@ -25,6 +25,7 @@
 
 #import "GdkMacosCairoView.h"
 
+#include "gdkdeviceprivate.h"
 #include "gdkdisplay.h"
 #include "gdkframeclockidleprivate.h"
 #include "gdkinternals.h"
@@ -290,9 +291,13 @@ gdk_macos_surface_drag_begin (GdkSurface         *surface,
 {
   GdkMacosSurface *self = (GdkMacosSurface *)surface;
   GdkMacosSurface *drag_surface;
+  GdkMacosDrag *drag;
   GdkCursor *cursor;
   GdkSeat *seat;
-  GdkDrag *drag;
+  double px;
+  double py;
+  int sx;
+  int sy;
 
   g_assert (GDK_IS_MACOS_SURFACE (self));
   g_assert (GDK_IS_MACOS_TOPLEVEL_SURFACE (self) ||
@@ -301,11 +306,12 @@ gdk_macos_surface_drag_begin (GdkSurface         *surface,
   g_assert (GDK_IS_CONTENT_PROVIDER (content));
 
   seat = gdk_device_get_seat (device);
+  _gdk_device_query_state (device, surface, NULL, &px, &py, NULL);
+  _gdk_macos_surface_get_root_coords (GDK_MACOS_SURFACE (surface), &sx, &sy);
   drag_surface = _gdk_macos_surface_new (GDK_MACOS_DISPLAY (surface->display),
                                          GDK_SURFACE_TEMP,
                                          surface,
-                                         dx, dy,
-                                         1, 1);
+                                         -99, -99, 1, 1);
   drag = g_object_new (GDK_TYPE_MACOS_DRAG,
                        "drag-surface", drag_surface,
                        "surface", surface,
@@ -317,7 +323,6 @@ gdk_macos_surface_drag_begin (GdkSurface         *surface,
   cursor = gdk_drag_get_cursor (GDK_DRAG (drag),
                                 gdk_drag_get_selected_action (GDK_DRAG (drag)));
   gdk_drag_set_cursor (GDK_DRAG (drag), cursor);
-
   gdk_seat_ungrab (seat);
 
   g_clear_object (&drag_surface);
@@ -325,7 +330,7 @@ gdk_macos_surface_drag_begin (GdkSurface         *surface,
   /* Hold a reference until drop_done is called */
   g_object_ref (drag);
 
-  return g_steal_pointer (&drag);
+  return GDK_DRAG (g_steal_pointer (&drag));
 }
 
 static void
