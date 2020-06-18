@@ -158,7 +158,7 @@ gsk_rounded_rect_init_from_rect (GskRoundedRect        *self,
  *
  * Normalizes the passed rectangle.
  *
- * this function will ensure that the bounds of the rectanlge are normalized
+ * this function will ensure that the bounds of the rectangle are normalized
  * and ensure that the corner values are positive and the corners do not overlap.
  *
  * Returns: (transfer none): the normalized rectangle

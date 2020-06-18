@@ -326,7 +326,7 @@ static void
 gtk_action_muxer_action_added (GtkActionMuxer *muxer,
                                const gchar    *action_name,
                                GActionGroup   *original_group,
-                               const gchar    *orignal_action_name)
+                               const gchar    *original_action_name)
 {
   const GVariantType *parameter_type;
   gboolean enabled;
@@ -336,7 +336,7 @@ gtk_action_muxer_action_added (GtkActionMuxer *muxer,
   action = g_hash_table_lookup (muxer->observed_actions, action_name);
 
   if (action && action->watchers &&
-      g_action_group_query_action (original_group, orignal_action_name,
+      g_action_group_query_action (original_group, original_action_name,
                                    &enabled, &parameter_type, NULL, NULL, &state))
     {
       GSList *node;

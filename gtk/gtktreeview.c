@@ -6245,7 +6245,7 @@ do_validate_rows (GtkTreeView *tree_view, gboolean queue_resize)
        * GtkWidget:adjust_size_request() is called).
        *
        * Currently bypassing this but the real solution is to not update the scroll adjustments
-       * untill we've recieved an allocation (never update scroll adjustments from size-requests).
+       * until we've received an allocation (never update scroll adjustments from size-requests).
        */
       prevent_recursion_hack = TRUE;
       gtk_tree_view_measure (GTK_WIDGET (tree_view),

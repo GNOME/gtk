@@ -145,7 +145,7 @@ _gdk_x11_precache_atoms (GdkDisplay          *display,
  * be freed. 
  *
  * Returns: name of the X atom; this string is owned by GDK,
- *   so it shouldn’t be modifed or freed. 
+ *   so it shouldn’t be modified or freed. 
  **/
 const gchar *
 gdk_x11_get_xatom_name_for_display (GdkDisplay *display,

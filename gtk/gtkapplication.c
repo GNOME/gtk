@@ -585,7 +585,7 @@ sysprof_profiler_method_call (GDBusConnection       *connection,
 static gboolean
 gtk_application_dbus_register (GApplication     *application,
                                GDBusConnection  *connection,
-                               const char       *obect_path,
+                               const char       *object_path,
                                GError          **error)
 {
   GtkApplicationPrivate *priv = gtk_application_get_instance_private (GTK_APPLICATION (application));
@@ -622,7 +622,7 @@ gtk_application_dbus_register (GApplication     *application,
 static void
 gtk_application_dbus_unregister (GApplication     *application,
                                  GDBusConnection  *connection,
-                                 const char       *obect_path)
+                                 const char       *object_path)
 {
   GtkApplicationPrivate *priv = gtk_application_get_instance_private (GTK_APPLICATION (application));
 
@@ -634,7 +634,7 @@ gtk_application_dbus_unregister (GApplication     *application,
 static gboolean
 gtk_application_dbus_register (GApplication     *application,
                                GDBusConnection  *connection,
-                               const char       *obect_path,
+                               const char       *object_path,
                                GError          **error)
 {
   return TRUE;
@@ -643,7 +643,7 @@ gtk_application_dbus_register (GApplication     *application,
 static void
 gtk_application_dbus_unregister (GApplication     *application,
                                  GDBusConnection  *connection,
-                                 const char       *obect_path)
+                                 const char       *object_path)
 {
 }
 

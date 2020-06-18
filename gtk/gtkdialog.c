@@ -1270,7 +1270,7 @@ gtk_dialog_buildable_custom_finished (GtkBuildable *buildable,
       if (!object)
         continue;
 
-      /* If the widget already has reponse data at this point, it
+      /* If the widget already has response data at this point, it
        * was either added by gtk_dialog_add_action_widget(), or via
        * <child type="action"> or by moving an action area child
        * to the header bar. In these cases, apply placement heuristics

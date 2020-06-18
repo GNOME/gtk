@@ -978,7 +978,7 @@ gtk_drop_target_get_drop (GtkDropTarget *self)
  * gtk_drop_target_get_value:
  * @self: a #GtkDropTarget
  *
- * Gets the value of the GtkDropTarget:value porperty.
+ * Gets the value of the GtkDropTarget:value property.
  *
  * Returns: (nullable) (transfer none): The current drop data
  **/

@@ -6705,7 +6705,7 @@ search_start_query (GtkFileChooserWidget *impl,
     gtk_widget_show (impl->remote_warning_bar);
 
   /* We're not showing the file list here already and instead rely on the
-   * GtkSearchEntry timout and the ::hits-added signal from above to
+   * GtkSearchEntry timeout and the ::hits-added signal from above to
    * switch. */
 }
 
