@@ -1205,9 +1205,9 @@ gdk_event_get_device (GdkEvent *event)
  * gdk_event_get_source_device:
  * @event: a #GdkEvent
  *
- * This function returns the hardware (slave) #GdkDevice that has
- * triggered the event, falling back to the virtual (master) device
- * (as in gdk_event_get_device()) if the event wasn’t caused by
+ * This function returns the physical #GdkDevice that has triggered
+ * the event, falling back to the logical device, as returned by
+ * gdk_event_get_device(), if the event wasn’t caused by
  * interaction with a hardware device. This may happen for example
  * in synthesized crossing events after a #GdkSurface updates its
  * geometry or a grab is acquired/released.

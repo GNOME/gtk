@@ -5,7 +5,7 @@ in what happens to translate a key press or mouse motion of the users into a
 change of a GTK widget, you should read this chapter. This knowledge will also
 be useful if you decide to implement your own widgets.
 
-Devices and events
+## Devices and events
 
 The most basic input devices that every computer user has interacted with are
 keyboards and mice; beyond these, GTK supports touchpads, touchscreens and
@@ -13,14 +13,14 @@ more exotic input devices such as graphics tablets. Inside GTK, every such
 input device is represented by a #GdkDevice object.
 
 To simplify dealing with the variability between these input devices, GTK
-has a concept of master and slave devices. The concrete physical devices that
+has a concept of logical and physical devices. The concrete physical devices that
 have many different characteristics (mice may have 2 or 3 or 8 buttons,
 keyboards have different layouts and may or may not have a separate number
-block, etc) are represented as slave devices. Each slave device is
-associated with a virtual master device. Master devices always come in
+block, etc) are represented as physical devices. Each physical device is
+associated with a virtual logical device. Logical devices always come in
 pointer/keyboard pairs - you can think of such a pair as a 'seat'.
 
-GTK widgets generally deal with the master devices, and thus can be used
+GTK widgets generally deal with the logical devices, and thus can be used
 with any pointing device or keyboard.
 
 When a user interacts with an input device (e.g. moves a mouse or presses

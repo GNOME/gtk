@@ -323,35 +323,35 @@ gdk_seat_ungrab (GdkSeat *seat)
 }
 
 /**
- * gdk_seat_get_slaves:
+ * gdk_seat_get_physical_devices:
  * @seat: a #GdkSeat
  * @capabilities: capabilities to get devices for
  *
- * Returns the slave devices that match the given capabilities.
+ * Returns the physical devices that match the given capabilities.
  *
  * Returns: (transfer container) (element-type GdkDevice): A list of #GdkDevices.
  *          The list must be freed with g_list_free(), the elements are owned
  *          by GDK and must not be freed.
  **/
 GList *
-gdk_seat_get_slaves (GdkSeat             *seat,
-                     GdkSeatCapabilities  capabilities)
+gdk_seat_get_physical_devices (GdkSeat             *seat,
+                               GdkSeatCapabilities  capabilities)
 {
   GdkSeatClass *seat_class;
 
   g_return_val_if_fail (GDK_IS_SEAT (seat), NULL);
 
   seat_class = GDK_SEAT_GET_CLASS (seat);
-  return seat_class->get_slaves (seat, capabilities);
+  return seat_class->get_physical_devices (seat, capabilities);
 }
 
 /**
  * gdk_seat_get_pointer:
  * @seat: a #GdkSeat
  *
- * Returns the master device that routes pointer events.
+ * Returns the logical device that routes pointer events.
  *
- * Returns: (transfer none) (nullable): a master #GdkDevice with pointer
+ * Returns: (transfer none) (nullable): a logical #GdkDevice with pointer
  *          capabilities. This object is owned by GTK and must not be freed.
  **/
 GdkDevice *
@@ -362,16 +362,16 @@ gdk_seat_get_pointer (GdkSeat *seat)
   g_return_val_if_fail (GDK_IS_SEAT (seat), NULL);
 
   seat_class = GDK_SEAT_GET_CLASS (seat);
-  return seat_class->get_master (seat, GDK_SEAT_CAPABILITY_POINTER);
+  return seat_class->get_logical_device (seat, GDK_SEAT_CAPABILITY_POINTER);
 }
 
 /**
  * gdk_seat_get_keyboard:
  * @seat: a #GdkSeat
  *
- * Returns the master device that routes keyboard events.
+ * Returns the logical device that routes keyboard events.
  *
- * Returns: (transfer none) (nullable): a master #GdkDevice with keyboard
+ * Returns: (transfer none) (nullable): a logical #GdkDevice with keyboard
  *          capabilities. This object is owned by GTK and must not be freed.
  **/
 GdkDevice *
@@ -382,7 +382,7 @@ gdk_seat_get_keyboard (GdkSeat *seat)
   g_return_val_if_fail (GDK_IS_SEAT (seat), NULL);
 
   seat_class = GDK_SEAT_GET_CLASS (seat);
-  return seat_class->get_master (seat, GDK_SEAT_CAPABILITY_KEYBOARD);
+  return seat_class->get_logical_device (seat, GDK_SEAT_CAPABILITY_KEYBOARD);
 }
 
 void
@@ -448,25 +448,29 @@ gdk_seat_get_tool (GdkSeat *seat,
 }
 
 /**
- * gdk_seat_get_master_pointers:
+ * gdk_seat_get_logical_pointers:
  * @seat: The #GdkSeat
  * @capabilities: Queried capabilities
  *
- * Returns all master pointers with the given capabilities driven by this @seat.
- * On most backends this function will return a list with a single element (meaning
- * that all input devices drive the same onscreen cursor).
+ * Returns all logical pointers with the given capabilities driven by
+ * this @seat.
  *
- * In other backends where there can possibly be multiple foci (eg. wayland),
- * this function will return all master #GdkDevices that represent these.
+ * On most windowing system backends this function will return a list
+ * with a single element (meaning that all input devices drive the same
+ * on-screen cursor).
+ *
+ * In other windowing systems where there can possibly be multiple
+ * foci (e.g. Wayland), this function will return all logical #GdkDevices
+ * that represent these.
  *
  * Returns: (transfer container) (element-type GdkDevice): A list
- * of master pointing devices
+ *   of logical pointing devices
  */
 GList *
-gdk_seat_get_master_pointers (GdkSeat             *seat,
-                              GdkSeatCapabilities  capabilities)
+gdk_seat_get_logical_pointers (GdkSeat             *seat,
+                               GdkSeatCapabilities  capabilities)
 {
   g_return_val_if_fail (GDK_IS_SEAT (seat), NULL);
 
-  return GDK_SEAT_GET_CLASS (seat)->get_master_pointers (seat, capabilities);
+  return GDK_SEAT_GET_CLASS (seat)->get_logical_pointers (seat, capabilities);
 }

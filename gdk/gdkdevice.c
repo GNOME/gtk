@@ -36,7 +36,7 @@
  * as a keyboard, a mouse, a touchpad, etc.
  *
  * See the #GdkSeat documentation for more information
- * about the various kinds of master and slave devices, and their
+ * about the various kinds of logical and physical devices, and their
  * relationships.
  */
 
@@ -152,15 +152,16 @@ gdk_device_class_init (GdkDeviceClass *klass)
                          P_("Device type"),
                          P_("Device role in the device manager"),
                          GDK_TYPE_DEVICE_TYPE,
-                         GDK_DEVICE_TYPE_MASTER,
+                         GDK_DEVICE_TYPE_LOGICAL,
                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY |
                          G_PARAM_STATIC_STRINGS);
 
   /**
    * GdkDevice:associated-device:
    *
-   * Associated pointer or keyboard with this device, if any. Devices of type #GDK_DEVICE_TYPE_MASTER
-   * always come in keyboard/pointer pairs. Other device types will have a %NULL associated device.
+   * Associated pointer or keyboard with this device, if any. Devices of
+   * type #GDK_DEVICE_TYPE_LOGICAL always come in keyboard/pointer pairs.
+   * Other device types will have a %NULL associated device.
    */
   device_props[PROP_ASSOCIATED_DEVICE] =
       g_param_spec_object ("associated-device",
@@ -187,7 +188,7 @@ gdk_device_class_init (GdkDeviceClass *klass)
    * GdkDevice:has-cursor:
    *
    * Whether the device is represented by a cursor on the screen. Devices of type
-   * %GDK_DEVICE_TYPE_MASTER will have %TRUE here.
+   * %GDK_DEVICE_TYPE_LOGICAL will have %TRUE here.
    */
   device_props[PROP_HAS_CURSOR] =
       g_param_spec_boolean ("has-cursor",
@@ -333,11 +334,11 @@ gdk_device_class_init (GdkDeviceClass *klass)
    *
    * The ::changed signal is emitted either when the #GdkDevice
    * has changed the number of either axes or keys. For example
-   * In X this will normally happen when the slave device routing
-   * events through the master device changes (for example, user
-   * switches from the USB mouse to a tablet), in that case the
-   * master device will change to reflect the new slave device
-   * axes and keys.
+   * on X11 this will normally happen when the physical device
+   * routing events through the logical device changes (for
+   * example, user switches from the USB mouse to a tablet); in
+   * that case the logical device will change to reflect the axes
+   * and keys on the new physical device.
    */
   signals[CHANGED] =
     g_signal_new (g_intern_static_string ("changed"),
@@ -394,14 +395,14 @@ gdk_device_dispose (GObject *object)
   GdkDevice *device = GDK_DEVICE (object);
   GdkDevice *associated = device->associated;
 
-  if (associated && device->type == GDK_DEVICE_TYPE_SLAVE)
-    _gdk_device_remove_slave (associated, device);
+  if (associated && device->type == GDK_DEVICE_TYPE_PHYSICAL)
+    _gdk_device_remove_physical_device (associated, device);
 
   if (associated)
     {
       device->associated = NULL;
 
-      if (device->type == GDK_DEVICE_TYPE_MASTER &&
+      if (device->type == GDK_DEVICE_TYPE_LOGICAL &&
           associated->associated == device)
         _gdk_device_set_associated_device (associated, NULL);
 
@@ -539,21 +540,23 @@ gdk_device_get_property (GObject    *object,
  * the axes of @device in, or %NULL.
  * @mask: (optional) (out): location to store the modifiers, or %NULL.
  *
- * Gets the current state of a pointer device relative to @surface. As a slave
- * device’s coordinates are those of its master pointer, this
- * function may not be called on devices of type %GDK_DEVICE_TYPE_SLAVE,
- * unless there is an ongoing grab on them. See gdk_seat_grab().
+ * Gets the current state of a pointer device relative to @surface. As a
+ * physical device’s coordinates are those of its logical pointer, this
+ * function may not be called on devices of type %GDK_DEVICE_TYPE_PHYSICAL,
+ * unless there is an ongoing grab on them.
+ *
+ * See also: gdk_seat_grab().
  */
 void
 gdk_device_get_state (GdkDevice       *device,
-                      GdkSurface       *surface,
+                      GdkSurface      *surface,
                       gdouble         *axes,
                       GdkModifierType *mask)
 {
   g_return_if_fail (GDK_IS_DEVICE (device));
   g_return_if_fail (device->source != GDK_SOURCE_KEYBOARD);
   g_return_if_fail (GDK_IS_SURFACE (surface));
-  g_return_if_fail (gdk_device_get_device_type (device) != GDK_DEVICE_TYPE_SLAVE ||
+  g_return_if_fail (gdk_device_get_device_type (device) != GDK_DEVICE_TYPE_PHYSICAL ||
                     gdk_display_device_is_grabbed (gdk_device_get_display (device), device));
 
   if (GDK_DEVICE_GET_CLASS (device)->get_state)
@@ -575,7 +578,7 @@ gdk_device_get_position (GdkDevice *device,
 {
   g_return_if_fail (GDK_IS_DEVICE (device));
   g_return_if_fail (device->source != GDK_SOURCE_KEYBOARD);
-  g_return_if_fail (gdk_device_get_device_type (device) != GDK_DEVICE_TYPE_SLAVE ||
+  g_return_if_fail (gdk_device_get_device_type (device) != GDK_DEVICE_TYPE_PHYSICAL ||
                     gdk_display_device_is_grabbed (gdk_device_get_display (device), device));
 
   _gdk_device_query_state (device, NULL, NULL, x, y, NULL);
@@ -593,8 +596,8 @@ gdk_device_get_position (GdkDevice *device,
  * double precision. Returns %NULL if the surface tree under @device is not known to GDK (for example,
  * belongs to another application).
  *
- * As a slave device coordinates are those of its master pointer, This
- * function may not be called on devices of type %GDK_DEVICE_TYPE_SLAVE,
+ * As a physical device coordinates are those of its logical pointer, this
+ * function may not be called on devices of type %GDK_DEVICE_TYPE_PHYSICAL,
  * unless there is an ongoing grab on them, see gdk_seat_grab().
  *
  * Returns: (nullable) (transfer none): the #GdkSurface under the
@@ -610,7 +613,7 @@ gdk_device_get_surface_at_position (GdkDevice *device,
 
   g_return_val_if_fail (GDK_IS_DEVICE (device), NULL);
   g_return_val_if_fail (device->source != GDK_SOURCE_KEYBOARD, NULL);
-  g_return_val_if_fail (gdk_device_get_device_type (device) != GDK_DEVICE_TYPE_SLAVE ||
+  g_return_val_if_fail (gdk_device_get_device_type (device) != GDK_DEVICE_TYPE_PHYSICAL ||
                         gdk_display_device_is_grabbed (gdk_device_get_display (device), device), NULL);
 
   surface = _gdk_device_surface_at_position (device, &tmp_x, &tmp_y, NULL);
@@ -717,15 +720,14 @@ gdk_device_get_display (GdkDevice *device)
  * gdk_device_get_associated_device:
  * @device: a #GdkDevice
  *
- * Returns the associated device to @device, if @device is of type
- * %GDK_DEVICE_TYPE_MASTER, it will return the paired pointer or
- * keyboard.
+ * Returns the #GdkDevice associated to @device:
  *
- * If @device is of type %GDK_DEVICE_TYPE_SLAVE, it will return
- * the master device to which @device is attached to.
- *
- * If @device is of type %GDK_DEVICE_TYPE_FLOATING, %NULL will be
- * returned, as there is no associated device.
+ *  - if @device is of type %GDK_DEVICE_TYPE_LOGICAL, it will return
+ *    the paired pointer or keyboard.
+ *  - if @device is of type %GDK_DEVICE_TYPE_PHYSICAL, it will return
+ *    the logical device to which @device is attached to.
+ *  - if @device is of type %GDK_DEVICE_TYPE_FLOATING, %NULL will be
+ *    returned, as there is no associated device.
  *
  * Returns: (nullable) (transfer none): The associated device, or
  *   %NULL
@@ -769,63 +771,59 @@ _gdk_device_set_associated_device (GdkDevice *device,
   if (associated)
     device->associated = g_object_ref (associated);
 
-  if (device->type != GDK_DEVICE_TYPE_MASTER)
+  if (device->type != GDK_DEVICE_TYPE_LOGICAL)
     {
       if (device->associated)
-        _gdk_device_set_device_type (device, GDK_DEVICE_TYPE_SLAVE);
+        _gdk_device_set_device_type (device, GDK_DEVICE_TYPE_PHYSICAL);
       else
         _gdk_device_set_device_type (device, GDK_DEVICE_TYPE_FLOATING);
     }
 }
 
 /**
- * gdk_device_list_slave_devices:
- * @device: a #GdkDevice
+ * gdk_device_list_physical_devices:
+ * @device: a logical #GdkDevice
  *
- * If the device if of type %GDK_DEVICE_TYPE_MASTER, it will return
- * the list of slave devices attached to it, otherwise it will return
- * %NULL
+ * Returns the list of physical devices attached to the given logical
+ * #GdkDevice.
  *
  * Returns: (nullable) (transfer container) (element-type GdkDevice):
- *          the list of slave devices, or %NULL. The list must be
- *          freed with g_list_free(), the contents of the list are
- *          owned by GTK+ and should not be freed.
- **/
+ *   the list of physical devices attached to a logical #GdkDevice
+ */
 GList *
-gdk_device_list_slave_devices (GdkDevice *device)
+gdk_device_list_physical_devices (GdkDevice *device)
 {
   g_return_val_if_fail (GDK_IS_DEVICE (device), NULL);
-  g_return_val_if_fail (gdk_device_get_device_type (device) == GDK_DEVICE_TYPE_MASTER, NULL);
+  g_return_val_if_fail (gdk_device_get_device_type (device) == GDK_DEVICE_TYPE_LOGICAL, NULL);
 
-  return g_list_copy (device->slaves);
+  return g_list_copy (device->physical_devices);
 }
 
 void
-_gdk_device_add_slave (GdkDevice *device,
-                       GdkDevice *slave)
+_gdk_device_add_physical_device (GdkDevice *device,
+                                 GdkDevice *physical)
 {
-  g_return_if_fail (gdk_device_get_device_type (device) == GDK_DEVICE_TYPE_MASTER);
-  g_return_if_fail (gdk_device_get_device_type (slave) != GDK_DEVICE_TYPE_MASTER);
+  g_return_if_fail (gdk_device_get_device_type (device) == GDK_DEVICE_TYPE_LOGICAL);
+  g_return_if_fail (gdk_device_get_device_type (physical) != GDK_DEVICE_TYPE_LOGICAL);
 
-  if (!g_list_find (device->slaves, slave))
-    device->slaves = g_list_prepend (device->slaves, slave);
+  if (!g_list_find (device->physical_devices, physical))
+    device->physical_devices = g_list_prepend (device->physical_devices, physical);
 }
 
 void
-_gdk_device_remove_slave (GdkDevice *device,
-                          GdkDevice *slave)
+_gdk_device_remove_physical_device (GdkDevice *device,
+                                    GdkDevice *physical)
 {
   GList *elem;
 
-  g_return_if_fail (gdk_device_get_device_type (device) == GDK_DEVICE_TYPE_MASTER);
-  g_return_if_fail (gdk_device_get_device_type (slave) != GDK_DEVICE_TYPE_MASTER);
+  g_return_if_fail (gdk_device_get_device_type (device) == GDK_DEVICE_TYPE_LOGICAL);
+  g_return_if_fail (gdk_device_get_device_type (physical) != GDK_DEVICE_TYPE_LOGICAL);
 
-  elem = g_list_find (device->slaves, slave);
-
-  if (!elem)
+  elem = g_list_find (device->physical_devices, physical);
+  if (elem == NULL)
     return;
 
-  device->slaves = g_list_delete_link (device->slaves, elem);
+  device->physical_devices = g_list_delete_link (device->physical_devices, elem);
 }
 
 /**
@@ -839,7 +837,7 @@ _gdk_device_remove_slave (GdkDevice *device,
 GdkDeviceType
 gdk_device_get_device_type (GdkDevice *device)
 {
-  g_return_val_if_fail (GDK_IS_DEVICE (device), GDK_DEVICE_TYPE_MASTER);
+  g_return_val_if_fail (GDK_IS_DEVICE (device), GDK_DEVICE_TYPE_LOGICAL);
 
   return device->type;
 }
@@ -1315,7 +1313,7 @@ gdk_device_get_last_event_surface (GdkDevice *device)
 
 /**
  * gdk_device_get_vendor_id:
- * @device: a slave #GdkDevice
+ * @device: a physical #GdkDevice
  *
  * Returns the vendor ID of this device, or %NULL if this information couldn't
  * be obtained. This ID is retrieved from the device, and is thus constant for
@@ -1350,14 +1348,14 @@ const gchar *
 gdk_device_get_vendor_id (GdkDevice *device)
 {
   g_return_val_if_fail (GDK_IS_DEVICE (device), NULL);
-  g_return_val_if_fail (gdk_device_get_device_type (device) != GDK_DEVICE_TYPE_MASTER, NULL);
+  g_return_val_if_fail (gdk_device_get_device_type (device) != GDK_DEVICE_TYPE_LOGICAL, NULL);
 
   return device->vendor_id;
 }
 
 /**
  * gdk_device_get_product_id:
- * @device: a slave #GdkDevice
+ * @device: a physical #GdkDevice
  *
  * Returns the product ID of this device, or %NULL if this information couldn't
  * be obtained. This ID is retrieved from the device, and is thus constant for
@@ -1369,7 +1367,7 @@ const gchar *
 gdk_device_get_product_id (GdkDevice *device)
 {
   g_return_val_if_fail (GDK_IS_DEVICE (device), NULL);
-  g_return_val_if_fail (gdk_device_get_device_type (device) != GDK_DEVICE_TYPE_MASTER, NULL);
+  g_return_val_if_fail (gdk_device_get_device_type (device) != GDK_DEVICE_TYPE_LOGICAL, NULL);
 
   return device->product_id;
 }
@@ -1424,7 +1422,7 @@ gdk_device_update_tool (GdkDevice     *device,
                         GdkDeviceTool *tool)
 {
   g_return_if_fail (GDK_IS_DEVICE (device));
-  g_return_if_fail (gdk_device_get_device_type (device) != GDK_DEVICE_TYPE_MASTER);
+  g_return_if_fail (gdk_device_get_device_type (device) != GDK_DEVICE_TYPE_LOGICAL);
 
   if (g_set_object (&device->last_tool, tool))
     {

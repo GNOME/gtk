@@ -80,7 +80,7 @@ create_pointer (GdkDeviceManagerWin32 *device_manager,
                        "name", name,
                        "type", type,
                        "source", GDK_SOURCE_MOUSE,
-                       "has-cursor", type == GDK_DEVICE_TYPE_MASTER,
+                       "has-cursor", type == GDK_DEVICE_TYPE_LOGICAL,
                        "display", _gdk_display,
                        NULL);
 }
@@ -565,7 +565,7 @@ wintab_init_check (GdkDeviceManagerWin32 *device_manager)
 	  if (device->sends_core)
 	    {
 	      _gdk_device_set_associated_device (device_manager->system_pointer, GDK_DEVICE (device));
-	      _gdk_device_add_slave (device_manager->core_pointer, GDK_DEVICE (device));
+	      _gdk_device_add_physical_device (device_manager->core_pointer, GDK_DEVICE (device));
 	    }
 
           g_free (csrname_utf8);
@@ -693,40 +693,40 @@ gdk_device_manager_win32_constructed (GObject *object)
     create_pointer (device_manager,
 		    GDK_TYPE_DEVICE_VIRTUAL,
 		    "Virtual Core Pointer",
-		    GDK_DEVICE_TYPE_MASTER);
+		    GDK_DEVICE_TYPE_LOGICAL);
   device_manager->system_pointer =
     create_pointer (device_manager,
 		    GDK_TYPE_DEVICE_WIN32,
 		    "System Aggregated Pointer",
-		    GDK_DEVICE_TYPE_SLAVE);
+		    GDK_DEVICE_TYPE_PHYSICAL);
   _gdk_device_virtual_set_active (device_manager->core_pointer,
 				  device_manager->system_pointer);
   _gdk_device_set_associated_device (device_manager->system_pointer, device_manager->core_pointer);
-  _gdk_device_add_slave (device_manager->core_pointer, device_manager->system_pointer);
+  _gdk_device_add_physical_device (device_manager->core_pointer, device_manager->system_pointer);
 
   device_manager->core_keyboard =
     create_keyboard (device_manager,
 		     GDK_TYPE_DEVICE_VIRTUAL,
 		     "Virtual Core Keyboard",
-		     GDK_DEVICE_TYPE_MASTER);
+		     GDK_DEVICE_TYPE_LOGICAL);
   device_manager->system_keyboard =
     create_keyboard (device_manager,
 		    GDK_TYPE_DEVICE_WIN32,
 		     "System Aggregated Keyboard",
-		     GDK_DEVICE_TYPE_SLAVE);
+		     GDK_DEVICE_TYPE_PHYSICAL);
   _gdk_device_virtual_set_active (device_manager->core_keyboard,
 				  device_manager->system_keyboard);
   _gdk_device_set_associated_device (device_manager->system_keyboard, device_manager->core_keyboard);
-  _gdk_device_add_slave (device_manager->core_keyboard, device_manager->system_keyboard);
+  _gdk_device_add_physical_device (device_manager->core_keyboard, device_manager->system_keyboard);
 
   _gdk_device_set_associated_device (device_manager->core_pointer, device_manager->core_keyboard);
   _gdk_device_set_associated_device (device_manager->core_keyboard, device_manager->core_pointer);
 
-  seat = gdk_seat_default_new_for_master_pair (device_manager->core_pointer,
-                                               device_manager->core_keyboard);
+  seat = gdk_seat_default_new_for_logical_pair (device_manager->core_pointer,
+                                                device_manager->core_keyboard);
   gdk_display_add_seat (_gdk_display, seat);
-  gdk_seat_default_add_slave (GDK_SEAT_DEFAULT (seat), device_manager->system_pointer);
-  gdk_seat_default_add_slave (GDK_SEAT_DEFAULT (seat), device_manager->system_keyboard);
+  gdk_seat_default_add_physical_device (GDK_SEAT_DEFAULT (seat), device_manager->system_pointer);
+  gdk_seat_default_add_physical_device (GDK_SEAT_DEFAULT (seat), device_manager->system_keyboard);
   g_object_unref (seat);
 
   /* Only call Wintab init stuff after the default display

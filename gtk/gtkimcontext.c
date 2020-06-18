@@ -560,7 +560,7 @@ gtk_im_context_filter_key (GtkIMContext    *context,
 
   g_return_val_if_fail (GTK_IS_IM_CONTEXT (context), FALSE);
 
-  if (gdk_device_get_device_type (device) == GDK_DEVICE_TYPE_MASTER)
+  if (gdk_device_get_device_type (device) == GDK_DEVICE_TYPE_LOGICAL)
     {
       source_device = NULL;
     }

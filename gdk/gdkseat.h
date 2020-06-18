@@ -68,24 +68,24 @@ GDK_AVAILABLE_IN_ALL
 GType          gdk_seat_get_type         (void) G_GNUC_CONST;
 
 GDK_AVAILABLE_IN_ALL
-GdkDisplay *   gdk_seat_get_display      (GdkSeat             *seat);
+GdkDisplay *   gdk_seat_get_display             (GdkSeat             *seat);
 
 GDK_AVAILABLE_IN_ALL
 GdkSeatCapabilities
-               gdk_seat_get_capabilities (GdkSeat             *seat);
+               gdk_seat_get_capabilities        (GdkSeat             *seat);
 
 GDK_AVAILABLE_IN_ALL
-GList *        gdk_seat_get_slaves       (GdkSeat             *seat,
-                                          GdkSeatCapabilities  capabilities);
+GList *        gdk_seat_get_physical_devices    (GdkSeat             *seat,
+                                                 GdkSeatCapabilities  capabilities);
 
 GDK_AVAILABLE_IN_ALL
-GdkDevice *    gdk_seat_get_pointer      (GdkSeat             *seat);
+GdkDevice *    gdk_seat_get_pointer             (GdkSeat             *seat);
 GDK_AVAILABLE_IN_ALL
-GdkDevice *    gdk_seat_get_keyboard     (GdkSeat             *seat);
+GdkDevice *    gdk_seat_get_keyboard            (GdkSeat             *seat);
 
 GDK_AVAILABLE_IN_ALL
-GList *        gdk_seat_get_master_pointers (GdkSeat             *seat,
-                                             GdkSeatCapabilities  capabilities);
+GList *        gdk_seat_get_logical_pointers    (GdkSeat             *seat,
+                                                 GdkSeatCapabilities  capabilities);
 
 G_END_DECLS
 

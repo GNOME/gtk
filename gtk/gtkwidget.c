@@ -7630,7 +7630,7 @@ _gtk_widget_list_devices (GtkWidget *widget,
   if (is_my_surface (widget, gdk_device_get_last_event_surface (device)))
     g_ptr_array_add (result, device);
 
-  devices = gdk_seat_get_slaves (seat, GDK_SEAT_CAPABILITY_ALL_POINTING);
+  devices = gdk_seat_get_physical_devices (seat, GDK_SEAT_CAPABILITY_ALL_POINTING);
   for (l = devices; l; l = l->next)
     {
       device = l->data;

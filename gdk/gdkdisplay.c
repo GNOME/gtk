@@ -643,12 +643,12 @@ switch_to_pointer_grab (GdkDisplay        *display,
       if (grab == NULL /* ungrab */ ||
 	  (!last_grab->owner_events && grab->owner_events) /* switched to owner_events */ )
 	{
-          /* Ungrabbed slave devices don't have a position by
-           * itself, rather depend on its master pointer, so
+          /* Ungrabbed physical devices don't have a position by
+           * itself, rather depend on its logical pointer, so
            * it doesn't make sense to track any position for
            * these after the grab
            */
-          if (grab || gdk_device_get_device_type (device) != GDK_DEVICE_TYPE_SLAVE)
+          if (grab || gdk_device_get_device_type (device) != GDK_DEVICE_TYPE_PHYSICAL)
             new_toplevel = get_current_toplevel (display, device, &x, &y, &state);
 
 	  if (new_toplevel)
