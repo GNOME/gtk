@@ -29,24 +29,14 @@
 
 #define BIG_STEP 20
 #define SMALL_STEP 1
+#define ANIM_TIME 500000 /* .5 seconds */
 
-struct _GdkMacosDrag
+typedef struct
 {
-  GdkDrag parent_instance;
-
-  GdkMacosDragSurface *drag_surface;
-
-  int hot_x;
-  int hot_y;
-
-  int last_x;
-  int last_y;
-};
-
-struct _GdkMacosDragClass
-{
-  GdkDragClass parent_class;
-};
+  GdkMacosDrag  *drag;
+  GdkFrameClock *frame_clock;
+  gint64         start_time;
+} GdkMacosZoomback;
 
 G_DEFINE_TYPE (GdkMacosDrag, gdk_macos_drag, GDK_TYPE_DRAG)
 
@@ -57,6 +47,57 @@ enum {
 };
 
 static GParamSpec *properties [N_PROPS];
+
+static double
+ease_out_cubic (double t)
+{
+  double p = t - 1;
+  return p * p * p + 1;
+}
+
+static void
+gdk_macos_zoomback_destroy (GdkMacosZoomback *zb)
+{
+  gdk_surface_hide (GDK_SURFACE (zb->drag->drag_surface));
+  g_object_unref (zb->drag);
+  g_slice_free (GdkMacosZoomback, zb);
+}
+
+static gboolean
+gdk_macos_zoomback_timeout (gpointer data)
+{
+  GdkMacosZoomback *zb = data;
+  GdkFrameClock *frame_clock;
+  GdkMacosDrag *drag;
+  gint64 current_time;
+  double f;
+  double t;
+
+  g_assert (zb != NULL);
+  g_assert (GDK_IS_MACOS_DRAG (zb->drag));
+
+  drag = zb->drag;
+  frame_clock = zb->frame_clock;
+
+  if (!frame_clock)
+    return G_SOURCE_REMOVE;
+
+  current_time = gdk_frame_clock_get_frame_time (frame_clock);
+  f = (current_time - zb->start_time) / (double) ANIM_TIME;
+  if (f >= 1.0)
+    return G_SOURCE_REMOVE;
+
+  t = ease_out_cubic (f);
+
+  _gdk_macos_surface_move (GDK_MACOS_SURFACE (drag->drag_surface),
+                           (drag->last_x - drag->hot_x) +
+                           (drag->start_x - drag->last_x) * t,
+                           (drag->last_y - drag->hot_y) +
+                           (drag->start_y - drag->last_y) * t);
+  _gdk_macos_surface_set_opacity (GDK_MACOS_SURFACE (drag->drag_surface), 1.0 - f);
+
+  return G_SOURCE_CONTINUE;
+}
 
 static GdkSurface *
 gdk_macos_drag_get_drag_surface (GdkDrag *drag)
@@ -70,13 +111,21 @@ gdk_macos_drag_set_hotspot (GdkDrag *drag,
                             int      hot_y)
 {
   GdkMacosDrag *self = (GdkMacosDrag *)drag;
+  int change_x;
+  int change_y;
 
   g_assert (GDK_IS_MACOS_DRAG (self));
+
+  change_x = hot_x - self->hot_x;
+  change_y = hot_y - self->hot_y;
 
   self->hot_x = hot_x;
   self->hot_y = hot_y;
 
-  /* TODO: move/resize to take point into account */
+  if (change_x || change_y)
+    _gdk_macos_surface_move (GDK_MACOS_SURFACE (self->drag_surface),
+                             GDK_SURFACE (self->drag_surface)->x + change_x,
+                             GDK_SURFACE (self->drag_surface)->y + change_y);
 }
 
 static void
@@ -84,15 +133,31 @@ gdk_macos_drag_drop_done (GdkDrag  *drag,
                           gboolean  success)
 {
   GdkMacosDrag *self = (GdkMacosDrag *)drag;
+  GdkMacosZoomback *zb;
+  guint id;
 
   g_assert (GDK_IS_MACOS_DRAG (self));
 
-  gdk_surface_hide (GDK_SURFACE (self->drag_surface));
+  if (success)
+    {
+      gdk_surface_hide (GDK_SURFACE (self->drag_surface));
+      g_object_unref (drag);
+      return;
+    }
 
-  /* TODO: Apple HIG suggests doing a "zoomback" animation of
-   * the surface back towards the original position.
+  /* Apple HIG suggests doing a "zoomback" animation of the surface back
+   * towards the original position.
    */
+  zb = g_slice_new0 (GdkMacosZoomback);
+  zb->drag = g_object_ref (self);
+  zb->frame_clock = gdk_surface_get_frame_clock (GDK_SURFACE (self->drag_surface));
+  zb->start_time = gdk_frame_clock_get_frame_time (zb->frame_clock);
 
+  id = g_timeout_add_full (G_PRIORITY_DEFAULT, 17,
+                           gdk_macos_zoomback_timeout,
+                           zb,
+                           (GDestroyNotify) gdk_macos_zoomback_destroy);
+  g_source_set_name_by_id (id, "[gtk] gdk_macos_zoomback_timeout");
   g_object_unref (drag);
 }
 
@@ -119,11 +184,9 @@ gdk_macos_drag_cancel (GdkDrag             *drag,
 
   g_assert (GDK_IS_MACOS_DRAG (self));
 
-  g_print ("Drag cancel\n");
-
   gdk_drag_drop_done (drag, FALSE);
 
-  //g_clear_pointer ((GdkSurface **)&self->drag_surface, gdk_surface_destroy);
+  self->cancelled = TRUE;
 }
 
 static void
@@ -134,7 +197,6 @@ gdk_macos_drag_drop_performed (GdkDrag *drag,
 
   g_assert (GDK_IS_MACOS_DRAG (self));
 
-  //g_clear_pointer ((GdkSurface **)&self->drag_surface, gdk_surface_destroy);
 }
 
 static void
@@ -222,6 +284,13 @@ gdk_drag_update (GdkDrag         *drag,
                                        suggested_action,
                                        possible_actions,
                                        evtime);
+
+  if (!self->did_update)
+    {
+      self->start_x = self->last_x;
+      self->start_y = self->last_y;
+      self->did_update = TRUE;
+    }
 }
 
 static gboolean
@@ -233,6 +302,10 @@ gdk_dnd_handle_motion_event (GdkDrag  *drag,
 
   g_assert (GDK_IS_MACOS_DRAG (drag));
   g_assert (event != NULL);
+
+  /* Ignore motion while doing zoomback */
+  if (GDK_MACOS_DRAG (drag)->cancelled)
+    return FALSE;
 
   gdk_event_get_position (event, &x, &y);
   x_root = event->surface->x + x;
@@ -444,8 +517,6 @@ gdk_macos_drag_set_property (GObject      *object,
     {
     case PROP_DRAG_SURFACE:
       self->drag_surface = g_value_dup_object (value);
-      self->last_x = GDK_SURFACE (self->drag_surface)->x;
-      self->last_y = GDK_SURFACE (self->drag_surface)->y;
       break;
 
     default:
