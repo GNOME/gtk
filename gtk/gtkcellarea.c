@@ -2614,7 +2614,7 @@ gtk_cell_area_cell_set_valist (GtkCellArea        *area,
           g_free (error);
 
           /* we purposely leak the value here, it might not be
-           * in a sane state if an error condition occoured
+           * in a sane state if an error condition occurred
            */
           break;
         }

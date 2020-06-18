@@ -64,7 +64,7 @@ static int acquired_loop_level = -1;
 static gboolean run_loop_polling_async = FALSE;
 
 /* Between run_loop_before_waiting() and run_loop_after_waiting();
- * max_prioritiy to pass to g_main_loop_check()
+ * max_priority to pass to g_main_loop_check()
  */
 static gint run_loop_max_priority;
 

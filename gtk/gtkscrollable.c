@@ -83,7 +83,7 @@ gtk_scrollable_default_init (GtkScrollableInterface *iface)
   /**
    * GtkScrollable:vadjustment:
    *
-   * Verical #GtkAdjustment of the scrollable widget. This adjustment is shared
+   * Vertical #GtkAdjustment of the scrollable widget. This adjustment is shared
    * between the scrollable widget and its parent.
    */
   pspec = g_param_spec_object ("vadjustment",

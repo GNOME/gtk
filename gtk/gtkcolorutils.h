@@ -1,4 +1,4 @@
-/* Color utilties
+/* Color utilities
  *
  * Copyright (C) 1999 The Free Software Foundation
  *

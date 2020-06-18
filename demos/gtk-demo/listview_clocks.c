@@ -249,7 +249,7 @@ gtk_clock_tick (gpointer unused)
     {
       GtkClock *clock = l->data;
 
-      /* We will now return a different value for the time porperty,
+      /* We will now return a different value for the time property,
        * so notify about that.
        */
       g_object_notify_by_pspec (G_OBJECT (clock), properties[PROP_TIME]);

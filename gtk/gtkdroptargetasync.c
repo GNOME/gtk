@@ -420,7 +420,7 @@ gtk_drop_target_async_class_init (GtkDropTargetAsyncClass *class)
    * based on the formats provided by the @drop.
    *
    * If the decision whether the drop will be accepted or rejected needs
-   * further procesing, such as inspecting the data, this function should
+   * further processing, such as inspecting the data, this function should
    * return %TRUE and proceed as is @drop was accepted and if it decides to
    * reject the drop later, it should call gtk_drop_target_reject_drop().
    *

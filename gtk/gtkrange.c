@@ -560,7 +560,7 @@ gtk_range_init (GtkRange *range)
   /* Note: Order is important here.
    * The ::drag-begin handler relies on the state set up by the
    * click ::pressed handler. Gestures are handling events
-   * in the oppposite order in which they are added to their
+   * in the opposite order in which they are added to their
    * widget.
    */
   priv->drag_gesture = gtk_gesture_drag_new ();

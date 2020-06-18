@@ -375,7 +375,7 @@ gdk_texture_new_from_resource (const char *resource_path)
  * Creates a new texture by loading an image from a file.  The file format is
  * detected automatically. If %NULL is returned, then @error will be set.
  *
- * Return value: A newly-created #GdkTexture or %NULL if an error occured.
+ * Return value: A newly-created #GdkTexture or %NULL if an error occurred.
  **/
 GdkTexture *
 gdk_texture_new_from_file (GFile   *file,

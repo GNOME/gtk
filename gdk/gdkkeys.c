@@ -452,7 +452,7 @@ gdk_keymap_have_bidi_layouts (GdkKeymap *keymap)
  * gdk_keymap_get_caps_lock_state:
  * @keymap: a #GdkKeymap
  *
- * Returns whether the Caps Lock modifer is locked.
+ * Returns whether the Caps Lock modifier is locked.
  *
  * Returns: %TRUE if Caps Lock is on
  */
@@ -468,7 +468,7 @@ gdk_keymap_get_caps_lock_state (GdkKeymap *keymap)
  * gdk_keymap_get_num_lock_state:
  * @keymap: a #GdkKeymap
  *
- * Returns whether the Num Lock modifer is locked.
+ * Returns whether the Num Lock modifier is locked.
  *
  * Returns: %TRUE if Num Lock is on
  */
@@ -484,7 +484,7 @@ gdk_keymap_get_num_lock_state (GdkKeymap *keymap)
  * gdk_keymap_get_scroll_lock_state:
  * @keymap: a #GdkKeymap
  *
- * Returns whether the Scroll Lock modifer is locked.
+ * Returns whether the Scroll Lock modifier is locked.
  *
  * Returns: %TRUE if Scroll Lock is on
  */

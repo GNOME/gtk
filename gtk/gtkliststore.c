@@ -1038,7 +1038,7 @@ gtk_list_store_set_valist_internal (GtkListStore *list_store,
 	  g_free (error);
 
  	  /* we purposely leak the value here, it might not be
-	   * in a sane state if an error condition occoured
+	   * in a sane state if an error condition occurred
 	   */
 	  break;
 	}

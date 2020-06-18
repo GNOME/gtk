@@ -293,7 +293,7 @@ clear_response_data (GtkWidget *widget)
 
   data = get_response_data (widget, FALSE);
   g_signal_handler_disconnect (widget, data->handler_id);
-  g_object_set_data (G_OBJECT (widget), "gtk-info-bar-reponse-data", NULL);
+  g_object_set_data (G_OBJECT (widget), "gtk-info-bar-response-data", NULL);
 }
 
 static GtkWidget *
