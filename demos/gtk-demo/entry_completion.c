@@ -1,4 +1,4 @@
-/* Entry/Entry Completion
+/* Entry/Completion
  *
  * GtkEntryCompletion provides a mechanism for adding support for
  * completion in GtkEntry.
@@ -48,7 +48,7 @@ do_entry_completion (GtkWidget *do_widget)
       window = gtk_window_new ();
       gtk_window_set_display (GTK_WINDOW (window),
                               gtk_widget_get_display (do_widget));
-      gtk_window_set_title (GTK_WINDOW (window), "Entry Completion");
+      gtk_window_set_title (GTK_WINDOW (window), "Completion");
       gtk_window_set_resizable (GTK_WINDOW (window), FALSE);
       g_object_add_weak_pointer (G_OBJECT (window), (gpointer *)&window);
 
@@ -60,7 +60,7 @@ do_entry_completion (GtkWidget *do_widget)
       gtk_window_set_child (GTK_WINDOW (window), vbox);
 
       label = gtk_label_new (NULL);
-      gtk_label_set_markup (GTK_LABEL (label), "Completion demo, try writing <b>total</b> or <b>gnome</b> for example.");
+      gtk_label_set_markup (GTK_LABEL (label), "Try writing <b>total</b> or <b>gnome</b> for example.");
       gtk_box_append (GTK_BOX (vbox), label);
 
       /* Create our entry */
