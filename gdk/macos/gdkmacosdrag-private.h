@@ -22,6 +22,8 @@
 
 #include "gdkdragprivate.h"
 
+#include "gdkmacosdragsurface-private.h"
+
 G_BEGIN_DECLS
 
 #define GDK_TYPE_MACOS_DRAG            (gdk_macos_drag_get_type ())
@@ -33,6 +35,30 @@ G_BEGIN_DECLS
 
 typedef struct _GdkMacosDrag GdkMacosDrag;
 typedef struct _GdkMacosDragClass GdkMacosDragClass;
+
+struct _GdkMacosDrag
+{
+  GdkDrag parent_instance;
+
+  GdkMacosDragSurface *drag_surface;
+
+  int hot_x;
+  int hot_y;
+
+  int last_x;
+  int last_y;
+
+  int start_x;
+  int start_y;
+
+  guint did_update : 1;
+  guint cancelled : 1;
+};
+
+struct _GdkMacosDragClass
+{
+  GdkDragClass parent_class;
+};
 
 GType gdk_macos_drag_get_type (void) G_GNUC_CONST;
 
