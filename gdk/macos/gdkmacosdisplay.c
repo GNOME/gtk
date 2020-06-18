@@ -1045,3 +1045,15 @@ _gdk_macos_display_get_surfaces (GdkMacosDisplay *self)
 
   return self->sorted_surfaces.head;
 }
+
+void
+_gdk_macos_display_warp_pointer (GdkMacosDisplay *self,
+                                 int              x,
+                                 int              y)
+{
+  g_return_if_fail (GDK_IS_MACOS_DISPLAY (self));
+
+  _gdk_macos_display_to_display_coords (self, x, y, &x, &y);
+
+  CGWarpMouseCursorPosition ((CGPoint) { x, y });
+}
