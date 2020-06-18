@@ -71,14 +71,41 @@ typedef enum {
 } GtkStackTransitionType;
 
 GDK_AVAILABLE_IN_ALL
-GType                  gtk_stack_page_get_type           (void) G_GNUC_CONST;
+GType                  gtk_stack_page_get_type            (void) G_GNUC_CONST;
 GDK_AVAILABLE_IN_ALL
-GtkWidget *            gtk_stack_page_get_child          (GtkStackPage           *page);
+GtkWidget *            gtk_stack_page_get_child           (GtkStackPage           *page);
 GDK_AVAILABLE_IN_ALL
-gboolean               gtk_stack_page_get_visible        (GtkStackPage           *page);
+gboolean               gtk_stack_page_get_visible         (GtkStackPage           *self);
 GDK_AVAILABLE_IN_ALL
-void                   gtk_stack_page_set_visible        (GtkStackPage           *page,
-                                                          gboolean                visible);
+void                   gtk_stack_page_set_visible         (GtkStackPage           *self,
+                                                           gboolean                visible);
+GDK_AVAILABLE_IN_ALL
+gboolean               gtk_stack_page_get_needs_attention (GtkStackPage           *self);
+GDK_AVAILABLE_IN_ALL
+void                   gtk_stack_page_set_needs_attention (GtkStackPage           *self,
+                                                           gboolean                setting);
+GDK_AVAILABLE_IN_ALL
+gboolean               gtk_stack_page_get_use_underline   (GtkStackPage           *self);
+GDK_AVAILABLE_IN_ALL
+void                   gtk_stack_page_set_use_underline   (GtkStackPage           *self,
+                                                           gboolean                setting);
+GDK_AVAILABLE_IN_ALL
+const char *           gtk_stack_page_get_name            (GtkStackPage           *self);
+GDK_AVAILABLE_IN_ALL
+void                   gtk_stack_page_set_name            (GtkStackPage           *self,
+                                                            const char            *setting);
+GDK_AVAILABLE_IN_ALL
+const char *           gtk_stack_page_get_title           (GtkStackPage           *self);
+GDK_AVAILABLE_IN_ALL
+void                   gtk_stack_page_set_title           (GtkStackPage           *self,
+                                                           const char             *setting);
+GDK_AVAILABLE_IN_ALL
+const char *           gtk_stack_page_get_icon_name       (GtkStackPage           *self);
+GDK_AVAILABLE_IN_ALL
+void                   gtk_stack_page_set_icon_name       (GtkStackPage           *self,
+                                                           const char             *setting);
+
+
 
 GDK_AVAILABLE_IN_ALL
 GType                  gtk_stack_get_type                (void) G_GNUC_CONST;
