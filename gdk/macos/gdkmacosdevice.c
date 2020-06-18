@@ -160,7 +160,7 @@ gdk_macos_device_query_state (GdkDevice        *device,
   gint y_tmp;
 
   g_assert (GDK_IS_MACOS_DEVICE (device));
-  g_assert (GDK_IS_MACOS_SURFACE (surface));
+  g_assert (!surface || GDK_IS_MACOS_SURFACE (surface));
 
   if (child_surface)
     *child_surface = surface;
