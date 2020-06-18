@@ -727,7 +727,7 @@ gtk_distribute_natural_allocation (gint              extra_space,
 		     compare_gap, sizes);
 
   /* Distribute available space.
-   * This master piece of a loop was conceived by Behdad Esfahbod.
+   * This masterpiece of a loop was conceived by Behdad Esfahbod.
    */
   for (i = n_requested_sizes - 1; extra_space > 0 && i >= 0; --i)
     {
