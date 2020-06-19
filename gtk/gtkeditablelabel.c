@@ -17,6 +17,7 @@
 
 #include "config.h"
 
+#include "gtkdroptarget.h"
 #include "gtkeditablelabel.h"
 #include "gtkeditable.h"
 #include "gtklabel.h"
@@ -133,10 +134,40 @@ text_changed (GtkEditableLabel *self)
     }
 }
 
+static gboolean
+gtk_editable_label_drag_accept (GtkDropTarget    *dest,
+                                GdkDrop          *drop,
+                                GtkEditableLabel *self)
+{
+  if (!gtk_editable_get_editable (GTK_EDITABLE (self)))
+    return FALSE;
+
+  if ((gdk_drop_get_actions (drop) & gtk_drop_target_get_actions (dest)) == 0)
+    return FALSE;
+
+  return gdk_content_formats_match (gtk_drop_target_get_formats (dest), gdk_drop_get_formats (drop));
+}
+
+static gboolean
+gtk_editable_label_drag_drop (GtkDropTarget    *dest,
+                              const GValue     *value,
+                              double            x,
+                              double            y,
+                              GtkEditableLabel *self)
+{
+  if (!gtk_editable_get_editable (GTK_EDITABLE (self)))
+    return FALSE;
+
+  gtk_editable_set_text (GTK_EDITABLE (self), g_value_get_string (value));
+
+  return TRUE;
+}
+
 static void
 gtk_editable_label_init (GtkEditableLabel *self)
 {
   GtkGesture *gesture;
+  GtkDropTarget *target;
 
   gtk_widget_set_focusable (GTK_WIDGET (self), TRUE);
 
@@ -156,6 +187,11 @@ gtk_editable_label_init (GtkEditableLabel *self)
 
   g_signal_connect_swapped (self->entry, "activate", G_CALLBACK (activate_cb), self);
   g_signal_connect_swapped (self->entry, "notify::text", G_CALLBACK (text_changed), self);
+
+  target = gtk_drop_target_new (G_TYPE_STRING, GDK_ACTION_COPY | GDK_ACTION_MOVE);
+  g_signal_connect (target, "accept", G_CALLBACK (gtk_editable_label_drag_accept), self);
+  g_signal_connect (target, "drop", G_CALLBACK (gtk_editable_label_drag_drop), self);
+  gtk_widget_add_controller (self->label, GTK_EVENT_CONTROLLER (target));
 
   gtk_editable_init_delegate (GTK_EDITABLE (self));
 }
