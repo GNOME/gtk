@@ -41,11 +41,11 @@ struct _GdkDevice
   gboolean has_cursor;
   GdkAxisFlags axis_flags;
   GdkDisplay *display;
-  /* Paired master for master,
-   * associated master for slaves
+  /* The paired logical device for logical devices,
+   * or the associated logical device for physical ones
    */
   GdkDevice *associated;
-  GList *slaves;
+  GList *physical_devices;
   GdkDeviceType type;
   GArray *axes;
   guint num_touches;
@@ -132,10 +132,11 @@ gboolean   _gdk_device_translate_axis         (GdkDevice *device,
 GdkTimeCoord ** _gdk_device_allocate_history  (GdkDevice *device,
                                                gint       n_events);
 
-void _gdk_device_add_slave (GdkDevice *device,
-                            GdkDevice *slave);
-void _gdk_device_remove_slave (GdkDevice *device,
-                               GdkDevice *slave);
+void    _gdk_device_add_physical_device         (GdkDevice *device,
+                                                 GdkDevice *physical);
+void    _gdk_device_remove_physical_device      (GdkDevice *device,
+                                                 GdkDevice *physical);
+
 void _gdk_device_query_state                  (GdkDevice        *device,
                                                GdkSurface        *surface,
                                                GdkSurface       **child_surface,

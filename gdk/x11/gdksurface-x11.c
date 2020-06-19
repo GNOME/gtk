@@ -4335,7 +4335,8 @@ _should_perform_ewmh_drag (GdkSurface *surface,
   display = gdk_surface_get_display (surface);
   info = _gdk_display_get_pointer_info (display, device);
 
-  if ((!info->last_slave || gdk_device_get_source (info->last_slave) != GDK_SOURCE_TOUCHSCREEN) &&
+  if ((info->last_physical_device == NULL ||
+       gdk_device_get_source (info->last_physical_device) != GDK_SOURCE_TOUCHSCREEN) &&
       gdk_x11_screen_supports_net_wm_hint (GDK_SURFACE_SCREEN (surface),
                                            g_intern_static_string ("_NET_WM_MOVERESIZE")))
     return TRUE;

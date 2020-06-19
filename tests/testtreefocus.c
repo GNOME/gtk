@@ -78,7 +78,7 @@ static TreeStruct may[] =
 static TreeStruct june[] =
 {
   { "June Fathers' Day", FALSE, FALSE, FALSE, FALSE, FALSE, TRUE, NULL },
-  { "Juneteenth (Liberation of Slaves)", FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, NULL },
+  { "Juneteenth (Liberation Day)", FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, NULL },
   { "Flag Day", FALSE, TRUE, FALSE, TRUE, FALSE, FALSE, NULL },
   { NULL }
 };

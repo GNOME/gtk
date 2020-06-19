@@ -42,7 +42,7 @@
             "random")
 #define MATCH_ANY_VALUE         ((void*) 0xf1874c23)
 
-/* --- property blacklists --- */
+/* --- ignored property names --- */
 typedef struct {
   const char   *type_name;
   const char   *name;

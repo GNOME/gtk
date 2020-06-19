@@ -209,8 +209,9 @@ endforeach
 # Disable deprecation checks for all libraries we depend on on stable branches.
 # This is so newer versions of those libraries don't cause more warnings with
 # a stable GTK version.
-# We don't ever want to turn off deprecation warnings for master however, because
-# that's where we get rid of deprecated API we use.
+#
+# We don't ever want to turn off deprecation warnings for development cycles,
+# however, because that's where we get rid of deprecated API we use.
 if gtk_minor_version.is_even()
   cdata.set('GLIB_DISABLE_DEPRECATION_WARNINGS', 1)
 endif

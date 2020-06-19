@@ -52,16 +52,16 @@ struct _GdkSeatClass
                             gpointer                prepare_func_data);
   void          (* ungrab) (GdkSeat                *seat);
 
-  GdkDevice * (* get_master) (GdkSeat             *seat,
-                              GdkSeatCapabilities  capability);
-  GList *     (* get_slaves) (GdkSeat             *seat,
-                              GdkSeatCapabilities  capabilities);
+  GdkDevice * (* get_logical_device) (GdkSeat             *seat,
+                                      GdkSeatCapabilities  capability);
+  GList *     (* get_physical_devices) (GdkSeat             *seat,
+                                        GdkSeatCapabilities  capabilities);
 
   GdkDeviceTool * (* get_tool) (GdkSeat *seat,
                                 guint64  serial,
                                 guint64  tool_id);
-  GList *     (* get_master_pointers) (GdkSeat             *seat,
-                                       GdkSeatCapabilities  capabilities);
+  GList *     (* get_logical_pointers) (GdkSeat             *seat,
+                                        GdkSeatCapabilities  capabilities);
 };
 
 void gdk_seat_device_added   (GdkSeat   *seat,

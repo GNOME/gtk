@@ -895,7 +895,7 @@ gtk_gesture_init (GtkGesture *gesture)
  * gtk_gesture_get_device:
  * @gesture: a #GtkGesture
  *
- * Returns the master #GdkDevice that is currently operating
+ * Returns the logical #GdkDevice that is currently operating
  * on @gesture, or %NULL if the gesture is not being interacted.
  *
  * Returns: (nullable) (transfer none): a #GdkDevice, or %NULL

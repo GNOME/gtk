@@ -23,6 +23,8 @@
 #include "gdkseat.h"
 #include "gdkseatprivate.h"
 
+G_BEGIN_DECLS
+
 #define GDK_TYPE_SEAT_DEFAULT         (gdk_seat_default_get_type ())
 #define GDK_SEAT_DEFAULT(o)           (G_TYPE_CHECK_INSTANCE_CAST ((o), GDK_TYPE_SEAT_DEFAULT, GdkSeatDefault))
 #define GDK_IS_SEAT_DEFAULT(o)        (G_TYPE_CHECK_INSTANCE_TYPE ((o), GDK_TYPE_SEAT_DEFAULT))
@@ -45,16 +47,18 @@ struct _GdkSeatDefaultClass
 
 GType     gdk_seat_default_get_type     (void) G_GNUC_CONST;
 
-GdkSeat * gdk_seat_default_new_for_master_pair (GdkDevice *pointer,
-                                                GdkDevice *keyboard);
+GdkSeat * gdk_seat_default_new_for_logical_pair         (GdkDevice      *pointer,
+                                                         GdkDevice      *keyboard);
 
-void      gdk_seat_default_add_slave    (GdkSeatDefault *seat,
-                                         GdkDevice      *device);
-void      gdk_seat_default_remove_slave (GdkSeatDefault *seat,
-                                         GdkDevice      *device);
-void      gdk_seat_default_add_tool     (GdkSeatDefault *seat,
-                                         GdkDeviceTool  *tool);
-void      gdk_seat_default_remove_tool  (GdkSeatDefault *seat,
-                                         GdkDeviceTool  *tool);
+void      gdk_seat_default_add_physical_device          (GdkSeatDefault *seat,
+                                                         GdkDevice      *device);
+void      gdk_seat_default_remove_physical_device       (GdkSeatDefault *seat,
+                                                         GdkDevice      *device);
+void      gdk_seat_default_add_tool                     (GdkSeatDefault *seat,
+                                                         GdkDeviceTool  *tool);
+void      gdk_seat_default_remove_tool                  (GdkSeatDefault *seat,
+                                                         GdkDeviceTool  *tool);
+
+G_END_DECLS
 
 #endif /* __GDK_SEAT_DEFAULT_PRIVATE_H__ */
