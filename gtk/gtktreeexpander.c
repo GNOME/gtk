@@ -23,6 +23,7 @@
 
 #include "gtkboxlayout.h"
 #include "gtkbuiltiniconprivate.h"
+#include "gtkdropcontrollermotion.h"
 #include "gtkgestureclick.h"
 #include "gtkintl.h"
 #include "gtktreelistmodel.h"
@@ -75,6 +76,8 @@ struct _GtkTreeExpander
 
   GtkWidget *expander;
   guint notify_handler;
+
+  guint expand_timer;
 };
 
 enum
@@ -294,6 +297,12 @@ static void
 gtk_tree_expander_dispose (GObject *object)
 {
   GtkTreeExpander *self = GTK_TREE_EXPANDER (object);
+
+  if (self->expand_timer)
+    {
+      g_source_remove (self->expand_timer);
+      self->expand_timer = 0;
+    }
 
   gtk_tree_expander_clear_list_row (self);
   gtk_tree_expander_update_for_list_row (self);
@@ -557,10 +566,60 @@ gtk_tree_expander_class_init (GtkTreeExpanderClass *klass)
   gtk_widget_class_set_css_name (widget_class, I_("treeexpander"));
 }
 
+static gboolean
+gtk_tree_expander_expand_timeout (gpointer data)
+{
+  GtkTreeExpander *self = GTK_TREE_EXPANDER (data);
+
+  if (self->list_row != NULL)
+    gtk_tree_list_row_set_expanded (self->list_row, TRUE);
+
+  self->expand_timer = 0;
+
+  return G_SOURCE_REMOVE;
+}
+
+#define TIMEOUT_EXPAND 500
+
+static void
+gtk_tree_expander_drag_enter (GtkDropControllerMotion *motion,
+                              double                   x,
+                              double                   y,
+                              GtkTreeExpander         *self)
+{
+  if (self->list_row == NULL)
+    return;
+
+  if (!gtk_tree_list_row_get_expanded (self->list_row) &&
+      !self->expand_timer)
+    {
+      self->expand_timer = g_timeout_add (TIMEOUT_EXPAND, (GSourceFunc) gtk_tree_expander_expand_timeout, self);
+      g_source_set_name_by_id (self->expand_timer, "[gtk] gtk_tree_expander_expand_timeout");
+    }
+}
+
+static void
+gtk_tree_expander_drag_leave (GtkDropControllerMotion *motion,
+                              GtkTreeExpander         *self)
+{
+  if (self->expand_timer)
+    {
+      g_source_remove (self->expand_timer);
+      self->expand_timer = 0;
+    }
+}
+
 static void
 gtk_tree_expander_init (GtkTreeExpander *self)
 {
+  GtkEventController *controller;
+
   gtk_widget_set_can_focus (GTK_WIDGET (self), TRUE);
+
+  controller = gtk_drop_controller_motion_new ();
+  g_signal_connect (controller, "enter", G_CALLBACK (gtk_tree_expander_drag_enter), self);
+  g_signal_connect (controller, "leave", G_CALLBACK (gtk_tree_expander_drag_leave), self);
+  gtk_widget_add_controller (GTK_WIDGET (self), controller);
 }
 
 /**
