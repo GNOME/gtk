@@ -38,14 +38,19 @@ set_color (CanvasItem *item,
   char *str;
   GtkStyleContext *context;
   GtkCssProvider *provider;
+  const char *old_class;
 
   str = gdk_rgba_to_string (color);
-  css = g_strdup_printf ("* { background: %s; padding: 10px; margin: 1px; }", str);
+  css = g_strdup_printf ("* { background: %s; }", str);
 
   context = gtk_widget_get_style_context (item->label);
   provider = g_object_get_data (G_OBJECT (context), "style-provider");
   if (provider)
     gtk_style_context_remove_provider (context, GTK_STYLE_PROVIDER (provider));
+
+  old_class = (const char *)g_object_get_data (G_OBJECT (item->label), "css-class");
+  if (old_class)
+    gtk_widget_remove_css_class (item->label, old_class);
 
   provider = gtk_css_provider_new ();
   gtk_css_provider_load_from_data (provider, css, -1);
@@ -54,6 +59,27 @@ set_color (CanvasItem *item,
 
   g_free (str);
   g_free (css);
+}
+
+static void
+set_css (CanvasItem *item,
+         const char *class)
+{
+  GtkStyleContext *context;
+  GtkCssProvider *provider;
+  const char *old_class;
+
+  context = gtk_widget_get_style_context (item->label);
+  provider = g_object_get_data (G_OBJECT (context), "style-provider");
+  if (provider)
+    gtk_style_context_remove_provider (context, GTK_STYLE_PROVIDER (provider));
+
+  old_class = (const char *)g_object_get_data (G_OBJECT (item->label), "css-class");
+  if (old_class)
+    gtk_widget_remove_css_class (item->label, old_class);
+
+  g_object_set_data_full (G_OBJECT (item->label), "css-class", g_strdup (class), g_free);
+  gtk_widget_add_css_class (item->label, class);
 }
 
 static gboolean
@@ -65,7 +91,10 @@ item_drag_drop (GtkDropTarget *dest,
   GtkWidget *label = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (dest));
   CanvasItem *item = CANVAS_ITEM (gtk_widget_get_parent (gtk_widget_get_parent (label)));
 
-  set_color (item, g_value_get_boxed (value));
+  if (G_VALUE_TYPE (value) == GDK_TYPE_RGBA)
+    set_color (item, g_value_get_boxed (value));
+  else if (G_VALUE_TYPE (value) == G_TYPE_STRING)
+    set_css (item, g_value_get_string (value));
 
   return TRUE;
 }
@@ -132,11 +161,13 @@ canvas_item_init (CanvasItem *item)
   GdkRGBA rgba;
   GtkDropTarget *dest;
   GtkGesture *gesture;
+  GType types[2] = { GDK_TYPE_RGBA, G_TYPE_STRING };
 
   n_items++;
 
   text = g_strdup_printf ("Item %d", n_items);
   item->label = gtk_label_new (text);
+  gtk_widget_add_css_class (item->label, "canvasitem");
   g_free (text);
 
   item->fixed = gtk_fixed_new ();
@@ -154,7 +185,8 @@ canvas_item_init (CanvasItem *item)
 
   item->angle = 0;
 
-  dest = gtk_drop_target_new (GDK_TYPE_RGBA, GDK_ACTION_COPY);
+  dest = gtk_drop_target_new (G_TYPE_INVALID, GDK_ACTION_COPY);
+  gtk_drop_target_set_gtypes (dest, types, G_N_ELEMENTS (types));
   g_signal_connect (dest, "drop", G_CALLBACK (item_drag_drop), NULL);
   gtk_widget_add_controller (GTK_WIDGET (item->label), GTK_EVENT_CONTROLLER (dest));
 
@@ -529,6 +561,42 @@ canvas_new (void)
   return canvas;
 }
 
+static GdkContentProvider *
+css_drag_prepare (GtkDragSource *source,
+                  double         x,
+                  double         y,
+                  GtkWidget     *button)
+{
+  const char *class;
+  GdkPaintable *paintable;
+
+  class = (const char *)g_object_get_data (G_OBJECT (button), "css-class");
+
+  paintable = gtk_widget_paintable_new (button);
+  gtk_drag_source_set_icon (source, paintable, 0, 0);
+  g_object_unref (paintable);
+
+  return gdk_content_provider_new_typed (G_TYPE_STRING, class);
+}
+
+static GtkWidget *
+css_button_new (const char *class)
+{
+  GtkWidget *button;
+  GtkDragSource *source;
+
+  button = gtk_image_new ();
+  gtk_widget_set_size_request (button, 48, 32);
+  gtk_widget_add_css_class (button, class);
+  g_object_set_data (G_OBJECT (button), "css-class", (gpointer)class);
+
+  source = gtk_drag_source_new ();
+  g_signal_connect (source, "prepare", G_CALLBACK (css_drag_prepare), button);
+  gtk_widget_add_controller (button, GTK_EVENT_CONTROLLER (source));
+
+  return button;
+}
+
 static GtkWidget *window = NULL;
 
 GtkWidget *
@@ -548,9 +616,17 @@ do_dnd (GtkWidget *do_widget)
       };
       int i;
       int x, y;
+      GtkCssProvider *provider;
 
       button = gtk_color_button_new ();
       g_object_unref (g_object_ref_sink (button));
+
+      provider = gtk_css_provider_new ();
+      gtk_css_provider_load_from_resource (provider, "/dnd/dnd.css");
+      gtk_style_context_add_provider_for_display (gdk_display_get_default (),
+                                                  GTK_STYLE_PROVIDER (provider),
+                                                  800);
+      g_object_unref (provider);
 
       window = gtk_window_new ();
       gtk_window_set_display (GTK_WINDOW (window),
@@ -606,6 +682,10 @@ do_dnd (GtkWidget *do_widget)
                                  NULL);
           gtk_box_append (GTK_BOX (box3), swatch);
         }
+
+      gtk_box_append (GTK_BOX (box3), css_button_new ("rainbow1"));
+      gtk_box_append (GTK_BOX (box3), css_button_new ("rainbow2"));
+      gtk_box_append (GTK_BOX (box3), css_button_new ("rainbow3"));
     }
 
   if (!gtk_widget_get_visible (window))
