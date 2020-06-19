@@ -28,6 +28,7 @@
 #include "gtkcolumnviewlayoutprivate.h"
 #include "gtkcolumnviewsorterprivate.h"
 #include "gtkcssnodeprivate.h"
+#include "gtkdropcontrollermotion.h"
 #include "gtkintl.h"
 #include "gtklistview.h"
 #include "gtkmain.h"
@@ -778,6 +779,37 @@ remove_autoscroll (GtkColumnView *self)
     }
 }
 
+#define SCROLL_EDGE_SIZE 30
+
+static void
+update_autoscroll (GtkColumnView *self,
+                   double         x)
+{
+  double width;
+  double delta;
+  double vx, vy;
+
+  /* x is in header coordinates */
+  gtk_widget_translate_coordinates (self->header, GTK_WIDGET (self), x, 0, &vx, &vy);
+  width = gtk_widget_get_width (GTK_WIDGET (self));
+
+  if (vx < SCROLL_EDGE_SIZE)
+    delta = - (SCROLL_EDGE_SIZE - vx)/3.0;
+  else if (width - vx < SCROLL_EDGE_SIZE)
+    delta = (SCROLL_EDGE_SIZE - (width - vx))/3.0;
+  else
+    delta = 0;
+
+  if (gtk_widget_get_direction (GTK_WIDGET (self)) == GTK_TEXT_DIR_RTL)
+    delta = - delta;
+
+  if (delta != 0)
+    add_autoscroll (self, x, delta);
+  else
+    remove_autoscroll (self);
+}
+
+
 #define DRAG_WIDTH 6
 
 static gboolean
@@ -968,8 +1000,6 @@ update_column_reorder (GtkColumnView *self,
   g_object_unref (column);
 }
 
-#define SCROLL_EDGE_SIZE 15
-
 static void
 header_drag_update (GtkGestureDrag *gesture,
                     double          offset_x,
@@ -1018,20 +1048,7 @@ header_drag_update (GtkGestureDrag *gesture,
     update_column_reorder (self, x);
 
   if (self->in_column_resize || self->in_column_reorder)
-    {
-      double value, page_size, upper;
-
-      value = gtk_adjustment_get_value (self->hadjustment);
-      page_size = gtk_adjustment_get_page_size (self->hadjustment);
-      upper = gtk_adjustment_get_upper (self->hadjustment);
-
-      if (x - value < SCROLL_EDGE_SIZE && value > 0)
-        add_autoscroll (self, x, - (SCROLL_EDGE_SIZE - (x - value))/3.0);
-      else if (value + page_size - x < SCROLL_EDGE_SIZE && value + page_size < upper)
-        add_autoscroll (self, x, (SCROLL_EDGE_SIZE - (value + page_size - x))/3.0);
-      else
-        remove_autoscroll (self);
-    }
+    update_autoscroll (self, x);
 }
 
 static void
@@ -1087,6 +1104,29 @@ header_key_pressed (GtkEventControllerKey *controller,
 }
 
 static void
+gtk_column_view_drag_motion (GtkDropControllerMotion *motion,
+                             double                   x,
+                             double                   y,
+                             gpointer                 unused)
+{
+  GtkWidget *widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (motion));
+  GtkColumnView *self = GTK_COLUMN_VIEW (widget);
+  double hx, hy;
+
+  gtk_widget_translate_coordinates (widget, self->header, x, 0, &hx, &hy);
+  update_autoscroll (GTK_COLUMN_VIEW (widget), hx);
+}
+
+static void
+gtk_column_view_drag_leave (GtkDropControllerMotion *motion,
+                            gpointer                 unused)
+{
+  GtkWidget *widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (motion));
+
+  remove_autoscroll (GTK_COLUMN_VIEW (widget));
+}
+
+static void
 gtk_column_view_init (GtkColumnView *self)
 {
   GtkEventController *controller;
@@ -1112,6 +1152,11 @@ gtk_column_view_init (GtkColumnView *self)
 
   controller = gtk_event_controller_key_new ();
   g_signal_connect (controller, "key-pressed", G_CALLBACK (header_key_pressed), self);
+  gtk_widget_add_controller (GTK_WIDGET (self), controller);
+
+  controller = gtk_drop_controller_motion_new ();
+  g_signal_connect (controller, "motion", G_CALLBACK (gtk_column_view_drag_motion), NULL);
+  g_signal_connect (controller, "leave", G_CALLBACK (gtk_column_view_drag_leave), NULL);
   gtk_widget_add_controller (GTK_WIDGET (self), controller);
 
   self->sorter = gtk_column_view_sorter_new ();

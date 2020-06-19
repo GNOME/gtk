@@ -22,6 +22,7 @@
 #include "gtklistbaseprivate.h"
 
 #include "gtkadjustment.h"
+#include "gtkdropcontrollermotion.h"
 #include "gtkgesturedrag.h"
 #include "gtkgizmoprivate.h"
 #include "gtkintl.h"
@@ -1250,23 +1251,36 @@ autoscroll_cb (GtkWidget     *widget,
   GtkListBase *self = data;
   GtkListBasePrivate *priv = gtk_list_base_get_instance_private (self);
   double value;
+  double delta_x, delta_y;
 
   value = gtk_adjustment_get_value (priv->adjustment[GTK_ORIENTATION_HORIZONTAL]);
   gtk_adjustment_set_value (priv->adjustment[GTK_ORIENTATION_HORIZONTAL], value + priv->autoscroll_delta_x);
 
+  delta_x = gtk_adjustment_get_value (priv->adjustment[GTK_ORIENTATION_HORIZONTAL]) - value;
+
   value = gtk_adjustment_get_value (priv->adjustment[GTK_ORIENTATION_VERTICAL]);
   gtk_adjustment_set_value (priv->adjustment[GTK_ORIENTATION_VERTICAL], value + priv->autoscroll_delta_y);
 
+  delta_y = gtk_adjustment_get_value (priv->adjustment[GTK_ORIENTATION_VERTICAL]) - value;
+
   if (priv->rubberband)
     {
-      priv->rubberband->x2 += priv->autoscroll_delta_x;
-      priv->rubberband->y2 += priv->autoscroll_delta_y;
+      priv->rubberband->x2 += delta_x;
+      priv->rubberband->y2 += delta_y;
       gtk_list_base_update_rubberband_selection (self);
     }
 
   gtk_widget_queue_draw (GTK_WIDGET (self));
 
-  return G_SOURCE_CONTINUE;
+  if (delta_x != 0 || delta_y != 0)
+    {
+      return G_SOURCE_CONTINUE;
+    }
+  else
+    {
+      priv->autoscroll_id = 0;
+      return G_SOURCE_REMOVE;
+    }
 }
 
 static void
@@ -1293,6 +1307,43 @@ remove_autoscroll (GtkListBase *self)
       gtk_widget_remove_tick_callback (GTK_WIDGET (self), priv->autoscroll_id);
       priv->autoscroll_id = 0;
     }
+}
+
+#define SCROLL_EDGE_SIZE 30
+
+static void
+update_autoscroll (GtkListBase *self,
+                   double       x,
+                   double       y)
+{
+  double width, height;
+  double delta_x, delta_y;
+
+  width = gtk_widget_get_width (GTK_WIDGET (self));
+
+  if (x < SCROLL_EDGE_SIZE)
+    delta_x = - (SCROLL_EDGE_SIZE - x)/3.0;
+  else if (width - x < SCROLL_EDGE_SIZE)
+    delta_x = (SCROLL_EDGE_SIZE - (width - x))/3.0;
+  else
+    delta_x = 0;
+
+  if (gtk_widget_get_direction (GTK_WIDGET (self)) == GTK_TEXT_DIR_RTL)
+    delta_x = - delta_x;
+
+  height = gtk_widget_get_height (GTK_WIDGET (self));
+
+  if (y < SCROLL_EDGE_SIZE)
+    delta_y = - (SCROLL_EDGE_SIZE - y)/3.0;
+  else if (height - y < SCROLL_EDGE_SIZE)
+    delta_y = (SCROLL_EDGE_SIZE - (height - y))/3.0;
+  else
+    delta_y = 0;
+
+  if (delta_x != 0 || delta_y != 0)
+    add_autoscroll (self, delta_x, delta_y);
+  else
+    remove_autoscroll (self);
 }
 
 void
@@ -1400,52 +1451,22 @@ gtk_list_base_stop_rubberband (GtkListBase *self)
   gtk_widget_queue_draw (GTK_WIDGET (self));
 }
 
-#define SCROLL_EDGE_SIZE 15
-
 static void
 gtk_list_base_update_rubberband (GtkListBase *self,
                                  double       x,
                                  double       y)
 {
   GtkListBasePrivate *priv = gtk_list_base_get_instance_private (self);
-  double value_x, value_y, page_size, upper;
-  double delta_x, delta_y;
 
   if (!priv->rubberband)
     return;
 
-  value_x = gtk_adjustment_get_value (priv->adjustment[GTK_ORIENTATION_HORIZONTAL]);
-  value_y = gtk_adjustment_get_value (priv->adjustment[GTK_ORIENTATION_VERTICAL]);
-
-  priv->rubberband->x2 = x + value_x;
-  priv->rubberband->y2 = y + value_y;
+  priv->rubberband->x2 = x + gtk_adjustment_get_value (priv->adjustment[GTK_ORIENTATION_HORIZONTAL]);
+  priv->rubberband->y2 = y + gtk_adjustment_get_value (priv->adjustment[GTK_ORIENTATION_VERTICAL]);
 
   gtk_list_base_update_rubberband_selection (self);
 
-  page_size = gtk_adjustment_get_page_size (priv->adjustment[GTK_ORIENTATION_HORIZONTAL]);
-  upper = gtk_adjustment_get_upper (priv->adjustment[GTK_ORIENTATION_HORIZONTAL]);
-
-  if (x < SCROLL_EDGE_SIZE && value_x > 0)
-    delta_x = - (SCROLL_EDGE_SIZE - x)/3.0;
-  else if (page_size - x < SCROLL_EDGE_SIZE && value_x + page_size < upper)
-    delta_x = (SCROLL_EDGE_SIZE - (page_size - x))/3.0;
-  else
-    delta_x = 0;
-
-  page_size = gtk_adjustment_get_page_size (priv->adjustment[GTK_ORIENTATION_VERTICAL]);
-  upper = gtk_adjustment_get_upper (priv->adjustment[GTK_ORIENTATION_VERTICAL]);
-
-  if (y < SCROLL_EDGE_SIZE && value_y > 0)
-    delta_y = - (SCROLL_EDGE_SIZE - y)/3.0;
-  else if (page_size - y < SCROLL_EDGE_SIZE && value_y + page_size < upper)
-    delta_y = (SCROLL_EDGE_SIZE - (page_size - y))/3.0;
-  else
-    delta_y = 0;
-
-  if (delta_x != 0 || delta_y != 0)
-    add_autoscroll (self, delta_x, delta_y);
-  else
-    remove_autoscroll (self);
+  update_autoscroll (self, x, y);
 
   gtk_widget_queue_draw (GTK_WIDGET (self));
 }
@@ -1577,10 +1598,31 @@ gtk_list_base_get_enable_rubberband (GtkListBase *self)
 }
 
 static void
+gtk_list_base_drag_motion (GtkDropControllerMotion *motion,
+                           double                   x,
+                           double                   y,
+                           gpointer                 unused)
+{
+  GtkWidget *widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (motion));
+
+  update_autoscroll (GTK_LIST_BASE (widget), x, y);
+}
+
+static void
+gtk_list_base_drag_leave (GtkDropControllerMotion *motion,
+                          gpointer                 unused)
+{
+  GtkWidget *widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (motion));
+
+  remove_autoscroll (GTK_LIST_BASE (widget));
+}
+
+static void
 gtk_list_base_init_real (GtkListBase      *self,
                          GtkListBaseClass *g_class)
 {
   GtkListBasePrivate *priv = gtk_list_base_get_instance_private (self);
+  GtkEventController *controller;
 
   priv->item_manager = gtk_list_item_manager_new_for_size (GTK_WIDGET (self),
                                                            g_class->list_item_name,
@@ -1600,6 +1642,11 @@ gtk_list_base_init_real (GtkListBase      *self,
 
   gtk_widget_set_overflow (GTK_WIDGET (self), GTK_OVERFLOW_HIDDEN);
   gtk_widget_set_focusable (GTK_WIDGET (self), TRUE);
+
+  controller = gtk_drop_controller_motion_new ();
+  g_signal_connect (controller, "motion", G_CALLBACK (gtk_list_base_drag_motion), NULL);
+  g_signal_connect (controller, "leave", G_CALLBACK (gtk_list_base_drag_leave), NULL);
+  gtk_widget_add_controller (GTK_WIDGET (self), controller);
 }
 
 static int
