@@ -2178,8 +2178,7 @@ _gtk_widget_set_sequence_state_internal (GtkWidget             *widget,
           /* If a group is provided, ensure only gestures pertaining to the group
            * get a "claimed" state, all other claiming gestures must deny the sequence.
            */
-          if (gesture_state == GTK_EVENT_SEQUENCE_CLAIMED &&
-              gtk_gesture_get_sequence_state (gesture, sequence) == GTK_EVENT_SEQUENCE_CLAIMED)
+          if (state == GTK_EVENT_SEQUENCE_CLAIMED)
             gesture_state = GTK_EVENT_SEQUENCE_DENIED;
           else
             continue;
