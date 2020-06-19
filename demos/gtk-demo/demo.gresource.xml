@@ -105,6 +105,9 @@
     <file>zoom_in_cursor.png</file>
     <file>zoom_out_cursor.png</file>
   </gresource>
+  <gresource prefix="/dnd">
+    <file>dnd.css</file>
+  </gresource>
   <gresource prefix="/fishbowl">
     <file>fishbowl.ui</file>
     <file>gtkfishbowl.c</file>
