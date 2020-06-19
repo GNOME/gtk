@@ -165,15 +165,50 @@ static void
 gdk_macos_drag_set_cursor (GdkDrag   *drag,
                            GdkCursor *cursor)
 {
+  GdkMacosDrag *self = (GdkMacosDrag *)drag;
   NSCursor *nscursor;
 
-  g_assert (GDK_IS_MACOS_DRAG (drag));
+  g_assert (GDK_IS_MACOS_DRAG (self));
   g_assert (!cursor || GDK_IS_CURSOR (cursor));
+
+  g_set_object (&self->cursor, cursor);
 
   nscursor = _gdk_macos_cursor_get_ns_cursor (cursor);
 
   if (nscursor != NULL)
     [nscursor set];
+}
+
+static gboolean
+drag_grab (GdkMacosDrag *self)
+{
+  GdkSeat *seat;
+
+  g_assert (GDK_IS_MACOS_DRAG (self));
+
+  seat = gdk_device_get_seat (gdk_drag_get_device (GDK_DRAG (self)));
+
+  if (gdk_seat_grab (seat,
+                     GDK_SURFACE (self->drag_surface),
+                     GDK_SEAT_CAPABILITY_ALL_POINTING,
+                     FALSE,
+                     self->cursor,
+                     NULL,
+                     NULL,
+                     NULL) != GDK_GRAB_SUCCESS)
+    return FALSE;
+
+  g_set_object (&self->drag_seat, seat);
+
+  return TRUE;
+}
+
+static void
+drag_ungrab (GdkMacosDrag *self)
+{
+  g_assert (GDK_IS_MACOS_DRAG (self));
+
+  gdk_seat_ungrab (self->drag_seat);
 }
 
 static void
@@ -184,6 +219,7 @@ gdk_macos_drag_cancel (GdkDrag             *drag,
 
   g_assert (GDK_IS_MACOS_DRAG (self));
 
+  drag_ungrab (self);
   gdk_drag_drop_done (drag, FALSE);
 
   self->cancelled = TRUE;
@@ -480,6 +516,9 @@ gdk_macos_drag_finalize (GObject *object)
   GdkMacosDrag *self = (GdkMacosDrag *)object;
   GdkMacosDragSurface *drag_surface = g_steal_pointer (&self->drag_surface);
 
+  g_clear_object (&self->cursor);
+  g_clear_object (&self->drag_seat);
+
   G_OBJECT_CLASS (gdk_macos_drag_parent_class)->finalize (object);
 
   if (drag_surface)
@@ -555,4 +594,14 @@ gdk_macos_drag_class_init (GdkMacosDragClass *klass)
 static void
 gdk_macos_drag_init (GdkMacosDrag *self)
 {
+}
+
+gboolean
+_gdk_macos_drag_begin (GdkMacosDrag *self)
+{
+  g_return_val_if_fail (GDK_IS_MACOS_DRAG (self), FALSE);
+
+  _gdk_macos_surface_show (GDK_MACOS_SURFACE (self->drag_surface));
+
+  return drag_grab (self);
 }

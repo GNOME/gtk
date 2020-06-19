@@ -41,6 +41,8 @@ struct _GdkMacosDrag
   GdkDrag parent_instance;
 
   GdkMacosDragSurface *drag_surface;
+  GdkSeat *drag_seat;
+  GdkCursor *cursor;
 
   int hot_x;
   int hot_y;
@@ -60,7 +62,8 @@ struct _GdkMacosDragClass
   GdkDragClass parent_class;
 };
 
-GType gdk_macos_drag_get_type (void) G_GNUC_CONST;
+GType    gdk_macos_drag_get_type (void) G_GNUC_CONST;
+gboolean _gdk_macos_drag_begin   (GdkMacosDrag *self);
 
 G_END_DECLS
 
