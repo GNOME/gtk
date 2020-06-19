@@ -7,11 +7,13 @@ struct _TestObject {
   GObject parent_instance;
   char *string;
   guint number;
+  gboolean allow_children;
 };
 
 enum {
   PROP_STRING = 1,
   PROP_NUMBER,
+  PROP_ALLOW_CHILDREN,
   PROP_NUM_PROPERTIES
 };
 
@@ -51,6 +53,10 @@ test_object_set_property (GObject      *object,
       obj->number = g_value_get_uint (value);
       break;
 
+    case PROP_ALLOW_CHILDREN:
+      obj->allow_children = g_value_get_boolean (value);
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
       break;
@@ -73,6 +79,10 @@ test_object_get_property (GObject    *object,
 
     case PROP_NUMBER:
       g_value_set_uint (value, obj->number);
+      break;
+
+    case PROP_ALLOW_CHILDREN:
+      g_value_set_boolean (value, obj->allow_children);
       break;
 
     default:
@@ -99,15 +109,22 @@ test_object_class_init (TestObjectClass *class)
       g_param_spec_uint ("number", "Number", "Number",
                          0, G_MAXUINT, 0,
                          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+
+  g_object_class_install_property (object_class, PROP_ALLOW_CHILDREN,
+      g_param_spec_boolean ("allow-children", "Allow children", "Allow children",
+                            FALSE,
+                            G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 }
 
 static TestObject *
 test_object_new (const char *string,
-                 guint       number)
+                 guint       number,
+                 gboolean    allow_children)
 {
   return g_object_new (TEST_TYPE_OBJECT,
                        "string", string,
                        "number", number,
+                       "allow-children", allow_children,
                        NULL);
 }
 
@@ -121,6 +138,12 @@ static guint
 test_object_get_number (TestObject *obj)
 {
   return obj->number;
+}
+
+static gboolean
+test_object_get_allow_children (TestObject *obj)
+{
+  return obj->allow_children;
 }
 
 /* * * */
@@ -140,7 +163,8 @@ prepare_drag (GtkDragSource *source,
 static GListModel *
 create_model (guint base,
               guint n,
-              guint increment)
+              guint increment,
+              gboolean allow_children)
 {
   GListStore *store;
   guint i;
@@ -154,13 +178,36 @@ create_model (guint base,
 
       number = base + i * increment;
       string = g_strdup_printf ("%u", number);
-      obj = test_object_new (string, number);
+      obj = test_object_new (string, number, allow_children);
       g_list_store_append (store, obj);
       g_object_unref (obj);
       g_free (string);
     }
 
   return G_LIST_MODEL (store);
+}
+
+static GListModel *
+create_child_model (gpointer item,
+                    gpointer user_data)
+{
+  guint size = GPOINTER_TO_UINT (user_data);
+  guint base = test_object_get_number (TEST_OBJECT (item));
+
+  if (test_object_get_allow_children (TEST_OBJECT (item)))
+    return create_model (base, size, 1, FALSE);
+  else
+    return NULL;
+}
+
+static GListModel *
+create_tree_model (guint n, guint m)
+{
+  return G_LIST_MODEL (gtk_tree_list_model_new (FALSE,
+                                                create_model (0, n, m, TRUE),
+                                                FALSE,
+                                                create_child_model,
+                                                GUINT_TO_POINTER (m), NULL));
 }
 
 static void
@@ -184,6 +231,37 @@ bind_item (GtkSignalListItemFactory *factory,
   obj = gtk_list_item_get_item (item);
   entry = gtk_list_item_get_child (item);
 
+  gtk_editable_set_text (GTK_EDITABLE (entry), test_object_get_string (obj));
+}
+
+static void
+setup_tree_item (GtkSignalListItemFactory *factory,
+                 GtkListItem              *item)
+{
+  GtkWidget *expander;
+  GtkWidget *entry;
+
+  entry = gtk_entry_new ();
+  gtk_editable_set_width_chars (GTK_EDITABLE (entry), 3);
+  expander = gtk_tree_expander_new ();
+  gtk_tree_expander_set_child (GTK_TREE_EXPANDER (expander), entry);
+  gtk_list_item_set_child (item, expander);
+}
+
+static void
+bind_tree_item (GtkSignalListItemFactory *factory,
+                GtkListItem              *item)
+{
+  TestObject *obj;
+  GtkTreeListRow *row;
+  GtkTreeExpander *expander;
+  GtkWidget *entry;
+
+  row = gtk_list_item_get_item (item);
+  expander = GTK_TREE_EXPANDER (gtk_list_item_get_child (item));
+  gtk_tree_expander_set_list_row (expander, row);
+  obj = gtk_tree_list_row_get_item (row);
+  entry = gtk_tree_expander_get_child (expander);
   gtk_editable_set_text (GTK_EDITABLE (entry), test_object_get_string (obj));
 }
 
@@ -245,7 +323,7 @@ main (int argc, char *argv[])
 
   gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (sw), grid);
 
-  model = create_model (0, 400, 1);
+  model = create_model (0, 400, 1, FALSE);
   gtk_grid_view_set_model (GTK_GRID_VIEW (grid), model);
   g_object_unref (model);
 
@@ -264,7 +342,7 @@ main (int argc, char *argv[])
   list = gtk_list_view_new ();
   gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (sw), list);
 
-  model = create_model (0, 400, 1);
+  model = create_model (0, 400, 1, FALSE);
   gtk_list_view_set_model (GTK_LIST_VIEW (list), model);
   g_object_unref (model);
 
@@ -282,7 +360,7 @@ main (int argc, char *argv[])
 
   cv = gtk_column_view_new ();
 
-  model = create_model (0, 400, 1);
+  model = create_model (0, 400, 1, FALSE);
   gtk_column_view_set_model (GTK_COLUMN_VIEW (cv), model);
   g_object_unref (model);
 
@@ -303,6 +381,26 @@ main (int argc, char *argv[])
     }
 
   gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (sw), cv);
+
+  /* tree */
+  sw = gtk_scrolled_window_new (NULL, NULL);
+  gtk_scrolled_window_set_has_frame (GTK_SCROLLED_WINDOW (sw), TRUE);
+  gtk_stack_add_titled (GTK_STACK (stack), sw, "tree", "Tree");
+
+  list = gtk_list_view_new ();
+  gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (sw), list);
+
+  model = create_tree_model (20, 20);
+  gtk_list_view_set_model (GTK_LIST_VIEW (list), model);
+  g_object_unref (model);
+
+  factory = gtk_signal_list_item_factory_new ();
+  g_signal_connect (factory, "setup", G_CALLBACK (setup_tree_item), NULL);
+  g_signal_connect (factory, "bind", G_CALLBACK (bind_tree_item), NULL);
+
+  gtk_list_view_set_factory (GTK_LIST_VIEW (list), factory);
+  g_object_unref (factory);
+
   gtk_window_present (GTK_WINDOW (window));
 
   while (g_list_model_get_n_items (gtk_window_get_toplevels ()) > 0)
