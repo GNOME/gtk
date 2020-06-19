@@ -778,6 +778,37 @@ remove_autoscroll (GtkColumnView *self)
     }
 }
 
+#define SCROLL_EDGE_SIZE 15
+
+static void
+update_autoscroll (GtkColumnView *self,
+                   double         x)
+{
+  double width;
+  double delta;
+  double vx, vy;
+
+  /* x is in header coordinates */
+  gtk_widget_translate_coordinates (self->header, GTK_WIDGET (self), x, 0, &vx, &vy);
+  width = gtk_widget_get_width (GTK_WIDGET (self));
+
+  if (vx < SCROLL_EDGE_SIZE)
+    delta = - (SCROLL_EDGE_SIZE - vx)/3.0;
+  else if (width - vx < SCROLL_EDGE_SIZE)
+    delta = (SCROLL_EDGE_SIZE - (width - vx))/3.0;
+  else
+    delta = 0;
+
+  if (gtk_widget_get_direction (GTK_WIDGET (self)) == GTK_TEXT_DIR_RTL)
+    delta = - delta;
+
+  if (delta != 0)
+    add_autoscroll (self, x, delta);
+  else
+    remove_autoscroll (self);
+}
+
+
 #define DRAG_WIDTH 6
 
 static gboolean
@@ -968,8 +999,6 @@ update_column_reorder (GtkColumnView *self,
   g_object_unref (column);
 }
 
-#define SCROLL_EDGE_SIZE 15
-
 static void
 header_drag_update (GtkGestureDrag *gesture,
                     double          offset_x,
@@ -1018,20 +1047,7 @@ header_drag_update (GtkGestureDrag *gesture,
     update_column_reorder (self, x);
 
   if (self->in_column_resize || self->in_column_reorder)
-    {
-      double value, page_size, upper;
-
-      value = gtk_adjustment_get_value (self->hadjustment);
-      page_size = gtk_adjustment_get_page_size (self->hadjustment);
-      upper = gtk_adjustment_get_upper (self->hadjustment);
-
-      if (x - value < SCROLL_EDGE_SIZE && value > 0)
-        add_autoscroll (self, x, - (SCROLL_EDGE_SIZE - (x - value))/3.0);
-      else if (value + page_size - x < SCROLL_EDGE_SIZE && value + page_size < upper)
-        add_autoscroll (self, x, (SCROLL_EDGE_SIZE - (value + page_size - x))/3.0);
-      else
-        remove_autoscroll (self);
-    }
+    update_autoscroll (self, x);
 }
 
 static void
