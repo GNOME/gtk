@@ -313,10 +313,13 @@ create_colors_model (void)
   GBytes *data;
   char **lines;
   guint i;
+  GHashTable *names;
 
   result = g_list_store_new (GTK_TYPE_COLOR);
   data = g_resources_lookup_data ("/listview_colors/color.names.txt", 0, NULL);
   lines = g_strsplit (g_bytes_get_data (data, NULL), "\n", 0);
+
+  names = g_hash_table_new_full (g_direct_hash, g_direct_equal, NULL, g_free);
 
   for (i = 0; lines[i]; i++)
     {
@@ -333,14 +336,30 @@ create_colors_model (void)
       green = atoi (fields[4]);
       blue = atoi (fields[5]);
 
-      color = gtk_color_new (name, red / 255., green / 255., blue / 255.);
-      g_list_store_append (result, color);
-      g_object_unref (color);
+      g_hash_table_insert (names, GUINT_TO_POINTER (((red & 0xFF) << 16) | ((green & 0xFF) << 8) | blue), g_strdup (name));
 
       g_strfreev (fields);
     }
   g_strfreev (lines);
 
+  for (i = 0; i < 0x1000000; i++)
+    {
+      guint red, green, blue;
+      const char *name;
+
+      red = (i >> 16) & 0xFF;
+      green = (i >> 8) & 0xFF;
+      blue = i & 0xFF;
+      name = g_hash_table_lookup (names, GUINT_TO_POINTER (i));
+      if (name == NULL)
+        name = "";
+
+      color = gtk_color_new (name, red / 255., green / 255., blue / 255.);
+      g_list_store_append (result, color);
+      g_object_unref (color);
+    }
+
+  g_hash_table_unref (names);
   g_bytes_unref (data);
 
   return G_LIST_MODEL (result);
@@ -591,7 +610,9 @@ do_listview_colors (GtkWidget *do_widget)
       gtk_drop_down_set_model (GTK_DROP_DOWN (dropdown), G_LIST_MODEL (sorters));
       g_object_unref (sorters);
 
+#if 0
       g_object_bind_property (dropdown, "selected-item", model, "sorter", G_BINDING_SYNC_CREATE);
+#endif
 
       factories = g_list_store_new (GTK_TYPE_LIST_ITEM_FACTORY);
 
