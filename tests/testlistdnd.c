@@ -148,18 +148,6 @@ test_object_get_allow_children (TestObject *obj)
 
 /* * * */
 
-static GdkContentProvider *
-prepare_drag (GtkDragSource *source,
-              double         x,
-              double         y)
-{
-  GtkWidget *label;
-
-  label = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (source));
-  return gdk_content_provider_new_typed (G_TYPE_STRING,
-                                         gtk_label_get_label (GTK_LABEL (label)));
-}
-
 static GListModel *
 create_model (guint base,
               guint n,
@@ -216,9 +204,21 @@ setup_item (GtkSignalListItemFactory *factory,
 {
   GtkWidget *entry;
 
-  entry = gtk_entry_new ();
+  entry = gtk_editable_label_new ("");
   gtk_editable_set_width_chars (GTK_EDITABLE (entry), 3);
   gtk_list_item_set_child (item, entry);
+}
+
+static void
+text_changed (GObject    *object,
+              GParamSpec *pspec,
+              gpointer    data)
+{
+  const char *text;
+
+  text = gtk_editable_get_text (GTK_EDITABLE (object));
+g_print ("text changed to '%s'\n", text);
+  g_object_set (data, "string", text, NULL);
 }
 
 static void
@@ -230,8 +230,20 @@ bind_item (GtkSignalListItemFactory *factory,
 
   obj = gtk_list_item_get_item (item);
   entry = gtk_list_item_get_child (item);
-
   gtk_editable_set_text (GTK_EDITABLE (entry), test_object_get_string (obj));
+  g_signal_connect (entry, "notify::text", G_CALLBACK (text_changed), obj);
+}
+
+static void
+unbind_item (GtkSignalListItemFactory *factory,
+             GtkListItem              *item)
+{
+  TestObject *obj;
+  GtkWidget *entry;
+
+  obj = gtk_list_item_get_item (item);
+  entry = gtk_list_item_get_child (item);
+  g_signal_handlers_disconnect_by_func (entry, text_changed, obj);
 }
 
 static void
@@ -241,7 +253,7 @@ setup_tree_item (GtkSignalListItemFactory *factory,
   GtkWidget *expander;
   GtkWidget *entry;
 
-  entry = gtk_entry_new ();
+  entry = gtk_editable_label_new ("");
   gtk_editable_set_width_chars (GTK_EDITABLE (entry), 3);
   expander = gtk_tree_expander_new ();
   gtk_tree_expander_set_child (GTK_TREE_EXPANDER (expander), entry);
@@ -252,9 +264,9 @@ static void
 bind_tree_item (GtkSignalListItemFactory *factory,
                 GtkListItem              *item)
 {
-  TestObject *obj;
   GtkTreeListRow *row;
   GtkTreeExpander *expander;
+  TestObject *obj;
   GtkWidget *entry;
 
   row = gtk_list_item_get_item (item);
@@ -263,6 +275,24 @@ bind_tree_item (GtkSignalListItemFactory *factory,
   obj = gtk_tree_list_row_get_item (row);
   entry = gtk_tree_expander_get_child (expander);
   gtk_editable_set_text (GTK_EDITABLE (entry), test_object_get_string (obj));
+
+  g_signal_connect (entry, "notify::text", G_CALLBACK (text_changed), obj);
+}
+
+static void
+unbind_tree_item (GtkSignalListItemFactory *factory,
+                  GtkListItem              *item)
+{
+  GtkTreeListRow *row;
+  GtkTreeExpander *expander;
+  TestObject *obj;
+  GtkWidget *entry;
+
+  row = gtk_list_item_get_item (item);
+  expander = GTK_TREE_EXPANDER (gtk_list_item_get_child (item));
+  obj = gtk_tree_list_row_get_item (row);
+  entry = gtk_tree_expander_get_child (expander);
+  g_signal_handlers_disconnect_by_func (entry, text_changed, obj);
 }
 
 int
@@ -300,12 +330,8 @@ main (int argc, char *argv[])
   gtk_box_set_homogeneous (GTK_BOX (box), TRUE);
   gtk_box_append (GTK_BOX (box2), box);
 
-  label = gtk_label_new ("Drag me");
+  label = gtk_editable_label_new ("Drag me");
   gtk_box_append (GTK_BOX (box), label);
-
-  dragsource = gtk_drag_source_new ();
-  g_signal_connect (dragsource, "prepare", G_CALLBACK (prepare_drag), NULL);
-  gtk_widget_add_controller (label, GTK_EVENT_CONTROLLER (dragsource));
 
   stack = gtk_stack_new ();
   gtk_widget_set_vexpand (stack, TRUE);
@@ -330,6 +356,7 @@ main (int argc, char *argv[])
   factory = gtk_signal_list_item_factory_new ();
   g_signal_connect (factory, "setup", G_CALLBACK (setup_item), NULL);
   g_signal_connect (factory, "bind", G_CALLBACK (bind_item), NULL);
+  g_signal_connect (factory, "unbind", G_CALLBACK (unbind_item), NULL);
 
   gtk_grid_view_set_factory (GTK_GRID_VIEW (grid), factory);
   g_object_unref (factory);
@@ -349,6 +376,7 @@ main (int argc, char *argv[])
   factory = gtk_signal_list_item_factory_new ();
   g_signal_connect (factory, "setup", G_CALLBACK (setup_item), NULL);
   g_signal_connect (factory, "bind", G_CALLBACK (bind_item), NULL);
+  g_signal_connect (factory, "unbind", G_CALLBACK (unbind_item), NULL);
 
   gtk_list_view_set_factory (GTK_LIST_VIEW (list), factory);
   g_object_unref (factory);
@@ -372,6 +400,7 @@ main (int argc, char *argv[])
       factory = gtk_signal_list_item_factory_new ();
       g_signal_connect (factory, "setup", G_CALLBACK (setup_item), NULL);
       g_signal_connect (factory, "bind", G_CALLBACK (bind_item), NULL);
+      g_signal_connect (factory, "unbind", G_CALLBACK (unbind_item), NULL);
 
       title = g_strdup_printf ("Column %u", i);
       column = gtk_column_view_column_new_with_factory (title, factory);
@@ -397,6 +426,7 @@ main (int argc, char *argv[])
   factory = gtk_signal_list_item_factory_new ();
   g_signal_connect (factory, "setup", G_CALLBACK (setup_tree_item), NULL);
   g_signal_connect (factory, "bind", G_CALLBACK (bind_tree_item), NULL);
+  g_signal_connect (factory, "unbind", G_CALLBACK (unbind_tree_item), NULL);
 
   gtk_list_view_set_factory (GTK_LIST_VIEW (list), factory);
   g_object_unref (factory);
