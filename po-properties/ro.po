@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-16 20:00+0000\n"
-"PO-Revision-Date: 2020-06-17 18:37+0300\n"
+"POT-Creation-Date: 2020-06-18 21:45+0000\n"
+"PO-Revision-Date: 2020-06-19 09:15+0300\n"
 "Last-Translator: Florentina Mușat <florentina [dot] musat [dot] 28 [at] "
 "gmail [dot] com>\n"
 "Language-Team: Romanian Gnome Team <gnomero-list@lists.sourceforge.net>\n"
@@ -4609,19 +4609,19 @@ msgstr "Permite micșorarea"
 msgid "Allow self to be smaller than contents"
 msgstr "Permite self să fie mai mic decât conținutul"
 
-#: gtk/gtkplacessidebar.c:4338
+#: gtk/gtkplacessidebar.c:4336
 msgid "Location to Select"
 msgstr "Locație la selectare"
 
-#: gtk/gtkplacessidebar.c:4339
+#: gtk/gtkplacessidebar.c:4337
 msgid "The location to highlight in the sidebar"
 msgstr "Locația de evidențiat în bara laterală"
 
-#: gtk/gtkplacessidebar.c:4344 gtk/gtkplacesview.c:2250
+#: gtk/gtkplacessidebar.c:4342 gtk/gtkplacesview.c:2250
 msgid "Open Flags"
 msgstr "Fanioane deschise"
 
-#: gtk/gtkplacessidebar.c:4345 gtk/gtkplacesview.c:2251
+#: gtk/gtkplacessidebar.c:4343 gtk/gtkplacesview.c:2251
 msgid ""
 "Modes in which the calling application can open locations selected in the "
 "sidebar"
@@ -4629,55 +4629,55 @@ msgstr ""
 "Moduri în care aplicația ce apelează poate deschide locațiile selectate în "
 "bara laterală"
 
-#: gtk/gtkplacessidebar.c:4351
+#: gtk/gtkplacessidebar.c:4349
 msgid "Show recent files"
 msgstr "Arată fișiere recente"
 
-#: gtk/gtkplacessidebar.c:4352
+#: gtk/gtkplacessidebar.c:4350
 msgid "Whether the sidebar includes a builtin shortcut for recent files"
 msgstr ""
 "Dacă bara laterală include o scurtătură înglobată pentru fișiere recente"
 
-#: gtk/gtkplacessidebar.c:4357
+#: gtk/gtkplacessidebar.c:4355
 msgid "Show “Desktop”"
 msgstr "Arată „Desktop”"
 
-#: gtk/gtkplacessidebar.c:4358
+#: gtk/gtkplacessidebar.c:4356
 msgid "Whether the sidebar includes a builtin shortcut to the Desktop folder"
 msgstr "Dacă bara laterală include o scurtătură integrată la dosarul Desktop"
 
-#: gtk/gtkplacessidebar.c:4363
+#: gtk/gtkplacessidebar.c:4361
 msgid "Show “Enter Location”"
 msgstr "Arată „Introdu locația”"
 
-#: gtk/gtkplacessidebar.c:4364
+#: gtk/gtkplacessidebar.c:4362
 msgid ""
 "Whether the sidebar includes a builtin shortcut to manually enter a location"
 msgstr ""
 "Dacă bara laterală include o scurtătură integrată pentru a introduce o "
 "locație manual"
 
-#: gtk/gtkplacessidebar.c:4369
+#: gtk/gtkplacessidebar.c:4367
 msgid "Show “Trash”"
 msgstr "Arată „Gunoi”"
 
-#: gtk/gtkplacessidebar.c:4370
+#: gtk/gtkplacessidebar.c:4368
 msgid "Whether the sidebar includes a builtin shortcut to the Trash location"
 msgstr "Dacă bara laterală include o scurtătură integrată la locația Gunoi"
 
-#: gtk/gtkplacessidebar.c:4375
+#: gtk/gtkplacessidebar.c:4373
 msgid "Show “Other locations”"
 msgstr "Arată „Alte locații”"
 
-#: gtk/gtkplacessidebar.c:4376
+#: gtk/gtkplacessidebar.c:4374
 msgid "Whether the sidebar includes an item to show external locations"
 msgstr "Dacă bara laterală include un element pentru a arăta locații externe"
 
-#: gtk/gtkplacessidebar.c:4381
+#: gtk/gtkplacessidebar.c:4379
 msgid "Show “Starred Location”"
 msgstr "Arată „Locație marcată”"
 
-#: gtk/gtkplacessidebar.c:4382
+#: gtk/gtkplacessidebar.c:4380
 msgid "Whether the sidebar includes an item to show starred files"
 msgstr "Dacă bara laterală include un element pentru a arăta fișiere favorite"
 
@@ -5926,8 +5926,8 @@ msgid "The trigger for this shortcut"
 msgstr "Declanșatorul pentru această scurtătură"
 
 #: gtk/gtkshortcutcontroller.c:526
-msgid "Mnemonic modifers"
-msgstr "Modificatori de mnemonic"
+msgid "Mnemonic modifiers"
+msgstr "Modificatori mnemonici"
 
 #: gtk/gtkshortcutcontroller.c:527
 msgid "The modifiers to be pressed to allow mnemonics activation"
