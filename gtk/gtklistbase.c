@@ -239,7 +239,7 @@ gtk_list_base_adjustment_value_changed_cb (GtkAdjustment *adjustment,
   if (side_across == GTK_PACK_START)
     align_across = (double) (cell_area.x - area.x) / area.width;
   else
-    align_across = (double) (cell_area.x + cell_area.height - area.x) / area.width;
+    align_across = (double) (cell_area.x + cell_area.width - area.x) / area.width;
   if (side_along == GTK_PACK_START)
     align_along = (double) (cell_area.y - area.y) / area.height;
   else
