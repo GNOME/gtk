@@ -2300,9 +2300,6 @@ gtk_stack_size_allocate (GtkWidget *widget,
   GtkStackPrivate *priv = gtk_stack_get_instance_private (stack);
   GtkAllocation child_allocation;
 
-  child_allocation.x = get_bin_window_x (stack);
-  child_allocation.y = get_bin_window_y (stack);
-
   if (priv->last_visible_child)
     {
       int child_width, child_height;
@@ -2313,7 +2310,7 @@ gtk_stack_size_allocate (GtkWidget *widget,
                           &min, &nat, NULL, NULL);
       child_width = MAX (min, width);
       gtk_widget_measure (priv->last_visible_child->widget, GTK_ORIENTATION_VERTICAL,
-                          child_allocation.width,
+                          child_width,
                           &min, &nat, NULL, NULL);
       child_height = MAX (min, height);
 
@@ -2321,6 +2318,8 @@ gtk_stack_size_allocate (GtkWidget *widget,
                                 &(GtkAllocation) { 0, 0, child_width, child_height }, -1);
     }
 
+  child_allocation.x = get_bin_window_x (stack);
+  child_allocation.y = get_bin_window_y (stack);
   child_allocation.width = width;
   child_allocation.height = height;
 
