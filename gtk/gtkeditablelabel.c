@@ -17,6 +17,8 @@
 
 #include "config.h"
 
+#include "gtkdragsource.h"
+#include "gtkdroptarget.h"
 #include "gtkeditablelabel.h"
 #include "gtkeditable.h"
 #include "gtklabel.h"
@@ -133,10 +135,54 @@ text_changed (GtkEditableLabel *self)
     }
 }
 
+static gboolean
+gtk_editable_label_drag_accept (GtkDropTarget    *dest,
+                                GdkDrop          *drop,
+                                GtkEditableLabel *self)
+{
+  if (!gtk_editable_get_editable (GTK_EDITABLE (self)))
+    return FALSE;
+
+  if ((gdk_drop_get_actions (drop) & gtk_drop_target_get_actions (dest)) == 0)
+    return FALSE;
+
+  return gdk_content_formats_match (gtk_drop_target_get_formats (dest), gdk_drop_get_formats (drop));
+}
+
+static gboolean
+gtk_editable_label_drag_drop (GtkDropTarget    *dest,
+                              const GValue     *value,
+                              double            x,
+                              double            y,
+                              GtkEditableLabel *self)
+{
+  if (!gtk_editable_get_editable (GTK_EDITABLE (self)))
+    return FALSE;
+
+  gtk_editable_set_text (GTK_EDITABLE (self), g_value_get_string (value));
+
+  return TRUE;
+}
+
+static GdkContentProvider *
+gtk_editable_label_prepare_drag (GtkDragSource    *source,
+                                 double            x,
+                                 double            y,
+                                 GtkEditableLabel *self)
+{
+  if (!gtk_editable_get_editable (GTK_EDITABLE (self)))
+    return NULL;
+
+  return gdk_content_provider_new_typed (G_TYPE_STRING,
+                                         gtk_label_get_label (GTK_LABEL (self->label)));
+}
+
 static void
 gtk_editable_label_init (GtkEditableLabel *self)
 {
   GtkGesture *gesture;
+  GtkDropTarget *target;
+  GtkDragSource *source;
 
   gtk_widget_set_focusable (GTK_WIDGET (self), TRUE);
 
@@ -151,11 +197,20 @@ gtk_editable_label_init (GtkEditableLabel *self)
   gtk_widget_set_parent (self->stack, GTK_WIDGET (self));
 
   gesture = gtk_gesture_click_new ();
-  g_signal_connect_swapped (gesture, "pressed", G_CALLBACK (clicked_cb), self);
+  g_signal_connect_swapped (gesture, "released", G_CALLBACK (clicked_cb), self);
   gtk_widget_add_controller (self->label, GTK_EVENT_CONTROLLER (gesture));
 
   g_signal_connect_swapped (self->entry, "activate", G_CALLBACK (activate_cb), self);
   g_signal_connect_swapped (self->entry, "notify::text", G_CALLBACK (text_changed), self);
+
+  target = gtk_drop_target_new (G_TYPE_STRING, GDK_ACTION_COPY | GDK_ACTION_MOVE);
+  g_signal_connect (target, "accept", G_CALLBACK (gtk_editable_label_drag_accept), self);
+  g_signal_connect (target, "drop", G_CALLBACK (gtk_editable_label_drag_drop), self);
+  gtk_widget_add_controller (self->label, GTK_EVENT_CONTROLLER (target));
+
+  source = gtk_drag_source_new ();
+  g_signal_connect (source, "prepare", G_CALLBACK (gtk_editable_label_prepare_drag), self);
+  gtk_widget_add_controller (self->label, GTK_EVENT_CONTROLLER (source));
 
   gtk_editable_init_delegate (GTK_EDITABLE (self));
 }

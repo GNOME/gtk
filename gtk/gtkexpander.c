@@ -231,7 +231,7 @@ expand_timeout (gpointer data)
   return FALSE;
 }
 
-static gboolean
+static void
 gtk_expander_drag_enter (GtkDropControllerMotion *motion,
                          double                   x,
                          double                   y,
@@ -242,8 +242,6 @@ gtk_expander_drag_enter (GtkDropControllerMotion *motion,
       expander->expand_timer = g_timeout_add (TIMEOUT_EXPAND, (GSourceFunc) expand_timeout, expander);
       g_source_set_name_by_id (expander->expand_timer, "[gtk] expand_timeout");
     }
-
-  return TRUE;
 }
 
 static void
