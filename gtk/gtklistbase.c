@@ -1296,7 +1296,7 @@ remove_autoscroll (GtkListBase *self)
     }
 }
 
-#define SCROLL_EDGE_SIZE 15
+#define SCROLL_EDGE_SIZE 30
 
 static void
 update_autoscroll (GtkListBase *self,
