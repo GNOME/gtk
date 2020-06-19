@@ -1295,6 +1295,45 @@ remove_autoscroll (GtkListBase *self)
     }
 }
 
+#define SCROLL_EDGE_SIZE 15
+
+static void
+update_autoscroll (GtkListBase *self,
+                   double       x,
+                   double       y)
+{
+  GtkListBasePrivate *priv = gtk_list_base_get_instance_private (self);
+  double value, page_size, upper;
+  double delta_x, delta_y;
+
+  value = gtk_adjustment_get_value (priv->adjustment[GTK_ORIENTATION_HORIZONTAL]);
+  page_size = gtk_adjustment_get_page_size (priv->adjustment[GTK_ORIENTATION_HORIZONTAL]);
+  upper = gtk_adjustment_get_upper (priv->adjustment[GTK_ORIENTATION_HORIZONTAL]);
+
+  if (x < SCROLL_EDGE_SIZE && value > 0)
+    delta_x = - (SCROLL_EDGE_SIZE - x)/3.0;
+  else if (page_size - x < SCROLL_EDGE_SIZE && value + page_size < upper)
+    delta_x = (SCROLL_EDGE_SIZE - (page_size - x))/3.0;
+  else
+    delta_x = 0;
+
+  value = gtk_adjustment_get_value (priv->adjustment[GTK_ORIENTATION_VERTICAL]);
+  page_size = gtk_adjustment_get_page_size (priv->adjustment[GTK_ORIENTATION_VERTICAL]);
+  upper = gtk_adjustment_get_upper (priv->adjustment[GTK_ORIENTATION_VERTICAL]);
+
+  if (y < SCROLL_EDGE_SIZE && value > 0)
+    delta_y = - (SCROLL_EDGE_SIZE - y)/3.0;
+  else if (page_size - y < SCROLL_EDGE_SIZE && value + page_size < upper)
+    delta_y = (SCROLL_EDGE_SIZE - (page_size - y))/3.0;
+  else
+    delta_y = 0;
+
+  if (delta_x != 0 || delta_y != 0)
+    add_autoscroll (self, delta_x, delta_y);
+  else
+    remove_autoscroll (self);
+}
+
 void
 gtk_list_base_allocate_rubberband (GtkListBase *self)
 {
@@ -1400,52 +1439,22 @@ gtk_list_base_stop_rubberband (GtkListBase *self)
   gtk_widget_queue_draw (GTK_WIDGET (self));
 }
 
-#define SCROLL_EDGE_SIZE 15
-
 static void
 gtk_list_base_update_rubberband (GtkListBase *self,
                                  double       x,
                                  double       y)
 {
   GtkListBasePrivate *priv = gtk_list_base_get_instance_private (self);
-  double value_x, value_y, page_size, upper;
-  double delta_x, delta_y;
 
   if (!priv->rubberband)
     return;
 
-  value_x = gtk_adjustment_get_value (priv->adjustment[GTK_ORIENTATION_HORIZONTAL]);
-  value_y = gtk_adjustment_get_value (priv->adjustment[GTK_ORIENTATION_VERTICAL]);
-
-  priv->rubberband->x2 = x + value_x;
-  priv->rubberband->y2 = y + value_y;
+  priv->rubberband->x2 = x + gtk_adjustment_get_value (priv->adjustment[GTK_ORIENTATION_HORIZONTAL]);
+  priv->rubberband->y2 = y + gtk_adjustment_get_value (priv->adjustment[GTK_ORIENTATION_VERTICAL]);
 
   gtk_list_base_update_rubberband_selection (self);
 
-  page_size = gtk_adjustment_get_page_size (priv->adjustment[GTK_ORIENTATION_HORIZONTAL]);
-  upper = gtk_adjustment_get_upper (priv->adjustment[GTK_ORIENTATION_HORIZONTAL]);
-
-  if (x < SCROLL_EDGE_SIZE && value_x > 0)
-    delta_x = - (SCROLL_EDGE_SIZE - x)/3.0;
-  else if (page_size - x < SCROLL_EDGE_SIZE && value_x + page_size < upper)
-    delta_x = (SCROLL_EDGE_SIZE - (page_size - x))/3.0;
-  else
-    delta_x = 0;
-
-  page_size = gtk_adjustment_get_page_size (priv->adjustment[GTK_ORIENTATION_VERTICAL]);
-  upper = gtk_adjustment_get_upper (priv->adjustment[GTK_ORIENTATION_VERTICAL]);
-
-  if (y < SCROLL_EDGE_SIZE && value_y > 0)
-    delta_y = - (SCROLL_EDGE_SIZE - y)/3.0;
-  else if (page_size - y < SCROLL_EDGE_SIZE && value_y + page_size < upper)
-    delta_y = (SCROLL_EDGE_SIZE - (page_size - y))/3.0;
-  else
-    delta_y = 0;
-
-  if (delta_x != 0 || delta_y != 0)
-    add_autoscroll (self, delta_x, delta_y);
-  else
-    remove_autoscroll (self);
+  update_autoscroll (self, x, y);
 
   gtk_widget_queue_draw (GTK_WIDGET (self));
 }
