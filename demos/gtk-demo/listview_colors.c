@@ -305,27 +305,107 @@ gtk_color_new (const char *name,
   return result;
 }
 
-static GListModel *
-create_colors_model (void)
+#define N_COLORS (256 * 256 * 256)
+
+#define GTK_TYPE_COLOR_LIST (gtk_color_list_get_type ())
+G_DECLARE_FINAL_TYPE (GtkColorList, gtk_color_list, GTK, COLOR_LIST, GObject)
+
+typedef struct _GtkColorList GtkColorList;
+struct _GtkColorList
 {
-  GListStore *result;
-  GtkColor *color;
+  GObject parent_instance;
+
+  GtkColor **colors;
+};
+
+static GType
+gtk_color_list_get_item_type (GListModel *list)
+{
+  return GTK_TYPE_COLOR;
+}
+
+static guint
+gtk_color_list_get_n_items (GListModel *list)
+{
+  return N_COLORS;
+}
+
+static gpointer
+gtk_color_list_get_item (GListModel *list,
+                         guint       position)
+{
+  GtkColorList *self = GTK_COLOR_LIST (list);
+
+  if (position >= N_COLORS)
+    return NULL;
+
+  if (self->colors[position] == NULL)
+    {
+      guint red, green, blue;
+
+      red = (position >> 16) & 0xFF;
+      green = (position >> 8) & 0xFF;
+      blue = position & 0xFF;
+
+      self->colors[position] = gtk_color_new ("", red / 255., green / 255., blue / 255.);
+    }
+
+  return g_object_ref (self->colors[position]);
+}
+
+static void
+gtk_color_list_model_init (GListModelInterface *iface)
+{
+  iface->get_item_type = gtk_color_list_get_item_type;
+  iface->get_n_items = gtk_color_list_get_n_items;
+  iface->get_item = gtk_color_list_get_item;
+}
+
+G_DEFINE_TYPE_WITH_CODE (GtkColorList, gtk_color_list, G_TYPE_OBJECT,
+                         G_IMPLEMENT_INTERFACE (G_TYPE_LIST_MODEL,
+                                                gtk_color_list_model_init))
+
+static void
+gtk_color_list_dispose (GObject *object)
+{
+  GtkColorList *self = GTK_COLOR_LIST (object);
+  guint i;
+
+  for (i = 0; i < N_COLORS; i++)
+    {
+      g_clear_object (&self->colors[i]);
+    }
+  g_free (self->colors);
+
+  G_OBJECT_CLASS (gtk_color_parent_class)->finalize (object);
+}
+
+static void
+gtk_color_list_class_init (GtkColorListClass *klass)
+{
+  GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
+
+  gobject_class->dispose = gtk_color_list_dispose;
+}
+
+static void
+gtk_color_list_init (GtkColorList *self)
+{
   GBytes *data;
   char **lines;
   guint i;
-  GHashTable *names;
 
-  result = g_list_store_new (GTK_TYPE_COLOR);
+  self->colors = g_new0 (GtkColor *, N_COLORS);
+
   data = g_resources_lookup_data ("/listview_colors/color.names.txt", 0, NULL);
   lines = g_strsplit (g_bytes_get_data (data, NULL), "\n", 0);
-
-  names = g_hash_table_new_full (g_direct_hash, g_direct_equal, NULL, g_free);
 
   for (i = 0; lines[i]; i++)
     {
       const char *name;
       char **fields;
       int red, green, blue;
+      guint pos;
 
       if (lines[i][0] == '#' || lines[i][0] == '\0')
         continue;
@@ -336,33 +416,21 @@ create_colors_model (void)
       green = atoi (fields[4]);
       blue = atoi (fields[5]);
 
-      g_hash_table_insert (names, GUINT_TO_POINTER (((red & 0xFF) << 16) | ((green & 0xFF) << 8) | blue), g_strdup (name));
+      pos = ((red & 0xFF) << 16) | ((green & 0xFF) << 8) | blue;
+      if (self->colors[pos] == NULL)
+        self->colors[pos] = gtk_color_new (name, red / 255., green / 255., blue / 255.);
 
       g_strfreev (fields);
     }
   g_strfreev (lines);
 
-  for (i = 0; i < 0x1000000; i++)
-    {
-      guint red, green, blue;
-      const char *name;
-
-      red = (i >> 16) & 0xFF;
-      green = (i >> 8) & 0xFF;
-      blue = i & 0xFF;
-      name = g_hash_table_lookup (names, GUINT_TO_POINTER (i));
-      if (name == NULL)
-        name = "";
-
-      color = gtk_color_new (name, red / 255., green / 255., blue / 255.);
-      g_list_store_append (result, color);
-      g_object_unref (color);
-    }
-
-  g_hash_table_unref (names);
   g_bytes_unref (data);
+}
 
-  return G_LIST_MODEL (result);
+static GListModel *
+gtk_color_list_new (void)
+{
+  return g_object_new (GTK_TYPE_COLOR_LIST, NULL);
 }
 
 static char *
@@ -493,7 +561,7 @@ create_color_grid (void)
   gtk_grid_view_set_max_columns (GTK_GRID_VIEW (gridview), 24);
   gtk_grid_view_set_enable_rubberband (GTK_GRID_VIEW (gridview), TRUE);
 
-  model = G_LIST_MODEL (gtk_sort_list_model_new (create_colors_model (), NULL));
+  model = G_LIST_MODEL (gtk_sort_list_model_new (gtk_color_list_new (), NULL));
   selection = G_LIST_MODEL (gtk_property_selection_new (model, "selected"));
   gtk_grid_view_set_model (GTK_GRID_VIEW (gridview), selection);
   g_object_unref (selection);
