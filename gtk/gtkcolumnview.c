@@ -28,6 +28,7 @@
 #include "gtkcolumnviewlayoutprivate.h"
 #include "gtkcolumnviewsorterprivate.h"
 #include "gtkcssnodeprivate.h"
+#include "gtkdropcontrollermotion.h"
 #include "gtkintl.h"
 #include "gtklistview.h"
 #include "gtkmain.h"
@@ -1103,6 +1104,29 @@ header_key_pressed (GtkEventControllerKey *controller,
 }
 
 static void
+gtk_column_view_drag_motion (GtkDropControllerMotion *motion,
+                             double                   x,
+                             double                   y,
+                             gpointer                 unused)
+{
+  GtkWidget *widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (motion));
+  GtkColumnView *self = GTK_COLUMN_VIEW (widget);
+  double hx, hy;
+
+  gtk_widget_translate_coordinates (widget, self->header, x, 0, &hx, &hy);
+  update_autoscroll (GTK_COLUMN_VIEW (widget), hx);
+}
+
+static void
+gtk_column_view_drag_leave (GtkDropControllerMotion *motion,
+                            gpointer                 unused)
+{
+  GtkWidget *widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (motion));
+
+  remove_autoscroll (GTK_COLUMN_VIEW (widget));
+}
+
+static void
 gtk_column_view_init (GtkColumnView *self)
 {
   GtkEventController *controller;
@@ -1128,6 +1152,11 @@ gtk_column_view_init (GtkColumnView *self)
 
   controller = gtk_event_controller_key_new ();
   g_signal_connect (controller, "key-pressed", G_CALLBACK (header_key_pressed), self);
+  gtk_widget_add_controller (GTK_WIDGET (self), controller);
+
+  controller = gtk_drop_controller_motion_new ();
+  g_signal_connect (controller, "motion", G_CALLBACK (gtk_column_view_drag_motion), NULL);
+  g_signal_connect (controller, "leave", G_CALLBACK (gtk_column_view_drag_leave), NULL);
   gtk_widget_add_controller (GTK_WIDGET (self), controller);
 
   self->sorter = gtk_column_view_sorter_new ();
