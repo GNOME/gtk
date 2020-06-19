@@ -22,6 +22,7 @@
 #include "gtklistbaseprivate.h"
 
 #include "gtkadjustment.h"
+#include "gtkdropcontrollermotion.h"
 #include "gtkgesturedrag.h"
 #include "gtkgizmoprivate.h"
 #include "gtkintl.h"
@@ -1586,10 +1587,31 @@ gtk_list_base_get_enable_rubberband (GtkListBase *self)
 }
 
 static void
+gtk_list_base_drag_motion (GtkDropControllerMotion *motion,
+                           double                   x,
+                           double                   y,
+                           gpointer                 unused)
+{
+  GtkWidget *widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (motion));
+
+  update_autoscroll (GTK_LIST_BASE (widget), x, y);
+}
+
+static void
+gtk_list_base_drag_leave (GtkDropControllerMotion *motion,
+                          gpointer                 unused)
+{
+  GtkWidget *widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (motion));
+
+  remove_autoscroll (GTK_LIST_BASE (widget));
+}
+
+static void
 gtk_list_base_init_real (GtkListBase      *self,
                          GtkListBaseClass *g_class)
 {
   GtkListBasePrivate *priv = gtk_list_base_get_instance_private (self);
+  GtkEventController *controller;
 
   priv->item_manager = gtk_list_item_manager_new_for_size (GTK_WIDGET (self),
                                                            g_class->list_item_name,
@@ -1609,6 +1631,11 @@ gtk_list_base_init_real (GtkListBase      *self,
 
   gtk_widget_set_overflow (GTK_WIDGET (self), GTK_OVERFLOW_HIDDEN);
   gtk_widget_set_focusable (GTK_WIDGET (self), TRUE);
+
+  controller = gtk_drop_controller_motion_new ();
+  g_signal_connect (controller, "motion", G_CALLBACK (gtk_list_base_drag_motion), NULL);
+  g_signal_connect (controller, "leave", G_CALLBACK (gtk_list_base_drag_leave), NULL);
+  gtk_widget_add_controller (GTK_WIDGET (self), controller);
 }
 
 static int
