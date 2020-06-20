@@ -1035,8 +1035,6 @@ activate (GApplication *app)
   listview = GTK_WIDGET (gtk_builder_get_object (builder, "listview"));
   g_signal_connect (listview, "activate", G_CALLBACK (activate_cb), window);
 
-  load_file (gtk_demos[0].name, gtk_demos[0].filename);
-
   listmodel = create_demo_model ();
   treemodel = gtk_tree_list_model_new (FALSE,
                                        G_LIST_MODEL (listmodel),
