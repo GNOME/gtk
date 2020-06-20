@@ -647,7 +647,7 @@ if broadway_enabled
 endif
 
 if quartz_enabled
-  pc_gdk_extra_libs += ['-framework Cocoa', '-framework Carbon', '-framework CoreGraphics']
+  pc_gdk_extra_libs += ['-Wl,-framework,Cocoa', '-Wl,-framework,Carbon', '-Wl,-framework,CoreGraphics']
 endif
 
 extra_demo_ldflags = []

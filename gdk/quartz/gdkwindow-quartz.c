@@ -847,6 +847,7 @@ _gdk_quartz_display_create_window_impl (GdkDisplay    *display,
 {
   GdkWindowImplQuartz *impl;
   GdkWindowImplQuartz *parent_impl;
+  GdkWindowTypeHint    type_hint = GDK_WINDOW_TYPE_HINT_NORMAL;
 
   GDK_QUARTZ_ALLOC_POOL;
 
@@ -879,6 +880,12 @@ _gdk_quartz_display_create_window_impl (GdkDisplay    *display,
 
   impl->view = NULL;
 
+  if (attributes_mask & GDK_WA_TYPE_HINT)
+    {
+      type_hint = attributes->type_hint;
+      gdk_window_set_type_hint (window, type_hint);
+    }
+
   switch (window->window_type)
     {
     case GDK_WINDOW_TOPLEVEL:
@@ -908,8 +915,7 @@ _gdk_quartz_display_create_window_impl (GdkDisplay    *display,
                                    window->height);
 
         if (window->window_type == GDK_WINDOW_TEMP ||
-            ((attributes_mask & GDK_WA_TYPE_HINT) &&
-              attributes->type_hint == GDK_WINDOW_TYPE_HINT_SPLASHSCREEN))
+            type_hint == GDK_WINDOW_TYPE_HINT_SPLASHSCREEN)
           {
             style_mask = GDK_QUARTZ_BORDERLESS_WINDOW;
           }
@@ -926,6 +932,9 @@ _gdk_quartz_display_create_window_impl (GdkDisplay    *display,
 			                                        backing:NSBackingStoreBuffered
 			                                          defer:NO
                                                                   screen:screen];
+
+        if (type_hint != GDK_WINDOW_TYPE_HINT_NORMAL)
+          impl->toplevel.excludedFromWindowsMenu = true;
 
 	if (attributes_mask & GDK_WA_TITLE)
 	  title = attributes->title;
@@ -982,9 +991,6 @@ _gdk_quartz_display_create_window_impl (GdkDisplay    *display,
     }
 
   GDK_QUARTZ_RELEASE_POOL;
-
-  if (attributes_mask & GDK_WA_TYPE_HINT)
-    gdk_window_set_type_hint (window, attributes->type_hint);
 }
 
 void
