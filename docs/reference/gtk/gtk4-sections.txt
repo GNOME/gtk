@@ -7540,6 +7540,7 @@ gtk_drop_down_set_model
 gtk_drop_down_get_model
 gtk_drop_down_set_selected
 gtk_drop_down_get_selected
+gtk_drop_down_get_selected_item
 gtk_drop_down_set_factory
 gtk_drop_down_get_factory
 gtk_drop_down_set_list_factory

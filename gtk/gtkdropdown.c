@@ -131,6 +131,7 @@ enum
   PROP_LIST_FACTORY,
   PROP_MODEL,
   PROP_SELECTED,
+  PROP_SELECTED_ITEM,
   PROP_ENABLE_SEARCH,
   PROP_EXPRESSION,
 
@@ -314,6 +315,10 @@ gtk_drop_down_get_property (GObject    *object,
       g_value_set_uint (value, gtk_drop_down_get_selected (self));
       break;
 
+    case PROP_SELECTED_ITEM:
+      g_value_set_object (value, gtk_drop_down_get_selected_item (self));
+      break;
+
     case PROP_ENABLE_SEARCH:
       g_value_set_boolean (value, self->enable_search);
       break;
@@ -487,6 +492,18 @@ gtk_drop_down_class_init (GtkDropDownClass *klass)
                          P_("Position of the selected item"),
                          0, G_MAXUINT, GTK_INVALID_LIST_POSITION,
                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+
+  /**
+   * GtkDropDown:selected-item:
+   *
+   * The selected item.
+   */
+  properties[PROP_SELECTED_ITEM] =
+    g_param_spec_object ("selected-item",
+                       P_("Selected Item"),
+                       P_("The selected item"),
+                       G_TYPE_OBJECT,
+                       G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
   /**
    * GtkDropDown:enable-search:
@@ -794,6 +811,7 @@ gtk_drop_down_set_selected (GtkDropDown *self,
   gtk_single_selection_set_selected (GTK_SINGLE_SELECTION (self->selection), position);
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_SELECTED]);
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_SELECTED_ITEM]);
 }
 
 /**
@@ -814,6 +832,25 @@ gtk_drop_down_get_selected (GtkDropDown *self)
     return GTK_INVALID_LIST_POSITION;
 
   return gtk_single_selection_get_selected (GTK_SINGLE_SELECTION (self->selection));
+}
+
+/**
+ * gtk_drop_down_get_selected_item:
+ * @self: a #GtkDropDown
+ *
+ * Gets the selected item. If no item is selected, %NULL is returned.
+ *
+ * Returns: (transfer none): The selected item
+ */
+gpointer
+gtk_drop_down_get_selected_item (GtkDropDown *self)
+{
+  g_return_val_if_fail (GTK_IS_DROP_DOWN (self), NULL);
+
+  if (self->selection == NULL)
+    return NULL;
+
+  return gtk_single_selection_get_selected_item (GTK_SINGLE_SELECTION (self->selection));
 }
 
 /**
