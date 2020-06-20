@@ -644,8 +644,9 @@ find_toplevel_under_pointer (GdkDisplay *display,
   if (!(toplevel && WINDOW_IS_TOPLEVEL (toplevel)))
     {
       gint gdk_x = 0, gdk_y = 0;
+      GdkDevice *pointer = gdk_seat_get_pointer(seat);
       _gdk_quartz_window_nspoint_to_gdk_xy (screen_point, &gdk_x, &gdk_y);
-      toplevel = gdk_display_get_window_at_pointer (display, &gdk_x, &gdk_y);
+      toplevel = gdk_device_get_window_at_position (pointer, &gdk_x, &gdk_y);
 
       if (toplevel && ! WINDOW_IS_TOPLEVEL (toplevel))
         toplevel = gdk_window_get_toplevel (toplevel);
@@ -1379,16 +1380,18 @@ _gdk_quartz_events_get_current_keyboard_modifiers (void)
 GdkModifierType
 _gdk_quartz_events_get_current_mouse_modifiers (void)
 {
+  NSUInteger buttons = 0;
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= 1060
   if (gdk_quartz_osx_version () >= GDK_OSX_SNOW_LEOPARD)
-    return get_mouse_button_modifiers_from_ns_buttons ([NSClassFromString(@"NSEvent") pressedMouseButtons]);
+    buttons = [NSClassFromString(@"NSEvent") pressedMouseButtons];
 #if MAC_OS_X_VERSION_MIN_REQUIRED < 1060
   else
 #endif
 #endif
 #if MAC_OS_X_VERSION_MIN_REQUIRED < 1060
-    return get_mouse_button_modifiers_from_ns_buttons (GetCurrentButtonState ());
+    buttons = GetCurrentButtonState ();
 #endif
+  return get_mouse_button_modifiers_from_ns_buttons (buttons);
 }
 
 /* Detect window resizing */

@@ -18,7 +18,8 @@
  */
 
 #include "config.h"
-
+/* GdkScreen is deprecated, but we need to support it still so silence the warnings.*/
+#define GDK_DISABLE_DEPRECATION_WARNINGS 1
 #include <gdk/gdk.h>
 
 #include "gdkprivate-quartz.h"
@@ -121,9 +122,6 @@ static void
 gdk_quartz_screen_calculate_layout (GdkQuartzScreen *screen,
                                     GdkQuartzDisplay *display)
 {
-  int i, monitors;
-  int max_x, max_y;
-
   if (!display)
     display = GDK_QUARTZ_DISPLAY (gdk_screen_get_display (GDK_SCREEN (screen)));
 
