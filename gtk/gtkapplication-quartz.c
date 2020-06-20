@@ -56,8 +56,11 @@ typedef struct
 } GtkApplicationImplQuartz;
 
 G_DEFINE_TYPE (GtkApplicationImplQuartz, gtk_application_impl_quartz, GTK_TYPE_APPLICATION_IMPL)
-
+#if MAC_OS_X_VERSION_MIN_REQUIRED >= 1060
+@interface GtkApplicationQuartzDelegate : NSObject <NSApplicationDelegate>
+#else
 @interface GtkApplicationQuartzDelegate : NSObject
+#endif
 {
   GtkApplicationImplQuartz *quartz;
 }
@@ -162,7 +165,7 @@ gtk_application_impl_quartz_startup (GtkApplicationImpl *impl,
   if (register_session)
     {
       quartz->delegate = [[GtkApplicationQuartzDelegate alloc] initWithImpl:quartz];
-      [NSApp setDelegate: quartz->delegate];
+      [NSApp setDelegate: (id)(quartz->delegate)];
     }
 
   quartz->muxer = gtk_action_muxer_new ();
