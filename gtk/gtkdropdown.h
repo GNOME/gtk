@@ -50,6 +50,9 @@ GDK_AVAILABLE_IN_ALL
 guint           gtk_drop_down_get_selected                      (GtkDropDown            *self);
 
 GDK_AVAILABLE_IN_ALL
+gpointer        gtk_drop_down_get_selected_item                 (GtkDropDown            *self);
+
+GDK_AVAILABLE_IN_ALL
 void            gtk_drop_down_set_factory                       (GtkDropDown            *self,
                                                                  GtkListItemFactory     *factory);
 GDK_AVAILABLE_IN_ALL
