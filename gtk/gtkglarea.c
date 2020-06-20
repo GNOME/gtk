@@ -366,17 +366,17 @@ gtk_gl_area_ensure_buffers (GtkGLArea *area)
 
   priv->have_buffers = TRUE;
 
-  glGenFramebuffersEXT (1, &priv->frame_buffer);
+  glGenFramebuffers (1, &priv->frame_buffer);
 
   if ((priv->has_depth_buffer || priv->has_stencil_buffer))
     {
       if (priv->depth_stencil_buffer == 0)
-        glGenRenderbuffersEXT (1, &priv->depth_stencil_buffer);
+        glGenRenderbuffers (1, &priv->depth_stencil_buffer);
     }
   else if (priv->depth_stencil_buffer != 0)
     {
       /* Delete old depth/stencil buffer */
-      glDeleteRenderbuffersEXT (1, &priv->depth_stencil_buffer);
+      glDeleteRenderbuffers (1, &priv->depth_stencil_buffer);
       priv->depth_stencil_buffer = 0;
     }
 
@@ -549,20 +549,20 @@ gtk_gl_area_attach_buffers (GtkGLArea *area)
   else if (priv->needs_resize)
     gtk_gl_area_allocate_buffers (area);
 
-  glBindFramebufferEXT (GL_FRAMEBUFFER_EXT, priv->frame_buffer);
+  glBindFramebuffer (GL_FRAMEBUFFER, priv->frame_buffer);
 
   if (priv->texture != NULL)
-    glFramebufferTexture2D (GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT,
+    glFramebufferTexture2D (GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
                             GL_TEXTURE_2D, priv->texture->id, 0);
 
   if (priv->depth_stencil_buffer)
     {
       if (priv->has_depth_buffer)
-        glFramebufferRenderbufferEXT (GL_FRAMEBUFFER_EXT, GL_DEPTH_ATTACHMENT_EXT,
-                                      GL_RENDERBUFFER_EXT, priv->depth_stencil_buffer);
+        glFramebufferRenderbuffer (GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT,
+                                   GL_RENDERBUFFER, priv->depth_stencil_buffer);
       if (priv->has_stencil_buffer)
-        glFramebufferRenderbufferEXT (GL_FRAMEBUFFER_EXT, GL_STENCIL_ATTACHMENT_EXT,
-                                      GL_RENDERBUFFER_EXT, priv->depth_stencil_buffer);
+        glFramebufferRenderbuffer (GL_FRAMEBUFFER, GL_STENCIL_ATTACHMENT,
+                                   GL_RENDERBUFFER, priv->depth_stencil_buffer);
     }
 }
 
@@ -578,14 +578,14 @@ gtk_gl_area_delete_buffers (GtkGLArea *area)
 
   if (priv->depth_stencil_buffer != 0)
     {
-      glDeleteRenderbuffersEXT (1, &priv->depth_stencil_buffer);
+      glDeleteRenderbuffers (1, &priv->depth_stencil_buffer);
       priv->depth_stencil_buffer = 0;
     }
 
   if (priv->frame_buffer != 0)
     {
-      glBindFramebufferEXT (GL_FRAMEBUFFER_EXT, 0);
-      glDeleteFramebuffersEXT (1, &priv->frame_buffer);
+      glBindFramebuffer (GL_FRAMEBUFFER, 0);
+      glDeleteFramebuffers (1, &priv->frame_buffer);
       priv->frame_buffer = 0;
     }
 }
@@ -716,8 +716,8 @@ gtk_gl_area_snapshot (GtkWidget   *widget,
  else
    glDisable (GL_DEPTH_TEST);
 
-  status = glCheckFramebufferStatusEXT (GL_FRAMEBUFFER_EXT);
-  if (status == GL_FRAMEBUFFER_COMPLETE_EXT)
+  status = glCheckFramebufferStatus (GL_FRAMEBUFFER);
+  if (status == GL_FRAMEBUFFER_COMPLETE)
     {
       Texture *texture;
 
