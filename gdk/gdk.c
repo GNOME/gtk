@@ -293,7 +293,7 @@ gdk_should_use_portal (void)
         }
     }
 
-  return use_portal[0] == '1';
+  return atoi (use_portal) != 0;
 }
 
 PangoDirection
