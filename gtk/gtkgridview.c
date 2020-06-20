@@ -269,7 +269,18 @@ gtk_grid_view_get_cell_at_y (GtkGridView *self,
       /* skip remaining items at end of row */
       if (pos % self->n_columns)
         {
-          skip = pos - pos % self->n_columns;
+          skip = self->n_columns - pos % self->n_columns;
+          if (n_items <= skip)
+            {
+              g_warning ("ran out of items");
+              if (position)
+                *position = 0;
+              if (offset)
+                *offset = 0;
+              if (size)
+                *size = 0;
+              return NULL;
+            }
           n_items -= skip;
           pos += skip;
         }
