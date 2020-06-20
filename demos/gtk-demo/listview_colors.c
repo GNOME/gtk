@@ -242,49 +242,83 @@ gtk_color_new (const char *name,
   return result;
 }
 
-static GListModel *
-create_colors_model (void)
+typedef struct
 {
-  GListStore *result;
-  GtkColor *color;
   GBytes *data;
+  GListStore *store;
   char **lines;
+  guint n;
   guint i;
+} ColorData;
 
-  result = g_list_store_new (GTK_TYPE_COLOR);
-  data = g_resources_lookup_data ("/listview_colors/color.names.txt", 0, NULL);
-  lines = g_strsplit (g_bytes_get_data (data, NULL), "\n", 0);
+static void
+free_color_data (gpointer data)
+{
+  ColorData *cd = data;
 
-  for (i = 0; lines[i]; i++)
-    {
-      const char *name;
-      char **fields;
-      int red, green, blue;
-      int h, s, v;
+  g_bytes_unref (cd->data);
+  g_object_unref (cd->store);
+  g_strfreev (cd->lines);
+  g_free (cd);
+}
 
-      if (lines[i][0] == '#' || lines[i][0] == '\0')
-        continue;
+static gboolean
+add_one_color (GtkWidget     *widget,
+               GdkFrameClock *clock,
+               gpointer       data)
+{
+  ColorData *cd = data;
+  const char *name;
+  char **fields;
+  int red, green, blue;
+  int h, s, v;
+  GtkColor *color;
 
-      fields = g_strsplit (lines[i], " ", 0);
-      name = fields[1];
-      red = atoi (fields[3]);
-      green = atoi (fields[4]);
-      blue = atoi (fields[5]);
-      h = atoi (fields[9]);
-      s = atoi (fields[10]);
-      v = atoi (fields[11]);
+  g_print ("%u/%u\n", cd->i, cd->n);
 
-      color = gtk_color_new (name, red / 255., green / 255., blue / 255., h, s, v);
-      g_list_store_append (result, color);
-      g_object_unref (color);
+  if (cd->lines[cd->i][0] == '#' || cd->lines[cd->i][0] == '\0')
+    goto out;
 
-      g_strfreev (fields);
-    }
-  g_strfreev (lines);
+  fields = g_strsplit (cd->lines[cd->i], " ", 0);
+  name = fields[1];
+  red = atoi (fields[3]);
+  green = atoi (fields[4]);
+  blue = atoi (fields[5]);
+  h = atoi (fields[9]);
+  s = atoi (fields[10]);
+  v = atoi (fields[11]);
 
-  g_bytes_unref (data);
+  color = gtk_color_new (name, red / 255., green / 255., blue / 255., h, s, v);
+  g_list_store_append (cd->store, color);
+  g_object_unref (color);
 
-  return G_LIST_MODEL (result);
+  g_strfreev (fields);
+
+out:
+  cd->i++;
+
+  if (cd->i == cd->n)
+    return G_SOURCE_REMOVE;
+
+  return G_SOURCE_CONTINUE;
+}
+
+static GListModel *
+create_colors_model (GtkWidget *view)
+{
+  ColorData *cd;
+
+  cd = g_new (ColorData, 1);
+
+  cd->store = g_list_store_new (GTK_TYPE_COLOR);
+  cd->data = g_resources_lookup_data ("/listview_colors/color.names.txt", 0, NULL);
+  cd->lines = g_strsplit (g_bytes_get_data (cd->data, NULL), "\n", 0);
+  cd->n = g_strv_length (cd->lines);
+  cd->i = 0;
+
+  gtk_widget_add_tick_callback (view, add_one_color, cd, free_color_data);
+
+  return G_LIST_MODEL (g_object_ref (cd->store));
 }
 
 static char *
@@ -438,7 +472,7 @@ create_color_grid (void)
   gtk_grid_view_set_max_columns (GTK_GRID_VIEW (gridview), 24);
   gtk_grid_view_set_enable_rubberband (GTK_GRID_VIEW (gridview), TRUE);
 
-  model = G_LIST_MODEL (gtk_sort_list_model_new (create_colors_model (), NULL));
+  model = G_LIST_MODEL (gtk_sort_list_model_new (create_colors_model (gridview), NULL));
   selection = G_LIST_MODEL (gtk_property_selection_new (model, "selected"));
   gtk_grid_view_set_model (GTK_GRID_VIEW (gridview), selection);
   g_object_unref (selection);
