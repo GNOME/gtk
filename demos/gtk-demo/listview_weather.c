@@ -70,7 +70,6 @@ gtk_weather_info_new (GDateTime      *timestamp,
     {
       result->temperature = copy_from->temperature;
       result->weather_type = copy_from->weather_type;
-      g_object_unref (copy_from);
     }
 
   return result;
@@ -142,53 +141,88 @@ parse_temperature (const char *s,
   return d;
 }
 
-static GListModel *
-create_weather_model (void)
+typedef struct
 {
   GListStore *store;
-  GTimeZone *utc;
   GDateTime *timestamp;
-  GtkWeatherInfo *info;
+  GTimeZone *utc;
   GBytes *data;
   char **lines;
+  guint n;
   guint i;
+  GtkWeatherInfo *info;
+} WeatherData;
 
-  store = g_list_store_new (GTK_TYPE_WEATHER_INFO);
-  data = g_resources_lookup_data ("/listview_weather/listview_weather.txt", 0, NULL);
-  lines = g_strsplit (g_bytes_get_data (data, NULL), "\n", 0);
+static void
+free_weather_data (gpointer data)
+{
+  WeatherData *wd = data;
 
-  utc = g_time_zone_new_utc ();
-  timestamp = g_date_time_new (utc, 2011, 1, 1, 0, 0, 0);
-  info = gtk_weather_info_new (timestamp, NULL);
-  g_list_store_append (store, info);
+  g_object_unref (wd->store);
+  g_date_time_unref (wd->timestamp);
+  g_time_zone_unref (wd->utc);
+  g_bytes_unref (wd->data);
+  g_strfreev (wd->lines);
 
-  for (i = 0; lines[i] != NULL && *lines[i]; i++)
+  g_free (wd);
+}
+
+static gboolean
+add_one_item (GtkWidget     *widget,
+              GdkFrameClock *frame_clock,
+              gpointer       user_data)
+{
+  WeatherData *wd = user_data;
+  char **fields;
+  GDateTime *date;
+
+  g_print ("%d/%d\n", wd->i, wd->n);
+  fields = g_strsplit (wd->lines[wd->i], ",", 0);
+  date = parse_timestamp (fields[0], wd->utc);
+  while (g_date_time_difference (date, wd->timestamp) > 30 * G_TIME_SPAN_MINUTE)
     {
-      char **fields;
-      GDateTime *date;
-
-      fields = g_strsplit (lines[i], ",", 0);
-      date = parse_timestamp (fields[0], utc);
-      while (g_date_time_difference (date, timestamp) > 30 * G_TIME_SPAN_MINUTE)
-        {
-          GDateTime *new_timestamp = g_date_time_add_hours (timestamp, 1);
-          g_date_time_unref (timestamp);
-          timestamp = new_timestamp;
-          info = gtk_weather_info_new (timestamp, info);
-          g_list_store_append (store, info);
-        }
-
-      info->temperature = parse_temperature (fields[1], info->temperature);
-      info->weather_type = parse_weather_type (fields[2], fields[3], info->weather_type);
-      g_date_time_unref (date);
-      g_strfreev (fields);
+      GDateTime *new_timestamp = g_date_time_add_hours (wd->timestamp, 1);
+      g_date_time_unref (wd->timestamp);
+      wd->timestamp = new_timestamp;
+      wd->info = gtk_weather_info_new (wd->timestamp, wd->info);
+      g_list_store_append (wd->store, wd->info);
+      g_object_unref (wd->info);
     }
 
-  g_strfreev (lines);
-  g_bytes_unref (data);
-  g_time_zone_unref (utc);
+  wd->info->temperature = parse_temperature (fields[1], wd->info->temperature);
+  wd->info->weather_type = parse_weather_type (fields[2], fields[3], wd->info->weather_type);
 
-  return G_LIST_MODEL (store);
+  g_date_time_unref (date);
+  g_strfreev (fields);
+
+  wd->i++;
+
+  if (wd->i == wd->n)
+    return G_SOURCE_REMOVE;
+
+  return G_SOURCE_CONTINUE;
+}
+
+static void
+populate_weather_model (GtkWidget *view, GListStore *store)
+{
+  WeatherData *wd;
+
+  wd = g_new (WeatherData, 1);
+
+  wd->data = g_resources_lookup_data ("/listview_weather/listview_weather.txt", 0, NULL);
+  wd->lines = g_strsplit (g_bytes_get_data (wd->data, NULL), "\n", 0);
+  wd->n = g_strv_length (wd->lines);
+  wd->i = 0;
+  wd->store = g_object_ref (store);
+
+  wd->utc = g_time_zone_new_utc ();
+  wd->timestamp = g_date_time_new (wd->utc, 2011, 1, 1, 0, 0, 0);
+  wd->info = gtk_weather_info_new (wd->timestamp, NULL);
+  g_list_store_append (wd->store, wd->info);
+  g_object_unref (wd->info);
+
+  gtk_widget_add_tick_callback (view, add_one_item, wd, free_weather_data);
 }
 
 static void
@@ -279,7 +313,8 @@ GtkWidget *
 create_weather_view (void)
 {
   GtkWidget *listview;
-  GListModel *model, *selection;
+  GListStore *store;
+  GListModel *selection;
 
   listview = gtk_list_view_new_with_factory (
   gtk_functions_list_item_factory_new (setup_widget,
@@ -287,11 +322,12 @@ create_weather_view (void)
                                        NULL, NULL));
   gtk_orientable_set_orientation (GTK_ORIENTABLE (listview), GTK_ORIENTATION_HORIZONTAL);
   gtk_list_view_set_show_separators (GTK_LIST_VIEW (listview), TRUE);
-  model = create_weather_model ();
-  selection = G_LIST_MODEL (gtk_no_selection_new (model));
+  store = g_list_store_new (GTK_TYPE_WEATHER_INFO);
+  selection = G_LIST_MODEL (gtk_no_selection_new (G_LIST_MODEL (store)));
   gtk_list_view_set_model (GTK_LIST_VIEW (listview), selection);
+  populate_weather_model (listview, store);
   g_object_unref (selection);
-  g_object_unref (model);
+  g_object_unref (store);
 
   return listview;
 }
