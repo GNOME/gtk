@@ -70,7 +70,6 @@ gtk_weather_info_new (GDateTime      *timestamp,
     {
       result->temperature = copy_from->temperature;
       result->weather_type = copy_from->weather_type;
-      g_object_unref (copy_from);
     }
 
   return result;
@@ -161,6 +160,7 @@ create_weather_model (void)
   timestamp = g_date_time_new (utc, 2011, 1, 1, 0, 0, 0);
   info = gtk_weather_info_new (timestamp, NULL);
   g_list_store_append (store, info);
+  g_object_unref (info);
 
   for (i = 0; lines[i] != NULL && *lines[i]; i++)
     {
@@ -176,6 +176,7 @@ create_weather_model (void)
           timestamp = new_timestamp;
           info = gtk_weather_info_new (timestamp, info);
           g_list_store_append (store, info);
+          g_object_unref (info);
         }
 
       info->temperature = parse_temperature (fields[1], info->temperature);
@@ -184,6 +185,7 @@ create_weather_model (void)
       g_strfreev (fields);
     }
 
+  g_date_time_unref (timestamp);
   g_strfreev (lines);
   g_bytes_unref (data);
   g_time_zone_unref (utc);
