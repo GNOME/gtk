@@ -2277,11 +2277,10 @@ render_cross_fade_node (GskGLRenderer   *self,
                           &end_region, &is_offscreen2,
                           FORCE_OFFSCREEN | RESET_CLIP | RESET_OPACITY))
     {
-      load_vertex_data_with_region (ops_draw (builder, NULL),
-                                    node,
-                                    builder,
-                                    &start_region,
-                                    TRUE);
+      const float prev_opacity = ops_set_opacity (builder, builder->current_opacity * progress);
+      gsk_gl_renderer_add_render_ops (self, start_node, builder);
+      ops_set_opacity (builder, prev_opacity);
+
       return;
     }
 
