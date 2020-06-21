@@ -427,6 +427,21 @@ gtk_color_list_get_property (GObject    *object,
 }
 
 static void
+gtk_color_list_set_size (GtkColorList *self,
+                         guint         size)
+{
+  guint old_size = self->size;
+
+  self->size = size;
+  if (self->size > old_size)
+    g_list_model_items_changed (G_LIST_MODEL (self), old_size, 0, self->size - old_size);
+  else if (old_size > self->size)
+    g_list_model_items_changed (G_LIST_MODEL (self), self->size, old_size - self->size, 0);
+
+  g_object_notify_by_pspec (G_OBJECT (self), list_properties[LIST_PROP_SIZE]);
+}
+
+static void
 gtk_color_list_set_property (GObject      *object,
                              guint         property_id,
                              const GValue *value,
@@ -437,14 +452,7 @@ gtk_color_list_set_property (GObject      *object,
   switch (property_id)
     {
     case LIST_PROP_SIZE:
-      {
-        guint old_size = self->size;
-        self->size = g_value_get_uint (value);
-        if (self->size > old_size)
-          g_list_model_items_changed (G_LIST_MODEL (self), old_size, 0, self->size - old_size);
-        else if (old_size > self->size)
-          g_list_model_items_changed (G_LIST_MODEL (self), self->size, old_size - self->size, 0);
-      }
+      gtk_color_list_set_size (self, g_value_get_uint (value));
       break;
 
     default:
@@ -658,7 +666,7 @@ create_color_grid (void)
   gtk_grid_view_set_max_columns (GTK_GRID_VIEW (gridview), 24);
   gtk_grid_view_set_enable_rubberband (GTK_GRID_VIEW (gridview), TRUE);
 
-  model = G_LIST_MODEL (gtk_sort_list_model_new (gtk_color_list_new (1<<12), NULL));
+  model = G_LIST_MODEL (gtk_sort_list_model_new (gtk_color_list_new (0), NULL));
 
   selection = G_LIST_MODEL (gtk_property_selection_new (model, "selected"));
   gtk_grid_view_set_model (GTK_GRID_VIEW (gridview), selection);
@@ -667,6 +675,63 @@ create_color_grid (void)
 
   return gridview;
 }
+
+static gboolean
+add_colors (GtkWidget     *widget,
+            GdkFrameClock *clock,
+            gpointer       data)
+{
+  GtkColorList *colors = data;
+  guint limit;
+
+  limit = GPOINTER_TO_UINT (g_object_get_data (data, "limit"));
+  gtk_color_list_set_size (colors, MIN (limit, colors->size + MAX (1, limit / 4096)));
+  
+  if (colors->size >= limit)
+    return G_SOURCE_REMOVE;
+  else
+    return G_SOURCE_CONTINUE;
+}
+
+static void
+refill (GtkWidget    *button,
+        GtkColorList *colors)
+{
+  gtk_color_list_set_size (colors, 0);
+  gtk_widget_add_tick_callback (button, add_colors, g_object_ref (colors), g_object_unref);
+}
+ 
+static void
+limit_changed_cb (GtkDropDown  *dropdown,
+                  GParamSpec   *pspec,
+                  GtkColorList *colors)
+{
+  guint new_limit, old_limit;
+
+  old_limit = GPOINTER_TO_UINT (g_object_get_data (G_OBJECT (colors), "limit"));
+  new_limit = 1 << (3 * (gtk_drop_down_get_selected (dropdown) + 1));
+
+  g_object_set_data (G_OBJECT (colors), "limit", GUINT_TO_POINTER (new_limit));
+
+  if (old_limit == colors->size)
+    gtk_color_list_set_size (colors, new_limit);
+}
+
+static void
+items_changed_cb (GListModel *model,
+                  guint       position,
+                  guint       removed,
+                  guint       added,
+                  GtkWidget  *label)
+{
+  guint n = g_list_model_get_n_items (model);
+  char *text;
+
+  text = g_strdup_printf ("%u /", n);
+  gtk_label_set_label (GTK_LABEL (label), text);
+  g_free (text);
+}
+
 
 static GtkWidget *window = NULL;
 
@@ -679,11 +744,12 @@ do_listview_colors (GtkWidget *do_widget)
       GtkListItemFactory *factory;
       GListStore *factories;
       GListModel *model;
-
       GtkSorter *sorter;
       GtkSorter *multi_sorter;
       GListStore *sorters;
       GtkExpression *expression;
+      GtkWidget *button;
+      GtkWidget *label;
 
       window = gtk_window_new ();
       gtk_window_set_title (GTK_WINDOW (window), "Colors");
@@ -703,6 +769,26 @@ do_listview_colors (GtkWidget *do_widget)
       gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (sw), gridview);
       model = gtk_grid_view_get_model (GTK_GRID_VIEW (gridview));
       g_object_get (model, "model", &model, NULL);
+
+      button = gtk_button_new_with_mnemonic ("_Refill");
+      g_signal_connect (button, "clicked",
+                        G_CALLBACK (refill),
+                        gtk_sort_list_model_get_model (GTK_SORT_LIST_MODEL (model)));
+
+      gtk_header_bar_pack_start (GTK_HEADER_BAR (header), button);
+
+      label = gtk_label_new ("0 /");
+      g_signal_connect (gtk_grid_view_get_model (GTK_GRID_VIEW (gridview)),
+                        "items-changed", G_CALLBACK (items_changed_cb), label);
+      gtk_header_bar_pack_start (GTK_HEADER_BAR (header), label);
+
+      dropdown = gtk_drop_down_new ();
+      gtk_drop_down_set_from_strings (GTK_DROP_DOWN (dropdown), (const char *[]) { "8", "64", "512", "4096", "32768", "262144", "2097152", "16777216", NULL });
+      g_signal_connect (dropdown, "notify::selected",
+                        G_CALLBACK (limit_changed_cb), 
+                        gtk_sort_list_model_get_model (GTK_SORT_LIST_MODEL (model)));
+      gtk_drop_down_set_selected (GTK_DROP_DOWN (dropdown), 3); /* 4096 */
+      gtk_header_bar_pack_start (GTK_HEADER_BAR (header), dropdown);
 
       sorters = g_list_store_new (GTK_TYPE_SORTER);
 
