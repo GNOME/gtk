@@ -311,7 +311,7 @@ gtk_any_filter_init (GtkAnyFilter *self)
 /**
  * gtk_any_filter_new:
  *
- * Creates a new empty "any" filter.  
+ * Creates a new empty "any" filter.
  * Use gtk_multi_filter_append() to add filters to it.
  *
  * This filter matches an item if any of the filters added to it
