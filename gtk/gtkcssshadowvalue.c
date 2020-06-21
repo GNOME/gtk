@@ -32,6 +32,8 @@
 #include <math.h>
 #include <float.h>
 
+#define CORNER_MASK_CACHE_MAX_SIZE 2000U
+
 struct _GtkCssValue {
   GTK_CSS_VALUE_BASE
   guint inset :1;
@@ -828,6 +830,10 @@ draw_shadow_corner (const GtkCssValue   *shadow,
   key.corner_vertical = quantize_to_int (box->corner[corner].vertical);
 
   mask = g_hash_table_lookup (corner_mask_cache, &key);
+
+  if (mask)
+    cairo_surface_reference (mask);
+
   if (mask == NULL)
     {
       mask = cairo_surface_create_similar_image (cairo_get_target (cr), CAIRO_FORMAT_A8,
@@ -840,7 +846,12 @@ draw_shadow_corner (const GtkCssValue   *shadow,
       cairo_fill (mask_cr);
       _gtk_cairo_blur_surface (mask, radius, GTK_BLUR_X | GTK_BLUR_Y);
       cairo_destroy (mask_cr);
-      g_hash_table_insert (corner_mask_cache, g_memdup (&key, sizeof (key)), mask);
+
+      if (g_hash_table_size (corner_mask_cache) < CORNER_MASK_CACHE_MAX_SIZE)
+        {
+          g_hash_table_insert (corner_mask_cache, g_memdup (&key, sizeof (key)), mask);
+          cairo_surface_reference (mask);
+        }
     }
 
   gdk_cairo_set_source_rgba (cr, _gtk_css_rgba_value_get_rgba (shadow->color));
@@ -851,6 +862,7 @@ draw_shadow_corner (const GtkCssValue   *shadow,
   cairo_pattern_set_matrix (pattern, &matrix);
   cairo_mask (cr, pattern);
   cairo_pattern_destroy (pattern);
+  cairo_surface_destroy (mask);
 }
 
 static void
