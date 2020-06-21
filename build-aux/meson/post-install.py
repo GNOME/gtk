@@ -27,7 +27,10 @@ if 'DESTDIR' not in os.environ:
                 shutil.copyfile(installed_lib, installed_lib_dst)
 
     print('Compiling GSettings schemas...')
-    subprocess.call(['glib-compile-schemas',
+    glib_compile_schemas = subprocess.check_output(['pkg-config',
+                                                   '--variable=glib_compile_schemas',
+                                                   'gio-2.0']).strip()
+    subprocess.call([glib_compile_schemas,
                     os.path.join(gtk_datadir, 'glib-2.0', 'schemas')])
 
     print('Updating icon cache...')
@@ -43,4 +46,7 @@ if 'DESTDIR' not in os.environ:
     # Untested!
     print('Updating module cache for print backends...')
     os.makedirs(gtk_printmodule_dir, exist_ok=True)
-    subprocess.call(['gio-querymodules', gtk_printmodule_dir])
+    gio_querymodules = subprocess.check_output(['pkg-config',
+                                                '--variable=gio_querymodules',
+                                                'gio-2.0']).strip()
+    subprocess.call([gio_querymodules, gtk_printmodule_dir])
