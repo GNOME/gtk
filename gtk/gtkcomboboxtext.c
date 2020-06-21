@@ -24,6 +24,7 @@
 #include "gtkcelllayout.h"
 #include "gtkbuildable.h"
 #include "gtkbuilderprivate.h"
+#include "gtkliststore.h"
 
 #include <string.h>
 

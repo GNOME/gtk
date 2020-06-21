@@ -26,6 +26,7 @@
 #include <gtk/gtklabel.h>
 #include <gtk/gtklistbox.h>
 #include <gtk/gtklistview.h>
+#include <gtk/gtkliststore.h>
 #include <gtk/gtkmessagedialog.h>
 #include <gtk/gtkpicture.h>
 #include <gtk/gtkpopover.h>
