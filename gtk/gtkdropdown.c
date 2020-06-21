@@ -216,6 +216,9 @@ selection_changed (GtkSingleSelection *selection,
   if (GTK_IS_STRING_FILTER (filter))
     gtk_string_filter_set_search (GTK_STRING_FILTER (filter), "");
   gtk_single_selection_set_selected (GTK_SINGLE_SELECTION (self->popup_selection), selected);
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_SELECTED]);
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_SELECTED_ITEM]);
 }
 
 static void
@@ -809,9 +812,6 @@ gtk_drop_down_set_selected (GtkDropDown *self,
     return;
 
   gtk_single_selection_set_selected (GTK_SINGLE_SELECTION (self->selection), position);
-
-  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_SELECTED]);
-  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_SELECTED_ITEM]);
 }
 
 /**

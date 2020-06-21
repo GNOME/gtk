@@ -471,29 +471,6 @@ get_title (gpointer item)
   return g_strdup ((char *)g_object_get_data (G_OBJECT (item), "title"));
 }
 
-static gboolean
-set_item (GBinding *binding,
-          const GValue *from,
-          GValue *to,
-          gpointer data)
-{
-  GObject *source = g_binding_get_source (binding);
-  GListModel *model;
-  guint selected;
-  gpointer item;
-
-  selected = g_value_get_uint (from);
-
-  model = gtk_drop_down_get_model (GTK_DROP_DOWN (source));
-  item = g_list_model_get_item (model, selected);
-
-  g_value_set_object (to, item);
-
-  g_clear_object (&item);
-
-  return TRUE;
-}
-
 GtkWidget *
 create_color_grid (void)
 {
@@ -663,11 +640,7 @@ do_listview_colors (GtkWidget *do_widget)
       gtk_drop_down_set_model (GTK_DROP_DOWN (dropdown), G_LIST_MODEL (sorters));
       g_object_unref (sorters);
 
-      g_object_bind_property_full (dropdown, "selected",
-                                   model, "sorter",
-                                   G_BINDING_SYNC_CREATE,
-                                   set_item, NULL,
-                                   NULL, NULL);
+      g_object_bind_property (dropdown, "selected-item", model, "sorter", G_BINDING_SYNC_CREATE);
 
       factories = g_list_store_new (GTK_TYPE_LIST_ITEM_FACTORY);
 
@@ -698,11 +671,7 @@ do_listview_colors (GtkWidget *do_widget)
       gtk_drop_down_set_model (GTK_DROP_DOWN (dropdown), G_LIST_MODEL (factories));
       g_object_unref (factories);
 
-      g_object_bind_property_full (dropdown, "selected",
-                                   gridview, "factory",
-                                   G_BINDING_SYNC_CREATE,
-                                   set_item, NULL,
-                                   NULL, NULL);
+      g_object_bind_property (dropdown, "selected-item", gridview, "factory", G_BINDING_SYNC_CREATE);
       g_object_unref (model);
     }
 
