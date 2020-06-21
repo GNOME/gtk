@@ -72,7 +72,6 @@
         <xi:include href="xml/gtknoselection.xml" />
         <xi:include href="xml/gtksingleselection.xml" />
         <xi:include href="xml/gtkmultiselection.xml" />
-      <xi:include href="xml/gtkpropertyselection.xml" />
       </section>
       <xi:include href="xml/gtkbookmarklist.xml" />
       <xi:include href="xml/gtkdirectorylist.xml" />

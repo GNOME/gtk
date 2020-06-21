@@ -80,8 +80,7 @@ test_finalize_object (gconstpointer data)
                              NULL);
       g_object_unref (list_store);
     }
-  else if (g_type_is_a (test_type, GTK_TYPE_LAYOUT_CHILD) ||
-           g_type_is_a (test_type, GTK_TYPE_PROPERTY_SELECTION))
+  else if (g_type_is_a (test_type, GTK_TYPE_LAYOUT_CHILD))
     {
       char *msg = g_strdup_printf ("Skipping %s", g_type_name (test_type));
       g_test_skip (msg);
