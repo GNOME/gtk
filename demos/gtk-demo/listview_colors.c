@@ -30,7 +30,6 @@ struct _GtkColor
   char *name;
   GdkRGBA color;
   int h, s, v;
-  gboolean selected;
 };
 
 enum {
@@ -43,7 +42,6 @@ enum {
   PROP_HUE,
   PROP_SATURATION,
   PROP_VALUE,
-  PROP_SELECTED,
 
   N_COLOR_PROPS
 };
@@ -206,10 +204,6 @@ gtk_color_get_property (GObject    *object,
       g_value_set_int (value, self->v);
       break;
 
-    case PROP_SELECTED:
-      g_value_set_boolean (value, self->selected);
-      break;
-
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
       break;
@@ -237,10 +231,6 @@ gtk_color_set_property (GObject      *object,
       self->h = round (360 * h);
       self->s = round (100 * s);
       self->v = round (100 * v);
-      break;
-
-    case PROP_SELECTED:
-      self->selected = g_value_get_boolean (value);
       break;
 
     default:
@@ -284,8 +274,6 @@ gtk_color_class_init (GtkColorClass *klass)
     g_param_spec_int ("saturation", NULL, NULL, 0, 100, 0, G_PARAM_READABLE);
   color_properties[PROP_VALUE] =
     g_param_spec_int ("value", NULL, NULL, 0, 100, 0, G_PARAM_READABLE);
-  color_properties[PROP_SELECTED] =
-    g_param_spec_boolean ("selected", NULL, NULL, FALSE, G_PARAM_READWRITE);
 
   g_object_class_install_properties (gobject_class, N_COLOR_PROPS, color_properties);
 }
@@ -673,7 +661,7 @@ create_color_grid (void)
 
   model = G_LIST_MODEL (gtk_sort_list_model_new (gtk_color_list_new (0), NULL));
 
-  selection = G_LIST_MODEL (gtk_property_selection_new (model, "selected"));
+  selection = G_LIST_MODEL (gtk_multi_selection_new (model));
   gtk_grid_view_set_model (GTK_GRID_VIEW (gridview), selection);
   g_object_unref (selection);
   g_object_unref (model);
