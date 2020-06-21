@@ -23,7 +23,7 @@ struct _GtkColor
   GObject parent_instance;
 
   char *name;
-  GdkRGBA *color;
+  GdkRGBA color;
   int h, s, v;
   gboolean selected;
 };
@@ -40,7 +40,7 @@ enum {
   PROP_VALUE,
   PROP_SELECTED,
 
-  N_PROPS
+  N_COLOR_PROPS
 };
 
 static void
@@ -51,7 +51,7 @@ gtk_color_snapshot (GdkPaintable *paintable,
 {
   GtkColor *self = GTK_COLOR (paintable);
 
-  gtk_snapshot_append_color (snapshot, self->color, &GRAPHENE_RECT_INIT (0, 0, width, height));
+  gtk_snapshot_append_color (snapshot, &self->color, &GRAPHENE_RECT_INIT (0, 0, width, height));
 }
 
 static int
@@ -82,7 +82,82 @@ G_DEFINE_TYPE_WITH_CODE (GtkColor, gtk_color, G_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (GDK_TYPE_PAINTABLE,
                                                 gtk_color_paintable_init))
 
-static GParamSpec *properties[N_PROPS] = { NULL, };
+static GParamSpec *color_properties[N_COLOR_PROPS] = { NULL, };
+
+static void
+rgb_to_hsv (GdkRGBA *rgba,
+            gdouble *h_out,
+            gdouble *s_out,
+            gdouble *v_out)
+{
+  gdouble red, green, blue;
+  gdouble h, s, v;
+  gdouble min, max;
+  gdouble delta;
+
+  red = rgba->red;
+  green = rgba->green;
+  blue = rgba->blue;
+
+  h = 0.0;
+
+  if (red > green)
+    {
+      if (red > blue)
+        max = red;
+      else
+        max = blue;
+
+      if (green < blue)
+        min = green;
+      else
+        min = blue;
+    }
+  else
+    {
+      if (green > blue)
+        max = green;
+      else
+        max = blue;
+
+      if (red < blue)
+        min = red;
+      else
+        min = blue;
+    }
+
+  v = max;
+
+  if (max != 0.0)
+    s = (max - min) / max;
+  else
+    s = 0.0;
+
+  if (s == 0.0)
+    h = 0.0;
+  else
+    {
+      delta = max - min;
+
+      if (red == max)
+        h = (green - blue) / delta;
+      else if (green == max)
+        h = 2 + (blue - red) / delta;
+      else if (blue == max)
+        h = 4 + (red - green) / delta;
+
+      h /= 6.0;
+
+      if (h < 0.0)
+        h += 1.0;
+      else if (h > 1.0)
+        h -= 1.0;
+    }
+
+  *h_out = h;
+  *s_out = s;
+  *v_out = v;
+}
 
 static void
 gtk_color_get_property (GObject    *object,
@@ -99,19 +174,19 @@ gtk_color_get_property (GObject    *object,
       break;
 
     case PROP_COLOR:
-      g_value_set_boxed (value, self->color);
+      g_value_set_boxed (value, &self->color);
       break;
 
     case PROP_RED:
-      g_value_set_float (value, self->color->red);
+      g_value_set_float (value, self->color.red);
       break;
 
     case PROP_GREEN:
-      g_value_set_float (value, self->color->green);
+      g_value_set_float (value, self->color.green);
       break;
 
     case PROP_BLUE:
-      g_value_set_float (value, self->color->blue);
+      g_value_set_float (value, self->color.blue);
       break;
 
     case PROP_HUE:
@@ -143,6 +218,7 @@ gtk_color_set_property (GObject      *object,
                         GParamSpec   *pspec)
 {
   GtkColor *self = GTK_COLOR (object);
+  double h, s, v;
 
   switch (property_id)
     {
@@ -151,19 +227,11 @@ gtk_color_set_property (GObject      *object,
       break;
 
     case PROP_COLOR:
-      self->color = g_value_dup_boxed (value);
-      break;
-
-    case PROP_HUE:
-      self->h = g_value_get_int (value);
-      break;
-
-    case PROP_SATURATION:
-      self->s = g_value_get_int (value);
-      break;
-
-    case PROP_VALUE:
-      self->v = g_value_get_int (value);
+      self->color = *(GdkRGBA *) g_value_dup_boxed (value);
+      rgb_to_hsv (&self->color, &h, &s, &v);
+      self->h = round (360 * h);
+      self->s = round (100 * s);
+      self->v = round (100 * v);
       break;
 
     case PROP_SELECTED:
@@ -182,7 +250,6 @@ gtk_color_finalize (GObject *object)
   GtkColor *self = GTK_COLOR (object);
 
   g_free (self->name);
-  g_clear_pointer (&self->color, gdk_rgba_free);
 
   G_OBJECT_CLASS (gtk_color_parent_class)->finalize (object);
 }
@@ -196,26 +263,26 @@ gtk_color_class_init (GtkColorClass *klass)
   gobject_class->set_property = gtk_color_set_property;
   gobject_class->finalize = gtk_color_finalize;
 
-  properties[PROP_NAME] =
+  color_properties[PROP_NAME] =
     g_param_spec_string ("name", NULL, NULL, NULL, G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY);
-  properties[PROP_COLOR] =
+  color_properties[PROP_COLOR] =
     g_param_spec_boxed ("color", NULL, NULL, GDK_TYPE_RGBA, G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY);
-  properties[PROP_RED] =
+  color_properties[PROP_RED] =
     g_param_spec_float ("red", NULL, NULL, 0, 1, 0, G_PARAM_READABLE);
-  properties[PROP_GREEN] =
+  color_properties[PROP_GREEN] =
     g_param_spec_float ("green", NULL, NULL, 0, 1, 0, G_PARAM_READABLE);
-  properties[PROP_BLUE] =
+  color_properties[PROP_BLUE] =
     g_param_spec_float ("blue", NULL, NULL, 0, 1, 0, G_PARAM_READABLE);
-  properties[PROP_HUE] =
-    g_param_spec_int ("hue", NULL, NULL, 0, 360, 0, G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY);
-  properties[PROP_SATURATION] =
-    g_param_spec_int ("saturation", NULL, NULL, 0, 100, 0, G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY);
-  properties[PROP_VALUE] =
-    g_param_spec_int ("value", NULL, NULL, 0, 100, 0, G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY);
-  properties[PROP_SELECTED] =
+  color_properties[PROP_HUE] =
+    g_param_spec_int ("hue", NULL, NULL, 0, 360, 0, G_PARAM_READABLE);
+  color_properties[PROP_SATURATION] =
+    g_param_spec_int ("saturation", NULL, NULL, 0, 100, 0, G_PARAM_READABLE);
+  color_properties[PROP_VALUE] =
+    g_param_spec_int ("value", NULL, NULL, 0, 100, 0, G_PARAM_READABLE);
+  color_properties[PROP_SELECTED] =
     g_param_spec_boolean ("selected", NULL, NULL, FALSE, G_PARAM_READWRITE);
 
-  g_object_class_install_properties (gobject_class, N_PROPS, properties);
+  g_object_class_install_properties (gobject_class, N_COLOR_PROPS, color_properties);
 }
 
 static void
@@ -225,8 +292,7 @@ gtk_color_init (GtkColor *self)
 
 static GtkColor *
 gtk_color_new (const char *name,
-               float r, float g, float b,
-               int h, int s, int v)
+               float r, float g, float b)
 {
   GtkColor *result;
   GdkRGBA color = { r, g, b, 1.0 };
@@ -234,132 +300,242 @@ gtk_color_new (const char *name,
   result = g_object_new (GTK_TYPE_COLOR,
                          "name", name,
                          "color", &color,
-                         "hue", h,
-                         "saturation", s,
-                         "value", v,
                          NULL);
 
   return result;
 }
 
-typedef struct
-{
-  GtkWidget *widget;
-  GBytes *data;
-  GListStore *store;
-  char **lines;
-  guint n;
-  guint i;
-} ColorData;
+#define N_COLORS (256 * 256 * 256)
 
-static void
-free_color_data (gpointer data)
-{
-  ColorData *cd = data;
+#define GTK_TYPE_COLOR_LIST (gtk_color_list_get_type ())
+G_DECLARE_FINAL_TYPE (GtkColorList, gtk_color_list, GTK, COLOR_LIST, GObject)
 
-  if (cd->widget)
-    gtk_widget_set_sensitive (cd->widget, TRUE);
-  g_bytes_unref (cd->data);
-  g_object_unref (cd->store);
-  g_strfreev (cd->lines);
-  g_free (cd);
+enum {
+  LIST_PROP_0,
+  LIST_PROP_SIZE,
+
+  N_LIST_PROPS
+};
+
+typedef struct _GtkColorList GtkColorList;
+struct _GtkColorList
+{
+  GObject parent_instance;
+
+  GtkColor **colors; /* Always N_COLORS */
+
+  guint size; /* How many colors we allow */
+};
+
+static GType
+gtk_color_list_get_item_type (GListModel *list)
+{
+  return GTK_TYPE_COLOR;
 }
 
-static gboolean
-add_color (GtkWidget     *widget,
-           GdkFrameClock *clock,
-           gpointer       data)
+static guint
+gtk_color_list_get_n_items (GListModel *list)
 {
-  ColorData *cd = data;
-  const char *name;
-  char **fields;
-  int red, green, blue;
-  int h, s, v;
-  GtkColor *color;
-  guint64 start, now;
+  GtkColorList *self = GTK_COLOR_LIST (list);
 
-  start = g_get_monotonic_time ();
+  return self->size;
+}
 
-  while (cd->i < cd->n)
+static guint
+position_to_color (guint position)
+{
+  static guint map[] = {
+    0xFF0000, 0x00FF00, 0x0000FF,
+    0x7F0000, 0x007F00, 0x00007F,
+    0x3F0000, 0x003F00, 0x00003F,
+    0x1F0000, 0x001F00, 0x00001F,
+    0x0F0000, 0x000F00, 0x00000F,
+    0x070000, 0x000700, 0x000007,
+    0x030000, 0x000300, 0x000003,
+    0x010000, 0x000100, 0x000001
+  };
+  guint result, i;
+
+  result = 0;
+
+  for (i = 0; i < G_N_ELEMENTS (map); i++)
     {
-      const char *line = cd->lines[cd->i];
+      if (position & (1 << i))
+        result ^= map[i];
+    }
 
-      cd->i++;
+  return result;
+}
 
-      if (line[0] == '#' || line[0] == '\0')
+static gpointer
+gtk_color_list_get_item (GListModel *list,
+                         guint       position)
+{
+  GtkColorList *self = GTK_COLOR_LIST (list);
+
+  if (position >= self->size)
+    return NULL;
+
+  position = position_to_color (position);
+
+  if (self->colors[position] == NULL)
+    {
+      guint red, green, blue;
+
+      red = (position >> 16) & 0xFF;
+      green = (position >> 8) & 0xFF;
+      blue = position & 0xFF;
+
+      self->colors[position] = gtk_color_new ("", red / 255., green / 255., blue / 255.);
+    }
+
+  return g_object_ref (self->colors[position]);
+}
+
+static void
+gtk_color_list_model_init (GListModelInterface *iface)
+{
+  iface->get_item_type = gtk_color_list_get_item_type;
+  iface->get_n_items = gtk_color_list_get_n_items;
+  iface->get_item = gtk_color_list_get_item;
+}
+
+G_DEFINE_TYPE_WITH_CODE (GtkColorList, gtk_color_list, G_TYPE_OBJECT,
+                         G_IMPLEMENT_INTERFACE (G_TYPE_LIST_MODEL,
+                                                gtk_color_list_model_init))
+
+static GParamSpec *list_properties[N_LIST_PROPS] = { NULL, };
+
+static void
+gtk_color_list_get_property (GObject    *object,
+                             guint       property_id,
+                             GValue     *value,
+                             GParamSpec *pspec)
+{
+  GtkColorList *self = GTK_COLOR_LIST (object);
+
+  switch (property_id)
+    {
+    case LIST_PROP_SIZE:
+      g_value_set_uint (value, self->size);
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
+      break;
+    }
+}
+
+static void
+gtk_color_list_set_size (GtkColorList *self,
+                         guint         size)
+{
+  guint old_size = self->size;
+
+  self->size = size;
+  if (self->size > old_size)
+    g_list_model_items_changed (G_LIST_MODEL (self), old_size, 0, self->size - old_size);
+  else if (old_size > self->size)
+    g_list_model_items_changed (G_LIST_MODEL (self), self->size, old_size - self->size, 0);
+
+  g_object_notify_by_pspec (G_OBJECT (self), list_properties[LIST_PROP_SIZE]);
+}
+
+static void
+gtk_color_list_set_property (GObject      *object,
+                             guint         property_id,
+                             const GValue *value,
+                             GParamSpec   *pspec)
+{
+  GtkColorList *self = GTK_COLOR_LIST (object);
+
+  switch (property_id)
+    {
+    case LIST_PROP_SIZE:
+      gtk_color_list_set_size (self, g_value_get_uint (value));
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
+      break;
+    }
+}
+
+static void
+gtk_color_list_dispose (GObject *object)
+{
+  GtkColorList *self = GTK_COLOR_LIST (object);
+  guint i;
+
+  for (i = 0; i < N_COLORS; i++)
+    {
+      g_clear_object (&self->colors[i]);
+    }
+  g_free (self->colors);
+
+  G_OBJECT_CLASS (gtk_color_parent_class)->finalize (object);
+}
+
+static void
+gtk_color_list_class_init (GtkColorListClass *klass)
+{
+  GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
+
+  gobject_class->get_property = gtk_color_list_get_property;
+  gobject_class->set_property = gtk_color_list_set_property;
+  gobject_class->dispose = gtk_color_list_dispose;
+
+  list_properties[LIST_PROP_SIZE] =
+    g_param_spec_uint ("size", NULL, NULL, 0, N_COLORS, 0, G_PARAM_READWRITE);
+
+  g_object_class_install_properties (gobject_class, N_LIST_PROPS, list_properties);
+}
+
+static void
+gtk_color_list_init (GtkColorList *self)
+{
+  GBytes *data;
+  char **lines;
+  guint i;
+
+  self->colors = g_new0 (GtkColor *, N_COLORS);
+
+  data = g_resources_lookup_data ("/listview_colors/color.names.txt", 0, NULL);
+  lines = g_strsplit (g_bytes_get_data (data, NULL), "\n", 0);
+
+  for (i = 0; lines[i]; i++)
+    {
+      const char *name;
+      char **fields;
+      int red, green, blue;
+      guint pos;
+
+      if (lines[i][0] == '#' || lines[i][0] == '\0')
         continue;
 
-      fields = g_strsplit (line, " ", 0);
+      fields = g_strsplit (lines[i], " ", 0);
       name = fields[1];
       red = atoi (fields[3]);
       green = atoi (fields[4]);
       blue = atoi (fields[5]);
-      h = atoi (fields[9]);
-      s = atoi (fields[10]);
-      v = atoi (fields[11]);
 
-      color = gtk_color_new (name, red / 255., green / 255., blue / 255., h, s, v);
-      g_list_store_append (cd->store, color);
-      g_object_unref (color);
+      pos = ((red & 0xFF) << 16) | ((green & 0xFF) << 8) | blue;
+      if (self->colors[pos] == NULL)
+        self->colors[pos] = gtk_color_new (name, red / 255., green / 255., blue / 255.);
 
       g_strfreev (fields);
-
-      now = g_get_monotonic_time ();
-      if (now > start + 4000)
-        return G_SOURCE_CONTINUE;
     }
+  g_strfreev (lines);
 
-  return G_SOURCE_REMOVE;
+  g_bytes_unref (data);
 }
 
-static void
-populate_colors_model (GtkWidget  *widget,
-                       GListStore *store)
+static GListModel *
+gtk_color_list_new (guint size)
 {
-  ColorData *cd;
-
-  cd = g_new (ColorData, 1);
-
-  gtk_widget_set_sensitive (widget, FALSE);
-
-  cd->widget = widget;
-  cd->store = g_object_ref (store);
-  cd->data = g_resources_lookup_data ("/listview_colors/color.names.txt", 0, NULL);
-  cd->lines = g_strsplit (g_bytes_get_data (cd->data, NULL), "\n", 0);
-  cd->n = g_strv_length (cd->lines);
-  cd->i = 0;
-
-  gtk_widget_add_tick_callback (widget, add_color, cd, free_color_data);
-}
-
-static void
-fill (GtkWidget *view,
-      GListStore *store)
-{
-  ColorData *cd;
-  gboolean res;
-
-  cd = g_new (ColorData, 1);
-
-  cd->widget = NULL;
-  cd->store = g_object_ref (store);
-  cd->data = g_resources_lookup_data ("/listview_colors/color.names.txt", 0, NULL);
-  cd->lines = g_strsplit (g_bytes_get_data (cd->data, NULL), "\n", 0);
-  cd->n = g_strv_length (cd->lines);
-  cd->i = 0;
-
-  do {
-    res = add_color (view, NULL, cd);
-  } while (res == G_SOURCE_CONTINUE);
-  free_color_data (cd);
-}
-
-static void
-refill (GtkWidget  *button,
-        GListStore *store)
-{
-  g_list_store_remove_all (store);
-  populate_colors_model (button, store);
+  return g_object_new (GTK_TYPE_COLOR_LIST,
+                       "size", size,
+                       NULL);
 }
 
 static char *
@@ -370,9 +546,9 @@ get_rgb_markup (gpointer this,
     return NULL;
 
   return g_strdup_printf ("<b>R:</b> %d <b>G:</b> %d <b>B:</b> %d",
-                          (int)(color->color->red * 255), 
-                          (int)(color->color->green * 255),
-                          (int)(color->color->blue * 255));
+                          (int)(color->color.red * 255), 
+                          (int)(color->color.green * 255),
+                          (int)(color->color.blue * 255));
 }
 
 static char *
@@ -477,7 +653,6 @@ create_color_grid (void)
   GtkWidget *gridview;
   GtkListItemFactory *factory;
   GListModel *model, *selection;
-  GListStore *store;
 
   gridview = gtk_grid_view_new ();
   gtk_scrollable_set_hscroll_policy (GTK_SCROLLABLE (gridview), GTK_SCROLL_NATURAL);
@@ -491,17 +666,72 @@ create_color_grid (void)
   gtk_grid_view_set_max_columns (GTK_GRID_VIEW (gridview), 24);
   gtk_grid_view_set_enable_rubberband (GTK_GRID_VIEW (gridview), TRUE);
 
-  store = g_list_store_new (GTK_TYPE_COLOR);
-  fill (gridview, store);
+  model = G_LIST_MODEL (gtk_sort_list_model_new (gtk_color_list_new (0), NULL));
 
-  model = G_LIST_MODEL (gtk_sort_list_model_new (G_LIST_MODEL (store), NULL));
   selection = G_LIST_MODEL (gtk_property_selection_new (model, "selected"));
   gtk_grid_view_set_model (GTK_GRID_VIEW (gridview), selection);
   g_object_unref (selection);
   g_object_unref (model);
-  g_object_unref (store);
 
   return gridview;
+}
+
+static gboolean
+add_colors (GtkWidget     *widget,
+            GdkFrameClock *clock,
+            gpointer       data)
+{
+  GtkColorList *colors = data;
+  guint limit;
+
+  limit = GPOINTER_TO_UINT (g_object_get_data (data, "limit"));
+  gtk_color_list_set_size (colors, MIN (limit, colors->size + MAX (1, limit / 4096)));
+  
+  if (colors->size >= limit)
+    return G_SOURCE_REMOVE;
+  else
+    return G_SOURCE_CONTINUE;
+}
+
+static void
+refill (GtkWidget    *button,
+        GtkColorList *colors)
+{
+  gtk_color_list_set_size (colors, 0);
+  gtk_widget_add_tick_callback (button, add_colors, g_object_ref (colors), g_object_unref);
+}
+ 
+static void
+limit_changed_cb (GtkDropDown  *dropdown,
+                  GParamSpec   *pspec,
+                  GtkColorList *colors)
+{
+  guint new_limit, old_limit;
+
+  old_limit = GPOINTER_TO_UINT (g_object_get_data (G_OBJECT (colors), "limit"));
+  new_limit = 1 << (3 * (gtk_drop_down_get_selected (dropdown) + 1));
+
+  g_object_set_data (G_OBJECT (colors), "limit", GUINT_TO_POINTER (new_limit));
+
+  if (old_limit == colors->size)
+    gtk_color_list_set_size (colors, new_limit);
+}
+
+static void
+limit_changed_cb2 (GtkDropDown  *dropdown,
+                   GParamSpec   *pspec,
+                   GtkLabel     *label)
+{
+  gpointer item;
+  char *string;
+  int len;
+
+  item = gtk_drop_down_get_selected_item (dropdown);
+  g_object_get (item, "string", &string, NULL);
+  len = g_utf8_strlen (string, -1);
+  g_free (string);
+
+  gtk_label_set_max_width_chars (label, len + 2); /* for " /" */
 }
 
 static void
@@ -514,10 +744,11 @@ items_changed_cb (GListModel *model,
   guint n = g_list_model_get_n_items (model);
   char *text;
 
-  text = g_strdup_printf ("%u items", n);
+  text = g_strdup_printf ("%u /", n);
   gtk_label_set_label (GTK_LABEL (label), text);
   g_free (text);
 }
+
 
 static GtkWidget *window = NULL;
 
@@ -536,6 +767,7 @@ do_listview_colors (GtkWidget *do_widget)
       GtkExpression *expression;
       GtkWidget *button;
       GtkWidget *label;
+      PangoAttrList *attrs;
 
       window = gtk_window_new ();
       gtk_window_set_title (GTK_WINDOW (window), "Colors");
@@ -563,12 +795,37 @@ do_listview_colors (GtkWidget *do_widget)
 
       gtk_header_bar_pack_start (GTK_HEADER_BAR (header), button);
 
-      label = gtk_label_new ("0 items");
+      label = gtk_label_new ("0 /");
+      attrs = pango_attr_list_new ();
+      pango_attr_list_insert (attrs, pango_attr_font_features_new ("tnum"));
+      gtk_label_set_attributes (GTK_LABEL (label), attrs);
+      pango_attr_list_unref (attrs);
+      gtk_label_set_width_chars (GTK_LABEL (label), 6);
+      gtk_label_set_xalign (GTK_LABEL (label), 1);
       g_signal_connect (gtk_grid_view_get_model (GTK_GRID_VIEW (gridview)),
                         "items-changed", G_CALLBACK (items_changed_cb), label);
       gtk_header_bar_pack_start (GTK_HEADER_BAR (header), label);
 
+      dropdown = gtk_drop_down_new ();
+      gtk_drop_down_set_from_strings (GTK_DROP_DOWN (dropdown), (const char *[]) { "8", "64", "512", "4096", "32768", "262144", "2097152", "16777216", NULL });
+      g_signal_connect (dropdown, "notify::selected",
+                        G_CALLBACK (limit_changed_cb), 
+                        gtk_sort_list_model_get_model (GTK_SORT_LIST_MODEL (model)));
+      g_signal_connect (dropdown, "notify::selected",
+                        G_CALLBACK (limit_changed_cb2), 
+                        label);
+      gtk_drop_down_set_selected (GTK_DROP_DOWN (dropdown), 3); /* 4096 */
+      gtk_header_bar_pack_start (GTK_HEADER_BAR (header), dropdown);
+
       sorters = g_list_store_new (GTK_TYPE_SORTER);
+
+      /* An empty multisorter doesn't do any sorting and the sortmodel is
+       * smart enough to know that.
+       */
+      sorter = gtk_multi_sorter_new ();
+      set_title (sorter, "Unsorted");
+      g_list_store_append (sorters, sorter);
+      g_object_unref (sorter);
 
       sorter = gtk_string_sorter_new (gtk_property_expression_new (GTK_TYPE_COLOR, NULL, "name"));
       set_title (sorter, "Name");
