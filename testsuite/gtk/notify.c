@@ -425,10 +425,6 @@ test_type (gconstpointer data)
      g_type_is_a (type, GTK_TYPE_NAMED_ACTION))
     return;
 
-  /* needs special item type in underlying model */
-  if (g_type_is_a (type, GTK_TYPE_PROPERTY_SELECTION))
-    return;
-
   klass = g_type_class_ref (type);
 
   if (g_type_is_a (type, GTK_TYPE_SETTINGS))
