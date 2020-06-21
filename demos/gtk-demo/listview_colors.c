@@ -718,6 +718,23 @@ limit_changed_cb (GtkDropDown  *dropdown,
 }
 
 static void
+limit_changed_cb2 (GtkDropDown  *dropdown,
+                   GParamSpec   *pspec,
+                   GtkLabel     *label)
+{
+  gpointer item;
+  char *string;
+  int len;
+
+  item = gtk_drop_down_get_selected_item (dropdown);
+  g_object_get (item, "string", &string, NULL);
+  len = g_utf8_strlen (string, -1);
+  g_free (string);
+
+  gtk_label_set_max_width_chars (label, len + 2); /* for " /" */
+}
+
+static void
 items_changed_cb (GListModel *model,
                   guint       position,
                   guint       removed,
@@ -750,6 +767,7 @@ do_listview_colors (GtkWidget *do_widget)
       GtkExpression *expression;
       GtkWidget *button;
       GtkWidget *label;
+      PangoAttrList *attrs;
 
       window = gtk_window_new ();
       gtk_window_set_title (GTK_WINDOW (window), "Colors");
@@ -778,6 +796,12 @@ do_listview_colors (GtkWidget *do_widget)
       gtk_header_bar_pack_start (GTK_HEADER_BAR (header), button);
 
       label = gtk_label_new ("0 /");
+      attrs = pango_attr_list_new ();
+      pango_attr_list_insert (attrs, pango_attr_font_features_new ("tnum"));
+      gtk_label_set_attributes (GTK_LABEL (label), attrs);
+      pango_attr_list_unref (attrs);
+      gtk_label_set_width_chars (GTK_LABEL (label), 6);
+      gtk_label_set_xalign (GTK_LABEL (label), 1);
       g_signal_connect (gtk_grid_view_get_model (GTK_GRID_VIEW (gridview)),
                         "items-changed", G_CALLBACK (items_changed_cb), label);
       gtk_header_bar_pack_start (GTK_HEADER_BAR (header), label);
@@ -787,6 +811,9 @@ do_listview_colors (GtkWidget *do_widget)
       g_signal_connect (dropdown, "notify::selected",
                         G_CALLBACK (limit_changed_cb), 
                         gtk_sort_list_model_get_model (GTK_SORT_LIST_MODEL (model)));
+      g_signal_connect (dropdown, "notify::selected",
+                        G_CALLBACK (limit_changed_cb2), 
+                        label);
       gtk_drop_down_set_selected (GTK_DROP_DOWN (dropdown), 3); /* 4096 */
       gtk_header_bar_pack_start (GTK_HEADER_BAR (header), dropdown);
 
