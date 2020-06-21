@@ -7554,3 +7554,10 @@ GTK_TYPE_DROP_DOWN
 <SUBSECTION Private>
 gtk_drop_down_get_type
 </SECTION>
+
+<SECTION>
+<FILE>gtkstringlist</FILE>
+<TITLE>GtkStringList</TITLE>
+GtkStringList
+gtk_string_list_new
+</SECTION>
