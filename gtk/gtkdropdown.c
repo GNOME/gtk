@@ -44,6 +44,7 @@
 #include "gtklistitem.h"
 #include "gtkbuildable.h"
 #include "gtkbuilderprivate.h"
+#include "gtkstringlist.h"
 
 /**
  * SECTION:gtkdropdown
@@ -943,118 +944,6 @@ gtk_drop_down_get_expression (GtkDropDown *self)
   return self->expression;
 }
 
-
-#define GTK_TYPE_DROP_DOWN_STRING_HOLDER (gtk_drop_down_string_holder_get_type ())
-G_DECLARE_FINAL_TYPE (GtkDropDownStringHolder, gtk_drop_down_string_holder, GTK, DROP_DOWN_STRING_HOLDER, GObject)
-
-struct _GtkDropDownStringHolder {
-  GObject parent_instance;
-  char *string;
-};
-
-enum {
-  PROP_STRING = 1,
-  PROP_NUM_PROPERTIES
-};
-
-G_DEFINE_TYPE (GtkDropDownStringHolder, gtk_drop_down_string_holder, G_TYPE_OBJECT);
-
-static void
-gtk_drop_down_string_holder_init (GtkDropDownStringHolder *holder)
-{
-}
-
-static void
-gtk_drop_down_string_holder_finalize (GObject *object)
-{
-  GtkDropDownStringHolder *holder = GTK_DROP_DOWN_STRING_HOLDER (object);
-
-  g_free (holder->string);
-
-  G_OBJECT_CLASS (gtk_drop_down_string_holder_parent_class)->finalize (object);
-}
-
-static void
-gtk_drop_down_string_holder_set_property (GObject      *object,
-                                          guint         property_id,
-                                          const GValue *value,
-                                          GParamSpec   *pspec)
-{
-  GtkDropDownStringHolder *holder = GTK_DROP_DOWN_STRING_HOLDER (object);
-
-  switch (property_id)
-    {
-    case PROP_STRING:
-      g_free (holder->string);
-      holder->string = g_value_dup_string (value);
-      break;
-
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
-      break;
-    }
-}
-
-static void
-gtk_drop_down_string_holder_get_property (GObject      *object,
-                                          guint         property_id,
-                                          GValue       *value,
-                                          GParamSpec   *pspec)
-{
-  GtkDropDownStringHolder *holder = GTK_DROP_DOWN_STRING_HOLDER (object);
-
-  switch (property_id)
-    {
-    case PROP_STRING:
-      g_value_set_string (value, holder->string);
-      break;
-
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
-      break;
-    }
-}
-
-static void
-gtk_drop_down_string_holder_class_init (GtkDropDownStringHolderClass *class)
-{
-  GObjectClass *object_class = G_OBJECT_CLASS (class);
-  GParamSpec *pspec;
-
-  object_class->finalize = gtk_drop_down_string_holder_finalize;
-  object_class->set_property = gtk_drop_down_string_holder_set_property;
-  object_class->get_property = gtk_drop_down_string_holder_get_property;
-
-  pspec = g_param_spec_string ("string", "String", "String",
-                               NULL,
-                               G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
-
-  g_object_class_install_property (object_class, PROP_STRING, pspec);
-
-}
-
-static GtkDropDownStringHolder *
-gtk_drop_down_string_holder_new (const char *string)
-{
-  return g_object_new (GTK_TYPE_DROP_DOWN_STRING_HOLDER, "string", string, NULL);
-}
-
-static GListModel *
-gtk_drop_down_strings_model_new (const char *const *text)
-{
-  GListStore *store;
-  int i;
-
-  store = g_list_store_new (GTK_TYPE_DROP_DOWN_STRING_HOLDER);
-  for (i = 0; text[i]; i++)
-    {
-      GtkDropDownStringHolder *holder = gtk_drop_down_string_holder_new (text[i]);
-      g_list_store_append (store, holder);
-      g_object_unref (holder);
-    }
-  return G_LIST_MODEL (store);
-}
-
 /**
  * gtk_drop_down_set_from_strings:
  * @self: a #GtkDropDown
@@ -1075,11 +964,11 @@ gtk_drop_down_set_from_strings (GtkDropDown       *self,
 
   set_default_factory (self);
 
-  expression = gtk_property_expression_new (GTK_TYPE_DROP_DOWN_STRING_HOLDER, NULL, "string");
+  expression = gtk_property_expression_new (GTK_TYPE_STRING_HOLDER, NULL, "string");
   gtk_drop_down_set_expression (self, expression);
   gtk_expression_unref (expression);
 
-  model = gtk_drop_down_strings_model_new (texts);
+  model = G_LIST_MODEL (gtk_string_list_new (texts, -1));
   gtk_drop_down_set_model (self, model);
   g_object_unref (model);
 }
