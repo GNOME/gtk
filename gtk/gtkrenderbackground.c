@@ -94,9 +94,6 @@ gtk_theming_background_snapshot_layer (GtkCssBoxes *bg,
 
   pos = _gtk_css_array_value_get_nth (background->background_position, idx);
   repeat = _gtk_css_array_value_get_nth (background->background_repeat, idx);
-  hrepeat = _gtk_css_background_repeat_value_get_x (repeat);
-  vrepeat = _gtk_css_background_repeat_value_get_y (repeat);
-
 
   origin = gtk_css_boxes_get_box (bg,
                                   _gtk_css_area_value_get (
@@ -125,8 +122,13 @@ gtk_theming_background_snapshot_layer (GtkCssBoxes *bg,
   /* optimization */
   if (image_width == width)
     hrepeat = GTK_CSS_REPEAT_STYLE_NO_REPEAT;
+  else
+    hrepeat = _gtk_css_background_repeat_value_get_x (repeat);
+
   if (image_height == height)
     vrepeat = GTK_CSS_REPEAT_STYLE_NO_REPEAT;
+  else
+    vrepeat = _gtk_css_background_repeat_value_get_y (repeat);
 
   gtk_snapshot_push_debug (snapshot, "Layer %u", idx);
   gtk_snapshot_push_rounded_clip (snapshot, clip);
