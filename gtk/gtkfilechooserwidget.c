@@ -6929,17 +6929,14 @@ filter_combo_changed (GtkDropDown          *dropdown,
                       GParamSpec           *pspec,
                       GtkFileChooserWidget *impl)
 {
-  gint new_index;
   GtkFileFilter *new_filter;
 
-  new_index = gtk_drop_down_get_selected (dropdown);
-  new_filter = g_list_model_get_item (G_LIST_MODEL (impl->filters), new_index);
+  new_filter = gtk_drop_down_get_selected_item (dropdown);
   set_current_filter (impl, new_filter);
 
   if (impl->location_entry != NULL)
     _gtk_file_chooser_entry_set_file_filter (GTK_FILE_CHOOSER_ENTRY (impl->location_entry),
                                              new_filter);
-  g_object_unref (new_filter);
 }
 
 static gboolean
