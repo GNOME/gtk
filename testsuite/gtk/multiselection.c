@@ -408,7 +408,7 @@ test_select_range (void)
 }
 
 /* Test that removing and readding items
- * clears the selected state.
+ * doesn't clear the selected state.
  */
 static void
 test_readd (void)
@@ -432,7 +432,7 @@ test_readd (void)
 
   g_list_model_items_changed (G_LIST_MODEL (store), 1, 3, 3);
   assert_changes (selection, "1-3+3");
-  assert_selection (selection, "");
+  assert_selection (selection, "3 4");
 
   g_object_unref (store);
   g_object_unref (selection);
