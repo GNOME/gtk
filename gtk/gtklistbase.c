@@ -27,7 +27,6 @@
 #include "gtkgizmoprivate.h"
 #include "gtkintl.h"
 #include "gtklistitemwidgetprivate.h"
-#include "gtkmultiselection.h"
 #include "gtkorientable.h"
 #include "gtkscrollable.h"
 #include "gtkset.h"
