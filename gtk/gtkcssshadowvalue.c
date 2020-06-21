@@ -32,6 +32,8 @@
 #include <math.h>
 #include <float.h>
 
+#define CORNER_MASK_CACHE_MAX_SIZE 2000U
+
 struct _GtkCssValue {
   GTK_CSS_VALUE_BASE
   guint inset :1;
@@ -840,6 +842,17 @@ draw_shadow_corner (const GtkCssValue   *shadow,
       cairo_fill (mask_cr);
       _gtk_cairo_blur_surface (mask, radius, GTK_BLUR_X | GTK_BLUR_Y);
       cairo_destroy (mask_cr);
+
+      if (g_hash_table_size (corner_mask_cache) >= CORNER_MASK_CACHE_MAX_SIZE)
+        {
+          GHashTableIter iter;
+          guint i = 0;
+
+          g_hash_table_iter_init (&iter, corner_mask_cache);
+          while (g_hash_table_iter_next (&iter, NULL, NULL))
+            if (i++ % 4 == 0)
+              g_hash_table_iter_remove (&iter);
+        }
       g_hash_table_insert (corner_mask_cache, g_memdup (&key, sizeof (key)), mask);
     }
 
