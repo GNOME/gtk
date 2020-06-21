@@ -330,6 +330,32 @@ gtk_color_list_get_n_items (GListModel *list)
   return N_COLORS;
 }
 
+static guint
+position_to_color (guint position)
+{
+  static guint map[] = {
+    0xFF0000, 0x00FF00, 0x0000FF,
+    0x7F0000, 0x007F00, 0x00007F,
+    0x3F0000, 0x003F00, 0x00003F,
+    0x1F0000, 0x001F00, 0x00001F,
+    0x0F0000, 0x000F00, 0x00000F,
+    0x070000, 0x000700, 0x000007,
+    0x030000, 0x000300, 0x000003,
+    0x010000, 0x000100, 0x000001
+  };
+  guint result, i;
+
+  result = 0;
+
+  for (i = 0; i < G_N_ELEMENTS (map); i++)
+    {
+      if (position & (1 << i))
+        result ^= map[i];
+    }
+
+  return result;
+}
+
 static gpointer
 gtk_color_list_get_item (GListModel *list,
                          guint       position)
@@ -338,6 +364,8 @@ gtk_color_list_get_item (GListModel *list,
 
   if (position >= N_COLORS)
     return NULL;
+
+  position = position_to_color (position);
 
   if (self->colors[position] == NULL)
     {
