@@ -380,6 +380,7 @@ gtk_public_sources = files([
   'gtkstackswitcher.c',
   'gtkstatusbar.c',
   'gtkstringfilter.c',
+  'gtkstringlist.c',
   'gtkstringsorter.c',
   'gtkstylecontext.c',
   'gtkstyleprovider.c',

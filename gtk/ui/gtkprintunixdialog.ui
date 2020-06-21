@@ -511,11 +511,15 @@
                                       <object class="GtkDropDown" id="page_set_combo">
                                         <property name="valign">baseline</property>
                                         <property name="selected">0</property>
-                                        <items>
-                                          <item translatable="yes">All sheets</item>
-                                          <item translatable="yes">Even sheets</item>
-                                          <item translatable="yes">Odd sheets</item>
-                                        </items>
+                                        <property name="model">
+                                          <object class="GtkStringList">
+                                            <items>
+                                              <item translatable="yes">All sheets</item>
+                                              <item translatable="yes">Even sheets</item>
+                                              <item translatable="yes">Odd sheets</item>
+                                            </items>
+                                          </object>
+                                        </property>
                                         <layout>
                                           <property name="left-attach">1</property>
                                           <property name="top-attach">3</property>
@@ -695,12 +699,16 @@
                                         <property name="sensitive">0</property>
                                         <property name="selected">0</property>
                                         <property name="valign">baseline</property>
-                                        <items>
-                                          <item translatable="yes">Portrait</item>
-                                          <item translatable="yes">Landscape</item>
-                                          <item translatable="yes">Reverse portrait</item>
-                                          <item translatable="yes">Reverse landscape</item>
-                                        </items>
+                                        <property name="model">
+                                          <object class="GtkStringList">
+                                            <items>
+                                              <item translatable="yes">Portrait</item>
+                                              <item translatable="yes">Landscape</item>
+                                              <item translatable="yes">Reverse portrait</item>
+                                              <item translatable="yes">Reverse landscape</item>
+                                            </items>
+                                          </object>
+                                        </property>
                                         <layout>
                                           <property name="left-attach">1</property>
                                           <property name="top-attach">4</property>

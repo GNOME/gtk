@@ -76,6 +76,7 @@
       </section>
       <xi:include href="xml/gtkdirectorylist.xml" />
       <xi:include href="xml/gtkbookmarklist.xml" />
+      <xi:include href="xml/gtkstringlist.xml" />
     </chapter>
 
     <chapter id="ListContainers">
