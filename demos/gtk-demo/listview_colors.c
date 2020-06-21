@@ -792,6 +792,14 @@ do_listview_colors (GtkWidget *do_widget)
 
       sorters = g_list_store_new (GTK_TYPE_SORTER);
 
+      /* An empty multisorter doesn't do any sorting and the sortmodel is
+       * smart enough to know that.
+       */
+      sorter = gtk_multi_sorter_new ();
+      set_title (sorter, "Unsorted");
+      g_list_store_append (sorters, sorter);
+      g_object_unref (sorter);
+
       sorter = gtk_string_sorter_new (gtk_property_expression_new (GTK_TYPE_COLOR, NULL, "name"));
       set_title (sorter, "Name");
       g_list_store_append (sorters, sorter);
