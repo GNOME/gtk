@@ -266,18 +266,21 @@ do_iconview (GtkWidget *do_widget)
       gtk_window_set_child (GTK_WINDOW (window), vbox);
 
       tool_bar = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+      gtk_widget_add_css_class (tool_bar, "toolbar");
+      gtk_widget_add_css_class (tool_bar, "top");
       gtk_box_append (GTK_BOX (vbox), tool_bar);
 
       up_button = gtk_button_new_with_mnemonic ("_Up");
+      gtk_button_set_has_frame (GTK_BUTTON (up_button), FALSE);
       gtk_widget_set_sensitive (GTK_WIDGET (up_button), FALSE);
       gtk_box_append (GTK_BOX (tool_bar), up_button);
 
       home_button = gtk_button_new_with_mnemonic ("_Home");
+      gtk_button_set_has_frame (GTK_BUTTON (home_button), FALSE);
       gtk_box_append (GTK_BOX (tool_bar), home_button);
 
 
       sw = gtk_scrolled_window_new (NULL, NULL);
-      gtk_scrolled_window_set_has_frame (GTK_SCROLLED_WINDOW (sw), TRUE);
       gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (sw),
                                       GTK_POLICY_AUTOMATIC,
                                       GTK_POLICY_AUTOMATIC);

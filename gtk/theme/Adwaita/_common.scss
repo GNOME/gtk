@@ -860,19 +860,6 @@ modelbutton.flat arrow {
   &.right { -gtk-icon-source: -gtk-icontheme("go-next-symbolic"); }
 }
 
-/* oldstyle toolbar buttons */
-
-.toolbar button {
-  margin: 1px;
-  @extend %undecorated_button;
-
-  &:hover { @include button('hover'); }
-  &:active { @include button('active'); }
-  &:disabled { @include button('insensitive'); }
-  &:backdrop { @include button('backdrop'); }
-  &:backdrop:disabled { @include button('backdrop-insensitive'); }
-}
-
 button.color {
   padding: 4px;
 
@@ -1237,14 +1224,24 @@ combobox {
  ************/
 %toolbar {
   padding: 4px;
+  border-spacing: 4px;
   background-color: $bg_color;
 }
 
-.toolbar,
-toolbar {
+.toolbar {
   @extend %toolbar;
 
-  padding: 4px 3px 3px 4px;
+  &.top { border-bottom: 1px solid $borders_color; }
+
+  &.bottom { border-top: 1px solid $borders_color; }
+
+  &.start:dir(ltr),
+  &.end:dir(rtl) { border-right: 1px solid $borders_color; }
+
+  &.end:dir(ltr),
+  &.start:dir(rtl) { border-left: 1px solid $borders_color; }
+
+  &:backdrop { border-color: $backdrop_borders_color; }
 
   // on OSD
   .osd & { background-color: transparent; }
@@ -1256,15 +1253,15 @@ toolbar {
     border-radius: 5px;
     background-color: $osd_bg_color;
 
-    &.left,
-    &.right,
+    &.start,
+    &.end,
     &.top,
     &.bottom { border-radius: 0; } // positional classes for `attached` osd toolbars
   }
 
   // toolbar separators
-  &.horizontal separator { margin: 0 7px 1px 6px; }
-  &.vertical separator { margin: 6px 1px 7px 0; }
+  &.horizontal > separator { margin: 4px 0; }
+  &.vertical > separator { margin: 0 4px; }
 }
 
 //searchbar & location-bar
@@ -2976,6 +2973,13 @@ frame,
   &.flat { border-style: none; }
 }
 
+statusbar {
+  padding: 6px 10px;
+  border-top: 1px solid $borders_color;
+
+  &:backdrop { border-color: $backdrop_borders_color; }
+}
+
 actionbar > revealer >  box {
   padding: 6px;
   border-top: 1px solid $borders_color;
@@ -4128,8 +4132,4 @@ popover.menu {
     font-weight: bold;
     padding: 4px ($_menu-padding + 20px); //this will fall apart with font sizing
   }
-}
-
-statusbar {
-  padding: 6px 10px 6px 10px;
 }

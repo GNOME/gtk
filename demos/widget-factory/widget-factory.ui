@@ -1922,12 +1922,14 @@ microphone-sensitivity-medium-symbolic</property>
                                       <object class="GtkBox" id="toolbar">
                                         <style>
                                           <class name="toolbar"/>
+                                          <class name="top"/>
                                         </style>
                                         <child>
                                           <object class="GtkButton">
                                             <property name="label" translatable="yes">New</property>
                                             <property name="icon-name">document-new</property>
                                             <property name="tooltip-text" translatable="yes">Create a new document</property>
+                                            <property name="has-frame">0</property>
                                           </object>
                                         </child>
                                         <child>
@@ -1935,6 +1937,7 @@ microphone-sensitivity-medium-symbolic</property>
                                             <property name="label" translatable="yes">Save</property>
                                             <property name="icon-name">document-save</property>
                                             <property name="tooltip-text" translatable="yes">Save the current document</property>
+                                            <property name="has-frame">0</property>
                                           </object>
                                         </child>
                                         <child>
@@ -1946,6 +1949,7 @@ microphone-sensitivity-medium-symbolic</property>
                                             <property name="icon-name">edit-find</property>
                                             <property name="action-name">win.search</property>
                                             <property name="tooltip-text" translatable="yes">Search for it</property>
+                                            <property name="has-frame">0</property>
                                           </object>
                                         </child>
                                         <child>
@@ -1954,6 +1958,7 @@ microphone-sensitivity-medium-symbolic</property>
                                             <property name="label" translatable="yes">Insert</property>
                                             <property name="icon-name">insert-image</property>
                                             <property name="tooltip-text" translatable="yes">Insert something</property>
+                                            <property name="has-frame">0</property>
                                           </object>
                                         </child>
                                       </object>
@@ -1981,9 +1986,6 @@ microphone-sensitivity-medium-symbolic</property>
                                       </object>
                                     </child>
                                     <child>
-                                      <object class="GtkSeparator"/>
-                                    </child>
-                                    <child>
                                       <object class="GtkScrolledWindow">
                                         <property name="vexpand">1</property>
                                         <child>
@@ -1996,9 +1998,6 @@ microphone-sensitivity-medium-symbolic</property>
                                           </object>
                                         </child>
                                       </object>
-                                    </child>
-                                    <child>
-                                      <object class="GtkSeparator"/>
                                     </child>
                                     <child>
                                       <object class="GtkStatusbar" id="statusbar"/>
@@ -2091,51 +2090,62 @@ microphone-sensitivity-medium-symbolic</property>
                               <object class="GtkExpander" id="expander1">
                                 <property name="expanded">1</property>
                                 <child>
-                                  <object class="GtkBox">
-                                    <property name="orientation">vertical</property>
+                                  <object class="GtkFrame" id="expander1frame">
+                                    <property name="margin-top">6</property>
                                     <child>
-                                      <object class="GtkScrolledWindow" id="scrolledwindow3">
-                                        <property name="has-frame">1</property>
-                                        <property name="margin-top">6</property>
-                                        <property name="height-request">226</property>
+                                      <object class="GtkBox">
+                                        <property name="orientation">vertical</property>
                                         <child>
-                                          <object class="GtkIconView" id="iconview1">
-                                            <property name="selection-mode">multiple</property>
-                                            <property name="model">iconsmodel</property>
+                                          <object class="GtkScrolledWindow" id="scrolledwindow3">
+                                            <property name="height-request">226</property>
                                             <child>
-                                              <object class="GtkCellRendererPixbuf" id="iconviewcell"/>
-                                              <attributes>
-                                                <attribute name="icon-name">0</attribute>
-                                              </attributes>
+                                              <object class="GtkIconView" id="iconview1">
+                                                <property name="selection-mode">multiple</property>
+                                                <property name="model">iconsmodel</property>
+                                                <child>
+                                                  <object class="GtkCellRendererPixbuf" id="iconviewcell"/>
+                                                  <attributes>
+                                                    <attribute name="icon-name">0</attribute>
+                                                  </attributes>
+                                                </child>
+                                              </object>
                                             </child>
                                           </object>
                                         </child>
-                                      </object>
-                                    </child>
-                                    <child>
-                                      <object class="GtkBox">
-                                        <style>
-                                          <class name="linked"/>
-                                        </style>
                                         <child>
-                                          <object class="GtkButton" id="decrease_button">
-                                            <property name="icon-name">zoom-out-symbolic</property>
-                                            <property name="tooltip-text">Normal icons</property>
-                                            <signal name="clicked" handler="decrease_icon_size" object="iconview1" swapped="yes"/>
-                                          </object>
-                                        </child>
-                                        <child>
-                                          <object class="GtkButton" id="increase_button">
-                                            <property name="icon-name">zoom-in-symbolic</property>
-                                            <property name="tooltip-text">Large icons</property>
-                                            <signal name="clicked" handler="increase_icon_size" object="iconview1" swapped="yes"/>
-                                          </object>
-                                        </child>
-                                        <child>
-                                          <object class="GtkButton" id="reset_button">
-                                            <property name="icon-name">zoom-original-symbolic</property>
-                                            <property name="tooltip-text">Inherited icon size</property>
-                                            <signal name="clicked" handler="reset_icon_size" object="iconview1" swapped="yes"/>
+                                          <object class="GtkBox">
+                                            <style>
+                                              <class name="toolbar"/>
+                                              <class name="bottom"/>
+                                            </style>
+                                            <child>
+                                              <object class="GtkBox">
+                                                <style>
+                                                  <class name="linked"/>
+                                                </style>
+                                                <child>
+                                                  <object class="GtkButton" id="decrease_button">
+                                                    <property name="icon-name">zoom-out-symbolic</property>
+                                                    <property name="tooltip-text">Normal icons</property>
+                                                    <signal name="clicked" handler="decrease_icon_size" object="iconview1" swapped="yes"/>
+                                                  </object>
+                                                </child>
+                                                <child>
+                                                  <object class="GtkButton" id="increase_button">
+                                                    <property name="icon-name">zoom-in-symbolic</property>
+                                                    <property name="tooltip-text">Large icons</property>
+                                                    <signal name="clicked" handler="increase_icon_size" object="iconview1" swapped="yes"/>
+                                                  </object>
+                                                </child>
+                                                <child>
+                                                  <object class="GtkButton" id="reset_button">
+                                                    <property name="icon-name">zoom-original-symbolic</property>
+                                                    <property name="tooltip-text">Inherited icon size</property>
+                                                    <signal name="clicked" handler="reset_icon_size" object="iconview1" swapped="yes"/>
+                                                  </object>
+                                                </child>
+                                              </object>
+                                            </child>
                                           </object>
                                         </child>
                                       </object>
@@ -2592,19 +2602,23 @@ microphone-sensitivity-medium-symbolic</property>
                             </child>
                           </object>
                         </child>
+                        <child>
+                          <object class="GtkFrame">
                             <child>
                               <object class="GtkBox">
                                 <child>
                                   <object class="GtkBox">
                                     <property name="orientation">vertical</property>
                                     <style>
-                                      <class name="linked"/>
+                                      <class name="toolbar"/>
+                                      <class name="start"/>
                                     </style>
                                     <child>
                                       <object class="GtkButton" id="toolbutton1">
                                         <property name="icon-name">document-open-symbolic</property>
                                         <property name="focus-on-click">0</property>
                                         <property name="tooltip-text" translatable="yes">Insert ⌘</property>
+                                        <property name="has-frame">0</property>
                                       </object>
                                     </child>
                                     <child>
@@ -2612,6 +2626,7 @@ microphone-sensitivity-medium-symbolic</property>
                                         <property name="icon-name">send-to-symbolic</property>
                                         <property name="focus-on-click">0</property>
                                         <property name="tooltip-text" translatable="yes">Insert ⚽</property>
+                                        <property name="has-frame">0</property>
                                       </object>
                                     </child>
                                     <child>
@@ -2619,6 +2634,7 @@ microphone-sensitivity-medium-symbolic</property>
                                         <property name="icon-name">view-fullscreen-symbolic</property>
                                         <property name="focus-on-click">0</property>
                                         <property name="tooltip-text" translatable="yes">Insert ⤢</property>
+                                        <property name="has-frame">0</property>
                                       </object>
                                     </child>
                                     <child>
@@ -2626,13 +2642,13 @@ microphone-sensitivity-medium-symbolic</property>
                                         <property name="icon-name">star-new-symbolic</property>
                                         <property name="focus-on-click">0</property>
                                         <property name="tooltip-text" translatable="yes">Insert ☆</property>
+                                        <property name="has-frame">0</property>
                                       </object>
                                     </child>
                                   </object>
                                 </child>
                                 <child>
                                   <object class="GtkScrolledWindow">
-                                    <property name="has-frame">1</property>
                                     <property name="hexpand">1</property>
                                     <child>
                                       <object class="GtkTextView" id="tooltextview"/>
@@ -2642,6 +2658,10 @@ microphone-sensitivity-medium-symbolic</property>
                                 <child>
                                   <object class="GtkBox">
                                     <property name="orientation">vertical</property>
+                                    <style>
+                                      <class name="toolbar"/>
+                                      <class name="end"/>
+                                    </style>
                                     <child>
                                       <object class="GtkBox">
                                         <property name="orientation">vertical</property>
@@ -2687,6 +2707,8 @@ microphone-sensitivity-medium-symbolic</property>
                                 </child>
                               </object>
                             </child>
+                          </object>
+                        </child>
                         <child>
                           <object class="GtkOverlay">
                             <child type="overlay">
@@ -2699,6 +2721,7 @@ microphone-sensitivity-medium-symbolic</property>
                                 <property name="margin-bottom">20</property>
                                 <property name="valign">end</property>
                                 <style>
+                                  <class name="toolbar"/>
                                   <class name="osd"/>
                                 </style>
                                 <child>

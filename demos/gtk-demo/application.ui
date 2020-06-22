@@ -10,15 +10,21 @@
         <child>
           <object class="GtkBox">
             <property name="hexpand">1</property>
+            <style>
+              <class name="toolbar"/>
+              <class name="top"/>
+            </style>
             <child>
               <object class="GtkMenuButton" id="menubutton">
                 <property name="icon-name">document-open</property>
+                <property name="has-frame">0</property>
               </object>
             </child>
             <child>
               <object class="GtkButton">
                 <property name="icon-name">application-exit</property>
                 <property name="action-name">app.quit</property>
+                <property name="has-frame">0</property>
               </object>
             </child>
             <child>
@@ -28,6 +34,7 @@
               <object class="GtkButton">
                 <property name="icon-name">applications-other</property>
                 <property name="action-name">win.logo</property>
+                <property name="has-frame">0</property>
               </object>
             </child>
             <layout>
@@ -61,7 +68,6 @@
         </child>
         <child>
           <object class="GtkScrolledWindow">
-            <property name="has-frame">1</property>
             <child>
               <object class="GtkTextView">
                 <property name="hexpand">1</property>
