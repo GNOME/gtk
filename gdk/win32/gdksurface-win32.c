@@ -3762,7 +3762,7 @@ setup_drag_move_resize_context (GdkSurface                   *window,
    * This is why we first do the grab, *then* set the op.
    */
   gdk_device_grab (device, pointer_window,
-                   GDK_OWNERSHIP_NONE, FALSE,
+                   FALSE,
                    GDK_ALL_EVENTS_MASK,
                    context->cursor,
                    timestamp);

@@ -2077,7 +2077,7 @@ gdk_x11_drag_set_cursor (GdkDrag   *drag,
       G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
       gdk_device_grab (gdk_seat_get_pointer (x11_drag->grab_seat),
                        x11_drag->ipc_surface,
-                       GDK_OWNERSHIP_APPLICATION, FALSE,
+                       FALSE,
                        GDK_POINTER_MOTION_MASK | GDK_BUTTON_RELEASE_MASK,
                        cursor, GDK_CURRENT_TIME);
       G_GNUC_END_IGNORE_DEPRECATIONS;

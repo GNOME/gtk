@@ -149,7 +149,7 @@ gdk_seat_default_grab (GdkSeat                *seat,
         pointer_evmask |= TOUCH_EVENTS;
 
       status = gdk_device_grab (priv->logical_pointer, surface,
-                                GDK_OWNERSHIP_NONE, owner_events,
+                                owner_events,
                                 pointer_evmask, cursor,
                                 evtime);
     }
@@ -158,7 +158,7 @@ gdk_seat_default_grab (GdkSeat                *seat,
       capabilities & GDK_SEAT_CAPABILITY_KEYBOARD)
     {
       status = gdk_device_grab (priv->logical_keyboard, surface,
-                                GDK_OWNERSHIP_NONE, owner_events,
+                                owner_events,
                                 KEYBOARD_EVENTS, cursor,
                                 evtime);
 

@@ -2245,13 +2245,6 @@ _gdk_windowing_got_event (GdkDisplay *display,
         }
 
       _gdk_display_device_grab_update (display, device, source_device, serial);
-
-      if (!_gdk_display_check_grab_ownership (display, device, serial))
-        {
-          /* Device events are blocked by another device grab */
-          unlink_event = TRUE;
-          goto out;
-        }
     }
 
   event_surface = gdk_event_get_surface (event);
@@ -2274,7 +2267,6 @@ _gdk_windowing_got_event (GdkDisplay *display,
           _gdk_display_add_device_grab (display,
                                         device,
                                         event_surface,
-                                        GDK_OWNERSHIP_NONE,
                                         FALSE,
                                         GDK_ALL_EVENTS_MASK,
                                         serial,

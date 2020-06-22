@@ -45,7 +45,6 @@ typedef struct
   gulong serial_end; /* exclusive, i.e. not active on serial_end */
   guint event_mask;
   guint32 time;
-  GdkGrabOwnership ownership;
 
   guint activated : 1;
   guint implicit_ungrab : 1;
@@ -187,7 +186,6 @@ GdkDeviceGrabInfo * _gdk_display_get_last_device_grab (GdkDisplay *display,
 GdkDeviceGrabInfo * _gdk_display_add_device_grab      (GdkDisplay       *display,
                                                        GdkDevice        *device,
                                                        GdkSurface        *surface,
-                                                       GdkGrabOwnership  grab_ownership,
                                                        gboolean          owner_events,
                                                        GdkEventMask      event_mask,
                                                        gulong            serial_start,
@@ -201,9 +199,6 @@ gboolean            _gdk_display_end_device_grab      (GdkDisplay       *display
                                                        gulong            serial,
                                                        GdkSurface        *if_child,
                                                        gboolean          implicit);
-gboolean            _gdk_display_check_grab_ownership (GdkDisplay       *display,
-                                                       GdkDevice        *device,
-                                                       gulong            serial);
 GdkPointerSurfaceInfo * _gdk_display_get_pointer_info  (GdkDisplay       *display,
                                                        GdkDevice        *device);
 void                _gdk_display_pointer_info_foreach (GdkDisplay       *display,
