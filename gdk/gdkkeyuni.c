@@ -878,11 +878,15 @@ static const struct {
 
 /**
  * gdk_keyval_to_unicode:
- * @keyval: a GDK key symbol 
- * 
+ * @keyval: a GDK key symbol
+ *
  * Convert from a GDK key symbol to the corresponding ISO10646 (Unicode)
  * character.
- * 
+ *
+ * Note that the conversion does not take the current locale
+ * into consideration, which might be expected for particular
+ * keyvals, such as %GDK_KEY_KP_Decimal.
+ *
  * Returns: the corresponding unicode character, or 0 if there
  *               is no corresponding character.
  **/
@@ -902,16 +906,6 @@ gdk_keyval_to_unicode (guint keyval)
    */
   if ((keyval & 0xff000000) == 0x01000000)
     return keyval & 0x00ffffff;
-
-#if defined(GDK_WINDOWING_WIN32)
-  if (GDK_IS_WIN32_DISPLAY (gdk_display_get_default ()) &&
-      keyval == 0xffae)
-    {
-      GdkWin32Keymap *keymap = GDK_WIN32_KEYMAP (gdk_display_get_keymap (gdk_display_get_default ()));
-
-      return (guint32) _gdk_win32_keymap_get_decimal_mark (keymap);
-    }
-#endif
 
   /* binary search in table */
   while (max >= min) {
