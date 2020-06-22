@@ -48,8 +48,6 @@ struct _GtkEntryCompletionClass
   gboolean (* match_selected)   (GtkEntryCompletion *completion,
                                  GtkTreeModel       *model,
                                  GtkTreeIter        *iter);
-  void     (* action_activated) (GtkEntryCompletion *completion,
-                                 gint                index_);
   gboolean (* insert_prefix)    (GtkEntryCompletion *completion,
                                  const gchar        *prefix);
   gboolean (* cursor_on_match)  (GtkEntryCompletion *completion,
@@ -65,7 +63,6 @@ struct _GtkEntryCompletionPrivate
   GtkWidget *tree_view;
   GtkTreeViewColumn *column;
   GtkTreeModelFilter *filter_model;
-  GtkListStore *actions;
   GtkCellArea *cell_area;
 
   GtkEntryCompletionMatchFunc match_func;
@@ -82,9 +79,7 @@ struct _GtkEntryCompletionPrivate
 
   /* only used by GtkEntry when attached: */
   GtkWidget *popup_window;
-  GtkWidget *vbox;
   GtkWidget *scrolled_window;
-  GtkWidget *action_view;
 
   gulong completion_timeout;
   gulong changed_id;
