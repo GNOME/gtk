@@ -95,18 +95,6 @@ GDK_AVAILABLE_IN_ALL
 void                gtk_entry_completion_insert_prefix          (GtkEntryCompletion          *completion);
 
 GDK_AVAILABLE_IN_ALL
-void                gtk_entry_completion_insert_action_text     (GtkEntryCompletion          *completion,
-                                                                 gint                         index_,
-                                                                 const gchar                 *text);
-GDK_AVAILABLE_IN_ALL
-void                gtk_entry_completion_insert_action_markup   (GtkEntryCompletion          *completion,
-                                                                 gint                         index_,
-                                                                 const gchar                 *markup);
-GDK_AVAILABLE_IN_ALL
-void                gtk_entry_completion_delete_action          (GtkEntryCompletion          *completion,
-                                                                 gint                         index_);
-
-GDK_AVAILABLE_IN_ALL
 void                gtk_entry_completion_set_inline_completion  (GtkEntryCompletion          *completion,
                                                                  gboolean                     inline_completion);
 GDK_AVAILABLE_IN_ALL

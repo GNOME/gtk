@@ -182,14 +182,6 @@ match_func (GtkEntryCompletion *completion,
   return ret;
 }
 
-static void
-activated_cb (GtkEntryCompletion *completion, 
-	      gint                index,
-	      gpointer            user_data)
-{
-  g_print ("action activated: %d\n", index);
-}
-
 static gint timer_count = 0;
 
 static const char *dynamic_completions[] = {
@@ -378,10 +370,6 @@ main (int argc, char *argv[])
   gtk_entry_completion_set_match_func (completion, match_func, NULL, NULL);
   g_signal_connect (completion, "match-selected", 
 		    G_CALLBACK (match_selected_cb), NULL);
-
-  gtk_entry_completion_insert_action_text (completion, 100, "action!");
-  gtk_entry_completion_insert_action_text (completion, 101, "'nother action!");
-  g_signal_connect (completion, "action_activated", G_CALLBACK (activated_cb), NULL);
 
   /* Create our third entry */
   entry = gtk_entry_new ();
