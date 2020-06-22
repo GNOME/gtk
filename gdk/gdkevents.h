@@ -345,6 +345,9 @@ GDK_AVAILABLE_IN_ALL
 GdkSurface *            gdk_event_get_surface           (GdkEvent *event);
 
 GDK_AVAILABLE_IN_ALL
+GdkSeat *               gdk_event_get_seat              (GdkEvent *event);
+
+GDK_AVAILABLE_IN_ALL
 GdkDevice *             gdk_event_get_device            (GdkEvent *event);
 
 GDK_AVAILABLE_IN_ALL
