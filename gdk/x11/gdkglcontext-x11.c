@@ -582,6 +582,46 @@ create_legacy_context (GdkDisplay   *display,
 }
 
 #ifdef HAVE_XDAMAGE
+static void
+bind_context_for_frame_fence (GdkGLContext *context)
+{
+  GdkGLContext *current_context;
+  GdkX11GLContext *current_context_x11;
+  GLXContext current_glx_context = NULL;
+  gboolean needs_binding = TRUE;
+
+  /* We don't care if the passed context is the current context,
+   * necessarily, but we do care that *some* context that can
+   * see the sync object is bound.
+   *
+   * If no context is bound at all, the GL dispatch layer will
+   * make glClientWaitSync() silently return 0.
+   */
+  current_glx_context = glXGetCurrentContext ();
+
+  if (current_glx_context == NULL)
+    goto out;
+
+  current_context = gdk_gl_context_get_current ();
+
+  if (current_context == NULL)
+    goto out;
+
+  current_context_x11 = GDK_X11_GL_CONTEXT (current_context);
+
+  /* If the GLX context was changed out from under GDK, then
+   * that context may not be one that is able to see the
+   * created fence object.
+   */
+  if (current_context_x11->glx_context != current_glx_context)
+    goto out;
+
+  needs_binding = FALSE;
+out:
+  if (needs_binding)
+    gdk_gl_context_make_current (context);
+}
+
 static gboolean
 on_gl_surface_xevent (GdkGLContext   *context,
                       XEvent         *xevent,
@@ -606,13 +646,7 @@ on_gl_surface_xevent (GdkGLContext   *context,
     {
       GLenum wait_result;
 
-      /* We don't care if the passed context is the current context,
-       * necessarily, but we do care that *some* context is bound,
-       * otherwise, the GL dispatch layer will make glClientWaitSync()
-       * silently return 0.
-       */
-      if (glXGetCurrentContext () == NULL)
-        gdk_gl_context_make_current (context);
+      bind_context_for_frame_fence (context);
 
       wait_result = glClientWaitSync (context_x11->frame_fence, 0, 0);
 
