@@ -1663,6 +1663,25 @@ handle_key_event (GdkEvent *event)
   return focus_widget ? focus_widget : event_widget;
 }
 
+static gboolean
+is_transient_for (GtkWindow *child,
+                  GtkWindow *parent)
+{
+  GtkWindow *transient_for;
+
+  transient_for = gtk_window_get_transient_for (child);
+
+  while (transient_for)
+    {
+      if (transient_for == parent)
+        return TRUE;
+
+      transient_for = gtk_window_get_transient_for (transient_for);
+    }
+
+  return FALSE;
+}
+
 void
 gtk_main_do_event (GdkEvent *event)
 {
@@ -1726,11 +1745,16 @@ gtk_main_do_event (GdkEvent *event)
 
   /* If the grab widget is an ancestor of the event widget
    * then we send the event to the original event widget.
-   * This is the key to implementing modality.
+   * This is the key to implementing modality. This also applies
+   * across windows that are directly or indirectly transient-for
+   * the modal one.
    */
   if (!grab_widget ||
       ((gtk_widget_is_sensitive (target_widget) || gdk_event_get_event_type (event) == GDK_SCROLL) &&
-       gtk_widget_is_ancestor (target_widget, grab_widget)))
+       gtk_widget_is_ancestor (target_widget, grab_widget)) ||
+      (GTK_IS_WINDOW (grab_widget) &&
+       grab_widget != event_widget &&
+       is_transient_for (GTK_WINDOW (event_widget), GTK_WINDOW (grab_widget))))
     grab_widget = target_widget;
 
   g_object_ref (target_widget);
