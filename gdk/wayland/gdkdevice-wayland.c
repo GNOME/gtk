@@ -4767,32 +4767,6 @@ gdk_wayland_seat_get_physical_devices (GdkSeat             *seat,
   return physical_devices;
 }
 
-static GList *
-gdk_wayland_seat_get_logical_pointers (GdkSeat             *seat,
-                                       GdkSeatCapabilities  capabilities)
-{
-  GdkWaylandSeat *wayland_seat = GDK_WAYLAND_SEAT (seat);
-  GList *logical_devices = NULL;
-
-  if (capabilities & GDK_SEAT_CAPABILITY_POINTER)
-    logical_devices = g_list_prepend (logical_devices, wayland_seat->logical_pointer);
-  if (capabilities & GDK_SEAT_CAPABILITY_TOUCH)
-    logical_devices = g_list_prepend (logical_devices, wayland_seat->logical_touch);
-  if (capabilities & GDK_SEAT_CAPABILITY_TABLET_STYLUS)
-    {
-      GList *l;
-
-      for (l = wayland_seat->tablets; l; l = l->next)
-        {
-          GdkWaylandTabletData *tablet = l->data;
-
-          logical_devices = g_list_prepend (logical_devices, tablet->logical_device);
-        }
-    }
-
-  return logical_devices;
-}
-
 static void
 gdk_wayland_seat_class_init (GdkWaylandSeatClass *klass)
 {
@@ -4806,7 +4780,6 @@ gdk_wayland_seat_class_init (GdkWaylandSeatClass *klass)
   seat_class->ungrab = gdk_wayland_seat_ungrab;
   seat_class->get_logical_device = gdk_wayland_seat_get_logical_device;
   seat_class->get_physical_devices = gdk_wayland_seat_get_physical_devices;
-  seat_class->get_logical_pointers = gdk_wayland_seat_get_logical_pointers;
 }
 
 static void

@@ -305,18 +305,6 @@ gdk_seat_default_get_tool (GdkSeat *seat,
   return NULL;
 }
 
-static GList *
-gdk_seat_default_get_logical_pointers (GdkSeat             *seat,
-                                      GdkSeatCapabilities  capabilities)
-{
-  GList *pointers = NULL;
-
-  if (capabilities & GDK_SEAT_CAPABILITY_ALL_POINTING)
-    pointers = g_list_prepend (pointers, gdk_seat_get_pointer (seat));
-
-  return pointers;
-}
-
 static void
 gdk_seat_default_class_init (GdkSeatDefaultClass *klass)
 {
@@ -332,7 +320,6 @@ gdk_seat_default_class_init (GdkSeatDefaultClass *klass)
 
   seat_class->get_logical_device = gdk_seat_default_get_logical_device;
   seat_class->get_physical_devices = gdk_seat_default_get_physical_devices;
-  seat_class->get_logical_pointers = gdk_seat_default_get_logical_pointers;
 
   seat_class->get_tool = gdk_seat_default_get_tool;
 }
