@@ -42,12 +42,6 @@
  *
  * To add completion functionality to an entry, use gtk_entry_set_completion().
  *
- * In addition to regular completion matches, which will be inserted into the
- * entry when they are selected, #GtkEntryCompletion also allows to display
- * “actions” in the popup window. Their appearance is similar to menuitems,
- * to differentiate them clearly from completion strings. When an action is
- * selected, the #GtkEntryCompletion::action-activated signal is emitted.
- *
  * GtkEntryCompletion uses a #GtkTreeModelFilter model to represent the
  * subset of the entire model that is currently matching. While the
  * GtkEntryCompletion signals #GtkEntryCompletion::match-selected and
@@ -103,7 +97,6 @@ enum
 {
   INSERT_PREFIX,
   MATCH_SELECTED,
-  ACTION_ACTIVATED,
   CURSOR_ON_MATCH,
   NO_MATCHES,
   LAST_SIGNAL
@@ -148,20 +141,7 @@ static void     gtk_entry_completion_list_activated      (GtkTreeView        *tr
                                                           GtkTreePath        *path,
                                                           GtkTreeViewColumn  *column,
                                                           gpointer            user_data);
-static void     gtk_entry_completion_action_activated    (GtkTreeView        *treeview,
-                                                          GtkTreePath        *path,
-                                                          GtkTreeViewColumn  *column,
-                                                          gpointer            user_data);
 static void     gtk_entry_completion_selection_changed   (GtkTreeSelection   *selection,
-                                                          gpointer            data);
-static void     gtk_entry_completion_insert_action       (GtkEntryCompletion *completion,
-                                                          gint                index,
-                                                          const gchar        *string,
-                                                          gboolean            markup);
-static void     gtk_entry_completion_action_data_func    (GtkTreeViewColumn  *tree_column,
-                                                          GtkCellRenderer    *cell,
-                                                          GtkTreeModel       *model,
-                                                          GtkTreeIter        *iter,
                                                           gpointer            data);
 
 static gboolean gtk_entry_completion_match_selected      (GtkEntryCompletion *completion,
@@ -311,23 +291,6 @@ gtk_entry_completion_class_init (GtkEntryCompletionClass *klass)
                   NULL, NULL,
                   NULL,
                   G_TYPE_NONE, 0);
-
-  /**
-   * GtkEntryCompletion::action-activated:
-   * @widget: the object which received the signal
-   * @index: the index of the activated action
-   *
-   * Gets emitted when an action is activated.
-   */
-  entry_completion_signals[ACTION_ACTIVATED] =
-    g_signal_new (I_("action-activated"),
-                  G_TYPE_FROM_CLASS (klass),
-                  G_SIGNAL_RUN_LAST,
-                  G_STRUCT_OFFSET (GtkEntryCompletionClass, action_activated),
-                  NULL, NULL,
-                  NULL,
-                  G_TYPE_NONE, 1,
-                  G_TYPE_INT);
 
   entry_completion_props[PROP_MODEL] =
       g_param_spec_object ("model",
@@ -553,32 +516,6 @@ gtk_entry_completion_constructed (GObject *object)
   gtk_widget_set_size_request (gtk_scrolled_window_get_vscrollbar (GTK_SCROLLED_WINDOW (priv->scrolled_window)),
                                -1, 0);
 
-  /* actions */
-  priv->actions = gtk_list_store_new (2, G_TYPE_STRING, G_TYPE_BOOLEAN);
-
-  priv->action_view =
-    gtk_tree_view_new_with_model (GTK_TREE_MODEL (priv->actions));
-  g_object_ref_sink (priv->action_view);
-  g_signal_connect (priv->action_view, "row-activated",
-                    G_CALLBACK (gtk_entry_completion_action_activated),
-                    completion);
-  gtk_tree_view_set_enable_search (GTK_TREE_VIEW (priv->action_view), FALSE);
-  gtk_tree_view_set_headers_visible (GTK_TREE_VIEW (priv->action_view), FALSE);
-  gtk_tree_view_set_hover_selection (GTK_TREE_VIEW (priv->action_view), TRUE);
-  gtk_tree_view_set_activate_on_single_click (GTK_TREE_VIEW (priv->action_view), TRUE);
-
-  sel = gtk_tree_view_get_selection (GTK_TREE_VIEW (priv->action_view));
-  gtk_tree_selection_set_mode (sel, GTK_SELECTION_SINGLE);
-  gtk_tree_selection_unselect_all (sel);
-
-  cell = gtk_cell_renderer_text_new ();
-  gtk_tree_view_insert_column_with_data_func (GTK_TREE_VIEW (priv->action_view),
-                                              0, "",
-                                              cell,
-                                              gtk_entry_completion_action_data_func,
-                                              NULL,
-                                              NULL);
-
   /* pack it all */
   priv->popup_window = gtk_popover_new ();
   gtk_popover_set_position (GTK_POPOVER (priv->popup_window), GTK_POS_BOTTOM);
@@ -602,19 +539,11 @@ gtk_entry_completion_constructed (GObject *object)
   popup_frame = gtk_frame_new (NULL);
   gtk_popover_set_child (GTK_POPOVER (priv->popup_window), popup_frame);
 
-  priv->vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-  gtk_frame_set_child (GTK_FRAME (popup_frame), priv->vbox);
-
   gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (priv->scrolled_window),
                                  priv->tree_view);
   gtk_widget_set_hexpand (priv->scrolled_window, TRUE);
   gtk_widget_set_vexpand (priv->scrolled_window, TRUE);
-  gtk_box_append (GTK_BOX (priv->vbox), priv->scrolled_window);
-
-  /* we don't want to see the action treeview when no actions have
-   * been inserted, so we pack the action treeview after the first
-   * action has been added
-   */
+  gtk_frame_set_child (GTK_FRAME (popup_frame), priv->scrolled_window);
 }
 
 
@@ -768,8 +697,6 @@ gtk_entry_completion_dispose (GObject *object)
   if (priv->entry)
     gtk_entry_set_completion (GTK_ENTRY (priv->entry), NULL);
 
-  g_clear_object (&priv->actions);
-  g_clear_object (&priv->action_view);
   g_clear_object (&priv->cell_area);
 
   G_OBJECT_CLASS (gtk_entry_completion_parent_class)->dispose (object);
@@ -887,54 +814,6 @@ gtk_entry_completion_list_activated (GtkTreeView       *treeview,
   g_signal_handler_unblock (text, completion->priv->changed_id);
 
   _gtk_entry_completion_popdown (completion);
-}
-
-static void
-gtk_entry_completion_action_activated (GtkTreeView       *treeview,
-                                       GtkTreePath       *path,
-                                       GtkTreeViewColumn *column,
-                                       gpointer           user_data)
-{
-  GtkEntryCompletion *completion = GTK_ENTRY_COMPLETION (user_data);
-
-  gtk_entry_reset_im_context (GTK_ENTRY (completion->priv->entry));
-
-  g_signal_emit (completion, entry_completion_signals[ACTION_ACTIVATED],
-                 0, gtk_tree_path_get_indices (path)[0]);
-
-  _gtk_entry_completion_popdown (completion);
-}
-
-static void
-gtk_entry_completion_action_data_func (GtkTreeViewColumn *tree_column,
-                                       GtkCellRenderer   *cell,
-                                       GtkTreeModel      *model,
-                                       GtkTreeIter       *iter,
-                                       gpointer           data)
-{
-  gchar *string = NULL;
-  gboolean markup;
-
-  gtk_tree_model_get (model, iter,
-                      0, &string,
-                      1, &markup,
-                      -1);
-
-  if (!string)
-    return;
-
-  if (markup)
-    g_object_set (cell,
-                  "text", NULL,
-                  "markup", string,
-                  NULL);
-  else
-    g_object_set (cell,
-                  "markup", NULL,
-                  "text", string,
-                  NULL);
-
-  g_free (string);
 }
 
 static void
@@ -1175,102 +1054,6 @@ gtk_entry_completion_complete (GtkEntryCompletion *completion)
     _gtk_entry_completion_resize_popup (completion);
 }
 
-static void
-gtk_entry_completion_insert_action (GtkEntryCompletion *completion,
-                                    gint                index,
-                                    const gchar        *string,
-                                    gboolean            markup)
-{
-  GtkTreeIter iter;
-
-  gtk_list_store_insert (completion->priv->actions, &iter, index);
-  gtk_list_store_set (completion->priv->actions, &iter,
-                      0, string,
-                      1, markup,
-                      -1);
-
-  if (!gtk_widget_get_parent (completion->priv->action_view))
-    {
-      GtkTreePath *path = gtk_tree_path_new_from_indices (0, -1);
-
-      gtk_tree_view_set_cursor (GTK_TREE_VIEW (completion->priv->action_view),
-                                path, NULL, FALSE);
-      gtk_tree_path_free (path);
-
-      gtk_box_append (GTK_BOX (completion->priv->vbox),
-                          completion->priv->action_view);
-      gtk_widget_show (completion->priv->action_view);
-    }
-}
-
-/**
- * gtk_entry_completion_insert_action_text:
- * @completion: a #GtkEntryCompletion
- * @index_: the index of the item to insert
- * @text: text of the item to insert
- *
- * Inserts an action in @completion’s action item list at position @index_
- * with text @text. If you want the action item to have markup, use
- * gtk_entry_completion_insert_action_markup().
- *
- * Note that @index_ is a relative position in the list of actions and
- * the position of an action can change when deleting a different action.
- */
-void
-gtk_entry_completion_insert_action_text (GtkEntryCompletion *completion,
-                                         gint                index_,
-                                         const gchar        *text)
-{
-  g_return_if_fail (GTK_IS_ENTRY_COMPLETION (completion));
-  g_return_if_fail (text != NULL);
-
-  gtk_entry_completion_insert_action (completion, index_, text, FALSE);
-}
-
-/**
- * gtk_entry_completion_insert_action_markup:
- * @completion: a #GtkEntryCompletion
- * @index_: the index of the item to insert
- * @markup: markup of the item to insert
- *
- * Inserts an action in @completion’s action item list at position @index_
- * with markup @markup.
- */
-void
-gtk_entry_completion_insert_action_markup (GtkEntryCompletion *completion,
-                                           gint                index_,
-                                           const gchar        *markup)
-{
-  g_return_if_fail (GTK_IS_ENTRY_COMPLETION (completion));
-  g_return_if_fail (markup != NULL);
-
-  gtk_entry_completion_insert_action (completion, index_, markup, TRUE);
-}
-
-/**
- * gtk_entry_completion_delete_action:
- * @completion: a #GtkEntryCompletion
- * @index_: the index of the item to delete
- *
- * Deletes the action at @index_ from @completion’s action list.
- *
- * Note that @index_ is a relative position and the position of an
- * action may have changed since it was inserted.
- */
-void
-gtk_entry_completion_delete_action (GtkEntryCompletion *completion,
-                                    gint                index_)
-{
-  GtkTreeIter iter;
-
-  g_return_if_fail (GTK_IS_ENTRY_COMPLETION (completion));
-  g_return_if_fail (index_ >= 0);
-
-  gtk_tree_model_iter_nth_child (GTK_TREE_MODEL (completion->priv->actions),
-                                 &iter, NULL, index_);
-  gtk_list_store_remove (completion->priv->actions, &iter);
-}
-
 /**
  * gtk_entry_completion_set_text_column:
  * @completion: a #GtkEntryCompletion
@@ -1333,14 +1116,12 @@ void
 _gtk_entry_completion_resize_popup (GtkEntryCompletion *completion)
 {
   GtkAllocation allocation;
-  gint matches, actions, items, height;
+  gint matches, items, height;
   GdkSurface *surface;
   GtkRequisition entry_req;
   GtkRequisition tree_req;
   GtkTreePath *path;
   gint width;
-  GtkTreeViewColumn *action_column;
-  gint action_height;
 
   surface = gtk_native_get_surface (gtk_widget_get_native (completion->priv->entry));
 
@@ -1355,8 +1136,6 @@ _gtk_entry_completion_resize_popup (GtkEntryCompletion *completion)
                                  &entry_req, NULL);
 
   matches = gtk_tree_model_iter_n_children (GTK_TREE_MODEL (completion->priv->filter_model), NULL);
-  actions = gtk_tree_model_iter_n_children (GTK_TREE_MODEL (completion->priv->actions), NULL);
-  action_column  = gtk_tree_view_get_column (GTK_TREE_VIEW (completion->priv->action_view), 0);
 
   /* Call get preferred size on the on the tree view to force it to validate its
    * cells before calling into the cell size functions.
@@ -1365,8 +1144,6 @@ _gtk_entry_completion_resize_popup (GtkEntryCompletion *completion)
                                  &tree_req, NULL);
   gtk_tree_view_column_cell_get_size (completion->priv->column,
                                       NULL, NULL, NULL, &height);
-  gtk_tree_view_column_cell_get_size (action_column,
-                                      NULL, NULL, NULL, &action_height);
 
   gtk_widget_realize (completion->priv->tree_view);
 
@@ -1386,11 +1163,6 @@ _gtk_entry_completion_resize_popup (GtkEntryCompletion *completion)
   gtk_scrolled_window_set_min_content_width (GTK_SCROLLED_WINDOW (completion->priv->scrolled_window), width);
   gtk_widget_set_size_request (completion->priv->popup_window, width, -1);
   gtk_scrolled_window_set_min_content_height (GTK_SCROLLED_WINDOW (completion->priv->scrolled_window), items * height);
-
-  if (actions)
-    gtk_widget_show (completion->priv->action_view);
-  else
-    gtk_widget_hide (completion->priv->action_view);
 
   if (matches > 0)
     {
@@ -1888,7 +1660,6 @@ gtk_entry_completion_timeout (gpointer data)
       >= completion->priv->minimum_key_length)
     {
       gint matches;
-      gint actions;
       GtkTreeSelection *s;
       gboolean popup_single;
 
@@ -1896,14 +1667,8 @@ gtk_entry_completion_timeout (gpointer data)
       matches = gtk_tree_model_iter_n_children (GTK_TREE_MODEL (completion->priv->filter_model), NULL);
       gtk_tree_selection_unselect_all (gtk_tree_view_get_selection (GTK_TREE_VIEW (completion->priv->tree_view)));
 
-      s = gtk_tree_view_get_selection (GTK_TREE_VIEW (completion->priv->action_view));
-
-      gtk_tree_selection_unselect_all (s);
-
-      actions = gtk_tree_model_iter_n_children (GTK_TREE_MODEL (completion->priv->actions), NULL);
-
       g_object_get (completion, "popup-single-match", &popup_single, NULL);
-      if ((matches > (popup_single ? 0: 1)) || actions > 0)
+      if (matches > (popup_single ? 0: 1))
         {
           if (gtk_widget_get_visible (completion->priv->popup_window))
             _gtk_entry_completion_resize_popup (completion);
@@ -1943,7 +1708,7 @@ gtk_entry_completion_key_pressed (GtkEventControllerKey *controller,
                                   GdkModifierType        state,
                                   gpointer               user_data)
 {
-  gint matches, actions = 0;
+  gint matches;
   GtkEntryCompletion *completion = GTK_ENTRY_COMPLETION (user_data);
   GtkWidget *widget = completion->priv->entry;
   GtkText *text = gtk_entry_get_text_widget (GTK_ENTRY (widget));
@@ -1968,9 +1733,6 @@ gtk_entry_completion_key_pressed (GtkEventControllerKey *controller,
 
   matches = gtk_tree_model_iter_n_children (GTK_TREE_MODEL (completion->priv->filter_model), NULL);
 
-  if (completion->priv->actions)
-    actions = gtk_tree_model_iter_n_children (GTK_TREE_MODEL (completion->priv->actions), NULL);
-
   if (keyval_is_cursor_move (keyval))
     {
       GtkTreePath *path = NULL;
@@ -1978,13 +1740,13 @@ gtk_entry_completion_key_pressed (GtkEventControllerKey *controller,
       if (keyval == GDK_KEY_Up || keyval == GDK_KEY_KP_Up)
         {
           if (completion->priv->current_selected < 0)
-            completion->priv->current_selected = matches + actions - 1;
+            completion->priv->current_selected = matches - 1;
           else
             completion->priv->current_selected--;
         }
       else if (keyval == GDK_KEY_Down || keyval == GDK_KEY_KP_Down)
         {
-          if (completion->priv->current_selected < matches + actions - 1)
+          if (completion->priv->current_selected < matches - 1)
             completion->priv->current_selected++;
           else
             completion->priv->current_selected = -1;
@@ -1992,7 +1754,7 @@ gtk_entry_completion_key_pressed (GtkEventControllerKey *controller,
       else if (keyval == GDK_KEY_Page_Up)
         {
           if (completion->priv->current_selected < 0)
-            completion->priv->current_selected = matches + actions - 1;
+            completion->priv->current_selected = matches - 1;
           else if (completion->priv->current_selected == 0)
             completion->priv->current_selected = -1;
           else if (completion->priv->current_selected < matches)
@@ -2018,22 +1780,21 @@ gtk_entry_completion_key_pressed (GtkEventControllerKey *controller,
               if (completion->priv->current_selected > matches - 1)
                 completion->priv->current_selected = matches - 1;
             }
-          else if (completion->priv->current_selected == matches + actions - 1)
+          else if (completion->priv->current_selected == matches - 1)
             {
               completion->priv->current_selected = -1;
             }
           else
             {
               completion->priv->current_selected += PAGE_STEP;
-              if (completion->priv->current_selected > matches + actions - 1)
-                completion->priv->current_selected = matches + actions - 1;
+              if (completion->priv->current_selected > matches - 1)
+                completion->priv->current_selected = matches - 1;
             }
         }
 
       if (completion->priv->current_selected < 0)
         {
           gtk_tree_selection_unselect_all (gtk_tree_view_get_selection (GTK_TREE_VIEW (completion->priv->tree_view)));
-          gtk_tree_selection_unselect_all (gtk_tree_view_get_selection (GTK_TREE_VIEW (completion->priv->action_view)));
 
           if (completion->priv->inline_selection &&
               completion->priv->completion_prefix)
@@ -2045,8 +1806,6 @@ gtk_entry_completion_key_pressed (GtkEventControllerKey *controller,
         }
       else if (completion->priv->current_selected < matches)
         {
-          gtk_tree_selection_unselect_all (gtk_tree_view_get_selection (GTK_TREE_VIEW (completion->priv->action_view)));
-
           path = gtk_tree_path_new_from_indices (completion->priv->current_selected, -1);
           gtk_tree_view_set_cursor (GTK_TREE_VIEW (completion->priv->tree_view),
                                     path, NULL, FALSE);
@@ -2071,22 +1830,6 @@ gtk_entry_completion_key_pressed (GtkEventControllerKey *controller,
 
               g_signal_emit_by_name (completion, "cursor-on-match", model,
                                      &child_iter, &entry_set);
-            }
-        }
-      else if (completion->priv->current_selected - matches >= 0)
-        {
-          gtk_tree_selection_unselect_all (gtk_tree_view_get_selection (GTK_TREE_VIEW (completion->priv->tree_view)));
-
-          path = gtk_tree_path_new_from_indices (completion->priv->current_selected - matches, -1);
-          gtk_tree_view_set_cursor (GTK_TREE_VIEW (completion->priv->action_view),
-                                    path, NULL, FALSE);
-
-          if (completion->priv->inline_selection &&
-              completion->priv->completion_prefix)
-            {
-              gtk_editable_set_text (GTK_EDITABLE (completion->priv->entry),
-                                     completion->priv->completion_prefix);
-              gtk_editable_set_position (GTK_EDITABLE (widget), -1);
             }
         }
 
@@ -2196,21 +1939,6 @@ keypress_completion_out:
                   gtk_editable_set_position (GTK_EDITABLE (widget), -1);
                   g_free (str);
                 }
-            }
-          else
-            retval = FALSE;
-        }
-      else if (completion->priv->current_selected - matches >= 0)
-        {
-          sel = gtk_tree_view_get_selection (GTK_TREE_VIEW (completion->priv->action_view));
-          if (gtk_tree_selection_get_selected (sel, &model, &iter))
-            {
-              GtkTreePath *path;
-
-              path = gtk_tree_path_new_from_indices (completion->priv->current_selected - matches, -1);
-              g_signal_emit_by_name (completion, "action-activated",
-                                     gtk_tree_path_get_indices (path)[0]);
-              gtk_tree_path_free (path);
             }
           else
             retval = FALSE;
