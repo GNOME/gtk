@@ -648,7 +648,7 @@ on_gl_surface_xevent (GdkGLContext   *context,
           case GL_TIMEOUT_EXPIRED:
             break;
           default:
-            g_assert_not_reached ();
+            g_error ("glClientWaitSync returned unexpected result: %x", (guint) wait_result);
         }
     }
 
