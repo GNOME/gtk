@@ -1,48 +1,22 @@
 #include <string.h>
 #include "iconbrowserapp.h"
 #include "iconbrowserwin.h"
-#include "iconstore.h"
+#include "iconbrowsericon.h"
+#include "iconbrowsercontext.h"
 #include <gtk/gtk.h>
 
-/* Drag 'n Drop */
-
-typedef struct
-{
-  gchar *id;
-  gchar *name;
-  gchar *description;
-} Context;
-
-static void
-context_free (gpointer data)
-{
-  Context *context = data;
-
-  g_free (context->id);
-  g_free (context->name);
-  g_free (context->description);
-  g_free (context);
-}
 
 struct _IconBrowserWindow
 {
   GtkApplicationWindow parent;
-  GHashTable *contexts;
 
-  GtkWidget *context_list;
-  Context *current_context;
-  gboolean symbolic;
   GtkWidget *symbolic_radio;
-  GtkTreeModelFilter *filter_model;
-  GtkWidget *details;
-
-  GtkListStore *store;
-  GtkCellRenderer *cell;
-  GtkCellRenderer *text_cell;
-  GtkWidget *search;
   GtkWidget *searchbar;
-  GtkWidget *searchentry;
-  GtkWidget *list;
+  GListModel *icon_filter_model;
+  GListStore *icon_store;
+  GListStore *context_store;
+  GtkFilter *name_filter;
+  GtkWidget *details;
   GtkWidget *image1;
   GtkWidget *image2;
   GtkWidget *image3;
@@ -69,87 +43,6 @@ icon_browser_window_get_icon_theme (IconBrowserWindow *win)
 }
 
 static void
-search_text_changed (GtkEntry *entry, IconBrowserWindow *win)
-{
-  const gchar *text;
-
-  text = gtk_editable_get_text (GTK_EDITABLE (entry));
-
-  if (text[0] == '\0')
-    return;
-
-  gtk_tree_model_filter_refilter (win->filter_model);
-}
-
-static void
-set_image (GtkWidget *image, const gchar *name, gint size)
-{
-  gtk_image_set_from_icon_name (GTK_IMAGE (image), name);
-  gtk_image_set_pixel_size (GTK_IMAGE (image), size);
-}
-
-static void
-item_activated (GtkIconView *icon_view, GtkTreePath *path, IconBrowserWindow *win)
-{
-  GtkIconTheme *icon_theme = icon_browser_window_get_icon_theme (win);
-  GtkTreeIter iter;
-  gchar *name;
-  gchar *description;
-  gint column;
-
-  gtk_tree_model_get_iter (GTK_TREE_MODEL (win->filter_model), &iter, path);
-
-  if (win->symbolic)
-    column = ICON_STORE_SYMBOLIC_NAME_COLUMN;
-  else
-    column = ICON_STORE_NAME_COLUMN;
-  gtk_tree_model_get (GTK_TREE_MODEL (win->filter_model), &iter,
-                      column, &name,
-                      ICON_STORE_DESCRIPTION_COLUMN, &description,
-                      -1);
-
-  if (name == NULL || !gtk_icon_theme_has_icon (icon_theme, name))
-    {
-      g_free (description);
-      return;
-    }
-
-  gtk_window_set_title (GTK_WINDOW (win->details), name);
-  set_image (win->image1, name, 8);
-  set_image (win->image2, name, 16);
-  set_image (win->image3, name, 18);
-  set_image (win->image4, name, 24);
-  set_image (win->image5, name, 32);
-  set_image (win->image6, name, 48);
-  set_image (win->image7, name, 64);
-  if (win->symbolic)
-    {
-      gtk_widget_show (win->image8);
-      gtk_widget_show (win->label8);
-      set_image (win->image8, name, 64);
-    }
-  else
-    {
-      gtk_widget_hide (win->image8);
-      gtk_widget_hide (win->label8);
-    }
-  if (description && description[0])
-    {
-      gtk_label_set_text (GTK_LABEL (win->description), description);
-      gtk_widget_show (win->description);
-    }
-  else
-    {
-      gtk_widget_hide (win->description);
-    }
-
-  gtk_window_present (GTK_WINDOW (win->details));
-
-  g_free (name);
-  g_free (description);
-}
-
-static void
 add_icon (IconBrowserWindow *win,
           const gchar       *name,
           const gchar       *description,
@@ -158,6 +51,7 @@ add_icon (IconBrowserWindow *win,
   GtkIconTheme *icon_theme = icon_browser_window_get_icon_theme (win);
   gchar *regular_name;
   gchar *symbolic_name;
+  IbIcon *icon;
 
   regular_name = g_strdup (name);
   if (!gtk_icon_theme_has_icon (icon_theme, regular_name))
@@ -173,12 +67,12 @@ add_icon (IconBrowserWindow *win,
       symbolic_name = NULL;
     }
 
-  gtk_list_store_insert_with_values (win->store, NULL, -1,
-                                     ICON_STORE_NAME_COLUMN, regular_name,
-                                     ICON_STORE_SYMBOLIC_NAME_COLUMN, symbolic_name,
-                                     ICON_STORE_DESCRIPTION_COLUMN, description,
-                                     ICON_STORE_CONTEXT_COLUMN, context,
-                                     -1);
+  icon = ib_icon_new (regular_name, symbolic_name, description, context);
+  g_object_bind_property (win->symbolic_radio, "active",
+                          icon, "use-symbolic",
+                          G_BINDING_DEFAULT);
+  g_list_store_append (win->icon_store, icon);
+  g_object_unref (icon);
 }
 
 static void
@@ -187,50 +81,11 @@ add_context (IconBrowserWindow *win,
              const gchar       *name,
              const gchar       *description)
 {
-  Context *c;
-  GtkWidget *row;
+  IbContext *context;
 
-  c = g_new (Context, 1);
-  c->id = g_strdup (id);
-  c->name = g_strdup (name);
-  c->description = g_strdup (description);
-
-  g_hash_table_insert (win->contexts, c->id, c);
-
-  row = gtk_label_new (name);
-  gtk_label_set_xalign (GTK_LABEL (row), 0);
-  g_object_set_data (G_OBJECT (row), "context", c);
-  gtk_widget_show (row);
-  gtk_widget_set_margin_start (row, 10);
-  gtk_widget_set_margin_end (row, 10);
-  gtk_widget_set_margin_top (row, 10);
-  gtk_widget_set_margin_bottom (row, 10);
-
-  gtk_list_box_insert (GTK_LIST_BOX (win->context_list), row, -1);
-
-  /* set the tooltip on the list box row */
-  row = gtk_widget_get_parent (row);
-  gtk_widget_set_tooltip_text (row, description);
-
-  if (win->current_context == NULL)
-    win->current_context = c;
-}
-
-static void
-selected_context_changed (GtkListBox *list, IconBrowserWindow *win)
-{
-  GtkWidget *row;
-  GtkWidget *label;
-
-  row = GTK_WIDGET (gtk_list_box_get_selected_row (list));
-  if (row == NULL)
-    return;
-
-  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (win->search), FALSE);
-
-  label = gtk_list_box_row_get_child (GTK_LIST_BOX_ROW (row));
-  win->current_context = g_object_get_data (G_OBJECT (label), "context");
-  gtk_tree_model_filter_refilter (win->filter_model);
+  context = ib_context_new (id, name, description);
+  g_list_store_append (win->context_store, context);
+  g_object_unref (context);
 }
 
 static void
@@ -282,6 +137,19 @@ populate (IconBrowserWindow *win)
   g_strfreev (groups);
 }
 
+static gboolean
+filter_by_icon_name (gpointer item,
+                     gpointer data)
+{
+  return ib_icon_get_name (IB_ICON (item)) != NULL;
+}
+
+static void
+symbolic_toggled (IconBrowserWindow *win)
+{
+  gtk_filter_changed (win->name_filter, GTK_FILTER_CHANGE_DIFFERENT);
+}
+
 static void
 copy_to_clipboard (GtkButton         *button,
                    IconBrowserWindow *win)
@@ -292,70 +160,60 @@ copy_to_clipboard (GtkButton         *button,
   gdk_clipboard_set_text (clipboard, gtk_window_get_title (GTK_WINDOW (win->details)));
 }
 
-static gboolean
-icon_visible_func (GtkTreeModel *model,
-                   GtkTreeIter  *iter,
-                   gpointer      data)
+static void
+set_image (GtkWidget *image, const gchar *name, gint size)
 {
-  IconBrowserWindow *win = data;
-  gchar *context;
-  gchar *name;
-  gint column;
-  gboolean search;
-  const gchar *search_text;
-  gboolean visible;
-
-  search = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (win->search));
-  search_text = gtk_editable_get_text (GTK_EDITABLE (win->searchentry));
-
-  if (win->symbolic)
-    column = ICON_STORE_SYMBOLIC_NAME_COLUMN;
-  else
-    column = ICON_STORE_NAME_COLUMN;
-
-  gtk_tree_model_get (model, iter,
-                      column, &name,
-                      ICON_STORE_CONTEXT_COLUMN, &context,
-                      -1);
-  if (!name)
-    visible = FALSE;
-  else if (search)
-    visible = strstr (name, search_text) != NULL;
-  else
-    visible = win->current_context != NULL && g_strcmp0 (context, win->current_context->id) == 0;
-
-  g_free (name);
-  g_free (context);
-
-  return visible;
+  gtk_image_set_from_icon_name (GTK_IMAGE (image), name);
+  gtk_image_set_pixel_size (GTK_IMAGE (image), size);
 }
 
 static void
-symbolic_toggled (GtkToggleButton *toggle, IconBrowserWindow *win)
+item_activated (GtkGridView       *view,
+                guint              position,
+                IconBrowserWindow *win)
 {
-  gint column;
+  GListModel *model = gtk_grid_view_get_model (view);
+  IbIcon *icon = g_list_model_get_item (model, position);
+  const char *name;
+  const char *description;
+  gboolean symbolic;
 
-  win->symbolic = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (toggle));
+  name = ib_icon_get_name (icon);
+  description = ib_icon_get_description (icon);
+  symbolic = ib_icon_get_use_symbolic (icon);
 
-  if (win->symbolic)
-    column = ICON_STORE_SYMBOLIC_NAME_COLUMN;
+  gtk_window_set_title (GTK_WINDOW (win->details), name);
+  set_image (win->image1, name, 8);
+  set_image (win->image2, name, 16);
+  set_image (win->image3, name, 18);
+  set_image (win->image4, name, 24);
+  set_image (win->image5, name, 32);
+  set_image (win->image6, name, 48);
+  set_image (win->image7, name, 64);
+  if (symbolic)
+    {
+      gtk_widget_show (win->image8);
+      gtk_widget_show (win->label8);
+      set_image (win->image8, name, 64);
+    }
   else
-    column = ICON_STORE_NAME_COLUMN;
+    {
+      gtk_widget_hide (win->image8);
+      gtk_widget_hide (win->label8);
+    }
+  if (description && description[0])
+    {
+      gtk_label_set_text (GTK_LABEL (win->description), description);
+      gtk_widget_show (win->description);
+    }
+  else
+    {
+      gtk_widget_hide (win->description);
+    }
 
-  icon_store_set_text_column (ICON_STORE (win->store), column);
+  gtk_window_present (GTK_WINDOW (win->details));
 
-  gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (win->list), win->cell, "icon-name", column, NULL);
-  gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (win->list), win->text_cell, "text", column, NULL);
-
-  gtk_tree_model_filter_refilter (win->filter_model);
-  gtk_widget_queue_draw (win->list);
-}
-
-static void
-search_mode_toggled (GObject *searchbar, GParamSpec *pspec, IconBrowserWindow *win)
-{
-  if (gtk_search_bar_get_search_mode (GTK_SEARCH_BAR (searchbar)))
-    gtk_list_box_unselect_all (GTK_LIST_BOX (win->context_list));
+  g_object_unref (icon);
 }
 
 static GdkPaintable *
@@ -381,7 +239,10 @@ get_image_paintable (GtkImage *image)
                                          gtk_widget_get_direction (GTK_WIDGET (image)),
                                          0);
       if (icon == NULL)
-        return NULL;
+        {
+g_print ("no icon for %s\n", icon_name);
+          return NULL;
+        }
       return GDK_PAINTABLE (icon);
     case GTK_IMAGE_GICON:
     case GTK_IMAGE_EMPTY:
@@ -419,10 +280,10 @@ drag_prepare_texture (GtkDragSource *source,
 {
   GdkPaintable *paintable = get_image_paintable (GTK_IMAGE (widget));
 
-  if (!GDK_IS_TEXTURE (paintable))
+  if (!GDK_IS_PAINTABLE (paintable))
     return NULL;
 
-  return gdk_content_provider_new_typed (GDK_TYPE_TEXTURE, paintable);
+  return gdk_content_provider_new_typed (GDK_TYPE_PAINTABLE, paintable);
 }
 
 static GdkContentProvider *
@@ -476,16 +337,9 @@ setup_scalable_image_dnd (GtkWidget *image)
 static void
 icon_browser_window_init (IconBrowserWindow *win)
 {
-  GdkContentFormats *list;
+  GtkFilter *filter;
 
   gtk_widget_init_template (GTK_WIDGET (win));
-
-  list = gdk_content_formats_new_for_gtype (G_TYPE_STRING);
-  gtk_icon_view_enable_model_drag_source (GTK_ICON_VIEW (win->list),
-                                          GDK_BUTTON1_MASK,
-                                          list,
-                                          GDK_ACTION_COPY);
-  gdk_content_formats_unref (list);
 
   setup_image_dnd (win->image1);
   setup_image_dnd (win->image2);
@@ -496,19 +350,16 @@ icon_browser_window_init (IconBrowserWindow *win)
   setup_image_dnd (win->image7);
   setup_scalable_image_dnd (win->image8);
 
-  win->contexts = g_hash_table_new_full (g_str_hash, g_str_equal, NULL, context_free);
-
-  gtk_tree_model_filter_set_visible_func (win->filter_model, icon_visible_func, win, NULL);
   gtk_window_set_transient_for (GTK_WINDOW (win->details), GTK_WINDOW (win));
-
-  g_signal_connect (win->searchbar, "notify::search-mode-enabled",
-                    G_CALLBACK (search_mode_toggled), win);
-  gtk_search_bar_set_key_capture_widget (GTK_SEARCH_BAR (win->searchbar),
-                                         GTK_WIDGET (win));
-
-  symbolic_toggled (GTK_TOGGLE_BUTTON (win->symbolic_radio), win);
+  gtk_search_bar_set_key_capture_widget (GTK_SEARCH_BAR (win->searchbar), GTK_WIDGET (win));
 
   populate (win);
+
+  filter = gtk_filter_list_model_get_filter (GTK_FILTER_LIST_MODEL (win->icon_filter_model));
+
+  win->name_filter = gtk_custom_filter_new (filter_by_icon_name, NULL, NULL);
+
+  gtk_multi_filter_append (GTK_MULTI_FILTER (filter), g_object_ref (win->name_filter));
 }
 
 static void
@@ -516,7 +367,7 @@ icon_browser_window_finalize (GObject *object)
 {
   IconBrowserWindow *win = ICON_BROWSER_WINDOW (object);
 
-  g_hash_table_unref (win->contexts);
+  g_clear_object (&win->name_filter);
 
   G_OBJECT_CLASS (icon_browser_window_parent_class)->finalize (object);
 }
@@ -528,23 +379,19 @@ icon_browser_window_class_init (IconBrowserWindowClass *class)
 
   object_class->finalize = icon_browser_window_finalize;
 
-  g_type_ensure (ICON_STORE_TYPE);
+  g_type_ensure (IB_TYPE_ICON);
+  g_type_ensure (IB_TYPE_CONTEXT);
 
   gtk_widget_class_set_template_from_resource (GTK_WIDGET_CLASS (class),
                                                "/org/gtk/iconbrowser/gtk/window.ui");
 
-  gtk_widget_class_bind_template_child (GTK_WIDGET_CLASS (class), IconBrowserWindow, context_list);
-  gtk_widget_class_bind_template_child (GTK_WIDGET_CLASS (class), IconBrowserWindow, filter_model);
   gtk_widget_class_bind_template_child (GTK_WIDGET_CLASS (class), IconBrowserWindow, symbolic_radio);
-  gtk_widget_class_bind_template_child (GTK_WIDGET_CLASS (class), IconBrowserWindow, details);
-
-  gtk_widget_class_bind_template_child (GTK_WIDGET_CLASS (class), IconBrowserWindow, store);
-  gtk_widget_class_bind_template_child (GTK_WIDGET_CLASS (class), IconBrowserWindow, cell);
-  gtk_widget_class_bind_template_child (GTK_WIDGET_CLASS (class), IconBrowserWindow, text_cell);
-  gtk_widget_class_bind_template_child (GTK_WIDGET_CLASS (class), IconBrowserWindow, search);
   gtk_widget_class_bind_template_child (GTK_WIDGET_CLASS (class), IconBrowserWindow, searchbar);
-  gtk_widget_class_bind_template_child (GTK_WIDGET_CLASS (class), IconBrowserWindow, searchentry);
-  gtk_widget_class_bind_template_child (GTK_WIDGET_CLASS (class), IconBrowserWindow, list);
+  gtk_widget_class_bind_template_child (GTK_WIDGET_CLASS (class), IconBrowserWindow, icon_store);
+  gtk_widget_class_bind_template_child (GTK_WIDGET_CLASS (class), IconBrowserWindow, icon_filter_model);
+  gtk_widget_class_bind_template_child (GTK_WIDGET_CLASS (class), IconBrowserWindow, context_store);
+
+  gtk_widget_class_bind_template_child (GTK_WIDGET_CLASS (class), IconBrowserWindow, details);
   gtk_widget_class_bind_template_child (GTK_WIDGET_CLASS (class), IconBrowserWindow, image1);
   gtk_widget_class_bind_template_child (GTK_WIDGET_CLASS (class), IconBrowserWindow, image2);
   gtk_widget_class_bind_template_child (GTK_WIDGET_CLASS (class), IconBrowserWindow, image3);
@@ -556,11 +403,9 @@ icon_browser_window_class_init (IconBrowserWindowClass *class)
   gtk_widget_class_bind_template_child (GTK_WIDGET_CLASS (class), IconBrowserWindow, label8);
   gtk_widget_class_bind_template_child (GTK_WIDGET_CLASS (class), IconBrowserWindow, description);
 
-  gtk_widget_class_bind_template_callback (GTK_WIDGET_CLASS (class), search_text_changed);
   gtk_widget_class_bind_template_callback (GTK_WIDGET_CLASS (class), item_activated);
-  gtk_widget_class_bind_template_callback (GTK_WIDGET_CLASS (class), selected_context_changed);
-  gtk_widget_class_bind_template_callback (GTK_WIDGET_CLASS (class), symbolic_toggled);
   gtk_widget_class_bind_template_callback (GTK_WIDGET_CLASS (class), copy_to_clipboard);
+  gtk_widget_class_bind_template_callback (GTK_WIDGET_CLASS (class), symbolic_toggled);
 }
 
 IconBrowserWindow *
