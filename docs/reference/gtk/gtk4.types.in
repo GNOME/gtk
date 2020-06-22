@@ -211,6 +211,7 @@ gtk_stack_switcher_get_type
 gtk_statusbar_get_type
 gtk_string_filter_get_type
 gtk_string_list_get_type
+gtk_string_object_get_type
 gtk_string_sorter_get_type
 gtk_switch_get_type
 gtk_level_bar_get_type

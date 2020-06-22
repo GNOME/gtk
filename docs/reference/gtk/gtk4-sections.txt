@@ -7560,4 +7560,6 @@ gtk_drop_down_get_type
 <TITLE>GtkStringList</TITLE>
 GtkStringList
 gtk_string_list_new
+GtkStringObject
+gtk_string_object_get_string
 </SECTION>
