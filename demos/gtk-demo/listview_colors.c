@@ -1,12 +1,17 @@
 /* Lists/Colors
  *
- * This demo displays a list of named colors.
+ * This demo displays a grid of colors.
  *
  * It is using a GtkGridView, and shows how to display
  * and sort the data in various ways. The controls for
  * this are implemented using GtkDropDown.
  *
- * The dataset used here has 9 283 items.
+ * The dataset used here has up to 16 777 216 items.
+ *
+ * Note that this demo also functions as a performance
+ * test for some of the list model machinery, and biggest
+ * sizes here can lock up the application for extended
+ * times when used with sorting.
  */
 
 #include <gtk/gtk.h>
