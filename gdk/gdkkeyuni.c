@@ -878,11 +878,15 @@ static const struct {
 
 /**
  * gdk_keyval_to_unicode:
- * @keyval: a GDK key symbol 
- * 
+ * @keyval: a GDK key symbol
+ *
  * Convert from a GDK key symbol to the corresponding ISO10646 (Unicode)
  * character.
- * 
+ *
+ * Note that the conversion does not take the current locale
+ * into consideration, which might be expected for particular
+ * keyvals, such as %GDK_KEY_KP_Decimal.
+ *
  * Returns: the corresponding unicode character, or 0 if there
  *               is no corresponding character.
  **/
