@@ -11412,7 +11412,7 @@ gtk_widget_add_controller (GtkWidget          *widget,
   g_ptr_array_add (priv->controllers, controller);
 
   if (priv->controller_observer)
-    gtk_list_list_model_item_added_at (priv->controller_observer, 0);
+    gtk_list_list_model_item_added_at (priv->controller_observer, priv->controllers->len - 1);
 }
 
 /**
