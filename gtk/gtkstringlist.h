@@ -32,9 +32,12 @@
 
 G_BEGIN_DECLS
 
-#define GTK_TYPE_STRING_HOLDER (gtk_string_holder_get_type ())
+#define GTK_TYPE_STRING_OBJECT (gtk_string_object_get_type ())
 GDK_AVAILABLE_IN_ALL
-G_DECLARE_FINAL_TYPE (GtkStringHolder, gtk_string_holder, GTK, STRING_HOLDER, GObject)
+G_DECLARE_FINAL_TYPE (GtkStringObject, gtk_string_object, GTK, STRING_OBJECT, GObject)
+
+GDK_AVAILABLE_IN_ALL
+const char *         gtk_string_object_get_string (GtkStringObject *self);
 
 #define GTK_TYPE_STRING_LIST (gtk_string_list_get_type ())
 

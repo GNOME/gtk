@@ -21,6 +21,8 @@
 
 #include "gtkstringlist.h"
 
+#include "gtkbuildable.h"
+#include "gtkbuilderprivate.h"
 #include "gtkintl.h"
 #include "gtkprivate.h"
 
@@ -30,12 +32,12 @@
  * @short_description: A list model for strings
  * @see_also: #GListModel
  *
- * #GtkStringList is a list model that wraps a %NULL-terminated array of strings.
+ * #GtkStringList is a list model that wraps an array of strings.
  *
  * The objects in the model have a "string" property.
  */
 
-struct _GtkStringHolder
+struct _GtkStringObject
 {
   GObject parent_instance;
   char *string;
@@ -46,36 +48,36 @@ enum {
   PROP_NUM_PROPERTIES
 };
 
-G_DEFINE_TYPE (GtkStringHolder, gtk_string_holder, G_TYPE_OBJECT);
+G_DEFINE_TYPE (GtkStringObject, gtk_string_object, G_TYPE_OBJECT);
 
 static void
-gtk_string_holder_init (GtkStringHolder *holder)
+gtk_string_object_init (GtkStringObject *object)
 {
 }
 
 static void
-gtk_string_holder_finalize (GObject *object)
+gtk_string_object_finalize (GObject *object)
 {
-  GtkStringHolder *holder = GTK_STRING_HOLDER (object);
+  GtkStringObject *self = GTK_STRING_OBJECT (object);
 
-  g_free (holder->string);
+  g_free (self->string);
 
-  G_OBJECT_CLASS (gtk_string_holder_parent_class)->finalize (object);
+  G_OBJECT_CLASS (gtk_string_object_parent_class)->finalize (object);
 }
 
 static void
-gtk_string_holder_set_property (GObject      *object,
+gtk_string_object_set_property (GObject      *object,
                                 guint         property_id,
                                 const GValue *value,
                                 GParamSpec   *pspec)
 {
-  GtkStringHolder *holder = GTK_STRING_HOLDER (object);
+  GtkStringObject *self = GTK_STRING_OBJECT (object);
 
   switch (property_id)
     {
     case PROP_STRING:
-      g_free (holder->string);
-      holder->string = g_value_dup_string (value);
+      g_free (self->string);
+      self->string = g_value_dup_string (value);
       break;
 
     default:
@@ -85,17 +87,17 @@ gtk_string_holder_set_property (GObject      *object,
 }
 
 static void
-gtk_string_holder_get_property (GObject    *object,
+gtk_string_object_get_property (GObject    *object,
                                 guint       property_id,
                                 GValue     *value,
                                 GParamSpec *pspec)
 {
-  GtkStringHolder *holder = GTK_STRING_HOLDER (object);
+  GtkStringObject *self = GTK_STRING_OBJECT (object);
 
   switch (property_id)
     {
     case PROP_STRING:
-      g_value_set_string (value, holder->string);
+      g_value_set_string (value, self->string);
       break;
 
     default:
@@ -104,16 +106,15 @@ gtk_string_holder_get_property (GObject    *object,
     }
 }
 
-
 static void
-gtk_string_holder_class_init (GtkStringHolderClass *class)
+gtk_string_object_class_init (GtkStringObjectClass *class)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (class);
   GParamSpec *pspec;
 
-  object_class->finalize = gtk_string_holder_finalize;
-  object_class->set_property = gtk_string_holder_set_property;
-  object_class->get_property = gtk_string_holder_get_property;
+  object_class->finalize = gtk_string_object_finalize;
+  object_class->set_property = gtk_string_object_set_property;
+  object_class->get_property = gtk_string_object_get_property;
 
   pspec = g_param_spec_string ("string", "String", "String",
                                NULL,
@@ -125,12 +126,27 @@ gtk_string_holder_class_init (GtkStringHolderClass *class)
 
 }
 
-static GtkStringHolder *
-gtk_string_holder_new (const char *string)
+static GtkStringObject *
+gtk_string_object_new (const char *string)
 {
-  return g_object_new (GTK_TYPE_STRING_HOLDER, "string", string, NULL);
+  return g_object_new (GTK_TYPE_STRING_OBJECT, "string", string, NULL);
 }
 
+/**
+ * gtk_string_object_get_string:
+ * @self: a #GtkStringObject
+ *
+ * Returns the string contained in a #GtkStringObject.
+ *
+ * Returns: the string of @self
+ */
+const char *
+gtk_string_object_get_string (GtkStringObject *self)
+{
+  g_return_val_if_fail (GTK_IS_STRING_OBJECT (self), NULL);
+
+  return self->string;
+}
 
 struct _GtkStringList
 {
@@ -181,8 +197,176 @@ gtk_string_list_model_init (GListModelInterface *iface)
   iface->get_item = gtk_string_list_get_item;
 }
 
+typedef struct
+{
+  GtkBuilder    *builder;
+  GtkStringList *list;
+  GString       *string;
+  const gchar   *domain;
+  gchar         *context;
+
+  guint          translatable : 1;
+  guint          is_text      : 1;
+} ItemParserData;
+
+static void
+item_start_element (GtkBuildableParseContext  *context,
+                    const gchar               *element_name,
+                    const gchar              **names,
+                    const gchar              **values,
+                    gpointer                   user_data,
+                    GError                   **error)
+{
+  ItemParserData *data = (ItemParserData*)user_data;
+
+  if (strcmp (element_name, "items") == 0)
+    {
+      if (!_gtk_builder_check_parent (data->builder, context, "object", error))
+        return;
+
+      if (!g_markup_collect_attributes (element_name, names, values, error,
+                                        G_MARKUP_COLLECT_INVALID, NULL, NULL,
+                                        G_MARKUP_COLLECT_INVALID))
+        _gtk_builder_prefix_error (data->builder, context, error);
+    }
+  else if (strcmp (element_name, "item") == 0)
+    {
+      gboolean translatable = FALSE;
+      const gchar *msg_context = NULL;
+
+      if (!_gtk_builder_check_parent (data->builder, context, "items", error))
+        return;
+
+      if (!g_markup_collect_attributes (element_name, names, values, error,
+                                        G_MARKUP_COLLECT_BOOLEAN|G_MARKUP_COLLECT_OPTIONAL, "translatable", &translatable,
+                                        G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "comments", NULL,
+                                        G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "context", &msg_context,
+                                        G_MARKUP_COLLECT_INVALID))
+        {
+          _gtk_builder_prefix_error (data->builder, context, error);
+          return;
+        }
+
+      data->is_text = TRUE;
+      data->translatable = translatable;
+      data->context = g_strdup (msg_context);
+    }
+  else
+    {
+      _gtk_builder_error_unhandled_tag (data->builder, context,
+                                        "GtkStringList", element_name,
+                                        error);
+    }
+}
+
+static void
+item_text (GtkBuildableParseContext  *context,
+           const gchar               *text,
+           gsize                      text_len,
+           gpointer                   user_data,
+           GError                   **error)
+{
+  ItemParserData *data = (ItemParserData*)user_data;
+
+  if (data->is_text)
+    g_string_append_len (data->string, text, text_len);
+}
+
+static void
+item_end_element (GtkBuildableParseContext  *context,
+                  const gchar               *element_name,
+                  gpointer                   user_data,
+                  GError                   **error)
+{
+  ItemParserData *data = (ItemParserData*)user_data;
+
+  /* Append the translated strings */
+  if (data->string->len)
+    {
+      if (data->translatable)
+        {
+          const char *translated;
+
+          translated = _gtk_builder_parser_translate (data->domain,
+                                                      data->context,
+                                                      data->string->str);
+          g_string_assign (data->string, translated);
+        }
+
+      g_sequence_append (data->list->items, gtk_string_object_new (data->string->str));
+    }
+
+  data->translatable = FALSE;
+  g_string_set_size (data->string, 0);
+  g_clear_pointer (&data->context, g_free);
+  data->is_text = FALSE;
+}
+
+static const GtkBuildableParser item_parser =
+{
+  item_start_element,
+  item_end_element,
+  item_text
+};
+
+static gboolean
+gtk_string_list_buildable_custom_tag_start (GtkBuildable       *buildable,
+                                            GtkBuilder         *builder,
+                                            GObject            *child,
+                                            const gchar        *tagname,
+                                            GtkBuildableParser *parser,
+                                            gpointer           *parser_data)
+{
+  if (strcmp (tagname, "items") == 0)
+    {
+      ItemParserData *data;
+
+      data = g_slice_new0 (ItemParserData);
+      data->builder = g_object_ref (builder);
+      data->list = g_object_ref (GTK_STRING_LIST (buildable));
+      data->domain = gtk_builder_get_translation_domain (builder);
+      data->string = g_string_new ("");
+
+      *parser = item_parser;
+      *parser_data = data;
+
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
+static void
+gtk_string_list_buildable_custom_finished (GtkBuildable *buildable,
+                                           GtkBuilder   *builder,
+                                           GObject      *child,
+                                           const gchar  *tagname,
+                                           gpointer      user_data)
+{
+  if (strcmp (tagname, "items") == 0)
+    {
+      ItemParserData *data;
+
+      data = (ItemParserData*)user_data;
+      g_object_unref (data->list);
+      g_object_unref (data->builder);
+      g_string_free (data->string, TRUE);
+      g_slice_free (ItemParserData, data);
+    }
+}
+
+static void
+gtk_string_list_buildable_init (GtkBuildableIface *iface)
+{
+  iface->custom_tag_start = gtk_string_list_buildable_custom_tag_start;
+  iface->custom_finished = gtk_string_list_buildable_custom_finished;
+}
+
 G_DEFINE_TYPE_WITH_CODE (GtkStringList, gtk_string_list, G_TYPE_OBJECT,
-                         G_IMPLEMENT_INTERFACE (G_TYPE_LIST_MODEL, gtk_string_list_model_init))
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
+                                                gtk_string_list_buildable_init)
+                         G_IMPLEMENT_INTERFACE (G_TYPE_LIST_MODEL,
+                                                gtk_string_list_model_init))
 
 static void
 gtk_string_list_dispose (GObject *object)
@@ -230,7 +414,7 @@ gtk_string_list_new (const char * const *strings,
       guint i;
 
       for (i = 0; (length == -1 || i < length) && strings[i]; i++)
-        g_sequence_append (list->items, gtk_string_holder_new (strings[i]));
+        g_sequence_append (list->items, gtk_string_object_new (strings[i]));
     }
 
   return list;
