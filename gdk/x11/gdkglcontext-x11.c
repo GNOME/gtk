@@ -606,6 +606,14 @@ on_gl_surface_xevent (GdkGLContext   *context,
     {
       GLenum wait_result;
 
+      /* We don't care if the passed context is the current context,
+       * necessarily, but we do care that *some* context is bound,
+       * otherwise, the GL dispatch layer will make glClientWaitSync()
+       * silently return 0.
+       */
+      if (glXGetCurrentContext () == NULL)
+        gdk_gl_context_make_current (context);
+
       wait_result = glClientWaitSync (context_x11->frame_fence, 0, 0);
 
       switch (wait_result)
