@@ -964,7 +964,7 @@ gtk_drop_down_set_from_strings (GtkDropDown       *self,
 
   set_default_factory (self);
 
-  expression = gtk_property_expression_new (GTK_TYPE_STRING_HOLDER, NULL, "string");
+  expression = gtk_property_expression_new (GTK_TYPE_STRING_OBJECT, NULL, "string");
   gtk_drop_down_set_expression (self, expression);
   gtk_expression_unref (expression);
 
