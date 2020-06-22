@@ -207,8 +207,6 @@ GdkModifierType
 GDK_MODIFIER_MASK
 
 <SUBSECTION>
-gdk_surface_get_support_multidevice
-gdk_surface_set_support_multidevice
 gdk_surface_get_device_cursor
 gdk_surface_set_device_cursor
 

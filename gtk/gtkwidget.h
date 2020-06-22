@@ -596,14 +596,6 @@ GDK_AVAILABLE_IN_ALL
 gboolean gtk_widget_compute_expand       (GtkWidget      *widget,
                                           GtkOrientation  orientation);
 
-
-/* Multidevice support */
-GDK_AVAILABLE_IN_ALL
-gboolean         gtk_widget_get_support_multidevice (GtkWidget      *widget);
-GDK_AVAILABLE_IN_ALL
-void             gtk_widget_set_support_multidevice (GtkWidget      *widget,
-                                                     gboolean        support_multidevice);
-
 /* Accessibility support */
 GDK_AVAILABLE_IN_ALL
 void             gtk_widget_class_set_accessible_type    (GtkWidgetClass     *widget_class,

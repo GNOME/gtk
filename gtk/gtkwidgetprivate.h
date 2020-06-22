@@ -84,7 +84,6 @@ struct _GtkWidgetPrivate
   guint has_grab              : 1;
   guint shadowed              : 1;
   guint child_visible         : 1;
-  guint multidevice           : 1;
   guint can_target            : 1;
 
   /* Queue-resize related flags */

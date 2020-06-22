@@ -3355,13 +3355,6 @@ gtk_widget_realize (GtkWidget *widget)
 
   g_signal_emit (widget, widget_signals[REALIZE], 0);
 
-  if (priv->multidevice)
-    {
-      GdkSurface *surface = gtk_widget_get_surface (widget);
-
-      gdk_surface_set_support_multidevice (surface, TRUE);
-    }
-
   if (priv->context)
     gtk_style_context_set_scale (priv->context, gtk_widget_get_scale_factor (widget));
   else
@@ -7746,13 +7739,6 @@ gtk_widget_propagate_state (GtkWidget          *widget,
               device = devices[i];
               surface = _gtk_widget_get_device_surface (widget, device);
 
-              /* Do not propagate more than once to the
-               * same surface if non-multidevice aware.
-               */
-              if (!gdk_surface_get_support_multidevice (surface) &&
-                  g_list_find (event_surfaces, surface))
-                continue;
-
               if (!gtk_widget_is_sensitive (widget))
                 _gtk_widget_synthesize_crossing (widget, NULL, device,
                                                  GDK_CROSSING_STATE_CHANGED);
@@ -10218,54 +10204,6 @@ gtk_widget_get_allocated_baseline (GtkWidget *widget)
   get_box_padding (style, &padding);
 
   return priv->baseline - margin.top - border.top - padding.top;
-}
-
-/**
- * gtk_widget_get_support_multidevice:
- * @widget: a #GtkWidget
- *
- * Returns %TRUE if @widget is multiple pointer aware. See
- * gtk_widget_set_support_multidevice() for more information.
- *
- * Returns: %TRUE if @widget is multidevice aware.
- **/
-gboolean
-gtk_widget_get_support_multidevice (GtkWidget *widget)
-{
-  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
-
-  g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
-
-  return priv->multidevice;
-}
-
-/**
- * gtk_widget_set_support_multidevice:
- * @widget: a #GtkWidget
- * @support_multidevice: %TRUE to support input from multiple devices.
- *
- * Enables or disables multiple pointer awareness. If this setting is %TRUE,
- * @widget will start receiving multiple, per device enter/leave events. Note
- * that if custom #GdkSurfaces are created in #GtkWidget::realize,
- * gdk_surface_set_support_multidevice() will have to be called manually on them.
- **/
-void
-gtk_widget_set_support_multidevice (GtkWidget *widget,
-                                    gboolean   support_multidevice)
-{
-  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
-
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-
-  priv->multidevice = (support_multidevice == TRUE);
-
-  if (_gtk_widget_get_realized (widget))
-    {
-      GdkSurface *surface = gtk_widget_get_surface (widget);
-
-      if (surface)
-        gdk_surface_set_support_multidevice (surface, support_multidevice);
-    }
 }
 
 /**

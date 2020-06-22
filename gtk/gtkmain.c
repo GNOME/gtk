@@ -1885,32 +1885,15 @@ synth_crossing_for_grab_notify (GtkWidget        *from,
       GdkDevice *device = devices[i];
       GdkSurface *from_surface, *to_surface;
 
-      /* Do not propagate events more than once to
-       * the same surfaces if non-multidevice aware.
-       */
       if (!from)
         from_surface = NULL;
       else
-        {
-          from_surface = _gtk_widget_get_device_surface (from, device);
-
-          if (from_surface &&
-              !gdk_surface_get_support_multidevice (from_surface) &&
-              g_list_find (info->notified_surfaces, from_surface))
-            from_surface = NULL;
-        }
+        from_surface = _gtk_widget_get_device_surface (from, device);
 
       if (!to)
         to_surface = NULL;
       else
-        {
-          to_surface = _gtk_widget_get_device_surface (to, device);
-
-          if (to_surface &&
-              !gdk_surface_get_support_multidevice (to_surface) &&
-              g_list_find (info->notified_surfaces, to_surface))
-            to_surface = NULL;
-        }
+        to_surface = _gtk_widget_get_device_surface (to, device);
 
       if (from_surface || to_surface)
         {

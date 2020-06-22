@@ -2186,53 +2186,6 @@ gdk_surface_beep (GdkSurface *surface)
   gdk_display_beep (surface->display);
 }
 
-/**
- * gdk_surface_set_support_multidevice:
- * @surface: a #GdkSurface.
- * @support_multidevice: %TRUE to enable multidevice support in @surface.
- *
- * This function will enable multidevice features in @surface.
- *
- * Multidevice aware surfaces will need to handle properly multiple,
- * per device enter/leave events, device grabs and grab ownerships.
- **/
-void
-gdk_surface_set_support_multidevice (GdkSurface *surface,
-                                     gboolean   support_multidevice)
-{
-  g_return_if_fail (GDK_IS_SURFACE (surface));
-
-  if (GDK_SURFACE_DESTROYED (surface))
-    return;
-
-  if (surface->support_multidevice == support_multidevice)
-    return;
-
-  surface->support_multidevice = support_multidevice;
-
-  /* FIXME: What to do if called when some pointers are inside the surface ? */
-}
-
-/**
- * gdk_surface_get_support_multidevice:
- * @surface: a #GdkSurface.
- *
- * Returns %TRUE if the surface is aware of the existence of multiple
- * devices.
- *
- * Returns: %TRUE if the surface handles multidevice features.
- **/
-gboolean
-gdk_surface_get_support_multidevice (GdkSurface *surface)
-{
-  g_return_val_if_fail (GDK_IS_SURFACE (surface), FALSE);
-
-  if (GDK_SURFACE_DESTROYED (surface))
-    return FALSE;
-
-  return surface->support_multidevice;
-}
-
 void
 _gdk_display_set_surface_under_pointer (GdkDisplay *display,
                                         GdkDevice  *device,
