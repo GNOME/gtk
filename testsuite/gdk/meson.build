@@ -3,6 +3,7 @@ testdatadir = join_paths(installed_test_datadir, 'gdk')
 
 tests = [
   'cairo',
+  'clipboard',
   'display',
   'encoding',
   'keysyms',
