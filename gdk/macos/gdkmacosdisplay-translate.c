@@ -734,7 +734,7 @@ find_surface_under_pointer (GdkMacosDisplay *self,
                                         gdk_seat_get_pointer (seat));
   surface = info->surface_under_pointer;
 
-  if (!surface)
+  if (surface == NULL)
     {
       GdkMacosSurface *found;
 
