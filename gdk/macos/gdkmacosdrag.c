@@ -59,7 +59,7 @@ static void
 gdk_macos_zoomback_destroy (GdkMacosZoomback *zb)
 {
   gdk_surface_hide (GDK_SURFACE (zb->drag->drag_surface));
-  g_object_unref (zb->drag);
+  g_clear_object (&zb->drag);
   g_slice_free (GdkMacosZoomback, zb);
 }
 
@@ -206,9 +206,12 @@ drag_grab (GdkMacosDrag *self)
 static void
 drag_ungrab (GdkMacosDrag *self)
 {
+  GdkDisplay *display;
+
   g_assert (GDK_IS_MACOS_DRAG (self));
 
-  gdk_seat_ungrab (self->drag_seat);
+  display = gdk_drag_get_display (GDK_DRAG (self));
+  _gdk_macos_display_break_all_grabs (GDK_MACOS_DISPLAY (display), GDK_CURRENT_TIME);
 }
 
 static void
@@ -219,10 +222,12 @@ gdk_macos_drag_cancel (GdkDrag             *drag,
 
   g_assert (GDK_IS_MACOS_DRAG (self));
 
-  drag_ungrab (self);
-  gdk_drag_drop_done (drag, FALSE);
+  if (self->cancelled)
+    return;
 
   self->cancelled = TRUE;
+  drag_ungrab (self);
+  gdk_drag_drop_done (drag, FALSE);
 }
 
 static void
@@ -233,6 +238,9 @@ gdk_macos_drag_drop_performed (GdkDrag *drag,
 
   g_assert (GDK_IS_MACOS_DRAG (self));
 
+  drag_ungrab (self);
+  g_signal_emit_by_name (drag, "dnd-finished");
+  gdk_drag_drop_done (drag, TRUE);
 }
 
 static void
@@ -358,7 +366,6 @@ gdk_dnd_handle_grab_broken_event (GdkDrag  *drag,
                                   GdkEvent *event)
 {
   GdkMacosDrag *self = GDK_MACOS_DRAG (drag);
-
   gboolean is_implicit = gdk_grab_broken_event_get_implicit (event);
   GdkSurface *grab_surface = gdk_grab_broken_event_get_grab_surface (event);
 
