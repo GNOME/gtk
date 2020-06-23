@@ -301,7 +301,7 @@
 {
   inShowOrHide = YES;
 
-  if (makeKey)
+  if (makeKey && [self canBecomeKeyWindow])
     [self makeKeyAndOrderFront:nil];
   else
     [self orderFront:nil];
