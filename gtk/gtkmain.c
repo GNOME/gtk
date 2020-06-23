@@ -1887,12 +1887,12 @@ synth_crossing_for_grab_notify (GtkWidget        *from,
       if (!from)
         from_surface = NULL;
       else
-        from_surface = _gtk_widget_get_device_surface (from, device);
+        from_surface = gtk_native_get_surface (gtk_widget_get_native (from));
 
       if (!to)
         to_surface = NULL;
       else
-        to_surface = _gtk_widget_get_device_surface (to, device);
+        to_surface = gtk_native_get_surface (gtk_widget_get_native (to));
 
       if (from_surface || to_surface)
         {

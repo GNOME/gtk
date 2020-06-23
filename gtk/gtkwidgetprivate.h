@@ -257,8 +257,6 @@ void              _gtk_widget_propagate_display_changed    (GtkWidget  *widget,
 void              _gtk_widget_set_device_surface           (GtkWidget *widget,
                                                             GdkDevice *device,
                                                             GdkSurface *pointer_window);
-GdkSurface *       _gtk_widget_get_device_surface          (GtkWidget *widget,
-                                                            GdkDevice *device);
 GdkDevice **       _gtk_widget_list_devices                 (GtkWidget *widget,
                                                              guint     *out_n_devices);
 

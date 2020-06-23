@@ -7559,32 +7559,6 @@ is_my_surface (GtkWidget *widget,
 }
 
 /*
- * _gtk_widget_get_device_surface:
- * @widget: a #GtkWidget
- * @device: a #GdkDevice
- *
- * Returns: (nullable): the surface of @widget that @device is in, or %NULL
- */
-GdkSurface *
-_gtk_widget_get_device_surface (GtkWidget *widget,
-				GdkDevice *device)
-{
-  GdkSurface *surface;
-
-  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
-  g_return_val_if_fail (GDK_IS_DEVICE (device), NULL);
-
-  if (gdk_device_get_source (device) == GDK_SOURCE_KEYBOARD)
-    return NULL;
-
-  surface = gdk_device_get_last_event_surface (device);
-  if (surface && is_my_surface (widget, surface))
-    return surface;
-  else
-    return NULL;
-}
-
-/*
  * _gtk_widget_list_devices:
  * @widget: a #GtkWidget
  *
@@ -7666,19 +7640,14 @@ _gtk_widget_synthesize_crossing (GtkWidget       *from,
     {
       crossing.direction = GTK_CROSSING_OUT;
 
-      from_surface = _gtk_widget_get_device_surface (from, device);
-      if (!from_surface)
-        from_surface = gtk_widget_get_surface (from);
-
+      from_surface = gtk_widget_get_surface (from);
       gdk_surface_get_device_position (from_surface, device, &x, &y, NULL);
       gtk_widget_handle_crossing (from, &crossing, x, y);
     }
 
   if (to)
     {
-      to_surface = _gtk_widget_get_device_surface (to, device);
-      if (!to_surface)
-        to_surface = gtk_widget_get_surface (to);
+      to_surface = gtk_widget_get_surface (to);
 
       crossing.direction = GTK_CROSSING_IN;
       gdk_surface_get_device_position (to_surface, device, &x, &y, NULL);
