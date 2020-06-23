@@ -7727,17 +7727,14 @@ gtk_widget_propagate_state (GtkWidget          *widget,
         {
           guint i, n_devices;
           GdkDevice **devices;
-          GList *event_surfaces = NULL;
 
           devices = _gtk_widget_list_devices (widget, &n_devices);
 
           for (i = 0; i < n_devices; i++)
             {
-              GdkSurface *surface;
               GdkDevice *device;
 
               device = devices[i];
-              surface = _gtk_widget_get_device_surface (widget, device);
 
               if (!gtk_widget_is_sensitive (widget))
                 _gtk_widget_synthesize_crossing (widget, NULL, device,
@@ -7745,11 +7742,8 @@ gtk_widget_propagate_state (GtkWidget          *widget,
               else
                 _gtk_widget_synthesize_crossing (NULL, widget, device,
                                                  GDK_CROSSING_STATE_CHANGED);
-
-              event_surfaces = g_list_prepend (event_surfaces, surface);
             }
 
-          g_list_free (event_surfaces);
           g_free (devices);
         }
 
