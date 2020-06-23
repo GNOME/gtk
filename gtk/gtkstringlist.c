@@ -35,6 +35,26 @@
  * #GtkStringList is a list model that wraps an array of strings.
  *
  * The objects in the model have a "string" property.
+ *
+ * # GtkStringList as GtkBuildable
+ *
+ * The GtkStringList implementation of the GtkBuildable interface
+ * supports adding items directly using the <items> element and
+ * specifying <item> elements for each item. Each <item> element
+ * supports the regular translation attributes “translatable”,
+ * “context” and “comments”.
+ *
+ * Here is a UI definition fragment specifying a GtkStringList
+ * |[
+ * <object class="GtkStringList">
+ *   <items>
+ *     <item translatable="yes">Factory</item>
+ *     <item translatable="yes">Home</item>
+ *     <item translatable="yes">Subway</item>
+ *   </items>
+ * </object>
+ * ]|
+
  */
 
 struct _GtkStringObject
