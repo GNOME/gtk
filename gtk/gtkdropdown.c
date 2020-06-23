@@ -580,7 +580,7 @@ bind_item (GtkSignalListItemFactory *factory,
 
   if (self->expression == NULL)
     {
-      g_critical ("Either GtkDropDown::factory or GtkDropDown::expression must be set");
+      g_critical ("Either GtkDropDown:factory or GtkDropDown:expression must be set");
       return;
     }
 
@@ -968,7 +968,7 @@ gtk_drop_down_set_from_strings (GtkDropDown       *self,
   gtk_drop_down_set_expression (self, expression);
   gtk_expression_unref (expression);
 
-  model = G_LIST_MODEL (gtk_string_list_new (texts, -1));
+  model = G_LIST_MODEL (gtk_string_list_new_from_strv ((const char **)texts));
   gtk_drop_down_set_model (self, model);
   g_object_unref (model);
 }
