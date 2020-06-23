@@ -3830,8 +3830,8 @@ gdk_wayland_surface_show_window_menu (GdkSurface *surface,
   GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
   GdkWaylandDisplay *display_wayland =
     GDK_WAYLAND_DISPLAY (gdk_surface_get_display (surface));
-  struct wl_seat *seat;
-  GdkWaylandDevice *device;
+  GdkSeat *seat;
+  struct wl_seat *wl_seat;
   double x, y;
   uint32_t serial;
 
@@ -3850,21 +3850,21 @@ gdk_wayland_surface_show_window_menu (GdkSurface *surface,
   if (!is_realized_toplevel (surface))
     return FALSE;
 
-  device = GDK_WAYLAND_DEVICE (gdk_event_get_device (event));
-  seat = gdk_wayland_device_get_wl_seat (GDK_DEVICE (device));
+  seat = gdk_event_get_seat (event);
+  wl_seat = gdk_wayland_seat_get_wl_seat (seat);
   gdk_event_get_position (event, &x, &y);
 
-  serial = _gdk_wayland_device_get_implicit_grab_serial (device, event);
+  serial = _gdk_wayland_seat_get_implicit_grab_serial (seat, event);
 
   switch (display_wayland->shell_variant)
     {
     case GDK_WAYLAND_SHELL_VARIANT_XDG_SHELL:
       xdg_toplevel_show_window_menu (impl->display_server.xdg_toplevel,
-                                     seat, serial, x, y);
+                                     wl_seat, serial, x, y);
       break;
     case GDK_WAYLAND_SHELL_VARIANT_ZXDG_SHELL_V6:
       zxdg_toplevel_v6_show_window_menu (impl->display_server.zxdg_toplevel_v6,
-                                         seat, serial, x, y);
+                                         wl_seat, serial, x, y);
       break;
     default:
       g_assert_not_reached ();

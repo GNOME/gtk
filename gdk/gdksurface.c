@@ -2947,11 +2947,9 @@ gdk_surface_get_seat_from_event (GdkSurface *surface,
 {
   if (event)
     {
-      GdkDevice *device = gdk_event_get_device (event);
       GdkSeat *seat = NULL;
 
-      if (device)
-        seat = gdk_device_get_seat (device);
+      seat = gdk_event_get_seat (event);
 
       if (seat)
         return seat;

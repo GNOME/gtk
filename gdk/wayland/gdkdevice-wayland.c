@@ -4886,10 +4886,9 @@ _gdk_wayland_display_remove_seat (GdkWaylandDisplay *display_wayland,
 }
 
 uint32_t
-_gdk_wayland_device_get_implicit_grab_serial (GdkWaylandDevice *device,
-                                              GdkEvent         *event)
+_gdk_wayland_seat_get_implicit_grab_serial (GdkSeat  *seat,
+                                            GdkEvent *event)
 {
-  GdkSeat *seat = gdk_device_get_seat (GDK_DEVICE (device));
   GdkEventSequence *sequence = NULL;
   GdkWaylandTouchData *touch = NULL;
 
