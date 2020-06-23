@@ -31,33 +31,11 @@
 G_BEGIN_DECLS
 
 typedef struct _GtkEntryCompletionClass       GtkEntryCompletionClass;
-typedef struct _GtkEntryCompletionPrivate     GtkEntryCompletionPrivate;
 
 struct _GtkEntryCompletion
 {
   GObject parent_instance;
 
-  /*< private >*/
-  GtkEntryCompletionPrivate *priv;
-};
-
-struct _GtkEntryCompletionClass
-{
-  GObjectClass parent_class;
-
-  gboolean (* match_selected)   (GtkEntryCompletion *completion,
-                                 GtkTreeModel       *model,
-                                 GtkTreeIter        *iter);
-  gboolean (* insert_prefix)    (GtkEntryCompletion *completion,
-                                 const gchar        *prefix);
-  gboolean (* cursor_on_match)  (GtkEntryCompletion *completion,
-                                 GtkTreeModel       *model,
-                                 GtkTreeIter        *iter);
-  void     (* no_matches)       (GtkEntryCompletion *completion);
-};
-
-struct _GtkEntryCompletionPrivate
-{
   GtkWidget *entry;
 
   GtkWidget *tree_view;
@@ -101,13 +79,30 @@ struct _GtkEntryCompletionPrivate
   GSource *check_completion_idle;
 };
 
+struct _GtkEntryCompletionClass
+{
+  GObjectClass parent_class;
+
+  gboolean (* match_selected)   (GtkEntryCompletion *completion,
+                                 GtkTreeModel       *model,
+                                 GtkTreeIter        *iter);
+  void     (* action_activated) (GtkEntryCompletion *completion,
+                                 gint                index_);
+  gboolean (* insert_prefix)    (GtkEntryCompletion *completion,
+                                 const gchar        *prefix);
+  gboolean (* cursor_on_match)  (GtkEntryCompletion *completion,
+                                 GtkTreeModel       *model,
+                                 GtkTreeIter        *iter);
+  void     (* no_matches)       (GtkEntryCompletion *completion);
+};
+
 void     _gtk_entry_completion_resize_popup (GtkEntryCompletion *completion);
 void     _gtk_entry_completion_popdown      (GtkEntryCompletion *completion);
 void     _gtk_entry_completion_connect      (GtkEntryCompletion *completion,
                                              GtkEntry           *entry);
 void     _gtk_entry_completion_disconnect   (GtkEntryCompletion *completion);
 
-GtkIMContext* _gtk_entry_get_im_context    (GtkEntry  *entry);
+GtkIMContext * _gtk_entry_get_im_context    (GtkEntry  *entry);
 GtkEventController * gtk_entry_get_key_controller (GtkEntry *entry);
 GtkText *gtk_entry_get_text_widget (GtkEntry *entry);
 

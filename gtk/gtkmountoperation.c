@@ -60,6 +60,7 @@
 #include "gtkshortcuttrigger.h"
 #include "gtkshortcutaction.h"
 #include "gtkshortcut.h"
+#include "gtkliststore.h"
 #include <glib/gprintf.h>
 
 /**

@@ -61,6 +61,7 @@
 #include "gtkdialog.h"
 #include "gtkintl.h"
 #include "gtkmarshalers.h"
+#include "gtkliststore.h"
 
 enum {
   PROP_SHOW_DIALOG_ITEM = 1,
