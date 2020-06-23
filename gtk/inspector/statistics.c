@@ -31,6 +31,7 @@
 #include "gtktreeview.h"
 #include "gtkeventcontrollerkey.h"
 #include "gtkmain.h"
+#include "gtkliststore.h"
 
 #include <glib/gi18n-lib.h>
 
