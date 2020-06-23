@@ -44,6 +44,7 @@
 #include "gtklistitem.h"
 #include "gtkbuildable.h"
 #include "gtkbuilderprivate.h"
+#include "gtkstringlist.h"
 
 /**
  * SECTION:gtkdropdown
@@ -68,26 +69,6 @@
  * GtkDropDown can optionally allow search in the popup, which is
  * useful if the list of options is long. To enable the search entry,
  * use gtk_drop_down_set_enable_search().
- *
- * # GtkDropDown as GtkBuildable
- *
- * The GtkDropDown implementation of the GtkBuildable interface supports
- * adding items directly using the <items> element and specifying <item>
- * elements for each item. Using <items> is equivalent to calling
- * gtk_drop_down_set_from_strings(). Each <item> element supports
- * the regular translation attributes “translatable”, “context”
- * and “comments”.
- *
- * Here is a UI definition fragment specifying GtkDropDown items:
- * |[
- * <object class="GtkDropDown">
- *   <items>
- *     <item translatable="yes">Factory</item>
- *     <item translatable="yes">Home</item>
- *     <item translatable="yes">Subway</item>
- *   </items>
- * </object>
- * ]|
  *
  * * # CSS nodes
  *
@@ -138,13 +119,7 @@ enum
   N_PROPS
 };
 
-static void gtk_drop_down_buildable_interface_init (GtkBuildableIface *iface);
-
-static GtkBuildableIface *buildable_parent_iface = NULL;
-
-G_DEFINE_TYPE_WITH_CODE (GtkDropDown, gtk_drop_down, GTK_TYPE_WIDGET,
-                         G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
-                                                gtk_drop_down_buildable_interface_init))
+G_DEFINE_TYPE (GtkDropDown, gtk_drop_down, GTK_TYPE_WIDGET)
 
 static GParamSpec *properties[N_PROPS] = { NULL, };
 
@@ -577,19 +552,25 @@ bind_item (GtkSignalListItemFactory *factory,
   GtkWidget *label;
   GValue value = G_VALUE_INIT;
 
-  if (self->expression == NULL)
-    {
-      g_critical ("Either GtkDropDown::factory or GtkDropDown::expression must be set");
-      return;
-    }
-
   item = gtk_list_item_get_item (list_item);
   label = gtk_list_item_get_child (list_item);
 
-  if (gtk_expression_evaluate (self->expression, item, &value))
+  if (self->expression &&
+      gtk_expression_evaluate (self->expression, item, &value))
     {
       gtk_label_set_label (GTK_LABEL (label), g_value_get_string (&value));
       g_value_unset (&value);
+    }
+  else if (GTK_IS_STRING_OBJECT (item))
+    {
+      const char *string;
+
+      string = gtk_string_object_get_string (GTK_STRING_OBJECT (item));
+      gtk_label_set_label (GTK_LABEL (label), string);
+    }
+  else
+    {
+      g_critical ("Either GtkDropDown:factory or GtkDropDown:expression must be set");
     }
 }
 
@@ -943,118 +924,6 @@ gtk_drop_down_get_expression (GtkDropDown *self)
   return self->expression;
 }
 
-
-#define GTK_TYPE_DROP_DOWN_STRING_HOLDER (gtk_drop_down_string_holder_get_type ())
-G_DECLARE_FINAL_TYPE (GtkDropDownStringHolder, gtk_drop_down_string_holder, GTK, DROP_DOWN_STRING_HOLDER, GObject)
-
-struct _GtkDropDownStringHolder {
-  GObject parent_instance;
-  char *string;
-};
-
-enum {
-  PROP_STRING = 1,
-  PROP_NUM_PROPERTIES
-};
-
-G_DEFINE_TYPE (GtkDropDownStringHolder, gtk_drop_down_string_holder, G_TYPE_OBJECT);
-
-static void
-gtk_drop_down_string_holder_init (GtkDropDownStringHolder *holder)
-{
-}
-
-static void
-gtk_drop_down_string_holder_finalize (GObject *object)
-{
-  GtkDropDownStringHolder *holder = GTK_DROP_DOWN_STRING_HOLDER (object);
-
-  g_free (holder->string);
-
-  G_OBJECT_CLASS (gtk_drop_down_string_holder_parent_class)->finalize (object);
-}
-
-static void
-gtk_drop_down_string_holder_set_property (GObject      *object,
-                                          guint         property_id,
-                                          const GValue *value,
-                                          GParamSpec   *pspec)
-{
-  GtkDropDownStringHolder *holder = GTK_DROP_DOWN_STRING_HOLDER (object);
-
-  switch (property_id)
-    {
-    case PROP_STRING:
-      g_free (holder->string);
-      holder->string = g_value_dup_string (value);
-      break;
-
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
-      break;
-    }
-}
-
-static void
-gtk_drop_down_string_holder_get_property (GObject      *object,
-                                          guint         property_id,
-                                          GValue       *value,
-                                          GParamSpec   *pspec)
-{
-  GtkDropDownStringHolder *holder = GTK_DROP_DOWN_STRING_HOLDER (object);
-
-  switch (property_id)
-    {
-    case PROP_STRING:
-      g_value_set_string (value, holder->string);
-      break;
-
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
-      break;
-    }
-}
-
-static void
-gtk_drop_down_string_holder_class_init (GtkDropDownStringHolderClass *class)
-{
-  GObjectClass *object_class = G_OBJECT_CLASS (class);
-  GParamSpec *pspec;
-
-  object_class->finalize = gtk_drop_down_string_holder_finalize;
-  object_class->set_property = gtk_drop_down_string_holder_set_property;
-  object_class->get_property = gtk_drop_down_string_holder_get_property;
-
-  pspec = g_param_spec_string ("string", "String", "String",
-                               NULL,
-                               G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
-
-  g_object_class_install_property (object_class, PROP_STRING, pspec);
-
-}
-
-static GtkDropDownStringHolder *
-gtk_drop_down_string_holder_new (const char *string)
-{
-  return g_object_new (GTK_TYPE_DROP_DOWN_STRING_HOLDER, "string", string, NULL);
-}
-
-static GListModel *
-gtk_drop_down_strings_model_new (const char *const *text)
-{
-  GListStore *store;
-  int i;
-
-  store = g_list_store_new (GTK_TYPE_DROP_DOWN_STRING_HOLDER);
-  for (i = 0; text[i]; i++)
-    {
-      GtkDropDownStringHolder *holder = gtk_drop_down_string_holder_new (text[i]);
-      g_list_store_append (store, holder);
-      g_object_unref (holder);
-    }
-  return G_LIST_MODEL (store);
-}
-
 /**
  * gtk_drop_down_set_from_strings:
  * @self: a #GtkDropDown
@@ -1067,7 +936,6 @@ void
 gtk_drop_down_set_from_strings (GtkDropDown       *self,
                                 const char *const *texts)
 {
-  GtkExpression *expression;
   GListModel *model;
 
   g_return_if_fail (GTK_IS_DROP_DOWN (self));
@@ -1075,193 +943,7 @@ gtk_drop_down_set_from_strings (GtkDropDown       *self,
 
   set_default_factory (self);
 
-  expression = gtk_property_expression_new (GTK_TYPE_DROP_DOWN_STRING_HOLDER, NULL, "string");
-  gtk_drop_down_set_expression (self, expression);
-  gtk_expression_unref (expression);
-
-  model = gtk_drop_down_strings_model_new (texts);
+  model = G_LIST_MODEL (gtk_string_list_new ((const char **)texts));
   gtk_drop_down_set_model (self, model);
   g_object_unref (model);
-}
-
-typedef struct {
-  GtkBuilder    *builder;
-  GObject       *object;
-  const gchar   *domain;
-
-  gchar         *context;
-  guint          translatable : 1;
-  guint          is_text : 1;
-
-  GString       *string;
-  GPtrArray     *strings;
-} ItemParserData;
-
-static void
-item_start_element (GtkBuildableParseContext  *context,
-                    const gchar               *element_name,
-                    const gchar              **names,
-                    const gchar              **values,
-                    gpointer                   user_data,
-                    GError                   **error)
-{
-  ItemParserData *data = (ItemParserData*)user_data;
-
-  if (strcmp (element_name, "items") == 0)
-    {
-      if (!_gtk_builder_check_parent (data->builder, context, "object", error))
-        return;
-
-      if (!g_markup_collect_attributes (element_name, names, values, error,
-                                        G_MARKUP_COLLECT_INVALID, NULL, NULL,
-                                        G_MARKUP_COLLECT_INVALID))
-        _gtk_builder_prefix_error (data->builder, context, error);
-    }
-  else if (strcmp (element_name, "item") == 0)
-    {
-      gboolean translatable = FALSE;
-      const gchar *msg_context = NULL;
-
-      if (!_gtk_builder_check_parent (data->builder, context, "items", error))
-        return;
-
-      if (!g_markup_collect_attributes (element_name, names, values, error,
-                                        G_MARKUP_COLLECT_BOOLEAN|G_MARKUP_COLLECT_OPTIONAL, "translatable", &translatable,
-                                        G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "comments", NULL,
-                                        G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "context", &msg_context,
-                                        G_MARKUP_COLLECT_INVALID))
-        {
-          _gtk_builder_prefix_error (data->builder, context, error);
-          return;
-        }
-
-      data->is_text = TRUE;
-      data->translatable = translatable;
-      data->context = g_strdup (msg_context);
-    }
-  else
-    {
-      _gtk_builder_error_unhandled_tag (data->builder, context,
-                                        "GtkDropDown", element_name,
-                                        error);
-    }
-}
-
-static void
-item_text (GtkBuildableParseContext  *context,
-           const gchar               *text,
-           gsize                      text_len,
-           gpointer                   user_data,
-           GError                   **error)
-{
-  ItemParserData *data = (ItemParserData*)user_data;
-
-  if (data->is_text)
-    g_string_append_len (data->string, text, text_len);
-}
-
-static void
-item_end_element (GtkBuildableParseContext  *context,
-                  const gchar               *element_name,
-                  gpointer                   user_data,
-                  GError                   **error)
-{
-  ItemParserData *data = (ItemParserData*)user_data;
-
-  /* Append the translated strings */
-  if (data->string->len)
-    {
-      if (data->translatable)
-        {
-          const gchar *translated;
-
-          translated = _gtk_builder_parser_translate (data->domain,
-                                                      data->context,
-                                                      data->string->str);
-          g_string_assign (data->string, translated);
-        }
-
-      g_ptr_array_add (data->strings, g_strdup (data->string->str));
-    }
-
-  data->translatable = FALSE;
-  g_string_set_size (data->string, 0);
-  g_clear_pointer (&data->context, g_free);
-  data->is_text = FALSE;
-}
-
-static const GtkBuildableParser item_parser =
-{
-  item_start_element,
-  item_end_element,
-  item_text
-};
-
-static gboolean
-gtk_drop_down_buildable_custom_tag_start (GtkBuildable       *buildable,
-                                          GtkBuilder         *builder,
-                                          GObject            *child,
-                                          const gchar        *tagname,
-                                          GtkBuildableParser *parser,
-                                          gpointer           *parser_data)
-{
-  if (buildable_parent_iface->custom_tag_start (buildable, builder, child,
-                                                tagname, parser, parser_data))
-    return TRUE;
-
-  if (strcmp (tagname, "items") == 0)
-    {
-      ItemParserData *data;
-
-      data = g_slice_new0 (ItemParserData);
-      data->builder = g_object_ref (builder);
-      data->object = g_object_ref (G_OBJECT (buildable));
-      data->domain = gtk_builder_get_translation_domain (builder);
-      data->string = g_string_new ("");
-      data->strings = g_ptr_array_new_with_free_func (g_free);
-
-      *parser = item_parser;
-      *parser_data = data;
-
-      return TRUE;
-    }
-
-  return FALSE;
-}
-
-static void
-gtk_drop_down_buildable_custom_finished (GtkBuildable *buildable,
-                                         GtkBuilder   *builder,
-                                         GObject      *child,
-                                         const gchar  *tagname,
-                                         gpointer      user_data)
-{
-  ItemParserData *data;
-
-  buildable_parent_iface->custom_finished (buildable, builder, child,
-                                           tagname, user_data);
-
-  if (strcmp (tagname, "items") == 0)
-    {
-      data = (ItemParserData*)user_data;
-
-      g_ptr_array_add (data->strings, NULL);
-
-      gtk_drop_down_set_from_strings (GTK_DROP_DOWN (data->object), (const char **)data->strings->pdata);
-
-      g_object_unref (data->object);
-      g_object_unref (data->builder);
-      g_string_free (data->string, TRUE);
-      g_ptr_array_unref (data->strings);
-      g_slice_free (ItemParserData, data);
-    }
-}
-
-static void
-gtk_drop_down_buildable_interface_init (GtkBuildableIface *iface)
-{
-  buildable_parent_iface = g_type_interface_peek_parent (iface);
-
-  iface->custom_tag_start = gtk_drop_down_buildable_custom_tag_start;
-  iface->custom_finished = gtk_drop_down_buildable_custom_finished;
 }

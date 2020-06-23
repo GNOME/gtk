@@ -58,6 +58,7 @@ tests = [
   ['sorter'],
   ['sortlistmodel'],
   ['spinbutton'],
+  ['stringlist'],
   ['templates'],
   ['textbuffer'],
   ['textiter'],
