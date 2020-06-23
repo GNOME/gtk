@@ -2807,6 +2807,7 @@ draw_insertion_cursor (GtkStyleContext *context,
                        gdouble          x,
                        gdouble          y,
                        gdouble          height,
+                       float            aspect_ratio,
                        gboolean         is_primary,
                        PangoDirection   direction,
                        gboolean         draw_arrow)
@@ -2814,7 +2815,6 @@ draw_insertion_cursor (GtkStyleContext *context,
 {
   GdkRGBA primary_color;
   GdkRGBA secondary_color;
-  gfloat cursor_aspect_ratio;
   gint stem_width;
   gint offset;
 
@@ -2828,11 +2828,7 @@ draw_insertion_cursor (GtkStyleContext *context,
    * propagate the changes to gtktextview.c:text_window_invalidate_cursors().
    */
 
-  gtk_style_context_get_style (context,
-                               "cursor-aspect-ratio", &cursor_aspect_ratio,
-                               NULL);
-
-  stem_width = height * cursor_aspect_ratio + 1;
+  stem_width = height * aspect_ratio + 1;
 
   /* put (stem_width % 2) on the proper side of the cursor */
   if (direction == PANGO_DIRECTION_LTR)
@@ -2902,6 +2898,7 @@ gtk_render_insertion_cursor (GtkStyleContext *context,
 {
   GtkStyleContextPrivate *priv;
   gboolean split_cursor;
+  float aspect_ratio;
   PangoRectangle strong_pos, weak_pos;
   PangoRectangle *cursor1, *cursor2;
   PangoDirection keymap_direction;
@@ -2916,6 +2913,7 @@ gtk_render_insertion_cursor (GtkStyleContext *context,
 
   g_object_get (gtk_settings_get_for_screen (priv->screen),
                 "gtk-split-cursor", &split_cursor,
+                "gtk-cursor-aspect-ratio", &aspect_ratio,
                 NULL);
 
   keymap_direction = gdk_keymap_get_direction (gdk_keymap_get_for_display (gdk_screen_get_display (priv->screen)));
@@ -2947,6 +2945,7 @@ gtk_render_insertion_cursor (GtkStyleContext *context,
                          x + PANGO_PIXELS (cursor1->x),
                          y + PANGO_PIXELS (cursor1->y),
                          PANGO_PIXELS (cursor1->height),
+                         aspect_ratio,
                          TRUE,
                          direction,
                          direction2 != PANGO_DIRECTION_NEUTRAL);
@@ -2958,6 +2957,7 @@ gtk_render_insertion_cursor (GtkStyleContext *context,
                              x + PANGO_PIXELS (cursor2->x),
                              y + PANGO_PIXELS (cursor2->y),
                              PANGO_PIXELS (cursor2->height),
+                             aspect_ratio,
                              FALSE,
                              direction2,
                              TRUE);
@@ -2990,6 +2990,7 @@ gtk_draw_insertion_cursor (GtkWidget          *widget,
                            gboolean            draw_arrow)
 {
   GtkStyleContext *context;
+  float aspect_ratio;
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (cr != NULL);
@@ -2998,8 +2999,13 @@ gtk_draw_insertion_cursor (GtkWidget          *widget,
 
   context = gtk_widget_get_style_context (widget);
 
+  g_object_get (gtk_settings_get_for_screen (context->priv->screen),
+                "gtk-cursor-aspect-ratio", &aspect_ratio,
+                NULL);
+
   draw_insertion_cursor (context, cr,
                          location->x, location->y, location->height,
+                         aspect_ratio,
                          is_primary,
                          (direction == GTK_TEXT_DIR_RTL) ? PANGO_DIRECTION_RTL : PANGO_DIRECTION_LTR,
                          draw_arrow);
