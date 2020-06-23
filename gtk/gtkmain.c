@@ -1867,7 +1867,6 @@ typedef struct
   gboolean   is_grabbed;
   gboolean   from_grab;
   GList     *notified_surfaces;
-  GdkDevice *device;
 } GrabNotifyInfo;
 
 static void
@@ -1942,16 +1941,7 @@ gtk_grab_notify_foreach (GtkWidget *child,
         }
     }
 
-  if (info->device &&
-      _gtk_widget_get_device_surface (child, info->device))
-    {
-      /* Device specified and is on widget */
-      devices = g_new (GdkDevice *, 1);
-      devices[0] = info->device;
-      n_devices = 1;
-    }
-  else
-    devices = _gtk_widget_list_devices (child, &n_devices);
+  devices = _gtk_widget_list_devices (child, &n_devices);
 
   if (is_shadowed)
     {
@@ -1985,7 +1975,6 @@ gtk_grab_notify_foreach (GtkWidget *child,
 
 static void
 gtk_grab_notify (GtkWindowGroup *group,
-                 GdkDevice      *device,
                  GtkWidget      *old_grab_widget,
                  GtkWidget      *new_grab_widget,
                  gboolean        from_grab)
@@ -1999,7 +1988,6 @@ gtk_grab_notify (GtkWindowGroup *group,
   info.old_grab_widget = old_grab_widget;
   info.new_grab_widget = new_grab_widget;
   info.from_grab = from_grab;
-  info.device = device;
 
   g_object_ref (group);
 
@@ -2055,7 +2043,7 @@ gtk_grab_add (GtkWidget *widget)
       g_object_ref (widget);
       _gtk_window_group_add_grab (group, widget);
 
-      gtk_grab_notify (group, NULL, old_grab_widget, widget, TRUE);
+      gtk_grab_notify (group, old_grab_widget, widget, TRUE);
     }
 }
 
@@ -2085,7 +2073,7 @@ gtk_grab_remove (GtkWidget *widget)
       _gtk_window_group_remove_grab (group, widget);
       new_grab_widget = gtk_window_group_get_current_grab (group);
 
-      gtk_grab_notify (group, NULL, widget, new_grab_widget, FALSE);
+      gtk_grab_notify (group, widget, new_grab_widget, FALSE);
 
       g_object_unref (widget);
     }
