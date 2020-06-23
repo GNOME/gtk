@@ -393,7 +393,7 @@ gtk_string_list_init (GtkStringList *self)
 }
 
 /**
- * gtk_string_list_new:
+ * gtk_string_list_new_from_strv:
  * @strings: (allow-none): The strings to put in the model
  * @length: length @strings, or -1 if @strings i %NULL-terminated
  *
@@ -402,20 +402,122 @@ gtk_string_list_init (GtkStringList *self)
  * Returns: a new #GtkStringList
  **/
 GtkStringList *
-gtk_string_list_new (const char * const *strings,
-                     int                 length)
+gtk_string_list_new_from_strv (const char **strings)
 {
-  GtkStringList *list;
+  GtkStringList *self;
+  guint i;
 
-  list = g_object_new (GTK_TYPE_STRING_LIST, NULL);
+  self = g_object_new (GTK_TYPE_STRING_LIST, NULL);
 
-  if (strings)
+  for (i = 0; strings[i]; i++)
+    g_sequence_append (self->items, gtk_string_object_new (strings[i]));
+
+  return self;
+}
+
+/**
+ * gtk_string_list_new:
+ * @string1: first string to add
+ * @...: a %NULL-terminated list fo strings, starting with @string1
+ *
+ * Creates a new #GtkStringList with the given strings.
+ *
+ * Returns: a new #GtkStringList
+ */
+GtkStringList *
+gtk_string_list_new (const char *string1,
+                     ...)
+{
+  GtkStringList *self;
+  const char *s;
+  va_list args;
+
+  self = g_object_new (GTK_TYPE_STRING_LIST, NULL);
+
+  va_start (args, string1);
+  s = string1;
+  while (s)
     {
-      guint i;
-
-      for (i = 0; (length == -1 || i < length) && strings[i]; i++)
-        g_sequence_append (list->items, gtk_string_object_new (strings[i]));
+      g_sequence_append (self->items, gtk_string_object_new (s));
+      s = va_arg (args, const char *);
     }
+  va_end (args);
 
-  return list;
+  return self;
+}
+
+/**
+ * gtk_string_list_insert:
+ * @self: a #GtkStringList
+ * @position: the position at which to insert @string
+ * @string: the string to insert
+ *
+ * Inserts @string into @self at @position.
+ */
+void
+gtk_string_list_insert (GtkStringList *self,
+                        guint          position,
+                        const char    *string)
+{
+  GSequenceIter *iter;
+
+  iter = g_sequence_get_iter_at_pos (self->items, position);
+  g_sequence_insert_before (iter, gtk_string_object_new (string));
+
+  g_list_model_items_changed (G_LIST_MODEL (self), position, 0, 1);
+}
+
+/**
+ * gtk_string_list_remove:
+ * @self: a #GtkStringList
+ * @position: the position of the string that is to be removed
+ *
+ * Removes the string at @position from @self. @position must
+ * be smaller than the current length of the list.
+ */
+void
+gtk_string_list_remove (GtkStringList *self,
+                        guint          position)
+{
+  GSequenceIter *iter;
+
+  iter = g_sequence_get_iter_at_pos (self->items, position);
+  g_return_if_fail (!g_sequence_iter_is_end (iter));
+
+  g_sequence_remove (iter);
+
+  g_list_model_items_changed (G_LIST_MODEL (self), position, 1, 0);
+}
+
+/**
+ * gtk_string_list_get_string:
+ * @self: a #GtkStringList
+ * @position:
+ *
+ * Gets the string that is at @position in @self. @position
+ * must be smaller than the current length of the list.
+ *
+ * This function returns the const char *. To get the
+ * object wrapping it, use g_list_model_get_item().
+ *
+ * Returns: the string at the given position
+ */
+const char *
+gtk_string_list_get_string (GtkStringList *self,
+                            guint          position)
+{
+  GSequenceIter *iter;
+
+  iter = g_sequence_get_iter_at_pos (self->items, position);
+
+  if (g_sequence_iter_is_end (iter))
+    {
+      return NULL;
+    }
+  else
+    {
+      GtkStringObject *obj = g_sequence_get (iter);
+
+      return obj->string;
+    }
 }
