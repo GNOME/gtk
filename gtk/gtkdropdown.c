@@ -578,19 +578,25 @@ bind_item (GtkSignalListItemFactory *factory,
   GtkWidget *label;
   GValue value = G_VALUE_INIT;
 
-  if (self->expression == NULL)
-    {
-      g_critical ("Either GtkDropDown:factory or GtkDropDown:expression must be set");
-      return;
-    }
-
   item = gtk_list_item_get_item (list_item);
   label = gtk_list_item_get_child (list_item);
 
-  if (gtk_expression_evaluate (self->expression, item, &value))
+  if (self->expression &&
+      gtk_expression_evaluate (self->expression, item, &value))
     {
       gtk_label_set_label (GTK_LABEL (label), g_value_get_string (&value));
       g_value_unset (&value);
+    }
+  else if (GTK_IS_STRING_OBJECT (item))
+    {
+      const char *string;
+
+      string = gtk_string_object_get_string (GTK_STRING_OBJECT (item));
+      gtk_label_set_label (GTK_LABEL (label), string);
+    }
+  else
+    {
+      g_critical ("Either GtkDropDown:factory or GtkDropDown:expression must be set");
     }
 }
 
@@ -956,17 +962,12 @@ void
 gtk_drop_down_set_from_strings (GtkDropDown       *self,
                                 const char *const *texts)
 {
-  GtkExpression *expression;
   GListModel *model;
 
   g_return_if_fail (GTK_IS_DROP_DOWN (self));
   g_return_if_fail (texts != NULL);
 
   set_default_factory (self);
-
-  expression = gtk_property_expression_new (GTK_TYPE_STRING_OBJECT, NULL, "string");
-  gtk_drop_down_set_expression (self, expression);
-  gtk_expression_unref (expression);
 
   model = G_LIST_MODEL (gtk_string_list_new_from_strv ((const char **)texts));
   gtk_drop_down_set_model (self, model);
