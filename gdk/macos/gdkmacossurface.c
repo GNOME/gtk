@@ -319,12 +319,11 @@ gdk_macos_surface_drag_begin (GdkSurface         *surface,
                        "content", content,
                        "actions", actions,
                        NULL);
+  g_clear_object (&drag_surface);
 
   cursor = gdk_drag_get_cursor (GDK_DRAG (drag),
                                 gdk_drag_get_selected_action (GDK_DRAG (drag)));
   gdk_drag_set_cursor (GDK_DRAG (drag), cursor);
-
-  g_clear_object (&drag_surface);
 
   if (!_gdk_macos_drag_begin (drag))
     {

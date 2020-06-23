@@ -118,7 +118,7 @@ gdk_display_link_source_frame_cb (CVDisplayLinkRef   display_link,
   impl->needs_dispatch = TRUE;
 
   if (needs_wakeup)
-     {
+    {
       NSEvent *event;
 
       /* Post a message so we'll break out of the message loop.
@@ -139,7 +139,7 @@ gdk_display_link_source_frame_cb (CVDisplayLinkRef   display_link,
                                     data2: 0];
 
       [NSApp postEvent:event atStart:YES];
-     }
+    }
 
   return kCVReturnSuccess;
 }

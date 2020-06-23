@@ -352,7 +352,7 @@ select_thread_start (void)
   while (TRUE)
     {
       if (pthread_create (&select_thread, NULL, select_thread_func, NULL) == 0)
-          break;
+        break;
 
       g_warning ("Failed to create select thread, sleeping and trying again");
       sleep (1);
