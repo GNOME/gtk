@@ -96,6 +96,9 @@ gdk_macos_zoomback_timeout (gpointer data)
                            (drag->start_y - drag->last_y) * t);
   _gdk_macos_surface_set_opacity (GDK_MACOS_SURFACE (drag->drag_surface), 1.0 - f);
 
+  /* Make sure we're topmost */
+  _gdk_macos_surface_show (GDK_MACOS_SURFACE (drag->drag_surface));
+
   return G_SOURCE_CONTINUE;
 }
 
