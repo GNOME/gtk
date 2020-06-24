@@ -3773,9 +3773,6 @@ gtk_text_view_dispose (GObject *object)
       g_object_set_data (object, "gtk-emoji-chooser", NULL);
     }
 
-  while ((child = gtk_widget_get_first_child (GTK_WIDGET (text_view))))
-    gtk_text_view_remove (text_view, child);
-
   gtk_text_view_remove_validate_idles (text_view);
   gtk_text_view_set_buffer (text_view, NULL);
   gtk_text_view_destroy_layout (text_view);
@@ -3800,6 +3797,9 @@ gtk_text_view_dispose (GObject *object)
 
   g_clear_pointer (&priv->selection_bubble, gtk_widget_unparent);
   g_clear_pointer (&priv->magnifier_popover, gtk_widget_unparent);
+
+  while ((child = gtk_widget_get_first_child (GTK_WIDGET (text_view))))
+    gtk_text_view_remove (text_view, child);
 
   G_OBJECT_CLASS (gtk_text_view_parent_class)->dispose (object);
 }
