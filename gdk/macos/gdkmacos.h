@@ -22,6 +22,10 @@
 
 #include <gdk/gdk.h>
 
+#include "gdkmacosdevice.h"
 #include "gdkmacosdisplay.h"
+#include "gdkmacoskeymap.h"
+#include "gdkmacosmonitor.h"
+#include "gdkmacossurface.h"
 
 #endif /* __GDK_MACOS_H__ */
