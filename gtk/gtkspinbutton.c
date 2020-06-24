@@ -273,8 +273,6 @@ static void gtk_spin_button_get_property   (GObject         *object,
                                             GValue          *value,
                                             GParamSpec      *pspec);
 static void gtk_spin_button_realize        (GtkWidget          *widget);
-static void gtk_spin_button_grab_notify    (GtkWidget          *widget,
-                                            gboolean            was_grabbed);
 static void gtk_spin_button_state_flags_changed  (GtkWidget     *widget,
                                                   GtkStateFlags  previous_state);
 static gboolean gtk_spin_button_timer          (GtkSpinButton      *spin_button);
@@ -350,7 +348,6 @@ gtk_spin_button_class_init (GtkSpinButtonClass *class)
   gobject_class->get_property = gtk_spin_button_get_property;
 
   widget_class->realize = gtk_spin_button_realize;
-  widget_class->grab_notify = gtk_spin_button_grab_notify;
   widget_class->state_flags_changed = gtk_spin_button_state_flags_changed;
   widget_class->mnemonic_activate = gtk_spin_button_mnemonic_activate;
   widget_class->grab_focus = gtk_spin_button_grab_focus;
@@ -1188,18 +1185,6 @@ gtk_spin_button_update_width_chars (GtkSpinButton *spin_button)
     width_chars = spin_button->width_chars;
 
   gtk_editable_set_width_chars (GTK_EDITABLE (spin_button->entry), width_chars);
-}
-
-static void
-gtk_spin_button_grab_notify (GtkWidget *widget,
-                             gboolean   was_grabbed)
-{
-  GtkSpinButton *spin = GTK_SPIN_BUTTON (widget);
-
-  GTK_WIDGET_CLASS (gtk_spin_button_parent_class)->grab_notify (widget, was_grabbed);
-
-  if (!was_grabbed)
-    gtk_spin_button_stop_spinning (spin);
 }
 
 static void
