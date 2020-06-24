@@ -492,7 +492,6 @@ enum {
   UNREALIZE,
   STATE_FLAGS_CHANGED,
   DIRECTION_CHANGED,
-  GRAB_NOTIFY,
   MNEMONIC_ACTIVATE,
   MOVE_FOCUS,
   KEYNAV_FAILED,
@@ -808,9 +807,16 @@ gtk_widget_real_contains (GtkWidget *widget,
                                           &GRAPHENE_POINT_INIT (x, y));
 }
 
-static void
-gtk_widget_real_grab_notify (GtkWidget *widget,
-                             gboolean   was_grabbed)
+/**
+ * _gtk_widget_grab_notify:
+ * @widget: a #GtkWidget
+ * @was_grabbed: whether a grab is now in effect
+ *
+ * Emits the #GtkWidget::grab-notify signal on @widget.
+ **/
+void
+_gtk_widget_grab_notify (GtkWidget *widget,
+			 gboolean   was_grabbed)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
   int i;
@@ -923,7 +929,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   klass->measure = gtk_widget_real_measure;
   klass->state_flags_changed = gtk_widget_real_state_flags_changed;
   klass->direction_changed = gtk_widget_real_direction_changed;
-  klass->grab_notify = gtk_widget_real_grab_notify;
   klass->snapshot = gtk_widget_real_snapshot;
   klass->mnemonic_activate = gtk_widget_real_mnemonic_activate;
   klass->grab_focus = gtk_widget_grab_focus_self;
@@ -1526,31 +1531,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  NULL,
 		  G_TYPE_NONE, 1,
 		  GTK_TYPE_TEXT_DIRECTION);
-
-  /**
-   * GtkWidget::grab-notify:
-   * @widget: the object which received the signal
-   * @was_grabbed: %FALSE if the widget becomes shadowed, %TRUE
-   *               if it becomes unshadowed
-   *
-   * The ::grab-notify signal is emitted when a widget becomes
-   * shadowed by a GTK+ grab (not a pointer or keyboard grab) on
-   * another widget, or when it becomes unshadowed due to a grab
-   * being removed.
-   *
-   * A widget is shadowed by a gtk_grab_add() when the topmost
-   * grab widget in the grab stack of its window group is not
-   * its ancestor.
-   */
-  widget_signals[GRAB_NOTIFY] =
-    g_signal_new (I_("grab-notify"),
-		  G_TYPE_FROM_CLASS (gobject_class),
-		  G_SIGNAL_RUN_FIRST,
-                  G_STRUCT_OFFSET (GtkWidgetClass, grab_notify),
-		  NULL, NULL,
-		  NULL,
-		  G_TYPE_NONE, 1,
-		  G_TYPE_BOOLEAN);
 
   /**
    * GtkWidget::mnemonic-activate:
@@ -4591,20 +4571,6 @@ gtk_widget_activate (GtkWidget *widget)
     }
   else
     return FALSE;
-}
-
-/**
- * _gtk_widget_grab_notify:
- * @widget: a #GtkWidget
- * @was_grabbed: whether a grab is now in effect
- *
- * Emits the #GtkWidget::grab-notify signal on @widget.
- **/
-void
-_gtk_widget_grab_notify (GtkWidget *widget,
-			 gboolean   was_grabbed)
-{
-  g_signal_emit (widget, widget_signals[GRAB_NOTIFY], 0, was_grabbed);
 }
 
 /**
