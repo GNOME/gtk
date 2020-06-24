@@ -1859,120 +1859,6 @@ gtk_main_get_window_group (GtkWidget *widget)
     return gtk_window_get_group (NULL);
 }
 
-typedef struct
-{
-  GtkWidget *old_grab_widget;
-  GtkWidget *new_grab_widget;
-  gboolean   was_grabbed;
-  gboolean   is_grabbed;
-  gboolean   from_grab;
-  GList     *notified_surfaces;
-} GrabNotifyInfo;
-
-static void
-synth_crossing_for_grab_notify (GtkWidget        *from,
-                                GtkWidget        *to,
-                                GrabNotifyInfo   *info,
-                                GdkDevice       **devices,
-                                guint             n_devices,
-                                GdkCrossingMode   mode)
-{
-  guint i;
-
-  for (i = 0; i < n_devices; i++)
-    {
-      GdkDevice *device = devices[i];
-      GdkSurface *from_surface, *to_surface;
-
-      if (!from)
-        from_surface = NULL;
-      else
-        from_surface = gtk_native_get_surface (gtk_widget_get_native (from));
-
-      if (!to)
-        to_surface = NULL;
-      else
-        to_surface = gtk_native_get_surface (gtk_widget_get_native (to));
-
-      if (from_surface || to_surface)
-        {
-          _gtk_widget_synthesize_crossing ((from_surface) ? from : NULL,
-                                           (to_surface) ? to : NULL,
-                                           device, mode);
-
-          if (from_surface)
-            info->notified_surfaces = g_list_prepend (info->notified_surfaces, from_surface);
-
-          if (to_surface)
-            info->notified_surfaces = g_list_prepend (info->notified_surfaces, to_surface);
-        }
-    }
-}
-
-static void
-gtk_grab_notify_foreach (GtkWidget *child,
-                         gpointer   data)
-{
-  GrabNotifyInfo *info = data;
-  gboolean was_grabbed, is_grabbed, was_shadowed, is_shadowed;
-  GdkDevice **devices;
-  guint n_devices;
-
-  was_grabbed = info->was_grabbed;
-  is_grabbed = info->is_grabbed;
-
-  info->was_grabbed = info->was_grabbed || (child == info->old_grab_widget);
-  info->is_grabbed = info->is_grabbed || (child == info->new_grab_widget);
-
-  was_shadowed = info->old_grab_widget && !info->was_grabbed;
-  is_shadowed = info->new_grab_widget && !info->is_grabbed;
-
-  g_object_ref (child);
-
-  if (was_shadowed || is_shadowed)
-    {
-      GtkWidget *p;
-
-      for (p = _gtk_widget_get_first_child (child);
-           p != NULL;
-           p = _gtk_widget_get_next_sibling (p))
-        {
-          gtk_grab_notify_foreach (p, info);
-        }
-    }
-
-  devices = _gtk_widget_list_devices (child, &n_devices);
-
-  if (is_shadowed)
-    {
-      _gtk_widget_set_shadowed (child, TRUE);
-      if (!was_shadowed && devices &&
-          gtk_widget_is_sensitive (child))
-        synth_crossing_for_grab_notify (child, info->new_grab_widget,
-                                        info, devices, n_devices,
-                                        GDK_CROSSING_GTK_GRAB);
-    }
-  else
-    {
-      _gtk_widget_set_shadowed (child, FALSE);
-      if (was_shadowed && devices &&
-          gtk_widget_is_sensitive (child))
-        synth_crossing_for_grab_notify (info->old_grab_widget, child,
-                                        info, devices, n_devices,
-                                        info->from_grab ? GDK_CROSSING_GTK_GRAB :
-                                        GDK_CROSSING_GTK_UNGRAB);
-    }
-
-  if (was_shadowed != is_shadowed)
-    _gtk_widget_grab_notify (child, was_shadowed);
-
-  g_object_unref (child);
-  g_free (devices);
-
-  info->was_grabbed = was_grabbed;
-  info->is_grabbed = is_grabbed;
-}
-
 static void
 gtk_grab_notify (GtkWindowGroup *group,
                  GtkWidget      *old_grab_widget,
@@ -1980,14 +1866,9 @@ gtk_grab_notify (GtkWindowGroup *group,
                  gboolean        from_grab)
 {
   GList *toplevels;
-  GrabNotifyInfo info = { 0 };
 
   if (old_grab_widget == new_grab_widget)
     return;
-
-  info.old_grab_widget = old_grab_widget;
-  info.new_grab_widget = new_grab_widget;
-  info.from_grab = from_grab;
 
   g_object_ref (group);
 
@@ -1999,15 +1880,13 @@ gtk_grab_notify (GtkWindowGroup *group,
       GtkWindow *toplevel = toplevels->data;
       toplevels = g_list_delete_link (toplevels, toplevels);
 
-      info.was_grabbed = FALSE;
-      info.is_grabbed = FALSE;
-
-      if (group == gtk_window_get_group (toplevel))
-        gtk_grab_notify_foreach (GTK_WIDGET (toplevel), &info);
+      gtk_window_grab_notify (toplevel,
+                              old_grab_widget,
+                              new_grab_widget,
+                              from_grab);
       g_object_unref (toplevel);
     }
 
-  g_list_free (info.notified_surfaces);
   g_object_unref (group);
 }
 
