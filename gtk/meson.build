@@ -649,6 +649,7 @@ gtk_public_headers = files([
   'gtkstackswitcher.h',
   'gtkstatusbar.h',
   'gtkstringfilter.h',
+  'gtkstringlist.h',
   'gtkstringsorter.h',
   'gtkstylecontext.h',
   'gtkstyleprovider.h',
