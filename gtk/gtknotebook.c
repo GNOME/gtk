@@ -771,8 +771,6 @@ static void gtk_notebook_motion              (GtkEventController *controller,
                                              double              x,
                                               double              y,
                                               gpointer            user_data);
-static void gtk_notebook_grab_notify         (GtkWidget          *widget,
-                                              gboolean            was_grabbed);
 static void gtk_notebook_state_flags_changed (GtkWidget          *widget,
                                               GtkStateFlags       previous_state);
 static void gtk_notebook_direction_changed   (GtkWidget        *widget,
@@ -911,7 +909,9 @@ static void gtk_notebook_gesture_released (GtkGestureClick *gesture,
                                            double                x,
                                            double                y,
                                            gpointer              user_data);
-
+static void gtk_notebook_gesture_cancel   (GtkGestureClick  *gesture,
+                                           GdkEventSequence *sequence,
+                                           GtkNotebook      *notebook);
 
 static guint notebook_signals[LAST_SIGNAL] = { 0 };
 
@@ -1029,7 +1029,6 @@ gtk_notebook_class_init (GtkNotebookClass *class)
   gobject_class->dispose = gtk_notebook_dispose;
 
   widget_class->unmap = gtk_notebook_unmap;
-  widget_class->grab_notify = gtk_notebook_grab_notify;
   widget_class->state_flags_changed = gtk_notebook_state_flags_changed;
   widget_class->direction_changed = gtk_notebook_direction_changed;
   widget_class->focus = gtk_notebook_focus;
@@ -1435,6 +1434,7 @@ gtk_notebook_init (GtkNotebook *notebook)
   gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (gesture), GTK_PHASE_CAPTURE);
   g_signal_connect (gesture, "pressed", G_CALLBACK (gtk_notebook_gesture_pressed), notebook);
   g_signal_connect (gesture, "released", G_CALLBACK (gtk_notebook_gesture_released), notebook);
+  g_signal_connect (gesture, "cancel", G_CALLBACK (gtk_notebook_gesture_cancel), notebook);
   gtk_widget_add_controller (GTK_WIDGET (notebook), GTK_EVENT_CONTROLLER (gesture));
 
   controller = gtk_event_controller_motion_new ();
@@ -2752,6 +2752,15 @@ gtk_notebook_gesture_released (GtkGestureClick *gesture,
   stop_scrolling (notebook);
 }
 
+static void
+gtk_notebook_gesture_cancel (GtkGestureClick  *gesture,
+                             GdkEventSequence *sequence,
+                             GtkNotebook      *notebook)
+{
+  gtk_notebook_stop_reorder (notebook);
+  stop_scrolling (notebook);
+}
+
 static GtkNotebookPointerPosition
 get_pointer_position (GtkNotebook *notebook)
 {
@@ -2952,21 +2961,6 @@ gtk_notebook_motion (GtkEventController *controller,
 
   if (notebook->operation == DRAG_OPERATION_REORDER)
     gtk_widget_queue_allocate (notebook->tabs_widget);
-}
-
-static void
-gtk_notebook_grab_notify (GtkWidget *widget,
-                          gboolean   was_grabbed)
-{
-  GtkNotebook *notebook = GTK_NOTEBOOK (widget);
-
-  GTK_WIDGET_CLASS (gtk_notebook_parent_class)->grab_notify (widget, was_grabbed);
-
-  if (!was_grabbed)
-    {
-      gtk_notebook_stop_reorder (notebook);
-      stop_scrolling (notebook);
-    }
 }
 
 static void
