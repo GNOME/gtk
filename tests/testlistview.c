@@ -613,7 +613,7 @@ main (int argc, char *argv[])
   search_entry = gtk_search_entry_new ();
   gtk_box_append (GTK_BOX (vbox), search_entry);
 
-  sw = gtk_scrolled_window_new (NULL, NULL);
+  sw = gtk_scrolled_window_new ();
   gtk_widget_set_vexpand (sw, TRUE);
   gtk_search_entry_set_key_capture_widget (GTK_SEARCH_ENTRY (search_entry), sw);
   gtk_box_append (GTK_BOX (vbox), sw);

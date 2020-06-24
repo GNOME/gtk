@@ -24,7 +24,7 @@ test_size (gboolean       overlay,
   gtk_widget_set_hexpand (box, TRUE);
   gtk_widget_set_vexpand (box, TRUE);
 
-  scrolledwindow = gtk_scrolled_window_new (NULL, NULL);
+  scrolledwindow = gtk_scrolled_window_new ();
   gtk_scrolled_window_set_propagate_natural_width (GTK_SCROLLED_WINDOW (scrolledwindow), TRUE);
   gtk_scrolled_window_set_propagate_natural_height (GTK_SCROLLED_WINDOW (scrolledwindow), TRUE);
   gtk_scrolled_window_set_overlay_scrolling (GTK_SCROLLED_WINDOW (scrolledwindow), overlay);

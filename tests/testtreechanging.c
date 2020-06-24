@@ -495,7 +495,7 @@ main (int    argc,
   g_signal_connect (window, "destroy", G_CALLBACK (quit_cb), &done);
   gtk_window_set_default_size (GTK_WINDOW (window), 430, 400);
 
-  sw = gtk_scrolled_window_new (NULL, NULL);
+  sw = gtk_scrolled_window_new ();
   gtk_widget_set_hexpand (sw, TRUE);
   gtk_widget_set_vexpand (sw, TRUE);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (sw),

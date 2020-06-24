@@ -188,7 +188,7 @@ do_listview_applauncher (GtkWidget *do_widget)
        * because otherwise they might get too large or they might not
        * be scrollable.
        */
-      sw = gtk_scrolled_window_new (NULL, NULL);
+      sw = gtk_scrolled_window_new ();
       gtk_window_set_child (GTK_WINDOW (window), sw);
       gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (sw), list);
     }

@@ -10,7 +10,7 @@ int main (int argc, char *argv[])
   gtk_init ();
 
   window = gtk_window_new ();
-  sw = gtk_scrolled_window_new (NULL, NULL);
+  sw = gtk_scrolled_window_new ();
   gtk_window_set_child (GTK_WINDOW (window), sw);
   viewport = gtk_viewport_new (gtk_scrolled_window_get_hadjustment (GTK_SCROLLED_WINDOW (sw)),
                                gtk_scrolled_window_get_vadjustment (GTK_SCROLLED_WINDOW (sw)));

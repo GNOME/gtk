@@ -1520,7 +1520,7 @@ create_listbox (GtkWidget *widget)
       hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
       gtk_window_set_child (GTK_WINDOW (window), hbox);
 
-      scrolled = gtk_scrolled_window_new (NULL, NULL);
+      scrolled = gtk_scrolled_window_new ();
       gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled), GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
       gtk_box_append (GTK_BOX (hbox), scrolled);
 
@@ -1948,7 +1948,7 @@ create_scrolled_windows (GtkWidget *widget)
 
       gtk_window_set_title (GTK_WINDOW (window), "dialog");
 
-      scrolled_window = gtk_scrolled_window_new (NULL, NULL);
+      scrolled_window = gtk_scrolled_window_new ();
       gtk_widget_set_hexpand (scrolled_window, TRUE);
       gtk_widget_set_vexpand (scrolled_window, TRUE);
       gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_window),
@@ -5935,7 +5935,7 @@ create_main_window (void)
   gtk_box_append (GTK_BOX (box1), label);
   gtk_widget_set_name (label, "testgtk-version-label");
 
-  scrolled_window = gtk_scrolled_window_new (NULL, NULL);
+  scrolled_window = gtk_scrolled_window_new ();
   gtk_widget_set_margin_top (scrolled_window, 10);
   gtk_widget_set_margin_bottom (scrolled_window, 10);
   gtk_widget_set_margin_start (scrolled_window, 10);

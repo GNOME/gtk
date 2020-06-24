@@ -86,7 +86,7 @@ new_window (GApplication *app,
   grid = gtk_grid_new ();
   gtk_window_set_child (GTK_WINDOW (window), grid);
 
-  scrolled = gtk_scrolled_window_new (NULL, NULL);
+  scrolled = gtk_scrolled_window_new ();
   gtk_widget_set_hexpand (scrolled, TRUE);
   gtk_widget_set_vexpand (scrolled, TRUE);
   view = gtk_text_view_new ();

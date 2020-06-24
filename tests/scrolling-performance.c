@@ -128,7 +128,7 @@ main (int argc, char **argv)
   frame_stats_ensure (GTK_WINDOW (window));
   gtk_window_set_default_size (GTK_WINDOW (window), 800, 600);
 
-  scrolled_window = gtk_scrolled_window_new (NULL, NULL);
+  scrolled_window = gtk_scrolled_window_new ();
   gtk_window_set_child (GTK_WINDOW (window), scrolled_window);
 
   viewport = gtk_viewport_new (NULL, NULL);

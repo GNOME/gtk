@@ -57,7 +57,7 @@ do_expander (GtkWidget *do_widget)
 
       expander = gtk_expander_new ("Details:");
       gtk_widget_set_vexpand (expander, TRUE);
-      sw = gtk_scrolled_window_new (NULL, NULL);
+      sw = gtk_scrolled_window_new ();
       gtk_scrolled_window_set_min_content_height (GTK_SCROLLED_WINDOW (sw), 100);
       gtk_scrolled_window_set_has_frame (GTK_SCROLLED_WINDOW (sw), TRUE);
       gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (sw),

@@ -364,7 +364,7 @@ do_editable_cells (GtkWidget *do_widget)
       gtk_box_append (GTK_BOX (vbox),
                           gtk_label_new ("Shopping list (you can edit the cells!)"));
 
-      sw = gtk_scrolled_window_new (NULL, NULL);
+      sw = gtk_scrolled_window_new ();
       gtk_scrolled_window_set_has_frame (GTK_SCROLLED_WINDOW (sw), TRUE);
       gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (sw),
                                       GTK_POLICY_AUTOMATIC,

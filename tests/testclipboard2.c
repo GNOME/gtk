@@ -248,7 +248,7 @@ get_formats_list (GdkClipboard *clipboard)
 {
   GtkWidget *sw, *list;
 
-  sw = gtk_scrolled_window_new (NULL, NULL);
+  sw = gtk_scrolled_window_new ();
 
   list = gtk_list_box_new ();
   g_signal_connect_object (clipboard, "notify::formats", G_CALLBACK (clipboard_formats_change_cb), list, 0);

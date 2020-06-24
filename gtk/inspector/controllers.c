@@ -79,7 +79,7 @@ gtk_inspector_controllers_init (GtkInspectorControllers *self)
 
   self->sizegroup = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
 
-  sw = gtk_scrolled_window_new (NULL, NULL);
+  sw = gtk_scrolled_window_new ();
 
   box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 10);
   g_object_set (box,

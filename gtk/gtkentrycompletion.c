@@ -497,7 +497,7 @@ gtk_entry_completion_constructed (GObject *object)
   completion->column = gtk_tree_view_column_new_with_area (completion->cell_area);
   gtk_tree_view_append_column (GTK_TREE_VIEW (completion->tree_view), completion->column);
 
-  completion->scrolled_window = gtk_scrolled_window_new (NULL, NULL);
+  completion->scrolled_window = gtk_scrolled_window_new ();
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (completion->scrolled_window),
                                   GTK_POLICY_NEVER,
                                   GTK_POLICY_AUTOMATIC);

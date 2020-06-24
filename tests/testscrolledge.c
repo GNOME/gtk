@@ -120,7 +120,7 @@ main (int argc, char *argv[])
   gtk_overlay_add_overlay (GTK_OVERLAY (overlay), popup);
   gtk_widget_hide (popup);
 
-  sw = gtk_scrolled_window_new (NULL, NULL);
+  sw = gtk_scrolled_window_new ();
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (sw), GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
   list = gtk_list_box_new ();
   gtk_list_box_set_selection_mode (GTK_LIST_BOX (list), GTK_SELECTION_NONE);

@@ -132,7 +132,7 @@ do_css_multiplebgs (GtkWidget *do_widget)
 
       provider = GTK_STYLE_PROVIDER (gtk_css_provider_new ());
 
-      sw = gtk_scrolled_window_new (NULL, NULL);
+      sw = gtk_scrolled_window_new ();
       gtk_paned_set_end_child (GTK_PANED (paned), sw);
       child = gtk_text_view_new_with_buffer (text);
       gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (sw), child);

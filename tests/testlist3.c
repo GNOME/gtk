@@ -154,7 +154,7 @@ main (int argc, char *argv[])
   g_signal_connect (list, "selected-rows-changed", G_CALLBACK (on_selected_children_changed), NULL);
   g_signal_connect (gtk_widget_get_accessible (list), "selection-changed", G_CALLBACK (a11y_selection_changed), NULL);
 
-  sw = gtk_scrolled_window_new (NULL, NULL);
+  sw = gtk_scrolled_window_new ();
   gtk_widget_set_hexpand (sw, TRUE);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (sw), GTK_POLICY_NEVER, GTK_POLICY_ALWAYS);
   gtk_box_append (GTK_BOX (hbox), sw);

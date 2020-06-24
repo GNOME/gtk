@@ -318,7 +318,7 @@ make_window (gint view_type)
 
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 8);
   gtk_window_set_default_size (GTK_WINDOW (window), 300, 350);
-  scrolled_window = gtk_scrolled_window_new (NULL, NULL);
+  scrolled_window = gtk_scrolled_window_new ();
   switch (view_type)
     {
     case 0:

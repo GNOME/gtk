@@ -252,7 +252,7 @@ new_window (GApplication *app,
 
   gtk_grid_attach (GTK_GRID (grid), toolbar, 0, 0, 1, 1);
 
-  scrolled = gtk_scrolled_window_new (NULL, NULL);
+  scrolled = gtk_scrolled_window_new ();
   gtk_widget_set_hexpand (scrolled, TRUE);
   gtk_widget_set_vexpand (scrolled, TRUE);
   view = gtk_text_view_new ();

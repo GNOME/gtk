@@ -131,7 +131,7 @@ main (int argc, char *argv[])
   button = gtk_button_new_with_label ("Switch search method");
   gtk_box_append (GTK_BOX (vbox), button);
 
-  scrolled_window = gtk_scrolled_window_new (NULL, NULL);
+  scrolled_window = gtk_scrolled_window_new ();
   gtk_scrolled_window_set_has_frame (GTK_SCROLLED_WINDOW (scrolled_window), TRUE);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_window), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
   gtk_widget_set_vexpand (scrolled_window, TRUE);
@@ -254,7 +254,7 @@ main (int argc, char *argv[])
 			  gtk_label_new ("Jonathan and Kristian's list of words.\n\nA GtkTreeModelSort wrapping the GtkTreeStore of window 1"));
       gtk_window_set_child (GTK_WINDOW (window2), vbox2);
       
-      scrolled_window2 = gtk_scrolled_window_new (NULL, NULL);
+      scrolled_window2 = gtk_scrolled_window_new ();
       gtk_scrolled_window_set_has_frame (GTK_SCROLLED_WINDOW (scrolled_window2), TRUE);
       gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_window2),
 				      GTK_POLICY_AUTOMATIC,
@@ -321,7 +321,7 @@ main (int argc, char *argv[])
 			  gtk_label_new ("Jonathan and Kristian's list of words.\n\nA GtkTreeModelSort wrapping the GtkTreeModelSort of window 2"));
       gtk_window_set_child (GTK_WINDOW (window3), vbox3);
       
-      scrolled_window3 = gtk_scrolled_window_new (NULL, NULL);
+      scrolled_window3 = gtk_scrolled_window_new ();
       gtk_scrolled_window_set_has_frame (GTK_SCROLLED_WINDOW (scrolled_window3), TRUE);
       gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_window3),
 				      GTK_POLICY_AUTOMATIC,

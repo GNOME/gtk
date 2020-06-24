@@ -269,7 +269,7 @@ do_list_store (GtkWidget *do_widget)
       label = gtk_label_new ("This is the bug list (note: not based on real data, it would be nice to have a nice ODBC interface to bugzilla or so, though).");
       gtk_box_append (GTK_BOX (vbox), label);
 
-      sw = gtk_scrolled_window_new (NULL, NULL);
+      sw = gtk_scrolled_window_new ();
       gtk_scrolled_window_set_has_frame (GTK_SCROLLED_WINDOW (sw), TRUE);
       gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (sw),
                                       GTK_POLICY_NEVER,

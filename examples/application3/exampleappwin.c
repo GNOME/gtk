@@ -43,7 +43,7 @@ example_app_window_open (ExampleAppWindow *win,
 
   basename = g_file_get_basename (file);
 
-  scrolled = gtk_scrolled_window_new (NULL, NULL);
+  scrolled = gtk_scrolled_window_new ();
   gtk_widget_set_hexpand (scrolled, TRUE);
   gtk_widget_set_vexpand (scrolled, TRUE);
   view = gtk_text_view_new ();

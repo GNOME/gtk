@@ -946,7 +946,7 @@ gtk_shortcuts_window_init (GtkShortcutsWindow *self)
                            self,
                            G_CONNECT_SWAPPED);
 
-  scroller = gtk_scrolled_window_new (NULL, NULL);
+  scroller = gtk_scrolled_window_new ();
   box = g_object_new (GTK_TYPE_BOX,
                       "halign", GTK_ALIGN_CENTER,
                       "orientation", GTK_ORIENTATION_VERTICAL,
