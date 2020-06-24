@@ -107,6 +107,16 @@ gtk_multi_selection_is_selected (GtkSelectionModel *model,
   return gtk_bitset_contains (self->selected, position);
 }
 
+static GtkBitset *
+gtk_multi_selection_get_selection_in_range (GtkSelectionModel *model,
+                                            guint              pos,
+                                            guint              n_items)
+{
+  GtkMultiSelection *self = GTK_MULTI_SELECTION (model);
+
+  return gtk_bitset_ref (self->selected);
+}
+
 static void
 gtk_multi_selection_toggle_selection (GtkMultiSelection *self,
                                       GtkBitset         *changes)
@@ -192,6 +202,7 @@ static void
 gtk_multi_selection_selection_model_init (GtkSelectionModelInterface *iface)
 {
   iface->is_selected = gtk_multi_selection_is_selected;
+  iface->get_selection_in_range = gtk_multi_selection_get_selection_in_range;
   iface->set_selection = gtk_multi_selection_set_selection;
 }
 
