@@ -107,6 +107,9 @@ do_entry_completion (GtkWidget *do_widget)
 
       /* Use model column 0 as the text column */
       gtk_entry_completion_set_text_column (completion, 0);
+
+      gtk_entry_completion_set_inline_completion (completion, TRUE);
+      gtk_entry_completion_set_inline_selection (completion, TRUE);
     }
 
   if (!gtk_widget_get_visible (window))
