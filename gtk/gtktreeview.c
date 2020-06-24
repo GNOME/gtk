@@ -2691,8 +2691,7 @@ grab_focus_and_unset_draw_keyfocus (GtkTreeView *tree_view)
   GtkWidget *widget = GTK_WIDGET (tree_view);
 
   if (gtk_widget_get_focusable (widget) &&
-      !gtk_widget_has_focus (widget) &&
-      !_gtk_widget_get_shadowed (widget))
+      !gtk_widget_has_focus (widget))
     gtk_widget_grab_focus (widget);
 
   tree_view->draw_keyfocus = 0;

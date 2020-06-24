@@ -82,9 +82,7 @@ struct _GtkWidgetPrivate
   guint has_default           : 1;
   guint receives_default      : 1;
   guint has_grab              : 1;
-  guint shadowed              : 1;
   guint child_visible         : 1;
-  guint multidevice           : 1;
   guint can_target            : 1;
 
   /* Queue-resize related flags */
@@ -222,9 +220,6 @@ void          gtk_widget_unroot             (GtkWidget *widget);
 GtkCssNode *  gtk_widget_get_css_node       (GtkWidget *widget);
 void         _gtk_widget_set_visible_flag   (GtkWidget *widget,
                                              gboolean   visible);
-gboolean     _gtk_widget_get_shadowed       (GtkWidget *widget);
-void         _gtk_widget_set_shadowed       (GtkWidget *widget,
-                                             gboolean   shadowed);
 gboolean     _gtk_widget_get_alloc_needed   (GtkWidget *widget);
 gboolean     gtk_widget_needs_allocate      (GtkWidget *widget);
 void         gtk_widget_ensure_resize       (GtkWidget *widget);
@@ -258,8 +253,6 @@ void              _gtk_widget_propagate_display_changed    (GtkWidget  *widget,
 void              _gtk_widget_set_device_surface           (GtkWidget *widget,
                                                             GdkDevice *device,
                                                             GdkSurface *pointer_window);
-GdkSurface *       _gtk_widget_get_device_surface          (GtkWidget *widget,
-                                                            GdkDevice *device);
 GdkDevice **       _gtk_widget_list_devices                 (GtkWidget *widget,
                                                              guint     *out_n_devices);
 

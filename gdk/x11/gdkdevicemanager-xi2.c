@@ -489,14 +489,13 @@ create_device (GdkX11DeviceManagerXI2 *device_manager,
 
       tmp_name = g_ascii_strdown (dev->name, -1);
 
-      if (strstr (tmp_name, "eraser"))
-        input_source = GDK_SOURCE_ERASER;
-      else if (strstr (tmp_name, "cursor"))
+      if (strstr (tmp_name, "cursor"))
         input_source = GDK_SOURCE_CURSOR;
       else if (strstr (tmp_name, " pad"))
         input_source = GDK_SOURCE_TABLET_PAD;
       else if (strstr (tmp_name, "wacom") ||
-               strstr (tmp_name, "pen"))
+               strstr (tmp_name, "pen") ||
+               strstr (tmp_name, "eraser"))
         input_source = GDK_SOURCE_PEN;
       else if (!strstr (tmp_name, "mouse") &&
                !strstr (tmp_name, "pointer") &&

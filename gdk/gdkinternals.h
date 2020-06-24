@@ -229,21 +229,6 @@ typedef enum
   GDK_GRAB_FAILED          = 5
 } GdkGrabStatus;
 
-/**
- * GdkGrabOwnership:
- * @GDK_OWNERSHIP_NONE: All other devices’ events are allowed.
- * @GDK_OWNERSHIP_SURFACE: Other devices’ events are blocked for the grab surface.
- * @GDK_OWNERSHIP_APPLICATION: Other devices’ events are blocked for the whole application.
- *
- * Defines how device grabs interact with other devices.
- */
-typedef enum
-{
-  GDK_OWNERSHIP_NONE,
-  GDK_OWNERSHIP_SURFACE,
-  GDK_OWNERSHIP_APPLICATION
-} GdkGrabOwnership;
-
 typedef enum
 {
   GDK_EXPOSURE_MASK             = 1 << 1,
@@ -274,7 +259,6 @@ typedef enum
 
 GdkGrabStatus gdk_device_grab (GdkDevice        *device,
                                GdkSurface        *surface,
-                               GdkGrabOwnership  grab_ownership,
                                gboolean          owner_events,
                                GdkEventMask      event_mask,
                                GdkCursor        *cursor,

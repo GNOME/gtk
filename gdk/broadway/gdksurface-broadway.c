@@ -1107,13 +1107,12 @@ create_moveresize_surface (MoveResizeData *mv_resize,
 
   G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
   status = gdk_device_grab (pointer,
-                             mv_resize->moveresize_emulation_surface,
-                             GDK_OWNERSHIP_APPLICATION,
-                             FALSE,
-                             GDK_BUTTON_RELEASE_MASK |
-                             GDK_POINTER_MOTION_MASK,
-                             NULL,
-                             timestamp);
+                            mv_resize->moveresize_emulation_surface,
+                            FALSE,
+                            GDK_BUTTON_RELEASE_MASK |
+                            GDK_POINTER_MOTION_MASK,
+                            NULL,
+                            timestamp);
   G_GNUC_END_IGNORE_DEPRECATIONS;
 
   if (status != GDK_GRAB_SUCCESS)

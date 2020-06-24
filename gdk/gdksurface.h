@@ -214,12 +214,6 @@ GDK_AVAILABLE_IN_ALL
 void       gdk_surface_thaw_updates        (GdkSurface    *surface);
 
 GDK_AVAILABLE_IN_ALL
-void       gdk_surface_set_support_multidevice (GdkSurface *surface,
-                                                gboolean   support_multidevice);
-GDK_AVAILABLE_IN_ALL
-gboolean   gdk_surface_get_support_multidevice (GdkSurface *surface);
-
-GDK_AVAILABLE_IN_ALL
 GdkFrameClock* gdk_surface_get_frame_clock      (GdkSurface     *surface);
 
 GDK_AVAILABLE_IN_ALL

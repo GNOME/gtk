@@ -521,7 +521,6 @@ GdkDeviceGrabInfo *
 _gdk_display_add_device_grab (GdkDisplay       *display,
                               GdkDevice        *device,
                               GdkSurface        *surface,
-                              GdkGrabOwnership  grab_ownership,
                               gboolean          owner_events,
                               GdkEventMask      event_mask,
                               unsigned long     serial_start,
@@ -540,7 +539,6 @@ _gdk_display_add_device_grab (GdkDisplay       *display,
   info->event_mask = event_mask;
   info->time = time;
   info->implicit = implicit;
-  info->ownership = grab_ownership;
 
   grabs = g_hash_table_lookup (display->device_grabs, device);
 
@@ -814,61 +812,6 @@ _gdk_display_end_device_grab (GdkDisplay *display,
     }
   
   return FALSE;
-}
-
-/* Returns TRUE if device events are not blocked by any grab */
-gboolean
-_gdk_display_check_grab_ownership (GdkDisplay *display,
-                                   GdkDevice  *device,
-                                   gulong      serial)
-{
-  GHashTableIter iter;
-  gpointer key, value;
-  GdkGrabOwnership higher_ownership, device_ownership;
-  gboolean device_is_keyboard;
-
-  g_hash_table_iter_init (&iter, display->device_grabs);
-  higher_ownership = device_ownership = GDK_OWNERSHIP_NONE;
-  device_is_keyboard = (gdk_device_get_source (device) == GDK_SOURCE_KEYBOARD);
-
-  while (g_hash_table_iter_next (&iter, &key, &value))
-    {
-      GdkDeviceGrabInfo *grab;
-      GdkDevice *dev;
-      GList *grabs;
-
-      dev = key;
-      grabs = value;
-      grabs = grab_list_find (grabs, serial);
-
-      if (!grabs)
-        continue;
-
-      /* Discard device if it's not of the same type */
-      if ((device_is_keyboard && gdk_device_get_source (dev) != GDK_SOURCE_KEYBOARD) ||
-          (!device_is_keyboard && gdk_device_get_source (dev) == GDK_SOURCE_KEYBOARD))
-        continue;
-
-      grab = grabs->data;
-
-      if (dev == device)
-        device_ownership = grab->ownership;
-      else
-        {
-          if (grab->ownership > higher_ownership)
-            higher_ownership = grab->ownership;
-        }
-    }
-
-  if (higher_ownership > device_ownership)
-    {
-      /* There's a higher priority ownership
-       * going on for other device(s)
-       */
-      return FALSE;
-    }
-
-  return TRUE;
 }
 
 GdkPointerSurfaceInfo *

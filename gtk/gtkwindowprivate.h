@@ -124,6 +124,13 @@ GtkWidget *      gtk_window_pick_popover (GtkWindow   *window,
                                           double       x,
                                           double       y,
                                           GtkPickFlags flags);
+GdkDevice** gtk_window_get_foci_on_widget (GtkWindow *window,
+                                           GtkWidget *widget,
+                                           guint     *n_devices);
+void gtk_window_grab_notify (GtkWindow *window,
+                             GtkWidget *old_grab_widget,
+                             GtkWidget *new_grab_widget,
+                             gboolean   from_grab);
 
 G_END_DECLS
 

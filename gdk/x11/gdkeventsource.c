@@ -152,9 +152,8 @@ static void
 handle_touch_synthetic_crossing (GdkEvent *event)
 {
   GdkEventType evtype = gdk_event_get_event_type (event);
-  GdkDevice *device = gdk_event_get_device (event);
   GdkEvent *crossing = NULL;
-  GdkSeat *seat = gdk_device_get_seat (device);
+  GdkSeat *seat = gdk_event_get_seat (event);
   gboolean needs_enter, set_needs_enter = FALSE;
 
   if (quark_needs_enter == 0)
@@ -208,7 +207,7 @@ handle_touch_synthetic_crossing (GdkEvent *event)
 
   if (crossing)
     {
-      gdk_display_put_event (gdk_device_get_display (device), crossing);
+      gdk_display_put_event (gdk_seat_get_display (seat), crossing);
       gdk_event_unref (crossing);
     }
 }

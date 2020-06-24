@@ -1269,7 +1269,6 @@ captured_motion (GtkEventController *controller,
       indicator_set_over (&priv->vindicator, FALSE);
     }
   else if (input_source == GDK_SOURCE_PEN ||
-           input_source == GDK_SOURCE_ERASER ||
            input_source == GDK_SOURCE_TRACKPOINT)
     {
       indicator_set_over (&priv->hindicator, TRUE);

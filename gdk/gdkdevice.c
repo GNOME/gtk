@@ -924,7 +924,6 @@ get_native_grab_event_mask (GdkEventMask grab_mask)
 GdkGrabStatus
 gdk_device_grab (GdkDevice        *device,
                  GdkSurface       *surface,
-                 GdkGrabOwnership  grab_ownership,
                  gboolean          owner_events,
                  GdkEventMask      event_mask,
                  GdkCursor        *cursor,
@@ -958,7 +957,6 @@ gdk_device_grab (GdkDevice        *device,
       _gdk_display_add_device_grab (display,
                                     device,
                                     surface,
-                                    grab_ownership,
                                     owner_events,
                                     event_mask,
                                     serial,
@@ -1282,33 +1280,6 @@ _gdk_device_surface_at_position (GdkDevice       *device,
                                                              win_x,
                                                              win_y,
                                                              mask);
-}
-
-/**
- * gdk_device_get_last_event_surface:
- * @device: a #GdkDevice, with a source other than %GDK_SOURCE_KEYBOARD
- *
- * Gets information about which surface the given pointer device is in, based on events
- * that have been received so far from the display server. If another application
- * has a pointer grab, or this application has a grab with owner_events = %FALSE,
- * %NULL may be returned even if the pointer is physically over one of this
- * application's surfaces.
- *
- * Returns: (transfer none) (allow-none): the last surface the device
- */
-GdkSurface *
-gdk_device_get_last_event_surface (GdkDevice *device)
-{
-  GdkDisplay *display;
-  GdkPointerSurfaceInfo *info;
-
-  g_return_val_if_fail (GDK_IS_DEVICE (device), NULL);
-  g_return_val_if_fail (device->source != GDK_SOURCE_KEYBOARD, NULL);
-
-  display = gdk_device_get_display (device);
-  info = _gdk_display_get_pointer_info (display, device);
-
-  return info->surface_under_pointer;
 }
 
 /**

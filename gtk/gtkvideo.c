@@ -171,14 +171,14 @@ gtk_video_unmap (GtkWidget *widget)
 }
 
 static void
-gtk_video_grab_notify (GtkWidget *widget,
-                       gboolean   was_grabbed)
+gtk_video_set_focus_child (GtkWidget *widget,
+                           GtkWidget *child)
 {
   GtkVideo *self = GTK_VIDEO (widget);
 
-  self->grabbed = !was_grabbed;
+  self->grabbed = child != NULL;
 
-  GTK_WIDGET_CLASS (gtk_video_parent_class)->grab_notify (widget, was_grabbed);
+  GTK_WIDGET_CLASS (gtk_video_parent_class)->set_focus_child (widget, child);
 }
 
 static void
@@ -268,7 +268,7 @@ gtk_video_class_init (GtkVideoClass *klass)
   widget_class->unrealize = gtk_video_unrealize;
   widget_class->map = gtk_video_map;
   widget_class->unmap = gtk_video_unmap;
-  widget_class->grab_notify = gtk_video_grab_notify;
+  widget_class->set_focus_child = gtk_video_set_focus_child;
 
   gobject_class->dispose = gtk_video_dispose;
   gobject_class->get_property = gtk_video_get_property;

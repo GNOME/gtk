@@ -158,9 +158,6 @@ struct _GtkWidget
  *   see gtk_widget_get_state_flags().
  * @direction_changed: Signal emitted when the text direction of a
  *   widget changes.
- * @grab_notify: Signal emitted when a widget becomes shadowed by a
- *   GTK+ grab (not a pointer or keyboard grab) on another widget, or
- *   when it becomes unshadowed due to a grab being removed.
  * @get_request_mode: This allows a widget to tell its parent container whether
  *   it prefers to be allocated in %GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH or
  *   %GTK_SIZE_REQUEST_WIDTH_FOR_HEIGHT mode.
@@ -226,8 +223,6 @@ struct _GtkWidgetClass
                                 GtkStateFlags     previous_state_flags);
   void (* direction_changed)   (GtkWidget        *widget,
                                 GtkTextDirection  previous_direction);
-  void (* grab_notify)         (GtkWidget        *widget,
-                                gboolean          was_grabbed);
 
   /* size requests */
   GtkSizeRequestMode (* get_request_mode)               (GtkWidget      *widget);
@@ -432,10 +427,6 @@ void      gtk_widget_set_receives_default (GtkWidget           *widget,
 GDK_AVAILABLE_IN_ALL
 gboolean  gtk_widget_get_receives_default (GtkWidget           *widget);
 
-GDK_AVAILABLE_IN_ALL
-gboolean   gtk_widget_device_is_shadowed  (GtkWidget           *widget,
-                                           GdkDevice           *device);
-
 
 GDK_AVAILABLE_IN_ALL
 void                  gtk_widget_set_name               (GtkWidget    *widget,
@@ -595,14 +586,6 @@ void     gtk_widget_set_vexpand_set      (GtkWidget      *widget,
 GDK_AVAILABLE_IN_ALL
 gboolean gtk_widget_compute_expand       (GtkWidget      *widget,
                                           GtkOrientation  orientation);
-
-
-/* Multidevice support */
-GDK_AVAILABLE_IN_ALL
-gboolean         gtk_widget_get_support_multidevice (GtkWidget      *widget);
-GDK_AVAILABLE_IN_ALL
-void             gtk_widget_set_support_multidevice (GtkWidget      *widget,
-                                                     gboolean        support_multidevice);
 
 /* Accessibility support */
 GDK_AVAILABLE_IN_ALL

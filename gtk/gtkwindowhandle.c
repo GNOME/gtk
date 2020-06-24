@@ -328,13 +328,11 @@ click_gesture_pressed_cb (GtkGestureClick *gesture,
   GdkEventSequence *sequence;
   GdkEvent *event;
   guint button;
-  GtkRoot *root;
 
   widget = GTK_WIDGET (self);
   sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
   button = gtk_gesture_single_get_current_button (GTK_GESTURE_SINGLE (gesture));
   event = gtk_gesture_get_last_event (GTK_GESTURE (gesture), sequence);
-  root = gtk_widget_get_root (widget);
 
   if (!event)
     return;
@@ -355,9 +353,8 @@ click_gesture_pressed_cb (GtkGestureClick *gesture,
       if (n_press == 2)
         perform_titlebar_action (self, event, button, n_press);
 
-      if (gtk_widget_has_grab (GTK_WIDGET (root)))
-        gtk_gesture_set_sequence_state (GTK_GESTURE (gesture),
-                                        sequence, GTK_EVENT_SEQUENCE_CLAIMED);
+      gtk_gesture_set_sequence_state (GTK_GESTURE (gesture),
+                                      sequence, GTK_EVENT_SEQUENCE_CLAIMED);
       break;
 
     case GDK_BUTTON_SECONDARY:
@@ -420,7 +417,6 @@ drag_gesture_update_cb (GtkGestureDrag  *gesture,
            * widget from doing anything.
            */
           if (event_widget != GTK_WIDGET (self) &&
-              !gtk_widget_has_grab (event_widget) &&
               gtk_widget_consumes_motion (event_widget, GTK_WIDGET (self), sequence))
             {
               gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_DENIED);

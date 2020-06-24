@@ -446,31 +446,3 @@ gdk_seat_get_tool (GdkSeat *seat,
   seat_class = GDK_SEAT_GET_CLASS (seat);
   return seat_class->get_tool (seat, serial, hw_id);
 }
-
-/**
- * gdk_seat_get_logical_pointers:
- * @seat: The #GdkSeat
- * @capabilities: Queried capabilities
- *
- * Returns all logical pointers with the given capabilities driven by
- * this @seat.
- *
- * On most windowing system backends this function will return a list
- * with a single element (meaning that all input devices drive the same
- * on-screen cursor).
- *
- * In other windowing systems where there can possibly be multiple
- * foci (e.g. Wayland), this function will return all logical #GdkDevices
- * that represent these.
- *
- * Returns: (transfer container) (element-type GdkDevice): A list
- *   of logical pointing devices
- */
-GList *
-gdk_seat_get_logical_pointers (GdkSeat             *seat,
-                               GdkSeatCapabilities  capabilities)
-{
-  g_return_val_if_fail (GDK_IS_SEAT (seat), NULL);
-
-  return GDK_SEAT_GET_CLASS (seat)->get_logical_pointers (seat, capabilities);
-}

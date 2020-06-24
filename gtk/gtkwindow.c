@@ -7195,3 +7195,130 @@ gtk_window_destroy (GtkWindow *window)
 
   g_object_unref (window);
 }
+
+GdkDevice**
+gtk_window_get_foci_on_widget (GtkWindow *window,
+                               GtkWidget *widget,
+                               guint     *n_devices)
+{
+  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
+  GPtrArray *array = g_ptr_array_new ();
+  GList *l;
+
+  for (l = priv->foci; l; l = l->next)
+    {
+      GtkPointerFocus *focus = l->data;
+      GtkWidget *target;
+
+      target = gtk_pointer_focus_get_effective_target (focus);
+
+      if (target == widget || gtk_widget_is_ancestor (target, widget))
+        g_ptr_array_add (array, focus->device);
+    }
+
+  if (n_devices)
+    *n_devices = array->len;
+
+  return (GdkDevice**) g_ptr_array_free (array, FALSE);
+}
+
+static void
+gtk_grab_notify_foreach (GtkWidget *child,
+                         GdkDevice *device,
+                         GtkWidget *new_grab_widget,
+                         GtkWidget *old_grab_widget,
+                         gboolean   from_grab,
+                         gboolean   was_shadowed,
+                         gboolean   is_shadowed)
+{
+  g_object_ref (child);
+
+  if (is_shadowed)
+    {
+      if (!was_shadowed &&
+          gtk_widget_is_sensitive (child))
+        _gtk_widget_synthesize_crossing (child,
+                                         new_grab_widget,
+                                         device,
+                                         GDK_CROSSING_GTK_GRAB);
+    }
+  else
+    {
+      if (was_shadowed &&
+          gtk_widget_is_sensitive (child))
+        _gtk_widget_synthesize_crossing (old_grab_widget, child,
+                                         device,
+                                         from_grab ? GDK_CROSSING_GTK_GRAB :
+                                         GDK_CROSSING_GTK_UNGRAB);
+    }
+
+  _gtk_widget_grab_notify (child, was_shadowed);
+
+  g_object_unref (child);
+}
+
+static void
+gtk_window_propagate_grab_notify (GtkWindow *window,
+                                  GtkWidget *target,
+                                  GdkDevice *device,
+                                  GtkWidget *old_grab_widget,
+                                  GtkWidget *new_grab_widget,
+                                  gboolean   from_grab)
+{
+  GList *l, *widgets = NULL;
+  gboolean was_grabbed = FALSE, is_grabbed = FALSE;
+
+  while (target)
+    {
+      widgets = g_list_prepend (widgets, g_object_ref (target));
+      target = gtk_widget_get_parent (target);
+    }
+
+  widgets = g_list_reverse (widgets);
+
+  for (l = widgets; l; l = l->next)
+    {
+      gboolean was_shadowed, is_shadowed;
+
+      was_grabbed |= (l->data == old_grab_widget);
+      is_grabbed |= (l->data == new_grab_widget);
+
+      was_shadowed = old_grab_widget && !was_grabbed;
+      is_shadowed = new_grab_widget && is_grabbed;
+
+      if (was_shadowed == is_shadowed)
+        break;
+
+      gtk_grab_notify_foreach (l->data,
+                               device,
+                               old_grab_widget,
+                               new_grab_widget,
+                               from_grab,
+                               was_shadowed,
+                               is_shadowed);
+    }
+
+  g_list_free_full (widgets, g_object_unref);
+}
+
+void
+gtk_window_grab_notify (GtkWindow *window,
+                        GtkWidget *old_grab_widget,
+                        GtkWidget *new_grab_widget,
+                        gboolean   from_grab)
+{
+  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
+  GList *l;
+
+  for (l = priv->foci; l; l = l->next)
+    {
+      GtkPointerFocus *focus = l->data;
+
+      gtk_window_propagate_grab_notify (window,
+                                        gtk_pointer_focus_get_effective_target (focus),
+                                        focus->device,
+                                        old_grab_widget,
+                                        new_grab_widget,
+                                        from_grab);
+    }
+}
