@@ -427,10 +427,6 @@ void      gtk_widget_set_receives_default (GtkWidget           *widget,
 GDK_AVAILABLE_IN_ALL
 gboolean  gtk_widget_get_receives_default (GtkWidget           *widget);
 
-GDK_AVAILABLE_IN_ALL
-gboolean   gtk_widget_device_is_shadowed  (GtkWidget           *widget,
-                                           GdkDevice           *device);
-
 
 GDK_AVAILABLE_IN_ALL
 void                  gtk_widget_set_name               (GtkWidget    *widget,

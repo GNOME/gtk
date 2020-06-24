@@ -5219,48 +5219,6 @@ _gtk_widget_set_has_grab (GtkWidget *widget,
 }
 
 /**
- * gtk_widget_device_is_shadowed:
- * @widget: a #GtkWidget
- * @device: a #GdkDevice
- *
- * Returns %TRUE if @device has been shadowed by a GTK+
- * device grab on another widget, so it would stop sending
- * events to @widget. This may be used in the
- * #GtkWidget::grab-notify signal to check for specific
- * devices. See gtk_device_grab_add().
- *
- * Returns: %TRUE if there is an ongoing grab on @device
- *          by another #GtkWidget than @widget.
- **/
-gboolean
-gtk_widget_device_is_shadowed (GtkWidget *widget,
-                               GdkDevice *device)
-{
-  GtkWindowGroup *group;
-  GtkWidget *grab_widget;
-  GtkRoot *root;
-
-  g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
-
-  if (!_gtk_widget_get_realized (widget))
-    return TRUE;
-
-  root = _gtk_widget_get_root (widget);
-
-  if (GTK_IS_WINDOW (root))
-    group = gtk_window_get_group (GTK_WINDOW (root));
-  else
-    group = gtk_window_get_group (NULL);
-
-  grab_widget = gtk_window_group_get_current_grab (group);
-  if (grab_widget && widget != grab_widget &&
-      !gtk_widget_is_ancestor (widget, grab_widget))
-    return TRUE;
-
-  return FALSE;
-}
-
-/**
  * gtk_widget_set_name:
  * @widget: a #GtkWidget
  * @name: name for the widget
