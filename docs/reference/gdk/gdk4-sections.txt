@@ -379,7 +379,6 @@ gdk_device_get_surface_at_position
 GdkTimeCoord
 gdk_device_get_axis
 gdk_device_get_axis_names
-gdk_device_get_last_event_surface
 
 <SUBSECTION>
 gdk_device_tool_get_serial

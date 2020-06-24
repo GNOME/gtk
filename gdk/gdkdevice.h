@@ -144,9 +144,6 @@ GDK_AVAILABLE_IN_ALL
 GdkDeviceType gdk_device_get_device_type (GdkDevice *device);
 
 GDK_AVAILABLE_IN_ALL
-GdkSurface *gdk_device_get_last_event_surface (GdkDevice *device);
-
-GDK_AVAILABLE_IN_ALL
 const gchar *gdk_device_get_vendor_id       (GdkDevice *device);
 GDK_AVAILABLE_IN_ALL
 const gchar *gdk_device_get_product_id      (GdkDevice *device);
