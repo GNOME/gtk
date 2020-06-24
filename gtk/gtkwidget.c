@@ -10216,23 +10216,6 @@ gtk_widget_in_destruction (GtkWidget *widget)
 }
 
 gboolean
-_gtk_widget_get_shadowed (GtkWidget *widget)
-{
-  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
-
-  return priv->shadowed;
-}
-
-void
-_gtk_widget_set_shadowed (GtkWidget *widget,
-                          gboolean   shadowed)
-{
-  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
-
-  priv->shadowed = shadowed;
-}
-
-gboolean
 _gtk_widget_get_alloc_needed (GtkWidget *widget)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);

@@ -7235,7 +7235,6 @@ gtk_grab_notify_foreach (GtkWidget *child,
 
   if (is_shadowed)
     {
-      _gtk_widget_set_shadowed (child, TRUE);
       if (!was_shadowed &&
           gtk_widget_is_sensitive (child))
         _gtk_widget_synthesize_crossing (child,
@@ -7245,7 +7244,6 @@ gtk_grab_notify_foreach (GtkWidget *child,
     }
   else
     {
-      _gtk_widget_set_shadowed (child, FALSE);
       if (was_shadowed &&
           gtk_widget_is_sensitive (child))
         _gtk_widget_synthesize_crossing (old_grab_widget, child,
