@@ -22,6 +22,7 @@ gdk_macos_sources = files([
   'GdkMacosBaseView.c',
   'GdkMacosCairoView.c',
   'GdkMacosCairoSubview.c',
+  'GdkMacosGLLayer.c',
   'GdkMacosWindow.c',
 ])
 
@@ -40,6 +41,7 @@ gdk_macos_frameworks = [
   'Carbon',
   'CoreVideo',
   'CoreServices',
+  'OpenGL',
 ]
 
 gdk_macos_deps = [
