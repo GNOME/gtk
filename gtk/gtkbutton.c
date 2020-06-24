@@ -140,8 +140,6 @@ static void gtk_button_finish_activate (GtkButton         *button,
 
 static void gtk_button_state_flags_changed (GtkWidget     *widget,
                                             GtkStateFlags  previous_state);
-static void gtk_button_grab_notify     (GtkWidget             *widget,
-					gboolean               was_grabbed);
 static void gtk_button_do_release      (GtkButton             *button,
                                         gboolean               emit_clicked);
 static void gtk_button_set_child_type (GtkButton *button, guint child_type);
@@ -212,7 +210,6 @@ gtk_button_class_init (GtkButtonClass *klass)
 
   widget_class->unrealize = gtk_button_unrealize;
   widget_class->state_flags_changed = gtk_button_state_flags_changed;
-  widget_class->grab_notify = gtk_button_grab_notify;
   widget_class->unmap = gtk_button_unmap;
   widget_class->compute_expand = gtk_button_compute_expand;
   widget_class->get_request_mode = gtk_button_get_request_mode;
@@ -369,6 +366,11 @@ click_gesture_cancel_cb (GtkGesture       *gesture,
                          GdkEventSequence *sequence,
                          GtkButton        *button)
 {
+  GtkButtonPrivate *priv = gtk_button_get_instance_private (button);
+
+  if (priv->activate_timeout)
+    gtk_button_finish_activate (button, FALSE);
+
   gtk_button_do_release (button, FALSE);
 }
 
@@ -932,22 +934,6 @@ gtk_button_state_flags_changed (GtkWidget     *widget,
   GtkButton *button = GTK_BUTTON (widget);
 
   if (!gtk_widget_is_sensitive (widget))
-    gtk_button_do_release (button, FALSE);
-}
-
-static void
-gtk_button_grab_notify (GtkWidget *widget,
-                        gboolean   was_grabbed)
-{
-  GtkButton *button = GTK_BUTTON (widget);
-  GtkButtonPrivate *priv = gtk_button_get_instance_private (button);
-
-  GTK_WIDGET_CLASS (gtk_button_parent_class)->grab_notify (widget, was_grabbed);
-
-  if (was_grabbed && priv->activate_timeout)
-    gtk_button_finish_activate (button, FALSE);
-
-  if (!was_grabbed)
     gtk_button_do_release (button, FALSE);
 }
 
