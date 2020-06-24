@@ -21,6 +21,7 @@
 
 #include "gtknoselection.h"
 
+#include "gtkbitset.h"
 #include "gtkintl.h"
 #include "gtkselectionmodel.h"
 
@@ -89,9 +90,26 @@ gtk_no_selection_list_model_init (GListModelInterface *iface)
   iface->get_item = gtk_no_selection_get_item;
 }
 
+static gboolean
+gtk_no_selection_is_selected (GtkSelectionModel *model,
+                              guint              position)
+{
+  return FALSE;
+}
+
+static GtkBitset *
+gtk_no_selection_get_selection_in_range (GtkSelectionModel *model,
+                                         guint              pos,
+                                         guint              n_items)
+{
+  return gtk_bitset_new_empty ();
+}
+
 static void
 gtk_no_selection_selection_model_init (GtkSelectionModelInterface *iface)
 {
+  iface->is_selected = gtk_no_selection_is_selected;
+  iface->get_selection_in_range = gtk_no_selection_get_selection_in_range;
 }
 
 G_DEFINE_TYPE_EXTENDED (GtkNoSelection, gtk_no_selection, G_TYPE_OBJECT, 0,
