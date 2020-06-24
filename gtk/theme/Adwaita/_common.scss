@@ -2930,7 +2930,7 @@ switch {
   (':backdrop:checked', '-gtk-icontheme(\'object-select-symbolic\')', '#{transparentize($osd_fg_color, 0.2)}', '#{desaturate($checkradio_bg_color, 100%)}'), {
 
   .view.content-view.check#{$check_state}:not(list),
-  .content-view .tile check#{$check_state}:not(list) {
+  .content-view:not(list) check#{$check_state} {
     margin: 4px;
     min-width: 32px;
     min-height: 32px;
