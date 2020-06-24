@@ -1275,8 +1275,14 @@ add_autoscroll (GtkListBase *self,
 {
   GtkListBasePrivate *priv = gtk_list_base_get_instance_private (self);
 
-  priv->autoscroll_delta_x = delta_x;
-  priv->autoscroll_delta_y = delta_y;
+  if (gtk_list_base_adjustment_is_flipped (self, GTK_ORIENTATION_HORIZONTAL))
+    priv->autoscroll_delta_x = -delta_x;
+  else
+    priv->autoscroll_delta_x = delta_x;
+  if (gtk_list_base_adjustment_is_flipped (self, GTK_ORIENTATION_VERTICAL))
+    priv->autoscroll_delta_y = -delta_y;
+  else
+    priv->autoscroll_delta_y = delta_y;
 
   if (priv->autoscroll_id == 0)
     priv->autoscroll_id = gtk_widget_add_tick_callback (GTK_WIDGET (self), autoscroll_cb, self, NULL);
