@@ -1263,15 +1263,6 @@ autoscroll_cb (GtkWidget     *widget,
 
   delta_y = gtk_adjustment_get_value (priv->adjustment[GTK_ORIENTATION_VERTICAL]) - value;
 
-  if (priv->rubberband)
-    {
-      priv->rubberband->x2 += delta_x;
-      priv->rubberband->y2 += delta_y;
-      gtk_list_base_update_rubberband_selection (self);
-    }
-
-  gtk_widget_queue_draw (GTK_WIDGET (self));
-
   if (delta_x != 0 || delta_y != 0)
     {
       return G_SOURCE_CONTINUE;
