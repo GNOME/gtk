@@ -60,6 +60,9 @@
 #ifdef GDK_RENDERING_VULKAN
 #include "vulkan/gskvulkanrenderer.h"
 #endif
+#ifdef GDK_WINDOWING_MACOS
+#include <gdk/macos/gdkmacos.h>
+#endif
 
 typedef struct
 {
@@ -554,6 +557,10 @@ get_renderer_for_backend (GdkSurface *surface)
 #ifdef GDK_WINDOWING_BROADWAY
   if (GDK_IS_BROADWAY_SURFACE (surface))
     return GSK_TYPE_BROADWAY_RENDERER;
+#endif
+#ifdef GDK_WINDOWING_MACOS
+  if (GDK_IS_MACOS_SURFACE (surface))
+    return GSK_TYPE_GL_RENDERER;
 #endif
 
   return G_TYPE_INVALID;

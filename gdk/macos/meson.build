@@ -11,6 +11,7 @@ gdk_macos_sources = files([
   'gdkmacosdisplay-translate.c',
   'gdkmacosdrag.c',
   'gdkmacosdragsurface.c',
+  'gdkmacosglcontext.c',
   'gdkmacoseventsource.c',
   'gdkmacoskeymap.c',
   'gdkmacosmonitor.c',
@@ -29,6 +30,7 @@ gdk_macos_sources = files([
 gdk_macos_public_headers = files([
   'gdkmacosdevice.h',
   'gdkmacosdisplay.h',
+  'gdkmacosglcontext.h',
   'gdkmacoskeymap.h',
   'gdkmacosmonitor.h',
   'gdkmacossurface.h',

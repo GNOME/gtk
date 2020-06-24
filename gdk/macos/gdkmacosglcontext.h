@@ -17,16 +17,27 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later
  */
 
-#ifndef __GDK_MACOS_H__
-#define __GDK_MACOS_H__
+#ifndef __GDK_MACOS_GL_CONTEXT_H__
+#define __GDK_MACOS_GL_CONTEXT_H__
+
+#if !defined (__GDKMACOS_H_INSIDE__) && !defined (GTK_COMPILATION)
+#error "Only <gdk/macos/gdkmacos.h> can be included directly."
+#endif
 
 #include <gdk/gdk.h>
 
-#include "gdkmacosdevice.h"
-#include "gdkmacosdisplay.h"
-#include "gdkmacosglcontext.h"
-#include "gdkmacoskeymap.h"
-#include "gdkmacosmonitor.h"
-#include "gdkmacossurface.h"
+G_BEGIN_DECLS
 
-#endif /* __GDK_MACOS_H__ */
+#define GDK_TYPE_MACOS_GL_CONTEXT    (gdk_macos_gl_context_get_type ())
+#define GDK_MACOS_GL_CONTEXT(obj)    (G_TYPE_CHECK_INSTANCE_CAST ((obj), GDK_TYPE_MACOS_GL_CONTEXT, GdkMacosGLContext))
+#define GDK_IS_MACOS_GL_CONTEXT(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GDK_TYPE_MACOS_GL_CONTEXT))
+
+typedef struct _GdkMacosGLContext      GdkMacosGLContext;
+typedef struct _GdkMacosGLContextClass GdkMacosGLContextClass;
+
+GDK_AVAILABLE_IN_ALL
+GType gdk_macos_gl_context_get_type (void) G_GNUC_CONST;
+
+G_END_DECLS
+
+#endif /* __GDK_MACOS_GL_CONTEXT_H__ */

@@ -31,6 +31,7 @@
 #include "gdkmacoscairocontext-private.h"
 #include "gdkmacoseventsource-private.h"
 #include "gdkmacosdisplay-private.h"
+#include "gdkmacosglcontext-private.h"
 #include "gdkmacoskeymap-private.h"
 #include "gdkmacosmonitor-private.h"
 #include "gdkmacosseat-private.h"
@@ -606,6 +607,16 @@ gdk_macos_display_load_clipboard (GdkMacosDisplay *self)
   GDK_DISPLAY (self)->clipboard = _gdk_macos_clipboard_new (self);
 }
 
+static gboolean
+gdk_macos_display_make_gl_context_current (GdkDisplay   *display,
+                                           GdkGLContext *gl_context)
+{
+  g_assert (GDK_IS_MACOS_DISPLAY (display));
+  g_assert (GDK_IS_MACOS_GL_CONTEXT (gl_context));
+
+  return _gdk_macos_gl_context_make_current (GDK_MACOS_GL_CONTEXT (gl_context));
+}
+
 static void
 gdk_macos_display_finalize (GObject *object)
 {
@@ -649,6 +660,7 @@ gdk_macos_display_class_init (GdkMacosDisplayClass *klass)
   display_class->get_name = gdk_macos_display_get_name;
   display_class->get_setting = gdk_macos_display_get_setting;
   display_class->has_pending = gdk_macos_display_has_pending;
+  display_class->make_gl_context_current = gdk_macos_display_make_gl_context_current;
   display_class->notify_startup_complete = gdk_macos_display_notify_startup_complete;
   display_class->queue_events = gdk_macos_display_queue_events;
   display_class->sync = gdk_macos_display_sync;
