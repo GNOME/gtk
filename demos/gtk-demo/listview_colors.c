@@ -785,7 +785,7 @@ do_listview_colors (GtkWidget *do_widget)
                               gtk_widget_get_display (do_widget));
       g_object_add_weak_pointer (G_OBJECT (window), (gpointer*)&window);
 
-      sw = gtk_scrolled_window_new (NULL, NULL);
+      sw = gtk_scrolled_window_new ();
       gtk_window_set_child (GTK_WINDOW (window), sw);
 
       gridview = create_color_grid ();

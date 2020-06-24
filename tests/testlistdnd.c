@@ -338,7 +338,7 @@ main (int argc, char *argv[])
   gtk_box_append (GTK_BOX (box), stack);
 
   /* grid */
-  sw = gtk_scrolled_window_new (NULL, NULL);
+  sw = gtk_scrolled_window_new ();
   gtk_scrolled_window_set_has_frame (GTK_SCROLLED_WINDOW (sw), TRUE);
   gtk_stack_add_titled (GTK_STACK (stack), sw, "grid", "GtkGridView");
 
@@ -361,7 +361,7 @@ main (int argc, char *argv[])
   g_object_unref (factory);
 
   /* list */
-  sw = gtk_scrolled_window_new (NULL, NULL);
+  sw = gtk_scrolled_window_new ();
   gtk_scrolled_window_set_has_frame (GTK_SCROLLED_WINDOW (sw), TRUE);
   gtk_stack_add_titled (GTK_STACK (stack), sw, "list", "GtkListView");
 
@@ -381,7 +381,7 @@ main (int argc, char *argv[])
   g_object_unref (factory);
 
   /* columnview */
-  sw = gtk_scrolled_window_new (NULL, NULL);
+  sw = gtk_scrolled_window_new ();
   gtk_scrolled_window_set_has_frame (GTK_SCROLLED_WINDOW (sw), TRUE);
   gtk_stack_add_titled (GTK_STACK (stack), sw, "column", "GtkColumnView");
 
@@ -411,7 +411,7 @@ main (int argc, char *argv[])
   gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (sw), cv);
 
   /* tree */
-  sw = gtk_scrolled_window_new (NULL, NULL);
+  sw = gtk_scrolled_window_new ();
   gtk_scrolled_window_set_has_frame (GTK_SCROLLED_WINDOW (sw), TRUE);
   gtk_stack_add_titled (GTK_STACK (stack), sw, "tree", "Tree");
 

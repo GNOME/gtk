@@ -262,7 +262,7 @@ scrolling (void)
 
   window = gtk_window_new ();
   gtk_window_set_title (GTK_WINDOW (window), "Scrolling");
-  sw = gtk_scrolled_window_new (NULL, NULL);
+  sw = gtk_scrolled_window_new ();
   viewport = gtk_viewport_new (NULL, NULL);
   grid = gtk_grid_new ();
 

@@ -94,7 +94,7 @@ do_css_basics (GtkWidget *do_widget)
 
       provider = GTK_STYLE_PROVIDER (gtk_css_provider_new ());
 
-      container = gtk_scrolled_window_new (NULL, NULL);
+      container = gtk_scrolled_window_new ();
       gtk_window_set_child (GTK_WINDOW (window), container);
       child = gtk_text_view_new_with_buffer (text);
       gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (container), child);

@@ -196,7 +196,7 @@ main (int argc, char *argv[])
 
   box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 10);
 
-  sw = gtk_scrolled_window_new (NULL, NULL);
+  sw = gtk_scrolled_window_new ();
   gtk_widget_set_hexpand (sw, TRUE);
   gtk_widget_set_vexpand (sw, TRUE);
   gtk_window_set_child (GTK_WINDOW (window), box);

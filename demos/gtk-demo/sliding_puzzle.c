@@ -443,7 +443,7 @@ do_sliding_puzzle (GtkWidget *do_widget)
       gtk_media_stream_set_muted (media, TRUE);
       gtk_media_stream_play (media);
       add_choice (choices, GDK_PAINTABLE (media));
-      sw = gtk_scrolled_window_new (NULL, NULL);
+      sw = gtk_scrolled_window_new ();
       gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (sw), choices);
       gtk_grid_attach (GTK_GRID (tweaks), sw, 0, 0, 2, 1);
 

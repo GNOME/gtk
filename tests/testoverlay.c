@@ -229,7 +229,7 @@ test_scrolling (void)
   overlay = gtk_overlay_new ();
   gtk_window_set_child (GTK_WINDOW (win), overlay);
 
-  sw = gtk_scrolled_window_new (NULL, NULL);
+  sw = gtk_scrolled_window_new ();
   gtk_scrolled_window_set_min_content_width (GTK_SCROLLED_WINDOW (sw), 200);
   gtk_scrolled_window_set_min_content_height (GTK_SCROLLED_WINDOW (sw), 200);
   gtk_overlay_set_child (GTK_OVERLAY (overlay), sw);
@@ -378,7 +378,7 @@ test_chase (void)
   overlay = gtk_overlay_new ();
   gtk_window_set_child (GTK_WINDOW (win), overlay);
 
-  sw = gtk_scrolled_window_new (NULL, NULL);
+  sw = gtk_scrolled_window_new ();
   gtk_scrolled_window_set_min_content_width (GTK_SCROLLED_WINDOW (sw), 200);
   gtk_scrolled_window_set_min_content_height (GTK_SCROLLED_WINDOW (sw), 200);
   gtk_overlay_set_child (GTK_OVERLAY (overlay), sw);

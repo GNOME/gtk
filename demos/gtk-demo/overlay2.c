@@ -40,7 +40,7 @@ do_overlay2 (GtkWidget *do_widget)
       gtk_window_set_title (GTK_WINDOW (window), "Decorative Overlay");
 
       overlay = gtk_overlay_new ();
-      sw = gtk_scrolled_window_new (NULL, NULL);
+      sw = gtk_scrolled_window_new ();
       gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (sw),
                                       GTK_POLICY_AUTOMATIC,
                                       GTK_POLICY_AUTOMATIC);

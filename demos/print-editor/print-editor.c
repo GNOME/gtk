@@ -768,7 +768,7 @@ activate (GApplication *app)
   gtk_window_set_child (GTK_WINDOW (main_window), box);
 
   /* Create document  */
-  sw = gtk_scrolled_window_new (NULL, NULL);
+  sw = gtk_scrolled_window_new ();
 
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (sw),
                                   GTK_POLICY_AUTOMATIC,

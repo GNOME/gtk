@@ -80,7 +80,7 @@
  * from the GtkScrolledWindow, like this:
  *
  * |[<!-- language="C" -->
- * GtkWidget *scrolled_window = gtk_scrolled_window_new (NULL, NULL);
+ * GtkWidget *scrolled_window = gtk_scrolled_window_new ();
  * GtkWidget *child_widget = gtk_button_new ();
  *
  * // GtkButton is not a GtkScrollable, so GtkScrolledWindow will automatically
@@ -2082,36 +2082,15 @@ gtk_scrolled_window_init (GtkScrolledWindow *scrolled_window)
 
 /**
  * gtk_scrolled_window_new:
- * @hadjustment: (nullable): horizontal adjustment
- * @vadjustment: (nullable): vertical adjustment
  *
  * Creates a new scrolled window.
  *
- * The two arguments are the scrolled window’s adjustments; these will be
- * shared with the scrollbars and the child widget to keep the bars in sync
- * with the child. Usually you want to pass %NULL for the adjustments, which
- * will cause the scrolled window to create them for you.
- *
  * Returns: a new scrolled window
  */
-GtkWidget*
-gtk_scrolled_window_new (GtkAdjustment *hadjustment,
-                         GtkAdjustment *vadjustment)
+GtkWidget *
+gtk_scrolled_window_new (void)
 {
-  GtkWidget *scrolled_window;
-
-  if (hadjustment)
-    g_return_val_if_fail (GTK_IS_ADJUSTMENT (hadjustment), NULL);
-
-  if (vadjustment)
-    g_return_val_if_fail (GTK_IS_ADJUSTMENT (vadjustment), NULL);
-
-  scrolled_window = g_object_new (GTK_TYPE_SCROLLED_WINDOW,
-                                    "hadjustment", hadjustment,
-                                    "vadjustment", vadjustment,
-                                    NULL);
-
-  return scrolled_window;
+  return g_object_new (GTK_TYPE_SCROLLED_WINDOW, NULL);
 }
 
 /**

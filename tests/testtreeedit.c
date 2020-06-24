@@ -254,7 +254,7 @@ main (gint argc, gchar **argv)
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 6);
   gtk_window_set_child (GTK_WINDOW (window), vbox);
 
-  scrolled_window = gtk_scrolled_window_new (NULL, NULL);
+  scrolled_window = gtk_scrolled_window_new ();
   gtk_scrolled_window_set_has_frame (GTK_SCROLLED_WINDOW (scrolled_window), TRUE);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_window),
 				  GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);

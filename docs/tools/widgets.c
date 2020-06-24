@@ -881,7 +881,7 @@ create_scrolledwindow (void)
 {
   GtkWidget *scrolledwin, *label;
 
-  scrolledwin = gtk_scrolled_window_new (NULL, NULL);
+  scrolledwin = gtk_scrolled_window_new ();
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolledwin),
                                   GTK_POLICY_NEVER, GTK_POLICY_ALWAYS);
   label = gtk_label_new ("Scrolled Window");

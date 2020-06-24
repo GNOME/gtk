@@ -193,7 +193,7 @@ main (int argc, char *argv[])
   window = gtk_window_new ();
   grid = gtk_grid_new ();
   gtk_window_set_child (GTK_WINDOW (window), grid);
-  sw = gtk_scrolled_window_new (NULL, NULL);
+  sw = gtk_scrolled_window_new ();
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (sw),
                                   GTK_POLICY_AUTOMATIC,
                                   GTK_POLICY_AUTOMATIC);
@@ -205,7 +205,7 @@ main (int argc, char *argv[])
   gtk_list_box_bind_model (GTK_LIST_BOX (box), G_LIST_MODEL (store), create_widget, NULL, NULL);
   gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (sw), box);
 
-  sw = gtk_scrolled_window_new (NULL, NULL);
+  sw = gtk_scrolled_window_new ();
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (sw),
                                   GTK_POLICY_AUTOMATIC,
                                   GTK_POLICY_AUTOMATIC);

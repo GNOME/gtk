@@ -36,7 +36,7 @@ test_scrolled_window_child_count (void)
   GtkWidget *sw;
   AtkObject *accessible;
 
-  sw = gtk_scrolled_window_new (NULL, NULL);
+  sw = gtk_scrolled_window_new ();
   g_object_ref_sink (sw);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (sw),
                                   GTK_POLICY_ALWAYS, GTK_POLICY_ALWAYS);
@@ -242,7 +242,7 @@ main (int argc, char *argv[])
 
   g_test_add_func ("/scrolledwindow/child-count", test_scrolled_window_child_count);
 
-  add_child_tests (gtk_scrolled_window_new (NULL, NULL));
+  add_child_tests (gtk_scrolled_window_new ());
   add_child_tests (gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0));
   add_child_tests (gtk_paned_new (GTK_ORIENTATION_HORIZONTAL));
   add_child_tests (gtk_grid_new ());

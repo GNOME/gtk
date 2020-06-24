@@ -947,7 +947,7 @@ property_editor (GObject                *object,
         prop_edit = gtk_menu_button_new ();
         gtk_menu_button_set_popover (GTK_MENU_BUTTON (prop_edit), popover);
 
-        sw = gtk_scrolled_window_new (NULL, NULL);
+        sw = gtk_scrolled_window_new ();
         gtk_popover_set_child (GTK_POPOVER (popover), sw);
         g_object_set (sw,
                       "hexpand", TRUE,
@@ -1015,7 +1015,7 @@ property_editor (GObject                *object,
       prop_edit = gtk_menu_button_new ();
       gtk_menu_button_set_popover (GTK_MENU_BUTTON (prop_edit), popover);
 
-      sw = gtk_scrolled_window_new (NULL, NULL);
+      sw = gtk_scrolled_window_new ();
       gtk_popover_set_child (GTK_POPOVER (popover), sw);
       g_object_set (sw,
                     "hexpand", TRUE,
