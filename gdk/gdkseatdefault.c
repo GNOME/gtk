@@ -149,7 +149,7 @@ gdk_seat_default_grab (GdkSeat                *seat,
         pointer_evmask |= TOUCH_EVENTS;
 
       status = gdk_device_grab (priv->logical_pointer, surface,
-                                GDK_OWNERSHIP_NONE, owner_events,
+                                owner_events,
                                 pointer_evmask, cursor,
                                 evtime);
     }
@@ -158,7 +158,7 @@ gdk_seat_default_grab (GdkSeat                *seat,
       capabilities & GDK_SEAT_CAPABILITY_KEYBOARD)
     {
       status = gdk_device_grab (priv->logical_keyboard, surface,
-                                GDK_OWNERSHIP_NONE, owner_events,
+                                owner_events,
                                 KEYBOARD_EVENTS, cursor,
                                 evtime);
 
@@ -228,7 +228,6 @@ device_get_capability (GdkDevice *device)
     case GDK_SOURCE_TOUCHSCREEN:
       return GDK_SEAT_CAPABILITY_TOUCH;
     case GDK_SOURCE_PEN:
-    case GDK_SOURCE_ERASER:
     case GDK_SOURCE_CURSOR:
       return GDK_SEAT_CAPABILITY_TABLET_STYLUS;
     case GDK_SOURCE_TABLET_PAD:
@@ -306,18 +305,6 @@ gdk_seat_default_get_tool (GdkSeat *seat,
   return NULL;
 }
 
-static GList *
-gdk_seat_default_get_logical_pointers (GdkSeat             *seat,
-                                      GdkSeatCapabilities  capabilities)
-{
-  GList *pointers = NULL;
-
-  if (capabilities & GDK_SEAT_CAPABILITY_ALL_POINTING)
-    pointers = g_list_prepend (pointers, gdk_seat_get_pointer (seat));
-
-  return pointers;
-}
-
 static void
 gdk_seat_default_class_init (GdkSeatDefaultClass *klass)
 {
@@ -333,7 +320,6 @@ gdk_seat_default_class_init (GdkSeatDefaultClass *klass)
 
   seat_class->get_logical_device = gdk_seat_default_get_logical_device;
   seat_class->get_physical_devices = gdk_seat_default_get_physical_devices;
-  seat_class->get_logical_pointers = gdk_seat_default_get_logical_pointers;
 
   seat_class->get_tool = gdk_seat_default_get_tool;
 }

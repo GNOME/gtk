@@ -1663,6 +1663,25 @@ handle_key_event (GdkEvent *event)
   return focus_widget ? focus_widget : event_widget;
 }
 
+static gboolean
+is_transient_for (GtkWindow *child,
+                  GtkWindow *parent)
+{
+  GtkWindow *transient_for;
+
+  transient_for = gtk_window_get_transient_for (child);
+
+  while (transient_for)
+    {
+      if (transient_for == parent)
+        return TRUE;
+
+      transient_for = gtk_window_get_transient_for (transient_for);
+    }
+
+  return FALSE;
+}
+
 void
 gtk_main_do_event (GdkEvent *event)
 {
@@ -1726,11 +1745,16 @@ gtk_main_do_event (GdkEvent *event)
 
   /* If the grab widget is an ancestor of the event widget
    * then we send the event to the original event widget.
-   * This is the key to implementing modality.
+   * This is the key to implementing modality. This also applies
+   * across windows that are directly or indirectly transient-for
+   * the modal one.
    */
   if (!grab_widget ||
       ((gtk_widget_is_sensitive (target_widget) || gdk_event_get_event_type (event) == GDK_SCROLL) &&
-       gtk_widget_is_ancestor (target_widget, grab_widget)))
+       gtk_widget_is_ancestor (target_widget, grab_widget)) ||
+      (GTK_IS_WINDOW (grab_widget) &&
+       grab_widget != event_widget &&
+       is_transient_for (GTK_WINDOW (event_widget), GTK_WINDOW (grab_widget))))
     grab_widget = target_widget;
 
   g_object_ref (target_widget);
@@ -1835,164 +1859,16 @@ gtk_main_get_window_group (GtkWidget *widget)
     return gtk_window_get_group (NULL);
 }
 
-typedef struct
-{
-  GtkWidget *old_grab_widget;
-  GtkWidget *new_grab_widget;
-  gboolean   was_grabbed;
-  gboolean   is_grabbed;
-  gboolean   from_grab;
-  GList     *notified_surfaces;
-  GdkDevice *device;
-} GrabNotifyInfo;
-
-static void
-synth_crossing_for_grab_notify (GtkWidget        *from,
-                                GtkWidget        *to,
-                                GrabNotifyInfo   *info,
-                                GdkDevice       **devices,
-                                guint             n_devices,
-                                GdkCrossingMode   mode)
-{
-  guint i;
-
-  for (i = 0; i < n_devices; i++)
-    {
-      GdkDevice *device = devices[i];
-      GdkSurface *from_surface, *to_surface;
-
-      /* Do not propagate events more than once to
-       * the same surfaces if non-multidevice aware.
-       */
-      if (!from)
-        from_surface = NULL;
-      else
-        {
-          from_surface = _gtk_widget_get_device_surface (from, device);
-
-          if (from_surface &&
-              !gdk_surface_get_support_multidevice (from_surface) &&
-              g_list_find (info->notified_surfaces, from_surface))
-            from_surface = NULL;
-        }
-
-      if (!to)
-        to_surface = NULL;
-      else
-        {
-          to_surface = _gtk_widget_get_device_surface (to, device);
-
-          if (to_surface &&
-              !gdk_surface_get_support_multidevice (to_surface) &&
-              g_list_find (info->notified_surfaces, to_surface))
-            to_surface = NULL;
-        }
-
-      if (from_surface || to_surface)
-        {
-          _gtk_widget_synthesize_crossing ((from_surface) ? from : NULL,
-                                           (to_surface) ? to : NULL,
-                                           device, mode);
-
-          if (from_surface)
-            info->notified_surfaces = g_list_prepend (info->notified_surfaces, from_surface);
-
-          if (to_surface)
-            info->notified_surfaces = g_list_prepend (info->notified_surfaces, to_surface);
-        }
-    }
-}
-
-static void
-gtk_grab_notify_foreach (GtkWidget *child,
-                         gpointer   data)
-{
-  GrabNotifyInfo *info = data;
-  gboolean was_grabbed, is_grabbed, was_shadowed, is_shadowed;
-  GdkDevice **devices;
-  guint n_devices;
-
-  was_grabbed = info->was_grabbed;
-  is_grabbed = info->is_grabbed;
-
-  info->was_grabbed = info->was_grabbed || (child == info->old_grab_widget);
-  info->is_grabbed = info->is_grabbed || (child == info->new_grab_widget);
-
-  was_shadowed = info->old_grab_widget && !info->was_grabbed;
-  is_shadowed = info->new_grab_widget && !info->is_grabbed;
-
-  g_object_ref (child);
-
-  if (was_shadowed || is_shadowed)
-    {
-      GtkWidget *p;
-
-      for (p = _gtk_widget_get_first_child (child);
-           p != NULL;
-           p = _gtk_widget_get_next_sibling (p))
-        {
-          gtk_grab_notify_foreach (p, info);
-        }
-    }
-
-  if (info->device &&
-      _gtk_widget_get_device_surface (child, info->device))
-    {
-      /* Device specified and is on widget */
-      devices = g_new (GdkDevice *, 1);
-      devices[0] = info->device;
-      n_devices = 1;
-    }
-  else
-    devices = _gtk_widget_list_devices (child, &n_devices);
-
-  if (is_shadowed)
-    {
-      _gtk_widget_set_shadowed (child, TRUE);
-      if (!was_shadowed && devices &&
-          gtk_widget_is_sensitive (child))
-        synth_crossing_for_grab_notify (child, info->new_grab_widget,
-                                        info, devices, n_devices,
-                                        GDK_CROSSING_GTK_GRAB);
-    }
-  else
-    {
-      _gtk_widget_set_shadowed (child, FALSE);
-      if (was_shadowed && devices &&
-          gtk_widget_is_sensitive (child))
-        synth_crossing_for_grab_notify (info->old_grab_widget, child,
-                                        info, devices, n_devices,
-                                        info->from_grab ? GDK_CROSSING_GTK_GRAB :
-                                        GDK_CROSSING_GTK_UNGRAB);
-    }
-
-  if (was_shadowed != is_shadowed)
-    _gtk_widget_grab_notify (child, was_shadowed);
-
-  g_object_unref (child);
-  g_free (devices);
-
-  info->was_grabbed = was_grabbed;
-  info->is_grabbed = is_grabbed;
-}
-
 static void
 gtk_grab_notify (GtkWindowGroup *group,
-                 GdkDevice      *device,
                  GtkWidget      *old_grab_widget,
                  GtkWidget      *new_grab_widget,
                  gboolean        from_grab)
 {
   GList *toplevels;
-  GrabNotifyInfo info = { 0 };
 
   if (old_grab_widget == new_grab_widget)
     return;
-
-  info.old_grab_widget = old_grab_widget;
-  info.new_grab_widget = new_grab_widget;
-  info.from_grab = from_grab;
-  info.device = device;
 
   g_object_ref (group);
 
@@ -2004,15 +1880,13 @@ gtk_grab_notify (GtkWindowGroup *group,
       GtkWindow *toplevel = toplevels->data;
       toplevels = g_list_delete_link (toplevels, toplevels);
 
-      info.was_grabbed = FALSE;
-      info.is_grabbed = FALSE;
-
-      if (group == gtk_window_get_group (toplevel))
-        gtk_grab_notify_foreach (GTK_WIDGET (toplevel), &info);
+      gtk_window_grab_notify (toplevel,
+                              old_grab_widget,
+                              new_grab_widget,
+                              from_grab);
       g_object_unref (toplevel);
     }
 
-  g_list_free (info.notified_surfaces);
   g_object_unref (group);
 }
 
@@ -2048,7 +1922,7 @@ gtk_grab_add (GtkWidget *widget)
       g_object_ref (widget);
       _gtk_window_group_add_grab (group, widget);
 
-      gtk_grab_notify (group, NULL, old_grab_widget, widget, TRUE);
+      gtk_grab_notify (group, old_grab_widget, widget, TRUE);
     }
 }
 
@@ -2078,7 +1952,7 @@ gtk_grab_remove (GtkWidget *widget)
       _gtk_window_group_remove_grab (group, widget);
       new_grab_widget = gtk_window_group_get_current_grab (group);
 
-      gtk_grab_notify (group, NULL, widget, new_grab_widget, FALSE);
+      gtk_grab_notify (group, widget, new_grab_widget, FALSE);
 
       g_object_unref (widget);
     }

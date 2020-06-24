@@ -70,7 +70,6 @@ struct _GdkSurface
 
   guint destroyed : 2;
 
-  guint support_multidevice : 1;
   guint in_update : 1;
   guint frame_clock_events_paused : 1;
   guint autohide : 1;

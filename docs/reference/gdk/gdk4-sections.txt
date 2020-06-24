@@ -207,8 +207,6 @@ GdkModifierType
 GDK_MODIFIER_MASK
 
 <SUBSECTION>
-gdk_surface_get_support_multidevice
-gdk_surface_set_support_multidevice
 gdk_surface_get_device_cursor
 gdk_surface_set_device_cursor
 
@@ -381,7 +379,6 @@ gdk_device_get_surface_at_position
 GdkTimeCoord
 gdk_device_get_axis
 gdk_device_get_axis_names
-gdk_device_get_last_event_surface
 
 <SUBSECTION>
 gdk_device_tool_get_serial
@@ -443,7 +440,6 @@ gdk_seat_get_capabilities
 gdk_seat_get_pointer
 gdk_seat_get_keyboard
 gdk_seat_get_physical_devices
-gdk_seat_get_logical_pointers
 
 <SUBSECTION Standard>
 GDK_SEAT

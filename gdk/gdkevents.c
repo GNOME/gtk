@@ -1186,6 +1186,22 @@ gdk_event_get_surface (GdkEvent *event)
 }
 
 /**
+ * gdk_event_get_seat:
+ * @event: a #GdkEvent.
+ *
+ * Returns the seat that originated the event.
+ *
+ * Returns: (nullable) (transfer none): a #GdkSeat.
+ */
+GdkSeat *
+gdk_event_get_seat (GdkEvent *event)
+{
+  g_return_val_if_fail (GDK_IS_EVENT (event), NULL);
+
+  return event->device ? gdk_device_get_seat (event->device) : NULL;
+}
+
+/**
  * gdk_event_get_device:
  * @event: a #GdkEvent.
  *

@@ -2186,53 +2186,6 @@ gdk_surface_beep (GdkSurface *surface)
   gdk_display_beep (surface->display);
 }
 
-/**
- * gdk_surface_set_support_multidevice:
- * @surface: a #GdkSurface.
- * @support_multidevice: %TRUE to enable multidevice support in @surface.
- *
- * This function will enable multidevice features in @surface.
- *
- * Multidevice aware surfaces will need to handle properly multiple,
- * per device enter/leave events, device grabs and grab ownerships.
- **/
-void
-gdk_surface_set_support_multidevice (GdkSurface *surface,
-                                     gboolean   support_multidevice)
-{
-  g_return_if_fail (GDK_IS_SURFACE (surface));
-
-  if (GDK_SURFACE_DESTROYED (surface))
-    return;
-
-  if (surface->support_multidevice == support_multidevice)
-    return;
-
-  surface->support_multidevice = support_multidevice;
-
-  /* FIXME: What to do if called when some pointers are inside the surface ? */
-}
-
-/**
- * gdk_surface_get_support_multidevice:
- * @surface: a #GdkSurface.
- *
- * Returns %TRUE if the surface is aware of the existence of multiple
- * devices.
- *
- * Returns: %TRUE if the surface handles multidevice features.
- **/
-gboolean
-gdk_surface_get_support_multidevice (GdkSurface *surface)
-{
-  g_return_val_if_fail (GDK_IS_SURFACE (surface), FALSE);
-
-  if (GDK_SURFACE_DESTROYED (surface))
-    return FALSE;
-
-  return surface->support_multidevice;
-}
-
 void
 _gdk_display_set_surface_under_pointer (GdkDisplay *display,
                                         GdkDevice  *device,
@@ -2292,13 +2245,6 @@ _gdk_windowing_got_event (GdkDisplay *display,
         }
 
       _gdk_display_device_grab_update (display, device, source_device, serial);
-
-      if (!_gdk_display_check_grab_ownership (display, device, serial))
-        {
-          /* Device events are blocked by another device grab */
-          unlink_event = TRUE;
-          goto out;
-        }
     }
 
   event_surface = gdk_event_get_surface (event);
@@ -2321,7 +2267,6 @@ _gdk_windowing_got_event (GdkDisplay *display,
           _gdk_display_add_device_grab (display,
                                         device,
                                         event_surface,
-                                        GDK_OWNERSHIP_NONE,
                                         FALSE,
                                         GDK_ALL_EVENTS_MASK,
                                         serial,
@@ -3002,11 +2947,9 @@ gdk_surface_get_seat_from_event (GdkSurface *surface,
 {
   if (event)
     {
-      GdkDevice *device = gdk_event_get_device (event);
       GdkSeat *seat = NULL;
 
-      if (device)
-        seat = gdk_device_get_seat (device);
+      seat = gdk_event_get_seat (event);
 
       if (seat)
         return seat;

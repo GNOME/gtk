@@ -492,7 +492,6 @@ enum {
   UNREALIZE,
   STATE_FLAGS_CHANGED,
   DIRECTION_CHANGED,
-  GRAB_NOTIFY,
   MNEMONIC_ACTIVATE,
   MOVE_FOCUS,
   KEYNAV_FAILED,
@@ -808,26 +807,28 @@ gtk_widget_real_contains (GtkWidget *widget,
                                           &GRAPHENE_POINT_INIT (x, y));
 }
 
-static void
-gtk_widget_real_grab_notify (GtkWidget *widget,
-                             gboolean   was_grabbed)
+/**
+ * _gtk_widget_grab_notify:
+ * @widget: a #GtkWidget
+ * @was_grabbed: whether a grab is now in effect
+ *
+ * Emits the #GtkWidget::grab-notify signal on @widget.
+ **/
+void
+_gtk_widget_grab_notify (GtkWidget *widget,
+			 gboolean   was_grabbed)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
   int i;
 
   if (!priv->controllers)
     return;
+  if (was_grabbed)
+    return;
 
   for (i = (int)priv->controllers->len - 1; i >= 0; i--)
     {
       GtkEventController *controller = g_ptr_array_index (priv->controllers, i);
-      GdkDevice *device = NULL;
-
-      if (GTK_IS_GESTURE (controller))
-        device = gtk_gesture_get_device (GTK_GESTURE (controller));
-
-      if (!device || !gtk_widget_device_is_shadowed (widget, device))
-        continue;
 
       gtk_event_controller_reset (controller);
     }
@@ -923,7 +924,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   klass->measure = gtk_widget_real_measure;
   klass->state_flags_changed = gtk_widget_real_state_flags_changed;
   klass->direction_changed = gtk_widget_real_direction_changed;
-  klass->grab_notify = gtk_widget_real_grab_notify;
   klass->snapshot = gtk_widget_real_snapshot;
   klass->mnemonic_activate = gtk_widget_real_mnemonic_activate;
   klass->grab_focus = gtk_widget_grab_focus_self;
@@ -1526,31 +1526,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  NULL,
 		  G_TYPE_NONE, 1,
 		  GTK_TYPE_TEXT_DIRECTION);
-
-  /**
-   * GtkWidget::grab-notify:
-   * @widget: the object which received the signal
-   * @was_grabbed: %FALSE if the widget becomes shadowed, %TRUE
-   *               if it becomes unshadowed
-   *
-   * The ::grab-notify signal is emitted when a widget becomes
-   * shadowed by a GTK+ grab (not a pointer or keyboard grab) on
-   * another widget, or when it becomes unshadowed due to a grab
-   * being removed.
-   *
-   * A widget is shadowed by a gtk_grab_add() when the topmost
-   * grab widget in the grab stack of its window group is not
-   * its ancestor.
-   */
-  widget_signals[GRAB_NOTIFY] =
-    g_signal_new (I_("grab-notify"),
-		  G_TYPE_FROM_CLASS (gobject_class),
-		  G_SIGNAL_RUN_FIRST,
-                  G_STRUCT_OFFSET (GtkWidgetClass, grab_notify),
-		  NULL, NULL,
-		  NULL,
-		  G_TYPE_NONE, 1,
-		  G_TYPE_BOOLEAN);
 
   /**
    * GtkWidget::mnemonic-activate:
@@ -2178,8 +2153,7 @@ _gtk_widget_set_sequence_state_internal (GtkWidget             *widget,
           /* If a group is provided, ensure only gestures pertaining to the group
            * get a "claimed" state, all other claiming gestures must deny the sequence.
            */
-          if (gesture_state == GTK_EVENT_SEQUENCE_CLAIMED &&
-              gtk_gesture_get_sequence_state (gesture, sequence) == GTK_EVENT_SEQUENCE_CLAIMED)
+          if (state == GTK_EVENT_SEQUENCE_CLAIMED)
             gesture_state = GTK_EVENT_SEQUENCE_DENIED;
           else
             continue;
@@ -3355,13 +3329,6 @@ gtk_widget_realize (GtkWidget *widget)
     gtk_widget_realize (priv->parent);
 
   g_signal_emit (widget, widget_signals[REALIZE], 0);
-
-  if (priv->multidevice)
-    {
-      GdkSurface *surface = gtk_widget_get_surface (widget);
-
-      gdk_surface_set_support_multidevice (surface, TRUE);
-    }
 
   if (priv->context)
     gtk_style_context_set_scale (priv->context, gtk_widget_get_scale_factor (widget));
@@ -4602,20 +4569,6 @@ gtk_widget_activate (GtkWidget *widget)
 }
 
 /**
- * _gtk_widget_grab_notify:
- * @widget: a #GtkWidget
- * @was_grabbed: whether a grab is now in effect
- *
- * Emits the #GtkWidget::grab-notify signal on @widget.
- **/
-void
-_gtk_widget_grab_notify (GtkWidget *widget,
-			 gboolean   was_grabbed)
-{
-  g_signal_emit (widget, widget_signals[GRAB_NOTIFY], 0, was_grabbed);
-}
-
-/**
  * gtk_widget_grab_focus:
  * @widget: a #GtkWidget
  *
@@ -5263,48 +5216,6 @@ _gtk_widget_set_has_grab (GtkWidget *widget,
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
 
   priv->has_grab = has_grab;
-}
-
-/**
- * gtk_widget_device_is_shadowed:
- * @widget: a #GtkWidget
- * @device: a #GdkDevice
- *
- * Returns %TRUE if @device has been shadowed by a GTK+
- * device grab on another widget, so it would stop sending
- * events to @widget. This may be used in the
- * #GtkWidget::grab-notify signal to check for specific
- * devices. See gtk_device_grab_add().
- *
- * Returns: %TRUE if there is an ongoing grab on @device
- *          by another #GtkWidget than @widget.
- **/
-gboolean
-gtk_widget_device_is_shadowed (GtkWidget *widget,
-                               GdkDevice *device)
-{
-  GtkWindowGroup *group;
-  GtkWidget *grab_widget;
-  GtkRoot *root;
-
-  g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
-
-  if (!_gtk_widget_get_realized (widget))
-    return TRUE;
-
-  root = _gtk_widget_get_root (widget);
-
-  if (GTK_IS_WINDOW (root))
-    group = gtk_window_get_group (GTK_WINDOW (root));
-  else
-    group = gtk_window_get_group (NULL);
-
-  grab_widget = gtk_window_group_get_current_grab (group);
-  if (grab_widget && widget != grab_widget &&
-      !gtk_widget_is_ancestor (widget, grab_widget))
-    return TRUE;
-
-  return FALSE;
 }
 
 /**
@@ -7556,48 +7467,12 @@ gtk_widget_adjust_baseline_request (GtkWidget *widget,
     }
 }
 
-static gboolean
-is_my_surface (GtkWidget *widget,
-	       GdkSurface *surface)
-{
-  if (!surface)
-    return FALSE;
-
-  return gdk_surface_get_widget (surface) == widget;
-}
-
-/*
- * _gtk_widget_get_device_surface:
- * @widget: a #GtkWidget
- * @device: a #GdkDevice
- *
- * Returns: (nullable): the surface of @widget that @device is in, or %NULL
- */
-GdkSurface *
-_gtk_widget_get_device_surface (GtkWidget *widget,
-				GdkDevice *device)
-{
-  GdkSurface *surface;
-
-  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
-  g_return_val_if_fail (GDK_IS_DEVICE (device), NULL);
-
-  if (gdk_device_get_source (device) == GDK_SOURCE_KEYBOARD)
-    return NULL;
-
-  surface = gdk_device_get_last_event_surface (device);
-  if (surface && is_my_surface (widget, surface))
-    return surface;
-  else
-    return NULL;
-}
-
 /*
  * _gtk_widget_list_devices:
  * @widget: a #GtkWidget
  *
  * Returns the list of pointer #GdkDevices that are currently
- * on top of any surface belonging to @widget. Free the list
+ * on top of @widget. Free the list
  * with g_free(), the elements are owned by GTK+ and must
  * not be freed.
  */
@@ -7605,11 +7480,7 @@ GdkDevice **
 _gtk_widget_list_devices (GtkWidget *widget,
                           guint     *out_n_devices)
 {
-  GPtrArray *result;
-  GdkSeat *seat;
-  GList *devices;
-  GList *l;
-  GdkDevice *device;
+  GtkRoot *root;
 
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
   g_assert (out_n_devices);
@@ -7620,29 +7491,15 @@ _gtk_widget_list_devices (GtkWidget *widget,
       return NULL;
     }
 
-  seat = gdk_display_get_default_seat (_gtk_widget_get_display (widget));
-  if (!seat)
+  root = gtk_widget_get_root (widget);
+  if (!root)
     {
       *out_n_devices = 0;
       return NULL;
     }
-  device = gdk_seat_get_pointer (seat);
 
-  result = g_ptr_array_new ();
-  if (is_my_surface (widget, gdk_device_get_last_event_surface (device)))
-    g_ptr_array_add (result, device);
-
-  devices = gdk_seat_get_physical_devices (seat, GDK_SEAT_CAPABILITY_ALL_POINTING);
-  for (l = devices; l; l = l->next)
-    {
-      device = l->data;
-      if (is_my_surface (widget, gdk_device_get_last_event_surface (device)))
-        g_ptr_array_add (result, device);
-    }
-  g_list_free (devices);
-
-  *out_n_devices = result->len;
-  return (GdkDevice **)g_ptr_array_free (result, FALSE);
+  return gtk_window_get_foci_on_widget (GTK_WINDOW (root),
+                                        widget, out_n_devices);
 }
 
 /*
@@ -7674,19 +7531,14 @@ _gtk_widget_synthesize_crossing (GtkWidget       *from,
     {
       crossing.direction = GTK_CROSSING_OUT;
 
-      from_surface = _gtk_widget_get_device_surface (from, device);
-      if (!from_surface)
-        from_surface = gtk_widget_get_surface (from);
-
+      from_surface = gtk_widget_get_surface (from);
       gdk_surface_get_device_position (from_surface, device, &x, &y, NULL);
       gtk_widget_handle_crossing (from, &crossing, x, y);
     }
 
   if (to)
     {
-      to_surface = _gtk_widget_get_device_surface (to, device);
-      if (!to_surface)
-        to_surface = gtk_widget_get_surface (to);
+      to_surface = gtk_widget_get_surface (to);
 
       crossing.direction = GTK_CROSSING_IN;
       gdk_surface_get_device_position (to_surface, device, &x, &y, NULL);
@@ -7721,7 +7573,17 @@ gtk_widget_propagate_state (GtkWidget          *widget,
 
   if (old_flags != new_flags)
     {
+      GtkWindowGroup *window_group;
+      GtkRoot *root;
+      GtkWidget *grab;
+      gboolean shadowed;
+
       g_object_ref (widget);
+
+      root = gtk_widget_get_root (widget);
+      window_group = gtk_window_get_group (GTK_WINDOW (root));
+      grab = gtk_window_group_get_current_grab (window_group);
+      shadowed = grab && grab != widget && !gtk_widget_is_ancestor (widget, grab);
 
       if (!gtk_widget_is_sensitive (widget) && gtk_widget_has_grab (widget))
         gtk_grab_remove (widget);
@@ -7730,29 +7592,19 @@ gtk_widget_propagate_state (GtkWidget          *widget,
 
       g_signal_emit (widget, widget_signals[STATE_FLAGS_CHANGED], 0, old_flags);
 
-      if (!priv->shadowed &&
+      if (!shadowed &&
           (new_flags & GTK_STATE_FLAG_INSENSITIVE) != (old_flags & GTK_STATE_FLAG_INSENSITIVE))
         {
           guint i, n_devices;
           GdkDevice **devices;
-          GList *event_surfaces = NULL;
 
           devices = _gtk_widget_list_devices (widget, &n_devices);
 
           for (i = 0; i < n_devices; i++)
             {
-              GdkSurface *surface;
               GdkDevice *device;
 
               device = devices[i];
-              surface = _gtk_widget_get_device_surface (widget, device);
-
-              /* Do not propagate more than once to the
-               * same surface if non-multidevice aware.
-               */
-              if (!gdk_surface_get_support_multidevice (surface) &&
-                  g_list_find (event_surfaces, surface))
-                continue;
 
               if (!gtk_widget_is_sensitive (widget))
                 _gtk_widget_synthesize_crossing (widget, NULL, device,
@@ -7760,11 +7612,8 @@ gtk_widget_propagate_state (GtkWidget          *widget,
               else
                 _gtk_widget_synthesize_crossing (NULL, widget, device,
                                                  GDK_CROSSING_STATE_CHANGED);
-
-              event_surfaces = g_list_prepend (event_surfaces, surface);
             }
 
-          g_list_free (event_surfaces);
           g_free (devices);
         }
 
@@ -10222,54 +10071,6 @@ gtk_widget_get_allocated_baseline (GtkWidget *widget)
 }
 
 /**
- * gtk_widget_get_support_multidevice:
- * @widget: a #GtkWidget
- *
- * Returns %TRUE if @widget is multiple pointer aware. See
- * gtk_widget_set_support_multidevice() for more information.
- *
- * Returns: %TRUE if @widget is multidevice aware.
- **/
-gboolean
-gtk_widget_get_support_multidevice (GtkWidget *widget)
-{
-  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
-
-  g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
-
-  return priv->multidevice;
-}
-
-/**
- * gtk_widget_set_support_multidevice:
- * @widget: a #GtkWidget
- * @support_multidevice: %TRUE to support input from multiple devices.
- *
- * Enables or disables multiple pointer awareness. If this setting is %TRUE,
- * @widget will start receiving multiple, per device enter/leave events. Note
- * that if custom #GdkSurfaces are created in #GtkWidget::realize,
- * gdk_surface_set_support_multidevice() will have to be called manually on them.
- **/
-void
-gtk_widget_set_support_multidevice (GtkWidget *widget,
-                                    gboolean   support_multidevice)
-{
-  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
-
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-
-  priv->multidevice = (support_multidevice == TRUE);
-
-  if (_gtk_widget_get_realized (widget))
-    {
-      GdkSurface *surface = gtk_widget_get_surface (widget);
-
-      if (surface)
-        gdk_surface_set_support_multidevice (surface, support_multidevice);
-    }
-}
-
-/**
  * gtk_widget_set_opacity:
  * @widget: a #GtkWidget
  * @opacity: desired opacity, between 0 and 1
@@ -10412,23 +10213,6 @@ gtk_widget_in_destruction (GtkWidget *widget)
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
 
   return priv->in_destruction;
-}
-
-gboolean
-_gtk_widget_get_shadowed (GtkWidget *widget)
-{
-  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
-
-  return priv->shadowed;
-}
-
-void
-_gtk_widget_set_shadowed (GtkWidget *widget,
-                          gboolean   shadowed)
-{
-  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
-
-  priv->shadowed = shadowed;
 }
 
 gboolean
