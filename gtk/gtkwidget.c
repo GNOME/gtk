@@ -823,17 +823,12 @@ _gtk_widget_grab_notify (GtkWidget *widget,
 
   if (!priv->controllers)
     return;
+  if (was_grabbed)
+    return;
 
   for (i = (int)priv->controllers->len - 1; i >= 0; i--)
     {
       GtkEventController *controller = g_ptr_array_index (priv->controllers, i);
-      GdkDevice *device = NULL;
-
-      if (GTK_IS_GESTURE (controller))
-        device = gtk_gesture_get_device (GTK_GESTURE (controller));
-
-      if (!device || !gtk_widget_device_is_shadowed (widget, device))
-        continue;
 
       gtk_event_controller_reset (controller);
     }
