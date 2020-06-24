@@ -1395,15 +1395,6 @@ print_callback_new  (void)
   return &callback->iPrintDialogCallback;
 }
 
-static  void
-plug_grab_notify (GtkWidget        *widget,
-		  gboolean          was_grabbed,
-		  GtkPrintOperation *op)
-{
-  EnableWindow (GetAncestor (GDK_SURFACE_HWND (gtk_native_get_surface (gtk_widget_get_native (widget))), GA_ROOT),
-		was_grabbed);
-}
-
 static INT_PTR CALLBACK
 pageDlgProc (HWND wnd, UINT message, WPARAM wparam, LPARAM lparam)
 {
@@ -1429,9 +1420,6 @@ pageDlgProc (HWND wnd, UINT message, WPARAM wparam, LPARAM lparam)
 
       /* This dialog is modal, so we grab the embed widget */
       gtk_grab_add (plug);
-
-      /* When we lose the grab we need to disable the print dialog */
-      g_signal_connect (plug, "grab-notify", G_CALLBACK (plug_grab_notify), op);
       return FALSE;
     }
   else if (message == WM_DESTROY)
