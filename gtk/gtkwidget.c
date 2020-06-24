@@ -7573,7 +7573,17 @@ gtk_widget_propagate_state (GtkWidget          *widget,
 
   if (old_flags != new_flags)
     {
+      GtkWindowGroup *window_group;
+      GtkRoot *root;
+      GtkWidget *grab;
+      gboolean shadowed;
+
       g_object_ref (widget);
+
+      root = gtk_widget_get_root (widget);
+      window_group = gtk_window_get_group (GTK_WINDOW (root));
+      grab = gtk_window_group_get_current_grab (window_group);
+      shadowed = grab && grab != widget && !gtk_widget_is_ancestor (widget, grab);
 
       if (!gtk_widget_is_sensitive (widget) && gtk_widget_has_grab (widget))
         gtk_grab_remove (widget);
@@ -7582,7 +7592,7 @@ gtk_widget_propagate_state (GtkWidget          *widget,
 
       g_signal_emit (widget, widget_signals[STATE_FLAGS_CHANGED], 0, old_flags);
 
-      if (!priv->shadowed &&
+      if (!shadowed &&
           (new_flags & GTK_STATE_FLAG_INSENSITIVE) != (old_flags & GTK_STATE_FLAG_INSENSITIVE))
         {
           guint i, n_devices;
