@@ -119,7 +119,7 @@ do_css_shadows (GtkWidget *do_widget)
 
       provider = GTK_STYLE_PROVIDER (gtk_css_provider_new ());
 
-      container = gtk_scrolled_window_new (NULL, NULL);
+      container = gtk_scrolled_window_new ();
       gtk_paned_set_end_child (GTK_PANED (paned), container);
       child = gtk_text_view_new_with_buffer (text);
       gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (container), child);

@@ -375,7 +375,7 @@ create_window (void)
   gtk_window_set_child (GTK_WINDOW (window), hbox);
   gtk_box_append (GTK_BOX (hbox), vbox);
 
-  swindow = gtk_scrolled_window_new (NULL, NULL);
+  swindow = gtk_scrolled_window_new ();
   gtk_widget_set_hexpand (swindow, TRUE);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (swindow),
                                   GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);

@@ -3758,7 +3758,7 @@ gtk_places_sidebar_init (GtkPlacesSidebar *sidebar)
   sidebar->trash_monitor_changed_id = g_signal_connect_swapped (sidebar->trash_monitor, "trash-state-changed",
                                                                 G_CALLBACK (update_trash_icon), sidebar);
 
-  sidebar->swin = gtk_scrolled_window_new (NULL, NULL);
+  sidebar->swin = gtk_scrolled_window_new ();
   gtk_widget_set_parent (sidebar->swin, GTK_WIDGET (sidebar));
   gtk_widget_set_size_request (sidebar->swin, 140, 280);
 

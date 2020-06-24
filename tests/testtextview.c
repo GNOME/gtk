@@ -177,7 +177,7 @@ main (int argc, char **argv)
   gtk_init ();
 
   window   = gtk_window_new ();
-  sw       = gtk_scrolled_window_new (NULL, NULL);
+  sw       = gtk_scrolled_window_new ();
   textview = g_object_new (my_text_view_get_type (), NULL);
   buffer   = gtk_text_view_get_buffer (GTK_TEXT_VIEW (textview));
   button   = gtk_button_new_with_label ("Fixed Child");

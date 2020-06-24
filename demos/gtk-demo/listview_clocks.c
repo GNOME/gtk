@@ -474,7 +474,7 @@ do_listview_clocks (GtkWidget *do_widget)
       g_object_add_weak_pointer (G_OBJECT (window), (gpointer *) &window);
 
       /* List widgets go into a scrolled window. Always. */
-      sw = gtk_scrolled_window_new (NULL, NULL);
+      sw = gtk_scrolled_window_new ();
       gtk_window_set_child (GTK_WINDOW (window), sw);
 
       /* Create the factory that creates the listitems. Because we

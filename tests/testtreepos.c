@@ -94,7 +94,7 @@ int main (int argc, char *argv[])
   gtk_init ();
 
   window = gtk_window_new ();
-  sw = gtk_scrolled_window_new (NULL, NULL);
+  sw = gtk_scrolled_window_new ();
   gtk_window_set_child (GTK_WINDOW (window), sw);
   tv = gtk_tree_view_new ();
   gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (sw), tv);

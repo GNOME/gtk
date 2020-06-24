@@ -173,7 +173,7 @@ create_tree (gboolean rtl)
   GtkCellRenderer *renderer;
   GdkPixbuf *pixbuf;
 
-  sw = gtk_scrolled_window_new (NULL, NULL);
+  sw = gtk_scrolled_window_new ();
   gtk_scrolled_window_set_has_frame (GTK_SCROLLED_WINDOW (sw), TRUE);
   gtk_widget_set_direction (sw, rtl ? GTK_TEXT_DIR_RTL : GTK_TEXT_DIR_LTR);
 

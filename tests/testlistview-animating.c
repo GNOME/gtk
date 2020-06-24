@@ -140,7 +140,7 @@ main (int   argc,
   label = gtk_label_new ("GtkListView");
   gtk_box_append (GTK_BOX (vbox), label);
 
-  sw = gtk_scrolled_window_new (NULL, NULL);
+  sw = gtk_scrolled_window_new ();
   gtk_widget_set_hexpand (sw, TRUE);
   gtk_widget_set_vexpand (sw, TRUE);
   gtk_box_append (GTK_BOX (vbox), sw);
@@ -157,7 +157,7 @@ main (int   argc,
   label = gtk_label_new ("GtkListBox");
   gtk_box_append (GTK_BOX (vbox), label);
 
-  sw = gtk_scrolled_window_new (NULL, NULL);
+  sw = gtk_scrolled_window_new ();
   gtk_widget_set_hexpand (sw, TRUE);
   gtk_widget_set_vexpand (sw, TRUE);
   gtk_box_append (GTK_BOX (vbox), sw);

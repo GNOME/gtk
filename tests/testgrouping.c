@@ -125,7 +125,7 @@ main (int argc, char **argv)
   g_signal_connect (window, "destroy", G_CALLBACK (quit_cb), &done);
   gtk_window_set_default_size (GTK_WINDOW (window), 320, 480);
 
-  sw = gtk_scrolled_window_new (NULL, NULL);
+  sw = gtk_scrolled_window_new ();
   gtk_window_set_child (GTK_WINDOW (window), sw);
 
   tv = gtk_tree_view_new_with_model (model);

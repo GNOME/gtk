@@ -70,7 +70,7 @@ key_test (void)
   window = gtk_window_new ();
   gtk_window_set_default_size (GTK_WINDOW (window), 400, 400);
 
-  sw = gtk_scrolled_window_new (NULL, NULL);
+  sw = gtk_scrolled_window_new ();
   gtk_widget_set_vexpand (sw, TRUE);
   box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 10);
   gtk_window_set_child (GTK_WINDOW (window), box);

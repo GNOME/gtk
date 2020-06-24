@@ -227,7 +227,7 @@ main (int argc, char **argv)
   gtk_widget_set_margin_start (combo, 12);
   gtk_box_append (GTK_BOX (combo_vbox), combo);
 
-  scrolled_window = gtk_scrolled_window_new (NULL, NULL);
+  scrolled_window = gtk_scrolled_window_new ();
   gtk_widget_set_hexpand (scrolled_window, TRUE);
   gtk_box_append (GTK_BOX (hbox), scrolled_window);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_window),

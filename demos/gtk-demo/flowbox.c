@@ -727,7 +727,7 @@ do_flowbox (GtkWidget *do_widget)
       gtk_window_set_default_size (GTK_WINDOW (window), 400, 600);
       g_object_add_weak_pointer (G_OBJECT (window), (gpointer *)&window);
 
-      scrolled = gtk_scrolled_window_new (NULL, NULL);
+      scrolled = gtk_scrolled_window_new ();
       gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled), GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
       flowbox = gtk_flow_box_new ();
       gtk_widget_set_valign (flowbox, GTK_ALIGN_START);

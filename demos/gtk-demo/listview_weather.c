@@ -313,7 +313,7 @@ do_listview_weather (GtkWidget *do_widget)
       gtk_window_set_title (GTK_WINDOW (window), "Weather");
       g_object_add_weak_pointer (G_OBJECT (window), (gpointer *) &window);
 
-      sw = gtk_scrolled_window_new (NULL, NULL);
+      sw = gtk_scrolled_window_new ();
       gtk_window_set_child (GTK_WINDOW (window), sw);
       listview = create_weather_view ();
       gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (sw), listview);

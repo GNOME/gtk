@@ -367,7 +367,7 @@ main (int argc, char *argv[])
   gtk_box_append (GTK_BOX (vbox), gtk_label_new ("Jonathan's Holiday Card Planning Sheet"));
   gtk_window_set_child (GTK_WINDOW (window), vbox);
 
-  scrolled_window = gtk_scrolled_window_new (NULL, NULL);
+  scrolled_window = gtk_scrolled_window_new ();
   gtk_scrolled_window_set_has_frame (GTK_SCROLLED_WINDOW (scrolled_window), TRUE);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_window), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
   gtk_widget_set_vexpand (scrolled_window, TRUE);
@@ -482,7 +482,7 @@ main (int argc, char *argv[])
   gtk_box_append (GTK_BOX (vbox), gtk_label_new ("The model revealed"));
   gtk_window_set_child (GTK_WINDOW (window), vbox);
 
-  scrolled_window = gtk_scrolled_window_new (NULL, NULL);
+  scrolled_window = gtk_scrolled_window_new ();
   gtk_scrolled_window_set_has_frame (GTK_SCROLLED_WINDOW (scrolled_window), TRUE);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_window), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
   gtk_widget_set_vexpand (scrolled_window, TRUE);

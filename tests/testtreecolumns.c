@@ -761,7 +761,7 @@ main (int argc, char *argv[])
   g_signal_connect (window, "destroy", G_CALLBACK (quit_cb), &done); 
   gtk_window_set_default_size (GTK_WINDOW (window), 300, 300);
   gtk_window_set_title (GTK_WINDOW (window), "Top Window");
-  swindow = gtk_scrolled_window_new (NULL, NULL);
+  swindow = gtk_scrolled_window_new ();
   gtk_window_set_child (GTK_WINDOW (window), swindow);
   gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (swindow), sample_tree_view_top);
   gtk_widget_show (window);
@@ -770,7 +770,7 @@ main (int argc, char *argv[])
   g_signal_connect (window, "destroy", G_CALLBACK (quit_cb), &done); 
   gtk_window_set_default_size (GTK_WINDOW (window), 300, 300);
   gtk_window_set_title (GTK_WINDOW (window), "Bottom Window");
-  swindow = gtk_scrolled_window_new (NULL, NULL);
+  swindow = gtk_scrolled_window_new ();
   gtk_window_set_child (GTK_WINDOW (window), swindow);
   gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (swindow), sample_tree_view_bottom);
   gtk_widget_show (window);
@@ -788,7 +788,7 @@ main (int argc, char *argv[])
   /* Left Pane */
   cell = gtk_cell_renderer_text_new ();
 
-  swindow = gtk_scrolled_window_new (NULL, NULL);
+  swindow = gtk_scrolled_window_new ();
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (swindow), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
   left_tree_view = gtk_tree_view_new_with_model (left_tree_model);
   gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (swindow), left_tree_view);
@@ -845,7 +845,7 @@ main (int argc, char *argv[])
   vbox2 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 8);
   gtk_box_append (GTK_BOX (hbox), vbox2);
 
-  swindow = gtk_scrolled_window_new (NULL, NULL);
+  swindow = gtk_scrolled_window_new ();
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (swindow), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
   gtk_tree_view_set_headers_visible (GTK_TREE_VIEW (top_right_tree_view), FALSE);
   cell = gtk_cell_renderer_text_new ();
@@ -860,7 +860,7 @@ main (int argc, char *argv[])
   gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (swindow), top_right_tree_view);
   gtk_box_append (GTK_BOX (vbox2), swindow);
 
-  swindow = gtk_scrolled_window_new (NULL, NULL);
+  swindow = gtk_scrolled_window_new ();
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (swindow), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
   gtk_tree_view_set_headers_visible (GTK_TREE_VIEW (bottom_right_tree_view), FALSE);
   cell = gtk_cell_renderer_text_new ();

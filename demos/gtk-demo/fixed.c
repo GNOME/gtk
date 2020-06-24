@@ -130,7 +130,7 @@ create_demo_window (GtkWidget *do_widget)
   gtk_window_set_default_size (GTK_WINDOW (window), 600, 400);
   g_signal_connect (window, "destroy", G_CALLBACK (close_window), NULL);
 
-  sw = gtk_scrolled_window_new (NULL, NULL);
+  sw = gtk_scrolled_window_new ();
   gtk_window_set_child (GTK_WINDOW (window), sw);
 
   fixed = gtk_fixed_new ();

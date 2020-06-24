@@ -150,7 +150,7 @@ main (int argc, char *argv[])
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 8);
   gtk_box_append (GTK_BOX (vbox), gtk_label_new ("Incremental Reflow Test"));
   gtk_window_set_child (GTK_WINDOW (window), vbox);
-  scrolled_window = gtk_scrolled_window_new (NULL, NULL);
+  scrolled_window = gtk_scrolled_window_new ();
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_window),
 				  GTK_POLICY_AUTOMATIC,
 				  GTK_POLICY_AUTOMATIC);
