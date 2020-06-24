@@ -7548,22 +7548,12 @@ gtk_widget_adjust_baseline_request (GtkWidget *widget,
     }
 }
 
-static gboolean
-is_my_surface (GtkWidget *widget,
-	       GdkSurface *surface)
-{
-  if (!surface)
-    return FALSE;
-
-  return gdk_surface_get_widget (surface) == widget;
-}
-
 /*
  * _gtk_widget_list_devices:
  * @widget: a #GtkWidget
  *
  * Returns the list of pointer #GdkDevices that are currently
- * on top of any surface belonging to @widget. Free the list
+ * on top of @widget. Free the list
  * with g_free(), the elements are owned by GTK+ and must
  * not be freed.
  */
@@ -7571,11 +7561,7 @@ GdkDevice **
 _gtk_widget_list_devices (GtkWidget *widget,
                           guint     *out_n_devices)
 {
-  GPtrArray *result;
-  GdkSeat *seat;
-  GList *devices;
-  GList *l;
-  GdkDevice *device;
+  GtkRoot *root;
 
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
   g_assert (out_n_devices);
@@ -7586,29 +7572,15 @@ _gtk_widget_list_devices (GtkWidget *widget,
       return NULL;
     }
 
-  seat = gdk_display_get_default_seat (_gtk_widget_get_display (widget));
-  if (!seat)
+  root = gtk_widget_get_root (widget);
+  if (!root)
     {
       *out_n_devices = 0;
       return NULL;
     }
-  device = gdk_seat_get_pointer (seat);
 
-  result = g_ptr_array_new ();
-  if (is_my_surface (widget, gdk_device_get_last_event_surface (device)))
-    g_ptr_array_add (result, device);
-
-  devices = gdk_seat_get_physical_devices (seat, GDK_SEAT_CAPABILITY_ALL_POINTING);
-  for (l = devices; l; l = l->next)
-    {
-      device = l->data;
-      if (is_my_surface (widget, gdk_device_get_last_event_surface (device)))
-        g_ptr_array_add (result, device);
-    }
-  g_list_free (devices);
-
-  *out_n_devices = result->len;
-  return (GdkDevice **)g_ptr_array_free (result, FALSE);
+  return gtk_window_get_foci_on_widget (GTK_WINDOW (root),
+                                        widget, out_n_devices);
 }
 
 /*

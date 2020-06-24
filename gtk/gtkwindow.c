@@ -7195,3 +7195,29 @@ gtk_window_destroy (GtkWindow *window)
 
   g_object_unref (window);
 }
+
+GdkDevice**
+gtk_window_get_foci_on_widget (GtkWindow *window,
+                               GtkWidget *widget,
+                               guint     *n_devices)
+{
+  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
+  GPtrArray *array = g_ptr_array_new ();
+  GList *l;
+
+  for (l = priv->foci; l; l = l->next)
+    {
+      GtkPointerFocus *focus = l->data;
+      GtkWidget *target;
+
+      target = gtk_pointer_focus_get_effective_target (focus);
+
+      if (target == widget || gtk_widget_is_ancestor (target, widget))
+        g_ptr_array_add (array, focus->device);
+    }
+
+  if (n_devices)
+    *n_devices = array->len;
+
+  return (GdkDevice**) g_ptr_array_free (array, FALSE);
+}
