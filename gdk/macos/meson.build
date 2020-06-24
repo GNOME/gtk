@@ -42,6 +42,7 @@ gdk_macos_frameworks = [
   'CoreVideo',
   'CoreServices',
   'OpenGL',
+  'QuartzCore',
 ]
 
 gdk_macos_deps = [
