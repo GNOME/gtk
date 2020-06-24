@@ -99,10 +99,17 @@ gboolean               gtk_list_base_grab_focus_on_item         (GtkListBase    
                                                                  gboolean                select,
                                                                  gboolean                modify,
                                                                  gboolean                extend);
+
 void                   gtk_list_base_set_enable_rubberband      (GtkListBase            *self,
                                                                  gboolean                enable);
 gboolean               gtk_list_base_get_enable_rubberband      (GtkListBase            *self);
-
 void                   gtk_list_base_allocate_rubberband        (GtkListBase            *self);
+
+void                   gtk_list_base_size_allocate_child        (GtkListBase            *self,
+                                                                 GtkWidget              *child,
+                                                                 int                     x,
+                                                                 int                     y,
+                                                                 int                     width,
+                                                                 int                     height);
 
 #endif /* __GTK_LIST_BASE_PRIVATE_H__ */

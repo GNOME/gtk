@@ -687,43 +687,6 @@ cell_set_size (Cell  *cell,
   gtk_rb_tree_node_mark_dirty (cell);
 }
 
-static void
-gtk_grid_view_size_allocate_child (GtkGridView *self,
-                                   GtkWidget   *child,
-                                   int          x,
-                                   int          y,
-                                   int          width,
-                                   int          height)
-{
-  GtkAllocation child_allocation;
-
-  if (gtk_list_base_get_orientation (GTK_LIST_BASE (self)) == GTK_ORIENTATION_VERTICAL)
-    {
-      child_allocation.x = x;
-      child_allocation.y = y;
-      child_allocation.width = width;
-      child_allocation.height = height;
-    }
-  else if (_gtk_widget_get_direction (GTK_WIDGET (self)) == GTK_TEXT_DIR_LTR)
-    {
-      child_allocation.x = y;
-      child_allocation.y = x;
-      child_allocation.width = height;
-      child_allocation.height = width;
-    }
-  else
-    {
-      int mirror_point = gtk_widget_get_width (GTK_WIDGET (self));
-
-      child_allocation.x = mirror_point - y - height; 
-      child_allocation.y = x;
-      child_allocation.width = height;
-      child_allocation.height = width;
-    }
-
-  gtk_widget_size_allocate (child, &child_allocation, -1);
-}
-
 static int
 gtk_grid_view_compute_total_height (GtkGridView *self)
 {
@@ -873,7 +836,7 @@ gtk_grid_view_size_allocate (GtkWidget *widget,
         {
           row_height += cell->size;
 
-          gtk_grid_view_size_allocate_child (self,
+          gtk_list_base_size_allocate_child (GTK_LIST_BASE (self),
                                              cell->parent.widget,
                                              x + ceil (self->column_width * i),
                                              y,
