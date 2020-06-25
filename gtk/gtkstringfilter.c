@@ -484,7 +484,7 @@ gtk_string_filter_get_match_mode (GtkStringFilter *self)
  * @self: a #GtkStringFilter
  * @mode: the new match mode
  *
- * Sets the match mode fot the filter.
+ * Sets the match mode for the filter.
  */
 void
 gtk_string_filter_set_match_mode (GtkStringFilter *self,
