@@ -638,7 +638,7 @@ nodes.
 
 If you are using a #GtkDrawingArea for custom drawing, you need to switch
 to using gtk_drawing_area_set_draw_func() to set a draw function instead
-of connnecting a handler to the #GtkWidget::draw signal.
+of connecting a handler to the #GtkWidget::draw signal.
 
 ### Stop using APIs to query GdkSurfaces
 

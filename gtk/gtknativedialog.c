@@ -37,7 +37,6 @@
 #include "gtkstylecontext.h"
 #include "gtkheaderbar.h"
 #include "gtklabel.h"
-#include "gtkfilechooserentry.h"
 
 /**
  * SECTION:gtknativedialog
