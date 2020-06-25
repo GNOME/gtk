@@ -417,6 +417,10 @@ G_GNUC_END_IGNORE_DEPRECATIONS
           strcmp (pspec->name, "factory") == 0)
         continue;
 
+      if (g_type_is_a (type, GTK_TYPE_SUGGESTION_ENTRY) &&
+          strcmp (pspec->name, "factory") == 0)
+        continue;
+
       if (g_type_is_a (type, GTK_TYPE_BOOKMARK_LIST) &&
           (strcmp (pspec->name, "filename") == 0 ||
            strcmp (pspec->name, "loading") == 0))
