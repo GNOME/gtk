@@ -7565,3 +7565,16 @@ gtk_string_list_get_string
 GtkStringObject
 gtk_string_object_get_string
 </SECTION>
+
+<SECTION>
+<FILE>gtksuggestionentry</FILE>
+<TITLE>GtkSuggestionEntry</TITLE>
+GtkSuggestionEntry
+gtk_suggestion_entry_new
+gtk_suggestion_entry_set_model
+gtk_suggestion_entry_get_model
+gtk_suggestion_entry_set_factory
+gtk_suggestion_entry_get_factory
+gtk_suggestion_entry_set_expression
+gtk_suggestion_entry_get_expression
+</SECTION>
