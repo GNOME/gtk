@@ -23,11 +23,8 @@
 #endif
 
 #include <gdk/gdk.h>
-#include <gtk/gtktreemodel.h>
-#include <gtk/gtkliststore.h>
-#include <gtk/gtkcellarea.h>
-#include <gtk/gtktreeviewcolumn.h>
-#include <gtk/gtktreemodelfilter.h>
+#include <gtk/gtklistitemfactory.h>
+#include <gtk/gtkexpression.h>
 
 G_BEGIN_DECLS
 
@@ -37,50 +34,31 @@ G_BEGIN_DECLS
 
 typedef struct _GtkEntryCompletion            GtkEntryCompletion;
 
-/**
- * GtkEntryCompletionMatchFunc:
- * @completion: the #GtkEntryCompletion
- * @key: the string to match, normalized and case-folded
- * @iter: a #GtkTreeIter indicating the row to match
- * @user_data: user data given to gtk_entry_completion_set_match_func()
- *
- * A function which decides whether the row indicated by @iter matches
- * a given @key, and should be displayed as a possible completion for @key.
- * Note that @key is normalized and case-folded (see g_utf8_normalize()
- * and g_utf8_casefold()). If this is not appropriate, match functions
- * have access to the unmodified key via
- * `gtk_editable_get_text (GTK_EDITABLE (gtk_entry_completion_get_entry ()))`.
- *
- * Returns: %TRUE if @iter should be displayed as a possible completion
- *     for @key
- */
-typedef gboolean (* GtkEntryCompletionMatchFunc) (GtkEntryCompletion *completion,
-                                                  const gchar        *key,
-                                                  GtkTreeIter        *iter,
-                                                  gpointer            user_data);
-
-
 GDK_AVAILABLE_IN_ALL
 GType               gtk_entry_completion_get_type               (void) G_GNUC_CONST;
 GDK_AVAILABLE_IN_ALL
 GtkEntryCompletion *gtk_entry_completion_new                    (void);
 GDK_AVAILABLE_IN_ALL
-GtkEntryCompletion *gtk_entry_completion_new_with_area          (GtkCellArea                 *area);
-
-GDK_AVAILABLE_IN_ALL
 GtkWidget          *gtk_entry_completion_get_entry              (GtkEntryCompletion          *completion);
 
 GDK_AVAILABLE_IN_ALL
 void                gtk_entry_completion_set_model              (GtkEntryCompletion          *completion,
-                                                                 GtkTreeModel                *model);
+                                                                 GListModel                  *model);
 GDK_AVAILABLE_IN_ALL
-GtkTreeModel       *gtk_entry_completion_get_model              (GtkEntryCompletion          *completion);
+GListModel *        gtk_entry_completion_get_model              (GtkEntryCompletion          *completion);
 
 GDK_AVAILABLE_IN_ALL
-void                gtk_entry_completion_set_match_func         (GtkEntryCompletion          *completion,
-                                                                 GtkEntryCompletionMatchFunc  func,
-                                                                 gpointer                     func_data,
-                                                                 GDestroyNotify               func_notify);
+void                gtk_entry_completion_set_expression         (GtkEntryCompletion          *completion,
+                                                                 GtkExpression               *expression);
+GDK_AVAILABLE_IN_ALL
+GtkExpression *     gtk_entry_completion_get_expression         (GtkEntryCompletion          *completion);
+
+GDK_AVAILABLE_IN_ALL
+void                gtk_entry_completion_set_factory            (GtkEntryCompletion          *completion,
+                                                                 GtkListItemFactory          *factory);
+GDK_AVAILABLE_IN_ALL
+GtkListItemFactory *gtk_entry_completion_get_factory            (GtkEntryCompletion          *completion);
+
 GDK_AVAILABLE_IN_ALL
 void                gtk_entry_completion_set_minimum_key_length (GtkEntryCompletion          *completion,
                                                                  gint                         length);
@@ -122,12 +100,6 @@ gboolean            gtk_entry_completion_get_popup_single_match (GtkEntryComplet
 
 GDK_AVAILABLE_IN_ALL
 const gchar         *gtk_entry_completion_get_completion_prefix (GtkEntryCompletion *completion);
-/* convenience */
-GDK_AVAILABLE_IN_ALL
-void                gtk_entry_completion_set_text_column        (GtkEntryCompletion          *completion,
-                                                                 gint                         column);
-GDK_AVAILABLE_IN_ALL
-gint                gtk_entry_completion_get_text_column        (GtkEntryCompletion          *completion);
 
 G_END_DECLS
 

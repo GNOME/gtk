@@ -2850,17 +2850,10 @@ static const gchar *cursor_names[] = {
   NULL
 };
 
-static GtkTreeModel *
+static GListModel *
 cursor_model (void)
 {
-  GtkListStore *store;
-  gint i;
-  store = gtk_list_store_new (1, G_TYPE_STRING);
-
-  for (i = 0; i < G_N_ELEMENTS (cursor_names); i++)
-    gtk_list_store_insert_with_values (store, NULL, -1, 0, cursor_names[i], -1);
-
-  return (GtkTreeModel *)store;
+  return G_LIST_MODEL (gtk_string_list_new (cursor_names));
 }
 
 static void
@@ -2961,7 +2954,7 @@ create_cursors (GtkWidget *widget)
   GtkWidget *entry;
   GtkWidget *size;
   GtkEntryCompletion *completion;
-  GtkTreeModel *model;
+  GListModel *model;
   gboolean cursor_demo = FALSE;
   GtkGesture *gesture;
 
@@ -3038,7 +3031,6 @@ create_cursors (GtkWidget *widget)
       completion = gtk_entry_completion_new ();
       model = cursor_model ();
       gtk_entry_completion_set_model (completion, model);
-      gtk_entry_completion_set_text_column (completion, 0);
       gtk_entry_set_completion (GTK_ENTRY (entry), completion);
       g_object_unref (model);
       gtk_widget_set_hexpand (entry, TRUE);
