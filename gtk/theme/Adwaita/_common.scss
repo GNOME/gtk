@@ -1152,8 +1152,10 @@ spinbutton {
 /**************
  * ComboBoxes *
  **************/
+entry.suggestion > popover.menu.background > contents,
 dropdown > popover.menu.background > contents { padding: 0; } //allow search entries with no margin
 
+entry.suggestion,
 dropdown,
 combobox {
   arrow {

@@ -653,6 +653,10 @@ test_type (gconstpointer data)
            g_str_equal (pspec->name, "selected"))
          continue;
 
+       if (g_type_is_a (type, GTK_TYPE_SUGGESTION_ENTRY) &&
+           g_str_equal (pspec->name, "popup-visible"))
+         continue;
+
        /* can't set position without a notebook */
        if (g_type_is_a (type, GTK_TYPE_NOTEBOOK_PAGE) &&
            g_str_equal (pspec->name, "position"))
