@@ -425,12 +425,12 @@ gtk_string_list_init (GtkStringList *self)
 
 /**
  * gtk_string_list_new:
- * @strings: (allow-none): The strings to put in the model
+ * @strings: (array zero-terminated=1) (nullable): The strings to put in the model
  *
  * Creates a new #GtkStringList with the given @strings.
  *
  * Returns: a new #GtkStringList
- **/
+ */
 GtkStringList *
 gtk_string_list_new (const char **strings)
 {
@@ -534,7 +534,7 @@ gtk_string_list_append (GtkStringList *self,
 /**
  * gtk_string_list_take:
  * @self: a #GtkStringList
- * @string: the string to insert
+ * @string: (transfer full): the string to insert
  *
  * Adds @string to self at the end, and takes
  * ownership of it.
