@@ -289,6 +289,42 @@ quit_cb (GtkWidget *widget,
   g_main_context_wakeup (NULL);
 }
 
+static char *
+get_file_name (gpointer item)
+{
+  return g_strdup (g_file_info_get_display_name (G_FILE_INFO (item)));
+}
+
+static void
+setup_item (GtkSignalListItemFactory *factory,
+            GtkListItem              *item)
+{
+  GtkWidget *box;
+  GtkWidget *icon;
+  GtkWidget *label;
+
+  box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
+  icon = gtk_image_new ();
+  label = gtk_label_new ("");
+  gtk_label_set_xalign (GTK_LABEL (label), 0);
+  gtk_box_append (GTK_BOX (box), icon);
+  gtk_box_append (GTK_BOX (box), label);
+  gtk_list_item_set_child (item, box);
+}
+
+static void
+bind_item (GtkSignalListItemFactory *factory,
+           GtkListItem              *item)
+{
+  GFileInfo *info = G_FILE_INFO (gtk_list_item_get_item (item));
+  GtkWidget *box = gtk_list_item_get_child (item);
+  GtkWidget *icon = gtk_widget_get_first_child (box);
+  GtkWidget *label = gtk_widget_get_last_child (box);
+
+  gtk_image_set_from_gicon (GTK_IMAGE (icon), g_file_info_get_icon (info));
+  gtk_label_set_label (GTK_LABEL (label), g_file_info_get_display_name (info));
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -299,6 +335,12 @@ main (int argc, char *argv[])
   GtkTreeModel *completion_model;
   GtkCellRenderer *cell;
   gboolean done = FALSE;
+  GtkStringList *strings;
+  char *cwd;
+  GFile *file;
+  GListModel *dir;
+  GtkExpression *expression;
+  GtkListItemFactory *factory;
 
   gtk_init ();
 
@@ -406,6 +448,40 @@ main (int argc, char *argv[])
   /* Assign the completion to the entry */
   gtk_entry_set_completion (GTK_ENTRY (entry), completion);
   g_object_unref (completion);
+
+  gtk_box_append (GTK_BOX (vbox), entry);
+
+  strings = gtk_string_list_new ((const char *[]) { "total", "totten", "Tobias", "Tobine", "totem", "GNOME", "Gnostic", "gnarly", NULL });
+  entry = gtk_suggestion_entry_new ();
+
+  gtk_suggestion_entry_set_model (GTK_SUGGESTION_ENTRY (entry),
+                                  G_LIST_MODEL (strings));
+
+  gtk_box_append (GTK_BOX (vbox), entry);
+
+  entry = gtk_suggestion_entry_new ();
+
+  cwd = g_get_current_dir ();
+  file = g_file_new_for_path (cwd);
+  dir = G_LIST_MODEL (gtk_directory_list_new ("standard::display-name,standard::content-type,standard::icon,standard::size", file));
+  gtk_suggestion_entry_set_model (GTK_SUGGESTION_ENTRY (entry), dir);
+  g_object_unref (dir);
+  g_object_unref (file);
+  g_free (cwd);
+
+  expression = gtk_cclosure_expression_new (G_TYPE_STRING, NULL,
+                                            0, NULL,
+                                            (GCallback)get_file_name,
+                                            NULL, NULL);
+  gtk_suggestion_entry_set_expression (GTK_SUGGESTION_ENTRY (entry), expression);
+  gtk_expression_unref (expression);
+
+  factory = gtk_signal_list_item_factory_new ();
+  g_signal_connect (factory, "setup", G_CALLBACK (setup_item), NULL);
+  g_signal_connect (factory, "bind", G_CALLBACK (bind_item), NULL);
+
+  gtk_suggestion_entry_set_factory (GTK_SUGGESTION_ENTRY (entry), factory);
+  g_object_unref (factory);
 
   gtk_box_append (GTK_BOX (vbox), entry);
 
