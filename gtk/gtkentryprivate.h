@@ -38,43 +38,34 @@ struct _GtkEntryCompletion
 
   GtkWidget *entry;
 
-  GtkWidget *tree_view;
-  GtkTreeViewColumn *column;
-  GtkTreeModelFilter *filter_model;
-  GtkCellArea *cell_area;
-
-  GtkEntryCompletionMatchFunc match_func;
-  gpointer match_data;
-  GDestroyNotify match_notify;
+  GListModel *filter_model;
+  GtkExpression *expression;
+  GtkListItemFactory *factory;
 
   gint minimum_key_length;
-  gint text_column;
-
-  gchar *case_normalized_key;
+  char *case_normalized_key;
 
   GtkEventController *entry_key_controller;
   GtkEventController *entry_focus_controller;
 
-  /* only used by GtkEntry when attached: */
   GtkWidget *popup_window;
   GtkWidget *scrolled_window;
+  GtkWidget *list_view;
 
   gulong completion_timeout;
   gulong changed_id;
   gulong insert_text_id;
 
-  gint current_selected;
+  int current_selected;
 
-  guint first_sel_changed : 1;
-  guint has_completion    : 1;
-  guint inline_completion : 1;
-  guint popup_completion  : 1;
-  guint popup_set_width   : 1;
+  guint has_completion     : 1;
+  guint inline_completion  : 1;
+  guint popup_completion   : 1;
+  guint popup_set_width    : 1;
   guint popup_single_match : 1;
   guint inline_selection   : 1;
-  guint has_grab           : 1;
 
-  gchar *completion_prefix;
+  char *completion_prefix;
 
   GSource *check_completion_idle;
 };
@@ -84,23 +75,19 @@ struct _GtkEntryCompletionClass
   GObjectClass parent_class;
 
   gboolean (* match_selected)   (GtkEntryCompletion *completion,
-                                 GtkTreeModel       *model,
-                                 GtkTreeIter        *iter);
-  void     (* action_activated) (GtkEntryCompletion *completion,
-                                 gint                index_);
+                                 guint               position);
   gboolean (* insert_prefix)    (GtkEntryCompletion *completion,
-                                 const gchar        *prefix);
+                                 const char         *prefix);
   gboolean (* cursor_on_match)  (GtkEntryCompletion *completion,
-                                 GtkTreeModel       *model,
-                                 GtkTreeIter        *iter);
+                                 guint               position);
   void     (* no_matches)       (GtkEntryCompletion *completion);
 };
 
-void     _gtk_entry_completion_resize_popup (GtkEntryCompletion *completion);
-void     _gtk_entry_completion_popdown      (GtkEntryCompletion *completion);
-void     _gtk_entry_completion_connect      (GtkEntryCompletion *completion,
-                                             GtkEntry           *entry);
-void     _gtk_entry_completion_disconnect   (GtkEntryCompletion *completion);
+void     gtk_entry_completion_resize_popup (GtkEntryCompletion *completion);
+void     gtk_entry_completion_popdown      (GtkEntryCompletion *completion);
+void     gtk_entry_completion_connect      (GtkEntryCompletion *completion,
+                                            GtkEntry           *entry);
+void     gtk_entry_completion_disconnect   (GtkEntryCompletion *completion);
 
 GtkIMContext * _gtk_entry_get_im_context    (GtkEntry  *entry);
 GtkEventController * gtk_entry_get_key_controller (GtkEntry *entry);

@@ -1752,7 +1752,7 @@ gtk_entry_size_allocate (GtkWidget *widget,
 
       completion = gtk_entry_get_completion (entry);
       if (completion)
-        _gtk_entry_completion_resize_popup (completion);
+        gtk_entry_completion_resize_popup (completion);
     }
 
   if (priv->emoji_chooser)
@@ -3183,7 +3183,7 @@ gtk_entry_set_completion (GtkEntry           *entry,
   
   if (old)
     {
-      _gtk_entry_completion_disconnect (old);
+      gtk_entry_completion_disconnect (old);
       g_object_unref (old);
     }
 
@@ -3196,7 +3196,7 @@ gtk_entry_set_completion (GtkEntry           *entry,
   /* hook into the entry */
   g_object_ref (completion);
 
-  _gtk_entry_completion_connect (completion, entry);
+  gtk_entry_completion_connect (completion, entry);
 
   g_object_set_qdata (G_OBJECT (entry), quark_entry_completion, completion);
 
