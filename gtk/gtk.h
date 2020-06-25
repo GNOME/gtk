@@ -247,6 +247,7 @@
 #include <gtk/gtkstringsorter.h>
 #include <gtk/gtkstylecontext.h>
 #include <gtk/gtkstyleprovider.h>
+#include <gtk/gtksuggestionentry.h>
 #include <gtk/gtkswitch.h>
 #include <gtk/gtktext.h>
 #include <gtk/gtktextbuffer.h>
