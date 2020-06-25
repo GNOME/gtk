@@ -49,16 +49,13 @@
  * @Short_description: An entry which shows a search icon
  * @Title: GtkSearchEntry
  *
- * #GtkSearchEntry is a subclass of #GtkEntry that has been
- * tailored for use as a search entry.
+ * #GtkSearchEntry is an entry widget that has been tailored for use
+ * as a search entry. The main aPI for interacting with a GtkSearchEntry
+ * as entry is the #GtkEditable interface.
  *
  * It will show an inactive symbolic “find” icon when the search
  * entry is empty, and a symbolic “clear” icon when there is text.
  * Clicking on the “clear” icon will empty the search entry.
- *
- * Note that the search/clear icon is shown using a secondary
- * icon, and thus does not work if you are using the secondary
- * icon position for some other purpose.
  *
  * To make filtering appear more reactive, it is a good idea to
  * not react to every change in the entry text immediately, but
