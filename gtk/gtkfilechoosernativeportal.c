@@ -39,7 +39,6 @@
 #include "gtkheaderbar.h"
 #include "gtklabel.h"
 #include "gtkmain.h"
-#include "gtkfilechooserentry.h"
 #include "gtkfilefilterprivate.h"
 #include "gtkwindowprivate.h"
 
