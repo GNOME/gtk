@@ -102,11 +102,6 @@ static void     delete_text_callback      (GtkFileChooserEntry *widget,
 					   gpointer             user_data);
 #endif
 
-static gboolean match_selected_callback   (GtkEntryCompletion  *completion,
-					   GtkTreeModel        *model,
-					   GtkTreeIter         *iter,
-					   GtkFileChooserEntry *chooser_entry);
-
 static void set_complete_on_load (GtkFileChooserEntry *chooser_entry,
                                   gboolean             complete_on_load);
 static void refresh_current_folder_and_file_part (GtkFileChooserEntry *chooser_entry);
@@ -181,83 +176,6 @@ _gtk_file_chooser_entry_class_init (GtkFileChooserEntryClass *class)
                   G_TYPE_NONE, 0);
 }
 
-static gboolean
-match_func (GtkEntryCompletion *compl,
-            const gchar        *key,
-            GtkTreeIter        *iter,
-            gpointer            user_data)
-{
-  GtkFileChooserEntry *chooser_entry = user_data;
-
-  /* If we arrive here, the GtkFileSystemModel's GtkFileFilter already filtered out all
-   * files that don't start with the current prefix, so we manually apply the GtkFileChooser's
-   * current file filter (e.g. just jpg files) here. */
-  if (chooser_entry->current_filter != NULL)
-    {
-      char *mime_type = NULL;
-      gboolean matches;
-      GFile *file;
-      GFileInfo *file_info;
-      GtkFileFilterInfo filter_info;
-      GtkFileFilterFlags needed_flags;
-
-      file = _gtk_file_system_model_get_file (GTK_FILE_SYSTEM_MODEL (chooser_entry->completion_store),
-                                              iter);
-      file_info = _gtk_file_system_model_get_info (GTK_FILE_SYSTEM_MODEL (chooser_entry->completion_store),
-                                                   iter);
-
-      /* We always allow navigating into subfolders, so don't ever filter directories */
-      if (g_file_info_get_file_type (file_info) != G_FILE_TYPE_REGULAR)
-        return TRUE;
-
-      needed_flags = gtk_file_filter_get_needed (chooser_entry->current_filter);
-
-      filter_info.display_name = g_file_info_get_display_name (file_info);
-      filter_info.contains = GTK_FILE_FILTER_DISPLAY_NAME;
-
-      if (needed_flags & GTK_FILE_FILTER_MIME_TYPE)
-        {
-          const char *s = g_file_info_get_content_type (file_info);
-          if (s != NULL)
-            {
-              mime_type = g_content_type_get_mime_type (s);
-              if (mime_type != NULL)
-                {
-                  filter_info.mime_type = mime_type;
-                  filter_info.contains |= GTK_FILE_FILTER_MIME_TYPE;
-                }
-            }
-        }
-
-      if (needed_flags & GTK_FILE_FILTER_FILENAME)
-        {
-          const char *path = g_file_get_path (file);
-          if (path != NULL)
-            {
-              filter_info.filename = path;
-              filter_info.contains |= GTK_FILE_FILTER_FILENAME;
-            }
-        }
-
-      if (needed_flags & GTK_FILE_FILTER_URI)
-        {
-          const char *uri = g_file_get_uri (file);
-          if (uri)
-            {
-              filter_info.uri = uri;
-              filter_info.contains |= GTK_FILE_FILTER_URI;
-            }
-        }
-
-      matches = gtk_file_filter_filter (chooser_entry->current_filter, &filter_info);
-
-      g_free (mime_type);
-      return matches;
-    }
-
-  return TRUE;
-}
-
 static void
 chooser_entry_focus_out (GtkEventController   *controller,
                          GtkFileChooserEntry  *chooser_entry)
@@ -269,36 +187,8 @@ static void
 _gtk_file_chooser_entry_init (GtkFileChooserEntry *chooser_entry)
 {
   GtkEventController *controller;
-  GtkEntryCompletion *comp;
-  GtkCellRenderer *cell;
 
   g_object_set (chooser_entry, "truncate-multiline", TRUE, NULL);
-
-  comp = gtk_entry_completion_new ();
-  gtk_entry_completion_set_popup_single_match (comp, FALSE);
-  gtk_entry_completion_set_minimum_key_length (comp, 0);
-  /* see docs for gtk_entry_completion_set_text_column() */
-  g_object_set (comp, "text-column", FULL_PATH_COLUMN, NULL);
-
-  /* Need a match func here or entry completion uses a wrong one.
-   * We do our own filtering after all. */
-  gtk_entry_completion_set_match_func (comp,
-                                       match_func,
-                                       chooser_entry,
-                                       NULL);
-
-  cell = gtk_cell_renderer_text_new ();
-  gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (comp),
-                              cell, TRUE);
-  gtk_cell_layout_add_attribute (GTK_CELL_LAYOUT (comp),
-                                 cell,
-                                 "text", DISPLAY_NAME_COLUMN);
-
-  g_signal_connect (comp, "match-selected",
-		    G_CALLBACK (match_selected_callback), chooser_entry);
-
-  gtk_entry_set_completion (GTK_ENTRY (chooser_entry), comp);
-  g_object_unref (comp);
 
   /* NB: This needs to happen after the completion is set, so this controller
    * runs before the one installed by entrycompletion */
@@ -347,36 +237,6 @@ gtk_file_chooser_entry_dispose (GObject *object)
   set_completion_folder (chooser_entry, NULL, NULL);
 
   G_OBJECT_CLASS (_gtk_file_chooser_entry_parent_class)->dispose (object);
-}
-
-/* Match functions for the GtkEntryCompletion */
-static gboolean
-match_selected_callback (GtkEntryCompletion  *completion,
-                         GtkTreeModel        *model,
-                         GtkTreeIter         *iter,
-                         GtkFileChooserEntry *chooser_entry)
-{
-  char *path;
-  gint pos;
-
-  gtk_tree_model_get (model, iter,
-                      FULL_PATH_COLUMN, &path,
-                      -1);
-
-  gtk_editable_delete_text (GTK_EDITABLE (chooser_entry),
-                            0,
-                            gtk_editable_get_position (GTK_EDITABLE (chooser_entry)));
-  pos = 0;
-  gtk_editable_insert_text (GTK_EDITABLE (chooser_entry),
-                            path,
-                            -1,
-                            &pos);
-
-  gtk_editable_set_position (GTK_EDITABLE (chooser_entry), pos);
-
-  g_free (path);
-
-  return TRUE;
 }
 
 static void
@@ -553,37 +413,12 @@ gtk_file_chooser_entry_tab_handler (GtkEventControllerKey *key,
 }
 
 static void
-update_inline_completion (GtkFileChooserEntry *chooser_entry)
-{
-  GtkEntryCompletion *completion = gtk_entry_get_completion (GTK_ENTRY (chooser_entry));
-
-  if (!chooser_entry->current_folder_loaded)
-    {
-      gtk_entry_completion_set_inline_completion (completion, FALSE);
-      return;
-    }
-
-  switch (chooser_entry->action)
-    {
-    case GTK_FILE_CHOOSER_ACTION_OPEN:
-    case GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER:
-      gtk_entry_completion_set_inline_completion (completion, TRUE);
-      break;
-    case GTK_FILE_CHOOSER_ACTION_SAVE:
-    default:
-      gtk_entry_completion_set_inline_completion (completion, FALSE);
-      break;
-    }
-}
-
-static void
 discard_completion_store (GtkFileChooserEntry *chooser_entry)
 {
   if (!chooser_entry->completion_store)
     return;
 
   gtk_entry_completion_set_model (gtk_entry_get_completion (GTK_ENTRY (chooser_entry)), NULL);
-  update_inline_completion (chooser_entry);
   g_object_unref (chooser_entry->completion_store);
   chooser_entry->completion_store = NULL;
 }
@@ -647,9 +482,6 @@ populate_completion_store (GtkFileChooserEntry *chooser_entry)
                                          chooser_entry->action == GTK_FILE_CHOOSER_ACTION_SAVE);
   gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (chooser_entry->completion_store),
 					DISPLAY_NAME_COLUMN, GTK_SORT_ASCENDING);
-
-  gtk_entry_completion_set_model (gtk_entry_get_completion (GTK_ENTRY (chooser_entry)),
-				  chooser_entry->completion_store);
 }
 
 /* Callback when the current folder finishes loading */
@@ -675,7 +507,6 @@ finished_loading_cb (GtkFileSystemModel  *model,
   gtk_widget_set_tooltip_text (GTK_WIDGET (chooser_entry), NULL);
 
   completion = gtk_entry_get_completion (GTK_ENTRY (chooser_entry));
-  update_inline_completion (chooser_entry);
 
   if (gtk_widget_has_focus (GTK_WIDGET (chooser_entry)))
     {
@@ -960,32 +791,12 @@ _gtk_file_chooser_entry_set_action (GtkFileChooserEntry *chooser_entry,
   
   if (chooser_entry->action != action)
     {
-      GtkEntryCompletion *comp;
-
       chooser_entry->action = action;
-
-      comp = gtk_entry_get_completion (GTK_ENTRY (chooser_entry));
-
-      /* FIXME: do we need to actually set the following? */
-
-      switch (action)
-	{
-	case GTK_FILE_CHOOSER_ACTION_OPEN:
-	case GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER:
-        default:
-	  gtk_entry_completion_set_popup_single_match (comp, FALSE);
-	  break;
-	case GTK_FILE_CHOOSER_ACTION_SAVE:
-	  gtk_entry_completion_set_popup_single_match (comp, TRUE);
-	  break;
-	}
 
       if (chooser_entry->completion_store)
         _gtk_file_system_model_set_show_files (GTK_FILE_SYSTEM_MODEL (chooser_entry->completion_store),
                                                action == GTK_FILE_CHOOSER_ACTION_OPEN ||
                                                action == GTK_FILE_CHOOSER_ACTION_SAVE);
-
-      update_inline_completion (chooser_entry);
     }
 }
 
