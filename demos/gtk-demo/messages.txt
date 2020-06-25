@@ -259,7 +259,7 @@
 259|GTK+ and friends|GTKtoolkit|#java bindings version 4.0.16 released: http://article.gmane.org/gmane.comp.gnome.bindings.java/1796 #gtk|1276885917|0||0|0
 260|GTK+ and friends|GTKtoolkit|RT @cwiiis: MxIconTheme and MxIcon respect system's icon theme (and changes) now in #mx master :) Made possible by @thosw's XSettings work|1276883019|0||0|0
 261|GTK+ and friends|GTKtoolkit|#javascript mailing list just created. Discuss its usage in GObject libraries: GTK+, Glib ... http://ur1.ca/08lwz by @jwendell #gtk|1276842639|0||0|0
-262|GTK+ and friends|GTKtoolkit|Note fot Win32 users: XP theming is back in 2.90.3 . Please test. #gtk|1276829697|0||0|0
+262|GTK+ and friends|GTKtoolkit|Note for Win32 users: XP theming is back in 2.90.3 . Please test. #gtk|1276829697|0||0|0
 263|GTK+ and friends|GTKtoolkit|GTK+ 2.90.3 (unstable) released: http://mail.gnome.org/archives/gtk-devel-list/2010-June/msg00137.html #gtk|1276829633|0||0|0
 264|GTK+ and friends|GTKtoolkit|GLib 2.25.9 (unstable) released: http://ur1.ca/08hrl WARNING: API changes in GDBus, GSettings and GApplication #gtk|1276829581|0||0|0
 265|scaroo|scaroo|RT @scaroo: #SeedKit does RGBA window with css shadows and stuff : http://dl.dropbox.com/u/5746554/seedkit-does-rgba.png|1276734086|0|GTKtoolkit|0|1

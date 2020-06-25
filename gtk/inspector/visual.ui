@@ -290,10 +290,14 @@
                                     <property name="valign">baseline</property>
                                     <property name="hexpand">1</property>
                                     <signal name="notify::selected" handler="direction_changed"/>
-                                    <items>
-                                      <item translatable="yes">Left-to-Right</item>
-                                      <item translatable="yes">Right-to-Left</item>
-                                    </items>
+                                    <property name="model">
+                                      <object class="GtkStringList">
+                                        <items>
+                                          <item translatable="yes">Left-to-Right</item>
+                                          <item translatable="yes">Right-to-Left</item>
+                                        </items>
+                                      </object>
+                                    </property>
                                   </object>
                                 </child>
                               </object>

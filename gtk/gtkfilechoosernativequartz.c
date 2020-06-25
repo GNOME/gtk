@@ -38,7 +38,6 @@
 #include "gtkstylecontext.h"
 #include "gtkheaderbar.h"
 #include "gtklabel.h"
-#include "gtkfilechooserentry.h"
 #include "gtkfilefilterprivate.h"
 
 #include "quartz/gdkquartz.h"
