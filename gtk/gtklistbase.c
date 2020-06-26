@@ -48,8 +48,6 @@ struct _RubberbandData
   double              start_align_along;        /* alignment in vertical direction */
 
   double pointer_x, pointer_y;                  /* mouse coordinates in widget space */
-  gboolean modify;
-  gboolean extend;
 };
 
 typedef struct _GtkListBasePrivate GtkListBasePrivate;
@@ -1506,9 +1504,7 @@ gtk_list_base_allocate_rubberband (GtkListBase *self)
 static void
 gtk_list_base_start_rubberband (GtkListBase *self,
                                 double       x,
-                                double       y,
-                                gboolean     modify,
-                                gboolean     extend)
+                                double       y)
 {
   GtkListBasePrivate *priv = gtk_list_base_get_instance_private (self);
   cairo_rectangle_int_t item_area;
@@ -1535,16 +1531,15 @@ gtk_list_base_start_rubberband (GtkListBase *self,
   priv->rubberband->pointer_x = x;
   priv->rubberband->pointer_y = y;
 
-  priv->rubberband->modify = modify;
-  priv->rubberband->extend = extend;
-
   priv->rubberband->widget = gtk_gizmo_new ("rubberband",
                                             NULL, NULL, NULL, NULL, NULL, NULL);
   gtk_widget_set_parent (priv->rubberband->widget, GTK_WIDGET (self));
 }
 
 static void
-gtk_list_base_stop_rubberband (GtkListBase *self)
+gtk_list_base_stop_rubberband (GtkListBase *self,
+                               gboolean     modify,
+                               gboolean     extend)
 {
   GtkListBasePrivate *priv = gtk_list_base_get_instance_private (self);
   GtkListItemManagerItem *item;
@@ -1572,21 +1567,45 @@ gtk_list_base_stop_rubberband (GtkListBase *self)
         return;
 
       rubberband_selection = gtk_list_base_get_items_in_rect (self, &rect);
-
-      if (priv->rubberband->extend)
+      if (gtk_bitset_is_empty (rubberband_selection))
         {
+          gtk_bitset_unref (rubberband_selection);
+          return;
+        }
+
+      if (modify && extend) /* Ctrl + Shift */
+        {
+          GtkBitset *current;
+          guint min = gtk_bitset_get_minimum (rubberband_selection);
+          guint max = gtk_bitset_get_maximum (rubberband_selection);
+          /* toggle the rubberband, keep the rest */
+          current = gtk_selection_model_get_selection_in_range (model, min, max - min + 1);
+          selected = gtk_bitset_copy (current);
+          gtk_bitset_unref (current);
+          gtk_bitset_intersect (selected, rubberband_selection);
+          gtk_bitset_difference (selected, rubberband_selection);
+                                                              
           mask = gtk_bitset_ref (rubberband_selection);
         }
-      else
+      else if (modify) /* Ctrl */
         {
+          /* select the rubberband, keep the rest */
+          selected = gtk_bitset_ref (rubberband_selection);
+          mask = gtk_bitset_ref (rubberband_selection);
+        }
+      else if (extend) /* Shift */
+        {
+          /* unselect the rubberband, keep the rest */
+          selected = gtk_bitset_new_empty ();
+          mask = gtk_bitset_ref (rubberband_selection);
+        }
+      else /* no modifer */
+        {
+          /* select the rubberband, clear the rest */
+          selected = gtk_bitset_ref (rubberband_selection);
           mask = gtk_bitset_new_empty ();
           gtk_bitset_add_range (mask, 0, g_list_model_get_n_items (G_LIST_MODEL (model)));
         }
-
-      if (priv->rubberband->modify)
-        selected = gtk_bitset_new_empty ();
-      else
-        selected = gtk_bitset_ref (rubberband_selection);
 
       gtk_selection_model_set_selection (model, selected, mask);
 
@@ -1683,11 +1702,7 @@ gtk_list_base_drag_begin (GtkGestureDrag *gesture,
                           double          start_y,
                           GtkListBase    *self)
 {
-  gboolean modify;
-  gboolean extend;
-
-  get_selection_modifiers (GTK_GESTURE (gesture), &modify, &extend);
-  gtk_list_base_start_rubberband (self, start_x, start_y, modify, extend);
+  gtk_list_base_start_rubberband (self, start_x, start_y);
 }
 
 static void
@@ -1707,8 +1722,11 @@ gtk_list_base_drag_end (GtkGestureDrag *gesture,
                         double          offset_y,
                         GtkListBase    *self)
 {
+  gboolean modify, extend;
+
   gtk_list_base_drag_update (gesture, offset_x, offset_y, self);
-  gtk_list_base_stop_rubberband (self);
+  get_selection_modifiers (GTK_GESTURE (gesture), &modify, &extend);
+  gtk_list_base_stop_rubberband (self, modify, extend);
 }
 
 void
