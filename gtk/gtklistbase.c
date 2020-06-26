@@ -23,6 +23,7 @@
 
 #include "gtkadjustment.h"
 #include "gtkbitset.h"
+#include "gtkdragsource.h"
 #include "gtkdropcontrollermotion.h"
 #include "gtkgesturedrag.h"
 #include "gtkgizmoprivate.h"
@@ -1697,22 +1698,24 @@ get_selection_modifiers (GtkGesture *gesture,
 }
 
 static void
-gtk_list_base_drag_begin (GtkGestureDrag *gesture,
-                          double          start_x,
-                          double          start_y,
-                          GtkListBase    *self)
-{
-  gtk_list_base_start_rubberband (self, start_x, start_y);
-}
-
-static void
 gtk_list_base_drag_update (GtkGestureDrag *gesture,
                            double          offset_x,
                            double          offset_y,
                            GtkListBase    *self)
 {
+  GtkListBasePrivate *priv = gtk_list_base_get_instance_private (self);
   double start_x, start_y;
+
   gtk_gesture_drag_get_start_point (gesture, &start_x, &start_y);
+
+  if (!priv->rubberband)
+    {
+      if (!gtk_drag_check_threshold (GTK_WIDGET (self), 0, 0, offset_x, offset_y))
+        return;
+      
+      gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
+      gtk_list_base_start_rubberband (self, start_x, start_y);
+    }
   gtk_list_base_update_rubberband (self, start_x + offset_x, start_y + offset_y);
 }
 
@@ -1743,7 +1746,6 @@ gtk_list_base_set_enable_rubberband (GtkListBase *self,
   if (enable)
     {
       priv->drag_gesture = gtk_gesture_drag_new ();
-      g_signal_connect (priv->drag_gesture, "drag-begin", G_CALLBACK (gtk_list_base_drag_begin), self);
       g_signal_connect (priv->drag_gesture, "drag-update", G_CALLBACK (gtk_list_base_drag_update), self);
       g_signal_connect (priv->drag_gesture, "drag-end", G_CALLBACK (gtk_list_base_drag_end), self);
       gtk_widget_add_controller (GTK_WIDGET (self), GTK_EVENT_CONTROLLER (priv->drag_gesture));
