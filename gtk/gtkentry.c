@@ -121,7 +121,7 @@
  * ├── text[.readonly]
  * ├── image.left
  * ├── image.right
- * ├── [progress[.pulse]]
+ * ╰── [progress[.pulse]]
  * ]|
  *
  * GtkEntry has a main node with the name entry. Depending on the properties
