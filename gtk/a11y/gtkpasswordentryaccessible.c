@@ -65,7 +65,7 @@ static gunichar
 gtk_password_entry_accessible_get_character_at_offset (AtkText *atk_text,
                                                        gint     offset)
 {
-  GtkText *text = get_text_widget (GTK_ACCESSIBLE (atk_text));
+  GtkText *text;
   char *contents, *index;
   gunichar result;
 
