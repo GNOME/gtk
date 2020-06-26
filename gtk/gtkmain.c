@@ -1753,6 +1753,7 @@ gtk_main_do_event (GdkEvent *event)
       ((gtk_widget_is_sensitive (target_widget) || gdk_event_get_event_type (event) == GDK_SCROLL) &&
        gtk_widget_is_ancestor (target_widget, grab_widget)) ||
       (GTK_IS_WINDOW (grab_widget) &&
+       GTK_IS_WINDOW (event_widget) &&
        grab_widget != event_widget &&
        is_transient_for (GTK_WINDOW (event_widget), GTK_WINDOW (grab_widget))))
     grab_widget = target_widget;
