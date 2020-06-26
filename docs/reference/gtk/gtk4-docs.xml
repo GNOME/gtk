@@ -48,6 +48,7 @@
 
     <chapter id="Lists">
       <title>GListModel support</title>
+      <xi:include href="xml/gtkbitset.xml" />
       <xi:include href="xml/gtkexpression.xml" />
       <xi:include href="xml/gtkfilterlistmodel.xml" />
       <section>
@@ -72,7 +73,6 @@
         <xi:include href="xml/gtknoselection.xml" />
         <xi:include href="xml/gtksingleselection.xml" />
         <xi:include href="xml/gtkmultiselection.xml" />
-      <xi:include href="xml/gtkpropertyselection.xml" />
       </section>
       <xi:include href="xml/gtkbookmarklist.xml" />
       <xi:include href="xml/gtkdirectorylist.xml" />

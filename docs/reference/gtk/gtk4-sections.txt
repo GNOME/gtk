@@ -340,20 +340,64 @@ gtk_list_box_row_get_type
 </SECTION>
 
 <SECTION>
+<FILE>gtkbitset</FILE>
+<TITLE>GtkBitset</TITLE>
+GtkBitset
+gtk_bitset_ref
+gtk_bitset_unref
+gtk_bitset_new_empty
+gtk_bitset_copy
+<SUBSECTION>
+gtk_bitset_contains
+gtk_bitset_is_empty
+gtk_bitset_equals
+gtk_bitset_get_minimum
+gtk_bitset_get_maximum
+<SUBSECTION>
+gtk_bitset_remove_all
+gtk_bitset_add
+gtk_bitset_remove
+gtk_bitset_add_range
+gtk_bitset_remove_range
+gtk_bitset_add_range_closed
+gtk_bitset_remove_range_closed
+gtk_bitset_add_rectangle
+gtk_bitset_remove_rectangle
+gtk_bitset_union
+gtk_bitset_intersect
+gtk_bitset_subtract
+gtk_bitset_difference
+gtk_bitset_shift_left
+gtk_bitset_shift_right
+gtk_bitset_slice
+<SUBSECTION>
+GtkBitsetIter
+gtk_bitset_iter_init_first
+gtk_bitset_iter_init_last
+gtk_bitset_iter_init_at
+gtk_bitset_iter_next
+gtk_bitset_iter_previous
+gtk_bitset_iter_get_value
+gtk_bitset_iter_is_valid
+<SUBSECTION Private>
+GTK_TYPE_BITSET
+gtk_bitset_get_type
+</SECTION>
+
+<SECTION>
 <FILE>gtkselectionmodel</FILE>
 <TITLE>GtkSelectionModel</TITLE>
 GtkSelectionModel
 gtk_selection_model_is_selected
+gtk_selection_model_get_selection
+gtk_selection_model_get_selection_in_range
 gtk_selection_model_select_item
 gtk_selection_model_unselect_item
 gtk_selection_model_select_range
 gtk_selection_model_unselect_range
 gtk_selection_model_select_all
 gtk_selection_model_unselect_all
-GtkSelectionCallback
-gtk_selection_model_select_callback
-gtk_selection_model_unselect_callback
-gtk_selection_model_query_range
+gtk_selection_model_set_selection
 <SUBSECTION>
 gtk_selection_model_selection_changed
 <SUBSECTION Standard>
@@ -402,17 +446,6 @@ GtkMultiSelection
 gtk_multi_selection_new
 <SUBSECTION Private>
 gtk_multi_selection_get_type
-</SECTION>
-
-<SECTION>
-<FILE>gtkpropertyselection</FILE>
-<TITLE>GtkPropertySelection</TITLE>
-GtkPropertySelection
-gtk_property_selection_new
-gtk_property_selection_get_model
-gtk_property_selection_get_property
-<SUBSECTION Private>
-gtk_property_selection_get_type
 </SECTION>
 
 <SECTION>

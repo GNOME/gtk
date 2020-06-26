@@ -18,6 +18,7 @@ gtk_aspect_frame_get_type
 gtk_assistant_get_type
 gtk_assistant_page_get_type
 gtk_bin_layout_get_type
+gtk_bitset_get_type
 gtk_bookmark_list_get_type
 gtk_box_get_type
 gtk_box_layout_get_type
@@ -171,7 +172,6 @@ gtk_print_operation_preview_get_type
 gtk_print_settings_get_type
 @DISABLE_ON_W32@gtk_print_unix_dialog_get_type
 gtk_progress_bar_get_type
-gtk_property_selection_get_type
 gtk_radio_button_get_type
 gtk_range_get_type
 gtk_recent_manager_get_type
