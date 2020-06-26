@@ -4371,6 +4371,22 @@ gtk_widget_run_controllers (GtkWidget           *widget,
               is_gesture = GTK_IS_GESTURE (controller);
               this_handled = gtk_event_controller_handle_event (controller, event, target, x, y);
 
+#ifdef G_ENABLE_DEBUG
+              if (GTK_DEBUG_CHECK (KEYBINDINGS))
+                {
+                  GdkEventType type = gdk_event_get_event_type (event);
+                  if (this_handled &&
+                      (type == GDK_KEY_PRESS || type == GDK_KEY_RELEASE))
+                    {
+                      g_message ("key %s (keyval %d) handled at widget %s by controller %s\n",
+                                 type == GDK_KEY_PRESS ? "press" : "release",
+                                 gdk_key_event_get_keyval (event),
+                                 G_OBJECT_TYPE_NAME (widget),
+                                 gtk_event_controller_get_name (controller));
+                    }
+                }
+#endif
+
               handled |= this_handled;
 
               /* Non-gesture controllers are basically unique entities not meant
