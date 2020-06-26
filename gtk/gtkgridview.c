@@ -1171,6 +1171,8 @@ gtk_grid_view_init (GtkGridView *self)
   gtk_list_base_set_anchor_max_widgets (GTK_LIST_BASE (self),
                                         self->max_columns * GTK_GRID_VIEW_MAX_VISIBLE_ROWS,
                                         self->max_columns);
+
+  gtk_widget_add_css_class (GTK_WIDGET (self), "view");
 }
 
 /**
