@@ -295,7 +295,6 @@ gtk_cell_accessible_action_do_action (AtkAction *action,
   GtkCellAccessible *cell = GTK_CELL_ACCESSIBLE (action);
   GtkCellAccessibleParent *parent;
 
-  cell = GTK_CELL_ACCESSIBLE (action);
   if (gtk_accessible_get_widget (GTK_ACCESSIBLE (cell)) == NULL)
     return FALSE;
 
