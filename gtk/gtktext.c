@@ -1870,6 +1870,7 @@ gtk_text_init (GtkText *self)
   gtk_widget_add_controller (GTK_WIDGET (self), GTK_EVENT_CONTROLLER (priv->drag_gesture));
 
   gesture = gtk_gesture_click_new ();
+  gtk_event_controller_set_name (GTK_EVENT_CONTROLLER (gesture), "gtk-text-click-gesture");
   g_signal_connect (gesture, "pressed",
                     G_CALLBACK (gtk_text_click_gesture_pressed), self);
   gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (gesture), 0);
@@ -1877,11 +1878,14 @@ gtk_text_init (GtkText *self)
   gtk_widget_add_controller (GTK_WIDGET (self), GTK_EVENT_CONTROLLER (gesture));
 
   controller = gtk_event_controller_motion_new ();
+  gtk_event_controller_set_name (controller, "gtk-text-motion-controller");
   g_signal_connect (controller, "motion",
                     G_CALLBACK (gtk_text_motion_controller_motion), self);
   gtk_widget_add_controller (GTK_WIDGET (self), controller);
 
   priv->key_controller = gtk_event_controller_key_new ();
+  gtk_event_controller_set_propagation_phase (priv->key_controller, GTK_PHASE_TARGET);
+  gtk_event_controller_set_name (priv->key_controller, "gtk-text-key-controller");
   g_signal_connect (priv->key_controller, "key-pressed",
                     G_CALLBACK (gtk_text_key_controller_key_pressed), self);
   g_signal_connect_swapped (priv->key_controller, "im-update",
@@ -1889,7 +1893,9 @@ gtk_text_init (GtkText *self)
   gtk_event_controller_key_set_im_context (GTK_EVENT_CONTROLLER_KEY (priv->key_controller),
                                            priv->im_context);
   gtk_widget_add_controller (GTK_WIDGET (self), priv->key_controller);
+
   controller = gtk_event_controller_focus_new ();
+  gtk_event_controller_set_name (controller, "gtk-text-focus-controller");
   g_signal_connect_swapped (controller, "enter",
                             G_CALLBACK (gtk_text_focus_in), self);
   g_signal_connect_swapped (controller, "leave",
@@ -3187,11 +3193,15 @@ gtk_text_grab_focus (GtkWidget *widget)
   GtkText *self = GTK_TEXT (widget);
   GtkTextPrivate *priv = gtk_text_get_instance_private (self);
   gboolean select_on_focus;
+  GtkWidget *prev_focus;
+
+  prev_focus = gtk_root_get_focus (gtk_widget_get_root (widget));
 
   if (!GTK_WIDGET_CLASS (gtk_text_parent_class)->grab_focus (GTK_WIDGET (self)))
     return FALSE;
 
-  if (priv->editable && !priv->in_click)
+  if (priv->editable && !priv->in_click &&
+      !(prev_focus && gtk_widget_is_ancestor (prev_focus, widget)))
     {
       g_object_get (gtk_widget_get_settings (widget),
                     "gtk-entry-select-on-focus",
@@ -4348,6 +4358,8 @@ gtk_text_create_layout (GtkText  *self,
 
   tmp_attrs = gtk_css_style_get_pango_attributes (gtk_css_node_get_style (gtk_widget_get_css_node (widget)));
   tmp_attrs = _gtk_pango_attr_list_merge (tmp_attrs, priv->attrs);
+  if (!tmp_attrs)
+    tmp_attrs = pango_attr_list_new ();
 
   display_text = gtk_text_get_display_text (self, 0, -1);
 
@@ -4368,10 +4380,7 @@ gtk_text_create_layout (GtkText  *self,
       pos = g_utf8_offset_to_pointer (display_text, priv->current_pos) - display_text;
       g_string_insert (tmp_string, pos, preedit_string);
       pango_layout_set_text (layout, tmp_string->str, tmp_string->len);
-      if (tmp_attrs)
-        pango_attr_list_splice (tmp_attrs, preedit_attrs, pos, preedit_length);
-      else
-        tmp_attrs = pango_attr_list_ref (preedit_attrs);
+      pango_attr_list_splice (tmp_attrs, preedit_attrs, pos, preedit_length);
       g_string_free (tmp_string, TRUE);
     }
   else
