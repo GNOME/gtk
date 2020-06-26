@@ -2667,8 +2667,6 @@ gtk_text_click_gesture_pressed (GtkGestureClick *gesture,
   current = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
   event = gtk_gesture_get_last_event (GTK_GESTURE (gesture), current);
 
-  gtk_gesture_set_sequence_state (GTK_GESTURE (gesture), current,
-                                  GTK_EVENT_SEQUENCE_CLAIMED);
   gesture_get_current_point_in_layout (GTK_GESTURE_SINGLE (gesture), self, &x, &y);
   gtk_text_reset_blink_time (self);
 
@@ -2816,13 +2814,16 @@ gtk_text_click_gesture_pressed (GtkGestureClick *gesture,
             gtk_text_set_positions (self, end, start);
         }
 
-      gtk_gesture_set_state (priv->drag_gesture,
-                             GTK_EVENT_SEQUENCE_CLAIMED);
+      if (n_press > 1)
+        {
+          gtk_gesture_set_state (priv->drag_gesture,
+                                 GTK_EVENT_SEQUENCE_CLAIMED);
+        }
 
       gtk_text_update_handles (self);
     }
 
-  if (n_press >= 3)
+  if (button != GDK_BUTTON_PRIMARY || n_press >= 3)
     gtk_event_controller_reset (GTK_EVENT_CONTROLLER (gesture));
 }
 
