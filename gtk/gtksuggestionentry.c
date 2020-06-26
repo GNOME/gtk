@@ -44,6 +44,9 @@
 #include "gtkscrolledwindow.h"
 #include "gtkeventcontrollerkey.h"
 #include "gtkeventcontrollerfocus.h"
+#include "gtkbox.h"
+#include "gtkgizmoprivate.h"
+#include "gtkactionable.h"
 
 
 /**
@@ -75,14 +78,19 @@
  * # CSS Nodes
  *
  * |[<!-- language="plain" -->
- * entry.suggestion
- * ├── text
- * ╰── popover
+ * widget
+ * ╰── box
+ *     ├── entry.suggestion
+ *     │   ├── text
+ *     │   ╰── popover
+ *     ╰── [button]
  * ]|
  *
  * GtkSuggestionEntry has a single CSS node with name entry that carries
  * a .sugggestion style class, and the text and popover nodes are children
- * of that.
+ * of that. The parent of the entry node is a box node, which also contains
+ * the CSS node for the button (which may be hidden). The parent of the box
+ * node is a widget node.
  */
 
 struct _GtkSuggestionEntry
@@ -96,6 +104,9 @@ struct _GtkSuggestionEntry
   GtkFilterListModel *filter_model;
   GtkSingleSelection *selection;
 
+  GtkWidget *box;
+  GtkWidget *gizmo;
+  GtkWidget *button;
   GtkWidget *entry;
   GtkWidget *popup;
   GtkWidget *list;
@@ -107,6 +118,7 @@ struct _GtkSuggestionEntry
   guint use_filter       : 1;
   guint insert_selection : 1;
   guint insert_prefix    : 1;
+  guint show_button      : 1;
 };
 
 typedef struct _GtkSuggestionEntryClass GtkSuggestionEntryClass;
@@ -127,6 +139,7 @@ enum
   PROP_USE_FILTER,
   PROP_INSERT_PREFIX,
   PROP_INSERT_SELECTION,
+  PROP_SHOW_BUTTON,
 
   N_PROPERTIES,
 };
@@ -162,8 +175,7 @@ gtk_suggestion_entry_dispose (GObject *object)
       g_signal_handler_disconnect (self->entry, self->changed_id);
       self->changed_id = 0;
     }
-  g_clear_pointer (&self->popup, gtk_widget_unparent);
-  g_clear_pointer (&self->entry, gtk_widget_unparent);
+  g_clear_pointer (&self->box, gtk_widget_unparent);
 
   g_clear_pointer (&self->expression, gtk_expression_unref);
   g_clear_object (&self->factory);
@@ -207,7 +219,7 @@ gtk_suggestion_entry_get_property (GObject    *object,
       break;
 
     case PROP_POPUP_VISIBLE:
-      g_value_set_boolean (value, gtk_widget_get_visible (self->popup));
+      g_value_set_boolean (value, self->popup && gtk_widget_get_visible (self->popup));
       break;
 
     case PROP_USE_FILTER:
@@ -220,6 +232,10 @@ gtk_suggestion_entry_get_property (GObject    *object,
 
     case PROP_INSERT_PREFIX:
       g_value_set_boolean (value, gtk_suggestion_entry_get_insert_prefix (self));
+      break;
+
+    case PROP_SHOW_BUTTON:
+      g_value_set_boolean (value, gtk_suggestion_entry_get_show_button (self));
       break;
 
     default:
@@ -273,6 +289,10 @@ gtk_suggestion_entry_set_property (GObject      *object,
       gtk_suggestion_entry_set_insert_prefix (self, g_value_get_boolean (value));
       break;
 
+    case PROP_SHOW_BUTTON:
+      gtk_suggestion_entry_set_show_button (self, g_value_get_boolean (value));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
       break;
@@ -290,7 +310,7 @@ gtk_suggestion_entry_measure (GtkWidget      *widget,
 {
   GtkSuggestionEntry *self = GTK_SUGGESTION_ENTRY (widget);
 
-  gtk_widget_measure (self->entry,
+  gtk_widget_measure (self->box,
                       orientation,
                       size,
                       minimum, natural,
@@ -305,11 +325,8 @@ gtk_suggestion_entry_size_allocate (GtkWidget *widget,
 {
   GtkSuggestionEntry *self = GTK_SUGGESTION_ENTRY (widget);
 
-  gtk_widget_size_allocate (self->entry, &(GtkAllocation) { 0, 0, width, height }, baseline);
+  gtk_widget_size_allocate (self->box, &(GtkAllocation) { 0, 0, width, height }, baseline);
 
-  gtk_widget_set_size_request (self->popup, gtk_widget_get_allocated_width (widget), -1);
-
-  gtk_native_check_resize (GTK_NATIVE (self->popup));
 }
 
 static gboolean
@@ -431,10 +448,15 @@ gtk_suggestion_entry_class_init (GtkSuggestionEntryClass *klass)
                             FALSE,
                             G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
+  properties[PROP_SHOW_BUTTON] =
+      g_param_spec_boolean ("show-button",
+                            P_("Show button"),
+                            P_("Whether to show a button for presenting the popup"),
+                            FALSE,
+                            G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+
   g_object_class_install_properties (object_class, N_PROPERTIES, properties);
   gtk_editable_install_properties (object_class, N_PROPERTIES);
-
-  gtk_widget_class_set_css_name (widget_class, I_("entry"));
 
   /**
    * GtkSuggestionEntry|popup.show:
@@ -776,6 +798,46 @@ set_default_factory (GtkSuggestionEntry *self)
 }
 
 static void
+measure_entry (GtkGizmo       *gizmo,
+               GtkOrientation  orientation,
+               gint            size,
+               gint           *minimum,
+               gint           *natural,
+               gint           *minimum_baseline,
+               gint           *natural_baseline)
+{
+  gtk_widget_measure (gtk_widget_get_first_child (GTK_WIDGET (gizmo)),
+                      orientation, size,
+                      minimum, natural,
+                      minimum_baseline, natural_baseline);
+}
+
+static void
+allocate_entry (GtkGizmo *gizmo,
+                int       width,
+                int       height,
+                int       baseline)
+{
+  GtkSuggestionEntry *self;
+
+  self = GTK_SUGGESTION_ENTRY (gtk_widget_get_parent (gtk_widget_get_parent (GTK_WIDGET (gizmo))));
+
+  gtk_widget_size_allocate (gtk_widget_get_first_child (GTK_WIDGET (gizmo)),
+                            &(GtkAllocation){ 0, 0, width, height },
+                            baseline);
+
+  gtk_widget_set_size_request (self->popup, gtk_widget_get_allocated_width (GTK_WIDGET (gizmo)), -1);
+
+  gtk_native_check_resize (GTK_NATIVE (self->popup));
+}
+
+static gboolean
+grab_focus_entry (GtkGizmo *gizmo)
+{
+  return gtk_widget_grab_focus (gtk_widget_get_first_child (GTK_WIDGET (gizmo)));
+}
+
+static void
 gtk_suggestion_entry_init (GtkSuggestionEntry *self)
 {
   GtkWidget *sw;
@@ -783,11 +845,30 @@ gtk_suggestion_entry_init (GtkSuggestionEntry *self)
 
   self->use_filter = TRUE;
 
+  self->box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+  gtk_widget_add_css_class (self->box, "linked");
+  gtk_widget_set_hexpand (self->box, TRUE);
+  gtk_widget_set_parent (self->box, GTK_WIDGET (self));
+
+  self->gizmo = gtk_gizmo_new ("entry", measure_entry, allocate_entry, NULL, NULL,
+                               (GtkGizmoFocusFunc)gtk_widget_focus_child,
+                               grab_focus_entry);
+  gtk_widget_add_css_class (self->gizmo, "suggestion");
+  gtk_widget_set_hexpand (self->gizmo, TRUE);
+  gtk_box_append (GTK_BOX (self->box), self->gizmo);
+
   self->entry = gtk_text_new ();
-  gtk_widget_set_parent (self->entry, GTK_WIDGET (self));
+  gtk_widget_set_parent (self->entry, self->gizmo);
   gtk_widget_set_hexpand (self->entry, TRUE);
   gtk_editable_init_delegate (GTK_EDITABLE (self));
   self->changed_id = g_signal_connect (self->entry, "notify::text", G_CALLBACK (text_changed), self);
+
+  self->button = gtk_toggle_button_new ();
+  gtk_button_set_icon_name (GTK_BUTTON (self->button), "pan-down-symbolic");
+  gtk_widget_set_focus_on_click (self->button, FALSE);
+  gtk_actionable_set_action_name (GTK_ACTIONABLE (self->button), "popup.show");
+  gtk_box_append (GTK_BOX (self->box), self->button);
+  gtk_widget_hide (self->button);
 
   self->popup = gtk_popover_new ();
   gtk_popover_set_position (GTK_POPOVER (self->popup), GTK_POS_BOTTOM);
@@ -795,7 +876,7 @@ gtk_suggestion_entry_init (GtkSuggestionEntry *self)
   gtk_popover_set_has_arrow (GTK_POPOVER (self->popup), FALSE);
   gtk_widget_set_halign (self->popup, GTK_ALIGN_START);
   gtk_widget_add_css_class (self->popup, "menu");
-  gtk_widget_set_parent (self->popup, GTK_WIDGET (self));
+  gtk_widget_set_parent (self->popup, self->gizmo);
   sw = gtk_scrolled_window_new ();
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (sw),
                                   GTK_POLICY_NEVER,
@@ -811,8 +892,6 @@ gtk_suggestion_entry_init (GtkSuggestionEntry *self)
   gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (sw), self->list);
 
   set_default_factory (self);
-
-  gtk_widget_add_css_class (GTK_WIDGET (self), I_("suggestion"));
 
   controller = gtk_event_controller_key_new ();
   gtk_event_controller_set_name (controller, "gtk-suggestion-entry");
@@ -1382,4 +1461,43 @@ gtk_suggestion_entry_get_insert_prefix (GtkSuggestionEntry *self)
   g_return_val_if_fail (GTK_IS_SUGGESTION_ENTRY (self), FALSE);
 
   return self->insert_prefix;
+}
+
+/**
+ * gtk_suggestion_entry_set_show_button:
+ * @self: a #GtkSuggestionEntry
+ * @show_button: %TRUE to show a button
+ *
+ * Sets whether the GtkSuggestionEntry should show a button
+ * for opening the popup with suggestions.
+ */
+void
+gtk_suggestion_entry_set_show_button (GtkSuggestionEntry *self,
+                                      gboolean            show_button)
+{
+  g_return_if_fail (GTK_IS_SUGGESTION_ENTRY (self));
+
+  if (self->show_button == show_button)
+    return;
+
+  if (self->button)
+    gtk_widget_set_visible (self->button, show_button);
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_SHOW_BUTTON]);
+}
+
+/**
+ * gtk_suggestion_entry_get_show_button:
+ * @self: a #GtkSuggestionEntry
+ *
+ * Gets the value set by gtk_suggestion_entry_set_show_button().
+ *
+ * Returns: %TRUE if @self is showing a button for suggestions
+ */
+gboolean
+gtk_suggestion_entry_get_show_button (GtkSuggestionEntry *self)
+{
+  g_return_val_if_fail (GTK_IS_SUGGESTION_ENTRY (self), FALSE);
+
+  return self->show_button;
 }
