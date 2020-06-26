@@ -71,6 +71,17 @@
  * placed inside a #GtkSearchBar. If that is not the case,
  * you can use gtk_search_entry_set_key_capture_widget() to let it
  * capture key input from another widget.
+ *
+ * # CSS Nodes
+ *
+ * |[<!-- language="plain" -->
+ * entry.search
+ * ╰── text
+ * ]|
+ *
+ * GtkSearchEntry has a single CSS node with name entry that carries
+ * a .sarch style class, and the text node is a child of that.
+
  */
 
 enum {

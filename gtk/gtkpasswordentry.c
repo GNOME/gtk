@@ -50,6 +50,20 @@
  *
  * GtkPasswordEntry provides only minimal API and should be used with the
  * #GtkEditable API.
+ *
+ * # CSS Nodes
+ *
+ * |[<!-- language="plain" -->
+ * entry.password
+ * ╰── text
+ *     ├── image.caps-lock-indicator
+ *     ┊
+ * ]|
+ *
+ * GtkPasswordEntry has a single CSS node with name entry that carries
+ * a .passwordstyle class. The text Css node below it has a child with
+ * name image and style class .caps-lock-indicator for the Caps Lock
+ * icon, and possibly other children.
  */
 
 typedef struct {
