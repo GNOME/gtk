@@ -251,16 +251,6 @@ static guint signals[LAST_SIGNAL];
 static GParamSpec *properties[LAST_PROP];
 
 static void
-gtk_range_snapshot (GtkWidget   *widget,
-                    GtkSnapshot *snapshot)
-{
-  GtkRange *range = GTK_RANGE (widget);
-  GtkRangePrivate *priv = gtk_range_get_instance_private (range);
-
-  gtk_widget_snapshot_child (widget, priv->trough_widget, snapshot);
-}
-
-static void
 gtk_range_class_init (GtkRangeClass *class)
 {
   GObjectClass   *gobject_class;
@@ -275,7 +265,6 @@ gtk_range_class_init (GtkRangeClass *class)
   gobject_class->dispose = gtk_range_dispose;
 
   widget_class->measure = gtk_range_measure;
-  widget_class->snapshot = gtk_range_snapshot;
   widget_class->size_allocate = gtk_range_size_allocate;
   widget_class->unmap = gtk_range_unmap;
   widget_class->direction_changed = gtk_range_direction_changed;
