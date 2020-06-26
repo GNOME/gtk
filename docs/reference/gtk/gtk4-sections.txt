@@ -7641,4 +7641,6 @@ gtk_suggestion_entry_set_insert_selection
 gtk_suggestion_entry_get_insert_selection
 gtk_suggestion_entry_set_insert_prefix
 gtk_suggestion_entry_get_insert_prefix
+gtk_suggestion_entry_set_show_button
+gtk_suggestion_entry_get_show_button
 </SECTION>
