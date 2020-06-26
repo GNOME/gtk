@@ -255,53 +255,6 @@ test_column_object_new (void)
   g_object_unref (col);
 }
 
-/* test that we have a cell area after new() */
-static void
-test_completion_new (void)
-{
-  GtkEntryCompletion *c;
-  GtkCellArea *area;
-
-  c = gtk_entry_completion_new ();
-
-  area = gtk_cell_layout_get_area (GTK_CELL_LAYOUT (c));
-  g_assert (GTK_IS_CELL_AREA_BOX (area));
-
-  g_object_ref_sink (c);
-  g_object_unref (c);
-}
-
-/* test that new_with_area() keeps the provided area */
-static void
-test_completion_new_with_area (void)
-{
-  GtkEntryCompletion *c;
-  GtkCellArea *area;
-
-  area = gtk_cell_area_box_new ();
-  c = gtk_entry_completion_new_with_area (area);
-  g_assert (gtk_cell_layout_get_area (GTK_CELL_LAYOUT (c)) == area);
-
-  g_object_ref_sink (c);
-  g_object_unref (c);
-}
-
-/* test that g_object_new keeps the provided area */
-static void
-test_completion_object_new (void)
-{
-  GtkEntryCompletion *c;
-  GtkCellArea *area;
-
-  area = gtk_cell_area_box_new ();
-  gtk_orientable_set_orientation (GTK_ORIENTABLE (area), GTK_ORIENTATION_HORIZONTAL);
-  c = g_object_new (GTK_TYPE_ENTRY_COMPLETION, "cell-area", area, NULL);
-  g_assert (gtk_cell_layout_get_area (GTK_CELL_LAYOUT (c)) == area);
-
-  g_object_ref_sink (c);
-  g_object_unref (c);
-}
-
 int
 main (int argc, char *argv[])
 {
@@ -323,10 +276,6 @@ main (int argc, char *argv[])
   g_test_add_func ("/tests/column-new", test_column_new);
   g_test_add_func ("/tests/column-new-with-area", test_column_new_with_area);
   g_test_add_func ("/tests/column-object-new", test_column_object_new);
-
-  g_test_add_func ("/tests/completion-new", test_completion_new);
-  g_test_add_func ("/tests/completion-new-with-area", test_completion_new_with_area);
-  g_test_add_func ("/tests/completion-object-new", test_completion_object_new);
 
   return g_test_run();
 }

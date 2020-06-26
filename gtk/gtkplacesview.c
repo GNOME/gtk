@@ -30,6 +30,7 @@
 #include "gtktypebuiltins.h"
 #include "gtkeventcontrollerkey.h"
 #include "gtkpopovermenu.h"
+#include "gtkstringlist.h"
 
 /*
  * SECTION:gtkplacesview
@@ -98,7 +99,7 @@ struct _GtkPlacesView
   GtkSizeGroup                  *space_size_group;
 
   GtkEntryCompletion            *address_entry_completion;
-  GtkListStore                  *completion_store;
+  GListModel                    *completion_store;
 
   GCancellable                  *networks_fetching_cancellable;
 
@@ -551,12 +552,12 @@ populate_servers (GtkPlacesView *view)
   while ((child = gtk_widget_get_first_child (GTK_WIDGET (view->recent_servers_listbox))))
     gtk_list_box_remove (GTK_LIST_BOX (view->listbox), child);
 
-  gtk_list_store_clear (view->completion_store);
+  while (g_list_model_get_n_items (G_LIST_MODEL (view->completion_store)) > 0)
+    gtk_string_list_remove (GTK_STRING_LIST (view->completion_store), 0);
 
   for (i = 0; i < num_uris; i++)
     {
       RemoveServerData *data;
-      GtkTreeIter iter;
       GtkWidget *row;
       GtkWidget *grid;
       GtkWidget *button;
@@ -568,12 +569,7 @@ populate_servers (GtkPlacesView *view)
       dup_uri = g_strdup (uris[i]);
 
       /* add to the completion list */
-      gtk_list_store_append (view->completion_store, &iter);
-      gtk_list_store_set (view->completion_store,
-                          &iter,
-                          0, name,
-                          1, uris[i],
-                          -1);
+      gtk_string_list_append (GTK_STRING_LIST (view->completion_store), uris[i]);
 
       /* add to the recent servers listbox */
       row = gtk_list_box_row_new ();

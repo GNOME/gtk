@@ -8,8 +8,8 @@
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
 
-/* Creates a tree model containing the completions */
-static GtkTreeModel *
+/* Creates a list model containing the completions */
+static GListModel *
 create_completion_model (void)
 {
   const char *strings[] = {
@@ -42,20 +42,8 @@ create_completion_model (void)
     "aæz",
     NULL
   };
-  int i;
-  GtkListStore *store;
-  GtkTreeIter iter;
 
-  store = gtk_list_store_new (1, G_TYPE_STRING);
-
-  for (i = 0; strings[i]; i++)
-    {
-      /* Append one word */
-      gtk_list_store_append (store, &iter);
-      gtk_list_store_set (store, &iter, 0, strings[i], -1);
-    }
-
-  return GTK_TREE_MODEL (store);
+  return G_LIST_MODEL (gtk_string_list_new (strings));
 }
 
 
@@ -67,7 +55,7 @@ do_entry_completion (GtkWidget *do_widget)
   GtkWidget *label;
   GtkWidget *entry;
   GtkEntryCompletion *completion;
-  GtkTreeModel *completion_model;
+  GListModel *completion_model;
 
   if (!window)
     {
@@ -104,9 +92,6 @@ do_entry_completion (GtkWidget *do_widget)
       completion_model = create_completion_model ();
       gtk_entry_completion_set_model (completion, completion_model);
       g_object_unref (completion_model);
-
-      /* Use model column 0 as the text column */
-      gtk_entry_completion_set_text_column (completion, 0);
 
       gtk_entry_completion_set_inline_completion (completion, TRUE);
       gtk_entry_completion_set_inline_selection (completion, TRUE);
