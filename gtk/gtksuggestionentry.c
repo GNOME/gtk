@@ -115,6 +115,8 @@ struct _GtkSuggestionEntry
 
   gulong changed_id;
 
+  guint minimum_length;
+
   guint use_filter       : 1;
   guint insert_selection : 1;
   guint insert_prefix    : 1;
@@ -139,6 +141,7 @@ enum
   PROP_USE_FILTER,
   PROP_INSERT_PREFIX,
   PROP_INSERT_SELECTION,
+  PROP_MINIMUM_LENGTH,
   PROP_SHOW_BUTTON,
 
   N_PROPERTIES,
@@ -234,6 +237,10 @@ gtk_suggestion_entry_get_property (GObject    *object,
       g_value_set_boolean (value, gtk_suggestion_entry_get_insert_prefix (self));
       break;
 
+    case PROP_MINIMUM_LENGTH:
+      g_value_set_uint (value, gtk_suggestion_entry_get_minimum_length (self));
+      break;
+
     case PROP_SHOW_BUTTON:
       g_value_set_boolean (value, gtk_suggestion_entry_get_show_button (self));
       break;
@@ -287,6 +294,10 @@ gtk_suggestion_entry_set_property (GObject      *object,
 
     case PROP_INSERT_PREFIX:
       gtk_suggestion_entry_set_insert_prefix (self, g_value_get_boolean (value));
+      break;
+
+    case PROP_MINIMUM_LENGTH:
+      gtk_suggestion_entry_set_minimum_length (self, g_value_get_uint (value));
       break;
 
     case PROP_SHOW_BUTTON:
@@ -455,6 +466,13 @@ gtk_suggestion_entry_class_init (GtkSuggestionEntryClass *klass)
                             FALSE,
                             G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
+  properties[PROP_MINIMUM_LENGTH] =
+      g_param_spec_uint ("minimum-length",
+                         P_("Minimum Length"),
+                         P_("Minimum length for matches when filtering"),
+                         0, G_MAXUINT, 1,
+                         G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+
   g_object_class_install_properties (object_class, N_PROPERTIES, properties);
   gtk_editable_install_properties (object_class, N_PROPERTIES);
 
@@ -542,17 +560,19 @@ text_changed_idle (gpointer data)
 {
   GtkSuggestionEntry *self = data;
   const char *text;
+  glong len;
   guint matches;
   GtkFilter *filter;
 
   text = gtk_editable_get_text (GTK_EDITABLE (self->entry));
+  len = g_utf8_strlen (text, -1);
   filter = gtk_filter_list_model_get_filter (self->filter_model);
   if (filter)
     gtk_string_filter_set_search (GTK_STRING_FILTER (filter), text);
 
   matches = g_list_model_get_n_items (G_LIST_MODEL (self->selection));
 
-  if (!text || !*text)
+  if (len < self->minimum_length)
     gtk_suggestion_entry_set_popup_visible (self, FALSE);
   else
     gtk_suggestion_entry_set_popup_visible (self, self->use_filter && matches > 0);
@@ -679,7 +699,6 @@ gtk_suggestion_entry_key_pressed (GtkEventControllerKey *controller,
           g_signal_handler_block (self->entry, self->changed_id);
 
           text = self->prefix ? self->prefix : "";
-g_print ("set text: %s\n", text);
           gtk_editable_set_text (GTK_EDITABLE (self->entry), text);
           filter = gtk_filter_list_model_get_filter (self->filter_model);
           if (filter)
@@ -843,7 +862,11 @@ gtk_suggestion_entry_init (GtkSuggestionEntry *self)
   GtkWidget *sw;
   GtkEventController *controller;
 
+  self->minimum_length = 1;
   self->use_filter = TRUE;
+  self->insert_selection = FALSE;
+  self->insert_prefix = FALSE;
+  self->show_button = FALSE;
 
   self->box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_widget_add_css_class (self->box, "linked");
@@ -1480,6 +1503,8 @@ gtk_suggestion_entry_set_show_button (GtkSuggestionEntry *self,
   if (self->show_button == show_button)
     return;
 
+  self->show_button = show_button;
+
   if (self->button)
     gtk_widget_set_visible (self->button, show_button);
 
@@ -1500,4 +1525,42 @@ gtk_suggestion_entry_get_show_button (GtkSuggestionEntry *self)
   g_return_val_if_fail (GTK_IS_SUGGESTION_ENTRY (self), FALSE);
 
   return self->show_button;
+}
+
+/**
+ * gtk_suggestion_entry_set_minimum_length:
+ * @self: a #GtkSuggestionEntry
+ * @minimum_length: the minimum length of matches when filtering
+ *
+ * Sets the minimum number of characters the user has to enter
+ * before the GtkSuggestionEntry presents the suggestion popup.
+ */
+void
+gtk_suggestion_entry_set_minimum_length (GtkSuggestionEntry *self,
+                                         guint               minimum_length)
+{
+  g_return_if_fail (GTK_IS_SUGGESTION_ENTRY (self));
+
+  if (self->minimum_length == minimum_length)
+    return;
+
+  self->minimum_length = minimum_length;
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_MINIMUM_LENGTH]);
+}
+
+/**
+ * gtk_suggestion_entry_get_minimum_length:
+ * @self: a #GtkSuggestionEntry
+ *
+ * Gets the value set by gtk_suggestion_entry_set_minimum_length().
+ *
+ * Returns: the minimum length of matches when filtering
+ */
+guint
+gtk_suggestion_entry_get_minimum_length (GtkSuggestionEntry *self)
+{
+  g_return_val_if_fail (GTK_IS_SUGGESTION_ENTRY (self), 1);
+
+  return self->minimum_length;
 }

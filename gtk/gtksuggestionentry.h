@@ -90,6 +90,14 @@ void            gtk_suggestion_entry_set_show_button      (GtkSuggestionEntry  *
                                                            gboolean             show_button);
 GDK_AVAILABLE_IN_ALL
 gboolean        gtk_suggestion_entry_get_show_button      (GtkSuggestionEntry  *self);
+
+GDK_AVAILABLE_IN_ALL
+void            gtk_suggestion_entry_set_minimum_length   (GtkSuggestionEntry  *self,
+                                                           guint                minimum_length);
+GDK_AVAILABLE_IN_ALL
+guint           gtk_suggestion_entry_get_minimum_length   (GtkSuggestionEntry  *self);
+
+
 G_END_DECLS
 
 #endif /* __GTK_SUGGESTION_ENTRY_H__ */
