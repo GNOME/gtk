@@ -6655,7 +6655,7 @@ run_container_t *run_container_create_given_capacity(int32_t size) {
     /* Allocate the run container itself. */
     run = (run_container_t *)malloc(sizeof(run_container_t));
     assert (run);
-    if (size <= 0 ) { // we don't want to rely on malloc(0)
+    if (size <= 0 ) // we don't want to rely on malloc(0)
         run->runs = NULL;
     run->runs = (rle16_t *)malloc(sizeof(rle16_t) * size);
     assert (run->runs);
