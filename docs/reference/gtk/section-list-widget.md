@@ -4,8 +4,8 @@ GTK provides powerful widgets to display and edit lists of data. This document
 gives an overview over the concepts and how they work together to allow
 developers to implement lists.
 
-Lists are intended to be used whenever developers want to display lists of
-objects in roughly the same way.
+Lists are intended to be used whenever developers want to display many objects
+in roughly the same way.
 
 Lists are perfectly fine to be used for very short list of only 2 or 3 elements,
 but generally scale fine to millions of items. Of course, the larger the list
@@ -32,8 +32,8 @@ be provided in 3 ways or combinations thereof:
    specific data, like #GtkDirectoryList. And there are models like #GListStore
    that allow building lists manually.
 
- * Wrapping list models exists like #GtkFilterListModel or #GtkSortListModel
-   that modify or adapt or combine other models.
+ * Wrapping list models like #GtkFilterListModel or #GtkSortListModel
+   modify, adapt or combine other models.
 
  * Last but not least, developers are encouraged to create their own #GListModel
    implementations. The interface is kept deliberately small to make this easy.
@@ -44,8 +44,9 @@ multiple different models at once.
 The elements in a model are called **_items_**. All items are #GObjects.
 
 Every item in a model has a **_position_** which is the unsigned integer that
-describes where in the model the item is located. This position can of course
-change as items are added or removed from the model.
+describes where in the model the item is located. The first item in a model is
+at position 0. The position of an item can of course change as other items are
+added or removed from the model.
 
 It is important to be aware of the difference between items and positions
 because the mapping from position to item is not permanent, so developers
@@ -80,7 +81,7 @@ The behavior of selection models - ie which items they allow selecting and
 what effect this has on other items - is completely up to the selection model.
 As such, single-selections, multi-selections or sharing selection state between
 different selection models and/or views is possible. The selection state of an
-item is exposed in the listitem via the GtkListItem:selected property.
+item is exposed in the listitem via the #GtkListItem:selected property.
 
 Views and listitems also support activation. Activation means that double
 clicking or pressing enter while inside a focused row will cause the view
