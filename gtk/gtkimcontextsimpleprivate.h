@@ -26,6 +26,25 @@ G_BEGIN_DECLS
 
 extern const GtkComposeTableCompact gtk_compose_table_compact;
 
+static const guint16 gtk_compose_ignore[] = {
+  GDK_KEY_Shift_L,
+  GDK_KEY_Shift_R,
+  GDK_KEY_Control_L,
+  GDK_KEY_Control_R,
+  GDK_KEY_Caps_Lock,
+  GDK_KEY_Shift_Lock,
+  GDK_KEY_Meta_L,
+  GDK_KEY_Meta_R,
+  GDK_KEY_Alt_L,
+  GDK_KEY_Alt_R,
+  GDK_KEY_Super_L,
+  GDK_KEY_Super_R,
+  GDK_KEY_Hyper_L,
+  GDK_KEY_Hyper_R,
+  GDK_KEY_Mode_switch,
+  GDK_KEY_ISO_Level3_Shift
+};
+
 gboolean gtk_check_algorithmically (const guint16                *compose_buffer,
                                     gint                          n_compose,
                                     gunichar                     *output);
