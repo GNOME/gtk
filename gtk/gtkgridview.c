@@ -21,6 +21,7 @@
 
 #include "gtkgridview.h"
 
+#include "gtkbitset.h"
 #include "gtkintl.h"
 #include "gtklistbaseprivate.h"
 #include "gtklistitemfactory.h"
@@ -450,6 +451,36 @@ gtk_grid_view_get_position_from_allocation (GtkListBase           *base,
     }
 
   return TRUE;
+}
+
+static GtkBitset *
+gtk_grid_view_get_items_in_rect (GtkListBase        *base,
+                                 const GdkRectangle *rect)
+{
+  GtkGridView *self = GTK_GRID_VIEW (base);
+  guint first_row, last_row, first_column, last_column, n_items;
+  GtkBitset *result;
+
+  result = gtk_bitset_new_empty ();
+
+  n_items = gtk_list_base_get_n_items (base);
+  if (n_items == 0)
+    return result;
+
+  first_column = floor (rect->x / self->column_width);
+  last_column = floor ((rect->x + rect->width) / self->column_width);
+  if (!gtk_grid_view_get_cell_at_y (self, rect->y, &first_row, NULL, NULL))
+    first_row = rect->y < 0 ? 0 : n_items - 1;
+  if (!gtk_grid_view_get_cell_at_y (self, rect->y + rect->height, &last_row, NULL, NULL))
+    last_row = rect->y < 0 ? 0 : n_items - 1;
+
+  gtk_bitset_add_rectangle (result,
+                            first_row + first_column,
+                            last_column - first_column + 1,
+                            (last_row - first_row) / self->n_columns + 1,
+                            self->n_columns);
+
+  return result;
 }
 
 static guint
@@ -1000,6 +1031,7 @@ gtk_grid_view_class_init (GtkGridViewClass *klass)
   list_base_class->list_item_augment_func = cell_augment;
   list_base_class->get_allocation_along = gtk_grid_view_get_allocation_along;
   list_base_class->get_allocation_across = gtk_grid_view_get_allocation_across;
+  list_base_class->get_items_in_rect = gtk_grid_view_get_items_in_rect;
   list_base_class->get_position_from_allocation = gtk_grid_view_get_position_from_allocation;
   list_base_class->move_focus_along = gtk_grid_view_move_focus_along;
   list_base_class->move_focus_across = gtk_grid_view_move_focus_across;

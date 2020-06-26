@@ -47,7 +47,6 @@ struct _RubberbandData
   double              start_align_across;       /* alignment in horizontal direction */
   double              start_align_along;        /* alignment in vertical direction */
 
-  GtkBitset *active;
   double pointer_x, pointer_y;                  /* mouse coordinates in widget space */
   gboolean modify;
   gboolean extend;
@@ -1235,8 +1234,6 @@ gtk_list_base_class_init (GtkListBaseClass *klass)
   gtk_widget_class_add_binding_action (widget_class, GDK_KEY_backslash, GDK_CONTROL_MASK, "list.unselect-all", NULL);
 }
 
-static void gtk_list_base_update_rubberband_selection (GtkListBase *self);
-
 static gboolean
 autoscroll_cb (GtkWidget     *widget,
                GdkFrameClock *frame_clock,
@@ -1430,16 +1427,22 @@ gtk_list_base_widget_to_list (GtkListBase *self,
     }
 }
 
-void
-gtk_list_base_allocate_rubberband (GtkListBase *self)
+static GtkBitset *
+gtk_list_base_get_items_in_rect (GtkListBase        *self,
+                                 const GdkRectangle *rect)
+{
+  return GTK_LIST_BASE_GET_CLASS (self)->get_items_in_rect (self, rect);
+}
+
+static gboolean
+gtk_list_base_get_rubberband_coords (GtkListBase  *self,
+                                     GdkRectangle *rect)
 {
   GtkListBasePrivate *priv = gtk_list_base_get_instance_private (self);
-  GtkRequisition min_size;
   int x1, x2, y1, y2;
-  int offset_x, offset_y;
 
   if (!priv->rubberband)
-    return;
+    return FALSE;
 
   if (priv->rubberband->start_tracker == NULL)
     {
@@ -1467,17 +1470,37 @@ gtk_list_base_allocate_rubberband (GtkListBase *self)
                                 priv->rubberband->pointer_x, priv->rubberband->pointer_y,
                                 &x2, &y2);
 
+  rect->x = MIN (x1, x2);
+  rect->y = MIN (y1, y2);
+  rect->width = ABS (x1 - x2) + 1;
+  rect->height = ABS (y1 - y2) + 1;
+
+  return TRUE;
+}
+
+void
+gtk_list_base_allocate_rubberband (GtkListBase *self)
+{
+  GtkListBasePrivate *priv = gtk_list_base_get_instance_private (self);
+  GtkRequisition min_size;
+  GdkRectangle rect;
+  int offset_x, offset_y;
+
+  if (!gtk_list_base_get_rubberband_coords (self, &rect))
+    return;
+
   gtk_widget_get_preferred_size (priv->rubberband->widget, &min_size, NULL);
+  rect.width = MAX (min_size.width, rect.width);
+  rect.height = MAX (min_size.height, rect.height);
 
   gtk_list_base_get_adjustment_values (self, OPPOSITE_ORIENTATION (priv->orientation), &offset_x, NULL, NULL);
   gtk_list_base_get_adjustment_values (self, priv->orientation, &offset_y, NULL, NULL);
+  rect.x -= offset_x;
+  rect.y -= offset_y;
 
   gtk_list_base_size_allocate_child (self,
                                      priv->rubberband->widget,
-                                     MIN (x1, x2) - offset_x,
-                                     MIN (y1, y2) - offset_y,
-                                     MAX (min_size.width, ABS (x1 - x2) + 1),
-                                     MAX (min_size.height, ABS (y1 - y2) + 1));
+                                     rect.x, rect.y, rect.width, rect.height);
 }
 
 static void
@@ -1518,7 +1541,6 @@ gtk_list_base_start_rubberband (GtkListBase *self,
   priv->rubberband->widget = gtk_gizmo_new ("rubberband",
                                             NULL, NULL, NULL, NULL, NULL, NULL);
   gtk_widget_set_parent (priv->rubberband->widget, GTK_WIDGET (self));
-  priv->rubberband->active = gtk_bitset_new_empty ();
 }
 
 static void
@@ -1543,10 +1565,17 @@ gtk_list_base_stop_rubberband (GtkListBase *self)
   if (model != NULL)
     {
       GtkBitset *selected, *mask;
+      GdkRectangle rect;
+      GtkBitset *rubberband_selection;
+
+      if (!gtk_list_base_get_rubberband_coords (self, &rect))
+        return;
+
+      rubberband_selection = gtk_list_base_get_items_in_rect (self, &rect);
 
       if (priv->rubberband->extend)
         {
-          mask = gtk_bitset_ref (priv->rubberband->active);
+          mask = gtk_bitset_ref (rubberband_selection);
         }
       else
         {
@@ -1557,23 +1586,54 @@ gtk_list_base_stop_rubberband (GtkListBase *self)
       if (priv->rubberband->modify)
         selected = gtk_bitset_new_empty ();
       else
-        selected = gtk_bitset_ref (priv->rubberband->active);
+        selected = gtk_bitset_ref (rubberband_selection);
 
       gtk_selection_model_set_selection (model, selected, mask);
 
       gtk_bitset_unref (selected);
       gtk_bitset_unref (mask);
+      gtk_bitset_unref (rubberband_selection);
     }
 
   gtk_list_item_tracker_free (priv->item_manager, priv->rubberband->start_tracker);
   g_clear_pointer (&priv->rubberband->widget, gtk_widget_unparent);
-  g_clear_pointer (&priv->rubberband->active, gtk_bitset_unref);
   g_free (priv->rubberband);
   priv->rubberband = NULL;
 
   remove_autoscroll (self);
+}
 
-  gtk_widget_queue_draw (GTK_WIDGET (self));
+static void
+gtk_list_base_update_rubberband_selection (GtkListBase *self)
+{
+  GtkListBasePrivate *priv = gtk_list_base_get_instance_private (self);
+  GtkListItemManagerItem *item;
+  GdkRectangle rect;
+  guint pos;
+  GtkBitset *rubberband_selection;
+
+  if (!gtk_list_base_get_rubberband_coords (self, &rect))
+    return;
+
+  rubberband_selection = gtk_list_base_get_items_in_rect (self, &rect);
+
+  pos = 0;
+  for (item = gtk_list_item_manager_get_first (priv->item_manager);
+       item != NULL;
+       item = gtk_rb_tree_node_get_next (item))
+    {
+      if (item->widget)
+        {
+          if (gtk_bitset_contains (rubberband_selection, pos))
+            gtk_widget_set_state_flags (item->widget, GTK_STATE_FLAG_ACTIVE, FALSE);
+          else
+            gtk_widget_unset_state_flags (item->widget, GTK_STATE_FLAG_ACTIVE);
+        }
+      
+      pos += item->n_items;
+    }
+
+  gtk_bitset_unref (rubberband_selection);
 }
 
 static void
@@ -1593,44 +1653,7 @@ gtk_list_base_update_rubberband (GtkListBase *self,
 
   update_autoscroll (self, x, y);
 
-  gtk_widget_queue_draw (GTK_WIDGET (self));
-}
-
-static void
-gtk_list_base_update_rubberband_selection (GtkListBase *self)
-{
-  GtkListBasePrivate *priv = gtk_list_base_get_instance_private (self);
-  GdkRectangle rect;
-  GdkRectangle alloc;
-  GtkListItemManagerItem *item;
-
-  gtk_list_base_allocate_rubberband (self);
-  gtk_widget_get_allocation (priv->rubberband->widget, &rect);
-
-  for (item = gtk_list_item_manager_get_first (priv->item_manager);
-       item != NULL;
-       item = gtk_rb_tree_node_get_next (item))
-    {
-      guint pos;
-
-      if (!item->widget)
-        continue;
-
-      pos = gtk_list_item_manager_get_item_position (priv->item_manager, item);
-
-      gtk_widget_get_allocation (item->widget, &alloc);
-
-      if (gdk_rectangle_intersect (&rect, &alloc, &alloc))
-        {
-          gtk_bitset_add (priv->rubberband->active, pos);
-          gtk_widget_set_state_flags (item->widget, GTK_STATE_FLAG_ACTIVE, FALSE);
-        }
-      else
-        {
-          gtk_bitset_remove (priv->rubberband->active, pos);
-          gtk_widget_unset_state_flags (item->widget, GTK_STATE_FLAG_ACTIVE);
-        }
-    }
+  gtk_widget_queue_allocate (GTK_WIDGET (self));
 }
 
 static void
