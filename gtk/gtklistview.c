@@ -930,6 +930,8 @@ gtk_list_view_init (GtkListView *self)
   gtk_list_base_set_anchor_max_widgets (GTK_LIST_BASE (self),
                                         GTK_LIST_VIEW_MAX_LIST_ITEMS,
                                         GTK_LIST_VIEW_EXTRA_ITEMS);
+
+  gtk_widget_add_css_class (GTK_WIDGET (self), "view");
 }
 
 /**
