@@ -205,8 +205,6 @@ gtk_switch_click_gesture_pressed (GtkGestureClick *gesture,
   if (!gtk_widget_compute_bounds (GTK_WIDGET (self), GTK_WIDGET (self), &switch_bounds))
     return;
 
-  gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
-
   /* If the press didn't happen in the draggable handle,
    * cancel the pan gesture right away
    */
@@ -228,7 +226,10 @@ gtk_switch_click_gesture_released (GtkGestureClick *gesture,
 
   if (gtk_widget_contains (GTK_WIDGET (self), x, y) &&
       gtk_gesture_handles_sequence (GTK_GESTURE (gesture), sequence))
-    gtk_switch_begin_toggle_animation (self);
+    {
+      gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
+      gtk_switch_begin_toggle_animation (self);
+    }
 }
 
 static void
