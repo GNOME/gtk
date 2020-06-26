@@ -3193,11 +3193,15 @@ gtk_text_grab_focus (GtkWidget *widget)
   GtkText *self = GTK_TEXT (widget);
   GtkTextPrivate *priv = gtk_text_get_instance_private (self);
   gboolean select_on_focus;
+  GtkWidget *prev_focus;
+
+  prev_focus = gtk_root_get_focus (gtk_widget_get_root (widget));
 
   if (!GTK_WIDGET_CLASS (gtk_text_parent_class)->grab_focus (GTK_WIDGET (self)))
     return FALSE;
 
-  if (priv->editable && !priv->in_click)
+  if (priv->editable && !priv->in_click &&
+      !(prev_focus && gtk_widget_is_ancestor (prev_focus, widget)))
     {
       g_object_get (gtk_widget_get_settings (widget),
                     "gtk-entry-select-on-focus",
