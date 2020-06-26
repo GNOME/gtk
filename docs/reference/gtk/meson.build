@@ -176,7 +176,6 @@ private_headers = [
   'gtkroundedboxprivate.h',
   'gtkscalerprivate.h',
   'gtksearchentryprivate.h',
-  'gtkset.h',
   'gtksettingsprivate.h',
   'gtkshortcutcontrollerprivate.h',
   'gtkshortcutsshortcutprivate.h',
@@ -216,6 +215,7 @@ private_headers = [
   'gtkwin32themeprivate.h',
   'gtkwindowprivate.h',
   'gtk-text-input-client-protocol.h',
+  'roaring.h',
 ]
 
 images = [

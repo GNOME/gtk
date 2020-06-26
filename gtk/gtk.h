@@ -47,6 +47,7 @@
 #include <gtk/gtkaspectframe.h>
 #include <gtk/gtkassistant.h>
 #include <gtk/gtkbinlayout.h>
+#include <gtk/gtkbitset.h>
 #include <gtk/gtkbookmarklist.h>
 #include <gtk/gtkborder.h>
 #include <gtk/gtkboxlayout.h>
@@ -200,7 +201,6 @@
 #include <gtk/gtkprintoperationpreview.h>
 #include <gtk/gtkprintsettings.h>
 #include <gtk/gtkprogressbar.h>
-#include <gtk/gtkpropertyselection.h>
 #include <gtk/gtkradiobutton.h>
 #include <gtk/gtkrange.h>
 #include <gtk/gtkrecentmanager.h>

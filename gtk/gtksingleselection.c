@@ -21,6 +21,7 @@
 
 #include "gtksingleselection.h"
 
+#include "gtkbitset.h"
 #include "gtkintl.h"
 #include "gtkselectionmodel.h"
 
@@ -110,6 +111,21 @@ gtk_single_selection_is_selected (GtkSelectionModel *model,
   return self->selected == position;
 }
 
+static GtkBitset *
+gtk_single_selection_get_selection_in_range (GtkSelectionModel *model,
+                                             guint              position,
+                                             guint              n_items)
+{
+  GtkSingleSelection *self = GTK_SINGLE_SELECTION (model);
+  GtkBitset *result;
+
+  result = gtk_bitset_new_empty ();
+  if (self->selected != GTK_INVALID_LIST_POSITION)
+    gtk_bitset_add (result, self->selected);
+
+  return result;
+}
+
 static gboolean
 gtk_single_selection_select_item (GtkSelectionModel *model,
                                   guint              position,
@@ -139,56 +155,12 @@ gtk_single_selection_unselect_item (GtkSelectionModel *model,
 }
 
 static void
-gtk_single_selection_query_range (GtkSelectionModel *model,
-                                  guint              position,
-                                  guint             *start_range,
-                                  guint             *n_range,
-                                  gboolean          *selected)
-{
-  GtkSingleSelection *self = GTK_SINGLE_SELECTION (model);
-  guint n_items;
-
-  n_items = g_list_model_get_n_items (self->model);
-
-  if (position >= n_items)
-    {
-      *start_range = position;
-      *n_range = 0;
-      *selected = FALSE;
-    }
-  else if (self->selected == GTK_INVALID_LIST_POSITION)
-    {
-      *start_range = 0;
-      *n_range = n_items;
-      *selected = FALSE;
-    }
-  else if (position < self->selected)
-    {
-      *start_range = 0;
-      *n_range = self->selected;
-      *selected = FALSE;
-    }
-  else if (position > self->selected)
-    {
-      *start_range = self->selected + 1;
-      *n_range = n_items - *start_range;
-      *selected = FALSE;
-    }
-  else
-    {
-      *start_range = self->selected;
-      *n_range = 1;
-      *selected = TRUE;
-    }
-}
-
-static void
 gtk_single_selection_selection_model_init (GtkSelectionModelInterface *iface)
 {
   iface->is_selected = gtk_single_selection_is_selected; 
+  iface->get_selection_in_range = gtk_single_selection_get_selection_in_range; 
   iface->select_item = gtk_single_selection_select_item; 
   iface->unselect_item = gtk_single_selection_unselect_item; 
-  iface->query_range = gtk_single_selection_query_range;
 }
 
 G_DEFINE_TYPE_EXTENDED (GtkSingleSelection, gtk_single_selection, G_TYPE_OBJECT, 0,

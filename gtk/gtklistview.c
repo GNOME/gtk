@@ -21,6 +21,7 @@
 
 #include "gtklistview.h"
 
+#include "gtkbitset.h"
 #include "gtkintl.h"
 #include "gtklistbaseprivate.h"
 #include "gtklistitemmanagerprivate.h"
@@ -374,6 +375,36 @@ gtk_list_view_get_allocation_across (GtkListBase *base,
   return TRUE;
 }
 
+static GtkBitset *
+gtk_list_view_get_items_in_rect (GtkListBase                 *base,
+                                 const cairo_rectangle_int_t *rect)
+{
+  GtkListView *self = GTK_LIST_VIEW (base);
+  guint first, last, n_items;
+  GtkBitset *result;
+  ListRow *row;
+
+  result = gtk_bitset_new_empty ();
+
+  n_items = gtk_list_base_get_n_items (base);
+  if (n_items == 0)
+    return result;
+
+  row = gtk_list_view_get_row_at_y (self, rect->y, NULL);
+  if (row)
+    first = gtk_list_item_manager_get_item_position (self->item_manager, row);
+  else
+    first = rect->y < 0 ? 0 : n_items - 1;
+  row = gtk_list_view_get_row_at_y (self, rect->y + rect->height, NULL);
+  if (row)
+    last = gtk_list_item_manager_get_item_position (self->item_manager, row);
+  else
+    last = rect->y < 0 ? 0 : n_items - 1;
+
+  gtk_bitset_add_range_closed (result, first, last);
+  return result;
+}
+
 static guint
 gtk_list_view_move_focus_along (GtkListBase *base,
                                 guint        pos,
@@ -554,43 +585,6 @@ gtk_list_view_measure (GtkWidget      *widget,
 }
 
 static void
-gtk_list_view_size_allocate_child (GtkListView *self,
-                                   GtkWidget   *child,
-                                   int          x,
-                                   int          y,
-                                   int          width,
-                                   int          height)
-{
-  GtkAllocation child_allocation;
-
-  if (gtk_list_base_get_orientation (GTK_LIST_BASE (self)) == GTK_ORIENTATION_VERTICAL)
-    {
-      child_allocation.x = x;
-      child_allocation.y = y;
-      child_allocation.width = width;
-      child_allocation.height = height;
-    }
-  else if (_gtk_widget_get_direction (GTK_WIDGET (self)) == GTK_TEXT_DIR_LTR)
-    {
-      child_allocation.x = y;
-      child_allocation.y = x;
-      child_allocation.width = height;
-      child_allocation.height = width;
-    }
-  else
-    {
-      int mirror_point = gtk_widget_get_width (GTK_WIDGET (self));
-
-      child_allocation.x = mirror_point - y - height; 
-      child_allocation.y = x;
-      child_allocation.width = height;
-      child_allocation.height = width;
-    }
-
-  gtk_widget_size_allocate (child, &child_allocation, -1);
-}
-
-static void
 gtk_list_view_size_allocate (GtkWidget *widget,
                              int        width,
                              int        height,
@@ -603,8 +597,6 @@ gtk_list_view_size_allocate (GtkWidget *widget,
   int x, y;
   GtkOrientation orientation, opposite_orientation;
   GtkScrollablePolicy scroll_policy;
-
-  gtk_list_base_allocate_rubberband (GTK_LIST_BASE (self));
 
   orientation = gtk_list_base_get_orientation (GTK_LIST_BASE (self));
   opposite_orientation = OPPOSITE_ORIENTATION (orientation);
@@ -685,7 +677,7 @@ gtk_list_view_size_allocate (GtkWidget *widget,
     {
       if (row->parent.widget)
         {
-          gtk_list_view_size_allocate_child (self,
+          gtk_list_base_size_allocate_child (GTK_LIST_BASE (self),
                                              row->parent.widget,
                                              x,
                                              y,
@@ -695,6 +687,8 @@ gtk_list_view_size_allocate (GtkWidget *widget,
 
       y += row->height * row->parent.n_items;
     }
+
+  gtk_list_base_allocate_rubberband (GTK_LIST_BASE (self));
 }
 
 static void
@@ -810,6 +804,7 @@ gtk_list_view_class_init (GtkListViewClass *klass)
   list_base_class->list_item_augment_func = list_row_augment;
   list_base_class->get_allocation_along = gtk_list_view_get_allocation_along;
   list_base_class->get_allocation_across = gtk_list_view_get_allocation_across;
+  list_base_class->get_items_in_rect = gtk_list_view_get_items_in_rect;
   list_base_class->get_position_from_allocation = gtk_list_view_get_position_from_allocation;
   list_base_class->move_focus_along = gtk_list_view_move_focus_along;
   list_base_class->move_focus_across = gtk_list_view_move_focus_across;
