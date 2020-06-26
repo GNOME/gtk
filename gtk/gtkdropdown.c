@@ -821,7 +821,7 @@ gtk_drop_down_get_selected (GtkDropDown *self)
  *
  * Gets the selected item. If no item is selected, %NULL is returned.
  *
- * Returns: (transfer none): The selected item
+ * Returns: (transfer none) (type GObject) (nullable): The selected item
  */
 gpointer
 gtk_drop_down_get_selected_item (GtkDropDown *self)
