@@ -21,6 +21,7 @@
 
 #include "gtklistview.h"
 
+#include "gtkbitset.h"
 #include "gtkintl.h"
 #include "gtklistbaseprivate.h"
 #include "gtklistitemmanagerprivate.h"
@@ -372,6 +373,36 @@ gtk_list_view_get_allocation_across (GtkListBase *base,
     *size = self->list_width;
 
   return TRUE;
+}
+
+static GtkBitset *
+gtk_list_view_get_items_in_rect (GtkListBase                 *base,
+                                 const cairo_rectangle_int_t *rect)
+{
+  GtkListView *self = GTK_LIST_VIEW (base);
+  guint first, last, n_items;
+  GtkBitset *result;
+  ListRow *row;
+
+  result = gtk_bitset_new_empty ();
+
+  n_items = gtk_list_base_get_n_items (base);
+  if (n_items == 0)
+    return result;
+
+  row = gtk_list_view_get_row_at_y (self, rect->y, NULL);
+  if (row)
+    first = gtk_list_item_manager_get_item_position (self->item_manager, row);
+  else
+    first = rect->y < 0 ? 0 : n_items - 1;
+  row = gtk_list_view_get_row_at_y (self, rect->y + rect->height, NULL);
+  if (row)
+    last = gtk_list_item_manager_get_item_position (self->item_manager, row);
+  else
+    last = rect->y < 0 ? 0 : n_items - 1;
+
+  gtk_bitset_add_range_closed (result, first, last);
+  return result;
 }
 
 static guint
@@ -773,6 +804,7 @@ gtk_list_view_class_init (GtkListViewClass *klass)
   list_base_class->list_item_augment_func = list_row_augment;
   list_base_class->get_allocation_along = gtk_list_view_get_allocation_along;
   list_base_class->get_allocation_across = gtk_list_view_get_allocation_across;
+  list_base_class->get_items_in_rect = gtk_list_view_get_items_in_rect;
   list_base_class->get_position_from_allocation = gtk_list_view_get_position_from_allocation;
   list_base_class->move_focus_along = gtk_list_view_move_focus_along;
   list_base_class->move_focus_across = gtk_list_view_move_focus_across;
