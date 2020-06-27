@@ -108,7 +108,7 @@
  * as %TRUE, strings like “FALSE”, “f”, “no”, “n”, “0” are interpreted
  * as %FALSE), enumerations (can be specified by their name, nick or
  * integer value), flags (can be specified by their name, nick, integer
- * value, optionally combined with “|”, e.g. “GTK_VISIBLE|GTK_REALIZED”)
+ * value, optionally combined with “|”, e.g. “GTK_INPUT_HINT_EMOJI|GTK_INPUT_HINT_LOWERCASE”)
  * and colors (in a format understood by gdk_rgba_parse()).
  *
  * GVariants can be specified in the format understood by g_variant_parse(),
@@ -131,7 +131,7 @@
  * For more information see g_object_bind_property()
  *
  * Sometimes it is necessary to refer to widgets which have implicitly
- * been constructed by GTK+ as part of a composite widget, to set
+ * been constructed by GTK as part of a composite widget, to set
  * properties on them or to add further children (e.g. the content area
  * of a #GtkDialog). This can be achieved by setting the “internal-child”
  * property of the `<child>` element to a true value. Note that #GtkBuilder
