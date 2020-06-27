@@ -943,7 +943,7 @@ gtk_drop_down_set_from_strings (GtkDropDown       *self,
 
   set_default_factory (self);
 
-  model = G_LIST_MODEL (gtk_string_list_new ((const char **)texts));
+  model = G_LIST_MODEL (gtk_string_list_new (texts));
   gtk_drop_down_set_model (self, model);
   g_object_unref (model);
 }
