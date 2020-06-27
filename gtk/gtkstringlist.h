@@ -45,7 +45,7 @@ GDK_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (GtkStringList, gtk_string_list, GTK, STRING_LIST, GObject)
 
 GDK_AVAILABLE_IN_ALL
-GtkStringList * gtk_string_list_new             (const char **strings);
+GtkStringList * gtk_string_list_new             (const char * const *strings);
 
 GDK_AVAILABLE_IN_ALL
 void            gtk_string_list_append          (GtkStringList *self,
