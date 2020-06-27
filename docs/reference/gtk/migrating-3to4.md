@@ -457,6 +457,11 @@ as property. GtkNotebook and GtkAssistant are similar.
 gtk4-builder-tool can help with this conversion, with the --3to4 option
 of the simplify command.
 
+### Adapt to GtkScrolledWindow API changes
+
+The constructor for GtkScrolledWindow no longer takes the adjustments
+as arguments - these were almost always %NULL.
+
 ### Adapt to GtkBin removal
 
 The abstract base class GtkBin for single-child containers has been
@@ -940,3 +945,18 @@ You can replace calls to <function>gtk_dialog_run()</function>
 by specifying that the #GtkDialog must be modal using
 gtk_window_set_modal() or the %GTK_DIALOG_MODAL flag, and
 connecting to the #GtkDialog::response signal.
+
+## Changes to consider after the switch
+
+GTK 4 has a number of new features that you may want to take
+advantage of once the dust has settled over the initial migration.
+
+### Consider porting to the new list widgets
+
+In GTK 2 and 3, GtkTreeModel and GtkCellRenderer and widgets using
+these were the primary way of displaying data and lists. GTK 4 brings
+a new family of widgets for this purpose that uses list models instead
+of tree models, and widgets instead of cell renderers.
+
+To learn more about the new list widgets, you can read the [List Widget
+Overview](#ListWidget).
