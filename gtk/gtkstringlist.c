@@ -432,7 +432,7 @@ gtk_string_list_init (GtkStringList *self)
  * Returns: a new #GtkStringList
  */
 GtkStringList *
-gtk_string_list_new (const char **strings)
+gtk_string_list_new (const char * const *strings)
 {
   GtkStringList *self;
   guint i;
