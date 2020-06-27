@@ -1097,6 +1097,7 @@ spinbutton {
       border-radius: 0;
 
       > selection { @extend %selected_items; }
+      > block-cursor { @include entry(block_cursor); }
     }
 
     > button {
