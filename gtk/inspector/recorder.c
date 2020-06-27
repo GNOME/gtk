@@ -1016,57 +1016,22 @@ render_node_save (GtkButton            *button,
   gtk_widget_show (dialog);
 }
 
-static char *
-format_timespan (gint64 timespan)
-{
-  if (ABS (timespan) < G_TIME_SPAN_MILLISECOND)
-    return g_strdup_printf ("%fus", (double) timespan);
-  else if (ABS (timespan) < 10 * G_TIME_SPAN_MILLISECOND)
-    return g_strdup_printf ("%.1fs", (double) timespan / G_TIME_SPAN_MILLISECOND);
-  else if (ABS (timespan) < G_TIME_SPAN_SECOND)
-    return g_strdup_printf ("%.0fms", (double) timespan / G_TIME_SPAN_MILLISECOND);
-  else if (ABS (timespan) < 10 * G_TIME_SPAN_SECOND)
-    return g_strdup_printf ("%.1fs", (double) timespan / G_TIME_SPAN_SECOND);
-  else
-    return g_strdup_printf ("%.0fs", (double) timespan / G_TIME_SPAN_SECOND);
-}
-
 static GtkWidget *
 gtk_inspector_recorder_recordings_list_create_widget (gpointer item,
                                                       gpointer user_data)
 {
-  GtkInspectorRecorder *recorder = GTK_INSPECTOR_RECORDER (user_data);
-  GtkInspectorRecorderPrivate *priv = gtk_inspector_recorder_get_instance_private (recorder);
   GtkInspectorRecording *recording = GTK_INSPECTOR_RECORDING (item);
   GtkWidget *widget;
 
   if (GTK_INSPECTOR_IS_RENDER_RECORDING (recording))
     {
-      GtkInspectorRecording *previous = NULL;
-      char *time_str, *str;
       cairo_region_t *region;
       GtkWidget *hbox, *label, *button;
-      guint i;
 
       widget = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
 
       hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
       gtk_box_append (GTK_BOX (widget), hbox);
-
-      for (i = 0; i < g_list_model_get_n_items (priv->recordings); i++)
-        {
-          GtkInspectorRecording *r = g_list_model_get_item (priv->recordings, i);
-
-          g_object_unref (r);
-
-          if (r == recording)
-            break;
-
-          if (GTK_INSPECTOR_IS_RENDER_RECORDING (r))
-            previous = r;
-          else if (GTK_INSPECTOR_IS_START_RECORDING (r))
-            previous = NULL;
-        }
 
       region = cairo_region_create_rectangle (
                    gtk_inspector_render_recording_get_area (GTK_INSPECTOR_RENDER_RECORDING (recording)));
@@ -1074,20 +1039,10 @@ gtk_inspector_recorder_recordings_list_create_widget (gpointer item,
                              gtk_inspector_render_recording_get_clip_region (GTK_INSPECTOR_RENDER_RECORDING (recording)));
       cairo_region_destroy (region);
 
-      if (previous)
-        {
-          time_str = format_timespan (gtk_inspector_recording_get_timestamp (recording) -
-                                      gtk_inspector_recording_get_timestamp (previous));
-          str = g_strdup_printf ("<b>Frame</b>\n+%s", time_str);
-          g_free (time_str);
-        }
-      else
-        {
-          str = g_strdup ("<b>Frame</b>\n");
-        }
-      label = gtk_label_new (str);
+      label = gtk_label_new ("<b>Frame</b>");
+      gtk_label_set_xalign (GTK_LABEL (label), 0.0f);
+      gtk_widget_set_hexpand (label, TRUE);
       gtk_label_set_use_markup (GTK_LABEL (label), TRUE);
-      g_free (str);
       gtk_box_append (GTK_BOX (hbox), label);
 
       button = gtk_toggle_button_new ();
