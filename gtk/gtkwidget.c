@@ -7377,14 +7377,14 @@ static void
 gtk_widget_real_realize (GtkWidget *widget)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
-  GdkFrameClock *frame_clock;
 
   priv->realized = TRUE;
 
   /* Connect frame clock */
-  frame_clock = gtk_widget_get_frame_clock (widget);
   if (priv->tick_callbacks != NULL && !priv->clock_tick_id)
     {
+      GdkFrameClock *frame_clock = gtk_widget_get_frame_clock (widget);
+
       priv->clock_tick_id = g_signal_connect (frame_clock, "update",
                                               G_CALLBACK (gtk_widget_on_frame_clock_update),
                                               widget);
