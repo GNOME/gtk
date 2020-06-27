@@ -3573,12 +3573,15 @@ static void
 gtk_label_unrealize (GtkWidget *widget)
 {
   GtkLabel *self = GTK_LABEL (widget);
-  GdkClipboard *clipboard;
 
-  clipboard = gtk_widget_get_primary_clipboard (widget);
   if (self->select_info &&
-      gdk_clipboard_get_content (clipboard) == self->select_info->provider)
-    gdk_clipboard_set_content (clipboard, NULL);
+      self->select_info->provider)
+    {
+      GdkClipboard *clipboard = gtk_widget_get_primary_clipboard (widget);
+
+      if (gdk_clipboard_get_content (clipboard) == self->select_info->provider)
+        gdk_clipboard_set_content (clipboard, NULL);
+    }
 
   GTK_WIDGET_CLASS (gtk_label_parent_class)->unrealize (widget);
 }
