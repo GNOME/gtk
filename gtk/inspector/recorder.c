@@ -1044,7 +1044,6 @@ gtk_inspector_recorder_recordings_list_create_widget (gpointer item,
     {
       GtkInspectorRecording *previous = NULL;
       char *time_str, *str;
-      const char *render_str;
       cairo_region_t *region;
       GtkWidget *hbox, *label, *button;
       guint i;
@@ -1073,22 +1072,18 @@ gtk_inspector_recorder_recordings_list_create_widget (gpointer item,
                    gtk_inspector_render_recording_get_area (GTK_INSPECTOR_RENDER_RECORDING (recording)));
       cairo_region_subtract (region,
                              gtk_inspector_render_recording_get_clip_region (GTK_INSPECTOR_RENDER_RECORDING (recording)));
-      if (cairo_region_is_empty (region))
-        render_str = "Full Render";
-      else
-        render_str = "Partial Render";
       cairo_region_destroy (region);
 
       if (previous)
         {
           time_str = format_timespan (gtk_inspector_recording_get_timestamp (recording) -
                                       gtk_inspector_recording_get_timestamp (previous));
-          str = g_strdup_printf ("<b>%s</b>\n+%s", render_str, time_str);
+          str = g_strdup_printf ("<b>Frame</b>\n+%s", time_str);
           g_free (time_str);
         }
       else
         {
-          str = g_strdup_printf ("<b>%s</b>\n", render_str);
+          str = g_strdup ("<b>Frame</b>\n");
         }
       label = gtk_label_new (str);
       gtk_label_set_use_markup (GTK_LABEL (label), TRUE);
