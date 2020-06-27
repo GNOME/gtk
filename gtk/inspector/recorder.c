@@ -402,9 +402,9 @@ get_color_texture (const GdkRGBA *color)
   guchar pixel[4];
   guchar *data;
   GBytes *bytes;
-  gint width = 30;
-  gint height = 30;
-  gint i;
+  int width = 30;
+  int height = 30;
+  int i;
 
   pixel[0] = round (color->red * 255);
   pixel[1] = round (color->green * 255);
@@ -947,7 +947,7 @@ render_node_list_selection_changed (GtkListBox           *list,
 
 static void
 render_node_save_response (GtkWidget     *dialog,
-                           gint           response,
+                           int            response,
                            GskRenderNode *node)
 {
   gtk_widget_hide (dialog);
