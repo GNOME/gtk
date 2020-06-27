@@ -546,19 +546,8 @@ gtk_scrolled_window_compute_expand (GtkWidget *widget,
                                     gboolean  *hexpand,
                                     gboolean  *vexpand)
 {
-  GtkScrolledWindow *scrolled_window = GTK_SCROLLED_WINDOW (widget);
-  GtkScrolledWindowPrivate *priv = gtk_scrolled_window_get_instance_private (scrolled_window);
-
-  if (priv->child)
-    {
-      *hexpand = gtk_widget_compute_expand (priv->child, GTK_ORIENTATION_HORIZONTAL);
-      *vexpand = gtk_widget_compute_expand (priv->child, GTK_ORIENTATION_VERTICAL);
-    }
-  else
-    {
-      *hexpand = FALSE;
-      *vexpand = FALSE;
-    }
+  *hexpand = TRUE;
+  *vexpand = TRUE;
 }
 
 static GtkSizeRequestMode
