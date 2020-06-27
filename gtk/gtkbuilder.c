@@ -225,6 +225,8 @@
 #include "gtkicontheme.h"
 #include "gtkiconthemeprivate.h"
 #include "gdkpixbufutilsprivate.h"
+#include "gtkdebug.h"
+
 
 static void gtk_builder_finalize       (GObject         *object);
 static void gtk_builder_set_property   (GObject         *object,
@@ -358,6 +360,22 @@ gtk_builder_finalize (GObject *object)
   g_free (priv->domain);
   g_free (priv->filename);
   g_free (priv->resource_prefix);
+
+#ifdef G_ENABLE_DEBUG
+  if (GTK_DEBUG_CHECK (BUILDER_OBJECTS))
+    {
+      GHashTableIter iter;
+      gpointer key, value;
+
+      g_hash_table_iter_init (&iter, priv->objects);
+      while (g_hash_table_iter_next (&iter, &key, &value))
+        {
+          if (G_OBJECT (value)->ref_count == 1)
+            g_message ("builder: %s with id %s unused",
+                       G_OBJECT_TYPE_NAME (value), (const char *)key);
+        }
+    }
+#endif
 
   g_hash_table_destroy (priv->objects);
 
