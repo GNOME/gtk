@@ -384,8 +384,6 @@ recordings_list_row_selected (GtkListBox           *box,
                            (gpointer[1]) { paintable },
                            1);
       g_object_unref (paintable);
-
-      g_print ("%u render nodes\n", g_list_model_get_n_items (G_LIST_MODEL (priv->render_node_model)));
     }
   else
     {
