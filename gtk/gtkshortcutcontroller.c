@@ -74,6 +74,7 @@
 #include "gtktypebuiltins.h"
 #include "gtkwidgetprivate.h"
 #include "gtknative.h"
+#include "gtkdebug.h"
 
 #include <gdk/gdk.h>
 
@@ -369,6 +370,18 @@ gtk_shortcut_controller_run_controllers (GtkEventController *controller,
       data->index = index;
       data->widget = widget;
     }
+
+#ifdef G_ENABLE_DEBUG
+  if (GTK_DEBUG_CHECK (KEYBINDINGS))
+    {
+      g_message ("Found %u shortcuts triggered %s by %s %u %u",
+                 shortcuts ? shortcuts->len : 0,
+                 has_exact ? "exactly" : "approximately",
+                 gdk_event_get_event_type (event) == GDK_KEY_PRESS ? "key press" : "key release",
+                 gdk_key_event_get_keyval (event),
+                 gdk_event_get_modifier_state (event));
+    }
+#endif
 
   if (!shortcuts)
     return retval;
