@@ -224,4 +224,6 @@ transitioning code for easy lookup:
 | #GtkCellLayout      | #GtkListItemFactory                 |
 | #GtkCellArea        | #GtkWidget                          |
 | #GtkCellRenderer    | #GtkWidget                          |
+| #GtkComboBoxText    | #GtkSuggestionEntry                 |
+| #GtkEntryCompletion | #GtkSuggestionEntry                 |
 
