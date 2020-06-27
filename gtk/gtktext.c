@@ -4025,7 +4025,11 @@ gtk_text_copy_clipboard (GtkText *self)
           return;
         }
 
-      str = gtk_text_get_display_text (self, priv->selection_bound, priv->current_pos);
+      if (priv->selection_bound < priv->current_pos)
+        str = gtk_text_get_display_text (self, priv->selection_bound, priv->current_pos);
+      else
+        str = gtk_text_get_display_text (self, priv->current_pos, priv->selection_bound);
+
       gdk_clipboard_set_text (gtk_widget_get_clipboard (GTK_WIDGET (self)), str);
       g_free (str);
     }
