@@ -1257,24 +1257,8 @@ gtk_inspector_recorder_add_recording (GtkInspectorRecorder  *recorder,
                                       GtkInspectorRecording *recording)
 {
   GtkInspectorRecorderPrivate *priv = gtk_inspector_recorder_get_instance_private (recorder);
-  guint count;
-  GtkListBoxRow *selected_row;
-  gboolean should_select_new_row;
-
-  count = g_list_model_get_n_items (priv->recordings);
-  selected_row = gtk_list_box_get_selected_row (GTK_LIST_BOX (priv->recordings_list));
-  if (count == 0 || selected_row == NULL)
-    should_select_new_row = TRUE;
-  else
-    should_select_new_row = (gtk_list_box_row_get_index (selected_row) == count - 1);
 
   g_list_store_append (G_LIST_STORE (priv->recordings), recording);
-
-  if (should_select_new_row)
-    {
-      gtk_list_box_select_row (GTK_LIST_BOX (priv->recordings_list),
-                               gtk_list_box_get_row_at_index (GTK_LIST_BOX (priv->recordings_list), count));
-    }
 }
 
 void
