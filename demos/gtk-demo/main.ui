@@ -16,15 +16,6 @@
       </item>
     </section>
   </menu>
-  <object class="GtkTreeStore" id="treestore">
-    <columns>
-      <column type="gchararray"/>
-      <column type="gchararray"/>
-      <column type="gchararray"/>
-      <column type="gpointer"/>
-      <column type="gint"/>
-    </columns>
-  </object>
   <object class="GtkApplicationWindow" id="window">
     <style>
       <class name="devel"/>
