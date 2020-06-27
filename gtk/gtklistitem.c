@@ -332,7 +332,7 @@ gtk_list_item_set_child (GtkListItem *self,
  * @self: a #GtkListItem
  *
  * Gets the position in the model that @self currently displays.
- * If @self is unbound, 0 is returned.
+ * If @self is unbound, %GTK_INVALID_LIST_POSITION is returned.
  *
  * Returns: The position of this item
  **/
@@ -443,10 +443,10 @@ gtk_list_item_get_activatable (GtkListItem *self)
  * Sets @self to be activatable.
  *
  * If an item is activatable, double-clicking on the item, using
- * the <Return> key or calling gtk_widget_activate() will activate
+ * the Return key or calling gtk_widget_activate() will activate
  * the item. Activating instructs the containing view to handle
  * activation. #GtkListView for example will be emitting the
- * GtkListView::activate signal.
+ * #GtkListView::activate signal.
  *
  * By default, list items are activatable
  **/
