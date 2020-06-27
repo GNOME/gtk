@@ -4378,7 +4378,7 @@ gtk_widget_run_controllers (GtkWidget           *widget,
                   if (this_handled &&
                       (type == GDK_KEY_PRESS || type == GDK_KEY_RELEASE))
                     {
-                      g_message ("key %s (keyval %d) handled at widget %s by controller %s\n",
+                      g_message ("key %s (keyval %d) handled at widget %s by controller %s",
                                  type == GDK_KEY_PRESS ? "press" : "release",
                                  gdk_key_event_get_keyval (event),
                                  G_OBJECT_TYPE_NAME (widget),

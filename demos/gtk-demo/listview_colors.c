@@ -9,9 +9,9 @@
  * The dataset used here has up to 16 777 216 items.
  *
  * Note that this demo also functions as a performance
- * test for some of the list model machinery, and biggest
- * sizes here can lock up the application for extended
- * times when used with sorting.
+ * test for some of the list model machinery, and the
+ * biggest sizes here can lock up the application for
+ * extended times when used with sorting.
  */
 
 #include <gtk/gtk.h>
@@ -715,16 +715,17 @@ limit_changed_cb2 (GtkDropDown  *dropdown,
                    GParamSpec   *pspec,
                    GtkLabel     *label)
 {
-  gpointer item;
   char *string;
   int len;
+  guint limit;
 
-  item = gtk_drop_down_get_selected_item (dropdown);
-  g_object_get (item, "string", &string, NULL);
+  limit = 1 << (3 * (gtk_drop_down_get_selected (dropdown) + 1));
+
+  string = g_strdup_printf ("%'u", limit);
   len = g_utf8_strlen (string, -1);
   g_free (string);
 
-  gtk_label_set_max_width_chars (label, len + 2); /* for " /" */
+  gtk_label_set_width_chars (label, len + 2); /* for " /" */
 }
 
 static void
@@ -737,11 +738,44 @@ items_changed_cb (GListModel *model,
   guint n = g_list_model_get_n_items (model);
   char *text;
 
-  text = g_strdup_printf ("%u /", n);
+  text = g_strdup_printf ("%'u /", n);
   gtk_label_set_label (GTK_LABEL (label), text);
   g_free (text);
 }
 
+static void
+setup_number_item (GtkSignalListItemFactory *factory,
+                   GtkListItem              *item)
+{
+  GtkWidget *label;
+  PangoAttrList *attrs;
+
+  label = gtk_label_new ("");
+  gtk_label_set_xalign (GTK_LABEL (label), 1);
+
+  attrs = pango_attr_list_new ();
+  pango_attr_list_insert (attrs, pango_attr_font_features_new ("tnum"));
+  gtk_label_set_attributes (GTK_LABEL (label), attrs);
+  pango_attr_list_unref (attrs);
+
+  gtk_list_item_set_child (item, label);
+}
+
+static void
+bind_number_item (GtkSignalListItemFactory *factory,
+                  GtkListItem              *item)
+{
+  GtkWidget *label;
+  guint limit;
+  char *string;
+
+  label = gtk_list_item_get_child (item);
+
+  limit = 1 << (3 * (gtk_list_item_get_position (item) + 1));
+  string = g_strdup_printf ("%'u", limit);
+  gtk_label_set_label (GTK_LABEL (label), string);
+  g_free (string);
+}
 
 static GtkWidget *window = NULL;
 
@@ -761,6 +795,8 @@ do_listview_colors (GtkWidget *do_widget)
       GtkWidget *button;
       GtkWidget *label;
       PangoAttrList *attrs;
+      char *string;
+      guint len;
 
       window = gtk_window_new ();
       gtk_window_set_title (GTK_WINDOW (window), "Colors");
@@ -793,8 +829,12 @@ do_listview_colors (GtkWidget *do_widget)
       pango_attr_list_insert (attrs, pango_attr_font_features_new ("tnum"));
       gtk_label_set_attributes (GTK_LABEL (label), attrs);
       pango_attr_list_unref (attrs);
-      gtk_label_set_width_chars (GTK_LABEL (label), 6);
+      string = g_strdup_printf ("%'u", 4096);
+      len = g_utf8_strlen (string, -1);
+      g_free (string);
+      gtk_label_set_width_chars (GTK_LABEL (label), len + 2);
       gtk_label_set_xalign (GTK_LABEL (label), 1);
+
       g_signal_connect (gtk_grid_view_get_model (GTK_GRID_VIEW (gridview)),
                         "items-changed", G_CALLBACK (items_changed_cb), label);
       gtk_header_bar_pack_start (GTK_HEADER_BAR (header), label);
@@ -807,6 +847,11 @@ do_listview_colors (GtkWidget *do_widget)
       g_signal_connect (dropdown, "notify::selected",
                         G_CALLBACK (limit_changed_cb2), 
                         label);
+      factory = gtk_signal_list_item_factory_new ();
+      g_signal_connect (factory, "setup", G_CALLBACK (setup_number_item), NULL);
+      g_signal_connect (factory, "bind", G_CALLBACK (bind_number_item), NULL);
+      gtk_drop_down_set_factory (GTK_DROP_DOWN (dropdown), factory);
+      g_object_unref (factory);
       gtk_drop_down_set_selected (GTK_DROP_DOWN (dropdown), 3); /* 4096 */
       gtk_header_bar_pack_start (GTK_HEADER_BAR (header), dropdown);
 

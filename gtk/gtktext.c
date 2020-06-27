@@ -2627,6 +2627,7 @@ gtk_text_do_popup (GtkText *self,
   GtkTextPrivate *priv = gtk_text_get_instance_private (self);
 
   gtk_text_update_clipboard_actions (self);
+  gtk_text_update_emoji_action (self);
 
   if (!priv->popup_menu)
     {
@@ -4024,7 +4025,11 @@ gtk_text_copy_clipboard (GtkText *self)
           return;
         }
 
-      str = gtk_text_get_display_text (self, priv->selection_bound, priv->current_pos);
+      if (priv->selection_bound < priv->current_pos)
+        str = gtk_text_get_display_text (self, priv->selection_bound, priv->current_pos);
+      else
+        str = gtk_text_get_display_text (self, priv->current_pos, priv->selection_bound);
+
       gdk_clipboard_set_text (gtk_widget_get_clipboard (GTK_WIDGET (self)), str);
       g_free (str);
     }
@@ -5397,6 +5402,9 @@ gtk_text_set_editable (GtkText  *self,
       gtk_event_controller_key_set_im_context (GTK_EVENT_CONTROLLER_KEY (priv->key_controller),
                                                is_editable ? priv->im_context : NULL);
 
+      gtk_text_update_clipboard_actions (self);
+      gtk_text_update_emoji_action (self);
+
       g_object_notify (G_OBJECT (self), "editable");
     }
 }
@@ -5909,7 +5917,10 @@ gtk_text_update_clipboard_actions (GtkText *self)
 static void
 gtk_text_update_emoji_action (GtkText *self)
 {
+  GtkTextPrivate *priv = gtk_text_get_instance_private (self);
+
   gtk_widget_action_set_enabled (GTK_WIDGET (self), "misc.insert-emoji",
+                                 priv->editable &&
                                  (gtk_text_get_input_hints (self) & GTK_INPUT_HINT_NO_EMOJI) == 0);
 }
 
