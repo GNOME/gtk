@@ -159,26 +159,25 @@ DisplayDebugFlags debug_flags[N_DEBUG_DISPLAYS];
 gboolean any_display_debug_flags_set = FALSE;
 
 #ifdef G_ENABLE_DEBUG
-static const GDebugKey gtk_debug_keys[] = {
-  { "text", GTK_DEBUG_TEXT },
-  { "tree", GTK_DEBUG_TREE },
-  { "keybindings", GTK_DEBUG_KEYBINDINGS },
-  { "modules", GTK_DEBUG_MODULES },
-  { "geometry", GTK_DEBUG_GEOMETRY },
-  { "icontheme", GTK_DEBUG_ICONTHEME },
-  { "printing", GTK_DEBUG_PRINTING} ,
-  { "builder", GTK_DEBUG_BUILDER },
-  { "builder-objects", GTK_DEBUG_BUILDER_OBJECTS },
-  { "size-request", GTK_DEBUG_SIZE_REQUEST },
-  { "no-css-cache", GTK_DEBUG_NO_CSS_CACHE },
-  { "shortcuts", GTK_DEBUG_SHORTCUTS },
-  { "interactive", GTK_DEBUG_INTERACTIVE },
-  { "touchscreen", GTK_DEBUG_TOUCHSCREEN },
-  { "actions", GTK_DEBUG_ACTIONS },
-  { "resize", GTK_DEBUG_RESIZE },
-  { "layout", GTK_DEBUG_LAYOUT },
-  { "snapshot", GTK_DEBUG_SNAPSHOT },
-  { "constraints", GTK_DEBUG_CONSTRAINTS },
+static const GdkDebugKey gtk_debug_keys[] = {
+  { "keybindings", GTK_DEBUG_KEYBINDINGS, "Information about keyboard shortcuts" },
+  { "modules", GTK_DEBUG_MODULES, "Information about modules and extensions" },
+  { "icontheme", GTK_DEBUG_ICONTHEME, "Information about icon themes" },
+  { "printing", GTK_DEBUG_PRINTING, "Information about printing" },
+  { "geometry", GTK_DEBUG_GEOMETRY, "Information about size allocation" },
+  { "size-request", GTK_DEBUG_SIZE_REQUEST, "Information about size requests" },
+  { "actions", GTK_DEBUG_ACTIONS, "Information about actions and menu models" },
+  { "constraints", GTK_DEBUG_CONSTRAINTS, "Information about constraints" },
+  { "text", GTK_DEBUG_TEXT, "Information about GtkTextView" },
+  { "tree", GTK_DEBUG_TREE, "Information about GtkTreeView" },
+  { "builder", GTK_DEBUG_BUILDER, "Trace GtkBuilder operation" },
+  { "builder-objects", GTK_DEBUG_BUILDER_OBJECTS, "Log unused GtkBuilder objects" },
+  { "no-css-cache", GTK_DEBUG_NO_CSS_CACHE, "Disable style property cache" },
+  { "interactive", GTK_DEBUG_INTERACTIVE, "Enable the GTK inspector" },
+  { "touchscreen", GTK_DEBUG_TOUCHSCREEN, "Pretend the pointer is a touchscreen" },
+  { "resize", GTK_DEBUG_RESIZE, "Highlight resizing widgets" },
+  { "layout", GTK_DEBUG_LAYOUT, "Show layout borders" },
+  { "snapshot", GTK_DEBUG_SNAPSHOT, "Generate debug render nodes" },
 };
 #endif /* G_ENABLE_DEBUG */
 
@@ -603,19 +602,14 @@ do_pre_parse_initialization (void)
 
   gdk_pre_parse ();
 
-  env_string = g_getenv ("GTK_DEBUG");
-  if (env_string != NULL)
-    {
 #ifdef G_ENABLE_DEBUG
-      debug_flags[0].flags = g_parse_debug_string (env_string,
-                                                   gtk_debug_keys,
-                                                   G_N_ELEMENTS (gtk_debug_keys));
-      any_display_debug_flags_set = debug_flags[0].flags > 0;
+  debug_flags[0].flags = gdk_parse_debug_var ("GTK_DEBUG",
+                                              gtk_debug_keys,
+                                              G_N_ELEMENTS (gtk_debug_keys));
+  any_display_debug_flags_set = debug_flags[0].flags > 0;
 #else
-      g_warning ("GTK_DEBUG set but ignored because gtk isn't built with G_ENABLE_DEBUG");
+  g_warning ("GTK_DEBUG set but ignored because gtk isn't built with G_ENABLE_DEBUG");
 #endif  /* G_ENABLE_DEBUG */
-      env_string = NULL;
-    }
 
   env_string = g_getenv ("GTK_SLOWDOWN");
   if (env_string)
