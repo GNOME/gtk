@@ -1197,16 +1197,6 @@ main (int argc, char **argv)
   };
   int i;
 
-  /* Most code in gtk-demo is intended to be exemplary, but not
-   * these few lines, which are just a hack so gtk-demo will work
-   * in the GTK tree without installing it.
-   */
-  if (g_file_test ("../../modules/input/immodules.cache", G_FILE_TEST_EXISTS))
-    {
-      g_setenv ("GTK_IM_MODULE_FILE", "../../modules/input/immodules.cache", TRUE);
-    }
-  /* -- End of hack -- */
-
   app = gtk_application_new ("org.gtk.Demo4", G_APPLICATION_NON_UNIQUE|G_APPLICATION_HANDLES_COMMAND_LINE);
 
   g_action_map_add_action_entries (G_ACTION_MAP (app),
