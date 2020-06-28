@@ -40,4 +40,15 @@ void           gdk_surface_set_widget (GdkSurface *surface,
                                        gpointer    widget);
 gpointer       gdk_surface_get_widget (GdkSurface *surface);
 
+typedef struct
+{
+  const char *key;
+  guint value;
+  const char *help;
+} GdkDebugKey;
+
+guint gdk_parse_debug_var (const char        *variable,
+                           const GdkDebugKey *keys,
+                           guint              nkeys);
+
 #endif /* __GDK__PRIVATE_H__ */
