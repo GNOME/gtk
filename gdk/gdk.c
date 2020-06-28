@@ -42,6 +42,8 @@
 
 #include <string.h>
 #include <stdlib.h>
+#include <stdio.h>
+#include <ctype.h>
 
 #include <fribidi.h>
 
@@ -128,28 +130,28 @@ static int gdk_initialized = 0;                     /* 1 if the library is initi
                                                      */
 
 #ifdef G_ENABLE_DEBUG
-static const GDebugKey gdk_debug_keys[] = {
-  { "misc",            GDK_DEBUG_MISC },
-  { "events",          GDK_DEBUG_EVENTS },
-  { "dnd",             GDK_DEBUG_DND },
-  { "input",           GDK_DEBUG_INPUT },
-  { "eventloop",       GDK_DEBUG_EVENTLOOP },
-  { "frames",          GDK_DEBUG_FRAMES },
-  { "settings",        GDK_DEBUG_SETTINGS },
-  { "opengl",          GDK_DEBUG_OPENGL },
-  { "vulkan",          GDK_DEBUG_VULKAN },
-  { "selection",       GDK_DEBUG_SELECTION },
-  { "clipboard",       GDK_DEBUG_CLIPBOARD },
-  { "nograbs",         GDK_DEBUG_NOGRABS },
-  { "gl-disable",      GDK_DEBUG_GL_DISABLE },
-  { "gl-software",     GDK_DEBUG_GL_SOFTWARE },
-  { "gl-texture-rect", GDK_DEBUG_GL_TEXTURE_RECT },
-  { "gl-legacy",       GDK_DEBUG_GL_LEGACY },
-  { "gl-gles",         GDK_DEBUG_GL_GLES },
-  { "gl-debug",        GDK_DEBUG_GL_DEBUG },
-  { "vulkan-disable",  GDK_DEBUG_VULKAN_DISABLE },
-  { "vulkan-validate", GDK_DEBUG_VULKAN_VALIDATE },
-  { "default-settings",GDK_DEBUG_DEFAULT_SETTINGS },
+static const GdkDebugKey gdk_debug_keys[] = {
+  { "misc",            GDK_DEBUG_MISC, "Miscellaneous information" },
+  { "events",          GDK_DEBUG_EVENTS, "Information about events" },
+  { "dnd",             GDK_DEBUG_DND, "Information about Drag-and-Drop" },
+  { "input",           GDK_DEBUG_INPUT, "Information about input (Windows)" },
+  { "eventloop",       GDK_DEBUG_EVENTLOOP, "Information about event loop operation (Quartz)" },
+  { "frames",          GDK_DEBUG_FRAMES, "Information about the frame clock" },
+  { "settings",        GDK_DEBUG_SETTINGS, "Information about xsettings" },
+  { "opengl",          GDK_DEBUG_OPENGL, "Information about OpenGL" },
+  { "vulkan",          GDK_DEBUG_VULKAN, "Information about Vulkan" },
+  { "selection",       GDK_DEBUG_SELECTION, "Information about selections" },
+  { "clipboard",       GDK_DEBUG_CLIPBOARD, "Information about clipboards" },
+  { "nograbs",         GDK_DEBUG_NOGRABS, "Disable pointer and keyboard grabs (X11)" },
+  { "gl-disable",      GDK_DEBUG_GL_DISABLE, "Disable OpenGL support" },
+  { "gl-software",     GDK_DEBUG_GL_SOFTWARE, "Force OpenGL software rendering" },
+  { "gl-texture-rect", GDK_DEBUG_GL_TEXTURE_RECT, "Use OpenGL texture rectangle extension" },
+  { "gl-legacy",       GDK_DEBUG_GL_LEGACY, "Use a legacy OpenGL context" },
+  { "gl-gles",         GDK_DEBUG_GL_GLES, "Use a GLES OpenGL context" },
+  { "gl-debug",        GDK_DEBUG_GL_DEBUG, "Insert debugging information in OpenGL" },
+  { "vulkan-disable",  GDK_DEBUG_VULKAN_DISABLE, "Disable Vulkan support" },
+  { "vulkan-validate", GDK_DEBUG_VULKAN_VALIDATE, "Load the Vulkan validation layer" },
+  { "default-settings",GDK_DEBUG_DEFAULT_SETTINGS, "Force default values for xsettings" },
 };
 #endif
 
@@ -199,6 +201,93 @@ gdk_ensure_resources (void)
   g_once (&register_resources_once, register_resources, NULL);
 }
 
+guint
+gdk_parse_debug_var (const char        *variable,
+                     const GdkDebugKey *keys,
+                     guint              nkeys)
+{
+  guint i;
+  guint result = 0;
+  const char *string;
+  const gchar *p;
+  const gchar *q;
+  gboolean invert;
+  gboolean help;
+
+  string = g_getenv (variable);
+  if (string == NULL)
+    return 0;
+
+  p = string;
+  invert = FALSE;
+  help = FALSE;
+
+  while (*p)
+    {
+      q = strpbrk (p, ":;, \t");
+      if (!q)
+        q = p + strlen (p);
+
+      if (3 == q - p && g_ascii_strncasecmp ("all", p, q - p) == 0)
+        {
+          invert = TRUE;
+        }
+      else if (4 == q - p && g_ascii_strncasecmp ("help", p, q - p) == 0)
+        {
+          help = TRUE;
+        }
+      else
+        {
+          for (i = 0; i < nkeys; i++)
+            {
+              if (strlen (keys[i].key) == q - p &&
+                  g_ascii_strncasecmp (keys[i].key, p, q - p) == 0)
+                {
+                  result |= keys[i].value;
+                  break;
+                }
+            }
+          if (i == nkeys)
+            {
+              char *val = g_strndup (p, q - p);
+              fprintf (stderr, "Unrecognized value \"%s\". Try %s=help\n", val, variable);
+              g_free (val);
+            }
+         }
+
+      p = q;
+      if (*p)
+        p++;
+    }
+
+  if (help)
+    {
+      int max_width = 4;
+      for (i = 0; i < nkeys; i++)
+        max_width = MAX (max_width, strlen (keys[i].key));
+      max_width += 4;
+
+      fprintf (stderr, "Supported %s values:\n", variable);
+      for (i = 0; i < nkeys; i++)
+        fprintf (stderr, "  %s%*s%s\n", keys[i].key, (int)(max_width - strlen (keys[i].key)), " ", keys[i].help);
+      fprintf (stderr, "  %s%*s%s\n", "all", max_width - 3, " ", "Enable all values");
+      fprintf (stderr, "  %s%*s%s\n", "help", max_width - 4, " ", "Print this help");
+      fprintf (stderr, "\nMultiple values can be given, separated by : or space.\n");
+    }
+
+  if (invert)
+    {
+      guint all_flags = 0;
+
+      for (i = 0; i < nkeys; i++)
+        all_flags |= keys[i].value;
+
+      result = all_flags & (~result);
+    }
+
+  return result;
+}
+
 void
 gdk_pre_parse (void)
 {
@@ -207,13 +296,9 @@ gdk_pre_parse (void)
   gdk_ensure_resources ();
 
 #ifdef G_ENABLE_DEBUG
-  {
-    gchar *debug_string = getenv("GDK_DEBUG");
-    if (debug_string != NULL)
-      _gdk_debug_flags = g_parse_debug_string (debug_string,
-                                              (GDebugKey *) gdk_debug_keys,
-                                              G_N_ELEMENTS (gdk_debug_keys));
-  }
+  _gdk_debug_flags = gdk_parse_debug_var ("GDK_DEBUG",
+                                          gdk_debug_keys,
+                                          G_N_ELEMENTS (gdk_debug_keys));
 #endif  /* G_ENABLE_DEBUG */
 
   if (g_getenv ("GTK_TRACE_FD"))
