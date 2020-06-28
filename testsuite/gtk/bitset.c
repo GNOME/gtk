@@ -350,6 +350,74 @@ test_subtract (void)
     }
 }
 
+static void
+test_shift_left (void)
+{
+  guint i, j, k, min, max;
+  GtkBitset *iset, *testset;
+
+  for (i = 0; i < G_N_ELEMENTS (bitsets); i++)
+    {
+      iset = bitsets[i].create();
+
+      for (j = 1; j < 10000000; j *= 10)
+        {
+          testset = gtk_bitset_copy (iset);
+
+          gtk_bitset_shift_left (testset, j);
+
+          min = MIN (gtk_bitset_get_minimum (iset), gtk_bitset_get_minimum (testset));
+          max = MAX (gtk_bitset_get_maximum (iset), gtk_bitset_get_maximum (testset));
+
+          for (k = min; k <= max; k++)
+            {
+              if (k >= j)
+                g_assert_cmpint (gtk_bitset_contains (iset, k), ==, gtk_bitset_contains (testset, k - j));
+            }
+
+          gtk_bitset_unref (testset);
+        }
+
+       gtk_bitset_unref (iset);
+    }
+}
+
+static void
+test_shift_right (void)
+{
+  guint i, j, k, min, max;
+  GtkBitset *iset, *testset;
+
+  for (i = 0; i < G_N_ELEMENTS (bitsets); i++)
+    {
+      iset = bitsets[i].create();
+
+      for (j = 1; j < 10000000; j *= 10)
+        {
+          testset = gtk_bitset_copy (iset);
+
+          gtk_bitset_shift_right (testset, j);
+
+          min = MIN (gtk_bitset_get_minimum (iset), gtk_bitset_get_minimum (testset));
+          max = MAX (gtk_bitset_get_maximum (iset), gtk_bitset_get_maximum (testset));
+
+          for (k = min; k <= max; k++)
+            {
+              if (k <= G_MAXUINT - j)
+                {
+                if (gtk_bitset_contains (iset, k) != gtk_bitset_contains (testset, k + j))
+                  g_print ("right-shift fail set %u shift %u test %u\n", i, j, k);
+                g_assert_cmpint (gtk_bitset_contains (iset, k), ==, gtk_bitset_contains (testset, k + j));
+                }
+            }
+
+          gtk_bitset_unref (testset);
+        }
+
+       gtk_bitset_unref (iset);
+    }
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -364,6 +432,8 @@ main (int argc, char *argv[])
   g_test_add_func ("/bitset/intersect", test_intersect);
   g_test_add_func ("/bitset/difference", test_difference);
   g_test_add_func ("/bitset/subtract", test_subtract);
+  g_test_add_func ("/bitset/shift-left", test_shift_left);
+  g_test_add_func ("/bitset/shift-right", test_shift_right);
 
   return g_test_run ();
 }

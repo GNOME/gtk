@@ -604,8 +604,8 @@ gtk_bitset_shift_right (GtkBitset *self,
   original = gtk_bitset_copy (self);
   gtk_bitset_remove_all (self);
 
-  for (loop = gtk_bitset_iter_init_at (&iter, original, amount, &value);
-       loop && value >= G_MAXUINT - amount;
+  for (loop = gtk_bitset_iter_init_first (&iter, original, &value);
+       loop && value <= G_MAXUINT - amount;
        loop = gtk_bitset_iter_next (&iter, &value))
     {
       gtk_bitset_add (self, value + amount);
