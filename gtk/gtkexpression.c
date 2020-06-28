@@ -1961,7 +1961,7 @@ gtk_expression_bind_notify (gpointer data)
  * @self: (transfer full): a #GtkExpression
  * @target: (transfer none) (type GObject): the target object to bind to
  * @property: name of the property on @target to bind to
- * @this_: (transfer none) (type GObject): the this argument for
+ * @this_: (transfer none) (type GObject) (nullable): the this argument for
  *     the evaluation of @self
  *
  * Bind @target's property named @property to @self.
