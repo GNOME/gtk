@@ -113,6 +113,8 @@ static const GtkIMContextInfo *info_list[] =
   &imwayland_info,
 };
 
+static void gtk_im_context_wayland_focus_out (GtkIMContext *context);
+
 #define GTK_IM_CONTEXT_WAYLAND(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), type_wayland, GtkIMContextWayland))
 
 #ifndef INCLUDE_IM_wayland
@@ -468,6 +470,8 @@ static void
 gtk_im_context_wayland_finalize (GObject *object)
 {
   GtkIMContextWayland *context = GTK_IM_CONTEXT_WAYLAND (object);
+
+  gtk_im_context_wayland_focus_out (GTK_IM_CONTEXT (context));
 
   g_clear_object (&context->window);
   g_clear_object (&context->gesture);
