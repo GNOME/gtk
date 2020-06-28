@@ -7,4 +7,13 @@ the Wayland backend by setting `GDK_BACKEND=wayland`.
 On UNIX, the Wayland backend is enabled by default, so you don't need to
 do anything special when compiling it, and everything should "just work."
 
-Currently, the Wayland backend does not use any additional environment variables.
+## Wayland-specific environment variables {#wayland-envar}
+
+### WAYLAND_DISPLAY
+
+Specifies the name of the Wayland display to use. Typically, wayland-0
+or wayland-1.
+
+### XDG_RUNTIME_DIR
+
+Used to locate the Wayland socket to use.
