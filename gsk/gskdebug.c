@@ -1,21 +1,22 @@
 #include "gskdebugprivate.h"
+#include "gdk/gdk-private.h"
 
 #ifdef G_ENABLE_DEBUG
-static const GDebugKey gsk_debug_keys[] = {
-  { "renderer", GSK_DEBUG_RENDERER },
-  { "cairo", GSK_DEBUG_CAIRO },
-  { "opengl", GSK_DEBUG_OPENGL },
-  { "shaders", GSK_DEBUG_SHADERS },
-  { "surface", GSK_DEBUG_SURFACE },
-  { "vulkan", GSK_DEBUG_VULKAN },
-  { "fallback", GSK_DEBUG_FALLBACK },
-  { "glyphcache", GSK_DEBUG_GLYPH_CACHE },
-  { "diff", GSK_DEBUG_DIFF },
-  { "geometry", GSK_DEBUG_GEOMETRY },
-  { "full-redraw", GSK_DEBUG_FULL_REDRAW},
-  { "sync", GSK_DEBUG_SYNC },
-  { "vulkan-staging-image", GSK_DEBUG_VULKAN_STAGING_IMAGE },
-  { "vulkan-staging-buffer", GSK_DEBUG_VULKAN_STAGING_BUFFER }
+static const GdkDebugKey gsk_debug_keys[] = {
+  { "renderer", GSK_DEBUG_RENDERER, "General renderer information" },
+  { "cairo", GSK_DEBUG_CAIRO, "Cairo renderer information" },
+  { "opengl", GSK_DEBUG_OPENGL, "OpenGL renderer information" },
+  { "vulkan", GSK_DEBUG_VULKAN, "Vulkan renderer information" },
+  { "shaders", GSK_DEBUG_SHADERS, "Information about shaders" },
+  { "surface", GSK_DEBUG_SURFACE, "Information about surfaces" },
+  { "fallback", GSK_DEBUG_FALLBACK, "Information about fallbacks" },
+  { "glyphcache", GSK_DEBUG_GLYPH_CACHE, "Information about glyph caching" },
+  { "diff", GSK_DEBUG_DIFF, "Show differences" },
+  { "geometry", GSK_DEBUG_GEOMETRY, "Show borders" },
+  { "full-redraw", GSK_DEBUG_FULL_REDRAW, "Force full redraws" },
+  { "sync", GSK_DEBUG_SYNC, "Sync after each frame" },
+  { "vulkan-staging-image", GSK_DEBUG_VULKAN_STAGING_IMAGE, "Use a staging image for Vulkan texture upload" },
+  { "vulkan-staging-buffer", GSK_DEBUG_VULKAN_STAGING_BUFFER, "Use a staging buffer for Vulkan texture upload" }
 };
 #endif
 
@@ -29,11 +30,9 @@ init_debug_flags (void)
 
   if (g_once_init_enter (&gsk_debug_flags__set))
     {
-      const char *env = g_getenv ("GSK_DEBUG");
-
-      gsk_debug_flags = g_parse_debug_string (env,
-                                              (GDebugKey *) gsk_debug_keys,
-                                              G_N_ELEMENTS (gsk_debug_keys));
+      gsk_debug_flags = gdk_parse_debug_var ("GSK_DEBUG",
+                                             gsk_debug_keys,
+                                             G_N_ELEMENTS (gsk_debug_keys));
 
       g_once_init_leave (&gsk_debug_flags__set, TRUE);
     }
