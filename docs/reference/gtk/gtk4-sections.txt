@@ -312,6 +312,8 @@ gtk_list_box_bind_model
 gtk_list_box_row_new
 gtk_list_box_row_changed
 gtk_list_box_row_is_selected
+gtk_list_box_row_get_child
+gtk_list_box_row_set_child
 gtk_list_box_row_get_header
 gtk_list_box_row_set_header
 gtk_list_box_row_get_index
@@ -459,6 +461,8 @@ gtk_list_item_set_child
 gtk_list_item_get_selected
 gtk_list_item_get_selectable
 gtk_list_item_set_selectable
+gtk_list_item_get_activatable
+gtk_list_item_set_activatable
 <SUBSECTION Standard>
 GTK_LIST_ITEM
 GTK_LIST_ITEM_CLASS
@@ -622,6 +626,7 @@ gtk_column_view_column_get_type
 <TITLE>GtkGridView</TITLE>
 GtkGridView
 gtk_grid_view_new
+gtk_grid_view_new_with_factory
 gtk_grid_view_set_model
 gtk_grid_view_get_model
 gtk_grid_view_set_max_columns
@@ -632,6 +637,8 @@ gtk_grid_view_set_single_click_activate
 gtk_grid_view_get_single_click_activate
 gtk_grid_view_set_enable_rubberband
 gtk_grid_view_get_enable_rubberband
+gtk_grid_view_set_factory
+gtk_grid_view_get_factory
 <SUBSECTION Standard>
 GTK_GRID_VIEW
 GTK_GRID_VIEW_CLASS
@@ -1471,8 +1478,6 @@ gtk_filter_get_strictness
 <SUBSECTION>
 GtkFilterChange
 gtk_filter_changed
-<SUBSECTION>
-gtk_custom_filter_new
 <SUBSECTION Standard>
 GTK_FILTER
 GTK_IS_FILTER
@@ -1490,6 +1495,7 @@ gtk_filter_get_type
 GtkCustomFilter
 GtkCustomFilterFunc
 gtk_custom_filter_new
+gtk_custom_filter_set_filter_func
 <SUBSECTION Standard>
 GTK_CUSTOM_FILTER
 GTK_IS_CUSTOM_FILTER
@@ -1553,6 +1559,9 @@ gtk_fixed_new
 gtk_fixed_put
 gtk_fixed_remove
 gtk_fixed_move
+gtk_fixed_get_child_position
+gtk_fixed_get_child_transform
+gtk_fixed_set_child_transform
 <SUBSECTION Standard>
 GTK_FIXED
 GTK_IS_FIXED
@@ -2766,6 +2775,8 @@ gtk_numeric_sorter_get_type
 <TITLE>GtkCustomSorter</TITLE>
 GtkCustomSorter
 gtk_custom_sorter_new
+
+gtk_custom_sorter_set_sort_func
 <SUBSECTION Standard>
 GTK_CUSTOM_SORTER
 GTK_IS_CUSTOM_SORTER
