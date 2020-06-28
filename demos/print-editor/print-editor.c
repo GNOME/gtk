@@ -753,25 +753,6 @@ mark_set_callback (GtkTextBuffer     *text_buffer,
   update_statusbar ();
 }
 
-static gint
-command_line (GApplication            *application,
-              GApplicationCommandLine *command_line)
-{
-  int argc;
-  char **argv;
-
-  argv = g_application_command_line_get_arguments (command_line, &argc);
-
-  if (argc == 2)
-    {
-      GFile *file = g_file_new_for_commandline_arg (argv[1]);
-      load_file (file);
-      g_object_unref (file);
-    }
-
-  return 0;
-}
-
 static void
 startup (GApplication *app)
 {
@@ -846,6 +827,20 @@ activate (GApplication *app)
   gtk_widget_show (main_window);
 }
 
+static void
+open (GApplication  *application,
+      GFile        **files,
+      int            n_files,
+      const char    *hint)
+{
+  if (n_files > 1)
+    g_warning ("Can only open a single file");
+
+  activate (application);
+
+  load_file (files[0]);
+}
+
 int
 main (int argc, char **argv)
 {
@@ -869,7 +864,7 @@ main (int argc, char **argv)
     g_clear_error (&error);
   }
 
-  app = gtk_application_new ("org.gtk.PrintEditor", 0);
+  app = gtk_application_new ("org.gtk.PrintEditor4", G_APPLICATION_HANDLES_OPEN);
 
   g_action_map_add_action_entries (G_ACTION_MAP (app),
                                    app_entries, G_N_ELEMENTS (app_entries),
@@ -877,7 +872,7 @@ main (int argc, char **argv)
 
   g_signal_connect (app, "startup", G_CALLBACK (startup), NULL);
   g_signal_connect (app, "activate", G_CALLBACK (activate), NULL);
-  g_signal_connect (app, "command-line", G_CALLBACK (command_line), NULL);
+  g_signal_connect (app, "open", G_CALLBACK (open), NULL);
 
   g_application_run (G_APPLICATION (app), argc, argv);
 
