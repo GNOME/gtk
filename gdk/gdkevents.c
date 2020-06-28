@@ -1187,7 +1187,7 @@ gdk_event_get_surface (GdkEvent *event)
 
 /**
  * gdk_event_get_seat:
- * @event: a #GdkEvent.
+ * @event: a #GdkEvent
  *
  * Returns the seat that originated the event.
  *
