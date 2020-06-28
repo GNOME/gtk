@@ -9,11 +9,14 @@ diff = find_program('diff', required: true)
 common_env = [
   'GIO_USE_VOLUME_MONITOR=unix',
   'GSETTINGS_BACKEND=memory',
-  'GDK_DEBUG=default-settings',
   'GTK_CSD=1',
   'G_ENABLE_DIAGNOSTIC=0',
   'GSETTINGS_SCHEMA_DIR=@0@'.format(gtk_schema_build_dir),
 ]
+
+if get_option('debug')
+  common_env += [ 'GDK_DEBUG=default-settings' ]
+endif
 
 add_test_setup ('x11',
                 is_default: true,
