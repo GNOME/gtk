@@ -119,6 +119,7 @@ foreach t : tests
   test(test_name, test_exe,
        args: [ '--tap', '-k' ],
        protocol: 'tap',
+       timeout: 60,
        env: [
               'NO_AT_BRIDGE=1',
               'GSK_RENDERER=cairo',
