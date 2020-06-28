@@ -170,7 +170,8 @@ focus_chain_tests = [
   [ 'widget-factory', 'up' ],
   [ 'widget-factory', 'down' ],
   [ 'widget-factory', 'left' ],
-  [ 'widget-factory', 'right' ],
+  # this one is flaky in ci, for unclear reasons
+  #[ 'widget-factory', 'right' ],
   [ 'widget-factory2', 'tab' ],
   [ 'widget-factory2', 'tab-backward' ],
   # in ci, we don't show a color picker, so the focus chain
