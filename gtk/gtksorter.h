@@ -31,12 +31,9 @@ G_BEGIN_DECLS
 
 /**
  * GtkSorterOrder:
- * @GTK_SORTER_ORDER_PARTIAL: A partial order. And #GtkOrdering is possible.
- * @GTK_SORTER_ORDER_INVALID: An invalid order. gtk_sorter_compare() will
- *     always return %GTK_ORDERING_INVALID if both items are unequal.
+ * @GTK_SORTER_ORDER_PARTIAL: A partial order. Any #GtkOrdering is possible.
  * @GTK_SORTER_ORDER_NONE: No order, all elements are considered equal.
- *     gtk_sorter_compare() will only return %GTK_ORDERING_EQUAL or
- *     %GTK_ORDERING_INVALID.
+ *     gtk_sorter_compare() will only return %GTK_ORDERING_EQUAL.
  * @GTK_SORTER_ORDER_TOTAL: A total order. gtk_sorter_compare() will only
  *     return %GTK_ORDERING_EQUAL if an item is compared with itself. Two
  *     different items will never cause this value to be returned.

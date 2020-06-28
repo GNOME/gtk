@@ -5987,13 +5987,6 @@ create_main_window (void)
   gtk_widget_show (window);
 }
 
-static void
-test_init (void)
-{
-  if (g_file_test ("../modules/input/immodules.cache", G_FILE_TEST_EXISTS))
-    g_setenv ("GTK_IM_MODULE_FILE", "../modules/input/immodules.cache", TRUE);
-}
-
 static char *
 pad (const char *str, int to)
 {
@@ -6110,9 +6103,7 @@ main (int argc, char *argv[])
 
   srand (time (NULL));
 
-  test_init ();
-
-  g_set_application_name ("GTK+ Test Program");
+  g_set_application_name ("GTK Test Program");
 
 #ifdef GTK_SRCDIR
   g_chdir (GTK_SRCDIR);

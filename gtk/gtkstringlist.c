@@ -587,7 +587,7 @@ gtk_string_list_remove (GtkStringList *self,
 /**
  * gtk_string_list_get_string:
  * @self: a #GtkStringList
- * @position:
+ * @position: the position to get the string for
  *
  * Gets the string that is at @position in @self. @position
  * must be smaller than the current length of the list.

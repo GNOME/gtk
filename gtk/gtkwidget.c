@@ -7539,9 +7539,11 @@ _gtk_widget_synthesize_crossing (GtkWidget       *from,
   g_return_if_fail (from != NULL || to != NULL);
 
   crossing.type = GTK_CROSSING_POINTER;
-  crossing.old_target = from;
-  crossing.new_target = to;
   crossing.mode = mode;
+  crossing.old_target = from;
+  crossing.old_descendent = NULL;
+  crossing.new_target = to;
+  crossing.new_descendent = NULL;
 
   if (from)
     {
