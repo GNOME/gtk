@@ -42,7 +42,8 @@
  * The fastest way to iterate values in a bitset is #GtkBitsetIter which allows
  * quick iteration of all the values in a bitset.
  *
- * The main use case #GtkBitset is implementing complex selections for #GtkSelectionModel.
+ * The main use case for #GtkBitset is implementing complex selections for
+ * #GtkSelectionModel.
  */
 
 /**
@@ -273,7 +274,7 @@ gtk_bitset_add (GtkBitset *self,
  * @self: a #GtkBitset
  * @value: value to add
  *
- * Adds @value to @self if it wasn't part of it before.
+ * Removes @value from @self if it was part of it before.
  *
  * Returns: %TRUE if @value was part of @self and @self
  *     was changed.
@@ -293,8 +294,8 @@ gtk_bitset_remove (GtkBitset *self,
  * @start: first value to add
  * @n_items: number of consecutive values to add
  *
- * Adds all values from @start (inclusive) to @start + @n_items (exclusive)
- * in @self.
+ * Adds all values from @start (inclusive) to @start + @n_items
+ * (exclusive) in @self.
  **/
 void
 gtk_bitset_add_range (GtkBitset *self,
@@ -343,8 +344,8 @@ gtk_bitset_remove_range (GtkBitset *self,
  * @first: first value to add
  * @last: last value to add
  *
- * Adds the closed range [@first, @last], so @first, @last and all values inbetween.
- * @first must be smaller than @last.
+ * Adds the closed range [@first, @last], so @first, @last and all
+ * values inbetween. @first must be smaller than @last.
  **/
 void
 gtk_bitset_add_range_closed (GtkBitset *self,
@@ -363,8 +364,8 @@ gtk_bitset_add_range_closed (GtkBitset *self,
  * @first: first value to remove
  * @last: last value to remove
  *
- * Removes the closed range [@first, @last], so @first, @last and all values inbetween.
- * @first must be smaller than @last.
+ * Removes the closed range [@first, @last], so @first, @last and all
+ * values inbetween. @first must be smaller than @last.
  **/
 void
 gtk_bitset_remove_range_closed (GtkBitset *self,
@@ -383,7 +384,7 @@ gtk_bitset_remove_range_closed (GtkBitset *self,
  * @start: first value to add
  * @width: width of the rectangle
  * @height: height of the rectangle
- * @stride: rowstride of the rectangle
+ * @stride: row stride of the grid
  *
  * Interprets the values as a 2-dimensional boolean grid with the given @stride
  * and inside that grid, adds a rectangle with the given @width and @height.
@@ -414,7 +415,7 @@ gtk_bitset_add_rectangle (GtkBitset *self,
  * @start: first value to remove
  * @width: width of the rectangle
  * @height: height of the rectangle
- * @stride: rowstride of the rectangle
+ * @stride: row stride of the grid
  *
  * Interprets the values as a 2-dimensional boolean grid with the given @stride
  * and inside that grid, removes a rectangle with the given @width and @height.
@@ -468,8 +469,8 @@ gtk_bitset_union (GtkBitset       *self,
  * @self: a #GtkBitset
  * @other: the #GtkBitset to intersect with
  *
- * Sets @self to be the intersection of @self and @other, that is remove all values
- * from @self that are not part of @other.
+ * Sets @self to be the intersection of @self and @other, that is remove
+ * all values from @self that are not part of @other.
  *
  * It is allowed for @self and @other to be the same bitset. Nothing will
  * happen in that case.
@@ -629,7 +630,7 @@ gtk_bitset_shift_right (GtkBitset *self,
  *
  * Then, it "pastes" new room into the bitset by shifting all values
  * larger than @position by @added spaces to the right. This frees
- * up space that can then be filled using
+ * up space that can then be filled.
  **/
 void
 gtk_bitset_slice (GtkBitset *self,
@@ -668,10 +669,10 @@ G_STATIC_ASSERT (sizeof (GtkBitsetIter) >= sizeof (roaring_uint32_iterator_t));
  * @value: (out) (optional): Set to the first value in @set
  *
  * Initializes an iterator for @set and points it to the first
- * value in @set. If @set is empty, %FALSE is returned and @value is set to
- * %G_MAXUINT.
+ * value in @set. If @set is empty, %FALSE is returned and @value
+ * is set to %G_MAXUINT.
  *
- * Returns: %TRUE if a @set isn't empty.
+ * Returns: %TRUE if @set isn't empty.
  **/
 gboolean
 gtk_bitset_iter_init_first (GtkBitsetIter   *iter,
@@ -700,7 +701,7 @@ gtk_bitset_iter_init_first (GtkBitsetIter   *iter,
  * Initializes an iterator for @set and points it to the last
  * value in @set. If @set is empty, %FALSE is returned.
  *
- * Returns: %TRUE if a @set isn't empty.
+ * Returns: %TRUE if @set isn't empty.
  **/
 gboolean
 gtk_bitset_iter_init_last (GtkBitsetIter    *iter,
