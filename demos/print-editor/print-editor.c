@@ -23,7 +23,7 @@ update_title (GtkWindow *window)
   else
     basename = g_file_get_basename (filename);
 
-  title = g_strdup_printf ("Simple Editor with printing - %s", basename);
+  title = g_strdup_printf ("GTK Print Editor — %s", basename);
   g_free (basename);
 
   gtk_window_set_title (window, title);
@@ -592,18 +592,54 @@ activate_about (GSimpleAction *action,
                 GVariant      *parameter,
                 gpointer       user_data)
 {
-  const gchar *authors[] = {
-    "Alexander Larsson",
-    NULL
-  };
+  char *version;
+  GString *sysinfo;
+  char *setting;
+  char **backends;
+  int i;
+
+  sysinfo = g_string_new ("System libraries\n");
+  g_string_append_printf (sysinfo, "\tGLib\t%d.%d.%d\n",
+                          glib_major_version,
+                          glib_minor_version,
+                          glib_micro_version);
+  g_string_append_printf (sysinfo, "\tPango\t%s\n",
+                          pango_version_string ());
+  g_string_append_printf (sysinfo, "\tGTK\t%d.%d.%d\n",
+                          gtk_get_major_version (),
+                          gtk_get_minor_version (),
+                          gtk_get_micro_version ());
+
+  g_string_append (sysinfo, "\nPrint backends\n");
+
+  g_object_get (gtk_settings_get_default (), "gtk-print-backends", &setting, NULL);
+  backends = g_strsplit (setting, ",", -1);
+  for (i = 0; backends[i]; i++)
+    g_string_append_printf (sysinfo, "\t%s\n", backends[i]);
+  g_strfreev (backends);
+  g_free (setting);
+
+  version = g_strdup_printf ("%s\nRunning against GTK %d.%d.%d",
+                             PACKAGE_VERSION,
+                             gtk_get_major_version (),
+                             gtk_get_minor_version (),
+                             gtk_get_micro_version ());
+
   gtk_show_about_dialog (GTK_WINDOW (main_window),
-                         "name", "Print Test Editor",
-                         "logo-icon-name", "text-editor-symbolic",
-                         "version", PACKAGE_VERSION,
+                         "program-name", "GTK Print Editor",
+                         "version", version,
                          "copyright", "© 2006-2020 Red Hat, Inc",
-                         "comments", "Program to demonstrate GTK printing.",
-                         "authors", authors,
+                         "license-type", GTK_LICENSE_LGPL_2_1,
+                         "website", "http://www.gtk.org",
+                         "comments", "Program to demonstrate GTK printing",
+                         "authors", (const char *[]){ "Alexander Larsson", NULL },
+                         "logo-icon-name", "text-editor-symbolic",
+                         "title", "About GTK Print Editor",
+                         "system-information", sysinfo->str,
                          NULL);
+
+  g_string_free (sysinfo, TRUE);
+  g_free (version);
 }
 
 static void
@@ -643,23 +679,6 @@ static const gchar ui_info[] =
   "<interface>"
   "  <menu id='menubar'>"
   "    <submenu>"
-  "      <attribute name='label'>_Application</attribute>"
-  "      <section>"
-  "        <item>"
-  "          <attribute name='label'>_About</attribute>"
-  "          <attribute name='action'>app.about</attribute>"
-  "          <attribute name='accel'>&lt;Primary&gt;a</attribute>"
-  "        </item>"
-  "      </section>"
-  "      <section>"
-  "        <item>"
-  "          <attribute name='label'>_Quit</attribute>"
-  "          <attribute name='action'>app.quit</attribute>"
-  "          <attribute name='accel'>&lt;Primary&gt;q</attribute>"
-  "        </item>"
-  "      </section>"
-  "    </submenu>"
-  "    <submenu>"
   "      <attribute name='label'>_File</attribute>"
   "      <section>"
   "        <item>"
@@ -696,6 +715,23 @@ static const gchar ui_info[] =
   "          <attribute name='action'>app.print</attribute>"
   "        </item>"
   "      </section>"
+  "      <section>"
+  "        <item>"
+  "          <attribute name='label'>_Quit</attribute>"
+  "          <attribute name='action'>app.quit</attribute>"
+  "          <attribute name='accel'>&lt;Primary&gt;q</attribute>"
+  "        </item>"
+  "      </section>"
+  "    </submenu>"
+  "    <submenu>"
+  "      <attribute name='label'>_Help</attribute>"
+  "      <section>"
+  "        <item>"
+  "          <attribute name='label'>_About Print Editor</attribute>"
+  "          <attribute name='action'>app.about</attribute>"
+  "          <attribute name='accel'>&lt;Primary&gt;a</attribute>"
+  "        </item>"
+  "      </section>"
   "    </submenu>"
   "  </menu>"
   "</interface>";
@@ -714,25 +750,6 @@ mark_set_callback (GtkTextBuffer     *text_buffer,
                    gpointer           data)
 {
   update_statusbar ();
-}
-
-static gint
-command_line (GApplication            *application,
-              GApplicationCommandLine *command_line)
-{
-  int argc;
-  char **argv;
-
-  argv = g_application_command_line_get_arguments (command_line, &argc);
-
-  if (argc == 2)
-    {
-      GFile *file = g_file_new_for_commandline_arg (argv[1]);
-      load_file (file);
-      g_object_unref (file);
-    }
-
-  return 0;
 }
 
 static void
@@ -809,6 +826,20 @@ activate (GApplication *app)
   gtk_widget_show (main_window);
 }
 
+static void
+open (GApplication  *application,
+      GFile        **files,
+      int            n_files,
+      const char    *hint)
+{
+  if (n_files > 1)
+    g_warning ("Can only open a single file");
+
+  activate (application);
+
+  load_file (files[0]);
+}
+
 int
 main (int argc, char **argv)
 {
@@ -832,7 +863,7 @@ main (int argc, char **argv)
     g_clear_error (&error);
   }
 
-  app = gtk_application_new ("org.gtk.PrintEditor", 0);
+  app = gtk_application_new ("org.gtk.PrintEditor4", G_APPLICATION_HANDLES_OPEN);
 
   g_action_map_add_action_entries (G_ACTION_MAP (app),
                                    app_entries, G_N_ELEMENTS (app_entries),
@@ -840,7 +871,7 @@ main (int argc, char **argv)
 
   g_signal_connect (app, "startup", G_CALLBACK (startup), NULL);
   g_signal_connect (app, "activate", G_CALLBACK (activate), NULL);
-  g_signal_connect (app, "command-line", G_CALLBACK (command_line), NULL);
+  g_signal_connect (app, "open", G_CALLBACK (open), NULL);
 
   g_application_run (G_APPLICATION (app), argc, argv);
 
