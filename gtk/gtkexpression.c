@@ -1961,7 +1961,7 @@ gtk_expression_bind_notify (gpointer data)
  * @self: (transfer full): a #GtkExpression
  * @target: (transfer none) (type GObject): the target object to bind to
  * @property: name of the property on @target to bind to
- * @this_: (transfer none) (type GObject): the this argument for
+ * @this_: (transfer none) (type GObject) (nullable): the this argument for
  *     the evaluation of @self
  *
  * Bind @target's property named @property to @self.
@@ -1992,6 +1992,8 @@ gtk_expression_bind (GtkExpression *self,
   g_return_val_if_fail (GTK_IS_EXPRESSION (self), NULL);
   g_return_val_if_fail (G_IS_OBJECT (target), NULL);
   g_return_val_if_fail (property != NULL, NULL);
+  g_return_val_if_fail (this_ == NULL || G_IS_OBJECT (this_), NULL);
+
   pspec = g_object_class_find_property (G_OBJECT_GET_CLASS (target), property);
   if (G_UNLIKELY (pspec == NULL))
     {
