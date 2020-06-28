@@ -749,6 +749,7 @@ gtk_im_context_wayland_focus_in (GtkIMContext *context)
   if (context_wayland->gesture)
     gtk_event_controller_reset (GTK_EVENT_CONTROLLER (context_wayland->gesture));
   global->current = context;
+  g_object_add_weak_pointer (G_OBJECT (context), (gpointer *) &global->current);
 
   if (global->focused)
     enable (context_wayland);
