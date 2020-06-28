@@ -2079,6 +2079,9 @@ gdk_wayland_display_get_setting (GdkDisplay *display,
 {
   TranslationEntry *entry;
 
+  if (GDK_DISPLAY_DEBUG_CHECK (display, DEFAULT_SETTINGS))
+      return FALSE;
+
   if (GDK_WAYLAND_DISPLAY (display)->settings != NULL &&
       g_hash_table_size (GDK_WAYLAND_DISPLAY (display)->settings) == 0)
     return FALSE;

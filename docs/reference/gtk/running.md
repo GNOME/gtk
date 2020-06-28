@@ -4,9 +4,10 @@
 
 GTK inspects a number of environment variables in addition to
 standard variables like `LANG`, `PATH`, `HOME` or `DISPLAY`; mostly
-to determine paths to look for certain files. The [X11]{#x11-envar},
-[Windows]{#win32-envar} and [Broadway]{#broadway-envar} GDK backends
-use some additional environment variables.
+to determine paths to look for certain files. The [X11](#x11-envar),
+[Wayland](#wayland-envar), [Windows](#win32-envar) and
+[Broadway](#broadway-envar) GDK backends use some additional
+environment variables.
 
 ### GTK_DEBUG {#GTK_Debug-Options}
 

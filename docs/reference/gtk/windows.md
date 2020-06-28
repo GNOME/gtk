@@ -16,7 +16,6 @@ variables.
 ### GDK_IGNORE_WINTAB
 
 If this variable is set, GTK doesn't use the Wintab API for tablet support.
-</para>
 
 ### GDK_USE_WINTAB
 
@@ -37,10 +36,10 @@ can override GTK settings in the `settings.ini` file or at runtime in the
 GTK Inspector.
 
 Themes are loaded from normal Windows variants of the XDG locations:
-`%HOME%/icons/THEME/cursors`, 
-`%APPDATA%/icons/THEME/cursors`, 
+`%HOME%/icons/THEME/cursors`,
+`%APPDATA%/icons/THEME/cursors`,
 `RUNTIME_PREFIX/share/icons/THEME/cursors`
 
-The `gtk-cursor-theme-size`> setting is ignored, GTK will use
+The `gtk-cursor-theme-size` setting is ignored, GTK will use
 the cursor size that Windows tells it to use.
 

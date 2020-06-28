@@ -26,13 +26,6 @@ GArray *contents;
 
 static char next_value = 'A';
 
-static void
-test_init (void)
-{
-  if (g_file_test ("../modules/input/immodules.cache", G_FILE_TEST_EXISTS))
-    g_setenv ("GTK_IM_MODULE_FILE", "../modules/input/immodules.cache", TRUE);
-}
-
 G_GNUC_PRINTF (1, 2) static void
 combochange_log (const char *fmt,
                  ...)
@@ -199,8 +192,6 @@ main (int argc, char **argv)
   GtkWidget *button;
   GtkWidget *combo;
   GtkCellRenderer *cell_renderer;
-
-  test_init ();
 
   gtk_init ();
 

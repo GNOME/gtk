@@ -494,13 +494,6 @@ popsite_leave (GtkDropControllerMotion *motion)
 }
 
 static void
-test_init (void)
-{
-  if (g_file_test ("../modules/input/immodules.cache", G_FILE_TEST_EXISTS))
-    g_setenv ("GTK_IM_MODULE_FILE", "../modules/input/immodules.cache", TRUE);
-}
-
-static void
 quit_cb (GtkWidget *widget,
          gpointer   data)
 {
@@ -528,8 +521,6 @@ main (int argc, char **argv)
   GtkEventController *controller;
   gboolean done = FALSE;
 
-  test_init ();
-  
   gtk_init ();
 
   window = gtk_window_new ();

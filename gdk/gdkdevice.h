@@ -43,14 +43,12 @@ typedef struct _GdkTimeCoord GdkTimeCoord;
  * @GDK_SOURCE_CURSOR: the device is a graphics tablet “puck” or similar device.
  * @GDK_SOURCE_KEYBOARD: the device is a keyboard.
  * @GDK_SOURCE_TOUCHSCREEN: the device is a direct-input touch device, such
- *     as a touchscreen or tablet. This device type has been added in 3.4.
+ *     as a touchscreen or tablet
  * @GDK_SOURCE_TOUCHPAD: the device is an indirect touch device, such
- *     as a touchpad. This device type has been added in 3.4.
- * @GDK_SOURCE_TRACKPOINT: the device is a trackpoint. This device type has been
- *     added in 3.22
+ *     as a touchpad
+ * @GDK_SOURCE_TRACKPOINT: the device is a trackpoint
  * @GDK_SOURCE_TABLET_PAD: the device is a "pad", a collection of buttons,
- *     rings and strips found in drawing tablets. This device type has been
- *     added in 3.22.
+ *     rings and strips found in drawing tablets
  *
  * An enumeration describing the type of an input device in general terms.
  */

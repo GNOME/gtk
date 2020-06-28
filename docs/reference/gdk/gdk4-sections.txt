@@ -378,7 +378,6 @@ gdk_device_get_state
 gdk_device_get_surface_at_position
 GdkTimeCoord
 gdk_device_get_axis
-gdk_device_get_axis_names
 
 <SUBSECTION>
 gdk_device_tool_get_serial
@@ -483,6 +482,7 @@ gdk_event_get_source_device
 gdk_event_get_device_tool
 gdk_event_get_time
 gdk_event_get_display
+gdk_event_get_seat
 GdkEventSequence
 gdk_event_get_event_sequence
 gdk_event_get_modifier_state

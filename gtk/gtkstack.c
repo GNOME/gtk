@@ -1504,16 +1504,16 @@ gtk_stack_get_child_by_name (GtkStack    *stack,
 
 /**
  * gtk_stack_page_get_child:
- * @page: a #GtkStackPage
+ * @self: a #GtkStackPage
  *
- * Returns the stack child to which @page belongs.
+ * Returns the stack child to which @self belongs.
  *
- * Returns: (transfer none): the child to which @page belongs
+ * Returns: (transfer none): the child to which @self belongs
  */
 GtkWidget *
-gtk_stack_page_get_child (GtkStackPage *page)
+gtk_stack_page_get_child (GtkStackPage *self)
 {
-  return page->widget;
+  return self->widget;
 }
 
 /**
@@ -2456,11 +2456,13 @@ gtk_stack_get_pages (GtkStack *stack)
 
 /**
  * gtk_stack_page_get_visible:
- * @page: a #GtkStackPage
+ * @self: a #GtkStackPage
  *
  * Returns whether @page is visible in its #GtkStack.
  * This is independent from the #GtkWidget:visible value of its
  * #GtkWidget.
+ *
+ * Returns: %TRUE if @page is visible
  */
 gboolean
 gtk_stack_page_get_visible (GtkStackPage *self)
@@ -2472,7 +2474,7 @@ gtk_stack_page_get_visible (GtkStackPage *self)
 
 /**
  * gtk_stack_page_set_visible:
- * @page: a #GtkStackPage
+ * @self: a #GtkStackPage
  * @visible: The new property value
  *
  * Sets the new value of the #GtkStackPage:visible property
