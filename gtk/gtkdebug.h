@@ -45,15 +45,14 @@ typedef enum {
   GTK_DEBUG_BUILDER         = 1 <<  7,
   GTK_DEBUG_SIZE_REQUEST    = 1 <<  8,
   GTK_DEBUG_NO_CSS_CACHE    = 1 <<  9,
-  GTK_DEBUG_SHORTCUTS       = 1 << 10,
-  GTK_DEBUG_INTERACTIVE     = 1 << 11,
-  GTK_DEBUG_TOUCHSCREEN     = 1 << 12,
-  GTK_DEBUG_ACTIONS         = 1 << 13,
-  GTK_DEBUG_RESIZE          = 1 << 14,
-  GTK_DEBUG_LAYOUT          = 1 << 15,
-  GTK_DEBUG_SNAPSHOT        = 1 << 16,
-  GTK_DEBUG_CONSTRAINTS     = 1 << 17,
-  GTK_DEBUG_BUILDER_OBJECTS = 1 << 18,
+  GTK_DEBUG_INTERACTIVE     = 1 << 10,
+  GTK_DEBUG_TOUCHSCREEN     = 1 << 11,
+  GTK_DEBUG_ACTIONS         = 1 << 12,
+  GTK_DEBUG_RESIZE          = 1 << 13,
+  GTK_DEBUG_LAYOUT          = 1 << 14,
+  GTK_DEBUG_SNAPSHOT        = 1 << 15,
+  GTK_DEBUG_CONSTRAINTS     = 1 << 16,
+  GTK_DEBUG_BUILDER_OBJECTS = 1 << 17,
 } GtkDebugFlag;
 
 #ifdef G_ENABLE_DEBUG
