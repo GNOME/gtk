@@ -2,6 +2,7 @@
 #include <math.h>
 #include <pango/pangocairo.h>
 #include <gtk/gtk.h>
+#include <cups/cups.h>
 
 static GtkWidget *main_window;
 static GFile *filename = NULL;
@@ -23,7 +24,7 @@ update_title (GtkWindow *window)
   else
     basename = g_file_get_basename (filename);
 
-  title = g_strdup_printf ("Simple Editor with printing - %s", basename);
+  title = g_strdup_printf ("GTK Print Editor — %s", basename);
   g_free (basename);
 
   gtk_window_set_title (window, title);
@@ -592,18 +593,54 @@ activate_about (GSimpleAction *action,
                 GVariant      *parameter,
                 gpointer       user_data)
 {
-  const gchar *authors[] = {
-    "Alexander Larsson",
-    NULL
-  };
+  char *version;
+  GString *sysinfo;
+  char *setting;
+  char **backends;
+  int i;
+
+  sysinfo = g_string_new ("System libraries\n");
+  g_string_append_printf (sysinfo, "\tGLib\t%d.%d.%d\n",
+                          glib_major_version,
+                          glib_minor_version,
+                          glib_micro_version);
+  g_string_append_printf (sysinfo, "\tPango\t%s\n",
+                          pango_version_string ());
+  g_string_append_printf (sysinfo, "\tGTK\t%d.%d.%d\n",
+                          gtk_get_major_version (),
+                          gtk_get_minor_version (),
+                          gtk_get_micro_version ());
+
+  g_string_append (sysinfo, "\nPrint backends\n");
+
+  g_object_get (gtk_settings_get_default (), "gtk-print-backends", &setting, NULL);
+  backends = g_strsplit (setting, ",", -1);
+  for (i = 0; backends[i]; i++)
+    g_string_append_printf (sysinfo, "\t%s\n", backends[i]);
+  g_strfreev (backends);
+  g_free (setting);
+
+  version = g_strdup_printf ("%s\nRunning against GTK %d.%d.%d",
+                             PACKAGE_VERSION,
+                             gtk_get_major_version (),
+                             gtk_get_minor_version (),
+                             gtk_get_micro_version ());
+
   gtk_show_about_dialog (GTK_WINDOW (main_window),
-                         "name", "Print Test Editor",
-                         "logo-icon-name", "text-editor-symbolic",
-                         "version", PACKAGE_VERSION,
+                         "program-name", "GTK Print Editor",
+                         "version", version,
                          "copyright", "© 2006-2020 Red Hat, Inc",
-                         "comments", "Program to demonstrate GTK printing.",
-                         "authors", authors,
+                         "license-type", GTK_LICENSE_LGPL_2_1,
+                         "website", "http://www.gtk.org",
+                         "comments", "Program to demonstrate GTK printing",
+                         "authors", (const char *[]){ "Alexander Larsson", NULL },
+                         "logo-icon-name", "text-editor-symbolic",
+                         "title", "About GTK Print Editor",
+                         "system-information", sysinfo->str,
                          NULL);
+
+  g_string_free (sysinfo, TRUE);
+  g_free (version);
 }
 
 static void
@@ -643,23 +680,6 @@ static const gchar ui_info[] =
   "<interface>"
   "  <menu id='menubar'>"
   "    <submenu>"
-  "      <attribute name='label'>_Application</attribute>"
-  "      <section>"
-  "        <item>"
-  "          <attribute name='label'>_About</attribute>"
-  "          <attribute name='action'>app.about</attribute>"
-  "          <attribute name='accel'>&lt;Primary&gt;a</attribute>"
-  "        </item>"
-  "      </section>"
-  "      <section>"
-  "        <item>"
-  "          <attribute name='label'>_Quit</attribute>"
-  "          <attribute name='action'>app.quit</attribute>"
-  "          <attribute name='accel'>&lt;Primary&gt;q</attribute>"
-  "        </item>"
-  "      </section>"
-  "    </submenu>"
-  "    <submenu>"
   "      <attribute name='label'>_File</attribute>"
   "      <section>"
   "        <item>"
@@ -694,6 +714,23 @@ static const gchar ui_info[] =
   "        <item>"
   "          <attribute name='label'>Print</attribute>"
   "          <attribute name='action'>app.print</attribute>"
+  "        </item>"
+  "      </section>"
+  "      <section>"
+  "        <item>"
+  "          <attribute name='label'>_Quit</attribute>"
+  "          <attribute name='action'>app.quit</attribute>"
+  "          <attribute name='accel'>&lt;Primary&gt;q</attribute>"
+  "        </item>"
+  "      </section>"
+  "    </submenu>"
+  "    <submenu>"
+  "      <attribute name='label'>_Help</attribute>"
+  "      <section>"
+  "        <item>"
+  "          <attribute name='label'>_About Print Editor</attribute>"
+  "          <attribute name='action'>app.about</attribute>"
+  "          <attribute name='accel'>&lt;Primary&gt;a</attribute>"
   "        </item>"
   "      </section>"
   "    </submenu>"
