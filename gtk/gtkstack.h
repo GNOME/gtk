@@ -146,11 +146,6 @@ void                   gtk_stack_set_visible_child_full  (GtkStack              
                                                           const gchar            *name,
                                                           GtkStackTransitionType  transition);
 GDK_AVAILABLE_IN_ALL
-void                   gtk_stack_set_homogeneous         (GtkStack               *stack,
-                                                          gboolean                homogeneous);
-GDK_AVAILABLE_IN_ALL
-gboolean               gtk_stack_get_homogeneous         (GtkStack               *stack);
-GDK_AVAILABLE_IN_ALL
 void                   gtk_stack_set_hhomogeneous        (GtkStack               *stack,
                                                           gboolean                hhomogeneous);
 GDK_AVAILABLE_IN_ALL
