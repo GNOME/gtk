@@ -126,16 +126,46 @@ activate_inspector (GSimpleAction *action,
   gtk_window_set_interactive_debugging (TRUE);
 }
 
+static void
+activate_help (GSimpleAction *action,
+               GVariant      *parameter,
+               gpointer       user_data)
+{
+  GtkBuilder *builder;
+  GtkWidget *window;
+  GtkTextBuffer *buffer;
+  GBytes *bytes;
+  const char *text;
+  gsize len;
+
+  builder = gtk_builder_new ();
+  gtk_builder_add_from_resource (builder, "/org/gtk/gtk4/node-editor/help-window.ui", NULL);
+  window = GTK_WIDGET (gtk_builder_get_object (builder, "window"));
+  buffer = GTK_TEXT_BUFFER (gtk_builder_get_object (builder, "buffer"));
+
+  bytes = g_resources_lookup_data ("/org/gtk/gtk4/node-editor/node-format.md",
+                                   G_RESOURCE_LOOKUP_FLAGS_NONE,
+                                   NULL);
+  text = g_bytes_get_data (bytes, &len);
+  gtk_text_buffer_set_text (buffer, text, len);
+  g_bytes_unref (bytes);
+
+  gtk_window_present (GTK_WINDOW (window));
+  g_object_unref (builder);
+}
+
 static GActionEntry app_entries[] =
 {
   { "about", activate_about, NULL, NULL, NULL },
   { "quit", activate_quit, NULL, NULL, NULL },
   { "inspector", activate_inspector, NULL, NULL, NULL },
+  { "help", activate_help, NULL, NULL, NULL },
 };
 
 static void
 node_editor_application_startup (GApplication *app)
 {
+  const char *help_accels[2] = { "F1", NULL };
   const char *quit_accels[2] = { "<Ctrl>Q", NULL };
   const char *open_accels[2] = { "<Ctrl>O", NULL };
   GtkCssProvider *provider;
@@ -145,6 +175,7 @@ node_editor_application_startup (GApplication *app)
   g_action_map_add_action_entries (G_ACTION_MAP (app),
                                    app_entries, G_N_ELEMENTS (app_entries),
                                    app);
+  gtk_application_set_accels_for_action (GTK_APPLICATION (app), "app.help", help_accels);
   gtk_application_set_accels_for_action (GTK_APPLICATION (app), "app.quit", quit_accels);
   gtk_application_set_accels_for_action (GTK_APPLICATION (app), "win.open", open_accels);
 
