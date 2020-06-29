@@ -30,6 +30,9 @@
 #include "gtkpango.h"
 
 #include <math.h>
+#include <float.h>
+
+#define CORNER_MASK_CACHE_MAX_SIZE 2000U
 
 struct _GtkCssValue {
   GTK_CSS_VALUE_BASE
@@ -663,16 +666,18 @@ draw_shadow (const GtkCssValue   *shadow,
 }
 
 typedef struct {
-  double radius;
-  GtkRoundedBoxCorner corner;
+  gint radius;
+  /* rounded box corner */
+  gint corner_horizontal;
+  gint corner_vertical;
 } CornerMask;
 
 static guint
 corner_mask_hash (CornerMask *mask)
 {
-  return ((guint)mask->radius << 24) ^
-    ((guint)(mask->corner.horizontal*4)) << 12 ^
-    ((guint)(mask->corner.vertical*4)) << 0;
+  return ((guint)mask->radius) << 24 ^
+    ((guint)mask->corner_horizontal) << 12 ^
+    ((guint)mask->corner_vertical) << 0;
 }
 
 static gboolean
@@ -681,8 +686,33 @@ corner_mask_equal (CornerMask *mask1,
 {
   return
     mask1->radius == mask2->radius &&
-    mask1->corner.horizontal == mask2->corner.horizontal &&
-    mask1->corner.vertical == mask2->corner.vertical;
+    mask1->corner_horizontal == mask2->corner_horizontal &&
+    mask1->corner_vertical == mask2->corner_vertical;
+}
+
+static gint
+truncate_to_int (double val)
+{
+  if (isnan (val))
+    return 0;
+  if (val >= G_MAXINT)
+    return G_MAXINT;
+  if (val <= G_MININT)
+    return G_MININT;
+  return (gint) val;
+}
+
+static inline gint
+round_to_int (double val)
+{
+  return truncate_to_int (val + (val > 0 ? 0.5 : -0.5));
+}
+
+static inline gint
+quantize_to_int (double val)
+{
+  const double precision_factor = 10.0;
+  return round_to_int (val * precision_factor);
 }
 
 static void
@@ -784,7 +814,7 @@ draw_shadow_corner (const GtkCssValue   *shadow,
    *
    * The blur radius (which also defines the clip_radius)
    *
-   * The the horizontal and vertical corner radius
+   * The horizontal and vertical corner radius
    *
    * We apply the first position and orientation when drawing the
    * mask, so we cache rendered masks based on the blur radius and the
@@ -795,8 +825,9 @@ draw_shadow_corner (const GtkCssValue   *shadow,
                                                (GEqualFunc)corner_mask_equal,
                                                g_free, (GDestroyNotify)cairo_surface_destroy);
 
-  key.radius = radius;
-  key.corner = box->corner[corner];
+  key.radius = quantize_to_int (radius);
+  key.corner_horizontal = quantize_to_int (box->corner[corner].horizontal);
+  key.corner_vertical = quantize_to_int (box->corner[corner].vertical);
 
   mask = g_hash_table_lookup (corner_mask_cache, &key);
   if (mask == NULL)
@@ -811,6 +842,17 @@ draw_shadow_corner (const GtkCssValue   *shadow,
       cairo_fill (mask_cr);
       _gtk_cairo_blur_surface (mask, radius, GTK_BLUR_X | GTK_BLUR_Y);
       cairo_destroy (mask_cr);
+
+      if (g_hash_table_size (corner_mask_cache) >= CORNER_MASK_CACHE_MAX_SIZE)
+        {
+          GHashTableIter iter;
+          guint i = 0;
+
+          g_hash_table_iter_init (&iter, corner_mask_cache);
+          while (g_hash_table_iter_next (&iter, NULL, NULL))
+            if (i++ % 4 == 0)
+              g_hash_table_iter_remove (&iter);
+        }
       g_hash_table_insert (corner_mask_cache, g_memdup (&key, sizeof (key)), mask);
     }
 
