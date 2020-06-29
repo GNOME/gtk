@@ -220,7 +220,7 @@ gtk_bitset_new_empty (void)
  *
  * Creates a copy of @self.
  *
- * Returns: (transfer full) A new bitset that contains the same
+ * Returns: (transfer full): A new bitset that contains the same
  *     values as @self
  **/
 GtkBitset *
@@ -399,7 +399,7 @@ gtk_bitset_add_rectangle (GtkBitset *self,
   guint i;
 
   g_return_if_fail (self != NULL);
-  g_return_if_fail (width <= stride);
+  g_return_if_fail ((start % stride) + width <= stride);
   g_return_if_fail (G_MAXUINT - start >= height * stride);
 
   if (width == 0 || height == 0)
@@ -664,7 +664,7 @@ G_STATIC_ASSERT (sizeof (GtkBitsetIter) >= sizeof (roaring_uint32_iterator_t));
 
 /**
  * gtk_bitset_iter_init_first:
- * @iter: (out): a pointer to a preallocated #GtkBitsetIter
+ * @iter: (out): a pointer to an uninitialized #GtkBitsetIter
  * @set: a #GtkBitset
  * @value: (out) (optional): Set to the first value in @set
  *
@@ -694,7 +694,7 @@ gtk_bitset_iter_init_first (GtkBitsetIter   *iter,
 
 /**
  * gtk_bitset_iter_init_last:
- * @iter: (out): a pointer to a preallocated #GtkBitsetIter
+ * @iter: (out): a pointer to an uninitialized #GtkBitsetIter
  * @set: a #GtkBitset
  * @value: (out) (optional): Set to the last value in @set
  *
@@ -723,7 +723,7 @@ gtk_bitset_iter_init_last (GtkBitsetIter    *iter,
 
 /**
  * gtk_bitset_iter_init_at:
- * @iter: a #GtkBitsetIter
+ * @iter: (out): a pointer to an uninitialized #GtkBitsetIter
  * @set: a #GtkBitset
  * @target: target value to start iterating at
  * @value: (out) (optional): Set to the found value in @set
@@ -851,7 +851,7 @@ gtk_bitset_iter_get_value (const GtkBitsetIter *iter)
  * gtk_bitset_iter_is_valid:
  * @iter: a #GtkBitsetIter
  *
- * Checks if @iter points to a valid value
+ * Checks if @iter points to a valid value.
  *
  * Returns: %TRUE if @iter points to a valid value
  **/
@@ -864,4 +864,3 @@ gtk_bitset_iter_is_valid (const GtkBitsetIter *iter)
 
   return riter->has_value;
 }
-
