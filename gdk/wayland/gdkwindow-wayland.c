@@ -123,6 +123,7 @@ struct _GdkWindowImplWayland
     struct xdg_surface *xdg_surface;
     struct xdg_toplevel *xdg_toplevel;
     struct xdg_popup *xdg_popup;
+    struct zxdg_toplevel_decoration_v1 *xdg_toplevel_decoration;
 
     /* Legacy xdg-shell unstable v6 fallback support */
     struct zxdg_surface_v6 *zxdg_surface_v6;
@@ -134,7 +135,6 @@ struct _GdkWindowImplWayland
     struct wl_egl_window *egl_window;
     struct wl_egl_window *dummy_egl_window;
     struct zxdg_exported_v1 *xdg_exported;
-    struct org_kde_kwin_server_decoration *server_decoration;
   } display_server;
 
   EGLSurface egl_surface;
@@ -270,7 +270,6 @@ static void calculate_moved_to_rect_result (GdkWindow    *window,
 
 static gboolean gdk_wayland_window_is_exported (GdkWindow *window);
 static void gdk_wayland_window_unexport (GdkWindow *window);
-static void gdk_wayland_window_announce_decoration_mode (GdkWindow *window);
 
 static gboolean should_map_as_subsurface (GdkWindow *window);
 static gboolean should_map_as_popup (GdkWindow *window);
@@ -1625,7 +1624,7 @@ gdk_wayland_window_handle_configure (GdkWindow *window,
     }
 
   new_state = impl->pending.state;
-  impl->pending.state = 0;
+  impl->pending.state = impl->pending.state & GDK_WINDOW_STATE_SSD;
 
   fixed_size = should_use_fixed_size (new_state);
 
@@ -1704,12 +1703,13 @@ gdk_wayland_window_handle_configure (GdkWindow *window,
     }
 
   GDK_NOTE (EVENTS,
-            g_message ("configure, window %p %dx%d,%s%s%s%s",
+            g_message ("configure, window %p %dx%d,%s%s%s%s%s",
                        window, width, height,
                        (new_state & GDK_WINDOW_STATE_FULLSCREEN) ? " fullscreen" : "",
                        (new_state & GDK_WINDOW_STATE_MAXIMIZED) ? " maximized" : "",
                        (new_state & GDK_WINDOW_STATE_FOCUSED) ? " focused" : "",
-                       (new_state & GDK_WINDOW_STATE_TILED) ? " tiled" : ""));
+                       (new_state & GDK_WINDOW_STATE_TILED) ? " tiled" : "",
+                       (new_state & GDK_WINDOW_STATE_SSD) ? " ssd" : ""));
 
   _gdk_set_window_state (window, new_state);
 
@@ -1736,6 +1736,8 @@ gdk_wayland_window_handle_configure_toplevel (GdkWindow     *window,
                                               GdkWindowState state)
 {
   GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+
+  state |= impl->pending.state & GDK_WINDOW_STATE_SSD;
 
   impl->pending.state |= state;
   impl->pending.width = width;
@@ -1826,6 +1828,26 @@ static const struct xdg_toplevel_listener xdg_toplevel_listener = {
 };
 
 static void
+xdg_toplevel_decoration_configure (void                               *data,
+                                   struct zxdg_toplevel_decoration_v1 *zxdg_toplevel_decoration_v1,
+                                   uint32_t                           mode)
+{
+  GdkWindow *window = GDK_WINDOW (data);
+  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+
+  if (mode == ZXDG_TOPLEVEL_DECORATION_V1_MODE_SERVER_SIDE)
+    impl->pending.state |= GDK_WINDOW_STATE_SSD;
+  else if (mode == ZXDG_TOPLEVEL_DECORATION_V1_MODE_CLIENT_SIDE)
+    impl->pending.state &= ~GDK_WINDOW_STATE_SSD;
+  else
+    g_assert_not_reached();
+}
+
+static const struct zxdg_toplevel_decoration_v1_listener xdg_toplevel_decoration_listener = {
+  xdg_toplevel_decoration_configure,
+};
+
+static void
 create_xdg_toplevel_resources (GdkWindow *window)
 {
   GdkWaylandDisplay *display_wayland =
@@ -1844,6 +1866,17 @@ create_xdg_toplevel_resources (GdkWindow *window)
   xdg_toplevel_add_listener (impl->display_server.xdg_toplevel,
                              &xdg_toplevel_listener,
                              window);
+
+  if (display_wayland->xdg_decoration_manager)
+    {
+      impl->display_server.xdg_toplevel_decoration =
+        zxdg_decoration_manager_v1_get_toplevel_decoration (display_wayland->xdg_decoration_manager,
+                                                            impl->display_server.xdg_toplevel);
+      zxdg_toplevel_decoration_v1_add_listener (impl->display_server.xdg_toplevel_decoration,
+                                                &xdg_toplevel_decoration_listener,
+                                                window);
+      zxdg_toplevel_decoration_v1_unset_mode (impl->display_server.xdg_toplevel_decoration);
+    }
 }
 
 static void
@@ -2227,68 +2260,38 @@ window_anchor_to_gravity_legacy (GdkGravity rect_anchor)
     }
 }
 
-static void
-kwin_server_decoration_mode_set (void *data, struct org_kde_kwin_server_decoration *org_kde_kwin_server_decoration, uint32_t mode)
+void
+gdk_wayland_window_request_csd (GdkWindow *window)
 {
-  GdkWindow *window = GDK_WINDOW (data);
   GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
 
-  if ((mode == ORG_KDE_KWIN_SERVER_DECORATION_MODE_SERVER && impl->using_csd) ||
-        (mode == ORG_KDE_KWIN_SERVER_DECORATION_MODE_CLIENT && !impl->using_csd))
-    gdk_wayland_window_announce_decoration_mode (window);
+  if (impl->display_server.xdg_toplevel_decoration)
+    zxdg_toplevel_decoration_v1_set_mode (impl->display_server.xdg_toplevel_decoration,
+                                          ZXDG_TOPLEVEL_DECORATION_V1_MODE_CLIENT_SIDE);
 }
 
-static const struct org_kde_kwin_server_decoration_listener kwin_server_decoration_listener = {
-  kwin_server_decoration_mode_set
-};
-
-static void
-gdk_wayland_window_announce_decoration_mode (GdkWindow *window)
+void
+gdk_wayland_window_request_ssd (GdkWindow *window)
 {
-  GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (gdk_window_get_display (window));
   GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
 
-  if (!display_wayland->server_decoration_manager)
-    return;
-  if (!impl->display_server.server_decoration)
-    {
-      impl->display_server.server_decoration =
-        org_kde_kwin_server_decoration_manager_create (display_wayland->server_decoration_manager,
-                                                                                         impl->display_server.wl_surface);
-      org_kde_kwin_server_decoration_add_listener (impl->display_server.server_decoration,
-                                                                                &kwin_server_decoration_listener,
-                                                                                window);
-  }
-
-  if (impl->display_server.server_decoration)
-    {
-      if (impl->using_csd)
-        org_kde_kwin_server_decoration_request_mode (impl->display_server.server_decoration,
-                                                                                     ORG_KDE_KWIN_SERVER_DECORATION_MODE_CLIENT);
-      else
-        org_kde_kwin_server_decoration_request_mode (impl->display_server.server_decoration,
-                                                                                     ORG_KDE_KWIN_SERVER_DECORATION_MODE_SERVER);
-    }
+  if (impl->display_server.xdg_toplevel_decoration)
+    zxdg_toplevel_decoration_v1_set_mode (impl->display_server.xdg_toplevel_decoration,
+                                          ZXDG_TOPLEVEL_DECORATION_V1_MODE_SERVER_SIDE);
 }
 
 void
 gdk_wayland_window_announce_csd (GdkWindow *window)
 {
-  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
-
-  impl->using_csd = TRUE;
-  if (impl->mapped)
-    gdk_wayland_window_announce_decoration_mode (window);
+  /* deprecated as this no is no longer an annoncement but a request */
+  gdk_wayland_window_request_csd (window);
 }
 
 void
 gdk_wayland_window_announce_ssd (GdkWindow *window)
 {
-  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
-
-  impl->using_csd = FALSE;
-  if (impl->mapped)
-    gdk_wayland_window_announce_decoration_mode (window);
+  /* deprecated as this no is no longer an annoncement but a request */
+  gdk_wayland_window_request_ssd (window);
 }
 
 static GdkWindow *
@@ -3141,13 +3144,11 @@ gdk_wayland_window_map (GdkWindow *window)
       else
         {
           gdk_wayland_window_create_xdg_toplevel (window);
-          gdk_wayland_window_announce_decoration_mode (window);
         }
     }
   else
     {
       gdk_wayland_window_create_xdg_toplevel (window);
-      gdk_wayland_window_announce_decoration_mode (window);
     }
 
   impl->mapped = TRUE;
@@ -3249,6 +3250,12 @@ gdk_wayland_window_hide_surface (GdkWindow *window)
 
       if (impl->display_server.xdg_toplevel)
         {
+          if (impl->display_server.xdg_toplevel_decoration)
+            {
+              zxdg_toplevel_decoration_v1_destroy (impl->display_server.xdg_toplevel_decoration);
+              impl->display_server.xdg_toplevel_decoration = NULL;
+            }
+
           xdg_toplevel_destroy (impl->display_server.xdg_toplevel);
           impl->display_server.xdg_toplevel = NULL;
         }
@@ -3309,12 +3316,6 @@ gdk_wayland_window_hide_surface (GdkWindow *window)
           gtk_surface1_destroy (impl->display_server.gtk_surface);
           impl->display_server.gtk_surface = NULL;
           impl->application.was_set = FALSE;
-        }
-
-      if (impl->display_server.server_decoration)
-        {
-          org_kde_kwin_server_decoration_release (impl->display_server.server_decoration);
-          impl->display_server.server_decoration = NULL;
         }
 
       wl_surface_destroy (impl->display_server.wl_surface);
