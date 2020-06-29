@@ -93,6 +93,8 @@ struct _GtkIMContextWayland
   guint use_preedit : 1;
 };
 
+static void gtk_im_context_wayland_focus_out (GtkIMContext *context);
+
 G_DEFINE_TYPE_WITH_CODE (GtkIMContextWayland, gtk_im_context_wayland, GTK_TYPE_IM_CONTEXT_SIMPLE,
 			 gtk_im_module_ensure_extension_point ();
                          g_io_extension_point_implement (GTK_IM_MODULE_EXTENSION_POINT_NAME,
@@ -475,6 +477,8 @@ static void
 gtk_im_context_wayland_finalize (GObject *object)
 {
   GtkIMContextWayland *context = GTK_IM_CONTEXT_WAYLAND (object);
+
+  gtk_im_context_wayland_focus_out (GTK_IM_CONTEXT (context));
 
   g_clear_object (&context->widget);
   g_clear_object (&context->gesture);
