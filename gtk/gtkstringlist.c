@@ -138,8 +138,7 @@ gtk_string_object_class_init (GtkStringObjectClass *class)
 
   pspec = g_param_spec_string ("string", "String", "String",
                                NULL,
-                               G_PARAM_READWRITE |
-                               G_PARAM_CONSTRUCT_ONLY |
+                               G_PARAM_READABLE |
                                G_PARAM_STATIC_STRINGS);
 
   g_object_class_install_property (object_class, PROP_STRING, pspec);
@@ -149,7 +148,12 @@ gtk_string_object_class_init (GtkStringObjectClass *class)
 static GtkStringObject *
 gtk_string_object_new (const char *string)
 {
-  return g_object_new (GTK_TYPE_STRING_OBJECT, "string", string, NULL);
+  GtkStringObject *result;
+
+  result = g_object_new (GTK_TYPE_STRING_OBJECT, NULL);
+  result->string = g_strdup (string);
+
+  return result;
 }
 
 static GtkStringObject *
