@@ -17,8 +17,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-28 19:21+0000\n"
-"PO-Revision-Date: 2020-06-29 15:45+0200\n"
+"POT-Creation-Date: 2020-06-29 14:04+0000\n"
+"PO-Revision-Date: 2020-06-29 16:32+0200\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: Spanish - Spain <gnome-es-list@gnome.org>\n"
 "Language: es_ES\n"
@@ -6920,12 +6920,10 @@ msgstr ""
 "derecha y derecha-a-izquierda"
 
 #: gtk/gtksettings.c:461
-#| msgid "Cursor line aspect ratio"
 msgid "Cursor Aspect Ratio"
 msgstr "Proporción del aspecto del cursor"
 
 #: gtk/gtksettings.c:462
-#, fuzzy
 #| msgid "The orientation of the orientable"
 msgid "The aspect ratio of the text caret"
 msgstr "La proporción de aspecto del cursor"
