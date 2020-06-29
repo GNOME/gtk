@@ -1,3 +1,4 @@
+
 /*
  * Copyright © 2019 Benjamin Otte
  *
@@ -28,18 +29,50 @@
  * @Short_description: Expressions to values
  * @Title: GtkExpression
  *
- * GtkExpression provides a way to describe references to #GValues.
+ * GtkExpression provides a way to describe references to values.
  *
- * An expression needs to be "evaluated" to obtain the value that it currently refers
- * to. An evaluation always happens in the context of a current object called `this`
- * (it mirrors the behavior of object-oriented languages), which may or may not
- * influence the result of the evaluation. Use gtk_expression_evaluate() for
- * evaluating an expression.
+ * An important aspect of expressions is that the value can be obtained
+ * from a source that is several steps away. For example, an expression
+ * may describe ‘the value of property A of @object1, which is itself the
+ * value of a property of @object2’. And @object1 may not even exist yet
+ * at the time that the expression is created. This is contrast to GObject
+ * property bindings, which can only create direct connections between
+ * the properties of two objects that must both exist for the duration
+ * of the binding.
+ *
+ * An expression needs to be "evaluated" to obtain the value that it currently
+ * refers to. An evaluation always happens in the context of a current object
+ * called `this` (it mirrors the behavior of object-oriented languages),
+ * which may or may not influence the result of the evaluation. Use
+ * gtk_expression_evaluate() for evaluating an expression.
  *
  * Various methods for defining expressions exist, from simple constants via
  * gtk_constant_expression_new() to looking up properties in a #GObject (even
- * recursively) via gtk_property_expression_new() or providing custom functions to
- * transform and combine expressions via gtk_closure_expression_new().
+ * recursively) via gtk_property_expression_new() or providing custom functions
+ * to transform and combine expressions via gtk_closure_expression_new().
+ *
+ * Here is an example of a complex expression:
+ * |[
+ * color_expr = gtk_property_expression_new (GTK_TYPE_LIST_ITEM,
+ *                                           NULL, "item");
+ * expression = gtk_property_expression_new (GTK_TYPE_COLOR,
+ *                                           color_expr,
+ *                                           "name");
+ * ]|
+ * when evaluated with `this` being a GtkListItem, it will obtain the
+ * "item" property from the GtkListItem, and then obtain the "name" property
+ * from the resulting object (which is assumed to be of type GTK_TYPE_COLOR).
+ *
+ * A more concise way to describe this would be
+ * |[
+ * this->item->name
+ * ]|
+ *
+ * The most likely place where you will encounter expressions is in the context
+ * of list models and list widgets using them. For example, #GtkDropDown is
+ * evaluating a GtkExpression to obtain strings from the items in its model
+ * that it can then use to match against the contents of its search entry.
+ * #GtkStringFilter is using a GtkExpression for a similar reason.
  *
  * By default, expressions are not paying attention to changes and evaluation is
  * just a snapshot of the current state at a given time. To get informed about
