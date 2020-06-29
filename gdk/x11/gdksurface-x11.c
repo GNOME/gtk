@@ -1374,6 +1374,14 @@ gdk_x11_surface_hide (GdkSurface *surface)
   _gdk_x11_surface_grab_check_unmap (surface,
                                     NextRequest (GDK_SURFACE_XDISPLAY (surface)));
 
+#ifdef HAVE_XDAMAGE
+  /* If we're about to withdraw the surface, then we don't care that the frame is
+   * still getting rendered by the GPU. The compositor is going to remove the surface
+   * from the scene anyway.
+   */
+  _gdk_x11_surface_set_frame_still_painting (surface, FALSE);
+#endif
+
   gdk_x11_surface_withdraw (surface);
 }
 
