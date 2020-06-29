@@ -33,7 +33,7 @@
  *
  * An important aspect of expressions is that the value can be obtained
  * from a source that is several steps away. For example, an expression
- * may describe ‘the value of property A of @object1, which is itself the
+ * may describe ‘the value of property A of `@object1`, which is itself the
  * value of a property of @object2’. And @object1 may not even exist yet
  * at the time that the expression is created. This is contrast to GObject
  * property bindings, which can only create direct connections between
