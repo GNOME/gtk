@@ -51,21 +51,121 @@ node_editor_application_init (NodeEditorApplication *app)
 }
 
 static void
-quit_activated (GSimpleAction *action,
+activate_about (GSimpleAction *action,
                 GVariant      *parameter,
-                gpointer       data)
+                gpointer       user_data)
+{
+  GtkApplication *app = user_data;
+  char *version;
+  GString *s;
+  GskRenderer *gsk_renderer;
+  const char *renderer;
+
+  s = g_string_new ("");
+
+  g_string_append (s, "System libraries\n");
+  g_string_append_printf (s, "\tGLib\t%d.%d.%d\n",
+                          glib_major_version,
+                          glib_minor_version,
+                          glib_micro_version);
+  g_string_append_printf (s, "\tPango\t%s\n",
+                          pango_version_string ());
+  g_string_append_printf (s, "\tGTK\t%d.%d.%d\n",
+                          gtk_get_major_version (),
+                          gtk_get_minor_version (),
+                          gtk_get_micro_version ());
+
+  gsk_renderer = gtk_native_get_renderer (GTK_NATIVE (gtk_application_get_active_window (app)));
+  if (strcmp (G_OBJECT_TYPE_NAME (gsk_renderer), "GskVulkanRenderer") == 0)
+    renderer = "Vulkan";
+  else if (strcmp (G_OBJECT_TYPE_NAME (gsk_renderer), "GskGLRenderer") == 0)
+    renderer = "OpenGL";
+  else if (strcmp (G_OBJECT_TYPE_NAME (gsk_renderer), "GskCairoRenderer") == 0)
+    renderer = "Cairo";
+  else
+    renderer = "Unknown";
+
+  g_string_append_printf (s, "\nRenderer\n\t%s", renderer);
+
+  version = g_strdup_printf ("%s\nRunning against GTK %d.%d.%d",
+                             PACKAGE_VERSION,
+                             gtk_get_major_version (),
+                             gtk_get_minor_version (),
+                             gtk_get_micro_version ());
+
+  gtk_show_about_dialog (GTK_WINDOW (gtk_application_get_active_window (app)),
+                         "program-name", "GTK Node Editor",
+                         "version", version,
+                         "copyright", "© 2019—2020 The GTK Team",
+                         "license-type", GTK_LICENSE_LGPL_2_1,
+                         "website", "http://www.gtk.org",
+                         "comments", "Program to test GTK rendering",
+                         "authors", (const char *[]){ "Benjamin Otte", "Timm Bäder", NULL},
+                         "logo-icon-name", "text-editor-symbolic",
+                         "title", "About GTK Node Editor",
+                         "system-information", s->str,
+                         NULL);
+
+  g_string_free (s, TRUE);
+  g_free (version);
+}
+
+static void
+activate_quit (GSimpleAction *action,
+               GVariant      *parameter,
+               gpointer       data)
 {
   g_application_quit (G_APPLICATION (data));
 }
 
+static void
+activate_inspector (GSimpleAction *action,
+                    GVariant      *parameter,
+                    gpointer       user_data)
+{
+  gtk_window_set_interactive_debugging (TRUE);
+}
+
+static void
+activate_help (GSimpleAction *action,
+               GVariant      *parameter,
+               gpointer       user_data)
+{
+  GtkBuilder *builder;
+  GtkWidget *window;
+  GtkTextBuffer *buffer;
+  GBytes *bytes;
+  const char *text;
+  gsize len;
+
+  builder = gtk_builder_new ();
+  gtk_builder_add_from_resource (builder, "/org/gtk/gtk4/node-editor/help-window.ui", NULL);
+  window = GTK_WIDGET (gtk_builder_get_object (builder, "window"));
+  buffer = GTK_TEXT_BUFFER (gtk_builder_get_object (builder, "buffer"));
+
+  bytes = g_resources_lookup_data ("/org/gtk/gtk4/node-editor/node-format.md",
+                                   G_RESOURCE_LOOKUP_FLAGS_NONE,
+                                   NULL);
+  text = g_bytes_get_data (bytes, &len);
+  gtk_text_buffer_set_text (buffer, text, len);
+  g_bytes_unref (bytes);
+
+  gtk_window_present (GTK_WINDOW (window));
+  g_object_unref (builder);
+}
+
 static GActionEntry app_entries[] =
 {
-  { "quit", quit_activated, NULL, NULL, NULL }
+  { "about", activate_about, NULL, NULL, NULL },
+  { "quit", activate_quit, NULL, NULL, NULL },
+  { "inspector", activate_inspector, NULL, NULL, NULL },
+  { "help", activate_help, NULL, NULL, NULL },
 };
 
 static void
 node_editor_application_startup (GApplication *app)
 {
+  const char *help_accels[2] = { "F1", NULL };
   const char *quit_accels[2] = { "<Ctrl>Q", NULL };
   const char *open_accels[2] = { "<Ctrl>O", NULL };
   GtkCssProvider *provider;
@@ -75,6 +175,7 @@ node_editor_application_startup (GApplication *app)
   g_action_map_add_action_entries (G_ACTION_MAP (app),
                                    app_entries, G_N_ELEMENTS (app_entries),
                                    app);
+  gtk_application_set_accels_for_action (GTK_APPLICATION (app), "app.help", help_accels);
   gtk_application_set_accels_for_action (GTK_APPLICATION (app), "app.quit", quit_accels);
   gtk_application_set_accels_for_action (GTK_APPLICATION (app), "win.open", open_accels);
 

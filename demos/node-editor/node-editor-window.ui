@@ -1,5 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
+  <menu id="gear_menu">
+    <section>
+      <item>
+        <attribute name="label" translatable="yes">_Help</attribute>
+        <attribute name="action">app.help</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">_Inspector</attribute>
+        <attribute name="action">app.inspector</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">_About Node Editor</attribute>
+        <attribute name="action">app.about</attribute>
+      </item>
+    </section>
+  </menu>
+
   <object class="GtkPopover" id="testcase_popover">
     <child>
       <object class="GtkGrid">
@@ -117,6 +134,13 @@
           <object class="GtkMenuButton">
             <property name="label">Save Testcase</property>
             <property name="popover">testcase_popover</property>
+          </object>
+        </child>
+        <child type="end">
+          <object class="GtkMenuButton" id="gear_menu_button">
+            <property name="valign">center</property>
+            <property name="menu-model">gear_menu</property>
+            <property name="icon-name">open-menu-symbolic</property>
           </object>
         </child>
       </object>

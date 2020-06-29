@@ -133,7 +133,7 @@ gtk_demo_run (GtkDemo   *self,
     }
   return TRUE;
 }
-              
+
 static void
 activate_about (GSimpleAction *action,
                 GVariant      *parameter,
@@ -1155,7 +1155,7 @@ out:
 static void
 print_version (void)
 {
-  g_print ("gtk3-demo %d.%d.%d\n",
+  g_print ("gtk4-demo %d.%d.%d\n",
            gtk_get_major_version (),
            gtk_get_minor_version (),
            gtk_get_micro_version ());
