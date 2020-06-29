@@ -133,7 +133,6 @@
 #include <gtk/gtkfontchooserdialog.h>
 #include <gtk/gtkfontchooserwidget.h>
 #include <gtk/gtkframe.h>
-#include <gtk/gtkfunctionslistitemfactory.h>
 #include <gtk/gtkgesture.h>
 #include <gtk/gtkgestureclick.h>
 #include <gtk/gtkgesturedrag.h>
