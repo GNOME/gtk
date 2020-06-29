@@ -345,7 +345,7 @@ test_subtract (void)
           gtk_bitset_unref (testset);
           gtk_bitset_unref (jset);
         }
-      
+
       gtk_bitset_unref (iset);
     }
 }
@@ -404,11 +404,7 @@ test_shift_right (void)
           for (k = min; k <= max; k++)
             {
               if (k <= G_MAXUINT - j)
-                {
-                if (gtk_bitset_contains (iset, k) != gtk_bitset_contains (testset, k + j))
-                  g_print ("right-shift fail set %u shift %u test %u\n", i, j, k);
                 g_assert_cmpint (gtk_bitset_contains (iset, k), ==, gtk_bitset_contains (testset, k + j));
-                }
             }
 
           gtk_bitset_unref (testset);
@@ -416,6 +412,135 @@ test_shift_right (void)
 
        gtk_bitset_unref (iset);
     }
+}
+
+static void
+test_slice (void)
+{
+  GtkBitset *set;
+  guint i;
+
+  set = gtk_bitset_new_empty ();
+
+  gtk_bitset_add_range (set, 10, 30);
+
+  gtk_bitset_slice (set, 20, 10, 20);
+
+  for (i = 0; i < 60; i++)
+    g_assert_cmpint (gtk_bitset_contains (set, i), ==, (i >= 10 && i < 20) ||
+                                                       (i >= 40 && i < 50));
+
+  gtk_bitset_slice (set, 25, 10, 0);
+
+  for (i = 0; i < 60; i++)
+    g_assert_cmpint (gtk_bitset_contains (set, i), ==, (i >= 10 && i < 20) ||
+                                                       (i >= 30 && i < 40));
+
+  gtk_bitset_unref (set);
+}
+
+static void
+test_rectangle (void)
+{
+  GtkBitset *set;
+  GString *s;
+  guint i, j;
+
+  set = gtk_bitset_new_empty ();
+
+  gtk_bitset_add_rectangle    (set,  8, 5, 5, 7);
+  gtk_bitset_remove_rectangle (set, 16, 3, 3, 7);
+  gtk_bitset_add_rectangle    (set, 24, 1, 1, 7);
+
+  s = g_string_new ("");
+  for (i = 0; i < 7; i++)
+    {
+      for (j = 0; j < 7; j++)
+        g_string_append_printf (s, "%c ",
+                                gtk_bitset_contains (set, i * 7 + j) ? '*' : ' ');
+      g_string_append (s, "\n");
+    }
+  g_assert_cmpstr (s->str, ==,
+      "              \n"
+      "  * * * * *   \n"
+      "  *       *   \n"
+      "  *   *   *   \n"
+      "  *       *   \n"
+      "  * * * * *   \n"
+      "              \n");
+
+  g_string_free (s, TRUE);
+  gtk_bitset_unref (set);
+}
+
+static void
+test_iter (void)
+{
+  GtkBitset *set;
+  GtkBitsetIter iter;
+  gboolean ret;
+  guint value;
+
+  set = gtk_bitset_new_empty ();
+
+  ret = gtk_bitset_iter_init_first (&iter, set, &value);
+  g_assert_false (ret);
+
+  g_assert_false (gtk_bitset_iter_is_valid (&iter));
+  g_assert_cmpuint (gtk_bitset_iter_get_value (&iter), ==, 0);
+  g_assert_false (gtk_bitset_iter_previous (&iter, &value));
+  g_assert_false (gtk_bitset_iter_next (&iter, &value));
+
+  ret = gtk_bitset_iter_init_last (&iter, set, &value);
+  g_assert_false (ret);
+
+  g_assert_false (gtk_bitset_iter_is_valid (&iter));
+  g_assert_cmpuint (gtk_bitset_iter_get_value (&iter), ==, 0);
+  g_assert_false (gtk_bitset_iter_previous (&iter, &value));
+  g_assert_false (gtk_bitset_iter_next (&iter, &value));
+
+  ret = gtk_bitset_iter_init_at (&iter, set, 0, &value);
+
+  g_assert_false (gtk_bitset_iter_is_valid (&iter));
+  g_assert_cmpuint (gtk_bitset_iter_get_value (&iter), ==, 0);
+  g_assert_false (gtk_bitset_iter_previous (&iter, &value));
+  g_assert_false (gtk_bitset_iter_next (&iter, &value));
+
+  gtk_bitset_add_range_closed (set, 10, 20);
+
+  ret = gtk_bitset_iter_init_first (&iter, set, &value);
+  g_assert_true (ret);
+  g_assert_true (gtk_bitset_iter_is_valid (&iter));
+  g_assert_cmpuint (value, ==, 10);
+  g_assert_cmpuint (gtk_bitset_iter_get_value (&iter), ==, 10);
+
+  ret = gtk_bitset_iter_next (&iter, &value);
+  g_assert_true (ret);
+  g_assert_cmpuint (value, ==, 11);
+
+  ret = gtk_bitset_iter_next (&iter, NULL);
+  g_assert_true (ret);
+  g_assert_cmpuint (gtk_bitset_iter_get_value (&iter), ==, 12);
+
+  ret = gtk_bitset_iter_init_last (&iter, set, &value);
+  g_assert_true (ret);
+  g_assert_true (gtk_bitset_iter_is_valid (&iter));
+  g_assert_cmpuint (value, ==, 20);
+
+  ret = gtk_bitset_iter_init_at (&iter, set, 5, NULL);
+  g_assert_true (ret);
+  g_assert_true (gtk_bitset_iter_is_valid (&iter));
+  g_assert_cmpuint (gtk_bitset_iter_get_value (&iter), ==, 10);
+
+  ret = gtk_bitset_iter_previous (&iter, NULL);
+  g_assert_false (ret);
+
+  g_assert_false (gtk_bitset_iter_is_valid (&iter));
+
+  ret = gtk_bitset_iter_init_at (&iter, set, 100, NULL);
+  g_assert_false (ret);
+
+  gtk_bitset_unref (set);
 }
 
 int
@@ -434,6 +559,9 @@ main (int argc, char *argv[])
   g_test_add_func ("/bitset/subtract", test_subtract);
   g_test_add_func ("/bitset/shift-left", test_shift_left);
   g_test_add_func ("/bitset/shift-right", test_shift_right);
+  g_test_add_func ("/bitset/slice", test_slice);
+  g_test_add_func ("/bitset/rectangle", test_rectangle);
+  g_test_add_func ("/bitset/iter", test_iter);
 
   return g_test_run ();
 }
