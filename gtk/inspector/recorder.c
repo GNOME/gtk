@@ -22,7 +22,7 @@
 #include <gtk/gtkbinlayout.h>
 #include <gtk/gtkbox.h>
 #include <gtk/gtkfilechooserdialog.h>
-#include <gtk/gtkfunctionslistitemfactory.h>
+#include <gtk/gtksignallistitemfactory.h>
 #include <gtk/gtklabel.h>
 #include <gtk/gtklistbox.h>
 #include <gtk/gtklistview.h>
@@ -302,8 +302,8 @@ node_name (GskRenderNode *node)
 }
 
 static void
-setup_widget_for_render_node (GtkListItem *list_item,
-                              gpointer     unused)
+setup_widget_for_render_node (GtkSignalListItemFactory *factory,
+                              GtkListItem              *list_item)
 {
   GtkWidget *expander, *box, *child;
 
@@ -324,8 +324,8 @@ setup_widget_for_render_node (GtkListItem *list_item,
 }
 
 static void
-bind_widget_for_render_node (GtkListItem *list_item,
-                             gpointer     unused)
+bind_widget_for_render_node (GtkSignalListItemFactory *factory,
+                             GtkListItem              *list_item)
 {
   GdkPaintable *paintable;
   GskRenderNode *node;
@@ -1291,9 +1291,10 @@ gtk_inspector_recorder_init (GtkInspectorRecorder *recorder)
   priv->render_node_selection = gtk_single_selection_new (G_LIST_MODEL (priv->render_node_model));
   g_signal_connect (priv->render_node_selection, "notify::selected-item", G_CALLBACK (render_node_list_selection_changed), recorder);
 
-  factory = gtk_functions_list_item_factory_new (setup_widget_for_render_node,
-                                                 bind_widget_for_render_node,
-                                                 NULL, NULL);
+  factory = gtk_signal_list_item_factory_new ();
+  g_signal_connect (factory, "setup", G_CALLBACK (setup_widget_for_render_node), NULL);
+  g_signal_connect (factory, "bind", G_CALLBACK (bind_widget_for_render_node), NULL);
+
   gtk_list_view_set_factory (GTK_LIST_VIEW (priv->render_node_list), factory);
   g_object_unref (factory);
   gtk_list_view_set_model (GTK_LIST_VIEW (priv->render_node_list),

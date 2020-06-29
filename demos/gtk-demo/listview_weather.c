@@ -194,8 +194,8 @@ create_weather_model (void)
 }
 
 static void
-setup_widget (GtkListItem *list_item,
-              gpointer     unused)
+setup_widget (GtkSignalListItemFactory *factory,
+              GtkListItem              *list_item)
 {
   GtkWidget *box, *child;
 
@@ -218,8 +218,8 @@ setup_widget (GtkListItem *list_item,
 }
 
 static void
-bind_widget (GtkListItem *list_item,
-             gpointer     unused)
+bind_widget (GtkSignalListItemFactory *factory,
+             GtkListItem              *list_item)
 {
   GtkWidget *box, *child;
   GtkWeatherInfo *info;
@@ -282,11 +282,12 @@ create_weather_view (void)
 {
   GtkWidget *listview;
   GListModel *model, *selection;
+  GtkListItemFactory *factory;
 
-  listview = gtk_list_view_new_with_factory (
-  gtk_functions_list_item_factory_new (setup_widget,
-                                       bind_widget,
-                                       NULL, NULL));
+  factory = gtk_signal_list_item_factory_new ();
+  g_signal_connect (factory, "setup", G_CALLBACK (setup_widget), NULL);
+  g_signal_connect (factory, "bind", G_CALLBACK (bind_widget), NULL);
+  listview = gtk_list_view_new_with_factory (factory);
   gtk_orientable_set_orientation (GTK_ORIENTABLE (listview), GTK_ORIENTATION_HORIZONTAL);
   gtk_list_view_set_show_separators (GTK_LIST_VIEW (listview), TRUE);
   model = create_weather_model ();
