@@ -220,7 +220,7 @@ gtk_bitset_new_empty (void)
  *
  * Creates a copy of @self.
  *
- * Returns: (transfer full) A new bitset that contains the same
+ * Returns: (transfer full): A new bitset that contains the same
  *     values as @self
  **/
 GtkBitset *
