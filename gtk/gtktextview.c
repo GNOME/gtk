@@ -4668,6 +4668,24 @@ changed_handler (GtkTextLayout     *layout,
           priv->yoffset += new_first_para_top - old_first_para_top;
           
           gtk_adjustment_set_value (text_view->priv->vadjustment, priv->yoffset);
+
+          /* If the height changed above our current position, then we
+           * need to discard the pixelcache because things wont line nup
+           * anymore (even if we adjust the vadjustment).
+           *
+           * Generally this doesn't happen interactively because we keep
+           * the insert cursor on screen when making changes. It can
+           * happen when code changes the first line, for example, in an
+           * automated fashion.
+           *
+           * There is one case where this could be optimized out such as
+           * when delete-range is followed by insert-text and whole lines
+           * are removed. API consumers can always work around that by
+           * avoiding the removal of a \n so no effort is made here to
+           * handle that.
+           */
+          if (gtk_widget_get_realized (widget))
+            _gtk_pixel_cache_invalidate (text_view->priv->pixel_cache, NULL);
         }
 
       /* FIXME be smarter about which anchored widgets we update */
