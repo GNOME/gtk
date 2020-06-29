@@ -48,6 +48,15 @@ GDK_AVAILABLE_IN_ALL
 gboolean                gtk_bitset_equals                       (const GtkBitset        *self,
                                                                  const GtkBitset        *other);
 GDK_AVAILABLE_IN_ALL
+guint64                 gtk_bitset_get_size                     (const GtkBitset        *self);
+GDK_AVAILABLE_IN_ALL
+guint64                 gtk_bitset_get_size_in_range            (const GtkBitset        *self,
+                                                                 guint                   first,
+                                                                 guint                   last);
+GDK_AVAILABLE_IN_ALL
+guint                   gtk_bitset_get_nth                      (const GtkBitset        *self,
+                                                                 guint                   nth);
+GDK_AVAILABLE_IN_ALL
 guint                   gtk_bitset_get_minimum                  (const GtkBitset        *self);
 GDK_AVAILABLE_IN_ALL
 guint                   gtk_bitset_get_maximum                  (const GtkBitset        *self);
