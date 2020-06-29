@@ -9,8 +9,8 @@
 #endif
 
 static void
-setup_list_item (GtkListItem *list_item,
-                 gpointer     unused)
+setup_list_item (GtkSignalListItemFactory *factory,
+                 GtkListItem              *list_item)
 {
   GtkWidget *label = gtk_label_new ("");
 
@@ -18,8 +18,8 @@ setup_list_item (GtkListItem *list_item,
 }
 
 static void
-bind_list_item (GtkListItem *list_item,
-                gpointer     unused)
+bind_list_item (GtkSignalListItemFactory *factory,
+                GtkListItem              *list_item)
 {
   GtkWidget *label;
   gpointer item;
@@ -118,6 +118,7 @@ main (int   argc,
   GtkSortListModel *sort;
   GtkSorter *sorter;
   guint i;
+  GtkListItemFactory *factory;
 
   gtk_init ();
 
@@ -145,10 +146,11 @@ main (int   argc,
   gtk_widget_set_vexpand (sw, TRUE);
   gtk_box_append (GTK_BOX (vbox), sw);
 
-  listview = gtk_list_view_new_with_factory (
-    gtk_functions_list_item_factory_new (setup_list_item,
-                                         bind_list_item,
-                                         NULL, NULL));
+  factory = gtk_signal_list_item_factory_new ();
+  g_signal_connect (factory, "setup", G_CALLBACK (setup_list_item), NULL);
+  g_signal_connect (factory, "bind", G_CALLBACK (bind_list_item), NULL);
+  listview = gtk_list_view_new_with_factory (factory);
+
   gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (sw), listview);
 
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 4);

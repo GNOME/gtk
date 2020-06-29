@@ -486,8 +486,8 @@ row_data_free (gpointer _data)
 }
 
 static void
-setup_widget (GtkListItem *list_item,
-              gpointer     unused)
+setup_widget (GtkSignalListItemFactory *factory,
+              GtkListItem              *list_item)
 {
   GtkWidget *box, *child;
   RowData *data;
@@ -601,6 +601,7 @@ main (int argc, char *argv[])
   FileInfoSelection *selectionmodel;
   GFile *root;
   GListModel *toplevels;
+  GtkListItemFactory *factory;
 
   gtk_init ();
 
@@ -618,10 +619,9 @@ main (int argc, char *argv[])
   gtk_search_entry_set_key_capture_widget (GTK_SEARCH_ENTRY (search_entry), sw);
   gtk_box_append (GTK_BOX (vbox), sw);
 
-  listview = gtk_grid_view_new_with_factory (
-    gtk_functions_list_item_factory_new (setup_widget,
-                                         NULL,
-                                         NULL, NULL));
+  factory = gtk_signal_list_item_factory_new ();
+  g_signal_connect (factory, "setup", G_CALLBACK (setup_widget), NULL);
+  listview = gtk_grid_view_new_with_factory (factory);
   gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (sw), listview);
 
   if (argc > 1)
