@@ -60,7 +60,7 @@
  *                                           "name");
  * ]|
  * when evaluated with `this` being a `GtkListItem`, it will obtain the
- * "item" property from the GtkListItem, and then obtain the "name" property
+ * "item" property from the `GtkListItem`, and then obtain the "name" property
  * from the resulting object (which is assumed to be of type GTK_TYPE_COLOR).
  *
  * A more concise way to describe this would be
