@@ -825,6 +825,7 @@ node_editor_window_create_renderer_widget (gpointer item,
   gtk_widget_set_size_request (box, 120, 90);
 
   label = gtk_label_new (g_object_get_data (G_OBJECT (paintable), "description"));
+  gtk_widget_add_css_class (label, "title-4");
   gtk_box_append (GTK_BOX (box), label);
 
   picture = gtk_picture_new_for_paintable (paintable);
