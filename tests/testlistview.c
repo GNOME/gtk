@@ -618,7 +618,7 @@ main (int argc, char *argv[])
   gtk_search_entry_set_key_capture_widget (GTK_SEARCH_ENTRY (search_entry), sw);
   gtk_box_append (GTK_BOX (vbox), sw);
 
-  listview = gtk_grid_view_new_with_factory (
+  listview = gtk_list_view_new_with_factory (
     gtk_functions_list_item_factory_new (setup_widget,
                                          NULL,
                                          NULL, NULL));
@@ -645,7 +645,7 @@ main (int argc, char *argv[])
   selectionmodel = file_info_selection_new (G_LIST_MODEL (filter));
   g_object_unref (filter);
 
-  gtk_grid_view_set_model (GTK_GRID_VIEW (listview), G_LIST_MODEL (selectionmodel));
+  gtk_list_view_set_model (GTK_LIST_VIEW (listview), G_LIST_MODEL (selectionmodel));
 
   statusbar = gtk_statusbar_new ();
   gtk_widget_add_tick_callback (statusbar, (GtkTickCallback) update_statusbar, NULL, NULL);
