@@ -92,7 +92,7 @@ strings_setup_item_full (GtkSignalListItemFactory *factory,
   gtk_label_set_xalign (GTK_LABEL (title), 0.0);
   description = gtk_label_new ("");
   gtk_label_set_xalign (GTK_LABEL (description), 0.0);
-  gtk_style_context_add_class (gtk_widget_get_style_context (description), "dim-label");
+  gtk_widget_add_css_class (description, "dim-label");
 
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
   box2 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 2);

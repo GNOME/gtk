@@ -314,7 +314,7 @@ setup_name_cb (GtkSignalListItemFactory *factory,
   label = gtk_label_new (NULL);
   gtk_label_set_xalign (GTK_LABEL (label), 0.0);
   gtk_list_item_set_child (list_item, label);
-  gtk_style_context_add_class (gtk_widget_get_style_context (label), "cell");
+  gtk_widget_add_css_class (label, "cell");
 }
 
 static void
@@ -339,7 +339,7 @@ setup_type_cb (GtkSignalListItemFactory *factory,
   label = gtk_label_new (NULL);
   gtk_label_set_xalign (GTK_LABEL (label), 0.0);
   gtk_list_item_set_child (list_item, label);
-  gtk_style_context_add_class (gtk_widget_get_style_context (label), "cell");
+  gtk_widget_add_css_class (label, "cell");
 }
 
 static void
@@ -369,7 +369,7 @@ setup_origin_cb (GtkSignalListItemFactory *factory,
   label = gtk_label_new (NULL);
   gtk_label_set_xalign (GTK_LABEL (label), 0.0);
   gtk_list_item_set_child (list_item, label);
-  gtk_style_context_add_class (gtk_widget_get_style_context (label), "cell");
+  gtk_widget_add_css_class (label, "cell");
 }
 
 static void
