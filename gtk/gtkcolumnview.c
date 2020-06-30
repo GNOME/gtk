@@ -940,7 +940,7 @@ header_drag_end (GtkGestureDrag *gesture,
 
       column = g_list_model_get_item (G_LIST_MODEL (self->columns), self->drag_pos);
       header = gtk_column_view_column_get_header (column);
-      gtk_style_context_remove_class (gtk_widget_get_style_context (header), "dnd");
+      gtk_widget_remove_css_class (header, "dnd");
 
       sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
       if (!gtk_gesture_handles_sequence (GTK_GESTURE (gesture), sequence))
@@ -1027,7 +1027,7 @@ header_drag_update (GtkGestureDrag *gesture,
           header = gtk_column_view_column_get_header (column);
 
           gtk_widget_insert_after (header, self->header, gtk_widget_get_last_child (self->header));
-          gtk_style_context_add_class (gtk_widget_get_style_context (header), "dnd");
+          gtk_widget_add_css_class (header, "dnd");
 
           gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
           if (!gtk_widget_has_focus (GTK_WIDGET (self)))
