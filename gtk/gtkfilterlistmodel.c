@@ -47,6 +47,7 @@ enum {
   PROP_INCREMENTAL,
   PROP_ITEM_TYPE,
   PROP_MODEL,
+  PROP_PENDING,
   NUM_PROPERTIES
 };
 
@@ -184,6 +185,7 @@ gtk_filter_list_model_run_filter (GtkFilterListModel *self,
     gtk_bitset_remove_range_closed (self->pending, 0, pos);
   else
     g_clear_pointer (&self->pending, gtk_bitset_unref);
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_PENDING]);
 
   return;
 }
@@ -191,8 +193,13 @@ gtk_filter_list_model_run_filter (GtkFilterListModel *self,
 static void
 gtk_filter_list_model_stop_filtering (GtkFilterListModel *self)
 {
+  gboolean notify_pending = self->pending != NULL;
+
   g_clear_pointer (&self->pending, gtk_bitset_unref);
   g_clear_handle_id (&self->pending_cb, g_source_remove);
+
+  if (notify_pending)
+    g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_PENDING]);
 }
 
 static void
@@ -244,6 +251,7 @@ gtk_filter_list_model_start_filtering (GtkFilterListModel *self,
     {
       gtk_bitset_union (self->pending, items);
       gtk_bitset_unref (items);
+      g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_PENDING]);
       return;
     }
 
@@ -262,6 +270,7 @@ gtk_filter_list_model_start_filtering (GtkFilterListModel *self,
       return;
     }
 
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_PENDING]);
   g_assert (self->pending_cb == 0);
   self->pending_cb = g_idle_add (gtk_filter_list_model_run_filter_cb, self);
   g_source_set_name_by_id (self->pending_cb, "[gtk] gtk_filter_list_model_run_filter_cb");
@@ -366,6 +375,10 @@ gtk_filter_list_model_get_property (GObject     *object,
 
     case PROP_MODEL:
       g_value_set_object (value, self->model);
+      break;
+
+    case PROP_PENDING:
+      g_value_set_uint (value, gtk_filter_list_model_get_pending (self));
       break;
 
     default:
@@ -578,6 +591,18 @@ gtk_filter_list_model_class_init (GtkFilterListModelClass *class)
                            P_("The model being filtered"),
                            G_TYPE_LIST_MODEL,
                            GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_EXPLICIT_NOTIFY);
+
+  /**
+   * GtkFilterListModel:pending:
+   *
+   * Number of items not yet filtered
+   */
+  properties[PROP_PENDING] =
+      g_param_spec_uint ("pending",
+                         P_("Pending"),
+                         P_("Number of items not yet filtered"),
+                         0, G_MAXUINT, 0,
+                         GTK_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (gobject_class, NUM_PROPERTIES, properties);
 }
@@ -821,4 +846,30 @@ gtk_filter_list_model_get_incremental (GtkFilterListModel *self)
   g_return_val_if_fail (GTK_IS_FILTER_LIST_MODEL (self), FALSE);
 
   return self->incremental;
+}
+
+/**
+ * gtk_filter_list_model_get_pending:
+ * @self: a #GtkFilterListModel
+ *
+ * Returns the number of items that have not been filtered yet.
+ *
+ * When incremental filtering is not enabled, this always returns 0.
+ *
+ * You can use this value to check if @self is busy filtering by
+ * comparing the return value to 0 or you can compute the percentage
+ * of the filter remaining by dividing the return value by
+ * g_list_model_get_n_items(gtk_filter_list_model_get_model (self)).
+ *
+ * Returns: The number of items not yet filtered
+ **/
+guint
+gtk_filter_list_model_get_pending (GtkFilterListModel *self)
+{
+  g_return_val_if_fail (GTK_IS_FILTER_LIST_MODEL (self), FALSE);
+
+  if (self->pending == NULL)
+    return 0;
+
+  return gtk_bitset_get_size (self->pending);
 }
