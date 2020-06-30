@@ -268,7 +268,7 @@ gtk_bitset_get_nth (const GtkBitset *self,
  *
  * Creates a new empty bitset.
  *
- * Returns: A new empty bitset.
+ * Returns: A new empty bitset
  **/
 GtkBitset *
 gtk_bitset_new_empty (void)
@@ -280,6 +280,28 @@ gtk_bitset_new_empty (void)
   self->ref_count = 1;
 
   ra_init (&self->roaring.high_low_container);
+
+  return self;
+}
+
+/**
+ * gtk_bitset_new_range:
+ * @start: first value to add
+ * @n_items: number of consecutive values to add
+ *
+ * Creates a bitset with the given range set.
+ *
+ * Returns: A new bitset
+ **/
+GtkBitset *
+gtk_bitset_new_range (guint start,
+                      guint n_items)
+{
+  GtkBitset *self;
+
+  self = gtk_bitset_new_empty ();
+
+  gtk_bitset_add_range (self, start, n_items);
 
   return self;
 }
