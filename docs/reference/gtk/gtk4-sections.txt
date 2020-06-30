@@ -1549,6 +1549,7 @@ gtk_filter_list_model_set_filter
 gtk_filter_list_model_get_filter
 gtk_filter_list_model_set_incremental
 gtk_filter_list_model_get_incremental
+gtk_filter_list_model_get_pending
 <SUBSECTION Standard>
 GTK_FILTER_LIST_MODEL
 GTK_IS_FILTER_LIST_MODEL
