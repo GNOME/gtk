@@ -408,7 +408,7 @@ bind_value_cb (GtkSignalListItemFactory *factory,
   widget = gtk_inspector_prop_editor_new (object, name, NULL);
   g_signal_connect (widget, "show-object", G_CALLBACK (show_object), data);
   gtk_list_item_set_child (list_item, widget);
-  gtk_style_context_add_class (gtk_widget_get_style_context (widget), "cell");
+  gtk_widget_add_css_class (widget, "cell");
 }
 
 static void

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Red Hat, Inc.
+ * Copyright (c) 2014, 2020 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -18,7 +18,7 @@
 #include "config.h"
 #include <glib/gi18n-lib.h>
 
-#include "data-list.h"
+#include "tree-data.h"
 
 #include "object-tree.h"
 
@@ -27,10 +27,14 @@
 #include "gtktogglebutton.h"
 #include "gtklabel.h"
 #include "gtkstack.h"
+#include "gtkboxlayout.h"
+#include "gtkorientable.h"
 
 
-struct _GtkInspectorDataListPrivate
+struct _GtkInspectorTreeData
 {
+  GtkWidget parent_instance;
+
   GtkTreeModel *object;
   GtkTreeModel *types;
   GtkTreeView *view;
@@ -38,13 +42,22 @@ struct _GtkInspectorDataListPrivate
   gboolean show_data;
 };
 
-G_DEFINE_TYPE_WITH_PRIVATE (GtkInspectorDataList, gtk_inspector_data_list, GTK_TYPE_BOX)
+typedef struct _GtkInspectorTreeDataClass GtkInspectorTreeDataClass;
+struct _GtkInspectorTreeDataClass
+{
+  GtkWidgetClass parent_class;
+};
+
+
+G_DEFINE_TYPE (GtkInspectorTreeData, gtk_inspector_tree_data, GTK_TYPE_WIDGET)
 
 static void
-gtk_inspector_data_list_init (GtkInspectorDataList *sl)
+gtk_inspector_tree_data_init (GtkInspectorTreeData *sl)
 {
-  sl->priv = gtk_inspector_data_list_get_instance_private (sl);
   gtk_widget_init_template (GTK_WIDGET (sl));
+
+  gtk_orientable_set_orientation (GTK_ORIENTABLE (gtk_widget_get_layout_manager (GTK_WIDGET (sl))),
+                                  GTK_ORIENTATION_VERTICAL);
 }
 
 static void
@@ -67,7 +80,7 @@ cell_data_func (GtkTreeViewColumn *col,
 }
 
 static void
-add_columns (GtkInspectorDataList *sl)
+add_columns (GtkInspectorTreeData *sl)
 {
   gint n_columns;
   GtkCellRenderer *cell;
@@ -76,45 +89,45 @@ add_columns (GtkInspectorDataList *sl)
   GtkTreeViewColumn *col;
   gint i;
 
-  n_columns = gtk_tree_model_get_n_columns (sl->priv->object);
+  n_columns = gtk_tree_model_get_n_columns (sl->object);
   for (i = 0; i < n_columns; i++)
     {
       cell = gtk_cell_renderer_text_new ();
-      type = gtk_tree_model_get_column_type (sl->priv->object, i);
+      type = gtk_tree_model_get_column_type (sl->object, i);
       title = g_strdup_printf ("%d: %s", i, g_type_name (type));
       col = gtk_tree_view_column_new_with_attributes (title, cell, NULL);
       g_object_set_data (G_OBJECT (col), "num", GINT_TO_POINTER (i));
       gtk_tree_view_column_set_cell_data_func (col, cell, cell_data_func, sl, NULL);
-      gtk_tree_view_append_column (sl->priv->view, col);
+      gtk_tree_view_append_column (sl->view, col);
       g_free (title);
     } 
 }
 
 static void
-show_types (GtkInspectorDataList *sl)
+show_types (GtkInspectorTreeData *sl)
 {
-  gtk_tree_view_set_model (sl->priv->view, NULL);
-  sl->priv->show_data = FALSE;
+  gtk_tree_view_set_model (sl->view, NULL);
+  sl->show_data = FALSE;
 }
 
 static void
-show_data (GtkInspectorDataList *sl)
+show_data (GtkInspectorTreeData *sl)
 {
-  gtk_tree_view_set_model (sl->priv->view, sl->priv->object);
-  sl->priv->show_data = TRUE;
+  gtk_tree_view_set_model (sl->view, sl->object);
+  sl->show_data = TRUE;
 }
 
 static void
-clear_view (GtkInspectorDataList *sl)
+clear_view (GtkInspectorTreeData *sl)
 {
-  gtk_tree_view_set_model (sl->priv->view, NULL);
-  while (gtk_tree_view_get_n_columns (sl->priv->view) > 0)
-    gtk_tree_view_remove_column (sl->priv->view,
-                                 gtk_tree_view_get_column (sl->priv->view, 0));
+  gtk_tree_view_set_model (sl->view, NULL);
+  while (gtk_tree_view_get_n_columns (sl->view) > 0)
+    gtk_tree_view_remove_column (sl->view,
+                                 gtk_tree_view_get_column (sl->view, 0));
 }
 
 void
-gtk_inspector_data_list_set_object (GtkInspectorDataList *sl,
+gtk_inspector_tree_data_set_object (GtkInspectorTreeData *sl,
                                     GObject              *object)
 {
   GtkWidget *stack;
@@ -125,8 +138,8 @@ gtk_inspector_data_list_set_object (GtkInspectorDataList *sl,
   page = gtk_stack_get_page (GTK_STACK (stack), GTK_WIDGET (sl));
 
   clear_view (sl);
-  sl->priv->object = NULL;
-  sl->priv->show_data = FALSE;
+  sl->object = NULL;
+  sl->show_data = FALSE;
 
   if (!GTK_IS_TREE_MODEL (object))
     {
@@ -135,21 +148,21 @@ gtk_inspector_data_list_set_object (GtkInspectorDataList *sl,
     }
 
   title = gtk_inspector_get_object_title (object);
-  gtk_label_set_label (GTK_LABEL (sl->priv->object_title), title);
+  gtk_label_set_label (GTK_LABEL (sl->object_title), title);
   g_free (title);
 
   g_object_set (page, "visible", TRUE, NULL);
 
-  sl->priv->object = GTK_TREE_MODEL (object);
+  sl->object = GTK_TREE_MODEL (object);
   add_columns (sl);
   show_types (sl);
 }
 
 static void
 toggle_show (GtkToggleButton      *button,
-             GtkInspectorDataList *sl)
+             GtkInspectorTreeData *sl)
 {
-  if (gtk_toggle_button_get_active (button) == sl->priv->show_data)
+  if (gtk_toggle_button_get_active (button) == sl->show_data)
     return;
 
   if (gtk_toggle_button_get_active (button))
@@ -159,14 +172,16 @@ toggle_show (GtkToggleButton      *button,
 }
 
 static void
-gtk_inspector_data_list_class_init (GtkInspectorDataListClass *klass)
+gtk_inspector_tree_data_class_init (GtkInspectorTreeDataClass *klass)
 {
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
-  gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/libgtk/inspector/data-list.ui");
-  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorDataList, view);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorDataList, object_title);
+  gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/libgtk/inspector/tree-data.ui");
+  gtk_widget_class_bind_template_child (widget_class, GtkInspectorTreeData, view);
+  gtk_widget_class_bind_template_child (widget_class, GtkInspectorTreeData, object_title);
   gtk_widget_class_bind_template_callback (widget_class, toggle_show);
+
+  gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BOX_LAYOUT);
 }
 
 // vim: set et sw=2 ts=2:
