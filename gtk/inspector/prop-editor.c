@@ -769,36 +769,6 @@ font_changed (GObject *object, GParamSpec *pspec, gpointer data)
   pango_font_description_free (fb_font_desc);
 }
 
-static void
-item_properties (GtkButton *button, GtkInspectorPropEditor *self)
-{
-  GObject *item;
-  item = g_object_get_data (G_OBJECT (button), "item");
-  g_signal_emit (self, signals[SHOW_OBJECT], 0, item, "Item", "properties");
-}
-
-static GtkWidget *
-create_row (gpointer item,
-            gpointer user_data)
-{
-  GtkWidget *row, *label, *button;
-  char *name;
-
-  name = object_label (G_OBJECT (item), NULL);
-  label = gtk_label_new (name);
-  g_free (name);
-
-  button = gtk_button_new_with_label (_("Properties"));
-  g_object_set_data (G_OBJECT (button), "item", item);
-  g_signal_connect (button, "clicked", G_CALLBACK (item_properties), user_data);
-
-  row = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
-  gtk_box_append (GTK_BOX (row), label);
-  gtk_box_append (GTK_BOX (row), button);
-
-  return row;
-}
-
 static GtkWidget *
 property_editor (GObject                *object,
                  GParamSpec             *spec,
@@ -1002,39 +972,6 @@ property_editor (GObject                *object,
       g_object_connect_property (object, spec,
                                  G_CALLBACK (pointer_changed),
                                  prop_edit, G_OBJECT (prop_edit));
-    }
-  else if (type == G_TYPE_PARAM_OBJECT &&
-           g_type_is_a (G_PARAM_SPEC_VALUE_TYPE (spec), G_TYPE_LIST_MODEL))
-    {
-      GtkWidget *popover;
-      GtkWidget *box;
-      GtkWidget *sw;
-      GListModel *model;
-
-      popover = gtk_popover_new ();
-      prop_edit = gtk_menu_button_new ();
-      gtk_menu_button_set_popover (GTK_MENU_BUTTON (prop_edit), popover);
-
-      sw = gtk_scrolled_window_new ();
-      gtk_popover_set_child (GTK_POPOVER (popover), sw);
-      g_object_set (sw,
-                    "hexpand", TRUE,
-                    "vexpand", TRUE,
-                    "hscrollbar-policy", GTK_POLICY_NEVER,
-                    "vscrollbar-policy", GTK_POLICY_NEVER,
-                    NULL);
-
-      g_object_get (object, spec->name, &model, NULL);
-
-      if (g_list_model_get_n_items (model) >= 10)
-        g_object_set (prop_edit, "vscrollbar-policy", GTK_POLICY_AUTOMATIC, NULL);
-
-      box = gtk_list_box_new ();
-      gtk_list_box_set_selection_mode (GTK_LIST_BOX (box), GTK_SELECTION_NONE);
-      gtk_list_box_bind_model (GTK_LIST_BOX (box), model, create_row, self, NULL);
-      g_object_unref (model);
-
-      gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (sw), box);
     }
   else if (type == G_TYPE_PARAM_OBJECT)
     {

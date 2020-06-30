@@ -29,9 +29,9 @@
 #include "controllers.h"
 #include "css-editor.h"
 #include "css-node-tree.h"
-#include "data-list.h"
 #include "general.h"
 #include "graphdata.h"
+#include "list-data.h"
 #include "logs.h"
 #include "magnifier.h"
 #include "menu.h"
@@ -43,6 +43,7 @@
 #include "shortcuts.h"
 #include "size-groups.h"
 #include "statistics.h"
+#include "tree-data.h"
 #include "visual.h"
 #include "window.h"
 
@@ -64,8 +65,8 @@ gtk_inspector_init (void)
   g_type_ensure (GTK_TYPE_INSPECTOR_CONTROLLERS);
   g_type_ensure (GTK_TYPE_INSPECTOR_CSS_EDITOR);
   g_type_ensure (GTK_TYPE_INSPECTOR_CSS_NODE_TREE);
-  g_type_ensure (GTK_TYPE_INSPECTOR_DATA_LIST);
   g_type_ensure (GTK_TYPE_INSPECTOR_GENERAL);
+  g_type_ensure (GTK_TYPE_INSPECTOR_LIST_DATA);
   g_type_ensure (GTK_TYPE_INSPECTOR_LOGS);
   g_type_ensure (GTK_TYPE_MAGNIFIER);
   g_type_ensure (GTK_TYPE_INSPECTOR_MAGNIFIER);
@@ -78,6 +79,7 @@ gtk_inspector_init (void)
   g_type_ensure (GTK_TYPE_INSPECTOR_SHORTCUTS);
   g_type_ensure (GTK_TYPE_INSPECTOR_SIZE_GROUPS);
   g_type_ensure (GTK_TYPE_INSPECTOR_STATISTICS);
+  g_type_ensure (GTK_TYPE_INSPECTOR_TREE_DATA);
   g_type_ensure (GTK_TYPE_INSPECTOR_VISUAL);
   g_type_ensure (GTK_TYPE_INSPECTOR_WINDOW);
 

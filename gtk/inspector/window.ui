@@ -405,7 +405,18 @@
                                     <property name="name">data</property>
                                     <property name="title" translatable="yes">Data</property>
                                     <property name="child">
-                                      <object class="GtkInspectorDataList" id="data_list"/>
+                                      <object class="GtkInspectorTreeData" id="tree_data"/>
+                                    </property>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkStackPage">
+                                    <property name="name">list-data</property>
+                                    <property name="title" translatable="yes">Data</property>
+                                    <property name="child">
+                                      <object class="GtkInspectorListData" id="list_data">
+                                        <property name="object-tree">object_tree</property>
+                                      </object>
                                     </property>
                                   </object>
                                 </child>
