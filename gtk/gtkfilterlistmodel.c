@@ -764,7 +764,7 @@ gtk_filter_list_model_set_model (GtkFilterListModel *self,
       if (removed == 0)
         {
           self->strictness = GTK_FILTER_MATCH_NONE;
-          gtk_filter_list_model_refilter (self, GTK_FILTER_CHANGE_MORE_STRICT);
+          gtk_filter_list_model_refilter (self, GTK_FILTER_CHANGE_LESS_STRICT);
           added = 0;
         }
       else if (self->matches)
