@@ -287,6 +287,8 @@ struct _GtkTextViewPrivate
   guint vscroll_policy : 1;
   guint cursor_handle_dragged : 1;
   guint selection_handle_dragged : 1;
+
+  gulong is_active_id;
 };
 
 struct _GtkTextPendingScroll
@@ -3798,6 +3800,13 @@ gtk_text_view_dispose (GObject *object)
   g_clear_pointer (&priv->selection_bubble, gtk_widget_unparent);
   g_clear_pointer (&priv->magnifier_popover, gtk_widget_unparent);
 
+  if (priv->is_active_id)
+    {
+      g_signal_handler_disconnect (gtk_widget_get_root (GTK_WIDGET (text_view)),
+                                   priv->is_active_id);
+      priv->is_active_id = 0;
+    }
+
   while ((child = gtk_widget_get_first_child (GTK_WIDGET (text_view))))
     gtk_text_view_remove (text_view, child);
 
@@ -4790,6 +4799,30 @@ changed_handler (GtkTextLayout     *layout,
 }
 
 static void
+gtk_text_view_is_active_cb (GtkWidget  *window,
+                            GParamSpec *spec,
+                            GtkWidget  *widget)
+{
+  gboolean is_active = FALSE;
+  GtkTextView *text_view = (GtkTextView *)widget;
+  GtkTextViewPrivate *priv = text_view->priv;
+
+  if (gtk_window_get_focus (GTK_WINDOW (window)) != widget)
+    return;
+
+  g_object_get (window, "is-active", &is_active, NULL);
+
+  if (priv->editable)
+    {
+      priv->need_im_reset = TRUE;
+      if (is_active)
+        gtk_im_context_focus_in (priv->im_context);
+      else
+        gtk_im_context_focus_out (priv->im_context);
+    }
+}
+
+static void
 gtk_text_view_realize (GtkWidget *widget)
 {
   GtkTextView *text_view;
@@ -4805,6 +4838,11 @@ gtk_text_view_realize (GtkWidget *widget)
       gtk_im_context_set_client_widget (GTK_TEXT_VIEW (widget)->priv->im_context,
                                         widget);
     }
+
+  priv->is_active_id = g_signal_connect (gtk_widget_get_root (widget),
+                                         "notify::is-active",
+                                         G_CALLBACK (gtk_text_view_is_active_cb),
+                                         widget);
 
   gtk_text_view_ensure_layout (text_view);
   gtk_text_view_invalidate (text_view);
@@ -4837,6 +4875,13 @@ gtk_text_view_unrealize (GtkWidget *widget)
   gtk_text_view_remove_validate_idles (text_view);
 
   g_clear_pointer (&priv->popup_menu, gtk_widget_unparent);
+
+  if (priv->is_active_id)
+    {
+      g_signal_handler_disconnect (gtk_widget_get_root (widget),
+                                   priv->is_active_id);
+      priv->is_active_id = 0;
+    }
 
   gtk_im_context_set_client_widget (priv->im_context, NULL);
 

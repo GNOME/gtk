@@ -232,6 +232,8 @@ struct _GtkTextPrivate
   guint         populate_all            : 1;
   guint         propagate_text_width    : 1;
   guint         text_handles_enabled    : 1;
+
+  gulong        is_active_id;
 };
 
 struct _GtkTextPasswordHint
@@ -1925,6 +1927,13 @@ gtk_text_dispose (GObject *object)
   GdkDevice *keyboard = NULL;
   GtkWidget *chooser;
 
+  if (priv->is_active_id)
+    {
+      g_signal_handler_disconnect (gtk_widget_get_root (GTK_WIDGET (self)),
+                                   priv->is_active_id);
+      priv->is_active_id = 0;
+    }
+
   priv->current_pos = priv->selection_bound = 0;
   gtk_text_reset_im_context (self);
   gtk_text_reset_layout (self);
@@ -2149,6 +2158,30 @@ gtk_text_unmap (GtkWidget *widget)
 }
 
 static void
+gtk_text_is_active_cb (GtkWidget  *window,
+                       GParamSpec *spec,
+                       GtkWidget  *widget)
+{
+  gboolean is_active = FALSE;
+  GtkText *self = GTK_TEXT (widget);
+  GtkTextPrivate *priv = gtk_text_get_instance_private (self);
+
+  if (gtk_window_get_focus (GTK_WINDOW (window)) != widget)
+    return;
+
+  g_object_get (window, "is-active", &is_active, NULL);
+
+  if (priv->editable)
+    {
+      priv->need_im_reset = TRUE;
+      if (is_active)
+        gtk_im_context_focus_in (priv->im_context);
+      else
+        gtk_im_context_focus_out (priv->im_context);
+    }
+}
+
+static void
 gtk_text_realize (GtkWidget *widget)
 {
   GtkText *self = GTK_TEXT (widget);
@@ -2157,6 +2190,11 @@ gtk_text_realize (GtkWidget *widget)
   GTK_WIDGET_CLASS (gtk_text_parent_class)->realize (widget);
 
   gtk_im_context_set_client_widget (priv->im_context, widget);
+
+  priv->is_active_id = g_signal_connect (gtk_widget_get_root (widget),
+                                         "notify::is-active",
+                                         G_CALLBACK (gtk_text_is_active_cb),
+                                         widget);
 
   gtk_text_adjust_scroll (self);
   gtk_text_update_primary_selection (self);
@@ -2168,6 +2206,13 @@ gtk_text_unrealize (GtkWidget *widget)
   GtkText *self = GTK_TEXT (widget);
   GtkTextPrivate *priv = gtk_text_get_instance_private (self);
   GdkClipboard *clipboard;
+
+  if (priv->is_active_id)
+    {
+      g_signal_handler_disconnect (gtk_widget_get_root (widget),
+                                   priv->is_active_id);
+      priv->is_active_id = 0;
+    }
 
   gtk_text_reset_layout (self);
   
