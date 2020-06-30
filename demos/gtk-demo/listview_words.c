@@ -27,16 +27,21 @@ const char *factory_text =
 "</interface>\n";
 
 static void
-update_title_cb (GListModel *model,
-                 guint       position,
-                 guint       removed,
-                 guint       added,
-                 GtkWindow  *win)
+update_title_cb (GtkFilterListModel *model)
 {
   char *title;
+  guint pending;
 
-  title = g_strdup_printf ("%u Words\n", g_list_model_get_n_items (model));
-  gtk_window_set_title (win, title);
+  pending = gtk_filter_list_model_get_pending (model);
+  if (pending)
+    {
+      guint total = g_list_model_get_n_items (gtk_filter_list_model_get_model (model));
+      title = g_strdup_printf ("%u Words (%u%% done)", g_list_model_get_n_items (G_LIST_MODEL (model)),
+                               (total - pending) * 100 / total);
+    }
+  else
+    title = g_strdup_printf ("%u Words\n", g_list_model_get_n_items (G_LIST_MODEL (model)));
+  gtk_window_set_title (GTK_WINDOW (window), title);
   g_free (title);
 }
 
@@ -70,6 +75,7 @@ do_listview_words (GtkWidget *do_widget)
       gtk_string_filter_set_expression (GTK_STRING_FILTER (filter), expression);
       gtk_expression_unref (expression);
       filter_model = gtk_filter_list_model_new (G_LIST_MODEL (stringlist), filter);
+      gtk_filter_list_model_set_incremental (filter_model, TRUE);
 
       window = gtk_window_new ();
       gtk_window_set_title (GTK_WINDOW (window), "Words");
@@ -97,8 +103,9 @@ do_listview_words (GtkWidget *do_widget)
       gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (sw), listview);
       gtk_list_view_set_model (GTK_LIST_VIEW (listview), G_LIST_MODEL (filter_model));
 
-      g_signal_connect (filter_model, "items-changed", G_CALLBACK (update_title_cb), window);
-      update_title_cb (G_LIST_MODEL (filter_model), 0, 0, 0, GTK_WINDOW (window));
+      g_signal_connect (filter_model, "items-changed", G_CALLBACK (update_title_cb), NULL);
+      g_signal_connect (filter_model, "notify::pending", G_CALLBACK (update_title_cb), NULL);
+      update_title_cb (filter_model);
 
       g_object_unref (filter_model);
     }
