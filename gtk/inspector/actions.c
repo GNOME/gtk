@@ -134,7 +134,7 @@ setup_parameter_cb (GtkSignalListItemFactory *factory,
   label = gtk_label_new (NULL);
   gtk_label_set_xalign (GTK_LABEL (label), 0.5);
   gtk_list_item_set_child (list_item, label);
-  gtk_style_context_add_class (gtk_widget_get_style_context (label), "cell");
+  gtk_widget_add_css_class (label, "cell");
 }
 
 static void
@@ -168,7 +168,7 @@ setup_state_cb (GtkSignalListItemFactory *factory,
   gtk_widget_set_margin_end (label, 5);
   gtk_label_set_xalign (GTK_LABEL (label), 0.0);
   gtk_list_item_set_child (list_item, label);
-  gtk_style_context_add_class (gtk_widget_get_style_context (label), "cell");
+  gtk_widget_add_css_class (label, "cell");
 }
 
 static void
@@ -215,7 +215,7 @@ bind_changes_cb (GtkSignalListItemFactory *factory,
   name = action_holder_get_name (ACTION_HOLDER (item));
 
   editor = gtk_inspector_action_editor_new (group, name, NULL);
-  gtk_style_context_add_class (gtk_widget_get_style_context (editor), "cell");
+  gtk_widget_add_css_class (editor, "cell");
   gtk_list_item_set_child (list_item, editor);
 }
 
