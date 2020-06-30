@@ -31,6 +31,7 @@
 #include "css-node-tree.h"
 #include "general.h"
 #include "graphdata.h"
+#include "list-data.h"
 #include "logs.h"
 #include "magnifier.h"
 #include "menu.h"
@@ -65,6 +66,7 @@ gtk_inspector_init (void)
   g_type_ensure (GTK_TYPE_INSPECTOR_CSS_EDITOR);
   g_type_ensure (GTK_TYPE_INSPECTOR_CSS_NODE_TREE);
   g_type_ensure (GTK_TYPE_INSPECTOR_GENERAL);
+  g_type_ensure (GTK_TYPE_INSPECTOR_LIST_DATA);
   g_type_ensure (GTK_TYPE_INSPECTOR_LOGS);
   g_type_ensure (GTK_TYPE_MAGNIFIER);
   g_type_ensure (GTK_TYPE_INSPECTOR_MAGNIFIER);
