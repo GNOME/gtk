@@ -434,12 +434,10 @@ GtkStringList *
 gtk_string_list_new (const char * const *strings)
 {
   GtkStringList *self;
-  guint i;
 
   self = g_object_new (GTK_TYPE_STRING_LIST, NULL);
 
-  for (i = 0; strings[i]; i++)
-    g_sequence_append (self->items, gtk_string_object_new (strings[i]));
+  gtk_string_list_splice (self, 0, 0, strings);
 
   return self;
 }
