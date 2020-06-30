@@ -146,17 +146,6 @@ gtk_string_object_class_init (GtkStringObjectClass *class)
 }
 
 static GtkStringObject *
-gtk_string_object_new (const char *string)
-{
-  GtkStringObject *result;
-
-  result = g_object_new (GTK_TYPE_STRING_OBJECT, NULL);
-  result->string = g_strdup (string);
-
-  return result;
-}
-
-static GtkStringObject *
 gtk_string_object_new_take (char *string)
 {
   GtkStringObject *obj;
@@ -165,6 +154,12 @@ gtk_string_object_new_take (char *string)
   obj->string = string;
 
   return obj;
+}
+
+static GtkStringObject *
+gtk_string_object_new (const char *string)
+{
+  return gtk_string_object_new_take (g_strdup (string));
 }
 
 /**
