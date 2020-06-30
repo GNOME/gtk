@@ -1184,7 +1184,7 @@ _gdk_wm_protocols_filter (const XEvent  *xevent,
           if (timings)
             timings->drawn_time = frame_drawn_time;
 
-          if (surface_impl->toplevel->frame_pending)
+          if (!surface_impl->toplevel->frame_still_painting && surface_impl->toplevel->frame_pending)
             {
               surface_impl->toplevel->frame_pending = FALSE;
               gdk_surface_thaw_updates (win);
