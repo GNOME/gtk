@@ -64,7 +64,7 @@ typedef struct
   GtkWidget *widget_recorder;
   GtkWidget *object_hierarchy;
   GtkWidget *size_groups;
-  GtkWidget *data_list;
+  GtkWidget *tree_data;
   GtkWidget *actions;
   GtkWidget *shortcuts;
   GtkWidget *menu;

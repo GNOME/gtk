@@ -405,7 +405,7 @@
                                     <property name="name">data</property>
                                     <property name="title" translatable="yes">Data</property>
                                     <property name="child">
-                                      <object class="GtkInspectorDataList" id="data_list"/>
+                                      <object class="GtkInspectorTreeData" id="tree_data"/>
                                     </property>
                                   </object>
                                 </child>
