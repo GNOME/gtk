@@ -29,7 +29,7 @@
 
 /**
  * SECTION:gtkbuilderlistitemfactory
- * @Tiitle: GtkBuilderListItemFactory
+ * @Title: GtkBuilderListItemFactory
  * @Short_description: A listitem factory using ui files
  *
  * #GtkBuilderListItemFactory is a #GtkListItemFactory that creates
