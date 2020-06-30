@@ -40,7 +40,7 @@
  * Because views do not display the whole list at once but only a few
  * items, they only need to maintain a few widgets at a time. They will
  * instruct the #GtkListItemFactory to create these widgets and bind them
- * to the items that are currently displayed.  
+ * to the items that are currently displayed.
  * As the list model changes or the user scrolls to the list, the items will
  * change and the view will instruct the factory to bind the widgets to those
  * new items.
@@ -56,13 +56,13 @@
  * Various implementations of #GtkListItemFactory exist to allow you different
  * ways to provide those widgets. The most common implementations are
  * #GtkBuilderListItemFactory which takes a #GtkBuilder .ui file and then creates
- * and manages widgets everything automatically from the information in that file
+ * widgets and manages everything automatically from the information in that file
  * and #GtkSignalListItemFactory which allows you to connect to signals with your
  * own code and retain full control over how the widgets are setup and managed.
  *
  * A #GtkListItemFactory is supposed to be final - that means its behavior should
  * not change and the first widget created from it should behave the same way as
- * the last widget created from it.  
+ * the last widget created from it.
  * If you intend to do changes to the behavior, it is recommended that you create
  * a new #GtkListItemFactory which will allow the views to recreate its widgets.
  *
