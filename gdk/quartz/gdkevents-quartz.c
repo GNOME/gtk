@@ -42,7 +42,6 @@
 #define GRIP_WIDTH 15
 #define GRIP_HEIGHT 15
 #define GDK_LION_RESIZE 5
-#define TABLET_AXES 5
 
 #if MAC_OS_X_VERSION_MAX_ALLOWED < 1060
 #define NSEventTypeRotate 13
@@ -1011,6 +1010,49 @@ fill_pinch_event (GdkWindow *window,
 }
 #endif /* OSX Version >= 10.8 */
 
+static gdouble *
+translate_axes (GdkDevice *device,
+                gdouble    x,
+                gdouble    y,
+                NSEvent   *nsevent)
+{
+  guint n_axes, i;
+  gdouble *axes;
+
+  g_object_get (device, "n-axes", &n_axes, NULL);
+  axes = g_new0 (gdouble, n_axes);
+
+  for (i = 0; i < n_axes; i++)
+    {
+      GdkAxisUse use;
+
+      use = gdk_device_get_axis_use (device, i);
+      switch (use)
+        {
+        case GDK_AXIS_X:
+          axes[i] = x;
+          break;
+        case GDK_AXIS_Y:
+          axes[i] = y;
+          break;
+        case GDK_AXIS_PRESSURE:
+          axes[i] = [nsevent pressure];
+          break;
+        case GDK_AXIS_XTILT:
+          axes[i] = [nsevent tilt].x;
+          break;
+        case GDK_AXIS_YTILT:
+          axes[i] = [nsevent tilt].y;
+          break;
+        default:
+          g_warn_if_reached ();
+          break;
+        }
+    }
+
+  return axes;
+}
+
 static void
 fill_button_event (GdkWindow *window,
                    GdkEvent  *event,
@@ -1053,15 +1095,7 @@ fill_button_event (GdkWindow *window,
                                                                       nsevent);
 
   if ([nsevent subtype] == GDK_QUARTZ_EVENT_SUBTYPE_TABLET_POINT)
-    {
-      axes = g_new (gdouble, TABLET_AXES);
-
-      axes[0] = x;
-      axes[1] = y;
-      axes[2] = [nsevent pressure];
-      axes[3] = [nsevent tilt].x;
-      axes[4] = [nsevent tilt].y;
-    }
+    axes = translate_axes (event_device, x, y, nsevent);
 
   event->any.type = type;
   event->button.window = window;
@@ -1096,15 +1130,7 @@ fill_motion_event (GdkWindow *window,
                                                                       nsevent);
 
   if ([nsevent subtype] == GDK_QUARTZ_EVENT_SUBTYPE_TABLET_POINT)
-    {
-      axes = g_new (gdouble, TABLET_AXES);
-
-      axes[0] = x;
-      axes[1] = y;
-      axes[2] = [nsevent pressure];
-      axes[3] = [nsevent tilt].x;
-      axes[4] = [nsevent tilt].y;
-    }
+    axes = translate_axes (event_device, x, y, nsevent);
 
   event->any.type = GDK_MOTION_NOTIFY;
   event->motion.window = window;
