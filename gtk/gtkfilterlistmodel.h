@@ -55,6 +55,8 @@ void                    gtk_filter_list_model_set_incremental   (GtkFilterListMo
                                                                  gboolean                incremental);
 GDK_AVAILABLE_IN_ALL
 gboolean                gtk_filter_list_model_get_incremental   (GtkFilterListModel     *self);
+GDK_AVAILABLE_IN_ALL
+guint                   gtk_filter_list_model_get_pending       (GtkFilterListModel     *self);
 
 
 G_END_DECLS
