@@ -40,7 +40,7 @@ update_title_cb (GtkFilterListModel *model)
                                (total - pending) * 100 / total);
     }
   else
-    title = g_strdup_printf ("%u Words\n", g_list_model_get_n_items (G_LIST_MODEL (model)));
+    title = g_strdup_printf ("%u Words", g_list_model_get_n_items (G_LIST_MODEL (model)));
   gtk_window_set_title (GTK_WINDOW (window), title);
   g_free (title);
 }
@@ -82,6 +82,7 @@ do_listview_words (GtkWidget *do_widget)
       header = gtk_header_bar_new ();
       gtk_header_bar_set_show_title_buttons (GTK_HEADER_BAR (header), TRUE);
       gtk_window_set_titlebar (GTK_WINDOW (window), header);
+      gtk_window_set_default_size (GTK_WINDOW (window), 400, 600);
 
       gtk_window_set_display (GTK_WINDOW (window),
                               gtk_widget_get_display (do_widget));
