@@ -45,30 +45,134 @@ update_title_cb (GtkFilterListModel *model)
   g_free (title);
 }
 
+static void
+read_lines_cb (GObject      *object,
+               GAsyncResult *result,
+               gpointer      data)
+{
+  GBufferedInputStream *stream = G_BUFFERED_INPUT_STREAM (object);
+  GtkStringList *stringlist = data;
+  GError *error = NULL;
+  gsize size;
+  GPtrArray *lines;
+  gssize n_filled;
+  const char *buffer, *newline;
+
+  n_filled = g_buffered_input_stream_fill_finish (stream, result, &error);
+  if (n_filled < 0)
+    {
+      g_print ("Could not read data: %s\n", error->message);
+      g_clear_error (&error);
+      return;
+    }
+
+  buffer = g_buffered_input_stream_peek_buffer (stream, &size);
+
+  if (n_filled == 0)
+    {
+      if (size)
+        gtk_string_list_take (stringlist, g_utf8_make_valid (buffer, size));
+      return;
+    }
+
+  lines = NULL;
+  while ((newline = memchr (buffer, '\n', size)))
+    {
+      if (newline > buffer)
+        {
+          if (lines == NULL)
+            lines = g_ptr_array_new_with_free_func (g_free);
+          g_ptr_array_add (lines, g_utf8_make_valid (buffer, newline - buffer));
+        }
+      if (g_input_stream_skip (G_INPUT_STREAM (stream), newline - buffer + 1, NULL, &error) < 0)
+        {
+          g_clear_error (&error);
+          break;
+        }
+      buffer = g_buffered_input_stream_peek_buffer (stream, &size);
+    }
+  if (lines == NULL)
+    {
+      g_buffered_input_stream_set_buffer_size (stream, g_buffered_input_stream_get_buffer_size (stream) + 4096);
+    }
+  else
+    {
+      g_ptr_array_add (lines, NULL);
+      gtk_string_list_splice (stringlist, g_list_model_get_n_items (G_LIST_MODEL (stringlist)), 0, (const char **) lines->pdata);
+      g_ptr_array_free (lines, TRUE);
+    }
+
+  g_buffered_input_stream_fill_async (stream, -1, G_PRIORITY_HIGH_IDLE, NULL, read_lines_cb, data);
+}
+               
+static void
+file_is_open_cb (GObject      *file,
+                 GAsyncResult *result,
+                 gpointer      data)
+{
+  GError *error = NULL;
+  GFileInputStream *file_stream;
+  GBufferedInputStream *stream;
+
+  file_stream = g_file_read_finish (G_FILE (file), result, &error);
+  if (file_stream == NULL)
+    {
+      g_print ("Could not open file: %s\n", error->message);
+      g_error_free (error);
+      return;
+    }
+
+  stream = G_BUFFERED_INPUT_STREAM (g_buffered_input_stream_new (G_INPUT_STREAM (file_stream)));
+  g_buffered_input_stream_fill_async (stream, -1, G_PRIORITY_HIGH_IDLE, NULL, read_lines_cb, data);
+  g_object_unref (stream);
+}
+
+static void
+load_file (GtkStringList *list,
+           GFile         *file)
+{
+  gtk_string_list_splice (list, 0, g_list_model_get_n_items (G_LIST_MODEL (list)), NULL);
+  g_file_read_async (file, G_PRIORITY_HIGH_IDLE, NULL, file_is_open_cb, list);
+}
+
+static void
+file_selected_cb (GtkWidget     *button,
+                  GtkStringList *stringlist)
+{
+  GFile *file = gtk_file_chooser_get_file (GTK_FILE_CHOOSER (button));
+
+  if (file)
+    {
+      load_file (stringlist, file);
+      g_object_unref (file);
+    }
+}
+
 GtkWidget *
 do_listview_words (GtkWidget *do_widget)
 {
   if (window == NULL)
     {
-      GtkWidget *header, *listview, *sw, *vbox, *search_entry;
+      GtkWidget *header, *listview, *sw, *vbox, *search_entry, *open_button;
       GtkFilterListModel *filter_model;
       GtkStringList *stringlist;
       GtkFilter *filter;
-      char **words;
-      char *usr_dict_words;
       GtkExpression *expression;
+      GFile *file;
 
-      if (g_file_get_contents ("/usr/share/dict/words", &usr_dict_words, NULL, NULL))
+      file = g_file_new_for_path ("/usr/share/dict/words");
+      if (g_file_query_exists (file, NULL))
         {
-          words = g_strsplit (usr_dict_words, "\n", -1);
-          g_free (usr_dict_words);
+          stringlist = gtk_string_list_new (NULL);
+          load_file (stringlist, file);
         }
       else
         {
+          char **words;
           words = g_strsplit ("lorem ipsum dolor sit amet consectetur adipisci elit sed eiusmod tempor incidunt labore et dolore magna aliqua ut enim ad minim veniam quis nostrud exercitation ullamco laboris nisi ut aliquid ex ea commodi consequat", " ", -1);
+          stringlist = gtk_string_list_new ((const char **) words);
+          g_strfreev (words);
         }
-      stringlist = gtk_string_list_new ((const char **) words);
-      g_strfreev (words);
 
       filter = gtk_string_filter_new ();
       expression = gtk_property_expression_new (GTK_TYPE_STRING_OBJECT, NULL, "string");
@@ -81,6 +185,9 @@ do_listview_words (GtkWidget *do_widget)
       gtk_window_set_title (GTK_WINDOW (window), "Words");
       header = gtk_header_bar_new ();
       gtk_header_bar_set_show_title_buttons (GTK_HEADER_BAR (header), TRUE);
+      open_button = gtk_file_chooser_button_new ("_Open", GTK_FILE_CHOOSER_ACTION_OPEN);
+      g_signal_connect (open_button, "file-set", G_CALLBACK (file_selected_cb), stringlist);
+      gtk_header_bar_pack_start (GTK_HEADER_BAR (header), open_button);
       gtk_window_set_titlebar (GTK_WINDOW (window), header);
 
       gtk_window_set_display (GTK_WINDOW (window),
