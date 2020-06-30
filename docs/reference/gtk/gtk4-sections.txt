@@ -348,6 +348,7 @@ GtkBitset
 gtk_bitset_ref
 gtk_bitset_unref
 gtk_bitset_new_empty
+gtk_bitset_new_range
 gtk_bitset_copy
 <SUBSECTION>
 gtk_bitset_contains
