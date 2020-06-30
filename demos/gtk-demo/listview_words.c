@@ -157,6 +157,7 @@ do_listview_words (GtkWidget *do_widget)
     {
       GtkWidget *header, *listview, *sw, *vbox, *search_entry, *open_button;
       GtkFilterListModel *filter_model;
+      GtkNoSelection *selection;
       GtkStringList *stringlist;
       GtkFilter *filter;
       GtkExpression *expression;
@@ -211,7 +212,9 @@ do_listview_words (GtkWidget *do_widget)
           gtk_builder_list_item_factory_new_from_bytes (NULL,
               g_bytes_new_static (factory_text, strlen (factory_text))));
       gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (sw), listview);
-      gtk_list_view_set_model (GTK_LIST_VIEW (listview), G_LIST_MODEL (filter_model));
+      selection = gtk_no_selection_new (G_LIST_MODEL (filter_model));
+      gtk_list_view_set_model (GTK_LIST_VIEW (listview), G_LIST_MODEL (selection));
+      g_object_unref (selection);
 
       g_signal_connect (filter_model, "items-changed", G_CALLBACK (update_title_cb), NULL);
       g_signal_connect (filter_model, "notify::pending", G_CALLBACK (update_title_cb), NULL);
