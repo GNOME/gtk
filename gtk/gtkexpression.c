@@ -1570,12 +1570,12 @@ GTK_DEFINE_EXPRESSION_TYPE (GtkCClosureExpression,
 /**
  * gtk_cclosure_expression_new:
  * @value_type: the type of the value that this expression evaluates to
- * @marshal: (scope call): marshaller used for creating a closure
+ * @marshal: (scope call) (nullable): marshaller used for creating a closure
  * @n_params: the number of params needed for evaluating @closure
  * @params: (array length=n_params) (transfer full): expressions for each parameter
  * @callback_func: (scope notified) (closure user_data) (destroy user_destroy): callback used for creating a closure
- * @user_data: user data used for creating a closure
- * @user_destroy: destroy notify for @user_data
+ * @user_data: (nullable): user data used for creating a closure
+ * @user_destroy: (nullable): destroy notify for @user_data
  *
  * This function is a variant of gtk_closure_expression_new() that
  * creates a #GClosure by calling gtk_cclosure_new() with the given
