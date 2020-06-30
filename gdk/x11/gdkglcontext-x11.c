@@ -186,15 +186,19 @@ gdk_x11_gl_context_end_frame (GdkDrawContext *draw_context,
 #ifdef HAVE_XDAMAGE
   if (context_x11->xdamage != 0)
     {
+      g_warning ("fence was %p", context_x11->frame_fence);
       g_assert (context_x11->frame_fence == 0);
 
       context_x11->frame_fence = glFenceSync (GL_SYNC_GPU_COMMANDS_COMPLETE, 0);
+
+      g_warning ("fence is %p", context_x11->frame_fence);
 
       /* We consider the frame still getting painted until the GL operation is
        * finished, and the window gets damage reported from the X server.
        * It's only at this point the compositor can be sure it has full
        * access to the new updates.
        */
+      g_warning ("still painting true");
       _gdk_x11_surface_set_frame_still_painting (surface, TRUE);
     }
 #endif
@@ -588,14 +592,23 @@ finish_frame (GdkGLContext *context)
   GdkX11GLContext *context_x11 = GDK_X11_GL_CONTEXT (context);
   GdkSurface *surface = gdk_gl_context_get_surface (context);
 
+  g_warning ("finish frame");
   if (context_x11->xdamage == 0)
+  {
+    g_warning ("no damage");
     return;
+  }
 
   if (context_x11->frame_fence == 0)
-    return;
+    {
+      g_warning ("no fence");
+      return;
+    }
 
+  g_warning ("deleting fence %p", context_x11->frame_fence);
   glDeleteSync (context_x11->frame_fence);
   context_x11->frame_fence = 0;
+  g_warning ("still painting false");
   _gdk_x11_surface_set_frame_still_painting (surface, FALSE);
 }
 
@@ -691,6 +704,7 @@ on_gl_surface_xevent (GdkGLContext   *context,
           case GL_WAIT_FAILED:
             if (wait_result == GL_WAIT_FAILED)
               g_warning ("failed to wait on GL fence associated with last swap buffers call");
+	    g_warning ("gpu done");
             finish_frame (context);
             break;
 
@@ -716,8 +730,13 @@ on_surface_state_changed (GdkGLContext *context)
 {
   GdkSurface *surface = gdk_gl_context_get_surface (context);
 
+  g_warning ("surface state changed");
   if ((surface->state & GDK_SURFACE_STATE_WITHDRAWN) == 0)
+  {
+    g_warning ("not withdrawn");
     return;
+  }
+  g_warning ("withdrawn");
 
   /* If we're about to withdraw the surface, then we don't care if the frame is
    * still getting rendered by the GPU. The compositor is going to remove the surface
@@ -959,6 +978,7 @@ gdk_x11_gl_context_dispose (GObject *gobject)
 #ifdef HAVE_XDAMAGE
   context_x11->xdamage = 0;
 #endif
+  g_warning ("disposing context %p", gobject);
 
   G_OBJECT_CLASS (gdk_x11_gl_context_parent_class)->dispose (gobject);
 }
@@ -983,6 +1003,8 @@ static void
 gdk_x11_gl_context_init (GdkX11GLContext *self)
 {
   self->do_frame_sync = TRUE;
+
+  g_warning ("creating context %p", self);
 }
 
 gboolean
