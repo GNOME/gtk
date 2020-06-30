@@ -449,11 +449,10 @@ gtk_string_list_new (const char * const *strings)
  * @self: a #GtkStringList
  * @position: the position at which to make the change
  * @n_removals: the number of strings to remove
- * @additions: (array length=n_additions): the strings to add
- * @n_additions: the number of items to add
+ * @additions: (array zero-terminated=1) (nullable): The strings to add
  *
- * Changes @self by removing @n_removals strings and adding @n_additions
- * strings to it.
+ * Changes @self by removing @n_removals strings and adding @additions
+ * to it.
  *
  * This function is more efficient than gtk_string_list_insert() and
  * gtk_string_list_remove(), because it only emits
@@ -466,14 +465,13 @@ gtk_string_list_new (const char * const *strings)
  * of the list at the time this function is called).
  */
 void
-gtk_string_list_splice (GtkStringList  *self,
-                        guint           position,
-                        guint           n_removals,
-                        const char    **additions,
-                        guint           n_additions)
+gtk_string_list_splice (GtkStringList      *self,
+                        guint               position,
+                        guint               n_removals,
+                        const char * const *additions)
 {
   GSequenceIter *it;
-  guint n_items;
+  guint add, n_items;
 
   g_return_if_fail (GTK_IS_STRING_LIST (self));
   g_return_if_fail (position + n_removals >= position); /* overflow */
@@ -493,17 +491,18 @@ gtk_string_list_splice (GtkStringList  *self,
       it = end;
     }
 
-  if (n_additions)
+  if (additions)
     {
-      gint i;
-
-      for (i = 0; i < n_additions; i++)
+      for (add = 0; additions[add]; add++)
         {
-          g_sequence_insert_before (it, gtk_string_object_new (additions[i]));
+          g_sequence_insert_before (it, gtk_string_object_new (additions[add]));
         }
     }
+  else
+    add = 0;
 
-  g_list_model_items_changed (G_LIST_MODEL (self), position, n_removals, n_additions);
+  if (n_removals || add)
+    g_list_model_items_changed (G_LIST_MODEL (self), position, n_removals, add);
 }
 
 /**
