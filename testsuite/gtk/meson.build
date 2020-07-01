@@ -76,6 +76,7 @@ tests = [
   ['revealer-size'],
   ['widgetorder'],
   ['widget-refcount'],
+  ['listmodel-performance'],
 ]
 
 # Tests that are expected to fail
