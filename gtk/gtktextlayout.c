@@ -111,27 +111,13 @@ struct _GtkTextLayoutPrivate
   GtkTextLineDisplayCache *cache;
 };
 
-static GtkTextLineData *gtk_text_layout_real_wrap (GtkTextLayout *layout,
-                                                   GtkTextLine *line,
-                                                   /* may be NULL */
-                                                   GtkTextLineData *line_data);
-
 static void gtk_text_layout_invalidated     (GtkTextLayout     *layout);
 
-static void gtk_text_layout_real_invalidate        (GtkTextLayout     *layout,
-						    const GtkTextIter *start,
-						    const GtkTextIter *end);
-static void gtk_text_layout_real_invalidate_cursors(GtkTextLayout     *layout,
-						    const GtkTextIter *start,
-						    const GtkTextIter *end);
 static void gtk_text_layout_invalidate_cache       (GtkTextLayout     *layout,
 						    GtkTextLine       *line,
 						    gboolean           cursors_only);
 static void gtk_text_layout_invalidate_cursor_line (GtkTextLayout     *layout,
 						    gboolean           cursors_only);
-static void gtk_text_layout_real_free_line_data    (GtkTextLayout     *layout,
-						    GtkTextLine       *line,
-						    GtkTextLineData   *line_data);
 static void gtk_text_layout_emit_changed           (GtkTextLayout     *layout,
 						    gint               y,
 						    gint               old_height,
@@ -249,16 +235,11 @@ gtk_text_layout_class_init (GtkTextLayoutClass *klass)
   object_class->dispose = gtk_text_layout_dispose;
   object_class->finalize = gtk_text_layout_finalize;
 
-  klass->wrap = gtk_text_layout_real_wrap;
-  klass->invalidate = gtk_text_layout_real_invalidate;
-  klass->invalidate_cursors = gtk_text_layout_real_invalidate_cursors;
-  klass->free_line_data = gtk_text_layout_real_free_line_data;
-
   signals[INVALIDATED] =
     g_signal_new (I_("invalidated"),
                   G_OBJECT_CLASS_TYPE (object_class),
                   G_SIGNAL_RUN_LAST,
-                  G_STRUCT_OFFSET (GtkTextLayoutClass, invalidated),
+                  0,
                   NULL, NULL,
                   NULL,
                   G_TYPE_NONE,
@@ -268,7 +249,7 @@ gtk_text_layout_class_init (GtkTextLayoutClass *klass)
     g_signal_new (I_("changed"),
                   G_OBJECT_CLASS_TYPE (object_class),
                   G_SIGNAL_RUN_LAST,
-                  G_STRUCT_OFFSET (GtkTextLayoutClass, changed),
+                  0,
                   NULL, NULL,
                   _gtk_marshal_VOID__INT_INT_INT,
                   G_TYPE_NONE,
@@ -283,7 +264,7 @@ gtk_text_layout_class_init (GtkTextLayoutClass *klass)
     g_signal_new (I_("allocate-child"),
                   G_OBJECT_CLASS_TYPE (object_class),
                   G_SIGNAL_RUN_LAST,
-                  G_STRUCT_OFFSET (GtkTextLayoutClass, allocate_child),
+                  0,
                   NULL, NULL,
                   _gtk_marshal_VOID__OBJECT_INT_INT,
                   G_TYPE_NONE,
@@ -690,39 +671,6 @@ gtk_text_layout_cursors_changed (GtkTextLayout *layout,
   gtk_text_layout_emit_changed (layout, y, old_height, new_height);
 }
 
-void
-gtk_text_layout_free_line_data (GtkTextLayout     *layout,
-                                GtkTextLine       *line,
-                                GtkTextLineData   *line_data)
-{
-  GTK_TEXT_LAYOUT_GET_CLASS (layout)->free_line_data (layout, line, line_data);
-}
-
-void
-gtk_text_layout_invalidate (GtkTextLayout *layout,
-                            const GtkTextIter *start_index,
-                            const GtkTextIter *end_index)
-{
-  GTK_TEXT_LAYOUT_GET_CLASS (layout)->invalidate (layout, start_index, end_index);
-}
-
-void
-gtk_text_layout_invalidate_cursors (GtkTextLayout *layout,
-				    const GtkTextIter *start_index,
-				    const GtkTextIter *end_index)
-{
-  GTK_TEXT_LAYOUT_GET_CLASS (layout)->invalidate_cursors (layout, start_index, end_index);
-}
-
-GtkTextLineData*
-gtk_text_layout_wrap (GtkTextLayout *layout,
-                      GtkTextLine  *line,
-                      /* may be NULL */
-                      GtkTextLineData *line_data)
-{
-  return GTK_TEXT_LAYOUT_GET_CLASS (layout)->wrap (layout, line, line_data);
-}
-
 
 /*
  * gtk_text_layout_get_lines:
@@ -892,10 +840,10 @@ gtk_text_layout_update_cursor_line (GtkTextLayout *layout)
   gtk_text_line_display_cache_set_cursor_line (priv->cache, priv->cursor_line);
 }
 
-static void
-gtk_text_layout_real_invalidate (GtkTextLayout *layout,
-                                 const GtkTextIter *start,
-                                 const GtkTextIter *end)
+void
+gtk_text_layout_invalidate (GtkTextLayout     *layout,
+			    const GtkTextIter *start,
+			    const GtkTextIter *end)
 {
   GtkTextLine *line;
   GtkTextLine *last_line;
@@ -936,20 +884,20 @@ gtk_text_layout_real_invalidate (GtkTextLayout *layout,
   gtk_text_layout_invalidated (layout);
 }
 
-static void
-gtk_text_layout_real_invalidate_cursors (GtkTextLayout     *layout,
-					 const GtkTextIter *start,
-					 const GtkTextIter *end)
+void
+gtk_text_layout_invalidate_cursors (GtkTextLayout     *layout,
+				    const GtkTextIter *start,
+				    const GtkTextIter *end)
 {
   GtkTextLayoutPrivate *priv = GTK_TEXT_LAYOUT_GET_PRIVATE (layout);
   gtk_text_line_display_cache_invalidate_range (priv->cache, layout, start, end, TRUE);
   gtk_text_layout_invalidated (layout);
 }
 
-static void
-gtk_text_layout_real_free_line_data (GtkTextLayout     *layout,
-                                     GtkTextLine       *line,
-                                     GtkTextLineData   *line_data)
+void
+gtk_text_layout_free_line_data (GtkTextLayout   *layout,
+                                GtkTextLine     *line,
+                                GtkTextLineData *line_data)
 {
   gtk_text_layout_invalidate_cache (layout, line, FALSE);
 
@@ -1148,11 +1096,11 @@ gtk_text_layout_validate (GtkTextLayout *layout,
     }
 }
 
-static GtkTextLineData*
-gtk_text_layout_real_wrap (GtkTextLayout   *layout,
-                           GtkTextLine     *line,
-                           /* may be NULL */
-                           GtkTextLineData *line_data)
+GtkTextLineData *
+gtk_text_layout_wrap (GtkTextLayout   *layout,
+                      GtkTextLine     *line,
+                      /* may be NULL */
+                      GtkTextLineData *line_data)
 {
   GtkTextLineDisplay *display;
   PangoRectangle ink_rect, logical_rect;

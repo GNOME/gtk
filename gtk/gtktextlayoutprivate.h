@@ -167,44 +167,6 @@ struct _GtkTextLayout
 struct _GtkTextLayoutClass
 {
   GObjectClass parent_class;
-
-  /* Some portion of the layout was invalidated
-   */
-  void  (*invalidated)  (GtkTextLayout *layout);
-
-  /* A range of the layout changed appearance and possibly height
-   */
-  void  (*changed)              (GtkTextLayout     *layout,
-                                 gint               y,
-                                 gint               old_height,
-                                 gint               new_height);
-  GtkTextLineData* (*wrap)      (GtkTextLayout     *layout,
-                                 GtkTextLine       *line,
-                                 GtkTextLineData   *line_data); /* may be NULL */
-  void  (*get_log_attrs)        (GtkTextLayout     *layout,
-                                 GtkTextLine       *line,
-                                 PangoLogAttr     **attrs,
-                                 gint              *n_attrs);
-  void  (*invalidate)           (GtkTextLayout     *layout,
-                                 const GtkTextIter *start,
-                                 const GtkTextIter *end);
-  void  (*free_line_data)       (GtkTextLayout     *layout,
-                                 GtkTextLine       *line,
-                                 GtkTextLineData   *line_data);
-
-  void (*allocate_child)        (GtkTextLayout     *layout,
-                                 GtkWidget         *child,
-                                 gint               x,
-                                 gint               y);
-
-  void (*invalidate_cursors)    (GtkTextLayout     *layout,
-                                 const GtkTextIter *start,
-                                 const GtkTextIter *end);
-
-  /* Padding for future expansion */
-  void (*_gtk_reserved1) (void);
-  void (*_gtk_reserved2) (void);
-  void (*_gtk_reserved3) (void);
 };
 
 struct _GtkTextAttrAppearance
