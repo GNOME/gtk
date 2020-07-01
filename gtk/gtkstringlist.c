@@ -146,23 +146,6 @@ gtk_string_object_class_init (GtkStringObjectClass *class)
 
 }
 
-static GtkStringObject *
-gtk_string_object_new (const char *string)
-{
-  return g_object_new (GTK_TYPE_STRING_OBJECT, "string", string, NULL);
-}
-
-static GtkStringObject *
-gtk_string_object_new_take (char *string)
-{
-  GtkStringObject *obj;
-
-  obj = g_object_new (GTK_TYPE_STRING_OBJECT, NULL);
-  obj->string = string;
-
-  return obj;
-}
-
 /**
  * gtk_string_object_get_string:
  * @self: a #GtkStringObject
@@ -183,7 +166,7 @@ struct _GtkStringList
 {
   GObject parent_instance;
 
-  GSequence *items;
+  GPtrArray *items;
 };
 
 struct _GtkStringListClass
@@ -202,7 +185,25 @@ gtk_string_list_get_n_items (GListModel *list)
 {
   GtkStringList *self = GTK_STRING_LIST (list);
 
-  return g_sequence_get_length (self->items);
+  return self->items->len;
+}
+
+static inline gboolean
+IS_STRING (gpointer item)
+{
+  return GPOINTER_TO_INT (item) & 0x1;
+}
+
+static inline gpointer
+TO_STRING (gpointer item)
+{
+  return GINT_TO_POINTER (GPOINTER_TO_INT (item) & ~0x1);
+}
+
+static inline gpointer
+MAKE_STRING (const char *str)
+{
+  return GINT_TO_POINTER (GPOINTER_TO_INT (str) | 0x1);
 }
 
 static gpointer
@@ -210,14 +211,21 @@ gtk_string_list_get_item (GListModel *list,
                           guint       position)
 {
   GtkStringList *self = GTK_STRING_LIST (list);
-  GSequenceIter *iter;
+  gpointer item;
 
-  iter = g_sequence_get_iter_at_pos (self->items, position);
-
-  if (g_sequence_iter_is_end (iter))
+  if (position >= self->items->len)
     return NULL;
-  else
-    return g_object_ref (g_sequence_get (iter));
+
+  item = g_ptr_array_index (self->items, position);
+
+  if (IS_STRING (item))
+    {
+      GtkStringObject *obj = g_object_new (GTK_TYPE_STRING_OBJECT, NULL);
+      obj->string = (char *)TO_STRING (item);
+      g_ptr_array_index (self->items, position) = obj;
+    }
+
+  return g_object_ref (item);
 }
 
 static void
@@ -324,7 +332,7 @@ item_end_element (GtkBuildableParseContext  *context,
           g_string_assign (data->string, translated);
         }
 
-      g_sequence_append (data->list->items, gtk_string_object_new (data->string->str));
+      g_ptr_array_add (data->list->items, MAKE_STRING (g_strdup (data->string->str)));
     }
 
   data->translatable = FALSE;
@@ -404,7 +412,7 @@ gtk_string_list_dispose (GObject *object)
 {
   GtkStringList *self = GTK_STRING_LIST (object);
 
-  g_clear_pointer (&self->items, g_sequence_free);
+  g_clear_pointer (&self->items, g_ptr_array_unref);
 
   G_OBJECT_CLASS (gtk_string_list_parent_class)->dispose (object);
 }
@@ -418,9 +426,18 @@ gtk_string_list_class_init (GtkStringListClass *class)
 }
 
 static void
+free_string_or_object (gpointer data)
+{
+  if (IS_STRING (data))
+    g_free (TO_STRING (data));
+  else
+    g_object_unref (data);
+}
+
+static void
 gtk_string_list_init (GtkStringList *self)
 {
-  self->items = g_sequence_new (g_object_unref);
+  self->items = g_ptr_array_new_full (32, free_string_or_object);
 }
 
 /**
@@ -435,12 +452,10 @@ GtkStringList *
 gtk_string_list_new (const char **strings)
 {
   GtkStringList *self;
-  guint i;
 
   self = g_object_new (GTK_TYPE_STRING_LIST, NULL);
 
-  for (i = 0; strings[i]; i++)
-    g_sequence_append (self->items, gtk_string_object_new (strings[i]));
+  gtk_string_list_splice (self, 0, 0, strings, g_strv_length ((char **)strings));
 
   return self;
 }
@@ -473,35 +488,23 @@ gtk_string_list_splice (GtkStringList  *self,
                         const char    **additions,
                         guint           n_additions)
 {
-  GSequenceIter *it;
   guint n_items;
+  int i;
+  gpointer item;
 
   g_return_if_fail (GTK_IS_STRING_LIST (self));
   g_return_if_fail (position + n_removals >= position); /* overflow */
 
-  n_items = g_sequence_get_length (self->items);
+  n_items = self->items->len;
   g_return_if_fail (position + n_removals <= n_items);
 
-  it = g_sequence_get_iter_at_pos (self->items, position);
+  for (i = 0; i < n_removals; i++)
+    g_ptr_array_remove_index (self->items, position);
 
-  if (n_removals)
+  for (i = 0; i < n_additions; i++)
     {
-      GSequenceIter *end;
-
-      end = g_sequence_iter_move (it, n_removals);
-      g_sequence_remove_range (it, end);
-
-      it = end;
-    }
-
-  if (n_additions)
-    {
-      gint i;
-
-      for (i = 0; i < n_additions; i++)
-        {
-          g_sequence_insert_before (it, gtk_string_object_new (additions[i]));
-        }
+      item = MAKE_STRING (g_strdup (additions[i]));
+      g_ptr_array_insert (self->items, position + i, item);
     }
 
   g_list_model_items_changed (G_LIST_MODEL (self), position, n_removals, n_additions);
@@ -522,11 +525,13 @@ gtk_string_list_append (GtkStringList *self,
                         const char    *string)
 {
   guint n_items;
+  gpointer item;
 
   g_return_if_fail (GTK_IS_STRING_LIST (self));
 
-  n_items = g_sequence_get_length (self->items);
-  g_sequence_append (self->items, gtk_string_object_new (string));
+  n_items = self->items->len;
+  item = MAKE_STRING (g_strdup (string));
+  g_ptr_array_add (self->items, item);
 
   g_list_model_items_changed (G_LIST_MODEL (self), n_items, 0, 1);
 }
@@ -551,11 +556,13 @@ gtk_string_list_take (GtkStringList *self,
                       char          *string)
 {
   guint n_items;
+  gpointer item;
 
   g_return_if_fail (GTK_IS_STRING_LIST (self));
 
-  n_items = g_sequence_get_length (self->items);
-  g_sequence_append (self->items, gtk_string_object_new_take (string));
+  n_items = self->items->len;
+  item = MAKE_STRING (string);
+  g_ptr_array_add (self->items, item);
 
   g_list_model_items_changed (G_LIST_MODEL (self), n_items, 0, 1);
 }
@@ -572,14 +579,12 @@ void
 gtk_string_list_remove (GtkStringList *self,
                         guint          position)
 {
-  GSequenceIter *iter;
-
   g_return_if_fail (GTK_IS_STRING_LIST (self));
 
-  iter = g_sequence_get_iter_at_pos (self->items, position);
-  g_return_if_fail (!g_sequence_iter_is_end (iter));
+  if (position >= self->items->len)
+    return;
 
-  g_sequence_remove (iter);
+  g_ptr_array_remove_index (self->items, position);
 
   g_list_model_items_changed (G_LIST_MODEL (self), position, 1, 0);
 }
@@ -601,20 +606,14 @@ const char *
 gtk_string_list_get_string (GtkStringList *self,
                             guint          position)
 {
-  GSequenceIter *iter;
+  gpointer item;
 
   g_return_val_if_fail (GTK_IS_STRING_LIST (self), NULL);
 
-  iter = g_sequence_get_iter_at_pos (self->items, position);
+  item = g_ptr_array_index (self->items, position);
 
-  if (g_sequence_iter_is_end (iter))
-    {
-      return NULL;
-    }
+  if (IS_STRING (item))
+    return (const char *)TO_STRING (item);
   else
-    {
-      GtkStringObject *obj = g_sequence_get (iter);
-
-      return obj->string;
-    }
+    return GTK_STRING_OBJECT (item)->string;
 }
