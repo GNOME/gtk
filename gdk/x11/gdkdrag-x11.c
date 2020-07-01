@@ -1999,6 +1999,7 @@ _gdk_x11_surface_drag_begin (GdkSurface         *surface,
   display = gdk_surface_get_display (surface);
 
   ipc_surface = gdk_surface_new_temp (display, &(GdkRectangle) { -99, -99, 1, 1 });
+  gdk_x11_surface_set_frame_sync_enabled (ipc_surface, FALSE);
 
   drag = (GdkDrag *) g_object_new (GDK_TYPE_X11_DRAG,
                                    "surface", ipc_surface,
