@@ -2822,6 +2822,7 @@ gdk_x11_drag_context_manage_dnd (GdkDragContext *context,
 
   context->protocol = GDK_DRAG_PROTO_XDND;
   x11_context->ipc_window = g_object_ref (ipc_window);
+  gdk_x11_window_set_frame_sync_enabled (ipc_window, FALSE);
 
   if (drag_context_grab (context))
     {
