@@ -446,6 +446,7 @@ gtk_single_selection_get_type
 <TITLE>GtkMultiSeledction</TITLE>
 GtkMultiSelection
 gtk_multi_selection_new
+gtk_multi_selection_get_model
 <SUBSECTION Private>
 gtk_multi_selection_get_type
 </SECTION>

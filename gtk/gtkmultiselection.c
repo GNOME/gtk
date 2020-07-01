@@ -386,3 +386,19 @@ gtk_multi_selection_new (GListModel *model)
                        "model", model,
                        NULL);
 }
+
+/**
+ * gtk_multi_selection_get_model:
+ * @self: a #GtkMultiSelection
+ *
+ * Returns the underlying model of @self.
+ *
+ * Returns: (transfer none): the underlying model
+ */
+GListModel *
+gtk_multi_selection_get_model (GtkMultiSelection *self)
+{
+  g_return_val_if_fail (GTK_IS_MULTI_SELECTION (self), NULL);
+
+  return self->model;
+}
