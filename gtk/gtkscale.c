@@ -79,22 +79,23 @@
  *
  * |[<!-- language="plain" -->
  * scale[.fine-tune][.marks-before][.marks-after]
+ * ├── [value][.top][.right][.bottom][.left]
  * ├── marks.top
  * │   ├── mark
  * │   ┊    ├── [label]
  * │   ┊    ╰── indicator
  * ┊   ┊
  * │   ╰── mark
- * ├── [value][.top][.right][.bottom][.left]
- * ├── trough
- * │   ├── [fill]
- * │   ├── [highlight]
- * │   ╰── slider
- * ╰── marks.bottom
- *     ├── mark
- *     ┊    ├── indicator
- *     ┊    ╰── [label]
- *     ╰── mark
+ * ├── marks.bottom
+ * │   ├── mark
+ * │   ┊    ├── indicator
+ * │   ┊    ╰── [label]
+ * ┊   ┊
+ * │   ╰── mark
+ * ╰── trough
+ *     ├── [fill]
+ *     ├── [highlight]
+ *     ╰── slider
  * ]|
  *
  * GtkScale has a main CSS node with name scale and a subnode for its contents,
@@ -197,8 +198,6 @@ static void     gtk_scale_measure (GtkWidget      *widget,
 static void     gtk_scale_get_range_border        (GtkRange       *range,
                                                    GtkBorder      *border);
 static void     gtk_scale_finalize                (GObject        *object);
-static void     gtk_scale_snapshot                (GtkWidget      *widget,
-                                                   GtkSnapshot    *snapshot);
 static void     gtk_scale_real_get_layout_offsets (GtkScale       *scale,
                                                    gint           *x,
                                                    gint           *y);
@@ -661,7 +660,6 @@ gtk_scale_class_init (GtkScaleClass *class)
   gobject_class->notify = gtk_scale_notify;
   gobject_class->finalize = gtk_scale_finalize;
 
-  widget_class->snapshot = gtk_scale_snapshot;
   widget_class->size_allocate = gtk_scale_size_allocate;
   widget_class->measure = gtk_scale_measure;
   widget_class->grab_focus = gtk_widget_grab_focus_self;
@@ -1093,14 +1091,9 @@ gtk_scale_set_draw_value (GtkScale *scale,
                                              "css-name", "value",
                                              "label", txt,
                                              NULL);
-
           g_free (txt);
 
-          if (priv->value_pos == GTK_POS_TOP || priv->value_pos == GTK_POS_LEFT)
-            gtk_widget_insert_after (priv->value_widget, GTK_WIDGET (scale), NULL);
-          else
-            gtk_widget_insert_before (priv->value_widget, GTK_WIDGET (scale), NULL);
-
+          gtk_widget_insert_after (priv->value_widget, GTK_WIDGET (scale), NULL);
           gtk_range_set_round_digits (GTK_RANGE (scale), priv->digits);
           update_value_position (scale);
           update_label_request (scale);
@@ -1470,25 +1463,6 @@ gtk_scale_measure (GtkWidget      *widget,
 }
 
 static void
-gtk_scale_snapshot (GtkWidget   *widget,
-                    GtkSnapshot *snapshot)
-{
-  GtkScale *scale = GTK_SCALE (widget);
-  GtkScalePrivate *priv = gtk_scale_get_instance_private (scale);
-
-  if (priv->top_marks_widget)
-    gtk_widget_snapshot_child (widget, priv->top_marks_widget, snapshot);
-
-  if (priv->bottom_marks_widget)
-    gtk_widget_snapshot_child (widget, priv->bottom_marks_widget, snapshot);
-
-  if (priv->value_widget)
-    gtk_widget_snapshot_child (widget, priv->value_widget, snapshot);
-
-  GTK_WIDGET_CLASS (gtk_scale_parent_class)->snapshot (widget, snapshot);
-}
-
-static void
 gtk_scale_real_get_layout_offsets (GtkScale *scale,
                                    gint     *x,
                                    gint     *y)
@@ -1722,9 +1696,7 @@ gtk_scale_add_mark (GtkScale        *scale,
 
           gtk_widget_insert_after (priv->top_marks_widget,
                                    GTK_WIDGET (scale),
-                                   (priv->value_widget &&
-                                    (priv->value_pos == GTK_POS_TOP || priv->value_pos == GTK_POS_LEFT)) ?
-                                     priv->value_widget : NULL);
+                                   priv->value_widget);
           gtk_widget_add_css_class (priv->top_marks_widget, GTK_STYLE_CLASS_TOP);
         }
       marks_widget = priv->top_marks_widget;
@@ -1742,9 +1714,7 @@ gtk_scale_add_mark (GtkScale        *scale,
 
           gtk_widget_insert_before (priv->bottom_marks_widget,
                                     GTK_WIDGET (scale),
-                                    (priv->value_widget &&
-                                     (priv->value_pos == GTK_POS_BOTTOM || priv->value_pos == GTK_POS_RIGHT)) ?
-                                      priv->value_widget: NULL);
+                                    gtk_range_get_trough_widget (GTK_RANGE (scale)));
           gtk_widget_add_css_class (priv->bottom_marks_widget, GTK_STYLE_CLASS_BOTTOM);
         }
       marks_widget = priv->bottom_marks_widget;

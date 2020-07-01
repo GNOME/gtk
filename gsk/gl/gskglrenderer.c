@@ -2241,11 +2241,22 @@ render_cross_fade_node (GskGLRenderer   *self,
 {
   GskRenderNode *start_node = gsk_cross_fade_node_get_start_child (node);
   GskRenderNode *end_node = gsk_cross_fade_node_get_end_child (node);
-  float progress = gsk_cross_fade_node_get_progress (node);
+  const float progress = gsk_cross_fade_node_get_progress (node);
   TextureRegion start_region;
   TextureRegion end_region;
   gboolean is_offscreen1, is_offscreen2;
   OpCrossFade *op;
+
+  if (progress <= 0)
+    {
+      gsk_gl_renderer_add_render_ops (self, start_node, builder);
+      return;
+    }
+  else if (progress >= 1)
+    {
+      gsk_gl_renderer_add_render_ops (self, end_node, builder);
+      return;
+    }
 
   /* TODO: We create 2 textures here as big as the cross-fade node, but both the
    * start and the end node might be a lot smaller than that. */
@@ -2266,11 +2277,10 @@ render_cross_fade_node (GskGLRenderer   *self,
                           &end_region, &is_offscreen2,
                           FORCE_OFFSCREEN | RESET_CLIP | RESET_OPACITY))
     {
-      load_vertex_data_with_region (ops_draw (builder, NULL),
-                                    node,
-                                    builder,
-                                    &start_region,
-                                    TRUE);
+      const float prev_opacity = ops_set_opacity (builder, builder->current_opacity * progress);
+      gsk_gl_renderer_add_render_ops (self, start_node, builder);
+      ops_set_opacity (builder, prev_opacity);
+
       return;
     }
 

@@ -104,7 +104,7 @@ gsk_color_node_peek_color (GskRenderNode *node)
 }
 
 /**
- * gsk_color_node_new: 
+ * gsk_color_node_new:
  * @rgba: a #GdkRGBA specifying a color
  * @bounds: the rectangle to render the color into
  *
@@ -216,7 +216,7 @@ gsk_linear_gradient_node_diff (GskRenderNode  *node1,
 
       return;
     }
-  
+
   gsk_render_node_diff_impossible (node1, node2, region);
 }
 
@@ -1163,7 +1163,7 @@ gsk_inset_shadow_node_diff (GskRenderNode  *node1,
 }
 
 /**
- * gsk_inset_shadow_node_new: 
+ * gsk_inset_shadow_node_new:
  * @outline: outline of the region containing the shadow
  * @color: color of the shadow
  * @dx: horizontal offset of shadow
@@ -1465,7 +1465,7 @@ gsk_outset_shadow_node_diff (GskRenderNode  *node1,
 }
 
 /**
- * gsk_outset_shadow_node_new: 
+ * gsk_outset_shadow_node_new:
  * @outline: outline of the region surrounded by shadow
  * @color: color of the shadow
  * @dx: horizontal offset of shadow
@@ -1672,7 +1672,7 @@ gsk_cairo_node_peek_surface (GskRenderNode *node)
 }
 
 /**
- * gsk_cairo_node_new: 
+ * gsk_cairo_node_new:
  * @bounds: the rectangle to render to
  *
  * Creates a #GskRenderNode that will render a cairo surface
@@ -1982,7 +1982,7 @@ gsk_transform_node_draw (GskRenderNode *node,
                             ctm.xy, ctm.yy,
                             ctm.x0, ctm.y0));
   cairo_transform (cr, &ctm);
-  
+
   gsk_render_node_draw (self->child, cr);
 }
 
@@ -2062,7 +2062,7 @@ gsk_transform_node_diff (GskRenderNode  *node1,
 }
 
 /**
- * gsk_transform_node_new: 
+ * gsk_transform_node_new:
  * @child: The node to transform
  * @transform: (transfer none): The transform to apply
  *
@@ -2188,7 +2188,7 @@ gsk_opacity_node_diff (GskRenderNode  *node1,
 }
 
 /**
- * gsk_opacity_node_new: 
+ * gsk_opacity_node_new:
  * @child: The node to draw
  * @opacity: The opacity to apply
  *
@@ -2380,7 +2380,7 @@ nope:
 }
 
 /**
- * gsk_color_matrix_node_new: 
+ * gsk_color_matrix_node_new:
  * @child: The node to draw
  * @color_matrix: The matrix to apply
  * @color_offset: Values to add to the color
@@ -2533,7 +2533,7 @@ gsk_repeat_node_draw (GskRenderNode *node,
 }
 
 /**
- * gsk_repeat_node_new: 
+ * gsk_repeat_node_new:
  * @bounds: The bounds of the area to be painted
  * @child: The child to repeat
  * @child_bounds: (allow-none): The area of the child to repeat or %NULL to
@@ -2670,7 +2670,7 @@ gsk_clip_node_diff (GskRenderNode  *node1,
 }
 
 /**
- * gsk_clip_node_new: 
+ * gsk_clip_node_new:
  * @child: The node to draw
  * @clip: The clip to apply
  *
@@ -2800,7 +2800,7 @@ gsk_rounded_clip_node_diff (GskRenderNode  *node1,
 }
 
 /**
- * gsk_rounded_clip_node_new: 
+ * gsk_rounded_clip_node_new:
  * @child: The node to draw
  * @clip: The clip to apply
  *
@@ -3013,7 +3013,7 @@ gsk_shadow_node_get_bounds (GskShadowNode *self,
 }
 
 /**
- * gsk_shadow_node_new: 
+ * gsk_shadow_node_new:
  * @child: The node to draw
  * @shadows: (array length=n_shadows): The shadows to apply
  * @n_shadows: number of entries in the @shadows array
@@ -3210,7 +3210,7 @@ gsk_blend_node_diff (GskRenderNode  *node1,
 }
 
 /**
- * gsk_blend_node_new: 
+ * gsk_blend_node_new:
  * @bottom: The bottom node to be drawn
  * @top: The node to be blended onto the @bottom node
  * @blend_mode: The blend mode to use
@@ -3359,7 +3359,7 @@ gsk_cross_fade_node_diff (GskRenderNode  *node1,
 }
 
 /**
- * gsk_cross_fade_node_new: 
+ * gsk_cross_fade_node_new:
  * @start: The start node to be drawn
  * @end: The node to be cross_fadeed onto the @start node
  * @progress: How far the fade has progressed from start to end. The value will
@@ -3549,7 +3549,7 @@ font_has_color_glyphs (const PangoFont *font)
 }
 
 /**
- * gsk_text_node_new: 
+ * gsk_text_node_new:
  * @font: the #PangoFont containing the glyphs
  * @glyphs: the #PangoGlyphString to render
  * @color: the foreground color to render with
@@ -3953,7 +3953,7 @@ gsk_blur_node_diff (GskRenderNode  *node1,
 }
 
 /**
- * gsk_blur_node_new: 
+ * gsk_blur_node_new:
  * @child: the child node to blur
  * @radius: the blur radius
  *
@@ -4076,9 +4076,9 @@ gsk_debug_node_diff (GskRenderNode  *node1,
 }
 
 /**
- * gsk_debug_node_new: 
+ * gsk_debug_node_new:
  * @child: The child to add debug info for
- * @message: (transfer full): The debug message 
+ * @message: (transfer full): The debug message
  *
  * Creates a #GskRenderNode that will add debug information about
  * the given @child.

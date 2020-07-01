@@ -143,7 +143,6 @@
 #define SCREEN_HEIGHT(widget) text_window_get_height (GTK_TEXT_VIEW (widget)->priv->text_window)
 
 #define SPACE_FOR_CURSOR 1
-#define CURSOR_ASPECT_RATIO (0.04)
 
 typedef struct _GtkTextWindow GtkTextWindow;
 typedef struct _GtkTextPendingScroll GtkTextPendingScroll;
