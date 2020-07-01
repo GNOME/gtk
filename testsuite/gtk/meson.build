@@ -78,6 +78,7 @@ tests = [
   ['vector-performance'],
   ['widgetorder'],
   ['widget-refcount'],
+  ['listmodel-performance'],
 ]
 
 # Tests that are expected to fail
