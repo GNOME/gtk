@@ -25,6 +25,7 @@
 #include "gtkbuilderprivate.h"
 #include "gtkintl.h"
 #include "gtkprivate.h"
+#include "gtkbitset.h"
 
 /**
  * SECTION:gtkstringlist
@@ -166,6 +167,7 @@ struct _GtkStringList
   GObject parent_instance;
 
   GPtrArray *items;
+  GtkBitset *objects;
 };
 
 struct _GtkStringListClass
@@ -205,6 +207,37 @@ MAKE_STRING (const char *str)
   return GINT_TO_POINTER (GPOINTER_TO_INT (str) | 0x1);
 }
 
+static GtkStringObject *
+find_unused_object (GtkStringList *self)
+{
+  GtkBitsetIter iter;
+  guint position;
+  gpointer item;
+
+  if (gtk_bitset_iter_init_first (&iter, self->objects, &position))
+    {
+      do
+        {
+          item = g_ptr_array_index (self->items, position);
+          g_assert (!IS_STRING (item));
+          if (G_OBJECT (item)->ref_count == 1)
+            {
+              GtkStringObject *obj;
+
+              obj = GTK_STRING_OBJECT (item);
+              g_ptr_array_index (self->items, position) = MAKE_STRING (obj->string);
+              obj->string = NULL;
+
+              gtk_bitset_remove (self->objects, position);
+
+              return obj;
+            }
+        } while (gtk_bitset_iter_next (&iter, &position));
+    }
+
+  return NULL;
+}
+
 static gpointer
 gtk_string_list_get_item (GListModel *list,
                           guint       position)
@@ -216,15 +249,22 @@ gtk_string_list_get_item (GListModel *list,
     return NULL;
 
   item = g_ptr_array_index (self->items, position);
-
   if (IS_STRING (item))
     {
-      GtkStringObject *obj = g_object_new (GTK_TYPE_STRING_OBJECT, NULL);
-      obj->string = (char *)TO_STRING (item);
-      g_assert (!IS_STRING (obj));
+      GtkStringObject *obj;
+
+      obj = find_unused_object (self);
+      if (!obj)
+        obj = g_object_new (GTK_TYPE_STRING_OBJECT, NULL);
+
+      obj->string = TO_STRING (item);
       g_ptr_array_index (self->items, position) = obj;
+      gtk_bitset_add (self->objects, position);
+
       item = obj;
     }
+
+  g_print ("live string objects: %lu\n", gtk_bitset_get_size (self->objects));
 
   return g_object_ref (item);
 }
@@ -414,6 +454,7 @@ gtk_string_list_dispose (GObject *object)
   GtkStringList *self = GTK_STRING_LIST (object);
 
   g_clear_pointer (&self->items, g_ptr_array_unref);
+  g_clear_pointer (&self->objects, gtk_bitset_unref);
 
   G_OBJECT_CLASS (gtk_string_list_parent_class)->dispose (object);
 }
@@ -439,6 +480,7 @@ static void
 gtk_string_list_init (GtkStringList *self)
 {
   self->items = g_ptr_array_new_full (32, free_string_or_object);
+  self->objects = gtk_bitset_new_empty ();
 }
 
 /**
@@ -489,6 +531,7 @@ gtk_string_list_splice (GtkStringList      *self,
 {
   guint n_items;
   guint i;
+  guint n_additions;
   gpointer item;
 
   g_return_if_fail (GTK_IS_STRING_LIST (self));
@@ -501,16 +544,21 @@ gtk_string_list_splice (GtkStringList      *self,
     g_ptr_array_remove_index (self->items, position);
 
   if (additions)
-    for (i = 0; additions[i]; i++)
-      {
-        item = MAKE_STRING (g_strdup (additions[i]));
-        g_ptr_array_insert (self->items, position + i, item);
-      }
+    {
+      for (i = 0; additions[i]; i++)
+        {
+          item = MAKE_STRING (g_strdup (additions[i]));
+          g_ptr_array_insert (self->items, position + i, item);
+        }
+      n_additions = i;
+    }
   else
-    i = 0;
+    n_additions = 0;
 
-  if (n_removals || i)
-    g_list_model_items_changed (G_LIST_MODEL (self), position, n_removals, i);
+  gtk_bitset_slice (self->objects, position, n_removals, n_additions);
+
+  if (n_removals || n_additions)
+    g_list_model_items_changed (G_LIST_MODEL (self), position, n_removals, n_additions);
 }
 
 /**
@@ -588,6 +636,7 @@ gtk_string_list_remove (GtkStringList *self,
     return;
 
   g_ptr_array_remove_index (self->items, position);
+  gtk_bitset_slice (self->objects, position, 1, 0);
 
   g_list_model_items_changed (G_LIST_MODEL (self), position, 1, 0);
 }
