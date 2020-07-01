@@ -1,5 +1,7 @@
 #include <gtk/gtk.h>
 
+#include "gtkstringlist.h"
+
 static GObject *
 get_object (const char *string)
 {
@@ -30,6 +32,26 @@ make_list_store (guint n_items)
       obj = get_object (string);
       g_list_store_append (store, obj);
       g_object_unref (obj);
+      g_free (string);
+    }
+
+  return G_LIST_MODEL (store);
+}
+
+static GListModel *
+make_string_list2 (guint n_items)
+{
+  GtkStringList2 *store;
+  guint i;
+
+  store = gtk_string_list2_new (NULL);
+
+  for (i = 0; i < n_items; i++)
+    {
+      char *string;
+
+      string = g_strdup_printf ("item %d", i);
+      gtk_string_list2_append (store, string);
       g_free (string);
     }
 
@@ -70,6 +92,8 @@ do_random_access (const char *kind,
   if (strcmp (kind, "liststore") == 0)
     model = make_list_store (size);
   else if (strcmp (kind, "stringlist") == 0)
+    model = make_string_list2 (size);
+  else if (strcmp (kind, "array stringlist") == 0)
     model = make_string_list (size);
   else
     g_error ("unsupported: %s", kind);
@@ -87,7 +111,46 @@ do_random_access (const char *kind,
 
   end = g_get_monotonic_time ();
 
-  g_print ("\"%s\", %u, %g\n",
+  g_print ("\"random access\",\"%s\", %u, %g\n",
+           kind,
+           size,
+           iterations / (((double)(end - start)) / G_TIME_SPAN_SECOND));
+
+  g_object_unref (model);
+}
+
+static void
+do_linear_access (const char *kind,
+                  guint       size)
+{
+  GListModel *model;
+  guint i;
+  GtkStringObject *obj;
+  gint64 start, end;
+  guint iterations = 10000000;
+
+  if (strcmp (kind, "liststore") == 0)
+    model = make_list_store (size);
+  else if (strcmp (kind, "stringlist") == 0)
+    model = make_string_list2 (size);
+  else if (strcmp (kind, "array stringlist") == 0)
+    model = make_string_list (size);
+  else
+    g_error ("unsupported: %s", kind);
+
+  start = g_get_monotonic_time ();
+
+  for (i = 0; i < iterations; i++)
+    {
+      obj = g_list_model_get_item (model, i % size);
+      if (g_getenv ("PRINT_ACCESS"))
+        g_print ("%s", gtk_string_object_get_string (obj));
+      g_object_unref (obj);
+    }
+
+  end = g_get_monotonic_time ();
+
+  g_print ("\"linear access\", \"%s\", %u, %g\n",
            kind,
            size,
            iterations / (((double)(end - start)) / G_TIME_SPAN_SECOND));
@@ -98,20 +161,27 @@ do_random_access (const char *kind,
 static void
 random_access (void)
 {
-  do_random_access ("liststore", 1e1);
-  do_random_access ("liststore", 1e2);
-  do_random_access ("liststore", 1e3);
-  do_random_access ("liststore", 1e4);
-  do_random_access ("liststore", 1e5);
-  do_random_access ("liststore", 1e6);
-  do_random_access ("liststore", 1e7);
-  do_random_access ("stringlist", 1e1);
-  do_random_access ("stringlist", 1e2);
-  do_random_access ("stringlist", 1e3);
-  do_random_access ("stringlist", 1e4);
-  do_random_access ("stringlist", 1e5);
-  do_random_access ("stringlist", 1e6);
-  do_random_access ("stringlist", 1e7);
+  const char *kind[] = { "liststore", "stringlist", "array stringlist" };
+  int sizes = 22;
+  int size;
+  int i, j;
+
+  for (i = 0; i < G_N_ELEMENTS (kind); i++)
+    for (j = 0, size = 2; j < sizes; j++, size *= 2)
+      do_random_access (kind[i], size);
+}
+
+static void
+linear_access (void)
+{
+  const char *kind[] = { "liststore", "stringlist", "array stringlist" };
+  int sizes = 22;
+  int size;
+  int i, j;
+
+  for (i = 0; i < G_N_ELEMENTS (kind); i++)
+    for (j = 0, size = 2; j < sizes; j++, size *= 2)
+      do_linear_access (kind[i], size);
 }
 
 int
@@ -119,7 +189,9 @@ main (int argc, char *argv[])
 {
   gtk_test_init (&argc, &argv);
 
+  g_print ("\"test\",\"model\",\"model size\",\"accesses/s\"");
   g_test_add_func ("/liststore/random-access", random_access);
+  g_test_add_func ("/liststore/linear-access", linear_access);
 
   return g_test_run ();
 }
