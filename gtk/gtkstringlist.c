@@ -205,38 +205,6 @@ MAKE_STRING (const char *str)
   return GINT_TO_POINTER (GPOINTER_TO_INT (str) | 0x1);
 }
 
-static guint n_string_objects;
-
-static inline GtkStringObject *
-steal_nearby_orphan (GtkStringList *self,
-                     guint          position)
-{
-  gpointer item;
-  guint i;
-
-  for (i = 0; i < 3; i++)
-    {
-      if (position == 0)
-        break;
-
-      position--;
-
-      item = g_ptr_array_index (self->items, position);
-
-      if (!IS_STRING (item) &&
-          G_OBJECT (item)->ref_count == 1)
-        {
-          GtkStringObject *obj = GTK_STRING_OBJECT (item);
-          gpointer str = MAKE_STRING (obj->string);
-          obj->string = NULL;
-          g_ptr_array_index (self->items, position) = str;
-          return obj;
-        }
-    }
-
-  return NULL;
-}
-
 static gpointer
 gtk_string_list_get_item (GListModel *list,
                           guint       position)
@@ -251,15 +219,7 @@ gtk_string_list_get_item (GListModel *list,
 
   if (IS_STRING (item))
     {
-      GtkStringObject *obj;
-
-      obj = steal_nearby_orphan (self, position);
-      if (!obj)
-        {
-          obj = g_object_new (GTK_TYPE_STRING_OBJECT, NULL);
-          n_string_objects++;
-        }
-      //g_print ("%u string objects\n", n_string_objects);
+      GtkStringObject *obj = g_object_new (GTK_TYPE_STRING_OBJECT, NULL);
       obj->string = (char *)TO_STRING (item);
       g_assert (!IS_STRING (obj));
       g_ptr_array_index (self->items, position) = obj;
