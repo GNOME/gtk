@@ -385,8 +385,6 @@ recordings_list_row_selected (GtkListBox           *box,
                            (gpointer[1]) { paintable },
                            1);
       g_object_unref (paintable);
-
-      g_print ("%u render nodes\n", g_list_model_get_n_items (G_LIST_MODEL (priv->render_node_model)));
     }
   else
     {
@@ -405,9 +403,9 @@ get_color_texture (const GdkRGBA *color)
   guchar pixel[4];
   guchar *data;
   GBytes *bytes;
-  gint width = 30;
-  gint height = 30;
-  gint i;
+  int width = 30;
+  int height = 30;
+  int i;
 
   pixel[0] = round (color->red * 255);
   pixel[1] = round (color->green * 255);
@@ -950,7 +948,7 @@ render_node_list_selection_changed (GtkListBox           *list,
 
 static void
 render_node_save_response (GtkWidget     *dialog,
-                           gint           response,
+                           int            response,
                            GskRenderNode *node)
 {
   gtk_widget_hide (dialog);
@@ -1019,83 +1017,33 @@ render_node_save (GtkButton            *button,
   gtk_widget_show (dialog);
 }
 
-static char *
-format_timespan (gint64 timespan)
-{
-  if (ABS (timespan) < G_TIME_SPAN_MILLISECOND)
-    return g_strdup_printf ("%fus", (double) timespan);
-  else if (ABS (timespan) < 10 * G_TIME_SPAN_MILLISECOND)
-    return g_strdup_printf ("%.1fs", (double) timespan / G_TIME_SPAN_MILLISECOND);
-  else if (ABS (timespan) < G_TIME_SPAN_SECOND)
-    return g_strdup_printf ("%.0fms", (double) timespan / G_TIME_SPAN_MILLISECOND);
-  else if (ABS (timespan) < 10 * G_TIME_SPAN_SECOND)
-    return g_strdup_printf ("%.1fs", (double) timespan / G_TIME_SPAN_SECOND);
-  else
-    return g_strdup_printf ("%.0fs", (double) timespan / G_TIME_SPAN_SECOND);
-}
-
 static GtkWidget *
 gtk_inspector_recorder_recordings_list_create_widget (gpointer item,
                                                       gpointer user_data)
 {
-  GtkInspectorRecorder *recorder = GTK_INSPECTOR_RECORDER (user_data);
-  GtkInspectorRecorderPrivate *priv = gtk_inspector_recorder_get_instance_private (recorder);
   GtkInspectorRecording *recording = GTK_INSPECTOR_RECORDING (item);
   GtkWidget *widget;
 
   if (GTK_INSPECTOR_IS_RENDER_RECORDING (recording))
     {
-      GtkInspectorRecording *previous = NULL;
-      char *time_str, *str;
-      const char *render_str;
       cairo_region_t *region;
       GtkWidget *hbox, *label, *button;
-      guint i;
 
       widget = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
 
       hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
       gtk_box_append (GTK_BOX (widget), hbox);
 
-      for (i = 0; i < g_list_model_get_n_items (priv->recordings); i++)
-        {
-          GtkInspectorRecording *r = g_list_model_get_item (priv->recordings, i);
-
-          g_object_unref (r);
-
-          if (r == recording)
-            break;
-
-          if (GTK_INSPECTOR_IS_RENDER_RECORDING (r))
-            previous = r;
-          else if (GTK_INSPECTOR_IS_START_RECORDING (r))
-            previous = NULL;
-        }
-
       region = cairo_region_create_rectangle (
                    gtk_inspector_render_recording_get_area (GTK_INSPECTOR_RENDER_RECORDING (recording)));
       cairo_region_subtract (region,
                              gtk_inspector_render_recording_get_clip_region (GTK_INSPECTOR_RENDER_RECORDING (recording)));
-      if (cairo_region_is_empty (region))
-        render_str = "Full Render";
-      else
-        render_str = "Partial Render";
       cairo_region_destroy (region);
 
-      if (previous)
-        {
-          time_str = format_timespan (gtk_inspector_recording_get_timestamp (recording) -
-                                      gtk_inspector_recording_get_timestamp (previous));
-          str = g_strdup_printf ("<b>%s</b>\n+%s", render_str, time_str);
-          g_free (time_str);
-        }
-      else
-        {
-          str = g_strdup_printf ("<b>%s</b>\n", render_str);
-        }
-      label = gtk_label_new (str);
+      label = gtk_label_new ("<b>Frame</b>");
+      gtk_label_set_xalign (GTK_LABEL (label), 0.0f);
+      gtk_widget_set_hexpand (label, TRUE);
       gtk_label_set_use_markup (GTK_LABEL (label), TRUE);
-      g_free (str);
       gtk_box_append (GTK_BOX (hbox), label);
 
       button = gtk_toggle_button_new ();
@@ -1311,24 +1259,8 @@ gtk_inspector_recorder_add_recording (GtkInspectorRecorder  *recorder,
                                       GtkInspectorRecording *recording)
 {
   GtkInspectorRecorderPrivate *priv = gtk_inspector_recorder_get_instance_private (recorder);
-  guint count;
-  GtkListBoxRow *selected_row;
-  gboolean should_select_new_row;
-
-  count = g_list_model_get_n_items (priv->recordings);
-  selected_row = gtk_list_box_get_selected_row (GTK_LIST_BOX (priv->recordings_list));
-  if (count == 0 || selected_row == NULL)
-    should_select_new_row = TRUE;
-  else
-    should_select_new_row = (gtk_list_box_row_get_index (selected_row) == count - 1);
 
   g_list_store_append (G_LIST_STORE (priv->recordings), recording);
-
-  if (should_select_new_row)
-    {
-      gtk_list_box_select_row (GTK_LIST_BOX (priv->recordings_list),
-                               gtk_list_box_get_row_at_index (GTK_LIST_BOX (priv->recordings_list), count));
-    }
 }
 
 void
