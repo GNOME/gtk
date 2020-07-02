@@ -74,6 +74,7 @@ tests = [
   ['typename'],
   ['displayclose'],
   ['revealer-size'],
+  ['vector'],
   ['widgetorder'],
   ['widget-refcount'],
 ]
