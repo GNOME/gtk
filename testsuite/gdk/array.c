@@ -50,6 +50,34 @@ int_free_func (int data)
 #define GDK_ARRAY_FREE_FUNC int_free_func
 #include "arrayimpl.c"
 
+#define GDK_ARRAY_ELEMENT_TYPE int
+#define GDK_ARRAY_NAME null_int_array
+#define GDK_ARRAY_TYPE_NAME NullIntVector
+#define GDK_ARRAY_NULL_TERMINATED 1
+#include "arrayimpl.c"
+
+#define GDK_ARRAY_ELEMENT_TYPE int
+#define GDK_ARRAY_NAME null_pre_int_array
+#define GDK_ARRAY_TYPE_NAME NullPreIntVector
+#define GDK_ARRAY_PREALLOC 100
+#define GDK_ARRAY_NULL_TERMINATED 1
+#include "arrayimpl.c"
+
+#define GDK_ARRAY_ELEMENT_TYPE int
+#define GDK_ARRAY_NAME null_free_int_array
+#define GDK_ARRAY_TYPE_NAME NullFreeIntVector
+#define GDK_ARRAY_FREE_FUNC int_free_func
+#define GDK_ARRAY_NULL_TERMINATED 1
+#include "arrayimpl.c"
+
+#define GDK_ARRAY_ELEMENT_TYPE int
+#define GDK_ARRAY_NAME null_pre_free_int_array
+#define GDK_ARRAY_TYPE_NAME NullPreFreeIntVector
+#define GDK_ARRAY_PREALLOC 100
+#define GDK_ARRAY_FREE_FUNC int_free_func
+#define GDK_ARRAY_NULL_TERMINATED 1
+#include "arrayimpl.c"
+
 int
 main (int argc, char *argv[])
 {
@@ -59,11 +87,19 @@ main (int argc, char *argv[])
   g_test_add_func ("/intarray/simple", int_array_test_simple);
   g_test_add_func ("/intarray/prealloc/simple", pre_int_array_test_simple);
   g_test_add_func ("/intarray/freefunc/simple", free_int_array_test_simple);
-  g_test_add_func ("/intarray/prealloc_freefunc_simple", pre_free_int_array_test_simple);
+  g_test_add_func ("/intarray/prealloc/freefunc/simple", pre_free_int_array_test_simple);
+  g_test_add_func ("/intarray/null/simple", null_int_array_test_simple);
+  g_test_add_func ("/intarray/null/prealloc/simple", null_pre_int_array_test_simple);
+  g_test_add_func ("/intarray/null/freefunc/simple", null_free_int_array_test_simple);
+  g_test_add_func ("/intarray/null/prealloc/freefunc/simple", null_pre_free_int_array_test_simple);
   g_test_add_func ("/intarray/splice", int_array_test_splice);
   g_test_add_func ("/intarray/prealloc/splice", pre_int_array_test_splice);
   g_test_add_func ("/intarray/freefunc/splice", free_int_array_test_splice);
-  g_test_add_func ("/intarray/prealloc_freefunc_splice", pre_free_int_array_test_splice);
+  g_test_add_func ("/intarray/prealloc/freefunc/splice", pre_free_int_array_test_splice);
+  g_test_add_func ("/intarray/null/splice", null_int_array_test_splice);
+  g_test_add_func ("/intarray/null/prealloc/splice", null_pre_int_array_test_splice);
+  g_test_add_func ("/intarray/null/freefunc/splice", null_free_int_array_test_splice);
+  g_test_add_func ("/intarray/null/prealloc/freefunc/splice", null_pre_free_int_array_test_splice);
 
   return g_test_run ();
 }

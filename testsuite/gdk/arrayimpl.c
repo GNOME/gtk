@@ -36,6 +36,9 @@ gdk_array(test_simple) (void)
       g_assert_cmpint (gdk_array(get_size) (&v), ==, i);
       g_assert_cmpint (gdk_array(get_size) (&v), <=, gdk_array(get_capacity) (&v));
       gdk_array(append) (&v, i);
+#ifdef GDK_ARRAY_NULL_TERMINATED
+      g_assert_cmpint (*gdk_array(index) (&v, gdk_array(get_size) (&v)), ==, 0);
+#endif
     }
   g_assert_cmpint (gdk_array(get_size) (&v), ==, i);
   g_assert_cmpint (gdk_array(get_size) (&v), <=, gdk_array(get_capacity) (&v));
@@ -84,6 +87,10 @@ gdk_array(test_splice) (void)
 
       g_assert_cmpint (gdk_array(get_size) (&v), ==, old_size + add - remove);
       g_assert_cmpint (gdk_array(get_size) (&v), <=, gdk_array(get_capacity) (&v));
+#ifdef GDK_ARRAY_NULL_TERMINATED
+      if (gdk_array(get_size) (&v))
+        g_assert_cmpint (*gdk_array(index) (&v, gdk_array(get_size) (&v)), ==, 0);
+#endif
       for (j = 0; j < add; j++)
         g_assert_cmpint (gdk_array(get) (&v, pos + j), ==, additions[j]);
     }
@@ -100,9 +107,11 @@ gdk_array(test_splice) (void)
 #undef gdk_array_paste_more
 #undef gdk_array_paste
 #undef gdk_array
+#undef GDK_ARRAY_REAL_SIZE
 
-#undef GDK_ARRAY_PREALLOC
 #undef GDK_ARRAY_ELEMENT_TYPE
 #undef GDK_ARRAY_NAME
 #undef GDK_ARRAY_TYPE_NAME
+#undef GDK_ARRAY_PREALLOC
+#undef GDK_ARRAY_NULL_TERMINATED
 
