@@ -23,6 +23,12 @@
 #include "gtk/gtkcssparserprivate.h"
 #include "gtk/gtkarrayimplprivate.h"
 
+#define GTK_VECTOR_ELEMENT_TYPE gpointer
+#define GTK_VECTOR_TYPE_NAME GtkCssSelectorMatches
+#define GTK_VECTOR_NAME gtk_css_selector_matches
+#define GTK_VECTOR_PREALLOC 32
+#include "gtk/gtkvectorimpl.c"
+
 G_BEGIN_DECLS
 
 typedef union _GtkCssSelector GtkCssSelector;
@@ -45,8 +51,8 @@ int               _gtk_css_selector_compare         (const GtkCssSelector   *a,
 void         _gtk_css_selector_tree_free             (GtkCssSelectorTree       *tree);
 void         _gtk_css_selector_tree_match_all        (const GtkCssSelectorTree *tree,
                                                       const GtkCountingBloomFilter *filter,
-                                                      GtkCssNode                   *node,
-                                                      GtkArray                     *out_tree_rules);
+                                                      GtkCssNode               *node,
+                                                      GtkCssSelectorMatches    *out_tree_rules);
 GtkCssChange gtk_css_selector_tree_get_change_all    (const GtkCssSelectorTree *tree,
                                                       const GtkCountingBloomFilter *filter,
 						      GtkCssNode               *node);

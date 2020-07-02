@@ -58,6 +58,7 @@ struct GtkVector
 #endif
 };
 
+/* no G_GNUC_UNUSED here, if you don't use an array type, remove it. */
 static inline void
 gtk_vector(init) (GtkVector *self)
 {
@@ -83,6 +84,7 @@ gtk_vector(free_elements) (_T_ *start,
 #endif
 }
 
+/* no G_GNUC_UNUSED here */
 static inline void
 gtk_vector(clear) (GtkVector *self)
 {
@@ -95,26 +97,38 @@ gtk_vector(clear) (GtkVector *self)
   gtk_vector(init) (self);
 }
 
-static inline _T_ *
+static inline _T_ * G_GNUC_UNUSED
+gtk_vector(get_data) (GtkVector *self)
+{
+  return self->start;
+}
+
+static inline _T_ * G_GNUC_UNUSED
 gtk_vector(index) (GtkVector *self,
                    gsize      pos)
 {
   return self->start + pos;
 }
 
-static inline gsize
+static inline gsize G_GNUC_UNUSED
 gtk_vector(get_capacity) (GtkVector *self)
 {
   return self->end_allocation - self->start;
 }
 
-static inline gsize
+static inline gsize G_GNUC_UNUSED
 gtk_vector(get_size) (GtkVector *self)
 {
   return self->end - self->start;
 }
 
-static void
+static inline gboolean G_GNUC_UNUSED
+gtk_vector(is_empty) (GtkVector *self)
+{
+  return self->end == self->start;
+}
+
+static void G_GNUC_UNUSED
 gtk_vector(reserve) (GtkVector *self,
                         gsize      n)
 {
@@ -140,7 +154,7 @@ gtk_vector(reserve) (GtkVector *self,
   self->end_allocation = self->start + new_size;
 }
 
-static void
+static void G_GNUC_UNUSED
 gtk_vector(splice) (GtkVector *self,
                     gsize      pos,
                     gsize      removed,
@@ -170,7 +184,7 @@ gtk_vector(splice) (GtkVector *self,
   self->end += added - removed;
 }
 
-static void
+static void G_GNUC_UNUSED
 gtk_vector(append) (GtkVector *self,
                     _T_        value)
 {
@@ -181,7 +195,7 @@ gtk_vector(append) (GtkVector *self,
                       1);
 }
 
-static _T_
+static _T_ G_GNUC_UNUSED
 gtk_vector(get) (GtkVector *self,
                  gsize      pos)
 {
