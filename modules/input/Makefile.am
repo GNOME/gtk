@@ -304,7 +304,6 @@ immodules.cache: Makefile.am $(module_LTLIBRARIES)
 
 if USE_WAYLAND
 BUILT_SOURCES = $(protocol_built_sources) $(protocol_built_sources_gtk)
-EXTRA_DIST += $(protocol_built_sources) $(protocol_built_sources_gtk)
 endif
 
 EXTRA_DIST += \
