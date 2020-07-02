@@ -118,6 +118,7 @@ tests = [
   { 'name': 'typename' },
   { 'name': 'displayclose' },
   { 'name': 'revealer-size' },
+  { 'name': 'vector' },
   { 'name': 'widgetorder' },
   { 'name': 'widget-refcount' },
 ]
