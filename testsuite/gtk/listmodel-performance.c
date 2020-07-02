@@ -42,6 +42,29 @@ make_list_store (guint n_items)
 }
 
 static GListModel *
+make_array_store (guint n_items)
+{
+  GtkArrayStore *store;
+  guint i;
+
+  store = gtk_array_store_new ();
+
+  for (i = 0; i < n_items; i++)
+    {
+      char *string;
+      gpointer obj;
+
+      string = g_strdup_printf ("item %d", i);
+      obj = get_object (string);
+      gtk_array_store_append (store, obj);
+      g_object_unref (obj);
+      g_free (string);
+    }
+
+  return G_LIST_MODEL (store);
+}
+
+static GListModel *
 make_string_list2 (guint n_items)
 {
   GtkStringList2 *store;
@@ -94,6 +117,8 @@ do_random_access (const char *kind,
 
   if (strcmp (kind, "liststore") == 0)
     model = make_list_store (size);
+  else if (strcmp (kind, "arraystore") == 0)
+    model = make_array_store (size);
   else if (strcmp (kind, "stringlist") == 0)
     model = make_string_list2 (size);
   else if (strcmp (kind, "array stringlist") == 0)
@@ -134,6 +159,8 @@ do_linear_access (const char *kind,
 
   if (strcmp (kind, "liststore") == 0)
     model = make_list_store (size);
+  else if (strcmp (kind, "arraystore") == 0)
+    model = make_array_store (size);
   else if (strcmp (kind, "stringlist") == 0)
     model = make_string_list2 (size);
   else if (strcmp (kind, "array stringlist") == 0)
@@ -177,6 +204,8 @@ do_append (const char *kind,
     {
       if (strcmp (kind, "liststore") == 0)
         model = make_list_store (0);
+      else if (strcmp (kind, "arraystore") == 0)
+        model = make_array_store (0);
       else if (strcmp (kind, "stringlist") == 0)
         model = make_string_list2 (0);
       else if (strcmp (kind, "array stringlist") == 0)
@@ -196,6 +225,12 @@ do_append (const char *kind,
               g_list_store_append (G_LIST_STORE (model), obj);
               g_object_unref (obj);
             }
+          else if (strcmp (kind, "arraystore") == 0)
+            {
+              gpointer obj = get_object (string);
+              gtk_array_store_append (GTK_ARRAY_STORE (model), obj);
+              g_object_unref (obj);
+            }
           else if (strcmp (kind, "stringlist") == 0)
             gtk_string_list2_append (GTK_STRING_LIST2 (model), string);
           else if (strcmp (kind, "array stringlist") == 0)
@@ -212,6 +247,9 @@ do_append (const char *kind,
 
   g_print ("\"append\", \"%s\", %u, %g\n", kind, size, ((double)total) / iterations);
 }
+
+#define gtk_array_store_insert(store,position,item) \
+  gtk_array_store_splice (store, position, 0, (gpointer *)&item, 1)
 
 static void
 do_insert (const char *kind,
@@ -230,6 +268,8 @@ do_insert (const char *kind,
     {
       if (strcmp (kind, "liststore") == 0)
         model = make_list_store (1);
+      else if (strcmp (kind, "arraystore") == 0)
+        model = make_array_store (1);
       else if (strcmp (kind, "stringlist") == 0)
         model = make_string_list2 (1);
       else if (strcmp (kind, "array stringlist") == 0)
@@ -248,6 +288,12 @@ do_insert (const char *kind,
             {
               gpointer obj = get_object (string);
               g_list_store_insert (G_LIST_STORE (model), position, obj);
+              g_object_unref (obj);
+            }
+          else if (strcmp (kind, "arraystore") == 0)
+            {
+              gpointer obj = get_object (string);
+              gtk_array_store_insert (GTK_ARRAY_STORE (model), position, obj);
               g_object_unref (obj);
             }
           else if (strcmp (kind, "stringlist") == 0)
@@ -272,7 +318,7 @@ do_insert (const char *kind,
 static void
 random_access (void)
 {
-  const char *kind[] = { "liststore", "stringlist", "array stringlist" };
+  const char *kind[] = { "liststore", "arraystore", "stringlist", "array stringlist" };
   int sizes = 22;
   int size;
   int i, j;
@@ -285,7 +331,7 @@ random_access (void)
 static void
 linear_access (void)
 {
-  const char *kind[] = { "liststore", "stringlist", "array stringlist" };
+  const char *kind[] = { "liststore", "arraystore", "stringlist", "array stringlist" };
   int sizes = 22;
   int size;
   int i, j;
@@ -298,7 +344,7 @@ linear_access (void)
 static void
 append (void)
 {
-  const char *kind[] = { "liststore", "stringlist", "array stringlist" };
+  const char *kind[] = { "liststore", "arraystore", "stringlist", "array stringlist" };
   int sizes = 22;
   int size;
   int i, j;
@@ -311,7 +357,7 @@ append (void)
 static void
 insert (void)
 {
-  const char *kind[] = { "liststore", "stringlist", "array stringlist" };
+  const char *kind[] = { "liststore", "arraystore", "stringlist", "array stringlist" };
   int sizes = 22;
   int size;
   int i, j;
