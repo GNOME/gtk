@@ -44,6 +44,7 @@
 #include <gtk/gtkappchooserbutton.h>
 #include <gtk/gtkapplication.h>
 #include <gtk/gtkapplicationwindow.h>
+#include <gtk/gtkarraystore.h>
 #include <gtk/gtkaspectframe.h>
 #include <gtk/gtkassistant.h>
 #include <gtk/gtkbinlayout.h>
