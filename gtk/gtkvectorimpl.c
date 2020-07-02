@@ -97,38 +97,38 @@ gtk_vector(clear) (GtkVector *self)
   gtk_vector(init) (self);
 }
 
-static inline _T_ * G_GNUC_UNUSED
+G_GNUC_UNUSED static inline _T_ *
 gtk_vector(get_data) (GtkVector *self)
 {
   return self->start;
 }
 
-static inline _T_ * G_GNUC_UNUSED
+G_GNUC_UNUSED static inline _T_ *
 gtk_vector(index) (GtkVector *self,
                    gsize      pos)
 {
   return self->start + pos;
 }
 
-static inline gsize G_GNUC_UNUSED
+G_GNUC_UNUSED static inline gsize
 gtk_vector(get_capacity) (GtkVector *self)
 {
   return self->end_allocation - self->start;
 }
 
-static inline gsize G_GNUC_UNUSED
+G_GNUC_UNUSED static inline gsize
 gtk_vector(get_size) (GtkVector *self)
 {
   return self->end - self->start;
 }
 
-static inline gboolean G_GNUC_UNUSED
+G_GNUC_UNUSED static inline gboolean
 gtk_vector(is_empty) (GtkVector *self)
 {
   return self->end == self->start;
 }
 
-static void G_GNUC_UNUSED
+G_GNUC_UNUSED static void
 gtk_vector(reserve) (GtkVector *self,
                         gsize      n)
 {
@@ -154,7 +154,7 @@ gtk_vector(reserve) (GtkVector *self,
   self->end_allocation = self->start + new_size;
 }
 
-static void G_GNUC_UNUSED
+G_GNUC_UNUSED static void
 gtk_vector(splice) (GtkVector *self,
                     gsize      pos,
                     gsize      removed,
@@ -184,7 +184,7 @@ gtk_vector(splice) (GtkVector *self,
   self->end += added - removed;
 }
 
-static void G_GNUC_UNUSED
+G_GNUC_UNUSED static void
 gtk_vector(append) (GtkVector *self,
                     _T_        value)
 {
@@ -195,7 +195,7 @@ gtk_vector(append) (GtkVector *self,
                       1);
 }
 
-static _T_ G_GNUC_UNUSED
+G_GNUC_UNUSED static _T_ 
 gtk_vector(get) (GtkVector *self,
                  gsize      pos)
 {
