@@ -39,6 +39,12 @@ G_BEGIN_DECLS
 #endif
 #endif
 
+#ifdef GDK_ARRAY_NULL_TERMINATED
+#define GDK_ARRAY_REAL_SIZE(_size) ((_size) + 1)
+#else
+#define GDK_ARRAY_REAL_SIZE(_size) (_size)
+#endif
+
 /* make this readable */
 #define _T_ GDK_ARRAY_ELEMENT_TYPE
 #define GdkArray GDK_ARRAY_TYPE_NAME
@@ -54,7 +60,7 @@ struct GdkArray
   _T_ *end;
   _T_ *end_allocation;
 #ifdef GDK_ARRAY_PREALLOC
-  _T_ preallocated[GDK_ARRAY_PREALLOC];
+  _T_ preallocated[GDK_ARRAY_REAL_SIZE(GDK_ARRAY_PREALLOC)];
 #endif
 };
 
@@ -66,6 +72,9 @@ gdk_array(init) (GdkArray *self)
   self->start = self->preallocated;
   self->end = self->start;
   self->end_allocation = self->start + GDK_ARRAY_PREALLOC;
+#ifdef GDK_ARRAY_NULL_TERMINATED
+  *self->start = *(_T_[1]) {};
+#endif
 #else
   self->start = NULL;
   self->end = NULL;
@@ -138,13 +147,21 @@ gdk_array(reserve) (GdkArray *self,
     return;
 
   size = gdk_array(get_size) (self);
-  new_size = 1 << g_bit_storage (MAX (n, 16) - 1);
+  new_size = 1 << g_bit_storage (MAX (GDK_ARRAY_REAL_SIZE (n), 16) - 1);
 
 #ifdef GDK_ARRAY_PREALLOC
   if (self->start == self->preallocated)
     {
       self->start = g_new (_T_, new_size);
-      memcpy (self->start, self->preallocated, sizeof (_T_) * size);
+      memcpy (self->start, self->preallocated, sizeof (_T_) * GDK_ARRAY_REAL_SIZE (size));
+    }
+  else
+#endif
+#ifdef GDK_ARRAY_NULL_TERMINATED
+  if (self->start == NULL)
+    {
+      self->start = g_new (_T_, new_size);
+      *self->start = *(_T_[1]) {};
     }
   else
 #endif
@@ -152,6 +169,9 @@ gdk_array(reserve) (GdkArray *self,
 
   self->end = self->start + size;
   self->end_allocation = self->start + new_size;
+#ifdef GDK_ARRAY_NULL_TERMINATED
+  self->end_allocation--;
+#endif
 }
 
 G_GNUC_UNUSED static void
@@ -161,19 +181,22 @@ gdk_array(splice) (GdkArray *self,
                    _T_       *additions,
                    gsize      added)
 {
-  gssize size = gdk_array(get_size) (self);
+  gsize size;
+  gsize remaining;
 
+  size = gdk_array(get_size) (self);
   g_assert (pos + removed <= size);
+  remaining = size - pos - removed;
 
   gdk_array(free_elements) (gdk_array(index) (self, pos),
                             gdk_array(index) (self, pos + removed));
 
   gdk_array(reserve) (self, size - removed + added);
 
-  if (pos + removed < size && removed != added)
+  if (GDK_ARRAY_REAL_SIZE (remaining) && removed != added)
     memmove (gdk_array(index) (self, pos + added),
              gdk_array(index) (self, pos + removed),
-             (size - pos - removed) * sizeof (_T_));
+             GDK_ARRAY_REAL_SIZE (remaining) * sizeof (_T_));
 
   if (added)
     memcpy (gdk_array(index) (self, pos),
@@ -210,10 +233,12 @@ gdk_array(get) (GdkArray *self,
 #undef gdk_array_paste_more
 #undef gdk_array_paste
 #undef gdk_array
+#undef GDK_ARRAY_REAL_SIZE
 
-#undef GDK_ARRAY_PREALLOC
 #undef GDK_ARRAY_ELEMENT_TYPE
 #undef GDK_ARRAY_NAME
 #undef GDK_ARRAY_TYPE_NAME
+#undef GDK_ARRAY_PREALLOC
+#undef GDK_ARRAY_NULL_TERMINATED
 
 #endif
