@@ -36,6 +36,9 @@
  *
  * The objects in the model have a "string" property.
  *
+ * GtkStringList is well-suited for any place where you would
+ * typically use a `char*[]`, but need a list model.
+ *
  * # GtkStringList as GtkBuildable
  *
  * The GtkStringList implementation of the GtkBuildable interface

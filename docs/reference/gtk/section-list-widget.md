@@ -123,6 +123,32 @@ the number of listitems they create such as with gtk_grid_view_set_max_columns()
 and developers running into performance problems should definitely study the
 tradeoffs of those and experiment with them.
 
+## Choosing the right model {#model-choosing}
+
+GTK offers a wide variety of wrapping models which change or supplement an
+existing model (or models) in some way. But when it comes to storing your
+actual data, there are only a few ready-made choices available: #GListStore
+and #GtkStringList.
+
+GListStore is backed by a balanced tree and has performance characteristics
+that are expected for that data structure. It works reasonably well for dataset
+sizes in the 1,000,000 range, and can handle insertions and deletions. It uses
+a cached iter to make linear access to the items fast.
+
+GtkStringList is not a general store - it can only handle strings. It is
+backed by an dynamically allocated array and has performance characteristics
+that are expected for that data structure. GtkStringList is a good fit for any
+place where you would otherwise use `char*[]` and works best if the dataset
+is not very dynamic.
+
+If these models don't fit your use case or scalability requirements, you
+should make a custom #GListModel. It is a small interface and not very hard
+to implement.
+
+For asymptotic performance comparisons between tree- and array-based
+implementations, see this
+[article](https://en.wikipedia.org/wiki/Dynamic_array#Performance).
+
 ## Displaying trees {#displaying-trees}
 
 While #GtkTreeView provided built-in support for trees, the list widgets, and
