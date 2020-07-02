@@ -184,6 +184,7 @@ gtk_scrollbar_get_type
 gtk_scrolled_window_get_type
 gtk_search_bar_get_type
 gtk_search_entry_get_type
+gtk_selection_filter_model_get_type
 gtk_selection_model_get_type
 gtk_separator_get_type
 gtk_settings_get_type
