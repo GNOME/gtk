@@ -6,7 +6,6 @@
     <property name="default-height">400</property>
     <child type="titlebar">
       <object class="GtkHeaderBar" id="header">
-        <property name="show-title-buttons">1</property>
         <child type="title">
           <object class="GtkStackSwitcher" id="tabs">
             <property name="stack">stack</property>

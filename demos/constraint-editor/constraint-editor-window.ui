@@ -9,7 +9,6 @@
     <property name="default-height">768</property>
     <child type="titlebar">
       <object class="GtkHeaderBar" id="header">
-        <property name="show-title-buttons">1</property>
         <child type="start">
           <object class="GtkButton">
             <property name="icon-name">document-open-symbolic</property>
