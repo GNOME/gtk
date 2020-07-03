@@ -1313,6 +1313,15 @@ render_rounded_clip_node (GskGLRenderer       *self,
           transformed_clip.corner[i].height = clip->corner[i].height * scale;
         }
 
+      /* If the new clip entirely contains the current clip, the intersection is simply
+       * the current clip, so we can ignore the new one */
+      if (rounded_inner_rect_contains_rect (&transformed_clip, &builder->current_clip->bounds))
+        {
+          gsk_gl_renderer_add_render_ops (self, child, builder);
+          return;
+        }
+
+      /* TODO: Intersect current and new clip */
       ops_push_clip (builder, &transformed_clip);
       gsk_gl_renderer_add_render_ops (self, child, builder);
       ops_pop_clip (builder);
