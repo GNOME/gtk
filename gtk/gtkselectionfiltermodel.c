@@ -100,22 +100,26 @@ G_DEFINE_TYPE_WITH_CODE (GtkSelectionFilterModel, gtk_selection_filter_model, G_
                          G_IMPLEMENT_INTERFACE (G_TYPE_LIST_MODEL, gtk_selection_filter_model_list_model_init))
 
 static void
-gtk_selection_filter_model_items_changed_cb (GListModel *model,
-                                             guint       position,
-                                             guint       removed,
-                                             guint       added,
-                                             GtkSelectionFilterModel *self)
+selection_filter_model_items_changed (GtkSelectionFilterModel *self,
+                                      guint                    position,
+                                      guint                    removed,
+                                      guint                    added)
 {
   GtkBitset *selection;
-  guint sel_position;
-  guint sel_removed;
-  guint sel_added;
+  guint sel_position = 0;
+  guint sel_removed = 0;
+  guint sel_added = 0;
 
   selection = gtk_selection_model_get_selection (self->model);
 
-  sel_position = gtk_bitset_get_size_in_range (self->selection, 0, position - 1);
-  sel_removed = gtk_bitset_get_size_in_range (self->selection, position, position + removed);
-  sel_added = gtk_bitset_get_size_in_range (selection, position, position + added);
+  if (position > 0)
+    sel_position = gtk_bitset_get_size_in_range (self->selection, 0, position - 1);
+
+  if (removed > 0)
+    sel_removed = gtk_bitset_get_size_in_range (self->selection, position, position + removed - 1);
+
+  if (added > 0)
+    sel_added = gtk_bitset_get_size_in_range (selection, position, position + added - 1);
 
   gtk_bitset_unref (self->selection);
   self->selection = gtk_bitset_copy (selection);
@@ -127,29 +131,22 @@ gtk_selection_filter_model_items_changed_cb (GListModel *model,
 }
 
 static void
-gtk_selection_filter_model_selection_changed_cb (GListModel *model,
-                                                 guint       position,
-                                                 guint       n_items,
+gtk_selection_filter_model_items_changed_cb (GListModel              *model,
+                                             guint                    position,
+                                             guint                    removed,
+                                             guint                    added,
+                                             GtkSelectionFilterModel *self)
+{
+  selection_filter_model_items_changed (self, position, removed, added);
+}
+
+static void
+gtk_selection_filter_model_selection_changed_cb (GListModel              *model,
+                                                 guint                    position,
+                                                 guint                    n_items,
                                                  GtkSelectionFilterModel *self)
 {
-  GtkBitset *selection;
-  guint sel_position;
-  guint sel_removed;
-  guint sel_added;
-
-  selection = gtk_selection_model_get_selection (self->model);
-
-  sel_position = gtk_bitset_get_size_in_range (self->selection, 0, position - 1);
-  sel_removed = gtk_bitset_get_size_in_range (self->selection, position, position + n_items);
-  sel_added = gtk_bitset_get_size_in_range (selection, position, position + n_items);
-
-  gtk_bitset_unref (self->selection);
-  self->selection = gtk_bitset_copy (selection);
-
-  gtk_bitset_unref (selection);
-
-  if (sel_removed > 0 || sel_added > 0)
-    g_list_model_items_changed (G_LIST_MODEL (self), sel_position, sel_removed, sel_added);
+  selection_filter_model_items_changed (self, position, n_items, n_items);
 }
 
 static void
