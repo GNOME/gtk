@@ -55,6 +55,14 @@
 #include "gdk/gdktextureprivate.h"
 #include "gdk/gdkprofilerprivate.h"
 
+#define GDK_ARRAY_ELEMENT_TYPE char *
+#define GDK_ARRAY_NULL_TERMINATED 1
+#define GDK_ARRAY_FREE_FUNC g_free
+#define GDK_ARRAY_TYPE_NAME GtkStrvBuilder
+#define GDK_ARRAY_NAME gtk_strv_builder
+#define GDK_ARRAY_PREALLOC 16
+#include "gdk/gdkarrayimpl.c"
+
 /**
  * SECTION:gtkicontheme
  * @Short_description: Looking up icons by name
@@ -2276,13 +2284,13 @@ real_choose_icon (GtkIconTheme      *self,
 }
 
 static void
-icon_name_list_add_icon (GPtrArray   *icons,
-                         const gchar *dir_suffix,
-                         gchar       *icon_name)
+icon_name_list_add_icon (GtkStrvBuilder *icons,
+                         const gchar    *dir_suffix,
+                         gchar          *icon_name)
 {
   if (dir_suffix)
-    g_ptr_array_add (icons, g_strconcat (icon_name, dir_suffix, NULL));
-  g_ptr_array_add (icons, icon_name);
+    gtk_strv_builder_append (icons, g_strconcat (icon_name, dir_suffix, NULL));
+  gtk_strv_builder_append (icons, icon_name);
 }
 
 static GtkIconPaintable *
@@ -2296,7 +2304,7 @@ choose_icon (GtkIconTheme      *self,
 {
   gboolean has_regular = FALSE, has_symbolic = FALSE;
   GtkIconPaintable *icon;
-  GPtrArray *new_names;
+  GtkStrvBuilder new_names;
   const gchar *dir_suffix;
   guint i;
 
@@ -2327,73 +2335,70 @@ choose_icon (GtkIconTheme      *self,
 
   if ((flags & GTK_ICON_LOOKUP_FORCE_REGULAR) && has_symbolic)
     {
-      new_names = g_ptr_array_new_with_free_func (g_free);
+      gtk_strv_builder_init (&new_names);
       for (i = 0; icon_names[i]; i++)
         {
           if (icon_name_is_symbolic (icon_names[i], -1))
-            icon_name_list_add_icon (new_names, dir_suffix, g_strndup (icon_names[i], strlen (icon_names[i]) - strlen ("-symbolic")));
+            icon_name_list_add_icon (&new_names, dir_suffix, g_strndup (icon_names[i], strlen (icon_names[i]) - strlen ("-symbolic")));
           else
-            icon_name_list_add_icon (new_names, dir_suffix, g_strdup (icon_names[i]));
+            icon_name_list_add_icon (&new_names, dir_suffix, g_strdup (icon_names[i]));
         }
       for (i = 0; icon_names[i]; i++)
         {
           if (icon_name_is_symbolic (icon_names[i], -1))
-            icon_name_list_add_icon (new_names, dir_suffix, g_strdup (icon_names[i]));
+            icon_name_list_add_icon (&new_names, dir_suffix, g_strdup (icon_names[i]));
         }
-      g_ptr_array_add (new_names, NULL);
 
       icon = real_choose_icon (self,
-                               (const gchar **) new_names->pdata,
+                               (const char **) gtk_strv_builder_get_data (&new_names),
                                size,
                                scale,
                                flags & ~(GTK_ICON_LOOKUP_FORCE_REGULAR | GTK_ICON_LOOKUP_FORCE_SYMBOLIC),
                                non_blocking);
 
-      g_ptr_array_free (new_names, TRUE);
+      gtk_strv_builder_clear (&new_names);
     }
   else if ((flags & GTK_ICON_LOOKUP_FORCE_SYMBOLIC) && has_regular)
     {
-      new_names = g_ptr_array_new_with_free_func (g_free);
+      gtk_strv_builder_init (&new_names);
       for (i = 0; icon_names[i]; i++)
         {
           if (!icon_name_is_symbolic (icon_names[i], -1))
-            icon_name_list_add_icon (new_names, dir_suffix, g_strconcat (icon_names[i], "-symbolic", NULL));
+            icon_name_list_add_icon (&new_names, dir_suffix, g_strconcat (icon_names[i], "-symbolic", NULL));
           else
-            icon_name_list_add_icon (new_names, dir_suffix, g_strdup (icon_names[i]));
+            icon_name_list_add_icon (&new_names, dir_suffix, g_strdup (icon_names[i]));
         }
       for (i = 0; icon_names[i]; i++)
         {
           if (!icon_name_is_symbolic (icon_names[i], -1))
-            icon_name_list_add_icon (new_names, dir_suffix, g_strdup (icon_names[i]));
+            icon_name_list_add_icon (&new_names, dir_suffix, g_strdup (icon_names[i]));
         }
-      g_ptr_array_add (new_names, NULL);
 
       icon = real_choose_icon (self,
-                               (const gchar **) new_names->pdata,
+                               (const char **) gtk_strv_builder_get_data (&new_names),
                                size,
                                scale,
                                flags & ~(GTK_ICON_LOOKUP_FORCE_REGULAR | GTK_ICON_LOOKUP_FORCE_SYMBOLIC),
                                non_blocking);
 
-      g_ptr_array_free (new_names, TRUE);
+      gtk_strv_builder_clear (&new_names);
     }
   else if (dir_suffix)
     {
-      new_names = g_ptr_array_new_with_free_func (g_free);
+      gtk_strv_builder_init (&new_names);
       for (i = 0; icon_names[i]; i++)
         {
-          icon_name_list_add_icon (new_names, dir_suffix, g_strdup (icon_names[i]));
+          icon_name_list_add_icon (&new_names, dir_suffix, g_strdup (icon_names[i]));
         }
-      g_ptr_array_add (new_names, NULL);
 
       icon = real_choose_icon (self,
-                               (const gchar **) new_names->pdata,
+                               (const char **) gtk_strv_builder_get_data (&new_names),
                                size,
                                scale,
                                flags & ~(GTK_ICON_LOOKUP_FORCE_REGULAR | GTK_ICON_LOOKUP_FORCE_SYMBOLIC),
                                non_blocking);
 
-      g_ptr_array_free (new_names, TRUE);
+      gtk_strv_builder_clear (&new_names);
     }
   else
     {
