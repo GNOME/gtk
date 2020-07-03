@@ -728,6 +728,7 @@
     <widgets>
       <widget name="version_frame"/>
       <widget name="gl_frame"/>
+      <widget name="monitor_frame"/>
       <widget name="vulkan_frame"/>
       <widget name="env_frame"/>
       <widget name="display_frame"/>
