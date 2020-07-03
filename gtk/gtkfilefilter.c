@@ -90,12 +90,12 @@ typedef enum {
 
 struct _GtkFileFilterClass
 {
-  GInitiallyUnownedClass parent_class;
+  GObjectClass parent_class;
 };
 
 struct _GtkFileFilter
 {
-  GInitiallyUnowned parent_instance;
+  GObject parent_instance;
 
   gchar *name;
   GSList *rules;
@@ -156,7 +156,7 @@ static void         gtk_file_filter_buildable_custom_tag_end   (GtkBuildable    
                                                                 const gchar        *tagname,
                                                                 gpointer            data);
 
-G_DEFINE_TYPE_WITH_CODE (GtkFileFilter, gtk_file_filter, G_TYPE_INITIALLY_UNOWNED,
+G_DEFINE_TYPE_WITH_CODE (GtkFileFilter, gtk_file_filter, G_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
                                                 gtk_file_filter_buildable_init))
 
