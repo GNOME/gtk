@@ -89,7 +89,11 @@ gtk_vector(free_elements) (_T_ *start,
 #ifdef GTK_VECTOR_FREE_FUNC
   _T_ *e;
   for (e = start; e < end; e++)
+#ifdef GTK_VECTOR_BY_VALUE
+    GTK_VECTOR_FREE_FUNC (e);
+#else
     GTK_VECTOR_FREE_FUNC (*e);
+#endif
 #endif
 }
 
@@ -107,32 +111,32 @@ gtk_vector(clear) (GtkVector *self)
 }
 
 G_GNUC_UNUSED static inline _T_ *
-gtk_vector(get_data) (GtkVector *self)
+gtk_vector(get_data) (const GtkVector *self)
 {
   return self->start;
 }
 
 G_GNUC_UNUSED static inline _T_ *
-gtk_vector(index) (GtkVector *self,
-                   gsize      pos)
+gtk_vector(index) (const GtkVector *self,
+                   gsize            pos)
 {
   return self->start + pos;
 }
 
 G_GNUC_UNUSED static inline gsize
-gtk_vector(get_capacity) (GtkVector *self)
+gtk_vector(get_capacity) (const GtkVector *self)
 {
   return self->end_allocation - self->start;
 }
 
 G_GNUC_UNUSED static inline gsize
-gtk_vector(get_size) (GtkVector *self)
+gtk_vector(get_size) (const GtkVector *self)
 {
   return self->end - self->start;
 }
 
 G_GNUC_UNUSED static inline gboolean
-gtk_vector(is_empty) (GtkVector *self)
+gtk_vector(is_empty) (const GtkVector *self)
 {
   return self->end == self->start;
 }
@@ -196,31 +200,64 @@ gtk_vector(splice) (GtkVector *self,
              GTK_VECTOR_REAL_SIZE (remaining) * sizeof (_T_));
 
   if (added)
-    memcpy (gtk_vector(index) (self, pos),
-            additions,
-            added * sizeof (_T_));
+    {
+      if (additions)
+        memcpy (gtk_vector(index) (self, pos),
+                additions,
+                added * sizeof (_T_));
+      else
+        memset (gtk_vector(index) (self, pos), 0, added * sizeof (_T_));
+    }
 
   /* might overflow, but does the right thing */
   self->end += added - removed;
 }
 
 G_GNUC_UNUSED static void
+gtk_vector(set_size) (GtkVector *self,
+                      gsize      new_size)
+{
+  gsize old_size = gtk_vector(get_size) (self);
+  if (new_size > old_size)
+    gtk_vector(splice) (self, old_size, 0, NULL, new_size - old_size);
+  else
+    gtk_vector(splice) (self, old_size, old_size - new_size, NULL, 0);
+}
+
+G_GNUC_UNUSED static void
 gtk_vector(append) (GtkVector *self,
+#ifdef GTK_VECTOR_BY_VALUE
+                    _T_       *value)
+#else
                     _T_        value)
+#endif
 {
   gtk_vector(splice) (self, 
                       gtk_vector(get_size) (self),
                       0,
+#ifdef GTK_VECTOR_BY_VALUE
+                      value,
+#else
                       &value,
+#endif
                       1);
 }
 
+#ifdef GTK_VECTOR_BY_VALUE
+G_GNUC_UNUSED static _T_ *
+gtk_vector(get) (const GtkVector *self,
+                 gsize            pos)
+{
+  return gtk_vector(index) (self, pos);
+}
+#else
 G_GNUC_UNUSED static _T_ 
-gtk_vector(get) (GtkVector *self,
-                 gsize      pos)
+gtk_vector(get) (const GtkVector *self,
+                 gsize            pos)
 {
   return *gtk_vector(index) (self, pos);
 }
+#endif
 
 
 #ifndef GTK_VECTOR_NO_UNDEF
@@ -232,10 +269,12 @@ gtk_vector(get) (GtkVector *self,
 #undef gtk_vector
 #undef GTK_VECTOR_REAL_SIZE
 
+#undef GTK_VECTOR_BY_VALUE
 #undef GTK_VECTOR_ELEMENT_TYPE
+#undef GTK_VECTOR_FREE_FUNC
 #undef GTK_VECTOR_NAME
-#undef GTK_VECTOR_TYPE_NAME
-#undef GTK_VECTOR_PREALLOC
 #undef GTK_VECTOR_NULL_TERMINATED
+#undef GTK_VECTOR_PREALLOC
+#undef GTK_VECTOR_TYPE_NAME
 
 #endif
