@@ -201,6 +201,46 @@ strvcmp (gconstpointer p1,
 
 static GtkFilter *current_filter;
 
+static int
+compare_by_sorter (gconstpointer a,
+                   gconstpointer b,
+                   gpointer      data)
+{
+  return gtk_sorter_compare (GTK_SORTER (data), (gpointer)a, (gpointer)b);
+}
+
+static void
+resort (GListStore *store)
+{
+  GtkSorter *sorter;
+
+  g_signal_handlers_block_by_func (store, resort, NULL);
+  sorter = GTK_SORTER (g_object_get_data (G_OBJECT (store), "sorter"));
+  g_list_store_sort (store, compare_by_sorter, sorter);
+  g_signal_handlers_unblock_by_func (store, resort, NULL);
+}
+
+static void
+sorter_changed (GtkSorter  *sorter,
+                int         change,
+                GListStore *store)
+{
+  if (gtk_sorter_get_order (sorter) != GTK_SORTER_ORDER_NONE)
+    resort (store);
+}
+
+static void
+gtk_list_store_set_sorter (GListStore *store,
+                           GtkSorter  *sorter)
+{
+  g_object_set_data_full (G_OBJECT (store), "sorter", g_object_ref (sorter), g_object_unref );
+
+  g_signal_connect (store, "items-changed", G_CALLBACK (resort), NULL);
+  g_signal_connect (sorter, "changed", G_CALLBACK (sorter_changed), store);
+
+  resort (store);
+}
+
 static gboolean
 transform_settings_to_keys (GBinding     *binding,
                             const GValue *from_value,
@@ -211,7 +251,6 @@ transform_settings_to_keys (GBinding     *binding,
   GSettings *settings;
   GSettingsSchema *schema;
   GListStore *store;
-  GtkSortListModel *sort_model;
   GtkFilterListModel *filter_model;
   GtkFilter *filter;
   GtkNoSelection *selection_model;
@@ -242,16 +281,13 @@ transform_settings_to_keys (GBinding     *binding,
   g_settings_schema_unref (schema);
   g_object_unref (settings);
 
-  sort_model = gtk_sort_list_model_new (G_LIST_MODEL (store),
-                                        gtk_column_view_get_sorter (GTK_COLUMN_VIEW (data)));
-  g_object_unref (store);
+  gtk_list_store_set_sorter (store, gtk_column_view_get_sorter (GTK_COLUMN_VIEW (data)));
 
   expression = gtk_property_expression_new (SETTINGS_TYPE_KEY, NULL, "name");
   filter = gtk_string_filter_new ();
   gtk_string_filter_set_expression (GTK_STRING_FILTER (filter), expression);
-  filter_model = gtk_filter_list_model_new (G_LIST_MODEL (sort_model), filter);
+  filter_model = gtk_filter_list_model_new (G_LIST_MODEL (store), filter);
   gtk_expression_unref (expression);
-  g_object_unref (sort_model);
 
   g_set_object (&current_filter, filter);
 
