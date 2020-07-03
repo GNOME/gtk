@@ -107,15 +107,20 @@ gtk_selection_filter_model_items_changed_cb (GListModel *model,
                                              GtkSelectionFilterModel *self)
 {
   GtkBitset *selection;
-  guint sel_position;
-  guint sel_removed;
-  guint sel_added;
+  guint sel_position = 0;
+  guint sel_removed = 0;
+  guint sel_added = 0;
 
   selection = gtk_selection_model_get_selection (self->model);
 
-  sel_position = gtk_bitset_get_size_in_range (self->selection, 0, position - 1);
-  sel_removed = gtk_bitset_get_size_in_range (self->selection, position, position + removed);
-  sel_added = gtk_bitset_get_size_in_range (selection, position, position + added);
+  if (position > 0)
+    sel_position = gtk_bitset_get_size_in_range (self->selection, 0, position - 1);
+
+  if (removed > 0)
+    sel_removed = gtk_bitset_get_size_in_range (self->selection, position, position + removed - 1);
+
+  if (added > 0)
+    sel_added = gtk_bitset_get_size_in_range (selection, position, position + added - 1);
 
   gtk_bitset_unref (self->selection);
   self->selection = gtk_bitset_copy (selection);
@@ -133,13 +138,15 @@ gtk_selection_filter_model_selection_changed_cb (GListModel *model,
                                                  GtkSelectionFilterModel *self)
 {
   GtkBitset *selection;
-  guint sel_position;
-  guint sel_removed;
-  guint sel_added;
+  guint sel_position = 0;
+  guint sel_removed = 0;
+  guint sel_added = 0;
 
   selection = gtk_selection_model_get_selection (self->model);
 
-  sel_position = gtk_bitset_get_size_in_range (self->selection, 0, position - 1);
+  if (position > 0)
+    sel_position = gtk_bitset_get_size_in_range (self->selection, 0, position - 1);
+
   sel_removed = gtk_bitset_get_size_in_range (self->selection, position, position + n_items);
   sel_added = gtk_bitset_get_size_in_range (selection, position, position + n_items);
 
