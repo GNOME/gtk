@@ -50,6 +50,34 @@ int_free_func (int data)
 #define GTK_VECTOR_FREE_FUNC int_free_func
 #include "vectorimpl.c"
 
+#define GTK_VECTOR_ELEMENT_TYPE int
+#define GTK_VECTOR_NAME null_int_vector
+#define GTK_VECTOR_TYPE_NAME NullIntVector
+#define GTK_VECTOR_NULL_TERMINATED 1
+#include "vectorimpl.c"
+
+#define GTK_VECTOR_ELEMENT_TYPE int
+#define GTK_VECTOR_NAME null_pre_int_vector
+#define GTK_VECTOR_TYPE_NAME NullPreIntVector
+#define GTK_VECTOR_PREALLOC 100
+#define GTK_VECTOR_NULL_TERMINATED 1
+#include "vectorimpl.c"
+
+#define GTK_VECTOR_ELEMENT_TYPE int
+#define GTK_VECTOR_NAME null_free_int_vector
+#define GTK_VECTOR_TYPE_NAME NullFreeIntVector
+#define GTK_VECTOR_FREE_FUNC int_free_func
+#define GTK_VECTOR_NULL_TERMINATED 1
+#include "vectorimpl.c"
+
+#define GTK_VECTOR_ELEMENT_TYPE int
+#define GTK_VECTOR_NAME null_pre_free_int_vector
+#define GTK_VECTOR_TYPE_NAME NullPreFreeIntVector
+#define GTK_VECTOR_PREALLOC 100
+#define GTK_VECTOR_FREE_FUNC int_free_func
+#define GTK_VECTOR_NULL_TERMINATED 1
+#include "vectorimpl.c"
+
 int
 main (int argc, char *argv[])
 {
@@ -59,11 +87,19 @@ main (int argc, char *argv[])
   g_test_add_func ("/intvector/simple", int_vector_test_simple);
   g_test_add_func ("/intvector/prealloc/simple", pre_int_vector_test_simple);
   g_test_add_func ("/intvector/freefunc/simple", free_int_vector_test_simple);
-  g_test_add_func ("/intvector/prealloc_freefunc_simple", pre_free_int_vector_test_simple);
+  g_test_add_func ("/intvector/prealloc/freefunc/simple", pre_free_int_vector_test_simple);
+  g_test_add_func ("/intvector/null/simple", null_int_vector_test_simple);
+  g_test_add_func ("/intvector/null/prealloc/simple", null_pre_int_vector_test_simple);
+  g_test_add_func ("/intvector/null/freefunc/simple", null_free_int_vector_test_simple);
+  g_test_add_func ("/intvector/null/prealloc/freefunc/simple", null_pre_free_int_vector_test_simple);
   g_test_add_func ("/intvector/splice", int_vector_test_splice);
   g_test_add_func ("/intvector/prealloc/splice", pre_int_vector_test_splice);
   g_test_add_func ("/intvector/freefunc/splice", free_int_vector_test_splice);
-  g_test_add_func ("/intvector/prealloc_freefunc_splice", pre_free_int_vector_test_splice);
+  g_test_add_func ("/intvector/prealloc/freefunc/splice", pre_free_int_vector_test_splice);
+  g_test_add_func ("/intvector/null/splice", null_int_vector_test_splice);
+  g_test_add_func ("/intvector/null/prealloc/splice", null_pre_int_vector_test_splice);
+  g_test_add_func ("/intvector/null/freefunc/splice", null_free_int_vector_test_splice);
+  g_test_add_func ("/intvector/null/prealloc/freefunc/splice", null_pre_free_int_vector_test_splice);
 
   return g_test_run ();
 }
