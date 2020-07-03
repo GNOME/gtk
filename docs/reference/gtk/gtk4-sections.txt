@@ -355,6 +355,9 @@ gtk_bitset_is_empty
 gtk_bitset_equals
 gtk_bitset_get_minimum
 gtk_bitset_get_maximum
+gtk_bitset_get_size
+gtk_bitset_get_size_in_range
+gtk_bitset_get_nth
 <SUBSECTION>
 gtk_bitset_remove_all
 gtk_bitset_add
@@ -7609,4 +7612,14 @@ gtk_string_list_splice
 gtk_string_list_get_string
 GtkStringObject
 gtk_string_object_get_string
+</SECTION>
+
+<SECTION>
+<FILE>gtkselectionfiltermodel</FILE>
+<TITLE>GtkSelectionFilterModel</TITLE>
+GtkSelectionFilterModel
+gtk_selection_filter_model_new
+gtk_selection_filter_model_new_for_type
+gtk_selection_filter_model_set_model
+gtk_selection_filter_model_get_model
 </SECTION>

@@ -628,6 +628,23 @@ setup_listitem_cb (GtkListItemFactory *factory,
 }
 
 static void
+setup_selection_listitem_cb (GtkListItemFactory *factory,
+                             GtkListItem        *list_item)
+{
+  GtkWidget *picture;
+  GtkExpression *color_expression, *expression;
+
+  expression = gtk_constant_expression_new (GTK_TYPE_LIST_ITEM, list_item);
+  color_expression = gtk_property_expression_new (GTK_TYPE_LIST_ITEM, expression, "item");
+
+  picture = gtk_picture_new ();
+  gtk_widget_set_size_request (picture, 8, 8);
+  gtk_expression_bind (color_expression, picture, "paintable", NULL);
+
+  gtk_list_item_set_child (list_item, picture);
+}
+
+static void
 set_title (gpointer    item,
            const char *title)
 {
@@ -777,6 +794,47 @@ bind_number_item (GtkSignalListItemFactory *factory,
   g_free (string);
 }
 
+static void
+update_selection_count (GListModel *model,
+                        guint       position,
+                        guint       removed,
+                        guint       added,
+                        gpointer    data)
+{
+  char *text;
+  text = g_strdup_printf ("%u", g_list_model_get_n_items (model));
+  gtk_label_set_label (GTK_LABEL (data), text);
+  g_free (text);
+}
+
+static void
+update_selection_average (GListModel *model,
+                          guint       position,
+                          guint       removed,
+                          guint       added,
+                          gpointer    data)
+{
+  guint n = g_list_model_get_n_items (model);
+  GdkRGBA c = { 0, 0, 0, 1 };
+  guint i;
+  GtkColor *color;
+
+  for (i = 0; i < n; i++)
+    {
+      color = g_list_model_get_item (model, i);
+
+      c.red += color->color.red;
+      c.green += color->color.green;
+      c.blue += color->color.blue;
+
+      g_object_unref (color);
+    }
+
+  color = gtk_color_new ("", c.red / n, c.green / n, c.blue / n);
+  gtk_picture_set_paintable (GTK_PICTURE (data), GDK_PAINTABLE (color));
+  g_object_unref (color);
+}
+
 static GtkWidget *window = NULL;
 
 GtkWidget *
@@ -797,6 +855,22 @@ do_listview_colors (GtkWidget *do_widget)
       PangoAttrList *attrs;
       char *string;
       guint len;
+      GtkWidget *selection_view;
+      GListModel *selection_filter;
+      GListModel *no_selection;
+      GtkWidget *grid;
+      GtkWidget *selection_size_label;
+      GtkWidget *selection_average_picture;
+      GtkWidget *selection_info_toggle;
+      GtkWidget *selection_info_revealer;
+      GtkCssProvider *provider;
+
+      provider = gtk_css_provider_new ();
+      gtk_css_provider_load_from_resource (provider, "/listview_colors/listview_colors.css");
+      gtk_style_context_add_provider_for_display (gdk_display_get_default (),
+                                                  GTK_STYLE_PROVIDER (provider),
+                                                  800);
+      g_object_unref (provider);
 
       window = gtk_window_new ();
       gtk_window_set_title (GTK_WINDOW (window), "Colors");
@@ -809,13 +883,84 @@ do_listview_colors (GtkWidget *do_widget)
                               gtk_widget_get_display (do_widget));
       g_object_add_weak_pointer (G_OBJECT (window), (gpointer*)&window);
 
+      box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
+      gtk_window_set_child (GTK_WINDOW (window), box);
+
+      selection_info_revealer = gtk_revealer_new ();
+      gtk_box_append (GTK_BOX (box), selection_info_revealer);
+
+      grid = gtk_grid_new ();
+      gtk_revealer_set_child (GTK_REVEALER (selection_info_revealer), grid);
+      gtk_widget_set_margin_start (grid, 10);
+      gtk_widget_set_margin_end (grid, 10);
+      gtk_widget_set_margin_top (grid, 10);
+      gtk_widget_set_margin_bottom (grid, 10);
+      gtk_grid_set_row_spacing (GTK_GRID (grid), 10);
+      gtk_grid_set_column_spacing (GTK_GRID (grid), 10);
+
+      label = gtk_label_new ("Selection");
+      gtk_widget_set_hexpand (label, TRUE);
+      gtk_widget_add_css_class (label, "title-3");
+      gtk_grid_attach (GTK_GRID (grid), label, 0, 0, 5, 1);
+
+      gtk_grid_attach (GTK_GRID (grid), gtk_label_new ("Size:"), 0, 2, 1, 1);
+
+      selection_size_label = gtk_label_new ("0");
+      gtk_grid_attach (GTK_GRID (grid), selection_size_label, 1, 2, 1, 1);
+
+      gtk_grid_attach (GTK_GRID (grid), gtk_label_new ("Average:"), 2, 2, 1, 1);
+
+      selection_average_picture = gtk_picture_new ();
+      gtk_widget_set_size_request (selection_average_picture, 32, 32);
+      gtk_grid_attach (GTK_GRID (grid), selection_average_picture, 3, 2, 1, 1);
+
+      label = gtk_label_new ("");
+      gtk_widget_set_hexpand (label, TRUE);
+      gtk_grid_attach (GTK_GRID (grid), label, 4, 2, 1, 1);
+
       sw = gtk_scrolled_window_new ();
-      gtk_window_set_child (GTK_WINDOW (window), sw);
+      gtk_widget_set_hexpand (sw, TRUE);
+
+      gtk_grid_attach (GTK_GRID (grid), sw, 0, 1, 5, 1);
+      gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (sw),
+                                      GTK_POLICY_NEVER,
+                                      GTK_POLICY_AUTOMATIC);
+
+      factory = gtk_signal_list_item_factory_new ();
+      g_signal_connect (factory, "setup", G_CALLBACK (setup_selection_listitem_cb), NULL);
+      selection_view = gtk_grid_view_new_with_factory (factory);
+      gtk_widget_add_css_class (selection_view, "compact");
+      gtk_grid_view_set_max_columns (GTK_GRID_VIEW (selection_view), 200);
+      gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (sw), selection_view);
+
+      sw = gtk_scrolled_window_new ();
+      gtk_box_append (GTK_BOX (box), sw);
 
       gridview = create_color_grid ();
       gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (sw), gridview);
+      gtk_widget_set_hexpand (sw, TRUE);
+      gtk_widget_set_vexpand (sw, TRUE);
       model = gtk_grid_view_get_model (GTK_GRID_VIEW (gridview));
+
+      selection_filter = G_LIST_MODEL (gtk_selection_filter_model_new (GTK_SELECTION_MODEL (model)));
+      g_signal_connect (selection_filter, "items-changed", G_CALLBACK (update_selection_count), selection_size_label);
+      g_signal_connect (selection_filter, "items-changed", G_CALLBACK (update_selection_average), selection_average_picture);
+
+      no_selection = G_LIST_MODEL (gtk_no_selection_new (selection_filter));
+      gtk_grid_view_set_model (GTK_GRID_VIEW (selection_view), no_selection);
+      g_object_unref (selection_filter);
+      g_object_unref (no_selection);
+
       g_object_get (model, "model", &model, NULL);
+
+      selection_info_toggle = gtk_toggle_button_new ();
+      gtk_button_set_icon_name (GTK_BUTTON (selection_info_toggle), "emblem-important-symbolic");
+      gtk_widget_set_tooltip_text (selection_info_toggle, "Show selection info");
+      gtk_header_bar_pack_start (GTK_HEADER_BAR (header), selection_info_toggle);
+
+      g_object_bind_property (selection_info_toggle, "active",
+                              selection_info_revealer, "reveal-child",
+                              G_BINDING_DEFAULT);
 
       button = gtk_button_new_with_mnemonic ("_Refill");
       g_signal_connect (button, "clicked",

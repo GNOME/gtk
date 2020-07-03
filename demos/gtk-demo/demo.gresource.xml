@@ -140,6 +140,7 @@
   </gresource>
   <gresource prefix="/listview_colors">
     <file compressed="true">color.names.txt</file>
+    <file>listview_colors.css</file>
   </gresource>
   <gresource prefix="/shortcuts">
     <file>shortcuts.ui</file>
