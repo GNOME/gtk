@@ -57,6 +57,12 @@
 
  */
 
+#define GDK_ARRAY_ELEMENT_TYPE GtkStringObject *
+#define GDK_ARRAY_NAME objects
+#define GDK_ARRAY_TYPE_NAME Objects
+#define GDK_ARRAY_FREE_FUNC g_object_unref
+#include "gdk/gdkarrayimpl.c"
+
 struct _GtkStringObject
 {
   GObject parent_instance;
@@ -190,7 +196,7 @@ struct _GtkStringList
 {
   GObject parent_instance;
 
-  GSequence *items;
+  Objects items;
 };
 
 struct _GtkStringListClass
@@ -209,7 +215,7 @@ gtk_string_list_get_n_items (GListModel *list)
 {
   GtkStringList *self = GTK_STRING_LIST (list);
 
-  return g_sequence_get_length (self->items);
+  return objects_get_size (&self->items);
 }
 
 static gpointer
@@ -217,14 +223,11 @@ gtk_string_list_get_item (GListModel *list,
                           guint       position)
 {
   GtkStringList *self = GTK_STRING_LIST (list);
-  GSequenceIter *iter;
 
-  iter = g_sequence_get_iter_at_pos (self->items, position);
-
-  if (g_sequence_iter_is_end (iter))
+  if (position >= objects_get_size (&self->items))
     return NULL;
-  else
-    return g_object_ref (g_sequence_get (iter));
+
+  return g_object_ref (objects_get (&self->items, position));
 }
 
 static void
@@ -331,7 +334,7 @@ item_end_element (GtkBuildableParseContext  *context,
           g_string_assign (data->string, translated);
         }
 
-      g_sequence_append (data->list->items, gtk_string_object_new (data->string->str));
+      gtk_string_list_append (data->list, data->string->str);
     }
 
   data->translatable = FALSE;
@@ -411,7 +414,7 @@ gtk_string_list_dispose (GObject *object)
 {
   GtkStringList *self = GTK_STRING_LIST (object);
 
-  g_clear_pointer (&self->items, g_sequence_free);
+  objects_clear (&self->items);
 
   G_OBJECT_CLASS (gtk_string_list_parent_class)->dispose (object);
 }
@@ -427,7 +430,7 @@ gtk_string_list_class_init (GtkStringListClass *class)
 static void
 gtk_string_list_init (GtkStringList *self)
 {
-  self->items = g_sequence_new (g_object_unref);
+  objects_init (&self->items);
 }
 
 /**
@@ -476,39 +479,26 @@ gtk_string_list_splice (GtkStringList      *self,
                         guint               n_removals,
                         const char * const *additions)
 {
-  GSequenceIter *it;
-  guint add, n_items;
+  guint i, n_additions;
 
   g_return_if_fail (GTK_IS_STRING_LIST (self));
   g_return_if_fail (position + n_removals >= position); /* overflow */
-
-  n_items = g_sequence_get_length (self->items);
-  g_return_if_fail (position + n_removals <= n_items);
-
-  it = g_sequence_get_iter_at_pos (self->items, position);
-
-  if (n_removals)
-    {
-      GSequenceIter *end;
-
-      end = g_sequence_iter_move (it, n_removals);
-      g_sequence_remove_range (it, end);
-
-      it = end;
-    }
+  g_return_if_fail (position + n_removals <= objects_get_size (&self->items));
 
   if (additions)
-    {
-      for (add = 0; additions[add]; add++)
-        {
-          g_sequence_insert_before (it, gtk_string_object_new (additions[add]));
-        }
-    }
+    n_additions = g_strv_length ((char **) additions);
   else
-    add = 0;
+    n_additions = 0;
 
-  if (n_removals || add)
-    g_list_model_items_changed (G_LIST_MODEL (self), position, n_removals, add);
+  objects_splice (&self->items, position, n_removals, NULL, n_additions);
+
+  for (i = 0; i < n_additions; i++)
+    {
+      *objects_index (&self->items, position + i) = gtk_string_object_new (additions[i]);
+    }
+
+  if (n_removals || n_additions)
+    g_list_model_items_changed (G_LIST_MODEL (self), position, n_removals, n_additions);
 }
 
 /**
@@ -525,14 +515,11 @@ void
 gtk_string_list_append (GtkStringList *self,
                         const char    *string)
 {
-  guint n_items;
-
   g_return_if_fail (GTK_IS_STRING_LIST (self));
 
-  n_items = g_sequence_get_length (self->items);
-  g_sequence_append (self->items, gtk_string_object_new (string));
+  objects_append (&self->items, gtk_string_object_new (string));
 
-  g_list_model_items_changed (G_LIST_MODEL (self), n_items, 0, 1);
+  g_list_model_items_changed (G_LIST_MODEL (self), objects_get_size (&self->items) - 1, 0, 1);
 }
 
 /**
@@ -554,14 +541,11 @@ void
 gtk_string_list_take (GtkStringList *self,
                       char          *string)
 {
-  guint n_items;
-
   g_return_if_fail (GTK_IS_STRING_LIST (self));
 
-  n_items = g_sequence_get_length (self->items);
-  g_sequence_append (self->items, gtk_string_object_new_take (string));
+  objects_append (&self->items, gtk_string_object_new_take (string));
 
-  g_list_model_items_changed (G_LIST_MODEL (self), n_items, 0, 1);
+  g_list_model_items_changed (G_LIST_MODEL (self), objects_get_size (&self->items) - 1, 0, 1);
 }
 
 /**
@@ -576,16 +560,9 @@ void
 gtk_string_list_remove (GtkStringList *self,
                         guint          position)
 {
-  GSequenceIter *iter;
-
   g_return_if_fail (GTK_IS_STRING_LIST (self));
 
-  iter = g_sequence_get_iter_at_pos (self->items, position);
-  g_return_if_fail (!g_sequence_iter_is_end (iter));
-
-  g_sequence_remove (iter);
-
-  g_list_model_items_changed (G_LIST_MODEL (self), position, 1, 0);
+  gtk_string_list_splice (self, position, 1, NULL);
 }
 
 /**
@@ -605,20 +582,10 @@ const char *
 gtk_string_list_get_string (GtkStringList *self,
                             guint          position)
 {
-  GSequenceIter *iter;
-
   g_return_val_if_fail (GTK_IS_STRING_LIST (self), NULL);
 
-  iter = g_sequence_get_iter_at_pos (self->items, position);
+  if (position >= objects_get_size (&self->items))
+    return NULL;
 
-  if (g_sequence_iter_is_end (iter))
-    {
-      return NULL;
-    }
-  else
-    {
-      GtkStringObject *obj = g_sequence_get (iter);
-
-      return obj->string;
-    }
+  return objects_get (&self->items, position)->string;
 }
