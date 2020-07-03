@@ -194,6 +194,76 @@ gtk_bitset_get_maximum (const GtkBitset *self)
 }
 
 /**
+ * gtk_bitset_get_size:
+ * @self: a #GtkBitSet
+ *
+ * Gets the number of values that were added to the set.  
+ * For example, if the set is empty, 0 is returned.
+ *
+ * Note that this function returns a #guint64, because when all values are
+ * set, the return value is #G_MAXUINT + 1. Unless you are sure this cannot
+ * happen (it can't with #GListModel), be sure to use a 64bit type.
+ *
+ * Returns: The number of values in the set.
+ **/
+guint64
+gtk_bitset_get_size (const GtkBitset *self)
+{
+  g_return_val_if_fail (self != NULL, 0);
+
+  return roaring_bitmap_get_cardinality (&self->roaring);
+}
+
+/**
+ * gtk_bitset_get_size_in_range:
+ * @self: a #GtkBitSet
+ * @first: the first element to include
+ * @last: the last element to include
+ *
+ * Gets the number of values that are part of the set from @first to @last
+ * (inclusive).
+ *
+ * Note that this function returns a #guint64, because when all values are
+ * set, the return value is #G_MAXUINT + 1. Unless you are sure this cannot
+ * happen (it can't with #GListModel), be sure to use a 64bit type.
+ *
+ * Returns: The number of values in the set from @first to @last.
+ **/
+guint64
+gtk_bitset_get_size_in_range (const GtkBitset *self,
+                              guint            first,
+                              guint            last)
+{
+  g_return_val_if_fail (self != NULL, 0);
+  g_return_val_if_fail (last >= first, 0);
+
+  return roaring_bitmap_range_cardinality (&self->roaring, first, ((uint64_t) last) + 1);
+}
+
+/**
+ * gtk_bitset_get_nth:
+ * @self: a #GtkBitset
+ * @nth: index of the item to get
+ *
+ * Returns the value of the @nth item in self.
+ *
+ * If @nth is >= the size of @self, 0 is returned.
+ *
+ * Returns: the value of the @nth item in @self
+ **/
+guint
+gtk_bitset_get_nth (const GtkBitset *self,
+                    guint            nth)
+{
+  uint32_t result;
+
+  if (!roaring_bitmap_select (&self->roaring, nth, &result))
+    return 0;
+
+  return result;
+}
+
+/**
  * gtk_bitset_new_empty:
  *
  * Creates a new empty bitset.
