@@ -73,6 +73,7 @@
 #include "gtkbuilderprivate.h"
 #include "gtkintl.h"
 #include "gtkprivate.h"
+#include "gtkfilter.h"
 
 typedef struct _GtkFileFilterClass GtkFileFilterClass;
 typedef struct _FilterRule FilterRule;
@@ -90,12 +91,12 @@ typedef enum {
 
 struct _GtkFileFilterClass
 {
-  GObjectClass parent_class;
+  GtkFilterClass parent_class;
 };
 
 struct _GtkFileFilter
 {
-  GObject parent_instance;
+  GtkFilter parent_instance;
 
   gchar *name;
   GSList *rules;
@@ -107,7 +108,7 @@ struct _FilterRule
 {
   FilterRuleType type;
   GtkFileFilterFlags needed;
-  
+
   union {
     gchar *pattern;
     gchar *mime_type;
@@ -156,6 +157,11 @@ static void         gtk_file_filter_buildable_custom_tag_end   (GtkBuildable    
                                                                 const gchar        *tagname,
                                                                 gpointer            data);
 
+static gboolean       gtk_file_filter_match          (GtkFilter *filter,
+                                                      gpointer   item);
+static GtkFilterMatch gtk_file_filter_get_strictness (GtkFilter *filter);
+
+
 G_DEFINE_TYPE_WITH_CODE (GtkFileFilter, gtk_file_filter, G_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
                                                 gtk_file_filter_buildable_init))
@@ -169,10 +175,14 @@ static void
 gtk_file_filter_class_init (GtkFileFilterClass *class)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (class);
+  GtkFilterClass *filter_class = GTK_FILTER_CLASS (class);
 
   gobject_class->set_property = gtk_file_filter_set_property;
   gobject_class->get_property = gtk_file_filter_get_property;
   gobject_class->finalize = gtk_file_filter_finalize;
+
+  filter_class->match = gtk_file_filter_match;
+  filter_class->get_strictness = gtk_file_filter_get_strictness;
 
   /**
    * GtkFileFilter:name:
@@ -436,6 +446,84 @@ gtk_file_filter_buildable_custom_tag_end (GtkBuildable *buildable,
     }
 }
 
+/* GtkFilter implementation */
+
+static gboolean
+gtk_file_filter_match (GtkFilter *filter,
+                       gpointer   item)
+{
+  GtkFileFilter *file_filter = GTK_FILE_FILTER (filter);
+  GFileInfo *info;
+  GFile *file;
+  GtkFileFilterInfo filter_info = { 0, };
+  GtkFileFilterFlags required;
+  gboolean result;
+  char *mime_type = NULL;
+  char *filename = NULL;
+  char *uri = NULL;
+
+  if (!G_IS_FILE_INFO (item))
+    return TRUE;
+
+  info = G_FILE_INFO (item);
+  file = G_FILE (g_file_info_get_attribute_object (info, "standard::file"));
+
+  required = file_filter->needed;
+
+  filter_info.contains = GTK_FILE_FILTER_DISPLAY_NAME;
+  filter_info.display_name = g_file_info_get_display_name (info);
+
+  if (required & GTK_FILE_FILTER_MIME_TYPE)
+    {
+      const char *s = g_file_info_get_content_type (info);
+      if (!s)
+        s = g_file_info_get_attribute_string (info, G_FILE_ATTRIBUTE_STANDARD_FAST_CONTENT_TYPE);
+
+      if (s)
+        {
+          mime_type = g_content_type_get_mime_type (s);
+          if (mime_type)
+            {
+              filter_info.mime_type = mime_type;
+              filter_info.contains |= GTK_FILE_FILTER_MIME_TYPE;
+            }
+        }
+    }
+
+  if (required & GTK_FILE_FILTER_FILENAME)
+    {
+      filename = g_file_get_path (file);
+      if (filename)
+        {
+          filter_info.filename = filename;
+          filter_info.contains |= GTK_FILE_FILTER_FILENAME;
+        }
+    }
+
+  if (required & GTK_FILE_FILTER_URI)
+    {
+      uri = g_file_get_uri (file);
+      if (uri)
+        {
+          filter_info.uri = uri;
+          filter_info.contains |= GTK_FILE_FILTER_URI;
+        }
+    }
+
+  result = gtk_file_filter_filter (file_filter, &filter_info);
+
+  g_free (mime_type);
+  g_free (filename);
+  g_free (uri);
+
+  return result;
+}
+
+static GtkFilterMatch
+gtk_file_filter_get_strictness (GtkFilter *filter)
+{
+  return GTK_FILTER_MATCH_SOME;
+}
 
 /**
  * gtk_file_filter_new:
