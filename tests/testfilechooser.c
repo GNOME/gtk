@@ -393,6 +393,7 @@ main (int argc, char **argv)
 
   /* Make this filter the default */
   gtk_file_chooser_set_filter (GTK_FILE_CHOOSER (dialog), filter);
+  g_object_unref (filter);
 
   filter = gtk_file_filter_new ();
   gtk_file_filter_set_name (filter, "No backup files");
@@ -400,11 +401,13 @@ main (int argc, char **argv)
 			      no_backup_files_filter, NULL, NULL);
   gtk_file_filter_add_mime_type (filter, "image/png");
   gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (dialog), filter);
+  g_object_unref (filter);
 
   filter = gtk_file_filter_new ();
   gtk_file_filter_set_name (filter, "Starts with D");
   gtk_file_filter_add_pattern (filter, "D*");
   gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (dialog), filter);
+  g_object_unref (filter);
 
   g_signal_connect (dialog, "notify::filter",
 		    G_CALLBACK (filter_changed), NULL);
@@ -414,11 +417,13 @@ main (int argc, char **argv)
   gtk_file_filter_add_mime_type (filter, "image/jpeg");
   gtk_file_filter_add_mime_type (filter, "image/png");
   gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (dialog), filter);
+  g_object_unref (filter);
 
   filter = gtk_file_filter_new ();
   gtk_file_filter_set_name (filter, "Images");
   gtk_file_filter_add_pixbuf_formats (filter);
   gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (dialog), filter);
+  g_object_unref (filter);
 
   /* Choices */
 
