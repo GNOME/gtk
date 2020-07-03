@@ -113,6 +113,15 @@ struct _GtkSnapshotState {
   } data;
 };
 
+static void gtk_snapshot_state_clear (GtkSnapshotState *state);
+
+#define GDK_ARRAY_NAME gtk_snapshot_states
+#define GDK_ARRAY_TYPE_NAME GtkSnapshotStates
+#define GDK_ARRAY_ELEMENT_TYPE GtkSnapshotState
+#define GDK_ARRAY_FREE_FUNC gtk_snapshot_state_clear
+#define GDK_ARRAY_BY_VALUE 1
+#include "gdk/gdkarrayimpl.c"
+
 /* This is a nasty little hack. We typedef GtkSnapshot to the fake object GdkSnapshot
  * so that we don't need to typecast between them.
  * After all, the GdkSnapshot only exist so poor language bindings don't trip. Hardcore
@@ -121,7 +130,7 @@ struct _GtkSnapshotState {
 struct _GdkSnapshot {
   GObject                parent_instance; /* it's really GdkSnapshot, but don't tell anyone! */
 
-  GArray                *state_stack;
+  GtkSnapshotStates      state_stack;
   GtkSnapshotNodes       nodes;
 };
 
@@ -136,10 +145,10 @@ gtk_snapshot_dispose (GObject *object)
 {
   GtkSnapshot *snapshot = GTK_SNAPSHOT (object);
 
-  if (snapshot->state_stack)
+  if (!gtk_snapshot_states_is_empty (&snapshot->state_stack))
     gsk_render_node_unref (gtk_snapshot_to_node (snapshot));
 
-  g_assert (snapshot->state_stack == NULL);
+  g_assert (gtk_snapshot_states_is_empty (&snapshot->state_stack));
   g_assert (gtk_snapshot_nodes_is_empty (&snapshot->nodes));
 
   G_OBJECT_CLASS (gtk_snapshot_parent_class)->dispose (object);
@@ -187,11 +196,11 @@ gtk_snapshot_push_state (GtkSnapshot            *snapshot,
                          GskTransform           *transform,
                          GtkSnapshotCollectFunc  collect_func)
 {
-  const gsize n_states = snapshot->state_stack->len;
+  const gsize n_states = gtk_snapshot_states_get_size (&snapshot->state_stack);
   GtkSnapshotState *state;
 
-  g_array_set_size (snapshot->state_stack, n_states + 1);
-  state = &g_array_index (snapshot->state_stack, GtkSnapshotState, n_states);
+  gtk_snapshot_states_set_size (&snapshot->state_stack, n_states + 1);
+  state = gtk_snapshot_states_get (&snapshot->state_stack, n_states);
 
   state->transform = gsk_transform_ref (transform);
   state->collect_func = collect_func;
@@ -204,17 +213,21 @@ gtk_snapshot_push_state (GtkSnapshot            *snapshot,
 static GtkSnapshotState *
 gtk_snapshot_get_current_state (const GtkSnapshot *snapshot)
 {
-  g_assert (snapshot->state_stack->len > 0);
+  gsize size = gtk_snapshot_states_get_size (&snapshot->state_stack);
 
-  return &g_array_index (snapshot->state_stack, GtkSnapshotState, snapshot->state_stack->len - 1);
+  g_assert (size > 0);
+
+  return gtk_snapshot_states_get (&snapshot->state_stack, size - 1);
 }
 
 static GtkSnapshotState *
 gtk_snapshot_get_previous_state (const GtkSnapshot *snapshot)
 {
-  g_assert (snapshot->state_stack->len > 1);
+  gsize size = gtk_snapshot_states_get_size (&snapshot->state_stack);
 
-  return &g_array_index (snapshot->state_stack, GtkSnapshotState, snapshot->state_stack->len - 2);
+  g_assert (size > 1);
+
+  return gtk_snapshot_states_get (&snapshot->state_stack, size - 2);
 }
 
 static void
@@ -237,8 +250,7 @@ gtk_snapshot_new (void)
 
   snapshot = g_object_new (GTK_TYPE_SNAPSHOT, NULL);
 
-  snapshot->state_stack = g_array_new (FALSE, TRUE, sizeof (GtkSnapshotState));
-  g_array_set_clear_func (snapshot->state_stack, (GDestroyNotify)gtk_snapshot_state_clear);
+  gtk_snapshot_states_init (&snapshot->state_stack);
   gtk_snapshot_nodes_init (&snapshot->nodes);
 
   gtk_snapshot_push_state (snapshot,
@@ -1104,14 +1116,14 @@ gtk_snapshot_pop_one (GtkSnapshot *snapshot)
   guint state_index;
   GskRenderNode *node;
 
-  if (snapshot->state_stack->len == 0)
+  if (gtk_snapshot_states_is_empty (&snapshot->state_stack))
     {
       g_warning ("Too many gtk_snapshot_pop() calls.");
       return NULL;
     }
 
   state = gtk_snapshot_get_current_state (snapshot);
-  state_index = snapshot->state_stack->len - 1;
+  state_index = gtk_snapshot_states_get_size (&snapshot->state_stack) - 1;
 
   if (state->collect_func)
     {
@@ -1121,7 +1133,7 @@ gtk_snapshot_pop_one (GtkSnapshot *snapshot)
                                   state->n_nodes);
 
       /* The collect func may not modify the state stack... */
-      g_assert (state_index == snapshot->state_stack->len - 1);
+      g_assert (state_index == gtk_snapshot_states_get_size (&snapshot->state_stack) - 1);
 
       /* Remove all the state's nodes from the list of nodes */
       g_assert (state->start_node_index + state->n_nodes == gtk_snapshot_nodes_get_size (&snapshot->nodes));
@@ -1139,7 +1151,7 @@ gtk_snapshot_pop_one (GtkSnapshot *snapshot)
       g_assert (previous_state->start_node_index + previous_state->n_nodes == gtk_snapshot_nodes_get_size (&snapshot->nodes));
     }
 
-  g_array_remove_index (snapshot->state_stack, state_index);
+  gtk_snapshot_states_splice (&snapshot->state_stack, state_index, 1, NULL, 0);
 
   return node;
 }
@@ -1235,15 +1247,14 @@ gtk_snapshot_to_node (GtkSnapshot *snapshot)
   result = gtk_snapshot_pop_internal (snapshot);
 
   /* We should have exactly our initial state */
-  if (snapshot->state_stack->len > 0)
+  if (!gtk_snapshot_states_is_empty (&snapshot->state_stack))
     {
-      g_warning ("Too many gtk_snapshot_push() calls. %u states remaining.", snapshot->state_stack->len);
+      g_warning ("Too many gtk_snapshot_push() calls. %zu states remaining.",
+                 gtk_snapshot_states_get_size (&snapshot->state_stack));
     }
 
-  g_array_free (snapshot->state_stack, TRUE);
+  gtk_snapshot_states_clear (&snapshot->state_stack);
   gtk_snapshot_nodes_clear (&snapshot->nodes);
-
-  snapshot->state_stack = NULL;
 
   return result;
 }
