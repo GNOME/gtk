@@ -6,7 +6,6 @@
     <property name="default-height">480</property>
     <child type="titlebar">
       <object class="GtkHeaderBar">
-        <property name="show-title-buttons">1</property>
         <child type="end">
           <object class="GtkToggleButton" id="search_button">
             <property name="icon-name">system-search-symbolic</property>

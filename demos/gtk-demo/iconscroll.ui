@@ -6,7 +6,6 @@
     <property name="default-height">500</property>
     <child type="titlebar">
       <object class="GtkHeaderBar">
-        <property name="show-title-buttons">1</property>
         <child>
           <object class="GtkBox">
             <style>

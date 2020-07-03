@@ -6,7 +6,6 @@
     <property name="title" translatable="yes">Minesweeper</property>
     <child type="titlebar">
       <object class="GtkHeaderBar" id="">
-        <property name="show-title-buttons">1</property>
         <child>
           <object class="GtkButton">
             <property name="label">New Game</property>
