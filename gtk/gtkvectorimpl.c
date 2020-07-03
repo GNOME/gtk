@@ -39,6 +39,12 @@ G_BEGIN_DECLS
 #endif
 #endif
 
+#ifdef GTK_VECTOR_NULL_TERMINATED
+#define GTK_VECTOR_REAL_SIZE(_size) ((_size) + 1)
+#else
+#define GTK_VECTOR_REAL_SIZE(_size) (_size)
+#endif
+
 /* make this readable */
 #define _T_ GTK_VECTOR_ELEMENT_TYPE
 #define GtkVector GTK_VECTOR_TYPE_NAME
@@ -54,7 +60,7 @@ struct GtkVector
   _T_ *end;
   _T_ *end_allocation;
 #ifdef GTK_VECTOR_PREALLOC
-  _T_ preallocated[GTK_VECTOR_PREALLOC];
+  _T_ preallocated[GTK_VECTOR_REAL_SIZE(GTK_VECTOR_PREALLOC)];
 #endif
 };
 
@@ -66,6 +72,9 @@ gtk_vector(init) (GtkVector *self)
   self->start = self->preallocated;
   self->end = self->start;
   self->end_allocation = self->start + GTK_VECTOR_PREALLOC;
+#ifdef GTK_VECTOR_NULL_TERMINATED
+  *self->start = *(_T_[1]) {};
+#endif
 #else
   self->start = NULL;
   self->end = NULL;
@@ -130,7 +139,7 @@ gtk_vector(is_empty) (GtkVector *self)
 
 G_GNUC_UNUSED static void
 gtk_vector(reserve) (GtkVector *self,
-                        gsize      n)
+                     gsize      n)
 {
   gsize new_size, size;
 
@@ -144,7 +153,15 @@ gtk_vector(reserve) (GtkVector *self,
   if (self->start == self->preallocated)
     {
       self->start = g_new (_T_, new_size);
-      memcpy (self->start, self->preallocated, sizeof (_T_) * size);
+      memcpy (self->start, self->preallocated, sizeof (_T_) * GTK_VECTOR_REAL_SIZE (size));
+    }
+  else
+#endif
+#ifdef GTK_VECTOR_NULL_TERMINATED
+  if (self->start == NULL)
+    {
+      self->start = g_new (_T_, new_size);
+      *self->start = *(_T_[1]) {};
     }
   else
 #endif
@@ -161,19 +178,22 @@ gtk_vector(splice) (GtkVector *self,
                     _T_       *additions,
                     gsize      added)
 {
-  gssize size = gtk_vector(get_size) (self);
+  gsize size;
+  gsize remaining;
 
+  size = gtk_vector(get_size) (self);
   g_assert (pos + removed <= size);
+  remaining = size - pos - removed;
 
   gtk_vector(free_elements) (gtk_vector(index) (self, pos),
                              gtk_vector(index) (self, pos + removed));
 
   gtk_vector(reserve) (self, size - removed + added);
 
-  if (pos + removed < size && removed != added)
+  if (GTK_VECTOR_REAL_SIZE (remaining) && removed != added)
     memmove (gtk_vector(index) (self, pos + added),
              gtk_vector(index) (self, pos + removed),
-             (size - pos - removed) * sizeof (_T_));
+             GTK_VECTOR_REAL_SIZE (remaining) * sizeof (_T_));
 
   if (added)
     memcpy (gtk_vector(index) (self, pos),
@@ -210,10 +230,12 @@ gtk_vector(get) (GtkVector *self,
 #undef gtk_vector_paste_more
 #undef gtk_vector_paste
 #undef gtk_vector
+#undef GTK_VECTOR_REAL_SIZE
 
-#undef GTK_VECTOR_PREALLOC
 #undef GTK_VECTOR_ELEMENT_TYPE
 #undef GTK_VECTOR_NAME
 #undef GTK_VECTOR_TYPE_NAME
+#undef GTK_VECTOR_PREALLOC
+#undef GTK_VECTOR_NULL_TERMINATED
 
 #endif
