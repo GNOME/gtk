@@ -36,6 +36,9 @@ gtk_vector(test_simple) (void)
       g_assert_cmpint (gtk_vector(get_size) (&v), ==, i);
       g_assert_cmpint (gtk_vector(get_size) (&v), <=, gtk_vector(get_capacity) (&v));
       gtk_vector(append) (&v, i);
+#ifdef GTK_VECTOR_NULL_TERMINATED
+      g_assert_cmpint (*gtk_vector(index) (&v, gtk_vector(get_size) (&v)), ==, 0);
+#endif
     }
   g_assert_cmpint (gtk_vector(get_size) (&v), ==, i);
   g_assert_cmpint (gtk_vector(get_size) (&v), <=, gtk_vector(get_capacity) (&v));
@@ -84,6 +87,10 @@ gtk_vector(test_splice) (void)
 
       g_assert_cmpint (gtk_vector(get_size) (&v), ==, old_size + add - remove);
       g_assert_cmpint (gtk_vector(get_size) (&v), <=, gtk_vector(get_capacity) (&v));
+#ifdef GTK_VECTOR_NULL_TERMINATED
+      if (gtk_vector(get_size) (&v))
+        g_assert_cmpint (*gtk_vector(index) (&v, gtk_vector(get_size) (&v)), ==, 0);
+#endif
       for (j = 0; j < add; j++)
         g_assert_cmpint (gtk_vector(get) (&v, pos + j), ==, additions[j]);
     }
@@ -100,9 +107,11 @@ gtk_vector(test_splice) (void)
 #undef gtk_vector_paste_more
 #undef gtk_vector_paste
 #undef gtk_vector
+#undef GTK_VECTOR_REAL_SIZE
 
-#undef GTK_VECTOR_PREALLOC
 #undef GTK_VECTOR_ELEMENT_TYPE
 #undef GTK_VECTOR_NAME
 #undef GTK_VECTOR_TYPE_NAME
+#undef GTK_VECTOR_PREALLOC
+#undef GTK_VECTOR_NULL_TERMINATED
 
