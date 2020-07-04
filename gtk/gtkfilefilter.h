@@ -23,6 +23,7 @@
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
 
+#include <gtk/gtkfilter.h>
 #include <glib-object.h>
 #include <gdk/gdk.h>
 
@@ -93,9 +94,6 @@ void gtk_file_filter_add_custom         (GtkFileFilter      *filter,
 
 GDK_AVAILABLE_IN_ALL
 GtkFileFilterFlags gtk_file_filter_get_needed (GtkFileFilter           *filter);
-GDK_AVAILABLE_IN_ALL
-gboolean           gtk_file_filter_filter     (GtkFileFilter           *filter,
-                                               GFileInfo               *info);
 
 GDK_AVAILABLE_IN_ALL
 GVariant      *gtk_file_filter_to_gvariant       (GtkFileFilter *filter);

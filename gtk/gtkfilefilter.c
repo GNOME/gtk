@@ -784,38 +784,22 @@ static gboolean
 gtk_file_filter_match (GtkFilter *filter,
                        gpointer   item)
 {
+  GtkFileFilter *file_filter = GTK_FILE_FILTER (filter);
+  GFileInfo *info = item;
+  GSList *tmp_list;
+  GtkFileFilterFlags contains;
+
   if (!G_IS_FILE_INFO (item))
     return TRUE;
 
-  return gtk_file_filter_filter (GTK_FILE_FILTER (filter), G_FILE_INFO (item));
-}
-
-/**
- * gtk_file_filter_filter:
- * @filter: a #GtkFileFilter
- * @info: the #GFileInfo to filter
- *
- * Tests whether a file should be displayed according to @filter.
- *
- * This function will not typically be used by applications; it
- * is intended principally for use in the implementation of
- * #GtkFileChooser.
- *
- * Returns: %TRUE if the file should be displayed
- **/
-gboolean
-gtk_file_filter_filter (GtkFileFilter *filter,
-                        GFileInfo     *info)
-{
-  GSList *tmp_list;
-  GtkFileFilterFlags contains = GTK_FILE_FILTER_DISPLAY_NAME;
+  contains = GTK_FILE_FILTER_DISPLAY_NAME;
 
   if (g_file_info_has_attribute (info, G_FILE_ATTRIBUTE_STANDARD_FAST_CONTENT_TYPE))
     contains |= GTK_FILE_FILTER_MIME_TYPE;
   if (g_file_info_has_attribute (info, G_FILE_ATTRIBUTE_STANDARD_FILE))
     contains |= GTK_FILE_FILTER_FILENAME | GTK_FILE_FILTER_URI;
 
-  for (tmp_list = filter->rules; tmp_list; tmp_list = tmp_list->next)
+  for (tmp_list = file_filter->rules; tmp_list; tmp_list = tmp_list->next)
     {
       FilterRule *rule = tmp_list->data;
 
