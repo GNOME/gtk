@@ -78,7 +78,7 @@ tests = [
   ['vector'],
   ['widgetorder'],
   ['widget-refcount'],
-  ['listmodel-performance', ['listmodel-performance.c','gtkstringlist.c']]
+  ['listmodel-performance', ['listmodel-performance.c','gtkstringlist.c','gtkarraystore.c']]
 ]
 
 # Tests that are expected to fail
