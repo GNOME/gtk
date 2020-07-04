@@ -4,22 +4,6 @@
 #include "gtkstringlist.h"
 
 typedef struct {
-  GObject obj;
-  char *str;
-} StrObj;
-
-static GtkStringObject *
-get_object (const char *string)
-{
-  GtkStringObject *s;
-
-  s = g_object_new (GTK_TYPE_STRING_OBJECT, NULL);
-  ((StrObj*)s)->str = g_strdup (string);
-
-  return s;
-}
-
-typedef struct {
   const char *name;
   GListModel * (* create_model) (guint n_items);
   void         (* append)       (GListModel *model, const char *s);
@@ -40,7 +24,7 @@ make_list_store (guint n_items)
       gpointer obj;
 
       string = g_strdup_printf ("item %d", i);
-      obj = get_object (string);
+      obj = gtk_string_object_new (string);
       g_list_store_append (store, obj);
       g_object_unref (obj);
       g_free (string);
@@ -52,7 +36,7 @@ make_list_store (guint n_items)
 static void
 append_list_store (GListModel *model, const char *s)
 {
-  gpointer obj = get_object (s);
+  gpointer obj = gtk_string_object_new (s);
   g_list_store_append (G_LIST_STORE (model), obj);
   g_object_unref (obj);
 }
@@ -60,7 +44,7 @@ append_list_store (GListModel *model, const char *s)
 static void
 insert_list_store (GListModel *model, guint pos, const char *s)
 {
-  gpointer obj = get_object (s);
+  gpointer obj = gtk_string_object_new (s);
   g_list_store_insert (G_LIST_STORE (model), pos, obj);
   g_object_unref (obj);
 }
@@ -79,7 +63,7 @@ make_array_store (guint n_items)
       gpointer obj;
 
       string = g_strdup_printf ("item %d", i);
-      obj = get_object (string);
+      obj = gtk_string_object_new (string);
       gtk_array_store_append (store, obj);
       g_object_unref (obj);
       g_free (string);
@@ -91,7 +75,7 @@ make_array_store (guint n_items)
 static void
 append_array_store (GListModel *model, const char *s)
 {
-  gpointer obj = get_object (s);
+  gpointer obj = gtk_string_object_new (s);
   gtk_array_store_append (GTK_ARRAY_STORE (model), obj);
   g_object_unref (obj);
 }
@@ -99,7 +83,7 @@ append_array_store (GListModel *model, const char *s)
 static void
 insert_array_store (GListModel *model, guint pos, const char *s)
 {
-  gpointer obj = get_object (s);
+  gpointer obj = gtk_string_object_new (s);
   gtk_array_store_splice (GTK_ARRAY_STORE (model), pos, 0, (gpointer *)&obj, 1);
   g_object_unref (obj);
 }
@@ -118,7 +102,7 @@ make_array_store2 (guint n_items)
       gpointer obj;
 
       string = g_strdup_printf ("item %d", i);
-      obj = get_object (string);
+      obj = gtk_string_object_new (string);
       gtk_array_store2_append (store, obj);
       g_object_unref (obj);
       g_free (string);
@@ -130,7 +114,7 @@ make_array_store2 (guint n_items)
 static void
 append_array_store2 (GListModel *model, const char *s)
 {
-  gpointer obj = get_object (s);
+  gpointer obj = gtk_string_object_new (s);
   gtk_array_store2_append (GTK_ARRAY_STORE2 (model), obj);
   g_object_unref (obj);
 }
@@ -138,7 +122,7 @@ append_array_store2 (GListModel *model, const char *s)
 static void
 insert_array_store2 (GListModel *model, guint pos, const char *s)
 {
-  gpointer obj = get_object (s);
+  gpointer obj = gtk_string_object_new (s);
   gtk_array_store2_splice (GTK_ARRAY_STORE2 (model), pos, 0, (gpointer *)&obj, 1);
   g_object_unref (obj);
 }
