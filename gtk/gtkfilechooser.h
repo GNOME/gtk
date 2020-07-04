@@ -145,18 +145,18 @@ GFile *  gtk_file_chooser_get_current_folder      (GtkFileChooser  *chooser);
  */
 GDK_AVAILABLE_IN_ALL
 void    gtk_file_chooser_add_filter    (GtkFileChooser *chooser,
-					GtkFileFilter  *filter);
+                                        GtkFileFilter  *filter);
 GDK_AVAILABLE_IN_ALL
 void    gtk_file_chooser_remove_filter (GtkFileChooser *chooser,
-					GtkFileFilter  *filter);
+                                        GtkFileFilter  *filter);
 GDK_AVAILABLE_IN_ALL
-GSList *gtk_file_chooser_list_filters  (GtkFileChooser *chooser);
+GListModel *gtk_file_chooser_get_filters  (GtkFileChooser *chooser);
 
 /* Current filter
  */
 GDK_AVAILABLE_IN_ALL
 void           gtk_file_chooser_set_filter (GtkFileChooser *chooser,
-					    GtkFileFilter  *filter);
+                                            GtkFileFilter  *filter);
 GDK_AVAILABLE_IN_ALL
 GtkFileFilter *gtk_file_chooser_get_filter (GtkFileChooser *chooser);
 
