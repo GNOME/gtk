@@ -119,11 +119,15 @@ response_cb (GtkDialog *dialog,
 }
 
 static gboolean
-no_backup_files_filter (const GtkFileFilterInfo *filter_info,
-			gpointer                 data)
+no_backup_files_filter (GFileInfo *info,
+                        gpointer   data)
 {
-  gsize len = filter_info->display_name ? strlen (filter_info->display_name) : 0;
-  if (len > 0 && filter_info->display_name[len - 1] == '~')
+  const char *display_name;
+  gsize len;
+
+  display_name = g_file_info_get_display_name (info);
+  len = strlen (display_name);
+  if (len > 0 && display_name[len - 1] == '~')
     return 0;
   else
     return 1;
