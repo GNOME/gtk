@@ -268,6 +268,7 @@ gtk/gtkscrolledwindow.c
 gtk/gtksearchbar.c
 gtk/gtksearchengine.c
 gtk/gtksearchentry.c
+gtk/gtkselectionfiltermodel.c
 gtk/gtkseparator.c
 gtk/gtksettings.c
 gtk/gtkshortcutaction.c

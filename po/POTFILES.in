@@ -270,6 +270,7 @@ gtk/gtkscrolledwindow.c
 gtk/gtksearchbar.c
 gtk/gtksearchengine.c
 gtk/gtksearchentry.c
+gtk/gtkselectionfiltermodel.c
 gtk/gtkseparator.c
 gtk/gtksettings.c
 gtk/gtkshortcutaction.c
@@ -345,7 +346,6 @@ gtk/inspector/css-editor.c
 gtk/inspector/css-editor.ui
 gtk/inspector/css-node-tree.c
 gtk/inspector/css-node-tree.ui
-gtk/inspector/data-list.ui
 gtk/inspector/general.c
 gtk/inspector/general.ui
 gtk/inspector/inspect-button.c
@@ -364,6 +364,7 @@ gtk/inspector/shortcuts.ui
 gtk/inspector/size-groups.c
 gtk/inspector/statistics.c
 gtk/inspector/statistics.ui
+gtk/inspector/tree-data.ui
 gtk/inspector/type-info.ui
 gtk/inspector/visual.c
 gtk/inspector/visual.ui

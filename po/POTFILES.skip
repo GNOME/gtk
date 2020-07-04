@@ -49,6 +49,7 @@ demos/gtk-demo/stack.ui
 demos/gtk-demo/themes.ui
 demos/gtk-demo/theming.ui
 demos/icon-browser/window.ui
+demos/node-editor/help-window.ui
 demos/node-editor/node-editor-window.ui
 demos/widget-factory/menus.ui
 demos/widget-factory/widget-factory.c

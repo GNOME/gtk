@@ -49,6 +49,7 @@ demos/gtk-demo/stack.ui
 demos/gtk-demo/themes.ui
 demos/gtk-demo/theming.ui
 demos/icon-browser/window.ui
+demos/node-editor/help-window.ui
 demos/node-editor/node-editor-window.ui
 demos/widget-factory/menus.ui
 demos/widget-factory/widget-factory.c
@@ -90,7 +91,6 @@ gtk/inspector/actions.ui.h
 gtk/inspector/css-editor.ui
 gtk/inspector/css-editor.ui.h
 gtk/inspector/css-node-tree.ui
-gtk/inspector/data-list.ui
 gtk/inspector/data-list.ui.h
 gtk/inspector/general.ui
 gtk/inspector/general.ui.h
@@ -116,6 +116,7 @@ gtk/inspector/statistics.ui
 gtk/inspector/statistics.ui.h
 gtk/inspector/style-prop-list.ui
 gtk/inspector/style-prop-list.ui.h
+gtk/inspector/tree-data.ui
 gtk/inspector/type-info.ui
 gtk/inspector/visual.ui
 gtk/inspector/visual.ui.h
