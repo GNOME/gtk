@@ -385,7 +385,7 @@ node_should_be_filtered_out (GtkFileSystemModel *model, guint id)
   if (!g_file_info_has_attribute (node->info, "standard::file"))
     g_file_info_set_attribute_object (node->info, "standard::file", G_OBJECT (node->file));
 
-  return !gtk_file_filter_filter (model->filter, node->info);
+  return !gtk_filter_match (GTK_FILE_FILTER (model->filter), node->info);
 }
 
 static gboolean
