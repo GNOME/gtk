@@ -90,12 +90,12 @@ typedef enum {
 
 struct _GtkFileFilterClass
 {
-  GObjectClass parent_class;
+  GtkFilterClass parent_class;
 };
 
 struct _GtkFileFilter
 {
-  GObject parent_instance;
+  GtkFilter parent_instance;
 
   gchar *name;
   GSList *rules;
@@ -150,8 +150,12 @@ static void         gtk_file_filter_buildable_custom_tag_end   (GtkBuildable    
                                                                 const gchar        *tagname,
                                                                 gpointer            data);
 
+static gboolean       gtk_file_filter_match          (GtkFilter *filter,
+                                                      gpointer   item);
+static GtkFilterMatch gtk_file_filter_get_strictness (GtkFilter *filter);
 
-G_DEFINE_TYPE_WITH_CODE (GtkFileFilter, gtk_file_filter, G_TYPE_OBJECT,
+
+G_DEFINE_TYPE_WITH_CODE (GtkFileFilter, gtk_file_filter, GTK_TYPE_FILTER,
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
                                                 gtk_file_filter_buildable_init))
 
@@ -164,10 +168,14 @@ static void
 gtk_file_filter_class_init (GtkFileFilterClass *class)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (class);
+  GtkFilterClass *filter_class = GTK_FILTER_CLASS (class);
 
   gobject_class->set_property = gtk_file_filter_set_property;
   gobject_class->get_property = gtk_file_filter_get_property;
   gobject_class->finalize = gtk_file_filter_finalize;
+
+  filter_class->get_strictness = gtk_file_filter_get_strictness;
+  filter_class->match = gtk_file_filter_match;
 
   /**
    * GtkFileFilter:name:
@@ -498,6 +506,8 @@ file_filter_add_rule (GtkFileFilter *filter,
 		      FilterRule    *rule)
 {
   filter->rules = g_slist_append (filter->rules, rule);
+
+  gtk_filter_changed (GTK_FILTER (filter), GTK_FILTER_CHANGE_LESS_STRICT);
 }
 
 static void
@@ -729,6 +739,39 @@ _gtk_file_filter_get_as_patterns (GtkFileFilter      *filter)
 
   g_ptr_array_add (array, NULL); /* Null terminate */
   return (char **)g_ptr_array_free (array, FALSE);
+}
+
+static GtkFilterMatch
+gtk_file_filter_get_strictness (GtkFilter *filter)
+{
+  GtkFileFilter *file_filter = GTK_FILE_FILTER (filter);
+
+  /* Handle only the documented cases for 'match all'
+   * and match none. There are of course other ways to
+   * make filters that do this.
+   */
+  if (file_filter->rules == NULL)
+    return GTK_FILTER_MATCH_NONE;
+
+  if (file_filter->rules->next == NULL)
+    {
+      FilterRule *rule = file_filter->rules->data;
+      if (rule->type == FILTER_RULE_PATTERN &&
+          strcmp (rule->u.pattern, "*") == 0)
+        return GTK_FILTER_MATCH_ALL;
+    }
+
+  return GTK_FILTER_MATCH_SOME;
+}
+
+static gboolean
+gtk_file_filter_match (GtkFilter *filter,
+                       gpointer   item)
+{
+  if (!G_IS_FILE_INFO (item))
+    return TRUE;
+
+  return gtk_file_filter_filter (GTK_FILE_FILTER (filter), G_FILE_INFO (item));
 }
 
 /**
