@@ -209,7 +209,7 @@ match_func (GtkEntryCompletion *compl,
       if (!g_file_info_has_attribute (info, "standard::file"))
         g_file_info_set_attribute_object (info, "standard::file", G_OBJECT (file));
 
-      return gtk_file_filter_filter (chooser_entry->current_filter, info);
+      return gtk_filter_match (GTK_FILTER (chooser_entry->current_filter), info);
     }
 
   return TRUE;
