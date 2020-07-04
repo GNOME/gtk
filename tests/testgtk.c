@@ -5692,17 +5692,20 @@ native_filter_changed (GtkWidget *combo,
       gtk_file_filter_add_pattern (filter, "*.doc");
       gtk_file_filter_add_pattern (filter, "*.txt");
       gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (native), filter);
+      g_object_unref (filter);
 
       filter = gtk_file_filter_new ();
       gtk_file_filter_set_name (filter, "Images");
       gtk_file_filter_add_pixbuf_formats (filter);
       gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (native), filter);
       gtk_file_chooser_set_filter (GTK_FILE_CHOOSER (native), filter);
+      g_object_unref (filter);
 
       filter = gtk_file_filter_new ();
       gtk_file_filter_set_name (filter, "All");
       gtk_file_filter_add_pattern (filter, "*");
       gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (native), filter);
+      g_object_unref (filter);
       break;
 
     case 2:   /* mimetype */
@@ -5710,12 +5713,14 @@ native_filter_changed (GtkWidget *combo,
       gtk_file_filter_set_name (filter, "Text");
       gtk_file_filter_add_mime_type (filter, "text/plain");
       gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (native), filter);
+      g_object_unref (filter);
 
       filter = gtk_file_filter_new ();
       gtk_file_filter_set_name (filter, "All");
       gtk_file_filter_add_pattern (filter, "*");
       gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (native), filter);
       gtk_file_chooser_set_filter (GTK_FILE_CHOOSER (native), filter);
+      g_object_unref (filter);
       break;
     default:
       g_assert_not_reached ();
