@@ -40,7 +40,6 @@
 enum {
   PROP_0,
   PROP_FILTER,
-  PROP_ITEM_TYPE,
   PROP_MODEL,
   NUM_PROPERTIES
 };
@@ -63,7 +62,6 @@ struct _GtkFilterListModel
 {
   GObject parent_instance;
 
-  GType item_type;
   GListModel *model;
   GtkFilter *filter;
   GtkFilterMatch strictness;
@@ -194,9 +192,7 @@ gtk_filter_list_model_get_nth (GtkRbTree *tree,
 static GType
 gtk_filter_list_model_get_item_type (GListModel *list)
 {
-  GtkFilterListModel *self = GTK_FILTER_LIST_MODEL (list);
-
-  return self->item_type;
+  return G_TYPE_OBJECT;
 }
 
 static guint
@@ -364,10 +360,6 @@ gtk_filter_list_model_set_property (GObject      *object,
       gtk_filter_list_model_set_filter (self, g_value_get_object (value));
       break;
 
-    case PROP_ITEM_TYPE:
-      self->item_type = g_value_get_gtype (value);
-      break;
-
     case PROP_MODEL:
       gtk_filter_list_model_set_model (self, g_value_get_object (value));
       break;
@@ -390,10 +382,6 @@ gtk_filter_list_model_get_property (GObject     *object,
     {
     case PROP_FILTER:
       g_value_set_object (value, self->filter);
-      break;
-
-    case PROP_ITEM_TYPE:
-      g_value_set_gtype (value, self->item_type);
       break;
 
     case PROP_MODEL:
@@ -663,18 +651,6 @@ gtk_filter_list_model_class_init (GtkFilterListModelClass *class)
                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkFilterListModel:item-type:
-   *
-   * The #GType for elements of this object
-   */
-  properties[PROP_ITEM_TYPE] =
-      g_param_spec_gtype ("item-type",
-                          P_("Item type"),
-                          P_("The type of elements of this object"),
-                          G_TYPE_OBJECT,
-                          GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_EXPLICIT_NOTIFY);
-
-  /**
    * GtkFilterListModel:model:
    *
    * The model being filtered
@@ -697,7 +673,7 @@ gtk_filter_list_model_init (GtkFilterListModel *self)
 
 /**
  * gtk_filter_list_model_new:
- * @model: the model to sort
+ * @model: (allow-none): the model to sort
  * @filter: (allow-none): filter or %NULL to not filter items
  *
  * Creates a new #GtkFilterListModel that will filter @model using the given
@@ -711,35 +687,15 @@ gtk_filter_list_model_new (GListModel *model,
 {
   GtkFilterListModel *result;
 
-  g_return_val_if_fail (G_IS_LIST_MODEL (model), NULL);
+  g_return_val_if_fail (model == NULL || G_IS_LIST_MODEL (model), NULL);
+  g_return_val_if_fail (filter == NULL || GTK_IS_FILTER (filter), NULL);
 
   result = g_object_new (GTK_TYPE_FILTER_LIST_MODEL,
-                         "item-type", g_list_model_get_item_type (model),
                          "model", model,
                          "filter", filter,
                          NULL);
 
   return result;
-}
-
-/**
- * gtk_filter_list_model_new_for_type:
- * @item_type: the type of the items that will be returned
- *
- * Creates a new empty filter list model set up to return items of type @item_type.
- * It is up to the application to set a proper filter and model to ensure
- * the item type is matched.
- *
- * Returns: a new #GtkFilterListModel
- **/
-GtkFilterListModel *
-gtk_filter_list_model_new_for_type (GType item_type)
-{
-  g_return_val_if_fail (g_type_is_a (item_type, G_TYPE_OBJECT), NULL);
-
-  return g_object_new (GTK_TYPE_FILTER_LIST_MODEL,
-                       "item-type", item_type,
-                       NULL);
 }
 
 /**

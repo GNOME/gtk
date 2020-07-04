@@ -130,7 +130,7 @@ object_tree_widget_get_children (GObject *object)
   g_list_store_append (list, sublist);
   g_object_unref (sublist);
 
-  flatten = gtk_flatten_list_model_new (G_TYPE_OBJECT, G_LIST_MODEL (list));
+  flatten = gtk_flatten_list_model_new (G_LIST_MODEL (list));
   g_object_unref (list);
 
   return G_LIST_MODEL (flatten);
@@ -225,7 +225,7 @@ list_model_for_properties (GObject     *object,
       g_object_unref (tmp);
     }
 
-  result = G_LIST_MODEL (gtk_flatten_list_model_new (G_TYPE_OBJECT, G_LIST_MODEL (concat)));
+  result = G_LIST_MODEL (gtk_flatten_list_model_new (G_LIST_MODEL (concat)));
   g_object_unref (concat);
   return result;
 }
@@ -330,7 +330,7 @@ object_tree_tree_view_get_children (GObject *object)
   g_object_unref (selection);
   g_list_store_append (result_list, columns);
   g_object_unref (columns);
-  result = gtk_flatten_list_model_new (G_TYPE_OBJECT, G_LIST_MODEL (result_list));
+  result = gtk_flatten_list_model_new (G_LIST_MODEL (result_list));
   g_object_unref (result_list);
 
   return G_LIST_MODEL (result);
@@ -353,7 +353,7 @@ object_tree_column_view_get_children (GObject *object)
   g_list_store_append (result_list, sublist);
   g_object_unref (sublist);
 
-  result = gtk_flatten_list_model_new (G_TYPE_OBJECT, G_LIST_MODEL (result_list));
+  result = gtk_flatten_list_model_new (G_LIST_MODEL (result_list));
   g_object_unref (result_list);
 
   return G_LIST_MODEL (result);
@@ -640,7 +640,7 @@ object_get_children (GObject *object)
 
   if (result_list)
     {
-      result = G_LIST_MODEL (gtk_flatten_list_model_new (G_TYPE_OBJECT, G_LIST_MODEL (result_list)));
+      result = G_LIST_MODEL (gtk_flatten_list_model_new (G_LIST_MODEL (result_list)));
       g_object_unref (result_list);
     }
 
@@ -1179,7 +1179,7 @@ create_root_model (GdkDisplay *display)
   g_list_store_append (list, special);
   g_object_unref (special);
 
-  filter = gtk_filter_list_model_new_for_type (G_TYPE_OBJECT);
+  filter = gtk_filter_list_model_new (NULL, NULL);
   custom_filter = gtk_custom_filter_new (toplevel_filter_func,
                                          display, NULL);
   gtk_filter_list_model_set_filter (filter, custom_filter);
@@ -1187,7 +1187,7 @@ create_root_model (GdkDisplay *display)
   g_list_store_append (list, filter);
   g_object_unref (filter);
 
-  flatten = gtk_flatten_list_model_new (G_TYPE_OBJECT, G_LIST_MODEL (list));
+  flatten = gtk_flatten_list_model_new (G_LIST_MODEL (list));
   g_object_unref (list);
   return G_LIST_MODEL (flatten);
 }
