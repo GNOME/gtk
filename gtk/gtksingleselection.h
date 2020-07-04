@@ -35,22 +35,25 @@ GtkSingleSelection *    gtk_single_selection_new                (GListModel     
 GDK_AVAILABLE_IN_ALL
 GListModel *            gtk_single_selection_get_model          (GtkSingleSelection     *self);
 GDK_AVAILABLE_IN_ALL
-guint           gtk_single_selection_get_selected       (GtkSingleSelection     *self);
+void                    gtk_single_selection_set_model          (GtkSingleSelection     *self,
+                                                                 GListModel             *model);
 GDK_AVAILABLE_IN_ALL
-void            gtk_single_selection_set_selected       (GtkSingleSelection     *self,
-                                                         guint                   position);
+guint                   gtk_single_selection_get_selected       (GtkSingleSelection     *self);
 GDK_AVAILABLE_IN_ALL
-gpointer        gtk_single_selection_get_selected_item  (GtkSingleSelection     *self);
+void                    gtk_single_selection_set_selected       (GtkSingleSelection     *self,
+                                                                 guint                   position);
 GDK_AVAILABLE_IN_ALL
-gboolean        gtk_single_selection_get_autoselect     (GtkSingleSelection     *self);
+gpointer                gtk_single_selection_get_selected_item  (GtkSingleSelection     *self);
 GDK_AVAILABLE_IN_ALL
-void            gtk_single_selection_set_autoselect     (GtkSingleSelection     *self,
-                                                         gboolean                autoselect);
+gboolean                gtk_single_selection_get_autoselect     (GtkSingleSelection     *self);
 GDK_AVAILABLE_IN_ALL
-gboolean        gtk_single_selection_get_can_unselect   (GtkSingleSelection     *self);
+void                    gtk_single_selection_set_autoselect     (GtkSingleSelection     *self,
+                                                                 gboolean                autoselect);
 GDK_AVAILABLE_IN_ALL
-void            gtk_single_selection_set_can_unselect   (GtkSingleSelection     *self,
-                                                         gboolean                can_unselect);
+gboolean                gtk_single_selection_get_can_unselect   (GtkSingleSelection     *self);
+GDK_AVAILABLE_IN_ALL
+void                    gtk_single_selection_set_can_unselect   (GtkSingleSelection     *self,
+                                                                 gboolean                can_unselect);
 
 G_END_DECLS
 

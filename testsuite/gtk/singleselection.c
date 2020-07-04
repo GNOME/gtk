@@ -644,6 +644,57 @@ test_query_range (void)
   g_object_unref (selection);
 }
 
+static void
+test_set_model (void)
+{
+  GtkSelectionModel *selection;
+  GListStore *store;
+  GListModel *m1, *m2;
+  
+  store = new_store (1, 5, 1);
+  m1 = G_LIST_MODEL (store);
+  m2 = G_LIST_MODEL (gtk_slice_list_model_new (m1, 0, 3));
+  selection = new_model (store, TRUE, TRUE);
+  assert_selection (selection, "1");
+  assert_selection_changes (selection, "");
+
+  /* we retain the selected item across model changes */
+  gtk_single_selection_set_model (GTK_SINGLE_SELECTION (selection), m2);
+  assert_changes (selection, "0-5+3");
+  assert_selection (selection, "1");
+  assert_selection_changes (selection, "");
+
+  gtk_single_selection_set_model (GTK_SINGLE_SELECTION (selection), NULL);
+  assert_changes (selection, "0-3");
+  assert_selection (selection, "");
+  assert_selection_changes (selection, "");
+
+  gtk_single_selection_set_autoselect (GTK_SINGLE_SELECTION (selection), FALSE);
+  gtk_single_selection_set_model (GTK_SINGLE_SELECTION (selection), m2);
+  assert_changes (selection, "0+3");
+  assert_selection (selection, "");
+  assert_selection_changes (selection, "");
+
+  /* we retain no selected item across model changes */
+  gtk_single_selection_set_model (GTK_SINGLE_SELECTION (selection), m1);
+  assert_changes (selection, "0-3+5");
+  assert_selection (selection, "");
+  assert_selection_changes (selection, "");
+
+  gtk_single_selection_set_selected (GTK_SINGLE_SELECTION (selection), 4);
+  assert_selection (selection, "5");
+  assert_selection_changes (selection, "4:1");
+
+  gtk_single_selection_set_model (GTK_SINGLE_SELECTION (selection), m2);
+  assert_changes (selection, "0-5+3");
+  assert_selection (selection, "");
+  assert_selection_changes (selection, "");
+
+  g_object_unref (m2);
+  g_object_unref (m1);
+  g_object_unref (selection);
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -662,6 +713,7 @@ main (int argc, char *argv[])
   g_test_add_func ("/singleselection/persistence", test_persistence);
   g_test_add_func ("/singleselection/query-range", test_query_range);
   g_test_add_func ("/singleselection/changes", test_changes);
+  g_test_add_func ("/singleselection/set-model", test_set_model);
 
   return g_test_run ();
 }
