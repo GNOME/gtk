@@ -73,7 +73,6 @@ RUN dnf -y install \
     python3-wheel \
     redhat-rpm-config \
     sassc \
-    sysprof-devel \
     systemtap-sdt-devel \
     vulkan-devel \
     wayland-devel \
