@@ -224,7 +224,7 @@ gtk_drop_controller_motion_class_init (GtkDropControllerMotionClass *klass)
   props[PROP_CONTAINS_POINTER] =
       g_param_spec_boolean ("contains-pointer",
                             P_("Contains Pointer"),
-                            P_("Whether the pointer is inthe controllers widget or a descendant"),
+                            P_("Whether the pointer is in the controllers widget or a descendant"),
                             FALSE,
                             G_PARAM_READABLE);
 
