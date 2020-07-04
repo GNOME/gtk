@@ -485,7 +485,7 @@ static void           gtk_file_chooser_widget_add_filter                   (GtkF
                                                                             GtkFileFilter     *filter);
 static void           gtk_file_chooser_widget_remove_filter                (GtkFileChooser    *chooser,
                                                                             GtkFileFilter     *filter);
-static GSList *       gtk_file_chooser_widget_list_filters                 (GtkFileChooser    *chooser);
+static GListModel *   gtk_file_chooser_widget_get_filters                  (GtkFileChooser    *chooser);
 static gboolean       gtk_file_chooser_widget_add_shortcut_folder    (GtkFileChooser    *chooser,
                                                                        GFile             *file,
                                                                        GError           **error);
@@ -619,7 +619,7 @@ gtk_file_chooser_widget_iface_init (GtkFileChooserIface *iface)
   iface->get_current_name = gtk_file_chooser_widget_get_current_name;
   iface->add_filter = gtk_file_chooser_widget_add_filter;
   iface->remove_filter = gtk_file_chooser_widget_remove_filter;
-  iface->list_filters = gtk_file_chooser_widget_list_filters;
+  iface->get_filters = gtk_file_chooser_widget_get_filters;
   iface->add_shortcut_folder = gtk_file_chooser_widget_add_shortcut_folder;
   iface->remove_shortcut_folder = gtk_file_chooser_widget_remove_shortcut_folder;
   iface->list_shortcut_folders = gtk_file_chooser_widget_list_shortcut_folders;
@@ -5599,23 +5599,12 @@ gtk_file_chooser_widget_remove_filter (GtkFileChooser *chooser,
     show_filters (impl, FALSE);
 }
 
-static GSList *
-gtk_file_chooser_widget_list_filters (GtkFileChooser *chooser)
+static GListModel *
+gtk_file_chooser_widget_get_filters (GtkFileChooser *chooser)
 {
   GtkFileChooserWidget *impl = GTK_FILE_CHOOSER_WIDGET (chooser);
-  GSList *filters;
-  guint i;
 
-  filters = NULL;
-
-  for (i = 0; i < g_list_model_get_n_items (G_LIST_MODEL (impl->filters)); i++)
-    {
-      GtkFileFilter *filter = g_list_model_get_item (G_LIST_MODEL (impl->filters), i);
-      filters = g_slist_append (filters, filter);
-      g_object_unref (filter);
-    }
-
-  return filters;
+  return G_LIST_MODEL (g_object_ref (impl->filters));
 }
 
 static gboolean
