@@ -33,6 +33,7 @@
 #include "gtkintl.h"
 #include "gtkmarshalers.h"
 #include "gtkfilefilterprivate.h"
+#include "gtkfilter.h"
 #include "gtkeventcontrollerfocus.h"
 
 typedef struct _GtkFileChooserEntryClass GtkFileChooserEntryClass;
