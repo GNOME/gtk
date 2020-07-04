@@ -54,8 +54,9 @@
       <section>
         <xi:include href="xml/gtkfilter.xml" />
         <xi:include href="xml/gtkcustomfilter.xml" />
-        <xi:include href="xml/gtkstringfilter.xml" />
         <xi:include href="xml/gtkmultifilter.xml" />
+        <xi:include href="xml/gtkstringfilter.xml" />
+        <xi:include href="xml/gtkfilefilter.xml" />
       </section>
       <xi:include href="xml/gtkflattenlistmodel.xml" />
       <xi:include href="xml/gtkmaplistmodel.xml" />
@@ -285,7 +286,6 @@
       <xi:include href="xml/gtkfilechoosernative.xml" />
       <xi:include href="xml/gtkfilechooserdialog.xml" />
       <xi:include href="xml/gtkfilechooserwidget.xml" />
-      <xi:include href="xml/gtkfilefilter.xml" />
       <xi:include href="xml/gtkfontchooser.xml" />
       <xi:include href="xml/gtkfontbutton.xml" />
       <xi:include href="xml/gtkfontchooserwidget.xml" />
