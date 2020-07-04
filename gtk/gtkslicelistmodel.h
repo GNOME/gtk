@@ -40,8 +40,6 @@ GDK_AVAILABLE_IN_ALL
 GtkSliceListModel *     gtk_slice_list_model_new                (GListModel             *model,
                                                                  guint                   offset,
                                                                  guint                   size);
-GDK_AVAILABLE_IN_ALL
-GtkSliceListModel *     gtk_slice_list_model_new_for_type       (GType                   item_type);
 
 GDK_AVAILABLE_IN_ALL
 void                    gtk_slice_list_model_set_model          (GtkSliceListModel      *self,

@@ -492,7 +492,7 @@ test_bind_child (void)
                                       "filter");
 
   filter = gtk_string_filter_new ();
-  child = gtk_filter_list_model_new_for_type (G_TYPE_OBJECT);
+  child = gtk_filter_list_model_new (NULL, NULL);
   gtk_filter_list_model_set_filter (child, filter);
   target = gtk_filter_list_model_new (G_LIST_MODEL (child), NULL);
   g_object_unref (child);
