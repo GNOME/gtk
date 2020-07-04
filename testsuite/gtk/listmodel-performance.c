@@ -18,6 +18,13 @@ get_object (const char *string)
   return s;
 }
 
+typedef struct {
+  const char *name;
+  GListModel * (* create_model) (guint n_items);
+  void         (* append)       (GListModel *model, const char *s);
+  void         (* insert)       (GListModel *model, guint pos, const char *s);
+} Model;
+
 static GListModel *
 make_list_store (guint n_items)
 {
@@ -39,6 +46,22 @@ make_list_store (guint n_items)
     }
 
   return G_LIST_MODEL (store);
+}
+
+static void
+append_list_store (GListModel *model, const char *s)
+{
+  gpointer obj = get_object (s);
+  g_list_store_append (G_LIST_STORE (model), obj);
+  g_object_unref (obj);
+}
+
+static void
+insert_list_store (GListModel *model, guint pos, const char *s)
+{
+  gpointer obj = get_object (s);
+  g_list_store_insert (G_LIST_STORE (model), pos, obj);
+  g_object_unref (obj);
 }
 
 static GListModel *
@@ -64,8 +87,24 @@ make_array_store (guint n_items)
   return G_LIST_MODEL (store);
 }
 
+static void
+append_array_store (GListModel *model, const char *s)
+{
+  gpointer obj = get_object (s);
+  gtk_array_store_append (GTK_ARRAY_STORE (model), obj);
+  g_object_unref (obj);
+}
+
+static void
+insert_array_store (GListModel *model, guint pos, const char *s)
+{
+  gpointer obj = get_object (s);
+  gtk_array_store_splice (GTK_ARRAY_STORE (model), pos, 0, (gpointer *)&obj, 1);
+  g_object_unref (obj);
+}
+
 static GListModel *
-make_string_list2 (guint n_items)
+make_sequence_string_list (guint n_items)
 {
   GtkStringList2 *store;
   guint i;
@@ -82,6 +121,18 @@ make_string_list2 (guint n_items)
     }
 
   return G_LIST_MODEL (store);
+}
+
+static void
+append_sequence_string_list (GListModel *model, const char *s)
+{
+  gtk_string_list2_append (GTK_STRING_LIST2 (model), s);
+}
+
+static void
+insert_sequence_string_list (GListModel *model, guint pos, const char *s)
+{
+  gtk_string_list2_splice (GTK_STRING_LIST2 (model), pos, 0, (const char *[2]) { s, NULL });
 }
 
 static GListModel *
@@ -105,8 +156,20 @@ make_string_list (guint n_items)
 }
 
 static void
-do_random_access (const char *kind,
-                  guint       size)
+append_string_list (GListModel *model, const char *s)
+{
+  gtk_string_list_append (GTK_STRING_LIST (model), s);
+}
+
+static void
+insert_string_list (GListModel *model, guint pos, const char *s)
+{
+  gtk_string_list_splice (GTK_STRING_LIST (model), pos, 0, (const char *[2]) { s, NULL });
+}
+
+static void
+do_random_access (const Model *klass,
+                  guint        size)
 {
   GListModel *model;
   guint i;
@@ -115,16 +178,7 @@ do_random_access (const char *kind,
   gint64 start, end;
   guint iterations = 10000000;
 
-  if (strcmp (kind, "liststore") == 0)
-    model = make_list_store (size);
-  else if (strcmp (kind, "arraystore") == 0)
-    model = make_array_store (size);
-  else if (strcmp (kind, "stringlist") == 0)
-    model = make_string_list2 (size);
-  else if (strcmp (kind, "array stringlist") == 0)
-    model = make_string_list (size);
-  else
-    g_error ("unsupported: %s", kind);
+  model = klass->create_model (size);
 
   start = g_get_monotonic_time ();
 
@@ -133,40 +187,31 @@ do_random_access (const char *kind,
       position = g_random_int_range (0, size);
       obj = g_list_model_get_item (model, position);
       if (g_getenv ("PRINT_ACCESS"))
-        g_print ("%s", gtk_string_object_get_string (obj));
+        g_printerr ("%s", gtk_string_object_get_string (obj));
       g_object_unref (obj);
     }
 
   end = g_get_monotonic_time ();
 
-  g_print ("\"random access\",\"%s\", %u, %g\n",
-           kind,
-           size,
-           ((double)(end - start)) / iterations);
+  g_printerr ("\"random access\",\"%s\", %u, %g\n",
+              klass->name,
+              size,
+              ((double)(end - start)) / iterations);
 
   g_object_unref (model);
 }
 
 static void
-do_linear_access (const char *kind,
-                  guint       size)
+do_linear_access (const Model *klass,
+                  guint        size)
 {
   GListModel *model;
   guint i;
   GtkStringObject *obj;
   gint64 start, end;
-  guint iterations = 10000000;
+  guint iterations = 1000000;
 
-  if (strcmp (kind, "liststore") == 0)
-    model = make_list_store (size);
-  else if (strcmp (kind, "arraystore") == 0)
-    model = make_array_store (size);
-  else if (strcmp (kind, "stringlist") == 0)
-    model = make_string_list2 (size);
-  else if (strcmp (kind, "array stringlist") == 0)
-    model = make_string_list (size);
-  else
-    g_error ("unsupported: %s", kind);
+  model = klass->create_model (size);
 
   start = g_get_monotonic_time ();
 
@@ -174,23 +219,23 @@ do_linear_access (const char *kind,
     {
       obj = g_list_model_get_item (model, i % size);
       if (g_getenv ("PRINT_ACCESS"))
-        g_print ("%s", gtk_string_object_get_string (obj));
+        g_printerr ("%s", gtk_string_object_get_string (obj));
       g_object_unref (obj);
     }
 
   end = g_get_monotonic_time ();
 
-  g_print ("\"linear access\", \"%s\", %u, %g\n",
-           kind,
-           size,
-           ((double)(end - start)) / iterations);
+  g_printerr ("\"linear access\", \"%s\", %u, %g\n",
+              klass->name,
+              size,
+              ((double)(end - start)) / iterations);
 
   g_object_unref (model);
 }
 
 static void
-do_append (const char *kind,
-           guint       size)
+do_append (const Model *klass,
+           guint        size)
 {
   GListModel *model;
   guint i, j;
@@ -202,16 +247,7 @@ do_append (const char *kind,
 
   for (i = 0; i < iterations; i++)
     {
-      if (strcmp (kind, "liststore") == 0)
-        model = make_list_store (0);
-      else if (strcmp (kind, "arraystore") == 0)
-        model = make_array_store (0);
-      else if (strcmp (kind, "stringlist") == 0)
-        model = make_string_list2 (0);
-      else if (strcmp (kind, "array stringlist") == 0)
-        model = make_string_list (0);
-      else
-        g_error ("unsupported: %s", kind);
+      model = klass->create_model (size);
 
       start = g_get_monotonic_time ();
 
@@ -219,24 +255,7 @@ do_append (const char *kind,
         {
           char *string = g_strdup_printf ("item %d", j);
 
-          if (strcmp (kind, "liststore") == 0)
-            {
-              gpointer obj = get_object (string);
-              g_list_store_append (G_LIST_STORE (model), obj);
-              g_object_unref (obj);
-            }
-          else if (strcmp (kind, "arraystore") == 0)
-            {
-              gpointer obj = get_object (string);
-              gtk_array_store_append (GTK_ARRAY_STORE (model), obj);
-              g_object_unref (obj);
-            }
-          else if (strcmp (kind, "stringlist") == 0)
-            gtk_string_list2_append (GTK_STRING_LIST2 (model), string);
-          else if (strcmp (kind, "array stringlist") == 0)
-            gtk_string_list_append (GTK_STRING_LIST (model), string);
-
-          g_free (string);
+          klass->append (model, string);
         }
 
       end = g_get_monotonic_time ();
@@ -245,15 +264,12 @@ do_append (const char *kind,
       g_object_unref (model);
     }
 
-  g_print ("\"append\", \"%s\", %u, %g\n", kind, size, ((double)total) / iterations);
+  g_printerr ("\"append\", \"%s\", %u, %g\n", klass->name, size, ((double)total) / iterations);
 }
 
-#define gtk_array_store_insert(store,position,item) \
-  gtk_array_store_splice (store, position, 0, (gpointer *)&item, 1)
-
 static void
-do_insert (const char *kind,
-           guint       size)
+do_insert (const Model *klass,
+           guint        size)
 {
   GListModel *model;
   guint i, j;
@@ -266,16 +282,7 @@ do_insert (const char *kind,
 
   for (i = 0; i < iterations; i++)
     {
-      if (strcmp (kind, "liststore") == 0)
-        model = make_list_store (1);
-      else if (strcmp (kind, "arraystore") == 0)
-        model = make_array_store (1);
-      else if (strcmp (kind, "stringlist") == 0)
-        model = make_string_list2 (1);
-      else if (strcmp (kind, "array stringlist") == 0)
-        model = make_string_list (1);
-      else
-        g_error ("unsupported: %s", kind);
+      model = klass->create_model (size);
 
       start = g_get_monotonic_time ();
 
@@ -284,24 +291,7 @@ do_insert (const char *kind,
           char *string = g_strdup_printf ("item %d", j);
           position = g_random_int_range (0, j);
 
-          if (strcmp (kind, "liststore") == 0)
-            {
-              gpointer obj = get_object (string);
-              g_list_store_insert (G_LIST_STORE (model), position, obj);
-              g_object_unref (obj);
-            }
-          else if (strcmp (kind, "arraystore") == 0)
-            {
-              gpointer obj = get_object (string);
-              gtk_array_store_insert (GTK_ARRAY_STORE (model), position, obj);
-              g_object_unref (obj);
-            }
-          else if (strcmp (kind, "stringlist") == 0)
-            gtk_string_list2_splice (GTK_STRING_LIST2 (model), position, 0,
-                                     (const char * const []){string, NULL});
-          else if (strcmp (kind, "array stringlist") == 0)
-            gtk_string_list_splice (GTK_STRING_LIST (model), position, 0,
-                                     (const char * const []){string, NULL});
+          klass->insert (model, position, string);
 
           g_free (string);
         }
@@ -312,59 +302,79 @@ do_insert (const char *kind,
       g_object_unref (model);
     }
 
-  g_print ("\"insert\", \"%s\", %u, %g\n", kind, size, ((double)total) / iterations);
+  g_printerr ("\"insert\", \"%s\", %u, %g\n", klass->name, size, ((double)total) / iterations);
+}
+
+const Model all_models[] = {
+  {
+    "liststore",
+    make_list_store,
+    append_list_store,
+    insert_list_store
+  },
+  {
+    "arraystore",
+    make_array_store,
+    append_array_store,
+    insert_array_store
+  },
+  {
+    "sequence-stringlist",
+    make_sequence_string_list,
+    append_sequence_string_list,
+    insert_sequence_string_list
+  },
+  {
+    "stringlist",
+    make_string_list,
+    append_string_list,
+    insert_string_list
+  }
+};
+
+typedef struct {
+  void (* test_func) (const Model *model, guint size);
+  const Model *model;
+  guint size;
+} TestData;
+
+static void
+free_test_data (gpointer data)
+{
+  g_free (data);
 }
 
 static void
-random_access (void)
+run_test (gconstpointer data)
 {
-  const char *kind[] = { "liststore", "arraystore", "stringlist", "array stringlist" };
-  int sizes = 22;
-  int size;
-  int i, j;
+  const TestData *test = data;
 
-  for (i = 0; i < G_N_ELEMENTS (kind); i++)
-    for (j = 0, size = 2; j < sizes; j++, size *= 2)
-      do_random_access (kind[i], size);
+  test->test_func (test->model, test->size);
 }
 
 static void
-linear_access (void)
+add_test (const char *name,
+          void (* test_func) (const Model *model, guint size))
 {
-  const char *kind[] = { "liststore", "arraystore", "stringlist", "array stringlist" };
-  int sizes = 22;
+  int max_size = 10 * 1000 * 1000;
   int size;
-  int i, j;
+  int i;
 
-  for (i = 0; i < G_N_ELEMENTS (kind); i++)
-    for (j = 0, size = 2; j < sizes; j++, size *= 2)
-      do_linear_access (kind[i], size);
-}
+  for (i = 0; i < G_N_ELEMENTS (all_models); i++)
+    {
+      for (size = 1; size <= max_size; size *= 100)
+        {
+          TestData *test = g_new0 (TestData, 1);
+          char *path;
 
-static void
-append (void)
-{
-  const char *kind[] = { "liststore", "arraystore", "stringlist", "array stringlist" };
-  int sizes = 22;
-  int size;
-  int i, j;
-
-  for (i = 0; i < G_N_ELEMENTS (kind); i++)
-    for (j = 0, size = 2; j < sizes; j++, size *= 2)
-      do_append (kind[i], size);
-}
-
-static void
-insert (void)
-{
-  const char *kind[] = { "liststore", "arraystore", "stringlist", "array stringlist" };
-  int sizes = 22;
-  int size;
-  int i, j;
-
-  for (i = 0; i < G_N_ELEMENTS (kind); i++)
-    for (j = 0, size = 2; j < sizes; j++, size *= 2)
-      do_insert (kind[i], size);
+          test->test_func = test_func;
+          test->model = &all_models[i];
+          test->size = size;
+          path = g_strdup_printf ("/model/%s/%s/size-%d", name, all_models[i].name, size);
+          g_test_add_data_func_full (path, test, run_test, free_test_data);
+          g_free (path);
+        }
+    }
 }
 
 int
@@ -372,11 +382,11 @@ main (int argc, char *argv[])
 {
   gtk_test_init (&argc, &argv);
 
-  g_print ("\"test\",\"model\",\"model size\",\"time\"");
-  g_test_add_func ("/model/random-access", random_access);
-  g_test_add_func ("/model/linear-access", linear_access);
-  g_test_add_func ("/model/append", append);
-  g_test_add_func ("/model/insert", insert);
+  g_printerr ("\"test\",\"model\",\"model size\",\"time\"\n");
+  add_test ("random-access", do_random_access);
+  add_test ("linear-access", do_linear_access);
+  add_test ("append", do_append);
+  add_test ("insert", do_insert);
 
   return g_test_run ();
 }
