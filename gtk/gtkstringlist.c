@@ -156,7 +156,15 @@ gtk_string_object_new_take (char *string)
   return obj;
 }
 
-static GtkStringObject *
+/**
+ * gtk_string_object_new:
+ * @string: (non-nullable): The string to wrap
+ *
+ * Wraps a string in an object for use with #GListModel
+ *
+ * Returns: a new #GtkStringObject
+ **/
+GtkStringObject *
 gtk_string_object_new (const char *string)
 {
   return gtk_string_object_new_take (g_strdup (string));
