@@ -56,9 +56,6 @@ void gtk_file_filter_add_pixbuf_formats (GtkFileFilter      *filter);
 
 GDK_AVAILABLE_IN_ALL
 const char **      gtk_file_filter_get_attributes (GtkFileFilter           *filter);
-GDK_AVAILABLE_IN_ALL
-gboolean           gtk_file_filter_filter     (GtkFileFilter           *filter,
-                                               GFileInfo               *info);
 
 GDK_AVAILABLE_IN_ALL
 GVariant      *gtk_file_filter_to_gvariant       (GtkFileFilter *filter);
