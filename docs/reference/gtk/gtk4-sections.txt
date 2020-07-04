@@ -7611,7 +7611,9 @@ gtk_string_list_take
 gtk_string_list_remove
 gtk_string_list_splice
 gtk_string_list_get_string
+<SUBSECTION>
 GtkStringObject
+gtk_string_object_new
 gtk_string_object_get_string
 </SECTION>
 

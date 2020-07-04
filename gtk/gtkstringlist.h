@@ -37,7 +37,9 @@ GDK_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (GtkStringObject, gtk_string_object, GTK, STRING_OBJECT, GObject)
 
 GDK_AVAILABLE_IN_ALL
-const char *         gtk_string_object_get_string (GtkStringObject *self);
+GtkStringObject *       gtk_string_object_new        (const char      *string);
+GDK_AVAILABLE_IN_ALL
+const char *            gtk_string_object_get_string (GtkStringObject *self);
 
 #define GTK_TYPE_STRING_LIST (gtk_string_list_get_type ())
 
