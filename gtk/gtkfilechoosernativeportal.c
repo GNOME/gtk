@@ -126,7 +126,7 @@ response_cb (GDBusConnection  *connection,
   if (current_filter)
     {
       GtkFileFilter *filter = gtk_file_filter_new_from_gvariant (current_filter);
-      const gchar *current_filter_name = gtk_file_filter_get_name (filter);
+      const char *current_filter_name = gtk_file_filter_get_name (filter);
 
       /* Try to find  the given filter in the list of filters.
        * Since filters are compared by pointer value, using the passed
@@ -137,18 +137,24 @@ response_cb (GDBusConnection  *connection,
        * If there is no match, just set the filter as it was retrieved.
        */
       GtkFileFilter *filter_to_select = filter;
-      GSList *filters = gtk_file_chooser_list_filters (GTK_FILE_CHOOSER (self));
-      for (GSList *l = filters; l; l = l->next)
+      GListModel *filters;
+      guint i, n;
+
+      filters = gtk_file_chooser_get_filters (GTK_FILE_CHOOSER (self));
+      n = g_list_model_get_n_items (filters);
+      for (i = 0; i < n; i++)
         {
-          GtkFileFilter *f = l->data;
+          GtkFileFilter *f = g_list_model_get_item (filters, i);
           if (g_strcmp0 (gtk_file_filter_get_name (f), current_filter_name) == 0)
             {
               filter_to_select = f;
               break;
             }
+          g_object_unref (f);
         }
-      g_slist_free (filters);
+      g_object_unref (filters);
       gtk_file_chooser_set_filter (GTK_FILE_CHOOSER (self), filter_to_select);
+      g_object_unref (filter_to_select);
     }
 
   g_slist_free_full (self->custom_files, g_object_unref);
@@ -264,17 +270,20 @@ open_file_msg_cb (GObject *source_object,
 static GVariant *
 get_filters (GtkFileChooser *self)
 {
-  GSList *list, *l;
+  GListModel *filters;
+  guint n, i;
   GVariantBuilder builder;
 
   g_variant_builder_init (&builder, G_VARIANT_TYPE ("a(sa(us))"));
-  list = gtk_file_chooser_list_filters (self);
-  for (l = list; l; l = l->next)
+  filters = gtk_file_chooser_get_filters (self);
+  n = g_list_model_get_n_items (filters);
+  for (i = 0; i < n; i++)
     {
-      GtkFileFilter *filter = l->data;
+      GtkFileFilter *filter = g_list_model_get_item (filters, i);
       g_variant_builder_add (&builder, "@(sa(us))", gtk_file_filter_to_gvariant (filter));
+      g_object_unref (filter);
     }
-  g_slist_free (list);
+  g_object_unref (filters);
 
   return g_variant_builder_end (&builder);
 }
