@@ -48,15 +48,7 @@ struct _GtkArrayStore
 {
   GObject parent_instance;
 
-  GType item_type;
   GtkVector items;
-};
-
-enum
-{
-  PROP_0,
-  PROP_ITEM_TYPE,
-  N_PROPERTIES
 };
 
 static void gtk_array_store_iface_init (GListModelInterface *iface);
@@ -75,70 +67,17 @@ gtk_array_store_dispose (GObject *object)
 }
 
 static void
-gtk_array_store_get_property (GObject    *object,
-                              guint       property_id,
-                              GValue     *value,
-                              GParamSpec *pspec)
-{
-  GtkArrayStore *self = GTK_ARRAY_STORE (object);
-
-  switch (property_id)
-    {
-    case PROP_ITEM_TYPE:
-      g_value_set_gtype (value, self->item_type);
-      break;
-
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
-    }
-}
-
-static void
-gtk_array_store_set_property (GObject      *object,
-                              guint         property_id,
-                              const GValue *value,
-                              GParamSpec   *pspec)
-{
-  GtkArrayStore *self = GTK_ARRAY_STORE (object);
-
-  switch (property_id)
-    {
-    case PROP_ITEM_TYPE: /* construct-only */
-      g_assert (g_type_is_a (g_value_get_gtype (value), G_TYPE_OBJECT));
-      self->item_type = g_value_get_gtype (value);
-      break;
-
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
-    }
-}
-
-static void
 gtk_array_store_class_init (GtkArrayStoreClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
   object_class->dispose = gtk_array_store_dispose;
-  object_class->get_property = gtk_array_store_get_property;
-  object_class->set_property = gtk_array_store_set_property;
-
-  /**
-   * GtkArrayStore:item-type:
-   *
-   * The type of items contained in this list self. Items must be
-   * subclasses of #GObject.
-   **/
-  g_object_class_install_property (object_class, PROP_ITEM_TYPE,
-    g_param_spec_gtype ("item-type", "", "", G_TYPE_OBJECT,
-                        G_PARAM_CONSTRUCT_ONLY | G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 }
 
 static GType
 gtk_array_store_get_item_type (GListModel *list)
 {
-  GtkArrayStore *self = GTK_ARRAY_STORE (list);
-
-  return self->item_type;
+  return G_TYPE_OBJECT;
 }
 
 static guint
@@ -185,13 +124,9 @@ gtk_array_store_init (GtkArrayStore *self)
  * Returns: a new #GtkArrayStore
  */
 GtkArrayStore *
-gtk_array_store_new (GType item_type)
+gtk_array_store_new (void)
 {
-  g_return_val_if_fail (g_type_is_a (item_type, G_TYPE_OBJECT), NULL);
-
-  return g_object_new (GTK_TYPE_ARRAY_STORE,
-                       "item-type", item_type,
-                       NULL);
+  return g_object_new (GTK_TYPE_ARRAY_STORE, NULL);
 }
 
 /**
@@ -213,7 +148,6 @@ gtk_array_store_append (GtkArrayStore *self,
   guint position;
 
   g_return_if_fail (GTK_IS_ARRAY_STORE (self));
-  g_return_if_fail (g_type_is_a (G_OBJECT_TYPE (item), self->item_type));
 
   position = gtk_vector_get_size (&self->items);
   gtk_vector_append (&self->items, g_object_ref (item));

@@ -33,7 +33,7 @@ GDK_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE(GtkArrayStore, gtk_array_store, GTK, ARRAY_STORE, GObject)
 
 GDK_AVAILABLE_IN_ALL
-GtkArrayStore *         gtk_array_store_new                             (GType           item_type);
+GtkArrayStore *         gtk_array_store_new                             (void);
 
 GDK_AVAILABLE_IN_ALL
 void                    gtk_array_store_append                          (GtkArrayStore  *store,
