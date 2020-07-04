@@ -18,15 +18,14 @@
 
 /**
  * SECTION:gtkfilefilter
- * @Short_description: A filter for selecting a file subset
+ * @Short_description: Filtering files
  * @Title: GtkFileFilter
  * @see_also: #GtkFileChooser
  *
  * A GtkFileFilter can be used to restrict the files being shown in a
  * #GtkFileChooser. Files can be filtered based on their name (with
- * gtk_file_filter_add_pattern()), on their mime type (with
- * gtk_file_filter_add_mime_type()), or by a custom filter function
- * (with gtk_file_filter_add_custom()).
+ * gtk_file_filter_add_pattern()) or on their mime type (with
+ * gtk_file_filter_add_mime_type()).
  *
  * Filtering by mime types handles aliasing and subclassing of mime
  * types; e.g. a filter for text/plain also matches a file with mime
@@ -34,9 +33,10 @@
  * text/plain. Note that #GtkFileFilter allows wildcards for the
  * subtype of a mime type, so you can e.g. filter for image/\*.
  *
- * Normally, filters are used by adding them to a #GtkFileChooser,
- * see gtk_file_chooser_add_filter(), but it is also possible
- * to manually use a filter on a file with gtk_file_filter_filter().
+ * Normally, file filters are used by adding them to a #GtkFileChooser
+ * (see gtk_file_chooser_add_filter()), but it is also possible to
+ * manually use a file filter on any #GtkFilterListModel containing
+ * #GFileInfo objects.
  *
  * # GtkFileFilter as GtkBuildable
  *
@@ -438,18 +438,20 @@ gtk_file_filter_buildable_custom_tag_end (GtkBuildable *buildable,
 
 /**
  * gtk_file_filter_new:
- * 
+ *
  * Creates a new #GtkFileFilter with no rules added to it.
+ *
  * Such a filter doesn’t accept any files, so is not
  * particularly useful until you add rules with
  * gtk_file_filter_add_mime_type(), gtk_file_filter_add_pattern(),
- * or gtk_file_filter_add_custom(). To create a filter
- * that accepts any file, use:
+ * or gtk_file_filter_add_pixbuf_formats().
+ *
+ * To create a filter that accepts any file, use:
  * |[<!-- language="C" -->
  * GtkFileFilter *filter = gtk_file_filter_new ();
  * gtk_file_filter_add_pattern (filter, "*");
  * ]|
- * 
+ *
  * Returns: a new #GtkFileFilter
  **/
 GtkFileFilter *
@@ -463,14 +465,14 @@ gtk_file_filter_new (void)
  * @filter: a #GtkFileFilter
  * @name: (allow-none): the human-readable-name for the filter, or %NULL
  *   to remove any existing name.
- * 
- * Sets the human-readable name of the filter; this is the string
- * that will be displayed in the file selector user interface if
- * there is a selectable list of filters.
+ *
+ * Sets a human-readable name of the filter; this is the string
+ * that will be displayed in the file chooser if there is a selectable
+ * list of filters.
  **/
 void
 gtk_file_filter_set_name (GtkFileFilter *filter,
-			  const gchar   *name)
+                          const gchar   *name)
 {
   g_return_if_fail (GTK_IS_FILE_FILTER (filter));
 
@@ -486,18 +488,18 @@ gtk_file_filter_set_name (GtkFileFilter *filter,
 /**
  * gtk_file_filter_get_name:
  * @filter: a #GtkFileFilter
- * 
+ *
  * Gets the human-readable name for the filter. See gtk_file_filter_set_name().
- * 
+ *
  * Returns: (nullable): The human-readable name of the filter,
- *   or %NULL. This value is owned by GTK+ and must not
+ *   or %NULL. This value is owned by GTK and must not
  *   be modified or freed.
  **/
 const gchar *
 gtk_file_filter_get_name (GtkFileFilter *filter)
 {
   g_return_val_if_fail (GTK_IS_FILE_FILTER (filter), NULL);
-  
+
   return filter->name;
 }
 
@@ -534,7 +536,7 @@ file_filter_add_attribute (GtkFileFilter *filter,
  * gtk_file_filter_add_mime_type:
  * @filter: A #GtkFileFilter
  * @mime_type: name of a MIME type
- * 
+ *
  * Adds a rule allowing a given mime type to @filter.
  **/
 void
@@ -581,9 +583,12 @@ gtk_file_filter_add_pattern (GtkFileFilter *filter,
 /**
  * gtk_file_filter_add_pixbuf_formats:
  * @filter: a #GtkFileFilter
- * 
+ *
  * Adds a rule allowing image files in the formats supported
  * by GdkPixbuf.
+ *
+ * This is equivalent to calling gtk_file_filter_add_mime_type()
+ * for all the supported mime types.
  **/
 void
 gtk_file_filter_add_pixbuf_formats (GtkFileFilter *filter)
