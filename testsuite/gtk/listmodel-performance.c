@@ -1,5 +1,6 @@
 #include <gtk/gtk.h>
 
+#include "gtkarraystore.h"
 #include "gtkstringlist.h"
 
 typedef struct {
@@ -100,6 +101,45 @@ insert_array_store (GListModel *model, guint pos, const char *s)
 {
   gpointer obj = get_object (s);
   gtk_array_store_splice (GTK_ARRAY_STORE (model), pos, 0, (gpointer *)&obj, 1);
+  g_object_unref (obj);
+}
+
+static GListModel *
+make_array_store2 (guint n_items)
+{
+  GtkArrayStore2 *store;
+  guint i;
+
+  store = gtk_array_store2_new (GTK_TYPE_STRING_OBJECT);
+
+  for (i = 0; i < n_items; i++)
+    {
+      char *string;
+      gpointer obj;
+
+      string = g_strdup_printf ("item %d", i);
+      obj = get_object (string);
+      gtk_array_store2_append (store, obj);
+      g_object_unref (obj);
+      g_free (string);
+    }
+
+  return G_LIST_MODEL (store);
+}
+
+static void
+append_array_store2 (GListModel *model, const char *s)
+{
+  gpointer obj = get_object (s);
+  gtk_array_store2_append (GTK_ARRAY_STORE2 (model), obj);
+  g_object_unref (obj);
+}
+
+static void
+insert_array_store2 (GListModel *model, guint pos, const char *s)
+{
+  gpointer obj = get_object (s);
+  gtk_array_store2_splice (GTK_ARRAY_STORE2 (model), pos, 0, (gpointer *)&obj, 1);
   g_object_unref (obj);
 }
 
@@ -317,6 +357,12 @@ const Model all_models[] = {
     make_array_store,
     append_array_store,
     insert_array_store
+  },
+  {
+    "ptrarraystore",
+    make_array_store2,
+    append_array_store2,
+    insert_array_store2
   },
   {
     "sequence-stringlist",
