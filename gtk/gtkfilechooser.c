@@ -682,23 +682,24 @@ gtk_file_chooser_remove_filter (GtkFileChooser *chooser,
 }
 
 /**
- * gtk_file_chooser_list_filters:
+ * gtk_file_chooser_get_filters:
  * @chooser: a #GtkFileChooser
  * 
- * Lists the current set of user-selectable filters; see
+ * Gets the current set of user-selectable filters, as a list model; see
  * gtk_file_chooser_add_filter(), gtk_file_chooser_remove_filter().
  *
- * Returns: (element-type GtkFileFilter) (transfer container): a
- *  #GSList containing the current set of user selectable filters. The
- *  contents of the list are owned by GTK+, but you must free the list
- *  itself with g_slist_free() when you are done with it.
+ * You should not modify the returned list model. Future changes to
+ * @chooser may or may not affect the returned model.
+ *
+ * Returns: (transfer full): a #GListModel containing the current set
+ *     of user-selectable filters.
  **/
-GSList *
-gtk_file_chooser_list_filters  (GtkFileChooser *chooser)
+GListModel *
+gtk_file_chooser_get_filters (GtkFileChooser *chooser)
 {
   g_return_val_if_fail (GTK_IS_FILE_CHOOSER (chooser), NULL);
 
-  return GTK_FILE_CHOOSER_GET_IFACE (chooser)->list_filters (chooser);
+  return GTK_FILE_CHOOSER_GET_IFACE (chooser)->get_filters (chooser);
 }
 
 /**
