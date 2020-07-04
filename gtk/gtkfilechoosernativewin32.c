@@ -244,9 +244,11 @@ ifiledialogevents_OnTypeChange (IFileDialogEvents * self,
       return S_OK;
     }
   fileType--; // fileTypeIndex starts at 1 
-  GSList *filters = gtk_file_chooser_list_filters (GTK_FILE_CHOOSER (events->data->self));
-  events->data->self->current_filter = g_slist_nth_data (filters, fileType);
-  g_slist_free (filters);
+  GListModel *filters = gtk_file_chooser_get_filters (GTK_FILE_CHOOSER (events->data->self));
+  GtkFileFilter *filter = g_list_model_get_item (filters, fileType);
+  events->data->self->current_filter = filter;
+  g_object_unref (filter);
+  g_object_unref (filters);
   g_object_notify (G_OBJECT (events->data->self), "filter");
   return S_OK;
 }
@@ -591,9 +593,24 @@ filechooser_win32_thread (gpointer _data)
 
       if (data->self->current_filter)
         {
-          GSList *filters = gtk_file_chooser_list_filters (GTK_FILE_CHOOSER (data->self));
-	  gint current_filter_index = g_slist_index (filters, data->self->current_filter);
-	  g_slist_free (filters);
+          GListModel *filters;
+          guint n, i;
+          guint current_filter_index = GTK_INVALID_LIST_POSITION;
+
+          filters = gtk_file_chooser_get_filters (GTK_FILE_CHOOSER (data->self));
+          n = g_list_model_get_n_items (filters);
+          for (i = 0; i < n; i++)
+            {
+              gpointer item = g_list_model_get_item (filters, i);
+              if (item == data->self->current_filter)
+                {
+                  current_filter_index = i;
+                  g_object_unref (item);
+                  break;
+                }
+              g_object_unref (item);
+            }
+	  g_object_unref (filters);
 
 	  if (current_filter_index >= 0)
 	    hr = IFileDialog_SetFileTypeIndex (pfd, current_filter_index + 1);
@@ -864,21 +881,24 @@ gtk_file_chooser_native_win32_show (GtkFileChooserNative *self)
   FilechooserWin32ThreadData *data;
   GtkWindow *transient_for;
   GtkFileChooserAction action;
-  GSList *filters, *l;
-  int n_filters, i;
+  GListModel *filters;
+  guint n_filters, i;
 
   data = g_new0 (FilechooserWin32ThreadData, 1);
 
-  filters = gtk_file_chooser_list_filters (GTK_FILE_CHOOSER (self));
-  n_filters = g_slist_length (filters);
+  filters = gtk_file_chooser_get_filters (GTK_FILE_CHOOSER (self));
+  n_filters = g_list_model_get_n_items (filters);
   if (n_filters > 0)
     {
       data->filters = g_new0 (COMDLG_FILTERSPEC, n_filters + 1);
 
-      for (l = filters, i = 0; l != NULL; l = l->next, i++)
+      for (i = 0; i < n_filters; i++)
         {
-          if (!file_filter_to_win32 (l->data, &data->filters[i]))
+          GtkFileFilter *filter = g_list_model_get_item (filters, i);
+          if (!file_filter_to_win32 (filter, &data->filters[i]))
             {
+              g_object_unref (filter);
+              g_object_unref (filters);
               filechooser_win32_thread_data_free (data);
               return FALSE;
             }
@@ -889,6 +909,7 @@ gtk_file_chooser_native_win32_show (GtkFileChooserNative *self)
     {
       self->current_filter = NULL;
     }
+  g_object_unref (filters);
 
   self->mode_data = data;
   data->self = g_object_ref (self);
