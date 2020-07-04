@@ -80,6 +80,9 @@ gtk_single_selection_get_n_items (GListModel *list)
 {
   GtkSingleSelection *self = GTK_SINGLE_SELECTION (list);
 
+  if (self->model == NULL)
+    return 0;
+
   return g_list_model_get_n_items (self->model);
 }
 
@@ -88,6 +91,9 @@ gtk_single_selection_get_item (GListModel *list,
                                guint       position)
 {
   GtkSingleSelection *self = GTK_SINGLE_SELECTION (list);
+
+  if (self->model == NULL)
+    return NULL;
 
   return g_list_model_get_item (self->model, position);
 }
@@ -305,12 +311,7 @@ gtk_single_selection_set_property (GObject      *object,
       break;
 
     case PROP_MODEL:
-      gtk_single_selection_clear_model (self);
-      self->model = g_value_dup_object (value);
-      g_signal_connect (self->model, "items-changed",
-                        G_CALLBACK (gtk_single_selection_items_changed_cb), self);
-      if (self->autoselect)
-        gtk_single_selection_set_selected (self, 0);
+      gtk_single_selection_set_model (self, g_value_get_object (value));
       break;
 
     case PROP_SELECTED:
@@ -438,7 +439,7 @@ gtk_single_selection_class_init (GtkSingleSelectionClass *klass)
                        P_("The model"),
                        P_("The model being managed"),
                        G_TYPE_LIST_MODEL,
-                       G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
+                       G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
 
   g_object_class_install_properties (gobject_class, N_PROPS, properties);
 }
@@ -482,6 +483,62 @@ gtk_single_selection_get_model (GtkSingleSelection *self)
   g_return_val_if_fail (GTK_IS_SINGLE_SELECTION (self), NULL);
 
   return self->model;
+}
+
+/**
+ * gtk_single_selection_set_model:
+ * @self: a #GtkSingleSelection
+ * @model: (allow-none): A #GListModel to wrap
+ *
+ * Sets the model that @self should wrap. If @model is %NULL, @self
+ * will be empty.
+ **/
+void
+gtk_single_selection_set_model (GtkSingleSelection *self,
+                                GListModel         *model)
+{
+  guint n_items_before;
+
+  g_return_if_fail (GTK_IS_SINGLE_SELECTION (self));
+  g_return_if_fail (model == NULL || G_IS_LIST_MODEL (model));
+
+  if (self->model == model)
+    return;
+
+  g_object_freeze_notify (G_OBJECT (self));
+  
+  n_items_before = self->model ? g_list_model_get_n_items (self->model) : 0;
+  gtk_single_selection_clear_model (self);
+
+  if (model)
+    {
+      self->model = g_object_ref (model);
+      g_signal_connect (self->model, "items-changed",
+                        G_CALLBACK (gtk_single_selection_items_changed_cb), self);
+      gtk_single_selection_items_changed_cb (self->model,
+                                             0,
+                                             n_items_before,
+                                             g_list_model_get_n_items (model),
+                                             self);
+    }
+  else
+    {
+      if (self->selected != GTK_INVALID_LIST_POSITION)
+        {
+          self->selected = GTK_INVALID_LIST_POSITION;
+          g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_SELECTED]);
+        }
+      if (self->selected_item)
+        {
+          g_clear_object (&self->selected_item);
+          g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_SELECTED_ITEM]);
+        }
+      g_list_model_items_changed (G_LIST_MODEL (self), 0, n_items_before, 0);
+    }
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_MODEL]);
+
+  g_object_thaw_notify (G_OBJECT (self));
 }
 
 /**

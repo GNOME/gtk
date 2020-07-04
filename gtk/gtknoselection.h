@@ -34,6 +34,9 @@ GtkNoSelection *        gtk_no_selection_new                    (GListModel     
 
 GDK_AVAILABLE_IN_ALL
 GListModel *            gtk_no_selection_get_model              (GtkNoSelection         *self);
+GDK_AVAILABLE_IN_ALL
+void                    gtk_no_selection_set_model              (GtkNoSelection         *self,
+                                                                 GListModel             *model);
 
 G_END_DECLS
 
