@@ -1409,7 +1409,6 @@ GtkFileChooserButtonPrivate
 <SECTION>
 <FILE>gtkfilefilter</FILE>
 GtkFileFilter
-GtkFileFilterInfo
 GtkFileFilterFlags
 GtkFileFilterFunc
 gtk_file_filter_new
