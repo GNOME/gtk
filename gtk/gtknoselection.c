@@ -60,9 +60,7 @@ static GParamSpec *properties[N_PROPS] = { NULL, };
 static GType
 gtk_no_selection_get_item_type (GListModel *list)
 {
-  GtkNoSelection *self = GTK_NO_SELECTION (list);
-
-  return g_list_model_get_item_type (self->model);
+  return G_TYPE_OBJECT;
 }
 
 static guint

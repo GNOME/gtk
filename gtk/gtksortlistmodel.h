@@ -41,9 +41,6 @@ GDK_AVAILABLE_IN_ALL
 GtkSortListModel *      gtk_sort_list_model_new                 (GListModel            *model,
                                                                  GtkSorter             *sorter);
 GDK_AVAILABLE_IN_ALL
-GtkSortListModel *      gtk_sort_list_model_new_for_type        (GType                  item_type);
-
-GDK_AVAILABLE_IN_ALL
 void                    gtk_sort_list_model_set_sorter          (GtkSortListModel       *self,
                                                                  GtkSorter              *sorter);
 GDK_AVAILABLE_IN_ALL

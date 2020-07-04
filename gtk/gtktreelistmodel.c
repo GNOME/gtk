@@ -533,16 +533,6 @@ gtk_tree_list_model_expand_node (GtkTreeListModel *self,
   if (model == NULL)
     return 0;
   
-  if (!g_type_is_a (g_list_model_get_item_type (model), g_list_model_get_item_type (self->root_node.model)))
-    {
-      g_critical ("The GtkTreeListModelCreateModelFunc for %p returned a model with item type \"%s\" "
-                  "but \"%s\" is required.",
-                  self,
-                  g_type_name (g_list_model_get_item_type (model)),
-                  g_type_name (g_list_model_get_item_type (self->root_node.model)));
-      return 0;
-    }
-
   gtk_tree_list_model_init_node (self, node, model);
 
   tree_node_mark_dirty (node);
@@ -576,7 +566,7 @@ gtk_tree_list_model_get_item_type (GListModel *list)
   GtkTreeListModel *self = GTK_TREE_LIST_MODEL (list);
 
   if (self->passthrough)
-    return g_list_model_get_item_type (self->root_node.model);
+    return G_TYPE_OBJECT;
   else
     return GTK_TYPE_TREE_LIST_ROW;
 }
