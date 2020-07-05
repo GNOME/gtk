@@ -760,12 +760,12 @@ gtk_file_chooser_get_filter (GtkFileChooser *chooser)
  * Returns: (nullable) (element-type Gio.File) (transfer full): A list
  * of folder filenames, or %NULL if there are no shortcut folders.
  */
-GSList *
-gtk_file_chooser_list_shortcut_folders (GtkFileChooser *chooser)
+GListModel *
+gtk_file_chooser_get_shortcut_folders (GtkFileChooser *chooser)
 {
   g_return_val_if_fail (GTK_IS_FILE_CHOOSER (chooser), NULL);
 
-  return GTK_FILE_CHOOSER_GET_IFACE (chooser)->list_shortcut_folders (chooser);
+  return GTK_FILE_CHOOSER_GET_IFACE (chooser)->get_shortcut_folders (chooser);
 }
 
 /**
