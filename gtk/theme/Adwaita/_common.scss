@@ -1465,30 +1465,6 @@ headerbar {
   }
 }
 
-.background:not(.tiled):not(.maximized):not(.solid-csd) .titlebar,
-.background:not(.tiled-top):not(.maximized):not(.solid-csd) .titlebar,
-.background:not(.tiled-left):not(.maximized):not(.solid-csd) .titlebar,
-.background:not(.tiled-right):not(.maximized):not(.solid-csd) .titlebar,
-.background:not(.tiled-bottom):not(.maximized):not(.solid-csd) .titlebar {
-  &:backdrop, & {
-    border-top-left-radius: 7px;
-    border-top-right-radius: 7px;
-  }
-}
-
-headerbar { // headerbar border rounding
-  window:not(.tiled):not(.maximized):not(.fullscreen):not(.solid-csd) separator:first-child + &, // tackles the paned container case
-  window:not(.tiled):not(.maximized):not(.fullscreen):not(.solid-csd) &:first-child { &:backdrop, & { border-top-left-radius: 7px; }}
-  window:not(.tiled):not(.maximized):not(.fullscreen):not(.solid-csd) &:last-child { &:backdrop, & { border-top-right-radius: 7px; }}
-  window:not(.tiled):not(.maximized):not(.fullscreen):not(.solid-csd) stack & { // tackles the stacked headerbars case
-    &:first-child, &:last-child {
-      &:backdrop, & {
-        border-top-left-radius: 7px;
-        border-top-right-radius: 7px;
-      }
-    }
-  }
-}
 
 .titlebar:not(headerbar) {
   window.csd > & {
