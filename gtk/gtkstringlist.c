@@ -581,3 +581,9 @@ gtk_string_list_get_string (GtkStringList *self,
 
   return objects_get (&self->items, position)->string;
 }
+
+guint64
+gtk_string_list_get_size (GtkStringList *self)
+{
+  return sizeof (GtkStringList) + (self->items.end_allocation - self->items.start) * sizeof (gpointer);
+}
