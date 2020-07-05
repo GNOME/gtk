@@ -1916,8 +1916,9 @@ gtk_main_do_event (GdkEvent *event)
     case GDK_PAD_RING:
     case GDK_PAD_STRIP:
     case GDK_PAD_GROUP_MODE:
-      if (!_gtk_propagate_captured_event (grab_widget, event, topmost_widget))
-        gtk_propagate_event (grab_widget, event);
+      if (!_gtk_propagate_captured_event (grab_widget, event, topmost_widget)) {
+        gtk_propagate_event(grab_widget, event);
+      }
       break;
 
     case GDK_ENTER_NOTIFY:
@@ -2664,8 +2665,11 @@ propagate_event (GtkWidget *widget,
        * for that window.
        */
       GtkWidget *window;
+      GdkDisplay *window_display;
 
       window = gtk_widget_get_toplevel (widget);
+      window_display = gtk_widget_get_display(window);
+
       if (GTK_IS_WINDOW (window))
         {
           g_object_ref (widget);
@@ -2678,6 +2682,14 @@ propagate_event (GtkWidget *widget,
           if (!handled_event &&
               gtk_widget_is_sensitive (window))
             handled_event = propagate_func (window, event);
+
+          /**
+           * If the event wasn't handled at window level
+           * propagate it up for native OS handling
+           */
+          if (!handled_event && !captured) {
+            handled_event = gdk_display_propagate_native_event(window_display, event);
+          }
 
           g_object_unref (widget);
           return handled_event;

@@ -52,7 +52,8 @@ void       _gdk_quartz_display_event_data_copy (GdkDisplay     *display,
                                                 GdkEvent       *dst);
 void       _gdk_quartz_display_event_data_free (GdkDisplay     *display,
                                                 GdkEvent       *event);
-
+void       _gdk_quartz_display_event_propagate_native (GdkDisplay     *display,
+                                                       GdkEvent       *event);
 /* Display methods - cursor */
 GdkCursor *_gdk_quartz_display_get_cursor_for_type     (GdkDisplay      *display,
                                                         GdkCursorType    type);
