@@ -52,7 +52,7 @@ static gboolean       delegate_add_shortcut_folder    (GtkFileChooser    *choose
 static gboolean       delegate_remove_shortcut_folder (GtkFileChooser    *chooser,
 						       GFile             *file,
 						       GError           **error);
-static GSList *       delegate_list_shortcut_folders  (GtkFileChooser    *chooser);
+static GListModel *   delegate_get_shortcut_folders   (GtkFileChooser    *chooser);
 static void           delegate_notify                 (GObject           *object,
 						       GParamSpec        *pspec,
 						       gpointer           data);
@@ -137,7 +137,7 @@ _gtk_file_chooser_delegate_iface_init (GtkFileChooserIface *iface)
   iface->get_filters = delegate_get_filters;
   iface->add_shortcut_folder = delegate_add_shortcut_folder;
   iface->remove_shortcut_folder = delegate_remove_shortcut_folder;
-  iface->list_shortcut_folders = delegate_list_shortcut_folders;
+  iface->get_shortcut_folders = delegate_get_shortcut_folders;
   iface->add_choice = delegate_add_choice;
   iface->remove_choice = delegate_remove_choice;
   iface->set_choice = delegate_set_choice;
@@ -266,10 +266,10 @@ delegate_remove_shortcut_folder (GtkFileChooser  *chooser,
   return gtk_file_chooser_remove_shortcut_folder (get_delegate (chooser), file, error);
 }
 
-static GSList *
-delegate_list_shortcut_folders (GtkFileChooser *chooser)
+static GListModel *
+delegate_get_shortcut_folders (GtkFileChooser *chooser)
 {
-  return gtk_file_chooser_list_shortcut_folders (get_delegate (chooser));
+  return gtk_file_chooser_get_shortcut_folders (get_delegate (chooser));
 }
 
 static gboolean

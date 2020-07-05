@@ -767,21 +767,23 @@ gtk_file_chooser_get_filter (GtkFileChooser *chooser)
 }
 
 /**
- * gtk_file_chooser_list_shortcut_folders:
+ * gtk_file_chooser_get_shortcut_folders:
  * @chooser: a #GtkFileChooser
  * 
  * Queries the list of shortcut folders in the file chooser, as set by
  * gtk_file_chooser_add_shortcut_folder().
  *
- * Returns: (nullable) (element-type Gio.File) (transfer full): A list
- * of folder filenames, or %NULL if there are no shortcut folders.
+ * You should not modify the returned list model. Future changes to
+ * @chooser may or may not affect the returned model.
+ *
+ * Returns: (transfer full): A list model of #GFiles
  */
-GSList *
-gtk_file_chooser_list_shortcut_folders (GtkFileChooser *chooser)
+GListModel *
+gtk_file_chooser_get_shortcut_folders (GtkFileChooser *chooser)
 {
   g_return_val_if_fail (GTK_IS_FILE_CHOOSER (chooser), NULL);
 
-  return GTK_FILE_CHOOSER_GET_IFACE (chooser)->list_shortcut_folders (chooser);
+  return GTK_FILE_CHOOSER_GET_IFACE (chooser)->get_shortcut_folders (chooser);
 }
 
 /**
