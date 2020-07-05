@@ -492,7 +492,7 @@ static gboolean       gtk_file_chooser_widget_add_shortcut_folder    (GtkFileCho
 static gboolean       gtk_file_chooser_widget_remove_shortcut_folder (GtkFileChooser    *chooser,
                                                                        GFile             *file,
                                                                        GError           **error);
-static GSList *       gtk_file_chooser_widget_list_shortcut_folders  (GtkFileChooser    *chooser);
+static GListModel *   gtk_file_chooser_widget_get_shortcut_folders   (GtkFileChooser    *chooser);
 
 static gboolean       gtk_file_chooser_widget_should_respond         (GtkFileChooserEmbed *chooser_embed);
 static void           gtk_file_chooser_widget_initial_focus          (GtkFileChooserEmbed *chooser_embed);
@@ -622,7 +622,7 @@ gtk_file_chooser_widget_iface_init (GtkFileChooserIface *iface)
   iface->get_filters = gtk_file_chooser_widget_get_filters;
   iface->add_shortcut_folder = gtk_file_chooser_widget_add_shortcut_folder;
   iface->remove_shortcut_folder = gtk_file_chooser_widget_remove_shortcut_folder;
-  iface->list_shortcut_folders = gtk_file_chooser_widget_list_shortcut_folders;
+  iface->get_shortcut_folders = gtk_file_chooser_widget_get_shortcut_folders;
   iface->add_choice = gtk_file_chooser_widget_add_choice;
   iface->remove_choice = gtk_file_chooser_widget_remove_choice;
   iface->set_choice = gtk_file_chooser_widget_set_choice;
@@ -3429,25 +3429,27 @@ set_startup_mode (GtkFileChooserWidget *impl)
 static gboolean
 shortcut_exists (GtkFileChooserWidget *impl, GFile *needle)
 {
-  GSList *haystack;
-  GSList *l;
+  GListModel *haystack;
+  guint n, i;
   gboolean exists;
 
   exists = FALSE;
 
-  haystack = gtk_places_sidebar_list_shortcuts (GTK_PLACES_SIDEBAR (impl->places_sidebar));
-  for (l = haystack; l; l = l->next)
+  haystack = gtk_places_sidebar_get_shortcuts (GTK_PLACES_SIDEBAR (impl->places_sidebar));
+  n = g_list_model_get_n_items (haystack);
+  for (i = 0; i < n; i++)
     {
-      GFile *hay;
+      GFile *hay = g_list_model_get_item (haystack, i);
 
-      hay = G_FILE (l->data);
       if (g_file_equal (hay, needle))
         {
+          g_object_unref (hay);
           exists = TRUE;
           break;
         }
+      g_object_unref (hay);
     }
-  g_slist_free_full (haystack, g_object_unref);
+  g_object_unref (haystack);
 
   return exists;
 }
@@ -5629,12 +5631,12 @@ gtk_file_chooser_widget_remove_shortcut_folder (GtkFileChooser  *chooser,
   return TRUE;
 }
 
-static GSList *
-gtk_file_chooser_widget_list_shortcut_folders (GtkFileChooser *chooser)
+static GListModel *
+gtk_file_chooser_widget_get_shortcut_folders (GtkFileChooser *chooser)
 {
   GtkFileChooserWidget *impl = GTK_FILE_CHOOSER_WIDGET (chooser);
 
-  return gtk_places_sidebar_list_shortcuts (GTK_PLACES_SIDEBAR (impl->places_sidebar));
+  return gtk_places_sidebar_get_shortcuts (GTK_PLACES_SIDEBAR (impl->places_sidebar));
 }
 
 struct switch_folder_closure {

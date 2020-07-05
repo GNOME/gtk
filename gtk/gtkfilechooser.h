@@ -164,14 +164,14 @@ GtkFileFilter *gtk_file_chooser_get_filter (GtkFileChooser *chooser);
 
 GDK_AVAILABLE_IN_ALL
 gboolean gtk_file_chooser_add_shortcut_folder    (GtkFileChooser *chooser,
-						  GFile          *folder,
-						  GError        **error);
+                                                  GFile          *folder,
+                                                  GError        **error);
 GDK_AVAILABLE_IN_ALL
 gboolean gtk_file_chooser_remove_shortcut_folder (GtkFileChooser *chooser,
-						  GFile          *folder,
-						  GError        **error);
+                                                  GFile          *folder,
+                                                  GError        **error);
 GDK_AVAILABLE_IN_ALL
-GSList *gtk_file_chooser_list_shortcut_folders   (GtkFileChooser *chooser);
+GListModel *gtk_file_chooser_get_shortcut_folders (GtkFileChooser *chooser);
 
 GDK_AVAILABLE_IN_ALL
 void        gtk_file_chooser_add_choice              (GtkFileChooser  *chooser,
