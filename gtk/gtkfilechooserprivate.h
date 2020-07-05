@@ -85,7 +85,7 @@ struct _GtkFileChooserIface
   gboolean       (*remove_shortcut_folder) (GtkFileChooser    *chooser,
                                             GFile             *file,
                                             GError           **error);
-  GSList *       (*list_shortcut_folders)  (GtkFileChooser    *chooser);
+  GListModel *   (*get_shortcut_folders)   (GtkFileChooser    *chooser);
 
   /* Signals
    */
