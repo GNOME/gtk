@@ -118,21 +118,6 @@ response_cb (GtkDialog *dialog,
   g_main_context_wakeup (NULL);
 }
 
-static gboolean
-no_backup_files_filter (GFileInfo *info,
-                        gpointer   data)
-{
-  const char *display_name;
-  gsize len;
-
-  display_name = g_file_info_get_display_name (info);
-  len = strlen (display_name);
-  if (len > 0 && display_name[len - 1] == '~')
-    return 0;
-  else
-    return 1;
-}
-
 static void
 filter_changed (GtkFileChooserDialog *dialog,
 		gpointer              data)
@@ -397,14 +382,6 @@ main (int argc, char **argv)
 
   /* Make this filter the default */
   gtk_file_chooser_set_filter (GTK_FILE_CHOOSER (dialog), filter);
-  g_object_unref (filter);
-
-  filter = gtk_file_filter_new ();
-  gtk_file_filter_set_name (filter, "No backup files");
-  gtk_file_filter_add_custom (filter, GTK_FILE_FILTER_DISPLAY_NAME,
-			      no_backup_files_filter, NULL, NULL);
-  gtk_file_filter_add_mime_type (filter, "image/png");
-  gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (dialog), filter);
   g_object_unref (filter);
 
   filter = gtk_file_filter_new ();

@@ -52,19 +52,6 @@ typedef enum {
   GTK_FILE_FILTER_MIME_TYPE    = 1 << 3
 } GtkFileFilterFlags;
 
-/**
- * GtkFileFilterFunc:
- * @info: a #GFileInfo
- * @data: (closure): user data passed to gtk_file_filter_add_custom()
- *
- * The type of function that is used with custom filters, see
- * gtk_file_filter_add_custom().
- *
- * Returns: %TRUE if the file should be displayed
- */
-typedef gboolean (*GtkFileFilterFunc) (GFileInfo *info,
-                                       gpointer  data);
-
 GDK_AVAILABLE_IN_ALL
 GType gtk_file_filter_get_type (void) G_GNUC_CONST;
 
@@ -84,12 +71,6 @@ void gtk_file_filter_add_pattern        (GtkFileFilter      *filter,
 					 const gchar        *pattern);
 GDK_AVAILABLE_IN_ALL
 void gtk_file_filter_add_pixbuf_formats (GtkFileFilter      *filter);
-GDK_AVAILABLE_IN_ALL
-void gtk_file_filter_add_custom         (GtkFileFilter      *filter,
-					 GtkFileFilterFlags  needed,
-					 GtkFileFilterFunc   func,
-					 gpointer            data,
-					 GDestroyNotify      notify);
 
 GDK_AVAILABLE_IN_ALL
 GtkFileFilterFlags gtk_file_filter_get_needed (GtkFileFilter           *filter);

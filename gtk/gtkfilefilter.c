@@ -85,8 +85,7 @@ typedef struct _FilterRule FilterRule;
 typedef enum {
   FILTER_RULE_PATTERN,
   FILTER_RULE_MIME_TYPE,
-  FILTER_RULE_PIXBUF_FORMATS,
-  FILTER_RULE_CUSTOM
+  FILTER_RULE_PIXBUF_FORMATS
 } FilterRuleType;
 
 struct _GtkFileFilterClass
@@ -113,11 +112,6 @@ struct _FilterRule
     gchar *pattern;
     gchar *mime_type;
     GSList *pixbuf_formats;
-    struct {
-      GtkFileFilterFunc func;
-      gpointer data;
-      GDestroyNotify notify;
-    } custom;
   } u;
 };
 
@@ -204,10 +198,6 @@ filter_rule_free (FilterRule *rule)
       break;
     case FILTER_RULE_PATTERN:
       g_free (rule->u.pattern);
-      break;
-    case FILTER_RULE_CUSTOM:
-      if (rule->u.custom.notify)
-	rule->u.custom.notify (rule->u.custom.data);
       break;
     case FILTER_RULE_PIXBUF_FORMATS:
       g_slist_free (rule->u.pixbuf_formats);
@@ -580,45 +570,6 @@ gtk_file_filter_add_pixbuf_formats (GtkFileFilter *filter)
   file_filter_add_rule (filter, rule);
 }
 
-
-/**
- * gtk_file_filter_add_custom:
- * @filter: a #GtkFileFilter
- * @needed: bitfield of flags indicating the information that the custom
- *          filter function needs.
- * @func: callback function; if the function returns %TRUE, then
- *   the file will be displayed.
- * @data: data to pass to @func
- * @notify: function to call to free @data when it is no longer needed.
- * 
- * Adds rule to a filter that allows files based on a custom callback
- * function. The bitfield @needed which is passed in provides information
- * about what sorts of information that the filter function needs;
- * this allows GTK+ to avoid retrieving expensive information when
- * it isn’t needed by the filter.
- **/
-void
-gtk_file_filter_add_custom (GtkFileFilter         *filter,
-			    GtkFileFilterFlags     needed,
-			    GtkFileFilterFunc      func,
-			    gpointer               data,
-			    GDestroyNotify         notify)
-{
-  FilterRule *rule;
-  
-  g_return_if_fail (GTK_IS_FILE_FILTER (filter));
-  g_return_if_fail (func != NULL);
-
-  rule = g_slice_new (FilterRule);
-  rule->type = FILTER_RULE_CUSTOM;
-  rule->needed = needed;
-  rule->u.custom.func = func;
-  rule->u.custom.data = data;
-  rule->u.custom.notify = notify;
-
-  file_filter_add_rule (filter, rule);
-}
-
 /**
  * gtk_file_filter_get_needed:
  * @filter: a #GtkFileFilter
@@ -654,10 +605,6 @@ NSArray * _gtk_file_filter_get_as_pattern_nsstrings (GtkFileFilter *filter)
 
       switch (rule->type)
 	{
-	case FILTER_RULE_CUSTOM:
-	  [array release];
-          return NULL;
-	  break;
 	case FILTER_RULE_MIME_TYPE:
 	  {
 	    // convert mime-types to UTI
@@ -731,7 +678,6 @@ _gtk_file_filter_get_as_patterns (GtkFileFilter      *filter)
 
       switch (rule->type)
 	{
-	case FILTER_RULE_CUSTOM:
 	case FILTER_RULE_MIME_TYPE:
           g_ptr_array_free (array, TRUE);
           return NULL;
@@ -853,10 +799,6 @@ gtk_file_filter_filter (GtkFileFilter *filter,
               }
           }
           break;
-        case FILTER_RULE_CUSTOM:
-          if (rule->u.custom.func (info, rule->u.custom.data))
-            return TRUE;
-          break;
 
         default:
           break;
@@ -910,7 +852,6 @@ gtk_file_filter_to_gvariant (GtkFileFilter *filter)
               }
           }
           break;
-        case FILTER_RULE_CUSTOM:
         default:
           break;
         }
