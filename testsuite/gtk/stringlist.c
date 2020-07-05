@@ -184,7 +184,7 @@ test_splice (void)
 
   assert_model (list, "a b c d e");
 
-  gtk_string_list_splice (list, 2, 2, (const char *[]){ "x", "y", "z" }, 3);
+  gtk_string_list_splice (list, 2, 2, (const char *[]){ "x", "y", "z", NULL });
 
   assert_model (list, "a b x y z e");
   assert_changes (list, "2-2+3");

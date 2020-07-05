@@ -65,6 +65,9 @@ GDK_AVAILABLE_IN_ALL
 GtkBitset *             gtk_bitset_new_empty                    (void);
 GDK_AVAILABLE_IN_ALL
 GtkBitset *             gtk_bitset_copy                         (const GtkBitset        *self);
+GDK_AVAILABLE_IN_ALL
+GtkBitset *             gtk_bitset_new_range                    (guint                   start,
+                                                                 guint                   n_items);
 
 GDK_AVAILABLE_IN_ALL
 void                    gtk_bitset_remove_all                   (GtkBitset              *self);

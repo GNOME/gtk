@@ -138,18 +138,11 @@ gtk_string_object_class_init (GtkStringObjectClass *class)
 
   pspec = g_param_spec_string ("string", "String", "String",
                                NULL,
-                               G_PARAM_READWRITE |
-                               G_PARAM_CONSTRUCT_ONLY |
+                               G_PARAM_READABLE |
                                G_PARAM_STATIC_STRINGS);
 
   g_object_class_install_property (object_class, PROP_STRING, pspec);
 
-}
-
-static GtkStringObject *
-gtk_string_object_new (const char *string)
-{
-  return g_object_new (GTK_TYPE_STRING_OBJECT, "string", string, NULL);
 }
 
 static GtkStringObject *
@@ -161,6 +154,20 @@ gtk_string_object_new_take (char *string)
   obj->string = string;
 
   return obj;
+}
+
+/**
+ * gtk_string_object_new:
+ * @string: (non-nullable): The string to wrap
+ *
+ * Wraps a string in an object for use with #GListModel
+ *
+ * Returns: a new #GtkStringObject
+ **/
+GtkStringObject *
+gtk_string_object_new (const char *string)
+{
+  return gtk_string_object_new_take (g_strdup (string));
 }
 
 /**
@@ -432,15 +439,13 @@ gtk_string_list_init (GtkStringList *self)
  * Returns: a new #GtkStringList
  */
 GtkStringList *
-gtk_string_list_new (const char **strings)
+gtk_string_list_new (const char * const *strings)
 {
   GtkStringList *self;
-  guint i;
 
   self = g_object_new (GTK_TYPE_STRING_LIST, NULL);
 
-  for (i = 0; strings[i]; i++)
-    g_sequence_append (self->items, gtk_string_object_new (strings[i]));
+  gtk_string_list_splice (self, 0, 0, strings);
 
   return self;
 }
@@ -450,11 +455,10 @@ gtk_string_list_new (const char **strings)
  * @self: a #GtkStringList
  * @position: the position at which to make the change
  * @n_removals: the number of strings to remove
- * @additions: (array length=n_additions): the strings to add
- * @n_additions: the number of items to add
+ * @additions: (array zero-terminated=1) (nullable): The strings to add
  *
- * Changes @self by removing @n_removals strings and adding @n_additions
- * strings to it.
+ * Changes @self by removing @n_removals strings and adding @additions
+ * to it.
  *
  * This function is more efficient than gtk_string_list_insert() and
  * gtk_string_list_remove(), because it only emits
@@ -467,14 +471,13 @@ gtk_string_list_new (const char **strings)
  * of the list at the time this function is called).
  */
 void
-gtk_string_list_splice (GtkStringList  *self,
-                        guint           position,
-                        guint           n_removals,
-                        const char    **additions,
-                        guint           n_additions)
+gtk_string_list_splice (GtkStringList      *self,
+                        guint               position,
+                        guint               n_removals,
+                        const char * const *additions)
 {
   GSequenceIter *it;
-  guint n_items;
+  guint add, n_items;
 
   g_return_if_fail (GTK_IS_STRING_LIST (self));
   g_return_if_fail (position + n_removals >= position); /* overflow */
@@ -494,17 +497,18 @@ gtk_string_list_splice (GtkStringList  *self,
       it = end;
     }
 
-  if (n_additions)
+  if (additions)
     {
-      gint i;
-
-      for (i = 0; i < n_additions; i++)
+      for (add = 0; additions[add]; add++)
         {
-          g_sequence_insert_before (it, gtk_string_object_new (additions[i]));
+          g_sequence_insert_before (it, gtk_string_object_new (additions[add]));
         }
     }
+  else
+    add = 0;
 
-  g_list_model_items_changed (G_LIST_MODEL (self), position, n_removals, n_additions);
+  if (n_removals || add)
+    g_list_model_items_changed (G_LIST_MODEL (self), position, n_removals, add);
 }
 
 /**
@@ -589,8 +593,8 @@ gtk_string_list_remove (GtkStringList *self,
  * @self: a #GtkStringList
  * @position: the position to get the string for
  *
- * Gets the string that is at @position in @self. @position
- * must be smaller than the current length of the list.
+ * Gets the string that is at @position in @self. If @self
+ * does not contain @position items, %NULL is returned.
  *
  * This function returns the const char *. To get the
  * object wrapping it, use g_list_model_get_item().

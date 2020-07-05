@@ -39,8 +39,6 @@ G_DECLARE_FINAL_TYPE (GtkFilterListModel, gtk_filter_list_model, GTK, FILTER_LIS
 GDK_AVAILABLE_IN_ALL
 GtkFilterListModel *    gtk_filter_list_model_new               (GListModel             *model,
                                                                  GtkFilter              *filter);
-GDK_AVAILABLE_IN_ALL
-GtkFilterListModel *    gtk_filter_list_model_new_for_type      (GType                   item_type);
 
 GDK_AVAILABLE_IN_ALL
 void                    gtk_filter_list_model_set_filter        (GtkFilterListModel     *self,

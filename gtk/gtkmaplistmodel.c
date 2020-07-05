@@ -63,7 +63,6 @@
 enum {
   PROP_0,
   PROP_HAS_MAP,
-  PROP_ITEM_TYPE,
   PROP_MODEL,
   NUM_PROPERTIES
 };
@@ -86,7 +85,6 @@ struct _GtkMapListModel
 {
   GObject parent_instance;
 
-  GType item_type;
   GListModel *model;
   GtkMapListModelMapFunc map_func;
   gpointer user_data;
@@ -145,9 +143,7 @@ gtk_map_list_model_get_nth (GtkRbTree *tree,
 static GType
 gtk_map_list_model_get_item_type (GListModel *list)
 {
-  GtkMapListModel *self = GTK_MAP_LIST_MODEL (list);
-
-  return self->item_type;
+  return G_TYPE_OBJECT;
 }
 
 static guint
@@ -199,11 +195,6 @@ gtk_map_list_model_get_item (GListModel *list,
     }
 
   node->item = self->map_func (g_list_model_get_item (self->model, position), self->user_data);
-  if (!G_TYPE_CHECK_INSTANCE_TYPE (node->item, self->item_type))
-    {
-      g_critical ("Map function returned a %s, but it is not a subtype of the model's type %s",
-                  G_OBJECT_TYPE_NAME (node->item), g_type_name (self->item_type));
-    }
   g_object_add_weak_pointer (node->item, &node->item);
 
   return node->item;
@@ -293,10 +284,6 @@ gtk_map_list_model_set_property (GObject      *object,
 
   switch (prop_id)
     {
-    case PROP_ITEM_TYPE:
-      self->item_type = g_value_get_gtype (value);
-      break;
-
     case PROP_MODEL:
       gtk_map_list_model_set_model (self, g_value_get_object (value));
       break;
@@ -319,10 +306,6 @@ gtk_map_list_model_get_property (GObject     *object,
     {
     case PROP_HAS_MAP:
       g_value_set_boolean (value, self->items != NULL);
-      break;
-
-    case PROP_ITEM_TYPE:
-      g_value_set_gtype (value, self->item_type);
       break;
 
     case PROP_MODEL:
@@ -383,18 +366,6 @@ gtk_map_list_model_class_init (GtkMapListModelClass *class)
                             GTK_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkMapListModel:item-type:
-   *
-   * The #GType for elements of this object
-   */
-  properties[PROP_ITEM_TYPE] =
-      g_param_spec_gtype ("item-type",
-                          P_("Item type"),
-                          P_("The type of elements of this object"),
-                          G_TYPE_OBJECT,
-                          GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_EXPLICIT_NOTIFY);
-
-  /**
    * GtkMapListModel:model:
    *
    * The model being mapped
@@ -441,7 +412,6 @@ gtk_map_list_model_augment (GtkRbTree *map,
 
 /**
  * gtk_map_list_model_new:
- * @item_type: the #GType to use as the model's item type
  * @model: (allow-none): The model to map or %NULL for none
  * @map_func: (allow-none): map function or %NULL to not map items
  * @user_data: (closure): user data passed to @map_func
@@ -452,19 +422,16 @@ gtk_map_list_model_augment (GtkRbTree *map,
  * Returns: a new #GtkMapListModel
  **/
 GtkMapListModel *
-gtk_map_list_model_new (GType                   item_type,
-                        GListModel             *model,
+gtk_map_list_model_new (GListModel             *model,
                         GtkMapListModelMapFunc  map_func,
                         gpointer                user_data,
                         GDestroyNotify          user_destroy)
 {
   GtkMapListModel *result;
 
-  g_return_val_if_fail (g_type_is_a (item_type, G_TYPE_OBJECT), NULL);
   g_return_val_if_fail (model == NULL || G_IS_LIST_MODEL (model), NULL);
 
   result = g_object_new (GTK_TYPE_MAP_LIST_MODEL,
-                         "item-type", item_type,
                          "model", model,
                          NULL);
 

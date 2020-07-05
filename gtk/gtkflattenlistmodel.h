@@ -36,8 +36,7 @@ GDK_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (GtkFlattenListModel, gtk_flatten_list_model, GTK, FLATTEN_LIST_MODEL, GObject)
 
 GDK_AVAILABLE_IN_ALL
-GtkFlattenListModel *    gtk_flatten_list_model_new             (GType                   item_type,
-                                                                 GListModel             *model);
+GtkFlattenListModel *    gtk_flatten_list_model_new             (GListModel             *model);
 
 GDK_AVAILABLE_IN_ALL
 void                    gtk_flatten_list_model_set_model        (GtkFlattenListModel    *self,

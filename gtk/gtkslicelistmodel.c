@@ -41,7 +41,6 @@
 
 enum {
   PROP_0,
-  PROP_ITEM_TYPE,
   PROP_MODEL,
   PROP_OFFSET,
   PROP_SIZE,
@@ -52,7 +51,6 @@ struct _GtkSliceListModel
 {
   GObject parent_instance;
 
-  GType item_type;
   GListModel *model;
   guint offset;
   guint size;
@@ -70,9 +68,7 @@ static GParamSpec *properties[NUM_PROPERTIES] = { NULL, };
 static GType
 gtk_slice_list_model_get_item_type (GListModel *list)
 {
-  GtkSliceListModel *self = GTK_SLICE_LIST_MODEL (list);
-
-  return self->item_type;
+  return G_TYPE_OBJECT;
 }
 
 static guint
@@ -182,10 +178,6 @@ gtk_slice_list_model_set_property (GObject      *object,
 
   switch (prop_id)
     {
-    case PROP_ITEM_TYPE:
-      self->item_type = g_value_get_gtype (value);
-      break;
-
     case PROP_MODEL:
       gtk_slice_list_model_set_model (self, g_value_get_object (value));
       break;
@@ -214,10 +206,6 @@ gtk_slice_list_model_get_property (GObject     *object,
 
   switch (prop_id)
     {
-    case PROP_ITEM_TYPE:
-      g_value_set_gtype (value, self->item_type);
-      break;
-
     case PROP_MODEL:
       g_value_set_object (value, self->model);
       break;
@@ -266,18 +254,6 @@ gtk_slice_list_model_class_init (GtkSliceListModelClass *class)
   gobject_class->dispose = gtk_slice_list_model_dispose;
 
   /**
-   * GtkSliceListModel:item-type:
-   *
-   * The #GType for elements of this object
-   */
-  properties[PROP_ITEM_TYPE] =
-      g_param_spec_gtype ("item-type",
-                          P_("Item type"),
-                          P_("The type of elements of this object"),
-                          G_TYPE_OBJECT,
-                          GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_EXPLICIT_NOTIFY);
-
-  /**
    * GtkSliceListModel:model:
    *
    * Child model to take slice from
@@ -324,7 +300,7 @@ gtk_slice_list_model_init (GtkSliceListModel *self)
 
 /**
  * gtk_slice_list_model_new:
- * @model: (transfer none): The model to use
+ * @model: (transfer none) (allow-none): The model to use
  * @offset: the offset of the slice
  * @size: maximum size of the slice
  *
@@ -338,32 +314,12 @@ gtk_slice_list_model_new (GListModel *model,
                           guint       offset,
                           guint       size)
 {
-  g_return_val_if_fail (G_IS_LIST_MODEL (model), NULL);
+  g_return_val_if_fail (model == NULL || G_IS_LIST_MODEL (model), NULL);
 
   return g_object_new (GTK_TYPE_SLICE_LIST_MODEL,
-                       "item-type", g_list_model_get_item_type (model),
                        "model", model,
                        "offset", offset,
                        "size", size,
-                       NULL);
-}
-
-/**
- * gtk_slice_list_model_new_for_type:
- * @item_type: the type of items
- *
- * Creates a new empty #GtkSliceListModel for the given @item_type that
- * can be set up later.
- *
- * Returns: a new empty #GtkSliceListModel
- **/
-GtkSliceListModel *
-gtk_slice_list_model_new_for_type (GType item_type)
-{
-  g_return_val_if_fail (g_type_is_a (item_type, G_TYPE_OBJECT), NULL);
-
-  return g_object_new (GTK_TYPE_SLICE_LIST_MODEL,
-                       "item-type", item_type,
                        NULL);
 }
 

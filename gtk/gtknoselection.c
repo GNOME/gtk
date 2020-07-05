@@ -60,9 +60,7 @@ static GParamSpec *properties[N_PROPS] = { NULL, };
 static GType
 gtk_no_selection_get_item_type (GListModel *list)
 {
-  GtkNoSelection *self = GTK_NO_SELECTION (list);
-
-  return g_list_model_get_item_type (self->model);
+  return G_TYPE_OBJECT;
 }
 
 static guint
@@ -70,14 +68,20 @@ gtk_no_selection_get_n_items (GListModel *list)
 {
   GtkNoSelection *self = GTK_NO_SELECTION (list);
 
+  if (self->model == NULL)
+    return 0;
+
   return g_list_model_get_n_items (self->model);
 }
 
 static gpointer
 gtk_no_selection_get_item (GListModel *list,
-                               guint       position)
+                           guint       position)
 {
   GtkNoSelection *self = GTK_NO_SELECTION (list);
+
+  if (self->model == NULL)
+    return NULL;
 
   return g_list_model_get_item (self->model, position);
 }
@@ -132,9 +136,9 @@ gtk_no_selection_clear_model (GtkNoSelection *self)
 
 static void
 gtk_no_selection_set_property (GObject      *object,
-                                   guint         prop_id,
-                                   const GValue *value,
-                                   GParamSpec   *pspec)
+                               guint         prop_id,
+                               const GValue *value,
+                               GParamSpec   *pspec)
 
 {
   GtkNoSelection *self = GTK_NO_SELECTION (object);
@@ -142,10 +146,7 @@ gtk_no_selection_set_property (GObject      *object,
   switch (prop_id)
     {
     case PROP_MODEL:
-      gtk_no_selection_clear_model (self);
-      self->model = g_value_dup_object (value);
-      g_signal_connect_swapped (self->model, "items-changed",
-                                G_CALLBACK (g_list_model_items_changed), self);
+      gtk_no_selection_set_model (self, g_value_get_object (value));
       break;
 
     default:
@@ -203,7 +204,7 @@ gtk_no_selection_class_init (GtkNoSelectionClass *klass)
                        P_("The model"),
                        P_("The model being managed"),
                        G_TYPE_LIST_MODEL,
-                       G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
+                       G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
 
   g_object_class_install_properties (gobject_class, N_PROPS, properties);
 }
@@ -247,3 +248,40 @@ gtk_no_selection_get_model (GtkNoSelection *self)
   return self->model;
 }
 
+/**
+ * gtk_no_selection_set_model:
+ * @self: a #GtkNoSelection
+ * @model: (allow-none): A #GListModel to wrap
+ *
+ * Sets the model that @self should wrap. If @model is %NULL, this
+ * model will be empty.
+ **/
+void
+gtk_no_selection_set_model (GtkNoSelection *self,
+                            GListModel     *model)
+{
+  guint n_items_before;
+
+  g_return_if_fail (GTK_IS_NO_SELECTION (self));
+  g_return_if_fail (model == NULL || G_IS_LIST_MODEL (model));
+
+  if (self->model == model)
+    return;
+
+  n_items_before = self->model ? g_list_model_get_n_items (self->model) : 0;
+  gtk_no_selection_clear_model (self);
+
+  if (model)
+    {
+      self->model = g_object_ref (model);
+      g_signal_connect_swapped (self->model, "items-changed",
+                                G_CALLBACK (g_list_model_items_changed), self);
+    }
+
+  g_list_model_items_changed (G_LIST_MODEL (self),
+                              0,
+                              n_items_before,
+                              model ? g_list_model_get_n_items (self->model) : 0);
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_MODEL]);
+}

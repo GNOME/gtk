@@ -110,7 +110,7 @@ static GParamSpec *properties[N_PROPS] = { NULL, };
 static GType
 gtk_shortcut_controller_list_model_get_item_type (GListModel *list)
 {
-  return GTK_TYPE_SHORTCUT;
+  return G_TYPE_OBJECT;
 }
 
 static guint
@@ -198,12 +198,6 @@ gtk_shortcut_controller_set_property (GObject      *object,
     case PROP_MODEL:
       {
         GListModel *model = g_value_get_object (value);
-        if (model && g_list_model_get_item_type (model) != GTK_TYPE_SHORTCUT)
-          {
-            g_warning ("Setting a model with type '%s' on a shortcut controller that requires 'GtkShortcut'",
-                       g_type_name (g_list_model_get_item_type (model)));
-            model = NULL;
-          }
         if (model == NULL)
           {
             self->shortcuts = G_LIST_MODEL (g_list_store_new (GTK_TYPE_SHORTCUT));
@@ -309,6 +303,11 @@ gtk_shortcut_controller_run_controllers (GtkEventController *controller,
 
       index = (self->last_activated + 1 + i) % g_list_model_get_n_items (self->shortcuts);
       shortcut = g_list_model_get_item (self->shortcuts, index);
+      if (!GTK_IS_SHORTCUT (shortcut))
+        {
+          g_object_unref (shortcut);
+          continue;
+        }
 
       switch (gtk_shortcut_trigger_trigger (gtk_shortcut_get_trigger (shortcut), event, enable_mnemonics))
         {
@@ -484,7 +483,8 @@ gtk_shortcut_controller_set_widget (GtkEventController *controller,
   for (i = 0, p = g_list_model_get_n_items (G_LIST_MODEL (controller)); i < p; i++)
     {
       GtkShortcut *shortcut = g_list_model_get_item (G_LIST_MODEL (controller), i);
-      update_accel (shortcut, widget, TRUE);
+      if (GTK_IS_SHORTCUT (shortcut))
+        update_accel (shortcut, widget, TRUE);
       g_object_unref (shortcut);
     }
 
@@ -506,7 +506,8 @@ gtk_shortcut_controller_unset_widget (GtkEventController *controller)
   for (i = 0; i < g_list_model_get_n_items (G_LIST_MODEL (controller)); i++)
     {
       GtkShortcut *shortcut = g_list_model_get_item (G_LIST_MODEL (controller), i);
-      update_accel (shortcut, widget, FALSE);
+      if (GTK_IS_SHORTCUT (shortcut))
+        update_accel (shortcut, widget, FALSE);
       g_object_unref (shortcut);
     }
 #endif
@@ -697,7 +698,6 @@ GtkEventController *
 gtk_shortcut_controller_new_for_model (GListModel *model)
 {
   g_return_val_if_fail (G_IS_LIST_MODEL (model), NULL);
-  g_return_val_if_fail (g_list_model_get_item_type (model) == GTK_TYPE_SHORTCUT, NULL);
 
   return g_object_new (GTK_TYPE_SHORTCUT_CONTROLLER,
                        "model", model,
