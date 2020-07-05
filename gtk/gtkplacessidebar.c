@@ -162,7 +162,7 @@ struct _GtkPlacesSidebar {
 
   GtkWidget *popover;
   GtkSidebarRow *context_row;
-  GSList *shortcuts;
+  GListStore *shortcuts;
 
   GDBusProxy *hostnamed_proxy;
   GCancellable *hostnamed_cancellable;
@@ -709,14 +709,24 @@ file_is_shown (GtkPlacesSidebar *sidebar,
   return found;
 }
 
+typedef struct
+{
+  GtkPlacesSidebar *sidebar;
+  guint position;
+} ShortcutData;
+
 static void
 on_app_shortcuts_query_complete (GObject      *source,
                                  GAsyncResult *result,
                                  gpointer      data)
 {
-  GtkPlacesSidebar *sidebar = data;
+  ShortcutData *sdata = data;
+  GtkPlacesSidebar *sidebar = sdata->sidebar;
+  guint pos = sdata->position;
   GFile *file = G_FILE (source);
   GFileInfo *info;
+
+  g_free (sdata);
 
   info = g_file_query_info_finish (file, result, NULL);
 
@@ -726,19 +736,11 @@ on_app_shortcuts_query_complete (GObject      *source,
       gchar *tooltip;
       const gchar *name;
       GIcon *start_icon;
-      int pos = 0;
 
       name = g_file_info_get_display_name (info);
       start_icon = g_file_info_get_symbolic_icon (info);
       uri = g_file_get_uri (file);
       tooltip = g_file_get_parse_name (file);
-
-      /* XXX: we could avoid this by using an ancillary closure
-       * with the index coming from add_application_shortcuts(),
-       * but in terms of algorithmic overhead, the application
-       * shortcuts is not going to be really big
-       */
-      pos = g_slist_index (sidebar->shortcuts, file);
 
       add_place (sidebar, PLACES_BUILT_IN,
                  SECTION_COMPUTER,
@@ -757,11 +759,13 @@ on_app_shortcuts_query_complete (GObject      *source,
 static void
 add_application_shortcuts (GtkPlacesSidebar *sidebar)
 {
-  GSList *l;
+  guint i, n;
 
-  for (l = sidebar->shortcuts; l; l = l->next)
+  n = g_list_model_get_n_items (G_LIST_MODEL (sidebar->shortcuts));
+  for (i = 0; i < n; i++)
     {
-      GFile *file = l->data;
+      GFile *file = g_list_model_get_item (G_LIST_MODEL (sidebar->shortcuts), i);
+      ShortcutData *data;
 
       if (!should_show_file (sidebar, file))
         continue;
@@ -769,13 +773,16 @@ add_application_shortcuts (GtkPlacesSidebar *sidebar)
       if (file_is_shown (sidebar, file))
         continue;
 
+      data = g_new (ShortcutData, 1);
+      data->sidebar = sidebar;
+      data->position = i;
       g_file_query_info_async (file,
                                "standard::display-name,standard::symbolic-icon",
                                G_FILE_QUERY_INFO_NONE,
                                G_PRIORITY_DEFAULT,
                                sidebar->cancellable,
                                on_app_shortcuts_query_complete,
-                               sidebar);
+                               data);
     }
 }
 
@@ -4018,9 +4025,7 @@ gtk_places_sidebar_dispose (GObject *object)
 
   g_clear_object (&sidebar->current_location);
   g_clear_pointer (&sidebar->rename_uri, g_free);
-
-  g_slist_free_full (sidebar->shortcuts, g_object_unref);
-  sidebar->shortcuts = NULL;
+  g_clear_object (&sidebar->shortcuts);
 
 #ifdef HAVE_CLOUDPROVIDERS
   for (l = cloud_providers_collector_get_providers (sidebar->cloud_manager);
@@ -4782,24 +4787,6 @@ gtk_places_sidebar_get_show_trash (GtkPlacesSidebar *sidebar)
   return sidebar->show_trash;
 }
 
-static GSList *
-find_shortcut_link (GtkPlacesSidebar *sidebar,
-                    GFile            *location)
-{
-  GSList *l;
-
-  for (l = sidebar->shortcuts; l; l = l->next)
-    {
-      GFile *shortcut;
-
-      shortcut = G_FILE (l->data);
-      if (g_file_equal (shortcut, location))
-        return l;
-    }
-
-  return NULL;
-}
-
 /*
  * gtk_places_sidebar_add_shortcut:
  * @sidebar: a places sidebar
@@ -4823,8 +4810,7 @@ gtk_places_sidebar_add_shortcut (GtkPlacesSidebar *sidebar,
   g_return_if_fail (GTK_IS_PLACES_SIDEBAR (sidebar));
   g_return_if_fail (G_IS_FILE (location));
 
-  g_object_ref (location);
-  sidebar->shortcuts = g_slist_append (sidebar->shortcuts, location);
+  g_list_store_append (sidebar->shortcuts, location);
 
   update_places (sidebar);
 }
@@ -4842,43 +4828,46 @@ void
 gtk_places_sidebar_remove_shortcut (GtkPlacesSidebar *sidebar,
                                     GFile            *location)
 {
-  GSList *link;
-  GFile *shortcut;
+  guint i, n;
 
   g_return_if_fail (GTK_IS_PLACES_SIDEBAR (sidebar));
   g_return_if_fail (G_IS_FILE (location));
 
-  link = find_shortcut_link (sidebar, location);
-  if (!link)
-    return;
+  n = g_list_model_get_n_items (G_LIST_MODEL (sidebar->shortcuts));
+  for (i = 0; i < n; i++)
+    {
+      GFile *shortcut = g_list_model_get_item (G_LIST_MODEL (sidebar->shortcuts), i);
 
-  shortcut = G_FILE (link->data);
-  g_object_unref (shortcut);
+      if (shortcut == location)
+        {
+          g_list_store_remove (sidebar->shortcuts, i);
+          g_object_unref (shortcut);
+          update_places (sidebar);
+          return;
+        }
 
-  sidebar->shortcuts = g_slist_delete_link (sidebar->shortcuts, link);
-  update_places (sidebar);
+      g_object_unref (shortcut);
+    }
 }
 
 /*
  * gtk_places_sidebar_list_shortcuts:
  * @sidebar: a places sidebar
  *
- * Gets the list of shortcuts.
+ * Gets the list of shortcuts, as a list model containing #GFile objects.
  *
- * Returns: (element-type GFile) (transfer full):
- *     A #GSList of #GFile of the locations that have been added as
+ * You should not modify the returned list model. Future changes to
+ * @sidebar may or may not affect the returned model.
+ *
+ * Returns: (transfer full): a list model of #GFiles that have been added as
  *     application-specific shortcuts with gtk_places_sidebar_add_shortcut().
- *     To free this list, you can use
- * |[<!-- language="C" -->
- * g_slist_free_full (list, (GDestroyNotify) g_object_unref);
- * ]|
  */
-GSList *
-gtk_places_sidebar_list_shortcuts (GtkPlacesSidebar *sidebar)
+GListModel *
+gtk_places_sidebar_get_shortcuts (GtkPlacesSidebar *sidebar)
 {
   g_return_val_if_fail (GTK_IS_PLACES_SIDEBAR (sidebar), NULL);
 
-  return g_slist_copy_deep (sidebar->shortcuts, (GCopyFunc) g_object_ref, NULL);
+  return g_object_ref (sidebar->shortcuts);
 }
 
 /*

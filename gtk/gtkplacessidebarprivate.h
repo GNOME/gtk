@@ -92,7 +92,7 @@ void               gtk_places_sidebar_add_shortcut               (GtkPlacesSideb
                                                                   GFile              *location);
 void               gtk_places_sidebar_remove_shortcut            (GtkPlacesSidebar   *sidebar,
                                                                   GFile              *location);
-GSList *           gtk_places_sidebar_list_shortcuts             (GtkPlacesSidebar   *sidebar);
+GListModel *       gtk_places_sidebar_get_shortcuts              (GtkPlacesSidebar   *sidebar);
 
 GFile *            gtk_places_sidebar_get_nth_bookmark           (GtkPlacesSidebar   *sidebar,
                                                                   gint                n);
