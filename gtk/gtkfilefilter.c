@@ -784,19 +784,10 @@ gtk_file_filter_filter (GtkFileFilter *filter,
                         GFileInfo     *info)
 {
   GSList *tmp_list;
-  GtkFileFilterFlags contains = GTK_FILE_FILTER_DISPLAY_NAME;
 
-  if (g_file_info_has_attribute (info, G_FILE_ATTRIBUTE_STANDARD_FAST_CONTENT_TYPE))
-    contains |= GTK_FILE_FILTER_MIME_TYPE;
-  if (g_file_info_has_attribute (info, "standard::file"))
-    contains |= GTK_FILE_FILTER_FILENAME | GTK_FILE_FILTER_URI;
-
-  for (tmp_list = filter->rules; tmp_list; tmp_list = tmp_list->next)
+  for (tmp_list = file_filter->rules; tmp_list; tmp_list = tmp_list->next)
     {
       FilterRule *rule = tmp_list->data;
-
-      if ((contains & rule->needed) != rule->needed)
-        continue;
 
       switch (rule->type)
         {
@@ -807,52 +798,58 @@ gtk_file_filter_filter (GtkFileFilter *filter,
             gboolean match;
 
             filter_content_type = g_file_info_get_content_type (info);
-            rule_content_type = g_content_type_from_mime_type (rule->u.mime_type);
-            match = filter_content_type != NULL &&
-                    rule_content_type != NULL &&
-                    g_content_type_is_a (filter_content_type, rule_content_type);
-            g_free (rule_content_type);
+            if (filter_content_type)
+              {
+                rule_content_type = g_content_type_from_mime_type (rule->u.mime_type);
+                match = g_content_type_is_a (filter_content_type, rule_content_type);
+                g_free (rule_content_type);
 
-            if (match)
-             return TRUE;
+                if (match)
+                  return TRUE;
+              }
           }
           break;
+
         case FILTER_RULE_PATTERN:
           {
             const char *display_name;
 
             display_name = g_file_info_get_display_name (info);
-            if (display_name != NULL &&
-                _gtk_fnmatch (rule->u.pattern, display_name, FALSE))
-            return TRUE;
+            if (display_name)
+              {
+                if (_gtk_fnmatch (rule->u.pattern, display_name, FALSE))
+                  return TRUE;
+              }
           }
           break;
+
         case FILTER_RULE_PIXBUF_FORMATS:
           {
             const char *filter_content_type;
-            GSList *list;
 
             filter_content_type = g_file_info_get_content_type (info);
-            if (!filter_content_type)
-              break;
-
-            for (list = rule->u.pixbuf_formats; list; list = list->next)
+            if (filter_content_type)
               {
-                int i;
-                char **mime_types;
+                GSList *list;
 
-                mime_types = gdk_pixbuf_format_get_mime_types (list->data);
-
-                for (i = 0; mime_types[i] != NULL; i++)
+                for (list = rule->u.pixbuf_formats; list; list = list->next)
                   {
-                    if (strcmp (mime_types[i], filter_content_type) == 0)
-                      {
-                        g_strfreev (mime_types);
-                        return TRUE;
-                      }
-                  }
+                    int i;
+                    char **mime_types;
 
-                g_strfreev (mime_types);
+                    mime_types = gdk_pixbuf_format_get_mime_types (list->data);
+
+                    for (i = 0; mime_types[i] != NULL; i++)
+                      {
+                        if (strcmp (mime_types[i], filter_content_type) == 0)
+                          {
+                            g_strfreev (mime_types);
+                            return TRUE;
+                          }
+                      }
+
+                    g_strfreev (mime_types);
+                  }
               }
           }
           break;
