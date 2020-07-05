@@ -18,15 +18,14 @@
 
 /**
  * SECTION:gtkfilefilter
- * @Short_description: A filter for selecting a file subset
+ * @Short_description: Filtering files
  * @Title: GtkFileFilter
  * @see_also: #GtkFileChooser
  *
  * A GtkFileFilter can be used to restrict the files being shown in a
  * #GtkFileChooser. Files can be filtered based on their name (with
- * gtk_file_filter_add_pattern()), on their mime type (with
- * gtk_file_filter_add_mime_type()), or by a custom filter function
- * (with gtk_file_filter_add_custom()).
+ * gtk_file_filter_add_pattern()) or on their mime type (with
+ * gtk_file_filter_add_mime_type()).
  *
  * Filtering by mime types handles aliasing and subclassing of mime
  * types; e.g. a filter for text/plain also matches a file with mime
@@ -34,9 +33,10 @@
  * text/plain. Note that #GtkFileFilter allows wildcards for the
  * subtype of a mime type, so you can e.g. filter for image/\*.
  *
- * Normally, filters are used by adding them to a #GtkFileChooser,
- * see gtk_file_chooser_add_filter(), but it is also possible
- * to manually use a filter on a file with gtk_file_filter_filter().
+ * Normally, file filters are used by adding them to a #GtkFileChooser
+ * (see gtk_file_chooser_add_filter()), but it is also possible to
+ * manually use a file filter on any #GtkFilterListModel containing
+ * #GFileInfo objects.
  *
  * # GtkFileFilter as GtkBuildable
  *
@@ -73,6 +73,7 @@
 #include "gtkbuilderprivate.h"
 #include "gtkintl.h"
 #include "gtkprivate.h"
+#include "gtkfilter.h"
 
 typedef struct _GtkFileFilterClass GtkFileFilterClass;
 typedef struct _FilterRule FilterRule;
@@ -84,39 +85,32 @@ typedef struct _FilterRule FilterRule;
 typedef enum {
   FILTER_RULE_PATTERN,
   FILTER_RULE_MIME_TYPE,
-  FILTER_RULE_PIXBUF_FORMATS,
-  FILTER_RULE_CUSTOM
+  FILTER_RULE_PIXBUF_FORMATS
 } FilterRuleType;
 
 struct _GtkFileFilterClass
 {
-  GInitiallyUnownedClass parent_class;
+  GtkFilterClass parent_class;
 };
 
 struct _GtkFileFilter
 {
-  GInitiallyUnowned parent_instance;
+  GtkFilter parent_instance;
 
   gchar *name;
   GSList *rules;
 
-  GtkFileFilterFlags needed;
+  char **attributes;
 };
 
 struct _FilterRule
 {
   FilterRuleType type;
-  GtkFileFilterFlags needed;
-  
+
   union {
-    gchar *pattern;
-    gchar *mime_type;
+    char *pattern;
+    char **content_types;
     GSList *pixbuf_formats;
-    struct {
-      GtkFileFilterFunc func;
-      gpointer data;
-      GDestroyNotify notify;
-    } custom;
   } u;
 };
 
@@ -156,7 +150,12 @@ static void         gtk_file_filter_buildable_custom_tag_end   (GtkBuildable    
                                                                 const gchar        *tagname,
                                                                 gpointer            data);
 
-G_DEFINE_TYPE_WITH_CODE (GtkFileFilter, gtk_file_filter, G_TYPE_INITIALLY_UNOWNED,
+static gboolean       gtk_file_filter_match          (GtkFilter *filter,
+                                                      gpointer   item);
+static GtkFilterMatch gtk_file_filter_get_strictness (GtkFilter *filter);
+
+
+G_DEFINE_TYPE_WITH_CODE (GtkFileFilter, gtk_file_filter, GTK_TYPE_FILTER,
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
                                                 gtk_file_filter_buildable_init))
 
@@ -169,10 +168,14 @@ static void
 gtk_file_filter_class_init (GtkFileFilterClass *class)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (class);
+  GtkFilterClass *filter_class = GTK_FILTER_CLASS (class);
 
   gobject_class->set_property = gtk_file_filter_set_property;
   gobject_class->get_property = gtk_file_filter_get_property;
   gobject_class->finalize = gtk_file_filter_finalize;
+
+  filter_class->get_strictness = gtk_file_filter_get_strictness;
+  filter_class->match = gtk_file_filter_match;
 
   /**
    * GtkFileFilter:name:
@@ -197,18 +200,12 @@ filter_rule_free (FilterRule *rule)
 {
   switch (rule->type)
     {
-    case FILTER_RULE_MIME_TYPE:
-      g_free (rule->u.mime_type);
-      break;
     case FILTER_RULE_PATTERN:
       g_free (rule->u.pattern);
       break;
-    case FILTER_RULE_CUSTOM:
-      if (rule->u.custom.notify)
-	rule->u.custom.notify (rule->u.custom.data);
-      break;
+    case FILTER_RULE_MIME_TYPE:
     case FILTER_RULE_PIXBUF_FORMATS:
-      g_slist_free (rule->u.pixbuf_formats);
+      g_strfreev (rule->u.content_types);
       break;
     default:
       g_assert_not_reached ();
@@ -261,6 +258,7 @@ gtk_file_filter_finalize (GObject  *object)
   GtkFileFilter *filter = GTK_FILE_FILTER (object);
 
   g_slist_free_full (filter->rules, (GDestroyNotify)filter_rule_free);
+  g_strfreev (filter->attributes);
 
   g_free (filter->name);
 
@@ -436,21 +434,22 @@ gtk_file_filter_buildable_custom_tag_end (GtkBuildable *buildable,
     }
 }
 
-
 /**
  * gtk_file_filter_new:
- * 
+ *
  * Creates a new #GtkFileFilter with no rules added to it.
+ *
  * Such a filter doesn’t accept any files, so is not
  * particularly useful until you add rules with
  * gtk_file_filter_add_mime_type(), gtk_file_filter_add_pattern(),
- * or gtk_file_filter_add_custom(). To create a filter
- * that accepts any file, use:
+ * or gtk_file_filter_add_pixbuf_formats().
+ *
+ * To create a filter that accepts any file, use:
  * |[<!-- language="C" -->
  * GtkFileFilter *filter = gtk_file_filter_new ();
  * gtk_file_filter_add_pattern (filter, "*");
  * ]|
- * 
+ *
  * Returns: a new #GtkFileFilter
  **/
 GtkFileFilter *
@@ -464,14 +463,14 @@ gtk_file_filter_new (void)
  * @filter: a #GtkFileFilter
  * @name: (allow-none): the human-readable-name for the filter, or %NULL
  *   to remove any existing name.
- * 
- * Sets the human-readable name of the filter; this is the string
- * that will be displayed in the file selector user interface if
- * there is a selectable list of filters.
+ *
+ * Sets a human-readable name of the filter; this is the string
+ * that will be displayed in the file chooser if there is a selectable
+ * list of filters.
  **/
 void
 gtk_file_filter_set_name (GtkFileFilter *filter,
-			  const gchar   *name)
+                          const gchar   *name)
 {
   g_return_if_fail (GTK_IS_FILE_FILTER (filter));
 
@@ -487,18 +486,18 @@ gtk_file_filter_set_name (GtkFileFilter *filter,
 /**
  * gtk_file_filter_get_name:
  * @filter: a #GtkFileFilter
- * 
+ *
  * Gets the human-readable name for the filter. See gtk_file_filter_set_name().
- * 
+ *
  * Returns: (nullable): The human-readable name of the filter,
- *   or %NULL. This value is owned by GTK+ and must not
+ *   or %NULL. This value is owned by GTK and must not
  *   be modified or freed.
  **/
 const gchar *
 gtk_file_filter_get_name (GtkFileFilter *filter)
 {
   g_return_val_if_fail (GTK_IS_FILE_FILTER (filter), NULL);
-  
+
   return filter->name;
 }
 
@@ -506,31 +505,53 @@ static void
 file_filter_add_rule (GtkFileFilter *filter,
 		      FilterRule    *rule)
 {
-  filter->needed |= rule->needed;
   filter->rules = g_slist_append (filter->rules, rule);
+
+  gtk_filter_changed (GTK_FILTER (filter), GTK_FILTER_CHANGE_LESS_STRICT);
+}
+
+static void
+file_filter_add_attribute (GtkFileFilter *filter,
+                           const char    *attribute)
+{
+  int i;
+
+  if (filter->attributes)
+    for (i = 0; filter->attributes[i]; i++)
+      {
+        if (strcmp (filter->attributes[i], attribute) == 0)
+          return;
+      }
+  else
+    i = 0;
+
+  filter->attributes = (char **)g_renew (char **, filter->attributes, i + 2);
+  filter->attributes[i] = g_strdup (attribute);
+  filter->attributes[i + 1] = NULL;
 }
 
 /**
  * gtk_file_filter_add_mime_type:
  * @filter: A #GtkFileFilter
  * @mime_type: name of a MIME type
- * 
+ *
  * Adds a rule allowing a given mime type to @filter.
  **/
 void
 gtk_file_filter_add_mime_type (GtkFileFilter *filter,
-			       const gchar   *mime_type)
+                               const gchar   *mime_type)
 {
   FilterRule *rule;
-  
+
   g_return_if_fail (GTK_IS_FILE_FILTER (filter));
   g_return_if_fail (mime_type != NULL);
 
   rule = g_slice_new (FilterRule);
   rule->type = FILTER_RULE_MIME_TYPE;
-  rule->needed = GTK_FILE_FILTER_MIME_TYPE;
-  rule->u.mime_type = g_strdup (mime_type);
+  rule->u.content_types = g_new0 (char *, 2);
+  rule->u.content_types[0] = g_content_type_from_mime_type (mime_type);
 
+  file_filter_add_attribute (filter, G_FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE);
   file_filter_add_rule (filter, rule);
 }
 
@@ -552,90 +573,76 @@ gtk_file_filter_add_pattern (GtkFileFilter *filter,
 
   rule = g_slice_new (FilterRule);
   rule->type = FILTER_RULE_PATTERN;
-  rule->needed = GTK_FILE_FILTER_DISPLAY_NAME;
   rule->u.pattern = g_strdup (pattern);
 
+  file_filter_add_attribute (filter, G_FILE_ATTRIBUTE_STANDARD_DISPLAY_NAME);
   file_filter_add_rule (filter, rule);
 }
 
 /**
  * gtk_file_filter_add_pixbuf_formats:
  * @filter: a #GtkFileFilter
- * 
+ *
  * Adds a rule allowing image files in the formats supported
  * by GdkPixbuf.
+ *
+ * This is equivalent to calling gtk_file_filter_add_mime_type()
+ * for all the supported mime types.
  **/
 void
 gtk_file_filter_add_pixbuf_formats (GtkFileFilter *filter)
 {
   FilterRule *rule;
-  
+  GPtrArray *array;
+  GSList *formats, *l;
+
   g_return_if_fail (GTK_IS_FILE_FILTER (filter));
 
   rule = g_slice_new (FilterRule);
   rule->type = FILTER_RULE_PIXBUF_FORMATS;
-  rule->needed = GTK_FILE_FILTER_MIME_TYPE;
-  rule->u.pixbuf_formats = gdk_pixbuf_get_formats ();
-  file_filter_add_rule (filter, rule);
-}
 
+  array = g_ptr_array_new ();
 
-/**
- * gtk_file_filter_add_custom:
- * @filter: a #GtkFileFilter
- * @needed: bitfield of flags indicating the information that the custom
- *          filter function needs.
- * @func: callback function; if the function returns %TRUE, then
- *   the file will be displayed.
- * @data: data to pass to @func
- * @notify: function to call to free @data when it is no longer needed.
- * 
- * Adds rule to a filter that allows files based on a custom callback
- * function. The bitfield @needed which is passed in provides information
- * about what sorts of information that the filter function needs;
- * this allows GTK+ to avoid retrieving expensive information when
- * it isn’t needed by the filter.
- **/
-void
-gtk_file_filter_add_custom (GtkFileFilter         *filter,
-			    GtkFileFilterFlags     needed,
-			    GtkFileFilterFunc      func,
-			    gpointer               data,
-			    GDestroyNotify         notify)
-{
-  FilterRule *rule;
-  
-  g_return_if_fail (GTK_IS_FILE_FILTER (filter));
-  g_return_if_fail (func != NULL);
+  formats = gdk_pixbuf_get_formats ();
+  for (l = formats; l; l = l->next)
+    {
+      int i;
+      char **mime_types;
 
-  rule = g_slice_new (FilterRule);
-  rule->type = FILTER_RULE_CUSTOM;
-  rule->needed = needed;
-  rule->u.custom.func = func;
-  rule->u.custom.data = data;
-  rule->u.custom.notify = notify;
+      mime_types = gdk_pixbuf_format_get_mime_types (l->data);
 
+      for (i = 0; mime_types[i] != NULL; i++)
+        {
+          g_ptr_array_add (array, g_content_type_from_mime_type (mime_types[i]));
+        }
+    }
+  g_slist_free (formats);
+
+  g_ptr_array_add (array, NULL);
+
+  rule->u.content_types = (char **)g_ptr_array_free (array, FALSE);
+
+  file_filter_add_attribute (filter, G_FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE);
   file_filter_add_rule (filter, rule);
 }
 
 /**
- * gtk_file_filter_get_needed:
+ * gtk_file_filter_get_attributes:
  * @filter: a #GtkFileFilter
  * 
- * Gets the fields that need to be filled in for the #GtkFileFilterInfo
+ * Gets the attributes that need to be filled in for the #GFileInfo
  * passed to gtk_file_filter_filter()
  * 
  * This function will not typically be used by applications; it
  * is intended principally for use in the implementation of
  * #GtkFileChooser.
  * 
- * Returns: bitfield of flags indicating needed fields when
- *   calling gtk_file_filter_filter()
+ * Returns: (transfer none): the attributes
  **/
-GtkFileFilterFlags
-gtk_file_filter_get_needed (GtkFileFilter *filter)
+const char **
+gtk_file_filter_get_attributes (GtkFileFilter *filter)
 {
-  return filter->needed;
+  return (const char **)filter->attributes;
 }
 
 #ifdef GDK_WINDOWING_QUARTZ
@@ -652,65 +659,65 @@ NSArray * _gtk_file_filter_get_as_pattern_nsstrings (GtkFileFilter *filter)
       FilterRule *rule = tmp_list->data;
 
       switch (rule->type)
-	{
-	case FILTER_RULE_CUSTOM:
-	  [array release];
-          return NULL;
-	  break;
-	case FILTER_RULE_MIME_TYPE:
-	  {
-	    // convert mime-types to UTI
-	    NSString *mime_type_nsstring = [NSString stringWithUTF8String: rule->u.mime_type];
-	    NSString *uti_nsstring = (NSString *) UTTypeCreatePreferredIdentifierForTag (kUTTagClassMIMEType, (CFStringRef) mime_type_nsstring, NULL);
-	    if (uti_nsstring == NULL)
-	      {
-	        [array release];
-		return NULL;
-	      }
-	    [array addObject:uti_nsstring];
-	  }
-	  break;
-	case FILTER_RULE_PATTERN:
-	  {
-	    // patterns will need to be stripped of their leading *.
-	    GString *pattern = g_string_new (rule->u.pattern);
-	    if (strncmp (pattern->str, "*.", 2) == 0)
-	      {
-	        pattern = g_string_erase (pattern, 0, 2);
-	      }
-	    else if (strncmp (pattern->str, "*", 1) == 0)
-	      {
-	        pattern = g_string_erase (pattern, 0, 1);
-	      }
-	    gchar *pattern_c = g_string_free (pattern, FALSE);
-	    NSString *pattern_nsstring = [NSString stringWithUTF8String:pattern_c];
-	    g_free (pattern_c);
-	    [pattern_nsstring retain];
-	    [array addObject:pattern_nsstring];
-	  }
-	  break;
-	case FILTER_RULE_PIXBUF_FORMATS:
-	  {
-	    GSList *list;
+        {
+        case FILTER_RULE_MIME_TYPE:
+          {
+            // convert mime-types to UTI
+            NSString *mime_type_nsstring = [NSString stringWithUTF8String: rule->u.content_types[0]];
+            NSString *uti_nsstring = (NSString *) UTTypeCreatePreferredIdentifierForTag (kUTTagClassMIMEType, (CFStringRef) mime_type_nsstring, NULL);
+            if (uti_nsstring == NULL)
+              {
+                [array release];
+                return NULL;
+              }
+            [array addObject:uti_nsstring];
+          }
+          break;
 
-	    for (list = rule->u.pixbuf_formats; list; list = list->next)
-	      {
-		int i;
-		gchar **extensions;
+        case FILTER_RULE_PATTERN:
+          {
+            // patterns will need to be stripped of their leading *.
+            GString *pattern = g_string_new (rule->u.pattern);
+            if (strncmp (pattern->str, "*.", 2) == 0)
+              {
+                pattern = g_string_erase (pattern, 0, 2);
+              }
+            else if (strncmp (pattern->str, "*", 1) == 0)
+              {
+                pattern = g_string_erase (pattern, 0, 1);
+              }
+            gchar *pattern_c = g_string_free (pattern, FALSE);
+            NSString *pattern_nsstring = [NSString stringWithUTF8String:pattern_c];
+            g_free (pattern_c);
+            [pattern_nsstring retain];
+            [array addObject:pattern_nsstring];
+          }
+          break;
 
-		extensions = gdk_pixbuf_format_get_extensions (list->data);
+        case FILTER_RULE_PIXBUF_FORMATS:
+          {
+            GSList *formats, *l;
 
-		for (i = 0; extensions[i] != NULL; i++)
-		  {
-		    NSString *extension = [NSString stringWithUTF8String: extensions[i]];
-		    [extension retain];
-		    [array addObject:extension];
-		  }
-		g_strfreev (extensions);
-	      }
-	    break;
-	  }
-	}
+            formats = gdk_pixbuf_get_formats ();
+            for (l = formats; l; l = l->next)
+              {
+                int i;
+                gchar **extensions;
+
+                extensions = gdk_pixbuf_format_get_extensions (l->data);
+
+                for (i = 0; extensions[i] != NULL; i++)
+                  {
+                    NSString *extension = [NSString stringWithUTF8String: extensions[i]];
+                    [extension retain];
+                    [array addObject:extension];
+                  }
+                g_strfreev (extensions);
+              }
+            g_slist_free (formats);
+            break;
+          }
+       }
     }
   return array;
 }
@@ -729,131 +736,150 @@ _gtk_file_filter_get_as_patterns (GtkFileFilter      *filter)
       FilterRule *rule = tmp_list->data;
 
       switch (rule->type)
-	{
-	case FILTER_RULE_CUSTOM:
-	case FILTER_RULE_MIME_TYPE:
+        {
+        case FILTER_RULE_MIME_TYPE:
           g_ptr_array_free (array, TRUE);
           return NULL;
-	  break;
-	case FILTER_RULE_PATTERN:
+          break;
+
+        case FILTER_RULE_PATTERN:
           g_ptr_array_add (array, g_strdup (rule->u.pattern));
-	  break;
-	case FILTER_RULE_PIXBUF_FORMATS:
-	  {
-	    GSList *list;
+          break;
 
-	    for (list = rule->u.pixbuf_formats; list; list = list->next)
-	      {
-		int i;
-		gchar **extensions;
+        case FILTER_RULE_PIXBUF_FORMATS:
+          {
+            GSList *formats, *l;
 
-		extensions = gdk_pixbuf_format_get_extensions (list->data);
+            formats = gdk_pixbuf_get_formats ();
+            for (l = formats; l; l = l->next)
+              {
+                int i;
+                char **extensions;
 
-		for (i = 0; extensions[i] != NULL; i++)
+                extensions = gdk_pixbuf_format_get_extensions (l->data);
+
+                for (i = 0; extensions[i] != NULL; i++)
                   g_ptr_array_add (array, g_strdup_printf ("*.%s", extensions[i]));
 
-		g_strfreev (extensions);
-	      }
-	    break;
-	  }
+                g_strfreev (extensions);
+              }
+            g_slist_free (formats);
+            break;
+          }
         default:
           break;
-	}
+        }
     }
 
   g_ptr_array_add (array, NULL); /* Null terminate */
   return (char **)g_ptr_array_free (array, FALSE);
 }
 
-/**
- * gtk_file_filter_filter:
- * @filter: a #GtkFileFilter
- * @filter_info: a #GtkFileFilterInfo containing information
- *  about a file.
- * 
- * Tests whether a file should be displayed according to @filter.
- * The #GtkFileFilterInfo @filter_info should include
- * the fields returned from gtk_file_filter_get_needed().
- *
- * This function will not typically be used by applications; it
- * is intended principally for use in the implementation of
- * #GtkFileChooser.
- * 
- * Returns: %TRUE if the file should be displayed
- **/
-gboolean
-gtk_file_filter_filter (GtkFileFilter           *filter,
-			const GtkFileFilterInfo *filter_info)
+static GtkFilterMatch
+gtk_file_filter_get_strictness (GtkFilter *filter)
 {
+  GtkFileFilter *file_filter = GTK_FILE_FILTER (filter);
+
+  /* Handle only the documented cases for 'match all'
+   * and match none. There are of course other ways to
+   * make filters that do this.
+   */
+  if (file_filter->rules == NULL)
+    return GTK_FILTER_MATCH_NONE;
+
+  if (file_filter->rules->next == NULL)
+    {
+      FilterRule *rule = file_filter->rules->data;
+      if (rule->type == FILTER_RULE_PATTERN &&
+          strcmp (rule->u.pattern, "*") == 0)
+        return GTK_FILTER_MATCH_ALL;
+    }
+
+  return GTK_FILTER_MATCH_SOME;
+}
+
+static gboolean
+gtk_file_filter_match (GtkFilter *filter,
+                       gpointer   item)
+{
+  GtkFileFilter *file_filter = GTK_FILE_FILTER (filter);
+  GFileInfo *info = item;
   GSList *tmp_list;
 
-  for (tmp_list = filter->rules; tmp_list; tmp_list = tmp_list->next)
+  if (!G_IS_FILE_INFO (item))
+    return TRUE;
+
+  for (tmp_list = file_filter->rules; tmp_list; tmp_list = tmp_list->next)
     {
       FilterRule *rule = tmp_list->data;
 
-      if ((filter_info->contains & rule->needed) != rule->needed)
-	continue;
-
       switch (rule->type)
-	{
-	case FILTER_RULE_MIME_TYPE:
-          if (filter_info->mime_type != NULL)
-            {
-              gchar *filter_content_type, *rule_content_type;
-              gboolean match;
+        {
+        case FILTER_RULE_PATTERN:
+          {
+            const char *display_name;
 
-              filter_content_type = g_content_type_from_mime_type (filter_info->mime_type);
-              rule_content_type = g_content_type_from_mime_type (rule->u.mime_type);
-              match = filter_content_type != NULL &&
-                      rule_content_type != NULL &&
-                      g_content_type_is_a (filter_content_type, rule_content_type);
-              g_free (filter_content_type);
-              g_free (rule_content_type);
+            display_name = g_file_info_get_display_name (info);
+            if (display_name)
+              {
+                if (_gtk_fnmatch (rule->u.pattern, display_name, FALSE))
+                  return TRUE;
+              }
+          }
+          break;
 
-              if (match)
-                return TRUE;
-        }
-	  break;
-	case FILTER_RULE_PATTERN:
-	  if (filter_info->display_name != NULL &&
-	      _gtk_fnmatch (rule->u.pattern, filter_info->display_name, FALSE))
-	    return TRUE;
-	  break;
-	case FILTER_RULE_PIXBUF_FORMATS:
-	  {
-	    GSList *list;
+        case FILTER_RULE_MIME_TYPE:
+        case FILTER_RULE_PIXBUF_FORMATS:
+          {
+            const char *filter_content_type;
 
-	    if (!filter_info->mime_type)
-	      break;
+            filter_content_type = g_file_info_get_content_type (info);
+            if (filter_content_type)
+              {
+                int i;
 
-	    for (list = rule->u.pixbuf_formats; list; list = list->next)
-	      {
-		int i;
-		gchar **mime_types;
+                for (i = 0; rule->u.content_types[i]; i++)
+                  {
+                    if (g_content_type_is_a (filter_content_type, rule->u.content_types[i]))
+                      return TRUE;
+                  }
+              }
+          }
+          break;
 
-		mime_types = gdk_pixbuf_format_get_mime_types (list->data);
+          {
+            const char *filter_content_type;
 
-		for (i = 0; mime_types[i] != NULL; i++)
-		  {
-		    if (strcmp (mime_types[i], filter_info->mime_type) == 0)
-		      {
-			g_strfreev (mime_types);
-			return TRUE;
-		      }
-		  }
+            filter_content_type = g_file_info_get_content_type (info);
+            if (filter_content_type)
+              {
+                GSList *list;
 
-		g_strfreev (mime_types);
-	      }
-	    break;
-	  }
-	case FILTER_RULE_CUSTOM:
-	  if (rule->u.custom.func (filter_info, rule->u.custom.data))
-	    return TRUE;
-	  break;
+                for (list = rule->u.pixbuf_formats; list; list = list->next)
+                  {
+                    int i;
+                    char **mime_types;
+
+                    mime_types = gdk_pixbuf_format_get_mime_types (list->data);
+
+                    for (i = 0; mime_types[i] != NULL; i++)
+                      {
+                        if (strcmp (mime_types[i], filter_content_type) == 0)
+                          {
+                            g_strfreev (mime_types);
+                            return TRUE;
+                          }
+                      }
+
+                    g_strfreev (mime_types);
+                  }
+              }
+          }
+          break;
 
         default:
           break;
-	}
+        }
     }
 
   return FALSE;
@@ -877,33 +903,20 @@ gtk_file_filter_to_gvariant (GtkFileFilter *filter)
   for (l = filter->rules; l; l = l->next)
     {
       FilterRule *rule = l->data;
+      int i;
 
       switch (rule->type)
         {
         case FILTER_RULE_PATTERN:
           g_variant_builder_add (&builder, "(us)", 0, rule->u.pattern);
           break;
+
         case FILTER_RULE_MIME_TYPE:
-          g_variant_builder_add (&builder, "(us)", 1, rule->u.mime_type);
-          break;
         case FILTER_RULE_PIXBUF_FORMATS:
-          {
-	    GSList *f;
-
-	    for (f = rule->u.pixbuf_formats; f; f = f->next)
-	      {
-                GdkPixbufFormat *fmt = f->data;
-                gchar **mime_types;
-                int i;
-
-                mime_types = gdk_pixbuf_format_get_mime_types (fmt);
-                for (i = 0; mime_types[i]; i++)
-                  g_variant_builder_add (&builder, "(us)", 1, mime_types[i]);
-                g_strfreev (mime_types);
-              }
-          }
+          for (i = 0; rule->u.content_types[i]; i++)
+            g_variant_builder_add (&builder, "(us)", 1, rule->u.content_types[i]);
           break;
-        case FILTER_RULE_CUSTOM:
+
         default:
           break;
         }

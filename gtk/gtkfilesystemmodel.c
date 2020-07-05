@@ -29,6 +29,7 @@
 #include "gtktreedatalist.h"
 #include "gtktreednd.h"
 #include "gtktreemodel.h"
+#include "gtkfilter.h"
 
 /*** Structure: how GtkFileSystemModel works
  *
@@ -375,12 +376,6 @@ static gboolean
 node_should_be_filtered_out (GtkFileSystemModel *model, guint id)
 {
   FileModelNode *node = get_node (model, id);
-  GtkFileFilterInfo filter_info = { 0, };
-  GtkFileFilterFlags required;
-  gboolean result;
-  char *mime_type = NULL;
-  char *filename = NULL;
-  char *uri = NULL;
 
   if (node->info == NULL)
     return TRUE;
@@ -388,57 +383,10 @@ node_should_be_filtered_out (GtkFileSystemModel *model, guint id)
   if (model->filter == NULL)
     return FALSE;
 
-  /* fill info */
-  required = gtk_file_filter_get_needed (model->filter);
+  if (!g_file_info_has_attribute (node->info, "standard::file"))
+    g_file_info_set_attribute_object (node->info, "standard::file", G_OBJECT (node->file));
 
-  filter_info.contains = GTK_FILE_FILTER_DISPLAY_NAME;
-  filter_info.display_name = g_file_info_get_display_name (node->info);
-
-  if (required & GTK_FILE_FILTER_MIME_TYPE)
-    {
-      const char *s = g_file_info_get_content_type (node->info);
-
-      if (!s)
-        s = g_file_info_get_attribute_string (node->info, G_FILE_ATTRIBUTE_STANDARD_FAST_CONTENT_TYPE);
-
-      if (s)
-	{
-	  mime_type = g_content_type_get_mime_type (s);
-	  if (mime_type)
-	    {
-	      filter_info.mime_type = mime_type;
-	      filter_info.contains |= GTK_FILE_FILTER_MIME_TYPE;
-	    }
-	}
-    }
-
-  if (required & GTK_FILE_FILTER_FILENAME)
-    {
-      filename = g_file_get_path (node->file);
-      if (filename)
-        {
-          filter_info.filename = filename;
-	  filter_info.contains |= GTK_FILE_FILTER_FILENAME;
-        }
-    }
-
-  if (required & GTK_FILE_FILTER_URI)
-    {
-      uri = g_file_get_uri (node->file);
-      if (uri)
-        {
-          filter_info.uri = uri;
-	  filter_info.contains |= GTK_FILE_FILTER_URI;
-        }
-    }
-
-  result = !gtk_file_filter_filter (model->filter, &filter_info);
-
-  g_free (mime_type);
-  g_free (filename);
-  g_free (uri);
-
-  return result;
+  return !gtk_filter_match (GTK_FILTER (model->filter), node->info);
 }
 
 static gboolean
