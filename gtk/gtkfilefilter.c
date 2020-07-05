@@ -110,7 +110,6 @@ struct _FilterRule
   union {
     char *pattern;
     char **content_types;
-    GSList *pixbuf_formats;
   } u;
 };
 
@@ -842,36 +841,6 @@ gtk_file_filter_match (GtkFilter *filter,
                   {
                     if (g_content_type_is_a (filter_content_type, rule->u.content_types[i]))
                       return TRUE;
-                  }
-              }
-          }
-          break;
-
-          {
-            const char *filter_content_type;
-
-            filter_content_type = g_file_info_get_content_type (info);
-            if (filter_content_type)
-              {
-                GSList *list;
-
-                for (list = rule->u.pixbuf_formats; list; list = list->next)
-                  {
-                    int i;
-                    char **mime_types;
-
-                    mime_types = gdk_pixbuf_format_get_mime_types (list->data);
-
-                    for (i = 0; mime_types[i] != NULL; i++)
-                      {
-                        if (strcmp (mime_types[i], filter_content_type) == 0)
-                          {
-                            g_strfreev (mime_types);
-                            return TRUE;
-                          }
-                      }
-
-                    g_strfreev (mime_types);
                   }
               }
           }
