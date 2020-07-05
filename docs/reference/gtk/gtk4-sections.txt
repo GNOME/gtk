@@ -1413,18 +1413,13 @@ GtkFileChooserButtonPrivate
 <SECTION>
 <FILE>gtkfilefilter</FILE>
 GtkFileFilter
-GtkFileFilterInfo
-GtkFileFilterFlags
-GtkFileFilterFunc
 gtk_file_filter_new
 gtk_file_filter_set_name
 gtk_file_filter_get_name
 gtk_file_filter_add_mime_type
 gtk_file_filter_add_pattern
 gtk_file_filter_add_pixbuf_formats
-gtk_file_filter_add_custom
-gtk_file_filter_get_needed
-gtk_file_filter_filter
+gtk_file_filter_get_attributes
 
 <SUBSECTION Serialization>
 gtk_file_filter_new_from_gvariant

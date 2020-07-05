@@ -118,17 +118,6 @@ response_cb (GtkDialog *dialog,
   g_main_context_wakeup (NULL);
 }
 
-static gboolean
-no_backup_files_filter (const GtkFileFilterInfo *filter_info,
-			gpointer                 data)
-{
-  gsize len = filter_info->display_name ? strlen (filter_info->display_name) : 0;
-  if (len > 0 && filter_info->display_name[len - 1] == '~')
-    return 0;
-  else
-    return 1;
-}
-
 static void
 filter_changed (GtkFileChooserDialog *dialog,
 		gpointer              data)
@@ -393,18 +382,13 @@ main (int argc, char **argv)
 
   /* Make this filter the default */
   gtk_file_chooser_set_filter (GTK_FILE_CHOOSER (dialog), filter);
-
-  filter = gtk_file_filter_new ();
-  gtk_file_filter_set_name (filter, "No backup files");
-  gtk_file_filter_add_custom (filter, GTK_FILE_FILTER_DISPLAY_NAME,
-			      no_backup_files_filter, NULL, NULL);
-  gtk_file_filter_add_mime_type (filter, "image/png");
-  gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (dialog), filter);
+  g_object_unref (filter);
 
   filter = gtk_file_filter_new ();
   gtk_file_filter_set_name (filter, "Starts with D");
   gtk_file_filter_add_pattern (filter, "D*");
   gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (dialog), filter);
+  g_object_unref (filter);
 
   g_signal_connect (dialog, "notify::filter",
 		    G_CALLBACK (filter_changed), NULL);
@@ -414,11 +398,13 @@ main (int argc, char **argv)
   gtk_file_filter_add_mime_type (filter, "image/jpeg");
   gtk_file_filter_add_mime_type (filter, "image/png");
   gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (dialog), filter);
+  g_object_unref (filter);
 
   filter = gtk_file_filter_new ();
   gtk_file_filter_set_name (filter, "Images");
   gtk_file_filter_add_pixbuf_formats (filter);
   gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (dialog), filter);
+  g_object_unref (filter);
 
   /* Choices */
 

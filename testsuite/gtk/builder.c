@@ -2387,7 +2387,6 @@ test_file_filter (void)
   GtkBuilder *builder;
   GObject *obj;
   GtkFileFilter *filter;
-  GtkFileFilterInfo info;
 
   const gchar buffer[] =
     "<interface>"
@@ -2409,17 +2408,8 @@ test_file_filter (void)
   g_assert (GTK_IS_FILE_FILTER (obj));
   filter = GTK_FILE_FILTER (obj);
   g_assert_cmpstr (gtk_file_filter_get_name (filter), ==, "Text and Images");
-  g_assert (gtk_file_filter_get_needed (filter) & GTK_FILE_FILTER_MIME_TYPE);
-  g_assert (gtk_file_filter_get_needed (filter) & GTK_FILE_FILTER_DISPLAY_NAME);
-
-  info.filename = "test1.txt";
-  info.display_name = "test1.txt";
-  info.contains = GTK_FILE_FILTER_FILENAME | GTK_FILE_FILTER_DISPLAY_NAME;
-  g_assert (gtk_file_filter_filter (filter, &info));
-
-  info.mime_type = "application/x-pdf";
-  info.contains = GTK_FILE_FILTER_MIME_TYPE;
-  g_assert (!gtk_file_filter_filter (filter, &info));
+  g_assert_true (g_strv_contains (gtk_file_filter_get_attributes (filter), G_FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE));
+  g_assert_true (g_strv_contains (gtk_file_filter_get_attributes (filter), G_FILE_ATTRIBUTE_STANDARD_DISPLAY_NAME));
 
   g_object_unref (builder);
 }
