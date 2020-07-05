@@ -57,6 +57,9 @@ GDK_AVAILABLE_IN_ALL
 const char *    gtk_string_list2_get_string      (GtkStringList2         *self,
                                                  guint                  position);
 
+GDK_AVAILABLE_IN_ALL
+guint64         gtk_string_list2_get_size  (GtkStringList2 *self);
+
 G_END_DECLS
 
 #endif /* __GTK_STRING_LIST2_H__ */
