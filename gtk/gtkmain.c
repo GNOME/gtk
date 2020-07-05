@@ -2683,13 +2683,12 @@ propagate_event (GtkWidget *widget,
               gtk_widget_is_sensitive (window))
             handled_event = propagate_func (window, event);
 
-          /**
+          /*
            * If the event wasn't handled at window level
            * propagate it up for native OS handling
            */
-          if (!handled_event && !captured) {
-            handled_event = gdk_display_propagate_native_event(window_display, event);
-          }
+          if (!handled_event && !captured)
+            handled_event = GDK_PRIVATE_CALL (gdk_display_propagate_native_event) (window_display, event);
 
           g_object_unref (widget);
           return handled_event;
