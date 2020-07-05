@@ -37,7 +37,9 @@ GDK_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (GtkStringObject, gtk_string_object, GTK, STRING_OBJECT, GObject)
 
 GDK_AVAILABLE_IN_ALL
-const char *         gtk_string_object_get_string (GtkStringObject *self);
+GtkStringObject *       gtk_string_object_new        (const char      *string);
+GDK_AVAILABLE_IN_ALL
+const char *            gtk_string_object_get_string (GtkStringObject *self);
 
 #define GTK_TYPE_STRING_LIST (gtk_string_list_get_type ())
 
@@ -45,30 +47,29 @@ GDK_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (GtkStringList, gtk_string_list, GTK, STRING_LIST, GObject)
 
 GDK_AVAILABLE_IN_ALL
-GtkStringList * gtk_string_list_new             (const char **strings);
+GtkStringList * gtk_string_list_new             (const char * const    *strings);
 
 GDK_AVAILABLE_IN_ALL
-void            gtk_string_list_append          (GtkStringList *self,
-                                                 const char    *string);
+void            gtk_string_list_append          (GtkStringList         *self,
+                                                 const char            *string);
 
 GDK_AVAILABLE_IN_ALL
-void            gtk_string_list_take            (GtkStringList *self,
-                                                 char          *string);
+void            gtk_string_list_take            (GtkStringList         *self,
+                                                 char                  *string);
 
 GDK_AVAILABLE_IN_ALL
-void            gtk_string_list_remove          (GtkStringList *self,
-                                                 guint          position);
+void            gtk_string_list_remove          (GtkStringList         *self,
+                                                 guint                  position);
 
 GDK_AVAILABLE_IN_ALL
-void            gtk_string_list_splice          (GtkStringList  *self,
-                                                 guint           position,
-                                                 guint           n_removals,
-                                                 const char    **additions,
-                                                 guint           n_additions);
+void            gtk_string_list_splice          (GtkStringList         *self,
+                                                 guint                  position,
+                                                 guint                  n_removals,
+                                                 const char * const    *additions);
 
 GDK_AVAILABLE_IN_ALL
-const char *    gtk_string_list_get_string      (GtkStringList *self,
-                                                 guint          position);
+const char *    gtk_string_list_get_string      (GtkStringList         *self,
+                                                 guint                  position);
 
 G_END_DECLS
 

@@ -40,7 +40,6 @@
 
 enum {
   PROP_0,
-  PROP_ITEM_TYPE,
   PROP_MODEL,
   NUM_PROPERTIES
 };
@@ -64,7 +63,6 @@ struct _GtkFlattenListModel
 {
   GObject parent_instance;
 
-  GType item_type;
   GListModel *model;
   GtkRbTree *items; /* NULL if model == NULL */
 };
@@ -157,9 +155,7 @@ gtk_flatten_list_model_get_nth_model (GtkRbTree *tree,
 static GType
 gtk_flatten_list_model_get_item_type (GListModel *list)
 {
-  GtkFlattenListModel *self = GTK_FLATTEN_LIST_MODEL (list);
-
-  return self->item_type;
+  return G_TYPE_OBJECT;
 }
 
 static guint
@@ -299,7 +295,6 @@ gtk_flatten_list_model_add_items (GtkFlattenListModel *self,
     {
       node = gtk_rb_tree_insert_before (self->items, after);
       node->model = g_list_model_get_item (self->model, position + i);
-      g_warn_if_fail (g_type_is_a (g_list_model_get_item_type (node->model), self->item_type));
       g_signal_connect (node->model,
                         "items-changed",
                         G_CALLBACK (gtk_flatten_list_model_items_changed_cb),
@@ -321,10 +316,6 @@ gtk_flatten_list_model_set_property (GObject      *object,
 
   switch (prop_id)
     {
-    case PROP_ITEM_TYPE:
-      self->item_type = g_value_get_gtype (value);
-      break;
-
     case PROP_MODEL:
       gtk_flatten_list_model_set_model (self, g_value_get_object (value));
       break;
@@ -345,10 +336,6 @@ gtk_flatten_list_model_get_property (GObject     *object,
 
   switch (prop_id)
     {
-    case PROP_ITEM_TYPE:
-      g_value_set_gtype (value, self->item_type);
-      break;
-
     case PROP_MODEL:
       g_value_set_object (value, self->model);
       break;
@@ -417,18 +404,6 @@ gtk_flatten_list_model_class_init (GtkFlattenListModelClass *class)
   gobject_class->dispose = gtk_flatten_list_model_dispose;
 
   /**
-   * GtkFlattenListModel:item-type:
-   *
-   * The #GType for elements of this object
-   */
-  properties[PROP_ITEM_TYPE] =
-      g_param_spec_gtype ("item-type",
-                          P_("Item type"),
-                          P_("The type of elements of this object"),
-                          G_TYPE_OBJECT,
-                          GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_EXPLICIT_NOTIFY);
-
-  /**
    * GtkFlattenListModel:model:
    *
    * The model being flattened
@@ -450,26 +425,20 @@ gtk_flatten_list_model_init (GtkFlattenListModel *self)
 
 /**
  * gtk_flatten_list_model_new:
- * @item_type: The type of items in the to-be-flattened models
- * @model: (nullable) (transfer none): the item to be flattened
+ * @model: (nullable) (transfer none): the model to be flattened
  *
- * Creates a new #GtkFlattenListModel that flattens @list. The
- * models returned by @model must conform to the given @item_type,
- * either by having an identical type or a subtype.
+ * Creates a new #GtkFlattenListModel that flattens @list.
  *
  * Returns: a new #GtkFlattenListModel
  **/
 GtkFlattenListModel *
-gtk_flatten_list_model_new (GType       item_type,
-                            GListModel *model)
+gtk_flatten_list_model_new (GListModel *model)
 {
   GtkFlattenListModel *result;
 
-  g_return_val_if_fail (g_type_is_a (item_type, G_TYPE_OBJECT), NULL);
   g_return_val_if_fail (model == NULL || G_IS_LIST_MODEL (model), NULL);
 
   result = g_object_new (GTK_TYPE_FLATTEN_LIST_MODEL,
-                         "item-type", item_type,
                          "model", model,
                          NULL);
 
@@ -481,8 +450,7 @@ gtk_flatten_list_model_new (GType       item_type,
  * @self: a #GtkFlattenListModel
  * @model: (nullable) (transfer none): the new model or %NULL
  *
- * Sets a new model to be flattened. The model must contain items of
- * #GListModel that conform to the item type of @self.
+ * Sets a new model to be flattened.
  **/
 void
 gtk_flatten_list_model_set_model (GtkFlattenListModel *self,
@@ -492,10 +460,6 @@ gtk_flatten_list_model_set_model (GtkFlattenListModel *self,
 
   g_return_if_fail (GTK_IS_FLATTEN_LIST_MODEL (self));
   g_return_if_fail (model == NULL || G_IS_LIST_MODEL (model));
-  if (model)
-    {
-      g_return_if_fail (g_type_is_a (g_list_model_get_item_type (model), G_TYPE_LIST_MODEL));
-    }
 
   if (self->model == model)
     return;

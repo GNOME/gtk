@@ -62,15 +62,16 @@ static GParamSpec *properties[N_PROPS] = { NULL, };
 static GType
 gtk_multi_selection_get_item_type (GListModel *list)
 {
-  GtkMultiSelection *self = GTK_MULTI_SELECTION (list);
-
-  return g_list_model_get_item_type (self->model);
+  return G_TYPE_OBJECT;
 }
 
 static guint
 gtk_multi_selection_get_n_items (GListModel *list)
 {
   GtkMultiSelection *self = GTK_MULTI_SELECTION (list);
+
+  if (self->model == NULL)
+    return 0;
 
   return g_list_model_get_n_items (self->model);
 }
@@ -80,6 +81,9 @@ gtk_multi_selection_get_item (GListModel *list,
                               guint       position)
 {
   GtkMultiSelection *self = GTK_MULTI_SELECTION (list);
+
+  if (self->model == NULL)
+    return NULL;
 
   return g_list_model_get_item (self->model, position);
 }
@@ -174,7 +178,7 @@ gtk_multi_selection_set_selection (GtkSelectionModel *model,
   max = gtk_bitset_get_maximum (changes);
 
   /* sanity check */
-  n_items = g_list_model_get_n_items (self->model);
+  n_items = self->model ? g_list_model_get_n_items (self->model) : 0;
   if (max >= n_items)
     {
       gtk_bitset_remove_range_closed (changes, n_items, max);
@@ -291,12 +295,7 @@ gtk_multi_selection_set_property (GObject      *object,
   switch (prop_id)
     {
     case PROP_MODEL:
-      self->model = g_value_dup_object (value);
-      g_warn_if_fail (self->model != NULL);
-      g_signal_connect (self->model,
-                        "items-changed",
-                        G_CALLBACK (gtk_multi_selection_items_changed_cb),
-                        self);
+      gtk_multi_selection_set_model (self, g_value_get_object (value));
       break;
 
     default:
@@ -357,7 +356,7 @@ gtk_multi_selection_class_init (GtkMultiSelectionClass *klass)
                          P_("Model"),
                          P_("List managed by this selection"),
                          G_TYPE_LIST_MODEL,
-                         G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+                         G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   g_object_class_install_properties (gobject_class, N_PROPS, properties);
 }
@@ -401,4 +400,50 @@ gtk_multi_selection_get_model (GtkMultiSelection *self)
   g_return_val_if_fail (GTK_IS_MULTI_SELECTION (self), NULL);
 
   return self->model;
+}
+
+/**
+ * gtk_multi_selection_set_model:
+ * @self: a #GtkMultiSelection
+ * @model: (allow-none): A #GListModel to wrap
+ *
+ * Sets the model that @self should wrap. If @model is %NULL, @self
+ * will be empty.
+ **/
+void
+gtk_multi_selection_set_model (GtkMultiSelection *self,
+                               GListModel        *model)
+{
+  guint n_items_before;
+
+  g_return_if_fail (GTK_IS_MULTI_SELECTION (self));
+  g_return_if_fail (model == NULL || G_IS_LIST_MODEL (model));
+
+  if (self->model == model)
+    return;
+
+  n_items_before = self->model ? g_list_model_get_n_items (self->model) : 0;
+  gtk_multi_selection_clear_model (self);
+
+  if (model)
+    {
+      self->model = g_object_ref (model);
+      g_signal_connect (self->model,
+                        "items-changed",
+                        G_CALLBACK (gtk_multi_selection_items_changed_cb),
+                        self);
+      gtk_multi_selection_items_changed_cb (self->model,
+                                            0,
+                                            n_items_before,
+                                            g_list_model_get_n_items (model),
+                                            self);
+    }
+  else
+    {
+      gtk_bitset_remove_all (self->selected);
+      g_hash_table_remove_all (self->items);
+      g_list_model_items_changed (G_LIST_MODEL (self), 0, n_items_before, 0);
+    }
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_MODEL]);
 }

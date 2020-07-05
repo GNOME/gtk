@@ -53,8 +53,7 @@ G_DECLARE_FINAL_TYPE (GtkMapListModel, gtk_map_list_model, GTK, MAP_LIST_MODEL, 
 typedef gpointer (* GtkMapListModelMapFunc) (gpointer item, gpointer user_data);
 
 GDK_AVAILABLE_IN_ALL
-GtkMapListModel *       gtk_map_list_model_new                  (GType                   item_type,
-                                                                 GListModel             *model,
+GtkMapListModel *       gtk_map_list_model_new                  (GListModel             *model,
                                                                  GtkMapListModelMapFunc  map_func,
                                                                  gpointer                user_data,
                                                                  GDestroyNotify          user_destroy);

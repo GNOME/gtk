@@ -35,6 +35,9 @@ GListModel *    gtk_multi_selection_new                (GListModel           *mo
 
 GDK_AVAILABLE_IN_ALL
 GListModel *    gtk_multi_selection_get_model          (GtkMultiSelection    *self);
+GDK_AVAILABLE_IN_ALL
+void            gtk_multi_selection_set_model          (GtkMultiSelection    *self,
+                                                        GListModel           *model);
 
 G_END_DECLS
 

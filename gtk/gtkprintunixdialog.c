@@ -806,7 +806,7 @@ gtk_print_unix_dialog_init (GtkPrintUnixDialog *dialog)
   g_list_store_append (store, dialog->page_setup_list);
   g_list_store_append (store, dialog->custom_paper_list);
   g_list_store_append (store, dialog->manage_papers_list);
-  paper_size_list = G_LIST_MODEL (gtk_flatten_list_model_new (GTK_TYPE_PAGE_SETUP, G_LIST_MODEL (store)));
+  paper_size_list = G_LIST_MODEL (gtk_flatten_list_model_new (G_LIST_MODEL (store)));
   gtk_drop_down_set_model (GTK_DROP_DOWN (dialog->paper_size_combo), paper_size_list);
   g_object_unref (store);
   g_object_unref (paper_size_list);
@@ -1056,7 +1056,7 @@ load_print_backends (GtkPrintUnixDialog *dialog)
       g_list_store_append (lists, gtk_print_backend_get_printers (backend));
     }
 
-  model = G_LIST_MODEL (gtk_flatten_list_model_new (GTK_TYPE_PRINTER, G_LIST_MODEL (lists)));
+  model = G_LIST_MODEL (gtk_flatten_list_model_new (G_LIST_MODEL (lists)));
 
   g_object_unref (lists);
 

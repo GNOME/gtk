@@ -42,7 +42,6 @@
 
 enum {
   PROP_0,
-  PROP_ITEM_TYPE,
   PROP_MODEL,
   PROP_SORTER,
   NUM_PROPERTIES
@@ -54,7 +53,6 @@ struct _GtkSortListModel
 {
   GObject parent_instance;
 
-  GType item_type;
   GListModel *model;
   GtkSorter *sorter;
 
@@ -89,9 +87,7 @@ gtk_sort_list_entry_free (gpointer data)
 static GType
 gtk_sort_list_model_get_item_type (GListModel *list)
 {
-  GtkSortListModel *self = GTK_SORT_LIST_MODEL (list);
-
-  return self->item_type;
+  return G_TYPE_OBJECT;
 }
 
 static guint
@@ -262,10 +258,6 @@ gtk_sort_list_model_set_property (GObject      *object,
 
   switch (prop_id)
     {
-    case PROP_ITEM_TYPE:
-      self->item_type = g_value_get_gtype (value);
-      break;
-
     case PROP_MODEL:
       gtk_sort_list_model_set_model (self, g_value_get_object (value));
       break;
@@ -290,10 +282,6 @@ gtk_sort_list_model_get_property (GObject     *object,
 
   switch (prop_id)
     {
-    case PROP_ITEM_TYPE:
-      g_value_set_gtype (value, self->item_type);
-      break;
-
     case PROP_MODEL:
       g_value_set_object (value, self->model);
       break;
@@ -406,18 +394,6 @@ gtk_sort_list_model_class_init (GtkSortListModelClass *class)
                             GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkSortListModel:item-type:
-   *
-   * The #GType for items of this model
-   */
-  properties[PROP_ITEM_TYPE] =
-      g_param_spec_gtype ("item-type",
-                          P_("Item type"),
-                          P_("The type of items of this list"),
-                          G_TYPE_OBJECT,
-                          GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_EXPLICIT_NOTIFY);
-
-  /**
    * GtkSortListModel:model:
    *
    * The model being sorted
@@ -439,7 +415,7 @@ gtk_sort_list_model_init (GtkSortListModel *self)
 
 /**
  * gtk_sort_list_model_new:
- * @model: the model to sort
+ * @model: (allow-none): the model to sort
  * @sorter: (allow-none): the #GtkSorter to sort @model with
  *
  * Creates a new sort list model that uses the @sorter to sort @model.
@@ -452,36 +428,15 @@ gtk_sort_list_model_new (GListModel *model,
 {
   GtkSortListModel *result;
 
-  g_return_val_if_fail (G_IS_LIST_MODEL (model), NULL);
+  g_return_val_if_fail (model == NULL || G_IS_LIST_MODEL (model), NULL);
   g_return_val_if_fail (sorter == NULL || GTK_IS_SORTER (sorter), NULL);
 
   result = g_object_new (GTK_TYPE_SORT_LIST_MODEL,
-                         "item-type", g_list_model_get_item_type (model),
                          "model", model,
                          "sorter", sorter,
                          NULL);
 
   return result;
-}
-
-/**
- * gtk_sort_list_model_new_for_type:
- * @item_type: the type of the items that will be returned
- *
- * Creates a new empty sort list model set up to return items of type @item_type.
- * It is up to the application to set a proper sort function and model to ensure
- * the item type is matched.
- *
- * Returns: a new #GtkSortListModel
- **/
-GtkSortListModel *
-gtk_sort_list_model_new_for_type (GType item_type)
-{
-  g_return_val_if_fail (g_type_is_a (item_type, G_TYPE_OBJECT), NULL);
-
-  return g_object_new (GTK_TYPE_SORT_LIST_MODEL,
-                       "item-type", item_type,
-                       NULL);
 }
 
 /**
@@ -500,10 +455,6 @@ gtk_sort_list_model_set_model (GtkSortListModel *self,
 
   g_return_if_fail (GTK_IS_SORT_LIST_MODEL (self));
   g_return_if_fail (model == NULL || G_IS_LIST_MODEL (model));
-  if (model)
-    {
-      g_return_if_fail (g_type_is_a (g_list_model_get_item_type (model), self->item_type));
-    }
 
   if (self->model == model)
     return;

@@ -188,7 +188,7 @@ constraint_view_init (ConstraintView *self)
   g_list_store_append (list, children);
   g_list_store_append (list, guides);
   g_list_store_append (list, constraints);
-  self->model = G_LIST_MODEL (gtk_flatten_list_model_new (G_TYPE_OBJECT, G_LIST_MODEL (list)));
+  self->model = G_LIST_MODEL (gtk_flatten_list_model_new (G_LIST_MODEL (list)));
   g_object_unref (children);
   g_object_unref (guides);
   g_object_unref (constraints);

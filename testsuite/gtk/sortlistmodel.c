@@ -203,7 +203,7 @@ new_model (gpointer model)
       g_object_unref (sorter);
     }
   else
-    result = gtk_sort_list_model_new_for_type (G_TYPE_OBJECT);
+    result = gtk_sort_list_model_new (NULL, NULL);
 
   changes = g_string_new ("");
   g_object_set_qdata_full (G_OBJECT(result), changes_quark, changes, free_changes);

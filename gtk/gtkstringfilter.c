@@ -110,9 +110,9 @@ gtk_string_filter_match (GtkFilter *filter,
       !gtk_expression_evaluate (self->expression, item, &value))
     return FALSE;
   s = g_value_get_string (&value);
-  if (s == NULL)
-    return FALSE;
   prepared = gtk_string_filter_prepare (self, s);
+  if (prepared == NULL)
+    return FALSE;
 
   switch (self->match_mode)
     {
