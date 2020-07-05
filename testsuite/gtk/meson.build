@@ -10,6 +10,7 @@ endif
 tests = [
   ['accel'],
   ['accessible'],
+  ['accessor-apis'],
   ['action'],
   ['adjustment'],
   ['bitset'],
