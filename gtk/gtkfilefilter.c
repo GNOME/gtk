@@ -100,13 +100,12 @@ struct _GtkFileFilter
   gchar *name;
   GSList *rules;
 
-  GtkFileFilterFlags needed;
+  char **attributes;
 };
 
 struct _FilterRule
 {
   FilterRuleType type;
-  GtkFileFilterFlags needed;
 
   union {
     gchar *pattern;
@@ -253,6 +252,7 @@ gtk_file_filter_finalize (GObject  *object)
   GtkFileFilter *filter = GTK_FILE_FILTER (object);
 
   g_slist_free_full (filter->rules, (GDestroyNotify)filter_rule_free);
+  g_strfreev (filter->attributes);
 
   g_free (filter->name);
 
@@ -497,8 +497,24 @@ static void
 file_filter_add_rule (GtkFileFilter *filter,
 		      FilterRule    *rule)
 {
-  filter->needed |= rule->needed;
   filter->rules = g_slist_append (filter->rules, rule);
+}
+
+static void
+file_filter_add_attribute (GtkFileFilter *filter,
+                           const char    *attribute)
+{
+  int i;
+
+  for (i = 0; filter->attributes[i]; i++)
+    {
+      if (strcmp (filter->attributes[i], attribute) == 0)
+        return;
+    }
+
+  filter->attributes = (char **)g_renew (char **, filter->attributes, i + 2);
+  filter->attributes[i] = g_strdup (attribute);
+  filter->attributes[i + 1] = NULL;
 }
 
 /**
@@ -519,9 +535,9 @@ gtk_file_filter_add_mime_type (GtkFileFilter *filter,
 
   rule = g_slice_new (FilterRule);
   rule->type = FILTER_RULE_MIME_TYPE;
-  rule->needed = GTK_FILE_FILTER_MIME_TYPE;
   rule->u.mime_type = g_strdup (mime_type);
 
+  file_filter_add_attribute (filter, G_FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE);
   file_filter_add_rule (filter, rule);
 }
 
@@ -543,9 +559,9 @@ gtk_file_filter_add_pattern (GtkFileFilter *filter,
 
   rule = g_slice_new (FilterRule);
   rule->type = FILTER_RULE_PATTERN;
-  rule->needed = GTK_FILE_FILTER_DISPLAY_NAME;
   rule->u.pattern = g_strdup (pattern);
 
+  file_filter_add_attribute (filter, G_FILE_ATTRIBUTE_STANDARD_DISPLAY_NAME);
   file_filter_add_rule (filter, rule);
 }
 
@@ -565,29 +581,29 @@ gtk_file_filter_add_pixbuf_formats (GtkFileFilter *filter)
 
   rule = g_slice_new (FilterRule);
   rule->type = FILTER_RULE_PIXBUF_FORMATS;
-  rule->needed = GTK_FILE_FILTER_MIME_TYPE;
   rule->u.pixbuf_formats = gdk_pixbuf_get_formats ();
+
+  file_filter_add_attribute (filter, G_FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE);
   file_filter_add_rule (filter, rule);
 }
 
 /**
- * gtk_file_filter_get_needed:
+ * gtk_file_filter_get_attributes:
  * @filter: a #GtkFileFilter
  * 
- * Gets the fields that need to be filled in for the #GtkFileFilterInfo
+ * Gets the attributes that need to be filled in for the #GFileInfo
  * passed to gtk_file_filter_filter()
  * 
  * This function will not typically be used by applications; it
  * is intended principally for use in the implementation of
  * #GtkFileChooser.
  * 
- * Returns: bitfield of flags indicating needed fields when
- *   calling gtk_file_filter_filter()
+ * Returns: (transfer none): the attributes
  **/
-GtkFileFilterFlags
-gtk_file_filter_get_needed (GtkFileFilter *filter)
+const char **
+gtk_file_filter_get_attributes (GtkFileFilter *filter)
 {
-  return filter->needed;
+  return (const char **)filter->attributes;
 }
 
 #ifdef GDK_WINDOWING_QUARTZ

@@ -34,24 +34,6 @@ G_BEGIN_DECLS
 
 typedef struct _GtkFileFilter     GtkFileFilter;
 
-/**
- * GtkFileFilterFlags:
- * @GTK_FILE_FILTER_FILENAME: the filename of the file being tested
- * @GTK_FILE_FILTER_URI: the URI for the file being tested
- * @GTK_FILE_FILTER_DISPLAY_NAME: the string that will be used to 
- *   display the file in the file chooser
- * @GTK_FILE_FILTER_MIME_TYPE: the mime type of the file
- * 
- * These flags indicate what parts of a #GtkFileFilterInfo struct
- * are filled or need to be filled. 
- */
-typedef enum {
-  GTK_FILE_FILTER_FILENAME     = 1 << 0,
-  GTK_FILE_FILTER_URI          = 1 << 1,
-  GTK_FILE_FILTER_DISPLAY_NAME = 1 << 2,
-  GTK_FILE_FILTER_MIME_TYPE    = 1 << 3
-} GtkFileFilterFlags;
-
 GDK_AVAILABLE_IN_ALL
 GType gtk_file_filter_get_type (void) G_GNUC_CONST;
 
@@ -73,7 +55,7 @@ GDK_AVAILABLE_IN_ALL
 void gtk_file_filter_add_pixbuf_formats (GtkFileFilter      *filter);
 
 GDK_AVAILABLE_IN_ALL
-GtkFileFilterFlags gtk_file_filter_get_needed (GtkFileFilter           *filter);
+const char **      gtk_file_filter_get_attributes (GtkFileFilter           *filter);
 GDK_AVAILABLE_IN_ALL
 gboolean           gtk_file_filter_filter     (GtkFileFilter           *filter,
                                                GFileInfo               *info);
