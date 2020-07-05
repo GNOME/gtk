@@ -24,6 +24,7 @@ typedef struct {
   GListModel * (* create_model) (guint n_items);
   void         (* append)       (GListModel *model, const char *s);
   void         (* insert)       (GListModel *model, guint pos, const char *s);
+  guint64      (* size)         (GListModel *model);
 } Model;
 
 static GListModel *
@@ -216,7 +217,7 @@ do_random_access (const Model *klass,
   guint position;
   GtkStringObject *obj;
   gint64 start, end;
-  guint iterations = 10000000;
+  guint iterations = 10 * 1000 * 1000;
 
   model = klass->create_model (size);
 
@@ -233,10 +234,11 @@ do_random_access (const Model *klass,
 
   end = g_get_monotonic_time ();
 
-  g_printerr ("\"random access\",\"%s\", %u, %g\n",
+  g_printerr ("\"random access\",\"%s\", %u, %g, %lu\n",
               klass->name,
               size,
-              ((double)(end - start)) / iterations);
+              ((double)(end - start)) / iterations,
+              klass->size (model));
 
   g_object_unref (model);
 }
@@ -249,7 +251,7 @@ do_linear_access (const Model *klass,
   guint i;
   GtkStringObject *obj;
   gint64 start, end;
-  guint iterations = 1000000;
+  guint iterations = 1000 * 1000;
 
   model = klass->create_model (size);
 
@@ -265,10 +267,11 @@ do_linear_access (const Model *klass,
 
   end = g_get_monotonic_time ();
 
-  g_printerr ("\"linear access\", \"%s\", %u, %g\n",
+  g_printerr ("\"linear access\", \"%s\", %u, %g, %lu\n",
               klass->name,
               size,
-              ((double)(end - start)) / iterations);
+              ((double)(end - start)) / iterations,
+              klass->size (model));
 
   g_object_unref (model);
 }
@@ -281,9 +284,11 @@ do_append (const Model *klass,
   guint i, j;
   gint64 start, end;
   int iterations = 5;
-  gint64 total;
+  gint64 total_time;
+  guint64 total_size;
 
-  total = 0;
+  total_time = 0;
+  total_size = 0;
 
   for (i = 0; i < iterations; i++)
     {
@@ -299,12 +304,13 @@ do_append (const Model *klass,
         }
 
       end = g_get_monotonic_time ();
-      total += end - start;
+      total_time += end - start;
+      total_size += klass->size (model);
 
       g_object_unref (model);
     }
 
-  g_printerr ("\"append\", \"%s\", %u, %g\n", klass->name, size, ((double)total) / iterations);
+  g_printerr ("\"append\", \"%s\", %u, %g, %g\n", klass->name, size, ((double)total_time) / iterations, ((double)total_size) / iterations);
 }
 
 static void
@@ -315,10 +321,12 @@ do_insert (const Model *klass,
   guint i, j;
   gint64 start, end;
   int iterations = 5;
-  gint64 total;
+  gint64 total_time;
+  guint64 total_size;
   guint position;
 
-  total = 0;
+  total_time = 0;
+  total_size = 0;
 
   for (i = 0; i < iterations; i++)
     {
@@ -337,44 +345,58 @@ do_insert (const Model *klass,
         }
 
       end = g_get_monotonic_time ();
-      total += end - start;
+      total_time += end - start;
+      total_size += klass->size (model);
 
       g_object_unref (model);
     }
 
-  g_printerr ("\"insert\", \"%s\", %u, %g\n", klass->name, size, ((double)total) / iterations);
+  g_printerr ("\"insert\", \"%s\", %u, %g, %g\n", klass->name, size, ((double)total_time) / iterations, ((double)total_size) / iterations);
+}
+
+static guint64
+no_size (GListModel *model)
+{
+  return 0;
 }
 
 const Model all_models[] = {
   {
+    "judy-stringlist",
+    make_sequence_string_list,
+    append_sequence_string_list,
+    insert_sequence_string_list,
+    gtk_string_list2_get_size
+  },
+#if 0
+  {
     "liststore",
     make_list_store,
     append_list_store,
-    insert_list_store
+    insert_list_store,
+    no_size
   },
   {
     "arraystore",
     make_array_store,
     append_array_store,
-    insert_array_store
+    insert_array_store,
+    no_size
   },
   {
     "ptrarraystore",
     make_array_store2,
     append_array_store2,
-    insert_array_store2
+    insert_array_store2,
+    no_size
   },
-  {
-    "sequence-stringlist",
-    make_sequence_string_list,
-    append_sequence_string_list,
-    insert_sequence_string_list
-  },
+#endif
   {
     "stringlist",
     make_string_list,
     append_string_list,
-    insert_string_list
+    insert_string_list,
+    gtk_string_list_get_size
   }
 };
 
