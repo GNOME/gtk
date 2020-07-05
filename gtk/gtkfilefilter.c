@@ -108,8 +108,8 @@ struct _FilterRule
   FilterRuleType type;
 
   union {
-    gchar *pattern;
-    gchar *mime_type;
+    char *pattern;
+    char **content_types;
     GSList *pixbuf_formats;
   } u;
 };
@@ -200,14 +200,12 @@ filter_rule_free (FilterRule *rule)
 {
   switch (rule->type)
     {
-    case FILTER_RULE_MIME_TYPE:
-      g_free (rule->u.mime_type);
-      break;
     case FILTER_RULE_PATTERN:
       g_free (rule->u.pattern);
       break;
+    case FILTER_RULE_MIME_TYPE:
     case FILTER_RULE_PIXBUF_FORMATS:
-      g_slist_free (rule->u.pixbuf_formats);
+      g_strfreev (rule->u.content_types);
       break;
     default:
       g_assert_not_reached ();
@@ -541,16 +539,17 @@ file_filter_add_attribute (GtkFileFilter *filter,
  **/
 void
 gtk_file_filter_add_mime_type (GtkFileFilter *filter,
-			       const gchar   *mime_type)
+                               const gchar   *mime_type)
 {
   FilterRule *rule;
-  
+
   g_return_if_fail (GTK_IS_FILE_FILTER (filter));
   g_return_if_fail (mime_type != NULL);
 
   rule = g_slice_new (FilterRule);
   rule->type = FILTER_RULE_MIME_TYPE;
-  rule->u.mime_type = g_strdup (mime_type);
+  rule->u.content_types = g_new0 (char *, 2);
+  rule->u.content_types[0] = g_content_type_from_mime_type (mime_type);
 
   file_filter_add_attribute (filter, G_FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE);
   file_filter_add_rule (filter, rule);
@@ -594,12 +593,34 @@ void
 gtk_file_filter_add_pixbuf_formats (GtkFileFilter *filter)
 {
   FilterRule *rule;
-  
+  GPtrArray *array;
+  GSList *formats, *l;
+
   g_return_if_fail (GTK_IS_FILE_FILTER (filter));
 
   rule = g_slice_new (FilterRule);
   rule->type = FILTER_RULE_PIXBUF_FORMATS;
-  rule->u.pixbuf_formats = gdk_pixbuf_get_formats ();
+
+  array = g_ptr_array_new ();
+
+  formats = gdk_pixbuf_get_formats ();
+  for (l = formats; l; l = l->next)
+    {
+      int i;
+      char **mime_types;
+
+      mime_types = gdk_pixbuf_format_get_mime_types (l->data);
+
+      for (i = 0; mime_types[i] != NULL; i++)
+        {
+          g_ptr_array_add (array, g_content_type_from_mime_type (mime_types[i]));
+        }
+    }
+  g_slist_free (formats);
+
+  g_ptr_array_add (array, NULL);
+
+  rule->u.content_types = (char **)g_ptr_array_free (array, FALSE);
 
   file_filter_add_attribute (filter, G_FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE);
   file_filter_add_rule (filter, rule);
@@ -638,61 +659,65 @@ NSArray * _gtk_file_filter_get_as_pattern_nsstrings (GtkFileFilter *filter)
       FilterRule *rule = tmp_list->data;
 
       switch (rule->type)
-	{
-	case FILTER_RULE_MIME_TYPE:
-	  {
-	    // convert mime-types to UTI
-	    NSString *mime_type_nsstring = [NSString stringWithUTF8String: rule->u.mime_type];
-	    NSString *uti_nsstring = (NSString *) UTTypeCreatePreferredIdentifierForTag (kUTTagClassMIMEType, (CFStringRef) mime_type_nsstring, NULL);
-	    if (uti_nsstring == NULL)
-	      {
-	        [array release];
-		return NULL;
-	      }
-	    [array addObject:uti_nsstring];
-	  }
-	  break;
-	case FILTER_RULE_PATTERN:
-	  {
-	    // patterns will need to be stripped of their leading *.
-	    GString *pattern = g_string_new (rule->u.pattern);
-	    if (strncmp (pattern->str, "*.", 2) == 0)
-	      {
-	        pattern = g_string_erase (pattern, 0, 2);
-	      }
-	    else if (strncmp (pattern->str, "*", 1) == 0)
-	      {
-	        pattern = g_string_erase (pattern, 0, 1);
-	      }
-	    gchar *pattern_c = g_string_free (pattern, FALSE);
-	    NSString *pattern_nsstring = [NSString stringWithUTF8String:pattern_c];
-	    g_free (pattern_c);
-	    [pattern_nsstring retain];
-	    [array addObject:pattern_nsstring];
-	  }
-	  break;
-	case FILTER_RULE_PIXBUF_FORMATS:
-	  {
-	    GSList *list;
+        {
+        case FILTER_RULE_MIME_TYPE:
+          {
+            // convert mime-types to UTI
+            NSString *mime_type_nsstring = [NSString stringWithUTF8String: rule->u.content_types[0]];
+            NSString *uti_nsstring = (NSString *) UTTypeCreatePreferredIdentifierForTag (kUTTagClassMIMEType, (CFStringRef) mime_type_nsstring, NULL);
+            if (uti_nsstring == NULL)
+              {
+                [array release];
+                return NULL;
+              }
+            [array addObject:uti_nsstring];
+          }
+          break;
 
-	    for (list = rule->u.pixbuf_formats; list; list = list->next)
-	      {
-		int i;
-		gchar **extensions;
+        case FILTER_RULE_PATTERN:
+          {
+            // patterns will need to be stripped of their leading *.
+            GString *pattern = g_string_new (rule->u.pattern);
+            if (strncmp (pattern->str, "*.", 2) == 0)
+              {
+                pattern = g_string_erase (pattern, 0, 2);
+              }
+            else if (strncmp (pattern->str, "*", 1) == 0)
+              {
+                pattern = g_string_erase (pattern, 0, 1);
+              }
+            gchar *pattern_c = g_string_free (pattern, FALSE);
+            NSString *pattern_nsstring = [NSString stringWithUTF8String:pattern_c];
+            g_free (pattern_c);
+            [pattern_nsstring retain];
+            [array addObject:pattern_nsstring];
+          }
+          break;
 
-		extensions = gdk_pixbuf_format_get_extensions (list->data);
+        case FILTER_RULE_PIXBUF_FORMATS:
+          {
+            GSList *formats, *l;
 
-		for (i = 0; extensions[i] != NULL; i++)
-		  {
-		    NSString *extension = [NSString stringWithUTF8String: extensions[i]];
-		    [extension retain];
-		    [array addObject:extension];
-		  }
-		g_strfreev (extensions);
-	      }
-	    break;
-	  }
-	}
+            formats = gdk_pixbuf_get_formats ();
+            for (l = formats; l; l = l->next)
+              {
+                int i;
+                gchar **extensions;
+
+                extensions = gdk_pixbuf_format_get_extensions (l->data);
+
+                for (i = 0; extensions[i] != NULL; i++)
+                  {
+                    NSString *extension = [NSString stringWithUTF8String: extensions[i]];
+                    [extension retain];
+                    [array addObject:extension];
+                  }
+                g_strfreev (extensions);
+              }
+            g_slist_free (formats);
+            break;
+          }
+       }
     }
   return array;
 }
@@ -711,35 +736,39 @@ _gtk_file_filter_get_as_patterns (GtkFileFilter      *filter)
       FilterRule *rule = tmp_list->data;
 
       switch (rule->type)
-	{
-	case FILTER_RULE_MIME_TYPE:
+        {
+        case FILTER_RULE_MIME_TYPE:
           g_ptr_array_free (array, TRUE);
           return NULL;
-	  break;
-	case FILTER_RULE_PATTERN:
+          break;
+
+        case FILTER_RULE_PATTERN:
           g_ptr_array_add (array, g_strdup (rule->u.pattern));
-	  break;
-	case FILTER_RULE_PIXBUF_FORMATS:
-	  {
-	    GSList *list;
+          break;
 
-	    for (list = rule->u.pixbuf_formats; list; list = list->next)
-	      {
-		int i;
-		gchar **extensions;
+        case FILTER_RULE_PIXBUF_FORMATS:
+          {
+            GSList *formats, *l;
 
-		extensions = gdk_pixbuf_format_get_extensions (list->data);
+            formats = gdk_pixbuf_get_formats ();
+            for (l = formats; l; l = l->next)
+              {
+                int i;
+                char **extensions;
 
-		for (i = 0; extensions[i] != NULL; i++)
+                extensions = gdk_pixbuf_format_get_extensions (l->data);
+
+                for (i = 0; extensions[i] != NULL; i++)
                   g_ptr_array_add (array, g_strdup_printf ("*.%s", extensions[i]));
 
-		g_strfreev (extensions);
-	      }
-	    break;
-	  }
+                g_strfreev (extensions);
+              }
+            g_slist_free (formats);
+            break;
+          }
         default:
           break;
-	}
+        }
     }
 
   g_ptr_array_add (array, NULL); /* Null terminate */
@@ -786,25 +815,6 @@ gtk_file_filter_match (GtkFilter *filter,
 
       switch (rule->type)
         {
-        case FILTER_RULE_MIME_TYPE:
-          {
-            const char *filter_content_type;
-            char *rule_content_type;
-            gboolean match;
-
-            filter_content_type = g_file_info_get_content_type (info);
-            if (filter_content_type)
-              {
-                rule_content_type = g_content_type_from_mime_type (rule->u.mime_type);
-                match = g_content_type_is_a (filter_content_type, rule_content_type);
-                g_free (rule_content_type);
-
-                if (match)
-                  return TRUE;
-              }
-          }
-          break;
-
         case FILTER_RULE_PATTERN:
           {
             const char *display_name;
@@ -818,7 +828,25 @@ gtk_file_filter_match (GtkFilter *filter,
           }
           break;
 
+        case FILTER_RULE_MIME_TYPE:
         case FILTER_RULE_PIXBUF_FORMATS:
+          {
+            const char *filter_content_type;
+
+            filter_content_type = g_file_info_get_content_type (info);
+            if (filter_content_type)
+              {
+                int i;
+
+                for (i = 0; rule->u.content_types[i]; i++)
+                  {
+                    if (g_content_type_is_a (filter_content_type, rule->u.content_types[i]))
+                      return TRUE;
+                  }
+              }
+          }
+          break;
+
           {
             const char *filter_content_type;
 
@@ -875,32 +903,20 @@ gtk_file_filter_to_gvariant (GtkFileFilter *filter)
   for (l = filter->rules; l; l = l->next)
     {
       FilterRule *rule = l->data;
+      int i;
 
       switch (rule->type)
         {
         case FILTER_RULE_PATTERN:
           g_variant_builder_add (&builder, "(us)", 0, rule->u.pattern);
           break;
+
         case FILTER_RULE_MIME_TYPE:
-          g_variant_builder_add (&builder, "(us)", 1, rule->u.mime_type);
-          break;
         case FILTER_RULE_PIXBUF_FORMATS:
-          {
-	    GSList *f;
-
-	    for (f = rule->u.pixbuf_formats; f; f = f->next)
-	      {
-                GdkPixbufFormat *fmt = f->data;
-                gchar **mime_types;
-                int i;
-
-                mime_types = gdk_pixbuf_format_get_mime_types (fmt);
-                for (i = 0; mime_types[i]; i++)
-                  g_variant_builder_add (&builder, "(us)", 1, mime_types[i]);
-                g_strfreev (mime_types);
-              }
-          }
+          for (i = 0; rule->u.content_types[i]; i++)
+            g_variant_builder_add (&builder, "(us)", 1, rule->u.content_types[i]);
           break;
+
         default:
           break;
         }
