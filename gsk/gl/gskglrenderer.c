@@ -70,7 +70,6 @@ typedef enum
   RESET_CLIP       = 1 << 1,
   RESET_OPACITY    = 1 << 2,
   DUMP_FRAMEBUFFER = 1 << 3,
-  CENTER_CHILD     = 1 << 4,
   NO_CACHE_PLZ     = 1 << 5,
 } OffscreenFlags;
 
@@ -3326,19 +3325,8 @@ add_offscreen_ops (GskGLRenderer         *self,
                                            bounds->origin.y * scale,
                                            width, height));
 
-  if (flags & CENTER_CHILD)
-    {
-      ops_offset (builder,
-                    (bounds->size.width - child_node->bounds.size.width) / 2.0 -
-                    child_node->bounds.origin.x,
-                    (bounds->size.height - child_node->bounds.size.height) / 2.0 -
-                    child_node->bounds.origin.y);
-    }
-  else
-    {
-      builder->dx = 0;
-      builder->dy = 0;
-    }
+  builder->dx = 0;
+  builder->dy = 0;
 
   if (flags & RESET_OPACITY)
     prev_opacity = ops_set_opacity (builder, 1.0);
