@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-23 20:49+0000\n"
-"PO-Revision-Date: 2020-06-25 11:26+0500\n"
+"POT-Creation-Date: 2020-07-02 19:09+0000\n"
+"PO-Revision-Date: 2020-07-05 16:25+0500\n"
 "Last-Translator: Baurzhan Muftakhidinov <baurthefirst@gmail.com>\n"
 "Language-Team: Kazakh <kk_KZ@googlegroups.com>\n"
 "Language: kk\n"
@@ -1510,7 +1510,6 @@ msgid "Apache License, Version 2.0"
 msgstr "Apache License, нұсқасы 2.0"
 
 #: gtk/gtkaboutdialog.c:131
-#| msgid "Artistic License 2.0"
 msgid "Mozilla Public License 2.0"
 msgstr "Mozilla Public License 2.0"
 
@@ -2207,44 +2206,44 @@ msgstr "Оң ж_ақ:"
 msgid "Paper Margins"
 msgstr "Қағаздың шет өрістері"
 
-#: gtk/gtkentry.c:9590 gtk/gtklabel.c:6680 gtk/gtktextview.c:9502
+#: gtk/gtkentry.c:9590 gtk/gtklabel.c:6680 gtk/gtktextview.c:9520
 msgid "Cu_t"
 msgstr "Қ_иып алу"
 
-#: gtk/gtkentry.c:9594 gtk/gtklabel.c:6681 gtk/gtktextview.c:9506
+#: gtk/gtkentry.c:9594 gtk/gtklabel.c:6681 gtk/gtktextview.c:9524
 msgid "_Copy"
 msgstr "_Көшіру"
 
-#: gtk/gtkentry.c:9598 gtk/gtklabel.c:6682 gtk/gtktextview.c:9508
+#: gtk/gtkentry.c:9598 gtk/gtklabel.c:6682 gtk/gtktextview.c:9526
 msgid "_Paste"
 msgstr "Кірі_стіру"
 
 #: gtk/gtkentry.c:9601 gtk/gtkfilechooserwidget.c:1499
-#: gtk/gtkfilechooserwidget.c:2334 gtk/gtklabel.c:6684 gtk/gtktextview.c:9511
+#: gtk/gtkfilechooserwidget.c:2334 gtk/gtklabel.c:6684 gtk/gtktextview.c:9529
 msgid "_Delete"
 msgstr "Ө_шіру"
 
-#: gtk/gtkentry.c:9612 gtk/gtklabel.c:6693 gtk/gtktextview.c:9525
+#: gtk/gtkentry.c:9612 gtk/gtklabel.c:6693 gtk/gtktextview.c:9543
 msgid "Select _All"
 msgstr "Б_арлығын таңдау"
 
-#: gtk/gtkentry.c:9622 gtk/gtktextview.c:9535
+#: gtk/gtkentry.c:9622 gtk/gtktextview.c:9553
 msgid "Insert _Emoji"
 msgstr "_Эмодзи кірістіру"
 
-#: gtk/gtkentry.c:9798 gtk/gtktextview.c:9755
+#: gtk/gtkentry.c:9798 gtk/gtktextview.c:9773
 msgid "Select all"
 msgstr "Барлығын таңдау"
 
-#: gtk/gtkentry.c:9801 gtk/gtktextview.c:9758
+#: gtk/gtkentry.c:9801 gtk/gtktextview.c:9776
 msgid "Cut"
 msgstr "Қиып алу"
 
-#: gtk/gtkentry.c:9804 gtk/gtktextview.c:9761
+#: gtk/gtkentry.c:9804 gtk/gtktextview.c:9779
 msgid "Copy"
 msgstr "Көшіру"
 
-#: gtk/gtkentry.c:9807 gtk/gtktextview.c:9764
+#: gtk/gtkentry.c:9807 gtk/gtktextview.c:9782
 msgid "Paste"
 msgstr "Кірістіру"
 
@@ -4715,17 +4714,17 @@ msgstr "Барлық баламаларға қатынау"
 #: gtk/open-type-layout.h:14
 msgctxt "OpenType layout"
 msgid "Above-base Forms"
-msgstr ""
+msgstr "Базалық сызық үстіндегі формалар"
 
 #: gtk/open-type-layout.h:15
 msgctxt "OpenType layout"
 msgid "Above-base Mark Positioning"
-msgstr ""
+msgstr "Белгі таңбасының базалық сызық үстінде орналасуы"
 
 #: gtk/open-type-layout.h:16
 msgctxt "OpenType layout"
 msgid "Above-base Substitutions"
-msgstr ""
+msgstr "Базалық сызық үстіндегі алмастырулар"
 
 #: gtk/open-type-layout.h:17
 msgctxt "OpenType layout"
@@ -4745,12 +4744,12 @@ msgstr "Төмендегі негізгі пішіндер"
 #: gtk/open-type-layout.h:20
 msgctxt "OpenType layout"
 msgid "Below-base Mark Positioning"
-msgstr ""
+msgstr "Белгі таңбасының базалық сызық астындағы орналасуы"
 
 #: gtk/open-type-layout.h:21
 msgctxt "OpenType layout"
 msgid "Below-base Substitutions"
-msgstr ""
+msgstr "Базалық сызық астындағы алмастырулар"
 
 #: gtk/open-type-layout.h:22
 msgctxt "OpenType layout"
@@ -4765,17 +4764,17 @@ msgstr "Регистрге тәуелді формалар"
 #: gtk/open-type-layout.h:24
 msgctxt "OpenType layout"
 msgid "Glyph Composition / Decomposition"
-msgstr ""
+msgstr "Глифті құрастыру/ыдырату"
 
 #: gtk/open-type-layout.h:25
 msgctxt "OpenType layout"
 msgid "Conjunct Form After Ro"
-msgstr ""
+msgstr "\"Ro\" таңбасынан кейінгі байланысқан форма"
 
 #: gtk/open-type-layout.h:26
 msgctxt "OpenType layout"
 msgid "Conjunct Forms"
-msgstr ""
+msgstr "Байланысқан формалар"
 
 #: gtk/open-type-layout.h:27
 msgctxt "OpenType layout"
@@ -4800,7 +4799,7 @@ msgstr "Контекстті жарқылдар"
 #: gtk/open-type-layout.h:31
 msgctxt "OpenType layout"
 msgid "Cursive Positioning"
-msgstr ""
+msgstr "Курсивті позициялау"
 
 #: gtk/open-type-layout.h:32
 msgctxt "OpenType layout"
@@ -5000,17 +4999,17 @@ msgstr "Солдан оңға қарай айналы пішіндер"
 #: gtk/open-type-layout.h:71
 msgctxt "OpenType layout"
 msgid "Mark Positioning"
-msgstr ""
+msgstr "Белгі таңбасын орналастыру"
 
 #: gtk/open-type-layout.h:72
 msgctxt "OpenType layout"
 msgid "Medial Forms #2"
-msgstr ""
+msgstr "Медиалды формалар №2"
 
 #: gtk/open-type-layout.h:73
 msgctxt "OpenType layout"
 msgid "Medial Forms"
-msgstr ""
+msgstr "Медиалды формалар"
 
 #: gtk/open-type-layout.h:74
 msgctxt "OpenType layout"
@@ -5020,27 +5019,27 @@ msgstr "Математикалық грек"
 #: gtk/open-type-layout.h:75
 msgctxt "OpenType layout"
 msgid "Mark to Mark Positioning"
-msgstr ""
+msgstr "Белгі-белгіге орналастыру"
 
 #: gtk/open-type-layout.h:76
 msgctxt "OpenType layout"
 msgid "Mark Positioning via Substitution"
-msgstr ""
+msgstr "Алмастыру арқылы белгі таңбасын орналастыру"
 
 #: gtk/open-type-layout.h:77
 msgctxt "OpenType layout"
 msgid "Alternate Annotation Forms"
-msgstr ""
+msgstr "Аңдатпа нұсқаларының пішіндері"
 
 #: gtk/open-type-layout.h:78
 msgctxt "OpenType layout"
 msgid "NLC Kanji Forms"
-msgstr ""
+msgstr "NLC кандзи пішіндері"
 
 #: gtk/open-type-layout.h:79
 msgctxt "OpenType layout"
 msgid "Nukta Forms"
-msgstr ""
+msgstr "Нукта формалары"
 
 #: gtk/open-type-layout.h:80
 msgctxt "OpenType layout"
@@ -5140,12 +5139,12 @@ msgstr "Міндетті лигатуралар"
 #: gtk/open-type-layout.h:99
 msgctxt "OpenType layout"
 msgid "Reph Forms"
-msgstr ""
+msgstr "Реф формалары"
 
 #: gtk/open-type-layout.h:100
 msgctxt "OpenType layout"
 msgid "Right Bounds"
-msgstr ""
+msgstr "Оң жақ шекаралар"
 
 #: gtk/open-type-layout.h:101
 msgctxt "OpenType layout"
@@ -5160,7 +5159,7 @@ msgstr "Оңнан солға айналы пішіндер"
 #: gtk/open-type-layout.h:103
 msgctxt "OpenType layout"
 msgid "Ruby Notation Forms"
-msgstr ""
+msgstr "Фуригана пішіндері"
 
 #: gtk/open-type-layout.h:104
 msgctxt "OpenType layout"
@@ -5295,12 +5294,12 @@ msgstr "Стилистикалық жиынтық 20"
 #: gtk/open-type-layout.h:130
 msgctxt "OpenType layout"
 msgid "Math script style alternates"
-msgstr ""
+msgstr "Математикалық жазу стилінің баламалары"
 
 #: gtk/open-type-layout.h:131
 msgctxt "OpenType layout"
 msgid "Stretching Glyph Decomposition"
-msgstr ""
+msgstr "Созылмалы глиф ыдырауы"
 
 #: gtk/open-type-layout.h:132
 msgctxt "OpenType layout"
@@ -5325,7 +5324,7 @@ msgstr "Тақырыптық таңбалар"
 #: gtk/open-type-layout.h:136
 msgctxt "OpenType layout"
 msgid "Trailing Jamo Forms"
-msgstr ""
+msgstr "Соңындағы Джамо формалары"
 
 #: gtk/open-type-layout.h:137
 msgctxt "OpenType layout"
@@ -5335,7 +5334,7 @@ msgstr "Аттардың дәстүрлі пішіндері"
 #: gtk/open-type-layout.h:138
 msgctxt "OpenType layout"
 msgid "Tabular Figures"
-msgstr ""
+msgstr "Кестелік сандар"
 
 #: gtk/open-type-layout.h:139
 msgctxt "OpenType layout"
@@ -5375,7 +5374,7 @@ msgstr "Балама вертикалды жарты метрикалар"
 #: gtk/open-type-layout.h:146
 msgctxt "OpenType layout"
 msgid "Vowel Jamo Forms"
-msgstr ""
+msgstr "Дауысты Джамо формалары"
 
 #: gtk/open-type-layout.h:147
 msgctxt "OpenType layout"
@@ -6840,7 +6839,7 @@ msgstr "Дуплоян"
 #: gtk/script-names.c:122
 msgctxt "Script"
 msgid "Elbasan"
-msgstr ""
+msgstr "Эльбасан"
 
 #: gtk/script-names.c:123
 msgctxt "Script"
@@ -6855,7 +6854,7 @@ msgstr "Ходжки"
 #: gtk/script-names.c:125
 msgctxt "Script"
 msgid "Khudawadi, Sindhi"
-msgstr ""
+msgstr "Худавади, Синди"
 
 #: gtk/script-names.c:126
 msgctxt "Script"
@@ -6875,7 +6874,7 @@ msgstr "Манихейлік"
 #: gtk/script-names.c:129
 msgctxt "Script"
 msgid "Mende Kikakui"
-msgstr ""
+msgstr "Менде Кикакуи"
 
 #: gtk/script-names.c:130
 msgctxt "Script"
@@ -6900,27 +6899,27 @@ msgstr "Көне солтүстік арабша"
 #: gtk/script-names.c:134
 msgctxt "Script"
 msgid "Old Permic"
-msgstr ""
+msgstr "Көне Пермь"
 
 #: gtk/script-names.c:135
 msgctxt "Script"
 msgid "Pahawh Hmong"
-msgstr ""
+msgstr "Пахо Хмонг"
 
 #: gtk/script-names.c:136
 msgctxt "Script"
 msgid "Palmyrene"
-msgstr ""
+msgstr "Пальмирлік"
 
 #: gtk/script-names.c:137
 msgctxt "Script"
 msgid "Pau Cin Hau"
-msgstr ""
+msgstr "По Чин Хо"
 
 #: gtk/script-names.c:138
 msgctxt "Script"
 msgid "Psalter Pahlavi"
-msgstr ""
+msgstr "Пехлеви псалтірі"
 
 #: gtk/script-names.c:139
 msgctxt "Script"
@@ -6930,27 +6929,27 @@ msgstr "Сидхам"
 #: gtk/script-names.c:140
 msgctxt "Script"
 msgid "Tirhuta"
-msgstr ""
+msgstr "Тирхута"
 
 #: gtk/script-names.c:141
 msgctxt "Script"
 msgid "Warang Citi"
-msgstr ""
+msgstr "Варанг-кшити"
 
 #: gtk/script-names.c:142
 msgctxt "Script"
 msgid "Ahom"
-msgstr ""
+msgstr "Ахом"
 
 #: gtk/script-names.c:143
 msgctxt "Script"
 msgid "Anatolian Hieroglyphs"
-msgstr ""
+msgstr "Анатолийлік иероглифтері"
 
 #: gtk/script-names.c:144
 msgctxt "Script"
 msgid "Hatran"
-msgstr ""
+msgstr "Хатран"
 
 #: gtk/script-names.c:145
 msgctxt "Script"
@@ -6965,32 +6964,32 @@ msgstr "Көне венгриялық"
 #: gtk/script-names.c:147
 msgctxt "Script"
 msgid "Signwriting"
-msgstr ""
+msgstr "Ым жазуы"
 
 #: gtk/script-names.c:148
 msgctxt "Script"
 msgid "Adlam"
-msgstr ""
+msgstr "Адлам"
 
 #: gtk/script-names.c:149
 msgctxt "Script"
 msgid "Bhaiksuki"
-msgstr ""
+msgstr "Бхайкшуки"
 
 #: gtk/script-names.c:150
 msgctxt "Script"
 msgid "Marchen"
-msgstr ""
+msgstr "Марчхен"
 
 #: gtk/script-names.c:151
 msgctxt "Script"
 msgid "Newa"
-msgstr ""
+msgstr "Нева"
 
 #: gtk/script-names.c:152
 msgctxt "Script"
 msgid "Osage"
-msgstr ""
+msgstr "Осейдж"
 
 #: gtk/script-names.c:153
 msgctxt "Script"
@@ -7000,22 +6999,22 @@ msgstr "Тангут"
 #: gtk/script-names.c:154
 msgctxt "Script"
 msgid "Masaram Gondi"
-msgstr ""
+msgstr "Масарам Гонди"
 
 #: gtk/script-names.c:155
 msgctxt "Script"
 msgid "Nushu"
-msgstr ""
+msgstr "Нушу"
 
 #: gtk/script-names.c:156
 msgctxt "Script"
 msgid "Soyombo"
-msgstr ""
+msgstr "Соёмбо"
 
 #: gtk/script-names.c:157
 msgctxt "Script"
 msgid "Zanabazar Square"
-msgstr ""
+msgstr "Дзанабадзар шаршы жазуы"
 
 #: gtk/ui/gtkaboutdialog.ui:137
 msgid "About"
