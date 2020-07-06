@@ -92,8 +92,6 @@ select_widget (GtkInspectorWindow *iw,
 {
   GtkInspectorObjectTree *wt = GTK_INSPECTOR_OBJECT_TREE (iw->object_tree);
 
-  iw->selected_widget = widget;
-
   gtk_inspector_object_tree_select_object (wt, G_OBJECT (widget));
 }
 

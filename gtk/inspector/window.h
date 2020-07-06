@@ -78,8 +78,6 @@ typedef struct
   GtkWidget *general;
   GtkWidget *logs;
 
-  GtkWidget *selected_widget;
-
   GList *extra_pages;
 
   GdkSeat *grab_seat;
