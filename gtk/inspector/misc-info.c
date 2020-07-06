@@ -180,52 +180,55 @@ disconnect_each_other (gpointer  still_alive,
 }
 
 static void
-show_object (GtkInspectorMiscInfo *sl,
-             GObject              *object,
-             const gchar          *tab)
-{
-  g_object_set_data_full (G_OBJECT (sl->priv->object_tree), "next-tab", g_strdup (tab), g_free);
-  gtk_inspector_object_tree_activate_object (sl->priv->object_tree, object);
-}
-
-static void
 show_mnemonic_label (GtkWidget *button, GtkInspectorMiscInfo *sl)
 {
+  GtkInspectorWindow *iw;
   GtkWidget *widget;
+
+  iw = GTK_INSPECTOR_WINDOW (gtk_widget_get_ancestor (GTK_WIDGET (sl), GTK_TYPE_INSPECTOR_WINDOW));
 
   widget = g_object_get_data (G_OBJECT (button), "mnemonic-label");
   if (widget)
-    show_object (sl, G_OBJECT (widget), "properties");
+    gtk_inspector_window_push_object (iw, G_OBJECT (widget), CHILD_KIND_OTHER, 0);
 }
 
 static void
 show_surface (GtkWidget *button, GtkInspectorMiscInfo *sl)
 {
+  GtkInspectorWindow *iw;
   GObject *surface;
+
+  iw = GTK_INSPECTOR_WINDOW (gtk_widget_get_ancestor (GTK_WIDGET (sl), GTK_TYPE_INSPECTOR_WINDOW));
 
   surface = (GObject *)gtk_native_get_surface (GTK_NATIVE (sl->priv->object));
   if (surface)
-    show_object (sl, G_OBJECT (surface), "properties");
+    gtk_inspector_window_push_object (iw, surface, CHILD_KIND_OTHER, 0);
 }
 
 static void
 show_renderer (GtkWidget *button, GtkInspectorMiscInfo *sl)
 {
+  GtkInspectorWindow *iw;
   GObject *renderer;
+
+  iw = GTK_INSPECTOR_WINDOW (gtk_widget_get_ancestor (GTK_WIDGET (sl), GTK_TYPE_INSPECTOR_WINDOW));
 
   renderer = (GObject *)gtk_native_get_renderer (GTK_NATIVE (sl->priv->object));
   if (renderer)
-    show_object (sl, G_OBJECT (renderer), "properties");
+    gtk_inspector_window_push_object (iw, renderer, CHILD_KIND_OTHER, 0);
 }
 
 static void
 show_frame_clock (GtkWidget *button, GtkInspectorMiscInfo *sl)
 {
+  GtkInspectorWindow *iw;
   GObject *clock;
+
+  iw = GTK_INSPECTOR_WINDOW (gtk_widget_get_ancestor (GTK_WIDGET (sl), GTK_TYPE_INSPECTOR_WINDOW));
 
   clock = (GObject *)gtk_widget_get_frame_clock (GTK_WIDGET (sl->priv->object));
   if (clock)
-    show_object (sl, G_OBJECT (clock), "properties");
+    gtk_inspector_window_push_object (iw, clock, CHILD_KIND_OTHER, 0);
 }
 
 static void

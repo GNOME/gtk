@@ -31,6 +31,7 @@
 #include "gtknoselection.h"
 #include "gtksignallistitemfactory.h"
 #include "gtklistitem.h"
+#include "window.h"
 
 
 struct _GtkInspectorListData
@@ -167,13 +168,15 @@ static void
 object_properties (GtkWidget   *button,
                    GtkListItem *item)
 {
-  GtkInspectorListData *sl;
-  gpointer obj;
+  GtkInspectorWindow *iw;
+  GObject *obj;
+  guint pos;
 
-  sl = GTK_INSPECTOR_LIST_DATA (gtk_widget_get_ancestor (button, GTK_TYPE_INSPECTOR_LIST_DATA));
+  iw = GTK_INSPECTOR_WINDOW (gtk_widget_get_ancestor (button, GTK_TYPE_INSPECTOR_WINDOW));
+
   obj = gtk_list_item_get_item (item);
-  g_object_set_data (G_OBJECT (sl->object_tree), "next-tab", (gpointer)"properties");
-  gtk_inspector_object_tree_activate_object (sl->object_tree, obj);
+  pos = gtk_list_item_get_position (item);
+  gtk_inspector_window_push_object (iw, obj, CHILD_KIND_LISTITEM, pos);
 }
 
 static void

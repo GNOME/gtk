@@ -37,6 +37,7 @@
 #include "gtkstack.h"
 #include "gtkstylecontext.h"
 #include "gtkwidgetprivate.h"
+#include "window.h"
 
 struct _GtkInspectorControllers
 {
@@ -66,10 +67,14 @@ row_activated (GtkListBox              *box,
                GtkListBoxRow           *row,
                GtkInspectorControllers *self)
 {
+  GtkInspectorWindow *iw;
   GObject *controller;
-  
+
+  iw = GTK_INSPECTOR_WINDOW (gtk_widget_get_ancestor (GTK_WIDGET (self), GTK_TYPE_INSPECTOR_WINDOW));
+
   controller = G_OBJECT (g_object_get_data (G_OBJECT (row), "controller"));
-  gtk_inspector_object_tree_select_object (self->object_tree, controller);
+
+  gtk_inspector_window_push_object (iw, controller, CHILD_KIND_CONTROLLER, 0);
 }
 
 static void
@@ -130,7 +135,7 @@ create_controller_widget (gpointer item,
   const char *phases[5];
 
   row = gtk_list_box_row_new ();
-  gtk_list_box_row_set_activatable (GTK_LIST_BOX_ROW (row), FALSE);
+  gtk_list_box_row_set_activatable (GTK_LIST_BOX_ROW (row), TRUE);
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 40);
   gtk_list_box_row_set_child (GTK_LIST_BOX_ROW (row), box);
   gtk_widget_set_margin_start (box, 10);
