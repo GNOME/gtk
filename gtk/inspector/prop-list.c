@@ -45,6 +45,7 @@
 #include "gtkgestureclick.h"
 #include "gtkstylecontext.h"
 #include "prop-holder.h"
+#include "window.h"
 
 enum
 {
@@ -201,9 +202,10 @@ show_object (GtkInspectorPropEditor *editor,
              const gchar            *tab,
              GtkInspectorPropList   *pl)
 {
-  g_object_set_data_full (G_OBJECT (pl->priv->object_tree), "next-tab", g_strdup (tab), g_free);
-  gtk_inspector_object_tree_select_object (pl->priv->object_tree, object);
-  gtk_inspector_object_tree_activate_object (pl->priv->object_tree, object);
+  GtkInspectorWindow *iw;
+
+  iw = GTK_INSPECTOR_WINDOW (gtk_widget_get_ancestor (GTK_WIDGET (pl), GTK_TYPE_INSPECTOR_WINDOW));
+  gtk_inspector_window_push_object (iw, object, CHILD_KIND_PROPERTY, 0);
 }
 
 

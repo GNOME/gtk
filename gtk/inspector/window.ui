@@ -339,6 +339,57 @@
                                     </child>
                                   </object>
                                 </child>
+                                <child type="end">
+                                  <object class="GtkBox">
+                                    <property name="margin-start">6</property>
+                                    <property name="margin-end">6</property>
+                                    <child>
+                                      <object class="GtkButton" id="go_up_button">
+                                        <property name="icon-name">go-up-symbolic</property>
+                                        <property name="tooltip-text" translatable="yes">Previous object</property>
+                                        <property name="has-frame">0</property>
+                                        <property name="halign">center</property>
+                                        <property name="valign">center</property>
+                                        <signal name="clicked" handler="go_up_cb"/>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkButton" id="go_down_button">
+                                        <property name="icon-name">go-down-symbolic</property>
+                                        <property name="tooltip-text" translatable="yes">Child object</property>
+                                        <property name="has-frame">0</property>
+                                        <property name="halign">center</property>
+                                        <property name="valign">center</property>
+                                        <signal name="clicked" handler="go_down_cb"/>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkButton" id="go_previous_button">
+                                        <property name="icon-name">go-previous-symbolic</property>
+                                        <property name="tooltip-text" translatable="yes">Previous sibling</property>
+                                        <property name="has-frame">0</property>
+                                        <property name="halign">center</property>
+                                        <property name="valign">center</property>
+                                        <signal name="clicked" handler="go_previous_cb"/>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkLabel" id="list_position_label">
+                                        <property name="tooltip-text" translatable="yes">List Position</property>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkButton" id="go_next_button">
+                                        <property name="icon-name">go-next-symbolic</property>
+                                        <property name="tooltip-text" translatable="yes">Next sibling</property>
+                                        <property name="has-frame">0</property>
+                                        <property name="halign">center</property>
+                                        <property name="valign">center</property>
+                                        <signal name="clicked" handler="go_next_cb"/>
+                                      </object>
+                                    </child>
+                                  </object>
+                                </child>
                               </object>
                             </child>
                             <child>
