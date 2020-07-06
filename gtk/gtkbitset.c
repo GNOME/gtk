@@ -742,7 +742,7 @@ gtk_bitset_slice (GtkBitset *self,
       GtkBitset *shift = gtk_bitset_copy (self);
 
       gtk_bitset_remove_range (shift, 0, position);
-      gtk_bitset_remove_range (self, position, G_MAXUINT - position + 1);
+      gtk_bitset_remove_range_closed (self, position, G_MAXUINT);
       if (added > removed)
         gtk_bitset_shift_right (shift, added - removed);
       else
