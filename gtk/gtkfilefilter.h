@@ -35,32 +35,32 @@ G_BEGIN_DECLS
 typedef struct _GtkFileFilter     GtkFileFilter;
 
 GDK_AVAILABLE_IN_ALL
-GType gtk_file_filter_get_type (void) G_GNUC_CONST;
+GType           gtk_file_filter_get_type           (void) G_GNUC_CONST;
 
 GDK_AVAILABLE_IN_ALL
-GtkFileFilter *       gtk_file_filter_new      (void);
+GtkFileFilter * gtk_file_filter_new                (void);
 GDK_AVAILABLE_IN_ALL
-void                  gtk_file_filter_set_name (GtkFileFilter *filter,
-						const gchar   *name);
+void            gtk_file_filter_set_name           (GtkFileFilter *filter,
+                                                    const char    *name);
 GDK_AVAILABLE_IN_ALL
-const gchar *         gtk_file_filter_get_name (GtkFileFilter *filter);
+const char *    gtk_file_filter_get_name           (GtkFileFilter *filter);
 
 GDK_AVAILABLE_IN_ALL
-void gtk_file_filter_add_mime_type      (GtkFileFilter      *filter,
-					 const gchar        *mime_type);
+void            gtk_file_filter_add_mime_type      (GtkFileFilter *filter,
+                                                    const char    *mime_type);
 GDK_AVAILABLE_IN_ALL
-void gtk_file_filter_add_pattern        (GtkFileFilter      *filter,
-					 const gchar        *pattern);
+void            gtk_file_filter_add_pattern        (GtkFileFilter *filter,
+                                                    const char    *pattern);
 GDK_AVAILABLE_IN_ALL
-void gtk_file_filter_add_pixbuf_formats (GtkFileFilter      *filter);
+void            gtk_file_filter_add_pixbuf_formats (GtkFileFilter *filter);
 
 GDK_AVAILABLE_IN_ALL
-const char **      gtk_file_filter_get_attributes (GtkFileFilter           *filter);
+const char **   gtk_file_filter_get_attributes     (GtkFileFilter *filter);
 
 GDK_AVAILABLE_IN_ALL
-GVariant      *gtk_file_filter_to_gvariant       (GtkFileFilter *filter);
+GVariant      * gtk_file_filter_to_gvariant        (GtkFileFilter *filter);
 GDK_AVAILABLE_IN_ALL
-GtkFileFilter *gtk_file_filter_new_from_gvariant (GVariant      *variant);
+GtkFileFilter * gtk_file_filter_new_from_gvariant  (GVariant      *variant);
 
 G_END_DECLS
 

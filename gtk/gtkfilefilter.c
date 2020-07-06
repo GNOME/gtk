@@ -41,9 +41,9 @@
  * # GtkFileFilter as GtkBuildable
  *
  * The GtkFileFilter implementation of the GtkBuildable interface
- * supports adding rules using the <mime-types>, <patterns> and
- * <applications> elements and listing the rules within. Specifying
- * a <mime-type> or <pattern> has the same effect as as calling
+ * supports adding rules using the <mime-types> and <patterns>
+ * elements and listing the rules within. Specifying a <mime-type>
+ * or <pattern> has the same effect as as calling
  * gtk_file_filter_add_mime_type() or gtk_file_filter_add_pattern().
  *
  * An example of a UI definition fragment specifying GtkFileFilter
@@ -97,7 +97,7 @@ struct _GtkFileFilter
 {
   GtkFilter parent_instance;
 
-  gchar *name;
+  char *name;
   GSList *rules;
 
   char **attributes;
@@ -110,7 +110,6 @@ struct _FilterRule
   union {
     char *pattern;
     char **content_types;
-    GSList *pixbuf_formats;
   } u;
 };
 
@@ -123,36 +122,11 @@ enum {
 static GParamSpec *props[NUM_PROPERTIES] = { NULL, };
 
 
-static void gtk_file_filter_set_property (GObject            *object,
-                                          guint               prop_id,
-                                          const GValue       *value,
-                                          GParamSpec         *pspec);
-static void gtk_file_filter_get_property (GObject            *object,
-                                          guint               prop_id,
-                                          GValue             *value,
-                                          GParamSpec         *pspec);
-
-
-static void gtk_file_filter_finalize   (GObject            *object);
-
-
-static void         gtk_file_filter_buildable_init             (GtkBuildableIface  *iface);
-
-static gboolean     gtk_file_filter_buildable_custom_tag_start (GtkBuildable       *buildable,
-                                                                GtkBuilder         *builder,
-                                                                GObject            *child,
-                                                                const gchar        *tagname,
-                                                                GtkBuildableParser *parser,
-                                                                gpointer           *data);
-static void         gtk_file_filter_buildable_custom_tag_end   (GtkBuildable       *buildable,
-                                                                GtkBuilder         *builder,
-                                                                GObject            *child,
-                                                                const gchar        *tagname,
-                                                                gpointer            data);
-
 static gboolean       gtk_file_filter_match          (GtkFilter *filter,
                                                       gpointer   item);
 static GtkFilterMatch gtk_file_filter_get_strictness (GtkFilter *filter);
+
+static void           gtk_file_filter_buildable_init (GtkBuildableIface  *iface);
 
 
 G_DEFINE_TYPE_WITH_CODE (GtkFileFilter, gtk_file_filter, GTK_TYPE_FILTER,
@@ -162,56 +136,6 @@ G_DEFINE_TYPE_WITH_CODE (GtkFileFilter, gtk_file_filter, GTK_TYPE_FILTER,
 static void
 gtk_file_filter_init (GtkFileFilter *object)
 {
-}
-
-static void
-gtk_file_filter_class_init (GtkFileFilterClass *class)
-{
-  GObjectClass *gobject_class = G_OBJECT_CLASS (class);
-  GtkFilterClass *filter_class = GTK_FILTER_CLASS (class);
-
-  gobject_class->set_property = gtk_file_filter_set_property;
-  gobject_class->get_property = gtk_file_filter_get_property;
-  gobject_class->finalize = gtk_file_filter_finalize;
-
-  filter_class->get_strictness = gtk_file_filter_get_strictness;
-  filter_class->match = gtk_file_filter_match;
-
-  /**
-   * GtkFileFilter:name:
-   *
-   * The human-readable name of the filter.
-   *
-   * This is the string that will be displayed in the file selector user
-   * interface if there is a selectable list of filters.
-   */
-  props[PROP_NAME] =
-      g_param_spec_string ("name",
-                           P_("Name"),
-                           P_("The human-readable name for this filter"),
-                           NULL,
-                           G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
-
-  g_object_class_install_properties (gobject_class, NUM_PROPERTIES, props);
-}
-
-static void
-filter_rule_free (FilterRule *rule)
-{
-  switch (rule->type)
-    {
-    case FILTER_RULE_PATTERN:
-      g_free (rule->u.pattern);
-      break;
-    case FILTER_RULE_MIME_TYPE:
-    case FILTER_RULE_PIXBUF_FORMATS:
-      g_strfreev (rule->u.content_types);
-      break;
-    default:
-      g_assert_not_reached ();
-    }
-
-  g_slice_free (FilterRule, rule);
 }
 
 static void
@@ -253,6 +177,24 @@ gtk_file_filter_get_property (GObject    *object,
 }
 
 static void
+filter_rule_free (FilterRule *rule)
+{
+  switch (rule->type)
+    {
+    case FILTER_RULE_PATTERN:
+      g_free (rule->u.pattern);
+      break;
+    case FILTER_RULE_MIME_TYPE:
+    case FILTER_RULE_PIXBUF_FORMATS:
+      g_strfreev (rule->u.content_types);
+      break;
+    default:
+      break;
+    }
+  g_slice_free (FilterRule, rule);
+}
+
+static void
 gtk_file_filter_finalize (GObject  *object)
 {
   GtkFileFilter *filter = GTK_FILE_FILTER (object);
@@ -265,22 +207,49 @@ gtk_file_filter_finalize (GObject  *object)
   G_OBJECT_CLASS (gtk_file_filter_parent_class)->finalize (object);
 }
 
+static void
+gtk_file_filter_class_init (GtkFileFilterClass *class)
+{
+  GObjectClass *gobject_class = G_OBJECT_CLASS (class);
+  GtkFilterClass *filter_class = GTK_FILTER_CLASS (class);
+
+  gobject_class->set_property = gtk_file_filter_set_property;
+  gobject_class->get_property = gtk_file_filter_get_property;
+  gobject_class->finalize = gtk_file_filter_finalize;
+
+  filter_class->get_strictness = gtk_file_filter_get_strictness;
+  filter_class->match = gtk_file_filter_match;
+
+  /**
+   * GtkFileFilter:name:
+   *
+   * The human-readable name of the filter.
+   *
+   * This is the string that will be displayed in the file selector user
+   * interface if there is a selectable list of filters.
+   */
+  props[PROP_NAME] =
+      g_param_spec_string ("name",
+                           P_("Name"),
+                           P_("The human-readable name for this filter"),
+                           NULL,
+                           G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
+
+  g_object_class_install_properties (gobject_class, NUM_PROPERTIES, props);
+}
+
 /*
  * GtkBuildable implementation
  */
-static void
-gtk_file_filter_buildable_init (GtkBuildableIface *iface)
-{
-  iface->custom_tag_start = gtk_file_filter_buildable_custom_tag_start;
-  iface->custom_tag_end = gtk_file_filter_buildable_custom_tag_end;
-}
 
-typedef enum {
+typedef enum
+{
   PARSE_MIME_TYPES,
   PARSE_PATTERNS
 } ParserType;
 
-typedef struct {
+typedef struct
+{
   GtkFileFilter *filter;
   GtkBuilder    *builder;
   ParserType     type;
@@ -290,9 +259,9 @@ typedef struct {
 
 static void
 parser_start_element (GtkBuildableParseContext  *context,
-                      const gchar               *element_name,
-                      const gchar              **names,
-                      const gchar              **values,
+                      const char                *element_name,
+                      const char               **names,
+                      const char               **values,
                       gpointer                   user_data,
                       GError                   **error)
 {
@@ -335,11 +304,11 @@ parser_start_element (GtkBuildableParseContext  *context,
 }
 
 static void
-parser_text_element (GtkBuildableParseContext *context,
-                     const gchar              *text,
-                     gsize                     text_len,
-                     gpointer                  user_data,
-                     GError                  **error)
+parser_text_element (GtkBuildableParseContext  *context,
+                     const char                *text,
+                     gsize                      text_len,
+                     gpointer                   user_data,
+                     GError                   **error)
 {
   SubParserData *data = (SubParserData*)user_data;
 
@@ -348,10 +317,10 @@ parser_text_element (GtkBuildableParseContext *context,
 }
 
 static void
-parser_end_element (GtkBuildableParseContext *context,
-                    const gchar              *element_name,
-                    gpointer                  user_data,
-                    GError                  **error)
+parser_end_element (GtkBuildableParseContext  *context,
+                    const char                *element_name,
+                    gpointer                   user_data,
+                    GError                   **error)
 {
   SubParserData *data = (SubParserData*)user_data;
 
@@ -385,7 +354,7 @@ static gboolean
 gtk_file_filter_buildable_custom_tag_start (GtkBuildable       *buildable,
                                             GtkBuilder         *builder,
                                             GObject            *child,
-                                            const gchar        *tagname,
+                                            const char         *tagname,
                                             GtkBuildableParser *parser,
                                             gpointer           *parser_data)
 {
@@ -421,7 +390,7 @@ static void
 gtk_file_filter_buildable_custom_tag_end (GtkBuildable *buildable,
                                           GtkBuilder   *builder,
                                           GObject      *child,
-                                          const gchar  *tagname,
+                                          const char   *tagname,
                                           gpointer      user_data)
 {
   if (strcmp (tagname, "mime-types") == 0 ||
@@ -433,6 +402,17 @@ gtk_file_filter_buildable_custom_tag_end (GtkBuildable *buildable,
       g_slice_free (SubParserData, data);
     }
 }
+
+static void
+gtk_file_filter_buildable_init (GtkBuildableIface *iface)
+{
+  iface->custom_tag_start = gtk_file_filter_buildable_custom_tag_start;
+  iface->custom_tag_end = gtk_file_filter_buildable_custom_tag_end;
+}
+
+/*
+ * Public api
+ */
 
 /**
  * gtk_file_filter_new:
@@ -470,7 +450,7 @@ gtk_file_filter_new (void)
  **/
 void
 gtk_file_filter_set_name (GtkFileFilter *filter,
-                          const gchar   *name)
+                          const char    *name)
 {
   g_return_if_fail (GTK_IS_FILE_FILTER (filter));
 
@@ -493,7 +473,7 @@ gtk_file_filter_set_name (GtkFileFilter *filter,
  *   or %NULL. This value is owned by GTK and must not
  *   be modified or freed.
  **/
-const gchar *
+const char *
 gtk_file_filter_get_name (GtkFileFilter *filter)
 {
   g_return_val_if_fail (GTK_IS_FILE_FILTER (filter), NULL);
@@ -503,7 +483,7 @@ gtk_file_filter_get_name (GtkFileFilter *filter)
 
 static void
 file_filter_add_rule (GtkFileFilter *filter,
-		      FilterRule    *rule)
+                      FilterRule    *rule)
 {
   filter->rules = g_slist_append (filter->rules, rule);
 
@@ -539,7 +519,7 @@ file_filter_add_attribute (GtkFileFilter *filter,
  **/
 void
 gtk_file_filter_add_mime_type (GtkFileFilter *filter,
-                               const gchar   *mime_type)
+                               const char    *mime_type)
 {
   FilterRule *rule;
 
@@ -559,15 +539,15 @@ gtk_file_filter_add_mime_type (GtkFileFilter *filter,
  * gtk_file_filter_add_pattern:
  * @filter: a #GtkFileFilter
  * @pattern: a shell style glob
- * 
+ *
  * Adds a rule allowing a shell style glob to a filter.
  **/
 void
 gtk_file_filter_add_pattern (GtkFileFilter *filter,
-			     const gchar   *pattern)
+                             const char    *pattern)
 {
   FilterRule *rule;
-  
+
   g_return_if_fail (GTK_IS_FILE_FILTER (filter));
   g_return_if_fail (pattern != NULL);
 
@@ -629,14 +609,14 @@ gtk_file_filter_add_pixbuf_formats (GtkFileFilter *filter)
 /**
  * gtk_file_filter_get_attributes:
  * @filter: a #GtkFileFilter
- * 
+ *
  * Gets the attributes that need to be filled in for the #GFileInfo
  * passed to gtk_file_filter_filter()
- * 
- * This function will not typically be used by applications; it
- * is intended principally for use in the implementation of
- * #GtkFileChooser.
- * 
+ *
+ * This function will not typically be used by applications;
+ * it is intended principally for use in the implementation
+ * of #GtkFileChooser.
+ *
  * Returns: (transfer none): the attributes
  **/
 const char **
@@ -724,7 +704,7 @@ NSArray * _gtk_file_filter_get_as_pattern_nsstrings (GtkFileFilter *filter)
 #endif
 
 char **
-_gtk_file_filter_get_as_patterns (GtkFileFilter      *filter)
+_gtk_file_filter_get_as_patterns (GtkFileFilter *filter)
 {
   GPtrArray *array;
   GSList *tmp_list;
@@ -842,36 +822,6 @@ gtk_file_filter_match (GtkFilter *filter,
                   {
                     if (g_content_type_is_a (filter_content_type, rule->u.content_types[i]))
                       return TRUE;
-                  }
-              }
-          }
-          break;
-
-          {
-            const char *filter_content_type;
-
-            filter_content_type = g_file_info_get_content_type (info);
-            if (filter_content_type)
-              {
-                GSList *list;
-
-                for (list = rule->u.pixbuf_formats; list; list = list->next)
-                  {
-                    int i;
-                    char **mime_types;
-
-                    mime_types = gdk_pixbuf_format_get_mime_types (list->data);
-
-                    for (i = 0; mime_types[i] != NULL; i++)
-                      {
-                        if (strcmp (mime_types[i], filter_content_type) == 0)
-                          {
-                            g_strfreev (mime_types);
-                            return TRUE;
-                          }
-                      }
-
-                    g_strfreev (mime_types);
                   }
               }
           }
