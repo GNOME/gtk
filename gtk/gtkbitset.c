@@ -707,7 +707,7 @@ gtk_bitset_shift_right (GtkBitset *self,
 }
 
 /**
- * gtk_bitset_slice:
+ * gtk_bitset_splice:
  * @self: a #GtkBitset
  * @position: position at which to slice
  * @removed: number of values to remove
@@ -725,10 +725,10 @@ gtk_bitset_shift_right (GtkBitset *self,
  * up space that can then be filled.
  **/
 void
-gtk_bitset_slice (GtkBitset *self,
-                  guint      position,
-                  guint      removed,
-                  guint      added)
+gtk_bitset_splice (GtkBitset *self,
+                   guint      position,
+                   guint      removed,
+                   guint      added)
 {
   g_return_if_fail (self != NULL);
   /* overflow */

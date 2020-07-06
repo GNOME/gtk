@@ -375,7 +375,7 @@ gtk_bitset_subtract
 gtk_bitset_difference
 gtk_bitset_shift_left
 gtk_bitset_shift_right
-gtk_bitset_slice
+gtk_bitset_splice
 <SUBSECTION>
 GtkBitsetIter
 gtk_bitset_iter_init_first

@@ -302,9 +302,9 @@ gtk_filter_list_model_items_changed_cb (GListModel         *model,
   else
     filter_removed = 0;
 
-  gtk_bitset_slice (self->matches, position, removed, added);
+  gtk_bitset_splice (self->matches, position, removed, added);
   if (self->pending)
-    gtk_bitset_slice (self->pending, position, removed, added);
+    gtk_bitset_splice (self->pending, position, removed, added);
 
   if (added > 0)
     {

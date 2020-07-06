@@ -125,7 +125,7 @@ GDK_AVAILABLE_IN_ALL
 void                    gtk_bitset_shift_right                  (GtkBitset              *self,
                                                                  guint                   amount);
 GDK_AVAILABLE_IN_ALL
-void                    gtk_bitset_slice                        (GtkBitset              *self,
+void                    gtk_bitset_splice                       (GtkBitset              *self,
                                                                  guint                   position,
                                                                  guint                   removed,
                                                                  guint                   added);
