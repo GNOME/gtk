@@ -122,8 +122,7 @@ on_object_activated (GtkInspectorObjectTree *wt,
 {
   const gchar *tab;
 
-  if (!set_selected_object (iw, selected))
-    return;
+  gtk_inspector_window_set_object (iw, CHILD_KIND_WIDGET, selected);
 
   tab = g_object_get_data (G_OBJECT (wt), "next-tab");
   if (tab)
@@ -180,8 +179,7 @@ open_object_details (GtkWidget *button, GtkInspectorWindow *iw)
 
   selected = gtk_inspector_object_tree_get_selected (GTK_INSPECTOR_OBJECT_TREE (iw->object_tree));
  
-  if (!set_selected_object (iw, selected))
-    return;
+  gtk_inspector_window_set_object (iw, CHILD_KIND_WIDGET, selected);
 
   gtk_stack_set_visible_child_name (GTK_STACK (iw->object_stack), "object-details");
   gtk_stack_set_visible_child_name (GTK_STACK (iw->object_buttons), "details");
@@ -206,11 +204,19 @@ translate_visible_child_name (GBinding     *binding,
   return TRUE;
 }
 
+typedef struct
+{
+  GObject *object;
+  ChildKind kind;
+} ChildData;
+
 static void
 gtk_inspector_window_init (GtkInspectorWindow *iw)
 {
   GIOExtensionPoint *extension_point;
   GList *l, *extensions;
+
+  iw->objects = g_array_new (FALSE, FALSE, sizeof (ChildData));
 
   gtk_widget_init_template (GTK_WIDGET (iw));
 
@@ -299,6 +305,7 @@ gtk_inspector_window_dispose (GObject *object)
   g_object_set_data (G_OBJECT (iw->inspected_display), "-gtk-inspector", NULL);
 
   g_clear_object (&iw->flash_overlay);
+  g_clear_pointer (&iw->objects, g_array_unref);
 
   G_OBJECT_CLASS (gtk_inspector_window_parent_class)->dispose (object);
 }
@@ -325,6 +332,202 @@ toggle_sidebar (GtkWidget          *button,
       gtk_revealer_set_reveal_child (GTK_REVEALER (iw->sidebar_revealer), TRUE);
       gtk_button_set_icon_name (GTK_BUTTON (button), "go-previous-symbolic");
     }
+}
+
+static void
+go_up_cb (GtkWidget          *button,
+          GtkInspectorWindow *iw)
+{
+  if (iw->objects->len > 1)
+    {
+      gtk_inspector_window_pop_object (iw);
+      return;
+    }
+  else if (iw->objects->len > 0)
+    {
+      ChildData *data = &g_array_index (iw->objects, ChildData, 0);
+      GtkWidget *widget = (GtkWidget *)data->object;
+      if (GTK_IS_WIDGET (widget) && gtk_widget_get_parent (widget))
+        {
+          gtk_inspector_window_replace_object (iw, (GObject*)gtk_widget_get_parent (widget));
+          return;
+        }
+    }
+
+  gtk_widget_error_bell (GTK_WIDGET (iw));
+}
+
+static void
+go_down_cb (GtkWidget          *button,
+            GtkInspectorWindow *iw)
+{
+  ChildData *data;
+  GObject *object;
+
+  if (iw->objects->len < 1)
+    {
+      gtk_widget_error_bell (GTK_WIDGET (iw));
+      return;
+    }
+
+  data = &g_array_index (iw->objects, ChildData, iw->objects->len - 1);
+  object = data->object;
+
+  if (GTK_IS_WIDGET (object))
+    {
+      GtkWidget *child = gtk_widget_get_first_child (GTK_WIDGET (object));
+
+      if (child)
+        {
+          gtk_inspector_window_push_object (iw, CHILD_KIND_WIDGET, G_OBJECT (child));
+          return;
+        }
+    }
+  else if (G_IS_LIST_MODEL (object))
+    {
+      GObject *item = g_list_model_get_item (G_LIST_MODEL (object), 0);
+      if (item)
+        {
+          gtk_inspector_window_push_object (iw, CHILD_KIND_LISTITEM, item);
+          g_object_unref (item);
+          return;
+        }
+    }
+
+  gtk_widget_error_bell (GTK_WIDGET (iw));
+}
+
+static guint
+list_model_find_object (GListModel *model,
+                        gpointer    object)
+{
+
+  guint i, n;
+
+  n = g_list_model_get_n_items (model);
+  for (i = 0; i < n; i++)
+    {
+      gpointer item = g_list_model_get_item (model, i);
+
+      if (item == object)
+        {
+          g_object_unref (item);
+          return i;
+        }
+
+      g_object_unref (item);
+    }
+
+  return GTK_INVALID_LIST_POSITION;
+}
+
+static gpointer
+list_model_get_previous (GListModel *model,
+                         gpointer    item)
+{
+  guint position = list_model_find_object (model, item);
+
+  if (position == GTK_INVALID_LIST_POSITION || position == 0)
+    return NULL;
+
+  return g_list_model_get_item (model, position - 1);
+}
+
+static gpointer
+list_model_get_next (GListModel *model,
+                     gpointer    item)
+{
+  guint position = list_model_find_object (model, item);
+
+  return g_list_model_get_item (model, position + 1);
+}
+
+static void
+go_previous_cb (GtkWidget          *button,
+                GtkInspectorWindow *iw)
+{
+  ChildData *odata;
+  ChildData *pdata;
+  GObject *object;
+  GObject *parent;
+
+  if (iw->objects->len < 2)
+    {
+      gtk_widget_error_bell (GTK_WIDGET (iw));
+      return;
+    }
+
+  odata = &g_array_index (iw->objects, ChildData, iw->objects->len - 1);
+  pdata = &g_array_index (iw->objects, ChildData, iw->objects->len - 2);
+
+  object = odata->object;
+  parent = pdata->object;
+
+  if (GTK_IS_WIDGET (object) && gtk_widget_get_parent (GTK_WIDGET (object)) == (GtkWidget*)parent)
+    {
+      GtkWidget *sibling = gtk_widget_get_prev_sibling (GTK_WIDGET (object));
+      if (sibling)
+        {
+          gtk_inspector_window_replace_object (iw, (GObject*)sibling);
+          return;
+        }
+    }
+  else if (G_IS_LIST_MODEL (parent))
+    {
+      GObject *item = list_model_get_previous (G_LIST_MODEL (parent), object);
+      if (item)
+        {
+          gtk_inspector_window_replace_object (iw, item);
+          g_object_unref (item);
+          return;
+        }
+    }
+
+  gtk_widget_error_bell (GTK_WIDGET (iw));
+}
+
+static void
+go_next_cb (GtkWidget          *button,
+            GtkInspectorWindow *iw)
+{
+  ChildData *odata;
+  ChildData *pdata;
+  GObject *object;
+  GObject *parent;
+
+  if (iw->objects->len < 2)
+    {
+      gtk_widget_error_bell (GTK_WIDGET (iw));
+      return;
+    }
+
+  odata = &g_array_index (iw->objects, ChildData, iw->objects->len - 1);
+  pdata = &g_array_index (iw->objects, ChildData, iw->objects->len - 2);
+
+  object = odata->object;
+  parent = pdata->object;
+
+  if (GTK_IS_WIDGET (object) && gtk_widget_get_parent (GTK_WIDGET (object)) == (GtkWidget*)parent)
+    {
+      GtkWidget *sibling = gtk_widget_get_next_sibling (GTK_WIDGET (object));
+      if (sibling)
+        {
+          gtk_inspector_window_replace_object (iw, (GObject*)sibling);
+          return;
+        }
+    }
+  else if (G_IS_LIST_MODEL (parent))
+    {
+      GObject *item = list_model_get_next (G_LIST_MODEL (parent), object);
+      if (item)
+        {
+          gtk_inspector_window_replace_object (iw, item);
+          g_object_unref (item);
+          return;
+        }
+    }
+
+  gtk_widget_error_bell (GTK_WIDGET (iw));
 }
 
 static void
@@ -461,6 +664,11 @@ gtk_inspector_window_class_init (GtkInspectorWindowClass *klass)
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, general);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, logs);
 
+  gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, go_previous_button);
+  gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, go_up_button);
+  gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, go_down_button);
+  gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, go_next_button);
+
   gtk_widget_class_bind_template_callback (widget_class, gtk_inspector_on_inspect);
   gtk_widget_class_bind_template_callback (widget_class, on_object_activated);
   gtk_widget_class_bind_template_callback (widget_class, on_object_selected);
@@ -469,6 +677,10 @@ gtk_inspector_window_class_init (GtkInspectorWindowClass *klass)
   gtk_widget_class_bind_template_callback (widget_class, object_details_changed);
   gtk_widget_class_bind_template_callback (widget_class, notify_node);
   gtk_widget_class_bind_template_callback (widget_class, toggle_sidebar);
+  gtk_widget_class_bind_template_callback (widget_class, go_previous_cb);
+  gtk_widget_class_bind_template_callback (widget_class, go_up_cb);
+  gtk_widget_class_bind_template_callback (widget_class, go_down_cb);
+  gtk_widget_class_bind_template_callback (widget_class, go_next_cb);
 }
 
 static GdkDisplay *
@@ -667,6 +879,138 @@ GdkDisplay *
 gtk_inspector_window_get_inspected_display (GtkInspectorWindow *iw)
 {
   return iw->inspected_display;
+}
+
+static void
+update_go_buttons (GtkInspectorWindow *iw)
+{
+  ChildData *pdata;
+  ChildData *odata;
+  GObject *parent;
+  GObject *object;
+
+  if (iw->objects->len > 1)
+    {
+      pdata = &g_array_index (iw->objects, ChildData, iw->objects->len - 2);
+      parent = pdata->object;
+    }
+  else
+    {
+      pdata = NULL;
+      parent = NULL;
+    }
+
+  if (iw->objects->len > 0)
+    {
+      odata = &g_array_index (iw->objects, ChildData, iw->objects->len - 1);
+      object = odata->object;
+    }
+  else
+    {
+      odata = NULL;
+      object = NULL;
+    }
+
+  gtk_widget_set_sensitive (iw->go_up_button, parent != NULL || GTK_IS_WIDGET (object));
+
+  if (parent)
+    {
+      char *text;
+      text = g_strdup_printf ("Go to %s", G_OBJECT_TYPE_NAME (parent));
+      gtk_widget_set_tooltip_text (iw->go_up_button, text);
+      g_free (text);
+    }
+  else
+    {
+      gtk_widget_set_tooltip_text (iw->go_up_button, NULL);
+    }
+
+  switch (odata->kind)
+    {
+    case CHILD_KIND_WIDGET:
+      gtk_widget_set_sensitive (iw->go_down_button, TRUE);
+      gtk_widget_set_sensitive (iw->go_previous_button, TRUE);
+      gtk_widget_set_sensitive (iw->go_next_button, TRUE);
+      break;
+    case CHILD_KIND_LISTITEM:
+      gtk_widget_set_sensitive (iw->go_down_button, FALSE);
+      gtk_widget_set_sensitive (iw->go_previous_button, TRUE);
+      gtk_widget_set_sensitive (iw->go_next_button, TRUE);
+      break;
+    case CHILD_KIND_PROPERTY:
+    case CHILD_KIND_CONTROLLER:
+      gtk_widget_set_sensitive (iw->go_down_button, FALSE);
+      gtk_widget_set_sensitive (iw->go_previous_button, FALSE);
+      gtk_widget_set_sensitive (iw->go_next_button, FALSE);
+      break;
+    default:
+      g_assert_not_reached ();
+      break;
+    }
+}
+
+static void
+show_object_details (GtkInspectorWindow *iw,
+                     GObject            *object)
+{
+  set_selected_object (iw, object);
+
+  gtk_stack_set_visible_child_name (GTK_STACK (iw->object_details), "misc");
+  gtk_stack_set_visible_child_name (GTK_STACK (iw->object_stack), "object-details");
+  gtk_stack_set_visible_child_name (GTK_STACK (iw->object_buttons), "details");
+}
+
+void
+gtk_inspector_window_push_object (GtkInspectorWindow *iw,
+                                  ChildKind           kind,
+                                  GObject            *object)
+{
+  ChildData data;
+
+  data.kind = kind;
+  data.object = object;
+  g_array_append_val (iw->objects, data);
+  show_object_details (iw, object);
+  update_go_buttons (iw);
+}
+
+void
+gtk_inspector_window_pop_object (GtkInspectorWindow *iw)
+{
+  ChildData *data;
+
+  if (iw->objects->len < 2)
+    {
+      gtk_widget_error_bell (GTK_WIDGET (iw));
+      return;
+    }
+
+  g_array_remove_index (iw->objects, iw->objects->len - 1);
+  data = &g_array_index (iw->objects, ChildData, iw->objects->len - 1);
+  show_object_details (iw, data->object);
+  update_go_buttons (iw);
+}
+
+void
+gtk_inspector_window_replace_object (GtkInspectorWindow *iw,
+                                     GObject            *object)
+{
+  ChildData *data;
+
+  data = &g_array_index (iw->objects, ChildData, iw->objects->len - 1);
+  data->object = object;
+  show_object_details (iw, object);
+  update_go_buttons (iw);
+}
+
+void
+gtk_inspector_window_set_object (GtkInspectorWindow *iw,
+                                 ChildKind           kind,
+                                 GObject            *object)
+{
+  g_array_set_size (iw->objects, 0);
+  gtk_inspector_window_push_object (iw, kind, object);
+  update_go_buttons (iw);
 }
 
 // vim: set et sw=2 ts=2:

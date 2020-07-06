@@ -78,6 +78,11 @@ typedef struct
   GtkWidget *general;
   GtkWidget *logs;
 
+  GtkWidget *go_previous_button;
+  GtkWidget *go_up_button;
+  GtkWidget *go_down_button;
+  GtkWidget *go_next_button;
+
   GList *extra_pages;
 
   GdkSeat *grab_seat;
@@ -85,6 +90,8 @@ typedef struct
   GtkInspectorOverlay *flash_overlay;
   gint flash_count;
   gint flash_cnx;
+
+  GArray *objects;
 
   GList *overlays;
 
@@ -117,6 +124,24 @@ void                    gtk_inspector_window_remove_overlay                     
 void                    gtk_inspector_window_select_widget_under_pointer        (GtkInspectorWindow     *iw);
 GdkDisplay *            gtk_inspector_window_get_inspected_display              (GtkInspectorWindow     *iw);
 
+typedef enum
+{
+  CHILD_KIND_WIDGET,
+  CHILD_KIND_CONTROLLER,
+  CHILD_KIND_PROPERTY,
+  CHILD_KIND_LISTITEM
+} ChildKind;
+
+void                    gtk_inspector_window_push_object     (GtkInspectorWindow *iw,
+                                                              ChildKind           kind,
+                                                              GObject            *object);
+void                    gtk_inspector_window_pop_object      (GtkInspectorWindow *iw);
+void                    gtk_inspector_window_set_object      (GtkInspectorWindow *iw,
+                                                              ChildKind           kind,
+                                                              GObject            *object);
+void                    gtk_inspector_window_replace_object  (GtkInspectorWindow *iw,
+                                                              GObject            *object);
+
 gboolean                gtk_inspector_is_recording                              (GtkWidget              *widget);
 GskRenderNode *         gtk_inspector_prepare_render                            (GtkWidget              *widget,
                                                                                  GskRenderer            *renderer,
@@ -124,7 +149,6 @@ GskRenderNode *         gtk_inspector_prepare_render                            
                                                                                  const cairo_region_t   *region,
                                                                                  GskRenderNode          *node);
 gboolean                gtk_inspector_handle_event                              (GdkEvent               *event);
-                                                                                
 
 G_END_DECLS
 
