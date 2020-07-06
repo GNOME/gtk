@@ -1310,7 +1310,7 @@ gtk_file_chooser_get_current_folder
 <SUBSECTION>
 gtk_file_chooser_add_filter
 gtk_file_chooser_remove_filter
-gtk_file_chooser_list_filters
+gtk_file_chooser_get_filters
 gtk_file_chooser_set_filter
 gtk_file_chooser_get_filter
 <SUBSECTION>
