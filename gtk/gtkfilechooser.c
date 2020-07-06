@@ -185,6 +185,22 @@ gtk_file_chooser_default_init (GtkFileChooserInterface *iface)
                                                           GTK_PARAM_READABLE));
 
   /**
+   * GtkFileChooser:shortcut-folders:
+   *
+   * A #GListModel containing the shortcut folders that have been
+   * added with gtk_file_chooser_add_shortcut().
+   *
+   * The returned object should not be modified. It may
+   * or may not be updated for later changes.
+   */
+  g_object_interface_install_property (iface,
+                                       g_param_spec_object ("shortcut-folders",
+                                                          P_("Shortcut Folders"),
+                                                          P_("List model of shortcut folders"),
+                                                          G_TYPE_LIST_MODEL,
+                                                          GTK_PARAM_READABLE));
+
+  /**
    * GtkFileChooser:create-folders:
    * 
    * Whether a file chooser not in %GTK_FILE_CHOOSER_ACTION_OPEN mode

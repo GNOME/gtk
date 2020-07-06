@@ -3076,6 +3076,10 @@ gtk_file_chooser_widget_get_property (GObject    *object,
       g_value_set_object (value, impl->filters);
       break;
 
+    case GTK_FILE_CHOOSER_PROP_SHORTCUT_FOLDERS:
+      g_value_take_object (value, gtk_file_chooser_get_shortcut_folders (GTK_FILE_CHOOSER (impl)));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -5625,6 +5629,9 @@ gtk_file_chooser_widget_add_shortcut_folder (GtkFileChooser  *chooser,
   GtkFileChooserWidget *impl = GTK_FILE_CHOOSER_WIDGET (chooser);
 
   gtk_places_sidebar_add_shortcut (GTK_PLACES_SIDEBAR (impl->places_sidebar), file);
+
+  g_object_notify (G_OBJECT (chooser), "shortcut-folders");
+
   return TRUE;
 }
 
@@ -5636,6 +5643,9 @@ gtk_file_chooser_widget_remove_shortcut_folder (GtkFileChooser  *chooser,
   GtkFileChooserWidget *impl = GTK_FILE_CHOOSER_WIDGET (chooser);
 
   gtk_places_sidebar_remove_shortcut (GTK_PLACES_SIDEBAR (impl->places_sidebar), file);
+
+  g_object_notify (G_OBJECT (chooser), "shortcut-folders");
+
   return TRUE;
 }
 

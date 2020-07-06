@@ -106,6 +106,9 @@ _gtk_file_chooser_install_properties (GObjectClass *klass)
   g_object_class_override_property (klass,
                                     GTK_FILE_CHOOSER_PROP_FILTERS,
                                     "filters");
+  g_object_class_override_property (klass,
+                                    GTK_FILE_CHOOSER_PROP_SHORTCUT_FOLDERS,
+                                    "shortcut-folders");
 }
 
 /**

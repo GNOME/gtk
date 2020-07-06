@@ -1036,6 +1036,7 @@ gtk_file_chooser_button_get_property (GObject    *object,
     case GTK_FILE_CHOOSER_PROP_SELECT_MULTIPLE:
     case GTK_FILE_CHOOSER_PROP_CREATE_FOLDERS:
     case GTK_FILE_CHOOSER_PROP_FILTERS:
+    case GTK_FILE_CHOOSER_PROP_SHORTCUT_FOLDERS:
       g_object_get_property (G_OBJECT (button->chooser), pspec->name, value);
       break;
 
