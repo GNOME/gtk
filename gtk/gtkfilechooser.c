@@ -169,6 +169,22 @@ gtk_file_chooser_default_init (GtkFileChooserInterface *iface)
                                                              GTK_PARAM_READWRITE));
 
   /**
+   * GtkFileChooser:filters:
+   *
+   * A #GListModel containing the filters that have been
+   * added with gtk_file_chooser_add_filter().
+   *
+   * The returned object should not be modified. It may
+   * or may not be updated for later changes.
+   */
+  g_object_interface_install_property (iface,
+                                       g_param_spec_object ("filters",
+                                                          P_("Filters"),
+                                                          P_("List model of filters"),
+                                                          G_TYPE_LIST_MODEL,
+                                                          GTK_PARAM_READABLE));
+
+  /**
    * GtkFileChooser:create-folders:
    * 
    * Whether a file chooser not in %GTK_FILE_CHOOSER_ACTION_OPEN mode

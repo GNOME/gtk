@@ -3072,6 +3072,10 @@ gtk_file_chooser_widget_get_property (GObject    *object,
       g_value_set_boolean (value, impl->create_folders);
       break;
 
+    case GTK_FILE_CHOOSER_PROP_FILTERS:
+      g_value_set_object (value, impl->filters);
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -5564,6 +5568,8 @@ gtk_file_chooser_widget_add_filter (GtkFileChooser *chooser,
     set_current_filter (impl, filter);
 
   show_filters (impl, TRUE);
+
+  g_object_notify (G_OBJECT (chooser), "filters");
 }
 
 static void
@@ -5597,6 +5603,8 @@ gtk_file_chooser_widget_remove_filter (GtkFileChooser *chooser,
 
   if (!impl->filters)
     show_filters (impl, FALSE);
+
+  g_object_notify (G_OBJECT (chooser), "filters");
 }
 
 static GListModel *

@@ -92,17 +92,20 @@ void
 _gtk_file_chooser_install_properties (GObjectClass *klass)
 {
   g_object_class_override_property (klass,
-				    GTK_FILE_CHOOSER_PROP_ACTION,
-				    "action");
+                                    GTK_FILE_CHOOSER_PROP_ACTION,
+                                    "action");
   g_object_class_override_property (klass,
-				    GTK_FILE_CHOOSER_PROP_FILTER,
-				    "filter");
+                                    GTK_FILE_CHOOSER_PROP_FILTER,
+                                    "filter");
   g_object_class_override_property (klass,
-				    GTK_FILE_CHOOSER_PROP_SELECT_MULTIPLE,
-				    "select-multiple");
+                                    GTK_FILE_CHOOSER_PROP_SELECT_MULTIPLE,
+                                    "select-multiple");
   g_object_class_override_property (klass,
-				    GTK_FILE_CHOOSER_PROP_CREATE_FOLDERS,
-				    "create-folders");
+                                    GTK_FILE_CHOOSER_PROP_CREATE_FOLDERS,
+                                    "create-folders");
+  g_object_class_override_property (klass,
+                                    GTK_FILE_CHOOSER_PROP_FILTERS,
+                                    "filters");
 }
 
 /**
