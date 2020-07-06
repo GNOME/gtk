@@ -1,4 +1,4 @@
-/* gtkaccessible.h: Accessible interface
+/* gtkatcontext.h: Assistive technology context
  *
  * Copyright 2020  GNOME Foundation
  *
@@ -20,20 +20,20 @@
 
 #pragma once
 
-#include <glib-object.h>
 #include <gtk/gtktypes.h>
 #include <gtk/gtkenums.h>
+#include <gtk/gtkaccessible.h>
 
 G_BEGIN_DECLS
 
-#define GTK_TYPE_ACCESSIBLE (gtk_accessible_get_type())
+#define GTK_TYPE_AT_CONTEXT (gtk_at_context_get_type())
 
 GDK_AVAILABLE_IN_ALL
-G_DECLARE_INTERFACE (GtkAccessible, gtk_accessible, GTK, ACCESSIBLE, GObject)
+GDK_DECLARE_INTERNAL_TYPE (GtkATContext, gtk_at_context, GTK, AT_CONTEXT, GObject)
 
 GDK_AVAILABLE_IN_ALL
-void    gtk_accessible_update_state     (GtkAccessible      *self,
-                                         GtkAccessibleState  first_state,
-                                         ...);
+GtkAccessible *         gtk_at_context_get_accessible           (GtkATContext *self);
+GDK_AVAILABLE_IN_ALL
+GtkAccessibleRole       gtk_at_context_get_accessible_role      (GtkATContext *self);
 
 G_END_DECLS

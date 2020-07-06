@@ -1,4 +1,4 @@
-/* gtkaccessible.h: Accessible interface
+/* gtktestatcontextprivate.h: Private test AT context
  *
  * Copyright 2020  GNOME Foundation
  *
@@ -20,20 +20,28 @@
 
 #pragma once
 
-#include <glib-object.h>
-#include <gtk/gtktypes.h>
-#include <gtk/gtkenums.h>
+#include "gtkatcontextprivate.h"
 
 G_BEGIN_DECLS
 
-#define GTK_TYPE_ACCESSIBLE (gtk_accessible_get_type())
+#define GTK_TYPE_TEST_AT_CONTEXT (gtk_test_at_context_get_type())
 
-GDK_AVAILABLE_IN_ALL
-G_DECLARE_INTERFACE (GtkAccessible, gtk_accessible, GTK, ACCESSIBLE, GObject)
+G_DECLARE_FINAL_TYPE (GtkTestATContext, gtk_test_at_context, GTK, TEST_AT_CONTEXT, GtkATContext)
 
-GDK_AVAILABLE_IN_ALL
-void    gtk_accessible_update_state     (GtkAccessible      *self,
-                                         GtkAccessibleState  first_state,
-                                         ...);
+GtkATContext *
+gtk_test_at_context_new (GtkAccessibleRole  accessible_role,
+                         GtkAccessible     *accessible);
+
+void
+gtk_test_at_context_assert_role (GtkTestATContext  *self,
+                                 GtkAccessibleRole  role);
+
+void
+gtk_test_at_context_assert_state_added (GtkTestATContext   *self,
+                                        GtkAccessibleState  state);
+
+void
+gtk_test_at_context_assert_state_removed (GtkTestATContext   *self,
+                                          GtkAccessibleState  state);
 
 G_END_DECLS
