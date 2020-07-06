@@ -145,18 +145,18 @@ GFile *  gtk_file_chooser_get_current_folder      (GtkFileChooser  *chooser);
  */
 GDK_AVAILABLE_IN_ALL
 void    gtk_file_chooser_add_filter    (GtkFileChooser *chooser,
-					GtkFileFilter  *filter);
+                                        GtkFileFilter  *filter);
 GDK_AVAILABLE_IN_ALL
 void    gtk_file_chooser_remove_filter (GtkFileChooser *chooser,
-					GtkFileFilter  *filter);
+                                        GtkFileFilter  *filter);
 GDK_AVAILABLE_IN_ALL
-GSList *gtk_file_chooser_list_filters  (GtkFileChooser *chooser);
+GListModel *gtk_file_chooser_get_filters  (GtkFileChooser *chooser);
 
 /* Current filter
  */
 GDK_AVAILABLE_IN_ALL
 void           gtk_file_chooser_set_filter (GtkFileChooser *chooser,
-					    GtkFileFilter  *filter);
+                                            GtkFileFilter  *filter);
 GDK_AVAILABLE_IN_ALL
 GtkFileFilter *gtk_file_chooser_get_filter (GtkFileChooser *chooser);
 
@@ -164,14 +164,14 @@ GtkFileFilter *gtk_file_chooser_get_filter (GtkFileChooser *chooser);
 
 GDK_AVAILABLE_IN_ALL
 gboolean gtk_file_chooser_add_shortcut_folder    (GtkFileChooser *chooser,
-						  GFile          *folder,
-						  GError        **error);
+                                                  GFile          *folder,
+                                                  GError        **error);
 GDK_AVAILABLE_IN_ALL
 gboolean gtk_file_chooser_remove_shortcut_folder (GtkFileChooser *chooser,
-						  GFile          *folder,
-						  GError        **error);
+                                                  GFile          *folder,
+                                                  GError        **error);
 GDK_AVAILABLE_IN_ALL
-GSList *gtk_file_chooser_list_shortcut_folders   (GtkFileChooser *chooser);
+GListModel *gtk_file_chooser_get_shortcut_folders (GtkFileChooser *chooser);
 
 GDK_AVAILABLE_IN_ALL
 void        gtk_file_chooser_add_choice              (GtkFileChooser  *chooser,

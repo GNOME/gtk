@@ -5672,15 +5672,19 @@ native_filter_changed (GtkWidget *combo,
                        GtkFileChooserNative *native)
 {
   int i;
-  GSList *filters, *l;
+  GListModel *filters;
   GtkFileFilter *filter;
 
   i = gtk_combo_box_get_active (GTK_COMBO_BOX (combo));
 
-  filters = gtk_file_chooser_list_filters (GTK_FILE_CHOOSER (native));
-  for (l = filters; l != NULL; l = l->next)
-    gtk_file_chooser_remove_filter (GTK_FILE_CHOOSER (native), l->data);
-  g_slist_free (filters);
+  filters = gtk_file_chooser_get_filters (GTK_FILE_CHOOSER (native));
+  while (g_list_model_get_n_items (filters) > 0)
+    {
+      GtkFileFilter *f = g_list_model_get_item (filters, 0);
+      gtk_file_chooser_remove_filter (GTK_FILE_CHOOSER (native), f);
+      g_object_unref (f);
+    }
+  g_object_unref (filters);
 
   switch (i)
     {

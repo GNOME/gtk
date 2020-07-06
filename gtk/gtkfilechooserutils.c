@@ -45,14 +45,14 @@ static void           delegate_add_filter             (GtkFileChooser    *choose
 						       GtkFileFilter     *filter);
 static void           delegate_remove_filter          (GtkFileChooser    *chooser,
 						       GtkFileFilter     *filter);
-static GSList *       delegate_list_filters           (GtkFileChooser    *chooser);
+static GListModel *   delegate_get_filters            (GtkFileChooser    *chooser);
 static gboolean       delegate_add_shortcut_folder    (GtkFileChooser    *chooser,
 						       GFile             *file,
 						       GError           **error);
 static gboolean       delegate_remove_shortcut_folder (GtkFileChooser    *chooser,
 						       GFile             *file,
 						       GError           **error);
-static GSList *       delegate_list_shortcut_folders  (GtkFileChooser    *chooser);
+static GListModel *   delegate_get_shortcut_folders   (GtkFileChooser    *chooser);
 static void           delegate_notify                 (GObject           *object,
 						       GParamSpec        *pspec,
 						       gpointer           data);
@@ -92,17 +92,23 @@ void
 _gtk_file_chooser_install_properties (GObjectClass *klass)
 {
   g_object_class_override_property (klass,
-				    GTK_FILE_CHOOSER_PROP_ACTION,
-				    "action");
+                                    GTK_FILE_CHOOSER_PROP_ACTION,
+                                    "action");
   g_object_class_override_property (klass,
-				    GTK_FILE_CHOOSER_PROP_FILTER,
-				    "filter");
+                                    GTK_FILE_CHOOSER_PROP_FILTER,
+                                    "filter");
   g_object_class_override_property (klass,
-				    GTK_FILE_CHOOSER_PROP_SELECT_MULTIPLE,
-				    "select-multiple");
+                                    GTK_FILE_CHOOSER_PROP_SELECT_MULTIPLE,
+                                    "select-multiple");
   g_object_class_override_property (klass,
-				    GTK_FILE_CHOOSER_PROP_CREATE_FOLDERS,
-				    "create-folders");
+                                    GTK_FILE_CHOOSER_PROP_CREATE_FOLDERS,
+                                    "create-folders");
+  g_object_class_override_property (klass,
+                                    GTK_FILE_CHOOSER_PROP_FILTERS,
+                                    "filters");
+  g_object_class_override_property (klass,
+                                    GTK_FILE_CHOOSER_PROP_SHORTCUT_FOLDERS,
+                                    "shortcut-folders");
 }
 
 /**
@@ -131,10 +137,10 @@ _gtk_file_chooser_delegate_iface_init (GtkFileChooserIface *iface)
   iface->get_file_system = delegate_get_file_system;
   iface->add_filter = delegate_add_filter;
   iface->remove_filter = delegate_remove_filter;
-  iface->list_filters = delegate_list_filters;
+  iface->get_filters = delegate_get_filters;
   iface->add_shortcut_folder = delegate_add_shortcut_folder;
   iface->remove_shortcut_folder = delegate_remove_shortcut_folder;
-  iface->list_shortcut_folders = delegate_list_shortcut_folders;
+  iface->get_shortcut_folders = delegate_get_shortcut_folders;
   iface->add_choice = delegate_add_choice;
   iface->remove_choice = delegate_remove_choice;
   iface->set_choice = delegate_set_choice;
@@ -241,10 +247,10 @@ delegate_remove_filter (GtkFileChooser *chooser,
   gtk_file_chooser_remove_filter (get_delegate (chooser), filter);
 }
 
-static GSList *
-delegate_list_filters (GtkFileChooser *chooser)
+static GListModel *
+delegate_get_filters (GtkFileChooser *chooser)
 {
-  return gtk_file_chooser_list_filters (get_delegate (chooser));
+  return gtk_file_chooser_get_filters (get_delegate (chooser));
 }
 
 static gboolean
@@ -263,10 +269,10 @@ delegate_remove_shortcut_folder (GtkFileChooser  *chooser,
   return gtk_file_chooser_remove_shortcut_folder (get_delegate (chooser), file, error);
 }
 
-static GSList *
-delegate_list_shortcut_folders (GtkFileChooser *chooser)
+static GListModel *
+delegate_get_shortcut_folders (GtkFileChooser *chooser)
 {
-  return gtk_file_chooser_list_shortcut_folders (get_delegate (chooser));
+  return gtk_file_chooser_get_shortcut_folders (get_delegate (chooser));
 }
 
 static gboolean
