@@ -21,7 +21,7 @@
 
 #include "gtkfilterlistmodel.h"
 
-#include "gtkrbtreeprivate.h"
+#include "gtkbitset.h"
 #include "gtkintl.h"
 #include "gtkprivate.h"
 
@@ -35,27 +35,19 @@
  * listmodel.
  * It hides some elements from the other model according to
  * criteria given by a #GtkFilter.
+ *
+ * The model can be set up to do incremental searching, so that
+ * filtering long lists doesn't block the UI. See
+ * gtk_filter_list_model_set_incremental() for details.
  */
 
 enum {
   PROP_0,
   PROP_FILTER,
+  PROP_INCREMENTAL,
   PROP_MODEL,
+  PROP_PENDING,
   NUM_PROPERTIES
-};
-
-typedef struct _FilterNode FilterNode;
-typedef struct _FilterAugment FilterAugment;
-
-struct _FilterNode
-{
-  guint visible : 1;
-};
-
-struct _FilterAugment
-{
-  guint n_items;
-  guint n_visible;
 };
 
 struct _GtkFilterListModel
@@ -65,8 +57,11 @@ struct _GtkFilterListModel
   GListModel *model;
   GtkFilter *filter;
   GtkFilterMatch strictness;
+  gboolean incremental;
 
-  GtkRbTree *items; /* NULL if strictness != GTK_FILTER_MATCH_SOME */
+  GtkBitset *matches; /* NULL if strictness != GTK_FILTER_MATCH_SOME */
+  GtkBitset *pending; /* not yet filtered items or NULL if all filtered */
+  guint pending_cb; /* idle callback handle */
 };
 
 struct _GtkFilterListModelClass
@@ -75,119 +70,6 @@ struct _GtkFilterListModelClass
 };
 
 static GParamSpec *properties[NUM_PROPERTIES] = { NULL, };
-
-static void
-gtk_filter_list_model_augment (GtkRbTree *filter,
-                               gpointer   _aug,
-                               gpointer   _node,
-                               gpointer   left,
-                               gpointer   right)
-{
-  FilterNode *node = _node;
-  FilterAugment *aug = _aug;
-
-  aug->n_items = 1;
-  aug->n_visible = node->visible ? 1 : 0;
-
-  if (left)
-    {
-      FilterAugment *left_aug = gtk_rb_tree_get_augment (filter, left);
-      aug->n_items += left_aug->n_items;
-      aug->n_visible += left_aug->n_visible;
-    }
-  if (right)
-    {
-      FilterAugment *right_aug = gtk_rb_tree_get_augment (filter, right);
-      aug->n_items += right_aug->n_items;
-      aug->n_visible += right_aug->n_visible;
-    }
-}
-
-static FilterNode *
-gtk_filter_list_model_get_nth_filtered (GtkRbTree *tree,
-                                        guint      position,
-                                        guint     *out_unfiltered)
-{
-  FilterNode *node, *tmp;
-  guint unfiltered;
-
-  node = gtk_rb_tree_get_root (tree);
-  unfiltered = 0;
-
-  while (node)
-    {
-      tmp = gtk_rb_tree_node_get_left (node);
-      if (tmp)
-        {
-          FilterAugment *aug = gtk_rb_tree_get_augment (tree, tmp);
-          if (position < aug->n_visible)
-            {
-              node = tmp;
-              continue;
-            }
-          position -= aug->n_visible;
-          unfiltered += aug->n_items;
-        }
-
-      if (node->visible)
-        {
-          if (position == 0)
-            break;
-          position--;
-        }
-
-      unfiltered++;
-
-      node = gtk_rb_tree_node_get_right (node);
-    }
-
-  if (out_unfiltered)
-    *out_unfiltered = unfiltered;
-
-  return node;
-}
-
-static FilterNode *
-gtk_filter_list_model_get_nth (GtkRbTree *tree,
-                               guint      position,
-                               guint     *out_filtered)
-{
-  FilterNode *node, *tmp;
-  guint filtered;
-
-  node = gtk_rb_tree_get_root (tree);
-  filtered = 0;
-
-  while (node)
-    {
-      tmp = gtk_rb_tree_node_get_left (node);
-      if (tmp)
-        {
-          FilterAugment *aug = gtk_rb_tree_get_augment (tree, tmp);
-          if (position < aug->n_items)
-            {
-              node = tmp;
-              continue;
-            }
-          position -= aug->n_items;
-          filtered += aug->n_visible;
-        }
-
-      if (position == 0)
-        break;
-
-      position--;
-      if (node->visible)
-        filtered++;
-
-      node = gtk_rb_tree_node_get_right (node);
-    }
-
-  if (out_filtered)
-    *out_filtered = filtered;
-
-  return node;
-}
 
 static GType
 gtk_filter_list_model_get_item_type (GListModel *list)
@@ -199,8 +81,6 @@ static guint
 gtk_filter_list_model_get_n_items (GListModel *list)
 {
   GtkFilterListModel *self = GTK_FILTER_LIST_MODEL (list);
-  FilterAugment *aug;
-  FilterNode *node;
 
   switch (self->strictness)
     {
@@ -211,18 +91,12 @@ gtk_filter_list_model_get_n_items (GListModel *list)
       return g_list_model_get_n_items (self->model);
 
     case GTK_FILTER_MATCH_SOME:
-      break;
+      return gtk_bitset_get_size (self->matches);
 
     default:
       g_assert_not_reached ();
+      return 0;
     }
-
-  node = gtk_rb_tree_get_root (self->items);
-  if (node == NULL)
-    return 0;
-
-  aug = gtk_rb_tree_get_augment (self->items, node);
-  return aug->n_visible;
 }
 
 static gpointer
@@ -242,7 +116,9 @@ gtk_filter_list_model_get_item (GListModel *list,
       break;
 
     case GTK_FILTER_MATCH_SOME:
-      gtk_filter_list_model_get_nth_filtered (self->items, position, &unfiltered);
+      unfiltered = gtk_bitset_get_nth (self->matches, position);
+      if (unfiltered == 0 && position >= gtk_bitset_get_size (self->matches))
+        return NULL;
       break;
 
     default:
@@ -264,8 +140,8 @@ G_DEFINE_TYPE_WITH_CODE (GtkFilterListModel, gtk_filter_list_model, G_TYPE_OBJEC
                          G_IMPLEMENT_INTERFACE (G_TYPE_LIST_MODEL, gtk_filter_list_model_model_init))
 
 static gboolean
-gtk_filter_list_model_run_filter (GtkFilterListModel *self,
-                                  guint               position)
+gtk_filter_list_model_run_filter_on_item (GtkFilterListModel *self,
+                                          guint               position)
 {
   gpointer item;
   gboolean visible;
@@ -280,26 +156,120 @@ gtk_filter_list_model_run_filter (GtkFilterListModel *self,
   return visible;
 }
 
-static guint
-gtk_filter_list_model_add_items (GtkFilterListModel *self,
-                                 FilterNode         *after,
-                                 guint               position,
-                                 guint               n_items)
+static void
+gtk_filter_list_model_run_filter (GtkFilterListModel *self,
+                                  guint               n_steps)
 {
-  FilterNode *node;
-  guint i, n_visible;
+  GtkBitsetIter iter;
+  guint i, pos;
+  gboolean more;
 
-  n_visible = 0;
+  g_return_if_fail (GTK_IS_FILTER_LIST_MODEL (self));
   
-  for (i = 0; i < n_items; i++)
+  if (self->pending == NULL)
+    return;
+
+  for (i = 0, more = gtk_bitset_iter_init_first (&iter, self->pending, &pos);
+       i < n_steps && more;
+       i++, more = gtk_bitset_iter_next (&iter, &pos))
     {
-      node = gtk_rb_tree_insert_before (self->items, after);
-      node->visible = gtk_filter_list_model_run_filter (self, position + i);
-      if (node->visible)
-        n_visible++;
+      if (gtk_filter_list_model_run_filter_on_item (self, pos))
+        gtk_bitset_add (self->matches, pos);
     }
 
-  return n_visible;
+  if (more)
+    gtk_bitset_remove_range_closed (self->pending, 0, pos);
+  else
+    g_clear_pointer (&self->pending, gtk_bitset_unref);
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_PENDING]);
+
+  return;
+}
+
+static void
+gtk_filter_list_model_stop_filtering (GtkFilterListModel *self)
+{
+  gboolean notify_pending = self->pending != NULL;
+
+  g_clear_pointer (&self->pending, gtk_bitset_unref);
+  g_clear_handle_id (&self->pending_cb, g_source_remove);
+
+  if (notify_pending)
+    g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_PENDING]);
+}
+
+static void
+gtk_filter_list_model_emit_items_changed_for_changes (GtkFilterListModel *self,
+                                                      GtkBitset          *old)
+{
+  GtkBitset *changes;
+
+  changes = gtk_bitset_copy (self->matches);
+  gtk_bitset_difference (changes, old);
+  if (!gtk_bitset_is_empty (changes))
+    {
+      guint min, max;
+
+      min = gtk_bitset_get_minimum (changes);
+      max = gtk_bitset_get_maximum (changes);
+      g_list_model_items_changed (G_LIST_MODEL (self),
+                                  min > 0 ? gtk_bitset_get_size_in_range (self->matches, 0, min - 1) : 0,
+                                  gtk_bitset_get_size_in_range (old, min, max),
+                                  gtk_bitset_get_size_in_range (self->matches, min, max));
+    }
+  gtk_bitset_unref (changes);
+  gtk_bitset_unref (old);
+}
+
+static gboolean
+gtk_filter_list_model_run_filter_cb (gpointer data)
+{
+  GtkFilterListModel *self = data;
+  GtkBitset *old;
+
+  old = gtk_bitset_copy (self->matches);
+  gtk_filter_list_model_run_filter (self, 512);
+
+  if (self->pending == NULL)
+    gtk_filter_list_model_stop_filtering (self);
+
+  gtk_filter_list_model_emit_items_changed_for_changes (self, old);
+
+  return G_SOURCE_CONTINUE;
+}
+
+/* NB: bitset is (transfer full) */
+static void
+gtk_filter_list_model_start_filtering (GtkFilterListModel *self,
+                                       GtkBitset          *items)
+{
+  if (self->pending)
+    {
+      gtk_bitset_union (self->pending, items);
+      gtk_bitset_unref (items);
+      g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_PENDING]);
+      return;
+    }
+
+  if (gtk_bitset_is_empty (items))
+    {
+      gtk_bitset_unref (items);
+      return;
+    }
+
+  self->pending = items;
+
+  if (!self->incremental)
+    {
+      gtk_filter_list_model_run_filter (self, G_MAXUINT);
+      g_assert (self->pending == NULL);
+      return;
+    }
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_PENDING]);
+  g_assert (self->pending_cb == 0);
+  self->pending_cb = g_idle_add (gtk_filter_list_model_run_filter_cb, self);
+  g_source_set_name_by_id (self->pending_cb, "[gtk] gtk_filter_list_model_run_filter_cb");
 }
 
 static void
@@ -309,8 +279,7 @@ gtk_filter_list_model_items_changed_cb (GListModel         *model,
                                         guint               added,
                                         GtkFilterListModel *self)
 {
-  FilterNode *node;
-  guint i, filter_position, filter_removed, filter_added;
+  guint filter_removed, filter_added;
 
   switch (self->strictness)
     {
@@ -328,22 +297,27 @@ gtk_filter_list_model_items_changed_cb (GListModel         *model,
       g_assert_not_reached ();
     }
 
-  node = gtk_filter_list_model_get_nth (self->items, position, &filter_position);
+  if (removed > 0)
+    filter_removed = gtk_bitset_get_size_in_range (self->matches, position, position + removed - 1);
+  else
+    filter_removed = 0;
 
-  filter_removed = 0;
-  for (i = 0; i < removed; i++)
+  gtk_bitset_splice (self->matches, position, removed, added);
+  if (self->pending)
+    gtk_bitset_splice (self->pending, position, removed, added);
+
+  if (added > 0)
     {
-      FilterNode *next = gtk_rb_tree_node_get_next (node);
-      if (node->visible)
-        filter_removed++;
-      gtk_rb_tree_remove (self->items, node);
-      node = next;
+      gtk_filter_list_model_start_filtering (self, gtk_bitset_new_range (position, added));
+      filter_added = gtk_bitset_get_size_in_range (self->matches, position, position + added - 1);
     }
-
-  filter_added = gtk_filter_list_model_add_items (self, node, position, added);
+  else
+    filter_added = 0;
 
   if (filter_removed > 0 || filter_added > 0)
-    g_list_model_items_changed (G_LIST_MODEL (self), filter_position, filter_removed, filter_added);
+    g_list_model_items_changed (G_LIST_MODEL (self),
+                                position > 0 ? gtk_bitset_get_size_in_range (self->matches, 0, position - 1) : 0,
+                                filter_removed, filter_added);
 }
 
 static void
@@ -358,6 +332,10 @@ gtk_filter_list_model_set_property (GObject      *object,
     {
     case PROP_FILTER:
       gtk_filter_list_model_set_filter (self, g_value_get_object (value));
+      break;
+
+    case PROP_INCREMENTAL:
+      gtk_filter_list_model_set_incremental (self, g_value_get_boolean (value));
       break;
 
     case PROP_MODEL:
@@ -384,8 +362,16 @@ gtk_filter_list_model_get_property (GObject     *object,
       g_value_set_object (value, self->filter);
       break;
 
+    case PROP_INCREMENTAL:
+      g_value_set_boolean (value, self->incremental);
+      break;
+
     case PROP_MODEL:
       g_value_set_object (value, self->model);
+      break;
+
+    case PROP_PENDING:
+      g_value_set_uint (value, gtk_filter_list_model_get_pending (self));
       break;
 
     default:
@@ -400,109 +386,16 @@ gtk_filter_list_model_clear_model (GtkFilterListModel *self)
   if (self->model == NULL)
     return;
 
+  gtk_filter_list_model_stop_filtering (self);
   g_signal_handlers_disconnect_by_func (self->model, gtk_filter_list_model_items_changed_cb, self);
   g_clear_object (&self->model);
-  if (self->items)
-    gtk_rb_tree_remove_all (self->items);
-}
-
-/*<private>
- * gtk_filter_list_model_find_filtered:
- * @self: a #GtkFilterListModel
- * @start: (out) (caller-allocates): number of unfiltered items
- *     at start of list
- * @end: (out) (caller-allocates): number of unfiltered items
- *     at end of list
- * @n_items: (out) (caller-allocates): number of unfiltered items in
- *     list
- *
- * Checks if elements in self->items are filtered out and returns
- * the range that they occupy.  
- * This function is intended to be used for GListModel::items-changed
- * emissions, so it is called in an intermediate state for @self.
- *
- * Returns: %TRUE if elements are filtered out, %FALSE if none are
- **/
-static gboolean
-gtk_filter_list_model_find_filtered (GtkFilterListModel *self,
-                                     guint              *start,
-                                     guint              *end,
-                                     guint              *n_items)
-{
-  FilterNode *root, *node, *tmp;
-  FilterAugment *aug;
-
-  if (self->items == NULL || self->model == NULL)
-    return FALSE;
-
-  root = gtk_rb_tree_get_root (self->items);
-  if (root == NULL)
-    return FALSE; /* empty parent model */
-
-  aug = gtk_rb_tree_get_augment (self->items, root);
-  if (aug->n_items == aug->n_visible)
-    return FALSE; /* all items visible */
-
-  /* find first filtered */
-  *start = 0;
-  *end = 0;
-  *n_items = aug->n_visible;
-
-  node = root;
-  while (node)
-    {
-      tmp = gtk_rb_tree_node_get_left (node);
-      if (tmp)
-        {
-          aug = gtk_rb_tree_get_augment (self->items, tmp);
-          if (aug->n_visible < aug->n_items)
-            {
-              node = tmp;
-              continue;
-            }
-          *start += aug->n_items;
-        }
-
-      if (!node->visible)
-        break;
-
-      (*start)++;
-
-      node = gtk_rb_tree_node_get_right (node);
-    }
-
-  /* find last filtered by doing everything the opposite way */
-  node = root;
-  while (node)
-    {
-      tmp = gtk_rb_tree_node_get_right (node);
-      if (tmp)
-        {
-          aug = gtk_rb_tree_get_augment (self->items, tmp);
-          if (aug->n_visible < aug->n_items)
-            {
-              node = tmp;
-              continue;
-            }
-          *end += aug->n_items;
-        }
-
-      if (!node->visible)
-        break;
-
-      (*end)++;
-
-      node = gtk_rb_tree_node_get_left (node);
-    }
-
-  return TRUE;
+  if (self->matches)
+    gtk_bitset_remove_all (self->matches);
 }
 
 static void
-gtk_filter_list_model_refilter (GtkFilterListModel *self);
-
-static void
-gtk_filter_list_model_update_strictness_and_refilter (GtkFilterListModel *self)
+gtk_filter_list_model_refilter (GtkFilterListModel *self,
+                                GtkFilterChange     change)
 {
   GtkFilterMatch new_strictness;
 
@@ -520,8 +413,9 @@ gtk_filter_list_model_update_strictness_and_refilter (GtkFilterListModel *self)
     case GTK_FILTER_MATCH_NONE:
       {
         guint n_before = g_list_model_get_n_items (G_LIST_MODEL (self));
-        g_clear_pointer (&self->items, gtk_rb_tree_unref);
+        g_clear_pointer (&self->matches, gtk_bitset_unref);
         self->strictness = new_strictness;
+        gtk_filter_list_model_stop_filtering (self);
         if (n_before > 0)
           g_list_model_items_changed (G_LIST_MODEL (self), 0, n_before, 0);
       }
@@ -541,16 +435,35 @@ gtk_filter_list_model_update_strictness_and_refilter (GtkFilterListModel *self)
         case GTK_FILTER_MATCH_SOME:
           {
             guint start, end, n_before, n_after;
+
+            gtk_filter_list_model_stop_filtering (self);
             self->strictness = new_strictness;
-            if (gtk_filter_list_model_find_filtered (self, &start, &end, &n_before))
+            n_after = g_list_model_get_n_items (G_LIST_MODEL (self));
+            start = gtk_bitset_get_minimum (self->matches);
+            end = gtk_bitset_get_maximum (self->matches);
+
+            n_before = gtk_bitset_get_size (self->matches);
+            if (n_before == n_after)
               {
-                n_after = g_list_model_get_n_items (G_LIST_MODEL (self));
-                g_clear_pointer (&self->items, gtk_rb_tree_unref);
-                g_list_model_items_changed (G_LIST_MODEL (self), start, n_before - end - start, n_after - end - start);
+                g_clear_pointer (&self->matches, gtk_bitset_unref);
               }
             else
               {
-                g_clear_pointer (&self->items, gtk_rb_tree_unref);
+                GtkBitset *inverse;
+
+                inverse = gtk_bitset_new_range (0, n_after);
+                gtk_bitset_subtract (inverse, self->matches);
+                /* otherwise all items would be visible */
+                g_assert (!gtk_bitset_is_empty (inverse));
+
+                /* find first filtered */
+                start = gtk_bitset_get_minimum (inverse);
+                end = n_after - gtk_bitset_get_maximum (inverse) - 1;
+
+                gtk_bitset_unref (inverse);
+
+                g_clear_pointer (&self->matches, gtk_bitset_unref);
+                g_list_model_items_changed (G_LIST_MODEL (self), start, n_before - end - start, n_after - end - start);
               }
           }
           break;
@@ -562,40 +475,44 @@ gtk_filter_list_model_update_strictness_and_refilter (GtkFilterListModel *self)
       break;
 
     case GTK_FILTER_MATCH_SOME:
-      switch (self->strictness)
-        {
-        case GTK_FILTER_MATCH_NONE:
+      {
+        GtkBitset *old, *pending;
+      
+        if (self->matches == NULL)
           {
-            guint n_after;
-            self->strictness = new_strictness;
-            self->items = gtk_rb_tree_new (FilterNode,
-                                           FilterAugment,
-                                           gtk_filter_list_model_augment,
-                                           NULL, NULL);
-            n_after = gtk_filter_list_model_add_items (self, NULL, 0, g_list_model_get_n_items (self->model));
-            if (n_after > 0)
-              g_list_model_items_changed (G_LIST_MODEL (self), 0, 0, n_after);
+            if (self->strictness == GTK_FILTER_MATCH_ALL)
+              old = gtk_bitset_new_range (0, g_list_model_get_n_items (self->model));
+            else
+              old = gtk_bitset_new_empty ();
           }
-          break;
-        case GTK_FILTER_MATCH_ALL:
+        else
           {
-            guint start, end, n_before, n_after;
-            self->strictness = new_strictness;
-            self->items = gtk_rb_tree_new (FilterNode,
-                                           FilterAugment,
-                                           gtk_filter_list_model_augment,
-                                           NULL, NULL);
-            n_before = g_list_model_get_n_items (self->model);
-            gtk_filter_list_model_add_items (self, NULL, 0, n_before);
-            if (gtk_filter_list_model_find_filtered (self, &start, &end, &n_after))
-              g_list_model_items_changed (G_LIST_MODEL (self), start, n_before - end - start, n_after - end - start);
+            old = self->matches;
           }
-          break;
-        default:
-        case GTK_FILTER_MATCH_SOME:
-          gtk_filter_list_model_refilter (self);
-          break;
-        }
+        self->strictness = new_strictness;
+        switch (change)
+          {
+          default:
+            g_assert_not_reached ();
+            G_GNUC_FALLTHROUGH;
+          case GTK_FILTER_CHANGE_DIFFERENT:
+            self->matches = gtk_bitset_new_empty ();
+            pending = gtk_bitset_new_range (0, g_list_model_get_n_items (self->model));
+            break;
+          case GTK_FILTER_CHANGE_LESS_STRICT:
+            self->matches = gtk_bitset_copy (old);
+            pending = gtk_bitset_new_range (0, g_list_model_get_n_items (self->model));
+            gtk_bitset_subtract (pending, self->matches);
+            break;
+          case GTK_FILTER_CHANGE_MORE_STRICT:
+            self->matches = gtk_bitset_new_empty ();
+            pending = gtk_bitset_copy (old);
+            break;
+          }
+        gtk_filter_list_model_start_filtering (self, pending);
+
+        gtk_filter_list_model_emit_items_changed_for_changes (self, old);
+      }
     }
 }
 
@@ -604,7 +521,7 @@ gtk_filter_list_model_filter_changed_cb (GtkFilter          *filter,
                                          GtkFilterChange     change,
                                          GtkFilterListModel *self)
 {
-  gtk_filter_list_model_update_strictness_and_refilter (self);
+  gtk_filter_list_model_refilter (self, change);
 }
 
 static void
@@ -624,7 +541,7 @@ gtk_filter_list_model_dispose (GObject *object)
 
   gtk_filter_list_model_clear_model (self);
   gtk_filter_list_model_clear_filter (self);
-  g_clear_pointer (&self->items, gtk_rb_tree_unref);
+  g_clear_pointer (&self->matches, gtk_bitset_unref);
 
   G_OBJECT_CLASS (gtk_filter_list_model_parent_class)->dispose (object);
 }
@@ -651,6 +568,18 @@ gtk_filter_list_model_class_init (GtkFilterListModelClass *class)
                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
+   * GtkFilterListModel:incremental:
+   *
+   * If the model should filter items incrementally
+   */
+  properties[PROP_INCREMENTAL] =
+      g_param_spec_boolean ("incremental",
+                            P_("Incremental"),
+                            P_("Filer items incrementally"),
+                            FALSE,
+                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
+
+  /**
    * GtkFilterListModel:model:
    *
    * The model being filtered
@@ -661,6 +590,18 @@ gtk_filter_list_model_class_init (GtkFilterListModelClass *class)
                            P_("The model being filtered"),
                            G_TYPE_LIST_MODEL,
                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
+
+  /**
+   * GtkFilterListModel:pending:
+   *
+   * Number of items not yet filtered
+   */
+  properties[PROP_PENDING] =
+      g_param_spec_uint ("pending",
+                         P_("Pending"),
+                         P_("Number of items not yet filtered"),
+                         0, G_MAXUINT, 0,
+                         GTK_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (gobject_class, NUM_PROPERTIES, properties);
 }
@@ -725,7 +666,7 @@ gtk_filter_list_model_set_filter (GtkFilterListModel *self,
     }
   else
     {
-      gtk_filter_list_model_update_strictness_and_refilter (self);
+      gtk_filter_list_model_refilter (self, GTK_FILTER_CHANGE_LESS_STRICT);
     }
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_FILTER]);
@@ -784,13 +725,18 @@ gtk_filter_list_model_set_model (GtkFilterListModel *self,
       if (removed == 0)
         {
           self->strictness = GTK_FILTER_MATCH_NONE;
-          gtk_filter_list_model_update_strictness_and_refilter (self);
+          gtk_filter_list_model_refilter (self, GTK_FILTER_CHANGE_LESS_STRICT);
           added = 0;
         }
-      else if (self->items)
-        added = gtk_filter_list_model_add_items (self, NULL, 0, g_list_model_get_n_items (model));
+      else if (self->matches)
+        {
+          gtk_filter_list_model_start_filtering (self, gtk_bitset_new_range (0, g_list_model_get_n_items (model)));
+          added = gtk_bitset_get_size (self->matches);
+        }
       else
-        added = g_list_model_get_n_items (model);
+        {
+          added = g_list_model_get_n_items (model);
+        }
     }
   else
     {
@@ -820,54 +766,89 @@ gtk_filter_list_model_get_model (GtkFilterListModel *self)
   return self->model;
 }
 
-static void
-gtk_filter_list_model_refilter (GtkFilterListModel *self)
+/**
+ * gtk_filter_list_model_set_incremental:
+ * @self: a #GtkFilterListModel
+ * @incremental: %TRUE to enable incremental filtering
+ *
+ * When incremental filtering is enabled, the filterlistmodel will not run
+ * filters immediately, but will instead queue an idle handler that
+ * incrementally filters the items and adds them to the list. This of course
+ * means that items are not instantly added to the list, but only appear
+ * incrementally.
+ *
+ * When your filter blocks the UI while filtering, you might consider
+ * turning this on. Depending on your model and filters, this may become
+ * interesting around 10,000 to 100,000 items.
+ *
+ * By default, incremental filtering is disabled.
+ **/
+void
+gtk_filter_list_model_set_incremental (GtkFilterListModel *self,
+                                       gboolean            incremental)
 {
-  FilterNode *node;
-  guint i, first_change, last_change;
-  guint n_is_visible, n_was_visible;
-  gboolean visible;
-
   g_return_if_fail (GTK_IS_FILTER_LIST_MODEL (self));
-  
-  if (self->items == NULL || self->model == NULL)
+
+  if (self->incremental == incremental)
     return;
 
-  first_change = G_MAXUINT;
-  last_change = 0;
-  n_is_visible = 0;
-  n_was_visible = 0;
-  for (i = 0, node = gtk_rb_tree_get_first (self->items);
-       node != NULL;
-       i++, node = gtk_rb_tree_node_get_next (node))
-    {
-      visible = gtk_filter_list_model_run_filter (self, i);
-      if (visible == node->visible)
-        {
-          if (visible)
-            {
-              n_is_visible++;
-              n_was_visible++;
-            }
-          continue;
-        }
+  self->incremental = incremental;
 
-      node->visible = visible;
-      gtk_rb_tree_node_mark_dirty (node);
-      first_change = MIN (n_is_visible, first_change);
-      if (visible)
-        n_is_visible++;
-      else
-        n_was_visible++;
-      last_change = MAX (n_is_visible, last_change);
+  if (!incremental)
+    {
+      GtkBitset *old;
+      gtk_filter_list_model_run_filter (self, G_MAXUINT);
+
+      old = gtk_bitset_copy (self->matches);
+      gtk_filter_list_model_run_filter (self, 512);
+
+      gtk_filter_list_model_stop_filtering (self);
+
+      gtk_filter_list_model_emit_items_changed_for_changes (self, old);
     }
 
-  if (first_change <= last_change)
-    {
-      g_list_model_items_changed (G_LIST_MODEL (self),
-                                  first_change,
-                                  last_change - first_change + n_was_visible - n_is_visible,
-                                  last_change - first_change);
-    }
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_INCREMENTAL]);
 }
 
+/**
+ * gtk_filter_list_model_get_incremental:
+ * @self: a #GtkFilterListModel
+ *
+ * Returns whether incremental filtering was enabled via
+ * gtk_filter_list_model_set_incremental().
+ *
+ * Returns: %TRUE if incremental filtering is enabled
+ **/
+gboolean
+gtk_filter_list_model_get_incremental (GtkFilterListModel *self)
+{
+  g_return_val_if_fail (GTK_IS_FILTER_LIST_MODEL (self), FALSE);
+
+  return self->incremental;
+}
+
+/**
+ * gtk_filter_list_model_get_pending:
+ * @self: a #GtkFilterListModel
+ *
+ * Returns the number of items that have not been filtered yet.
+ *
+ * When incremental filtering is not enabled, this always returns 0.
+ *
+ * You can use this value to check if @self is busy filtering by
+ * comparing the return value to 0 or you can compute the percentage
+ * of the filter remaining by dividing the return value by
+ * g_list_model_get_n_items(gtk_filter_list_model_get_model (self)).
+ *
+ * Returns: The number of items not yet filtered
+ **/
+guint
+gtk_filter_list_model_get_pending (GtkFilterListModel *self)
+{
+  g_return_val_if_fail (GTK_IS_FILTER_LIST_MODEL (self), FALSE);
+
+  if (self->pending == NULL)
+    return 0;
+
+  return gtk_bitset_get_size (self->pending);
+}
