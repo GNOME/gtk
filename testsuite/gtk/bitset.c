@@ -424,13 +424,13 @@ test_slice (void)
 
   gtk_bitset_add_range (set, 10, 30);
 
-  gtk_bitset_slice (set, 20, 10, 20);
+  gtk_bitset_splice (set, 20, 10, 20);
 
   for (i = 0; i < 60; i++)
     g_assert_cmpint (gtk_bitset_contains (set, i), ==, (i >= 10 && i < 20) ||
                                                        (i >= 40 && i < 50));
 
-  gtk_bitset_slice (set, 25, 10, 0);
+  gtk_bitset_splice (set, 25, 10, 0);
 
   for (i = 0; i < 60; i++)
     g_assert_cmpint (gtk_bitset_contains (set, i), ==, (i >= 10 && i < 20) ||
@@ -543,6 +543,18 @@ test_iter (void)
   gtk_bitset_unref (set);
 }
 
+static void
+test_splice_overflow (void)
+{
+  GtkBitset *set, *compare;
+
+  set = gtk_bitset_new_range (3, 1);
+  gtk_bitset_splice (set, 0, 0, 13);
+
+  compare = gtk_bitset_new_range (16, 1);
+  g_assert_true (gtk_bitset_equals (set, compare));
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -562,6 +574,7 @@ main (int argc, char *argv[])
   g_test_add_func ("/bitset/slice", test_slice);
   g_test_add_func ("/bitset/rectangle", test_rectangle);
   g_test_add_func ("/bitset/iter", test_iter);
+  g_test_add_func ("/bitset/splice-overflow", test_splice_overflow);
 
   return g_test_run ();
 }

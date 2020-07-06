@@ -222,7 +222,7 @@ gtk_multi_selection_items_changed_cb (GListModel        *model,
   GHashTable *pending = NULL;
   guint i;
 
-  gtk_bitset_slice (self->selected, position, removed, added);
+  gtk_bitset_splice (self->selected, position, removed, added);
 
   g_hash_table_iter_init (&iter, self->items);
   while (g_hash_table_iter_next (&iter, &item, &pos_pointer))
