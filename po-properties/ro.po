@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-07-04 15:48+0000\n"
-"PO-Revision-Date: 2020-07-05 13:41+0300\n"
+"POT-Creation-Date: 2020-07-06 15:42+0000\n"
+"PO-Revision-Date: 2020-07-06 22:33+0200\n"
 "Last-Translator: Florentina Mușat <florentina.musat.28@gmail.com>\n"
 "Language-Team: Romanian Gnome Team <gnomero-list@lists.sourceforge.net>\n"
 "Language: ro\n"
@@ -58,7 +58,7 @@ msgid "Vertical offset of the cursor hotspot"
 msgstr "Decalajul vertical pentru hotspot-ul cursorului"
 
 #: gdk/gdkcursor.c:204 gtk/gtkcssnode.c:612 gtk/gtkeventcontroller.c:231
-#: gtk/gtkfilefilter.c:187 gtk/gtkprinter.c:121 gtk/gtkstack.c:342
+#: gtk/gtkfilefilter.c:233 gtk/gtkprinter.c:121 gtk/gtkstack.c:342
 #: gtk/gtktextmark.c:135
 msgid "Name"
 msgstr "Nume"
@@ -897,7 +897,7 @@ msgid "The object the builder is evaluating for"
 msgstr "Obiectul pentru care constructorul evaluează"
 
 #: gtk/gtkbuilder.c:332 gtk/gtkbuilderlistitemfactory.c:293
-#: gtk/gtkshortcutcontroller.c:564
+#: gtk/gtkshortcutcontroller.c:565
 msgid "Scope"
 msgstr "Anvergură"
 
@@ -1257,11 +1257,11 @@ msgid "Whether the cell background color is set"
 msgstr "Dacă culoarea de fundal a celulei este stabilită"
 
 #: gtk/gtkcellrenderercombo.c:136 gtk/gtkcolumnview.c:629 gtk/gtkdropdown.c:456
-#: gtk/gtkfilterlistmodel.c:684 gtk/gtkflattenlistmodel.c:438
-#: gtk/gtkgridview.c:1093 gtk/gtklistview.c:838 gtk/gtkmaplistmodel.c:404
-#: gtk/gtkmultiselection.c:357 gtk/gtkselectionfiltermodel.c:251
-#: gtk/gtkshortcutcontroller.c:552 gtk/gtkslicelistmodel.c:287
-#: gtk/gtksortlistmodel.c:427 gtk/gtktreelistmodel.c:716
+#: gtk/gtkfilterlistmodel.c:660 gtk/gtkflattenlistmodel.c:413
+#: gtk/gtkgridview.c:1093 gtk/gtklistview.c:838 gtk/gtkmaplistmodel.c:375
+#: gtk/gtkmultiselection.c:356 gtk/gtkselectionfiltermodel.c:251
+#: gtk/gtkshortcutcontroller.c:553 gtk/gtkslicelistmodel.c:263
+#: gtk/gtksortlistmodel.c:403 gtk/gtktreelistmodel.c:706
 msgid "Model"
 msgstr "Model"
 
@@ -1430,7 +1430,7 @@ msgid "Pulse of the spinner"
 msgstr "Pulsul spinnerului"
 
 #: gtk/gtkcellrendererspinner.c:168 gtk/gtkrecentmanager.c:294
-#: gtk/gtkslicelistmodel.c:311
+#: gtk/gtkslicelistmodel.c:287
 msgid "Size"
 msgstr "Dimensiune"
 
@@ -2021,7 +2021,7 @@ msgid "Show separators between columns"
 msgstr "Arată separatori între coloane"
 
 #: gtk/gtkcolumnview.c:665 gtk/gtkcolumnviewcolumn.c:270
-#: gtk/gtksortlistmodel.c:403 gtk/gtktreelistrowsorter.c:243
+#: gtk/gtksortlistmodel.c:391 gtk/gtktreelistrowsorter.c:243
 msgid "Sorter"
 msgstr "Sortator"
 
@@ -2360,17 +2360,13 @@ msgstr "Fișier"
 msgid "The file to query"
 msgstr "Fișierul de interogat"
 
-#: gtk/gtkdirectorylist.c:287 gtk/gtkfilterlistmodel.c:672
-#: gtk/gtkflattenlistmodel.c:426 gtk/gtkmaplistmodel.c:392
-#: gtk/gtkpropertylookuplistmodel.c:376 gtk/gtkselectionfiltermodel.c:239
-#: gtk/gtkslicelistmodel.c:275 gtk/gtksortlistmodel.c:415
+#: gtk/gtkdirectorylist.c:287 gtk/gtkpropertylookuplistmodel.c:376
+#: gtk/gtkselectionfiltermodel.c:239
 msgid "Item type"
 msgstr "Tip element"
 
-#: gtk/gtkdirectorylist.c:288 gtk/gtkfilterlistmodel.c:673
-#: gtk/gtkflattenlistmodel.c:427 gtk/gtkmaplistmodel.c:393
-#: gtk/gtkpropertylookuplistmodel.c:377 gtk/gtkselectionfiltermodel.c:240
-#: gtk/gtkslicelistmodel.c:276
+#: gtk/gtkdirectorylist.c:288 gtk/gtkpropertylookuplistmodel.c:377
+#: gtk/gtkselectionfiltermodel.c:240
 msgid "The type of elements of this object"
 msgstr "Tipurile de elemente ale acestui obiect"
 
@@ -2443,19 +2439,19 @@ msgstr "Listează fabrica"
 msgid "Model for the displayed items"
 msgstr "Modelul pentru elementele afișate"
 
-#: gtk/gtkdropdown.c:469 gtk/gtklistitem.c:233 gtk/gtksingleselection.c:416
+#: gtk/gtkdropdown.c:469 gtk/gtklistitem.c:233 gtk/gtksingleselection.c:415
 msgid "Selected"
 msgstr "Selectat"
 
-#: gtk/gtkdropdown.c:470 gtk/gtksingleselection.c:417
+#: gtk/gtkdropdown.c:470 gtk/gtksingleselection.c:416
 msgid "Position of the selected item"
 msgstr "Poziția elementului selectat"
 
-#: gtk/gtkdropdown.c:481 gtk/gtksingleselection.c:428
+#: gtk/gtkdropdown.c:481 gtk/gtksingleselection.c:427
 msgid "Selected Item"
 msgstr "Element selectat"
 
-#: gtk/gtkdropdown.c:482 gtk/gtksingleselection.c:429
+#: gtk/gtkdropdown.c:482 gtk/gtksingleselection.c:428
 msgid "The selected item"
 msgstr "Elementul selectat"
 
@@ -3000,7 +2996,7 @@ msgstr "Dacă focalizarea este descendentul widgetului controlerului"
 msgid "Flags"
 msgstr "Fanioane"
 
-#: gtk/gtkexpander.c:310 gtk/gtktreelistmodel.c:1100
+#: gtk/gtkexpander.c:310 gtk/gtktreelistmodel.c:1090
 msgid "Expanded"
 msgstr "Desfășurat"
 
@@ -3070,7 +3066,7 @@ msgstr "Acțiune"
 msgid "The type of operation that the file selector is performing"
 msgstr "Tipul operației efectuate de selectorul de fișiere"
 
-#: gtk/gtkfilechooser.c:160 gtk/gtkfilterlistmodel.c:660
+#: gtk/gtkfilechooser.c:160 gtk/gtkfilterlistmodel.c:648
 msgid "Filter"
 msgstr "Filtru"
 
@@ -3086,11 +3082,27 @@ msgstr "Selectare multiplă"
 msgid "Whether to allow multiple files to be selected"
 msgstr "Specifică dacă este permisă selectarea mai multor fișiere"
 
-#: gtk/gtkfilechooser.c:179
+#: gtk/gtkfilechooser.c:182
+msgid "Filters"
+msgstr "Filtre"
+
+#: gtk/gtkfilechooser.c:183
+msgid "List model of filters"
+msgstr "Model listă de filtre"
+
+#: gtk/gtkfilechooser.c:198
+msgid "Shortcut Folders"
+msgstr "Dosare scurtături"
+
+#: gtk/gtkfilechooser.c:199
+msgid "List model of shortcut folders"
+msgstr "Model listă de dosare scurtături"
+
+#: gtk/gtkfilechooser.c:211
 msgid "Allow folder creation"
 msgstr "Permite crearea de dosare"
 
-#: gtk/gtkfilechooser.c:180
+#: gtk/gtkfilechooser.c:212
 msgid ""
 "Whether a file chooser not in open mode will offer the user to create new "
 "folders."
@@ -3114,24 +3126,24 @@ msgstr "Etichetă de anulare"
 msgid "The label on the cancel button"
 msgstr "Etichetă de pe butonul anulează"
 
-#: gtk/gtkfilechooserwidget.c:7648 gtk/gtkfilechooserwidget.c:7649
+#: gtk/gtkfilechooserwidget.c:7657 gtk/gtkfilechooserwidget.c:7658
 msgid "Search mode"
 msgstr "Mod de căutare"
 
-#: gtk/gtkfilechooserwidget.c:7655 gtk/gtkfilechooserwidget.c:7656
+#: gtk/gtkfilechooserwidget.c:7664 gtk/gtkfilechooserwidget.c:7665
 #: gtk/gtkshortcutsshortcut.c:634
 msgid "Subtitle"
 msgstr "Subitlu"
 
-#: gtk/gtkfilefilter.c:188
+#: gtk/gtkfilefilter.c:234
 msgid "The human-readable name for this filter"
 msgstr "Numele lizibil de către oameni pentru acest filtru"
 
-#: gtk/gtkfilterlistmodel.c:661
+#: gtk/gtkfilterlistmodel.c:649
 msgid "The filter set for this model"
 msgstr "Filtrul stabilit pentru acest model"
 
-#: gtk/gtkfilterlistmodel.c:685 gtk/gtkselectionfiltermodel.c:252
+#: gtk/gtkfilterlistmodel.c:661 gtk/gtkselectionfiltermodel.c:252
 msgid "The model being filtered"
 msgstr "Modelul filtrat"
 
@@ -3143,7 +3155,7 @@ msgstr "transformă"
 msgid "The transform of a child of a fixed layout"
 msgstr "Transformarea unui inferior al unui aranjament fixat"
 
-#: gtk/gtkflattenlistmodel.c:439
+#: gtk/gtkflattenlistmodel.c:414
 msgid "The model being flattened"
 msgstr "Modelul pliat"
 
@@ -3883,7 +3895,7 @@ msgstr "Dacă elementul poate fi activat de către utilizator"
 msgid "Widget used for display"
 msgstr "Widget-ul utilizat pentru afișaj"
 
-#: gtk/gtklistitem.c:197 gtk/gtktreeexpander.c:470 gtk/gtktreelistmodel.c:1112
+#: gtk/gtklistitem.c:197 gtk/gtktreeexpander.c:470 gtk/gtktreelistmodel.c:1102
 msgid "Item"
 msgstr "Element"
 
@@ -3974,15 +3986,15 @@ msgstr "amplificare"
 msgid "resize"
 msgstr "redimensionare"
 
-#: gtk/gtkmaplistmodel.c:380
+#: gtk/gtkmaplistmodel.c:363
 msgid "has map"
 msgstr "are hartă"
 
-#: gtk/gtkmaplistmodel.c:381
+#: gtk/gtkmaplistmodel.c:364
 msgid "If a map is set for this model"
 msgstr "Dacă harta este stabilită pentru acest model"
 
-#: gtk/gtkmaplistmodel.c:405
+#: gtk/gtkmaplistmodel.c:376
 msgid "The model being mapped"
 msgstr "Modelul mapat"
 
@@ -4258,7 +4270,7 @@ msgstr "Dacă se arată un dialog"
 msgid "The display where this window will be displayed."
 msgstr "Afișajul unde această fereastră va fi afișată."
 
-#: gtk/gtkmultiselection.c:358
+#: gtk/gtkmultiselection.c:357
 msgid "List managed by this selection"
 msgstr "Listă gestionată de această selecție"
 
@@ -4290,11 +4302,11 @@ msgstr "Tranzient pentru fereastră"
 msgid "The transient parent of the dialog"
 msgstr "Superiorul tranzient al mesajului dialog"
 
-#: gtk/gtknoselection.c:203 gtk/gtksingleselection.c:440
+#: gtk/gtknoselection.c:204 gtk/gtksingleselection.c:439
 msgid "The model"
 msgstr "Modelul"
 
-#: gtk/gtknoselection.c:204 gtk/gtksingleselection.c:441
+#: gtk/gtknoselection.c:205 gtk/gtksingleselection.c:440
 msgid "The model being managed"
 msgstr "Modelul gestionat"
 
@@ -4617,19 +4629,19 @@ msgstr "Permite micșorarea"
 msgid "Allow self to be smaller than contents"
 msgstr "Permite self să fie mai mic decât conținutul"
 
-#: gtk/gtkplacessidebar.c:4336
+#: gtk/gtkplacessidebar.c:4343
 msgid "Location to Select"
 msgstr "Locație la selectare"
 
-#: gtk/gtkplacessidebar.c:4337
+#: gtk/gtkplacessidebar.c:4344
 msgid "The location to highlight in the sidebar"
 msgstr "Locația de evidențiat în bara laterală"
 
-#: gtk/gtkplacessidebar.c:4342 gtk/gtkplacesview.c:2250
+#: gtk/gtkplacessidebar.c:4349 gtk/gtkplacesview.c:2250
 msgid "Open Flags"
 msgstr "Fanioane deschise"
 
-#: gtk/gtkplacessidebar.c:4343 gtk/gtkplacesview.c:2251
+#: gtk/gtkplacessidebar.c:4350 gtk/gtkplacesview.c:2251
 msgid ""
 "Modes in which the calling application can open locations selected in the "
 "sidebar"
@@ -4637,55 +4649,55 @@ msgstr ""
 "Moduri în care aplicația ce apelează poate deschide locațiile selectate în "
 "bara laterală"
 
-#: gtk/gtkplacessidebar.c:4349
+#: gtk/gtkplacessidebar.c:4356
 msgid "Show recent files"
 msgstr "Arată fișiere recente"
 
-#: gtk/gtkplacessidebar.c:4350
+#: gtk/gtkplacessidebar.c:4357
 msgid "Whether the sidebar includes a builtin shortcut for recent files"
 msgstr ""
 "Dacă bara laterală include o scurtătură înglobată pentru fișiere recente"
 
-#: gtk/gtkplacessidebar.c:4355
+#: gtk/gtkplacessidebar.c:4362
 msgid "Show “Desktop”"
 msgstr "Arată „Desktop”"
 
-#: gtk/gtkplacessidebar.c:4356
+#: gtk/gtkplacessidebar.c:4363
 msgid "Whether the sidebar includes a builtin shortcut to the Desktop folder"
 msgstr "Dacă bara laterală include o scurtătură integrată la dosarul Desktop"
 
-#: gtk/gtkplacessidebar.c:4361
+#: gtk/gtkplacessidebar.c:4368
 msgid "Show “Enter Location”"
 msgstr "Arată „Introdu locația”"
 
-#: gtk/gtkplacessidebar.c:4362
+#: gtk/gtkplacessidebar.c:4369
 msgid ""
 "Whether the sidebar includes a builtin shortcut to manually enter a location"
 msgstr ""
 "Dacă bara laterală include o scurtătură integrată pentru a introduce o "
 "locație manual"
 
-#: gtk/gtkplacessidebar.c:4367
+#: gtk/gtkplacessidebar.c:4374
 msgid "Show “Trash”"
 msgstr "Arată „Gunoi”"
 
-#: gtk/gtkplacessidebar.c:4368
+#: gtk/gtkplacessidebar.c:4375
 msgid "Whether the sidebar includes a builtin shortcut to the Trash location"
 msgstr "Dacă bara laterală include o scurtătură integrată la locația Gunoi"
 
-#: gtk/gtkplacessidebar.c:4373
+#: gtk/gtkplacessidebar.c:4380
 msgid "Show “Other locations”"
 msgstr "Arată „Alte locații”"
 
-#: gtk/gtkplacessidebar.c:4374
+#: gtk/gtkplacessidebar.c:4381
 msgid "Whether the sidebar includes an item to show external locations"
 msgstr "Dacă bara laterală include un element pentru a arăta locații externe"
 
-#: gtk/gtkplacessidebar.c:4379
+#: gtk/gtkplacessidebar.c:4386
 msgid "Show “Starred Location”"
 msgstr "Arată „Locație marcată”"
 
-#: gtk/gtkplacessidebar.c:4380
+#: gtk/gtkplacessidebar.c:4387
 msgid "Whether the sidebar includes an item to show starred files"
 msgstr "Dacă bara laterală include un element pentru a arăta fișiere favorite"
 
@@ -5925,19 +5937,19 @@ msgstr "Declanșator"
 msgid "The trigger for this shortcut"
 msgstr "Declanșatorul pentru această scurtătură"
 
-#: gtk/gtkshortcutcontroller.c:539
+#: gtk/gtkshortcutcontroller.c:540
 msgid "Mnemonic modifiers"
 msgstr "Modificatori mnemonici"
 
-#: gtk/gtkshortcutcontroller.c:540
+#: gtk/gtkshortcutcontroller.c:541
 msgid "The modifiers to be pressed to allow mnemonics activation"
 msgstr "Modificatorii de apăsat pentru a permite activarea mnemonicelor"
 
-#: gtk/gtkshortcutcontroller.c:553
+#: gtk/gtkshortcutcontroller.c:554
 msgid "A list model to take shortcuts from"
 msgstr "Un model de listă din care se iau scurtături"
 
-#: gtk/gtkshortcutcontroller.c:565
+#: gtk/gtkshortcutcontroller.c:566
 msgid "What scope the shortcuts will be handled in"
 msgstr "În ce anvergură vor fi gestionate scurtăturile"
 
@@ -6059,19 +6071,19 @@ msgstr "Al doilea"
 msgid "The second trigger to check"
 msgstr "Al doilea declanșator de verificat"
 
-#: gtk/gtksingleselection.c:392
+#: gtk/gtksingleselection.c:391
 msgid "Autoselect"
 msgstr "Autoselectează"
 
-#: gtk/gtksingleselection.c:393
+#: gtk/gtksingleselection.c:392
 msgid "If the selection will always select an item"
 msgstr "Dacă selecția va selecta întotdeauna un element"
 
-#: gtk/gtksingleselection.c:404
+#: gtk/gtksingleselection.c:403
 msgid "Can unselect"
 msgstr "Poate deselecta"
 
-#: gtk/gtksingleselection.c:405
+#: gtk/gtksingleselection.c:404
 msgid "If unselecting the selected item is allowed"
 msgstr "Dacă deselectarea elementului selectat este permisă"
 
@@ -6087,31 +6099,27 @@ msgstr ""
 "Direcțiile în care dimensiunea grupului afectează dimensiunile cerute pentru "
 "widgeturile componentelor proprii"
 
-#: gtk/gtkslicelistmodel.c:288
+#: gtk/gtkslicelistmodel.c:264
 msgid "Child model to take slice from"
 msgstr "Modelul inferior din care să se ia o secțiune"
 
-#: gtk/gtkslicelistmodel.c:299
+#: gtk/gtkslicelistmodel.c:275
 msgid "Offset"
 msgstr "Decalaj"
 
-#: gtk/gtkslicelistmodel.c:300
+#: gtk/gtkslicelistmodel.c:276
 msgid "Offset of slice"
 msgstr "Decalajul secțiunii"
 
-#: gtk/gtkslicelistmodel.c:312
+#: gtk/gtkslicelistmodel.c:288
 msgid "Maximum size of slice"
 msgstr "Dimensiunea maximă a secțiunii"
 
-#: gtk/gtksortlistmodel.c:404
+#: gtk/gtksortlistmodel.c:392
 msgid "The sorter for this model"
 msgstr "Sortatorul pentru acest model"
 
-#: gtk/gtksortlistmodel.c:416
-msgid "The type of items of this list"
-msgstr "Tipul elementelor acestei liste"
-
-#: gtk/gtksortlistmodel.c:428
+#: gtk/gtksortlistmodel.c:404
 msgid "The model being sorted"
 msgstr "Modelul ce este sortat"
 
@@ -6985,55 +6993,55 @@ msgstr "Rând de listă"
 msgid "The list row to track for expander state"
 msgstr "Rândul de listă de urmărit pentru starea desfășurătorului"
 
-#: gtk/gtktreelistmodel.c:704
+#: gtk/gtktreelistmodel.c:694
 msgid "autoexpand"
 msgstr "expandare automată"
 
-#: gtk/gtktreelistmodel.c:705
+#: gtk/gtktreelistmodel.c:695
 msgid "If all rows should be expanded by default"
 msgstr "Dacă toate rândurile ar trebui expandate implicit"
 
-#: gtk/gtktreelistmodel.c:717
+#: gtk/gtktreelistmodel.c:707
 msgid "The root model displayed"
 msgstr "Modelul rădăcină afișat"
 
-#: gtk/gtktreelistmodel.c:730
+#: gtk/gtktreelistmodel.c:720
 msgid "passthrough"
 msgstr "trecere"
 
-#: gtk/gtktreelistmodel.c:731
+#: gtk/gtktreelistmodel.c:721
 msgid "If child model values are passed through"
 msgstr "Dacă valorile modelului inferior au trecut"
 
-#: gtk/gtktreelistmodel.c:1064
+#: gtk/gtktreelistmodel.c:1054
 msgid "Children"
 msgstr "Copii"
 
-#: gtk/gtktreelistmodel.c:1065
+#: gtk/gtktreelistmodel.c:1055
 msgid "Model holding the row’s children"
 msgstr "Model ce ține copii rândului"
 
-#: gtk/gtktreelistmodel.c:1076
+#: gtk/gtktreelistmodel.c:1066
 msgid "Depth"
 msgstr "Adâncime"
 
-#: gtk/gtktreelistmodel.c:1077
+#: gtk/gtktreelistmodel.c:1067
 msgid "Depth in the tree"
 msgstr "Adâncimea arborescentă"
 
-#: gtk/gtktreelistmodel.c:1088
+#: gtk/gtktreelistmodel.c:1078
 msgid "Expandable"
 msgstr "Expandabil"
 
-#: gtk/gtktreelistmodel.c:1089
+#: gtk/gtktreelistmodel.c:1079
 msgid "If this row can ever be expanded"
 msgstr "Dacă acest rând poate fi expandat"
 
-#: gtk/gtktreelistmodel.c:1101
+#: gtk/gtktreelistmodel.c:1091
 msgid "If this row is currently expanded"
 msgstr "Dacă acest rând este expandat curent"
 
-#: gtk/gtktreelistmodel.c:1113
+#: gtk/gtktreelistmodel.c:1103
 msgid "The item held in this row"
 msgstr "Elementul ținut în acest rând"
 
@@ -7791,6 +7799,9 @@ msgstr "Titlul profilului de culori"
 #: modules/printbackends/gtkprintercups.c:94
 msgid "The title of the color profile to use"
 msgstr "Titlul profilului de culoare de folosit"
+
+#~ msgid "The type of items of this list"
+#~ msgstr "Tipul elementelor acestei liste"
 
 #~ msgid "Property"
 #~ msgstr "Proprietate"
