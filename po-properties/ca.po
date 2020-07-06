@@ -40,7 +40,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.3.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-07-06 06:56+0000\n"
+"POT-Creation-Date: 2020-07-06 15:42+0000\n"
 "PO-Revision-Date: 2017-08-14 00:28+0200\n"
 "Last-Translator: Jordi Mas <jmas@softcatala.org>\n"
 "Language-Team: Catalan <tradgnome@softcatala.org>\n"
@@ -54,8 +54,8 @@ msgstr ""
 #: gdk/gdkapplaunchcontext.c:133 gdk/gdkdrawcontext.c:155 gdk/gdkseat.c:200
 #: gdk/gdkseat.c:201 gdk/gdksurface.c:486 gdk/gdksurface.c:487
 #: gdk/win32/gdkcursor-win32.c:234 gtk/gtkicontheme.c:985
-#: gtk/gtkicontheme.c:986 gtk/gtkmountoperation.c:191
-#: gtk/gtkstylecontext.c:145 gtk/gtkwindow.c:854
+#: gtk/gtkicontheme.c:986 gtk/gtkmountoperation.c:191 gtk/gtkstylecontext.c:145
+#: gtk/gtkwindow.c:854
 msgid "Display"
 msgstr "Pantalla"
 
@@ -504,8 +504,8 @@ msgstr "Utilitza subratllat"
 #: gtk/gtkaccellabel.c:143 gtk/gtkbutton.c:230 gtk/gtkexpander.c:327
 #: gtk/gtklabel.c:762 gtk/gtkmenubutton.c:430
 msgid ""
-"If set, an underline in the text indicates the next character should be used"
-" for the mnemonic accelerator key"
+"If set, an underline in the text indicates the next character should be used "
+"for the mnemonic accelerator key"
 msgstr ""
 "Si s'habilita, un subratllat en el text indica que el caràcter següent "
 "s'hauria d'utilitzar per a la tecla de drecera"
@@ -1064,8 +1064,8 @@ msgid ""
 "A GtkPackType indicating whether the cell is packed with reference to the "
 "start or end of the cell area"
 msgstr ""
-"Un GtkPackType que indica si la cel·la s'empaqueta en referència a l'inici o"
-" al final de l'àrea de la cel·la"
+"Un GtkPackType que indica si la cel·la s'empaqueta en referència a l'inici o "
+"al final de l'àrea de la cel·la"
 
 #: gtk/gtkcellarea.c:780
 msgid "Focus Cell"
@@ -1277,13 +1277,12 @@ msgstr "Conjunt de fons de la cel·la"
 msgid "Whether the cell background color is set"
 msgstr "Si s'ha establert el color de fons de la cel·la"
 
-#: gtk/gtkcellrenderercombo.c:136 gtk/gtkcolumnview.c:629
-#: gtk/gtkdropdown.c:456 gtk/gtkfilterlistmodel.c:660
-#: gtk/gtkflattenlistmodel.c:413 gtk/gtkgridview.c:1093 gtk/gtklistview.c:838
-#: gtk/gtkmaplistmodel.c:375 gtk/gtkmultiselection.c:356
-#: gtk/gtkselectionfiltermodel.c:251 gtk/gtkshortcutcontroller.c:553
-#: gtk/gtkslicelistmodel.c:263 gtk/gtksortlistmodel.c:403
-#: gtk/gtktreelistmodel.c:706
+#: gtk/gtkcellrenderercombo.c:136 gtk/gtkcolumnview.c:629 gtk/gtkdropdown.c:456
+#: gtk/gtkfilterlistmodel.c:660 gtk/gtkflattenlistmodel.c:413
+#: gtk/gtkgridview.c:1093 gtk/gtklistview.c:838 gtk/gtkmaplistmodel.c:375
+#: gtk/gtkmultiselection.c:356 gtk/gtkselectionfiltermodel.c:251
+#: gtk/gtkshortcutcontroller.c:553 gtk/gtkslicelistmodel.c:263
+#: gtk/gtksortlistmodel.c:403 gtk/gtktreelistmodel.c:706
 msgid "Model"
 msgstr "Model"
 
@@ -1350,8 +1349,8 @@ msgstr ""
 msgid "The name of the icon from the icon theme"
 msgstr "El nom de la icona del tema d'icones"
 
-#: gtk/gtkcellrendererpixbuf.c:226 gtk/gtkimage.c:223
-#: gtk/gtkmodelbutton.c:1123 gtk/gtkshortcutsshortcut.c:593
+#: gtk/gtkcellrendererpixbuf.c:226 gtk/gtkimage.c:223 gtk/gtkmodelbutton.c:1123
+#: gtk/gtkshortcutsshortcut.c:593
 msgid "Icon"
 msgstr "Icona"
 
@@ -1394,8 +1393,8 @@ msgid ""
 "The horizontal text alignment, from 0 (left) to 1 (right). Reversed for RTL "
 "layouts."
 msgstr ""
-"L'alineació horitzontal del text, des de 0 (esquerre) a 1 (dreta). Només per"
-" a formats RTL (dreta a esquerra)."
+"L'alineació horitzontal del text, des de 0 (esquerre) a 1 (dreta). Només per "
+"a formats RTL (dreta a esquerra)."
 
 #: gtk/gtkcellrendererprogress.c:218
 msgid "Text y alignment"
@@ -1536,8 +1535,7 @@ msgstr "Tipus de lletra"
 
 #: gtk/gtkcellrenderertext.c:329 gtk/gtkfontchooser.c:65 gtk/gtktexttag.c:291
 msgid "Font description as a string, e.g. “Sans Italic 12”"
-msgstr ""
-"Descripció del tipus de lletra com una cadena, p. ex. «Sans Italic 12»"
+msgstr "Descripció del tipus de lletra com una cadena, p. ex. «Sans Italic 12»"
 
 #: gtk/gtkcellrenderertext.c:336 gtk/gtkfontchooser.c:78 gtk/gtktexttag.c:299
 msgid "Font description as a PangoFontDescription struct"
@@ -1931,10 +1929,10 @@ msgid "Whether to give the color an alpha value"
 msgstr "Si s'ha de donar un valor alfa al color"
 
 #: gtk/gtkcolorbutton.c:171 gtk/gtkcolumnviewcolumn.c:258
-#: gtk/gtkfilechooserbutton.c:512 gtk/gtkfontbutton.c:477
-#: gtk/gtkprintjob.c:144 gtk/gtkshortcutsgroup.c:279
-#: gtk/gtkshortcutssection.c:321 gtk/gtkshortcutsshortcut.c:618
-#: gtk/gtkstack.c:349 gtk/gtktreeviewcolumn.c:344
+#: gtk/gtkfilechooserbutton.c:512 gtk/gtkfontbutton.c:477 gtk/gtkprintjob.c:144
+#: gtk/gtkshortcutsgroup.c:279 gtk/gtkshortcutssection.c:321
+#: gtk/gtkshortcutsshortcut.c:618 gtk/gtkstack.c:349
+#: gtk/gtktreeviewcolumn.c:344
 msgid "Title"
 msgstr "Títol"
 
@@ -2103,9 +2101,8 @@ msgstr "Títol mostrat a la capçalera"
 msgid "Sorter for sorting items according to this column"
 msgstr "Ordenador per ordenar els elements segons aquesta columna"
 
-#: gtk/gtkcolumnviewcolumn.c:282 gtk/gtkcssnode.c:623
-#: gtk/gtknativedialog.c:240 gtk/gtkstack.c:378 gtk/gtktreeviewcolumn.c:274
-#: gtk/gtkwidget.c:990
+#: gtk/gtkcolumnviewcolumn.c:282 gtk/gtkcssnode.c:623 gtk/gtknativedialog.c:240
+#: gtk/gtkstack.c:378 gtk/gtktreeviewcolumn.c:274 gtk/gtkwidget.c:990
 msgid "Visible"
 msgstr "Visible"
 
@@ -2189,12 +2186,12 @@ msgstr "Columna d'entrada de text"
 
 #: gtk/gtkcombobox.c:730
 msgid ""
-"The column in the combo box’s model to associate with strings from the entry"
-" if the combo was created with #GtkComboBox:has-entry = %TRUE"
+"The column in the combo box’s model to associate with strings from the entry "
+"if the combo was created with #GtkComboBox:has-entry = %TRUE"
 msgstr ""
 "La columna en el model del quadre combinat que s'ha d'associar amb les "
-"cadenes de l'entrada si el quadre combinat es va crear amb "
-"«#GtkComboBox:has-entry = %TRUE»"
+"cadenes de l'entrada si el quadre combinat es va crear amb «#GtkComboBox:has-"
+"entry = %TRUE»"
 
 #: gtk/gtkcombobox.c:745
 msgid "ID Column"
@@ -2407,8 +2404,7 @@ msgstr "Contingut"
 msgid "The content provider for the dragged data"
 msgstr "El proveïdor de contingut per a les dades arrossegades"
 
-#: gtk/gtkdragsource.c:296 gtk/gtkdroptargetasync.c:391
-#: gtk/gtkdroptarget.c:578
+#: gtk/gtkdragsource.c:296 gtk/gtkdroptargetasync.c:391 gtk/gtkdroptarget.c:578
 msgid "Actions"
 msgstr "Accions"
 
@@ -2554,8 +2550,7 @@ msgstr "Límit seleccionat"
 #: gtk/gtkeditable.c:393
 msgid ""
 "The position of the opposite end of the selection from the cursor in chars"
-msgstr ""
-"La posició del final oposat de la selecció des del cursor en caràcters"
+msgstr "La posició del final oposat de la selecció des del cursor en caràcters"
 
 #: gtk/gtkeditable.c:401
 msgid "Whether the entry contents can be edited"
@@ -2631,8 +2626,8 @@ msgid ""
 "FALSE displays the “invisible char” instead of the actual text (password "
 "mode)"
 msgstr ""
-"Si és «FALSE» (fals) mostrarà el «caràcter d'invisibilitat» en lloc del text"
-" real (mode de contrasenya)"
+"Si és «FALSE» (fals) mostrarà el «caràcter d'invisibilitat» en lloc del text "
+"real (mode de contrasenya)"
 
 #: gtk/gtkentry.c:468
 msgid "FALSE removes outside bevel from entry"
@@ -3070,8 +3065,8 @@ msgid ""
 "Whether the expander will resize the toplevel window upon expanding and "
 "collapsing"
 msgstr ""
-"Si l'expansor redimensionarà la finestra de nivell superior en expandir-se i"
-" col·lapsar-se"
+"Si l'expansor redimensionarà la finestra de nivell superior en expandir-se i "
+"col·lapsar-se"
 
 #: gtk/gtkfilechooserbutton.c:499
 msgid "Dialog"
@@ -3117,11 +3112,27 @@ msgstr "Selecció múltiple"
 msgid "Whether to allow multiple files to be selected"
 msgstr "Si es permet o no seleccionar diversos fitxers"
 
-#: gtk/gtkfilechooser.c:179
+#: gtk/gtkfilechooser.c:182
+msgid "Filters"
+msgstr "Filtres"
+
+#: gtk/gtkfilechooser.c:183
+msgid "List model of filters"
+msgstr "Model llista dels filtres"
+
+#: gtk/gtkfilechooser.c:198
+msgid "Shortcut Folders"
+msgstr "Dreceres de carpetes"
+
+#: gtk/gtkfilechooser.c:199
+msgid "List model of shortcut folders"
+msgstr "Model llista de les dreceres de carpetes"
+
+#: gtk/gtkfilechooser.c:211
 msgid "Allow folder creation"
 msgstr "Permet la creació de carpetes"
 
-#: gtk/gtkfilechooser.c:180
+#: gtk/gtkfilechooser.c:212
 msgid ""
 "Whether a file chooser not in open mode will offer the user to create new "
 "folders."
@@ -3145,11 +3156,11 @@ msgstr "Cancel·la l'etiqueta"
 msgid "The label on the cancel button"
 msgstr "L'etiqueta del botó cancel·la"
 
-#: gtk/gtkfilechooserwidget.c:7648 gtk/gtkfilechooserwidget.c:7649
+#: gtk/gtkfilechooserwidget.c:7657 gtk/gtkfilechooserwidget.c:7658
 msgid "Search mode"
 msgstr "Mode de cerca"
 
-#: gtk/gtkfilechooserwidget.c:7655 gtk/gtkfilechooserwidget.c:7656
+#: gtk/gtkfilechooserwidget.c:7664 gtk/gtkfilechooserwidget.c:7665
 #: gtk/gtkshortcutsshortcut.c:634
 msgid "Subtitle"
 msgstr "Subtítol"
@@ -3777,8 +3788,7 @@ msgstr "Ajustament de línia"
 
 #: gtk/gtklabel.c:809
 msgid "If set, wrap lines if the text becomes too wide"
-msgstr ""
-"Si és establert, ajusta les línies si el text arriba a ser massa ample"
+msgstr "Si és establert, ajusta les línies si el text arriba a ser massa ample"
 
 #: gtk/gtklabel.c:822
 msgid "Line wrap mode"
@@ -3835,8 +3845,8 @@ msgstr "Nombre de línies"
 #: gtk/gtklabel.c:936
 msgid "The desired number of lines, when ellipsizing a wrapping label"
 msgstr ""
-"El nombre de línies desitjades quan es posen punts suspensius a una etiqueta"
-" ajustada"
+"El nombre de línies desitjades quan es posen punts suspensius a una etiqueta "
+"ajustada"
 
 #: gtk/gtklabel.c:950 gtk/gtktext.c:937 gtk/gtktextview.c:1078
 msgid "Menu model to append to the context menu"
@@ -3928,7 +3938,7 @@ msgid "Displayed item"
 msgstr "Element mostrat"
 
 #: gtk/gtklistitem.c:209 gtk/gtknotebook.c:605 gtk/gtkpaned.c:449
-#: gtk/gtkpopover.c:163
+#: gtk/gtkpopover.c:1630
 msgid "Position"
 msgstr "Posició"
 
@@ -3995,8 +4005,8 @@ msgstr "Indicador de funció de no autorització"
 msgid ""
 "The tooltip to display when prompting the user cannot obtain authorization"
 msgstr ""
-"L'indicador de funció a mostrar quan s'indiqui a l'usuari que no pot obtenir"
-" l'autorització"
+"L'indicador de funció a mostrar quan s'indiqui a l'usuari que no pot obtenir "
+"l'autorització"
 
 #: gtk/gtkmagnifier.c:185
 msgid "Inspected"
@@ -4146,8 +4156,7 @@ msgstr "Volum"
 msgid "Volume of the audio stream."
 msgstr "Volum del flux d'àudio."
 
-#: gtk/gtkmenubutton.c:370 gtk/gtkpopovermenubar.c:593
-#: gtk/gtkpopovermenu.c:517
+#: gtk/gtkmenubutton.c:370 gtk/gtkpopovermenubar.c:593 gtk/gtkpopovermenu.c:517
 msgid "Menu model"
 msgstr "Model del menú"
 
@@ -4314,11 +4323,11 @@ msgstr "El títol del diàleg de selecció de fitxers"
 
 #: gtk/gtknativedialog.c:229
 msgid ""
-"If TRUE, the dialog is modal (other windows are not usable while this one is"
-" up)"
+"If TRUE, the dialog is modal (other windows are not usable while this one is "
+"up)"
 msgstr ""
-"Si és «TRUE» (cert), la finestra és modal (les altres finestres no es podran"
-" utilitzar mentre aquesta estigui oberta)"
+"Si és «TRUE» (cert), la finestra és modal (les altres finestres no es podran "
+"utilitzar mentre aquesta estigui oberta)"
 
 #: gtk/gtknativedialog.c:241
 msgid "Whether the dialog is currently visible"
@@ -4460,8 +4469,8 @@ msgstr "Disponible el menú emergent"
 
 #: gtk/gtknotebook.c:1089
 msgid ""
-"If TRUE, pressing the right mouse button on the notebook pops up a menu that"
-" you can use to go to a page"
+"If TRUE, pressing the right mouse button on the notebook pops up a menu that "
+"you can use to go to a page"
 msgstr ""
 "Si és «TRUE» (cert), prement el botó dret del ratolí sobre la llibreta "
 "apareixerà un menú que podreu utilitzar per anar a una pàgina"
@@ -4570,8 +4579,8 @@ msgstr "Canvia la mida del primer fill"
 msgid ""
 "If TRUE, the first child expands and shrinks along with the paned widget"
 msgstr ""
-"Si és «TRUE» (cert), el primer fill s'expandirà o s'encongirà amb el giny de"
-" la subfinestra"
+"Si és «TRUE» (cert), el primer fill s'expandirà o s'encongirà amb el giny de "
+"la subfinestra"
 
 #: gtk/gtkpaned.c:524
 msgid "Resize second child"
@@ -4660,19 +4669,19 @@ msgstr "Pot encongir"
 msgid "Allow self to be smaller than contents"
 msgstr "Permet que sigui més petit que els continguts"
 
-#: gtk/gtkplacessidebar.c:4336
+#: gtk/gtkplacessidebar.c:4343
 msgid "Location to Select"
 msgstr "Trieu la ubicació"
 
-#: gtk/gtkplacessidebar.c:4337
+#: gtk/gtkplacessidebar.c:4344
 msgid "The location to highlight in the sidebar"
 msgstr "La ubicació que s'ha de ressaltar a la barra lateral"
 
-#: gtk/gtkplacessidebar.c:4342 gtk/gtkplacesview.c:2250
+#: gtk/gtkplacessidebar.c:4349 gtk/gtkplacesview.c:2250
 msgid "Open Flags"
 msgstr "Indicadors d'obertura"
 
-#: gtk/gtkplacessidebar.c:4343 gtk/gtkplacesview.c:2251
+#: gtk/gtkplacessidebar.c:4350 gtk/gtkplacesview.c:2251
 msgid ""
 "Modes in which the calling application can open locations selected in the "
 "sidebar"
@@ -4680,53 +4689,53 @@ msgstr ""
 "Els modes en els quals l'aplicació que fa la crida pot obrir ubicacions "
 "seleccionades a la barra lateral"
 
-#: gtk/gtkplacessidebar.c:4349
+#: gtk/gtkplacessidebar.c:4356
 msgid "Show recent files"
 msgstr "Mostra els fitxers recents"
 
-#: gtk/gtkplacessidebar.c:4350
+#: gtk/gtkplacessidebar.c:4357
 msgid "Whether the sidebar includes a builtin shortcut for recent files"
 msgstr "Si la barra lateral inclou una drecera pels fitxers recents"
 
-#: gtk/gtkplacessidebar.c:4355
+#: gtk/gtkplacessidebar.c:4362
 msgid "Show “Desktop”"
 msgstr "Mostra l'«Escriptori»"
 
-#: gtk/gtkplacessidebar.c:4356
+#: gtk/gtkplacessidebar.c:4363
 msgid "Whether the sidebar includes a builtin shortcut to the Desktop folder"
 msgstr "Si la barra lateral inclou una drecera a la carpeta de l'escriptori"
 
-#: gtk/gtkplacessidebar.c:4361
+#: gtk/gtkplacessidebar.c:4368
 msgid "Show “Enter Location”"
 msgstr "Mostra «Introduïu la ubicació»"
 
-#: gtk/gtkplacessidebar.c:4362
+#: gtk/gtkplacessidebar.c:4369
 msgid ""
 "Whether the sidebar includes a builtin shortcut to manually enter a location"
 msgstr ""
 "Si la barra lateral inclou una drecera per introduir manualment una ubicació"
 
-#: gtk/gtkplacessidebar.c:4367
+#: gtk/gtkplacessidebar.c:4374
 msgid "Show “Trash”"
 msgstr "Mostra la «paperera»"
 
-#: gtk/gtkplacessidebar.c:4368
+#: gtk/gtkplacessidebar.c:4375
 msgid "Whether the sidebar includes a builtin shortcut to the Trash location"
 msgstr "Si la barra lateral inclou una drecera amb la ubicació de la paperera"
 
-#: gtk/gtkplacessidebar.c:4373
+#: gtk/gtkplacessidebar.c:4380
 msgid "Show “Other locations”"
 msgstr "Mostra «altres ubicacions»"
 
-#: gtk/gtkplacessidebar.c:4374
+#: gtk/gtkplacessidebar.c:4381
 msgid "Whether the sidebar includes an item to show external locations"
 msgstr "Si la barra lateral inclou un element per a mostrar altres ubicacions"
 
-#: gtk/gtkplacessidebar.c:4379
+#: gtk/gtkplacessidebar.c:4386
 msgid "Show “Starred Location”"
 msgstr "Mostra «ubicació destacada»"
 
-#: gtk/gtkplacessidebar.c:4380
+#: gtk/gtkplacessidebar.c:4387
 msgid "Whether the sidebar includes an item to show starred files"
 msgstr ""
 "Si la barra lateral inclou un element per a mostrar els fitxers destacats"
@@ -4837,8 +4846,7 @@ msgstr "Mnemònics visibles"
 
 #: gtk/gtkpopover.c:1659
 msgid "Whether mnemonics are currently visible in this popover"
-msgstr ""
-"Si els mnemònics són visibles actualment en aquesta finestra emergent"
+msgstr "Si els mnemònics són visibles actualment en aquesta finestra emergent"
 
 #: gtk/gtkpopovermenubar.c:594
 msgid "The model from which the bar is made."
@@ -4982,8 +4990,8 @@ msgstr "Segueix l'estat de la impressió"
 
 #: gtk/gtkprintjob.c:181
 msgid ""
-"TRUE if the print job will continue to emit status-changed signals after the"
-" print data has been sent to the printer or print server."
+"TRUE if the print job will continue to emit status-changed signals after the "
+"print data has been sent to the printer or print server."
 msgstr ""
 "«TRUE» (cert) si el treball d'impressió ha de continuar emetent senyals "
 "«status-changed» un cop ja s'hagin transmès les dades a la impressora, o al "
@@ -5183,8 +5191,8 @@ msgstr "Pas de la pulsació"
 #: gtk/gtkprogressbar.c:198
 msgid "The fraction of total progress to move the bouncing block when pulsed"
 msgstr ""
-"La fracció de progrés total en què es mourà el bloc de rebot en realitzar el"
-" moviment polsant"
+"La fracció de progrés total en què es mourà el bloc de rebot en realitzar el "
+"moviment polsant"
 
 #: gtk/gtkprogressbar.c:206
 msgid "Text to be displayed in the progress bar"
@@ -5317,11 +5325,9 @@ msgstr "El valor de l'escalat"
 
 #: gtk/gtkscalebutton.c:218
 msgid ""
-"The GtkAdjustment that contains the current value of this scale button "
-"object"
+"The GtkAdjustment that contains the current value of this scale button object"
 msgstr ""
-"El GtkAdjustment que conté el valor actual d'aquest objecte de botó "
-"d'escalat"
+"El GtkAdjustment que conté el valor actual d'aquest objecte de botó d'escalat"
 
 #: gtk/gtkscalebutton.c:244
 msgid "Icons"
@@ -5342,8 +5348,8 @@ msgstr "Valor del dibuix"
 #: gtk/gtkscale.c:684
 msgid "Whether the current value is displayed as a string next to the slider"
 msgstr ""
-"Si el valor actual es mostra com una cadena de text al costat de la barra de"
-" desplaçament"
+"Si el valor actual es mostra com una cadena de text al costat de la barra de "
+"desplaçament"
 
 #: gtk/gtkscale.c:690
 msgid "Has Origin"
@@ -5453,8 +5459,7 @@ msgid "Minimum Content Width"
 msgstr "Amplada mínima del contingut"
 
 #: gtk/gtkscrolledwindow.c:653
-msgid ""
-"The minimum width that the scrolled window will allocate to its content"
+msgid "The minimum width that the scrolled window will allocate to its content"
 msgstr ""
 "L'amplada mínima que la finestra amb desplaçament ubicarà per aquests "
 "continguts"
@@ -5491,8 +5496,7 @@ msgid "Maximum Content Width"
 msgstr "Amplada màxima del contingut"
 
 #: gtk/gtkscrolledwindow.c:708
-msgid ""
-"The maximum width that the scrolled window will allocate to its content"
+msgid "The maximum width that the scrolled window will allocate to its content"
 msgstr ""
 "L'amplada màxima que la finestra amb desplaçament ubicarà per aquest "
 "contingut"
@@ -5505,8 +5509,7 @@ msgstr "Alçada màxima del contingut"
 msgid ""
 "The maximum height that the scrolled window will allocate to its content"
 msgstr ""
-"L'alçada màxima que la finestra amb desplaçament ubicarà per aquest "
-"contingut"
+"L'alçada màxima que la finestra amb desplaçament ubicarà per aquest contingut"
 
 #: gtk/gtkscrolledwindow.c:735 gtk/gtkscrolledwindow.c:736
 msgid "Propagate Natural Width"
@@ -5582,11 +5585,11 @@ msgstr "Cursor partit"
 
 #: gtk/gtksettings.c:384
 msgid ""
-"Whether two cursors should be displayed for mixed left-to-right and right-"
-"to-left text"
+"Whether two cursors should be displayed for mixed left-to-right and right-to-"
+"left text"
 msgstr ""
-"Si s'han de mostrar dos cursors en text mixt d'esquerra a dreta i de dreta a"
-" esquerra"
+"Si s'han de mostrar dos cursors en text mixt d'esquerra a dreta i de dreta a "
+"esquerra"
 
 #: gtk/gtksettings.c:391
 msgid "Cursor Aspect Ratio"
@@ -5636,12 +5639,12 @@ msgstr "Suavitzat de vores Xft"
 #: gtk/gtksettings.c:437
 msgid "Whether to antialias Xft fonts; 0=no, 1=yes, -1=default"
 msgstr ""
-"Si s'han de suavitzar les vores dels tipus de lletra Xft: 0=no, 1=sí, -1=per"
-" defecte"
+"Si s'han de suavitzar les vores dels tipus de lletra Xft: 0=no, 1=sí, -1=per "
+"defecte"
 
 # Una mica d'ajuda per a "hint font":
 # http://www.cairographics.org/manual/cairo-Font-Options.html
-# 
+#
 # Specifies the type of hinting to do on font outlines. Hinting is the process
 #  of fitting outlines to the pixel grid in order to improve the appearance of
 #  the result. Since hinting outlines involves distorting them, it also
@@ -5673,8 +5676,8 @@ msgstr "Estil de transformació Xft"
 msgid ""
 "What degree of hinting to use; hintnone, hintslight, hintmedium, or hintfull"
 msgstr ""
-"Quin grau de transformació a emprar: «hintnone» (cap), «hintslight» "
-"(senzill), «hintmedium» (mitjà) o «hintfull» (complet)"
+"Quin grau de transformació a emprar: «hintnone» (cap), "
+"«hintslight» (senzill), «hintmedium» (mitjà) o «hintfull» (complet)"
 
 #: gtk/gtksettings.c:463
 msgid "Xft RGBA"
@@ -5684,8 +5687,8 @@ msgstr "RGBA de Xft"
 msgid "Type of subpixel antialiasing; none, rgb, bgr, vrgb, vbgr"
 msgstr ""
 "Tipus de suavitzat de subpíxels: «none» (cap), «rgb» (vermell-verd-blau), "
-"«bgr» (blau-verd-vermell), «vrgb» (vermell-verd-blau vertical) o «vbgr» "
-"(blau-verd-vermell vertical)"
+"«bgr» (blau-verd-vermell), «vrgb» (vermell-verd-blau vertical) o "
+"«vbgr» (blau-verd-vermell vertical)"
 
 #: gtk/gtksettings.c:472
 msgid "Xft DPI"
@@ -5811,8 +5814,8 @@ msgstr "Nom del tema de so"
 msgid "XDG sound theme name"
 msgstr "Nom del tema de so XDG"
 
-#. Translators: this means sounds that are played as feedback to user input
 # FIXME (dpm)
+#. Translators: this means sounds that are played as feedback to user input
 #: gtk/gtksettings.c:674
 msgid "Audible Input Feedback"
 msgstr "Sons en resposta a l'activitat de l'usuari"
@@ -5820,8 +5823,8 @@ msgstr "Sons en resposta a l'activitat de l'usuari"
 #: gtk/gtksettings.c:675
 msgid "Whether to play event sounds as feedback to user input"
 msgstr ""
-"Si s'han de reproduir sons per als esdeveniments com a reacció a l'activitat"
-" de l'usuari"
+"Si s'han de reproduir sons per als esdeveniments com a reacció a l'activitat "
+"de l'usuari"
 
 #: gtk/gtksettings.c:693
 msgid "Enable Event Sounds"
@@ -5833,7 +5836,7 @@ msgstr "Si s'han de reproduir sons per als esdeveniments"
 
 # Notes:
 # Afegeix una nota
-# 
+#
 # Camins:
 # ../gtk/gtksettings.c:1174
 #: gtk/gtksettings.c:713
@@ -5874,8 +5877,7 @@ msgstr ""
 "entrades ocultes"
 
 #: gtk/gtksettings.c:769
-msgid ""
-"Whether to select the contents of a selectable label when it is focused"
+msgid "Whether to select the contents of a selectable label when it is focused"
 msgstr ""
 "Si s'han de seleccionar els continguts d'una etiqueta seleccionable quan "
 "obtingui el focus"
@@ -5950,8 +5952,8 @@ msgid ""
 "Whether builtin GTK dialogs should use a header bar instead of an action "
 "area."
 msgstr ""
-"Si els diàlegs integrats de la GTK+ han d'utilitzar la barra de capçalera en"
-" comptes d'una àrea d'acció."
+"Si els diàlegs integrats de la GTK+ han d'utilitzar la barra de capçalera en "
+"comptes d'una àrea d'acció."
 
 #: gtk/gtksettings.c:906
 msgid "Enable primary paste"
@@ -5979,8 +5981,7 @@ msgstr "Temps d'una premuda llarga"
 
 #: gtk/gtksettings.c:934
 msgid ""
-"Time for a button/touch press to be considered a long press (in "
-"milliseconds)"
+"Time for a button/touch press to be considered a long press (in milliseconds)"
 msgstr ""
 "Temps perquè la premuda d'un botó/un gest sigui considerada una premuda "
 "llarga (en mil·lisegons)"
@@ -6257,8 +6258,7 @@ msgstr "Actualitza la política"
 
 #: gtk/gtkspinbutton.c:405
 msgid ""
-"Whether the spin button should update always, or only when the value is "
-"legal"
+"Whether the spin button should update always, or only when the value is legal"
 msgstr ""
 "Si el botó de rotació s'hauria d'actualitzar sempre, o només quan el valor "
 "és legal"
@@ -6308,8 +6308,8 @@ msgid ""
 "If set, an underline in the title indicates the next character should be "
 "used for the mnemonic accelerator key"
 msgstr ""
-"Si s'estableix un subratllat en el títol indica que el caràcter següent s'ha"
-" d'utilitzar per a la tecla acceleradora mnemotècnica"
+"Si s'estableix un subratllat en el títol indica que el caràcter següent s'ha "
+"d'utilitzar per a la tecla acceleradora mnemotècnica"
 
 #: gtk/gtkstack.c:708
 msgid "Horizontally homogeneous"
@@ -6475,8 +6475,7 @@ msgstr "Llista de destinacions de còpia"
 
 #: gtk/gtktextbuffer.c:545
 msgid ""
-"The list of targets this buffer supports for clipboard copying and DND "
-"source"
+"The list of targets this buffer supports for clipboard copying and DND source"
 msgstr ""
 "La llista de destinacions que aquest element de memòria intermèdia permet "
 "per copiar al porta-retalls i com a fonts d'arrossegar i deixar anar"
@@ -6566,11 +6565,11 @@ msgstr "Alçària completa del fons"
 
 #: gtk/gtktexttag.c:237
 msgid ""
-"Whether the background color fills the entire line height or only the height"
-" of the tagged characters"
+"Whether the background color fills the entire line height or only the height "
+"of the tagged characters"
 msgstr ""
-"Si el color de fons omple l'alçada de la línia sencera o només l'alçada dels"
-" caràcters marcats"
+"Si el color de fons omple l'alçada de la línia sencera o només l'alçada dels "
+"caràcters marcats"
 
 #: gtk/gtktexttag.c:257
 msgid "Foreground RGBA"
@@ -6615,9 +6614,9 @@ msgstr "Mida del tipus de lletra en unitats Pango"
 
 #: gtk/gtktexttag.c:363
 msgid ""
-"Font size as a scale factor relative to the default font size. This properly"
-" adapts to theme changes etc. so is recommended. Pango predefines some "
-"scales such as PANGO_SCALE_X_LARGE"
+"Font size as a scale factor relative to the default font size. This properly "
+"adapts to theme changes etc. so is recommended. Pango predefines some scales "
+"such as PANGO_SCALE_X_LARGE"
 msgstr ""
 "Mida del tipus de lletrat com a un factor relatiu a la mida de la font per "
 "defecte. Això s'adapta pròpiament a canvis de tema, etc., per tant es "
@@ -6665,8 +6664,8 @@ msgid ""
 "Offset of text above the baseline (below the baseline if rise is negative) "
 "in Pango units"
 msgstr ""
-"Desplaçament del text per sobre de la línia de base (per sota de la línia de"
-" base si l'elevació és negativa) en unitats del Pango"
+"Desplaçament del text per sobre de la línia de base (per sota de la línia de "
+"base si l'elevació és negativa) en unitats del Pango"
 
 #: gtk/gtktexttag.c:451
 msgid "Pixels above lines"
@@ -7302,8 +7301,8 @@ msgstr ""
 #: gtk/gtktreeview.c:1190
 msgid "The column in the model containing the tooltip texts for the rows"
 msgstr ""
-"La columna del model que conté els texts dels indicadors de funció per a les"
-" files"
+"La columna del model que conté els texts dels indicadors de funció per a les "
+"files"
 
 #: gtk/gtktreeviewcolumn.c:275
 msgid "Whether to display the column"
@@ -7475,8 +7474,8 @@ msgstr "Sol·licitud d'amplada"
 
 #: gtk/gtkwidget.c:975
 msgid ""
-"Override for width request of the widget, or -1 if natural request should be"
-" used"
+"Override for width request of the widget, or -1 if natural request should be "
+"used"
 msgstr ""
 "Substitueix per sol·licitud d'amplada del giny, o -1 si la sol·licitud "
 "natural hagués de ser utilitzada"
@@ -7726,8 +7725,8 @@ msgstr "Si és «TRUE» (cert), els usuaris podran redimensionar la finestra"
 
 #: gtk/gtkwindow.c:776
 msgid ""
-"If TRUE, the window is modal (other windows are not usable while this one is"
-" up)"
+"If TRUE, the window is modal (other windows are not usable while this one is "
+"up)"
 msgstr ""
 "Si és «TRUE» (cert), la finestra serà modal (les altres finestres no es "
 "podran utilitzar mentre aquesta estigui oberta)"
@@ -7737,8 +7736,7 @@ msgid "Default Width"
 msgstr "Amplada per defecte"
 
 #: gtk/gtkwindow.c:783
-msgid ""
-"The default width of the window, used when initially showing the window"
+msgid "The default width of the window, used when initially showing the window"
 msgstr ""
 "L'amplada per defecte de la finestra, utilitzada quan es mostra inicialment "
 "la finestra"
@@ -7769,8 +7767,7 @@ msgstr "Amaga en tancar"
 #: gtk/gtkwindow.c:806
 msgid "If this window should be hidden when the user clicks the close button"
 msgstr ""
-"Si s'hauria d'amagar aquesta finestra quan l'usuari fa clic al botó de "
-"tancar"
+"Si s'hauria d'amagar aquesta finestra quan l'usuari fa clic al botó de tancar"
 
 #: gtk/gtkwindow.c:819
 msgid "Mnemonics Visible"
@@ -7994,7 +7991,8 @@ msgstr "El títol del perfil de color a utilitzar"
 #~ msgstr "Giny de visualització prèvia actiu"
 
 #~ msgid ""
-#~ "Whether the application supplied widget for custom previews should be shown."
+#~ "Whether the application supplied widget for custom previews should be "
+#~ "shown."
 #~ msgstr ""
 #~ "Si s'ha de mostrar el giny de visualització prèvia que l'aplicació "
 #~ "proporciona."
@@ -8003,7 +8001,8 @@ msgstr "El títol del perfil de color a utilitzar"
 #~ msgstr "Utilitza l'etiqueta de visualització prèvia"
 
 #~ msgid "Whether to display a label with the name of the previewed file."
-#~ msgstr "Si s'ha de mostrar una etiqueta amb el nom del fitxer previsualitzat."
+#~ msgstr ""
+#~ "Si s'ha de mostrar una etiqueta amb el nom del fitxer previsualitzat."
 
 #~ msgid "Extra widget"
 #~ msgstr "Giny addicional"
@@ -8021,11 +8020,11 @@ msgstr "El títol del perfil de color a utilitzar"
 #~ msgstr "Confirma la sobreescriptura"
 
 #~ msgid ""
-#~ "Whether a file chooser in save mode will present an overwrite confirmation "
-#~ "dialog if necessary."
+#~ "Whether a file chooser in save mode will present an overwrite "
+#~ "confirmation dialog if necessary."
 #~ msgstr ""
-#~ "Si un selector de fitxers que permeti desar ha de demanar confirmació en cas"
-#~ " que se sobreescrigui algun fitxer."
+#~ "Si un selector de fitxers que permeti desar ha de demanar confirmació en "
+#~ "cas que se sobreescrigui algun fitxer."
 
 #~ msgid "has filter"
 #~ msgstr "té filtre"
@@ -8052,11 +8051,11 @@ msgstr "El títol del perfil de color a utilitzar"
 #~ msgstr "Patró"
 
 #~ msgid ""
-#~ "A string with _ characters in positions correspond to characters in the text"
-#~ " to underline"
+#~ "A string with _ characters in positions correspond to characters in the "
+#~ "text to underline"
 #~ msgstr ""
-#~ "Una cadena amb caràcters _ en posicions corresponen a caràcters del text per"
-#~ " subratllar"
+#~ "Una cadena amb caràcters _ en posicions corresponen a caràcters del text "
+#~ "per subratllar"
 
 #~ msgid "Track visited links"
 #~ msgstr "Fes un seguiment dels enllaços que s'hagin visitat"
@@ -8091,8 +8090,8 @@ msgstr "El títol del perfil de color a utilitzar"
 #~ msgid ""
 #~ "An accel path used to conveniently construct accel paths of child items"
 #~ msgstr ""
-#~ "Un camí d'accelerador que s'utilitza per construir els camins d'accelerador "
-#~ "dels elements fill"
+#~ "Un camí d'accelerador que s'utilitza per construir els camins "
+#~ "d'accelerador dels elements fill"
 
 #~ msgid "Attach Widget"
 #~ msgstr "Giny d'acoblament"
@@ -8113,8 +8112,8 @@ msgstr "El títol del perfil de color a utilitzar"
 #~ "A boolean that indicates whether the menu reserves space for toggles and "
 #~ "icons"
 #~ msgstr ""
-#~ "Un booleà que indica si el menú ha de reservar espai per als commutadors i "
-#~ "les icones"
+#~ "Un booleà que indica si el menú ha de reservar espai per als commutadors "
+#~ "i les icones"
 
 #~ msgid "Anchor hints"
 #~ msgstr "Indicacions d'ancoratge"
@@ -8229,12 +8228,13 @@ msgstr "El títol del perfil de color a utilitzar"
 #~ msgstr "Text a mostrar en l'element."
 
 #~ msgid ""
-#~ "If set, an underline in the label property indicates that the next character"
-#~ " should be used for the mnemonic accelerator key in the overflow menu"
+#~ "If set, an underline in the label property indicates that the next "
+#~ "character should be used for the mnemonic accelerator key in the overflow "
+#~ "menu"
 #~ msgstr ""
 #~ "Si es fixa, un subratllat en la propietat de l'etiqueta indica que el "
-#~ "caràcter següent s'hauria d'utilitzar per a la tecla de drecera mnemotècnica"
-#~ " en el menú"
+#~ "caràcter següent s'hauria d'utilitzar per a la tecla de drecera "
+#~ "mnemotècnica en el menú"
 
 #~ msgid "Widget to use as the item label"
 #~ msgstr "El giny que s'utilitzarà com a etiqueta de l'element"
@@ -8269,11 +8269,11 @@ msgstr "El títol del perfil de color a utilitzar"
 #~ msgstr "És important"
 
 #~ msgid ""
-#~ "Whether the toolbar item is considered important. When TRUE, toolbar buttons"
-#~ " show text in GTK_TOOLBAR_BOTH_HORIZ mode"
+#~ "Whether the toolbar item is considered important. When TRUE, toolbar "
+#~ "buttons show text in GTK_TOOLBAR_BOTH_HORIZ mode"
 #~ msgstr ""
-#~ "Si l'element de la barra d'eines es considera important. Si és «TRUE» "
-#~ "(cert), els botons de la barra d'eines mostraran el text en mode "
+#~ "Si l'element de la barra d'eines es considera important. Si és "
+#~ "«TRUE» (cert), els botons de la barra d'eines mostraran el text en mode "
 #~ "GTK_TOOLBAR_BOTH_HORIZ"
 
 #~ msgid "Expand Item"
@@ -8303,7 +8303,8 @@ msgstr "El títol del perfil de color a utilitzar"
 #~ msgstr "Tipus d'ombra"
 
 #~ msgid "Determines how the shadowed box around the viewport is drawn"
-#~ msgstr "Determina com es dibuixa el quadre ombrejat al voltant de la subàrea"
+#~ msgstr ""
+#~ "Determina com es dibuixa el quadre ombrejat al voltant de la subàrea"
 
 #~ msgid "Is focus"
 #~ msgstr "És focus"
@@ -8328,11 +8329,11 @@ msgstr "El títol del perfil de color a utilitzar"
 #~ msgstr "Indicació de tipus"
 
 #~ msgid ""
-#~ "Hint to help the desktop environment understand what kind of window this is "
-#~ "and how to treat it."
+#~ "Hint to help the desktop environment understand what kind of window this "
+#~ "is and how to treat it."
 #~ msgstr ""
-#~ "Indicació per ajudar l'entorn d'escriptori a entendre quin tipus de finestra"
-#~ " és i com tractar-la."
+#~ "Indicació per ajudar l'entorn d'escriptori a entendre quin tipus de "
+#~ "finestra és i com tractar-la."
 
 #~ msgid "Accept focus"
 #~ msgstr "Accepta el focus"
