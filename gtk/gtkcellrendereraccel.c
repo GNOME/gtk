@@ -569,15 +569,21 @@ key_controller_key_pressed (GtkEventControllerKey *key,
   edited = TRUE;
 
  out:
-  gtk_grab_remove (widget);
-  gtk_cell_editable_editing_done (GTK_CELL_EDITABLE (widget));
-  gtk_cell_editable_remove_widget (GTK_CELL_EDITABLE (widget));
-
   if (edited)
     g_signal_emit (box->cell, signals[ACCEL_EDITED], 0, box->path,
                    accel_key, accel_mods, keycode);
   else if (cleared)
     g_signal_emit (box->cell, signals[ACCEL_CLEARED], 0, box->path);
+
+  /* Will receive keysym + state after modifier only in case
+   * accel_mode is not GTK_CELL_RENDERER_ACCEL_MODE_GTK.
+   * E.g. Ctrl-C after Control_L */
+  if (edited && !gtk_accelerator_valid (accel_key, accel_mods))
+    return TRUE;
+
+  gtk_grab_remove (widget);
+  gtk_cell_editable_editing_done (GTK_CELL_EDITABLE (widget));
+  gtk_cell_editable_remove_widget (GTK_CELL_EDITABLE (widget));
 
   return TRUE;
 }
