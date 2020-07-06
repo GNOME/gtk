@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-07-06 15:42+0000\n"
-"PO-Revision-Date: 2020-07-06 22:33+0200\n"
+"POT-Creation-Date: 2020-07-06 20:36+0000\n"
+"PO-Revision-Date: 2020-07-06 22:40+0200\n"
 "Last-Translator: Florentina Mușat <florentina.musat.28@gmail.com>\n"
 "Language-Team: Romanian Gnome Team <gnomero-list@lists.sourceforge.net>\n"
 "Language: ro\n"
@@ -1257,7 +1257,7 @@ msgid "Whether the cell background color is set"
 msgstr "Dacă culoarea de fundal a celulei este stabilită"
 
 #: gtk/gtkcellrenderercombo.c:136 gtk/gtkcolumnview.c:629 gtk/gtkdropdown.c:456
-#: gtk/gtkfilterlistmodel.c:660 gtk/gtkflattenlistmodel.c:413
+#: gtk/gtkfilterlistmodel.c:589 gtk/gtkflattenlistmodel.c:413
 #: gtk/gtkgridview.c:1093 gtk/gtklistview.c:838 gtk/gtkmaplistmodel.c:375
 #: gtk/gtkmultiselection.c:356 gtk/gtkselectionfiltermodel.c:251
 #: gtk/gtkshortcutcontroller.c:553 gtk/gtkslicelistmodel.c:263
@@ -3066,7 +3066,7 @@ msgstr "Acțiune"
 msgid "The type of operation that the file selector is performing"
 msgstr "Tipul operației efectuate de selectorul de fișiere"
 
-#: gtk/gtkfilechooser.c:160 gtk/gtkfilterlistmodel.c:648
+#: gtk/gtkfilechooser.c:160 gtk/gtkfilterlistmodel.c:565
 msgid "Filter"
 msgstr "Filtru"
 
@@ -3139,13 +3139,29 @@ msgstr "Subitlu"
 msgid "The human-readable name for this filter"
 msgstr "Numele lizibil de către oameni pentru acest filtru"
 
-#: gtk/gtkfilterlistmodel.c:649
+#: gtk/gtkfilterlistmodel.c:566
 msgid "The filter set for this model"
 msgstr "Filtrul stabilit pentru acest model"
 
-#: gtk/gtkfilterlistmodel.c:661 gtk/gtkselectionfiltermodel.c:252
+#: gtk/gtkfilterlistmodel.c:577
+msgid "Incremental"
+msgstr "Incremental"
+
+#: gtk/gtkfilterlistmodel.c:578
+msgid "Filer items incrementally"
+msgstr "Filtrează elemente incremental"
+
+#: gtk/gtkfilterlistmodel.c:590 gtk/gtkselectionfiltermodel.c:252
 msgid "The model being filtered"
 msgstr "Modelul filtrat"
+
+#: gtk/gtkfilterlistmodel.c:601
+msgid "Pending"
+msgstr "În așteptare"
+
+#: gtk/gtkfilterlistmodel.c:602
+msgid "Number of items not yet filtered"
+msgstr "Număr de elemente care nu sunt filtrate încă"
 
 #: gtk/gtkfixedlayout.c:155
 msgid "transform"
@@ -9961,9 +9977,6 @@ msgstr "Titlul profilului de culoare de folosit"
 
 #~ msgid "Recent Files Limit"
 #~ msgstr "Limită fișiere recente"
-
-#~ msgid "Number of recently used files"
-#~ msgstr "Număr de fișiere recent utilizate"
 
 #~ msgid "Enable Tooltips"
 #~ msgstr "Activare indicii"
