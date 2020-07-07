@@ -1297,6 +1297,56 @@ find_frame_timings (GdkFrameClock *clock,
   return NULL;
 }
 
+static gint64
+get_high_res_server_time (void)
+{
+  gint64 now = g_get_monotonic_time();
+
+  return ((now / 1000) & 0xffffffff) * 1000 + (now % 1000);
+}
+
+static void
+compute_server_time_offset_from_monotonic_time (void)
+{
+  display_x11->server_time_offset = -((g_get_monotonic_time() / 1000) & 0xffffffff00000000) * 1000;
+}
+
+static void
+compute_server_time_offset_from_round_trip (GdkX11Display *display_x11)
+{
+  gint64 remote_high_res_time = gdk_x11_get_server_time (display_x11->leader_gdk_window) * 1000;
+  gint64 local_high_res_time = get_high_res_server_time ();
+
+  /* If the server time is within a second of the monotonic time,
+   * we assume that they are identical. This seems like a big margin,
+   * but we want to be as robust as possible even if the system
+   * is under load and our processing of the server response is
+   * delayed.
+   */
+  if (abs (remote_high_res_time - local_high_res_time) < (1 * G_USEC_PER_SEC))
+    {
+      display_x11->server_time_uses_monotonic_time = TRUE;
+      compute_server_time_offset_from_monotonic_time ();
+      return;
+    }
+
+  display_x11->server_time_query_time = remote_high_res_time;
+  display_x11->server_time_offset = remote_high_res_time - local_high_res_time;
+}
+
+static gboolean
+server_time_offset_is_stale (GdkX11Display *display_x11,
+                             gint           server_time)
+{
+  if (display_x11->server_time_query_time == 0)
+    return TRUE;
+
+  if (server_time > display_x11->server_time_query_time + (10 * G_USEC_PER_SEC))
+    return TRUE;
+
+  return FALSE;
+}
+
 /* _NET_WM_FRAME_DRAWN and _NET_WM_FRAME_TIMINGS messages represent time
  * as a "high resolution server time" - this is the server time interpolated
  * to microsecond resolution. The advantage of this time representation
@@ -1310,32 +1360,12 @@ gint64
 server_time_to_monotonic_time (GdkX11Display *display_x11,
                                gint64         server_time)
 {
-  if (display_x11->server_time_query_time == 0 ||
-      (!display_x11->server_time_uses_monotonic_time &&
-       server_time > display_x11->server_time_query_time + (10 * G_USEC_PER_SEC)))
-    {
-      gint64 current_server_time = gdk_x11_get_server_time (display_x11->leader_gdk_window);
-      gint64 current_server_time_usec = (gint64)current_server_time * 1000;
-      gint64 current_monotonic_time = g_get_monotonic_time ();
-      display_x11->server_time_query_time = current_server_time_usec;
-
-      /* If the server time is within a second of the monotonic time,
-       * we assume that they are identical. This seems like a big margin,
-       * but we want to be as robust as possible even if the system
-       * is under load and our processing of the server response is
-       * delayed.
-       */
-      if (current_server_time_usec > current_monotonic_time - (1 * G_USEC_PER_SEC) &&
-          current_server_time_usec < current_monotonic_time + (1 * G_USEC_PER_SEC))
-        display_x11->server_time_uses_monotonic_time = TRUE;
-
-      display_x11->server_time_offset = current_server_time_usec - current_monotonic_time;
-    }
-
   if (display_x11->server_time_uses_monotonic_time)
-    return server_time;
-  else
-    return server_time - display_x11->server_time_offset;
+    compute_server_time_offset_from_monotonic_time ();
+  else if (server_time_offset_is_stale (display_x11, server_time))
+    compute_server_time_offset_from_round_trip ();
+
+  return server_time - display_x11->server_time_offset;
 }
 
 GdkFilterReturn
