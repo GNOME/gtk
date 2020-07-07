@@ -45,3 +45,7 @@
 .list .cell combobox {
   padding: 0 4px;
 }
+
+stacksidebar.object-details {
+  border-top: 1px solid lightgray;
+}

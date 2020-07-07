@@ -317,22 +317,6 @@ object_details_changed (GtkWidget          *combo,
 }
 
 static void
-toggle_sidebar (GtkWidget          *button,
-                GtkInspectorWindow *iw)
-{
-  if (gtk_revealer_get_child_revealed (GTK_REVEALER (iw->sidebar_revealer)))
-    {
-      gtk_revealer_set_reveal_child (GTK_REVEALER (iw->sidebar_revealer), FALSE);
-      gtk_button_set_icon_name (GTK_BUTTON (button), "go-next-symbolic");
-    }
-  else
-    {
-      gtk_revealer_set_reveal_child (GTK_REVEALER (iw->sidebar_revealer), TRUE);
-      gtk_button_set_icon_name (GTK_BUTTON (button), "go-previous-symbolic");
-    }
-}
-
-static void
 go_up_cb (GtkWidget          *button,
           GtkInspectorWindow *iw)
 {
@@ -674,7 +658,6 @@ gtk_inspector_window_class_init (GtkInspectorWindowClass *klass)
   gtk_widget_class_bind_template_callback (widget_class, close_object_details);
   gtk_widget_class_bind_template_callback (widget_class, object_details_changed);
   gtk_widget_class_bind_template_callback (widget_class, notify_node);
-  gtk_widget_class_bind_template_callback (widget_class, toggle_sidebar);
   gtk_widget_class_bind_template_callback (widget_class, go_previous_cb);
   gtk_widget_class_bind_template_callback (widget_class, go_up_cb);
   gtk_widget_class_bind_template_callback (widget_class, go_down_cb);

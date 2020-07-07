@@ -208,17 +208,6 @@
                     <property name="child">
                       <object class="GtkBox">
                         <child>
-                          <object class="GtkRevealer" id="sidebar_revealer">
-                            <property name="transition-type">slide-right</property>
-                            <property name="reveal-child">1</property>
-                            <child>
-                              <object class="GtkStackSidebar">
-                                <property name="stack">object_details</property>
-                              </object>
-                            </child>
-                          </object>
-                        </child>
-                        <child>
                           <object class="GtkBox">
                             <property name="orientation">vertical</property>
                             <child>
@@ -226,17 +215,16 @@
                                 <child type="start">
                                   <object class="GtkBox">
                                     <child>
-                                      <object class="GtkButton">
-                                        <property name="icon-name">go-previous-symbolic</property>
+                                      <object class="GtkToggleButton" id="sidebar_toggle">
+                                        <property name="icon-name">open-menu-symbolic</property>
                                         <property name="tooltip-text" translatable="yes">Toggle Sidebar</property>
-                                        <property name="has-frame">0</property>
                                         <property name="margin-start">6</property>
                                         <property name="margin-end">6</property>
                                         <property name="margin-top">6</property>
                                         <property name="margin-bottom">6</property>
                                         <property name="halign">center</property>
                                         <property name="valign">center</property>
-                                        <signal name="clicked" handler="toggle_sidebar"/>
+                                        <property name="active">1</property>
                                       </object>
                                     </child>
                                     <child>
@@ -393,129 +381,146 @@
                               </object>
                             </child>
                             <child>
-                              <object class="GtkStack" id="object_details">
-                                <signal name="notify::visible-child" handler="object_details_changed"/>
+                              <object class="GtkBox">
                                 <child>
-                                  <object class="GtkStackPage">
-                                    <property name="name">misc</property>
-                                    <property name="title" translatable="yes">Miscellaneous</property>
-                                    <property name="child">
-                                      <object class="GtkInspectorMiscInfo" id="misc_info">
+                                  <object class="GtkRevealer" id="sidebar_revealer">
+                                    <property name="transition-type">slide-right</property>
+                                    <property name="reveal-child" bind-source="sidebar_toggle" bind-property="active" bind-flags="sync-create"/>
+                                    <child>
+                                      <object class="GtkStackSidebar">
+                                        <property name="stack">object_details</property>
+                                        <style>
+                                          <class name="object-details"/>
+                                        </style>
                                       </object>
-                                    </property>
+                                    </child>
                                   </object>
                                 </child>
                                 <child>
-                                  <object class="GtkStackPage">
-                                    <property name="name">properties</property>
-                                    <property name="title" translatable="yes">Properties</property>
-                                    <property name="child">
-                                      <object class="GtkInspectorPropList" id="prop_list">
-                                        <property name="search-entry">prop_search_entry</property>
+                                  <object class="GtkStack" id="object_details">
+                                    <signal name="notify::visible-child" handler="object_details_changed"/>
+                                    <child>
+                                      <object class="GtkStackPage">
+                                        <property name="name">misc</property>
+                                        <property name="title" translatable="yes">Miscellaneous</property>
+                                        <property name="child">
+                                          <object class="GtkInspectorMiscInfo" id="misc_info">
+                                          </object>
+                                        </property>
                                       </object>
-                                    </property>
-                                  </object>
-                                </child>
-                                <child>
-                                  <object class="GtkStackPage">
-                                    <property name="name">layout_properties</property>
-                                    <property name="title" translatable="yes">Layout</property>
-                                    <property name="child">
-                                      <object class="GtkInspectorPropList" id="layout_prop_list">
-                                        <property name="search-entry">layout_prop_search_entry</property>
+                                    </child>
+                                    <child>
+                                      <object class="GtkStackPage">
+                                        <property name="name">properties</property>
+                                        <property name="title" translatable="yes">Properties</property>
+                                        <property name="child">
+                                          <object class="GtkInspectorPropList" id="prop_list">
+                                            <property name="search-entry">prop_search_entry</property>
+                                          </object>
+                                        </property>
                                       </object>
-                                    </property>
-                                  </object>
-                                </child>
-                                <child>
-                                  <object class="GtkStackPage">
-                                    <property name="name">css-nodes</property>
-                                    <property name="title" translatable="yes">CSS Nodes</property>
-                                    <property name="child">
-                                      <object class="GtkInspectorCssNodeTree" id="widget_css_node_tree">
-                                        <signal name="notify::node" handler="notify_node"/>
+                                    </child>
+                                    <child>
+                                      <object class="GtkStackPage">
+                                        <property name="name">layout_properties</property>
+                                        <property name="title" translatable="yes">Layout</property>
+                                        <property name="child">
+                                          <object class="GtkInspectorPropList" id="layout_prop_list">
+                                            <property name="search-entry">layout_prop_search_entry</property>
+                                          </object>
+                                        </property>
                                       </object>
-                                    </property>
-                                  </object>
-                                </child>
-                                <child>
-                                  <object class="GtkStackPage">
-                                    <property name="name">size-groups</property>
-                                    <property name="title" translatable="yes">Size Groups</property>
-                                    <property name="child">
-                                      <object class="GtkInspectorSizeGroups" id="size_groups"/>
-                                    </property>
-                                  </object>
-                                </child>
-                                <child>
-                                  <object class="GtkStackPage">
-                                    <property name="name">data</property>
-                                    <property name="title" translatable="yes">Data</property>
-                                    <property name="child">
-                                      <object class="GtkInspectorTreeData" id="tree_data"/>
-                                    </property>
-                                  </object>
-                                </child>
-                                <child>
-                                  <object class="GtkStackPage">
-                                    <property name="name">list-data</property>
-                                    <property name="title" translatable="yes">Data</property>
-                                    <property name="child">
-                                      <object class="GtkInspectorListData" id="list_data">
+                                    </child>
+                                    <child>
+                                      <object class="GtkStackPage">
+                                        <property name="name">css-nodes</property>
+                                        <property name="title" translatable="yes">CSS Nodes</property>
+                                        <property name="child">
+                                          <object class="GtkInspectorCssNodeTree" id="widget_css_node_tree">
+                                            <signal name="notify::node" handler="notify_node"/>
+                                          </object>
+                                        </property>
                                       </object>
-                                    </property>
-                                  </object>
-                                </child>
-                                <child>
-                                  <object class="GtkStackPage">
-                                    <property name="name">actions</property>
-                                    <property name="title" translatable="yes">Actions</property>
-                                    <property name="child">
-                                      <object class="GtkInspectorActions" id="actions">
-                                        <property name="button">refresh_actions_button</property>
+                                    </child>
+                                    <child>
+                                      <object class="GtkStackPage">
+                                        <property name="name">size-groups</property>
+                                        <property name="title" translatable="yes">Size Groups</property>
+                                        <property name="child">
+                                          <object class="GtkInspectorSizeGroups" id="size_groups"/>
+                                        </property>
                                       </object>
-                                    </property>
-                                  </object>
-                                </child>
-                                <child>
-                                  <object class="GtkStackPage">
-                                    <property name="name">menu</property>
-                                    <property name="title" translatable="yes">Menu</property>
-                                    <property name="child">
-                                      <object class="GtkInspectorMenu" id="menu"/>
-                                    </property>
-                                  </object>
-                                </child>
-                                <child>
-                                  <object class="GtkStackPage">
-                                    <property name="name">controllers</property>
-                                    <property name="title" translatable="yes">Controllers</property>
-                                    <property name="child">
-                                      <object class="GtkInspectorControllers" id="controllers">
-                                        <property name="object-tree">object_tree</property>
+                                    </child>
+                                    <child>
+                                      <object class="GtkStackPage">
+                                        <property name="name">data</property>
+                                        <property name="title" translatable="yes">Data</property>
+                                        <property name="child">
+                                          <object class="GtkInspectorTreeData" id="tree_data"/>
+                                        </property>
                                       </object>
-                                    </property>
-                                  </object>
-                                </child>
-                                <child>
-                                  <object class="GtkStackPage">
-                                    <property name="name">magnifier</property>
-                                    <property name="title" translatable="yes">Magnifier</property>
-                                    <property name="child">
-                                      <object class="GtkInspectorMagnifier" id="magnifier">
-                                        <property name="adjustment">magnification_adjustment</property>
+                                    </child>
+                                    <child>
+                                      <object class="GtkStackPage">
+                                        <property name="name">list-data</property>
+                                        <property name="title" translatable="yes">Data</property>
+                                        <property name="child">
+                                          <object class="GtkInspectorListData" id="list_data">
+                                          </object>
+                                        </property>
                                       </object>
-                                    </property>
-                                  </object>
-                                </child>
-                                <child>
-                                  <object class="GtkStackPage">
-                                    <property name="name">shortcuts</property>
-                                    <property name="title" translatable="yes">Shortcuts</property>
-                                    <property name="child">
-                                      <object class="GtkInspectorShortcuts" id="shortcuts">
+                                    </child>
+                                    <child>
+                                      <object class="GtkStackPage">
+                                        <property name="name">actions</property>
+                                        <property name="title" translatable="yes">Actions</property>
+                                        <property name="child">
+                                          <object class="GtkInspectorActions" id="actions">
+                                            <property name="button">refresh_actions_button</property>
+                                          </object>
+                                        </property>
                                       </object>
-                                    </property>
+                                    </child>
+                                    <child>
+                                      <object class="GtkStackPage">
+                                        <property name="name">menu</property>
+                                        <property name="title" translatable="yes">Menu</property>
+                                        <property name="child">
+                                          <object class="GtkInspectorMenu" id="menu"/>
+                                        </property>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkStackPage">
+                                        <property name="name">controllers</property>
+                                        <property name="title" translatable="yes">Controllers</property>
+                                        <property name="child">
+                                          <object class="GtkInspectorControllers" id="controllers">
+                                          </object>
+                                        </property>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkStackPage">
+                                        <property name="name">magnifier</property>
+                                        <property name="title" translatable="yes">Magnifier</property>
+                                        <property name="child">
+                                          <object class="GtkInspectorMagnifier" id="magnifier">
+                                            <property name="adjustment">magnification_adjustment</property>
+                                          </object>
+                                        </property>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkStackPage">
+                                        <property name="name">shortcuts</property>
+                                        <property name="title" translatable="yes">Shortcuts</property>
+                                        <property name="child">
+                                          <object class="GtkInspectorShortcuts" id="shortcuts">
+                                          </object>
+                                        </property>
+                                      </object>
+                                    </child>
                                   </object>
                                 </child>
                               </object>
