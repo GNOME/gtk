@@ -224,7 +224,7 @@ gtk_vector(set_size) (GtkVector *self,
   if (new_size > old_size)
     gtk_vector(splice) (self, old_size, 0, NULL, new_size - old_size);
   else
-    gtk_vector(splice) (self, old_size, old_size - new_size, NULL, 0);
+    gtk_vector(splice) (self, new_size, old_size - new_size, NULL, 0);
 }
 
 G_GNUC_UNUSED static void
