@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.4.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-07-06 20:36+0000\n"
-"PO-Revision-Date: 2020-07-07 07:43+0300\n"
+"POT-Creation-Date: 2020-07-07 17:07+0000\n"
+"PO-Revision-Date: 2020-07-07 20:54+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
 "Language: uk\n"
@@ -3066,22 +3066,18 @@ msgid "Whether to allow multiple files to be selected"
 msgstr "Чи дозволяти виділення багатьох файлів"
 
 #: gtk/gtkfilechooser.c:182
-#| msgid "Filter"
 msgid "Filters"
 msgstr "Фільтри"
 
 #: gtk/gtkfilechooser.c:183
-#| msgid "The model being filtered"
 msgid "List model of filters"
 msgstr "Модель списку фільтрів"
 
 #: gtk/gtkfilechooser.c:198
-#| msgid "Shortcut Type"
 msgid "Shortcut Folders"
 msgstr "Теки скорочень"
 
 #: gtk/gtkfilechooser.c:199
-#| msgid "A list model to take shortcuts from"
 msgid "List model of shortcut folders"
 msgstr "Модель списку тек скорочень"
 
@@ -3131,12 +3127,12 @@ msgid "The filter set for this model"
 msgstr "Набір фільтрів для цієї моделі"
 
 #: gtk/gtkfilterlistmodel.c:577
-#| msgid "Step Increment"
 msgid "Incremental"
 msgstr "Нарощувальне"
 
 #: gtk/gtkfilterlistmodel.c:578
-msgid "Filer items incrementally"
+#| msgid "Filer items incrementally"
+msgid "Filter items incrementally"
 msgstr "Нарощувальне фільтрування записів"
 
 #: gtk/gtkfilterlistmodel.c:590 gtk/gtkselectionfiltermodel.c:252
@@ -3144,12 +3140,10 @@ msgid "The model being filtered"
 msgstr "Модель, яка фільтрується"
 
 #: gtk/gtkfilterlistmodel.c:601
-#| msgid "Heading"
 msgid "Pending"
 msgstr "У черзі"
 
 #: gtk/gtkfilterlistmodel.c:602
-#| msgid "Number of recently used files"
 msgid "Number of items not yet filtered"
 msgstr "Кількість записів, які ще не було фільтровано"
 
