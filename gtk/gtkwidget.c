@@ -2577,6 +2577,10 @@ gtk_widget_show (GtkWidget *widget)
       g_signal_emit (widget, widget_signals[SHOW], 0);
       g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_VISIBLE]);
 
+      gtk_accessible_update_state (GTK_ACCESSIBLE (widget),
+                                   GTK_ACCESSIBLE_STATE_HIDDEN, FALSE,
+                                   -1);
+
       gtk_widget_pop_verify_invariants (widget);
       g_object_unref (widget);
     }
@@ -2636,6 +2640,10 @@ gtk_widget_hide (GtkWidget *widget)
 
       g_signal_emit (widget, widget_signals[HIDE], 0);
       g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_VISIBLE]);
+
+      gtk_accessible_update_state (GTK_ACCESSIBLE (widget),
+                                   GTK_ACCESSIBLE_STATE_HIDDEN, TRUE,
+                                   -1);
 
       parent = gtk_widget_get_parent (widget);
       if (parent)
