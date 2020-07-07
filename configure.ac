@@ -1552,6 +1552,30 @@ else
   fi
 fi
 
+# Checks to see if we should compile with tracker3 search engine
+#
+
+AC_ARG_ENABLE(tracker3,
+              [AS_HELP_STRING([--enable-tracker3],
+                              [enable tracker3 search engine])],
+              [enable_tracker3=yes],
+              [enable_tracker3=no])
+
+if test "x$enable_tracker3" = "xyes"; then
+  PKG_CHECK_MODULES(TRACKER3, [tracker-sparql-3.0], have_tracker3=yes, have_tracker3=no)
+  GTK_DEP_CFLAGS="$GTK_DEP_CFLAGS $TRACKER3_CFLAGS"
+  GTK_DEP_LIBS="$GTK_DEP_LIBS $TRACKER3_LIBS"
+  if test "x$have_tracker3" = "xyes"; then
+    AC_DEFINE([HAVE_TRACKER3], [], [Define if tracker3 is available])
+  else
+    AC_MSG_ERROR([
+*** tracker3 not found.
+])
+  fi
+fi
+
+AM_CONDITIONAL(HAVE_TRACKER3, test "x$have_tracker3" = "xyes")
+
 # Checks to see if we should compile with cloudprint backend for GTK+
 #
 
