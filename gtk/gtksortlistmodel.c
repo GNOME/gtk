@@ -403,7 +403,7 @@ gtk_sort_list_model_class_init (GtkSortListModelClass *class)
                            P_("Model"),
                            P_("The model being sorted"),
                            G_TYPE_LIST_MODEL,
-                           GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_EXPLICIT_NOTIFY);
+                           GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (gobject_class, NUM_PROPERTIES, properties);
 }
