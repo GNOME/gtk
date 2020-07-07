@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.4.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-07-04 15:48+0000\n"
-"PO-Revision-Date: 2020-07-04 20:01+0300\n"
+"POT-Creation-Date: 2020-07-06 20:36+0000\n"
+"PO-Revision-Date: 2020-07-07 07:43+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
 "Language: uk\n"
@@ -54,7 +54,7 @@ msgid "Vertical offset of the cursor hotspot"
 msgstr "Вертикальний відступ «гарячої» точки курсора"
 
 #: gdk/gdkcursor.c:204 gtk/gtkcssnode.c:612 gtk/gtkeventcontroller.c:231
-#: gtk/gtkfilefilter.c:187 gtk/gtkprinter.c:121 gtk/gtkstack.c:342
+#: gtk/gtkfilefilter.c:233 gtk/gtkprinter.c:121 gtk/gtkstack.c:342
 #: gtk/gtktextmark.c:135
 msgid "Name"
 msgstr "Назва"
@@ -891,7 +891,7 @@ msgid "The object the builder is evaluating for"
 msgstr "Об'єкт для оцінки збиральником"
 
 #: gtk/gtkbuilder.c:332 gtk/gtkbuilderlistitemfactory.c:293
-#: gtk/gtkshortcutcontroller.c:564
+#: gtk/gtkshortcutcontroller.c:565
 msgid "Scope"
 msgstr "Область"
 
@@ -1244,11 +1244,11 @@ msgid "Whether the cell background color is set"
 msgstr "Чи встановлено колір тла комірки"
 
 #: gtk/gtkcellrenderercombo.c:136 gtk/gtkcolumnview.c:629 gtk/gtkdropdown.c:456
-#: gtk/gtkfilterlistmodel.c:684 gtk/gtkflattenlistmodel.c:438
-#: gtk/gtkgridview.c:1093 gtk/gtklistview.c:838 gtk/gtkmaplistmodel.c:404
-#: gtk/gtkmultiselection.c:357 gtk/gtkselectionfiltermodel.c:251
-#: gtk/gtkshortcutcontroller.c:552 gtk/gtkslicelistmodel.c:287
-#: gtk/gtksortlistmodel.c:427 gtk/gtktreelistmodel.c:716
+#: gtk/gtkfilterlistmodel.c:589 gtk/gtkflattenlistmodel.c:413
+#: gtk/gtkgridview.c:1093 gtk/gtklistview.c:838 gtk/gtkmaplistmodel.c:375
+#: gtk/gtkmultiselection.c:356 gtk/gtkselectionfiltermodel.c:251
+#: gtk/gtkshortcutcontroller.c:553 gtk/gtkslicelistmodel.c:263
+#: gtk/gtksortlistmodel.c:403 gtk/gtktreelistmodel.c:706
 msgid "Model"
 msgstr "Модель"
 
@@ -1415,7 +1415,7 @@ msgid "Pulse of the spinner"
 msgstr "Пульсація вертушки"
 
 #: gtk/gtkcellrendererspinner.c:168 gtk/gtkrecentmanager.c:294
-#: gtk/gtkslicelistmodel.c:311
+#: gtk/gtkslicelistmodel.c:287
 msgid "Size"
 msgstr "Розмір"
 
@@ -1999,7 +1999,7 @@ msgid "Show separators between columns"
 msgstr "Показувати роздільники між стовпчиками"
 
 #: gtk/gtkcolumnview.c:665 gtk/gtkcolumnviewcolumn.c:270
-#: gtk/gtksortlistmodel.c:403 gtk/gtktreelistrowsorter.c:243
+#: gtk/gtksortlistmodel.c:391 gtk/gtktreelistrowsorter.c:243
 msgid "Sorter"
 msgstr "Сортувальник"
 
@@ -2340,17 +2340,13 @@ msgstr "Файл"
 msgid "The file to query"
 msgstr "Файл для запиту"
 
-#: gtk/gtkdirectorylist.c:287 gtk/gtkfilterlistmodel.c:672
-#: gtk/gtkflattenlistmodel.c:426 gtk/gtkmaplistmodel.c:392
-#: gtk/gtkpropertylookuplistmodel.c:376 gtk/gtkselectionfiltermodel.c:239
-#: gtk/gtkslicelistmodel.c:275 gtk/gtksortlistmodel.c:415
+#: gtk/gtkdirectorylist.c:287 gtk/gtkpropertylookuplistmodel.c:376
+#: gtk/gtkselectionfiltermodel.c:239
 msgid "Item type"
 msgstr "Тип запису"
 
-#: gtk/gtkdirectorylist.c:288 gtk/gtkfilterlistmodel.c:673
-#: gtk/gtkflattenlistmodel.c:427 gtk/gtkmaplistmodel.c:393
-#: gtk/gtkpropertylookuplistmodel.c:377 gtk/gtkselectionfiltermodel.c:240
-#: gtk/gtkslicelistmodel.c:276
+#: gtk/gtkdirectorylist.c:288 gtk/gtkpropertylookuplistmodel.c:377
+#: gtk/gtkselectionfiltermodel.c:240
 msgid "The type of elements of this object"
 msgstr "Тип елементів цього об'єкта"
 
@@ -2395,7 +2391,6 @@ msgid "Contains Pointer"
 msgstr "Містить вказівник"
 
 #: gtk/gtkdropcontrollermotion.c:227 gtk/gtkeventcontrollermotion.c:224
-#| msgid "Whether the pointer is inthe controllers widget or a descendant"
 msgid "Whether the pointer is in the controllers widget or a descendant"
 msgstr "Чи перебуває вказівник у віджеті контролерів або підлеглому віджеті"
 
@@ -2423,19 +2418,19 @@ msgstr "Фабрика списку"
 msgid "Model for the displayed items"
 msgstr "Модель для показаних пунктів"
 
-#: gtk/gtkdropdown.c:469 gtk/gtklistitem.c:233 gtk/gtksingleselection.c:416
+#: gtk/gtkdropdown.c:469 gtk/gtklistitem.c:233 gtk/gtksingleselection.c:415
 msgid "Selected"
 msgstr "Позначений"
 
-#: gtk/gtkdropdown.c:470 gtk/gtksingleselection.c:417
+#: gtk/gtkdropdown.c:470 gtk/gtksingleselection.c:416
 msgid "Position of the selected item"
 msgstr "Розташування позначеного пункту"
 
-#: gtk/gtkdropdown.c:481 gtk/gtksingleselection.c:428
+#: gtk/gtkdropdown.c:481 gtk/gtksingleselection.c:427
 msgid "Selected Item"
 msgstr "Вибраний елемент"
 
-#: gtk/gtkdropdown.c:482 gtk/gtksingleselection.c:429
+#: gtk/gtkdropdown.c:482 gtk/gtksingleselection.c:428
 msgid "The selected item"
 msgstr "Позначений пункт"
 
@@ -2986,7 +2981,7 @@ msgstr "Чи перебуває фокус у підлеглому об'єкті
 msgid "Flags"
 msgstr "Прапорці"
 
-#: gtk/gtkexpander.c:310 gtk/gtktreelistmodel.c:1100
+#: gtk/gtkexpander.c:310 gtk/gtktreelistmodel.c:1090
 msgid "Expanded"
 msgstr "Розширений"
 
@@ -3054,7 +3049,7 @@ msgstr "Дія"
 msgid "The type of operation that the file selector is performing"
 msgstr "Тип операції, яку виконує діалог вибору файлів"
 
-#: gtk/gtkfilechooser.c:160 gtk/gtkfilterlistmodel.c:660
+#: gtk/gtkfilechooser.c:160 gtk/gtkfilterlistmodel.c:565
 msgid "Filter"
 msgstr "Фільтр"
 
@@ -3070,11 +3065,31 @@ msgstr "Виділяти декілька"
 msgid "Whether to allow multiple files to be selected"
 msgstr "Чи дозволяти виділення багатьох файлів"
 
-#: gtk/gtkfilechooser.c:179
+#: gtk/gtkfilechooser.c:182
+#| msgid "Filter"
+msgid "Filters"
+msgstr "Фільтри"
+
+#: gtk/gtkfilechooser.c:183
+#| msgid "The model being filtered"
+msgid "List model of filters"
+msgstr "Модель списку фільтрів"
+
+#: gtk/gtkfilechooser.c:198
+#| msgid "Shortcut Type"
+msgid "Shortcut Folders"
+msgstr "Теки скорочень"
+
+#: gtk/gtkfilechooser.c:199
+#| msgid "A list model to take shortcuts from"
+msgid "List model of shortcut folders"
+msgstr "Модель списку тек скорочень"
+
+#: gtk/gtkfilechooser.c:211
 msgid "Allow folder creation"
 msgstr "Дозволити створення тек"
 
-#: gtk/gtkfilechooser.c:180
+#: gtk/gtkfilechooser.c:212
 msgid ""
 "Whether a file chooser not in open mode will offer the user to create new "
 "folders."
@@ -3098,26 +3113,45 @@ msgstr "Мітка скасування"
 msgid "The label on the cancel button"
 msgstr "Мітка на кнопці скасування"
 
-#: gtk/gtkfilechooserwidget.c:7648 gtk/gtkfilechooserwidget.c:7649
+#: gtk/gtkfilechooserwidget.c:7657 gtk/gtkfilechooserwidget.c:7658
 msgid "Search mode"
 msgstr "Режим пошуку"
 
-#: gtk/gtkfilechooserwidget.c:7655 gtk/gtkfilechooserwidget.c:7656
+#: gtk/gtkfilechooserwidget.c:7664 gtk/gtkfilechooserwidget.c:7665
 #: gtk/gtkshortcutsshortcut.c:634
 msgid "Subtitle"
 msgstr "Підзаголовок"
 
-#: gtk/gtkfilefilter.c:188
+#: gtk/gtkfilefilter.c:234
 msgid "The human-readable name for this filter"
 msgstr "Зручна для читання назва цього фільтра"
 
-#: gtk/gtkfilterlistmodel.c:661
+#: gtk/gtkfilterlistmodel.c:566
 msgid "The filter set for this model"
 msgstr "Набір фільтрів для цієї моделі"
 
-#: gtk/gtkfilterlistmodel.c:685 gtk/gtkselectionfiltermodel.c:252
+#: gtk/gtkfilterlistmodel.c:577
+#| msgid "Step Increment"
+msgid "Incremental"
+msgstr "Нарощувальне"
+
+#: gtk/gtkfilterlistmodel.c:578
+msgid "Filer items incrementally"
+msgstr "Нарощувальне фільтрування записів"
+
+#: gtk/gtkfilterlistmodel.c:590 gtk/gtkselectionfiltermodel.c:252
 msgid "The model being filtered"
 msgstr "Модель, яка фільтрується"
+
+#: gtk/gtkfilterlistmodel.c:601
+#| msgid "Heading"
+msgid "Pending"
+msgstr "У черзі"
+
+#: gtk/gtkfilterlistmodel.c:602
+#| msgid "Number of recently used files"
+msgid "Number of items not yet filtered"
+msgstr "Кількість записів, які ще не було фільтровано"
 
 #: gtk/gtkfixedlayout.c:155
 msgid "transform"
@@ -3127,7 +3161,7 @@ msgstr "перетворення"
 msgid "The transform of a child of a fixed layout"
 msgstr "Перетворення дочірнього об'єкта із фіксованим компонуванням"
 
-#: gtk/gtkflattenlistmodel.c:439
+#: gtk/gtkflattenlistmodel.c:414
 msgid "The model being flattened"
 msgstr "Модель, яка сплощується"
 
@@ -3869,7 +3903,7 @@ msgstr "Чи може користувач активувати пункт"
 msgid "Widget used for display"
 msgstr "Віджет, який використано для показу"
 
-#: gtk/gtklistitem.c:197 gtk/gtktreeexpander.c:470 gtk/gtktreelistmodel.c:1112
+#: gtk/gtklistitem.c:197 gtk/gtktreeexpander.c:470 gtk/gtktreelistmodel.c:1102
 msgid "Item"
 msgstr "Пункт"
 
@@ -3959,15 +3993,15 @@ msgstr "масштаб"
 msgid "resize"
 msgstr "змінний"
 
-#: gtk/gtkmaplistmodel.c:380
+#: gtk/gtkmaplistmodel.c:363
 msgid "has map"
 msgstr "має мапу"
 
-#: gtk/gtkmaplistmodel.c:381
+#: gtk/gtkmaplistmodel.c:364
 msgid "If a map is set for this model"
 msgstr "Чи встановлено мапу для цієї моделі"
 
-#: gtk/gtkmaplistmodel.c:405
+#: gtk/gtkmaplistmodel.c:376
 msgid "The model being mapped"
 msgstr "Модель для створення мапи"
 
@@ -4246,7 +4280,7 @@ msgstr "Чи виводити діалог"
 msgid "The display where this window will be displayed."
 msgstr "Дисплей, на якому буде показано це вікно."
 
-#: gtk/gtkmultiselection.c:358
+#: gtk/gtkmultiselection.c:357
 msgid "List managed by this selection"
 msgstr "Список, який керується цим вибором"
 
@@ -4278,11 +4312,11 @@ msgstr "Прозорий для вікна"
 msgid "The transient parent of the dialog"
 msgstr "Прозорий батьківський віджет діалогу"
 
-#: gtk/gtknoselection.c:203 gtk/gtksingleselection.c:440
+#: gtk/gtknoselection.c:204 gtk/gtksingleselection.c:439
 msgid "The model"
 msgstr "Модель"
 
-#: gtk/gtknoselection.c:204 gtk/gtksingleselection.c:441
+#: gtk/gtknoselection.c:205 gtk/gtksingleselection.c:440
 msgid "The model being managed"
 msgstr "Модель, яка керується"
 
@@ -4607,19 +4641,19 @@ msgstr "Може стискатися"
 msgid "Allow self to be smaller than contents"
 msgstr "Дозволити віджету бути меншим за вміст"
 
-#: gtk/gtkplacessidebar.c:4336
+#: gtk/gtkplacessidebar.c:4343
 msgid "Location to Select"
 msgstr "Місце для позначення"
 
-#: gtk/gtkplacessidebar.c:4337
+#: gtk/gtkplacessidebar.c:4344
 msgid "The location to highlight in the sidebar"
 msgstr "Місце підсвічування на бічній панелі"
 
-#: gtk/gtkplacessidebar.c:4342 gtk/gtkplacesview.c:2250
+#: gtk/gtkplacessidebar.c:4349 gtk/gtkplacesview.c:2250
 msgid "Open Flags"
 msgstr "Прапорці відкривання"
 
-#: gtk/gtkplacessidebar.c:4343 gtk/gtkplacesview.c:2251
+#: gtk/gtkplacessidebar.c:4350 gtk/gtkplacesview.c:2251
 msgid ""
 "Modes in which the calling application can open locations selected in the "
 "sidebar"
@@ -4627,54 +4661,54 @@ msgstr ""
 "Режими, у яких програма виклику може відкривати адреси, які позначено на "
 "бічній панелі"
 
-#: gtk/gtkplacessidebar.c:4349
+#: gtk/gtkplacessidebar.c:4356
 msgid "Show recent files"
 msgstr "Показувати нещодавні файли"
 
-#: gtk/gtkplacessidebar.c:4350
+#: gtk/gtkplacessidebar.c:4357
 msgid "Whether the sidebar includes a builtin shortcut for recent files"
 msgstr ""
 "Визначає, чи містить бічна панель вбудований пункт для нещодавно "
 "використаних файлів"
 
-#: gtk/gtkplacessidebar.c:4355
+#: gtk/gtkplacessidebar.c:4362
 msgid "Show “Desktop”"
 msgstr "Показувати «Стільниця»"
 
-#: gtk/gtkplacessidebar.c:4356
+#: gtk/gtkplacessidebar.c:4363
 msgid "Whether the sidebar includes a builtin shortcut to the Desktop folder"
 msgstr "Чи повинна бічна панель містити вбудований пункт теки стільниці"
 
-#: gtk/gtkplacessidebar.c:4361
+#: gtk/gtkplacessidebar.c:4368
 msgid "Show “Enter Location”"
 msgstr "Показувати «Введіть адресу»"
 
-#: gtk/gtkplacessidebar.c:4362
+#: gtk/gtkplacessidebar.c:4369
 msgid ""
 "Whether the sidebar includes a builtin shortcut to manually enter a location"
 msgstr "Чи містить бічна панель вбудований пункт введення адреси вручну"
 
-#: gtk/gtkplacessidebar.c:4367
+#: gtk/gtkplacessidebar.c:4374
 msgid "Show “Trash”"
 msgstr "Показувати «Смітник»"
 
-#: gtk/gtkplacessidebar.c:4368
+#: gtk/gtkplacessidebar.c:4375
 msgid "Whether the sidebar includes a builtin shortcut to the Trash location"
 msgstr "Чи містить бічна панель вбудований пункт теки «Смітник»"
 
-#: gtk/gtkplacessidebar.c:4373
+#: gtk/gtkplacessidebar.c:4380
 msgid "Show “Other locations”"
 msgstr "Показувати «Інші місця»"
 
-#: gtk/gtkplacessidebar.c:4374
+#: gtk/gtkplacessidebar.c:4381
 msgid "Whether the sidebar includes an item to show external locations"
 msgstr "Чи містить бічна панель вбудований пункт зовнішніх місць"
 
-#: gtk/gtkplacessidebar.c:4379
+#: gtk/gtkplacessidebar.c:4386
 msgid "Show “Starred Location”"
 msgstr "Показувати «Позначене місце»"
 
-#: gtk/gtkplacessidebar.c:4380
+#: gtk/gtkplacessidebar.c:4387
 msgid "Whether the sidebar includes an item to show starred files"
 msgstr "Чи включає бічна панель елемент для показу позначених зірками файлів"
 
@@ -5910,21 +5944,21 @@ msgstr "Перемикач"
 msgid "The trigger for this shortcut"
 msgstr "Перемикач для цього скорочення"
 
-#: gtk/gtkshortcutcontroller.c:539
+#: gtk/gtkshortcutcontroller.c:540
 msgid "Mnemonic modifiers"
 msgstr "Модифікатори мнемоніки"
 
-#: gtk/gtkshortcutcontroller.c:540
+#: gtk/gtkshortcutcontroller.c:541
 msgid "The modifiers to be pressed to allow mnemonics activation"
 msgstr ""
 "Клавіші-модифікатори, які має бути натиснуто, щоб уможливити активацію "
 "мнемоніки"
 
-#: gtk/gtkshortcutcontroller.c:553
+#: gtk/gtkshortcutcontroller.c:554
 msgid "A list model to take shortcuts from"
 msgstr "Модель списку, з якої слід брати скорочення"
 
-#: gtk/gtkshortcutcontroller.c:565
+#: gtk/gtkshortcutcontroller.c:566
 msgid "What scope the shortcuts will be handled in"
 msgstr "Область, у якій оброблятимуться скорочення"
 
@@ -6046,19 +6080,19 @@ msgstr "Другий"
 msgid "The second trigger to check"
 msgstr "Другий перемикач для перевірки"
 
-#: gtk/gtksingleselection.c:392
+#: gtk/gtksingleselection.c:391
 msgid "Autoselect"
 msgstr "Автовибір"
 
-#: gtk/gtksingleselection.c:393
+#: gtk/gtksingleselection.c:392
 msgid "If the selection will always select an item"
 msgstr "Чи позначення завжди позначає пункт"
 
-#: gtk/gtksingleselection.c:404
+#: gtk/gtksingleselection.c:403
 msgid "Can unselect"
 msgstr "Можна знімати позначення"
 
-#: gtk/gtksingleselection.c:405
+#: gtk/gtksingleselection.c:404
 msgid "If unselecting the selected item is allowed"
 msgstr "Чи зняття позначення з позначеного пункту дозволене"
 
@@ -6074,31 +6108,27 @@ msgstr ""
 "Напрямки, в яких розмір групи впливає на задані розміри елементів, що "
 "входять у віджет"
 
-#: gtk/gtkslicelistmodel.c:288
+#: gtk/gtkslicelistmodel.c:264
 msgid "Child model to take slice from"
 msgstr "Дочірня модель для створення зрізу"
 
-#: gtk/gtkslicelistmodel.c:299
+#: gtk/gtkslicelistmodel.c:275
 msgid "Offset"
 msgstr "Зсув"
 
-#: gtk/gtkslicelistmodel.c:300
+#: gtk/gtkslicelistmodel.c:276
 msgid "Offset of slice"
 msgstr "Зсув зрізу"
 
-#: gtk/gtkslicelistmodel.c:312
+#: gtk/gtkslicelistmodel.c:288
 msgid "Maximum size of slice"
 msgstr "Максимальний розмір зрізу"
 
-#: gtk/gtksortlistmodel.c:404
+#: gtk/gtksortlistmodel.c:392
 msgid "The sorter for this model"
 msgstr "Сортувальник для цієї моделі"
 
-#: gtk/gtksortlistmodel.c:416
-msgid "The type of items of this list"
-msgstr "Тип пунктів у цьому списку"
-
-#: gtk/gtksortlistmodel.c:428
+#: gtk/gtksortlistmodel.c:404
 msgid "The model being sorted"
 msgstr "Модель, яка зберігається"
 
@@ -6964,55 +6994,55 @@ msgstr "Рядок списку"
 msgid "The list row to track for expander state"
 msgstr "Рядок списку для стеження за станом розгортання"
 
-#: gtk/gtktreelistmodel.c:704
+#: gtk/gtktreelistmodel.c:694
 msgid "autoexpand"
 msgstr "авторозширення"
 
-#: gtk/gtktreelistmodel.c:705
+#: gtk/gtktreelistmodel.c:695
 msgid "If all rows should be expanded by default"
 msgstr "Чи має бути типово розгорнуто усі рядки"
 
-#: gtk/gtktreelistmodel.c:717
+#: gtk/gtktreelistmodel.c:707
 msgid "The root model displayed"
 msgstr "Показана коренева модель"
 
-#: gtk/gtktreelistmodel.c:730
+#: gtk/gtktreelistmodel.c:720
 msgid "passthrough"
 msgstr "пропускання"
 
-#: gtk/gtktreelistmodel.c:731
+#: gtk/gtktreelistmodel.c:721
 msgid "If child model values are passed through"
 msgstr "Чи передаються значення дочірньої моделі далі"
 
-#: gtk/gtktreelistmodel.c:1064
+#: gtk/gtktreelistmodel.c:1054
 msgid "Children"
 msgstr "Дочірні"
 
-#: gtk/gtktreelistmodel.c:1065
+#: gtk/gtktreelistmodel.c:1055
 msgid "Model holding the row’s children"
 msgstr "Модель містить дочірні елементи рядка"
 
-#: gtk/gtktreelistmodel.c:1076
+#: gtk/gtktreelistmodel.c:1066
 msgid "Depth"
 msgstr "Глибина"
 
-#: gtk/gtktreelistmodel.c:1077
+#: gtk/gtktreelistmodel.c:1067
 msgid "Depth in the tree"
 msgstr "Глибина у ієрархії"
 
-#: gtk/gtktreelistmodel.c:1088
+#: gtk/gtktreelistmodel.c:1078
 msgid "Expandable"
 msgstr "З розгортанням"
 
-#: gtk/gtktreelistmodel.c:1089
+#: gtk/gtktreelistmodel.c:1079
 msgid "If this row can ever be expanded"
 msgstr "Чи може бути розгорнуто цей рядок"
 
-#: gtk/gtktreelistmodel.c:1101
+#: gtk/gtktreelistmodel.c:1091
 msgid "If this row is currently expanded"
 msgstr "Чи розгорнуто зараз цей рядок"
 
-#: gtk/gtktreelistmodel.c:1113
+#: gtk/gtktreelistmodel.c:1103
 msgid "The item held in this row"
 msgstr "Запис, який зберігається у цьому рядку"
 
@@ -7760,6 +7790,9 @@ msgstr "Назва профілю кольору"
 #: modules/printbackends/gtkprintercups.c:94
 msgid "The title of the color profile to use"
 msgstr "Заголовок вікна вибору профілю кольору"
+
+#~ msgid "The type of items of this list"
+#~ msgstr "Тип пунктів у цьому списку"
 
 #~ msgid "Property"
 #~ msgstr "Властивість"
@@ -9804,9 +9837,6 @@ msgstr "Заголовок вікна вибору профілю кольору
 
 #~ msgid "Recent Files Limit"
 #~ msgstr "Кількість недавніх файлів"
-
-#~ msgid "Number of recently used files"
-#~ msgstr "Кількість недавно використаних файлів"
 
 #~ msgid "Enable Tooltips"
 #~ msgstr "Увімкнути підказки"
