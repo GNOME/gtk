@@ -1317,7 +1317,7 @@ server_time_to_monotonic_time (GdkX11Display *display_x11,
       gint64 current_server_time = gdk_x11_get_server_time (display_x11->leader_gdk_window);
       gint64 current_server_time_usec = (gint64)current_server_time * 1000;
       gint64 current_monotonic_time = g_get_monotonic_time ();
-      display_x11->server_time_query_time = current_monotonic_time;
+      display_x11->server_time_query_time = current_server_time_usec;
 
       /* If the server time is within a second of the monotonic time,
        * we assume that they are identical. This seems like a big margin,
