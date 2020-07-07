@@ -59,6 +59,7 @@ tests = [
   ['slicelistmodel'],
   ['sorter'],
   ['sortlistmodel'],
+  ['sort-performance'],
   ['spinbutton'],
   ['stringlist'],
   ['templates'],
