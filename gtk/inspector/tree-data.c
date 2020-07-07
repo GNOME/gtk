@@ -20,8 +20,6 @@
 
 #include "tree-data.h"
 
-#include "object-tree.h"
-
 #include "gtktreeview.h"
 #include "gtkcellrenderertext.h"
 #include "gtktogglebutton.h"
