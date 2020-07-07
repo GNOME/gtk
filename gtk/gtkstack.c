@@ -361,7 +361,7 @@ gtk_stack_page_class_init (GtkStackPageClass *class)
   /**
    * GtkStackPage:needs-attention:
    *
-   * Sets a flag specifying whether the oage requires the user attention.
+   * Sets a flag specifying whether the page requires the user attention.
    * This is used by the #GtkStackSwitcher to change the appearance of the
    * corresponding button when a page needs attention and it is not the
    * current one.
@@ -1240,23 +1240,17 @@ set_visible_child (GtkStack               *stack,
 }
 
 static void
-stack_child_visibility_notify_cb (GObject    *obj,
-                                  GParamSpec *pspec,
-                                  gpointer    user_data)
+update_child_visible (GtkStack     *stack,
+                      GtkStackPage *child_info)
 {
-  GtkStack *stack = GTK_STACK (user_data);
   GtkStackPrivate *priv = gtk_stack_get_instance_private (stack);
-  GtkWidget *child = GTK_WIDGET (obj);
-  GtkStackPage *child_info;
+  gboolean visible;
 
-  child_info = find_child_info_for_widget (stack, child);
-  g_return_if_fail (child_info != NULL);
+  visible = child_info->visible && gtk_widget_get_visible (child_info->widget);
 
-  if (priv->visible_child == NULL &&
-      gtk_widget_get_visible (child))
+  if (priv->visible_child == NULL && visible)
     set_visible_child (stack, child_info, priv->transition_type, priv->transition_duration);
-  else if (priv->visible_child == child_info &&
-           !gtk_widget_get_visible (child))
+  else if (priv->visible_child == child_info && !visible)
     set_visible_child (stack, NULL, priv->transition_type, priv->transition_duration);
 
   if (child_info == priv->last_visible_child)
@@ -1264,6 +1258,20 @@ stack_child_visibility_notify_cb (GObject    *obj,
       gtk_widget_set_child_visible (priv->last_visible_child->widget, FALSE);
       priv->last_visible_child = NULL;
     }
+}
+
+static void
+stack_child_visibility_notify_cb (GObject    *obj,
+                                  GParamSpec *pspec,
+                                  gpointer    user_data)
+{
+  GtkStack *stack = GTK_STACK (user_data);
+  GtkStackPage *child_info;
+
+  child_info = find_child_info_for_widget (stack, GTK_WIDGET (obj));
+  g_return_if_fail (child_info != NULL);
+
+  update_child_visible (stack, child_info);
 }
 
 /**
@@ -2492,6 +2500,10 @@ gtk_stack_page_set_visible (GtkStackPage *self,
     return;
 
   self->visible = visible;
+
+  if (self->widget && gtk_widget_get_parent (self->widget))
+    update_child_visible (GTK_STACK (gtk_widget_get_parent (self->widget)), self);
+
   g_object_notify_by_pspec (G_OBJECT (self), stack_page_props[CHILD_PROP_VISIBLE]);
 }
 
