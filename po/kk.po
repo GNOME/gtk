@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-07-04 11:37+0000\n"
-"PO-Revision-Date: 2020-07-05 17:49+0500\n"
+"POT-Creation-Date: 2020-07-07 17:05+0000\n"
+"PO-Revision-Date: 2020-07-07 22:20+0500\n"
 "Last-Translator: Baurzhan Muftakhidinov <baurthefirst@gmail.com>\n"
 "Language-Team: Kazakh <kk_KZ@googlegroups.com>\n"
 "Language: kk\n"
@@ -1202,7 +1202,7 @@ msgctxt "Stock label"
 msgid "Zoom _Out"
 msgstr "Кі_шірейту"
 
-#: gtk/a11y/gtkmenubuttonaccessible.c:77 gtk/inspector/window.ui:436
+#: gtk/a11y/gtkmenubuttonaccessible.c:77 gtk/inspector/window.ui:487
 msgid "Menu"
 msgstr "Мәзір"
 
@@ -1971,7 +1971,7 @@ msgstr "Эмодзи кірістіру"
 msgid "Select a File"
 msgstr "Файлды таңдаңыз"
 
-#: gtk/gtkfilechooserbutton.c:114 gtk/gtkplacessidebar.c:1054
+#: gtk/gtkfilechooserbutton.c:114 gtk/gtkplacessidebar.c:1061
 msgid "Desktop"
 msgstr "Жұмыс үстелі"
 
@@ -1979,7 +1979,7 @@ msgstr "Жұмыс үстелі"
 msgid "(None)"
 msgstr "(Ешнәрсе)"
 
-#: gtk/gtkfilechooserbutton.c:1939
+#: gtk/gtkfilechooserbutton.c:1941
 msgid "Other…"
 msgstr "Басқа…"
 
@@ -2044,7 +2044,7 @@ msgid "A file with that name already exists"
 msgstr "Олай аталатын файл бар болып тұр"
 
 #: gtk/gtkfilechoosernative.c:527 gtk/gtkfilechoosernative.c:598
-#: gtk/gtkfilechooserwidget.c:1284 gtk/gtkfilechooserwidget.c:5800
+#: gtk/gtkfilechooserwidget.c:1284 gtk/gtkfilechooserwidget.c:5809
 #: gtk/gtkmessagedialog.c:781 gtk/gtkmessagedialog.c:790
 #: gtk/gtkmountoperation.c:608 gtk/gtkpagesetupunixdialog.c:281
 #: gtk/gtkprintbackend.c:643 gtk/gtkprinteroptionwidget.c:711
@@ -2057,7 +2057,7 @@ msgid "_Cancel"
 msgstr "Ба_с тарту"
 
 #: gtk/gtkfilechoosernative.c:528 gtk/gtkfilechoosernative.c:592
-#: gtk/gtkplacessidebar.c:3132 gtk/gtkplacessidebar.c:3217
+#: gtk/gtkplacessidebar.c:3139 gtk/gtkplacessidebar.c:3224
 #: gtk/gtkplacesview.c:1646
 msgid "_Open"
 msgstr "_Ашу"
@@ -2067,7 +2067,7 @@ msgstr "_Ашу"
 msgid "_Save"
 msgstr "_Сақтау"
 
-#: gtk/gtkfilechoosernativequartz.c:323 gtk/ui/gtkfilechooserwidget.ui:350
+#: gtk/gtkfilechoosernativequartz.c:339 gtk/ui/gtkfilechooserwidget.ui:350
 msgid "Select which types of files are shown"
 msgstr "Файлдардың қай түрлері көрсетілетінін таңдаңыз"
 
@@ -2075,7 +2075,7 @@ msgstr "Файлдардың қай түрлері көрсетілетінін 
 #. * is a hostname. Nautilus and the panel contain the same string
 #. * to translate.
 #.
-#: gtk/gtkfilechooserutils.c:395
+#: gtk/gtkfilechooserutils.c:401
 #, c-format
 msgid "%1$s on %2$s"
 msgstr "%1$s, қайда: %2$s"
@@ -2168,8 +2168,8 @@ msgstr "_Орналасуын көшіру"
 msgid "_Add to Bookmarks"
 msgstr "Б_етбелгілерге қосу"
 
-#: gtk/gtkfilechooserwidget.c:1895 gtk/gtkplacessidebar.c:2314
-#: gtk/gtkplacessidebar.c:3253 gtk/ui/gtkfilechooserwidget.ui:469
+#: gtk/gtkfilechooserwidget.c:1895 gtk/gtkplacessidebar.c:2321
+#: gtk/gtkplacessidebar.c:3260 gtk/ui/gtkfilechooserwidget.ui:469
 msgid "_Rename"
 msgstr "Атын ауысты_ру"
 
@@ -2221,112 +2221,112 @@ msgstr "Іздеу"
 msgid "Enter location or URL"
 msgstr "Орналасуды не сілтемені енгізіңіз"
 
-#: gtk/gtkfilechooserwidget.c:3828 gtk/gtkfilechooserwidget.c:6638
+#: gtk/gtkfilechooserwidget.c:3838 gtk/gtkfilechooserwidget.c:6647
 #: gtk/ui/gtkfilechooserwidget.ui:230
 msgid "Modified"
 msgstr "Өзгертілген"
 
-#: gtk/gtkfilechooserwidget.c:4094
+#: gtk/gtkfilechooserwidget.c:4104
 #, c-format
 msgid "Could not read the contents of %s"
 msgstr "%s құрамасын оқу мүмкін емес"
 
-#: gtk/gtkfilechooserwidget.c:4098
+#: gtk/gtkfilechooserwidget.c:4108
 msgid "Could not read the contents of the folder"
 msgstr "Бума құрамасын оқу мүмкін емес"
 
 #. Translators: see g_date_time_format() for details on the format
-#: gtk/gtkfilechooserwidget.c:4246 gtk/gtkfilechooserwidget.c:4289
+#: gtk/gtkfilechooserwidget.c:4256 gtk/gtkfilechooserwidget.c:4299
 msgid "%H:%M"
 msgstr "%H:%M"
 
-#: gtk/gtkfilechooserwidget.c:4248 gtk/gtkfilechooserwidget.c:4291
+#: gtk/gtkfilechooserwidget.c:4258 gtk/gtkfilechooserwidget.c:4301
 msgid "%l:%M %p"
 msgstr "%l:%M %p"
 
-#: gtk/gtkfilechooserwidget.c:4252
+#: gtk/gtkfilechooserwidget.c:4262
 msgid "Yesterday"
 msgstr "Кеше"
 
-#: gtk/gtkfilechooserwidget.c:4260
+#: gtk/gtkfilechooserwidget.c:4270
 msgid "%-e %b"
 msgstr "%-e %b"
 
-#: gtk/gtkfilechooserwidget.c:4264
+#: gtk/gtkfilechooserwidget.c:4274
 msgid "%-e %b %Y"
 msgstr "%-e %b %Y"
 
-#: gtk/gtkfilechooserwidget.c:4353 gtk/gtkfilechooserwidget.c:4361
+#: gtk/gtkfilechooserwidget.c:4363 gtk/gtkfilechooserwidget.c:4371
 msgid "Program"
 msgstr "Бағдарлама"
 
-#: gtk/gtkfilechooserwidget.c:4354
+#: gtk/gtkfilechooserwidget.c:4364
 msgid "Audio"
 msgstr "Аудио"
 
-#: gtk/gtkfilechooserwidget.c:4355 gtk/gtkfontbutton.c:549
+#: gtk/gtkfilechooserwidget.c:4365 gtk/gtkfontbutton.c:549
 #: gtk/inspector/visual.ui:211
 msgid "Font"
 msgstr "Қаріп"
 
-#: gtk/gtkfilechooserwidget.c:4356
+#: gtk/gtkfilechooserwidget.c:4366
 msgid "Image"
 msgstr "Сурет"
 
-#: gtk/gtkfilechooserwidget.c:4357
+#: gtk/gtkfilechooserwidget.c:4367
 msgid "Archive"
 msgstr "Архив"
 
-#: gtk/gtkfilechooserwidget.c:4358
+#: gtk/gtkfilechooserwidget.c:4368
 msgid "Markup"
 msgstr "Белгілеу"
 
-#: gtk/gtkfilechooserwidget.c:4359 gtk/gtkfilechooserwidget.c:4360
+#: gtk/gtkfilechooserwidget.c:4369 gtk/gtkfilechooserwidget.c:4370
 msgid "Text"
 msgstr "Мәтін"
 
-#: gtk/gtkfilechooserwidget.c:4362
+#: gtk/gtkfilechooserwidget.c:4372
 msgid "Video"
 msgstr "Видео"
 
-#: gtk/gtkfilechooserwidget.c:4363
+#: gtk/gtkfilechooserwidget.c:4373
 msgid "Contacts"
 msgstr "Контакттар"
 
-#: gtk/gtkfilechooserwidget.c:4364
+#: gtk/gtkfilechooserwidget.c:4374
 msgid "Calendar"
 msgstr "Күнтізбе"
 
-#: gtk/gtkfilechooserwidget.c:4365
+#: gtk/gtkfilechooserwidget.c:4375
 msgid "Document"
 msgstr "Құжат"
 
-#: gtk/gtkfilechooserwidget.c:4366
+#: gtk/gtkfilechooserwidget.c:4376
 msgid "Presentation"
 msgstr "Презентация"
 
-#: gtk/gtkfilechooserwidget.c:4367
+#: gtk/gtkfilechooserwidget.c:4377
 msgid "Spreadsheet"
 msgstr "Электрондық кесте"
 
 #. Translators: We don't know whether this printer is
 #. * available to print to.
-#: gtk/gtkfilechooserwidget.c:4398 gtk/gtkfilechooserwidget.c:4585
-#: gtk/inspector/prop-editor.c:1508
+#: gtk/gtkfilechooserwidget.c:4408 gtk/gtkfilechooserwidget.c:4595
+#: gtk/inspector/prop-editor.c:1507
 #: modules/printbackends/gtkprintbackendcloudprint.c:731
 msgid "Unknown"
 msgstr "Белгісіз"
 
-#: gtk/gtkfilechooserwidget.c:4624 gtk/gtkplacessidebar.c:1039
+#: gtk/gtkfilechooserwidget.c:4634 gtk/gtkplacessidebar.c:1046
 msgid "Home"
 msgstr "Үй бумасы"
 
-#: gtk/gtkfilechooserwidget.c:5793 gtk/gtkprintunixdialog.c:618
+#: gtk/gtkfilechooserwidget.c:5802 gtk/gtkprintunixdialog.c:618
 #, c-format
 msgid "A file named “%s” already exists.  Do you want to replace it?"
 msgstr "“%s” файлы бар болып тұр. Оны алмастыруды қалайсыз ба?"
 
-#: gtk/gtkfilechooserwidget.c:5796 gtk/gtkprintunixdialog.c:622
+#: gtk/gtkfilechooserwidget.c:5805 gtk/gtkprintunixdialog.c:622
 #, c-format
 msgid ""
 "The file already exists in “%s”.  Replacing it will overwrite its contents."
@@ -2334,19 +2334,19 @@ msgstr ""
 "Файл “%s” ішінде бар болып тұр.  Оны алмастыру нәтижесінде құрамасы үстінен "
 "жазылады."
 
-#: gtk/gtkfilechooserwidget.c:5801 gtk/gtkprintunixdialog.c:630
+#: gtk/gtkfilechooserwidget.c:5810 gtk/gtkprintunixdialog.c:630
 msgid "_Replace"
 msgstr "А_лмастыру"
 
-#: gtk/gtkfilechooserwidget.c:5967
+#: gtk/gtkfilechooserwidget.c:5976
 msgid "You do not have access to the specified folder."
 msgstr "Көрсетілген бумаға қатынау үшін керек рұқсаттарыңыз жоқ."
 
-#: gtk/gtkfilechooserwidget.c:6567
+#: gtk/gtkfilechooserwidget.c:6576
 msgid "Could not send the search request"
 msgstr "Іздеу сұранымын жіберу мүмкін емес"
 
-#: gtk/gtkfilechooserwidget.c:6877
+#: gtk/gtkfilechooserwidget.c:6886
 msgid "Accessed"
 msgstr "Қатынаған"
 
@@ -2392,7 +2392,7 @@ msgstr "Көлбеу"
 msgid "Optical Size"
 msgstr "Оптикалық өлшемі"
 
-#: gtk/gtkfontchooserwidget.c:1615 gtk/inspector/prop-editor.c:1495
+#: gtk/gtkfontchooserwidget.c:1615 gtk/inspector/prop-editor.c:1494
 msgid "Default"
 msgstr "Үнсіз келісім бойынша"
 
@@ -2424,7 +2424,7 @@ msgstr "Таңба нұсқалары"
 msgid "OpenGL context creation failed"
 msgstr "OpenGL контекстін жасау сәтсіз"
 
-#: gtk/gtkinfobar.c:1101 gtk/gtkmessagedialog.c:301 gtk/inspector/window.ui:502
+#: gtk/gtkinfobar.c:1101 gtk/gtkmessagedialog.c:301 gtk/inspector/window.ui:554
 msgid "Information"
 msgstr "Ақпарат"
 
@@ -2745,78 +2745,78 @@ msgid "File System Root"
 msgstr "Файлдық жүйенің түбірі"
 
 #. translators: %s is the name of a cloud provider for files
-#: gtk/gtkplacessidebar.c:927
+#: gtk/gtkplacessidebar.c:934
 #, c-format
 msgid "Open %s"
 msgstr "%s ашу"
 
-#: gtk/gtkplacessidebar.c:1017
+#: gtk/gtkplacessidebar.c:1024
 msgid "Recent"
 msgstr "Жуырдағы"
 
-#: gtk/gtkplacessidebar.c:1019
+#: gtk/gtkplacessidebar.c:1026
 msgid "Recent files"
 msgstr "Жуырда қолданылған файлдар"
 
-#: gtk/gtkplacessidebar.c:1028
+#: gtk/gtkplacessidebar.c:1035
 msgid "Starred"
 msgstr "Жұлдызшалы"
 
-#: gtk/gtkplacessidebar.c:1030
+#: gtk/gtkplacessidebar.c:1037
 msgid "Starred files"
 msgstr "Жұлдызша орнатылған файлдар"
 
-#: gtk/gtkplacessidebar.c:1041
+#: gtk/gtkplacessidebar.c:1048
 msgid "Open your personal folder"
 msgstr "Жеке бумаңызды ашу"
 
-#: gtk/gtkplacessidebar.c:1056
+#: gtk/gtkplacessidebar.c:1063
 msgid "Open the contents of your desktop in a folder"
 msgstr "Жұмыс үстеліңіздің құрамасын бумада ашу"
 
-#: gtk/gtkplacessidebar.c:1070
+#: gtk/gtkplacessidebar.c:1077
 msgid "Enter Location"
 msgstr "Орналасуды енгізіңіз"
 
-#: gtk/gtkplacessidebar.c:1072
+#: gtk/gtkplacessidebar.c:1079
 msgid "Manually enter a location"
 msgstr "Орналасуды қолмен енгізу"
 
-#: gtk/gtkplacessidebar.c:1082
+#: gtk/gtkplacessidebar.c:1089
 msgid "Trash"
 msgstr "Қоқыс шелегі"
 
-#: gtk/gtkplacessidebar.c:1084
+#: gtk/gtkplacessidebar.c:1091
 msgid "Open the trash"
 msgstr "Қоқыс шелегін ашу"
 
-#: gtk/gtkplacessidebar.c:1195 gtk/gtkplacessidebar.c:1223
-#: gtk/gtkplacessidebar.c:1423
+#: gtk/gtkplacessidebar.c:1202 gtk/gtkplacessidebar.c:1230
+#: gtk/gtkplacessidebar.c:1430
 #, c-format
 msgid "Mount and open “%s”"
 msgstr "“%s” тіркеу және ашу"
 
-#: gtk/gtkplacessidebar.c:1318
+#: gtk/gtkplacessidebar.c:1325
 msgid "Open the contents of the file system"
 msgstr "Файлдық жүйенің құрамасын ашу"
 
-#: gtk/gtkplacessidebar.c:1401
+#: gtk/gtkplacessidebar.c:1408
 msgid "New bookmark"
 msgstr "Жаңа бетбелгі"
 
-#: gtk/gtkplacessidebar.c:1403
+#: gtk/gtkplacessidebar.c:1410
 msgid "Add a new bookmark"
 msgstr "Жаңа бетбелгіні қосу"
 
-#: gtk/gtkplacessidebar.c:1468
+#: gtk/gtkplacessidebar.c:1475
 msgid "Other Locations"
 msgstr "Басқа орналасулар"
 
-#: gtk/gtkplacessidebar.c:1469
+#: gtk/gtkplacessidebar.c:1476
 msgid "Show other locations"
 msgstr "Басқа орналасуларды көрсету"
 
-#: gtk/gtkplacessidebar.c:1966 gtk/gtkplacessidebar.c:2967
+#: gtk/gtkplacessidebar.c:1973 gtk/gtkplacessidebar.c:2974
 #, c-format
 msgid "Unable to start “%s”"
 msgstr "“%s” іске қосу мүмкін емес"
@@ -2824,127 +2824,127 @@ msgstr "“%s” іске қосу мүмкін емес"
 #. Translators: This means that unlocking an encrypted storage
 #. * device failed. %s is the name of the device.
 #.
-#: gtk/gtkplacessidebar.c:2002
+#: gtk/gtkplacessidebar.c:2009
 #, c-format
 msgid "Error unlocking “%s”"
 msgstr "“%s” босату қатесі"
 
-#: gtk/gtkplacessidebar.c:2004
+#: gtk/gtkplacessidebar.c:2011
 #, c-format
 msgid "Unable to access “%s”"
 msgstr "“%s” қатынау мүмкін емес"
 
-#: gtk/gtkplacessidebar.c:2235
+#: gtk/gtkplacessidebar.c:2242
 msgid "This name is already taken"
 msgstr "Бұл атау қолдануда болып тұр"
 
-#: gtk/gtkplacessidebar.c:2308 gtk/inspector/actions.ui:20
+#: gtk/gtkplacessidebar.c:2315 gtk/inspector/actions.ui:20
 #: gtk/inspector/css-node-tree.ui:35 gtk/inspector/prop-list.ui:23
 #: gtk/ui/gtkfilechooserwidget.ui:172 gtk/ui/gtkfilechooserwidget.ui:444
 #: gtk/ui/gtkprintunixdialog.ui:85
 msgid "Name"
 msgstr "Аты"
 
-#: gtk/gtkplacessidebar.c:2508
+#: gtk/gtkplacessidebar.c:2515
 #, c-format
 msgid "Unable to unmount “%s”"
 msgstr "“%s” тіркеуден босату мүмкін емес"
 
-#: gtk/gtkplacessidebar.c:2684
+#: gtk/gtkplacessidebar.c:2691
 #, c-format
 msgid "Unable to stop “%s”"
 msgstr "\"%s\" тоқтату мүмкін емес"
 
-#: gtk/gtkplacessidebar.c:2713
+#: gtk/gtkplacessidebar.c:2720
 #, c-format
 msgid "Unable to eject “%s”"
 msgstr "\"%s\" шығару мүмкін емес"
 
-#: gtk/gtkplacessidebar.c:2742 gtk/gtkplacessidebar.c:2771
+#: gtk/gtkplacessidebar.c:2749 gtk/gtkplacessidebar.c:2778
 #, c-format
 msgid "Unable to eject %s"
 msgstr "%s шығару мүмкін емес"
 
-#: gtk/gtkplacessidebar.c:2919
+#: gtk/gtkplacessidebar.c:2926
 #, c-format
 msgid "Unable to poll “%s” for media changes"
 msgstr "“%s” тасушы өзгерістеріне бақылау мүмкін емес"
 
-#: gtk/gtkplacessidebar.c:3138 gtk/gtkplacessidebar.c:3225
+#: gtk/gtkplacessidebar.c:3145 gtk/gtkplacessidebar.c:3232
 #: gtk/gtkplacesview.c:1650
 msgid "Open in New _Tab"
 msgstr "Жаңа бе_тте ашу"
 
-#: gtk/gtkplacessidebar.c:3144 gtk/gtkplacessidebar.c:3234
+#: gtk/gtkplacessidebar.c:3151 gtk/gtkplacessidebar.c:3241
 #: gtk/gtkplacesview.c:1655
 msgid "Open in New _Window"
 msgstr "Жаңа т_ерезеде ашу"
 
-#: gtk/gtkplacessidebar.c:3245
+#: gtk/gtkplacessidebar.c:3252
 msgid "_Add Bookmark"
 msgstr "Б_етбелгілерге қосу"
 
-#: gtk/gtkplacessidebar.c:3249
+#: gtk/gtkplacessidebar.c:3256
 msgid "_Remove"
 msgstr "Ө_шіру"
 
-#: gtk/gtkplacessidebar.c:3265 gtk/gtkplacesview.c:1680
+#: gtk/gtkplacessidebar.c:3272 gtk/gtkplacesview.c:1680
 msgid "_Mount"
 msgstr "Тір_кеу"
 
-#: gtk/gtkplacessidebar.c:3274 gtk/gtkplacesview.c:1669
+#: gtk/gtkplacessidebar.c:3281 gtk/gtkplacesview.c:1669
 msgid "_Unmount"
 msgstr "Тіркеуден бос_ату"
 
-#: gtk/gtkplacessidebar.c:3281
+#: gtk/gtkplacessidebar.c:3288
 msgid "_Eject"
 msgstr "Ш_ығару"
 
-#: gtk/gtkplacessidebar.c:3291
+#: gtk/gtkplacessidebar.c:3298
 msgid "_Detect Media"
 msgstr "Тасушыны анық_тау"
 
-#: gtk/gtkplacessidebar.c:3300
+#: gtk/gtkplacessidebar.c:3307
 msgid "_Start"
 msgstr "Ба_стау"
 
-#: gtk/gtkplacessidebar.c:3302
+#: gtk/gtkplacessidebar.c:3309
 msgid "_Power On"
 msgstr "І_ске қосу"
 
-#: gtk/gtkplacessidebar.c:3303
+#: gtk/gtkplacessidebar.c:3310
 msgid "_Connect Drive"
 msgstr "Дискті і_ске қосу"
 
-#: gtk/gtkplacessidebar.c:3304
+#: gtk/gtkplacessidebar.c:3311
 msgid "_Start Multi-disk Device"
 msgstr "Көпдискті құрылғыны іске қ_осу"
 
-#: gtk/gtkplacessidebar.c:3305
+#: gtk/gtkplacessidebar.c:3312
 msgid "_Unlock Device"
 msgstr "Құрылғыны блоктаудан б_осату"
 
-#: gtk/gtkplacessidebar.c:3315
+#: gtk/gtkplacessidebar.c:3322
 msgid "_Stop"
 msgstr "Т_оқтату"
 
-#: gtk/gtkplacessidebar.c:3317
+#: gtk/gtkplacessidebar.c:3324
 msgid "_Safely Remove Drive"
 msgstr "Дискті қауіп_сіз шығару"
 
-#: gtk/gtkplacessidebar.c:3318
+#: gtk/gtkplacessidebar.c:3325
 msgid "_Disconnect Drive"
 msgstr "Дискті а_жырату"
 
-#: gtk/gtkplacessidebar.c:3319
+#: gtk/gtkplacessidebar.c:3326
 msgid "_Stop Multi-disk Device"
 msgstr "Көпдискті құрылғыны т_оқтату"
 
-#: gtk/gtkplacessidebar.c:3320
+#: gtk/gtkplacessidebar.c:3327
 msgid "_Lock Device"
 msgstr "Құрылғыны б_локтау"
 
-#: gtk/gtkplacessidebar.c:3812 gtk/gtkplacesview.c:1102
+#: gtk/gtkplacessidebar.c:3821 gtk/gtkplacesview.c:1102
 msgid "Computer"
 msgstr "Компьютер"
 
@@ -3161,7 +3161,7 @@ msgid "Print"
 msgstr "Баспаға шығару"
 
 #: gtk/gtkprintoperation-unix.c:479 gtk/gtkprintoperation-win32.c:1503
-#: gtk/inspector/prop-editor.c:1505
+#: gtk/inspector/prop-editor.c:1504
 msgid "Application"
 msgstr "Қолданба"
 
@@ -3386,7 +3386,7 @@ msgid "Swipe right"
 msgstr "Оңға ығыстыру"
 
 #. Translators: This is the window title for the shortcuts window in normal mode
-#: gtk/gtkshortcutswindow.c:898 gtk/inspector/window.ui:467
+#: gtk/gtkshortcutswindow.c:898 gtk/inspector/window.ui:517
 msgid "Shortcuts"
 msgstr "Жарлықтар"
 
@@ -3494,22 +3494,22 @@ msgstr "Параметр түрі"
 msgid "State"
 msgstr "Күйі"
 
-#: gtk/inspector/controllers.c:147
+#: gtk/inspector/controllers.c:145
 msgctxt "event phase"
 msgid "None"
 msgstr "Ешнәрсе"
 
-#: gtk/inspector/controllers.c:148
+#: gtk/inspector/controllers.c:146
 msgctxt "event phase"
 msgid "Capture"
 msgstr "Төмендейтін"
 
-#: gtk/inspector/controllers.c:149
+#: gtk/inspector/controllers.c:147
 msgctxt "event phase"
 msgid "Bubble"
 msgstr "Жоғарылайтын"
 
-#: gtk/inspector/controllers.c:150
+#: gtk/inspector/controllers.c:148
 msgctxt "event phase"
 msgid "Target"
 msgstr "Мақсаты"
@@ -3695,8 +3695,8 @@ msgid "Surface"
 msgstr "Бет"
 
 #: gtk/inspector/misc-info.ui:316 gtk/inspector/misc-info.ui:355
-#: gtk/inspector/misc-info.ui:394 gtk/inspector/prop-editor.c:983
-#: gtk/inspector/prop-editor.c:1329 gtk/inspector/window.ui:361
+#: gtk/inspector/misc-info.ui:394 gtk/inspector/prop-editor.c:982
+#: gtk/inspector/prop-editor.c:1328 gtk/inspector/window.ui:415
 msgid "Properties"
 msgstr "Қасиеттері"
 
@@ -3748,58 +3748,58 @@ msgstr "Ең жоғарыда"
 msgid "Child Visible"
 msgstr "Ұрпақ көрінеді"
 
-#: gtk/inspector/prop-editor.c:657
+#: gtk/inspector/prop-editor.c:656
 #, c-format
 msgid "Pointer: %p"
 msgstr "Көрсеткіш: %p"
 
-#: gtk/inspector/prop-editor.c:1040
+#: gtk/inspector/prop-editor.c:1039
 #, c-format
 msgid "Uneditable property type: %s"
 msgstr "Түзетілмейтін қасиет түрі: %s"
 
-#: gtk/inspector/prop-editor.c:1184
+#: gtk/inspector/prop-editor.c:1183
 msgid "None"
 msgstr "Ешнәрсе"
 
-#: gtk/inspector/prop-editor.c:1221
+#: gtk/inspector/prop-editor.c:1220
 msgid "Attribute:"
 msgstr "Атрибут:"
 
-#: gtk/inspector/prop-editor.c:1224
+#: gtk/inspector/prop-editor.c:1223
 msgid "Model"
 msgstr "Модель"
 
-#: gtk/inspector/prop-editor.c:1229
+#: gtk/inspector/prop-editor.c:1228
 msgid "Column:"
 msgstr "Баған:"
 
-#: gtk/inspector/prop-editor.c:1325
+#: gtk/inspector/prop-editor.c:1324
 #, c-format
 msgid "Action from: %p (%s)"
 msgstr "Кімнен әрекет: %p (%s)"
 
-#: gtk/inspector/prop-editor.c:1428
+#: gtk/inspector/prop-editor.c:1427
 msgid "bidirectional"
 msgstr "қос бағытты"
 
-#: gtk/inspector/prop-editor.c:1447
+#: gtk/inspector/prop-editor.c:1446
 msgid "Setting:"
 msgstr "Баптау:"
 
-#: gtk/inspector/prop-editor.c:1487
+#: gtk/inspector/prop-editor.c:1486
 msgid "Reset"
 msgstr "Тастау"
 
-#: gtk/inspector/prop-editor.c:1498
+#: gtk/inspector/prop-editor.c:1497
 msgid "Theme"
 msgstr "Тема"
 
-#: gtk/inspector/prop-editor.c:1501
+#: gtk/inspector/prop-editor.c:1500
 msgid "XSettings"
 msgstr "XSettings"
 
-#: gtk/inspector/prop-editor.c:1511
+#: gtk/inspector/prop-editor.c:1510
 msgid "Source:"
 msgstr "Қайнар көзі:"
 
@@ -4053,71 +4053,91 @@ msgstr "Статистиканы жинау"
 msgid "Objects"
 msgstr "Объекттер"
 
-#: gtk/inspector/window.ui:231
+#: gtk/inspector/window.ui:220
 msgid "Toggle Sidebar"
 msgstr "Бүйір панелін көрсету/жасыру"
 
-#: gtk/inspector/window.ui:264
+#: gtk/inspector/window.ui:252
 msgid "Refresh action state"
 msgstr "Әрекет күйін жаңарту"
 
-#: gtk/inspector/window.ui:350
+#: gtk/inspector/window.ui:337
+msgid "Previous object"
+msgstr "Алдыңғы объект"
+
+#: gtk/inspector/window.ui:347
+msgid "Child object"
+msgstr "Ұрпақ объекті"
+
+#: gtk/inspector/window.ui:357
+msgid "Previous sibling"
+msgstr "Алдыңғы туыс"
+
+#: gtk/inspector/window.ui:366
+msgid "List Position"
+msgstr "Тізім орны"
+
+#: gtk/inspector/window.ui:372
+msgid "Next sibling"
+msgstr "Келесі туыс"
+
+#: gtk/inspector/window.ui:405
 msgid "Miscellaneous"
 msgstr "Әр түрлі"
 
-#: gtk/inspector/window.ui:373 gtk/ui/gtkprintunixdialog.ui:414
+#: gtk/inspector/window.ui:426 gtk/ui/gtkprintunixdialog.ui:414
 msgid "Layout"
 msgstr "Жайма"
 
-#: gtk/inspector/window.ui:385
+#: gtk/inspector/window.ui:437
 msgid "CSS Nodes"
 msgstr "CSS тораптары"
 
-#: gtk/inspector/window.ui:396
+#: gtk/inspector/window.ui:448
 msgid "Size Groups"
 msgstr "Өлшемдер топтары"
 
-#: gtk/inspector/window.ui:405 gtk/inspector/window.ui:414
+#: gtk/inspector/window.ui:457 gtk/inspector/window.ui:466
 msgid "Data"
 msgstr "Деректер"
 
-#: gtk/inspector/window.ui:425
+#: gtk/inspector/window.ui:476
 msgid "Actions"
 msgstr "Әрекеттер"
 
-#: gtk/inspector/window.ui:445
+#: gtk/inspector/window.ui:496
 msgid "Controllers"
 msgstr "Контроллерлер"
 
-#: gtk/inspector/window.ui:456
+#: gtk/inspector/window.ui:506
 msgid "Magnifier"
 msgstr "Үлкейткіш"
 
-#: gtk/inspector/window.ui:489
+#: gtk/inspector/window.ui:541
 msgid "Global"
 msgstr "Глобалды"
 
-#: gtk/inspector/window.ui:511
+#: gtk/inspector/window.ui:563
 msgid "Settings"
 msgstr "Баптаулар"
 
-#: gtk/inspector/window.ui:520
+#: gtk/inspector/window.ui:572
 msgid "Resources"
 msgstr "Ресурстар"
 
-#: gtk/inspector/window.ui:531
+#: gtk/inspector/window.ui:583
 msgid "Statistics"
 msgstr "Статистика"
 
-#: gtk/inspector/window.ui:542
+#: gtk/inspector/window.ui:594
 msgid "Logging"
 msgstr "Журналдау"
 
-#: gtk/inspector/window.ui:557
+#: gtk/inspector/window.ui:609
 msgid "CSS"
 msgstr "CSS"
 
-#: gtk/inspector/window.ui:566
+#: gtk/inspector/window.ui:618
 msgid "Recorder"
 msgstr "Жазушы"
 
@@ -8124,9 +8144,6 @@ msgstr "Көрсетілмеген профиль"
 
 #~ msgid "Clear log"
 #~ msgstr "Журналды тазарту"
-
-#~ msgid "Child Properties"
-#~ msgstr "Ұрпақ қасиеттері"
 
 #~ msgid "Class Hierarchy"
 #~ msgstr "Кластар иерархиясы"
