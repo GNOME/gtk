@@ -1777,8 +1777,13 @@ popup_grab_on_window (GdkWindow *window,
   GdkSeat *seat;
 
   seat = gdk_device_get_seat (pointer);
+
+/* Let GtkMenu use pointer emulation instead of touch events under X11. */
+#define GDK_SEAT_CAPABILITY_NO_TOUCH (GDK_SEAT_CAPABILITY_POINTER | \
+                                      GDK_SEAT_CAPABILITY_TABLET_STYLUS | \
+                                      GDK_SEAT_CAPABILITY_KEYBOARD)
   status = gdk_seat_grab (seat, window,
-                          GDK_SEAT_CAPABILITY_ALL, TRUE,
+                          GDK_SEAT_CAPABILITY_NO_TOUCH, TRUE,
                           NULL, NULL, NULL, NULL);
 
   return status == GDK_GRAB_SUCCESS;
