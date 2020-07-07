@@ -27,7 +27,6 @@
 #include "prop-list.h"
 
 #include "prop-editor.h"
-#include "object-tree.h"
 
 #include "gtkcelllayout.h"
 #include "gtktreeview.h"
@@ -50,7 +49,6 @@
 enum
 {
   PROP_0,
-  PROP_OBJECT_TREE,
   PROP_SEARCH_ENTRY
 };
 
@@ -58,7 +56,6 @@ struct _GtkInspectorPropListPrivate
 {
   GObject *object;
   gulong notify_handler_id;
-  GtkInspectorObjectTree *object_tree;
   GtkWidget *search_entry;
   GtkWidget *search_stack;
   GtkWidget *list;
@@ -157,10 +154,6 @@ get_property (GObject    *object,
 
   switch (param_id)
     {
-      case PROP_OBJECT_TREE:
-        g_value_take_object (value, pl->priv->object_tree);
-        break;
-
       case PROP_SEARCH_ENTRY:
         g_value_take_object (value, pl->priv->search_entry);
         break;
@@ -181,10 +174,6 @@ set_property (GObject      *object,
 
   switch (param_id)
     {
-      case PROP_OBJECT_TREE:
-        pl->priv->object_tree = g_value_get_object (value);
-        break;
-
       case PROP_SEARCH_ENTRY:
         pl->priv->search_entry = g_value_get_object (value);
         break;
@@ -436,10 +425,6 @@ gtk_inspector_prop_list_class_init (GtkInspectorPropListClass *klass)
   widget_class->unmap = unmap;
   widget_class->root = root;
   widget_class->unroot = unroot;
-
-  g_object_class_install_property (object_class, PROP_OBJECT_TREE,
-      g_param_spec_object ("object-tree", "Object Tree", "Object tree",
-                           GTK_TYPE_WIDGET, G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
 
   g_object_class_install_property (object_class, PROP_SEARCH_ENTRY,
       g_param_spec_object ("search-entry", "Search Entry", "Search Entry",

@@ -19,10 +19,10 @@
 #include <glib/gi18n-lib.h>
 
 #include "controllers.h"
-#include "object-tree.h"
 
 #include "gtkbinlayout.h"
 #include "gtkdropdown.h"
+#include "gtkbox.h"
 #include "gtkcustomsorter.h"
 #include "gtkflattenlistmodel.h"
 #include "gtkframe.h"
@@ -46,18 +46,11 @@ struct _GtkInspectorControllers
   GtkWidget *listbox;
   GtkPropertyLookupListModel *model;
   GtkSizeGroup *sizegroup;
-  GtkInspectorObjectTree *object_tree;
 };
 
 struct _GtkInspectorControllersClass
 {
   GtkWidgetClass parent_class;
-};
-
-enum
-{
-  PROP_0,
-  PROP_OBJECT_TREE
 };
 
 G_DEFINE_TYPE (GtkInspectorControllers, gtk_inspector_controllers, GTK_TYPE_WIDGET)
@@ -271,46 +264,6 @@ gtk_inspector_controllers_set_object (GtkInspectorControllers *self,
 }
 
 static void
-gtk_inspector_controllers_get_property (GObject    *object,
-                                        guint       param_id,
-                                        GValue     *value,
-                                        GParamSpec *pspec)
-{
-  GtkInspectorControllers *self = GTK_INSPECTOR_CONTROLLERS (object);
-
-  switch (param_id)
-    {
-      case PROP_OBJECT_TREE:
-        g_value_take_object (value, self->object_tree);
-        break;
-
-      default:
-        G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
-        break;
-    }
-}
-
-static void
-gtk_inspector_controllers_set_property (GObject      *object,
-                                        guint         param_id,
-                                        const GValue *value,
-                                        GParamSpec   *pspec)
-{
-  GtkInspectorControllers *self = GTK_INSPECTOR_CONTROLLERS (object);
-
-  switch (param_id)
-    {
-      case PROP_OBJECT_TREE:
-        self->object_tree = g_value_get_object (value);
-        break;
-
-      default:
-        G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
-        break;
-    }
-}
-
-static void
 gtk_inspector_controllers_dispose (GObject *object)
 {
   GtkInspectorControllers *self = GTK_INSPECTOR_CONTROLLERS (object);
@@ -326,13 +279,7 @@ gtk_inspector_controllers_class_init (GtkInspectorControllersClass *klass)
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-  object_class->get_property = gtk_inspector_controllers_get_property;
-  object_class->set_property = gtk_inspector_controllers_set_property;
   object_class->dispose= gtk_inspector_controllers_dispose;
-
-  g_object_class_install_property (object_class, PROP_OBJECT_TREE,
-      g_param_spec_object ("object-tree", "Widget Tree", "Widget tree",
-                           GTK_TYPE_WIDGET, G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
 
   gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BIN_LAYOUT);
 }

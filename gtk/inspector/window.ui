@@ -401,7 +401,6 @@
                                     <property name="title" translatable="yes">Miscellaneous</property>
                                     <property name="child">
                                       <object class="GtkInspectorMiscInfo" id="misc_info">
-                                        <property name="object-tree">object_tree</property>
                                       </object>
                                     </property>
                                   </object>
@@ -412,7 +411,6 @@
                                     <property name="title" translatable="yes">Properties</property>
                                     <property name="child">
                                       <object class="GtkInspectorPropList" id="prop_list">
-                                        <property name="object-tree">object_tree</property>
                                         <property name="search-entry">prop_search_entry</property>
                                       </object>
                                     </property>
@@ -424,7 +422,6 @@
                                     <property name="title" translatable="yes">Layout</property>
                                     <property name="child">
                                       <object class="GtkInspectorPropList" id="layout_prop_list">
-                                        <property name="object-tree">object_tree</property>
                                         <property name="search-entry">layout_prop_search_entry</property>
                                       </object>
                                     </property>
@@ -465,7 +462,6 @@
                                     <property name="title" translatable="yes">Data</property>
                                     <property name="child">
                                       <object class="GtkInspectorListData" id="list_data">
-                                        <property name="object-tree">object_tree</property>
                                       </object>
                                     </property>
                                   </object>
