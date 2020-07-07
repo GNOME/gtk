@@ -927,7 +927,7 @@ gtk_drop_down_get_expression (GtkDropDown *self)
 /**
  * gtk_drop_down_set_from_strings:
  * @self: a #GtkDropDown
- * @texts: a %NULL-terminated string array
+ * @texts: (array zero-terminated=1) (element-type utf8): a %NULL-terminated string array
  *
  * Populates @self with the strings in @text,
  * by creating a suitable model and factory.
