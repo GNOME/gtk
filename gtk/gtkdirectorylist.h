@@ -62,6 +62,12 @@ gboolean                gtk_directory_list_is_loading           (GtkDirectoryLis
 GDK_AVAILABLE_IN_ALL
 const GError *          gtk_directory_list_get_error            (GtkDirectoryList       *self);
 
+GDK_AVAILABLE_IN_ALL
+void                    gtk_directory_list_set_monitored        (GtkDirectoryList       *self,
+                                                                 gboolean                monitored);
+GDK_AVAILABLE_IN_ALL
+gboolean                gtk_directory_list_get_monitored        (GtkDirectoryList       *self);
+
 G_END_DECLS
 
 #endif /* __GTK_DIRECTORY_LIST_H__ */
