@@ -235,6 +235,7 @@
 #include <gtk/gtksnapshot.h>
 #include <gtk/gtksorter.h>
 #include <gtk/gtksor2listmodel.h>
+#include <gtk/gtksor3listmodel.h>
 #include <gtk/gtksor4listmodel.h>
 #include <gtk/gtksor5listmodel.h>
 #include <gtk/gtksortlistmodel.h>
