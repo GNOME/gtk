@@ -20,8 +20,6 @@
 
 #include "list-data.h"
 
-#include "object-tree.h"
-
 #include "gtkcolumnview.h"
 #include "gtktogglebutton.h"
 #include "gtklabel.h"
@@ -31,13 +29,13 @@
 #include "gtknoselection.h"
 #include "gtksignallistitemfactory.h"
 #include "gtklistitem.h"
+#include "window.h"
 
 
 struct _GtkInspectorListData
 {
   GtkWidget parent_instance;
 
-  GtkInspectorObjectTree *object_tree;
   GListModel *object;
   GtkColumnView *view;
   GtkWidget *items_label;
@@ -46,12 +44,6 @@ struct _GtkInspectorListData
 struct _GtkInspectorListDataClass
 {
   GtkWidgetClass parent_class;
-};
-
-enum
-{
-  PROP_0,
-  PROP_OBJECT_TREE,
 };
 
 G_DEFINE_TYPE (GtkInspectorListData, gtk_inspector_list_data, GTK_TYPE_WIDGET)
@@ -167,13 +159,15 @@ static void
 object_properties (GtkWidget   *button,
                    GtkListItem *item)
 {
-  GtkInspectorListData *sl;
-  gpointer obj;
+  GtkInspectorWindow *iw;
+  GObject *obj;
+  guint pos;
 
-  sl = GTK_INSPECTOR_LIST_DATA (gtk_widget_get_ancestor (button, GTK_TYPE_INSPECTOR_LIST_DATA));
+  iw = GTK_INSPECTOR_WINDOW (gtk_widget_get_ancestor (button, GTK_TYPE_INSPECTOR_WINDOW));
+
   obj = gtk_list_item_get_item (item);
-  g_object_set_data (G_OBJECT (sl->object_tree), "next-tab", (gpointer)"properties");
-  gtk_inspector_object_tree_activate_object (sl->object_tree, obj);
+  pos = gtk_list_item_get_position (item);
+  gtk_inspector_window_push_object (iw, obj, CHILD_KIND_LISTITEM, pos);
 }
 
 static void
@@ -193,46 +187,6 @@ unbind_props (GtkSignalListItemFactory *factory,
 }
 
 static void
-get_property (GObject    *object,
-              guint       param_id,
-              GValue     *value,
-              GParamSpec *pspec)
-{
-  GtkInspectorListData *sl = GTK_INSPECTOR_LIST_DATA (object);
-
-  switch (param_id)
-    {
-      case PROP_OBJECT_TREE:
-        g_value_take_object (value, sl->object_tree);
-        break;
-
-      default:
-        G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
-        break;
-    }
-}
-
-static void
-set_property (GObject      *object,
-              guint         param_id,
-              const GValue *value,
-              GParamSpec   *pspec)
-{
-  GtkInspectorListData *sl = GTK_INSPECTOR_LIST_DATA (object);
-
-  switch (param_id)
-    {
-      case PROP_OBJECT_TREE:
-        sl->object_tree = g_value_get_object (value);
-        break;
-
-      default:
-        G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
-        break;
-    }
-}
-
-static void
 finalize (GObject *object)
 {
   GtkInspectorListData *sl = GTK_INSPECTOR_LIST_DATA (object);
@@ -249,12 +203,6 @@ gtk_inspector_list_data_class_init (GtkInspectorListDataClass *klass)
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
   object_class->finalize = finalize;
-  object_class->get_property = get_property;
-  object_class->set_property = set_property;
-
-  g_object_class_install_property (object_class, PROP_OBJECT_TREE,
-      g_param_spec_object ("object-tree", "Object Tree", "Object tree",
-                           GTK_TYPE_WIDGET, G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/libgtk/inspector/list-data.ui");
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorListData, view);
