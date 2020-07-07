@@ -382,11 +382,24 @@ bind_origin_cb (GtkSignalListItemFactory *factory,
 }
 
 static void
+setup_value_cb (GtkSignalListItemFactory *factory,
+                GtkListItem              *list_item,
+                gpointer                  data)
+{
+  GtkWidget *widget;
+
+  widget = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+  gtk_widget_add_css_class (widget, "cell");
+  gtk_list_item_set_child (list_item, widget);
+}
+
+static void
 bind_value_cb (GtkSignalListItemFactory *factory,
                GtkListItem              *list_item,
                gpointer                  data)
 {
   GObject *item;
+  GtkWidget *editor;
   GtkWidget *widget;
   GObject *object;
   const char *name;
@@ -396,10 +409,10 @@ bind_value_cb (GtkSignalListItemFactory *factory,
   object = prop_holder_get_object (PROP_HOLDER (item));
   name = prop_holder_get_name (PROP_HOLDER (item));
 
-  widget = gtk_inspector_prop_editor_new (object, name, NULL);
-  g_signal_connect (widget, "show-object", G_CALLBACK (show_object), data);
-  gtk_list_item_set_child (list_item, widget);
-  gtk_widget_add_css_class (widget, "cell");
+  editor = gtk_inspector_prop_editor_new (object, name, NULL);
+  g_signal_connect (editor, "show-object", G_CALLBACK (show_object), data);
+  widget = gtk_list_item_get_child (list_item);
+  gtk_box_append (GTK_BOX (widget), editor);
 }
 
 static void
@@ -407,7 +420,10 @@ unbind_value_cb (GtkSignalListItemFactory *factory,
                  GtkListItem              *list_item,
                  gpointer                  data)
 {
-  gtk_list_item_set_child (list_item, NULL);
+  GtkWidget *widget;
+
+  widget = gtk_list_item_get_child (list_item);
+  gtk_box_remove (GTK_BOX (widget), gtk_widget_get_first_child (widget));
 }
 
 static void
@@ -441,6 +457,7 @@ gtk_inspector_prop_list_class_init (GtkInspectorPropListClass *klass)
   gtk_widget_class_bind_template_callback (widget_class, bind_type_cb);
   gtk_widget_class_bind_template_callback (widget_class, setup_origin_cb);
   gtk_widget_class_bind_template_callback (widget_class, bind_origin_cb);
+  gtk_widget_class_bind_template_callback (widget_class, setup_value_cb);
   gtk_widget_class_bind_template_callback (widget_class, bind_value_cb);
   gtk_widget_class_bind_template_callback (widget_class, unbind_value_cb);
 }
