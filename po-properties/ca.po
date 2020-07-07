@@ -65,7 +65,7 @@ msgstr "Sistema alternatiu"
 
 #: gdk/gdkcursor.c:181
 msgid "Cursor image to fall back to if this cursor cannot be displayed"
-msgstr "Imatge de cursor alternativa si maquest cursor no es pot mostrar"
+msgstr "Imatge de cursor alternativa si aquest cursor no es pot mostrar"
 
 #: gdk/gdkcursor.c:188
 msgid "Hotspot X"
@@ -2099,7 +2099,7 @@ msgstr "Títol mostrat a la capçalera"
 
 #: gtk/gtkcolumnviewcolumn.c:271
 msgid "Sorter for sorting items according to this column"
-msgstr "Ordenador per ordenar els elements segons aquesta columna"
+msgstr "Ordenador per a ordenar els elements segons aquesta columna"
 
 #: gtk/gtkcolumnviewcolumn.c:282 gtk/gtkcssnode.c:623 gtk/gtknativedialog.c:240
 #: gtk/gtkstack.c:378 gtk/gtktreeviewcolumn.c:274 gtk/gtkwidget.c:990
@@ -2267,7 +2267,7 @@ msgstr "Atribut origen"
 
 #: gtk/gtkconstraint.c:249
 msgid "The attribute of the source widget set by the constraint"
-msgstr "El atribut origen del giny d'origen establert per la restricció"
+msgstr "L'atribut origen del giny d'origen establert per la restricció"
 
 #: gtk/gtkconstraint.c:263
 msgid "Multiplier"
@@ -2359,7 +2359,7 @@ msgstr "Valor inicial"
 
 #: gtk/gtkcssstyleproperty.c:196
 msgid "The initial specified value used for this property"
-msgstr "El valor inicial especificat que s'utilitza per aquesta propietat"
+msgstr "El valor inicial especificat que s'utilitza per a aquesta propietat"
 
 #: gtk/gtkdirectorylist.c:239
 msgid "attributes"
@@ -2434,7 +2434,7 @@ msgstr "Conté el punter"
 
 #: gtk/gtkdropcontrollermotion.c:227 gtk/gtkeventcontrollermotion.c:224
 msgid "Whether the pointer is in the controllers widget or a descendant"
-msgstr "Si el punter està a en el giny de controladors o en un descendent"
+msgstr "Si el punter està en el giny de controladors o en un descendent"
 
 #: gtk/gtkdropcontrollermotion.c:246 gtk/gtkdroptarget.c:590
 msgid "Drop"
@@ -2928,7 +2928,7 @@ msgstr "Longitud mínima de la clau"
 
 #: gtk/gtkentrycompletion.c:304
 msgid "Minimum length of the search key in order to look up matches"
-msgstr "Longitud mínima de la clau de cerca per cercar coincidències"
+msgstr "Longitud mínima de la clau de cerca per a cercar coincidències"
 
 #: gtk/gtkentrycompletion.c:316 gtk/gtkiconview.c:400
 msgid "Text column"
@@ -3102,7 +3102,7 @@ msgstr "Filtre"
 
 #: gtk/gtkfilechooser.c:161
 msgid "The current filter for selecting which files are displayed"
-msgstr "El filtre actual per seleccionar quins fitxers es mostraran"
+msgstr "El filtre actual per a seleccionar quins fitxers es mostraran"
 
 #: gtk/gtkfilechooser.c:166
 msgid "Select Multiple"
@@ -3237,7 +3237,7 @@ msgid ""
 "The maximum amount of children to request space for consecutively in the "
 "given orientation."
 msgstr ""
-"La quantitat màxima de fills per sol·licitar espai de forma consecutiva a "
+"La quantitat màxima de fills per a sol·licitar espai de forma consecutiva a "
 "l'orientació proporcionada."
 
 #: gtk/gtkflowbox.c:3661
@@ -3286,7 +3286,7 @@ msgstr "Text previsualitzat"
 
 #: gtk/gtkfontchooser.c:91
 msgid "The text to display in order to demonstrate the selected font"
-msgstr "El text a visualitzar per demostrar el tipus de lletra seleccionat"
+msgstr "El text a visualitzar per a demostrar el tipus de lletra seleccionat"
 
 #: gtk/gtkfontchooser.c:103
 msgid "Show preview text entry"
@@ -3322,7 +3322,7 @@ msgstr "L'acció de retoc"
 
 #: gtk/gtkfontchooserwidget.c:662
 msgid "The toggle action to switch to the tweak page"
-msgstr "L'acció d'activació per commutar a la pàgina de retocs"
+msgstr "L'acció d'activació per a commutar a la pàgina de retocs"
 
 #: gtk/gtkframe.c:169
 msgid "Text of the frame’s label"
@@ -3463,7 +3463,7 @@ msgstr "Fila de punt de referència"
 #: gtk/gtkgrid.c:391 gtk/gtkgridlayout.c:1719
 msgid "The row to align the to the baseline when valign is GTK_ALIGN_BASELINE"
 msgstr ""
-"La fila per alinear com a punt de referència quan l'alineació vertical és "
+"La fila per a alinear com a punt de referència quan l'alineació vertical és "
 "«GTK_ALIGN_BASELINE»"
 
 #: gtk/gtkgridlayout.c:167
@@ -3692,7 +3692,7 @@ msgstr "Un GdkPaintable que s'ha de mostrar"
 
 #: gtk/gtkimage.c:174
 msgid "Filename to load and display"
-msgstr "Nom de fitxer per carregar i visualitzar"
+msgstr "Nom de fitxer per a carregar i visualitzar"
 
 #: gtk/gtkimage.c:180
 msgid "Icon size"
@@ -4461,7 +4461,7 @@ msgstr "Desplaçable"
 msgid "If TRUE, scroll arrows are added if there are too many tabs to fit"
 msgstr ""
 "Si és «TRUE» (cert), s'afegiran fletxes de desplaçament si hi ha massa "
-"pestanyes per ajustar"
+"pestanyes per a ajustar"
 
 #: gtk/gtknotebook.c:1088
 msgid "Enable Popup"
@@ -4713,7 +4713,7 @@ msgstr "Mostra «Introduïu la ubicació»"
 msgid ""
 "Whether the sidebar includes a builtin shortcut to manually enter a location"
 msgstr ""
-"Si la barra lateral inclou una drecera per introduir manualment una ubicació"
+"Si la barra lateral inclou una drecera per a introduir manualment una ubicació"
 
 #: gtk/gtkplacessidebar.c:4374
 msgid "Show “Trash”"
@@ -5011,7 +5011,7 @@ msgstr "Paràmetres de la impressora"
 
 #: gtk/gtkprintoperation.c:1094 gtk/gtkprintunixdialog.c:401
 msgid "The GtkPrintSettings used for initializing the dialog"
-msgstr "El GtkPrintSettings utilitzat per inicialitzar el diàleg"
+msgstr "El GtkPrintSettings utilitzat per a inicialitzar el diàleg"
 
 #: gtk/gtkprintoperation.c:1110
 msgid "Job Name"
@@ -5245,7 +5245,7 @@ msgstr "El GtkAdjustment que conté el valor actual d'aquest rang d'objectes"
 #: gtk/gtkrange.c:370
 msgid "Invert direction slider moves to increase range value"
 msgstr ""
-"El lliscador de direcció invertida es mou per incrementar el valor del rang"
+"El lliscador de direcció invertida es mou per a incrementar el valor del rang"
 
 #: gtk/gtkrange.c:383
 msgid "Show Fill Level"
@@ -5281,7 +5281,7 @@ msgstr "El nombre de dígits al qual s'arrodonirà el valor."
 
 #: gtk/gtkrecentmanager.c:282
 msgid "The full path to the file to be used to store and read the list"
-msgstr "El camí sencer al fitxer a utilitzar per desar i llegir la llista"
+msgstr "El camí sencer al fitxer a utilitzar per a desar i llegir la llista"
 
 #: gtk/gtkrecentmanager.c:295
 msgid "The size of the recently used resources list"
@@ -6478,7 +6478,7 @@ msgid ""
 "The list of targets this buffer supports for clipboard copying and DND source"
 msgstr ""
 "La llista de destinacions que aquest element de memòria intermèdia permet "
-"per copiar al porta-retalls i com a fonts d'arrossegar i deixar anar"
+"per a copiar al porta-retalls i com a fonts d'arrossegar i deixar anar"
 
 # FIXME
 #: gtk/gtktextbuffer.c:557
@@ -7149,7 +7149,7 @@ msgstr "El model del fill"
 
 #: gtk/gtktreemodelfilter.c:533
 msgid "The model for the filtermodel to filter"
-msgstr "El model per al model de filtre que filtrar"
+msgstr "El model per al model de filtre per a filtrar"
 
 #: gtk/gtktreemodelfilter.c:540
 msgid "The virtual root"

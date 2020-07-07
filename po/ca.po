@@ -707,7 +707,7 @@ msgstr "S'està iniciant «%s»"
 #: gdk/x11/gdkapplaunchcontext-x11.c:305
 #, c-format
 msgid "Opening “%s”"
-msgstr "S'està obrint «%s»."
+msgstr "S'està obrint «%s»"
 
 #: gdk/x11/gdkapplaunchcontext-x11.c:310
 #, c-format
