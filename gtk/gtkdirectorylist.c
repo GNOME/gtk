@@ -62,6 +62,7 @@ enum {
   PROP_IO_PRIORITY,
   PROP_ITEM_TYPE,
   PROP_LOADING,
+  PROP_MONITORED,
   NUM_PROPERTIES
 };
 
@@ -70,8 +71,10 @@ struct _GtkDirectoryList
   GObject parent_instance;
 
   char *attributes;
-  int io_priority;
   GFile *file;
+  GFileMonitor *monitor;
+  gboolean monitored;
+  int io_priority;
 
   GCancellable *cancellable;
   GError *error; /* Error while loading */
@@ -147,13 +150,17 @@ gtk_directory_list_set_property (GObject      *object,
       gtk_directory_list_set_io_priority (self, g_value_get_int (value));
       break;
 
+    case PROP_MONITORED:
+      gtk_directory_list_set_monitored (self, g_value_get_boolean (value));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
     }
 }
 
-static void 
+static void
 gtk_directory_list_get_property (GObject     *object,
                                  guint        prop_id,
                                  GValue      *value,
@@ -187,6 +194,10 @@ gtk_directory_list_get_property (GObject     *object,
       g_value_set_boolean (value, gtk_directory_list_is_loading (self));
       break;
 
+    case PROP_MONITORED:
+      g_value_set_boolean (value, gtk_directory_list_get_monitored (self));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -204,12 +215,27 @@ gtk_directory_list_stop_loading (GtkDirectoryList *self)
   return TRUE;
 }
 
+static void directory_changed (GFileMonitor       *monitor,
+                               GFile              *file,
+                               GFile              *other_file,
+                               GFileMonitorEvent   event,
+                               gpointer            data);
+
+static void
+gtk_directory_list_stop_monitoring (GtkDirectoryList *self)
+{
+  if (self->monitor)
+    g_signal_handlers_disconnect_by_func (self->monitor, directory_changed, self);
+  g_clear_object (&self->monitor);
+}
+
 static void
 gtk_directory_list_dispose (GObject *object)
 {
   GtkDirectoryList *self = GTK_DIRECTORY_LIST (object);
 
   gtk_directory_list_stop_loading (self);
+  gtk_directory_list_stop_monitoring (self);
 
   g_clear_object (&self->file);
   g_clear_pointer (&self->attributes, g_free);
@@ -301,6 +327,18 @@ gtk_directory_list_class_init (GtkDirectoryListClass *class)
                             FALSE,
                             GTK_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY);
 
+  /**
+   * GtkDirectoryList:monitored:
+   *
+   * %TRUE if the directory is monitored for changed
+   */
+  properties[PROP_MONITORED] =
+      g_param_spec_boolean ("monitored",
+                            P_("monitored"),
+                            P_("TRUE if the directory is monitored for changes"),
+                            FALSE,
+                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
+
   g_object_class_install_properties (gobject_class, NUM_PROPERTIES, properties);
 }
 
@@ -324,7 +362,6 @@ gtk_directory_list_init (GtkDirectoryList *self)
 GtkDirectoryList *
 gtk_directory_list_new (const char *attributes,
                         GFile      *file)
-                        
 {
   g_return_val_if_fail (file == NULL || G_IS_FILE (file), NULL);
 
@@ -410,7 +447,7 @@ gtk_directory_list_got_files_cb (GObject      *source,
     {
       GFileInfo *info;
       GFile *file;
-      
+
       info = l->data;
       file = g_file_enumerator_get_child (enumerator, info);
       g_file_info_set_attribute_object (info, "standard::file", G_OBJECT (file));
@@ -496,6 +533,102 @@ gtk_directory_list_start_loading (GtkDirectoryList *self)
     g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_LOADING]);
 }
 
+static void
+got_file_info_cb (GObject      *source,
+                  GAsyncResult *res,
+                  gpointer      data)
+{
+  GFile *file = G_FILE (source);
+  GtkDirectoryList *self = GTK_DIRECTORY_LIST (data);
+  GFileInfo *info;
+
+  info = g_file_query_info_finish (file, res, NULL);
+  if (info)
+    {
+      guint position = g_sequence_get_length (self->items);
+      g_file_info_set_attribute_object (info, "standard::file", G_OBJECT (file));
+      g_sequence_append (self->items, info);
+      g_list_model_items_changed (G_LIST_MODEL (self), position, 0, 1);
+    }
+}
+
+static void
+gtk_directory_list_remove_file (GtkDirectoryList *self,
+                                GFile            *file)
+{
+  guint i, n;
+
+  n = g_list_model_get_n_items (G_LIST_MODEL (self));
+  for (i = 0; i < n; i++)
+    {
+      GFileInfo *info = g_list_model_get_item (G_LIST_MODEL (self), i);
+      GFile *f = G_FILE (g_file_info_get_attribute_object (info, "standard::file"));
+      if (g_file_equal (f, file))
+        {
+          GSequenceIter *iter = g_sequence_get_iter_at_pos (self->items, i);
+          g_sequence_remove (iter);
+          g_list_model_items_changed (G_LIST_MODEL (self), i, 1, 0);
+          g_object_unref (info);
+
+          return;
+        }
+
+      g_object_unref (info);
+    }
+}
+
+static void
+directory_changed (GFileMonitor       *monitor,
+                   GFile              *file,
+                   GFile              *other_file,
+                   GFileMonitorEvent   event,
+                   gpointer            data)
+{
+  GtkDirectoryList *self = GTK_DIRECTORY_LIST (data);
+  switch (event)
+    {
+    case G_FILE_MONITOR_EVENT_CREATED:
+      g_file_query_info_async (file,
+                               self->attributes,
+                               G_FILE_QUERY_INFO_NONE,
+                               self->io_priority,
+                               self->cancellable,
+                               got_file_info_cb,
+                               self);
+      break;
+    case G_FILE_MONITOR_EVENT_DELETED:
+      gtk_directory_list_remove_file (self, file);
+      break;
+    case G_FILE_MONITOR_EVENT_CHANGED:
+    case G_FILE_MONITOR_EVENT_CHANGES_DONE_HINT:
+    case G_FILE_MONITOR_EVENT_ATTRIBUTE_CHANGED:
+    case G_FILE_MONITOR_EVENT_PRE_UNMOUNT:
+    case G_FILE_MONITOR_EVENT_UNMOUNTED:
+    case G_FILE_MONITOR_EVENT_MOVED:
+    case G_FILE_MONITOR_EVENT_RENAMED:
+    case G_FILE_MONITOR_EVENT_MOVED_IN:
+    case G_FILE_MONITOR_EVENT_MOVED_OUT:
+    default:
+      break;
+    }
+}
+
+static void
+gtk_directory_list_start_monitoring (GtkDirectoryList *self)
+{
+  g_assert (self->monitor == NULL);
+  self->monitor = g_file_monitor_directory (self->file, G_FILE_MONITOR_NONE, NULL, NULL);
+  g_signal_connect (self->monitor, "changed", G_CALLBACK (directory_changed), self);
+}
+
+static void
+gtk_directory_list_update_monitoring (GtkDirectoryList *self)
+{
+  gtk_directory_list_stop_monitoring (self);
+  if (self->file && self->monitored)
+    gtk_directory_list_start_monitoring (self);
+}
+
 /**
  * gtk_directory_list_set_file:
  * @self: a #GtkDirectoryList
@@ -521,6 +654,7 @@ gtk_directory_list_set_file (GtkDirectoryList *self,
   g_set_object (&self->file, file);
 
   gtk_directory_list_start_loading (self);
+  gtk_directory_list_update_monitoring (self);
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_FILE]);
 
@@ -679,3 +813,46 @@ gtk_directory_list_get_error (GtkDirectoryList *self)
   return self->error;
 }
 
+/**
+ * gtk_directory_list_set_monitored:
+ * @self: a #GtkDirectoryList
+ * @monitor: %TRUE to monitor the directory for changes
+ *
+ * Sets whether the directory list will monitor the directory
+ * for changes.
+ *
+ * If %TRUE, the #GListModel::items-changed signal will be
+ * emitted when the directory contents change.
+ */
+void
+gtk_directory_list_set_monitored (GtkDirectoryList *self,
+                                  gboolean          monitored)
+{
+  g_return_if_fail (GTK_IS_DIRECTORY_LIST (self));
+
+  if (self->monitored == monitored)
+    return;
+
+  self->monitored = monitored;
+
+  gtk_directory_list_update_monitoring (self);
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_MONITORED]);
+}
+
+/**
+ * gtk_directory_list_get_monitored:
+ * @self: a #GtkDirectoryList
+ *
+ * Returns whether the directory list is monitoring
+ * the directory for changes.
+ *
+ * Returns: %TRUE if the directory is monitored
+ */
+gboolean
+gtk_directory_list_get_monitored (GtkDirectoryList *self)
+{
+  g_return_val_if_fail (GTK_IS_DIRECTORY_LIST (self), FALSE);
+
+  return self->monitored;
+}
