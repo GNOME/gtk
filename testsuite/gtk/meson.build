@@ -93,6 +93,7 @@ tests = [
   { 'name': 'sorter' },
   { 'name': 'sortlistmodel' },
   { 'name': 'sortlistmodel-exhaustive' },
+  { 'name': 'sort-performance' },
   { 'name': 'spinbutton' },
   { 'name': 'stringlist' },
   { 'name': 'templates' },
