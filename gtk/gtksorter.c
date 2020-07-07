@@ -142,7 +142,8 @@ gtk_sorter_compare (GtkSorter *self,
 {
   GtkOrdering result;
 
-  g_return_val_if_fail (GTK_IS_SORTER (self), GTK_ORDERING_EQUAL);
+  /* We turn this off because gtk_sorter_compare() is called so much that it's too expensive */
+  /* g_return_val_if_fail (GTK_IS_SORTER (self), GTK_ORDERING_EQUAL); */
   g_return_val_if_fail (item1 && item2, GTK_ORDERING_EQUAL);
 
   if (item1 == item2)
