@@ -676,7 +676,7 @@ create_color_grid (void)
   gtk_grid_view_set_max_columns (GTK_GRID_VIEW (gridview), 24);
   gtk_grid_view_set_enable_rubberband (GTK_GRID_VIEW (gridview), TRUE);
 
-  model = G_LIST_MODEL (gtk_sort_list_model_new (gtk_color_list_new (0), NULL));
+  model = G_LIST_MODEL (gtk_sor2_list_model_new (gtk_color_list_new (0), NULL));
 
   selection = G_LIST_MODEL (gtk_multi_selection_new (model));
   gtk_grid_view_set_model (GTK_GRID_VIEW (gridview), selection);
@@ -835,6 +835,54 @@ update_selection_average (GListModel *model,
   g_object_unref (color);
 }
 
+static int
+compare_red (gconstpointer a,
+             gconstpointer b,
+             gpointer      unused)
+{
+  GtkColor *colora = (GtkColor *) a;
+  GtkColor *colorb = (GtkColor *) b;
+
+  if (colora->color.red < colorb->color.red)
+    return GTK_ORDERING_LARGER;
+  else if (colora->color.red > colorb->color.red)
+    return GTK_ORDERING_SMALLER;
+  else
+    return GTK_ORDERING_EQUAL;
+}
+
+static int
+compare_green (gconstpointer a,
+               gconstpointer b,
+               gpointer      unused)
+{
+  GtkColor *colora = (GtkColor *) a;
+  GtkColor *colorb = (GtkColor *) b;
+
+  if (colora->color.green < colorb->color.green)
+    return GTK_ORDERING_LARGER;
+  else if (colora->color.green > colorb->color.green)
+    return GTK_ORDERING_SMALLER;
+  else
+    return GTK_ORDERING_EQUAL;
+}
+
+static int
+compare_blue (gconstpointer a,
+              gconstpointer b,
+              gpointer      unused)
+{
+  GtkColor *colora = (GtkColor *) a;
+  GtkColor *colorb = (GtkColor *) b;
+
+  if (colora->color.blue < colorb->color.blue)
+    return GTK_ORDERING_LARGER;
+  else if (colora->color.blue > colorb->color.blue)
+    return GTK_ORDERING_SMALLER;
+  else
+    return GTK_ORDERING_EQUAL;
+}
+
 static GtkWidget *window = NULL;
 
 GtkWidget *
@@ -964,7 +1012,7 @@ do_listview_colors (GtkWidget *do_widget)
       button = gtk_button_new_with_mnemonic ("_Refill");
       g_signal_connect (button, "clicked",
                         G_CALLBACK (refill),
-                        gtk_sort_list_model_get_model (GTK_SORT_LIST_MODEL (model)));
+                        gtk_sor2_list_model_get_model (GTK_SOR2_LIST_MODEL (model)));
 
       gtk_header_bar_pack_start (GTK_HEADER_BAR (header), button);
 
@@ -987,7 +1035,7 @@ do_listview_colors (GtkWidget *do_widget)
       gtk_drop_down_set_from_strings (GTK_DROP_DOWN (dropdown), (const char *[]) { "8", "64", "512", "4096", "32768", "262144", "2097152", "16777216", NULL });
       g_signal_connect (dropdown, "notify::selected",
                         G_CALLBACK (limit_changed_cb), 
-                        gtk_sort_list_model_get_model (GTK_SORT_LIST_MODEL (model)));
+                        gtk_sor2_list_model_get_model (GTK_SOR2_LIST_MODEL (model)));
       g_signal_connect (dropdown, "notify::selected",
                         G_CALLBACK (limit_changed_cb2), 
                         label);
@@ -1022,17 +1070,29 @@ do_listview_colors (GtkWidget *do_widget)
       g_list_store_append (sorters, sorter);
       gtk_multi_sorter_append (GTK_MULTI_SORTER (multi_sorter), sorter);
 
+      sorter = gtk_custom_sorter_new (compare_red, NULL, NULL);
+      set_title (sorter, "Red (fast)");
+      g_list_store_append (sorters, sorter);
+
       sorter = gtk_numeric_sorter_new (gtk_property_expression_new (GTK_TYPE_COLOR, NULL, "green"));
       gtk_numeric_sorter_set_sort_order (GTK_NUMERIC_SORTER (sorter), GTK_SORT_DESCENDING);
       set_title (sorter, "Green");
       g_list_store_append (sorters, sorter);
       gtk_multi_sorter_append (GTK_MULTI_SORTER (multi_sorter), sorter);
 
+      sorter = gtk_custom_sorter_new (compare_green, NULL, NULL);
+      set_title (sorter, "Green (fast)");
+      g_list_store_append (sorters, sorter);
+
       sorter = gtk_numeric_sorter_new (gtk_property_expression_new (GTK_TYPE_COLOR, NULL, "blue"));
       gtk_numeric_sorter_set_sort_order (GTK_NUMERIC_SORTER (sorter), GTK_SORT_DESCENDING);
       set_title (sorter, "Blue");
       g_list_store_append (sorters, sorter);
       gtk_multi_sorter_append (GTK_MULTI_SORTER (multi_sorter), sorter);
+
+      sorter = gtk_custom_sorter_new (compare_blue, NULL, NULL);
+      set_title (sorter, "Blue (fast)");
+      g_list_store_append (sorters, sorter);
 
       set_title (multi_sorter, "RGB");
       g_list_store_append (sorters, multi_sorter);
