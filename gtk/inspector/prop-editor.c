@@ -21,7 +21,6 @@
 #include "prop-editor.h"
 
 #include "strv-editor.h"
-#include "object-tree.h"
 #include "prop-list.h"
 
 #include "gtkactionable.h"

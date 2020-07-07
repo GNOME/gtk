@@ -353,7 +353,7 @@
                                 <property name="halign">end</property>
                                 <property name="valign">baseline</property>
                                 <property name="label" translatable="yes">Properties</property>
-                                <signal name="clicked" handler="show_frame_clock"/>
+                                <signal name="clicked" handler="show_renderer"/>
                               </object>
                             </child>
                           </object>

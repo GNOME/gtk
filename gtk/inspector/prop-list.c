@@ -27,7 +27,6 @@
 #include "prop-list.h"
 
 #include "prop-editor.h"
-#include "object-tree.h"
 
 #include "gtkcelllayout.h"
 #include "gtktreeview.h"
@@ -45,11 +44,11 @@
 #include "gtkgestureclick.h"
 #include "gtkstylecontext.h"
 #include "prop-holder.h"
+#include "window.h"
 
 enum
 {
   PROP_0,
-  PROP_OBJECT_TREE,
   PROP_SEARCH_ENTRY
 };
 
@@ -57,7 +56,6 @@ struct _GtkInspectorPropListPrivate
 {
   GObject *object;
   gulong notify_handler_id;
-  GtkInspectorObjectTree *object_tree;
   GtkWidget *search_entry;
   GtkWidget *search_stack;
   GtkWidget *list;
@@ -156,10 +154,6 @@ get_property (GObject    *object,
 
   switch (param_id)
     {
-      case PROP_OBJECT_TREE:
-        g_value_take_object (value, pl->priv->object_tree);
-        break;
-
       case PROP_SEARCH_ENTRY:
         g_value_take_object (value, pl->priv->search_entry);
         break;
@@ -180,10 +174,6 @@ set_property (GObject      *object,
 
   switch (param_id)
     {
-      case PROP_OBJECT_TREE:
-        pl->priv->object_tree = g_value_get_object (value);
-        break;
-
       case PROP_SEARCH_ENTRY:
         pl->priv->search_entry = g_value_get_object (value);
         break;
@@ -201,9 +191,10 @@ show_object (GtkInspectorPropEditor *editor,
              const gchar            *tab,
              GtkInspectorPropList   *pl)
 {
-  g_object_set_data_full (G_OBJECT (pl->priv->object_tree), "next-tab", g_strdup (tab), g_free);
-  gtk_inspector_object_tree_select_object (pl->priv->object_tree, object);
-  gtk_inspector_object_tree_activate_object (pl->priv->object_tree, object);
+  GtkInspectorWindow *iw;
+
+  iw = GTK_INSPECTOR_WINDOW (gtk_widget_get_ancestor (GTK_WIDGET (pl), GTK_TYPE_INSPECTOR_WINDOW));
+  gtk_inspector_window_push_object (iw, object, CHILD_KIND_PROPERTY, 0);
 }
 
 
@@ -391,11 +382,24 @@ bind_origin_cb (GtkSignalListItemFactory *factory,
 }
 
 static void
+setup_value_cb (GtkSignalListItemFactory *factory,
+                GtkListItem              *list_item,
+                gpointer                  data)
+{
+  GtkWidget *widget;
+
+  widget = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+  gtk_widget_add_css_class (widget, "cell");
+  gtk_list_item_set_child (list_item, widget);
+}
+
+static void
 bind_value_cb (GtkSignalListItemFactory *factory,
                GtkListItem              *list_item,
                gpointer                  data)
 {
   GObject *item;
+  GtkWidget *editor;
   GtkWidget *widget;
   GObject *object;
   const char *name;
@@ -405,10 +409,10 @@ bind_value_cb (GtkSignalListItemFactory *factory,
   object = prop_holder_get_object (PROP_HOLDER (item));
   name = prop_holder_get_name (PROP_HOLDER (item));
 
-  widget = gtk_inspector_prop_editor_new (object, name, NULL);
-  g_signal_connect (widget, "show-object", G_CALLBACK (show_object), data);
-  gtk_list_item_set_child (list_item, widget);
-  gtk_widget_add_css_class (widget, "cell");
+  editor = gtk_inspector_prop_editor_new (object, name, NULL);
+  g_signal_connect (editor, "show-object", G_CALLBACK (show_object), data);
+  widget = gtk_list_item_get_child (list_item);
+  gtk_box_append (GTK_BOX (widget), editor);
 }
 
 static void
@@ -416,7 +420,10 @@ unbind_value_cb (GtkSignalListItemFactory *factory,
                  GtkListItem              *list_item,
                  gpointer                  data)
 {
-  gtk_list_item_set_child (list_item, NULL);
+  GtkWidget *widget;
+
+  widget = gtk_list_item_get_child (list_item);
+  gtk_box_remove (GTK_BOX (widget), gtk_widget_get_first_child (widget));
 }
 
 static void
@@ -435,10 +442,6 @@ gtk_inspector_prop_list_class_init (GtkInspectorPropListClass *klass)
   widget_class->root = root;
   widget_class->unroot = unroot;
 
-  g_object_class_install_property (object_class, PROP_OBJECT_TREE,
-      g_param_spec_object ("object-tree", "Object Tree", "Object tree",
-                           GTK_TYPE_WIDGET, G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
-
   g_object_class_install_property (object_class, PROP_SEARCH_ENTRY,
       g_param_spec_object ("search-entry", "Search Entry", "Search Entry",
                            GTK_TYPE_WIDGET, G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
@@ -454,6 +457,7 @@ gtk_inspector_prop_list_class_init (GtkInspectorPropListClass *klass)
   gtk_widget_class_bind_template_callback (widget_class, bind_type_cb);
   gtk_widget_class_bind_template_callback (widget_class, setup_origin_cb);
   gtk_widget_class_bind_template_callback (widget_class, bind_origin_cb);
+  gtk_widget_class_bind_template_callback (widget_class, setup_value_cb);
   gtk_widget_class_bind_template_callback (widget_class, bind_value_cb);
   gtk_widget_class_bind_template_callback (widget_class, unbind_value_cb);
 }

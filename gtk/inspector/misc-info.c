@@ -20,7 +20,6 @@
 
 #include "misc-info.h"
 #include "window.h"
-#include "object-tree.h"
 #include "type-info.h"
 
 #include "gtktypebuiltins.h"
@@ -35,8 +34,6 @@
 
 
 struct _GtkInspectorMiscInfoPrivate {
-  GtkInspectorObjectTree *object_tree;
-
   GObject *object;
 
   GtkWidget *swin;
@@ -89,12 +86,6 @@ struct _GtkInspectorMiscInfoPrivate {
 
   guint update_source_id;
   gint64 last_frame;
-};
-
-enum
-{
-  PROP_0,
-  PROP_OBJECT_TREE
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE (GtkInspectorMiscInfo, gtk_inspector_misc_info, GTK_TYPE_WIDGET)
@@ -180,52 +171,55 @@ disconnect_each_other (gpointer  still_alive,
 }
 
 static void
-show_object (GtkInspectorMiscInfo *sl,
-             GObject              *object,
-             const gchar          *tab)
-{
-  g_object_set_data_full (G_OBJECT (sl->priv->object_tree), "next-tab", g_strdup (tab), g_free);
-  gtk_inspector_object_tree_activate_object (sl->priv->object_tree, object);
-}
-
-static void
 show_mnemonic_label (GtkWidget *button, GtkInspectorMiscInfo *sl)
 {
+  GtkInspectorWindow *iw;
   GtkWidget *widget;
+
+  iw = GTK_INSPECTOR_WINDOW (gtk_widget_get_ancestor (GTK_WIDGET (sl), GTK_TYPE_INSPECTOR_WINDOW));
 
   widget = g_object_get_data (G_OBJECT (button), "mnemonic-label");
   if (widget)
-    show_object (sl, G_OBJECT (widget), "properties");
+    gtk_inspector_window_push_object (iw, G_OBJECT (widget), CHILD_KIND_OTHER, 0);
 }
 
 static void
 show_surface (GtkWidget *button, GtkInspectorMiscInfo *sl)
 {
+  GtkInspectorWindow *iw;
   GObject *surface;
+
+  iw = GTK_INSPECTOR_WINDOW (gtk_widget_get_ancestor (GTK_WIDGET (sl), GTK_TYPE_INSPECTOR_WINDOW));
 
   surface = (GObject *)gtk_native_get_surface (GTK_NATIVE (sl->priv->object));
   if (surface)
-    show_object (sl, G_OBJECT (surface), "properties");
+    gtk_inspector_window_push_object (iw, surface, CHILD_KIND_OTHER, 0);
 }
 
 static void
 show_renderer (GtkWidget *button, GtkInspectorMiscInfo *sl)
 {
+  GtkInspectorWindow *iw;
   GObject *renderer;
+
+  iw = GTK_INSPECTOR_WINDOW (gtk_widget_get_ancestor (GTK_WIDGET (sl), GTK_TYPE_INSPECTOR_WINDOW));
 
   renderer = (GObject *)gtk_native_get_renderer (GTK_NATIVE (sl->priv->object));
   if (renderer)
-    show_object (sl, G_OBJECT (renderer), "properties");
+    gtk_inspector_window_push_object (iw, renderer, CHILD_KIND_OTHER, 0);
 }
 
 static void
 show_frame_clock (GtkWidget *button, GtkInspectorMiscInfo *sl)
 {
+  GtkInspectorWindow *iw;
   GObject *clock;
+
+  iw = GTK_INSPECTOR_WINDOW (gtk_widget_get_ancestor (GTK_WIDGET (sl), GTK_TYPE_INSPECTOR_WINDOW));
 
   clock = (GObject *)gtk_widget_get_frame_clock (GTK_WIDGET (sl->priv->object));
   if (clock)
-    show_object (sl, G_OBJECT (clock), "properties");
+    gtk_inspector_window_push_object (iw, clock, CHILD_KIND_OTHER, 0);
 }
 
 static void
@@ -529,46 +523,6 @@ unmap (GtkWidget *widget)
 }
 
 static void
-get_property (GObject    *object,
-              guint       param_id,
-              GValue     *value,
-              GParamSpec *pspec)
-{
-  GtkInspectorMiscInfo *sl = GTK_INSPECTOR_MISC_INFO (object);
-
-  switch (param_id)
-    {
-      case PROP_OBJECT_TREE:
-        g_value_take_object (value, sl->priv->object_tree);
-        break;
-
-      default:
-        G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
-        break;
-    }
-}
-
-static void
-set_property (GObject      *object,
-              guint         param_id,
-              const GValue *value,
-              GParamSpec   *pspec)
-{
-  GtkInspectorMiscInfo *sl = GTK_INSPECTOR_MISC_INFO (object);
-
-  switch (param_id)
-    {
-      case PROP_OBJECT_TREE:
-        sl->priv->object_tree = g_value_get_object (value);
-        break;
-
-      default:
-        G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
-        break;
-    }
-}
-
-static void
 dispose (GObject *o)
 {
   GtkInspectorMiscInfo *sl = GTK_INSPECTOR_MISC_INFO (o);
@@ -584,16 +538,10 @@ gtk_inspector_misc_info_class_init (GtkInspectorMiscInfoClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
-  object_class->get_property = get_property;
-  object_class->set_property = set_property;
   object_class->dispose = dispose;
 
   widget_class->map = map;
   widget_class->unmap = unmap;
-
-  g_object_class_install_property (object_class, PROP_OBJECT_TREE,
-      g_param_spec_object ("object-tree", "Object Tree", "Object tree",
-                           GTK_TYPE_WIDGET, G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/libgtk/inspector/misc-info.ui");
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, swin);
