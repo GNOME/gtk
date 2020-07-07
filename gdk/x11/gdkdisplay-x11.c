@@ -1311,7 +1311,7 @@ server_time_to_monotonic_time (GdkX11Display *display_x11,
                                gint64         server_time)
 {
   if (display_x11->server_time_query_time == 0 ||
-      (!display_x11->server_time_is_monotonic_time &&
+      (!display_x11->server_time_uses_monotonic_time &&
        server_time > display_x11->server_time_query_time + 10*1000*1000)) /* 10 seconds */
     {
       gint64 current_server_time = gdk_x11_get_server_time (display_x11->leader_gdk_window);
@@ -1327,12 +1327,12 @@ server_time_to_monotonic_time (GdkX11Display *display_x11,
        */
       if (current_server_time_usec > current_monotonic_time - 1000*1000 &&
           current_server_time_usec < current_monotonic_time + 1000*1000)
-        display_x11->server_time_is_monotonic_time = TRUE;
+        display_x11->server_time_uses_monotonic_time = TRUE;
 
       display_x11->server_time_offset = current_server_time_usec - current_monotonic_time;
     }
 
-  if (display_x11->server_time_is_monotonic_time)
+  if (display_x11->server_time_uses_monotonic_time)
     return server_time;
   else
     return server_time - display_x11->server_time_offset;

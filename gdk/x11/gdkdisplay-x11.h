@@ -135,7 +135,7 @@ struct _GdkX11Display
   gint64 server_time_query_time;
   gint64 server_time_offset;
 
-  guint server_time_is_monotonic_time : 1;
+  guint server_time_uses_monotonic_time : 1;
 
   guint have_glx : 1;
 
