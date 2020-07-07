@@ -575,7 +575,7 @@ gtk_filter_list_model_class_init (GtkFilterListModelClass *class)
   properties[PROP_INCREMENTAL] =
       g_param_spec_boolean ("incremental",
                             P_("Incremental"),
-                            P_("Filer items incrementally"),
+                            P_("Filter items incrementally"),
                             FALSE,
                             GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
