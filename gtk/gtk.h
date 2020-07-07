@@ -234,6 +234,7 @@
 #include <gtk/gtksnapshot.h>
 #include <gtk/gtksorter.h>
 #include <gtk/gtksor2listmodel.h>
+#include <gtk/gtksor3listmodel.h>
 #include <gtk/gtksortlistmodel.h>
 #include <gtk/gtkstacksidebar.h>
 #include <gtk/gtksizegroup.h>
