@@ -158,7 +158,7 @@ gtk_string_object_new_take (char *string)
 
 /**
  * gtk_string_object_new:
- * @string: (non-nullable): The string to wrap
+ * @string: (not nullable): The string to wrap
  *
  * Wraps a string in an object for use with #GListModel
  *
