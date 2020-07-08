@@ -309,7 +309,8 @@ run_test (GtkStringList      *source,
     GTK_TYPE_SORT_LIST_MODEL,
     GTK_TYPE_SOR2_LIST_MODEL,
     GTK_TYPE_SOR3_LIST_MODEL,
-    GTK_TYPE_SOR4_LIST_MODEL
+    GTK_TYPE_SOR4_LIST_MODEL,
+    GTK_TYPE_SOR5_LIST_MODEL,
   };
   guint random = g_random_int ();
   guint i;
