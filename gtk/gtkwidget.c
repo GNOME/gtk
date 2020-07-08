@@ -27,7 +27,7 @@
 #include "gtkwidgetprivate.h"
 
 #include "gtkaccelgroupprivate.h"
-#include "gtkaccessible.h"
+#include "gtkaccessibleprivate.h"
 #include "gtkapplicationprivate.h"
 #include "gtkbuildable.h"
 #include "gtkbuilderprivate.h"
@@ -755,6 +755,8 @@ gtk_widget_base_class_init (gpointer g_class)
           g_object_unref (shortcut);
         }
     }
+
+  priv->accessible_role = GTK_ACCESSIBLE_ROLE_WIDGET;
 }
 
 static void
@@ -6999,6 +7001,8 @@ gtk_widget_dispose (GObject *object)
     gtk_layout_manager_set_widget (priv->layout_manager, NULL);
   g_clear_object (&priv->layout_manager);
 
+  g_clear_object (&priv->at_context);
+
   priv->visible = FALSE;
   if (_gtk_widget_get_realized (widget))
     gtk_widget_unrealize (widget);
@@ -8052,9 +8056,29 @@ gtk_widget_set_vexpand_set (GtkWidget      *widget,
 /*
  * GtkAccessible implementation
  */
+
+static GtkATContext *
+gtk_widget_accessible_get_at_context (GtkAccessible *accessible)
+{
+  GtkWidget *self = GTK_WIDGET (accessible);
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (self);
+
+  if (priv->at_context == NULL)
+    {
+      GtkWidgetClass *widget_class = GTK_WIDGET_GET_CLASS (self);
+      GtkWidgetClassPrivate *class_priv = widget_class->priv;
+
+      priv->at_context =
+        gtk_at_context_create (class_priv->accessible_role, accessible);
+    }
+
+  return priv->at_context;
+}
+
 static void
 gtk_widget_accessible_interface_init (GtkAccessibleInterface *iface)
 {
+  iface->get_at_context = gtk_widget_accessible_get_at_context;
 }
 
 /*
@@ -12083,4 +12107,26 @@ gtk_widget_update_orientation (GtkWidget      *widget,
       gtk_widget_add_css_class (widget, GTK_STYLE_CLASS_VERTICAL);
       gtk_widget_remove_css_class (widget, GTK_STYLE_CLASS_HORIZONTAL);
     }
+}
+
+/**
+ * gtk_widget_class_set_accessible_role:
+ * @widget_class: a #GtkWidgetClass
+ * @accessible_role: the #GtkAccessibleRole used by the @widget_class
+ *
+ * Sets the accessible role used by the given #GtkWidget class.
+ *
+ * Different accessible roles have different states, and are rendered
+ * differently by assistive technologies.
+ */
+void
+gtk_widget_class_set_accessible_role (GtkWidgetClass    *widget_class,
+                                      GtkAccessibleRole  accessible_role)
+{
+  GtkWidgetClassPrivate *priv;
+
+  g_return_if_fail (GTK_IS_WIDGET_CLASS (widget_class));
+
+  priv = widget_class->priv;
+  priv->accessible_role = accessible_role;
 }
