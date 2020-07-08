@@ -286,6 +286,8 @@ struct _GtkTextViewPrivate
   guint vscroll_policy : 1;
   guint cursor_handle_dragged : 1;
   guint selection_handle_dragged : 1;
+
+  gulong is_active_id;
 };
 
 struct _GtkTextPendingScroll
@@ -3765,6 +3767,13 @@ gtk_text_view_dispose (GObject *object)
   GtkTextViewPrivate *priv = text_view->priv;
   GtkWidget *child;
 
+  if (priv->is_active_id)
+    {
+      g_signal_handler_disconnect (gtk_widget_get_root (GTK_WIDGET (text_view)),
+                                   priv->is_active_id);
+      priv->is_active_id = 0;
+    }
+
   child = g_object_get_data (object, "gtk-emoji-chooser");
   if (child)
     {
@@ -4789,6 +4798,29 @@ changed_handler (GtkTextLayout     *layout,
 }
 
 static void
+gtk_text_view_is_active_cb (GtkWidget  *window,
+                            GParamSpec *spec,
+                            GtkWidget  *widget)
+{
+  GtkTextView *text_view = (GtkTextView *)widget;
+  GtkTextViewPrivate *priv = text_view->priv;
+
+  if (gtk_window_get_focus (GTK_WINDOW (window)) != widget)
+    return;
+
+  if (priv->editable && gtk_widget_has_focus (widget))
+    {
+      gboolean is_active = FALSE;
+      g_object_get (window, "is-active", &is_active, NULL);
+      priv->need_im_reset = TRUE;
+      if (is_active)
+        gtk_im_context_focus_in (priv->im_context);
+      else
+        gtk_im_context_focus_out (priv->im_context);
+    }
+}
+
+static void
 gtk_text_view_realize (GtkWidget *widget)
 {
   GtkTextView *text_view;
@@ -4804,6 +4836,11 @@ gtk_text_view_realize (GtkWidget *widget)
       gtk_im_context_set_client_widget (GTK_TEXT_VIEW (widget)->priv->im_context,
                                         widget);
     }
+
+  priv->is_active_id = g_signal_connect (gtk_widget_get_root (widget),
+                                         "notify::is-active",
+                                         G_CALLBACK (gtk_text_view_is_active_cb),
+                                         widget);
 
   gtk_text_view_ensure_layout (text_view);
   gtk_text_view_invalidate (text_view);
@@ -4836,6 +4873,13 @@ gtk_text_view_unrealize (GtkWidget *widget)
   gtk_text_view_remove_validate_idles (text_view);
 
   g_clear_pointer (&priv->popup_menu, gtk_widget_unparent);
+
+  if (priv->is_active_id)
+    {
+      g_signal_handler_disconnect (gtk_widget_get_root (widget),
+                                   priv->is_active_id);
+      priv->is_active_id = 0;
+    }
 
   gtk_im_context_set_client_widget (priv->im_context, NULL);
 
@@ -5540,7 +5584,7 @@ gtk_text_view_focus_in (GtkWidget *widget)
                       G_CALLBACK (direction_changed), text_view);
   gtk_text_view_check_keymap_direction (text_view);
 
-  if (priv->editable)
+  if (priv->editable && gtk_widget_has_focus (widget))
     {
       priv->need_im_reset = TRUE;
       gtk_im_context_focus_in (priv->im_context);
@@ -5579,7 +5623,7 @@ gtk_text_view_focus_out (GtkWidget *widget)
   text_view->priv->text_handles_enabled = FALSE;
   gtk_text_view_update_handles (text_view);
 
-  if (priv->editable)
+  if (priv->editable && gtk_widget_has_focus (widget))
     {
       priv->need_im_reset = TRUE;
       gtk_im_context_focus_out (priv->im_context);
