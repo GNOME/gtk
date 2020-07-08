@@ -905,6 +905,7 @@ upload_texture (GskGLRenderer *self,
     }
   else
     {
+
       out_region->texture_id =
           gsk_gl_driver_get_texture_for_texture (self->gl_driver,
                                                  texture,
@@ -1151,6 +1152,59 @@ rounded_inner_rect_contains_rect (const GskRoundedRect  *rounded,
   return graphene_rect_contains_rect (&inner, rect);
 }
 
+/* Current clip is NOT rounded but new one is definitely! */
+static inline bool
+intersect_rounded_rectilinear (const graphene_rect_t *non_rounded,
+                               const GskRoundedRect  *rounded,
+                               GskRoundedRect        *result)
+{
+  int n_corners = 0;
+  bool corners[4];
+
+  /* Intersects with top left corner? */
+  n_corners += corners[0] = rounded_rect_has_corner (rounded, 0) &&
+                            graphene_rect_intersection (non_rounded,
+                                                        &rounded_rect_corner (rounded, 0), NULL);
+  /* top right? */
+  n_corners += corners[1] = rounded_rect_has_corner (rounded, 1) &&
+                            graphene_rect_intersection (non_rounded,
+                                                        &rounded_rect_corner (rounded, 1), NULL);
+  /* bottom right? */
+  n_corners += corners[2] = rounded_rect_has_corner (rounded, 2) &&
+                            graphene_rect_intersection (non_rounded,
+                                                        &rounded_rect_corner (rounded, 2), NULL);
+  /* bottom left */
+  n_corners += corners[3] = rounded_rect_has_corner (rounded, 3) &&
+                            graphene_rect_intersection (non_rounded,
+                                                        &rounded_rect_corner (rounded, 3), NULL);
+
+  if (corners[0] && !graphene_rect_contains_rect (non_rounded, &rounded_rect_corner (rounded, 0)))
+    return false;
+  if (corners[1] && !graphene_rect_contains_rect (non_rounded, &rounded_rect_corner (rounded, 1)))
+    return false;
+  if (corners[2] && !graphene_rect_contains_rect (non_rounded, &rounded_rect_corner (rounded, 2)))
+    return false;
+  if (corners[3] && !graphene_rect_contains_rect (non_rounded, &rounded_rect_corner (rounded, 3)))
+    return false;
+
+  /* We do intersect with at least one of the corners, but in such a way that the
+   * intersection between the two clips can still be represented by a single rounded
+   * rect in a trivial way. do that. */
+  graphene_rect_intersection (non_rounded, &rounded->bounds, &result->bounds);
+
+  for (int i = 0; i < 4; i++)
+    {
+      if (corners[i])
+        result->corner[i] = rounded->corner[i];
+      else
+        result->corner[i].width = result->corner[i].height = 0;
+    }
+
+  return true;
+}
+
+/* This code intersects the current (maybe rounded) clip with the new
+ * non-rounded clip */
 static inline void
 render_clipped_child (GskGLRenderer         *self,
                       RenderOpBuilder       *builder,
@@ -1158,112 +1212,57 @@ render_clipped_child (GskGLRenderer         *self,
                       GskRenderNode         *child)
 {
   graphene_rect_t transformed_clip;
-  GskRoundedRect child_clip;
+  GskRoundedRect intersection;
 
   ops_transform_bounds_modelview (builder, clip, &transformed_clip);
 
   if (builder->clip_is_rectilinear)
-    goto trivial;
-
-  {
-    const GskRoundedRect *cur_clip = builder->current_clip;
-    int n_corners = 0;
-    bool corners[4];
-
-    /* Intersects with top left corner? */
-    n_corners += corners[0] = rounded_rect_has_corner (cur_clip, 0) &&
-                              graphene_rect_intersection (&transformed_clip,
-                                                          &rounded_rect_corner (cur_clip, 0), NULL);
-    /* top right? */
-    n_corners += corners[1] = rounded_rect_has_corner (cur_clip, 1) &&
-                              graphene_rect_intersection (&transformed_clip,
-                                                          &rounded_rect_corner (cur_clip, 1), NULL);
-    /* bottom right? */
-    n_corners += corners[2] = rounded_rect_has_corner (cur_clip, 2) &&
-                              graphene_rect_intersection (&transformed_clip,
-                                                          &rounded_rect_corner (cur_clip, 2), NULL);
-    /* bottom left */
-    n_corners += corners[3] = rounded_rect_has_corner (cur_clip, 3) &&
-                              graphene_rect_intersection (&transformed_clip,
-                                                          &rounded_rect_corner (cur_clip, 3), NULL);
-
-    if (n_corners == 0)
-      goto trivial;
-
-    if (corners[0] && !graphene_rect_contains_rect (&transformed_clip, &rounded_rect_corner (cur_clip, 0)))
-      goto rtt;
-    if (corners[1] && !graphene_rect_contains_rect (&transformed_clip, &rounded_rect_corner (cur_clip, 1)))
-      goto rtt;
-    if (corners[2] && !graphene_rect_contains_rect (&transformed_clip, &rounded_rect_corner (cur_clip, 2)))
-      goto rtt;
-    if (corners[3] && !graphene_rect_contains_rect (&transformed_clip, &rounded_rect_corner (cur_clip, 3)))
-      goto rtt;
-
-    /* We do intersect with at least one of the corners, but in such a way that the
-     * intersection between the two clips can still be represented by a single rounded
-     * rect in a trivial way. do that. */
     {
-      GskRoundedRect real_intersection;
+      memset (&intersection, 0, sizeof (GskRoundedRect));
+      graphene_rect_intersection (&transformed_clip,
+                                  &builder->current_clip->bounds,
+                                  &intersection.bounds);
 
-      graphene_rect_intersection (&transformed_clip, &cur_clip->bounds, &real_intersection.bounds);
-
-      for (int i = 0; i < 4; i++)
-        {
-          if (corners[i])
-            real_intersection.corner[i] = cur_clip->corner[i];
-          else
-            real_intersection.corner[i].width = real_intersection.corner[i].height = 0;
-        }
-
-      /* Draw with that new clip */
-      ops_push_clip (builder, &real_intersection);
+      ops_push_clip (builder, &intersection);
       gsk_gl_renderer_add_render_ops (self, child, builder);
       ops_pop_clip (builder);
     }
-    return;
-  }
+  else if (intersect_rounded_rectilinear (&transformed_clip,
+                                          builder->current_clip,
+                                          &intersection))
+    {
+      ops_push_clip (builder, &intersection);
+      gsk_gl_renderer_add_render_ops (self, child, builder);
+      ops_pop_clip (builder);
+    }
+  else
+    {
+      /* well fuck */
+      const float scale = ops_get_scale (builder);
+      gboolean is_offscreen;
+      TextureRegion region;
+      GskRoundedRect scaled_clip;
 
-rtt:
-  {
-    /* well fuck */
-    const float scale = ops_get_scale (builder);
-    gboolean is_offscreen;
-    TextureRegion region;
-    GskRoundedRect scaled_clip;
+      memset (&scaled_clip, 0, sizeof (GskRoundedRect));
 
-    memset (&scaled_clip, 0, sizeof (GskRoundedRect));
+      scaled_clip.bounds.origin.x = clip->origin.x * scale;
+      scaled_clip.bounds.origin.y = clip->origin.y * scale;
+      scaled_clip.bounds.size.width = clip->size.width * scale;
+      scaled_clip.bounds.size.height = clip->size.height * scale;
 
-    scaled_clip.bounds.origin.x = clip->origin.x * scale;
-    scaled_clip.bounds.origin.y = clip->origin.y * scale;
-    scaled_clip.bounds.size.width = clip->size.width * scale;
-    scaled_clip.bounds.size.height = clip->size.height * scale;
+      ops_push_clip (builder, &scaled_clip);
+      if (!add_offscreen_ops (self, builder, &child->bounds,
+                              child,
+                              &region, &is_offscreen,
+                              RESET_OPACITY | FORCE_OFFSCREEN))
+        g_assert_not_reached ();
+      ops_pop_clip (builder);
 
-    ops_push_clip (builder, &scaled_clip);
-    if (!add_offscreen_ops (self, builder, &child->bounds,
-                            child,
-                            &region, &is_offscreen,
-                            RESET_OPACITY | FORCE_OFFSCREEN))
-      g_assert_not_reached ();
-    ops_pop_clip (builder);
+      ops_set_program (builder, &self->programs->blit_program);
+      ops_set_texture (builder, region.texture_id);
 
-    ops_set_program (builder, &self->programs->blit_program);
-    ops_set_texture (builder, region.texture_id);
-
-    load_offscreen_vertex_data (ops_draw (builder, NULL), child, builder);
-    return;
-  }
-
-
-trivial:
-  memset (&child_clip, 0, sizeof (GskRoundedRect));
-  graphene_rect_intersection (&transformed_clip,
-                              &builder->current_clip->bounds,
-                              &child_clip.bounds);
-
-  ops_push_clip (builder, &child_clip);
-  gsk_gl_renderer_add_render_ops (self, child, builder);
-  ops_pop_clip (builder);
-  return;
+      load_offscreen_vertex_data (ops_draw (builder, NULL), child, builder);
+    }
 }
 
 static inline void
@@ -1293,6 +1292,29 @@ render_rounded_clip_node (GskGLRenderer       *self,
     return;
 
   ops_transform_bounds_modelview (builder, &clip->bounds, &transformed_clip.bounds);
+  for (i = 0; i < 4; i ++)
+    {
+      transformed_clip.corner[i].width = clip->corner[i].width * scale;
+      transformed_clip.corner[i].height = clip->corner[i].height * scale;
+    }
+
+  if (builder->clip_is_rectilinear)
+    {
+      GskRoundedRect intersected_clip;
+
+      if (intersect_rounded_rectilinear (&builder->current_clip->bounds,
+                                         &transformed_clip,
+                                         &intersected_clip))
+        {
+          ops_push_clip (builder, &intersected_clip);
+          gsk_gl_renderer_add_render_ops (self, child, builder);
+          ops_pop_clip (builder);
+          return;
+        }
+    }
+
+  /* After this point we are really working with a new and a current clip
+   * which both have rounded corners. */
 
   if (!ops_has_clip (builder))
     need_offscreen = FALSE;
@@ -1306,11 +1328,6 @@ render_rounded_clip_node (GskGLRenderer       *self,
     {
       /* If they don't intersect at all, we can simply set
        * the new clip and add the render ops */
-      for (i = 0; i < 4; i ++)
-        {
-          transformed_clip.corner[i].width = clip->corner[i].width * scale;
-          transformed_clip.corner[i].height = clip->corner[i].height * scale;
-        }
 
       /* If the new clip entirely contains the current clip, the intersection is simply
        * the current clip, so we can ignore the new one */
