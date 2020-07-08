@@ -1444,6 +1444,8 @@ gtk_directory_list_get_file
 gtk_directory_list_set_file
 gtk_directory_list_get_io_priority
 gtk_directory_list_set_io_priority
+gtk_directory_list_get_monitored
+gtk_directory_list_set_monitored
 gtk_directory_list_is_loading
 gtk_directory_list_get_error
 <SUBSECTION Standard>
