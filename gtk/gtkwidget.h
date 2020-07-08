@@ -977,6 +977,10 @@ void                    gtk_widget_action_set_enabled (GtkWidget  *widget,
                                                        gboolean    enabled);
 
 
+GDK_AVAILABLE_IN_ALL
+void                    gtk_widget_class_set_accessible_role    (GtkWidgetClass    *widget_class,
+                                                                 GtkAccessibleRole  accessible_role);
+
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkWidget, g_object_unref)
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkRequisition, gtk_requisition_free)
 
