@@ -393,6 +393,7 @@ expand_content_md_files = [
   'drawing-model.md',
   'css-overview.md',
   'css-properties.md',
+  'section-accessibility.md',
   'section-text-widget.md',
   'section-tree-widget.md',
   'section-list-widget.md',
