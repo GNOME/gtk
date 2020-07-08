@@ -1306,9 +1306,19 @@ get_high_res_server_time (void)
 }
 
 static void
-compute_server_time_offset_from_monotonic_time (void)
+compute_server_time_offset_from_monotonic_time (gint64 high_res_time)
 {
-  display_x11->server_time_offset = -((g_get_monotonic_time() / 1000) & 0xffffffff00000000) * 1000;
+  gint64 now, offset_candidate_1, offset_candidate_2;
+
+  now = g_get_monotonic_time();
+
+  offset_candidate_1 = -((now / 1000) & 0xffffffff00000000) * 1000;
+  offset_candidate_2 = -(((now / 1000) - (1 << 32)) & 0xffffffff00000000) * 1000;
+
+  if (ABS (now - (high_res_time - offset_candidate_1)) < ABS (now - (high_res_time - offset_candidate_2)))
+    display_x11->server_time_offset = offset_candidate_1;
+  else
+    display_x11->server_time_offset = offset_candidate_2;
 }
 
 static void
@@ -1361,7 +1371,7 @@ server_time_to_monotonic_time (GdkX11Display *display_x11,
                                gint64         server_time)
 {
   if (display_x11->server_time_uses_monotonic_time)
-    compute_server_time_offset_from_monotonic_time ();
+    compute_server_time_offset_from_monotonic_time (server_time);
   else if (server_time_offset_is_stale (display_x11, server_time))
     compute_server_time_offset_from_round_trip ();
 
