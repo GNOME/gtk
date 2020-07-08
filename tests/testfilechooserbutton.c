@@ -105,13 +105,6 @@ del_pwds_parent_as_shortcut_clicked_cb (GtkWidget *button,
 }
 
 static void
-unselect_all_clicked_cb (GtkWidget *button,
-                         gpointer   user_data)
-{
-  gtk_file_chooser_unselect_all (user_data);
-}
-
-static void
 tests_button_clicked_cb (GtkButton *real_button,
 			 gpointer   user_data)
 {
@@ -146,11 +139,6 @@ tests_button_clicked_cb (GtkButton *real_button,
       button = gtk_button_new_with_label ("Remove $PWD's Parent as Shortcut");
       g_signal_connect (button, "clicked",
 			G_CALLBACK (del_pwds_parent_as_shortcut_clicked_cb), user_data);
-      gtk_box_append (GTK_BOX (box), button);
-
-      button = gtk_button_new_with_label ("Unselect all");
-      g_signal_connect (button, "clicked",
-			G_CALLBACK (unselect_all_clicked_cb), user_data);
       gtk_box_append (GTK_BOX (box), button);
 
       g_object_set_data (user_data, "tests-dialog", tests);
