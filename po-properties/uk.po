@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.4.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-07-07 17:07+0000\n"
-"PO-Revision-Date: 2020-07-07 20:54+0300\n"
+"POT-Creation-Date: 2020-07-08 16:18+0000\n"
+"PO-Revision-Date: 2020-07-08 21:27+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
 "Language: uk\n"
@@ -819,23 +819,23 @@ msgstr "Файл закладок, який слід завантажити"
 msgid "Attributes"
 msgstr "Атрибути"
 
-#: gtk/gtkbookmarklist.c:225 gtk/gtkdirectorylist.c:240
+#: gtk/gtkbookmarklist.c:225 gtk/gtkdirectorylist.c:266
 msgid "Attributes to query"
 msgstr "Атрибути для запиту"
 
-#: gtk/gtkbookmarklist.c:236 gtk/gtkdirectorylist.c:275
+#: gtk/gtkbookmarklist.c:236 gtk/gtkdirectorylist.c:301
 msgid "IO priority"
 msgstr "Пріоритетність введення-виведення"
 
-#: gtk/gtkbookmarklist.c:237 gtk/gtkdirectorylist.c:276
+#: gtk/gtkbookmarklist.c:237 gtk/gtkdirectorylist.c:302
 msgid "Priority used when loading"
 msgstr "Пріоритетність під час завантаження"
 
-#: gtk/gtkbookmarklist.c:248 gtk/gtkdirectorylist.c:299
+#: gtk/gtkbookmarklist.c:248 gtk/gtkdirectorylist.c:325
 msgid "loading"
 msgstr "завантаження"
 
-#: gtk/gtkbookmarklist.c:249 gtk/gtkdirectorylist.c:300
+#: gtk/gtkbookmarklist.c:249 gtk/gtkdirectorylist.c:326
 msgid "TRUE if files are being loaded"
 msgstr "TRUE, якщо файли завантажуються"
 
@@ -2319,36 +2319,46 @@ msgstr "Початкове значення"
 msgid "The initial specified value used for this property"
 msgstr "Початкове вказане значення потрібне для властивості"
 
-#: gtk/gtkdirectorylist.c:239
+#: gtk/gtkdirectorylist.c:265
 msgid "attributes"
 msgstr "атрибути"
 
-#: gtk/gtkdirectorylist.c:251
+#: gtk/gtkdirectorylist.c:277
 msgid "error"
 msgstr "помилка"
 
-#: gtk/gtkdirectorylist.c:252
+#: gtk/gtkdirectorylist.c:278
 msgid "Error encountered while loading files"
 msgstr "Під час завантаження файлів сталася помилка"
 
-#: gtk/gtkdirectorylist.c:263 gtk/gtkmediafile.c:161 gtk/gtkpicture.c:324
+#: gtk/gtkdirectorylist.c:289 gtk/gtkmediafile.c:161 gtk/gtkpicture.c:324
 #: gtk/gtkvideo.c:296
 msgid "File"
 msgstr "Файл"
 
-#: gtk/gtkdirectorylist.c:264
+#: gtk/gtkdirectorylist.c:290
 msgid "The file to query"
 msgstr "Файл для запиту"
 
-#: gtk/gtkdirectorylist.c:287 gtk/gtkpropertylookuplistmodel.c:376
+#: gtk/gtkdirectorylist.c:313 gtk/gtkpropertylookuplistmodel.c:376
 #: gtk/gtkselectionfiltermodel.c:239
 msgid "Item type"
 msgstr "Тип запису"
 
-#: gtk/gtkdirectorylist.c:288 gtk/gtkpropertylookuplistmodel.c:377
+#: gtk/gtkdirectorylist.c:314 gtk/gtkpropertylookuplistmodel.c:377
 #: gtk/gtkselectionfiltermodel.c:240
 msgid "The type of elements of this object"
 msgstr "Тип елементів цього об'єкта"
+
+#: gtk/gtkdirectorylist.c:337
+#| msgid "Monitor"
+msgid "monitored"
+msgstr "відстежується"
+
+#: gtk/gtkdirectorylist.c:338
+#| msgid "The widget to be monitored for accelerator changes"
+msgid "TRUE if the directory is monitored for changes"
+msgstr "TRUE, якщо за змінами у каталозі ведеться стеження"
 
 #: gtk/gtkdragicon.c:373
 msgid "The widget to display as drag icon."
@@ -3131,7 +3141,6 @@ msgid "Incremental"
 msgstr "Нарощувальне"
 
 #: gtk/gtkfilterlistmodel.c:578
-#| msgid "Filer items incrementally"
 msgid "Filter items incrementally"
 msgstr "Нарощувальне фільтрування записів"
 
@@ -8467,9 +8476,6 @@ msgstr "Заголовок вікна вибору профілю кольору
 #~ msgid "Accelerator Widget"
 #~ msgstr "Елемент керування \"комбінація клавіш\""
 
-#~ msgid "The widget to be monitored for accelerator changes"
-#~ msgstr "Елемент керування, відповідний за зміну комбінації клавіш"
-
 #~ msgid ""
 #~ "A GtkPackType indicating whether the child is packed with reference to "
 #~ "the start or end of the parent"
@@ -9156,9 +9162,6 @@ msgstr "Заголовок вікна вибору профілю кольору
 
 #~ msgid "A boolean that indicates whether the menu is torn-off"
 #~ msgstr "Логічне значення, яке вказує чи є меню від'єднаним"
-
-#~ msgid "Monitor"
-#~ msgstr "Монітор"
 
 #~ msgid "The monitor the menu will be popped up on"
 #~ msgstr "The monitor the menu will be popped up on"
