@@ -41,6 +41,7 @@ RUN dnf -y install \
     itstool \
     json-glib-devel \
     lcov \
+    libasan \
     libattr-devel \
     libepoxy-devel \
     libffi-devel \

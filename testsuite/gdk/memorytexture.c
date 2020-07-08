@@ -93,7 +93,7 @@ create_texture (GdkMemoryFormat  format,
   guchar *data;
   int x, y;
 
-  data = g_malloc (height * stride);
+  data = g_malloc (height * MAX (stride, tests[format].bytes_per_pixel));
   for (y = 0; y < height; y++)
     for (x = 0; x < width; x++)
       {
@@ -102,7 +102,7 @@ create_texture (GdkMemoryFormat  format,
                 tests[format].bytes_per_pixel);
       }
 
-  bytes = g_bytes_new_static (data, height * stride);
+  bytes = g_bytes_new_static (data, height * MAX (stride, tests[format].bytes_per_pixel));
   texture = gdk_memory_texture_new (width, height,
                                     format,
                                     bytes,
