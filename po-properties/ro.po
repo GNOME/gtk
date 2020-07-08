@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-07-06 20:36+0000\n"
-"PO-Revision-Date: 2020-07-06 22:40+0200\n"
+"POT-Creation-Date: 2020-07-07 17:07+0000\n"
+"PO-Revision-Date: 2020-07-08 11:30+0300\n"
 "Last-Translator: Florentina Mușat <florentina.musat.28@gmail.com>\n"
 "Language-Team: Romanian Gnome Team <gnomero-list@lists.sourceforge.net>\n"
 "Language: ro\n"
@@ -3148,7 +3148,7 @@ msgid "Incremental"
 msgstr "Incremental"
 
 #: gtk/gtkfilterlistmodel.c:578
-msgid "Filer items incrementally"
+msgid "Filter items incrementally"
 msgstr "Filtrează elemente incremental"
 
 #: gtk/gtkfilterlistmodel.c:590 gtk/gtkselectionfiltermodel.c:252
@@ -5752,12 +5752,12 @@ msgstr "Nume temă XDG de sunete"
 #. Translators: this means sounds that are played as feedback to user input
 #: gtk/gtksettings.c:674
 msgid "Audible Input Feedback"
-msgstr "Feedback audio pentru input"
+msgstr "Feedback pentru intrarea audio"
 
 #: gtk/gtksettings.c:675
 msgid "Whether to play event sounds as feedback to user input"
 msgstr ""
-"Specifică dacă se vor reda sunete ca feedback la inputul utilizatorului"
+"Specifică dacă se vor reda sunete ca feedback la ce utilizatorul tastează"
 
 #: gtk/gtksettings.c:693
 msgid "Enable Event Sounds"
@@ -7419,7 +7419,7 @@ msgstr "Specifică dacă widgetul este vizibil"
 # Ugly... Mișu
 #: gtk/gtkwidget.c:998
 msgid "Whether the widget responds to input"
-msgstr "Specifică dacă widgetul răspunde la input"
+msgstr "Specifică dacă widgetul răspunde la intrări"
 
 #: gtk/gtkwidget.c:1010
 msgid "Can focus"
@@ -7427,7 +7427,7 @@ msgstr "Suportă focalizare"
 
 #: gtk/gtkwidget.c:1011 gtk/gtkwidget.c:1023
 msgid "Whether the widget can accept the input focus"
-msgstr "Specifică dacă widgetul poate accepta focalizarea de la input"
+msgstr "Specifică dacă widgetul poate accepta focalizarea de la intrări"
 
 #: gtk/gtkwidget.c:1022
 msgid "Focusable"
@@ -7439,7 +7439,7 @@ msgstr "Are focalizare"
 
 #: gtk/gtkwidget.c:1030
 msgid "Whether the widget has the input focus"
-msgstr "Specifică dacă widgetul are focalizare de la input"
+msgstr "Specifică dacă widgetul are focalizare de la intrări"
 
 #: gtk/gtkwidget.c:1036
 msgid "Can target"
