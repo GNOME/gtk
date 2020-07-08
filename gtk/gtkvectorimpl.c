@@ -105,8 +105,8 @@ gtk_vector(clear) (GtkVector *self)
 
 #ifdef GTK_VECTOR_PREALLOC
   if (self->start != self->preallocated)
-    g_free (self->start);
 #endif
+    g_free (self->start);
   gtk_vector(init) (self);
 }
 
