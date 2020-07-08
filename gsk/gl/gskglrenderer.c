@@ -1379,7 +1379,6 @@ render_rounded_clip_node (GskGLRenderer       *self,
 
       load_offscreen_vertex_data (ops_draw (builder, NULL), node, builder);
     }
-  /* Else this node is entirely out of the current clip node and we don't draw it anyway. */
 }
 
 static inline void
