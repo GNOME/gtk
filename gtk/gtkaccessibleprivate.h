@@ -1,4 +1,4 @@
-/* gtkaccessible.h: Accessible interface
+/* gtkaccessibleprivate.h: Accessible interface
  *
  * Copyright 2020  GNOME Foundation
  *
@@ -20,24 +20,18 @@
 
 #pragma once
 
-#include <glib-object.h>
-#include <gtk/gtktypes.h>
-#include <gtk/gtkenums.h>
+#include "gtkaccessible.h"
+#include "gtkatcontext.h"
 
 G_BEGIN_DECLS
 
-#define GTK_TYPE_ACCESSIBLE (gtk_accessible_get_type())
+struct _GtkAccessibleInterface
+{
+  GTypeInterface g_iface;
 
-GDK_AVAILABLE_IN_ALL
-G_DECLARE_INTERFACE (GtkAccessible, gtk_accessible, GTK, ACCESSIBLE, GObject)
+  GtkATContext *        (* get_at_context)      (GtkAccessible *self);
+};
 
-GDK_AVAILABLE_IN_ALL
-void    gtk_accessible_update_state             (GtkAccessible      *self,
-                                                 GtkAccessibleState  first_state,
-                                                 ...);
-GDK_AVAILABLE_IN_ALL
-void    gtk_accessible_update_state_value       (GtkAccessible      *self,
-                                                 GtkAccessibleState  state,
-                                                 const GValue       *value);
+GtkATContext *  gtk_accessible_get_at_context   (GtkAccessible *self);
 
 G_END_DECLS
