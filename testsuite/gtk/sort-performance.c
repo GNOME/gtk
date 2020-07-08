@@ -35,42 +35,72 @@ create_sorter (void)
   return gtk_custom_sorter_new (compare_string_object, NULL, NULL);
 }
 
-G_GNUC_UNUSED static void
+static void
+count_changed_cb (GListModel *model,
+                  guint       position,
+                  guint       removed,
+                  guint       added,
+                  guint      *counter)
+{
+  *counter += MAX (removed, added);
+}
+
+static gint64
+snapshot_time (gint64  last,
+               gint64 *inout_max)
+{
+  gint64 now = g_get_monotonic_time ();
+  *inout_max = MAX (*inout_max, now - last);
+  return now;
+}
+
+static void
 set_model (const char *testname,
            GType       type,
            GListModel *source,
            guint       random)
 {
-  gint64 start, end, total;
+  gint64 start, end, max, total;
   GtkSliceListModel *slice;
   GtkSorter *sorter;
   GListModel *sort;
-  guint size = 1000;
+  guint n_changed, size = 1000;
 
   slice = gtk_slice_list_model_new (source, 0, size);
   sorter = create_sorter ();
   sort = g_object_new (type,
                        "sorter", sorter,
                        NULL);
+  g_signal_connect (sort, "items-changed", G_CALLBACK (count_changed_cb), &n_changed);
   g_object_unref (sorter);
 
   while (TRUE)
     {
-      comparisons = 0;
-      start = g_get_monotonic_time ();
-      g_object_set (sort, "model", slice, NULL);
       while (g_main_context_pending (NULL))
         g_main_context_iteration (NULL, TRUE);
-      end = g_get_monotonic_time ();
+      comparisons = 0;
+      n_changed = 0;
+      max = 0;
+
+      start = end = g_get_monotonic_time ();
+      g_object_set (sort, "model", slice, NULL);
+      end = snapshot_time (end, &max);
+      while (g_main_context_pending (NULL))
+        {
+          g_main_context_iteration (NULL, TRUE);
+          end = snapshot_time (end, &max);
+        }
 
       total = (end - start);
 
-      g_print ("\"%s\", \"%s\",%8u,%8uus,%8u\n",
+      g_print ("\"%s\", \"%s\",%8u,%8uus,%8uus, %8u,%9u\n",
                testname,
                g_type_name (type),
                size,
                (guint) total,
-               comparisons);
+               (guint) max,
+               comparisons,
+               n_changed);
 
       if (total > MAX_TIME)
         break;
@@ -94,11 +124,11 @@ append (const char *testname,
         guint       random,
         guint       fraction)
 {
-  gint64 start, end, total;
+  gint64 start, end, max, total;
   GtkSliceListModel *slice;
   GtkSorter *sorter;
   GListModel *sort;
-  guint size = 1000;
+  guint n_changed, size = 1000;
 
   slice = gtk_slice_list_model_new (source, 0, (fraction - 1) * size / fraction);
   sorter = create_sorter ();
@@ -106,27 +136,37 @@ append (const char *testname,
                        "model", slice,
                        "sorter", sorter,
                        NULL);
+  g_signal_connect (sort, "items-changed", G_CALLBACK (count_changed_cb), &n_changed);
   g_object_unref (sorter);
 
   while (TRUE)
     {
       gtk_slice_list_model_set_size (slice, (fraction - 1) * size / fraction);
-      comparisons = 0;
-
-      start = g_get_monotonic_time ();
-      gtk_slice_list_model_set_size (slice, size);
       while (g_main_context_pending (NULL))
         g_main_context_iteration (NULL, TRUE);
-      end = g_get_monotonic_time ();
+      comparisons = 0;
+      n_changed = 0;
+      max = 0;
+
+      start = end = g_get_monotonic_time ();
+      gtk_slice_list_model_set_size (slice, size);
+      end = snapshot_time (end, &max);
+      while (g_main_context_pending (NULL))
+        {
+          g_main_context_iteration (NULL, TRUE);
+          end = snapshot_time (end, &max);
+        }
 
       total = (end - start);
 
-      g_print ("\"%s\", \"%s\",%8u,%8uus,%8u\n",
+      g_print ("\"%s\", \"%s\",%8u,%8uus,%8uus, %8u,%9u\n",
                testname,
                g_type_name (type),
                size,
                (guint) total,
-               comparisons);
+               (guint) max,
+               comparisons,
+               n_changed);
 
       if (total > MAX_TIME)
         break;
@@ -175,11 +215,11 @@ remove_test (const char *testname,
              guint       random,
              guint       fraction)
 {
-  gint64 start, end, total;
+  gint64 start, end, max, total;
   GtkSliceListModel *slice;
   GtkSorter *sorter;
   GListModel *sort;
-  guint size = 1000;
+  guint n_changed, size = 1000;
 
   slice = gtk_slice_list_model_new (source, 0, size);
   sorter = create_sorter ();
@@ -187,27 +227,37 @@ remove_test (const char *testname,
                        "model", slice,
                        "sorter", sorter,
                        NULL);
+  g_signal_connect (sort, "items-changed", G_CALLBACK (count_changed_cb), &n_changed);
   g_object_unref (sorter);
 
   while (TRUE)
     {
       gtk_slice_list_model_set_size (slice, size);
-      comparisons = 0;
-
-      start = g_get_monotonic_time ();
-      gtk_slice_list_model_set_size (slice, (fraction - 1) * size / fraction);
       while (g_main_context_pending (NULL))
         g_main_context_iteration (NULL, TRUE);
-      end = g_get_monotonic_time ();
+      comparisons = 0;
+      n_changed = 0;
+      max = 0;
+
+      start = end = g_get_monotonic_time ();
+      gtk_slice_list_model_set_size (slice, (fraction - 1) * size / fraction);
+      end = snapshot_time (end, &max);
+      while (g_main_context_pending (NULL))
+        {
+          g_main_context_iteration (NULL, TRUE);
+          end = snapshot_time (end, &max);
+        }
 
       total = (end - start);
 
-      g_print ("\"%s\", \"%s\",%8u,%8uus,%8u\n",
+      g_print ("\"%s\", \"%s\",%8u,%8uus,%8uus, %8u,%9u\n",
                testname,
                g_type_name (type),
                size,
                (guint) total,
-               comparisons);
+               (guint) max,
+               comparisons,
+               n_changed);
 
       if (total > MAX_TIME)
         break;
@@ -280,11 +330,11 @@ append_n (const char *testname,
           guint       random,
           guint       n)
 {
-  gint64 start, end, total;
+  gint64 start, end, max, total;
   GtkSliceListModel *slice;
   GtkSorter *sorter;
   GListModel *sort;
-  guint i, size = 1000;
+  guint i, n_changed, size = 1000;
 
   slice = gtk_slice_list_model_new (source, 0, size);
   sorter = create_sorter ();
@@ -292,30 +342,40 @@ append_n (const char *testname,
                        "model", slice,
                        "sorter", sorter,
                        NULL);
+  g_signal_connect (sort, "items-changed", G_CALLBACK (count_changed_cb), &n_changed);
   g_object_unref (sorter);
 
   while (TRUE)
     {
       gtk_slice_list_model_set_size (slice, size - n * 100);
+      while (g_main_context_pending (NULL))
+        g_main_context_iteration (NULL, TRUE);
       comparisons = 0;
+      n_changed = 0;
+      max = 0;
 
-      start = g_get_monotonic_time ();
+      start = end = g_get_monotonic_time ();
       for (i = 0; i < 100; i++)
         {
           gtk_slice_list_model_set_size (slice, size - n * (100 - i));
+          end = snapshot_time (end, &max);
           while (g_main_context_pending (NULL))
-            g_main_context_iteration (NULL, TRUE);
+            {
+              g_main_context_iteration (NULL, TRUE);
+              end = snapshot_time (end, &max);
+            }
         }
-      end = g_get_monotonic_time ();
 
       total = (end - start);
 
-      g_print ("\"%s\", \"%s\",%8u,%8uus,%8u\n",
+      g_print ("\"%s\", \"%s\",%8u,%8uus,%8uus, %8u,%9u\n",
                testname,
                g_type_name (type),
                size,
                (guint) total,
-               comparisons);
+               (guint) max,
+               comparisons,
+               n_changed);
 
       if (total > MAX_TIME)
         break;
@@ -364,11 +424,11 @@ remove_n (const char *testname,
           guint       random,
           guint       n)
 {
-  gint64 start, end, total;
+  gint64 start, end, max, total;
   GtkSliceListModel *slice;
   GtkSorter *sorter;
   GListModel *sort;
-  guint i, size = 1000;
+  guint i, n_changed, size = 1000;
 
   slice = gtk_slice_list_model_new (source, 0, size);
   sorter = create_sorter ();
@@ -376,30 +436,40 @@ remove_n (const char *testname,
                        "model", slice,
                        "sorter", sorter,
                        NULL);
+  g_signal_connect (sort, "items-changed", G_CALLBACK (count_changed_cb), &n_changed);
   g_object_unref (sorter);
 
   while (TRUE)
     {
       gtk_slice_list_model_set_size (slice, size);
+      while (g_main_context_pending (NULL))
+        g_main_context_iteration (NULL, TRUE);
       comparisons = 0;
+      n_changed = 0;
+      max = 0;
 
-      start = g_get_monotonic_time ();
+      start = end = g_get_monotonic_time ();
       for (i = 0; i < 100; i++)
         {
           gtk_slice_list_model_set_size (slice, size - n * (i + 1));
+          end = snapshot_time (end, &max);
           while (g_main_context_pending (NULL))
-            g_main_context_iteration (NULL, TRUE);
+            {
+              g_main_context_iteration (NULL, TRUE);
+              end = snapshot_time (end, &max);
+            }
         }
-      end = g_get_monotonic_time ();
 
       total = (end - start);
 
-      g_print ("\"%s\", \"%s\",%8u,%8uus,%8u\n",
+      g_print ("\"%s\", \"%s\",%8u,%8uus,%8uus, %8u,%9u\n",
                testname,
                g_type_name (type),
                size,
                (guint) total,
-               comparisons);
+               (guint) max,
+               comparisons,
+               n_changed);
 
       if (total > MAX_TIME)
         break;
@@ -463,7 +533,7 @@ main (int argc, char *argv[])
   else
     tests = (const char **) argv + 1;
 
-  g_print ("\"test\",\"model\",\"model size\",\"time\",\"comparisons\"\n");
+  g_print ("\"test\",\"model\",\"model size\",\"time\",\"max time\",\"comparisons\",\"changes\"\n");
   run_test (source, tests, "set-model", set_model);
   run_test (source, tests, "append-half", append_half);
   run_test (source, tests, "append-10th", append_10th);
