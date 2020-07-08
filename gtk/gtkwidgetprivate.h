@@ -28,6 +28,7 @@
 #include "gtkwidget.h"
 
 #include "gtkactionmuxerprivate.h"
+#include "gtkatcontextprivate.h"
 #include "gtkcsstypesprivate.h"
 #include "gtkeventcontrollerprivate.h"
 #include "gtklistlistmodelprivate.h"
@@ -193,6 +194,9 @@ struct _GtkWidgetPrivate
   /* Tooltip */
   char *tooltip_markup;
   char *tooltip_text;
+
+  /* Accessible context */
+  GtkATContext *at_context;
 };
 
 typedef struct
@@ -209,6 +213,7 @@ struct _GtkWidgetClassPrivate
   GQuark css_name;
   GType layout_manager_type;
   GtkWidgetAction *actions;
+  GtkAccessibleRole accessible_role;
 };
 
 void          gtk_widget_root               (GtkWidget *widget);
