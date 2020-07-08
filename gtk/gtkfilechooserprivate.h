@@ -111,6 +111,9 @@ struct _GtkFileChooserIface
 
 GtkFileSystem *_gtk_file_chooser_get_file_system         (GtkFileChooser    *chooser);
 
+void     gtk_file_chooser_select_all         (GtkFileChooser *chooser);
+void     gtk_file_chooser_unselect_all       (GtkFileChooser *chooser);
+
 G_END_DECLS
 
 #endif /* __GTK_FILE_CHOOSER_PRIVATE_H__ */

@@ -113,11 +113,6 @@ void        gtk_file_chooser_set_current_name  (GtkFileChooser *chooser,
 GDK_AVAILABLE_IN_ALL
 gchar *gtk_file_chooser_get_current_name (GtkFileChooser *chooser);
 
-GDK_AVAILABLE_IN_ALL
-void     gtk_file_chooser_select_all         (GtkFileChooser *chooser);
-GDK_AVAILABLE_IN_ALL
-void     gtk_file_chooser_unselect_all       (GtkFileChooser *chooser);
-
 /* GFile manipulation */
 GDK_AVAILABLE_IN_ALL
 GFile *  gtk_file_chooser_get_file                (GtkFileChooser  *chooser);
