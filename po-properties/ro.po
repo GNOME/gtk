@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-07-07 17:07+0000\n"
-"PO-Revision-Date: 2020-07-08 11:30+0300\n"
+"POT-Creation-Date: 2020-07-08 16:18+0000\n"
+"PO-Revision-Date: 2020-07-08 18:21+0200\n"
 "Last-Translator: Florentina Mușat <florentina.musat.28@gmail.com>\n"
 "Language-Team: Romanian Gnome Team <gnomero-list@lists.sourceforge.net>\n"
 "Language: ro\n"
@@ -825,23 +825,23 @@ msgstr "Fișierul marcaj de încărcat"
 msgid "Attributes"
 msgstr "Atribute"
 
-#: gtk/gtkbookmarklist.c:225 gtk/gtkdirectorylist.c:240
+#: gtk/gtkbookmarklist.c:225 gtk/gtkdirectorylist.c:266
 msgid "Attributes to query"
 msgstr "Atribute de interogat"
 
-#: gtk/gtkbookmarklist.c:236 gtk/gtkdirectorylist.c:275
+#: gtk/gtkbookmarklist.c:236 gtk/gtkdirectorylist.c:301
 msgid "IO priority"
 msgstr "Prioritate IO"
 
-#: gtk/gtkbookmarklist.c:237 gtk/gtkdirectorylist.c:276
+#: gtk/gtkbookmarklist.c:237 gtk/gtkdirectorylist.c:302
 msgid "Priority used when loading"
 msgstr "Prioritate utilizată când se încarcă"
 
-#: gtk/gtkbookmarklist.c:248 gtk/gtkdirectorylist.c:299
+#: gtk/gtkbookmarklist.c:248 gtk/gtkdirectorylist.c:325
 msgid "loading"
 msgstr "se încarcă"
 
-#: gtk/gtkbookmarklist.c:249 gtk/gtkdirectorylist.c:300
+#: gtk/gtkbookmarklist.c:249 gtk/gtkdirectorylist.c:326
 msgid "TRUE if files are being loaded"
 msgstr "ADEVĂRAT dacă fișierele se încarcă"
 
@@ -2339,36 +2339,44 @@ msgstr "Valoare inițială"
 msgid "The initial specified value used for this property"
 msgstr "Valoarea inițială specificată de folosit pentru această proprietate"
 
-#: gtk/gtkdirectorylist.c:239
+#: gtk/gtkdirectorylist.c:265
 msgid "attributes"
 msgstr "atribute"
 
-#: gtk/gtkdirectorylist.c:251
+#: gtk/gtkdirectorylist.c:277
 msgid "error"
 msgstr "eroare"
 
-#: gtk/gtkdirectorylist.c:252
+#: gtk/gtkdirectorylist.c:278
 msgid "Error encountered while loading files"
 msgstr "Eroare apărută în timpul încărcării fișierelor"
 
-#: gtk/gtkdirectorylist.c:263 gtk/gtkmediafile.c:161 gtk/gtkpicture.c:324
+#: gtk/gtkdirectorylist.c:289 gtk/gtkmediafile.c:161 gtk/gtkpicture.c:324
 #: gtk/gtkvideo.c:296
 msgid "File"
 msgstr "Fișier"
 
-#: gtk/gtkdirectorylist.c:264
+#: gtk/gtkdirectorylist.c:290
 msgid "The file to query"
 msgstr "Fișierul de interogat"
 
-#: gtk/gtkdirectorylist.c:287 gtk/gtkpropertylookuplistmodel.c:376
+#: gtk/gtkdirectorylist.c:313 gtk/gtkpropertylookuplistmodel.c:376
 #: gtk/gtkselectionfiltermodel.c:239
 msgid "Item type"
 msgstr "Tip element"
 
-#: gtk/gtkdirectorylist.c:288 gtk/gtkpropertylookuplistmodel.c:377
+#: gtk/gtkdirectorylist.c:314 gtk/gtkpropertylookuplistmodel.c:377
 #: gtk/gtkselectionfiltermodel.c:240
 msgid "The type of elements of this object"
 msgstr "Tipurile de elemente ale acestui obiect"
+
+#: gtk/gtkdirectorylist.c:337
+msgid "monitored"
+msgstr "monitorizat"
+
+#: gtk/gtkdirectorylist.c:338
+msgid "TRUE if the directory is monitored for changes"
+msgstr "ADEVĂRAT dacă directorul este monitorizat pentru modificări"
 
 #: gtk/gtkdragicon.c:373
 msgid "The widget to display as drag icon."
@@ -7861,9 +7869,6 @@ msgstr "Titlul profilului de culoare de folosit"
 #~ msgid "Accelerator Widget"
 #~ msgstr "Widget accelerator"
 
-#~ msgid "The widget to be monitored for accelerator changes"
-#~ msgstr "Widget de monitorizat pentru schimbări ale acceleratorului"
-
 #~ msgid "Border relief"
 #~ msgstr "Umbra chenarului"
 
@@ -8038,9 +8043,6 @@ msgstr "Titlul profilului de culoare de folosit"
 
 #~ msgid "The widget the menu is attached to"
 #~ msgstr "Widgetul de care se atașează meniul"
-
-#~ msgid "Monitor"
-#~ msgstr "Monitor"
 
 #~ msgid "The monitor the menu will be popped up on"
 #~ msgstr "Monitorul pe care va fi afișat meniul"
