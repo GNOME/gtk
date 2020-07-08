@@ -142,11 +142,17 @@ gtk_shortcut_trigger_parse_string (const char *string)
 
       /* empty first slot */
       if (*frag_a == '\0')
-        return NULL;
+        {
+          g_free (frag_a);
+          return NULL;
+        }
 
       /* empty second slot */
       if (*frag_b == '\0')
-        return NULL;
+        {
+          g_free (frag_a);
+          return NULL;
+        }
 
       t1 = gtk_shortcut_trigger_parse_string (frag_a);
       if (t1 == NULL)
