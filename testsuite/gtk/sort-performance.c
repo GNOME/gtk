@@ -59,6 +59,8 @@ set_model (const char *testname,
       comparisons = 0;
       start = g_get_monotonic_time ();
       g_object_set (sort, "model", slice, NULL);
+      while (g_main_context_pending (NULL))
+        g_main_context_iteration (NULL, TRUE);
       end = g_get_monotonic_time ();
 
       total = (end - start);
@@ -113,6 +115,8 @@ append (const char *testname,
 
       start = g_get_monotonic_time ();
       gtk_slice_list_model_set_size (slice, size);
+      while (g_main_context_pending (NULL))
+        g_main_context_iteration (NULL, TRUE);
       end = g_get_monotonic_time ();
 
       total = (end - start);
@@ -192,6 +196,8 @@ remove_test (const char *testname,
 
       start = g_get_monotonic_time ();
       gtk_slice_list_model_set_size (slice, (fraction - 1) * size / fraction);
+      while (g_main_context_pending (NULL))
+        g_main_context_iteration (NULL, TRUE);
       end = g_get_monotonic_time ();
 
       total = (end - start);
@@ -273,6 +279,174 @@ run_test (GtkStringList      *source,
     }
 }
 
+static void
+append_n (const char *testname,
+          GType       type,
+          GListModel *source,
+          guint       random,
+          guint       n)
+{
+  gint64 start, end, total;
+  GtkSliceListModel *slice;
+  GtkSorter *sorter;
+  GListModel *sort;
+  guint i, size = 1000;
+
+  slice = gtk_slice_list_model_new (source, 0, size);
+  sorter = create_sorter ();
+  sort = g_object_new (type,
+                       "model", slice,
+                       "sorter", sorter,
+                       NULL);
+  g_object_unref (sorter);
+
+  while (TRUE)
+    {
+      gtk_slice_list_model_set_size (slice, size - n * 100);
+      comparisons = 0;
+
+      start = g_get_monotonic_time ();
+      for (i = 0; i < 100; i++)
+        {
+          gtk_slice_list_model_set_size (slice, size - n * (100 - i));
+          while (g_main_context_pending (NULL))
+            g_main_context_iteration (NULL, TRUE);
+        }
+      end = g_get_monotonic_time ();
+
+      total = (end - start);
+
+      g_print ("\"%s\", \"%s\",%8u,%8uus,%8u\n",
+               testname,
+               g_type_name (type),
+               size,
+               (guint) total,
+               comparisons);
+
+      if (total > MAX_TIME)
+        break;
+
+      size *= 2;
+      if (4 * total > 2 * MAX_TIME ||
+          size > MAX_SIZE)
+        break;
+    }
+
+  g_object_unref (sort);
+  g_object_unref (slice);
+}
+
+static void
+append_1 (const char *name,
+          GType       type,
+          GListModel *source,
+          guint       random)
+{
+  append_n (name, type, source, random, 1);
+}
+
+static void
+append_2 (const char *name,
+          GType       type,
+          GListModel *source,
+          guint       random)
+{
+  append_n (name, type, source, random, 2);
+}
+
+static void
+append_10 (const char *name,
+           GType       type,
+           GListModel *source,
+           guint       random)
+{
+  append_n (name, type, source, random, 10);
+}
+
+static void
+remove_n (const char *testname,
+          GType       type,
+          GListModel *source,
+          guint       random,
+          guint       n)
+{
+  gint64 start, end, total;
+  GtkSliceListModel *slice;
+  GtkSorter *sorter;
+  GListModel *sort;
+  guint i, size = 1000;
+
+  slice = gtk_slice_list_model_new (source, 0, size);
+  sorter = create_sorter ();
+  sort = g_object_new (type,
+                       "model", slice,
+                       "sorter", sorter,
+                       NULL);
+  g_object_unref (sorter);
+
+  while (TRUE)
+    {
+      gtk_slice_list_model_set_size (slice, size);
+      comparisons = 0;
+
+      start = g_get_monotonic_time ();
+      for (i = 0; i < 100; i++)
+        {
+          gtk_slice_list_model_set_size (slice, size - n * (i + 1));
+          while (g_main_context_pending (NULL))
+            g_main_context_iteration (NULL, TRUE);
+        }
+      end = g_get_monotonic_time ();
+
+      total = (end - start);
+
+      g_print ("\"%s\", \"%s\",%8u,%8uus,%8u\n",
+               testname,
+               g_type_name (type),
+               size,
+               (guint) total,
+               comparisons);
+
+      if (total > MAX_TIME)
+        break;
+
+      size *= 2;
+      if (4 * total > 2 * MAX_TIME ||
+          size > MAX_SIZE)
+        break;
+    }
+
+  g_object_unref (sort);
+  g_object_unref (slice);
+}
+
+static void
+remove_1 (const char *name,
+          GType       type,
+          GListModel *source,
+          guint       random)
+{
+  remove_n (name, type, source, random, 1);
+}
+
+static void
+remove_2 (const char *name,
+          GType       type,
+          GListModel *source,
+          guint       random)
+{
+  remove_n (name, type, source, random, 2);
+}
+
+static void
+remove_10 (const char *name,
+           GType       type,
+           GListModel *source,
+           guint       random)
+{
+  remove_n (name, type, source, random, 10);
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -303,6 +477,12 @@ main (int argc, char *argv[])
   run_test (source, tests, "remove-half", remove_half);
   run_test (source, tests, "remove-10th", remove_10th);
   run_test (source, tests, "remove-100th", remove_100th);
+  run_test (source, tests, "append-1", append_1);
+  run_test (source, tests, "append-2", append_2);
+  run_test (source, tests, "append-10", append_10);
+  run_test (source, tests, "remove-1", remove_1);
+  run_test (source, tests, "remove-2", remove_2);
+  run_test (source, tests, "remove-10", remove_10);
 
   return g_test_run ();
 }
