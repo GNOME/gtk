@@ -7638,3 +7638,41 @@ gtk_selection_filter_model_new_for_type
 gtk_selection_filter_model_set_model
 gtk_selection_filter_model_get_model
 </SECTION>
+
+<SECTION>
+<FILE>gtkaccessible</FILE>
+GtkAccessible
+GtkAccessibleRole
+GtkAccessibleState
+GtkAccessibleProperty
+gtk_accessible_update_state
+<SUBSECTION Standard>
+GTK_TYPE_ACCESSIBLE
+GTK_TYPE_ACCESSIBLE_PROPERTY
+GTK_TYPE_ACCESSIBLE_ROLE
+GTK_TYPE_ACCESSIBLE_STATE
+GTK_ACCESSIBLE
+GTK_ACCESSIBLE_GET_IFACE
+GTK_IS_ACCESSIBLE
+<SUBSECTION Private>
+gtk_accessible_get_type
+</SECTION>
+
+<SECTION>
+<FILE>gtkatcontext</FILE>
+GtkATContext
+gtk_at_context_get_accessible
+gtk_at_context_get_accessible_role
+<SUBSECTION>
+gtk_at_context_create
+<SUBSECTION Standard>
+GTK_TYPE_AT_CONTEXT
+GTK_AT_CONTEXT
+GTK_AT_CONTEXT_CLASS
+GTK_AT_CONTEXT_GET_CLASS
+GTK_IS_AT_CONTEXT
+GTK_IS_AT_CONTEXT_CLASS
+<SUBSECTION Private>
+GtkATContextClass
+gtk_at_context_get_type
+</SECTION>
