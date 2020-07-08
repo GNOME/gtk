@@ -376,6 +376,7 @@ content_files = [
 ]
 
 expand_content_md_files = [
+  'accessibility.md',
   'broadway.md',
   'osx.md',
   'wayland.md',
