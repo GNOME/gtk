@@ -1300,4 +1300,65 @@ typedef enum {
   GTK_ACCESSIBLE_ROLE_WINDOW
 } GtkAccessibleRole;
 
+/**
+ * GtkAccessibleState:
+ * @GTK_ACCESSIBLE_STATE_NONE: An invalid state, used as a sentinel value
+ * @GTK_ACCESSIBLE_STATE_BUSY: A “busy” state
+ * @GTK_ACCESSIBLE_STATE_CHECKED: A “checked” state; corresponds to the
+ *   #GtkToggleButton:active property on #GtkToggleButton
+ * @GTK_ACCESSIBLE_STATE_DISABLED: A “disabled” state; corresponds to the
+ *   #GtkWidget:sensitive property on #GtkWidget
+ * @GTK_ACCESSIBLE_STATE_EXPANDED: An “expanded” state; corresponds to the
+ *   #GtkExpander:expanded property on #GtkExpander
+ * @GTK_ACCESSIBLE_STATE_GRABBED: A “grabbed” state; set when a widget is
+ *   being grabbed in a drag and drop operation
+ * @GTK_ACCESSIBLE_STATE_HIDDEN: A “hidden” state; corresponds to the
+ *   #GtkWidget:visible property on #GtkWidget
+ * @GTK_ACCESSIBLE_STATE_INVALID: An “invalid” state; set when a widget
+ *   is showing an error
+ * @GTK_ACCESSIBLE_STATE_PRESSED: A “pressed” state; set when a widget
+ *   is being activated by a pointer
+ * @GTK_ACCESSIBLE_STATE_SELECTED: A “selected” state; set when a widget
+ *   is selected
+ *
+ * The possible accessible state of a #GtkAccessible.
+ */
+typedef enum {
+  GTK_ACCESSIBLE_STATE_NONE = -1,
+  GTK_ACCESSIBLE_STATE_BUSY = 0,
+  GTK_ACCESSIBLE_STATE_CHECKED,
+  GTK_ACCESSIBLE_STATE_DISABLED,
+  GTK_ACCESSIBLE_STATE_EXPANDED,
+  GTK_ACCESSIBLE_STATE_GRABBED,
+  GTK_ACCESSIBLE_STATE_HIDDEN,
+  GTK_ACCESSIBLE_STATE_INVALID,
+  GTK_ACCESSIBLE_STATE_PRESSED,
+  GTK_ACCESSIBLE_STATE_SELECTED
+} GtkAccessibleState;
+
+typedef enum {
+  GTK_ACCESSIBLE_PROPERTY_ACTIVE_DESCENDANT,
+  GTK_ACCESSIBLE_PROPERTY_CONTROLS,
+  GTK_ACCESSIBLE_PROPERTY_DESCRIBED_BY,
+  GTK_ACCESSIBLE_PROPERTY_FLOW_TO,
+  GTK_ACCESSIBLE_PROPERTY_HAS_POPUP,
+  GTK_ACCESSIBLE_PROPERTY_LABEL,
+  GTK_ACCESSIBLE_PROPERTY_LABELLED_BY,
+  GTK_ACCESSIBLE_PROPERTY_LEVEL,
+  GTK_ACCESSIBLE_PROPERTY_MULTI_LINE,
+  GTK_ACCESSIBLE_PROPERTY_MULTI_SELECTABLE,
+  GTK_ACCESSIBLE_PROPERTY_ORIENTATION,
+  GTK_ACCESSIBLE_PROPERTY_OWNS,
+  GTK_ACCESSIBLE_PROPERTY_POS_IN_SET,
+  GTK_ACCESSIBLE_PROPERTY_READ_ONLY,
+  GTK_ACCESSIBLE_PROPERTY_RELEVANT,
+  GTK_ACCESSIBLE_PROPERTY_REQUIRED,
+  GTK_ACCESSIBLE_PROPERTY_SET_SIZE,
+  GTK_ACCESSIBLE_PROPERTY_SORT,
+  GTK_ACCESSIBLE_PROPERTY_VALUE_MAX,
+  GTK_ACCESSIBLE_PROPERTY_VALUE_MIN,
+  GTK_ACCESSIBLE_PROPERTY_VALUE_NOW,
+  GTK_ACCESSIBLE_PROPERTY_VALUE_TEXT
+} GtkAccessibleProperty;
+
 #endif /* __GTK_ENUMS_H__ */
