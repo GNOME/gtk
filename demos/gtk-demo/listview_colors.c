@@ -676,7 +676,7 @@ create_color_grid (void)
   gtk_grid_view_set_max_columns (GTK_GRID_VIEW (gridview), 24);
   gtk_grid_view_set_enable_rubberband (GTK_GRID_VIEW (gridview), TRUE);
 
-  model = G_LIST_MODEL (gtk_sor3_list_model_new (gtk_color_list_new (0), NULL));
+  model = G_LIST_MODEL (gtk_sor5_list_model_new (gtk_color_list_new (0), NULL));
 
   selection = G_LIST_MODEL (gtk_multi_selection_new (model));
   gtk_grid_view_set_model (GTK_GRID_VIEW (gridview), selection);
@@ -1012,7 +1012,7 @@ do_listview_colors (GtkWidget *do_widget)
       button = gtk_button_new_with_mnemonic ("_Refill");
       g_signal_connect (button, "clicked",
                         G_CALLBACK (refill),
-                        gtk_sor3_list_model_get_model (GTK_SOR3_LIST_MODEL (model)));
+                        gtk_sor5_list_model_get_model (GTK_SOR5_LIST_MODEL (model)));
 
       gtk_header_bar_pack_start (GTK_HEADER_BAR (header), button);
 
@@ -1035,7 +1035,7 @@ do_listview_colors (GtkWidget *do_widget)
       gtk_drop_down_set_from_strings (GTK_DROP_DOWN (dropdown), (const char *[]) { "8", "64", "512", "4096", "32768", "262144", "2097152", "16777216", NULL });
       g_signal_connect (dropdown, "notify::selected",
                         G_CALLBACK (limit_changed_cb), 
-                        gtk_sor3_list_model_get_model (GTK_SOR3_LIST_MODEL (model)));
+                        gtk_sor5_list_model_get_model (GTK_SOR5_LIST_MODEL (model)));
       g_signal_connect (dropdown, "notify::selected",
                         G_CALLBACK (limit_changed_cb2), 
                         label);
