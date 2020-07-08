@@ -102,7 +102,7 @@ create_texture (GdkMemoryFormat  format,
                 tests[format].bytes_per_pixel);
       }
 
-  bytes = g_bytes_new_static (data, height * MAX (stride, tests[format].bytes_per_pixel));
+  bytes = g_bytes_new_take (data, height * MAX (stride, tests[format].bytes_per_pixel));
   texture = gdk_memory_texture_new (width, height,
                                     format,
                                     bytes,
