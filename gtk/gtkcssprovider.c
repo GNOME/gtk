@@ -768,7 +768,11 @@ parse_selector_list (GtkCssScanner  *scanner,
       GtkCssSelector *select = _gtk_css_selector_parse (scanner->parser);
 
       if (select == NULL)
-        return 0;
+        {
+          for (int i = 0; i < n_selectors; i++)
+            g_clear_pointer (&out_selectors[i], _gtk_css_selector_free);
+          return 0;
+        }
 
       out_selectors[n_selectors] = select;
       n_selectors++;
@@ -778,6 +782,8 @@ parse_selector_list (GtkCssScanner  *scanner,
           gtk_css_parser_error_syntax (scanner->parser,
                                        "Only %u selectors per ruleset allowed",
                                        MAX_SELECTOR_LIST_LENGTH);
+          for (int i = 0; i < MAX_SELECTOR_LIST_LENGTH; i++)
+            g_clear_pointer (&out_selectors[i], _gtk_css_selector_free);
           return 0;
         }
     }
@@ -806,10 +812,7 @@ parse_declaration (GtkCssScanner *scanner,
 
   name = gtk_css_parser_consume_ident (scanner->parser);
   if (name == NULL)
-    {
-      gtk_css_parser_end_block (scanner->parser);
-      return;
-    }
+    goto out;
 
   property = _gtk_style_property_lookup (name);
 
@@ -821,25 +824,18 @@ parse_declaration (GtkCssScanner *scanner,
       if (!gtk_css_parser_try_token (scanner->parser, GTK_CSS_TOKEN_COLON))
         {
           gtk_css_parser_error_syntax (scanner->parser, "Expected ':'");
-          g_free (name);
-          gtk_css_parser_end_block (scanner->parser);
-          return;
+          goto out;
         }
 
-      value = _gtk_style_property_parse_value (property,
-                                               scanner->parser);
+      value = _gtk_style_property_parse_value (property, scanner->parser);
 
       if (value == NULL)
-        {
-          gtk_css_parser_end_block (scanner->parser);
-          return;
-        }
+        goto out;
 
       if (!gtk_css_parser_has_token (scanner->parser, GTK_CSS_TOKEN_EOF))
         {
           gtk_css_parser_error_syntax (scanner->parser, "Junk at end of value for %s", property->name);
-          gtk_css_parser_end_block (scanner->parser);
-          return;
+          goto out;
         }
 
       if (gtk_keep_css_sections)
@@ -884,6 +880,7 @@ parse_declaration (GtkCssScanner *scanner,
       gtk_css_parser_error_value (scanner->parser, "No property named \"%s\"", name);
     }
 
+out:
   g_free (name);
 
   gtk_css_parser_end_block (scanner->parser);

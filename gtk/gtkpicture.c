@@ -284,6 +284,7 @@ gtk_picture_dispose (GObject *object)
   gtk_picture_set_paintable (self, NULL);
 
   g_clear_object (&self->file);
+  g_clear_pointer (&self->alternative_text, g_free);
 
   G_OBJECT_CLASS (gtk_picture_parent_class)->dispose (object);
 };

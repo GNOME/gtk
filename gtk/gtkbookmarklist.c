@@ -369,6 +369,8 @@ gtk_bookmark_list_start_loading (GtkBookmarkList *self)
                                    self);
           g_object_unref (file);
         }
+
+      g_strfreev (uris);
     }
   else
     {
