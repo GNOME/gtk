@@ -360,7 +360,7 @@ add_test_for_file (GFile *file)
 
   if (g_file_query_file_type (file, 0, NULL) != G_FILE_TYPE_DIRECTORY)
     {
-      g_test_add_vtable (g_file_get_path (file),
+      g_test_add_vtable (g_file_peek_path (file),
                          0,
                          g_object_ref (file),
                          NULL,

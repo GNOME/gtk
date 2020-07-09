@@ -105,13 +105,6 @@ del_pwds_parent_as_shortcut_clicked_cb (GtkWidget *button,
 }
 
 static void
-unselect_all_clicked_cb (GtkWidget *button,
-                         gpointer   user_data)
-{
-  gtk_file_chooser_unselect_all (user_data);
-}
-
-static void
 tests_button_clicked_cb (GtkButton *real_button,
 			 gpointer   user_data)
 {
@@ -148,36 +141,10 @@ tests_button_clicked_cb (GtkButton *real_button,
 			G_CALLBACK (del_pwds_parent_as_shortcut_clicked_cb), user_data);
       gtk_box_append (GTK_BOX (box), button);
 
-      button = gtk_button_new_with_label ("Unselect all");
-      g_signal_connect (button, "clicked",
-			G_CALLBACK (unselect_all_clicked_cb), user_data);
-      gtk_box_append (GTK_BOX (box), button);
-
       g_object_set_data (user_data, "tests-dialog", tests);
     }
 
   gtk_window_present (GTK_WINDOW (tests));
-}
-
-static void
-chooser_current_folder_changed_cb (GtkFileChooser *chooser,
-				   gpointer        user_data)
-{
-  GFile *folder, *filename;
-  char *folder_uri, *filename_uri;
-
-  folder = gtk_file_chooser_get_current_folder (chooser);
-  filename = gtk_file_chooser_get_file (chooser);
-
-  folder_uri = g_file_get_uri (folder);
-  filename_uri = g_file_get_uri (filename);
-  g_message ("%s::current-folder-changed\n\tFolder: `%s'\n\tFilename: `%s'\nDone.\n",
-	     G_OBJECT_TYPE_NAME (chooser), folder_uri, filename_uri);
-  g_free (folder_uri);
-  g_free (filename_uri);
-
-  g_object_unref (folder);
-  g_object_unref (filename);
 }
 
 static void
@@ -194,27 +161,6 @@ chooser_selection_changed_cb (GtkFileChooser *chooser,
 	     G_OBJECT_TYPE_NAME (chooser), uri);
   g_free (uri);
 
-  g_object_unref (filename);
-}
-
-static void
-chooser_file_activated_cb (GtkFileChooser *chooser,
-			   gpointer        user_data)
-{
-  GFile *folder, *filename;
-  char *folder_uri, *filename_uri;
-
-  folder = gtk_file_chooser_get_current_folder (chooser);
-  filename = gtk_file_chooser_get_file (chooser);
-
-  folder_uri = g_file_get_uri (folder);
-  filename_uri = g_file_get_uri (filename);
-  g_message ("%s::file-activated\n\tFolder: `%s'\n\tFilename: `%s'\nDone.\n",
-	     G_OBJECT_TYPE_NAME (chooser), folder_uri, filename_uri);
-  g_free (folder_uri);
-  g_free (filename_uri);
-
-  g_object_unref (folder);
   g_object_unref (filename);
 }
 
@@ -247,10 +193,7 @@ add_new_filechooser_button (const gchar          *mnemonic,
   g_object_unref (path);
 
   gtk_label_set_mnemonic_widget (GTK_LABEL (label), chooser);
-  g_signal_connect (chooser, "current-folder-changed",
-		    G_CALLBACK (chooser_current_folder_changed_cb), NULL);
   g_signal_connect (chooser, "selection-changed", G_CALLBACK (chooser_selection_changed_cb), NULL);
-  g_signal_connect (chooser, "file-activated", G_CALLBACK (chooser_file_activated_cb), NULL);
   gtk_box_append (GTK_BOX (hbox), chooser);
 
   button = gtk_button_new_with_label ("Tests");

@@ -39,7 +39,7 @@ static void           delegate_unselect_file          (GtkFileChooser    *choose
 						       GFile             *file);
 static void           delegate_select_all             (GtkFileChooser    *chooser);
 static void           delegate_unselect_all           (GtkFileChooser    *chooser);
-static GSList *       delegate_get_files              (GtkFileChooser    *chooser);
+static GListModel *   delegate_get_files              (GtkFileChooser    *chooser);
 static GtkFileSystem *delegate_get_file_system        (GtkFileChooser    *chooser);
 static void           delegate_add_filter             (GtkFileChooser    *chooser,
 						       GtkFileFilter     *filter);
@@ -55,12 +55,6 @@ static gboolean       delegate_remove_shortcut_folder (GtkFileChooser    *choose
 static GListModel *   delegate_get_shortcut_folders   (GtkFileChooser    *chooser);
 static void           delegate_notify                 (GObject           *object,
 						       GParamSpec        *pspec,
-						       gpointer           data);
-static void           delegate_current_folder_changed (GtkFileChooser    *chooser,
-						       gpointer           data);
-static void           delegate_selection_changed      (GtkFileChooser    *chooser,
-						       gpointer           data);
-static void           delegate_file_activated         (GtkFileChooser    *chooser,
 						       gpointer           data);
 
 static void           delegate_add_choice             (GtkFileChooser  *chooser,
@@ -168,12 +162,6 @@ _gtk_file_chooser_set_delegate (GtkFileChooser *receiver,
   g_object_set_data (G_OBJECT (receiver), I_("gtk-file-chooser-delegate"), delegate);
   g_signal_connect (delegate, "notify",
 		    G_CALLBACK (delegate_notify), receiver);
-  g_signal_connect (delegate, "current-folder-changed",
-		    G_CALLBACK (delegate_current_folder_changed), receiver);
-  g_signal_connect (delegate, "selection-changed",
-		    G_CALLBACK (delegate_selection_changed), receiver);
-  g_signal_connect (delegate, "file-activated",
-		    G_CALLBACK (delegate_file_activated), receiver);
 }
 
 GQuark
@@ -221,7 +209,7 @@ delegate_unselect_all (GtkFileChooser *chooser)
   gtk_file_chooser_unselect_all (get_delegate (chooser));
 }
 
-static GSList *
+static GListModel *
 delegate_get_files (GtkFileChooser *chooser)
 {
   return gtk_file_chooser_get_files (get_delegate (chooser));
@@ -313,27 +301,6 @@ delegate_notify (GObject    *object,
 				 gtk_file_chooser_get_type ());
   if (g_object_interface_find_property (iface, pspec->name))
     g_object_notify (data, pspec->name);
-}
-
-static void
-delegate_selection_changed (GtkFileChooser *chooser,
-			    gpointer        data)
-{
-  g_signal_emit_by_name (data, "selection-changed");
-}
-
-static void
-delegate_current_folder_changed (GtkFileChooser *chooser,
-				 gpointer        data)
-{
-  g_signal_emit_by_name (data, "current-folder-changed");
-}
-
-static void
-delegate_file_activated (GtkFileChooser    *chooser,
-			 gpointer           data)
-{
-  g_signal_emit_by_name (data, "file-activated");
 }
 
 GSettings *

@@ -479,7 +479,7 @@ static void           gtk_file_chooser_widget_unselect_file                (GtkF
                                                                             GFile             *file);
 static void           gtk_file_chooser_widget_select_all                   (GtkFileChooser    *chooser);
 static void           gtk_file_chooser_widget_unselect_all                 (GtkFileChooser    *chooser);
-static GSList *       gtk_file_chooser_widget_get_files                    (GtkFileChooser    *chooser);
+static GListModel *   gtk_file_chooser_widget_get_files                    (GtkFileChooser    *chooser);
 static GtkFileSystem *gtk_file_chooser_widget_get_file_system              (GtkFileChooser    *chooser);
 static void           gtk_file_chooser_widget_add_filter                   (GtkFileChooser    *chooser,
                                                                             GtkFileFilter     *filter);
@@ -2220,14 +2220,66 @@ set_icon_cell_renderer_fixed_size (GtkFileChooserWidget *impl)
                                     ypad * 2 + ICON_SIZE);
 }
 
+static GtkWidget *
+get_accept_action_widget (GtkDialog *dialog,
+                          gboolean   sensitive_only)
+{
+  gint response[] = {
+    GTK_RESPONSE_ACCEPT,
+    GTK_RESPONSE_OK,
+    GTK_RESPONSE_YES,
+    GTK_RESPONSE_APPLY
+  };
+  gint i;
+  GtkWidget *widget;
+
+  for (i = 0; i < G_N_ELEMENTS (response); i++)
+    {
+      widget = gtk_dialog_get_widget_for_response (dialog, response[i]);
+      if (widget)
+        {
+          if (!sensitive_only)
+            return widget;
+
+          if (gtk_widget_is_sensitive (widget))
+            return widget;
+        }
+    }
+
+  return NULL;
+}
+
+static void
+update_default (GtkFileChooserWidget *impl)
+{
+  GtkWidget *dialog;
+  GtkWidget *button;
+  GListModel *files;
+  gboolean sensitive;
+
+  dialog = gtk_widget_get_ancestor (GTK_WIDGET (impl), GTK_TYPE_DIALOG);
+  if (dialog == NULL)
+    return;
+
+  button = get_accept_action_widget (GTK_DIALOG (dialog), FALSE);
+  if (button == NULL)
+    return;
+
+  files = gtk_file_chooser_get_files (GTK_FILE_CHOOSER (impl));
+  sensitive = (g_list_model_get_n_items (files) > 0);
+  gtk_widget_set_sensitive (button, sensitive);
+
+  g_object_unref (files);
+}
+
 static gboolean
 location_changed_timeout_cb (gpointer user_data)
 {
   GtkFileChooserWidget *impl = user_data;
 
   gtk_file_chooser_unselect_all (GTK_FILE_CHOOSER (impl));
-  g_signal_emit_by_name (impl, "selection-changed", 0);
 
+  update_default (impl);
   impl->location_changed_id = 0;
 
   return G_SOURCE_REMOVE;
@@ -5084,9 +5136,7 @@ update_current_folder_get_info_cb (GCancellable *cancellable,
 
   g_object_notify (G_OBJECT (impl), "subtitle");
 
-  g_signal_emit_by_name (impl, "current-folder-changed", 0);
-
-  g_signal_emit_by_name (impl, "selection-changed", 0);
+  update_default (impl);
 
 out:
   g_object_unref (data->impl);
@@ -5408,7 +5458,7 @@ check_save_entry (GtkFileChooserWidget  *impl,
 
 struct get_files_closure {
   GtkFileChooserWidget *impl;
-  GSList *result;
+  GListStore *result;
   GFile *file_from_entry;
 };
 
@@ -5425,10 +5475,25 @@ get_files_foreach (GtkTreeModel *model,
   file = _gtk_file_system_model_get_file (fs_model, iter);
 
   if (!info->file_from_entry || !g_file_equal (info->file_from_entry, file))
-    info->result = g_slist_prepend (info->result, g_object_ref (file));
+    g_list_store_append (info->result, file);
 }
 
-static GSList *
+static GListModel *
+get_selected_files_as_model (GtkFileChooserWidget *impl)
+{
+  GListStore *store;
+  GSList *files, *l;
+
+  store = g_list_store_new (G_TYPE_FILE);
+  files = get_selected_files (impl);
+  for (l = files; l; l = l->next)
+    g_list_store_append (store, l->data);
+  g_slist_free_full (files, g_object_unref);
+
+  return G_LIST_MODEL (store);
+}
+
+static GListModel *
 gtk_file_chooser_widget_get_files (GtkFileChooser *chooser)
 {
   GtkFileChooserWidget *impl = GTK_FILE_CHOOSER_WIDGET (chooser);
@@ -5437,12 +5502,8 @@ gtk_file_chooser_widget_get_files (GtkFileChooser *chooser)
   GtkWidget *current_focus;
   gboolean file_list_seen;
 
-  info.impl = impl;
-  info.result = NULL;
-  info.file_from_entry = NULL;
-
   if (impl->operation_mode == OPERATION_MODE_SEARCH)
-    return get_selected_files (impl);
+    return get_selected_files_as_model (impl);
 
   if (impl->operation_mode == OPERATION_MODE_RECENT)
     {
@@ -5452,8 +5513,12 @@ gtk_file_chooser_widget_get_files (GtkFileChooser *chooser)
           goto file_entry;
         }
       else
-        return get_selected_files (impl);
+        return get_selected_files_as_model (impl);
     }
+
+  info.impl = impl;
+  info.result = g_list_store_new (G_TYPE_FILE);
+  info.file_from_entry = NULL;
 
   toplevel = get_toplevel (GTK_WIDGET (impl));
   if (toplevel)
@@ -5498,7 +5563,7 @@ gtk_file_chooser_widget_get_files (GtkFileChooser *chooser)
         return NULL;
 
       if (info.file_from_entry)
-        info.result = g_slist_prepend (info.result, info.file_from_entry);
+        g_list_store_append (info.result, info.file_from_entry);
       else if (!file_list_seen)
         goto file_list;
       else
@@ -5530,10 +5595,10 @@ gtk_file_chooser_widget_get_files (GtkFileChooser *chooser)
       current_folder = gtk_file_chooser_get_current_folder (chooser);
 
       if (current_folder)
-        info.result = g_slist_prepend (info.result, current_folder);
+        g_list_store_append (info.result, current_folder);
     }
 
-  return g_slist_reverse (info.result);
+  return G_LIST_MODEL (info.result);
 }
 
 static GtkFileSystem *
@@ -6143,18 +6208,18 @@ location_popup_on_paste_handler (GtkFileChooserWidget *impl)
 static void
 add_selection_to_recent_list (GtkFileChooserWidget *impl)
 {
-  GSList *files;
-  GSList *l;
+  GListModel *files;
+  guint i, n;
 
   files = gtk_file_chooser_widget_get_files (GTK_FILE_CHOOSER (impl));
-
 
   if (!impl->recent_manager)
     impl->recent_manager = gtk_recent_manager_get_default ();
 
-  for (l = files; l; l = l->next)
+  n = g_list_model_get_n_items (files);
+  for (i = 0; i < n; i++)
     {
-      GFile *file = l->data;
+      GFile *file = g_list_model_get_item (files, i);
       char *uri;
 
       uri = g_file_get_uri (file);
@@ -6163,9 +6228,11 @@ add_selection_to_recent_list (GtkFileChooserWidget *impl)
           gtk_recent_manager_add_item (impl->recent_manager, uri);
           g_free (uri);
         }
+
+      g_object_unref (file);
     }
 
-  g_slist_free_full (files, g_object_unref);
+  g_object_unref (files);
 }
 
 static gboolean
@@ -6989,8 +7056,7 @@ list_selection_changed (GtkTreeSelection     *selection,
     update_chooser_entry (impl);
 
   location_bar_update (impl);
-
-  g_signal_emit_by_name (impl, "selection-changed", 0);
+  update_default (impl);
 }
 
 static gboolean
@@ -7042,7 +7108,7 @@ list_row_activated (GtkTreeView          *tree_view,
 
   if (impl->action == GTK_FILE_CHOOSER_ACTION_OPEN ||
       impl->action == GTK_FILE_CHOOSER_ACTION_SAVE)
-    g_signal_emit_by_name (impl, "file-activated");
+    gtk_widget_activate_default (GTK_WIDGET (impl));
 
  out:
 

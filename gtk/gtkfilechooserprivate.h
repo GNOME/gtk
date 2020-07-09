@@ -72,7 +72,7 @@ struct _GtkFileChooserIface
                                             GFile             *file);
   void           (*select_all)             (GtkFileChooser    *chooser);
   void           (*unselect_all)           (GtkFileChooser    *chooser);
-  GSList *       (*get_files)              (GtkFileChooser    *chooser);
+  GListModel *   (*get_files)              (GtkFileChooser    *chooser);
   GtkFileSystem *(*get_file_system)        (GtkFileChooser    *chooser);
   void           (*add_filter)             (GtkFileChooser    *chooser,
                                             GtkFileFilter     *filter);
@@ -111,6 +111,13 @@ struct _GtkFileChooserIface
 
 GtkFileSystem *_gtk_file_chooser_get_file_system         (GtkFileChooser    *chooser);
 
+void     gtk_file_chooser_select_all         (GtkFileChooser *chooser);
+void     gtk_file_chooser_unselect_all       (GtkFileChooser *chooser);
+gboolean gtk_file_chooser_select_file             (GtkFileChooser  *chooser,
+                                                   GFile           *file,
+                                                   GError         **error);
+void     gtk_file_chooser_unselect_file           (GtkFileChooser  *chooser,
+                                                   GFile           *file);
 G_END_DECLS
 
 #endif /* __GTK_FILE_CHOOSER_PRIVATE_H__ */

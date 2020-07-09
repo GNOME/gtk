@@ -42,40 +42,23 @@ static GtkWidget *preview_image;
 static GtkFileChooserAction action;
 
 static void
-print_current_folder (GtkFileChooser *chooser)
-{
-  GFile *cwd;
-
-  cwd = gtk_file_chooser_get_current_folder (chooser);
-  if (cwd != NULL)
-    {
-      char *uri = g_file_get_uri (cwd);
-      g_print ("Current folder changed :\n  %s\n", uri ? uri : "(null)");
-      g_free (uri);
-      g_object_unref (cwd);
-    }
-  else
-    {
-      g_print ("Current folder changed :\n  none\n");
-    }
-}
-
-static void
 print_selected (GtkFileChooser *chooser)
 {
-  GSList *uris = gtk_file_chooser_get_files (chooser);
-  GSList *tmp_list;
+  GListModel *files = gtk_file_chooser_get_files (chooser);
+  guint i, n;
 
   g_print ("Selection changed :\n");
-  for (tmp_list = uris; tmp_list; tmp_list = tmp_list->next)
+  n = g_list_model_get_n_items (files);
+  for (i = 0; i < n; i++)
     {
-      GFile *file = tmp_list->data;
+      GFile *file = g_list_model_get_item (files, i);
       char *uri = g_file_get_uri (file);
       g_print ("  %s\n", uri ? uri : "(null)");
       g_free (uri);
+      g_object_unref (files);
     }
   g_print ("\n");
-  g_slist_free_full (uris, g_object_unref);
+  g_object_unref (files);
 }
 
 static void
@@ -87,28 +70,23 @@ response_cb (GtkDialog *dialog,
 
   if (response_id == GTK_RESPONSE_OK)
     {
-      GSList *list;
+      GListModel *files;
+      guint i, n;
 
-      list = gtk_file_chooser_get_files (GTK_FILE_CHOOSER (dialog));
+      files = gtk_file_chooser_get_files (GTK_FILE_CHOOSER (dialog));
+      n = g_list_model_get_n_items (files);
 
-      if (list)
-	{
-	  GSList *l;
+      g_print ("Selected files:\n");
+      for (i = 0; i < n; i++)
+        {
+          GFile *file = g_list_model_get_item (files, i);
+          char *uri = g_file_get_uri (file);
+          g_print ("  %s\n", uri ? uri : "(null)");
+          g_free (uri);
+          g_object_unref (file);
+        }
 
-	  g_print ("Selected files:\n");
-
-	  for (l = list; l; l = l->next)
-	    {
-              GFile *file = l->data;
-              char *uri = g_file_get_uri (file);
-	      g_print ("  %s\n", uri ? uri : "(null)");
-	      g_free (uri);
-	    }
-
-	  g_slist_free_full (list, g_object_unref);
-	}
-      else
-	g_print ("No selected files\n");
+      g_object_unref (files);
     }
   else
     g_print ("Dialog was closed\n");
@@ -208,33 +186,24 @@ static void
 get_selection_cb (GtkButton      *button,
 		  GtkFileChooser *chooser)
 {
-  GSList *selection;
+  GListModel *selection;
+  guint i, n;
 
   selection = gtk_file_chooser_get_files (chooser);
+  n = g_list_model_get_n_items (selection);
 
   g_print ("Selection: ");
 
-  if (selection == NULL)
-    g_print ("empty\n");
-  else
+  for (i = 0; i < n; i++)
     {
-      GSList *l;
-      
-      for (l = selection; l; l = l->next)
-	{
-          GFile *file = l->data;
-	  char *uri = g_file_get_uri (file);
-
-	  g_print ("%s\n", uri);
-
-          g_free (uri);
-
-	  if (l->next)
-	    g_print ("           ");
-	}
+      GFile *file = g_list_model_get_item (selection, i);
+      char *uri = g_file_get_uri (file);
+      g_print ("%s\n", uri);
+      g_free (uri);
+      g_object_unref (file);
     }
 
-  g_slist_free_full (selection, g_object_unref);
+  g_object_unref (selection);
 }
 
 static void
@@ -260,18 +229,6 @@ static void
 kill_dependent (GtkWindow *win, GtkWidget *dep)
 {
   gtk_window_destroy (GTK_WINDOW (dep));
-}
-
-static void
-notify_multiple_cb (GtkWidget  *dialog,
-		    GParamSpec *pspec,
-		    GtkWidget  *button)
-{
-  gboolean multiple;
-
-  multiple = gtk_file_chooser_get_select_multiple (GTK_FILE_CHOOSER (dialog));
-
-  gtk_widget_set_sensitive (button, multiple);
 }
 
 int
@@ -369,8 +326,6 @@ main (int argc, char **argv)
 
   g_signal_connect (dialog, "selection-changed",
 		    G_CALLBACK (print_selected), NULL);
-  g_signal_connect (dialog, "current-folder-changed",
-		    G_CALLBACK (print_current_folder), NULL);
   g_signal_connect (dialog, "response",
 		    G_CALLBACK (response_cb), &done);
 
@@ -442,19 +397,6 @@ main (int argc, char **argv)
 
   vbbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
   gtk_window_set_child (GTK_WINDOW (control_window), vbbox);
-
-  button = gtk_button_new_with_mnemonic ("_Select all");
-  gtk_widget_set_sensitive (button, multiple);
-  gtk_box_append (GTK_BOX (vbbox), button);
-  g_signal_connect_swapped (button, "clicked",
-			    G_CALLBACK (gtk_file_chooser_select_all), dialog);
-  g_signal_connect (dialog, "notify::select-multiple",
-		    G_CALLBACK (notify_multiple_cb), button);
-
-  button = gtk_button_new_with_mnemonic ("_Unselect all");
-  gtk_box_append (GTK_BOX (vbbox), button);
-  g_signal_connect_swapped (button, "clicked",
-			    G_CALLBACK (gtk_file_chooser_unselect_all), dialog);
 
   button = gtk_button_new_with_label ("set_current_folder (\"/nonexistent\")");
   gtk_box_append (GTK_BOX (vbbox), button);

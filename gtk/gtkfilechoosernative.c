@@ -158,21 +158,8 @@
  * possible to use with #GtkFileChooserNative, as such use would
  * prohibit the use of a native dialog.
  *
- * There is no support for the signals that are emitted when the user
- * navigates in the dialog, including:
- * * #GtkFileChooser::current-folder-changed
- * * #GtkFileChooser::selection-changed
- * * #GtkFileChooser::file-activated
- *
- * You can also not use the methods that directly control user navigation:
- * * gtk_file_chooser_unselect_filename()
- * * gtk_file_chooser_select_all()
- * * gtk_file_chooser_unselect_all()
- *
- * If you need any of the above you will have to use #GtkFileChooserDialog directly.
- *
- * No operations that change the dialog work while the dialog is visible. Set
- * all the properties that are required before showing the dialog.
+ * No operations that change the dialog work while the dialog is visible.
+ * Set all the properties that are required before showing the dialog.
  *
  * ## Win32 details ## {#gtkfilechooserdialognative-win32}
  *
@@ -180,7 +167,7 @@
  * used. It supports many of the features that #GtkFileChooserDialog
  * does, but there are some things it does not handle:
  *
- * * Any #GtkFileFilter added using a mimetype or custom filter.
+ * * Any #GtkFileFilter added using a mimetype
  *
  * If any of these features are used the regular #GtkFileChooserDialog
  * will be used in place of the native one.
@@ -190,18 +177,13 @@
  * When the org.freedesktop.portal.FileChooser portal is available on the
  * session bus, it is used to bring up an out-of-process file chooser. Depending
  * on the kind of session the application is running in, this may or may not
- * be a GTK+ file chooser. In this situation, the following things are not
- * supported and will be silently ignored:
- *
- * * Any #GtkFileFilter added with a custom filter.
+ * be a GTK file chooser.
  *
  * ## macOS details ## {#gtkfilechooserdialognative-macos}
  *
  * On macOS the NSSavePanel and NSOpenPanel classes are used to provide native
  * file chooser dialogs. Some features provided by #GtkFileChooserDialog are
  * not supported:
- *
- * * Any #GtkFileFilter added with a custom filter.
  *
  * * Shortcut folders.
  */
@@ -683,7 +665,7 @@ gtk_file_chooser_native_set_current_name (GtkFileChooser    *chooser,
   g_clear_object (&self->current_file);
 }
 
-static GSList *
+static GListModel *
 gtk_file_chooser_native_get_files (GtkFileChooser *chooser)
 {
   GtkFileChooserNative *self = GTK_FILE_CHOOSER_NATIVE (chooser);
@@ -693,7 +675,16 @@ gtk_file_chooser_native_get_files (GtkFileChooser *chooser)
     case MODE_PORTAL:
     case MODE_WIN32:
     case MODE_QUARTZ:
-      return g_slist_copy_deep (self->custom_files, (GCopyFunc)g_object_ref, NULL);
+      {
+        GListStore *store;
+        GSList *l;
+
+        store = g_list_store_new (G_TYPE_FILE);
+        for (l = self->custom_files; l; l = l->next)
+          g_list_store_append (store, l->data);
+
+        return G_LIST_MODEL (store);
+      }
 
     case MODE_FALLBACK:
     default:
