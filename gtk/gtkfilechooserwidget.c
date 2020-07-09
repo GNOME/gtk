@@ -7059,7 +7059,7 @@ list_row_activated (GtkTreeView          *tree_view,
 
   if (impl->action == GTK_FILE_CHOOSER_ACTION_OPEN ||
       impl->action == GTK_FILE_CHOOSER_ACTION_SAVE)
-    g_signal_emit_by_name (impl, "file-activated");
+    gtk_widget_activate_default (GTK_WIDGET (impl));
 
  out:
 

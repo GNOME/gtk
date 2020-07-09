@@ -60,8 +60,6 @@ static void           delegate_current_folder_changed (GtkFileChooser    *choose
 						       gpointer           data);
 static void           delegate_selection_changed      (GtkFileChooser    *chooser,
 						       gpointer           data);
-static void           delegate_file_activated         (GtkFileChooser    *chooser,
-						       gpointer           data);
 
 static void           delegate_add_choice             (GtkFileChooser  *chooser,
                                                        const char      *id,
@@ -172,8 +170,6 @@ _gtk_file_chooser_set_delegate (GtkFileChooser *receiver,
 		    G_CALLBACK (delegate_current_folder_changed), receiver);
   g_signal_connect (delegate, "selection-changed",
 		    G_CALLBACK (delegate_selection_changed), receiver);
-  g_signal_connect (delegate, "file-activated",
-		    G_CALLBACK (delegate_file_activated), receiver);
 }
 
 GQuark
@@ -327,13 +323,6 @@ delegate_current_folder_changed (GtkFileChooser *chooser,
 				 gpointer        data)
 {
   g_signal_emit_by_name (data, "current-folder-changed");
-}
-
-static void
-delegate_file_activated (GtkFileChooser    *chooser,
-			 gpointer           data)
-{
-  g_signal_emit_by_name (data, "file-activated");
 }
 
 GSettings *

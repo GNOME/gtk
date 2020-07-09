@@ -126,28 +126,6 @@ gtk_file_chooser_default_init (GtkFileChooserInterface *iface)
                 NULL,
                 G_TYPE_NONE, 0);
 
-  /**
-   * GtkFileChooser::file-activated:
-   * @chooser: the object which received the signal.
-   *
-   * This signal is emitted when the user "activates" a file in the file
-   * chooser.  This can happen by double-clicking on a file in the file list, or
-   * by pressing `Enter`.
-   *
-   * Normally you do not need to connect to this signal.  It is used internally
-   * by #GtkFileChooserDialog to know when to activate the default button in the
-   * dialog.
-   *
-   * See also: gtk_file_chooser_get_file(), gtk_file_chooser_get_files()
-   */
-  g_signal_new (I_("file-activated"),
-                iface_type,
-                G_SIGNAL_RUN_LAST,
-                G_STRUCT_OFFSET (GtkFileChooserIface, file_activated),
-                NULL, NULL,
-                NULL,
-                G_TYPE_NONE, 0);
-
   g_object_interface_install_property (iface,
                                        g_param_spec_enum ("action",
                                                           P_("Action"),

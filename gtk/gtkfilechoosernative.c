@@ -162,7 +162,6 @@
  * navigates in the dialog, including:
  * * #GtkFileChooser::current-folder-changed
  * * #GtkFileChooser::selection-changed
- * * #GtkFileChooser::file-activated
  *
  * You can also not use the methods that directly control user navigation:
  * * gtk_file_chooser_unselect_filename()

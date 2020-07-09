@@ -20,7 +20,6 @@
           <object class="GtkFileChooserWidget" id="widget">
             <property name="hexpand">1</property>
             <property name="vexpand">1</property>
-            <signal name="file-activated" handler="file_chooser_widget_file_activated" swapped="no"/>
             <signal name="response-requested" handler="file_chooser_widget_response_requested" swapped="no"/>
             <signal name="selection-changed" handler="file_chooser_widget_selection_changed" swapped="no"/>
           </object>
