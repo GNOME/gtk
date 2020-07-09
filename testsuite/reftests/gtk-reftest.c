@@ -78,6 +78,7 @@ parse_command_line (int *argc, char ***argv)
       g_print ("option parsing failed: %s\n", error->message);
       return FALSE;
     }
+  g_option_context_free (context);
 
   for (i = 0; i < *argc; i++)
     {
@@ -325,6 +326,8 @@ test_ui_file (GFile *file)
     }
 
   remove_extra_css (provider);
+
+  g_free (ui_file);
 }
 
 static int

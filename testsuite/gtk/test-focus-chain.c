@@ -304,6 +304,7 @@ main (int argc, char **argv)
       g_error ("Option parsing failed: %s\n", error->message);
       return 1;
     }
+  g_option_context_free (context);
 
   gtk_init ();
 

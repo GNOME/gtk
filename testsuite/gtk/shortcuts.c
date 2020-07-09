@@ -354,6 +354,8 @@ test_trigger_trigger (void)
         }
 
       gdk_event_unref (event);
+
+      g_free (keys);
     }
 
   gdk_surface_destroy (surface);

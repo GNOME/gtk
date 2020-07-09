@@ -1360,6 +1360,7 @@ check_buffer_contents (GtkTextBuffer *buffer,
   gtk_text_buffer_get_end_iter (buffer, &end);
   buffer_contents = gtk_text_buffer_get_text (buffer, &start, &end, FALSE);
   g_assert_cmpstr (buffer_contents, ==, contents);
+  g_free (buffer_contents);
 }
 
 static void

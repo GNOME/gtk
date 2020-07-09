@@ -570,8 +570,9 @@ got_existing_file_info_cb (GObject      *source,
 
   g_file_info_set_attribute_object (info, "standard::file", G_OBJECT (file));
 
-  iter = g_sequence_get_begin_iter (self->items);
-  while (!g_sequence_iter_is_end (iter))
+  for (iter = g_sequence_get_begin_iter (self->items);
+       !g_sequence_iter_is_end (iter);
+       iter = g_sequence_iter_next (iter))
     {
       GFileInfo *item = g_sequence_get (iter);
       GFile *f = G_FILE (g_file_info_get_attribute_object (item, "standard::file"));
@@ -591,8 +592,9 @@ gtk_directory_list_remove_file (GtkDirectoryList *self,
 {
   GSequenceIter *iter;
 
-  iter = g_sequence_get_begin_iter (self->items);
-  while (!g_sequence_iter_is_end (iter))
+  for (iter = g_sequence_get_begin_iter (self->items);
+       !g_sequence_iter_is_end (iter);
+       iter = g_sequence_iter_next (iter))
     {
       GFileInfo *item = g_sequence_get (iter);
       GFile *f = G_FILE (g_file_info_get_attribute_object (item, "standard::file"));

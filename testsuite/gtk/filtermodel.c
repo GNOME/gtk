@@ -5971,6 +5971,7 @@ specific_bug_346800 (void)
   columns[1] = G_TYPE_BOOLEAN;
   store = gtk_tree_store_newv (2, columns);
   model = GTK_TREE_MODEL (store);
+  GList *junk = NULL;
 
   /*http://bugzilla.gnome.org/show_bug.cgi?id=346800 */
 
@@ -5981,14 +5982,14 @@ specific_bug_346800 (void)
     {
       /* allocate random amounts of junk, otherwise the filter model's arrays can expand without moving */
 
-      g_malloc (138);
+      junk = g_list_append (junk, g_malloc (138));
       gtk_tree_store_append (store, &node_iters[i], NULL);
       gtk_tree_store_set (store, &node_iters[i],
                           0, "something",
                           1, ((i%6) == 0) ? FALSE : TRUE,
                           -1);
 
-      g_malloc (47);
+      junk = g_list_append (junk, g_malloc (47));
       gtk_tree_store_append (store, &child_iters[i], &node_iters[i]);
       gtk_tree_store_set (store, &child_iters[i],
                           0, "something else",
@@ -6007,6 +6008,8 @@ specific_bug_346800 (void)
           gtk_tree_model_filter_refilter (filter);
         }
     }
+
+  g_list_free_full (junk, g_free);
 }
 
 static gboolean

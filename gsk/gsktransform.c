@@ -123,7 +123,8 @@ gsk_transform_alloc (const GskTransformClass *transform_class,
 
   self->transform_class = transform_class;
   self->category = next ? MIN (category, next->category) : category;
-  self->next = gsk_transform_is_identity (next) ? NULL : next;
+  self->next = gsk_transform_is_identity (next) ? NULL : gsk_transform_ref (next);
+  g_clear_pointer (&next, gsk_transform_unref);
 
   return self;
 }
