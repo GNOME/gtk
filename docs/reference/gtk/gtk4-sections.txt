@@ -1316,7 +1316,7 @@ gtk_file_chooser_get_filter
 <SUBSECTION>
 gtk_file_chooser_add_shortcut_folder
 gtk_file_chooser_remove_shortcut_folder
-gtk_file_chooser_list_shortcut_folders
+gtk_file_chooser_get_shortcut_folders
 <SUBSECTION>
 gtk_file_chooser_add_choice
 gtk_file_chooser_remove_choice
