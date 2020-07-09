@@ -88,6 +88,11 @@ add (GListStore *store,
   g_string_set_size (changes, 0); \
 }G_STMT_END
 
+#define ignore_changes(model) G_STMT_START{ \
+  GString *changes = g_object_get_qdata (G_OBJECT (model), changes_quark); \
+  g_string_set_size (changes, 0); \
+}G_STMT_END
+
 static GListStore *
 new_empty_store (void)
 {
@@ -345,6 +350,33 @@ test_change_filter (void)
   g_object_unref (filter);
 }
 
+static void
+test_incremental (void)
+{
+  GtkFilterListModel *filter;
+  GtkFilter *custom;
+  
+  /* everything is filtered */
+  filter = new_model (1000, is_larger_than, GUINT_TO_POINTER (10000));
+  gtk_filter_list_model_set_incremental (filter, TRUE);
+  assert_model (filter, "");
+  assert_changes (filter, "");
+
+  custom = gtk_custom_filter_new (is_near, GUINT_TO_POINTER (512), NULL);
+  gtk_filter_list_model_set_filter (filter, custom);
+  g_object_unref (custom);
+  assert_model (filter, "");
+  assert_changes (filter, "");
+
+  while (g_main_context_pending (NULL))
+    g_main_context_iteration (NULL, TRUE);
+  assert_model (filter, "510 511 512 513 514");
+  /* implementation detail */
+  ignore_changes (filter);
+
+  g_object_unref (filter);
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -357,6 +389,7 @@ main (int argc, char *argv[])
   g_test_add_func ("/filterlistmodel/create", test_create);
   g_test_add_func ("/filterlistmodel/empty_set_filter", test_empty_set_filter);
   g_test_add_func ("/filterlistmodel/change_filter", test_change_filter);
+  g_test_add_func ("/filterlistmodel/incremental", test_incremental);
 
   return g_test_run ();
 }
