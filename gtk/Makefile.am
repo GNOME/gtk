@@ -1421,10 +1421,10 @@ resource_files = $(shell $(GLIB_COMPILE_RESOURCES) --sourcedir=$(srcdir) --gener
 
 gtkresources.h: gtk.gresource.xml
 	$(AM_V_GEN) $(GLIB_COMPILE_RESOURCES) $< \
-		--target=$@ --sourcedir=$(srcdir) --c-name _gtk --generate-header --manual-register
+		--target=$@ --sourcedir=$(srcdir) --c-name _gtk --generate-header --manual-register --internal
 gtkresources.c: gtk.gresource.xml $(resource_files)
 	$(AM_V_GEN) $(GLIB_COMPILE_RESOURCES) $< \
-		--target=$@ --sourcedir=$(srcdir) --c-name _gtk --generate-source --manual-register
+		--target=$@ --sourcedir=$(srcdir) --c-name _gtk --generate-source --manual-register --internal
 
 gtkprivatetypebuiltins.h: stamp-gtkprivatetypebuiltins.h
 	@true
