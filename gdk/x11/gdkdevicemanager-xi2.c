@@ -1874,6 +1874,7 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
     case XI_Leave:
       {
         XIEnterEvent *xev = (XIEnterEvent *) ev;
+        GdkModifierType state;
 
         GDK_DISPLAY_NOTE (display, EVENTS,
                   g_message ("%s notify:\twindow %ld\n\tsubwindow:%ld\n"
@@ -1889,6 +1890,18 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
 
         source_device = g_hash_table_lookup (device_manager->id_table,
                                              GUINT_TO_POINTER (xev->sourceid));
+
+        state = _gdk_x11_device_xi2_translate_state (&xev->mods, &xev->buttons, &xev->group);
+
+        /* Ignore normal crossing events while there is an implicit grab.
+         * We will receive a crossing event with one of the other details if
+         * the implicit grab were finished (eg. releasing the button outside
+         * the window triggers a XINotifyUngrab leave).
+         */
+        if (xev->mode == XINotifyNormal &&
+            (state & (GDK_BUTTON1_MASK | GDK_BUTTON2_MASK | GDK_BUTTON3_MASK |
+                      GDK_BUTTON4_MASK | GDK_BUTTON5_MASK)))
+          break;
 
         if (ev->evtype == XI_Enter &&
             xev->detail != XINotifyInferior && xev->mode != XINotifyPassiveUngrab &&
@@ -1916,12 +1929,11 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
                                         device,
                                         source_device,
                                         xev->time,
-                                        _gdk_x11_device_xi2_translate_state (&xev->mods, &xev->buttons, &xev->group),
+                                        state,
                                         (double) xev->event_x / scale,
                                         (double) xev->event_y / scale,
                                         translate_crossing_mode (xev->mode),
                                         translate_notify_type (xev->detail));
-           
       }
       break;
     case XI_FocusIn:
