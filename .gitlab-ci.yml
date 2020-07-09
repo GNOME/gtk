@@ -180,6 +180,22 @@ static-scan:
       - _scan_build/meson-logs
   allow_failure: true
 
+# Run tests with the address sanitizer. We need to turn off introspection,
+# since it is incompatible with asan
+asan-build:
+  image: $FEDORA_IMAGE
+  tags: [ privileged ]
+  stage: analysis
+  variables:
+  script:
+    - CC=clang meson --buildtype=debugoptimized -Db_sanitize=address -Db_lundef=false -Dintrospection=false _build
+            _build
+    - ninja -C _build
+    - .gitlab-ci/run-tests.sh _build wayland
+  artifacts:
+    paths:
+      - _build/meson-logs
+
 reference:
   image: $DOCS_IMAGE
   stage: docs
