@@ -91,17 +91,17 @@ GQuark gtk_file_chooser_error_quark (void);
  */
 GDK_AVAILABLE_IN_ALL
 void                 gtk_file_chooser_set_action          (GtkFileChooser       *chooser,
-							   GtkFileChooserAction  action);
+                                                           GtkFileChooserAction  action);
 GDK_AVAILABLE_IN_ALL
 GtkFileChooserAction gtk_file_chooser_get_action          (GtkFileChooser       *chooser);
 GDK_AVAILABLE_IN_ALL
 void                 gtk_file_chooser_set_select_multiple (GtkFileChooser       *chooser,
-							   gboolean              select_multiple);
+                                                           gboolean              select_multiple);
 GDK_AVAILABLE_IN_ALL
 gboolean             gtk_file_chooser_get_select_multiple (GtkFileChooser       *chooser);
 GDK_AVAILABLE_IN_ALL
 void                 gtk_file_chooser_set_create_folders  (GtkFileChooser       *chooser,
-							  gboolean               create_folders);
+                                                          gboolean               create_folders);
 GDK_AVAILABLE_IN_ALL
 gboolean             gtk_file_chooser_get_create_folders (GtkFileChooser *chooser);
 
@@ -109,7 +109,7 @@ gboolean             gtk_file_chooser_get_create_folders (GtkFileChooser *choose
  */
 GDK_AVAILABLE_IN_ALL
 void        gtk_file_chooser_set_current_name  (GtkFileChooser *chooser,
-					        const gchar    *name);
+                                                const gchar    *name);
 GDK_AVAILABLE_IN_ALL
 gchar *gtk_file_chooser_get_current_name (GtkFileChooser *chooser);
 
@@ -120,13 +120,6 @@ GDK_AVAILABLE_IN_ALL
 gboolean gtk_file_chooser_set_file                (GtkFileChooser  *chooser,
                                                    GFile           *file,
                                                    GError         **error);
-GDK_AVAILABLE_IN_ALL
-gboolean gtk_file_chooser_select_file             (GtkFileChooser  *chooser,
-                                                   GFile           *file,
-                                                   GError         **error);
-GDK_AVAILABLE_IN_ALL
-void     gtk_file_chooser_unselect_file           (GtkFileChooser  *chooser,
-                                                   GFile           *file);
 GDK_AVAILABLE_IN_ALL
 GSList * gtk_file_chooser_get_files               (GtkFileChooser  *chooser);
 GDK_AVAILABLE_IN_ALL

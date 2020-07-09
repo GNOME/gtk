@@ -113,7 +113,11 @@ GtkFileSystem *_gtk_file_chooser_get_file_system         (GtkFileChooser    *cho
 
 void     gtk_file_chooser_select_all         (GtkFileChooser *chooser);
 void     gtk_file_chooser_unselect_all       (GtkFileChooser *chooser);
-
+gboolean gtk_file_chooser_select_file             (GtkFileChooser  *chooser,
+                                                   GFile           *file,
+                                                   GError         **error);
+void     gtk_file_chooser_unselect_file           (GtkFileChooser  *chooser,
+                                                   GFile           *file);
 G_END_DECLS
 
 #endif /* __GTK_FILE_CHOOSER_PRIVATE_H__ */

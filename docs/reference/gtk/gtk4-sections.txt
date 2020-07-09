@@ -1300,8 +1300,6 @@ gtk_file_chooser_get_current_name
 <SUBSECTION>
 gtk_file_chooser_get_file
 gtk_file_chooser_set_file
-gtk_file_chooser_select_file
-gtk_file_chooser_unselect_file
 gtk_file_chooser_get_files
 gtk_file_chooser_set_current_folder
 gtk_file_chooser_get_current_folder
