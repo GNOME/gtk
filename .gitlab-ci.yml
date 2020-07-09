@@ -180,6 +180,20 @@ static-scan:
       - _scan_build/meson-logs
   allow_failure: true
 
+# Run tests with the address sanitizer. We need to turn off introspection,
+# since it is incompatible with asan
+asan-build:
+  extends: .build-fedora-default
+  tags: [ privileged ]
+  stage: analysis
+  variables:
+    EXTRA_MESON_FLAGS: "--buildtype=debugoptimized -Db_sanitize=address -Db_lundef=false -Dintrospection=false"
+  script:
+    - CC=clang meson ${COMMON_MESON_FLAGS} ${EXTRA_MESON_FLAGS} ${BACKEND_FLAGS} ${FEATURE_FLAGS}
+            _build
+    - ninja -C _build
+    - .gitlab-ci/run-tests.sh _build wayland
+
 reference:
   image: $DOCS_IMAGE
   stage: docs
