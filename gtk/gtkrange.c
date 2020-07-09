@@ -567,14 +567,14 @@ gtk_range_init (GtkRange *range)
   g_signal_connect (gesture, "released",
                     G_CALLBACK (gtk_range_click_gesture_released), range);
   gtk_widget_add_controller (GTK_WIDGET (range), GTK_EVENT_CONTROLLER (gesture));
-  gtk_gesture_group (priv->drag_gesture, gesture);
+  gtk_gesture_group (gesture, priv->drag_gesture);
 
   gesture = gtk_gesture_long_press_new ();
   gtk_gesture_long_press_set_delay_factor (GTK_GESTURE_LONG_PRESS (gesture), 2.0);
   g_signal_connect (gesture, "pressed",
                     G_CALLBACK (gtk_range_long_press_gesture_pressed), range);
   gtk_widget_add_controller (GTK_WIDGET (range), GTK_EVENT_CONTROLLER (gesture));
-  gtk_gesture_group (priv->drag_gesture, gesture);
+  gtk_gesture_group (gesture, priv->drag_gesture);
 
   controller = gtk_event_controller_scroll_new (GTK_EVENT_CONTROLLER_SCROLL_BOTH_AXES);
   g_signal_connect (controller, "scroll",
