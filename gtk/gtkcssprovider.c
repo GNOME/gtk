@@ -562,10 +562,12 @@ css_provider_commit (GtkCssProvider  *css_provider,
 
   if (ruleset->styles == NULL)
     {
+      for (i = 0; i < n_selectors; i++)
+        _gtk_css_selector_free (selectors[i]);
       return;
     }
 
-  for (i = 0; i < n_selectors; i ++)
+  for (i = 0; i < n_selectors; i++)
     {
       GtkCssRuleset *new;
 
@@ -915,7 +917,7 @@ parse_ruleset (GtkCssScanner *scanner)
     {
       guint i;
       gtk_css_parser_error_syntax (scanner->parser, "Expected '{' after selectors");
-      for (i = 0; i < n_selectors; i ++)
+      for (i = 0; i < n_selectors; i++)
         _gtk_css_selector_free (selectors[i]);
       gtk_css_parser_skip_until (scanner->parser, GTK_CSS_TOKEN_OPEN_CURLY);
       gtk_css_parser_skip (scanner->parser);
