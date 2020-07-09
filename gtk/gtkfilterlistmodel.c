@@ -178,7 +178,7 @@ gtk_filter_list_model_run_filter (GtkFilterListModel *self,
     }
 
   if (more)
-    gtk_bitset_remove_range_closed (self->pending, 0, pos);
+    gtk_bitset_remove_range_closed (self->pending, 0, pos - 1);
   else
     g_clear_pointer (&self->pending, gtk_bitset_unref);
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_PENDING]);
