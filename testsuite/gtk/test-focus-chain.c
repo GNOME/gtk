@@ -190,6 +190,7 @@ generate_focus_chain (GtkWidget        *window,
     }
 
   g_free (name);
+  g_free (key);
   g_free (first);
   g_free (last);
 
