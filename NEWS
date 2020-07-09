@@ -1,3 +1,74 @@
+Overview of Changes in GTK 3.99.0
+=================================
+
+* Add GtkEditableLabel
+
+* Add GtkBookmarkList, a list model for bookmarks
+
+* Add GtkStringList, a list model for strings
+
+* Add GtkBitset, and use it for representing selections
+
+* GtkTreeView:
+ - Make cell editing work again
+
+* GtkSpinButton:
+ - Make autosizing work again
+
+* Printing:
+ - Use GtkDropDown in the print dialog
+
+* GtkApplication
+ - Support opening files on OS X
+
+* GtkFileChooser:
+ - Fix libcloudproviders support
+ - Turn GtkFileFilter into a GtkFilter
+ - Simplify the api
+
+* GtkGridView, GtkListView:
+ - Improve scrolling behavior
+ - Autoscroll and autoexpand during DND
+
+* GtkFilterListModel:
+ - Add incremental filtering
+
+* GtkEntry:
+ - Make entry completion work again
+ - Drop action support from GtkEntryCompletion
+
+* Inspector:
+ - Improve list model support
+ - Add direct navigation between objects
+
+* GDK:
+ - Compress scroll events
+ - Keep a scroll history
+ - Clean up GdkDevice api
+ - Improve frame clock accuracy
+
+* GSK:
+ - Use gL_ARB_framebuffer_object
+
+* gtk-demo:
+ - Add incremental refill to the color grid
+ - Improve performance of the color grid
+ - Add an incrementally filtering word list
+
+* Translation updates
+ Basque
+ Catalan
+ Chinese
+ Japanese
+ Kazakh
+ Lithuanian
+ Polish
+ Romanian
+ Spanish
+ Turkish
+ Ukrainian
+
+
 Overview of Changes in GTK 3.98.5
 =================================
 
