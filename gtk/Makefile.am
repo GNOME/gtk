@@ -1030,6 +1030,13 @@ gtk_private_h_sources += \
 	gtkprinteroptionwidget.h	\
 	gtksearchenginetracker.h
 
+if HAVE_TRACKER3
+gtk_private_h_sources += \
+	gtksearchenginetracker3.h
+gtk_os_unix_c_sources += \
+	gtksearchenginetracker3.c
+endif
+
 gtk_c_sources += $(gtk_os_unix_c_sources)
 endif
 
@@ -1770,6 +1777,8 @@ EXTRA_DIST +=                   \
 	gtkwin32embedwidget.c	\
 	gtkprint-win32.h	\
 	gtkprint-win32.c	\
+	gtksearchenginetracker3.c \
+	gtksearchenginetracker3.h \
 	gtksearchenginequartz.h \
 	gtkdbusinterfaces.xml	\
 	gtk-keys.css.default	\
