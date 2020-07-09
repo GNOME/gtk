@@ -1648,6 +1648,38 @@ create_zxdg_toplevel_v6_resources (GdkSurface *surface)
                                  surface);
 }
 
+void
+gdk_wayland_surface_set_application_id (GdkSurface *surface, const char* application_id)
+{
+  GdkWaylandSurface *impl;
+  GdkWaylandDisplay *display_wayland;
+
+  g_return_if_fail (application_id != NULL);
+
+  if (GDK_SURFACE_DESTROYED (surface))
+    return;
+
+  if (!is_realized_toplevel (surface))
+    return;
+
+  display_wayland = GDK_WAYLAND_DISPLAY (gdk_surface_get_display (surface));
+  impl = GDK_WAYLAND_SURFACE (surface);
+
+  switch (display_wayland->shell_variant)
+    {
+    case GDK_WAYLAND_SHELL_VARIANT_XDG_SHELL:
+      xdg_toplevel_set_app_id (impl->display_server.xdg_toplevel,
+                               application_id);
+      break;
+    case GDK_WAYLAND_SHELL_VARIANT_ZXDG_SHELL_V6:
+      zxdg_toplevel_v6_set_app_id (impl->display_server.zxdg_toplevel_v6,
+                                   application_id);
+      break;
+    default:
+      g_assert_not_reached ();
+    }
+}
+
 static void
 gdk_wayland_surface_create_xdg_toplevel (GdkSurface *surface)
 {
@@ -1702,19 +1734,7 @@ gdk_wayland_surface_create_xdg_toplevel (GdkSurface *surface)
   if (app_id == NULL)
     app_id = "GTK+ Application";
 
-  switch (display_wayland->shell_variant)
-    {
-    case GDK_WAYLAND_SHELL_VARIANT_XDG_SHELL:
-      xdg_toplevel_set_app_id (impl->display_server.xdg_toplevel,
-                               app_id);
-      break;
-    case GDK_WAYLAND_SHELL_VARIANT_ZXDG_SHELL_V6:
-      zxdg_toplevel_v6_set_app_id (impl->display_server.zxdg_toplevel_v6,
-                                   app_id);
-      break;
-    default:
-      g_assert_not_reached ();
-    }
+  gdk_wayland_surface_set_application_id (surface, app_id);
 
   maybe_set_gtk_surface_dbus_properties (surface);
   maybe_set_gtk_surface_modal (surface);
