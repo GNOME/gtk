@@ -491,10 +491,10 @@ resource_files = $(shell $(GLIB_COMPILE_RESOURCES) --sourcedir=$(srcdir) --gener
 
 gdkresources.h: gdk.gresource.xml
 	$(AM_V_GEN) $(GLIB_COMPILE_RESOURCES) $< --target=$@ \
-		--sourcedir=$(srcdir) --c-name _gdk --generate-header --manual-register
+		--sourcedir=$(srcdir) --c-name _gdk --generate-header --manual-register --internal
 gdkresources.c: gdk.gresource.xml $(resource_files)
 	$(AM_V_GEN) $(GLIB_COMPILE_RESOURCES) $< --target=$@ \
-		--sourcedir=$(srcdir) --c-name _gdk --generate-source --manual-register
+		--sourcedir=$(srcdir) --c-name _gdk --generate-source --manual-register --internal
 
 # ------------------- MSVC Build Items ----------------
 MSVCPROJS = gdk-3
