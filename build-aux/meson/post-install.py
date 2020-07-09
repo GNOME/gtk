@@ -15,7 +15,13 @@ if 'DESTDIR' not in os.environ:
     gtk_immodule_dir = os.path.join(gtk_moduledir, 'immodules')
 
     print('Compiling GSettings schemas...')
-    subprocess.call(['glib-compile-schemas',
+    glib_compile_schemas = subprocess.check_output(['pkg-config',
+                                                   '--variable=glib_compile_schemas',
+                                                   'gio-2.0']).strip()
+    if not os.path.exists(glib_compile_schemas):
+        # pkg-config variables only available since GLib 2.62.0.
+        glib_compile_schemas = 'glib-compile-schemas'
+    subprocess.call([glib_compile_schemas,
                     os.path.join(gtk_datadir, 'glib-2.0', 'schemas')])
 
     print('Updating icon cache...')
@@ -24,8 +30,14 @@ if 'DESTDIR' not in os.environ:
 
     print('Updating module cache for print backends...')
     os.makedirs(gtk_printmodule_dir, exist_ok=True)
-    subprocess.call(['gio-querymodules', gtk_printmodule_dir])
+    gio_querymodules = subprocess.check_output(['pkg-config',
+                                                '--variable=gio_querymodules',
+                                                'gio-2.0']).strip()
+    if not os.path.exists(gio_querymodules):
+        # pkg-config variables only available since GLib 2.62.0.
+        gio_querymodules = 'gio-querymodules'
+    subprocess.call([gio_querymodules, gtk_printmodule_dir])
 
     print('Updating module cache for input methods...')
     os.makedirs(gtk_immodule_dir, exist_ok=True)
-    subprocess.call(['gio-querymodules', gtk_immodule_dir])
+    subprocess.call([gio_querymodules, gtk_immodule_dir])
