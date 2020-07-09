@@ -265,11 +265,7 @@ static void     gtk_file_chooser_dialog_size_allocate (GtkWidget            *wid
                                                        int                   width,
                                                        int                   height,
                                                        int                    baseline);
-static void     file_chooser_widget_file_activated   (GtkFileChooser        *chooser,
-                                                      GtkFileChooserDialog  *dialog);
 static void     file_chooser_widget_response_requested (GtkWidget            *widget,
-                                                        GtkFileChooserDialog *dialog);
-static void     file_chooser_widget_selection_changed (GtkWidget            *widget,
                                                         GtkFileChooserDialog *dialog);
 
 static void response_cb (GtkDialog *dialog,
@@ -310,9 +306,7 @@ gtk_file_chooser_dialog_class_init (GtkFileChooserDialogClass *class)
   gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserDialog, widget);
   gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserDialog, buttons);
   gtk_widget_class_bind_template_callback (widget_class, response_cb);
-  gtk_widget_class_bind_template_callback (widget_class, file_chooser_widget_file_activated);
   gtk_widget_class_bind_template_callback (widget_class, file_chooser_widget_response_requested);
-  gtk_widget_class_bind_template_callback (widget_class, file_chooser_widget_selection_changed);
 }
 
 static void
@@ -365,34 +359,6 @@ is_accept_response_id (gint response_id)
           response_id == GTK_RESPONSE_OK ||
           response_id == GTK_RESPONSE_YES ||
           response_id == GTK_RESPONSE_APPLY);
-}
-
-/* Callback used when the user activates a file in the file chooser widget */
-static void
-file_chooser_widget_file_activated (GtkFileChooser       *chooser,
-                                    GtkFileChooserDialog *dialog)
-{
-  gtk_widget_activate_default (GTK_WIDGET (chooser));
-}
-
-static void
-file_chooser_widget_selection_changed (GtkWidget            *widget,
-                                       GtkFileChooserDialog *dialog)
-{
-  GtkFileChooserDialogPrivate *priv = gtk_file_chooser_dialog_get_instance_private (dialog);
-  GtkWidget *button;
-  GSList *files;
-  gboolean sensitive;
-
-  button = get_accept_action_widget (GTK_DIALOG (dialog), FALSE);
-  if (button == NULL)
-    return;
-
-  files = gtk_file_chooser_get_files (GTK_FILE_CHOOSER (priv->widget));
-  sensitive = (files != NULL);
-  gtk_widget_set_sensitive (button, sensitive);
-
-  g_slist_free_full (files, g_object_unref);
 }
 
 static void

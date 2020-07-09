@@ -244,7 +244,7 @@ static gboolean gtk_file_chooser_button_select_file (GtkFileChooser *chooser,
 static void gtk_file_chooser_button_unselect_file (GtkFileChooser *chooser,
 						   GFile          *file);
 static void gtk_file_chooser_button_unselect_all (GtkFileChooser *chooser);
-static GSList *gtk_file_chooser_button_get_files (GtkFileChooser *chooser);
+static GListModel *gtk_file_chooser_button_get_files (GtkFileChooser *chooser);
 static gboolean gtk_file_chooser_button_add_shortcut_folder     (GtkFileChooser      *chooser,
 								 GFile               *file,
 								 GError             **error);
@@ -627,7 +627,6 @@ emit_selection_changed_if_changing_selection (GtkFileChooserButton *button)
   if (button->is_changing_selection)
     {
       button->is_changing_selection = FALSE;
-      g_signal_emit_by_name (button, "selection-changed");
     }
 }
 
@@ -644,8 +643,6 @@ gtk_file_chooser_button_set_current_folder (GtkFileChooser    *chooser,
   button->current_folder_while_inactive = g_object_ref (file);
 
   update_combo_box (button);
-
-  g_signal_emit_by_name (button, "current-folder-changed");
 
   if (button->active)
     gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (button->chooser), file, NULL);
@@ -750,17 +747,23 @@ get_selected_file (GtkFileChooserButton *button)
     return NULL;
 }
 
-static GSList *
+static GListModel *
 gtk_file_chooser_button_get_files (GtkFileChooser *chooser)
 {
   GtkFileChooserButton *button = GTK_FILE_CHOOSER_BUTTON (chooser);
   GFile *file;
+  GListStore *store;
+
+  store = g_list_store_new (G_TYPE_FILE);
 
   file = get_selected_file (button);
   if (file)
-    return g_slist_prepend (NULL, file);
-  else
-    return NULL;
+    {
+      g_list_store_append (store, file);
+      g_object_unref (file);
+    }
+
+  return G_LIST_MODEL (store);
 }
 
 static gboolean
@@ -2512,9 +2515,6 @@ common_response_cb (GtkFileChooserButton *button,
       response == GTK_RESPONSE_OK)
     {
       save_inactive_state (button);
-
-      g_signal_emit_by_name (button, "current-folder-changed");
-      g_signal_emit_by_name (button, "selection-changed");
     }
   else
     {
