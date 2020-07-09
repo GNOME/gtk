@@ -160,7 +160,6 @@
  *
  * There is no support for the signals that are emitted when the user
  * navigates in the dialog, including:
- * * #GtkFileChooser::current-folder-changed
  * * #GtkFileChooser::selection-changed
  *
  * If you need any of the above you will have to use #GtkFileChooserDialog directly.

@@ -5084,8 +5084,6 @@ update_current_folder_get_info_cb (GCancellable *cancellable,
 
   g_object_notify (G_OBJECT (impl), "subtitle");
 
-  g_signal_emit_by_name (impl, "current-folder-changed", 0);
-
   g_signal_emit_by_name (impl, "selection-changed", 0);
 
 out:

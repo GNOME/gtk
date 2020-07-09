@@ -645,8 +645,6 @@ gtk_file_chooser_button_set_current_folder (GtkFileChooser    *chooser,
 
   update_combo_box (button);
 
-  g_signal_emit_by_name (button, "current-folder-changed");
-
   if (button->active)
     gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (button->chooser), file, NULL);
 
@@ -2519,7 +2517,6 @@ common_response_cb (GtkFileChooserButton *button,
     {
       save_inactive_state (button);
 
-      g_signal_emit_by_name (button, "current-folder-changed");
       g_signal_emit_by_name (button, "selection-changed");
     }
   else

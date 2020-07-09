@@ -42,25 +42,6 @@ static GtkWidget *preview_image;
 static GtkFileChooserAction action;
 
 static void
-print_current_folder (GtkFileChooser *chooser)
-{
-  GFile *cwd;
-
-  cwd = gtk_file_chooser_get_current_folder (chooser);
-  if (cwd != NULL)
-    {
-      char *uri = g_file_get_uri (cwd);
-      g_print ("Current folder changed :\n  %s\n", uri ? uri : "(null)");
-      g_free (uri);
-      g_object_unref (cwd);
-    }
-  else
-    {
-      g_print ("Current folder changed :\n  none\n");
-    }
-}
-
-static void
 print_selected (GtkFileChooser *chooser)
 {
   GListModel *files = gtk_file_chooser_get_files (chooser);
@@ -345,8 +326,6 @@ main (int argc, char **argv)
 
   g_signal_connect (dialog, "selection-changed",
 		    G_CALLBACK (print_selected), NULL);
-  g_signal_connect (dialog, "current-folder-changed",
-		    G_CALLBACK (print_current_folder), NULL);
   g_signal_connect (dialog, "response",
 		    G_CALLBACK (response_cb), &done);
 

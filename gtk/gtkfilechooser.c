@@ -82,30 +82,6 @@ gtk_file_chooser_default_init (GtkFileChooserInterface *iface)
   GType iface_type = G_TYPE_FROM_INTERFACE (iface);
 
   /**
-   * GtkFileChooser::current-folder-changed:
-   * @chooser: the object which received the signal.
-   *
-   * This signal is emitted when the current folder in a #GtkFileChooser
-   * changes.  This can happen due to the user performing some action that
-   * changes folders, such as selecting a bookmark or visiting a folder on the
-   * file list.  It can also happen as a result of calling a function to
-   * explicitly change the current folder in a file chooser.
-   *
-   * Normally you do not need to connect to this signal, unless you need to keep
-   * track of which folder a file chooser is showing.
-   *
-   * See also:  gtk_file_chooser_set_current_folder(),
-   * gtk_file_chooser_get_current_folder(),
-   */
-  g_signal_new (I_("current-folder-changed"),
-                iface_type,
-                G_SIGNAL_RUN_LAST,
-                G_STRUCT_OFFSET (GtkFileChooserIface, current_folder_changed),
-                NULL, NULL,
-                NULL,
-                G_TYPE_NONE, 0);
-
-  /**
    * GtkFileChooser::selection-changed:
    * @chooser: the object which received the signal.
    *
