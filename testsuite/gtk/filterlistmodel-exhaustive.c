@@ -1,7 +1,5 @@
-/* GtkRBTree tests.
- *
- * Copyright (C) 2011, Red Hat, Inc.
- * Authors: Benjamin Otte <otte@gnome.org>
+/*
+ * Copyright © 2020 Benjamin Otte
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -324,7 +322,7 @@ test_two_filters (gconstpointer model_id)
 
           for (k = 0; k < 10; k++)
             {
-              source = create_source_model (0, 20);
+              source = create_source_model (0, 1000);
               gtk_filter_list_model_set_model (compare, source);
               gtk_filter_list_model_set_model (model1, source);
               g_object_unref (source);
@@ -418,7 +416,7 @@ test_model_changes (gconstpointer model_id)
       if (add)
         {
           /* We want at least one element, otherwise the filters will see no changes */
-          GListModel *source = create_source_model (1, 20);
+          GListModel *source = create_source_model (1, 100);
           GtkFilterListModel *model1 = create_filter_list_model (model_id, source, multi);
           g_list_store_splice (store1,
                                position,
