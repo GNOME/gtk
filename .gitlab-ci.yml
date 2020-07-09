@@ -72,6 +72,7 @@ fedora-x86_64:
     EXTRA_MESON_FLAGS: "--buildtype=debug --default-library=both"
   script:
     - meson ${COMMON_MESON_FLAGS} ${EXTRA_MESON_FLAGS} ${BACKEND_FLAGS} ${FEATURE_FLAGS}
+            -Db_sanitize=address
             -Dprofiler=true
             _build
     - ninja -C _build
@@ -179,6 +180,20 @@ static-scan:
     paths:
       - _scan_build/meson-logs
   allow_failure: true
+
+# Run tests with the address sanitizer. We need to turn off introspection,
+# since it is incompatible with asan
+asan-build:
+  extends: $FEDORA_IMAGE
+  tags: [ privileged ]
+  stage: analysis
+  variables:
+    EXTRA_MESON_FLAGS: "--buildtype=debugoptimized -Db_sanitize=address -Dintrospection=false"
+  script:
+    - CC=clang meson ${COMMON_MESON_FLAGS} ${EXTRA_MESON_FLAGS} ${BACKEND_FLAGS} ${FEATURE_FLAGS}
+            _build
+    - ninja -C _build
+    - .gitlab-ci/run-tests.sh _build wayland
 
 reference:
   image: $DOCS_IMAGE
