@@ -1,8 +1,10 @@
-leak:_cairo_pattern_create_solid
-leak:_cairo_image_surface_create_for_pixman_image
 leak:g_quark_init
 leak:xdg_mime_init
+leak:libc.so
 leak:libfontconfig.so
 leak:libEGL_mesa.so
 leak:iris_dri.so
+leak:libglib-2.0.so
+leak:libcairo.so
 leak:libpixman-1.so
+leak:libatk-bridge-2.0.so
