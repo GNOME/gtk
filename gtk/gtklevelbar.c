@@ -725,6 +725,8 @@ static const GtkBuildableParser offset_parser =
   offset_start_element
 };
 
+static GtkBuildableIface *parent_buildable_iface;
+
 static gboolean
 gtk_level_bar_buildable_custom_tag_start (GtkBuildable       *buildable,
                                           GtkBuilder         *builder,
@@ -734,6 +736,10 @@ gtk_level_bar_buildable_custom_tag_start (GtkBuildable       *buildable,
                                           gpointer           *parser_data)
 {
   OffsetsParserData *data;
+
+  if (parent_buildable_iface->custom_tag_start (buildable, builder, child,
+                                                tagname, parser, parser_data))
+    return TRUE;
 
   if (child)
     return FALSE;
@@ -767,7 +773,11 @@ gtk_level_bar_buildable_custom_finished (GtkBuildable *buildable,
   self = data->self;
 
   if (strcmp (tagname, "offsets") != 0)
-    goto out;
+    {
+      parent_buildable_iface->custom_finished (buildable, builder, child,
+                                               tagname, user_data);
+      return;
+    }
 
   for (l = data->offsets; l != NULL; l = l->next)
     {
@@ -775,7 +785,6 @@ gtk_level_bar_buildable_custom_finished (GtkBuildable *buildable,
       gtk_level_bar_add_offset_value (self, offset->name, offset->value);
     }
 
- out:
   g_list_free_full (data->offsets, (GDestroyNotify) gtk_level_bar_offset_free);
   g_slice_free (OffsetsParserData, data);
 }
@@ -783,6 +792,8 @@ gtk_level_bar_buildable_custom_finished (GtkBuildable *buildable,
 static void
 gtk_level_bar_buildable_init (GtkBuildableIface *iface)
 {
+  parent_buildable_iface = g_type_interface_peek_parent (iface);
+
   iface->custom_tag_start = gtk_level_bar_buildable_custom_tag_start;
   iface->custom_finished = gtk_level_bar_buildable_custom_finished;
 }
