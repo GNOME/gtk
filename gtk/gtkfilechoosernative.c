@@ -683,7 +683,7 @@ gtk_file_chooser_native_set_current_name (GtkFileChooser    *chooser,
   g_clear_object (&self->current_file);
 }
 
-static GSList *
+static GListModel *
 gtk_file_chooser_native_get_files (GtkFileChooser *chooser)
 {
   GtkFileChooserNative *self = GTK_FILE_CHOOSER_NATIVE (chooser);
@@ -693,7 +693,16 @@ gtk_file_chooser_native_get_files (GtkFileChooser *chooser)
     case MODE_PORTAL:
     case MODE_WIN32:
     case MODE_QUARTZ:
-      return g_slist_copy_deep (self->custom_files, (GCopyFunc)g_object_ref, NULL);
+      {
+        GListStore *store;
+        GSList *l;
+
+        store = g_list_store_new (G_TYPE_FILE);
+        for (l = self->custom_files; l; l = l->next)
+          g_list_store_append (store, l->data);
+
+        return G_LIST_MODEL (store);
+      }
 
     case MODE_FALLBACK:
     default:

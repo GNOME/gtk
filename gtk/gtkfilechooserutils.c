@@ -39,7 +39,7 @@ static void           delegate_unselect_file          (GtkFileChooser    *choose
 						       GFile             *file);
 static void           delegate_select_all             (GtkFileChooser    *chooser);
 static void           delegate_unselect_all           (GtkFileChooser    *chooser);
-static GSList *       delegate_get_files              (GtkFileChooser    *chooser);
+static GListModel *   delegate_get_files              (GtkFileChooser    *chooser);
 static GtkFileSystem *delegate_get_file_system        (GtkFileChooser    *chooser);
 static void           delegate_add_filter             (GtkFileChooser    *chooser,
 						       GtkFileFilter     *filter);
@@ -221,7 +221,7 @@ delegate_unselect_all (GtkFileChooser *chooser)
   gtk_file_chooser_unselect_all (get_delegate (chooser));
 }
 
-static GSList *
+static GListModel *
 delegate_get_files (GtkFileChooser *chooser)
 {
   return gtk_file_chooser_get_files (get_delegate (chooser));

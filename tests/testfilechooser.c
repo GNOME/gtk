@@ -63,19 +63,21 @@ print_current_folder (GtkFileChooser *chooser)
 static void
 print_selected (GtkFileChooser *chooser)
 {
-  GSList *uris = gtk_file_chooser_get_files (chooser);
-  GSList *tmp_list;
+  GListModel *files = gtk_file_chooser_get_files (chooser);
+  guint i, n;
 
   g_print ("Selection changed :\n");
-  for (tmp_list = uris; tmp_list; tmp_list = tmp_list->next)
+  n = g_list_model_get_n_items (files);
+  for (i = 0; i < n; i++)
     {
-      GFile *file = tmp_list->data;
+      GFile *file = g_list_model_get_item (files, i);
       char *uri = g_file_get_uri (file);
       g_print ("  %s\n", uri ? uri : "(null)");
       g_free (uri);
+      g_object_unref (files);
     }
   g_print ("\n");
-  g_slist_free_full (uris, g_object_unref);
+  g_object_unref (files);
 }
 
 static void
@@ -87,28 +89,23 @@ response_cb (GtkDialog *dialog,
 
   if (response_id == GTK_RESPONSE_OK)
     {
-      GSList *list;
+      GListModel *files;
+      guint i, n;
 
-      list = gtk_file_chooser_get_files (GTK_FILE_CHOOSER (dialog));
+      files = gtk_file_chooser_get_files (GTK_FILE_CHOOSER (dialog));
+      n = g_list_model_get_n_items (files);
 
-      if (list)
-	{
-	  GSList *l;
+      g_print ("Selected files:\n");
+      for (i = 0; i < n; i++)
+        {
+          GFile *file = g_list_model_get_item (files, i);
+          char *uri = g_file_get_uri (file);
+          g_print ("  %s\n", uri ? uri : "(null)");
+          g_free (uri);
+          g_object_unref (file);
+        }
 
-	  g_print ("Selected files:\n");
-
-	  for (l = list; l; l = l->next)
-	    {
-              GFile *file = l->data;
-              char *uri = g_file_get_uri (file);
-	      g_print ("  %s\n", uri ? uri : "(null)");
-	      g_free (uri);
-	    }
-
-	  g_slist_free_full (list, g_object_unref);
-	}
-      else
-	g_print ("No selected files\n");
+      g_object_unref (files);
     }
   else
     g_print ("Dialog was closed\n");
@@ -208,33 +205,24 @@ static void
 get_selection_cb (GtkButton      *button,
 		  GtkFileChooser *chooser)
 {
-  GSList *selection;
+  GListModel *selection;
+  guint i, n;
 
   selection = gtk_file_chooser_get_files (chooser);
+  n = g_list_model_get_n_items (selection);
 
   g_print ("Selection: ");
 
-  if (selection == NULL)
-    g_print ("empty\n");
-  else
+  for (i = 0; i < n; i++)
     {
-      GSList *l;
-      
-      for (l = selection; l; l = l->next)
-	{
-          GFile *file = l->data;
-	  char *uri = g_file_get_uri (file);
-
-	  g_print ("%s\n", uri);
-
-          g_free (uri);
-
-	  if (l->next)
-	    g_print ("           ");
-	}
+      GFile *file = g_list_model_get_item (selection, i);
+      char *uri = g_file_get_uri (file);
+      g_print ("%s\n", uri);
+      g_free (uri);
+      g_object_unref (file);
     }
 
-  g_slist_free_full (selection, g_object_unref);
+  g_object_unref (selection);
 }
 
 static void

@@ -123,7 +123,7 @@ gboolean             gtk_file_chooser_set_file            (GtkFileChooser       
                                                            GFile                *file,
                                                            GError              **error);
 GDK_AVAILABLE_IN_ALL
-GSList *             gtk_file_chooser_get_files           (GtkFileChooser       *chooser);
+GListModel *         gtk_file_chooser_get_files           (GtkFileChooser       *chooser);
 GDK_AVAILABLE_IN_ALL
 gboolean             gtk_file_chooser_set_current_folder  (GtkFileChooser       *chooser,
                                                            GFile                *file,

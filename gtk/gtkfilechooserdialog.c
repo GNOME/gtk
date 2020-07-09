@@ -381,7 +381,7 @@ file_chooser_widget_selection_changed (GtkWidget            *widget,
 {
   GtkFileChooserDialogPrivate *priv = gtk_file_chooser_dialog_get_instance_private (dialog);
   GtkWidget *button;
-  GSList *files;
+  GListModel *files;
   gboolean sensitive;
 
   button = get_accept_action_widget (GTK_DIALOG (dialog), FALSE);
@@ -389,10 +389,10 @@ file_chooser_widget_selection_changed (GtkWidget            *widget,
     return;
 
   files = gtk_file_chooser_get_files (GTK_FILE_CHOOSER (priv->widget));
-  sensitive = (files != NULL);
+  sensitive = (g_list_model_get_n_items (files) > 0);
   gtk_widget_set_sensitive (button, sensitive);
 
-  g_slist_free_full (files, g_object_unref);
+  g_object_unref (files);
 }
 
 static void

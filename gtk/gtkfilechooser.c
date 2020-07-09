@@ -508,16 +508,15 @@ gtk_file_chooser_unselect_file (GtkFileChooser *chooser,
 /**
  * gtk_file_chooser_get_files:
  * @chooser: a #GtkFileChooser
- * 
- * Lists all the selected files and subfolders in the current folder of @chooser
- * as #GFile.
  *
- * Returns: (element-type GFile) (transfer full): a list
- *   containing a #GFile for each selected file and subfolder in the
- *   current folder.  Free the returned list with g_slist_free(), and
- *   the files with g_object_unref().
- **/
-GSList *
+ * Lists all the selected files and subfolders in the current folder
+ * of @chooser as #GFile.
+ *
+ * Returns: (transfer full): a list model containing a #GFile for each
+ *     selected file and subfolder in the current folder. Free the returned
+ *     list with g_object_unref().
+ */
+GListModel *
 gtk_file_chooser_get_files (GtkFileChooser *chooser)
 {
   g_return_val_if_fail (GTK_IS_FILE_CHOOSER (chooser), NULL);
@@ -597,19 +596,15 @@ gtk_file_chooser_set_file (GtkFileChooser  *chooser,
 GFile *
 gtk_file_chooser_get_file (GtkFileChooser *chooser)
 {
-  GSList *list;
+  GListModel *list;
   GFile *result = NULL;
-  
+
   g_return_val_if_fail (GTK_IS_FILE_CHOOSER (chooser), NULL);
 
   list = gtk_file_chooser_get_files (chooser);
-  if (list)
-    {
-      result = list->data;
-      list = g_slist_delete_link (list, list);
-
-      g_slist_free_full (list, g_object_unref);
-    }
+  if (g_list_model_get_n_items (list) > 0)
+    result = g_list_model_get_item (list, 0);
+  g_object_unref (list);
 
   return result;
 }

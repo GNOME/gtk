@@ -5507,22 +5507,26 @@ native_response (GtkNativeDialog *self,
 {
   static int count = 0;
   char *res;
-  GSList *uris, *l;
   GString *s;
   char *response;
   GtkFileFilter *filter;
+  GListModel *files;
+  guint i, n;
 
-  uris = gtk_file_chooser_get_files (GTK_FILE_CHOOSER (self));
+  files = gtk_file_chooser_get_files (GTK_FILE_CHOOSER (self));
   filter = gtk_file_chooser_get_filter (GTK_FILE_CHOOSER (self));
   s = g_string_new ("");
-  for (l = uris; l != NULL; l = l->next)
+  n = g_list_model_get_n_items (files);
+  for (i = 0; i < n; i++)
     {
-      char *uri = g_file_get_uri (l->data);
+      GFile *file = g_list_model_get_item (files, i);
+      char *uri = g_file_get_uri (file);
       g_string_prepend (s, uri);
       g_string_prepend (s, "\n");
       g_free (uri);
+      g_object_unref (file);
     }
-  g_slist_free_full (uris, g_object_unref);
+  g_object_unref (files);
 
   switch (response_id)
     {
