@@ -7,6 +7,8 @@ srcdir=$( pwd )
 builddir=$1
 backend=$2
 
+export ASAN_OPTIONS=detect_leaks=0
+
 case "${backend}" in
   x11)
     xvfb-run -a -s "-screen 0 1024x768x24" \
