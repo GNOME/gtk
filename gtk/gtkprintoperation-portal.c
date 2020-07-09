@@ -426,8 +426,15 @@ prepare_print_response (GDBusConnection *connection,
       g_free (filename);
     }
   else
-    portal->result = GTK_PRINT_OPERATION_RESULT_CANCEL;
+    {
+      portal->result = GTK_PRINT_OPERATION_RESULT_CANCEL;
 
+      if (portal->print_cb)
+	  portal->print_cb (portal->op, portal->parent, portal->do_print, portal->result);
+
+      if (portal->destroy)
+	  portal->destroy (portal);
+    }
   if (portal->loop)
     g_main_loop_quit (portal->loop);
 }
