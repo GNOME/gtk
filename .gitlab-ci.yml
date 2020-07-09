@@ -67,11 +67,13 @@ style-check-diff:
 
 fedora-x86_64:
   extends: .build-fedora-default
+  tags: [ privileged ]
   stage: build
   variables:
     EXTRA_MESON_FLAGS: "--buildtype=debug --default-library=both"
   script:
     - meson ${COMMON_MESON_FLAGS} ${EXTRA_MESON_FLAGS} ${BACKEND_FLAGS} ${FEATURE_FLAGS}
+            -Db_sanitize=address
             -Dprofiler=true
             _build
     - ninja -C _build
