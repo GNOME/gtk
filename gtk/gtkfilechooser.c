@@ -79,29 +79,6 @@ G_DEFINE_INTERFACE (GtkFileChooser, gtk_file_chooser, G_TYPE_OBJECT);
 static void
 gtk_file_chooser_default_init (GtkFileChooserInterface *iface)
 {
-  GType iface_type = G_TYPE_FROM_INTERFACE (iface);
-
-  /**
-   * GtkFileChooser::selection-changed:
-   * @chooser: the object which received the signal.
-   *
-   * This signal is emitted when there is a change in the set of selected files
-   * in a #GtkFileChooser.  This can happen when the user modifies the selection
-   * with the mouse or the keyboard, or when explicitly calling functions to
-   * change the selection.
-   *
-   * Normally you do not need to connect to this signal, as it is easier to wait
-   * for the file chooser to finish running, and then to get the list of
-   * selected files using the functions mentioned below.
-   */
-  g_signal_new (I_("selection-changed"),
-                iface_type,
-                G_SIGNAL_RUN_LAST,
-                G_STRUCT_OFFSET (GtkFileChooserIface, selection_changed),
-                NULL, NULL,
-                NULL,
-                G_TYPE_NONE, 0);
-
   g_object_interface_install_property (iface,
                                        g_param_spec_enum ("action",
                                                           P_("Action"),

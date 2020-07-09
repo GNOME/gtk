@@ -2220,14 +2220,66 @@ set_icon_cell_renderer_fixed_size (GtkFileChooserWidget *impl)
                                     ypad * 2 + ICON_SIZE);
 }
 
+static GtkWidget *
+get_accept_action_widget (GtkDialog *dialog,
+                          gboolean   sensitive_only)
+{
+  gint response[] = {
+    GTK_RESPONSE_ACCEPT,
+    GTK_RESPONSE_OK,
+    GTK_RESPONSE_YES,
+    GTK_RESPONSE_APPLY
+  };
+  gint i;
+  GtkWidget *widget;
+
+  for (i = 0; i < G_N_ELEMENTS (response); i++)
+    {
+      widget = gtk_dialog_get_widget_for_response (dialog, response[i]);
+      if (widget)
+        {
+          if (!sensitive_only)
+            return widget;
+
+          if (gtk_widget_is_sensitive (widget))
+            return widget;
+        }
+    }
+
+  return NULL;
+}
+
+static void
+update_default (GtkFileChooserWidget *impl)
+{
+  GtkWidget *dialog;
+  GtkWidget *button;
+  GListModel *files;
+  gboolean sensitive;
+
+  dialog = gtk_widget_get_ancestor (GTK_WIDGET (impl), GTK_TYPE_DIALOG);
+  if (dialog == NULL)
+    return;
+
+  button = get_accept_action_widget (GTK_DIALOG (dialog), FALSE);
+  if (button == NULL)
+    return;
+
+  files = gtk_file_chooser_get_files (GTK_FILE_CHOOSER (impl));
+  sensitive = (g_list_model_get_n_items (files) > 0);
+  gtk_widget_set_sensitive (button, sensitive);
+
+  g_object_unref (files);
+}
+
 static gboolean
 location_changed_timeout_cb (gpointer user_data)
 {
   GtkFileChooserWidget *impl = user_data;
 
   gtk_file_chooser_unselect_all (GTK_FILE_CHOOSER (impl));
-  g_signal_emit_by_name (impl, "selection-changed", 0);
 
+  update_default (impl);
   impl->location_changed_id = 0;
 
   return G_SOURCE_REMOVE;
@@ -5084,7 +5136,7 @@ update_current_folder_get_info_cb (GCancellable *cancellable,
 
   g_object_notify (G_OBJECT (impl), "subtitle");
 
-  g_signal_emit_by_name (impl, "selection-changed", 0);
+  update_default (impl);
 
 out:
   g_object_unref (data->impl);
@@ -7004,8 +7056,7 @@ list_selection_changed (GtkTreeSelection     *selection,
     update_chooser_entry (impl);
 
   location_bar_update (impl);
-
-  g_signal_emit_by_name (impl, "selection-changed", 0);
+  update_default (impl);
 }
 
 static gboolean

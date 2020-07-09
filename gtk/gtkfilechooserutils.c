@@ -56,8 +56,6 @@ static GListModel *   delegate_get_shortcut_folders   (GtkFileChooser    *choose
 static void           delegate_notify                 (GObject           *object,
 						       GParamSpec        *pspec,
 						       gpointer           data);
-static void           delegate_selection_changed      (GtkFileChooser    *chooser,
-						       gpointer           data);
 
 static void           delegate_add_choice             (GtkFileChooser  *chooser,
                                                        const char      *id,
@@ -164,8 +162,6 @@ _gtk_file_chooser_set_delegate (GtkFileChooser *receiver,
   g_object_set_data (G_OBJECT (receiver), I_("gtk-file-chooser-delegate"), delegate);
   g_signal_connect (delegate, "notify",
 		    G_CALLBACK (delegate_notify), receiver);
-  g_signal_connect (delegate, "selection-changed",
-		    G_CALLBACK (delegate_selection_changed), receiver);
 }
 
 GQuark
@@ -305,13 +301,6 @@ delegate_notify (GObject    *object,
 				 gtk_file_chooser_get_type ());
   if (g_object_interface_find_property (iface, pspec->name))
     g_object_notify (data, pspec->name);
-}
-
-static void
-delegate_selection_changed (GtkFileChooser *chooser,
-			    gpointer        data)
-{
-  g_signal_emit_by_name (data, "selection-changed");
 }
 
 GSettings *

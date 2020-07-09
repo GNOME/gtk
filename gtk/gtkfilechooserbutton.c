@@ -627,7 +627,6 @@ emit_selection_changed_if_changing_selection (GtkFileChooserButton *button)
   if (button->is_changing_selection)
     {
       button->is_changing_selection = FALSE;
-      g_signal_emit_by_name (button, "selection-changed");
     }
 }
 
@@ -2516,8 +2515,6 @@ common_response_cb (GtkFileChooserButton *button,
       response == GTK_RESPONSE_OK)
     {
       save_inactive_state (button);
-
-      g_signal_emit_by_name (button, "selection-changed");
     }
   else
     {

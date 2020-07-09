@@ -158,12 +158,6 @@
  * possible to use with #GtkFileChooserNative, as such use would
  * prohibit the use of a native dialog.
  *
- * There is no support for the signals that are emitted when the user
- * navigates in the dialog, including:
- * * #GtkFileChooser::selection-changed
- *
- * If you need any of the above you will have to use #GtkFileChooserDialog directly.
- *
  * No operations that change the dialog work while the dialog is visible.
  * Set all the properties that are required before showing the dialog.
  *
