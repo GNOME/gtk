@@ -3629,6 +3629,7 @@ cups_request_printer_list_cb (GtkPrintBackendCups *cups_backend,
       GTK_PRINTER_CUPS (printer)->supports_collate = info->supports_collate;
       GTK_PRINTER_CUPS (printer)->supports_number_up = info->supports_number_up;
       GTK_PRINTER_CUPS (printer)->number_of_covers = info->number_of_covers;
+      g_clear_pointer (&(GTK_PRINTER_CUPS (printer)->covers), g_strfreev);
       GTK_PRINTER_CUPS (printer)->covers = g_strdupv (info->covers);
       status_changed = gtk_printer_set_job_count (printer, info->job_count);
       status_changed |= gtk_printer_set_location (printer, info->location);
