@@ -653,6 +653,8 @@ gdk_x11_clipboard_store_async (GdkClipboard        *clipboard,
       GDK_DISPLAY_NOTE (display, CLIPBOARD,
                 g_printerr ("%s: X error during ConvertSelection() while storing selection: %d\n", cb->selection, error));
     }
+
+  g_free (atoms);
 }
 
 static gboolean
