@@ -1169,10 +1169,13 @@ check_update_scrollbar_proximity (GtkScrolledWindow *sw,
   gboolean indicator_close, on_scrollbar, on_other_scrollbar;
 
   indicator_close = coords_close_to_indicator (sw, indicator, x, y);
-  on_scrollbar = (target == indicator->scrollbar);
+  on_scrollbar = (target == indicator->scrollbar ||
+                  gtk_widget_is_ancestor (target, indicator->scrollbar));
   on_other_scrollbar = (!on_scrollbar &&
                         (target == priv->hindicator.scrollbar ||
-                         target == priv->vindicator.scrollbar));
+                         target == priv->vindicator.scrollbar ||
+                         gtk_widget_is_ancestor (target, priv->hindicator.scrollbar) ||
+                         gtk_widget_is_ancestor (target, priv->vindicator.scrollbar)));
 
   if (indicator->over_timeout_id)
     {
@@ -1262,7 +1265,8 @@ captured_motion (GtkEventController *controller,
   if (priv->vscrollbar_visible)
     indicator_start_fade (&priv->vindicator, 1.0);
 
-  if (!target &&
+  if ((target == priv->child ||
+       gtk_widget_is_ancestor (target, priv->child)) &&
       (state & (GDK_BUTTON1_MASK | GDK_BUTTON2_MASK | GDK_BUTTON3_MASK)) != 0)
     {
       indicator_set_over (&priv->hindicator, FALSE);
