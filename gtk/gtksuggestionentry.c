@@ -68,9 +68,18 @@
  * the suggestions in the model, controlled by a few properties. If
  * #GtkSuggestionEntry:use-filter is set to %FALSE, the popup will not
  * be filtered against the entry contents, and will always show all
- * suggestions. If #GtkSuggestionEntry:insert-prefix is set to %TRUE,
+ * suggestions (unless you do your own filtering). The filtering that
+ * is done by GtkSuggestionEntry if use-filter is %TRUE is case-insensitive
+ * and matches a prefix of the strings returned by the expression given
+ * in #GtkSuggestionEntry:expression.
+ *
+ * If #GtkSuggestionEntry:insert-prefix is set to %TRUE,
  * GtkSuggestionEntry will automatically inserted the longest common
- * prefix of all matching suggestions into the entry as you type.
+ * prefix of all matching suggestions into the entry as you type. You
+ * probably want to turn this off when you are doing your own filtering,
+ * since it makes the assumption that the filtering is doing prefix
+ * matching.
+ *
  * If #GtkSuggestionEntry:insert-selection is set to %TRUE,
  * GtkSuggestionEntry will automatically insert the current selection
  * from the popup into the entry.
@@ -111,6 +120,7 @@ struct _GtkSuggestionEntry
   GtkWidget *popup;
   GtkWidget *list;
 
+  char *search;
   char *prefix;
 
   gulong changed_id;
@@ -187,6 +197,7 @@ gtk_suggestion_entry_dispose (GObject *object)
   g_clear_object (&self->filter_model);
   g_clear_object (&self->selection);
 
+  g_clear_pointer (&self->search, g_free);
   g_clear_pointer (&self->prefix, g_free);
 
   G_OBJECT_CLASS (gtk_suggestion_entry_parent_class)->dispose (object);
@@ -569,16 +580,20 @@ text_changed_idle (gpointer data)
 
   text = gtk_editable_get_text (GTK_EDITABLE (self->entry));
   len = g_utf8_strlen (text, -1);
+
+  g_free (self->search);
+  self->search = g_strdup (text);
+
   filter = gtk_filter_list_model_get_filter (self->filter_model);
-  if (filter)
-    gtk_string_filter_set_search (GTK_STRING_FILTER (filter), text);
+  if (GTK_IS_STRING_FILTER (filter))
+    gtk_string_filter_set_search (GTK_STRING_FILTER (filter), self->search);
 
   matches = g_list_model_get_n_items (G_LIST_MODEL (self->selection));
 
   if (len < self->minimum_length)
     gtk_suggestion_entry_set_popup_visible (self, FALSE);
   else
-    gtk_suggestion_entry_set_popup_visible (self, self->use_filter && matches > 0);
+    gtk_suggestion_entry_set_popup_visible (self, matches > 0);
 
   gtk_widget_action_set_enabled (GTK_WIDGET (self), "popup.show", matches > 0);
 
@@ -703,9 +718,14 @@ gtk_suggestion_entry_key_pressed (GtkEventControllerKey *controller,
 
           text = self->prefix ? self->prefix : "";
           gtk_editable_set_text (GTK_EDITABLE (self->entry), text);
+
+          g_free (self->search);
+          self->search = g_strdup (text);
+
           filter = gtk_filter_list_model_get_filter (self->filter_model);
-          if (filter)
-            gtk_string_filter_set_search (GTK_STRING_FILTER (filter), text);
+          if (GTK_IS_STRING_FILTER (filter))
+            gtk_string_filter_set_search (GTK_STRING_FILTER (filter), self->search);
+
           g_clear_pointer (&self->prefix, g_free);
           gtk_editable_set_position (GTK_EDITABLE (self->entry), -1);
 
@@ -981,37 +1001,36 @@ search_changed (GObject            *object,
 static void
 update_filter (GtkSuggestionEntry *self)
 {
-  if (self->filter_model)
+  GtkFilter *filter;
+  GtkExpression *expression;
+
+  if (!self->filter_model)
+    return;
+
+  if (!self->use_filter)
+    expression = NULL;
+  else if (self->expression)
+    expression = gtk_expression_ref (self->expression);
+  else if (GTK_IS_STRING_LIST (self->model))
+    expression = gtk_property_expression_new (GTK_TYPE_STRING_OBJECT, NULL, "string");
+  else
+    expression = NULL;
+
+  if (expression)
     {
-      GtkExpression *expression;
-      GtkFilter *filter;
-
-      if (!self->use_filter)
-        expression = NULL;
-      else if (self->expression)
-        expression = gtk_expression_ref (self->expression);
-      else if (GTK_IS_STRING_LIST (self->model))
-        expression = gtk_property_expression_new (GTK_TYPE_STRING_OBJECT, NULL, "string");
-      else
-        expression = NULL;
-
-      if (expression)
-        {
-          filter = gtk_string_filter_new ();
-          gtk_string_filter_set_match_mode (GTK_STRING_FILTER (filter), GTK_STRING_FILTER_MATCH_MODE_PREFIX);
-          gtk_string_filter_set_ignore_case (GTK_STRING_FILTER (filter), TRUE);
-
-          gtk_string_filter_set_expression (GTK_STRING_FILTER (filter), expression);
-          g_signal_connect (filter, "notify::search", G_CALLBACK (search_changed), self);
-        }
-      else
-        filter = NULL;
-
-      gtk_filter_list_model_set_filter (GTK_FILTER_LIST_MODEL (self->filter_model), filter);
-
-      g_clear_object (&filter);
-      g_clear_pointer (&expression, gtk_expression_unref);
+      filter = gtk_string_filter_new ();
+      gtk_string_filter_set_match_mode (GTK_STRING_FILTER (filter), GTK_STRING_FILTER_MATCH_MODE_PREFIX);
+      gtk_string_filter_set_ignore_case (GTK_STRING_FILTER (filter), TRUE);
+      gtk_string_filter_set_expression (GTK_STRING_FILTER (filter), expression);
+      g_signal_connect (filter, "notify::search", G_CALLBACK (search_changed), self);
     }
+  else
+    filter = NULL;
+
+  gtk_filter_list_model_set_filter (GTK_FILTER_LIST_MODEL (self->filter_model), filter);
+
+  g_clear_pointer (&expression, gtk_expression_unref);
+  g_clear_object (&filter);
 }
 
 static void
@@ -1156,26 +1175,16 @@ static void
 update_prefix (GtkSuggestionEntry *self)
 {
   const char *text;
-  const char *search;
   char *prefix;
-  GtkFilter *filter;
 
   if (!self->insert_prefix)
     return;
 
-  if (!self->use_filter)
-    return;
-
-  filter = gtk_filter_list_model_get_filter (self->filter_model);
-  if (!filter)
-    return;
-
   g_signal_handler_block (self->entry, self->changed_id);
 
-  search = gtk_string_filter_get_search (GTK_STRING_FILTER (filter));
   text = gtk_editable_get_text (GTK_EDITABLE (self->entry));
 
-  prefix = compute_prefix (self, search, text);
+  prefix = compute_prefix (self, self->search, text);
   insert_prefix (self, prefix);
 
   g_free (prefix);

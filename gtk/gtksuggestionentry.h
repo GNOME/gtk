@@ -24,6 +24,7 @@
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
 
+#include <gtk/gtkfilter.h>
 #include <gtk/gtkexpression.h>
 #include <gtk/gtklistitemfactory.h>
 #include <gtk/gtkwidget.h>
@@ -61,16 +62,16 @@ GtkListItemFactory *
                 gtk_suggestion_entry_get_factory        (GtkSuggestionEntry     *self);
 
 GDK_AVAILABLE_IN_ALL
+void            gtk_suggestion_entry_set_use_filter     (GtkSuggestionEntry     *self,
+                                                         gboolean                use_ilter);
+GDK_AVAILABLE_IN_ALL
+gboolean        gtk_suggestion_entry_get_use_filter     (GtkSuggestionEntry     *self);
+
+GDK_AVAILABLE_IN_ALL
 void            gtk_suggestion_entry_set_expression     (GtkSuggestionEntry     *self,
                                                          GtkExpression          *expression);
 GDK_AVAILABLE_IN_ALL
 GtkExpression * gtk_suggestion_entry_get_expression     (GtkSuggestionEntry     *self);
-
-GDK_AVAILABLE_IN_ALL
-void            gtk_suggestion_entry_set_use_filter     (GtkSuggestionEntry     *self,
-                                                         gboolean                use_filter);
-GDK_AVAILABLE_IN_ALL
-gboolean        gtk_suggestion_entry_get_use_filter     (GtkSuggestionEntry     *self);
 
 GDK_AVAILABLE_IN_ALL
 void            gtk_suggestion_entry_set_insert_selection (GtkSuggestionEntry  *self,
