@@ -544,6 +544,12 @@ gdk_registry_handle_global (void               *data,
       gdk_wayland_display_init_xdg_output (display_wayland);
       _gdk_wayland_display_async_roundtrip (display_wayland);
     }
+  else if (strcmp(interface, "zwp_idle_inhibit_manager_v1") == 0)
+    {
+      display_wayland->idle_inhibit_manager =
+        wl_registry_bind (display_wayland->wl_registry, id,
+                          &zwp_idle_inhibit_manager_v1_interface, 1);
+    }
 
   g_hash_table_insert (display_wayland->known_globals,
                        GUINT_TO_POINTER (id), g_strdup (interface));

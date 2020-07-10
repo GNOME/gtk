@@ -1,6 +1,7 @@
 /*
  * Copyright © 2010 Codethink Limited
  * Copyright © 2013 Canonical Limited
+ * Copyright © 2020 Emmanuel Gil Peyrot
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -24,12 +25,31 @@
 #include "gtknative.h"
 
 #include <gdk/wayland/gdkwayland.h>
+#include <gdk/wayland/gdkdisplay-wayland.h>
+#include <gdk/wayland/idle-inhibit-unstable-v1-client-protocol.h>
 
 typedef GtkApplicationImplDBusClass GtkApplicationImplWaylandClass;
 
 typedef struct
 {
+  struct zwp_idle_inhibitor_v1 *idle_inhibitor;
+  guint cookie;
+  GtkApplicationInhibitFlags flags;
+
+} GtkApplicationWaylandInhibitor;
+
+static void
+gtk_application_wayland_inhibitor_free (GtkApplicationWaylandInhibitor *inhibitor)
+{
+  zwp_idle_inhibitor_v1_destroy (inhibitor->idle_inhibitor);
+  g_slice_free (GtkApplicationWaylandInhibitor, inhibitor);
+}
+
+typedef struct
+{
   GtkApplicationImplDBus dbus;
+  GSList *inhibitors;
+  guint next_cookie;
 
 } GtkApplicationImplWayland;
 
@@ -72,6 +92,68 @@ gtk_application_impl_wayland_before_emit (GtkApplicationImpl *impl,
   gdk_wayland_display_set_startup_notification_id (gdk_display_get_default (), startup_notification_id);
 }
 
+static guint
+gtk_application_impl_wayland_inhibit (GtkApplicationImpl         *impl,
+                                      GtkWindow                  *window,
+                                      GtkApplicationInhibitFlags  flags,
+                                      const gchar                *reason)
+{
+  GtkApplicationImplWayland *wayland = (GtkApplicationImplWayland *) impl;
+  GdkSurface *gdk_surface;
+  GdkDisplay *gdk_display;
+  struct zwp_idle_inhibit_manager_v1 *idle_inhibit_manager;
+  struct wl_surface *surface;
+  GtkApplicationWaylandInhibitor *inhibitor;
+
+  /* Wayland only supports idle inhibit so far. */
+  if (!(flags & GTK_APPLICATION_INHIBIT_IDLE))
+    return 0;
+
+  gdk_surface = gtk_native_get_surface (GTK_NATIVE (window));
+
+  if (!GDK_IS_WAYLAND_SURFACE (gdk_surface))
+    return 0;
+
+  gdk_display = gdk_surface_get_display (gdk_surface);
+  idle_inhibit_manager = GDK_WAYLAND_DISPLAY (gdk_display)->idle_inhibit_manager;
+
+  if (!idle_inhibit_manager)
+    return 0;
+
+  surface = gdk_wayland_surface_get_wl_surface (gdk_surface);
+
+  inhibitor = g_slice_new (GtkApplicationWaylandInhibitor);
+  inhibitor->cookie = ++wayland->next_cookie;
+  inhibitor->flags = flags;
+  inhibitor->idle_inhibitor = zwp_idle_inhibit_manager_v1_create_inhibitor (idle_inhibit_manager, surface);
+
+  wayland->inhibitors = g_slist_prepend (wayland->inhibitors, inhibitor);
+
+  return inhibitor->cookie;
+}
+
+static void
+gtk_application_impl_wayland_uninhibit (GtkApplicationImpl *impl,
+                                        guint               cookie)
+{
+  GtkApplicationImplWayland *wayland = (GtkApplicationImplWayland *) impl;
+  GSList *iter;
+
+  for (iter = wayland->inhibitors; iter; iter = iter->next)
+    {
+      GtkApplicationWaylandInhibitor *inhibitor = iter->data;
+
+      if (inhibitor->cookie == cookie)
+        {
+          gtk_application_wayland_inhibitor_free (inhibitor);
+          wayland->inhibitors = g_slist_delete_link (wayland->inhibitors, iter);
+          return;
+        }
+    }
+
+  g_warning ("Invalid inhibitor cookie");
+}
+
 static void
 gtk_application_impl_wayland_init (GtkApplicationImplWayland *wayland)
 {
@@ -86,4 +168,8 @@ gtk_application_impl_wayland_class_init (GtkApplicationImplWaylandClass *class)
     gtk_application_impl_wayland_handle_window_realize;
   impl_class->before_emit =
     gtk_application_impl_wayland_before_emit;
+  impl_class->inhibit =
+    gtk_application_impl_wayland_inhibit;
+  impl_class->uninhibit =
+    gtk_application_impl_wayland_uninhibit;
 }
