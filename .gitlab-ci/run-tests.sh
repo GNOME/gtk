@@ -9,6 +9,8 @@ backend=$2
 
 # Ignore memory leaks lower in dependencies
 export LSAN_OPTIONS=suppressions=$srcdir/lsan.supp
+# Disable lsan for now since it is crashy
+export ASAN_OPTION=detect_leaks=0
 
 case "${backend}" in
   x11)
