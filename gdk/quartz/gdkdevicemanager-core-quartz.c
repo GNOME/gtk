@@ -197,6 +197,50 @@ create_core_device (GdkDeviceManager *device_manager,
   return device;
 }
 
+static void
+mimic_device_axes (GdkDevice *logical,
+                   GdkDevice *physical)
+{
+  double axis_min, axis_max, axis_resolution;
+  GdkAtom axis_label;
+  GdkAxisUse axis_use;
+  int axis_count;
+  int i;
+
+  axis_count = gdk_device_get_n_axes (physical);
+
+  for (i = 0; i < axis_count; i++)
+    {
+      _gdk_device_get_axis_info (physical, i, &axis_label, &axis_use, &axis_min,
+                                 &axis_max, &axis_resolution);
+      _gdk_device_add_axis (logical, axis_label, axis_use, axis_min,
+                            axis_max, axis_resolution);
+    }
+}
+
+static void
+translate_device_axes (GdkDevice *source_device,
+                       gboolean   active)
+{
+  GdkSeat *seat = gdk_display_get_default_seat (_gdk_display);
+  GdkDevice *core_pointer = gdk_seat_get_pointer (seat);
+
+  g_object_freeze_notify (G_OBJECT (core_pointer));
+
+  _gdk_device_reset_axes (core_pointer);
+  if (active && source_device)
+    {
+      mimic_device_axes (core_pointer, source_device);
+    }
+  else
+    {
+      _gdk_device_add_axis (core_pointer, GDK_NONE, GDK_AXIS_X, 0, 0, 1);
+      _gdk_device_add_axis (core_pointer, GDK_NONE, GDK_AXIS_Y, 0, 0, 1);
+    }
+
+  g_object_thaw_notify (G_OBJECT (core_pointer));
+}
+
 void
 _gdk_quartz_device_manager_register_device_for_ns_event (GdkDeviceManager *device_manager,
                                                          NSEvent          *nsevent)
@@ -289,6 +333,8 @@ _gdk_quartz_device_manager_register_device_for_ns_event (GdkDeviceManager *devic
           _gdk_quartz_device_core_set_active (device, TRUE, [nsevent deviceID]);
         }
     }
+
+  translate_device_axes (device, [nsevent isEnteringProximity]);
 
   if (self->num_active_devices)
     [NSEvent setMouseCoalescingEnabled: FALSE];
