@@ -494,7 +494,7 @@ gtk_filter_list_model_refilter (GtkFilterListModel *self,
           {
           default:
             g_assert_not_reached ();
-            G_GNUC_FALLTHROUGH;
+            /* fall thru */
           case GTK_FILTER_CHANGE_DIFFERENT:
             self->matches = gtk_bitset_new_empty ();
             pending = gtk_bitset_new_range (0, g_list_model_get_n_items (self->model));
