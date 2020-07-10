@@ -30,7 +30,7 @@ tests = [
   ['expression'],
   ['filter'],
   ['filterlistmodel'],
-  ['filterlistmodel-exhaustive'],
+  ['filterlistmodel-exhaustive', [], [], [], ['slow']],
   ['flattenlistmodel'],
   ['floating'],
   ['flowbox'],
