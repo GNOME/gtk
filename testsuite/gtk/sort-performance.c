@@ -430,12 +430,12 @@ remove_n (const char *testname,
 
   while (TRUE)
     {
-      gtk_slice_list_model_set_size (slice, size - n);
+      gtk_slice_list_model_set_size (slice, size);
       comparisons = 0;
       n_changed = 0;
 
       start = end = g_get_monotonic_time ();
-      for (i = 0; i < 100; i++)
+      for (i = 1; i <= 100; i++)
         {
           gtk_slice_list_model_set_size (slice, size - n * i);
           end = snapshot_time (end, &max);
