@@ -157,7 +157,10 @@ merge (SortArray *items,
        GtkSorter *sorter)
 {
   int start2 = mid + 1;
-  int c = 1;
+  int c = 0;
+
+  if (mid == end)
+    return 0;
 
   if (gtk_sorter_compare (sorter,
                           sort_array_get (items, mid),
