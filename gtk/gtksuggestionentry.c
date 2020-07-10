@@ -564,6 +564,9 @@ text_changed_idle (gpointer data)
   guint matches;
   GtkFilter *filter;
 
+  if (!self->filter_model)
+    return G_SOURCE_REMOVE;
+
   text = gtk_editable_get_text (GTK_EDITABLE (self->entry));
   len = g_utf8_strlen (text, -1);
   filter = gtk_filter_list_model_get_filter (self->filter_model);
@@ -867,6 +870,8 @@ gtk_suggestion_entry_init (GtkSuggestionEntry *self)
   self->insert_selection = FALSE;
   self->insert_prefix = FALSE;
   self->show_button = FALSE;
+
+  gtk_widget_action_set_enabled (GTK_WIDGET (self), "popup.show", FALSE);
 
   self->box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_widget_add_css_class (self->box, "linked");
@@ -1241,6 +1246,8 @@ gtk_suggestion_entry_set_model (GtkSuggestionEntry *self,
       g_signal_connect (self->selection, "items-changed",
                         G_CALLBACK (items_changed), self);
     }
+  else
+    gtk_widget_action_set_enabled (GTK_WIDGET (self), "popup.show", FALSE);
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_MODEL]);
 }
