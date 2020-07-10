@@ -35,4 +35,13 @@ branch, as well as their available versions.
  - [ ] Add the new job to `.gitlab-ci.yml` referencing the image
  - [ ] Open a merge request with your changes and let it run
 
+### Checklist for Adding a new dependency to a CI image
+
+Our images are layered, and the base (called fedora-base) contains
+all the rpm payload. Therefore, adding a new dependency is a 2-step
+process:
+
+ 1. [ ] Build and upload fedora-base:$version+1
+ 1. [ ] Build and upload fedora:$version+1 based on fedora-base:version+1
+
 [registry]: https://gitlab.gnome.org/GNOME/gtk/container_registry
