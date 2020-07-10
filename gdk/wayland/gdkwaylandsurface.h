@@ -80,6 +80,9 @@ void                     gdk_wayland_surface_set_application_id (GdkSurface *sur
 
 void gdk_wayland_surface_announce_csd                        (GdkSurface *surface);
 
+gboolean gdk_wayland_surface_inhibit_idle                    (GdkSurface *surface);
+void gdk_wayland_surface_uninhibit_idle                      (GdkSurface *surface);
+
 G_END_DECLS
 
 #endif /* __GDK_WAYLAND_SURFACE_H__ */
