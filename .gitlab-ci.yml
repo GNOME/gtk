@@ -20,7 +20,7 @@ variables:
   BACKEND_FLAGS: "-Dx11-backend=true -Dwayland-backend=true -Dbroadway-backend=true -Dvulkan=yes"
   FEATURE_FLAGS: "-Dcloudproviders=true"
   MESON_TEST_TIMEOUT_MULTIPLIER: 2
-  FEDORA_IMAGE: "registry.gitlab.gnome.org/gnome/gtk/fedora:v17"
+  FEDORA_IMAGE: "registry.gitlab.gnome.org/gnome/gtk/fedora:v20"
   FLATPAK_IMAGE: "registry.gitlab.gnome.org/gnome/gnome-runtime-images/gnome:master"
   DOCS_IMAGE: "registry.gitlab.gnome.org/gnome/gtk/fedora-docs:v19"
 
@@ -178,6 +178,22 @@ static-scan:
   artifacts:
     paths:
       - _scan_build/meson-logs
+  allow_failure: true
+
+# Run tests with the address sanitizer. We need to turn off introspection,
+# since it is incompatible with asan
+asan-build:
+  image: $FEDORA_IMAGE
+  tags: [ privileged ]
+  stage: analysis
+  variables:
+  script:
+    - CC=clang meson --buildtype=debugoptimized -Db_sanitize=address -Db_lundef=false -Dintrospection=false _build
+    - ninja -C _build
+    - .gitlab-ci/run-tests.sh _build wayland
+  artifacts:
+    paths:
+      - _build/meson-logs
   allow_failure: true
 
 reference:

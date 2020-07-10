@@ -7,6 +7,11 @@ srcdir=$( pwd )
 builddir=$1
 backend=$2
 
+# Ignore memory leaks lower in dependencies
+export LSAN_OPTIONS=suppressions=$srcdir/lsan.supp
+# Disable lsan for now since it is crashy
+export ASAN_OPTION=detect_leaks=0
+
 case "${backend}" in
   x11)
     xvfb-run -a -s "-screen 0 1024x768x24" \

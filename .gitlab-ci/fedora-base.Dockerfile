@@ -48,6 +48,7 @@ RUN dnf -y install \
     libmount-devel \
     librsvg2 \
     libselinux-devel \
+    libubsan \
     libXcomposite-devel \
     libXcursor-devel \
     libXcursor-devel \
