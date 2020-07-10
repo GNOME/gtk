@@ -588,7 +588,7 @@ text_changed_idle (gpointer data)
   if (GTK_IS_STRING_FILTER (filter))
     gtk_string_filter_set_search (GTK_STRING_FILTER (filter), self->search);
 
-  matches = g_list_model_get_n_items (G_LIST_MODEL (self->selection));
+  matches = g_list_model_get_n_items (G_LIST_MODEL (self->filter_model));
 
   if (len < self->minimum_length)
     gtk_suggestion_entry_set_popup_visible (self, FALSE);
@@ -1027,10 +1027,23 @@ update_filter (GtkSuggestionEntry *self)
   else
     filter = NULL;
 
-  gtk_filter_list_model_set_filter (GTK_FILTER_LIST_MODEL (self->filter_model), filter);
+  gtk_filter_list_model_set_filter (self->filter_model, filter);
 
   g_clear_pointer (&expression, gtk_expression_unref);
   g_clear_object (&filter);
+}
+
+static void
+update_popup_action (GtkSuggestionEntry *self)
+{
+  guint n_items;
+
+  if (self->filter_model)
+    n_items = g_list_model_get_n_items (G_LIST_MODEL (self->filter_model));
+  else
+    n_items = 0;
+
+  gtk_widget_action_set_enabled (GTK_WIDGET (self), "popup.show", n_items > 0);
 }
 
 static void
@@ -1200,6 +1213,7 @@ items_changed (GListModel         *model,
                GtkSuggestionEntry *self)
 {
   update_prefix (self);
+  update_popup_action (self);
 }
 
 /**
@@ -1255,8 +1269,8 @@ gtk_suggestion_entry_set_model (GtkSuggestionEntry *self,
       g_signal_connect (self->selection, "items-changed",
                         G_CALLBACK (items_changed), self);
     }
-  else
-    gtk_widget_action_set_enabled (GTK_WIDGET (self), "popup.show", FALSE);
+
+  update_popup_action (self);
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_MODEL]);
 }
