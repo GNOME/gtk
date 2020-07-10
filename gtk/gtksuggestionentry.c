@@ -100,6 +100,7 @@ struct _GtkSuggestionEntry
   GListModel *model;
   GtkListItemFactory *factory;
   GtkExpression *expression;
+  GtkFilter *filter;
 
   GtkFilterListModel *filter_model;
   GtkSingleSelection *selection;
@@ -180,6 +181,7 @@ gtk_suggestion_entry_dispose (GObject *object)
     }
   g_clear_pointer (&self->box, gtk_widget_unparent);
 
+  g_clear_object (&self->filter);
   g_clear_pointer (&self->expression, gtk_expression_unref);
   g_clear_object (&self->factory);
 
@@ -570,7 +572,7 @@ text_changed_idle (gpointer data)
   text = gtk_editable_get_text (GTK_EDITABLE (self->entry));
   len = g_utf8_strlen (text, -1);
   filter = gtk_filter_list_model_get_filter (self->filter_model);
-  if (filter)
+  if (GTK_IS_STRING_FILTER (filter))
     gtk_string_filter_set_search (GTK_STRING_FILTER (filter), text);
 
   matches = g_list_model_get_n_items (G_LIST_MODEL (self->selection));
@@ -704,7 +706,7 @@ gtk_suggestion_entry_key_pressed (GtkEventControllerKey *controller,
           text = self->prefix ? self->prefix : "";
           gtk_editable_set_text (GTK_EDITABLE (self->entry), text);
           filter = gtk_filter_list_model_get_filter (self->filter_model);
-          if (filter)
+          if (GTK_IS_STRING_FILTER (filter))
             gtk_string_filter_set_search (GTK_STRING_FILTER (filter), text);
           g_clear_pointer (&self->prefix, g_free);
           gtk_editable_set_position (GTK_EDITABLE (self->entry), -1);
@@ -981,10 +983,16 @@ search_changed (GObject            *object,
 static void
 update_filter (GtkSuggestionEntry *self)
 {
-  if (self->filter_model)
+  GtkFilter *filter;
+
+  if (!self->filter_model)
+    return;
+
+  if (self->filter)
+    filter = g_object_ref (self->filter);
+  else
     {
       GtkExpression *expression;
-      GtkFilter *filter;
 
       if (!self->use_filter)
         expression = NULL;
@@ -1007,11 +1015,12 @@ update_filter (GtkSuggestionEntry *self)
       else
         filter = NULL;
 
-      gtk_filter_list_model_set_filter (GTK_FILTER_LIST_MODEL (self->filter_model), filter);
-
-      g_clear_object (&filter);
       g_clear_pointer (&expression, gtk_expression_unref);
     }
+
+  gtk_filter_list_model_set_filter (GTK_FILTER_LIST_MODEL (self->filter_model), filter);
+
+  g_clear_object (&filter);
 }
 
 static void
@@ -1167,7 +1176,7 @@ update_prefix (GtkSuggestionEntry *self)
     return;
 
   filter = gtk_filter_list_model_get_filter (self->filter_model);
-  if (!filter)
+  if (!GTK_IS_STRING_FILTER (filter))
     return;
 
   g_signal_handler_block (self->entry, self->changed_id);
@@ -1570,4 +1579,24 @@ gtk_suggestion_entry_get_minimum_length (GtkSuggestionEntry *self)
   g_return_val_if_fail (GTK_IS_SUGGESTION_ENTRY (self), 1);
 
   return self->minimum_length;
+}
+
+void
+gtk_suggestion_entry_set_filter (GtkSuggestionEntry *self,
+                                 GtkFilter          *filter)
+{
+  g_return_if_fail (GTK_IS_SUGGESTION_ENTRY (self));
+
+  if (!g_set_object (&self->filter, filter))
+    return;
+
+  update_filter (self);
+}
+
+GtkFilter *
+gtk_suggestion_entry_get_filter (GtkSuggestionEntry *self)
+{
+  g_return_val_if_fail (GTK_IS_SUGGESTION_ENTRY (self), NULL);
+
+  return self->filter;
 }
