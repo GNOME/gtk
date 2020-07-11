@@ -25,6 +25,15 @@
  */
 #define MIN_MERGE 32
 
+/*
+ * Limit the amount of work done when merging. This ensures that the step
+ * function does not take too much time. Of coure, there's overhead associated
+ * with splitting a merge into miultliple merges.
+ *
+ * So lowering this number will make the average runtime of the step function
+ * faster but increase the total runtime.
+ */
+#define MAX_MERGE_PER_RUN 1024
 
 /*
  * When we get into galloping mode, we stay there until both runs win less
