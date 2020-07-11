@@ -101,6 +101,7 @@ struct _GtkSor3ListModel
   PivotStack stack;
 
   gint64 start_time;
+  guint steps;
 };
 
 struct _GtkSor3ListModelClass
@@ -189,7 +190,7 @@ gtk_sor3_list_model_stop_sorting (GtkSor3ListModel *self)
       guint n_items = g_list_model_get_n_items (G_LIST_MODEL (self));
 
       if (self->start_time != 0)
-        gdk_profiler_add_markf (self->start_time, g_get_monotonic_time () - self->start_time, "quicksort", "sorting %u", n_items);
+        gdk_profiler_add_markf (self->start_time, g_get_monotonic_time () - self->start_time, "quicksort", "sorting %u items, %u steps", n_items, self->steps);
 
       self->start_time = 0;
     }
@@ -289,6 +290,8 @@ gtk_sor3_list_model_sort_cb (gpointer data)
   guint changed_end;
   guint changed_items = 0;
 
+  self->steps++;
+
   start = self->sorted_to;
   n_items = sort_array_get_size (&self->items);
   end = MIN (512, n_items - start);
@@ -327,6 +330,7 @@ gtk_sor3_list_model_start_sorting (GtkSor3ListModel *self)
   g_assert (self->sorting_cb == 0);
 
   self->start_time = g_get_monotonic_time ();
+  self->steps = 0;
 
   pivot_stack_push (&self->stack, (guint)sort_array_get_size (&self->items) - 1);
   self->sorted_to = 0;
