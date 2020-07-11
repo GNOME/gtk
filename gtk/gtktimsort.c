@@ -125,10 +125,15 @@ gtk_tim_sort_push_run (GtkTimSort *self,
                        gsize       len)
 {
   g_assert (self->pending_runs < GTK_TIM_SORT_MAX_PENDING);
+  g_assert (len <= self->size);
 
   self->run[self->pending_runs].base = base;
   self->run[self->pending_runs].len = len;
   self->pending_runs++;
+
+  /* Advance to find next run */
+  self->base = ((char *) self->base) + len * self->element_size;
+  self->size -= len;
 }
 
 /**
@@ -165,6 +170,54 @@ gtk_tim_sort_ensure_capacity (GtkTimSort *self,
   }
 
   return self->tmp;
+}
+
+/*<private>
+ * gtk_tim_sort_get_runs:
+ * @self: a #GtkTimSort
+ * @runs: (out) (caller-allocates): Place to store the 0-terminated list of
+ *     runs
+ *
+ * Stores the already presorted list of runs - ranges of items that are
+ * known to be sorted among themselves.
+ *
+ * This can be used with gtk_tim_sort_set_runs() when resuming a sort later.
+ **/
+void
+gtk_tim_sort_get_runs (GtkTimSort *self,
+                       gsize       runs[GTK_TIM_SORT_MAX_PENDING + 1])
+{
+  gsize i;
+
+  g_return_if_fail (self);
+  g_return_if_fail (runs);
+
+  for (i = 0; i < self->pending_runs; i++)
+    runs[i] = self->run[i].len;
+}
+
+/*<private>
+ * gtk_tim_sort_set_runs:
+ * @self: a freshly initialized #GtkTimSort
+ * @runs: (array length=zero-terminated): a 0-terminated list of runs
+ *
+ * Sets the list of runs. A run is a range of items that are already
+ * sorted correctly among themselves. Runs must appear at the beginning of
+ * the array.
+ *
+ * Runs can only be set at the beginning of the sort operation.
+ **/
+void
+gtk_tim_sort_set_runs (GtkTimSort *self,
+                       gsize      *runs)
+{
+  gsize i;
+
+  g_return_if_fail (self);
+  g_return_if_fail (self->pending_runs == 0);
+
+  for (i = 0; runs[i] != 0; i++)
+    gtk_tim_sort_push_run (self, self->base, runs[i]);
 }
 
 #if 1
