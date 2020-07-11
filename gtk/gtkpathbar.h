@@ -19,7 +19,6 @@
 #define __GTK_PATH_BAR_H__
 
 #include "gtkwidget.h"
-#include "gtkfilesystem.h"
 
 G_BEGIN_DECLS
 
@@ -31,11 +30,9 @@ typedef struct _GtkPathBar GtkPathBar;
 
 GDK_AVAILABLE_IN_ALL
 GType    gtk_path_bar_get_type (void) G_GNUC_CONST;
-void     _gtk_path_bar_set_file_system (GtkPathBar         *path_bar,
-					GtkFileSystem      *file_system);
 void     _gtk_path_bar_set_file        (GtkPathBar         *path_bar,
-					GFile              *file,
-					gboolean            keep_trail);
+                                        GFile              *file,
+                                        gboolean            keep_trail);
 void     _gtk_path_bar_up              (GtkPathBar *path_bar);
 void     _gtk_path_bar_down            (GtkPathBar *path_bar);
 

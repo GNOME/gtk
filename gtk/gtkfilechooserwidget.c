@@ -7863,8 +7863,6 @@ post_process_ui (GtkFileChooserWidget *impl)
   file_list_set_sort_column_ids (impl);
   update_cell_renderer_attributes (impl);
 
-  /* Set the GtkPathBar file system backend */
-  _gtk_path_bar_set_file_system (GTK_PATH_BAR (impl->browse_path_bar), impl->file_system);
   file = g_file_new_for_path ("/");
   _gtk_path_bar_set_file (GTK_PATH_BAR (impl->browse_path_bar), file, FALSE);
   g_object_unref (file);
