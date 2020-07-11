@@ -67,6 +67,7 @@ enum {
   PROP_0,
   PROP_MODEL,
   PROP_SORTER,
+  PROP_SORTING,
   NUM_PROPERTIES
 };
 
@@ -149,6 +150,8 @@ gtk_tim2_sort_model_stop_sorting (GtkTim2SortModel *self)
 
   gtk_tim_sort_finish (&self->sort);
   g_clear_handle_id (&self->sort_cb, g_source_remove);
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_SORTING]);
 }
 
 static gboolean
@@ -174,6 +177,8 @@ gtk_tim2_sort_model_start_sorting (GtkTim2SortModel *self)
     return;
 
   self->sort_cb = g_idle_add (gtk_tim2_sort_model_sort_cb, self);
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_SORTING]);
 }
 
 static void
@@ -367,6 +372,10 @@ gtk_tim2_sort_model_get_property (GObject     *object,
       g_value_set_object (value, self->sorter);
       break;
 
+    case PROP_SORTING:
+      g_value_set_boolean (value, self->sort_cb != 0);
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -457,6 +466,13 @@ gtk_tim2_sort_model_class_init (GtkTim2SortModelClass *class)
                            P_("The model being sorted"),
                            G_TYPE_LIST_MODEL,
                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
+
+  properties[PROP_SORTING] =
+      g_param_spec_boolean ("sorting",
+                           P_("Sorting"),
+                           P_("Whether sorting is currently underway"),
+                           FALSE,
+                           GTK_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (gobject_class, NUM_PROPERTIES, properties);
 }
