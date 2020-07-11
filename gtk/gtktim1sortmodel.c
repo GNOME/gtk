@@ -175,13 +175,22 @@ sort_func (gconstpointer a,
 }
 
 static void
-gtk_tim1_sort_model_resort (GtkTim1SortModel *self)
+gtk_tim1_sort_model_resort (GtkTim1SortModel *self,
+                            guint             already_sorted)
 {
-  gtk_tim_sort (sort_array_get_data (&self->items),
-                sort_array_get_size (&self->items),
-                sizeof (SortItem),
-                sort_func,
-                self->sorter);
+  GtkTimSort sort;
+
+  gtk_tim_sort_init (&sort,
+                     sort_array_get_data (&self->items),
+                     sort_array_get_size (&self->items),
+                     sizeof (SortItem),
+                     sort_func,
+                     self->sorter);
+  gtk_tim_sort_set_already_sorted (&sort, already_sorted);
+
+  while (gtk_tim_sort_step (&sort));
+
+  gtk_tim_sort_finish (&sort);
 }
 
 static void
@@ -252,7 +261,7 @@ gtk_tim1_sort_model_items_changed_cb (GListModel       *model,
         {
           sort_array_append (&self->items, &(SortItem) { g_list_model_get_item (self->model, i), i });
         }
-      gtk_tim1_sort_model_resort (self);
+      gtk_tim1_sort_model_resort (self, sort_array_get_size (&self->items) - added);
 
       for (i = 0; i < start; i++)
         {
@@ -339,7 +348,7 @@ gtk_tim1_sort_model_sorter_changed_cb (GtkSorter        *sorter,
   else if (sort_array_is_empty (&self->items))
     gtk_tim1_sort_model_create_items (self);
 
-  gtk_tim1_sort_model_resort (self);
+  gtk_tim1_sort_model_resort (self, 0);
 
   n_items = g_list_model_get_n_items (G_LIST_MODEL (self));
   if (n_items > 1)
@@ -476,7 +485,7 @@ gtk_tim1_sort_model_set_model (GtkTim1SortModel *self,
       added = g_list_model_get_n_items (model);
 
       gtk_tim1_sort_model_create_items (self);
-      gtk_tim1_sort_model_resort (self);
+      gtk_tim1_sort_model_resort (self, 0);
     }
   else
     added = 0;
