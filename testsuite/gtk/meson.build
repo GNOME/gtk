@@ -66,6 +66,7 @@ tests = [
   ['textbuffer'],
   ['textiter'],
   ['theme-validate'],
+  ['timsort', ['timsort.c', '../../gtk/gtktimsort.c']],
   ['tooltips'],
   ['treelistmodel'],
   ['treemodel', ['treemodel.c', 'liststore.c', 'treestore.c', 'filtermodel.c',
