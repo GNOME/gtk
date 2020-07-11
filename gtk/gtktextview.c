@@ -9692,7 +9692,11 @@ activate_bubble_cb (GtkWidget   *item,
 
   signal = g_object_get_qdata (G_OBJECT (item), quark_gtk_signal);
   gtk_widget_hide (text_view->priv->selection_bubble);
-  g_signal_emit_by_name (text_view, signal);
+
+  if (strcmp (signal, "select-all") == 0)
+    g_signal_emit_by_name (text_view, "select-all", TRUE);
+  else
+    g_signal_emit_by_name (text_view, signal);
 }
 
 static void
