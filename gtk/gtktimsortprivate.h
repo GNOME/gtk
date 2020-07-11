@@ -95,6 +95,8 @@ void            gtk_tim_sort_init                               (GtkTimSort     
                                                                  gpointer                data);
 void            gtk_tim_sort_finish                             (GtkTimSort             *self);
 
+void            gtk_tim_sort_set_already_sorted                 (GtkTimSort             *self,
+                                                                 gsize                   already_sorted);
 gboolean        gtk_tim_sort_step                               (GtkTimSort             *self);
 
 void            gtk_tim_sort                                    (gpointer                base,
