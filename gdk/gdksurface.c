@@ -2861,6 +2861,7 @@ gdk_surface_handle_event (GdkEvent *event)
 {
   gint64 begin_time = g_get_monotonic_time ();
   gboolean handled = FALSE;
+  GdkSurface *surface = gdk_event_get_surface (event);
 
   if (check_autohide (event))
     return TRUE;
@@ -2870,13 +2871,13 @@ gdk_surface_handle_event (GdkEvent *event)
       int width, height;
 
       gdk_configure_event_get_size (event, &width, &height);
-      g_signal_emit (gdk_event_get_surface (event), signals[SIZE_CHANGED], 0,
-                     width, height);
+      if (width != surface->width || height != surface->height)
+        g_signal_emit (surface, signals[SIZE_CHANGED], 0, width, height);
       handled = TRUE;
     }
   else
     {
-      g_signal_emit (gdk_event_get_surface (event), signals[EVENT], 0, event, &handled);
+      g_signal_emit (surface, signals[EVENT], 0, event, &handled);
     }
 
   if (GDK_PROFILER_IS_RUNNING)
