@@ -23,31 +23,11 @@
 
 G_BEGIN_DECLS
 
-typedef struct _GtkPathBar        GtkPathBar;
-typedef struct _GtkPathBarClass   GtkPathBarClass;
+#define GTK_TYPE_PATH_BAR    (gtk_path_bar_get_type ())
+#define GTK_PATH_BAR(obj)    (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_PATH_BAR, GtkPathBar))
+#define GTK_IS_PATH_BAR(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_PATH_BAR))
 
-
-#define GTK_TYPE_PATH_BAR                 (gtk_path_bar_get_type ())
-#define GTK_PATH_BAR(obj)                 (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_PATH_BAR, GtkPathBar))
-#define GTK_PATH_BAR_CLASS(klass)         (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_PATH_BAR, GtkPathBarClass))
-#define GTK_IS_PATH_BAR(obj)              (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_PATH_BAR))
-#define GTK_IS_PATH_BAR_CLASS(klass)      (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_PATH_BAR))
-#define GTK_PATH_BAR_GET_CLASS(obj)       (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_PATH_BAR, GtkPathBarClass))
-
-struct _GtkPathBar
-{
-  GtkWidget parent_instance;
-};
-
-struct _GtkPathBarClass
-{
-  GtkWidgetClass parent_class;
-
-  void (* path_clicked) (GtkPathBar  *path_bar,
-			 GFile       *file,
-			 GFile       *child_file,
-			 gboolean     child_is_hidden);
-};
+typedef struct _GtkPathBar GtkPathBar;
 
 GDK_AVAILABLE_IN_ALL
 GType    gtk_path_bar_get_type (void) G_GNUC_CONST;
