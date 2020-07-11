@@ -806,18 +806,6 @@ gtk_tim_sort(merge_at) (GtkTimSort *self,
   g_assert (ELEM (base1, len1) == base2);
 
   /*
-   * Record the length of the combined runs; if i is the 3rd-last
-   * run now, also slide over the last run (which isn't involved
-   * in this merge).  The current run (i+1) goes away in any case.
-   */
-  self->run[i].len = len1 + len2;
-  if (i == self->pending_runs - 3)
-    {
-      self->run[i + 1] = self->run[i + 2];
-    }
-  self->pending_runs--;
-
-  /*
    * Find where the first element of run2 goes in run1. Prior elements
    * in run1 can be ignored (because they're already in place).
    */
@@ -825,7 +813,7 @@ gtk_tim_sort(merge_at) (GtkTimSort *self,
   base1 = ELEM (base1, k);
   len1 -= k;
   if (len1 == 0)
-    return;
+    goto done;
 
   /*
    * Find where the last element of run1 goes in run2. Subsequent elements
@@ -835,13 +823,53 @@ gtk_tim_sort(merge_at) (GtkTimSort *self,
                                     ELEM (base1, len1 - 1),
                                     base2, len2, len2 - 1);
   if (len2 == 0)
-    return;
+    goto done;
 
   /* Merge remaining runs, using tmp array with min(len1, len2) elements */
   if (len1 <= len2)
-    gtk_tim_sort(merge_lo) (self, base1, len1, base2, len2);
+    {
+      if (len1 > MAX_MERGE_PER_RUN)
+        {
+          base1 = ELEM (self->run[i].base, self->run[i].len - MAX_MERGE_PER_RUN);
+          gtk_tim_sort(merge_lo) (self, base1, MAX_MERGE_PER_RUN, base2, len2);
+          self->run[i].len -= MAX_MERGE_PER_RUN;
+          self->run[i + 1].base = ELEM (self->run[i + 1].base, - MAX_MERGE_PER_RUN);
+          self->run[i + 1].len += MAX_MERGE_PER_RUN;
+          g_assert (ELEM (self->run[i].base, self->run[i].len) == self->run[i + 1].base);
+          return;
+        }
+      else
+        {
+          gtk_tim_sort(merge_lo) (self, base1, len1, base2, len2);
+        }
+    }
   else
-    gtk_tim_sort(merge_hi) (self, base1, len1, base2, len2);
+    {
+      if (len2 > MAX_MERGE_PER_RUN)
+        {
+          gtk_tim_sort(merge_hi) (self, base1, len1, base2, MAX_MERGE_PER_RUN);
+          self->run[i].len += MAX_MERGE_PER_RUN;
+          self->run[i + 1].base = ELEM (self->run[i + 1].base, MAX_MERGE_PER_RUN);
+          self->run[i + 1].len -= MAX_MERGE_PER_RUN;
+          g_assert (ELEM (self->run[i].base, self->run[i].len) == self->run[i + 1].base);
+          return;
+        }
+      else
+        {
+          gtk_tim_sort(merge_hi) (self, base1, len1, base2, len2);
+        }
+    }
+
+done:
+  /*
+   * Record the length of the combined runs; if i is the 3rd-last
+   * run now, also slide over the last run (which isn't involved
+   * in this merge).  The current run (i+1) goes away in any case.
+   */
+  self->run[i].len += self->run[i + 1].len;
+  if (i == self->pending_runs - 3)
+    self->run[i + 1] = self->run[i + 2];
+  self->pending_runs--;
 }
 
 
