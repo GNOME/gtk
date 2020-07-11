@@ -215,10 +215,6 @@ gtk_tim_sort(merge_append) (GtkTimSort *self)
   /* Push run onto pending-run stack, and maybe merge */
   gtk_tim_sort_push_run (self, self->base, run_len);
 
-  /* Advance to find next run */
-  self->base = ELEM (self->base, run_len);
-  self->size -= run_len;
-
   return TRUE;
 }
 
