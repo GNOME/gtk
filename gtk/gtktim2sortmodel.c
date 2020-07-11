@@ -23,6 +23,7 @@
 
 #include "gtkintl.h"
 #include "gtkprivate.h"
+#include "gdk/gdkprofilerprivate.h"
 #include "gtktimsortprivate.h"
 
 typedef struct _SortItem SortItem;
@@ -81,6 +82,9 @@ struct _GtkTim2SortModel
   GtkTimSort sort; /* ongoing sort operation */
   guint sort_cb; /* 0 or current ongoing sort callback */
   SortArray items; /* empty if known unsorted */
+
+  gint64 start_time;
+  guint steps;
 };
 
 struct _GtkTim2SortModelClass
@@ -151,6 +155,14 @@ gtk_tim2_sort_model_stop_sorting (GtkTim2SortModel *self)
   gtk_tim_sort_finish (&self->sort);
   g_clear_handle_id (&self->sort_cb, g_source_remove);
 
+  if (GDK_PROFILER_IS_RUNNING)
+    {
+      if (self->start_time != 0)
+        gdk_profiler_add_markf (self->start_time, g_get_monotonic_time () - self->start_time, "sort", "sorting %u", (guint)sort_array_get_size (&self->items));
+
+      self->start_time = 0;
+    }
+
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_SORTING]);
 }
 
@@ -158,13 +170,21 @@ static gboolean
 gtk_tim2_sort_model_sort_cb (gpointer data)
 {
   GtkTim2SortModel *self = data;
+  gint64 begin = g_get_monotonic_time ();
 
   if (gtk_tim_sort_step (&self->sort))
     {
       guint n_items = sort_array_get_size (&self->items);
       g_list_model_items_changed (G_LIST_MODEL (self), 0, n_items, n_items);
+
+      if (GDK_PROFILER_IS_RUNNING)
+        gdk_profiler_add_markf (begin, g_get_monotonic_time () - begin, "sort", "sort step (%u:%u)", 0, n_items);
+
       return G_SOURCE_CONTINUE;
     }
+
+  if (GDK_PROFILER_IS_RUNNING)
+    gdk_profiler_add_markf (begin, g_get_monotonic_time () - begin, "sort", "sort step (%u:%u)", 0, (guint)sort_array_get_size (&self->items));
 
   gtk_tim2_sort_model_stop_sorting (self);
   return G_SOURCE_REMOVE;
@@ -177,6 +197,8 @@ gtk_tim2_sort_model_start_sorting (GtkTim2SortModel *self)
     return;
 
   self->sort_cb = g_idle_add (gtk_tim2_sort_model_sort_cb, self);
+
+  self->start_time = g_get_monotonic_time ();
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_SORTING]);
 }
@@ -227,6 +249,9 @@ static void
 gtk_tim2_sort_model_resort (GtkTim2SortModel *self,
                             guint             already_sorted)
 {
+  if (GDK_PROFILER_IS_RUNNING)
+    gdk_profiler_add_mark (g_get_monotonic_time (), 0, "resort", NULL);
+
   if (gtk_tim2_sort_model_is_sorting (self))
     {
       already_sorted = 0;
