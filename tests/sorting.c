@@ -64,6 +64,18 @@ start_sort (gpointer data)
 int main (int argc, char *argv[])
 {
   GListModel *model;
+  guint32 seed;
+
+  seed = g_random_int ();
+
+  if (argc > 2)
+    {
+      if (strcmp (argv[1], "--seed") == 0)
+        seed = atoi (argv[2]);
+    }
+
+  g_print ("seed %u\n", seed);
+  g_random_set_seed (seed);
 
   gtk_init ();
 
