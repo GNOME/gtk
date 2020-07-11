@@ -98,6 +98,10 @@ tests = [
   { 'name': 'textbuffer' },
   { 'name': 'textiter' },
   { 'name': 'theme-validate' },
+  {
+    'name': 'timsort',
+    'sources': ['timsort.c', '../../gtk/gtktimsort.c'],
+  },
   { 'name': 'tooltips' },
   { 'name': 'treelistmodel' },
   {
