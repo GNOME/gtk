@@ -189,7 +189,7 @@ gtk_sor3_list_model_stop_sorting (GtkSor3ListModel *self)
       guint n_items = g_list_model_get_n_items (G_LIST_MODEL (self));
 
       if (self->start_time != 0)
-        gdk_profiler_add_markf (self->start_time, g_get_monotonic_time () - self->start_time, "sort", "sorting %u", n_items);
+        gdk_profiler_add_markf (self->start_time, g_get_monotonic_time () - self->start_time, "quicksort", "sorting %u", n_items);
 
       self->start_time = 0;
     }
@@ -204,11 +204,16 @@ compare (GtkSorter *sorter, GObject *a, GObject *b)
 }
 
 static inline void
-swap (SortArray *items, guint i, guint j)
+swap (SortArray *items, guint i, guint j, guint *changed_start, guint *changed_end)
 {
   GObject *tmp = sort_array_get (items, i);
+  g_assert (i < j);
   *sort_array_index (items, i) = sort_array_get (items, j);
   *sort_array_index (items, j) = tmp;
+  if (i < *changed_start)
+    *changed_start = i;
+  if (*changed_end < j)
+    *changed_end = j;
 }
 
 /* This is pretty much the incremental quicksort that is described
@@ -220,7 +225,7 @@ swap (SortArray *items, guint i, guint j)
  * which is the incremental part.
  */
 static guint
-partition (SortArray *items, guint first, guint end, GtkSorter *sorter)
+partition (SortArray *items, guint first, guint end, GtkSorter *sorter, guint *changed_start, guint *changed_end)
 {
   guint mid;
   guint i, j;
@@ -229,13 +234,13 @@ partition (SortArray *items, guint first, guint end, GtkSorter *sorter)
   mid = first + (end - first) / 2;
   if (compare (sorter, sort_array_get (items, mid),
                        sort_array_get (items, first)) < 0)
-      swap (items, mid, first);
+      swap (items, first, mid, changed_start, changed_end);
   if (compare (sorter, sort_array_get (items, end),
                        sort_array_get (items, first)) < 0)
-      swap (items, end, first);
+      swap (items, first, end, changed_start, changed_end);
   if (compare (sorter, sort_array_get (items, mid),
                        sort_array_get (items, end)) < 0)
-      swap (items, mid, end);
+      swap (items, mid, end, changed_start, changed_end);
 
   pivot = sort_array_get (items, end);
 
@@ -246,14 +251,14 @@ partition (SortArray *items, guint first, guint end, GtkSorter *sorter)
       while (compare (sorter, sort_array_get (items, i), pivot) < 0) i++;
       while (j > i && compare (sorter, sort_array_get (items, j), pivot) >= 0) j--;
       if (i >= j) return j;
-      swap (items, i, j);
+      swap (items, i, j, changed_start, changed_end);
     }
 
   return j;
 }
 
 static gpointer
-iqs (SortArray *items, guint pos, PivotStack *stack, GtkSorter *sorter)
+iqs (SortArray *items, guint pos, PivotStack *stack, GtkSorter *sorter, guint *changed_start, guint *changed_end)
 {
   guint top;
   guint pivot;
@@ -265,10 +270,10 @@ iqs (SortArray *items, guint pos, PivotStack *stack, GtkSorter *sorter)
       return sort_array_get (items, pos);
     }
 
-  pivot = partition (items, pos, top, sorter);
+  pivot = partition (items, pos, top, sorter, changed_start, changed_end);
   pivot_stack_push (stack, pivot);
 
-  return iqs (items, pos, stack, sorter);
+  return iqs (items, pos, stack, sorter, changed_start, changed_end);
 }
 
 static gboolean
@@ -280,24 +285,34 @@ gtk_sor3_list_model_sort_cb (gpointer data)
   guint n_items;
   guint i;
   gint64 begin = g_get_monotonic_time ();
+  guint changed_start;
+  guint changed_end;
+  guint changed_items = 0;
 
   start = self->sorted_to;
   n_items = sort_array_get_size (&self->items);
   end = MIN (512, n_items - start);
 
+  changed_start = G_MAXUINT;
+  changed_end = 0;
+
   for (i = 0; i < end; i++)
     {
-      iqs (&self->items, self->sorted_to, &self->stack, self->sorter);
+      iqs (&self->items, self->sorted_to, &self->stack, self->sorter, &changed_start, &changed_end);
       self->sorted_to++;
     }
 
   if (self->sorted_to >= n_items)
     gtk_sor3_list_model_stop_sorting (self);
 
-  g_list_model_items_changed (G_LIST_MODEL (self), start, n_items - start, n_items - start);
+   if (changed_start != GTK_INVALID_LIST_POSITION)
+     {
+       changed_items = changed_end - changed_start + 1;
+       g_list_model_items_changed (G_LIST_MODEL (self), changed_start, changed_items, changed_items);
+     }
 
   if (GDK_PROFILER_IS_RUNNING)
-    gdk_profiler_add_markf (begin, g_get_monotonic_time () - begin, "sort", "sort step (%u:%u)", start, n_items);
+    gdk_profiler_add_markf (begin, g_get_monotonic_time () - begin, "quicksort", "sort step (%u:%u)", changed_start, changed_items);
 
   return G_SOURCE_CONTINUE;
 }
