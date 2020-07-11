@@ -37,6 +37,23 @@ get_random_model (guint size)
 }
 
 static GListModel *
+copy_model (GListModel *model)
+{
+  GListStore *store = g_list_store_new (G_TYPE_OBJECT);
+  guint i, n;
+
+  n = g_list_model_get_n_items (model);
+  for (i = 0; i < n; i++)
+    {
+      gpointer item = g_list_model_get_item (model, i);
+      g_list_store_append (store, item);
+      g_object_unref (item);
+    }
+
+  return G_LIST_MODEL (store);
+}
+
+static GListModel *
 get_aaaa_model (guint size)
 {
   GListStore *store = g_list_store_new (G_TYPE_OBJECT);
@@ -226,6 +243,50 @@ test_stable_sort (void)
     }
 }
 
+static void
+test_insert_random (void)
+{
+  GListModel *store1;
+  GListModel *store2;
+  GtkSorter *sorter;
+  GtkSortListModel *s1, *s2;
+  guint i, j;
+
+  for (i = 0; i < 20; i++)
+    {
+      store1 = get_random_model (1000);
+      store2 = copy_model (store1);
+
+      sorter = get_random_string_sorter ();
+
+      s1 = gtk_sort_list_model_new (G_LIST_MODEL (store1), sorter);
+      s2 = gtk_sort_list_model_new (G_LIST_MODEL (store2), sorter);
+
+      for (j = 0; j < 20; j++)
+        {
+          char *string = g_strdup_printf ("%d", g_random_int_range (0, 100000));
+          GtkStringObject *obj = gtk_string_object_new (string);
+          guint pos1 = g_random_int_range (0, g_list_model_get_n_items (store1) + 1);
+          guint pos2 = g_random_int_range (0, g_list_model_get_n_items (store2) + 1);
+
+          g_list_store_insert (G_LIST_STORE (store1), pos1, obj);
+          g_list_store_insert (G_LIST_STORE (store2), pos2, obj);
+
+          g_object_unref (obj);
+          g_free (string);
+
+          assert_model_equal (G_LIST_MODEL (s1), G_LIST_MODEL (s2));
+        }
+
+      g_object_unref (s1);
+      g_object_unref (s2);
+
+      g_object_unref (sorter);
+      g_object_unref (store1);
+      g_object_unref (store2);
+    }
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -235,6 +296,7 @@ main (int argc, char *argv[])
   g_test_add_func ("/sortlistmodel/two-sorters", test_two_sorters);
   g_test_add_func ("/sortlistmodel/sort-twice", test_sort_twice);
   g_test_add_func ("/sortlistmodel/stable-sort", test_stable_sort);
+  g_test_add_func ("/sortlistmodel/insert-random", test_insert_random);
 
   return g_test_run ();
 }
