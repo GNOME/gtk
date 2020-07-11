@@ -411,3 +411,76 @@ delegate_get_choice (GtkFileChooser  *chooser,
 {
   return gtk_file_chooser_get_choice (get_delegate (chooser), id);
 }
+
+gboolean
+_gtk_file_info_consider_as_directory (GFileInfo *info)
+{
+  GFileType type = g_file_info_get_file_type (info);
+
+  return (type == G_FILE_TYPE_DIRECTORY ||
+          type == G_FILE_TYPE_MOUNTABLE ||
+          type == G_FILE_TYPE_SHORTCUT);
+}
+
+gboolean
+_gtk_file_has_native_path (GFile *file)
+{
+  char *local_file_path;
+  gboolean has_native_path;
+
+  /* Don't use g_file_is_native(), as we want to support FUSE paths if available */
+  local_file_path = g_file_get_path (file);
+  has_native_path = (local_file_path != NULL);
+  g_free (local_file_path);
+
+  return has_native_path;
+}
+
+gboolean
+_gtk_file_consider_as_remote (GFile *file)
+{
+  GFileInfo *info;
+  gboolean is_remote;
+
+  info = g_file_query_filesystem_info (file, G_FILE_ATTRIBUTE_FILESYSTEM_REMOTE, NULL, NULL);
+  if (info)
+    {
+      is_remote = g_file_info_get_attribute_boolean (info, G_FILE_ATTRIBUTE_FILESYSTEM_REMOTE);
+
+      g_object_unref (info);
+    }
+  else
+    is_remote = FALSE;
+
+  return is_remote;
+}
+
+GIcon *
+_gtk_file_info_get_icon (GFileInfo *info,
+                         int        icon_size,
+                         int        scale)
+{
+  GIcon *icon;
+  GdkPixbuf *pixbuf;
+  const gchar *thumbnail_path;
+
+  thumbnail_path = g_file_info_get_attribute_byte_string (info, G_FILE_ATTRIBUTE_THUMBNAIL_PATH);
+
+  if (thumbnail_path)
+    {
+      pixbuf = gdk_pixbuf_new_from_file_at_size (thumbnail_path,
+                                                 icon_size*scale, icon_size*scale,
+                                                 NULL);
+
+      if (pixbuf != NULL)
+        return G_ICON (pixbuf);
+    }
+
+  icon = g_file_info_get_icon (info);
+  if (icon)
+    return g_object_ref (icon);
+
+  /* Use general fallback for all files without icon */
+  icon = g_themed_icon_new ("text-x-generic");
+  return icon;
+}
