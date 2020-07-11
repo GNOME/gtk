@@ -676,7 +676,7 @@ create_color_grid (void)
   gtk_grid_view_set_max_columns (GTK_GRID_VIEW (gridview), 24);
   gtk_grid_view_set_enable_rubberband (GTK_GRID_VIEW (gridview), TRUE);
 
-  model = G_LIST_MODEL (gtk_sor5_list_model_new (gtk_color_list_new (0), NULL));
+  model = G_LIST_MODEL (gtk_sor3_list_model_new (gtk_color_list_new (0), NULL));
 
   selection = G_LIST_MODEL (gtk_multi_selection_new (model));
   gtk_grid_view_set_model (GTK_GRID_VIEW (gridview), selection);
@@ -883,6 +883,53 @@ compare_blue (gconstpointer a,
     return GTK_ORDERING_EQUAL;
 }
 
+static void
+clear_timeout (gpointer data)
+{
+  guint timeout = GPOINTER_TO_UINT (data);
+
+  if (timeout)
+    g_source_remove (timeout);
+}
+
+static gboolean
+start_reveal (gpointer data)
+{
+  gtk_revealer_set_transition_type (GTK_REVEALER (data), GTK_REVEALER_TRANSITION_TYPE_CROSSFADE);
+  gtk_revealer_set_reveal_child (GTK_REVEALER (data), TRUE);
+
+  g_object_set_data (G_OBJECT (data), "timeout", NULL);
+
+  return G_SOURCE_REMOVE;
+}
+
+static void
+sorting_changed (GObject     *model,
+                 GParamSpec  *pspec,
+                 GtkRevealer *revealer)
+{
+  gboolean sorting;
+
+  g_object_get (model, "sorting", &sorting, NULL);
+
+  if (sorting)
+    {
+      guint timeout;
+
+      timeout = g_timeout_add (2000, start_reveal, revealer);
+      g_object_set_data_full (G_OBJECT (revealer), "timeout",
+                              GUINT_TO_POINTER (timeout),
+                              clear_timeout);
+    }
+  else
+    {
+      g_object_set_data (G_OBJECT (revealer), "timeout", NULL);
+
+      gtk_revealer_set_transition_type (GTK_REVEALER (revealer), GTK_REVEALER_TRANSITION_TYPE_NONE);
+      gtk_revealer_set_reveal_child (GTK_REVEALER (revealer), FALSE);
+    }
+}
+
 static GtkWidget *window = NULL;
 
 GtkWidget *
@@ -912,6 +959,8 @@ do_listview_colors (GtkWidget *do_widget)
       GtkWidget *selection_info_toggle;
       GtkWidget *selection_info_revealer;
       GtkCssProvider *provider;
+      GtkWidget *revealer;
+      GtkWidget *spinner;
 
       provider = gtk_css_provider_new ();
       gtk_css_provider_load_from_resource (provider, "/listview_colors/listview_colors.css");
@@ -1012,7 +1061,7 @@ do_listview_colors (GtkWidget *do_widget)
       button = gtk_button_new_with_mnemonic ("_Refill");
       g_signal_connect (button, "clicked",
                         G_CALLBACK (refill),
-                        gtk_sor5_list_model_get_model (GTK_SOR5_LIST_MODEL (model)));
+                        gtk_sor3_list_model_get_model (GTK_SOR3_LIST_MODEL (model)));
 
       gtk_header_bar_pack_start (GTK_HEADER_BAR (header), button);
 
@@ -1035,7 +1084,7 @@ do_listview_colors (GtkWidget *do_widget)
       gtk_drop_down_set_from_strings (GTK_DROP_DOWN (dropdown), (const char *[]) { "8", "64", "512", "4096", "32768", "262144", "2097152", "16777216", NULL });
       g_signal_connect (dropdown, "notify::selected",
                         G_CALLBACK (limit_changed_cb), 
-                        gtk_sor5_list_model_get_model (GTK_SOR5_LIST_MODEL (model)));
+                        gtk_sor3_list_model_get_model (GTK_SOR3_LIST_MODEL (model)));
       g_signal_connect (dropdown, "notify::selected",
                         G_CALLBACK (limit_changed_cb2), 
                         label);
@@ -1046,6 +1095,17 @@ do_listview_colors (GtkWidget *do_widget)
       g_object_unref (factory);
       gtk_drop_down_set_selected (GTK_DROP_DOWN (dropdown), 3); /* 4096 */
       gtk_header_bar_pack_start (GTK_HEADER_BAR (header), dropdown);
+
+      revealer = gtk_revealer_new ();
+      gtk_revealer_set_transition_type (GTK_REVEALER (revealer), GTK_REVEALER_TRANSITION_TYPE_CROSSFADE);
+      gtk_revealer_set_transition_duration (GTK_REVEALER (revealer), 2000);
+      spinner = gtk_spinner_new ();
+      gtk_revealer_set_child (GTK_REVEALER (revealer), spinner);
+      gtk_header_bar_pack_end (GTK_HEADER_BAR (header), revealer);
+
+      g_signal_connect (model, "notify::sorting", G_CALLBACK (sorting_changed), revealer);
+      g_object_bind_property (model, "sorting", spinner, "spinning", G_BINDING_DEFAULT);
+
 
       sorters = g_list_store_new (GTK_TYPE_SORTER);
 
