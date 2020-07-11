@@ -294,7 +294,7 @@ gtk_sor3_list_model_sort_cb (gpointer data)
 
   start = self->sorted_to;
   n_items = sort_array_get_size (&self->items);
-  end = MIN (512, n_items - start);
+  end = n_items - start;
 
   changed_start = G_MAXUINT;
   changed_end = 0;
@@ -303,6 +303,9 @@ gtk_sor3_list_model_sort_cb (gpointer data)
     {
       iqs (&self->items, self->sorted_to, &self->stack, self->sorter, &changed_start, &changed_end);
       self->sorted_to++;
+
+      if (g_get_monotonic_time () - begin > 1500)
+        break;
     }
 
   if (self->sorted_to >= n_items)
