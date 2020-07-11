@@ -99,18 +99,7 @@ GIcon *               _gtk_file_system_volume_get_icon          (GtkFileSystemVo
 GtkFileSystemVolume  *_gtk_file_system_volume_ref              (GtkFileSystemVolume *volume);
 void                  _gtk_file_system_volume_unref            (GtkFileSystemVolume *volume);
 
-/* GFileInfo helper functions */
-GIcon *               _gtk_file_info_get_icon    (GFileInfo *info,
-                                                  int        icon_size,
-                                                  int        scale);
-
-gboolean	_gtk_file_info_consider_as_directory (GFileInfo *info);
-
-/* GFile helper functions */
-gboolean	_gtk_file_has_native_path (GFile *file);
-
-gboolean        _gtk_file_consider_as_remote (GFile *file);
-
 G_END_DECLS
 
 #endif /* __GTK_FILE_SYSTEM_H__ */
+

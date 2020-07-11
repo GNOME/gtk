@@ -19,7 +19,6 @@
 #ifndef __GTK_FILE_CHOOSER_ENTRY_H__
 #define __GTK_FILE_CHOOSER_ENTRY_H__
 
-#include "gtkfilesystem.h"
 #include "gtkfilechooser.h"
 
 G_BEGIN_DECLS
