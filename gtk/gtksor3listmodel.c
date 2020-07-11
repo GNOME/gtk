@@ -84,6 +84,7 @@ enum {
   PROP_MODEL,
   PROP_SORTER,
   PROP_SORTING,
+  PROP_INCREMENTAL,
   NUM_PROPERTIES
 };
 
@@ -102,6 +103,8 @@ struct _GtkSor3ListModel
 
   gint64 start_time;
   guint steps;
+
+  gboolean incremental;
 };
 
 struct _GtkSor3ListModelClass
@@ -345,12 +348,49 @@ gtk_sor3_list_model_start_sorting (GtkSor3ListModel *self)
 }
 
 static void
+gtk_sor3_list_model_sort_fully (GtkSor3ListModel *self)
+{
+  guint n_items;
+  guint i;
+  gint64 begin = g_get_monotonic_time ();
+  guint changed_start;
+  guint changed_end;
+  guint changed_items = 0;
+
+  pivot_stack_set_size (&self->stack, 0);
+  pivot_stack_push (&self->stack, (guint)sort_array_get_size (&self->items) - 1);
+  self->sorted_to = 0;
+
+  n_items = sort_array_get_size (&self->items);
+
+  changed_start = G_MAXUINT;
+  changed_end = 0;
+
+  for (i = 0; i < n_items; i++)
+    {
+      iqs (&self->items, self->sorted_to, &self->stack, self->sorter, &changed_start, &changed_end);
+      self->sorted_to++;
+    }
+
+   if (changed_start != GTK_INVALID_LIST_POSITION)
+     {
+       changed_items = changed_end - changed_start + 1;
+       g_list_model_items_changed (G_LIST_MODEL (self), changed_start, changed_items, changed_items);
+     }
+
+  if (GDK_PROFILER_IS_RUNNING)
+    gdk_profiler_add_markf (begin, g_get_monotonic_time () - begin, "quicksort", "sort fully (%u:%u)", changed_start, changed_items);
+}
+static void
 gtk_sor3_list_model_resort (GtkSor3ListModel *self)
 {
   guint64 begin = g_get_monotonic_time ();
 
   gtk_sor3_list_model_stop_sorting (self);
-  gtk_sor3_list_model_start_sorting (self);
+  if (self->incremental)
+    gtk_sor3_list_model_start_sorting (self);
+  else
+    gtk_sor3_list_model_sort_fully (self);
 
   if (GDK_PROFILER_IS_RUNNING)
     gdk_profiler_add_mark (begin, g_get_monotonic_time () - begin, "resort", NULL);
@@ -374,6 +414,9 @@ gtk_sor3_list_model_items_changed_cb (GListModel       *model,
   g_list_model_items_changed (G_LIST_MODEL (self), 0, n_items - added + removed, n_items);
 }
 
+static void gtk_sor3_list_model_set_incremental (GtkSor3ListModel *self,
+                                                 gboolean          incremental);
+
 static void
 gtk_sor3_list_model_set_property (GObject      *object,
                                   guint         prop_id,
@@ -390,6 +433,10 @@ gtk_sor3_list_model_set_property (GObject      *object,
 
     case PROP_SORTER:
       gtk_sor3_list_model_set_sorter (self, g_value_get_object (value));
+      break;
+
+    case PROP_INCREMENTAL:
+      gtk_sor3_list_model_set_incremental (self, g_value_get_boolean (value));
       break;
 
     default:
@@ -418,6 +465,10 @@ gtk_sor3_list_model_get_property (GObject     *object,
 
     case PROP_SORTING:
       g_value_set_boolean (value, self->sorting_cb != 0);
+      break;
+
+    case PROP_INCREMENTAL:
+      g_value_set_boolean (value, self->incremental);
       break;
 
     default:
@@ -520,6 +571,13 @@ gtk_sor3_list_model_class_init (GtkSor3ListModelClass *class)
                            P_("Whether sorting is currently underway"),
                            FALSE,
                            GTK_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY);
+
+  properties[PROP_INCREMENTAL] =
+      g_param_spec_boolean ("incremental",
+                           P_("Incremental"),
+                           P_("Whether to sort incrementally"),
+                           FALSE,
+                           GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (gobject_class, NUM_PROPERTIES, properties);
 }
@@ -652,4 +710,18 @@ gtk_sor3_list_model_get_sorter (GtkSor3ListModel *self)
   g_return_val_if_fail (GTK_IS_SOR3_LIST_MODEL (self), NULL);
 
   return self->sorter;
+}
+
+static void
+gtk_sor3_list_model_set_incremental (GtkSor3ListModel *self,
+                                     gboolean          incremental)
+{
+  g_return_if_fail (GTK_IS_SOR3_LIST_MODEL (self));
+
+  if (self->incremental == incremental)
+    return;
+
+  self->incremental = incremental;
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_INCREMENTAL]);
 }
