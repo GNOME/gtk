@@ -23,6 +23,7 @@
 
 #include "gtkintl.h"
 #include "gtkprivate.h"
+#include "gdk/gdkprofilerprivate.h"
 
 #define GTK_VECTOR_ELEMENT_TYPE GObject *
 #define GTK_VECTOR_TYPE_NAME SortArray
@@ -109,6 +110,8 @@ struct _GtkSor3ListModel
   guint sorting_cb;
   guint sorted_to;
   PivotStack stack;
+
+  gint64 start_time;
 };
 
 struct _GtkSor3ListModelClass
@@ -191,6 +194,16 @@ gtk_sor3_list_model_stop_sorting (GtkSor3ListModel *self)
 {
   g_clear_handle_id (&self->sorting_cb, g_source_remove);
   pivot_stack_set_size (&self->stack, 0);
+
+  if (GDK_PROFILER_IS_RUNNING)
+    {
+      guint n_items = g_list_model_get_n_items (G_LIST_MODEL (self));
+
+      if (self->start_time != 0)
+        gdk_profiler_add_markf (self->start_time, g_get_monotonic_time () - self->start_time, "sort", "sorting %u", n_items);
+
+      self->start_time = 0;
+    }
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_SORTING]);
 }
@@ -277,6 +290,7 @@ gtk_sor3_list_model_sort_cb (gpointer data)
   guint end;
   guint n_items;
   guint i;
+  gint64 begin = g_get_monotonic_time ();
 
   start = self->sorted_to;
   n_items = sort_array_get_size (&self->items);
@@ -293,6 +307,9 @@ gtk_sor3_list_model_sort_cb (gpointer data)
 
   g_list_model_items_changed (G_LIST_MODEL (self), start, n_items - start, n_items - start);
 
+  if (GDK_PROFILER_IS_RUNNING)
+    gdk_profiler_add_markf (begin, g_get_monotonic_time () - begin, "sort", "sort step (%u:%u)", start, n_items);
+
   return G_SOURCE_CONTINUE;
 }
 
@@ -304,6 +321,8 @@ gtk_sor3_list_model_start_sorting (GtkSor3ListModel *self)
 
   g_assert (pivot_stack_get_size (&self->stack) == 0);
   g_assert (self->sorting_cb == 0);
+
+  self->start_time = g_get_monotonic_time ();
 
   pivot_stack_push (&self->stack, (guint)sort_array_get_size (&self->items) - 1);
   self->sorted_to = 0;
@@ -317,8 +336,13 @@ gtk_sor3_list_model_start_sorting (GtkSor3ListModel *self)
 static void
 gtk_sor3_list_model_resort (GtkSor3ListModel *self)
 {
+  guint64 begin = g_get_monotonic_time ();
+
   gtk_sor3_list_model_stop_sorting (self);
   gtk_sor3_list_model_start_sorting (self);
+
+  if (GDK_PROFILER_IS_RUNNING)
+    gdk_profiler_add_mark (begin, g_get_monotonic_time () - begin, "resort", NULL);
 }
 
 static void
