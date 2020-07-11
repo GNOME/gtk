@@ -41,7 +41,6 @@ struct _GtkPathBar
 {
   GtkWidget parent_instance;
 
-  GtkFileSystem *file_system;
   GFile *root_file;
   GFile *home_file;
   GFile *desktop_file;
@@ -160,7 +159,7 @@ static gboolean gtk_path_bar_scroll_controller_scroll (GtkEventControllerScroll 
 
 static void
 add_cancellable (GtkPathBar   *path_bar,
-		 GCancellable *cancellable)
+                 GCancellable *cancellable)
 {
   g_assert (g_list_find (path_bar->cancellables, cancellable) == NULL);
   path_bar->cancellables = g_list_prepend (path_bar->cancellables, cancellable);
@@ -168,7 +167,7 @@ add_cancellable (GtkPathBar   *path_bar,
 
 static void
 drop_node_for_cancellable (GtkPathBar *path_bar,
-			   GCancellable *cancellable)
+                           GCancellable *cancellable)
 {
   GList *node;
 
@@ -180,7 +179,7 @@ drop_node_for_cancellable (GtkPathBar *path_bar,
 
 static void
 cancel_cancellable (GtkPathBar   *path_bar,
-		    GCancellable *cancellable)
+                    GCancellable *cancellable)
 {
   drop_node_for_cancellable (path_bar, cancellable);
   g_cancellable_cancel (cancellable);
@@ -188,7 +187,7 @@ cancel_cancellable (GtkPathBar   *path_bar,
 
 static void
 cancellable_async_done (GtkPathBar   *path_bar,
-			GCancellable *cancellable)
+                        GCancellable *cancellable)
 {
   drop_node_for_cancellable (path_bar, cancellable);
   g_object_unref (cancellable);
@@ -208,6 +207,7 @@ static void
 gtk_path_bar_init (GtkPathBar *path_bar)
 {
   GtkEventController *controller;
+  const char *home;
 
   path_bar->up_slider_button = gtk_button_new_from_icon_name ("pan-start-symbolic");
   gtk_widget_set_parent (path_bar->up_slider_button, GTK_WIDGET (path_bar));
@@ -234,6 +234,28 @@ gtk_path_bar_init (GtkPathBar *path_bar)
                     G_CALLBACK (gtk_path_bar_scroll_controller_scroll),
                     path_bar);
   gtk_widget_add_controller (GTK_WIDGET (path_bar), controller);
+
+  home = g_get_home_dir ();
+  if (home != NULL)
+    {
+      const gchar *desktop;
+
+      path_bar->home_file = g_file_new_for_path (home);
+      /* FIXME: Need file system backend specific way of getting the
+       * Desktop path.
+       */
+      desktop = g_get_user_special_dir (G_USER_DIRECTORY_DESKTOP);
+      if (desktop != NULL)
+        path_bar->desktop_file = g_file_new_for_path (desktop);
+      else 
+        path_bar->desktop_file = NULL;
+    }
+  else
+    {
+      path_bar->home_file = NULL;
+      path_bar->desktop_file = NULL;
+    }
+  path_bar->root_file = g_file_new_for_path ("/");
 }
 
 static void
@@ -281,8 +303,6 @@ gtk_path_bar_finalize (GObject *object)
   g_clear_object (&path_bar->root_icon);
   g_clear_object (&path_bar->home_icon);
   g_clear_object (&path_bar->desktop_icon);
-
-  g_clear_object (&path_bar->file_system);
 
   G_OBJECT_CLASS (gtk_path_bar_parent_class)->finalize (object);
 }
@@ -811,31 +831,24 @@ struct SetButtonImageData
 };
 
 static void
-set_button_image_get_info_cb (GCancellable *cancellable,
-			      GFileInfo    *info,
-			      const GError *error,
-			      gpointer      user_data)
+set_button_image_get_info_cb (GObject      *source,
+                              GAsyncResult *result,
+                              gpointer      user_data)
 {
-  gboolean cancelled = g_cancellable_is_cancelled (cancellable);
-  GIcon *icon;
+  GFile *file = G_FILE (source);
   struct SetButtonImageData *data = user_data;
+  GFileInfo *info;
+  GIcon *icon;
 
-  if (cancelled)
-    {
-      g_free (data);
-      g_object_unref (cancellable);
-      return;
-    }
+  info = g_file_query_info_finish (file, result, NULL);
+  if (!info)
+    goto out;
 
   g_assert (GTK_IS_PATH_BAR (data->path_bar));
   g_assert (G_OBJECT (data->path_bar)->ref_count > 0);
 
-  g_assert (cancellable == data->button_data->cancellable);
-  cancellable_async_done (data->path_bar, cancellable);
+  cancellable_async_done (data->path_bar, data->button_data->cancellable);
   data->button_data->cancellable = NULL;
-
-  if (error)
-    goto out;
 
   icon = g_file_info_get_symbolic_icon (info);
   gtk_image_set_from_gicon (GTK_IMAGE (data->button_data->image), icon);
@@ -844,16 +857,16 @@ set_button_image_get_info_cb (GCancellable *cancellable,
     {
       case HOME_BUTTON:
         g_set_object (&data->path_bar->home_icon, icon);
-	break;
+        break;
 
       case DESKTOP_BUTTON:
         g_set_object (&data->path_bar->desktop_icon, icon);
-	break;
+        break;
 
       case NORMAL_BUTTON:
       case ROOT_BUTTON:
       default:
-	break;
+        break;
     };
 
 out:
@@ -862,10 +875,10 @@ out:
 
 static void
 set_button_image (GtkPathBar *path_bar,
-		  ButtonData *button_data)
+                  ButtonData *button_data)
 {
-  GtkFileSystemVolume *volume;
   struct SetButtonImageData *data;
+  GMount *mount;
 
   switch (button_data->type)
     {
@@ -877,12 +890,17 @@ set_button_image (GtkPathBar *path_bar,
 	  break;
 	}
 
-      volume = _gtk_file_system_get_volume_for_file (path_bar->file_system, path_bar->root_file);
-      if (volume == NULL)
-	return;
+      mount = g_file_find_enclosing_mount (button_data->file, NULL, NULL);
 
-      path_bar->root_icon = _gtk_file_system_volume_get_symbolic_icon (volume);
-      _gtk_file_system_volume_unref (volume);
+      if (!mount && g_file_is_native (button_data->file))
+        path_bar->root_icon = g_themed_icon_new ("drive-harddisk-symbolic");
+      else if (mount)
+        path_bar->root_icon = g_mount_get_symbolic_icon (mount);
+      else
+        path_bar->root_icon = NULL;
+
+      g_clear_object (&mount);
+
       gtk_image_set_from_gicon (GTK_IMAGE (button_data->image), path_bar->root_icon);
 
       break;
@@ -899,16 +917,19 @@ set_button_image (GtkPathBar *path_bar,
       data->button_data = button_data;
 
       if (button_data->cancellable)
-	{
-	  cancel_cancellable (path_bar, button_data->cancellable);
-	}
+        {
+          cancel_cancellable (path_bar, button_data->cancellable);
+          g_clear_object (&button_data->cancellable);
+        }
 
-      button_data->cancellable =
-        _gtk_file_system_get_info (path_bar->file_system,
-				   path_bar->home_file,
-				   "standard::symbolic-icon",
-				   set_button_image_get_info_cb,
-				   data);
+      button_data->cancellable = g_cancellable_new ();
+      g_file_query_info_async (path_bar->home_file,
+                               "standard::symbolic-icon",
+                               G_FILE_QUERY_INFO_NONE,
+                               G_PRIORITY_DEFAULT,
+                               button_data->cancellable,
+                               set_button_image_get_info_cb,
+                               data);
       add_cancellable (path_bar, button_data->cancellable);
       break;
 
@@ -924,16 +945,19 @@ set_button_image (GtkPathBar *path_bar,
       data->button_data = button_data;
 
       if (button_data->cancellable)
-	{
-	  cancel_cancellable (path_bar, button_data->cancellable);
-	}
+        {
+          cancel_cancellable (path_bar, button_data->cancellable);
+          g_clear_object (&button_data->cancellable);
+        }
 
-      button_data->cancellable =
-        _gtk_file_system_get_info (path_bar->file_system,
-				   path_bar->desktop_file,
-				   "standard::symbolic-icon",
-				   set_button_image_get_info_cb,
-				   data);
+      button_data->cancellable = g_cancellable_new ();
+      g_file_query_info_async (path_bar->desktop_file,
+                               "standard::symbolic-icon",
+                               G_FILE_QUERY_INFO_NONE,
+                               G_PRIORITY_DEFAULT,
+                               button_data->cancellable,
+                               set_button_image_get_info_cb,
+                               data);
       add_cancellable (path_bar, button_data->cancellable);
       break;
 
@@ -1139,6 +1163,7 @@ struct SetFileInfo
   GtkPathBar *path_bar;
   GList *new_buttons;
   GList *fake_root;
+  GCancellable *cancellable;
   gboolean first_directory;
 };
 
@@ -1184,43 +1209,38 @@ gtk_path_bar_set_file_finish (struct SetFileInfo *info,
 }
 
 static void
-gtk_path_bar_get_info_callback (GCancellable *cancellable,
-			        GFileInfo    *info,
-			        const GError *error,
-			        gpointer      data)
+gtk_path_bar_get_info_callback (GObject      *source,
+                                GAsyncResult *result,
+                                gpointer      data)
 {
-  gboolean cancelled = g_cancellable_is_cancelled (cancellable);
+  GFile *file = G_FILE (source);
   struct SetFileInfo *file_info = data;
+  GFileInfo *info;
   ButtonData *button_data;
   const gchar *display_name;
   gboolean is_hidden;
 
-  if (cancelled)
-    {
-      gtk_path_bar_set_file_finish (file_info, FALSE);
-      g_object_unref (cancellable);
-      return;
-    }
-
-  g_assert (GTK_IS_PATH_BAR (file_info->path_bar));
-  g_assert (G_OBJECT (file_info->path_bar)->ref_count > 0);
-
-  g_assert (cancellable == file_info->path_bar->get_info_cancellable);
-  cancellable_async_done (file_info->path_bar, cancellable);
-  file_info->path_bar->get_info_cancellable = NULL;
-
+  info = g_file_query_info_finish (file, result, NULL);
   if (!info)
     {
       gtk_path_bar_set_file_finish (file_info, FALSE);
       return;
     }
 
+  g_assert (GTK_IS_PATH_BAR (file_info->path_bar));
+  g_assert (G_OBJECT (file_info->path_bar)->ref_count > 0);
+
+  cancellable_async_done (file_info->path_bar, file_info->cancellable);
+  if (file_info->path_bar->get_info_cancellable == file_info->cancellable)
+    file_info->path_bar->get_info_cancellable = NULL;
+  file_info->cancellable = NULL;
+
   display_name = g_file_info_get_display_name (info);
   is_hidden = g_file_info_get_is_hidden (info) || g_file_info_get_is_backup (info);
 
   button_data = make_directory_button (file_info->path_bar, display_name,
                                        file_info->file,
-				       file_info->first_directory, is_hidden);
+                                       file_info->first_directory, is_hidden);
   g_clear_object (&file_info->file);
 
   file_info->new_buttons = g_list_prepend (file_info->new_buttons, button_data);
@@ -1245,14 +1265,18 @@ gtk_path_bar_get_info_callback (GCancellable *cancellable,
   file_info->parent_file = g_file_get_parent (file_info->file);
 
   /* Recurse asynchronously */
-  file_info->path_bar->get_info_cancellable = _gtk_file_system_get_info (file_info->path_bar->file_system,
-                                                           file_info->file,
-                                                           "standard::display-name,"
-                                                           "standard::is-hidden,"
-                                                           "standard::is-backup",
-                                                           gtk_path_bar_get_info_callback,
-                                                           file_info);
-  add_cancellable (file_info->path_bar, file_info->path_bar->get_info_cancellable);
+  file_info->cancellable = g_cancellable_new ();
+  file_info->path_bar->get_info_cancellable = file_info->cancellable;
+  g_file_query_info_async (file_info->file,
+                           "standard::display-name,"
+                           "standard::is-hidden,"
+                           "standard::is-backup",
+                           G_FILE_QUERY_INFO_NONE,
+                           G_PRIORITY_DEFAULT,
+                           file_info->cancellable,
+                           gtk_path_bar_get_info_callback,
+                           file_info);
+  add_cancellable (file_info->path_bar, file_info->cancellable);
 }
 
 void
@@ -1278,53 +1302,20 @@ _gtk_path_bar_set_file (GtkPathBar *path_bar,
   info->parent_file = g_file_get_parent (info->file);
 
   if (path_bar->get_info_cancellable)
-    {
-      cancel_cancellable (path_bar, path_bar->get_info_cancellable);
-    }
+    cancel_cancellable (path_bar, path_bar->get_info_cancellable);
 
-  path_bar->get_info_cancellable =
-    _gtk_file_system_get_info (path_bar->file_system,
-                               info->file,
-                               "standard::display-name,standard::is-hidden,standard::is-backup",
-                               gtk_path_bar_get_info_callback,
-                               info);
-  add_cancellable (path_bar, path_bar->get_info_cancellable);
-}
-
-/* FIXME: This should be a construct-only property */
-void
-_gtk_path_bar_set_file_system (GtkPathBar    *path_bar,
-			       GtkFileSystem *file_system)
-{
-  const char *home;
-
-  g_return_if_fail (GTK_IS_PATH_BAR (path_bar));
-
-  g_assert (path_bar->file_system == NULL);
-
-  path_bar->file_system = g_object_ref (file_system);
-
-  home = g_get_home_dir ();
-  if (home != NULL)
-    {
-      const gchar *desktop;
-
-      path_bar->home_file = g_file_new_for_path (home);
-      /* FIXME: Need file system backend specific way of getting the
-       * Desktop path.
-       */
-      desktop = g_get_user_special_dir (G_USER_DIRECTORY_DESKTOP);
-      if (desktop != NULL)
-        path_bar->desktop_file = g_file_new_for_path (desktop);
-      else 
-        path_bar->desktop_file = NULL;
-    }
-  else
-    {
-      path_bar->home_file = NULL;
-      path_bar->desktop_file = NULL;
-    }
-  path_bar->root_file = g_file_new_for_path ("/");
+  info->cancellable = g_cancellable_new ();
+  path_bar->get_info_cancellable = info->cancellable;
+  g_file_query_info_async (info->file,
+                           "standard::display-name,"
+                           "standard::is-hidden,"
+                           "standard::is-backup",
+                           G_FILE_QUERY_INFO_NONE,
+                           G_PRIORITY_DEFAULT,
+                           info->cancellable,
+                           gtk_path_bar_get_info_callback,
+                           info);
+  add_cancellable (path_bar, info->cancellable);
 }
 
 /**
