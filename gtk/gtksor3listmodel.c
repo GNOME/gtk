@@ -93,6 +93,7 @@ enum {
   PROP_0,
   PROP_MODEL,
   PROP_SORTER,
+  PROP_SORTING,
   NUM_PROPERTIES
 };
 
@@ -190,6 +191,8 @@ gtk_sor3_list_model_stop_sorting (GtkSor3ListModel *self)
 {
   g_clear_handle_id (&self->sorting_cb, g_source_remove);
   pivot_stack_set_size (&self->stack, 0);
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_SORTING]);
 }
 
 static inline int
@@ -307,6 +310,8 @@ gtk_sor3_list_model_start_sorting (GtkSor3ListModel *self)
 
   self->sorting_cb = g_idle_add (gtk_sor3_list_model_sort_cb, self);
   g_source_set_name_by_id (self->sorting_cb, "[gtk] gtk_sor3_list_model_sort_cb");
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_SORTING]);
 }
 
 static void
@@ -374,6 +379,10 @@ gtk_sor3_list_model_get_property (GObject     *object,
 
     case PROP_SORTER:
       g_value_set_object (value, self->sorter);
+      break;
+
+    case PROP_SORTING:
+      g_value_set_boolean (value, self->sorting_cb != 0);
       break;
 
     default:
@@ -469,6 +478,13 @@ gtk_sor3_list_model_class_init (GtkSor3ListModelClass *class)
                            P_("The model being sorted"),
                            G_TYPE_LIST_MODEL,
                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
+
+  properties[PROP_SORTING] =
+      g_param_spec_boolean ("sorting",
+                           P_("Sorting"),
+                           P_("Whether sorting is currently underway"),
+                           FALSE,
+                           GTK_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (gobject_class, NUM_PROPERTIES, properties);
 }
