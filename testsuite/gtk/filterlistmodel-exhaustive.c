@@ -416,7 +416,7 @@ test_model_changes (gconstpointer model_id)
       if (add)
         {
           /* We want at least one element, otherwise the filters will see no changes */
-          GListModel *source = create_source_model (1, 100);
+          GListModel *source = create_source_model (1, 50);
           GtkFilterListModel *model1 = create_filter_list_model (model_id, source, multi);
           g_list_store_splice (store1,
                                position,
