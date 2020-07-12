@@ -171,7 +171,7 @@ gtk_sort_list_model_sort_cb (gpointer data)
 {
   GtkSortListModel *self = data;
 
-  if (gtk_tim_sort_step (&self->sort))
+  if (gtk_tim_sort_step (&self->sort, NULL))
     {
       guint n_items = sort_array_get_size (&self->items);
       g_list_model_items_changed (G_LIST_MODEL (self), 0, n_items, n_items);
