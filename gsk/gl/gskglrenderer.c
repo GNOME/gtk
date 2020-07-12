@@ -1786,7 +1786,6 @@ render_unblurred_outset_shadow_node (GskGLRenderer   *self,
 }
 
 
-
 static GdkRGBA COLOR_WHITE = { 1, 1, 1, 1 };
 static inline void
 render_outset_shadow_node (GskGLRenderer   *self,
@@ -1807,19 +1806,32 @@ render_outset_shadow_node (GskGLRenderer   *self,
   OpShadow *shadow;
   int blurred_texture_id;
   int cached_tid;
+  bool do_slicing;
 
   /* scaled_outline is the minimal outline we need to draw the given drop shadow,
    * enlarged by the spread and offset by the blur radius. */
   scaled_outline = *outline;
-  /* Shrink our outline to the minimum size that can still hold all the border radii */
-  gsk_rounded_rect_shrink_to_minimum (&scaled_outline);
-  /* Increase by the spread */
-  gsk_rounded_rect_shrink (&scaled_outline, -spread, -spread, -spread, -spread);
-  /* Grow bounds but don't grow corners */
-  graphene_rect_inset (&scaled_outline.bounds, - extra_blur_pixels, - extra_blur_pixels);
-  /* For the center part, we add a few pixels */
-  scaled_outline.bounds.size.width += SHADOW_EXTRA_SIZE;
-  scaled_outline.bounds.size.height += SHADOW_EXTRA_SIZE;
+
+  if (outline->bounds.size.width < blur_extra ||
+      outline->bounds.size.height < blur_extra)
+    {
+      do_slicing = false;
+      gsk_rounded_rect_shrink (&scaled_outline, -spread, -spread, -spread, -spread);
+    }
+  else
+    {
+      /* Shrink our outline to the minimum size that can still hold all the border radii */
+      gsk_rounded_rect_shrink_to_minimum (&scaled_outline);
+      /* Increase by the spread */
+      gsk_rounded_rect_shrink (&scaled_outline, -spread, -spread, -spread, -spread);
+      /* Grow bounds but don't grow corners */
+      graphene_rect_inset (&scaled_outline.bounds, - blur_extra / 2.0, - blur_extra / 2.0);
+      /* For the center part, we add a few pixels */
+      scaled_outline.bounds.size.width += SHADOW_EXTRA_SIZE;
+      scaled_outline.bounds.size.height += SHADOW_EXTRA_SIZE;
+
+      do_slicing = true;
+    }
 
   texture_width  = (int)ceil ((scaled_outline.bounds.size.width  + blur_extra) * scale);
   texture_height = (int)ceil ((scaled_outline.bounds.size.height + blur_extra) * scale);
@@ -1903,6 +1915,41 @@ render_outset_shadow_node (GskGLRenderer   *self,
     {
       blurred_texture_id = cached_tid;
     }
+
+
+  if (!do_slicing)
+    {
+      const float min_x = floorf (builder->dx + outline->bounds.origin.x - spread - (blur_extra / 2.0) + dx);
+      const float min_y = floorf (builder->dy + outline->bounds.origin.y - spread - (blur_extra / 2.0) + dy);
+      float x1, x2, y1, y2, tx1, tx2, ty1, ty2;
+
+      ops_set_program (builder, &self->programs->outset_shadow_program);
+      ops_set_color (builder, color);
+      ops_set_texture (builder, blurred_texture_id);
+
+      shadow = ops_begin (builder, OP_CHANGE_OUTSET_SHADOW);
+      shadow->outline = transform_rect (self, builder, outline);
+
+      tx1 = 0; tx2 = 1;
+      ty1 = 0; ty2 = 1;
+
+      x1 = min_x;
+      x2 = min_x + texture_width / scale;
+      y1 = min_y;
+      y2 = min_y + texture_height / scale;
+
+      ops_draw (builder, (GskQuadVertex[GL_N_VERTICES]) {
+        { { x1, y1 }, { tx1, ty2 }, },
+        { { x1, y2 }, { tx1, ty1 }, },
+        { { x2, y1 }, { tx2, ty2 }, },
+
+        { { x2, y2 }, { tx2, ty1 }, },
+        { { x1, y2 }, { tx1, ty1 }, },
+        { { x2, y1 }, { tx2, ty2 }, },
+      });
+      return;
+    }
+
 
   ops_set_program (builder, &self->programs->outset_shadow_program);
   ops_set_color (builder, color);
