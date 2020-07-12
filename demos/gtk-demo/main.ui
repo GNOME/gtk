@@ -55,12 +55,29 @@
             <property name="hscrollbar-policy">never</property>
             <property name="min-content-width">150</property>
             <child>
-              <object class="GtkListView" id="listview">
-                <property name="factory">
-                  <object class="GtkBuilderListItemFactory">
-                    <property name="resource">/ui/main-listitem.ui</property>
+              <object class="GtkBox">
+                <property name="width-request">220</property>
+                <property name="orientation">vertical</property>
+
+                <child>
+                  <object class="GtkSearchBar">
+                    <property name="search-mode-enabled">1</property>
+                    <child>
+                      <object class="GtkSearchEntry" id="search-entry"/>
+                    </child>
                   </object>
-                </property>
+                </child>
+
+                <child>
+                  <object class="GtkListView" id="listview">
+                    <property name="factory">
+                      <object class="GtkBuilderListItemFactory">
+                        <property name="resource">/ui/main-listitem.ui</property>
+                      </object>
+                    </property>
+                  </object>
+                </child>
+
               </object>
             </child>
           </object>

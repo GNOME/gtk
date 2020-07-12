@@ -18,6 +18,7 @@ static gchar *current_file = NULL;
 static GtkWidget *notebook;
 static GtkSingleSelection *selection;
 static GtkWidget *toplevel;
+static char **search_needle;
 
 typedef struct _GtkDemo GtkDemo;
 struct _GtkDemo
@@ -945,12 +946,74 @@ selection_cb (GtkSingleSelection *sel,
               gpointer            user_data)
 {
   GtkTreeListRow *row = gtk_single_selection_get_selected_item (sel);
-  GtkDemo *demo = gtk_tree_list_row_get_item (row);
+  GtkDemo *demo;
+
+  gtk_widget_set_sensitive (GTK_WIDGET (notebook), !!row);
+
+  if (!row)
+    {
+      gtk_window_set_title (GTK_WINDOW (toplevel), "No match");
+
+      return;
+    }
+
+  demo = gtk_tree_list_row_get_item (row);
 
   if (demo->filename)
     load_file (demo->name, demo->filename);
 
   gtk_window_set_title (GTK_WINDOW (toplevel), demo->title);
+}
+
+static gboolean
+demo_filter_by_name (GtkTreeListRow     *row,
+                     GtkFilterListModel *model)
+{
+  GtkDemo *demo;
+  guint i;
+
+  /* Show all items if search is empty */
+  if (!search_needle || !search_needle[0] || !*search_needle[0])
+    return TRUE;
+
+  g_assert (GTK_IS_TREE_LIST_ROW (row));
+  g_assert (GTK_IS_FILTER_LIST_MODEL (model));
+
+  demo = gtk_tree_list_row_get_item (row);
+  g_assert (GTK_IS_DEMO (demo));
+
+  /* Show only if the name maches every needle */
+  for (i = 0; search_needle[i]; i++)
+    {
+      if (!demo->title)
+        return FALSE;
+
+      if (g_str_match_string (search_needle[i], demo->title, TRUE))
+        continue;
+
+      return FALSE;
+    }
+
+  return TRUE;
+}
+
+static void
+demo_search_changed_cb (GtkSearchEntry *entry,
+                        GtkFilter      *filter)
+{
+  const char *text;
+
+  g_assert (GTK_IS_SEARCH_ENTRY (entry));
+  g_assert (GTK_IS_FILTER (filter));
+
+  text = gtk_editable_get_text (GTK_EDITABLE (entry));
+
+  g_clear_pointer (&search_needle, g_strfreev);
+
+  if (text && *text)
+    search_needle = g_strsplit (text, " ", 0);
+
+  gtk_filter_changed (filter, GTK_FILTER_CHANGE_DIFFERENT);
 }
 
 static GListModel *
@@ -1013,7 +1076,9 @@ activate (GApplication *app)
   GtkBuilder *builder;
   GListModel *listmodel;
   GtkTreeListModel *treemodel;
-  GtkWidget *window, *listview;
+  GtkWidget *window, *listview, *search_entry;
+  GtkFilterListModel *filter_model;
+  GtkFilter *filter;
 
   static GActionEntry win_entries[] = {
     { "run", activate_run, NULL, NULL, NULL }
@@ -1042,7 +1107,13 @@ activate (GApplication *app)
                                        get_child_model,
                                        NULL,
                                        NULL);
-  selection = gtk_single_selection_new (G_LIST_MODEL (treemodel));
+  filter_model = gtk_filter_list_model_new (G_LIST_MODEL (treemodel), NULL);
+  filter = gtk_custom_filter_new ((GtkCustomFilterFunc)demo_filter_by_name, filter_model, NULL);
+  gtk_filter_list_model_set_filter (filter_model, filter);
+  search_entry = GTK_WIDGET (gtk_builder_get_object (builder, "search-entry"));
+  g_signal_connect (search_entry, "search-changed", G_CALLBACK (demo_search_changed_cb), filter);
+
+  selection = gtk_single_selection_new (G_LIST_MODEL (filter_model));
   g_signal_connect (selection, "notify::selected-item", G_CALLBACK (selection_cb), NULL);
   gtk_list_view_set_model (GTK_LIST_VIEW (listview), G_LIST_MODEL (selection));
 
