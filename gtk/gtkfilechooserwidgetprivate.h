@@ -30,6 +30,12 @@ void
 gtk_file_chooser_widget_set_save_entry (GtkFileChooserWidget *chooser,
                                         GtkWidget            *entry);
 
+gboolean
+gtk_file_chooser_widget_should_respond (GtkFileChooserWidget *chooser);
+
+void
+gtk_file_chooser_widget_initial_focus  (GtkFileChooserWidget *chooser);
+
 G_END_DECLS
 
 #endif /* __GTK_FILE_CHOOSER_WIDGET_PRIVATE_H__ */
