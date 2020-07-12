@@ -33,7 +33,7 @@
 #include "gdk/gdkkeysyms.h"
 #include "gtkbookmarksmanagerprivate.h"
 #include "gtkcelllayout.h"
-#include "gtkfilesystem.h"
+#include "gtkfilechooserutils.h"
 #include "gtkicontheme.h"
 #include "gtkintl.h"
 #include "gtkmain.h"

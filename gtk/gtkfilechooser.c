@@ -540,24 +540,6 @@ gtk_file_chooser_get_file (GtkFileChooser *chooser)
   return result;
 }
 
-/*< private >
- * _gtk_file_chooser_get_file_system:
- * @chooser: a #GtkFileChooser
- * 
- * Gets the #GtkFileSystem of @chooser; this is an internal
- * implementation detail, used for conversion between paths
- * and filenames and URIs.
- * 
- * Returns: the file system for @chooser.
- **/
-GtkFileSystem *
-_gtk_file_chooser_get_file_system (GtkFileChooser *chooser)
-{
-  g_return_val_if_fail (GTK_IS_FILE_CHOOSER (chooser), NULL);
-
-  return GTK_FILE_CHOOSER_GET_IFACE (chooser)->get_file_system (chooser);
-}
-
 /**
  * gtk_file_chooser_add_shortcut_folder:
  * @chooser: a #GtkFileChooser
