@@ -88,6 +88,7 @@
 #include "gtkshortcuttrigger.h"
 #include "gtkshortcutaction.h"
 #include "gtkshortcut.h"
+#include "gtkstringlist.h"
 
 #include <cairo-gobject.h>
 
@@ -7934,6 +7935,7 @@ gtk_file_chooser_widget_add_choice (GtkFileChooser  *chooser,
     {
       GtkWidget *box;
       GtkWidget *combo;
+      GListModel *model;
 
       box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
       gtk_box_append (GTK_BOX (box), gtk_label_new (label));
@@ -7942,8 +7944,9 @@ gtk_file_chooser_widget_add_choice (GtkFileChooser  *chooser,
       g_hash_table_insert (impl->choices, g_strdup (id), combo);
       gtk_box_append (GTK_BOX (box), combo);
 
-      gtk_drop_down_set_from_strings (GTK_DROP_DOWN (combo), option_labels);
-      g_object_set_data_full (G_OBJECT (combo), "options", g_strdupv ((char **)options), (GDestroyNotify)g_strfreev);
+      model = G_LIST_MODEL (gtk_string_list_new ((const char * const *)options));
+      gtk_drop_down_set_model (GTK_DROP_DOWN (combo), model);
+      g_object_unref (model);
 
       widget = box;
     }
@@ -7998,11 +8001,15 @@ gtk_file_chooser_widget_set_choice (GtkFileChooser  *chooser,
 
   if (GTK_IS_DROP_DOWN (widget))
     {
-      guint i;
-      const char **options = (const char **)g_object_get_data (G_OBJECT (widget), "options");
-      for (i = 0; options[i]; i++)
+      guint i, n;
+      GListModel *model;
+
+      model = gtk_drop_down_get_model (GTK_DROP_DOWN (widget));
+      n = g_list_model_get_n_items (model);
+      for (i = 0; i < n; i++)
         {
-          if (strcmp (options[i], option) == 0)
+          const char *string = gtk_string_list_get_string (GTK_STRING_LIST (model), i);
+          if (strcmp (string, option) == 0)
             {
               gtk_drop_down_set_selected (GTK_DROP_DOWN (widget), i);
               break;
@@ -8026,11 +8033,10 @@ gtk_file_chooser_widget_get_choice (GtkFileChooser  *chooser,
   widget = (GtkWidget *)g_hash_table_lookup (impl->choices, id);
   if (GTK_IS_DROP_DOWN (widget))
     {
-      const char **options = (const char **)g_object_get_data (G_OBJECT (widget), "options");
-      guint selected = gtk_drop_down_get_selected (GTK_DROP_DOWN (widget));
-      if (selected == GTK_INVALID_LIST_POSITION)
-        return NULL;
-      return options[selected];
+      gpointer selected = gtk_drop_down_get_selected_item (GTK_DROP_DOWN (widget));
+      if (GTK_IS_STRING_OBJECT (selected))
+        return gtk_string_object_get_string (GTK_STRING_OBJECT (selected));
+      return NULL;
     }
 
   else if (GTK_IS_TOGGLE_BUTTON (widget))
