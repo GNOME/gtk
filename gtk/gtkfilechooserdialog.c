@@ -25,7 +25,6 @@
 #include "gtkfilechooserwidget.h"
 #include "gtkfilechooserwidgetprivate.h"
 #include "gtkfilechooserutils.h"
-#include "gtkfilechooserembed.h"
 #include "gtksizerequest.h"
 #include "gtktypebuiltins.h"
 #include "gtkintl.h"
@@ -606,7 +605,7 @@ gtk_file_chooser_dialog_map (GtkWidget *widget)
   setup_save_entry (dialog);
   ensure_default_response (dialog);
 
-  _gtk_file_chooser_embed_initial_focus (GTK_FILE_CHOOSER_EMBED (priv->widget));
+  gtk_file_chooser_widget_initial_focus (GTK_FILE_CHOOSER_WIDGET (priv->widget));
 
   GTK_WIDGET_CLASS (gtk_file_chooser_dialog_parent_class)->map (widget);
 }
@@ -670,7 +669,7 @@ response_cb (GtkDialog *dialog,
   /* Act only on response IDs we recognize */
   if (is_accept_response_id (response_id) &&
       !priv->response_requested &&
-      !_gtk_file_chooser_embed_should_respond (GTK_FILE_CHOOSER_EMBED (priv->widget)))
+      !gtk_file_chooser_widget_should_respond (GTK_FILE_CHOOSER_WIDGET (priv->widget)))
     {
       g_signal_stop_emission_by_name (dialog, "response");
     }

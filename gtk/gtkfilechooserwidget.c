@@ -34,7 +34,6 @@
 #include "gtkentry.h"
 #include "gtkfilechooserprivate.h"
 #include "gtkfilechooserdialog.h"
-#include "gtkfilechooserembed.h"
 #include "gtkfilechooserentry.h"
 #include "gtkfilechooserutils.h"
 #include "gtkfilechooser.h"
@@ -388,7 +387,6 @@ enum {
 #define ICON_SIZE 16
 
 static void gtk_file_chooser_widget_iface_init       (GtkFileChooserIface        *iface);
-static void gtk_file_chooser_embed_default_iface_init (GtkFileChooserEmbedIface   *iface);
 
 static void     gtk_file_chooser_widget_constructed  (GObject               *object);
 static void     gtk_file_chooser_widget_finalize     (GObject               *object);
@@ -440,9 +438,6 @@ static gboolean       gtk_file_chooser_widget_remove_shortcut_folder (GtkFileCho
                                                                        GFile             *file,
                                                                        GError           **error);
 static GListModel *   gtk_file_chooser_widget_get_shortcut_folders   (GtkFileChooser    *chooser);
-
-static gboolean       gtk_file_chooser_widget_should_respond         (GtkFileChooserEmbed *chooser_embed);
-static void           gtk_file_chooser_widget_initial_focus          (GtkFileChooserEmbed *chooser_embed);
 
 static void        gtk_file_chooser_widget_add_choice    (GtkFileChooser  *chooser,
                                                           const char      *id,
@@ -547,9 +542,7 @@ static void     set_show_hidden              (GtkFileChooserWidget *impl,
 
 G_DEFINE_TYPE_WITH_CODE (GtkFileChooserWidget, gtk_file_chooser_widget, GTK_TYPE_WIDGET,
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_FILE_CHOOSER,
-                                                gtk_file_chooser_widget_iface_init)
-                         G_IMPLEMENT_INTERFACE (GTK_TYPE_FILE_CHOOSER_EMBED,
-                                                gtk_file_chooser_embed_default_iface_init));
+                                                gtk_file_chooser_widget_iface_init))
 
 static void
 gtk_file_chooser_widget_iface_init (GtkFileChooserIface *iface)
@@ -573,13 +566,6 @@ gtk_file_chooser_widget_iface_init (GtkFileChooserIface *iface)
   iface->remove_choice = gtk_file_chooser_widget_remove_choice;
   iface->set_choice = gtk_file_chooser_widget_set_choice;
   iface->get_choice = gtk_file_chooser_widget_get_choice;
-}
-
-static void
-gtk_file_chooser_embed_default_iface_init (GtkFileChooserEmbedIface *iface)
-{
-  iface->should_respond = gtk_file_chooser_widget_should_respond;
-  iface->initial_focus = gtk_file_chooser_widget_initial_focus;
 }
 
 static void
@@ -6117,10 +6103,9 @@ add_selection_to_recent_list (GtkFileChooserWidget *impl)
   g_object_unref (files);
 }
 
-static gboolean
-gtk_file_chooser_widget_should_respond (GtkFileChooserEmbed *chooser_embed)
+gboolean
+gtk_file_chooser_widget_should_respond (GtkFileChooserWidget *impl)
 {
-  GtkFileChooserWidget *impl = GTK_FILE_CHOOSER_WIDGET (chooser_embed);
   GtkWidget *toplevel;
   GtkWidget *current_focus;
   gboolean retval;
@@ -6366,11 +6351,9 @@ gtk_file_chooser_widget_should_respond (GtkFileChooserEmbed *chooser_embed)
   return retval;
 }
 
-/* Implementation for GtkFileChooserEmbed::initial_focus() */
-static void
-gtk_file_chooser_widget_initial_focus (GtkFileChooserEmbed *chooser_embed)
+void
+gtk_file_chooser_widget_initial_focus (GtkFileChooserWidget *impl)
 {
-  GtkFileChooserWidget *impl = GTK_FILE_CHOOSER_WIDGET (chooser_embed);
   GtkWidget *widget;
 
   if (impl->action == GTK_FILE_CHOOSER_ACTION_OPEN ||
