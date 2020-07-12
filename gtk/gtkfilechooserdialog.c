@@ -263,8 +263,9 @@ static void     gtk_file_chooser_dialog_size_allocate (GtkWidget            *wid
                                                        int                   width,
                                                        int                   height,
                                                        int                    baseline);
-static void     file_chooser_widget_response_requested (GtkWidget            *widget,
-                                                        GtkFileChooserDialog *dialog);
+static void     gtk_file_chooser_dialog_activate_response (GtkWidget        *widget,
+                                                           const char       *action_name,
+                                                           GVariant         *parameters);
 
 static void response_cb (GtkDialog *dialog,
                          gint       response_id);
@@ -304,7 +305,8 @@ gtk_file_chooser_dialog_class_init (GtkFileChooserDialogClass *class)
   gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserDialog, widget);
   gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserDialog, buttons);
   gtk_widget_class_bind_template_callback (widget_class, response_cb);
-  gtk_widget_class_bind_template_callback (widget_class, file_chooser_widget_response_requested);
+
+  gtk_widget_class_install_action (widget_class, "response.activate", NULL, gtk_file_chooser_dialog_activate_response);
 }
 
 static void
@@ -360,9 +362,11 @@ is_accept_response_id (gint response_id)
 }
 
 static void
-file_chooser_widget_response_requested (GtkWidget            *widget,
-                                        GtkFileChooserDialog *dialog)
+gtk_file_chooser_dialog_activate_response (GtkWidget  *widget,
+                                           const char *action_name,
+                                           GVariant   *parameters)
 {
+  GtkFileChooserDialog *dialog = GTK_FILE_CHOOSER_DIALOG (widget);
   GtkFileChooserDialogPrivate *priv = gtk_file_chooser_dialog_get_instance_private (dialog);
   GtkWidget *button;
 
