@@ -186,7 +186,8 @@ gtk_tim1_sort_model_resort (GtkTim1SortModel *self,
                      sizeof (SortItem),
                      sort_func,
                      self->sorter);
-  gtk_tim_sort_set_already_sorted (&sort, already_sorted);
+  if (already_sorted > 1)
+    gtk_tim_sort_set_runs (&sort, (gsize[2]) { already_sorted, 0 });
 
   while (gtk_tim_sort_step (&sort, NULL));
 

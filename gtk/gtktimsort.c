@@ -125,6 +125,7 @@ gtk_tim_sort_push_run (GtkTimSort *self,
                        gsize       len)
 {
   g_assert (self->pending_runs < GTK_TIM_SORT_MAX_PENDING);
+  g_assert (len <= self->size);
 
   self->run[self->pending_runs].base = base;
   self->run[self->pending_runs].len = len;
@@ -184,15 +185,29 @@ gtk_tim_sort_set_change (GtkTimSortRun *out_change,
 }
 
 void
-gtk_tim_sort_set_already_sorted (GtkTimSort *self,
-                                 gsize       already_sorted)
+gtk_tim_sort_get_runs (GtkTimSort *self,
+                       gsize       runs[GTK_TIM_SORT_MAX_PENDING + 1])
 {
-  g_assert (self);
-  g_assert (self->pending_runs == 0);
-  g_assert (already_sorted <= self->size);
+  gsize i;
 
-  if (already_sorted > 1)
-    gtk_tim_sort_push_run (self, self->base, already_sorted);
+  g_return_if_fail (self);
+  g_return_if_fail (runs);
+  
+  for (i = 0; i < self->pending_runs; i++)
+    runs[i] = self->run[i].len;
+}
+
+void
+gtk_tim_sort_set_runs (GtkTimSort *self,
+                       gsize      *runs)
+{
+  gsize i;
+
+  g_return_if_fail (self);
+  g_return_if_fail (self->pending_runs == 0);
+
+  for (i = 0; runs[i] != 0; i++)
+    gtk_tim_sort_push_run (self, self->base, runs[i]);
 }
 
 /*
