@@ -205,9 +205,8 @@ update_filter (GtkDropDown *self)
 
       if (self->expression)
         {
-          filter = gtk_string_filter_new ();
+          filter = gtk_string_filter_new (gtk_expression_ref (self->expression));
           gtk_string_filter_set_match_mode (GTK_STRING_FILTER (filter), GTK_STRING_FILTER_MATCH_MODE_PREFIX);
-          gtk_string_filter_set_expression (GTK_STRING_FILTER (filter), self->expression);
         }
       else
         filter = gtk_every_filter_new ();
