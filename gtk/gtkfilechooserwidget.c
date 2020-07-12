@@ -480,7 +480,6 @@ static void           gtk_file_chooser_widget_unselect_file                (GtkF
 static void           gtk_file_chooser_widget_select_all                   (GtkFileChooser    *chooser);
 static void           gtk_file_chooser_widget_unselect_all                 (GtkFileChooser    *chooser);
 static GListModel *   gtk_file_chooser_widget_get_files                    (GtkFileChooser    *chooser);
-static GtkFileSystem *gtk_file_chooser_widget_get_file_system              (GtkFileChooser    *chooser);
 static void           gtk_file_chooser_widget_add_filter                   (GtkFileChooser    *chooser,
                                                                             GtkFileFilter     *filter);
 static void           gtk_file_chooser_widget_remove_filter                (GtkFileChooser    *chooser,
@@ -612,7 +611,6 @@ gtk_file_chooser_widget_iface_init (GtkFileChooserIface *iface)
   iface->select_all = gtk_file_chooser_widget_select_all;
   iface->unselect_all = gtk_file_chooser_widget_unselect_all;
   iface->get_files = gtk_file_chooser_widget_get_files;
-  iface->get_file_system = gtk_file_chooser_widget_get_file_system;
   iface->set_current_folder = gtk_file_chooser_widget_set_current_folder;
   iface->get_current_folder = gtk_file_chooser_widget_get_current_folder;
   iface->set_current_name = gtk_file_chooser_widget_set_current_name;
@@ -5599,14 +5597,6 @@ gtk_file_chooser_widget_get_files (GtkFileChooser *chooser)
     }
 
   return G_LIST_MODEL (info.result);
-}
-
-static GtkFileSystem *
-gtk_file_chooser_widget_get_file_system (GtkFileChooser *chooser)
-{
-  GtkFileChooserWidget *impl = GTK_FILE_CHOOSER_WIDGET (chooser);
-
-  return impl->file_system;
 }
 
 /* Shows or hides the filter widgets */
