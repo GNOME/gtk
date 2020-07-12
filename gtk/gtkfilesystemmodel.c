@@ -23,7 +23,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "gtkfilesystem.h"
+#include "gtkfilechooserutils.h"
 #include "gtkintl.h"
 #include "gtkmarshalers.h"
 #include "gtktreedatalist.h"

@@ -25,7 +25,7 @@
 #include "gtkcelllayout.h"
 #include "gtkcellrenderertext.h"
 #include "gtkentryprivate.h"
-#include "gtkfilesystemmodel.h"
+#include "gtkfilechooserutils.h"
 #include "gtklabel.h"
 #include "gtkmain.h"
 #include "gtksizerequest.h"

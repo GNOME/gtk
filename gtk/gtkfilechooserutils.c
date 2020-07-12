@@ -20,7 +20,6 @@
 #include "config.h"
 #include "gtkfilechooserutils.h"
 #include "gtkfilechooser.h"
-#include "gtkfilesystem.h"
 #include "gtktypebuiltins.h"
 #include "gtkintl.h"
 
@@ -40,7 +39,6 @@ static void           delegate_unselect_file          (GtkFileChooser    *choose
 static void           delegate_select_all             (GtkFileChooser    *chooser);
 static void           delegate_unselect_all           (GtkFileChooser    *chooser);
 static GListModel *   delegate_get_files              (GtkFileChooser    *chooser);
-static GtkFileSystem *delegate_get_file_system        (GtkFileChooser    *chooser);
 static void           delegate_add_filter             (GtkFileChooser    *chooser,
 						       GtkFileFilter     *filter);
 static void           delegate_remove_filter          (GtkFileChooser    *chooser,
@@ -128,7 +126,6 @@ _gtk_file_chooser_delegate_iface_init (GtkFileChooserIface *iface)
   iface->select_all = delegate_select_all;
   iface->unselect_all = delegate_unselect_all;
   iface->get_files = delegate_get_files;
-  iface->get_file_system = delegate_get_file_system;
   iface->add_filter = delegate_add_filter;
   iface->remove_filter = delegate_remove_filter;
   iface->get_filters = delegate_get_filters;
@@ -213,12 +210,6 @@ static GListModel *
 delegate_get_files (GtkFileChooser *chooser)
 {
   return gtk_file_chooser_get_files (get_delegate (chooser));
-}
-
-static GtkFileSystem *
-delegate_get_file_system (GtkFileChooser *chooser)
-{
-  return _gtk_file_chooser_get_file_system (get_delegate (chooser));
 }
 
 static void
@@ -410,4 +401,77 @@ delegate_get_choice (GtkFileChooser  *chooser,
                      const char      *id)
 {
   return gtk_file_chooser_get_choice (get_delegate (chooser), id);
+}
+
+gboolean
+_gtk_file_info_consider_as_directory (GFileInfo *info)
+{
+  GFileType type = g_file_info_get_file_type (info);
+
+  return (type == G_FILE_TYPE_DIRECTORY ||
+          type == G_FILE_TYPE_MOUNTABLE ||
+          type == G_FILE_TYPE_SHORTCUT);
+}
+
+gboolean
+_gtk_file_has_native_path (GFile *file)
+{
+  char *local_file_path;
+  gboolean has_native_path;
+
+  /* Don't use g_file_is_native(), as we want to support FUSE paths if available */
+  local_file_path = g_file_get_path (file);
+  has_native_path = (local_file_path != NULL);
+  g_free (local_file_path);
+
+  return has_native_path;
+}
+
+gboolean
+_gtk_file_consider_as_remote (GFile *file)
+{
+  GFileInfo *info;
+  gboolean is_remote;
+
+  info = g_file_query_filesystem_info (file, G_FILE_ATTRIBUTE_FILESYSTEM_REMOTE, NULL, NULL);
+  if (info)
+    {
+      is_remote = g_file_info_get_attribute_boolean (info, G_FILE_ATTRIBUTE_FILESYSTEM_REMOTE);
+
+      g_object_unref (info);
+    }
+  else
+    is_remote = FALSE;
+
+  return is_remote;
+}
+
+GIcon *
+_gtk_file_info_get_icon (GFileInfo *info,
+                         int        icon_size,
+                         int        scale)
+{
+  GIcon *icon;
+  GdkPixbuf *pixbuf;
+  const gchar *thumbnail_path;
+
+  thumbnail_path = g_file_info_get_attribute_byte_string (info, G_FILE_ATTRIBUTE_THUMBNAIL_PATH);
+
+  if (thumbnail_path)
+    {
+      pixbuf = gdk_pixbuf_new_from_file_at_size (thumbnail_path,
+                                                 icon_size*scale, icon_size*scale,
+                                                 NULL);
+
+      if (pixbuf != NULL)
+        return G_ICON (pixbuf);
+    }
+
+  icon = g_file_info_get_icon (info);
+  if (icon)
+    return g_object_ref (icon);
+
+  /* Use general fallback for all files without icon */
+  icon = g_themed_icon_new ("text-x-generic");
+  return icon;
 }
