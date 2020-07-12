@@ -424,6 +424,7 @@ test_model_changes (gconstpointer model_id)
                                position,
                                remove ? 1 : 0,
                                (gpointer *) &source, 1);
+          g_object_unref (model1);
           g_object_unref (source);
         }
       else if (remove)
