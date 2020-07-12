@@ -577,13 +577,11 @@ gtk_list_item_manager_model_items_changed_cb (GListModel         *model,
                                               GtkListItemManager *self)
 {
   GHashTable *change;
-  GHashTableIter iter;
-  gpointer list_item;
   GSList *l;
   guint n_items;
 
   n_items = g_list_model_get_n_items (G_LIST_MODEL (self->model));
-  change = g_hash_table_new (g_direct_hash, g_direct_equal);
+  change = g_hash_table_new_full (g_direct_hash, g_direct_equal, NULL, (GDestroyNotify )gtk_widget_unparent);
 
   gtk_list_item_manager_remove_items (self, change, position, removed);
   gtk_list_item_manager_add_items (self, position, added);
@@ -725,12 +723,6 @@ gtk_list_item_manager_model_items_changed_cb (GListModel         *model,
       g_assert (item != NULL);
       g_assert (item->widget);
       tracker->widget = GTK_LIST_ITEM_WIDGET (item->widget);
-    }
-
-  g_hash_table_iter_init (&iter, change);
-  while (g_hash_table_iter_next (&iter, NULL, &list_item))
-    {
-      gtk_list_item_manager_release_list_item (self, NULL, list_item);
     }
 
   g_hash_table_unref (change);
@@ -1073,10 +1065,12 @@ gtk_list_item_manager_release_list_item (GtkListItemManager *self,
 
   if (change != NULL)
     {
-      if (g_hash_table_insert (change, gtk_list_item_widget_get_item (GTK_LIST_ITEM_WIDGET (item)), item))
-        return;
-      
-      g_warning ("FIXME: Handle the same item multiple times in the list.\nLars says this totally should not happen, but here we are.");
+      if (!g_hash_table_replace (change, gtk_list_item_widget_get_item (GTK_LIST_ITEM_WIDGET (item)), item))
+        {
+          g_warning ("FIXME: Handle the same item multiple times in the list.\nLars says this totally should not happen, but here we are.");
+        }
+
+      return;
     }
 
   gtk_widget_unparent (item);
