@@ -1071,12 +1071,22 @@ get_child_model (gpointer item,
 }
 
 static void
+clear_search (GtkSearchBar *bar)
+{
+  if (!gtk_search_bar_get_search_mode (bar))
+    {
+      GtkWidget *entry = gtk_search_bar_get_child (GTK_SEARCH_BAR (bar));
+      gtk_editable_set_text (GTK_EDITABLE (entry), "");
+    }
+}
+
+static void
 activate (GApplication *app)
 {
   GtkBuilder *builder;
   GListModel *listmodel;
   GtkTreeListModel *treemodel;
-  GtkWidget *window, *listview, *search_entry;
+  GtkWidget *window, *listview, *search_entry, *search_bar;
   GtkFilterListModel *filter_model;
   GtkFilter *filter;
 
@@ -1099,6 +1109,8 @@ activate (GApplication *app)
   toplevel = GTK_WIDGET (window);
   listview = GTK_WIDGET (gtk_builder_get_object (builder, "listview"));
   g_signal_connect (listview, "activate", G_CALLBACK (activate_cb), window);
+  search_bar = GTK_WIDGET (gtk_builder_get_object (builder, "searchbar"));
+  g_signal_connect (search_bar, "notify::search-mode-enabled", G_CALLBACK (clear_search), NULL);
 
   listmodel = create_demo_model ();
   treemodel = gtk_tree_list_model_new (FALSE,
