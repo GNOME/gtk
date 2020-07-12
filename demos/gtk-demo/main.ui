@@ -61,7 +61,7 @@
 
                 <child>
                   <object class="GtkSearchBar">
-                    <property name="search-mode-enabled">1</property>
+                    <property name="key-capture-widget">window</property>
                     <child>
                       <object class="GtkSearchEntry" id="search-entry"/>
                     </child>
