@@ -244,6 +244,51 @@ gtk_tim_sort_set_max_merge_size (GtkTimSort *self,
   self->max_merge_size = max_merge_size;
 }
 
+/**
+ * gtk_tim_sort_get_progress:
+ * @self: a #GtkTimSort
+ *
+ * Does a progress estimate about sort progress, estimates relative
+ * to the number of items to sort.
+ *
+ * Note that this is entirely a progress estimate and does not have
+ * a relationship with items put in their correct place.  
+ * It is also an estimate, so no guarantees are made about accuracy,
+ * other than that it will only report 100% completion when it is
+ * indeed done sorting.
+ *
+ * To get a percentage, you need to divide this number by the total
+ * number of elements that are being sorted.
+ *
+ * Returns: Rough guess of sort progress
+ **/
+gsize
+gtk_tim_sort_get_progress (GtkTimSort *self)
+{
+#define DEPTH 4
+  gsize i;
+  gsize last, progress;
+
+  g_return_val_if_fail (self != NULL, 0);
+
+  if (self->pending_runs == 0)
+    return 0;
+
+  last = self->run[0].len;
+  progress = 0;
+
+  for (i = 1; i < DEPTH + 1 && i < self->pending_runs; i++)
+    {
+      progress += (DEPTH + 1 - i) * MAX (last, self->run[i].len);
+      last = MIN (last, self->run[i].len);
+    }
+  if (i < DEPTH + 1)
+    progress += (DEPTH + 1 - i) * last;
+
+  return progress / DEPTH;
+#undef DEPTH
+}
+
 #if 1
 #define WIDTH 4
 #include "gtktimsort-impl.c"
