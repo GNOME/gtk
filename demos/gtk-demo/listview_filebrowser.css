@@ -1,11 +1,11 @@
-list.viewswitcher {
+listview.viewswitcher {
   border: 1px solid gray;
 }
 
-list.viewswitcher > row {
+listview.viewswitcher > row {
   padding: 5px;
 }
 
-list.viewswitcher row:selected {
+listview.viewswitcher row:selected {
   background: gray;
 }
