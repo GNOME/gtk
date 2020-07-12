@@ -34,7 +34,6 @@
 #include "gtkfilechooserwidget.h"
 #include "gtkfilechooserwidgetprivate.h"
 #include "gtkfilechooserutils.h"
-#include "gtkfilechooserembed.h"
 #include "gtksizerequest.h"
 #include "gtktypebuiltins.h"
 #include "gtkintl.h"
