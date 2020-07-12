@@ -105,7 +105,8 @@ void            gtk_tim_sort_set_already_sorted                 (GtkTimSort     
                                                                  gsize                   already_sorted);
 void            gtk_tim_sort_set_max_merge_size                 (GtkTimSort             *self,
                                                                  gsize                   max_merge_size);
-gboolean        gtk_tim_sort_step                               (GtkTimSort             *self);
+gboolean        gtk_tim_sort_step                               (GtkTimSort             *self,
+                                                                 GtkTimSortRun          *out_change);
 
 void            gtk_tim_sort                                    (gpointer                base,
                                                                  gsize                   size,
