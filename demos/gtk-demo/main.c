@@ -966,21 +966,9 @@ selection_cb (GtkSingleSelection *sel,
 }
 
 static gboolean
-demo_filter_by_name (GtkTreeListRow     *row,
-                     GtkFilterListModel *model)
+filter_demo (GtkDemo *demo)
 {
-  GtkDemo *demo;
-  guint i;
-
-  /* Show all items if search is empty */
-  if (!search_needle || !search_needle[0] || !*search_needle[0])
-    return TRUE;
-
-  g_assert (GTK_IS_TREE_LIST_ROW (row));
-  g_assert (GTK_IS_FILTER_LIST_MODEL (model));
-
-  demo = gtk_tree_list_row_get_item (row);
-  g_assert (GTK_IS_DEMO (demo));
+  int i;
 
   /* Show only if the name maches every needle */
   for (i = 0; search_needle[i]; i++)
@@ -995,6 +983,45 @@ demo_filter_by_name (GtkTreeListRow     *row,
     }
 
   return TRUE;
+}
+
+static gboolean
+demo_filter_by_name (GtkTreeListRow     *row,
+                     GtkFilterListModel *model)
+{
+  GListModel *children;
+  GtkDemo *demo;
+  guint i, n;
+
+  /* Show all items if search is empty */
+  if (!search_needle || !search_needle[0] || !*search_needle[0])
+    return TRUE;
+
+  g_assert (GTK_IS_TREE_LIST_ROW (row));
+  g_assert (GTK_IS_FILTER_LIST_MODEL (model));
+
+  children = gtk_tree_list_row_get_children (row);
+  if (children)
+    {
+      n = g_list_model_get_n_items (children);
+      for (i = 0; i < n; i++)
+        {
+          demo = g_list_model_get_item (children, i);
+          g_assert (GTK_IS_DEMO (demo));
+
+          if (filter_demo (demo))
+            {
+              g_object_unref (demo);
+              return TRUE;
+            }
+          g_object_unref (demo);
+        }
+    }
+
+  demo = gtk_tree_list_row_get_item (row);
+  g_assert (GTK_IS_DEMO (demo));
+
+  return filter_demo (demo);
 }
 
 static void
