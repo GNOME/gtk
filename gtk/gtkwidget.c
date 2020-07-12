@@ -11373,7 +11373,7 @@ gtk_widget_create_render_node (GtkWidget   *widget,
                            "RenderNode for %s %p",
                            G_OBJECT_TYPE_NAME (widget), widget);
 
-  filter_value = gtk_css_node_get_style (priv->cssnode)->other->filter;
+  filter_value = style->other->filter;
   gtk_css_filter_value_push_snapshot (filter_value, snapshot);
 
   if (opacity < 1.0)
