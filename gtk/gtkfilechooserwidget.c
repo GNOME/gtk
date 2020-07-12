@@ -38,7 +38,6 @@
 #include "gtkfilechooserentry.h"
 #include "gtkfilechooserutils.h"
 #include "gtkfilechooser.h"
-#include "gtkfilesystem.h"
 #include "gtkfilesystemmodel.h"
 #include "gtkgrid.h"
 #include "gtkicontheme.h"
@@ -226,8 +225,6 @@ struct _GtkFileChooserWidget
   GtkWidget parent_instance;
 
   GtkFileChooserAction action;
-
-  GtkFileSystem *file_system;
 
   GtkWidget *box;
 
@@ -661,8 +658,6 @@ gtk_file_chooser_widget_finalize (GObject *object)
   if (impl->location_changed_id > 0)
     g_source_remove (impl->location_changed_id);
 
-  g_clear_object (&impl->file_system);
-
   g_free (impl->browse_files_last_selected_name);
 
   g_clear_object (&impl->filters);
@@ -917,22 +912,18 @@ struct FileExistsData
 };
 
 static void
-name_exists_get_info_cb (GCancellable *cancellable,
-                         GFileInfo    *info,
-                         const GError *error,
+name_exists_get_info_cb (GObject      *source,
+                         GAsyncResult *result,
                          gpointer      user_data)
 {
+  GFile *file = G_FILE (source);
   struct FileExistsData *data = user_data;
+  GFileInfo *info;
   GtkFileChooserWidget *impl = data->impl;
 
-  if (cancellable != impl->file_exists_get_info_cancellable)
-    goto out;
+  g_clear_object (&impl->file_exists_get_info_cancellable);
 
-  impl->file_exists_get_info_cancellable = NULL;
-
-  if (g_cancellable_is_cancelled (cancellable))
-    goto out;
-
+  info = g_file_query_info_finish (file, result, NULL);
   if (info != NULL)
     {
       gtk_widget_set_sensitive (data->button, FALSE);
@@ -946,11 +937,10 @@ name_exists_get_info_cb (GCancellable *cancellable,
       /* Don't clear the label here, it may contain a warning */
     }
 
-out:
   g_object_unref (impl);
   g_object_unref (data->file);
   g_free (data);
-  g_object_unref (cancellable);
+  g_clear_object (&info);
 }
 
 static void
@@ -1012,13 +1002,16 @@ check_valid_child_name (GtkFileChooserWidget *impl,
 
           if (impl->file_exists_get_info_cancellable)
             g_cancellable_cancel (impl->file_exists_get_info_cancellable);
+          g_clear_object (&impl->file_exists_get_info_cancellable);
 
-          impl->file_exists_get_info_cancellable =
-            _gtk_file_system_get_info (impl->file_system,
-                                       file,
-                                       "standard::type",
-                                       name_exists_get_info_cb,
-                                       data);
+          impl->file_exists_get_info_cancellable = g_cancellable_new ();
+          g_file_query_info_async (file,
+                                   "standard::type",
+                                   G_FILE_QUERY_INFO_NONE,
+                                   G_PRIORITY_DEFAULT,
+                                   impl->file_exists_get_info_cancellable,
+                                   name_exists_get_info_cb,
+                                   data);
 
           g_object_unref (file);
         }
@@ -1692,27 +1685,25 @@ typedef struct
 } FileListDragData;
 
 static void
-file_list_drag_data_received_get_info_cb (GCancellable *cancellable,
-                                          GFileInfo    *info,
-                                          const GError *error,
+file_list_drag_data_received_get_info_cb (GObject      *source,
+                                          GAsyncResult *result,
                                           gpointer      user_data)
 {
-  gboolean cancelled = g_cancellable_is_cancelled (cancellable);
+  GFile *file = G_FILE (source);
   FileListDragData *data = user_data;
+  GFileInfo *info;
   GtkFileChooserWidget *impl = data->impl;
   GtkFileChooser *chooser = GTK_FILE_CHOOSER (impl);
 
-  if (cancellable != impl->file_list_drag_data_received_cancellable)
-    goto out;
+  g_clear_object (&impl->file_list_drag_data_received_cancellable);
 
-  impl->file_list_drag_data_received_cancellable = NULL;
-
-  if (cancelled || error)
+  info = g_file_query_info_finish (file, result, NULL);
+  if (!info)
     goto out;
 
   if ((impl->action == GTK_FILE_CHOOSER_ACTION_OPEN ||
        impl->action == GTK_FILE_CHOOSER_ACTION_SAVE) &&
-      data->files->next == NULL && !error && _gtk_file_info_consider_as_directory (info))
+      data->files->next == NULL && _gtk_file_info_consider_as_directory (info))
     change_folder_and_display_error (data->impl, data->files->data, FALSE);
   else
     {
@@ -1734,7 +1725,7 @@ out:
   g_slist_free_full (data->files, g_object_unref);
   g_free (data);
 
-  g_object_unref (cancellable);
+  g_clear_object (&info);
 }
 
 static gboolean
@@ -1755,12 +1746,16 @@ file_list_drag_drop_cb (GtkDropTarget        *dest,
 
   if (impl->file_list_drag_data_received_cancellable)
     g_cancellable_cancel (impl->file_list_drag_data_received_cancellable);
+  g_clear_object (&impl->file_list_drag_data_received_cancellable);
 
-  impl->file_list_drag_data_received_cancellable =
-    _gtk_file_system_get_info (impl->file_system, data->files->data,
-                               "standard::type",
-                               file_list_drag_data_received_get_info_cb,
-                                   data);
+  impl->file_list_drag_data_received_cancellable = g_cancellable_new ();
+  g_file_query_info_async (data->files->data,
+                           "standard::type",
+                           G_FILE_QUERY_INFO_NONE,
+                           G_PRIORITY_DEFAULT,
+                           impl->file_list_drag_data_received_cancellable,
+                           file_list_drag_data_received_get_info_cb,
+                           data);
 
   return TRUE;
 }
@@ -2591,8 +2586,6 @@ gtk_file_chooser_widget_constructed (GObject *object)
 
   G_OBJECT_CLASS (gtk_file_chooser_widget_parent_class)->constructed (object);
 
-  g_assert (impl->file_system);
-
   update_appearance (impl);
 
   profile_end ("end", NULL);
@@ -3142,10 +3135,18 @@ cancel_all_operations (GtkFileChooserWidget *impl)
 {
   pending_select_files_free (impl);
 
-  g_clear_pointer (&impl->file_list_drag_data_received_cancellable, g_cancellable_cancel);
-  g_clear_pointer (&impl->update_current_folder_cancellable, g_cancellable_cancel);
-  g_clear_pointer (&impl->should_respond_get_info_cancellable, g_cancellable_cancel);
-  g_clear_pointer (&impl->file_exists_get_info_cancellable, g_cancellable_cancel);
+  if (impl->file_list_drag_data_received_cancellable)
+    g_cancellable_cancel (impl->file_list_drag_data_received_cancellable);
+  g_clear_object (&impl->file_list_drag_data_received_cancellable);
+  if (impl->update_current_folder_cancellable)
+    g_cancellable_cancel (impl->update_current_folder_cancellable);
+  g_clear_object (&impl->update_current_folder_cancellable);
+  if (impl->should_respond_get_info_cancellable)
+    g_cancellable_cancel (impl->should_respond_get_info_cancellable);
+  g_clear_object (&impl->should_respond_get_info_cancellable);
+  if (impl->file_exists_get_info_cancellable)
+    g_cancellable_cancel (impl->file_exists_get_info_cancellable);
+  g_clear_object (&impl->file_exists_get_info_cancellable);
 
   search_stop_searching (impl, TRUE);
 }
@@ -4957,24 +4958,19 @@ struct UpdateCurrentFolderData
 };
 
 static void
-update_current_folder_mount_enclosing_volume_cb (GCancellable        *cancellable,
-                                                 GtkFileSystemVolume *volume,
-                                                 const GError        *error,
-                                                 gpointer             user_data)
+update_current_folder_mount_enclosing_volume_cb (GObject      *source,
+                                                 GAsyncResult *result,
+                                                 gpointer      user_data)
 {
+  GFile *file = G_FILE (source);
   struct UpdateCurrentFolderData *data = user_data;
   GtkFileChooserWidget *impl = data->impl;
-  gboolean cancelled = g_cancellable_is_cancelled (cancellable);
+  GError *error = NULL;
 
-  if (cancellable != impl->update_current_folder_cancellable)
-    goto out;
-
-  impl->update_current_folder_cancellable = NULL;
+  g_clear_object (&impl->update_current_folder_cancellable);
   set_busy_cursor (impl, FALSE);
 
-  if (cancelled)
-    goto out;
-
+  g_file_mount_enclosing_volume_finish (file, result, &error);
   if (error)
     {
       error_changing_folder_dialog (data->impl, data->file, g_error_copy (error));
@@ -4989,30 +4985,26 @@ out:
   g_object_unref (data->file);
   g_free (data);
 
-  g_object_unref (cancellable);
+  g_clear_error (&error);
 }
 
 static void
-update_current_folder_get_info_cb (GCancellable *cancellable,
-                                   GFileInfo    *info,
-                                   const GError *error,
+update_current_folder_get_info_cb (GObject      *source,
+                                   GAsyncResult *result,
                                    gpointer      user_data)
 {
-  gboolean cancelled = g_cancellable_is_cancelled (cancellable);
+  GFile *file = G_FILE (source);
   struct UpdateCurrentFolderData *data = user_data;
+  GFileInfo *info;
+  GError *error = NULL;
   GtkFileChooserWidget *impl = data->impl;
 
-  if (cancellable != impl->update_current_folder_cancellable)
-    goto out;
-
-  impl->update_current_folder_cancellable = NULL;
+  g_clear_object (&impl->update_current_folder_cancellable);
   impl->reload_state = RELOAD_EMPTY;
 
   set_busy_cursor (impl, FALSE);
 
-  if (cancelled)
-    goto out;
-
+  info = g_file_query_info_finish (file, result, &error);
   if (error)
     {
       GFile *parent_file;
@@ -5022,18 +5014,20 @@ update_current_folder_get_info_cb (GCancellable *cancellable,
           GMountOperation *mount_operation;
           GtkWidget *toplevel;
 
-          g_object_unref (cancellable);
+          g_clear_error (&error);
           toplevel = GTK_WIDGET (gtk_widget_get_root (GTK_WIDGET (impl)));
 
           mount_operation = gtk_mount_operation_new (GTK_WINDOW (toplevel));
 
           set_busy_cursor (impl, TRUE);
 
-          impl->update_current_folder_cancellable =
-            _gtk_file_system_mount_enclosing_volume (impl->file_system, data->file,
-                                                     mount_operation,
-                                                     update_current_folder_mount_enclosing_volume_cb,
-                                                     data);
+          impl->update_current_folder_cancellable = g_cancellable_new ();
+          g_file_mount_enclosing_volume (data->file,
+                                         G_MOUNT_MOUNT_NONE,
+                                         mount_operation,
+                                         impl->update_current_folder_cancellable,
+                                         update_current_folder_mount_enclosing_volume_cb,
+                                         data);
 
           return;
         }
@@ -5052,16 +5046,19 @@ update_current_folder_get_info_cb (GCancellable *cancellable,
           g_object_unref (data->file);
           data->file = parent_file;
 
-          g_object_unref (cancellable);
+          g_clear_error (&error);
 
           /* restart the update current folder operation */
           impl->reload_state = RELOAD_HAS_FOLDER;
 
-          impl->update_current_folder_cancellable =
-            _gtk_file_system_get_info (impl->file_system, data->file,
-                                       "standard::type",
-                                       update_current_folder_get_info_cb,
-                                       data);
+          impl->update_current_folder_cancellable = g_cancellable_new ();
+          g_file_query_info_async (data->file,
+                                   "standard::type",
+                                   G_FILE_QUERY_INFO_NONE,
+                                   G_PRIORITY_DEFAULT,
+                                   impl->update_current_folder_cancellable,
+                                   update_current_folder_get_info_cb,
+                                   data);
 
           set_busy_cursor (impl, TRUE);
 
@@ -5077,6 +5074,7 @@ update_current_folder_get_info_cb (GCancellable *cancellable,
           else
             g_error_free (data->original_error);
 
+          g_clear_error (&error);
           g_object_unref (data->original_file);
 
           goto out;
@@ -5141,7 +5139,7 @@ out:
   g_object_unref (data->file);
   g_free (data);
 
-  g_object_unref (cancellable);
+  g_clear_object (&info);
 }
 
 static gboolean
@@ -5162,6 +5160,7 @@ gtk_file_chooser_widget_update_current_folder (GtkFileChooser  *chooser,
 
   if (impl->update_current_folder_cancellable)
     g_cancellable_cancel (impl->update_current_folder_cancellable);
+  g_clear_object (&impl->update_current_folder_cancellable);
 
   /* Test validity of path here.  */
   data = g_new0 (struct UpdateCurrentFolderData, 1);
@@ -5172,11 +5171,14 @@ gtk_file_chooser_widget_update_current_folder (GtkFileChooser  *chooser,
 
   impl->reload_state = RELOAD_HAS_FOLDER;
 
-  impl->update_current_folder_cancellable =
-    _gtk_file_system_get_info (impl->file_system, file,
-                               "standard::type",
-                               update_current_folder_get_info_cb,
-                               data);
+  impl->update_current_folder_cancellable = g_cancellable_new ();
+  g_file_query_info_async (file,
+                           "standard::type",
+                           G_FILE_QUERY_INFO_NONE,
+                           G_PRIORITY_DEFAULT,
+                           impl->update_current_folder_cancellable,
+                           update_current_folder_get_info_cb,
+                           data);
 
   set_busy_cursor (impl, TRUE);
   g_object_unref (file);
@@ -5882,23 +5884,18 @@ struct GetDisplayNameData
 };
 
 static void
-confirmation_confirm_get_info_cb (GCancellable *cancellable,
-                                  GFileInfo    *info,
-                                  const GError *error,
+confirmation_confirm_get_info_cb (GObject      *source,
+                                  GAsyncResult *result,
                                   gpointer      user_data)
 {
-  gboolean cancelled = g_cancellable_is_cancelled (cancellable);
+  GFile *file = G_FILE (source);
   struct GetDisplayNameData *data = user_data;
+  GFileInfo *info;
 
-  if (cancellable != data->impl->should_respond_get_info_cancellable)
-    goto out;
+  g_clear_object (&data->impl->should_respond_get_info_cancellable);
 
-  data->impl->should_respond_get_info_cancellable = NULL;
-
-  if (cancelled)
-    goto out;
-
-  if (error)
+  info = g_file_query_info_finish (file, result, NULL);
+  if (!info)
     goto out;
 
   confirm_dialog_should_accept_filename (data->impl, data->file_part,
@@ -5911,7 +5908,7 @@ out:
   g_free (data->file_part);
   g_free (data);
 
-  g_object_unref (cancellable);
+  g_clear_object (&info);
 }
 
 /* Does overwrite confirmation if appropriate, and returns whether the dialog
@@ -5932,38 +5929,38 @@ should_respond_after_confirm_overwrite (GtkFileChooserWidget *impl,
 
   if (impl->should_respond_get_info_cancellable)
     g_cancellable_cancel (impl->should_respond_get_info_cancellable);
+  g_clear_object (&impl->should_respond_get_info_cancellable);
 
-  impl->should_respond_get_info_cancellable =
-    _gtk_file_system_get_info (impl->file_system, parent_file,
-                               "standard::display-name",
-                               confirmation_confirm_get_info_cb,
-                               data);
+  impl->should_respond_get_info_cancellable = g_cancellable_new ();
+  g_file_query_info_async (parent_file,
+                           "standard::display-name",
+                           G_FILE_QUERY_INFO_NONE,
+                           G_PRIORITY_DEFAULT,
+                           impl->should_respond_get_info_cancellable,
+                           confirmation_confirm_get_info_cb,
+                           data);
   set_busy_cursor (data->impl, TRUE);
   return FALSE;
 }
 
 static void
-name_entry_get_parent_info_cb (GCancellable *cancellable,
-                               GFileInfo    *info,
-                               const GError *error,
+name_entry_get_parent_info_cb (GObject      *source,
+                               GAsyncResult *result,
                                gpointer      user_data)
 {
+  GFile *file = G_FILE (source);
+  struct FileExistsData *data = user_data;
+  GFileInfo *info;
   gboolean parent_is_folder = FALSE;
   gboolean parent_is_accessible = FALSE;
-  gboolean cancelled = g_cancellable_is_cancelled (cancellable);
-  struct FileExistsData *data = user_data;
   GtkFileChooserWidget *impl = data->impl;
+  GError *error = NULL;
 
-  if (cancellable != impl->should_respond_get_info_cancellable)
-    goto out;
-
-  impl->should_respond_get_info_cancellable = NULL;
+  g_clear_object (&impl->should_respond_get_info_cancellable);
 
   set_busy_cursor (impl, FALSE);
 
-  if (cancelled)
-    goto out;
-
+  info = g_file_query_info_finish (file, result, &error);
   if (info)
     {
       parent_is_folder = _gtk_file_info_consider_as_directory (info);
@@ -6049,39 +6046,35 @@ name_entry_get_parent_info_cb (GCancellable *cancellable,
       error_changing_folder_dialog (impl, data->parent_file, error_copy);
     }
 
-out:
   g_object_unref (data->impl);
   g_object_unref (data->file);
   g_object_unref (data->parent_file);
   g_free (data);
 
-  g_object_unref (cancellable);
+  g_clear_error (&error);
+  g_clear_object (&info);
 }
 
 static void
-file_exists_get_info_cb (GCancellable *cancellable,
-                         GFileInfo    *info,
-                         const GError *error,
+file_exists_get_info_cb (GObject      *source,
+                         GAsyncResult *result,
                          gpointer      user_data)
 {
+  GFile *file = G_FILE (source);
+  struct FileExistsData *data = user_data;
+  GFileInfo *info;
   gboolean data_ownership_taken = FALSE;
-  gboolean cancelled = g_cancellable_is_cancelled (cancellable);
   gboolean file_exists;
   gboolean is_folder;
   gboolean needs_parent_check = FALSE;
-  struct FileExistsData *data = user_data;
   GtkFileChooserWidget *impl = data->impl;
+  GError *error = NULL;
 
-  if (cancellable != impl->file_exists_get_info_cancellable)
-    goto out;
-
-  impl->file_exists_get_info_cancellable = NULL;
+  g_clear_object (&impl->file_exists_get_info_cancellable);
 
   set_busy_cursor (impl, FALSE);
 
-  if (cancelled)
-    goto out;
-
+  info = g_file_query_info_finish (file, result, &error);
   file_exists = (info != NULL);
   is_folder = (file_exists && _gtk_file_info_consider_as_directory (info));
 
@@ -6138,17 +6131,19 @@ file_exists_get_info_cb (GCancellable *cancellable,
 
       if (impl->should_respond_get_info_cancellable)
         g_cancellable_cancel (impl->should_respond_get_info_cancellable);
+      g_clear_object (&impl->should_respond_get_info_cancellable);
 
-      impl->should_respond_get_info_cancellable =
-        _gtk_file_system_get_info (impl->file_system,
-                                   data->parent_file,
-                                   "standard::type,access::can-execute",
-                                   name_entry_get_parent_info_cb,
-                                   data);
+      impl->should_respond_get_info_cancellable = g_cancellable_new ();
+      g_file_query_info_async (data->parent_file,
+                               "standard::type,access::can-execute",
+                               G_FILE_QUERY_INFO_NONE,
+                               G_PRIORITY_DEFAULT,
+                               impl->should_respond_get_info_cancellable,
+                               name_entry_get_parent_info_cb,
+                               data);
       set_busy_cursor (impl, TRUE);
     }
 
-out:
   if (!data_ownership_taken)
     {
       g_object_unref (impl);
@@ -6157,7 +6152,8 @@ out:
       g_free (data);
     }
 
-  g_object_unref (cancellable);
+  g_clear_error (&error);
+  g_clear_object (&info);
 }
 
 static void
@@ -6424,12 +6420,16 @@ gtk_file_chooser_widget_should_respond (GtkFileChooserEmbed *chooser_embed)
 
           if (impl->file_exists_get_info_cancellable)
             g_cancellable_cancel (impl->file_exists_get_info_cancellable);
+          g_clear_object (&impl->file_exists_get_info_cancellable);
 
-          impl->file_exists_get_info_cancellable =
-            _gtk_file_system_get_info (impl->file_system, file,
-                                       "standard::type",
-                                       file_exists_get_info_cb,
-                                       data);
+          impl->file_exists_get_info_cancellable = g_cancellable_new ();
+          g_file_query_info_async (file,
+                                   "standard::type",
+                                   G_FILE_QUERY_INFO_NONE,
+                                   G_PRIORITY_DEFAULT,
+                                   impl->file_exists_get_info_cancellable,
+                                   file_exists_get_info_cb,
+                                   data);
 
           set_busy_cursor (impl, TRUE);
         }
@@ -7982,7 +7982,6 @@ gtk_file_chooser_widget_init (GtkFileChooserWidget *impl)
   g_signal_connect (impl, "notify::display,", G_CALLBACK (display_changed_cb), impl);
   check_icon_theme (impl);
 
-  impl->file_system = _gtk_file_system_new ();
   impl->bookmarks_manager = _gtk_bookmarks_manager_new (NULL, NULL);
 
   impl->filters = g_list_store_new (GTK_TYPE_FILE_FILTER);
