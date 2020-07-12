@@ -20,7 +20,6 @@
 #define __GTK_FILE_CHOOSER_PRIVATE_H__
 
 #include "gtkfilechooser.h"
-#include "gtkfilesystem.h"
 #include "gtkfilesystemmodel.h"
 #include "gtkliststore.h"
 #include "gtkrecentmanager.h"
@@ -73,7 +72,6 @@ struct _GtkFileChooserIface
   void           (*select_all)             (GtkFileChooser    *chooser);
   void           (*unselect_all)           (GtkFileChooser    *chooser);
   GListModel *   (*get_files)              (GtkFileChooser    *chooser);
-  GtkFileSystem *(*get_file_system)        (GtkFileChooser    *chooser);
   void           (*add_filter)             (GtkFileChooser    *chooser,
                                             GtkFileFilter     *filter);
   void           (*remove_filter)          (GtkFileChooser    *chooser,
@@ -108,8 +106,6 @@ struct _GtkFileChooserIface
   const char *   (*get_choice)    (GtkFileChooser  *chooser,
                                    const char      *id);
 };
-
-GtkFileSystem *_gtk_file_chooser_get_file_system         (GtkFileChooser    *chooser);
 
 void     gtk_file_chooser_select_all         (GtkFileChooser *chooser);
 void     gtk_file_chooser_unselect_all       (GtkFileChooser *chooser);
