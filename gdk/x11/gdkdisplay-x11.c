@@ -1306,7 +1306,8 @@ get_high_res_server_time (void)
 }
 
 static void
-compute_server_time_offset_from_monotonic_time (gint64 high_res_time)
+compute_server_time_offset_from_monotonic_time (GdkX11Display *display_x11,
+                                                gint64         high_res_time)
 {
   gint64 now, offset_candidate_1, offset_candidate_2;
 
@@ -1336,7 +1337,8 @@ compute_server_time_offset_from_round_trip (GdkX11Display *display_x11)
   if (ABS (remote_high_res_time - local_high_res_time) < (1 * G_USEC_PER_SEC))
     {
       display_x11->server_time_uses_monotonic_time = TRUE;
-      compute_server_time_offset_from_monotonic_time ();
+      compute_server_time_offset_from_monotonic_time (display_x11,
+                                                      remote_high_res_time);
       return;
     }
 
@@ -1371,9 +1373,9 @@ server_time_to_monotonic_time (GdkX11Display *display_x11,
                                gint64         server_time)
 {
   if (display_x11->server_time_uses_monotonic_time)
-    compute_server_time_offset_from_monotonic_time (server_time);
+    compute_server_time_offset_from_monotonic_time (display_x11, server_time);
   else if (server_time_offset_is_stale (display_x11, server_time))
-    compute_server_time_offset_from_round_trip ();
+    compute_server_time_offset_from_round_trip (display_x11);
 
   return server_time - display_x11->server_time_offset;
 }
