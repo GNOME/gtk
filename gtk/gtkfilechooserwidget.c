@@ -34,7 +34,6 @@
 #include "gtkentry.h"
 #include "gtkfilechooserprivate.h"
 #include "gtkfilechooserdialog.h"
-#include "gtkfilechooserembed.h"
 #include "gtkfilechooserentry.h"
 #include "gtkfilechooserutils.h"
 #include "gtkfilechooser.h"
@@ -88,6 +87,7 @@
 #include "gtkshortcuttrigger.h"
 #include "gtkshortcutaction.h"
 #include "gtkshortcut.h"
+#include "gtkstringlist.h"
 
 #include <cairo-gobject.h>
 
@@ -116,56 +116,6 @@
 
 /* 150 mseconds of delay */
 #define LOCATION_CHANGED_TIMEOUT 150
-
-/* Profiling stuff */
-#undef PROFILE_FILE_CHOOSER
-#ifdef PROFILE_FILE_CHOOSER
-
-
-#ifndef F_OK 
-#define F_OK 0
-#endif
-
-#define PROFILE_INDENT 4
-
-static int profile_indent;
-
-static void
-profile_add_indent (int indent)
-{
-  profile_indent += indent;
-  if (profile_indent < 0)
-    g_error ("You screwed up your indentation");
-}
-
-static void
-_gtk_file_chooser_profile_log (const char *func, int indent, const char *msg1, const char *msg2)
-{
-  char *str;
-
-  if (indent < 0)
-    profile_add_indent (indent);
-
-  if (profile_indent == 0)
-    str = g_strdup_printf ("MARK: %s %s %s", func ? func : "", msg1 ? msg1 : "", msg2 ? msg2 : "");
-  else
-    str = g_strdup_printf ("MARK: %*c %s %s %s", profile_indent - 1, ' ', func ? func : "", msg1 ? msg1 : "", msg2 ? msg2 : "");
-
-  access (str, F_OK);
-  g_free (str);
-
-  if (indent > 0)
-    profile_add_indent (indent);
-}
-
-#define profile_start(x, y) _gtk_file_chooser_profile_log (G_STRFUNC, PROFILE_INDENT, x, y)
-#define profile_end(x, y) _gtk_file_chooser_profile_log (G_STRFUNC, -PROFILE_INDENT, x, y)
-#define profile_msg(x, y) _gtk_file_chooser_profile_log (NULL, 0, x, y)
-#else
-#define profile_start(x, y)
-#define profile_end(x, y)
-#define profile_msg(x, y)
-#endif
 
 enum {
   PROP_SEARCH_MODE = 1,
@@ -437,7 +387,6 @@ enum {
 #define ICON_SIZE 16
 
 static void gtk_file_chooser_widget_iface_init       (GtkFileChooserIface        *iface);
-static void gtk_file_chooser_embed_default_iface_init (GtkFileChooserEmbedIface   *iface);
 
 static void     gtk_file_chooser_widget_constructed  (GObject               *object);
 static void     gtk_file_chooser_widget_finalize     (GObject               *object);
@@ -489,9 +438,6 @@ static gboolean       gtk_file_chooser_widget_remove_shortcut_folder (GtkFileCho
                                                                        GFile             *file,
                                                                        GError           **error);
 static GListModel *   gtk_file_chooser_widget_get_shortcut_folders   (GtkFileChooser    *chooser);
-
-static gboolean       gtk_file_chooser_widget_should_respond         (GtkFileChooserEmbed *chooser_embed);
-static void           gtk_file_chooser_widget_initial_focus          (GtkFileChooserEmbed *chooser_embed);
 
 static void        gtk_file_chooser_widget_add_choice    (GtkFileChooser  *chooser,
                                                           const char      *id,
@@ -596,9 +542,7 @@ static void     set_show_hidden              (GtkFileChooserWidget *impl,
 
 G_DEFINE_TYPE_WITH_CODE (GtkFileChooserWidget, gtk_file_chooser_widget, GTK_TYPE_WIDGET,
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_FILE_CHOOSER,
-                                                gtk_file_chooser_widget_iface_init)
-                         G_IMPLEMENT_INTERFACE (GTK_TYPE_FILE_CHOOSER_EMBED,
-                                                gtk_file_chooser_embed_default_iface_init));
+                                                gtk_file_chooser_widget_iface_init))
 
 static void
 gtk_file_chooser_widget_iface_init (GtkFileChooserIface *iface)
@@ -622,13 +566,6 @@ gtk_file_chooser_widget_iface_init (GtkFileChooserIface *iface)
   iface->remove_choice = gtk_file_chooser_widget_remove_choice;
   iface->set_choice = gtk_file_chooser_widget_set_choice;
   iface->get_choice = gtk_file_chooser_widget_get_choice;
-}
-
-static void
-gtk_file_chooser_embed_default_iface_init (GtkFileChooserEmbedIface *iface)
-{
-  iface->should_respond = gtk_file_chooser_widget_should_respond;
-  iface->initial_focus = gtk_file_chooser_widget_initial_focus;
 }
 
 static void
@@ -2582,13 +2519,9 @@ gtk_file_chooser_widget_constructed (GObject *object)
 {
   GtkFileChooserWidget *impl = GTK_FILE_CHOOSER_WIDGET (object);
 
-  profile_start ("start", NULL);
-
   G_OBJECT_CLASS (gtk_file_chooser_widget_parent_class)->constructed (object);
 
   update_appearance (impl);
-
-  profile_end ("end", NULL);
 }
 
 static void
@@ -3244,15 +3177,11 @@ gtk_file_chooser_widget_unroot (GtkWidget *widget)
 static void
 change_icon_theme (GtkFileChooserWidget *impl)
 {
-  profile_start ("start", NULL);
-
   /* the first cell in the first column is the icon column, and we have a fixed size there */
   set_icon_cell_renderer_fixed_size (impl);
 
   clear_model_cache (impl, MODEL_COL_ICON);
   gtk_widget_queue_resize (impl->browse_files_tree_view);
-
-  profile_end ("end", NULL);
 }
 
 /* Callback used when a GtkSettings value changes */
@@ -3263,14 +3192,10 @@ settings_notify_cb (GObject               *object,
 {
   const char *name;
 
-  profile_start ("start", NULL);
-
   name = g_param_spec_get_name (pspec);
 
   if (strcmp (name, "gtk-icon-theme-name") == 0)
     change_icon_theme (impl);
-
-  profile_end ("end", NULL);
 }
 
 /* Installs a signal handler for GtkSettings so that we can monitor changes in
@@ -3281,21 +3206,14 @@ check_icon_theme (GtkFileChooserWidget *impl)
 {
   GtkSettings *settings;
 
-  profile_start ("start", NULL);
-
   if (impl->settings_signal_id)
-    {
-      profile_end ("end", NULL);
-      return;
-    }
+    return;
 
   settings = gtk_widget_get_settings (GTK_WIDGET (impl));
   impl->settings_signal_id = g_signal_connect (settings, "notify",
                                                G_CALLBACK (settings_notify_cb), impl);
 
   change_icon_theme (impl);
-
-  profile_end ("end", NULL);
 }
 
 static void
@@ -3304,17 +3222,11 @@ gtk_file_chooser_widget_css_changed (GtkWidget         *widget,
 {
   GtkFileChooserWidget *impl;
 
-  profile_start ("start", NULL);
-
   impl = GTK_FILE_CHOOSER_WIDGET (widget);
 
-  profile_msg ("    parent class css_changed start", NULL);
   GTK_WIDGET_CLASS (gtk_file_chooser_widget_parent_class)->css_changed (widget, change);
-  profile_msg ("    parent class css_changed end", NULL);
 
   change_icon_theme (impl);
-
-  profile_end ("end", NULL);
 }
 
 static void
@@ -3550,8 +3462,6 @@ gtk_file_chooser_widget_map (GtkWidget *widget)
 {
   GtkFileChooserWidget *impl = GTK_FILE_CHOOSER_WIDGET (widget);
 
-  profile_start ("start", NULL);
-
   impl->browse_files_interaction_frozen = FALSE;
 
   GTK_WIDGET_CLASS (gtk_file_chooser_widget_parent_class)->map (widget);
@@ -3578,8 +3488,6 @@ gtk_file_chooser_widget_map (GtkWidget *widget)
           g_assert_not_reached ();
       }
     }
-
-  profile_end ("end", NULL);
 }
 
 /* GtkWidget::unmap method */
@@ -3879,22 +3787,16 @@ update_columns (GtkFileChooserWidget *impl,
 static void
 load_set_model (GtkFileChooserWidget *impl)
 {
-  profile_start ("start", NULL);
-
   g_assert (impl->browse_files_model != NULL);
 
-  profile_msg ("    gtk_tree_view_set_model start", NULL);
   gtk_tree_view_set_model (GTK_TREE_VIEW (impl->browse_files_tree_view),
                            GTK_TREE_MODEL (impl->browse_files_model));
   update_columns (impl, FALSE, _("Modified"));
   file_list_set_sort_column_ids (impl);
   set_sort_column (impl);
-  profile_msg ("    gtk_tree_view_set_model end", NULL);
   impl->list_sort_ascending = TRUE;
 
   g_set_object (&impl->model_for_search, impl->browse_files_model);
-
-  profile_end ("end", NULL);
 }
 
 /* Timeout callback used when the loading timer expires */
@@ -3902,8 +3804,6 @@ static gboolean
 load_timeout_cb (gpointer data)
 {
   GtkFileChooserWidget *impl = GTK_FILE_CHOOSER_WIDGET (data);
-
-  profile_start ("start", NULL);
 
   g_assert (impl->load_state == LOAD_PRELOAD);
   g_assert (impl->load_timeout_id != 0);
@@ -3913,8 +3813,6 @@ load_timeout_cb (gpointer data)
   impl->load_state = LOAD_LOADING;
 
   load_set_model (impl);
-
-  profile_end ("end", NULL);
 
   return FALSE;
 }
@@ -4168,8 +4066,6 @@ browse_files_model_finished_loading_cb (GtkFileSystemModel   *model,
                                         GError               *error,
                                         GtkFileChooserWidget *impl)
 {
-  profile_start ("start", NULL);
-
   if (error)
     {
       set_busy_cursor (impl, FALSE);
@@ -4190,7 +4086,6 @@ browse_files_model_finished_loading_cb (GtkFileSystemModel   *model,
       /* We can't g_assert_not_reached(), as something other than us may have
        *  initiated a folder reload.  See #165556.
        */
-      profile_end ("end", NULL);
       return;
     }
 
@@ -4200,11 +4095,6 @@ browse_files_model_finished_loading_cb (GtkFileSystemModel   *model,
 
   pending_select_files_process (impl);
   set_busy_cursor (impl, FALSE);
-#ifdef PROFILE_FILE_CHOOSER
-  access ("MARK: *** FINISHED LOADING", F_OK);
-#endif
-
-  profile_end ("end", NULL);
 }
 
 /* Callback used when file system model adds or updates a file.
@@ -4721,8 +4611,6 @@ set_list_model (GtkFileChooserWidget  *impl,
       _gtk_file_system_model_get_directory (impl->browse_files_model) == impl->current_folder)
     return TRUE;
 
-  profile_start ("start", NULL);
-
   stop_loading_and_clear_list_model (impl, TRUE);
 
   set_busy_cursor (impl, TRUE);
@@ -4736,7 +4624,6 @@ set_list_model (GtkFileChooserWidget  *impl,
 
   _gtk_file_system_model_set_show_hidden (impl->browse_files_model, impl->show_hidden);
 
-  profile_msg ("    set sort function", NULL);
   gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE (impl->browse_files_model), MODEL_COL_NAME, name_sort_func, impl, NULL);
   gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE (impl->browse_files_model), MODEL_COL_SIZE, size_sort_func, impl, NULL);
   gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE (impl->browse_files_model), MODEL_COL_TYPE, type_sort_func, impl, NULL);
@@ -4756,8 +4643,6 @@ set_list_model (GtkFileChooserWidget  *impl,
                     G_CALLBACK (browse_files_model_row_changed_cb), impl);
 
   _gtk_file_system_model_set_filter (impl->browse_files_model, impl->current_filter);
-
-  profile_end ("end", NULL);
 
   return TRUE;
 }
@@ -5152,8 +5037,6 @@ gtk_file_chooser_widget_update_current_folder (GtkFileChooser  *chooser,
   GtkFileChooserWidget *impl = GTK_FILE_CHOOSER_WIDGET (chooser);
   struct UpdateCurrentFolderData *data;
 
-  profile_start ("start", NULL);
-
   g_object_ref (file);
 
   operation_mode_set (impl, OPERATION_MODE_BROWSE);
@@ -5183,7 +5066,6 @@ gtk_file_chooser_widget_update_current_folder (GtkFileChooser  *chooser,
   set_busy_cursor (impl, TRUE);
   g_object_unref (file);
 
-  profile_end ("end", NULL);
   return TRUE;
 }
 
@@ -5818,6 +5700,7 @@ add_custom_button_to_dialog (GtkDialog   *dialog,
 static void
 request_response_and_add_to_recent_list (GtkFileChooserWidget *impl)
 {
+  gtk_widget_activate_action (GTK_WIDGET (impl), "response.activate", NULL);
   g_signal_emit_by_name (impl, "response-requested");
   add_selection_to_recent_list (impl);
 }
@@ -6221,10 +6104,9 @@ add_selection_to_recent_list (GtkFileChooserWidget *impl)
   g_object_unref (files);
 }
 
-static gboolean
-gtk_file_chooser_widget_should_respond (GtkFileChooserEmbed *chooser_embed)
+gboolean
+gtk_file_chooser_widget_should_respond (GtkFileChooserWidget *impl)
 {
-  GtkFileChooserWidget *impl = GTK_FILE_CHOOSER_WIDGET (chooser_embed);
   GtkWidget *toplevel;
   GtkWidget *current_focus;
   gboolean retval;
@@ -6470,11 +6352,9 @@ gtk_file_chooser_widget_should_respond (GtkFileChooserEmbed *chooser_embed)
   return retval;
 }
 
-/* Implementation for GtkFileChooserEmbed::initial_focus() */
-static void
-gtk_file_chooser_widget_initial_focus (GtkFileChooserEmbed *chooser_embed)
+void
+gtk_file_chooser_widget_initial_focus (GtkFileChooserWidget *impl)
 {
-  GtkFileChooserWidget *impl = GTK_FILE_CHOOSER_WIDGET (chooser_embed);
   GtkWidget *widget;
 
   if (impl->action == GTK_FILE_CHOOSER_ACTION_OPEN ||
@@ -7947,11 +7827,6 @@ gtk_file_chooser_widget_init (GtkFileChooserWidget *impl)
 {
   GtkExpression *expression;
 
-  profile_start ("start", NULL);
-#ifdef PROFILE_FILE_CHOOSER
-  access ("MARK: *** CREATE FILE CHOOSER", F_OK);
-#endif
-
   impl->select_multiple = FALSE;
   impl->show_hidden = FALSE;
   impl->show_size_column = TRUE;
@@ -7998,8 +7873,6 @@ gtk_file_chooser_widget_init (GtkFileChooserWidget *impl)
    * which cannot be done with GtkBuilder
    */
   post_process_ui (impl);
-
-  profile_end ("end", NULL);
 }
 
 /**
@@ -8046,6 +7919,7 @@ gtk_file_chooser_widget_add_choice (GtkFileChooser  *chooser,
     {
       GtkWidget *box;
       GtkWidget *combo;
+      GListModel *model;
 
       box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
       gtk_box_append (GTK_BOX (box), gtk_label_new (label));
@@ -8054,8 +7928,9 @@ gtk_file_chooser_widget_add_choice (GtkFileChooser  *chooser,
       g_hash_table_insert (impl->choices, g_strdup (id), combo);
       gtk_box_append (GTK_BOX (box), combo);
 
-      gtk_drop_down_set_from_strings (GTK_DROP_DOWN (combo), option_labels);
-      g_object_set_data_full (G_OBJECT (combo), "options", g_strdupv ((char **)options), (GDestroyNotify)g_strfreev);
+      model = G_LIST_MODEL (gtk_string_list_new ((const char * const *)options));
+      gtk_drop_down_set_model (GTK_DROP_DOWN (combo), model);
+      g_object_unref (model);
 
       widget = box;
     }
@@ -8110,11 +7985,15 @@ gtk_file_chooser_widget_set_choice (GtkFileChooser  *chooser,
 
   if (GTK_IS_DROP_DOWN (widget))
     {
-      guint i;
-      const char **options = (const char **)g_object_get_data (G_OBJECT (widget), "options");
-      for (i = 0; options[i]; i++)
+      guint i, n;
+      GListModel *model;
+
+      model = gtk_drop_down_get_model (GTK_DROP_DOWN (widget));
+      n = g_list_model_get_n_items (model);
+      for (i = 0; i < n; i++)
         {
-          if (strcmp (options[i], option) == 0)
+          const char *string = gtk_string_list_get_string (GTK_STRING_LIST (model), i);
+          if (strcmp (string, option) == 0)
             {
               gtk_drop_down_set_selected (GTK_DROP_DOWN (widget), i);
               break;
@@ -8138,11 +8017,10 @@ gtk_file_chooser_widget_get_choice (GtkFileChooser  *chooser,
   widget = (GtkWidget *)g_hash_table_lookup (impl->choices, id);
   if (GTK_IS_DROP_DOWN (widget))
     {
-      const char **options = (const char **)g_object_get_data (G_OBJECT (widget), "options");
-      guint selected = gtk_drop_down_get_selected (GTK_DROP_DOWN (widget));
-      if (selected == GTK_INVALID_LIST_POSITION)
-        return NULL;
-      return options[selected];
+      gpointer selected = gtk_drop_down_get_selected_item (GTK_DROP_DOWN (widget));
+      if (GTK_IS_STRING_OBJECT (selected))
+        return gtk_string_object_get_string (GTK_STRING_OBJECT (selected));
+      return NULL;
     }
 
   else if (GTK_IS_TOGGLE_BUTTON (widget))
