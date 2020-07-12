@@ -52,6 +52,12 @@ void                    gtk_tim2_sort_model_set_model           (GtkTim2SortMode
 GDK_AVAILABLE_IN_ALL
 GListModel *            gtk_tim2_sort_model_get_model           (GtkTim2SortModel       *self);
 
+GDK_AVAILABLE_IN_ALL
+void                    gtk_tim2_sort_model_set_incremental     (GtkTim2SortModel       *self,
+                                                                 gboolean                incremental);
+GDK_AVAILABLE_IN_ALL
+gboolean                gtk_tim2_sort_model_get_incremental     (GtkTim2SortModel       *self);
+
 G_END_DECLS
 
 #endif /* __GTK_TIM2_SORT_MODEL_H__ */

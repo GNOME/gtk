@@ -65,6 +65,7 @@ sort_item_clear (gpointer data)
 
 enum {
   PROP_0,
+  PROP_INCREMENTAL,
   PROP_MODEL,
   PROP_SORTER,
   NUM_PROPERTIES
@@ -76,6 +77,7 @@ struct _GtkTim2SortModel
 
   GListModel *model;
   GtkSorter *sorter;
+  gboolean incremental;
 
   GtkTimSort sort; /* ongoing sort operation */
   guint sort_cb; /* 0 or current ongoing sort callback */
@@ -142,17 +144,28 @@ gtk_tim2_sort_model_is_sorting (GtkTim2SortModel *self)
 }
 
 static void
-gtk_tim2_sort_model_stop_sorting (GtkTim2SortModel *self)
+gtk_tim2_sort_model_stop_sorting (GtkTim2SortModel *self,
+                                  gsize            *runs)
 {
   if (self->sort_cb == 0)
-    return;
+    {
+      if (runs)
+        {
+          runs[0] = sort_array_get_size (&self->items);
+          runs[1] = 0;
+        }
+      return;
+    }
 
+  if (runs)
+    gtk_tim_sort_get_runs (&self->sort, runs);
   gtk_tim_sort_finish (&self->sort);
   g_clear_handle_id (&self->sort_cb, g_source_remove);
 }
 
 static gboolean
 gtk_tim2_sort_model_sort_step (GtkTim2SortModel *self,
+                               gboolean          finish,
                                guint            *out_position,
                                guint            *out_n_items)
 {
@@ -175,9 +188,11 @@ gtk_tim2_sort_model_sort_step (GtkTim2SortModel *self,
           end_change = MAX (end_change, ((SortItem *) change.base) + change.len);
         }
      
-      if (g_get_monotonic_time () >= end_time)
+      if (g_get_monotonic_time () >= end_time && !finish)
         break;
     }
+
+  g_print ("progress: %zu%%\n", gtk_tim_sort_get_progress (&self->sort) * 100 / MAX (1, sort_array_get_size (&self->items)));
 
   if (start_change < end_change)
     {
@@ -199,30 +214,94 @@ gtk_tim2_sort_model_sort_cb (gpointer data)
   GtkTim2SortModel *self = data;
   guint pos, n_items;
 
-  if (gtk_tim2_sort_model_sort_step (self, &pos, &n_items))
+  if (gtk_tim2_sort_model_sort_step (self, FALSE, &pos, &n_items))
     {
       if (n_items)
         g_list_model_items_changed (G_LIST_MODEL (self), pos, n_items, n_items);
       return G_SOURCE_CONTINUE;
     }
 
-  gtk_tim2_sort_model_stop_sorting (self);
+  gtk_tim2_sort_model_stop_sorting (self, NULL);
   return G_SOURCE_REMOVE;
 }
 
-static void
-gtk_tim2_sort_model_start_sorting (GtkTim2SortModel *self)
+static int
+sort_func (gconstpointer a,
+           gconstpointer b,
+           gpointer      data)
 {
-  if (self->sort_cb != 0)
-    return;
+  SortItem *sa = (SortItem *) a;
+  SortItem *sb = (SortItem *) b;
+
+  return gtk_sorter_compare (data, sa->item, sb->item);
+}
+
+static gboolean
+gtk_tim2_sort_model_start_sorting (GtkTim2SortModel *self,
+                                   gsize            *runs)
+{
+  g_assert (self->sort_cb == 0);
+
+  gtk_tim_sort_init (&self->sort,
+                     sort_array_get_data (&self->items),
+                     sort_array_get_size (&self->items),
+                     sizeof (SortItem),
+                     sort_func,
+                     self->sorter);
+  if (runs)
+    gtk_tim_sort_set_runs (&self->sort, runs);
+  if (self->incremental)
+    gtk_tim_sort_set_max_merge_size (&self->sort, 1024);
+
+  if (!self->incremental)
+    return FALSE;
 
   self->sort_cb = g_idle_add (gtk_tim2_sort_model_sort_cb, self);
+  return TRUE;
 }
 
 static void
-gtk_tim2_sort_model_clear_items (GtkTim2SortModel *self)
+gtk_tim2_sort_model_finish_sorting (GtkTim2SortModel *self,
+                                    guint            *pos,
+                                    guint            *n_items)
 {
-  gtk_tim2_sort_model_stop_sorting (self);
+  gtk_tim_sort_set_max_merge_size (&self->sort, 0);
+
+  gtk_tim2_sort_model_sort_step (self, TRUE, pos, n_items);
+  gtk_tim_sort_finish (&self->sort);
+
+  gtk_tim2_sort_model_stop_sorting (self, NULL);
+}
+
+static void
+gtk_tim2_sort_model_clear_items (GtkTim2SortModel *self,
+                                 guint            *pos,
+                                 guint            *n_items)
+{
+  gtk_tim2_sort_model_stop_sorting (self, NULL);
+
+  if (pos || n_items)
+    {
+      guint start, end;
+
+      for (start = 0; start < sort_array_get_size (&self->items); start++)
+        {
+          if (sort_array_index (&self->items, start)->position != start)
+            break;
+        }
+      for (end = sort_array_get_size (&self->items); end > start; end--)
+        {
+          if (sort_array_index (&self->items, end - 1)->position != end - 1)
+            break;
+        }
+
+      *n_items = end - start;
+      if (*n_items == 0)
+        *pos = 0;
+      else
+        *pos = start;
+    }
+
   sort_array_clear (&self->items);
 } 
 
@@ -250,41 +329,10 @@ gtk_tim2_sort_model_create_items (GtkTim2SortModel *self)
     }
 }
 
-static int
-sort_func (gconstpointer a,
-           gconstpointer b,
-           gpointer      data)
-{
-  SortItem *sa = (SortItem *) a;
-  SortItem *sb = (SortItem *) b;
-
-  return gtk_sorter_compare (data, sa->item, sb->item);
-}
 
 static void
-gtk_tim2_sort_model_resort (GtkTim2SortModel *self,
-                            guint             already_sorted)
-{
-  if (gtk_tim2_sort_model_is_sorting (self))
-    {
-      already_sorted = 0;
-      gtk_tim2_sort_model_stop_sorting (self);
-    }
-
-  gtk_tim_sort_init (&self->sort,
-                     sort_array_get_data (&self->items),
-                     sort_array_get_size (&self->items),
-                     sizeof (SortItem),
-                     sort_func,
-                     self->sorter);
-  gtk_tim_sort_set_max_merge_size (&self->sort, 1024);
-  gtk_tim_sort_set_already_sorted (&self->sort, already_sorted);
-
-  gtk_tim2_sort_model_start_sorting (self);
-}
-
-static void
-gtk_tim2_sort_model_remove_items (GtkTim2SortModel *self,
+gtk_tim2_sort_model_update_items (GtkTim2SortModel *self,
+                                  gsize             runs[GTK_TIM_SORT_MAX_PENDING + 1],
                                   guint             position,
                                   guint             removed,
                                   guint             added,
@@ -317,6 +365,9 @@ gtk_tim2_sort_model_remove_items (GtkTim2SortModel *self,
       valid++;
     }
 
+  /* FIXME */
+  runs[0] = 0;
+
   g_assert (valid == n_items - removed);
   memset (sort_array_index (&self->items, valid), 0, sizeof (SortItem) * removed); 
   sort_array_set_size (&self->items, valid);
@@ -332,6 +383,7 @@ gtk_tim2_sort_model_items_changed_cb (GListModel       *model,
                                       guint             added,
                                       GtkTim2SortModel *self)
 {
+  gsize runs[GTK_TIM_SORT_MAX_PENDING + 1];
   guint i, n_items, start, end;
   gboolean was_sorting;
 
@@ -345,25 +397,34 @@ gtk_tim2_sort_model_items_changed_cb (GListModel       *model,
     }
 
   was_sorting = gtk_tim2_sort_model_is_sorting (self);
-  gtk_tim2_sort_model_stop_sorting (self);
+  gtk_tim2_sort_model_stop_sorting (self, runs);
 
-  gtk_tim2_sort_model_remove_items (self, position, removed, added, &start, &end);
+  gtk_tim2_sort_model_update_items (self, runs, position, removed, added, &start, &end);
 
   if (added > 0)
     {
+      gboolean success;
+
       sort_array_reserve (&self->items, sort_array_get_size (&self->items) + added);
       for (i = position; i < position + added; i++)
         {
           sort_array_append (&self->items, &(SortItem) { g_list_model_get_item (self->model, i), i });
         }
 
-      gtk_tim2_sort_model_resort (self, was_sorting ? 0 : sort_array_get_size (&self->items) - added);
       end = 0;
+      success = gtk_tim2_sort_model_start_sorting (self, runs);
+      if (!success)
+        {
+          guint pos, n;
+          gtk_tim2_sort_model_finish_sorting (self, &pos, &n);
+          start = MIN (start, pos);
+          end = MIN (end, sort_array_get_size (&self->items) - pos - n);
+        }
     }
   else
     {
       if (was_sorting)
-        gtk_tim2_sort_model_resort (self, 0);
+        gtk_tim2_sort_model_start_sorting (self, runs);
     }
 
   n_items = sort_array_get_size (&self->items) - start - end;
@@ -380,6 +441,10 @@ gtk_tim2_sort_model_set_property (GObject      *object,
 
   switch (prop_id)
     {
+    case PROP_INCREMENTAL:
+      gtk_tim2_sort_model_set_incremental (self, g_value_get_boolean (value));
+      break;
+
     case PROP_MODEL:
       gtk_tim2_sort_model_set_model (self, g_value_get_object (value));
       break;
@@ -404,6 +469,10 @@ gtk_tim2_sort_model_get_property (GObject     *object,
 
   switch (prop_id)
     {
+    case PROP_INCREMENTAL:
+      g_value_set_boolean (value, self->incremental);
+      break;
+
     case PROP_MODEL:
       g_value_set_object (value, self->model);
       break;
@@ -423,18 +492,25 @@ gtk_tim2_sort_model_sorter_changed_cb (GtkSorter        *sorter,
                                        int               change,
                                        GtkTim2SortModel *self)
 {
-  guint n_items;
+  guint pos, n_items;
 
   if (gtk_sorter_get_order (sorter) == GTK_SORTER_ORDER_NONE)
-    gtk_tim2_sort_model_clear_items (self);
-  else if (sort_array_is_empty (&self->items))
-    gtk_tim2_sort_model_create_items (self);
+    gtk_tim2_sort_model_clear_items (self, &pos, &n_items);
+  else
+    {
+      if (sort_array_is_empty (&self->items))
+        gtk_tim2_sort_model_create_items (self);
 
-  gtk_tim2_sort_model_resort (self, 0);
+      gtk_tim2_sort_model_stop_sorting (self, NULL);
 
-  n_items = g_list_model_get_n_items (G_LIST_MODEL (self));
-  if (n_items > 1)
-    g_list_model_items_changed (G_LIST_MODEL (self), 0, n_items, n_items);
+      if (gtk_tim2_sort_model_start_sorting (self, NULL))
+        pos = n_items = 0;
+      else
+        gtk_tim2_sort_model_finish_sorting (self, &pos, &n_items);
+    }
+
+  if (n_items > 0)
+    g_list_model_items_changed (G_LIST_MODEL (self), pos, n_items, n_items);
 }
 
 static void
@@ -445,7 +521,7 @@ gtk_tim2_sort_model_clear_model (GtkTim2SortModel *self)
 
   g_signal_handlers_disconnect_by_func (self->model, gtk_tim2_sort_model_items_changed_cb, self);
   g_clear_object (&self->model);
-  gtk_tim2_sort_model_clear_items (self);
+  gtk_tim2_sort_model_clear_items (self, NULL, NULL);
 }
 
 static void
@@ -456,7 +532,6 @@ gtk_tim2_sort_model_clear_sorter (GtkTim2SortModel *self)
 
   g_signal_handlers_disconnect_by_func (self->sorter, gtk_tim2_sort_model_sorter_changed_cb, self);
   g_clear_object (&self->sorter);
-  gtk_tim2_sort_model_clear_items (self);
 }
 
 static void
@@ -480,15 +555,15 @@ gtk_tim2_sort_model_class_init (GtkTim2SortModelClass *class)
   gobject_class->dispose = gtk_tim2_sort_model_dispose;
 
   /**
-   * GtkTim2SortModel:sorter:
+   * GtkTim2SortModel:incremental:
    *
-   * The sorter for this model
+   * If the model should sort items incrementally
    */
-  properties[PROP_SORTER] =
-      g_param_spec_object ("sorter",
-                            P_("Sorter"),
-                            P_("The sorter for this model"),
-                            GTK_TYPE_SORTER,
+  properties[PROP_INCREMENTAL] =
+      g_param_spec_boolean ("incremental",
+                            P_("Incremental"),
+                            P_("Sort items incrementally"),
+                            FALSE,
                             GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
@@ -502,6 +577,18 @@ gtk_tim2_sort_model_class_init (GtkTim2SortModelClass *class)
                            P_("The model being sorted"),
                            G_TYPE_LIST_MODEL,
                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
+
+  /**
+   * GtkTim2SortModel:sorter:
+   *
+   * The sorter for this model
+   */
+  properties[PROP_SORTER] =
+      g_param_spec_object ("sorter",
+                            P_("Sorter"),
+                            P_("The sorter for this model"),
+                            GTK_TYPE_SORTER,
+                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (gobject_class, NUM_PROPERTIES, properties);
 }
@@ -562,12 +649,15 @@ gtk_tim2_sort_model_set_model (GtkTim2SortModel *self,
 
   if (model)
     {
+      guint ignore1, ignore2;
+
       self->model = g_object_ref (model);
       g_signal_connect (model, "items-changed", G_CALLBACK (gtk_tim2_sort_model_items_changed_cb), self);
       added = g_list_model_get_n_items (model);
 
       gtk_tim2_sort_model_create_items (self);
-      gtk_tim2_sort_model_resort (self, 0);
+      if (!gtk_tim2_sort_model_start_sorting (self, NULL))
+        gtk_tim2_sort_model_finish_sorting (self, &ignore1, &ignore2);
     }
   else
     added = 0;
@@ -628,7 +718,7 @@ gtk_tim2_sort_model_set_sorter (GtkTim2SortModel *self,
 
 /**
  * gtk_tim2_sort_model_get_sorter:
- * @self: a #GtkSor4LisTModel
+ * @self: a #GtkTim2SortModel
  *
  * Gets the sorter that is used to sort @self.
  *
@@ -640,4 +730,63 @@ gtk_tim2_sort_model_get_sorter (GtkTim2SortModel *self)
   g_return_val_if_fail (GTK_IS_TIM2_SORT_MODEL (self), NULL);
 
   return self->sorter;
+}
+
+/**
+ * gtk_tim2_sort_model_set_incremental:
+ * @self: a #GtkTim2SortModel
+ * @incremental: %TRUE to sort incrementally
+ *
+ * Sets the sort model to do an incremental sort.
+ *
+ * When incremental sorting is enabled, the sortlistmodel will not do
+ * a complete sort immediately, but will instead queue an idle handler that
+ * incrementally sorts the items towards their correct position. This of
+ * course means that items do not instantly appear in the right place. It
+ * also means that the total sorting time is a lot slower.
+ *
+ * When your filter blocks the UI while sorting, you might consider
+ * turning this on. Depending on your model and sorters, this may become
+ * interesting around 10,000 to 100,000 items.
+ *
+ * By default, incremental sortinging is disabled.
+ */
+void
+gtk_tim2_sort_model_set_incremental (GtkTim2SortModel *self,
+                                     gboolean          incremental)
+{
+  g_return_if_fail (GTK_IS_TIM2_SORT_MODEL (self));
+
+  if (self->incremental == incremental)
+    return;
+
+  self->incremental = incremental;
+
+  if (!incremental && gtk_tim2_sort_model_is_sorting (self))
+    {
+      guint pos, n_items;
+
+      gtk_tim2_sort_model_finish_sorting (self, &pos, &n_items);
+      if (n_items)
+        g_list_model_items_changed (G_LIST_MODEL (self), pos, n_items, n_items);
+    }
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_INCREMENTAL]);
+}
+
+/**
+ * gtk_tim2_sort_model_get_incremental:
+ * @self: a #GtkModel
+ *
+ * Returns whether incremental sorting was enabled via
+ * gtk_sort_list_model_set_incremental().
+ *
+ * Returns: %TRUE if incremental sorting is enabled
+ */
+gboolean
+gtk_tim2_sort_model_get_incremental (GtkTim2SortModel *self)
+{
+  g_return_val_if_fail (GTK_IS_TIM2_SORT_MODEL (self), FALSE);
+
+  return self->incremental;
 }
