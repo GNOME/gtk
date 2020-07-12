@@ -26,16 +26,6 @@
 #define MIN_MERGE 32
 
 /*
- * Limit the amount of work done when merging. This ensures that the step
- * function does not take too much time. Of coure, there's overhead associated
- * with splitting a merge into miultliple merges.
- *
- * So lowering this number will make the average runtime of the step function
- * faster but increase the total runtime.
- */
-#define MAX_MERGE_PER_RUN 1024
-
-/*
  * When we get into galloping mode, we stay there until both runs win less
  * often than MIN_GALLOP consecutive times.
  */
@@ -84,6 +74,7 @@ gtk_tim_sort_init (GtkTimSort       *self,
   self->data = data;
 
   self->min_gallop = MIN_GALLOP;
+  self->max_merge_size = G_MAXSIZE;
   self->min_run = compute_min_run (size);
 
   self->tmp = NULL;
@@ -190,6 +181,40 @@ gtk_tim_sort_set_already_sorted (GtkTimSort *self,
 
   if (already_sorted > 1)
     gtk_tim_sort_push_run (self, self->base, already_sorted);
+}
+
+/*
+ * gtk_tim_sort_set_max_merge_size:
+ * @self: a #GtkTimSort
+ * @max_merge_size: Maximum size of a merge step, 0 for unlimited
+ *
+ * Sets the maximum size of a merge step. Every time
+ * gtk_tim_sort_step() is called and a merge operation has to be
+ * done, the @max_merge_size will be used to limit the size of
+ * the merge.
+ *
+ * The benefit is that merges happen faster, and if you're using
+ * an incremental sorting algorithm in the main thread, this will
+ * limit the runtime.
+ *
+ * The disadvantage is that setting up merges is expensive and that
+ * various optimizations benefit from larger merges, so the total
+ * runtime of the sorting will increase with the number of merges.
+ *
+ * A good estimate is to set a @max_merge_size to 1024 for around
+ * 1ms runtimes, if your compare function is fast.
+ *
+ * By default, max_merge_size is set to unlimited.
+ **/
+void
+gtk_tim_sort_set_max_merge_size (GtkTimSort *self,
+                                 gsize       max_merge_size)
+{
+  g_return_if_fail (self != NULL);
+
+  if (max_merge_size == 0)
+    max_merge_size = G_MAXSIZE;
+  self->max_merge_size = max_merge_size;
 }
 
 #if 1

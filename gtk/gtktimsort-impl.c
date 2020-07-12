@@ -828,13 +828,13 @@ gtk_tim_sort(merge_at) (GtkTimSort *self,
   /* Merge remaining runs, using tmp array with min(len1, len2) elements */
   if (len1 <= len2)
     {
-      if (len1 > MAX_MERGE_PER_RUN)
+      if (len1 > self->max_merge_size)
         {
-          base1 = ELEM (self->run[i].base, self->run[i].len - MAX_MERGE_PER_RUN);
-          gtk_tim_sort(merge_lo) (self, base1, MAX_MERGE_PER_RUN, base2, len2);
-          self->run[i].len -= MAX_MERGE_PER_RUN;
-          self->run[i + 1].base = ELEM (self->run[i + 1].base, - MAX_MERGE_PER_RUN);
-          self->run[i + 1].len += MAX_MERGE_PER_RUN;
+          base1 = ELEM (self->run[i].base, self->run[i].len - self->max_merge_size);
+          gtk_tim_sort(merge_lo) (self, base1, self->max_merge_size, base2, len2);
+          self->run[i].len -= self->max_merge_size;
+          self->run[i + 1].base = ELEM (self->run[i + 1].base, - self->max_merge_size);
+          self->run[i + 1].len += self->max_merge_size;
           g_assert (ELEM (self->run[i].base, self->run[i].len) == self->run[i + 1].base);
           return;
         }
@@ -845,12 +845,12 @@ gtk_tim_sort(merge_at) (GtkTimSort *self,
     }
   else
     {
-      if (len2 > MAX_MERGE_PER_RUN)
+      if (len2 > self->max_merge_size)
         {
-          gtk_tim_sort(merge_hi) (self, base1, len1, base2, MAX_MERGE_PER_RUN);
-          self->run[i].len += MAX_MERGE_PER_RUN;
-          self->run[i + 1].base = ELEM (self->run[i + 1].base, MAX_MERGE_PER_RUN);
-          self->run[i + 1].len -= MAX_MERGE_PER_RUN;
+          gtk_tim_sort(merge_hi) (self, base1, len1, base2, self->max_merge_size);
+          self->run[i].len += self->max_merge_size;
+          self->run[i + 1].base = ELEM (self->run[i + 1].base, self->max_merge_size);
+          self->run[i + 1].len -= self->max_merge_size;
           g_assert (ELEM (self->run[i].base, self->run[i].len) == self->run[i + 1].base);
           return;
         }
