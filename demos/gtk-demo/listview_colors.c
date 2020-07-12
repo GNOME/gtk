@@ -657,6 +657,97 @@ get_title (gpointer item)
   return g_strdup ((char *)g_object_get_data (G_OBJECT (item), "title"));
 }
 
+static void
+assert_items_changed_correctly (GListModel *model,
+                                guint       position,
+                                guint       removed,
+                                guint       added,
+                                GListModel *compare)
+{
+  guint i, n_items;
+
+  //g_print ("%s => %u -%u +%u => %s\n", model_to_string (compare), position, removed, added, model_to_string (model));
+
+  g_assert_cmpint (g_list_model_get_n_items (model), ==, g_list_model_get_n_items (compare) - removed + added);
+  n_items = g_list_model_get_n_items (model);
+
+  if (position != 0 || removed != n_items)
+    {
+      /* Check that all unchanged items are indeed unchanged */
+      for (i = 0; i < position; i++)
+        {
+          gpointer o1 = g_list_model_get_item (model, i);
+          gpointer o2 = g_list_model_get_item (compare, i);
+          g_assert_cmphex (GPOINTER_TO_SIZE (o1), ==, GPOINTER_TO_SIZE (o2));
+          g_object_unref (o1);
+          g_object_unref (o2);
+        }
+      for (i = position + added; i < n_items; i++)
+        {
+          gpointer o1 = g_list_model_get_item (model, i);
+          gpointer o2 = g_list_model_get_item (compare, i - added + removed);
+          g_assert_cmphex (GPOINTER_TO_SIZE (o1), ==, GPOINTER_TO_SIZE (o2));
+          g_object_unref (o1);
+          g_object_unref (o2);
+        }
+
+      /* Check that the first and last added item are different from
+       * first and last removed item.
+       * Otherwise we could have kept them as-is
+       */
+      if (removed > 0 && added > 0)
+        {
+          gpointer o1 = g_list_model_get_item (model, position);
+          gpointer o2 = g_list_model_get_item (compare, position);
+          g_assert_cmphex (GPOINTER_TO_SIZE (o1), !=, GPOINTER_TO_SIZE (o2));
+          g_object_unref (o1);
+          g_object_unref (o2);
+
+          o1 = g_list_model_get_item (model, position + added - 1);
+          o2 = g_list_model_get_item (compare, position + removed - 1);
+          g_assert_cmphex (GPOINTER_TO_SIZE (o1), !=, GPOINTER_TO_SIZE (o2));
+          g_object_unref (o1);
+          g_object_unref (o2);
+        }
+    }
+
+  /* Finally, perform the same change as the signal indicates */
+  g_list_store_splice (G_LIST_STORE (compare), position, removed, NULL, 0);
+  for (i = position; i < position + added; i++)
+    {
+      gpointer item = g_list_model_get_item (G_LIST_MODEL (model), i);
+      g_list_store_insert (G_LIST_STORE (compare), i, item);
+      g_object_unref (item);
+    }
+}
+
+static GtkTim2SortModel *
+sort_list_model_new (GListModel *source,
+                     GtkSorter  *sorter)
+{
+  GtkTim2SortModel *model;
+  GListStore *check;
+  guint i;
+
+  model = gtk_tim2_sort_model_new (source, sorter);
+  gtk_tim2_sort_model_set_incremental (model, TRUE);
+  check = g_list_store_new (G_TYPE_OBJECT);
+  for (i = 0; i < g_list_model_get_n_items (G_LIST_MODEL (model)); i++)
+    {
+      gpointer item = g_list_model_get_item (G_LIST_MODEL (model), i);
+      g_list_store_append (check, item);
+      g_object_unref (item);
+    }
+  g_signal_connect_data (model,
+                         "items-changed",
+                         G_CALLBACK (assert_items_changed_correctly), 
+                         check,
+                         (GClosureNotify) g_object_unref,
+                         0);
+
+  return model;
+}
+
 GtkWidget *
 create_color_grid (void)
 {
@@ -676,7 +767,7 @@ create_color_grid (void)
   gtk_grid_view_set_max_columns (GTK_GRID_VIEW (gridview), 24);
   gtk_grid_view_set_enable_rubberband (GTK_GRID_VIEW (gridview), TRUE);
 
-  model = G_LIST_MODEL (gtk_tim2_sort_model_new (gtk_color_list_new (0), NULL));
+  model = G_LIST_MODEL (sort_list_model_new (gtk_color_list_new (0), NULL));
 
   selection = G_LIST_MODEL (gtk_multi_selection_new (model));
   gtk_grid_view_set_model (GTK_GRID_VIEW (gridview), selection);
