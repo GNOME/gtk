@@ -99,7 +99,7 @@ gtk_tim_sort (gpointer         base,
 
   gtk_tim_sort_init (&self, base, size, element_size, compare_func, user_data);
 
-  while (gtk_tim_sort_step (&self));
+  while (gtk_tim_sort_step (&self, NULL));
 
   gtk_tim_sort_finish (&self);
 }
@@ -170,6 +170,18 @@ gtk_tim_sort_ensure_capacity (GtkTimSort *self,
   }
 
   return self->tmp;
+}
+
+static void
+gtk_tim_sort_set_change (GtkTimSortRun *out_change,
+                         gpointer       base,
+                         gsize          len)
+{
+  if (out_change)
+    {
+      out_change->base = base;
+      out_change->len = len;
+    }
 }
 
 /*<private>
@@ -269,23 +281,48 @@ gtk_tim_sort_set_max_merge_size (GtkTimSort *self,
 #define WIDTH (self->element_size)
 #include "gtktimsort-impl.c"
 
+/*
+ * gtk_tim_sort_step:
+ * @self: a #GtkTimSort
+ * @out_change: (optional): Return location for changed
+ *     area. If a change did not cause any changes (for example,
+ *     if an already sorted array gets sorted), out_change
+ *     will be set to %NULL and 0.
+ *
+ * Performs another step in the sorting process. If a
+ * step was performed, %TRUE is returned and @out_change is
+ * set to the smallest area that contains all changes while
+ * sorting.
+ *
+ * If the data is completely sorted, %FALSE will be
+ * returned.
+ *
+ * Returns: %TRUE if an action was performed
+ **/
 gboolean
-gtk_tim_sort_step (GtkTimSort *self)
+gtk_tim_sort_step (GtkTimSort    *self,
+                   GtkTimSortRun *out_change)
 {
+  gboolean result;
+
   g_assert (self);
 
   switch (self->element_size)
   {
-#if 1
     case 4:
-      return gtk_tim_sort_step_4 (self);
+      result = gtk_tim_sort_step_4 (self, out_change);
+      break;
     case 8:
-      return gtk_tim_sort_step_8 (self);
+      result = gtk_tim_sort_step_8 (self, out_change);
+      break;
     case 16:
-      return gtk_tim_sort_step_16 (self);
-#endif
+      result = gtk_tim_sort_step_16 (self, out_change);
+      break;
     default:
-      return gtk_tim_sort_step_default(self);
+      result = gtk_tim_sort_step_default (self, out_change);
+      break;
   }
+
+  return result;
 }
 

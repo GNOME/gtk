@@ -196,6 +196,46 @@ test_pointers_huge (void)
   g_free (a);
 }
 
+static void
+test_steps (void)
+{
+  GtkTimSortRun change;
+  GtkTimSort sort;
+  int *a, *b;
+  gsize i, n;
+  
+  n = g_test_rand_int_range (20 * 1000, 50 * 1000);
+
+  a = g_new (int, n);
+  for (i = 0; i < n; i++)
+    a[i] = g_test_rand_int ();
+  b = g_memdup (a, sizeof (int) * n);
+
+  gtk_tim_sort_init (&sort, a, n, sizeof (int), compare_int, NULL);
+  gtk_tim_sort_set_max_merge_size (&sort, g_test_rand_int_range (512, 2048));
+
+  while (gtk_tim_sort_step (&sort, &change))
+    {
+      if (change.len)
+        {
+          int *a_start = change.base;
+          int *b_start = b + ((int *) change.base - a);
+          g_assert_cmpint (a_start[0], !=, b_start[0]); 
+          g_assert_cmpint (a_start[change.len - 1], !=, b_start[change.len - 1]); 
+          memcpy (b_start, a_start, change.len * sizeof (int));
+        }
+
+      assert_sort_equal (a, b, int, n);
+    }
+
+  g_qsort_with_data (b, n, sizeof (int), compare_int, NULL);
+  assert_sort_equal (a, b, int, n);
+
+  gtk_tim_sort_finish (&sort);
+  g_free (b);
+  g_free (a);
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -207,6 +247,7 @@ main (int argc, char *argv[])
   g_test_add_func ("/timsort/integers/huge", test_integers_huge);
   g_test_add_func ("/timsort/pointers", test_pointers);
   g_test_add_func ("/timsort/pointers/huge", test_pointers_huge);
+  g_test_add_func ("/timsort/steps", test_steps);
 
   return g_test_run ();
 }
