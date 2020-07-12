@@ -744,7 +744,6 @@ gtk_print_unix_dialog_init (GtkPrintUnixDialog *dialog)
   GtkSorter *sorter;
   GtkFilter *filter;
   GtkFilter *filter1;
-  GtkExpression *expression;
   GtkListItemFactory *factory;
   GListStore *store;
   GListModel *paper_size_list;
@@ -819,15 +818,13 @@ gtk_print_unix_dialog_init (GtkPrintUnixDialog *dialog)
 
   filter = gtk_every_filter_new ();
 
-  filter1 = gtk_string_filter_new ();
+  filter1 = gtk_string_filter_new (
+                gtk_cclosure_expression_new (G_TYPE_STRING,
+                                             NULL, 0, NULL,
+                                             G_CALLBACK (get_printer_key),
+                                             NULL, NULL));
   gtk_string_filter_set_match_mode (GTK_STRING_FILTER (filter1), GTK_STRING_FILTER_MATCH_MODE_SUBSTRING);
   gtk_string_filter_set_ignore_case (GTK_STRING_FILTER (filter1), TRUE);
-  expression = gtk_cclosure_expression_new (G_TYPE_STRING,
-                                            NULL, 0, NULL,
-                                            G_CALLBACK (get_printer_key),
-                                            NULL, NULL);
-  gtk_string_filter_set_expression (GTK_STRING_FILTER (filter1), expression);
-  gtk_expression_unref (expression);
   gtk_multi_filter_append (GTK_MULTI_FILTER (filter), filter1);
 
   filter1 = gtk_custom_filter_new (is_printer_active, dialog, NULL);

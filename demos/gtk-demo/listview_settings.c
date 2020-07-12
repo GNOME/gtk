@@ -215,7 +215,6 @@ transform_settings_to_keys (GBinding     *binding,
   GtkFilterListModel *filter_model;
   GtkFilter *filter;
   GtkNoSelection *selection_model;
-  GtkExpression *expression;
   char **keys;
   guint i;
 
@@ -246,11 +245,8 @@ transform_settings_to_keys (GBinding     *binding,
                                         gtk_column_view_get_sorter (GTK_COLUMN_VIEW (data)));
   g_object_unref (store);
 
-  expression = gtk_property_expression_new (SETTINGS_TYPE_KEY, NULL, "name");
-  filter = gtk_string_filter_new ();
-  gtk_string_filter_set_expression (GTK_STRING_FILTER (filter), expression);
+  filter = gtk_string_filter_new (gtk_property_expression_new (SETTINGS_TYPE_KEY, NULL, "name"));
   filter_model = gtk_filter_list_model_new (G_LIST_MODEL (sort_model), filter);
-  gtk_expression_unref (expression);
   g_object_unref (sort_model);
 
   g_set_object (&current_filter, filter);
