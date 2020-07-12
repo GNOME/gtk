@@ -302,7 +302,9 @@ gtk_string_filter_init (GtkStringFilter *self)
 }
 
 /**
- * gtk_string_filter_new:
+ * gtk_s tring_filter_new:
+ * @expression: (transfer full) (nullable): The expression to evaluate
+ *     or %NULL for none
  *
  * Creates a new string filter.
  *
@@ -312,9 +314,15 @@ gtk_string_filter_init (GtkStringFilter *self)
  * Returns: a new #GtkStringFilter
  **/
 GtkFilter *
-gtk_string_filter_new (void)
+gtk_string_filter_new (GtkExpression *expression)
 {
-  return g_object_new (GTK_TYPE_STRING_FILTER, NULL);
+  GtkFilter *result;
+
+  result = g_object_new (GTK_TYPE_STRING_FILTER, NULL);
+
+  g_clear_pointer (&expression, gtk_expression_unref);
+
+  return result;
 }
 
 /**

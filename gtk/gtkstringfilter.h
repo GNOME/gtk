@@ -51,7 +51,7 @@ GDK_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (GtkStringFilter, gtk_string_filter, GTK, STRING_FILTER, GtkFilter)
 
 GDK_AVAILABLE_IN_ALL
-GtkFilter *             gtk_string_filter_new                   (void);
+GtkFilter *             gtk_string_filter_new                   (GtkExpression          *exporession);
 
 GDK_AVAILABLE_IN_ALL
 const char *            gtk_string_filter_get_search            (GtkStringFilter        *self);
@@ -69,10 +69,10 @@ GDK_AVAILABLE_IN_ALL
 void                    gtk_string_filter_set_ignore_case       (GtkStringFilter        *self,
                                                                  gboolean                ignore_case);
 GDK_AVAILABLE_IN_ALL
-GtkStringFilterMatchMode gtk_string_filter_get_match_mode   (GtkStringFilter          *self);
+GtkStringFilterMatchMode gtk_string_filter_get_match_mode       (GtkStringFilter        *self);
 GDK_AVAILABLE_IN_ALL
-void                     gtk_string_filter_set_match_mode   (GtkStringFilter          *self,
-                                                             GtkStringFilterMatchMode  mode);
+void                     gtk_string_filter_set_match_mode       (GtkStringFilter        *self,
+                                                                 GtkStringFilterMatchMode mode);
 
 
 
