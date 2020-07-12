@@ -148,7 +148,7 @@ void
 gtk_file_chooser_error_stack_set_custom_error  (GtkFileChooserErrorStack *self,
                                                 const char               *label_text)
 {
-  GtkWidget *label = gtk_stack_get_child_by_name (GTK_STACK (self->stack), "cutsom");
+  GtkWidget *label = gtk_stack_get_child_by_name (GTK_STACK (self->stack), "custom");
 
   gtk_label_set_text (GTK_LABEL (label), label_text);
 
