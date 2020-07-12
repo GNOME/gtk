@@ -160,7 +160,6 @@ do_listview_words (GtkWidget *do_widget)
       GtkNoSelection *selection;
       GtkStringList *stringlist;
       GtkFilter *filter;
-      GtkExpression *expression;
       GFile *file;
 
       file = g_file_new_for_path ("/usr/share/dict/words");
@@ -177,10 +176,7 @@ do_listview_words (GtkWidget *do_widget)
           g_strfreev (words);
         }
 
-      filter = gtk_string_filter_new ();
-      expression = gtk_property_expression_new (GTK_TYPE_STRING_OBJECT, NULL, "string");
-      gtk_string_filter_set_expression (GTK_STRING_FILTER (filter), expression);
-      gtk_expression_unref (expression);
+      filter = gtk_string_filter_new (gtk_property_expression_new (GTK_TYPE_STRING_OBJECT, NULL, "string"));
       filter_model = gtk_filter_list_model_new (G_LIST_MODEL (stringlist), filter);
       gtk_filter_list_model_set_incremental (filter_model, TRUE);
 
