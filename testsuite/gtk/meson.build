@@ -92,6 +92,7 @@ tests = [
   { 'name': 'slicelistmodel' },
   { 'name': 'sorter' },
   { 'name': 'sortlistmodel' },
+  { 'name': 'sortlistmodel-exhaustive' },
   { 'name': 'spinbutton' },
   { 'name': 'stringlist' },
   { 'name': 'templates' },
