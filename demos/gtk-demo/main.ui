@@ -60,8 +60,8 @@
                 <property name="orientation">vertical</property>
 
                 <child>
-                  <object class="GtkSearchBar">
-                    <property name="search-mode-enabled">1</property>
+                  <object class="GtkSearchBar" id="searchbar">
+                    <property name="key-capture-widget">window</property>
                     <child>
                       <object class="GtkSearchEntry" id="search-entry"/>
                     </child>
