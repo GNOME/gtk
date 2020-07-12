@@ -20,7 +20,6 @@
 #include "config.h"
 #include "gtkfilechooserutils.h"
 #include "gtkfilechooser.h"
-#include "gtkfilesystem.h"
 #include "gtktypebuiltins.h"
 #include "gtkintl.h"
 
@@ -40,7 +39,6 @@ static void           delegate_unselect_file          (GtkFileChooser    *choose
 static void           delegate_select_all             (GtkFileChooser    *chooser);
 static void           delegate_unselect_all           (GtkFileChooser    *chooser);
 static GListModel *   delegate_get_files              (GtkFileChooser    *chooser);
-static GtkFileSystem *delegate_get_file_system        (GtkFileChooser    *chooser);
 static void           delegate_add_filter             (GtkFileChooser    *chooser,
 						       GtkFileFilter     *filter);
 static void           delegate_remove_filter          (GtkFileChooser    *chooser,
@@ -128,7 +126,6 @@ _gtk_file_chooser_delegate_iface_init (GtkFileChooserIface *iface)
   iface->select_all = delegate_select_all;
   iface->unselect_all = delegate_unselect_all;
   iface->get_files = delegate_get_files;
-  iface->get_file_system = delegate_get_file_system;
   iface->add_filter = delegate_add_filter;
   iface->remove_filter = delegate_remove_filter;
   iface->get_filters = delegate_get_filters;
@@ -213,12 +210,6 @@ static GListModel *
 delegate_get_files (GtkFileChooser *chooser)
 {
   return gtk_file_chooser_get_files (get_delegate (chooser));
-}
-
-static GtkFileSystem *
-delegate_get_file_system (GtkFileChooser *chooser)
-{
-  return _gtk_file_chooser_get_file_system (get_delegate (chooser));
 }
 
 static void
