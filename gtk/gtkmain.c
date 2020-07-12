@@ -181,7 +181,6 @@ static const GdkDebugKey gtk_debug_keys[] = {
   { "no-css-cache", GTK_DEBUG_NO_CSS_CACHE, "Disable style property cache" },
   { "interactive", GTK_DEBUG_INTERACTIVE, "Enable the GTK inspector" },
   { "touchscreen", GTK_DEBUG_TOUCHSCREEN, "Pretend the pointer is a touchscreen" },
-  { "resize", GTK_DEBUG_RESIZE, "Highlight resizing widgets" },
   { "layout", GTK_DEBUG_LAYOUT, "Show layout borders" },
   { "snapshot", GTK_DEBUG_SNAPSHOT, "Generate debug render nodes" },
 };
