@@ -234,6 +234,7 @@ gtk_tim2_sort_model_resort (GtkTim2SortModel *self,
                      sizeof (SortItem),
                      sort_func,
                      self->sorter);
+  gtk_tim_sort_set_max_merge_size (&self->sort, 1024);
   gtk_tim_sort_set_already_sorted (&self->sort, already_sorted);
 
   gtk_tim2_sort_model_start_sorting (self);
