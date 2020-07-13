@@ -239,3 +239,40 @@ gtk_accessible_update_property (GtkAccessible         *self,
 out:
   va_end (args);
 }
+
+/**
+ * gtk_accessible_update_property_value:
+ * @self: a #GtkAccessible
+ * @property: a #GtkAccessibleProperty
+ * @value: a #GValue with the value for @property
+ *
+ * Updates an accessible property.
+ *
+ * This function should be called by #GtkWidget types whenever an accessible
+ * property change must be communicated to assistive technologies.
+ *
+ * This function is meant to be used by language bindings.
+ */
+void
+gtk_accessible_update_property_value (GtkAccessible         *self,
+                                      GtkAccessibleProperty  property,
+                                      const GValue          *value)
+{
+  GtkATContext *context;
+
+  g_return_if_fail (GTK_IS_ACCESSIBLE (self));
+
+  context = gtk_accessible_get_at_context (self);
+  if (context == NULL)
+    return;
+
+  GtkAccessibleValue *real_value =
+    gtk_accessible_value_collect_for_property_value (property, value);
+
+  if (real_value == NULL)
+    return;
+
+  gtk_at_context_set_accessible_property (context, property, real_value);
+  gtk_accessible_value_unref (real_value);
+  gtk_at_context_update (context);
+}
