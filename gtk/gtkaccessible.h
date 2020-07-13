@@ -46,5 +46,9 @@ GDK_AVAILABLE_IN_ALL
 void                    gtk_accessible_update_state_value       (GtkAccessible         *self,
                                                                  GtkAccessibleState     state,
                                                                  const GValue          *value);
+GDK_AVAILABLE_IN_ALL
+void                    gtk_accessible_update_property_value    (GtkAccessible         *self,
+                                                                 GtkAccessibleProperty  property,
+                                                                 const GValue          *value);
 
 G_END_DECLS
