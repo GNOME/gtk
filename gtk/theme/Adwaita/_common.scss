@@ -3343,7 +3343,14 @@ placessidebar {
     // will make the animation of the new bookmark row jump
     > revealer { padding: 0 14px; }
 
-    &:selected { color: $selected_fg_color; }
+    &:selected {
+      color: $selected_fg_color;
+      background-color: $menu_selected_color;
+
+      &:focus { background-color: $selected_bg_color; }
+    }
+
+
 
     &:disabled { color: $insensitive_fg_color; }
 
