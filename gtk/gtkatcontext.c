@@ -57,6 +57,7 @@ gtk_at_context_finalize (GObject *gobject)
   GtkATContext *self = GTK_AT_CONTEXT (gobject);
 
   gtk_accessible_state_set_unref (self->states);
+  gtk_accessible_property_set_unref (self->properties);
 
   G_OBJECT_CLASS (gtk_at_context_parent_class)->finalize (gobject);
 }
@@ -108,9 +109,11 @@ gtk_at_context_get_property (GObject    *gobject,
 }
 
 static void
-gtk_at_context_real_state_change (GtkATContext             *self,
-                                  GtkAccessibleStateChange  change,
-                                  GtkAccessibleStateSet    *states)
+gtk_at_context_real_state_change (GtkATContext                *self,
+                                  GtkAccessibleStateChange     changed_states,
+                                  GtkAccessiblePropertyChange  changed_properies,
+                                  GtkAccessibleStateSet       *states,
+                                  GtkAccessiblePropertySet    *properties)
 {
 }
 
@@ -166,6 +169,7 @@ gtk_at_context_init (GtkATContext *self)
   self->accessible_role = GTK_ACCESSIBLE_ROLE_WIDGET;
 
   self->states = gtk_accessible_state_set_new ();
+  self->properties = gtk_accessible_property_set_new ();
 }
 
 /**
@@ -252,34 +256,87 @@ gtk_at_context_create (GtkAccessibleRole  accessible_role,
 }
 
 /*< private >
- * gtk_at_context_update_state:
+ * gtk_at_context_update:
  * @self: a #GtkATContext
  *
  * Notifies the AT connected to this #GtkATContext that the accessible
- * state has changed.
+ * state and its properties have changed.
  */
 void
-gtk_at_context_update_state (GtkATContext *self)
+gtk_at_context_update (GtkATContext *self)
 {
   g_return_if_fail (GTK_IS_AT_CONTEXT (self));
 
-  GtkAccessibleStateChange change = 0;
+  GtkAccessibleStateChange changed_states = 0;
+  GtkAccessiblePropertyChange changed_properties = 0;
 
   for (int i = 0; i < GTK_ACCESSIBLE_STATE_SELECTED; i++)
     {
       if (gtk_accessible_state_set_contains (self->states, i))
-        change |= (1 << i);
+        changed_states |= (1 << i);
     }
 
-  GTK_AT_CONTEXT_GET_CLASS (self)->state_change (self, change, self->states);
+  for (int i = 0; i < GTK_ACCESSIBLE_PROPERTY_VALUE_TEXT; i++)
+    {
+      if (gtk_accessible_property_set_contains (self->properties, i))
+        changed_properties |= (1 << i);
+    }
+
+  GTK_AT_CONTEXT_GET_CLASS (self)->state_change (self,
+                                                 changed_states,
+                                                 changed_properties,
+                                                 self->states,
+                                                 self->properties);
 }
 
+/*< private >
+ * gtk_at_context_set_state:
+ * @self: a #GtkATContext
+ * @state: a #GtkAccessibleState
+ * @value: (nullable): #GtkAccessibleValue
+ *
+ * Sets the @value for the given @state of a #GtkATContext.
+ *
+ * If @value is %NULL, the state is unset.
+ *
+ * This function will accumulate state changes until gtk_at_context_update_state()
+ * is called.
+ */
 void
-gtk_at_context_set_state (GtkATContext       *self,
-                          GtkAccessibleState  state,
-                          GtkAccessibleValue *value)
+gtk_at_context_set_accessible_state (GtkATContext       *self,
+                                     GtkAccessibleState  state,
+                                     GtkAccessibleValue *value)
 {
   g_return_if_fail (GTK_IS_AT_CONTEXT (self));
 
-  gtk_accessible_state_set_add (self->states, state, value);
+  if (value != NULL)
+    gtk_accessible_state_set_add (self->states, state, value);
+  else
+    gtk_accessible_state_set_remove (self->states, state);
+}
+
+/*< private >
+ * gtk_at_context_set_accessible_property:
+ * @self: a #GtkATContext
+ * @property: a #GtkAccessibleProperty
+ * @value: (nullable): #GtkAccessibleValue
+ *
+ * Sets the @value for the given @property of a #GtkATContext.
+ *
+ * If @value is %NULL, the property is unset.
+ *
+ * This function will accumulate property changes until gtk_at_context_update_state()
+ * is called.
+ */
+void
+gtk_at_context_set_accessible_property (GtkATContext          *self,
+                                        GtkAccessibleProperty  property,
+                                        GtkAccessibleValue    *value)
+{
+  g_return_if_fail (GTK_IS_AT_CONTEXT (self));
+
+  if (value != NULL)
+    gtk_accessible_property_set_add (self->properties, property, value);
+  else
+    gtk_accessible_property_set_remove (self->properties, property);
 }
