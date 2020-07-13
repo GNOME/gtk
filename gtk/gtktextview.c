@@ -4978,7 +4978,7 @@ gtk_text_view_state_flags_changed (GtkWidget     *widget,
       priv->mouse_cursor_obscured = FALSE;
     }
 
-  if (!gtk_widget_is_sensitive (widget))
+  if (!gtk_widget_is_focus (widget))
     {
       /* Clear any selection */
       gtk_text_view_unselect (text_view);
