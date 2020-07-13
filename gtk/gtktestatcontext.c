@@ -33,20 +33,27 @@ struct _GtkTestATContext
 G_DEFINE_TYPE (GtkTestATContext, gtk_test_at_context, GTK_TYPE_AT_CONTEXT)
 
 static void
-gtk_test_at_context_state_change (GtkATContext             *self,
-                                  GtkAccessibleStateChange  change,
-                                  GtkAccessibleStateSet    *states)
+gtk_test_at_context_state_change (GtkATContext                *self,
+                                  GtkAccessibleStateChange     changed_states,
+                                  GtkAccessiblePropertyChange  changed_properties,
+                                  GtkAccessibleStateSet       *states,
+                                  GtkAccessiblePropertySet    *properties)
 {
   GtkAccessible *accessible = gtk_at_context_get_accessible (self);
   GtkAccessibleRole role = gtk_at_context_get_accessible_role (self);
-  char *state = gtk_accessible_state_set_to_string (states);
+  char *states_str = gtk_accessible_state_set_to_string (states);
+  char *properties_str = gtk_accessible_property_set_to_string (properties);
 
-  g_print ("Accessible state changed for accessible “%s”, with role %d: %s\n",
+  g_print ("*** Accessible state changed for accessible “%s”, with role %d:\n"
+           "*** states = %s\n"
+           "*** properties = %s\n",
            G_OBJECT_TYPE_NAME (accessible),
            role,
-           state);
+           states_str,
+           properties_str);
 
-  g_free (state);
+  g_free (states_str);
+  g_free (properties_str);
 }
 
 static void

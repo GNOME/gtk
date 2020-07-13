@@ -32,15 +32,19 @@ GDK_AVAILABLE_IN_ALL
 G_DECLARE_INTERFACE (GtkAccessible, gtk_accessible, GTK, ACCESSIBLE, GObject)
 
 GDK_AVAILABLE_IN_ALL
-GtkAccessibleRole       gtk_accessible_get_accessible_role      (GtkAccessible *self);
+GtkAccessibleRole       gtk_accessible_get_accessible_role      (GtkAccessible         *self);
 
 GDK_AVAILABLE_IN_ALL
-void                    gtk_accessible_update_state             (GtkAccessible      *self,
-                                                                 GtkAccessibleState  first_state,
+void                    gtk_accessible_update_state             (GtkAccessible         *self,
+                                                                 GtkAccessibleState     first_state,
                                                                  ...);
 GDK_AVAILABLE_IN_ALL
-void                    gtk_accessible_update_state_value       (GtkAccessible      *self,
-                                                                 GtkAccessibleState  state,
-                                                                 const GValue       *value);
+void                    gtk_accessible_update_property          (GtkAccessible         *self,
+                                                                 GtkAccessibleProperty  first_property,
+                                                                 ...);
+GDK_AVAILABLE_IN_ALL
+void                    gtk_accessible_update_state_value       (GtkAccessible         *self,
+                                                                 GtkAccessibleState     state,
+                                                                 const GValue          *value);
 
 G_END_DECLS

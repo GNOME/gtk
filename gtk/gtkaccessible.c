@@ -116,7 +116,7 @@ gtk_accessible_get_accessible_role (GtkAccessible *self)
  * state change must be communicated to assistive technologies.
  */
 void
-gtk_accessible_update_state (GtkAccessible *self,
+gtk_accessible_update_state (GtkAccessible      *self,
                              GtkAccessibleState  first_state,
                              ...)
 {
@@ -141,13 +141,13 @@ gtk_accessible_update_state (GtkAccessible *self,
       if (value == NULL)
         goto out;
 
-      gtk_at_context_set_state (context, state, value);
+      gtk_at_context_set_accessible_state (context, state, value);
       gtk_accessible_value_unref (value);
 
       state = va_arg (args, int);
     }
 
-  gtk_at_context_update_state (context);
+  gtk_at_context_update (context);
 
 out:
   va_end (args);
@@ -185,7 +185,57 @@ gtk_accessible_update_state_value (GtkAccessible      *self,
   if (real_value == NULL)
     return;
 
-  gtk_at_context_set_state (context, state, real_value);
+  gtk_at_context_set_accessible_state (context, state, real_value);
   gtk_accessible_value_unref (real_value);
-  gtk_at_context_update_state (context);
+  gtk_at_context_update (context);
+}
+
+/**
+ * gtk_accessible_update_property:
+ * @self: a #GtkAccessible
+ * @first_property: the first #GtkAccessibleProperty
+ * @...: a list of property and value pairs, terminated by -1
+ *
+ * Updates a list of accessible properties.
+ *
+ * This function should be called by #GtkWidget types whenever an accessible
+ * property change must be communicated to assistive technologies.
+ */
+void
+gtk_accessible_update_property (GtkAccessible         *self,
+                                GtkAccessibleProperty  first_property,
+                                ...)
+{
+  GtkAccessibleProperty property;
+  GtkATContext *context;
+  va_list args;
+
+  g_return_if_fail (GTK_IS_ACCESSIBLE (self));
+
+  context = gtk_accessible_get_at_context (self);
+  if (context == NULL)
+    return;
+
+  va_start (args, first_property);
+
+  property = first_property;
+
+  while (property != -1)
+    {
+      GtkAccessibleValue *value = gtk_accessible_value_collect_for_property (property, &args);
+
+      /* gtk_accessible_value_collect_for_property() will warn for us */
+      if (value == NULL)
+        goto out;
+
+      gtk_at_context_set_accessible_property (context, property, value);
+      gtk_accessible_value_unref (value);
+
+      property = va_arg (args, int);
+    }
+
+  gtk_at_context_update (context);
+
+out:
+  va_end (args);
 }
