@@ -633,7 +633,7 @@ activate_about (GSimpleAction *action,
                          "website", "http://www.gtk.org",
                          "comments", "Program to demonstrate GTK printing",
                          "authors", (const char *[]){ "Alexander Larsson", NULL },
-                         "logo-icon-name", "org.gtk.PrintEditor4",
+                         "logo-icon-name", "org.gtk.PrintEditor4.Devel",
                          "title", "About GTK Print Editor",
                          "system-information", sysinfo->str,
                          NULL);

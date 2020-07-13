@@ -2,7 +2,7 @@
 Name=Print Editor
 Comment=A simple editor demonstrating GTK printing
 Exec=gtk4-print-editor %f
-Icon=text-editor-symbolic
+Icon=org.gtk.PrintEditor4.Devel
 Terminal=false
 Type=Application
 StartupNotify=true

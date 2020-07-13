@@ -19,3 +19,12 @@ executable('gtk4-node-editor',
            gui_app: true,
            link_args: extra_demo_ldflags,
            install: false)
+
+# icons
+icontheme_dir = join_paths(gtk_datadir, 'icons/hicolor')
+
+foreach size: ['scalable', 'symbolic']
+  install_subdir('data/' + size,
+    install_dir: icontheme_dir
+  )
+endforeach
