@@ -44,6 +44,7 @@
 
 #include "gtkaccessiblevalueprivate.h"
 
+#include "gtkaccessible.h"
 #include "gtkenums.h"
 
 G_DEFINE_QUARK (gtk-accessible-value-error-quark, gtk_accessible_value_error)
@@ -368,6 +369,92 @@ gtk_string_accessible_value_get (const GtkAccessibleValue *value)
   return self->value;
 }
 
+typedef struct {
+  GtkAccessibleValue parent;
+
+  GtkAccessible *ref;
+} GtkReferenceAccessibleValue;
+
+static void
+remove_weak_ref (gpointer  data,
+                 GObject  *old_reference)
+{
+  GtkReferenceAccessibleValue *self = data;
+
+  self->ref = NULL;
+}
+
+static void
+gtk_reference_accessible_value_finalize (GtkAccessibleValue *value)
+{
+  GtkReferenceAccessibleValue *self = (GtkReferenceAccessibleValue *) value;
+
+  if (self->ref != NULL)
+    g_object_weak_unref (G_OBJECT (self->ref), remove_weak_ref, self);
+}
+
+static gboolean
+gtk_reference_accessible_value_equal (const GtkAccessibleValue *value_a,
+                                      const GtkAccessibleValue *value_b)
+{
+  const GtkReferenceAccessibleValue *self_a = (GtkReferenceAccessibleValue *) value_a;
+  const GtkReferenceAccessibleValue *self_b = (GtkReferenceAccessibleValue *) value_b;
+
+  return self_a->ref == self_b->ref;
+}
+
+static void
+gtk_reference_accessible_value_print (const GtkAccessibleValue *value,
+                                      GString                  *buffer)
+{
+  const GtkReferenceAccessibleValue *self = (GtkReferenceAccessibleValue *) value;
+
+  if (self->ref != NULL)
+    {
+      g_string_append_printf (buffer, "%s<%p>",
+                              G_OBJECT_TYPE_NAME (self->ref),
+                              self->ref);
+    }
+  else
+    {
+      g_string_append (buffer, "<null>");
+    }
+}
+
+static const GtkAccessibleValueClass GTK_REFERENCE_ACCESSIBLE_VALUE = {
+  .type_name = "GtkReferenceAccessibleValue",
+  .instance_size = sizeof (GtkReferenceAccessibleValue),
+  .finalize = gtk_reference_accessible_value_finalize,
+  .equal = gtk_reference_accessible_value_equal,
+  .print = gtk_reference_accessible_value_print,
+};
+
+GtkAccessibleValue *
+gtk_reference_accessible_value_new (GtkAccessible *ref)
+{
+  g_return_val_if_fail (GTK_IS_ACCESSIBLE (ref), NULL);
+
+  GtkAccessibleValue *res = gtk_accessible_value_alloc (&GTK_REFERENCE_ACCESSIBLE_VALUE);
+
+  GtkReferenceAccessibleValue *self = (GtkReferenceAccessibleValue *) res;
+
+  self->ref = ref;
+  g_object_weak_ref (G_OBJECT (self->ref), remove_weak_ref, self);
+
+  return res;
+}
+
+GtkAccessible *
+gtk_reference_accessible_value_get (const GtkAccessibleValue *value)
+{
+  GtkReferenceAccessibleValue *self = (GtkReferenceAccessibleValue *) value;
+
+  g_return_val_if_fail (value != NULL, 0);
+  g_return_val_if_fail (value->value_class == &GTK_REFERENCE_ACCESSIBLE_VALUE, 0);
+
+  return self->ref;
+}
+
 /* }}} */
 
 /* {{{ Collection API */
@@ -379,7 +466,8 @@ typedef enum {
   GTK_ACCESSIBLE_COLLECT_TRISTATE,
   GTK_ACCESSIBLE_COLLECT_ENUM,
   GTK_ACCESSIBLE_COLLECT_NUMBER,
-  GTK_ACCESSIBLE_COLLECT_STRING
+  GTK_ACCESSIBLE_COLLECT_STRING,
+  GTK_ACCESSIBLE_COLLECT_REF
 } GtkAccessibleCollectType;
 
 typedef struct {
@@ -412,7 +500,7 @@ static const GtkAccessibleCollect collect_props[] = {
   { GTK_ACCESSIBLE_PROPERTY_FLOW_TO,           GTK_ACCESSIBLE_COLLECT_STRING,  "flowto",           (GCallback) gtk_string_accessible_value_new },
   { GTK_ACCESSIBLE_PROPERTY_HAS_POPUP,         GTK_ACCESSIBLE_COLLECT_BOOLEAN, "haspopup",         (GCallback) gtk_boolean_accessible_value_new },
   { GTK_ACCESSIBLE_PROPERTY_LABEL,             GTK_ACCESSIBLE_COLLECT_STRING,  "label",            (GCallback) gtk_string_accessible_value_new },
-  { GTK_ACCESSIBLE_PROPERTY_LABELLED_BY,       GTK_ACCESSIBLE_COLLECT_STRING,  "labelledby",       (GCallback) gtk_string_accessible_value_new },
+  { GTK_ACCESSIBLE_PROPERTY_LABELLED_BY,       GTK_ACCESSIBLE_COLLECT_REF   ,  "labelledby",       (GCallback) gtk_reference_accessible_value_new },
   { GTK_ACCESSIBLE_PROPERTY_LEVEL,             GTK_ACCESSIBLE_COLLECT_INT,     "level",            (GCallback) gtk_int_accessible_value_new },
   { GTK_ACCESSIBLE_PROPERTY_MULTI_LINE,        GTK_ACCESSIBLE_COLLECT_BOOLEAN, "multiline",        (GCallback) gtk_boolean_accessible_value_new },
   { GTK_ACCESSIBLE_PROPERTY_MULTI_SELECTABLE,  GTK_ACCESSIBLE_COLLECT_BOOLEAN, "multiselectable",  (GCallback) gtk_boolean_accessible_value_new },
@@ -436,6 +524,7 @@ typedef GtkAccessibleValue * (* GtkAccessibleValueTristateCtor) (int value);
 typedef GtkAccessibleValue * (* GtkAccessibleValueEnumCtor)     (int value);
 typedef GtkAccessibleValue * (* GtkAccessibleValueNumberCtor)   (double value);
 typedef GtkAccessibleValue * (* GtkAccessibleValueStringCtor)   (const char *value);
+typedef GtkAccessibleValue * (* GtkAccessibleValueRefCtor)      (gpointer value);
 
 /*< private >
  * gtk_accessible_value_get_default_for_state:
@@ -574,6 +663,17 @@ gtk_accessible_value_collect_for_state (GtkAccessibleState  state,
       }
       break;
 
+    case GTK_ACCESSIBLE_COLLECT_REF:
+      {
+        GtkAccessibleValueStringCtor ctor =
+          (GtkAccessibleValueStringCtor) cstate->ctor;
+
+        gpointer value = va_arg (*args, gpointer);
+
+        res = (* ctor) (value);
+      }
+      break;
+
     case GTK_ACCESSIBLE_COLLECT_INVALID:
     default:
       g_critical ("Unknown type for accessible state “%s”", cstate->name);
@@ -671,6 +771,17 @@ gtk_accessible_value_collect_for_state_value (GtkAccessibleState  state,
       }
       break;
 
+    case GTK_ACCESSIBLE_COLLECT_REF:
+      {
+        GtkAccessibleValueStringCtor ctor =
+          (GtkAccessibleValueStringCtor) cstate->ctor;
+
+        gpointer value_ = g_value_get_object (value);
+
+        res = (* ctor) (value_);
+      }
+      break;
+
     case GTK_ACCESSIBLE_COLLECT_INVALID:
     default:
       g_critical ("Unknown value type for accessible state “%s”", cstate->name);
@@ -696,6 +807,7 @@ gtk_accessible_value_get_default_for_property (GtkAccessibleProperty property)
 
   switch (cstate->value)
     {
+    /* Reference properties */
     case GTK_ACCESSIBLE_PROPERTY_ACTIVE_DESCENDANT:
     case GTK_ACCESSIBLE_PROPERTY_CONTROLS:
     case GTK_ACCESSIBLE_PROPERTY_DESCRIBED_BY:
@@ -703,9 +815,9 @@ gtk_accessible_value_get_default_for_property (GtkAccessibleProperty property)
     case GTK_ACCESSIBLE_PROPERTY_LABELLED_BY:
     case GTK_ACCESSIBLE_PROPERTY_OWNS:
     case GTK_ACCESSIBLE_PROPERTY_RELEVANT:
-      g_critical ("Unsupported property “%s”", cstate->name);
       return NULL;
 
+    /* Boolean properties */
     case GTK_ACCESSIBLE_PROPERTY_HAS_POPUP:
     case GTK_ACCESSIBLE_PROPERTY_MULTI_LINE:
     case GTK_ACCESSIBLE_PROPERTY_MULTI_SELECTABLE:
@@ -713,11 +825,24 @@ gtk_accessible_value_get_default_for_property (GtkAccessibleProperty property)
     case GTK_ACCESSIBLE_PROPERTY_REQUIRED:
       return gtk_boolean_accessible_value_new (FALSE);
 
+    /* Integer properties */
     case GTK_ACCESSIBLE_PROPERTY_LEVEL:
     case GTK_ACCESSIBLE_PROPERTY_POS_IN_SET:
     case GTK_ACCESSIBLE_PROPERTY_SET_SIZE:
       return gtk_int_accessible_value_new (0);
 
+    /* Number properties */
+    case GTK_ACCESSIBLE_PROPERTY_VALUE_MAX:
+    case GTK_ACCESSIBLE_PROPERTY_VALUE_MIN:
+    case GTK_ACCESSIBLE_PROPERTY_VALUE_NOW:
+      return gtk_number_accessible_value_new (0);
+
+    /* String properties */
+    case GTK_ACCESSIBLE_PROPERTY_LABEL:
+    case GTK_ACCESSIBLE_PROPERTY_VALUE_TEXT:
+      return gtk_string_accessible_value_new ("");
+
+    /* Token properties */
     case GTK_ACCESSIBLE_PROPERTY_AUTOCOMPLETE:
       return gtk_autocomplete_accessible_value_new (GTK_ACCESSIBLE_AUTOCOMPLETE_NONE);
 
@@ -726,15 +851,6 @@ gtk_accessible_value_get_default_for_property (GtkAccessibleProperty property)
 
     case GTK_ACCESSIBLE_PROPERTY_SORT:
       return gtk_sort_accessible_value_new (GTK_ACCESSIBLE_SORT_NONE);
-
-    case GTK_ACCESSIBLE_PROPERTY_VALUE_MAX:
-    case GTK_ACCESSIBLE_PROPERTY_VALUE_MIN:
-    case GTK_ACCESSIBLE_PROPERTY_VALUE_NOW:
-      return gtk_number_accessible_value_new (0);
-
-    case GTK_ACCESSIBLE_PROPERTY_LABEL:
-    case GTK_ACCESSIBLE_PROPERTY_VALUE_TEXT:
-      return gtk_string_accessible_value_new ("");
 
     default:
       g_critical ("Unknown value for accessible state “%s”", cstate->name);
@@ -830,6 +946,17 @@ gtk_accessible_value_collect_for_property (GtkAccessibleProperty  property,
       }
       break;
 
+    case GTK_ACCESSIBLE_COLLECT_REF:
+      {
+        GtkAccessibleValueStringCtor ctor =
+          (GtkAccessibleValueStringCtor) cstate->ctor;
+
+        gpointer value = va_arg (*args, gpointer);
+
+        res = (* ctor) (value);
+      }
+      break;
+
     case GTK_ACCESSIBLE_COLLECT_INVALID:
     default:
       g_critical ("Unknown type for accessible state “%s”", cstate->name);
@@ -920,6 +1047,17 @@ gtk_accessible_value_collect_for_property_value (GtkAccessibleProperty  property
           (GtkAccessibleValueStringCtor) cstate->ctor;
 
         const char *value_ = g_value_get_string (value);
+
+        res = (* ctor) (value_);
+      }
+      break;
+
+    case GTK_ACCESSIBLE_COLLECT_REF:
+      {
+        GtkAccessibleValueStringCtor ctor =
+          (GtkAccessibleValueStringCtor) cstate->ctor;
+
+        gpointer value_ = g_value_get_object (value);
 
         res = (* ctor) (value_);
       }
