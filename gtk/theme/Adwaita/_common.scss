@@ -3343,7 +3343,20 @@ placessidebar {
     // will make the animation of the new bookmark row jump
     > revealer { padding: 0 14px; }
 
-    &:selected { color: $selected_fg_color; }
+    &:selected {
+      background-color: desaturate($selected_bg_color,100%);
+      color: $selected_fg_color;
+
+      &:focus {
+        outline-width: 0;
+        color: $selected_fg_color;
+        background-color: $selected_bg_color;
+      }
+      &:hover:not(:last-child) { /* FIXME: dirty specificity bump */
+        color: $fg_color;
+        background-color: $menu_selected_color;
+      }
+    }
 
     &:disabled { color: $insensitive_fg_color; }
 
@@ -3361,7 +3374,6 @@ placessidebar {
       @extend %button_basic_flat;
 
       @extend %button_selected_flat;
-
       min-height: 26px;
       min-width: 26px;
       margin-top: 3px;
@@ -3406,7 +3418,7 @@ placesview {
     -gtk-icon-transform: rotate(-0.5turn);
   }
 
-  row.activatable:hover { background-color: transparent; }
+  row.activatable:hover {  }
 
   > actionbar > revealer > box  > box{
     border-spacing: 6px;
