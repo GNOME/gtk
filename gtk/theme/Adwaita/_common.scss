@@ -3343,7 +3343,17 @@ placessidebar {
     // will make the animation of the new bookmark row jump
     > revealer { padding: 0 14px; }
 
-    &:selected { color: $selected_fg_color; }
+    &:selected {
+      background-color: $menu_selected_color;
+      color: $fg_color;
+
+      &:focus, &:hover {
+        color: $selected_fg_color;
+        background-color: $selected_bg_color;
+      }
+    }
+
+
 
     &:disabled { color: $insensitive_fg_color; }
 
@@ -3361,7 +3371,6 @@ placessidebar {
       @extend %button_basic_flat;
 
       @extend %button_selected_flat;
-
       min-height: 26px;
       min-width: 26px;
       margin-top: 3px;
