@@ -4667,6 +4667,7 @@ gtk_entry_show_magnifier (GtkEntry *entry,
 
   _gtk_magnifier_set_coords (GTK_MAGNIFIER (priv->magnifier), rect.x,
                              rect.y + rect.height / 2);
+  rect.x = CLAMP (rect.x, 0, allocation.width);
   gtk_popover_set_pointing_to (GTK_POPOVER (priv->magnifier_popover),
                                &rect);
   gtk_popover_popup (GTK_POPOVER (priv->magnifier_popover));
