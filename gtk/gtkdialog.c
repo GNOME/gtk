@@ -553,6 +553,8 @@ gtk_dialog_class_init (GtkDialogClass *class)
   gtk_widget_class_bind_template_child_internal_private (widget_class, GtkDialog, action_area);
   gtk_widget_class_bind_template_child_internal_private (widget_class, GtkDialog, content_area);
   gtk_widget_class_bind_template_child_private (widget_class, GtkDialog, action_box);
+
+  gtk_widget_class_set_accessible_role (widget_class, GTK_ACCESSIBLE_ROLE_DIALOG);
 }
 
 static void
