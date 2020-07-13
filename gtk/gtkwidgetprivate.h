@@ -195,7 +195,8 @@ struct _GtkWidgetPrivate
   char *tooltip_markup;
   char *tooltip_text;
 
-  /* Accessible context */
+  /* Accessibility */
+  GtkAccessibleRole accessible_role;
   GtkATContext *at_context;
 };
 

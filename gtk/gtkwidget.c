@@ -511,7 +511,10 @@ enum {
   PROP_CSS_NAME,
   PROP_CSS_CLASSES,
   PROP_LAYOUT_MANAGER,
-  NUM_PROPERTIES
+  NUM_PROPERTIES,
+
+  /* GtkAccessible */
+  PROP_ACCESSIBLE_ROLE
 };
 
 static GParamSpec *widget_props[NUM_PROPERTIES] = { NULL, };
@@ -1334,6 +1337,8 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 
   g_object_class_install_properties (gobject_class, NUM_PROPERTIES, widget_props);
 
+  g_object_class_override_property (gobject_class, PROP_ACCESSIBLE_ROLE, "accessible-role");
+
   /**
    * GtkWidget::destroy:
    * @object: the object which received the signal
@@ -1714,6 +1719,9 @@ gtk_widget_set_property (GObject         *object,
     case PROP_LAYOUT_MANAGER:
       gtk_widget_set_layout_manager (widget, g_value_dup_object (value));
       break;
+    case PROP_ACCESSIBLE_ROLE:
+      priv->accessible_role = g_value_get_enum (value);
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -1843,6 +1851,16 @@ gtk_widget_get_property (GObject         *object,
       break;
     case PROP_LAYOUT_MANAGER:
       g_value_set_object (value, gtk_widget_get_layout_manager (widget));
+      break;
+    case PROP_ACCESSIBLE_ROLE:
+      {
+        GtkAccessibleRole role = priv->accessible_role;
+
+        if (priv->accessible_role == GTK_ACCESSIBLE_ROLE_WIDGET)
+          role = gtk_widget_class_get_accessible_role (GTK_WIDGET_GET_CLASS (widget));
+
+        g_value_set_enum (value, role);
+      }
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -2259,6 +2277,8 @@ gtk_widget_init (GTypeInstance *instance, gpointer g_class)
 
   priv->halign = GTK_ALIGN_FILL;
   priv->valign = GTK_ALIGN_FILL;
+
+  priv->accessible_role = GTK_ACCESSIBLE_ROLE_WIDGET;
 
   priv->width_request = -1;
   priv->height_request = -1;
@@ -8084,9 +8104,23 @@ gtk_widget_accessible_get_at_context (GtkAccessible *accessible)
     {
       GtkWidgetClass *widget_class = GTK_WIDGET_GET_CLASS (self);
       GtkWidgetClassPrivate *class_priv = widget_class->priv;
+      GtkAccessibleRole role;
 
-      priv->at_context =
-        gtk_at_context_create (class_priv->accessible_role, accessible);
+      /* Widgets have two options to set the accessible role: either they
+       * define it in their class_init() function, and the role applies to
+       * all instances; or an instance is created with the :accessible-role
+       * property (from GtkAccessible) set to anything other than the default
+       * GTK_ACCESSIBLE_ROLE_WIDGET value.
+       *
+       * In either case, the accessible role cannot be set post-construction.
+       */
+      if (priv->accessible_role != GTK_ACCESSIBLE_ROLE_WIDGET)
+        role = priv->accessible_role;
+      else
+        role = class_priv->accessible_role;
+
+      priv->at_context = gtk_at_context_create (role, accessible);
+      priv->accessible_role = role;
     }
 
   return priv->at_context;
@@ -12177,4 +12211,28 @@ gtk_widget_class_set_accessible_role (GtkWidgetClass    *widget_class,
 
   priv = widget_class->priv;
   priv->accessible_role = accessible_role;
+}
+
+/**
+ * gtk_widget_class_get_accessible_role:
+ * @widget_class: a #GtkWidgetClass
+ *
+ * Retrieves the accessible role used by the given #GtkWidget class.
+ *
+ * Different accessible roles have different states, and are rendered
+ * differently by assistive technologies.
+ *
+ * See also: gtk_accessible_get_accessible_role()
+ *
+ * Returns: the accessible role for the widget class
+ */
+GtkAccessibleRole
+gtk_widget_class_get_accessible_role (GtkWidgetClass *widget_class)
+{
+  GtkWidgetClassPrivate *priv;
+
+  g_return_val_if_fail (GTK_IS_WIDGET_CLASS (widget_class), GTK_ACCESSIBLE_ROLE_WIDGET);
+
+  priv = widget_class->priv;
+  return priv->accessible_role;
 }
