@@ -294,6 +294,7 @@ gtk_search_bar_class_init (GtkSearchBarClass *klass)
   object_class->get_property = gtk_search_bar_get_property;
 
   widget_class->compute_expand = gtk_search_bar_compute_expand;
+  widget_class->focus = gtk_widget_focus_child;
 
   /**
    * GtkSearchBar:search-mode-enabled:
