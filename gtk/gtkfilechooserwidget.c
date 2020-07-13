@@ -24,6 +24,7 @@
 
 #include "gtkaccessible.h"
 #include "gtkbindings.h"
+#include "gtkbuildable.h"
 #include "gtkbutton.h"
 #include "gtkcelllayout.h"
 #include "gtkcellrendererpixbuf.h"
@@ -455,8 +456,23 @@ enum {
 #define NUM_LINES 45
 #define NUM_CHARS 60
 
+/* GtkBuildable method implementation */
+static GtkBuildableIface *parent_buildable_iface;
+
 static void gtk_file_chooser_widget_iface_init       (GtkFileChooserIface        *iface);
 static void gtk_file_chooser_embed_default_iface_init (GtkFileChooserEmbedIface   *iface);
+static void gtk_file_chooser_buildable_iface_init    (GtkBuildableIface          *iface);
+static gboolean gtk_file_chooser_widget_buildable_custom_tag_start (GtkBuildable  *buildable,
+                                                                    GtkBuilder    *builder,
+                                                                    GObject       *child,
+                                                                    const gchar   *tagname,
+                                                                    GMarkupParser *parser,
+                                                                    gpointer      *data);
+static void     gtk_file_chooser_widget_buildable_custom_finished  (GtkBuildable  *buildable,
+                                                                    GtkBuilder    *builder,
+                                                                    GObject       *child,
+                                                                    const gchar   *tagname,
+                                                                    gpointer       data);
 
 static void     gtk_file_chooser_widget_constructed  (GObject               *object);
 static void     gtk_file_chooser_widget_finalize     (GObject               *object);
@@ -632,7 +648,9 @@ G_DEFINE_TYPE_WITH_CODE (GtkFileChooserWidget, gtk_file_chooser_widget, GTK_TYPE
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_FILE_CHOOSER,
                                                 gtk_file_chooser_widget_iface_init)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_FILE_CHOOSER_EMBED,
-                                                gtk_file_chooser_embed_default_iface_init));
+                                                gtk_file_chooser_embed_default_iface_init)
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
+                                                gtk_file_chooser_buildable_iface_init))
 
 static void
 gtk_file_chooser_widget_iface_init (GtkFileChooserIface *iface)
@@ -666,6 +684,41 @@ gtk_file_chooser_embed_default_iface_init (GtkFileChooserEmbedIface *iface)
   iface->get_default_size = gtk_file_chooser_widget_get_default_size;
   iface->should_respond = gtk_file_chooser_widget_should_respond;
   iface->initial_focus = gtk_file_chooser_widget_initial_focus;
+}
+
+static void
+gtk_file_chooser_buildable_iface_init (GtkBuildableIface *iface)
+{
+  parent_buildable_iface = g_type_interface_peek_parent (iface);
+  iface->custom_tag_start = gtk_file_chooser_widget_buildable_custom_tag_start;
+  iface->custom_finished = gtk_file_chooser_widget_buildable_custom_finished;
+}
+
+static gboolean
+gtk_file_chooser_widget_buildable_custom_tag_start (GtkBuildable  *buildable,
+                                                    GtkBuilder    *builder,
+                                                    GObject       *child,
+                                                    const gchar   *tagname,
+                                                    GMarkupParser *parser,
+                                                    gpointer      *data)
+{
+  if (parent_buildable_iface->custom_tag_start (buildable, builder, child,
+                                                tagname, parser, data))
+    return TRUE;
+
+  return _gtk_file_chooser_buildable_custom_tag_start (GTK_FILE_CHOOSER (buildable), builder, child,
+                                                       tagname, parser, data);
+}
+
+static void
+gtk_file_chooser_widget_buildable_custom_finished (GtkBuildable  *buildable,
+                                                   GtkBuilder    *builder,
+                                                   GObject       *child,
+                                                   const gchar   *tagname,
+                                                   gpointer       data)
+{
+  if (!_gtk_file_chooser_buildable_custom_finished (GTK_FILE_CHOOSER (buildable), builder, child, tagname, data))
+    parent_buildable_iface->custom_finished (buildable, builder, child, tagname, data);
 }
 
 static void
