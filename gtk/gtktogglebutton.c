@@ -26,7 +26,9 @@
 
 #include "gtktogglebutton.h"
 
+#include "gtkaccessible.h"
 #include "gtkbuttonprivate.h"
+#include "gtkenums.h"
 #include "gtkintl.h"
 #include "gtklabel.h"
 #include "gtkmain.h"
@@ -310,6 +312,10 @@ gtk_toggle_button_set_active (GtkToggleButton *toggle_button,
     gtk_widget_set_state_flags (GTK_WIDGET (toggle_button), GTK_STATE_FLAG_CHECKED, FALSE);
   else
     gtk_widget_unset_state_flags (GTK_WIDGET (toggle_button), GTK_STATE_FLAG_CHECKED);
+
+  gtk_accessible_update_state (GTK_ACCESSIBLE (toggle_button),
+                               GTK_ACCESSIBLE_STATE_PRESSED, is_active,
+                               -1);
 
   gtk_toggle_button_toggled (toggle_button);
 
