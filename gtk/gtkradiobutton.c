@@ -229,6 +229,7 @@ gtk_radio_button_class_init (GtkRadioButtonClass *class)
                                          G_TYPE_NONE, 0);
 
   gtk_widget_class_set_css_name (widget_class, I_("radiobutton"));
+  gtk_widget_class_set_accessible_role (widget_class, GTK_ACCESSIBLE_ROLE_RADIO);
 }
 
 static void
