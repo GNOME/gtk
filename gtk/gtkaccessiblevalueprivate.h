@@ -73,11 +73,19 @@ gboolean                gtk_accessible_value_equal                      (const G
                                                                          const GtkAccessibleValue      *value_b);
 
 GtkAccessibleValue *    gtk_accessible_value_get_default_for_state      (GtkAccessibleState             state);
-
 GtkAccessibleValue *    gtk_accessible_value_collect_for_state          (GtkAccessibleState             state,
                                                                          va_list                       *args);
 GtkAccessibleValue *    gtk_accessible_value_collect_for_state_value    (GtkAccessibleState             state,
                                                                          const GValue                  *value);
+
+GtkAccessibleValue *    gtk_accessible_value_get_default_for_property   (GtkAccessibleProperty          property);
+GtkAccessibleValue *    gtk_accessible_value_collect_for_property       (GtkAccessibleProperty          property,
+                                                                         va_list                       *args);
+GtkAccessibleValue *    gtk_accessible_value_collect_for_property_value (GtkAccessibleProperty          property,
+                                                                         const GValue                  *value);
+
+
+#define GTK_ACCESSIBLE_STATE_UNDEFINED  (-1)
 
 typedef enum { /*< prefix=GTK_ACCESSIBLE_CHECKED >*/
   GTK_ACCESSIBLE_CHECKED_FALSE     = 0,
@@ -100,36 +108,60 @@ typedef enum { /*< prefix=GTK_ACCESSIBLE_INVALID >*/
   GTK_ACCESSIBLE_INVALID_SPELLING,
 } GtkAccessibleInvalidState;
 
-#define GTK_ACCESSIBLE_STATE_UNDEFINED  (-1)
+typedef enum { /*< prefix=GTK_ACCESSIBLE_AUTOCOMPLETE >*/
+  GTK_ACCESSIBLE_AUTOCOMPLETE_NONE,
+  GTK_ACCESSIBLE_AUTOCOMPLETE_INLINE,
+  GTK_ACCESSIBLE_AUTOCOMPLETE_LIST,
+  GTK_ACCESSIBLE_AUTOCOMPLETE_BOTH
+} GtkAccessibleAutocomplete;
 
-/* Boolean states */
-GtkAccessibleValue *            gtk_busy_accessible_value_new           (gboolean                  state);
-gboolean                        gtk_busy_accessible_value_get           (const GtkAccessibleValue *value);
+typedef enum { /*< prefix=GTK_ACCESSIBLE_SORT >*/
+  GTK_ACCESSIBLE_SORT_NONE,
+  GTK_ACCESSIBLE_SORT_ASCENDING,
+  GTK_ACCESSIBLE_SORT_DESCENDING,
+  GTK_ACCESSIBLE_SORT_OTHER
+} GtkAccessibleSort;
 
-GtkAccessibleValue *            gtk_disabled_accessible_value_new       (gboolean                  state);
-gboolean                        gtk_disabled_accessible_value_get       (const GtkAccessibleValue *value);
+/* Basic values */
+GtkAccessibleValue *            gtk_boolean_accessible_value_new        (gboolean                  value);
+gboolean                        gtk_boolean_accessible_value_get        (const GtkAccessibleValue *value);
 
-GtkAccessibleValue *            gtk_hidden_accessible_value_new         (gboolean                  state);
-gboolean                        gtk_hidden_accessible_value_get       (const GtkAccessibleValue *value);
+GtkAccessibleValue *            gtk_int_accessible_value_new            (int                       value);
+int                             gtk_int_accessible_value_get            (const GtkAccessibleValue *value);
 
-/* Tri-state states */
-GtkAccessibleValue *            gtk_expanded_accessible_value_new       (int                       state);
+GtkAccessibleValue *            gtk_number_accessible_value_new         (double                    value);
+double                          gtk_number_accessible_value_get         (const GtkAccessibleValue *value);
+
+GtkAccessibleValue *            gtk_string_accessible_value_new         (const char               *value);
+const char *                    gtk_string_accessible_value_get         (const GtkAccessibleValue *value);
+
+/* Tri-state values */
+GtkAccessibleValue *            gtk_expanded_accessible_value_new       (int                       value);
 int                             gtk_expanded_accessible_value_get       (const GtkAccessibleValue *value);
 
-GtkAccessibleValue *            gtk_grabbed_accessible_value_new        (int                       state);
+GtkAccessibleValue *            gtk_grabbed_accessible_value_new        (int                       value);
 int                             gtk_grabbed_accessible_value_get        (const GtkAccessibleValue *value);
 
-GtkAccessibleValue *            gtk_selected_accessible_value_new       (int                       state);
+GtkAccessibleValue *            gtk_selected_accessible_value_new       (int                       value);
 int                             gtk_selected_accessible_value_get       (const GtkAccessibleValue *value);
 
-/* Token states */
-GtkAccessibleValue *            gtk_pressed_accessible_value_new        (GtkAccessiblePressedState state);
+/* Token values */
+GtkAccessibleValue *            gtk_pressed_accessible_value_new        (GtkAccessiblePressedState value);
 GtkAccessiblePressedState       gtk_pressed_accessible_value_get        (const GtkAccessibleValue *value);
 
-GtkAccessibleValue *            gtk_checked_accessible_value_new        (GtkAccessibleCheckedState state);
+GtkAccessibleValue *            gtk_checked_accessible_value_new        (GtkAccessibleCheckedState value);
 GtkAccessibleCheckedState       gtk_checked_accessible_value_get        (const GtkAccessibleValue *value);
 
-GtkAccessibleValue *            gtk_invalid_accessible_value_new        (GtkAccessibleInvalidState state);
+GtkAccessibleValue *            gtk_invalid_accessible_value_new        (GtkAccessibleInvalidState value);
 GtkAccessibleInvalidState       gtk_invalid_accessible_value_get        (const GtkAccessibleValue *value);
+
+GtkAccessibleValue *            gtk_autocomplete_accessible_value_new   (GtkAccessibleAutocomplete value);
+GtkAccessibleAutocomplete       gtk_autocomplete_accessible_value_get   (const GtkAccessibleValue *value);
+
+GtkAccessibleValue *            gtk_orientation_accessible_value_new    (GtkOrientation            value);
+GtkOrientation                  gtk_orientation_accessible_value_get    (const GtkAccessibleValue *value);
+
+GtkAccessibleValue *            gtk_sort_accessible_value_new           (GtkAccessibleSort         value);
+GtkAccessibleSort               gtk_sort_accessible_value_get           (const GtkAccessibleValue *value);
 
 G_END_DECLS
