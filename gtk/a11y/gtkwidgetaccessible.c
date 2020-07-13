@@ -575,14 +575,17 @@ gtk_widget_accessible_get_extents (AtkComponent   *component,
   gint x_toplevel, y_toplevel;
   GtkWidget *widget;
   GtkAllocation allocation;
+  gint scale;
 
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (component));
   if (widget == NULL)
     return;
 
   gtk_widget_get_allocation (widget, &allocation);
-  *width = allocation.width;
-  *height = allocation.height;
+  scale = gtk_widget_get_scale_factor (widget);
+
+  *width = allocation.width * scale;
+  *height = allocation.height * scale;
   if (!gtk_widget_accessible_on_screen (widget) || (!gtk_widget_is_drawable (widget)))
     {
       *x = G_MININT;
@@ -605,6 +608,9 @@ gtk_widget_accessible_get_extents (AtkComponent   *component,
   gdk_window_get_origin (window, &x_window, &y_window);
   *x += x_window;
   *y += y_window;
+
+  *x *= scale;
+  *y *= scale;
 
   if (coord_type == ATK_XY_WINDOW)
     {
@@ -666,6 +672,7 @@ gtk_widget_accessible_set_extents (AtkComponent *component,
                                    AtkCoordType  coord_type)
 {
   GtkWidget *widget;
+  gint scale;
 
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (component));
   if (widget == NULL)
@@ -674,27 +681,28 @@ gtk_widget_accessible_set_extents (AtkComponent *component,
   if (!gtk_widget_is_toplevel (widget))
     return FALSE;
 
+  scale = gtk_widget_get_scale_factor (widget);
   if (coord_type == ATK_XY_WINDOW)
     {
       gint x_current, y_current;
       GdkWindow *window = gtk_widget_get_window (widget);
 
       gdk_window_get_origin (window, &x_current, &y_current);
-      x_current += x;
-      y_current += y;
+      x_current += x / scale;
+      y_current += y / scale;
       if (x_current < 0 || y_current < 0)
         return FALSE;
       else
         {
           gtk_window_move (GTK_WINDOW (widget), x_current, y_current);
-          gtk_widget_set_size_request (widget, width, height);
+          gtk_widget_set_size_request (widget, width / scale, height / scale);
           return TRUE;
         }
     }
   else if (coord_type == ATK_XY_SCREEN)
     {
       gtk_window_move (GTK_WINDOW (widget), x, y);
-      gtk_widget_set_size_request (widget, width, height);
+      gtk_widget_set_size_request (widget, width / scale, height / scale);
       return TRUE;
     }
   return FALSE;

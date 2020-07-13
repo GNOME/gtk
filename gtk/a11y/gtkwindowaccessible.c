@@ -385,6 +385,7 @@ gtk_window_accessible_get_extents (AtkComponent  *component,
   GdkWindow *window;
   GdkRectangle rect;
   gint x_toplevel, y_toplevel;
+  gint scale;
 
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (component));
   if (widget == NULL)
@@ -404,9 +405,10 @@ gtk_window_accessible_get_extents (AtkComponent  *component,
     return;
 
   gdk_window_get_frame_extents (window, &rect);
+  scale = gtk_widget_get_scale_factor (widget);
 
-  *width = rect.width;
-  *height = rect.height;
+  *width = rect.width * scale;
+  *height = rect.height * scale;
   if (!gtk_widget_is_drawable (widget))
     {
       *x = G_MININT;
