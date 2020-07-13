@@ -150,7 +150,6 @@ gtk/gtkexpander.c
 gtk/gtkfilechooserbutton.c
 gtk/gtkfilechooser.c
 gtk/gtkfilechooserdialog.c
-gtk/gtkfilechooserembed.c
 gtk/gtkfilechooserentry.c
 gtk/gtkfilechoosererrorstack.c
 gtk/gtkfilechoosernative.c
@@ -158,7 +157,6 @@ gtk/gtkfilechoosernativequartz.c
 gtk/gtkfilechooserutils.c
 gtk/gtkfilechooserwidget.c
 gtk/gtkfilefilter.c
-gtk/gtkfilesystem.c
 gtk/gtkfilesystemmodel.c
 gtk/gtkfilter.c
 gtk/gtkfilterlistmodel.c
