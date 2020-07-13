@@ -837,6 +837,10 @@ gtk_button_set_label (GtkButton   *button,
   gtk_label_set_label (GTK_LABEL (priv->child), label);
   gtk_button_set_child_type (button, LABEL_CHILD);
 
+  gtk_accessible_update_property (GTK_ACCESSIBLE (button),
+                                  GTK_ACCESSIBLE_PROPERTY_LABEL, label,
+                                  -1);
+
   g_object_notify_by_pspec (G_OBJECT (button), props[PROP_LABEL]);
 }
 
