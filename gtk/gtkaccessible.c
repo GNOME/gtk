@@ -46,6 +46,7 @@
 
 #include "gtkatcontextprivate.h"
 #include "gtkenums.h"
+#include "gtktypebuiltins.h"
 
 #include <stdarg.h>
 
@@ -54,14 +55,53 @@ G_DEFINE_INTERFACE (GtkAccessible, gtk_accessible, G_TYPE_OBJECT)
 static void
 gtk_accessible_default_init (GtkAccessibleInterface *iface)
 {
+  GParamSpec *pspec =
+    g_param_spec_enum ("accessible-role",
+                       "Accessible Role",
+                       "The role of the accessible object",
+                       GTK_TYPE_ACCESSIBLE_ROLE,
+                       GTK_ACCESSIBLE_ROLE_WIDGET,
+                       G_PARAM_READWRITE |
+                       G_PARAM_CONSTRUCT_ONLY |
+                       G_PARAM_STATIC_STRINGS);
+
+  g_object_interface_install_property (iface, pspec);
 }
 
+/*< private >
+ * gtk_accessible_get_at_context:
+ * @self: a #GtkAccessible
+ *
+ * Retrieves the #GtkATContext for the given #GtkAccessible.
+ *
+ * Returns: (transfer none): the #GtkATContext
+ */
 GtkATContext *
 gtk_accessible_get_at_context (GtkAccessible *self)
 {
   g_return_val_if_fail (GTK_IS_ACCESSIBLE (self), NULL);
 
   return GTK_ACCESSIBLE_GET_IFACE (self)->get_at_context (self);
+}
+
+/**
+ * gtk_accessible_get_accessible_role:
+ * @self: a #GtkAccessible
+ *
+ * Retrieves the #GtkAccessibleRole for the given #GtkAccessible.
+ *
+ * Returns: a #GtkAccessibleRole
+ */
+GtkAccessibleRole
+gtk_accessible_get_accessible_role (GtkAccessible *self)
+{
+  g_return_val_if_fail (GTK_IS_ACCESSIBLE (self), GTK_ACCESSIBLE_ROLE_WIDGET);
+
+  GtkATContext *context = gtk_accessible_get_at_context (self);
+  if (context == NULL)
+    return GTK_ACCESSIBLE_ROLE_WIDGET;
+
+  return gtk_at_context_get_accessible_role (context);
 }
 
 /**
