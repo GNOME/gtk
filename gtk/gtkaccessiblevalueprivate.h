@@ -22,6 +22,7 @@
 
 #include <glib-object.h>
 
+#include "gtkaccessible.h"
 #include "gtkenums.h"
 
 G_BEGIN_DECLS
@@ -134,6 +135,9 @@ double                          gtk_number_accessible_value_get         (const G
 
 GtkAccessibleValue *            gtk_string_accessible_value_new         (const char               *value);
 const char *                    gtk_string_accessible_value_get         (const GtkAccessibleValue *value);
+
+GtkAccessibleValue *            gtk_reference_accessible_value_new      (GtkAccessible            *value);
+GtkAccessible *                 gtk_reference_accessible_value_get      (const GtkAccessibleValue *value);
 
 /* Tri-state values */
 GtkAccessibleValue *            gtk_expanded_accessible_value_new       (int                       value);
