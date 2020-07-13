@@ -302,6 +302,8 @@ gtk_button_class_init (GtkButtonClass *klass)
                                        "activate", NULL);
   gtk_widget_class_add_binding_signal (widget_class, GDK_KEY_KP_Enter, 0,
                                        "activate", NULL);
+
+  gtk_widget_class_set_accessible_role (widget_class, GTK_ACCESSIBLE_ROLE_BUTTON);
 }
 
 static void

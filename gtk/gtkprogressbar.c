@@ -250,6 +250,7 @@ gtk_progress_bar_class_init (GtkProgressBarClass *class)
 
   gtk_widget_class_set_css_name (widget_class, I_("progressbar"));
   gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BOX_LAYOUT);
+  gtk_widget_class_set_accessible_role (widget_class, GTK_ACCESSIBLE_ROLE_PROGRESS_BAR);
 }
 
 static void
