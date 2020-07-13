@@ -10,6 +10,9 @@
   <template class="GtkInspectorWindow" parent="GtkWindow">
     <property name="default-height">500</property>
     <property name="default-width">800</property>
+    <style>
+      <class name="devel"/>
+    </style>
     <child type="titlebar">
       <object class="GtkHeaderBar">
         <child>
