@@ -268,6 +268,7 @@ gtk_tree_expander_focus (GtkWidget        *widget,
     return FALSE;
 
   gtk_widget_grab_focus (widget);
+
   return TRUE;
 }
 
@@ -614,7 +615,7 @@ gtk_tree_expander_init (GtkTreeExpander *self)
 {
   GtkEventController *controller;
 
-  gtk_widget_set_can_focus (GTK_WIDGET (self), TRUE);
+  gtk_widget_set_focusable (GTK_WIDGET (self), TRUE);
 
   controller = gtk_drop_controller_motion_new ();
   g_signal_connect (controller, "enter", G_CALLBACK (gtk_tree_expander_drag_enter), self);
