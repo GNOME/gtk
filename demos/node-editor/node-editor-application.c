@@ -101,7 +101,7 @@ activate_about (GSimpleAction *action,
                          "website", "http://www.gtk.org",
                          "comments", "Program to test GTK rendering",
                          "authors", (const char *[]){ "Benjamin Otte", "Timm Bäder", NULL},
-                         "logo-icon-name", "text-editor-symbolic",
+                         "logo-icon-name", "org.gtk.gtk4.NodeEditor",
                          "title", "About GTK Node Editor",
                          "system-information", s->str,
                          NULL);
