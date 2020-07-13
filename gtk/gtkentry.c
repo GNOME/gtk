@@ -3683,7 +3683,8 @@ place_windows (GtkEntry *entry)
   EntryIconInfo *icon_info;
 
   icon_info = priv->icons[GTK_ENTRY_ICON_PRIMARY];
-  if (icon_info)
+  if (icon_info &&
+      !_gtk_icon_helper_get_is_empty (GTK_ICON_HELPER (icon_info->gadget)))
     {
       GtkAllocation primary;
 
@@ -3694,7 +3695,8 @@ place_windows (GtkEntry *entry)
     }
 
   icon_info = priv->icons[GTK_ENTRY_ICON_SECONDARY];
-  if (icon_info)
+  if (icon_info &&
+      !_gtk_icon_helper_get_is_empty (GTK_ICON_HELPER (icon_info->gadget)))
     {
       GtkAllocation secondary;
 
@@ -3846,6 +3848,9 @@ gtk_entry_allocate (GtkCssGadget        *gadget,
       if (!icon_info)
         continue;
 
+      if (_gtk_icon_helper_get_is_empty (GTK_ICON_HELPER (icon_info->gadget)))
+        continue;
+
       gtk_css_gadget_get_preferred_size (icon_info->gadget,
                                          GTK_ORIENTATION_HORIZONTAL,
                                          -1,
@@ -3987,7 +3992,10 @@ gtk_entry_draw_undershoot (GtkEntry *entry,
     {
       int icon_width = 0;
       int icon_idx = rtl ? 1 : 0;
-      if (priv->icons[icon_idx] != NULL)
+      EntryIconInfo *icon_info = priv->icons[icon_idx];
+
+      if (icon_info != NULL &&
+          !_gtk_icon_helper_get_is_empty (GTK_ICON_HELPER (icon_info->gadget)))
         {
            gtk_css_gadget_get_preferred_size (priv->icons[icon_idx]->gadget,
                                               GTK_ORIENTATION_HORIZONTAL,
@@ -4006,7 +4014,10 @@ gtk_entry_draw_undershoot (GtkEntry *entry,
     {
       int icon_width = 0;
       int icon_idx = rtl ? 0 : 1;
-      if (priv->icons[icon_idx] != NULL)
+      EntryIconInfo *icon_info = priv->icons[icon_idx];
+
+      if (icon_info != NULL &&
+          !_gtk_icon_helper_get_is_empty (GTK_ICON_HELPER (icon_info->gadget)))
         {
            gtk_css_gadget_get_preferred_size (priv->icons[icon_idx]->gadget,
                                               GTK_ORIENTATION_HORIZONTAL,
@@ -4014,6 +4025,7 @@ gtk_entry_draw_undershoot (GtkEntry *entry,
                                               &icon_width, NULL,
                                               NULL, NULL);
         }
+
       gtk_style_context_save_to_node (context, priv->undershoot_node[1]);
       gtk_render_background (context, cr, rect.x + rect.width - UNDERSHOOT_SIZE - icon_width + 1, rect.y, UNDERSHOOT_SIZE, rect.height);
       gtk_render_frame (context, cr, rect.x + rect.width - UNDERSHOOT_SIZE - icon_width + 1, rect.y, UNDERSHOOT_SIZE, rect.height);
@@ -4064,8 +4076,11 @@ gtk_entry_render (GtkCssGadget *gadget,
     {
       EntryIconInfo *icon_info = priv->icons[i];
 
-      if (icon_info != NULL)
-        gtk_css_gadget_draw (icon_info->gadget, cr);
+      if (icon_info != NULL &&
+          !_gtk_icon_helper_get_is_empty (GTK_ICON_HELPER (icon_info->gadget)))
+        {
+          gtk_css_gadget_draw (icon_info->gadget, cr);
+        }
     }
 
   gtk_entry_draw_undershoot (entry, cr);
@@ -7477,15 +7492,18 @@ gtk_entry_clear_icon (GtkEntry             *entry,
   if (GDK_IS_WINDOW (icon_info->window))
     gdk_window_hide (icon_info->window);
 
+  _gtk_icon_helper_clear (icon_helper);
+
+  g_object_notify_by_pspec (G_OBJECT (entry),
+                            entry_props[icon_pos == GTK_ENTRY_ICON_PRIMARY
+                                        ? PROP_PIXBUF_PRIMARY
+                                        : PROP_PIXBUF_SECONDARY]);
+
   storage_type = _gtk_icon_helper_get_storage_type (icon_helper);
 
   switch (storage_type)
     {
     case GTK_IMAGE_PIXBUF:
-      g_object_notify_by_pspec (G_OBJECT (entry),
-                                entry_props[icon_pos == GTK_ENTRY_ICON_PRIMARY
-                                            ? PROP_PIXBUF_PRIMARY
-                                            : PROP_PIXBUF_SECONDARY]);
       break;
 
     case GTK_IMAGE_STOCK:
@@ -7513,8 +7531,6 @@ gtk_entry_clear_icon (GtkEntry             *entry,
       g_assert_not_reached ();
       break;
     }
-
-  _gtk_icon_helper_clear (icon_helper);
 
   g_object_notify_by_pspec (G_OBJECT (entry),
                             entry_props[icon_pos == GTK_ENTRY_ICON_PRIMARY
@@ -8498,10 +8514,9 @@ gtk_entry_set_icon_from_pixbuf (GtkEntry             *entry,
   g_object_freeze_notify (G_OBJECT (entry));
 
   if (pixbuf)
-    g_object_ref (pixbuf);
-
-  if (pixbuf)
     {
+      g_object_ref (pixbuf);
+
       _gtk_icon_helper_set_pixbuf (GTK_ICON_HELPER (icon_info->gadget), pixbuf);
       _gtk_icon_helper_set_icon_size (GTK_ICON_HELPER (icon_info->gadget),
                                       GTK_ICON_SIZE_MENU);
@@ -8526,7 +8541,7 @@ gtk_entry_set_icon_from_pixbuf (GtkEntry             *entry,
     gtk_entry_clear_icon (entry, icon_pos);
 
   if (gtk_widget_get_visible (GTK_WIDGET (entry)))
-    gtk_widget_queue_resize (GTK_WIDGET (entry));
+    gtk_widget_queue_allocate (GTK_WIDGET (entry));
 
   g_object_thaw_notify (G_OBJECT (entry));
 }
@@ -8586,7 +8601,7 @@ gtk_entry_set_icon_from_stock (GtkEntry             *entry,
     gtk_entry_clear_icon (entry, icon_pos);
 
   if (gtk_widget_get_visible (GTK_WIDGET (entry)))
-    gtk_widget_queue_resize (GTK_WIDGET (entry));
+    gtk_widget_queue_allocate (GTK_WIDGET (entry));
 
   g_object_thaw_notify (G_OBJECT (entry));
 }
@@ -8625,7 +8640,6 @@ gtk_entry_set_icon_from_icon_name (GtkEntry             *entry,
 
   g_object_freeze_notify (G_OBJECT (entry));
 
-
   if (icon_name != NULL)
     {
       _gtk_icon_helper_set_icon_name (GTK_ICON_HELPER (icon_info->gadget), icon_name, GTK_ICON_SIZE_MENU);
@@ -8648,7 +8662,7 @@ gtk_entry_set_icon_from_icon_name (GtkEntry             *entry,
     gtk_entry_clear_icon (entry, icon_pos);
 
   if (gtk_widget_get_visible (GTK_WIDGET (entry)))
-    gtk_widget_queue_resize (GTK_WIDGET (entry));
+    gtk_widget_queue_allocate (GTK_WIDGET (entry));
 
   g_object_thaw_notify (G_OBJECT (entry));
 }
@@ -8708,7 +8722,7 @@ gtk_entry_set_icon_from_gicon (GtkEntry             *entry,
     gtk_entry_clear_icon (entry, icon_pos);
 
   if (gtk_widget_get_visible (GTK_WIDGET (entry)))
-    gtk_widget_queue_resize (GTK_WIDGET (entry));
+    gtk_widget_queue_allocate (GTK_WIDGET (entry));
 
   g_object_thaw_notify (G_OBJECT (entry));
 }
@@ -8816,6 +8830,9 @@ gtk_entry_get_icon_pixbuf (GtkEntry             *entry,
   icon_info = priv->icons[icon_pos];
 
   if (!icon_info)
+    return NULL;
+
+  if (_gtk_icon_helper_get_is_empty (GTK_ICON_HELPER (icon_info->gadget)))
     return NULL;
 
   _gtk_icon_helper_get_size (GTK_ICON_HELPER (icon_info->gadget), &width, &height);
@@ -9081,6 +9098,9 @@ gtk_entry_get_icon_at_pos (GtkEntry *entry,
       EntryIconInfo *icon_info = priv->icons[i];
 
       if (icon_info == NULL)
+        continue;
+
+      if (_gtk_icon_helper_get_is_empty (GTK_ICON_HELPER (icon_info->gadget)))
         continue;
 
       if (gtk_css_gadget_border_box_contains_point (icon_info->gadget, x, y))
@@ -11173,7 +11193,6 @@ set_show_emoji_icon (GtkEntry *entry,
     }
 
   g_object_notify_by_pspec (G_OBJECT (entry), entry_props[PROP_SHOW_EMOJI_ICON]);
-  gtk_widget_queue_resize (GTK_WIDGET (entry));
 }
 
 static void
