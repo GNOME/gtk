@@ -493,11 +493,11 @@ static const GtkAccessibleCollect collect_states[] = {
 };
 
 static const GtkAccessibleCollect collect_props[] = {
-  { GTK_ACCESSIBLE_PROPERTY_ACTIVE_DESCENDANT, GTK_ACCESSIBLE_COLLECT_STRING,  "activedescendant", (GCallback) gtk_string_accessible_value_new },
+  { GTK_ACCESSIBLE_PROPERTY_ACTIVE_DESCENDANT, GTK_ACCESSIBLE_COLLECT_REF,     "activedescendant", (GCallback) gtk_reference_accessible_value_new },
   { GTK_ACCESSIBLE_PROPERTY_AUTOCOMPLETE,      GTK_ACCESSIBLE_COLLECT_ENUM,    "autocomplete",     (GCallback) gtk_autocomplete_accessible_value_new },
-  { GTK_ACCESSIBLE_PROPERTY_CONTROLS,          GTK_ACCESSIBLE_COLLECT_STRING,  "controls",         (GCallback) gtk_string_accessible_value_new },
-  { GTK_ACCESSIBLE_PROPERTY_DESCRIBED_BY,      GTK_ACCESSIBLE_COLLECT_STRING,  "describedby",      (GCallback) gtk_string_accessible_value_new },
-  { GTK_ACCESSIBLE_PROPERTY_FLOW_TO,           GTK_ACCESSIBLE_COLLECT_STRING,  "flowto",           (GCallback) gtk_string_accessible_value_new },
+  { GTK_ACCESSIBLE_PROPERTY_CONTROLS,          GTK_ACCESSIBLE_COLLECT_REF,     "controls",         (GCallback) gtk_reference_accessible_value_new },
+  { GTK_ACCESSIBLE_PROPERTY_DESCRIBED_BY,      GTK_ACCESSIBLE_COLLECT_REF,     "describedby",      (GCallback) gtk_reference_accessible_value_new },
+  { GTK_ACCESSIBLE_PROPERTY_FLOW_TO,           GTK_ACCESSIBLE_COLLECT_REF,     "flowto",           (GCallback) gtk_reference_accessible_value_new },
   { GTK_ACCESSIBLE_PROPERTY_HAS_POPUP,         GTK_ACCESSIBLE_COLLECT_BOOLEAN, "haspopup",         (GCallback) gtk_boolean_accessible_value_new },
   { GTK_ACCESSIBLE_PROPERTY_LABEL,             GTK_ACCESSIBLE_COLLECT_STRING,  "label",            (GCallback) gtk_string_accessible_value_new },
   { GTK_ACCESSIBLE_PROPERTY_LABELLED_BY,       GTK_ACCESSIBLE_COLLECT_REF   ,  "labelledby",       (GCallback) gtk_reference_accessible_value_new },
@@ -505,7 +505,7 @@ static const GtkAccessibleCollect collect_props[] = {
   { GTK_ACCESSIBLE_PROPERTY_MULTI_LINE,        GTK_ACCESSIBLE_COLLECT_BOOLEAN, "multiline",        (GCallback) gtk_boolean_accessible_value_new },
   { GTK_ACCESSIBLE_PROPERTY_MULTI_SELECTABLE,  GTK_ACCESSIBLE_COLLECT_BOOLEAN, "multiselectable",  (GCallback) gtk_boolean_accessible_value_new },
   { GTK_ACCESSIBLE_PROPERTY_ORIENTATION,       GTK_ACCESSIBLE_COLLECT_ENUM,    "orientation",      (GCallback) gtk_orientation_accessible_value_new },
-  { GTK_ACCESSIBLE_PROPERTY_OWNS,              GTK_ACCESSIBLE_COLLECT_STRING,  "owns",             (GCallback) gtk_string_accessible_value_new },
+  { GTK_ACCESSIBLE_PROPERTY_OWNS,              GTK_ACCESSIBLE_COLLECT_REF,     "owns",             (GCallback) gtk_reference_accessible_value_new },
   { GTK_ACCESSIBLE_PROPERTY_POS_IN_SET,        GTK_ACCESSIBLE_COLLECT_INT,     "posinset",         (GCallback) gtk_int_accessible_value_new },
   { GTK_ACCESSIBLE_PROPERTY_READ_ONLY,         GTK_ACCESSIBLE_COLLECT_BOOLEAN, "readonly",         (GCallback) gtk_boolean_accessible_value_new },
   { GTK_ACCESSIBLE_PROPERTY_RELEVANT,          GTK_ACCESSIBLE_COLLECT_STRING,  "relevant",         (GCallback) gtk_string_accessible_value_new },
