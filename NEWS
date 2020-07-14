@@ -30,6 +30,9 @@ Overview of Changes in GTK 3.99.0
  - Improve scrolling behavior
  - Autoscroll and autoexpand during DND
 
+* GtkScrolledWindow:
+ - Make autoscrolling work again
+
 * GtkFilterListModel:
  - Add incremental filtering
 
@@ -48,12 +51,15 @@ Overview of Changes in GTK 3.99.0
  - Improve frame clock accuracy
 
 * GSK:
- - Use gL_ARB_framebuffer_object
+ - Use GL_ARB_framebuffer_object
 
 * gtk-demo:
  - Add incremental refill to the color grid
  - Improve performance of the color grid
  - Add an incrementally filtering word list
+ - Improve the sidebar
+
+* Install print-editor as another demo
 
 * Translation updates
  Basque
