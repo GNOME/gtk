@@ -184,7 +184,7 @@ gdk_x11_gl_context_end_frame (GdkDrawContext *draw_context,
   gdk_x11_surface_pre_damage (surface);
 
 #ifdef HAVE_XDAMAGE
-  if (context_x11->xdamage != 0)
+  if (context_x11->xdamage != 0 && _gdk_x11_surface_syncs_frames (surface))
     {
       g_assert (context_x11->frame_fence == 0);
 
