@@ -58,70 +58,58 @@ G_DEFINE_TYPE (GtkStringSorter, gtk_string_sorter, GTK_TYPE_SORTER)
 
 static GParamSpec *properties[NUM_PROPERTIES] = { NULL, };
 
+static char *
+gtk_string_sorter_get_key (GtkExpression *expression,
+                           gboolean       ignore_case,
+                           gpointer       item1)
+{
+  GValue value = G_VALUE_INIT;
+  char *s;
+
+  if (expression == NULL)
+    return NULL;
+
+  if (!gtk_expression_evaluate (expression, item1, &value))
+    return NULL;
+
+  /* If strings are NULL, order them before "". */
+  if (ignore_case)
+    {
+      char *t;
+
+      t = g_utf8_casefold (g_value_get_string (&value), -1);
+      s = g_utf8_collate_key (t, -1);
+      g_free (t);
+    }
+  else
+    {
+      s = g_utf8_collate_key (g_value_get_string (&value), -1);
+    }
+
+  g_value_unset (&value);
+
+  return s;
+}
+
 static GtkOrdering
 gtk_string_sorter_compare (GtkSorter *sorter,
                            gpointer   item1,
                            gpointer   item2)
 {
   GtkStringSorter *self = GTK_STRING_SORTER (sorter);
-  GValue value1 = G_VALUE_INIT;
-  GValue value2 = G_VALUE_INIT;
-  const char *s1, *s2;
-  gboolean res1, res2;
+  char *s1, *s2;
   GtkOrdering result;
 
   if (self->expression == NULL)
     return GTK_ORDERING_EQUAL;
 
-  res1 = gtk_expression_evaluate (self->expression, item1, &value1);
-  res2 = gtk_expression_evaluate (self->expression, item2, &value2);
+  s1 = gtk_string_sorter_get_key (self->expression, self->ignore_case, item1);
+  s2 = gtk_string_sorter_get_key (self->expression, self->ignore_case, item2);
 
-  /* If items don't evaluate, order them at the end, so they aren't
-   * in the way. */
-  if (!res1)
-    {
-      result = res2 ? GTK_ORDERING_LARGER : GTK_ORDERING_EQUAL;
-      goto out;
-    }
-  else if (!res2)
-    {
-      result = GTK_ORDERING_SMALLER;
-      goto out;
-    }
+  result = g_strcmp0 (s1, s2);
 
-  s1 = g_value_get_string (&value1);
-  s2 = g_value_get_string (&value2);
-
-  /* If strings are NULL, order them before "". */
-  if (s1 == NULL)
-    {
-      result = s2 == NULL ? GTK_ORDERING_EQUAL : GTK_ORDERING_SMALLER;
-      goto out;
-    }
-  else if (s2 == NULL)
-    {
-      result = GTK_ORDERING_LARGER;
-      goto out;
-    }
-
-  if (self->ignore_case)
-    {
-      char *t1, *t2;
-
-      t1 = g_utf8_casefold (s1, -1);
-      t2 = g_utf8_casefold (s2, -1);
-
-      result = gtk_ordering_from_cmpfunc (g_utf8_collate (t1, t2));
-
-      g_free (t1);
-      g_free (t2);
-    }
-  else
-    result = gtk_ordering_from_cmpfunc (g_utf8_collate (s1, s2));
-
-out:
-  g_value_unset (&value1);
-  g_value_unset (&value2);
+  g_free (s1);
+  g_free (s2);
 
   return result;
 }
@@ -135,6 +123,81 @@ gtk_string_sorter_get_order (GtkSorter *sorter)
     return GTK_SORTER_ORDER_NONE;
 
   return GTK_SORTER_ORDER_PARTIAL;
+}
+
+typedef struct _GtkStringSorterKeys GtkStringSorterKeys;
+struct _GtkStringSorterKeys
+{
+  GtkSorterKeys keys;
+
+  GtkExpression *expression;
+  gboolean ignore_case;
+};
+
+static int
+gtk_string_sorter_compare_keys (gconstpointer a,
+                                gconstpointer b,
+                                gpointer      unused)
+{
+  const char *sa = *(const char **) a;
+  const char *sb = *(const char **) b;
+
+  if (sa == NULL)
+    return sb == NULL ? GTK_ORDERING_EQUAL : GTK_ORDERING_LARGER;
+  else if (sb == NULL)
+    return GTK_ORDERING_SMALLER;
+
+  return gtk_ordering_from_cmpfunc (strcmp (sa, sb));
+}
+
+static void
+gtk_string_sorter_keys_free (GtkSorterKeys *keys)
+{
+  GtkStringSorterKeys *self = (GtkStringSorterKeys *) keys;
+
+  g_clear_pointer (&self->expression, gtk_expression_unref);
+  g_slice_free (GtkStringSorterKeys, self);
+}
+
+static void
+gtk_string_sorter_keys_init_key (GtkSorterKeys *keys,
+                                 gpointer       item,
+                                 gpointer       key_memory)
+{
+  GtkStringSorterKeys *self = (GtkStringSorterKeys *) keys;
+  char **key = (char **) key_memory;
+
+  *key = gtk_string_sorter_get_key (self->expression, self->ignore_case, item);
+}
+
+static void
+gtk_string_sorter_keys_clear_key (GtkSorterKeys *keys,
+                                  gpointer       key_memory)
+{
+  char **key = (char **) key_memory;
+
+  g_free (*key);
+}
+
+static GtkSorterKeys *
+gtk_string_sorter_get_keys (GtkSorter *sorter)
+{
+  GtkStringSorter *self = GTK_STRING_SORTER (sorter);
+  GtkStringSorterKeys *result;
+
+  result = g_slice_new0 (GtkStringSorterKeys);
+
+  result->keys.key_size = sizeof (gpointer);
+  result->keys.key_align = sizeof (gpointer);
+  result->keys.key_compare = gtk_string_sorter_compare_keys;
+  result->keys.free = gtk_string_sorter_keys_free;
+  result->keys.init_key = gtk_string_sorter_keys_init_key;
+  result->keys.clear_key = gtk_string_sorter_keys_clear_key;
+  if (self->expression)
+    result->expression = gtk_expression_ref (self->expression);
+  result->ignore_case = self->ignore_case;
+
+  return (GtkSorterKeys *) result;
 }
 
 static void
@@ -203,6 +266,7 @@ gtk_string_sorter_class_init (GtkStringSorterClass *class)
 
   sorter_class->compare = gtk_string_sorter_compare;
   sorter_class->get_order = gtk_string_sorter_get_order;
+  sorter_class->get_keys = gtk_string_sorter_get_keys;
 
   object_class->get_property = gtk_string_sorter_get_property;
   object_class->set_property = gtk_string_sorter_set_property;

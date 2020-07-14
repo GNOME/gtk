@@ -74,11 +74,78 @@ gtk_sorter_default_get_order (GtkSorter *self)
   return GTK_SORTER_ORDER_PARTIAL;
 }
 
+typedef struct _GtkSorterDefaultKeys GtkSorterDefaultKeys;
+struct _GtkSorterDefaultKeys
+{
+  GtkSorterKeys keys;
+  GtkSorter *sorter;
+};
+
+static int
+gtk_sorter_default_keys_compare (gconstpointer a,
+                                 gconstpointer b,
+                                 gpointer      data)
+{
+  GtkSorterDefaultKeys *self = data;
+  gpointer *key_a = (gpointer *) a;
+  gpointer *key_b = (gpointer *) b;
+
+  return gtk_sorter_compare (self->sorter, *key_a, *key_b);
+}
+
+static void
+gtk_sorter_default_keys_free (GtkSorterKeys *keys)
+{
+  GtkSorterDefaultKeys *self = (GtkSorterDefaultKeys *) keys;
+
+  g_object_unref (self->sorter);
+
+  g_slice_free (GtkSorterDefaultKeys, self);
+}
+
+static void
+gtk_sorter_default_keys_init_key (GtkSorterKeys *self,
+                                  gpointer       item,
+                                  gpointer       key_memory)
+{
+  gpointer *key = (gpointer *) key_memory;
+
+  *key = g_object_ref (item);
+}
+
+static void
+gtk_sorter_default_keys_clear_key (GtkSorterKeys *self,
+                                   gpointer       key_memory)
+{
+  gpointer *key = (gpointer *) key_memory;
+
+  g_object_unref (*key);
+}
+
+static GtkSorterKeys *
+gtk_sorter_default_get_keys (GtkSorter *self)
+{
+  GtkSorterDefaultKeys *result;
+
+  result = g_slice_new0 (GtkSorterDefaultKeys);
+
+  result->keys.key_size = sizeof (gpointer);
+  result->keys.key_align = sizeof (gpointer);
+  result->keys.key_compare = gtk_sorter_default_keys_compare;
+  result->keys.free = gtk_sorter_default_keys_free;
+  result->keys.init_key = gtk_sorter_default_keys_init_key;
+  result->keys.clear_key = gtk_sorter_default_keys_clear_key;
+  result->sorter = g_object_ref (self);
+
+  return (GtkSorterKeys *) result;
+}
+
 static void
 gtk_sorter_class_init (GtkSorterClass *class)
 {
   class->compare = gtk_sorter_default_compare;
   class->get_order = gtk_sorter_default_get_order;
+  class->get_keys = gtk_sorter_default_get_keys;
 
   /**
    * GtkSorter::changed:
@@ -180,6 +247,14 @@ gtk_sorter_get_order (GtkSorter *self)
   g_return_val_if_fail (GTK_IS_SORTER (self), GTK_SORTER_ORDER_PARTIAL);
 
   return GTK_SORTER_GET_CLASS (self)->get_order (self);
+}
+
+GtkSorterKeys *
+gtk_sorter_get_keys (GtkSorter *self)
+{
+  g_return_val_if_fail (GTK_IS_SORTER (self), NULL);
+
+  return GTK_SORTER_GET_CLASS (self)->get_keys (self);
 }
 
 /**

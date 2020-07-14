@@ -2,7 +2,7 @@
 #include <math.h>
 
 #define MAX_SIZE 1024000
-#define MAX_TIME (G_USEC_PER_SEC / 2)
+#define MAX_TIME (G_USEC_PER_SEC * 2)
 
 static inline guint
 quick_random (guint prev)
@@ -15,7 +15,7 @@ quick_random (guint prev)
 
 static guint comparisons = 0;
 
-static int
+static G_GNUC_UNUSED int
 compare_string_object (gconstpointer a,
                        gconstpointer b,
                        gpointer      unused)
@@ -32,7 +32,11 @@ compare_string_object (gconstpointer a,
 static GtkSorter *
 create_sorter (void)
 {
+#if 0
   return gtk_custom_sorter_new (compare_string_object, NULL, NULL);
+#else
+  return gtk_string_sorter_new (gtk_property_expression_new (GTK_TYPE_STRING_OBJECT, NULL, "string"));
+#endif
 }
 
 static void
@@ -504,7 +508,9 @@ run_test (GtkStringList      *source,
   struct {
     GType type;
     gboolean incremental;
-  } types[] = { 
+  } types[] = {
+    { GTK_TYPE_TIM4_SORT_MODEL, FALSE },
+    { GTK_TYPE_TIM4_SORT_MODEL, TRUE },
     { GTK_TYPE_SORT_LIST_MODEL, FALSE },
     { GTK_TYPE_SOR2_LIST_MODEL, FALSE },
     { GTK_TYPE_SOR3_LIST_MODEL, FALSE },

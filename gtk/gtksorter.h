@@ -70,6 +70,8 @@ typedef enum {
 
 #define GTK_TYPE_SORTER             (gtk_sorter_get_type ())
 
+typedef struct _GtkSorterKeys GtkSorterKeys;
+
 GDK_AVAILABLE_IN_ALL
 G_DECLARE_DERIVABLE_TYPE (GtkSorter, gtk_sorter, GTK, SORTER, GObject)
 
@@ -92,6 +94,8 @@ struct _GtkSorterClass
   /* optional */
   GtkSorterOrder        (* get_order)                           (GtkSorter              *self);
 
+  GtkSorterKeys *       (* get_keys)                            (GtkSorter              *self);
+
   /* Padding for future expansion */
   void (*_gtk_reserved1) (void);
   void (*_gtk_reserved2) (void);
@@ -103,6 +107,20 @@ struct _GtkSorterClass
   void (*_gtk_reserved8) (void);
 };
 
+struct _GtkSorterKeys
+{
+  gsize key_size;
+  gsize key_align; /* must be power of 2 */
+  GCompareDataFunc key_compare;
+
+  void                  (* free)                                (GtkSorterKeys          *self);
+  void                  (* init_key)                            (GtkSorterKeys          *self,
+                                                                 gpointer                item,
+                                                                 gpointer                key_memory);
+  void                  (* clear_key)                           (GtkSorterKeys          *self,
+                                                                 gpointer                key_memory);
+};
+
 GDK_AVAILABLE_IN_ALL
 GtkOrdering             gtk_sorter_compare                      (GtkSorter              *self,
                                                                  gpointer                item1,
@@ -110,10 +128,43 @@ GtkOrdering             gtk_sorter_compare                      (GtkSorter      
 GDK_AVAILABLE_IN_ALL
 GtkSorterOrder          gtk_sorter_get_order                    (GtkSorter              *self);
 
+GDK_AVAILABLE_IN_ALL
+GtkSorterKeys *         gtk_sorter_get_keys                     (GtkSorter              *self);
+
 /* for sorter implementations */
 GDK_AVAILABLE_IN_ALL
 void                    gtk_sorter_changed                      (GtkSorter              *self,
                                                                  GtkSorterChange         change);
+
+
+static inline void
+gtk_sorter_keys_free (GtkSorterKeys *self)
+{
+  if (self->free)
+    self->free (self);
+}
+
+static inline void
+gtk_sorter_keys_init_key (GtkSorterKeys *self,
+                          gpointer       item,
+                          gpointer       key_memory)
+{
+  self->init_key (self, item, key_memory);
+}
+
+static inline void
+gtk_sorter_keys_clear_key (GtkSorterKeys *self,
+                           gpointer       key_memory)
+{
+  if (self->clear_key)
+    self->clear_key (self, key_memory);
+}
+
+static inline gboolean
+gtk_sorter_keys_has_clear_func (GtkSorterKeys *self)
+{
+  return self->clear_key != NULL;
+}
 
 G_END_DECLS
 
