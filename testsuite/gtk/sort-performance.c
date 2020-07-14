@@ -109,8 +109,8 @@ set_model (const char *testname,
       if (4 * total > 2 * MAX_TIME)
         break;
 
-      gtk_slice_list_model_set_size (slice, size);
       g_object_set (sort, "model", NULL, NULL);
+      gtk_slice_list_model_set_size (slice, size);
     }
 
   g_object_unref (sort);
