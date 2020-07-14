@@ -261,6 +261,7 @@
 #include <gtk/gtktextview.h>
 #include <gtk/gtktim1sortmodel.h>
 #include <gtk/gtktim2sortmodel.h>
+#include <gtk/gtktim3sortmodel.h>
 #include <gtk/gtktogglebutton.h>
 #include <gtk/gtktooltip.h>
 #include <gtk/gtktestutils.h>
