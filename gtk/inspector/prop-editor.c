@@ -768,6 +768,67 @@ font_changed (GObject *object, GParamSpec *pspec, gpointer data)
   pango_font_description_free (fb_font_desc);
 }
 
+static char *
+describe_expression (GtkExpression *expression)
+{
+  if (expression == NULL)
+    return NULL;
+
+  if (G_TYPE_CHECK_INSTANCE_TYPE (expression, GTK_TYPE_CONSTANT_EXPRESSION))
+    {
+      const GValue *value = gtk_constant_expression_get_value (expression);
+      GValue dest = G_VALUE_INIT;
+
+      g_value_init (&dest, G_TYPE_STRING);
+      if (g_value_transform (value, &dest))
+        {
+          char *res = g_strdup_printf (_("%s with value \"%s\""),
+                                       g_type_name (G_TYPE_FROM_INSTANCE (expression)),
+                                       g_value_get_string (&dest));
+          g_value_unset (&dest);
+          return res;
+        }
+      else
+        {
+          return g_strdup_printf (_("%s with type %s"),
+                                  g_type_name (G_TYPE_FROM_INSTANCE (expression)),
+                                  g_type_name (G_VALUE_TYPE (value)));
+        }
+    }
+  else if (G_TYPE_CHECK_INSTANCE_TYPE (expression, GTK_TYPE_OBJECT_EXPRESSION))
+    {
+      gpointer obj = gtk_object_expression_get_object (expression);
+
+      if (obj)
+        return g_strdup_printf (_("%s for %s %p"),
+                                g_type_name (G_TYPE_FROM_INSTANCE (expression)),
+                                G_OBJECT_TYPE_NAME (obj), obj);
+      else
+        return g_strdup_printf (_("%s"),
+                                g_type_name (G_TYPE_FROM_INSTANCE (expression)));
+    }
+  else if (G_TYPE_CHECK_INSTANCE_TYPE (expression, GTK_TYPE_PROPERTY_EXPRESSION))
+    {
+      GParamSpec *pspec = gtk_property_expression_get_pspec (expression);
+      GtkExpression *expr = gtk_property_expression_get_expression (expression);
+      char *str;
+      char *res;
+
+      str = describe_expression (expr);
+      res = g_strdup_printf ("%s for property %s:%s on: %s",
+                             g_type_name (G_TYPE_FROM_INSTANCE (expression)),
+                             g_type_name (pspec->owner_type),
+                             pspec->name,
+                             str);
+      g_free (str);
+      return res;
+    }
+  else
+    return g_strdup_printf (_("%s with value type %s"),
+                            g_type_name (G_TYPE_FROM_INSTANCE (expression)),
+                            g_type_name (gtk_expression_get_value_type (expression)));
+}
+
 static GtkWidget *
 property_editor (GObject                *object,
                  GParamSpec             *spec,
@@ -1031,6 +1092,17 @@ property_editor (GObject                *object,
       connect_controller (G_OBJECT (prop_edit), "changed",
                           object, spec, G_CALLBACK (strv_modified));
 
+      gtk_widget_set_halign (prop_edit, GTK_ALIGN_START);
+      gtk_widget_set_valign (prop_edit, GTK_ALIGN_CENTER);
+    }
+  else if (type == GTK_TYPE_PARAM_SPEC_EXPRESSION)
+    {
+      GtkExpression *expression;
+      g_object_get (object, spec->name, &expression, NULL);
+      msg = describe_expression (expression);
+      prop_edit = gtk_label_new (msg);
+      g_free (msg);
+      g_clear_pointer (&expression, gtk_expression_unref);
       gtk_widget_set_halign (prop_edit, GTK_ALIGN_START);
       gtk_widget_set_valign (prop_edit, GTK_ALIGN_CENTER);
     }
