@@ -855,6 +855,24 @@ gtk_constant_expression_new_for_value (const GValue *value)
   return result;
 }
 
+/**
+ * gtk_constant_expression_get_value:
+ * @expression: a constant #GtkExpression
+ *
+ * Gets the value that a constant expression evaluates to.
+ *
+ * Returns: (transfer none): the value
+ */
+const GValue *
+gtk_constant_expression_get_value (GtkExpression *expression)
+{
+  GtkConstantExpression *self = (GtkConstantExpression *) expression;
+
+  g_return_val_if_fail (G_TYPE_CHECK_INSTANCE_TYPE (expression, GTK_TYPE_CONSTANT_EXPRESSION), NULL);
+
+  return &self->value;
+}
+
 /* }}} */
 
 /* {{{ GtkObjectExpression */
@@ -1000,6 +1018,24 @@ gtk_object_expression_new (GObject *object)
   g_object_weak_ref (object, gtk_object_expression_weak_ref_cb, self);
 
   return result;
+}
+
+/**
+ * gtk_object_expression_get_object:
+ * @expression: an object #GtkExpression
+ *
+ * Gets the object that the expression evaluates to.
+ *
+ * Returns: (transfer none): the object, or %NULL
+ */
+GObject *
+gtk_object_expression_get_object (GtkExpression *expression)
+{
+  GtkObjectExpression *self = (GtkObjectExpression *) expression;
+
+  g_return_val_if_fail (G_TYPE_CHECK_INSTANCE_TYPE (expression, GTK_TYPE_OBJECT_EXPRESSION), NULL);
+
+  return self->object;
 }
 
 /* }}} */
@@ -1305,6 +1341,44 @@ gtk_property_expression_new_for_pspec (GtkExpression *expression,
   self->expr = expression;
 
   return result;
+}
+
+/**
+ * gtk_property_expression_get_expression:
+ * @expression: a property #GtkExpression
+ *
+ * Gets the expression specifying the object of
+ * a property expression.
+ *
+ * Returns: (transfer none): the object expression
+ */
+GtkExpression *
+gtk_property_expression_get_expression (GtkExpression *expression)
+{
+  GtkPropertyExpression *self = (GtkPropertyExpression *) expression;
+
+  g_return_val_if_fail (G_TYPE_CHECK_INSTANCE_TYPE (expression, GTK_TYPE_PROPERTY_EXPRESSION), NULL);
+
+  return self->expr;
+}
+
+/**
+ * gtk_property_expression_get_pspec:
+ * @expression: a property #GtkExpression
+ *
+ * Gets the #GParamSpec specifying the property of
+ * a property expression.
+ *
+ * Returns: (transfer none): the #GParamSpec
+ */
+GParamSpec *
+gtk_property_expression_get_pspec (GtkExpression *expression)
+{
+  GtkPropertyExpression *self = (GtkPropertyExpression *) expression;
+
+  g_return_val_if_fail (G_TYPE_CHECK_INSTANCE_TYPE (expression, GTK_TYPE_PROPERTY_EXPRESSION), NULL);
+
+  return self->pspec;
 }
 
 /* }}} */
