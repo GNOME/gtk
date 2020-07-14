@@ -192,8 +192,6 @@ gtk_tim2_sort_model_sort_step (GtkTim2SortModel *self,
         break;
     }
 
-  g_print ("progress: %zu%%\n", gtk_tim_sort_get_progress (&self->sort) * 100 / MAX (1, sort_array_get_size (&self->items)));
-
   if (start_change < end_change)
     {
       *out_position = start_change - sort_array_get_data (&self->items);
