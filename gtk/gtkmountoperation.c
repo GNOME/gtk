@@ -52,6 +52,7 @@
 #include "gtkmain.h"
 #include "gtksettings.h"
 #include "gtkstylecontextprivate.h"
+#include "gtkheaderbar.h"
 
 #include <glib/gprintf.h>
 
@@ -519,6 +520,7 @@ table_add_entry (GtkMountOperation *operation,
   gtk_widget_set_halign (label, GTK_ALIGN_END);
   gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
   gtk_widget_set_hexpand (label, FALSE);
+  gtk_style_context_add_class (gtk_widget_get_style_context (label), "dim-label");
   operation->priv->user_widgets = g_list_prepend (operation->priv->user_widgets, label);
 
   entry = gtk_entry_new ();
@@ -551,7 +553,7 @@ gtk_mount_operation_ask_password_do_gtk (GtkMountOperation *operation,
   GtkWidget *widget;
   GtkDialog *dialog;
   GtkWindow *window;
-  GtkWidget *hbox, *main_vbox, *icon;
+  GtkWidget *hbox, *main_vbox;
   GtkWidget *grid;
   GtkWidget *label;
   GtkWidget *content_area, *action_area;
@@ -570,6 +572,7 @@ gtk_mount_operation_ask_password_do_gtk (GtkMountOperation *operation,
   widget = g_object_new (GTK_TYPE_DIALOG,
                          "use-header-bar", use_header,
                          NULL);
+  printf("use_header: %u\n", use_header);
   dialog = GTK_DIALOG (widget);
   window = GTK_WINDOW (widget);
 
@@ -608,37 +611,41 @@ G_GNUC_END_IGNORE_DEPRECATIONS
   gtk_container_set_border_width (GTK_CONTAINER (hbox), 5);
   gtk_box_pack_start (GTK_BOX (content_area), hbox, TRUE, TRUE, 0);
 
-  icon = gtk_image_new_from_icon_name ("dialog-password",
-                                       GTK_ICON_SIZE_DIALOG);
-
-  gtk_widget_set_halign (icon, GTK_ALIGN_CENTER);
-  gtk_widget_set_valign (icon, GTK_ALIGN_START);
-  gtk_box_pack_start (GTK_BOX (hbox), icon, FALSE, FALSE, 0);
-
   main_vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 18);
   gtk_box_pack_start (GTK_BOX (hbox), main_vbox, TRUE, TRUE, 0);
 
   secondary = strstr (message, "\n");
   if (secondary != NULL)
     {
-      primary = g_strndup (message, secondary - message + 1);
+      primary = g_strndup (message, secondary - message);
     }
   else
     {
       primary = g_strdup (message);
     }
 
-  label = gtk_label_new (primary);
-  gtk_widget_set_halign (label, GTK_ALIGN_START);
-  gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
-  gtk_label_set_line_wrap (GTK_LABEL (label), TRUE);
-  gtk_box_pack_start (GTK_BOX (main_vbox), GTK_WIDGET (label),
-                      FALSE, TRUE, 0);
+  if (use_header)
+    {
+      GtkWidget *header;
+      header = gtk_dialog_get_header_bar (GTK_DIALOG (dialog));
+      gtk_header_bar_set_title (GTK_HEADER_BAR (header), primary);
+    }
+  else
+    {
+      label = gtk_label_new (primary);
+      gtk_widget_set_halign (label, GTK_ALIGN_START);
+      gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
+      gtk_label_set_line_wrap (GTK_LABEL (label), TRUE);
+      gtk_label_set_max_width_chars (GTK_LABEL (label), 55);
+      gtk_box_pack_start (GTK_BOX (main_vbox), GTK_WIDGET (label),
+                          FALSE, TRUE, 0);
+      attrs = pango_attr_list_new ();
+      pango_attr_list_insert (attrs, pango_attr_weight_new (PANGO_WEIGHT_BOLD));
+      gtk_label_set_attributes (GTK_LABEL (label), attrs);
+      pango_attr_list_unref (attrs);
+    }
+
   g_free (primary);
-  attrs = pango_attr_list_new ();
-  pango_attr_list_insert (attrs, pango_attr_weight_new (PANGO_WEIGHT_BOLD));
-  gtk_label_set_attributes (GTK_LABEL (label), attrs);
-  pango_attr_list_unref (attrs);
 
   if (secondary != NULL)
     {
@@ -646,6 +653,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
       gtk_widget_set_halign (label, GTK_ALIGN_START);
       gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
       gtk_label_set_line_wrap (GTK_LABEL (label), TRUE);
+      gtk_label_set_max_width_chars (GTK_LABEL (label), 55);
       gtk_box_pack_start (GTK_BOX (main_vbox), GTK_WIDGET (label),
                           FALSE, FALSE, 0);
     }
@@ -672,6 +680,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
       gtk_widget_set_halign (label, GTK_ALIGN_END);
       gtk_widget_set_valign (label, GTK_ALIGN_START);
       gtk_widget_set_hexpand (label, FALSE);
+      gtk_style_context_add_class (gtk_widget_get_style_context (label), "dim-label");
       gtk_grid_attach (GTK_GRID (grid), label, 0, rows, 1, 1);
 
       anon_box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
@@ -704,31 +713,6 @@ G_GNUC_END_IGNORE_DEPRECATIONS
   if (priv->ask_flags & G_ASK_PASSWORD_NEED_DOMAIN)
     priv->domain_entry = table_add_entry (operation, rows++, _("_Domain"),
                                           default_domain, operation);
-
-  priv->pim_entry = NULL;
-  if (priv->ask_flags & G_ASK_PASSWORD_TCRYPT)
-    {
-      GtkWidget *volume_type_label;
-      GtkWidget *volume_type_box;
-
-      volume_type_label = gtk_label_new (_("Volume type"));
-      gtk_widget_set_halign (volume_type_label, GTK_ALIGN_END);
-      gtk_widget_set_hexpand (volume_type_label, FALSE);
-      gtk_grid_attach (GTK_GRID (grid), volume_type_label, 0, rows, 1, 1);
-      priv->user_widgets = g_list_prepend (priv->user_widgets, volume_type_label);
-
-      volume_type_box =  gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
-      gtk_grid_attach (GTK_GRID (grid), volume_type_box, 1, rows++, 1, 1);
-      priv->user_widgets = g_list_prepend (priv->user_widgets, volume_type_box);
-
-      priv->tcrypt_hidden_toggle = gtk_check_button_new_with_mnemonic (_("_Hidden"));
-      gtk_container_add (GTK_CONTAINER (volume_type_box), priv->tcrypt_hidden_toggle);
-
-      priv->tcrypt_system_toggle = gtk_check_button_new_with_mnemonic (_("_Windows system"));
-      gtk_container_add (GTK_CONTAINER (volume_type_box), priv->tcrypt_system_toggle);
-
-      priv->pim_entry = table_add_entry (operation, rows++, _("_PIM"), NULL, operation);
-    }
 
   priv->password_entry = NULL;
   if (priv->ask_flags & G_ASK_PASSWORD_NEED_PASSWORD)
@@ -783,6 +767,33 @@ G_GNUC_END_IGNORE_DEPRECATIONS
       g_signal_connect (choice, "toggled",
                         G_CALLBACK (remember_button_toggled), operation);
       gtk_box_pack_start (GTK_BOX (remember_box), choice, FALSE, FALSE, 0);
+    }
+
+  priv->pim_entry = NULL;
+  if (priv->ask_flags & G_ASK_PASSWORD_TCRYPT)
+    {
+      GtkWidget *volume_type_box;
+      gchar *str;
+
+      str = g_strdup_printf ("<b>%s</b>", _("Encryption Options"));
+      label = gtk_label_new (str);
+      gtk_widget_set_halign (label, GTK_ALIGN_START);
+      gtk_label_set_use_markup (GTK_LABEL (label), TRUE);
+      g_free (str);
+      gtk_grid_attach (GTK_GRID (grid), label, 0, rows++, 2, 1);
+      priv->user_widgets = g_list_prepend (priv->user_widgets, label);
+
+      volume_type_box =  gtk_box_new (GTK_ORIENTATION_VERTICAL, 10);
+      gtk_grid_attach (GTK_GRID (grid), volume_type_box, 0, rows++, 2, 1);
+      priv->user_widgets = g_list_prepend (priv->user_widgets, volume_type_box);
+
+      priv->tcrypt_hidden_toggle = gtk_check_button_new_with_mnemonic (_("_Hidden Volume"));
+      gtk_container_add (GTK_CONTAINER (volume_type_box), priv->tcrypt_hidden_toggle);
+
+      priv->tcrypt_system_toggle = gtk_check_button_new_with_mnemonic (_("_Windows System Volume"));
+      gtk_container_add (GTK_CONTAINER (volume_type_box), priv->tcrypt_system_toggle);
+
+      priv->pim_entry = table_add_entry (operation, rows++, _("_PIM"), NULL, operation);
     }
 
   g_signal_connect (G_OBJECT (dialog), "response",
