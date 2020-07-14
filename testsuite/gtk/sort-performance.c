@@ -55,8 +55,30 @@ snapshot_time (gint64  last,
 }
 
 static void
+print_result (const char *testname,
+              GType       type,
+              gboolean    incremental,
+              gsize       size,
+              guint       total_time,
+              guint       max_time,
+              guint       n_comparisons,
+              guint       n_changed)
+{
+  g_print ("# \"%s\", \"%s%s\",%8zu,%8uus,%8uus, %8u,%9u\n",
+           testname,
+           g_type_name (type),
+           incremental ? "-inc" : "",
+           size,
+           total_time,
+           max_time,
+           n_comparisons,
+           n_changed);
+}
+
+static void
 set_model (const char *testname,
            GType       type,
+           gboolean    incremental,
            GListModel *source,
            guint       random)
 {
@@ -70,6 +92,7 @@ set_model (const char *testname,
   sorter = create_sorter ();
   sort = g_object_new (type,
                        "sorter", sorter,
+                       incremental ? "incremental" : NULL, TRUE,
                        NULL);
   g_signal_connect (sort, "items-changed", G_CALLBACK (count_changed_cb), &n_changed);
   g_object_unref (sorter);
@@ -93,14 +116,7 @@ set_model (const char *testname,
 
       total = (end - start);
 
-      g_print ("\"%s\", \"%s\",%8u,%8uus,%8uus, %8u,%9u\n",
-               testname,
-               g_type_name (type),
-               size,
-               (guint) total,
-               (guint) max,
-               comparisons,
-               n_changed);
+      print_result (testname, type, incremental, size, total, max, comparisons, n_changed);
 
       if (total > MAX_TIME)
         break;
@@ -120,6 +136,7 @@ set_model (const char *testname,
 static void
 append (const char *testname,
         GType       type,
+        gboolean    incremental,
         GListModel *source,
         guint       random,
         guint       fraction)
@@ -135,6 +152,7 @@ append (const char *testname,
   sort = g_object_new (type,
                        "model", slice,
                        "sorter", sorter,
+                       incremental ? "incremental" : NULL, TRUE,
                        NULL);
   g_signal_connect (sort, "items-changed", G_CALLBACK (count_changed_cb), &n_changed);
   g_object_unref (sorter);
@@ -159,14 +177,7 @@ append (const char *testname,
 
       total = (end - start);
 
-      g_print ("\"%s\", \"%s\",%8u,%8uus,%8uus, %8u,%9u\n",
-               testname,
-               g_type_name (type),
-               size,
-               (guint) total,
-               (guint) max,
-               comparisons,
-               n_changed);
+      print_result (testname, type, incremental, size, total, max, comparisons, n_changed);
 
       if (total > MAX_TIME)
         break;
@@ -184,33 +195,37 @@ append (const char *testname,
 static void
 append_half (const char *name,
              GType       type,
+             gboolean    incremental,
              GListModel *source,
              guint       random)
 {
-  append (name, type, source, random, 2);
+  append (name, type, incremental, source, random, 2);
 }
 
 static void
 append_10th (const char *name,
              GType       type,
+             gboolean    incremental,
              GListModel *source,
              guint       random)
 {
-  append (name, type, source, random, 10);
+  append (name, type, incremental, source, random, 10);
 }
 
 static void
 append_100th (const char *name,
               GType       type,
+              gboolean    incremental,
               GListModel *source,
               guint       random)
 {
-  append (name, type, source, random, 100);
+  append (name, type, incremental, source, random, 100);
 }
 
 static void
 remove_test (const char *testname,
              GType       type,
+             gboolean    incremental,
              GListModel *source,
              guint       random,
              guint       fraction)
@@ -226,6 +241,7 @@ remove_test (const char *testname,
   sort = g_object_new (type,
                        "model", slice,
                        "sorter", sorter,
+                       incremental ? "incremental" : NULL, TRUE,
                        NULL);
   g_signal_connect (sort, "items-changed", G_CALLBACK (count_changed_cb), &n_changed);
   g_object_unref (sorter);
@@ -250,14 +266,7 @@ remove_test (const char *testname,
 
       total = (end - start);
 
-      g_print ("\"%s\", \"%s\",%8u,%8uus,%8uus, %8u,%9u\n",
-               testname,
-               g_type_name (type),
-               size,
-               (guint) total,
-               (guint) max,
-               comparisons,
-               n_changed);
+      print_result (testname, type, incremental, size, total, max, comparisons, n_changed);
 
       if (total > MAX_TIME)
         break;
@@ -275,63 +284,37 @@ remove_test (const char *testname,
 static void
 remove_half (const char *name,
              GType       type,
+             gboolean    incremental,
              GListModel *source,
              guint       random)
 {
-  remove_test (name, type, source, random, 2);
+  remove_test (name, type, incremental, source, random, 2);
 }
 
 static void
 remove_10th (const char *name,
              GType       type,
+             gboolean    incremental,
              GListModel *source,
              guint       random)
 {
-  remove_test (name, type, source, random, 10);
+  remove_test (name, type, incremental, source, random, 10);
 }
 
 static void
 remove_100th (const char *name,
               GType       type,
+              gboolean    incremental,
               GListModel *source,
               guint       random)
 {
-  remove_test (name, type, source, random, 100);
-}
-
-static void
-run_test (GtkStringList      *source,
-          const char * const *tests,
-          const char         *test_name,
-          void (* test_func) (const char *name, GType type, GListModel *source, guint random))
-{
-  GType types[] = { 
-    GTK_TYPE_SORT_LIST_MODEL,
-    GTK_TYPE_GSEQ_SORT_MODEL,
-    GTK_TYPE_SOR2_LIST_MODEL,
-    GTK_TYPE_SOR3_LIST_MODEL,
-    GTK_TYPE_SOR4_LIST_MODEL,
-    GTK_TYPE_SOR5_LIST_MODEL,
-    GTK_TYPE_TIM1_SORT_MODEL,
-    GTK_TYPE_TIM2_SORT_MODEL,
-    GTK_TYPE_TIM3_SORT_MODEL,
-    GTK_TYPE_TIM4_SORT_MODEL
-  };
-  guint random = g_random_int ();
-  guint i;
-
-  if (tests != NULL && !g_strv_contains (tests, test_name))
-    return;
-
-  for (i = 0; i < G_N_ELEMENTS (types); i++)
-    {
-      test_func (test_name, types[i], G_LIST_MODEL (source), random);
-    }
+  remove_test (name, type, incremental, source, random, 100);
 }
 
 static void
 append_n (const char *testname,
           GType       type,
+          gboolean    incremental,
           GListModel *source,
           guint       random,
           guint       n)
@@ -347,6 +330,7 @@ append_n (const char *testname,
   sort = g_object_new (type,
                        "model", slice,
                        "sorter", sorter,
+                       incremental ? "incremental" : NULL, TRUE,
                        NULL);
   g_signal_connect (sort, "items-changed", G_CALLBACK (count_changed_cb), &n_changed);
   g_object_unref (sorter);
@@ -374,14 +358,7 @@ append_n (const char *testname,
 
       total = (end - start);
 
-      g_print ("\"%s\", \"%s\",%8u,%8uus,%8uus, %8u,%9u\n",
-               testname,
-               g_type_name (type),
-               size,
-               (guint) total,
-               (guint) max,
-               comparisons,
-               n_changed);
+      print_result (testname, type, incremental, size, total, max, comparisons, n_changed);
 
       if (total > MAX_TIME)
         break;
@@ -399,33 +376,37 @@ append_n (const char *testname,
 static void
 append_1 (const char *name,
           GType       type,
+          gboolean    incremental,
           GListModel *source,
           guint       random)
 {
-  append_n (name, type, source, random, 1);
+  append_n (name, type, incremental, source, random, 1);
 }
 
 static void
 append_2 (const char *name,
           GType       type,
+          gboolean    incremental,
           GListModel *source,
           guint       random)
 {
-  append_n (name, type, source, random, 2);
+  append_n (name, type, incremental, source, random, 2);
 }
 
 static void
 append_10 (const char *name,
            GType       type,
+           gboolean    incremental,
            GListModel *source,
            guint       random)
 {
-  append_n (name, type, source, random, 10);
+  append_n (name, type, incremental, source, random, 10);
 }
 
 static void
 remove_n (const char *testname,
           GType       type,
+          gboolean    incremental,
           GListModel *source,
           guint       random,
           guint       n)
@@ -441,6 +422,7 @@ remove_n (const char *testname,
   sort = g_object_new (type,
                        "model", slice,
                        "sorter", sorter,
+                       incremental ? "incremental" : NULL, TRUE,
                        NULL);
   g_signal_connect (sort, "items-changed", G_CALLBACK (count_changed_cb), &n_changed);
   g_object_unref (sorter);
@@ -468,14 +450,7 @@ remove_n (const char *testname,
 
       total = (end - start);
 
-      g_print ("\"%s\", \"%s\",%8u,%8uus,%8uus, %8u,%9u\n",
-               testname,
-               g_type_name (type),
-               size,
-               (guint) total,
-               (guint) max,
-               comparisons,
-               n_changed);
+      print_result (testname, type, incremental, size, total, max, comparisons, n_changed);
 
       if (total > MAX_TIME)
         break;
@@ -493,28 +468,69 @@ remove_n (const char *testname,
 static void
 remove_1 (const char *name,
           GType       type,
+          gboolean    incremental,
           GListModel *source,
           guint       random)
 {
-  remove_n (name, type, source, random, 1);
+  remove_n (name, type, incremental, source, random, 1);
 }
 
 static void
 remove_2 (const char *name,
           GType       type,
+          gboolean    incremental,
           GListModel *source,
           guint       random)
 {
-  remove_n (name, type, source, random, 2);
+  remove_n (name, type, incremental, source, random, 2);
 }
 
 static void
 remove_10 (const char *name,
            GType       type,
+          gboolean    incremental,
            GListModel *source,
            guint       random)
 {
-  remove_n (name, type, source, random, 10);
+  remove_n (name, type, incremental, source, random, 10);
+}
+
+static void
+run_test (GtkStringList      *source,
+          const char * const *tests,
+          const char         *test_name,
+          void (* test_func) (const char *name, GType type, gboolean incremental, GListModel *source, guint random))
+{
+  struct {
+    GType type;
+    gboolean incremental;
+  } types[] = { 
+    { GTK_TYPE_SORT_LIST_MODEL, FALSE },
+    { GTK_TYPE_GSEQ_SORT_MODEL, FALSE },
+    { GTK_TYPE_SOR2_LIST_MODEL, FALSE },
+    { GTK_TYPE_SOR3_LIST_MODEL, FALSE },
+    { GTK_TYPE_SOR4_LIST_MODEL, FALSE },
+    { GTK_TYPE_SOR5_LIST_MODEL, FALSE },
+    { GTK_TYPE_TIM1_SORT_MODEL, FALSE },
+    { GTK_TYPE_TIM2_SORT_MODEL, FALSE },
+    { GTK_TYPE_TIM3_SORT_MODEL, FALSE },
+    { GTK_TYPE_TIM4_SORT_MODEL, FALSE },
+    { GTK_TYPE_SORT_LIST_MODEL, TRUE },
+    { GTK_TYPE_SOR3_LIST_MODEL, TRUE },
+    { GTK_TYPE_TIM2_SORT_MODEL, TRUE },
+    { GTK_TYPE_TIM3_SORT_MODEL, TRUE },
+    { GTK_TYPE_TIM4_SORT_MODEL, TRUE },
+  };
+  guint random = g_random_int ();
+  guint i;
+
+  if (tests != NULL && !g_strv_contains (tests, test_name))
+    return;
+
+  for (i = 0; i < G_N_ELEMENTS (types); i++)
+    {
+      test_func (test_name, types[i].type, types[i].incremental, G_LIST_MODEL (source), random);
+    }
 }
 
 int
@@ -539,7 +555,7 @@ main (int argc, char *argv[])
   else
     tests = (const char **) argv + 1;
 
-  g_print ("\"test\",\"model\",\"model size\",\"time\",\"max time\",\"comparisons\",\"changes\"\n");
+  g_print ("# \"test\",\"model\",\"model size\",\"time\",\"max time\",\"comparisons\",\"changes\"\n");
   run_test (source, tests, "set-model", set_model);
   run_test (source, tests, "append-half", append_half);
   run_test (source, tests, "append-10th", append_10th);
