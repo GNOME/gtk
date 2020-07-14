@@ -206,6 +206,8 @@ struct _GdkWaylandToplevel
   GdkWaylandSurface parent_instance;
 
   GdkWaylandToplevel *transient_for;
+
+  struct zwp_transaction_v1 *transaction;
 };
 
 typedef struct
@@ -558,6 +560,60 @@ static const struct wl_callback_listener frame_listener = {
   frame_callback
 };
 
+static GdkWaylandToplevel *
+find_popup_toplevel (GdkSurface *surface)
+{
+  if (GDK_IS_POPUP (surface))
+    return find_popup_toplevel (surface->parent);
+  else
+    return GDK_WAYLAND_TOPLEVEL (surface);
+}
+
+static struct zwp_transaction_v1 *
+maybe_ensure_transaction (GdkWaylandToplevel *toplevel)
+{
+  GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (toplevel);
+  GdkWaylandDisplay *display_wayland =
+    GDK_WAYLAND_DISPLAY (gdk_surface_get_display (GDK_SURFACE (toplevel)));
+
+  if (!display_wayland->transaction_manager)
+    return NULL;
+
+  if (!impl->display_server.wl_surface)
+    return NULL;
+
+  if (!toplevel->transaction)
+    {
+      struct zwp_transaction_manager_v1 *manager =
+        display_wayland->transaction_manager;
+
+      toplevel->transaction =
+        zwp_transaction_manager_v1_create_transaction (manager);
+      zwp_transaction_v1_add_surface (toplevel->transaction,
+                                      impl->display_server.wl_surface);
+    }
+
+  return toplevel->transaction;
+}
+
+static void
+gdk_wayland_toplevel_add_synchronized_popup (GdkWaylandToplevel *toplevel,
+                                             GdkWaylandPopup    *popup)
+{
+  GdkWaylandSurface *popup_impl = GDK_WAYLAND_SURFACE (popup);
+  struct zwp_transaction_v1 *transaction;
+
+  if (!popup_impl->display_server.wl_surface)
+    return;
+
+  transaction = maybe_ensure_transaction (toplevel);
+  if (!transaction)
+    return;
+
+  zwp_transaction_v1_add_surface (transaction,
+                                  popup_impl->display_server.wl_surface);
+}
+
 static void
 on_frame_clock_before_paint (GdkFrameClock *clock,
                              GdkSurface     *surface)
@@ -588,6 +644,16 @@ on_frame_clock_before_paint (GdkFrameClock *clock,
        * so just assume that we're half way through a refresh cycle.
        */
       timings->predicted_presentation_time = timings->frame_time + refresh_interval / 2 + refresh_interval;
+    }
+
+  if (GDK_IS_WAYLAND_POPUP (surface))
+    {
+      GdkWaylandToplevel *toplevel;
+      GdkWaylandPopup *popup;
+
+      toplevel = find_popup_toplevel (surface);
+      popup = GDK_WAYLAND_POPUP (surface);
+      gdk_wayland_toplevel_add_synchronized_popup (toplevel, popup);
     }
 }
 
@@ -641,6 +707,13 @@ on_frame_clock_after_paint (GdkFrameClock *clock,
     {
       impl->awaiting_frame_frozen = TRUE;
       gdk_surface_freeze_updates (surface);
+    }
+
+  if (GDK_IS_WAYLAND_TOPLEVEL (surface))
+    {
+      GdkWaylandToplevel *toplevel = GDK_WAYLAND_TOPLEVEL (surface);
+
+      g_clear_pointer (&toplevel->transaction, zwp_transaction_v1_commit);
     }
 }
 
@@ -2697,6 +2770,13 @@ gdk_wayland_surface_hide_surface (GdkSurface *surface)
       impl->display_server.outputs = NULL;
 
       g_clear_pointer (&impl->popup.layout, gdk_popup_layout_unref);
+
+      if (GDK_IS_TOPLEVEL (surface))
+        {
+          GdkWaylandToplevel *toplevel = GDK_WAYLAND_TOPLEVEL (surface);
+
+          g_clear_pointer (&toplevel->transaction, zwp_transaction_v1_commit);
+        }
     }
 
   unset_transient_for_exported (surface);
