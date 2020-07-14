@@ -883,12 +883,12 @@ cairo_packages = ''
 if cairo_pkg_found
   cairo_packages += ' '.join([ ' cairo', cairo_req ])
 elif cc.get_id() == 'msvc' and cairo_dep.found()
-  cairo_packages += ' '.join([ ' -lcairo' ])
+  cairo_libs += '-lcairo'
 endif
 if cairogobj_pkg_found
   cairo_packages += ' '.join([ ' cairo-gobject', cairo_req ])
 elif cc.get_id() == 'msvc' and cairogobj_dep.found()
-  cairo_packages += ' '.join([ ' -lcairo-gobject' ])
+  cairo_libs += '-lcairo-gobject'
 endif
 
 gdk_packages += cairo_packages
