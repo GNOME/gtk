@@ -49,3 +49,6 @@ HWND              _modal_move_resize_window = NULL;
 
 /* The singleton selection object pointer */
 GdkWin32Selection *_win32_selection = NULL;
+
+GPtrArray         *_gdk_window_stack = NULL;
+GPtrArray         *_gdk_tmp_stack = NULL;

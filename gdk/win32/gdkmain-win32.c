@@ -101,6 +101,8 @@ _gdk_win32_windowing_init (void)
 			     _gdk_input_locale, _gdk_input_codepage));
 
   _gdk_win32_selection_init ();
+  _gdk_window_stack = g_ptr_array_new ();
+  _gdk_tmp_stack = g_ptr_array_new ();
 }
 
 void
