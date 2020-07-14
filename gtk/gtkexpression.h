@@ -93,6 +93,11 @@ GDK_AVAILABLE_IN_ALL
 GtkExpression *         gtk_property_expression_new_for_pspec   (GtkExpression                  *expression,
                                                                  GParamSpec                     *pspec);
 
+GDK_AVAILABLE_IN_ALL
+GtkExpression *         gtk_property_expression_get_expression  (GtkExpression                  *expression);
+GDK_AVAILABLE_IN_ALL
+GParamSpec *            gtk_property_expression_get_pspec       (GtkExpression                  *expression);
+
 #define GTK_TYPE_CONSTANT_EXPRESSION (gtk_constant_expression_get_type())
 typedef struct _GtkConstantExpression   GtkConstantExpression;
 
@@ -105,6 +110,9 @@ GtkExpression *         gtk_constant_expression_new             (GType          
 GDK_AVAILABLE_IN_ALL
 GtkExpression *         gtk_constant_expression_new_for_value   (const GValue                   *value);
 
+GDK_AVAILABLE_IN_ALL
+const GValue *          gtk_constant_expression_get_value       (GtkExpression                  *expression);
+
 #define GTK_TYPE_OBJECT_EXPRESSION (gtk_object_expression_get_type())
 typedef struct _GtkObjectExpression     GtkObjectExpression;
 
@@ -113,6 +121,9 @@ GType                   gtk_object_expression_get_type          (void) G_GNUC_CO
 
 GDK_AVAILABLE_IN_ALL
 GtkExpression *         gtk_object_expression_new               (GObject                        *object);
+
+GDK_AVAILABLE_IN_ALL
+GObject *               gtk_object_expression_get_object        (GtkExpression                  *expression);
 
 #define GTK_TYPE_CLOSURE_EXPRESSION (gtk_closure_expression_get_type())
 typedef struct _GtkClosureExpression    GtkClosureExpression;
