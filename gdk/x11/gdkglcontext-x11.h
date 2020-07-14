@@ -51,6 +51,7 @@ struct _GdkX11GLContext
 #ifdef HAVE_XDAMAGE
   GLsync frame_fence;
   Damage xdamage;
+  cairo_region_t *pending_damage_region;
 #endif
 
   guint is_attached : 1;

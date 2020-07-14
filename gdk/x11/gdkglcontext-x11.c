@@ -188,13 +188,15 @@ gdk_x11_gl_context_end_frame (GdkDrawContext *draw_context,
     {
       g_assert (context_x11->frame_fence == 0);
 
-      context_x11->frame_fence = glFenceSync (GL_SYNC_GPU_COMMANDS_COMPLETE, 0);
-
       /* We consider the frame still getting painted until the GL operation is
-       * finished, and the window gets damage reported from the X server.
-       * It's only at this point the compositor can be sure it has full
+       * finished, and a suitably large enough damage area is reported from
+       * the X server.  It's only at this point the compositor can be sure it has full
        * access to the new updates.
        */
+      context_x11->frame_fence = glFenceSync (GL_SYNC_GPU_COMMANDS_COMPLETE, 0);
+      g_clear_pointer (&context_x11->pending_damage_region,
+                       cairo_region_destroy);
+      context_x11->pending_damage_region = cairo_region_copy (painted);
       _gdk_x11_surface_set_frame_still_painting (surface, TRUE);
     }
 #endif
@@ -662,30 +664,36 @@ on_gl_surface_xevent (GdkGLContext   *context,
     {
       GLenum wait_result;
 
+      /* It's conceivable that this damage event is unrelated to the drawing
+       * of the current frame (say it was X server generated from the window
+       * resizing or something).  There's no way to exactly finger any given
+       * damage event as "the one caused by the frame getting drawn", but we
+       * don't really need to know that anyway.  All we need to know is two
+       * things:
+       *
+       * 1. the damaged area the compositor sees is big enough to accomodate
+       * the frame update
+       *
+       * 2. the frame update is available for the compostor to use.
+       *
+       * We check both below.
+       */
+      cairo_region_subtract_rectangle (context_x11->pending_damage_region,
+                                       &(cairo_rectangle_int_t)
+                                       { damage_xevent->area.x,
+                                         damage_xevent->area.y,
+                                         damage_xevent->area.width,
+                                         damage_xevent->area.height });
+
+      if (!cairo_region_is_empty (context_x11->pending_damage_region))
+        return FALSE;
+
       bind_context_for_frame_fence (context);
 
       wait_result = glClientWaitSync (context_x11->frame_fence, 0, 0);
 
       switch (wait_result)
         {
-          /* We assume that if the fence has been signaled, that this damage
-           * event is the damage event that was triggered by the GL drawing
-           * associated with the fence. That's, technically, not necessarly
-           * always true. The X server could have generated damage for
-           * an unrelated event (say the size of the window changing), at
-           * just the right moment such that we're picking it up instead.
-           *
-           * We're choosing not to handle this edge case, but if it does ever
-           * happen in the wild, it could lead to slight underdrawing by
-           * the compositor for one frame. In the future, if we find out
-           * this edge case is noticeable, we can compensate by copying the
-           * painted region from gdk_x11_gl_context_end_frame and subtracting
-           * damaged areas from the copy as they come in. Once the copied
-           * region goes empty, we know that there won't be any underdraw,
-           * and can mark painting has finished. It's not worth the added
-           * complexity and resource usage to do this bookkeeping, however,
-           * unless the problem is practically visible.
-           */
           case GL_ALREADY_SIGNALED:
           case GL_CONDITION_SATISFIED:
           case GL_WAIT_FAILED:
@@ -958,6 +966,8 @@ gdk_x11_gl_context_dispose (GObject *gobject)
 
 #ifdef HAVE_XDAMAGE
   context_x11->xdamage = 0;
+  g_clear_pointer (&context_x11->pending_damage_region,
+                   cairo_region_destroy);
 #endif
 
   G_OBJECT_CLASS (gdk_x11_gl_context_parent_class)->dispose (gobject);
