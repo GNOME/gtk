@@ -1,3 +1,4 @@
+#include <errno.h>
 #include <stdio.h>
 #include <sysprof-capture.h>
 #include <gio/gio.h>
@@ -7,7 +8,7 @@ typedef struct {
   gint64 value;
 } Data;
 
-static gboolean
+static bool
 callback (const SysprofCaptureFrame *frame,
           gpointer              user_data)
 {
@@ -94,9 +95,9 @@ main (int argc, char *argv[])
       g_object_unref (subprocess);
       g_object_unref (launcher);
 
-      reader = sysprof_capture_reader_new (name, &error);
-      if (error)
-        g_error ("Opening syscap file: %s", error->message);
+      reader = sysprof_capture_reader_new (name);
+      if (!reader)
+        g_error ("Opening syscap file: %s", g_strerror (errno));
 
       data.group = "style";
       data.value = 0;
