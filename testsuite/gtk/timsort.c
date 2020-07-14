@@ -35,6 +35,16 @@ compare_int (gconstpointer a,
   return ia < ib ? -1 : (ia > ib);
 }
 
+static int
+compare_pointer (gconstpointer a,
+                 gconstpointer b,
+                 gpointer      unused)
+{
+  gpointer pa = *(const gpointer *) a;
+  gpointer pb = *(const gpointer *) b;
+
+  return pa < pb ? -1 : (pa > pb);
+}
 G_GNUC_UNUSED static void
 dump (int *a,
       gsize n)
@@ -146,6 +156,43 @@ test_integers_huge (void)
 }
 
 static void
+test_pointers (void)
+{
+  gpointer *a;
+  gsize i, n, run;
+
+  a = g_new (gpointer, 1000);
+
+  for (run = 0; run < 10; run++)
+    {
+      n = g_test_rand_int_range (0, 1000);
+      for (i = 0; i < n; i++)
+        a[i] = GINT_TO_POINTER (g_test_rand_int ());
+
+      run_comparison (a, n, sizeof (gpointer), compare_pointer, NULL);
+    }
+
+  g_free (a);
+}
+
+static void
+test_pointers_huge (void)
+{
+  gpointer *a;
+  gsize i, n;
+
+  n = g_test_rand_int_range (2 * 1000 * 1000, 5 * 1000 * 1000);
+
+  a = g_new (gpointer, n);
+  for (i = 0; i < n; i++)
+    a[i] = GINT_TO_POINTER (g_test_rand_int ());
+
+  run_comparison (a, n, sizeof (gpointer), compare_pointer, NULL);
+
+  g_free (a);
+}
+
+static void
 test_steps (void)
 {
   GtkTimSortRun change;
@@ -194,6 +241,8 @@ main (int argc, char *argv[])
   g_test_add_func ("/timsort/integers", test_integers);
   g_test_add_func ("/timsort/integers/runs", test_integers_runs);
   g_test_add_func ("/timsort/integers/huge", test_integers_huge);
+  g_test_add_func ("/timsort/pointers", test_pointers);
+  g_test_add_func ("/timsort/pointers/huge", test_pointers_huge);
   g_test_add_func ("/timsort/steps", test_steps);
 
   return g_test_run ();
