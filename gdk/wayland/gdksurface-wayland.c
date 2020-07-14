@@ -191,6 +191,9 @@ struct _GdkWaylandSurface
 
   struct zxdg_imported_v1 *imported_transient_for;
   GHashTable *shortcuts_inhibitors;
+
+  struct zwp_idle_inhibitor_v1 *idle_inhibitor;
+  size_t idle_inhibitor_refcount;
 };
 
 struct _GdkWaylandSurfaceClass
@@ -1982,6 +1985,39 @@ gdk_wayland_surface_announce_csd (GdkSurface *surface)
   if (impl->display_server.server_decoration)
     org_kde_kwin_server_decoration_request_mode (impl->display_server.server_decoration,
                                                 ORG_KDE_KWIN_SERVER_DECORATION_MANAGER_MODE_CLIENT);
+}
+
+gboolean
+gdk_wayland_surface_inhibit_idle (GdkSurface *surface)
+{
+  GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (gdk_surface_get_display (surface));
+  GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
+
+  if (!display_wayland->idle_inhibit_manager)
+    return false;
+  if (!impl->idle_inhibitor)
+    {
+      g_assert (impl->idle_inhibitor_refcount == 0);
+      impl->idle_inhibitor =
+        zwp_idle_inhibit_manager_v1_create_inhibitor (display_wayland->idle_inhibit_manager,
+                                                     impl->display_server.wl_surface);
+    }
+  ++impl->idle_inhibitor_refcount;
+  return true;
+}
+
+void
+gdk_wayland_surface_uninhibit_idle (GdkSurface *surface)
+{
+  GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
+
+  g_assert (impl->idle_inhibitor && impl->idle_inhibitor_refcount > 0);
+
+  if (--impl->idle_inhibitor_refcount == 0)
+    {
+      zwp_idle_inhibitor_v1_destroy (impl->idle_inhibitor);
+      impl->idle_inhibitor = NULL;
+    }
 }
 
 static void
