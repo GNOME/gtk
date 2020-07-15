@@ -1115,11 +1115,11 @@ update_places (GtkPlacesView *view)
   /* Inform clients that we started loading */
   gtk_places_view_set_loading (view, TRUE);
 
-  /* Add "Computer" row */
+  /* Add "File System" row */
   file = g_file_new_for_path ("/");
   icon = g_themed_icon_new_with_default_fallbacks ("drive-harddisk");
 
-  add_file (view, file, icon, _("Computer"), "/", FALSE);
+  add_file (view, file, icon, _("File System"), "/", FALSE);
 
   g_clear_object (&file);
   g_clear_object (&icon);
