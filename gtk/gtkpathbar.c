@@ -1208,6 +1208,20 @@ gtk_path_bar_set_file_finish (struct SetFileInfo *info,
   g_free (info);
 }
 
+static gboolean
+is_local (GFile *file)
+{
+  gchar *path;
+
+  path = g_file_get_path (file);
+  if (path == NULL)
+    return FALSE;
+
+  g_free (path);
+
+  return TRUE;
+}
+
 static void
 gtk_path_bar_get_info_callback (GObject      *source,
                                 GAsyncResult *result,
@@ -1263,6 +1277,8 @@ gtk_path_bar_get_info_callback (GObject      *source,
     }
 
   file_info->parent_file = g_file_get_parent (file_info->file);
+  if (!is_local (file_info->parent_file))
+    g_clear_object (&file_info->parent_file);
 
   /* Recurse asynchronously */
   file_info->cancellable = g_cancellable_new ();
