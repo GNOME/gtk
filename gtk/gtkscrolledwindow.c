@@ -3327,6 +3327,8 @@ gtk_scrolled_window_start_deceleration (GtkScrolledWindow *scrolled_window)
   GtkScrolledWindowPrivate *priv = gtk_scrolled_window_get_instance_private (scrolled_window);
   GdkFrameClock *frame_clock;
   KineticScrollData *data;
+  gboolean from_swipe;
+  gdouble decel_friction;
 
   g_return_if_fail (priv->deceleration_id == 0);
 
@@ -3335,6 +3337,9 @@ gtk_scrolled_window_start_deceleration (GtkScrolledWindow *scrolled_window)
   data = g_new0 (KineticScrollData, 1);
   data->scrolled_window = scrolled_window;
   data->last_deceleration_time = gdk_frame_clock_get_frame_time (frame_clock);
+
+  from_swipe = !!gtk_gesture_get_device (GTK_GESTURE (priv->swipe_gesture));
+  decel_friction = from_swipe ? 1 : DECELERATION_FRICTION;
 
   if (may_hscroll (scrolled_window))
     {
@@ -3349,7 +3354,7 @@ gtk_scrolled_window_start_deceleration (GtkScrolledWindow *scrolled_window)
         gtk_kinetic_scrolling_new (lower,
                                    upper,
                                    MAX_OVERSHOOT_DISTANCE,
-                                   DECELERATION_FRICTION,
+                                   decel_friction,
                                    OVERSHOOT_FRICTION,
                                    priv->unclamped_hadj_value,
                                    priv->x_velocity);
@@ -3368,7 +3373,7 @@ gtk_scrolled_window_start_deceleration (GtkScrolledWindow *scrolled_window)
         gtk_kinetic_scrolling_new (lower,
                                    upper,
                                    MAX_OVERSHOOT_DISTANCE,
-                                   DECELERATION_FRICTION,
+                                   decel_friction,
                                    OVERSHOOT_FRICTION,
                                    priv->unclamped_vadj_value,
                                    priv->y_velocity);
