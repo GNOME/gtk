@@ -1,6 +1,6 @@
 <protocol name="gtk">
 
-  <interface name="gtk_shell1" version="3">
+  <interface name="gtk_shell1" version="4">
     <description summary="gtk specific extensions">
       gtk_shell is a protocol extension providing additional features for
       clients implementing it.
@@ -35,7 +35,7 @@
     </request>
   </interface>
 
-  <interface name="gtk_surface1" version="3">
+  <interface name="gtk_surface1" version="4">
     <request name="set_dbus_properties">
       <arg name="application_id" type="string" allow-null="true"/>
       <arg name="app_menu_path" type="string" allow-null="true"/>
@@ -82,6 +82,9 @@
     <request name="request_focus" since="3">
       <arg name="startup_id" type="string" allow-null="true"/>
     </request>
+
+    <!-- Version 4 additions -->
+    <request name="release" type="destructor" since="4"/>
   </interface>
 
 </protocol>
