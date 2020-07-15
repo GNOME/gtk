@@ -50,7 +50,8 @@ void            gtk_file_filter_add_mime_type      (GtkFileFilter *filter,
                                                     const char    *mime_type);
 GDK_AVAILABLE_IN_ALL
 void            gtk_file_filter_add_pattern        (GtkFileFilter *filter,
-                                                    const char    *pattern);
+                                                    const char    *pattern,
+                                                    gboolean       ignore_case);
 GDK_AVAILABLE_IN_ALL
 void            gtk_file_filter_add_pixbuf_formats (GtkFileFilter *filter);
 

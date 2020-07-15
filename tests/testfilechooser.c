@@ -332,7 +332,7 @@ main (int argc, char **argv)
   /* Filters */
   filter = gtk_file_filter_new ();
   gtk_file_filter_set_name (filter, "All Files");
-  gtk_file_filter_add_pattern (filter, "*");
+  gtk_file_filter_add_pattern (filter, "*", FALSE);
   gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (dialog), filter);
 
   /* Make this filter the default */
@@ -341,7 +341,7 @@ main (int argc, char **argv)
 
   filter = gtk_file_filter_new ();
   gtk_file_filter_set_name (filter, "Starts with D");
-  gtk_file_filter_add_pattern (filter, "D*");
+  gtk_file_filter_add_pattern (filter, "D*", FALSE);
   gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (dialog), filter);
   g_object_unref (filter);
 
