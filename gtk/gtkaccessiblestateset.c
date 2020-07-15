@@ -143,7 +143,6 @@ static const char *state_names[] = {
   [GTK_ACCESSIBLE_STATE_CHECKED]  = "checked",
   [GTK_ACCESSIBLE_STATE_DISABLED] = "disabled",
   [GTK_ACCESSIBLE_STATE_EXPANDED] = "expanded",
-  [GTK_ACCESSIBLE_STATE_GRABBED]  = "grabbed",
   [GTK_ACCESSIBLE_STATE_HIDDEN]   = "hidden",
   [GTK_ACCESSIBLE_STATE_INVALID]  = "invalid",
   [GTK_ACCESSIBLE_STATE_PRESSED]  = "pressed",

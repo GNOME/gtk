@@ -91,7 +91,7 @@ gtk_accessible_property_set_add (GtkAccessiblePropertySet *self,
                                  GtkAccessibleProperty     property,
                                  GtkAccessibleValue       *value)
 {
-  g_return_if_fail (property >= GTK_ACCESSIBLE_PROPERTY_ACTIVE_DESCENDANT &&
+  g_return_if_fail (property >= GTK_ACCESSIBLE_PROPERTY_AUTOCOMPLETE &&
                     property <= GTK_ACCESSIBLE_PROPERTY_VALUE_TEXT);
 
   if (gtk_accessible_property_set_contains (self, property))
@@ -106,7 +106,7 @@ void
 gtk_accessible_property_set_remove (GtkAccessiblePropertySet *self,
                                     GtkAccessibleProperty     property)
 {
-  g_return_if_fail (property >= GTK_ACCESSIBLE_PROPERTY_ACTIVE_DESCENDANT &&
+  g_return_if_fail (property >= GTK_ACCESSIBLE_PROPERTY_AUTOCOMPLETE &&
                     property <= GTK_ACCESSIBLE_PROPERTY_VALUE_TEXT);
 
   if (gtk_accessible_property_set_contains (self, property))
@@ -120,7 +120,7 @@ gboolean
 gtk_accessible_property_set_contains (GtkAccessiblePropertySet *self,
                                       GtkAccessibleProperty     property)
 {
-  g_return_val_if_fail (property >= GTK_ACCESSIBLE_PROPERTY_ACTIVE_DESCENDANT &&
+  g_return_val_if_fail (property >= GTK_ACCESSIBLE_PROPERTY_AUTOCOMPLETE &&
                         property <= GTK_ACCESSIBLE_PROPERTY_VALUE_TEXT,
                         FALSE);
 
@@ -131,7 +131,7 @@ GtkAccessibleValue *
 gtk_accessible_property_set_get_value (GtkAccessiblePropertySet *self,
                                        GtkAccessibleProperty     property)
 {
-  g_return_val_if_fail (property >= GTK_ACCESSIBLE_PROPERTY_ACTIVE_DESCENDANT &&
+  g_return_val_if_fail (property >= GTK_ACCESSIBLE_PROPERTY_AUTOCOMPLETE &&
                         property <= GTK_ACCESSIBLE_PROPERTY_VALUE_TEXT,
                         NULL);
 
@@ -139,28 +139,25 @@ gtk_accessible_property_set_get_value (GtkAccessiblePropertySet *self,
 }
 
 static const char *property_names[] = {
-  [GTK_ACCESSIBLE_PROPERTY_ACTIVE_DESCENDANT] = "active-descendant",
-  [GTK_ACCESSIBLE_PROPERTY_CONTROLS]          = "controls",
-  [GTK_ACCESSIBLE_PROPERTY_DESCRIBED_BY]      = "described-by",
-  [GTK_ACCESSIBLE_PROPERTY_FLOW_TO]           = "flow-to",
-  [GTK_ACCESSIBLE_PROPERTY_HAS_POPUP]         = "has-popup",
-  [GTK_ACCESSIBLE_PROPERTY_LABEL]             = "label",
-  [GTK_ACCESSIBLE_PROPERTY_LABELLED_BY]       = "labelled-by",
-  [GTK_ACCESSIBLE_PROPERTY_LEVEL]             = "level",
-  [GTK_ACCESSIBLE_PROPERTY_MULTI_LINE]        = "multiline",
-  [GTK_ACCESSIBLE_PROPERTY_MULTI_SELECTABLE]  = "multi-selectable",
-  [GTK_ACCESSIBLE_PROPERTY_ORIENTATION]       = "orientation",
-  [GTK_ACCESSIBLE_PROPERTY_OWNS]              = "owns",
-  [GTK_ACCESSIBLE_PROPERTY_POS_IN_SET]        = "pos-in-set",
-  [GTK_ACCESSIBLE_PROPERTY_READ_ONLY]         = "read-only",
-  [GTK_ACCESSIBLE_PROPERTY_RELEVANT]          = "relevant",
-  [GTK_ACCESSIBLE_PROPERTY_REQUIRED]          = "required",
-  [GTK_ACCESSIBLE_PROPERTY_SET_SIZE]          = "set-size",
-  [GTK_ACCESSIBLE_PROPERTY_SORT]              = "sort",
-  [GTK_ACCESSIBLE_PROPERTY_VALUE_MAX]         = "value-max",
-  [GTK_ACCESSIBLE_PROPERTY_VALUE_MIN]         = "value-min",
-  [GTK_ACCESSIBLE_PROPERTY_VALUE_NOW]         = "value-now",
-  [GTK_ACCESSIBLE_PROPERTY_VALUE_TEXT]        = "value-text",
+  [GTK_ACCESSIBLE_PROPERTY_AUTOCOMPLETE]     = "autocomplete",
+  [GTK_ACCESSIBLE_PROPERTY_DESCRIPTION]      = "description",
+  [GTK_ACCESSIBLE_PROPERTY_HAS_POPUP]        = "haspopup",
+  [GTK_ACCESSIBLE_PROPERTY_KEY_SHORTCUTS]    = "keyshortcuts",
+  [GTK_ACCESSIBLE_PROPERTY_LABEL]            = "label",
+  [GTK_ACCESSIBLE_PROPERTY_LEVEL]            = "level",
+  [GTK_ACCESSIBLE_PROPERTY_MODAL]            = "modal",
+  [GTK_ACCESSIBLE_PROPERTY_MULTI_LINE]       = "multiline",
+  [GTK_ACCESSIBLE_PROPERTY_MULTI_SELECTABLE] = "multiselectable",
+  [GTK_ACCESSIBLE_PROPERTY_ORIENTATION]      = "orientation",
+  [GTK_ACCESSIBLE_PROPERTY_PLACEHOLDER]      = "placeholder",
+  [GTK_ACCESSIBLE_PROPERTY_READ_ONLY]        = "readonly",
+  [GTK_ACCESSIBLE_PROPERTY_REQUIRED]         = "required",
+  [GTK_ACCESSIBLE_PROPERTY_ROLE_DESCRIPTION] = "roledescription",
+  [GTK_ACCESSIBLE_PROPERTY_SORT]             = "sort",
+  [GTK_ACCESSIBLE_PROPERTY_VALUE_MAX]        = "valuemax",
+  [GTK_ACCESSIBLE_PROPERTY_VALUE_MIN]        = "valuemin",
+  [GTK_ACCESSIBLE_PROPERTY_VALUE_NOW]        = "valuenow",
+  [GTK_ACCESSIBLE_PROPERTY_VALUE_TEXT]       = "valuetext",
 };
 
 /*< private >
