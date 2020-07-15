@@ -1302,30 +1302,31 @@ typedef enum {
 
 /**
  * GtkAccessibleState:
- * @GTK_ACCESSIBLE_STATE_NONE: An invalid state, used as a sentinel value
  * @GTK_ACCESSIBLE_STATE_BUSY: A “busy” state
- * @GTK_ACCESSIBLE_STATE_CHECKED: A “checked” state; corresponds to the
- *   #GtkToggleButton:active property on #GtkToggleButton
+ * @GTK_ACCESSIBLE_STATE_CHECKED: A “checked” state; indicates the current
+ *   state of a #GtkCheckButton
  * @GTK_ACCESSIBLE_STATE_DISABLED: A “disabled” state; corresponds to the
- *   #GtkWidget:sensitive property on #GtkWidget
+ *   #GtkWidget:sensitive property on #GtkWidget. It indicates a UI element
+ *   that is perceivable, but not editable or operable
  * @GTK_ACCESSIBLE_STATE_EXPANDED: An “expanded” state; corresponds to the
  *   #GtkExpander:expanded property on #GtkExpander
  * @GTK_ACCESSIBLE_STATE_GRABBED: A “grabbed” state; set when a widget is
  *   being grabbed in a drag and drop operation
  * @GTK_ACCESSIBLE_STATE_HIDDEN: A “hidden” state; corresponds to the
- *   #GtkWidget:visible property on #GtkWidget
+ *   #GtkWidget:visible property on #GtkWidget. You can use this state
+ *   explicitly on UI elements that should not be exposed to an assistive
+ *   technology. See also: %GTK_ACCESSIBLE_STATE_DISABLED
  * @GTK_ACCESSIBLE_STATE_INVALID: An “invalid” state; set when a widget
  *   is showing an error
- * @GTK_ACCESSIBLE_STATE_PRESSED: A “pressed” state; set when a widget
- *   is being activated by a pointer
+ * @GTK_ACCESSIBLE_STATE_PRESSED: A “pressed” state; indicates the current
+ *   state of a #GtkToggleButton
  * @GTK_ACCESSIBLE_STATE_SELECTED: A “selected” state; set when a widget
  *   is selected
  *
  * The possible accessible state of a #GtkAccessible.
  */
 typedef enum {
-  GTK_ACCESSIBLE_STATE_NONE = -1,
-  GTK_ACCESSIBLE_STATE_BUSY = 0,
+  GTK_ACCESSIBLE_STATE_BUSY,
   GTK_ACCESSIBLE_STATE_CHECKED,
   GTK_ACCESSIBLE_STATE_DISABLED,
   GTK_ACCESSIBLE_STATE_EXPANDED,

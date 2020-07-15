@@ -108,7 +108,7 @@ gtk_accessible_get_accessible_role (GtkAccessible *self)
  * gtk_accessible_update_state:
  * @self: a #GtkAccessible
  * @first_state: the first #GtkAccessibleState
- * @...: a list of state and value pairs, terminated by %GTK_ACCESSIBLE_STATE_NONE
+ * @...: a list of state and value pairs, terminated by -1
  *
  * Updates a list of accessible states.
  *
@@ -134,7 +134,7 @@ gtk_accessible_update_state (GtkAccessible      *self,
 
   state = first_state;
 
-  while (state != GTK_ACCESSIBLE_STATE_NONE)
+  while (state != -1)
     {
       GtkAccessibleValue *value = gtk_accessible_value_collect_for_state (state, &args);
 
