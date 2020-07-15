@@ -38,19 +38,9 @@ dnd {
   -gtk-icon-size: 32px;
 }
 
-/*
-   These wildcard seems unavoidable, need to investigate.
-   Wildcards are bad and troublesome, use them with care,
-   or better, just don't.
-   Everytime a wildcard is used a kitten dies, painfully.
-*/
-
-spinner:disabled,
-arrow:disabled,
-scrollbar:disabled,
-check:disabled,
-radio:disabled,
-treeview.expander:disabled { -gtk-icon-filter: opacity(0.5); }
+image:disabled {
+  -gtk-icon-filter: opacity(0.5);
+}
 
 .view,
 %view {
@@ -500,7 +490,8 @@ button {
         @include button(backdrop);
 
         transition: $backdrop_transition;
-        -gtk-icon-filter: none;
+
+        &:not(:disabled) { -gtk-icon-filter: none; }
 
         &:active,
         &:checked { @include button(backdrop-active); }
@@ -519,6 +510,7 @@ button {
 
     &:disabled {
       @include button(insensitive);
+      -gtk-icon-filter: opacity(0.5);
 
       &:active,
       &:checked { @include button(insensitive-active); }
