@@ -345,7 +345,19 @@ gtk_application_impl_dbus_startup (GtkApplicationImpl *impl,
 
   if (error)
     {
-      g_warning ("Failed to register client: %s", error->message);
+      g_warning ("Failed to register SessionManager client: %s", error->message);
+
+      if (g_str_has_prefix (error->message, "GDBus.Error:org.gnome.SessionManager.AlreadyRegistered:"))
+        {
+          /* Many applications forget to unset DESKTOP_AUTOSTART_ID after
+           * registering it for themselves. This happens even for well-known
+           * launchers such as gnome media-keys. Applications started witch
+           * such launcher will inherit already-used DESKTOP_AUTOSTART_ID
+           * and will fail to RegisterClient here.
+           */
+          g_warning ("Parent application forgot to unset DESKTOP_AUTOSTART_ID after using it.");
+        }
+
       g_clear_error (&error);
       g_clear_object (&dbus->sm_proxy);
       goto out;
