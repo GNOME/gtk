@@ -115,6 +115,7 @@ GDK_AVAILABLE_IN_ALL
 void                    gtk_sorter_changed                      (GtkSorter              *self,
                                                                  GtkSorterChange         change);
 
+
 G_END_DECLS
 
 #endif /* __GTK_SORTER_H__ */
