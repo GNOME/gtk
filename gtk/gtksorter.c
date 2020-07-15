@@ -19,7 +19,7 @@
 
 #include "config.h"
 
-#include "gtksorter.h"
+#include "gtksorterprivate.h"
 
 #include "gtkintl.h"
 #include "gtktypebuiltins.h"
@@ -49,12 +49,26 @@
  * and provide one's own sorter.
  */
 
+typedef struct _GtkSorterPrivate GtkSorterPrivate;
+typedef struct _GtkDefaultSortKeys GtkDefaultSortKeys;
+
+struct _GtkSorterPrivate
+{
+  GtkSortKeys *keys;
+};
+
+struct _GtkDefaultSortKeys
+{
+  GtkSortKeys keys;
+  GtkSorter *sorter;
+};
+
 enum {
   CHANGED,
   LAST_SIGNAL
 };
 
-G_DEFINE_TYPE (GtkSorter, gtk_sorter, G_TYPE_OBJECT)
+G_DEFINE_TYPE_WITH_PRIVATE (GtkSorter, gtk_sorter, G_TYPE_OBJECT)
 
 static guint signals[LAST_SIGNAL] = { 0 };
 
@@ -75,8 +89,23 @@ gtk_sorter_default_get_order (GtkSorter *self)
 }
 
 static void
+gtk_sorter_dispose (GObject *object)
+{
+  GtkSorter *self = GTK_SORTER (object);
+  GtkSorterPrivate *priv = gtk_sorter_get_instance_private (self);
+
+  g_clear_pointer (&priv->keys, gtk_sort_keys_unref);
+
+  G_OBJECT_CLASS (gtk_sorter_parent_class)->dispose (object);
+}
+
+static void
 gtk_sorter_class_init (GtkSorterClass *class)
 {
+  GObjectClass *object_class = G_OBJECT_CLASS (class);
+
+  object_class->dispose = gtk_sorter_dispose;
+
   class->compare = gtk_sorter_default_compare;
   class->get_order = gtk_sorter_default_get_order;
 
@@ -182,6 +211,98 @@ gtk_sorter_get_order (GtkSorter *self)
   return GTK_SORTER_GET_CLASS (self)->get_order (self);
 }
 
+static int
+gtk_default_sort_keys_compare (gconstpointer a,
+                               gconstpointer b,
+                               gpointer      data)
+{
+  GtkDefaultSortKeys *self = data;
+  gpointer *key_a = (gpointer *) a;
+  gpointer *key_b = (gpointer *) b;
+
+  return gtk_sorter_compare (self->sorter, *key_a, *key_b);
+}
+
+static void
+gtk_default_sort_keys_free (GtkSortKeys *keys)
+{
+  GtkDefaultSortKeys *self = (GtkDefaultSortKeys *) keys;
+
+  g_object_unref (self->sorter);
+
+  g_slice_free (GtkDefaultSortKeys, self);
+}
+
+static gboolean
+gtk_default_sort_keys_is_compatible (GtkSortKeys *keys,
+                                     GtkSortKeys *other)
+{
+  if (keys->klass != other->klass)
+    return FALSE;
+
+  return TRUE;
+}
+
+static void
+gtk_default_sort_keys_init_key (GtkSortKeys *self,
+                                gpointer     item,
+                                gpointer     key_memory)
+{
+  gpointer *key = (gpointer *) key_memory;
+
+  *key = g_object_ref (item);
+}
+
+static void
+gtk_default_sort_keys_clear_key (GtkSortKeys *self,
+                                 gpointer     key_memory)
+{
+  gpointer *key = (gpointer *) key_memory;
+
+  g_object_unref (*key);
+}
+
+static const GtkSortKeysClass GTK_DEFAULT_SORT_KEYS_CLASS = 
+{
+  gtk_default_sort_keys_free,
+  gtk_default_sort_keys_compare,
+  gtk_default_sort_keys_is_compatible,
+  gtk_default_sort_keys_init_key,
+  gtk_default_sort_keys_clear_key,
+};
+
+/*<private>
+ * gtk_sorter_get_keys:
+ * @self: a #GtkSorter
+ *
+ * Gets a #GtkSortKeys that can be used as an alternative to
+ * @self for faster sorting.
+ *
+ * The sort keys can change every time #GtkSorter::changed is emitted.
+ * When the keys change, you should redo all comparisons with the new
+ * keys.  
+ * When gtk_sort_keys_is_compatible() for the old and new keys returns
+ * %TRUE, you can reuse keys you generated previously.
+ *
+ * Returns: (transfer full): the sort keys to sort with
+ **/
+GtkSortKeys *
+gtk_sorter_get_keys (GtkSorter *self)
+{
+  GtkSorterPrivate *priv = gtk_sorter_get_instance_private (self);
+  GtkDefaultSortKeys *fallback;
+
+  g_return_val_if_fail (GTK_IS_SORTER (self), NULL);
+
+  if (priv->keys)
+    return gtk_sort_keys_ref (priv->keys);
+
+  fallback = gtk_sort_keys_new (GtkDefaultSortKeys, &GTK_DEFAULT_SORT_KEYS_CLASS, sizeof (gpointer), sizeof (gpointer));
+  fallback->sorter = g_object_ref (self);
+
+  return (GtkSortKeys *) fallback;
+}
+
 /**
  * gtk_sorter_changed:
  * @self: a #GtkSorter
@@ -205,4 +326,32 @@ gtk_sorter_changed (GtkSorter       *self,
   g_return_if_fail (GTK_IS_SORTER (self));
 
   g_signal_emit (self, signals[CHANGED], 0, change);
+}
+
+/*<private>
+ * gtk_sorter_changed_with_keys
+ * @self: a #GtkSorter
+ * @change: How the sorter changed
+ * @keys: (not nullable) (transfer full): New keys to use
+ *
+ * Updates the sorter's keys to @keys and then calls gtk_sorter_changed().
+ * If you do not want to update the keys, call that function instead.
+ *
+ * This function should also be called in your_sorter_init() to initialize
+ * the keys to use with your sorter.
+ */
+void
+gtk_sorter_changed_with_keys (GtkSorter       *self,
+                              GtkSorterChange  change,
+                              GtkSortKeys     *keys)
+{
+  GtkSorterPrivate *priv = gtk_sorter_get_instance_private (self);
+
+  g_return_if_fail (GTK_IS_SORTER (self));
+  g_return_if_fail (keys != NULL);
+
+  g_clear_pointer (&priv->keys, gtk_sort_keys_unref);
+  priv->keys = keys;
+
+  gtk_sorter_changed (self, change);
 }

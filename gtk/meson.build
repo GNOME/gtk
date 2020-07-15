@@ -133,6 +133,7 @@ gtk_private_sources = files([
   'gtksearchengine.c',
   'gtksearchenginemodel.c',
   'gtksizerequestcache.c',
+  'gtksortkeys.c',
   'gtkstyleanimation.c',
   'gtkstylecascade.c',
   'gtkstyleproperty.c',
