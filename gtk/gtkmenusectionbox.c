@@ -297,7 +297,6 @@ gtk_menu_section_box_insert_func (GtkMenuTrackerItem *item,
                              NULL);
       g_object_bind_property (item, "label", widget, "text", G_BINDING_SYNC_CREATE);
       g_object_bind_property (item, "icon", widget, "icon", G_BINDING_SYNC_CREATE);
-      g_object_bind_property (item, "sensitive", widget, "sensitive", G_BINDING_SYNC_CREATE);
 
       get_ancestors (GTK_WIDGET (box->toplevel), GTK_TYPE_STACK, &stack, &parent);
       gtk_container_child_get (GTK_CONTAINER (stack), parent, "name", &name, NULL);
