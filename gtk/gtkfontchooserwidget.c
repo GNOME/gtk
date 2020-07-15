@@ -58,8 +58,11 @@
 #include <hb.h>
 #include <hb-ot.h>
 #include <hb-ft.h>
-#include <freetype/freetype.h>
-#include <freetype/ftmm.h>
+
+#include <ft2build.h>
+#include FT_FREETYPE_H
+#include FT_MULTIPLE_MASTERS_H
+
 #include "language-names.h"
 #include "script-names.h"
 #endif
