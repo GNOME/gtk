@@ -2011,7 +2011,7 @@ ensure_stacking_on_activate_app (MSG       *msg,
       impl->transient_owner != NULL)
     {
       SetWindowPos (msg->hwnd, HWND_TOP, 0, 0, 0, 0,
-		    SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE | SWP_NOOWNERZORDER);
+                    SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE);
       return;
     }
 
