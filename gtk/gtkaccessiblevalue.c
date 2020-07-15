@@ -485,32 +485,28 @@ static const GtkAccessibleCollect collect_states[] = {
   { GTK_ACCESSIBLE_STATE_CHECKED,  GTK_ACCESSIBLE_COLLECT_ENUM,     "checked",  (GCallback) gtk_checked_accessible_value_new },
   { GTK_ACCESSIBLE_STATE_DISABLED, GTK_ACCESSIBLE_COLLECT_BOOLEAN,  "disabled", (GCallback) gtk_boolean_accessible_value_new },
   { GTK_ACCESSIBLE_STATE_EXPANDED, GTK_ACCESSIBLE_COLLECT_TRISTATE, "expanded", (GCallback) gtk_expanded_accessible_value_new },
-  { GTK_ACCESSIBLE_STATE_GRABBED,  GTK_ACCESSIBLE_COLLECT_TRISTATE, "grabbed",  (GCallback) gtk_grabbed_accessible_value_new },
   { GTK_ACCESSIBLE_STATE_HIDDEN,   GTK_ACCESSIBLE_COLLECT_BOOLEAN,  "hidden",   (GCallback) gtk_boolean_accessible_value_new },
   { GTK_ACCESSIBLE_STATE_INVALID,  GTK_ACCESSIBLE_COLLECT_ENUM,     "invalid",  (GCallback) gtk_invalid_accessible_value_new },
   { GTK_ACCESSIBLE_STATE_PRESSED,  GTK_ACCESSIBLE_COLLECT_ENUM,     "pressed",  (GCallback) gtk_pressed_accessible_value_new },
   { GTK_ACCESSIBLE_STATE_SELECTED, GTK_ACCESSIBLE_COLLECT_TRISTATE, "selected", (GCallback) gtk_selected_accessible_value_new },
 };
 
+/* § 6.6.1 Widget attributes */
 static const GtkAccessibleCollect collect_props[] = {
-  { GTK_ACCESSIBLE_PROPERTY_ACTIVE_DESCENDANT, GTK_ACCESSIBLE_COLLECT_REF,     "activedescendant", (GCallback) gtk_reference_accessible_value_new },
   { GTK_ACCESSIBLE_PROPERTY_AUTOCOMPLETE,      GTK_ACCESSIBLE_COLLECT_ENUM,    "autocomplete",     (GCallback) gtk_autocomplete_accessible_value_new },
-  { GTK_ACCESSIBLE_PROPERTY_CONTROLS,          GTK_ACCESSIBLE_COLLECT_REF,     "controls",         (GCallback) gtk_reference_accessible_value_new },
-  { GTK_ACCESSIBLE_PROPERTY_DESCRIBED_BY,      GTK_ACCESSIBLE_COLLECT_REF,     "describedby",      (GCallback) gtk_reference_accessible_value_new },
-  { GTK_ACCESSIBLE_PROPERTY_FLOW_TO,           GTK_ACCESSIBLE_COLLECT_REF,     "flowto",           (GCallback) gtk_reference_accessible_value_new },
+  { GTK_ACCESSIBLE_PROPERTY_DESCRIPTION,       GTK_ACCESSIBLE_COLLECT_STRING,  "description",      (GCallback) gtk_string_accessible_value_new },
   { GTK_ACCESSIBLE_PROPERTY_HAS_POPUP,         GTK_ACCESSIBLE_COLLECT_BOOLEAN, "haspopup",         (GCallback) gtk_boolean_accessible_value_new },
+  { GTK_ACCESSIBLE_PROPERTY_KEY_SHORTCUTS,     GTK_ACCESSIBLE_COLLECT_STRING,  "keyshortcuts",     (GCallback) gtk_string_accessible_value_new },
   { GTK_ACCESSIBLE_PROPERTY_LABEL,             GTK_ACCESSIBLE_COLLECT_STRING,  "label",            (GCallback) gtk_string_accessible_value_new },
-  { GTK_ACCESSIBLE_PROPERTY_LABELLED_BY,       GTK_ACCESSIBLE_COLLECT_REF   ,  "labelledby",       (GCallback) gtk_reference_accessible_value_new },
   { GTK_ACCESSIBLE_PROPERTY_LEVEL,             GTK_ACCESSIBLE_COLLECT_INT,     "level",            (GCallback) gtk_int_accessible_value_new },
+  { GTK_ACCESSIBLE_PROPERTY_MODAL,             GTK_ACCESSIBLE_COLLECT_BOOLEAN, "modal",            (GCallback) gtk_boolean_accessible_value_new },
   { GTK_ACCESSIBLE_PROPERTY_MULTI_LINE,        GTK_ACCESSIBLE_COLLECT_BOOLEAN, "multiline",        (GCallback) gtk_boolean_accessible_value_new },
   { GTK_ACCESSIBLE_PROPERTY_MULTI_SELECTABLE,  GTK_ACCESSIBLE_COLLECT_BOOLEAN, "multiselectable",  (GCallback) gtk_boolean_accessible_value_new },
   { GTK_ACCESSIBLE_PROPERTY_ORIENTATION,       GTK_ACCESSIBLE_COLLECT_ENUM,    "orientation",      (GCallback) gtk_orientation_accessible_value_new },
-  { GTK_ACCESSIBLE_PROPERTY_OWNS,              GTK_ACCESSIBLE_COLLECT_REF,     "owns",             (GCallback) gtk_reference_accessible_value_new },
-  { GTK_ACCESSIBLE_PROPERTY_POS_IN_SET,        GTK_ACCESSIBLE_COLLECT_INT,     "posinset",         (GCallback) gtk_int_accessible_value_new },
+  { GTK_ACCESSIBLE_PROPERTY_PLACEHOLDER,       GTK_ACCESSIBLE_COLLECT_STRING,  "placeholder",      (GCallback) gtk_string_accessible_value_new },
   { GTK_ACCESSIBLE_PROPERTY_READ_ONLY,         GTK_ACCESSIBLE_COLLECT_BOOLEAN, "readonly",         (GCallback) gtk_boolean_accessible_value_new },
-  { GTK_ACCESSIBLE_PROPERTY_RELEVANT,          GTK_ACCESSIBLE_COLLECT_STRING,  "relevant",         (GCallback) gtk_string_accessible_value_new },
   { GTK_ACCESSIBLE_PROPERTY_REQUIRED,          GTK_ACCESSIBLE_COLLECT_BOOLEAN, "required",         (GCallback) gtk_boolean_accessible_value_new },
-  { GTK_ACCESSIBLE_PROPERTY_SET_SIZE,          GTK_ACCESSIBLE_COLLECT_INT,     "setsize",          (GCallback) gtk_int_accessible_value_new },
+  { GTK_ACCESSIBLE_PROPERTY_ROLE_DESCRIPTION,  GTK_ACCESSIBLE_COLLECT_STRING,  "roledescription",  (GCallback) gtk_string_accessible_value_new },
   { GTK_ACCESSIBLE_PROPERTY_SORT,              GTK_ACCESSIBLE_COLLECT_ENUM,    "sort",             (GCallback) gtk_sort_accessible_value_new },
   { GTK_ACCESSIBLE_PROPERTY_VALUE_MAX,         GTK_ACCESSIBLE_COLLECT_NUMBER,  "valuemax",         (GCallback) gtk_number_accessible_value_new },
   { GTK_ACCESSIBLE_PROPERTY_VALUE_MIN,         GTK_ACCESSIBLE_COLLECT_NUMBER,  "valuemin",         (GCallback) gtk_number_accessible_value_new },
@@ -551,10 +547,7 @@ gtk_accessible_value_get_default_for_state (GtkAccessibleState state)
       return gtk_checked_accessible_value_new (GTK_ACCESSIBLE_CHECKED_UNDEFINED);
 
     case GTK_ACCESSIBLE_STATE_EXPANDED:
-      return gtk_expanded_accessible_value_new (GTK_ACCESSIBLE_STATE_UNDEFINED);
-
-    case GTK_ACCESSIBLE_STATE_GRABBED:
-      return gtk_grabbed_accessible_value_new (GTK_ACCESSIBLE_STATE_UNDEFINED);
+      return gtk_expanded_accessible_value_new (GTK_ACCESSIBLE_VALUE_UNDEFINED);
 
     case GTK_ACCESSIBLE_STATE_INVALID:
       return gtk_invalid_accessible_value_new (GTK_ACCESSIBLE_INVALID_FALSE);
@@ -563,7 +556,7 @@ gtk_accessible_value_get_default_for_state (GtkAccessibleState state)
       return gtk_pressed_accessible_value_new (GTK_ACCESSIBLE_PRESSED_UNDEFINED);
 
     case GTK_ACCESSIBLE_STATE_SELECTED:
-      return gtk_selected_accessible_value_new (GTK_ACCESSIBLE_STATE_UNDEFINED);
+      return gtk_selected_accessible_value_new (GTK_ACCESSIBLE_VALUE_UNDEFINED);
 
     default:
       g_critical ("Unknown value for accessible state “%s”", cstate->name);
@@ -801,18 +794,9 @@ gtk_accessible_value_get_default_for_property (GtkAccessibleProperty property)
 
   switch (cstate->value)
     {
-    /* Reference properties */
-    case GTK_ACCESSIBLE_PROPERTY_ACTIVE_DESCENDANT:
-    case GTK_ACCESSIBLE_PROPERTY_CONTROLS:
-    case GTK_ACCESSIBLE_PROPERTY_DESCRIBED_BY:
-    case GTK_ACCESSIBLE_PROPERTY_FLOW_TO:
-    case GTK_ACCESSIBLE_PROPERTY_LABELLED_BY:
-    case GTK_ACCESSIBLE_PROPERTY_OWNS:
-    case GTK_ACCESSIBLE_PROPERTY_RELEVANT:
-      return NULL;
-
     /* Boolean properties */
     case GTK_ACCESSIBLE_PROPERTY_HAS_POPUP:
+    case GTK_ACCESSIBLE_PROPERTY_MODAL:
     case GTK_ACCESSIBLE_PROPERTY_MULTI_LINE:
     case GTK_ACCESSIBLE_PROPERTY_MULTI_SELECTABLE:
     case GTK_ACCESSIBLE_PROPERTY_READ_ONLY:
@@ -821,8 +805,6 @@ gtk_accessible_value_get_default_for_property (GtkAccessibleProperty property)
 
     /* Integer properties */
     case GTK_ACCESSIBLE_PROPERTY_LEVEL:
-    case GTK_ACCESSIBLE_PROPERTY_POS_IN_SET:
-    case GTK_ACCESSIBLE_PROPERTY_SET_SIZE:
       return gtk_int_accessible_value_new (0);
 
     /* Number properties */
@@ -832,7 +814,11 @@ gtk_accessible_value_get_default_for_property (GtkAccessibleProperty property)
       return gtk_number_accessible_value_new (0);
 
     /* String properties */
+    case GTK_ACCESSIBLE_PROPERTY_DESCRIPTION:
+    case GTK_ACCESSIBLE_PROPERTY_KEY_SHORTCUTS:
     case GTK_ACCESSIBLE_PROPERTY_LABEL:
+    case GTK_ACCESSIBLE_PROPERTY_PLACEHOLDER:
+    case GTK_ACCESSIBLE_PROPERTY_ROLE_DESCRIPTION:
     case GTK_ACCESSIBLE_PROPERTY_VALUE_TEXT:
       return gtk_string_accessible_value_new ("");
 

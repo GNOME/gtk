@@ -85,45 +85,9 @@ GtkAccessibleValue *    gtk_accessible_value_collect_for_property       (GtkAcce
 GtkAccessibleValue *    gtk_accessible_value_collect_for_property_value (GtkAccessibleProperty          property,
                                                                          const GValue                  *value);
 
-
-#define GTK_ACCESSIBLE_STATE_UNDEFINED  (-1)
-
-typedef enum { /*< prefix=GTK_ACCESSIBLE_CHECKED >*/
-  GTK_ACCESSIBLE_CHECKED_FALSE     = 0,
-  GTK_ACCESSIBLE_CHECKED_TRUE      = 1,
-  GTK_ACCESSIBLE_CHECKED_UNDEFINED = -1,
-  GTK_ACCESSIBLE_CHECKED_MIXED     = -2
-} GtkAccessibleCheckedState;
-
-typedef enum { /*< prefix=GTK_ACCESSIBLE_PRESSED >*/
-  GTK_ACCESSIBLE_PRESSED_FALSE     = 0,
-  GTK_ACCESSIBLE_PRESSED_TRUE      = 1,
-  GTK_ACCESSIBLE_PRESSED_UNDEFINED = -1,
-  GTK_ACCESSIBLE_PRESSED_MIXED     = -2
-} GtkAccessiblePressedState;
-
-typedef enum { /*< prefix=GTK_ACCESSIBLE_INVALID >*/
-  GTK_ACCESSIBLE_INVALID_FALSE,
-  GTK_ACCESSIBLE_INVALID_TRUE,
-  GTK_ACCESSIBLE_INVALID_GRAMMAR,
-  GTK_ACCESSIBLE_INVALID_SPELLING,
-} GtkAccessibleInvalidState;
-
-typedef enum { /*< prefix=GTK_ACCESSIBLE_AUTOCOMPLETE >*/
-  GTK_ACCESSIBLE_AUTOCOMPLETE_NONE,
-  GTK_ACCESSIBLE_AUTOCOMPLETE_INLINE,
-  GTK_ACCESSIBLE_AUTOCOMPLETE_LIST,
-  GTK_ACCESSIBLE_AUTOCOMPLETE_BOTH
-} GtkAccessibleAutocomplete;
-
-typedef enum { /*< prefix=GTK_ACCESSIBLE_SORT >*/
-  GTK_ACCESSIBLE_SORT_NONE,
-  GTK_ACCESSIBLE_SORT_ASCENDING,
-  GTK_ACCESSIBLE_SORT_DESCENDING,
-  GTK_ACCESSIBLE_SORT_OTHER
-} GtkAccessibleSort;
-
 /* Basic values */
+GtkAccessibleValue *            gtk_undefined_accessible_value_new      (void);
+
 GtkAccessibleValue *            gtk_boolean_accessible_value_new        (gboolean                  value);
 gboolean                        gtk_boolean_accessible_value_get        (const GtkAccessibleValue *value);
 
