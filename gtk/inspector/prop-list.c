@@ -114,7 +114,7 @@ gtk_inspector_prop_list_init (GtkInspectorPropList *pl)
   pl->priv = gtk_inspector_prop_list_get_instance_private (pl);
   gtk_widget_init_template (GTK_WIDGET (pl));
   pl->priv->filter = gtk_string_filter_new ();
-  gtk_string_filter_set_match_mode (GTK_STRING_FILTER (pl->priv->filter), GTK_STRING_FILTER_MATCH_MODE_PREFIX);
+  gtk_string_filter_set_match_mode (GTK_STRING_FILTER (pl->priv->filter), GTK_STRING_FILTER_MATCH_MODE_SUBSTRING);
 
   sorter = gtk_string_sorter_new (gtk_cclosure_expression_new (G_TYPE_STRING, NULL,
                                                                0, NULL,
