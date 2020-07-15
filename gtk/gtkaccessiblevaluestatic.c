@@ -22,6 +22,33 @@
 
 #include "gtkaccessiblevalueprivate.h"
 
+/* {{{ Undefined value */
+
+static void
+gtk_undefined_accessible_value_print (const GtkAccessibleValue *value,
+                                      GString                  *buffer)
+{
+  g_string_append (buffer, "undefined");
+}
+
+static const GtkAccessibleValueClass GTK_UNDEFINED_ACCESSIBLE_VALUE = {
+  .type_name = "GtkUndefinedAccessibleValue",
+  .instance_size = sizeof (GtkAccessibleValue),
+  .print = gtk_undefined_accessible_value_print,
+};
+
+static GtkAccessibleValue undefined_value = {
+  &GTK_UNDEFINED_ACCESSIBLE_VALUE, 1
+};
+
+GtkAccessibleValue *
+gtk_undefined_accessible_value_new (void)
+{
+  return gtk_accessible_value_ref (&undefined_value);
+}
+
+/* }}} */
+
 /* {{{ Boolean values */ 
 
 typedef struct
@@ -136,9 +163,9 @@ static const GtkAccessibleValueClass GTK_EXPANDED_ACCESSIBLE_VALUE = {
 };
 
 static GtkTristateAccessibleValue expanded_values[] = {
-  { { &GTK_EXPANDED_ACCESSIBLE_VALUE, 1 }, -1 },
-  { { &GTK_EXPANDED_ACCESSIBLE_VALUE, 1 },  0 },
-  { { &GTK_EXPANDED_ACCESSIBLE_VALUE, 1 },  1 },
+  { { &GTK_EXPANDED_ACCESSIBLE_VALUE, 1 }, GTK_ACCESSIBLE_VALUE_UNDEFINED },
+  { { &GTK_EXPANDED_ACCESSIBLE_VALUE, 1 }, 0 },
+  { { &GTK_EXPANDED_ACCESSIBLE_VALUE, 1 }, 1 },
 };
 
 GtkAccessibleValue *
@@ -161,9 +188,9 @@ gtk_expanded_accessible_value_get (const GtkAccessibleValue *value)
 {
   GtkTristateAccessibleValue *self = (GtkTristateAccessibleValue *) value;
 
-  g_return_val_if_fail (value != NULL, GTK_ACCESSIBLE_STATE_UNDEFINED);
+  g_return_val_if_fail (value != NULL, GTK_ACCESSIBLE_VALUE_UNDEFINED);
   g_return_val_if_fail (value->value_class == &GTK_EXPANDED_ACCESSIBLE_VALUE,
-                        GTK_ACCESSIBLE_STATE_UNDEFINED);
+                        GTK_ACCESSIBLE_VALUE_UNDEFINED);
 
   return self->value;
 }
@@ -176,9 +203,9 @@ static const GtkAccessibleValueClass GTK_GRABBED_ACCESSIBLE_VALUE = {
 };
 
 static GtkTristateAccessibleValue grabbed_values[] = {
-  { { &GTK_GRABBED_ACCESSIBLE_VALUE, 1 }, -1 },
-  { { &GTK_GRABBED_ACCESSIBLE_VALUE, 1 },  0 },
-  { { &GTK_GRABBED_ACCESSIBLE_VALUE, 1 },  1 },
+  { { &GTK_GRABBED_ACCESSIBLE_VALUE, 1 }, GTK_ACCESSIBLE_VALUE_UNDEFINED },
+  { { &GTK_GRABBED_ACCESSIBLE_VALUE, 1 }, 0 },
+  { { &GTK_GRABBED_ACCESSIBLE_VALUE, 1 }, 1 },
 };
 
 GtkAccessibleValue *
@@ -201,9 +228,9 @@ gtk_grabbed_accessible_value_get (const GtkAccessibleValue *value)
 {
   GtkTristateAccessibleValue *self = (GtkTristateAccessibleValue *) value;
 
-  g_return_val_if_fail (value != NULL, GTK_ACCESSIBLE_STATE_UNDEFINED);
+  g_return_val_if_fail (value != NULL, GTK_ACCESSIBLE_VALUE_UNDEFINED);
   g_return_val_if_fail (value->value_class == &GTK_GRABBED_ACCESSIBLE_VALUE,
-                        GTK_ACCESSIBLE_STATE_UNDEFINED);
+                        GTK_ACCESSIBLE_VALUE_UNDEFINED);
 
   return self->value;
 }
@@ -216,9 +243,9 @@ static const GtkAccessibleValueClass GTK_SELECTED_ACCESSIBLE_VALUE = {
 };
 
 static GtkTristateAccessibleValue selected_values[] = {
-  { { &GTK_SELECTED_ACCESSIBLE_VALUE, 1 }, -1 },
-  { { &GTK_SELECTED_ACCESSIBLE_VALUE, 1 },  0 },
-  { { &GTK_SELECTED_ACCESSIBLE_VALUE, 1 },  1 },
+  { { &GTK_SELECTED_ACCESSIBLE_VALUE, 1 }, GTK_ACCESSIBLE_VALUE_UNDEFINED },
+  { { &GTK_SELECTED_ACCESSIBLE_VALUE, 1 }, 0 },
+  { { &GTK_SELECTED_ACCESSIBLE_VALUE, 1 }, 1 },
 };
 
 GtkAccessibleValue *
@@ -241,9 +268,9 @@ gtk_selected_accessible_value_get (const GtkAccessibleValue *value)
 {
   GtkTristateAccessibleValue *self = (GtkTristateAccessibleValue *) value;
 
-  g_return_val_if_fail (value != NULL, GTK_ACCESSIBLE_STATE_UNDEFINED);
+  g_return_val_if_fail (value != NULL, GTK_ACCESSIBLE_VALUE_UNDEFINED);
   g_return_val_if_fail (value->value_class == &GTK_SELECTED_ACCESSIBLE_VALUE,
-                        GTK_ACCESSIBLE_STATE_UNDEFINED);
+                        GTK_ACCESSIBLE_VALUE_UNDEFINED);
 
   return self->value;
 }
@@ -472,8 +499,9 @@ static const GtkAccessibleValueClass GTK_ORIENTATION_ACCESSIBLE_VALUE = {
 };
 
 static GtkEnumAccessibleValue orientation_values[] = {
-  { { &GTK_ORIENTATION_ACCESSIBLE_VALUE, 1 }, GTK_ORIENTATION_HORIZONTAL, "horizontal" },
-  { { &GTK_ORIENTATION_ACCESSIBLE_VALUE, 1 }, GTK_ORIENTATION_VERTICAL,   "vertical"   },
+  { { &GTK_ORIENTATION_ACCESSIBLE_VALUE, 1 }, GTK_ORIENTATION_HORIZONTAL,     "horizontal" },
+  { { &GTK_ORIENTATION_ACCESSIBLE_VALUE, 1 }, GTK_ORIENTATION_VERTICAL,       "vertical"   },
+  { { &GTK_ORIENTATION_ACCESSIBLE_VALUE, 1 }, GTK_ACCESSIBLE_VALUE_UNDEFINED, "undefined"  },
 };
 
 GtkAccessibleValue *
