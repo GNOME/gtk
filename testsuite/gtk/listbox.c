@@ -440,6 +440,43 @@ test_header (void)
   g_object_unref (list);
 }
 
+static void
+test_sequencial_access (void)
+{
+  GtkListBox *list;
+  GtkWidget *label;
+  GtkWidget *rows[1000];
+  GtkWidget *row;
+  gchar *s;
+  gint i;
+
+  list = GTK_LIST_BOX (gtk_list_box_new ());
+  g_object_ref_sink (list);
+  gtk_widget_show (GTK_WIDGET (list));
+
+  for (i = 0; i < 1000; i++)
+    {
+      row = gtk_list_box_row_new ();
+      s = g_strdup_printf ("%d", i);
+      label = gtk_label_new (s);
+      gtk_list_box_row_set_child (GTK_LIST_BOX_ROW (row), label);
+
+      gtk_list_box_insert (GTK_LIST_BOX (list), row, -1);
+      rows[i] = row;
+    }
+
+  for (i = 0; i < 1000; i++)
+    {
+      row = (GtkWidget *) gtk_list_box_get_row_at_index (list, i);
+      g_assert_true (row == rows[i]);
+    }
+
+  row = (GtkWidget *) gtk_list_box_get_row_at_index (list, 1001);
+  g_assert_null (row);
+
+  g_object_unref (list);
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -450,6 +487,7 @@ main (int argc, char *argv[])
   g_test_add_func ("/listbox/multi-selection", test_multi_selection);
   g_test_add_func ("/listbox/filter", test_filter);
   g_test_add_func ("/listbox/header", test_header);
+  g_test_add_func ("/listbox/sequencial-access", test_sequencial_access);
 
   return g_test_run ();
 }
