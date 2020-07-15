@@ -370,7 +370,7 @@ gdk_cairo_draw_from_gl (cairo_t              *cr,
   paint_data = gdk_gl_context_get_paint_data (paint_context);
 
   if (paint_data->tmp_framebuffer == 0)
-    glGenFramebuffersEXT (1, &paint_data->tmp_framebuffer);
+    glGenFramebuffers (1, &paint_data->tmp_framebuffer);
 
   if (source_type == GL_RENDERBUFFER)
     {
@@ -423,10 +423,10 @@ gdk_cairo_draw_from_gl (cairo_t              *cr,
       /* Create a framebuffer with the source renderbuffer and
          make it the current target for reads */
       framebuffer = paint_data->tmp_framebuffer;
-      glBindFramebufferEXT (GL_FRAMEBUFFER_EXT, framebuffer);
-      glFramebufferRenderbufferEXT (GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT,
-                                    GL_RENDERBUFFER_EXT, source);
-      glBindFramebufferEXT (GL_DRAW_FRAMEBUFFER_EXT, 0);
+      glBindFramebuffer (GL_FRAMEBUFFER, framebuffer);
+      glFramebufferRenderbuffer (GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
+                                 GL_RENDERBUFFER, source);
+      glBindFramebuffer (GL_DRAW_FRAMEBUFFER, 0);
 
       /* Translate to impl coords */
       cairo_region_translate (clip_region, dx, dy);
@@ -481,11 +481,11 @@ gdk_cairo_draw_from_gl (cairo_t              *cr,
             {
               int clipped_src_x = x + (dest.x - dx * window_scale);
               int clipped_src_y = y + (height - dest.height - (dest.y - dy * window_scale));
-              glBlitFramebufferEXT(clipped_src_x, clipped_src_y,
-                                   (clipped_src_x + dest.width), (clipped_src_y + dest.height),
-                                   dest.x, FLIP_Y(dest.y + dest.height),
-                                   dest.x + dest.width, FLIP_Y(dest.y),
-                                   GL_COLOR_BUFFER_BIT, GL_NEAREST);
+              glBlitFramebuffer (clipped_src_x, clipped_src_y,
+                                 (clipped_src_x + dest.width), (clipped_src_y + dest.height),
+                                 dest.x, FLIP_Y(dest.y + dest.height),
+                                 dest.x + dest.width, FLIP_Y(dest.y),
+                                 GL_COLOR_BUFFER_BIT, GL_NEAREST);
               if (impl_window->current_paint.flushed_region)
                 {
                   cairo_rectangle_int_t flushed_rect;
@@ -505,7 +505,7 @@ gdk_cairo_draw_from_gl (cairo_t              *cr,
 
       glDisable (GL_SCISSOR_TEST);
 
-      glBindFramebufferEXT (GL_FRAMEBUFFER_EXT, 0);
+      glBindFramebuffer (GL_FRAMEBUFFER, 0);
 
 #undef FLIP_Y
 
@@ -671,19 +671,19 @@ gdk_cairo_draw_from_gl (cairo_t              *cr,
       cairo_surface_set_device_scale (image, buffer_scale, buffer_scale);
 
       framebuffer = paint_data->tmp_framebuffer;
-      glBindFramebufferEXT (GL_FRAMEBUFFER_EXT, framebuffer);
+      glBindFramebuffer (GL_FRAMEBUFFER, framebuffer);
 
       if (source_type == GL_RENDERBUFFER)
         {
           /* Create a framebuffer with the source renderbuffer and
              make it the current target for reads */
-          glFramebufferRenderbufferEXT (GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT,
-                                        GL_RENDERBUFFER_EXT, source);
+          glFramebufferRenderbuffer (GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
+                                     GL_RENDERBUFFER, source);
         }
       else
         {
-          glFramebufferTexture2DEXT (GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT,
-                                     GL_TEXTURE_2D, source, 0);
+          glFramebufferTexture2D (GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
+                                  GL_TEXTURE_2D, source, 0);
         }
 
       glPixelStorei (GL_PACK_ALIGNMENT, 4);
@@ -699,7 +699,7 @@ gdk_cairo_draw_from_gl (cairo_t              *cr,
 
       glPixelStorei (GL_PACK_ROW_LENGTH, 0);
 
-      glBindFramebufferEXT (GL_FRAMEBUFFER_EXT, 0);
+      glBindFramebuffer (GL_FRAMEBUFFER, 0);
 
       cairo_surface_mark_dirty (image);
 
