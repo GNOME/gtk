@@ -504,7 +504,7 @@ run_test (GtkStringList      *source,
   struct {
     GType type;
     gboolean incremental;
-  } types[] = { 
+  } types[] = {
     { GTK_TYPE_SORT_LIST_MODEL, FALSE },
     { GTK_TYPE_SOR2_LIST_MODEL, FALSE },
     { GTK_TYPE_SOR3_LIST_MODEL, FALSE },
@@ -515,6 +515,8 @@ run_test (GtkStringList      *source,
     { GTK_TYPE_TIM2_SORT_MODEL, TRUE },
     { GTK_TYPE_TIM3_SORT_MODEL, FALSE },
     { GTK_TYPE_TIM3_SORT_MODEL, TRUE },
+    { GTK_TYPE_TIM4_SORT_MODEL, FALSE },
+    { GTK_TYPE_TIM4_SORT_MODEL, TRUE },
   };
   guint random = g_random_int ();
   guint i;
