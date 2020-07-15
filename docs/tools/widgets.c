@@ -757,6 +757,16 @@ create_frame (void)
 }
 
 static WidgetInfo *
+create_caledar (void)
+{
+  GtkWidget *widget;
+
+  widget = gtk_calendar_new ();
+
+  return new_widget_info ("calendar", widget, MEDIUM);
+}
+
+static WidgetInfo *
 create_window (void)
 {
   WidgetInfo *info;
@@ -1552,6 +1562,7 @@ get_all_widgets (void)
   retval = g_list_prepend (retval, create_about_dialog ());
   retval = g_list_prepend (retval, create_accel_label ());
   retval = g_list_prepend (retval, create_button ());
+  retval = g_list_prepend (retval, create_caledar ());
   retval = g_list_prepend (retval, create_check_button ());
   retval = g_list_prepend (retval, create_color_button ());
   retval = g_list_prepend (retval, create_combo_box ());

@@ -45,6 +45,9 @@
     <link linkend="GtkGLArea">
       <inlinegraphic fileref="glarea.png" format="PNG"></inlinegraphic>
     </link>
+    <link linkend="GtkCalendar">
+      <inlinegraphic fileref="calendar.png" format="PNG"></inlinegraphic>
+    </link>
   </para>
 </section>
 
