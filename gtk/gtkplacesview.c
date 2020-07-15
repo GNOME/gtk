@@ -1263,7 +1263,21 @@ server_mount_ready_cb (GObject      *source_file,
       gtk_entry_set_text (GTK_ENTRY (priv->address_entry), "");
 
       if (priv->should_open_location)
-        emit_open_location (view, location, priv->open_flags);
+        {
+          GMount *mount;
+          GFile *root;
+
+          mount = g_file_find_enclosing_mount (location, priv->cancellable, NULL);
+          if (mount)
+            {
+              root = g_mount_get_default_location (mount);
+
+              emit_open_location (view, root, priv->open_flags);
+
+              g_object_unref (root);
+              g_object_unref (mount);
+            }
+        }
     }
 
   update_places (view);
