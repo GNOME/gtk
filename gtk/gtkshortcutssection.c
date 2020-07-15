@@ -543,21 +543,20 @@ gtk_shortcuts_section_reflow_groups (GtkShortcutsSection *self)
     {
       GtkWidget *column;
 
-      for (column = gtk_widget_get_first_child (page);
+      for (column = gtk_widget_get_last_child (page);
            column != NULL;
-           column = gtk_widget_get_next_sibling (column))
+           column = gtk_widget_get_prev_sibling (column))
         {
           GtkWidget *group;
 
-          for (group = gtk_widget_get_first_child (column);
+          for (group = gtk_widget_get_last_child (column);
                group != NULL;
-               group = gtk_widget_get_next_sibling (group))
+               group = gtk_widget_get_prev_sibling (group))
             {
               groups = g_list_prepend (groups, group);
             }
         }
     }
-  groups = g_list_reverse (groups);
 
   /* create new pages */
   current_page = NULL;
@@ -642,7 +641,6 @@ gtk_shortcuts_section_reflow_groups (GtkShortcutsSection *self)
            child != NULL;
            child = gtk_widget_get_prev_sibling (child))
         content = g_list_prepend (content, child);
-      content = g_list_reverse (content);
       n = 0;
 
       for (g = g_list_last (content); g; g = g->prev)
