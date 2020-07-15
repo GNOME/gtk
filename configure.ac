@@ -1391,20 +1391,41 @@ if test x"$os_win32" = xyes; then
   GTK_EXTRA_CFLAGS="$msnative_struct"
 fi
 
-##################################################
-# Check for harfbuzz and pangoft2
-##################################################
+###################################################
+# Check for harfbuzz and pangoft2 and/or pangowin32
+###################################################
 
-PKG_CHECK_MODULES(GTK_FONT_CHOOSER_WIDGET,
-                  harfbuzz >= 0.9 pangoft2,
-                  build_font_demo=yes,
-                  build_font_demo=no)
-AM_CONDITIONAL(BUILD_FONT_DEMO, [ test "x$build_font_demo" = xyes ])
-if test "x$build_font_demo" = xyes; then
-  AC_DEFINE([HAVE_HARFBUZZ], 1, [defines whether we have HarfBuzz])
-  AC_DEFINE([HAVE_PANGOFT], 1, [defines whether we have pangoft2])
-  GTK_DEP_CFLAGS="$GTK_DEP_CFLAGS $GTK_FONT_CHOOSER_WIDGET_CFLAGS"
-  GTK_DEP_LIBS="$GTK_DEP_LIBS $GTK_FONT_CHOOSER_WIDGET_LIBS"
+
+PKG_CHECK_MODULES(PANGOFT,
+                  pangoft2,
+                  have_pangoft2=yes,
+                  have_pangoft2=no)
+
+PKG_CHECK_MODULES(PANGOWIN32,
+                  pangowin32 freetype2,
+                  have_pangowin32=yes,
+                  have_pangowin32=no)
+
+if test "x$have_pangoft2" = "xyes" -o "x$have_pangowin32" = "xyes"; then
+  PKG_CHECK_MODULES(GTK_FONT_CHOOSER_WIDGET,
+                    harfbuzz >= 0.9,
+                    build_font_demo=yes,
+                    build_font_demo=no)
+  AM_CONDITIONAL(BUILD_FONT_DEMO, [ test "x$build_font_demo" = xyes ])
+  if test "x$build_font_demo" = xyes; then
+    AC_DEFINE([HAVE_HARFBUZZ], 1, [defines whether we have HarfBuzz])
+	if test "x$have_pangoft2" = "xyes"; then
+      AC_DEFINE([HAVE_PANGOFT], 1, [defines whether we have pangoft2])
+      GTK_FONT_CHOOSER_WIDGET_CFLAGS="$GTK_FONT_CHOOSER_WIDGET_CFLAGS $PANGOFT_CFLAGS"
+      GTK_FONT_CHOOSER_WIDGET_LIBS="$GTK_FONT_CHOOSER_WIDGET_LIBS $PANGOFT_LIBS"
+    fi
+	if test "x$have_pangwin32" = "xyes"; then
+      GTK_FONT_CHOOSER_WIDGET_CFLAGS="$GTK_FONT_CHOOSER_WIDGET_CFLAGS $PANGOWIN32_CFLAGS"
+      GTK_FONT_CHOOSER_WIDGET_LIBS="$GTK_FONT_CHOOSER_WIDGET_LIBS $PANGOWIN32_LIBS"
+    fi
+    GTK_DEP_CFLAGS="$GTK_DEP_CFLAGS $GTK_FONT_CHOOSER_WIDGET_CFLAGS"
+    GTK_DEP_LIBS="$GTK_DEP_LIBS $GTK_FONT_CHOOSER_WIDGET_LIBS"
+  fi
 fi
 
 if $PKG_CONFIG --exists x11; then

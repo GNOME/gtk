@@ -407,7 +407,7 @@ else
   pangoft_dep    = dependency('pangoft2', required: false)
 endif
 
-if pangoft_dep.found()
+if pangoft_dep.found() or os_win32
   # Need at least 2.7.1 for FT_Get_Var_Design_Coordinates()
   # We get the dependency itself from pango, but pango doesn't care
   # about ft2 version, so an extra check is needed.

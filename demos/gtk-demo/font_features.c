@@ -9,10 +9,11 @@
  */
 
 #include <gtk/gtk.h>
-#include <pango/pangofc-font.h>
 #include <hb.h>
 #include <hb-ot.h>
 #include <hb-ft.h>
+
+#include "gtkpangofontutilsprivate.h"
 
 static GtkWidget *label;
 static GtkWidget *settings;
@@ -117,18 +118,28 @@ update_display (void)
   g_free (font_settings);
 }
 
-static PangoFont *
+typedef struct
+{
+  PangoContext *context;
+  PangoFontMap *map;
+  PangoFont    *font;
+  gpointer     *ft_extra_items;
+} demo_pango_items;
+
+static demo_pango_items items;
+
+static void
 get_pango_font (void)
 {
   PangoFontDescription *desc;
   PangoContext *context;
-  PangoFontMap *map;
 
   desc = gtk_font_chooser_get_font_desc (GTK_FONT_CHOOSER (font));
   context = gtk_widget_get_pango_context (font);
-  map = pango_context_get_font_map (context);
+  items.map = pango_context_get_font_map (context);
 
-  return pango_font_map_load_font (map, context, desc);
+  items.font = pango_font_map_load_font (items.map, context, desc);
+  items.ft_extra_items = _gtk_pango_font_init_extra_ft_items (items.font);
 }
 
 static struct { const char *name; hb_script_t script; } script_names[] = {
@@ -208,15 +219,17 @@ update_script_combo (void)
   hb_font_t *hb_font;
   gint i, j, k, l;
   FT_Face ft_face;
-  PangoFont *pango_font;
   GHashTable *tags;
   GHashTableIter iter;
   TagPair *pair;
 
   store = gtk_list_store_new (4, G_TYPE_STRING, G_TYPE_UINT, G_TYPE_UINT, G_TYPE_UINT);
 
-  pango_font = get_pango_font ();
-  ft_face = pango_fc_font_lock_face (PANGO_FC_FONT (pango_font)),
+  get_pango_font ();
+  ft_face = _gtk_pango_font_get_ft_face (items.font,
+                                         items.map,
+                                         items.ft_extra_items);
+
   hb_font = hb_ft_font_create (ft_face, NULL);
 
   tags = g_hash_table_new_full (tag_pair_hash, tag_pair_equal, g_free, NULL);
@@ -267,8 +280,12 @@ update_script_combo (void)
       hb_face_destroy (hb_face);
     }
 
-  pango_fc_font_unlock_face (PANGO_FC_FONT (pango_font));
-  g_object_unref (pango_font);
+  _gtk_pango_font_release_ft_face (items.font, items.ft_extra_items);
+
+  if (_gtk_pango_font_release_ft_items (items.ft_extra_items))
+    g_free (items.ft_extra_items);
+
+  g_object_unref (items.font);
 
   g_hash_table_iter_init (&iter, tags);
   while (g_hash_table_iter_next (&iter, (gpointer *)&pair, NULL))
@@ -345,7 +362,6 @@ update_features (void)
   GtkTreeModel *model;
   GtkTreeIter iter;
   guint script_index, lang_index;
-  PangoFont *pango_font;
   FT_Face ft_face;
   hb_font_t *hb_font;
 
@@ -363,8 +379,8 @@ update_features (void)
                       2, &lang_index,
                       -1);
 
-  pango_font = get_pango_font ();
-  ft_face = pango_fc_font_lock_face (PANGO_FC_FONT (pango_font)),
+  get_pango_font ();
+  ft_face = _gtk_pango_font_get_ft_face (items.font, items.map, items.ft_extra_items);
   hb_font = hb_ft_font_create (ft_face, NULL);
 
   if (hb_font)
@@ -400,8 +416,12 @@ update_features (void)
       hb_face_destroy (hb_face);
     }
 
-  pango_fc_font_unlock_face (PANGO_FC_FONT (pango_font));
-  g_object_unref (pango_font);
+  _gtk_pango_font_release_ft_face (items.font, items.ft_extra_items);
+
+  if (_gtk_pango_font_release_ft_items (items.ft_extra_items))
+    g_free (items.ft_extra_items);
+
+  g_object_unref (items.font);
 }
 
 static void

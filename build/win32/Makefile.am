@@ -1,7 +1,14 @@
 include $(top_srcdir)/Makefile.decl
 
+GENERATED_ITEMS = regenerate-demos-h-win32.bat
+
+regenerate-demos-h-win32.bat: $(srcdir)/regenerate-demos-h-win32.batin demos.list
+	-$(RM) $@
+	$(CPP) -P - -traditional-cpp <$< >$@
+	$(RM) demos.list
+
 if HAVE_INTROSPECTION
-GENERATED_ITEMS = \
+GENERATED_ITEMS += \
 	introspection.body.mak	\
 	Gdk_3_0_gir_list		\
 	GdkWin32_3_0_gir_list	\
@@ -19,12 +26,9 @@ introspection.body.mak: $(MSVC_INTROSPECTION_INTERMEDIATE_FILES)
 	done
 	$(RM) $(MSVC_INTROSPECTION_INTERMEDIATE_FILES)
 
-DISTCLEANFILES = $(GENERATED_ITEMS)
-
-else
-GENERATED_ITEMS =
-DISTCLEANFILES =
 endif
+
+DISTCLEANFILES = $(GENERATED_ITEMS)
 
 SUBDIRS =	\
 	vs9 	\
@@ -49,6 +53,8 @@ EXTRA_DIST +=	\
 	pc_base.py			\
 	gtkpc.py			\
 	README_EGL_MSVC.txt		\
+	README_FONT_TWEAKING_MSVC.txt	\
+	regenerate-demos-h-win32.batin	\
 	$(GENERATED_ITEMS)
 
 -include $(top_srcdir)/git.mk

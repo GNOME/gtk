@@ -1,0 +1,35 @@
+@echo off
+
+set TARGET=demos.h.win32
+set DEMOS= ^
+#include "demos.list"
+ 
+set FONT_MSG=without font features demo
+
+if "%1" == "" goto continue
+if not "%1" == "font" goto fail
+set DEMOS=%DEMOS% font_features.c
+set FONT_MSG=with font features demo
+
+:continue
+cd ..\..\demos\gtk-demo
+if exist %TARGET% ren %TARGET% %TARGET%.bak
+
+perl geninclude.pl.in %DEMOS% > %TARGET%
+
+goto done_script
+
+:fail
+echo Only "font" is accepted as a argument to this batch script
+goto end
+
+:done_script
+for %%T in (%TARGET%) do if exist %%T if %%~zT gtr 0 echo %%T is successfully regenerated %FONT_MSG%
+for %%T in (%TARGET%) do if exist %%T if %%~zT equ 0 del %%T
+if exist %TARGET% if exist %TARGET%.bak del %TARGET%.bak
+if not exist %TARGET% echo %TARGET% is not regenerated, restoring existing %TARGET%
+if not exist %TARGET% ren %TARGET%.bak %TARGET%
+
+:end
+cd ..\..\build\win32
+
