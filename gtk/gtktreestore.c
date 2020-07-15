@@ -1811,45 +1811,21 @@ gtk_tree_store_iter_depth (GtkTreeStore *tree_store,
   return g_node_depth (G_NODE (iter->user_data)) - 2;
 }
 
-/* simple ripoff from g_node_traverse_post_order */
-static gboolean
+/* Remove the direct children of the root node */
+static void
 gtk_tree_store_clear_traverse (GNode        *node,
-			       GtkTreeStore *store)
+                               GtkTreeStore *store)
 {
-  GtkTreeIter iter;
-
-  if (node->children)
+  node = node->children;
+  if (node)
     {
-      GNode *child;
+      GtkTreeIter iter;
 
-      child = node->children;
-      while (child)
-        {
-	  register GNode *current;
-
-	  current = child;
-	  child = current->next;
-	  if (gtk_tree_store_clear_traverse (current, store))
-	    return TRUE;
-	}
-
-      if (node->parent)
-        {
-	  iter.stamp = store->priv->stamp;
-	  iter.user_data = node;
-
-	  gtk_tree_store_remove (store, &iter);
-	}
-    }
-  else if (node->parent)
-    {
       iter.stamp = store->priv->stamp;
       iter.user_data = node;
-
-      gtk_tree_store_remove (store, &iter);
+      while (gtk_tree_store_remove (store, &iter))
+        /* Nothing */;
     }
-
-  return FALSE;
 }
 
 static void
