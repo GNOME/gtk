@@ -336,37 +336,6 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 }
 
 static void
-setup_primary_label_font (GtkMessageDialog *dialog)
-{
-  GtkMessageDialogPrivate *priv = dialog->priv;
-
-  if (!priv->has_primary_markup)
-    {
-      PangoAttrList *attributes;
-      PangoAttribute *attr;
-
-      attributes = pango_attr_list_new ();
-
-      attr = pango_attr_weight_new (PANGO_WEIGHT_BOLD);
-      pango_attr_list_insert (attributes, attr);
-
-      if (priv->has_secondary_text)
-        {
-          attr = pango_attr_scale_new (PANGO_SCALE_LARGE);
-          pango_attr_list_insert (attributes, attr);
-        }
-
-      gtk_label_set_attributes (GTK_LABEL (priv->label), attributes);
-      pango_attr_list_unref (attributes);
-    }
-  else
-    {
-      /* unset the font settings */
-      gtk_label_set_attributes (GTK_LABEL (priv->label), NULL);
-    }
-}
-
-static void
 setup_type (GtkMessageDialog *dialog,
 	    GtkMessageType    type)
 {
@@ -492,7 +461,6 @@ gtk_message_dialog_set_property (GObject      *object,
           gtk_label_set_use_markup (GTK_LABEL (priv->label), priv->has_primary_markup);
           g_object_notify_by_pspec (object, pspec);
         }
-        setup_primary_label_font (dialog);
       break;
     case PROP_SECONDARY_TEXT:
       {
@@ -513,7 +481,6 @@ gtk_message_dialog_set_property (GObject      *object,
 	    priv->has_secondary_text = FALSE;
 	    gtk_widget_hide (priv->secondary_label);
 	  }
-	setup_primary_label_font (dialog);
       }
       break;
     case PROP_SECONDARY_USE_MARKUP:
@@ -838,8 +805,6 @@ gtk_message_dialog_format_secondary_text (GtkMessageDialog *message_dialog,
       priv->has_secondary_text = FALSE;
       gtk_widget_hide (priv->secondary_label);
     }
-
-  setup_primary_label_font (message_dialog);
 }
 
 /**
@@ -900,8 +865,6 @@ gtk_message_dialog_format_secondary_markup (GtkMessageDialog *message_dialog,
       priv->has_secondary_text = FALSE;
       gtk_widget_hide (priv->secondary_label);
     }
-
-  setup_primary_label_font (message_dialog);
 }
 
 /**
