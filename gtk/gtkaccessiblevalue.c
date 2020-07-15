@@ -538,8 +538,6 @@ typedef GtkAccessibleValue * (* GtkAccessibleValueRefCtor)      (gpointer value)
 GtkAccessibleValue *
 gtk_accessible_value_get_default_for_state (GtkAccessibleState state)
 {
-  g_assert (state != GTK_ACCESSIBLE_STATE_NONE);
-
   const GtkAccessibleCollect *cstate = &collect_states[state];
 
   switch (cstate->value)
@@ -589,8 +587,6 @@ GtkAccessibleValue *
 gtk_accessible_value_collect_for_state (GtkAccessibleState  state,
                                         va_list            *args)
 {
-  g_assert (state != GTK_ACCESSIBLE_STATE_NONE);
-
   const GtkAccessibleCollect *cstate = &collect_states[state];
 
   GtkAccessibleValue *res = NULL;
@@ -697,8 +693,6 @@ GtkAccessibleValue *
 gtk_accessible_value_collect_for_state_value (GtkAccessibleState  state,
                                               const GValue       *value)
 {
-  g_assert (state != GTK_ACCESSIBLE_STATE_NONE);
-
   const GtkAccessibleCollect *cstate = &collect_states[state];
 
   GtkAccessibleValue *res = NULL;
