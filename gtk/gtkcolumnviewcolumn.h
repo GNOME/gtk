@@ -85,6 +85,7 @@ void                    gtk_column_view_column_set_header_menu          (GtkColu
 GDK_AVAILABLE_IN_ALL
 GMenuModel *            gtk_column_view_column_get_header_menu          (GtkColumnViewColumn    *self);
 
+GDK_AVAILABLE_IN_ALL
 void                    gtk_column_view_column_set_fixed_width          (GtkColumnViewColumn    *self,
                                                                          int                     fixed_width);
 GDK_AVAILABLE_IN_ALL
