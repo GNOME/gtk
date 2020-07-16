@@ -181,6 +181,12 @@ typedef enum
   GDK_EVENT_FLUSHED = 1 << 2
 } GdkEventFlags;
 
+typedef enum
+{
+  GDK_INTERP_ABSOLUTE,
+  GDK_INTERP_RELATIVE
+} GdkInterpolationCategory;
+
 struct _GdkEventPrivate
 {
   GdkEvent   event;
@@ -193,6 +199,8 @@ struct _GdkEventPrivate
   GdkDeviceTool *tool;
   guint16    key_scancode;
 };
+
+typedef struct _GdkEventInterpolationControl GdkEventInterpolationControl;
 
 typedef struct _GdkWindowPaint GdkWindowPaint;
 
@@ -348,6 +356,7 @@ struct _GdkWindow
   guint geometry_dirty : 1;
   guint event_compression : 1;
   guint frame_clock_events_paused : 1;
+  guint interpolate_events : 1;
 
   /* The GdkWindow that has the impl, ref:ed if another window.
    * This ref is required to keep the wrapper of the impl window alive
@@ -389,6 +398,8 @@ struct _GdkWindow
   GdkDrawingContext *drawing_context;
 
   cairo_region_t *opaque_region;
+
+  GdkEventInterpolationControl *event_interpolation;
 };
 
 #define GDK_WINDOW_TYPE(d) ((((GdkWindow *)(d)))->window_type)
@@ -412,6 +423,33 @@ void     gdk_event_set_scancode        (GdkEvent *event,
 
 void     gdk_event_set_seat              (GdkEvent *event,
                                           GdkSeat  *seat);
+
+void     gdk_event_set_time              (GdkEvent *event, guint32 time);
+
+void     gdk_event_set_state             (GdkEvent        *event,
+                                          GdkModifierType  state);
+
+gboolean gdk_event_get_absolute_interpolation_prop_names (const GdkEvent *event,
+                                                          GArray         *names);
+gboolean gdk_event_get_absolute_values_for_interpolation (const GdkEvent *event,
+                                                          GArray         *values);
+void     gdk_event_set_interpolated_absolute_values      (GdkEvent       *event,
+                                                          GArray         *values);
+gboolean gdk_event_get_relative_interpolation_prop_names (const GdkEvent *event,
+                                                          GArray         *names);
+gboolean gdk_event_get_relative_values_for_interpolation (const GdkEvent *event,
+                                                          GArray         *values);
+void     gdk_event_set_interpolated_relative_values      (GdkEvent       *event,
+                                                          GArray         *values);
+gboolean gdk_event_get_interpolation_prop_names          (const GdkEvent           *event,
+                                                          GArray                   *names,
+                                                          GdkInterpolationCategory  category);
+gboolean gdk_event_get_values_for_interpolation          (const GdkEvent           *event,
+                                                          GArray                   *values,
+                                                          GdkInterpolationCategory  category);
+void     gdk_event_set_interpolated_values               (GdkEvent                 *event,
+                                                          GArray                   *values,
+                                                          GdkInterpolationCategory  category);
 
 void   _gdk_event_emit               (GdkEvent   *event);
 GList* _gdk_event_queue_find_first   (GdkDisplay *display);
@@ -547,6 +585,15 @@ void _gdk_synthesize_crossing_events_for_geometry_change (GdkWindow *changed_win
 
 gboolean    _gdk_window_has_impl (GdkWindow *window);
 GdkWindow * _gdk_window_get_impl_window (GdkWindow *window);
+
+/*******************************
+ * Event interpolation related *
+ *******************************/
+
+GdkEventInterpolationControl * gdk_event_interpolation_control_new (GdkWindow *window);
+void gdk_event_interpolation_control_free (GdkEventInterpolationControl *control);
+int gdk_event_interpolation_control_add (GdkEventInterpolationControl *control,
+                                         GdkEvent                     *event);
 
 /*****************************
  * offscreen window routines *

@@ -13,6 +13,8 @@ gdk_sources = files(
   'gdkdisplaymanager.c',
   'gdkdnd.c',
   'gdkevents.c',
+  'gdkeventhistory.c',
+  'gdkeventinterpolationcontrol.c',
   'gdkframetimings.c',
   'gdkgl.c',
   'gdkglcontext.c',
@@ -300,6 +302,9 @@ libgdk = library('gdk-3',
                  link_args: gdk_link_args,
                  darwin_versions : gtk_osxversions,
                  install: true)
+
+# unit tests
+subdir('unit-tests')
 
 gdk_dep_sources = [gdkconfig, gdkenum_h]
 # Introspection
