@@ -59,6 +59,8 @@ GtkSortKeys *           gtk_sort_keys_alloc                     (const GtkSortKe
 GtkSortKeys *           gtk_sort_keys_ref                       (GtkSortKeys            *self);
 void                    gtk_sort_keys_unref                     (GtkSortKeys            *self);
 
+GtkSortKeys *           gtk_sort_keys_new_equal                 (void);
+
 gsize                   gtk_sort_keys_get_key_size              (GtkSortKeys            *self);
 gsize                   gtk_sort_keys_get_key_align             (GtkSortKeys            *self);
 GCompareDataFunc        gtk_sort_keys_get_key_compare_func      (GtkSortKeys            *self);
