@@ -57,7 +57,7 @@ GDK_AVAILABLE_IN_3_22
 void                    gdk_wayland_display_set_startup_notification_id (GdkDisplay *display,
                                                                          const char *startup_id);
 
-GDK_AVAILABLE_IN_3_22
+GDK_DEPRECATED_IN_3_24
 gboolean                gdk_wayland_display_prefers_ssd         (GdkDisplay *display);
 
 GDK_AVAILABLE_IN_3_22

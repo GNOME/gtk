@@ -530,6 +530,7 @@ typedef enum
  * @GDK_WINDOW_STATE_BOTTOM_RESIZABLE: whether the bottom edge is resizable, Since 3.22.23
  * @GDK_WINDOW_STATE_LEFT_TILED: whether the left edge is tiled, Since 3.22.23
  * @GDK_WINDOW_STATE_LEFT_RESIZABLE: whether the left edge is resizable, Since 3.22.23
+ * @GDK_WINDOW_STATE_SSD: whether decorations are drawn by the server, Since 3.24
  *
  * Specifies the state of a toplevel window.
  */
@@ -551,7 +552,8 @@ typedef enum
   GDK_WINDOW_STATE_BOTTOM_TILED     = 1 << 13,
   GDK_WINDOW_STATE_BOTTOM_RESIZABLE = 1 << 14,
   GDK_WINDOW_STATE_LEFT_TILED       = 1 << 15,
-  GDK_WINDOW_STATE_LEFT_RESIZABLE   = 1 << 16
+  GDK_WINDOW_STATE_LEFT_RESIZABLE   = 1 << 16,
+  GDK_WINDOW_STATE_SSD              = 1 << 17
 } GdkWindowState;
 
 /**
