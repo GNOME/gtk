@@ -767,6 +767,8 @@ add_application_shortcuts (GtkPlacesSidebar *sidebar)
       GFile *file = g_list_model_get_item (G_LIST_MODEL (sidebar->shortcuts), i);
       ShortcutData *data;
 
+      g_object_unref (file);
+
       if (!should_show_file (sidebar, file))
         continue;
 

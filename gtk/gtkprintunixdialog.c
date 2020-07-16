@@ -3009,6 +3009,8 @@ paper_size_changed (GtkDropDown *combo_box,
           gtk_window_present (GTK_WINDOW (custom_paper_dialog));
           G_GNUC_END_IGNORE_DEPRECATIONS
 
+          g_object_unref (page_setup);
+
           return;
         }
 
