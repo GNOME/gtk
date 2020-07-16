@@ -27,6 +27,7 @@
 #undef GTK_DISABLE_DEPRECATED
 #endif
 
+#include "config.h"
 #include "gtkimcontextime.h"
 
 #include "imm-extra.h"
@@ -328,7 +329,7 @@ gtk_im_context_ime_filter_keypress (GtkIMContext *context,
 
   context_ime = GTK_IM_CONTEXT_IME (context);
 
-  g_return_val_if_fail (gdk_event_is_allocated (event), FALSE);
+  g_return_val_if_fail (gdk_event_is_allocated ((GdkEvent*)event), FALSE);
 
   event_priv = (GdkEventPrivate*) event;
   if (event_priv->translation_len == 0)

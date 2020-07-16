@@ -2589,12 +2589,14 @@ gdk_event_translate (MSG  *msg,
 	      /* The character is encoded in WPARAM as UTF-16. */
 	      gunichar2 c = msg2.wParam;
 
-	      if (!g_unichar_iscntrl(c)) { /* Ignore control sequences like Backspace */
-		/* Append character to translation string. */
-		event_priv->translation_len ++;
-		event_priv->translation = g_realloc (event_priv->translation, event_priv->translation_len * sizeof (event_priv->translation[0]));
-		event_priv->translation[event_priv->translation_len - 1] = c;
-	      }
+	      /* Ignore control sequences like Backspace */
+	      if (!g_unichar_iscntrl(c))
+		{
+		  /* Append character to translation string. */
+		  event_priv->translation_len ++;
+		  event_priv->translation = g_realloc (event_priv->translation, event_priv->translation_len * sizeof (event_priv->translation[0]));
+		  event_priv->translation[event_priv->translation_len - 1] = c;
+		}
 
 	      /* Remove message from queue */
 	      GetMessageW (&msg2, msg->hwnd, 0, 0);
