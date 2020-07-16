@@ -152,6 +152,7 @@ static int both_shift_pressed[2]; /* to store keycodes for shift keys */
 /* low-level keyboard hook handle */
 static HHOOK keyboard_hook = NULL;
 static UINT aerosnap_message;
+static UINT win10_emoji_panel_msg;
 
 static void
 track_mouse_event (DWORD dwFlags,
@@ -311,38 +312,39 @@ low_level_keystroke_handler (WPARAM message,
 
   if (message == WM_KEYDOWN &&
       !GDK_WINDOW_DESTROYED (toplevel) &&
-      _gdk_win32_window_lacks_wm_decorations (toplevel) && /* For CSD only */
       last_keydown != kbdhook->vkCode &&
       ((GetKeyState (VK_LWIN) & 0x8000) ||
       (GetKeyState (VK_RWIN) & 0x8000)))
-	{
-	  GdkWin32AeroSnapCombo combo = GDK_WIN32_AEROSNAP_COMBO_NOTHING;
-	  gboolean lshiftdown = GetKeyState (VK_LSHIFT) & 0x8000;
+    {
+      if (_gdk_win32_window_lacks_wm_decorations (toplevel)) /* For CSD only */
+        {
+          GdkWin32AeroSnapCombo combo = GDK_WIN32_AEROSNAP_COMBO_NOTHING;
+          gboolean lshiftdown = GetKeyState (VK_LSHIFT) & 0x8000;
           gboolean rshiftdown = GetKeyState (VK_RSHIFT) & 0x8000;
           gboolean oneshiftdown = (lshiftdown || rshiftdown) && !(lshiftdown && rshiftdown);
           gboolean maximized = gdk_window_get_state (toplevel) & GDK_WINDOW_STATE_MAXIMIZED;
 
-	  switch (kbdhook->vkCode)
-	    {
-	    case VK_UP:
-	      combo = GDK_WIN32_AEROSNAP_COMBO_UP;
-	      break;
-	    case VK_DOWN:
-	      combo = GDK_WIN32_AEROSNAP_COMBO_DOWN;
-	      break;
-	    case VK_LEFT:
-	      combo = GDK_WIN32_AEROSNAP_COMBO_LEFT;
-	      break;
-	    case VK_RIGHT:
-	      combo = GDK_WIN32_AEROSNAP_COMBO_RIGHT;
-	      break;
-	    }
+          switch (kbdhook->vkCode)
+            {
+              case VK_UP:
+                combo = GDK_WIN32_AEROSNAP_COMBO_UP;
+                break;
+              case VK_DOWN:
+                combo = GDK_WIN32_AEROSNAP_COMBO_DOWN;
+                break;
+              case VK_LEFT:
+                combo = GDK_WIN32_AEROSNAP_COMBO_LEFT;
+                break;
+              case VK_RIGHT:
+                combo = GDK_WIN32_AEROSNAP_COMBO_RIGHT;
+                break;
+            }
 
-	  if (oneshiftdown && combo != GDK_WIN32_AEROSNAP_COMBO_NOTHING)
-	    combo += 4;
+          if (oneshiftdown && combo != GDK_WIN32_AEROSNAP_COMBO_NOTHING)
+            combo += 4;
 
-	  /* These are the only combos that Windows WM does handle for us */
-	  if (combo == GDK_WIN32_AEROSNAP_COMBO_SHIFTLEFT ||
+          /* These are the only combos that Windows WM does handle for us */
+          if (combo == GDK_WIN32_AEROSNAP_COMBO_SHIFTLEFT ||
               combo == GDK_WIN32_AEROSNAP_COMBO_SHIFTRIGHT)
             combo = GDK_WIN32_AEROSNAP_COMBO_NOTHING;
 
@@ -351,9 +353,24 @@ low_level_keystroke_handler (WPARAM message,
               g_win32_check_windows_version (6, 4, 0, G_WIN32_OS_ANY))
             combo = GDK_WIN32_AEROSNAP_COMBO_NOTHING;
 
-	  if (combo != GDK_WIN32_AEROSNAP_COMBO_NOTHING)
+          if (combo != GDK_WIN32_AEROSNAP_COMBO_NOTHING)
             PostMessage (GDK_WINDOW_HWND (toplevel), aerosnap_message, (WPARAM) combo, 0);
-	}
+        }
+
+      /* Windows 10 only: support newer Emoji Panel: Force IME on!*/
+      if (g_win32_check_windows_version (6, 4, 0, G_WIN32_OS_ANY))
+        {
+          switch (kbdhook->vkCode)
+            {
+              case VK_OEM_PERIOD: /* '.' for all keyboards */
+              case VK_OEM_1: /* ';' on US-style keyboard layouts; not sure on other keyboard layouts... */
+                PostMessage (GDK_WINDOW_HWND (toplevel), win10_emoji_panel_msg, 0, 0);
+                break;
+              default:
+                break;
+            }
+        }
+    }
 
   if (message == WM_KEYDOWN)
     last_keydown = kbdhook->vkCode;
@@ -417,6 +434,7 @@ set_up_low_level_keyboard_hook (void)
     WIN32_API_FAILED ("SetWindowsHookEx");
 
   aerosnap_message = RegisterWindowMessage ("GDK_WIN32_AEROSNAP_MESSAGE");
+  win10_emoji_panel_msg = RegisterWindowMessage ("GDK_WIN32_WIN10_EMOJI_PANEL_MESSAGE");
 }
 
 void
@@ -2459,21 +2477,28 @@ gdk_event_translate (MSG  *msg,
     _gdk_win32_window_handle_aerosnap (gdk_window_get_toplevel (window),
                                        (GdkWin32AeroSnapCombo) msg->wParam);
 
-  switch (msg->message)
+  if (msg->message == WM_INPUTLANGCHANGE ||
+      msg->message == win10_emoji_panel_msg)
     {
-    case WM_INPUTLANGCHANGE:
       _gdk_input_locale = (HKL) msg->lParam;
-      _gdk_win32_keymap_set_active_layout (GDK_WIN32_KEYMAP (_gdk_win32_display_get_keymap (_gdk_display)), _gdk_input_locale);
+      _gdk_win32_keymap_set_active_layout (GDK_WIN32_KEYMAP (_gdk_win32_display_get_keymap (_gdk_display)),
+                                           _gdk_input_locale);
       GetLocaleInfo (MAKELCID (LOWORD (_gdk_input_locale), SORT_DEFAULT),
-		     LOCALE_IDEFAULTANSICODEPAGE,
-		     buf, sizeof (buf));
+                     LOCALE_IDEFAULTANSICODEPAGE,
+                     buf, sizeof (buf));
       _gdk_input_codepage = atoi (buf);
       _gdk_keymap_serial++;
       GDK_NOTE (EVENTS,
-		g_print (" cs:%lu hkl:%p%s cp:%d",
-			 (gulong) msg->wParam,
-			 (gpointer) msg->lParam, _gdk_input_locale_is_ime ? " (IME)" : "",
-			 _gdk_input_codepage));
+                g_print (" cs:%lu hkl:%p%s cp:%d",
+                         (gulong) msg->wParam,
+                         (gpointer) msg->lParam,
+                         _gdk_input_locale_is_ime ? " (IME)" : "",
+                         _gdk_input_codepage));
+
+      /* force the IME input on when using Windows 10 Emoji panel! */
+      if (msg->message == win10_emoji_panel_msg)
+        _gdk_input_locale_is_ime = TRUE;
+
       gdk_settings_notify (window, "gtk-im-module", GDK_SETTING_ACTION_CHANGED);
 
       /* Generate a dummy key event to "nudge" IMContext */
@@ -2491,8 +2516,10 @@ gdk_event_translate (MSG  *msg,
       event->key.is_modifier = FALSE;
       event->key.state = 0;
       _gdk_win32_append_event (event);
-      break;
+    }
 
+  switch (msg->message)
+    {
     case WM_SYSKEYUP:
     case WM_SYSKEYDOWN:
       GDK_NOTE (EVENTS,
