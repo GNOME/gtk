@@ -300,7 +300,7 @@ gtk_flatten_list_model_add_items (GtkFlattenListModel *self,
                         G_CALLBACK (gtk_flatten_list_model_items_changed_cb),
                         node);
       node->list = self;
-      added +=g_list_model_get_n_items (node->model);
+      added += g_list_model_get_n_items (node->model);
     }
 
   return added;

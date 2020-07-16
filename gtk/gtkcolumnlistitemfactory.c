@@ -62,10 +62,12 @@ gtk_column_list_item_factory_setup (GtkListItemFactory *factory,
     {
       GtkColumnViewColumn *column = g_list_model_get_item (columns, i);
 
-      gtk_column_list_item_factory_add_column (self, 
+      gtk_column_list_item_factory_add_column (self,
                                                list_item->owner,
                                                column,
                                                FALSE);
+
+      g_object_unref (column);
     }
 }
 

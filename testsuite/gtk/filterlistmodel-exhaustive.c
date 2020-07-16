@@ -38,6 +38,8 @@
          g_assertion_message (G_LOG_DOMAIN, __FILE__, __LINE__, G_STRFUNC, _s); \
           g_free (_s); \
         } \
+      g_object_unref (o1); \
+      g_object_unref (o2); \
     } \
 }G_STMT_END
 

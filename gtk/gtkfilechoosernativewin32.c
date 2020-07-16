@@ -906,6 +906,7 @@ gtk_file_chooser_native_win32_show (GtkFileChooserNative *self)
               filechooser_win32_thread_data_free (data);
               return FALSE;
             }
+          g_object_unref (filter);
         }
       self->current_filter = gtk_file_chooser_get_filter (GTK_FILE_CHOOSER (self));
     }

@@ -109,6 +109,7 @@ gtk_application_accels_set_accels_for_action (GtkApplicationAccels *accels,
         }
 
       g_list_store_remove (G_LIST_STORE (accels->shortcuts), i);
+      g_object_unref (shortcut_i);
       break;
     }
 
