@@ -3420,6 +3420,7 @@ gtk_tree_list_row_get_type
 <SECTION>
 <FILE>gtktreeexpander</FILE>
 <TITLE>GtkTreeExpander</TITLE>
+GtkTreeExpander
 gtk_tree_expander_new
 gtk_tree_expander_get_child
 gtk_tree_expander_set_child
