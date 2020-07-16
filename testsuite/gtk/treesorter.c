@@ -69,6 +69,8 @@ model_to_string (GListModel *model)
       if (i > 0)
         g_string_append (string, " ");
       g_string_append_printf (string, "%u", get_with_parents (object));
+
+      g_object_unref (object);
     }
 
   return g_string_free (string, FALSE);
