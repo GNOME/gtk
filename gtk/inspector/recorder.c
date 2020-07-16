@@ -1247,7 +1247,7 @@ gtk_inspector_recorder_init (GtkInspectorRecorder *recorder)
   gtk_list_view_set_factory (GTK_LIST_VIEW (priv->render_node_list), factory);
   g_object_unref (factory);
   gtk_list_view_set_model (GTK_LIST_VIEW (priv->render_node_list),
-                           G_LIST_MODEL (priv->render_node_selection));
+                           GTK_SELECTION_MODEL (priv->render_node_selection));
 
   priv->render_node_properties = GTK_TREE_MODEL (gtk_list_store_new (4, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_BOOLEAN, GDK_TYPE_TEXTURE));
   gtk_tree_view_set_model (GTK_TREE_VIEW (priv->node_property_tree), priv->render_node_properties);

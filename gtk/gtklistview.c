@@ -831,13 +831,14 @@ gtk_list_view_class_init (GtkListViewClass *klass)
   /**
    * GtkListView:model:
    *
-   * Model for the items displayed
+   * Model for the items displayed.
+   * This must be a #GtkSelectionModel
    */
   properties[PROP_MODEL] =
     g_param_spec_object ("model",
                          P_("Model"),
                          P_("Model for the items displayed"),
-                         G_TYPE_LIST_MODEL,
+                         GTK_TYPE_SELECTION_MODEL,
                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
@@ -989,7 +990,7 @@ gtk_list_view_new_with_factory (GtkListItemFactory *factory)
  *
  * Returns: (nullable) (transfer none): The model in use
  **/
-GListModel *
+GtkSelectionModel *
 gtk_list_view_get_model (GtkListView *self)
 {
   g_return_val_if_fail (GTK_IS_LIST_VIEW (self), NULL);
@@ -1002,17 +1003,14 @@ gtk_list_view_get_model (GtkListView *self)
  * @self: a #GtkListView
  * @model: (allow-none) (transfer none): the model to use or %NULL for none
  *
- * Sets the #GListModel to use.
- *
- * If the @model is a #GtkSelectionModel, it is used for managing the selection.
- * Otherwise, @self creates a #GtkSingleSelection for the selection.
- **/
+ * Sets the #GtkSelectionModel to use.
+ */
 void
-gtk_list_view_set_model (GtkListView *self,
-                         GListModel  *model)
+gtk_list_view_set_model (GtkListView       *self,
+                         GtkSelectionModel *model)
 {
   g_return_if_fail (GTK_IS_LIST_VIEW (self));
-  g_return_if_fail (model == NULL || G_IS_LIST_MODEL (model));
+  g_return_if_fail (model == NULL || GTK_IS_SELECTION_MODEL (model));
 
   if (!gtk_list_base_set_model (GTK_LIST_BASE (self), model))
     return;
