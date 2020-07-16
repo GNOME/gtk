@@ -34,6 +34,17 @@ G_BEGIN_DECLS
 typedef struct _GtkAccessibleValue      GtkAccessibleValue;
 typedef struct _GtkAccessibleValueClass GtkAccessibleValueClass;
 
+typedef enum {
+  GTK_ACCESSIBLE_VALUE_TYPE_UNDEFINED,
+  GTK_ACCESSIBLE_VALUE_TYPE_BOOLEAN,
+  GTK_ACCESSIBLE_VALUE_TYPE_TRISTATE,
+  GTK_ACCESSIBLE_VALUE_TYPE_TOKEN,
+  GTK_ACCESSIBLE_VALUE_TYPE_INTEGER,
+  GTK_ACCESSIBLE_VALUE_TYPE_NUMBER,
+  GTK_ACCESSIBLE_VALUE_TYPE_STRING,
+  GTK_ACCESSIBLE_VALUE_TYPE_REFERENCE
+} GtkAccessibleValueType;
+
 struct _GtkAccessibleValue
 {
   const GtkAccessibleValueClass *value_class;
@@ -41,8 +52,11 @@ struct _GtkAccessibleValue
   int ref_count;
 };
 
+#define GTK_ACCESSIBLE_VALUE_INIT(klass)        { .value_class = (klass), .ref_count = 1 }
+
 struct _GtkAccessibleValueClass
 {
+  GtkAccessibleValueType type;
   const char *type_name;
   gsize instance_size;
 
@@ -53,6 +67,9 @@ struct _GtkAccessibleValueClass
   gboolean (* equal) (const GtkAccessibleValue *value_a,
                       const GtkAccessibleValue *value_b);
 };
+
+#define GTK_IS_ACCESSIBLE_VALUE_TYPE(v,type) \
+  ((v)->value_class->type == (type))
 
 typedef enum {
   GTK_ACCESSIBLE_VALUE_ERROR_READ_ONLY,
@@ -87,9 +104,13 @@ GtkAccessibleValue *    gtk_accessible_value_collect_for_property_value (GtkAcce
 
 /* Basic values */
 GtkAccessibleValue *            gtk_undefined_accessible_value_new      (void);
+int                             gtk_undefined_accessible_value_get      (const GtkAccessibleValue *value);
 
 GtkAccessibleValue *            gtk_boolean_accessible_value_new        (gboolean                  value);
 gboolean                        gtk_boolean_accessible_value_get        (const GtkAccessibleValue *value);
+
+GtkAccessibleValue *            gtk_tristate_accessible_value_new       (GtkAccessibleTristate     value);
+GtkAccessibleTristate           gtk_tristate_accessible_value_get       (const GtkAccessibleValue *value);
 
 GtkAccessibleValue *            gtk_int_accessible_value_new            (int                       value);
 int                             gtk_int_accessible_value_get            (const GtkAccessibleValue *value);
@@ -103,23 +124,7 @@ const char *                    gtk_string_accessible_value_get         (const G
 GtkAccessibleValue *            gtk_reference_accessible_value_new      (GtkAccessible            *value);
 GtkAccessible *                 gtk_reference_accessible_value_get      (const GtkAccessibleValue *value);
 
-/* Tri-state values */
-GtkAccessibleValue *            gtk_expanded_accessible_value_new       (int                       value);
-int                             gtk_expanded_accessible_value_get       (const GtkAccessibleValue *value);
-
-GtkAccessibleValue *            gtk_grabbed_accessible_value_new        (int                       value);
-int                             gtk_grabbed_accessible_value_get        (const GtkAccessibleValue *value);
-
-GtkAccessibleValue *            gtk_selected_accessible_value_new       (int                       value);
-int                             gtk_selected_accessible_value_get       (const GtkAccessibleValue *value);
-
 /* Token values */
-GtkAccessibleValue *            gtk_pressed_accessible_value_new        (GtkAccessiblePressedState value);
-GtkAccessiblePressedState       gtk_pressed_accessible_value_get        (const GtkAccessibleValue *value);
-
-GtkAccessibleValue *            gtk_checked_accessible_value_new        (GtkAccessibleCheckedState value);
-GtkAccessibleCheckedState       gtk_checked_accessible_value_get        (const GtkAccessibleValue *value);
-
 GtkAccessibleValue *            gtk_invalid_accessible_value_new        (GtkAccessibleInvalidState value);
 GtkAccessibleInvalidState       gtk_invalid_accessible_value_get        (const GtkAccessibleValue *value);
 

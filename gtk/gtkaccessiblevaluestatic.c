@@ -32,19 +32,29 @@ gtk_undefined_accessible_value_print (const GtkAccessibleValue *value,
 }
 
 static const GtkAccessibleValueClass GTK_UNDEFINED_ACCESSIBLE_VALUE = {
+  .type = GTK_ACCESSIBLE_VALUE_TYPE_UNDEFINED,
   .type_name = "GtkUndefinedAccessibleValue",
   .instance_size = sizeof (GtkAccessibleValue),
   .print = gtk_undefined_accessible_value_print,
 };
 
-static GtkAccessibleValue undefined_value = {
-  &GTK_UNDEFINED_ACCESSIBLE_VALUE, 1
-};
+static GtkAccessibleValue undefined_value =
+  GTK_ACCESSIBLE_VALUE_INIT (&GTK_UNDEFINED_ACCESSIBLE_VALUE);
 
 GtkAccessibleValue *
 gtk_undefined_accessible_value_new (void)
 {
   return gtk_accessible_value_ref (&undefined_value);
+}
+
+int
+gtk_undefined_accessible_value_get (const GtkAccessibleValue *value)
+{
+  g_return_val_if_fail (value != NULL, GTK_ACCESSIBLE_VALUE_UNDEFINED);
+  g_return_val_if_fail (value->value_class == &GTK_UNDEFINED_ACCESSIBLE_VALUE,
+                        GTK_ACCESSIBLE_VALUE_UNDEFINED);
+
+  return GTK_ACCESSIBLE_VALUE_UNDEFINED;
 }
 
 /* }}} */
@@ -78,6 +88,7 @@ gtk_boolean_accessible_value_print (const GtkAccessibleValue *value,
 }
 
 static const GtkAccessibleValueClass GTK_BOOLEAN_ACCESSIBLE_VALUE = {
+  .type = GTK_ACCESSIBLE_VALUE_TYPE_BOOLEAN,
   .type_name = "GtkBooleanAccessibleValue",
   .instance_size = sizeof (GtkBooleanAccessibleValue),
   .equal = gtk_boolean_accessible_value_equal,
@@ -85,8 +96,8 @@ static const GtkAccessibleValueClass GTK_BOOLEAN_ACCESSIBLE_VALUE = {
 };
 
 static GtkBooleanAccessibleValue boolean_values[] = {
-  { { &GTK_BOOLEAN_ACCESSIBLE_VALUE, 1 }, FALSE },
-  { { &GTK_BOOLEAN_ACCESSIBLE_VALUE, 1 }, TRUE },
+  { GTK_ACCESSIBLE_VALUE_INIT (&GTK_BOOLEAN_ACCESSIBLE_VALUE), FALSE },
+  { GTK_ACCESSIBLE_VALUE_INIT (&GTK_BOOLEAN_ACCESSIBLE_VALUE), TRUE },
 };
 
 GtkAccessibleValue *
@@ -116,17 +127,17 @@ gtk_boolean_accessible_value_get (const GtkAccessibleValue *value)
 typedef struct {
   GtkAccessibleValue parent;
 
-  int value;
+  GtkAccessibleTristate value;
 } GtkTristateAccessibleValue;
 
 static gboolean
 gtk_tristate_accessible_value_equal (const GtkAccessibleValue *value_a,
                                      const GtkAccessibleValue *value_b)
 {
-  const GtkTristateAccessibleValue *tri_a = (GtkTristateAccessibleValue *) value_a;
-  const GtkTristateAccessibleValue *tri_b = (GtkTristateAccessibleValue *) value_b;
+  const GtkTristateAccessibleValue *self_a = (GtkTristateAccessibleValue *) value_a;
+  const GtkTristateAccessibleValue *self_b = (GtkTristateAccessibleValue *) value_b;
 
-  return tri_a->value == tri_b->value;
+  return self_a->value == self_b->value;
 }
 
 static void
@@ -137,16 +148,16 @@ gtk_tristate_accessible_value_print (const GtkAccessibleValue *value,
 
   switch (self->value)
     {
-    case 0:
+    case GTK_ACCESSIBLE_TRISTATE_FALSE:
       g_string_append (buffer, "false");
       break;
 
-    case 1:
+    case GTK_ACCESSIBLE_TRISTATE_TRUE:
       g_string_append (buffer, "true");
       break;
 
-    case -1:
-      g_string_append (buffer, "undefined");
+    case GTK_ACCESSIBLE_TRISTATE_MIXED:
+      g_string_append (buffer, "mixed");
       break;
 
     default:
@@ -155,122 +166,40 @@ gtk_tristate_accessible_value_print (const GtkAccessibleValue *value,
     }
 }
 
-static const GtkAccessibleValueClass GTK_EXPANDED_ACCESSIBLE_VALUE = {
-  .type_name = "GtkExpandedAccessibleValue",
+static const GtkAccessibleValueClass GTK_TRISTATE_ACCESSIBLE_VALUE = {
+  .type = GTK_ACCESSIBLE_VALUE_TYPE_TRISTATE,
+  .type_name = "GtkTristateAccessibleValue",
   .instance_size = sizeof (GtkTristateAccessibleValue),
   .equal = gtk_tristate_accessible_value_equal,
   .print = gtk_tristate_accessible_value_print,
 };
 
-static GtkTristateAccessibleValue expanded_values[] = {
-  { { &GTK_EXPANDED_ACCESSIBLE_VALUE, 1 }, GTK_ACCESSIBLE_VALUE_UNDEFINED },
-  { { &GTK_EXPANDED_ACCESSIBLE_VALUE, 1 }, 0 },
-  { { &GTK_EXPANDED_ACCESSIBLE_VALUE, 1 }, 1 },
+static GtkTristateAccessibleValue tristate_values[] = {
+  [GTK_ACCESSIBLE_TRISTATE_FALSE] = {
+    GTK_ACCESSIBLE_VALUE_INIT (&GTK_TRISTATE_ACCESSIBLE_VALUE), GTK_ACCESSIBLE_TRISTATE_FALSE
+  },
+  [GTK_ACCESSIBLE_TRISTATE_TRUE] = {
+    GTK_ACCESSIBLE_VALUE_INIT (&GTK_TRISTATE_ACCESSIBLE_VALUE), GTK_ACCESSIBLE_TRISTATE_TRUE
+  },
+  [GTK_ACCESSIBLE_TRISTATE_MIXED] = {
+    GTK_ACCESSIBLE_VALUE_INIT (&GTK_TRISTATE_ACCESSIBLE_VALUE), GTK_ACCESSIBLE_TRISTATE_MIXED
+  },
 };
 
 GtkAccessibleValue *
-gtk_expanded_accessible_value_new (int state)
+gtk_tristate_accessible_value_new (GtkAccessibleTristate value)
 {
-  int index_;
-
-  if (state < 0)
-    index_ = 0;
-  else if (state == 0)
-    index_ = 1;
-  else
-    index_ = 2;
-
-  return gtk_accessible_value_ref ((GtkAccessibleValue *) &expanded_values[index_]);
+  return gtk_accessible_value_ref ((GtkAccessibleValue *) &tristate_values[value]);
 }
 
-int
-gtk_expanded_accessible_value_get (const GtkAccessibleValue *value)
+GtkAccessibleTristate
+gtk_tristate_accessible_value_get (const GtkAccessibleValue *value)
 {
+  g_return_val_if_fail (value != NULL, GTK_ACCESSIBLE_TRISTATE_FALSE);
+  g_return_val_if_fail (value->value_class == &GTK_TRISTATE_ACCESSIBLE_VALUE,
+                        GTK_ACCESSIBLE_TRISTATE_FALSE);
+
   GtkTristateAccessibleValue *self = (GtkTristateAccessibleValue *) value;
-
-  g_return_val_if_fail (value != NULL, GTK_ACCESSIBLE_VALUE_UNDEFINED);
-  g_return_val_if_fail (value->value_class == &GTK_EXPANDED_ACCESSIBLE_VALUE,
-                        GTK_ACCESSIBLE_VALUE_UNDEFINED);
-
-  return self->value;
-}
-
-static const GtkAccessibleValueClass GTK_GRABBED_ACCESSIBLE_VALUE = {
-  .type_name = "GtkGrabbedAccessibleValue",
-  .instance_size = sizeof (GtkTristateAccessibleValue),
-  .equal = gtk_tristate_accessible_value_equal,
-  .print = gtk_tristate_accessible_value_print,
-};
-
-static GtkTristateAccessibleValue grabbed_values[] = {
-  { { &GTK_GRABBED_ACCESSIBLE_VALUE, 1 }, GTK_ACCESSIBLE_VALUE_UNDEFINED },
-  { { &GTK_GRABBED_ACCESSIBLE_VALUE, 1 }, 0 },
-  { { &GTK_GRABBED_ACCESSIBLE_VALUE, 1 }, 1 },
-};
-
-GtkAccessibleValue *
-gtk_grabbed_accessible_value_new (int state)
-{
-  int index_;
-
-  if (state < 0)
-    index_ = 0;
-  else if (state == 0)
-    index_ = 1;
-  else
-    index_ = 2;
-
-  return gtk_accessible_value_ref ((GtkAccessibleValue *) &grabbed_values[index_]);
-}
-
-int
-gtk_grabbed_accessible_value_get (const GtkAccessibleValue *value)
-{
-  GtkTristateAccessibleValue *self = (GtkTristateAccessibleValue *) value;
-
-  g_return_val_if_fail (value != NULL, GTK_ACCESSIBLE_VALUE_UNDEFINED);
-  g_return_val_if_fail (value->value_class == &GTK_GRABBED_ACCESSIBLE_VALUE,
-                        GTK_ACCESSIBLE_VALUE_UNDEFINED);
-
-  return self->value;
-}
-
-static const GtkAccessibleValueClass GTK_SELECTED_ACCESSIBLE_VALUE = {
-  .type_name = "GtkSelectedAccessibleValue",
-  .instance_size = sizeof (GtkTristateAccessibleValue),
-  .equal = gtk_tristate_accessible_value_equal,
-  .print = gtk_tristate_accessible_value_print,
-};
-
-static GtkTristateAccessibleValue selected_values[] = {
-  { { &GTK_SELECTED_ACCESSIBLE_VALUE, 1 }, GTK_ACCESSIBLE_VALUE_UNDEFINED },
-  { { &GTK_SELECTED_ACCESSIBLE_VALUE, 1 }, 0 },
-  { { &GTK_SELECTED_ACCESSIBLE_VALUE, 1 }, 1 },
-};
-
-GtkAccessibleValue *
-gtk_selected_accessible_value_new (int state)
-{
-  int index_;
-
-  if (state < 0)
-    index_ = 0;
-  else if (state == 0)
-    index_ = 1;
-  else
-    index_ = 2;
-
-  return gtk_accessible_value_ref ((GtkAccessibleValue *) &selected_values[index_]);
-}
-
-int
-gtk_selected_accessible_value_get (const GtkAccessibleValue *value)
-{
-  GtkTristateAccessibleValue *self = (GtkTristateAccessibleValue *) value;
-
-  g_return_val_if_fail (value != NULL, GTK_ACCESSIBLE_VALUE_UNDEFINED);
-  g_return_val_if_fail (value->value_class == &GTK_SELECTED_ACCESSIBLE_VALUE,
-                        GTK_ACCESSIBLE_VALUE_UNDEFINED);
 
   return self->value;
 }
@@ -284,153 +213,48 @@ typedef struct {
 
   int value;
   const char *token;
-} GtkEnumAccessibleValue;
+} GtkTokenAccessibleValue;
 
 static gboolean
-gtk_enum_accessible_value_equal (const GtkAccessibleValue *value_a,
-                                 const GtkAccessibleValue *value_b)
+gtk_token_accessible_value_equal (const GtkAccessibleValue *value_a,
+                                  const GtkAccessibleValue *value_b)
 {
-  const GtkEnumAccessibleValue *enum_a = (GtkEnumAccessibleValue *) value_a;
-  const GtkEnumAccessibleValue *enum_b = (GtkEnumAccessibleValue *) value_b;
+  const GtkTokenAccessibleValue *self_a = (GtkTokenAccessibleValue *) value_a;
+  const GtkTokenAccessibleValue *self_b = (GtkTokenAccessibleValue *) value_b;
 
-  return enum_a->value == enum_b->value;
+  return self_a->value == self_b->value;
 }
 
 static void
-gtk_enum_accessible_value_print (const GtkAccessibleValue *value,
-                                 GString                  *buffer)
+gtk_token_accessible_value_print (const GtkAccessibleValue *value,
+                                  GString                  *buffer)
 {
-  const GtkEnumAccessibleValue *self = (GtkEnumAccessibleValue *) value;
+  const GtkTokenAccessibleValue *self = (GtkTokenAccessibleValue *) value;
 
   g_string_append (buffer, self->token);
 }
 
-static const GtkAccessibleValueClass GTK_CHECKED_ACCESSIBLE_VALUE = {
-  .type_name = "GtkCheckedAccessibleValue",
-  .instance_size = sizeof (GtkEnumAccessibleValue),
-  .equal = gtk_enum_accessible_value_equal,
-  .print = gtk_enum_accessible_value_print,
-};
-
-static GtkEnumAccessibleValue checked_values[] = {
-  { { &GTK_CHECKED_ACCESSIBLE_VALUE, 1 }, GTK_ACCESSIBLE_CHECKED_FALSE,     "false" },
-  { { &GTK_CHECKED_ACCESSIBLE_VALUE, 1 }, GTK_ACCESSIBLE_CHECKED_TRUE,      "true" },
-  { { &GTK_CHECKED_ACCESSIBLE_VALUE, 1 }, GTK_ACCESSIBLE_PRESSED_UNDEFINED, "undefined" },
-  { { &GTK_CHECKED_ACCESSIBLE_VALUE, 1 }, GTK_ACCESSIBLE_CHECKED_MIXED,     "mixed" },
-};
-
-GtkAccessibleValue *
-gtk_checked_accessible_value_new (GtkAccessibleCheckedState state)
-{
-  int index_;
-
-  switch (state)
-    {
-    case GTK_ACCESSIBLE_CHECKED_FALSE:
-      index_ = 0;
-      break;
-
-    case GTK_ACCESSIBLE_CHECKED_TRUE:
-      index_ = 1;
-      break;
-
-    case GTK_ACCESSIBLE_CHECKED_UNDEFINED:
-      index_ = 2;
-      break;
-
-    case GTK_ACCESSIBLE_CHECKED_MIXED:
-      index_ = 3;
-      break;
-
-    default:
-      g_assert_not_reached ();
-      return NULL;
-    }
-
-  return gtk_accessible_value_ref ((GtkAccessibleValue *) &checked_values[index_]);
-}
-
-GtkAccessibleCheckedState
-gtk_checked_accessible_value_get (const GtkAccessibleValue *value)
-{
-  GtkEnumAccessibleValue *self = (GtkEnumAccessibleValue *) value;
-
-  g_return_val_if_fail (value != NULL, GTK_ACCESSIBLE_CHECKED_UNDEFINED);
-  g_return_val_if_fail (value->value_class == &GTK_CHECKED_ACCESSIBLE_VALUE,
-                        GTK_ACCESSIBLE_CHECKED_UNDEFINED);
-
-  return self->value;
-}
-
-static const GtkAccessibleValueClass GTK_PRESSED_ACCESSIBLE_VALUE = {
-  .type_name = "GtkPressedAccessibleValue",
-  .instance_size = sizeof (GtkEnumAccessibleValue),
-  .equal = gtk_enum_accessible_value_equal,
-  .print = gtk_enum_accessible_value_print,
-};
-
-static GtkEnumAccessibleValue pressed_values[] = {
-  { { &GTK_PRESSED_ACCESSIBLE_VALUE, 1 }, GTK_ACCESSIBLE_PRESSED_FALSE,     "false" },
-  { { &GTK_PRESSED_ACCESSIBLE_VALUE, 1 }, GTK_ACCESSIBLE_PRESSED_TRUE,      "true" },
-  { { &GTK_PRESSED_ACCESSIBLE_VALUE, 1 }, GTK_ACCESSIBLE_PRESSED_UNDEFINED, "undefined" },
-  { { &GTK_PRESSED_ACCESSIBLE_VALUE, 1 }, GTK_ACCESSIBLE_PRESSED_MIXED,     "mixed" },
-};
-
-GtkAccessibleValue *
-gtk_pressed_accessible_value_new (GtkAccessiblePressedState state)
-{
-  int index_;
-
-  switch (state)
-    {
-    case GTK_ACCESSIBLE_PRESSED_FALSE:
-      index_ = 0;
-      break;
-
-    case GTK_ACCESSIBLE_PRESSED_TRUE:
-      index_ = 1;
-      break;
-
-    case GTK_ACCESSIBLE_PRESSED_UNDEFINED:
-      index_ = 2;
-      break;
-
-    case GTK_ACCESSIBLE_PRESSED_MIXED:
-      index_ = 3;
-      break;
-
-    default:
-      g_assert_not_reached ();
-      return NULL;
-    }
-
-  return gtk_accessible_value_ref ((GtkAccessibleValue *) &pressed_values[index_]);
-}
-
-GtkAccessiblePressedState
-gtk_pressed_accessible_value_get (const GtkAccessibleValue *value)
-{
-  GtkEnumAccessibleValue *self = (GtkEnumAccessibleValue *) value;
-
-  g_return_val_if_fail (value != NULL, GTK_ACCESSIBLE_PRESSED_UNDEFINED);
-  g_return_val_if_fail (value->value_class == &GTK_PRESSED_ACCESSIBLE_VALUE,
-                        GTK_ACCESSIBLE_PRESSED_UNDEFINED);
-
-  return self->value;
-}
-
 static const GtkAccessibleValueClass GTK_INVALID_ACCESSIBLE_VALUE = {
+  .type = GTK_ACCESSIBLE_VALUE_TYPE_TOKEN,
   .type_name = "GtkInvalidAccessibleValue",
-  .instance_size = sizeof (GtkEnumAccessibleValue),
-  .equal = gtk_enum_accessible_value_equal,
-  .print = gtk_enum_accessible_value_print,
+  .instance_size = sizeof (GtkTokenAccessibleValue),
+  .equal = gtk_token_accessible_value_equal,
+  .print = gtk_token_accessible_value_print,
 };
 
-static GtkEnumAccessibleValue invalid_values[] = {
-  { { &GTK_INVALID_ACCESSIBLE_VALUE, 1 }, GTK_ACCESSIBLE_INVALID_FALSE,    "false" },
-  { { &GTK_INVALID_ACCESSIBLE_VALUE, 1 }, GTK_ACCESSIBLE_INVALID_TRUE,     "true" },
-  { { &GTK_INVALID_ACCESSIBLE_VALUE, 1 }, GTK_ACCESSIBLE_INVALID_GRAMMAR,  "grammar" },
-  { { &GTK_INVALID_ACCESSIBLE_VALUE, 1 }, GTK_ACCESSIBLE_INVALID_SPELLING, "spelling" },
+static GtkTokenAccessibleValue invalid_values[] = {
+  [GTK_ACCESSIBLE_INVALID_FALSE] = {
+    GTK_ACCESSIBLE_VALUE_INIT (&GTK_INVALID_ACCESSIBLE_VALUE), GTK_ACCESSIBLE_INVALID_FALSE, "false"
+  },
+  [GTK_ACCESSIBLE_INVALID_TRUE] = {
+    GTK_ACCESSIBLE_VALUE_INIT (&GTK_INVALID_ACCESSIBLE_VALUE), GTK_ACCESSIBLE_INVALID_TRUE, "true"
+  },
+  [GTK_ACCESSIBLE_INVALID_GRAMMAR] = {
+    GTK_ACCESSIBLE_VALUE_INIT (&GTK_INVALID_ACCESSIBLE_VALUE), GTK_ACCESSIBLE_INVALID_GRAMMAR, "grammar"
+  },
+  [GTK_ACCESSIBLE_INVALID_SPELLING] = {
+    GTK_ACCESSIBLE_VALUE_INIT (&GTK_INVALID_ACCESSIBLE_VALUE), GTK_ACCESSIBLE_INVALID_SPELLING, "spelling"
+  },
 };
 
 GtkAccessibleValue *
@@ -446,7 +270,7 @@ gtk_invalid_accessible_value_new (GtkAccessibleInvalidState state)
 GtkAccessibleInvalidState
 gtk_invalid_accessible_value_get (const GtkAccessibleValue *value)
 {
-  GtkEnumAccessibleValue *self = (GtkEnumAccessibleValue *) value;
+  GtkTokenAccessibleValue *self = (GtkTokenAccessibleValue *) value;
 
   g_return_val_if_fail (value != NULL, GTK_ACCESSIBLE_INVALID_FALSE);
   g_return_val_if_fail (value->value_class == &GTK_INVALID_ACCESSIBLE_VALUE,
@@ -456,17 +280,26 @@ gtk_invalid_accessible_value_get (const GtkAccessibleValue *value)
 }
 
 static const GtkAccessibleValueClass GTK_AUTOCOMPLETE_ACCESSIBLE_VALUE = {
+  .type = GTK_ACCESSIBLE_VALUE_TYPE_TOKEN,
   .type_name = "GtkAutocompleteAccessibleValue",
-  .instance_size = sizeof (GtkEnumAccessibleValue),
-  .equal = gtk_enum_accessible_value_equal,
-  .print = gtk_enum_accessible_value_print,
+  .instance_size = sizeof (GtkTokenAccessibleValue),
+  .equal = gtk_token_accessible_value_equal,
+  .print = gtk_token_accessible_value_print,
 };
 
-static GtkEnumAccessibleValue autocomplete_values[] = {
-  { { &GTK_AUTOCOMPLETE_ACCESSIBLE_VALUE, 1 }, GTK_ACCESSIBLE_AUTOCOMPLETE_NONE,   "none" },
-  { { &GTK_AUTOCOMPLETE_ACCESSIBLE_VALUE, 1 }, GTK_ACCESSIBLE_AUTOCOMPLETE_INLINE, "inline" },
-  { { &GTK_AUTOCOMPLETE_ACCESSIBLE_VALUE, 1 }, GTK_ACCESSIBLE_AUTOCOMPLETE_LIST,   "list" },
-  { { &GTK_AUTOCOMPLETE_ACCESSIBLE_VALUE, 1 }, GTK_ACCESSIBLE_AUTOCOMPLETE_BOTH,   "both" },
+static GtkTokenAccessibleValue autocomplete_values[] = {
+  [GTK_ACCESSIBLE_AUTOCOMPLETE_NONE] = {
+    GTK_ACCESSIBLE_VALUE_INIT (&GTK_AUTOCOMPLETE_ACCESSIBLE_VALUE), GTK_ACCESSIBLE_AUTOCOMPLETE_NONE, "none"
+  },
+  [GTK_ACCESSIBLE_AUTOCOMPLETE_INLINE] = {
+    GTK_ACCESSIBLE_VALUE_INIT (&GTK_AUTOCOMPLETE_ACCESSIBLE_VALUE), GTK_ACCESSIBLE_AUTOCOMPLETE_INLINE, "inline"
+  },
+  [GTK_ACCESSIBLE_AUTOCOMPLETE_LIST] = {
+    GTK_ACCESSIBLE_VALUE_INIT (&GTK_AUTOCOMPLETE_ACCESSIBLE_VALUE), GTK_ACCESSIBLE_AUTOCOMPLETE_LIST, "list"
+  },
+  [GTK_ACCESSIBLE_AUTOCOMPLETE_BOTH] = {
+    GTK_ACCESSIBLE_VALUE_INIT (&GTK_AUTOCOMPLETE_ACCESSIBLE_VALUE), GTK_ACCESSIBLE_AUTOCOMPLETE_BOTH, "both"
+  },
 };
 
 GtkAccessibleValue *
@@ -482,7 +315,7 @@ gtk_autocomplete_accessible_value_new (GtkAccessibleAutocomplete value)
 GtkAccessibleAutocomplete
 gtk_autocomplete_accessible_value_get (const GtkAccessibleValue *value)
 {
-  GtkEnumAccessibleValue *self = (GtkEnumAccessibleValue *) value;
+  GtkTokenAccessibleValue *self = (GtkTokenAccessibleValue *) value;
 
   g_return_val_if_fail (value != NULL, GTK_ACCESSIBLE_AUTOCOMPLETE_NONE);
   g_return_val_if_fail (value->value_class == &GTK_AUTOCOMPLETE_ACCESSIBLE_VALUE,
@@ -492,61 +325,61 @@ gtk_autocomplete_accessible_value_get (const GtkAccessibleValue *value)
 }
 
 static const GtkAccessibleValueClass GTK_ORIENTATION_ACCESSIBLE_VALUE = {
+  .type = GTK_ACCESSIBLE_VALUE_TYPE_TOKEN,
   .type_name = "GtkOrientationAccessibleValue",
-  .instance_size = sizeof (GtkEnumAccessibleValue),
-  .equal = gtk_enum_accessible_value_equal,
-  .print = gtk_enum_accessible_value_print,
+  .instance_size = sizeof (GtkTokenAccessibleValue),
+  .equal = gtk_token_accessible_value_equal,
+  .print = gtk_token_accessible_value_print,
 };
 
-static GtkEnumAccessibleValue orientation_values[] = {
-  { { &GTK_ORIENTATION_ACCESSIBLE_VALUE, 1 }, GTK_ORIENTATION_HORIZONTAL,     "horizontal" },
-  { { &GTK_ORIENTATION_ACCESSIBLE_VALUE, 1 }, GTK_ORIENTATION_VERTICAL,       "vertical"   },
-  { { &GTK_ORIENTATION_ACCESSIBLE_VALUE, 1 }, GTK_ACCESSIBLE_VALUE_UNDEFINED, "undefined"  },
+static GtkTokenAccessibleValue orientation_values[] = {
+  [GTK_ORIENTATION_HORIZONTAL] = {
+    GTK_ACCESSIBLE_VALUE_INIT (&GTK_ORIENTATION_ACCESSIBLE_VALUE), GTK_ORIENTATION_HORIZONTAL, "horizontal"
+  },
+  [GTK_ORIENTATION_VERTICAL] = {
+    GTK_ACCESSIBLE_VALUE_INIT (&GTK_ORIENTATION_ACCESSIBLE_VALUE), GTK_ORIENTATION_VERTICAL, "vertical"
+  },
 };
 
 GtkAccessibleValue *
 gtk_orientation_accessible_value_new (GtkOrientation value)
 {
-  switch (value)
-    {
-    case GTK_ORIENTATION_HORIZONTAL:
-      return gtk_accessible_value_ref ((GtkAccessibleValue *) &orientation_values[0]);
-
-    case GTK_ORIENTATION_VERTICAL:
-      return gtk_accessible_value_ref ((GtkAccessibleValue *) &orientation_values[1]);
-
-    default:
-      g_assert_not_reached ();
-      break;
-    }
-
-  return NULL;
+  return gtk_accessible_value_ref ((GtkAccessibleValue *) &orientation_values[value]);
 }
 
 GtkOrientation
 gtk_orientation_accessible_value_get (const GtkAccessibleValue *value)
 {
-  GtkEnumAccessibleValue *self = (GtkEnumAccessibleValue *) value;
+  GtkTokenAccessibleValue *self = (GtkTokenAccessibleValue *) value;
 
-  g_return_val_if_fail (value != NULL, GTK_ORIENTATION_HORIZONTAL);
+  g_return_val_if_fail (value != NULL, GTK_ACCESSIBLE_VALUE_UNDEFINED);
   g_return_val_if_fail (value->value_class == &GTK_ORIENTATION_ACCESSIBLE_VALUE,
-                        GTK_ORIENTATION_HORIZONTAL);
+                        GTK_ACCESSIBLE_VALUE_UNDEFINED);
 
   return self->value;
 }
 
 static const GtkAccessibleValueClass GTK_SORT_ACCESSIBLE_VALUE = {
+  .type = GTK_ACCESSIBLE_VALUE_TYPE_TOKEN,
   .type_name = "GtkSortAccessibleValue",
-  .instance_size = sizeof (GtkEnumAccessibleValue),
-  .equal = gtk_enum_accessible_value_equal,
-  .print = gtk_enum_accessible_value_print,
+  .instance_size = sizeof (GtkTokenAccessibleValue),
+  .equal = gtk_token_accessible_value_equal,
+  .print = gtk_token_accessible_value_print,
 };
 
-static GtkEnumAccessibleValue sort_values[] = {
-  { { &GTK_SORT_ACCESSIBLE_VALUE, 1 }, GTK_ACCESSIBLE_SORT_NONE,       "none" },
-  { { &GTK_SORT_ACCESSIBLE_VALUE, 1 }, GTK_ACCESSIBLE_SORT_ASCENDING,  "ascending" },
-  { { &GTK_SORT_ACCESSIBLE_VALUE, 1 }, GTK_ACCESSIBLE_SORT_DESCENDING, "descending" },
-  { { &GTK_SORT_ACCESSIBLE_VALUE, 1 }, GTK_ACCESSIBLE_SORT_OTHER,      "other" },
+static GtkTokenAccessibleValue sort_values[] = {
+  [GTK_ACCESSIBLE_SORT_NONE] = {
+    GTK_ACCESSIBLE_VALUE_INIT (&GTK_SORT_ACCESSIBLE_VALUE), GTK_ACCESSIBLE_SORT_NONE, "none"
+  },
+  [GTK_ACCESSIBLE_SORT_ASCENDING] = {
+    GTK_ACCESSIBLE_VALUE_INIT (&GTK_SORT_ACCESSIBLE_VALUE), GTK_ACCESSIBLE_SORT_ASCENDING, "ascending"
+  },
+  [GTK_ACCESSIBLE_SORT_DESCENDING] = {
+    GTK_ACCESSIBLE_VALUE_INIT (&GTK_SORT_ACCESSIBLE_VALUE), GTK_ACCESSIBLE_SORT_DESCENDING, "descending"
+  },
+  [GTK_ACCESSIBLE_SORT_OTHER] = {
+    GTK_ACCESSIBLE_VALUE_INIT (&GTK_SORT_ACCESSIBLE_VALUE), GTK_ACCESSIBLE_SORT_OTHER, "other"
+  },
 };
 
 GtkAccessibleValue *
@@ -562,7 +395,7 @@ gtk_sort_accessible_value_new (GtkAccessibleSort value)
 GtkAccessibleSort
 gtk_sort_accessible_value_get (const GtkAccessibleValue *value)
 {
-  GtkEnumAccessibleValue *self = (GtkEnumAccessibleValue *) value;
+  GtkTokenAccessibleValue *self = (GtkTokenAccessibleValue *) value;
 
   g_return_val_if_fail (value != NULL, GTK_ACCESSIBLE_SORT_NONE);
   g_return_val_if_fail (value->value_class == &GTK_SORT_ACCESSIBLE_VALUE,
