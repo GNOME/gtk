@@ -252,16 +252,13 @@ test_string_simple (void)
 {
   GtkFilterListModel *model;
   GtkFilter *filter;
-  GtkExpression *expr;
 
-  expr = gtk_cclosure_expression_new (G_TYPE_STRING,
-                                      NULL,
-                                      0, NULL,
-                                      G_CALLBACK (get_string),
-                                      NULL, NULL);
-
-  filter = gtk_string_filter_new ();
-  gtk_string_filter_set_expression (GTK_STRING_FILTER (filter), expr);
+  filter = gtk_string_filter_new (
+               gtk_cclosure_expression_new (G_TYPE_STRING,
+                                            NULL,
+                                            0, NULL,
+                                            G_CALLBACK (get_string),
+                                            NULL, NULL));
 
   model = new_model (20, filter);
   assert_model (model, "1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20");
@@ -271,7 +268,6 @@ test_string_simple (void)
 
   g_object_unref (model);
   g_object_unref (filter);
-  gtk_expression_unref (expr);
 }
 
 static void
@@ -279,16 +275,13 @@ test_string_properties (void)
 {
   GtkFilterListModel *model;
   GtkFilter *filter;
-  GtkExpression *expr;
 
-  expr = gtk_cclosure_expression_new (G_TYPE_STRING,
-                                      NULL,
-                                      0, NULL,
-                                      G_CALLBACK (get_spelled_out),
-                                      NULL, NULL);
-
-  filter = gtk_string_filter_new ();
-  gtk_string_filter_set_expression (GTK_STRING_FILTER (filter), expr);
+  filter = gtk_string_filter_new (
+               gtk_cclosure_expression_new (G_TYPE_STRING,
+                                            NULL,
+                                            0, NULL,
+                                            G_CALLBACK (get_spelled_out),
+                                            NULL, NULL));
 
   model = new_model (1000, filter);
   gtk_string_filter_set_search (GTK_STRING_FILTER (filter), "thirte");
@@ -314,7 +307,6 @@ test_string_properties (void)
 
   g_object_unref (model);
   g_object_unref (filter);
-  gtk_expression_unref (expr);
 }
 
 static void
