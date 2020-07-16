@@ -21,9 +21,9 @@
 #include <glib-object.h>
 
 #include "gtk/gtkbitmaskprivate.h"
-#include "gtk/gtkcssstaticstyleprivate.h"
 
 #include "gtk/css/gtkcsssection.h"
+#include "gtk/gtkcssvalueprivate.h"
 
 
 G_BEGIN_DECLS
@@ -31,29 +31,61 @@ G_BEGIN_DECLS
 typedef struct _GtkCssLookup GtkCssLookup;
 
 typedef struct {
-  GtkCssSection     *section;
-  GtkCssValue       *value;
+  int ref_count;
+  guint                id;
+  GtkCssValue         *value;
+  GtkCssSection       *section;
 } GtkCssLookupValue;
 
+GtkCssLookupValue *      gtk_css_lookup_value_new   (guint          id,
+                                                     GtkCssValue   *value,
+                                                     GtkCssSection *section);
+GtkCssLookupValue *      gtk_css_lookup_value_ref   (GtkCssLookupValue *value);
+void                     gtk_css_lookup_value_unref (GtkCssLookupValue *value);
+
+
 struct _GtkCssLookup {
+  int ref_count;
   GtkBitmask *set_values;
-  GtkCssLookupValue  values[GTK_CSS_PROPERTY_N_PROPERTIES];
+  GPtrArray *values;
 };
 
-void                    _gtk_css_lookup_init                    (GtkCssLookup               *lookup);
-void                    _gtk_css_lookup_destroy                 (GtkCssLookup               *lookup);
-gboolean                _gtk_css_lookup_is_missing              (const GtkCssLookup         *lookup,
+GtkCssLookup *           gtk_css_lookup_new (void);
+GtkCssLookup *           gtk_css_lookup_ref (GtkCssLookup *lookup);
+void                     gtk_css_lookup_unref (GtkCssLookup *lookup);
+
+void                     gtk_css_lookup_fill                    (GtkCssLookup               *lookup,
+                                                                 GtkCssLookupValue         **values,
+                                                                 guint                       n_values);
+GtkCssSection *          gtk_css_lookup_get_section             (GtkCssLookup               *lookup,
                                                                  guint                       id);
-void                    _gtk_css_lookup_set                     (GtkCssLookup               *lookup,
-                                                                 guint                       id,
-                                                                 GtkCssSection              *section,
-                                                                 GtkCssValue                *value);
 
 static inline const GtkBitmask *
-_gtk_css_lookup_get_set_values (const GtkCssLookup *lookup)
+gtk_css_lookup_get_set_values (const GtkCssLookup *lookup)
 {
   return lookup->set_values;
 }
+
+static inline GtkCssLookupValue *
+gtk_css_lookup_get (GtkCssLookup *lookup,
+                    guint         id)
+{
+  if (_gtk_bitmask_get (lookup->set_values, id))
+    {
+      int i;
+
+      for (i = 0; i < lookup->values->len; i++)
+        {
+          GtkCssLookupValue *value = g_ptr_array_index (lookup->values, i);
+          if (value->id == id)
+            return value;
+        }
+    }
+
+  return NULL;
+} 
+
+void gtk_css_lookup_register (GtkCssLookup *lookup);
 
 G_END_DECLS
 

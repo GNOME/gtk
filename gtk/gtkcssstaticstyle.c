@@ -43,8 +43,7 @@ static void gtk_css_static_style_compute_value (GtkCssStaticStyle *style,
                                                 GtkStyleProvider  *provider,
                                                 GtkCssStyle       *parent_style,
                                                 guint              id,
-                                                GtkCssValue       *specified,
-                                                GtkCssSection     *section);
+                                                GtkCssValue       *specified);
 
 static const int core_props[] = {
   GTK_CSS_PROPERTY_COLOR,
@@ -199,19 +198,34 @@ gtk_css_ ## NAME ## _values_new_compute (GtkCssStaticStyle *sstyle, \
                                          GtkCssLookup *lookup) \
 { \
   GtkCssStyle *style = (GtkCssStyle *)sstyle; \
-  int i; \
+  int i, j; \
+  int n; \
 \
   style->NAME = (GtkCss ## TYPE ## Values *)gtk_css_values_new (GTK_CSS_ ## ENUM ## _VALUES); \
 \
+  n = lookup->values ? lookup->values->len : 0; \
+  j = 0; \
   for (i = 0; i < G_N_ELEMENTS (NAME ## _props); i++) \
     { \
       guint id = NAME ## _props[i]; \
+      GtkCssValue *value = NULL; \
+      for (; j < n; j++) \
+        { \
+          GtkCssLookupValue *v = g_ptr_array_index (lookup->values, j); \
+          if (v->id > id) \
+            break; \
+          if (v->id == id) \
+            { \
+              value = v->value; \
+              break; \
+            } \
+        } \
+\
       gtk_css_static_style_compute_value (sstyle, \
                                           provider, \
                                           parent_style, \
                                           id, \
-                                          lookup->values[id].value, \
-                                          lookup->values[id].section); \
+                                          value); \
     } \
 } \
 static GtkBitmask * gtk_css_ ## NAME ## _values_mask; \
@@ -236,7 +250,7 @@ gtk_css_ ## NAME ## _values_init (void) \
 static inline gboolean \
 gtk_css_ ## NAME ## _values_unset (const GtkCssLookup *lookup) \
 { \
-  const GtkBitmask *set_values = _gtk_css_lookup_get_set_values (lookup); \
+  const GtkBitmask *set_values = gtk_css_lookup_get_set_values (lookup); \
   return !_gtk_bitmask_intersects (set_values, gtk_css_ ## NAME ## _values_mask); \
 }
 
@@ -298,15 +312,11 @@ G_DEFINE_TYPE (GtkCssStaticStyle, gtk_css_static_style, GTK_TYPE_CSS_STYLE)
 
 static GtkCssSection *
 gtk_css_static_style_get_section (GtkCssStyle *style,
-                                    guint        id)
+                                  guint        id)
 {
   GtkCssStaticStyle *sstyle = GTK_CSS_STATIC_STYLE (style);
 
-  if (sstyle->sections == NULL ||
-      id >= sstyle->sections->len)
-    return NULL;
-
-  return g_ptr_array_index (sstyle->sections, id);
+  return gtk_css_lookup_get_section (sstyle->lookup, id);
 }
 
 static void
@@ -314,11 +324,7 @@ gtk_css_static_style_dispose (GObject *object)
 {
   GtkCssStaticStyle *style = GTK_CSS_STATIC_STYLE (object);
 
-  if (style->sections)
-    {
-      g_ptr_array_unref (style->sections);
-      style->sections = NULL;
-    }
+  g_clear_pointer (&style->lookup, gtk_css_lookup_unref);
 
   G_OBJECT_CLASS (gtk_css_static_style_parent_class)->dispose (object);
 }
@@ -328,6 +334,8 @@ gtk_css_static_style_get_static_style (GtkCssStyle *style)
 {
   return (GtkCssStaticStyle *)style;
 }
+
+static GtkCssLookup *the_empty_lookup;
 
 static void
 gtk_css_static_style_class_init (GtkCssStaticStyleClass *klass)
@@ -353,18 +361,13 @@ gtk_css_static_style_class_init (GtkCssStaticStyleClass *klass)
   gtk_css_other_values_init ();
 
   verify_style_groups ();
+
+  the_empty_lookup = gtk_css_lookup_new ();
 }
 
 static void
 gtk_css_static_style_init (GtkCssStaticStyle *style)
 {
-}
-
-static void
-maybe_unref_section (gpointer section)
-{
-  if (section)
-    gtk_css_section_unref (section);
 }
 
 static inline void
@@ -379,8 +382,7 @@ gtk_css_take_value (GtkCssValue **variable,
 static void
 gtk_css_static_style_set_value (GtkCssStaticStyle *sstyle,
                                 guint              id,
-                                GtkCssValue       *value,
-                                GtkCssSection     *section)
+                                GtkCssValue       *value)
 {
   GtkCssStyle *style = (GtkCssStyle *)sstyle;
 
@@ -658,21 +660,6 @@ gtk_css_static_style_set_value (GtkCssStaticStyle *sstyle,
       g_assert_not_reached ();
       break;
     }
-
-  if (sstyle->sections && sstyle->sections->len > id && g_ptr_array_index (sstyle->sections, id))
-    {
-      gtk_css_section_unref (g_ptr_array_index (sstyle->sections, id));
-      g_ptr_array_index (sstyle->sections, id) = NULL;
-    }
-
-  if (section)
-    {
-      if (sstyle->sections == NULL)
-        sstyle->sections = g_ptr_array_new_with_free_func (maybe_unref_section);
-      if (sstyle->sections->len <= id)
-        g_ptr_array_set_size (sstyle->sections, id + 1);
-      g_ptr_array_index (sstyle->sections, id) = gtk_css_section_ref (section);
-    }
 }
 
 static GtkCssStyle *default_style;
@@ -699,6 +686,7 @@ gtk_css_static_style_get_default (void)
       settings = gtk_settings_get_default ();
       default_style = gtk_css_static_style_new_compute (GTK_STYLE_PROVIDER (settings),
                                                         &filter,
+                                                        NULL,
                                                         NULL,
                                                         0);
       g_object_set_data_full (G_OBJECT (settings), I_("gtk-default-style"),
@@ -899,7 +887,7 @@ gtk_css_lookup_resolve (GtkCssLookup      *lookup,
   gtk_internal_return_if_fail (GTK_IS_CSS_STATIC_STYLE (style));
   gtk_internal_return_if_fail (parent_style == NULL || GTK_IS_CSS_STYLE (parent_style));
 
-  if (_gtk_bitmask_is_empty (_gtk_css_lookup_get_set_values (lookup)))
+  if (_gtk_bitmask_is_empty (gtk_css_lookup_get_set_values (lookup)))
     {
       style->background = (GtkCssBackgroundValues *)gtk_css_values_ref (gtk_css_background_initial_values);
       style->border = (GtkCssBorderValues *)gtk_css_values_ref (gtk_css_border_initial_values);
@@ -986,23 +974,38 @@ GtkCssStyle *
 gtk_css_static_style_new_compute (GtkStyleProvider             *provider,
                                   const GtkCountingBloomFilter *filter,
                                   GtkCssNode                   *node,
+                                  GtkCssLookup                 *lookup,
                                   GtkCssChange                  change)
 {
   GtkCssStaticStyle *result;
-  GtkCssLookup lookup;
   GtkCssNode *parent;
-
-  _gtk_css_lookup_init (&lookup);
-
-  if (node)
-    gtk_style_provider_lookup (provider,
-                               filter,
-                               node,
-                               &lookup,
-                               change == 0 ? &change : NULL);
 
   result = g_object_new (GTK_TYPE_CSS_STATIC_STYLE, NULL);
 
+  if (lookup != NULL && change != 0)
+    {
+      gtk_css_lookup_ref (lookup);
+    }
+  else
+    {
+      lookup = gtk_css_lookup_new ();
+      if (node)
+        gtk_style_provider_lookup (provider,
+                                   filter,
+                                   node,
+                                   lookup,
+                                   change == 0 ? &change : NULL);
+
+      gtk_css_lookup_register (lookup);
+
+      if (_gtk_bitmask_is_empty (gtk_css_lookup_get_set_values (lookup)))
+        {
+          gtk_css_lookup_unref (lookup);
+          lookup = gtk_css_lookup_ref (the_empty_lookup);
+        }
+    }
+
+  result->lookup = lookup;
   result->change = change;
 
   if (node)
@@ -1010,12 +1013,10 @@ gtk_css_static_style_new_compute (GtkStyleProvider             *provider,
   else
     parent = NULL;
 
-  gtk_css_lookup_resolve (&lookup,
+  gtk_css_lookup_resolve (lookup,
                           provider,
                           result,
                           parent ? gtk_css_node_get_style (parent) : NULL);
-
-  _gtk_css_lookup_destroy (&lookup);
 
   return GTK_CSS_STYLE (result);
 }
@@ -1031,8 +1032,7 @@ gtk_css_static_style_compute_value (GtkCssStaticStyle *style,
                                     GtkStyleProvider  *provider,
                                     GtkCssStyle       *parent_style,
                                     guint              id,
-                                    GtkCssValue       *specified,
-                                    GtkCssSection     *section)
+                                    GtkCssValue       *specified)
 {
   GtkCssValue *value;
   GtkBorderStyle border_style;
@@ -1055,7 +1055,7 @@ gtk_css_static_style_compute_value (GtkCssStaticStyle *style,
         border_style = _gtk_css_border_style_value_get (gtk_css_style_get_value ((GtkCssStyle *)style, id - 1));
         if (border_style == GTK_BORDER_STYLE_NONE || border_style == GTK_BORDER_STYLE_HIDDEN)
           {
-            gtk_css_static_style_set_value (style, id, gtk_css_dimension_value_new (0, GTK_CSS_NUMBER), section);
+            gtk_css_static_style_set_value (style, id, gtk_css_dimension_value_new (0, GTK_CSS_NUMBER));
             return;
           }
         break;
@@ -1084,7 +1084,7 @@ gtk_css_static_style_compute_value (GtkCssStaticStyle *style,
       value = _gtk_css_initial_value_new_compute (id, provider, (GtkCssStyle *)style, parent_style);
     }
 
-  gtk_css_static_style_set_value (style, id, value, section);
+  gtk_css_static_style_set_value (style, id, value);
 }
 
 GtkCssChange
@@ -1093,4 +1093,12 @@ gtk_css_static_style_get_change (GtkCssStaticStyle *style)
   g_return_val_if_fail (GTK_IS_CSS_STATIC_STYLE (style), GTK_CSS_CHANGE_ANY);
 
   return style->change;
+}
+
+GtkCssLookup *
+gtk_css_static_style_get_lookup (GtkCssStaticStyle *style)
+{
+  g_return_val_if_fail (GTK_IS_CSS_STATIC_STYLE (style), NULL);
+
+  return style->lookup;
 }
