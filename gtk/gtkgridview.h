@@ -25,6 +25,7 @@
 #endif
 
 #include <gtk/gtklistbase.h>
+#include <gtk/gtkselectionmodel.h>
 
 G_BEGIN_DECLS
 
@@ -53,10 +54,10 @@ GDK_AVAILABLE_IN_ALL
 GtkWidget *     gtk_grid_view_new_with_factory                  (GtkListItemFactory     *factory);
 
 GDK_AVAILABLE_IN_ALL
-GListModel *    gtk_grid_view_get_model                         (GtkGridView            *self);
+GtkSelectionModel * gtk_grid_view_get_model                     (GtkGridView            *self);
 GDK_AVAILABLE_IN_ALL
 void            gtk_grid_view_set_model                         (GtkGridView            *self,
-                                                                 GListModel             *model);
+                                                                 GtkSelectionModel      *model);
 GDK_AVAILABLE_IN_ALL
 void            gtk_grid_view_set_factory                       (GtkGridView            *self,
                                                                  GtkListItemFactory     *factory);

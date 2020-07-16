@@ -26,6 +26,7 @@
 
 #include <gtk/gtktypes.h>
 #include <gtk/gtksortlistmodel.h>
+#include <gtk/gtkselectionmodel.h>
 #include <gtk/gtksorter.h>
 
 G_BEGIN_DECLS
@@ -67,10 +68,10 @@ void            gtk_column_view_insert_column                   (GtkColumnView  
                                                                  GtkColumnViewColumn    *column);
 
 GDK_AVAILABLE_IN_ALL
-GListModel *    gtk_column_view_get_model                       (GtkColumnView          *self);
+GtkSelectionModel * gtk_column_view_get_model                   (GtkColumnView          *self);
 GDK_AVAILABLE_IN_ALL
 void            gtk_column_view_set_model                       (GtkColumnView          *self,
-                                                                 GListModel             *model);
+                                                                 GtkSelectionModel      *model);
 
 GDK_AVAILABLE_IN_ALL
 gboolean        gtk_column_view_get_show_row_separators         (GtkColumnView          *self);
