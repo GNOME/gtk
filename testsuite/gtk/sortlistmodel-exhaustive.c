@@ -329,7 +329,7 @@ test_two_sorters (gconstpointer model_id)
  * see if the two sorters stay identical
  */
 static void
-test_chained_sort (gconstpointer model_id)
+test_stability (gconstpointer model_id)
 {
   GListStore *store;
   GtkFlattenListModel *flatten;
@@ -434,7 +434,7 @@ main (int argc, char *argv[])
   setlocale (LC_ALL, "C");
 
   add_test_for_all_models ("two-sorters", test_two_sorters);
-  add_test_for_all_models ("chained-sort", test_chained_sort);
+  add_test_for_all_models ("stability", test_stability);
 
   return g_test_run ();
 }
