@@ -19,7 +19,6 @@
 
 #include "gtkcolorplaneprivate.h"
 
-#include "gtkaccessible.h"
 #include "gtkadjustment.h"
 #include "gtkcolorutils.h"
 #include "gtkgesturedrag.h"
@@ -400,7 +399,6 @@ gtk_color_plane_init (GtkColorPlane *plane)
 {
   GtkEventController *controller;
   GtkGesture *gesture;
-  AtkObject *atk_obj;
   GtkShortcutTrigger *trigger;
   GtkShortcutAction *action;
   GtkShortcut *shortcut;
@@ -408,13 +406,6 @@ gtk_color_plane_init (GtkColorPlane *plane)
   plane->priv = gtk_color_plane_get_instance_private (plane);
 
   gtk_widget_set_focusable (GTK_WIDGET (plane), TRUE);
-
-  atk_obj = gtk_widget_get_accessible (GTK_WIDGET (plane));
-  if (GTK_IS_ACCESSIBLE (atk_obj))
-    {
-      atk_object_set_name (atk_obj, _("Color Plane"));
-      atk_object_set_role (atk_obj, ATK_ROLE_COLOR_CHOOSER);
-    }
 
   gesture = gtk_gesture_drag_new ();
   g_signal_connect (gesture, "drag-begin",

@@ -39,8 +39,6 @@
 #include "gtkstylecontextprivate.h"
 #include "gtkwidgetprivate.h"
 
-#include "a11y/gtkprogressbaraccessibleprivate.h"
-
 #include <string.h>
 
 /**
@@ -250,9 +248,9 @@ gtk_progress_bar_class_init (GtkProgressBarClass *class)
 
   g_object_class_install_properties (gobject_class, NUM_PROPERTIES, progress_props);
 
-  gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_PROGRESS_BAR_ACCESSIBLE);
   gtk_widget_class_set_css_name (widget_class, I_("progressbar"));
   gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BOX_LAYOUT);
+  gtk_widget_class_set_accessible_role (widget_class, GTK_ACCESSIBLE_ROLE_PROGRESS_BAR);
 }
 
 static void
@@ -731,14 +729,6 @@ gtk_progress_bar_set_fraction (GtkProgressBar *pbar,
   gtk_progress_bar_set_activity_mode (pbar, FALSE);
   gtk_widget_queue_allocate (pbar->trough_widget);
   update_fraction_classes (pbar);
-
-  {
-    AtkObject *accessible =
-      _gtk_widget_peek_accessible (GTK_WIDGET (pbar));
-
-    if (accessible != NULL)
-      gtk_progress_bar_accessible_update_value (GTK_PROGRESS_BAR_ACCESSIBLE (accessible));
-  }
 
   g_object_notify_by_pspec (G_OBJECT (pbar), progress_props[PROP_FRACTION]);
 }

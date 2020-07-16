@@ -1,11 +1,13 @@
-/* GTK - The GIMP Toolkit
- * Copyright 2001 Sun Microsystems Inc.
- * Copyright 2020 GNOME Foundation
+/* gtkaccessible.c: Accessible interface
+ *
+ * Copyright 2020  GNOME Foundation
+ *
+ * SPDX-License-Identifier: LGPL-2.1-or-later
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
+ * version 2.1 of the License, or (at your option) any later version.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -13,203 +15,264 @@
  * Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
- * License along with this library. If not, see <http://www.gnu.org/licenses/>.
+ * License along with this library; if not, see <http://www.gnu.org/licenses/>.
  */
-
-#include "config.h"
-#include <string.h>
-
-#include "gtkwidget.h"
-#include "gtkintl.h"
-#include "gtkaccessible.h"
 
 /**
  * SECTION:gtkaccessible
- * @Short_description: Accessibility support for widgets
  * @Title: GtkAccessible
+ * @Short_description: Accessible interface
  *
- * The #GtkAccessible class is the base class for accessible
- * implementations for #GtkWidget subclasses. It is a thin
- * wrapper around #AtkObject, which adds facilities for associating
- * a widget with its accessible object.
+ * GtkAccessible provides an interface for describing a UI element, like a
+ * #GtkWidget, in a way that can be consumed by Assistive Technologies, or
+ * “AT”. Every accessible implementation has:
  *
- * An accessible implementation for a third-party widget should
- * derive from #GtkAccessible and implement the suitable interfaces
- * from ATK, such as #AtkText or #AtkSelection. To establish
- * the connection between the widget class and its corresponding
- * accessible implementation, override the get_accessible vfunc
- * in #GtkWidgetClass.
+ *  - a “role”, represented by a value of the #GtkAccessibleRole enumeration
+ *  - a “state”, represented by a set of #GtkAccessibleState and
+ *    #GtkAccessibleProperty values
+ *
+ * The role cannot be changed after instantiating a #GtkAccessible
+ * implementation.
+ *
+ * The state is updated every time a UI element's state changes in a way that
+ * should be reflected by assistive technologies. For instance, if a #GtkWidget
+ * visibility changes, the %GTK_ACCESSIBLE_STATE_HIDDEN state will also change
+ * to reflect the #GtkWidget:visible property.
  */
 
-typedef struct
-{
-  GtkWidget *widget;
-} GtkAccessiblePrivate;
+#include "config.h"
 
-enum
-{
-  PROP_0,
-  PROP_WIDGET
-};
+#include "gtkaccessibleprivate.h"
 
-G_DEFINE_TYPE_WITH_PRIVATE (GtkAccessible, gtk_accessible, ATK_TYPE_OBJECT)
+#include "gtkatcontextprivate.h"
+#include "gtkenums.h"
+#include "gtktypebuiltins.h"
 
-static void
-gtk_accessible_set_property (GObject      *object,
-                             guint         prop_id,
-                             const GValue *value,
-                             GParamSpec   *pspec)
-{
-  GtkAccessible *accessible = GTK_ACCESSIBLE (object);
+#include <stdarg.h>
 
-  switch (prop_id)
-    {
-    case PROP_WIDGET:
-      gtk_accessible_set_widget (accessible, g_value_get_object (value));
-      break;
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-      break;
-    }
-}
+G_DEFINE_INTERFACE (GtkAccessible, gtk_accessible, G_TYPE_OBJECT)
 
 static void
-gtk_accessible_get_property (GObject    *object,
-                             guint       prop_id,
-                             GValue     *value,
-                             GParamSpec *pspec)
+gtk_accessible_default_init (GtkAccessibleInterface *iface)
 {
-  GtkAccessible *accessible = GTK_ACCESSIBLE (object);
-  GtkAccessiblePrivate *priv = gtk_accessible_get_instance_private (accessible);
+  GParamSpec *pspec =
+    g_param_spec_enum ("accessible-role",
+                       "Accessible Role",
+                       "The role of the accessible object",
+                       GTK_TYPE_ACCESSIBLE_ROLE,
+                       GTK_ACCESSIBLE_ROLE_WIDGET,
+                       G_PARAM_READWRITE |
+                       G_PARAM_CONSTRUCT_ONLY |
+                       G_PARAM_STATIC_STRINGS);
 
-  switch (prop_id)
-    {
-    case PROP_WIDGET:
-      g_value_set_object (value, priv->widget);
-      break;
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-      break;
-    }
+  g_object_interface_install_property (iface, pspec);
 }
 
-static void
-gtk_accessible_init (GtkAccessible *accessible)
+/*< private >
+ * gtk_accessible_get_at_context:
+ * @self: a #GtkAccessible
+ *
+ * Retrieves the #GtkATContext for the given #GtkAccessible.
+ *
+ * Returns: (transfer none): the #GtkATContext
+ */
+GtkATContext *
+gtk_accessible_get_at_context (GtkAccessible *self)
 {
-}
+  g_return_val_if_fail (GTK_IS_ACCESSIBLE (self), NULL);
 
-static AtkStateSet *
-gtk_accessible_ref_state_set (AtkObject *object)
-{
-  GtkAccessible *accessible = GTK_ACCESSIBLE (object);
-  GtkAccessiblePrivate *priv = gtk_accessible_get_instance_private (accessible);
-  AtkStateSet *state_set;
-
-  state_set = ATK_OBJECT_CLASS (gtk_accessible_parent_class)->ref_state_set (object);
-
-  if (priv->widget == NULL)
-    atk_state_set_add_state (state_set, ATK_STATE_DEFUNCT);
-
-  return state_set;
-}
-
-static void
-gtk_accessible_real_widget_set (GtkAccessible *accessible)
-{
-  atk_object_notify_state_change (ATK_OBJECT (accessible), ATK_STATE_DEFUNCT, FALSE);
-}
-
-static void
-gtk_accessible_real_widget_unset (GtkAccessible *accessible)
-{
-  atk_object_notify_state_change (ATK_OBJECT (accessible), ATK_STATE_DEFUNCT, TRUE);
-}
-
-static void
-gtk_accessible_dispose (GObject *object)
-{
-  GtkAccessible *accessible = GTK_ACCESSIBLE (object);
-  
-  gtk_accessible_set_widget (accessible, NULL);
-
-  G_OBJECT_CLASS (gtk_accessible_parent_class)->dispose (object);
-}
-
-static void
-gtk_accessible_class_init (GtkAccessibleClass *klass)
-{
-  GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
-  AtkObjectClass *atkobject_class = ATK_OBJECT_CLASS (klass);
-
-  klass->widget_set = gtk_accessible_real_widget_set;
-  klass->widget_unset = gtk_accessible_real_widget_unset;
-
-  atkobject_class->ref_state_set = gtk_accessible_ref_state_set;
-  gobject_class->get_property = gtk_accessible_get_property;
-  gobject_class->set_property = gtk_accessible_set_property;
-  gobject_class->dispose = gtk_accessible_dispose;
-
-  g_object_class_install_property (gobject_class,
-				   PROP_WIDGET,
-				   g_param_spec_object ("widget",
-							P_("Widget"),
-							P_("The widget referenced by this accessible."),
-							GTK_TYPE_WIDGET,
-							G_PARAM_READWRITE));
+  return GTK_ACCESSIBLE_GET_IFACE (self)->get_at_context (self);
 }
 
 /**
- * gtk_accessible_set_widget:
- * @accessible: a #GtkAccessible
- * @widget: (allow-none): a #GtkWidget or %NULL to unset
+ * gtk_accessible_get_accessible_role:
+ * @self: a #GtkAccessible
  *
- * Sets the #GtkWidget corresponding to the #GtkAccessible.
+ * Retrieves the #GtkAccessibleRole for the given #GtkAccessible.
  *
- * @accessible will not hold a reference to @widget.
- * It is the caller’s responsibility to ensure that when @widget
- * is destroyed, the widget is unset by calling this function
- * again with @widget set to %NULL.
+ * Returns: a #GtkAccessibleRole
+ */
+GtkAccessibleRole
+gtk_accessible_get_accessible_role (GtkAccessible *self)
+{
+  g_return_val_if_fail (GTK_IS_ACCESSIBLE (self), GTK_ACCESSIBLE_ROLE_WIDGET);
+
+  GtkATContext *context = gtk_accessible_get_at_context (self);
+  if (context == NULL)
+    return GTK_ACCESSIBLE_ROLE_WIDGET;
+
+  return gtk_at_context_get_accessible_role (context);
+}
+
+/**
+ * gtk_accessible_update_state:
+ * @self: a #GtkAccessible
+ * @first_state: the first #GtkAccessibleState
+ * @...: a list of state and value pairs, terminated by -1
+ *
+ * Updates a list of accessible states.
+ *
+ * This function should be called by #GtkWidget types whenever an accessible
+ * state change must be communicated to assistive technologies.
  */
 void
-gtk_accessible_set_widget (GtkAccessible *accessible,
-                           GtkWidget     *widget)
+gtk_accessible_update_state (GtkAccessible      *self,
+                             GtkAccessibleState  first_state,
+                             ...)
 {
-  GtkAccessiblePrivate *priv = gtk_accessible_get_instance_private (accessible);
-  GtkAccessibleClass *klass;
+  GtkAccessibleState state;
+  GtkATContext *context;
+  va_list args;
 
-  g_return_if_fail (GTK_IS_ACCESSIBLE (accessible));
+  g_return_if_fail (GTK_IS_ACCESSIBLE (self));
 
-  if (priv->widget == widget)
+  context = gtk_accessible_get_at_context (self);
+  if (context == NULL)
     return;
 
-  klass = GTK_ACCESSIBLE_GET_CLASS (accessible);
-  if (priv->widget)
-    klass->widget_unset (accessible);
+  va_start (args, first_state);
 
-  priv->widget = widget;
-  if (priv->widget)
-    klass->widget_set (accessible);
+  state = first_state;
 
-  g_object_notify (G_OBJECT (accessible), "widget");
+  while (state != -1)
+    {
+      GtkAccessibleValue *value = gtk_accessible_value_collect_for_state (state, &args);
+
+      if (value == NULL)
+        goto out;
+
+      gtk_at_context_set_accessible_state (context, state, value);
+      gtk_accessible_value_unref (value);
+
+      state = va_arg (args, int);
+    }
+
+  gtk_at_context_update (context);
+
+out:
+  va_end (args);
 }
 
 /**
- * gtk_accessible_get_widget:
- * @accessible: a #GtkAccessible
+ * gtk_accessible_update_state_value:
+ * @self: a #GtkAccessible
+ * @state: a #GtkAccessibleState
+ * @value: a #GValue with the value for @state
  *
- * Gets the #GtkWidget corresponding to the #GtkAccessible.
- * The returned widget does not have a reference added, so
- * you do not need to unref it.
+ * Updates an accessible state.
  *
- * Returns: (nullable) (transfer none): pointer to the #GtkWidget
- *     corresponding to the #GtkAccessible, or %NULL.
+ * This function should be called by #GtkWidget types whenever an accessible
+ * state change must be communicated to assistive technologies.
+ *
+ * This function is meant to be used by language bindings.
  */
-GtkWidget*
-gtk_accessible_get_widget (GtkAccessible *accessible)
+void
+gtk_accessible_update_state_value (GtkAccessible      *self,
+                                   GtkAccessibleState  state,
+                                   const GValue       *value)
 {
-  GtkAccessiblePrivate *priv = gtk_accessible_get_instance_private (accessible);
+  GtkATContext *context;
 
-  g_return_val_if_fail (GTK_IS_ACCESSIBLE (accessible), NULL);
+  g_return_if_fail (GTK_IS_ACCESSIBLE (self));
 
-  return priv->widget;
+  context = gtk_accessible_get_at_context (self);
+  if (context == NULL)
+    return;
+
+  GtkAccessibleValue *real_value =
+    gtk_accessible_value_collect_for_state_value (state, value);
+
+  if (real_value == NULL)
+    return;
+
+  gtk_at_context_set_accessible_state (context, state, real_value);
+  gtk_accessible_value_unref (real_value);
+  gtk_at_context_update (context);
+}
+
+/**
+ * gtk_accessible_update_property:
+ * @self: a #GtkAccessible
+ * @first_property: the first #GtkAccessibleProperty
+ * @...: a list of property and value pairs, terminated by -1
+ *
+ * Updates a list of accessible properties.
+ *
+ * This function should be called by #GtkWidget types whenever an accessible
+ * property change must be communicated to assistive technologies.
+ */
+void
+gtk_accessible_update_property (GtkAccessible         *self,
+                                GtkAccessibleProperty  first_property,
+                                ...)
+{
+  GtkAccessibleProperty property;
+  GtkATContext *context;
+  va_list args;
+
+  g_return_if_fail (GTK_IS_ACCESSIBLE (self));
+
+  context = gtk_accessible_get_at_context (self);
+  if (context == NULL)
+    return;
+
+  va_start (args, first_property);
+
+  property = first_property;
+
+  while (property != -1)
+    {
+      GtkAccessibleValue *value = gtk_accessible_value_collect_for_property (property, &args);
+
+      /* gtk_accessible_value_collect_for_property() will warn for us */
+      if (value == NULL)
+        goto out;
+
+      gtk_at_context_set_accessible_property (context, property, value);
+      gtk_accessible_value_unref (value);
+
+      property = va_arg (args, int);
+    }
+
+  gtk_at_context_update (context);
+
+out:
+  va_end (args);
+}
+
+/**
+ * gtk_accessible_update_property_value:
+ * @self: a #GtkAccessible
+ * @property: a #GtkAccessibleProperty
+ * @value: a #GValue with the value for @property
+ *
+ * Updates an accessible property.
+ *
+ * This function should be called by #GtkWidget types whenever an accessible
+ * property change must be communicated to assistive technologies.
+ *
+ * This function is meant to be used by language bindings.
+ */
+void
+gtk_accessible_update_property_value (GtkAccessible         *self,
+                                      GtkAccessibleProperty  property,
+                                      const GValue          *value)
+{
+  GtkATContext *context;
+
+  g_return_if_fail (GTK_IS_ACCESSIBLE (self));
+
+  context = gtk_accessible_get_at_context (self);
+  if (context == NULL)
+    return;
+
+  GtkAccessibleValue *real_value =
+    gtk_accessible_value_collect_for_property_value (property, value);
+
+  if (real_value == NULL)
+    return;
+
+  gtk_at_context_set_accessible_property (context, property, real_value);
+  gtk_accessible_value_unref (real_value);
+  gtk_at_context_update (context);
 }

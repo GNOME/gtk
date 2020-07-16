@@ -278,7 +278,6 @@ gtk_box_class_init (GtkBoxClass *class)
   g_object_class_install_properties (object_class, LAST_PROP, props);
 
   gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BOX_LAYOUT);
-  gtk_widget_class_set_accessible_role (widget_class, ATK_ROLE_FILLER);
   gtk_widget_class_set_css_name (widget_class, I_("box"));
 }
 static void

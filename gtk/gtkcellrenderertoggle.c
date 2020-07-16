@@ -29,8 +29,6 @@
 #include "gtkwidgetprivate.h"
 #include "gtktreeprivate.h"
 
-#include "a11y/gtkbooleancellaccessible.h"
-
 #include <stdlib.h>
 
 /**
@@ -216,8 +214,6 @@ gtk_cell_renderer_toggle_class_init (GtkCellRendererToggleClass *class)
 		  NULL,
 		  G_TYPE_NONE, 1,
 		  G_TYPE_STRING);
-
-  gtk_cell_renderer_class_set_accessible_type (cell_class, GTK_TYPE_BOOLEAN_CELL_ACCESSIBLE);
 }
 
 static void

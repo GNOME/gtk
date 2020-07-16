@@ -9,9 +9,9 @@ is used (the actual output on your system may be different):
 
 ```
 $ pkg-config --cflags gtk4
- -pthread -I/usr/include/gtk-4.0 -I/usr/lib64/gtk-4.0/include -I/usr/include/atk-1.0 -I/usr/include/cairo -I/usr/include/pango-1.0 -I/usr/include/glib-2.0 -I/usr/lib64/glib-2.0/include -I/usr/include/pixman-1 -I/usr/include/freetype2 -I/usr/include/libpng12
+ -pthread -I/usr/include/gtk-4.0 -I/usr/lib64/gtk-4.0/include -I/usr/include/cairo -I/usr/include/pango-1.0 -I/usr/include/glib-2.0 -I/usr/lib64/glib-2.0/include -I/usr/include/pixman-1 -I/usr/include/freetype2 -I/usr/include/libpng12
 $ pkg-config --libs gtk4
- -pthread -lgtk-4 -lgdk-4 -latk-1.0 -lgio-2.0 -lpangoft2-1.0 -lgdk_pixbuf-2.0 -lpangocairo-1.0 -lcairo -lpango-1.0 -lfreetype -lfontconfig -lgobject-2.0 -lgmodule-2.0 -lgthread-2.0 -lrt -lglib-2.0
+ -pthread -lgtk-4 -lgdk-4 -lgio-2.0 -lpangoft2-1.0 -lgdk_pixbuf-2.0 -lpangocairo-1.0 -lcairo -lpango-1.0 -lfreetype -lfontconfig -lgobject-2.0 -lgmodule-2.0 -lgthread-2.0 -lrt -lglib-2.0
 ```
 The simplest way to compile a program is to use the "backticks"
 feature of the shell. If you enclose a command in backticks

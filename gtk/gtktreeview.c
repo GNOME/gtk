@@ -65,8 +65,6 @@
 #include "gtknative.h"
 #include "gtkpopover.h"
 
-#include "a11y/gtktreeviewaccessibleprivate.h"
-
 #include "gdk/gdkeventsprivate.h"
 #include "gdk/gdktextureprivate.h"
 
@@ -1657,7 +1655,6 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
 
   gtk_widget_class_add_binding_signal (widget_class, GDK_KEY_F, GDK_CONTROL_MASK, "start-interactive-search", NULL);
 
-  gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_TREE_VIEW_ACCESSIBLE);
   gtk_widget_class_set_css_name (widget_class, I_("treeview"));
 }
 
@@ -7995,8 +7992,6 @@ gtk_tree_view_row_changed (GtkTreeModel *model,
   if (tree == NULL)
     goto done;
 
-  _gtk_tree_view_accessible_changed (tree_view, tree, node);
-
   if (tree_view->fixed_height_mode
       && tree_view->fixed_height >= 0)
     {
@@ -8121,8 +8116,6 @@ gtk_tree_view_row_inserted (GtkTreeModel *model,
       tmpnode = gtk_tree_rbtree_insert_after (tree, tmpnode, height, FALSE);
     }
 
-  _gtk_tree_view_accessible_add (tree_view, tree, tmpnode);
-
  done:
   if (height > 0)
     {
@@ -8182,12 +8175,10 @@ gtk_tree_view_row_has_child_toggled (GtkTreeModel *model,
   if (has_child)
     {
       GTK_TREE_RBNODE_SET_FLAG (node, GTK_TREE_RBNODE_IS_PARENT);
-      _gtk_tree_view_accessible_add_state (tree_view, tree, node, GTK_CELL_RENDERER_EXPANDABLE);
     }
   else
     {
       GTK_TREE_RBNODE_UNSET_FLAG (node, GTK_TREE_RBNODE_IS_PARENT);
-      _gtk_tree_view_accessible_remove_state (tree_view, tree, node, GTK_CELL_RENDERER_EXPANDABLE);
     }
 
   if (has_child && tree_view->is_list)
@@ -8319,15 +8310,10 @@ gtk_tree_view_row_deleted (GtkTreeModel *model,
       if (tree_view->tree == tree)
 	tree_view->tree = NULL;
 
-      _gtk_tree_view_accessible_remove_state (tree_view,
-                                              tree->parent_tree, tree->parent_node,
-                                              GTK_CELL_RENDERER_EXPANDED);
-      _gtk_tree_view_accessible_remove (tree_view, tree, NULL);
       gtk_tree_rbtree_remove (tree);
     }
   else
     {
-      _gtk_tree_view_accessible_remove (tree_view, tree, node);
       gtk_tree_rbtree_remove_node (tree, node);
     }
 
@@ -8400,8 +8386,6 @@ gtk_tree_view_rows_reordered (GtkTreeModel *model,
   ensure_unprelighted (tree_view);
 
   gtk_tree_rbtree_reorder (tree, new_order, len);
-
-  _gtk_tree_view_accessible_reorder (tree_view);
 
   gtk_widget_queue_draw (GTK_WIDGET (tree_view));
 
@@ -9113,10 +9097,6 @@ _gtk_tree_view_set_focus_column (GtkTreeView       *tree_view,
     return;
 
   tree_view->focus_column = column;
-
-  _gtk_tree_view_accessible_update_focus_column (tree_view, 
-                                                 old_column,
-                                                 column);
 }
 
 /* x and y are the mouse position
@@ -10259,7 +10239,6 @@ gtk_tree_view_set_model (GtkTreeView  *tree_view,
 	{
 	  tree_view->tree = gtk_tree_rbtree_new ();
 	  gtk_tree_view_build_tree (tree_view, tree_view->tree, &iter, 1, FALSE);
-          _gtk_tree_view_accessible_add (tree_view, tree_view->tree, NULL);
 	}
       gtk_tree_path_free (path);
 
@@ -10268,14 +10247,6 @@ gtk_tree_view_set_model (GtkTreeView  *tree_view,
     }
 
   gtk_tree_view_real_set_cursor (tree_view, NULL, CURSOR_INVALID);
-
-  {
-    GtkTreeViewAccessible *accessible =
-      GTK_TREE_VIEW_ACCESSIBLE (_gtk_widget_peek_accessible (GTK_WIDGET (tree_view)));
-
-    if (accessible != NULL)
-      gtk_tree_view_accessible_update_model (accessible, tree_view->model);
-  }
 
   g_object_notify_by_pspec (G_OBJECT (tree_view), tree_view_props[PROP_MODEL]);
 
@@ -10589,8 +10560,6 @@ gint
 gtk_tree_view_remove_column (GtkTreeView       *tree_view,
                              GtkTreeViewColumn *column)
 {
-  guint position;
-
   g_return_val_if_fail (GTK_IS_TREE_VIEW (tree_view), -1);
   g_return_val_if_fail (GTK_IS_TREE_VIEW_COLUMN (column), -1);
   g_return_val_if_fail (gtk_tree_view_column_get_tree_view (column) == GTK_WIDGET (tree_view), -1);
@@ -10613,8 +10582,6 @@ gtk_tree_view_remove_column (GtkTreeView       *tree_view,
                                         G_CALLBACK (column_sizing_notify),
                                         tree_view);
 
-  position = g_list_index (tree_view->columns, column);
-
   _gtk_tree_view_column_unset_tree_view (column);
 
   tree_view->columns = g_list_remove (tree_view->columns, column);
@@ -10635,8 +10602,6 @@ gtk_tree_view_remove_column (GtkTreeView       *tree_view,
 
       gtk_widget_queue_resize (GTK_WIDGET (tree_view));
     }
-
-  _gtk_tree_view_accessible_remove_column (tree_view, column, position);
 
   g_object_unref (column);
   g_signal_emit (tree_view, tree_view_signals[COLUMNS_CHANGED], 0);
@@ -10700,8 +10665,6 @@ gtk_tree_view_insert_column (GtkTreeView       *tree_view,
 	}
       gtk_widget_queue_resize (GTK_WIDGET (tree_view));
     }
-
-  _gtk_tree_view_accessible_add_column (tree_view, column, position);
 
   g_signal_emit (tree_view, tree_view_signals[COLUMNS_CHANGED], 0);
 
@@ -10913,8 +10876,6 @@ gtk_tree_view_move_column_after (GtkTreeView       *tree_view,
   gtk_tree_view_update_button_position (tree_view, column);
 
   gtk_widget_queue_resize (GTK_WIDGET (tree_view));
-
-  _gtk_tree_view_accessible_reorder_column (tree_view, column);
 
   g_signal_emit (tree_view, tree_view_signals[COLUMNS_CHANGED], 0);
 }
@@ -11382,11 +11343,6 @@ gtk_tree_view_real_expand_row (GtkTreeView   *tree_view,
 			    gtk_tree_path_get_depth (path) + 1,
 			    open_all);
 
-  _gtk_tree_view_accessible_add (tree_view, node->children, NULL);
-  _gtk_tree_view_accessible_add_state (tree_view,
-                                       tree, node,
-                                       GTK_CELL_RENDERER_EXPANDED);
-
   install_presize_handler (tree_view);
 
   g_signal_emit (tree_view, tree_view_signals[ROW_EXPANDED], 0, &iter, path);
@@ -11516,11 +11472,6 @@ gtk_tree_view_real_collapse_row (GtkTreeView   *tree_view,
   
   /* Stop a pending double click */
   gtk_event_controller_reset (GTK_EVENT_CONTROLLER (tree_view->click_gesture));
-
-  _gtk_tree_view_accessible_remove (tree_view, node->children, NULL);
-  _gtk_tree_view_accessible_remove_state (tree_view,
-                                          tree, node,
-                                          GTK_CELL_RENDERER_EXPANDED);
 
   gtk_tree_rbtree_remove (node->children);
 
@@ -11739,10 +11690,6 @@ gtk_tree_view_real_set_cursor (GtkTreeView     *tree_view,
 {
   if (!(flags & CURSOR_INVALID) && tree_view->cursor_node)
     {
-      _gtk_tree_view_accessible_remove_state (tree_view,
-                                              tree_view->cursor_tree,
-                                              tree_view->cursor_node,
-                                              GTK_CELL_RENDERER_FOCUSED);
       gtk_widget_queue_draw (GTK_WIDGET (tree_view));
     }
 
@@ -11800,11 +11747,6 @@ gtk_tree_view_real_set_cursor (GtkTreeView     *tree_view,
                                             tree_view->cursor_node);
           gtk_widget_queue_draw (GTK_WIDGET (tree_view));
 	}
-
-      _gtk_tree_view_accessible_add_state (tree_view,
-                                           tree_view->cursor_tree,
-                                           tree_view->cursor_node,
-                                           GTK_CELL_RENDERER_FOCUSED);
     }
 
   if (!gtk_widget_in_destruction (GTK_WIDGET (tree_view)))

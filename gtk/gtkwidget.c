@@ -27,7 +27,7 @@
 #include "gtkwidgetprivate.h"
 
 #include "gtkaccelgroupprivate.h"
-#include "gtkaccessible.h"
+#include "gtkaccessibleprivate.h"
 #include "gtkapplicationprivate.h"
 #include "gtkbuildable.h"
 #include "gtkbuilderprivate.h"
@@ -73,7 +73,6 @@
 #include "gtkwindowgroup.h"
 #include "gtkwindowprivate.h"
 
-#include "a11y/gtkwidgetaccessibleprivate.h"
 #include "inspector/window.h"
 
 #include "gdk/gdkeventsprivate.h"
@@ -258,29 +257,6 @@
  * |[
  * <object class="GtkButton">
  *   <accelerator key="q" modifiers="GDK_CONTROL_MASK" signal="clicked"/>
- * </object>
- * ]|
- *
- * In addition to accelerators, GtkWidget also support a custom <accessible>
- * element, which supports actions and relations. Properties on the accessible
- * implementation of an object can be set by accessing the internal child
- * “accessible” of a #GtkWidget.
- *
- * An example of a UI definition fragment specifying an accessible:
- * |[
- * <object class="GtkLabel" id="label1"/>
- *   <property name="label">I am a Label for a Button</property>
- * </object>
- * <object class="GtkButton" id="button1">
- *   <accessibility>
- *     <action action_name="click" translatable="yes">Click the button.</action>
- *     <relation target="label1" type="labelled-by"/>
- *   </accessibility>
- *   <child internal-child="accessible">
- *     <object class="AtkObject" id="a11y-button1">
- *       <property name="accessible-name">Clickable Button</property>
- *     </object>
- *   </child>
  * </object>
  * ]|
  *
@@ -535,7 +511,10 @@ enum {
   PROP_CSS_NAME,
   PROP_CSS_CLASSES,
   PROP_LAYOUT_MANAGER,
-  NUM_PROPERTIES
+  NUM_PROPERTIES,
+
+  /* GtkAccessible */
+  PROP_ACCESSIBLE_ROLE
 };
 
 static GParamSpec *widget_props[NUM_PROPERTIES] = { NULL, };
@@ -622,9 +601,8 @@ static void             gtk_widget_real_measure                 (GtkWidget      
                                                                  int              *natural_baseline);
 static void             gtk_widget_real_state_flags_changed     (GtkWidget        *widget,
                                                                  GtkStateFlags     old_state);
-static AtkObject*	gtk_widget_real_get_accessible		(GtkWidget	  *widget);
-static void		gtk_widget_accessible_interface_init	(AtkImplementorIface *iface);
-static AtkObject*	gtk_widget_ref_accessible		(AtkImplementor *implementor);
+
+static void             gtk_widget_accessible_interface_init    (GtkAccessibleInterface *iface);
 
 static void             gtk_widget_buildable_interface_init     (GtkBuildableIface  *iface);
 static void             gtk_widget_buildable_set_name           (GtkBuildable       *buildable,
@@ -707,11 +685,11 @@ gtk_widget_get_type (void)
 	NULL,		/* value_table */
       };
 
-      const GInterfaceInfo accessibility_info =
+      const GInterfaceInfo accessible_info =
       {
-	(GInterfaceInitFunc) gtk_widget_accessible_interface_init,
-	(GInterfaceFinalizeFunc) NULL,
-	NULL /* interface data */
+        (GInterfaceInitFunc) gtk_widget_accessible_interface_init,
+        (GInterfaceFinalizeFunc) NULL,
+        NULL,
       };
 
       const GInterfaceInfo buildable_info =
@@ -736,12 +714,12 @@ gtk_widget_get_type (void)
       GtkWidget_private_offset =
         g_type_add_instance_private (widget_type, sizeof (GtkWidgetPrivate));
 
-      g_type_add_interface_static (widget_type, ATK_TYPE_IMPLEMENTOR,
-                                   &accessibility_info) ;
+      g_type_add_interface_static (widget_type, GTK_TYPE_ACCESSIBLE,
+                                   &accessible_info);
       g_type_add_interface_static (widget_type, GTK_TYPE_BUILDABLE,
-                                   &buildable_info) ;
+                                   &buildable_info);
       g_type_add_interface_static (widget_type, GTK_TYPE_CONSTRAINT_TARGET,
-                                   &constraint_target_info) ;
+                                   &constraint_target_info);
     }
 
   return widget_type;
@@ -780,6 +758,8 @@ gtk_widget_base_class_init (gpointer g_class)
           g_object_unref (shortcut);
         }
     }
+
+  priv->accessible_role = GTK_ACCESSIBLE_ROLE_WIDGET;
 }
 
 static void
@@ -934,12 +914,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   klass->query_tooltip = gtk_widget_real_query_tooltip;
   klass->css_changed = gtk_widget_real_css_changed;
   klass->system_setting_changed = gtk_widget_real_system_setting_changed;
-
-  /* Accessibility support */
-  klass->priv->accessible_type = GTK_TYPE_WIDGET_ACCESSIBLE;
-  klass->priv->accessible_role = ATK_ROLE_INVALID;
-  klass->get_accessible = gtk_widget_real_get_accessible;
-
   klass->contains = gtk_widget_real_contains;
 
   widget_props[PROP_NAME] =
@@ -1363,6 +1337,8 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 
   g_object_class_install_properties (gobject_class, NUM_PROPERTIES, widget_props);
 
+  g_object_class_override_property (gobject_class, PROP_ACCESSIBLE_ROLE, "accessible-role");
+
   /**
    * GtkWidget::destroy:
    * @object: the object which received the signal
@@ -1743,6 +1719,9 @@ gtk_widget_set_property (GObject         *object,
     case PROP_LAYOUT_MANAGER:
       gtk_widget_set_layout_manager (widget, g_value_dup_object (value));
       break;
+    case PROP_ACCESSIBLE_ROLE:
+      priv->accessible_role = g_value_get_enum (value);
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -1872,6 +1851,16 @@ gtk_widget_get_property (GObject         *object,
       break;
     case PROP_LAYOUT_MANAGER:
       g_value_set_object (value, gtk_widget_get_layout_manager (widget));
+      break;
+    case PROP_ACCESSIBLE_ROLE:
+      {
+        GtkAccessibleRole role = priv->accessible_role;
+
+        if (priv->accessible_role == GTK_ACCESSIBLE_ROLE_WIDGET)
+          role = gtk_widget_class_get_accessible_role (GTK_WIDGET_GET_CLASS (widget));
+
+        g_value_set_enum (value, role);
+      }
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -2289,6 +2278,8 @@ gtk_widget_init (GTypeInstance *instance, gpointer g_class)
   priv->halign = GTK_ALIGN_FILL;
   priv->valign = GTK_ALIGN_FILL;
 
+  priv->accessible_role = GTK_ACCESSIBLE_ROLE_WIDGET;
+
   priv->width_request = -1;
   priv->height_request = -1;
 
@@ -2608,8 +2599,9 @@ gtk_widget_show (GtkWidget *widget)
       g_signal_emit (widget, widget_signals[SHOW], 0);
       g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_VISIBLE]);
 
-      if (priv->accessible != NULL)
-        gtk_widget_accessible_notify_visible (GTK_WIDGET_ACCESSIBLE (priv->accessible));
+      gtk_accessible_update_state (GTK_ACCESSIBLE (widget),
+                                   GTK_ACCESSIBLE_STATE_HIDDEN, FALSE,
+                                   -1);
 
       gtk_widget_pop_verify_invariants (widget);
       g_object_unref (widget);
@@ -2671,8 +2663,9 @@ gtk_widget_hide (GtkWidget *widget)
       g_signal_emit (widget, widget_signals[HIDE], 0);
       g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_VISIBLE]);
 
-      if (priv->accessible != NULL)
-        gtk_widget_accessible_notify_visible (GTK_WIDGET_ACCESSIBLE (priv->accessible));
+      gtk_accessible_update_state (GTK_ACCESSIBLE (widget),
+                                   GTK_ACCESSIBLE_STATE_HIDDEN, TRUE,
+                                   -1);
 
       parent = gtk_widget_get_parent (widget);
       if (parent)
@@ -2733,15 +2726,10 @@ gtk_widget_map (GtkWidget *widget)
 
   if (!_gtk_widget_get_mapped (widget))
     {
-      GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
-
       gtk_widget_push_verify_invariants (widget);
 
       if (!_gtk_widget_get_realized (widget))
         gtk_widget_realize (widget);
-
-      if (priv->accessible != NULL)
-        gtk_widget_accessible_notify_showing (GTK_WIDGET_ACCESSIBLE (priv->accessible));
 
       g_signal_emit (widget, widget_signals[MAP], 0);
 
@@ -2767,8 +2755,6 @@ gtk_widget_unmap (GtkWidget *widget)
 
   if (_gtk_widget_get_mapped (widget))
     {
-      GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
-
       g_object_ref (widget);
       gtk_widget_push_verify_invariants (widget);
 
@@ -2776,9 +2762,6 @@ gtk_widget_unmap (GtkWidget *widget)
       _gtk_tooltip_hide (widget);
 
       g_signal_emit (widget, widget_signals[UNMAP], 0);
-
-      if (priv->accessible != NULL)
-        gtk_widget_accessible_notify_showing (GTK_WIDGET_ACCESSIBLE (priv->accessible));
 
       update_cursor_on_state_change (widget);
 
@@ -3942,9 +3925,6 @@ gtk_widget_allocate (GtkWidget    *widget,
   priv->alloc_needed_on_child = FALSE;
 
   gtk_widget_update_paintables (widget);
-
-  if (priv->accessible != NULL)
-    gtk_widget_accessible_update_bounds (GTK_WIDGET_ACCESSIBLE (priv->accessible));
 
 skip_allocate:
   if (size_changed || baseline_changed)
@@ -5622,9 +5602,6 @@ gtk_widget_set_sensitive (GtkWidget *widget,
       update_cursor_on_state_change (widget);
     }
 
-  if (priv->accessible != NULL)
-    gtk_widget_accessible_notify_sensitive (GTK_WIDGET_ACCESSIBLE (priv->accessible));
-
   g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_SENSITIVE]);
 }
 
@@ -7061,6 +7038,8 @@ gtk_widget_dispose (GObject *object)
     gtk_layout_manager_set_widget (priv->layout_manager, NULL);
   g_clear_object (&priv->layout_manager);
 
+  g_clear_object (&priv->at_context);
+
   priv->visible = FALSE;
   if (_gtk_widget_get_realized (widget))
     gtk_widget_unrealize (widget);
@@ -7110,9 +7089,7 @@ finalize_assertion_weak_ref (gpointer data,
 static void
 gtk_widget_real_destroy (GtkWidget *object)
 {
-  /* gtk_object_destroy() will already hold a refcount on object */
   GtkWidget *widget = GTK_WIDGET (object);
-  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
 
   if (g_object_get_qdata (G_OBJECT (widget), quark_auto_children))
     {
@@ -7219,13 +7196,6 @@ gtk_widget_real_destroy (GtkWidget *object)
 	}
     }
 
-  if (priv->accessible)
-    {
-      gtk_accessible_set_widget (GTK_ACCESSIBLE (priv->accessible), NULL);
-      g_object_unref (priv->accessible);
-      priv->accessible = NULL;
-    }
-
   /* Callers of add_mnemonic_label() should disconnect on ::destroy */
   g_object_set_qdata (G_OBJECT (widget), quark_mnemonic_labels, NULL);
 
@@ -7255,7 +7225,6 @@ gtk_widget_finalize (GObject *object)
   g_free (priv->tooltip_markup);
   g_free (priv->tooltip_text);
 
-  g_clear_object (&priv->accessible);
   g_clear_pointer (&priv->transform, gsk_transform_unref);
   g_clear_pointer (&priv->allocated_transform, gsk_transform_unref);
 
@@ -7702,170 +7671,6 @@ G_DEFINE_BOXED_TYPE (GtkRequisition, gtk_requisition,
                      gtk_requisition_copy,
                      gtk_requisition_free)
 
-/**
- * gtk_widget_class_set_accessible_type:
- * @widget_class: class to set the accessible type for
- * @type: The object type that implements the accessible for @widget_class
- *
- * Sets the type to be used for creating accessibles for widgets of
- * @widget_class. The given @type must be a subtype of the type used for
- * accessibles of the parent class.
- *
- * This function should only be called from class init functions of widgets.
- **/
-void
-gtk_widget_class_set_accessible_type (GtkWidgetClass *widget_class,
-                                      GType           type)
-{
-  GtkWidgetClassPrivate *priv;
-
-  g_return_if_fail (GTK_IS_WIDGET_CLASS (widget_class));
-  g_return_if_fail (g_type_is_a (type, widget_class->priv->accessible_type));
-
-  priv = widget_class->priv;
-
-  priv->accessible_type = type;
-  /* reset this - honoring the type's role is better. */
-  priv->accessible_role = ATK_ROLE_INVALID;
-}
-
-/**
- * gtk_widget_class_set_accessible_role:
- * @widget_class: class to set the accessible role for
- * @role: The role to use for accessibles created for @widget_class
- *
- * Sets the default #AtkRole to be set on accessibles created for
- * widgets of @widget_class. Accessibles may decide to not honor this
- * setting if their role reporting is more refined. Calls to 
- * gtk_widget_class_set_accessible_type() will reset this value.
- *
- * In cases where you want more fine-grained control over the role of
- * accessibles created for @widget_class, you should provide your own
- * accessible type and use gtk_widget_class_set_accessible_type()
- * instead.
- *
- * If @role is #ATK_ROLE_INVALID, the default role will not be changed
- * and the accessible’s default role will be used instead.
- *
- * This function should only be called from class init functions of widgets.
- **/
-void
-gtk_widget_class_set_accessible_role (GtkWidgetClass *widget_class,
-                                      AtkRole         role)
-{
-  GtkWidgetClassPrivate *priv;
-
-  g_return_if_fail (GTK_IS_WIDGET_CLASS (widget_class));
-
-  priv = widget_class->priv;
-
-  priv->accessible_role = role;
-}
-
-/**
- * _gtk_widget_peek_accessible:
- * @widget: a #GtkWidget
- *
- * Gets the accessible for @widget, if it has been created yet.
- * Otherwise, this function returns %NULL. If the @widget’s implementation
- * does not use the default way to create accessibles, %NULL will always be
- * returned.
- *
- * Returns: (nullable): the accessible for @widget or %NULL if none has been
- *     created yet.
- **/
-AtkObject *
-_gtk_widget_peek_accessible (GtkWidget *widget)
-{
-  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
-
-  return priv->accessible;
-}
-
-/**
- * gtk_widget_get_accessible:
- * @widget: a #GtkWidget
- *
- * Returns the accessible object that describes the widget to an
- * assistive technology.
- *
- * If accessibility support is not available, this #AtkObject
- * instance may be a no-op. Likewise, if no class-specific #AtkObject
- * implementation is available for the widget instance in question,
- * it will inherit an #AtkObject implementation from the first ancestor
- * class for which such an implementation is defined.
- *
- * The documentation of the
- * [ATK](http://developer.gnome.org/atk/stable/)
- * library contains more information about accessible objects and their uses.
- *
- * Returns: (transfer none): the #AtkObject associated with @widget
- */
-AtkObject*
-gtk_widget_get_accessible (GtkWidget *widget)
-{
-  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
-
-  return GTK_WIDGET_GET_CLASS (widget)->get_accessible (widget);
-}
-
-static AtkObject*
-gtk_widget_real_get_accessible (GtkWidget *widget)
-{
-  AtkObject* accessible;
-
-  accessible = widget->priv->accessible;
-
-  if (!accessible)
-    {
-      GtkWidgetClass *widget_class;
-      GtkWidgetClassPrivate *priv;
-
-      widget_class = GTK_WIDGET_GET_CLASS (widget);
-      priv = widget_class->priv;
-
-      accessible = g_object_new (priv->accessible_type,
-                                 "widget", widget,
-                                 NULL);
-      if (priv->accessible_role != ATK_ROLE_INVALID)
-        atk_object_set_role (accessible, priv->accessible_role);
-
-      widget->priv->accessible = accessible;
-
-      atk_object_initialize (accessible, widget);
-
-      /* Set the role again, since we don't want a role set
-       * in some parent initialize() function to override
-       * our own.
-       */
-      if (priv->accessible_role != ATK_ROLE_INVALID)
-        atk_object_set_role (accessible, priv->accessible_role);
-    }
-
-  return accessible;
-}
-
-/*
- * Initialize an AtkImplementorIface instance’s virtual pointers as
- * appropriate to this implementor’s class (GtkWidget).
- */
-static void
-gtk_widget_accessible_interface_init (AtkImplementorIface *iface)
-{
-  iface->ref_accessible = gtk_widget_ref_accessible;
-}
-
-static AtkObject*
-gtk_widget_ref_accessible (AtkImplementor *implementor)
-{
-  AtkObject *accessible;
-
-  accessible = gtk_widget_get_accessible (GTK_WIDGET (implementor));
-  if (accessible)
-    g_object_ref (accessible);
-  return accessible;
-}
-
 /*
  * Expand flag management
  */
@@ -8286,9 +8091,50 @@ gtk_widget_set_vexpand_set (GtkWidget      *widget,
 }
 
 /*
+ * GtkAccessible implementation
+ */
+
+static GtkATContext *
+gtk_widget_accessible_get_at_context (GtkAccessible *accessible)
+{
+  GtkWidget *self = GTK_WIDGET (accessible);
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (self);
+
+  if (priv->at_context == NULL)
+    {
+      GtkWidgetClass *widget_class = GTK_WIDGET_GET_CLASS (self);
+      GtkWidgetClassPrivate *class_priv = widget_class->priv;
+      GtkAccessibleRole role;
+
+      /* Widgets have two options to set the accessible role: either they
+       * define it in their class_init() function, and the role applies to
+       * all instances; or an instance is created with the :accessible-role
+       * property (from GtkAccessible) set to anything other than the default
+       * GTK_ACCESSIBLE_ROLE_WIDGET value.
+       *
+       * In either case, the accessible role cannot be set post-construction.
+       */
+      if (priv->accessible_role != GTK_ACCESSIBLE_ROLE_WIDGET)
+        role = priv->accessible_role;
+      else
+        role = class_priv->accessible_role;
+
+      priv->at_context = gtk_at_context_create (role, accessible);
+      priv->accessible_role = role;
+    }
+
+  return priv->at_context;
+}
+
+static void
+gtk_widget_accessible_interface_init (GtkAccessibleInterface *iface)
+{
+  iface->get_at_context = gtk_widget_accessible_get_at_context;
+}
+
+/*
  * GtkBuildable implementation
  */
-static GQuark		 quark_builder_atk_relations = 0;
 static GQuark            quark_builder_set_name = 0;
 
 static void
@@ -8319,7 +8165,6 @@ gtk_widget_buildable_add_child (GtkBuildable  *buildable,
 static void
 gtk_widget_buildable_interface_init (GtkBuildableIface *iface)
 {
-  quark_builder_atk_relations = g_quark_from_static_string ("gtk-builder-atk-relations");
   quark_builder_set_name = g_quark_from_static_string ("gtk-builder-set-name");
 
   iface->set_name = gtk_widget_buildable_set_name;
@@ -8355,9 +8200,6 @@ gtk_widget_buildable_get_internal_child (GtkBuildable *buildable,
   GSList *l;
   GType internal_child_type = 0;
 
-  if (strcmp (childname, "accessible") == 0)
-    return G_OBJECT (gtk_widget_get_accessible (GTK_WIDGET (buildable)));
-
   /* Find a widget type which has declared an automated child as internal by
    * the name 'childname', if any.
    */
@@ -8389,241 +8231,11 @@ gtk_widget_buildable_get_internal_child (GtkBuildable *buildable,
   return NULL;
 }
 
-typedef struct
-{
-  gchar *action_name;
-  GString *description;
-  gchar *context;
-  gboolean translatable;
-} AtkActionData;
-
-typedef struct
-{
-  gchar *target;
-  AtkRelationType type;
-  gint line;
-  gint col;
-} AtkRelationData;
-
-static void
-free_action (AtkActionData *data, gpointer user_data)
-{
-  g_free (data->action_name);
-  g_string_free (data->description, TRUE);
-  g_free (data->context);
-  g_slice_free (AtkActionData, data);
-}
-
-static void
-free_relation (AtkRelationData *data, gpointer user_data)
-{
-  g_free (data->target);
-  g_slice_free (AtkRelationData, data);
-}
-
 static void
 gtk_widget_buildable_parser_finished (GtkBuildable *buildable,
 				      GtkBuilder   *builder)
 {
-  GSList *atk_relations;
-
-  atk_relations = g_object_get_qdata (G_OBJECT (buildable),
-				      quark_builder_atk_relations);
-  if (atk_relations)
-    {
-      AtkObject *accessible;
-      AtkRelationSet *relation_set;
-      GSList *l;
-      GObject *target;
-      AtkObject *target_accessible;
-
-      accessible = gtk_widget_get_accessible (GTK_WIDGET (buildable));
-      relation_set = atk_object_ref_relation_set (accessible);
-
-      for (l = atk_relations; l; l = l->next)
-	{
-	  AtkRelationData *relation = (AtkRelationData*)l->data;
-
-	  target = _gtk_builder_lookup_object (builder, relation->target, relation->line, relation->col);
-	  if (!target)
-	    continue;
-	  target_accessible = gtk_widget_get_accessible (GTK_WIDGET (target));
-	  g_assert (target_accessible != NULL);
-
-	  atk_relation_set_add_relation_by_type (relation_set, relation->type, target_accessible);
-	}
-      g_object_unref (relation_set);
-
-      g_slist_free_full (atk_relations, (GDestroyNotify) free_relation);
-      g_object_steal_qdata (G_OBJECT (buildable), quark_builder_atk_relations);
-    }
 }
-
-typedef struct
-{
-  GtkBuilder *builder;
-  GSList *actions;
-  GSList *relations;
-  AtkRole role;
-} AccessibilitySubParserData;
-
-static void
-accessibility_start_element (GtkBuildableParseContext  *context,
-                             const gchar               *element_name,
-                             const gchar              **names,
-                             const gchar              **values,
-                             gpointer                   user_data,
-                             GError                   **error)
-{
-  AccessibilitySubParserData *data = (AccessibilitySubParserData*)user_data;
-
-  if (strcmp (element_name, "relation") == 0)
-    {
-      gchar *target = NULL;
-      gchar *type = NULL;
-      AtkRelationData *relation;
-      AtkRelationType relation_type;
-
-      if (!_gtk_builder_check_parent (data->builder, context, "accessibility", error))
-        return;
-
-      if (!g_markup_collect_attributes (element_name, names, values, error,
-                                        G_MARKUP_COLLECT_STRING, "target", &target,
-                                        G_MARKUP_COLLECT_STRING, "type", &type,
-                                        G_MARKUP_COLLECT_INVALID))
-        {
-          _gtk_builder_prefix_error (data->builder, context, error);
-          return;
-        }
-
-      relation_type = atk_relation_type_for_name (type);
-      if (relation_type == ATK_RELATION_NULL)
-        {
-          g_set_error (error,
-                       GTK_BUILDER_ERROR,
-                       GTK_BUILDER_ERROR_INVALID_VALUE,
-                       "No such relation type: '%s'", type);
-          _gtk_builder_prefix_error (data->builder, context, error);
-          return;
-        }
-
-      relation = g_slice_new (AtkRelationData);
-      relation->target = g_strdup (target);
-      relation->type = relation_type;
-
-      data->relations = g_slist_prepend (data->relations, relation);
-    }
-  else if (strcmp (element_name, "action") == 0)
-    {
-      const gchar *action_name;
-      const gchar *description = NULL;
-      const gchar *msg_context = NULL;
-      gboolean translatable = FALSE;
-      AtkActionData *action;
-
-      if (!_gtk_builder_check_parent (data->builder, context, "accessibility", error))
-        return;
-
-      if (!g_markup_collect_attributes (element_name, names, values, error,
-                                        G_MARKUP_COLLECT_STRING, "action_name", &action_name,
-                                        G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "description", &description,
-                                        G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "comments", NULL,
-                                        G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "context", &msg_context,
-                                        G_MARKUP_COLLECT_BOOLEAN|G_MARKUP_COLLECT_OPTIONAL, "translatable", &translatable,
-                                        G_MARKUP_COLLECT_INVALID))
-        {
-          _gtk_builder_prefix_error (data->builder, context, error);
-          return;
-        }
-
-      action = g_slice_new (AtkActionData);
-      action->action_name = g_strdup (action_name);
-      action->description = g_string_new (description);
-      action->context = g_strdup (msg_context);
-      action->translatable = translatable;
-
-      data->actions = g_slist_prepend (data->actions, action);
-    }
-  else if (strcmp (element_name, "role") == 0)
-    {
-      const gchar *type;
-      AtkRole role;
-
-      if (!_gtk_builder_check_parent (data->builder, context, "accessibility", error))
-        return;
-
-      if (data->role != ATK_ROLE_INVALID)
-        {
-          g_set_error (error,
-                       GTK_BUILDER_ERROR,
-                       GTK_BUILDER_ERROR_INVALID_VALUE,
-                       "Duplicate accessibility role definition");
-          _gtk_builder_prefix_error (data->builder, context, error);
-          return;
-        }
-
-      if (!g_markup_collect_attributes (element_name, names, values, error,
-                                        G_MARKUP_COLLECT_STRING, "type", &type,
-                                        G_MARKUP_COLLECT_INVALID))
-        {
-          _gtk_builder_prefix_error (data->builder, context, error);
-          return;
-        }
-
-      role = atk_role_for_name (type);
-      if (role == ATK_ROLE_INVALID)
-        {
-          g_set_error (error,
-                       GTK_BUILDER_ERROR,
-                       GTK_BUILDER_ERROR_INVALID_VALUE,
-                       "No such role type: '%s'", type);
-          _gtk_builder_prefix_error (data->builder, context, error);
-          return;
-        }
-
-      data->role = role;
-    }
-  else if (strcmp (element_name, "accessibility") == 0)
-    {
-      if (!_gtk_builder_check_parent (data->builder, context, "object", error))
-        return;
-
-      if (!g_markup_collect_attributes (element_name, names, values, error,
-                                        G_MARKUP_COLLECT_INVALID, NULL, NULL,
-                                        G_MARKUP_COLLECT_INVALID))
-        _gtk_builder_prefix_error (data->builder, context, error);
-    }
-  else
-    {
-      _gtk_builder_error_unhandled_tag (data->builder, context,
-                                        "GtkWidget", element_name,
-                                        error);
-    }
-}
-
-static void
-accessibility_text (GtkBuildableParseContext  *context,
-                    const gchar               *text,
-                    gsize                      text_len,
-                    gpointer                   user_data,
-                    GError                   **error)
-{
-  AccessibilitySubParserData *data = (AccessibilitySubParserData*)user_data;
-
-  if (strcmp (gtk_buildable_parse_context_get_element (context), "action") == 0)
-    {
-      AtkActionData *action = data->actions->data;
-
-      g_string_append_len (action->description, text, text_len);
-    }
-}
-
-static const GtkBuildableParser accessibility_parser =
-  {
-    accessibility_start_element,
-    NULL,
-    accessibility_text,
-  };
 
 typedef struct
 {
@@ -8828,19 +8440,6 @@ gtk_widget_buildable_custom_tag_start (GtkBuildable       *buildable,
                                        GtkBuildableParser *parser,
                                        gpointer           *parser_data)
 {
-  if (strcmp (tagname, "accessibility") == 0)
-    {
-      AccessibilitySubParserData *data;
-
-      data = g_slice_new0 (AccessibilitySubParserData);
-      data->builder = builder;
-
-      *parser = accessibility_parser;
-      *parser_data = data;
-
-      return TRUE;
-    }
-
   if (strcmp (tagname, "style") == 0)
     {
       StyleParserData *data;
@@ -8953,69 +8552,7 @@ gtk_widget_buildable_custom_finished (GtkBuildable *buildable,
                                       const gchar  *tagname,
                                       gpointer      user_data)
 {
-  if (strcmp (tagname, "accessibility") == 0)
-    {
-      AccessibilitySubParserData *a11y_data;
-
-      a11y_data = (AccessibilitySubParserData*)user_data;
-
-      if (a11y_data->actions)
-	{
-	  AtkObject *accessible;
-	  AtkAction *action;
-	  gint i, n_actions;
-	  GSList *l;
-
-	  accessible = gtk_widget_get_accessible (GTK_WIDGET (buildable));
-
-          if (ATK_IS_ACTION (accessible))
-            {
-	      action = ATK_ACTION (accessible);
-	      n_actions = atk_action_get_n_actions (action);
-
-	      for (l = a11y_data->actions; l; l = l->next)
-	        {
-	          AtkActionData *action_data = (AtkActionData*)l->data;
-
-	          for (i = 0; i < n_actions; i++)
-		    if (strcmp (atk_action_get_name (action, i),
-		  	        action_data->action_name) == 0)
-		      break;
-
-	          if (i < n_actions)
-                    {
-                      const gchar *description;
-
-                      if (action_data->translatable && action_data->description->len)
-                        description = _gtk_builder_parser_translate (gtk_builder_get_translation_domain (builder),
-                                                                     action_data->context,
-                                                                     action_data->description->str);
-                      else
-                        description = action_data->description->str;
-
-		      atk_action_set_description (action, i, description);
-                    }
-                }
-	    }
-          else
-            g_warning ("accessibility action on a widget that does not implement AtkAction");
-
-	  g_slist_free_full (a11y_data->actions, (GDestroyNotify) free_action);
-	}
-
-      if (a11y_data->relations)
-	g_object_set_qdata (G_OBJECT (buildable), quark_builder_atk_relations,
-			    a11y_data->relations);
-
-      if (a11y_data->role != ATK_ROLE_INVALID)
-        {
-          AtkObject *accessible = gtk_widget_get_accessible (GTK_WIDGET (buildable));
-          atk_object_set_role (accessible, a11y_data->role);
-        }
-
-      g_slice_free (AccessibilitySubParserData, a11y_data);
-    }
-  else if (strcmp (tagname, "style") == 0)
+  if (strcmp (tagname, "style") == 0)
     {
       StyleParserData *style_data = (StyleParserData *)user_data;
       GSList *l;
@@ -9657,9 +9194,6 @@ gtk_widget_set_has_tooltip (GtkWidget *widget,
     {
       priv->has_tooltip = has_tooltip;
 
-      if (priv->accessible != NULL)
-        gtk_widget_accessible_notify_tooltip (GTK_WIDGET_ACCESSIBLE (priv->accessible));
-
       g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_HAS_TOOLTIP]);
     }
 }
@@ -10208,9 +9742,6 @@ gtk_widget_set_has_focus (GtkWidget *widget,
     return;
 
   priv->has_focus = has_focus;
-
-  if (priv->accessible != NULL)
-    gtk_widget_accessible_notify_focus (GTK_WIDGET_ACCESSIBLE (priv->accessible));
 
   g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_HAS_FOCUS]);
 }
@@ -12646,8 +12177,6 @@ void
 gtk_widget_update_orientation (GtkWidget      *widget,
                                GtkOrientation  orientation)
 {
-  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
-
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
   if (orientation == GTK_ORIENTATION_HORIZONTAL)
@@ -12660,7 +12189,50 @@ gtk_widget_update_orientation (GtkWidget      *widget,
       gtk_widget_add_css_class (widget, GTK_STYLE_CLASS_VERTICAL);
       gtk_widget_remove_css_class (widget, GTK_STYLE_CLASS_HORIZONTAL);
     }
+}
 
-  if (priv->accessible != NULL)
-    gtk_widget_accessible_notify_orientation (GTK_WIDGET_ACCESSIBLE (priv->accessible));
+/**
+ * gtk_widget_class_set_accessible_role:
+ * @widget_class: a #GtkWidgetClass
+ * @accessible_role: the #GtkAccessibleRole used by the @widget_class
+ *
+ * Sets the accessible role used by the given #GtkWidget class.
+ *
+ * Different accessible roles have different states, and are rendered
+ * differently by assistive technologies.
+ */
+void
+gtk_widget_class_set_accessible_role (GtkWidgetClass    *widget_class,
+                                      GtkAccessibleRole  accessible_role)
+{
+  GtkWidgetClassPrivate *priv;
+
+  g_return_if_fail (GTK_IS_WIDGET_CLASS (widget_class));
+
+  priv = widget_class->priv;
+  priv->accessible_role = accessible_role;
+}
+
+/**
+ * gtk_widget_class_get_accessible_role:
+ * @widget_class: a #GtkWidgetClass
+ *
+ * Retrieves the accessible role used by the given #GtkWidget class.
+ *
+ * Different accessible roles have different states, and are rendered
+ * differently by assistive technologies.
+ *
+ * See also: gtk_accessible_get_accessible_role()
+ *
+ * Returns: the accessible role for the widget class
+ */
+GtkAccessibleRole
+gtk_widget_class_get_accessible_role (GtkWidgetClass *widget_class)
+{
+  GtkWidgetClassPrivate *priv;
+
+  g_return_val_if_fail (GTK_IS_WIDGET_CLASS (widget_class), GTK_ACCESSIBLE_ROLE_WIDGET);
+
+  priv = widget_class->priv;
+  return priv->accessible_role;
 }

@@ -27,8 +27,10 @@
 
 #include "gtkrangeprivate.h"
 
+#include "gtkaccessible.h"
 #include "gtkadjustmentprivate.h"
 #include "gtkcolorscaleprivate.h"
+#include "gtkenums.h"
 #include "gtkeventcontrollerkey.h"
 #include "gtkeventcontrollerscroll.h"
 #include "gtkgesturedrag.h"
@@ -42,8 +44,6 @@
 #include "gtkscale.h"
 #include "gtktypebuiltins.h"
 #include "gtkwidgetprivate.h"
-
-#include "a11y/gtkrangeaccessible.h"
 
 #include <stdio.h>
 #include <math.h>
@@ -242,6 +242,9 @@ static gboolean      gtk_range_scroll_controller_scroll (GtkEventControllerScrol
                                                          gdouble                   dy,
                                                          GtkRange                 *range);
 
+static void          gtk_range_set_orientation          (GtkRange       *range,
+                                                         GtkOrientation  orientation);
+
 G_DEFINE_TYPE_WITH_CODE (GtkRange, gtk_range, GTK_TYPE_WIDGET,
                          G_ADD_PRIVATE (GtkRange)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_ORIENTABLE,
@@ -429,7 +432,6 @@ gtk_range_class_init (GtkRangeClass *class)
 
   g_object_class_install_properties (gobject_class, LAST_PROP, properties);
 
-  gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_RANGE_ACCESSIBLE);
   gtk_widget_class_set_css_name (widget_class, I_("range"));
 }
 
@@ -440,18 +442,11 @@ gtk_range_set_property (GObject      *object,
 			GParamSpec   *pspec)
 {
   GtkRange *range = GTK_RANGE (object);
-  GtkRangePrivate *priv = gtk_range_get_instance_private (range);
 
   switch (prop_id)
     {
     case PROP_ORIENTATION:
-      if (priv->orientation != g_value_get_enum (value))
-        {
-          priv->orientation = g_value_get_enum (value);
-          gtk_widget_update_orientation (GTK_WIDGET (range), priv->orientation);
-          gtk_widget_queue_resize (GTK_WIDGET (range));
-          g_object_notify_by_pspec (object, pspec);
-        }
+      gtk_range_set_orientation (range, g_value_get_enum (value));
       break;
     case PROP_ADJUSTMENT:
       gtk_range_set_adjustment (range, g_value_get_object (value));
@@ -587,6 +582,27 @@ gtk_range_init (GtkRange *range)
   gtk_widget_add_controller (GTK_WIDGET (range), controller);
 }
 
+static void
+gtk_range_set_orientation (GtkRange       *range,
+                           GtkOrientation  orientation)
+{
+  GtkRangePrivate *priv = gtk_range_get_instance_private (range);
+
+  if (priv->orientation != orientation)
+    {
+      priv->orientation = orientation;
+
+      gtk_accessible_update_property (GTK_ACCESSIBLE (range),
+                                      GTK_ACCESSIBLE_PROPERTY_ORIENTATION, priv->orientation,
+                                      -1);
+
+      gtk_widget_update_orientation (GTK_WIDGET (range), priv->orientation);
+      gtk_widget_queue_resize (GTK_WIDGET (range));
+
+      g_object_notify (G_OBJECT (range), "orientation");
+    }
+}
+
 /**
  * gtk_range_get_adjustment:
  * @range: a #GtkRange
@@ -660,16 +676,14 @@ gtk_range_set_adjustment (GtkRange      *range,
 			G_CALLBACK (gtk_range_adjustment_value_changed),
 			range);
 
+      gtk_accessible_update_property (GTK_ACCESSIBLE (range),
+                                      GTK_ACCESSIBLE_PROPERTY_VALUE_MAX, gtk_adjustment_get_upper (adjustment),
+                                      GTK_ACCESSIBLE_PROPERTY_VALUE_MIN, gtk_adjustment_get_lower (adjustment),
+                                      GTK_ACCESSIBLE_PROPERTY_VALUE_NOW, gtk_adjustment_get_value (adjustment),
+                                      -1);
+
       gtk_range_adjustment_changed (adjustment, range);
       gtk_range_adjustment_value_changed (adjustment, range);
-
-      {
-        GtkRangeAccessible *accessible =
-          GTK_RANGE_ACCESSIBLE (_gtk_widget_peek_accessible (GTK_WIDGET (range)));
-
-        if (accessible != NULL)
-          gtk_range_accessible_update_adjustment (accessible);
-      }
 
       g_object_notify_by_pspec (G_OBJECT (range), properties[PROP_ADJUSTMENT]);
     }
@@ -2292,14 +2306,20 @@ gtk_range_adjustment_changed (GtkAdjustment *adjustment,
 {
   GtkRange *range = GTK_RANGE (data);
   GtkRangePrivate *priv = gtk_range_get_instance_private (range);
+  double upper = gtk_adjustment_get_upper (priv->adjustment);
+  double lower = gtk_adjustment_get_lower (priv->adjustment);
 
-  if (gtk_adjustment_get_upper (priv->adjustment) == gtk_adjustment_get_lower (priv->adjustment) &&
-      GTK_IS_SCALE (range))
+  if (upper == lower && GTK_IS_SCALE (range))
     gtk_widget_hide (priv->slider_widget);
   else
     gtk_widget_show (priv->slider_widget);
 
   gtk_widget_queue_allocate (priv->trough_widget);
+
+  gtk_accessible_update_property (GTK_ACCESSIBLE (range),
+                                  GTK_ACCESSIBLE_PROPERTY_VALUE_MAX, upper,
+                                  GTK_ACCESSIBLE_PROPERTY_VALUE_MIN, lower,
+                                  -1);
 
   /* Note that we don't round off to priv->round_digits here.
    * that's because it's really broken to change a value
@@ -2326,6 +2346,10 @@ gtk_range_adjustment_value_changed (GtkAdjustment *adjustment,
    */
 
   g_signal_emit (range, signals[VALUE_CHANGED], 0);
+
+  gtk_accessible_update_property (GTK_ACCESSIBLE (range),
+                                  GTK_ACCESSIBLE_PROPERTY_VALUE_NOW, gtk_adjustment_get_value (adjustment),
+                                  -1);
 
   gtk_widget_queue_allocate (priv->trough_widget);
 }

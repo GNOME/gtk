@@ -35,8 +35,6 @@
 #include "gtkwidgetprivate.h"
 #include "gtkboxlayout.h"
 
-#include "a11y/gtkscrollbaraccessible.h"
-
 
 /**
  * SECTION:gtkscrollbar
@@ -205,9 +203,9 @@ gtk_scrollbar_class_init (GtkScrollbarClass *class)
 
   g_object_class_override_property (object_class, PROP_ORIENTATION, "orientation");
 
-  gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_SCROLLBAR_ACCESSIBLE);
   gtk_widget_class_set_css_name (widget_class, I_("scrollbar"));
   gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BOX_LAYOUT);
+  gtk_widget_class_set_accessible_role (widget_class, GTK_ACCESSIBLE_ROLE_SCROLLBAR);
 }
 
 static void

@@ -32,7 +32,6 @@
 #include "gtkmarshalers.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
-#include "a11y/gtkradiobuttonaccessible.h"
 #include "gtkstylecontextprivate.h"
 
 /**
@@ -229,8 +228,8 @@ gtk_radio_button_class_init (GtkRadioButtonClass *class)
                                          NULL,
                                          G_TYPE_NONE, 0);
 
-  gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_RADIO_BUTTON_ACCESSIBLE);
   gtk_widget_class_set_css_name (widget_class, I_("radiobutton"));
+  gtk_widget_class_set_accessible_role (widget_class, GTK_ACCESSIBLE_ROLE_RADIO);
 }
 
 static void

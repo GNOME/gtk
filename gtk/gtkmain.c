@@ -134,7 +134,6 @@
 #include "gtkroot.h"
 #include "gtknative.h"
 
-#include "a11y/gtkaccessibility.h"
 #include "inspector/window.h"
 
 #define GDK_ARRAY_ELEMENT_TYPE GtkWidget *
@@ -645,7 +644,6 @@ static void
 default_display_notify_cb (GdkDisplayManager *dm)
 {
   debug_flags[0].display = gdk_display_get_default ();
-  _gtk_accessibility_init ();
 }
 
 static void

@@ -335,6 +335,13 @@
       <xi:include href="xml/gtkshortcutlabel.xml" />
     </chapter>
 
+    <chapter id="Accessibility">
+      <title>Accessibility</title>
+      <xi:include href="section-accessibility.xml"/>
+      <xi:include href="xml/gtkaccessible.xml" />
+      <xi:include href="xml/gtkatcontext.xml" />
+    </chapter>
+
     <chapter id="MiscObjects">
       <title>Miscellaneous</title>
       <xi:include href="xml/gtkadjustment.xml" />

@@ -127,7 +127,7 @@ compilation flags needed for that library along with version number
 information.)
 
 Some of the libraries that GTK depends on are maintained by the
-GTK team: GLib, GdkPixbuf, Pango, ATK and GObject Introspection.
+GTK team: GLib, GdkPixbuf, Pango, and GObject Introspection.
 Other libraries are maintained separately.
 
 - The GLib library provides core non-graphical functionality
@@ -139,10 +139,6 @@ Other libraries are maintained separately.
   file formats. It is available [here](ttps://download.gnome.org/sources/gdk-pixbuf/).
 - [Pango](http://www.pango.org) is a library for internationalized
   text handling. It is available [here](https://download.gnome.org/sources/pango/).
-- ATK is the Accessibility Toolkit. It provides a set of generic
-  interfaces allowing accessibility technologies such as
-  screen readers to interact with a graphical user interface.
-  It is available [here](https://download.gnome.org/sources/atk/).
 - [GObject Introspection](https://wiki.gnome.org/Projects/GObjectIntrospection)
   is a framework for making introspection data available to language
   bindings. It is available [here](https://download.gnome.org/sources/gobject-introspection/).
@@ -192,7 +188,7 @@ you'll have all of these installed already, or they will be easily
 accessible through your operating system package repositories.
 
 Then build and install the GTK libraries in the order:
-GLib, Cairo, Pango, ATK, then GTK. For each library, follow the
+GLib, Cairo, Pango, then GTK. For each library, follow the
 instructions they provide, and make sure to share common settings
 between them and the GTK build; if you are using a separate prefix
 for GTK, for instance, you will need to use the same prefix for
