@@ -138,7 +138,9 @@ response_cb (GDBusConnection  *connection,
        */
       GtkFileFilter *filter_to_select = filter;
       GSList *filters = gtk_file_chooser_list_filters (GTK_FILE_CHOOSER (self));
-      for (GSList *l = filters; l; l = l->next)
+      GSList *l;
+
+      for (l = filters; l; l = l->next)
         {
           GtkFileFilter *f = l->data;
           if (g_strcmp0 (gtk_file_filter_get_name (f), current_filter_name) == 0)
