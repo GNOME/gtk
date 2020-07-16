@@ -3242,11 +3242,11 @@ window.dialog.message { // Message Dialog styling
 
       &:first-child{
         border-left-style: none;
-        border-bottom-left-radius: 7px;
+        border-radius: 0 0 0 7px;
       }
 
       &:last-child {
-        border-bottom-right-radius: 7px;
+        border-radius: 0 0 7px 0;
       }
     }
   }
