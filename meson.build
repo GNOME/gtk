@@ -340,8 +340,8 @@ if os_unix
 endif
 gmodule_dep    = dependency('gmodule-2.0', version: glib_req,
                             fallback : ['glib', 'libgmodule_dep'])
-cairo_dep      = dependency('cairo', version: cairo_req, required : cc.get_id() != 'msvc')
-cairogobj_dep  = dependency('cairo-gobject', version: cairo_req, required : cc.get_id() != 'msvc')
+cairo_dep      = dependency('cairo', version: cairo_req, required : cc.get_id() != 'msvc', fallback: ['cairo', 'libcairo_dep'])
+cairogobj_dep  = dependency('cairo-gobject', version: cairo_req, required : cc.get_id() != 'msvc', fallback: ['cairo', 'libcairo_gobject_dep'])
 pango_dep      = dependency('pango', version: pango_req,
                             fallback : ['pango', 'libpango_dep'])
 fribidi_dep    = dependency('fribidi', version: fribidi_req,
@@ -359,7 +359,7 @@ endif
 
 if win32_enabled
   # for GTK_IM_CONTEXT_IME
-  pangowin32_dep  = dependency('pangowin32')
+  pangowin32_dep  = dependency('pangowin32', fallback: ['pango', 'libpangowin32_dep'])
 endif
 
 pangocairo_dep = dependency('pangocairo', version: pango_req,
@@ -368,8 +368,9 @@ pixbuf_dep     = dependency('gdk-pixbuf-2.0', version: gdk_pixbuf_req,
                             fallback : ['gdk-pixbuf', 'gdkpixbuf_dep'])
 epoxy_dep      = dependency('epoxy', version: epoxy_req,
                             fallback: ['libepoxy', 'libepoxy_dep'])
-atk_dep        = dependency('atk', version: atk_req)
-harfbuzz_dep   = dependency('harfbuzz', version: '>= 0.9', required: false)
+atk_dep        = dependency('atk', version: atk_req, fallback: ['atk', 'libatk_dep'])
+harfbuzz_dep   = dependency('harfbuzz', version: '>= 0.9', required: false,
+                            fallback: ['harfbuzz', 'libharfbuzz_dep'])
 xkbdep         = dependency('xkbcommon', version: xkbcommon_req, required: wayland_enabled)
 graphene_dep   = dependency('graphene-gobject-1.0', version: graphene_req,
                             fallback: ['graphene', 'graphene_dep'])
