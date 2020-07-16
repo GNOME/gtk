@@ -139,15 +139,15 @@ assert_items_changed_correctly (GListModel *model,
     }
 }
 
-static GtkTim2SortModel *
-tim2_sort_model_new (GListModel *source,
+static GtkSortListModel *
+sort_list_model_new (GListModel *source,
                      GtkSorter  *sorter)
 {
-  GtkTim2SortModel *model;
+  GtkSortListModel *model;
   GListStore *check;
   guint i;
 
-  model = gtk_tim2_sort_model_new (source, sorter);
+  model = gtk_sort_list_model_new (source, sorter);
   check = g_list_store_new (G_TYPE_OBJECT);
   for (i = 0; i < g_list_model_get_n_items (G_LIST_MODEL (model)); i++)
     {
@@ -167,15 +167,19 @@ tim2_sort_model_new (GListModel *source,
 
 #define N_MODELS 8
 
-static GtkTim2SortModel *
-create_tim2_sort_model (gconstpointer  model_id,
+static GtkSortListModel *
+create_sort_list_model (gconstpointer  model_id,
+                        gboolean       track_changes,
                         GListModel    *source,
                         GtkSorter     *sorter)
 {
-  GtkTim2SortModel *model;
+  GtkSortListModel *model;
   guint id = GPOINTER_TO_UINT (model_id);
 
-  model = tim2_sort_model_new (id & 1 ? NULL : source, id & 2 ? NULL : sorter);
+  if (track_changes)
+    model = sort_list_model_new (id & 1 ? NULL : source, id & 2 ? NULL : sorter);
+  else
+    model = gtk_sort_list_model_new (id & 1 ? NULL : source, id & 2 ? NULL : sorter);
 
   switch (id >> 2)
   {
@@ -183,7 +187,7 @@ create_tim2_sort_model (gconstpointer  model_id,
       break;
 
     case 1:
-      gtk_tim2_sort_model_set_incremental (model, TRUE);
+      //gtk_sort_list_model_set_incremental (model, TRUE);
       break;
 
     default:
@@ -192,9 +196,9 @@ create_tim2_sort_model (gconstpointer  model_id,
   }
 
   if (id & 1)
-    gtk_tim2_sort_model_set_model (model, source);
+    gtk_sort_list_model_set_model (model, source);
   if (id & 2)
-    gtk_tim2_sort_model_set_sorter (model, sorter);
+    gtk_sort_list_model_set_sorter (model, sorter);
 
   return model;
 }
@@ -267,30 +271,31 @@ create_random_sorter (gboolean allow_null)
 static void
 test_two_sorters (gconstpointer model_id)
 {
-  GtkTim2SortModel *compare;
-  GtkTim2SortModel *model1, *model2;
+  GtkSortListModel *compare;
+  GtkSortListModel *model1, *model2;
   GListModel *source;
   GtkSorter *every, *sorter;
   guint i, j, k;
 
   source = create_source_model (10, 10);
-  model2 = create_tim2_sort_model (model_id, source, NULL);
-  model1 = create_tim2_sort_model (model_id, G_LIST_MODEL (model2), NULL);
+  model2 = create_sort_list_model (model_id, TRUE, source, NULL);
+  /* can't track changes from a sortmodel, where the same items get reordered */
+  model1 = create_sort_list_model (model_id, FALSE, G_LIST_MODEL (model2), NULL);
   every = gtk_multi_sorter_new ();
-  compare = create_tim2_sort_model (model_id, source, every);
+  compare = create_sort_list_model (model_id, TRUE, source, every);
   g_object_unref (every);
   g_object_unref (source);
 
   for (i = 0; i < N_SORTERS; i++)
     {
       sorter = create_sorter (i);
-      gtk_tim2_sort_model_set_sorter (model1, sorter);
+      gtk_sort_list_model_set_sorter (model1, sorter);
       gtk_multi_sorter_append (GTK_MULTI_SORTER (every), sorter);
 
       for (j = 0; j < N_SORTERS; j++)
         {
           sorter = create_sorter (i);
-          gtk_tim2_sort_model_set_sorter (model2, sorter);
+          gtk_sort_list_model_set_sorter (model2, sorter);
           gtk_multi_sorter_append (GTK_MULTI_SORTER (every), sorter);
 
           ensure_updated ();
@@ -299,8 +304,8 @@ test_two_sorters (gconstpointer model_id)
           for (k = 0; k < 10; k++)
             {
               source = create_source_model (0, 1000);
-              gtk_tim2_sort_model_set_model (compare, source);
-              gtk_tim2_sort_model_set_model (model2, source);
+              gtk_sort_list_model_set_model (compare, source);
+              gtk_sort_list_model_set_model (model2, source);
               g_object_unref (source);
 
               ensure_updated ();
@@ -328,7 +333,7 @@ test_chained_sort (gconstpointer model_id)
 {
   GListStore *store;
   GtkFlattenListModel *flatten;
-  GtkTim2SortModel *sort1, *sort2;
+  GtkSortListModel *sort1, *sort2;
   GtkSorter *sorter;
   gsize i;
 
@@ -336,8 +341,9 @@ test_chained_sort (gconstpointer model_id)
 
   store = g_list_store_new (G_TYPE_OBJECT);
   flatten = gtk_flatten_list_model_new (G_LIST_MODEL (store));
-  sort1 = create_tim2_sort_model (model_id, G_LIST_MODEL (flatten), sorter);
-  sort2 = create_tim2_sort_model (model_id, G_LIST_MODEL (sort1), sorter);
+  sort1 = create_sort_list_model (model_id, TRUE, G_LIST_MODEL (flatten), sorter);
+  sort2 = create_sort_list_model (model_id, FALSE, G_LIST_MODEL (sort1), sorter);
+  g_clear_object (&sorter);
 
   for (i = 0; i < 500; i++)
     {
@@ -349,8 +355,9 @@ test_chained_sort (gconstpointer model_id)
         case 0:
           /* change the sorter */
           sorter = create_random_sorter (TRUE);
-          gtk_tim2_sort_model_set_sorter (sort1, sorter);
-          gtk_tim2_sort_model_set_sorter (sort2, sorter);
+          gtk_sort_list_model_set_sorter (sort1, sorter);
+          gtk_sort_list_model_set_sorter (sort2, sorter);
+          g_clear_object (&sorter);
           break;
 
         case 1:
