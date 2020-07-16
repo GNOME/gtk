@@ -208,17 +208,16 @@ static GtkFilter *
 create_filter (gsize id)
 {
   GtkFilter *filter;
-  GtkExpression *expr;
 
   switch (id)
   {
     case 0:
       /* GTK_FILTER_MATCH_ALL */
-      return gtk_string_filter_new ();
+      return gtk_string_filter_new (NULL);
 
     case 1:
       /* GTK_FILTER_MATCH_NONE */
-      filter = gtk_string_filter_new ();
+      filter = gtk_string_filter_new (NULL);
       gtk_string_filter_set_search (GTK_STRING_FILTER (filter), "does not matter, because no expression");
       return filter;
 
@@ -226,10 +225,7 @@ create_filter (gsize id)
     case 3:
     case 4:
       /* match all As, Bs and nothing */
-      filter = gtk_string_filter_new ();
-      expr = gtk_property_expression_new (GTK_TYPE_STRING_OBJECT, NULL, "string");
-      gtk_string_filter_set_expression (GTK_STRING_FILTER (filter), expr);
-      gtk_expression_unref (expr);
+      filter = gtk_string_filter_new (gtk_property_expression_new (GTK_TYPE_STRING_OBJECT, NULL, "string"));
       if (id == 2)
         gtk_string_filter_set_search (GTK_STRING_FILTER (filter), "A");
       else if (id == 3)
@@ -418,7 +414,7 @@ test_model_changes (gconstpointer model_id)
       if (add)
         {
           /* We want at least one element, otherwise the filters will see no changes */
-          GListModel *source = create_source_model (1, 100);
+          GListModel *source = create_source_model (1, 50);
           GtkFilterListModel *model1 = create_filter_list_model (model_id, source, multi);
           g_list_store_splice (store1,
                                position,

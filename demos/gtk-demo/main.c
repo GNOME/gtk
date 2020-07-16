@@ -1249,7 +1249,6 @@ out:
       demo = (func) (window);
 
       gtk_window_set_transient_for (GTK_WINDOW (demo), GTK_WINDOW (window));
-      gtk_window_set_modal (GTK_WINDOW (demo), TRUE);
 
       g_signal_connect_swapped (G_OBJECT (demo), "destroy", G_CALLBACK (g_application_quit), app);
     }
