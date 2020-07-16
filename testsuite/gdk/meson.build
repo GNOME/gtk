@@ -2,6 +2,7 @@ testexecdir = join_paths(installed_test_bindir, 'gdk')
 testdatadir = join_paths(installed_test_datadir, 'gdk')
 
 tests = [
+  'array',
   'cairo',
   'clipboard',
   'display',

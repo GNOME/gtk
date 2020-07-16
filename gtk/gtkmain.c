@@ -95,7 +95,6 @@
 #include "gdk/gdk-private.h"
 #include "gsk/gskprivate.h"
 #include "gsk/gskrendernodeprivate.h"
-#include "gtkarrayimplprivate.h"
 #include "gtknative.h"
 
 #include <locale.h>
@@ -137,6 +136,13 @@
 
 #include "a11y/gtkaccessibility.h"
 #include "inspector/window.h"
+
+#define GDK_ARRAY_ELEMENT_TYPE GtkWidget *
+#define GDK_ARRAY_TYPE_NAME GtkWidgetStack
+#define GDK_ARRAY_NAME gtk_widget_stack
+#define GDK_ARRAY_FREE_FUNC g_object_unref
+#define GDK_ARRAY_PREALLOC 16
+#include "gdk/gdkarrayimpl.c"
 
 static GtkWindowGroup *gtk_main_get_window_group (GtkWidget   *widget);
 
@@ -1321,8 +1327,7 @@ gtk_synthesize_crossing_events (GtkRoot         *toplevel,
   double x, y;
   GtkWidget *prev;
   gboolean seen_ancestor;
-  GtkArray target_array;
-  GtkWidget *stack_targets[16];
+  GtkWidgetStack target_array;
   int i;
 
   if (old_target == new_target)
@@ -1376,19 +1381,19 @@ gtk_synthesize_crossing_events (GtkRoot         *toplevel,
       widget = _gtk_widget_get_parent (widget);
     }
 
-  gtk_array_init (&target_array, (void**)stack_targets, 16);
+  gtk_widget_stack_init (&target_array);
   for (widget = new_target; widget; widget = _gtk_widget_get_parent (widget))
-    gtk_array_add (&target_array, widget);
+    gtk_widget_stack_append (&target_array, g_object_ref (widget));
 
   crossing.direction = GTK_CROSSING_IN;
 
   seen_ancestor = FALSE;
-  for (i = (int)target_array.len - 1; i >= 0; i--)
+  for (i = gtk_widget_stack_get_size (&target_array) - 1; i >= 0; i--)
     {
-      widget = gtk_array_index (&target_array, i);
+      widget = gtk_widget_stack_get (&target_array, i);
 
-      if (i < (int)target_array.len - 1)
-        crossing.new_descendent = gtk_array_index (&target_array, i + 1);
+      if (i < gtk_widget_stack_get_size (&target_array) - 1)
+        crossing.new_descendent = gtk_widget_stack_get (&target_array, i + 1);
       else
         crossing.new_descendent = NULL;
 
@@ -1417,7 +1422,7 @@ gtk_synthesize_crossing_events (GtkRoot         *toplevel,
         gtk_widget_set_state_flags (widget, GTK_STATE_FLAG_PRELIGHT, FALSE);
     }
 
-  gtk_array_free (&target_array, NULL);
+  gtk_widget_stack_clear (&target_array);
 }
 
 static GtkWidget *
@@ -1994,13 +1999,12 @@ gtk_propagate_event_internal (GtkWidget *widget,
 {
   gint handled_event = FALSE;
   GtkWidget *target = widget;
-  GtkArray widget_array;
-  GtkWidget *stack_widgets[16];
+  GtkWidgetStack widget_array;
   int i;
 
   /* First, propagate event down */
-  gtk_array_init (&widget_array, (void**)stack_widgets, 16);
-  gtk_array_add (&widget_array, g_object_ref (widget));
+  gtk_widget_stack_init (&widget_array);
+  gtk_widget_stack_append (&widget_array, g_object_ref (widget));
 
   for (;;)
     {
@@ -2008,16 +2012,16 @@ gtk_propagate_event_internal (GtkWidget *widget,
       if (!widget)
         break;
 
-      gtk_array_add (&widget_array, g_object_ref (widget));
+      gtk_widget_stack_append (&widget_array, g_object_ref (widget));
 
       if (widget == topmost)
         break;
     }
 
-  i = widget_array.len - 1;
+  i = gtk_widget_stack_get_size (&widget_array) - 1;
   for (;;)
     {
-      widget = gtk_array_index (&widget_array, i);
+      widget = gtk_widget_stack_get (&widget_array, i);
 
       if (!_gtk_widget_is_sensitive (widget))
         {
@@ -2050,9 +2054,9 @@ gtk_propagate_event_internal (GtkWidget *widget,
        * parents can see the button and motion
        * events of the children.
        */
-      for (i = 0; i < widget_array.len; i++)
+      for (i = 0; i < gtk_widget_stack_get_size (&widget_array); i++)
         {
-          widget = gtk_array_index (&widget_array, i);
+          widget = gtk_widget_stack_get (&widget_array, i);
 
           /* Scroll events are special cased here because it
            * feels wrong when scrolling a GtkViewport, say,
@@ -2071,7 +2075,7 @@ gtk_propagate_event_internal (GtkWidget *widget,
         }
     }
 
-  gtk_array_free (&widget_array, g_object_unref);
+  gtk_widget_stack_clear (&widget_array);
   return handled_event;
 }
 
