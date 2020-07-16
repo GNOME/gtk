@@ -950,7 +950,8 @@ do_listview_colors (GtkWidget *do_widget)
       g_object_unref (selection_filter);
       g_object_unref (no_selection);
 
-      g_object_get (model, "model", &model, NULL);
+      model = gtk_multi_selection_get_model (GTK_MULTI_SELECTION (model));
+      g_object_ref (model);
 
       selection_info_toggle = gtk_toggle_button_new ();
       gtk_button_set_icon_name (GTK_BUTTON (selection_info_toggle), "emblem-important-symbolic");
