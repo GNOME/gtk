@@ -22,6 +22,7 @@
 #include "gtknumericsorter.h"
 
 #include "gtkintl.h"
+#include "gtksorterprivate.h"
 #include "gtktypebuiltins.h"
 
 #include <math.h>
@@ -68,6 +69,259 @@ static GParamSpec *properties[NUM_PROPERTIES] = { NULL, };
   else \
     _result = GTK_ORDERING_EQUAL; \
 }G_STMT_END
+
+typedef struct _GtkNumericSortKeys GtkNumericSortKeys;
+struct _GtkNumericSortKeys
+{
+  GtkSortKeys keys;
+
+  GtkExpression *expression;
+};
+
+static void
+gtk_numeric_sort_keys_free (GtkSortKeys *keys)
+{
+  GtkNumericSortKeys *self = (GtkNumericSortKeys *) keys;
+
+  gtk_expression_unref (self->expression);
+  g_slice_free (GtkNumericSortKeys, self);
+}
+
+#define COMPARE_FUNC(type, name, _a, _b) \
+static int \
+gtk_ ## type ## _sort_keys_compare_ ## name (gconstpointer a, \
+                                             gconstpointer b, \
+                                             gpointer      unused) \
+{ \
+  type num1 = *(type *) _a; \
+  type num2 = *(type *) _b; \
+\
+  if (num1 < num2) \
+    return GTK_ORDERING_SMALLER; \
+  else if (num1 > num2) \
+    return GTK_ORDERING_LARGER; \
+  else \
+    return GTK_ORDERING_EQUAL; \
+}
+#define COMPARE_FUNCS(type) \
+  COMPARE_FUNC(type, ascending, a, b) \
+  COMPARE_FUNC(type, descending, b, a)
+
+#define FLOAT_COMPARE_FUNC(type, name, _a, _b) \
+static int \
+gtk_ ## type ## _sort_keys_compare_ ## name (gconstpointer a, \
+                                             gconstpointer b, \
+                                             gpointer      unused) \
+{ \
+  type num1 = *(type *) _a; \
+  type num2 = *(type *) _b; \
+\
+  if (isnan (num1) && isnan (num2)) \
+    return GTK_ORDERING_EQUAL; \
+  else if (isnan (num1)) \
+    return GTK_ORDERING_LARGER; \
+  else if (isnan (num2)) \
+    return GTK_ORDERING_SMALLER; \
+  else if (num1 < num2) \
+    return GTK_ORDERING_SMALLER; \
+  else if (num1 > num2) \
+    return GTK_ORDERING_LARGER; \
+  else \
+    return GTK_ORDERING_EQUAL; \
+}
+#define FLOAT_COMPARE_FUNCS(type) \
+  FLOAT_COMPARE_FUNC(type, ascending, a, b) \
+  FLOAT_COMPARE_FUNC(type, descending, b, a)
+
+COMPARE_FUNCS(char)
+COMPARE_FUNCS(guchar)
+COMPARE_FUNCS(int)
+COMPARE_FUNCS(guint)
+FLOAT_COMPARE_FUNCS(float)
+FLOAT_COMPARE_FUNCS(double)
+COMPARE_FUNCS(long)
+COMPARE_FUNCS(gulong)
+COMPARE_FUNCS(gint64)
+COMPARE_FUNCS(guint64)
+
+#define NUMERIC_SORT_KEYS(TYPE, key_type, type, default_value) \
+static void \
+gtk_ ## type ## _sort_keys_init_key (GtkSortKeys *keys, \
+                                     gpointer     item, \
+                                     gpointer     key_memory) \
+{ \
+  GtkNumericSortKeys *self = (GtkNumericSortKeys *) keys; \
+  key_type *key = (key_type *) key_memory; \
+  GValue value = G_VALUE_INIT; \
+\
+  if (gtk_expression_evaluate (self->expression, item, &value)) \
+    *key = g_value_get_ ## type (&value); \
+  else \
+    *key = default_value; \
+\
+  g_value_unset (&value); \
+} \
+\
+static gboolean \
+gtk_ ## type ## _sort_keys_is_compatible (GtkSortKeys *keys, \
+                                          GtkSortKeys *other); \
+\
+static const GtkSortKeysClass GTK_ASCENDING_ ## TYPE ## _SORT_KEYS_CLASS = \
+{ \
+  gtk_numeric_sort_keys_free, \
+  gtk_ ## key_type ## _sort_keys_compare_ascending, \
+  gtk_ ## type ## _sort_keys_is_compatible, \
+  gtk_ ## type ## _sort_keys_init_key, \
+  NULL \
+}; \
+\
+static const GtkSortKeysClass GTK_DESCENDING_ ## TYPE ## _SORT_KEYS_CLASS = \
+{ \
+  gtk_numeric_sort_keys_free, \
+  gtk_ ## key_type ## _sort_keys_compare_descending, \
+  gtk_ ## type ## _sort_keys_is_compatible, \
+  gtk_ ## type ## _sort_keys_init_key, \
+  NULL \
+}; \
+\
+static gboolean \
+gtk_ ## type ## _sort_keys_is_compatible (GtkSortKeys *keys, \
+                                          GtkSortKeys *other) \
+{ \
+  return other->klass == &GTK_ASCENDING_ ## TYPE ## _SORT_KEYS_CLASS|| \
+         other->klass == &GTK_DESCENDING_ ## TYPE ## _SORT_KEYS_CLASS; \
+}
+
+NUMERIC_SORT_KEYS(BOOLEAN, char, boolean, FALSE)
+NUMERIC_SORT_KEYS(CHAR, char, char, G_MININT8)
+NUMERIC_SORT_KEYS(UCHAR, guchar, uchar, G_MAXUINT8)
+NUMERIC_SORT_KEYS(INT, int, int, G_MININT)
+NUMERIC_SORT_KEYS(UINT, guint, uint, G_MAXUINT)
+NUMERIC_SORT_KEYS(FLOAT, float, float, NAN)
+NUMERIC_SORT_KEYS(DOUBLE, double, double, NAN)
+NUMERIC_SORT_KEYS(LONG, long, long, G_MINLONG)
+NUMERIC_SORT_KEYS(ULONG, gulong, ulong, G_MAXLONG)
+NUMERIC_SORT_KEYS(INT64, gint64, int64, G_MININT64)
+NUMERIC_SORT_KEYS(UINT64, guint64, uint64, G_MAXUINT64)
+
+static GtkSortKeys *
+gtk_numeric_sort_keys_new (GtkNumericSorter *self)
+{
+  GtkNumericSortKeys *result;
+
+  if (self->expression == NULL)
+    return gtk_sort_keys_new_equal ();
+
+  switch (gtk_expression_get_value_type (self->expression))
+    {
+    case G_TYPE_BOOLEAN:
+      result = gtk_sort_keys_new (GtkNumericSortKeys,
+                                  self->sort_order == GTK_SORT_ASCENDING
+                                                      ? &GTK_ASCENDING_BOOLEAN_SORT_KEYS_CLASS
+                                                      : &GTK_DESCENDING_BOOLEAN_SORT_KEYS_CLASS,
+                                  sizeof (char),
+                                  sizeof (char));
+      break;
+
+    case G_TYPE_CHAR:
+      result = gtk_sort_keys_new (GtkNumericSortKeys,
+                                  self->sort_order == GTK_SORT_ASCENDING
+                                                      ? &GTK_ASCENDING_CHAR_SORT_KEYS_CLASS
+                                                      : &GTK_DESCENDING_CHAR_SORT_KEYS_CLASS,
+                                  sizeof (char),
+                                  sizeof (char));
+      break;
+
+    case G_TYPE_UCHAR:
+      result = gtk_sort_keys_new (GtkNumericSortKeys,
+                                  self->sort_order == GTK_SORT_ASCENDING
+                                                      ? &GTK_ASCENDING_UCHAR_SORT_KEYS_CLASS
+                                                      : &GTK_DESCENDING_UCHAR_SORT_KEYS_CLASS,
+                                  sizeof (guchar),
+                                  sizeof (guchar));
+      break;
+
+    case G_TYPE_INT:
+      result = gtk_sort_keys_new (GtkNumericSortKeys,
+                                  self->sort_order == GTK_SORT_ASCENDING
+                                                      ? &GTK_ASCENDING_INT_SORT_KEYS_CLASS
+                                                      : &GTK_DESCENDING_INT_SORT_KEYS_CLASS,
+                                  sizeof (int),
+                                  sizeof (int));
+      break;
+
+    case G_TYPE_UINT:
+      result = gtk_sort_keys_new (GtkNumericSortKeys,
+                                  self->sort_order == GTK_SORT_ASCENDING
+                                                      ? &GTK_ASCENDING_UINT_SORT_KEYS_CLASS
+                                                      : &GTK_DESCENDING_UINT_SORT_KEYS_CLASS,
+                                  sizeof (guint),
+                                  sizeof (guint));
+      break;
+
+    case G_TYPE_FLOAT:
+      result = gtk_sort_keys_new (GtkNumericSortKeys,
+                                  self->sort_order == GTK_SORT_ASCENDING
+                                                      ? &GTK_ASCENDING_FLOAT_SORT_KEYS_CLASS
+                                                      : &GTK_DESCENDING_FLOAT_SORT_KEYS_CLASS,
+                                  sizeof (float),
+                                  sizeof (float));
+      break;
+
+    case G_TYPE_DOUBLE:
+      result = gtk_sort_keys_new (GtkNumericSortKeys,
+                                  self->sort_order == GTK_SORT_ASCENDING
+                                                      ? &GTK_ASCENDING_DOUBLE_SORT_KEYS_CLASS
+                                                      : &GTK_DESCENDING_DOUBLE_SORT_KEYS_CLASS,
+                                  sizeof (double),
+                                  sizeof (double));
+      break;
+
+    case G_TYPE_LONG:
+      result = gtk_sort_keys_new (GtkNumericSortKeys,
+                                  self->sort_order == GTK_SORT_ASCENDING
+                                                      ? &GTK_ASCENDING_LONG_SORT_KEYS_CLASS
+                                                      : &GTK_DESCENDING_LONG_SORT_KEYS_CLASS,
+                                  sizeof (long),
+                                  sizeof (long));
+      break;
+
+    case G_TYPE_ULONG:
+      result = gtk_sort_keys_new (GtkNumericSortKeys,
+                                  self->sort_order == GTK_SORT_ASCENDING
+                                                      ? &GTK_ASCENDING_ULONG_SORT_KEYS_CLASS
+                                                      : &GTK_DESCENDING_ULONG_SORT_KEYS_CLASS,
+                                  sizeof (gulong),
+                                  sizeof (gulong));
+      break;
+
+    case G_TYPE_INT64:
+      result = gtk_sort_keys_new (GtkNumericSortKeys,
+                                  self->sort_order == GTK_SORT_ASCENDING
+                                                      ? &GTK_ASCENDING_INT64_SORT_KEYS_CLASS
+                                                      : &GTK_DESCENDING_INT64_SORT_KEYS_CLASS,
+                                  sizeof (gint64),
+                                  sizeof (gint64));
+      break;
+
+    case G_TYPE_UINT64:
+      result = gtk_sort_keys_new (GtkNumericSortKeys,
+                                  self->sort_order == GTK_SORT_ASCENDING
+                                                      ? &GTK_ASCENDING_UINT64_SORT_KEYS_CLASS
+                                                      : &GTK_DESCENDING_UINT64_SORT_KEYS_CLASS,
+                                  sizeof (guint64),
+                                  sizeof (guint64));
+      break;
+
+    default:
+      g_critical ("Invalid value type %s for expression\n", g_type_name (gtk_expression_get_value_type (self->expression)));
+      return gtk_sort_keys_new_equal ();
+    }
+
+  result->expression = gtk_expression_ref (self->expression);
+
+  return (GtkSortKeys *) result;
+}
 
 static GtkOrdering
 gtk_numeric_sorter_compare (GtkSorter *sorter,
@@ -373,7 +627,9 @@ gtk_numeric_sorter_set_expression (GtkNumericSorter *self,
   if (expression)
     self->expression = gtk_expression_ref (expression);
 
-  gtk_sorter_changed (GTK_SORTER (self), GTK_SORTER_CHANGE_DIFFERENT);
+  gtk_sorter_changed_with_keys (GTK_SORTER (self),
+                                GTK_SORTER_CHANGE_DIFFERENT,
+                                gtk_numeric_sort_keys_new (self));
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_EXPRESSION]);
 }
@@ -396,7 +652,9 @@ gtk_numeric_sorter_set_sort_order (GtkNumericSorter *self,
 
   self->sort_order = sort_order;
 
-  gtk_sorter_changed (GTK_SORTER (self), GTK_SORTER_CHANGE_INVERTED);
+  gtk_sorter_changed_with_keys (GTK_SORTER (self),
+                                GTK_SORTER_CHANGE_INVERTED,
+                                gtk_numeric_sort_keys_new (self));
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_SORT_ORDER]);
 }
