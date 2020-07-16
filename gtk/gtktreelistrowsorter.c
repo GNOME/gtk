@@ -39,7 +39,8 @@
  * a GtkTreeListSorter:
  *
  * |[
- * sorter = gtk_tree_list_row_sorter_new (gtk_column_view_get_sorter (view));
+ * column_sorter = gtk_column_view_get_sorter (view);
+ * sorter = gtk_tree_list_row_sorter_new (g_object_ref (column_sorter));
  * sort_model = gtk_sort_list_model_new (tree_model, sorter);
  * selection = gtk_single_selection_new (sort_model);
  * gtk_column_view_set_model (view, G_LIST_MODEL (selection));
