@@ -95,3 +95,56 @@ gtk_sort_keys_needs_clear_key (GtkSortKeys *self)
   return self->klass->clear_key != NULL;
 }
 
+static void
+gtk_equal_sort_keys_free (GtkSortKeys *keys)
+{
+  g_slice_free (GtkSortKeys, keys);
+}
+
+static int
+gtk_equal_sort_keys_compare (gconstpointer a,
+                             gconstpointer b,
+                             gpointer      unused)
+{
+  return GTK_ORDERING_EQUAL;
+}
+
+static gboolean
+gtk_equal_sort_keys_is_compatible (GtkSortKeys *keys,
+                                   GtkSortKeys *other)
+{
+  return keys->klass == other->klass;
+}
+
+static void
+gtk_equal_sort_keys_init_key (GtkSortKeys *keys,
+                               gpointer     item,
+                               gpointer     key_memory)
+{
+}
+
+static const GtkSortKeysClass GTK_EQUAL_SORT_KEYS_CLASS =
+{
+  gtk_equal_sort_keys_free,
+  gtk_equal_sort_keys_compare,
+  gtk_equal_sort_keys_is_compatible,
+  gtk_equal_sort_keys_init_key,
+  NULL
+};
+
+/*<private>
+ * gtk_sort_keys_new_equal:
+ *
+ * Creates a new #GtkSortKeys that compares every element as equal.
+ * This is useful when sorters are in an invalid configuration.
+ *
+ * Returns: a new #GtkSortKeys
+ **/
+GtkSortKeys *
+gtk_sort_keys_new_equal (void)
+{
+  return gtk_sort_keys_new (GtkSortKeys,
+                            &GTK_EQUAL_SORT_KEYS_CLASS,
+                            0, 1);
+}
+
