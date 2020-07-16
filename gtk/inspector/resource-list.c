@@ -694,6 +694,7 @@ constructed (GObject *object)
   GtkInspectorResourceList *rl = GTK_INSPECTOR_RESOURCE_LIST (object);
   GListModel *root_model;
   GListModel *sort_model;
+  GtkSorter *column_sorter;
   GtkSorter *sorter;
  
   g_signal_connect (rl->open_details_button, "clicked",
@@ -709,7 +710,8 @@ constructed (GObject *object)
                                             NULL,
                                             NULL);
 
-  sorter = gtk_tree_list_row_sorter_new (gtk_column_view_get_sorter (GTK_COLUMN_VIEW (rl->list)));
+  column_sorter = gtk_column_view_get_sorter (GTK_COLUMN_VIEW (rl->list));
+  sorter = gtk_tree_list_row_sorter_new (g_object_ref (column_sorter));
   sort_model = G_LIST_MODEL (gtk_sort_list_model_new (G_LIST_MODEL (rl->tree_model), sorter));
   rl->selection = gtk_single_selection_new (sort_model);
   g_object_unref (root_model);
@@ -764,14 +766,15 @@ set_property (GObject      *object,
 }
 
 static void
-finalize (GObject *object)
+dispose (GObject *object)
 {
   GtkInspectorResourceList *rl = GTK_INSPECTOR_RESOURCE_LIST (object);
 
-  g_object_unref (rl->selection);
-  g_object_unref (rl->tree_model);
+  g_clear_pointer (&rl->stack, gtk_widget_unparent);
+  g_clear_object (&rl->selection);
+  g_clear_object (&rl->tree_model);
 
-  G_OBJECT_CLASS (gtk_inspector_resource_list_parent_class)->finalize (object);
+  G_OBJECT_CLASS (gtk_inspector_resource_list_parent_class)->dispose (object);
 }
 
 static void
@@ -889,7 +892,7 @@ gtk_inspector_resource_list_class_init (GtkInspectorResourceListClass *klass)
   object_class->get_property = get_property;
   object_class->set_property = set_property;
   object_class->constructed = constructed;
-  object_class->finalize = finalize;
+  object_class->dispose = dispose;
 
   widget_class->root = root;
   widget_class->unroot = unroot;
