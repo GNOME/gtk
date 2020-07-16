@@ -21,7 +21,12 @@
 #include "gtk/gtkcountingbloomfilterprivate.h"
 #include "gtk/gtkcsstypesprivate.h"
 #include "gtk/gtkcssparserprivate.h"
-#include "gtk/gtkarrayimplprivate.h"
+
+#define GDK_ARRAY_ELEMENT_TYPE gpointer
+#define GDK_ARRAY_TYPE_NAME GtkCssSelectorMatches
+#define GDK_ARRAY_NAME gtk_css_selector_matches
+#define GDK_ARRAY_PREALLOC 32
+#include "gdk/gdkarrayimpl.c"
 
 G_BEGIN_DECLS
 
@@ -45,8 +50,8 @@ int               _gtk_css_selector_compare         (const GtkCssSelector   *a,
 void         _gtk_css_selector_tree_free             (GtkCssSelectorTree       *tree);
 void         _gtk_css_selector_tree_match_all        (const GtkCssSelectorTree *tree,
                                                       const GtkCountingBloomFilter *filter,
-                                                      GtkCssNode                   *node,
-                                                      GtkArray                     *out_tree_rules);
+                                                      GtkCssNode               *node,
+                                                      GtkCssSelectorMatches    *out_tree_rules);
 GtkCssChange gtk_css_selector_tree_get_change_all    (const GtkCssSelectorTree *tree,
                                                       const GtkCountingBloomFilter *filter,
 						      GtkCssNode               *node);
