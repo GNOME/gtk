@@ -1,0 +1,73 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Label="UserMacros">
+    <VSVer>10</VSVer>
+    <GlibEtcInstallRoot>$(SolutionDir)\..\..\..\vs$(VSVer)\$(Platform)</GlibEtcInstallRoot>
+    <CopyDir>..\..\..\vs$(VSVer)\$(Platform)</CopyDir>
+    <ApiVersion>3.0</ApiVersion>
+    <GtkVersion>@GTK_VERSION@</GtkVersion>
+    <GtkLibtoolCompatibleDllPrefix>lib</GtkLibtoolCompatibleDllPrefix>
+    <GtkLibtoolCompatibleDllSuffix>.0-0</GtkLibtoolCompatibleDllSuffix>
+    <GtkSeparateVSDllPrefix />
+    <GtkSeparateVSDllSuffix>-vs$(VSVer)</GtkSeparateVSDllSuffix>
+    <GtkDllPrefix>$(GtkSeparateVSDllPrefix)</GtkDllPrefix>
+    <GtkDllSuffix>$(GtkSeparateVSDllSuffix)</GtkDllSuffix>
+    <PythonDir Condition="'$(VisualStudioVersion)|$(Platform)' == '10.0|Win32'">c:\python34</PythonDir>
+    <PythonDir Condition="'$(VisualStudioVersion)|$(Platform)' == '11.0|Win32'">c:\python34</PythonDir>
+    <PythonDir Condition="'$(VisualStudioVersion)|$(Platform)' == '12.0|Win32'">c:\python34</PythonDir>
+    <PythonDir Condition="'$(VisualStudioVersion)|$(Platform)' == '14.0|Win32'">c:\python36</PythonDir>
+    <PythonDir Condition="'$(VisualStudioVersion)|$(Platform)' == '15.0|Win32'">c:\python36</PythonDir>
+    <PythonDir Condition="'$(VisualStudioVersion)|$(Platform)' == '16.0|Win32'">c:\python36</PythonDir>
+    <PythonDir Condition="'$(VisualStudioVersion)|$(Platform)' == '10.0|x64'">c:\python34.x64</PythonDir>
+    <PythonDir Condition="'$(VisualStudioVersion)|$(Platform)' == '11.0|x64'">c:\python34.x64</PythonDir>
+    <PythonDir Condition="'$(VisualStudioVersion)|$(Platform)' == '12.0|x64'">c:\python34.x64</PythonDir>
+    <PythonDir Condition="'$(VisualStudioVersion)|$(Platform)' == '14.0|x64'">c:\python36.x64</PythonDir>
+    <PythonDir Condition="'$(VisualStudioVersion)|$(Platform)' == '15.0|x64'">c:\python36.x64</PythonDir>
+    <PythonDir Condition="'$(VisualStudioVersion)|$(Platform)' == '16.0|x64'">c:\python36.x64</PythonDir>
+    <IntrospectPythonParam>PYTHON=$(PythonDir)\python.exe</IntrospectPythonParam>
+  </PropertyGroup>
+  <PropertyGroup>
+    <_PropertySheetDisplayName>gtk3versionpathsprops</_PropertySheetDisplayName>
+  </PropertyGroup>
+  <ItemGroup>
+    <BuildMacro Include="VSVer">
+      <Value>$(VSVer)</Value>
+    </BuildMacro>
+    <BuildMacro Include="GlibEtcInstallRoot">
+      <Value>$(GlibEtcInstallRoot)</Value>
+    </BuildMacro>
+    <BuildMacro Include="CopyDir">
+      <Value>$(CopyDir)</Value>
+    </BuildMacro>
+    <BuildMacro Include="ApiVersion">
+      <Value>$(ApiVersion)</Value>
+    </BuildMacro>
+    <BuildMacro Include="GtkVersion">
+      <Value>$(GtkVersion)</Value>
+    </BuildMacro>
+    <BuildMacro Include="GtkLibtoolCompatibleDllPrefix">
+      <Value>$(GtkLibtoolCompatibleDllPrefix)</Value>
+    </BuildMacro>
+    <BuildMacro Include="GtkLibtoolCompatibleDllSuffix">
+      <Value>$(GtkLibtoolCompatibleDllSuffix)</Value>
+    </BuildMacro>
+    <BuildMacro Include="GtkSeparateVSDllPrefix">
+      <Value>$(GtkSeparateVSDllPrefix)</Value>
+    </BuildMacro>
+    <BuildMacro Include="GtkSeparateVSDllSuffix">
+      <Value>$(GtkSeparateVSDllSuffix)</Value>
+    </BuildMacro>
+    <BuildMacro Include="GtkDllPrefix">
+      <Value>$(GtkDllPrefix)</Value>
+    </BuildMacro>
+    <BuildMacro Include="GtkDllSuffix">
+      <Value>$(GtkDllSuffix)</Value>
+    </BuildMacro>
+    <BuildMacro Include="PythonDir">
+      <Value>$(PythonDir)</Value>
+    </BuildMacro>
+    <BuildMacro Include="IntrospectPythonParam">
+      <Value>$(IntrospectPythonParam)</Value>
+    </BuildMacro>
+  </ItemGroup>
+</Project>
