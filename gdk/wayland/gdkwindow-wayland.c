@@ -713,12 +713,17 @@ window_update_scale (GdkWindow *window)
       return;
     }
 
-  scale = 1;
-  for (l = impl->display_server.outputs; l != NULL; l = l->next)
+  scale = impl->scale;
+
+  if (impl->display_server.outputs)
     {
-      guint32 output_scale =
-        _gdk_wayland_screen_get_output_scale (display_wayland->screen, l->data);
-      scale = MAX (scale, output_scale);
+      scale = 1;
+      for (l = impl->display_server.outputs; l != NULL; l = l->next)
+        {
+          guint32 output_scale =
+            _gdk_wayland_screen_get_output_scale (display_wayland->screen, l->data);
+          scale = MAX (scale, output_scale);
+        }
     }
 
   /* Notify app that scale changed */
