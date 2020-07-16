@@ -64,7 +64,7 @@ print_result (const char *testname,
               guint       n_comparisons,
               guint       n_changed)
 {
-  g_print ("\"%s\", \"%s%s\",%8zu,%8uus,%8uus, %8u,%9u\n",
+  g_print ("# \"%s\", \"%s%s\",%8zu,%8uus,%8uus, %8u,%9u\n",
            testname,
            g_type_name (type),
            incremental ? "-inc" : "",
@@ -552,7 +552,7 @@ main (int argc, char *argv[])
   else
     tests = (const char **) argv + 1;
 
-  g_print ("\"test\",\"model\",\"model size\",\"time\",\"max time\",\"comparisons\",\"changes\"\n");
+  g_print ("# \"test\",\"model\",\"model size\",\"time\",\"max time\",\"comparisons\",\"changes\"\n");
   run_test (source, tests, "set-model", set_model);
   run_test (source, tests, "append-half", append_half);
   run_test (source, tests, "append-10th", append_10th);
