@@ -22,24 +22,10 @@
 
 #define GTK_TYPE_INSPECTOR_RESOURCE_LIST            (gtk_inspector_resource_list_get_type())
 #define GTK_INSPECTOR_RESOURCE_LIST(obj)            (G_TYPE_CHECK_INSTANCE_CAST((obj), GTK_TYPE_INSPECTOR_RESOURCE_LIST, GtkInspectorResourceList))
-#define GTK_INSPECTOR_RESOURCE_LIST_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST((klass), GTK_TYPE_INSPECTOR_RESOURCE_LIST, GtkInspectorResourceListClass))
 #define GTK_INSPECTOR_IS_RESOURCE_LIST(obj)         (G_TYPE_CHECK_INSTANCE_TYPE((obj), GTK_TYPE_INSPECTOR_RESOURCE_LIST))
-#define GTK_INSPECTOR_IS_RESOURCE_LIST_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE((klass), GTK_TYPE_INSPECTOR_RESOURCE_LIST))
-#define GTK_INSPECTOR_RESOURCE_LIST_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS((obj), GTK_TYPE_INSPECTOR_RESOURCE_LIST, GtkInspectorResourceListClass))
 
 
-typedef struct _GtkInspectorResourceListPrivate GtkInspectorResourceListPrivate;
-
-typedef struct _GtkInspectorResourceList
-{
-  GtkBox parent;
-  GtkInspectorResourceListPrivate *priv;
-} GtkInspectorResourceList;
-
-typedef struct _GtkInspectorResourceListClass
-{
-  GtkBoxClass parent;
-} GtkInspectorResourceListClass;
+typedef struct _GtkInspectorResourceList GtkInspectorResourceList;
 
 G_BEGIN_DECLS
 
