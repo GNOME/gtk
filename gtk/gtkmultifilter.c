@@ -25,6 +25,13 @@
 #include "gtkintl.h"
 #include "gtktypebuiltins.h"
 
+#define GDK_ARRAY_TYPE_NAME GtkFilters
+#define GDK_ARRAY_NAME gtk_filters
+#define GDK_ARRAY_ELEMENT_TYPE GtkFilter *
+#define GDK_ARRAY_FREE_FUNC g_object_unref
+
+#include "gdk/gdkarrayimpl.c"
+
 /*** MULTI FILTER ***/
 
 /**
@@ -45,7 +52,7 @@ struct _GtkMultiFilter
 {
   GtkFilter parent_instance;
 
-  GSequence *filters;
+  GtkFilters filters;
 };
 
 struct _GtkMultiFilterClass
@@ -67,7 +74,7 @@ gtk_multi_filter_get_n_items (GListModel *list)
 {
   GtkMultiFilter *self = GTK_MULTI_FILTER (list);
 
-  return g_sequence_get_length (self->filters);
+  return gtk_filters_get_size (&self->filters);
 }
 
 static gpointer
@@ -75,14 +82,11 @@ gtk_multi_filter_get_item (GListModel *list,
                            guint       position)
 {
   GtkMultiFilter *self = GTK_MULTI_FILTER (list);
-  GSequenceIter *iter;
 
-  iter = g_sequence_get_iter_at_pos (self->filters, position);
-
-  if (g_sequence_iter_is_end (iter))
-    return NULL;
+  if (position < gtk_filters_get_size (&self->filters))
+    return g_object_ref (gtk_filters_get (&self->filters, position));
   else
-    return g_object_ref (g_sequence_get (iter));
+    return NULL;
 }
 
 static void
@@ -128,37 +132,20 @@ gtk_multi_filter_changed_cb (GtkFilter       *filter,
 }
 
 static void
-gtk_multi_filter_remove_iter (GtkMultiFilter *self,
-                              GSequenceIter  *iter)
-{
-  GtkFilter *filter;
-
-  filter = g_sequence_get (iter);
-  g_signal_handlers_disconnect_by_func (filter, gtk_multi_filter_changed_cb, self);
-  g_object_unref (filter);
-  g_sequence_remove (iter);
-}
-
-static void
 gtk_multi_filter_dispose (GObject *object)
 {
   GtkMultiFilter *self = GTK_MULTI_FILTER (object);
+  guint i;
 
-  while (!g_sequence_is_empty (self->filters))
-    gtk_multi_filter_remove_iter (self, g_sequence_get_begin_iter (self->filters));
+  for (i = 0; i < gtk_filters_get_size (&self->filters); i++)
+    {
+      GtkFilter *filter = gtk_filters_get (&self->filters, i);
+      g_signal_handlers_disconnect_by_func (filter, gtk_multi_filter_changed_cb, self);
+    }
+
+  gtk_filters_clear (&self->filters);
 
   G_OBJECT_CLASS (gtk_multi_filter_parent_class)->dispose (object);
-}
-
-static void
-gtk_multi_filter_finalize (GObject *object)
-{
-  GtkMultiFilter *self = GTK_MULTI_FILTER (object);
-
-  g_assert (g_sequence_is_empty (self->filters));
-  g_sequence_free (self->filters);
-
-  G_OBJECT_CLASS (gtk_multi_filter_parent_class)->finalize (object);
 }
 
 static void
@@ -167,13 +154,12 @@ gtk_multi_filter_class_init (GtkMultiFilterClass *class)
   GObjectClass *object_class = G_OBJECT_CLASS (class);
 
   object_class->dispose = gtk_multi_filter_dispose;
-  object_class->finalize = gtk_multi_filter_finalize;
 }
 
 static void
 gtk_multi_filter_init (GtkMultiFilter *self)
 {
-  self->filters = g_sequence_new (NULL);
+  gtk_filters_init (&self->filters);
 }
 
 /**
@@ -191,7 +177,7 @@ gtk_multi_filter_append (GtkMultiFilter *self,
   g_return_if_fail (GTK_IS_FILTER (filter));
 
   g_signal_connect (filter, "changed", G_CALLBACK (gtk_multi_filter_changed_cb), self);
-  g_sequence_append (self->filters, filter);
+  gtk_filters_append (&self->filters, filter);
 
   gtk_filter_changed (GTK_FILTER (self),
                       GTK_MULTI_FILTER_GET_CLASS (self)->addition_change);
@@ -211,15 +197,16 @@ void
 gtk_multi_filter_remove (GtkMultiFilter *self,
                          guint           position)
 {
-  GSequenceIter *iter;
   guint length;
+  GtkFilter *filter;
 
-  length = g_sequence_get_length (self->filters);
+  length = gtk_filters_get_size (&self->filters);
   if (position >= length)
     return;
 
-  iter = g_sequence_get_iter_at_pos (self->filters, position);
-  gtk_multi_filter_remove_iter (self, iter);
+  filter = gtk_filters_get (&self->filters, position);
+  g_signal_handlers_disconnect_by_func (filter, gtk_multi_filter_changed_cb, self);
+  gtk_filters_splice (&self->filters, position, 1, NULL, 0);
 
   gtk_filter_changed (GTK_FILTER (self),
                       GTK_MULTI_FILTER_GET_CLASS (self)->removal_change);
@@ -244,13 +231,11 @@ gtk_any_filter_match (GtkFilter *filter,
                       gpointer   item)
 {
   GtkMultiFilter *self = GTK_MULTI_FILTER (filter);
-  GSequenceIter *iter;
+  guint i;
 
-  for (iter = g_sequence_get_begin_iter (self->filters);
-       !g_sequence_iter_is_end (iter);
-       iter = g_sequence_iter_next (iter))
+  for (i = 0; i < gtk_filters_get_size (&self->filters); i++)
     {
-      GtkFilter *child = g_sequence_get (iter);
+      GtkFilter *child = gtk_filters_get (&self->filters, i);
 
       if (gtk_filter_match (child, item))
         return TRUE;
@@ -262,15 +247,13 @@ gtk_any_filter_match (GtkFilter *filter,
 static GtkFilterMatch
 gtk_any_filter_get_strictness (GtkFilter *filter)
 {
-  GtkMultiFilter *multi = GTK_MULTI_FILTER (filter);
-  GSequenceIter *iter;
+  GtkMultiFilter *self = GTK_MULTI_FILTER (filter);
+  guint i;
   GtkFilterMatch result = GTK_FILTER_MATCH_NONE;
 
-  for (iter = g_sequence_get_begin_iter (multi->filters);
-       !g_sequence_iter_is_end (iter);
-       iter = g_sequence_iter_next (iter))
+  for (i = 0; i < gtk_filters_get_size (&self->filters); i++)
     {
-      GtkFilter *child = g_sequence_get (iter);
+      GtkFilter *child = gtk_filters_get (&self->filters, i);
 
       switch (gtk_filter_get_strictness (child))
       {
@@ -346,13 +329,11 @@ gtk_every_filter_match (GtkFilter *filter,
                         gpointer   item)
 {
   GtkMultiFilter *self = GTK_MULTI_FILTER (filter);
-  GSequenceIter *iter;
+  guint i;
 
-  for (iter = g_sequence_get_begin_iter (self->filters);
-       !g_sequence_iter_is_end (iter);
-       iter = g_sequence_iter_next (iter))
+  for (i = 0; i < gtk_filters_get_size (&self->filters); i++)
     {
-      GtkFilter *child = g_sequence_get (iter);
+      GtkFilter *child = gtk_filters_get (&self->filters, i);
 
       if (!gtk_filter_match (child, item))
         return FALSE;
@@ -364,15 +345,13 @@ gtk_every_filter_match (GtkFilter *filter,
 static GtkFilterMatch
 gtk_every_filter_get_strictness (GtkFilter *filter)
 {
-  GtkMultiFilter *multi = GTK_MULTI_FILTER (filter);
-  GSequenceIter *iter;
+  GtkMultiFilter *self = GTK_MULTI_FILTER (filter);
+  guint i;
   GtkFilterMatch result = GTK_FILTER_MATCH_ALL;
 
-  for (iter = g_sequence_get_begin_iter (multi->filters);
-       !g_sequence_iter_is_end (iter);
-       iter = g_sequence_iter_next (iter))
+  for (i = 0; i < gtk_filters_get_size (&self->filters); i++)
     {
-      GtkFilter *child = g_sequence_get (iter);
+      GtkFilter *child = gtk_filters_get (&self->filters, i);
 
       switch (gtk_filter_get_strictness (child))
       {
@@ -413,7 +392,7 @@ gtk_every_filter_init (GtkEveryFilter *self)
 /**
  * gtk_every_filter_new:
  *
- * Creates a new empty "every" filter.  
+ * Creates a new empty "every" filter.
  * Use gtk_multi_filter_append() to add filters to it.
  *
  * This filter matches an item if each of the filters added to it
