@@ -269,6 +269,8 @@ struct _GtkScrolledWindowPrivate
   guint                  kinetic_scrolling         : 1;
   guint                  capture_button_press      : 1;
   guint                  in_drag                   : 1;
+  guint                  in_deceleration_cb        : 1;
+  guint                  in_drag_cb                : 1;
 
   guint                  deceleration_id;
 
@@ -1020,6 +1022,10 @@ scrolled_window_drag_update_cb (GtkScrolledWindow *scrolled_window,
                                       GTK_EVENT_SEQUENCE_CLAIMED);
     }
 
+  /* We will update the drag event's start position if the adjustment value is
+   * changed, but only if the change was not caused by this function. */
+  priv->in_drag_cb = TRUE;
+
   hadjustment = gtk_range_get_adjustment (GTK_RANGE (priv->hscrollbar));
   if (hadjustment && may_hscroll (scrolled_window))
     {
@@ -1035,6 +1041,8 @@ scrolled_window_drag_update_cb (GtkScrolledWindow *scrolled_window,
       _gtk_scrolled_window_set_adjustment_value (scrolled_window,
                                                  vadjustment, dy);
     }
+
+  priv->in_drag_cb = FALSE;
 
   gtk_scrolled_window_invalidate_overshoot (scrolled_window);
 }
@@ -3684,6 +3692,10 @@ scrolled_window_deceleration_cb (GtkWidget         *widget,
 
   gtk_scrolled_window_invalidate_overshoot (scrolled_window);
 
+  /* We want to cancel kinetic scrolling if the adjustment's value is changed,
+   * but only if the change was not caused by this function. */
+  priv->in_deceleration_cb = TRUE;
+
   if (data->hscrolling &&
       gtk_kinetic_scrolling_tick (data->hscrolling, elapsed, &position))
     {
@@ -3701,6 +3713,8 @@ scrolled_window_deceleration_cb (GtkWidget         *widget,
     }
   else if (data->vscrolling)
     g_clear_pointer (&data->vscrolling, gtk_kinetic_scrolling_free);
+
+  priv->in_deceleration_cb = FALSE;
 
   if (!data->hscrolling && !data->vscrolling)
     {
@@ -3918,6 +3932,22 @@ gtk_scrolled_window_adjustment_value_changed (GtkAdjustment *adjustment,
   GtkScrolledWindowPrivate *priv = scrolled_window->priv;
 
   maybe_emit_edge_reached (scrolled_window, adjustment);
+
+  /* Cancel kinetic scrolling when the adjustment's value is set. Otherwise,
+   * the next time the deceleration callback runs, it will reset the adjustment
+   * value. */
+  if (!priv->in_deceleration_cb)
+    gtk_scrolled_window_cancel_deceleration (scrolled_window);
+
+  /* If the adjustment value is set during a drag gesture, update the drag
+   * start position so the gesture can continue from the new location. */
+  if (!priv->in_drag_cb)
+    {
+      if (adjustment == gtk_range_get_adjustment (GTK_RANGE (priv->hscrollbar)))
+        priv->drag_start_x += gtk_adjustment_get_value (adjustment) - priv->unclamped_hadj_value;
+      else if (adjustment == gtk_range_get_adjustment (GTK_RANGE (priv->vscrollbar)))
+        priv->drag_start_y += gtk_adjustment_get_value (adjustment) - priv->unclamped_vadj_value;
+    }
 
   /* Allow overshooting for kinetic scrolling operations */
   if (priv->drag_device || priv->deceleration_id)
