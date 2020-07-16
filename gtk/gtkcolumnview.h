@@ -105,6 +105,7 @@ void            gtk_column_view_set_reorderable                 (GtkColumnView  
 GDK_AVAILABLE_IN_ALL
 gboolean        gtk_column_view_get_reorderable                 (GtkColumnView          *self);
 
+GDK_AVAILABLE_IN_ALL
 void            gtk_column_view_set_enable_rubberband           (GtkColumnView          *self,
                                                                  gboolean                enable_rubberband);
 GDK_AVAILABLE_IN_ALL
