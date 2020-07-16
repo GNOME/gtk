@@ -89,7 +89,11 @@ gdk_array(free_elements) (_T_ *start,
 #ifdef GDK_ARRAY_FREE_FUNC
   _T_ *e;
   for (e = start; e < end; e++)
+#ifdef GDK_ARRAY_BY_VALUE
+    GDK_ARRAY_FREE_FUNC (e);
+#else
     GDK_ARRAY_FREE_FUNC (*e);
+#endif
 #endif
 }
 
@@ -107,32 +111,32 @@ gdk_array(clear) (GdkArray *self)
 }
 
 G_GNUC_UNUSED static inline _T_ *
-gdk_array(get_data) (GdkArray *self)
+gdk_array(get_data) (const GdkArray *self)
 {
   return self->start;
 }
 
 G_GNUC_UNUSED static inline _T_ *
-gdk_array(index) (GdkArray *self,
-                  gsize      pos)
+gdk_array(index) (const GdkArray *self,
+                  gsize           pos)
 {
   return self->start + pos;
 }
 
 G_GNUC_UNUSED static inline gsize
-gdk_array(get_capacity) (GdkArray *self)
+gdk_array(get_capacity) (const GdkArray *self)
 {
   return self->end_allocation - self->start;
 }
 
 G_GNUC_UNUSED static inline gsize
-gdk_array(get_size) (GdkArray *self)
+gdk_array(get_size) (const GdkArray *self)
 {
   return self->end - self->start;
 }
 
 G_GNUC_UNUSED static inline gboolean
-gdk_array(is_empty) (GdkArray *self)
+gdk_array(is_empty) (const GdkArray *self)
 {
   return self->end == self->start;
 }
@@ -199,32 +203,65 @@ gdk_array(splice) (GdkArray *self,
              GDK_ARRAY_REAL_SIZE (remaining) * sizeof (_T_));
 
   if (added)
-    memcpy (gdk_array(index) (self, pos),
-            additions,
-            added * sizeof (_T_));
+    {
+      if (additions)
+        memcpy (gdk_array(index) (self, pos),
+                additions,
+                added * sizeof (_T_));
+      else
+        memset (gdk_array(index) (self, pos), 0, added * sizeof (_T_));
+    }
+
 
   /* might overflow, but does the right thing */
   self->end += added - removed;
 }
 
 G_GNUC_UNUSED static void
+gdk_array(set_size) (GdkArray *self,
+                     gsize     new_size)
+{
+  gsize old_size = gdk_array(get_size) (self);
+  if (new_size > old_size)
+    gdk_array(splice) (self, old_size, 0, NULL, new_size - old_size);
+  else
+    gdk_array(splice) (self, new_size, old_size - new_size, NULL, 0);
+}
+
+G_GNUC_UNUSED static void
 gdk_array(append) (GdkArray *self,
+#ifdef GDK_ARRAY_BY_VALUE
+                   _T_       *value)
+#else
                    _T_        value)
+#endif
 {
   gdk_array(splice) (self, 
                      gdk_array(get_size) (self),
                      0,
+#ifdef GDK_ARRAY_BY_VALUE
+                     value,
+#else
                      &value,
+#endif
                      1);
 }
 
-G_GNUC_UNUSED static _T_ 
-gdk_array(get) (GdkArray *self,
-                gsize      pos)
+#ifdef GDK_ARRAY_BY_VALUE
+G_GNUC_UNUSED static _T_ *
+gdk_array(get) (const GdkArray *self,
+                gsize           pos)
 {
-  return *gdk_array(index) (self, pos);
+  return gdk_array(index) (self, pos);
 }
-
+#else
+G_GNUC_UNUSED static _T_
+gdk_array(get) (const GdkArray *self,
+                gsize           pos)
+ {
+   return *gdk_array(index) (self, pos);
+ }
+#endif
 
 #ifndef GDK_ARRAY_NO_UNDEF
 
@@ -235,10 +272,12 @@ gdk_array(get) (GdkArray *self,
 #undef gdk_array
 #undef GDK_ARRAY_REAL_SIZE
 
+#undef GDK_ARRAY_BY_VALUE
 #undef GDK_ARRAY_ELEMENT_TYPE
+#undef GDK_ARRAY_FREE_FUNC
 #undef GDK_ARRAY_NAME
-#undef GDK_ARRAY_TYPE_NAME
-#undef GDK_ARRAY_PREALLOC
 #undef GDK_ARRAY_NULL_TERMINATED
+#undef GDK_ARRAY_PREALLOC
+#undef GDK_ARRAY_TYPE_NAME
 
 #endif
