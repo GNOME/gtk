@@ -199,7 +199,7 @@ append_half (const char *name,
              GListModel *source,
              guint       random)
 {
-  append (name, incremental, type, source, random, 2);
+  append (name, type, incremental, source, random, 2);
 }
 
 static void
@@ -209,7 +209,7 @@ append_10th (const char *name,
              GListModel *source,
              guint       random)
 {
-  append (name, incremental, type, source, random, 10);
+  append (name, type, incremental, source, random, 10);
 }
 
 static void
@@ -219,7 +219,7 @@ append_100th (const char *name,
               GListModel *source,
               guint       random)
 {
-  append (name, incremental, type, source, random, 100);
+  append (name, type, incremental, source, random, 100);
 }
 
 static void
@@ -288,7 +288,7 @@ remove_half (const char *name,
              GListModel *source,
              guint       random)
 {
-  remove_test (name, incremental, type, source, random, 2);
+  remove_test (name, type, incremental, source, random, 2);
 }
 
 static void
@@ -298,7 +298,7 @@ remove_10th (const char *name,
              GListModel *source,
              guint       random)
 {
-  remove_test (name, incremental, type, source, random, 10);
+  remove_test (name, type, incremental, source, random, 10);
 }
 
 static void
@@ -308,7 +308,7 @@ remove_100th (const char *name,
               GListModel *source,
               guint       random)
 {
-  remove_test (name, incremental, type, source, random, 100);
+  remove_test (name, type, incremental, source, random, 100);
 }
 
 static void
