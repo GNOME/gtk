@@ -309,6 +309,7 @@ main (int argc, char *argv[])
   GtkWidget *list;
   GtkWidget *cv;
   GListModel *model;
+  GtkSelectionModel *selection;
   GtkListItemFactory *factory;
 
   gtk_init ();
@@ -349,7 +350,9 @@ main (int argc, char *argv[])
   gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (sw), grid);
 
   model = create_model (0, 400, 1, FALSE);
-  gtk_grid_view_set_model (GTK_GRID_VIEW (grid), model);
+  selection = GTK_SELECTION_MODEL (gtk_single_selection_new (model));
+  gtk_grid_view_set_model (GTK_GRID_VIEW (grid), selection);
+  g_object_unref (selection);
   g_object_unref (model);
 
   factory = gtk_signal_list_item_factory_new ();
@@ -369,7 +372,9 @@ main (int argc, char *argv[])
   gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (sw), list);
 
   model = create_model (0, 400, 1, FALSE);
-  gtk_list_view_set_model (GTK_LIST_VIEW (list), model);
+  selection = GTK_SELECTION_MODEL (gtk_single_selection_new (model));
+  gtk_list_view_set_model (GTK_LIST_VIEW (list), selection);
+  g_object_unref (selection);
   g_object_unref (model);
 
   factory = gtk_signal_list_item_factory_new ();
@@ -388,7 +393,9 @@ main (int argc, char *argv[])
   cv = gtk_column_view_new ();
 
   model = create_model (0, 400, 1, FALSE);
-  gtk_column_view_set_model (GTK_COLUMN_VIEW (cv), model);
+  selection = GTK_SELECTION_MODEL (gtk_single_selection_new (model));
+  gtk_column_view_set_model (GTK_COLUMN_VIEW (cv), selection);
+  g_object_unref (selection);
   g_object_unref (model);
 
   for (guint i = 0; i < 20; i++)
@@ -419,7 +426,9 @@ main (int argc, char *argv[])
   gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (sw), list);
 
   model = create_tree_model (20, 20);
-  gtk_list_view_set_model (GTK_LIST_VIEW (list), model);
+  selection = GTK_SELECTION_MODEL (gtk_single_selection_new (model));
+  gtk_list_view_set_model (GTK_LIST_VIEW (list), selection);
+  g_object_unref (selection);
   g_object_unref (model);
 
   factory = gtk_signal_list_item_factory_new ();

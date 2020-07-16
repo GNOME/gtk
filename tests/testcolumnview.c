@@ -687,6 +687,7 @@ main (int argc, char *argv[])
   GListModel *dirmodel;
   GtkTreeListModel *tree;
   GtkFilterListModel *filter;
+  GtkSelectionModel *selection;
   GtkFilter *custom_filter;
   GtkSortListModel *sort;
   GtkSorter *sorter;
@@ -761,7 +762,9 @@ main (int argc, char *argv[])
   g_signal_connect (search_entry, "search-changed", G_CALLBACK (search_changed_cb), custom_filter);
   g_object_unref (custom_filter);
 
-  gtk_column_view_set_model (GTK_COLUMN_VIEW (view), G_LIST_MODEL (filter));
+  selection = GTK_SELECTION_MODEL (gtk_single_selection_new (G_LIST_MODEL (filter)));
+  gtk_column_view_set_model (GTK_COLUMN_VIEW (view), selection);
+  g_object_unref (selection);
 
   statusbar = gtk_statusbar_new ();
   gtk_widget_add_tick_callback (statusbar, (GtkTickCallback) update_statusbar, NULL, NULL);
@@ -776,7 +779,9 @@ main (int argc, char *argv[])
 
   list = gtk_list_view_new_with_factory (
              gtk_builder_list_item_factory_new_from_bytes (scope, g_bytes_new_static (factory_ui, strlen (factory_ui))));
-  gtk_list_view_set_model (GTK_LIST_VIEW (list), gtk_column_view_get_columns (GTK_COLUMN_VIEW (view)));
+  selection = GTK_SELECTION_MODEL (gtk_single_selection_new (gtk_column_view_get_columns (GTK_COLUMN_VIEW (view))));
+  gtk_list_view_set_model (GTK_LIST_VIEW (list), selection);
+  g_object_unref (selection);
   gtk_box_append (GTK_BOX (hbox), list);
 
   g_object_unref (scope);

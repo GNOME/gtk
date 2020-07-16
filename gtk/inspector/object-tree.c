@@ -1345,5 +1345,5 @@ gtk_inspector_object_tree_set_display (GtkInspectorObjectTree *wt,
   g_object_unref (root_model);
 
   gtk_column_view_set_model (GTK_COLUMN_VIEW (wt->priv->list),
-                             G_LIST_MODEL (wt->priv->selection));
+                             GTK_SELECTION_MODEL (wt->priv->selection));
 }

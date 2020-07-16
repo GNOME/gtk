@@ -513,7 +513,7 @@ update_combo_sensitivity_from_printers (GtkCustomPaperUnixDialog *dialog)
 static void
 update_custom_widgets_from_list (GtkCustomPaperUnixDialog *dialog)
 {
-  GListModel *model;
+  GtkSelectionModel *model;
   GtkPageSetup *page_setup;
 
   model = gtk_list_view_get_model (GTK_LIST_VIEW (dialog->listview));
@@ -559,7 +559,7 @@ static void
 unit_widget_changed (GtkCustomPaperUnixDialog *dialog)
 {
   double w, h, top, bottom, left, right;
-  GListModel *model;
+  GtkSelectionModel *model;
   GtkPageSetup *page_setup;
   GtkPaperSize *paper_size;
 
@@ -648,7 +648,7 @@ add_custom_paper (GtkCustomPaperUnixDialog *dialog)
 static void
 remove_custom_paper (GtkCustomPaperUnixDialog *dialog)
 {
-  GListModel *model;
+  GtkSelectionModel *model;
   guint selected;
 
   model = gtk_list_view_get_model (GTK_LIST_VIEW (dialog->listview));
@@ -870,7 +870,7 @@ populate_dialog (GtkCustomPaperUnixDialog *dialog)
   GtkWidget *grid, *label, *widget, *frame, *combo;
   GtkWidget *hbox, *vbox, *listview, *scrolled, *toolbar, *button;
   GtkUnit user_units;
-  GListModel *model;
+  GtkSingleSelection *selection;
   GtkListItemFactory *factory;
 
   content_area = gtk_dialog_get_content_area (cpu_dialog);
@@ -899,10 +899,10 @@ populate_dialog (GtkCustomPaperUnixDialog *dialog)
   listview = gtk_list_view_new ();
   gtk_widget_set_size_request (listview, 140, -1);
 
-  model = G_LIST_MODEL (gtk_single_selection_new (G_LIST_MODEL (dialog->custom_paper_list)));
-  gtk_list_view_set_model (GTK_LIST_VIEW (listview), model);
-  g_signal_connect (model, "notify::selected", G_CALLBACK (selected_custom_paper_changed), dialog);
-  g_object_unref (model);
+  selection = gtk_single_selection_new (G_LIST_MODEL (dialog->custom_paper_list));
+  gtk_list_view_set_model (GTK_LIST_VIEW (listview), GTK_SELECTION_MODEL (selection));
+  g_signal_connect (selection, "notify::selected", G_CALLBACK (selected_custom_paper_changed), dialog);
+  g_object_unref (selection);
 
   factory = gtk_signal_list_item_factory_new ();
   g_signal_connect (factory, "setup", G_CALLBACK (setup_item), NULL);

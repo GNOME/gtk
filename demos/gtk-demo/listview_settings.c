@@ -345,7 +345,7 @@ do_listview_settings (GtkWidget *do_widget)
       GtkWidget *listview, *columnview;
       GListModel *model;
       GtkTreeListModel *treemodel;
-      GtkSingleSelection *selection;
+      GtkSelectionModel *selection;
       GtkBuilderScope *scope;
       GtkBuilder *builder;
       GtkColumnViewColumn *name_column;
@@ -409,14 +409,14 @@ do_listview_settings (GtkWidget *do_widget)
                                            create_settings_model,
                                            NULL,
                                            NULL);
-      selection = gtk_single_selection_new (G_LIST_MODEL (treemodel));
+      selection = GTK_SELECTION_MODEL (gtk_single_selection_new (G_LIST_MODEL (treemodel)));
       g_object_bind_property_full (selection, "selected-item",
                                    columnview, "model",
                                    G_BINDING_SYNC_CREATE,
                                    transform_settings_to_keys,
                                    NULL,
                                    columnview, NULL);
-      gtk_list_view_set_model (GTK_LIST_VIEW (listview), G_LIST_MODEL (selection));
+      gtk_list_view_set_model (GTK_LIST_VIEW (listview), selection);
       g_object_unref (selection);
       g_object_unref (treemodel);
       g_object_unref (model);

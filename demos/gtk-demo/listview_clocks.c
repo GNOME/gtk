@@ -491,7 +491,7 @@ do_listview_clocks (GtkWidget *do_widget)
 
       model = create_clocks_model ();
       selection = gtk_no_selection_new (model);
-      gtk_grid_view_set_model (GTK_GRID_VIEW (gridview), G_LIST_MODEL (selection));
+      gtk_grid_view_set_model (GTK_GRID_VIEW (gridview), GTK_SELECTION_MODEL (selection));
       gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (sw), gridview);
       g_object_unref (selection);
       g_object_unref (model);
