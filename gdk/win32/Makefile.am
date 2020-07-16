@@ -107,10 +107,10 @@ gdk3_win32_HEADERS_INST = $(libgdkwin32include_HEADERS)
 
 gdk3_win32_HEADERS_EXCLUDES = dummy
 
-include $(top_srcdir)/build/Makefile.msvcproj
+include $(top_srcdir)/win32/Makefile.msvcproj
 
 dist-hook: \
-	$(top_builddir)/build/win32/vs9/gdk3-win32.vcproj	\
-	$(top_builddir)/build/win32/vs9/gdk3-win32.headers
+	$(top_builddir)/win32/vs9/gdk3-win32.vcproj	\
+	$(top_builddir)/win32/vs9/gdk3-win32.headers
 
 -include $(top_srcdir)/git.mk

@@ -510,7 +510,7 @@ gdk_3_HEADERS_INST = \
 
 gdk_3_HEADERS_EXCLUDES = dummy
 
-include $(top_srcdir)/build/Makefile.msvcproj
+include $(top_srcdir)/win32/Makefile.msvcproj
 
 if HAVE_INTROSPECTION
 # Introspection Items for MSVC
@@ -518,13 +518,13 @@ MSVC_INTROSPECT_GIRS = Gdk-3.0.gir GdkWin32-3.0.gir
 
 BASE_MSVC_GIR_CFLAGS =			\
 	$(GDK_CFLAGS_DEFINES)		\
-	-I../.. -I../../gdk -I.../../gdk/win32
+	-I.. -I../gdk -I../gdk/win32
 
 INTROSPECTION_INTERMEDIATE_ITEMS = \
-	$(top_builddir)/build/win32/Gdk-3.0.gir.msvc.introspect	\
-	$(top_builddir)/build/win32/Gdk_3_0_gir_list			\
-	$(top_builddir)/build/win32/GdkWin32-3.0.gir.msvc.introspect	\
-	$(top_builddir)/build/win32/GdkWin32_3_0_gir_list
+	$(top_builddir)/win32/Gdk-3.0.gir.msvc.introspect	\
+	$(top_builddir)/win32/Gdk_3_0_gir_list			\
+	$(top_builddir)/win32/GdkWin32-3.0.gir.msvc.introspect	\
+	$(top_builddir)/win32/GdkWin32_3_0_gir_list
 
 Gdk_3_0_gir_MSVC_FILES = $(introspection_files)
 Gdk_3_0_gir_MSVC_EXPORT_PACKAGES = $(Gdk_3_0_gir_EXPORT_PACKAGES)
@@ -542,15 +542,15 @@ GdkWin32_3_0_gir_MSVC_SCANNERFLAGS =	\
 	--c-include="gdk/gdkwin32.h"	\
 	--include-uninstalled='./vs$$$$(VSVER)/$$$$(CFG)/$$$$(PLAT)/bin/Gdk-3.0.gir'
 
-include $(top_srcdir)/build/Makefile.msvc-introspection
+include $(top_srcdir)/win32/Makefile.msvc-introspection
 
 else
 INTROSPECTION_INTERMEDIATE_ITEMS =
 endif
 
 dist-hook: \
-	$(top_builddir)/build/win32/vs9/gdk-3.vcproj	\
-	$(top_builddir)/build/win32/vs9/gdk-3.headers	\
+	$(top_builddir)/win32/vs9/gdk-3.vcproj	\
+	$(top_builddir)/win32/vs9/gdk-3.headers	\
 	$(INTROSPECTION_INTERMEDIATE_ITEMS)
 
 DISTCLEANFILES = gdkconfig.h stamp-gc-h

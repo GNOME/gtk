@@ -1527,7 +1527,7 @@ gtk_3_HEADERS_INST = \
 
 gtk_3_HEADERS_EXCLUDES = dummy
 
-include $(top_srcdir)/build/Makefile.msvcproj
+include $(top_srcdir)/win32/Makefile.msvcproj
 
 if HAVE_INTROSPECTION
 # Introspection Items for MSVC
@@ -1553,11 +1553,11 @@ GTK_MSVC_GIR_CFLAGS =						\
 	-DINCLUDE_IM_ti_et			\
 	-DINCLUDE_IM_viqr			\
 	-DGTK_TEXT_USE_INTERNAL_UNSUPPORTED_API	\
-	-I../.. -I../../gtk -I../../gdk
+	-I.. -I../gtk -I../gdk
 
 INTROSPECTION_INTERMEDIATE_ITEMS = \
-	$(top_builddir)/build/win32/Gtk-3.0.gir.msvc.introspect		\
-	$(top_builddir)/build/win32/Gtk_3_0_gir_list
+	$(top_builddir)/win32/Gtk-3.0.gir.msvc.introspect		\
+	$(top_builddir)/win32/Gtk_3_0_gir_list
 
 Gtk_3_0_gir_MSVC_FILES =		\
 	$(introspected_pub_headers)	\
@@ -1572,7 +1572,7 @@ Gtk_3_0_gir_MSVC_LIBS = gtk-3.0 gdk-3.0
 Gtk_3_0_gir_MSVC_CFLAGS = $(GTK_MSVC_GIR_CFLAGS)
 Gtk_3_0_gir_MSVC_SCANNERFLAGS = --warn-all --include-uninstalled='./vs$$$$(VSVER)/$$$$(CFG)/$$$$(PLAT)/bin/Gdk-3.0.gir'
 
-include $(top_srcdir)/build/Makefile.msvc-introspection
+include $(top_srcdir)/win32/Makefile.msvc-introspection
 
 else
 INTROSPECTION_INTERMEDIATE_ITEMS =
@@ -1580,8 +1580,8 @@ INTROSPECTION_INTERMEDIATE_ITEMS =
 endif
 
 dist-hook: \
-	$(top_builddir)/build/win32/vs9/gtk-3.vcproj	\
-	$(top_builddir)/build/win32/vs9/gtk-3.headers	\
+	$(top_builddir)/win32/vs9/gtk-3.vcproj	\
+	$(top_builddir)/win32/vs9/gtk-3.headers	\
 	$(INTROSPECTION_INTERMEDIATE_ITEMS)
 
 # Install a RC file for the default GTK+ theme, and key themes
