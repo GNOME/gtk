@@ -2102,40 +2102,30 @@ gtk_list_base_grab_focus_on_item (GtkListBase *self,
   return TRUE;
 }
 
-GListModel *
+GtkSelectionModel *
 gtk_list_base_get_model (GtkListBase *self)
 {
   GtkListBasePrivate *priv = gtk_list_base_get_instance_private (self);
 
-  return priv->model;
+  return GTK_SELECTION_MODEL (priv->model);
 }
 
 gboolean
-gtk_list_base_set_model (GtkListBase *self,
-                         GListModel  *model)
+gtk_list_base_set_model (GtkListBase       *self,
+                         GtkSelectionModel *model)
 {
   GtkListBasePrivate *priv = gtk_list_base_get_instance_private (self);
 
-  if (priv->model == model)
+  if (priv->model == G_LIST_MODEL (model))
     return FALSE;
 
   g_clear_object (&priv->model);
 
   if (model)
     {
-      GtkSelectionModel *selection_model;
-
-      priv->model = g_object_ref (model);
-
-      if (GTK_IS_SELECTION_MODEL (model))
-        selection_model = GTK_SELECTION_MODEL (g_object_ref (model));
-      else
-        selection_model = GTK_SELECTION_MODEL (gtk_single_selection_new (model));
-
-      gtk_list_item_manager_set_model (priv->item_manager, selection_model);
+      priv->model = g_object_ref (G_LIST_MODEL (model));
+      gtk_list_item_manager_set_model (priv->item_manager, model);
       gtk_list_base_set_anchor (self, 0, 0.0, GTK_PACK_START, 0.0, GTK_PACK_START);
-
-      g_object_unref (selection_model);
     }
   else
     {
