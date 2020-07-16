@@ -30,6 +30,7 @@
 #include "gtkeventcontrollerkey.h"
 #include "gtkpicture.h"
 #include "gtkmediafile.h"
+#include "gtkbinlayout.h"
 #include "resource-holder.h"
 
 #include <glib/gi18n-lib.h>
@@ -42,7 +43,7 @@ enum
 
 struct _GtkInspectorResourceList
 {
-  GtkBox parent_instance;
+  GtkWidget parent_instance;
 
   GtkTextBuffer *buffer;
   GtkWidget *video;
@@ -71,11 +72,11 @@ struct _GtkInspectorResourceList
 
 typedef struct _GtkInspectorResourceListClass
 {
-  GtkBoxClass parent;
+  GtkWidgetClass parent;
 } GtkInspectorResourceListClass;
 
 
-G_DEFINE_TYPE (GtkInspectorResourceList, gtk_inspector_resource_list, GTK_TYPE_BOX)
+G_DEFINE_TYPE (GtkInspectorResourceList, gtk_inspector_resource_list, GTK_TYPE_WIDGET)
 
 static GListModel *
 load_resources_recurse (const char *path,
@@ -925,6 +926,8 @@ gtk_inspector_resource_list_class_init (GtkInspectorResourceListClass *klass)
   gtk_widget_class_bind_template_callback (widget_class, bind_count_cb);
   gtk_widget_class_bind_template_callback (widget_class, setup_size_cb);
   gtk_widget_class_bind_template_callback (widget_class, bind_size_cb);
+
+  gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BIN_LAYOUT);
 }
 
 // vim: set et sw=2 ts=2:
