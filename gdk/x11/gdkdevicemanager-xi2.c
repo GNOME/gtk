@@ -1986,7 +1986,7 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
         gdk_event_set_seat (event, gdk_device_get_seat (device));
 
         if (ev->evtype == XI_Enter &&
-            xev->detail != XINotifyInferior && xev->mode != XINotifyPassiveUngrab &&
+            xev->detail != XINotifyInferior && xev->mode != XINotifyUngrab &&
 	    gdk_window_get_window_type (window) == GDK_WINDOW_TOPLEVEL)
           {
             if (gdk_device_get_device_type (source_device) != GDK_DEVICE_TYPE_MASTER)
