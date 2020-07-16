@@ -422,7 +422,7 @@ constructed (GObject *object)
   GtkInspectorActions *sl = GTK_INSPECTOR_ACTIONS (object);
   GtkSorter *sorter;
   GListModel *sorted;
-  GListModel *model;
+  GtkSelectionModel *model;
 
   g_signal_connect_swapped (sl->priv->button, "clicked",
                             G_CALLBACK (refresh_all), sl);
@@ -438,7 +438,7 @@ constructed (GObject *object)
   sl->priv->actions = G_LIST_MODEL (g_list_store_new (ACTION_TYPE_HOLDER));
   sorted = G_LIST_MODEL (gtk_sort_list_model_new (sl->priv->actions,
                                                   gtk_column_view_get_sorter (GTK_COLUMN_VIEW (sl->priv->list))));
-  model = G_LIST_MODEL (gtk_no_selection_new (sorted));
+  model = GTK_SELECTION_MODEL (gtk_no_selection_new (sorted));
   gtk_column_view_set_model (GTK_COLUMN_VIEW (sl->priv->list), model);
   g_object_unref (sorted);
   g_object_unref (model);

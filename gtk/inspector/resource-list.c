@@ -718,7 +718,7 @@ constructed (GObject *object)
   g_object_unref (sort_model);
   g_object_unref (sorter);
 
-  gtk_column_view_set_model (GTK_COLUMN_VIEW (rl->list), G_LIST_MODEL (rl->selection));
+  gtk_column_view_set_model (GTK_COLUMN_VIEW (rl->list), GTK_SELECTION_MODEL (rl->selection));
 
   g_signal_connect (rl->selection, "selection-changed", G_CALLBACK (on_selection_changed), rl);
 }

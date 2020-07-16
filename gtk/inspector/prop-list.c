@@ -583,7 +583,7 @@ gtk_inspector_prop_list_set_object (GtkInspectorPropList *pl,
   guint num_properties;
   guint i;
   GListStore *store;
-  GListModel *list;
+  GtkNoSelection *selection;
   GListModel *filtered;
   GtkSortListModel *sorted;
 
@@ -624,15 +624,15 @@ gtk_inspector_prop_list_set_object (GtkInspectorPropList *pl,
 
   filtered = G_LIST_MODEL (gtk_filter_list_model_new (G_LIST_MODEL (store), pl->priv->filter));
   sorted = gtk_sort_list_model_new (filtered, NULL);
-  list = G_LIST_MODEL (gtk_no_selection_new (G_LIST_MODEL (sorted)));
+  selection = gtk_no_selection_new (G_LIST_MODEL (sorted));
 
-  gtk_column_view_set_model (GTK_COLUMN_VIEW (pl->priv->list), list);
+  gtk_column_view_set_model (GTK_COLUMN_VIEW (pl->priv->list), GTK_SELECTION_MODEL (selection));
   gtk_sort_list_model_set_sorter (sorted, gtk_column_view_get_sorter (GTK_COLUMN_VIEW (pl->priv->list)));
   gtk_column_view_sort_by_column (GTK_COLUMN_VIEW (pl->priv->list), pl->priv->name, GTK_SORT_ASCENDING);
 
   gtk_widget_show (GTK_WIDGET (pl));
 
-  g_object_unref (list);
+  g_object_unref (selection);
   g_object_unref (sorted);
   g_object_unref (filtered);
   g_object_unref (store);

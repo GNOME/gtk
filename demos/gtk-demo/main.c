@@ -16,7 +16,7 @@ static GtkWidget *source_view;
 static gchar *current_file = NULL;
 
 static GtkWidget *notebook;
-static GtkSingleSelection *selection;
+static GtkSelectionModel *selection;
 static GtkWidget *toplevel;
 static char **search_needle;
 
@@ -220,7 +220,7 @@ activate_run (GSimpleAction *action,
               GVariant      *parameter,
               gpointer       window)
 {
-  GtkTreeListRow *row = gtk_single_selection_get_selected_item (selection);
+  GtkTreeListRow *row = gtk_single_selection_get_selected_item (GTK_SINGLE_SELECTION (selection));
   GtkDemo *demo = gtk_tree_list_row_get_item (row);
 
   gtk_demo_run (demo, window);
@@ -932,7 +932,7 @@ activate_cb (GtkWidget *widget,
              guint      position,
              gpointer   window)
 {
-  GtkTreeListRow *row = g_list_model_get_item (gtk_list_view_get_model (GTK_LIST_VIEW (widget)), position);
+  GtkTreeListRow *row = g_list_model_get_item (G_LIST_MODEL (gtk_list_view_get_model (GTK_LIST_VIEW (widget))), position);
   GtkDemo *demo = gtk_tree_list_row_get_item (row);
 
   gtk_demo_run (demo, window);
@@ -1152,11 +1152,11 @@ activate (GApplication *app)
   search_entry = GTK_WIDGET (gtk_builder_get_object (builder, "search-entry"));
   g_signal_connect (search_entry, "search-changed", G_CALLBACK (demo_search_changed_cb), filter);
 
-  selection = gtk_single_selection_new (G_LIST_MODEL (filter_model));
+  selection = GTK_SELECTION_MODEL (gtk_single_selection_new (G_LIST_MODEL (filter_model)));
   g_signal_connect (selection, "notify::selected-item", G_CALLBACK (selection_cb), NULL);
-  gtk_list_view_set_model (GTK_LIST_VIEW (listview), G_LIST_MODEL (selection));
+  gtk_list_view_set_model (GTK_LIST_VIEW (listview), selection);
 
-  selection_cb (selection, NULL, NULL);
+  selection_cb (GTK_SINGLE_SELECTION (selection), NULL, NULL);
 
   g_object_unref (builder);
 }
