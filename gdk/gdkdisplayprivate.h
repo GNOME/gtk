@@ -191,6 +191,8 @@ struct _GdkDisplayClass
                                                  GdkEvent       *new_event);
   void                       (*event_data_free) (GdkDisplay     *display,
                                                  GdkEvent       *event);
+  gboolean                   (*event_propagate_native) (GdkDisplay *display,
+                                                        GdkEvent *event);
   void                       (*create_window_impl) (GdkDisplay    *display,
                                                     GdkWindow     *window,
                                                     GdkWindow     *real_parent,

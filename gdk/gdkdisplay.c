@@ -134,6 +134,13 @@ gdk_display_real_event_data_free (GdkDisplay     *display,
 {
 }
 
+static gboolean
+gdk_display_real_event_propagate_native (GdkDisplay     *display,
+                                         GdkEvent       *event)
+{
+  return FALSE;
+}
+
 static GdkSeat *
 gdk_display_real_get_default_seat (GdkDisplay *display)
 {
@@ -158,7 +165,9 @@ gdk_display_class_init (GdkDisplayClass *class)
   class->make_default = gdk_display_real_make_default;
   class->event_data_copy = gdk_display_real_event_data_copy;
   class->event_data_free = gdk_display_real_event_data_free;
+  class->event_propagate_native = gdk_display_real_event_propagate_native;
   class->get_default_seat = gdk_display_real_get_default_seat;
+
 
   /**
    * GdkDisplay::opened:
@@ -2760,4 +2769,13 @@ gdk_display_monitor_removed (GdkDisplay *display,
 {
   g_signal_emit (display, signals[MONITOR_REMOVED], 0, monitor);
   gdk_monitor_invalidate (monitor);
+}
+
+gboolean
+gdk_display_propagate_native_event (GdkDisplay *display,
+                                    GdkEvent *event)
+{
+  g_return_val_if_fail (GDK_IS_DISPLAY (display), FALSE);
+
+  return GDK_DISPLAY_GET_CLASS (display)->event_propagate_native (display, event);
 }

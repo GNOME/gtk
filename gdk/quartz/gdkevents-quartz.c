@@ -1927,3 +1927,43 @@ _gdk_quartz_display_event_data_free (GdkDisplay *display,
       priv->windowing_data = NULL;
     }
 }
+
+static gboolean
+_gdk_quartz_event_should_be_handled_natively (NSEvent* event)
+{
+  NSEventType eventType = [event type];
+
+  /*
+   * In order to limit potential damage by passing native events back to OSX
+   * we pass through only events related to keyboard as they may relate to standard
+   * MacOS shortcuts like switch app window (Cmd+` etc.)
+   */
+  if (eventType == NSKeyDown || eventType == NSKeyUp || eventType == NSFlagsChanged)
+    return TRUE;
+  else
+    return FALSE;
+}
+
+gboolean
+_gdk_quartz_display_event_propagate_native (GdkDisplay *display,
+                                            GdkEvent   *event)
+{
+  GdkEventPrivate *priv = (GdkEventPrivate *) event;
+  NSEvent* native_event = NULL;
+
+  if (priv->windowing_data)
+    {
+      native_event = (NSEvent *)priv->windowing_data;
+    }
+
+  if (native_event && _gdk_quartz_event_should_be_handled_natively (native_event))
+    {
+      [NSApp sendEvent:native_event];
+
+      return TRUE;
+    }
+  else
+    {
+      return FALSE;
+    }
+}
