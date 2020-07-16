@@ -3213,8 +3213,8 @@ window.dialog.message { // Message Dialog styling
     background-image: none;
     background-color: $bg_color;
     border-style: none;
-    border-top-left-radius: 7px;
-    border-top-right-radius: 7px;
+    border-top-left-radius: $window_radius - 1;
+    border-top-right-radius: $window_radius - 1;
   }
 
   box.dialog-vbox.vertical {
@@ -3240,13 +3240,12 @@ window.dialog.message { // Message Dialog styling
       border-right-style: none;
       border-bottom-style: none;
 
-      &:first-child{
-        border-left-style: none;
-        border-bottom-left-radius: 7px;
+      &:first-child { //seems to be ignored but applied for second button's :active state
+        border-radius: 0 0 0 #{$window_radius - 1};
       }
 
       &:last-child {
-        border-bottom-right-radius: 7px;
+        border-radius: 0 0 #{$window_radius - 1} 0;
       }
     }
   }

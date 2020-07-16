@@ -3002,6 +3002,12 @@ bad things might happen.</property>
       </object>
     </child>
     <child type="action">
+      <object class="GtkButton" id="wait_info_dialog">
+        <property name="label" translatable="yes">_Wait</property>
+        <property name="use-underline">1</property>
+      </object>
+    </child>
+    <child type="action">
       <object class="GtkButton" id="doit_info_dialog">
         <property name="label" translatable="yes">_Do It</property>
         <property name="use-underline">1</property>
