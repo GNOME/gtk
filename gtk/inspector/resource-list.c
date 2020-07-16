@@ -30,6 +30,7 @@
 #include "gtkeventcontrollerkey.h"
 #include "gtkpicture.h"
 #include "gtkmediafile.h"
+#include "gtkbinlayout.h"
 #include "resource-holder.h"
 
 #include <glib/gi18n-lib.h>
@@ -40,9 +41,10 @@ enum
   PROP_BUTTONS
 };
 
-struct _GtkInspectorResourceListPrivate
+struct _GtkInspectorResourceList
 {
-  GtkTreeStore *model;
+  GtkWidget parent_instance;
+
   GtkTextBuffer *buffer;
   GtkWidget *video;
   GtkWidget *image;
@@ -68,8 +70,13 @@ struct _GtkInspectorResourceListPrivate
   GtkSingleSelection *selection;
 };
 
+typedef struct _GtkInspectorResourceListClass
+{
+  GtkWidgetClass parent;
+} GtkInspectorResourceListClass;
 
-G_DEFINE_TYPE_WITH_PRIVATE (GtkInspectorResourceList, gtk_inspector_resource_list, GTK_TYPE_BOX)
+
+G_DEFINE_TYPE (GtkInspectorResourceList, gtk_inspector_resource_list, GTK_TYPE_WIDGET)
 
 static GListModel *
 load_resources_recurse (const char *path,
@@ -156,15 +163,15 @@ populate_details (GtkInspectorResourceList *rl,
      return FALSE;
 
   markup = g_strconcat ("<span face='Monospace' size='small'>", path, "</span>", NULL);
-  gtk_label_set_markup (GTK_LABEL (rl->priv->name_label), markup);
+  gtk_label_set_markup (GTK_LABEL (rl->name_label), markup);
   g_free (markup);
 
   bytes = g_resources_lookup_data (path, 0, &error);
   if (bytes == NULL)
     {
-      gtk_text_buffer_set_text (rl->priv->buffer, error->message, -1);
+      gtk_text_buffer_set_text (rl->buffer, error->message, -1);
       g_error_free (error);
-      gtk_stack_set_visible_child_name (GTK_STACK (rl->priv->content), "text");
+      gtk_stack_set_visible_child_name (GTK_STACK (rl->content), "text");
     }
   else
     {
@@ -181,22 +188,22 @@ populate_details (GtkInspectorResourceList *rl,
       type = g_content_type_guess (name, data, size, NULL);
 
       text = g_content_type_get_description (type);
-      gtk_label_set_text (GTK_LABEL (rl->priv->type_label), text);
+      gtk_label_set_text (GTK_LABEL (rl->type_label), text);
       g_free (text);
 
       text = g_format_size (size);
-      gtk_label_set_text (GTK_LABEL (rl->priv->size_label), text);
+      gtk_label_set_text (GTK_LABEL (rl->size_label), text);
       g_free (text);
 
       if (g_content_type_is_a (type, content_text))
         {
-          gtk_text_buffer_set_text (rl->priv->buffer, data, -1);
-          gtk_stack_set_visible_child_name (GTK_STACK (rl->priv->content), "text");
+          gtk_text_buffer_set_text (rl->buffer, data, -1);
+          gtk_stack_set_visible_child_name (GTK_STACK (rl->content), "text");
         }
       else if (g_content_type_is_a (type, content_image))
         {
-          gtk_picture_set_resource (GTK_PICTURE (rl->priv->image), path);
-          gtk_stack_set_visible_child_name (GTK_STACK (rl->priv->content), "image");
+          gtk_picture_set_resource (GTK_PICTURE (rl->image), path);
+          gtk_stack_set_visible_child_name (GTK_STACK (rl->content), "image");
         }
       else if (g_content_type_is_a (type, content_video))
         {
@@ -204,15 +211,15 @@ populate_details (GtkInspectorResourceList *rl,
 
           stream = gtk_media_file_new_for_resource (path);
           gtk_media_stream_set_loop (GTK_MEDIA_STREAM (stream), TRUE);
-          gtk_picture_set_paintable (GTK_PICTURE (rl->priv->image), GDK_PAINTABLE (stream));
-          gtk_stack_set_visible_child_name (GTK_STACK (rl->priv->content), "image");
+          gtk_picture_set_paintable (GTK_PICTURE (rl->image), GDK_PAINTABLE (stream));
+          gtk_stack_set_visible_child_name (GTK_STACK (rl->content), "image");
           gtk_media_stream_play (GTK_MEDIA_STREAM (stream));
           g_object_unref (stream);
         }
       else
         {
-          gtk_text_buffer_set_text (rl->priv->buffer, "", 0);
-          gtk_stack_set_visible_child_name (GTK_STACK (rl->priv->content), "text");
+          gtk_text_buffer_set_text (rl->buffer, "", 0);
+          gtk_stack_set_visible_child_name (GTK_STACK (rl->content), "text");
         }
 
       g_free (type);
@@ -233,13 +240,13 @@ on_row_activated (GtkColumnView            *view,
   gpointer item;
   ResourceHolder *holder;
 
-  item = g_list_model_get_item (G_LIST_MODEL (rl->priv->selection), position);
+  item = g_list_model_get_item (G_LIST_MODEL (rl->selection), position);
   holder = gtk_tree_list_row_get_item (item);
   g_object_unref (item);
   if (populate_details (rl, holder))
     {
-      gtk_stack_set_visible_child_name (GTK_STACK (rl->priv->stack), "details");
-      gtk_stack_set_visible_child_name (GTK_STACK (rl->priv->buttons), "details");
+      gtk_stack_set_visible_child_name (GTK_STACK (rl->stack), "details");
+      gtk_stack_set_visible_child_name (GTK_STACK (rl->buttons), "details");
     }
   g_object_unref (holder);
 }
@@ -251,7 +258,7 @@ can_show_details (GtkInspectorResourceList *rl)
   ResourceHolder *holder;
   const char *path;
 
-  item = gtk_single_selection_get_selected_item (rl->priv->selection);
+  item = gtk_single_selection_get_selected_item (rl->selection);
   holder = gtk_tree_list_row_get_item (item);
   if (holder == NULL)
     return FALSE;
@@ -266,7 +273,7 @@ on_selection_changed (GtkSelectionModel        *selection,
                       guint                     n_items,
                       GtkInspectorResourceList *rl)
 {
-  gtk_widget_set_sensitive (rl->priv->open_details_button, can_show_details (rl));
+  gtk_widget_set_sensitive (rl->open_details_button, can_show_details (rl));
 }
 
 static void
@@ -276,14 +283,14 @@ open_details (GtkWidget                *button,
   gpointer item;
   ResourceHolder *holder;
 
-  item = gtk_single_selection_get_selected_item (rl->priv->selection);
+  item = gtk_single_selection_get_selected_item (rl->selection);
   holder = gtk_tree_list_row_get_item (item);
   if (holder == NULL)
     return;
   if (populate_details (rl, holder))
     {
-      gtk_stack_set_visible_child_name (GTK_STACK (rl->priv->stack), "details");
-      gtk_stack_set_visible_child_name (GTK_STACK (rl->priv->buttons), "details");
+      gtk_stack_set_visible_child_name (GTK_STACK (rl->stack), "details");
+      gtk_stack_set_visible_child_name (GTK_STACK (rl->buttons), "details");
     }
   g_object_unref (holder);
 }
@@ -292,8 +299,8 @@ static void
 close_details (GtkWidget                *button,
                GtkInspectorResourceList *rl)
 {
-  gtk_stack_set_visible_child_name (GTK_STACK (rl->priv->stack), "list");
-  gtk_stack_set_visible_child_name (GTK_STACK (rl->priv->buttons), "list");
+  gtk_stack_set_visible_child_name (GTK_STACK (rl->stack), "list");
+  gtk_stack_set_visible_child_name (GTK_STACK (rl->buttons), "list");
 }
 
 static GListModel *
@@ -310,8 +317,8 @@ on_map (GtkWidget *widget)
 {
   GtkInspectorResourceList *rl = GTK_INSPECTOR_RESOURCE_LIST (widget);
 
-  gtk_stack_set_visible_child_name (GTK_STACK (rl->priv->stack), "list");
-  gtk_widget_set_sensitive (rl->priv->open_details_button, can_show_details (rl));
+  gtk_stack_set_visible_child_name (GTK_STACK (rl->stack), "list");
+  gtk_widget_set_sensitive (rl->open_details_button, can_show_details (rl));
 }
 
 static gboolean search (GtkInspectorResourceList *rl,
@@ -330,7 +337,7 @@ key_pressed (GtkEventController       *controller,
       GdkModifierType default_accel;
       gboolean search_started;
 
-      search_started = gtk_search_bar_get_search_mode (GTK_SEARCH_BAR (rl->priv->search_bar));
+      search_started = gtk_search_bar_get_search_mode (GTK_SEARCH_BAR (rl->search_bar));
       default_accel = GDK_CONTROL_MASK;
 
       if (search_started &&
@@ -338,13 +345,13 @@ key_pressed (GtkEventController       *controller,
            keyval == GDK_KEY_ISO_Enter ||
            keyval == GDK_KEY_KP_Enter))
         {
-          gtk_widget_activate (GTK_WIDGET (rl->priv->list));
+          gtk_widget_activate (GTK_WIDGET (rl->list));
           return GDK_EVENT_PROPAGATE;
         }
       else if (search_started &&
                (keyval == GDK_KEY_Escape))
         {
-          gtk_search_bar_set_search_mode (GTK_SEARCH_BAR (rl->priv->search_bar), FALSE);
+          gtk_search_bar_set_search_mode (GTK_SEARCH_BAR (rl->search_bar), FALSE);
           return GDK_EVENT_STOP;
         }
       else if (search_started &&
@@ -390,7 +397,7 @@ root (GtkWidget *widget)
   g_signal_connect (controller, "key-pressed", G_CALLBACK (key_pressed), widget);
   gtk_widget_add_controller (toplevel, controller);
 
-  gtk_search_bar_set_key_capture_widget (GTK_SEARCH_BAR (rl->priv->search_bar), toplevel);
+  gtk_search_bar_set_key_capture_widget (GTK_SEARCH_BAR (rl->search_bar), toplevel);
 }
 
 static void
@@ -517,11 +524,11 @@ select_object (GtkInspectorResourceList *rl,
 {
   GtkTreeListRow *row_item;
 
-  row_item = find_and_expand_object (rl->priv->tree_model, object);
+  row_item = find_and_expand_object (rl->tree_model, object);
   if (row_item == NULL)
     return;
 
-  gtk_single_selection_set_selected (rl->priv->selection,
+  gtk_single_selection_set_selected (rl->selection,
                                      gtk_tree_list_row_get_position (row_item));
 }
 
@@ -530,14 +537,14 @@ search (GtkInspectorResourceList *rl,
         gboolean                  forward,
         gboolean                  force_progress)
 {
-  GListModel *model = G_LIST_MODEL (rl->priv->tree_model);
+  GListModel *model = G_LIST_MODEL (rl->tree_model);
   GtkTreeListRow *row_item;
   GObject *child, *result;
   guint i, selected, n, row;
   const char *text;
 
-  text = gtk_editable_get_text (GTK_EDITABLE (rl->priv->search_entry));
-  selected = gtk_single_selection_get_selected (rl->priv->selection);
+  text = gtk_editable_get_text (GTK_EDITABLE (rl->search_entry));
+  selected = gtk_single_selection_get_selected (rl->selection);
   n = g_list_model_get_n_items (model);
   if (selected >= n)
     selected = 0;
@@ -551,7 +558,7 @@ search (GtkInspectorResourceList *rl,
         {
           if (match_object (child, text))
             {
-              gtk_single_selection_set_selected (rl->priv->selection, row);
+              gtk_single_selection_set_selected (rl->selection, row);
               g_object_unref (child);
               g_object_unref (row_item);
               return TRUE;
@@ -589,7 +596,7 @@ static void
 next_match (GtkButton                *button,
             GtkInspectorResourceList *rl)
 {
-  if (gtk_search_bar_get_search_mode (GTK_SEARCH_BAR (rl->priv->search_bar)))
+  if (gtk_search_bar_get_search_mode (GTK_SEARCH_BAR (rl->search_bar)))
     {
       if (!search (rl, TRUE, TRUE))
         gtk_widget_error_bell (GTK_WIDGET (rl));
@@ -600,7 +607,7 @@ static void
 previous_match (GtkButton                *button,
                 GtkInspectorResourceList *rl)
 {
-  if (gtk_search_bar_get_search_mode (GTK_SEARCH_BAR (rl->priv->search_bar)))
+  if (gtk_search_bar_get_search_mode (GTK_SEARCH_BAR (rl->search_bar)))
     {
       if (!search (rl, FALSE, TRUE))
         gtk_widget_error_bell (GTK_WIDGET (rl));
@@ -611,8 +618,8 @@ static void
 stop_search (GtkWidget                *entry,
              GtkInspectorResourceList *rl)
 {
-  gtk_editable_set_text (GTK_EDITABLE (rl->priv->search_entry), "");
-  gtk_search_bar_set_search_mode (GTK_SEARCH_BAR (rl->priv->search_bar), FALSE);
+  gtk_editable_set_text (GTK_EDITABLE (rl->search_entry), "");
+  gtk_search_bar_set_search_mode (GTK_SEARCH_BAR (rl->search_bar), FALSE);
 }
 
 static char *
@@ -638,21 +645,19 @@ gtk_inspector_resource_list_init (GtkInspectorResourceList *rl)
 {
   GtkSorter *sorter;
 
-  rl->priv = gtk_inspector_resource_list_get_instance_private (rl);
-
   gtk_widget_init_template (GTK_WIDGET (rl));
 
   g_signal_connect (rl, "map", G_CALLBACK (on_map), NULL);
 
-  gtk_search_bar_connect_entry (GTK_SEARCH_BAR (rl->priv->search_bar),
-                                GTK_EDITABLE (rl->priv->search_entry));
+  gtk_search_bar_connect_entry (GTK_SEARCH_BAR (rl->search_bar),
+                                GTK_EDITABLE (rl->search_entry));
 
   sorter = gtk_string_sorter_new (gtk_cclosure_expression_new (G_TYPE_STRING, NULL,
                                                                0, NULL,
                                                                (GCallback)holder_name,
                                                                NULL, NULL));
 
-  gtk_column_view_column_set_sorter (rl->priv->path, sorter);
+  gtk_column_view_column_set_sorter (rl->path, sorter);
   g_object_unref (sorter);
 
   sorter = gtk_numeric_sorter_new (gtk_cclosure_expression_new (G_TYPE_INT, NULL,
@@ -660,7 +665,7 @@ gtk_inspector_resource_list_init (GtkInspectorResourceList *rl)
                                                                 (GCallback)holder_count,
                                                                 NULL, NULL));
 
-  gtk_column_view_column_set_sorter (rl->priv->count, sorter);
+  gtk_column_view_column_set_sorter (rl->count, sorter);
   g_object_unref (sorter);
 
   sorter = gtk_numeric_sorter_new (gtk_cclosure_expression_new (G_TYPE_UINT64, NULL,
@@ -668,7 +673,7 @@ gtk_inspector_resource_list_init (GtkInspectorResourceList *rl)
                                                                 (GCallback)holder_size,
                                                                 NULL, NULL));
 
-  gtk_column_view_column_set_sorter (rl->priv->size, sorter);
+  gtk_column_view_column_set_sorter (rl->size, sorter);
   g_object_unref (sorter);
 }
 
@@ -689,31 +694,33 @@ constructed (GObject *object)
   GtkInspectorResourceList *rl = GTK_INSPECTOR_RESOURCE_LIST (object);
   GListModel *root_model;
   GListModel *sort_model;
+  GtkSorter *column_sorter;
   GtkSorter *sorter;
  
-  g_signal_connect (rl->priv->open_details_button, "clicked",
+  g_signal_connect (rl->open_details_button, "clicked",
                     G_CALLBACK (open_details), rl);
-  g_signal_connect (rl->priv->close_details_button, "clicked",
+  g_signal_connect (rl->close_details_button, "clicked",
                     G_CALLBACK (close_details), rl);
  
   root_model = load_resources ();
-  rl->priv->tree_model = gtk_tree_list_model_new (FALSE,
-                                                  root_model,
-                                                  FALSE,
-                                                  create_model_for_object,
-                                                  NULL,
-                                                  NULL);
+  rl->tree_model = gtk_tree_list_model_new (FALSE,
+                                            root_model,
+                                            FALSE,
+                                            create_model_for_object,
+                                            NULL,
+                                            NULL);
 
-  sorter = gtk_tree_list_row_sorter_new (gtk_column_view_get_sorter (GTK_COLUMN_VIEW (rl->priv->list)));
-  sort_model = G_LIST_MODEL (gtk_sort_list_model_new (G_LIST_MODEL (rl->priv->tree_model), sorter));
-  rl->priv->selection = gtk_single_selection_new (sort_model);
+  column_sorter = gtk_column_view_get_sorter (GTK_COLUMN_VIEW (rl->list));
+  sorter = gtk_tree_list_row_sorter_new (g_object_ref (column_sorter));
+  sort_model = G_LIST_MODEL (gtk_sort_list_model_new (G_LIST_MODEL (rl->tree_model), sorter));
+  rl->selection = gtk_single_selection_new (sort_model);
   g_object_unref (root_model);
   g_object_unref (sort_model);
   g_object_unref (sorter);
 
-  gtk_column_view_set_model (GTK_COLUMN_VIEW (rl->priv->list), G_LIST_MODEL (rl->priv->selection));
+  gtk_column_view_set_model (GTK_COLUMN_VIEW (rl->list), G_LIST_MODEL (rl->selection));
 
-  g_signal_connect (rl->priv->selection, "selection-changed", G_CALLBACK (on_selection_changed), rl);
+  g_signal_connect (rl->selection, "selection-changed", G_CALLBACK (on_selection_changed), rl);
 }
 
 static void
@@ -727,7 +734,7 @@ get_property (GObject    *object,
   switch (param_id)
     {
     case PROP_BUTTONS:
-      g_value_take_object (value, rl->priv->buttons);
+      g_value_take_object (value, rl->buttons);
       break;
 
     default:
@@ -747,9 +754,9 @@ set_property (GObject      *object,
   switch (param_id)
     {
     case PROP_BUTTONS:
-      rl->priv->buttons = g_value_get_object (value);
-      rl->priv->open_details_button = gtk_stack_get_child_by_name (GTK_STACK (rl->priv->buttons), "list");
-      rl->priv->close_details_button = gtk_stack_get_child_by_name (GTK_STACK (rl->priv->buttons), "details");
+      rl->buttons = g_value_get_object (value);
+      rl->open_details_button = gtk_stack_get_child_by_name (GTK_STACK (rl->buttons), "list");
+      rl->close_details_button = gtk_stack_get_child_by_name (GTK_STACK (rl->buttons), "details");
       break;
 
     default:
@@ -759,14 +766,15 @@ set_property (GObject      *object,
 }
 
 static void
-finalize (GObject *object)
+dispose (GObject *object)
 {
   GtkInspectorResourceList *rl = GTK_INSPECTOR_RESOURCE_LIST (object);
 
-  g_object_unref (rl->priv->selection);
-  g_object_unref (rl->priv->tree_model);
+  g_clear_pointer (&rl->stack, gtk_widget_unparent);
+  g_clear_object (&rl->selection);
+  g_clear_object (&rl->tree_model);
 
-  G_OBJECT_CLASS (gtk_inspector_resource_list_parent_class)->finalize (object);
+  G_OBJECT_CLASS (gtk_inspector_resource_list_parent_class)->dispose (object);
 }
 
 static void
@@ -884,7 +892,7 @@ gtk_inspector_resource_list_class_init (GtkInspectorResourceListClass *klass)
   object_class->get_property = get_property;
   object_class->set_property = set_property;
   object_class->constructed = constructed;
-  object_class->finalize = finalize;
+  object_class->dispose = dispose;
 
   widget_class->root = root;
   widget_class->unroot = unroot;
@@ -894,22 +902,21 @@ gtk_inspector_resource_list_class_init (GtkInspectorResourceListClass *klass)
                            GTK_TYPE_WIDGET, G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/libgtk/inspector/resource-list.ui");
-  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorResourceList, model);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorResourceList, buffer);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorResourceList, content);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorResourceList, image);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorResourceList, name_label);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorResourceList, type_label);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorResourceList, type);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorResourceList, size_label);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorResourceList, info_grid);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorResourceList, stack);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorResourceList, search_bar);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorResourceList, search_entry);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorResourceList, list);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorResourceList, path);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorResourceList, count);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorResourceList, size);
+  gtk_widget_class_bind_template_child (widget_class, GtkInspectorResourceList, buffer);
+  gtk_widget_class_bind_template_child (widget_class, GtkInspectorResourceList, content);
+  gtk_widget_class_bind_template_child (widget_class, GtkInspectorResourceList, image);
+  gtk_widget_class_bind_template_child (widget_class, GtkInspectorResourceList, name_label);
+  gtk_widget_class_bind_template_child (widget_class, GtkInspectorResourceList, type_label);
+  gtk_widget_class_bind_template_child (widget_class, GtkInspectorResourceList, type);
+  gtk_widget_class_bind_template_child (widget_class, GtkInspectorResourceList, size_label);
+  gtk_widget_class_bind_template_child (widget_class, GtkInspectorResourceList, info_grid);
+  gtk_widget_class_bind_template_child (widget_class, GtkInspectorResourceList, stack);
+  gtk_widget_class_bind_template_child (widget_class, GtkInspectorResourceList, search_bar);
+  gtk_widget_class_bind_template_child (widget_class, GtkInspectorResourceList, search_entry);
+  gtk_widget_class_bind_template_child (widget_class, GtkInspectorResourceList, list);
+  gtk_widget_class_bind_template_child (widget_class, GtkInspectorResourceList, path);
+  gtk_widget_class_bind_template_child (widget_class, GtkInspectorResourceList, count);
+  gtk_widget_class_bind_template_child (widget_class, GtkInspectorResourceList, size);
 
   gtk_widget_class_bind_template_callback (widget_class, on_search_changed);
   gtk_widget_class_bind_template_callback (widget_class, on_row_activated);
@@ -922,6 +929,8 @@ gtk_inspector_resource_list_class_init (GtkInspectorResourceListClass *klass)
   gtk_widget_class_bind_template_callback (widget_class, bind_count_cb);
   gtk_widget_class_bind_template_callback (widget_class, setup_size_cb);
   gtk_widget_class_bind_template_callback (widget_class, bind_size_cb);
+
+  gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BIN_LAYOUT);
 }
 
 // vim: set et sw=2 ts=2:
