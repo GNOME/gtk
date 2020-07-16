@@ -147,6 +147,7 @@
 #include <gtk/gtkgrid.h>
 #include <gtk/gtkgridlayout.h>
 #include <gtk/gtkgridview.h>
+#include <gtk/gtkgseqsortmodel.h>
 #include <gtk/gtkheaderbar.h>
 #include <gtk/gtkicontheme.h>
 #include <gtk/gtkiconview.h>
