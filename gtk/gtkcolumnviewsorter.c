@@ -115,6 +115,14 @@ gtk_column_view_sorter_dispose (GObject *object)
 {
   GtkColumnViewSorter *self = GTK_COLUMN_VIEW_SORTER (object);
 
+  /* The sorter is owned by the columview and is unreffed
+   * after the columns, so the sequence must be empty at
+   * this point.
+   * The sorter can outlive the columview it comes from
+   * (the model might still have a ref), but that does
+   * not change the fact that all columns will be gone.
+   */
+  g_assert (g_sequence_is_empty (self->sorters));
   g_clear_pointer (&self->sorters, g_sequence_free);
 
   G_OBJECT_CLASS (gtk_column_view_sorter_parent_class)->dispose (object);
