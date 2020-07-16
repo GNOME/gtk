@@ -29,7 +29,7 @@
 #include "gtkrenderprivate.h"
 #include "gtkpango.h"
 
-#include <math.h>
+#include "fallback-c89.c"
 #include <float.h>
 
 #define CORNER_MASK_CACHE_MAX_SIZE 2000U
