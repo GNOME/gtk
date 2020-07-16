@@ -48,18 +48,14 @@
 #include <shlobj.h>
 
 static gboolean gdk_synchronize = FALSE;
-
-static gboolean dummy;
+extern GdkWin32TabletAPI _gdk_win32_tablet_api;
+extern gchar *_gdk_win32_tablet_api_argument;
 
 const GOptionEntry _gdk_windowing_args[] = {
   { "sync", 0, 0, G_OPTION_ARG_NONE, &gdk_synchronize,
     /* Description of --sync in --help output */              N_("Don't batch GDI requests"), NULL },
-  { "no-wintab", 0, 0, G_OPTION_ARG_NONE, &_gdk_input_ignore_wintab,
-    /* Description of --no-wintab in --help output */         N_("Don't use the Wintab API for tablet support"), NULL },
-  { "ignore-wintab", 0, 0, G_OPTION_ARG_NONE, &_gdk_input_ignore_wintab,
-    /* Description of --ignore-wintab in --help output */     N_("Same as --no-wintab"), NULL },
-  { "use-wintab", 0, 0, G_OPTION_ARG_NONE, &dummy,
-    /* Description of --use-wintab in --help output */     N_("Do use the Wintab API [default]"), NULL },
+  { "tablet-api", 0, 0, G_OPTION_ARG_STRING, &_gdk_win32_tablet_api_argument,
+    /* Description of --tablet-api in --help output */        N_("Tablet input API (for multitouch and pen): winpointer,winpointer-plain,wintab,none"), NULL },
   { "max-colors", 0, 0, G_OPTION_ARG_INT, &_gdk_max_colors,
     /* Description of --max-colors=COLORS in --help output */ N_("Size of the palette in 8 bit mode"),
     /* Placeholder in --max-colors=COLORS in --help output */ N_("COLORS") },
@@ -81,13 +77,37 @@ _gdk_win32_windowing_init (void)
 {
   gchar buf[10];
 
-  if (getenv ("GDK_IGNORE_WINTAB") != NULL)
-    _gdk_input_ignore_wintab = TRUE;
-  else if (getenv ("GDK_USE_WINTAB") != NULL)
-    _gdk_input_ignore_wintab = FALSE;
-
   if (gdk_synchronize)
     GdiSetBatchLimit (1);
+
+  /* If the application did not specify a tablet API using
+     gdk_win32_set_tablet_api () before GTK initialization,
+     see if the API was specified as an argument on the
+     command line; if neither, use the preferable API
+     depending on the OS:
+       Windows 8 and above -> WinPointer
+       Windows Vista / 7   -> WinTab */
+  if (_gdk_win32_tablet_api == 0 &&
+      _gdk_win32_tablet_api_argument != NULL &&
+      *_gdk_win32_tablet_api_argument != 0)
+    {
+      if (g_strcmp0 (_gdk_win32_tablet_api_argument, "winpointer") == 0)
+        _gdk_win32_tablet_api = GDK_WIN32_TABLET_API_WINPOINTER;
+      else if (g_strcmp0 (_gdk_win32_tablet_api_argument, "winpointer-plain") == 0)
+        _gdk_win32_tablet_api = GDK_WIN32_TABLET_API_WINPOINTER_PLAIN;
+      else if (g_strcmp0 (_gdk_win32_tablet_api_argument, "wintab") == 0)
+        _gdk_win32_tablet_api = GDK_WIN32_TABLET_API_WINTAB;
+      else if (g_strcmp0 (_gdk_win32_tablet_api_argument, "none") == 0)
+        _gdk_win32_tablet_api = GDK_WIN32_TABLET_API_NONE;
+    }
+  if (_gdk_win32_tablet_api == 0)
+    {
+      /*TODO: does it work reliably even without a compatiblity manifest? */
+      if (g_win32_check_windows_version (6, 2, 0, G_WIN32_OS_ANY))
+        _gdk_win32_tablet_api = GDK_WIN32_TABLET_API_WINPOINTER_PLAIN/*ADVANCED*/;
+      else
+        _gdk_win32_tablet_api = GDK_WIN32_TABLET_API_WINTAB;
+    }
 
   _gdk_app_hmodule = GetModuleHandle (NULL);
   _gdk_display_hdc = CreateDC ("DISPLAY", NULL, NULL, NULL);

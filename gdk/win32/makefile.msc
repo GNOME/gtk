@@ -33,6 +33,7 @@ all: \
 gdk_win32_OBJECTS = \
 	gdkcursor-win32.obj \
 	gdkdevice-win32.obj \
+	gdkdevice-winpointer.obj \
 	gdkdevice-wintab.obj \
 	gdkdevicemanager-win32.obj \
 	gdkdnd-win32.obj \
