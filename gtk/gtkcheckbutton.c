@@ -172,6 +172,30 @@ gtk_check_button_get_property (GObject      *object,
 }
 
 static void
+gtk_check_button_notify (GObject    *object,
+                         GParamSpec *pspec)
+{
+  if (strcmp (pspec->name, "child") == 0)
+    {
+      GtkWidget *child;
+
+      child = gtk_button_get_child (GTK_BUTTON (object));
+      if (child)
+        {
+          GtkLayoutManager *layout;
+          GtkLayoutChild *layout_child;
+
+          layout = gtk_widget_get_layout_manager (GTK_WIDGET (object));
+          layout_child = gtk_layout_manager_get_layout_child (layout, child);
+          gtk_box_layout_child_set_expand (GTK_BOX_LAYOUT_CHILD (layout_child), TRUE);
+        }
+    }
+
+  if (G_OBJECT_CLASS (gtk_check_button_parent_class)->notify)
+    G_OBJECT_CLASS (gtk_check_button_parent_class)->notify (object, pspec);
+}
+
+static void
 gtk_check_button_class_init (GtkCheckButtonClass *class)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (class);
@@ -180,6 +204,7 @@ gtk_check_button_class_init (GtkCheckButtonClass *class)
   object_class->finalize = gtk_check_button_finalize;
   object_class->set_property = gtk_check_button_set_property;
   object_class->get_property = gtk_check_button_get_property;
+  object_class->notify = gtk_check_button_notify;
 
   widget_class->state_flags_changed = gtk_check_button_state_flags_changed;
 

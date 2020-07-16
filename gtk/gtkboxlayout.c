@@ -49,6 +49,139 @@
  * you can use the #GtkBoxLayout:spacing property.
  */
 
+struct _GtkBoxLayoutChild
+{
+  GtkLayoutChild parent_instance;
+
+  gboolean expand;
+};
+
+enum {
+  PROP_CHILD_EXPAND = 1,
+
+  N_CHILD_PROPERTIES
+};
+
+static GParamSpec *child_props[N_CHILD_PROPERTIES];
+
+G_DEFINE_TYPE (GtkBoxLayoutChild, gtk_box_layout_child, GTK_TYPE_LAYOUT_CHILD)
+
+static void
+gtk_box_layout_child_set_property (GObject      *gobject,
+                                   guint         prop_id,
+                                   const GValue *value,
+                                   GParamSpec   *pspec)
+{
+  GtkBoxLayoutChild *self = GTK_BOX_LAYOUT_CHILD (gobject);
+
+  switch (prop_id)
+    {
+    case PROP_CHILD_EXPAND:
+      gtk_box_layout_child_set_expand (self, g_value_get_boolean (value));
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (gobject, prop_id, pspec);
+      break;
+    }
+}
+
+static void
+gtk_box_layout_child_get_property (GObject    *gobject,
+                                   guint       prop_id,
+                                   GValue     *value,
+                                   GParamSpec *pspec)
+{
+  GtkBoxLayoutChild *self = GTK_BOX_LAYOUT_CHILD (gobject);
+
+  switch (prop_id)
+    {
+    case PROP_CHILD_EXPAND:
+      g_value_set_boolean (value, self->expand);
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (gobject, prop_id, pspec);
+      break;
+    }
+}
+
+static void
+gtk_box_layout_child_class_init (GtkBoxLayoutChildClass *klass)
+{
+  GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
+
+  gobject_class->set_property = gtk_box_layout_child_set_property;
+  gobject_class->get_property = gtk_box_layout_child_get_property;
+
+  /**
+   * GtkBoxLayoutChild:expand:
+   *
+   * Whether the child should receive extra space when the parent grows.
+   *
+   * Note that the effective expand value for a child also takes
+   * the #GtkWidget:hexpand or #GtkWidget:vexpand property into account.
+   */
+  child_props[PROP_CHILD_EXPAND] =
+    g_param_spec_boolean ("expand",
+                          P_("xpand"),
+                          P_("Whether the child should receive extra space when the parent grows"),
+                          FALSE,
+                          GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
+
+  g_object_class_install_properties (gobject_class, N_CHILD_PROPERTIES, child_props);
+}
+
+static void
+gtk_box_layout_child_init (GtkBoxLayoutChild *self)
+{
+}
+
+/**
+ * gtk_box_layout_child_set_expand:
+ * @self: a #GtkBoxLayoutChild
+ * @expand: whether this child should receive extra space when the parent grows
+ *
+ * Sets whether the child should receive extra space (beyond its
+ * natural size) when the parent grows.
+ *
+ * Note that the effective expand is determined from this property
+ * and the #GtkWidget:hexpand or #GtkWidget:vexpand property of the
+ * child's widget.
+ */
+void
+gtk_box_layout_child_set_expand (GtkBoxLayoutChild *self,
+                                 gboolean           expand)
+{
+  g_return_if_fail (GTK_IS_BOX_LAYOUT_CHILD (self));
+
+  if (self->expand == expand)
+    return;
+
+  self->expand = expand;
+
+  gtk_layout_manager_layout_changed (gtk_layout_child_get_layout_manager (GTK_LAYOUT_CHILD (self)));
+
+  g_object_notify_by_pspec (G_OBJECT (self), child_props[PROP_CHILD_EXPAND]);
+}
+
+/**
+ * gtk_box_layout_child_get_expand:
+ * @self: a #GtkBoxLayoutChild
+ *
+ * Determines whether the child should receive extra space (beyond its
+ * natural size) when the parent grows.
+ *
+ * Returns: %TRUE if the child is set to expand
+ */
+gboolean
+gtk_box_layout_child_get_expand (GtkBoxLayoutChild *self)
+{
+  g_return_val_if_fail (GTK_IS_BOX_LAYOUT_CHILD (self), FALSE);
+
+  return self->expand;
+}
+
 struct _GtkBoxLayout
 {
   GtkLayoutManager parent_instance;
@@ -160,11 +293,27 @@ gtk_box_layout_get_property (GObject    *gobject,
     }
 }
 
+static gboolean
+child_should_expand (GtkBoxLayout *self,
+                     GtkWidget    *widget)
+{
+  GtkLayoutManager *layout;
+  GtkLayoutChild *child;
+
+  if (gtk_widget_compute_expand (widget, self->orientation))
+    return TRUE;
+
+  layout = GTK_LAYOUT_MANAGER (self);
+  child = gtk_layout_manager_get_layout_child (layout, widget);
+
+  return GTK_BOX_LAYOUT_CHILD (child)->expand;
+}
+
 static void
-count_expand_children (GtkWidget *widget,
-                       GtkOrientation orientation,
-                       gint *visible_children,
-                       gint *expand_children)
+count_expand_children (GtkBoxLayout *self,
+                       GtkWidget    *widget,
+                       int          *visible_children,
+                       int          *expand_children)
 {
   GtkWidget *child;
 
@@ -179,7 +328,7 @@ count_expand_children (GtkWidget *widget,
 
       *visible_children += 1;
 
-      if (gtk_widget_compute_expand (child, orientation))
+      if (child_should_expand (self, child))
         *expand_children += 1;
     }
 }
@@ -281,7 +430,7 @@ gtk_box_layout_compute_opposite_size (GtkBoxLayout *self,
   int spacing;
   gboolean have_baseline;
 
-  count_expand_children (widget, self->orientation, &nvis_children, &nexpand_children);
+  count_expand_children (self, widget, &nvis_children, &nexpand_children);
 
   if (nvis_children <= 0)
     return;
@@ -361,7 +510,7 @@ gtk_box_layout_compute_opposite_size (GtkBoxLayout *self,
         {
           child_size = sizes[i].minimum_size;
 
-          if (gtk_widget_compute_expand (child, self->orientation))
+          if (child_should_expand (self, child))
             {
               child_size += size_given_to_child;
 
@@ -482,7 +631,7 @@ gtk_box_layout_allocate (GtkLayoutManager *layout_manager,
   gint child_size;
   gint spacing;
 
-  count_expand_children (widget, self->orientation, &nvis_children, &nexpand_children);
+  count_expand_children (self, widget, &nvis_children, &nexpand_children);
 
   /* If there is no visible child, simply return. */
   if (nvis_children <= 0)
@@ -575,7 +724,7 @@ gtk_box_layout_allocate (GtkLayoutManager *layout_manager,
         {
           child_size = sizes[i].minimum_size;
 
-          if (gtk_widget_compute_expand (child, self->orientation))
+          if (child_should_expand (self, child))
             {
               child_size += size_given_to_child;
 
@@ -701,6 +850,7 @@ gtk_box_layout_class_init (GtkBoxLayoutClass *klass)
   gobject_class->set_property = gtk_box_layout_set_property;
   gobject_class->get_property = gtk_box_layout_get_property;
 
+  layout_manager_class->layout_child_type = GTK_TYPE_BOX_LAYOUT_CHILD;
   layout_manager_class->measure = gtk_box_layout_measure;
   layout_manager_class->allocate = gtk_box_layout_allocate;
 
