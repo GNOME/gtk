@@ -606,6 +606,8 @@ gtk_switch_class_init (GtkSwitchClass *klass)
   g_object_class_override_property (gobject_class, PROP_ACTION_TARGET, "action-target");
 
   gtk_widget_class_set_css_name (widget_class, I_("switch"));
+
+  gtk_widget_class_set_accessible_role (widget_class, GTK_ACCESSIBLE_ROLE_SWITCH);
 }
 
 static void
@@ -699,6 +701,10 @@ gtk_switch_set_active (GtkSwitch *self,
       g_signal_emit (self, signals[STATE_SET], 0, is_active, &handled);
 
       g_object_notify_by_pspec (G_OBJECT (self), switch_props[PROP_ACTIVE]);
+
+      gtk_accessible_update_state (GTK_ACCESSIBLE (self),
+                                   GTK_ACCESSIBLE_STATE_CHECKED, is_active,
+                                   -1);
 
       gtk_widget_queue_allocate (GTK_WIDGET (self));
     }
