@@ -56,9 +56,9 @@ gtk_at_context_finalize (GObject *gobject)
 {
   GtkATContext *self = GTK_AT_CONTEXT (gobject);
 
-  gtk_accessible_property_set_unref (self->properties);
-  gtk_accessible_relation_set_unref (self->relations);
-  gtk_accessible_state_set_unref (self->states);
+  gtk_accessible_attribute_set_unref (self->properties);
+  gtk_accessible_attribute_set_unref (self->relations);
+  gtk_accessible_attribute_set_unref (self->states);
 
   G_OBJECT_CLASS (gtk_at_context_parent_class)->finalize (gobject);
 }
@@ -114,9 +114,9 @@ gtk_at_context_real_state_change (GtkATContext                *self,
                                   GtkAccessibleStateChange     changed_states,
                                   GtkAccessiblePropertyChange  changed_properties,
                                   GtkAccessibleRelationChange  changed_relations,
-                                  GtkAccessibleStateSet       *states,
-                                  GtkAccessiblePropertySet    *properties,
-                                  GtkAccessibleRelationSet    *relations)
+                                  GtkAccessibleAttributeSet   *states,
+                                  GtkAccessibleAttributeSet   *properties,
+                                  GtkAccessibleAttributeSet   *relations)
 {
 }
 
@@ -166,14 +166,81 @@ gtk_at_context_class_init (GtkATContextClass *klass)
   g_object_class_install_properties (gobject_class, N_PROPS, obj_props);
 }
 
+#define N_PROPERTIES    (GTK_ACCESSIBLE_PROPERTY_VALUE_TEXT + 1)
+#define N_RELATIONS     (GTK_ACCESSIBLE_RELATION_SET_SIZE + 1)
+#define N_STATES        (GTK_ACCESSIBLE_STATE_SELECTED + 1)
+
+static const char *property_attrs[] = {
+  [GTK_ACCESSIBLE_PROPERTY_AUTOCOMPLETE]        = "autocomplete",
+  [GTK_ACCESSIBLE_PROPERTY_DESCRIPTION]         = "description",
+  [GTK_ACCESSIBLE_PROPERTY_HAS_POPUP]           = "haspopup",
+  [GTK_ACCESSIBLE_PROPERTY_KEY_SHORTCUTS]       = "keyshortcuts",
+  [GTK_ACCESSIBLE_PROPERTY_LABEL]               = "label",
+  [GTK_ACCESSIBLE_PROPERTY_LEVEL]               = "level",
+  [GTK_ACCESSIBLE_PROPERTY_MODAL]               = "modal",
+  [GTK_ACCESSIBLE_PROPERTY_MULTI_LINE]          = "multiline",
+  [GTK_ACCESSIBLE_PROPERTY_MULTI_SELECTABLE]    = "multiselectable",
+  [GTK_ACCESSIBLE_PROPERTY_ORIENTATION]         = "orientation",
+  [GTK_ACCESSIBLE_PROPERTY_PLACEHOLDER]         = "placeholder",
+  [GTK_ACCESSIBLE_PROPERTY_READ_ONLY]           = "readonly",
+  [GTK_ACCESSIBLE_PROPERTY_REQUIRED]            = "required",
+  [GTK_ACCESSIBLE_PROPERTY_ROLE_DESCRIPTION]    = "roledescription",
+  [GTK_ACCESSIBLE_PROPERTY_SORT]                = "sort",
+  [GTK_ACCESSIBLE_PROPERTY_VALUE_MAX]           = "valuemax",
+  [GTK_ACCESSIBLE_PROPERTY_VALUE_MIN]           = "valuemin",
+  [GTK_ACCESSIBLE_PROPERTY_VALUE_NOW]           = "valuenow",
+  [GTK_ACCESSIBLE_PROPERTY_VALUE_TEXT]          = "valuetext",
+};
+
+static const char *relation_attrs[] = {
+  [GTK_ACCESSIBLE_RELATION_ACTIVE_DESCENDANT]   = "activedescendant",
+  [GTK_ACCESSIBLE_RELATION_COL_COUNT]           = "colcount",
+  [GTK_ACCESSIBLE_RELATION_COL_INDEX]           = "colindex",
+  [GTK_ACCESSIBLE_RELATION_COL_INDEX_TEXT]      = "colindextext",
+  [GTK_ACCESSIBLE_RELATION_COL_SPAN]            = "colspan",
+  [GTK_ACCESSIBLE_RELATION_CONTROLS]            = "controls",
+  [GTK_ACCESSIBLE_RELATION_DESCRIBED_BY]        = "describedby",
+  [GTK_ACCESSIBLE_RELATION_DETAILS]             = "details",
+  [GTK_ACCESSIBLE_RELATION_ERROR_MESSAGE]       = "errormessage",
+  [GTK_ACCESSIBLE_RELATION_FLOW_TO]             = "flowto",
+  [GTK_ACCESSIBLE_RELATION_LABELLED_BY]         = "labelledby",
+  [GTK_ACCESSIBLE_RELATION_OWNS]                = "owns",
+  [GTK_ACCESSIBLE_RELATION_POS_IN_SET]          = "posinset",
+  [GTK_ACCESSIBLE_RELATION_ROW_COUNT]           = "rowcount",
+  [GTK_ACCESSIBLE_RELATION_ROW_INDEX]           = "rowindex",
+  [GTK_ACCESSIBLE_RELATION_ROW_INDEX_TEXT]      = "rowindextext",
+  [GTK_ACCESSIBLE_RELATION_ROW_SPAN]            = "rowspan",
+  [GTK_ACCESSIBLE_RELATION_SET_SIZE]            = "setsize",
+};
+
+static const char *state_attrs[] = {
+  [GTK_ACCESSIBLE_STATE_BUSY]           = "busy",
+  [GTK_ACCESSIBLE_STATE_CHECKED]        = "checked",
+  [GTK_ACCESSIBLE_STATE_DISABLED]       = "disabled",
+  [GTK_ACCESSIBLE_STATE_EXPANDED]       = "expanded",
+  [GTK_ACCESSIBLE_STATE_HIDDEN]         = "hidden",
+  [GTK_ACCESSIBLE_STATE_INVALID]        = "invalid",
+  [GTK_ACCESSIBLE_STATE_PRESSED]        = "pressed",
+  [GTK_ACCESSIBLE_STATE_SELECTED]       = "selected",
+};
+
 static void
 gtk_at_context_init (GtkATContext *self)
 {
   self->accessible_role = GTK_ACCESSIBLE_ROLE_WIDGET;
 
-  self->properties = gtk_accessible_property_set_new ();
-  self->relations = gtk_accessible_relation_set_new ();
-  self->states = gtk_accessible_state_set_new ();
+  self->properties =
+    gtk_accessible_attribute_set_new (N_PROPERTIES,
+                                      property_attrs,
+                                      (GtkAccessibleAttributeDefaultFunc) gtk_accessible_value_get_default_for_property);
+  self->relations =
+    gtk_accessible_attribute_set_new (N_RELATIONS,
+                                      relation_attrs,
+                                      (GtkAccessibleAttributeDefaultFunc) gtk_accessible_value_get_default_for_relation);
+  self->states =
+    gtk_accessible_attribute_set_new (N_STATES,
+                                      state_attrs,
+                                      (GtkAccessibleAttributeDefaultFunc) gtk_accessible_value_get_default_for_state);
 }
 
 /**
@@ -271,27 +338,12 @@ gtk_at_context_update (GtkATContext *self)
 {
   g_return_if_fail (GTK_IS_AT_CONTEXT (self));
 
-  GtkAccessibleStateChange changed_states = 0;
-  GtkAccessiblePropertyChange changed_properties = 0;
-  GtkAccessibleRelationChange changed_relations = 0;
-
-  for (int i = 0; i < GTK_ACCESSIBLE_STATE_SELECTED; i++)
-    {
-      if (gtk_accessible_state_set_contains (self->states, i))
-        changed_states |= (1 << i);
-    }
-
-  for (int i = 0; i < GTK_ACCESSIBLE_PROPERTY_VALUE_TEXT; i++)
-    {
-      if (gtk_accessible_property_set_contains (self->properties, i))
-        changed_properties |= (1 << i);
-    }
-
-  for (int i = 0; i < GTK_ACCESSIBLE_RELATION_SET_SIZE; i++)
-    {
-      if (gtk_accessible_relation_set_contains (self->relations, i))
-        changed_relations |= (1 << i);
-    }
+  GtkAccessibleStateChange changed_states =
+    gtk_accessible_attribute_set_get_changed (self->states);
+  GtkAccessiblePropertyChange changed_properties =
+    gtk_accessible_attribute_set_get_changed (self->properties);
+  GtkAccessibleRelationChange changed_relations =
+    gtk_accessible_attribute_set_get_changed (self->relations);
 
   GTK_AT_CONTEXT_GET_CLASS (self)->state_change (self,
                                                  changed_states,
@@ -323,9 +375,9 @@ gtk_at_context_set_accessible_state (GtkATContext       *self,
   g_return_if_fail (GTK_IS_AT_CONTEXT (self));
 
   if (value != NULL)
-    gtk_accessible_state_set_add (self->states, state, value);
+    gtk_accessible_attribute_set_add (self->states, state, value);
   else
-    gtk_accessible_state_set_remove (self->states, state);
+    gtk_accessible_attribute_set_remove (self->states, state);
 }
 
 /*< private >
@@ -349,9 +401,9 @@ gtk_at_context_set_accessible_property (GtkATContext          *self,
   g_return_if_fail (GTK_IS_AT_CONTEXT (self));
 
   if (value != NULL)
-    gtk_accessible_property_set_add (self->properties, property, value);
+    gtk_accessible_attribute_set_add (self->properties, property, value);
   else
-    gtk_accessible_property_set_remove (self->properties, property);
+    gtk_accessible_attribute_set_remove (self->properties, property);
 }
 
 /*< private >
@@ -375,7 +427,7 @@ gtk_at_context_set_accessible_relation (GtkATContext          *self,
   g_return_if_fail (GTK_IS_AT_CONTEXT (self));
 
   if (value != NULL)
-    gtk_accessible_relation_set_add (self->relations, relation, value);
+    gtk_accessible_attribute_set_add (self->relations, relation, value);
   else
-    gtk_accessible_relation_set_remove (self->relations, relation);
+    gtk_accessible_attribute_set_remove (self->relations, relation);
 }

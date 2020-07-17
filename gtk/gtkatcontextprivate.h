@@ -22,9 +22,7 @@
 
 #include "gtkatcontext.h"
 
-#include "gtkaccessiblepropertysetprivate.h"
-#include "gtkaccessiblerelationsetprivate.h"
-#include "gtkaccessiblestatesetprivate.h"
+#include "gtkaccessibleattributesetprivate.h"
 
 G_BEGIN_DECLS
 
@@ -89,9 +87,9 @@ struct _GtkATContext
   GtkAccessibleRole accessible_role;
   GtkAccessible *accessible;
 
-  GtkAccessibleStateSet *states;
-  GtkAccessiblePropertySet *properties;
-  GtkAccessibleRelationSet *relations;
+  GtkAccessibleAttributeSet *states;
+  GtkAccessibleAttributeSet *properties;
+  GtkAccessibleAttributeSet *relations;
 };
 
 struct _GtkATContextClass
@@ -102,9 +100,9 @@ struct _GtkATContextClass
                          GtkAccessibleStateChange     changed_states,
                          GtkAccessiblePropertyChange  changed_properties,
                          GtkAccessibleRelationChange  changed_relations,
-                         GtkAccessibleStateSet       *states,
-                         GtkAccessiblePropertySet    *properties,
-                         GtkAccessibleRelationSet    *relations);
+                         GtkAccessibleAttributeSet   *states,
+                         GtkAccessibleAttributeSet   *properties,
+                         GtkAccessibleAttributeSet   *relations);
 };
 
 GtkATContext *  gtk_at_context_create                   (GtkAccessibleRole      accessible_role,
