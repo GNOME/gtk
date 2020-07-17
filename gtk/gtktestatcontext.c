@@ -36,24 +36,30 @@ static void
 gtk_test_at_context_state_change (GtkATContext                *self,
                                   GtkAccessibleStateChange     changed_states,
                                   GtkAccessiblePropertyChange  changed_properties,
+                                  GtkAccessibleRelationChange  changed_relations,
                                   GtkAccessibleStateSet       *states,
-                                  GtkAccessiblePropertySet    *properties)
+                                  GtkAccessiblePropertySet    *properties,
+                                  GtkAccessibleRelationSet    *relations)
 {
   GtkAccessible *accessible = gtk_at_context_get_accessible (self);
   GtkAccessibleRole role = gtk_at_context_get_accessible_role (self);
   char *states_str = gtk_accessible_state_set_to_string (states);
   char *properties_str = gtk_accessible_property_set_to_string (properties);
+  char *relations_str = gtk_accessible_relation_set_to_string (relations);
 
   g_print ("*** Accessible state changed for accessible “%s”, with role %d:\n"
-           "*** states = %s\n"
-           "*** properties = %s\n",
+           "***     states = %s\n"
+           "*** properties = %s\n"
+           "***  relations = %s\n",
            G_OBJECT_TYPE_NAME (accessible),
            role,
            states_str,
-           properties_str);
+           properties_str,
+           relations_str);
 
   g_free (states_str);
   g_free (properties_str);
+  g_free (relations_str);
 }
 
 static void

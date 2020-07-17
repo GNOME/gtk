@@ -17,6 +17,7 @@ gtk_private_sources = files([
   'tools/gdkpixbufutils.c',
   'gsettings-mapping.c',
   'gtkaccessiblepropertyset.c',
+  'gtkaccessiblerelationset.c',
   'gtkaccessiblestateset.c',
   'gtkaccessiblevalue.c',
   'gtkaccessiblevaluestatic.c',

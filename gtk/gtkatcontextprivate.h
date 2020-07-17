@@ -22,21 +22,11 @@
 
 #include "gtkatcontext.h"
 
-#include "gtkaccessiblestatesetprivate.h"
 #include "gtkaccessiblepropertysetprivate.h"
+#include "gtkaccessiblerelationsetprivate.h"
+#include "gtkaccessiblestatesetprivate.h"
 
 G_BEGIN_DECLS
-
-typedef enum {
-  GTK_ACCESSIBLE_STATE_CHANGE_BUSY     = 1 << GTK_ACCESSIBLE_STATE_BUSY,
-  GTK_ACCESSIBLE_STATE_CHANGE_CHECKED  = 1 << GTK_ACCESSIBLE_STATE_CHECKED,
-  GTK_ACCESSIBLE_STATE_CHANGE_DISABLED = 1 << GTK_ACCESSIBLE_STATE_DISABLED,
-  GTK_ACCESSIBLE_STATE_CHANGE_EXPANDED = 1 << GTK_ACCESSIBLE_STATE_EXPANDED,
-  GTK_ACCESSIBLE_STATE_CHANGE_HIDDEN   = 1 << GTK_ACCESSIBLE_STATE_HIDDEN,
-  GTK_ACCESSIBLE_STATE_CHANGE_INVALID  = 1 << GTK_ACCESSIBLE_STATE_INVALID,
-  GTK_ACCESSIBLE_STATE_CHANGE_PRESSED  = 1 << GTK_ACCESSIBLE_STATE_PRESSED,
-  GTK_ACCESSIBLE_STATE_CHANGE_SELECTED = 1 << GTK_ACCESSIBLE_STATE_SELECTED
-} GtkAccessibleStateChange;
 
 typedef enum {
   GTK_ACCESSIBLE_PROPERTY_CHANGE_AUTOCOMPLETE     = 1 << GTK_ACCESSIBLE_PROPERTY_AUTOCOMPLETE,
@@ -60,6 +50,38 @@ typedef enum {
   GTK_ACCESSIBLE_PROPERTY_CHANGE_VALUE_TEXT       = 1 << GTK_ACCESSIBLE_PROPERTY_VALUE_TEXT
 } GtkAccessiblePropertyChange;
 
+typedef enum {
+  GTK_ACCESSIBLE_RELATION_CHANGE_ACTIVE_DESCENDANT = 1 << GTK_ACCESSIBLE_RELATION_ACTIVE_DESCENDANT,
+  GTK_ACCESSIBLE_RELATION_CHANGE_COL_COUNT         = 1 << GTK_ACCESSIBLE_RELATION_COL_COUNT,
+  GTK_ACCESSIBLE_RELATION_CHANGE_COL_INDEX         = 1 << GTK_ACCESSIBLE_RELATION_COL_INDEX,
+  GTK_ACCESSIBLE_RELATION_CHANGE_COL_INDEX_TEXT    = 1 << GTK_ACCESSIBLE_RELATION_COL_INDEX_TEXT,
+  GTK_ACCESSIBLE_RELATION_CHANGE_COL_SPAN          = 1 << GTK_ACCESSIBLE_RELATION_COL_SPAN,
+  GTK_ACCESSIBLE_RELATION_CHANGE_CONTROLS          = 1 << GTK_ACCESSIBLE_RELATION_CONTROLS,
+  GTK_ACCESSIBLE_RELATION_CHANGE_DESCRIBED_BY      = 1 << GTK_ACCESSIBLE_RELATION_DESCRIBED_BY,
+  GTK_ACCESSIBLE_RELATION_CHANGE_DETAILS           = 1 << GTK_ACCESSIBLE_RELATION_DETAILS,
+  GTK_ACCESSIBLE_RELATION_CHANGE_ERROR_MESSAGE     = 1 << GTK_ACCESSIBLE_RELATION_ERROR_MESSAGE,
+  GTK_ACCESSIBLE_RELATION_CHANGE_FLOW_TO           = 1 << GTK_ACCESSIBLE_RELATION_FLOW_TO,
+  GTK_ACCESSIBLE_RELATION_CHANGE_LABELLED_BY       = 1 << GTK_ACCESSIBLE_RELATION_LABELLED_BY,
+  GTK_ACCESSIBLE_RELATION_CHANGE_OWNS              = 1 << GTK_ACCESSIBLE_RELATION_OWNS,
+  GTK_ACCESSIBLE_RELATION_CHANGE_POS_IN_SET        = 1 << GTK_ACCESSIBLE_RELATION_POS_IN_SET,
+  GTK_ACCESSIBLE_RELATION_CHANGE_ROW_COUNT         = 1 << GTK_ACCESSIBLE_RELATION_ROW_COUNT,
+  GTK_ACCESSIBLE_RELATION_CHANGE_ROW_INDEX         = 1 << GTK_ACCESSIBLE_RELATION_ROW_INDEX,
+  GTK_ACCESSIBLE_RELATION_CHANGE_ROW_INDEX_TEXT    = 1 << GTK_ACCESSIBLE_RELATION_ROW_INDEX_TEXT,
+  GTK_ACCESSIBLE_RELATION_CHANGE_ROW_SPAN          = 1 << GTK_ACCESSIBLE_RELATION_ROW_SPAN,
+  GTK_ACCESSIBLE_RELATION_CHANGE_SET_SIZE          = 1 << GTK_ACCESSIBLE_RELATION_SET_SIZE
+} GtkAccessibleRelationChange;
+
+typedef enum {
+  GTK_ACCESSIBLE_STATE_CHANGE_BUSY     = 1 << GTK_ACCESSIBLE_STATE_BUSY,
+  GTK_ACCESSIBLE_STATE_CHANGE_CHECKED  = 1 << GTK_ACCESSIBLE_STATE_CHECKED,
+  GTK_ACCESSIBLE_STATE_CHANGE_DISABLED = 1 << GTK_ACCESSIBLE_STATE_DISABLED,
+  GTK_ACCESSIBLE_STATE_CHANGE_EXPANDED = 1 << GTK_ACCESSIBLE_STATE_EXPANDED,
+  GTK_ACCESSIBLE_STATE_CHANGE_HIDDEN   = 1 << GTK_ACCESSIBLE_STATE_HIDDEN,
+  GTK_ACCESSIBLE_STATE_CHANGE_INVALID  = 1 << GTK_ACCESSIBLE_STATE_INVALID,
+  GTK_ACCESSIBLE_STATE_CHANGE_PRESSED  = 1 << GTK_ACCESSIBLE_STATE_PRESSED,
+  GTK_ACCESSIBLE_STATE_CHANGE_SELECTED = 1 << GTK_ACCESSIBLE_STATE_SELECTED
+} GtkAccessibleStateChange;
+
 struct _GtkATContext
 {
   GObject parent_instance;
@@ -69,6 +91,7 @@ struct _GtkATContext
 
   GtkAccessibleStateSet *states;
   GtkAccessiblePropertySet *properties;
+  GtkAccessibleRelationSet *relations;
 };
 
 struct _GtkATContextClass
@@ -78,8 +101,10 @@ struct _GtkATContextClass
   void (* state_change) (GtkATContext                *self,
                          GtkAccessibleStateChange     changed_states,
                          GtkAccessiblePropertyChange  changed_properties,
+                         GtkAccessibleRelationChange  changed_relations,
                          GtkAccessibleStateSet       *states,
-                         GtkAccessiblePropertySet    *properties);
+                         GtkAccessiblePropertySet    *properties,
+                         GtkAccessibleRelationSet    *relations);
 };
 
 GtkATContext *  gtk_at_context_create                   (GtkAccessibleRole      accessible_role,
@@ -92,6 +117,9 @@ void            gtk_at_context_set_accessible_state     (GtkATContext          *
                                                          GtkAccessibleValue    *value);
 void            gtk_at_context_set_accessible_property  (GtkATContext          *self,
                                                          GtkAccessibleProperty  property,
+                                                         GtkAccessibleValue    *value);
+void            gtk_at_context_set_accessible_relation  (GtkATContext          *self,
+                                                         GtkAccessibleRelation  property,
                                                          GtkAccessibleValue    *value);
 
 G_END_DECLS
