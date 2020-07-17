@@ -2388,11 +2388,16 @@ output_handle_done (void             *data,
                     struct wl_output *wl_output)
 {
   GdkWaylandMonitor *monitor = (GdkWaylandMonitor *)data;
+  int scale;
 
   GDK_NOTE (MISC,
             g_message ("handle done output %d", monitor->id));
 
   monitor->wl_output_done = TRUE;
+
+  scale = gdk_monitor_get_scale_factor (GDK_MONITOR (monitor));
+  monitor->width = monitor->width / scale;
+  monitor->height = monitor->height / scale;
 
   if (!should_expect_xdg_output_done (monitor) || monitor->xdg_output_done)
     apply_monitor_change (monitor);
