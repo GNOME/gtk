@@ -60,7 +60,7 @@ gtk_accessible_default_init (GtkAccessibleInterface *iface)
                        "Accessible Role",
                        "The role of the accessible object",
                        GTK_TYPE_ACCESSIBLE_ROLE,
-                       GTK_ACCESSIBLE_ROLE_WIDGET,
+                       GTK_ACCESSIBLE_ROLE_NONE,
                        G_PARAM_READWRITE |
                        G_PARAM_CONSTRUCT_ONLY |
                        G_PARAM_STATIC_STRINGS);
@@ -95,11 +95,11 @@ gtk_accessible_get_at_context (GtkAccessible *self)
 GtkAccessibleRole
 gtk_accessible_get_accessible_role (GtkAccessible *self)
 {
-  g_return_val_if_fail (GTK_IS_ACCESSIBLE (self), GTK_ACCESSIBLE_ROLE_WIDGET);
+  g_return_val_if_fail (GTK_IS_ACCESSIBLE (self), GTK_ACCESSIBLE_ROLE_NONE);
 
   GtkATContext *context = gtk_accessible_get_at_context (self);
   if (context == NULL)
-    return GTK_ACCESSIBLE_ROLE_WIDGET;
+    return GTK_ACCESSIBLE_ROLE_NONE;
 
   return gtk_at_context_get_accessible_role (context);
 }

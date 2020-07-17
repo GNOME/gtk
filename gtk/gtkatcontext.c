@@ -144,7 +144,7 @@ gtk_at_context_class_init (GtkATContextClass *klass)
                        "Accessible Role",
                        "The accessible role of the AT context",
                        GTK_TYPE_ACCESSIBLE_ROLE,
-                       GTK_ACCESSIBLE_ROLE_WIDGET,
+                       GTK_ACCESSIBLE_ROLE_NONE,
                        G_PARAM_READWRITE |
                        G_PARAM_CONSTRUCT_ONLY |
                        G_PARAM_STATIC_STRINGS);
@@ -281,7 +281,7 @@ gtk_accessible_state_get_attribute_name (GtkAccessibleState state)
 static void
 gtk_at_context_init (GtkATContext *self)
 {
-  self->accessible_role = GTK_ACCESSIBLE_ROLE_WIDGET;
+  self->accessible_role = GTK_ACCESSIBLE_ROLE_NONE;
 
   self->properties =
     gtk_accessible_attribute_set_new (N_PROPERTIES,
@@ -324,7 +324,7 @@ gtk_at_context_get_accessible (GtkATContext *self)
 GtkAccessibleRole
 gtk_at_context_get_accessible_role (GtkATContext *self)
 {
-  g_return_val_if_fail (GTK_IS_AT_CONTEXT (self), GTK_ACCESSIBLE_ROLE_WIDGET);
+  g_return_val_if_fail (GTK_IS_AT_CONTEXT (self), GTK_ACCESSIBLE_ROLE_NONE);
 
   return self->accessible_role;
 }
