@@ -3420,6 +3420,7 @@ gtk_tree_list_row_get_type
 <SECTION>
 <FILE>gtktreeexpander</FILE>
 <TITLE>GtkTreeExpander</TITLE>
+GtkTreeExpander
 gtk_tree_expander_new
 gtk_tree_expander_get_child
 gtk_tree_expander_set_child
@@ -7550,6 +7551,17 @@ gtk_object_expression_new
 gtk_object_expression_get_object
 gtk_closure_expression_new
 gtk_cclosure_expression_new
+
+<SUBSECTION>
+GTK_VALUE_HOLDS_EXPRESSION
+gtk_value_set_expression
+gtk_value_take_expression
+gtk_value_get_expression
+gtk_value_dup_expression
+
+<SUBSECTION>
+GtkParamSpecExpression
+gtk_param_spec_expression
 
 <SUBSECTION Standard>
 GTK_IS_EXPRESSION

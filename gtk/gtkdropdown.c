@@ -70,7 +70,7 @@
  * useful if the list of options is long. To enable the search entry,
  * use gtk_drop_down_set_enable_search().
  *
- * * # CSS nodes
+ * # CSS nodes
  *
  * GtkDropDown has a single CSS node with name dropdown,
  * with the button and popover nodes as children.

@@ -27,7 +27,7 @@
 /**
  * SECTION:gtkstringfilter
  * @Title: GtkStringFilter
- * @Short_description: Filtering by string
+ * @Short_description: Filtering by strings
  *
  * GtkStringFilter determines whether to include items by looking
  * at strings and comparing them to a fixed search term. The strings

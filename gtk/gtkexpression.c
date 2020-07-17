@@ -53,26 +53,26 @@
  *
  * Here is an example of a complex expression:
  * |[
- * color_expr = gtk_property_expression_new (GTK_TYPE_LIST_ITEM,
- *                                           NULL, "item");
- * expression = gtk_property_expression_new (GTK_TYPE_COLOR,
- *                                           color_expr,
- *                                           "name");
+ *   color_expr = gtk_property_expression_new (GTK_TYPE_LIST_ITEM,
+ *                                             NULL, "item");
+ *   expression = gtk_property_expression_new (GTK_TYPE_COLOR,
+ *                                             color_expr, "name");
  * ]|
+ *
  * when evaluated with `this` being a GtkListItem, it will obtain the
  * "item" property from the GtkListItem, and then obtain the "name" property
  * from the resulting object (which is assumed to be of type GTK_TYPE_COLOR).
  *
  * A more concise way to describe this would be
  * |[
- * this->item->name
+ *   this->item->name
  * ]|
  *
  * The most likely place where you will encounter expressions is in the context
  * of list models and list widgets using them. For example, #GtkDropDown is
  * evaluating a GtkExpression to obtain strings from the items in its model
  * that it can then use to match against the contents of its search entry.
- * #GtkStringFilter is using a GtkExpression for a similar reason.
+ * #GtkStringFilter is using a GtkExpression for similar reasons.
  *
  * By default, expressions are not paying attention to changes and evaluation is
  * just a snapshot of the current state at a given time. To get informed about
@@ -127,11 +127,11 @@
  * attribute to specify the object type, and a `name` attribute to specify the property
  * to look up. The content of <lookup> can either be an element specfiying the expression
  * to use the object, or a string that specifies the name of the object to use.
- * 
+ *
  * Example:
  * |[
  *   <lookup name='search'>string_filter</lookup>
- * |]
+ * ]|
  *
  * To create a constant expression, use the <constant> element. If the type attribute
  * is specified, the element content is interpreted as a value of that type. Otherwise,

@@ -27,7 +27,7 @@
 /**
  * SECTION:gtkcustomsorter
  * @Title: GtkCustomSorter
- * @Short_description: Sorting with a callback
+ * @Short_description: Sorting with a callbacks
  *
  * GtkCustomSorter is a #GtkSorter implementation that sorts
  * via a traditional #GCompareDataFunc callback.
@@ -108,8 +108,10 @@ gtk_custom_sorter_init (GtkCustomSorter *self)
  * Creates a new #GtkSorter that works by calling
  * @sort_func to compare items.
  *
- * Returns: a new #GTkSorter
- */ 
+ * If @sort_func is %NULL, all items are considered equal.
+ *
+ * Returns: a new #GtkSorter
+ */
 GtkSorter *
 gtk_custom_sorter_new (GCompareDataFunc sort_func,
                        gpointer         user_data,
@@ -129,10 +131,12 @@ gtk_custom_sorter_new (GCompareDataFunc sort_func,
  * @self: a #GtkCustomSorter
  * @sort_func: (nullable): function to sort items
  * @user_data: (nullable): user data to pass to @match_func
- * @user_destroy: destory notify
+ * @user_destroy: destroy notify for @user_data
  *
  * Sets (or unsets) the function used for sorting items.
- * 
+ *
+ * If @sort_func is %NULL, all items are considered equal.
+ *
  * If the sort func changes its sorting behavior,
  * gtk_sorter_changed() needs to be called.
  *

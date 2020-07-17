@@ -60,7 +60,7 @@
  * GtkColumnView allows the user to select items according to the selection
  * characteristics of the model. If the provided model is not a #GtkSelectionModel,
  * GtkColumnView will wrap it in a #GtkSingleSelection. For models that allow
- * multiple selected items, it is possible to turn on _rubberband selection_,
+ * multiple selected items, it is possible to turn on *rubberband selection*,
  * using #GtkColumnView:enable-rubberband.
  *
  * The column view supports sorting that can be customized by the user by
@@ -1241,7 +1241,7 @@ gtk_column_view_set_model (GtkColumnView *self,
  *
  * Gets the list of columns in this column view. This list is constant over
  * the lifetime of @self and can be used to monitor changes to the columns
- * of @self by connecting to the GListModel:items-changed signal.
+ * of @self by connecting to the #GListModel:items-changed signal.
  *
  * Returns: (transfer none): The list managing the columns
  **/
@@ -1263,7 +1263,7 @@ gtk_column_view_get_columns (GtkColumnView *self)
  */
 void
 gtk_column_view_set_show_row_separators (GtkColumnView *self,
-                                         gboolean     show_row_separators)
+                                         gboolean       show_row_separators)
 {
   g_return_if_fail (GTK_IS_COLUMN_VIEW (self));
 
@@ -1302,7 +1302,7 @@ gtk_column_view_get_show_row_separators (GtkColumnView *self)
  */
 void
 gtk_column_view_set_show_column_separators (GtkColumnView *self,
-                                            gboolean     show_column_separators)
+                                            gboolean       show_column_separators)
 {
   g_return_if_fail (GTK_IS_COLUMN_VIEW (self));
 
@@ -1486,16 +1486,25 @@ gtk_column_view_get_list_view (GtkColumnView *self)
  * gtk_column_view_get_sorter:
  * @self: a #GtkColumnView
  *
- * Returns the sorter associated with users sorting choices in
- * the column view.
+ * Returns a special sorter that reflects the users sorting
+ * choices in the column view.
  *
  * To allow users to customizable sorting by clicking on column
- * headers, this sorter needs to be set on the sort
- * model(s) underneath the model that is displayed
- * by the view.
+ * headers, this sorter needs to be set on the sort model underneath
+ * the model that is displayed by the view.
  *
- * See gtk_column_view_column_get_sorter() for setting up
+ * See gtk_column_view_column_set_sorter() for setting up
  * per-column sorting.
+ *
+ * Here is an example:
+ * |[
+ *   gtk_column_view_column_set_sorter (column, sorter);
+ *   gtk_column_view_append_column (view, column);
+ *   model = gtk_sort_list_model_new (store,
+ *                                    gtk_column_view_get_sorter (view));
+ *   selection = gtk_no_selection_new (model);
+ *   gtk_column_view_set_model (view, selection);
+ * ]|
  *
  * Returns: (transfer none): the #GtkSorter of @self
  */

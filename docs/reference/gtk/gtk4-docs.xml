@@ -65,9 +65,9 @@
       <section>
         <xi:include href="xml/gtksorter.xml" />
         <xi:include href="xml/gtkcustomsorter.xml" />
+        <xi:include href="xml/gtkmultisorter.xml" />
         <xi:include href="xml/gtkstringsorter.xml" />
         <xi:include href="xml/gtknumericsorter.xml" />
-        <xi:include href="xml/gtkmultisorter.xml" />
       </section>
       <xi:include href="xml/gtkselectionmodel.xml" />
       <section>
@@ -93,7 +93,9 @@
       <xi:include href="xml/gtklistview.xml" />
       <xi:include href="xml/gtkgridview.xml" />
       <xi:include href="xml/gtkcolumnview.xml" />
-      <xi:include href="xml/gtkcolumnviewcolumn.xml" />
+      <section>
+        <xi:include href="xml/gtkcolumnviewcolumn.xml" />
+      </section>
       <xi:include href="xml/gtkdropdown.xml" />
     </chapter>
 
