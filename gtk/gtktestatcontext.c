@@ -24,6 +24,8 @@
 
 #include "gtkatcontextprivate.h"
 #include "gtkenums.h"
+#include "gtkprivate.h"
+#include "gtkdebug.h"
 
 struct _GtkTestATContext
 {
@@ -47,15 +49,16 @@ gtk_test_at_context_state_change (GtkATContext                *self,
   char *properties_str = gtk_accessible_attribute_set_to_string (properties);
   char *relations_str = gtk_accessible_attribute_set_to_string (relations);
 
-  g_print ("*** Accessible state changed for accessible “%s”, with role %d:\n"
-           "***     states = %s\n"
-           "*** properties = %s\n"
-           "***  relations = %s\n",
-           G_OBJECT_TYPE_NAME (accessible),
-           role,
-           states_str,
-           properties_str,
-           relations_str);
+  GTK_NOTE(A11Y,
+   g_print ("*** Accessible state changed for accessible “%s”, with role %d:\n"
+            "***     states = %s\n"
+            "*** properties = %s\n"
+            "***  relations = %s\n",
+             G_OBJECT_TYPE_NAME (accessible),
+            role,
+            states_str,
+            properties_str,
+            relations_str));
 
   g_free (states_str);
   g_free (properties_str);
