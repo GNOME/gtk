@@ -27,20 +27,19 @@
  * SECTION:gtkbitset
  * @title: GtkBitset
  * @short_description: Sets of integers
- * @see_also: GtkSelectionModel
+ * @see_also: #GtkSelectionModel
  *
  * #GtkBitset is a data structure for representing a set of unsigned integers.
  * Another name for this data structure is "bitmap".
  *
- * This version is based on [roaring bitmaps](https://roaringbitmap.org/).
+ * The current implemenation is based on [roaring bitmaps](https://roaringbitmap.org/).
  *
  * A bitset allows adding a set of integers and provides support for set operations
  * like unions, intersections and checks for equality or if a value is contained
  * in the set. #GtkBitset also contains various functions to query metadata about
  * the bitset, such as the minimum or maximum values or its size.
  *
- * The fastest way to iterate values in a bitset is #GtkBitsetIter which allows
- * quick iteration of all the values in a bitset.
+ * The fastest way to iterate values in a bitset is #GtkBitsetIter.
  *
  * The main use case for #GtkBitset is implementing complex selections for
  * #GtkSelectionModel.

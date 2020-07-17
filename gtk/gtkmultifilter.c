@@ -42,10 +42,10 @@
  * GtkMultiFilter is the base type that implements support for handling
  * multiple filters.
  *
- * GtkAnyFilter is an implementation of GtkMultiFilter that matches an item
+ * GtkAnyFilter is a subclass of GtkMultiFilter that matches an item
  * when at least one of its filters matches.
  *
- * GtkEveryFilter is an implementation of GtkMultiFilter that matches an item
+ * GtkEveryFilter is a subclass of GtkMultiFilter that matches an item
  * when each of its filters matches.
  */
 struct _GtkMultiFilter

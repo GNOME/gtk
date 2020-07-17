@@ -183,7 +183,7 @@ transitioning code for easy lookup:
 | #GtkTreeModel       | #GListModel                         |
 | #GtkTreePath        | #guint position, #GtkTreeListRow    |
 | #GtkTreeIter        | #guint position                     |
-| GtkTreeRowReference | #GObject item                       |
+| #GtkTreeRowReference | #GObject item                       |
 | #GtkListStore       | #GListStore                         |
 | #GtkTreeStore       | #GtkTreeListModel, #GtkTreeExpander |
 | #GtkTreeSelection   | #GtkSelectionModel                  |

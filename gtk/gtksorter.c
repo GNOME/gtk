@@ -37,9 +37,8 @@
  * by calling gtk_sorter_compare() for pairs of items.
  *
  * Sorters may change their sorting behavior through their lifetime. In that case,
- * they call gtk_sorter_changed(), which will emit the #GtkSorter::changed signal to
- * notify that the sort order is no longer valid and should be updated by calling
- * gtk_sorter_compare() again.
+ * they will emit the #GtkSorter::changed signal to notify that the sort order is
+ * no longer valid and should be updated by calling gtk_sorter_compare() again.
  *
  * GTK provides various pre-made sorter implementations for common sorting operations.
  * #GtkColumnView has built-in support for sorting lists via the #GtkColumnViewColumn:sorter

@@ -771,8 +771,8 @@ gtk_filter_list_model_get_model (GtkFilterListModel *self)
  * @self: a #GtkFilterListModel
  * @incremental: %TRUE to enable incremental filtering
  *
- * When incremental filtering is enabled, the filterlistmodel will not run
- * filters immediately, but will instead queue an idle handler that
+ * When incremental filtering is enabled, the GtkFilterListModel will not
+ * run filters immediately, but will instead queue an idle handler that
  * incrementally filters the items and adds them to the list. This of course
  * means that items are not instantly added to the list, but only appear
  * incrementally.
@@ -837,8 +837,14 @@ gtk_filter_list_model_get_incremental (GtkFilterListModel *self)
  *
  * You can use this value to check if @self is busy filtering by
  * comparing the return value to 0 or you can compute the percentage
- * of the filter remaining by dividing the return value by
- * g_list_model_get_n_items(gtk_filter_list_model_get_model (self)).
+ * of the filter remaining by dividing the return value by the total
+ * number of items in the underlying model:
+ *
+ * |[
+ *   pending = gtk_filter_list_model_get_pending (self);
+ *   model = gtk_filter_list_model_get_model (self);
+ *   percentage = pending / (double) g_list_model_get_n_items (model);
+ * ]|
  *
  * Returns: The number of items not yet filtered
  **/
