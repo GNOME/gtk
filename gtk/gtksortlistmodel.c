@@ -23,6 +23,7 @@
 
 #include "gtkintl.h"
 #include "gtkprivate.h"
+#include "gtktimsortprivate.h"
 
 typedef struct _SortItem SortItem;
 struct _SortItem
@@ -176,11 +177,11 @@ sort_func (gconstpointer a,
 static void
 gtk_sort_list_model_resort (GtkSortListModel *self)
 {
-  g_qsort_with_data (sort_array_get_data (&self->items),
-                     sort_array_get_size (&self->items),
-                     sizeof (SortItem),
-                     sort_func,
-                     self->sorter);
+  gtk_tim_sort (sort_array_get_data (&self->items),
+                sort_array_get_size (&self->items),
+                sizeof (SortItem),
+                sort_func,
+                self->sorter);
 }
 
 static void
