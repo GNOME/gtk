@@ -73,6 +73,7 @@ struct _GtkInspectorLogsPrivate
   GtkWidget *printing;
   GtkWidget *tree;
   GtkWidget *text;
+  GtkWidget *a11y;
 
   GdkDisplay *display;
 };
@@ -160,6 +161,7 @@ flag_toggled (GtkWidget        *button,
   update_flag (logs->priv->printing, &flags, GTK_DEBUG_PRINTING);
   update_flag (logs->priv->tree, &flags, GTK_DEBUG_TREE);
   update_flag (logs->priv->text, &flags, GTK_DEBUG_TEXT);
+  update_flag (logs->priv->a11y, &flags, GTK_DEBUG_A11Y);
   gtk_set_display_debug_flags (logs->priv->display, flags);
 }
 
@@ -201,6 +203,7 @@ gtk_inspector_logs_class_init (GtkInspectorLogsClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorLogs, printing);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorLogs, tree);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorLogs, text);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorLogs, a11y);
   gtk_widget_class_bind_template_callback (widget_class, flag_toggled);
 }
 
