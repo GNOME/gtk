@@ -662,7 +662,8 @@ create_color_grid (void)
 {
   GtkWidget *gridview;
   GtkListItemFactory *factory;
-  GListModel *model, *selection;
+  GListModel *model;
+  GtkSelectionModel *selection;
 
   gridview = gtk_grid_view_new ();
   gtk_scrollable_set_hscroll_policy (GTK_SCROLLABLE (gridview), GTK_SCROLL_NATURAL);
@@ -678,7 +679,7 @@ create_color_grid (void)
 
   model = G_LIST_MODEL (gtk_sort_list_model_new (gtk_color_list_new (0), NULL));
 
-  selection = G_LIST_MODEL (gtk_multi_selection_new (model));
+  selection = GTK_SELECTION_MODEL (gtk_multi_selection_new (model));
   gtk_grid_view_set_model (GTK_GRID_VIEW (gridview), selection);
   g_object_unref (selection);
   g_object_unref (model);
@@ -857,7 +858,7 @@ do_listview_colors (GtkWidget *do_widget)
       guint len;
       GtkWidget *selection_view;
       GListModel *selection_filter;
-      GListModel *no_selection;
+      GtkSelectionModel *selection;
       GtkWidget *grid;
       GtkWidget *selection_size_label;
       GtkWidget *selection_average_picture;
@@ -945,10 +946,10 @@ do_listview_colors (GtkWidget *do_widget)
       g_signal_connect (selection_filter, "items-changed", G_CALLBACK (update_selection_count), selection_size_label);
       g_signal_connect (selection_filter, "items-changed", G_CALLBACK (update_selection_average), selection_average_picture);
 
-      no_selection = G_LIST_MODEL (gtk_no_selection_new (selection_filter));
-      gtk_grid_view_set_model (GTK_GRID_VIEW (selection_view), no_selection);
+      selection = GTK_SELECTION_MODEL (gtk_no_selection_new (selection_filter));
+      gtk_grid_view_set_model (GTK_GRID_VIEW (selection_view), selection);
       g_object_unref (selection_filter);
-      g_object_unref (no_selection);
+      g_object_unref (selection);
 
       model = gtk_multi_selection_get_model (GTK_MULTI_SELECTION (model));
       g_object_ref (model);

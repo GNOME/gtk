@@ -628,7 +628,7 @@ gtk_column_view_class_init (GtkColumnViewClass *klass)
     g_param_spec_object ("model",
                          P_("Model"),
                          P_("Model for the items displayed"),
-                         G_TYPE_LIST_MODEL,
+                         GTK_TYPE_SELECTION_MODEL,
                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
@@ -1202,7 +1202,7 @@ gtk_column_view_new (void)
  *
  * Returns: (nullable) (transfer none): The model in use
  **/
-GListModel *
+GtkSelectionModel *
 gtk_column_view_get_model (GtkColumnView *self)
 {
   g_return_val_if_fail (GTK_IS_COLUMN_VIEW (self), NULL);
@@ -1215,17 +1215,14 @@ gtk_column_view_get_model (GtkColumnView *self)
  * @self: a #GtkColumnView
  * @model: (allow-none) (transfer none): the model to use or %NULL for none
  *
- * Sets the #GListModel to use.
- *
- * If the @model is a #GtkSelectionModel, it is used for managing the selection.
- * Otherwise, @self creates a #GtkSingleSelection for the selection.
+ * Sets the #GtkSelectionModel to use.
  **/
 void
-gtk_column_view_set_model (GtkColumnView *self,
-                           GListModel  *model)
+gtk_column_view_set_model (GtkColumnView     *self,
+                           GtkSelectionModel *model)
 {
   g_return_if_fail (GTK_IS_COLUMN_VIEW (self));
-  g_return_if_fail (model == NULL || G_IS_LIST_MODEL (model));
+  g_return_if_fail (model == NULL || GTK_IS_SELECTION_MODEL (model));
 
   if (gtk_list_view_get_model (self->listview) == model)
     return;

@@ -740,7 +740,7 @@ gtk_print_unix_dialog_init (GtkPrintUnixDialog *dialog)
   GListModel *model;
   GListModel *sorted;
   GListModel *filtered;
-  GListModel *selection;
+  GtkSingleSelection *selection;
   GtkSorter *sorter;
   GtkFilter *filter;
   GtkFilter *filter1;
@@ -833,10 +833,10 @@ gtk_print_unix_dialog_init (GtkPrintUnixDialog *dialog)
   filtered = G_LIST_MODEL (gtk_filter_list_model_new (sorted, filter));
   g_object_unref (filter);
 
-  selection = G_LIST_MODEL (gtk_single_selection_new (filtered));
-  gtk_single_selection_set_autoselect (GTK_SINGLE_SELECTION (selection), FALSE);
-  gtk_single_selection_set_selected (GTK_SINGLE_SELECTION (selection), GTK_INVALID_LIST_POSITION);
-  gtk_column_view_set_model (GTK_COLUMN_VIEW (dialog->printer_list), selection);
+  selection = gtk_single_selection_new (filtered);
+  gtk_single_selection_set_autoselect (selection, FALSE);
+  gtk_single_selection_set_selected (selection, GTK_INVALID_LIST_POSITION);
+  gtk_column_view_set_model (GTK_COLUMN_VIEW (dialog->printer_list), GTK_SELECTION_MODEL (selection));
   g_signal_connect (selection, "items-changed", G_CALLBACK (printer_added_cb), dialog);
   g_signal_connect_swapped (selection, "notify::selected", G_CALLBACK (selected_printer_changed), dialog);
   g_object_unref (selection);
@@ -983,18 +983,18 @@ printer_status_cb (GtkPrintBackend    *backend,
                    GtkPrinter         *printer,
                    GtkPrintUnixDialog *dialog)
 {
-  GListModel *model;
+  GtkSingleSelection *selection;
 
   /* When the pause state change then we need to update sensitive property
    * of GTK_RESPONSE_OK button inside of selected_printer_changed function.
    */
   selected_printer_changed (dialog);
 
-  model = gtk_column_view_get_model (GTK_COLUMN_VIEW (dialog->printer_list));
+  selection = GTK_SINGLE_SELECTION (gtk_column_view_get_model (GTK_COLUMN_VIEW (dialog->printer_list)));
 
   if (gtk_print_backend_printer_list_is_done (backend) &&
       gtk_printer_is_default (printer) &&
-      gtk_single_selection_get_selected (GTK_SINGLE_SELECTION (model)) == GTK_INVALID_LIST_POSITION)
+      gtk_single_selection_get_selected (selection) == GTK_INVALID_LIST_POSITION)
     set_active_printer (dialog, gtk_printer_get_name (printer));
 }
 
@@ -1822,8 +1822,10 @@ printer_details_acquired (GtkPrinter         *printer,
 static void
 selected_printer_changed (GtkPrintUnixDialog *dialog)
 {
-  GListModel *model = gtk_column_view_get_model (GTK_COLUMN_VIEW (dialog->printer_list));
+  GtkSingleSelection *selection;
   GtkPrinter *printer;
+
+  selection = GTK_SINGLE_SELECTION (gtk_column_view_get_model (GTK_COLUMN_VIEW (dialog->printer_list)));
 
   /* Whenever the user selects a printer we stop looking for
    * the printer specified in the initial settings
@@ -1837,7 +1839,7 @@ selected_printer_changed (GtkPrintUnixDialog *dialog)
 
   disconnect_printer_details_request (dialog, FALSE);
 
-  printer = gtk_single_selection_get_selected_item (GTK_SINGLE_SELECTION (model));
+  printer = gtk_single_selection_get_selected_item (selection);
 
   /* sets GTK_RESPONSE_OK button sensitivity depending on whether the printer
    * accepts/rejects jobs
@@ -3170,7 +3172,7 @@ set_active_printer (GtkPrintUnixDialog *dialog,
   GtkPrinter *printer;
   guint i;
 
-  model = gtk_column_view_get_model (GTK_COLUMN_VIEW (dialog->printer_list));
+  model = G_LIST_MODEL (gtk_column_view_get_model (GTK_COLUMN_VIEW (dialog->printer_list)));
 
   for (i = 0; i < g_list_model_get_n_items (model); i++)
     {

@@ -144,6 +144,7 @@ do_listview_applauncher (GtkWidget *do_widget)
     {
       GtkWidget *list, *sw;
       GListModel *model;
+      GtkSelectionModel *selection;
       GtkListItemFactory *factory;
 
       /* Create a window and set a few defaults */
@@ -181,8 +182,10 @@ do_listview_applauncher (GtkWidget *do_widget)
        * to create as many listitems as it needs to show itself to the user.
        */
       model = create_application_list ();
-      gtk_list_view_set_model (GTK_LIST_VIEW (list), model);
+      selection = GTK_SELECTION_MODEL (gtk_single_selection_new (model));
+      gtk_list_view_set_model (GTK_LIST_VIEW (list), selection);
       g_object_unref (model);
+      g_object_unref (selection);
 
       /* List widgets should always be contained in a #GtkScrolledWindow,
        * because otherwise they might get too large or they might not

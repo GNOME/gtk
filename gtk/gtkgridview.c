@@ -1092,7 +1092,7 @@ gtk_grid_view_class_init (GtkGridViewClass *klass)
     g_param_spec_object ("model",
                          P_("Model"),
                          P_("Model for the items displayed"),
-                         G_TYPE_LIST_MODEL,
+                         GTK_TYPE_SELECTION_MODEL,
                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
@@ -1235,7 +1235,7 @@ gtk_grid_view_new_with_factory (GtkListItemFactory *factory)
  *
  * Returns: (nullable) (transfer none): The model in use
  **/
-GListModel *
+GtkSelectionModel *
 gtk_grid_view_get_model (GtkGridView *self)
 {
   g_return_val_if_fail (GTK_IS_GRID_VIEW (self), NULL);
@@ -1248,14 +1248,14 @@ gtk_grid_view_get_model (GtkGridView *self)
  * @self: a #GtkGridView
  * @model: (allow-none) (transfer none): the model to use or %NULL for none
  *
- * Sets the #GListModel to use for
+ * Sets the #GtkSelectionModel to use for
  **/
 void
-gtk_grid_view_set_model (GtkGridView *self,
-                         GListModel  *model)
+gtk_grid_view_set_model (GtkGridView       *self,
+                         GtkSelectionModel *model)
 {
   g_return_if_fail (GTK_IS_GRID_VIEW (self));
-  g_return_if_fail (model == NULL || G_IS_LIST_MODEL (model));
+  g_return_if_fail (model == NULL || GTK_IS_SELECTION_MODEL (model));
 
   if (!gtk_list_base_set_model (GTK_LIST_BASE (self), model))
     return;
