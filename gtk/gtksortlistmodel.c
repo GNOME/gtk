@@ -24,10 +24,26 @@
 #include "gtkintl.h"
 #include "gtkprivate.h"
 
-#define GDK_ARRAY_ELEMENT_TYPE GObject *
+typedef struct _SortItem SortItem;
+struct _SortItem
+{
+  GObject *item;
+  guint position;
+};
+
+static void
+sort_item_clear (gpointer data)
+{
+  SortItem *si = data;
+
+  g_clear_object (&si->item);
+}
+
+#define GDK_ARRAY_ELEMENT_TYPE SortItem
 #define GDK_ARRAY_TYPE_NAME SortArray
 #define GDK_ARRAY_NAME sort_array
-#define GDK_ARRAY_FREE_FUNC g_object_unref
+#define GDK_ARRAY_FREE_FUNC sort_item_clear
+#define GDK_ARRAY_BY_VALUE 1
 #include "gdk/gdkarrayimpl.c"
 
 /**
@@ -102,7 +118,7 @@ gtk_sort_list_model_get_item (GListModel *list,
   if (position >= sort_array_get_size (&self->items))
     return NULL;
 
-  return g_object_ref (sort_array_get (&self->items, position));
+  return g_object_ref (sort_array_get (&self->items, position)->item);
 }
 
 static void
@@ -122,21 +138,27 @@ gtk_sort_list_model_clear_items (GtkSortListModel *self)
   sort_array_clear (&self->items);
 } 
 
+static gboolean
+gtk_sort_list_model_should_sort (GtkSortListModel *self)
+{
+  return self->sorter != NULL &&
+         self->model != NULL &&
+         gtk_sorter_get_order (self->sorter) != GTK_SORTER_ORDER_NONE;
+}
+
 static void
 gtk_sort_list_model_create_items (GtkSortListModel *self)
 {
   guint i, n_items;
 
-  if (self->sorter == NULL ||
-      self->model == NULL ||
-      gtk_sorter_get_order (self->sorter) == GTK_SORTER_ORDER_NONE)
+  if (!gtk_sort_list_model_should_sort (self))
     return;
 
   n_items = g_list_model_get_n_items (self->model);
   sort_array_reserve (&self->items, n_items);
   for (i = 0; i < n_items; i++)
     {
-      sort_array_append (&self->items, g_list_model_get_item (self->model, i));
+      sort_array_append (&self->items, &(SortItem) { g_list_model_get_item (self->model, i), i });
     }
 }
 
@@ -145,7 +167,10 @@ sort_func (gconstpointer a,
            gconstpointer b,
            gpointer      data)
 {
-  return gtk_sorter_compare (data, *(GObject **) a, *(GObject **) b);
+  SortItem *sa = (SortItem *) a;
+  SortItem *sb = (SortItem *) b;
+
+  return gtk_sorter_compare (data, sa->item, sb->item);
 }
 
 static void
@@ -153,9 +178,51 @@ gtk_sort_list_model_resort (GtkSortListModel *self)
 {
   g_qsort_with_data (sort_array_get_data (&self->items),
                      sort_array_get_size (&self->items),
-                     sizeof (GObject *),
+                     sizeof (SortItem),
                      sort_func,
                      self->sorter);
+}
+
+static void
+gtk_sort_list_model_remove_items (GtkSortListModel *self,
+                                  guint             position,
+                                  guint             removed,
+                                  guint             added,
+                                  guint            *unmodified_start,
+                                  guint            *unmodified_end)
+{
+  guint i, n_items, valid;
+  guint start, end;
+
+  n_items = sort_array_get_size (&self->items);
+  start = n_items;
+  end = n_items;
+  
+  valid = 0;
+  for (i = 0; i < n_items; i++)
+    {
+      SortItem *si = sort_array_index (&self->items, i);
+
+      if (si->position >= position + removed)
+        si->position = si->position - removed + added;
+      else if (si->position >= position)
+        { 
+          start = MIN (start, valid);
+          end = n_items - i - 1;
+          sort_item_clear (si);
+          continue;
+        }
+      if (valid < i)
+        *sort_array_index (&self->items, valid) = *sort_array_index (&self->items, i);
+      valid++;
+    }
+
+  g_assert (valid == n_items - removed);
+  memset (sort_array_index (&self->items, valid), 0, sizeof (SortItem) * removed); 
+  sort_array_set_size (&self->items, valid);
+
+  *unmodified_start = start;
+  *unmodified_end = end;
 }
 
 static void
@@ -165,15 +232,50 @@ gtk_sort_list_model_items_changed_cb (GListModel       *model,
                                       guint             added,
                                       GtkSortListModel *self)
 {
-  guint n_items;
+  guint i, n_items, start, end;
 
-  /* doesn't free() the array */
-  sort_array_set_size (&self->items, 0);
-  gtk_sort_list_model_create_items (self);
-  gtk_sort_list_model_resort (self);
+  if (removed == 0 && added == 0)
+    return;
 
-  n_items = g_list_model_get_n_items (model);
-  g_list_model_items_changed (G_LIST_MODEL (self), 0, n_items - added + removed, n_items);
+  if (!gtk_sort_list_model_should_sort (self))
+    {
+      g_list_model_items_changed (G_LIST_MODEL (self), position, removed, added);
+      return;
+    }
+
+  gtk_sort_list_model_remove_items (self, position, removed, added, &start, &end);
+  if (added > 0)
+    {
+      sort_array_reserve (&self->items, sort_array_get_size (&self->items) + added);
+      for (i = position; i < position + added; i++)
+        {
+          sort_array_append (&self->items, &(SortItem) { g_list_model_get_item (self->model, i), i });
+        }
+      gtk_sort_list_model_resort (self);
+
+      for (i = 0; i < start; i++)
+        {
+          SortItem *si = sort_array_get (&self->items, i);
+          if (si->position >= position && si->position < position + added)
+            {
+              start = i;
+              break;
+            }
+        }
+      n_items = sort_array_get_size (&self->items);
+      for (i = 0; i < end; i++)
+        {
+          SortItem *si = sort_array_get (&self->items, n_items - i - 1);
+          if (si->position >= position && si->position < position + added)
+            {
+              end = i;
+              break;
+            }
+        }
+    }
+
+  n_items = sort_array_get_size (&self->items) - start - end;
+  g_list_model_items_changed (G_LIST_MODEL (self), start, n_items - added + removed, n_items);
 }
 
 static void
@@ -428,7 +530,6 @@ gtk_sort_list_model_set_sorter (GtkSortListModel *self,
       if (n_items > 1)
         g_list_model_items_changed (G_LIST_MODEL (self), 0, n_items, n_items);
     }
-
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_SORTER]);
 }
