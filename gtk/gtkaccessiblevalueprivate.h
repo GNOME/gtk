@@ -102,6 +102,12 @@ GtkAccessibleValue *    gtk_accessible_value_collect_for_property       (GtkAcce
 GtkAccessibleValue *    gtk_accessible_value_collect_for_property_value (GtkAccessibleProperty          property,
                                                                          const GValue                  *value);
 
+GtkAccessibleValue *    gtk_accessible_value_get_default_for_relation   (GtkAccessibleRelation          relation);
+GtkAccessibleValue *    gtk_accessible_value_collect_for_relation       (GtkAccessibleRelation          relation,
+                                                                         va_list                       *args);
+GtkAccessibleValue *    gtk_accessible_value_collect_for_relation_value (GtkAccessibleRelation          relation,
+                                                                         const GValue                  *value);
+
 /* Basic values */
 GtkAccessibleValue *            gtk_undefined_accessible_value_new      (void);
 int                             gtk_undefined_accessible_value_get      (const GtkAccessibleValue *value);

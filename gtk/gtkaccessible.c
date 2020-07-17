@@ -276,3 +276,90 @@ gtk_accessible_update_property_value (GtkAccessible         *self,
   gtk_accessible_value_unref (real_value);
   gtk_at_context_update (context);
 }
+
+/**
+ * gtk_accessible_update_relation:
+ * @self: a #GtkAccessible
+ * @first_relation: the first #GtkAccessibleRelation
+ * @...: a list of relation and value pairs, terminated by -1
+ *
+ * Updates a list of accessible relations.
+ *
+ * This function should be called by #GtkWidget types whenever an accessible
+ * relation change must be communicated to assistive technologies.
+ */
+void
+gtk_accessible_update_relation (GtkAccessible         *self,
+                                GtkAccessibleRelation  first_relation,
+                                ...)
+{
+  GtkAccessibleRelation relation;
+  GtkATContext *context;
+  va_list args;
+
+  g_return_if_fail (GTK_IS_ACCESSIBLE (self));
+
+  context = gtk_accessible_get_at_context (self);
+  if (context == NULL)
+    return;
+
+  va_start (args, first_relation);
+
+  relation = first_relation;
+
+  while (relation != -1)
+    {
+      GtkAccessibleValue *value = gtk_accessible_value_collect_for_relation (relation, &args);
+
+      /* gtk_accessible_value_collect_for_relation() will warn for us */
+      if (value == NULL)
+        goto out;
+
+      gtk_at_context_set_accessible_relation (context, relation, value);
+      gtk_accessible_value_unref (value);
+
+      relation = va_arg (args, int);
+    }
+
+  gtk_at_context_update (context);
+
+out:
+  va_end (args);
+}
+
+/**
+ * gtk_accessible_update_relation_value:
+ * @self: a #GtkAccessible
+ * @relation: a #GtkAccessibleRelation
+ * @value: a #GValue with the value for @relation
+ *
+ * Updates an accessible relation.
+ *
+ * This function should be called by #GtkWidget types whenever an accessible
+ * relation change must be communicated to assistive technologies.
+ *
+ * This function is meant to be used by language bindings.
+ */
+void
+gtk_accessible_update_relation_value (GtkAccessible         *self,
+                                      GtkAccessibleRelation  relation,
+                                      const GValue          *value)
+{
+  GtkATContext *context;
+
+  g_return_if_fail (GTK_IS_ACCESSIBLE (self));
+
+  context = gtk_accessible_get_at_context (self);
+  if (context == NULL)
+    return;
+
+  GtkAccessibleValue *real_value =
+    gtk_accessible_value_collect_for_relation_value (relation, value);
+
+  if (real_value == NULL)
+    return;
+
+  gtk_at_context_set_accessible_relation (context, relation, real_value);
+  gtk_accessible_value_unref (real_value);
+  gtk_at_context_update (context);
+}

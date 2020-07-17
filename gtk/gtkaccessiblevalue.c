@@ -665,6 +665,100 @@ static const GtkAccessibleCollect collect_props[] = {
   },
 };
 
+/* § 6.6.4 Relationship Attributes */
+static const GtkAccessibleCollect collect_rels[] = {
+  [GTK_ACCESSIBLE_RELATION_ACTIVE_DESCENDANT] = {
+    .value = GTK_ACCESSIBLE_RELATION_ACTIVE_DESCENDANT,
+    .ctype = GTK_ACCESSIBLE_COLLECT_REFERENCE,
+    .name = "activedescendant"
+  },
+  [GTK_ACCESSIBLE_RELATION_COL_COUNT] = {
+    .value = GTK_ACCESSIBLE_RELATION_COL_COUNT,
+    .ctype = GTK_ACCESSIBLE_COLLECT_INTEGER,
+    .name = "colcount"
+  },
+  [GTK_ACCESSIBLE_RELATION_COL_INDEX] = {
+    .value = GTK_ACCESSIBLE_RELATION_COL_INDEX,
+    .ctype = GTK_ACCESSIBLE_COLLECT_INTEGER,
+    .name = "colindex"
+  },
+  [GTK_ACCESSIBLE_RELATION_COL_INDEX_TEXT] = {
+    .value = GTK_ACCESSIBLE_RELATION_COL_INDEX_TEXT,
+    .ctype = GTK_ACCESSIBLE_COLLECT_STRING,
+    .name = "colindextext"
+  },
+  [GTK_ACCESSIBLE_RELATION_COL_SPAN] = {
+    .value = GTK_ACCESSIBLE_RELATION_COL_SPAN,
+    .ctype = GTK_ACCESSIBLE_COLLECT_INTEGER,
+    .name = "colspan"
+  },
+  [GTK_ACCESSIBLE_RELATION_CONTROLS] = {
+    .value = GTK_ACCESSIBLE_RELATION_CONTROLS,
+    .ctype = GTK_ACCESSIBLE_COLLECT_REFERENCE,
+    .name = "controls"
+  },
+  [GTK_ACCESSIBLE_RELATION_DESCRIBED_BY] = {
+    .value = GTK_ACCESSIBLE_RELATION_DESCRIBED_BY,
+    .ctype = GTK_ACCESSIBLE_COLLECT_REFERENCE,
+    .name = "describedby"
+  },
+  [GTK_ACCESSIBLE_RELATION_DETAILS] = {
+    .value = GTK_ACCESSIBLE_RELATION_DETAILS,
+    .ctype = GTK_ACCESSIBLE_COLLECT_REFERENCE,
+    .name = "details"
+  },
+  [GTK_ACCESSIBLE_RELATION_ERROR_MESSAGE] = {
+    .value = GTK_ACCESSIBLE_RELATION_ERROR_MESSAGE,
+    .ctype = GTK_ACCESSIBLE_COLLECT_REFERENCE,
+    .name = "errormessage"
+  },
+  [GTK_ACCESSIBLE_RELATION_FLOW_TO] = {
+    .value = GTK_ACCESSIBLE_RELATION_FLOW_TO,
+    .ctype = GTK_ACCESSIBLE_COLLECT_REFERENCE,
+    .name = "flowto"
+  },
+  [GTK_ACCESSIBLE_RELATION_LABELLED_BY] = {
+    .value = GTK_ACCESSIBLE_RELATION_LABELLED_BY,
+    .ctype = GTK_ACCESSIBLE_COLLECT_REFERENCE,
+    .name = "labelledby"
+  },
+  [GTK_ACCESSIBLE_RELATION_OWNS] = {
+    .value = GTK_ACCESSIBLE_RELATION_OWNS,
+    .ctype = GTK_ACCESSIBLE_COLLECT_REFERENCE,
+    .name = "owns"
+  },
+  [GTK_ACCESSIBLE_RELATION_POS_IN_SET] = {
+    .value = GTK_ACCESSIBLE_RELATION_POS_IN_SET,
+    .ctype = GTK_ACCESSIBLE_COLLECT_INTEGER,
+    .name = "posinset"
+  },
+  [GTK_ACCESSIBLE_RELATION_ROW_COUNT] = {
+    .value = GTK_ACCESSIBLE_RELATION_ROW_COUNT,
+    .ctype = GTK_ACCESSIBLE_COLLECT_INTEGER,
+    .name = "rowcount"
+  },
+  [GTK_ACCESSIBLE_RELATION_ROW_INDEX] = {
+    .value = GTK_ACCESSIBLE_RELATION_ROW_INDEX,
+    .ctype = GTK_ACCESSIBLE_COLLECT_INTEGER,
+    .name = "rowindex"
+  },
+  [GTK_ACCESSIBLE_RELATION_ROW_INDEX_TEXT] = {
+    .value = GTK_ACCESSIBLE_RELATION_ROW_INDEX_TEXT,
+    .ctype = GTK_ACCESSIBLE_COLLECT_STRING,
+    .name = "rowindextext"
+  },
+  [GTK_ACCESSIBLE_RELATION_ROW_SPAN] = {
+    .value = GTK_ACCESSIBLE_RELATION_ROW_SPAN,
+    .ctype = GTK_ACCESSIBLE_COLLECT_INTEGER,
+    .name = "rowspan"
+  },
+  [GTK_ACCESSIBLE_RELATION_SET_SIZE] = {
+    .value = GTK_ACCESSIBLE_RELATION_SET_SIZE,
+    .ctype = GTK_ACCESSIBLE_COLLECT_INTEGER,
+    .name = "posinset"
+  },
+};
+
 typedef GtkAccessibleValue * (* GtkAccessibleValueBooleanCtor)  (gboolean value);
 typedef GtkAccessibleValue * (* GtkAccessibleValueIntCtor)      (int value);
 typedef GtkAccessibleValue * (* GtkAccessibleValueTristateCtor) (int value);
@@ -1113,6 +1207,95 @@ gtk_accessible_value_collect_for_property_value (GtkAccessibleProperty  property
                                                  const GValue          *value)
 {
   const GtkAccessibleCollect *cstate = &collect_props[property];
+
+  return gtk_accessible_value_collect_value (cstate, value);
+}
+
+/*< private >
+ * gtk_accessible_value_get_default_for_relation:
+ * @relation: a #GtkAccessibleRelation
+ *
+ * Retrieves the #GtkAccessibleValue that contains the default for the
+ * given @relation.
+ *
+ * Returns: (transfer full): the #GtkAccessibleValue
+ */
+GtkAccessibleValue *
+gtk_accessible_value_get_default_for_relation (GtkAccessibleRelation relation)
+{
+  const GtkAccessibleCollect *cstate = &collect_rels[relation];
+
+  switch (cstate->value)
+    {
+    /* References */
+    case GTK_ACCESSIBLE_RELATION_ACTIVE_DESCENDANT:
+    case GTK_ACCESSIBLE_RELATION_CONTROLS:
+    case GTK_ACCESSIBLE_RELATION_DESCRIBED_BY:
+    case GTK_ACCESSIBLE_RELATION_DETAILS:
+    case GTK_ACCESSIBLE_RELATION_ERROR_MESSAGE:
+    case GTK_ACCESSIBLE_RELATION_FLOW_TO:
+    case GTK_ACCESSIBLE_RELATION_LABELLED_BY:
+    case GTK_ACCESSIBLE_RELATION_OWNS:
+      return NULL;
+
+    /* Integers */
+    case GTK_ACCESSIBLE_RELATION_COL_COUNT:
+    case GTK_ACCESSIBLE_RELATION_COL_INDEX:
+    case GTK_ACCESSIBLE_RELATION_COL_SPAN:
+    case GTK_ACCESSIBLE_RELATION_POS_IN_SET:
+    case GTK_ACCESSIBLE_RELATION_ROW_COUNT:
+    case GTK_ACCESSIBLE_RELATION_ROW_INDEX:
+    case GTK_ACCESSIBLE_RELATION_ROW_SPAN:
+    case GTK_ACCESSIBLE_RELATION_SET_SIZE:
+      return gtk_int_accessible_value_new (0);
+
+    /* Strings */
+    case GTK_ACCESSIBLE_RELATION_ROW_INDEX_TEXT:
+    case GTK_ACCESSIBLE_RELATION_COL_INDEX_TEXT:
+      return gtk_string_accessible_value_new ("");
+
+    default:
+      g_critical ("Unknown value for accessible property “%s”", cstate->name);
+      break;
+    }
+
+  return NULL;
+}
+
+/*< private >
+ * gtk_accessible_value_collect_for_relation:
+ * @relation: a #GtkAccessibleRelation
+ * @args: a `va_list` reference
+ *
+ * Collects and consumes the next item in the @args variadic arguments list,
+ * and returns a #GtkAccessibleValue for it.
+ *
+ * Returns: (transfer full): a #GtkAccessibleValue
+ */
+GtkAccessibleValue *
+gtk_accessible_value_collect_for_relation (GtkAccessibleRelation  relation,
+                                           va_list               *args)
+{
+  const GtkAccessibleCollect *cstate = &collect_rels[relation];
+
+  return gtk_accessible_value_collect_valist (cstate, args);
+}
+
+/*< private >
+ * gtk_accessible_value_collect_for_relation_value:
+ * @relation: a #GtkAccessibleRelation
+ * @value: a #GValue
+ *
+ * Retrieves the value stored inside @value and returns a #GtkAccessibleValue
+ * for the given @relation.
+ *
+ * Returns: (transfer full): a #GtkAccessibleValue
+ */
+GtkAccessibleValue *
+gtk_accessible_value_collect_for_relation_value (GtkAccessibleRelation  relation,
+                                                 const GValue          *value)
+{
+  const GtkAccessibleCollect *cstate = &collect_rels[relation];
 
   return gtk_accessible_value_collect_value (cstate, value);
 }

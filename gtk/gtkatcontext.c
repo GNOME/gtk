@@ -56,8 +56,9 @@ gtk_at_context_finalize (GObject *gobject)
 {
   GtkATContext *self = GTK_AT_CONTEXT (gobject);
 
-  gtk_accessible_state_set_unref (self->states);
   gtk_accessible_property_set_unref (self->properties);
+  gtk_accessible_relation_set_unref (self->relations);
+  gtk_accessible_state_set_unref (self->states);
 
   G_OBJECT_CLASS (gtk_at_context_parent_class)->finalize (gobject);
 }
@@ -111,9 +112,11 @@ gtk_at_context_get_property (GObject    *gobject,
 static void
 gtk_at_context_real_state_change (GtkATContext                *self,
                                   GtkAccessibleStateChange     changed_states,
-                                  GtkAccessiblePropertyChange  changed_properies,
+                                  GtkAccessiblePropertyChange  changed_properties,
+                                  GtkAccessibleRelationChange  changed_relations,
                                   GtkAccessibleStateSet       *states,
-                                  GtkAccessiblePropertySet    *properties)
+                                  GtkAccessiblePropertySet    *properties,
+                                  GtkAccessibleRelationSet    *relations)
 {
 }
 
@@ -168,8 +171,9 @@ gtk_at_context_init (GtkATContext *self)
 {
   self->accessible_role = GTK_ACCESSIBLE_ROLE_WIDGET;
 
-  self->states = gtk_accessible_state_set_new ();
   self->properties = gtk_accessible_property_set_new ();
+  self->relations = gtk_accessible_relation_set_new ();
+  self->states = gtk_accessible_state_set_new ();
 }
 
 /**
@@ -269,6 +273,7 @@ gtk_at_context_update (GtkATContext *self)
 
   GtkAccessibleStateChange changed_states = 0;
   GtkAccessiblePropertyChange changed_properties = 0;
+  GtkAccessibleRelationChange changed_relations = 0;
 
   for (int i = 0; i < GTK_ACCESSIBLE_STATE_SELECTED; i++)
     {
@@ -282,11 +287,19 @@ gtk_at_context_update (GtkATContext *self)
         changed_properties |= (1 << i);
     }
 
+  for (int i = 0; i < GTK_ACCESSIBLE_RELATION_SET_SIZE; i++)
+    {
+      if (gtk_accessible_relation_set_contains (self->relations, i))
+        changed_relations |= (1 << i);
+    }
+
   GTK_AT_CONTEXT_GET_CLASS (self)->state_change (self,
                                                  changed_states,
                                                  changed_properties,
+                                                 changed_relations,
                                                  self->states,
-                                                 self->properties);
+                                                 self->properties,
+                                                 self->relations);
 }
 
 /*< private >
@@ -339,4 +352,30 @@ gtk_at_context_set_accessible_property (GtkATContext          *self,
     gtk_accessible_property_set_add (self->properties, property, value);
   else
     gtk_accessible_property_set_remove (self->properties, property);
+}
+
+/*< private >
+ * gtk_at_context_set_accessible_relation:
+ * @self: a #GtkATContext
+ * @relation: a #GtkAccessibleRelation
+ * @value: (nullable): #GtkAccessibleValue
+ *
+ * Sets the @value for the given @relation of a #GtkATContext.
+ *
+ * If @value is %NULL, the relation is unset.
+ *
+ * This function will accumulate relation changes until gtk_at_context_update_state()
+ * is called.
+ */
+void
+gtk_at_context_set_accessible_relation (GtkATContext          *self,
+                                        GtkAccessibleRelation  relation,
+                                        GtkAccessibleValue    *value)
+{
+  g_return_if_fail (GTK_IS_AT_CONTEXT (self));
+
+  if (value != NULL)
+    gtk_accessible_relation_set_add (self->relations, relation, value);
+  else
+    gtk_accessible_relation_set_remove (self->relations, relation);
 }
