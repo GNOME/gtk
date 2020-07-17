@@ -66,10 +66,6 @@ struct _GtkWidgetPrivate
 
   guint direction             : 2;
 
-#ifdef G_ENABLE_DEBUG
-  guint highlight_resize      : 1;
-#endif
-
   guint in_destruction        : 1;
   guint realized              : 1;
   guint mapped                : 1;

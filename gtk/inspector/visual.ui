@@ -570,35 +570,6 @@
                                 <property name="margin-bottom">10</property>
                                 <property name="spacing">40</property>
                                 <child>
-                                  <object class="GtkLabel" id="resize_label">
-                                    <property name="label" translatable="yes">Show Widget Resizes</property>
-                                    <property name="halign">start</property>
-                                    <property name="valign">baseline</property>
-                                    <property name="xalign">0.0</property>
-                                  </object>
-                                </child>
-                                <child>
-                                  <object class="GtkSwitch" id="resize_switch">
-                                    <property name="halign">end</property>
-                                    <property name="valign">baseline</property>
-                                    <property name="hexpand">1</property>
-                                    <signal name="notify::active" handler="widget_resize_activate"/>
-                                  </object>
-                                </child>
-                              </object>
-                            </child>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="GtkListBoxRow">
-                            <child>
-                              <object class="GtkBox">
-                                <property name="margin-start">10</property>
-                                <property name="margin-end">10</property>
-                                <property name="margin-top">10</property>
-                                <property name="margin-bottom">10</property>
-                                <property name="spacing">40</property>
-                                <child>
                                   <object class="GtkLabel" id="focus_label">
                                     <property name="label" translatable="yes">Show Focus</property>
                                     <property name="halign">start</property>
@@ -712,7 +683,6 @@
       <widget name="fallback_label"/>
       <widget name="baselines_label"/>
       <widget name="layout_label"/>
-      <widget name="resize_label"/>
       <widget name="focus_label"/>
       <widget name="touchscreen_label"/>
       <widget name="software_gl_label"/>
