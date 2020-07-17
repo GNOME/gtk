@@ -54,10 +54,9 @@
  * between the rows.
  *
  * GtkListView allows the user to select items according to the selection
- * characteristics of the model. If the provided model is not a #GtkSelectionModel,
- * GtkListView will wrap it in a #GtkSingleSelection. For models that allow
- * multiple selected items, it is possible to turn on _rubberband selection_,
- * using #GtkListView:enable-rubberband.
+ * characteristics of the model (see #GtkSelectionModel and its implementations).
+ * For models that allow multiple selected items, it is possible to turn on
+ * _rubberband selection_, using #GtkListView:enable-rubberband.
  *
  * If you need multiple columns with headers, see #GtkColumnView.
  *
@@ -1004,8 +1003,8 @@ gtk_list_view_get_model (GtkListView *self)
  *
  * Sets the #GListModel to use.
  *
- * If the @model is a #GtkSelectionModel, it is used for managing the selection.
- * Otherwise, @self creates a #GtkSingleSelection for the selection.
+ * If the @model is a #GtkSelectionModel, it is used for managing
+ * the selection.
  **/
 void
 gtk_list_view_set_model (GtkListView *self,

@@ -55,10 +55,9 @@
  * grid reflows vertically or horizontally.
  *
  * GtkGridView allows the user to select items according to the selection
- * characteristics of the model. If the provided model is not a #GtkSelectionModel,
- * GtkGridView will wrap it in a #GtkSingleSelection. For models that allow
- * multiple selected items, it is possible to turn on _rubberband selection_,
- * using #GtkGridView:enable-rubberband.
+ * characteristics of the model (see #GtkSelectionModel and its implementations).
+ * For models that allow multiple selected items, it is possible to turn on
+ * _rubberband selection_, using #GtkGridView:enable-rubberband.
  *
  * To learn more about the list widget framework, see the [overview](#ListWidget).
  *
@@ -1248,7 +1247,10 @@ gtk_grid_view_get_model (GtkGridView *self)
  * @self: a #GtkGridView
  * @model: (allow-none) (transfer none): the model to use or %NULL for none
  *
- * Sets the #GListModel to use for
+ * Sets the #GListModel to use.
+ *
+ * If the @model is a #GtkSelectionModel, it is used for managing
+ * the selection.
  **/
 void
 gtk_grid_view_set_model (GtkGridView *self,
