@@ -24,10 +24,16 @@
 
 #include "gtkatcontextprivate.h"
 #include "gtkenums.h"
+#include "gtktypebuiltins.h"
 
 struct _GtkTestATContext
 {
   GtkATContext parent_instance;
+};
+
+struct _GtkTestATContextClass
+{
+  GtkATContextClass parent_class;
 };
 
 G_DEFINE_TYPE (GtkTestATContext, gtk_test_at_context, GTK_TYPE_AT_CONTEXT)
@@ -75,6 +81,16 @@ gtk_test_at_context_init (GtkTestATContext *self)
 {
 }
 
+/*< private >
+ * gtk_test_at_context_new:
+ * @accessible_role: the #GtkAccessibleRole for the AT context
+ * @accessible: the #GtkAccessible instance which owns the AT context
+ *
+ * Creates a new #GtkTestATContext instance for @accessible, using the
+ * given @accessible_role.
+ *
+ * Returns: (transfer full): the newly created #GtkTestATContext instance
+ */
 GtkATContext *
 gtk_test_at_context_new (GtkAccessibleRole  accessible_role,
                          GtkAccessible     *accessible)
@@ -83,4 +99,72 @@ gtk_test_at_context_new (GtkAccessibleRole  accessible_role,
                        "accessible-role", accessible_role,
                        "accessible", accessible,
                        NULL);
+}
+
+gboolean
+gtk_test_accessible_has_role (GtkAccessible     *accessible,
+                              GtkAccessibleRole  role)
+{
+  GtkATContext *context;
+
+  g_return_val_if_fail (GTK_IS_ACCESSIBLE (accessible), FALSE);
+
+  context = gtk_accessible_get_at_context (accessible);
+  if (context == NULL)
+    return FALSE;
+
+  return gtk_at_context_get_accessible_role (context) == role;
+}
+
+gboolean
+gtk_test_accessible_has_property (GtkAccessible         *accessible,
+                                  GtkAccessibleProperty  property)
+{
+  GtkATContext *context;
+
+  g_return_val_if_fail (GTK_IS_ACCESSIBLE (accessible), FALSE);
+
+  context = gtk_accessible_get_at_context (accessible);
+  if (context == NULL)
+    return FALSE;
+
+  return gtk_at_context_has_accessible_property (context, property);
+}
+
+void
+gtk_test_accessible_assertion_message_cmprole (const char        *domain,
+                                               const char        *file,
+                                               int                line,
+                                               const char        *func,
+                                               const char        *expr,
+                                               GtkAccessible     *accessible,
+                                               GtkAccessibleRole  role)
+{
+  char *role_name = g_enum_to_string (GTK_TYPE_ACCESSIBLE_ROLE, role);
+  char *s = g_strdup_printf ("%s:accessible-role == %s",
+                             G_OBJECT_TYPE_NAME (accessible),
+                             role_name);
+
+  g_assertion_message_expr (domain, file, line, func, s);
+
+  g_free (role_name);
+  g_free (s);
+}
+
+void
+gtk_test_accessible_assertion_message_cmpproperty (const char            *domain,
+                                                   const char            *file,
+                                                   int                    line,
+                                                   const char            *func,
+                                                   const char            *expr,
+                                                   GtkAccessible         *accessible,
+                                                   GtkAccessibleProperty  property)
+{
+  char *s = g_strdup_printf ("%s:accessible-property == %s",
+                             G_OBJECT_TYPE_NAME (accessible),
+                             gtk_accessible_property_get_attribute_name (property));
+
+  g_assertion_message_expr (domain, file, line, func, s);
+
+  g_free (s);
 }

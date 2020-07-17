@@ -20,6 +20,10 @@
 
 #pragma once
 
+#if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
+#error "Only <gtk/gtk.h> can be included directly."
+#endif
+
 #include <glib-object.h>
 #include <gtk/gtktypes.h>
 #include <gtk/gtkenums.h>

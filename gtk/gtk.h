@@ -260,6 +260,7 @@
 #include <gtk/gtktextview.h>
 #include <gtk/gtktogglebutton.h>
 #include <gtk/gtktooltip.h>
+#include <gtk/gtktestatcontext.h>
 #include <gtk/gtktestutils.h>
 #include <gtk/gtktreednd.h>
 #include <gtk/gtktreeexpander.h>

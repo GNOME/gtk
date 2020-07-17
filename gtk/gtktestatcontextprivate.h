@@ -20,6 +20,7 @@
 
 #pragma once
 
+#include "gtktestatcontext.h"
 #include "gtkatcontextprivate.h"
 
 G_BEGIN_DECLS
@@ -31,17 +32,5 @@ G_DECLARE_FINAL_TYPE (GtkTestATContext, gtk_test_at_context, GTK, TEST_AT_CONTEX
 GtkATContext *
 gtk_test_at_context_new (GtkAccessibleRole  accessible_role,
                          GtkAccessible     *accessible);
-
-void
-gtk_test_at_context_assert_role (GtkTestATContext  *self,
-                                 GtkAccessibleRole  role);
-
-void
-gtk_test_at_context_assert_state_added (GtkTestATContext   *self,
-                                        GtkAccessibleState  state);
-
-void
-gtk_test_at_context_assert_state_removed (GtkTestATContext   *self,
-                                          GtkAccessibleState  state);
 
 G_END_DECLS

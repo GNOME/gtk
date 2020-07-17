@@ -192,6 +192,24 @@ static const char *property_attrs[] = {
   [GTK_ACCESSIBLE_PROPERTY_VALUE_TEXT]          = "valuetext",
 };
 
+/*< private >
+ * gtk_accessible_property_get_attribute_name:
+ * @property: a #GtkAccessibleProperty
+ *
+ * Retrieves the name of a #GtkAccessibleProperty.
+ *
+ * Returns: (transfer none): the name of the accessible property
+ */
+const char *
+gtk_accessible_property_get_attribute_name (GtkAccessibleProperty property)
+{
+  g_return_val_if_fail (property >= GTK_ACCESSIBLE_PROPERTY_AUTOCOMPLETE &&
+                        property <= GTK_ACCESSIBLE_PROPERTY_VALUE_TEXT,
+                        "<none>");
+
+  return property_attrs[property];
+}
+
 static const char *relation_attrs[] = {
   [GTK_ACCESSIBLE_RELATION_ACTIVE_DESCENDANT]   = "activedescendant",
   [GTK_ACCESSIBLE_RELATION_COL_COUNT]           = "colcount",
@@ -213,6 +231,24 @@ static const char *relation_attrs[] = {
   [GTK_ACCESSIBLE_RELATION_SET_SIZE]            = "setsize",
 };
 
+/*< private >
+ * gtk_accessible_relation_get_attribute_name:
+ * @relation: a #GtkAccessibleRelation
+ *
+ * Retrieves the name of a #GtkAccessibleRelation.
+ *
+ * Returns: (transfer none): the name of the accessible relation
+ */
+const char *
+gtk_accessible_relation_get_attribute_name (GtkAccessibleRelation relation)
+{
+  g_return_val_if_fail (relation >= GTK_ACCESSIBLE_RELATION_ACTIVE_DESCENDANT &&
+                        relation <= GTK_ACCESSIBLE_RELATION_SET_SIZE,
+                        "<none>");
+
+  return relation_attrs[relation];
+}
+
 static const char *state_attrs[] = {
   [GTK_ACCESSIBLE_STATE_BUSY]           = "busy",
   [GTK_ACCESSIBLE_STATE_CHECKED]        = "checked",
@@ -223,6 +259,24 @@ static const char *state_attrs[] = {
   [GTK_ACCESSIBLE_STATE_PRESSED]        = "pressed",
   [GTK_ACCESSIBLE_STATE_SELECTED]       = "selected",
 };
+
+/*< private >
+ * gtk_accessible_state_get_attribute_name:
+ * @state: a #GtkAccessibleState
+ *
+ * Retrieves the name of a #GtkAccessibleState.
+ *
+ * Returns: (transfer none): the name of the accessible state
+ */
+const char *
+gtk_accessible_state_get_attribute_name (GtkAccessibleState state)
+{
+  g_return_val_if_fail (state >= GTK_ACCESSIBLE_STATE_BUSY &&
+                        state <= GTK_ACCESSIBLE_STATE_SELECTED,
+                        "<none>");
+
+  return state_attrs[state];
+}
 
 static void
 gtk_at_context_init (GtkATContext *self)
@@ -355,7 +409,7 @@ gtk_at_context_update (GtkATContext *self)
 }
 
 /*< private >
- * gtk_at_context_set_state:
+ * gtk_at_context_set_accessible_state:
  * @self: a #GtkATContext
  * @state: a #GtkAccessibleState
  * @value: (nullable): #GtkAccessibleValue
@@ -378,6 +432,24 @@ gtk_at_context_set_accessible_state (GtkATContext       *self,
     gtk_accessible_attribute_set_add (self->states, state, value);
   else
     gtk_accessible_attribute_set_remove (self->states, state);
+}
+
+/*< private >
+ * gtk_at_context_has_accessible_state:
+ * @self: a #GtkATContext
+ * @state: a #GtkAccessibleState
+ *
+ * Checks whether a #GtkATContext has the given @state set.
+ *
+ * Returns: %TRUE, if the accessible state is set
+ */
+gboolean
+gtk_at_context_has_accessible_state (GtkATContext       *self,
+                                     GtkAccessibleState  state)
+{
+  g_return_val_if_fail (GTK_IS_AT_CONTEXT (self), FALSE);
+
+  return gtk_accessible_attribute_set_contains (self->states, state);
 }
 
 /*< private >
@@ -407,6 +479,24 @@ gtk_at_context_set_accessible_property (GtkATContext          *self,
 }
 
 /*< private >
+ * gtk_at_context_has_accessible_property:
+ * @self: a #GtkATContext
+ * @property: a #GtkAccessibleProperty
+ *
+ * Checks whether a #GtkATContext has the given @property set.
+ *
+ * Returns: %TRUE, if the accessible property is set
+ */
+gboolean
+gtk_at_context_has_accessible_property (GtkATContext          *self,
+                                        GtkAccessibleProperty  property)
+{
+  g_return_val_if_fail (GTK_IS_AT_CONTEXT (self), FALSE);
+
+  return gtk_accessible_attribute_set_contains (self->properties, property);
+}
+
+/*< private >
  * gtk_at_context_set_accessible_relation:
  * @self: a #GtkATContext
  * @relation: a #GtkAccessibleRelation
@@ -430,4 +520,22 @@ gtk_at_context_set_accessible_relation (GtkATContext          *self,
     gtk_accessible_attribute_set_add (self->relations, relation, value);
   else
     gtk_accessible_attribute_set_remove (self->relations, relation);
+}
+
+/*< private >
+ * gtk_at_context_has_accessible_relation:
+ * @self: a #GtkATContext
+ * @relation: a #GtkAccessibleRelation
+ *
+ * Checks whether a #GtkATContext has the given @relation set.
+ *
+ * Returns: %TRUE, if the accessible relation is set
+ */
+gboolean
+gtk_at_context_has_accessible_relation (GtkATContext          *self,
+                                        GtkAccessibleRelation  relation)
+{
+  g_return_val_if_fail (GTK_IS_AT_CONTEXT (self), FALSE);
+
+  return gtk_accessible_attribute_set_contains (self->relations, relation);
 }
