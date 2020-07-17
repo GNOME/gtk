@@ -170,7 +170,7 @@ in GTK 3, you can prepare for the switch by using gtk_widget_destroy()
 only on toplevel windows, and replace all other uses with
 gtk_container_remove() or g_object_unref().
 
-### Reduce the use of generic container APIs</title>
+### Reduce the use of generic container APIs
 
 GTK 4 removes gtk_container_add() and gtk_container_remove(). While there
 is not always a replacement for gtk_container_remove() in GTK 3, you can
