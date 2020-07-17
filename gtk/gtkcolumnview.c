@@ -1631,6 +1631,10 @@ gtk_column_view_get_reorderable (GtkColumnView *self)
  * @enable_rubberband: %TRUE to enable rubberband selection
  *
  * Sets whether selections can be changed by dragging with the mouse.
+ *
+ * Note that this is only useful when the model you passed to
+ * gtk_list_view_set_model() allows multi-selection (e.g. a
+ * #GtkMultiSelection).
  */
 void
 gtk_column_view_set_enable_rubberband (GtkColumnView *self,

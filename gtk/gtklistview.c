@@ -1146,6 +1146,10 @@ gtk_list_view_get_single_click_activate (GtkListView *self)
  * @enable_rubberband: %TRUE to enable rubberband selection
  *
  * Sets whether selections can be changed by dragging with the mouse.
+ *
+ * Note that this is only useful when the model you passed to
+ * gtk_list_view_set_model() allows multi-selection (e.g. a
+ * #GtkMultiSelection).
  */
 void
 gtk_list_view_set_enable_rubberband (GtkListView *self,
