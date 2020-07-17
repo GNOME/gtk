@@ -249,10 +249,8 @@ gtk_box_layout_compute_size (GtkBoxLayout *self,
       required_nat += (n_visible_children - 1) * spacing;
     }
 
-  if (minimum != NULL)
-    *minimum = required_min;
-  if (natural != NULL)
-    *natural = required_nat;
+  *minimum = required_min;
+  *natural = required_nat;
 }
 
 static void
@@ -419,15 +417,10 @@ gtk_box_layout_compute_opposite_size (GtkBoxLayout *self,
         }
     }
 
-  if (minimum != NULL)
-    *minimum = computed_minimum;
-  if (natural != NULL)
-    *natural = MAX (computed_natural, computed_natural_below + computed_natural_above);
-
-  if (min_baseline != NULL)
-    *min_baseline = computed_minimum_baseline;
-  if (nat_baseline != NULL)
-    *nat_baseline = computed_natural_baseline;
+  *minimum = computed_minimum;
+  *natural = MAX (computed_natural, computed_natural_below + computed_natural_above);
+  *min_baseline = computed_minimum_baseline;
+  *nat_baseline = computed_natural_baseline;
 }
 
 static void
