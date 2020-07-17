@@ -351,9 +351,6 @@ gtk_snapshot_collect_debug (GtkSnapshot      *snapshot,
   if (node == NULL)
     return NULL;
 
-  if (state->data.debug.message == NULL)
-    return node;
-
   debug_node = gsk_debug_node_new (node, state->data.debug.message);
 
   gsk_render_node_unref (node);
@@ -377,15 +374,17 @@ gtk_snapshot_push_debug (GtkSnapshot *snapshot,
                          ...)
 {
   GtkSnapshotState *current_state = gtk_snapshot_get_current_state (snapshot);
-  GtkSnapshotState *state;
-
-  state = gtk_snapshot_push_state (snapshot,
-                                   current_state->transform,
-                                   gtk_snapshot_collect_debug);
 
   if (GTK_DEBUG_CHECK (SNAPSHOT))
     {
       va_list args;
+      GtkSnapshotState *state;
+
+      state = gtk_snapshot_push_state (snapshot,
+                                       current_state->transform,
+                                       gtk_snapshot_collect_debug);
+
+
 
       va_start (args, message);
       state->data.debug.message = g_strdup_vprintf (message, args);
@@ -393,7 +392,9 @@ gtk_snapshot_push_debug (GtkSnapshot *snapshot,
     }
   else
     {
-      state->data.debug.message = NULL;
+      gtk_snapshot_push_state (snapshot,
+                               current_state->transform,
+                               gtk_snapshot_collect_default);
     }
 }
 
@@ -1822,7 +1823,7 @@ gtk_snapshot_render_layout (GtkSnapshot     *snapshot,
   fg_color = gtk_css_color_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_COLOR));
 
   shadows_value = _gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_TEXT_SHADOW);
-    has_shadow = gtk_css_shadow_value_push_snapshot (shadows_value, snapshot);
+  has_shadow = gtk_css_shadow_value_push_snapshot (shadows_value, snapshot);
 
   gtk_snapshot_append_layout (snapshot, layout, fg_color);
 

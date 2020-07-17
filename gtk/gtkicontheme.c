@@ -3858,11 +3858,11 @@ gtk_icon_paintable_ensure_texture (GtkIconPaintable *self)
 
 static void
 init_color_matrix (graphene_matrix_t *color_matrix,
-                   graphene_vec4_t *color_offset,
-                   const GdkRGBA *foreground_color,
-                   const GdkRGBA *success_color,
-                   const GdkRGBA *warning_color,
-                   const GdkRGBA *error_color)
+                   graphene_vec4_t   *color_offset,
+                   const GdkRGBA     *foreground_color,
+                   const GdkRGBA     *success_color,
+                   const GdkRGBA     *warning_color,
+                   const GdkRGBA     *error_color)
 {
   GdkRGBA fg_default = { 0.7450980392156863, 0.7450980392156863, 0.7450980392156863, 1.0};
   GdkRGBA success_default = { 0.3046921492332342,0.6015716792553597, 0.023437857633325704, 1.0};

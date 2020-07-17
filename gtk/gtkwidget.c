@@ -2254,9 +2254,6 @@ gtk_widget_init (GTypeInstance *instance, gpointer g_class)
   priv->alloc_needed_on_child = TRUE;
   priv->draw_needed = TRUE;
   priv->focus_on_click = TRUE;
-#ifdef G_ENABLE_DEBUG
-  priv->highlight_resize = FALSE;
-#endif
   priv->can_focus = TRUE;
   priv->focusable = FALSE;
   priv->can_target = TRUE;
@@ -3811,12 +3808,6 @@ gtk_widget_allocate (GtkWidget    *widget,
     }
 
 #ifdef G_ENABLE_DEBUG
-  if (GTK_DISPLAY_DEBUG_CHECK (_gtk_widget_get_display (widget), RESIZE))
-    {
-      priv->highlight_resize = TRUE;
-      gtk_widget_queue_draw (widget);
-    }
-
   if (gtk_widget_get_resize_needed (widget))
     {
       g_warning ("Allocating size to %s %p without calling gtk_widget_measure(). "
@@ -11356,32 +11347,6 @@ gtk_widget_list_controllers (GtkWidget           *widget,
   return (GtkEventController **)g_ptr_array_free (controllers, FALSE);
 }
 
-static inline void
-gtk_widget_maybe_add_debug_render_nodes (GtkWidget   *widget,
-                                         GtkSnapshot *snapshot)
-{
-#ifdef G_ENABLE_DEBUG
-  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
-  GdkDisplay *display = _gtk_widget_get_display (widget);
-
-  if (GTK_DISPLAY_DEBUG_CHECK (display, RESIZE) && priv->highlight_resize)
-    {
-      GdkRGBA blue = {0, 0, 1, 0.2};
-      graphene_rect_t bounds;
-
-      graphene_rect_init (&bounds,
-                          0, 0,
-                          priv->width, priv->height);
-
-      gtk_snapshot_append_color (snapshot,
-                                 &blue,
-                                 &bounds);
-      priv->highlight_resize = FALSE;
-      gtk_widget_queue_draw (widget);
-    }
-#endif
-}
-
 static GskRenderNode *
 gtk_widget_create_render_node (GtkWidget   *widget,
                                GtkSnapshot *snapshot)
@@ -11408,9 +11373,8 @@ gtk_widget_create_render_node (GtkWidget   *widget,
                            "RenderNode for %s %p",
                            G_OBJECT_TYPE_NAME (widget), widget);
 
-  filter_value = gtk_css_node_get_style (priv->cssnode)->other->filter;
-  if (filter_value)
-    gtk_css_filter_value_push_snapshot (filter_value, snapshot);
+  filter_value = style->other->filter;
+  gtk_css_filter_value_push_snapshot (filter_value, snapshot);
 
   if (opacity < 1.0)
     gtk_snapshot_push_opacity (snapshot, opacity);
@@ -11435,10 +11399,6 @@ gtk_widget_create_render_node (GtkWidget   *widget,
     gtk_snapshot_pop (snapshot);
 
   gtk_css_filter_value_pop_snapshot (filter_value, snapshot);
-
-#ifdef G_ENABLE_DEBUG
-  gtk_widget_maybe_add_debug_render_nodes (widget, snapshot);
-#endif
 
   gtk_snapshot_pop (snapshot);
 

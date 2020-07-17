@@ -83,7 +83,6 @@ struct _GtkInspectorVisualPrivate
   GtkWidget *fallback_switch;
   GtkWidget *baselines_switch;
   GtkWidget *layout_switch;
-  GtkWidget *resize_switch;
   GtkWidget *focus_switch;
 
   GtkWidget *misc_box;
@@ -420,19 +419,6 @@ layout_activate (GtkSwitch          *sw,
     }
 
   redraw_everything ();
-}
-
-static void
-widget_resize_activate (GtkSwitch *sw)
-{
-  guint flags = gtk_get_debug_flags ();
-
-  if (gtk_switch_get_active (sw))
-    flags |= GTK_DEBUG_RESIZE;
-  else
-    flags &= ~GTK_DEBUG_RESIZE;
-
-  gtk_set_debug_flags (flags);
 }
 
 static void
@@ -1014,11 +1000,6 @@ row_activated (GtkListBox         *box,
       GtkSwitch *sw = GTK_SWITCH (vis->priv->layout_switch);
       gtk_switch_set_active (sw, !gtk_switch_get_active (sw));
     }
-  else if (gtk_widget_is_ancestor (vis->priv->resize_switch, GTK_WIDGET (row)))
-    {
-      GtkSwitch *sw = GTK_SWITCH (vis->priv->resize_switch);
-      gtk_switch_set_active (sw, !gtk_switch_get_active (sw));
-    }
   else if (gtk_widget_is_ancestor (vis->priv->focus_switch, GTK_WIDGET (row)))
     {
       GtkSwitch *sw = GTK_SWITCH (vis->priv->focus_switch);
@@ -1164,7 +1145,6 @@ gtk_inspector_visual_class_init (GtkInspectorVisualClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, fallback_switch);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, baselines_switch);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, layout_switch);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, resize_switch);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, focus_switch);
 
   gtk_widget_class_bind_template_callback (widget_class, fps_activate);
@@ -1173,7 +1153,6 @@ gtk_inspector_visual_class_init (GtkInspectorVisualClass *klass)
   gtk_widget_class_bind_template_callback (widget_class, direction_changed);
   gtk_widget_class_bind_template_callback (widget_class, baselines_activate);
   gtk_widget_class_bind_template_callback (widget_class, layout_activate);
-  gtk_widget_class_bind_template_callback (widget_class, widget_resize_activate);
   gtk_widget_class_bind_template_callback (widget_class, focus_activate);
   gtk_widget_class_bind_template_callback (widget_class, software_gl_activate);
 
