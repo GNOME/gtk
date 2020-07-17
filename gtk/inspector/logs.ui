@@ -227,6 +227,12 @@
                 <signal name="toggled" handler="flag_toggled"/>
               </object>
             </child>
+            <child>
+              <object class="GtkCheckButton" id="a11y">
+                <property name="label">Accessibility</property>
+                <signal name="toggled" handler="flag_toggled"/>
+              </object>
+            </child>
           </object>
         </child>
       </object>
