@@ -182,6 +182,7 @@ static const GdkDebugKey gtk_debug_keys[] = {
   { "interactive", GTK_DEBUG_INTERACTIVE, "Enable the GTK inspector" },
   { "touchscreen", GTK_DEBUG_TOUCHSCREEN, "Pretend the pointer is a touchscreen" },
   { "snapshot", GTK_DEBUG_SNAPSHOT, "Generate debug render nodes" },
+  { "accessibility", GTK_DEBUG_A11Y, "Information about accessibility state changes" },
 };
 #endif /* G_ENABLE_DEBUG */
 
