@@ -302,7 +302,7 @@ gtk_string_filter_init (GtkStringFilter *self)
 }
 
 /**
- * gtk_s tring_filter_new:
+ * gtk_string_filter_new:
  * @expression: (transfer full) (nullable): The expression to evaluate
  *     or %NULL for none
  *
