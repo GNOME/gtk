@@ -643,6 +643,9 @@ gtk_progress_bar_act_mode_enter (GtkProgressBar *pbar)
   gboolean inverted;
 
   gtk_widget_add_css_class (pbar->progress_widget, GTK_STYLE_CLASS_PULSE);
+  gtk_accessible_update_state (GTK_ACCESSIBLE (pbar),
+                               GTK_ACCESSIBLE_STATE_BUSY, TRUE,
+                               -1);
 
   inverted = pbar->inverted;
   if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
@@ -680,6 +683,9 @@ gtk_progress_bar_act_mode_leave (GtkProgressBar *pbar)
     gtk_widget_remove_tick_callback (GTK_WIDGET (pbar), pbar->tick_id);
   pbar->tick_id = 0;
 
+  gtk_accessible_update_state (GTK_ACCESSIBLE (pbar),
+                               GTK_ACCESSIBLE_STATE_BUSY, FALSE,
+                               -1);
   gtk_widget_remove_css_class (pbar->progress_widget, GTK_STYLE_CLASS_PULSE);
   update_node_classes (pbar);
 }
@@ -729,6 +735,13 @@ gtk_progress_bar_set_fraction (GtkProgressBar *pbar,
   gtk_progress_bar_set_activity_mode (pbar, FALSE);
   gtk_widget_queue_allocate (pbar->trough_widget);
   update_fraction_classes (pbar);
+
+  gtk_accessible_update_property (GTK_ACCESSIBLE (pbar),
+                                  GTK_ACCESSIBLE_PROPERTY_VALUE_MAX, 1.0,
+                                  GTK_ACCESSIBLE_PROPERTY_VALUE_MIN, 0.0,
+                                  GTK_ACCESSIBLE_PROPERTY_VALUE_NOW, fraction,
+                                  -1);
+
 
   g_object_notify_by_pspec (G_OBJECT (pbar), progress_props[PROP_FRACTION]);
 }
