@@ -182,6 +182,7 @@ static const GdkDebugKey gtk_debug_keys[] = {
   { "touchscreen", GTK_DEBUG_TOUCHSCREEN, "Pretend the pointer is a touchscreen" },
   { "layout", GTK_DEBUG_LAYOUT, "Show layout borders" },
   { "snapshot", GTK_DEBUG_SNAPSHOT, "Generate debug render nodes" },
+  { "accessibility", GTK_DEBUG_A11Y, "Information about accessibility state changes" },
 };
 #endif /* G_ENABLE_DEBUG */
 
