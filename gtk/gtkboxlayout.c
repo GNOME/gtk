@@ -28,7 +28,6 @@
 #include "gtkstylecontextprivate.h"
 #include "gtktypebuiltins.h"
 #include "gtkwidgetprivate.h"
-#include "gtknative.h"
 
 /**
  * SECTION:gtkboxlayout
