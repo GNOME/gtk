@@ -26,7 +26,7 @@
 /**
  * SECTION:gtklistitem
  * @title: GtkListItem
- * @short_description: Object used to represent items of a ListModel
+ * @short_description: Object used to represent items of a list model
  * @see_also: #GtkListView, #GListModel
  *
  * #GtkListItem is the object that list-handling containers such
