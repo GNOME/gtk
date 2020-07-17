@@ -130,6 +130,15 @@ void                    gtk_bitset_splice                       (GtkBitset      
                                                                  guint                   removed,
                                                                  guint                   added);
 
+/**
+ * GtkBitsetIter:
+ *
+ * An opaque, stack-allocated struct for iterating
+ * over the elements of a #GtkBitset. Before a GtkBitsetIter
+ * can be used, it needs to be initialized with
+ * gtk_bitset_iter_init_first(), gtk_bitset_iter_init_last()
+ * or gtk_bitset_iter_init_at().
+ */
 typedef struct {gpointer private_data[10]; } GtkBitsetIter;
 
 GDK_AVAILABLE_IN_ALL
