@@ -10694,7 +10694,6 @@ gtk_tree_view_remove_column (GtkTreeView       *tree_view,
                              GtkTreeViewColumn *column)
 {
   GtkTreeViewPrivate *priv = gtk_tree_view_get_instance_private (tree_view);
-  guint position;
 
   g_return_val_if_fail (GTK_IS_TREE_VIEW (tree_view), -1);
   g_return_val_if_fail (GTK_IS_TREE_VIEW_COLUMN (column), -1);
@@ -10717,8 +10716,6 @@ gtk_tree_view_remove_column (GtkTreeView       *tree_view,
   g_signal_handlers_disconnect_by_func (column,
                                         G_CALLBACK (column_sizing_notify),
                                         tree_view);
-
-  position = g_list_index (priv->columns, column);
 
   _gtk_tree_view_column_unset_tree_view (column);
 
