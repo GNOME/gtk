@@ -597,6 +597,83 @@ css_button_new (const char *class)
   return button;
 }
 
+typedef struct
+{
+  GtkWidget parent_instance;
+  GdkRGBA color;
+} ColorSwatch;
+
+typedef struct
+{
+  GtkWidgetClass parent_class;
+} ColorSwatchClass;
+
+G_DEFINE_TYPE (ColorSwatch, color_swatch, GTK_TYPE_WIDGET)
+
+static GdkContentProvider *
+color_swatch_drag_prepare (GtkDragSource  *source,
+                           double          x,
+                           double          y,
+                           ColorSwatch    *swatch)
+{
+  return gdk_content_provider_new_typed (GDK_TYPE_RGBA, &swatch->color);
+}
+
+static void
+color_swatch_init (ColorSwatch *swatch)
+{
+  GtkDragSource *source = gtk_drag_source_new ();
+  g_signal_connect (source, "prepare", G_CALLBACK (color_swatch_drag_prepare), swatch);
+  gtk_widget_add_controller (GTK_WIDGET (swatch), GTK_EVENT_CONTROLLER (source));
+}
+
+static void
+color_swatch_snapshot (GtkWidget   *widget,
+                       GtkSnapshot *snapshot)
+{
+  ColorSwatch *swatch = (ColorSwatch *)widget;
+  float w = gtk_widget_get_width (widget);
+  float h = gtk_widget_get_height (widget);
+
+  gtk_snapshot_append_color (snapshot, &swatch->color,
+                             &GRAPHENE_RECT_INIT(0, 0, w, h));
+}
+
+void
+color_swatch_measure (GtkWidget      *widget,
+                      GtkOrientation  orientation,
+                      int             for_size,
+                      int            *minimum_size,
+                      int            *natural_size,
+                      int            *minimum_baseline,
+                      int            *natural_baseline)
+{
+  if (orientation == GTK_ORIENTATION_HORIZONTAL)
+    *minimum_size = *natural_size = 48;
+  else
+    *minimum_size = *natural_size = 32;
+}
+
+static void
+color_swatch_class_init (ColorSwatchClass *class)
+{
+  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (class);
+
+  widget_class->snapshot = color_swatch_snapshot;
+  widget_class->measure = color_swatch_measure;
+  gtk_widget_class_set_css_name (widget_class, "colorswatch");
+}
+
+static GtkWidget *
+color_swatch_new (const char *color)
+{
+  ColorSwatch *swatch = g_object_new (color_swatch_get_type (), NULL);
+
+  gdk_rgba_parse (&swatch->color, color);
+
+  return GTK_WIDGET (swatch);
+}
+
 static GtkWidget *window = NULL;
 
 GtkWidget *
@@ -670,18 +747,7 @@ do_dnd (GtkWidget *do_widget)
       gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (sw), box3);
 
       for (i = 0; colors[i]; i++)
-        {
-          GdkRGBA rgba;
-          GtkWidget *swatch;
-
-          gdk_rgba_parse (&rgba, colors[i]);
-
-          swatch = g_object_new (g_type_from_name ("GtkColorSwatch"),
-                                 "rgba", &rgba,
-                                 "selectable", FALSE,
-                                 NULL);
-          gtk_box_append (GTK_BOX (box3), swatch);
-        }
+        gtk_box_append (GTK_BOX (box3), color_swatch_new (colors[i]));
 
       gtk_box_append (GTK_BOX (box3), css_button_new ("rainbow1"));
       gtk_box_append (GTK_BOX (box3), css_button_new ("rainbow2"));
