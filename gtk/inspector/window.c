@@ -302,6 +302,7 @@ gtk_inspector_window_dispose (GObject *object)
 
   g_object_set_data (G_OBJECT (iw->inspected_display), "-gtk-inspector", NULL);
 
+  g_clear_pointer (&iw->top_stack, gtk_widget_unparent);
   g_clear_object (&iw->flash_overlay);
   g_clear_pointer (&iw->objects, g_array_unref);
 
