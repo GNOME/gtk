@@ -18,28 +18,13 @@
 #ifndef _GTK_INSPECTOR_ACTIONS_H_
 #define _GTK_INSPECTOR_ACTIONS_H_
 
-#include <gtk/gtkbox.h>
+#include <gtk/gtkwidget.h>
 
 #define GTK_TYPE_INSPECTOR_ACTIONS            (gtk_inspector_actions_get_type())
 #define GTK_INSPECTOR_ACTIONS(obj)            (G_TYPE_CHECK_INSTANCE_CAST((obj), GTK_TYPE_INSPECTOR_ACTIONS, GtkInspectorActions))
-#define GTK_INSPECTOR_ACTIONS_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST((klass), GTK_TYPE_INSPECTOR_ACTIONS, GtkInspectorActionsClass))
 #define GTK_INSPECTOR_IS_ACTIONS(obj)         (G_TYPE_CHECK_INSTANCE_TYPE((obj), GTK_TYPE_INSPECTOR_ACTIONS))
-#define GTK_INSPECTOR_IS_ACTIONS_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE((klass), GTK_TYPE_INSPECTOR_ACTIONS))
-#define GTK_INSPECTOR_ACTIONS_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS((obj), GTK_TYPE_INSPECTOR_ACTIONS, GtkInspectorActionsClass))
 
-
-typedef struct _GtkInspectorActionsPrivate GtkInspectorActionsPrivate;
-
-typedef struct _GtkInspectorActions
-{
-  GtkBox parent;
-  GtkInspectorActionsPrivate *priv;
-} GtkInspectorActions;
-
-typedef struct _GtkInspectorActionsClass
-{
-  GtkBoxClass parent;
-} GtkInspectorActionsClass;
+typedef struct _GtkInspectorActions GtkInspectorActions;
 
 G_BEGIN_DECLS
 
