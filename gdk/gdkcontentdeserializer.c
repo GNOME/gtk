@@ -875,7 +875,7 @@ init (void)
 
   g_slist_free (formats);
 
-#ifdef G_OS_UNIX
+#if defined(G_OS_UNIX) && !defined(__APPLE__)
   file_transfer_portal_register ();
 #endif
 
