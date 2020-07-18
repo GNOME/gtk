@@ -1741,11 +1741,15 @@ static void
 gtk_inspector_prop_editor_class_init (GtkInspectorPropEditorClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
   object_class->constructed = constructed;
   object_class->finalize = finalize;
   object_class->get_property = get_property;
   object_class->set_property = set_property;
+
+  widget_class->focus = gtk_widget_focus_child;
+  widget_class->grab_focus = gtk_widget_grab_focus_child;
 
   signals[SHOW_OBJECT] =
     g_signal_new ("show-object",
