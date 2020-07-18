@@ -48,6 +48,22 @@
  * to click or press the Enter key. The default bindings
  * for leaving the edit mode are the Enter key (to save
  * the results) or the Escape key (to cancel the editing).
+ *
+ * # CSS nodes
+ *
+ * |[<!-- language="plain" -->
+ * editablelabel[.editing]
+ * ╰── stack
+ *     ├── label
+ *     ╰── text
+ * ]|
+ *
+ * GtkEditableLabel has a main node with the name editablelabel.
+ * When the entry is in editing mode, it gets the .editing style
+ * class.
+ *
+ * For all the subnodes added to the text node in various situations,
+ * see #GtkText.
  */
 
 struct _GtkEditableLabel
