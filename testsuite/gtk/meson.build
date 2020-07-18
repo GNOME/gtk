@@ -4,7 +4,11 @@ testdatadir = join_paths(installed_test_datadir, 'gtk')
 gtk_tests_export_dynamic_ldflag = []
 
 if cc.get_id() != 'msvc'
-  gtk_tests_export_dynamic_ldflag = ['-Wl,--export-dynamic']
+  if os_darwin
+    gtk_tests_export_dynamic_ldflag = ['-Wl,-export_dynamic']
+  else
+    gtk_tests_export_dynamic_ldflag = ['-Wl,--export-dynamic']
+  endif
 endif
 
 # Available keys for each test:
