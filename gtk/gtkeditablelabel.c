@@ -30,6 +30,7 @@
 #include "gtkshortcut.h"
 #include "gtkshortcuttrigger.h"
 #include "gtkwidgetprivate.h"
+#include "gtkeventcontrollerfocus.h"
 #include "gtkintl.h"
 
 /**
@@ -194,11 +195,19 @@ gtk_editable_label_prepare_drag (GtkDragSource    *source,
 }
 
 static void
+gtk_editable_label_focus_out (GtkEventController *controller,
+                              GtkEditableLabel   *self)
+{
+  gtk_editable_label_stop_editing (self, TRUE);
+}
+
+static void
 gtk_editable_label_init (GtkEditableLabel *self)
 {
   GtkGesture *gesture;
   GtkDropTarget *target;
   GtkDragSource *source;
+  GtkEventController *controller;
 
   gtk_widget_set_focusable (GTK_WIDGET (self), TRUE);
 
@@ -227,6 +236,10 @@ gtk_editable_label_init (GtkEditableLabel *self)
   source = gtk_drag_source_new ();
   g_signal_connect (source, "prepare", G_CALLBACK (gtk_editable_label_prepare_drag), self);
   gtk_widget_add_controller (self->label, GTK_EVENT_CONTROLLER (source));
+
+  controller = gtk_event_controller_focus_new ();
+  g_signal_connect (controller, "leave", G_CALLBACK (gtk_editable_label_focus_out), self);
+  gtk_widget_add_controller (GTK_WIDGET (self), controller);
 
   gtk_editable_init_delegate (GTK_EDITABLE (self));
 }
