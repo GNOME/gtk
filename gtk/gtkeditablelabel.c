@@ -444,6 +444,8 @@ gtk_editable_label_start_editing (GtkEditableLabel *self)
   gtk_stack_set_visible_child_name (GTK_STACK (self->stack), "entry");
   gtk_widget_grab_focus (self->entry);
 
+  gtk_widget_add_css_class (self, "editing");
+
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_EDITING]);
 }
 
@@ -480,5 +482,8 @@ gtk_editable_label_stop_editing (GtkEditableLabel *self,
     }
 
   gtk_widget_grab_focus (GTK_WIDGET (self));
+
+  gtk_widget_remove_css_class (self, "editing");
+
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_EDITING]);
 }
