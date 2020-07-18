@@ -1,5 +1,6 @@
 gtk_tests = [
   # testname, optional extra sources
+  ['testrange'],
   ['testdropdown'],
   ['rendernode'],
   ['rendernode-create-tests'],
