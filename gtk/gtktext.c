@@ -2681,6 +2681,7 @@ gtk_text_click_gesture_pressed (GtkGestureClick *gesture,
     {
       priv->in_click = TRUE;
       gtk_widget_grab_focus (widget);
+      gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
       priv->in_click = FALSE;
     }
 
@@ -2689,6 +2690,7 @@ gtk_text_click_gesture_pressed (GtkGestureClick *gesture,
   if (gdk_event_triggers_context_menu (event))
     {
       gtk_text_do_popup (self, widget_x, widget_y);
+      gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
     }
   else if (n_press == 1 && button == GDK_BUTTON_MIDDLE &&
            get_middle_click_paste (self))
@@ -2702,6 +2704,8 @@ gtk_text_click_gesture_pressed (GtkGestureClick *gesture,
         {
           gtk_widget_error_bell (widget);
         }
+
+      gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
     }
   else if (button == GDK_BUTTON_PRIMARY)
     {
@@ -2821,12 +2825,8 @@ gtk_text_click_gesture_pressed (GtkGestureClick *gesture,
             gtk_text_set_positions (self, end, start);
         }
 
-
       gtk_text_update_handles (self);
     }
-
-  if (button != GDK_BUTTON_PRIMARY || n_press >= 3)
-    gtk_gesture_set_state (priv->drag_gesture, GTK_EVENT_SEQUENCE_CLAIMED);
 
   if (n_press >= 3)
     gtk_event_controller_reset (GTK_EVENT_CONTROLLER (gesture));

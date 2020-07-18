@@ -22,24 +22,9 @@
 
 #define GTK_TYPE_INSPECTOR_MISC_INFO            (gtk_inspector_misc_info_get_type())
 #define GTK_INSPECTOR_MISC_INFO(obj)            (G_TYPE_CHECK_INSTANCE_CAST((obj), GTK_TYPE_INSPECTOR_MISC_INFO, GtkInspectorMiscInfo))
-#define GTK_INSPECTOR_MISC_INFO_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST((klass), GTK_TYPE_INSPECTOR_MISC_INFO, GtkInspectorMiscInfoClass))
 #define GTK_INSPECTOR_IS_MISC_INFO(obj)         (G_TYPE_CHECK_INSTANCE_TYPE((obj), GTK_TYPE_INSPECTOR_MISC_INFO))
-#define GTK_INSPECTOR_IS_MISC_INFO_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE((klass), GTK_TYPE_INSPECTOR_MISC_INFO))
-#define GTK_INSPECTOR_MISC_INFO_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS((obj), GTK_TYPE_INSPECTOR_MISC_INFO, GtkInspectorMiscInfoClass))
 
-
-typedef struct _GtkInspectorMiscInfoPrivate GtkInspectorMiscInfoPrivate;
-
-typedef struct _GtkInspectorMiscInfo
-{
-  GtkWidget parent;
-  GtkInspectorMiscInfoPrivate *priv;
-} GtkInspectorMiscInfo;
-
-typedef struct _GtkInspectorMiscInfoClass
-{
-  GtkWidgetClass parent_class;
-} GtkInspectorMiscInfoClass;
+typedef struct _GtkInspectorMiscInfo GtkInspectorMiscInfo;
 
 G_BEGIN_DECLS
 

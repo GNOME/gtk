@@ -226,8 +226,6 @@ gtk_inspector_window_init (GtkInspectorWindow *iw)
                                iw,
                                NULL);
 
-  gtk_window_set_hide_on_close (GTK_WINDOW (iw), TRUE);
-
   gtk_window_group_add_window (gtk_window_group_new (), GTK_WINDOW (iw));
 
   extension_point = g_io_extension_point_lookup ("gtk-inspector-page");
@@ -302,6 +300,7 @@ gtk_inspector_window_dispose (GObject *object)
 
   g_object_set_data (G_OBJECT (iw->inspected_display), "-gtk-inspector", NULL);
 
+  g_clear_pointer (&iw->top_stack, gtk_widget_unparent);
   g_clear_object (&iw->flash_overlay);
   g_clear_pointer (&iw->objects, g_array_unref);
 

@@ -294,6 +294,17 @@ gtk_button_class_init (GtkButtonClass *klass)
   gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BIN_LAYOUT);
   gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_BUTTON_ACCESSIBLE);
   gtk_widget_class_set_css_name (widget_class, I_("button"));
+
+  gtk_widget_class_add_binding_signal (widget_class, GDK_KEY_space, 0,
+                                       "activate", NULL);
+  gtk_widget_class_add_binding_signal (widget_class, GDK_KEY_KP_Space, 0,
+                                       "activate", NULL);
+  gtk_widget_class_add_binding_signal (widget_class, GDK_KEY_Return, 0,
+                                       "activate", NULL);
+  gtk_widget_class_add_binding_signal (widget_class, GDK_KEY_ISO_Enter, 0,
+                                       "activate", NULL);
+  gtk_widget_class_add_binding_signal (widget_class, GDK_KEY_KP_Enter, 0,
+                                       "activate", NULL);
 }
 
 static void

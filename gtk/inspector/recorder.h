@@ -22,23 +22,9 @@
 
 #define GTK_TYPE_INSPECTOR_RECORDER            (gtk_inspector_recorder_get_type())
 #define GTK_INSPECTOR_RECORDER(obj)            (G_TYPE_CHECK_INSTANCE_CAST((obj), GTK_TYPE_INSPECTOR_RECORDER, GtkInspectorRecorder))
-#define GTK_INSPECTOR_RECORDER_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST((klass), GTK_TYPE_INSPECTOR_RECORDER, GtkInspectorRecorderClass))
 #define GTK_INSPECTOR_IS_RECORDER(obj)         (G_TYPE_CHECK_INSTANCE_TYPE((obj), GTK_TYPE_INSPECTOR_RECORDER))
-#define GTK_INSPECTOR_IS_RECORDER_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE((klass), GTK_TYPE_INSPECTOR_RECORDER))
-#define GTK_INSPECTOR_RECORDER_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS((obj), GTK_TYPE_INSPECTOR_RECORDER, GtkInspectorRecorderClass))
 
-
-typedef struct _GtkInspectorRecorderPrivate GtkInspectorRecorderPrivate;
-
-typedef struct _GtkInspectorRecorder
-{
-  GtkWidget parent;
-} GtkInspectorRecorder;
-
-typedef struct _GtkInspectorRecorderClass
-{
-  GtkWidgetClass parent;
-} GtkInspectorRecorderClass;
+typedef struct _GtkInspectorRecorder GtkInspectorRecorder;
 
 G_BEGIN_DECLS
 

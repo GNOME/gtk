@@ -30,6 +30,7 @@
 #include "gtkshortcut.h"
 #include "gtkshortcuttrigger.h"
 #include "gtkwidgetprivate.h"
+#include "gtkeventcontrollerfocus.h"
 #include "gtkintl.h"
 
 /**
@@ -48,6 +49,22 @@
  * to click or press the Enter key. The default bindings
  * for leaving the edit mode are the Enter key (to save
  * the results) or the Escape key (to cancel the editing).
+ *
+ * # CSS nodes
+ *
+ * |[<!-- language="plain" -->
+ * editablelabel[.editing]
+ * ╰── stack
+ *     ├── label
+ *     ╰── text
+ * ]|
+ *
+ * GtkEditableLabel has a main node with the name editablelabel.
+ * When the entry is in editing mode, it gets the .editing style
+ * class.
+ *
+ * For all the subnodes added to the text node in various situations,
+ * see #GtkText.
  */
 
 struct _GtkEditableLabel
@@ -178,11 +195,19 @@ gtk_editable_label_prepare_drag (GtkDragSource    *source,
 }
 
 static void
+gtk_editable_label_focus_out (GtkEventController *controller,
+                              GtkEditableLabel   *self)
+{
+  gtk_editable_label_stop_editing (self, TRUE);
+}
+
+static void
 gtk_editable_label_init (GtkEditableLabel *self)
 {
   GtkGesture *gesture;
   GtkDropTarget *target;
   GtkDragSource *source;
+  GtkEventController *controller;
 
   gtk_widget_set_focusable (GTK_WIDGET (self), TRUE);
 
@@ -211,6 +236,10 @@ gtk_editable_label_init (GtkEditableLabel *self)
   source = gtk_drag_source_new ();
   g_signal_connect (source, "prepare", G_CALLBACK (gtk_editable_label_prepare_drag), self);
   gtk_widget_add_controller (self->label, GTK_EVENT_CONTROLLER (source));
+
+  controller = gtk_event_controller_focus_new ();
+  g_signal_connect (controller, "leave", G_CALLBACK (gtk_editable_label_focus_out), self);
+  gtk_widget_add_controller (GTK_WIDGET (self), controller);
 
   gtk_editable_init_delegate (GTK_EDITABLE (self));
 }
@@ -444,6 +473,8 @@ gtk_editable_label_start_editing (GtkEditableLabel *self)
   gtk_stack_set_visible_child_name (GTK_STACK (self->stack), "entry");
   gtk_widget_grab_focus (self->entry);
 
+  gtk_widget_add_css_class (GTK_WIDGET (self), "editing");
+
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_EDITING]);
 }
 
@@ -480,5 +511,8 @@ gtk_editable_label_stop_editing (GtkEditableLabel *self,
     }
 
   gtk_widget_grab_focus (GTK_WIDGET (self));
+
+  gtk_widget_remove_css_class (GTK_WIDGET (self), "editing");
+
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_EDITING]);
 }

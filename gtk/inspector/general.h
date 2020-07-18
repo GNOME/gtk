@@ -18,29 +18,13 @@
 #ifndef _GTK_INSPECTOR_GENERAL_H_
 #define _GTK_INSPECTOR_GENERAL_H_
 
-#include <gtk/gtkscrolledwindow.h>
+#include <gtk/gtkwidget.h>
 
 #define GTK_TYPE_INSPECTOR_GENERAL            (gtk_inspector_general_get_type())
 #define GTK_INSPECTOR_GENERAL(obj)            (G_TYPE_CHECK_INSTANCE_CAST((obj), GTK_TYPE_INSPECTOR_GENERAL, GtkInspectorGeneral))
-#define GTK_INSPECTOR_GENERAL_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST((klass), GTK_TYPE_INSPECTOR_GENERAL, GtkInspectorGeneralClass))
 #define GTK_INSPECTOR_IS_GENERAL(obj)         (G_TYPE_CHECK_INSTANCE_TYPE((obj), GTK_TYPE_INSPECTOR_GENERAL))
-#define GTK_INSPECTOR_IS_GENERAL_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE((klass), GTK_TYPE_INSPECTOR_GENERAL))
-#define GTK_INSPECTOR_GENERAL_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS((obj), GTK_TYPE_INSPECTOR_GENERAL, GtkInspectorGeneralClass))
 
-
-typedef struct _GtkInspectorGeneralPrivate GtkInspectorGeneralPrivate;
-
-typedef struct _GtkInspectorGeneral
-{
-  GtkWidget parent;
-
-  GtkInspectorGeneralPrivate *priv;
-} GtkInspectorGeneral;
-
-typedef struct _GtkInspectorGeneralClass
-{
-  GtkWidgetClass parent_class;
-} GtkInspectorGeneralClass;
+typedef struct _GtkInspectorGeneral GtkInspectorGeneral;
 
 G_BEGIN_DECLS
 

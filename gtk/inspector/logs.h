@@ -23,28 +23,14 @@
 #ifndef _GTK_INSPECTOR_LOGS_H_
 #define _GTK_INSPECTOR_LOGS_H_
 
-#include <gtk/gtkbox.h>
+#include <gtk/gtkwidget.h>
 
 #define GTK_TYPE_INSPECTOR_LOGS            (gtk_inspector_logs_get_type())
 #define GTK_INSPECTOR_LOGS(obj)            (G_TYPE_CHECK_INSTANCE_CAST((obj), GTK_TYPE_INSPECTOR_LOGS, GtkInspectorLogs))
-#define GTK_INSPECTOR_LOGS_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST((klass), GTK_TYPE_INSPECTOR_LOGS, GtkInspectorLogsClass))
 #define GTK_INSPECTOR_IS_LOGS(obj)         (G_TYPE_CHECK_INSTANCE_TYPE((obj), GTK_TYPE_INSPECTOR_LOGS))
-#define GTK_INSPECTOR_IS_LOGS_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE((klass), GTK_TYPE_INSPECTOR_LOGS))
-#define GTK_INSPECTOR_LOGS_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS((obj), GTK_TYPE_INSPECTOR_LOGS, GtkInspectorLogsClass))
 
 
-typedef struct _GtkInspectorLogsPrivate GtkInspectorLogsPrivate;
-
-typedef struct _GtkInspectorLogs
-{
-  GtkBox parent;
-  GtkInspectorLogsPrivate *priv;
-} GtkInspectorLogs;
-
-typedef struct _GtkInspectorLogsClass
-{
-  GtkBoxClass parent;
-} GtkInspectorLogsClass;
+typedef struct _GtkInspectorLogs GtkInspectorLogs;
 
 G_BEGIN_DECLS
 

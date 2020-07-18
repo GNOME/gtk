@@ -141,11 +141,25 @@ gtk_inspector_shortcuts_size_allocate (GtkWidget *widget,
                             baseline);
 }
 
+static void
+dispose (GObject *object)
+{
+  GtkInspectorShortcuts *shortcuts = GTK_INSPECTOR_SHORTCUTS (object);
+  GtkWidget *child;
+
+  while ((child = gtk_widget_get_first_child (GTK_WIDGET (shortcuts))))
+    gtk_widget_unparent (child);
+
+  G_OBJECT_CLASS (gtk_inspector_shortcuts_parent_class)->dispose (object);
+}
 
 static void
 gtk_inspector_shortcuts_class_init (GtkInspectorShortcutsClass *klass)
 {
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
+
+  object_class->dispose = dispose;
 
   widget_class->measure = gtk_inspector_shortcuts_measure;
   widget_class->size_allocate = gtk_inspector_shortcuts_size_allocate;

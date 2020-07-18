@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface domain="gtk40">
-  <template class="GtkInspectorActions" parent="GtkBox">
-    <property name="orientation">vertical</property>
+  <template class="GtkInspectorActions" parent="GtkWidget">
     <style>
       <class name="view"/>
     </style>
