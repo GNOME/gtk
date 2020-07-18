@@ -857,7 +857,7 @@ gtk_constant_expression_new_for_value (const GValue *value)
 
 /**
  * gtk_constant_expression_get_value:
- * @expression: a constant #GtkExpression
+ * @expression: (type GtkConstantExpression): a constant #GtkExpression
  *
  * Gets the value that a constant expression evaluates to.
  *
@@ -1022,7 +1022,7 @@ gtk_object_expression_new (GObject *object)
 
 /**
  * gtk_object_expression_get_object:
- * @expression: an object #GtkExpression
+ * @expression: (type GtkObjectExpression): an object #GtkExpression
  *
  * Gets the object that the expression evaluates to.
  *
@@ -1345,7 +1345,7 @@ gtk_property_expression_new_for_pspec (GtkExpression *expression,
 
 /**
  * gtk_property_expression_get_expression:
- * @expression: a property #GtkExpression
+ * @expression: (type GtkPropertyExpression): a property #GtkExpression
  *
  * Gets the expression specifying the object of
  * a property expression.
@@ -1364,7 +1364,7 @@ gtk_property_expression_get_expression (GtkExpression *expression)
 
 /**
  * gtk_property_expression_get_pspec:
- * @expression: a property #GtkExpression
+ * @expression: (type GtkPropertyExpression): a property #GtkExpression
  *
  * Gets the #GParamSpec specifying the property of
  * a property expression.
