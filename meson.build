@@ -235,6 +235,8 @@ if cc.get_id() == 'msvc'
 elif cc.get_id() == 'gcc' or cc.get_id() == 'clang'
   test_cflags = [
     '-fno-strict-aliasing',
+    '-Wno-c++11-extensions',
+    '-Wno-missing-include-dirs',
     '-Wno-typedef-redefinition',
     '-Wcast-align',
     '-Wduplicated-branches',
