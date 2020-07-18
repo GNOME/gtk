@@ -25,6 +25,21 @@
 #include "gtkprivate.h"
 #include "gtktimsortprivate.h"
 
+/* The maximum amount of items to merge for a single merge step
+ *
+ * Making this smaller will result in more steps, which has more overhead and slows
+ * down total sort time.
+ * Making it larger will result in fewer steps, which increases the time taken for
+ * a single step.
+ *
+ * As merges are the most expensive steps, this is essentially a tunable for the
+ * longest time spent in gtk_tim_sort_step().
+ *
+ * Note that this should be reset to 0 when not doing incremental sorting to get
+ * rid of all the overhead.
+ */
+#define GTK_SORT_MAX_MERGE_SIZE (1024)
+
 typedef struct _SortItem SortItem;
 struct _SortItem
 {
@@ -234,6 +249,7 @@ gtk_sort_list_model_resort (GtkSortListModel *self,
                      sizeof (SortItem),
                      sort_func,
                      self->sorter);
+  gtk_tim_sort_set_max_merge_size (&self->sort, GTK_SORT_MAX_MERGE_SIZE);
   gtk_tim_sort_set_runs (&self->sort, (gsize[2]) { already_sorted, 0 });
 
   gtk_sort_list_model_start_sorting (self);

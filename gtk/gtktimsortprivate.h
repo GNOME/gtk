@@ -56,6 +56,12 @@ struct _GtkTimSort
   gsize size;
 
   /*
+   * The maximum size of a merge. It's guaranteed >0 and user-provided.
+   * See the comments for gtk_tim_sort_set_max_merge_size() for details.
+   */
+  gsize max_merge_size;
+
+  /*
    * This controls when we get *into* galloping mode.  It is initialized
    * to MIN_GALLOP.  The mergeLo and mergeHi methods nudge it higher for
    * random data, and lower for highly structured data.
@@ -99,6 +105,8 @@ void            gtk_tim_sort_get_runs                           (GtkTimSort     
                                                                  gsize                   runs[GTK_TIM_SORT_MAX_PENDING + 1]);
 void            gtk_tim_sort_set_runs                           (GtkTimSort             *self,
                                                                  gsize                  *runs);
+void            gtk_tim_sort_set_max_merge_size                 (GtkTimSort             *self,
+                                                                 gsize                   max_merge_size);
 
 gboolean        gtk_tim_sort_step                               (GtkTimSort             *self);
 
