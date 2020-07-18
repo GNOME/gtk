@@ -172,9 +172,24 @@ toggle_show (GtkToggleButton      *button,
 }
 
 static void
+dispose (GObject *object)
+{
+  GtkInspectorTreeData *sl = GTK_INSPECTOR_TREE_DATA (object);
+  GtkWidget *child;
+
+  while ((child = gtk_widget_get_first_child (GTK_WIDGET (sl))))
+    gtk_widget_unparent (child);
+
+  G_OBJECT_CLASS (gtk_inspector_tree_data_parent_class)->dispose (object);
+}
+
+static void
 gtk_inspector_tree_data_class_init (GtkInspectorTreeDataClass *klass)
 {
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
+
+  object_class->dispose = dispose;
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/libgtk/inspector/tree-data.ui");
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorTreeData, view);
