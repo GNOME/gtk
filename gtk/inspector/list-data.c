@@ -187,13 +187,15 @@ unbind_props (GtkSignalListItemFactory *factory,
 }
 
 static void
-finalize (GObject *object)
+dispose (GObject *object)
 {
   GtkInspectorListData *sl = GTK_INSPECTOR_LIST_DATA (object);
+  GtkWidget *child;
 
-  gtk_inspector_list_data_set_object (sl, NULL);
+  while ((child = gtk_widget_get_first_child (GTK_WIDGET (sl))))
+    gtk_widget_unparent (child);
 
-  G_OBJECT_CLASS (gtk_inspector_list_data_parent_class)->finalize (object);
+  G_OBJECT_CLASS (gtk_inspector_list_data_parent_class)->dispose (object);
 }
 
 static void
@@ -202,7 +204,7 @@ gtk_inspector_list_data_class_init (GtkInspectorListDataClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
-  object_class->finalize = finalize;
+  object_class->dispose = dispose;
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/libgtk/inspector/list-data.ui");
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorListData, view);
