@@ -61,6 +61,7 @@ struct _GtkInspectorRecorder
   GListStore *render_node_root_model;
   GtkSingleSelection *render_node_selection;
 
+  GtkWidget *box;
   GtkWidget *recordings_list;
   GtkWidget *render_node_view;
   GtkWidget *render_node_list;
@@ -1168,6 +1169,7 @@ gtk_inspector_recorder_dispose (GObject *object)
 {
   GtkInspectorRecorder *recorder = GTK_INSPECTOR_RECORDER (object);
 
+  g_clear_pointer (&recorder->box, gtk_widget_unparent);
   g_clear_object (&recorder->render_node_model);
   g_clear_object (&recorder->render_node_root_model);
   g_clear_object (&recorder->render_node_selection);
@@ -1202,6 +1204,7 @@ gtk_inspector_recorder_class_init (GtkInspectorRecorderClass *klass)
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/libgtk/inspector/recorder.ui");
 
+  gtk_widget_class_bind_template_child (widget_class, GtkInspectorRecorder, box);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorRecorder, recordings);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorRecorder, recordings_list);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorRecorder, render_node_view);

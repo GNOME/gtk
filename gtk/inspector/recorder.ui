@@ -2,7 +2,7 @@
   <object class="GListStore" id="recordings"/>
   <template class="GtkInspectorRecorder" parent="GtkWidget">
     <child>
-      <object class="GtkBox">
+      <object class="GtkBox" id="box">
         <property name="orientation">vertical</property>
         <child>
           <object class="GtkBox">
