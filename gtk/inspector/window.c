@@ -226,8 +226,6 @@ gtk_inspector_window_init (GtkInspectorWindow *iw)
                                iw,
                                NULL);
 
-  gtk_window_set_hide_on_close (GTK_WINDOW (iw), TRUE);
-
   gtk_window_group_add_window (gtk_window_group_new (), GTK_WINDOW (iw));
 
   extension_point = g_io_extension_point_lookup ("gtk-inspector-page");
