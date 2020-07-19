@@ -28,6 +28,7 @@
 
 #include "gtkaccelgroupprivate.h"
 #include "gtkaccessible.h"
+#include "gtkactionobserverprivate.h"
 #include "gtkapplicationprivate.h"
 #include "gtkbuildable.h"
 #include "gtkbuilderprivate.h"
@@ -11075,10 +11076,10 @@ gtk_widget_activate_action_variant (GtkWidget  *widget,
   if (muxer == NULL)
     return FALSE;
 
-  if (!g_action_group_has_action (G_ACTION_GROUP (muxer), name))
+  if (!gtk_action_muxer_has_action (muxer, name))
     return FALSE;
 
-  g_action_group_activate_action (G_ACTION_GROUP (muxer), name, args);
+  gtk_action_muxer_activate_action (muxer, name, args);
 
   return TRUE;
 }

@@ -522,7 +522,7 @@ _gtk_menu_tracker_item_new (GtkActionObservable *observable,
 
   if (!is_separator && g_menu_item_get_attribute (self->item, "action", "&s", &action_name))
     {
-      GActionGroup *group = G_ACTION_GROUP (observable);
+      GtkActionMuxer *muxer = GTK_ACTION_MUXER (observable);
       const GVariantType *parameter_type;
       GVariant *target;
       gboolean enabled;
@@ -546,7 +546,7 @@ _gtk_menu_tracker_item_new (GtkActionObservable *observable,
       state = NULL;
 
       gtk_action_observable_register_observer (self->observable, action_name, GTK_ACTION_OBSERVER (self));
-      found = g_action_group_query_action (group, action_name, &enabled, &parameter_type, NULL, NULL, &state);
+      found = gtk_action_muxer_query_action (muxer, action_name, &enabled, &parameter_type, NULL, NULL, &state);
 
       if (found)
         {
@@ -795,7 +795,7 @@ gtk_menu_tracker_item_activated (GtkMenuTrackerItem *self)
   action_name = strrchr (self->action_and_target, '|') + 1;
   action_target = g_menu_item_get_attribute_value (self->item, G_MENU_ATTRIBUTE_TARGET, NULL);
 
-  g_action_group_activate_action (G_ACTION_GROUP (self->observable), action_name, action_target);
+  gtk_action_muxer_activate_action (GTK_ACTION_MUXER (self->observable), action_name, action_target);
 
   if (action_target)
     g_variant_unref (action_target);
@@ -811,8 +811,9 @@ typedef struct
 static void
 gtk_menu_tracker_opener_update (GtkMenuTrackerOpener *opener)
 {
-  GActionGroup *group = G_ACTION_GROUP (opener->item->observable);
+  GtkActionMuxer *muxer = GTK_ACTION_MUXER (opener->item->observable);
   gboolean is_open = TRUE;
+  GVariant *state;
 
   /* We consider the menu as being "open" if the action does not exist
    * or if there is another problem (no state, wrong state type, etc.).
@@ -828,10 +829,8 @@ gtk_menu_tracker_opener_update (GtkMenuTrackerOpener *opener)
    * That is handled in _free() below.
    */
 
-  if (g_action_group_has_action (group, opener->submenu_action))
+  if (gtk_action_muxer_query_action (muxer, opener->submenu_action, NULL, NULL, NULL, NULL, &state))
     {
-      GVariant *state = g_action_group_get_action_state (group, opener->submenu_action);
-
       if (state)
         {
           if (g_variant_is_of_type (state, G_VARIANT_TYPE_BOOLEAN))
@@ -849,7 +848,7 @@ gtk_menu_tracker_opener_update (GtkMenuTrackerOpener *opener)
 
   if (!is_open || opener->first_time)
     {
-      g_action_group_change_action_state (group, opener->submenu_action, g_variant_new_boolean (TRUE));
+      gtk_action_muxer_change_action_state (muxer, opener->submenu_action, g_variant_new_boolean (TRUE));
       opener->first_time = FALSE;
     }
 }

@@ -444,8 +444,9 @@ gtk_action_helper_set_action_name (GtkActionHelper *helper,
                                                helper->action_name,
                                                GTK_ACTION_OBSERVER (helper));
 
-      if (g_action_group_query_action (G_ACTION_GROUP (helper->action_context), helper->action_name,
-                                       &enabled, &parameter_type, NULL, NULL, &state))
+      if (gtk_action_muxer_query_action (helper->action_context, helper->action_name,
+                                         &enabled, &parameter_type,
+                                         NULL, NULL, &state))
         {
           GTK_NOTE(ACTIONS, g_message ("%s: action %s existed from the start", "actionhelper", helper->action_name));
 
@@ -531,9 +532,9 @@ gtk_action_helper_set_action_target_value (GtkActionHelper *helper,
       gboolean enabled;
       GVariant *state;
 
-      if (g_action_group_query_action (G_ACTION_GROUP (helper->action_context),
-                                       helper->action_name, &enabled, &parameter_type,
-                                       NULL, NULL, &state))
+      if (gtk_action_muxer_query_action (helper->action_context,
+                                         helper->action_name, &enabled, &parameter_type,
+                                         NULL, NULL, &state))
         {
           gtk_action_helper_action_added (helper, enabled, parameter_type, state, FALSE);
 
@@ -593,6 +594,7 @@ gtk_action_helper_activate (GtkActionHelper *helper)
   if (!helper->can_activate || helper->reporting)
     return;
 
-  g_action_group_activate_action (G_ACTION_GROUP (helper->action_context),
-                                  helper->action_name, helper->target);
+  gtk_action_muxer_activate_action (helper->action_context,
+                                    helper->action_name,
+                                    helper->target);
 }
