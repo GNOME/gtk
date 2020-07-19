@@ -162,9 +162,12 @@ gtk_action_muxer_list_actions (GtkActionMuxer *muxer)
             g_hash_table_add (actions, g_strdup (action->name));
         }
 
-      g_hash_table_iter_init (&iter, muxer->groups);
-      while (g_hash_table_iter_next (&iter, (gpointer *)&prefix, (gpointer *)&group))
-        gtk_action_muxer_append_group_actions (prefix, group, actions);
+      if (muxer->groups)
+        {
+          g_hash_table_iter_init (&iter, muxer->groups);
+          while (g_hash_table_iter_next (&iter, (gpointer *)&prefix, (gpointer *)&group))
+            gtk_action_muxer_append_group_actions (prefix, group, actions);
+        }
     }
 
   keys = (char **)g_hash_table_get_keys_as_array (actions, NULL);
@@ -184,6 +187,9 @@ gtk_action_muxer_find_group (GtkActionMuxer  *muxer,
   gchar *prefix;
   const char *name;
   Group *group;
+
+  if (!muxer->groups)
+    return NULL;
 
   dot = strchr (full_name, '.');
 
@@ -220,6 +226,16 @@ gtk_action_muxer_find (GtkActionMuxer  *muxer,
   return NULL;
 }
 
+static inline Action *
+find_observers (GtkActionMuxer *muxer,
+                const char     *action_name)
+{
+  if (muxer->observed_actions)
+    return g_hash_table_lookup (muxer->observed_actions, action_name);
+
+  return NULL;
+}
+
 void
 gtk_action_muxer_action_enabled_changed (GtkActionMuxer *muxer,
                                          const gchar    *action_name,
@@ -246,7 +262,8 @@ gtk_action_muxer_action_enabled_changed (GtkActionMuxer *muxer,
         }
     }
 
-  action = g_hash_table_lookup (muxer->observed_actions, action_name);
+  action = find_observers (muxer, action_name);
+
   for (node = action ? action->watchers : NULL; node; node = node->next)
     gtk_action_observer_action_enabled_changed (node->data, GTK_ACTION_OBSERVABLE (muxer), action_name, enabled);
 }
@@ -273,7 +290,7 @@ gtk_action_muxer_action_state_changed (GtkActionMuxer *muxer,
   Action *action;
   GSList *node;
 
-  action = g_hash_table_lookup (muxer->observed_actions, action_name);
+  action = find_observers (muxer, action_name);
   for (node = action ? action->watchers : NULL; node; node = node->next)
     gtk_action_observer_action_state_changed (node->data, GTK_ACTION_OBSERVABLE (muxer), action_name, state);
 }
@@ -308,6 +325,9 @@ notify_observers_added (GtkActionMuxer *muxer,
   GHashTableIter iter;
   const char *action_name;
   Action *action;
+
+  if (!muxer->observed_actions)
+    return;
 
   g_hash_table_iter_init (&iter, muxer->observed_actions);
   while (g_hash_table_iter_next (&iter, (gpointer *)&action_name, (gpointer *)&action))
@@ -353,6 +373,9 @@ notify_observers_removed (GtkActionMuxer *muxer,
   const char *action_name;
   Action *action;
 
+  if (!muxer->observed_actions)
+    return;
+
   g_hash_table_iter_init (&iter, muxer->observed_actions);
   while (g_hash_table_iter_next (&iter, (gpointer *)&action_name, (gpointer *)&action))
     {
@@ -379,8 +402,7 @@ gtk_action_muxer_action_added (GtkActionMuxer     *muxer,
   Action *action;
   GSList *node;
 
-  action = g_hash_table_lookup (muxer->observed_actions, action_name);
-
+  action = find_observers (muxer, action_name);
   for (node = action ? action->watchers : NULL; node; node = node->next)
     gtk_action_observer_action_added (node->data,
                                       GTK_ACTION_OBSERVABLE (muxer),
@@ -401,7 +423,13 @@ gtk_action_muxer_action_added_to_group (GActionGroup *action_group,
   char *fullname;
 
   fullname = g_strconcat (group->prefix, ".", action_name, NULL);
-  action = g_hash_table_lookup (muxer->observed_actions, fullname);
+
+   if (muxer->parent)
+     gtk_action_observable_unregister_observer (GTK_ACTION_OBSERVABLE (muxer->parent),
+                                                fullname,
+                                                GTK_ACTION_OBSERVER (muxer));
+
+  action = find_observers (muxer, fullname);
 
   if (action && action->watchers &&
       g_action_group_query_action (action_group, action_name,
@@ -413,11 +441,6 @@ gtk_action_muxer_action_added_to_group (GActionGroup *action_group,
         g_variant_unref (state);
     }
 
-  if (muxer->parent)
-    gtk_action_observable_unregister_observer (GTK_ACTION_OBSERVABLE (muxer->parent),
-                                               fullname,
-                                               GTK_ACTION_OBSERVER (muxer));
-
   g_free (fullname);
 }
 
@@ -428,7 +451,7 @@ gtk_action_muxer_action_removed (GtkActionMuxer *muxer,
   Action *action;
   GSList *node;
 
-  action = g_hash_table_lookup (muxer->observed_actions, action_name);
+  action = find_observers (muxer, action_name);
   for (node = action ? action->watchers : NULL; node; node = node->next)
     gtk_action_observer_action_removed (node->data, GTK_ACTION_OBSERVABLE (muxer), action_name);
 }
@@ -447,7 +470,7 @@ gtk_action_muxer_action_removed_from_group (GActionGroup *action_group,
   gtk_action_muxer_action_removed (muxer, fullname);
   g_free (fullname);
 
-  action = g_hash_table_lookup (muxer->observed_actions, action_name);
+  action = find_observers (muxer, action_name);
 
   if (action && action->watchers &&
       !action_muxer_query_action (muxer, action_name,
@@ -471,7 +494,7 @@ gtk_action_muxer_primary_accel_changed (GtkActionMuxer *muxer,
   if (!action_name)
     action_name = strrchr (action_and_target, '|') + 1;
 
-  action = g_hash_table_lookup (muxer->observed_actions, action_name);
+  action = find_observers (muxer, action_name);
   for (node = action ? action->watchers : NULL; node; node = node->next)
     gtk_action_observer_primary_accel_changed (node->data, GTK_ACTION_OBSERVABLE (muxer),
                                                action_name, action_and_target);
@@ -808,6 +831,8 @@ gtk_action_muxer_weak_notify (gpointer  data,
   gtk_action_muxer_unregister_internal (action, where_the_object_was);
 }
 
+static void gtk_action_muxer_free_action (gpointer data);
+
 static void
 gtk_action_muxer_register_observer (GtkActionObservable *observable,
                                     const gchar         *name,
@@ -818,6 +843,9 @@ gtk_action_muxer_register_observer (GtkActionObservable *observable,
   gboolean enabled;
   const GVariantType *parameter_type;
   GVariant *state;
+
+  if (!muxer->observed_actions)
+    muxer->observed_actions = g_hash_table_new_full (g_str_hash, g_str_equal, NULL, gtk_action_muxer_free_action);
 
   action = g_hash_table_lookup (muxer->observed_actions, name);
 
@@ -865,12 +893,12 @@ gtk_action_muxer_unregister_observer (GtkActionObservable *observable,
   GtkActionMuxer *muxer = GTK_ACTION_MUXER (observable);
   Action *action;
 
-  action = g_hash_table_lookup (muxer->observed_actions, name);
-  if (!action)
-    return;
-
-  g_object_weak_unref (G_OBJECT (observer), gtk_action_muxer_weak_notify, action);
-  gtk_action_muxer_unregister_internal (action, observer);
+  action = find_observers (muxer, name);
+  if (action)
+    {
+      g_object_weak_unref (G_OBJECT (observer), gtk_action_muxer_weak_notify, action);
+      gtk_action_muxer_unregister_internal (action, observer);
+    }
 }
 
 static void
@@ -909,9 +937,13 @@ gtk_action_muxer_finalize (GObject *object)
 {
   GtkActionMuxer *muxer = GTK_ACTION_MUXER (object);
 
-  g_assert_cmpint (g_hash_table_size (muxer->observed_actions), ==, 0);
-  g_hash_table_unref (muxer->observed_actions);
-  g_hash_table_unref (muxer->groups);
+  if (muxer->observed_actions)
+    {
+      g_assert_cmpint (g_hash_table_size (muxer->observed_actions), ==, 0);
+      g_hash_table_unref (muxer->observed_actions);
+    }
+  if (muxer->groups)
+    g_hash_table_unref (muxer->groups);
   if (muxer->primary_accels)
     g_hash_table_unref (muxer->primary_accels);
 
@@ -926,7 +958,8 @@ gtk_action_muxer_dispose (GObject *object)
   GtkActionMuxer *muxer = GTK_ACTION_MUXER (object);
 
   g_clear_object (&muxer->parent);
-  g_hash_table_remove_all (muxer->observed_actions);
+  if (muxer->observed_actions)
+    g_hash_table_remove_all (muxer->observed_actions);
 
   muxer->widget = NULL;
 
@@ -988,8 +1021,6 @@ gtk_action_muxer_set_property (GObject      *object,
 static void
 gtk_action_muxer_init (GtkActionMuxer *muxer)
 {
-  muxer->observed_actions = g_hash_table_new_full (g_str_hash, g_str_equal, NULL, gtk_action_muxer_free_action);
-  muxer->groups = g_hash_table_new_full (g_str_hash, g_str_equal, NULL, gtk_action_muxer_free_group);
   muxer->widget_actions_disabled = _gtk_bitmask_new ();
 }
 
@@ -1119,6 +1150,9 @@ gtk_action_muxer_insert (GtkActionMuxer *muxer,
   /* TODO: diff instead of ripout and replace */
   gtk_action_muxer_remove (muxer, prefix);
 
+  if (!muxer->groups)
+    muxer->groups = g_hash_table_new_full (g_str_hash, g_str_equal, NULL, gtk_action_muxer_free_group);
+
   group = g_slice_new (Group);
   group->muxer = muxer;
   group->group = g_object_ref (action_group);
@@ -1156,6 +1190,9 @@ gtk_action_muxer_remove (GtkActionMuxer *muxer,
                          const gchar    *prefix)
 {
   Group *group;
+
+  if (!muxer->groups)
+    return;
 
   group = g_hash_table_lookup (muxer->groups, prefix);
 
