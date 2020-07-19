@@ -105,10 +105,24 @@ gtk_accels_remove (GtkAccels  *accels,
 
 /*< private >
  * SECTION:gtkactionmuxer
- * @short_description: Aggregate and monitor several action groups
+ * @short_description: Aggregate and monitor actions from multiple sources
  *
- * #GtkActionMuxer is a #GActionGroup and #GtkActionObservable that is
- * capable of containing other #GActionGroup instances.
+ * #GtkActionMuxer is #GtkActionObservable and #GtkActionObserver that
+ * offers a #GActionGroup-like api and is capable of containing other
+ * #GActionGroup instances. #GtkActionMuxer does not implement the
+ * #GActionGroup interface because it requires excessive signal emissions
+ * and has poor scalability. We use the #GtkActionObserver machinery
+ * instead to propagate changes between action muxer instances and
+ * to other users.
+ *
+ * Beyond action groups, #GtkActionMuxer can incorporate actions that
+ * are associated with widget classes (*class actions*) and actions
+ * that are associated with the parent widget, allowing for recursive
+ * lookup.
+ *
+ * In addition to the action attributes provided by #GActionGroup,
+ * #GtkActionMuxer maintains a *primary accelerator* string for
+ * actions that can be shown in menuitems.
  *
  * The typical use is aggregating all of the actions applicable to a
  * particular context into a single action group, with namespacing.
@@ -119,12 +133,12 @@ gtk_accels_remove (GtkAccels  *accels,
  * application (such as “fullscreen”).
  *
  * In this case, each of these action groups could be added to a
- * #GtkActionMuxer with the prefixes “app” and “win”, respectively.  This
- * would expose the actions as “app.quit” and “win.fullscreen” on the
- * #GActionGroup interface presented by the #GtkActionMuxer.
+ * #GtkActionMuxer with the prefixes “app” and “win”, respectively.
+ * This would expose the actions as “app.quit” and “win.fullscreen”
+ * on the #GActionGroup-like interface presented by the #GtkActionMuxer.
  *
- * Activations and state change requests on the #GtkActionMuxer are wired
- * through to the underlying action group in the expected way.
+ * Activations and state change requests on the #GtkActionMuxer are
+ * wired through to the underlying actions in the expected way.
  *
  * This class is typically only used at the site of “consumption” of
  * actions (eg: when displaying a menu that contains many actions on
