@@ -268,7 +268,6 @@ perform_titlebar_action (GtkWindowHandle *self,
   GtkSettings *settings;
   gchar *action = NULL;
   gboolean retval = TRUE;
-  GtkActionMuxer *context;
 
   settings = gtk_widget_get_settings (GTK_WIDGET (self));
   switch (button)
@@ -287,23 +286,21 @@ perform_titlebar_action (GtkWindowHandle *self,
       break;
     }
 
-  context = _gtk_widget_get_action_muxer (GTK_WIDGET (self), TRUE);
-
   if (action == NULL)
     retval = FALSE;
   else if (g_str_equal (action, "none"))
     retval = FALSE;
     /* treat all maximization variants the same */
   else if (g_str_has_prefix (action, "toggle-maximize"))
-    g_action_group_activate_action (G_ACTION_GROUP (context),
-                                    "window.toggle-maximized",
-                                    NULL);
+    gtk_widget_activate_action (GTK_WIDGET (self),
+                                "window.toggle-maximized",
+                                NULL);
   else if (g_str_equal (action, "lower"))
     lower_window (self);
   else if (g_str_equal (action, "minimize"))
-    g_action_group_activate_action (G_ACTION_GROUP (context),
-                                    "window.minimize",
-                                    NULL);
+    gtk_widget_activate_action (GTK_WIDGET (self),
+                                "window.minimize",
+                                NULL);
   else if (g_str_equal (action, "menu"))
     do_popup (self, event);
   else

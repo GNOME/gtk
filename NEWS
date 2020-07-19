@@ -1,7 +1,7 @@
 Overview of Changes in GTK 3.99.0
 =================================
 
-* Add GtkEditableLabel
+* Add GtkEditableLabel, a label that can be edited
 
 * Add GtkBookmarkList, a list model for bookmarks
 
