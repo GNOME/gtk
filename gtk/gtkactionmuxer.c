@@ -120,7 +120,6 @@ get_action_position (GtkWidgetAction *action)
   return slot;
 }
 
-#if 0
 static void
 gtk_action_muxer_append_group_actions (const char *prefix,
                                        Group      *group,
@@ -139,15 +138,13 @@ gtk_action_muxer_append_group_actions (const char *prefix,
   g_strfreev (group_actions);
 }
 
-static gchar **
-gtk_action_muxer_list_actions (GActionGroup *action_group)
+char **
+gtk_action_muxer_list_actions (GtkActionMuxer *muxer)
 {
-  GtkActionMuxer *muxer = GTK_ACTION_MUXER (action_group);
   GHashTable *actions;
   char **keys;
 
-  actions = g_hash_table_new_full (g_str_hash, g_str_equal,
-                                   g_free, NULL);
+  actions = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
 
   for ( ; muxer != NULL; muxer = muxer->parent)
     {
@@ -177,7 +174,6 @@ gtk_action_muxer_list_actions (GActionGroup *action_group)
 
   return (char **)keys;
 }
-#endif
 
 static Group *
 gtk_action_muxer_find_group (GtkActionMuxer  *muxer,

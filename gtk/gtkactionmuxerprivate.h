@@ -87,6 +87,7 @@ void                    gtk_action_muxer_change_action_state            (GtkActi
                                                                          GVariant            *state);
 gboolean                gtk_action_muxer_has_action                     (GtkActionMuxer      *muxer,
                                                                          const char          *action_name);
+char **                 gtk_action_muxer_list_actions                   (GtkActionMuxer      *muxer);
 
 
 void
