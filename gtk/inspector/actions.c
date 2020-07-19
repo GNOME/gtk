@@ -373,11 +373,13 @@ gtk_inspector_actions_set_object (GtkInspectorActions *sl,
     add_group (sl, page, G_ACTION_GROUP (object));
   else if (GTK_IS_WIDGET (object))
     {
+#if 0
       GtkActionMuxer *muxer;
 
       muxer = _gtk_widget_get_action_muxer (GTK_WIDGET (object), FALSE);
       if (muxer)
         add_group (sl, page, G_ACTION_GROUP (muxer));
+#endif
     }
 
   gtk_column_view_sort_by_column (GTK_COLUMN_VIEW (sl->list), sl->name, GTK_SORT_ASCENDING);
