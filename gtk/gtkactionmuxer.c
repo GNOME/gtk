@@ -31,6 +31,78 @@
 
 #include <string.h>
 
+typedef struct
+{
+  char *action_and_target;
+  char *accel;
+} GtkAccel;
+
+static void
+gtk_accel_clear (GtkAccel *accel)
+{
+  g_free (accel->action_and_target);
+  g_free (accel->accel);
+}
+
+#define GDK_ARRAY_NAME gtk_accels
+#define GDK_ARRAY_TYPE_NAME GtkAccels
+#define GDK_ARRAY_ELEMENT_TYPE GtkAccel
+#define GDK_ARRAY_FREE_FUNC gtk_accel_clear
+#define GDK_ARRAY_BY_VALUE 1
+#define GDK_ARRAY_PREALLOC 2
+#include "gdk/gdkarrayimpl.c"
+
+static guint
+gtk_accels_find (GtkAccels  *accels,
+                 const char *action_and_target)
+{
+  guint i;
+
+  for (i = 0; i < gtk_accels_get_size (accels); i++)
+    {
+      GtkAccel *accel = gtk_accels_index (accels, i);
+      if (strcmp (accel->action_and_target, action_and_target) == 0)
+        return i;
+    }
+
+  return G_MAXUINT;
+}
+
+static void
+gtk_accels_replace (GtkAccels  *accels,
+                    const char *action_and_target,
+                    const char *primary_accel)
+{
+  guint position;
+
+  position = gtk_accels_find (accels, action_and_target);
+  if (position < gtk_accels_get_size (accels))
+    {
+      GtkAccel *accel = gtk_accels_index (accels, position);
+      g_free (accel->accel);
+      accel->accel = g_strdup (primary_accel);
+    }
+  else
+    {
+      GtkAccel accel;
+
+      accel.action_and_target = g_strdup (action_and_target);
+      accel.accel = g_strdup (primary_accel);
+      gtk_accels_append (accels, &accel);
+    }
+}
+
+static void
+gtk_accels_remove (GtkAccels  *accels,
+                   const char *action_and_target)
+{
+  guint position;
+
+  position = gtk_accels_find (accels, action_and_target);
+  if (position < gtk_accels_get_size (accels))
+    gtk_accels_splice (accels, position, 1, NULL, 0);
+}
+
 /*< private >
  * SECTION:gtkactionmuxer
  * @short_description: Aggregate and monitor several action groups
@@ -67,13 +139,12 @@ typedef GObjectClass GtkActionMuxerClass;
 struct _GtkActionMuxer
 {
   GObject parent_instance;
+  GtkActionMuxer *parent;
+  GtkWidget *widget;
 
   GHashTable *observed_actions;
   GHashTable *groups;
-  GHashTable *primary_accels;
-  GtkActionMuxer *parent;
-
-  GtkWidget *widget;
+  GtkAccels primary_accels;
 
   GtkBitmask *widget_actions_disabled;
 };
@@ -944,8 +1015,8 @@ gtk_action_muxer_finalize (GObject *object)
     }
   if (muxer->groups)
     g_hash_table_unref (muxer->groups);
-  if (muxer->primary_accels)
-    g_hash_table_unref (muxer->primary_accels);
+
+  gtk_accels_clear (&muxer->primary_accels);
 
   _gtk_bitmask_free (muxer->widget_actions_disabled);
 
@@ -1276,16 +1347,13 @@ gtk_action_muxer_set_parent (GtkActionMuxer *muxer,
 
 void
 gtk_action_muxer_set_primary_accel (GtkActionMuxer *muxer,
-                                    const gchar    *action_and_target,
-                                    const gchar    *primary_accel)
+                                    const char     *action_and_target,
+                                    const char     *primary_accel)
 {
-  if (!muxer->primary_accels)
-    muxer->primary_accels = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_free);
-
   if (primary_accel)
-    g_hash_table_insert (muxer->primary_accels, g_strdup (action_and_target), g_strdup (primary_accel));
+    gtk_accels_replace (&muxer->primary_accels, action_and_target, primary_accel);
   else
-    g_hash_table_remove (muxer->primary_accels, action_and_target);
+    gtk_accels_remove (&muxer->primary_accels, action_and_target);
 
   gtk_action_muxer_primary_accel_changed (muxer, NULL, action_and_target);
 }
@@ -1294,15 +1362,11 @@ const gchar *
 gtk_action_muxer_get_primary_accel (GtkActionMuxer *muxer,
                                     const gchar    *action_and_target)
 {
-  if (muxer->primary_accels)
-    {
-      const gchar *primary_accel;
+   guint position;
 
-      primary_accel = g_hash_table_lookup (muxer->primary_accels, action_and_target);
-
-      if (primary_accel)
-        return primary_accel;
-    }
+   position = gtk_accels_find (&muxer->primary_accels, action_and_target);
+   if (position < G_MAXUINT)
+     return gtk_accels_index (&muxer->primary_accels, position)->accel;
 
   if (!muxer->parent)
     return NULL;
