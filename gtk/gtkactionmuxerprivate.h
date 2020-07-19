@@ -69,8 +69,25 @@ void                    gtk_action_muxer_set_primary_accel              (GtkActi
                                                                          const gchar    *action_and_target,
                                                                          const gchar    *primary_accel);
 
-const gchar *           gtk_action_muxer_get_primary_accel              (GtkActionMuxer *muxer,
+const char *            gtk_action_muxer_get_primary_accel              (GtkActionMuxer *muxer,
                                                                          const gchar    *action_and_target);
+
+gboolean                gtk_action_muxer_query_action                   (GtkActionMuxer      *muxer,
+                                                                         const char          *action_name,
+                                                                         gboolean            *enabled,
+                                                                         const GVariantType **parameter_type,
+                                                                         const GVariantType **state_type,
+                                                                         GVariant           **state_hint,
+                                                                         GVariant           **state);
+void                    gtk_action_muxer_activate_action                (GtkActionMuxer      *muxer,
+                                                                         const char          *action_name,
+                                                                         GVariant            *parameter);
+void                    gtk_action_muxer_change_action_state            (GtkActionMuxer      *muxer,
+                                                                         const char          *action_name,
+                                                                         GVariant            *state);
+gboolean                gtk_action_muxer_has_action                     (GtkActionMuxer      *muxer,
+                                                                         const char          *action_name);
+
 
 void
 gtk_action_muxer_action_enabled_changed (GtkActionMuxer *muxer,
@@ -80,6 +97,7 @@ void
 gtk_action_muxer_action_state_changed (GtkActionMuxer *muxer,
                                        const gchar    *action_name,
                                        GVariant       *state);
+
 
 void gtk_action_muxer_connect_class_actions (GtkActionMuxer *muxer);
 
