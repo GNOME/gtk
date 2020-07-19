@@ -27,12 +27,13 @@
 #include "gtkbox.h"
 #include "gtkboxlayout.h"
 #include "gtkorientable.h"
+#include "gtkactionmuxerprivate.h"
 
 struct _GtkInspectorActionEditor
 {
   GtkWidget parent;
 
-  GActionGroup *group;
+  GObject *owner;
   gchar *name;
   gboolean enabled;
   const GVariantType *parameter_type;
@@ -51,7 +52,7 @@ typedef struct
 enum
 {
   PROP_0,
-  PROP_GROUP,
+  PROP_OWNER,
   PROP_NAME,
   PROP_SIZEGROUP
 };
@@ -208,7 +209,10 @@ activate_action (GtkWidget                *button,
 
   if (r->parameter_entry)
     parameter = variant_editor_get_value (r->parameter_entry);
-  g_action_group_activate_action (r->group, r->name, parameter);
+  if (G_IS_ACTION_GROUP (r->owner))
+    g_action_group_activate_action (G_ACTION_GROUP (r->owner), r->name, parameter);
+  else if (GTK_IS_ACTION_MUXER (r->owner))
+    gtk_action_muxer_activate_action (GTK_ACTION_MUXER (r->owner), r->name, parameter);
 }
 
 static void
@@ -233,7 +237,12 @@ state_changed (GtkWidget *editor,
 
   value = variant_editor_get_value (editor);
   if (value)
-    g_action_group_change_action_state (r->group, r->name, value);
+    {
+      if (G_IS_ACTION_GROUP (r->owner))
+        g_action_group_change_action_state (G_ACTION_GROUP (r->owner), r->name, value);
+      else if (GTK_IS_ACTION_MUXER (r->owner))
+        gtk_action_muxer_change_action_state (GTK_ACTION_MUXER (r->owner), r->name, value);
+    }
 }
 
 static void
@@ -287,8 +296,16 @@ constructed (GObject *object)
   GtkWidget *activate;
   GtkWidget *label;
 
-  r->enabled = g_action_group_get_action_enabled (r->group, r->name);
-  state = g_action_group_get_action_state (r->group, r->name);
+  if (G_IS_ACTION_GROUP (r->owner))
+    g_action_group_query_action (G_ACTION_GROUP (r->owner), r->name,
+                                 &r->enabled, &r->parameter_type, NULL, NULL,
+                                 &state);
+  else if (GTK_IS_ACTION_MUXER (r->owner))
+    gtk_action_muxer_query_action (GTK_ACTION_MUXER (r->owner), r->name,
+                                   &r->enabled, &r->parameter_type, NULL, NULL,
+                                   &state);
+  else
+    state = NULL;
 
   row = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
   activate = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
@@ -302,7 +319,6 @@ constructed (GObject *object)
   gtk_widget_set_sensitive (r->activate_button, r->enabled);
   gtk_box_append (GTK_BOX (activate), r->activate_button);
 
-  r->parameter_type = g_action_group_get_action_parameter_type (r->group, r->name);
   if (r->parameter_type)
     {
       r->parameter_entry = variant_editor_new (r->parameter_type, parameter_changed, r);
@@ -326,10 +342,13 @@ constructed (GObject *object)
       gtk_widget_set_parent (row, GTK_WIDGET (r));
     }
 
-  g_signal_connect (r->group, "action-enabled-changed",
-                    G_CALLBACK (action_enabled_changed_cb), r);
-  g_signal_connect (r->group, "action-state-changed",
-                    G_CALLBACK (action_state_changed_cb), r);
+  if (G_IS_ACTION_GROUP (r->owner))
+    {
+      g_signal_connect (r->owner, "action-enabled-changed",
+                        G_CALLBACK (action_enabled_changed_cb), r);
+      g_signal_connect (r->owner, "action-state-changed",
+                        G_CALLBACK (action_state_changed_cb), r);
+    }
 }
 
 static void
@@ -342,8 +361,8 @@ dispose (GObject *object)
   g_clear_object (&r->sg);
   if (r->state_type)
     g_variant_type_free (r->state_type);
-  g_signal_handlers_disconnect_by_func (r->group, action_enabled_changed_cb, r);
-  g_signal_handlers_disconnect_by_func (r->group, action_state_changed_cb, r);
+  g_signal_handlers_disconnect_by_func (r->owner, action_enabled_changed_cb, r);
+  g_signal_handlers_disconnect_by_func (r->owner, action_state_changed_cb, r);
 
   while ((child = gtk_widget_get_first_child (GTK_WIDGET (r))))
     gtk_widget_unparent (child);
@@ -361,8 +380,8 @@ get_property (GObject    *object,
 
   switch (param_id)
     {
-    case PROP_GROUP:
-      g_value_set_object (value, r->group);
+    case PROP_OWNER:
+      g_value_set_object (value, r->owner);
       break;
 
     case PROP_NAME:
@@ -389,8 +408,8 @@ set_property (GObject      *object,
 
   switch (param_id)
     {
-    case PROP_GROUP:
-      r->group = g_value_get_object (value);
+    case PROP_OWNER:
+      r->owner = g_value_get_object (value);
       break;
 
     case PROP_NAME:
@@ -419,9 +438,9 @@ gtk_inspector_action_editor_class_init (GtkInspectorActionEditorClass *klass)
   object_class->get_property = get_property;
   object_class->set_property = set_property;
 
-  g_object_class_install_property (object_class, PROP_GROUP,
-      g_param_spec_object ("group", "Action Group", "The Action Group containing the action",
-                           G_TYPE_ACTION_GROUP, G_PARAM_READWRITE|G_PARAM_CONSTRUCT));
+  g_object_class_install_property (object_class, PROP_OWNER,
+      g_param_spec_object ("owner", "Owner", "The owner of the action",
+                           G_TYPE_OBJECT, G_PARAM_READWRITE|G_PARAM_CONSTRUCT));
 
   g_object_class_install_property (object_class, PROP_NAME,
       g_param_spec_string ("name", "Name", "The action name",
@@ -434,12 +453,12 @@ gtk_inspector_action_editor_class_init (GtkInspectorActionEditorClass *klass)
 }
 
 GtkWidget *
-gtk_inspector_action_editor_new (GActionGroup *group,
+gtk_inspector_action_editor_new (GObject      *owner,
                                  const gchar  *name,
                                  GtkSizeGroup *activate)
 {
   return g_object_new (GTK_TYPE_INSPECTOR_ACTION_EDITOR,
-                       "group", group,
+                       "owner", owner,
                        "name", name,
                        "sizegroup", activate,
                        NULL);

@@ -8,10 +8,10 @@
 
 G_DECLARE_FINAL_TYPE (ActionHolder, action_holder, ACTION, HOLDER, GObject)
 
-ActionHolder * action_holder_new     (GActionGroup *group,
-                                      const char   *name);
+ActionHolder * action_holder_new     (GObject    *owner,
+                                      const char *name);
 
-GActionGroup *action_holder_get_group (ActionHolder *holder);
+GObject      *action_holder_get_owner (ActionHolder *holder);
 const char   *action_holder_get_name  (ActionHolder *holder);
 
 #endif /* __ACTION_HOLDER_H__ */

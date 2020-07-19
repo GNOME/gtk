@@ -44,7 +44,8 @@ struct _GtkInspectorActions
   GtkWidget *list;
   GtkWidget *button;
 
-  GActionGroup *group;
+  GObject *object;
+
   GListModel *actions;
   GtkColumnViewColumn *name;
 };
@@ -73,15 +74,14 @@ gtk_inspector_actions_init (GtkInspectorActions *sl)
 }
 
 static void
-action_added_cb (GActionGroup        *group,
-                 const gchar         *action_name,
-                 GtkInspectorActions *sl)
+action_added (GObject             *owner,
+              const gchar         *action_name,
+              GtkInspectorActions *sl)
 {
-  ActionHolder *holder = action_holder_new (group, action_name);
+  ActionHolder *holder = action_holder_new (owner, action_name);
   g_list_store_append (G_LIST_STORE (sl->actions), holder);
   g_object_unref (holder);
 }
-
 
 static void
 setup_name_cb (GtkSignalListItemFactory *factory,
@@ -124,16 +124,20 @@ bind_enabled_cb (GtkSignalListItemFactory *factory,
 {
   gpointer item;
   GtkWidget *label;
-  GActionGroup *group;
+  GObject *owner;
   const char *name;
-  gboolean enabled;
+  gboolean enabled = FALSE;
 
   item = gtk_list_item_get_item (list_item);
   label = gtk_list_item_get_child (list_item);
 
-  group = action_holder_get_group (ACTION_HOLDER (item));
+  owner = action_holder_get_owner (ACTION_HOLDER (item));
   name = action_holder_get_name (ACTION_HOLDER (item));
-  enabled = g_action_group_get_action_enabled (group, name);
+  if (G_IS_ACTION_GROUP (owner))
+    enabled = g_action_group_get_action_enabled (G_ACTION_GROUP (owner), name);
+  else if (GTK_IS_ACTION_MUXER (owner))
+    gtk_action_muxer_query_action (GTK_ACTION_MUXER (owner), name,
+                                   &enabled, NULL, NULL, NULL, NULL);
 
   gtk_label_set_label (GTK_LABEL (label), enabled ? "+" : "-");
 }
@@ -156,16 +160,20 @@ bind_parameter_cb (GtkSignalListItemFactory *factory,
 {
   gpointer item;
   GtkWidget *label;
-  GActionGroup *group;
+  GObject *owner;
   const char *name;
   const char *parameter;
 
   item = gtk_list_item_get_item (list_item);
   label = gtk_list_item_get_child (list_item);
 
-  group = action_holder_get_group (ACTION_HOLDER (item));
+  owner = action_holder_get_owner (ACTION_HOLDER (item));
   name = action_holder_get_name (ACTION_HOLDER (item));
-  parameter = (const gchar *)g_action_group_get_action_parameter_type (group, name);
+  if (G_IS_ACTION_GROUP (owner))
+    parameter = (const gchar *)g_action_group_get_action_parameter_type (G_ACTION_GROUP (owner), name);
+  else if (GTK_IS_ACTION_MUXER (owner))
+    gtk_action_muxer_query_action (GTK_ACTION_MUXER (owner), name,
+                                   NULL, (const GVariantType **)&parameter, NULL, NULL, NULL);
 
   gtk_label_set_label (GTK_LABEL (label), parameter);
 }
@@ -190,7 +198,7 @@ bind_state_cb (GtkSignalListItemFactory *factory,
 {
   gpointer item;
   GtkWidget *label;
-  GActionGroup *group;
+  GObject *owner;
   const char *name;
   GVariant *state;
   char *state_string;
@@ -198,9 +206,16 @@ bind_state_cb (GtkSignalListItemFactory *factory,
   item = gtk_list_item_get_item (list_item);
   label = gtk_list_item_get_child (list_item);
 
-  group = action_holder_get_group (ACTION_HOLDER (item));
+  owner = action_holder_get_owner (ACTION_HOLDER (item));
   name = action_holder_get_name (ACTION_HOLDER (item));
-  state = g_action_group_get_action_state (group, name);
+  if (G_IS_ACTION_GROUP (owner))
+    state = g_action_group_get_action_state (G_ACTION_GROUP (owner), name);
+  else if (GTK_IS_ACTION_MUXER (owner))
+    gtk_action_muxer_query_action (GTK_ACTION_MUXER (owner), name,
+                                   NULL, NULL, NULL, NULL, &state);
+  else
+    state = NULL;
+
   if (state)
     state_string = g_variant_print (state, FALSE);
   else
@@ -218,16 +233,16 @@ bind_changes_cb (GtkSignalListItemFactory *factory,
                  GtkListItem              *list_item)
 {
   gpointer item;
-  GActionGroup *group;
+  GObject *owner;
   const char *name;
   GtkWidget *editor;
 
   item = gtk_list_item_get_item (list_item);
 
-  group = action_holder_get_group (ACTION_HOLDER (item));
+  owner = action_holder_get_owner (ACTION_HOLDER (item));
   name = action_holder_get_name (ACTION_HOLDER (item));
 
-  editor = gtk_inspector_action_editor_new (group, name, NULL);
+  editor = gtk_inspector_action_editor_new (owner, name, NULL);
   gtk_widget_add_css_class (editor, "cell");
   gtk_list_item_set_child (list_item, editor);
 }
@@ -240,116 +255,60 @@ unbind_changes_cb (GtkSignalListItemFactory *factory,
 }
 
 static void
-action_removed_cb (GActionGroup        *group,
-                   const gchar         *action_name,
-                   GtkInspectorActions *sl)
-{
-  int i;
-
-  for (i = 0; i < g_list_model_get_n_items (sl->actions); i++)
-    {
-      ActionHolder *holder = g_list_model_get_item (sl->actions, i);
-
-      if (group == action_holder_get_group (holder) &&
-          strcmp (action_name, action_holder_get_name (holder)) == 0)
-        g_list_store_remove (G_LIST_STORE (sl->actions), i);
-
-      g_object_unref (holder);
-    }
-}
-
-static void
-notify_action_changed (GtkInspectorActions *sl,
-                       GActionGroup        *group,
-                       const char          *action_name)
-{
-  int i;
-
-  for (i = 0; i < g_list_model_get_n_items (sl->actions); i++)
-    {
-      ActionHolder *holder = g_list_model_get_item (sl->actions, i);
-
-      if (group == action_holder_get_group (holder) &&
-          strcmp (action_name, action_holder_get_name (holder)) == 0)
-        g_list_model_items_changed (sl->actions, i, 1, 1);
-
-      g_object_unref (holder);
-    }
-}
-
-static void
-action_enabled_changed_cb (GActionGroup        *group,
-                           const gchar         *action_name,
-                           gboolean             enabled,
-                           GtkInspectorActions *sl)
-{
-  notify_action_changed (sl, group, action_name);
-}
-
-static void
-action_state_changed_cb (GActionGroup        *group,
-                         const gchar         *action_name,
-                         GVariant            *state,
-                         GtkInspectorActions *sl)
-{
-  notify_action_changed (sl, group, action_name);
-}
-
-static void
-refresh_all (GtkInspectorActions *sl)
-{
-  guint n = g_list_model_get_n_items (sl->actions);
-  g_list_model_items_changed (sl->actions, 0, n, n);
-}
-
-static void
-connect_group (GActionGroup *group,
-               GtkInspectorActions *sl)
-{
-  g_signal_connect (group, "action-added", G_CALLBACK (action_added_cb), sl);
-  g_signal_connect (group, "action-removed", G_CALLBACK (action_removed_cb), sl);
-  g_signal_connect (group, "action-enabled-changed", G_CALLBACK (action_enabled_changed_cb), sl);
-  g_signal_connect (group, "action-state-changed", G_CALLBACK (action_state_changed_cb), sl);
-}
-
-static void
-disconnect_group (GActionGroup *group,
-                  GtkInspectorActions *sl)
-{
-  g_signal_handlers_disconnect_by_func (group, action_added_cb, sl);
-  g_signal_handlers_disconnect_by_func (group, action_removed_cb, sl);
-  g_signal_handlers_disconnect_by_func (group, action_enabled_changed_cb, sl);
-  g_signal_handlers_disconnect_by_func (group, action_state_changed_cb, sl);
-}
-
-static void
 add_group (GtkInspectorActions *sl,
-           GtkStackPage        *page,
            GActionGroup        *group)
 {
   gint i;
   gchar **names;
 
-  g_object_set (page, "visible", TRUE, NULL);
-
-  connect_group (group, sl);
-
   names = g_action_group_list_actions (group);
   for (i = 0; names[i]; i++)
-    action_added_cb (group, names[i], sl);
+    action_added (G_OBJECT (group), names[i], sl);
   g_strfreev (names);
-
-  g_set_object (&sl->group, group);
 }
 
 static void
-remove_group (GtkInspectorActions *sl,
-              GtkStackPage        *page,
-              GActionGroup        *group)
+add_muxer (GtkInspectorActions *sl,
+           GtkActionMuxer      *muxer)
 {
-  disconnect_group (group, sl);
+  gint i;
+  gchar **names;
 
-  g_set_object (&sl->group, NULL);
+  names = gtk_action_muxer_list_actions (muxer);
+  for (i = 0; names[i]; i++)
+    action_added (G_OBJECT (muxer), names[i], sl);
+  g_strfreev (names);
+}
+
+static gboolean
+reload (GtkInspectorActions *sl)
+{
+  g_list_store_remove_all (G_LIST_STORE (sl->actions));
+
+  if (GTK_IS_APPLICATION (sl->object))
+    {
+      add_group (sl, G_ACTION_GROUP (sl->object));
+      return TRUE;
+    }
+  else if (GTK_IS_WIDGET (sl->object))
+    {
+      GtkActionMuxer *muxer;
+
+      muxer = _gtk_widget_get_action_muxer (GTK_WIDGET (sl->object), FALSE);
+      if (muxer)
+        {
+          add_muxer (sl, muxer);
+          return TRUE;
+        }
+    }
+
+  return FALSE;
+}
+
+static void
+refresh_all (GtkInspectorActions *sl)
+{
+  reload (sl);
 }
 
 void
@@ -358,29 +317,15 @@ gtk_inspector_actions_set_object (GtkInspectorActions *sl,
 {
   GtkWidget *stack;
   GtkStackPage *page;
+  gboolean loaded;
 
   stack = gtk_widget_get_parent (GTK_WIDGET (sl));
   page = gtk_stack_get_page (GTK_STACK (stack), GTK_WIDGET (sl));
+  gtk_stack_page_set_visible (page, FALSE);
 
-  g_object_set (page, "visible", FALSE, NULL);
-
-  if (sl->group)
-    remove_group (sl, page, sl->group);
-
-  g_list_store_remove_all (G_LIST_STORE (sl->actions));
-
-  if (GTK_IS_APPLICATION (object))
-    add_group (sl, page, G_ACTION_GROUP (object));
-  else if (GTK_IS_WIDGET (object))
-    {
-#if 0
-      GtkActionMuxer *muxer;
-
-      muxer = _gtk_widget_get_action_muxer (GTK_WIDGET (object), FALSE);
-      if (muxer)
-        add_group (sl, page, G_ACTION_GROUP (muxer));
-#endif
-    }
+  g_set_object (&sl->object, object);
+  loaded = reload (sl);
+  gtk_stack_page_set_visible (page, loaded);
 
   gtk_column_view_sort_by_column (GTK_COLUMN_VIEW (sl->list), sl->name, GTK_SORT_ASCENDING);
 }
@@ -449,7 +394,7 @@ constructed (GObject *object)
                                                                NULL, NULL));
   gtk_column_view_column_set_sorter (sl->name, sorter);
   g_object_unref (sorter);
-  
+
   sl->actions = G_LIST_MODEL (g_list_store_new (ACTION_TYPE_HOLDER));
   sorted = G_LIST_MODEL (gtk_sort_list_model_new (sl->actions,
                                                   gtk_column_view_get_sorter (GTK_COLUMN_VIEW (sl->list))));
@@ -466,6 +411,7 @@ dispose (GObject *object)
   GtkWidget *child;
 
   g_clear_object (&sl->actions);
+  g_clear_object (&sl->object);
 
   while ((child = gtk_widget_get_first_child (GTK_WIDGET (sl))))
     gtk_widget_unparent (child);
