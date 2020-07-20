@@ -371,7 +371,7 @@ gtk_sort_list_model_create_keys (GtkSortListModel *self)
   g_assert (self->key_size == 0);
 
   self->sort_keys = gtk_sorter_get_keys (self->sorter);
-  self->key_size = self->sort_keys->key_size;
+  self->key_size = gtk_sort_keys_get_key_size (self->sort_keys);
   self->keys = g_malloc_n (self->n_items, self->key_size);
   for (i = 0; i < self->n_items; i++)
     {
