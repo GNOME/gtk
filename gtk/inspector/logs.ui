@@ -215,6 +215,18 @@
                 <signal name="toggled" handler="flag_toggled"/>
               </object>
             </child>
+            <child>
+              <object class="GtkCheckButton" id="constraints">
+                <property name="label">Constraints</property>
+                <signal name="toggled" handler="flag_toggled"/>
+              </object>
+            </child>
+            <child>
+              <object class="GtkCheckButton" id="layout">
+                <property name="label">Layout</property>
+                <signal name="toggled" handler="flag_toggled"/>
+              </object>
+            </child>
           </object>
         </child>
       </object>
