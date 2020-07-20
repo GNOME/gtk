@@ -40,6 +40,16 @@
  */
 #define GTK_SORT_MAX_MERGE_SIZE (1024)
 
+/* Time we spend in the sort callback before returning to the main loop
+ *
+ * Increasing this number will make the callback take longer and potentially
+ * reduce responsiveness of an application, but will increase the amount of
+ * work done per step. And we emit an ::items-changed() signal after every
+ * step, so if we can avoid that, we recuce the overhead in the list widget
+ * and in turn reduce the total sort time.
+ */
+#define GTK_SORT_STEP_TIME_US (1000) /* 1 millisecond */
+
 typedef struct _SortItem SortItem;
 struct _SortItem
 {
@@ -167,14 +177,56 @@ gtk_sort_list_model_stop_sorting (GtkSortListModel *self)
 }
 
 static gboolean
+gtk_sort_list_model_sort_step (GtkSortListModel *self,
+                               guint            *out_position,
+                               guint            *out_n_items)
+{
+  gint64 end_time = g_get_monotonic_time ();
+  gboolean result = FALSE;
+  GtkTimSortRun change;
+  SortItem *start_change, *end_change;
+
+  end_time += GTK_SORT_STEP_TIME_US;
+  end_change = sort_array_get_data (&self->items);
+  start_change = end_change + sort_array_get_size (&self->items);
+
+  while (gtk_tim_sort_step (&self->sort, &change))
+    {
+      result = TRUE;
+      if (change.len)
+        {
+          start_change = MIN (start_change, (SortItem *) change.base);
+          end_change = MAX (end_change, ((SortItem *) change.base) + change.len);
+        }
+     
+      if (g_get_monotonic_time () >= end_time)
+        break;
+    }
+
+  if (start_change < end_change)
+    {
+      *out_position = start_change - sort_array_get_data (&self->items);
+      *out_n_items = end_change - start_change;
+    }
+  else
+    {
+      *out_position = 0;
+      *out_n_items = 0;
+    }
+
+  return result;
+}
+
+static gboolean
 gtk_sort_list_model_sort_cb (gpointer data)
 {
   GtkSortListModel *self = data;
+  guint pos, n_items;
 
-  if (gtk_tim_sort_step (&self->sort, NULL))
+  if (gtk_sort_list_model_sort_step (self, &pos, &n_items))
     {
-      guint n_items = sort_array_get_size (&self->items);
-      g_list_model_items_changed (G_LIST_MODEL (self), 0, n_items, n_items);
+      if (n_items)
+        g_list_model_items_changed (G_LIST_MODEL (self), pos, n_items, n_items);
       return G_SOURCE_CONTINUE;
     }
 
