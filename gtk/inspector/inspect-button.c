@@ -92,7 +92,7 @@ select_widget (GtkInspectorWindow *iw,
 {
   GtkInspectorObjectTree *wt = GTK_INSPECTOR_OBJECT_TREE (iw->object_tree);
 
-  gtk_inspector_object_tree_select_object (wt, G_OBJECT (widget));
+  gtk_inspector_object_tree_activate_object (wt, G_OBJECT (widget));
 }
 
 static void
