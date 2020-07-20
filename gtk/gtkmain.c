@@ -173,15 +173,15 @@ static const GdkDebugKey gtk_debug_keys[] = {
   { "geometry", GTK_DEBUG_GEOMETRY, "Information about size allocation" },
   { "size-request", GTK_DEBUG_SIZE_REQUEST, "Information about size requests" },
   { "actions", GTK_DEBUG_ACTIONS, "Information about actions and menu models" },
-  { "constraints", GTK_DEBUG_CONSTRAINTS, "Information about constraints" },
+  { "constraints", GTK_DEBUG_CONSTRAINTS, "Information from the constraints solver" },
   { "text", GTK_DEBUG_TEXT, "Information about GtkTextView" },
   { "tree", GTK_DEBUG_TREE, "Information about GtkTreeView" },
+  { "layout", GTK_DEBUG_LAYOUT, "Information from layout managers" },
   { "builder", GTK_DEBUG_BUILDER, "Trace GtkBuilder operation" },
   { "builder-objects", GTK_DEBUG_BUILDER_OBJECTS, "Log unused GtkBuilder objects" },
   { "no-css-cache", GTK_DEBUG_NO_CSS_CACHE, "Disable style property cache" },
   { "interactive", GTK_DEBUG_INTERACTIVE, "Enable the GTK inspector" },
   { "touchscreen", GTK_DEBUG_TOUCHSCREEN, "Pretend the pointer is a touchscreen" },
-  { "layout", GTK_DEBUG_LAYOUT, "Show layout borders" },
   { "snapshot", GTK_DEBUG_SNAPSHOT, "Generate debug render nodes" },
 };
 #endif /* G_ENABLE_DEBUG */
