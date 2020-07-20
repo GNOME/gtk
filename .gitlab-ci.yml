@@ -184,7 +184,7 @@ static-scan:
 # since it is incompatible with asan
 asan-build:
   image: $FEDORA_IMAGE
-  tags: [ privileged ]
+  tags: [ asan ]
   stage: analysis
   variables:
   script:
