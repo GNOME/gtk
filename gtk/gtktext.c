@@ -6015,6 +6015,7 @@ append_bubble_item (GtkText    *self,
   const char *icon_name;
   const char *action_name;
   GMenuModel *link;
+  gboolean enabled;
 
   link = g_menu_model_get_item_link (model, index, "section");
   if (link)
@@ -6040,7 +6041,9 @@ append_bubble_item (GtkText    *self,
   g_variant_unref (att);
 
   muxer = _gtk_widget_get_action_muxer (GTK_WIDGET (self), FALSE);
-  if (!g_action_group_get_action_enabled (G_ACTION_GROUP (muxer), action_name))
+  if (!gtk_action_muxer_query_action (muxer, action_name, &enabled,
+                                      NULL, NULL, NULL, NULL) ||
+      !enabled)
     return;
 
   item = gtk_button_new ();

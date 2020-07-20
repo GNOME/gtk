@@ -1072,14 +1072,16 @@ gtk_named_action_activate (GtkShortcutAction      *action,
 {
   GtkNamedAction *self = GTK_NAMED_ACTION (action);
   const GVariantType *parameter_type;
-  GActionGroup *action_group;
+  GtkActionMuxer *muxer;
   gboolean enabled;
 
-  action_group = G_ACTION_GROUP (_gtk_widget_get_action_muxer (widget, FALSE));
-  if (action_group == NULL)
+  muxer = _gtk_widget_get_action_muxer (widget, FALSE);
+  if (muxer == NULL)
     return FALSE;
 
-  if (!g_action_group_query_action (action_group, self->name, &enabled, &parameter_type, NULL, NULL, NULL))
+  if (!gtk_action_muxer_query_action (muxer, self->name,
+                                      &enabled, &parameter_type,
+                                      NULL, NULL, NULL))
     return FALSE;
 
   if (!enabled)
@@ -1095,7 +1097,7 @@ gtk_named_action_activate (GtkShortcutAction      *action,
   if (!check_parameter_type (args, parameter_type))
     return FALSE;
 
-  g_action_group_activate_action (action_group, self->name, args);
+  gtk_action_muxer_activate_action (muxer, self->name, args);
 
   return TRUE;
 }

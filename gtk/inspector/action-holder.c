@@ -4,7 +4,7 @@
 struct _ActionHolder {
   GObject instance;
 
-  GActionGroup *group;
+  GObject *owner;
   char *name;
 };
 
@@ -20,7 +20,7 @@ action_holder_finalize (GObject *object)
 {
   ActionHolder *holder = ACTION_HOLDER (object);
 
-  g_object_unref (holder->group);
+  g_object_unref (holder->owner);
   g_free (holder->name);
 
   G_OBJECT_CLASS (action_holder_parent_class)->finalize (object);
@@ -35,23 +35,23 @@ action_holder_class_init (ActionHolderClass *class)
 }
 
 ActionHolder *
-action_holder_new (GActionGroup *group,
-                   const char   *name)
+action_holder_new (GObject    *owner,
+                   const char *name)
 {
   ActionHolder *holder;
 
   holder = g_object_new (ACTION_TYPE_HOLDER, NULL);
 
-  holder->group = g_object_ref (group);
+  holder->owner = g_object_ref (owner);
   holder->name = g_strdup (name);
 
   return holder;
 }
 
-GActionGroup *
-action_holder_get_group (ActionHolder *holder)
+GObject *
+action_holder_get_owner (ActionHolder *holder)
 {
-  return holder->group;
+  return holder->owner;
 }
 
 const char *

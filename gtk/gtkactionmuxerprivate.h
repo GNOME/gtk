@@ -52,7 +52,7 @@ GType                   gtk_action_muxer_get_type                       (void);
 GtkActionMuxer *        gtk_action_muxer_new                            (GtkWidget      *widget);
 
 void                    gtk_action_muxer_insert                         (GtkActionMuxer *muxer,
-                                                                         const gchar    *prefix,
+                                                                         const char     *prefix,
                                                                          GActionGroup   *action_group);
 
 void                    gtk_action_muxer_remove                         (GtkActionMuxer *muxer,
@@ -65,30 +65,45 @@ GtkActionMuxer *        gtk_action_muxer_get_parent                     (GtkActi
 void                    gtk_action_muxer_set_parent                     (GtkActionMuxer *muxer,
                                                                          GtkActionMuxer *parent);
 
-void                    gtk_action_muxer_set_primary_accel              (GtkActionMuxer *muxer,
-                                                                         const gchar    *action_and_target,
-                                                                         const gchar    *primary_accel);
+/* GActionGroup equivalent api */
+gboolean                gtk_action_muxer_query_action                   (GtkActionMuxer      *muxer,
+                                                                         const char          *action_name,
+                                                                         gboolean            *enabled,
+                                                                         const GVariantType **parameter_type,
+                                                                         const GVariantType **state_type,
+                                                                         GVariant           **state_hint,
+                                                                         GVariant           **state);
+void                    gtk_action_muxer_activate_action                (GtkActionMuxer      *muxer,
+                                                                         const char          *action_name,
+                                                                         GVariant            *parameter);
+void                    gtk_action_muxer_change_action_state            (GtkActionMuxer      *muxer,
+                                                                         const char          *action_name,
+                                                                         GVariant            *state);
+gboolean                gtk_action_muxer_has_action                     (GtkActionMuxer      *muxer,
+                                                                         const char          *action_name);
+char **                 gtk_action_muxer_list_actions                   (GtkActionMuxer      *muxer);
 
-const gchar *           gtk_action_muxer_get_primary_accel              (GtkActionMuxer *muxer,
-                                                                         const gchar    *action_and_target);
+/* api for class actions */
+void                    gtk_action_muxer_action_enabled_changed         (GtkActionMuxer      *muxer,
+                                                                         const char          *action_name,
+                                                                         gboolean             enabled);
+void                    gtk_action_muxer_action_state_changed           (GtkActionMuxer      *muxer,
+                                                                         const char          *action_name,
+                                                                         GVariant            *state);
+void                    gtk_action_muxer_connect_class_actions          (GtkActionMuxer      *muxer);
 
-void
-gtk_action_muxer_action_enabled_changed (GtkActionMuxer *muxer,
-                                         const char     *action_name,
-                                         gboolean        enabled);
-void
-gtk_action_muxer_action_state_changed (GtkActionMuxer *muxer,
-                                       const gchar    *action_name,
-                                       GVariant       *state);
-
-void gtk_action_muxer_connect_class_actions (GtkActionMuxer *muxer);
+/* api for accels */
+void                    gtk_action_muxer_set_primary_accel              (GtkActionMuxer      *muxer,
+                                                                         const char          *action_and_target,
+                                                                         const char          *primary_accel);
+const char *            gtk_action_muxer_get_primary_accel              (GtkActionMuxer      *muxer,
+                                                                         const char          *action_and_target);
 
 /* No better place for these... */
-gchar *                 gtk_print_action_and_target                     (const gchar    *action_namespace,
-                                                                         const gchar    *action_name,
-                                                                         GVariant       *target);
-
-gchar *                 gtk_normalise_detailed_action_name              (const gchar *detailed_action_name);
+char *                  gtk_print_action_and_target                     (const char          *action_namespace,
+                                                                         const char          *action_name,
+                                                                         GVariant            *target);
+char *                  gtk_normalise_detailed_action_name              (const char          *detailed_action_name);
 
 G_END_DECLS
 
