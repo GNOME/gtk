@@ -3065,6 +3065,24 @@ row {
   }
 }
 
+  /********************************************
+  * Treeview like editable lists with columns *
+  ********************************************/
+
+  listview row:not(:selected) cell editablelabel:not(.editing):focus-within {
+    outline: 2px solid $focus_border_color;
+  }
+
+  listview row:not(:selected) cell editablelabel.editing:focus-within {
+    outline: 2px solid $selected_bg_color;
+  }
+
+  listview row:not(:selected) cell editablelabel.editing text selection {
+    color: $selected_fg_color;
+    background-color: $selected_bg_color;
+  }
+
+
 
 /*********************
  * App Notifications *
