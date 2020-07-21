@@ -414,6 +414,7 @@ gtk_sort_list_model_update_items (GtkSortListModel *self,
                                   guint            *unmodified_end)
 {
   guint i, n_items, valid;
+  guint run_index, valid_run, valid_run_end, run_end;
   guint start, end;
   gpointer *old_keys;
 
@@ -445,28 +446,50 @@ gtk_sort_list_model_update_items (GtkSortListModel *self,
 
   /* then, update the positions */
   valid = 0;
-  for (i = 0; i < n_items; i++)
+  valid_run = 0;
+  valid_run_end = 0;
+  run_index = 0;
+  run_end = 0;
+  for (i = 0; i < n_items;)
     {
-      guint pos = ((char *) self->positions[i] - (char *) old_keys) / self->key_size;
-
-      if (pos >= position + removed)
-        pos = pos - removed + added;
-      else if (pos >= position)
-        { 
-          start = MIN (start, valid);
-          end = n_items - i - 1;
-          continue;
+      if (runs[run_index] == 0)
+        {
+          run_end = n_items;
+          valid_run_end = G_MAXUINT;
+        }
+      else
+        {
+          run_end += runs[run_index++];
         }
 
-      self->positions[valid] = key_from_pos (self, pos);
-      valid++;
+      for (; i < run_end; i++)
+        {
+          guint pos = ((char *) self->positions[i] - (char *) old_keys) / self->key_size;
+
+          if (pos >= position + removed)
+            pos = pos - removed + added;
+          else if (pos >= position)
+            { 
+              start = MIN (start, valid);
+              end = n_items - i - 1;
+              continue;
+            }
+
+          self->positions[valid] = key_from_pos (self, pos);
+          valid++;
+        }
+
+      if (valid_run_end < valid)
+        {
+          runs[valid_run++] = valid - valid_run_end;
+          valid_run_end = valid;
+        }
     }
-  self->positions = g_renew (gpointer, self->positions, n_items - removed + added);
-
-  /* FIXME */
-  runs[0] = 0;
-
+  g_assert (i == n_items);
   g_assert (valid == n_items - removed);
+  runs[valid_run] = 0;
+
+  self->positions = g_renew (gpointer, self->positions, n_items - removed + added);
 
   self->n_items = n_items - removed + added;
 
