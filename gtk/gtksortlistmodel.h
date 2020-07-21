@@ -52,6 +52,12 @@ void                    gtk_sort_list_model_set_model           (GtkSortListMode
 GDK_AVAILABLE_IN_ALL
 GListModel *            gtk_sort_list_model_get_model           (GtkSortListModel       *self);
 
+GDK_AVAILABLE_IN_ALL
+void                    gtk_sort_list_model_set_incremental     (GtkSortListModel       *self,
+                                                                 gboolean                incremental);
+GDK_AVAILABLE_IN_ALL
+gboolean                gtk_sort_list_model_get_incremental     (GtkSortListModel       *self);
+
 G_END_DECLS
 
 #endif /* __GTK_SORT_LIST_MODEL_H__ */
