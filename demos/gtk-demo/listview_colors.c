@@ -662,7 +662,8 @@ create_color_grid (void)
 {
   GtkWidget *gridview;
   GtkListItemFactory *factory;
-  GListModel *model, *selection;
+  GListModel *selection;
+  GtkSortListModel *sort_model;
 
   gridview = gtk_grid_view_new ();
   gtk_scrollable_set_hscroll_policy (GTK_SCROLLABLE (gridview), GTK_SCROLL_NATURAL);
@@ -676,12 +677,13 @@ create_color_grid (void)
   gtk_grid_view_set_max_columns (GTK_GRID_VIEW (gridview), 24);
   gtk_grid_view_set_enable_rubberband (GTK_GRID_VIEW (gridview), TRUE);
 
-  model = G_LIST_MODEL (gtk_sort_list_model_new (gtk_color_list_new (0), NULL));
+  sort_model = gtk_sort_list_model_new (gtk_color_list_new (0), NULL);
+  gtk_sort_list_model_set_incremental (sort_model, TRUE);
 
-  selection = G_LIST_MODEL (gtk_multi_selection_new (model));
+  selection = G_LIST_MODEL (gtk_multi_selection_new (G_LIST_MODEL (sort_model)));
   gtk_grid_view_set_model (GTK_GRID_VIEW (gridview), selection);
   g_object_unref (selection);
-  g_object_unref (model);
+  g_object_unref (sort_model);
 
   return gridview;
 }
