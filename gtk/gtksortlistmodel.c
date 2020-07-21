@@ -23,6 +23,7 @@
 
 #include "gtkintl.h"
 #include "gtkprivate.h"
+#include "gtksorterprivate.h"
 #include "gtktimsortprivate.h"
 
 /* The maximum amount of items to merge for a single merge step
@@ -86,7 +87,9 @@ struct _GtkSortListModel
   guint sort_cb; /* 0 or current ongoing sort callback */
 
   guint n_items;
-  gpointer *keys;
+  GtkSortKeys *sort_keys;
+  gsize key_size;
+  gpointer keys;
   gpointer *positions;
 };
 
@@ -101,7 +104,7 @@ static guint
 pos_from_key (GtkSortListModel *self,
               gpointer          key)
 {
-  guint pos = (gpointer *) key - self->keys;
+  guint pos = ((char *) key - (char *) self->keys) / self->key_size;
 
   g_assert (pos < self->n_items);
 
@@ -112,7 +115,7 @@ static gpointer
 key_from_pos (GtkSortListModel *self,
               guint             pos)
 {
-  return self->keys + pos;
+  return (char *) self->keys + self->key_size * pos;
 }
 
 static GType
@@ -248,10 +251,11 @@ sort_func (gconstpointer a,
            gconstpointer b,
            gpointer      data)
 {
-  gpointer **sa = (gpointer **) a;
-  gpointer **sb = (gpointer **) b;
+  gpointer *sa = (gpointer *) a;
+  gpointer *sb = (gpointer *) b;
+  int result;
 
-  return gtk_sorter_compare (data, **sa, **sb);
+  return gtk_sort_keys_compare (data, *sa, *sb);
 }
 
 static gboolean
@@ -265,7 +269,7 @@ gtk_sort_list_model_start_sorting (GtkSortListModel *self,
                      self->n_items,
                      sizeof (gpointer),
                      sort_func,
-                     self->sorter);
+                     self->sort_keys);
   if (runs)
     gtk_tim_sort_set_runs (&self->sort, runs);
   if (self->incremental)
@@ -292,15 +296,30 @@ gtk_sort_list_model_finish_sorting (GtkSortListModel *self,
 }
 
 static void
+gtk_sort_list_model_clear_keys (GtkSortListModel *self)
+{
+
+  if (gtk_sort_keys_needs_clear_key (self->sort_keys))
+    {
+      guint i;
+
+      for (i = 0; i < self->n_items; i++)
+        gtk_sort_keys_clear_key (self->sort_keys, key_from_pos (self, i));
+    }
+
+  g_clear_pointer (&self->keys, g_free);
+  g_clear_pointer (&self->sort_keys, gtk_sort_keys_unref);
+  self->key_size = 0;
+}
+
+static void
 gtk_sort_list_model_clear_items (GtkSortListModel *self,
                                  guint            *pos,
                                  guint            *n_items)
 {
-  guint i;
-
   gtk_sort_list_model_stop_sorting (self, NULL);
 
-  if (self->positions == NULL)
+  if (self->sort_keys == NULL)
     {
       if (pos || n_items)
         *pos = *n_items = 0;
@@ -330,9 +349,8 @@ gtk_sort_list_model_clear_items (GtkSortListModel *self,
     }
 
   g_clear_pointer (&self->positions, g_free);
-  for (i = 0; i < self->n_items; i++)
-    g_object_unref (self->keys[i]);
-  g_clear_pointer (&self->keys, g_free);
+
+  gtk_sort_list_model_clear_keys (self);
 } 
 
 static gboolean
@@ -344,6 +362,26 @@ gtk_sort_list_model_should_sort (GtkSortListModel *self)
 }
 
 static void
+gtk_sort_list_model_create_keys (GtkSortListModel *self)
+{
+  guint i;
+
+  g_assert (self->keys == NULL);
+  g_assert (self->sort_keys == NULL);
+  g_assert (self->key_size == 0);
+
+  self->sort_keys = gtk_sorter_get_keys (self->sorter);
+  self->key_size = self->sort_keys->key_size;
+  self->keys = g_malloc_n (self->n_items, self->key_size);
+  for (i = 0; i < self->n_items; i++)
+    {
+      gpointer item = g_list_model_get_item (self->model, i);
+      gtk_sort_keys_init_key (self->sort_keys, item, key_from_pos (self, i));
+      g_object_unref (item);
+    }
+}
+
+static void
 gtk_sort_list_model_create_items (GtkSortListModel *self)
 {
   guint i;
@@ -351,13 +389,14 @@ gtk_sort_list_model_create_items (GtkSortListModel *self)
   if (!gtk_sort_list_model_should_sort (self))
     return;
 
+  g_assert (self->sort_keys == NULL);
+
   self->positions = g_new (gpointer, self->n_items);
-  self->keys = g_new (gpointer, self->n_items);
+
+  gtk_sort_list_model_create_keys (self);
+
   for (i = 0; i < self->n_items; i++)
-    {
-      self->keys[i] = g_list_model_get_item (self->model, i);
-      self->positions[i] = key_from_pos (self, i);
-    }
+    self->positions[i] = key_from_pos (self, i);
 }
 
 /* This realloc()s the arrays but does not set the added values. */
@@ -381,27 +420,30 @@ gtk_sort_list_model_update_items (GtkSortListModel *self,
   /* first, move the keys over */
   old_keys = self->keys;
   for (i = position; i < position + removed; i++)
-    g_object_unref (self->keys[i]);
+    {
+      gtk_sort_keys_clear_key (self->sort_keys, key_from_pos (self, i));
+    }
+
   if (removed > added)
     {
-      memmove (self->keys + position + removed,
-               self->keys + position + added,
-               sizeof (gpointer) * (n_items - position - removed));
-      self->keys = g_renew (gpointer, self->keys, n_items - removed + added);
+      memmove (key_from_pos (self, position + added),
+               key_from_pos (self, position + removed),
+               self->key_size * (n_items - position - removed));
+      self->keys = g_realloc_n (self->keys, n_items - removed + added, self->key_size);
     }
   else if (removed < added)
     {
-      self->keys = g_renew (gpointer, self->keys, n_items - removed + added);
-      memmove (self->keys + position + removed,
-               self->keys + position + added,
-               sizeof (gpointer) * (n_items - position - removed));
+      self->keys = g_realloc_n (self->keys, n_items - removed + added, self->key_size);
+      memmove (key_from_pos (self, position + added),
+               key_from_pos (self, position + removed),
+               self->key_size * (n_items - position - removed));
     }
 
   /* then, update the positions */
   valid = 0;
   for (i = 0; i < n_items; i++)
     {
-      guint pos = (gpointer *) self->positions[i] - old_keys;
+      guint pos = ((char *) self->positions[i] - (char *) old_keys) / self->key_size;
 
       if (pos >= position + removed)
         pos = pos - removed + added;
@@ -426,7 +468,9 @@ gtk_sort_list_model_update_items (GtkSortListModel *self,
 
   for (i = 0; i < added; i++)
     {
-      self->keys[position + i] = g_list_model_get_item (self->model, position + i);
+      gpointer item = g_list_model_get_item (self->model, position + i);
+      gtk_sort_keys_init_key (self->sort_keys, item, key_from_pos (self, position + i));
+      g_object_unref (item);
       self->positions[self->n_items - added + i] = key_from_pos (self, position + i);
     }
 
@@ -559,10 +603,36 @@ gtk_sort_list_model_sorter_changed_cb (GtkSorter        *sorter,
 
   if (gtk_sort_list_model_should_sort (self))
     {
-      if (self->positions == NULL)
-        gtk_sort_list_model_create_items (self);
-
       gtk_sort_list_model_stop_sorting (self, NULL);
+
+      if (self->sort_keys == NULL)
+        {
+          gtk_sort_list_model_create_items (self);
+        }
+      else
+        {
+          GtkSortKeys *new_keys = gtk_sorter_get_keys (sorter);
+
+          if (!gtk_sort_keys_is_compatible (new_keys, self->sort_keys))
+            {
+              char *old_keys = self->keys;
+              gsize old_key_size = self->key_size;
+              guint i;
+
+              gtk_sort_list_model_clear_keys (self);
+              gtk_sort_list_model_create_keys (self);
+
+              for (i = 0; i < self->n_items; i++)
+                self->positions[i] = key_from_pos (self, ((char *) self->positions[i] - old_keys) / old_key_size);
+
+              gtk_sort_keys_unref (new_keys);
+            }
+          else
+            {
+              gtk_sort_keys_unref (self->sort_keys);
+              self->sort_keys = new_keys;
+            }
+        }
 
       if (gtk_sort_list_model_start_sorting (self, NULL))
         pos = n_items = 0;
