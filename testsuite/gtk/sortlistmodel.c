@@ -306,9 +306,7 @@ test_set_sorter (void)
   gtk_sort_list_model_set_sorter (sort, sorter);
   g_object_unref (sorter);
   assert_model (sort, "2 4 6 8 10");
-  /* Technically, this is correct, but we shortcut setting the sort func:
-   * assert_changes (sort, "0-4+4"); */
-  assert_changes (sort, "0-5+5");
+  assert_changes (sort, "0-4+4");
 
   g_object_unref (store);
   g_object_unref (sort);
