@@ -2832,6 +2832,8 @@ gtk_sort_list_model_set_sorter
 gtk_sort_list_model_get_sorter
 gtk_sort_list_model_set_model
 gtk_sort_list_model_get_model
+gtk_sort_list_model_set_incremental
+gtk_sort_list_model_get_incremental
 <SUBSECTION Standard>
 GTK_SORT_LIST_MODEL
 GTK_IS_SORT_LIST_MODEL
