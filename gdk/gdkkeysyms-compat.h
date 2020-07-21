@@ -274,6 +274,10 @@
 #define GDK_dead_invertedbreve 0xfe6d
 #define GDK_dead_belowcomma 0xfe6e
 #define GDK_dead_currency 0xfe6f
+#define GDK_dead_lowline 0xfe90
+#define GDK_dead_aboveverticalline 0xfe91
+#define GDK_dead_belowverticalline 0xfe92
+#define GDK_dead_longsolidusoverlay 0xfe93
 #define GDK_dead_a 0xfe80
 #define GDK_dead_A 0xfe81
 #define GDK_dead_e 0xfe82
@@ -2279,6 +2283,10 @@
 #define GDK_TouchpadOn 0x1008ffb0
 #define GDK_TouchpadOff 0x1008ffb1
 #define GDK_AudioMicMute 0x1008ffb2
+#define GDK_Keyboard 0x1008ffb3
+#define GDK_WWAN 0x1008ffb4
+#define GDK_RFKill 0x1008ffb5
+#define GDK_AudioPreset 0x1008ffb6
 #define GDK_Switch_VT_1 0x1008fe01
 #define GDK_Switch_VT_2 0x1008fe02
 #define GDK_Switch_VT_3 0x1008fe03
