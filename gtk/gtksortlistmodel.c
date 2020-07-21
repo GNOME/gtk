@@ -21,6 +21,7 @@
 
 #include "gtksortlistmodel.h"
 
+#include "gtkbitset.h"
 #include "gtkintl.h"
 #include "gtkprivate.h"
 #include "gtksorterprivate.h"
@@ -90,6 +91,8 @@ struct _GtkSortListModel
   GtkSortKeys *sort_keys;
   gsize key_size;
   gpointer keys;
+  GtkBitset *missing_keys;
+
   gpointer *positions;
 };
 
@@ -199,6 +202,32 @@ gtk_sort_list_model_sort_step (GtkSortListModel *self,
   gpointer *start_change, *end_change;
 
   end_time += GTK_SORT_STEP_TIME_US;
+
+  if (!gtk_bitset_is_empty (self->missing_keys))
+    {
+      GtkBitsetIter iter;
+      guint pos;
+
+      for (gtk_bitset_iter_init_first (&iter, self->missing_keys, &pos);
+           gtk_bitset_iter_is_valid (&iter);
+           gtk_bitset_iter_next (&iter, &pos))
+        {
+          gpointer item = g_list_model_get_item (self->model, pos);
+          gtk_sort_keys_init_key (self->sort_keys, item, key_from_pos (self, pos));
+          g_object_unref (item);
+
+          if (g_get_monotonic_time () >= end_time && !finish)
+            {
+              gtk_bitset_remove_range_closed (self->missing_keys, 0, pos);
+              *out_position = 0;
+              *out_n_items = 0;
+              return TRUE;
+            }
+        }
+      result = TRUE;
+      gtk_bitset_remove_all (self->missing_keys);
+    }
+
   end_change = self->positions;
   start_change = self->positions + self->n_items;
 
@@ -300,17 +329,36 @@ gtk_sort_list_model_finish_sorting (GtkSortListModel *self,
 }
 
 static void
-gtk_sort_list_model_clear_keys (GtkSortListModel *self)
+gtk_sort_list_model_clear_sort_keys (GtkSortListModel *self,
+                                     guint             position,
+                                     guint             n_items)
 {
+  GtkBitsetIter iter;
+  GtkBitset *clear;
+  guint pos;
 
-  if (gtk_sort_keys_needs_clear_key (self->sort_keys))
+  if (!gtk_sort_keys_needs_clear_key (self->sort_keys))
+    return;
+
+  clear = gtk_bitset_new_range (position, n_items);
+  gtk_bitset_subtract (clear, self->missing_keys);
+
+  for (gtk_bitset_iter_init_first (&iter, clear, &pos);
+       gtk_bitset_iter_is_valid (&iter);
+       gtk_bitset_iter_next (&iter, &pos))
     {
-      guint i;
-
-      for (i = 0; i < self->n_items; i++)
-        gtk_sort_keys_clear_key (self->sort_keys, key_from_pos (self, i));
+      gtk_sort_keys_clear_key (self->sort_keys, key_from_pos (self, pos));
     }
 
+  gtk_bitset_unref (clear);
+}
+
+static void
+gtk_sort_list_model_clear_keys (GtkSortListModel *self)
+{
+  gtk_sort_list_model_clear_sort_keys (self, 0, self->n_items);
+
+  g_clear_pointer (&self->missing_keys, gtk_bitset_unref);
   g_clear_pointer (&self->keys, g_free);
   g_clear_pointer (&self->sort_keys, gtk_sort_keys_unref);
   self->key_size = 0;
@@ -368,8 +416,6 @@ gtk_sort_list_model_should_sort (GtkSortListModel *self)
 static void
 gtk_sort_list_model_create_keys (GtkSortListModel *self)
 {
-  guint i;
-
   g_assert (self->keys == NULL);
   g_assert (self->sort_keys == NULL);
   g_assert (self->key_size == 0);
@@ -377,12 +423,7 @@ gtk_sort_list_model_create_keys (GtkSortListModel *self)
   self->sort_keys = gtk_sorter_get_keys (self->sorter);
   self->key_size = gtk_sort_keys_get_key_size (self->sort_keys);
   self->keys = g_malloc_n (self->n_items, self->key_size);
-  for (i = 0; i < self->n_items; i++)
-    {
-      gpointer item = g_list_model_get_item (self->model, i);
-      gtk_sort_keys_init_key (self->sort_keys, item, key_from_pos (self, i));
-      g_object_unref (item);
-    }
+  self->missing_keys = gtk_bitset_new_range (0, self->n_items);
 }
 
 static void
@@ -424,10 +465,7 @@ gtk_sort_list_model_update_items (GtkSortListModel *self,
   
   /* first, move the keys over */
   old_keys = self->keys;
-  for (i = position; i < position + removed; i++)
-    {
-      gtk_sort_keys_clear_key (self->sort_keys, key_from_pos (self, i));
-    }
+  gtk_sort_list_model_clear_sort_keys (self, position, removed);
 
   if (removed > added)
     {
@@ -491,13 +529,16 @@ gtk_sort_list_model_update_items (GtkSortListModel *self,
 
   self->positions = g_renew (gpointer, self->positions, n_items - removed + added);
 
+  if (self->missing_keys)
+    {
+      gtk_bitset_splice (self->missing_keys, position, removed, added);
+      gtk_bitset_add_range (self->missing_keys, position, added);
+    }
+
   self->n_items = n_items - removed + added;
 
   for (i = 0; i < added; i++)
     {
-      gpointer item = g_list_model_get_item (self->model, position + i);
-      gtk_sort_keys_init_key (self->sort_keys, item, key_from_pos (self, position + i));
-      g_object_unref (item);
       self->positions[self->n_items - added + i] = key_from_pos (self, position + i);
     }
 
