@@ -255,7 +255,11 @@ sort_func (gconstpointer a,
   gpointer *sb = (gpointer *) b;
   int result;
 
-  return gtk_sort_keys_compare (data, *sa, *sb);
+  result = gtk_sort_keys_compare (data, *sa, *sb);
+  if (result)
+    return result;
+
+  return *sa < *sb ? -1 : 1;
 }
 
 static gboolean
