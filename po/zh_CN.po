@@ -30,7 +30,7 @@ msgstr ""
 "Project-Id-Version: gtk master\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-07-21 21:54+0000\n"
-"PO-Revision-Date: 2020-07-21 22:37-0400\n"
+"PO-Revision-Date: 2020-07-21 22:51-0400\n"
 "Last-Translator: Boyuan Yang <073plan@gmail.com>\n"
 "Language-Team: Chinese (China) <i18n-zh@googlegroups.com>\n"
 "Language: zh_CN\n"
@@ -203,82 +203,82 @@ msgstr "Num Lock"
 #: gdk/keyname-table.h:6864
 msgctxt "keyboard label"
 msgid "KP_Space"
-msgstr "空格键"
+msgstr "空格（小键盘）"
 
 #: gdk/keyname-table.h:6865
 msgctxt "keyboard label"
 msgid "KP_Tab"
-msgstr "Tab 键"
+msgstr "Tab（小键盘）"
 
 #: gdk/keyname-table.h:6866
 msgctxt "keyboard label"
 msgid "KP_Enter"
-msgstr "回车键"
+msgstr "回车（小键盘）"
 
 #: gdk/keyname-table.h:6867
 msgctxt "keyboard label"
 msgid "KP_Home"
-msgstr "Home 键"
+msgstr "Home（小键盘）"
 
 #: gdk/keyname-table.h:6868
 msgctxt "keyboard label"
 msgid "KP_Left"
-msgstr "左方向键"
+msgstr "左（小键盘）"
 
 #: gdk/keyname-table.h:6869
 msgctxt "keyboard label"
 msgid "KP_Up"
-msgstr "上方向键"
+msgstr "上（小键盘）"
 
 #: gdk/keyname-table.h:6870
 msgctxt "keyboard label"
 msgid "KP_Right"
-msgstr "右方向键"
+msgstr "右（小键盘）"
 
 #: gdk/keyname-table.h:6871
 msgctxt "keyboard label"
 msgid "KP_Down"
-msgstr "下方向键"
+msgstr "下（小键盘）"
 
 #: gdk/keyname-table.h:6872
 msgctxt "keyboard label"
 msgid "KP_Page_Up"
-msgstr "向上翻页键"
+msgstr "向上翻页（小键盘）"
 
 #: gdk/keyname-table.h:6873
 msgctxt "keyboard label"
 msgid "KP_Prior"
-msgstr "Prior 键"
+msgstr "Prior（小键盘）"
 
 #: gdk/keyname-table.h:6874
 msgctxt "keyboard label"
 msgid "KP_Page_Down"
-msgstr "向下翻页键"
+msgstr "向下翻页（小键盘）"
 
 #: gdk/keyname-table.h:6875
 msgctxt "keyboard label"
 msgid "KP_Next"
-msgstr "下一个键"
+msgstr "Next（小键盘）"
 
 #: gdk/keyname-table.h:6876
 msgctxt "keyboard label"
 msgid "KP_End"
-msgstr "End 键"
+msgstr "End（小键盘）"
 
 #: gdk/keyname-table.h:6877
 msgctxt "keyboard label"
 msgid "KP_Begin"
-msgstr "Begin 键"
+msgstr "Begin（小键盘）"
 
 #: gdk/keyname-table.h:6878
 msgctxt "keyboard label"
 msgid "KP_Insert"
-msgstr "插入键"
+msgstr "插入（小键盘）"
 
 #: gdk/keyname-table.h:6879
 msgctxt "keyboard label"
 msgid "KP_Delete"
-msgstr "删除键"
+msgstr "删除（小键盘）"
 
 #: gdk/keyname-table.h:6880
 msgctxt "keyboard label"
