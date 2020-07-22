@@ -137,8 +137,41 @@ use gtk_button_new_from_icon_name().
 
 ### Stop using GtkWidget event signals
 
-Event controllers and #GtkGestures replace event signals in GTK 4.
-They have been backported to GTK 3.x so you can prepare for this change.
+Event controllers and gestures replace event signals in GTK 4.
+
+Most of them have been backported to GTK 3.x so you can prepare
+for this change.
+
+| Signal | Event controller |
+| --- | --- |
+| ::event | #GtkEventControllerLegacy |
+| ::event-after | #GtkEventControllerLegacy |
+| ::button-press-event | #GtkGestureClick |
+| ::button-release-event | #GtkGestureClick |
+| ::touch-event | various touch gestures |
+| ::scroll-event | #GtkEventControllerScroll |
+| ::motion-notify-event | #GtkEventControllerMotion |
+| ::delete-event | - |
+| ::key-press-event | #GtkEventControllerKey |
+| ::key-release-event | #GtkEventControllerKey |
+| ::enter-notify-event | #GtkEventControllerMotion |
+| ::leave-notify-event | #GtkEventControllerMotion |
+| ::configure-event | replaced by #GdkSurface::size-changed |
+| ::focus-in-event | #GtkEventControllerFocus |
+| ::focus-out-event | #GtkEventControllerFocus |
+| ::map-event | replaced by #GdkSurface:mapped |
+| ::unmap-event | replaced by #GdkSurface:mapped |
+| ::property-notify-event | replaced by #GdkClipboard |
+| ::selection-clear-event | replaced by #GdkClipboard |
+| ::selection-request-event | replaced by #GdkClipboard |
+| ::selection-notify-event | replaced by #GdkClipboard |
+| Drag-and-Drop signals | #GtkDragSource, #GtkDropTarget |
+| ::proximity-in-event | #GtkGestureStylus |
+| ::proximity-out-event | #GtkGestureStylus |
+| ::visibility-notify-event | - |
+| ::window-state-event | replaced by #GdkToplevel:state |
+| ::damage-event | - |
+| ::grab-broken-event | - |
 
 ### Set a proper application ID
 
@@ -530,6 +563,26 @@ they will have to be converted either to layout properties provided
 by a layout manager (if they are layout-related), or handled in some
 other way. One possibility is to use child meta objects, as seen with
 GtkAssistantPage, GtkStackPage and the like.
+
+The replacements for gtk_container_add() are:
+
+| Widget | Replacement |
+| ------ | ----------- |
+| GtkActionBar    | gtk_action_bar_pack_start(), gtk_action_bar_pack_end() |
+| GtkBox          | gtk_box_append() |
+| GtkExpander     | gtk_expander_set_child() |
+| GtkFixed        | gtk_fixed_put() |
+| GtkFlowBox      | gtk_flow_box_insert() |
+| GtkGrid         | gtk_grid_attach() |
+| GtkHeaderBar    | gtk_header_bar_pack_start(), gtk_header_bar_pack_end() |
+| GtkIconView     | - |
+| GtkInfoBar      | gtk_info_bar_add_child() |
+| GtkListBox      | gtk_list_box_insert() |
+| GtkNotebook     | gtk_notebook_append_page() |
+| GtkPaned        | gtk_paned_set_start_child(), gtk_paned_set_end_child() |
+| GtkStack        | gtk_stack_add_named() |
+| GtkTextView     | gtk_text_view_add_child_at_anchor(), gtk_text_view_add_overlay() |
+| GtkTreeView     | - |
 
 ### Stop using GtkContainer::border-width
 
