@@ -72,6 +72,7 @@ enum {
   PROP_0,
   PROP_INCREMENTAL,
   PROP_MODEL,
+  PROP_PENDING,
   PROP_SORTER,
   NUM_PROPERTIES
 };
@@ -188,6 +189,8 @@ gtk_sort_list_model_stop_sorting (GtkSortListModel *self,
     gtk_tim_sort_get_runs (&self->sort, runs);
   gtk_tim_sort_finish (&self->sort);
   g_clear_handle_id (&self->sort_cb, g_source_remove);
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_PENDING]);
 }
 
 static gboolean
@@ -268,6 +271,7 @@ gtk_sort_list_model_sort_cb (gpointer data)
     {
       if (n_items)
         g_list_model_items_changed (G_LIST_MODEL (self), pos, n_items, n_items);
+      g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_PENDING]);
       return G_SOURCE_CONTINUE;
     }
 
@@ -312,6 +316,7 @@ gtk_sort_list_model_start_sorting (GtkSortListModel *self,
     return FALSE;
 
   self->sort_cb = g_idle_add (gtk_sort_list_model_sort_cb, self);
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_PENDING]);
   return TRUE;
 }
 
@@ -652,6 +657,10 @@ gtk_sort_list_model_get_property (GObject     *object,
       g_value_set_object (value, self->model);
       break;
 
+    case PROP_PENDING:
+      g_value_set_uint (value, gtk_sort_list_model_get_pending (self));
+      break;
+
     case PROP_SORTER:
       g_value_set_object (value, self->sorter);
       break;
@@ -781,6 +790,18 @@ gtk_sort_list_model_class_init (GtkSortListModelClass *class)
                            P_("The model being sorted"),
                            G_TYPE_LIST_MODEL,
                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
+
+  /**
+   * GtkSortListModel:pending:
+   *
+   * Estimate of unsorted items remaining
+   */
+  properties[PROP_PENDING] =
+      g_param_spec_uint ("pending",
+                         P_("Pending"),
+                         P_("Estimate of unsorted items remaining"),
+                         0, G_MAXUINT, 0,
+                         GTK_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkSortListModel:sorter:
@@ -990,3 +1011,51 @@ gtk_sort_list_model_get_incremental (GtkSortListModel *self)
 
   return self->incremental;
 }
+
+/**
+ * gtk_sort_list_model_get_pending:
+ * @self: a #GtkSortListModel
+ *
+ * Estimates progress of an ongoing sorting operation
+ *
+ * The estimate is the number of items that would still need to be
+ * sorted to finish the sorting operation if this was a linear
+ * algorithm. So this number is not related to how many items are
+ * already correctly sorted.
+ *
+ * If you want to estimate the progress, you can use code like this:
+ * |[<!-- language="C" -->
+ * double progress = 1.0 - (double) gtk_sort_list_model_get_pending (self) 
+ *                         / MAX (1, g_list_model_get_n_items (G_LIST_MODEL (sort)));
+ * ]|
+ *
+ * If no sort operation is ongoing - in particular when
+ * #GtkSortListModel:incremental is %FALSE - this function returns 0.
+ *
+ * Returns: a progress estimate of remaining items to sort
+ **/
+guint
+gtk_sort_list_model_get_pending (GtkSortListModel *self)
+{
+  g_return_val_if_fail (GTK_IS_SORT_LIST_MODEL (self), FALSE);
+
+  if (self->sort_cb == 0)
+    return 0;
+
+  /* We do a random guess that 50% of time is spent generating keys
+   * and the other 50% is spent actually sorting.
+   *
+   * This is of course massively wrong, but it depends on the sorter
+   * in use, and estimating this correctly is hard, so this will have
+   * to be good enough.
+   */
+  if (!gtk_bitset_is_empty (self->missing_keys))
+    {
+      return (self->n_items + gtk_bitset_get_size (self->missing_keys)) / 2;
+    }
+  else
+    {
+      return (self->n_items - gtk_tim_sort_get_progress (&self->sort)) / 2;
+    }
+}
+
