@@ -36,16 +36,6 @@
 #include "x11/gdkprivate-x11.h"
 #endif
 
-#ifdef GDK_WINDOWING_QUARTZ
-/* When the gdk_quartz_display_open function is removed We can
- * immediately include gdkquartzdisplaymanager.h here instead of
- * gdkprivate-quartz.h so that we won’t have to enable -xobjective-c
- * for the “generic” GDK source code.
- * #include "quartz/gdkquartzdisplaymanager.h"
- */
-#include "quartz/gdkprivate-quartz.h"
-#endif
-
 #ifdef GDK_WINDOWING_BROADWAY
 #include "broadway/gdkprivate-broadway.h"
 #endif
@@ -98,10 +88,10 @@
  *     }
  *   else
  * #endif
- * #ifdef GDK_WINDOWING_QUARTZ
- *   if (GDK_IS_QUARTZ_DISPLAY (display))
+ * #ifdef GDK_WINDOWING_MACOS
+ *   if (GDK_IS_MACOS_DISPLAY (display))
  *     {
- *       // make Quartz-specific calls here
+ *       // make macOS-specific calls here
 *     }
  *   else
  * #endif

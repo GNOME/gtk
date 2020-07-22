@@ -68,10 +68,10 @@
  *     }
  *   else
  * #endif
- * #ifdef GDK_WINDOWING_QUARTZ
- *   if (GDK_IS_QUARTZ_DISPLAY (display))
+ * #ifdef GDK_WINDOWING_MACOS
+ *   if (GDK_IS_MACOS_DISPLAY (display))
  *     {
- *       // make Quartz-specific calls here
+ *       // make macOS-specific calls here
  *     }
  *   else
  * #endif
