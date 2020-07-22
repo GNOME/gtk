@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.4.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-07-13 11:20+0000\n"
-"PO-Revision-Date: 2020-07-13 17:17+0300\n"
+"POT-Creation-Date: 2020-07-22 13:16+0000\n"
+"PO-Revision-Date: 2020-07-22 16:20+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
 "Language: uk\n"
@@ -23,8 +23,8 @@ msgstr ""
 
 #: gdk/gdkapplaunchcontext.c:133 gdk/gdkdrawcontext.c:155 gdk/gdkseat.c:200
 #: gdk/gdkseat.c:201 gdk/gdksurface.c:486 gdk/gdksurface.c:487
-#: gdk/win32/gdkcursor-win32.c:234 gtk/gtkicontheme.c:985
-#: gtk/gtkicontheme.c:986 gtk/gtkmountoperation.c:191 gtk/gtkstylecontext.c:145
+#: gdk/win32/gdkcursor-win32.c:234 gtk/gtkicontheme.c:993
+#: gtk/gtkicontheme.c:994 gtk/gtkmountoperation.c:191 gtk/gtkstylecontext.c:145
 #: gtk/gtkwindow.c:854
 msgid "Display"
 msgstr "Показ"
@@ -207,11 +207,11 @@ msgstr "RGBA"
 msgid "Input shapes"
 msgstr "Вхідні форми"
 
-#: gdk/gdkdisplaymanager.c:167
+#: gdk/gdkdisplaymanager.c:171
 msgid "Default Display"
 msgstr "Типовий дисплей"
 
-#: gdk/gdkdisplaymanager.c:168
+#: gdk/gdkdisplaymanager.c:172
 msgid "The default display for GDK"
 msgstr "Типовий дисплей для підсистеми GDK"
 
@@ -247,7 +247,7 @@ msgstr "Батьківська поверхня"
 msgid "Autohide"
 msgstr "Автоприховування"
 
-#: gdk/gdksurface.c:473 gdk/gdksurface.c:474 gtk/gtkwidget.c:1076
+#: gdk/gdksurface.c:473 gdk/gdksurface.c:474 gtk/gtkwidget.c:1077
 msgid "Cursor"
 msgstr "Курсор"
 
@@ -263,6 +263,11 @@ msgstr "Відображення"
 #: gtk/gtkswitch.c:538
 msgid "State"
 msgstr "Стан"
+
+#: gdk/macos/gdkmacosdrag.c:596 gdk/macos/gdkmacosdrag.c:597
+#| msgid "Surface"
+msgid "Drag Surface"
+msgstr "Перетягування поверхнею"
 
 #: gdk/win32/gdkcursor-win32.c:235
 msgid "The display that will use this cursor"
@@ -704,7 +709,7 @@ msgstr "Показувати панель меню"
 msgid "TRUE if the window should show a menubar at the top of the window"
 msgstr "TRUE, якщо вікну слід показувати панель меню зверху нього"
 
-#: gtk/gtkaspectframe.c:137 gtk/gtkwidget.c:1147
+#: gtk/gtkaspectframe.c:137 gtk/gtkwidget.c:1148
 msgid "Horizontal Alignment"
 msgstr "Горизонтальне вирівнювання"
 
@@ -712,7 +717,7 @@ msgstr "Горизонтальне вирівнювання"
 msgid "X alignment of the child"
 msgstr "Вирівнювання вкладеного елемента по X"
 
-#: gtk/gtkaspectframe.c:144 gtk/gtkwidget.c:1160
+#: gtk/gtkaspectframe.c:144 gtk/gtkwidget.c:1161
 msgid "Vertical Alignment"
 msgstr "Вертикальне вирівнювання"
 
@@ -744,8 +749,8 @@ msgstr ""
 #: gtk/gtkdragicon.c:372 gtk/gtkexpander.c:364 gtk/gtkflowbox.c:512
 #: gtk/gtkframe.c:190 gtk/gtklistbox.c:3455 gtk/gtklistitem.c:185
 #: gtk/gtknotebook.c:570 gtk/gtkoverlay.c:319 gtk/gtkpopover.c:1665
-#: gtk/gtkrevealer.c:352 gtk/gtkscrolledwindow.c:758 gtk/gtksearchbar.c:323
-#: gtk/gtkstack.c:335 gtk/gtktreeexpander.c:458 gtk/gtkviewport.c:390
+#: gtk/gtkrevealer.c:352 gtk/gtkscrolledwindow.c:758 gtk/gtksearchbar.c:324
+#: gtk/gtkstack.c:335 gtk/gtktreeexpander.c:459 gtk/gtkviewport.c:390
 #: gtk/gtkwindow.c:946 gtk/gtkwindowhandle.c:542
 msgid "Child"
 msgstr "Вкладений елемент"
@@ -753,7 +758,7 @@ msgstr "Вкладений елемент"
 #: gtk/gtkaspectframe.c:167 gtk/gtkbutton.c:251 gtk/gtkexpander.c:365
 #: gtk/gtkflowbox.c:513 gtk/gtkframe.c:191 gtk/gtklistbox.c:3456
 #: gtk/gtkoverlay.c:320 gtk/gtkpopover.c:1666 gtk/gtkrevealer.c:353
-#: gtk/gtkscrolledwindow.c:759 gtk/gtksearchbar.c:324 gtk/gtkviewport.c:391
+#: gtk/gtkscrolledwindow.c:759 gtk/gtksearchbar.c:325 gtk/gtkviewport.c:391
 #: gtk/gtkwindow.c:947 gtk/gtkwindowhandle.c:543
 msgid "The child widget"
 msgstr "Дочірній віджет"
@@ -839,7 +844,7 @@ msgstr "завантаження"
 msgid "TRUE if files are being loaded"
 msgstr "TRUE, якщо файли завантажуються"
 
-#: gtk/gtkbox.c:258 gtk/gtkboxlayout.c:730 gtk/gtkcellareabox.c:317
+#: gtk/gtkbox.c:258 gtk/gtkboxlayout.c:722 gtk/gtkcellareabox.c:317
 #: gtk/gtkiconview.c:471 gtk/gtktreeviewcolumn.c:304
 msgid "Spacing"
 msgstr "Інтервал"
@@ -848,7 +853,7 @@ msgstr "Інтервал"
 msgid "The amount of space between children"
 msgstr "Відстані між вкладеними елементами"
 
-#: gtk/gtkbox.c:265 gtk/gtkboxlayout.c:716 gtk/gtkflowbox.c:3617
+#: gtk/gtkbox.c:265 gtk/gtkboxlayout.c:708 gtk/gtkflowbox.c:3617
 msgid "Homogeneous"
 msgstr "Гомогенність"
 
@@ -856,21 +861,21 @@ msgstr "Гомогенність"
 msgid "Whether the children should all be the same size"
 msgstr "Чи всі вкладені елементи повинні мати однаковий розмір"
 
-#: gtk/gtkbox.c:272 gtk/gtkboxlayout.c:748 gtk/gtkcenterbox.c:205
+#: gtk/gtkbox.c:272 gtk/gtkboxlayout.c:740 gtk/gtkcenterbox.c:205
 msgid "Baseline position"
 msgstr "Позиція базової лінії"
 
-#: gtk/gtkbox.c:273 gtk/gtkboxlayout.c:749 gtk/gtkcenterbox.c:206
+#: gtk/gtkbox.c:273 gtk/gtkboxlayout.c:741 gtk/gtkcenterbox.c:206
 msgid ""
 "The position of the baseline aligned widgets if extra space is available"
 msgstr ""
 "Позиція базової лінії, за якою вирівнюються віджети при доступному просторі"
 
-#: gtk/gtkboxlayout.c:717
+#: gtk/gtkboxlayout.c:709
 msgid "Distribute space homogeneously"
 msgstr "Розподілити рівномірно за простором"
 
-#: gtk/gtkboxlayout.c:731
+#: gtk/gtkboxlayout.c:723
 msgid "Spacing between widgets"
 msgstr "Інтервал між віджетами"
 
@@ -1139,7 +1144,7 @@ msgstr "видимий"
 msgid "Display the cell"
 msgstr "Показати цю комірку"
 
-#: gtk/gtkcellrenderer.c:308 gtk/gtkwidget.c:997
+#: gtk/gtkcellrenderer.c:308 gtk/gtkwidget.c:998
 msgid "Sensitive"
 msgstr "Чутливий"
 
@@ -1227,7 +1232,7 @@ msgstr "Колір тла комірки в RGBA"
 msgid "Cell background color as a GdkRGBA"
 msgstr "Колір тла комірки як GdkRGBA"
 
-#: gtk/gtkcellrenderer.c:414 gtk/gtkeditablelabel.c:340
+#: gtk/gtkcellrenderer.c:414 gtk/gtkeditablelabel.c:369
 msgid "Editing"
 msgstr "Редагування"
 
@@ -1243,12 +1248,12 @@ msgstr "Встановлення тла комірки"
 msgid "Whether the cell background color is set"
 msgstr "Чи встановлено колір тла комірки"
 
-#: gtk/gtkcellrenderercombo.c:136 gtk/gtkcolumnview.c:629 gtk/gtkdropdown.c:456
+#: gtk/gtkcellrenderercombo.c:136 gtk/gtkcolumnview.c:629 gtk/gtkdropdown.c:455
 #: gtk/gtkfilterlistmodel.c:589 gtk/gtkflattenlistmodel.c:413
 #: gtk/gtkgridview.c:1093 gtk/gtklistview.c:838 gtk/gtkmaplistmodel.c:375
 #: gtk/gtkmultiselection.c:356 gtk/gtkselectionfiltermodel.c:251
 #: gtk/gtkshortcutcontroller.c:553 gtk/gtkslicelistmodel.c:263
-#: gtk/gtksortlistmodel.c:403 gtk/gtktreelistmodel.c:706
+#: gtk/gtksortlistmodel.c:789 gtk/gtktreelistmodel.c:706
 msgid "Model"
 msgstr "Модель"
 
@@ -1999,7 +2004,7 @@ msgid "Show separators between columns"
 msgstr "Показувати роздільники між стовпчиками"
 
 #: gtk/gtkcolumnview.c:665 gtk/gtkcolumnviewcolumn.c:270
-#: gtk/gtksortlistmodel.c:391 gtk/gtktreelistrowsorter.c:243
+#: gtk/gtksortlistmodel.c:813 gtk/gtktreelistrowsorter.c:544
 msgid "Sorter"
 msgstr "Сортувальник"
 
@@ -2015,7 +2020,7 @@ msgstr "Активація одним клацанням"
 msgid "Activate rows on single click"
 msgstr "Активувати рядки одинарним клацанням"
 
-#: gtk/gtkcolumnview.c:689 gtk/gtkiconview.c:542 gtk/gtktreeview.c:1069
+#: gtk/gtkcolumnview.c:689 gtk/gtkiconview.c:542 gtk/gtktreeview.c:1025
 #: gtk/gtktreeviewcolumn.c:379
 msgid "Reorderable"
 msgstr "Дозволено перестановку"
@@ -2040,12 +2045,12 @@ msgstr "Перегляд стовпцями"
 msgid "Column view this column is a part of"
 msgstr "Панель зі стовпчиками, частиною якої є цей стовпчик"
 
-#: gtk/gtkcolumnviewcolumn.c:246 gtk/gtkdropdown.c:430 gtk/gtkgridview.c:1053
+#: gtk/gtkcolumnviewcolumn.c:246 gtk/gtkdropdown.c:429 gtk/gtkgridview.c:1053
 #: gtk/gtklistview.c:826
 msgid "Factory"
 msgstr "Фабрика"
 
-#: gtk/gtkcolumnviewcolumn.c:247 gtk/gtkdropdown.c:431 gtk/gtkdropdown.c:445
+#: gtk/gtkcolumnviewcolumn.c:247 gtk/gtkdropdown.c:430 gtk/gtkdropdown.c:444
 #: gtk/gtkgridview.c:1054 gtk/gtklistview.c:827
 msgid "Factory for populating list items"
 msgstr "Фабрика для заповнення пунктів списку"
@@ -2059,7 +2064,7 @@ msgid "Sorter for sorting items according to this column"
 msgstr "Сортувальник для упорядковування пунктів за цим стовпчиком"
 
 #: gtk/gtkcolumnviewcolumn.c:282 gtk/gtkcssnode.c:623 gtk/gtknativedialog.c:238
-#: gtk/gtkstack.c:378 gtk/gtktreeviewcolumn.c:274 gtk/gtkwidget.c:990
+#: gtk/gtkstack.c:378 gtk/gtktreeviewcolumn.c:274 gtk/gtkwidget.c:991
 msgid "Visible"
 msgstr "Видима"
 
@@ -2418,44 +2423,44 @@ msgstr "Є вказівник"
 msgid "Whether the pointer is in the controllers widget"
 msgstr "Чи перебуває вказівник у віджеті контролера"
 
-#: gtk/gtkdropdown.c:444
+#: gtk/gtkdropdown.c:443
 msgid "List Factory"
 msgstr "Фабрика списку"
 
-#: gtk/gtkdropdown.c:457
+#: gtk/gtkdropdown.c:456
 msgid "Model for the displayed items"
 msgstr "Модель для показаних пунктів"
 
-#: gtk/gtkdropdown.c:469 gtk/gtklistitem.c:233 gtk/gtksingleselection.c:415
+#: gtk/gtkdropdown.c:468 gtk/gtklistitem.c:233 gtk/gtksingleselection.c:415
 msgid "Selected"
 msgstr "Позначений"
 
-#: gtk/gtkdropdown.c:470 gtk/gtksingleselection.c:416
+#: gtk/gtkdropdown.c:469 gtk/gtksingleselection.c:416
 msgid "Position of the selected item"
 msgstr "Розташування позначеного пункту"
 
-#: gtk/gtkdropdown.c:481 gtk/gtksingleselection.c:427
+#: gtk/gtkdropdown.c:480 gtk/gtksingleselection.c:427
 msgid "Selected Item"
 msgstr "Вибраний елемент"
 
-#: gtk/gtkdropdown.c:482 gtk/gtksingleselection.c:428
+#: gtk/gtkdropdown.c:481 gtk/gtksingleselection.c:428
 msgid "The selected item"
 msgstr "Позначений пункт"
 
-#: gtk/gtkdropdown.c:495
+#: gtk/gtkdropdown.c:494
 msgid "Enable search"
 msgstr "Дозволено пошук"
 
-#: gtk/gtkdropdown.c:496
+#: gtk/gtkdropdown.c:495
 msgid "Whether to show a search entry in the popup"
 msgstr "Чи слід показувати запис пошуку у контекстній підказці"
 
-#: gtk/gtkdropdown.c:510 gtk/gtknumericsorter.c:282 gtk/gtkstringfilter.c:252
-#: gtk/gtkstringsorter.c:218
+#: gtk/gtkdropdown.c:509 gtk/gtknumericsorter.c:542 gtk/gtkstringfilter.c:252
+#: gtk/gtkstringsorter.c:296
 msgid "Expression"
 msgstr "Вираз"
 
-#: gtk/gtkdropdown.c:511
+#: gtk/gtkdropdown.c:510
 msgid "Expression to determine strings to search for"
 msgstr "Вираз, який визначає рядки для пошуку"
 
@@ -2551,7 +2556,7 @@ msgstr ""
 "Горизонтальне вирівнювання, від 0 (ліворуч) до 1 (праворуч). Інвертується "
 "для розташування RTL(справа-наліво)"
 
-#: gtk/gtkeditablelabel.c:341
+#: gtk/gtkeditablelabel.c:370
 msgid "Whether the widget is in editing mode"
 msgstr "Чи перебуває віджет у стані редагування"
 
@@ -3134,7 +3139,7 @@ msgstr "Зручна для читання назва цього фільтра"
 msgid "The filter set for this model"
 msgstr "Набір фільтрів для цієї моделі"
 
-#: gtk/gtkfilterlistmodel.c:577
+#: gtk/gtkfilterlistmodel.c:577 gtk/gtksortlistmodel.c:777
 msgid "Incremental"
 msgstr "Нарощувальне"
 
@@ -3146,7 +3151,7 @@ msgstr "Нарощувальне фільтрування записів"
 msgid "The model being filtered"
 msgstr "Модель, яка фільтрується"
 
-#: gtk/gtkfilterlistmodel.c:601
+#: gtk/gtkfilterlistmodel.c:601 gtk/gtksortlistmodel.c:801
 msgid "Pending"
 msgstr "У черзі"
 
@@ -3176,12 +3181,12 @@ msgid "The selection mode"
 msgstr "Режим виділення"
 
 #: gtk/gtkflowbox.c:3597 gtk/gtkiconview.c:596 gtk/gtklistbox.c:496
-#: gtk/gtktreeview.c:1203
+#: gtk/gtktreeview.c:1159
 msgid "Activate on Single Click"
 msgstr "Активувати одиночним клацанням"
 
 #: gtk/gtkflowbox.c:3598 gtk/gtkiconview.c:597 gtk/gtklistbox.c:497
-#: gtk/gtktreeview.c:1204
+#: gtk/gtktreeview.c:1160
 msgid "Activate row on a single click"
 msgstr "Активувати рядок одиночним клацанням"
 
@@ -3515,43 +3520,43 @@ msgstr "Компонування оформлення"
 msgid "The layout for window decorations"
 msgstr "Компонування оформлення вікон"
 
-#: gtk/gtkicontheme.c:997 gtk/gtkicontheme.c:998
+#: gtk/gtkicontheme.c:1005 gtk/gtkicontheme.c:1006
 msgid "Supported icon names"
 msgstr "Підтримувані назви піктограм"
 
-#: gtk/gtkicontheme.c:1015 gtk/gtkicontheme.c:1016
+#: gtk/gtkicontheme.c:1023 gtk/gtkicontheme.c:1024
 msgid "Search path"
 msgstr "Шлях пошуку"
 
-#: gtk/gtkicontheme.c:1034 gtk/gtkicontheme.c:1035
+#: gtk/gtkicontheme.c:1042 gtk/gtkicontheme.c:1043
 msgid "Resource path"
 msgstr "Шлях до ресурсів"
 
-#: gtk/gtkicontheme.c:1050 gtk/gtkicontheme.c:1051
+#: gtk/gtkicontheme.c:1058 gtk/gtkicontheme.c:1059
 msgid "Theme name"
 msgstr "Назва теми"
 
-#: gtk/gtkicontheme.c:3571
+#: gtk/gtkicontheme.c:3576
 msgid "file"
 msgstr "файл"
 
-#: gtk/gtkicontheme.c:3572
+#: gtk/gtkicontheme.c:3577
 msgid "The file representing the icon"
 msgstr "Файл, який відповідає піктограмі"
 
-#: gtk/gtkicontheme.c:3582 gtk/gtkstack.c:356
+#: gtk/gtkicontheme.c:3587 gtk/gtkstack.c:356
 msgid "Icon name"
 msgstr "Назва піктограми"
 
-#: gtk/gtkicontheme.c:3583
+#: gtk/gtkicontheme.c:3588
 msgid "The icon name chosen during lookup"
 msgstr "Назва піктограми, яку вибрано під час пошуку"
 
-#: gtk/gtkicontheme.c:3593
+#: gtk/gtkicontheme.c:3598
 msgid "Is symbolic"
 msgstr "Є символічною"
 
-#: gtk/gtkicontheme.c:3594
+#: gtk/gtkicontheme.c:3599
 msgid "If the icon is symbolic"
 msgstr "Чи є піктограма символічною"
 
@@ -3640,11 +3645,11 @@ msgid ""
 msgstr ""
 "Як текст та значки кожного елемента розташовуються один відносно іншого"
 
-#: gtk/gtkiconview.c:543 gtk/gtktreeview.c:1070
+#: gtk/gtkiconview.c:543 gtk/gtktreeview.c:1026
 msgid "View is reorderable"
 msgstr "Перегляд можна перегрупувати"
 
-#: gtk/gtkiconview.c:550 gtk/gtktreeview.c:1189
+#: gtk/gtkiconview.c:550 gtk/gtktreeview.c:1145
 msgid "Tooltip Column"
 msgstr "Стовпчик підказки"
 
@@ -3716,7 +3721,7 @@ msgstr "Тип повідомлення"
 msgid "The type of message"
 msgstr "Тип повідомлення"
 
-#: gtk/gtkinfobar.c:373 gtk/gtksearchbar.c:317
+#: gtk/gtkinfobar.c:373 gtk/gtksearchbar.c:318
 msgid "Show Close Button"
 msgstr "Показувати кнопку закривання"
 
@@ -3904,7 +3909,7 @@ msgstr "Чи може користувач активувати пункт"
 msgid "Widget used for display"
 msgstr "Віджет, який використано для показу"
 
-#: gtk/gtklistitem.c:197 gtk/gtktreeexpander.c:470 gtk/gtktreelistmodel.c:1102
+#: gtk/gtklistitem.c:197 gtk/gtktreeexpander.c:471 gtk/gtktreelistmodel.c:1102
 msgid "Item"
 msgstr "Пункт"
 
@@ -4459,16 +4464,16 @@ msgstr "Назва групи для перетягування вкладки"
 msgid "The pages of the notebook."
 msgstr "Сторінки нотатника."
 
-#: gtk/gtknumericsorter.c:283 gtk/gtkstringfilter.c:253
-#: gtk/gtkstringsorter.c:219
+#: gtk/gtknumericsorter.c:543 gtk/gtkstringfilter.c:253
+#: gtk/gtkstringsorter.c:297
 msgid "Expression to compare with"
 msgstr "Вираз для порівняння"
 
-#: gtk/gtknumericsorter.c:293 gtk/gtktreeviewcolumn.c:393
+#: gtk/gtknumericsorter.c:553 gtk/gtktreeviewcolumn.c:393
 msgid "Sort order"
 msgstr "Порядок сортування"
 
-#: gtk/gtknumericsorter.c:294
+#: gtk/gtknumericsorter.c:554
 msgid "Whether to sort smaller numbers first"
 msgstr "Чи слід упорядковувати із розташуванням малих чисел першими"
 
@@ -4642,19 +4647,19 @@ msgstr "Може стискатися"
 msgid "Allow self to be smaller than contents"
 msgstr "Дозволити віджету бути меншим за вміст"
 
-#: gtk/gtkplacessidebar.c:4343
+#: gtk/gtkplacessidebar.c:4345
 msgid "Location to Select"
 msgstr "Місце для позначення"
 
-#: gtk/gtkplacessidebar.c:4344
+#: gtk/gtkplacessidebar.c:4346
 msgid "The location to highlight in the sidebar"
 msgstr "Місце підсвічування на бічній панелі"
 
-#: gtk/gtkplacessidebar.c:4349 gtk/gtkplacesview.c:2250
+#: gtk/gtkplacessidebar.c:4351 gtk/gtkplacesview.c:2250
 msgid "Open Flags"
 msgstr "Прапорці відкривання"
 
-#: gtk/gtkplacessidebar.c:4350 gtk/gtkplacesview.c:2251
+#: gtk/gtkplacessidebar.c:4352 gtk/gtkplacesview.c:2251
 msgid ""
 "Modes in which the calling application can open locations selected in the "
 "sidebar"
@@ -4662,54 +4667,54 @@ msgstr ""
 "Режими, у яких програма виклику може відкривати адреси, які позначено на "
 "бічній панелі"
 
-#: gtk/gtkplacessidebar.c:4356
+#: gtk/gtkplacessidebar.c:4358
 msgid "Show recent files"
 msgstr "Показувати нещодавні файли"
 
-#: gtk/gtkplacessidebar.c:4357
+#: gtk/gtkplacessidebar.c:4359
 msgid "Whether the sidebar includes a builtin shortcut for recent files"
 msgstr ""
 "Визначає, чи містить бічна панель вбудований пункт для нещодавно "
 "використаних файлів"
 
-#: gtk/gtkplacessidebar.c:4362
+#: gtk/gtkplacessidebar.c:4364
 msgid "Show “Desktop”"
 msgstr "Показувати «Стільниця»"
 
-#: gtk/gtkplacessidebar.c:4363
+#: gtk/gtkplacessidebar.c:4365
 msgid "Whether the sidebar includes a builtin shortcut to the Desktop folder"
 msgstr "Чи повинна бічна панель містити вбудований пункт теки стільниці"
 
-#: gtk/gtkplacessidebar.c:4368
+#: gtk/gtkplacessidebar.c:4370
 msgid "Show “Enter Location”"
 msgstr "Показувати «Введіть адресу»"
 
-#: gtk/gtkplacessidebar.c:4369
+#: gtk/gtkplacessidebar.c:4371
 msgid ""
 "Whether the sidebar includes a builtin shortcut to manually enter a location"
 msgstr "Чи містить бічна панель вбудований пункт введення адреси вручну"
 
-#: gtk/gtkplacessidebar.c:4374
+#: gtk/gtkplacessidebar.c:4376
 msgid "Show “Trash”"
 msgstr "Показувати «Смітник»"
 
-#: gtk/gtkplacessidebar.c:4375
+#: gtk/gtkplacessidebar.c:4377
 msgid "Whether the sidebar includes a builtin shortcut to the Trash location"
 msgstr "Чи містить бічна панель вбудований пункт теки «Смітник»"
 
-#: gtk/gtkplacessidebar.c:4380
+#: gtk/gtkplacessidebar.c:4382
 msgid "Show “Other locations”"
 msgstr "Показувати «Інші місця»"
 
-#: gtk/gtkplacessidebar.c:4381
+#: gtk/gtkplacessidebar.c:4383
 msgid "Whether the sidebar includes an item to show external locations"
 msgstr "Чи містить бічна панель вбудований пункт зовнішніх місць"
 
-#: gtk/gtkplacessidebar.c:4386
+#: gtk/gtkplacessidebar.c:4388
 msgid "Show “Starred Location”"
 msgstr "Показувати «Позначене місце»"
 
-#: gtk/gtkplacessidebar.c:4387
+#: gtk/gtkplacessidebar.c:4389
 msgid "Whether the sidebar includes an item to show starred files"
 msgstr "Чи включає бічна панель елемент для показу позначених зірками файлів"
 
@@ -5474,20 +5479,19 @@ msgstr "Передавати природну ширину"
 msgid "Propagate Natural Height"
 msgstr "Передавати природну висоту"
 
-#: gtk/gtksearchbar.c:306
+#: gtk/gtksearchbar.c:307
 msgid "Search Mode Enabled"
 msgstr "Режим пошуку увімкнено"
 
-#: gtk/gtksearchbar.c:307
+#: gtk/gtksearchbar.c:308
 msgid "Whether the search mode is on and the search bar shown"
 msgstr "Чи увімкнено режим пошуку й чи відкрита панель пошуку"
 
-#: gtk/gtksearchbar.c:318
+#: gtk/gtksearchbar.c:319
 msgid "Whether to show the close button in the toolbar"
 msgstr "Чи показувати кнопку закривання на панелі інструментів"
 
-#: gtk/gtksearchbar.c:330 gtk/gtksearchbar.c:331
-#| msgid "Accelerator Widget"
+#: gtk/gtksearchbar.c:331 gtk/gtksearchbar.c:332
 msgid "Key Capture Widget"
 msgstr "Віджет перехоплення клавіш"
 
@@ -5922,11 +5926,11 @@ msgstr "Назва сигналу"
 msgid "The name of the signal to emit"
 msgstr "Назва сигналу, який слід надіслати"
 
-#: gtk/gtkshortcutaction.c:1181 gtk/gtkshortcutsshortcut.c:718
+#: gtk/gtkshortcutaction.c:1183 gtk/gtkshortcutsshortcut.c:718
 msgid "Action Name"
 msgstr "Назва дії"
 
-#: gtk/gtkshortcutaction.c:1182
+#: gtk/gtkshortcutaction.c:1184
 msgid "The name of the action to activate"
 msgstr "Назва дії для активації"
 
@@ -6130,13 +6134,22 @@ msgstr "Зсув зрізу"
 msgid "Maximum size of slice"
 msgstr "Максимальний розмір зрізу"
 
-#: gtk/gtksortlistmodel.c:392
-msgid "The sorter for this model"
-msgstr "Сортувальник для цієї моделі"
+#: gtk/gtksortlistmodel.c:778
+#| msgid "Filter items incrementally"
+msgid "Sort items incrementally"
+msgstr "Нарощувальне упорядковування записів"
 
-#: gtk/gtksortlistmodel.c:404
+#: gtk/gtksortlistmodel.c:790
 msgid "The model being sorted"
 msgstr "Модель, яка зберігається"
+
+#: gtk/gtksortlistmodel.c:802
+msgid "Estimate of unsorted items remaining"
+msgstr "Оцінка залишкових неупорядкованих записів"
+
+#: gtk/gtksortlistmodel.c:814
+msgid "The sorter for this model"
+msgstr "Сортувальник для цієї моделі"
 
 #: gtk/gtkspinbutton.c:369
 msgid "Climb Rate"
@@ -6299,11 +6312,11 @@ msgstr "Стос"
 msgid "Associated stack for this GtkStackSidebar"
 msgstr "Пов'язаний стос для цього GtkStackSidebar"
 
-#: gtk/gtkstringfilter.c:263 gtk/gtkstringsorter.c:229
+#: gtk/gtkstringfilter.c:263 gtk/gtkstringsorter.c:307
 msgid "Ignore case"
 msgstr "Без врахування регістру"
 
-#: gtk/gtkstringfilter.c:264 gtk/gtkstringsorter.c:230
+#: gtk/gtkstringfilter.c:264 gtk/gtkstringsorter.c:308
 msgid "If matching is case sensitive"
 msgstr "Чи слід враховувати регістр символів при встановленні відповідності"
 
@@ -6984,19 +6997,19 @@ msgstr "GtkTextWindowType"
 msgid "If the toggle button should be pressed in"
 msgstr "Чи слід кнопці перемикання бути натиснутою"
 
-#: gtk/gtktreeexpander.c:459
+#: gtk/gtktreeexpander.c:460
 msgid "The child widget with the actual contents"
 msgstr "Дочірній віджет, який містить самі дані"
 
-#: gtk/gtktreeexpander.c:471
+#: gtk/gtktreeexpander.c:472
 msgid "The item held by this expander's row"
 msgstr "Запис, який зберігається у цьому рядку розгортання"
 
-#: gtk/gtktreeexpander.c:482
+#: gtk/gtktreeexpander.c:483
 msgid "List row"
 msgstr "Рядок списку"
 
-#: gtk/gtktreeexpander.c:483
+#: gtk/gtktreeexpander.c:484
 msgid "The list row to track for expander state"
 msgstr "Рядок списку для стеження за станом розгортання"
 
@@ -7052,7 +7065,7 @@ msgstr "Чи розгорнуто зараз цей рядок"
 msgid "The item held in this row"
 msgstr "Запис, який зберігається у цьому рядку"
 
-#: gtk/gtktreelistrowsorter.c:244
+#: gtk/gtktreelistrowsorter.c:545
 msgid "The underlying sorter"
 msgstr "Базовий сортувальник"
 
@@ -7089,126 +7102,126 @@ msgstr "модель"
 msgid "The model for the popover"
 msgstr "Модель для накладного меню"
 
-#: gtk/gtktreeview.c:1041
+#: gtk/gtktreeview.c:997
 msgid "TreeView Model"
 msgstr "Модель TreeView"
 
-#: gtk/gtktreeview.c:1042
+#: gtk/gtktreeview.c:998
 msgid "The model for the tree view"
 msgstr "Модель для перегляду у вигляді дерева"
 
-#: gtk/gtktreeview.c:1048
+#: gtk/gtktreeview.c:1004
 msgid "Headers Visible"
 msgstr "Заголовки видимі"
 
-#: gtk/gtktreeview.c:1049
+#: gtk/gtktreeview.c:1005
 msgid "Show the column header buttons"
 msgstr "Показувати кнопки заголовків стовпчиків"
 
-#: gtk/gtktreeview.c:1055
+#: gtk/gtktreeview.c:1011
 msgid "Headers Clickable"
 msgstr "Заголовки натискаються"
 
-#: gtk/gtktreeview.c:1056
+#: gtk/gtktreeview.c:1012
 msgid "Column headers respond to click events"
 msgstr "Заголовки стовпчиків відповідають на події клацання"
 
-#: gtk/gtktreeview.c:1062
+#: gtk/gtktreeview.c:1018
 msgid "Expander Column"
 msgstr "Колонка-розширювач"
 
-#: gtk/gtktreeview.c:1063
+#: gtk/gtktreeview.c:1019
 msgid "Set the column for the expander column"
 msgstr "Встановити колонку для розширювача"
 
-#: gtk/gtktreeview.c:1076
+#: gtk/gtktreeview.c:1032
 msgid "Enable Search"
 msgstr "Дозволено пошук"
 
-#: gtk/gtktreeview.c:1077
+#: gtk/gtktreeview.c:1033
 msgid "View allows user to search through columns interactively"
 msgstr ""
 "Перегляд дозволяє користувачу виконувати пошук у стовпчиках в інтерактивному "
 "режимі"
 
-#: gtk/gtktreeview.c:1083
+#: gtk/gtktreeview.c:1039
 msgid "Search Column"
 msgstr "Стовпчик пошуку"
 
-#: gtk/gtktreeview.c:1084
+#: gtk/gtktreeview.c:1040
 msgid "Model column to search through during interactive search"
 msgstr ""
 "Стовпчик моделі, за яким слід виконати інтерактивний пошук в міру набору"
 
-#: gtk/gtktreeview.c:1100
+#: gtk/gtktreeview.c:1056
 msgid "Fixed Height Mode"
 msgstr "Режим фіксованої висоти"
 
-#: gtk/gtktreeview.c:1101
+#: gtk/gtktreeview.c:1057
 msgid "Speeds up GtkTreeView by assuming that all rows have the same height"
 msgstr "Прискорює GtkTreeView, вважаючи що всі рядки мають ту ж саму висоту"
 
-#: gtk/gtktreeview.c:1118
+#: gtk/gtktreeview.c:1074
 msgid "Hover Selection"
 msgstr "Курсорне виділення"
 
-#: gtk/gtktreeview.c:1119
+#: gtk/gtktreeview.c:1075
 msgid "Whether the selection should follow the pointer"
 msgstr "Чи повинно виділення слідувати за вказівником"
 
-#: gtk/gtktreeview.c:1135
+#: gtk/gtktreeview.c:1091
 msgid "Hover Expand"
 msgstr "Курсорне розширення"
 
-#: gtk/gtktreeview.c:1136
+#: gtk/gtktreeview.c:1092
 msgid ""
 "Whether rows should be expanded/collapsed when the pointer moves over them"
 msgstr ""
 "Чи повинні рядки розгортатись/згортатись при переміщенні над ними вказівника"
 
-#: gtk/gtktreeview.c:1147
+#: gtk/gtktreeview.c:1103
 msgid "Show Expanders"
 msgstr "Показувати розширювачі"
 
-#: gtk/gtktreeview.c:1148
+#: gtk/gtktreeview.c:1104
 msgid "View has expanders"
 msgstr "Віджет містить розширювачі"
 
-#: gtk/gtktreeview.c:1159
+#: gtk/gtktreeview.c:1115
 msgid "Level Indentation"
 msgstr "Вирівнювання позначок"
 
-#: gtk/gtktreeview.c:1160
+#: gtk/gtktreeview.c:1116
 msgid "Extra indentation for each level"
 msgstr "Додаткове вирівнювання для кожного рівня"
 
-#: gtk/gtktreeview.c:1167
+#: gtk/gtktreeview.c:1123
 msgid "Rubber Banding"
 msgstr "Гумова стрічка"
 
-#: gtk/gtktreeview.c:1168
+#: gtk/gtktreeview.c:1124
 msgid ""
 "Whether to enable selection of multiple items by dragging the mouse pointer"
 msgstr ""
 "Чи дозволяти виділення кількох елементів перетягуванням вказівника миші"
 
-#: gtk/gtktreeview.c:1174
+#: gtk/gtktreeview.c:1130
 msgid "Enable Grid Lines"
 msgstr "Увімкнути лінії сітки"
 
-#: gtk/gtktreeview.c:1175
+#: gtk/gtktreeview.c:1131
 msgid "Whether grid lines should be drawn in the tree view"
 msgstr "Чи слід показувати лінії ґраток у віджеті"
 
-#: gtk/gtktreeview.c:1182
+#: gtk/gtktreeview.c:1138
 msgid "Enable Tree Lines"
 msgstr "Увімкнути лінії рівня вкладення"
 
-#: gtk/gtktreeview.c:1183
+#: gtk/gtktreeview.c:1139
 msgid "Whether tree lines should be drawn in the tree view"
 msgstr "Чи слід показувати лінії рівня вкладення у віджеті"
 
-#: gtk/gtktreeview.c:1190
+#: gtk/gtktreeview.c:1146
 msgid "The column in the model containing the tooltip texts for the rows"
 msgstr ""
 "Стовпчик у моделі джерела даних, що містить текстові підказки для рядків"
@@ -7351,35 +7364,35 @@ msgstr "Використовувати символічні піктограми
 msgid "Whether to use symbolic icons"
 msgstr "Чи використовувати символічні піктограми"
 
-#: gtk/gtkwidget.c:947
+#: gtk/gtkwidget.c:948
 msgid "Widget name"
 msgstr "Назва віджета"
 
-#: gtk/gtkwidget.c:948
+#: gtk/gtkwidget.c:949
 msgid "The name of the widget"
 msgstr "Назва віджета"
 
-#: gtk/gtkwidget.c:954
+#: gtk/gtkwidget.c:955
 msgid "Parent widget"
 msgstr "Батьківський віджет"
 
-#: gtk/gtkwidget.c:955
+#: gtk/gtkwidget.c:956
 msgid "The parent widget of this widget."
 msgstr "Батьківський віджет цього віджета"
 
-#: gtk/gtkwidget.c:967
+#: gtk/gtkwidget.c:968
 msgid "Root widget"
 msgstr "Кореневий віджет"
 
-#: gtk/gtkwidget.c:968
+#: gtk/gtkwidget.c:969
 msgid "The root widget in the widget tree."
 msgstr "Кореневий віджет у ієрархії віджетів."
 
-#: gtk/gtkwidget.c:974
+#: gtk/gtkwidget.c:975
 msgid "Width request"
 msgstr "Запит на встановлення ширини"
 
-#: gtk/gtkwidget.c:975
+#: gtk/gtkwidget.c:976
 msgid ""
 "Override for width request of the widget, or -1 if natural request should be "
 "used"
@@ -7387,11 +7400,11 @@ msgstr ""
 "Змінити запит на встановлення ширини цього віджета чи -1, якщо потрібно "
 "використати звичайний запит"
 
-#: gtk/gtkwidget.c:982
+#: gtk/gtkwidget.c:983
 msgid "Height request"
 msgstr "Запит на встановлення висоти"
 
-#: gtk/gtkwidget.c:983
+#: gtk/gtkwidget.c:984
 msgid ""
 "Override for height request of the widget, or -1 if natural request should "
 "be used"
@@ -7399,207 +7412,207 @@ msgstr ""
 "Змінити запит на встановлення висоти цього віджета чи -1, якщо потрібно "
 "використати звичайний запит"
 
-#: gtk/gtkwidget.c:991
+#: gtk/gtkwidget.c:992
 msgid "Whether the widget is visible"
 msgstr "Чи віджет видимий"
 
-#: gtk/gtkwidget.c:998
+#: gtk/gtkwidget.c:999
 msgid "Whether the widget responds to input"
 msgstr "Чи буде віджет використовувати ввід"
 
-#: gtk/gtkwidget.c:1010
+#: gtk/gtkwidget.c:1011
 msgid "Can focus"
 msgstr "Може мати фокус"
 
-#: gtk/gtkwidget.c:1011 gtk/gtkwidget.c:1023
+#: gtk/gtkwidget.c:1012 gtk/gtkwidget.c:1024
 msgid "Whether the widget can accept the input focus"
 msgstr "Чи може віджет мати фокус вводу"
 
-#: gtk/gtkwidget.c:1022
+#: gtk/gtkwidget.c:1023
 msgid "Focusable"
 msgstr "Може фокусуватися"
 
-#: gtk/gtkwidget.c:1029
+#: gtk/gtkwidget.c:1030
 msgid "Has focus"
 msgstr "Має фокус"
 
-#: gtk/gtkwidget.c:1030
+#: gtk/gtkwidget.c:1031
 msgid "Whether the widget has the input focus"
 msgstr "Чи має віджет фокус вводу"
 
-#: gtk/gtkwidget.c:1036
+#: gtk/gtkwidget.c:1037
 msgid "Can target"
 msgstr "Може бути ціллю"
 
-#: gtk/gtkwidget.c:1037
+#: gtk/gtkwidget.c:1038
 msgid "Whether the widget can receive pointer events"
 msgstr "Чи може віджет отримувати події вказівника"
 
-#: gtk/gtkwidget.c:1050
+#: gtk/gtkwidget.c:1051
 msgid "Focus on click"
 msgstr "Фокус при клацанні"
 
-#: gtk/gtkwidget.c:1051
+#: gtk/gtkwidget.c:1052
 msgid "Whether the widget should grab focus when it is clicked with the mouse"
 msgstr "Чи має віджет захоплювати фокус при клацанні на ньому мишею"
 
-#: gtk/gtkwidget.c:1057
+#: gtk/gtkwidget.c:1058
 msgid "Has default"
 msgstr "Типово вибраний"
 
-#: gtk/gtkwidget.c:1058
+#: gtk/gtkwidget.c:1059
 msgid "Whether the widget is the default widget"
 msgstr "Чи віджет є \"типовим елементом\""
 
-#: gtk/gtkwidget.c:1064
+#: gtk/gtkwidget.c:1065
 msgid "Receives default"
 msgstr "Типова дія"
 
-#: gtk/gtkwidget.c:1065
+#: gtk/gtkwidget.c:1066
 msgid "If TRUE, the widget will receive the default action when it is focused"
 msgstr "Якщо істинно, то віджет отримуватиме типову дію, коли отримає фокус"
 
-#: gtk/gtkwidget.c:1077
+#: gtk/gtkwidget.c:1078
 msgid "The cursor to show when hovering above widget"
 msgstr "Курсор, який слід показувати при наведенні на цей віджет"
 
-#: gtk/gtkwidget.c:1091
+#: gtk/gtkwidget.c:1092
 msgid "Has tooltip"
 msgstr "Має підказку"
 
-#: gtk/gtkwidget.c:1092
+#: gtk/gtkwidget.c:1093
 msgid "Whether this widget has a tooltip"
 msgstr "Чи цей віджет має підказку"
 
-#: gtk/gtkwidget.c:1113
+#: gtk/gtkwidget.c:1114
 msgid "Tooltip Text"
 msgstr "Текст підказки"
 
-#: gtk/gtkwidget.c:1114 gtk/gtkwidget.c:1136
+#: gtk/gtkwidget.c:1115 gtk/gtkwidget.c:1137
 msgid "The contents of the tooltip for this widget"
 msgstr "Вміст підказки для цього віджета"
 
-#: gtk/gtkwidget.c:1135
+#: gtk/gtkwidget.c:1136
 msgid "Tooltip markup"
 msgstr "Вміст підказки"
 
-#: gtk/gtkwidget.c:1148
+#: gtk/gtkwidget.c:1149
 msgid "How to position in extra horizontal space"
 msgstr "Як позиціювати в додатковому горизонтальному просторі"
 
-#: gtk/gtkwidget.c:1161
+#: gtk/gtkwidget.c:1162
 msgid "How to position in extra vertical space"
 msgstr "Як позиціювати в додатковому вертикальному просторі"
 
-#: gtk/gtkwidget.c:1178
+#: gtk/gtkwidget.c:1179
 msgid "Margin on Start"
 msgstr "Поле на початку"
 
-#: gtk/gtkwidget.c:1179
+#: gtk/gtkwidget.c:1180
 msgid "Pixels of extra space on the start"
 msgstr "Пікселів додаткового простору на початку"
 
-#: gtk/gtkwidget.c:1196
+#: gtk/gtkwidget.c:1197
 msgid "Margin on End"
 msgstr "Поле у кінці"
 
-#: gtk/gtkwidget.c:1197
+#: gtk/gtkwidget.c:1198
 msgid "Pixels of extra space on the end"
 msgstr "Пікселів додаткового простору в кінці"
 
-#: gtk/gtkwidget.c:1213
+#: gtk/gtkwidget.c:1214
 msgid "Margin on Top"
 msgstr "Поле на верхівці"
 
-#: gtk/gtkwidget.c:1214
+#: gtk/gtkwidget.c:1215
 msgid "Pixels of extra space on the top side"
 msgstr "Пікселів додаткового простору по верхню сторону"
 
-#: gtk/gtkwidget.c:1230
+#: gtk/gtkwidget.c:1231
 msgid "Margin on Bottom"
 msgstr "Поле на дні"
 
-#: gtk/gtkwidget.c:1231
+#: gtk/gtkwidget.c:1232
 msgid "Pixels of extra space on the bottom side"
 msgstr "Пікселів додаткового простору по нижню сторону"
 
-#: gtk/gtkwidget.c:1243
+#: gtk/gtkwidget.c:1244
 msgid "Horizontal Expand"
 msgstr "Горизонтальне розширення"
 
-#: gtk/gtkwidget.c:1244
+#: gtk/gtkwidget.c:1245
 msgid "Whether widget wants more horizontal space"
 msgstr "Чи віджет потребує більше горизонтального простору"
 
-#: gtk/gtkwidget.c:1255
+#: gtk/gtkwidget.c:1256
 msgid "Horizontal Expand Set"
 msgstr "Вказати горизонтальне розширення"
 
-#: gtk/gtkwidget.c:1256
+#: gtk/gtkwidget.c:1257
 msgid "Whether to use the hexpand property"
 msgstr "Чи використовувати властивості hexpand"
 
-#: gtk/gtkwidget.c:1267
+#: gtk/gtkwidget.c:1268
 msgid "Vertical Expand"
 msgstr "Вертикальне розширення"
 
-#: gtk/gtkwidget.c:1268
+#: gtk/gtkwidget.c:1269
 msgid "Whether widget wants more vertical space"
 msgstr "Чи віджет потребує більше горизонтального простору"
 
-#: gtk/gtkwidget.c:1279
+#: gtk/gtkwidget.c:1280
 msgid "Vertical Expand Set"
 msgstr "Вказати вертикальне розширення"
 
-#: gtk/gtkwidget.c:1280
+#: gtk/gtkwidget.c:1281
 msgid "Whether to use the vexpand property"
 msgstr "Чи використовувати властивості vexpand"
 
-#: gtk/gtkwidget.c:1294
+#: gtk/gtkwidget.c:1295
 msgid "Opacity for Widget"
 msgstr "Прозорість віджета"
 
-#: gtk/gtkwidget.c:1295
+#: gtk/gtkwidget.c:1296
 msgid "The opacity of the widget, from 0 to 1"
 msgstr "Прозорість віджета, від 0 до 1"
 
-#: gtk/gtkwidget.c:1307
+#: gtk/gtkwidget.c:1308
 msgid "Overflow"
 msgstr "Переповнення"
 
-#: gtk/gtkwidget.c:1308
+#: gtk/gtkwidget.c:1309
 msgid "How content outside the widget’s content area is treated"
 msgstr "Як обробляти дані поза областю вмісту віджета"
 
-#: gtk/gtkwidget.c:1321
+#: gtk/gtkwidget.c:1322
 msgid "Scale factor"
 msgstr "Масштаб"
 
-#: gtk/gtkwidget.c:1322
+#: gtk/gtkwidget.c:1323
 msgid "The scaling factor of the window"
 msgstr "Коефіцієнт масштабування вікна"
 
-#: gtk/gtkwidget.c:1334
+#: gtk/gtkwidget.c:1335
 msgid "CSS Name"
 msgstr "Назва CSS"
 
-#: gtk/gtkwidget.c:1335
+#: gtk/gtkwidget.c:1336
 msgid "The name of this widget in the CSS tree"
 msgstr "Назва цього віджета в ієрархії CSS"
 
-#: gtk/gtkwidget.c:1346
+#: gtk/gtkwidget.c:1347
 msgid "CSS Style Classes"
 msgstr "Класи стилів CSS"
 
-#: gtk/gtkwidget.c:1347
+#: gtk/gtkwidget.c:1348
 msgid "List of CSS classes"
 msgstr "Список класів CSS"
 
-#: gtk/gtkwidget.c:1359
+#: gtk/gtkwidget.c:1360
 msgid "Layout Manager"
 msgstr "Керування компонуванням"
 
-#: gtk/gtkwidget.c:1360
+#: gtk/gtkwidget.c:1361
 msgid "The layout manager used to layout children of the widget"
 msgstr ""
 "Засіб керування компонуванням, який використано для компонування дочірніх "
@@ -7796,2709 +7809,3 @@ msgstr "Назва профілю кольору"
 #: modules/printbackends/gtkprintercups.c:94
 msgid "The title of the color profile to use"
 msgstr "Заголовок вікна вибору профілю кольору"
-
-#~ msgid "The type of items of this list"
-#~ msgstr "Тип пунктів у цьому списку"
-
-#~ msgid "Property"
-#~ msgstr "Властивість"
-
-#~ msgid "Item property to store selection state in"
-#~ msgstr "Властивість пункту, до якої слід записати стан позначення"
-
-#~ msgid "has filter"
-#~ msgstr "має фільтр"
-
-#~ msgid "has sort"
-#~ msgstr "має упорядкування"
-
-#~ msgid "If a sort function is set for this model"
-#~ msgstr "Чи встановлено функцію упорядкування для цієї моделі"
-
-#~ msgid "Application menu"
-#~ msgstr "Меню програм"
-
-#~ msgid "The GMenuModel for the application menu"
-#~ msgstr "GMenuModel для меню програм"
-
-#~ msgid "The subtitle to display"
-#~ msgstr "Підзаголовок для показу"
-
-#~ msgid "Custom Title"
-#~ msgstr "Нетиповий заголовок"
-
-#~ msgid "Has Subtitle"
-#~ msgstr "Має підзаголовок"
-
-#~ msgid "Decoration Layout Set"
-#~ msgstr "Компонування оформлення встановлено"
-
-#~ msgid "Whether the decoration-layout property has been set"
-#~ msgstr "Чи було встановлено властивість decoration-layout"
-
-#~ msgid "Homogeneous sizing"
-#~ msgstr "Однорідний розмір"
-
-#~ msgid "Border relief"
-#~ msgstr "Рельєф границі"
-
-#~ msgid "The border relief style"
-#~ msgstr "Стиль рельєфу границі"
-
-#~ msgid "Frame shadow"
-#~ msgstr "Тінь рамки"
-
-#~| msgid "Appearance of the frame border"
-#~ msgid "Appearance of the frame"
-#~ msgstr "Вигляд рамки"
-
-#~ msgid "Pattern"
-#~ msgstr "Шаблон"
-
-#~ msgid ""
-#~ "A string with _ characters in positions correspond to characters in the "
-#~ "text to underline"
-#~ msgstr ""
-#~ "Рядок із символами підкреслення (_) в позиціях відповідних до позиції "
-#~ "символів, які потрібно підкреслити в тексті"
-
-#~ msgid "Track visited links"
-#~ msgstr "Колір відвіданого гіперпосилання"
-
-#~ msgid "Whether visited links should be tracked"
-#~ msgstr "Чи показувати відвідані посилання"
-
-#~ msgid "Shadow Type"
-#~ msgstr "Тип тіні"
-
-#~ msgid "Style of bevel around the contents"
-#~ msgstr "Стиль фаски навколо вмісту"
-
-#~ msgid "Shadow type"
-#~ msgstr "Тип тіні"
-
-#~ msgid "Determines how the shadowed box around the viewport is drawn"
-#~ msgstr "Визначає спосіб малювання тіні навколо порту перегляду"
-
-#~ msgid "Is focus"
-#~ msgstr "Є фокусом"
-
-#~ msgid "Whether the widget is the focus widget within the toplevel"
-#~ msgstr "Чи є віджет віджетом фокусу на найвищому рівні"
-
-#~ msgid "Cursor type"
-#~ msgstr "Тип курсора"
-
-#~ msgid "Standard cursor type"
-#~ msgstr "Стандартний тип курсора"
-
-#~ msgid "Device manager"
-#~ msgstr "Менеджер пристрою"
-
-#~ msgid "Device manager which the device belongs to"
-#~ msgstr "Менеджер пристрою, якому він належить "
-
-#~ msgid "Input mode for the device"
-#~ msgstr "Режим вводу для пристрою"
-
-#~ msgid "Display for the device manager"
-#~ msgstr "Дисплей для цього менеджера пристрою"
-
-#~ msgid "Window"
-#~ msgstr "Вікно"
-
-#~ msgid "Font options"
-#~ msgstr "Параметри шрифту"
-
-#~ msgid "The default font options for the screen"
-#~ msgstr "Типові параметри шрифту для екрану"
-
-#~ msgid "Font resolution"
-#~ msgstr "Роздільна здатність шрифту"
-
-#~ msgid "The resolution for fonts on the screen"
-#~ msgstr "Роздільна здатність шрифту на екрані"
-
-#~ msgid "A unique name for the action."
-#~ msgstr "Унікальна назва для дії."
-
-#~ msgid "The label used for menu items and buttons that activate this action."
-#~ msgstr ""
-#~ "Позначка, що використовується для меню та кнопок, які ініціюють дану дію."
-
-#~ msgid "Short label"
-#~ msgstr "Скорочена позначка"
-
-#~ msgid "A shorter label that may be used on toolbar buttons."
-#~ msgstr ""
-#~ "Скорочена позначка, яка може використовуватись для кнопок панелі "
-#~ "керування."
-
-#~ msgid "Tooltip"
-#~ msgstr "Підказка"
-
-#~ msgid "A tooltip for this action."
-#~ msgstr "Підказка до цієї дії."
-
-#~ msgid "Stock Icon"
-#~ msgstr "Вбудований значок"
-
-#~ msgid "The stock icon displayed in widgets representing this action."
-#~ msgstr ""
-#~ "Вбудований піктограма, що показується у віджетах, які представляють цю "
-#~ "дію."
-
-#~ msgid "GIcon"
-#~ msgstr "GIcon"
-
-#~ msgid "Visible when horizontal"
-#~ msgstr "Видимий при горизонтальному розташуванні"
-
-#~ msgid ""
-#~ "Whether the toolbar item is visible when the toolbar is in a horizontal "
-#~ "orientation."
-#~ msgstr ""
-#~ "Чи буде елемент панелі інструментів видимий при горизонтальному "
-#~ "розташуванні панелі інструментів."
-
-#~ msgid "Visible when overflown"
-#~ msgstr "Видимий при переповненні"
-
-#~ msgid ""
-#~ "When TRUE, toolitem proxies for this action are represented in the "
-#~ "toolbar overflow menu."
-#~ msgstr ""
-#~ "Якщо встановлено, тоді проксі-елементи меню для цієї дії будуть "
-#~ "перекривати меню на панелі інструментів."
-
-#~ msgid "Visible when vertical"
-#~ msgstr "Видимий при вертикальному розташуванні"
-
-#~ msgid ""
-#~ "Whether the toolbar item is visible when the toolbar is in a vertical "
-#~ "orientation."
-#~ msgstr ""
-#~ "Чи буде елемент панелі інструментів видимий при вертикальному "
-#~ "розташуванні панелі інструментів."
-
-#~ msgid "Is important"
-#~ msgstr "Важливо"
-
-#~ msgid ""
-#~ "Whether the action is considered important. When TRUE, toolitem proxies "
-#~ "for this action show text in GTK_TOOLBAR_BOTH_HORIZ mode."
-#~ msgstr ""
-#~ "Чи вважається ця дія важливою. Якщо встановлено, тоді проксі-елементи "
-#~ "панелі для цієї дії будуть показувати текст в режимі "
-#~ "GTK_TOOLBAR_BOTH_HORIZ."
-
-#~ msgid "Hide if empty"
-#~ msgstr "Приховувати, якщо порожній"
-
-#~ msgid "When TRUE, empty menu proxies for this action are hidden."
-#~ msgstr ""
-#~ "Якщо встановлено, тоді порожні проксі-елементи меню для цієї дії будуть "
-#~ "приховані."
-
-#~ msgid "Action Group"
-#~ msgstr "Група дій"
-
-#~ msgid ""
-#~ "The GtkActionGroup this GtkAction is associated with, or NULL (for "
-#~ "internal use)."
-#~ msgstr ""
-#~ "GtkActionGroup, з якою пов'язаний цей об'єкт GtkAction, або NULL (для "
-#~ "внутрішнього використання)."
-
-#~ msgid "Always show image"
-#~ msgstr "Завжди показувати значок"
-
-#~ msgid "Whether the image will always be shown"
-#~ msgstr "Чи показувати значок у меню"
-
-#~ msgid "A name for the action group."
-#~ msgstr "Назва групи групи дій."
-
-#~ msgid "Whether the action group is enabled."
-#~ msgstr "Чи буде група дій ввімкненою."
-
-#~ msgid "Whether the action group is visible."
-#~ msgstr "Чи буде група дій видимою."
-
-#~| msgid "Accelerator Mode"
-#~ msgid "Accelerator Group"
-#~ msgstr "Група прискорювачів"
-
-#~ msgid "The accelerator group the actions of this group should use."
-#~ msgstr "Група прискорювачів, яку мають використовувати дії з цієї групи."
-
-#~ msgid "Related Action"
-#~ msgstr "Пов'язані дії"
-
-#~ msgid "The action this activatable will activate and receive updates from"
-#~ msgstr ""
-#~ "Активація цього елементу призведе до активації та отримання оновлень з"
-
-#~ msgid "Use Action Appearance"
-#~ msgstr "Використовувати властивості вигляду дії"
-
-#~ msgid "Whether to use the related actions appearance properties"
-#~ msgstr "Чи використовувати властивості вигляду відповідних дій"
-
-#~ msgid "Horizontal alignment"
-#~ msgstr "Горизонтальне вирівнювання"
-
-#~ msgid ""
-#~ "Horizontal position of child in available space. 0.0 is left aligned, 1.0 "
-#~ "is right aligned"
-#~ msgstr ""
-#~ "Горизонтальне положення вкладеного елемента в доступному просторі. 0.0 — "
-#~ "вирівняно по лівому краю, 1.0 — вирівняно по правому краю"
-
-#~ msgid "Vertical alignment"
-#~ msgstr "Вертикальне вирівнювання"
-
-#~ msgid ""
-#~ "Vertical position of child in available space. 0.0 is top aligned, 1.0 is "
-#~ "bottom aligned"
-#~ msgstr ""
-#~ "Вертикальне положення вкладеного елемента в доступному просторі. 0.0 — "
-#~ "вирівняно по верхньому краю, 1.0 — вирівняно по нижньому краю"
-
-#~ msgid "Horizontal scale"
-#~ msgstr "Горизонтальний масштаб"
-
-#~ msgid ""
-#~ "If available horizontal space is bigger than needed for the child, how "
-#~ "much of it to use for the child. 0.0 means none, 1.0 means all"
-#~ msgstr ""
-#~ "Якщо доступний горизонтальний простір більше необхідного для елемента, "
-#~ "скільки буде використано цим елементом. 0.0 — нічого, 1.0 — все"
-
-#~ msgid "Vertical scale"
-#~ msgstr "Вертикальний масштаб"
-
-#~ msgid ""
-#~ "If available vertical space is bigger than needed for the child, how much "
-#~ "of it to use for the child. 0.0 means none, 1.0 means all"
-#~ msgstr ""
-#~ "Якщо доступний вертикальний простір більше необхідного для елемента, "
-#~ "скільки буде використано цим елементом. 0.0 — нічого, 1.0 — все"
-
-#~ msgid "Top Padding"
-#~ msgstr "Доповнення згори"
-
-#~ msgid "The padding to insert at the top of the widget."
-#~ msgstr "Простір, що додається до елемента керування згори."
-
-#~ msgid "Bottom Padding"
-#~ msgstr "Доповнення знизу"
-
-#~ msgid "The padding to insert at the bottom of the widget."
-#~ msgstr "Простір, що додається до елемента керування знизу."
-
-#~ msgid "Left Padding"
-#~ msgstr "Доповнення зліва"
-
-#~ msgid "Right Padding"
-#~ msgstr "Доповнення справа"
-
-#~ msgid "The padding to insert at the right of the widget."
-#~ msgstr "Простір, що додається до елемента керування справа."
-
-#~ msgid "Arrow direction"
-#~ msgstr "Напрям стрілки"
-
-#~ msgid "The direction the arrow should point"
-#~ msgstr "Напрям стрілки"
-
-#~ msgid "Arrow shadow"
-#~ msgstr "Тінь стрілки"
-
-#~ msgid "Appearance of the shadow surrounding the arrow"
-#~ msgstr "Зовнішній вигляд тіні, що оточує стрілку"
-
-#~ msgid "Arrow Scaling"
-#~ msgstr "Масштаб стрілки"
-
-#~ msgid "Amount of space used up by arrow"
-#~ msgstr "Простір, що займає стрілка"
-
-#~ msgid "Has Opacity Control"
-#~ msgstr "Має керування прозорістю"
-
-#~ msgid "Whether the color selector should allow setting opacity"
-#~ msgstr "Чи повинен вибір кольору дозволяти встановити прозорість"
-
-#~ msgid "Has palette"
-#~ msgstr "Має палітру"
-
-#~ msgid "The current color"
-#~ msgstr "Поточний колір."
-
-#~ msgid "Current Alpha"
-#~ msgstr "Поточний альфа-канал"
-
-#~ msgid "The current opacity value (0 fully transparent, 65535 fully opaque)"
-#~ msgstr ""
-#~ "Поточне значення непрозорості (\"0\" — абсолютно прозоре, \"65535\" — "
-#~ "абсолютно непрозоре)"
-
-#~ msgid "Current RGBA"
-#~ msgstr "Теперішній RGBA"
-
-#~ msgid "The current RGBA color"
-#~ msgstr "Теперішній колір RGBA"
-
-#~ msgid "Color Selection"
-#~ msgstr "Вибір кольору"
-
-#~ msgid "The color selection embedded in the dialog."
-#~ msgstr "Вибір кольору вбудовано у діалог."
-
-#~ msgid "OK Button"
-#~ msgstr "Кнопка Гаразд"
-
-#~ msgid "The OK button of the dialog."
-#~ msgstr "Кнопка Гаразд у діалозі"
-
-#~ msgid "Cancel Button"
-#~ msgstr "Кнопка Скасувати"
-
-#~ msgid "The cancel button of the dialog."
-#~ msgstr "Кнопка Скасувати у діалозі"
-
-#~ msgid "Help Button"
-#~ msgstr "Кнопка Довідка"
-
-#~ msgid "The help button of the dialog."
-#~ msgstr "Кнопка Довідка у діалозі"
-
-#~ msgid "Font name"
-#~ msgstr "Назва шрифту"
-
-#~ msgid "The string that represents this font"
-#~ msgstr "Рядок який представляє цей шрифт"
-
-#~ msgid "Appearance of the shadow that surrounds the container"
-#~ msgstr "Вигляд тіні, що оточує контейнер"
-
-#~ msgid "Handle position"
-#~ msgstr "Позиція регулятора"
-
-#~ msgid "Position of the handle relative to the child widget"
-#~ msgstr "Позиція регулятора відносно вкладеного віджета"
-
-#~ msgid "Snap edge"
-#~ msgstr "Вирівнювання країв"
-
-#~ msgid ""
-#~ "Side of the handlebox that's lined up with the docking point to dock the "
-#~ "handlebox"
-#~ msgstr ""
-#~ "Бік органу керування, вирівняний по точці стикування для стикування "
-#~ "органу керування"
-
-#~ msgid "Snap edge set"
-#~ msgstr "Встановлення вирівнювання країв"
-
-#~ msgid ""
-#~ "Whether to use the value from the snap_edge property or a value derived "
-#~ "from handle_position"
-#~ msgstr ""
-#~ "Використовувати значення властивості snap_edge чи значення отримане з "
-#~ "handle_position"
-
-#~ msgid "Child Detached"
-#~ msgstr "Дочірній елемент від'єднано"
-
-#~ msgid ""
-#~ "A boolean value indicating whether the handlebox's child is attached or "
-#~ "detached."
-#~ msgstr ""
-#~ "Двійкове значення, що показує, чи дочірній елемент handlebox приєднаний "
-#~ "чи від'єднаний."
-
-#~ msgid "Image widget"
-#~ msgstr "Віджет зображення"
-
-#~ msgid "Child widget to appear next to the menu text"
-#~ msgstr "Спадкоємний віджет, що з'являтиметься за текстом меню"
-
-#~ msgid "Use stock"
-#~ msgstr "Використовувати влаштоване"
-
-#~ msgid "Whether to use the label text to create a stock menu item"
-#~ msgstr ""
-#~ "Чи використовувати текст позначки вбудованого значка при створенні "
-#~ "елемента меню"
-
-#~ msgid "Accel Group"
-#~ msgstr "Група прискорювачів"
-
-#~ msgid "The Accel Group to use for stock accelerator keys"
-#~ msgstr ""
-#~ "Група прискорювачів для додавання комбінацій клавіш для вбудованого значка"
-
-#~ msgid "X pad"
-#~ msgstr "Заповнення по горизонталі"
-
-#~ msgid ""
-#~ "The amount of space to add on the left and right of the widget, in pixels"
-#~ msgstr "Простір, що додається до віджета ліворуч і праворуч, у точках"
-
-#~ msgid "Y pad"
-#~ msgstr "Заповнення по вертикалі"
-
-#~ msgid ""
-#~ "The amount of space to add on the top and bottom of the widget, in pixels"
-#~ msgstr "Простір, що додається до віджета зверху і знизу, у точках"
-
-#~ msgid "Icon's count"
-#~ msgstr "Кількість піктограм"
-
-#~ msgid "The count of the emblem currently displayed"
-#~ msgstr "Кількість емблем, які зараз показано "
-
-#~ msgid "Icon's label"
-#~ msgstr "Мітка піктограми"
-
-#~ msgid "The label to be displayed over the icon"
-#~ msgstr "Мітка, яку буде показано на піктограмі"
-
-#~ msgid "Icon's style context"
-#~ msgstr "Стиль контексту піктограми"
-
-#~ msgid "The style context to theme the icon appearance"
-#~ msgstr "Стиль контексту для теми вигляду піктограм"
-
-#~ msgid "Background icon"
-#~ msgstr "Піктограма тла"
-
-#~ msgid "The icon for the number emblem background"
-#~ msgstr "Піктограма для кількості емблеми тла"
-
-#~ msgid "Background icon name"
-#~ msgstr "Назва піктограми тла"
-
-#~ msgid "The icon name for the number emblem background"
-#~ msgstr "Назва піктограми для кількості емблем тла"
-
-#~ msgid ""
-#~ "The value returned by gtk_radio_action_get_current_value() when this "
-#~ "action is the current action of its group."
-#~ msgstr ""
-#~ "Значення, яке повертає gtk_radio_action_get_current_value() коли ця дія є "
-#~ "поточною дією у групі."
-
-#~ msgid "The radio action whose group this action belongs to."
-#~ msgstr "Дія-перемикач, групі якої належить ця дія."
-
-#~ msgid "The current value"
-#~ msgstr "Поточне значення"
-
-#~ msgid ""
-#~ "The value property of the currently active member of the group to which "
-#~ "this action belongs."
-#~ msgstr ""
-#~ "Значення властивості поточного активного члена групи, до якої належить "
-#~ "дія."
-
-#~ msgid "Show Numbers"
-#~ msgstr "Показувати номери"
-
-#~ msgid "Whether the items should be displayed with a number"
-#~ msgstr "Чи слід показувати номери з пункти"
-
-#~ msgid "Pixbuf"
-#~ msgstr "Pixbuf"
-
-#~ msgid "Stock ID"
-#~ msgstr "ID вбудованого значка"
-
-#~ msgid "Stock ID for a stock image to display"
-#~ msgstr "Ідентифікатор вбудованого зображення для показу"
-
-#~ msgid "Screen"
-#~ msgstr "Екран"
-
-#~ msgid "The screen where this status icon will be displayed"
-#~ msgstr "Екран, на якому буде показано цю піктограму  зі статусом"
-
-#~ msgid "Embedded"
-#~ msgstr "Вбудований"
-
-#~ msgid "Whether the status icon is embedded"
-#~ msgstr "Чи піктограма стану вбудована"
-
-#~ msgid "The orientation of the tray"
-#~ msgstr "Орієнтація лотка"
-
-#~ msgid "Whether this tray icon has a tooltip"
-#~ msgstr "Чи має цей значок панелі сповіщень контекстну підказку"
-
-#~ msgid "The contents of the tooltip for this tray icon"
-#~ msgstr "Вміст підказки значка панелі сповіщень"
-
-#~ msgid "Style context"
-#~ msgstr "Стиль контексту"
-
-#~ msgid "GtkStyleContext to get style from"
-#~ msgstr "GtkStyleContext для отримання стилю з"
-
-#~ msgid "Rows"
-#~ msgstr "Рядки"
-
-#~ msgid "The number of rows in the table"
-#~ msgstr "Кількість рядків у таблиці"
-
-#~ msgid "The number of columns in the table"
-#~ msgstr "Кількість стовпчиків у таблиці"
-
-#~ msgid "If TRUE, the table cells are all the same width/height"
-#~ msgstr "При значенні TRUE, комірки таблиці мають однакову ширину і висоту"
-
-#~ msgid "Right attachment"
-#~ msgstr "Додавання справа"
-
-#~ msgid "The column number to attach the right side of a child widget to"
-#~ msgstr ""
-#~ "Кількість стовпчиків, що додаються до правого краю вкладеного елемента"
-
-#~ msgid "The row number to attach the top of a child widget to"
-#~ msgstr ""
-#~ "Кількість рядків, що додаються до верхнього краю вкладеного елемента"
-
-#~ msgid "Bottom attachment"
-#~ msgstr "Додавання знизу"
-
-#~ msgid "The row number to attach the bottom of the child to"
-#~ msgstr "Кількість рядків, що додається до нижнього краю вкладеного елемента"
-
-#~ msgid "Horizontal options"
-#~ msgstr "Горизонтальні параметри"
-
-#~ msgid "Options specifying the horizontal behaviour of the child"
-#~ msgstr ""
-#~ "Параметри, що визначають горизонтальну поведінку вкладеного елемента"
-
-#~ msgid "Vertical options"
-#~ msgstr "Вертикальні параметри"
-
-#~ msgid "Options specifying the vertical behaviour of the child"
-#~ msgstr "Параметри, що визначають вертикальну поведінку вкладеного елемента"
-
-#~ msgid "Horizontal padding"
-#~ msgstr "Горизонтальний відступ"
-
-#~ msgid ""
-#~ "Extra space to put between the child and its left and right neighbors, in "
-#~ "pixels"
-#~ msgstr ""
-#~ "Додатковий інтервал, в точках, між вкладеним елементом і елементами, що "
-#~ "знаходяться ліворуч і праворуч від нього"
-
-#~ msgid "Vertical padding"
-#~ msgstr "Вертикальний відступ"
-
-#~ msgid ""
-#~ "Extra space to put between the child and its upper and lower neighbors, "
-#~ "in pixels"
-#~ msgstr ""
-#~ "Додатковий інтервал, в точках, між вкладеним елементом і елементами, що "
-#~ "знаходяться під і над ним"
-
-#~ msgid "Theming engine name"
-#~ msgstr "Назва рушія тем"
-
-#~ msgid "Create the same proxies as a radio action"
-#~ msgstr "Створити такі ж проксі як і радіо-дія"
-
-#~ msgid "Whether the proxies for this action look like radio action proxies"
-#~ msgstr "Чи повинні проксі для цих дій виглядати як проксі радіо-дії "
-
-#~ msgid "Whether the toggle action should be active"
-#~ msgstr "Чи слід увімкнути перемикання"
-
-#~ msgid "Foreground color"
-#~ msgstr "Колір переднього плану"
-
-#~ msgid "Foreground color for symbolic icons"
-#~ msgstr "Колір тексту для символічних піктограм"
-
-#~ msgid "Error color"
-#~ msgstr "Колір помилки"
-
-#~ msgid "Error color for symbolic icons"
-#~ msgstr "Колір помилки для символічних піктограм"
-
-#~ msgid "Warning color"
-#~ msgstr "Колір попередження"
-
-#~ msgid "Warning color for symbolic icons"
-#~ msgstr "Колір попередження для символічних піктограм"
-
-#~ msgid "Success color"
-#~ msgstr "Колір успіху"
-
-#~ msgid "Success color for symbolic icons"
-#~ msgstr "Колір успіху для символічних піктограм"
-
-#~ msgid "Padding"
-#~ msgstr "Доповнення"
-
-#~ msgid "Padding that should be put around icons in the tray"
-#~ msgstr "Проміжок, який слід поставити навколо піктограм у лотку"
-
-#~ msgid "The pixel size that icons should be forced to, or zero"
-#~ msgstr ""
-#~ "Розмір у пікселях, до якого потрібно змінити розмір піктограм, або нуль"
-
-#~ msgid "Add tearoffs to menus"
-#~ msgstr "Додати елементи відривання до меню"
-
-#~ msgid "Whether tearoff menu items should be added to menus"
-#~ msgstr "Чи повинні додаватись до меню елементи відривання"
-
-#~ msgid "An XML string describing the merged UI"
-#~ msgstr "XML рядок, що описує сполучений UI"
-
-#~ msgid ""
-#~ "A logo for the about box. If this is not set, it defaults to "
-#~ "gtk_window_get_default_icon_list()"
-#~ msgstr ""
-#~ "Емблема для вікна \"Про програму\". Якщо не встановлено, типово "
-#~ "використовується gtk_window_get_default_icon_list()"
-
-#~ msgid "Accelerator Closure"
-#~ msgstr "Об'єкт Closure комбінації клавіш"
-
-#~ msgid "The closure to be monitored for accelerator changes"
-#~ msgstr "Об'єкт GClosure, в якому показано зміни комбінації клавіш"
-
-#~ msgid ""
-#~ "A GtkPackType indicating whether the child is packed with reference to "
-#~ "the start or end of the parent"
-#~ msgstr ""
-#~ "Об'єкт GtkPackType, що визначає відносно чого упаковується вкладений "
-#~ "об'єкт -- відносно початку, кінця, чи батьківського об'єкта"
-
-#~ msgid "Header Padding"
-#~ msgstr "Доповнення заголовку"
-
-#~ msgid "Number of pixels around the header."
-#~ msgstr "Простір, що додається до заголовку елемента керування."
-
-#~ msgid "Content Padding"
-#~ msgstr "Доповнення до вмісту"
-
-#~ msgid "Number of pixels around the content pages."
-#~ msgstr "Простір, що додається до вмісту елемента керування."
-
-#~ msgid "Header image for the assistant page"
-#~ msgstr "Зображення у заголовку сторінки помічника"
-
-#~ msgid "Sidebar image"
-#~ msgstr "Бічне зображення"
-
-#~ msgid "Sidebar image for the assistant page"
-#~ msgstr "Зображення збоку сторінки помічника"
-
-#~| msgid "Whether this tag affects background height"
-#~ msgid "Whether the assistant adds padding around the page"
-#~ msgstr "Визначає, чи додає помічник фаски навколо сторінки"
-
-#~ msgid "Minimum child width"
-#~ msgstr "Мінімальна ширина вкладеного елементу"
-
-#~ msgid "Minimum width of buttons inside the box"
-#~ msgstr "Мінімальна ширина кнопок в контейнері"
-
-#~ msgid "Minimum child height"
-#~ msgstr "Мінімальна висота вкладеного елементу"
-
-#~ msgid "Minimum height of buttons inside the box"
-#~ msgstr "Мінімальна висота кнопок в контейнері"
-
-#~ msgid "Child internal width padding"
-#~ msgstr "Внутрішнє заповнення по ширині"
-
-#~ msgid "Amount to increase child's size on either side"
-#~ msgstr "Степінь збільшення розміру елемента по горизонталі"
-
-#~ msgid "Child internal height padding"
-#~ msgstr "Внутрішнє заповнення по висоті"
-
-#~ msgid "Amount to increase child's size on the top and bottom"
-#~ msgstr "Степінь збільшення розміру елемента по вертикалі"
-
-#~ msgid "Layout style"
-#~ msgstr "Стиль розміщення"
-
-#~ msgid ""
-#~ "How to lay out the buttons in the box. Possible values are: spread, edge, "
-#~ "start and end"
-#~ msgstr ""
-#~ "Як розміщати кнопки у вікні. Можливі значення: spread, edge, start і end"
-
-#~ msgid ""
-#~ "If TRUE, the child appears in a secondary group of children, suitable "
-#~ "for, e.g., help buttons"
-#~ msgstr ""
-#~ "Якщо встановлено, то вкладений елемент з'явиться у вторинній групі "
-#~ "вкладених елементів; застосовується, наприклад, для кнопок виклику довідки"
-
-#~ msgid "Non-Homogeneous"
-#~ msgstr "Неоднорідність"
-
-#~ msgid "If TRUE, the child will not be subject to homogeneous sizing"
-#~ msgstr ""
-#~ "Якщо TRUE, підпрограма не буде піддаватись однорідному змінюванню розміру"
-
-#~ msgid "Whether the child should receive extra space when the parent grows"
-#~ msgstr ""
-#~ "Чи всі вкладені елементи повинні отримувати додатковий простір, під нас "
-#~ "збільшення батьківського віджета"
-
-#~ msgid "Fill"
-#~ msgstr "Заповнення"
-
-#~ msgid ""
-#~ "Whether extra space given to the child should be allocated to the child "
-#~ "or used as padding"
-#~ msgstr ""
-#~ "Чи повинен додатковий простір, відданий вкладеному елементу, "
-#~ "розподілятись всередині цього елементу(fill), або ж використовуватись для "
-#~ "доповнення (padding)."
-
-#~ msgid "Extra space to put between the child and its neighbors, in pixels"
-#~ msgstr ""
-#~ "Додатковий простір між вкладеним елементом і його сусідами, в точках"
-
-#~ msgid ""
-#~ "If set, the label is used to pick a stock item instead of being displayed"
-#~ msgstr ""
-#~ "Якщо встановлено, позначку буде використано для вибору з влаштованих "
-#~ "пунктів замість показу"
-
-#~ msgid "Horizontal alignment for child"
-#~ msgstr "Горизонтальне вирівнювання вкладеного елементу"
-
-#~ msgid "Vertical alignment for child"
-#~ msgstr "Вертикальне вирівнювання вкладеного елементу"
-
-#~ msgid "Child widget to appear next to the button text"
-#~ msgstr ""
-#~ "Спадкоємний віджет, що з'являтиметься на екрані поруч з текстом кнопки"
-
-#~ msgid "Image position"
-#~ msgstr "Позиція зображення"
-
-#~ msgid "The position of the image relative to the text"
-#~ msgstr "Позиція зображення відносно вкладеного тексту"
-
-#~ msgid "Default Spacing"
-#~ msgstr "Типовий інтервал"
-
-#~ msgid "Extra space to add for GTK_CAN_DEFAULT buttons"
-#~ msgstr "Додатковий простір для кнопок GTK_CAN_DEFAULT"
-
-#~ msgid "Default Outside Spacing"
-#~ msgstr "Типовий зовнішній інтервал"
-
-#~ msgid ""
-#~ "Extra space to add for GTK_CAN_DEFAULT buttons that is always drawn "
-#~ "outside the border"
-#~ msgstr ""
-#~ "Додатковий зовнішній простір для кнопок GTK_CAN_DEFAULT, що завжди "
-#~ "додається за межами кнопок"
-
-#~ msgid "Child X Displacement"
-#~ msgstr "Переміщення вкладеного елемента по горизонталі"
-
-#~ msgid ""
-#~ "How far in the x direction to move the child when the button is depressed"
-#~ msgstr ""
-#~ "Наскільки перемістити вкладений елемент по горизонталі, при відпусканні "
-#~ "кнопки"
-
-#~ msgid "Child Y Displacement"
-#~ msgstr "Переміщення вкладеного елемента по вертикалі"
-
-#~ msgid ""
-#~ "How far in the y direction to move the child when the button is depressed"
-#~ msgstr ""
-#~ "Наскільки перемістити вкладений елемент по вертикалі, при відпусканні "
-#~ "кнопки"
-
-#~ msgid "Displace focus"
-#~ msgstr "Зсунути фокус"
-
-#~ msgid ""
-#~ "Whether the child_displacement_x/_y properties should also affect the "
-#~ "focus rectangle"
-#~ msgstr ""
-#~ "Чи повинні властивості child_displacement_x/_y також впливати на "
-#~ "прямокутник фокусу"
-
-#~ msgid "Inner Border"
-#~ msgstr "Внутрішній бордюр"
-
-#~ msgid "Border between button edges and child."
-#~ msgstr "Бордюр між межами кнопки та дочірнім елементом."
-
-#~ msgid "Image spacing"
-#~ msgstr "Відступ зображення"
-
-#~ msgid "Spacing in pixels between the image and label"
-#~ msgstr "Інтервал у точках між зображенням та позначкою"
-
-#~ msgid "No Month Change"
-#~ msgstr "Місяць не змінюється"
-
-#~ msgid "If TRUE, the selected month cannot be changed"
-#~ msgstr "Якщо встановлено, то змінити вибраний місяць неможливо"
-
-#~ msgid "Details Width"
-#~ msgstr "Ширина у докладному режимі"
-
-#~ msgid "Details width in characters"
-#~ msgstr "Ширина в символах у докладному режимі"
-
-#~ msgid "Details Height"
-#~ msgstr "Висота у докладному режимі"
-
-#~ msgid "Details height in rows"
-#~ msgstr "Висота у рядках у докладному режимі"
-
-#~ msgid "Show Details"
-#~ msgstr "Показати подробиці"
-
-#~ msgid "If TRUE, details are shown"
-#~ msgstr "Якщо TRUE, подробиці буде показано"
-
-#~ msgid "Inner border"
-#~ msgstr "Внутрішня рамка"
-
-#~ msgid "Inner border space"
-#~ msgstr "Простір внутрішньої рамки"
-
-#~ msgid "Vertical separation"
-#~ msgstr "Вертикальне відокремлення"
-
-#~ msgid "Space between day headers and main area"
-#~ msgstr "Проміжок між днем заголовка і головною ділянкою"
-
-#~ msgid "Horizontal separation"
-#~ msgstr "Горизонтальне відокремлення"
-
-#~ msgid "Space between week headers and main area"
-#~ msgstr "Проміжок між тижнем заголовка і головною ділянкою"
-
-#~ msgid "Cell background color"
-#~ msgstr "Колір тла комірки"
-
-#~ msgid "Cell background color as a GdkColor"
-#~ msgstr "Колір тла комірки у вигляді GdkColor"
-
-#~ msgid "surface"
-#~ msgstr "поверхня"
-
-#~ msgid "The stock ID of the stock icon to render"
-#~ msgstr "Ідентифікатор вбудованої піктограми, для відтворення"
-
-#~ msgid "Detail"
-#~ msgstr "Подробиці"
-
-#~ msgid "Render detail to pass to the theme engine"
-#~ msgstr "Подробиці візуалізації для передачі у механізму теми"
-
-#~ msgid "Follow State"
-#~ msgstr "Стан слідування"
-
-#~ msgid ""
-#~ "Whether the rendered pixbuf should be colorized according to the state"
-#~ msgstr "Чи відтворений pixbuf слід фарбувати відповідно до стану"
-
-#~ msgid "Background color"
-#~ msgstr "Колір тла"
-
-#~ msgid "Background color as a GdkColor"
-#~ msgstr "Колір тла у вигляді GdkColor"
-
-#~ msgid "Foreground color as a GdkColor"
-#~ msgstr "Колір переднього плану у вигляді GdkColor"
-
-#~ msgid "Indicator size"
-#~ msgstr "Розмір індикатора"
-
-#~ msgid "Background RGBA color"
-#~ msgstr "Колір тла RGBA"
-
-#~ msgid "Indicator Size"
-#~ msgstr "Розмір індикатора"
-
-#~ msgid "Indicator Spacing"
-#~ msgstr "Інтервал індикатора"
-
-#~ msgid "Spacing around check or radio indicator"
-#~ msgstr "Простір навколо вимикача чи перемикача"
-
-#~ msgid "Whether the menu item is checked"
-#~ msgstr "Чи елемент меню ввімкнений"
-
-#~ msgid "Whether to display an \"inconsistent\" state"
-#~ msgstr "Чи показувати \"нечутливий\" стан"
-
-#~ msgid "Draw as radio menu item"
-#~ msgstr "Намалювати як пункт меню-перемикача"
-
-#~ msgid "Whether the menu item looks like a radio menu item"
-#~ msgstr "Чи пункт меню показано як пункт меню-перемикача"
-
-#~ msgid "The selected color"
-#~ msgstr "Вибраний колір"
-
-#~ msgid "The selected opacity value (0 fully transparent, 65535 fully opaque)"
-#~ msgstr ""
-#~ "Поточне значення непрозорості (\"0\" — абсолютно прозоре, \"65535\" — "
-#~ "абсолютно непрозоре)"
-
-#~ msgid "Wrap width for laying out the items in a grid"
-#~ msgstr "Ширина переносу для розташування елементів сітки"
-
-#~ msgid "Row span column"
-#~ msgstr "Рядок інтервалів між стовпчиками"
-
-#~ msgid "TreeModel column containing the row span values"
-#~ msgstr "Стовпчик TreeModel, що містить значення інтервалу рядків"
-
-#~ msgid "Column span column"
-#~ msgstr "Рядок інтервалів між стовпчиками"
-
-#~ msgid "TreeModel column containing the column span values"
-#~ msgstr "Стовпчик TreeModel, що містить значення інтервалу стовпчиків"
-
-#~ msgid "Whether dropdowns should have a tearoff menu item"
-#~ msgstr "Чи повинні розкривні елементи мати лінію відриву"
-
-#~ msgid "Tearoff Title"
-#~ msgstr "Заголовок від'єднаного меню"
-
-#~ msgid ""
-#~ "A title that may be displayed by the window manager when the popup is "
-#~ "torn-off"
-#~ msgstr "Заголовок, який менеджер вікон показуватиме, коли меню відривається"
-
-#~ msgid "Appears as list"
-#~ msgstr "З'являється як список"
-
-#~ msgid "Whether dropdowns should look like lists rather than menus"
-#~ msgstr ""
-#~ "Чи повинне розкривне поле зі списком повинно виглядати як список, а не як "
-#~ "меню"
-
-#~ msgid "Arrow Size"
-#~ msgstr "Розмір стрілки"
-
-#~ msgid "The minimum size of the arrow in the combo box"
-#~ msgstr "Мінімальний розмір стрілки у полі зі списком"
-
-#~ msgid "The amount of space used by the arrow"
-#~ msgstr "Обсяг простору, що займає стрілка"
-
-#~ msgid "Which kind of shadow to draw around the combo box"
-#~ msgstr "Тип тіні навколо поля зі списком"
-
-#~ msgid "Specify how resize events are handled"
-#~ msgstr "Вкажіть спосіб обробки подій, що виникають при зміні розміру"
-
-#~ msgid "Border width"
-#~ msgstr "Ширина бордюру"
-
-#~ msgid "The width of the empty border outside the containers children"
-#~ msgstr "Ширина порожнього бордюру із зовнішньої сторони нащадків контейнера"
-
-#~ msgid "Can be used to add a new child to the container"
-#~ msgstr ""
-#~ "Може бути використано для додавання нового вкладеного елемента в контейнер"
-
-#~| msgid "Widget name"
-#~ msgid "Widget type"
-#~ msgstr "Тип віджета"
-
-#~| msgid "The name of the widget"
-#~ msgid "GType of the widget"
-#~ msgstr "GType віджета"
-
-#~ msgid "Content area border"
-#~ msgstr "Бордюр ділянки вмісту"
-
-#~ msgid "Width of border around the main dialog area"
-#~ msgstr "Ширина межі навколо основної ділянки діалогу"
-
-#~ msgid "Content area spacing"
-#~ msgstr "Відступи основної області"
-
-#~ msgid "Spacing between elements of the main dialog area"
-#~ msgstr "Інтервал між елементами основної області діалогу"
-
-#~ msgid "Button spacing"
-#~ msgstr "Інтервал між кнопками"
-
-#~ msgid "Action area border"
-#~ msgstr "Бордюр ділянки дій"
-
-#~ msgid "Width of border around the button area at the bottom of the dialog"
-#~ msgstr "Ширина відступу навколо області кнопок діалогового вікна"
-
-#~ msgid ""
-#~ "Border between text and frame. Overrides the inner-border style property"
-#~ msgstr ""
-#~ "Бордюр між текстом та рамкою. Перевизначає властивість стилю внутрішнього "
-#~ "бордюру"
-
-#~ msgid "Which kind of shadow to draw around the entry when has-frame is set"
-#~ msgstr "Тип тіні, що виводиться навколо поля з рамкою"
-
-#~ msgid "Whether password entries will show a warning when Caps Lock is on"
-#~ msgstr ""
-#~ "Чи показувати попередження про введення у верхньому регістрі у діалозі "
-#~ "вводу паролю"
-
-#~ msgid "Primary pixbuf"
-#~ msgstr "Головний значок"
-
-#~ msgid "Secondary pixbuf"
-#~ msgstr "Додатковий текст"
-
-#~ msgid "Primary stock ID"
-#~ msgstr "Ідентифікатор головного значка"
-
-#~ msgid "Stock ID for primary icon"
-#~ msgstr "Головний ідентифікатор вбудованого значка"
-
-#~ msgid "Secondary stock ID"
-#~ msgstr "Ідентифікатор додаткового значка"
-
-#~ msgid "Stock ID for secondary icon"
-#~ msgstr "Додатковий ідентифікатор вбудованого значка"
-
-#~ msgid "Populate all"
-#~ msgstr "Заповніть усі"
-
-#~ msgid "Whether to emit ::populate-popup for touch popups"
-#~ msgstr ""
-#~ "Чи надсилати сигнал ::populate-popup для сенсорних контекстних вікон"
-
-#~ msgid "Icon Prelight"
-#~ msgstr "Виділення кольором значка"
-
-#~ msgid "Progress Border"
-#~ msgstr "Простір навколо індикатора поступу"
-
-#~ msgid "Border around the progress bar"
-#~ msgstr "Відступи навколо індикатора поступу"
-
-#~ msgid "Border between text and frame."
-#~ msgstr "Бордюр між текстом та рамкою."
-
-#~ msgid "Visible Window"
-#~ msgstr "Видиме вікно"
-
-#~ msgid ""
-#~ "Whether the event box is visible, as opposed to invisible and only used "
-#~ "to trap events."
-#~ msgstr ""
-#~ "Чи є контейнер подій видимим, на відміну до невидимих та використовується "
-#~ "лише для слідкування за подіями."
-
-#~ msgid "Above child"
-#~ msgstr "Верхній елемент"
-
-#~ msgid ""
-#~ "Whether the event-trapping window of the eventbox is above the window of "
-#~ "the child widget as opposed to below it."
-#~ msgstr ""
-#~ "Чи вікно слідкування за подіями відповідного елементу керування "
-#~ "знаходиться над вікном вкладеного віджету, або ж знизу."
-
-#~ msgid "Space to put between the label and the child"
-#~ msgstr ""
-#~ "Додатковий інтервал між вкладеним елементом і його сусідами, в точках"
-
-#~ msgid "Label fill"
-#~ msgstr "Заповнення міток"
-
-#~ msgid "Whether the label widget should fill all available horizontal space"
-#~ msgstr ""
-#~ "Чи слід віджету міток заповнювати ввесь доступний горизонтальний простір"
-
-#~ msgid "Expander Size"
-#~ msgstr "Розмір розширювача"
-
-#~ msgid "Size of the expander arrow"
-#~ msgstr "Величина стрілки розширювача"
-
-#~ msgid "Spacing around expander arrow"
-#~ msgstr "Інтервал навколо стрілки розширювача"
-
-#~ msgid "Local Only"
-#~ msgstr "Лише локальні"
-
-#~ msgid "Whether the selected file(s) should be limited to local file: URLs"
-#~ msgstr "Чи виділення файлу(ів) повинно обмежуватись локальними файлами: URL"
-
-#~ msgid "Preview widget"
-#~ msgstr "Віджет попереднього перегляду"
-
-#~ msgid "Application supplied widget for custom previews."
-#~ msgstr ""
-#~ "Віджет, що надається програмою, для власного попереднього перегляду."
-
-#~ msgid "Preview Widget Active"
-#~ msgstr "Попередній перегляд активний"
-
-#~ msgid ""
-#~ "Whether the application supplied widget for custom previews should be "
-#~ "shown."
-#~ msgstr ""
-#~ "Чи буде показуватись віджет, що надається програмою, для власного "
-#~ "попереднього перегляду."
-
-#~ msgid "Use Preview Label"
-#~ msgstr "Використовувати позначку попереднього перегляду"
-
-#~ msgid ""
-#~ "Whether to display a stock label with the name of the previewed file."
-#~ msgstr ""
-#~ "Чи слід показувати вбудовану позначку з назвою файла попереднього "
-#~ "перегляду."
-
-#~ msgid "Application supplied widget for extra options."
-#~ msgstr "Наданий програмою віджет, для додаткових параметрів."
-
-#~ msgid "Show Hidden"
-#~ msgstr "Показувати приховані"
-
-#~ msgid "Whether the hidden files and folders should be displayed"
-#~ msgstr "Чи показувати приховані файли та теки"
-
-#~ msgid "Do overwrite confirmation"
-#~ msgstr "Попереджувати перед перезаписом"
-
-#~ msgid ""
-#~ "Whether a file chooser in save mode will present an overwrite "
-#~ "confirmation dialog if necessary."
-#~ msgstr ""
-#~ "Чи селектор файлів у режимі збереження буде виводити діалогове вікно з "
-#~ "попередженням про перезапис, якщо користувач вибрав наявний файл."
-
-#~ msgid "X position of child widget"
-#~ msgstr "Горизонтальна позиція вкладеного віджета"
-
-#~ msgid "Y position"
-#~ msgstr "Позиція по Y"
-
-#~ msgid "Y position of child widget"
-#~ msgstr "Вертикальна позиція вкладеного віджета"
-
-#~ msgid "Show style"
-#~ msgstr "Показ стилю"
-
-#~ msgid "Whether the selected font style is shown in the label"
-#~ msgstr "Чи показується стиль вибраного шрифту у позначці"
-
-#~ msgid "Show size"
-#~ msgstr "Показ розміру"
-
-#~ msgid "Whether selected font size is shown in the label"
-#~ msgstr "Чи показується розмір вибраного шрифту у позначці"
-
-#~ msgid "Label yalign"
-#~ msgstr "Вирівнювання по Y"
-
-#~ msgid "The vertical alignment of the label"
-#~ msgstr "Вертикальне вирівнювання позначки"
-
-#~ msgid "GdkWindow to receive events about"
-#~ msgstr "Вікно GdkWindow, від якого приймаються події"
-
-#~| msgid "Has Alpha"
-#~ msgid "Has alpha"
-#~ msgstr "Є прозорість"
-
-#~| msgid "Whether the pixbuf has an alpha channel"
-#~ msgid "Whether the color buffer has an alpha component"
-#~ msgstr "Чи має буфер кольору компонент прозорості"
-
-#~ msgid "Selection Box Color"
-#~ msgstr "Колір діалогу виділення виділення"
-
-#~ msgid "Color of the selection box"
-#~ msgstr "Колір діалогу виділення виділення"
-
-#~ msgid "Selection Box Alpha"
-#~ msgstr "Прозорість діалогу виділення"
-
-#~ msgid "Opacity of the selection box"
-#~ msgstr "Заголовок діалогу виділення"
-
-#~| msgid "Icon set to display"
-#~ msgid "A cairo_surface_t to display"
-#~ msgstr "cairo_surface_t, яку слід показувати"
-
-#~ msgid "Icon set"
-#~ msgstr "Набір піктограм"
-
-#~ msgid "Icon set to display"
-#~ msgstr "Набір значків для показу"
-
-#~ msgid "Animation"
-#~ msgstr "Анімація"
-
-#~ msgid "GdkPixbufAnimation to display"
-#~ msgstr "GdkPixbufAnimation для показу"
-
-#~ msgid "Width of border around the content area"
-#~ msgstr "Ширина межі навколо основної ділянки"
-
-#~ msgid "Spacing between elements of the area"
-#~ msgstr "Інтервал між елементами у області"
-
-#~ msgid "Width of border around the action area"
-#~ msgstr "Ширина межі навколо області дій"
-
-#~ msgid "The screen where this window will be displayed"
-#~ msgstr "Екран, на якому буде виведено це вікно"
-
-#~ msgid "Angle"
-#~ msgstr "Кут"
-
-#~ msgid "Angle at which the label is rotated"
-#~ msgstr "Кут, на який повертається ярлик"
-
-#~ msgid "The width of the layout"
-#~ msgstr "Ширина розміщення"
-
-#~ msgid "The height of the layout"
-#~ msgstr "Висота розміщення"
-
-#~| msgid "Minimum height of buttons inside the box"
-#~ msgid "Minimum height for filling blocks"
-#~ msgstr "Мінімальна висота блоків заповнення"
-
-#~| msgid "Minimum height of buttons inside the box"
-#~ msgid "Minimum height for blocks that fill the bar"
-#~ msgstr "Мінімальна висота блоків, які заповнюють панель"
-
-#~| msgid "Minimum width of buttons inside the box"
-#~ msgid "Minimum width for filling blocks"
-#~ msgstr "Мінімальна ширина блоків заповнення"
-
-#~| msgid "Minimum width of buttons inside the box"
-#~ msgid "Minimum width for blocks that fill the bar"
-#~ msgstr "Мінімальна ширина блоків, які заповнюють панель"
-
-#~ msgid "Pack direction"
-#~ msgstr "Напрям пакування"
-
-#~ msgid "Child Pack direction"
-#~ msgstr "Напрям пакування дочірнього меню"
-
-#~ msgid "The child pack direction of the menubar"
-#~ msgstr "Напрям пакування дочірнього меню у панелі меню"
-
-#~ msgid "Style of bevel around the menubar"
-#~ msgstr "Стиль фаски навколо панелі меню"
-
-#~ msgid "Internal padding"
-#~ msgstr "Внутрішній відступ"
-
-#~ msgid "Amount of border space between the menubar shadow and the menu items"
-#~ msgstr "Розмір проміжку між тінню панелі меню і елементами меню"
-
-#~| msgid "Popup shown"
-#~ msgid "Popup"
-#~ msgstr "Контекстна підказка"
-
-#~| msgid "The dropdown menu"
-#~ msgid "The dropdown menu."
-#~ msgstr "Спадне меню."
-
-#~ msgid "Use a popover"
-#~ msgstr "Використовувати контекстний віджет"
-
-#~ msgid "Use a popover instead of a menu"
-#~ msgstr "Використовувати контекстний віджет замість меню"
-
-#~ msgid "The currently selected menu item"
-#~ msgstr "Поточна вибрана назва файлу"
-
-#~ msgid "The accel group holding accelerators for the menu"
-#~ msgstr "Мнемонічна клавіша-прискорювач для цієї позначки"
-
-#~ msgid ""
-#~ "An accel path used to conveniently construct accel paths of child items"
-#~ msgstr ""
-#~ "Шлях прискорювача, що використовується для зручного конструювання шляхів "
-#~ "прискорювачів з дочірніх елементів"
-
-#~ msgid "Attach Widget"
-#~ msgstr "Додатковий віджет"
-
-#~ msgid "The widget the menu is attached to"
-#~ msgstr "Чи елемент має меню з позначкою"
-
-#~ msgid ""
-#~ "A title that may be displayed by the window manager when this menu is "
-#~ "torn-off"
-#~ msgstr ""
-#~ "Заголовок, який менеджер вікон показуватиме для цього меню після його "
-#~ "від'єднання"
-
-#~ msgid "Tearoff State"
-#~ msgstr "Стан лінії відриву"
-
-#~ msgid "A boolean that indicates whether the menu is torn-off"
-#~ msgstr "Логічне значення, яке вказує чи є меню від'єднаним"
-
-#~ msgid "The monitor the menu will be popped up on"
-#~ msgstr "The monitor the menu will be popped up on"
-
-#~ msgid "Reserve Toggle Size"
-#~ msgstr "Зарезервувати розмір перемикання"
-
-#~ msgid ""
-#~ "A boolean that indicates whether the menu reserves space for toggles and "
-#~ "icons"
-#~ msgstr ""
-#~ "Логічне значення, яке вказує чи меню резервує простір для перемикачів та "
-#~ "піктограм"
-
-#~ msgid "Anchor hints"
-#~ msgstr "Прив'язувати підказки"
-
-#~ msgid "Positioning hints for when the menu might fall off-screen"
-#~ msgstr ""
-#~ "Розташування підказок у випадку, коли меню може вийти за межі екрана"
-
-#~ msgid "Rect anchor dx"
-#~ msgstr "Приріст x прямокутника прив'язки"
-
-#~| msgid "Horizontal Offset"
-#~ msgid "Rect anchor horizontal offset"
-#~ msgstr "Горизонтальний зсув прямокутника прив'язки"
-
-#~ msgid "Rect anchor dy"
-#~ msgstr "Зсув dy прямокутника прив'язки"
-
-#~| msgid "Vertical Offset"
-#~ msgid "Rect anchor vertical offset"
-#~ msgstr "Вертикальний зсув прямокутника прив'язки"
-
-#~| msgid "Type hint"
-#~ msgid "Menu type hint"
-#~ msgstr "Підказка типу меню"
-
-#~ msgid "Menu window type hint"
-#~ msgstr "Підказка типу вікна меню"
-
-#~ msgid "Horizontal Padding"
-#~ msgstr "Горизонтальне доповнення"
-
-#~ msgid "Extra space at the left and right edges of the menu"
-#~ msgstr "Додатковий простір зліва та справа від меню"
-
-#~ msgid "Vertical Padding"
-#~ msgstr "Вертикальний доповнення"
-
-#~ msgid "Extra space at the top and bottom of the menu"
-#~ msgstr "Додатковий простір згори та знизу меню"
-
-#~ msgid "Vertical Offset"
-#~ msgstr "Вертикальний зсув"
-
-#~ msgid ""
-#~ "When the menu is a submenu, position it this number of pixels offset "
-#~ "vertically"
-#~ msgstr ""
-#~ "Коли меню являє собою підменю, його позиція по вертикалі зсувається на "
-#~ "вказану кількість точок"
-
-#~ msgid "Horizontal Offset"
-#~ msgstr "Горизонтальний зсув"
-
-#~ msgid ""
-#~ "When the menu is a submenu, position it this number of pixels offset "
-#~ "horizontally"
-#~ msgstr ""
-#~ "Коли меню являє собою підменю, його позиція по горизонталі зсувається на "
-#~ "вказану кількість точок"
-
-#~ msgid "Double Arrows"
-#~ msgstr "Подвійні стрілки"
-
-#~ msgid "When scrolling, always show both arrows."
-#~ msgstr "При прокручуванні, завжди показувати обидві стрілки."
-
-#~ msgid "Arrow Placement"
-#~ msgstr "Розташування стрілки"
-
-#~ msgid "Indicates where scroll arrows should be placed"
-#~ msgstr "Вказує розташування стрілок прокрутки"
-
-#~ msgid "Left Attach"
-#~ msgstr "Додавання зліва"
-
-#~ msgid "Right Attach"
-#~ msgstr "Додавання справа"
-
-#~ msgid "The column number to attach the right side of the child to"
-#~ msgstr ""
-#~ "Кількість стовпчиків, що додається до правого краю вкладеного елемента"
-
-#~ msgid "Top Attach"
-#~ msgstr "Додавання згори"
-
-#~ msgid "The row number to attach the top of the child to"
-#~ msgstr ""
-#~ "Кількість рядків, що додається до верхнього краю вкладеного елемента"
-
-#~ msgid "Bottom Attach"
-#~ msgstr "Додавання знизу"
-
-#~ msgid "Arbitrary constant to scale down the size of the scroll arrow"
-#~ msgstr "Довільне значення для зменшення розміру стрілки прокрутки"
-
-#~ msgid "Right Justified"
-#~ msgstr "Вирівняти праворуч"
-
-#~ msgid ""
-#~ "Sets whether the menu item appears justified at the right side of a menu "
-#~ "bar"
-#~ msgstr "Визначає, що пункти меню вирівнюються праворуч у панелі меню"
-
-#~ msgid "Submenu"
-#~ msgstr "Підменю"
-
-#~ msgid "The submenu attached to the menu item, or NULL if it has none"
-#~ msgstr ""
-#~ "Підменю, що приєднане до пункту меню, або NULL - якщо поле не має підменю"
-
-#~ msgid "Sets the accelerator path of the menu item"
-#~ msgstr "Визначає шлях до акселератора пункту меню"
-
-#~ msgid "The text for the child label"
-#~ msgstr "Текст для дочірньої позначки"
-
-#~ msgid ""
-#~ "Amount of space used up by arrow, relative to the menu item's font size"
-#~ msgstr "Кількість простору, що використовується стрілкою"
-
-#~ msgid "Width in Characters"
-#~ msgstr "Ширина у символах"
-
-#~ msgid "The minimum desired width of the menu item in characters"
-#~ msgstr "Мінімальна бажана ширина пункту меню, у символах"
-
-#~ msgid "Take Focus"
-#~ msgstr "Має фокус"
-
-#~ msgid "A boolean that determines whether the menu grabs the keyboard focus"
-#~ msgstr "Логічне значення, яке вказує чи меню отримує фокус вводу"
-
-#~ msgid "The dropdown menu"
-#~ msgstr "Спадне меню"
-
-#~| msgid "Image/label border"
-#~ msgid "label border"
-#~ msgstr "Рамка мітки"
-
-#~| msgid "Width of border around the label and image in the message dialog"
-#~ msgid "Width of border around the label in the message dialog"
-#~ msgstr "Ширина рамки навколо мітки у вікні повідомлення"
-
-#~ msgid "Image"
-#~ msgstr "Зображення"
-
-#~ msgid "The image"
-#~ msgstr "Зображення"
-
-#~ msgid "Centered"
-#~ msgstr "За центром"
-
-#~ msgid "The string displayed on the child's tab label"
-#~ msgstr "Рядок, що показано в позначці вкладки дочірнього елемента"
-
-#~ msgid "Secondary backward stepper"
-#~ msgstr "Додаткова кнопка переміщення назад"
-
-#~ msgid ""
-#~ "Display a second backward arrow button on the opposite end of the tab area"
-#~ msgstr ""
-#~ "Показувати другу кнопку із стрілкою назад на протилежні стороні смуги "
-#~ "прокрутки"
-
-#~ msgid "Secondary forward stepper"
-#~ msgstr "Додаткова кнопка переміщення вперед"
-
-#~ msgid ""
-#~ "Display a second forward arrow button on the opposite end of the tab area"
-#~ msgstr ""
-#~ "Показувати другу кнопку із стрілкою вперед на протилежні стороні смуги "
-#~ "прокрутки"
-
-#~ msgid "Backward stepper"
-#~ msgstr "Кнопка переміщення назад"
-
-#~ msgid "Display the standard backward arrow button"
-#~ msgstr "Показувати стандартну кнопку із стрілкою назад"
-
-#~ msgid "Forward stepper"
-#~ msgstr "Кнопка переміщення вперед"
-
-#~ msgid "Display the standard forward arrow button"
-#~ msgstr "Показувати стандартну кнопку із стрілкою вперед"
-
-#~ msgid "Tab overlap"
-#~ msgstr "Перекривання вкладок"
-
-#~ msgid "Size of tab overlap area"
-#~ msgstr "Розмір області перекривання вкладок"
-
-#~ msgid "Tab curvature"
-#~ msgstr "Кривина вкладок"
-
-#~ msgid "Size of tab curvature"
-#~ msgstr "Розмір кривини вкладок"
-
-#~ msgid "Arrow spacing"
-#~ msgstr "Відступи стрілки"
-
-#~ msgid "Scroll arrow spacing"
-#~ msgstr "Відступи стрілки з прокруткою"
-
-#~ msgid "Initial gap"
-#~ msgstr "Початкова відстань"
-
-#~ msgid "Initial gap before the first tab"
-#~ msgstr "Початкова відстань перед першою вкладкою"
-
-#~| msgid "Tab overlap"
-#~ msgid "Tab gap"
-#~ msgstr "Прогалина вкладки"
-
-#~ msgid "Active tab is drawn with a gap at the bottom"
-#~ msgstr ""
-#~ "Активну вкладку буде намальовано із вказаною прогалиною у нижній частині"
-
-#~ msgid "Pass through input, does not affect main child"
-#~ msgstr "Передавати вхідні дані, не впливає на основний дочірній елемент"
-
-#~| msgid "Indent"
-#~ msgid "Index"
-#~ msgstr "Індекс"
-
-#~| msgid "The index of the child in the parent"
-#~ msgid "The index of the overlay in the parent, -1 for the main child"
-#~ msgstr ""
-#~ "Індекс накладення у батьківському елементі, -1 для основного дочірнього "
-#~ "елемента"
-
-#~ msgid "Handle Size"
-#~ msgstr "Розмір елемента"
-
-#~ msgid "Width of handle"
-#~ msgstr "Ширина елемента"
-
-#~ msgid "Resize"
-#~ msgstr "Змінюваний розмір"
-
-#~ msgid "Show 'Connect to Server'"
-#~ msgstr "Показувати «З'єднання із сервером»"
-
-#~ msgid ""
-#~ "Whether the sidebar includes a builtin shortcut to a 'Connect to server' "
-#~ "dialog"
-#~ msgstr ""
-#~ "Чи має бічна панель містити вбудований пункт діалогового вікна "
-#~ "«З'єднатися із сервером»"
-
-#~| msgid "Show file operations"
-#~ msgid "Show 'Enter Location'"
-#~ msgstr "Показувати «Введіть адресу»"
-
-#~| msgid "Whether the secondary icon is activatable"
-#~ msgid "Whether the sidebar only includes local files"
-#~ msgstr "Чи додавати на бічну панель лише локальні файли"
-
-#~ msgid "Whether to emit ::populate-popup for popups that are not menus"
-#~ msgstr ""
-#~ "Чи слід надсилати сигнал ::populate-popup для контекстних вікон, які не є "
-#~ "меню"
-
-#~ msgid "Socket Window"
-#~ msgstr "Вікно сокету"
-
-#~ msgid "The window of the socket the plug is embedded in"
-#~ msgstr "Вікно сокету, у який вбудовано заглушку"
-
-#~| msgid "Related Action"
-#~ msgid "Relative to"
-#~ msgstr "Відносно"
-
-#~| msgid "The widget where the window is attached"
-#~ msgid "Widget the bubble window points to"
-#~ msgstr "Віджет, на який вказує контекстне вікно-бульбашка"
-
-#~| msgid "Whether the action is enabled."
-#~ msgid "Transitions enabled"
-#~ msgstr "Переходи увімкнені"
-
-#~| msgid "Whether the action is enabled."
-#~ msgid "Whether show/hide transitions are enabled or not"
-#~ msgstr "Чи увімкнені переходи «показати/приховати»."
-
-#~| msgid "The GtkAdjustment for the vertical position"
-#~ msgid "Constraint for the popover position"
-#~ msgstr "Обмеження для розташування контекстного віджета"
-
-#~| msgid "The name of the widget"
-#~ msgid "The name of the submenu"
-#~ msgstr "Назва підменю"
-
-#~ msgid "X spacing"
-#~ msgstr "Інтервал X"
-
-#~ msgid "Extra spacing applied to the width of a progress bar."
-#~ msgstr "Додатковий інтервал, що додається до ширини смуги поступу."
-
-#~ msgid "Y spacing"
-#~ msgstr "Інтервал Y"
-
-#~ msgid "Extra spacing applied to the height of a progress bar."
-#~ msgstr "Додатковий інтервал, що додається до висоти рядку поступу."
-
-#~ msgid "Minimum horizontal bar width"
-#~ msgstr "Мінімальна ширина горизонтальної панелі"
-
-#~ msgid "The minimum horizontal width of the progress bar"
-#~ msgstr "Горизонтальне вирівнювання позначки"
-
-#~ msgid "Minimum horizontal bar height"
-#~ msgstr "Мінімальна висота горизонтальної панелі"
-
-#~ msgid "Minimum horizontal height of the progress bar"
-#~ msgstr "Значення індикатора ходу поступу"
-
-#~ msgid "Minimum vertical bar width"
-#~ msgstr "Мінімальна ширина вертикальної панелі"
-
-#~ msgid "The minimum vertical width of the progress bar"
-#~ msgstr "Мінімальна ширина вертикального індикатора поступу"
-
-#~ msgid "Minimum vertical bar height"
-#~ msgstr "Мінімальна висота вертикальної панелі"
-
-#~ msgid "The minimum vertical height of the progress bar"
-#~ msgstr "Мінімальна висота вертикального індикатора поступу"
-
-#~ msgid "The radio menu item whose group this widget belongs to."
-#~ msgstr "Кнопка-перемикач, чиїй групі належить цей віджет."
-
-#~ msgid "The radio tool button whose group this button belongs to."
-#~ msgstr "Радіо-кнопка, чиїй групі належить цей віджет."
-
-#~ msgid "Lower stepper sensitivity"
-#~ msgstr "Нижня чутливість кроку"
-
-#~ msgid ""
-#~ "The sensitivity policy for the stepper that points to the adjustment's "
-#~ "lower side"
-#~ msgstr "Чутливість кроку, яка вказує на нижню сторону коригування"
-
-#~ msgid "Upper stepper sensitivity"
-#~ msgstr "Верхня чутливість кроку"
-
-#~ msgid ""
-#~ "The sensitivity policy for the stepper that points to the adjustment's "
-#~ "upper side"
-#~ msgstr "Чутливість кроку, яка вказує на верхню сторону коригування"
-
-#~ msgid "Slider Width"
-#~ msgstr "Ширина повзунка"
-
-#~ msgid "Width of scrollbar or scale thumb"
-#~ msgstr "Ширина повзунка чи вказівника"
-
-#~ msgid "Trough Border"
-#~ msgstr "Границя напрямної"
-
-#~ msgid "Spacing between thumb/steppers and outer trough bevel"
-#~ msgstr ""
-#~ "Відстань між вказівником чи кнопками переміщення і зовнішньою границею "
-#~ "напрямної"
-
-#~ msgid "Stepper Size"
-#~ msgstr "Розмір кнопок переміщення"
-
-#~ msgid "Length of step buttons at ends"
-#~ msgstr "Розмір кнопок переміщення по краях"
-
-#~ msgid "Stepper Spacing"
-#~ msgstr "Відстань між кнопками переміщення"
-
-#~ msgid "Spacing between step buttons and thumb"
-#~ msgstr "Відстань між кнопками переміщення і вказівником"
-
-#~ msgid "Arrow X Displacement"
-#~ msgstr "Горизонтальний зсув стрілки"
-
-#~ msgid ""
-#~ "How far in the x direction to move the arrow when the button is depressed"
-#~ msgstr "На скільки посувати стрілку по горизонталі, коли натиснуто кнопку"
-
-#~ msgid "Arrow Y Displacement"
-#~ msgstr "Вертикальний зсув стрілки"
-
-#~ msgid ""
-#~ "How far in the y direction to move the arrow when the button is depressed"
-#~ msgstr "На скільки посувати стрілку по вертикалі, коли натиснуто кнопку"
-
-#~ msgid "Trough Under Steppers"
-#~ msgstr "Жолоб під степерами"
-
-#~ msgid ""
-#~ "Whether to draw trough for full length of range or exclude the steppers "
-#~ "and spacing"
-#~ msgstr ""
-#~ "Чи виводити жолоб на всю довжину діапазону або ж враховуючи степер та "
-#~ "відступи"
-
-#~ msgid "Arrow scaling"
-#~ msgstr "Розтягування стрілки"
-
-#~ msgid "Arrow scaling with regard to scroll button size"
-#~ msgstr "Розтягування стрілки  відносно до розміру кнопки прокрутки"
-
-#~ msgid "The RecentManager object to use"
-#~ msgstr "Об'єкт RecentManager, що використовується"
-
-#~ msgid "Show Private"
-#~ msgstr "Показувати приватні"
-
-#~ msgid "Whether the private items should be displayed"
-#~ msgstr "Чи показувати приватні елементи"
-
-#~ msgid "Show Tooltips"
-#~ msgstr "Показувати підказки"
-
-#~ msgid "Whether there should be a tooltip on the item"
-#~ msgstr "Чи слід показувати підказка на пункті"
-
-#~ msgid "Whether there should be an icon near the item"
-#~ msgstr "Чи має бути значок поблизу елемента"
-
-#~ msgid "Show Not Found"
-#~ msgstr "Показувати не знайдені"
-
-#~ msgid ""
-#~ "Whether the items pointing to unavailable resources should be displayed"
-#~ msgstr "Чи показувати елементи, що вказують на недоступні ресурси"
-
-#~ msgid "Whether to allow multiple items to be selected"
-#~ msgstr "Чи дозволяти виділення багатьох елементів"
-
-#~ msgid "Local only"
-#~ msgstr "Лише локальні"
-
-#~ msgid ""
-#~ "Whether the selected resource(s) should be limited to local file: URIs"
-#~ msgstr ""
-#~ "Чи виділення ресурс(ів) повинно обмежуватись локальними файлами: URI"
-
-#~ msgid "Limit"
-#~ msgstr "Межа"
-
-#~ msgid "The maximum number of items to be displayed"
-#~ msgstr "Максимальна кількість пунктів, що показано"
-
-#~ msgid "Sort Type"
-#~ msgstr "Тип сортування"
-
-#~ msgid "The current filter for selecting which resources are displayed"
-#~ msgstr "Поточний фільтр для відбору ресурсів, що показано"
-
-#~ msgid "The icon size"
-#~ msgstr "Розмір значка"
-
-#~ msgid "Length of scale's slider"
-#~ msgstr "Довжина повзунка"
-
-#~ msgid "Value spacing"
-#~ msgstr "Відступ значення"
-
-#~ msgid "Space between value text and the slider/trough area"
-#~ msgstr "Інтервал між зображеним значенням і ділянкою повзунка чи напрямної"
-
-#~ msgid "Minimum Slider Length"
-#~ msgstr "Мінімальна довжина повзунка"
-
-#~ msgid "Minimum length of scrollbar slider"
-#~ msgstr "Мінімальна довжина повзунка смуги прокрутки"
-
-#~ msgid "Fixed slider size"
-#~ msgstr "Фіксований розмір повзунка"
-
-#~ msgid "Don't change slider size, just lock it to the minimum length"
-#~ msgstr "Не змінювати розмір повзунка, встановити мінімальну довжину"
-
-#~ msgid ""
-#~ "Display a second backward arrow button on the opposite end of the "
-#~ "scrollbar"
-#~ msgstr ""
-#~ "Показувати другу кнопку із стрілкою назад на протилежні стороні смуги "
-#~ "прокрутки"
-
-#~ msgid ""
-#~ "Display a second forward arrow button on the opposite end of the scrollbar"
-#~ msgstr ""
-#~ "Показувати другу кнопку із стрілкою вперед на протилежні стороні смуги "
-#~ "прокрутки"
-
-#~ msgid "Window Placement Set"
-#~ msgstr "Встановити розміщення вікна"
-
-#~ msgid ""
-#~ "Whether \"window-placement\" should be used to determine the location of "
-#~ "the contents with respect to the scrollbars."
-#~ msgstr ""
-#~ "Чи слід використовувати \"window-placement\" для визначення розташування "
-#~ "змісту відносно смуг прокрутки."
-
-#~ msgid "Scrollbars within bevel"
-#~ msgstr "Смуги прокрутки у межах фаски"
-
-#~ msgid "Place scrollbars within the scrolled window's bevel"
-#~ msgstr "Розміщати смуги прокрутки у межах фаски вікон, що прокручуються"
-
-#~ msgid "Scrollbar spacing"
-#~ msgstr "Відстань до панелей прокрутки"
-
-#~ msgid "Number of pixels between the scrollbars and the scrolled window"
-#~ msgstr "Кількість точок між панелями прокрутки і вікном, що прокручується"
-
-#~ msgid "Draw"
-#~ msgstr "Малювати"
-
-#~ msgid "Whether the separator is drawn, or just blank"
-#~ msgstr "Чи малюється розділювач, або вставляється інтервал"
-
-#~ msgid "Fallback Icon Theme Name"
-#~ msgstr "Назва запасної теми значків"
-
-#~ msgid "Name of a icon theme to fall back to"
-#~ msgstr "Назва теми значків, яка є запасною темою"
-
-#~ msgid "Key Theme Name"
-#~ msgstr "Назва ключової теми"
-
-#~ msgid "Name of key theme to load"
-#~ msgstr "Назва ключа теми для завантаження"
-
-#~ msgid "Menu bar accelerator"
-#~ msgstr "Клавіша виклику панелі меню"
-
-#~ msgid "Keybinding to activate the menu bar"
-#~ msgstr "Клавіша для активації панелі меню"
-
-#~ msgid "Icon Sizes"
-#~ msgstr "Розміри значків"
-
-#~ msgid "List of icon sizes (gtk-menu=16,16:gtk-button=20,20..."
-#~ msgstr "Список розмірів піктограм (gtk-menu=16,16:gtk-button=20,20…"
-
-#~ msgid "GTK Modules"
-#~ msgstr "Модулі GTK"
-
-#~ msgid "List of currently active GTK modules"
-#~ msgstr "Перелік активних модулів GTK"
-
-#~ msgid "Show the 'Input Methods' menu"
-#~ msgstr "Показувати меню «Способи вводу»"
-
-#~ msgid ""
-#~ "Whether the context menus of entries and text views should offer to "
-#~ "change the input method"
-#~ msgstr ""
-#~ "Чи у контекстних меню елементів та текстових віджетів пропонувати пункт "
-#~ "зміни методу вводу"
-
-#~ msgid "Show the 'Insert Unicode Control Character' menu"
-#~ msgstr "Показувати меню 'Вставити контрольний символ Унікод'"
-
-#~ msgid ""
-#~ "Whether the context menus of entries and text views should offer to "
-#~ "insert control characters"
-#~ msgstr ""
-#~ "Чи у контекстному меню елементів та текстових віджетів пропонувати пункт "
-#~ "вставки контрольного символу Унікод"
-
-#~ msgid "Start timeout"
-#~ msgstr "Час очікування початку"
-
-#~ msgid "Starting value for timeouts, when button is pressed"
-#~ msgstr "Значення для інтервалу початку повтору, при натисканні кнопки"
-
-#~ msgid "Repeat timeout"
-#~ msgstr "Час очікування повтору"
-
-#~ msgid "Repeat value for timeouts, when button is pressed"
-#~ msgstr "Значення для інтервалу очікування повтору, коли кнопка натиснута"
-
-#~ msgid "Expand timeout"
-#~ msgstr "Час очікування розширення"
-
-#~ msgid "Expand value for timeouts, when a widget is expanding a new region"
-#~ msgstr ""
-#~ "Значення для інтервалу очікування, коли віджет розширюється на нову "
-#~ "область"
-
-#~ msgid "Color scheme"
-#~ msgstr "Схема кольорів"
-
-#~ msgid "A palette of named colors for use in themes"
-#~ msgstr "Палітра назв кольорів, що використовуються у темах"
-
-#~ msgid "Enable Touchscreen Mode"
-#~ msgstr "Увімкнути режим Touchscreen"
-
-#~ msgid ""
-#~ "When TRUE, there are no motion notify events delivered on this screen"
-#~ msgstr ""
-#~ "При значенні TRUE, події сповіщення про рух не доставляються на цей екран"
-
-#~ msgid "Tooltip timeout"
-#~ msgstr "Час очікування появи підказки"
-
-#~ msgid "Timeout before tooltip is shown"
-#~ msgstr "Інтервал часу перед показом підказки"
-
-#~ msgid "Tooltip browse timeout"
-#~ msgstr "Час очікування перегляду підказки"
-
-#~ msgid "Timeout before tooltip is shown when browse mode is enabled"
-#~ msgstr ""
-#~ "Інтервал часу перед показом підказки, коли вмикається режим перегляду"
-
-#~ msgid "Tooltip browse mode timeout"
-#~ msgstr "Час очікування режиму перегляду"
-
-#~ msgid "Timeout after which browse mode is disabled"
-#~ msgstr "Інтервал часу після якого вимикається режим перегляду"
-
-#~ msgid "Keynav Cursor Only"
-#~ msgstr "Навігація курсора клавішами"
-
-#~ msgid "When TRUE, there are only cursor keys available to navigate widgets"
-#~ msgstr ""
-#~ "При значенні TRUE, для навігації по віджету доступні лише клавіші "
-#~ "керування курсором"
-
-#~ msgid "Keynav Wrap Around"
-#~ msgstr "Перехід на межі віджета при навігації клавіатурою"
-
-#~ msgid "Whether to wrap around when keyboard-navigating widgets"
-#~ msgstr ""
-#~ "Чи переходити на інший бік при досягненні межі віджета при навігації "
-#~ "клавіатурою"
-
-#~ msgid "Color Hash"
-#~ msgstr "Хеш кольорів"
-
-#~ msgid "A hash table representation of the color scheme."
-#~ msgstr "Представлення схеми кольорів у вигляді хеш-таблиці."
-
-#~ msgid "Default file chooser backend"
-#~ msgstr "Типовий механізм вибору файлів"
-
-#~ msgid "Name of the GtkFileChooser backend to use by default"
-#~ msgstr "Назва GtkFileChooser механізму для типового використання"
-
-#~ msgid "Enable Mnemonics"
-#~ msgstr "Увімкнути мнемоніку"
-
-#~ msgid "Whether labels should have mnemonics"
-#~ msgstr "Чи повинні позначки мати мнемоніку"
-
-#~ msgid "Recent Files Limit"
-#~ msgstr "Кількість недавніх файлів"
-
-#~ msgid "Enable Tooltips"
-#~ msgstr "Увімкнути підказки"
-
-#~ msgid "Whether tooltips should be shown on widgets"
-#~ msgstr "Чи потрібно показувати підказки на віджетах"
-
-#~ msgid "Toolbar style"
-#~ msgstr "Стиль панелі інструментів"
-
-#~ msgid ""
-#~ "Whether default toolbars have text only, text and icons, icons only, etc."
-#~ msgstr ""
-#~ "Чи матимуть пенали, початково, лише текст, текст і значки, лише значки "
-#~ "тощо."
-
-#~ msgid "Toolbar Icon Size"
-#~ msgstr "Розмір значка на панелі інструментів"
-
-#~ msgid "The size of icons in default toolbars."
-#~ msgstr "Розмір значків в типових панелях інструментів."
-
-#~ msgid "Auto Mnemonics"
-#~ msgstr "Автоматична мнемоніка"
-
-#~ msgid ""
-#~ "Whether mnemonics should be automatically shown and hidden when the user "
-#~ "presses the mnemonic activator."
-#~ msgstr ""
-#~ "Чи потрібно автоматично показувати та приховувати мнемоніку, коли "
-#~ "користувач натискає на активатор мнемоніки."
-
-#~ msgid "Visible Focus"
-#~ msgstr "Видимий фокус"
-
-#~ msgid ""
-#~ "Whether 'focus rectangles' should be hidden until the user starts to use "
-#~ "the keyboard."
-#~ msgstr ""
-#~ "Чи слід «фокус прямокутників» ховати, поки користувач не почне "
-#~ "використовувати клавіатуру."
-
-#~ msgid "Show button images"
-#~ msgstr "Показ зображень на кнопках"
-
-#~ msgid "Whether images should be shown on buttons"
-#~ msgstr "Чи показувати у меню зображення"
-
-#~ msgid "Show menu images"
-#~ msgstr "Показувати зображення меню"
-
-#~ msgid "Whether images should be shown in menus"
-#~ msgstr "Чи потрібно показувати зображення у меню"
-
-#~ msgid "Delay before drop down menus appear"
-#~ msgstr "Затримка перед появою розкривних меню"
-
-#~ msgid "Delay before the submenus of a menu bar appear"
-#~ msgstr "Затримка перед появою підменю панелей меню"
-
-#~ msgid "Scrolled Window Placement"
-#~ msgstr "Розміщення вікна прокрутки"
-
-#~ msgid ""
-#~ "Where the contents of scrolled windows are located with respect to the "
-#~ "scrollbars, if not overridden by the scrolled window's own placement."
-#~ msgstr ""
-#~ "Як буде розміщено вміст вікон, що прокручуються відносно смуг прокрутки, "
-#~ "якщо не буде перевизначено власним розміщенням вікна, що прокручується."
-
-#~ msgid "Can change accelerators"
-#~ msgstr "Можна змінювати комбінації клавіш"
-
-#~ msgid ""
-#~ "Whether menu accelerators can be changed by pressing a key over the menu "
-#~ "item"
-#~ msgstr ""
-#~ "Чи можна змінити комбінацію клавіш меню натисненням клавіші на елементі "
-#~ "меню"
-
-#~ msgid "Delay before submenus appear"
-#~ msgstr "Затримка перед появою підменю"
-
-#~ msgid ""
-#~ "Minimum time the pointer must stay over a menu item before the submenu "
-#~ "appear"
-#~ msgstr ""
-#~ "Мінімальний час, який вказівник має знаходитись над елементом меню, перед "
-#~ "тим як з'явиться підменю"
-
-#~ msgid "Delay before hiding a submenu"
-#~ msgstr "Затримка перед зникненням підменю"
-
-#~ msgid ""
-#~ "The time before hiding a submenu when the pointer is moving towards the "
-#~ "submenu"
-#~ msgstr "Затримка перед зникненням підменю, коли вказівник рухається по меню"
-
-#~ msgid "Custom palette"
-#~ msgstr "Інша палітра"
-
-#~ msgid "Palette to use in the color selector"
-#~ msgstr ""
-#~ "Палітра, що використовуватиметься у діалоговому вікні вибору кольору"
-
-#~ msgid "IM Preedit style"
-#~ msgstr "Стиль IM Preedit"
-
-#~ msgid "How to draw the input method preedit string"
-#~ msgstr "Як зображати рядок IM Preedit"
-
-#~ msgid "IM Status style"
-#~ msgstr "Стиль стану методу вводу"
-
-#~ msgid "How to draw the input method statusbar"
-#~ msgstr "Як зображати панель стану методу вводу"
-
-#~ msgid ""
-#~ "If TRUE, unmapped widgets are ignored when determining the size of the "
-#~ "group"
-#~ msgstr ""
-#~ "При значенні TRUE, Якщо встановлено, при визначенні розміру групи "
-#~ "приховані віджети ігноруються"
-
-#~ msgid "Style of bevel around the spin button"
-#~ msgstr "Стиль фаски навколо поле зі стрілками"
-
-#~| msgid "Pixel size to use for named icon"
-#~ msgid "Symbolic size to use for named icon"
-#~ msgstr "Символьний розмір, використовуваний для іменованої піктограми"
-
-#~ msgid "Style of bevel around the statusbar text"
-#~ msgstr "Стиль фаски навколо тексту в рядку стану"
-
-#~| msgid "The associated GdkScreen"
-#~ msgid "The associated GdkFrameClock"
-#~ msgstr "Пов'язана рамка годинника GdkFrameClock"
-
-#~ msgid "Value type"
-#~ msgstr "Тип значення"
-
-#~ msgid "The value type returned by GtkStyleContext"
-#~ msgstr "GtkStyleContext повернуло тип значення"
-
-#~ msgid "The minimum width of the handle"
-#~ msgstr "Мінімальна ширина регулятора"
-
-#~| msgid "Slider Length"
-#~ msgid "Slider Height"
-#~ msgstr "Висота повзунка"
-
-#~| msgid "The minimum width of the handle"
-#~ msgid "The minimum height of the handle"
-#~ msgstr "Мінімальна висота регулятора"
-
-#~ msgid "Paragraph background color"
-#~ msgstr "Колір тла абзацу"
-
-#~ msgid "Paragraph background color as a GdkColor"
-#~ msgstr "Колір тла абзацу як GdkColor"
-
-#~ msgid "Error underline color"
-#~ msgstr "Колір підкреслення помилок"
-
-#~ msgid "Color with which to draw error-indication underlines"
-#~ msgstr "Колір яким підкреслюються слова з помилками"
-
-#~ msgid "Toolbar Style"
-#~ msgstr "Стиль панелі інструментів"
-
-#~ msgid "How to draw the toolbar"
-#~ msgstr "Як малювати пенал"
-
-#~ msgid "If an arrow should be shown if the toolbar doesn't fit"
-#~ msgstr ""
-#~ "Чи повинна показуватись стрілка, при переповненні панелі інструментів"
-
-#~ msgid "Size of icons in this toolbar"
-#~ msgstr "Розмір значків у цій панелі інструментів"
-
-#~ msgid "Whether the icon-size property has been set"
-#~ msgstr "Чи встановлено властивість розміру значка"
-
-#~ msgid "Whether the item should receive extra space when the toolbar grows"
-#~ msgstr ""
-#~ "Чи елементи повинні отримувати додатковий простір, при збільшенні панелі "
-#~ "інструментів"
-
-#~ msgid "Whether the item should be the same size as other homogeneous items"
-#~ msgstr "Чи всі нащадки мають мати однаковий розмір"
-
-#~ msgid "Spacer size"
-#~ msgstr "Розмір пропуску"
-
-#~ msgid "Size of spacers"
-#~ msgstr "Розмір пропусків"
-
-#~ msgid "Amount of border space between the toolbar shadow and the buttons"
-#~ msgstr "Відстань між тінню пенала і кнопками"
-
-#~ msgid "Maximum child expand"
-#~ msgstr "Мінімальне розширення дочірнього елементу"
-
-#~ msgid "Maximum amount of space an expandable item will be given"
-#~ msgstr "Максимальний розмір елементу, що може розширюватись"
-
-#~ msgid "Space style"
-#~ msgstr "Стиль проміжку"
-
-#~ msgid "Whether spacers are vertical lines or just blank"
-#~ msgstr "Проміжки мають бути порожніми чи у вигляді вертикальних ліній"
-
-#~ msgid "Button relief"
-#~ msgstr "Рельєф кнопки"
-
-#~ msgid "Type of bevel around toolbar buttons"
-#~ msgstr "Тип фаски навколо кнопок пенала"
-
-#~ msgid "Style of bevel around the toolbar"
-#~ msgstr "Стиль фаски навколо пенала"
-
-#~ msgid ""
-#~ "If set, an underline in the label property indicates that the next "
-#~ "character should be used for the mnemonic accelerator key in the overflow "
-#~ "menu"
-#~ msgstr ""
-#~ "Якщо встановлено, то підкреслення в тексті означає, що наступний символ "
-#~ "має використовуватися в комбінації клавіш."
-
-#~ msgid "Widget to use as the item label"
-#~ msgstr "Віджет, який використовується як позначка елементу"
-
-#~ msgid "Stock Id"
-#~ msgstr "ID вбудованого значка"
-
-#~ msgid "The stock icon displayed on the item"
-#~ msgstr "Вбудований значок "
-
-#~ msgid "The name of the themed icon displayed on the item"
-#~ msgstr "Назва піктограми у темі, що показано в пункті"
-
-#~ msgid "Icon spacing"
-#~ msgstr "Інтервал між піктограмами"
-
-#~ msgid "Spacing in pixels between the icon and label"
-#~ msgstr "Відстань у точках між значками та позначкою"
-
-#~ msgid ""
-#~ "Whether the toolbar item is considered important. When TRUE, toolbar "
-#~ "buttons show text in GTK_TOOLBAR_BOTH_HORIZ mode"
-#~ msgstr ""
-#~ "Чи вважається панель інструментів важливою. Якщо встановлено, кнопки "
-#~ "панелі інструментів показують текст у GTK_TOOLBAR_BOTH_HORIZ режимі"
-
-#~ msgid "A widget to display in place of the usual label"
-#~ msgstr "Віджет, який буде показаний замість звичайної позначки"
-
-#~ msgid "Collapsed"
-#~ msgstr "Згорнуто"
-
-#~ msgid "Whether the group has been collapsed and items are hidden"
-#~ msgstr "Чи групи згорнуто і пункти сховано"
-
-#~ msgid "ellipsize"
-#~ msgstr "овал"
-
-#~ msgid "Ellipsize for item group headers"
-#~ msgstr "Овал заголовків групи пунктів"
-
-#~ msgid "Header Relief"
-#~ msgstr "Форма рельєфу заголовка"
-
-#~ msgid "Relief of the group header button"
-#~ msgstr "Форма рельєфу кнопки заголовків стовпчиків"
-
-#~ msgid "Header Spacing"
-#~ msgstr "Простір заголовка"
-
-#~ msgid "Spacing between expander arrow and caption"
-#~ msgstr "Інтервал між стрілкою-розширювачем та заголовком"
-
-#~ msgid "Whether the item should receive extra space when the group grows"
-#~ msgstr "Чи розширюється елемент при збільшенні розміру групи"
-
-#~ msgid "Whether the item should fill the available space"
-#~ msgstr "Чи повинен елемент заповнювати весь доступний простір"
-
-#~ msgid "New Row"
-#~ msgstr "Новий рядок"
-
-#~ msgid "Whether the item should start a new row"
-#~ msgstr "Чи має елемент створювати новий рядок"
-
-#~ msgid "Position of the item within this group"
-#~ msgstr "Розташування елемента всередині цієї групи"
-
-#~ msgid "Size of icons in this tool palette"
-#~ msgstr "Розмір значків у цій панелі інструментів"
-
-#~ msgid "Style of items in the tool palette"
-#~ msgstr "Стиль елементів на панелі інструментів"
-
-#~ msgid "Exclusive"
-#~ msgstr "Винятково"
-
-#~ msgid "Whether the item group should be the only expanded at a given time"
-#~ msgstr "Чи має група елементів розширюватися лише певного часу"
-
-#~ msgid ""
-#~ "Whether the item group should receive extra space when the palette grows"
-#~ msgstr "Чи має збільшуватись простір групи елементів при збільшенні панелі"
-
-#~ msgid "TreeMenu model"
-#~ msgstr "Модель TreeMenu"
-
-#~ msgid "TreeMenu root row"
-#~ msgstr "Кореневий рядок TreeMenu"
-
-#~ msgid "The TreeMenu will display children of the specified root"
-#~ msgstr "TreeMenu покаже, що знаходиться під вказаним коренем"
-
-#~ msgid "Tearoff"
-#~ msgstr "Відрив"
-
-#~ msgid "Whether the menu has a tearoff item"
-#~ msgstr "Чи меню має відривний пункт"
-
-#~ msgid "Wrap Width"
-#~ msgstr "Ширина переносу"
-
-#~ msgid "Wrap width for laying out items in a grid"
-#~ msgstr "Ширина переносу для розташування пунктів у ґратці"
-
-#~ msgid "Rules Hint"
-#~ msgstr "Порада правилам"
-
-#~ msgid "Set a hint to the theme engine to draw rows in alternating colors"
-#~ msgstr ""
-#~ "Встановити пораду процесору тем для малювання рядків у різні кольори"
-
-#~ msgid "Vertical Separator Width"
-#~ msgstr "Вертикальний інтервал між комірками"
-
-#~ msgid "Vertical space between cells.  Must be an even number"
-#~ msgstr "Вертикальний інтервал між комірками. Має бути парним числом."
-
-#~ msgid "Horizontal Separator Width"
-#~ msgstr "Ширина горизонтального розділювача"
-
-#~ msgid "Horizontal space between cells.  Must be an even number"
-#~ msgstr "Горизонтальний  інтервал між комірками. Має бути парним числом."
-
-#~ msgid "Allow drawing of alternating color rows"
-#~ msgstr "Дозволити малювання рядків різними кольорами"
-
-#~ msgid "Indent Expanders"
-#~ msgstr "Відступ розширювачів"
-
-#~ msgid "Make the expanders indented"
-#~ msgstr "Зробити відступ розширювачам"
-
-#~ msgid "Even Row Color"
-#~ msgstr "Колір парних рядків"
-
-#~ msgid "Color to use for even rows"
-#~ msgstr "Колір, що використовуватиметься для парних рядків"
-
-#~ msgid "Odd Row Color"
-#~ msgstr "Колір непарних рядків"
-
-#~ msgid "Color to use for odd rows"
-#~ msgstr "Колір, що використовуватиметься для непарних рядків"
-
-#~ msgid "Grid line width"
-#~ msgstr "Ширина лінії сітки"
-
-#~ msgid "Width, in pixels, of the tree view grid lines"
-#~ msgstr "Ширина, в точках, ліній рівня вкладення та ліній сітки"
-
-#~ msgid "Tree line width"
-#~ msgstr "Ширина лінії рівня вкладення"
-
-#~ msgid "Width, in pixels, of the tree view lines"
-#~ msgstr "Ширина, в точках, лінії ліній рівня вкладення"
-
-#~ msgid "Grid line pattern"
-#~ msgstr "Штрих лінії сітки"
-
-#~ msgid "Dash pattern used to draw the tree view grid lines"
-#~ msgstr "Візерунок, що використовується для малювання ліній сітки"
-
-#~ msgid "Tree line pattern"
-#~ msgstr "Штрих лінії вкладення"
-
-#~ msgid "Dash pattern used to draw the tree view lines"
-#~ msgstr "Візерунок, що використовуватиметься для малювання індикатора фокусу"
-
-#~ msgid "Application paintable"
-#~ msgstr "Малюється додатком"
-
-#~ msgid "Whether the application will paint directly on the widget"
-#~ msgstr "Чи буде додаток малювати просто у віджеті"
-
-#~ msgid "Can default"
-#~ msgstr "Вибирається типово"
-
-#~ msgid "Whether the widget can be the default widget"
-#~ msgstr "Чим може віджет бути \"типовим елементом\""
-
-#~ msgid "Whether the widget is part of a composite widget"
-#~ msgstr "Чи є елемент керування частиною складеного елемента керування"
-
-#~ msgid "Style"
-#~ msgstr "Стиль"
-
-#~ msgid ""
-#~ "The style of the widget, which contains information about how it will "
-#~ "look (colors etc)"
-#~ msgstr "Стиль віджета, що описує його зовнішній вигляд (кольори тощо)"
-
-#~ msgid "Events"
-#~ msgstr "Події"
-
-#~ msgid "The event mask that decides what kind of GdkEvents this widget gets"
-#~ msgstr ""
-#~ "Маска подій, що визначає, які події GdkEvents може отримувати цей віджет"
-
-#~ msgid "No show all"
-#~ msgstr "Не показується все"
-
-#~ msgid "Whether gtk_widget_show_all() should not affect this widget"
-#~ msgstr "Чи функція gtk_widget_show_all() не повинна впливати на віджет"
-
-#~ msgid "The widget's window if it is realized"
-#~ msgstr "Вікно віджету, яке реалізовано "
-
-#~ msgid "Double Buffered"
-#~ msgstr "Подвійна буферизація"
-
-#~ msgid "Whether the widget is double buffered"
-#~ msgstr "Чи віджет у буфері двічі"
-
-#~ msgid "Margin on Left"
-#~ msgstr "Поле наліво"
-
-#~ msgid "Pixels of extra space on the left side"
-#~ msgstr "Пікселів додаткового простору по ліву сторону"
-
-#~ msgid "Margin on Right"
-#~ msgstr "Поле направо"
-
-#~ msgid "Pixels of extra space on the right side"
-#~ msgstr "Пікселів додаткового простору по праву сторону"
-
-#~ msgid "All Margins"
-#~ msgstr "Усі поля"
-
-#~ msgid "Pixels of extra space on all four sides"
-#~ msgstr "Пікселів додаткового простору по всі чотири сторони"
-
-#~ msgid "Expand Both"
-#~ msgstr "Двостороннє розширення"
-
-#~ msgid "Interior Focus"
-#~ msgstr "Внутрішній фокус"
-
-#~ msgid "Width, in pixels, of the focus indicator line"
-#~ msgstr "Ширина, в точках, лінії індикатора фокуса"
-
-#~ msgid "Focus line dash pattern"
-#~ msgstr "Штрих лінії фокуса"
-
-#~ msgid ""
-#~ "Dash pattern used to draw the focus indicator. The character values are "
-#~ "interpreted as pixel widths of alternating on and off segments of the "
-#~ "line."
-#~ msgstr ""
-#~ "Шаблон пунктирної лінії, що використовується для індикації фокуса "
-#~ "введення. Значення для символів є сумою довжин сегментів штриха і "
-#~ "пропуску."
-
-#~ msgid "Focus padding"
-#~ msgstr "Відступ фокуса"
-
-#~ msgid "Width, in pixels, between focus indicator and the widget 'box'"
-#~ msgstr "Відстань, в точках, між індикатором фокуса і границею блока віджета"
-
-#~ msgid "Cursor color"
-#~ msgstr "Колір курсора"
-
-#~ msgid "Color with which to draw insertion cursor"
-#~ msgstr "Колір курсора"
-
-#~ msgid "Secondary cursor color"
-#~ msgstr "Вторинний колір курсора"
-
-#~ msgid ""
-#~ "Color with which to draw the secondary insertion cursor when editing "
-#~ "mixed right-to-left and left-to-right text"
-#~ msgstr ""
-#~ "Колір другого курсора, коли використовується змішаний (справа наліво і "
-#~ "зліва направо) ввід тексту"
-
-#~ msgid "Aspect ratio with which to draw insertion cursor"
-#~ msgstr "Пропорції курсора"
-
-#~ msgid "Window dragging"
-#~ msgstr "Перетягування вікна"
-
-#~| msgid "Whether windows can be dragged by clicking on empty areas"
-#~ msgid ""
-#~ "Whether windows can be dragged and maximized by clicking on empty areas"
-#~ msgstr ""
-#~ "Чи можна перетягувати та розгортати вікна, натиснувши на порожні області"
-
-#~ msgid "Unvisited Link Color"
-#~ msgstr "Колір не відвіданого гіперпосилання"
-
-#~ msgid "Color of unvisited links"
-#~ msgstr "Колір не відвіданих гіперпосилань"
-
-#~ msgid "Visited Link Color"
-#~ msgstr "Колір відвіданого гіперпосилання"
-
-#~ msgid "Color of visited links"
-#~ msgstr "Колір відвіданого гіперпосилання"
-
-#~ msgid "Wide Separators"
-#~ msgstr "Широкі розділювачі"
-
-#~ msgid ""
-#~ "Whether separators have configurable width and should be drawn using a "
-#~ "box instead of a line"
-#~ msgstr ""
-#~ "Чи ширина елементів розділення може налаштовуватись, та вони показуються "
-#~ "у вигляді прямокутника замість лінії"
-
-#~ msgid "Separator Width"
-#~ msgstr "Ширина розділювача"
-
-#~ msgid "The width of separators if wide-separators is TRUE"
-#~ msgstr "Ширина елемента розділення, якщо увімкнені широкі розділювачі"
-
-#~ msgid "Separator Height"
-#~ msgstr "Висота розділювача"
-
-#~ msgid "The height of separators if \"wide-separators\" is TRUE"
-#~ msgstr "Висота елемента розділення, якщо увімкнені широкі розділювачі"
-
-#~ msgid "Horizontal Scroll Arrow Length"
-#~ msgstr "Довжина стрілки горизонтальної прокрутки"
-
-#~ msgid "The length of horizontal scroll arrows"
-#~ msgstr "Довжина стрілок горизонтальної прокрутки"
-
-#~ msgid "Vertical Scroll Arrow Length"
-#~ msgstr "Довжина стрілки вертикальної прокрутки"
-
-#~ msgid "The length of vertical scroll arrows"
-#~ msgstr "Довжина стрілок вертикальної прокрутки"
-
-#~| msgid "Width of handle"
-#~ msgid "Width of text selection handles"
-#~ msgstr "Ширина елемента керування позначенням тексту"
-
-#~| msgid "The title of the font selection dialog"
-#~ msgid "Height of text selection handles"
-#~ msgstr "Висота елемента керування позначенням тексту"
-
-#~ msgid "The type of the window"
-#~ msgstr "Тип вікна"
-
-#~ msgid "Window Role"
-#~ msgstr "Роль вікна"
-
-#~ msgid "Unique identifier for the window to be used when restoring a session"
-#~ msgstr ""
-#~ "Унікальний ідентифікатор вікна, що використовується при відновленні сеансу"
-
-#~ msgid "Window Position"
-#~ msgstr "Позиція вікна"
-
-#~ msgid "The initial position of the window"
-#~ msgstr "Початкова позиція вікна"
-
-#~ msgid "Hide the titlebar during maximization"
-#~ msgstr "Сховати рядок заголовку під час розгортання"
-
-#~ msgid ""
-#~ "If this window's titlebar should be hidden when the window is maximized"
-#~ msgstr "Чи цей рядок заголовку слід сховати, коли вікно розгорнуто"
-
-#~ msgid "Icon for this window"
-#~ msgstr "Значок цього вікна"
-
-#~ msgid "Focus in Toplevel"
-#~ msgstr "Фокус у вікні найвищого рівня"
-
-#~ msgid "Whether the input focus is within this GtkWindow"
-#~ msgstr "Чи фокус вводу в цьому об'єкті GtkWindow"
-
-#~ msgid "Type hint"
-#~ msgstr "Вказівка типу"
-
-#~ msgid ""
-#~ "Hint to help the desktop environment understand what kind of window this "
-#~ "is and how to treat it."
-#~ msgstr ""
-#~ "Вказівка, що допомагає середовищу зрозуміти якого типу є це вікно і як "
-#~ "його необхідно обробляти"
-
-#~ msgid "Skip taskbar"
-#~ msgstr "Уникнути панель завдань"
-
-#~ msgid "TRUE if the window should not be in the task bar."
-#~ msgstr "Істина, якщо вікно не повинно потрапляти у панель завдань."
-
-#~ msgid "Skip pager"
-#~ msgstr "Уникнути пейджер"
-
-#~ msgid "TRUE if the window should not be in the pager."
-#~ msgstr "Істинно, якщо вікно не має потрапити в пейджер"
-
-#~ msgid "Urgent"
-#~ msgstr "Терміново"
-
-#~ msgid "TRUE if the window should be brought to the user's attention."
-#~ msgstr "Істинно, якщо вікно має привернути увагу користувача."
-
-#~ msgid "Accept focus"
-#~ msgstr "Допускає фокус"
-
-#~ msgid "TRUE if the window should receive the input focus."
-#~ msgstr "Істина, якщо вікно повинно отримувати фокус вводу."
-
-#~ msgid "Focus on map"
-#~ msgstr "Фокус при відображенні"
-
-#~ msgid "TRUE if the window should receive the input focus when mapped."
-#~ msgstr ""
-#~ "Встановлено, якщо вікно повинно отримувати фокус вводу при відображені."
-
-#~ msgid "Specifies whether the window should have a resize grip"
-#~ msgstr "Вказує, чи вікну слід змінювати розмір ґратки"
-
-#~ msgid "Resize grip is visible"
-#~ msgstr "Зміна розміру ґратки видима"
-
-#~ msgid "Specifies whether the window's resize grip is visible."
-#~ msgstr "Вказує, чи зміна розміру вікна видима."
-
-#~ msgid "Gravity"
-#~ msgstr "Важливість"
-
-#~ msgid "The window gravity of the window"
-#~ msgstr "Важливість вінка"
-
-#~ msgid "Attached to Widget"
-#~ msgstr "Під'єднаний до віджета"
-
-#~ msgid "The widget where the window is attached"
-#~ msgstr "Віджет, до якого під'єднано вікно"
-
-#~ msgid "Decorated button layout"
-#~ msgstr "Розташування декорованої кнопки"
-
-#~ msgid "Decoration resize handle size"
-#~ msgstr "Декорація змінює основний розмір"
