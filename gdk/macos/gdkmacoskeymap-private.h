@@ -27,9 +27,10 @@
 
 G_BEGIN_DECLS
 
-GdkMacosKeymap *_gdk_macos_keymap_new            (GdkMacosDisplay *display);
-GdkEventType    _gdk_macos_keymap_get_event_type (NSEvent         *event);
-gboolean        _gdk_macos_keymap_is_modifier    (guint            keycode);
+GdkMacosKeymap *_gdk_macos_keymap_new                (GdkMacosDisplay *display);
+GdkEventType    _gdk_macos_keymap_get_event_type     (NSEvent         *event);
+gboolean        _gdk_macos_keymap_is_modifier        (guint            keycode);
+gunichar        _gdk_macos_keymap_get_key_equivalent (guint            key);
 
 G_END_DECLS
 
