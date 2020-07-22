@@ -662,8 +662,6 @@ create_color_grid (void)
 {
   GtkWidget *gridview;
   GtkListItemFactory *factory;
-  GListModel *selection;
-  GtkSortListModel *sort_model;
 
   gridview = gtk_grid_view_new ();
   gtk_scrollable_set_hscroll_policy (GTK_SCROLLABLE (gridview), GTK_SCROLL_NATURAL);
@@ -676,14 +674,6 @@ create_color_grid (void)
 
   gtk_grid_view_set_max_columns (GTK_GRID_VIEW (gridview), 24);
   gtk_grid_view_set_enable_rubberband (GTK_GRID_VIEW (gridview), TRUE);
-
-  sort_model = gtk_sort_list_model_new (gtk_color_list_new (0), NULL);
-  gtk_sort_list_model_set_incremental (sort_model, TRUE);
-
-  selection = G_LIST_MODEL (gtk_multi_selection_new (G_LIST_MODEL (sort_model)));
-  gtk_grid_view_set_model (GTK_GRID_VIEW (gridview), selection);
-  g_object_unref (selection);
-  g_object_unref (sort_model);
 
   return gridview;
 }
@@ -837,6 +827,22 @@ update_selection_average (GListModel *model,
   g_object_unref (color);
 }
 
+static void
+update_progress_cb (GtkSortListModel *model,
+                    GParamSpec       *pspec,
+                    GtkProgressBar   *progress)
+{
+  guint total;
+  guint pending;
+
+  total = g_list_model_get_n_items (G_LIST_MODEL (model));
+  total = MAX (total, 1); /* avoid div by 0 below */
+  pending = gtk_sort_list_model_get_pending (model);
+
+  gtk_widget_set_visible (GTK_WIDGET (progress), pending != 0);
+  gtk_progress_bar_set_fraction (progress, (total - pending) / (double) total);
+}
+
 static int
 compare_red (gconstpointer a,
              gconstpointer b,
@@ -892,10 +898,11 @@ do_listview_colors (GtkWidget *do_widget)
 {
   if (window == NULL)
     {
-      GtkWidget *header, *gridview, *sw, *box, *dropdown;
+      GtkMultiSelection *selection;
+      GtkSortListModel *sort_model;
+      GtkWidget *header, *overlay, *gridview, *sw, *box, *dropdown;
       GtkListItemFactory *factory;
       GListStore *factories;
-      GListModel *model;
       GtkSorter *sorter;
       GtkSorter *multi_sorter;
       GListStore *sorters;
@@ -913,6 +920,7 @@ do_listview_colors (GtkWidget *do_widget)
       GtkWidget *selection_average_picture;
       GtkWidget *selection_info_toggle;
       GtkWidget *selection_info_revealer;
+      GtkWidget *progress;
       GtkCssProvider *provider;
 
       provider = gtk_css_provider_new ();
@@ -921,6 +929,10 @@ do_listview_colors (GtkWidget *do_widget)
                                                   GTK_STYLE_PROVIDER (provider),
                                                   800);
       g_object_unref (provider);
+
+      sort_model = gtk_sort_list_model_new (gtk_color_list_new (0), NULL);
+      gtk_sort_list_model_set_incremental (sort_model, TRUE);
+      selection = GTK_MULTI_SELECTION (gtk_multi_selection_new (G_LIST_MODEL (sort_model)));
 
       window = gtk_window_new ();
       gtk_window_set_title (GTK_WINDOW (window), "Colors");
@@ -932,8 +944,17 @@ do_listview_colors (GtkWidget *do_widget)
                               gtk_widget_get_display (do_widget));
       g_object_add_weak_pointer (G_OBJECT (window), (gpointer*)&window);
 
+      overlay = gtk_overlay_new ();
+      gtk_window_set_child (GTK_WINDOW (window), overlay);
+
       box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-      gtk_window_set_child (GTK_WINDOW (window), box);
+      gtk_overlay_set_child (GTK_OVERLAY (overlay), box);
+
+      progress = gtk_progress_bar_new ();
+      gtk_widget_set_hexpand (progress, TRUE);
+      gtk_widget_set_valign (progress, GTK_ALIGN_START);
+      g_signal_connect (sort_model, "notify::pending", G_CALLBACK (update_progress_cb), progress);
+      gtk_overlay_add_overlay (GTK_OVERLAY (overlay), progress);
 
       selection_info_revealer = gtk_revealer_new ();
       gtk_box_append (GTK_BOX (box), selection_info_revealer);
@@ -986,12 +1007,12 @@ do_listview_colors (GtkWidget *do_widget)
       gtk_box_append (GTK_BOX (box), sw);
 
       gridview = create_color_grid ();
+      gtk_grid_view_set_model (GTK_GRID_VIEW (gridview), G_LIST_MODEL (selection));
       gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (sw), gridview);
       gtk_widget_set_hexpand (sw, TRUE);
       gtk_widget_set_vexpand (sw, TRUE);
-      model = gtk_grid_view_get_model (GTK_GRID_VIEW (gridview));
 
-      selection_filter = G_LIST_MODEL (gtk_selection_filter_model_new (GTK_SELECTION_MODEL (model)));
+      selection_filter = G_LIST_MODEL (gtk_selection_filter_model_new (GTK_SELECTION_MODEL (selection)));
       g_signal_connect (selection_filter, "items-changed", G_CALLBACK (update_selection_count), selection_size_label);
       g_signal_connect (selection_filter, "items-changed", G_CALLBACK (update_selection_average), selection_average_picture);
 
@@ -999,9 +1020,6 @@ do_listview_colors (GtkWidget *do_widget)
       gtk_grid_view_set_model (GTK_GRID_VIEW (selection_view), no_selection);
       g_object_unref (selection_filter);
       g_object_unref (no_selection);
-
-      model = gtk_multi_selection_get_model (GTK_MULTI_SELECTION (model));
-      g_object_ref (model);
 
       selection_info_toggle = gtk_toggle_button_new ();
       gtk_button_set_icon_name (GTK_BUTTON (selection_info_toggle), "emblem-important-symbolic");
@@ -1015,7 +1033,7 @@ do_listview_colors (GtkWidget *do_widget)
       button = gtk_button_new_with_mnemonic ("_Refill");
       g_signal_connect (button, "clicked",
                         G_CALLBACK (refill),
-                        gtk_sort_list_model_get_model (GTK_SORT_LIST_MODEL (model)));
+                        gtk_sort_list_model_get_model (sort_model));
 
       gtk_header_bar_pack_start (GTK_HEADER_BAR (header), button);
 
@@ -1030,15 +1048,14 @@ do_listview_colors (GtkWidget *do_widget)
       gtk_label_set_width_chars (GTK_LABEL (label), len + 2);
       gtk_label_set_xalign (GTK_LABEL (label), 1);
 
-      g_signal_connect (gtk_grid_view_get_model (GTK_GRID_VIEW (gridview)),
-                        "items-changed", G_CALLBACK (items_changed_cb), label);
+      g_signal_connect (selection, "items-changed", G_CALLBACK (items_changed_cb), label);
       gtk_header_bar_pack_start (GTK_HEADER_BAR (header), label);
 
       dropdown = gtk_drop_down_new ();
       gtk_drop_down_set_from_strings (GTK_DROP_DOWN (dropdown), (const char *[]) { "8", "64", "512", "4096", "32768", "262144", "2097152", "16777216", NULL });
       g_signal_connect (dropdown, "notify::selected",
                         G_CALLBACK (limit_changed_cb), 
-                        gtk_sort_list_model_get_model (GTK_SORT_LIST_MODEL (model)));
+                        gtk_sort_list_model_get_model (sort_model));
       g_signal_connect (dropdown, "notify::selected",
                         G_CALLBACK (limit_changed_cb2), 
                         label);
@@ -1142,7 +1159,7 @@ do_listview_colors (GtkWidget *do_widget)
       gtk_drop_down_set_model (GTK_DROP_DOWN (dropdown), G_LIST_MODEL (sorters));
       g_object_unref (sorters);
 
-      g_object_bind_property (dropdown, "selected-item", model, "sorter", G_BINDING_SYNC_CREATE);
+      g_object_bind_property (dropdown, "selected-item", sort_model, "sorter", G_BINDING_SYNC_CREATE);
 
       factories = g_list_store_new (GTK_TYPE_LIST_ITEM_FACTORY);
 
@@ -1174,7 +1191,6 @@ do_listview_colors (GtkWidget *do_widget)
       g_object_unref (factories);
 
       g_object_bind_property (dropdown, "selected-item", gridview, "factory", G_BINDING_SYNC_CREATE);
-      g_object_unref (model);
     }
 
   if (!gtk_widget_get_visible (window))
