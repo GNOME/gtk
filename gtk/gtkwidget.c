@@ -3834,7 +3834,6 @@ gtk_widget_allocate (GtkWidget    *widget,
 
   gtk_widget_adjust_size_allocation (widget, &adjusted);
 
-  size_changed = (priv->width != adjusted.width) || (priv->height != adjusted.height);
 
   if (adjusted.width < 0 || adjusted.height < 0)
     {
@@ -3885,15 +3884,16 @@ gtk_widget_allocate (GtkWidget    *widget,
   if (priv->surface_transform_data)
     sync_widget_surface_transform (widget);
 
-  if (!alloc_needed && !size_changed && !baseline_changed)
-    goto skip_allocate;
-
   /* Since gtk_widget_measure does it for us, we can be sure here that
    * the given alloaction is large enough for the css margin/bordder/padding */
   adjusted.width -= border.left + padding.left +
                     border.right + padding.right;
   adjusted.height -= border.top + padding.top +
                      border.bottom + padding.bottom;
+  size_changed = (priv->width != adjusted.width) || (priv->height != adjusted.height);
+
+  if (!alloc_needed && !size_changed && !baseline_changed)
+    goto skip_allocate;
 
   priv->width = adjusted.width;
   priv->height = adjusted.height;
