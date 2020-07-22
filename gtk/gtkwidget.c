@@ -8960,6 +8960,10 @@ gtk_widget_add_mnemonic_label (GtkWidget *widget,
 
   g_object_set_qdata_full (G_OBJECT (widget), quark_mnemonic_labels,
 			   new_list, (GDestroyNotify) g_slist_free);
+
+  gtk_accessible_update_relation (GTK_ACCESSIBLE (widget),
+                                  GTK_ACCESSIBLE_RELATION_LABELLED_BY, new_list,
+                                  -1);
 }
 
 /**
@@ -8988,6 +8992,19 @@ gtk_widget_remove_mnemonic_label (GtkWidget *widget,
   if (new_list)
     g_object_set_qdata_full (G_OBJECT (widget), quark_mnemonic_labels,
 			     new_list, (GDestroyNotify) g_slist_free);
+
+  if (new_list != NULL && new_list->data != NULL)
+    {
+      gtk_accessible_update_relation (GTK_ACCESSIBLE (widget),
+                                      GTK_ACCESSIBLE_RELATION_LABELLED_BY, new_list,
+                                      -1);
+    }
+  else
+    {
+      gtk_accessible_update_relation (GTK_ACCESSIBLE (widget),
+                                      GTK_ACCESSIBLE_RELATION_LABELLED_BY, NULL,
+                                      -1);
+    }
 }
 
 /**
