@@ -23,10 +23,10 @@
 #include "gtkapplicationprivate.h"
 #include "gtkmenutrackerprivate.h"
 #include "gtkicontheme.h"
-#include "gtktoolbarprivate.h"
 #include "gtkquartz.h"
 
-#include <gdk/quartz/gdkquartz.h>
+#include <gdk/macos/gdkmacos.h>
+#include <gdk/macos/gdkmacoskeymap-private.h>
 
 #import <Cocoa/Cocoa.h>
 
@@ -103,7 +103,7 @@ icon_loaded (GObject      *object,
              GAsyncResult *result,
              gpointer      user_data)
 {
-  GtkIconPaintable *icon = GTK_ICON (object);
+  GtkIconPaintable *icon = GTK_ICON_PAINTABLE (object);
   GNSMenuItem *item = user_data;
   GError *error = NULL;
   GdkPixbuf *pixbuf;
@@ -322,7 +322,7 @@ icon_loaded (GObject      *object,
 
 - (void)didChangeToggled
 {
-  [self setState:gtk_menu_tracker_item_get_toggled (trackerItem) ? NSOnState : NSOffState];
+  [self setState:gtk_menu_tracker_item_get_toggled (trackerItem) ? NSControlStateValueOn : NSControlStateValueOff];
 }
 
 - (void)didChangeAccel
@@ -338,18 +338,18 @@ icon_loaded (GObject      *object,
 
       gtk_accelerator_parse (accel, &key, &mask);
 
-      character = gdk_quartz_get_key_equivalent (key);
+      character = _gdk_macos_keymap_get_key_equivalent (key);
       [self setKeyEquivalent:[NSString stringWithCharacters:&character length:1]];
 
       modifiers = 0;
       if (mask & GDK_SHIFT_MASK)
-        modifiers |= NSShiftKeyMask;
+        modifiers |= NSEventModifierFlagShift;
       if (mask & GDK_CONTROL_MASK)
-        modifiers |= NSControlKeyMask;
+        modifiers |= NSEventModifierFlagControl;
       if (mask & GDK_ALT_MASK)
-        modifiers |= NSAlternateKeyMask;
+        modifiers |= NSEventModifierFlagOption;
       if (mask & GDK_META_MASK)
-        modifiers |= NSCommandKeyMask;
+        modifiers |= NSEventModifierFlagCommand;
       [self setKeyEquivalentModifierMask:modifiers];
     }
   else
