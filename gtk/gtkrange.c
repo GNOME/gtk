@@ -2182,7 +2182,7 @@ gtk_range_scroll_controller_scroll (GtkEventControllerScroll *scroll,
   gboolean handled;
   GtkOrientation move_orientation;
 
-#ifdef GDK_WINDOWING_QUARTZ
+#ifdef GDK_WINDOWING_MACOS
   scroll_unit = 1;
 #else
   scroll_unit = gtk_adjustment_get_page_increment (priv->adjustment);

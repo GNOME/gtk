@@ -58,8 +58,8 @@
 #include "gtkimcontextime.h"
 #endif
 
-#ifdef GDK_WINDOWING_QUARTZ
-#include "quartz/gdkquartz.h"
+#ifdef GDK_WINDOWING_MACOS
+#include "macos/gdkmacos.h"
 #include "gtkimcontextquartz.h"
 #endif
 
@@ -131,9 +131,9 @@ match_backend (GdkDisplay *display,
     return FALSE;
 #endif
 
-  if (g_strcmp0 (context_id, "quartz") == 0)
-#ifdef GDK_WINDOWING_QUARTZ
-    return GDK_IS_QUARTZ_DISPLAY (display);
+  if (g_strcmp0 (context_id, "macos") == 0)
+#ifdef GDK_WINDOWING_MACOS
+    return GDK_IS_MACOS_DISPLAY (display);
 #else
     return FALSE;
 #endif
@@ -270,7 +270,7 @@ gtk_im_modules_init (void)
 #ifdef GDK_WINDOWING_WIN32
   g_type_ensure (gtk_im_context_ime_get_type ());
 #endif
-#ifdef GDK_WINDOWING_QUARTZ
+#ifdef GDK_WINDOWING_MACOS
   g_type_ensure (gtk_im_context_quartz_get_type ());
 #endif
 

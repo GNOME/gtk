@@ -1202,7 +1202,7 @@ get_scroll_unit (GtkScrolledWindow *sw,
 {
   gdouble scroll_unit;
 
-#ifndef GDK_WINDOWING_QUARTZ
+#ifndef GDK_WINDOWING_MACOS
   GtkScrolledWindowPrivate *priv = gtk_scrolled_window_get_instance_private (sw);
   GtkScrollbar *scrollbar;
   GtkAdjustment *adj;

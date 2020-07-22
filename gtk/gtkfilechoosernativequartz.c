@@ -19,6 +19,8 @@
 
 #include "config.h"
 
+#include <Cocoa/Cocoa.h>
+
 #include "gtkfilechoosernativeprivate.h"
 #include "gtknativedialogprivate.h"
 
@@ -28,6 +30,7 @@
 #include "gtkfilechooserwidget.h"
 #include "gtkfilechooserwidgetprivate.h"
 #include "gtkfilechooserutils.h"
+#include "gtknative.h"
 #include "gtksizerequest.h"
 #include "gtktypebuiltins.h"
 #include "gtkintl.h"
@@ -38,7 +41,9 @@
 #include "gtklabel.h"
 #include "gtkfilefilterprivate.h"
 
-#include "quartz/gdkquartz.h"
+#include <gdk/macos/gdkmacos.h>
+
+#include "gdk/macos/gdkmacossurface-private.h"
 
 typedef struct {
   GtkFileChooserNative *self;
@@ -346,7 +351,7 @@ filechooser_quartz_launch (FileChooserQuartzData *data)
   
   void (^handler)(NSInteger ret) = ^(NSInteger result) {
 
-    if (result == NSFileHandlingPanelOKButton)
+    if (result == NSModalResponseOK)
       {
         // get selected files and update data->files
         data->response = GTK_RESPONSE_ACCEPT;
@@ -467,7 +472,7 @@ gtk_file_chooser_native_quartz_show (GtkFileChooserNative *self)
       data->filter_names = [NSMutableArray arrayWithCapacity:n_filters];
       [data->filter_names retain];
 
-      for (i = 0; i < n; i++)
+      for (i = 0; i < n_filters; i++)
         {
           GtkFileFilter *filter = g_list_model_get_item (filters, i);
           if (!file_filter_to_quartz (filter, data->filters, data->filter_names))
@@ -516,7 +521,7 @@ gtk_file_chooser_native_quartz_show (GtkFileChooserNative *self)
   if (transient_for)
     {
       gtk_widget_realize (GTK_WIDGET (transient_for));
-      data->parent = gdk_quartz_surface_get_nswindow (gtk_native_get_surface (GTK_NATIVE (transient_for)));
+      data->parent = _gdk_macos_surface_get_native (GDK_MACOS_SURFACE (gtk_native_get_surface (GTK_NATIVE (transient_for))));
 
       if (gtk_native_dialog_get_modal (GTK_NATIVE_DIALOG (self)))
         data->modal = TRUE;

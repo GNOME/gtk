@@ -33,7 +33,7 @@
 #include "gtkresources.h"
 
 
-#if !defined G_OS_WIN32 && !(defined GDK_WINDOWING_QUARTZ && defined QUARTZ_RELOCATION)
+#if !defined G_OS_WIN32 && !(defined GDK_WINDOWING_MACOS && defined QUARTZ_RELOCATION)
 
 const gchar *
 _gtk_get_datadir (void)

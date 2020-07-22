@@ -25,7 +25,7 @@
 #include "gtksearchenginequartz.h"
 #include "gtkintl.h"
 
-#include <gdk/gdk.h> /* for GDK_WINDOWING_QUARTZ */
+#include <gdk/gdk.h> /* for GDK_WINDOWING_MACOS */
 
 #if defined(HAVE_TRACKER3)
 #include "gtksearchenginetracker3.h"
@@ -342,7 +342,7 @@ _gtk_search_engine_new (void)
     }
 #endif
 
-#ifdef GDK_WINDOWING_QUARTZ
+#ifdef GDK_WINDOWING_MACOS
   engine->priv->native = _gtk_search_engine_quartz_new ();
   if (engine->priv->native)
     {

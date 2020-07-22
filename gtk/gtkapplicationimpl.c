@@ -29,8 +29,8 @@
 #include <gdk/wayland/gdkwayland.h>
 #endif
 
-#ifdef GDK_WINDOWING_QUARTZ
-#include <gdk/quartz/gdkquartz.h>
+#ifdef GDK_WINDOWING_MACOS
+#include <gdk/macos/gdkmacos.h>
 #endif
 
 G_DEFINE_TYPE (GtkApplicationImpl, gtk_application_impl, G_TYPE_OBJECT)
@@ -172,8 +172,8 @@ gtk_application_impl_new (GtkApplication *application,
     impl_type = gtk_application_impl_wayland_get_type ();
 #endif
 
-#ifdef GDK_WINDOWING_QUARTZ
-  if (GDK_IS_QUARTZ_DISPLAY (display))
+#ifdef GDK_WINDOWING_MACOS
+  if (GDK_IS_MACOS_DISPLAY (display))
     impl_type = gtk_application_impl_quartz_get_type ();
 #endif
 

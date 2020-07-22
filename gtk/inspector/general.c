@@ -44,8 +44,8 @@
 #include "win32/gdkwin32.h"
 #endif
 
-#ifdef GDK_WINDOWING_QUARTZ
-#include "quartz/gdkquartz.h"
+#ifdef GDK_WINDOWING_MACOS
+#include "macos/gdkmacos.h"
 #endif
 
 #ifdef GDK_WINDOWING_WAYLAND
@@ -134,9 +134,9 @@ init_version (GtkInspectorGeneral *gen)
     backend = "Windows";
   else
 #endif
-#ifdef GDK_WINDOWING_QUARTZ
-  if (GDK_IS_QUARTZ_DISPLAY (gen->display))
-    backend = "Quartz";
+#ifdef GDK_WINDOWING_MACOS
+  if (GDK_IS_MACOS_DISPLAY (gen->display))
+    backend = "macOS";
   else
 #endif
     backend = "Unknown";

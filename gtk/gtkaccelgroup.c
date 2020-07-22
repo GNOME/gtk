@@ -707,7 +707,7 @@ static gboolean
 append_keyval_symbol (guint    accelerator_key,
                       GString *gstring)
 {
-#ifdef GDK_WINDOWING_QUARTZ
+#ifdef GDK_WINDOWING_MACOS
   switch (accelerator_key)
   {
   case GDK_KEY_Return:
@@ -778,7 +778,7 @@ append_keyval_symbol (guint    accelerator_key,
   default:
     return FALSE;
   }
-#else /* !GDK_WINDOWING_QUARTZ */
+#else /* !GDK_WINDOWING_MACOS */
   return FALSE;
 #endif
 }
@@ -786,7 +786,7 @@ append_keyval_symbol (guint    accelerator_key,
 static void
 append_separator (GString *string)
 {
-#ifndef GDK_WINDOWING_QUARTZ
+#ifndef GDK_WINDOWING_MACOS
   g_string_append (string, "+");
 #else
   /* no separator on quartz */
@@ -826,7 +826,7 @@ gtk_accelerator_print_label (GString        *gstring,
 
   if (accelerator_mods & GDK_SHIFT_MASK)
     {
-#ifndef GDK_WINDOWING_QUARTZ
+#ifndef GDK_WINDOWING_MACOS
       /* This is the text that should appear next to menu accelerators
        * that use the shift key. If the text on this key isn't typically
        * translated on keyboards used for your language, don't translate
@@ -845,7 +845,7 @@ gtk_accelerator_print_label (GString        *gstring,
       if (seen_mod)
         append_separator (gstring);
 
-#ifndef GDK_WINDOWING_QUARTZ
+#ifndef GDK_WINDOWING_MACOS
       /* This is the text that should appear next to menu accelerators
        * that use the control key. If the text on this key isn't typically
        * translated on keyboards used for your language, don't translate
@@ -864,7 +864,7 @@ gtk_accelerator_print_label (GString        *gstring,
       if (seen_mod)
         append_separator (gstring);
 
-#ifndef GDK_WINDOWING_QUARTZ
+#ifndef GDK_WINDOWING_MACOS
       /* This is the text that should appear next to menu accelerators
        * that use the alt key. If the text on this key isn't typically
        * translated on keyboards used for your language, don't translate
@@ -911,7 +911,7 @@ gtk_accelerator_print_label (GString        *gstring,
       if (seen_mod)
         append_separator (gstring);
 
-#ifndef GDK_WINDOWING_QUARTZ
+#ifndef GDK_WINDOWING_MACOS
       /* This is the text that should appear next to menu accelerators
        * that use the meta key. If the text on this key isn't typically
        * translated on keyboards used for your language, don't translate

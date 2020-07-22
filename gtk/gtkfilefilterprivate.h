@@ -22,7 +22,7 @@
 #include <gtk/gtkfilefilter.h>
 #include <gdk/gdkconfig.h>
 
-#ifdef GDK_WINDOWING_QUARTZ
+#ifdef GDK_WINDOWING_MACOS
 #import <Foundation/Foundation.h>
 #endif
 
@@ -30,7 +30,7 @@ G_BEGIN_DECLS
 
 char ** _gtk_file_filter_get_as_patterns (GtkFileFilter      *filter);
 
-#ifdef GDK_WINDOWING_QUARTZ
+#ifdef GDK_WINDOWING_MACOS
 NSArray * _gtk_file_filter_get_as_pattern_nsstrings (GtkFileFilter *filter);
 #endif
 

@@ -486,7 +486,7 @@ static gchar*
 get_data_path (const gchar *subdir)
 {
   gchar *base_datadir, *full_datadir;
-#if defined (GDK_WINDOWING_WIN32) || defined (GDK_WINDOWING_QUARTZ)
+#if defined (GDK_WINDOWING_WIN32) || defined (GDK_WINDOWING_MACOS)
   base_datadir = g_strdup (_gtk_get_datadir ());
 #else
   base_datadir = g_strdup (GTK_DATADIR);
