@@ -20,31 +20,18 @@
 #define __GTK_QUARTZ_H__
 
 #import <Cocoa/Cocoa.h>
-#include <gtk/gtkselection.h>
+
+#include <cairo.h>
+#include <glib.h>
 
 G_BEGIN_DECLS
 
-NSSet   *_gtk_quartz_target_list_to_pasteboard_types    (GtkTargetList *target_list);
-NSSet   *_gtk_quartz_target_entries_to_pasteboard_types (const GtkTargetEntry *targets,
-							 guint                 n_targets);
-
-GList   *_gtk_quartz_pasteboard_types_to_atom_list (NSArray  *array);
-
-GtkSelectionData *_gtk_quartz_get_selection_data_from_pasteboard (NSPasteboard *pasteboard,
-								  GdkAtom       target,
-								  GdkAtom       selection);
-
-void _gtk_quartz_set_selection_data_for_pasteboard (NSPasteboard *pasteboard,
-						    GtkSelectionData *selection_data);
-
-NSImage *_gtk_quartz_create_image_from_surface (cairo_surface_t *surface);
-void _gtk_clipboard_handle_event (GdkEventOwnerChange *event);
-void _gtk_clipboard_store_all (void);
-const gchar * _gtk_get_datadir (void);
-const gchar * _gtk_get_libdir (void);
-const gchar * _gtk_get_localedir (void);
-const gchar * _gtk_get_sysconfdir (void);
-const gchar * _gtk_get_data_prefix (void);
+NSImage    *_gtk_quartz_create_image_from_surface (cairo_surface_t *surface);
+const char *_gtk_get_datadir                      (void);
+const char *_gtk_get_libdir                       (void);
+const char *_gtk_get_localedir                    (void);
+const char *_gtk_get_sysconfdir                   (void);
+const char *_gtk_get_data_prefix                  (void);
 
 G_END_DECLS
 
