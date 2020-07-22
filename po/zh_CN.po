@@ -30,7 +30,7 @@ msgstr ""
 "Project-Id-Version: gtk master\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-07-21 21:54+0000\n"
-"PO-Revision-Date: 2020-07-21 22:18-0400\n"
+"PO-Revision-Date: 2020-07-21 22:37-0400\n"
 "Last-Translator: Boyuan Yang <073plan@gmail.com>\n"
 "Language-Team: Chinese (China) <i18n-zh@googlegroups.com>\n"
 "Language: zh_CN\n"
@@ -7648,7 +7648,7 @@ msgstr "无"
 #: modules/printbackends/gtkprintbackendcups.c:5522
 msgctxt "cover page"
 msgid "Classified"
-msgstr "已分类"
+msgstr "保密"
 
 #: modules/printbackends/gtkprintbackendcups.c:5523
 msgctxt "cover page"
@@ -7673,7 +7673,7 @@ msgstr "绝密"
 #: modules/printbackends/gtkprintbackendcups.c:5527
 msgctxt "cover page"
 msgid "Unclassified"
-msgstr "未分类"
+msgstr "非保密"
 
 #. Translators, this string is used to label the pages-per-sheet option
 #. * in the print dialog
@@ -7732,7 +7732,7 @@ msgstr "在指定时间打印"
 #: modules/printbackends/gtkprintbackendcups.c:5691
 #, c-format
 msgid "Custom %s×%s"
-msgstr "自定义 %sx%s"
+msgstr "自定义 %s×%s"
 
 #. TRANSLATORS: this is the ICC color profile to use for this job
 #: modules/printbackends/gtkprintbackendcups.c:5802
