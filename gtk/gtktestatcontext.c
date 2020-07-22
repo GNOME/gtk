@@ -49,27 +49,27 @@ gtk_test_at_context_state_change (GtkATContext                *self,
                                   GtkAccessibleAttributeSet   *properties,
                                   GtkAccessibleAttributeSet   *relations)
 {
-  GtkAccessible *accessible = gtk_at_context_get_accessible (self);
-  GtkAccessibleRole role = gtk_at_context_get_accessible_role (self);
   char *states_str = gtk_accessible_attribute_set_to_string (states);
   char *properties_str = gtk_accessible_attribute_set_to_string (properties);
   char *relations_str = gtk_accessible_attribute_set_to_string (relations);
 
   GTK_NOTE(A11Y,
     {
-       GEnumClass *class = g_type_class_ref (GTK_TYPE_ACCESSIBLE_ROLE);
-       GEnumValue *value = g_enum_get_value (class, role);
-       g_print ("*** Accessible state changed for accessible “%s”, with role “%s” (%d):\n"
-            "***     states = %s\n"
-            "*** properties = %s\n"
-            "***  relations = %s\n",
-             G_OBJECT_TYPE_NAME (accessible),
-            value->value_nick,
-            role,
-            states_str,
-            properties_str,
-            relations_str);
-       g_type_class_unref (class);
+      GtkAccessibleRole role = gtk_at_context_get_accessible_role (self);
+      GtkAccessible *accessible = gtk_at_context_get_accessible (self);
+      GEnumClass *class = g_type_class_ref (GTK_TYPE_ACCESSIBLE_ROLE);
+      GEnumValue *value = g_enum_get_value (class, role);
+      g_print ("*** Accessible state changed for accessible “%s”, with role “%s” (%d):\n"
+           "***     states = %s\n"
+           "*** properties = %s\n"
+           "***  relations = %s\n",
+            G_OBJECT_TYPE_NAME (accessible),
+           value->value_nick,
+           role,
+           states_str,
+           properties_str,
+           relations_str);
+      g_type_class_unref (class);
     });
 
   g_free (states_str);
