@@ -462,6 +462,125 @@ gtk_reference_accessible_value_get (const GtkAccessibleValue *value)
   return self->ref;
 }
 
+typedef struct {
+  GtkAccessibleValue parent;
+
+  GList *refs;
+} GtkReferenceListAccessibleValue;
+
+static void
+remove_weak_ref_from_list (gpointer  data,
+                           GObject  *old_reference)
+{
+  GtkReferenceListAccessibleValue *self = data;
+
+  GList *item = g_list_find (self->refs, old_reference);
+
+  if (item != NULL)
+    {
+      self->refs = g_list_remove_link (self->refs, item);
+      g_list_free (item);
+    }
+}
+
+static void
+gtk_reference_list_accessible_value_finalize (GtkAccessibleValue *value)
+{
+  GtkReferenceListAccessibleValue *self = (GtkReferenceListAccessibleValue *) value;
+
+  for (GList *l = self->refs; l != NULL; l = l->next)
+    {
+      if (l->data != NULL)
+        g_object_weak_unref (G_OBJECT (l->data), remove_weak_ref_from_list, self);
+    }
+
+  g_list_free (self->refs);
+}
+
+static gboolean
+gtk_reference_list_accessible_value_equal (const GtkAccessibleValue *value_a,
+                                           const GtkAccessibleValue *value_b)
+{
+  const GtkReferenceListAccessibleValue *self_a = (GtkReferenceListAccessibleValue *) value_a;
+  const GtkReferenceListAccessibleValue *self_b = (GtkReferenceListAccessibleValue *) value_b;
+
+  if (g_list_length (self_a->refs) != g_list_length (self_b->refs))
+    return FALSE;
+
+  for (GList *l = self_a->refs; l != NULL; l = l->next)
+    {
+      if (g_list_find (self_b->refs, l->data) == NULL)
+        return FALSE;
+    }
+
+  return TRUE;
+}
+
+static void
+gtk_reference_list_accessible_value_print (const GtkAccessibleValue *value,
+                                           GString                  *buffer)
+{
+  const GtkReferenceListAccessibleValue *self = (GtkReferenceListAccessibleValue *) value;
+
+  if (self->refs == NULL)
+    {
+      g_string_append (buffer, "<null>");
+      return;
+    }
+
+  for (GList *l = self->refs; l != NULL; l = l->next)
+    {
+      g_string_append_printf (buffer, "%s<%p>",
+                              G_OBJECT_TYPE_NAME (l->data),
+                              l->data);
+    }
+}
+
+static const GtkAccessibleValueClass GTK_REFERENCE_LIST_ACCESSIBLE_VALUE = {
+  .type = GTK_ACCESSIBLE_VALUE_TYPE_REFERENCE_LIST,
+  .type_name = "GtkReferenceListAccessibleValue",
+  .instance_size = sizeof (GtkReferenceListAccessibleValue),
+  .finalize = gtk_reference_list_accessible_value_finalize,
+  .equal = gtk_reference_list_accessible_value_equal,
+  .print = gtk_reference_list_accessible_value_print,
+};
+
+/*< private >
+ * gtk_reference_list_accessible_value_new:
+ * @value: (element-type GtkAccessible) (transfer full): a list of accessible objects
+ *
+ * Creates a new #GtkAccessible that stores a list of references to #GtkAccessible objects.
+ *
+ * Returns: (transfer full): the newly created #GtkAccessible
+ */
+GtkAccessibleValue *
+gtk_reference_list_accessible_value_new (GList *value)
+{
+  GtkAccessibleValue *res = gtk_accessible_value_alloc (&GTK_REFERENCE_LIST_ACCESSIBLE_VALUE);
+
+  GtkReferenceListAccessibleValue *self = (GtkReferenceListAccessibleValue *) res;
+
+  self->refs = g_list_copy (value);
+  if (self->refs != NULL)
+    {
+      for (GList *l = self->refs; l != NULL; l = l->next)
+        g_object_weak_ref (l->data, remove_weak_ref_from_list, self);
+    }
+
+  return res;
+}
+
+GList *
+gtk_reference_list_accessible_value_get (const GtkAccessibleValue *value)
+{
+  GtkReferenceListAccessibleValue *self = (GtkReferenceListAccessibleValue *) value;
+
+  g_return_val_if_fail (value != NULL, 0);
+  g_return_val_if_fail (value->value_class == &GTK_REFERENCE_LIST_ACCESSIBLE_VALUE, 0);
+
+  return self->refs;
+}
+
 /* }}} */
 
 /* {{{ Collection API */
@@ -489,6 +608,9 @@ typedef enum {
 
   /* reference */
   GTK_ACCESSIBLE_COLLECT_REFERENCE,
+
+  /* references list */
+  GTK_ACCESSIBLE_COLLECT_REFERENCE_LIST,
 
   /* allows collecting GTK_ACCESSIBLE_VALUE_UNDEFINED; implied
    * by GTK_ACCESSIBLE_COLLECT_TRISTATE
@@ -765,7 +887,8 @@ typedef GtkAccessibleValue * (* GtkAccessibleValueTristateCtor) (int value);
 typedef GtkAccessibleValue * (* GtkAccessibleValueEnumCtor)     (int value);
 typedef GtkAccessibleValue * (* GtkAccessibleValueNumberCtor)   (double value);
 typedef GtkAccessibleValue * (* GtkAccessibleValueStringCtor)   (const char *value);
-typedef GtkAccessibleValue * (* GtkAccessibleValueRefCtor)      (gpointer value);
+typedef GtkAccessibleValue * (* GtkAccessibleValueRefCtor)      (GtkAccessible *value);
+typedef GtkAccessibleValue * (* GtkAccessibleValueRefListCtor)  (GList *value);
 
 /*< private >
  * gtk_accessible_value_get_default_for_state:
@@ -917,13 +1040,27 @@ gtk_accessible_value_collect_valist (const GtkAccessibleCollect *cstate,
 
     case GTK_ACCESSIBLE_COLLECT_REFERENCE:
       {
-        GtkAccessibleValueStringCtor ctor =
-          (GtkAccessibleValueStringCtor) cstate->ctor;
+        GtkAccessibleValueRefCtor ctor =
+          (GtkAccessibleValueRefCtor) cstate->ctor;
 
         gpointer value = va_arg (*args, gpointer);
 
         if (ctor == NULL)
           res = gtk_reference_accessible_value_new (value);
+        else
+          res = (* ctor) (value);
+      }
+      break;
+
+    case GTK_ACCESSIBLE_COLLECT_REFERENCE_LIST:
+      {
+        GtkAccessibleValueRefListCtor ctor =
+          (GtkAccessibleValueRefListCtor) cstate->ctor;
+
+        GList *value = va_arg (*args, gpointer);
+
+        if (ctor == NULL)
+          res = gtk_reference_list_accessible_value_new (value);
         else
           res = (* ctor) (value);
       }
@@ -1051,13 +1188,27 @@ gtk_accessible_value_collect_value (const GtkAccessibleCollect *cstate,
 
     case GTK_ACCESSIBLE_COLLECT_REFERENCE:
       {
-        GtkAccessibleValueStringCtor ctor =
-          (GtkAccessibleValueStringCtor) cstate->ctor;
+        GtkAccessibleValueRefCtor ctor =
+          (GtkAccessibleValueRefCtor) cstate->ctor;
 
         gpointer value = g_value_get_object (value_);
 
         if (ctor == NULL)
           res = gtk_reference_accessible_value_new (value);
+        else
+          res = (* ctor) (value);
+      }
+      break;
+
+    case GTK_ACCESSIBLE_COLLECT_REFERENCE_LIST:
+      {
+        GtkAccessibleValueRefListCtor ctor =
+          (GtkAccessibleValueRefListCtor) cstate->ctor;
+
+        GList *value = g_value_get_pointer (value_);
+
+        if (ctor == NULL)
+          res = gtk_reference_list_accessible_value_new (value);
         else
           res = (* ctor) (value);
       }
@@ -1236,7 +1387,7 @@ gtk_accessible_value_get_default_for_relation (GtkAccessibleRelation relation)
     case GTK_ACCESSIBLE_RELATION_FLOW_TO:
     case GTK_ACCESSIBLE_RELATION_LABELLED_BY:
     case GTK_ACCESSIBLE_RELATION_OWNS:
-      return NULL;
+      return gtk_undefined_accessible_value_new ();
 
     /* Integers */
     case GTK_ACCESSIBLE_RELATION_COL_COUNT:

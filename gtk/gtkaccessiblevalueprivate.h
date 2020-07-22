@@ -42,7 +42,8 @@ typedef enum {
   GTK_ACCESSIBLE_VALUE_TYPE_INTEGER,
   GTK_ACCESSIBLE_VALUE_TYPE_NUMBER,
   GTK_ACCESSIBLE_VALUE_TYPE_STRING,
-  GTK_ACCESSIBLE_VALUE_TYPE_REFERENCE
+  GTK_ACCESSIBLE_VALUE_TYPE_REFERENCE,
+  GTK_ACCESSIBLE_VALUE_TYPE_REFERENCE_LIST
 } GtkAccessibleValueType;
 
 struct _GtkAccessibleValue
@@ -129,6 +130,9 @@ const char *                    gtk_string_accessible_value_get         (const G
 
 GtkAccessibleValue *            gtk_reference_accessible_value_new      (GtkAccessible            *value);
 GtkAccessible *                 gtk_reference_accessible_value_get      (const GtkAccessibleValue *value);
+
+GtkAccessibleValue *            gtk_reference_list_accessible_value_new (GList                    *value);
+GList *                         gtk_reference_list_accessible_value_get (const GtkAccessibleValue *value);
 
 /* Token values */
 GtkAccessibleValue *            gtk_invalid_accessible_value_new        (GtkAccessibleInvalidState value);
