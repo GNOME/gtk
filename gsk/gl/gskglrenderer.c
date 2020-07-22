@@ -535,8 +535,8 @@ render_fallback_node (GskGLRenderer   *self,
                       RenderOpBuilder *builder)
 {
   const float scale = ops_get_scale (builder);
-  const int surface_width = ceilf (node->bounds.size.width) * scale;
-  const int surface_height = ceilf (node->bounds.size.height) * scale;
+  const int surface_width = ceilf (node->bounds.size.width * scale);
+  const int surface_height = ceilf (node->bounds.size.height * scale);
   cairo_surface_t *surface;
   cairo_surface_t *rendered_surface;
   cairo_t *cr;
@@ -570,7 +570,7 @@ render_fallback_node (GskGLRenderer   *self,
     cr = cairo_create (rendered_surface);
 
     cairo_save (cr);
-    cairo_translate (cr, -node->bounds.origin.x, -node->bounds.origin.y);
+    cairo_translate (cr, - floorf (node->bounds.origin.x), - floorf (node->bounds.origin.y));
     gsk_render_node_draw (node, cr);
     cairo_restore (cr);
     cairo_destroy (cr);
@@ -585,7 +585,7 @@ render_fallback_node (GskGLRenderer   *self,
   /* We draw upside down here, so it matches what GL does. */
   cairo_save (cr);
   cairo_scale (cr, 1, -1);
-  cairo_translate (cr, 0, -surface_height / scale);
+  cairo_translate (cr, 0, - surface_height / scale);
   cairo_set_source_surface (cr, rendered_surface, 0, 0);
   cairo_rectangle (cr, 0, 0, surface_width / scale, surface_height / scale);
   cairo_fill (cr);
