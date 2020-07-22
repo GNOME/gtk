@@ -30,19 +30,6 @@
 #include "gdkmacosdisplay-private.h"
 #include "gdkmacossurface-private.h"
 
-/* Text Input Client */
-#define TIC_MARKED_TEXT      "tic-marked-text"
-#define TIC_SELECTED_POS     "tic-selected-pos"
-#define TIC_SELECTED_LEN     "tic-selected-len"
-#define TIC_INSERT_TEXT      "tic-insert-text"
-#define TIC_IN_KEY_DOWN      "tic-in-key-down"
-
-/* GtkIMContext */
-#define GIC_CURSOR_RECT      "gic-cursor-rect"
-#define GIC_FILTER_KEY       "gic-filter-key"
-#define GIC_FILTER_PASSTHRU  0
-#define GIC_FILTER_FILTERED  1
-
 @implementation GdkMacosBaseView
 
 -(id)initWithFrame:(NSRect)frameRect
