@@ -21,7 +21,9 @@ gdk/gdkseat.c
 gdk/gdksurface.c
 gdk/gdktoplevel.c
 gdk/keyname-table.h
-gdk/quartz/gdkglcontext-quartz.c
+gdk/macos/gdkmacosclipboard.c
+gdk/macos/gdkmacosdrag.c
+gdk/macos/gdkmacosglcontext.c
 gdk/wayland/gdkclipboard-wayland.c
 gdk/wayland/gdkdrag-wayland.c
 gdk/wayland/gdkdrop-wayland.c
