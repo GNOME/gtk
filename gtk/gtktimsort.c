@@ -206,6 +206,8 @@ gtk_tim_sort_get_runs (GtkTimSort *self,
 
   for (i = 0; i < self->pending_runs; i++)
     runs[i] = self->run[i].len;
+
+  runs[self->pending_runs] = 0;
 }
 
 /*<private>
