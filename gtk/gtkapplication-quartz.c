@@ -41,21 +41,7 @@ gtk_application_quartz_inhibitor_free (GtkApplicationQuartzInhibitor *inhibitor)
 }
 
 typedef GtkApplicationImplClass GtkApplicationImplQuartzClass;
-
-typedef struct
-{
-  GtkApplicationImpl impl;
-
-  GtkActionMuxer *muxer;
-  GMenu *combined;
-
-  GSList *inhibitors;
-  gint quit_inhibit;
-  guint next_cookie;
-  NSObject *delegate;
-} GtkApplicationImplQuartz;
-
-G_DEFINE_TYPE (GtkApplicationImplQuartz, gtk_application_impl_quartz, GTK_TYPE_APPLICATION_IMPL)
+typedef struct _GtkApplicationImplQuartz GtkApplicationImplQuartz;
 
 @interface GtkApplicationQuartzDelegate : NSObject
 {
@@ -66,6 +52,21 @@ G_DEFINE_TYPE (GtkApplicationImplQuartz, gtk_application_impl_quartz, GTK_TYPE_A
 - (NSApplicationTerminateReply) applicationShouldTerminate:(NSApplication *)sender;
 - (void)application:(NSApplication *)theApplication openFiles:(NSArray *)filenames;
 @end
+
+struct _GtkApplicationImplQuartz
+{
+  GtkApplicationImpl impl;
+
+  GtkActionMuxer *muxer;
+  GMenu *combined;
+
+  GSList *inhibitors;
+  gint quit_inhibit;
+  guint next_cookie;
+  GtkApplicationQuartzDelegate *delegate;
+};
+
+G_DEFINE_TYPE (GtkApplicationImplQuartz, gtk_application_impl_quartz, GTK_TYPE_APPLICATION_IMPL)
 
 @implementation GtkApplicationQuartzDelegate
 -(id)initWithImpl:(GtkApplicationImplQuartz*)impl
@@ -162,10 +163,10 @@ gtk_application_impl_quartz_startup (GtkApplicationImpl *impl,
   if (register_session)
     {
       quartz->delegate = [[GtkApplicationQuartzDelegate alloc] initWithImpl:quartz];
-      [NSApp setDelegate: quartz->delegate];
+      [NSApp setDelegate: (id<NSApplicationDelegate>)quartz->delegate];
     }
 
-  quartz->muxer = gtk_action_muxer_new ();
+  quartz->muxer = gtk_action_muxer_new (NULL);
   gtk_action_muxer_set_parent (quartz->muxer, gtk_application_get_action_muxer (impl->application));
 
   /* Add the default accels */
@@ -182,7 +183,11 @@ gtk_application_impl_quartz_startup (GtkApplicationImpl *impl,
   g_object_unref (gtkinternal);
 
   /* now setup the menu */
+#if 0
   app_menu = gtk_application_get_app_menu (impl->application);
+#else
+  app_menu = NULL;
+#endif
   if (app_menu == NULL)
     {
       GtkBuilder *builder;
@@ -193,7 +198,7 @@ gtk_application_impl_quartz_startup (GtkApplicationImpl *impl,
        * app menu at index 0 in 'combined'.
        */
       builder = gtk_builder_new_from_resource ("/org/gtk/libgtk/ui/gtkapplication-quartz.ui");
-      gtk_application_set_app_menu (impl->application, G_MENU_MODEL (gtk_builder_get_object (builder, "app-menu")));
+      gtk_application_impl_set_app_menu (impl, G_MENU_MODEL (gtk_builder_get_object (builder, "app-menu")));
       g_object_unref (builder);
     }
   else
