@@ -96,12 +96,17 @@ tests = [
   { 'name': 'slicelistmodel' },
   { 'name': 'sorter' },
   { 'name': 'sortlistmodel' },
+  { 'name': 'sortlistmodel-exhaustive' },
   { 'name': 'spinbutton' },
   { 'name': 'stringlist' },
   { 'name': 'templates' },
   { 'name': 'textbuffer' },
   { 'name': 'textiter' },
   { 'name': 'theme-validate' },
+  {
+    'name': 'timsort',
+    'sources': ['timsort.c', '../../gtk/gtktimsort.c'],
+  },
   { 'name': 'tooltips' },
   { 'name': 'treelistmodel' },
   {

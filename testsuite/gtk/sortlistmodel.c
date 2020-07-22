@@ -306,9 +306,7 @@ test_set_sorter (void)
   gtk_sort_list_model_set_sorter (sort, sorter);
   g_object_unref (sorter);
   assert_model (sort, "2 4 6 8 10");
-  /* Technically, this is correct, but we shortcut setting the sort func:
-   * assert_changes (sort, "0-4+4"); */
-  assert_changes (sort, "0-5+5");
+  assert_changes (sort, "0-4+4");
 
   g_object_unref (store);
   g_object_unref (sort);
@@ -394,6 +392,28 @@ test_remove_items (void)
   g_object_unref (sort);
 }
 
+static void
+test_stability (void)
+{
+  GtkSortListModel *sort;
+  GListStore *store;
+  GtkSorter *sorter;
+  
+  store = new_store ((guint[]) { 11, 31, 21, 1, 0 });
+  sort = new_model (store);
+  assert_model (sort, "1 11 21 31");
+  assert_changes (sort, "");
+
+  sorter = gtk_custom_sorter_new (compare_modulo, GUINT_TO_POINTER (5), NULL);
+  gtk_sort_list_model_set_sorter (sort, sorter);
+  g_object_unref (sorter);
+  assert_model (sort, "11 31 21 1");
+  assert_changes (sort, "0-4+4");
+
+  g_object_unref (store);
+  g_object_unref (sort);
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -411,6 +431,7 @@ main (int argc, char *argv[])
   g_test_add_func ("/sortlistmodel/add_items", test_add_items);
   g_test_add_func ("/sortlistmodel/remove_items", test_remove_items);
 #endif
+  g_test_add_func ("/sortlistmodel/stability", test_stability);
 
   return g_test_run ();
 }

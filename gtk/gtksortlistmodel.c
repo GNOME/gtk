@@ -21,8 +21,36 @@
 
 #include "gtksortlistmodel.h"
 
+#include "gtkbitset.h"
 #include "gtkintl.h"
 #include "gtkprivate.h"
+#include "gtksorterprivate.h"
+#include "gtktimsortprivate.h"
+
+/* The maximum amount of items to merge for a single merge step
+ *
+ * Making this smaller will result in more steps, which has more overhead and slows
+ * down total sort time.
+ * Making it larger will result in fewer steps, which increases the time taken for
+ * a single step.
+ *
+ * As merges are the most expensive steps, this is essentially a tunable for the
+ * longest time spent in gtk_tim_sort_step().
+ *
+ * Note that this should be reset to 0 when not doing incremental sorting to get
+ * rid of all the overhead.
+ */
+#define GTK_SORT_MAX_MERGE_SIZE (1024)
+
+/* Time we spend in the sort callback before returning to the main loop
+ *
+ * Increasing this number will make the callback take longer and potentially
+ * reduce responsiveness of an application, but will increase the amount of
+ * work done per step. And we emit an ::items-changed() signal after every
+ * step, so if we can avoid that, we recuce the overhead in the list widget
+ * and in turn reduce the total sort time.
+ */
+#define GTK_SORT_STEP_TIME_US (1000) /* 1 millisecond */
 
 /**
  * SECTION:gtksortlistmodel
@@ -42,12 +70,12 @@
 
 enum {
   PROP_0,
+  PROP_INCREMENTAL,
   PROP_MODEL,
+  PROP_PENDING,
   PROP_SORTER,
   NUM_PROPERTIES
 };
-
-typedef struct _GtkSortListEntry GtkSortListEntry;
 
 struct _GtkSortListModel
 {
@@ -55,9 +83,18 @@ struct _GtkSortListModel
 
   GListModel *model;
   GtkSorter *sorter;
+  gboolean incremental;
 
-  GSequence *sorted; /* NULL if known unsorted */
-  GSequence *unsorted; /* NULL if known unsorted */
+  GtkTimSort sort; /* ongoing sort operation */
+  guint sort_cb; /* 0 or current ongoing sort callback */
+
+  guint n_items;
+  GtkSortKeys *sort_keys;
+  gsize key_size;
+  gpointer keys;
+  GtkBitset *missing_keys;
+
+  gpointer *positions;
 };
 
 struct _GtkSortListModelClass
@@ -65,23 +102,24 @@ struct _GtkSortListModelClass
   GObjectClass parent_class;
 };
 
-struct _GtkSortListEntry
-{
-  GSequenceIter *sorted_iter;
-  GSequenceIter *unsorted_iter;
-  gpointer item; /* holds ref */
-};
-
 static GParamSpec *properties[NUM_PROPERTIES] = { NULL, };
 
-static void
-gtk_sort_list_entry_free (gpointer data)
+static guint
+pos_from_key (GtkSortListModel *self,
+              gpointer          key)
 {
-  GtkSortListEntry *entry = data;
+  guint pos = ((char *) key - (char *) self->keys) / self->key_size;
 
-  g_object_unref (entry->item);
+  g_assert (pos < self->n_items);
 
-  g_slice_free (GtkSortListEntry, entry);
+  return pos;
+}
+
+static gpointer
+key_from_pos (GtkSortListModel *self,
+              guint             pos)
+{
+  return (char *) self->keys + self->key_size * pos;
 }
 
 static GType
@@ -106,22 +144,14 @@ gtk_sort_list_model_get_item (GListModel *list,
                               guint       position)
 {
   GtkSortListModel *self = GTK_SORT_LIST_MODEL (list);
-  GSequenceIter *iter;
-  GtkSortListEntry *entry;
 
   if (self->model == NULL)
     return NULL;
 
-  if (self->unsorted == NULL)
-    return g_list_model_get_item (self->model, position);
+  if (self->positions)
+    position = pos_from_key (self, self->positions[position]);
 
-  iter = g_sequence_get_iter_at_pos (self->sorted, position);
-  if (g_sequence_iter_is_end (iter))
-    return NULL;
-
-  entry = g_sequence_get (iter);
-
-  return g_object_ref (entry->item);
+  return g_list_model_get_item (self->model, position);
 }
 
 static void
@@ -135,90 +165,390 @@ gtk_sort_list_model_model_init (GListModelInterface *iface)
 G_DEFINE_TYPE_WITH_CODE (GtkSortListModel, gtk_sort_list_model, G_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (G_TYPE_LIST_MODEL, gtk_sort_list_model_model_init))
 
-static void
-gtk_sort_list_model_remove_items (GtkSortListModel *self,
-                                  guint             position,
-                                  guint             n_items,
-                                  guint            *unmodified_start,
-                                  guint            *unmodified_end)
+static gboolean
+gtk_sort_list_model_is_sorting (GtkSortListModel *self)
 {
-  GSequenceIter *unsorted_iter;
-  guint i, pos, start, end, length_before;
-
-  start = end = length_before = g_sequence_get_length (self->sorted);
-  unsorted_iter = g_sequence_get_iter_at_pos (self->unsorted, position);
-
-  for (i = 0; i < n_items ; i++)
-    {
-      GtkSortListEntry *entry;
-      GSequenceIter *next;
-
-      next = g_sequence_iter_next (unsorted_iter);
-
-      entry = g_sequence_get (unsorted_iter);
-      pos = g_sequence_iter_get_position (entry->sorted_iter);
-      start = MIN (start, pos);
-      end = MIN (end, length_before - i - 1 - pos);
-
-      g_sequence_remove (entry->unsorted_iter);
-      g_sequence_remove (entry->sorted_iter);
-
-      unsorted_iter = next;
-    }
-
-  *unmodified_start = start;
-  *unmodified_end = end;
+  return self->sort_cb != 0;
 }
 
-static int
-_sort_func (gconstpointer item1,
-            gconstpointer item2,
-            gpointer      data)
+static void
+gtk_sort_list_model_stop_sorting (GtkSortListModel *self,
+                                  gsize            *runs)
 {
-  GtkSortListEntry *entry1 = (GtkSortListEntry *) item1;
-  GtkSortListEntry *entry2 = (GtkSortListEntry *) item2;
-  GtkOrdering result;
+  if (self->sort_cb == 0)
+    {
+      if (runs)
+        {
+          runs[0] = self->n_items;
+          runs[1] = 0;
+        }
+      return;
+    }
 
-  result = gtk_sorter_compare (GTK_SORTER (data), entry1->item, entry2->item);
+  if (runs)
+    gtk_tim_sort_get_runs (&self->sort, runs);
+  gtk_tim_sort_finish (&self->sort);
+  g_clear_handle_id (&self->sort_cb, g_source_remove);
 
-  if (result == GTK_ORDERING_EQUAL)
-    result = g_sequence_iter_compare (entry1->unsorted_iter, entry2->unsorted_iter);
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_PENDING]);
+}
+
+static gboolean
+gtk_sort_list_model_sort_step (GtkSortListModel *self,
+                               gboolean          finish,
+                               guint            *out_position,
+                               guint            *out_n_items)
+{
+  gint64 end_time = g_get_monotonic_time ();
+  gboolean result = FALSE;
+  GtkTimSortRun change;
+  gpointer *start_change, *end_change;
+
+  end_time += GTK_SORT_STEP_TIME_US;
+
+  if (!gtk_bitset_is_empty (self->missing_keys))
+    {
+      GtkBitsetIter iter;
+      guint pos;
+
+      for (gtk_bitset_iter_init_first (&iter, self->missing_keys, &pos);
+           gtk_bitset_iter_is_valid (&iter);
+           gtk_bitset_iter_next (&iter, &pos))
+        {
+          gpointer item = g_list_model_get_item (self->model, pos);
+          gtk_sort_keys_init_key (self->sort_keys, item, key_from_pos (self, pos));
+          g_object_unref (item);
+
+          if (g_get_monotonic_time () >= end_time && !finish)
+            {
+              gtk_bitset_remove_range_closed (self->missing_keys, 0, pos);
+              *out_position = 0;
+              *out_n_items = 0;
+              return TRUE;
+            }
+        }
+      result = TRUE;
+      gtk_bitset_remove_all (self->missing_keys);
+    }
+
+  end_change = self->positions;
+  start_change = self->positions + self->n_items;
+
+  while (gtk_tim_sort_step (&self->sort, &change))
+    {
+      result = TRUE;
+      if (change.len)
+        {
+          start_change = MIN (start_change, (gpointer *) change.base);
+          end_change = MAX (end_change, ((gpointer *) change.base) + change.len);
+        }
+     
+      if (g_get_monotonic_time () >= end_time && !finish)
+        break;
+    }
+
+  if (start_change < end_change)
+    {
+      *out_position = start_change - self->positions;
+      *out_n_items = end_change - start_change;
+    }
+  else
+    {
+      *out_position = 0;
+      *out_n_items = 0;
+    }
 
   return result;
 }
 
-static void
-gtk_sort_list_model_add_items (GtkSortListModel *self,
-                               guint             position,
-                               guint             n_items,
-                               guint            *unmodified_start,
-                               guint            *unmodified_end)
+static gboolean
+gtk_sort_list_model_sort_cb (gpointer data)
 {
-  GSequenceIter *unsorted_end;
-  guint i, pos, start, end, length_before;
+  GtkSortListModel *self = data;
+  guint pos, n_items;
 
-  unsorted_end = g_sequence_get_iter_at_pos (self->unsorted, position);
-  start = end = length_before = g_sequence_get_length (self->sorted);
-
-  for (i = 0; i < n_items; i++)
+  if (gtk_sort_list_model_sort_step (self, FALSE, &pos, &n_items))
     {
-      GtkSortListEntry *entry = g_slice_new0 (GtkSortListEntry);
-
-      entry->item = g_list_model_get_item (self->model, position + i);
-      entry->unsorted_iter = g_sequence_insert_before (unsorted_end, entry);
-      entry->sorted_iter = g_sequence_insert_sorted (self->sorted, entry, _sort_func, self->sorter);
-      if (unmodified_start != NULL || unmodified_end != NULL)
-        {
-          pos = g_sequence_iter_get_position (entry->sorted_iter);
-          start = MIN (start, pos);
-          end = MIN (end, length_before + i - pos);
-        }
+      if (n_items)
+        g_list_model_items_changed (G_LIST_MODEL (self), pos, n_items, n_items);
+      g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_PENDING]);
+      return G_SOURCE_CONTINUE;
     }
 
-  if (unmodified_start)
-    *unmodified_start = start;
-  if (unmodified_end)
-    *unmodified_end = end;
+  gtk_sort_list_model_stop_sorting (self, NULL);
+  return G_SOURCE_REMOVE;
+}
+
+static int
+sort_func (gconstpointer a,
+           gconstpointer b,
+           gpointer      data)
+{
+  gpointer *sa = (gpointer *) a;
+  gpointer *sb = (gpointer *) b;
+  int result;
+
+  result = gtk_sort_keys_compare (data, *sa, *sb);
+  if (result)
+    return result;
+
+  return *sa < *sb ? -1 : 1;
+}
+
+static gboolean
+gtk_sort_list_model_start_sorting (GtkSortListModel *self,
+                                   gsize            *runs)
+{
+  g_assert (self->sort_cb == 0);
+
+  gtk_tim_sort_init (&self->sort,
+                     self->positions,
+                     self->n_items,
+                     sizeof (gpointer),
+                     sort_func,
+                     self->sort_keys);
+  if (runs)
+    gtk_tim_sort_set_runs (&self->sort, runs);
+  if (self->incremental)
+    gtk_tim_sort_set_max_merge_size (&self->sort, GTK_SORT_MAX_MERGE_SIZE);
+
+  if (!self->incremental)
+    return FALSE;
+
+  self->sort_cb = g_idle_add (gtk_sort_list_model_sort_cb, self);
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_PENDING]);
+  return TRUE;
+}
+
+static void
+gtk_sort_list_model_finish_sorting (GtkSortListModel *self,
+                                    guint            *pos,
+                                    guint            *n_items)
+{
+  gtk_tim_sort_set_max_merge_size (&self->sort, 0);
+
+  gtk_sort_list_model_sort_step (self, TRUE, pos, n_items);
+  gtk_tim_sort_finish (&self->sort);
+
+  gtk_sort_list_model_stop_sorting (self, NULL);
+}
+
+static void
+gtk_sort_list_model_clear_sort_keys (GtkSortListModel *self,
+                                     guint             position,
+                                     guint             n_items)
+{
+  GtkBitsetIter iter;
+  GtkBitset *clear;
+  guint pos;
+
+  if (!gtk_sort_keys_needs_clear_key (self->sort_keys))
+    return;
+
+  clear = gtk_bitset_new_range (position, n_items);
+  gtk_bitset_subtract (clear, self->missing_keys);
+
+  for (gtk_bitset_iter_init_first (&iter, clear, &pos);
+       gtk_bitset_iter_is_valid (&iter);
+       gtk_bitset_iter_next (&iter, &pos))
+    {
+      gtk_sort_keys_clear_key (self->sort_keys, key_from_pos (self, pos));
+    }
+
+  gtk_bitset_unref (clear);
+}
+
+static void
+gtk_sort_list_model_clear_keys (GtkSortListModel *self)
+{
+  gtk_sort_list_model_clear_sort_keys (self, 0, self->n_items);
+
+  g_clear_pointer (&self->missing_keys, gtk_bitset_unref);
+  g_clear_pointer (&self->keys, g_free);
+  g_clear_pointer (&self->sort_keys, gtk_sort_keys_unref);
+  self->key_size = 0;
+}
+
+static void
+gtk_sort_list_model_clear_items (GtkSortListModel *self,
+                                 guint            *pos,
+                                 guint            *n_items)
+{
+  gtk_sort_list_model_stop_sorting (self, NULL);
+
+  if (self->sort_keys == NULL)
+    {
+      if (pos || n_items)
+        *pos = *n_items = 0;
+      return;
+    }
+
+  if (pos || n_items)
+    {
+      guint start, end;
+
+      for (start = 0; start < self->n_items; start++)
+        {
+          if (pos_from_key (self, self->positions[start]) != + start)
+            break;
+        }
+      for (end = self->n_items; end > start; end--)
+        {
+          if (pos_from_key (self, self->positions[end - 1]) != end - 1)
+            break;
+        }
+
+      *n_items = end - start;
+      if (*n_items == 0)
+        *pos = 0;
+      else
+        *pos = start;
+    }
+
+  g_clear_pointer (&self->positions, g_free);
+
+  gtk_sort_list_model_clear_keys (self);
+} 
+
+static gboolean
+gtk_sort_list_model_should_sort (GtkSortListModel *self)
+{
+  return self->sorter != NULL &&
+         self->model != NULL &&
+         gtk_sorter_get_order (self->sorter) != GTK_SORTER_ORDER_NONE;
+}
+
+static void
+gtk_sort_list_model_create_keys (GtkSortListModel *self)
+{
+  g_assert (self->keys == NULL);
+  g_assert (self->sort_keys == NULL);
+  g_assert (self->key_size == 0);
+
+  self->sort_keys = gtk_sorter_get_keys (self->sorter);
+  self->key_size = gtk_sort_keys_get_key_size (self->sort_keys);
+  self->keys = g_malloc_n (self->n_items, self->key_size);
+  self->missing_keys = gtk_bitset_new_range (0, self->n_items);
+}
+
+static void
+gtk_sort_list_model_create_items (GtkSortListModel *self)
+{
+  guint i;
+
+  if (!gtk_sort_list_model_should_sort (self))
+    return;
+
+  g_assert (self->sort_keys == NULL);
+
+  self->positions = g_new (gpointer, self->n_items);
+
+  gtk_sort_list_model_create_keys (self);
+
+  for (i = 0; i < self->n_items; i++)
+    self->positions[i] = key_from_pos (self, i);
+}
+
+/* This realloc()s the arrays but does not set the added values. */
+static void
+gtk_sort_list_model_update_items (GtkSortListModel *self,
+                                  gsize             runs[GTK_TIM_SORT_MAX_PENDING + 1],
+                                  guint             position,
+                                  guint             removed,
+                                  guint             added,
+                                  guint            *unmodified_start,
+                                  guint            *unmodified_end)
+{
+  guint i, n_items, valid;
+  guint run_index, valid_run, valid_run_end, run_end;
+  guint start, end;
+  gpointer *old_keys;
+
+  n_items = self->n_items;
+  start = n_items;
+  end = n_items;
+  
+  /* first, move the keys over */
+  old_keys = self->keys;
+  gtk_sort_list_model_clear_sort_keys (self, position, removed);
+
+  if (removed > added)
+    {
+      memmove (key_from_pos (self, position + added),
+               key_from_pos (self, position + removed),
+               self->key_size * (n_items - position - removed));
+      self->keys = g_realloc_n (self->keys, n_items - removed + added, self->key_size);
+    }
+  else if (removed < added)
+    {
+      self->keys = g_realloc_n (self->keys, n_items - removed + added, self->key_size);
+      memmove (key_from_pos (self, position + added),
+               key_from_pos (self, position + removed),
+               self->key_size * (n_items - position - removed));
+    }
+
+  /* then, update the positions */
+  valid = 0;
+  valid_run = 0;
+  valid_run_end = 0;
+  run_index = 0;
+  run_end = 0;
+  for (i = 0; i < n_items;)
+    {
+      if (runs[run_index] == 0)
+        {
+          run_end = n_items;
+          valid_run_end = G_MAXUINT;
+        }
+      else
+        {
+          run_end += runs[run_index++];
+        }
+
+      for (; i < run_end; i++)
+        {
+          guint pos = ((char *) self->positions[i] - (char *) old_keys) / self->key_size;
+
+          if (pos >= position + removed)
+            pos = pos - removed + added;
+          else if (pos >= position)
+            { 
+              start = MIN (start, valid);
+              end = n_items - i - 1;
+              continue;
+            }
+
+          self->positions[valid] = key_from_pos (self, pos);
+          valid++;
+        }
+
+      if (valid_run_end < valid)
+        {
+          runs[valid_run++] = valid - valid_run_end;
+          valid_run_end = valid;
+        }
+    }
+  g_assert (i == n_items);
+  g_assert (valid == n_items - removed);
+  runs[valid_run] = 0;
+
+  self->positions = g_renew (gpointer, self->positions, n_items - removed + added);
+
+  if (self->missing_keys)
+    {
+      gtk_bitset_splice (self->missing_keys, position, removed, added);
+      gtk_bitset_add_range (self->missing_keys, position, added);
+    }
+
+  self->n_items = n_items - removed + added;
+
+  for (i = 0; i < added; i++)
+    {
+      self->positions[self->n_items - added + i] = key_from_pos (self, position + i);
+    }
+
+  *unmodified_start = start;
+  *unmodified_end = end;
 }
 
 static void
@@ -228,23 +558,56 @@ gtk_sort_list_model_items_changed_cb (GListModel       *model,
                                       guint             added,
                                       GtkSortListModel *self)
 {
-  guint n_items, start, end, start2, end2;
+  gsize runs[GTK_TIM_SORT_MAX_PENDING + 1];
+  guint i, n_items, start, end;
+  gboolean was_sorting;
 
   if (removed == 0 && added == 0)
     return;
 
-  if (self->sorted == NULL)
+  if (!gtk_sort_list_model_should_sort (self))
     {
+      self->n_items = self->n_items - removed + added;
       g_list_model_items_changed (G_LIST_MODEL (self), position, removed, added);
       return;
     }
 
-  gtk_sort_list_model_remove_items (self, position, removed, &start, &end);
-  gtk_sort_list_model_add_items (self, position, added, &start2, &end2);
-  start = MIN (start, start2);
-  end = MIN (end, end2);
+  was_sorting = gtk_sort_list_model_is_sorting (self);
+  gtk_sort_list_model_stop_sorting (self, runs);
 
-  n_items = g_sequence_get_length (self->sorted) - start - end;
+  gtk_sort_list_model_update_items (self, runs, position, removed, added, &start, &end);
+
+  if (added > 0)
+    {
+      if (gtk_sort_list_model_start_sorting (self, runs))
+        {
+          end = 0;
+        }
+      else
+        {
+          guint pos, n;
+          gtk_sort_list_model_finish_sorting (self, &pos, &n);
+          if (n)
+            start = MIN (start, pos);
+          /* find first item that was added */
+          for (i = 0; i < end; i++)
+            {
+              pos = pos_from_key (self, self->positions[self->n_items - i - 1]);
+              if (pos >= position && pos < position + added)
+                {
+                  end = i;
+                  break;
+                }
+            }
+        }
+    }
+  else
+    {
+      if (was_sorting)
+        gtk_sort_list_model_start_sorting (self, runs);
+    }
+
+  n_items = self->n_items - start - end;
   g_list_model_items_changed (G_LIST_MODEL (self), start, n_items - added + removed, n_items);
 }
 
@@ -258,6 +621,10 @@ gtk_sort_list_model_set_property (GObject      *object,
 
   switch (prop_id)
     {
+    case PROP_INCREMENTAL:
+      gtk_sort_list_model_set_incremental (self, g_value_get_boolean (value));
+      break;
+
     case PROP_MODEL:
       gtk_sort_list_model_set_model (self, g_value_get_object (value));
       break;
@@ -282,8 +649,16 @@ gtk_sort_list_model_get_property (GObject     *object,
 
   switch (prop_id)
     {
+    case PROP_INCREMENTAL:
+      g_value_set_boolean (value, self->incremental);
+      break;
+
     case PROP_MODEL:
       g_value_set_object (value, self->model);
+      break;
+
+    case PROP_PENDING:
+      g_value_set_uint (value, gtk_sort_list_model_get_pending (self));
       break;
 
     case PROP_SORTER:
@@ -297,46 +672,57 @@ gtk_sort_list_model_get_property (GObject     *object,
 }
 
 static void
-gtk_sort_list_model_clear_sequences (GtkSortListModel *self)
-{
-  g_clear_pointer (&self->unsorted, g_sequence_free);
-  g_clear_pointer (&self->sorted, g_sequence_free);
-} 
-
-static void
-gtk_sort_list_model_create_sequences (GtkSortListModel *self)
-{
-  if (self->sorted)
-    return;
-
-  if (self->sorter == NULL ||
-      self->model == NULL ||
-      gtk_sorter_get_order (self->sorter) == GTK_SORTER_ORDER_NONE)
-    return;
-
-  self->sorted = g_sequence_new (gtk_sort_list_entry_free);
-  self->unsorted = g_sequence_new (NULL);
-
-  gtk_sort_list_model_add_items (self, 0, g_list_model_get_n_items (self->model), NULL, NULL);
-}
-
-static void gtk_sort_list_model_resort (GtkSortListModel *self);
-
-static void
 gtk_sort_list_model_sorter_changed_cb (GtkSorter        *sorter,
                                        int               change,
                                        GtkSortListModel *self)
 {
-  if (gtk_sorter_get_order (sorter) == GTK_SORTER_ORDER_NONE)
-    gtk_sort_list_model_clear_sequences (self);
-  else if (self->sorted == NULL)
+  guint pos, n_items;
+
+  if (gtk_sort_list_model_should_sort (self))
     {
-      guint n_items = g_list_model_get_n_items (self->model);
-      gtk_sort_list_model_create_sequences (self);
-      g_list_model_items_changed (G_LIST_MODEL (self), 0, n_items, n_items);
+      gtk_sort_list_model_stop_sorting (self, NULL);
+
+      if (self->sort_keys == NULL)
+        {
+          gtk_sort_list_model_create_items (self);
+        }
+      else
+        {
+          GtkSortKeys *new_keys = gtk_sorter_get_keys (sorter);
+
+          if (!gtk_sort_keys_is_compatible (new_keys, self->sort_keys))
+            {
+              char *old_keys = self->keys;
+              gsize old_key_size = self->key_size;
+              guint i;
+
+              gtk_sort_list_model_clear_keys (self);
+              gtk_sort_list_model_create_keys (self);
+
+              for (i = 0; i < self->n_items; i++)
+                self->positions[i] = key_from_pos (self, ((char *) self->positions[i] - old_keys) / old_key_size);
+
+              gtk_sort_keys_unref (new_keys);
+            }
+          else
+            {
+              gtk_sort_keys_unref (self->sort_keys);
+              self->sort_keys = new_keys;
+            }
+        }
+
+      if (gtk_sort_list_model_start_sorting (self, NULL))
+        pos = n_items = 0;
+      else
+        gtk_sort_list_model_finish_sorting (self, &pos, &n_items);
     }
   else
-    gtk_sort_list_model_resort (self);
+    {
+      gtk_sort_list_model_clear_items (self, &pos, &n_items);
+    }
+
+  if (n_items > 0)
+    g_list_model_items_changed (G_LIST_MODEL (self), pos, n_items, n_items);
 }
 
 static void
@@ -347,7 +733,8 @@ gtk_sort_list_model_clear_model (GtkSortListModel *self)
 
   g_signal_handlers_disconnect_by_func (self->model, gtk_sort_list_model_items_changed_cb, self);
   g_clear_object (&self->model);
-  gtk_sort_list_model_clear_sequences (self);
+  gtk_sort_list_model_clear_items (self, NULL, NULL);
+  self->n_items = 0;
 }
 
 static void
@@ -358,7 +745,6 @@ gtk_sort_list_model_clear_sorter (GtkSortListModel *self)
 
   g_signal_handlers_disconnect_by_func (self->sorter, gtk_sort_list_model_sorter_changed_cb, self);
   g_clear_object (&self->sorter);
-  gtk_sort_list_model_clear_sequences (self);
 }
 
 static void
@@ -382,15 +768,15 @@ gtk_sort_list_model_class_init (GtkSortListModelClass *class)
   gobject_class->dispose = gtk_sort_list_model_dispose;
 
   /**
-   * GtkSortListModel:sorter:
+   * GtkSortListModel:incremental:
    *
-   * The sorter for this model
+   * If the model should sort items incrementally
    */
-  properties[PROP_SORTER] =
-      g_param_spec_object ("sorter",
-                            P_("Sorter"),
-                            P_("The sorter for this model"),
-                            GTK_TYPE_SORTER,
+  properties[PROP_INCREMENTAL] =
+      g_param_spec_boolean ("incremental",
+                            P_("Incremental"),
+                            P_("Sort items incrementally"),
+                            FALSE,
                             GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
@@ -404,6 +790,30 @@ gtk_sort_list_model_class_init (GtkSortListModelClass *class)
                            P_("The model being sorted"),
                            G_TYPE_LIST_MODEL,
                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
+
+  /**
+   * GtkSortListModel:pending:
+   *
+   * Estimate of unsorted items remaining
+   */
+  properties[PROP_PENDING] =
+      g_param_spec_uint ("pending",
+                         P_("Pending"),
+                         P_("Estimate of unsorted items remaining"),
+                         0, G_MAXUINT, 0,
+                         GTK_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY);
+
+  /**
+   * GtkSortListModel:sorter:
+   *
+   * The sorter for this model
+   */
+  properties[PROP_SORTER] =
+      g_param_spec_object ("sorter",
+                            P_("Sorter"),
+                            P_("The sorter for this model"),
+                            GTK_TYPE_SORTER,
+                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (gobject_class, NUM_PROPERTIES, properties);
 }
@@ -451,7 +861,7 @@ void
 gtk_sort_list_model_set_model (GtkSortListModel *self,
                                GListModel       *model)
 {
-  guint removed, added;
+  guint removed;
 
   g_return_if_fail (GTK_IS_SORT_LIST_MODEL (self));
   g_return_if_fail (model == NULL || G_IS_LIST_MODEL (model));
@@ -464,17 +874,22 @@ gtk_sort_list_model_set_model (GtkSortListModel *self,
 
   if (model)
     {
-      self->model = g_object_ref (model);
-      g_signal_connect (model, "items-changed", G_CALLBACK (gtk_sort_list_model_items_changed_cb), self);
-      added = g_list_model_get_n_items (model);
+      guint ignore1, ignore2;
 
-      gtk_sort_list_model_create_sequences (self);
+      self->model = g_object_ref (model);
+      self->n_items = g_list_model_get_n_items (model);
+      g_signal_connect (model, "items-changed", G_CALLBACK (gtk_sort_list_model_items_changed_cb), self);
+
+      if (gtk_sort_list_model_should_sort (self))
+        {
+          gtk_sort_list_model_create_items (self);
+          if (!gtk_sort_list_model_start_sorting (self, NULL))
+            gtk_sort_list_model_finish_sorting (self, &ignore1, &ignore2);
+        }
     }
-  else
-    added = 0;
   
-  if (removed > 0 || added > 0)
-    g_list_model_items_changed (G_LIST_MODEL (self), 0, removed, added);
+  if (removed > 0 || self->n_items > 0)
+    g_list_model_items_changed (G_LIST_MODEL (self), 0, removed, self->n_items);
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_MODEL]);
 }
@@ -495,25 +910,6 @@ gtk_sort_list_model_get_model (GtkSortListModel *self)
   return self->model;
 }
 
-static void
-gtk_sort_list_model_resort (GtkSortListModel *self)
-{
-  guint n_items;
-
-  g_return_if_fail (GTK_IS_SORT_LIST_MODEL (self));
-  
-  if (self->sorted == NULL)
-    return;
-
-  n_items = g_list_model_get_n_items (self->model);
-  if (n_items <= 1)
-    return;
-
-  g_sequence_sort (self->sorted, _sort_func, self->sorter);
-
-  g_list_model_items_changed (G_LIST_MODEL (self), 0, n_items, n_items);
-}
-
 /**
  * gtk_sort_list_model_set_sorter:
  * @self: a #GtkSortListModel
@@ -525,8 +921,6 @@ void
 gtk_sort_list_model_set_sorter (GtkSortListModel *self,
                                 GtkSorter        *sorter)
 {
-  guint n_items;
-
   g_return_if_fail (GTK_IS_SORT_LIST_MODEL (self));
   g_return_if_fail (sorter == NULL || GTK_IS_SORTER (sorter));
 
@@ -538,18 +932,14 @@ gtk_sort_list_model_set_sorter (GtkSortListModel *self,
       g_signal_connect (sorter, "changed", G_CALLBACK (gtk_sort_list_model_sorter_changed_cb), self);
     }
 
-  gtk_sort_list_model_create_sequences (self);
-    
-  n_items = g_list_model_get_n_items (G_LIST_MODEL (self));
-  if (n_items > 1)
-    g_list_model_items_changed (G_LIST_MODEL (self), 0, n_items, n_items);
+  gtk_sort_list_model_sorter_changed_cb (sorter, GTK_SORTER_CHANGE_DIFFERENT, self);
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_SORTER]);
 }
 
 /**
  * gtk_sort_list_model_get_sorter:
- * @self: a #GtkSortLisTModel
+ * @self: a #GtkSortListModel
  *
  * Gets the sorter that is used to sort @self.
  *
@@ -562,3 +952,110 @@ gtk_sort_list_model_get_sorter (GtkSortListModel *self)
 
   return self->sorter;
 }
+
+/**
+ * gtk_sort_list_model_set_incremental:
+ * @self: a #GtkSortListModel
+ * @incremental: %TRUE to sort incrementally
+ *
+ * Sets the sort model to do an incremental sort.
+ *
+ * When incremental sorting is enabled, the sortlistmodel will not do
+ * a complete sort immediately, but will instead queue an idle handler that
+ * incrementally sorts the items towards their correct position. This of
+ * course means that items do not instantly appear in the right place. It
+ * also means that the total sorting time is a lot slower.
+ *
+ * When your filter blocks the UI while sorting, you might consider
+ * turning this on. Depending on your model and sorters, this may become
+ * interesting around 10,000 to 100,000 items.
+ *
+ * By default, incremental sorting is disabled.
+ */
+void
+gtk_sort_list_model_set_incremental (GtkSortListModel *self,
+                                     gboolean          incremental)
+{
+  g_return_if_fail (GTK_IS_SORT_LIST_MODEL (self));
+
+  if (self->incremental == incremental)
+    return;
+
+  self->incremental = incremental;
+
+  if (!incremental && gtk_sort_list_model_is_sorting (self))
+    {
+      guint pos, n_items;
+
+      gtk_sort_list_model_finish_sorting (self, &pos, &n_items);
+      if (n_items)
+        g_list_model_items_changed (G_LIST_MODEL (self), pos, n_items, n_items);
+    }
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_INCREMENTAL]);
+}
+
+/**
+ * gtk_sort_list_model_get_incremental:
+ * @self: a #GtkSortListModel
+ *
+ * Returns whether incremental sorting was enabled via
+ * gtk_sort_list_model_set_incremental().
+ *
+ * Returns: %TRUE if incremental sorting is enabled
+ */
+gboolean
+gtk_sort_list_model_get_incremental (GtkSortListModel *self)
+{
+  g_return_val_if_fail (GTK_IS_SORT_LIST_MODEL (self), FALSE);
+
+  return self->incremental;
+}
+
+/**
+ * gtk_sort_list_model_get_pending:
+ * @self: a #GtkSortListModel
+ *
+ * Estimates progress of an ongoing sorting operation
+ *
+ * The estimate is the number of items that would still need to be
+ * sorted to finish the sorting operation if this was a linear
+ * algorithm. So this number is not related to how many items are
+ * already correctly sorted.
+ *
+ * If you want to estimate the progress, you can use code like this:
+ * |[<!-- language="C" -->
+ * double progress = 1.0 - (double) gtk_sort_list_model_get_pending (self) 
+ *                         / MAX (1, g_list_model_get_n_items (G_LIST_MODEL (sort)));
+ * ]|
+ *
+ * If no sort operation is ongoing - in particular when
+ * #GtkSortListModel:incremental is %FALSE - this function returns 0.
+ *
+ * Returns: a progress estimate of remaining items to sort
+ **/
+guint
+gtk_sort_list_model_get_pending (GtkSortListModel *self)
+{
+  g_return_val_if_fail (GTK_IS_SORT_LIST_MODEL (self), FALSE);
+
+  if (self->sort_cb == 0)
+    return 0;
+
+  /* We do a random guess that 50% of time is spent generating keys
+   * and the other 50% is spent actually sorting.
+   *
+   * This is of course massively wrong, but it depends on the sorter
+   * in use, and estimating this correctly is hard, so this will have
+   * to be good enough.
+   */
+  if (!gtk_bitset_is_empty (self->missing_keys))
+    {
+      return (self->n_items + gtk_bitset_get_size (self->missing_keys)) / 2;
+    }
+  else
+    {
+      return (self->n_items - gtk_tim_sort_get_progress (&self->sort)) / 2;
+    }
+}
+
