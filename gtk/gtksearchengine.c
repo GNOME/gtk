@@ -178,8 +178,6 @@ static void
 _gtk_search_engine_init (GtkSearchEngine *engine)
 {
   engine->priv = _gtk_search_engine_get_instance_private (engine);
-
-  engine->priv->recursive = TRUE;
 }
 
 static void
@@ -410,28 +408,6 @@ _gtk_search_engine_error (GtkSearchEngine *engine,
   g_return_if_fail (GTK_IS_SEARCH_ENGINE (engine));
 
   g_signal_emit (engine, signals[ERROR], 0, error_message);
-}
-
-void
-_gtk_search_engine_set_recursive (GtkSearchEngine *engine,
-                                  gboolean         recursive)
-{
-  g_return_if_fail (GTK_IS_SEARCH_ENGINE (engine));
-
-  g_assert (!engine->priv->running);
-
-  engine->priv->recursive = recursive;
-
-  if (engine->priv->native)
-    _gtk_search_engine_set_recursive (engine->priv->native, recursive);
-}
-
-gboolean
-_gtk_search_engine_get_recursive (GtkSearchEngine *engine)
-{
-  g_return_val_if_fail (GTK_IS_SEARCH_ENGINE (engine), TRUE);
-
-  return engine->priv->recursive;
 }
 
 void
