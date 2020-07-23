@@ -28,8 +28,6 @@
 
 #include <string.h>
 
-#define BATCH_SIZE 500
-
 struct _GtkSearchEngineModel
 {
   GtkSearchEngine parent;
@@ -37,7 +35,6 @@ struct _GtkSearchEngineModel
   GtkFileSystemModel *model;
   GtkQuery *query;
 
-  gboolean query_finished;
   guint idle;
 };
 

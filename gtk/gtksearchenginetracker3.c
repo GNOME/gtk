@@ -195,9 +195,9 @@ gtk_search_engine_tracker3_start (GtkSearchEngine *engine)
   GtkSearchEngineTracker3 *tracker;
   TrackerSparqlStatement *statement;
   const gchar *search_text;
-  gboolean recursive;
   gchar *match;
   GFile *location;
+  gboolean recursive;
 
   tracker = GTK_SEARCH_ENGINE_TRACKER3 (engine);
 
@@ -216,7 +216,7 @@ gtk_search_engine_tracker3_start (GtkSearchEngine *engine)
   tracker->query_pending = TRUE;
   search_text = gtk_query_get_text (tracker->query);
   location = gtk_query_get_location (tracker->query);
-  recursive = _gtk_search_engine_get_recursive (engine);
+  recursive = TRUE;
 
   if (location)
     {
