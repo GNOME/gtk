@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-07-14 11:49+0000\n"
-"PO-Revision-Date: 2020-07-14 17:51+0300\n"
+"POT-Creation-Date: 2020-07-22 13:16+0000\n"
+"PO-Revision-Date: 2020-07-23 13:30+0300\n"
 "Last-Translator: Florentina Mușat <florentina.musat.28@gmail.com>\n"
 "Language-Team: Romanian Gnome Team <gnomero-list@lists.sourceforge.net>\n"
 "Language: ro\n"
@@ -27,8 +27,8 @@ msgstr ""
 
 #: gdk/gdkapplaunchcontext.c:133 gdk/gdkdrawcontext.c:155 gdk/gdkseat.c:200
 #: gdk/gdkseat.c:201 gdk/gdksurface.c:486 gdk/gdksurface.c:487
-#: gdk/win32/gdkcursor-win32.c:234 gtk/gtkicontheme.c:985
-#: gtk/gtkicontheme.c:986 gtk/gtkmountoperation.c:191 gtk/gtkstylecontext.c:145
+#: gdk/win32/gdkcursor-win32.c:234 gtk/gtkicontheme.c:993
+#: gtk/gtkicontheme.c:994 gtk/gtkmountoperation.c:191 gtk/gtkstylecontext.c:145
 #: gtk/gtkwindow.c:854
 msgid "Display"
 msgstr "Afișaj"
@@ -213,11 +213,11 @@ msgstr "RGBA"
 msgid "Input shapes"
 msgstr "Forme de intrare"
 
-#: gdk/gdkdisplaymanager.c:167
+#: gdk/gdkdisplaymanager.c:171
 msgid "Default Display"
 msgstr "Afișaj implicit"
 
-#: gdk/gdkdisplaymanager.c:168
+#: gdk/gdkdisplaymanager.c:172
 msgid "The default display for GDK"
 msgstr "Afișaj implicit pentru GDK"
 
@@ -253,7 +253,7 @@ msgstr "Suprafața superioară"
 msgid "Autohide"
 msgstr "Ascunde automat"
 
-#: gdk/gdksurface.c:473 gdk/gdksurface.c:474 gtk/gtkwidget.c:1076
+#: gdk/gdksurface.c:473 gdk/gdksurface.c:474 gtk/gtkwidget.c:1077
 msgid "Cursor"
 msgstr "Cursor"
 
@@ -269,6 +269,10 @@ msgstr "Mapat"
 #: gtk/gtkswitch.c:538
 msgid "State"
 msgstr "Stare"
+
+#: gdk/macos/gdkmacosdrag.c:596 gdk/macos/gdkmacosdrag.c:597
+msgid "Drag Surface"
+msgstr "Suprafață de plasare"
 
 #: gdk/win32/gdkcursor-win32.c:235
 msgid "The display that will use this cursor"
@@ -714,7 +718,7 @@ msgstr ""
 "ADEVĂRAT dacă fereastra ar trebui să arate bara de meniu în partea de sus a "
 "ferestrei"
 
-#: gtk/gtkaspectframe.c:137 gtk/gtkwidget.c:1147
+#: gtk/gtkaspectframe.c:137 gtk/gtkwidget.c:1148
 msgid "Horizontal Alignment"
 msgstr "Aliniere orizontală"
 
@@ -722,7 +726,7 @@ msgstr "Aliniere orizontală"
 msgid "X alignment of the child"
 msgstr "Alinierea pe axa X a inferiorului"
 
-#: gtk/gtkaspectframe.c:144 gtk/gtkwidget.c:1160
+#: gtk/gtkaspectframe.c:144 gtk/gtkwidget.c:1161
 msgid "Vertical Alignment"
 msgstr "Aliniere verticală"
 
@@ -752,7 +756,7 @@ msgstr "Forțează raportul de aspect să se potrivească cu inferiorul cadrului
 #: gtk/gtknotebook.c:570 gtk/gtkoverlay.c:319 gtk/gtkpopover.c:1665
 #: gtk/gtkrevealer.c:352 gtk/gtkscrolledwindow.c:758 gtk/gtksearchbar.c:324
 #: gtk/gtkstack.c:335 gtk/gtktreeexpander.c:459 gtk/gtkviewport.c:390
-#: gtk/gtkwindow.c:946 gtk/gtkwindowhandle.c:543
+#: gtk/gtkwindow.c:946 gtk/gtkwindowhandle.c:542
 msgid "Child"
 msgstr "Inferior"
 
@@ -760,7 +764,7 @@ msgstr "Inferior"
 #: gtk/gtkflowbox.c:513 gtk/gtkframe.c:191 gtk/gtklistbox.c:3456
 #: gtk/gtkoverlay.c:320 gtk/gtkpopover.c:1666 gtk/gtkrevealer.c:353
 #: gtk/gtkscrolledwindow.c:759 gtk/gtksearchbar.c:325 gtk/gtkviewport.c:391
-#: gtk/gtkwindow.c:947 gtk/gtkwindowhandle.c:544
+#: gtk/gtkwindow.c:947 gtk/gtkwindowhandle.c:543
 msgid "The child widget"
 msgstr "Widgetul inferior"
 
@@ -845,7 +849,7 @@ msgstr "se încarcă"
 msgid "TRUE if files are being loaded"
 msgstr "ADEVĂRAT dacă fișierele se încarcă"
 
-#: gtk/gtkbox.c:258 gtk/gtkboxlayout.c:730 gtk/gtkcellareabox.c:317
+#: gtk/gtkbox.c:258 gtk/gtkboxlayout.c:722 gtk/gtkcellareabox.c:317
 #: gtk/gtkiconview.c:471 gtk/gtktreeviewcolumn.c:304
 msgid "Spacing"
 msgstr "Spațiere"
@@ -854,7 +858,7 @@ msgstr "Spațiere"
 msgid "The amount of space between children"
 msgstr "Cantitatea de spațiu între copii"
 
-#: gtk/gtkbox.c:265 gtk/gtkboxlayout.c:716 gtk/gtkflowbox.c:3617
+#: gtk/gtkbox.c:265 gtk/gtkboxlayout.c:708 gtk/gtkflowbox.c:3617
 msgid "Homogeneous"
 msgstr "Omogen"
 
@@ -862,21 +866,21 @@ msgstr "Omogen"
 msgid "Whether the children should all be the same size"
 msgstr "Specifică dacă copiii ar trebui să fie toți de aceeași dimensiune"
 
-#: gtk/gtkbox.c:272 gtk/gtkboxlayout.c:748 gtk/gtkcenterbox.c:205
+#: gtk/gtkbox.c:272 gtk/gtkboxlayout.c:740 gtk/gtkcenterbox.c:205
 msgid "Baseline position"
 msgstr "Poziție linie de bază"
 
-#: gtk/gtkbox.c:273 gtk/gtkboxlayout.c:749 gtk/gtkcenterbox.c:206
+#: gtk/gtkbox.c:273 gtk/gtkboxlayout.c:741 gtk/gtkcenterbox.c:206
 msgid ""
 "The position of the baseline aligned widgets if extra space is available"
 msgstr ""
 "Poziția lățimilor aliniate la linia de bază dacă spațiu extra este disponibil"
 
-#: gtk/gtkboxlayout.c:717
+#: gtk/gtkboxlayout.c:709
 msgid "Distribute space homogeneously"
 msgstr "Distribuie spațiul în mod omogen"
 
-#: gtk/gtkboxlayout.c:731
+#: gtk/gtkboxlayout.c:723
 msgid "Spacing between widgets"
 msgstr "Spațierea dintre widgeturi"
 
@@ -1151,7 +1155,7 @@ msgstr "vizibil"
 msgid "Display the cell"
 msgstr "Arată celula"
 
-#: gtk/gtkcellrenderer.c:308 gtk/gtkwidget.c:997
+#: gtk/gtkcellrenderer.c:308 gtk/gtkwidget.c:998
 msgid "Sensitive"
 msgstr "Senzitiv"
 
@@ -1239,7 +1243,7 @@ msgstr "Culoare RGBA fundal celulă"
 msgid "Cell background color as a GdkRGBA"
 msgstr "Culoarea fundalului celulei ca GdkColor"
 
-#: gtk/gtkcellrenderer.c:414 gtk/gtkeditablelabel.c:340
+#: gtk/gtkcellrenderer.c:414 gtk/gtkeditablelabel.c:369
 msgid "Editing"
 msgstr "În editare"
 
@@ -1256,12 +1260,12 @@ msgstr "Set fundal celulă"
 msgid "Whether the cell background color is set"
 msgstr "Dacă culoarea de fundal a celulei este stabilită"
 
-#: gtk/gtkcellrenderercombo.c:136 gtk/gtkcolumnview.c:629 gtk/gtkdropdown.c:456
+#: gtk/gtkcellrenderercombo.c:136 gtk/gtkcolumnview.c:629 gtk/gtkdropdown.c:455
 #: gtk/gtkfilterlistmodel.c:589 gtk/gtkflattenlistmodel.c:413
 #: gtk/gtkgridview.c:1093 gtk/gtklistview.c:838 gtk/gtkmaplistmodel.c:375
 #: gtk/gtkmultiselection.c:356 gtk/gtkselectionfiltermodel.c:251
 #: gtk/gtkshortcutcontroller.c:553 gtk/gtkslicelistmodel.c:263
-#: gtk/gtksortlistmodel.c:403 gtk/gtktreelistmodel.c:706
+#: gtk/gtksortlistmodel.c:789 gtk/gtktreelistmodel.c:706
 msgid "Model"
 msgstr "Model"
 
@@ -2021,7 +2025,7 @@ msgid "Show separators between columns"
 msgstr "Arată separatori între coloane"
 
 #: gtk/gtkcolumnview.c:665 gtk/gtkcolumnviewcolumn.c:270
-#: gtk/gtksortlistmodel.c:391 gtk/gtktreelistrowsorter.c:243
+#: gtk/gtksortlistmodel.c:813 gtk/gtktreelistrowsorter.c:544
 msgid "Sorter"
 msgstr "Sortator"
 
@@ -2037,7 +2041,7 @@ msgstr "Activează clicul singur"
 msgid "Activate rows on single click"
 msgstr "Activează rândul la un singur clic"
 
-#: gtk/gtkcolumnview.c:689 gtk/gtkiconview.c:542 gtk/gtktreeview.c:1069
+#: gtk/gtkcolumnview.c:689 gtk/gtkiconview.c:542 gtk/gtktreeview.c:1025
 #: gtk/gtktreeviewcolumn.c:379
 msgid "Reorderable"
 msgstr "Reordonabilă"
@@ -2062,12 +2066,12 @@ msgstr "Vizualizare coloane"
 msgid "Column view this column is a part of"
 msgstr "Vizualizarea coloană la care face parte această coloană"
 
-#: gtk/gtkcolumnviewcolumn.c:246 gtk/gtkdropdown.c:430 gtk/gtkgridview.c:1053
+#: gtk/gtkcolumnviewcolumn.c:246 gtk/gtkdropdown.c:429 gtk/gtkgridview.c:1053
 #: gtk/gtklistview.c:826
 msgid "Factory"
 msgstr "Fabrică"
 
-#: gtk/gtkcolumnviewcolumn.c:247 gtk/gtkdropdown.c:431 gtk/gtkdropdown.c:445
+#: gtk/gtkcolumnviewcolumn.c:247 gtk/gtkdropdown.c:430 gtk/gtkdropdown.c:444
 #: gtk/gtkgridview.c:1054 gtk/gtklistview.c:827
 msgid "Factory for populating list items"
 msgstr "Fabrică pentru popularea elementelor listei"
@@ -2081,7 +2085,7 @@ msgid "Sorter for sorting items according to this column"
 msgstr "Sortator pentru sortarea elementelor potrivit cu această coloană"
 
 #: gtk/gtkcolumnviewcolumn.c:282 gtk/gtkcssnode.c:623 gtk/gtknativedialog.c:238
-#: gtk/gtkstack.c:378 gtk/gtktreeviewcolumn.c:274 gtk/gtkwidget.c:990
+#: gtk/gtkstack.c:378 gtk/gtktreeviewcolumn.c:274 gtk/gtkwidget.c:991
 msgid "Visible"
 msgstr "Vizibilă"
 
@@ -2439,44 +2443,44 @@ msgstr "Este indicator"
 msgid "Whether the pointer is in the controllers widget"
 msgstr "Dacă indicatorul este în widgetului controlerului"
 
-#: gtk/gtkdropdown.c:444
+#: gtk/gtkdropdown.c:443
 msgid "List Factory"
 msgstr "Listează fabrica"
 
-#: gtk/gtkdropdown.c:457
+#: gtk/gtkdropdown.c:456
 msgid "Model for the displayed items"
 msgstr "Modelul pentru elementele afișate"
 
-#: gtk/gtkdropdown.c:469 gtk/gtklistitem.c:233 gtk/gtksingleselection.c:415
+#: gtk/gtkdropdown.c:468 gtk/gtklistitem.c:233 gtk/gtksingleselection.c:415
 msgid "Selected"
 msgstr "Selectat"
 
-#: gtk/gtkdropdown.c:470 gtk/gtksingleselection.c:416
+#: gtk/gtkdropdown.c:469 gtk/gtksingleselection.c:416
 msgid "Position of the selected item"
 msgstr "Poziția elementului selectat"
 
-#: gtk/gtkdropdown.c:481 gtk/gtksingleselection.c:427
+#: gtk/gtkdropdown.c:480 gtk/gtksingleselection.c:427
 msgid "Selected Item"
 msgstr "Element selectat"
 
-#: gtk/gtkdropdown.c:482 gtk/gtksingleselection.c:428
+#: gtk/gtkdropdown.c:481 gtk/gtksingleselection.c:428
 msgid "The selected item"
 msgstr "Elementul selectat"
 
-#: gtk/gtkdropdown.c:495
+#: gtk/gtkdropdown.c:494
 msgid "Enable search"
 msgstr "Activează căutarea"
 
-#: gtk/gtkdropdown.c:496
+#: gtk/gtkdropdown.c:495
 msgid "Whether to show a search entry in the popup"
 msgstr "Dacă să se afișeze o intrare de căutare în meniul contextual"
 
-#: gtk/gtkdropdown.c:510 gtk/gtknumericsorter.c:282 gtk/gtkstringfilter.c:252
-#: gtk/gtkstringsorter.c:218
+#: gtk/gtkdropdown.c:509 gtk/gtknumericsorter.c:542 gtk/gtkstringfilter.c:252
+#: gtk/gtkstringsorter.c:296
 msgid "Expression"
 msgstr "Expresie"
 
-#: gtk/gtkdropdown.c:511
+#: gtk/gtkdropdown.c:510
 msgid "Expression to determine strings to search for"
 msgstr "Expresie de la care se determină șirurile de căutat"
 
@@ -2569,7 +2573,7 @@ msgstr ""
 "Alinierea orizontală, de la 0 (stânga) la 1 (dreapta). Invers pentru "
 "aranjamente RTL."
 
-#: gtk/gtkeditablelabel.c:341
+#: gtk/gtkeditablelabel.c:370
 msgid "Whether the widget is in editing mode"
 msgstr "Dacă widge-ul este în modul de editare"
 
@@ -3151,7 +3155,7 @@ msgstr "Numele lizibil de către oameni pentru acest filtru"
 msgid "The filter set for this model"
 msgstr "Filtrul stabilit pentru acest model"
 
-#: gtk/gtkfilterlistmodel.c:577
+#: gtk/gtkfilterlistmodel.c:577 gtk/gtksortlistmodel.c:777
 msgid "Incremental"
 msgstr "Incremental"
 
@@ -3163,7 +3167,7 @@ msgstr "Filtrează elemente incremental"
 msgid "The model being filtered"
 msgstr "Modelul filtrat"
 
-#: gtk/gtkfilterlistmodel.c:601
+#: gtk/gtkfilterlistmodel.c:601 gtk/gtksortlistmodel.c:801
 msgid "Pending"
 msgstr "În așteptare"
 
@@ -3193,12 +3197,12 @@ msgid "The selection mode"
 msgstr "Modul selecție"
 
 #: gtk/gtkflowbox.c:3597 gtk/gtkiconview.c:596 gtk/gtklistbox.c:496
-#: gtk/gtktreeview.c:1203
+#: gtk/gtktreeview.c:1159
 msgid "Activate on Single Click"
 msgstr "Activează la un simplu clic"
 
 #: gtk/gtkflowbox.c:3598 gtk/gtkiconview.c:597 gtk/gtklistbox.c:497
-#: gtk/gtktreeview.c:1204
+#: gtk/gtktreeview.c:1160
 msgid "Activate row on a single click"
 msgstr "Activează rândul la un singur clic"
 
@@ -3530,43 +3534,43 @@ msgstr "Aspect decorație"
 msgid "The layout for window decorations"
 msgstr "Aspectul decorațiilor ferestrei"
 
-#: gtk/gtkicontheme.c:997 gtk/gtkicontheme.c:998
+#: gtk/gtkicontheme.c:1005 gtk/gtkicontheme.c:1006
 msgid "Supported icon names"
 msgstr "Nume de iconițe suportate"
 
-#: gtk/gtkicontheme.c:1015 gtk/gtkicontheme.c:1016
+#: gtk/gtkicontheme.c:1023 gtk/gtkicontheme.c:1024
 msgid "Search path"
 msgstr "Cale de căutare"
 
-#: gtk/gtkicontheme.c:1034 gtk/gtkicontheme.c:1035
+#: gtk/gtkicontheme.c:1042 gtk/gtkicontheme.c:1043
 msgid "Resource path"
 msgstr "Cale resursă"
 
-#: gtk/gtkicontheme.c:1050 gtk/gtkicontheme.c:1051
+#: gtk/gtkicontheme.c:1058 gtk/gtkicontheme.c:1059
 msgid "Theme name"
 msgstr "Nume temă"
 
-#: gtk/gtkicontheme.c:3571
+#: gtk/gtkicontheme.c:3576
 msgid "file"
 msgstr "fișier"
 
-#: gtk/gtkicontheme.c:3572
+#: gtk/gtkicontheme.c:3577
 msgid "The file representing the icon"
 msgstr "Fișierul care reprezintă iconița"
 
-#: gtk/gtkicontheme.c:3582 gtk/gtkstack.c:356
+#: gtk/gtkicontheme.c:3587 gtk/gtkstack.c:356
 msgid "Icon name"
 msgstr "Nume iconiță"
 
-#: gtk/gtkicontheme.c:3583
+#: gtk/gtkicontheme.c:3588
 msgid "The icon name chosen during lookup"
 msgstr "Numele iconiței ales în timpul căutării"
 
-#: gtk/gtkicontheme.c:3593
+#: gtk/gtkicontheme.c:3598
 msgid "Is symbolic"
 msgstr "Este simbolic"
 
-#: gtk/gtkicontheme.c:3594
+#: gtk/gtkicontheme.c:3599
 msgid "If the icon is symbolic"
 msgstr "Dacă iconița este simbolică"
 
@@ -3653,11 +3657,11 @@ msgid ""
 msgstr ""
 "Cum ar trebui să fie poziționate relativ textul și iconița fiecărui element"
 
-#: gtk/gtkiconview.c:543 gtk/gtktreeview.c:1070
+#: gtk/gtkiconview.c:543 gtk/gtktreeview.c:1026
 msgid "View is reorderable"
 msgstr "Afișarea este reordonabilă"
 
-#: gtk/gtkiconview.c:550 gtk/gtktreeview.c:1189
+#: gtk/gtkiconview.c:550 gtk/gtktreeview.c:1145
 msgid "Tooltip Column"
 msgstr "Coloană indicii"
 
@@ -4471,16 +4475,16 @@ msgstr "Nume grup pentru tragerea și plasarea taburilor"
 msgid "The pages of the notebook."
 msgstr "Paginile carnețelului."
 
-#: gtk/gtknumericsorter.c:283 gtk/gtkstringfilter.c:253
-#: gtk/gtkstringsorter.c:219
+#: gtk/gtknumericsorter.c:543 gtk/gtkstringfilter.c:253
+#: gtk/gtkstringsorter.c:297
 msgid "Expression to compare with"
 msgstr "Expresie cu care se compară"
 
-#: gtk/gtknumericsorter.c:293 gtk/gtktreeviewcolumn.c:393
+#: gtk/gtknumericsorter.c:553 gtk/gtktreeviewcolumn.c:393
 msgid "Sort order"
 msgstr "Ordine sortare"
 
-#: gtk/gtknumericsorter.c:294
+#: gtk/gtknumericsorter.c:554
 msgid "Whether to sort smaller numbers first"
 msgstr "Dacă să se sorteze numerele mai mici mai întâi"
 
@@ -4653,19 +4657,19 @@ msgstr "Permite micșorarea"
 msgid "Allow self to be smaller than contents"
 msgstr "Permite self să fie mai mic decât conținutul"
 
-#: gtk/gtkplacessidebar.c:4343
+#: gtk/gtkplacessidebar.c:4345
 msgid "Location to Select"
 msgstr "Locație la selectare"
 
-#: gtk/gtkplacessidebar.c:4344
+#: gtk/gtkplacessidebar.c:4346
 msgid "The location to highlight in the sidebar"
 msgstr "Locația de evidențiat în bara laterală"
 
-#: gtk/gtkplacessidebar.c:4349 gtk/gtkplacesview.c:2250
+#: gtk/gtkplacessidebar.c:4351 gtk/gtkplacesview.c:2250
 msgid "Open Flags"
 msgstr "Fanioane deschise"
 
-#: gtk/gtkplacessidebar.c:4350 gtk/gtkplacesview.c:2251
+#: gtk/gtkplacessidebar.c:4352 gtk/gtkplacesview.c:2251
 msgid ""
 "Modes in which the calling application can open locations selected in the "
 "sidebar"
@@ -4673,55 +4677,55 @@ msgstr ""
 "Moduri în care aplicația ce apelează poate deschide locațiile selectate în "
 "bara laterală"
 
-#: gtk/gtkplacessidebar.c:4356
+#: gtk/gtkplacessidebar.c:4358
 msgid "Show recent files"
 msgstr "Arată fișiere recente"
 
-#: gtk/gtkplacessidebar.c:4357
+#: gtk/gtkplacessidebar.c:4359
 msgid "Whether the sidebar includes a builtin shortcut for recent files"
 msgstr ""
 "Dacă bara laterală include o scurtătură înglobată pentru fișiere recente"
 
-#: gtk/gtkplacessidebar.c:4362
+#: gtk/gtkplacessidebar.c:4364
 msgid "Show “Desktop”"
 msgstr "Arată „Desktop”"
 
-#: gtk/gtkplacessidebar.c:4363
+#: gtk/gtkplacessidebar.c:4365
 msgid "Whether the sidebar includes a builtin shortcut to the Desktop folder"
 msgstr "Dacă bara laterală include o scurtătură integrată la dosarul Desktop"
 
-#: gtk/gtkplacessidebar.c:4368
+#: gtk/gtkplacessidebar.c:4370
 msgid "Show “Enter Location”"
 msgstr "Arată „Introdu locația”"
 
-#: gtk/gtkplacessidebar.c:4369
+#: gtk/gtkplacessidebar.c:4371
 msgid ""
 "Whether the sidebar includes a builtin shortcut to manually enter a location"
 msgstr ""
 "Dacă bara laterală include o scurtătură integrată pentru a introduce o "
 "locație manual"
 
-#: gtk/gtkplacessidebar.c:4374
+#: gtk/gtkplacessidebar.c:4376
 msgid "Show “Trash”"
 msgstr "Arată „Gunoi”"
 
-#: gtk/gtkplacessidebar.c:4375
+#: gtk/gtkplacessidebar.c:4377
 msgid "Whether the sidebar includes a builtin shortcut to the Trash location"
 msgstr "Dacă bara laterală include o scurtătură integrată la locația Gunoi"
 
-#: gtk/gtkplacessidebar.c:4380
+#: gtk/gtkplacessidebar.c:4382
 msgid "Show “Other locations”"
 msgstr "Arată „Alte locații”"
 
-#: gtk/gtkplacessidebar.c:4381
+#: gtk/gtkplacessidebar.c:4383
 msgid "Whether the sidebar includes an item to show external locations"
 msgstr "Dacă bara laterală include un element pentru a arăta locații externe"
 
-#: gtk/gtkplacessidebar.c:4386
+#: gtk/gtkplacessidebar.c:4388
 msgid "Show “Starred Location”"
 msgstr "Arată „Locație marcată”"
 
-#: gtk/gtkplacessidebar.c:4387
+#: gtk/gtkplacessidebar.c:4389
 msgid "Whether the sidebar includes an item to show starred files"
 msgstr "Dacă bara laterală include un element pentru a arăta fișiere favorite"
 
@@ -5937,11 +5941,11 @@ msgstr "Nume semnal"
 msgid "The name of the signal to emit"
 msgstr "Numele semnalului de emis"
 
-#: gtk/gtkshortcutaction.c:1181 gtk/gtkshortcutsshortcut.c:718
+#: gtk/gtkshortcutaction.c:1183 gtk/gtkshortcutsshortcut.c:718
 msgid "Action Name"
 msgstr "Nume acțiune"
 
-#: gtk/gtkshortcutaction.c:1182
+#: gtk/gtkshortcutaction.c:1184
 msgid "The name of the action to activate"
 msgstr "Numele acțiunii de activat"
 
@@ -6143,13 +6147,21 @@ msgstr "Decalajul secțiunii"
 msgid "Maximum size of slice"
 msgstr "Dimensiunea maximă a secțiunii"
 
-#: gtk/gtksortlistmodel.c:392
-msgid "The sorter for this model"
-msgstr "Sortatorul pentru acest model"
+#: gtk/gtksortlistmodel.c:778
+msgid "Sort items incrementally"
+msgstr "Sortează elementele incremental"
 
-#: gtk/gtksortlistmodel.c:404
+#: gtk/gtksortlistmodel.c:790
 msgid "The model being sorted"
 msgstr "Modelul ce este sortat"
+
+#: gtk/gtksortlistmodel.c:802
+msgid "Estimate of unsorted items remaining"
+msgstr "Estimarea elementelor nesortate rămase"
+
+#: gtk/gtksortlistmodel.c:814
+msgid "The sorter for this model"
+msgstr "Sortatorul pentru acest model"
 
 #: gtk/gtkspinbutton.c:369
 msgid "Climb Rate"
@@ -6315,11 +6327,11 @@ msgstr "Stivă"
 msgid "Associated stack for this GtkStackSidebar"
 msgstr "Stiva asociată acestei GtkStackSidebar"
 
-#: gtk/gtkstringfilter.c:263 gtk/gtkstringsorter.c:229
+#: gtk/gtkstringfilter.c:263 gtk/gtkstringsorter.c:307
 msgid "Ignore case"
 msgstr "Ignoră majusculele"
 
-#: gtk/gtkstringfilter.c:264 gtk/gtkstringsorter.c:230
+#: gtk/gtkstringfilter.c:264 gtk/gtkstringsorter.c:308
 msgid "If matching is case sensitive"
 msgstr "Dacă potrivirea este sensibilă la majuscule"
 
@@ -7073,7 +7085,7 @@ msgstr "Dacă acest rând este expandat curent"
 msgid "The item held in this row"
 msgstr "Elementul ținut în acest rând"
 
-#: gtk/gtktreelistrowsorter.c:244
+#: gtk/gtktreelistrowsorter.c:545
 msgid "The underlying sorter"
 msgstr "Sortatorul de bază"
 
@@ -7110,131 +7122,131 @@ msgstr "model"
 msgid "The model for the popover"
 msgstr "Modelul pentru popover"
 
-#: gtk/gtktreeview.c:1041
+#: gtk/gtktreeview.c:997
 msgid "TreeView Model"
 msgstr "Model TreeView"
 
-#: gtk/gtktreeview.c:1042
+#: gtk/gtktreeview.c:998
 msgid "The model for the tree view"
 msgstr "Model pentru afișarea de tip arbore"
 
-#: gtk/gtktreeview.c:1048
+#: gtk/gtktreeview.c:1004
 msgid "Headers Visible"
 msgstr "Antete vizibile"
 
-#: gtk/gtktreeview.c:1049
+#: gtk/gtktreeview.c:1005
 msgid "Show the column header buttons"
 msgstr "Arată butoanele antetelor de coloană"
 
-#: gtk/gtktreeview.c:1055
+#: gtk/gtktreeview.c:1011
 msgid "Headers Clickable"
 msgstr "Antete sensibile la clic"
 
-#: gtk/gtktreeview.c:1056
+#: gtk/gtktreeview.c:1012
 msgid "Column headers respond to click events"
 msgstr "Antetele coloanelor răspund la clic"
 
-#: gtk/gtktreeview.c:1062
+#: gtk/gtktreeview.c:1018
 msgid "Expander Column"
 msgstr "Coloană de desfășurare"
 
 # Very fishy... Mișu
-#: gtk/gtktreeview.c:1063
+#: gtk/gtktreeview.c:1019
 msgid "Set the column for the expander column"
 msgstr "Setare coloană pentru coloana de desfășurare"
 
-#: gtk/gtktreeview.c:1076
+#: gtk/gtktreeview.c:1032
 msgid "Enable Search"
 msgstr "Activează căutarea"
 
-#: gtk/gtktreeview.c:1077
+#: gtk/gtktreeview.c:1033
 msgid "View allows user to search through columns interactively"
 msgstr "Afișarea permite utilizatorului să caute interactiv prin coloane"
 
-#: gtk/gtktreeview.c:1083
+#: gtk/gtktreeview.c:1039
 msgid "Search Column"
 msgstr "Coloană de căutare"
 
-#: gtk/gtktreeview.c:1084
+#: gtk/gtktreeview.c:1040
 msgid "Model column to search through during interactive search"
 msgstr "Coloană model pentru căutare în timpul căutării interactive"
 
-#: gtk/gtktreeview.c:1100
+#: gtk/gtktreeview.c:1056
 msgid "Fixed Height Mode"
 msgstr "Mod cu înălțime fixă"
 
-#: gtk/gtktreeview.c:1101
+#: gtk/gtktreeview.c:1057
 msgid "Speeds up GtkTreeView by assuming that all rows have the same height"
 msgstr ""
 "Eficientizează GtkTreeView presupunând că toate rândurile au aceeași înălțime"
 
-#: gtk/gtktreeview.c:1118
+#: gtk/gtktreeview.c:1074
 msgid "Hover Selection"
 msgstr "Selecție la planarea indicatorului"
 
-#: gtk/gtktreeview.c:1119
+#: gtk/gtktreeview.c:1075
 msgid "Whether the selection should follow the pointer"
 msgstr "Specifică dacă selecția ar trebui să urmărească indicatorul"
 
-#: gtk/gtktreeview.c:1135
+#: gtk/gtktreeview.c:1091
 msgid "Hover Expand"
 msgstr "Extindere la planarea indicatorului"
 
-#: gtk/gtktreeview.c:1136
+#: gtk/gtktreeview.c:1092
 msgid ""
 "Whether rows should be expanded/collapsed when the pointer moves over them"
 msgstr ""
 "Specifică dacă rândurile trebuie strânse și desfăcute la trecerea "
 "indicatorului deasupra lor"
 
-#: gtk/gtktreeview.c:1147
+#: gtk/gtktreeview.c:1103
 msgid "Show Expanders"
 msgstr "Arată desfășurătorii"
 
-#: gtk/gtktreeview.c:1148
+#: gtk/gtktreeview.c:1104
 msgid "View has expanders"
 msgstr "Vizualizarea are desfășurători"
 
-#: gtk/gtktreeview.c:1159
+#: gtk/gtktreeview.c:1115
 msgid "Level Indentation"
 msgstr "Indentare nivel"
 
-#: gtk/gtktreeview.c:1160
+#: gtk/gtktreeview.c:1116
 msgid "Extra indentation for each level"
 msgstr "Indentare în plus pentru fiecare nivel"
 
-#: gtk/gtktreeview.c:1167
+#: gtk/gtktreeview.c:1123
 msgid "Rubber Banding"
 msgstr "Fixare și tragere"
 
-#: gtk/gtktreeview.c:1168
+#: gtk/gtktreeview.c:1124
 msgid ""
 "Whether to enable selection of multiple items by dragging the mouse pointer"
 msgstr ""
 "Specifică dacă este permisă selectarea mai multor elemente prin clic și "
 "tragere indicatorului mausului"
 
-#: gtk/gtktreeview.c:1174
+#: gtk/gtktreeview.c:1130
 msgid "Enable Grid Lines"
 msgstr "Activează liniile grilei"
 
-#: gtk/gtktreeview.c:1175
+#: gtk/gtktreeview.c:1131
 msgid "Whether grid lines should be drawn in the tree view"
 msgstr ""
 "Specifică dacă ar trebui desenate liniile grilei în vizualizarea de tip "
 "arbore"
 
-#: gtk/gtktreeview.c:1182
+#: gtk/gtktreeview.c:1138
 msgid "Enable Tree Lines"
 msgstr "Activează liniile arborelui"
 
-#: gtk/gtktreeview.c:1183
+#: gtk/gtktreeview.c:1139
 msgid "Whether tree lines should be drawn in the tree view"
 msgstr ""
 "Specifică dacă ar trebui desenate liniile arborelui în vizualizarea de tip "
 "arbore"
 
-#: gtk/gtktreeview.c:1190
+#: gtk/gtktreeview.c:1146
 msgid "The column in the model containing the tooltip texts for the rows"
 msgstr "O coloană a modelului ce conține textele indiciilor pentru rânduri"
 
@@ -7376,35 +7388,35 @@ msgstr "Utilizează iconițe simbolice"
 msgid "Whether to use symbolic icons"
 msgstr "Specifică dacă se vor folosi iconițe simbolice"
 
-#: gtk/gtkwidget.c:947
+#: gtk/gtkwidget.c:948
 msgid "Widget name"
 msgstr "Nume widget"
 
-#: gtk/gtkwidget.c:948
+#: gtk/gtkwidget.c:949
 msgid "The name of the widget"
 msgstr "Numele widgetului"
 
-#: gtk/gtkwidget.c:954
+#: gtk/gtkwidget.c:955
 msgid "Parent widget"
 msgstr "Widget superior"
 
-#: gtk/gtkwidget.c:955
+#: gtk/gtkwidget.c:956
 msgid "The parent widget of this widget."
 msgstr "Widgetul superior pentru acest widget."
 
-#: gtk/gtkwidget.c:967
+#: gtk/gtkwidget.c:968
 msgid "Root widget"
 msgstr "Widget rădăcină"
 
-#: gtk/gtkwidget.c:968
+#: gtk/gtkwidget.c:969
 msgid "The root widget in the widget tree."
 msgstr "Widgetul rădăcină în structura arborescentă de widgeturi."
 
-#: gtk/gtkwidget.c:974
+#: gtk/gtkwidget.c:975
 msgid "Width request"
 msgstr "Cerere lățime"
 
-#: gtk/gtkwidget.c:975
+#: gtk/gtkwidget.c:976
 msgid ""
 "Override for width request of the widget, or -1 if natural request should be "
 "used"
@@ -7412,11 +7424,11 @@ msgstr ""
 "Valoare impusă pentru lățimea widgetului sau „-1” pentru a utiliza "
 "dimensiunea implicită"
 
-#: gtk/gtkwidget.c:982
+#: gtk/gtkwidget.c:983
 msgid "Height request"
 msgstr "Cerere înălțime"
 
-#: gtk/gtkwidget.c:983
+#: gtk/gtkwidget.c:984
 msgid ""
 "Override for height request of the widget, or -1 if natural request should "
 "be used"
@@ -7424,208 +7436,208 @@ msgstr ""
 "Valoare impusă pentru înălțimea widgetului sau „-1” pentru a utiliza "
 "dimensiunea implicită"
 
-#: gtk/gtkwidget.c:991
+#: gtk/gtkwidget.c:992
 msgid "Whether the widget is visible"
 msgstr "Specifică dacă widgetul este vizibil"
 
 # Ugly... Mișu
-#: gtk/gtkwidget.c:998
+#: gtk/gtkwidget.c:999
 msgid "Whether the widget responds to input"
 msgstr "Specifică dacă widgetul răspunde la intrări"
 
-#: gtk/gtkwidget.c:1010
+#: gtk/gtkwidget.c:1011
 msgid "Can focus"
 msgstr "Suportă focalizare"
 
-#: gtk/gtkwidget.c:1011 gtk/gtkwidget.c:1023
+#: gtk/gtkwidget.c:1012 gtk/gtkwidget.c:1024
 msgid "Whether the widget can accept the input focus"
 msgstr "Specifică dacă widgetul poate accepta focalizarea de la intrări"
 
-#: gtk/gtkwidget.c:1022
+#: gtk/gtkwidget.c:1023
 msgid "Focusable"
 msgstr "Focusabil"
 
-#: gtk/gtkwidget.c:1029
+#: gtk/gtkwidget.c:1030
 msgid "Has focus"
 msgstr "Are focalizare"
 
-#: gtk/gtkwidget.c:1030
+#: gtk/gtkwidget.c:1031
 msgid "Whether the widget has the input focus"
 msgstr "Specifică dacă widgetul are focalizare de la intrări"
 
-#: gtk/gtkwidget.c:1036
+#: gtk/gtkwidget.c:1037
 msgid "Can target"
 msgstr "Poate ținti"
 
-#: gtk/gtkwidget.c:1037
+#: gtk/gtkwidget.c:1038
 msgid "Whether the widget can receive pointer events"
 msgstr "Dacă widgetul poate primi evenimentele indicatorului"
 
-#: gtk/gtkwidget.c:1050
+#: gtk/gtkwidget.c:1051
 msgid "Focus on click"
 msgstr "Focalizează la clic"
 
-#: gtk/gtkwidget.c:1051
+#: gtk/gtkwidget.c:1052
 msgid "Whether the widget should grab focus when it is clicked with the mouse"
 msgstr "Dacă widgetul ar trebui să prindă focusul când este apăsat cu mausul"
 
-#: gtk/gtkwidget.c:1057
+#: gtk/gtkwidget.c:1058
 msgid "Has default"
 msgstr "Este implicit"
 
-#: gtk/gtkwidget.c:1058
+#: gtk/gtkwidget.c:1059
 msgid "Whether the widget is the default widget"
 msgstr "Specifică dacă widgetul este widgetul implicit"
 
-#: gtk/gtkwidget.c:1064
+#: gtk/gtkwidget.c:1065
 msgid "Receives default"
 msgstr "Primește implicit"
 
-#: gtk/gtkwidget.c:1065
+#: gtk/gtkwidget.c:1066
 msgid "If TRUE, the widget will receive the default action when it is focused"
 msgstr "La activare, widgetul va primi acțiunea implicită când este focalizat"
 
-#: gtk/gtkwidget.c:1077
+#: gtk/gtkwidget.c:1078
 msgid "The cursor to show when hovering above widget"
 msgstr "Cursorul de afișat când se planează peste widget"
 
-#: gtk/gtkwidget.c:1091
+#: gtk/gtkwidget.c:1092
 msgid "Has tooltip"
 msgstr "Are indiciu"
 
-#: gtk/gtkwidget.c:1092
+#: gtk/gtkwidget.c:1093
 msgid "Whether this widget has a tooltip"
 msgstr "Specifică dacă acest widget are indiciu"
 
-#: gtk/gtkwidget.c:1113
+#: gtk/gtkwidget.c:1114
 msgid "Tooltip Text"
 msgstr "Text indiciu"
 
-#: gtk/gtkwidget.c:1114 gtk/gtkwidget.c:1136
+#: gtk/gtkwidget.c:1115 gtk/gtkwidget.c:1137
 msgid "The contents of the tooltip for this widget"
 msgstr "Conținutul indiciului pentru acest widget"
 
-#: gtk/gtkwidget.c:1135
+#: gtk/gtkwidget.c:1136
 msgid "Tooltip markup"
 msgstr "Marcaj indiciu"
 
-#: gtk/gtkwidget.c:1148
+#: gtk/gtkwidget.c:1149
 msgid "How to position in extra horizontal space"
 msgstr "Cum să fie poziționat spațiul orizontal suplimentar"
 
-#: gtk/gtkwidget.c:1161
+#: gtk/gtkwidget.c:1162
 msgid "How to position in extra vertical space"
 msgstr "Cum să fie poziționat spațiul vertical suplimentar"
 
-#: gtk/gtkwidget.c:1178
+#: gtk/gtkwidget.c:1179
 msgid "Margin on Start"
 msgstr "Margine la început"
 
-#: gtk/gtkwidget.c:1179
+#: gtk/gtkwidget.c:1180
 msgid "Pixels of extra space on the start"
 msgstr "Pixeli ai spațiului suplimentar la început"
 
-#: gtk/gtkwidget.c:1196
+#: gtk/gtkwidget.c:1197
 msgid "Margin on End"
 msgstr "Margine la sfârșit"
 
-#: gtk/gtkwidget.c:1197
+#: gtk/gtkwidget.c:1198
 msgid "Pixels of extra space on the end"
 msgstr "Pixeli ai spațiului suplimentar la sfârșit"
 
-#: gtk/gtkwidget.c:1213
+#: gtk/gtkwidget.c:1214
 msgid "Margin on Top"
 msgstr "Margine în partea de sus"
 
-#: gtk/gtkwidget.c:1214
+#: gtk/gtkwidget.c:1215
 msgid "Pixels of extra space on the top side"
 msgstr "Pixeli de spațiu suplimentar în partea de sus"
 
-#: gtk/gtkwidget.c:1230
+#: gtk/gtkwidget.c:1231
 msgid "Margin on Bottom"
 msgstr "Margine în partea de jos"
 
-#: gtk/gtkwidget.c:1231
+#: gtk/gtkwidget.c:1232
 msgid "Pixels of extra space on the bottom side"
 msgstr "Pixeli ai spațiului suplimentar din partea de jos"
 
-#: gtk/gtkwidget.c:1243
+#: gtk/gtkwidget.c:1244
 msgid "Horizontal Expand"
 msgstr "Extindere orizontală"
 
-#: gtk/gtkwidget.c:1244
+#: gtk/gtkwidget.c:1245
 msgid "Whether widget wants more horizontal space"
 msgstr "Specifică dacă widgetul vrea mai mult spațiu orizontal"
 
-#: gtk/gtkwidget.c:1255
+#: gtk/gtkwidget.c:1256
 msgid "Horizontal Expand Set"
 msgstr "Setare extindere orizontală"
 
-#: gtk/gtkwidget.c:1256
+#: gtk/gtkwidget.c:1257
 msgid "Whether to use the hexpand property"
 msgstr "Specifică dacă se utilizează proprietatea „hexpand”"
 
-#: gtk/gtkwidget.c:1267
+#: gtk/gtkwidget.c:1268
 msgid "Vertical Expand"
 msgstr "Extindere verticală"
 
-#: gtk/gtkwidget.c:1268
+#: gtk/gtkwidget.c:1269
 msgid "Whether widget wants more vertical space"
 msgstr "Specifică dacă widgetul vrea mai mult spațiu vertical"
 
-#: gtk/gtkwidget.c:1279
+#: gtk/gtkwidget.c:1280
 msgid "Vertical Expand Set"
 msgstr "Setare extindere verticală"
 
-#: gtk/gtkwidget.c:1280
+#: gtk/gtkwidget.c:1281
 msgid "Whether to use the vexpand property"
 msgstr "Specifică dacă se utilizează proprietatea „vexpand”"
 
-#: gtk/gtkwidget.c:1294
+#: gtk/gtkwidget.c:1295
 msgid "Opacity for Widget"
 msgstr "Opacitatea widgetului"
 
-#: gtk/gtkwidget.c:1295
+#: gtk/gtkwidget.c:1296
 msgid "The opacity of the widget, from 0 to 1"
 msgstr "Opacitatea widgetului, între 0 și 1"
 
-#: gtk/gtkwidget.c:1307
+#: gtk/gtkwidget.c:1308
 msgid "Overflow"
 msgstr "Supraplin"
 
-#: gtk/gtkwidget.c:1308
+#: gtk/gtkwidget.c:1309
 msgid "How content outside the widget’s content area is treated"
 msgstr "Cum este tratat conținutul din afara zonei widgetului"
 
-#: gtk/gtkwidget.c:1321
+#: gtk/gtkwidget.c:1322
 msgid "Scale factor"
 msgstr "Factor de scalare"
 
-#: gtk/gtkwidget.c:1322
+#: gtk/gtkwidget.c:1323
 msgid "The scaling factor of the window"
 msgstr "Factorul de scalare al ferestrei"
 
-#: gtk/gtkwidget.c:1334
+#: gtk/gtkwidget.c:1335
 msgid "CSS Name"
 msgstr "Nume CSS"
 
-#: gtk/gtkwidget.c:1335
+#: gtk/gtkwidget.c:1336
 msgid "The name of this widget in the CSS tree"
 msgstr "Numele widgetului în structura arborescentă CSS"
 
-#: gtk/gtkwidget.c:1346
+#: gtk/gtkwidget.c:1347
 msgid "CSS Style Classes"
 msgstr "Clase de stil CSS"
 
-#: gtk/gtkwidget.c:1347
+#: gtk/gtkwidget.c:1348
 msgid "List of CSS classes"
 msgstr "Listă de clase CSS"
 
-#: gtk/gtkwidget.c:1359
+#: gtk/gtkwidget.c:1360
 msgid "Layout Manager"
 msgstr "Gestionar de aspect"
 
-#: gtk/gtkwidget.c:1360
+#: gtk/gtkwidget.c:1361
 msgid "The layout manager used to layout children of the widget"
 msgstr ""
 "Gestionarul de aspect folosit pentru a defini aspectul copiilor widgetului"
