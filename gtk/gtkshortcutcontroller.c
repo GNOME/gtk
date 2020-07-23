@@ -50,7 +50,7 @@
  *         <property name='scope'>managed</property>
  *         <child>
  *           <object class='GtkShortcut'>
- *             <property name='trigger'><![CDATA[<Control>k]]></property>
+ *             <property name='trigger'>&amp;lt;Control&amp;gt;k</property>
  *             <property name='action'>activate</property>
  *           </object>
  *         </child>
