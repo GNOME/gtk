@@ -36,6 +36,14 @@ Overview of Changes in GTK 3.99.0
 * GtkFilterListModel:
  - Add incremental filtering
 
+* GtkSortListModel:
+ - Use timsort
+ - Add various tweaks that massively speed up sorting
+ - Add incremental sorting
+
+* GtkWidget:
+ - Massively speed up action handling
+
 * GtkEntry:
  - Make entry completion work again
  - Drop action support from GtkEntryCompletion
@@ -49,6 +57,7 @@ Overview of Changes in GTK 3.99.0
  - Keep a scroll history
  - Clean up GdkDevice api
  - Improve frame clock accuracy
+ - Add a new macOS backend
 
 * GSK:
  - Use GL_ARB_framebuffer_object
