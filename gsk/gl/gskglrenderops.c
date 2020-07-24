@@ -889,3 +889,66 @@ ops_set_unblurred_outset_shadow (RenderOpBuilder      *self,
   else
     op->offset.send = FALSE;
 }
+
+void
+ops_set_linear_gradient (RenderOpBuilder     *self,
+                         guint                n_color_stops,
+                         const GskColorStop  *color_stops,
+                         float                start_x,
+                         float                start_y,
+                         float                end_x,
+                         float                end_y)
+{
+  ProgramState *current_program_state = get_current_program_state (self);
+  OpLinearGradient *op;
+  const guint real_n_color_stops = MIN (MAX_GRADIENT_STOPS, n_color_stops);
+
+  g_assert (current_program_state);
+
+  op = ops_begin (self, OP_CHANGE_LINEAR_GRADIENT);
+
+  /* We always save the n_color_stops value in the op so the renderer can use it in
+   * cases where we send the color stops, but not n_color_stops */
+  op->n_color_stops.value = real_n_color_stops;
+  if (current_program_state->linear_gradient.n_color_stops != real_n_color_stops)
+    {
+      op->n_color_stops.send = TRUE;
+      current_program_state->linear_gradient.n_color_stops = real_n_color_stops;
+    }
+  else
+    op->n_color_stops.send = FALSE;
+
+  op->color_stops.send = FALSE;
+  if (!op->n_color_stops.send)
+    {
+      g_assert (current_program_state->linear_gradient.n_color_stops == real_n_color_stops);
+
+      for (guint i = 0; i < real_n_color_stops; i ++)
+        {
+          const GskColorStop *s1 = &color_stops[i];
+          const GskColorStop *s2 = &current_program_state->linear_gradient.color_stops[i];
+
+          if (s1->offset != s2->offset ||
+              !gdk_rgba_equal (&s1->color, &s2->color))
+            {
+              op->color_stops.send = TRUE;
+              break;
+            }
+        }
+    }
+  else
+    op->color_stops.send = TRUE;
+
+  if (op->color_stops.send)
+    {
+      op->color_stops.value = color_stops;
+      memcpy (&current_program_state->linear_gradient.color_stops,
+              color_stops,
+              sizeof (GskColorStop) * real_n_color_stops);
+    }
+
+  op->start_point[0] = start_x;
+  op->start_point[1] = start_y;
+  op->end_point[0] = end_x;
+  op->end_point[1] = end_y;
+}

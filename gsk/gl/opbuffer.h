@@ -42,11 +42,13 @@ typedef enum
 } OpKind;
 
 
+typedef struct { int value; guint send: 1; }    IntUniformValue;
 typedef struct { float value; guint send: 1; }    FloatUniformValue;
 typedef struct { float value[2]; guint send: 1; } Float2UniformValue;
 typedef struct { GskRoundedRect value; guint send: 1; guint send_corners: 1; } RRUniformValue;
 typedef struct { const GdkRGBA *value; guint send: 1; } RGBAUniformValue;
 typedef struct { const graphene_vec4_t *value; guint send: 1; } Vec4UniformValue;
+typedef struct { const GskColorStop *value; guint send: 1; } ColorStopUniformValue;
 
 /* OpNode are allocated within OpBuffer.pos, but we keep
  * a secondary index into the locations of that buffer
@@ -129,10 +131,10 @@ typedef struct
 
 typedef struct
 {
-  const GskColorStop *color_stops;
-  graphene_point_t start_point;
-  graphene_point_t end_point;
-  int n_color_stops;
+  ColorStopUniformValue color_stops;
+  IntUniformValue n_color_stops;
+  float start_point[2];
+  float end_point[2];
 } OpLinearGradient;
 
 typedef struct

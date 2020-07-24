@@ -1129,16 +1129,15 @@ render_linear_gradient_node (GskGLRenderer   *self,
   const GskColorStop *stops = gsk_linear_gradient_node_peek_color_stops (node, NULL);
   const graphene_point_t *start = gsk_linear_gradient_node_peek_start (node);
   const graphene_point_t *end = gsk_linear_gradient_node_peek_end (node);
-  OpLinearGradient *op;
 
   ops_set_program (builder, &self->programs->linear_gradient_program);
-  op = ops_begin (builder, OP_CHANGE_LINEAR_GRADIENT);
-  op->color_stops = stops;
-  op->n_color_stops = n_color_stops;
-  op->start_point.x = start->x + builder->dx;
-  op->start_point.y = start->y + builder->dy;
-  op->end_point.x = end->x + builder->dx;
-  op->end_point.y = end->y + builder->dy;
+  ops_set_linear_gradient (builder,
+                           n_color_stops,
+                           stops,
+                           builder->dx + start->x,
+                           builder->dy + start->y,
+                           builder->dx + end->x,
+                           builder->dy + end->y);
 
   load_vertex_data (ops_draw (builder, NULL), node, builder);
 }
@@ -2687,12 +2686,16 @@ apply_linear_gradient_op (const Program          *program,
                           const OpLinearGradient *op)
 {
   OP_PRINT (" -> Linear gradient");
-  glUniform1i (program->linear_gradient.num_color_stops_location, op->n_color_stops);
-  glUniform1fv (program->linear_gradient.color_stops_location,
-                op->n_color_stops * 5,
-                (float *)op->color_stops);
-  glUniform2f (program->linear_gradient.start_point_location, op->start_point.x, op->start_point.y);
-  glUniform2f (program->linear_gradient.end_point_location, op->end_point.x, op->end_point.y);
+  if (op->n_color_stops.send)
+    glUniform1i (program->linear_gradient.num_color_stops_location, op->n_color_stops.value);
+
+  if (op->color_stops.send)
+    glUniform1fv (program->linear_gradient.color_stops_location,
+                  op->n_color_stops.value * 5,
+                  (float *)op->color_stops.value);
+
+  glUniform2f (program->linear_gradient.start_point_location, op->start_point[0], op->start_point[1]);
+  glUniform2f (program->linear_gradient.end_point_location, op->end_point[0], op->end_point[1]);
 }
 
 static inline void
