@@ -2041,8 +2041,6 @@ gtk_menu_button_get_menu_model
 GtkArrowType
 gtk_menu_button_set_direction
 gtk_menu_button_get_direction
-gtk_menu_button_set_align_widget
-gtk_menu_button_get_align_widget
 gtk_menu_button_set_icon_name
 gtk_menu_button_get_icon_name
 gtk_menu_button_set_label
