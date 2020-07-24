@@ -5392,6 +5392,7 @@ gdk_win32_window_unfullscreen (GdkWindow *window)
 
       impl->hint_flags = fi->hint_flags;
       SetWindowLong (GDK_WINDOW_HWND (window), GWL_STYLE, fi->style);
+      _gdk_win32_window_invalidate_egl_framebuffer (window);
       API_CALL (SetWindowPos, (GDK_WINDOW_HWND (window), HWND_NOTOPMOST,
 			       fi->r.left, fi->r.top,
 			       fi->r.right - fi->r.left, fi->r.bottom - fi->r.top,
