@@ -648,10 +648,12 @@ render_fallback_node (GskGLRenderer   *self,
                                            texture_id,
                                            surface,
                                            GL_NEAREST, GL_NEAREST);
-  gdk_gl_context_label_object_printf  (self->gl_context, GL_TEXTURE, texture_id,
-                                       "Fallback %s %d",
-                                       g_type_name_from_instance ((GTypeInstance *) node),
-                                       texture_id);
+
+  if (gdk_gl_context_has_debug (self->gl_context))
+    gdk_gl_context_label_object_printf  (self->gl_context, GL_TEXTURE, texture_id,
+                                         "Fallback %s %d",
+                                         g_type_name_from_instance ((GTypeInstance *) node),
+                                         texture_id);
 
   cairo_surface_destroy (surface);
   cairo_surface_destroy (rendered_surface);
@@ -1871,10 +1873,13 @@ render_outset_shadow_node (GskGLRenderer   *self,
 
       gsk_gl_driver_create_render_target (self->gl_driver, texture_width, texture_height,
                                           &texture_id, &render_target);
-      gdk_gl_context_label_object_printf (self->gl_context, GL_TEXTURE, texture_id,
-                                          "Outset Shadow Temp %d", texture_id);
-      gdk_gl_context_label_object_printf  (self->gl_context, GL_FRAMEBUFFER, render_target,
-                                           "Outset Shadow FB Temp %d", render_target);
+      if (gdk_gl_context_has_debug (self->gl_context))
+        {
+          gdk_gl_context_label_object_printf (self->gl_context, GL_TEXTURE, texture_id,
+                                              "Outset Shadow Temp %d", texture_id);
+          gdk_gl_context_label_object_printf  (self->gl_context, GL_FRAMEBUFFER, render_target,
+                                               "Outset Shadow FB Temp %d", render_target);
+        }
 
       ops_set_program (builder, &self->programs->color_program);
       graphene_matrix_init_ortho (&item_proj,
@@ -3396,14 +3401,17 @@ add_offscreen_ops (GskGLRenderer         *self,
   height = ceilf (height * scale);
 
   gsk_gl_driver_create_render_target (self->gl_driver, width, height, &texture_id, &render_target);
-  gdk_gl_context_label_object_printf (self->gl_context, GL_TEXTURE, texture_id,
-                                      "Offscreen<%s> %d",
-                                      g_type_name_from_instance ((GTypeInstance *) child_node),
-                                      texture_id);
-  gdk_gl_context_label_object_printf (self->gl_context, GL_FRAMEBUFFER, render_target,
-                                      "Offscreen<%s> FB %d",
-                                      g_type_name_from_instance ((GTypeInstance *) child_node),
-                                      render_target);
+  if (gdk_gl_context_has_debug (self->gl_context))
+    {
+      gdk_gl_context_label_object_printf (self->gl_context, GL_TEXTURE, texture_id,
+                                          "Offscreen<%s> %d",
+                                          g_type_name_from_instance ((GTypeInstance *) child_node),
+                                          texture_id);
+      gdk_gl_context_label_object_printf (self->gl_context, GL_FRAMEBUFFER, render_target,
+                                          "Offscreen<%s> FB %d",
+                                          g_type_name_from_instance ((GTypeInstance *) child_node),
+                                          render_target);
+    }
 
   graphene_matrix_init_ortho (&item_proj,
                               bounds->origin.x * scale,
@@ -3830,11 +3838,12 @@ gsk_gl_renderer_render_texture (GskRenderer           *renderer,
   glGenTextures (1, &texture_id);
   glBindTexture (GL_TEXTURE_2D, texture_id);
 
-  gdk_gl_context_label_object_printf (self->gl_context, GL_TEXTURE, texture_id,
-                                      "Texture %s<%p> %d",
-                                      g_type_name_from_instance ((GTypeInstance *) root),
-                                      root,
-                                      texture_id);
+  if (gdk_gl_context_has_debug (self->gl_context))
+    gdk_gl_context_label_object_printf (self->gl_context, GL_TEXTURE, texture_id,
+                                        "Texture %s<%p> %d",
+                                        g_type_name_from_instance ((GTypeInstance *) root),
+                                        root,
+                                        texture_id);
 
   if (gdk_gl_context_get_use_es (self->gl_context))
     glTexImage2D (GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
@@ -3843,11 +3852,13 @@ gsk_gl_renderer_render_texture (GskRenderer           *renderer,
 
   glGenFramebuffers (1, &fbo_id);
   glBindFramebuffer (GL_FRAMEBUFFER, fbo_id);
-  gdk_gl_context_label_object_printf (self->gl_context, GL_FRAMEBUFFER, fbo_id,
-                                      "FB %s<%p> %d",
-                                      g_type_name_from_instance ((GTypeInstance *) root),
-                                      root,
-                                      fbo_id);
+
+  if (gdk_gl_context_has_debug (self->gl_context))
+    gdk_gl_context_label_object_printf (self->gl_context, GL_FRAMEBUFFER, fbo_id,
+                                        "FB %s<%p> %d",
+                                        g_type_name_from_instance ((GTypeInstance *) root),
+                                        root,
+                                        fbo_id);
   glFramebufferTexture2D (GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture_id, 0);
   g_assert_cmphex (glCheckFramebufferStatus (GL_FRAMEBUFFER), ==, GL_FRAMEBUFFER_COMPLETE);
 

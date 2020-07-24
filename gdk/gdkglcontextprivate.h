@@ -1,7 +1,7 @@
 /* GDK - The GIMP Drawing Kit
  *
  * gdkglcontextprivate.h: GL context abstraction
- * 
+ *
  * Copyright © 2014  Emmanuele Bassi
  *
  * This library is free software; you can redistribute it and/or
@@ -105,6 +105,8 @@ void                    gdk_gl_context_label_object_printf      (GdkGLContext   
                                                                  guint            name,
                                                                  const char      *format,
                                                                 ...)  G_GNUC_PRINTF (4, 5);
+
+gboolean                gdk_gl_context_has_debug                (GdkGLContext    *self) G_GNUC_PURE;
 G_END_DECLS
 
 #endif /* __GDK_GL_CONTEXT_PRIVATE_H__ */
