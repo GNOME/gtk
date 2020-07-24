@@ -146,7 +146,6 @@ struct _GtkMenuButton
   GDestroyNotify create_popup_destroy_notify;
 
   GtkWidget *label_widget;
-  GtkWidget *align_widget;
   GtkWidget *arrow_widget;
   GtkArrowType arrow_type;
 };
@@ -160,7 +159,6 @@ enum
 {
   PROP_0,
   PROP_MENU_MODEL,
-  PROP_ALIGN_WIDGET,
   PROP_DIRECTION,
   PROP_POPOVER,
   PROP_ICON_NAME,
@@ -188,9 +186,6 @@ gtk_menu_button_set_property (GObject      *object,
     {
       case PROP_MENU_MODEL:
         gtk_menu_button_set_menu_model (self, g_value_get_object (value));
-        break;
-      case PROP_ALIGN_WIDGET:
-        gtk_menu_button_set_align_widget (self, g_value_get_object (value));
         break;
       case PROP_DIRECTION:
         gtk_menu_button_set_direction (self, g_value_get_enum (value));
@@ -227,9 +222,6 @@ gtk_menu_button_get_property (GObject    *object,
     {
       case PROP_MENU_MODEL:
         g_value_set_object (value, self->model);
-        break;
-      case PROP_ALIGN_WIDGET:
-        g_value_set_object (value, self->align_widget);
         break;
       case PROP_DIRECTION:
         g_value_set_enum (value, self->arrow_type);
@@ -370,18 +362,6 @@ gtk_menu_button_class_init (GtkMenuButtonClass *klass)
                            P_("Menu model"),
                            P_("The model from which the popup is made."),
                            G_TYPE_MENU_MODEL,
-                           GTK_PARAM_READWRITE);
-
-  /**
-   * GtkMenuButton:align-widget:
-   *
-   * The #GtkWidget to use to align the menu with.
-   */
-  menu_button_props[PROP_ALIGN_WIDGET] =
-      g_param_spec_object ("align-widget",
-                           P_("Align with"),
-                           P_("The parent widget which the menu should align with."),
-                           GTK_TYPE_WIDGET,
                            GTK_PARAM_READWRITE);
 
   /**
@@ -589,64 +569,6 @@ gtk_menu_button_get_menu_model (GtkMenuButton *menu_button)
 }
 
 static void
-set_align_widget_pointer (GtkMenuButton *self,
-                          GtkWidget     *align_widget)
-{
-  if (self->align_widget)
-    g_object_remove_weak_pointer (G_OBJECT (self->align_widget), (gpointer *) &self->align_widget);
-
-  self->align_widget = align_widget;
-
-  if (self->align_widget)
-    g_object_add_weak_pointer (G_OBJECT (self->align_widget), (gpointer *) &self->align_widget);
-}
-
-/**
- * gtk_menu_button_set_align_widget:
- * @menu_button: a #GtkMenuButton
- * @align_widget: (allow-none): a #GtkWidget
- *
- * Sets the #GtkWidget to use to line the menu with when popped up.
- * Note that the @align_widget must contain the #GtkMenuButton itself.
- *
- * Setting it to %NULL means that the menu will be aligned with the
- * button itself.
- *
- * Note that this property is only used with menus currently,
- * and not for popovers.
- */
-void
-gtk_menu_button_set_align_widget (GtkMenuButton *menu_button,
-                                  GtkWidget     *align_widget)
-{
-  g_return_if_fail (GTK_IS_MENU_BUTTON (menu_button));
-  g_return_if_fail (align_widget == NULL || gtk_widget_is_ancestor (GTK_WIDGET (menu_button), align_widget));
-
-  if (menu_button->align_widget == align_widget)
-    return;
-
-  set_align_widget_pointer (menu_button, align_widget);
-
-  g_object_notify_by_pspec (G_OBJECT (menu_button), menu_button_props[PROP_ALIGN_WIDGET]);
-}
-
-/**
- * gtk_menu_button_get_align_widget:
- * @menu_button: a #GtkMenuButton
- *
- * Returns the parent #GtkWidget to use to line up with menu.
- *
- * Returns: (nullable) (transfer none): a #GtkWidget value or %NULL
- */
-GtkWidget *
-gtk_menu_button_get_align_widget (GtkMenuButton *menu_button)
-{
-  g_return_val_if_fail (GTK_IS_MENU_BUTTON (menu_button), NULL);
-
-  return menu_button->align_widget;
-}
-
-static void
 update_popover_direction (GtkMenuButton *self)
 {
   if (!self->popover)
@@ -745,8 +667,6 @@ gtk_menu_button_dispose (GObject *object)
       gtk_widget_unparent (self->popover);
       self->popover = NULL;
     }
-
-  set_align_widget_pointer (GTK_MENU_BUTTON (object), NULL);
 
   g_clear_object (&self->model);
   g_clear_pointer (&self->button, gtk_widget_unparent);

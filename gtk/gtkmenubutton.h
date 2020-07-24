@@ -71,12 +71,6 @@ GDK_AVAILABLE_IN_ALL
 GMenuModel  *gtk_menu_button_get_menu_model (GtkMenuButton *menu_button);
 
 GDK_AVAILABLE_IN_ALL
-void         gtk_menu_button_set_align_widget (GtkMenuButton *menu_button,
-                                               GtkWidget     *align_widget);
-GDK_AVAILABLE_IN_ALL
-GtkWidget   *gtk_menu_button_get_align_widget (GtkMenuButton *menu_button);
-
-GDK_AVAILABLE_IN_ALL
 void         gtk_menu_button_set_icon_name (GtkMenuButton *menu_button,
                                             const char    *icon_name);
 GDK_AVAILABLE_IN_ALL
