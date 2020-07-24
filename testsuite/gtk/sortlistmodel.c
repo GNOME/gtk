@@ -518,6 +518,23 @@ test_incremental_remove (void)
   g_object_unref (removed);
 }
 
+static void
+test_out_of_bounds_access (void)
+{
+  GtkSortListModel *sort;
+  GListStore *store;
+  gpointer item;
+
+  store = new_store ((guint[]) { 4, 8, 2, 6, 10, 0 });
+  sort = new_model (store);
+
+  item = g_list_model_get_item (G_LIST_MODEL (sort), GTK_INVALID_LIST_POSITION);
+  g_assert_null (item);
+
+  g_object_unref (store);
+  g_object_unref (sort);
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -537,6 +554,7 @@ main (int argc, char *argv[])
 #endif
   g_test_add_func ("/sortlistmodel/stability", test_stability);
   g_test_add_func ("/sortlistmodel/incremental/remove", test_incremental_remove);
+  g_test_add_func ("/sortlistmodel/oob-access", test_out_of_bounds_access);
 
   return g_test_run ();
 }
