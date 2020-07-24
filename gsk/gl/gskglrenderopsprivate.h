@@ -188,7 +188,7 @@ typedef struct
   GArray *clip_stack;
   /* Pointer into clip_stack */
   const GskRoundedRect *current_clip;
-  guint clip_is_rectilinear;
+  bool clip_is_rectilinear;
 } RenderOpBuilder;
 
 

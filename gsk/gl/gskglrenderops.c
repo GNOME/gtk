@@ -1,6 +1,12 @@
 #include "gskglrenderopsprivate.h"
 #include "gsktransform.h"
 
+typedef struct
+{
+  GskRoundedRect rect;
+  bool is_rectilinear;
+} ClipStackEntry;
+
 static inline gboolean
 rect_equal (const graphene_rect_t *a,
             const graphene_rect_t *b)
@@ -310,33 +316,37 @@ void
 ops_push_clip (RenderOpBuilder      *self,
                const GskRoundedRect *clip)
 {
+  ClipStackEntry entry;
+
   if (G_UNLIKELY (self->clip_stack == NULL))
-    self->clip_stack = g_array_new (FALSE, TRUE, sizeof (GskRoundedRect));
+    self->clip_stack = g_array_new (FALSE, TRUE, sizeof (ClipStackEntry));
 
   g_assert (self->clip_stack != NULL);
 
-  g_array_append_val (self->clip_stack, *clip);
-  self->current_clip = &g_array_index (self->clip_stack, GskRoundedRect, self->clip_stack->len - 1);
-  self->clip_is_rectilinear = gsk_rounded_rect_is_rectilinear (self->current_clip);
+  entry.rect = *clip;
+  entry.is_rectilinear = gsk_rounded_rect_is_rectilinear (clip);
+  g_array_append_val (self->clip_stack, entry);
+  self->current_clip = &g_array_index (self->clip_stack, ClipStackEntry, self->clip_stack->len - 1).rect;
+  self->clip_is_rectilinear = entry.is_rectilinear;
   ops_set_clip (self, clip);
 }
 
 void
 ops_pop_clip (RenderOpBuilder *self)
 {
-  const GskRoundedRect *head;
+  const ClipStackEntry *head;
 
   g_assert (self->clip_stack);
   g_assert (self->clip_stack->len >= 1);
 
   self->clip_stack->len --;
-  head = &g_array_index (self->clip_stack, GskRoundedRect, self->clip_stack->len - 1);
+  head = &g_array_index (self->clip_stack, ClipStackEntry, self->clip_stack->len - 1);
 
   if (self->clip_stack->len >= 1)
     {
-      self->current_clip = head;
-      self->clip_is_rectilinear = gsk_rounded_rect_is_rectilinear (self->current_clip);
-      ops_set_clip (self, head);
+      self->current_clip = &head->rect;
+      self->clip_is_rectilinear = head->is_rectilinear;
+      ops_set_clip (self, &head->rect);
     }
   else
     {
