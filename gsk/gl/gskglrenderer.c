@@ -191,13 +191,29 @@ dump_node (GskRenderNode *node,
   cairo_surface_destroy (surface);
 }
 
-static inline gboolean G_GNUC_PURE
+static inline bool G_GNUC_PURE __attribute__((always_inline))
 node_is_invisible (const GskRenderNode *node)
 {
   return node->bounds.size.width == 0.0f ||
          node->bounds.size.height == 0.0f ||
          isnan (node->bounds.size.width) ||
          isnan (node->bounds.size.height);
+}
+
+static inline bool G_GNUC_PURE __attribute__((always_inline))
+graphene_rect_intersects (const graphene_rect_t *r1,
+                          const graphene_rect_t *r2)
+{
+  /* Assume both rects are already normalized, as they usually are */
+  if (r1->origin.x > (r2->origin.x + r2->size.width) ||
+      (r1->origin.x + r1->size.width) < r2->origin.x)
+    return false;
+
+  if (r1->origin.y > (r2->origin.y + r2->size.height) ||
+      (r1->origin.y + r1->size.height) < r2->origin.y)
+    return false;
+
+  return true;
 }
 
 static inline void
@@ -1152,20 +1168,20 @@ intersect_rounded_rectilinear (const graphene_rect_t *non_rounded,
 
   /* Intersects with top left corner? */
   n_corners += corners[0] = rounded_rect_has_corner (rounded, 0) &&
-                            graphene_rect_intersection (non_rounded,
-                                                        &rounded_rect_corner (rounded, 0), NULL);
+                            graphene_rect_intersects (non_rounded,
+                                                      &rounded_rect_corner (rounded, 0));
   /* top right? */
   n_corners += corners[1] = rounded_rect_has_corner (rounded, 1) &&
-                            graphene_rect_intersection (non_rounded,
-                                                        &rounded_rect_corner (rounded, 1), NULL);
+                            graphene_rect_intersects (non_rounded,
+                                                      &rounded_rect_corner (rounded, 1));
   /* bottom right? */
   n_corners += corners[2] = rounded_rect_has_corner (rounded, 2) &&
-                            graphene_rect_intersection (non_rounded,
-                                                        &rounded_rect_corner (rounded, 2), NULL);
+                            graphene_rect_intersects (non_rounded,
+                                                      &rounded_rect_corner (rounded, 2));
   /* bottom left */
   n_corners += corners[3] = rounded_rect_has_corner (rounded, 3) &&
-                            graphene_rect_intersection (non_rounded,
-                                                        &rounded_rect_corner (rounded, 3), NULL);
+                            graphene_rect_intersects (non_rounded,
+                                                      &rounded_rect_corner (rounded, 3));
 
   if (corners[0] && !graphene_rect_contains_rect (non_rounded, &rounded_rect_corner (rounded, 0)))
     return false;
@@ -3171,8 +3187,8 @@ gsk_gl_renderer_add_render_ops (GskGLRenderer   *self,
                                     &node->bounds,
                                     &transformed_node_bounds);
 
-    if (!graphene_rect_intersection (&builder->current_clip->bounds,
-                                     &transformed_node_bounds, NULL))
+    if (!graphene_rect_intersects (&builder->current_clip->bounds,
+                                   &transformed_node_bounds))
       return;
   }
 
