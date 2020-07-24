@@ -73,7 +73,7 @@ gdk_array(init) (GdkArray *self)
   self->end = self->start;
   self->end_allocation = self->start + GDK_ARRAY_PREALLOC;
 #ifdef GDK_ARRAY_NULL_TERMINATED
-  *self->start = *(_T_[1]) {};
+  *self->start = *(_T_[1]) { 0 };
 #endif
 #else
   self->start = NULL;
@@ -165,7 +165,7 @@ gdk_array(reserve) (GdkArray *self,
   if (self->start == NULL)
     {
       self->start = g_new (_T_, new_size);
-      *self->start = *(_T_[1]) {};
+      *self->start = *(_T_[1]) { 0 };
     }
   else
 #endif
