@@ -44,7 +44,7 @@ populate_flowbox_simple (GtkFlowBox *flowbox)
 
   for (i = 0; i < N_ITEMS; i++)
     {
-      gchar *text = g_strdup_printf ("Item %02d", i);
+      char *text = g_strdup_printf ("Item %02d", i);
 
       widget = gtk_label_new (text);
       frame  = gtk_frame_new (NULL);
@@ -127,7 +127,7 @@ populate_flowbox_wrappy (GtkFlowBox *flowbox)
   GtkWidget *widget, *frame;
   int i;
 
-  const gchar *strings[] = {
+  const char *strings[] = {
     "These are", "some wrappy label", "texts", "of various", "lengths.",
     "They should always be", "shown", "consecutively. Except it's",
     "hard to say", "where exactly the", "label", "will wrap", "and where exactly",
@@ -160,7 +160,7 @@ populate_flowbox_images (GtkFlowBox *flowbox)
 
   for (i = 0; i < N_ITEMS; i++)
     {
-      gchar *text = g_strdup_printf ("Item %02d", i);
+      char *text = g_strdup_printf ("Item %02d", i);
 
       widget = gtk_box_new (GTK_ORIENTATION_VERTICAL, 6);
       gtk_widget_set_hexpand (widget, TRUE);
@@ -343,10 +343,10 @@ sort_func (GtkFlowBoxChild *a,
            GtkFlowBoxChild *b,
            gpointer         data)
 {
-  gchar *ida, *idb;
+  char *ida, *idb;
 
-  ida = (gchar *)g_object_get_data (G_OBJECT (gtk_flow_box_child_get_child (a)), "id");
-  idb = (gchar *)g_object_get_data (G_OBJECT (gtk_flow_box_child_get_child (b)), "id");
+  ida = (char *)g_object_get_data (G_OBJECT (gtk_flow_box_child_get_child (a)), "id");
+  idb = (char *)g_object_get_data (G_OBJECT (gtk_flow_box_child_get_child (b)), "id");
   return g_strcmp0 (ida, idb);
 }
 

@@ -234,7 +234,7 @@
  * An example looks like this:
  *
  * |[<!-- language="C" -->
- * const gchar *text =
+ * const char *text =
  * "Go to the"
  * "<a href=\"http://www.gtk.org title=\"&lt;i&gt;Our&lt;/i&gt; website\">"
  * "GTK+ website</a> for more...";
@@ -264,8 +264,8 @@ struct _GtkLabel
   GtkWidget *popup_menu;
   GMenuModel *extra_menu;
 
-  gchar   *label;
-  gchar   *text;
+  char    *label;
+  char    *text;
 
   gfloat   xalign;
   gfloat   yalign;
@@ -299,7 +299,7 @@ struct _GtkLabelClass
   void (* copy_clipboard)  (GtkLabel       *self);
 
   gboolean (*activate_link) (GtkLabel       *self,
-                             const gchar    *uri);
+                             const char     *uri);
 };
 
 /* Notes about the handling of links:
@@ -330,8 +330,8 @@ struct _GtkLabelClass
  */
 typedef struct
 {
-  gchar *uri;
-  gchar *title;     /* the title attribute, used as tooltip */
+  char *uri;
+  char *title;     /* the title attribute, used as tooltip */
 
   GtkCssNode *cssnode;
 
@@ -445,15 +445,15 @@ static gboolean gtk_label_query_tooltip     (GtkWidget        *widget,
                                              GtkTooltip       *tooltip);
 
 static void gtk_label_set_text_internal          (GtkLabel      *self,
-						  gchar         *str);
+						  char          *str);
 static void gtk_label_set_label_internal         (GtkLabel      *self,
-						  gchar         *str);
+						  char          *str);
 static gboolean gtk_label_set_use_markup_internal    (GtkLabel  *self,
                                                       gboolean   val);
 static gboolean gtk_label_set_use_underline_internal (GtkLabel  *self,
                                                       gboolean   val);
 static void gtk_label_set_markup_internal        (GtkLabel      *self,
-						  const gchar   *str,
+						  const char    *str,
 						  gboolean       with_uline);
 static void gtk_label_recalculate                (GtkLabel      *self);
 static void gtk_label_root                       (GtkWidget     *widget);
@@ -486,14 +486,14 @@ static void     gtk_label_buildable_interface_init   (GtkBuildableIface  *iface)
 static gboolean gtk_label_buildable_custom_tag_start (GtkBuildable       *buildable,
                                                       GtkBuilder         *builder,
                                                       GObject            *child,
-                                                      const gchar        *tagname,
+                                                      const char         *tagname,
                                                       GtkBuildableParser *parser,
                                                       gpointer           *data);
 
 static void     gtk_label_buildable_custom_finished  (GtkBuildable       *buildable,
                                                       GtkBuilder         *builder,
                                                       GObject            *child,
-                                                      const gchar        *tagname,
+                                                      const char         *tagname,
                                                       gpointer            user_data);
 
 /* For selectable labels: */
@@ -511,7 +511,7 @@ static int gtk_label_move_backward_word  (GtkLabel        *self,
 /* For links: */
 static void          gtk_label_clear_links      (GtkLabel  *self);
 static gboolean      gtk_label_activate_link    (GtkLabel    *self,
-                                                 const gchar *uri);
+                                                 const char *uri);
 static void          gtk_label_activate_current_link (GtkLabel *self);
 static void          emit_activate_link         (GtkLabel     *self,
                                                  GtkLabelLink *link);
@@ -1323,7 +1323,7 @@ static gboolean
 gtk_label_buildable_custom_tag_start (GtkBuildable       *buildable,
                                       GtkBuilder         *builder,
                                       GObject            *child,
-                                      const gchar        *tagname,
+                                      const char         *tagname,
                                       GtkBuildableParser *parser,
                                       gpointer           *data)
 {
@@ -1349,7 +1349,7 @@ static void
 gtk_label_buildable_custom_finished (GtkBuildable *buildable,
 				     GtkBuilder   *builder,
 				     GObject      *child,
-				     const gchar  *tagname,
+				     const char   *tagname,
 				     gpointer      user_data)
 {
   GtkPangoAttributeParserData *data = user_data;
@@ -1382,7 +1382,7 @@ gtk_label_buildable_custom_finished (GtkBuildable *buildable,
  * Returns: the new #GtkLabel
  **/
 GtkWidget*
-gtk_label_new (const gchar *str)
+gtk_label_new (const char *str)
 {
   GtkLabel *self;
 
@@ -1417,7 +1417,7 @@ gtk_label_new (const gchar *str)
  * Returns: the new #GtkLabel
  **/
 GtkWidget*
-gtk_label_new_with_mnemonic (const gchar *str)
+gtk_label_new_with_mnemonic (const char *str)
 {
   GtkLabel *self;
 
@@ -1682,7 +1682,7 @@ gtk_label_get_mnemonic_keyval (GtkLabel *self)
 
 static void
 gtk_label_set_text_internal (GtkLabel *self,
-                             gchar    *str)
+                             char     *str)
 {
   if (g_strcmp0 (self->text, str) == 0)
     {
@@ -1701,7 +1701,7 @@ gtk_label_set_text_internal (GtkLabel *self,
 
 static void
 gtk_label_set_label_internal (GtkLabel *self,
-			      gchar    *str)
+			      char     *str)
 {
   g_free (self->label);
 
@@ -1793,7 +1793,7 @@ gtk_label_recalculate (GtkLabel *self)
  **/
 void
 gtk_label_set_text (GtkLabel    *self,
-		    const gchar *str)
+		    const char *str)
 {
   g_return_if_fail (GTK_IS_LABEL (self));
   
@@ -1879,7 +1879,7 @@ gtk_label_get_attributes (GtkLabel *self)
  **/
 void
 gtk_label_set_label (GtkLabel    *self,
-		     const gchar *str)
+		     const char *str)
 {
   g_return_if_fail (GTK_IS_LABEL (self));
 
@@ -1902,7 +1902,7 @@ gtk_label_set_label (GtkLabel    *self,
  * Returns: the text of the label widget. This string is
  *   owned by the widget and must not be modified or freed.
  **/
-const gchar *
+const char *
 gtk_label_get_label (GtkLabel *self)
 {
   g_return_val_if_fail (GTK_IS_LABEL (self), NULL);
@@ -1920,9 +1920,9 @@ typedef struct
 
 static void
 start_element_handler (GMarkupParseContext  *context,
-                       const gchar          *element_name,
-                       const gchar         **attribute_names,
-                       const gchar         **attribute_values,
+                       const char           *element_name,
+                       const char          **attribute_names,
+                       const char          **attribute_values,
                        gpointer              user_data,
                        GError              **error)
 {
@@ -1932,9 +1932,9 @@ start_element_handler (GMarkupParseContext  *context,
   if (strcmp (element_name, "a") == 0)
     {
       GtkLabelLink link;
-      const gchar *uri = NULL;
-      const gchar *title = NULL;
-      const gchar *class = NULL;
+      const char *uri = NULL;
+      const char *title = NULL;
+      const char *class = NULL;
       gboolean visited = FALSE;
       int line_number;
       int char_number;
@@ -1946,7 +1946,7 @@ start_element_handler (GMarkupParseContext  *context,
 
       for (i = 0; attribute_names[i] != NULL; i++)
         {
-          const gchar *attr = attribute_names[i];
+          const char *attr = attribute_names[i];
 
           if (strcmp (attr, "href") == 0)
             uri = attribute_values[i];
@@ -2026,9 +2026,9 @@ start_element_handler (GMarkupParseContext  *context,
 
       for (i = 0; attribute_names[i] != NULL; i++)
         {
-          const gchar *attr  = attribute_names[i];
-          const gchar *value = attribute_values[i];
-          gchar *newvalue;
+          const char *attr  = attribute_names[i];
+          const char *value = attribute_values[i];
+          char *newvalue;
 
           newvalue = g_markup_escape_text (value, -1);
 
@@ -2046,7 +2046,7 @@ start_element_handler (GMarkupParseContext  *context,
 
 static void
 end_element_handler (GMarkupParseContext  *context,
-                     const gchar          *element_name,
+                     const char           *element_name,
                      gpointer              user_data,
                      GError              **error)
 {
@@ -2067,13 +2067,13 @@ end_element_handler (GMarkupParseContext  *context,
 
 static void
 text_handler (GMarkupParseContext  *context,
-              const gchar          *text,
+              const char           *text,
               gsize                 text_len,
               gpointer              user_data,
               GError              **error)
 {
   UriParserData *pdata = user_data;
-  gchar *newtext;
+  char *newtext;
 
   newtext = g_markup_escape_text (text, text_len);
   g_string_append (pdata->new_str, newtext);
@@ -2091,7 +2091,7 @@ static const GMarkupParser markup_parser =
 };
 
 static gboolean
-xml_isspace (gchar c)
+xml_isspace (char c)
 {
   return (c == ' ' || c == '\t' || c == '\n' || c == '\r');
 }
@@ -2106,8 +2106,8 @@ link_free (GtkLabelLink *link)
 
 static gboolean
 parse_uri_markup (GtkLabel      *self,
-                  const gchar   *str,
-                  gchar        **new_str,
+                  const char    *str,
+                  char         **new_str,
                   GtkLabelLink  **links,
                   guint         *out_n_links,
                   GError       **error)
@@ -2272,13 +2272,13 @@ extract_mnemonic_keyval (const char      *text,
 
 static void
 gtk_label_set_markup_internal (GtkLabel    *self,
-                               const gchar *str,
+                               const char *str,
                                gboolean     with_uline)
 {
-  gchar *text = NULL;
+  char *text = NULL;
   GError *error = NULL;
   PangoAttrList *attrs = NULL;
-  gchar *str_for_display = NULL;
+  char *str_for_display = NULL;
   GtkLabelLink *links = NULL;
   guint n_links = 0;
   PangoAttribute *mnemonic_attr = NULL;
@@ -2402,7 +2402,7 @@ error_set:
  **/
 void
 gtk_label_set_markup (GtkLabel    *self,
-                      const gchar *str)
+                      const char *str)
 {
   g_return_if_fail (GTK_IS_LABEL (self));
 
@@ -2434,7 +2434,7 @@ gtk_label_set_markup (GtkLabel    *self,
  */
 void
 gtk_label_set_markup_with_mnemonic (GtkLabel    *self,
-                                    const gchar *str)
+                                    const char *str)
 {
   g_return_if_fail (GTK_IS_LABEL (self));
 
@@ -2460,7 +2460,7 @@ gtk_label_set_markup_with_mnemonic (GtkLabel    *self,
  * Returns: the text in the label widget. This is the internal
  *   string used by the label, and must not be modified.
  **/
-const gchar *
+const char *
 gtk_label_get_text (GtkLabel *self)
 {
   g_return_val_if_fail (GTK_IS_LABEL (self), NULL);
@@ -3553,7 +3553,7 @@ gtk_label_snapshot (GtkWidget   *widget,
  **/
 void
 gtk_label_set_text_with_mnemonic (GtkLabel    *self,
-				  const gchar *str)
+				  const char *str)
 {
   g_return_if_fail (GTK_IS_LABEL (self));
   g_return_if_fail (str != NULL);
@@ -3593,8 +3593,8 @@ get_layout_index (GtkLabel *self,
                   int      *index)
 {
   int trailing = 0;
-  const gchar *cluster;
-  const gchar *cluster_end;
+  const char *cluster;
+  const char *cluster_end;
   gboolean inside;
   int lx, ly;
 
@@ -5511,7 +5511,7 @@ gtk_label_clear_links (GtkLabel *self)
 
 static gboolean
 gtk_label_activate_link (GtkLabel    *self,
-                         const gchar *uri)
+                         const char *uri)
 {
   GtkWidget *widget = GTK_WIDGET (self);
   GtkWidget *toplevel = GTK_WIDGET (gtk_widget_get_root (widget));
@@ -5573,7 +5573,7 @@ gtk_label_activate_current_link (GtkLabel *self)
  * Returns: (nullable): the currently active URI or %NULL if there is none.
  *   The string is owned by GTK+ and must not be freed or modified.
  */
-const gchar *
+const char *
 gtk_label_get_current_uri (GtkLabel *self)
 {
   const GtkLabelLink *link;
@@ -5711,7 +5711,7 @@ _gtk_label_get_n_links (GtkLabel *self)
   return 0;
 }
 
-const gchar *
+const char *
 _gtk_label_get_link_uri (GtkLabel *self,
                          int       idx)
 {

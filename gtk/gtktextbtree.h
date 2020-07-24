@@ -66,7 +66,7 @@ gboolean _gtk_text_btree_is_end (GtkTextBTree       *tree,
 void _gtk_text_btree_delete           (GtkTextIter  *start,
                                        GtkTextIter  *end);
 void _gtk_text_btree_insert           (GtkTextIter  *iter,
-                                       const gchar  *text,
+                                       const char   *text,
                                        int           len);
 void _gtk_text_btree_insert_paintable (GtkTextIter  *iter,
                                        GdkPaintable *texture);
@@ -130,7 +130,7 @@ GtkTextLine * _gtk_text_btree_get_line_at_char  (GtkTextBTree      *tree,
                                                  int               *real_char_index);
 GtkTextTag**  _gtk_text_btree_get_tags          (const GtkTextIter *iter,
                                                  int               *num_tags);
-gchar        *_gtk_text_btree_get_text          (const GtkTextIter *start,
+char         *_gtk_text_btree_get_text          (const GtkTextIter *start,
                                                  const GtkTextIter *end,
                                                  gboolean           include_hidden,
                                                  gboolean           include_nonchars);
@@ -154,10 +154,10 @@ void     _gtk_text_btree_get_iter_at_line_byte    (GtkTextBTree       *tree,
                                                    int                 byte_index);
 gboolean _gtk_text_btree_get_iter_from_string     (GtkTextBTree       *tree,
                                                    GtkTextIter        *iter,
-                                                   const gchar        *string);
+                                                   const char         *string);
 gboolean _gtk_text_btree_get_iter_at_mark_name    (GtkTextBTree       *tree,
                                                    GtkTextIter        *iter,
-                                                   const gchar        *mark_name);
+                                                   const char         *mark_name);
 void     _gtk_text_btree_get_iter_at_mark         (GtkTextBTree       *tree,
                                                    GtkTextIter        *iter,
                                                    GtkTextMark        *mark);
@@ -186,12 +186,12 @@ void     _gtk_text_btree_get_iter_at_child_anchor  (GtkTextBTree       *tree,
 /* Manipulate marks */
 GtkTextMark        *_gtk_text_btree_set_mark                (GtkTextBTree       *tree,
                                                              GtkTextMark         *existing_mark,
-                                                             const gchar        *name,
+                                                             const char         *name,
                                                              gboolean            left_gravity,
                                                              const GtkTextIter  *index,
                                                              gboolean           should_exist);
 void                _gtk_text_btree_remove_mark_by_name     (GtkTextBTree       *tree,
-                                                             const gchar        *name);
+                                                             const char         *name);
 void                _gtk_text_btree_remove_mark             (GtkTextBTree       *tree,
                                                              GtkTextMark        *segment);
 gboolean            _gtk_text_btree_get_selection_bounds    (GtkTextBTree       *tree,
@@ -209,7 +209,7 @@ gboolean            _gtk_text_btree_mark_is_selection_bound (GtkTextBTree       
 GtkTextMark        *_gtk_text_btree_get_insert		    (GtkTextBTree       *tree);
 GtkTextMark        *_gtk_text_btree_get_selection_bound	    (GtkTextBTree       *tree);
 GtkTextMark        *_gtk_text_btree_get_mark_by_name        (GtkTextBTree       *tree,
-                                                             const gchar        *name);
+                                                             const char         *name);
 GtkTextLine *       _gtk_text_btree_first_could_contain_tag (GtkTextBTree       *tree,
                                                              GtkTextTag         *tag);
 GtkTextLine *       _gtk_text_btree_last_could_contain_tag  (GtkTextBTree       *tree,

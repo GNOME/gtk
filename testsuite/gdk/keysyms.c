@@ -6,8 +6,8 @@ test_keysyms_basic (void)
 {
   struct {
     guint keyval;
-    const gchar *name;
-    const gchar *other_name;
+    const char *name;
+    const char *other_name;
   } tests[] = {
     { GDK_KEY_space, "space", NULL },
     { GDK_KEY_a, "a", NULL },

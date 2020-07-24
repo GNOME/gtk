@@ -79,7 +79,7 @@ gtk_inspector_type_popover_set_gtype (GtkInspectorTypePopover *self,
   GtkInspectorTypePopoverPrivate *priv;
   GHashTable *implements;
   GHashTableIter iter;
-  const gchar *name;
+  const char *name;
   GType *interfaces;
   GType tmp;
   int i;
@@ -110,7 +110,7 @@ gtk_inspector_type_popover_set_gtype (GtkInspectorTypePopover *self,
       interfaces = g_type_interfaces (tmp, NULL);
 
       for (i = 0; interfaces[i]; i++)
-        g_hash_table_add (implements, (gchar *) g_type_name (interfaces[i]));
+        g_hash_table_add (implements, (char *) g_type_name (interfaces[i]));
 
       g_free (interfaces);
     }

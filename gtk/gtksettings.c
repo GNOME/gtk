@@ -116,7 +116,7 @@ struct _GtkSettings
   GtkCssProvider *theme_provider;
   int font_size;
   gboolean font_size_absolute;
-  gchar *font_family;
+  char *font_family;
   cairo_font_options_t *font_options;
 };
 
@@ -219,7 +219,7 @@ static gboolean settings_update_xsetting         (GtkSettings           *setting
 static void    settings_update_xsettings         (GtkSettings           *settings);
 
 static void gtk_settings_load_from_key_file      (GtkSettings           *settings,
-                                                  const gchar           *path,
+                                                  const char            *path,
                                                   GtkSettingsSource      source);
 static void settings_update_provider             (GdkDisplay            *display,
                                                   GtkCssProvider       **old,
@@ -243,8 +243,8 @@ gtk_settings_init (GtkSettings *settings)
 {
   GParamSpec **pspecs, **p;
   guint i = 0;
-  gchar *path;
-  const gchar * const *config_dirs;
+  char *path;
+  const char * const *config_dirs;
 
   g_datalist_init (&settings->queued_settings);
   object_list = g_slist_prepend (object_list, settings);
@@ -1042,7 +1042,7 @@ settings_init_style (GtkSettings *settings)
   /* Add provider for user file */
   if (G_UNLIKELY (!css_provider))
     {
-      gchar *css_path;
+      char *css_path;
 
       css_provider = gtk_css_provider_new ();
       css_path = g_build_filename (g_get_user_config_dir (),
@@ -1194,7 +1194,7 @@ static void
 settings_update_font_values (GtkSettings *settings)
 {
   PangoFontDescription *desc;
-  const gchar *font_name;
+  const char *font_name;
 
   font_name = g_value_get_string (&settings->property_values[PROP_FONT_NAME - 1].value);
   desc = pango_font_description_from_string (font_name);
@@ -1324,7 +1324,7 @@ apply_queued_setting (GtkSettings             *settings,
     }
   else
     {
-      gchar *debug = g_strdup_value_contents (&qvalue->public.value);
+      char *debug = g_strdup_value_contents (&qvalue->public.value);
 
       g_message ("%s: failed to retrieve property '%s' of type '%s' from rc file value \"%s\" of type '%s'",
                  qvalue->public.origin ? qvalue->public.origin : "(for origin information, set GTK_DEBUG)",
@@ -1413,13 +1413,13 @@ free_value (gpointer data)
 
 static void
 gtk_settings_set_property_value_internal (GtkSettings            *settings,
-                                          const gchar            *prop_name,
+                                          const char             *prop_name,
                                           const GtkSettingsValue *new_value,
                                           GtkSettingsSource       source)
 {
   GtkSettingsValuePrivate *qvalue;
   GParamSpec *pspec;
-  gchar *name;
+  char *name;
   GQuark name_quark;
 
   if (!G_VALUE_HOLDS_LONG (&new_value->value) &&
@@ -1474,7 +1474,7 @@ settings_update_double_click (GtkSettings *settings)
 static void
 settings_update_cursor_theme (GtkSettings *settings)
 {
-  gchar *theme = NULL;
+  char *theme = NULL;
   int size = 0;
 
   g_object_get (settings,
@@ -1492,11 +1492,11 @@ static void
 settings_update_font_options (GtkSettings *settings)
 {
   int hinting;
-  gchar *hint_style_str;
+  char *hint_style_str;
   cairo_hint_style_t hint_style;
   int antialias;
   cairo_antialias_t antialias_mode;
-  gchar *rgba_str;
+  char *rgba_str;
   cairo_subpixel_order_t subpixel_order;
 
   if (settings->font_options)
@@ -1637,8 +1637,8 @@ settings_update_provider (GdkDisplay      *display,
 
 static void
 get_theme_name (GtkSettings  *settings,
-                gchar       **theme_name,
-                gchar       **theme_variant)
+                char        **theme_name,
+                char        **theme_variant)
 {
   gboolean prefer_dark;
 
@@ -1681,10 +1681,10 @@ get_theme_name (GtkSettings  *settings,
 static void
 settings_update_theme (GtkSettings *settings)
 {
-  gchar *theme_name;
-  gchar *theme_variant;
-  const gchar *theme_dir;
-  gchar *path;
+  char *theme_name;
+  char *theme_variant;
+  const char *theme_dir;
+  char *path;
 
   get_theme_name (settings, &theme_name, &theme_variant);
 
@@ -1727,12 +1727,12 @@ gvalue_free (gpointer data)
 
 static void
 gtk_settings_load_from_key_file (GtkSettings       *settings,
-                                 const gchar       *path,
+                                 const char        *path,
                                  GtkSettingsSource  source)
 {
   GError *error;
   GKeyFile *keyfile;
-  gchar **keys;
+  char **keys;
   gsize n_keys;
   int i;
 
@@ -1760,7 +1760,7 @@ gtk_settings_load_from_key_file (GtkSettings       *settings,
 
   for (i = 0; i < n_keys; i++)
     {
-      gchar *key;
+      char *key;
       GParamSpec *pspec;
       GType value_type;
       GtkSettingsValue svalue = { NULL, { 0, }, };
@@ -1815,7 +1815,7 @@ gtk_settings_load_from_key_file (GtkSettings       *settings,
 
         default:
           {
-            gchar *s_val;
+            char *s_val;
 
             g_value_init (&svalue.value, G_TYPE_GSTRING);
             s_val = g_key_file_get_string (keyfile, "Settings", key, &error);
@@ -1844,7 +1844,7 @@ gtk_settings_load_from_key_file (GtkSettings       *settings,
                                        copy, gvalue_free);
 
           if (g_getenv ("GTK_DEBUG"))
-            svalue.origin = (gchar *)path;
+            svalue.origin = (char *)path;
 
           gtk_settings_set_property_value_internal (settings, key, &svalue, source);
           g_value_unset (&svalue.value);
@@ -1929,7 +1929,7 @@ gtk_settings_get_property (GObject     *object,
 
 GtkSettingsSource
 _gtk_settings_get_setting_source (GtkSettings *settings,
-                                  const gchar *name)
+                                  const char *name)
 {
   GParamSpec *pspec;
 
@@ -1952,7 +1952,7 @@ _gtk_settings_get_setting_source (GtkSettings *settings,
  */
 void
 gtk_settings_reset_property (GtkSettings *settings,
-                             const gchar *name)
+                             const char *name)
 {
   GParamSpec *pspec;
   GValue *value;
@@ -2023,7 +2023,7 @@ settings_update_font_name (GtkSettings *settings)
     }
 }
 
-const gchar *
+const char *
 gtk_settings_get_font_family (GtkSettings *settings)
 {
   settings_update_font_name (settings);

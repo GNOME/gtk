@@ -38,7 +38,7 @@ typedef struct
 {
   GDBusConnection       *dbus_connection;
   SecretsServiceAction   action;
-  gchar                **auth_info,
+  char                 **auth_info,
                        **auth_info_labels,
                        **auth_info_required,
                         *printer_uri,
@@ -60,7 +60,7 @@ typedef struct
  * Returns: A GVariant dictionary of string pairs or NULL on error.
  */
 static GVariant *
-create_attributes (const gchar  *printer_uri,
+create_attributes (const char   *printer_uri,
                    const char  **additional_attrs,
                    const char  **additional_labels)
 {
@@ -105,7 +105,7 @@ get_secret_cb (GObject      *source_object,
   GError             *error = NULL;
   GVariant           *output,
                      *attributes;
-  gchar             **auth_info = NULL,
+  char              **auth_info = NULL,
                      *key = NULL,
                      *value = NULL;
   GVariantIter       *iter = NULL;
@@ -137,7 +137,7 @@ get_secret_cb (GObject      *source_object,
   /* Iterate over the attributes to fill the auth info */
   g_variant_get (attributes, "a{ss}", &iter);
 
-  auth_info = g_new0 (gchar *,
+  auth_info = g_new0 (char *,
                       g_strv_length (task_data->auth_info_required) + 1);
 
   while (g_variant_iter_loop (iter, "{ss}", &key, &value))
@@ -247,7 +247,7 @@ create_item_cb (GObject      *source_object,
   GTask    *task;
   GError   *error = NULL;
   GVariant *output;
-  gchar    *item = NULL;
+  char     *item = NULL;
 
   task = user_data;
 
@@ -364,10 +364,10 @@ do_store_auth_info (GTask *task)
 
 static void
 prompt_completed_cb (GDBusConnection *connection,
-                     const gchar     *sender_name,
-                     const gchar     *object_path,
-                     const gchar     *interface_name,
-                     const gchar     *signal_name,
+                     const char      *sender_name,
+                     const char      *object_path,
+                     const char      *interface_name,
+                     const char      *signal_name,
                      GVariant        *parameters,
                      gpointer         user_data)
 {
@@ -472,7 +472,7 @@ unlock_collection_cb (GObject      *source_object,
   SecretsServiceData *task_data;
   GError             *error = NULL;
   GVariant           *output;
-  const gchar        *prompt_path;
+  const char         *prompt_path;
 
   task = user_data;
   task_data = g_task_get_task_data (task);
@@ -540,8 +540,8 @@ unlock_read_alias_cb (GObject      *source_object,
   GError *error = NULL;
   GVariant *output, *subresult;
   gsize path_len = 0;
-  const gchar *collection_path;
-  const gchar *to_unlock[2];
+  const char *collection_path;
+  const char *to_unlock[2];
 
   task = user_data;
   task_data = g_task_get_task_data (task);
@@ -695,7 +695,7 @@ search_items_cb (GObject      *source_object,
   for (i = 0; i < array_cnt; i++)
     {
       GVariant * const   item_paths = g_variant_get_child_value (output, i);
-      const gchar      **items = NULL;
+      const char       **items = NULL;
 
       if (item_paths == NULL)
         {
@@ -970,8 +970,8 @@ gtk_cups_secrets_service_query_task (gpointer              source_object,
                                      GCancellable         *cancellable,
                                      GAsyncReadyCallback   callback,
                                      gpointer              user_data,
-                                     const gchar          *printer_uri,
-                                     gchar               **auth_info_required)
+                                     const char           *printer_uri,
+                                     char                **auth_info_required)
 {
   GTask              *task;
   SecretsServiceData *task_data;
@@ -1020,9 +1020,9 @@ store_done_cb (GObject      *source_object,
  * Tries to store the auth_info in a secrets service.
  */
 void
-gtk_cups_secrets_service_store (gchar       **auth_info,
-                                gchar       **auth_info_labels,
-                                const gchar  *printer_uri)
+gtk_cups_secrets_service_store (char        **auth_info,
+                                char        **auth_info_labels,
+                                const char   *printer_uri)
 {
   GTask              *task;
   SecretsServiceData *task_data;

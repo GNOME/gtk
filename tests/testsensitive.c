@@ -10,7 +10,7 @@ static void
 state_flags_changed (GtkWidget *widget)
 {
   GtkStateFlags flags;
-  const gchar *sep;
+  const char *sep;
 
   g_print ("state changed: \n");
 

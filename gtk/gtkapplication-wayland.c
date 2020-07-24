@@ -36,7 +36,7 @@ typedef struct
   guint (*dbus_inhibit) (GtkApplicationImpl         *impl,
                          GtkWindow                  *window,
                          GtkApplicationInhibitFlags  flags,
-                         const gchar                *reason);
+                         const char                 *reason);
   void (*dbus_uninhibit) (GtkApplicationImpl *impl,
                           guint               cookie);
 } GtkApplicationImplWaylandClass;
@@ -74,7 +74,7 @@ gtk_application_impl_wayland_handle_window_realize (GtkApplicationImpl *impl,
     GTK_APPLICATION_IMPL_CLASS (gtk_application_impl_wayland_parent_class);
   GtkApplicationImplDBus *dbus = (GtkApplicationImplDBus *) impl;
   GdkSurface *gdk_surface;
-  gchar *window_path;
+  char *window_path;
 
   gdk_surface = gtk_native_get_surface (GTK_NATIVE (window));
 
@@ -107,7 +107,7 @@ static guint
 gtk_application_impl_wayland_inhibit (GtkApplicationImpl         *impl,
                                       GtkWindow                  *window,
                                       GtkApplicationInhibitFlags  flags,
-                                      const gchar                *reason)
+                                      const char                 *reason)
 {
   GtkApplicationImplWayland *wayland = (GtkApplicationImplWayland *) impl;
   GdkSurface *surface;

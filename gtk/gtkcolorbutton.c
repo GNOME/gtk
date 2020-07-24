@@ -72,7 +72,7 @@ struct _GtkColorButton {
   GtkWidget *swatch;    /* Widget where we draw the color sample */
   GtkWidget *cs_dialog; /* Color selection dialog */
 
-  gchar *title;         /* Title for the color selection window */
+  char *title;         /* Title for the color selection window */
   GdkRGBA rgba;
 
   guint use_alpha   : 1;  /* Use alpha or not */
@@ -491,9 +491,9 @@ set_use_alpha (GtkColorButton *button,
  */
 void
 gtk_color_button_set_title (GtkColorButton *button,
-                            const gchar    *title)
+                            const char     *title)
 {
-  gchar *old_title;
+  char *old_title;
 
   g_return_if_fail (GTK_IS_COLOR_BUTTON (button));
 
@@ -515,7 +515,7 @@ gtk_color_button_set_title (GtkColorButton *button,
  *
  * Returns: An internal string, do not free the return value
  */
-const gchar *
+const char *
 gtk_color_button_get_title (GtkColorButton *button)
 {
   g_return_val_if_fail (GTK_IS_COLOR_BUTTON (button), NULL);

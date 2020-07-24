@@ -68,7 +68,7 @@ release_event (GtkGestureClick *gesture,
     {
       GtkTreeModel *model;
       GtkTreeIter iter;
-      gchar *text;
+      char *text;
 
       model = gtk_tree_view_get_model (tv);
       gtk_tree_model_get_iter (model, &iter, path);

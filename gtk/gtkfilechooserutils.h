@@ -47,7 +47,7 @@ GQuark _gtk_file_chooser_delegate_get_quark (void) G_GNUC_CONST;
 
 GSettings *_gtk_file_chooser_get_settings_for_widget (GtkWidget *widget);
 
-gchar * _gtk_file_chooser_label_for_file (GFile *file);
+char * _gtk_file_chooser_label_for_file (GFile *file);
 
 gboolean        _gtk_file_info_consider_as_directory (GFileInfo *info);
 gboolean        _gtk_file_has_native_path (GFile *file);

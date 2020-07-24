@@ -166,7 +166,7 @@ update_modmap (Display      *display,
                GdkX11Keymap *keymap_x11)
 {
   static struct {
-    const gchar *name;
+    const char *name;
     Atom atom;
     GdkModifierType mask;
   } vmods[] = {

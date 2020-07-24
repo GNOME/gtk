@@ -59,12 +59,12 @@ gdk_x11_display_text_property_to_text_list (GdkDisplay   *display,
                                             int           format,
                                             const guchar *text,
                                             int           length,
-                                            gchar      ***list)
+                                            char       ***list)
 {
   XTextProperty property;
   int count = 0;
   int res;
-  gchar **local_list;
+  char **local_list;
   g_return_val_if_fail (GDK_IS_DISPLAY (display), 0);
 
   if (list)
@@ -101,7 +101,7 @@ gdk_x11_display_text_property_to_text_list (GdkDisplay   *display,
  * gdk_x11_display_text_property_to_text_list().
  */
 void
-gdk_x11_free_text_list (gchar **list)
+gdk_x11_free_text_list (char **list)
 {
   g_return_if_fail (list != NULL);
 
@@ -109,22 +109,22 @@ gdk_x11_free_text_list (gchar **list)
 }
 
 static int
-make_list (const gchar  *text,
+make_list (const char   *text,
            int           length,
            gboolean      latin1,
-           gchar      ***list)
+           char       ***list)
 {
   GSList *strings = NULL;
   int n_strings = 0;
   int i;
-  const gchar *p = text;
-  const gchar *q;
+  const char *p = text;
+  const char *q;
   GSList *tmp_list;
   GError *error = NULL;
 
   while (p < text + length)
     {
-      gchar *str;
+      char *str;
 
       q = p;
       while (*q && q < text + length)
@@ -165,7 +165,7 @@ make_list (const gchar  *text,
 
   if (list)
     {
-      *list = g_new (gchar *, n_strings + 1);
+      *list = g_new (char *, n_strings + 1);
       (*list)[n_strings] = NULL;
     }
 
@@ -192,22 +192,22 @@ _gdk_x11_display_text_property_to_utf8_list (GdkDisplay    *display,
                                              int            format,
                                              const guchar  *text,
                                              int            length,
-                                             gchar       ***list)
+                                             char        ***list)
 {
   if (g_str_equal (encoding, "STRING"))
     {
-      return make_list ((gchar *)text, length, TRUE, list);
+      return make_list ((char *)text, length, TRUE, list);
     }
   else if (g_str_equal (encoding, "UTF8_STRING"))
     {
-      return make_list ((gchar *)text, length, FALSE, list);
+      return make_list ((char *)text, length, FALSE, list);
     }
   else
     {
-      gchar **local_list;
+      char **local_list;
       int local_count;
       int i;
-      const gchar *charset = NULL;
+      const char *charset = NULL;
       gboolean need_conversion = !g_get_charset (&charset);
       int count = 0;
       GError *error = NULL;
@@ -221,7 +221,7 @@ _gdk_x11_display_text_property_to_utf8_list (GdkDisplay    *display,
                                                                 length,
                                                                 &local_list);
       if (list)
-        *list = g_new (gchar *, local_count + 1);
+        *list = g_new (char *, local_count + 1);
 
       for (i=0; i<local_count; i++)
         {
@@ -229,7 +229,7 @@ _gdk_x11_display_text_property_to_utf8_list (GdkDisplay    *display,
            */
           if (need_conversion)
             {
-              gchar *utf = g_convert (local_list[i], -1,
+              char *utf = g_convert (local_list[i], -1,
                                       "UTF-8", charset,
                                       NULL, NULL, &error);
               if (utf)
@@ -348,8 +348,8 @@ gdk_x11_display_utf8_to_compound_text (GdkDisplay  *display,
                                        int         *length)
 {
   gboolean need_conversion;
-  const gchar *charset;
-  gchar *locale_str, *tmp_str;
+  const char *charset;
+  char *locale_str, *tmp_str;
   GError *error = NULL;
   gboolean result;
 

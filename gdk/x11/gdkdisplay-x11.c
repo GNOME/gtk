@@ -1331,7 +1331,7 @@ gdk_event_init (GdkDisplay *display)
 
 static void
 set_sm_client_id (GdkDisplay  *display,
-                  const gchar *sm_client_id)
+                  const char *sm_client_id)
 {
   GdkX11Display *display_x11 = GDK_X11_DISPLAY (display);
 
@@ -1377,13 +1377,13 @@ gdk_display_setup_window_visual (GdkDisplay *display,
  *     %NULL on error.
  **/
 GdkDisplay *
-gdk_x11_display_open (const gchar *display_name)
+gdk_x11_display_open (const char *display_name)
 {
   Display *xdisplay;
   GdkDisplay *display;
   GdkX11Display *display_x11;
   int argc;
-  gchar *argv[1];
+  char *argv[1];
   XClassHint *class_hint;
   int ignore;
   int maj, min;
@@ -1733,10 +1733,10 @@ gdk_internal_connection_watch (Display  *display,
     gdk_remove_connection_handler ((GdkInternalConnection *)*watch_data);
 }
 
-static const gchar *
+static const char *
 gdk_x11_display_get_name (GdkDisplay *display)
 {
-  return (gchar *) DisplayString (GDK_X11_DISPLAY (display)->xdisplay);
+  return (char *) DisplayString (GDK_X11_DISPLAY (display)->xdisplay);
 }
 
 gboolean
@@ -2093,7 +2093,7 @@ static void
 gdk_x11_display_make_default (GdkDisplay *display)
 {
   GdkX11Display *display_x11 = GDK_X11_DISPLAY (display);
-  const gchar *startup_id;
+  const char *startup_id;
 
   g_free (display_x11->startup_notification_id);
   display_x11->startup_notification_id = NULL;
@@ -2257,9 +2257,9 @@ gdk_x11_display_broadcast_startup_message (GdkDisplay *display,
 
 static void
 gdk_x11_display_notify_startup_complete (GdkDisplay  *display,
-                                         const gchar *startup_id)
+                                         const char *startup_id)
 {
-  gchar *free_this = NULL;
+  char *free_this = NULL;
 
   if (startup_id == NULL)
     {
@@ -2329,7 +2329,7 @@ gdk_x11_display_get_user_time (GdkDisplay *display)
  * 
  * Returns: the startup notification ID for @display
  */
-const gchar *
+const char *
 gdk_x11_display_get_startup_notification_id (GdkDisplay *display)
 {
   return GDK_X11_DISPLAY (display)->startup_notification_id;
@@ -2357,10 +2357,10 @@ gdk_x11_display_get_startup_notification_id (GdkDisplay *display)
  **/
 void
 gdk_x11_display_set_startup_notification_id (GdkDisplay  *display,
-                                             const gchar *startup_id)
+                                             const char *startup_id)
 {
   GdkX11Display *display_x11;
-  gchar *time_str;
+  char *time_str;
 
   display_x11 = GDK_X11_DISPLAY (display);
 
@@ -2376,7 +2376,7 @@ gdk_x11_display_set_startup_notification_id (GdkDisplay  *display,
       if (time_str != NULL)
         {
           gulong retval;
-          gchar *end;
+          char *end;
           errno = 0;
 
           /* Skip past the "_TIME" part */
@@ -2463,8 +2463,8 @@ _gdk_x11_display_error_event (GdkDisplay  *display,
 
   if (!ignore)
     {
-      gchar buf[64];
-      gchar *msg;
+      char buf[64];
+      char *msg;
 
       XGetErrorText (display_x11->xdisplay, error->error_code, buf, 63);
 
@@ -2735,7 +2735,7 @@ gdk_x11_display_error_trap_pop_ignored (GdkDisplay *display)
  * session management and the Inter-Client Communication Conventions Manual
  */
 void
-gdk_x11_set_sm_client_id (const gchar *sm_client_id)
+gdk_x11_set_sm_client_id (const char *sm_client_id)
 {
  GSList *displays, *l;
 
@@ -2893,7 +2893,7 @@ gdk_x11_display_get_window_colormap (GdkX11Display *display)
 
 static gboolean
 gdk_x11_display_get_setting (GdkDisplay  *display,
-                             const gchar *name,
+                             const char *name,
                              GValue      *value)
 {
   return gdk_x11_screen_get_setting (GDK_X11_DISPLAY (display)->screen, name, value);

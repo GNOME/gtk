@@ -111,8 +111,8 @@ gtk_entry_icon_accessible_initialize (AtkObject *obj,
   GtkEntryIconAccessible *icon = GTK_ENTRY_ICON_ACCESSIBLE (obj);
   GtkWidget *widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (icon->entry));
   GtkEntry *gtk_entry = GTK_ENTRY (widget);
-  const gchar *name;
-  gchar *text;
+  const char *name;
+  char *text;
 
   ATK_OBJECT_CLASS (gtk_entry_icon_accessible_parent_class)->initialize (obj, data);
   atk_object_set_role (obj, ATK_ROLE_ICON);
@@ -255,7 +255,7 @@ gtk_entry_icon_accessible_get_n_actions (AtkAction *action)
   return (gtk_entry_get_icon_activatable (gtk_entry, icon->pos) ? 1 : 0);
 }
 
-static const gchar *
+static const char *
 gtk_entry_icon_accessible_get_name (AtkAction *action,
                                     int        i)
 {
@@ -418,7 +418,7 @@ check_for_selection_change (GtkEntryAccessible *accessible,
 
 static void
 insert_text_cb (GtkEditable        *editable,
-                gchar              *new_text,
+                char               *new_text,
                 int                 new_text_length,
                 int                *position,
                 GtkEntryAccessible *self)
@@ -455,7 +455,7 @@ delete_text_cb (GtkEditable        *editable,
 
   if (end < 0)
     {
-      gchar *text;
+      char *text;
 
       text = gtk_text_get_display_text (textw, 0, -1);
       end = g_utf8_strlen (text, -1);
@@ -556,7 +556,7 @@ on_notify (GObject            *gobject,
     {
       if (priv->icons[GTK_ENTRY_ICON_PRIMARY])
         {
-          const gchar *name;
+          const char *name;
           name = gtk_entry_get_icon_name (GTK_ENTRY (widget), GTK_ENTRY_ICON_PRIMARY);
           if (name)
             atk_object_set_name (priv->icons[GTK_ENTRY_ICON_PRIMARY], name);
@@ -566,7 +566,7 @@ on_notify (GObject            *gobject,
     {
       if (priv->icons[GTK_ENTRY_ICON_SECONDARY])
         {
-          const gchar *name;
+          const char *name;
           name = gtk_entry_get_icon_name (GTK_ENTRY (widget), GTK_ENTRY_ICON_SECONDARY);
           if (name)
             atk_object_set_name (priv->icons[GTK_ENTRY_ICON_SECONDARY], name);
@@ -576,7 +576,7 @@ on_notify (GObject            *gobject,
     {
       if (priv->icons[GTK_ENTRY_ICON_PRIMARY])
         {
-          gchar *text;
+          char *text;
           text = gtk_entry_get_icon_tooltip_text (GTK_ENTRY (widget), GTK_ENTRY_ICON_PRIMARY);
           if (text)
             {
@@ -593,7 +593,7 @@ on_notify (GObject            *gobject,
     {
       if (priv->icons[GTK_ENTRY_ICON_SECONDARY])
         {
-          gchar *text;
+          char *text;
           text = gtk_entry_get_icon_tooltip_text (GTK_ENTRY (widget), GTK_ENTRY_ICON_SECONDARY);
           if (text)
             {
@@ -831,7 +831,7 @@ gtk_entry_accessible_init (GtkEntryAccessible *entry)
   ATK_OBJECT (entry)->role = ATK_ROLE_TEXT;
 }
 
-static gchar *
+static char *
 gtk_entry_accessible_get_text (AtkText *atk_text,
                                int      start_pos,
                                int      end_pos)
@@ -846,7 +846,7 @@ gtk_entry_accessible_get_text (AtkText *atk_text,
   return gtk_text_get_display_text (text, start_pos, end_pos);
 }
 
-static gchar *
+static char *
 gtk_entry_accessible_get_text_before_offset (AtkText         *atk_text,
                                              int              offset,
                                              AtkTextBoundary  boundary_type,
@@ -865,7 +865,7 @@ gtk_entry_accessible_get_text_before_offset (AtkText         *atk_text,
                                      start_offset, end_offset);
 }
 
-static gchar *
+static char *
 gtk_entry_accessible_get_text_at_offset (AtkText         *atk_text,
                                          int              offset,
                                          AtkTextBoundary  boundary_type,
@@ -884,7 +884,7 @@ gtk_entry_accessible_get_text_at_offset (AtkText         *atk_text,
                                  start_offset, end_offset);
 }
 
-static gchar *
+static char *
 gtk_entry_accessible_get_text_after_offset (AtkText         *atk_text,
                                             int              offset,
                                             AtkTextBoundary  boundary_type,
@@ -1033,7 +1033,7 @@ gtk_entry_accessible_get_character_extents (AtkText      *atk_text,
 {
   GtkText *textw;
   PangoRectangle char_rect;
-  gchar *entry_text;
+  char *entry_text;
   int index, x_layout, y_layout;
   GtkAllocation allocation;
 
@@ -1065,7 +1065,7 @@ gtk_entry_accessible_get_offset_at_point (AtkText      *atk_text,
                                           AtkCoordType  coords)
 {
   GtkText *textw;
-  gchar *text;
+  char *text;
   int index, x_layout, y_layout;
   int x_local, y_local;
   glong offset;
@@ -1118,7 +1118,7 @@ gtk_entry_accessible_get_n_selections (AtkText *text)
   return 0;
 }
 
-static gchar *
+static char *
 gtk_entry_accessible_get_selection (AtkText *text,
                                     int      selection_num,
                                     int     *start_pos,
@@ -1216,8 +1216,8 @@ gtk_entry_accessible_get_character_at_offset (AtkText *atk_text,
                                               int      offset)
 {
   GtkText *textw;
-  gchar *text;
-  gchar *index;
+  char *text;
+  char *index;
   gunichar result;
 
   result = '\0';
@@ -1265,7 +1265,7 @@ atk_text_interface_init (AtkTextIface *iface)
 
 static void
 gtk_entry_accessible_set_text_contents (AtkEditableText *text,
-                                        const gchar     *string)
+                                        const char      *string)
 {
   GtkWidget *widget;
 
@@ -1281,7 +1281,7 @@ gtk_entry_accessible_set_text_contents (AtkEditableText *text,
 
 static void
 gtk_entry_accessible_insert_text (AtkEditableText *text,
-                                  const gchar     *string,
+                                  const char      *string,
                                   int              length,
                                   int             *position)
 {
@@ -1307,7 +1307,7 @@ gtk_entry_accessible_copy_text (AtkEditableText *text,
 {
   GtkWidget *widget;
   GtkEditable *editable;
-  gchar *str;
+  char *str;
   GdkClipboard *clipboard;
 
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (text));
@@ -1328,7 +1328,7 @@ gtk_entry_accessible_cut_text (AtkEditableText *text,
 {
   GtkWidget *widget;
   GtkEditable *editable;
-  gchar *str;
+  char *str;
   GdkClipboard *clipboard;
 
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (text));
@@ -1453,7 +1453,7 @@ gtk_entry_accessible_get_n_actions (AtkAction *action)
   return 1;
 }
 
-static const gchar *
+static const char *
 gtk_entry_accessible_get_keybinding (AtkAction *action,
                                      int        i)
 {
@@ -1498,7 +1498,7 @@ gtk_entry_accessible_get_keybinding (AtkAction *action,
   return NULL;
 }
 
-static const gchar*
+static const char *
 gtk_entry_accessible_action_get_name (AtkAction *action,
                                       int        i)
 {
@@ -1507,7 +1507,7 @@ gtk_entry_accessible_action_get_name (AtkAction *action,
   return NULL;
 }
 
-static const gchar*
+static const char *
 gtk_entry_accessible_action_get_localized_name (AtkAction *action,
                                                 int        i)
 {
@@ -1516,7 +1516,7 @@ gtk_entry_accessible_action_get_localized_name (AtkAction *action,
   return NULL;
 }
 
-static const gchar*
+static const char *
 gtk_entry_accessible_action_get_description (AtkAction *action,
                                              int        i)
 {

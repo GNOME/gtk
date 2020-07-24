@@ -34,7 +34,7 @@
 #include <gtk.h>
 
 static gboolean show_version;
-static gchar **args = NULL;
+static char **args = NULL;
 
 static GOptionEntry entries[] = {
   { "version", 0, 0, G_OPTION_ARG_NONE, &show_version, N_("Show program version"), NULL },
@@ -47,11 +47,11 @@ main (int argc, char *argv[])
 {
   GError *error = NULL;
   GOptionContext *context = NULL;
-  gchar *summary;
-  gchar *app_name;
+  char *summary;
+  char *app_name;
 #ifdef G_OS_UNIX
-  gchar *desktop_file_name;
-  gchar *bus_name = NULL;
+  char *desktop_file_name;
+  char *bus_name = NULL;
 #endif
   GAppInfo *info = NULL;
   GAppLaunchContext *launch_context;
@@ -172,7 +172,7 @@ main (int argc, char *argv[])
   if (bus_name != NULL)
     {
       GDBusConnection *connection;
-      gchar *object_path, *p;
+      char *object_path, *p;
 
       connection = g_bus_get_sync (G_BUS_TYPE_SESSION, NULL, NULL);
 

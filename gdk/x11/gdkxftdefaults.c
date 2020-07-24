@@ -57,7 +57,7 @@
 static int
 parse_boolean (char *v)
 {
-  gchar c0, c1;
+  char c0, c1;
   
   c0 = *v;
   if (g_ascii_isupper ((int)c0))
@@ -82,11 +82,11 @@ parse_boolean (char *v)
 
 static gboolean
 get_boolean_default (GdkX11Screen *x11_screen,
-		     const gchar *option,
+		     const char *option,
 		     gboolean    *value)
 {
   Display *dpy = GDK_SCREEN_XDISPLAY (x11_screen);
-  gchar *v;
+  char *v;
   int i;
 
   if (GDK_DISPLAY_DEBUG_CHECK (GDK_SCREEN_DISPLAY (x11_screen), DEFAULT_SETTINGS))
@@ -108,11 +108,11 @@ get_boolean_default (GdkX11Screen *x11_screen,
 
 static gboolean
 get_double_default (GdkX11Screen *x11_screen,
-		    const gchar *option,
+		    const char *option,
 		    gdouble     *value)
 {
   Display *dpy = GDK_SCREEN_XDISPLAY (x11_screen);
-  gchar    *v, *e;
+  char     *v, *e;
 
   if (GDK_DISPLAY_DEBUG_CHECK (GDK_SCREEN_DISPLAY (x11_screen), DEFAULT_SETTINGS))
       return FALSE;
@@ -135,11 +135,11 @@ get_double_default (GdkX11Screen *x11_screen,
 
 static gboolean
 get_integer_default (GdkX11Screen *x11_screen,
-		     const gchar *option,
+		     const char *option,
 		     int         *value)
 {
   Display *dpy = GDK_SCREEN_XDISPLAY (x11_screen);
-  gchar *v, *e;
+  char *v, *e;
 
   if (GDK_DISPLAY_DEBUG_CHECK (GDK_SCREEN_DISPLAY (x11_screen), DEFAULT_SETTINGS))
       return FALSE;

@@ -138,10 +138,10 @@ GDK_AVAILABLE_IN_ALL
 GtkWidget* gtk_dialog_new      (void);
 
 GDK_AVAILABLE_IN_ALL
-GtkWidget* gtk_dialog_new_with_buttons (const gchar     *title,
+GtkWidget* gtk_dialog_new_with_buttons (const char      *title,
                                         GtkWindow       *parent,
                                         GtkDialogFlags   flags,
-                                        const gchar     *first_button_text,
+                                        const char      *first_button_text,
                                         ...) G_GNUC_NULL_TERMINATED;
 
 GDK_AVAILABLE_IN_ALL
@@ -150,11 +150,11 @@ void       gtk_dialog_add_action_widget (GtkDialog   *dialog,
                                          int          response_id);
 GDK_AVAILABLE_IN_ALL
 GtkWidget* gtk_dialog_add_button        (GtkDialog   *dialog,
-                                         const gchar *button_text,
+                                         const char *button_text,
                                          int          response_id);
 GDK_AVAILABLE_IN_ALL
 void       gtk_dialog_add_buttons       (GtkDialog   *dialog,
-                                         const gchar *first_button_text,
+                                         const char *first_button_text,
                                          ...) G_GNUC_NULL_TERMINATED;
 
 GDK_AVAILABLE_IN_ALL

@@ -72,7 +72,7 @@ gtk_switch_action_get_n_actions (AtkAction *action)
   return 1;
 }
 
-static const gchar *
+static const char *
 gtk_switch_action_get_name (AtkAction *action,
                             int        i)
 {
@@ -81,7 +81,7 @@ gtk_switch_action_get_name (AtkAction *action,
   return NULL;
 }
 
-static const gchar *
+static const char *
 gtk_switch_action_get_localized_name (AtkAction *action,
                                       int        i)
 {
@@ -90,7 +90,7 @@ gtk_switch_action_get_localized_name (AtkAction *action,
   return NULL;
 }
 
-static const gchar *
+static const char *
 gtk_switch_action_get_description (AtkAction *action,
                                    int        i)
 {

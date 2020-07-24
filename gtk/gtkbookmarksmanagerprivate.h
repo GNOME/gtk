@@ -43,7 +43,7 @@ typedef struct
 typedef struct
 {
   GFile *file;
-  gchar *label;
+  char *label;
 } GtkBookmark;
 
 GtkBookmarksManager *_gtk_bookmarks_manager_new (GtkBookmarksChangedFunc changed_func,
@@ -71,12 +71,12 @@ gboolean _gtk_bookmarks_manager_reorder_bookmark (GtkBookmarksManager *manager,
 gboolean _gtk_bookmarks_manager_has_bookmark (GtkBookmarksManager *manager,
                                               GFile               *file);
 
-gchar * _gtk_bookmarks_manager_get_bookmark_label (GtkBookmarksManager *manager,
+char * _gtk_bookmarks_manager_get_bookmark_label (GtkBookmarksManager *manager,
 						   GFile               *file);
 
 gboolean _gtk_bookmarks_manager_set_bookmark_label (GtkBookmarksManager *manager,
 						    GFile               *file,
-						    const gchar         *label,
+						    const char          *label,
 						    GError             **error);
 
 gboolean _gtk_bookmarks_manager_get_is_builtin (GtkBookmarksManager *manager,

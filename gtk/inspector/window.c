@@ -670,7 +670,7 @@ get_inspector_display (void)
 
   if (display == NULL)
     {
-      const gchar *name;
+      const char *name;
 
       name = g_getenv ("GTK_INSPECTOR_DISPLAY");
       display = gdk_display_open (name);
@@ -693,7 +693,7 @@ get_inspector_display (void)
 
   if (display)
     {
-      const gchar *name;
+      const char *name;
 
       name = g_getenv ("GTK_INSPECTOR_RENDERER");
 

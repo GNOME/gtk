@@ -1291,8 +1291,8 @@ stack_child_visibility_notify_cb (GObject    *obj,
 GtkStackPage *
 gtk_stack_add_titled (GtkStack   *stack,
                      GtkWidget   *child,
-                     const gchar *name,
-                     const gchar *title)
+                     const char *name,
+                     const char *title)
 {
   g_return_val_if_fail (GTK_IS_STACK (stack), NULL);
   g_return_val_if_fail (GTK_IS_WIDGET (child), NULL);
@@ -1314,7 +1314,7 @@ gtk_stack_add_titled (GtkStack   *stack,
 GtkStackPage *
 gtk_stack_add_named (GtkStack   *stack,
                     GtkWidget   *child,
-                    const gchar *name)
+                    const char *name)
 {
   g_return_val_if_fail (GTK_IS_STACK (stack), NULL);
   g_return_val_if_fail (GTK_IS_WIDGET (child), NULL);
@@ -1491,7 +1491,7 @@ gtk_stack_get_page (GtkStack  *stack,
  */
 GtkWidget *
 gtk_stack_get_child_by_name (GtkStack    *stack,
-                             const gchar *name)
+                             const char *name)
 {
   GtkStackPrivate *priv = gtk_stack_get_instance_private (stack);
   GtkStackPage *info;
@@ -1810,7 +1810,7 @@ gtk_stack_get_visible_child (GtkStack *stack)
  *
  * Returns: (transfer none) (nullable): the name of the visible child of the #GtkStack
  */
-const gchar *
+const char *
 gtk_stack_get_visible_child_name (GtkStack *stack)
 {
   GtkStackPrivate *priv = gtk_stack_get_instance_private (stack);
@@ -1881,7 +1881,7 @@ gtk_stack_set_visible_child (GtkStack  *stack,
  */
 void
 gtk_stack_set_visible_child_name (GtkStack   *stack,
-                                 const gchar *name)
+                                 const char *name)
 {
   GtkStackPrivate *priv = gtk_stack_get_instance_private (stack);
 
@@ -1904,7 +1904,7 @@ gtk_stack_set_visible_child_name (GtkStack   *stack,
  */
 void
 gtk_stack_set_visible_child_full (GtkStack               *stack,
-                                  const gchar            *name,
+                                  const char             *name,
                                   GtkStackTransitionType  transition)
 {
   GtkStackPrivate *priv = gtk_stack_get_instance_private (stack);

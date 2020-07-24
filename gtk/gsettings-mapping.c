@@ -330,7 +330,7 @@ g_settings_set_mapping (const GValue       *value,
                         const GVariantType *expected_type,
                         gpointer            user_data)
 {
-  gchar *type_string;
+  char *type_string;
 
   if (G_VALUE_HOLDS_BOOLEAN (value))
     {
@@ -379,7 +379,7 @@ g_settings_set_mapping (const GValue       *value,
     {
       if (g_value_get_boxed (value) == NULL)
         return NULL;
-      return g_variant_new_strv ((const gchar **) g_value_get_boxed (value),
+      return g_variant_new_strv ((const char **) g_value_get_boxed (value),
                                  -1);
     }
 
@@ -485,7 +485,7 @@ g_settings_get_mapping (GValue   *value,
         {
           GEnumClass *eclass;
           GEnumValue *evalue;
-          const gchar *nick;
+          const char *nick;
 
           /* GParamSpecEnum holds a ref on the class so we just peek... */
           eclass = g_type_class_peek (G_VALUE_TYPE (value));
@@ -514,7 +514,7 @@ g_settings_get_mapping (GValue   *value,
         {
           GFlagsClass *fclass;
           GFlagsValue *fvalue;
-          const gchar *nick;
+          const char *nick;
           GVariantIter iter;
           guint flags = 0;
 

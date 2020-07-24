@@ -22,7 +22,7 @@
 
 G_DEFINE_TYPE (GtkScaleAccessible, gtk_scale_accessible, GTK_TYPE_RANGE_ACCESSIBLE)
 
-static const gchar *
+static const char *
 gtk_scale_accessible_get_description (AtkObject *object)
 {
   GtkWidget *widget;

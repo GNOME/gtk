@@ -154,10 +154,10 @@ gtk_application_impl_quartz_startup (GtkApplicationImpl *impl,
   GtkApplicationImplQuartz *quartz = (GtkApplicationImplQuartz *) impl;
   GSimpleActionGroup *gtkinternal;
   GMenuModel *app_menu;
-  const gchar *pref_accel[] = {"<Control>comma", NULL};
-  const gchar *hide_others_accel[] = {"<Control><Alt>h", NULL};
-  const gchar *hide_accel[] = {"<Control>h", NULL};
-  const gchar *quit_accel[] = {"<Control>q", NULL};
+  const char *pref_accel[] = {"<Control>comma", NULL};
+  const char *hide_others_accel[] = {"<Control><Alt>h", NULL};
+  const char *hide_accel[] = {"<Control>h", NULL};
+  const char *quit_accel[] = {"<Control>q", NULL};
 
   if (register_session)
     {
@@ -279,7 +279,7 @@ static guint
 gtk_application_impl_quartz_inhibit (GtkApplicationImpl         *impl,
                                      GtkWindow                  *window,
                                      GtkApplicationInhibitFlags  flags,
-                                     const gchar                *reason)
+                                     const char                 *reason)
 {
   GtkApplicationImplQuartz *quartz = (GtkApplicationImplQuartz *) impl;
   GtkApplicationQuartzInhibitor *inhibitor;

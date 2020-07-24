@@ -97,7 +97,7 @@ static void
 gtk_center_box_buildable_add_child (GtkBuildable  *buildable,
                                     GtkBuilder    *builder,
                                     GObject       *child,
-                                    const gchar   *type)
+                                    const char    *type)
 {
   if (g_strcmp0 (type, "start") == 0)
     gtk_center_box_set_start_widget (GTK_CENTER_BOX (buildable), GTK_WIDGET (child));

@@ -87,10 +87,10 @@ filechooser_portal_data_free (FilechooserPortalData *data)
 
 static void
 response_cb (GDBusConnection  *connection,
-             const gchar      *sender_name,
-             const gchar      *object_path,
-             const gchar      *interface_name,
-             const gchar      *signal_name,
+             const char       *sender_name,
+             const char       *object_path,
+             const char       *interface_name,
+             const char       *signal_name,
              GVariant         *parameters,
              gpointer          user_data)
 {
@@ -382,7 +382,7 @@ show_portal_file_chooser (GtkFileChooserNative *self,
                            g_variant_new_string (GTK_FILE_CHOOSER_NATIVE (self)->current_name));
   if (self->current_folder)
     {
-      gchar *path;
+      char *path;
 
       path = g_file_get_path (GTK_FILE_CHOOSER_NATIVE (self)->current_folder);
       g_variant_builder_add (&opt_builder, "{sv}", "current_folder",
@@ -391,7 +391,7 @@ show_portal_file_chooser (GtkFileChooserNative *self,
     }
   if (self->current_file)
     {
-      gchar *path;
+      char *path;
 
       path = g_file_get_path (GTK_FILE_CHOOSER_NATIVE (self)->current_file);
       g_variant_builder_add (&opt_builder, "{sv}", "current_file",

@@ -29,8 +29,8 @@ static gboolean       delegate_set_current_folder     (GtkFileChooser    *choose
 						       GError           **error);
 static GFile *        delegate_get_current_folder     (GtkFileChooser    *chooser);
 static void           delegate_set_current_name       (GtkFileChooser    *chooser,
-						       const gchar       *name);
-static gchar *        delegate_get_current_name       (GtkFileChooser    *chooser);
+						       const char        *name);
+static char *        delegate_get_current_name       (GtkFileChooser    *chooser);
 static gboolean       delegate_select_file            (GtkFileChooser    *chooser,
 						       GFile             *file,
 						       GError           **error);
@@ -270,12 +270,12 @@ delegate_get_current_folder (GtkFileChooser *chooser)
 
 static void
 delegate_set_current_name (GtkFileChooser *chooser,
-			   const gchar    *name)
+			   const char     *name)
 {
   gtk_file_chooser_set_current_name (get_delegate (chooser), name);
 }
 
-static gchar *
+static char *
 delegate_get_current_name (GtkFileChooser *chooser)
 {
   return gtk_file_chooser_get_current_name (get_delegate (chooser));
@@ -321,11 +321,11 @@ _gtk_file_chooser_get_settings_for_widget (GtkWidget *widget)
   return settings;
 }
 
-gchar *
+char *
 _gtk_file_chooser_label_for_file (GFile *file)
 {
-  const gchar *path, *start, *end, *p;
-  gchar *uri, *host, *label;
+  const char *path, *start, *end, *p;
+  char *uri, *host, *label;
 
   uri = g_file_get_uri (file);
 
@@ -453,7 +453,7 @@ _gtk_file_info_get_icon (GFileInfo *info,
 {
   GIcon *icon;
   GdkPixbuf *pixbuf;
-  const gchar *thumbnail_path;
+  const char *thumbnail_path;
 
   thumbnail_path = g_file_info_get_attribute_byte_string (info, G_FILE_ATTRIBUTE_THUMBNAIL_PATH);
 

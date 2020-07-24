@@ -24,8 +24,8 @@ typedef struct {
   int count;
   int start;
   int end;
-  gchar *text;
-  gchar *new_text;
+  char *text;
+  char *new_text;
   int position;
   int length;
 } EntryData;
@@ -48,7 +48,7 @@ notify (GtkEditable *editable, GParamSpec *pspec, EntryData *data)
 
 static void
 insert_text (GtkEditable *editable,
-             const gchar *new_text,
+             const char *new_text,
              int          new_text_length,
              int         *position,
              EntryData   *data)

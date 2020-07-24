@@ -115,12 +115,12 @@ GtkWidget *            gtk_stack_new                     (void);
 GDK_AVAILABLE_IN_ALL
 GtkStackPage *         gtk_stack_add_named               (GtkStack               *stack,
                                                           GtkWidget              *child,
-                                                          const gchar            *name);
+                                                          const char             *name);
 GDK_AVAILABLE_IN_ALL
 GtkStackPage *         gtk_stack_add_titled              (GtkStack               *stack,
                                                           GtkWidget              *child,
-                                                          const gchar            *name,
-                                                          const gchar            *title);
+                                                          const char             *name,
+                                                          const char             *title);
 GDK_AVAILABLE_IN_ALL
 void                   gtk_stack_remove                  (GtkStack               *stack,
                                                           GtkWidget              *child);
@@ -130,7 +130,7 @@ GtkStackPage *         gtk_stack_get_page                (GtkStack              
                                                           GtkWidget              *child);
 GDK_AVAILABLE_IN_ALL
 GtkWidget *            gtk_stack_get_child_by_name       (GtkStack               *stack,
-                                                          const gchar            *name);
+                                                          const char             *name);
 GDK_AVAILABLE_IN_ALL
 void                   gtk_stack_set_visible_child       (GtkStack               *stack,
                                                           GtkWidget              *child);
@@ -138,12 +138,12 @@ GDK_AVAILABLE_IN_ALL
 GtkWidget *            gtk_stack_get_visible_child       (GtkStack               *stack);
 GDK_AVAILABLE_IN_ALL
 void                   gtk_stack_set_visible_child_name  (GtkStack               *stack,
-                                                          const gchar            *name);
+                                                          const char             *name);
 GDK_AVAILABLE_IN_ALL
-const gchar *          gtk_stack_get_visible_child_name  (GtkStack               *stack);
+const char *          gtk_stack_get_visible_child_name  (GtkStack               *stack);
 GDK_AVAILABLE_IN_ALL
 void                   gtk_stack_set_visible_child_full  (GtkStack               *stack,
-                                                          const gchar            *name,
+                                                          const char             *name,
                                                           GtkStackTransitionType  transition);
 GDK_AVAILABLE_IN_ALL
 void                   gtk_stack_set_hhomogeneous        (GtkStack               *stack,

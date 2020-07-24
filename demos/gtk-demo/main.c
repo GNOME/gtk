@@ -13,7 +13,7 @@
 static GtkWidget *info_view;
 static GtkWidget *source_view;
 
-static gchar *current_file = NULL;
+static char *current_file = NULL;
 
 static GtkWidget *notebook;
 static GtkSingleSelection *selection;
@@ -141,7 +141,7 @@ activate_about (GSimpleAction *action,
                 gpointer       user_data)
 {
   GtkApplication *app = user_data;
-  const gchar *authors[] = {
+  const char *authors[] = {
     "The GTK Team",
     NULL
   };
@@ -254,7 +254,7 @@ static const char *types[] =
   "void",
   " int ",
   " char ",
-  "gchar ",
+  "char ",
   "gfloat",
   "float",
   "double",
@@ -384,14 +384,14 @@ static const char *control[] =
   NULL
 };
 void
-parse_chars (gchar       *text,
-             gchar      **end_ptr,
+parse_chars (char        *text,
+             char       **end_ptr,
              int         *state,
              const char **tag,
              gboolean     start)
 {
   int i;
-  gchar *next_token;
+  char *next_token;
 
   /* Handle comments first */
   if (*state == STATE_IN_COMMENT)
@@ -525,8 +525,8 @@ fontify (GtkTextBuffer *source_buffer)
 {
   GtkTextIter start_iter, next_iter, tmp_iter;
   int state;
-  gchar *text;
-  gchar *start_ptr, *end_ptr;
+  char *text;
+  char *start_ptr, *end_ptr;
   const char *tag;
 
   gtk_text_buffer_create_tag (source_buffer, "source",
@@ -694,10 +694,10 @@ static struct {
 };
 
 static void
-add_data_tab (const gchar *demoname)
+add_data_tab (const char *demoname)
 {
-  gchar *resource_dir, *resource_name;
-  gchar **resources;
+  char *resource_dir, *resource_name;
+  char **resources;
   GtkWidget *widget, *label;
   guint i, j;
 
@@ -748,8 +748,8 @@ remove_data_tabs (void)
 }
 
 void
-load_file (const gchar *demoname,
-           const gchar *filename)
+load_file (const char *demoname,
+           const char *filename)
 {
   GtkTextBuffer *info_buffer, *source_buffer;
   GtkTextIter start, end;
@@ -757,7 +757,7 @@ load_file (const gchar *demoname,
   GError *err = NULL;
   int state = 0;
   gboolean in_para = 0;
-  gchar **lines;
+  char **lines;
   GBytes *bytes;
   int i;
 
@@ -799,9 +799,9 @@ load_file (const gchar *demoname,
   gtk_text_buffer_get_iter_at_offset (info_buffer, &start, 0);
   for (i = 0; lines[i] != NULL; i++)
     {
-      gchar *p;
-      gchar *q;
-      gchar *r;
+      char *p;
+      char *q;
+      char *r;
 
       /* Make sure \r is stripped at the end for the poor windows people */
       lines[i] = g_strchomp (lines[i]);
@@ -1194,7 +1194,7 @@ command_line (GApplication            *app,
               GApplicationCommandLine *cmdline)
 {
   GVariantDict *options;
-  const gchar *name = NULL;
+  const char *name = NULL;
   gboolean autoquit = FALSE;
   gboolean list = FALSE;
   DemoData *d, *c;
@@ -1297,8 +1297,8 @@ main (int argc, char **argv)
     { "inspector", activate_inspector, NULL, NULL, NULL },
   };
   struct {
-    const gchar *action_and_target;
-    const gchar *accelerators[2];
+    const char *action_and_target;
+    const char *accelerators[2];
   } accels[] = {
     { "app.about", { "F1", NULL } },
     { "app.quit", { "<Control>q", NULL } },

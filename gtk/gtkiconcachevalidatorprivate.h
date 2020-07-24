@@ -28,7 +28,7 @@ enum {
 };
 
 typedef struct {
-  const gchar *cache;
+  const char *cache;
   gsize cache_size;
   guint32 n_directories;
   int flags;

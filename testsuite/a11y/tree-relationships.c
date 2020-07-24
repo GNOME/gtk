@@ -20,7 +20,7 @@
 
 #include <gtk/gtk.h>
 
-const gchar list_ui[] =
+const char list_ui[] =
   "<interface>"
   "  <object class='GtkListStore' id='liststore1'>"
   "    <columns>"
@@ -105,7 +105,7 @@ builder_get_toplevel (GtkBuilder *builder)
   return window;
 }
 
-const gchar tree_ui[] =
+const char tree_ui[] =
   "<interface>"
   "  <object class='GtkTreeStore' id='treestore1'>"
   "    <columns>"
@@ -235,7 +235,7 @@ test_a11y_tree_focus (void)
   SignalData data;
   AtkObject *accessible;
   AtkObject *child;
-  gchar *text;
+  char *text;
 
   builder = gtk_builder_new ();
   gtk_builder_add_from_string (builder, tree_ui, -1, &error);
@@ -284,7 +284,7 @@ find_root_accessible (GtkTreeView *tv, const char *name)
   {
     AtkObject *child = atk_object_ref_accessible_child (tvaccessible, i);
     AtkObject *item;
-    gchar *text;
+    char *text;
     if (!child)
       return NULL;
     item = atk_object_ref_accessible_child (child, 0);

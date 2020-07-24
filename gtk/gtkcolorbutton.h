@@ -54,9 +54,9 @@ GDK_AVAILABLE_IN_ALL
 GtkWidget *  gtk_color_button_new_with_rgba (const GdkRGBA  *rgba);
 GDK_AVAILABLE_IN_ALL
 void         gtk_color_button_set_title     (GtkColorButton *button,
-                                             const gchar    *title);
+                                             const char     *title);
 GDK_AVAILABLE_IN_ALL
-const gchar *gtk_color_button_get_title     (GtkColorButton *button);
+const char *gtk_color_button_get_title     (GtkColorButton *button);
 
 GDK_AVAILABLE_IN_ALL
 gboolean     gtk_color_button_get_modal        (GtkColorButton *button);

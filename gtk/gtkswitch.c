@@ -364,7 +364,7 @@ gtk_switch_allocate (GtkWidget *widget,
 
 static void
 gtk_switch_set_action_name (GtkActionable *actionable,
-                            const gchar   *action_name)
+                            const char    *action_name)
 {
   GtkSwitch *self = GTK_SWITCH (actionable);
 
@@ -386,7 +386,7 @@ gtk_switch_set_action_target_value (GtkActionable *actionable,
   gtk_action_helper_set_action_target_value (self->action_helper, action_target);
 }
 
-static const gchar *
+static const char *
 gtk_switch_get_action_name (GtkActionable *actionable)
 {
   GtkSwitch *self = GTK_SWITCH (actionable);

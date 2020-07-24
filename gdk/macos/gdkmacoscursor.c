@@ -84,7 +84,7 @@ CUSTOM_CURSOR_CTOR(gdkZoomOutCursor, 43)
 @end
 
 struct CursorsByName {
-  const gchar *name;
+  const char *name;
   NSString *selector;
 };
 

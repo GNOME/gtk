@@ -48,7 +48,7 @@ create_model (void)
 
   for (i = 0; i < N_ROWS; i++)
     {
-      gchar *str;
+      char *str;
 
       str = g_strdup_printf ("Row %d", i);
       gtk_list_store_insert_with_values (store, NULL, i,
@@ -94,7 +94,7 @@ static void
 combo_box_changed (GtkComboBox *combo_box,
                    gpointer     user_data)
 {
-  gchar *str;
+  char *str;
   GList *list;
   GList *columns;
 

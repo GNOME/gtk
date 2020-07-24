@@ -55,7 +55,7 @@ struct _GtkIMContextWaylandClass
 };
 
 struct preedit {
-  gchar *text;
+  char *text;
   int cursor_begin;
   int cursor_end;
 };
@@ -75,7 +75,7 @@ struct _GtkIMContextWayland
   gdouble press_y;
 
   struct {
-    gchar *text;
+    char *text;
     int cursor_idx;
     int anchor_idx;
   } surrounding;
@@ -87,7 +87,7 @@ struct _GtkIMContextWayland
   struct preedit current_preedit;
   struct preedit pending_preedit;
 
-  gchar *pending_commit;
+  char *pending_commit;
 
   cairo_rectangle_int_t cursor_rect;
   guint use_preedit : 1;
@@ -278,7 +278,7 @@ notify_surrounding_text (GtkIMContextWayland *context)
 {
 #define MAX_LEN 4000
   GtkIMContextWaylandGlobal *global;
-  const gchar *start, *end;
+  const char *start, *end;
   int len, cursor, anchor;
   char *str = NULL;
 
@@ -570,7 +570,7 @@ gtk_im_context_wayland_set_client_widget (GtkIMContext *context,
 
 static void
 gtk_im_context_wayland_get_preedit_string (GtkIMContext   *context,
-                                           gchar         **str,
+                                           char          **str,
                                            PangoAttrList **attrs,
                                            int            *cursor_pos)
 {
@@ -858,7 +858,7 @@ gtk_im_context_wayland_set_use_preedit (GtkIMContext *context,
 
 static void
 gtk_im_context_wayland_set_surrounding (GtkIMContext *context,
-                                        const gchar  *text,
+                                        const char   *text,
                                         int           len,
                                         int           cursor_index)
 {
@@ -882,7 +882,7 @@ gtk_im_context_wayland_set_surrounding (GtkIMContext *context,
 
 static gboolean
 gtk_im_context_wayland_get_surrounding (GtkIMContext  *context,
-                                        gchar        **text,
+                                        char         **text,
                                         int           *cursor_index)
 {
   GtkIMContextWayland *context_wayland;

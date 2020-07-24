@@ -180,7 +180,7 @@
  *                                        &iter);
  * while (valid)
  *  {
- *    gchar *str_data;
+ *    char *str_data;
  *    int    int_data;
  *
  *    // Make sure you terminate calls to gtk_tree_model_get() with a “-1” value
@@ -626,11 +626,11 @@ gtk_tree_path_new (void)
  * Returns: A newly-created #GtkTreePath-struct, or %NULL
  */
 GtkTreePath *
-gtk_tree_path_new_from_string (const gchar *path)
+gtk_tree_path_new_from_string (const char *path)
 {
   GtkTreePath *retval;
-  const gchar *orig_path = path;
-  gchar *ptr;
+  const char *orig_path = path;
+  char *ptr;
   int i;
 
   g_return_val_if_fail (path != NULL, NULL);
@@ -736,10 +736,10 @@ gtk_tree_path_new_from_indicesv (int *indices,
  * Returns: A newly-allocated string.
  *     Must be freed with g_free().
  */
-gchar *
+char *
 gtk_tree_path_to_string (GtkTreePath *path)
 {
-  gchar *retval, *ptr, *end;
+  char *retval, *ptr, *end;
   int i, n;
 
   g_return_val_if_fail (path != NULL, NULL);
@@ -748,7 +748,7 @@ gtk_tree_path_to_string (GtkTreePath *path)
     return NULL;
 
   n = path->depth * 12;
-  ptr = retval = g_new0 (gchar, n);
+  ptr = retval = g_new0 (char, n);
   end = ptr + n;
   g_snprintf (retval, end - ptr, "%d", path->indices[0]);
   while (*ptr != '\000')
@@ -1286,7 +1286,7 @@ gtk_tree_model_get_iter (GtkTreeModel *tree_model,
 gboolean
 gtk_tree_model_get_iter_from_string (GtkTreeModel *tree_model,
                                      GtkTreeIter  *iter,
-                                     const gchar  *path_string)
+                                     const char   *path_string)
 {
   gboolean retval;
   GtkTreePath *path;
@@ -1319,12 +1319,12 @@ gtk_tree_model_get_iter_from_string (GtkTreeModel *tree_model,
  * Returns: a newly-allocated string.
  *     Must be freed with g_free().
  */
-gchar *
+char *
 gtk_tree_model_get_string_from_iter (GtkTreeModel *tree_model,
                                      GtkTreeIter  *iter)
 {
   GtkTreePath *path;
-  gchar *ret;
+  char *ret;
 
   g_return_val_if_fail (GTK_IS_TREE_MODEL (tree_model), NULL);
   g_return_val_if_fail (iter != NULL, NULL);
@@ -1785,7 +1785,7 @@ gtk_tree_model_get_valist (GtkTreeModel *tree_model,
   while (column != -1)
     {
       GValue value = G_VALUE_INIT;
-      gchar *error = NULL;
+      char *error = NULL;
 
       if (column >= gtk_tree_model_get_n_columns (tree_model))
         {

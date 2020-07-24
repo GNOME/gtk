@@ -118,7 +118,7 @@ static void paper_size_changed                   (GtkDropDown            *combo_
 static void load_print_backends                  (GtkPageSetupUnixDialog *dialog);
 
 
-static const gchar common_paper_sizes[][16] = {
+static const char common_paper_sizes[][16] = {
   "na_letter",
   "na_legal",
   "iso_a4",
@@ -601,13 +601,13 @@ printer_changed_callback (GtkDropDown            *combo_box,
 /* We do this munging because we don't want to show zero digits
    after the decimal point, and not to many such digits if they
    are nonzero. I wish printf let you specify max precision for %f... */
-static gchar *
+static char *
 double_to_string (gdouble d,
                   GtkUnit unit)
 {
-  gchar *val, *p;
+  char *val, *p;
   struct lconv *locale_data;
-  const gchar *decimal_point;
+  const char *decimal_point;
   int decimal_point_len;
 
   locale_data = localeconv ();
@@ -658,10 +658,10 @@ paper_size_changed (GtkDropDown            *combo_box,
   GtkPageSetup *page_setup, *last_page_setup;
   guint selected;
   GtkUnit unit;
-  gchar *str, *w, *h;
-  gchar *top, *bottom, *left, *right;
+  char *str, *w, *h;
+  char *top, *bottom, *left, *right;
   GtkLabel *label;
-  const gchar *unit_str;
+  const char *unit_str;
 
   label = GTK_LABEL (dialog->paper_size_label);
 
@@ -764,7 +764,7 @@ paper_size_changed (GtkDropDown            *combo_box,
  * Returns: the new #GtkPageSetupUnixDialog
  */
 GtkWidget *
-gtk_page_setup_unix_dialog_new (const gchar *title,
+gtk_page_setup_unix_dialog_new (const char *title,
                                 GtkWindow   *parent)
 {
   GtkWidget *result;
@@ -858,7 +858,7 @@ gtk_page_setup_unix_dialog_get_page_setup (GtkPageSetupUnixDialog *dialog)
 
 static gboolean
 set_active_printer (GtkPageSetupUnixDialog *dialog,
-                    const gchar            *printer_name)
+                    const char             *printer_name)
 {
   GtkTreeModel *model;
   GtkTreeIter iter;
@@ -903,7 +903,7 @@ void
 gtk_page_setup_unix_dialog_set_print_settings (GtkPageSetupUnixDialog *dialog,
                                                GtkPrintSettings       *print_settings)
 {
-  const gchar *format_for_printer;
+  const char *format_for_printer;
 
   if (dialog->print_settings == print_settings) return;
 

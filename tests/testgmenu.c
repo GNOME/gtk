@@ -32,7 +32,7 @@
 
 /* The example menu {{{1 */
 
-static const gchar menu_markup[] =
+static const char menu_markup[] =
   "<interface>\n"
   "<menu id='edit-menu'>\n"
   "  <section>\n"
@@ -199,7 +199,7 @@ enabled_cell_func (GtkTreeViewColumn *column,
                    gpointer           data)
 {
   GActionGroup *group = data;
-  gchar *name;
+  char *name;
   gboolean enabled;
 
   gtk_tree_model_get (model, iter, 0, &name, -1);
@@ -217,7 +217,7 @@ state_cell_func (GtkTreeViewColumn *column,
                  gpointer           data)
 {
   GActionGroup *group = data;
-  gchar *name;
+  char *name;
   GVariant *state;
 
   gtk_tree_model_get (model, iter, 0, &name, -1);
@@ -251,12 +251,12 @@ state_cell_func (GtkTreeViewColumn *column,
 
 static void
 enabled_cell_toggled (GtkCellRendererToggle *cell,
-                      const gchar           *path_str,
+                      const char            *path_str,
                       GtkTreeModel          *model)
 {
   GActionGroup *group;
   GAction *action;
-  gchar *name;
+  char *name;
   GtkTreePath *path;
   GtkTreeIter iter;
   gboolean enabled;
@@ -278,12 +278,12 @@ enabled_cell_toggled (GtkCellRendererToggle *cell,
 
 static void
 state_cell_toggled (GtkCellRendererToggle *cell,
-                    const gchar           *path_str,
+                    const char            *path_str,
                     GtkTreeModel          *model)
 {
   GActionGroup *group;
   GAction *action;
-  gchar *name;
+  char *name;
   GtkTreePath *path;
   GtkTreeIter iter;
   GVariant *state;
@@ -317,13 +317,13 @@ state_cell_toggled (GtkCellRendererToggle *cell,
 
 static void
 state_cell_edited (GtkCellRendererCombo  *cell,
-                   const gchar           *path_str,
-                   const gchar           *new_text,
+                   const char            *path_str,
+                   const char            *new_text,
                    GtkTreeModel          *model)
 {
   GActionGroup *group;
   GAction *action;
-  gchar *name;
+  char *name;
   GtkTreePath *path;
   GtkTreeIter iter;
 
@@ -349,7 +349,7 @@ create_action_treeview (GActionGroup *group)
   GtkTreeIter iter;
   GtkTreeViewColumn *column;
   GtkCellRenderer *cell;
-  gchar **group_actions;
+  char **group_actions;
   int i;
 
   store = gtk_list_store_new (2, G_TYPE_STRING, G_TYPE_STRING);
@@ -438,7 +438,7 @@ toggle_sumerian (GtkToggleButton *button, gpointer data)
 
 static void
 action_list_add (GtkTreeModel *store,
-                 const gchar  *action)
+                 const char   *action)
 {
   GtkTreeIter iter;
 
@@ -448,10 +448,10 @@ action_list_add (GtkTreeModel *store,
 
 static void
 action_list_remove (GtkTreeModel *store,
-                    const gchar  *action)
+                    const char   *action)
 {
   GtkTreeIter iter;
-  gchar *text;
+  char *text;
 
   gtk_tree_model_get_iter_first (store, &iter);
   do {

@@ -23,10 +23,10 @@
 typedef struct _ListSort ListSort;
 struct _ListSort
 {
-  const gchar *word_1;
-  const gchar *word_2;
-  const gchar *word_3;
-  const gchar *word_4;
+  const char *word_1;
+  const char *word_2;
+  const char *word_3;
+  const char *word_4;
   int number_1;
 };
 

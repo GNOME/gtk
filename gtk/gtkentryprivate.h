@@ -50,7 +50,7 @@ struct _GtkEntryCompletion
   int minimum_key_length;
   int text_column;
 
-  gchar *case_normalized_key;
+  char *case_normalized_key;
 
   GtkEventController *entry_key_controller;
   GtkEventController *entry_focus_controller;
@@ -74,7 +74,7 @@ struct _GtkEntryCompletion
   guint inline_selection   : 1;
   guint has_grab           : 1;
 
-  gchar *completion_prefix;
+  char *completion_prefix;
 
   GSource *check_completion_idle;
 };
@@ -89,7 +89,7 @@ struct _GtkEntryCompletionClass
   void     (* action_activated) (GtkEntryCompletion *completion,
                                  int                 index_);
   gboolean (* insert_prefix)    (GtkEntryCompletion *completion,
-                                 const gchar        *prefix);
+                                 const char         *prefix);
   gboolean (* cursor_on_match)  (GtkEntryCompletion *completion,
                                  GtkTreeModel       *model,
                                  GtkTreeIter        *iter);

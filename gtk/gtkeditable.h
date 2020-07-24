@@ -49,7 +49,7 @@ struct _GtkEditableInterface
 
   /* signals */
   void (* insert_text)              (GtkEditable    *editable,
-                                     const gchar    *text,
+                                     const char     *text,
                                      int             length,
                                      int            *position);
   void (* delete_text)              (GtkEditable    *editable,

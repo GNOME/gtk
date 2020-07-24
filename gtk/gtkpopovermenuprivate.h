@@ -38,7 +38,7 @@ void  gtk_popover_menu_add_submenu (GtkPopoverMenu *popover,
                                     GtkWidget      *submenu,
                                     const char     *name);
 void gtk_popover_menu_open_submenu (GtkPopoverMenu *popover,
-                                    const gchar    *name);
+                                    const char     *name);
 
 G_END_DECLS
 

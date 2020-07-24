@@ -107,7 +107,7 @@ struct _GtkFontChooserWidget
   GtkWidget       *preview;
   GtkWidget       *preview2;
   GtkWidget       *font_name_label;
-  gchar           *preview_text;
+  char            *preview_text;
   gboolean         show_preview_entry;
 
   GtkWidget *size_label;
@@ -160,9 +160,9 @@ static void gtk_font_chooser_widget_get_property         (GObject         *objec
                                                           GParamSpec      *pspec);
 static void gtk_font_chooser_widget_finalize             (GObject         *object);
 
-static gchar   *gtk_font_chooser_widget_get_font         (GtkFontChooserWidget *fontchooser);
+static char    *gtk_font_chooser_widget_get_font         (GtkFontChooserWidget *fontchooser);
 static void     gtk_font_chooser_widget_set_font         (GtkFontChooserWidget *fontchooser,
-                                                          const gchar          *fontname);
+                                                          const char           *fontname);
 
 static PangoFontDescription *gtk_font_chooser_widget_get_font_desc  (GtkFontChooserWidget *fontchooser);
 static void                  gtk_font_chooser_widget_merge_font_desc(GtkFontChooserWidget       *fontchooser,
@@ -171,9 +171,9 @@ static void                  gtk_font_chooser_widget_take_font_desc (GtkFontChoo
                                                                      PangoFontDescription *font_desc);
 
 
-static const gchar *gtk_font_chooser_widget_get_preview_text (GtkFontChooserWidget *fontchooser);
+static const char *gtk_font_chooser_widget_get_preview_text (GtkFontChooserWidget *fontchooser);
 static void         gtk_font_chooser_widget_set_preview_text (GtkFontChooserWidget *fontchooser,
-                                                              const gchar          *text);
+                                                              const char           *text);
 
 static gboolean gtk_font_chooser_widget_get_show_preview_entry (GtkFontChooserWidget *fontchooser);
 static void     gtk_font_chooser_widget_set_show_preview_entry (GtkFontChooserWidget *fontchooser,
@@ -309,7 +309,7 @@ output_cb (GtkSpinButton *spin,
            gpointer       data)
 {
   GtkAdjustment *adjustment;
-  gchar *text;
+  char *text;
   gdouble value;
 
   adjustment = gtk_spin_button_get_adjustment (spin);
@@ -412,7 +412,7 @@ row_activated_cb (GtkWidget *view,
                   gpointer   user_data)
 {
   GtkFontChooserWidget *fontchooser = user_data;
-  gchar *fontname;
+  char *fontname;
 
   fontname = gtk_font_chooser_widget_get_font (fontchooser);
   _gtk_font_chooser_font_activated (GTK_FONT_CHOOSER (fontchooser), fontname);
@@ -967,7 +967,7 @@ gtk_font_chooser_widget_get_size (GtkFontChooser *chooser)
   return -1;
 }
 
-static gchar *
+static char *
 gtk_font_chooser_widget_get_font (GtkFontChooserWidget *fontchooser)
 {
   PangoFontDescription *desc = gtk_font_chooser_widget_get_font_desc (fontchooser);
@@ -989,7 +989,7 @@ gtk_font_chooser_widget_get_font_desc (GtkFontChooserWidget *self)
 
 static void
 gtk_font_chooser_widget_set_font (GtkFontChooserWidget *fontchooser,
-                                  const gchar          *fontname)
+                                  const char           *fontname)
 {
   PangoFontDescription *font_desc;
 
@@ -1871,7 +1871,7 @@ gtk_font_chooser_widget_take_font_desc (GtkFontChooserWidget *fontchooser,
   pango_font_description_free (font_desc);
 }
 
-static const gchar*
+static const char *
 gtk_font_chooser_widget_get_preview_text (GtkFontChooserWidget *fontchooser)
 {
 
@@ -1880,7 +1880,7 @@ gtk_font_chooser_widget_get_preview_text (GtkFontChooserWidget *fontchooser)
 
 static void
 gtk_font_chooser_widget_set_preview_text (GtkFontChooserWidget *fontchooser,
-                                          const gchar          *text)
+                                          const char           *text)
 {
   g_free (fontchooser->preview_text);
   fontchooser->preview_text = g_strdup (text);

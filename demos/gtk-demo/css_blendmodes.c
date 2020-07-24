@@ -38,14 +38,14 @@ struct {
 #pragma GCC diagnostic ignored "-Wformat-nonliteral"
 static void
 update_css_for_blend_mode (GtkCssProvider *provider,
-                           const gchar    *blend_mode)
+                           const char     *blend_mode)
 {
   GBytes *bytes;
-  gchar *css;
+  char *css;
 
   bytes = g_resources_lookup_data ("/css_blendmodes/css_blendmodes.css", 0, NULL);
 
-  css = g_strdup_printf ((gchar*) g_bytes_get_data (bytes, NULL),
+  css = g_strdup_printf ((char *) g_bytes_get_data (bytes, NULL),
                          blend_mode,
                          blend_mode,
                          blend_mode);
@@ -62,7 +62,7 @@ row_activated (GtkListBox     *listbox,
                GtkListBoxRow  *row,
                GtkCssProvider *provider)
 {
-  const gchar *blend_mode;
+  const char *blend_mode;
 
   blend_mode = blend_modes[gtk_list_box_row_get_index (row)].id;
 

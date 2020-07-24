@@ -188,7 +188,7 @@ struct _GtkEntryPrivate
 struct _EntryIconInfo
 {
   GtkWidget *widget;
-  gchar *tooltip;
+  char *tooltip;
   guint nonactivatable : 1;
   guint in_drag        : 1;
 
@@ -338,7 +338,7 @@ static gboolean
 gtk_entry_buildable_custom_tag_start (GtkBuildable       *buildable,
                                       GtkBuilder         *builder,
                                       GObject            *child,
-                                      const gchar        *tagname,
+                                      const char         *tagname,
                                       GtkBuildableParser *parser,
                                       gpointer           *data)
 {
@@ -364,7 +364,7 @@ static void
 gtk_entry_buildable_custom_finished (GtkBuildable *buildable,
                                      GtkBuilder   *builder,
                                      GObject      *child,
-                                     const gchar  *tagname,
+                                     const char   *tagname,
                                      gpointer      user_data)
 {
   GtkPangoAttributeParserData *data = user_data;
@@ -1434,7 +1434,7 @@ update_icon_style (GtkWidget            *widget,
   GtkEntry *entry = GTK_ENTRY (widget);
   GtkEntryPrivate *priv = gtk_entry_get_instance_private (entry);
   EntryIconInfo *icon_info = priv->icons[icon_pos];
-  const gchar *sides[2] = { GTK_STYLE_CLASS_LEFT, GTK_STYLE_CLASS_RIGHT };
+  const char *sides[2] = { GTK_STYLE_CLASS_LEFT, GTK_STYLE_CLASS_RIGHT };
 
   if (icon_info == NULL)
     return;
@@ -2440,7 +2440,7 @@ gtk_entry_set_icon_from_paintable (GtkEntry             *entry,
 void
 gtk_entry_set_icon_from_icon_name (GtkEntry             *entry,
                                    GtkEntryIconPosition  icon_pos,
-                                   const gchar          *icon_name)
+                                   const char           *icon_name)
 {
   GtkEntryPrivate *priv = gtk_entry_get_instance_private (entry);
   EntryIconInfo *icon_info;
@@ -2662,7 +2662,7 @@ gtk_entry_get_icon_gicon (GtkEntry             *entry,
  * Returns: (nullable): An icon name, or %NULL if no icon is set or if the icon
  *          wasn’t set from an icon name
  */
-const gchar *
+const char *
 gtk_entry_get_icon_name (GtkEntry             *entry,
                          GtkEntryIconPosition  icon_pos)
 {
@@ -2970,13 +2970,13 @@ ensure_has_tooltip (GtkEntry *entry)
  * Returns: (nullable): the tooltip text, or %NULL. Free the returned
  *     string with g_free() when done.
  */
-gchar *
+char *
 gtk_entry_get_icon_tooltip_text (GtkEntry             *entry,
                                  GtkEntryIconPosition  icon_pos)
 {
   GtkEntryPrivate *priv = gtk_entry_get_instance_private (entry);
   EntryIconInfo *icon_info;
-  gchar *text = NULL;
+  char *text = NULL;
 
   g_return_val_if_fail (GTK_IS_ENTRY (entry), NULL);
   g_return_val_if_fail (IS_VALID_ICON_POSITION (icon_pos), NULL);
@@ -3016,7 +3016,7 @@ gtk_entry_get_icon_tooltip_text (GtkEntry             *entry,
 void
 gtk_entry_set_icon_tooltip_text (GtkEntry             *entry,
                                  GtkEntryIconPosition  icon_pos,
-                                 const gchar          *tooltip)
+                                 const char           *tooltip)
 {
   GtkEntryPrivate *priv = gtk_entry_get_instance_private (entry);
   EntryIconInfo *icon_info;
@@ -3056,7 +3056,7 @@ gtk_entry_set_icon_tooltip_text (GtkEntry             *entry,
  * Returns: (nullable): the tooltip text, or %NULL. Free the returned
  *     string with g_free() when done.
  */
-gchar *
+char *
 gtk_entry_get_icon_tooltip_markup (GtkEntry             *entry,
                                    GtkEntryIconPosition  icon_pos)
 {
@@ -3092,7 +3092,7 @@ gtk_entry_get_icon_tooltip_markup (GtkEntry             *entry,
 void
 gtk_entry_set_icon_tooltip_markup (GtkEntry             *entry,
                                    GtkEntryIconPosition  icon_pos,
-                                   const gchar          *tooltip)
+                                   const char           *tooltip)
 {
   GtkEntryPrivate *priv = gtk_entry_get_instance_private (entry);
   EntryIconInfo *icon_info;
@@ -3376,7 +3376,7 @@ gtk_entry_progress_pulse (GtkEntry *entry)
  **/
 void
 gtk_entry_set_placeholder_text (GtkEntry    *entry,
-                                const gchar *text)
+                                const char *text)
 {
   GtkEntryPrivate *priv = gtk_entry_get_instance_private (entry);
 
@@ -3396,7 +3396,7 @@ gtk_entry_set_placeholder_text (GtkEntry    *entry,
  *   not be freed, modified or stored. If no placeholder text has been set,
  *   %NULL will be returned.
  **/
-const gchar *
+const char *
 gtk_entry_get_placeholder_text (GtkEntry *entry)
 {
   GtkEntryPrivate *priv = gtk_entry_get_instance_private (entry);

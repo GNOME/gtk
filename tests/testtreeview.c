@@ -164,7 +164,7 @@ get_model_types (void)
 
 static void
 toggled_callback (GtkCellRendererToggle *celltoggle,
-                  gchar                 *path_string,
+                  char                  *path_string,
                   GtkTreeView           *tree_view)
 {
   GtkTreeModel *model = NULL;
@@ -236,8 +236,8 @@ toggled_callback (GtkCellRendererToggle *celltoggle,
 
 static void
 edited_callback (GtkCellRendererText *renderer,
-		 const gchar   *path_string,
-		 const gchar   *new_text,
+		 const char    *path_string,
+		 const char    *new_text,
 		 GtkTreeView  *tree_view)
 {
   GtkTreeModel *model = NULL;
@@ -545,7 +545,7 @@ typesystem_recurse (GType        type,
   guint n_children = 0;
   int i;
   GtkTreeIter iter;
-  gchar *str;
+  char *str;
   
   gtk_tree_store_append (store, &iter, parent_iter);
 
@@ -958,7 +958,7 @@ gtk_real_model_types_get_value (GtkTreeModel *tree_model,
     {
     case 0:
       {
-        gchar *str;
+        char *str;
         
         g_value_init (value, G_TYPE_STRING);
 

@@ -67,7 +67,7 @@ static void
 calendar_set_signal_strings (char         *sig_str,
 				  CalendarData *data)
 {
-  const gchar *prev_sig;
+  const char *prev_sig;
 
   prev_sig = gtk_label_get_text (GTK_LABEL (data->prev_sig));
   gtk_label_set_text (GTK_LABEL (data->prev2_sig), prev_sig);

@@ -117,7 +117,7 @@ static void gtk_tree_view_column_add_editable_callback         (GtkCellArea     
 								GtkCellRenderer         *renderer,
 								GtkCellEditable         *edit_widget,
 								GdkRectangle            *cell_area,
-								const gchar             *path_string,
+								const char              *path_string,
 								gpointer                 user_data);
 static void gtk_tree_view_column_remove_editable_callback      (GtkCellArea             *area,
 								GtkCellRenderer         *renderer,
@@ -177,7 +177,7 @@ struct _GtkTreeViewColumnPrivate
   int drag_x;
   int drag_y;
 
-  gchar *title;
+  char *title;
 
   /* Sorting */
   gulong      sort_clicked_signal;
@@ -432,7 +432,7 @@ static void
 gtk_tree_view_column_custom_tag_end (GtkBuildable *buildable,
 				     GtkBuilder   *builder,
 				     GObject      *child,
-				     const gchar  *tagname,
+				     const char   *tagname,
 				     gpointer      data)
 {
   /* Just ignore the boolean return from here */
@@ -909,7 +909,7 @@ gtk_tree_view_column_update_button (GtkTreeViewColumn *tree_column)
   GtkWidget *frame;
   GtkWidget *arrow;
   GtkWidget *current_child;
-  const gchar *icon_name = "missing-image";
+  const char *icon_name = "missing-image";
   GtkTreeModel *model;
 
   if (priv->tree_view)
@@ -1251,7 +1251,7 @@ gtk_tree_view_column_add_editable_callback (GtkCellArea       *area,
                                             GtkCellRenderer   *renderer,
                                             GtkCellEditable   *edit_widget,
                                             GdkRectangle      *cell_area,
-                                            const gchar       *path_string,
+                                            const char        *path_string,
                                             gpointer           user_data)
 {
   GtkTreeViewColumn        *column = user_data;
@@ -1552,7 +1552,7 @@ gtk_tree_view_column_new_with_area (GtkCellArea *area)
  * Returns: A newly created #GtkTreeViewColumn.
  **/
 GtkTreeViewColumn *
-gtk_tree_view_column_new_with_attributes (const gchar     *title,
+gtk_tree_view_column_new_with_attributes (const char      *title,
 					  GtkCellRenderer *cell,
 					  ...)
 {
@@ -1636,7 +1636,7 @@ gtk_tree_view_column_clear (GtkTreeViewColumn *tree_column)
 void
 gtk_tree_view_column_add_attribute (GtkTreeViewColumn *tree_column,
 				    GtkCellRenderer   *cell_renderer,
-				    const gchar       *attribute,
+				    const char        *attribute,
 				    int                column)
 {
   gtk_cell_layout_add_attribute (GTK_CELL_LAYOUT (tree_column),
@@ -1649,10 +1649,10 @@ gtk_tree_view_column_set_attributesv (GtkTreeViewColumn *tree_column,
 				      va_list            args)
 {
   GtkTreeViewColumnPrivate *priv = tree_column->priv;
-  gchar *attribute;
+  char *attribute;
   int column;
 
-  attribute = va_arg (args, gchar *);
+  attribute = va_arg (args, char *);
 
   gtk_cell_layout_clear_attributes (GTK_CELL_LAYOUT (priv->cell_area),
                                     cell_renderer);
@@ -1662,7 +1662,7 @@ gtk_tree_view_column_set_attributesv (GtkTreeViewColumn *tree_column,
       column = va_arg (args, int);
       gtk_cell_layout_add_attribute (GTK_CELL_LAYOUT (priv->cell_area),
                                      cell_renderer, attribute, column);
-      attribute = va_arg (args, gchar *);
+      attribute = va_arg (args, char *);
     }
 }
 
@@ -2267,10 +2267,10 @@ gtk_tree_view_column_clicked (GtkTreeViewColumn *tree_column)
  **/
 void
 gtk_tree_view_column_set_title (GtkTreeViewColumn *tree_column,
-				const gchar       *title)
+				const char        *title)
 {
   GtkTreeViewColumnPrivate *priv;
-  gchar                    *new_title;
+  char                     *new_title;
 
   g_return_if_fail (GTK_IS_TREE_VIEW_COLUMN (tree_column));
 
@@ -2293,7 +2293,7 @@ gtk_tree_view_column_set_title (GtkTreeViewColumn *tree_column,
  * Returns: the title of the column. This string should not be
  * modified or freed.
  **/
-const gchar *
+const char *
 gtk_tree_view_column_get_title (GtkTreeViewColumn *tree_column)
 {
   g_return_val_if_fail (GTK_IS_TREE_VIEW_COLUMN (tree_column), NULL);

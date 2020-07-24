@@ -757,7 +757,7 @@ gdk_keymap_translate_keyboard_state (GdkKeymap       *keymap,
  *     of the key, or %NULL if @keyval is not a valid key. The string
  *     should not be modified.
  */
-const gchar *
+const char *
 gdk_keyval_name (guint keyval)
 {
   return _gdk_keyval_name (keyval);
@@ -777,7 +777,7 @@ gdk_keyval_name (guint keyval)
  *     if the key name is not a valid key
  */
 guint
-gdk_keyval_from_name (const gchar *keyval_name)
+gdk_keyval_from_name (const char *keyval_name)
 {
   return _gdk_keyval_from_name (keyval_name);
 }

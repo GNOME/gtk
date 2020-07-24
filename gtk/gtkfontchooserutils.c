@@ -91,7 +91,7 @@ delegate_notify (GObject    *object,
 
 static void
 delegate_font_activated (GtkFontChooser *receiver,
-                         const gchar    *fontname,
+                         const char     *fontname,
                          GtkFontChooser *delegate)
 {
   _gtk_font_chooser_font_activated (delegate, fontname);

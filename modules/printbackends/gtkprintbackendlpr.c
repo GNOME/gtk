@@ -160,7 +160,7 @@ _cairo_write (void                *closure,
 
   while (length > 0) 
     {
-      g_io_channel_write_chars (io, (const gchar*)data, length, &written, &error);
+      g_io_channel_write_chars (io, (const char *)data, length, &written, &error);
 
       if (error != NULL)
 	{
@@ -240,7 +240,7 @@ lpr_write (GIOChannel   *source,
            GIOCondition  con,
            gpointer      user_data)
 {
-  gchar buf[_LPR_MAX_CHUNK_SIZE];
+  char buf[_LPR_MAX_CHUNK_SIZE];
   gsize bytes_read;
   GError *error;
   GIOStatus status;
@@ -305,7 +305,7 @@ gtk_print_backend_lpr_print_stream (GtkPrintBackend        *print_backend,
   GtkPrintSettings *settings;
   int argc;
   int in_fd;
-  gchar **argv = NULL;
+  char **argv = NULL;
   const char *cmd_line;
 
   settings = gtk_print_job_get_settings (job);

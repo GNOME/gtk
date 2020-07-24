@@ -124,13 +124,13 @@ struct _GtkPrintBackendClass
                                                               gpointer             auth_info_default,
                                                               gpointer             auth_info_display,
                                                               gpointer             auth_info_visible,
-                                                              const gchar         *prompt,
+                                                              const char          *prompt,
                                                               gboolean             can_store_auth_info);
 
   /* not a signal */
   void                  (*set_password)                      (GtkPrintBackend     *backend,
-                                                              gchar              **auth_info_required,
-                                                              gchar              **auth_info,
+                                                              char               **auth_info_required,
+                                                              char               **auth_info,
                                                               gboolean             store_auth_info);
 
   gboolean              (*printer_get_hard_margins_for_paper_size) (GtkPrinter    *printer,
@@ -154,7 +154,7 @@ GDK_AVAILABLE_IN_ALL
 gboolean    gtk_print_backend_printer_list_is_done (GtkPrintBackend         *print_backend);
 GDK_AVAILABLE_IN_ALL
 GtkPrinter *gtk_print_backend_find_printer         (GtkPrintBackend         *print_backend,
-						    const gchar             *printer_name);
+						    const char              *printer_name);
 GDK_AVAILABLE_IN_ALL
 void        gtk_print_backend_print_stream         (GtkPrintBackend         *print_backend,
 						    GtkPrintJob             *job,
@@ -168,8 +168,8 @@ GDK_AVAILABLE_IN_ALL
 void        gtk_print_backend_destroy              (GtkPrintBackend         *print_backend);
 GDK_AVAILABLE_IN_ALL
 void        gtk_print_backend_set_password         (GtkPrintBackend         *backend, 
-                                                    gchar                  **auth_info_required,
-                                                    gchar                  **auth_info,
+                                                    char                   **auth_info_required,
+                                                    char                   **auth_info,
                                                     gboolean                 can_store_auth_info);
 
 /* Backend-only functions for GtkPrintBackend */
@@ -213,19 +213,19 @@ void        gtk_printer_set_is_default        (GtkPrinter      *printer,
 					       gboolean         val);
 GDK_AVAILABLE_IN_ALL
 void        gtk_printer_set_icon_name         (GtkPrinter      *printer,
-					       const gchar     *icon);
+					       const char      *icon);
 GDK_AVAILABLE_IN_ALL
 gboolean    gtk_printer_set_job_count         (GtkPrinter      *printer,
 					       int              count);
 GDK_AVAILABLE_IN_ALL
 gboolean    gtk_printer_set_location          (GtkPrinter      *printer,
-					       const gchar     *location);
+					       const char      *location);
 GDK_AVAILABLE_IN_ALL
 gboolean    gtk_printer_set_description       (GtkPrinter      *printer,
-					       const gchar     *description);
+					       const char      *description);
 GDK_AVAILABLE_IN_ALL
 gboolean    gtk_printer_set_state_message     (GtkPrinter      *printer,
-					       const gchar     *message);
+					       const char      *message);
 
 void        gtk_print_backends_init (void);
 

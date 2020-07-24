@@ -75,7 +75,7 @@ struct _GtkTextClass
                                int              count,
                                gboolean         extend);
   void (* insert_at_cursor)   (GtkText         *self,
-                               const gchar     *str);
+                               const char      *str);
   void (* delete_from_cursor) (GtkText         *self,
                                GtkDeleteType    type,
                                int              count);

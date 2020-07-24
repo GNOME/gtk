@@ -83,7 +83,7 @@ struct _GdkMacosDisplayClass
 };
 
 
-GdkDisplay      *_gdk_macos_display_open                           (const gchar     *display_name);
+GdkDisplay      *_gdk_macos_display_open                           (const char      *display_name);
 int              _gdk_macos_display_get_fd                         (GdkMacosDisplay *self);
 void             _gdk_macos_display_queue_events                   (GdkMacosDisplay *self);
 void             _gdk_macos_display_to_display_coords              (GdkMacosDisplay *self,
@@ -129,7 +129,7 @@ NSWindow        *_gdk_macos_display_find_native_under_pointer      (GdkMacosDisp
                                                                     int             *x,
                                                                     int             *y);
 gboolean         _gdk_macos_display_get_setting                    (GdkMacosDisplay *self,
-                                                                    const gchar     *setting,
+                                                                    const char      *setting,
                                                                     GValue          *value);
 void             _gdk_macos_display_reload_settings                (GdkMacosDisplay *self);
 void             _gdk_macos_display_surface_resigned_main          (GdkMacosDisplay *self,

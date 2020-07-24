@@ -39,12 +39,12 @@ GtkActionHelper *       gtk_action_helper_new                           (GtkActi
 
 G_GNUC_INTERNAL
 void                    gtk_action_helper_set_action_name               (GtkActionHelper *helper,
-                                                                         const gchar     *action_name);
+                                                                         const char      *action_name);
 G_GNUC_INTERNAL
 void                    gtk_action_helper_set_action_target_value       (GtkActionHelper *helper,
                                                                          GVariant        *action_target);
 G_GNUC_INTERNAL
-const gchar *           gtk_action_helper_get_action_name               (GtkActionHelper *helper);
+const char *           gtk_action_helper_get_action_name               (GtkActionHelper *helper);
 G_GNUC_INTERNAL
 GVariant *              gtk_action_helper_get_action_target_value       (GtkActionHelper *helper);
 

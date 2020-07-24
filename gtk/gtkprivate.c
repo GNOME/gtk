@@ -35,31 +35,31 @@
 
 #if !defined G_OS_WIN32 && !(defined GDK_WINDOWING_QUARTZ && defined QUARTZ_RELOCATION)
 
-const gchar *
+const char *
 _gtk_get_datadir (void)
 {
   return GTK_DATADIR;
 }
 
-const gchar *
+const char *
 _gtk_get_libdir (void)
 {
   return GTK_LIBDIR;
 }
 
-const gchar *
+const char *
 _gtk_get_sysconfdir (void)
 {
   return GTK_SYSCONFDIR;
 }
 
-const gchar *
+const char *
 _gtk_get_localedir (void)
 {
   return GTK_LOCALEDIR;
 }
 
-const gchar *
+const char *
 _gtk_get_data_prefix (void)
 {
   return GTK_DATA_PREFIX;
@@ -92,7 +92,7 @@ _gtk_get_data_prefix (void)
  * Returns: a dynamically allocated string, free with g_free().
  */
 
-gchar *
+char *
 _gtk_get_lc_ctype (void)
 {
 #ifdef G_OS_WIN32
@@ -106,7 +106,7 @@ _gtk_get_lc_ctype (void)
    * don't have to clickety-click in the Control Panel, you can simply
    * start the program with LC_ALL=something on the command line.)
    */
-  gchar *p;
+  char *p;
 
   p = getenv ("LC_ALL");
   if (p != NULL)
@@ -149,7 +149,7 @@ _gtk_single_string_accumulator (GSignalInvocationHint *ihint,
 				gpointer               dummy)
 {
   gboolean continue_emission;
-  const gchar *str;
+  const char *str;
 
   str = g_value_get_string (handler_return);
   g_value_set_string (return_accu, str);

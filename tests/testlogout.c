@@ -12,7 +12,7 @@ static void
 inhibitor_toggled (GtkToggleButton *button, GtkApplication *app)
 {
   gboolean active;
-  const gchar *reason;
+  const char *reason;
   GtkApplicationInhibitFlags flags;
   GtkWidget *toplevel;
   guint cookie;
@@ -34,7 +34,7 @@ inhibitor_toggled (GtkToggleButton *button, GtkApplication *app)
 
   if (active)
     {
-      gchar *text;
+      char *text;
 
       g_print ("Calling gtk_application_inhibit: %d, '%s'\n", flags, reason);
 

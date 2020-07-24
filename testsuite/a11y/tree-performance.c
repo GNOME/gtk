@@ -22,7 +22,7 @@
 
 #define N_ROWS 10000
 
-const gchar list_ui[] =
+const char list_ui[] =
   "<interface>"
   "  <object class='GtkListStore' id='liststore1'>"
   "    <columns>"
@@ -205,7 +205,7 @@ test_a11y_performance_list (void)
   g_test_message ("%d accessibles before, %d after\n", count_before, count_after);
 }
 
-const gchar tree_ui[] =
+const char tree_ui[] =
   "<interface>"
   "  <object class='GtkTreeStore' id='treestore1'>"
   "    <columns>"

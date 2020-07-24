@@ -57,8 +57,8 @@ void gtk_inspector_prop_list_set_layout_child (GtkInspectorPropList *pl,
                                                GObject              *object);
 
 void strdup_value_contents (const GValue  *value,
-                            gchar        **contents,
-                            gchar        **type);
+                            char         **contents,
+                            char         **type);
 
 
 

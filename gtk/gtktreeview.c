@@ -831,13 +831,13 @@ static gboolean gtk_tree_view_search_move               (GtkWidget        *windo
 							 gboolean          up);
 static gboolean gtk_tree_view_search_equal_func         (GtkTreeModel     *model,
 							 int               column,
-							 const gchar      *key,
+							 const char       *key,
 							 GtkTreeIter      *iter,
 							 gpointer          search_data);
 static gboolean gtk_tree_view_search_iter               (GtkTreeModel     *model,
 							 GtkTreeSelection *selection,
 							 GtkTreeIter      *iter,
-							 const gchar      *text,
+							 const char       *text,
 							 int              *count,
 							 int               n);
 static void     gtk_tree_view_search_init               (GtkWidget        *entry,
@@ -863,10 +863,10 @@ static GtkTreeViewColumn *gtk_tree_view_get_drop_column (GtkTreeView       *tree
 static void     gtk_tree_view_buildable_add_child          (GtkBuildable      *tree_view,
 							    GtkBuilder        *builder,
 							    GObject           *child,
-							    const gchar       *type);
+							    const char        *type);
 static GObject *gtk_tree_view_buildable_get_internal_child (GtkBuildable      *buildable,
 							    GtkBuilder        *builder,
-							    const gchar       *childname);
+							    const char        *childname);
 static void     gtk_tree_view_buildable_init               (GtkBuildableIface *iface);
 
 /* GtkScrollable */
@@ -1975,7 +1975,7 @@ static void
 gtk_tree_view_buildable_add_child (GtkBuildable *tree_view,
 				   GtkBuilder  *builder,
 				   GObject     *child,
-				   const gchar *type)
+				   const char *type)
 {
   if (GTK_IS_TREE_VIEW_COLUMN (child))
     gtk_tree_view_append_column (GTK_TREE_VIEW (tree_view), GTK_TREE_VIEW_COLUMN (child));
@@ -1986,7 +1986,7 @@ gtk_tree_view_buildable_add_child (GtkBuildable *tree_view,
 static GObject *
 gtk_tree_view_buildable_get_internal_child (GtkBuildable      *buildable,
 					    GtkBuilder        *builder,
-					    const gchar       *childname)
+					    const char        *childname)
 {
   GtkTreeView *tree_view = GTK_TREE_VIEW (buildable);
   GtkTreeViewPrivate *priv = gtk_tree_view_get_instance_private (tree_view);
@@ -6761,7 +6761,7 @@ remove_scroll_timeout (GtkTreeView *tree_view)
 static gboolean
 check_model_dnd (GtkTreeModel *model,
                  GType         required_iface,
-                 const gchar  *signal)
+                 const char   *signal)
 {
   if (model == NULL || !G_TYPE_CHECK_INSTANCE_TYPE ((model), required_iface))
     {
@@ -10863,13 +10863,13 @@ gtk_tree_view_insert_column (GtkTreeView       *tree_view,
 int
 gtk_tree_view_insert_column_with_attributes (GtkTreeView     *tree_view,
 					     int              position,
-					     const gchar     *title,
+					     const char      *title,
 					     GtkCellRenderer *cell,
 					     ...)
 {
   GtkTreeViewPrivate *priv = gtk_tree_view_get_instance_private (tree_view);
   GtkTreeViewColumn *column;
-  gchar *attribute;
+  char *attribute;
   va_list args;
   int column_id;
 
@@ -10884,13 +10884,13 @@ gtk_tree_view_insert_column_with_attributes (GtkTreeView     *tree_view,
 
   va_start (args, cell);
 
-  attribute = va_arg (args, gchar *);
+  attribute = va_arg (args, char *);
 
   while (attribute != NULL)
     {
       column_id = va_arg (args, int);
       gtk_tree_view_column_add_attribute (column, cell, attribute, column_id);
-      attribute = va_arg (args, gchar *);
+      attribute = va_arg (args, char *);
     }
 
   va_end (args);
@@ -10920,7 +10920,7 @@ gtk_tree_view_insert_column_with_attributes (GtkTreeView     *tree_view,
 int
 gtk_tree_view_insert_column_with_data_func  (GtkTreeView               *tree_view,
                                              int                        position,
-                                             const gchar               *title,
+                                             const char                *title,
                                              GtkCellRenderer           *cell,
                                              GtkTreeCellDataFunc        func,
                                              gpointer                   data,
@@ -13840,7 +13840,7 @@ gtk_tree_view_search_move (GtkWidget   *popover,
   gboolean ret;
   int len;
   int count = 0;
-  const gchar *text;
+  const char *text;
   GtkTreeIter iter;
   GtkTreeModel *model;
   GtkTreeSelection *selection;
@@ -13889,16 +13889,16 @@ gtk_tree_view_search_move (GtkWidget   *popover,
 static gboolean
 gtk_tree_view_search_equal_func (GtkTreeModel *model,
 				 int           column,
-				 const gchar  *key,
+				 const char   *key,
 				 GtkTreeIter  *iter,
 				 gpointer      search_data)
 {
   gboolean retval = TRUE;
-  const gchar *str;
-  gchar *normalized_string;
-  gchar *normalized_key;
-  gchar *case_normalized_string = NULL;
-  gchar *case_normalized_key = NULL;
+  const char *str;
+  char *normalized_string;
+  char *normalized_key;
+  char *case_normalized_string = NULL;
+  char *case_normalized_key = NULL;
   GValue value = G_VALUE_INIT;
   GValue transformed = G_VALUE_INIT;
 
@@ -13946,7 +13946,7 @@ static gboolean
 gtk_tree_view_search_iter (GtkTreeModel     *model,
 			   GtkTreeSelection *selection,
 			   GtkTreeIter      *iter,
-			   const gchar      *text,
+			   const char       *text,
 			   int              *count,
 			   int               n)
 {
@@ -14055,7 +14055,7 @@ gtk_tree_view_search_init (GtkWidget   *entry,
   GtkTreeViewPrivate *priv = gtk_tree_view_get_instance_private (tree_view);
   int ret;
   int count = 0;
-  const gchar *text;
+  const char *text;
   GtkTreeIter iter;
   GtkTreeModel *model;
   GtkTreeSelection *selection;

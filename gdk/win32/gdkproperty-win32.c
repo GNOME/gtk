@@ -33,12 +33,12 @@
 #include "gdkprivate-win32.h"
 #include "gdkwin32.h"
 
-static gchar*
+static char *
 _get_system_font_name (HDC hdc)
 {
   NONCLIENTMETRICSW ncm;
   PangoFontDescription *font_desc;
-  gchar *result, *font_desc_string;
+  char *result, *font_desc_string;
   int logpixelsy;
   int font_size;
 
@@ -98,7 +98,7 @@ _get_system_font_name (HDC hdc)
 
 */
 gboolean
-_gdk_win32_get_setting (const gchar *name,
+_gdk_win32_get_setting (const char *name,
                         GValue      *value)
 {
   /*
@@ -188,7 +188,7 @@ _gdk_win32_get_setting (const gchar *name,
     }
   else if (strcmp ("gtk-font-name", name) == 0)
     {
-      gchar *font_name = _get_system_font_name (_gdk_display_hdc);
+      char *font_name = _get_system_font_name (_gdk_display_hdc);
 
       if (font_name)
         {

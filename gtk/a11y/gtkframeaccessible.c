@@ -33,10 +33,10 @@ gtk_frame_accessible_initialize (AtkObject *accessible,
   accessible->role = ATK_ROLE_PANEL;
 }
 
-static const gchar *
+static const char *
 gtk_frame_accessible_get_name (AtkObject *obj)
 {
-  const gchar *name;
+  const char *name;
   GtkWidget *widget;
 
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (obj));

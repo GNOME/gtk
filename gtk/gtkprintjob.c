@@ -62,7 +62,7 @@ struct _GtkPrintJob
 {
   GObject parent_instance;
 
-  gchar *title;
+  char *title;
 
   GIOChannel *spool_io;
   cairo_surface_t *surface;
@@ -297,7 +297,7 @@ gtk_print_job_finalize (GObject *object)
  * Returns: a new #GtkPrintJob
  **/
 GtkPrintJob *
-gtk_print_job_new (const gchar      *title,
+gtk_print_job_new (const char       *title,
 		   GtkPrinter       *printer,
 		   GtkPrintSettings *settings,
 		   GtkPageSetup     *page_setup)
@@ -352,7 +352,7 @@ gtk_print_job_get_printer (GtkPrintJob *job)
  * 
  * Returns: the title of @job
  */
-const gchar *
+const char *
 gtk_print_job_get_title (GtkPrintJob *job)
 {
   g_return_val_if_fail (GTK_IS_PRINT_JOB (job), NULL);
@@ -405,7 +405,7 @@ gtk_print_job_set_status (GtkPrintJob   *job,
  **/
 gboolean
 gtk_print_job_set_source_file (GtkPrintJob *job,
-			       const gchar *filename,
+			       const char *filename,
 			       GError     **error)
 {
   GError *tmp_error;
@@ -475,7 +475,7 @@ cairo_surface_t *
 gtk_print_job_get_surface (GtkPrintJob  *job,
 			   GError      **error)
 {
-  gchar *filename = NULL;
+  char *filename = NULL;
   gdouble width, height;
   GtkPaperSize *paper_size;
   int fd;

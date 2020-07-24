@@ -33,7 +33,7 @@
 
 #include "gdkpixbufutilsprivate.h"
 
-static gchar *output_dir = NULL;
+static char *output_dir = NULL;
 
 static GOptionEntry args[] = {
   { "output", 'o', 0, G_OPTION_ARG_FILENAME, &output_dir, N_("Output to this directory instead of cwd"), NULL },
@@ -43,12 +43,12 @@ static GOptionEntry args[] = {
 int
 main (int argc, char **argv)
 {
-  gchar *path, *basename, *pngpath, *pngfile, *dot;
+  char *path, *basename, *pngpath, *pngfile, *dot;
   GOptionContext *context;
   GdkPixbuf *symbolic;
   GError *error;
   int width, height;
-  gchar **sizev;
+  char **sizev;
   GFileOutputStream *out;
   GFile *dest;
   char *data;

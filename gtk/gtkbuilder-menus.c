@@ -38,12 +38,12 @@ typedef struct
   struct frame frame;
 
   /* attributes */
-  gchar        *attribute;
+  char         *attribute;
   GVariantType *type;
   GString      *string;
 
   /* translation */
-  gchar        *context;
+  char         *context;
   gboolean      translatable;
 } GtkBuilderMenuState;
 
@@ -81,9 +81,9 @@ gtk_builder_menu_pop_frame (GtkBuilderMenuState *state)
 
 static void
 gtk_builder_menu_start_element (GtkBuildableParseContext  *context,
-                                const gchar               *element_name,
-                                const gchar              **attribute_names,
-                                const gchar              **attribute_values,
+                                const char                *element_name,
+                                const char               **attribute_names,
+                                const char               **attribute_values,
                                 gpointer                   user_data,
                                 GError                   **error)
 {
@@ -115,7 +115,7 @@ gtk_builder_menu_start_element (GtkBuildableParseContext  *context,
 
       else if (g_str_equal (element_name, "submenu"))
         {
-          const gchar *id;
+          const char *id;
 
           if (COLLECT (STRING | OPTIONAL, "id", &id))
             {
@@ -136,7 +136,7 @@ gtk_builder_menu_start_element (GtkBuildableParseContext  *context,
 
       else if (g_str_equal (element_name, "section"))
         {
-          const gchar *id;
+          const char *id;
 
           if (COLLECT (STRING | OPTIONAL, "id", &id))
             {
@@ -161,9 +161,9 @@ gtk_builder_menu_start_element (GtkBuildableParseContext  *context,
       /* Can have '<attribute>' or '<link>' here. */
       if (g_str_equal (element_name, "attribute"))
         {
-          const gchar *typestr;
-          const gchar *name;
-          const gchar *ctxt;
+          const char *typestr;
+          const char *name;
+          const char *ctxt;
 
           if (COLLECT (STRING,             "name", &name,
                        OPTIONAL | BOOLEAN, "translatable", &state->translatable,
@@ -192,8 +192,8 @@ gtk_builder_menu_start_element (GtkBuildableParseContext  *context,
 
       if (g_str_equal (element_name, "link"))
         {
-          const gchar *name;
-          const gchar *id;
+          const char *name;
+          const char *id;
 
           if (COLLECT (STRING,            "name", &name,
                        STRING | OPTIONAL, "id",   &id))
@@ -222,7 +222,7 @@ gtk_builder_menu_start_element (GtkBuildableParseContext  *context,
       g_set_error (error, G_MARKUP_ERROR, G_MARKUP_ERROR_UNKNOWN_ELEMENT,
                    _("Element <%s> not allowed inside <%s>"),
                    element_name,
-                   (const gchar *) g_ptr_array_index (element_stack, element_stack->len - 2));
+                   (const char *) g_ptr_array_index (element_stack, element_stack->len - 2));
 
     else
       g_set_error (error, G_MARKUP_ERROR, G_MARKUP_ERROR_UNKNOWN_ELEMENT,
@@ -232,7 +232,7 @@ gtk_builder_menu_start_element (GtkBuildableParseContext  *context,
 
 static void
 gtk_builder_menu_end_element (GtkBuildableParseContext  *context,
-                              const gchar               *element_name,
+                              const char                *element_name,
                               gpointer                   user_data,
                               GError                   **error)
 {
@@ -243,7 +243,7 @@ gtk_builder_menu_end_element (GtkBuildableParseContext  *context,
   if (state->string)
     {
       GVariant *value;
-      gchar *text;
+      char *text;
 
       text = g_string_free (state->string, FALSE);
       state->string = NULL;
@@ -251,7 +251,7 @@ gtk_builder_menu_end_element (GtkBuildableParseContext  *context,
       /* do the translation if necessary */
       if (state->translatable)
         {
-          const gchar *translated;
+          const char *translated;
 
           if (state->context)
             translated = g_dpgettext2 (state->parser_data->domain, state->context, text);
@@ -299,7 +299,7 @@ gtk_builder_menu_end_element (GtkBuildableParseContext  *context,
 
 static void
 gtk_builder_menu_text (GtkBuildableParseContext  *context,
-                       const gchar               *text,
+                       const char                *text,
                        gsize                      text_len,
                        gpointer                   user_data,
                        GError                   **error)
@@ -359,13 +359,13 @@ static GtkBuildableParser gtk_builder_menu_subparser =
 
 void
 _gtk_builder_menu_start (ParserData   *parser_data,
-                         const gchar  *element_name,
-                         const gchar **attribute_names,
-                         const gchar **attribute_values,
+                         const char   *element_name,
+                         const char **attribute_names,
+                         const char **attribute_values,
                          GError      **error)
 {
   GtkBuilderMenuState *state;
-  gchar *id;
+  char *id;
 
   state = g_slice_new0 (GtkBuilderMenuState);
   state->parser_data = parser_data;

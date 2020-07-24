@@ -87,10 +87,10 @@ gtk_app_chooser_default_init (GtkAppChooserIface *iface)
  *
  * Returns: the content type of @self. Free with g_free()
  */
-gchar *
+char *
 gtk_app_chooser_get_content_type (GtkAppChooser *self)
 {
-  gchar *retval = NULL;
+  char *retval = NULL;
 
   g_return_val_if_fail (GTK_IS_APP_CHOOSER (self), NULL);
 

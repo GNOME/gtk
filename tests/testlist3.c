@@ -57,7 +57,7 @@ drag_drop (GtkDropTarget *dest,
 }
 
 static GtkWidget *
-create_row (const gchar *text)
+create_row (const char *text)
 {
   GtkWidget *row, *box, *label, *image;
   GtkDragSource *source;
@@ -127,7 +127,7 @@ main (int argc, char *argv[])
   GtkWidget *window, *list, *sw, *row;
   GtkWidget *hbox, *vbox, *combo, *button;
   int i;
-  gchar *text;
+  char *text;
   GtkCssProvider *provider;
 
   gtk_init ();

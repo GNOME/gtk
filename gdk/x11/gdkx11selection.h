@@ -42,9 +42,9 @@ int      gdk_x11_display_text_property_to_text_list (GdkDisplay   *display,
                                                      int           format,
                                                      const guchar *text,
                                                      int           length,
-                                                     gchar      ***list);
+                                                     char       ***list);
 GDK_AVAILABLE_IN_ALL
-void     gdk_x11_free_text_list                     (gchar       **list);
+void     gdk_x11_free_text_list                     (char        **list);
 GDK_AVAILABLE_IN_ALL
 int      gdk_x11_display_string_to_compound_text    (GdkDisplay   *display,
                                                      const char   *str,

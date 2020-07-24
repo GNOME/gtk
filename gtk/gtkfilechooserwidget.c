@@ -416,8 +416,8 @@ static gboolean       gtk_file_chooser_widget_update_current_folder        (GtkF
                                                                             GError           **error);
 static GFile *        gtk_file_chooser_widget_get_current_folder           (GtkFileChooser    *chooser);
 static void           gtk_file_chooser_widget_set_current_name             (GtkFileChooser    *chooser,
-                                                                            const gchar       *name);
-static gchar *        gtk_file_chooser_widget_get_current_name             (GtkFileChooser    *chooser);
+                                                                            const char        *name);
+static char *        gtk_file_chooser_widget_get_current_name             (GtkFileChooser    *chooser);
 static gboolean       gtk_file_chooser_widget_select_file                  (GtkFileChooser    *chooser,
                                                                             GFile             *file,
                                                                             GError           **error);
@@ -456,7 +456,7 @@ static const char *gtk_file_chooser_widget_get_choice    (GtkFileChooser  *choos
 static void add_selection_to_recent_list (GtkFileChooserWidget *impl);
 
 static void location_popup_handler  (GtkFileChooserWidget *impl,
-                                     const gchar           *path);
+                                     const char            *path);
 static void location_popup_on_paste_handler (GtkFileChooserWidget *impl);
 static void location_toggle_popup_handler   (GtkFileChooserWidget *impl);
 static void up_folder_handler       (GtkFileChooserWidget *impl);
@@ -883,7 +883,7 @@ name_exists_get_info_cb (GObject      *source,
 static void
 check_valid_child_name (GtkFileChooserWidget *impl,
                         GFile                *parent,
-                        const gchar          *name,
+                        const char           *name,
                         gboolean              is_folder,
                         GFile                *original,
                         GtkWidget            *error_stack,
@@ -974,7 +974,7 @@ new_folder_create_clicked (GtkButton            *button,
 {
   GError *error = NULL;
   GFile *file;
-  const gchar *name;
+  const char *name;
 
   name = gtk_editable_get_text (GTK_EDITABLE (impl->new_folder_name_entry));
   file = g_file_get_child_for_display_name (impl->current_folder, name, &error);
@@ -1314,7 +1314,7 @@ rename_file_rename_clicked (GtkButton            *button,
                             GtkFileChooserWidget *impl)
 {
   GFile *dest;
-  const gchar* new_name;
+  const char * new_name;
 
   gtk_popover_popdown (GTK_POPOVER (impl->rename_file_popover));
 
@@ -1356,7 +1356,7 @@ rename_selected_cb (GtkTreeModel *model,
 {
   GtkFileChooserWidget *impl = data;
   GdkRectangle rect;
-  gchar *filename;
+  char *filename;
   double x, y;
 
   gtk_tree_model_get (model, iter,
@@ -1459,7 +1459,7 @@ open_folder_cb (GSimpleAction *action,
   if (files && GTK_IS_WINDOW (toplevel))
     {
       GFile *file = files->data;
-      gchar *uri;
+      char *uri;
 
       uri = g_file_get_uri (file);
       gtk_show_uri (GTK_WINDOW (toplevel), uri, GDK_CURRENT_TIME);
@@ -2104,7 +2104,7 @@ file_list_query_tooltip_cb (GtkWidget  *widget,
   GtkTreePath *path;
   GtkTreeIter iter;
   GFile *file;
-  gchar *filename;
+  char *filename;
 
   if (impl->operation_mode == OPERATION_MODE_BROWSE)
     return FALSE;
@@ -2562,7 +2562,7 @@ set_extra_widget (GtkFileChooserWidget *impl,
 static void
 switch_to_home_dir (GtkFileChooserWidget *impl)
 {
-  const gchar *home = g_get_home_dir ();
+  const char *home = g_get_home_dir ();
   GFile *home_file;
 
   if (home == NULL)
@@ -2865,14 +2865,14 @@ update_appearance (GtkFileChooserWidget *impl)
   gtk_widget_queue_draw (impl->browse_files_tree_view);
 }
 
-static gchar *
+static char *
 gtk_file_chooser_widget_get_subtitle (GtkFileChooserWidget *impl)
 {
-  gchar *subtitle = NULL;
+  char *subtitle = NULL;
 
   if (impl->operation_mode == OPERATION_MODE_SEARCH)
     {
-      gchar *location;
+      char *location;
 
       location = gtk_places_sidebar_get_location_title (GTK_PLACES_SIDEBAR (impl->places_sidebar));
       if (location)
@@ -3758,7 +3758,7 @@ set_busy_cursor (GtkFileChooserWidget *impl,
 static void
 update_columns (GtkFileChooserWidget *impl,
                 gboolean              location_visible,
-                const gchar          *time_title)
+                const char           *time_title)
 {
   gboolean need_resize = FALSE;
 
@@ -4138,13 +4138,13 @@ stop_loading_and_clear_list_model (GtkFileChooserWidget *impl,
 }
 
 /* Replace 'target' with 'replacement' in the input string. */
-static gchar *
-string_replace (const gchar *input,
-                const gchar *target,
-                const gchar *replacement)
+static char *
+string_replace (const char *input,
+                const char *target,
+                const char *replacement)
 {
-  gchar **pieces;
-  gchar *output;
+  char **pieces;
+  char *output;
 
   pieces = g_strsplit (input, target, -1);
   output = g_strjoinv (replacement, pieces);
@@ -4154,11 +4154,11 @@ string_replace (const gchar *input,
 }
 
 static void
-replace_ratio (gchar **str)
+replace_ratio (char **str)
 {
   if (g_get_charset (NULL))
     {
-      gchar *ret;
+      char *ret;
       ret = string_replace (*str, ":", "\xE2\x80\x8E∶");
       g_free (*str);
       *str = ret;
@@ -4171,8 +4171,8 @@ my_g_format_date_for_display (GtkFileChooserWidget *impl,
 {
   GDateTime *now, *time;
   GDateTime *now_date, *date;
-  const gchar *format;
-  gchar *date_str;
+  const char *format;
+  char *date_str;
   int days_ago;
 
   time = g_date_time_new_from_unix_local (secs);
@@ -4231,8 +4231,8 @@ my_g_format_time_for_display (GtkFileChooserWidget *impl,
                               glong                 secs)
 {
   GDateTime *time;
-  const gchar *format;
-  gchar *date_str;
+  const char *format;
+  char *date_str;
 
   time = g_date_time_new_from_unix_local (secs);
 
@@ -4252,7 +4252,7 @@ my_g_format_time_for_display (GtkFileChooserWidget *impl,
 static void
 copy_attribute (GFileInfo   *to,
                 GFileInfo   *from,
-                const gchar *attribute)
+                const char *attribute)
 {
   GFileAttributeType type;
   gpointer value;
@@ -4547,7 +4547,7 @@ file_system_model_set (GtkFileSystemModel *model,
       {
         GFile *home_location;
         GFile *dir_location;
-        gchar *location;
+        char *location;
 
         home_location = g_file_new_for_path (g_get_home_dir ());
         if (file)
@@ -4575,7 +4575,7 @@ file_system_model_set (GtkFileSystemModel *model,
           location = g_strdup (_("Home"));
         else if (g_file_has_prefix (dir_location, home_location))
           {
-            gchar *relative_path;
+            char *relative_path;
 
             relative_path = g_file_get_relative_path (home_location, dir_location);
             location = g_filename_display_name (relative_path);
@@ -4653,10 +4653,10 @@ struct update_chooser_entry_selected_foreach_closure {
 };
 
 static int
-compare_utf8_filenames (const gchar *a,
-                        const gchar *b)
+compare_utf8_filenames (const char *a,
+                        const char *b)
 {
-  gchar *a_folded, *b_folded;
+  char *a_folded, *b_folded;
   int retval;
 
   a_folded = g_utf8_strdown (a, -1);
@@ -4802,7 +4802,7 @@ update_chooser_entry (GtkFileChooserWidget *impl)
            */
           if (entry_text[len - 1] == G_DIR_SEPARATOR)
             {
-              gchar *tmp;
+              char *tmp;
 
               tmp = g_strndup (entry_text, len - 1);
               clear_entry = (compare_utf8_filenames (impl->browse_files_last_selected_name, tmp) == 0);
@@ -5085,7 +5085,7 @@ gtk_file_chooser_widget_get_current_folder (GtkFileChooser *chooser)
 
 static void
 gtk_file_chooser_widget_set_current_name (GtkFileChooser *chooser,
-                                          const gchar    *name)
+                                          const char     *name)
 {
   GtkFileChooserWidget *impl = GTK_FILE_CHOOSER_WIDGET (chooser);
 
@@ -5095,7 +5095,7 @@ gtk_file_chooser_widget_set_current_name (GtkFileChooser *chooser,
   gtk_editable_set_text (GTK_EDITABLE (impl->location_entry), name);
 }
 
-static gchar *
+static char *
 gtk_file_chooser_widget_get_current_name (GtkFileChooser *chooser)
 {
   GtkFileChooserWidget *impl = GTK_FILE_CHOOSER_WIDGET (chooser);
@@ -5669,7 +5669,7 @@ get_selected_file_info_from_file_list (GtkFileChooserWidget *impl,
 /* Gets the display name of the selected file in the file list; assumes single
  * selection mode and that something is selected.
  */
-static const gchar *
+static const char *
 get_display_name_from_file_list (GtkFileChooserWidget *impl)
 {
   GFileInfo *info;
@@ -5684,7 +5684,7 @@ get_display_name_from_file_list (GtkFileChooserWidget *impl)
 
 static void
 add_custom_button_to_dialog (GtkDialog   *dialog,
-                             const gchar *mnemonic_label,
+                             const char *mnemonic_label,
                              int          response_id)
 {
   GtkWidget *button;
@@ -5726,8 +5726,8 @@ on_confirm_overwrite_response (GtkWidget *dialog,
 /* Presents an overwrite confirmation dialog */
 static void
 confirm_dialog_should_accept_filename (GtkFileChooserWidget *impl,
-                                       const gchar           *file_part,
-                                       const gchar           *folder_display_name)
+                                       const char            *file_part,
+                                       const char            *folder_display_name)
 {
   GtkWindow *toplevel;
   GtkWidget *dialog;
@@ -5762,7 +5762,7 @@ confirm_dialog_should_accept_filename (GtkFileChooserWidget *impl,
 struct GetDisplayNameData
 {
   GtkFileChooserWidget *impl;
-  gchar *file_part;
+  char *file_part;
 };
 
 static void
@@ -5798,7 +5798,7 @@ out:
  */
 static gboolean
 should_respond_after_confirm_overwrite (GtkFileChooserWidget *impl,
-                                        const gchar          *file_part,
+                                        const char           *file_part,
                                         GFile                *parent_file)
 {
   struct GetDisplayNameData *data;
@@ -6503,7 +6503,7 @@ search_engine_finished_cb (GtkSearchEngine *engine,
 
 static void
 search_engine_error_cb (GtkSearchEngine *engine,
-                        const gchar     *message,
+                        const char      *message,
                         gpointer         data)
 {
   GtkFileChooserWidget *impl = GTK_FILE_CHOOSER_WIDGET (data);
@@ -6598,7 +6598,7 @@ show_spinner (gpointer data)
 /* Creates a new query with the specified text and launches it */
 static void
 search_start_query (GtkFileChooserWidget *impl,
-                    const gchar          *query_text)
+                    const char           *query_text)
 {
   GFile *file;
 
@@ -6696,7 +6696,7 @@ search_setup_widgets (GtkFileChooserWidget *impl)
   /* if there already is a query, restart it */
   if (impl->search_query)
     {
-      const gchar *query;
+      const char *query;
 
       query = gtk_query_get_text (impl->search_query);
       if (query)
@@ -7056,7 +7056,7 @@ update_cell_renderer_attributes (GtkFileChooserWidget *impl)
 
 static void
 location_set_user_text (GtkFileChooserWidget *impl,
-                        const gchar          *path)
+                        const char           *path)
 {
   gtk_editable_set_text (GTK_EDITABLE (impl->location_entry), path);
   gtk_editable_set_position (GTK_EDITABLE (impl->location_entry), -1);
@@ -7064,7 +7064,7 @@ location_set_user_text (GtkFileChooserWidget *impl,
 
 static void
 location_popup_handler (GtkFileChooserWidget *impl,
-                        const gchar          *path)
+                        const char           *path)
 {
   if (impl->operation_mode != OPERATION_MODE_BROWSE)
     {
@@ -7189,7 +7189,7 @@ static void
 add_normal_and_shifted_binding (GtkWidgetClass  *widget_class,
                                 guint            keyval,
                                 GdkModifierType  modifiers,
-                                const gchar     *signal_name)
+                                const char      *signal_name)
 {
   gtk_widget_class_add_binding_signal (widget_class,
                                        keyval, modifiers,

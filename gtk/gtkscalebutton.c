@@ -119,7 +119,7 @@ typedef struct
   GtkScrollType autoscroll_step;
   gboolean autoscrolling;
 
-  gchar **icon_list;
+  char **icon_list;
 
   GtkAdjustment *adjustment; /* needed because it must be settable in init() */
 } GtkScaleButtonPrivate;
@@ -469,7 +469,7 @@ gtk_scale_button_set_property (GObject       *object,
       break;
     case PROP_ICONS:
       gtk_scale_button_set_icons (button,
-                                  (const gchar **)g_value_get_boxed (value));
+                                  (const char **)g_value_get_boxed (value));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -550,7 +550,7 @@ GtkWidget *
 gtk_scale_button_new (gdouble       min,
 		      gdouble       max,
 		      gdouble       step,
-		      const gchar **icons)
+		      const char **icons)
 {
   GtkScaleButton *button;
   GtkAdjustment *adjustment;
@@ -615,15 +615,15 @@ gtk_scale_button_set_value (GtkScaleButton *button,
  */
 void
 gtk_scale_button_set_icons (GtkScaleButton  *button,
-			    const gchar    **icons)
+			    const char     **icons)
 {
   GtkScaleButtonPrivate *priv = gtk_scale_button_get_instance_private (button);
-  gchar **tmp;
+  char **tmp;
 
   g_return_if_fail (GTK_IS_SCALE_BUTTON (button));
 
   tmp = priv->icon_list;
-  priv->icon_list = g_strdupv ((gchar **) icons);
+  priv->icon_list = g_strdupv ((char **) icons);
   g_strfreev (tmp);
   gtk_scale_button_update_icon (button);
 
@@ -865,7 +865,7 @@ gtk_scale_button_update_icon (GtkScaleButton *button)
   GtkScaleButtonPrivate *priv = gtk_scale_button_get_instance_private (button);
   GtkAdjustment *adjustment;
   gdouble value;
-  const gchar *name;
+  const char *name;
   guint num_icons;
 
   if (!priv->icon_list || priv->icon_list[0][0] == '\0')

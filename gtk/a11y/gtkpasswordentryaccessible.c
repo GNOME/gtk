@@ -190,7 +190,7 @@ atk_text_interface_init (AtkTextIface *iface)
 
 static void
 gtk_password_entry_accessible_set_text_contents (AtkEditableText *text,
-                                                 const gchar     *string)
+                                                 const char      *string)
 {
   GtkWidget *widget;
 
@@ -206,7 +206,7 @@ gtk_password_entry_accessible_set_text_contents (AtkEditableText *text,
 
 static void
 gtk_password_entry_accessible_insert_text (AtkEditableText *text,
-                                           const gchar     *string,
+                                           const char      *string,
                                            int              length,
                                            int             *position)
 {
@@ -362,7 +362,7 @@ gtk_password_entry_accessible_get_n_actions (AtkAction *action)
   return n_actions;
 }
 
-static const gchar *
+static const char *
 gtk_password_entry_accessible_get_keybinding (AtkAction *action,
                                               int        i)
 {
@@ -407,7 +407,7 @@ gtk_password_entry_accessible_get_keybinding (AtkAction *action,
   return NULL;
 }
 
-static const gchar *
+static const char *
 gtk_password_entry_accessible_action_get_name (AtkAction *action,
                                                int        i)
 {
@@ -426,7 +426,7 @@ gtk_password_entry_accessible_action_get_name (AtkAction *action,
   return NULL;
 }
 
-static const gchar*
+static const char *
 gtk_password_entry_accessible_action_get_localized_name (AtkAction *action,
                                                          int        i)
 {
@@ -438,7 +438,7 @@ gtk_password_entry_accessible_action_get_localized_name (AtkAction *action,
   return NULL;
 }
 
-static const gchar *
+static const char *
 gtk_password_entry_accessible_action_get_description (AtkAction *action,
                                                       int        i)
 {
@@ -551,7 +551,7 @@ on_selection_bound_changed (GObject     *gobject,
 
 static void
 insert_text_cb (GtkEditable                *editable,
-                gchar                      *new_text,
+                char                       *new_text,
                 int                         new_text_length,
                 int                        *position,
                 GtkPasswordEntryAccessible *self)

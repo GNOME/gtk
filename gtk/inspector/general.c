@@ -164,7 +164,7 @@ init_version (GtkInspectorGeneral *gen)
 static G_GNUC_UNUSED void
 add_check_row (GtkInspectorGeneral *gen,
                GtkListBox          *list,
-               const gchar         *name,
+               const char          *name,
                gboolean             value,
                int                  indent)
 {
@@ -248,7 +248,7 @@ add_label_row (GtkInspectorGeneral *gen,
 static void
 append_glx_extension_row (GtkInspectorGeneral *gen,
                           Display             *dpy,
-                          const gchar         *ext)
+                          const char          *ext)
 {
   add_check_row (gen, GTK_LIST_BOX (gen->gl_box), ext, epoxy_has_glx_extension (dpy, 0, ext), 0);
 }
@@ -258,7 +258,7 @@ append_glx_extension_row (GtkInspectorGeneral *gen,
 static void
 append_egl_extension_row (GtkInspectorGeneral *gen,
                           EGLDisplay          dpy,
-                          const gchar         *ext)
+                          const char          *ext)
 {
   add_check_row (gen, GTK_LIST_BOX (gen->gl_box), ext, epoxy_has_egl_extension (dpy, ext), 0);
 }
@@ -307,7 +307,7 @@ init_gl (GtkInspectorGeneral *gen)
     {
       Display *dpy = GDK_DISPLAY_XDISPLAY (gen->display);
       int error_base, event_base;
-      gchar *version;
+      char *version;
       if (!glXQueryExtension (dpy, &error_base, &event_base))
         return;
 
@@ -332,7 +332,7 @@ init_gl (GtkInspectorGeneral *gen)
     {
       EGLDisplay dpy;
       EGLint major, minor;
-      gchar *version;
+      char *version;
 
       dpy = wayland_get_display (gdk_wayland_display_get_wl_display (gen->display));
 
@@ -474,9 +474,9 @@ set_monospace_font (GtkWidget *w)
 
 static void
 set_path_label (GtkWidget   *w,
-                const gchar *var)
+                const char *var)
 {
-  const gchar *v;
+  const char *v;
 
   v = g_getenv (var);
   if (v != NULL)
@@ -563,8 +563,8 @@ populate_monitor (gpointer item,
 {
   GtkListBox *list;
   GdkMonitor *monitor = item;
-  gchar *name;
-  gchar *value;
+  char *name;
+  char *value;
   GdkRectangle rect;
   int scale;
   char *scale_str = NULL;
@@ -678,11 +678,11 @@ static void
 add_device (GtkInspectorGeneral *gen,
             GdkDevice           *device)
 {
-  const gchar *name, *value;
+  const char *name, *value;
   GString *str;
   int i;
   guint n_touches;
-  gchar *text;
+  char *text;
   GdkAxisFlags axes;
   const char *axis_name[] = {
     "Ignore",

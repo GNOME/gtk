@@ -52,17 +52,17 @@ G_BEGIN_DECLS
 #define gtk_internal_return_val_if_fail(__expr, __val) g_return_val_if_fail(__expr, __val)
 #endif
 
-const gchar * _gtk_get_datadir            (void);
-const gchar * _gtk_get_libdir             (void);
-const gchar * _gtk_get_sysconfdir         (void);
-const gchar * _gtk_get_localedir          (void);
-const gchar * _gtk_get_data_prefix        (void);
+const char * _gtk_get_datadir            (void);
+const char * _gtk_get_libdir             (void);
+const char * _gtk_get_sysconfdir         (void);
+const char * _gtk_get_localedir          (void);
+const char * _gtk_get_data_prefix        (void);
 
 gboolean      _gtk_fnmatch                (const char *pattern,
                                            const char *string,
                                            gboolean    no_leading_period);
 
-gchar       * _gtk_get_lc_ctype           (void);
+char        * _gtk_get_lc_ctype           (void);
 
 void          _gtk_ensure_resources       (void);
 

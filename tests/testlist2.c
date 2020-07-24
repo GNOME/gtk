@@ -29,7 +29,7 @@ remove_this_row (GtkButton *button, GtkWidget *child)
   gtk_revealer_set_reveal_child (GTK_REVEALER (revealer), FALSE);
 }
 
-static GtkWidget *create_row (const gchar *label);
+static GtkWidget *create_row (const char *label);
 
 static void
 row_revealed (GObject *revealer, GParamSpec *pspec, gpointer data)
@@ -74,7 +74,7 @@ add_separator (GtkListBoxRow *row, GtkListBoxRow *before, gpointer data)
 }
 
 static GtkWidget *
-create_row (const gchar *text)
+create_row (const char *text)
 {
   GtkWidget *row, *label, *button;
 
@@ -110,7 +110,7 @@ int main (int argc, char *argv[])
 {
   GtkWidget *window, *list, *sw, *row;
   int i;
-  gchar *text;
+  char *text;
   gboolean done = FALSE;
 
   gtk_init ();

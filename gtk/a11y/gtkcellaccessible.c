@@ -230,7 +230,7 @@ gtk_cell_accessible_action_get_n_actions (AtkAction *action)
   return 3;
 }
 
-static const gchar *
+static const char *
 gtk_cell_accessible_action_get_name (AtkAction *action,
                                      int        index)
 {
@@ -247,7 +247,7 @@ gtk_cell_accessible_action_get_name (AtkAction *action,
     }
 }
 
-static const gchar *
+static const char *
 gtk_cell_accessible_action_get_localized_name (AtkAction *action,
                                                int        index)
 {
@@ -264,7 +264,7 @@ gtk_cell_accessible_action_get_localized_name (AtkAction *action,
     }
 }
 
-static const gchar *
+static const char *
 gtk_cell_accessible_action_get_description (AtkAction *action,
                                             int        index)
 {
@@ -281,7 +281,7 @@ gtk_cell_accessible_action_get_description (AtkAction *action,
     }
 }
 
-static const gchar *
+static const char *
 gtk_cell_accessible_action_get_keybinding (AtkAction *action,
                                            int        index)
 {

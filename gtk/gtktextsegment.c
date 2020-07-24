@@ -187,7 +187,7 @@ char_segment_self_check (GtkTextLineSegment *seg)
 }
 
 GtkTextLineSegment*
-_gtk_char_segment_new (const gchar *text, guint len)
+_gtk_char_segment_new (const char *text, guint len)
 {
   GtkTextLineSegment *seg;
 
@@ -209,10 +209,10 @@ _gtk_char_segment_new (const gchar *text, guint len)
 }
 
 GtkTextLineSegment*
-_gtk_char_segment_new_from_two_strings (const gchar *text1, 
+_gtk_char_segment_new_from_two_strings (const char *text1, 
 					guint        len1, 
 					guint        chars1,
-                                        const gchar *text2, 
+                                        const char *text2, 
 					guint        len2, 
 					guint        chars2)
 {

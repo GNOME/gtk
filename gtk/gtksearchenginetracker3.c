@@ -117,7 +117,7 @@ static GFileInfo *
 create_file_info (TrackerSparqlCursor *cursor)
 {
   GFileInfo *info;
-  const gchar *str;
+  const char *str;
   GDateTime *creation;
 
   info = g_file_info_new ();
@@ -170,7 +170,7 @@ query_callback (TrackerSparqlStatement *statement,
 
   while (tracker_sparql_cursor_next (cursor, NULL, NULL))
     {
-      const gchar *url;
+      const char *url;
 
       url = tracker_sparql_cursor_get_string (cursor, 0, NULL);
       hit = g_slice_new0 (GtkSearchHit);
@@ -194,8 +194,8 @@ gtk_search_engine_tracker3_start (GtkSearchEngine *engine)
 {
   GtkSearchEngineTracker3 *tracker;
   TrackerSparqlStatement *statement;
-  const gchar *search_text;
-  gchar *match;
+  const char *search_text;
+  char *match;
   GFile *location;
   gboolean recursive;
 
@@ -220,7 +220,7 @@ gtk_search_engine_tracker3_start (GtkSearchEngine *engine)
 
   if (location)
     {
-      gchar *location_uri = g_file_get_uri (location);
+      char *location_uri = g_file_get_uri (location);
 
       if (recursive)
         {

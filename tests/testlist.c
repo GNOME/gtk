@@ -44,7 +44,7 @@ row_class_init (RowClass *class)
 }
 
 static GtkWidget *
-row_new (const gchar* text, int sort_id) {
+row_new (const char * text, int sort_id) {
   Row *row;
 
   row = g_object_new (row_get_type (), NULL);

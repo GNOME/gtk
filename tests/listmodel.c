@@ -13,7 +13,7 @@ typedef struct
 {
   GObject parent;
 
-  gchar *label;
+  char *label;
   int id;
 } MyObject;
 
@@ -132,7 +132,7 @@ add_some (GtkButton *button, GListStore *store)
   int n, i;
   guint n_items;
   GObject *obj;
-  gchar *label;
+  char *label;
 
   for (n = 0; n < 50; n++)
     {
@@ -178,7 +178,7 @@ main (int argc, char *argv[])
   for (i = 0; i < 100; i++)
     {
       MyObject *obj;
-      gchar *label;
+      char *label;
 
       label = g_strdup_printf ("item %d", i);
       obj = g_object_new (my_object_get_type (),

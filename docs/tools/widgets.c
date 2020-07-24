@@ -797,7 +797,7 @@ static WidgetInfo *
 create_about_dialog (void)
 {
   GtkWidget *widget;
-  const gchar *authors[] = {
+  const char *authors[] = {
     "Peter Mattis",
     "Spencer Kimball",
     "Josh MacDonald",

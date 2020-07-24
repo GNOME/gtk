@@ -84,13 +84,13 @@ get_root (void)
   return root;
 }
 
-static const gchar *
+static const char *
 get_toolkit_name (void)
 {
   return "gtk";
 }
 
-static const gchar *
+static const char *
 get_toolkit_version (void)
 {
   return GTK_VERSION;

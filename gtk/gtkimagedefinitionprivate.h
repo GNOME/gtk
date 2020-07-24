@@ -35,7 +35,7 @@ void                    gtk_image_definition_unref              (GtkImageDefinit
 
 GtkImageType            gtk_image_definition_get_storage_type   (const GtkImageDefinition       *def);
 int                     gtk_image_definition_get_scale          (const GtkImageDefinition       *def);
-const gchar *           gtk_image_definition_get_icon_name      (const GtkImageDefinition       *def);
+const char *           gtk_image_definition_get_icon_name      (const GtkImageDefinition       *def);
 GIcon *                 gtk_image_definition_get_gicon          (const GtkImageDefinition       *def);
 GdkPaintable *          gtk_image_definition_get_paintable      (const GtkImageDefinition       *def);
 

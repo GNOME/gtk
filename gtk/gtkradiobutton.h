@@ -51,16 +51,16 @@ GDK_AVAILABLE_IN_ALL
 GtkWidget* gtk_radio_button_new_from_widget               (GtkRadioButton *radio_group_member);
 GDK_AVAILABLE_IN_ALL
 GtkWidget* gtk_radio_button_new_with_label                (GSList         *group,
-                                                           const gchar    *label);
+                                                           const char     *label);
 GDK_AVAILABLE_IN_ALL
 GtkWidget* gtk_radio_button_new_with_label_from_widget    (GtkRadioButton *radio_group_member,
-                                                           const gchar    *label);
+                                                           const char     *label);
 GDK_AVAILABLE_IN_ALL
 GtkWidget* gtk_radio_button_new_with_mnemonic             (GSList         *group,
-                                                           const gchar    *label);
+                                                           const char     *label);
 GDK_AVAILABLE_IN_ALL
 GtkWidget* gtk_radio_button_new_with_mnemonic_from_widget (GtkRadioButton *radio_group_member,
-                                                           const gchar    *label);
+                                                           const char     *label);
 GDK_AVAILABLE_IN_ALL
 GSList*    gtk_radio_button_get_group                     (GtkRadioButton *radio_button);
 GDK_AVAILABLE_IN_ALL

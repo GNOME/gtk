@@ -171,7 +171,7 @@ struct _GtkModelButton
   GtkWidget *end_indicator;
   GtkWidget *popover;
   GtkActionHelper *action_helper;
-  gchar *menu_name;
+  char *menu_name;
   GtkButtonRole role;
   GtkSizeGroup *indicators;
   char *accel;
@@ -458,8 +458,8 @@ update_node_name (GtkModelButton *self)
 {
   AtkObject *accessible;
   AtkRole a11y_role;
-  const gchar *start_name;
-  const gchar *end_name;
+  const char *start_name;
+  const char *end_name;
 
   accessible = gtk_widget_get_accessible (GTK_WIDGET (self));
   switch (self->role)
@@ -613,7 +613,7 @@ gtk_model_button_set_icon (GtkModelButton *self,
 
 static void
 gtk_model_button_set_text (GtkModelButton *button,
-                           const gchar    *text)
+                           const char     *text)
 {
   gtk_label_set_text_with_mnemonic (GTK_LABEL (button->label),
                                     text ? text : "");
@@ -650,7 +650,7 @@ gtk_model_button_set_active (GtkModelButton *button,
 
 static void
 gtk_model_button_set_menu_name (GtkModelButton *button,
-                                const gchar    *menu_name)
+                                const char     *menu_name)
 {
   g_free (button->menu_name);
   button->menu_name = g_strdup (menu_name);

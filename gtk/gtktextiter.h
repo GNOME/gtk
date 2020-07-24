@@ -139,19 +139,19 @@ gunichar gtk_text_iter_get_char          (const GtkTextIter  *iter);
  * into the returned string map properly into buffer char offsets
  */
 GDK_AVAILABLE_IN_ALL
-gchar   *gtk_text_iter_get_slice         (const GtkTextIter  *start,
+char    *gtk_text_iter_get_slice         (const GtkTextIter  *start,
                                           const GtkTextIter  *end);
 
 /* includes only text, no 0xFFFC */
 GDK_AVAILABLE_IN_ALL
-gchar   *gtk_text_iter_get_text          (const GtkTextIter  *start,
+char    *gtk_text_iter_get_text          (const GtkTextIter  *start,
                                           const GtkTextIter  *end);
 /* exclude invisible chars */
 GDK_AVAILABLE_IN_ALL
-gchar   *gtk_text_iter_get_visible_slice (const GtkTextIter  *start,
+char    *gtk_text_iter_get_visible_slice (const GtkTextIter  *start,
                                           const GtkTextIter  *end);
 GDK_AVAILABLE_IN_ALL
-gchar   *gtk_text_iter_get_visible_text  (const GtkTextIter  *start,
+char    *gtk_text_iter_get_visible_text  (const GtkTextIter  *start,
                                           const GtkTextIter  *end);
 
 GDK_AVAILABLE_IN_ALL
@@ -370,7 +370,7 @@ gboolean gtk_text_iter_backward_find_char (GtkTextIter          *iter,
 
 GDK_AVAILABLE_IN_ALL
 gboolean gtk_text_iter_forward_search  (const GtkTextIter *iter,
-                                        const gchar       *str,
+                                        const char        *str,
                                         GtkTextSearchFlags flags,
                                         GtkTextIter       *match_start,
                                         GtkTextIter       *match_end,
@@ -378,7 +378,7 @@ gboolean gtk_text_iter_forward_search  (const GtkTextIter *iter,
 
 GDK_AVAILABLE_IN_ALL
 gboolean gtk_text_iter_backward_search (const GtkTextIter *iter,
-                                        const gchar       *str,
+                                        const char        *str,
                                         GtkTextSearchFlags flags,
                                         GtkTextIter       *match_start,
                                         GtkTextIter       *match_end,

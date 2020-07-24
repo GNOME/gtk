@@ -19,7 +19,7 @@ static void
 fill_store (GtkListStore *store)
 {
   GtkTreeIter iter;
-  const gchar *text[] = { "Red", "Green", "Blue", "Yellow" };
+  const char *text[] = { "Red", "Green", "Blue", "Yellow" };
   int i;
 
   /* First clear the store */
@@ -49,7 +49,7 @@ set_cell_color (GtkCellLayout   *cell_layout,
                 GtkTreeIter     *iter,
                 gpointer         data)
 {
-  gchar *text;
+  char *text;
   GdkRGBA color;
   guint32 pixel = 0;
   GdkPixbuf *pixbuf;
@@ -77,8 +77,8 @@ set_cell_color (GtkCellLayout   *cell_layout,
 
 static void
 edited (GtkCellRendererText *cell,
-        gchar               *path_string,
-        gchar               *text,
+        char                *path_string,
+        char                *text,
         gpointer             data)
 {
   GtkTreeModel *model;

@@ -85,7 +85,7 @@
  * provided input method.
  *
  * |[<!-- language="C" -->
- * GtkIMContext * im_module_create(const gchar *context_id);
+ * GtkIMContext * im_module_create(const char *context_id);
  * ]|
  * This function should return a pointer to a newly created instance of the
  * #GtkIMContext subclass identified by @context_id. The context ID is the same
@@ -123,13 +123,13 @@ struct _GtkIMContextPrivate {
 };
 
 static void     gtk_im_context_real_get_preedit_string (GtkIMContext   *context,
-							gchar         **str,
+							char          **str,
 							PangoAttrList **attrs,
 							int            *cursor_pos);
 static gboolean gtk_im_context_real_filter_keypress    (GtkIMContext   *context,
 							GdkEvent       *event);
 static gboolean gtk_im_context_real_get_surrounding    (GtkIMContext   *context,
-							gchar         **text,
+							char          **text,
 							int            *cursor_index);
 static void     gtk_im_context_real_set_surrounding    (GtkIMContext   *context,
 							const char     *text,
@@ -358,7 +358,7 @@ gtk_im_context_init (GtkIMContext *im_context)
 
 static void
 gtk_im_context_real_get_preedit_string (GtkIMContext       *context,
-					gchar             **str,
+					char              **str,
 					PangoAttrList     **attrs,
 					int                *cursor_pos)
 {
@@ -379,13 +379,13 @@ gtk_im_context_real_filter_keypress (GtkIMContext *context,
 
 typedef struct
 {
-  gchar *text;
+  char *text;
   int cursor_index;
 } SurroundingInfo;
 
 static void
 gtk_im_context_real_set_surrounding (GtkIMContext  *context,
-				     const gchar   *text,
+				     const char    *text,
 				     int            len,
 				     int            cursor_index)
 {
@@ -402,7 +402,7 @@ gtk_im_context_real_set_surrounding (GtkIMContext  *context,
 
 static gboolean
 gtk_im_context_real_get_surrounding (GtkIMContext *context,
-				     gchar       **text,
+				     char        **text,
 				     int          *cursor_index)
 {
   gboolean result;
@@ -484,7 +484,7 @@ gtk_im_context_set_client_widget (GtkIMContext *context,
  **/
 void
 gtk_im_context_get_preedit_string (GtkIMContext   *context,
-				   gchar         **str,
+				   char          **str,
 				   PangoAttrList **attrs,
 				   int            *cursor_pos)
 {
@@ -742,7 +742,7 @@ gtk_im_context_set_use_preedit (GtkIMContext *context,
  **/
 void
 gtk_im_context_set_surrounding (GtkIMContext  *context,
-				const gchar   *text,
+				const char    *text,
 				int            len,
 				int            cursor_index)
 {
@@ -791,11 +791,11 @@ gtk_im_context_set_surrounding (GtkIMContext  *context,
  **/
 gboolean
 gtk_im_context_get_surrounding (GtkIMContext *context,
-				gchar       **text,
+				char        **text,
 				int          *cursor_index)
 {
   GtkIMContextClass *klass;
-  gchar *local_text = NULL;
+  char *local_text = NULL;
   int local_index;
   gboolean result = FALSE;
   

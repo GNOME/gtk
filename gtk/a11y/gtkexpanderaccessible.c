@@ -27,7 +27,7 @@ static void atk_action_interface_init (AtkActionIface *iface);
 G_DEFINE_TYPE_WITH_CODE (GtkExpanderAccessible, gtk_expander_accessible, GTK_TYPE_WIDGET_ACCESSIBLE,
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_ACTION, atk_action_interface_init))
 
-static const gchar *
+static const char *
 gtk_expander_accessible_get_full_text (GtkExpander *widget)
 {
   GtkWidget *label_widget;
@@ -40,11 +40,11 @@ gtk_expander_accessible_get_full_text (GtkExpander *widget)
   return gtk_label_get_text (GTK_LABEL (label_widget));
 }
 
-static const gchar *
+static const char *
 gtk_expander_accessible_get_name (AtkObject *obj)
 {
   GtkWidget *widget;
-  const gchar *name;
+  const char *name;
 
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (obj));
   if (widget == NULL)
@@ -184,11 +184,11 @@ gtk_expander_accessible_get_n_actions (AtkAction *action)
   return 1;
 }
 
-static const gchar *
+static const char *
 gtk_expander_accessible_get_keybinding (AtkAction *action,
                                         int        i)
 {
-  gchar *return_value = NULL;
+  char *return_value = NULL;
   GtkWidget *widget;
   GtkWidget *label;
 
@@ -212,7 +212,7 @@ gtk_expander_accessible_get_keybinding (AtkAction *action,
   return return_value;
 }
 
-static const gchar *
+static const char *
 gtk_expander_accessible_action_get_name (AtkAction *action,
                                          int        i)
 {
@@ -221,7 +221,7 @@ gtk_expander_accessible_action_get_name (AtkAction *action,
   return NULL;
 }
 
-static const gchar *
+static const char *
 gtk_expander_accessible_action_get_localized_name (AtkAction *action,
                                                    int        i)
 {
@@ -230,7 +230,7 @@ gtk_expander_accessible_action_get_localized_name (AtkAction *action,
   return NULL;
 }
 
-static const gchar *
+static const char *
 gtk_expander_accessible_action_get_description (AtkAction *action,
                                                 int        i)
 {

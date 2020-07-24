@@ -30,7 +30,7 @@ void gdk_display_set_cursor_theme          (GdkDisplay   *display,
 gboolean gdk_running_in_sandbox (void);
 gboolean gdk_should_use_portal (void);
 
-const gchar *   gdk_get_startup_notification_id (void);
+const char *   gdk_get_startup_notification_id (void);
 
 PangoDirection gdk_unichar_direction (gunichar    ch);
 PangoDirection gdk_find_base_dir     (const char *text,

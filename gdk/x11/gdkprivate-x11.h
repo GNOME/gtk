@@ -129,7 +129,7 @@ int         _gdk_x11_display_text_property_to_utf8_list (GdkDisplay     *display
                                                          int             format,
                                                          const guchar   *text,
                                                          int             length,
-                                                         gchar        ***list);
+                                                         char         ***list);
 char *      gdk_x11_utf8_to_string_target               (const char     *utf8_str,
                                                          gboolean        return_latin1);
 
@@ -186,11 +186,11 @@ GdkSurface * _gdk_x11_display_create_surface (GdkDisplay     *display,
 GList *    gdk_x11_display_get_toplevel_windows     (GdkDisplay *display);
 
 void _gdk_x11_precache_atoms (GdkDisplay          *display,
-                              const gchar * const *atom_names,
+                              const char * const *atom_names,
                               int                  n_atoms);
 
 Atom _gdk_x11_get_xatom_for_display_printf         (GdkDisplay    *display,
-                                                    const gchar   *format,
+                                                    const char    *format,
                                                     ...) G_GNUC_PRINTF (2, 3);
 
 GdkDrag        *gdk_x11_drag_find                       (GdkDisplay             *display,

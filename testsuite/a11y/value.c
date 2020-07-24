@@ -43,7 +43,7 @@ set_value (GtkWidget   *widget,
 typedef struct
 {
   int count;
-  gchar *last_name;
+  char *last_name;
 } NotifyData;
 
 static void
@@ -63,7 +63,7 @@ test_basic (GtkWidget *widget)
   AtkValue *atk_value;
   gdouble value = 50;
   gdouble ret;
-  gchar *text;
+  char *text;
 
   atk_object = gtk_widget_get_accessible (widget);
   atk_value = ATK_VALUE (atk_object);
@@ -90,11 +90,11 @@ setup_test (GtkWidget *widget)
 }
 
 static void
-add_value_test (const gchar      *prefix,
+add_value_test (const char       *prefix,
                GTestFixtureFunc  test_func,
                GtkWidget        *widget)
 {
-  gchar *path;
+  char *path;
 
   path = g_strdup_printf ("%s/%s", prefix, G_OBJECT_TYPE_NAME (widget));
   g_test_add_vtable (path,

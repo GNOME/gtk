@@ -160,7 +160,7 @@ log_writer (GLogLevelFlags   log_level,
 
   if (g_str_has_prefix (msg, "\tlookup name: "))
     {
-      gchar *s;
+      char *s;
       s = g_strchomp (g_strdup (msg + strlen ("\tlookup name: ")));
       lookups = g_list_append (lookups, s);
     }
@@ -179,7 +179,7 @@ assert_lookup_order (const char         *icon_name,
 {
   guint debug_flags;
   va_list args;
-  const gchar *s;
+  const char *s;
   GtkIconPaintable *info;
   GList *l;
 
@@ -216,7 +216,7 @@ assert_lookup_order (const char         *icon_name,
     {
       g_assert (l != NULL);
       g_assert_cmpstr (s, ==, l->data);
-      s = va_arg (args, gchar*);
+      s = va_arg (args, char *);
       l = l->next;
     }
   g_assert (l == NULL);
@@ -745,7 +745,7 @@ test_nonsquare_symbolic (void)
   GskRenderNode *node;
   graphene_rect_t bounds;
 
-  gchar *path = g_build_filename (g_test_get_dir (G_TEST_DIST),
+  char *path = g_build_filename (g_test_get_dir (G_TEST_DIST),
                                   "icons",
                                   "scalable",
                                   "nonsquare-symbolic.svg",

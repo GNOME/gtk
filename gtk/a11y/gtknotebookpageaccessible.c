@@ -78,7 +78,7 @@ get_label_from_notebook_page (GtkNotebookPageAccessible *page)
   return find_label_child (child);
 }
 
-static const gchar *
+static const char *
 gtk_notebook_page_accessible_get_name (AtkObject *accessible)
 {
   GtkWidget *label;

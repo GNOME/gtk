@@ -239,7 +239,7 @@ typedef struct _GtkTreeRowData GtkTreeRowData;
 struct _GtkTreeRowData
 {
   GtkTreeModel *model;
-  gchar path[4];
+  char path[4];
 };
 
 static GtkTreeRowData *
@@ -268,7 +268,7 @@ gtk_tree_create_row_drag_content (GtkTreeModel *tree_model,
 {
   GdkContentProvider *content;
   GtkTreeRowData *trd;
-  gchar *path_str;
+  char *path_str;
   int len;
   int struct_size;
   

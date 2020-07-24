@@ -38,7 +38,7 @@ typedef struct _GtkIMContextQuartz
   GtkIMContext parent;
   GtkIMContext *helper;
   GdkSurface *client_surface;
-  gchar *preedit_str;
+  char *preedit_str;
   unsigned int cursor_index;
   unsigned int selected_len;
   GdkRectangle *cursor_rect;
@@ -59,7 +59,7 @@ G_DEFINE_TYPE_WITH_CODE (GtkIMContextQuartz, gtk_im_context_quartz, GTK_TYPE_IM_
 
 static void
 quartz_get_preedit_string (GtkIMContext *context,
-                           gchar **str,
+                           char **str,
                            PangoAttrList **attrs,
                            int *cursor_pos)
 {
@@ -74,14 +74,14 @@ quartz_get_preedit_string (GtkIMContext *context,
     {
       *attrs = pango_attr_list_new ();
       int len = g_utf8_strlen (*str, -1);
-      gchar *ch = *str;
+      char *ch = *str;
       if (len > 0)
         {
           PangoAttribute *attr;
           int i = 0;
           for (;;)
             {
-              gchar *s = ch;
+              char *s = ch;
               ch = g_utf8_next_char (ch);
 
               if (i >= qc->cursor_index &&
@@ -114,7 +114,7 @@ output_result (GtkIMContext *context,
 {
   GtkIMContextQuartz *qc = GTK_IM_CONTEXT_QUARTZ (context);
   gboolean retval = FALSE;
-  gchar *fixed_str, *marked_str;
+  char *fixed_str, *marked_str;
 
   fixed_str = g_strdup (g_object_get_data (G_OBJECT (surface), TIC_INSERT_TEXT));
   marked_str = g_strdup (g_object_get_data (G_OBJECT (surface), TIC_MARKED_TEXT));
@@ -325,7 +325,7 @@ quartz_set_use_preedit (GtkIMContext *context, gboolean use_preedit)
 }
 
 static void
-commit_cb (GtkIMContext *context, const gchar *str, GtkIMContextQuartz *qc)
+commit_cb (GtkIMContext *context, const char *str, GtkIMContextQuartz *qc)
 {
   g_signal_emit_by_name (qc, "commit", str);
 }

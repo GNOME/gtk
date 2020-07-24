@@ -65,9 +65,9 @@ gboolean  gdk_rgba_equal     (gconstpointer  p1,
 
 GDK_AVAILABLE_IN_ALL
 gboolean  gdk_rgba_parse     (GdkRGBA       *rgba,
-                              const gchar   *spec);
+                              const char    *spec);
 GDK_AVAILABLE_IN_ALL
-gchar *   gdk_rgba_to_string (const GdkRGBA *rgba);
+char *   gdk_rgba_to_string (const GdkRGBA *rgba);
 
 
 G_END_DECLS

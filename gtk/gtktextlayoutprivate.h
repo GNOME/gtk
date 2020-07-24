@@ -156,7 +156,7 @@ struct _GtkTextLayout
 
   /* The preedit string and attributes, if any */
 
-  gchar *preedit_string;
+  char *preedit_string;
   PangoAttrList *preedit_attrs;
   int preedit_len;
   int preedit_cursor;
@@ -249,7 +249,7 @@ void               gtk_text_layout_default_style_changed (GtkTextLayout     *lay
 void gtk_text_layout_set_screen_width       (GtkTextLayout     *layout,
                                              int                width);
 void gtk_text_layout_set_preedit_string     (GtkTextLayout     *layout,
- 					     const gchar       *preedit_string,
+ 					     const char        *preedit_string,
  					     PangoAttrList     *preedit_attrs,
  					     int                cursor_pos);
 

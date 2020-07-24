@@ -58,13 +58,13 @@ gtk_link_button_accessible_link_new (GtkLinkButtonAccessible *button)
   return ATK_HYPERLINK (l);
 }
 
-static gchar *
+static char *
 gtk_link_button_accessible_link_get_uri (AtkHyperlink *atk_link,
                                          int           i)
 {
   GtkLinkButtonAccessibleLink *l = (GtkLinkButtonAccessibleLink *)atk_link;
   GtkWidget *widget;
-  const gchar *uri;
+  const char *uri;
 
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (l->button));
   uri = gtk_link_button_get_uri (GTK_LINK_BUTTON (widget));
@@ -137,7 +137,7 @@ gtk_link_button_accessible_link_get_n_actions (AtkAction *action)
   return 1;
 }
 
-static const gchar *
+static const char *
 gtk_link_button_accessible_link_get_name (AtkAction *action,
                                           int        i)
 {

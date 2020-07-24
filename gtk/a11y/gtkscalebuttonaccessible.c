@@ -158,7 +158,7 @@ gtk_scale_button_accessible_get_n_actions (AtkAction *action)
   return 2;
 }
 
-static const gchar *
+static const char *
 gtk_scale_button_accessible_get_description (AtkAction *action,
                                              int        i)
 {
@@ -173,7 +173,7 @@ gtk_scale_button_accessible_get_description (AtkAction *action,
     }
 }
 
-static const gchar *
+static const char *
 gtk_scale_button_accessible_action_get_name (AtkAction *action,
                                              int        i)
 {
@@ -188,7 +188,7 @@ gtk_scale_button_accessible_action_get_name (AtkAction *action,
     }
 }
 
-static const gchar *
+static const char *
 gtk_scale_button_accessible_action_get_localized_name (AtkAction *action,
                                                        int        i)
 {
@@ -301,7 +301,7 @@ gtk_scale_button_accessible_set_current_value (AtkValue     *obj,
 static void
 gtk_scale_button_accessible_get_value_and_text (AtkValue  *obj,
                                                 gdouble   *value,
-                                                gchar    **text)
+                                                char     **text)
 {
   GtkWidget *widget;
   GtkAdjustment *adjustment;

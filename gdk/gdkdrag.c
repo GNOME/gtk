@@ -37,7 +37,7 @@
 
 static struct {
   GdkDragAction action;
-  const gchar  *name;
+  const char   *name;
   GdkCursor    *cursor;
 } drag_cursors[] = {
   { GDK_ACTION_ASK,     "dnd-ask",  NULL },
@@ -604,7 +604,7 @@ gdk_drag_write_async (GdkDrag             *drag,
       return;
     }
 
-  mime_formats = gdk_content_formats_new ((const gchar *[2]) { mime_type, NULL }, 1);
+  mime_formats = gdk_content_formats_new ((const char *[2]) { mime_type, NULL }, 1);
   mime_formats = gdk_content_formats_union_serialize_gtypes (mime_formats);
   gtype = gdk_content_formats_match_gtype (formats, mime_formats);
   if (gtype != G_TYPE_INVALID)

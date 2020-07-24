@@ -95,7 +95,7 @@ struct _GdkWin32Drop
   /* The list from WM_DROPFILES is store here temporarily,
    * until the next gdk_win32_drop_read_async ()
    */
-  gchar           *dropfiles_list;
+  char            *dropfiles_list;
 
   guint drop_finished : 1; /* FALSE until gdk_drop_finish() is called */
   guint drop_failed : 1;   /* Whether the drop was unsuccessful */
@@ -316,7 +316,7 @@ query_object_formats (LPDATAOBJECT  pDataObj,
   while (SUCCEEDED (hr) && hr != S_FALSE)
     {
       gboolean is_predef;
-      gchar *registered_name = _gdk_win32_get_clipboard_format_name (fmt.cfFormat, &is_predef);
+      char *registered_name = _gdk_win32_get_clipboard_format_name (fmt.cfFormat, &is_predef);
 
       if (registered_name && is_predef)
         GDK_NOTE (DND, g_print ("supported built-in source format 0x%x %s\n", fmt.cfFormat, registered_name));
@@ -817,7 +817,7 @@ target_context_new (GdkSurface *window)
 static gboolean
 resolve_link (HWND     hWnd,
               wchar_t *link,
-              gchar  **lpszPath)
+              char   **lpszPath)
 {
   WIN32_FILE_ATTRIBUTE_DATA wfad;
   HRESULT hr;
@@ -940,7 +940,7 @@ gdk_dropfiles_filter (GdkWin32Display *display,
   HANDLE hdrop;
   POINT pt;
   int nfiles, i;
-  gchar *fileName, *linkedFile;
+  char *fileName, *linkedFile;
 
   if (msg->message != WM_DROPFILES)
     return GDK_WIN32_MESSAGE_FILTER_CONTINUE;
@@ -972,7 +972,7 @@ gdk_dropfiles_filter (GdkWin32Display *display,
   result = g_string_new (NULL);
   for (i = 0; i < nfiles; i++)
     {
-      gchar *uri;
+      char *uri;
       wchar_t wfn[MAX_PATH];
 
       DragQueryFileW (hdrop, i, wfn, MAX_PATH);
@@ -1225,7 +1225,7 @@ grab_data_from_hdata (GTask  *task,
 
   if (data == NULL)
     {
-      gchar *length_str = g_strdup_printf ("%" G_GSIZE_FORMAT, length);
+      char *length_str = g_strdup_printf ("%" G_GSIZE_FORMAT, length);
       g_task_return_new_error (task, G_IO_ERROR, G_IO_ERROR_FAILED,
                                _("Cannot get DnD data. Failed to allocate %s bytes to store the data."), length_str);
       g_free (length_str);

@@ -108,14 +108,14 @@ int main (int argc, char *argv[])
   GtkWidget *button;
   GtkWidget *frame;
   GtkWidget *scale;
-  const gchar *labels[3] = {
+  const char *labels[3] = {
     "<small>Left</small>",
     "<small>Middle</small>",
     "<small>Right</small>"
   };
 
   gdouble bath_marks[4] = { 0.0, 33.3, 66.6, 100.0 };
-  const gchar *bath_labels[4] = {
+  const char *bath_labels[4] = {
     "<span color='blue' size='small'>Cold</span>",
     "<span size='small'>Baby bath</span>",
     "<span size='small'>Hot tub</span>",
@@ -123,7 +123,7 @@ int main (int argc, char *argv[])
   };
 
   gdouble pos_marks[4] = { 0.0, 33.3, 66.6, 100.0 };
-  const gchar *pos_labels[4] = { "Left", "Right", "Top", "Bottom" };
+  const char *pos_labels[4] = { "Left", "Right", "Top", "Bottom" };
   gboolean done = FALSE;
 
   gtk_init ();

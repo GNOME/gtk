@@ -191,7 +191,7 @@ static void
 gtk_action_bar_buildable_add_child (GtkBuildable *buildable,
                                     GtkBuilder   *builder,
                                     GObject      *child,
-                                    const gchar  *type)
+                                    const char   *type)
 {
   GtkActionBar *self = GTK_ACTION_BAR (buildable);
 

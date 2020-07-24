@@ -478,7 +478,7 @@ _gtk_icon_helper_set_gicon (GtkIconHelper *self,
 
 void
 _gtk_icon_helper_set_icon_name (GtkIconHelper *self,
-                                const gchar   *icon_name)
+                                const char    *icon_name)
 {
   gtk_icon_helper_take_definition (self, gtk_image_definition_new_icon_name (icon_name));
 }
@@ -552,7 +552,7 @@ _gtk_icon_helper_peek_paintable (GtkIconHelper *self)
   return gtk_image_definition_get_paintable (self->def);
 }
 
-const gchar *
+const char *
 _gtk_icon_helper_get_icon_name (GtkIconHelper *self)
 {
   return gtk_image_definition_get_icon_name (self->def);

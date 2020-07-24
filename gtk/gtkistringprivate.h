@@ -128,7 +128,7 @@ istring_prepend (IString *str,
     }
   else
     {
-      gchar *old = NULL;
+      char *old = NULL;
 
       if (!istring_is_inline (str))
         old = str->u.str;
@@ -145,7 +145,7 @@ static inline void
 istring_append (IString *str,
                 IString *other)
 {
-  const gchar *text = istring_str (other);
+  const char *text = istring_str (other);
   guint n_bytes = other->n_bytes;
   guint n_chars = other->n_chars;
 

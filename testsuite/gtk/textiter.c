@@ -47,17 +47,17 @@ test_empty_search (void)
 }
 
 static void
-check_found_forward (const gchar *haystack,
-                     const gchar *needle,
+check_found_forward (const char *haystack,
+                     const char *needle,
                      GtkTextSearchFlags flags,
                      int expected_start,
                      int expected_end,
-                     const gchar *expected_string)
+                     const char *expected_string)
 {
   GtkTextBuffer *buffer;
   GtkTextIter i, s, e;
   gboolean res;
-  gchar *text;
+  char *text;
 
   buffer = gtk_text_buffer_new (NULL);
 
@@ -80,17 +80,17 @@ check_found_forward (const gchar *haystack,
 }
 
 static void
-check_found_backward (const gchar *haystack,
-                      const gchar *needle,
+check_found_backward (const char *haystack,
+                      const char *needle,
                       GtkTextSearchFlags flags,
                       int expected_start,
                       int expected_end,
-                      const gchar *expected_string)
+                      const char *expected_string)
 {
   GtkTextBuffer *buffer;
   GtkTextIter i, s, e;
   gboolean res;
-  gchar *text;
+  char *text;
 
   buffer = gtk_text_buffer_new (NULL);
 
@@ -110,8 +110,8 @@ check_found_backward (const gchar *haystack,
 }
 
 static void
-check_not_found (const gchar *haystack,
-                 const gchar *needle,
+check_not_found (const char *haystack,
+                 const char *needle,
                  GtkTextSearchFlags flags)
 {
   GtkTextBuffer *buffer;
@@ -331,7 +331,7 @@ test_forward_to_tag_toggle (void)
 }
 
 static void
-check_forward_line_end (const gchar *buffer_text,
+check_forward_line_end (const char *buffer_text,
                         int          initial_offset,
                         int          result_offset,
                         gboolean     ret)
@@ -363,7 +363,7 @@ test_forward_to_line_end (void)
 }
 
 static void
-check_word_boundaries (const gchar *buffer_text,
+check_word_boundaries (const char *buffer_text,
                        int          offset,
                        gboolean     starts_word,
                        gboolean     ends_word,
@@ -385,7 +385,7 @@ check_word_boundaries (const gchar *buffer_text,
 }
 
 static void
-check_forward_word_end (const gchar *buffer_text,
+check_forward_word_end (const char *buffer_text,
                         int          initial_offset,
                         int          result_offset,
                         gboolean     ret)
@@ -405,7 +405,7 @@ check_forward_word_end (const gchar *buffer_text,
 }
 
 static void
-check_backward_word_start (const gchar *buffer_text,
+check_backward_word_start (const char *buffer_text,
                            int          initial_offset,
                            int          result_offset,
                            gboolean     ret)
@@ -535,7 +535,7 @@ test_visible_word_boundaries (void)
 }
 
 static void
-check_is_cursor_position (const gchar *buffer_text,
+check_is_cursor_position (const char *buffer_text,
                           int          offset,
                           gboolean     ret)
 {
@@ -552,7 +552,7 @@ check_is_cursor_position (const gchar *buffer_text,
 }
 
 static void
-check_cursor_position (const gchar *buffer_text,
+check_cursor_position (const char *buffer_text,
                        gboolean     forward,
                        int          initial_offset,
                        int          result_offset,
@@ -657,7 +657,7 @@ test_visible_cursor_positions (void)
 }
 
 static void
-check_sentence_boundaries (const gchar *buffer_text,
+check_sentence_boundaries (const char *buffer_text,
                            int          offset,
                            gboolean     starts_sentence,
                            gboolean     ends_sentence,
@@ -679,7 +679,7 @@ check_sentence_boundaries (const gchar *buffer_text,
 }
 
 static void
-check_forward_sentence_end (const gchar *buffer_text,
+check_forward_sentence_end (const char *buffer_text,
                             int          initial_offset,
                             int          result_offset,
                             gboolean     ret)
@@ -699,7 +699,7 @@ check_forward_sentence_end (const gchar *buffer_text,
 }
 
 static void
-check_backward_sentence_start (const gchar *buffer_text,
+check_backward_sentence_start (const char *buffer_text,
                                int          initial_offset,
                                int          result_offset,
                                gboolean     ret)

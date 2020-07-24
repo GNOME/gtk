@@ -84,7 +84,7 @@ check_string (CacheInfo *info,
   if (info->flags & CHECK_STRINGS)
     {
       int i;
-      gchar c;
+      char c;
 
       /* assume no string is longer than 1k */
       for (i = 0; i < 1024; i++)
@@ -110,7 +110,7 @@ check_string_utf8 (CacheInfo *info,
   if (info->flags & CHECK_STRINGS)
     {
       int i;
-      gchar c;
+      char c;
 
       /* assume no string is longer than 1k */
       for (i = 0; i < 1024; i++)

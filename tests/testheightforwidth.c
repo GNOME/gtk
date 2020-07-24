@@ -21,9 +21,9 @@
 #include <gtk/gtk.h>
 
 typedef struct {
-  const gchar *name;
-  const gchar *tooltip;
-  const gchar *interface;
+  const char *name;
+  const char *tooltip;
+  const char *interface;
   GtkWidget   *window;
 } TestInterface;
 

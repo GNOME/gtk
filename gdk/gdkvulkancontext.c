@@ -971,7 +971,7 @@ gdk_display_create_vulkan_device (GdkDisplay  *display,
                                                     0,
                                                     NULL,
                                                     device_extensions->len,
-                                                    (const gchar * const *) device_extensions->pdata
+                                                    (const char * const *) device_extensions->pdata
                                                 },
                                                 NULL,
                                                 &display->vk_device) != VK_SUCCESS)

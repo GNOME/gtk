@@ -1040,8 +1040,8 @@ check_parameter_type (GVariant           *args,
 
       if (!g_variant_is_of_type (args, parameter_type))
         {
-          gchar *typestr = g_variant_type_dup_string (parameter_type);
-          gchar *targetstr = g_variant_print (args, TRUE);
+          char *typestr = g_variant_type_dup_string (parameter_type);
+          char *targetstr = g_variant_print (args, TRUE);
           g_warning ("Trying to invoke action with target '%s',"
                      " but action expects parameter with type '%s'", targetstr, typestr);
           g_free (targetstr);
@@ -1053,7 +1053,7 @@ check_parameter_type (GVariant           *args,
     {
       if (parameter_type != NULL)
         {
-          gchar *typestr = g_variant_type_dup_string (parameter_type);
+          char *typestr = g_variant_type_dup_string (parameter_type);
           g_warning ("Trying to invoke action without arguments,"
                      " but action expects parameter with type '%s'", typestr);
           g_free (typestr);

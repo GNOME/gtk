@@ -103,7 +103,7 @@ static void     gdk_x11_surface_apply_fullscreen_mode (GdkSurface  *surface);
 static gboolean gdk_surface_icon_name_set          (GdkSurface  *surface);
 static void     set_wm_name                       (GdkDisplay  *display,
 						   Window       xwindow,
-						   const gchar *name);
+						   const char *name);
 static void     move_to_current_desktop           (GdkSurface *surface);
 static void     gdk_x11_toplevel_state_callback   (GdkSurface *surface);
 static gboolean gdk_x11_toplevel_event_callback   (GdkSurface *surface,
@@ -652,7 +652,7 @@ set_wm_protocols (GdkSurface *surface)
   XSetWMProtocols (GDK_DISPLAY_XDISPLAY (display), GDK_SURFACE_XID (surface), protocols, n);
 }
 
-static const gchar *
+static const char *
 get_default_title (void)
 {
   const char *title;
@@ -1799,7 +1799,7 @@ move_to_current_desktop (GdkSurface *surface)
 
 static guint32
 get_netwm_cardinal_property (GdkSurface   *surface,
-                             const gchar *name)
+                             const char *name)
 {
   GdkX11Screen *x11_screen = GDK_SURFACE_SCREEN (surface);
   guint32 prop = 0;
@@ -2306,7 +2306,7 @@ gdk_surface_get_geometry_hints (GdkSurface      *surface,
 }
 
 static gboolean
-utf8_is_latin1 (const gchar *str)
+utf8_is_latin1 (const char *str)
 {
   const char *p = str;
 
@@ -2330,9 +2330,9 @@ static void
 set_text_property (GdkDisplay  *display,
 		   Window       xwindow,
 		   Atom         property,
-		   const gchar *utf8_str)
+		   const char *utf8_str)
 {
-  gchar *prop_text = NULL;
+  char *prop_text = NULL;
   Atom prop_type;
   int prop_length;
   int prop_format;
@@ -2378,7 +2378,7 @@ set_text_property (GdkDisplay  *display,
 static void
 set_wm_name (GdkDisplay  *display,
 	     Window       xwindow,
-	     const gchar *name)
+	     const char *name)
 {
   XChangeProperty (GDK_DISPLAY_XDISPLAY (display), xwindow,
 		   gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_NAME"),
@@ -2392,7 +2392,7 @@ set_wm_name (GdkDisplay  *display,
 
 static void
 gdk_x11_surface_set_title (GdkSurface   *surface,
-			  const gchar *title)
+			  const char *title)
 {
   GdkDisplay *display;
   Display *xdisplay;
@@ -2424,7 +2424,7 @@ gdk_x11_surface_set_title (GdkSurface   *surface,
 
 static void
 gdk_x11_surface_set_startup_id (GdkSurface   *surface,
-			       const gchar *startup_id)
+			       const char *startup_id)
 {
   GdkDisplay *display;
 
@@ -2846,8 +2846,8 @@ gdk_x11_surface_set_user_time (GdkSurface *surface,
  */
 void
 gdk_x11_surface_set_utf8_property  (GdkSurface *surface,
-				   const gchar *name,
-				   const gchar *value)
+				   const char *name,
+				   const char *value)
 {
   GdkDisplay *display;
 

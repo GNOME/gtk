@@ -29,7 +29,7 @@ draw_color (GtkDrawingArea *drawingarea,
 }
 
 static GtkWidget *
-color_swatch_new (const gchar *color)
+color_swatch_new (const char *color)
 {
   GtkWidget *button, *area;
 
@@ -48,7 +48,7 @@ do_flowbox (GtkWidget *do_widget)
 {
   static GtkWidget *window = NULL;
   GtkWidget *scrolled, *flowbox;
-  const gchar *colors[] = {
+  const char *colors[] = {
     "AliceBlue",
     "AntiqueWhite",
     "AntiqueWhite1",

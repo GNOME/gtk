@@ -104,14 +104,14 @@ static void     gtk_combo_box_text_buildable_interface_init   (GtkBuildableIface
 static gboolean gtk_combo_box_text_buildable_custom_tag_start (GtkBuildable       *buildable,
                                                                GtkBuilder         *builder,
                                                                GObject            *child,
-                                                               const gchar        *tagname,
+                                                               const char         *tagname,
                                                                GtkBuildableParser *parser,
                                                                gpointer           *data);
 
 static void     gtk_combo_box_text_buildable_custom_finished  (GtkBuildable       *buildable,
                                                                GtkBuilder         *builder,
                                                                GObject            *child,
-                                                               const gchar        *tagname,
+                                                               const char         *tagname,
                                                                gpointer            user_data);
 
 
@@ -174,12 +174,12 @@ gtk_combo_box_text_buildable_interface_init (GtkBuildableIface *iface)
 typedef struct {
   GtkBuilder    *builder;
   GObject       *object;
-  const gchar   *domain;
-  gchar         *id;
+  const char    *domain;
+  char          *id;
 
   GString       *string;
 
-  gchar         *context;
+  char          *context;
   guint          translatable : 1;
 
   guint          is_text : 1;
@@ -187,9 +187,9 @@ typedef struct {
 
 static void
 item_start_element (GtkBuildableParseContext  *context,
-                    const gchar               *element_name,
-                    const gchar              **names,
-                    const gchar              **values,
+                    const char                *element_name,
+                    const char               **names,
+                    const char               **values,
                     gpointer                   user_data,
                     GError                   **error)
 {
@@ -207,9 +207,9 @@ item_start_element (GtkBuildableParseContext  *context,
     }
   else if (strcmp (element_name, "item") == 0)
     {
-      const gchar *id = NULL;
+      const char *id = NULL;
       gboolean translatable = FALSE;
-      const gchar *msg_context = NULL;
+      const char *msg_context = NULL;
 
       if (!_gtk_builder_check_parent (data->builder, context, "items", error))
         return;
@@ -240,7 +240,7 @@ item_start_element (GtkBuildableParseContext  *context,
 
 static void
 item_text (GtkBuildableParseContext  *context,
-           const gchar               *text,
+           const char                *text,
            gsize                      text_len,
            gpointer                   user_data,
            GError                   **error)
@@ -253,7 +253,7 @@ item_text (GtkBuildableParseContext  *context,
 
 static void
 item_end_element (GtkBuildableParseContext  *context,
-                  const gchar               *element_name,
+                  const char                *element_name,
                   gpointer                   user_data,
                   GError                   **error)
 {
@@ -264,7 +264,7 @@ item_end_element (GtkBuildableParseContext  *context,
     {
       if (data->translatable)
 	{
-	  const gchar *translated;
+	  const char *translated;
 
 	  translated = _gtk_builder_parser_translate (data->domain,
 						      data->context,
@@ -293,7 +293,7 @@ static gboolean
 gtk_combo_box_text_buildable_custom_tag_start (GtkBuildable       *buildable,
                                                GtkBuilder         *builder,
                                                GObject            *child,
-                                               const gchar        *tagname,
+                                               const char         *tagname,
                                                GtkBuildableParser *parser,
                                                gpointer           *parser_data)
 {
@@ -324,7 +324,7 @@ static void
 gtk_combo_box_text_buildable_custom_finished (GtkBuildable *buildable,
                                               GtkBuilder   *builder,
                                               GObject      *child,
-                                              const gchar  *tagname,
+                                              const char   *tagname,
                                               gpointer      user_data)
 {
   ItemParserData *data;
@@ -386,7 +386,7 @@ gtk_combo_box_text_new_with_entry (void)
  */
 void
 gtk_combo_box_text_append_text (GtkComboBoxText *combo_box,
-                                const gchar     *text)
+                                const char      *text)
 {
   gtk_combo_box_text_insert (combo_box, -1, NULL, text);
 }
@@ -403,7 +403,7 @@ gtk_combo_box_text_append_text (GtkComboBoxText *combo_box,
  */
 void
 gtk_combo_box_text_prepend_text (GtkComboBoxText *combo_box,
-                                 const gchar     *text)
+                                 const char      *text)
 {
   gtk_combo_box_text_insert (combo_box, 0, NULL, text);
 }
@@ -424,7 +424,7 @@ gtk_combo_box_text_prepend_text (GtkComboBoxText *combo_box,
 void
 gtk_combo_box_text_insert_text (GtkComboBoxText *combo_box,
                                 int              position,
-                                const gchar     *text)
+                                const char      *text)
 {
   gtk_combo_box_text_insert (combo_box, position, NULL, text);
 }
@@ -443,8 +443,8 @@ gtk_combo_box_text_insert_text (GtkComboBoxText *combo_box,
  */
 void
 gtk_combo_box_text_append (GtkComboBoxText *combo_box,
-                           const gchar     *id,
-                           const gchar     *text)
+                           const char      *id,
+                           const char      *text)
 {
   gtk_combo_box_text_insert (combo_box, -1, id, text);
 }
@@ -463,8 +463,8 @@ gtk_combo_box_text_append (GtkComboBoxText *combo_box,
  */
 void
 gtk_combo_box_text_prepend (GtkComboBoxText *combo_box,
-                            const gchar     *id,
-                            const gchar     *text)
+                            const char      *id,
+                            const char      *text)
 {
   gtk_combo_box_text_insert (combo_box, 0, id, text);
 }
@@ -486,8 +486,8 @@ gtk_combo_box_text_prepend (GtkComboBoxText *combo_box,
 void
 gtk_combo_box_text_insert (GtkComboBoxText *combo_box,
                            int              position,
-                           const gchar     *id,
-                           const gchar     *text)
+                           const char      *id,
+                           const char      *text)
 {
   GtkListStore *store;
   GtkTreeIter iter;
@@ -582,11 +582,11 @@ gtk_combo_box_text_remove_all (GtkComboBoxText *combo_box)
  * Returns: (nullable) (transfer full): a newly allocated string containing the
  *     currently active text. Must be freed with g_free().
  */
-gchar *
+char *
 gtk_combo_box_text_get_active_text (GtkComboBoxText *combo_box)
 {
   GtkTreeIter iter;
-  gchar *text = NULL;
+  char *text = NULL;
 
   g_return_val_if_fail (GTK_IS_COMBO_BOX_TEXT (combo_box), NULL);
 

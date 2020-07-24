@@ -38,7 +38,7 @@ static GtkPadActionEntry pad_actions[] = {
   { GTK_PAD_ACTION_STRIP, -1, -1, N_("Brush size"), "pad.brush_size" },
 };
 
-static const gchar *pad_colors[] = {
+static const char *pad_colors[] = {
   "black",
   "pink",
   "green",
@@ -154,7 +154,7 @@ on_pad_button_activate (GSimpleAction *action,
                         GVariant      *parameter,
                         DrawingArea   *area)
 {
-  const gchar *color = g_object_get_data (G_OBJECT (action), "color");
+  const char *color = g_object_get_data (G_OBJECT (action), "color");
   GdkRGBA rgba;
 
   gdk_rgba_parse (&rgba, color);

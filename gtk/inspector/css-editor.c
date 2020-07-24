@@ -171,7 +171,7 @@ disable_toggled (GtkToggleButton       *button,
                                                 GTK_STYLE_PROVIDER_PRIORITY_USER);
 }
 
-static gchar *
+static char *
 get_current_text (GtkTextBuffer *buffer)
 {
   GtkTextIter start, end;
@@ -258,7 +258,7 @@ save_clicked (GtkButton             *button,
 static void
 update_style (GtkInspectorCssEditor *ce)
 {
-  gchar *text;
+  char *text;
 
   g_list_free_full (ce->priv->errors, css_error_free);
   ce->priv->errors = NULL;

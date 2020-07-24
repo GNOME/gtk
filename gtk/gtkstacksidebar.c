@@ -184,7 +184,7 @@ update_row (GtkStackSidebar *self,
             GtkWidget       *row)
 {
   GtkWidget *item;
-  gchar *title;
+  char *title;
   gboolean needs_attention;
   gboolean visible;
 

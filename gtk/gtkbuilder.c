@@ -260,13 +260,13 @@ struct _GtkBuilderClass
 
 typedef struct
 {
-  gchar *domain;
+  char *domain;
   GHashTable *objects;
   GSList *delayed_properties;
   GSList *signals;
   GSList *bindings;
-  gchar *filename;
-  gchar *resource_prefix;
+  char *filename;
+  char *resource_prefix;
   GType template_type;
   GObject *current_object;
   GtkBuilderScope *scope;
@@ -447,9 +447,9 @@ gtk_builder_get_property (GObject    *object,
 
 typedef struct
 {
-  gchar *object;
+  char *object;
   GParamSpec *pspec;
-  gchar *value;
+  char *value;
   int line;
   int col;
 } DelayedProperty;
@@ -529,7 +529,7 @@ object_properties_get_value (const ObjectProperties *self,
 static void
 gtk_builder_get_parameters (GtkBuilder         *builder,
                             GType               object_type,
-                            const gchar        *object_name,
+                            const char         *object_name,
                             GSList             *properties,
                             GParamFlags         filter_flags,
                             ObjectProperties   *parameters,
@@ -625,7 +625,7 @@ gtk_builder_get_parameters (GtkBuilder         *builder,
     }
 }
 
-static const gchar *
+static const char *
 object_get_name (GObject *object)
 {
   if (GTK_IS_BUILDABLE (object))
@@ -637,7 +637,7 @@ object_get_name (GObject *object)
 static GObject *
 gtk_builder_get_internal_child (GtkBuilder   *builder,
                                 ObjectInfo   *info,
-                                const gchar  *childname,
+                                const char   *childname,
                                 GError      **error)
 {
   GObject *obj = NULL;
@@ -673,7 +673,7 @@ gtk_builder_get_internal_child (GtkBuilder   *builder,
 
 static inline void
 object_set_name (GObject     *object,
-                 const gchar *name)
+                 const char *name)
 {
   if (GTK_IS_BUILDABLE (object))
     gtk_buildable_set_name (GTK_BUILDABLE (object), name);
@@ -683,7 +683,7 @@ object_set_name (GObject     *object,
 
 void
 _gtk_builder_add_object (GtkBuilder  *builder,
-                         const gchar *id,
+                         const char *id,
                          GObject     *object)
 {
   GtkBuilderPrivate *priv = gtk_builder_get_instance_private (builder);
@@ -825,7 +825,7 @@ _gtk_builder_construct (GtkBuilder  *builder,
            info->parent->tag_type == TAG_CHILD &&
            ((ChildInfo*)info->parent)->internal_child != NULL)
     {
-      gchar *childname = ((ChildInfo*)info->parent)->internal_child;
+      char *childname = ((ChildInfo*)info->parent)->internal_child;
       obj = gtk_builder_get_internal_child (builder, info, childname, error);
       if (!obj)
         {
@@ -890,7 +890,7 @@ _gtk_builder_construct (GtkBuilder  *builder,
 #ifdef G_ENABLE_DEBUG
       if (GTK_DEBUG_CHECK (BUILDER))
         {
-          gchar *str = g_strdup_value_contents (value);
+          char *str = g_strdup_value_contents (value);
           g_message ("set %s: %s = %s", info->id, name, str);
           g_free (str);
         }
@@ -957,7 +957,7 @@ _gtk_builder_apply_properties (GtkBuilder  *builder,
 #ifdef G_ENABLE_DEBUG
       if (GTK_DEBUG_CHECK (BUILDER))
         {
-          gchar *str = g_strdup_value_contents (value);
+          char *str = g_strdup_value_contents (value);
           g_message ("set %s: %s = %s", info->id, name, str);
           g_free (str);
         }
@@ -1193,11 +1193,11 @@ gtk_builder_new (void)
  **/
 gboolean
 gtk_builder_add_from_file (GtkBuilder   *builder,
-                           const gchar  *filename,
+                           const char   *filename,
                            GError      **error)
 {
   GtkBuilderPrivate *priv = gtk_builder_get_instance_private (builder);
-  gchar *buffer;
+  char *buffer;
   gsize length;
   GError *tmp_error;
 
@@ -1257,12 +1257,12 @@ gtk_builder_add_from_file (GtkBuilder   *builder,
  **/
 gboolean
 gtk_builder_add_objects_from_file (GtkBuilder   *builder,
-                                   const gchar  *filename,
+                                   const char   *filename,
                                    const char  **object_ids,
                                    GError      **error)
 {
   GtkBuilderPrivate *priv = gtk_builder_get_instance_private (builder);
-  gchar *buffer;
+  char *buffer;
   gsize length;
   GError *tmp_error;
 
@@ -1322,7 +1322,7 @@ gboolean
 gtk_builder_extend_with_template (GtkBuilder   *builder,
                                   GObject      *object,
                                   GType         template_type,
-                                  const gchar  *buffer,
+                                  const char   *buffer,
                                   gssize        length,
                                   GError      **error)
 {
@@ -1384,7 +1384,7 @@ gtk_builder_extend_with_template (GtkBuilder   *builder,
  **/
 gboolean
 gtk_builder_add_from_resource (GtkBuilder   *builder,
-                               const gchar  *resource_path,
+                               const char   *resource_path,
                                GError      **error)
 {
   GtkBuilderPrivate *priv = gtk_builder_get_instance_private (builder);
@@ -1458,7 +1458,7 @@ gtk_builder_add_from_resource (GtkBuilder   *builder,
  **/
 gboolean
 gtk_builder_add_objects_from_resource (GtkBuilder   *builder,
-                                       const gchar  *resource_path,
+                                       const char   *resource_path,
                                        const char  **object_ids,
                                        GError      **error)
 {
@@ -1534,7 +1534,7 @@ gtk_builder_add_objects_from_resource (GtkBuilder   *builder,
  **/
 gboolean
 gtk_builder_add_from_string (GtkBuilder   *builder,
-                             const gchar  *buffer,
+                             const char   *buffer,
                              gssize        length,
                              GError      **error)
 {
@@ -1588,7 +1588,7 @@ gtk_builder_add_from_string (GtkBuilder   *builder,
  **/
 gboolean
 gtk_builder_add_objects_from_string (GtkBuilder   *builder,
-                                     const gchar  *buffer,
+                                     const char   *buffer,
                                      gssize        length,
                                      const char  **object_ids,
                                      GError      **error)
@@ -1635,7 +1635,7 @@ gtk_builder_add_objects_from_string (GtkBuilder   *builder,
  **/
 GObject *
 gtk_builder_get_object (GtkBuilder  *builder,
-                        const gchar *name)
+                        const char *name)
 {
   GtkBuilderPrivate *priv = gtk_builder_get_instance_private (builder);
 
@@ -1684,10 +1684,10 @@ gtk_builder_get_objects (GtkBuilder *builder)
  **/
 void
 gtk_builder_set_translation_domain (GtkBuilder  *builder,
-                                    const gchar *domain)
+                                    const char *domain)
 {
   GtkBuilderPrivate *priv = gtk_builder_get_instance_private (builder);
-  gchar *new_domain;
+  char *new_domain;
 
   g_return_if_fail (GTK_IS_BUILDER (builder));
 
@@ -1708,7 +1708,7 @@ gtk_builder_set_translation_domain (GtkBuilder  *builder,
  *   in case it was never set or explicitly unset via gtk_builder_set_translation_domain().
  *   This string is owned by the builder object and must not be modified or freed.
  **/
-const gchar *
+const char *
 gtk_builder_get_translation_domain (GtkBuilder *builder)
 {
   GtkBuilderPrivate *priv = gtk_builder_get_instance_private (builder);
@@ -1729,7 +1729,7 @@ gtk_builder_get_translation_domain (GtkBuilder *builder)
  **/
 void
 gtk_builder_expose_object (GtkBuilder    *builder,
-                           const gchar   *name,
+                           const char    *name,
                            GObject       *object)
 {
   GtkBuilderPrivate *priv = gtk_builder_get_instance_private (builder);
@@ -1946,7 +1946,7 @@ _gtk_builder_finish (GtkBuilder  *builder,
 gboolean
 gtk_builder_value_from_string (GtkBuilder   *builder,
                                GParamSpec   *pspec,
-                               const gchar  *string,
+                               const char   *string,
                                GValue       *value,
                                GError      **error)
 {
@@ -2021,7 +2021,7 @@ gtk_builder_value_from_string (GtkBuilder   *builder,
 gboolean
 gtk_builder_value_from_string_type (GtkBuilder   *builder,
                                     GType         type,
-                                    const gchar  *string,
+                                    const char   *string,
                                     GValue       *value,
                                     GError      **error)
 {
@@ -2058,7 +2058,7 @@ gtk_builder_value_from_string_type (GtkBuilder   *builder,
     case G_TYPE_INT64:
       {
         gint64 l;
-        gchar *endptr = NULL;
+        char *endptr = NULL;
 
         errno = 0;
         l = g_ascii_strtoll (string, &endptr, 0);
@@ -2085,7 +2085,7 @@ gtk_builder_value_from_string_type (GtkBuilder   *builder,
     case G_TYPE_UINT64:
       {
         guint64 ul;
-        gchar *endptr = NULL;
+        char *endptr = NULL;
         errno = 0;
         ul = g_ascii_strtoull (string, &endptr, 0);
         if (errno || endptr == string)
@@ -2133,7 +2133,7 @@ gtk_builder_value_from_string_type (GtkBuilder   *builder,
     case G_TYPE_DOUBLE:
       {
         gdouble d;
-        gchar *endptr = NULL;
+        char *endptr = NULL;
         errno = 0;
         d = g_ascii_strtod (string, &endptr);
         if (errno || endptr == string)
@@ -2201,7 +2201,7 @@ gtk_builder_value_from_string_type (GtkBuilder   *builder,
         }
       else if (G_VALUE_HOLDS (value, G_TYPE_STRV))
         {
-          gchar **vector = g_strsplit (string, "\n", 0);
+          char **vector = g_strsplit (string, "\n", 0);
           g_value_take_boxed (value, vector);
         }
       else if (G_VALUE_HOLDS (value, G_TYPE_BYTES))
@@ -2224,7 +2224,7 @@ gtk_builder_value_from_string_type (GtkBuilder   *builder,
           G_VALUE_HOLDS (value, GDK_TYPE_PAINTABLE) ||
           G_VALUE_HOLDS (value, GDK_TYPE_TEXTURE))
         {
-          gchar *filename;
+          char *filename;
           GError *tmp_error = NULL;
           GdkPixbuf *pixbuf = NULL;
           GObject *object;
@@ -2407,13 +2407,13 @@ gtk_builder_value_from_string_type (GtkBuilder   *builder,
 
 gboolean
 _gtk_builder_enum_from_string (GType         type,
-                               const gchar  *string,
+                               const char   *string,
                                int          *enum_value,
                                GError      **error)
 {
   GEnumClass *eclass;
   GEnumValue *ev;
-  gchar *endptr;
+  char *endptr;
   int value;
   gboolean ret;
 
@@ -2455,16 +2455,16 @@ _gtk_builder_enum_from_string (GType         type,
 gboolean
 _gtk_builder_flags_from_string (GType         type,
                                 GFlagsValue  *aliases,
-                                const gchar  *string,
+                                const char   *string,
                                 guint        *flags_value,
                                 GError      **error)
 {
   GFlagsClass *fclass;
-  gchar *endptr, *prevptr;
+  char *endptr, *prevptr;
   guint i, j, k, value;
-  gchar *flagstr;
+  char *flagstr;
   GFlagsValue *fv;
-  const gchar *flag;
+  const char *flag;
   gunichar ch;
   gboolean eos, ret;
 
@@ -2572,7 +2572,7 @@ _gtk_builder_flags_from_string (GType         type,
 }
 
 gboolean
-_gtk_builder_boolean_from_string (const gchar  *string,
+_gtk_builder_boolean_from_string (const char   *string,
                                   gboolean     *value,
                                   GError      **error)
 {
@@ -2580,7 +2580,7 @@ _gtk_builder_boolean_from_string (const gchar  *string,
     goto error;
   else if (string[1] == '\0')
     {
-      gchar c;
+      char c;
 
       c = string[0];
       if (c == '1' ||
@@ -2631,7 +2631,7 @@ error:
  */
 GType
 gtk_builder_get_type_from_name (GtkBuilder  *builder,
-                                const gchar *type_name)
+                                const char *type_name)
 {
   GtkBuilderPrivate *priv = gtk_builder_get_instance_private (builder);
   GType type;
@@ -2655,8 +2655,8 @@ gtk_builder_error_quark (void)
   return g_quark_from_static_string ("gtk-builder-error-quark");
 }
 
-gchar *
-_gtk_builder_get_resource_path (GtkBuilder *builder, const gchar *string)
+char *
+_gtk_builder_get_resource_path (GtkBuilder *builder, const char *string)
 {
   GtkBuilderPrivate *priv = gtk_builder_get_instance_private (builder);
 
@@ -2670,13 +2670,13 @@ _gtk_builder_get_resource_path (GtkBuilder *builder, const gchar *string)
   return g_build_path ("/", priv->resource_prefix, string, NULL);
 }
 
-gchar *
+char *
 _gtk_builder_get_absolute_filename (GtkBuilder  *builder,
-                                    const gchar *string)
+                                    const char *string)
 {
   GtkBuilderPrivate *priv = gtk_builder_get_instance_private (builder);
-  gchar *filename;
-  gchar *dirname = NULL;
+  char *filename;
+  char *dirname = NULL;
 
   if (g_path_is_absolute (string))
     return g_strdup (string);
@@ -2759,7 +2759,7 @@ gtk_builder_create_closure (GtkBuilder             *builder,
  * Returns: a #GtkBuilder containing the described interface
  **/
 GtkBuilder *
-gtk_builder_new_from_file (const gchar *filename)
+gtk_builder_new_from_file (const char *filename)
 {
   GError *error = NULL;
   GtkBuilder *builder;
@@ -2784,7 +2784,7 @@ gtk_builder_new_from_file (const gchar *filename)
  * Returns: a #GtkBuilder containing the described interface
  **/
 GtkBuilder *
-gtk_builder_new_from_resource (const gchar *resource_path)
+gtk_builder_new_from_resource (const char *resource_path)
 {
   GError *error = NULL;
   GtkBuilder *builder;
@@ -2814,7 +2814,7 @@ gtk_builder_new_from_resource (const gchar *resource_path)
  * Returns: a #GtkBuilder containing the interface described by @string
  **/
 GtkBuilder *
-gtk_builder_new_from_string (const gchar *string,
+gtk_builder_new_from_string (const char *string,
                              gssize       length)
 {
   GError *error = NULL;
@@ -2869,8 +2869,8 @@ _gtk_builder_prefix_error (GtkBuilder                *builder,
 void
 _gtk_builder_error_unhandled_tag (GtkBuilder                *builder,
                                   GtkBuildableParseContext  *context,
-                                  const gchar               *object,
-                                  const gchar               *element_name,
+                                  const char                *object,
+                                  const char                *element_name,
                                   GError                   **error)
 {
   GtkBuilderPrivate *priv = gtk_builder_get_instance_private (builder);
@@ -2902,14 +2902,14 @@ _gtk_builder_error_unhandled_tag (GtkBuilder                *builder,
 gboolean
 _gtk_builder_check_parent (GtkBuilder                *builder,
                            GtkBuildableParseContext  *context,
-                           const gchar               *parent_name,
+                           const char                *parent_name,
                            GError                   **error)
 {
   GtkBuilderPrivate *priv = gtk_builder_get_instance_private (builder);
   GPtrArray *stack;
   int line, col;
-  const gchar *parent;
-  const gchar *element;
+  const char *parent;
+  const char *element;
 
   stack = gtk_buildable_parse_context_get_element_stack (context);
 
@@ -2932,7 +2932,7 @@ _gtk_builder_check_parent (GtkBuilder                *builder,
 
 GObject *
 gtk_builder_lookup_object (GtkBuilder   *builder,
-                           const gchar  *name,
+                           const char   *name,
                            int           line,
                            int           col,
                            GError      **error)
@@ -2969,7 +2969,7 @@ gtk_builder_lookup_object (GtkBuilder   *builder,
  */
 GObject *
 _gtk_builder_lookup_object (GtkBuilder  *builder,
-                            const gchar *name,
+                            const char *name,
                             int          line,
                             int          col)
 {

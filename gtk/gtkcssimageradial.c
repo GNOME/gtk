@@ -448,7 +448,7 @@ gtk_css_image_radial_print (GtkCssImage *image,
 {
   GtkCssImageRadial *radial = GTK_CSS_IMAGE_RADIAL (image);
   guint i;
-  const gchar *names[] = {
+  const char *names[] = {
     NULL,
     "closest-side",
     "farthest-side",

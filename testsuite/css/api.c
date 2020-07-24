@@ -24,7 +24,7 @@ static void
 gtk_css_provider_load_data_not_null_terminated (void)
 {
   GtkCssProvider *p;
-  const gchar data[3] = {'*', '{', '}'};
+  const char data[3] = {'*', '{', '}'};
 
   p = gtk_css_provider_new();
 

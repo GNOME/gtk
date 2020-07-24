@@ -41,17 +41,17 @@ AtkAttributeSet *_gtk_pango_get_run_attributes     (AtkAttributeSet *attributes,
                                                     int             *start_offset,
                                                     int             *end_offset);
 
-gchar *_gtk_pango_get_text_before (PangoLayout     *layout,
+char *_gtk_pango_get_text_before (PangoLayout     *layout,
                                    AtkTextBoundary  boundary_type,
                                    int              offset,
                                    int             *start_offset,
                                    int             *end_offset);
-gchar *_gtk_pango_get_text_at     (PangoLayout     *layout,
+char *_gtk_pango_get_text_at     (PangoLayout     *layout,
                                    AtkTextBoundary  boundary_type,
                                    int              offset,
                                    int             *start_offset,
                                    int             *end_offset);
-gchar *_gtk_pango_get_text_after  (PangoLayout     *layout,
+char *_gtk_pango_get_text_after  (PangoLayout     *layout,
                                    AtkTextBoundary  boundary_type,
                                    int              offset,
                                    int             *start_offset,
@@ -63,7 +63,7 @@ PangoAttrList *_gtk_pango_attr_list_merge (PangoAttrList *into,
 gboolean gtk_buildable_attribute_tag_start (GtkBuildable       *buildable,
                                             GtkBuilder         *builder,
                                             GObject            *child,
-                                            const gchar        *tagname,
+                                            const char         *tagname,
                                             GtkBuildableParser *parser,
                                             gpointer           *data);
 

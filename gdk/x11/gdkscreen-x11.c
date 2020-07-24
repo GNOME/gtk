@@ -1061,7 +1061,7 @@ _gdk_x11_screen_window_manager_changed (GdkX11Screen *screen)
 
 gboolean
 gdk_x11_screen_get_setting (GdkX11Screen   *x11_screen,
-			    const gchar *name,
+			    const char *name,
 			    GValue      *value)
 {
   const GValue *setting;
@@ -1305,7 +1305,7 @@ gdk_x11_screen_get_window_manager_name (GdkX11Screen *x11_screen)
           int format;
           gulong n_items;
           gulong bytes_after;
-          gchar *name;
+          char *name;
 
           name = NULL;
 
@@ -1357,7 +1357,7 @@ gdk_x11_screen_class_init (GdkX11ScreenClass *klass)
 
 static guint32
 get_netwm_cardinal_property (GdkX11Screen *x11_screen,
-                             const gchar  *name)
+                             const char   *name)
 {
   guint32 prop = 0;
   Atom type;

@@ -511,7 +511,7 @@ add_clicked (GtkWidget *button, gpointer data)
   GtkTreeViewColumn *column;
   GtkTreeSelection *selection;
   GtkCellRenderer *cell;
-  gchar *label = g_strdup_printf ("Column %d", i);
+  char *label = g_strdup_printf ("Column %d", i);
 
   cell = gtk_cell_renderer_text_new ();
   column = gtk_tree_view_column_new_with_attributes (label, cell, "text", 0, NULL);
@@ -546,7 +546,7 @@ get_visible (GtkTreeViewColumn *tree_column,
 
 static void
 set_visible (GtkCellRendererToggle *cell,
-	     gchar                 *path_str,
+	     char                  *path_str,
 	     gpointer               data)
 {
   GtkTreeView *tree_view = (GtkTreeView *) data;
@@ -576,7 +576,7 @@ move_to_left (GtkTreeModel *src,
   GtkTreeIter iter;
   GtkTreeViewColumn *column;
   GtkTreeSelection *selection;
-  gchar *label;
+  char *label;
 
   gtk_tree_model_get (src, src_iter, 0, &label, 1, &column, -1);
 
@@ -606,7 +606,7 @@ move_to_right (GtkTreeIter  *src_iter,
 	       GtkTreeModel *dest,
 	       GtkTreeIter  *dest_iter)
 {
-  gchar *label;
+  char *label;
   GtkTreeViewColumn *column;
   int before = -1;
 
@@ -636,7 +636,7 @@ move_up_or_down (GtkTreeModel *src,
 		 GtkTreeIter  *dest_iter)
 {
   GtkTreeViewColumn *column;
-  gchar *label;
+  char *label;
   int before = -1;
   
   gtk_tree_model_get (src, src_iter, 0, &label, 1, &column, -1);
@@ -750,7 +750,7 @@ main (int argc, char *argv[])
   for (i = 0; i < 10; i++)
     {
       GtkTreeIter iter;
-      gchar *string = g_strdup_printf ("%d", i);
+      char *string = g_strdup_printf ("%d", i);
       gtk_list_store_append (GTK_LIST_STORE (sample_model), &iter);
       gtk_list_store_set (GTK_LIST_STORE (sample_model), &iter, 0, string, -1);
       g_free (string);

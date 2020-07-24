@@ -161,7 +161,7 @@ struct _GdkWaylandTabletPadData
 
   guint enter_serial;
   uint32_t n_buttons;
-  gchar *path;
+  char *path;
 
   GList *rings;
   GList *strips;
@@ -171,8 +171,8 @@ struct _GdkWaylandTabletPadData
 struct _GdkWaylandTabletData
 {
   struct zwp_tablet_v2 *wp_tablet;
-  gchar *name;
-  gchar *path;
+  char *name;
+  char *path;
   uint32_t vid;
   uint32_t pid;
 
@@ -2853,8 +2853,8 @@ tablet_handle_done (void                 *data,
   GdkWaylandSeat *seat = GDK_WAYLAND_SEAT (tablet->seat);
   GdkDisplay *display = gdk_seat_get_display (GDK_SEAT (seat));
   GdkDevice *logical_device, *stylus_device;
-  gchar *logical_name;
-  gchar *vid, *pid;
+  char *logical_name;
+  char *vid, *pid;
 
   vid = g_strdup_printf ("%.4x", tablet->vid);
   pid = g_strdup_printf ("%.4x", tablet->pid);
@@ -5077,7 +5077,7 @@ gdk_wayland_seat_get_wl_seat (GdkSeat *seat)
  *
  * Returns: the /dev/input/event* path of this device
  **/
-const gchar *
+const char *
 gdk_wayland_device_get_node_path (GdkDevice *device)
 {
   GdkWaylandTabletData *tablet;
@@ -5113,7 +5113,7 @@ void
 gdk_wayland_device_pad_set_feedback (GdkDevice           *device,
                                      GdkDevicePadFeature  feature,
                                      guint                feature_idx,
-                                     const gchar         *label)
+                                     const char          *label)
 {
   GdkWaylandTabletPadData *pad;
   GdkWaylandTabletPadGroupData *group;

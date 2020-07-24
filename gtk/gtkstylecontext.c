@@ -672,7 +672,7 @@ gtk_style_context_restore (GtkStyleContext *context)
  **/
 void
 gtk_style_context_add_class (GtkStyleContext *context,
-                             const gchar     *class_name)
+                             const char      *class_name)
 {
   GtkStyleContextPrivate *priv = gtk_style_context_get_instance_private (context);
   GQuark class_quark;
@@ -694,7 +694,7 @@ gtk_style_context_add_class (GtkStyleContext *context,
  **/
 void
 gtk_style_context_remove_class (GtkStyleContext *context,
-                                const gchar     *class_name)
+                                const char      *class_name)
 {
   GtkStyleContextPrivate *priv = gtk_style_context_get_instance_private (context);
   GQuark class_quark;
@@ -721,7 +721,7 @@ gtk_style_context_remove_class (GtkStyleContext *context,
  **/
 gboolean
 gtk_style_context_has_class (GtkStyleContext *context,
-                             const gchar     *class_name)
+                             const char      *class_name)
 {
   GtkStyleContextPrivate *priv = gtk_style_context_get_instance_private (context);
   GQuark class_quark;
@@ -843,7 +843,7 @@ gtk_style_context_resolve_color (GtkStyleContext    *context,
  **/
 gboolean
 gtk_style_context_lookup_color (GtkStyleContext *context,
-                                const gchar     *color_name,
+                                const char      *color_name,
                                 GdkRGBA         *color)
 {
   GtkStyleContextPrivate *priv = gtk_style_context_get_instance_private (context);
@@ -1324,7 +1324,7 @@ gtk_snapshot_render_insertion_cursor (GtkSnapshot     *snapshot,
 static AtkAttributeSet *
 add_attribute (AtkAttributeSet  *attributes,
                AtkTextAttribute  attr,
-               const gchar      *value)
+               const char       *value)
 {
   AtkAttribute *at;
 
@@ -1354,7 +1354,7 @@ _gtk_style_context_get_attributes (AtkAttributeSet *attributes,
                                    GtkStyleContext *context)
 {
   const GdkRGBA *color; 
-  gchar *value;
+  char *value;
 
   color = gtk_css_color_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BACKGROUND_COLOR));
   value = g_strdup_printf ("%u,%u,%u",

@@ -18,7 +18,7 @@
 #include <gtk/gtk.h>
 #include <string.h>
 
-static gchar *
+static char *
 get_content (void)
 {
   GString *s;
@@ -54,7 +54,7 @@ int
 main (int argc, char *argv[])
 {
   GtkWidget *window;
-  gchar *content;
+  char *content;
   GtkWidget *box;
   GtkWidget *sw;
   GtkWidget *tv;

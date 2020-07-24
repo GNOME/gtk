@@ -31,7 +31,7 @@
 static AtkAttributeSet *
 add_attribute (AtkAttributeSet  *attributes,
                AtkTextAttribute  attr,
-               const gchar      *value)
+               const char       *value)
 {
   AtkAttribute *at;
 
@@ -78,7 +78,7 @@ _gtk_pango_get_default_attributes (AtkAttributeSet *attributes,
       font = pango_context_get_font_description (context);
       if (font)
         {
-          gchar buf[60];
+          char buf[60];
           attributes = add_attribute (attributes, ATK_TEXT_ATTR_STYLE,
                            atk_text_attribute_get_value (ATK_TEXT_ATTR_STYLE,
                                  pango_font_description_get_style (font)));
@@ -183,8 +183,8 @@ _gtk_pango_get_run_attributes (AtkAttributeSet *attributes,
   int index, start_index, end_index;
   gboolean is_next;
   glong len;
-  const gchar *text;
-  gchar *value;
+  const char *text;
+  char *value;
 
   text = pango_layout_get_text (layout);
   len = g_utf8_strlen (text, -1);
@@ -526,7 +526,7 @@ pango_layout_get_line_before (PangoLayout     *layout,
   PangoLayoutIter *iter;
   PangoLayoutLine *line, *prev_line = NULL, *prev_prev_line = NULL;
   int index, start_index, end_index;
-  const gchar *text;
+  const char *text;
   gboolean found = FALSE;
 
   text = pango_layout_get_text (layout);
@@ -599,7 +599,7 @@ pango_layout_get_line_at (PangoLayout     *layout,
   PangoLayoutIter *iter;
   PangoLayoutLine *line, *prev_line = NULL;
   int index, start_index, end_index;
-  const gchar *text;
+  const char *text;
   gboolean found = FALSE;
 
   text = pango_layout_get_text (layout);
@@ -663,7 +663,7 @@ pango_layout_get_line_after (PangoLayout     *layout,
   PangoLayoutIter *iter;
   PangoLayoutLine *line, *prev_line = NULL;
   int index, start_index, end_index;
-  const gchar *text;
+  const char *text;
   gboolean found = FALSE;
 
   text = pango_layout_get_text (layout);
@@ -743,14 +743,14 @@ pango_layout_get_line_after (PangoLayout     *layout,
  * Returns: a newly allocated string containing a slice of text
  *     from layout. Free with g_free().
  */
-gchar *
+char *
 _gtk_pango_get_text_before (PangoLayout     *layout,
                             AtkTextBoundary  boundary_type,
                             int              offset,
                             int             *start_offset,
                             int             *end_offset)
 {
-  const gchar *text;
+  const char *text;
   int start, end;
   const PangoLogAttr *attrs;
   int n_attrs;
@@ -848,14 +848,14 @@ _gtk_pango_get_text_before (PangoLayout     *layout,
  * Returns: a newly allocated string containing a slice of text
  *     from layout. Free with g_free().
  */
-gchar *
+char *
 _gtk_pango_get_text_after (PangoLayout     *layout,
                            AtkTextBoundary  boundary_type,
                            int              offset,
                            int             *start_offset,
                            int             *end_offset)
 {
-  const gchar *text;
+  const char *text;
   int start, end;
   const PangoLogAttr *attrs;
   int n_attrs;
@@ -959,14 +959,14 @@ _gtk_pango_get_text_after (PangoLayout     *layout,
  * Returns: a newly allocated string containing a slice of text
  *     from layout. Free with g_free().
  */
-gchar *
+char *
 _gtk_pango_get_text_at (PangoLayout     *layout,
                         AtkTextBoundary  boundary_type,
                         int              offset,
                         int             *start_offset,
                         int             *end_offset)
 {
-  const gchar *text;
+  const char *text;
   int start, end;
   const PangoLogAttr *attrs;
   int n_attrs;

@@ -112,10 +112,10 @@ char *           gtk_icon_theme_get_theme_name       (GtkIconTheme              
 
 GDK_AVAILABLE_IN_ALL
 gboolean         gtk_icon_theme_has_icon             (GtkIconTheme                *self,
-                                                      const gchar                 *icon_name);
+                                                      const char                  *icon_name);
 GDK_AVAILABLE_IN_ALL
 int              *gtk_icon_theme_get_icon_sizes      (GtkIconTheme                *self,
-                                                      const gchar                 *icon_name);
+                                                      const char                  *icon_name);
 GDK_AVAILABLE_IN_ALL
 GtkIconPaintable *gtk_icon_theme_lookup_icon         (GtkIconTheme                *self,
                                                       const char                  *icon_name,
@@ -144,7 +144,7 @@ GType                 gtk_icon_paintable_get_type         (void) G_GNUC_CONST;
 GDK_AVAILABLE_IN_ALL
 GFile *               gtk_icon_paintable_get_file          (GtkIconPaintable  *self);
 GDK_AVAILABLE_IN_ALL
-const gchar *         gtk_icon_paintable_get_icon_name     (GtkIconPaintable  *self);
+const char *         gtk_icon_paintable_get_icon_name     (GtkIconPaintable  *self);
 GDK_AVAILABLE_IN_ALL
 gboolean              gtk_icon_paintable_is_symbolic       (GtkIconPaintable  *self);
 

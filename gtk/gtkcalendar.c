@@ -529,7 +529,7 @@ gtk_calendar_drag_prepare (GtkDragSource *source,
                            GtkCalendar   *calendar)
 {
   GDate *date;
-  gchar str[128];
+  char str[128];
 
   date = g_date_new_dmy (g_date_time_get_day_of_month (calendar->date),
                          g_date_time_get_month (calendar->date),
@@ -559,14 +559,14 @@ gtk_calendar_init (GtkCalendar *calendar)
   char buffer[255];
   time_t tmp_time;
 #endif
-  gchar *year_before;
+  char *year_before;
 #ifdef HAVE__NL_TIME_FIRST_WEEKDAY
   union { unsigned int word; char *string; } langinfo;
   int week_1stday = 0;
   int first_weekday = 1;
   guint week_origin;
 #else
-  gchar *week_start;
+  char *week_start;
 #endif
   int min_year_width;
   GDateTime *now;

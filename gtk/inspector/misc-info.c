@@ -98,7 +98,7 @@ typedef struct _GtkInspectorMiscInfoClass
 
 G_DEFINE_TYPE (GtkInspectorMiscInfo, gtk_inspector_misc_info, GTK_TYPE_WIDGET)
 
-static gchar *
+static char *
 format_state_flags (GtkStateFlags state)
 {
   GFlagsClass *fclass;
@@ -130,7 +130,7 @@ format_state_flags (GtkStateFlags state)
 static void
 state_flags_changed (GtkWidget *w, GtkStateFlags old_flags, GtkInspectorMiscInfo *sl)
 {
-  gchar *s;
+  char *s;
 
   s = format_state_flags (gtk_widget_get_state_flags (w));
   gtk_label_set_label (GTK_LABEL (sl->state), s);
@@ -142,7 +142,7 @@ update_allocation (GtkWidget            *w,
                    GtkInspectorMiscInfo *sl)
 {
   GtkAllocation alloc;
-  gchar *size_label;
+  char *size_label;
   GEnumClass *class;
   GEnumValue *value;
 
@@ -284,7 +284,7 @@ update_frame_clock (GtkInspectorMiscInfo *sl)
       clock = (GObject *)gtk_widget_get_frame_clock (GTK_WIDGET (sl->object));
       if (clock)
         {
-          gchar *tmp;
+          char *tmp;
           tmp = g_strdup_printf ("%p", clock);
           gtk_label_set_label (GTK_LABEL (sl->frame_clock), tmp);
           g_free (tmp);
@@ -306,7 +306,7 @@ static gboolean
 update_info (gpointer data)
 {
   GtkInspectorMiscInfo *sl = data;
-  gchar *tmp;
+  char *tmp;
   GType gtype;
 
   tmp = g_strdup_printf ("%p", sl->object);

@@ -44,8 +44,8 @@ typedef struct {
   guint tag_type;
   GType type;
   GObjectClass *oclass;
-  gchar *id;
-  gchar *constructor;
+  char *id;
+  char *constructor;
   GSList *properties;
   GSList *signals;
   GSList *bindings;
@@ -59,8 +59,8 @@ typedef struct {
   GSList *packing_properties;
   GObject *object;
   CommonInfo *parent;
-  gchar *type;
-  gchar *internal_child;
+  char *type;
+  char *internal_child;
   gboolean added;
 } ChildInfo;
 
@@ -71,7 +71,7 @@ typedef struct {
   GString *text;
   gboolean translatable:1;
   gboolean bound:1;
-  gchar *context;
+  char *context;
   int line;
   int col;
 } PropertyInfo;
@@ -108,12 +108,12 @@ struct _ExpressionInfo {
 
 typedef struct {
   guint tag_type;
-  gchar *object_name;
+  char *object_name;
   guint  id;
   GQuark detail;
-  gchar *handler;
+  char *handler;
   GConnectFlags flags;
-  gchar *connect_object_name;
+  char *connect_object_name;
 } SignalInfo;
 
 typedef struct
@@ -121,8 +121,8 @@ typedef struct
   guint tag_type;
   GObject *target;
   GParamSpec *target_pspec;
-  gchar *source;
-  gchar *source_property;
+  char *source;
+  char *source_property;
   GBindingFlags flags;
   int line;
   int col;
@@ -141,7 +141,7 @@ typedef struct
 
 typedef struct {
   guint    tag_type;
-  gchar   *library;
+  char    *library;
   int      major;
   int      minor;
 } RequiresInfo;
@@ -162,21 +162,21 @@ struct _GtkBuildableParseContext {
 
 typedef struct {
   GtkBuildableParser *parser;
-  gchar *tagname;
-  const gchar *start;
+  char *tagname;
+  const char *start;
   gpointer data;
   GObject *object;
   GObject *child;
 } SubParser;
 
 typedef struct {
-  const gchar *last_element;
+  const char *last_element;
   GtkBuilder *builder;
-  gchar *domain;
+  char *domain;
   GSList *stack;
   SubParser *subparser;
   GtkBuildableParseContext ctx;
-  const gchar *filename;
+  const char *filename;
   GSList *finalizers;
   GSList *custom_finalizers;
 
@@ -193,18 +193,18 @@ typedef struct {
 typedef GType (*GTypeGetFunc) (void);
 
 /* Things only GtkBuilder should use */
-GBytes * _gtk_buildable_parser_precompile (const gchar              *text,
+GBytes * _gtk_buildable_parser_precompile (const char               *text,
                                            gssize                    text_len,
                                            GError                  **error);
-gboolean _gtk_buildable_parser_is_precompiled (const gchar          *data,
+gboolean _gtk_buildable_parser_is_precompiled (const char           *data,
                                                gssize                data_len);
 gboolean _gtk_buildable_parser_replay_precompiled (GtkBuildableParseContext *context,
-                                                   const gchar          *data,
+                                                   const char           *data,
                                                    gssize                data_len,
                                                    GError              **error);
 void _gtk_builder_parser_parse_buffer (GtkBuilder *builder,
-                                       const gchar *filename,
-                                       const gchar *buffer,
+                                       const char *filename,
+                                       const char *buffer,
                                        gssize length,
                                        const char **requested_objs,
                                        GError **error);
@@ -215,7 +215,7 @@ void      _gtk_builder_apply_properties (GtkBuilder *builder,
 					 ObjectInfo *info,
 					 GError **error);
 void      _gtk_builder_add_object (GtkBuilder  *builder,
-                                   const gchar *id,
+                                   const char *id,
                                    GObject     *object);
 void      _gtk_builder_add (GtkBuilder *builder,
                             ChildInfo *child_info);
@@ -233,11 +233,11 @@ GtkExpression * expression_info_construct (GtkBuilder      *builder,
                                            GError         **error);
 
 /* Internal API which might be made public at some point */
-gboolean _gtk_builder_boolean_from_string (const gchar  *string,
+gboolean _gtk_builder_boolean_from_string (const char   *string,
 					   gboolean     *value,
 					   GError      **error);
 gboolean _gtk_builder_enum_from_string (GType         type,
-                                        const gchar  *string,
+                                        const char   *string,
                                         int          *enum_value,
                                         GError      **error);
 gboolean  _gtk_builder_flags_from_string (GType         type,
@@ -245,18 +245,18 @@ gboolean  _gtk_builder_flags_from_string (GType         type,
 					  const char   *string,
 					  guint        *value,
 					  GError      **error);
-const gchar * _gtk_builder_parser_translate (const gchar *domain,
-                                             const gchar *context,
-                                             const gchar *text);
-gchar *   _gtk_builder_get_resource_path (GtkBuilder *builder,
-					  const gchar *string);
-gchar *   _gtk_builder_get_absolute_filename (GtkBuilder *builder,
-					      const gchar *string);
+const char * _gtk_builder_parser_translate (const char *domain,
+                                             const char *context,
+                                             const char *text);
+char *   _gtk_builder_get_resource_path (GtkBuilder *builder,
+					  const char *string);
+char *   _gtk_builder_get_absolute_filename (GtkBuilder *builder,
+					      const char *string);
 
 void      _gtk_builder_menu_start (ParserData   *parser_data,
-                                   const gchar  *element_name,
-                                   const gchar **attribute_names,
-                                   const gchar **attribute_values,
+                                   const char   *element_name,
+                                   const char **attribute_names,
+                                   const char **attribute_values,
                                    GError      **error);
 void      _gtk_builder_menu_end   (ParserData  *parser_data);
 
@@ -267,20 +267,20 @@ void     _gtk_builder_prefix_error        (GtkBuilder                *builder,
                                            GError                   **error);
 void     _gtk_builder_error_unhandled_tag (GtkBuilder                *builder,
                                            GtkBuildableParseContext  *context,
-                                           const gchar               *object,
-                                           const gchar               *element_name,
+                                           const char                *object,
+                                           const char                *element_name,
                                            GError                   **error);
 gboolean _gtk_builder_check_parent        (GtkBuilder                *builder,
                                            GtkBuildableParseContext  *context,
-                                           const gchar               *parent_name,
+                                           const char                *parent_name,
                                            GError                   **error);
 GObject *gtk_builder_lookup_object        (GtkBuilder                *builder,
-                                           const gchar               *name,
+                                           const char                *name,
                                            int                        line,
                                            int                        col,
                                            GError                   **error);
 GObject *_gtk_builder_lookup_object       (GtkBuilder                *builder,
-                                           const gchar               *name,
+                                           const char                *name,
                                            int                        line,
                                            int                        col);
 gboolean _gtk_builder_lookup_failed       (GtkBuilder                *builder,

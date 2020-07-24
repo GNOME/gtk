@@ -24,7 +24,7 @@ static void
 populate_list (GtkListBox *list)
 {
   int i;
-  gchar *text;
+  char *text;
   GtkWidget *row, *label;
   int n;
   GtkWidget *child;

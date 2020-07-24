@@ -312,7 +312,7 @@ _gdk_win32_surface_enable_transparency (GdkSurface *window)
   return SUCCEEDED (call_result);
 }
 
-static const gchar *
+static const char *
 get_default_title (void)
 {
   const char *title;
@@ -355,7 +355,7 @@ RegisterGdkClass (GdkSurfaceType wtype, GdkSurfaceTypeHint wtype_hint)
   /* initialize once! */
   if (0 == hAppIcon && 0 == hAppIconSm)
     {
-      gchar sLoc [MAX_PATH+1];
+      char sLoc [MAX_PATH+1];
 
       if (0 != GetModuleFileName (_gdk_dll_hinstance, sLoc, MAX_PATH))
         {
@@ -486,7 +486,7 @@ _gdk_win32_display_create_surface (GdkDisplay     *display,
   GdkWin32Surface *impl;
   GdkWin32Display *display_win32;
   GdkSurface *surface;
-  const gchar *title;
+  const char *title;
   wchar_t *wtitle;
   int window_width, window_height;
   int window_x, window_y;
@@ -1529,7 +1529,7 @@ gdk_win32_surface_set_geometry_hints (GdkSurface         *window,
 
 static void
 gdk_win32_surface_set_title (GdkSurface   *window,
-		      const gchar *title)
+		      const char *title)
 {
   wchar_t *wtitle;
 
@@ -2029,7 +2029,7 @@ _gdk_win32_surface_update_style_bits (GdkSurface *window)
 
 #if defined(MORE_AEROSNAP_DEBUGGING)
 static void
-log_region (gchar *prefix, AeroSnapEdgeRegion *region)
+log_region (char *prefix, AeroSnapEdgeRegion *region)
 {
   GDK_NOTE (MISC, g_print ("Region %s:\n"
                            "edge %d x %d @ %d x %d\n"
@@ -3456,7 +3456,7 @@ handle_aerosnap_move_resize (GdkSurface                   *window,
 }
 
 
-static const gchar *
+static const char *
 get_cursor_name_from_op (GdkW32WindowDragOp op,
                          GdkSurfaceEdge      edge)
 {
@@ -3511,7 +3511,7 @@ setup_drag_move_resize_context (GdkSurface                   *window,
                                 guint32                      timestamp)
 {
   RECT rect;
-  const gchar *cursor_name;
+  const char *cursor_name;
   GdkSurface *pointer_window;
   GdkWin32Surface *impl = GDK_WIN32_SURFACE (window);
   gboolean maximized = gdk_toplevel_get_state (GDK_TOPLEVEL (window)) & GDK_SURFACE_STATE_MAXIMIZED;

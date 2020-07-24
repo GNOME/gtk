@@ -69,9 +69,9 @@ GType      gtk_toggle_button_get_type          (void) G_GNUC_CONST;
 GDK_AVAILABLE_IN_ALL
 GtkWidget* gtk_toggle_button_new               (void);
 GDK_AVAILABLE_IN_ALL
-GtkWidget* gtk_toggle_button_new_with_label    (const gchar     *label);
+GtkWidget* gtk_toggle_button_new_with_label    (const char      *label);
 GDK_AVAILABLE_IN_ALL
-GtkWidget* gtk_toggle_button_new_with_mnemonic (const gchar     *label);
+GtkWidget* gtk_toggle_button_new_with_mnemonic (const char      *label);
 GDK_AVAILABLE_IN_ALL
 void       gtk_toggle_button_set_active        (GtkToggleButton *toggle_button,
                                                 gboolean         is_active);

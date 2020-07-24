@@ -94,8 +94,8 @@ enum {
 static void app_chooser_iface_init  (GtkAppChooserIface *iface);
 
 static void real_insert_custom_item (GtkAppChooserButton *self,
-                                     const gchar         *name,
-                                     const gchar         *label,
+                                     const char          *name,
+                                     const char          *label,
                                      GIcon               *icon,
                                      gboolean             custom,
                                      GtkTreeIter         *iter);
@@ -115,8 +115,8 @@ struct _GtkAppChooserButton {
   GtkWidget *combobox;
   GtkListStore *store;
 
-  gchar *content_type;
-  gchar *heading;
+  char *content_type;
+  char *heading;
   int last_active;
   gboolean show_dialog_item;
   gboolean show_default_item;
@@ -130,7 +130,7 @@ struct _GtkAppChooserButtonClass {
 
   void (* changed)               (GtkAppChooserButton *self);
   void (* custom_item_activated) (GtkAppChooserButton *self,
-                                  const gchar *item_name);
+                                  const char *item_name);
 };
 
 G_DEFINE_TYPE_WITH_CODE (GtkAppChooserButton, gtk_app_chooser_button, GTK_TYPE_WIDGET,
@@ -463,7 +463,7 @@ gtk_app_chooser_button_changed (GtkComboBox *object,
 {
   GtkAppChooserButton *self = user_data;
   GtkTreeIter iter;
-  gchar *name = NULL;
+  char *name = NULL;
   gboolean custom;
   GQuark name_quark;
 
@@ -765,11 +765,11 @@ gtk_app_chooser_button_init (GtkAppChooserButton *self)
 
 static gboolean
 app_chooser_button_iter_from_custom_name (GtkAppChooserButton *self,
-                                          const gchar         *name,
+                                          const char          *name,
                                           GtkTreeIter         *set_me)
 {
   GtkTreeIter iter;
-  gchar *custom_name = NULL;
+  char *custom_name = NULL;
 
   if (!gtk_tree_model_get_iter_first (GTK_TREE_MODEL (self->store), &iter))
     return FALSE;
@@ -795,8 +795,8 @@ app_chooser_button_iter_from_custom_name (GtkAppChooserButton *self,
 
 static void
 real_insert_custom_item (GtkAppChooserButton *self,
-                         const gchar         *name,
-                         const gchar         *label,
+                         const char          *name,
+                         const char          *label,
                          GIcon               *icon,
                          gboolean             custom,
                          GtkTreeIter         *iter)
@@ -844,7 +844,7 @@ real_insert_separator (GtkAppChooserButton *self,
  * Returns: a newly created #GtkAppChooserButton
  */
 GtkWidget *
-gtk_app_chooser_button_new (const gchar *content_type)
+gtk_app_chooser_button_new (const char *content_type)
 {
   g_return_val_if_fail (content_type != NULL, NULL);
 
@@ -887,8 +887,8 @@ gtk_app_chooser_button_append_separator (GtkAppChooserButton *self)
  */
 void
 gtk_app_chooser_button_append_custom_item (GtkAppChooserButton *self,
-                                           const gchar         *name,
-                                           const gchar         *label,
+                                           const char          *name,
+                                           const char          *label,
                                            GIcon               *icon)
 {
   GtkTreeIter iter;
@@ -913,7 +913,7 @@ gtk_app_chooser_button_append_custom_item (GtkAppChooserButton *self,
  */
 void
 gtk_app_chooser_button_set_active_custom_item (GtkAppChooserButton *self,
-                                               const gchar         *name)
+                                               const char          *name)
 {
   GtkTreeIter iter;
 
@@ -1020,7 +1020,7 @@ gtk_app_chooser_button_set_show_default_item (GtkAppChooserButton *self,
  */
 void
 gtk_app_chooser_button_set_heading (GtkAppChooserButton *self,
-                                    const gchar         *heading)
+                                    const char          *heading)
 {
   g_return_if_fail (GTK_IS_APP_CHOOSER_BUTTON (self));
 
@@ -1039,7 +1039,7 @@ gtk_app_chooser_button_set_heading (GtkAppChooserButton *self,
  * Returns: (nullable): the text to display at the top of the dialog,
  *     or %NULL, in which case a default text is displayed
  */
-const gchar *
+const char *
 gtk_app_chooser_button_get_heading (GtkAppChooserButton *self)
 {
   g_return_val_if_fail (GTK_IS_APP_CHOOSER_BUTTON (self), NULL);

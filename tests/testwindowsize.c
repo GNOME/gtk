@@ -11,7 +11,7 @@ static GtkWidget *resizable_check;
 static void
 size_changed_cb (GdkSurface *surface, int width, int height, GtkLabel *label)
 {
-  gchar *str;
+  char *str;
 
   str = g_strdup_printf ("%d x %d", width, height);
   gtk_label_set_label (label, str);

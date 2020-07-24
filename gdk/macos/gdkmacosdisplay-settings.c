@@ -96,7 +96,7 @@ _gdk_macos_settings_load (GdkMacosSettings *settings)
 
 gboolean
 _gdk_macos_display_get_setting (GdkMacosDisplay *self,
-                                const gchar     *setting,
+                                const char      *setting,
                                 GValue          *value)
 {
   GDK_BEGIN_MACOS_ALLOC_POOL;

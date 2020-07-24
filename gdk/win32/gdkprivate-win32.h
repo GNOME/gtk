@@ -212,39 +212,39 @@ void   _gdk_win32_print_system_palette (void);
 void   _gdk_win32_print_hpalette       (HPALETTE     hpal);
 void   _gdk_win32_print_dc             (HDC          hdc);
 
-gchar *_gdk_win32_drag_protocol_to_string (GdkDragProtocol protocol);
-gchar *_gdk_win32_surface_state_to_string (GdkSurfaceState state);
-gchar *_gdk_win32_surface_style_to_string (LONG style);
-gchar *_gdk_win32_surface_exstyle_to_string (LONG style);
-gchar *_gdk_win32_surface_pos_bits_to_string (UINT flags);
-gchar *_gdk_win32_drag_action_to_string (GdkDragAction actions);
-gchar *_gdk_win32_surface_description (GdkSurface *d);
+char *_gdk_win32_drag_protocol_to_string (GdkDragProtocol protocol);
+char *_gdk_win32_surface_state_to_string (GdkSurfaceState state);
+char *_gdk_win32_surface_style_to_string (LONG style);
+char *_gdk_win32_surface_exstyle_to_string (LONG style);
+char *_gdk_win32_surface_pos_bits_to_string (UINT flags);
+char *_gdk_win32_drag_action_to_string (GdkDragAction actions);
+char *_gdk_win32_surface_description (GdkSurface *d);
 
-gchar *_gdk_win32_rop2_to_string       (int          rop2);
-gchar *_gdk_win32_lbstyle_to_string    (UINT         brush_style);
-gchar *_gdk_win32_pstype_to_string     (DWORD        pen_style);
-gchar *_gdk_win32_psstyle_to_string    (DWORD        pen_style);
-gchar *_gdk_win32_psendcap_to_string   (DWORD        pen_style);
-gchar *_gdk_win32_psjoin_to_string     (DWORD        pen_style);
-gchar *_gdk_win32_message_to_string    (UINT         msg);
-gchar *_gdk_win32_key_to_string        (LONG         lParam);
-gchar *_gdk_win32_cf_to_string         (UINT         format);
-gchar *_gdk_win32_data_to_string       (const guchar*data,
+char *_gdk_win32_rop2_to_string       (int          rop2);
+char *_gdk_win32_lbstyle_to_string    (UINT         brush_style);
+char *_gdk_win32_pstype_to_string     (DWORD        pen_style);
+char *_gdk_win32_psstyle_to_string    (DWORD        pen_style);
+char *_gdk_win32_psendcap_to_string   (DWORD        pen_style);
+char *_gdk_win32_psjoin_to_string     (DWORD        pen_style);
+char *_gdk_win32_message_to_string    (UINT         msg);
+char *_gdk_win32_key_to_string        (LONG         lParam);
+char *_gdk_win32_cf_to_string         (UINT         format);
+char *_gdk_win32_data_to_string       (const guchar*data,
                                         int          nbytes);
-gchar *_gdk_win32_rect_to_string       (const RECT  *rect);
+char *_gdk_win32_rect_to_string       (const RECT  *rect);
 
-gchar *_gdk_win32_gdkrectangle_to_string (const GdkRectangle *rect);
-gchar *_gdk_win32_cairo_region_to_string (const cairo_region_t    *box);
+char *_gdk_win32_gdkrectangle_to_string (const GdkRectangle *rect);
+char *_gdk_win32_cairo_region_to_string (const cairo_region_t    *box);
 
 void   _gdk_win32_print_event            (GdkEvent     *event);
 
 #endif
 
-gchar  *_gdk_win32_last_error_string (void);
-void    _gdk_win32_api_failed        (const gchar *where,
-                                      const gchar *api);
-void    _gdk_other_api_failed        (const gchar *where,
-                                      const gchar *api);
+char   *_gdk_win32_last_error_string (void);
+void    _gdk_win32_api_failed        (const char *where,
+                                      const char *api);
+void    _gdk_other_api_failed        (const char *where,
+                                      const char *api);
 
 #define WIN32_API_FAILED(api) _gdk_win32_api_failed (G_STRLOC , api)
 #define WIN32_GDI_FAILED(api) WIN32_API_FAILED (api)
@@ -329,7 +329,7 @@ HICON _gdk_win32_pixbuf_to_hcursor (GdkPixbuf *pixbuf,
 void _gdk_win32_display_init_cursors (GdkWin32Display     *display);
 void _gdk_win32_display_finalize_cursors (GdkWin32Display *display);
 void _gdk_win32_display_update_cursors (GdkWin32Display   *display);
-GdkCursor *_gdk_win32_display_get_cursor_for_name (GdkDisplay   *display, const gchar* cursor_name);
+GdkCursor *_gdk_win32_display_get_cursor_for_name (GdkDisplay   *display, const char * cursor_name);
 GdkCursor *gdk_win32_display_cursor_from_hcursor (GdkDisplay *display, HCURSOR     hcursor);
 
 typedef struct _Win32CursorTheme Win32CursorTheme;
@@ -357,10 +357,10 @@ struct _Win32Cursor {
   int xcursor_number;
 };
 
-Win32CursorTheme *win32_cursor_theme_load             (const gchar      *name,
+Win32CursorTheme *win32_cursor_theme_load             (const char       *name,
                                                        int               size);
 Win32Cursor *     win32_cursor_theme_get_cursor       (Win32CursorTheme *theme,
-                                                       const gchar      *name);
+                                                       const char       *name);
 void              win32_cursor_theme_destroy          (Win32CursorTheme *theme);
 Win32CursorTheme *_gdk_win32_display_get_cursor_theme (GdkWin32Display  *win32_display);
 
@@ -399,13 +399,13 @@ GdkDrag *_gdk_win32_surface_drag_begin (GdkSurface         *window,
                                         double              y_root);
 
 /* Stray GdkWin32Screen members */
-gboolean _gdk_win32_get_setting (const gchar *name, GValue *value);
+gboolean _gdk_win32_get_setting (const char *name, GValue *value);
 void _gdk_win32_screen_on_displaychange_event (GdkWin32Screen *screen);
 GdkSurface *gdk_win32_screen_get_root_window (GdkWin32Screen *screen);
 GdkSurface *gdk_win32_display_get_root_window (GdkDisplay *display);
 
 /* Distributed display manager implementation */
-GdkDisplay *_gdk_win32_display_open (const gchar *display_name);
+GdkDisplay *_gdk_win32_display_open (const char *display_name);
 void _gdk_win32_append_event (GdkEvent *event);
 void _gdk_win32_emit_configure_event (GdkSurface *window);
 

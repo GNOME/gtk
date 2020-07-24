@@ -161,7 +161,7 @@ struct _GtkTextViewPrivate
 
   guint blink_time;  /* time in msec the cursor has blinked since last user event */
   guint im_spot_idle;
-  gchar *im_module;
+  char *im_module;
 
   int dnd_x;
   int dnd_y;
@@ -458,7 +458,7 @@ static gboolean gtk_text_view_scroll_hpages(GtkTextView           *text_view,
                                             int                    count,
                                             gboolean               extend_selection);
 static void gtk_text_view_insert_at_cursor (GtkTextView           *text_view,
-                                            const gchar           *str);
+                                            const char            *str);
 static void gtk_text_view_delete_from_cursor (GtkTextView           *text_view,
                                               GtkDeleteType          type,
                                               int                    count);
@@ -498,10 +498,10 @@ static void     gtk_text_view_reset_blink_time       (GtkTextView        *text_v
 static void     gtk_text_view_value_changed                (GtkAdjustment *adjustment,
 							    GtkTextView   *view);
 static void     gtk_text_view_commit_handler               (GtkIMContext  *context,
-							    const gchar   *str,
+							    const char    *str,
 							    GtkTextView   *text_view);
 static void     gtk_text_view_commit_text                  (GtkTextView   *text_view,
-                                                            const gchar   *text);
+                                                            const char    *text);
 static void     gtk_text_view_preedit_changed_handler      (GtkIMContext  *context,
 							    GtkTextView   *text_view);
 static gboolean gtk_text_view_retrieve_surrounding_handler (GtkIMContext  *context,
@@ -611,10 +611,10 @@ static void gtk_text_view_activate_misc_insert_emoji    (GtkWidget  *widget,
                                                          GVariant   *parameter);
 
 static void gtk_text_view_real_undo (GtkWidget   *widget,
-                                     const gchar *action_name,
+                                     const char *action_name,
                                      GVariant    *parameter);
 static void gtk_text_view_real_redo (GtkWidget   *widget,
-                                     const gchar *action_name,
+                                     const char *action_name,
                                      GVariant    *parameter);
 
 
@@ -6619,7 +6619,7 @@ find_whitepace_region (const GtkTextIter *center,
 
 static void
 gtk_text_view_insert_at_cursor (GtkTextView *text_view,
-                                const gchar *str)
+                                const char *str)
 {
   if (!gtk_text_buffer_insert_interactive_at_cursor (get_buffer (text_view), str, -1,
                                                      text_view->priv->editable))
@@ -6992,7 +6992,7 @@ gtk_text_view_unselect (GtkTextView *text_view)
 
 static void
 move_mark_to_pointer_and_scroll (GtkTextView    *text_view,
-                                 const gchar    *mark_name)
+                                 const char     *mark_name)
 {
   GtkTextIter newplace;
   GtkTextBuffer *buffer;
@@ -7897,7 +7897,7 @@ gtk_text_view_drag_drop (GtkDropTarget *dest,
   gtk_text_buffer_begin_user_action (buffer);
 
   if (!gtk_text_buffer_insert_interactive (buffer,
-                                           &drop_point, (gchar *) g_value_get_string (value), -1,
+                                           &drop_point, (char *) g_value_get_string (value), -1,
                                            text_view->priv->editable))
     gtk_widget_error_bell (GTK_WIDGET (text_view));
 
@@ -8137,7 +8137,7 @@ gtk_text_view_value_changed (GtkAdjustment *adjustment,
 
 static void
 gtk_text_view_commit_handler (GtkIMContext  *context,
-                              const gchar   *str,
+                              const char    *str,
                               GtkTextView   *text_view)
 {
   gtk_text_view_commit_text (text_view, str);
@@ -8147,7 +8147,7 @@ gtk_text_view_commit_handler (GtkIMContext  *context,
 
 static void
 gtk_text_view_commit_text (GtkTextView   *text_view,
-                           const gchar   *str)
+                           const char    *str)
 {
   GtkTextViewPrivate *priv;
   gboolean had_selection;
@@ -8204,7 +8204,7 @@ gtk_text_view_preedit_changed_handler (GtkIMContext *context,
 				       GtkTextView  *text_view)
 {
   GtkTextViewPrivate *priv;
-  gchar *str;
+  char *str;
   PangoAttrList *attrs;
   int cursor_pos;
   GtkTextIter iter;
@@ -8247,7 +8247,7 @@ gtk_text_view_retrieve_surrounding_handler (GtkIMContext  *context,
   GtkTextIter start;
   GtkTextIter end;
   int pos;
-  gchar *text;
+  char *text;
 
   gtk_text_buffer_get_iter_at_mark (text_view->priv->buffer, &start,
 				    gtk_text_buffer_get_insert (text_view->priv->buffer));
@@ -9678,7 +9678,7 @@ gtk_text_view_get_extra_menu (GtkTextView *text_view)
 
 static void
 gtk_text_view_real_undo (GtkWidget   *widget,
-                         const gchar *action_name,
+                         const char *action_name,
                          GVariant    *parameters)
 {
   GtkTextView *text_view = GTK_TEXT_VIEW (widget);
@@ -9689,7 +9689,7 @@ gtk_text_view_real_undo (GtkWidget   *widget,
 
 static void
 gtk_text_view_real_redo (GtkWidget   *widget,
-                         const gchar *action_name,
+                         const char *action_name,
                          GVariant    *parameters)
 {
   GtkTextView *text_view = GTK_TEXT_VIEW (widget);

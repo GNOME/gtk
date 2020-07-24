@@ -107,7 +107,7 @@ static void
 entry_set_rgba (GtkColorEditor *editor,
                 const GdkRGBA  *color)
 {
-  gchar *text;
+  char *text;
 
   text = g_strdup_printf ("#%02X%02X%02X",
                           scale_round (color->red, 255),
@@ -123,7 +123,7 @@ entry_apply (GtkWidget      *entry,
              GtkColorEditor *editor)
 {
   GdkRGBA color;
-  gchar *text;
+  char *text;
 
   if (!editor->text_changed)
     return;

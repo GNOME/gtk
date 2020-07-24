@@ -101,9 +101,9 @@ void gtk_notebook_remove_page       (GtkNotebook *notebook,
 
 GDK_AVAILABLE_IN_ALL
 void         gtk_notebook_set_group_name (GtkNotebook *notebook,
-                                          const gchar *group_name);
+                                          const char  *group_name);
 GDK_AVAILABLE_IN_ALL
-const gchar *gtk_notebook_get_group_name (GtkNotebook *notebook);
+const char *gtk_notebook_get_group_name  (GtkNotebook *notebook);
 
 
 
@@ -177,9 +177,9 @@ void gtk_notebook_set_tab_label           (GtkNotebook *notebook,
 GDK_AVAILABLE_IN_ALL
 void          gtk_notebook_set_tab_label_text (GtkNotebook *notebook,
                                                GtkWidget   *child,
-                                               const gchar *tab_text);
+                                               const char  *tab_text);
 GDK_AVAILABLE_IN_ALL
-const gchar * gtk_notebook_get_tab_label_text (GtkNotebook *notebook,
+const char * gtk_notebook_get_tab_label_text  (GtkNotebook *notebook,
                                                GtkWidget   *child);
 GDK_AVAILABLE_IN_ALL
 GtkWidget * gtk_notebook_get_menu_label   (GtkNotebook *notebook,
@@ -191,10 +191,10 @@ void gtk_notebook_set_menu_label          (GtkNotebook *notebook,
 GDK_AVAILABLE_IN_ALL
 void          gtk_notebook_set_menu_label_text (GtkNotebook *notebook,
                                                 GtkWidget   *child,
-                                                const gchar *menu_text);
+                                                const char  *menu_text);
 GDK_AVAILABLE_IN_ALL
-const gchar * gtk_notebook_get_menu_label_text (GtkNotebook *notebook,
-							GtkWidget   *child);
+const char * gtk_notebook_get_menu_label_text  (GtkNotebook *notebook,
+						GtkWidget   *child);
 GDK_AVAILABLE_IN_ALL
 void gtk_notebook_reorder_child           (GtkNotebook *notebook,
 					   GtkWidget   *child,

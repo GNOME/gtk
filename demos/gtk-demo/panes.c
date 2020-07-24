@@ -47,9 +47,9 @@ toggle_shrink (GtkWidget *widget,
 
 static GtkWidget *
 create_pane_options (GtkPaned    *paned,
-                     const gchar *frame_label,
-                     const gchar *label1,
-                     const gchar *label2)
+                     const char *frame_label,
+                     const char *label1,
+                     const char *label2)
 {
   GtkWidget *child1, *child2;
   GtkWidget *frame;

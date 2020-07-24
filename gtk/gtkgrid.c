@@ -405,7 +405,7 @@ static void
 gtk_grid_buildable_add_child (GtkBuildable *buildable,
                               GtkBuilder   *builder,
                               GObject      *child,
-                              const gchar  *type)
+                              const char   *type)
 {
   if (GTK_IS_WIDGET (child))
     {

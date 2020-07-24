@@ -90,13 +90,13 @@ static void        gtk_cell_view_buildable_init             (GtkBuildableIface  
 static gboolean    gtk_cell_view_buildable_custom_tag_start (GtkBuildable       *buildable,
                                                              GtkBuilder         *builder,
                                                              GObject            *child,
-                                                             const gchar        *tagname,
+                                                             const char         *tagname,
                                                              GtkBuildableParser *parser,
                                                              gpointer           *data);
 static void        gtk_cell_view_buildable_custom_tag_end   (GtkBuildable       *buildable,
                                                              GtkBuilder         *builder,
                                                              GObject            *child,
-                                                             const gchar        *tagname,
+                                                             const char         *tagname,
                                                              gpointer            data);
 
 static GtkSizeRequestMode gtk_cell_view_get_request_mode       (GtkWidget             *widget);
@@ -289,7 +289,7 @@ static void
 gtk_cell_view_buildable_add_child (GtkBuildable *buildable,
                                    GtkBuilder   *builder,
                                    GObject      *child,
-                                   const gchar  *type)
+                                   const char   *type)
 {
   if (GTK_IS_CELL_RENDERER (child))
     _gtk_cell_layout_buildable_add_child (buildable, builder, child, type);
@@ -750,7 +750,7 @@ static gboolean
 gtk_cell_view_buildable_custom_tag_start (GtkBuildable       *buildable,
                                           GtkBuilder         *builder,
                                           GObject            *child,
-                                          const gchar        *tagname,
+                                          const char         *tagname,
                                           GtkBuildableParser *parser,
                                           gpointer           *data)
 {
@@ -767,7 +767,7 @@ static void
 gtk_cell_view_buildable_custom_tag_end (GtkBuildable *buildable,
 					GtkBuilder   *builder,
 					GObject      *child,
-					const gchar  *tagname,
+					const char   *tagname,
 					gpointer      data)
 {
   if (_gtk_cell_layout_buildable_custom_tag_end (buildable, builder, child, tagname,
@@ -870,7 +870,7 @@ gtk_cell_view_new_with_context (GtkCellArea        *area,
  * Returns: A newly created #GtkCellView widget.
  */
 GtkWidget *
-gtk_cell_view_new_with_text (const gchar *text)
+gtk_cell_view_new_with_text (const char *text)
 {
   GtkCellView *cellview;
   GtkCellRenderer *renderer;
@@ -901,7 +901,7 @@ gtk_cell_view_new_with_text (const gchar *text)
  * Returns: A newly created #GtkCellView widget.
  */
 GtkWidget *
-gtk_cell_view_new_with_markup (const gchar *markup)
+gtk_cell_view_new_with_markup (const char *markup)
 {
   GtkCellView *cellview;
   GtkCellRenderer *renderer;

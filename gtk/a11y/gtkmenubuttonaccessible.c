@@ -60,10 +60,10 @@ gtk_menu_button_accessible_ref_child (AtkObject *obj,
   return accessible;
 }
 
-static const gchar *
+static const char *
 gtk_menu_button_accessible_get_name (AtkObject *obj)
 {
-  const gchar *name = NULL;
+  const char *name = NULL;
   GtkWidget *widget;
 
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (obj));

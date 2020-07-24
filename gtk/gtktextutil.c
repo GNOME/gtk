@@ -44,7 +44,7 @@
 #define ELLIPSIS_CHARACTER "\xe2\x80\xa6"
 
 static void
-append_n_lines (GString *str, const gchar *text, GSList *lines, int n_lines)
+append_n_lines (GString *str, const char *text, GSList *lines, int n_lines)
 {
   PangoLayoutLine *line;
   int i;
@@ -60,7 +60,7 @@ append_n_lines (GString *str, const gchar *text, GSList *lines, int n_lines)
 static void
 limit_layout_lines (PangoLayout *layout)
 {
-  const gchar *text;
+  const char *text;
   GString     *str;
   GSList      *lines, *elem;
   int          n_lines;
@@ -93,7 +93,7 @@ limit_layout_lines (PangoLayout *layout)
 /**
  * gtk_text_util_create_drag_icon:
  * @widget: #GtkWidget to extract the pango context
- * @text: a #gchar to render the icon
+ * @text: a #char to render the icon
  * @len: length of @text, or -1 for NUL-terminated text
  *
  * Creates a drag and drop icon from @text.
@@ -102,7 +102,7 @@ limit_layout_lines (PangoLayout *layout)
  */
 GdkPaintable *
 gtk_text_util_create_drag_icon (GtkWidget *widget,
-                                gchar     *text,
+                                char      *text,
                                 gssize     len)
 {
   GtkCssStyle *style;
@@ -301,7 +301,7 @@ _gtk_text_util_get_block_cursor_location (PangoLayout    *layout,
   PangoLayoutLine *layout_line;
   gboolean rtl;
   int line_no;
-  const gchar *text;
+  const char *text;
 
   g_return_val_if_fail (layout != NULL, FALSE);
   g_return_val_if_fail (index >= 0, FALSE);
@@ -365,7 +365,7 @@ _gtk_text_util_get_block_cursor_location (PangoLayout    *layout,
 	  PangoRectangle line_rect;
 	  int i;
 	  int left, right;
-	  const gchar *p;
+	  const char *p;
 
 	  p = g_utf8_prev_char (text + index);
 

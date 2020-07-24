@@ -69,7 +69,7 @@ static void gtk_cell_renderer_toggle_snapshot   (GtkCellRenderer            *cel
 static gboolean gtk_cell_renderer_toggle_activate  (GtkCellRenderer            *cell,
 						    GdkEvent                   *event,
 						    GtkWidget                  *widget,
-						    const gchar                *path,
+						    const char                 *path,
 						    const GdkRectangle         *background_area,
 						    const GdkRectangle         *cell_area,
 						    GtkCellRendererState        flags);
@@ -482,7 +482,7 @@ static int
 gtk_cell_renderer_toggle_activate (GtkCellRenderer      *cell,
 				   GdkEvent             *event,
 				   GtkWidget            *widget,
-				   const gchar          *path,
+				   const char           *path,
 				   const GdkRectangle   *background_area,
 				   const GdkRectangle   *cell_area,
 				   GtkCellRendererState  flags)

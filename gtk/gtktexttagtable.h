@@ -57,7 +57,7 @@ void             gtk_text_tag_table_remove   (GtkTextTagTable        *table,
                                               GtkTextTag             *tag);
 GDK_AVAILABLE_IN_ALL
 GtkTextTag      *gtk_text_tag_table_lookup   (GtkTextTagTable        *table,
-                                              const gchar            *name);
+                                              const char             *name);
 GDK_AVAILABLE_IN_ALL
 void             gtk_text_tag_table_foreach  (GtkTextTagTable        *table,
                                               GtkTextTagTableForeach  func,

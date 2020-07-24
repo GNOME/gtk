@@ -823,7 +823,7 @@ gdk_x11_clipboard_init (GdkX11Clipboard *cb)
 
 GdkClipboard *
 gdk_x11_clipboard_new (GdkDisplay  *display,
-                       const gchar *selection)
+                       const char *selection)
 {
   GdkX11Clipboard *cb;
 

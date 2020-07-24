@@ -38,10 +38,10 @@ typedef enum
 
 typedef struct _GtkIconCache GtkIconCache;
 
-GtkIconCache *gtk_icon_cache_new                        (const gchar  *data);
-GtkIconCache *gtk_icon_cache_new_for_path               (const gchar  *path);
+GtkIconCache *gtk_icon_cache_new                        (const char   *data);
+GtkIconCache *gtk_icon_cache_new_for_path               (const char   *path);
 GHashTable   *gtk_icon_cache_list_icons_in_directory    (GtkIconCache *cache,
-                                                         const gchar  *directory,
+                                                         const char   *directory,
                                                          GtkStringSet *set);
 GtkIconCache *gtk_icon_cache_ref                        (GtkIconCache *cache);
 void          gtk_icon_cache_unref                      (GtkIconCache *cache);

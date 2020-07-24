@@ -217,7 +217,7 @@ update_font_scale (GtkInspectorVisual *vis,
 
   if (update_entry)
     {
-      gchar *str = g_strdup_printf ("%0.2f", factor);
+      char *str = g_strdup_printf ("%0.2f", factor);
 
       gtk_editable_set_text (GTK_EDITABLE (vis->font_scale_entry), str);
       g_free (str);
@@ -239,7 +239,7 @@ font_scale_entry_activated (GtkEntry           *entry,
                             GtkInspectorVisual *vis)
 {
   gdouble factor;
-  gchar *err = NULL;
+  char *err = NULL;
 
   factor = g_strtod (gtk_editable_get_text (GTK_EDITABLE (entry)), &err);
   if (err != NULL)
@@ -459,10 +459,10 @@ focus_activate (GtkSwitch          *sw,
 }
 
 static void
-fill_gtk (const gchar *path,
+fill_gtk (const char *path,
           GHashTable  *t)
 {
-  const gchar *dir_entry;
+  const char *dir_entry;
   GDir *dir = g_dir_open (path, 0, NULL);
 
   if (!dir)
@@ -470,7 +470,7 @@ fill_gtk (const gchar *path,
 
   while ((dir_entry = g_dir_read_name (dir)))
     {
-      gchar *filename = g_build_filename (path, dir_entry, "gtk-4.0", "gtk.css", NULL);
+      char *filename = g_build_filename (path, dir_entry, "gtk-4.0", "gtk.css", NULL);
 
       if (g_file_test (filename, G_FILE_TEST_IS_REGULAR) &&
           !g_hash_table_contains (t, dir_entry))
@@ -482,10 +482,10 @@ fill_gtk (const gchar *path,
   g_dir_close (dir);
 }
 
-static gchar*
-get_data_path (const gchar *subdir)
+static char *
+get_data_path (const char *subdir)
 {
-  gchar *base_datadir, *full_datadir;
+  char *base_datadir, *full_datadir;
 #if defined (GDK_WINDOWING_WIN32) || defined (GDK_WINDOWING_QUARTZ)
   base_datadir = g_strdup (_gtk_get_datadir ());
 #else
@@ -534,11 +534,11 @@ init_theme (GtkInspectorVisual *vis)
 {
   GHashTable *t;
   GHashTableIter iter;
-  gchar *theme, *path;
-  gchar **builtin_themes;
+  char *theme, *path;
+  char **builtin_themes;
   GList *list, *l;
   guint i;
-  const gchar * const *dirs;
+  const char * const *dirs;
   char **names;
 
   t = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
@@ -622,10 +622,10 @@ init_dark (GtkInspectorVisual *vis)
 }
 
 static void
-fill_icons (const gchar *path,
+fill_icons (const char *path,
             GHashTable  *t)
 {
-  const gchar *dir_entry;
+  const char *dir_entry;
   GDir *dir;
 
   dir = g_dir_open (path, 0, NULL);
@@ -634,7 +634,7 @@ fill_icons (const gchar *path,
 
   while ((dir_entry = g_dir_read_name (dir)))
     {
-      gchar *filename = g_build_filename (path, dir_entry, "index.theme", NULL);
+      char *filename = g_build_filename (path, dir_entry, "index.theme", NULL);
 
       if (g_file_test (filename, G_FILE_TEST_IS_REGULAR) &&
           g_strcmp0 (dir_entry, "hicolor") != 0 &&
@@ -652,7 +652,7 @@ init_icons (GtkInspectorVisual *vis)
 {
   GHashTable *t;
   GHashTableIter iter;
-  gchar *theme, *path;
+  char *theme, *path;
   GList *list, *l;
   char **names;
   int i;
@@ -689,10 +689,10 @@ init_icons (GtkInspectorVisual *vis)
 }
 
 static void
-fill_cursors (const gchar *path,
+fill_cursors (const char *path,
               GHashTable  *t)
 {
-  const gchar *dir_entry;
+  const char *dir_entry;
   GDir *dir;
 
   dir = g_dir_open (path, 0, NULL);
@@ -701,7 +701,7 @@ fill_cursors (const gchar *path,
 
   while ((dir_entry = g_dir_read_name (dir)))
     {
-      gchar *filename = g_build_filename (path, dir_entry, "cursors", NULL);
+      char *filename = g_build_filename (path, dir_entry, "cursors", NULL);
 
       if (g_file_test (filename, G_FILE_TEST_IS_DIR) &&
           !g_hash_table_contains (t, dir_entry))
@@ -718,7 +718,7 @@ init_cursors (GtkInspectorVisual *vis)
 {
   GHashTable *t;
   GHashTableIter iter;
-  gchar *theme, *path;
+  char *theme, *path;
   GList *list, *l;
   char **names;
   int i;
@@ -857,7 +857,7 @@ update_slowdown (GtkInspectorVisual *vis,
 
   if (update_entry)
     {
-      gchar *str = g_strdup_printf ("%0.*f", 2, slowdown);
+      char *str = g_strdup_printf ("%0.*f", 2, slowdown);
 
       gtk_editable_set_text (GTK_EDITABLE (vis->slowdown_entry), str);
       g_free (str);
@@ -882,7 +882,7 @@ slowdown_entry_activated (GtkEntry *entry,
                           GtkInspectorVisual *vis)
 {
   gdouble slowdown;
-  gchar *err = NULL;
+  char *err = NULL;
 
   slowdown = g_strtod (gtk_editable_get_text (GTK_EDITABLE (entry)), &err);
   if (err != NULL)

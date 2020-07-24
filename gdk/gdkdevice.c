@@ -634,7 +634,7 @@ gdk_device_get_surface_at_position (GdkDevice *device,
  *
  * Returns: a name
  **/
-const gchar *
+const char *
 gdk_device_get_name (GdkDevice *device)
 {
   g_return_val_if_fail (GDK_IS_DEVICE (device), NULL);
@@ -1297,10 +1297,10 @@ _gdk_device_surface_at_position (GdkDevice       *device,
  *  static GSettings *
  *  get_device_settings (GdkDevice *device)
  *  {
- *    const gchar *vendor, *product;
+ *    const char *vendor, *product;
  *    GSettings *settings;
  *    GdkDevice *device;
- *    gchar *path;
+ *    char *path;
  *
  *    vendor = gdk_device_get_vendor_id (device);
  *    product = gdk_device_get_product_id (device);
@@ -1315,7 +1315,7 @@ _gdk_device_surface_at_position (GdkDevice       *device,
  *
  * Returns: (nullable): the vendor ID, or %NULL
  */
-const gchar *
+const char *
 gdk_device_get_vendor_id (GdkDevice *device)
 {
   g_return_val_if_fail (GDK_IS_DEVICE (device), NULL);
@@ -1334,7 +1334,7 @@ gdk_device_get_vendor_id (GdkDevice *device)
  *
  * Returns: (nullable): the product ID, or %NULL
  */
-const gchar *
+const char *
 gdk_device_get_product_id (GdkDevice *device)
 {
   g_return_val_if_fail (GDK_IS_DEVICE (device), NULL);

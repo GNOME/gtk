@@ -25,11 +25,11 @@
 typedef struct _TreeEntry TreeEntry;
 
 struct _TreeEntry {
-  const gchar *icon;
-  const gchar *info;
-  const gchar *description;
-  const gchar *fine_print;
-  const gchar *fine_print_color;
+  const char *icon;
+  const char *info;
+  const char *description;
+  const char *fine_print;
+  const char *fine_print_color;
   int progress;
   TreeEntry *entries;
 };
@@ -300,7 +300,7 @@ quit_cb (GtkWidget *widget,
 }
 
 int
-main (int argc, gchar **argv)
+main (int argc, char **argv)
 {
   GtkWidget *window;
   GtkWidget *scrolled_window;

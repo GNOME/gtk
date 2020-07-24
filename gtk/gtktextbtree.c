@@ -1092,7 +1092,7 @@ _gtk_text_btree_delete (GtkTextIter *start,
 
 void
 _gtk_text_btree_insert (GtkTextIter *iter,
-                        const gchar *text,
+                        const char *text,
                         int          len)
 {
   GtkTextLineSegment *prev_seg;     /* The segment just before the first
@@ -2406,7 +2406,7 @@ copy_segment (GString *string,
     }
 }
 
-gchar*
+char *
 _gtk_text_btree_get_text (const GtkTextIter *start_orig,
                          const GtkTextIter *end_orig,
                          gboolean include_hidden,
@@ -2415,7 +2415,7 @@ _gtk_text_btree_get_text (const GtkTextIter *start_orig,
   GtkTextLineSegment *seg;
   GtkTextLineSegment *end_seg;
   GString *retval;
-  gchar *str;
+  char *str;
   GtkTextIter iter;
   GtkTextIter start;
   GtkTextIter end;
@@ -2717,7 +2717,7 @@ ensure_not_off_end (GtkTextBTree *tree,
 static GtkTextLineSegment*
 real_set_mark (GtkTextBTree      *tree,
                GtkTextMark       *existing_mark,
-               const gchar       *name,
+               const char        *name,
                gboolean           left_gravity,
                const GtkTextIter *where,
                gboolean           should_exist,
@@ -2846,7 +2846,7 @@ real_set_mark (GtkTextBTree      *tree,
 GtkTextMark*
 _gtk_text_btree_set_mark (GtkTextBTree *tree,
                          GtkTextMark  *existing_mark,
-                         const gchar *name,
+                         const char *name,
                          gboolean left_gravity,
                          const GtkTextIter *iter,
                          gboolean should_exist)
@@ -2936,7 +2936,7 @@ _gtk_text_btree_select_range (GtkTextBTree      *tree,
 
 void
 _gtk_text_btree_remove_mark_by_name (GtkTextBTree *tree,
-                                    const gchar *name)
+                                    const char *name)
 {
   GtkTextMark *mark;
 
@@ -3017,7 +3017,7 @@ _gtk_text_btree_get_selection_bound (GtkTextBTree *tree)
 
 GtkTextMark*
 _gtk_text_btree_get_mark_by_name (GtkTextBTree *tree,
-                                  const gchar *name)
+                                  const char *name)
 {
   GtkTextLineSegment *seg;
 
@@ -7168,7 +7168,7 @@ _gtk_text_btree_spew (GtkTextBTree *tree)
 void
 _gtk_text_btree_spew_line_short (GtkTextLine *line, int indent)
 {
-  gchar * spaces;
+  char * spaces;
   GtkTextLineSegment *seg;
 
   spaces = g_strnfill (indent, ' ');
@@ -7183,8 +7183,8 @@ _gtk_text_btree_spew_line_short (GtkTextLine *line, int indent)
     {
       if (seg->type == &gtk_text_char_type)
         {
-          gchar* str = g_strndup (seg->body.chars, MIN (seg->byte_count, 10));
-          gchar* s;
+          char * str = g_strndup (seg->body.chars, MIN (seg->byte_count, 10));
+          char * s;
           s = str;
           while (*s)
             {
@@ -7226,7 +7226,7 @@ _gtk_text_btree_spew_line_short (GtkTextLine *line, int indent)
 void
 _gtk_text_btree_spew_node (GtkTextBTreeNode *node, int indent)
 {
-  gchar * spaces;
+  char * spaces;
   GtkTextBTreeNode *iter;
   Summary *s;
 
@@ -7293,7 +7293,7 @@ _gtk_text_btree_spew_segment (GtkTextBTree* tree, GtkTextLineSegment * seg)
 
   if (seg->type == &gtk_text_char_type)
     {
-      gchar* str = g_strndup (seg->body.chars, seg->byte_count);
+      char * str = g_strndup (seg->body.chars, seg->byte_count);
       printf ("       '%s'\n", str);
       g_free (str);
     }

@@ -161,7 +161,7 @@ struct _GtkScaleMark
 {
   gdouble          value;
   int              stop_position;
-  gchar           *markup;
+  char            *markup;
   GtkWidget       *label_widget;
   GtkWidget       *indicator_widget;
   GtkWidget       *widget;
@@ -205,15 +205,15 @@ static void     gtk_scale_buildable_interface_init   (GtkBuildableIface  *iface)
 static gboolean gtk_scale_buildable_custom_tag_start (GtkBuildable       *buildable,
                                                       GtkBuilder         *builder,
                                                       GObject            *child,
-                                                      const gchar        *tagname,
+                                                      const char         *tagname,
                                                       GtkBuildableParser *parser,
                                                       gpointer           *data);
 static void     gtk_scale_buildable_custom_finished  (GtkBuildable       *buildable,
                                                       GtkBuilder         *builder,
                                                       GObject            *child,
-                                                      const gchar        *tagname,
+                                                      const char         *tagname,
                                                       gpointer            user_data);
-static gchar  * gtk_scale_format_value               (GtkScale           *scale,
+static char   * gtk_scale_format_value               (GtkScale           *scale,
                                                       gdouble             value);
 
 
@@ -1484,13 +1484,13 @@ gtk_scale_real_get_layout_offsets (GtkScale *scale,
   *y = value_bounds.origin.y;
 }
 
-static gchar *
-weed_out_neg_zero (gchar *str,
+static char *
+weed_out_neg_zero (char *str,
                    int    digits)
 {
   if (str[0] == '-')
     {
-      gchar neg_zero[8];
+      char neg_zero[8];
       g_snprintf (neg_zero, 8, "%0.*f", digits, -0.0);
       if (strcmp (neg_zero, str) == 0)
         memmove (str, str + 1, strlen (str));
@@ -1656,7 +1656,7 @@ void
 gtk_scale_add_mark (GtkScale        *scale,
                     gdouble          value,
                     GtkPositionType  position,
-                    const gchar     *markup)
+                    const char      *markup)
 {
   GtkWidget *widget;
   GtkScalePrivate *priv = gtk_scale_get_instance_private (scale);
@@ -1800,7 +1800,7 @@ typedef struct
   gdouble value;
   GtkPositionType position;
   GString *markup;
-  gchar *context;
+  char *context;
   gboolean translatable;
 } MarkData;
 
@@ -1814,9 +1814,9 @@ mark_data_free (MarkData *data)
 
 static void
 marks_start_element (GtkBuildableParseContext *context,
-                     const gchar              *element_name,
-                     const gchar             **names,
-                     const gchar             **values,
+                     const char               *element_name,
+                     const char              **names,
+                     const char              **values,
                      gpointer                  user_data,
                      GError                  **error)
 {
@@ -1834,11 +1834,11 @@ marks_start_element (GtkBuildableParseContext *context,
     }
   else if (strcmp (element_name, "mark") == 0)
     {
-      const gchar *value_str;
+      const char *value_str;
       gdouble value = 0;
-      const gchar *position_str = NULL;
+      const char *position_str = NULL;
       GtkPositionType position = GTK_POS_BOTTOM;
-      const gchar *msg_context = NULL;
+      const char *msg_context = NULL;
       gboolean translatable = FALSE;
       MarkData *mark;
 
@@ -1905,7 +1905,7 @@ marks_start_element (GtkBuildableParseContext *context,
 
 static void
 marks_text (GtkBuildableParseContext  *context,
-            const gchar               *text,
+            const char                *text,
             gsize                      text_len,
             gpointer                   user_data,
             GError                   **error)
@@ -1932,7 +1932,7 @@ static gboolean
 gtk_scale_buildable_custom_tag_start (GtkBuildable       *buildable,
                                       GtkBuilder         *builder,
                                       GObject            *child,
-                                      const gchar        *tagname,
+                                      const char         *tagname,
                                       GtkBuildableParser *parser,
                                       gpointer           *parser_data)
 {
@@ -1962,7 +1962,7 @@ static void
 gtk_scale_buildable_custom_finished (GtkBuildable *buildable,
                                      GtkBuilder   *builder,
                                      GObject      *child,
-                                     const gchar  *tagname,
+                                     const char   *tagname,
                                      gpointer      user_data)
 {
   GtkScale *scale = GTK_SCALE (buildable);
@@ -1971,7 +1971,7 @@ gtk_scale_buildable_custom_finished (GtkBuildable *buildable,
   if (strcmp (tagname, "marks") == 0)
     {
       GSList *m;
-      const gchar *markup;
+      const char *markup;
 
       marks_data = (MarksSubparserData *)user_data;
 

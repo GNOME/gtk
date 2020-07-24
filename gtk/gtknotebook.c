@@ -897,7 +897,7 @@ static void gtk_notebook_buildable_init           (GtkBuildableIface *iface);
 static void gtk_notebook_buildable_add_child      (GtkBuildable *buildable,
                                                    GtkBuilder   *builder,
                                                    GObject      *child,
-                                                   const gchar  *type);
+                                                   const char   *type);
 
 static void gtk_notebook_gesture_pressed (GtkGestureClick *gesture,
                                           int                   n_press,
@@ -1461,7 +1461,7 @@ static void
 gtk_notebook_buildable_add_child (GtkBuildable  *buildable,
                                   GtkBuilder    *builder,
                                   GObject       *child,
-                                  const gchar   *type)
+                                  const char    *type)
 {
   GtkNotebook *notebook = GTK_NOTEBOOK (buildable);
 
@@ -6439,7 +6439,7 @@ gtk_notebook_set_tab_label (GtkNotebook *notebook,
 
       if (notebook->show_tabs)
         {
-          gchar string[32];
+          char string[32];
 
           g_snprintf (string, sizeof(string), _("Page %u"),
                       g_list_position (notebook->children, list));
@@ -6480,7 +6480,7 @@ gtk_notebook_set_tab_label (GtkNotebook *notebook,
 void
 gtk_notebook_set_tab_label_text (GtkNotebook *notebook,
                                  GtkWidget   *child,
-                                 const gchar *tab_text)
+                                 const char *tab_text)
 {
   GtkWidget *tab_label = NULL;
 
@@ -6503,7 +6503,7 @@ gtk_notebook_set_tab_label_text (GtkNotebook *notebook,
  * widget is not a #GtkLabel. The string is owned by the widget and must not be
  * freed.
  */
-const gchar *
+const char *
 gtk_notebook_get_tab_label_text (GtkNotebook *notebook,
                                  GtkWidget   *child)
 {
@@ -6605,7 +6605,7 @@ gtk_notebook_set_menu_label (GtkNotebook *notebook,
 void
 gtk_notebook_set_menu_label_text (GtkNotebook *notebook,
                                   GtkWidget   *child,
-                                  const gchar *menu_text)
+                                  const char *menu_text)
 {
   GtkWidget *menu_label = NULL;
 
@@ -6633,7 +6633,7 @@ gtk_notebook_set_menu_label_text (GtkNotebook *notebook,
  * widget is not a #GtkLabel. The string is owned by the widget and must not be
  * freed.
  */
-const gchar *
+const char *
 gtk_notebook_get_menu_label_text (GtkNotebook *notebook,
                                   GtkWidget *child)
 {
@@ -6759,7 +6759,7 @@ gtk_notebook_reorder_child (GtkNotebook *notebook,
  */
 void
 gtk_notebook_set_group_name (GtkNotebook *notebook,
-                             const gchar *group_name)
+                             const char *group_name)
 {
   GQuark group;
 
@@ -6783,7 +6783,7 @@ gtk_notebook_set_group_name (GtkNotebook *notebook,
  *
  * Returns: (nullable) (transfer none): the group name, or %NULL if none is set
  */
-const gchar *
+const char *
 gtk_notebook_get_group_name (GtkNotebook *notebook)
 {
   g_return_val_if_fail (GTK_IS_NOTEBOOK (notebook), NULL);

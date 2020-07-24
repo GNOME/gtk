@@ -862,7 +862,7 @@ gtk_text_tag_init (GtkTextTag *text_tag)
  * Returns: a new #GtkTextTag
  **/
 GtkTextTag*
-gtk_text_tag_new (const gchar *name)
+gtk_text_tag_new (const char *name)
 {
   GtkTextTag *tag;
 
@@ -1291,7 +1291,7 @@ gtk_text_tag_set_property (GObject      *object,
     case PROP_FONT:
       {
         PangoFontDescription *font_desc = NULL;
-        const gchar *name;
+        const char *name;
 
         name = g_value_get_string (value);
 
@@ -1788,7 +1788,7 @@ gtk_text_tag_get_property (GObject      *object,
 
     case PROP_FONT:
         {
-          gchar *str;
+          char *str;
 
 	  gtk_text_tag_ensure_font (tag);
 

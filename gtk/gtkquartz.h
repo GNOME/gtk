@@ -40,11 +40,11 @@ void _gtk_quartz_set_selection_data_for_pasteboard (NSPasteboard *pasteboard,
 NSImage *_gtk_quartz_create_image_from_surface (cairo_surface_t *surface);
 void _gtk_clipboard_handle_event (GdkEventOwnerChange *event);
 void _gtk_clipboard_store_all (void);
-const gchar * _gtk_get_datadir (void);
-const gchar * _gtk_get_libdir (void);
-const gchar * _gtk_get_localedir (void);
-const gchar * _gtk_get_sysconfdir (void);
-const gchar * _gtk_get_data_prefix (void);
+const char * _gtk_get_datadir (void);
+const char * _gtk_get_libdir (void);
+const char * _gtk_get_localedir (void);
+const char * _gtk_get_sysconfdir (void);
+const char * _gtk_get_data_prefix (void);
 
 G_END_DECLS
 

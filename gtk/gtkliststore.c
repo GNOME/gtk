@@ -75,7 +75,7 @@
  *
  *   for (i = 0; i < 10; i++)
  *     {
- *       gchar *some_data;
+ *       char *some_data;
  *
  *       some_data = get_some_data (i);
  *
@@ -286,13 +286,13 @@ static gboolean gtk_list_store_has_default_sort_func (GtkTreeSortable        *so
 static gboolean gtk_list_store_buildable_custom_tag_start (GtkBuildable       *buildable,
                                                            GtkBuilder         *builder,
                                                            GObject            *child,
-                                                           const gchar        *tagname,
+                                                           const char         *tagname,
                                                            GtkBuildableParser *parser,
                                                            gpointer           *data);
 static void     gtk_list_store_buildable_custom_tag_end   (GtkBuildable       *buildable,
                                                            GtkBuilder         *builder,
                                                            GObject            *child,
-                                                           const gchar        *tagname,
+                                                           const char         *tagname,
                                                            gpointer            data);
 
 G_DEFINE_TYPE_WITH_CODE (GtkListStore, gtk_list_store, G_TYPE_OBJECT,
@@ -1022,7 +1022,7 @@ gtk_list_store_set_valist_internal (GtkListStore *list_store,
   while (column != -1)
     {
       GValue value = G_VALUE_INIT;
-      gchar *error = NULL;
+      char *error = NULL;
 
       if (column < 0 || column >= priv->n_columns)
 	{
@@ -2327,7 +2327,7 @@ gtk_list_store_insert_with_valuesv (GtkListStore *list_store,
  */
 typedef struct {
   gboolean translatable;
-  gchar *context;
+  char *context;
   int id;
 } ColInfo;
 
@@ -2343,14 +2343,14 @@ typedef struct {
   int n_columns;
   int row_column;
   gboolean is_data;
-  const gchar *domain;
+  const char *domain;
 } SubParserData;
 
 static void
 list_store_start_element (GtkBuildableParseContext *context,
-                          const gchar              *element_name,
-                          const gchar             **names,
-                          const gchar             **values,
+                          const char               *element_name,
+                          const char              **names,
+                          const char              **values,
                           gpointer                  user_data,
                           GError                  **error)
 {
@@ -2359,8 +2359,8 @@ list_store_start_element (GtkBuildableParseContext *context,
   if (strcmp (element_name, "col") == 0)
     {
       int id = -1;
-      const gchar *id_str;
-      const gchar *msg_context = NULL;
+      const char *id_str;
+      const char *msg_context = NULL;
       gboolean translatable = FALSE;
       ColInfo *info;
       GValue val = G_VALUE_INIT;
@@ -2437,7 +2437,7 @@ list_store_start_element (GtkBuildableParseContext *context,
     }
   else if (strcmp (element_name, "column") == 0)
     {
-      const gchar *type;
+      const char *type;
 
       if (!_gtk_builder_check_parent (data->builder, context, "columns", error))
         return;
@@ -2462,7 +2462,7 @@ list_store_start_element (GtkBuildableParseContext *context,
 
 static void
 list_store_end_element (GtkBuildableParseContext  *context,
-                        const gchar               *element_name,
+                        const char                *element_name,
                         gpointer                   user_data,
                         GError                   **error)
 {
@@ -2510,7 +2510,7 @@ list_store_end_element (GtkBuildableParseContext  *context,
           if (type == G_TYPE_INVALID)
             {
               g_warning ("Unknown type %s specified in treemodel %s",
-                         (const gchar*)l->data,
+                         (const char *)l->data,
                          gtk_buildable_get_name (GTK_BUILDABLE (data->object)));
               continue;
             }
@@ -2531,14 +2531,14 @@ list_store_end_element (GtkBuildableParseContext  *context,
 
 static void
 list_store_text (GtkBuildableParseContext  *context,
-                 const gchar               *text,
+                 const char                *text,
                  gsize                      text_len,
                  gpointer                   user_data,
                  GError                   **error)
 {
   SubParserData *data = (SubParserData*)user_data;
   int i;
-  gchar *string;
+  char *string;
   ColInfo *info;
 
   if (!data->is_data)
@@ -2550,7 +2550,7 @@ list_store_text (GtkBuildableParseContext  *context,
   string = g_strndup (text, text_len);
   if (info->translatable && text_len)
     {
-      gchar *translated;
+      char *translated;
 
       /* FIXME: This will not use the domain set in the .ui file,
        * since the parser is not telling the builder about the domain.
@@ -2585,7 +2585,7 @@ static gboolean
 gtk_list_store_buildable_custom_tag_start (GtkBuildable       *buildable,
                                            GtkBuilder         *builder,
                                            GObject            *child,
-                                           const gchar        *tagname,
+                                           const char         *tagname,
                                            GtkBuildableParser *parser,
                                            gpointer           *parser_data)
 {
@@ -2636,7 +2636,7 @@ static void
 gtk_list_store_buildable_custom_tag_end (GtkBuildable *buildable,
                                          GtkBuilder   *builder,
                                          GObject      *child,
-                                         const gchar  *tagname,
+                                         const char   *tagname,
                                          gpointer      parser_data)
 {
   SubParserData *data = (SubParserData*)parser_data;

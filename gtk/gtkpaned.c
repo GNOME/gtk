@@ -785,7 +785,7 @@ static void
 gtk_paned_buildable_add_child (GtkBuildable *buildable,
                                GtkBuilder   *builder,
                                GObject      *child,
-                               const gchar  *type)
+                               const char   *type)
 {
   GtkPaned *self = GTK_PANED (buildable);
 

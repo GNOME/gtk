@@ -189,7 +189,7 @@ tree_selection_changed_cb (GtkTreeSelection *selection, gpointer data)
 {
   GtkTreeIter iter;
   GtkTreeModel *model;
-  gchar *author;
+  char *author;
 
   if (gtk_tree_selection_get_selected (selection, &model, &iter))
     {

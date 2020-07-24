@@ -355,7 +355,7 @@ gtk_bookmark_list_start_loading (GtkBookmarkList *self)
 
       for (i = 0; i < len; i++)
         {
-          const gchar *uri = uris[i];
+          const char *uri = uris[i];
           GFile *file;
 
           /* add this item */

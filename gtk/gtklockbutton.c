@@ -74,9 +74,9 @@ struct _GtkLockButton
   GPermission *permission;
   GCancellable *cancellable;
 
-  gchar *tooltip_lock;
-  gchar *tooltip_unlock;
-  gchar *tooltip_not_authorized;
+  char *tooltip_lock;
+  char *tooltip_unlock;
+  char *tooltip_not_authorized;
   GIcon *icon_lock;
   GIcon *icon_unlock;
 
@@ -339,7 +339,7 @@ update_state (GtkLockButton *button)
   gboolean sensitive;
   gboolean visible;
   GIcon *icon;
-  const gchar *tooltip;
+  const char *tooltip;
 
   if (button->permission)
     {

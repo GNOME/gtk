@@ -224,7 +224,7 @@ static void
 gtk_multi_sorter_buildable_add_child (GtkBuildable *buildable,
                                       GtkBuilder   *builder,
                                       GObject      *child,
-                                      const gchar  *type)
+                                      const char   *type)
 {
   if (GTK_IS_SORTER (child))
     gtk_multi_sorter_append (GTK_MULTI_SORTER (buildable), g_object_ref (GTK_SORTER (child)));

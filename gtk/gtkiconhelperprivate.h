@@ -45,7 +45,7 @@ void _gtk_icon_helper_set_gicon (GtkIconHelper *self,
                                  GIcon *gicon);
 
 void _gtk_icon_helper_set_icon_name (GtkIconHelper *self,
-                                     const gchar *icon_name);
+                                     const char *icon_name);
 void _gtk_icon_helper_set_paintable (GtkIconHelper *self,
 				     GdkPaintable  *paintable);
 
@@ -62,7 +62,7 @@ GIcon *_gtk_icon_helper_peek_gicon (GtkIconHelper *self);
 GdkPaintable *_gtk_icon_helper_peek_paintable (GtkIconHelper *self);
 
 GtkImageDefinition *gtk_icon_helper_get_definition (GtkIconHelper *self);
-const gchar *_gtk_icon_helper_get_icon_name (GtkIconHelper *self);
+const char *_gtk_icon_helper_get_icon_name (GtkIconHelper *self);
 
 int gtk_icon_helper_get_size (GtkIconHelper *self);
 

@@ -238,7 +238,7 @@ static void remove_file (GtkFileSystemModel *model,
 #define get_node(_model, _index) ((FileModelNode *) ((_model)->files->data + (_index) * (_model)->node_size))
 
 /* Get an index within the model->files array of nodes, given a FileModelNode* */
-#define node_index(_model, _node) (((gchar *) (_node) - (_model)->files->data) / (_model)->node_size)
+#define node_index(_model, _node) (((char *) (_node) - (_model)->files->data) / (_model)->node_size)
 
 /* @up_to_index: smallest model->files array index that will be valid after this call
  * @up_to_row: smallest node->row that will be valid after this call
@@ -1301,7 +1301,7 @@ gtk_file_system_model_set_n_columns (GtkFileSystemModel *model,
 static void
 gtk_file_system_model_set_directory (GtkFileSystemModel *model,
                                      GFile *             dir,
-			             const gchar *       attributes)
+			             const char *       attributes)
 {
   g_assert (G_IS_FILE (dir));
 
@@ -1387,7 +1387,7 @@ _gtk_file_system_model_new (GtkFileSystemModelGetValue get_func,
  **/
 GtkFileSystemModel *
 _gtk_file_system_model_new_for_directory (GFile *                    dir,
-                                          const gchar *              attributes,
+                                          const char *              attributes,
                                           GtkFileSystemModelGetValue get_func,
                                           gpointer                   get_data,
                                           guint                      n_columns,

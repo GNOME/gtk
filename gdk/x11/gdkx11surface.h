@@ -60,8 +60,8 @@ void     gdk_x11_surface_set_user_time     (GdkSurface   *surface,
                                             guint32      timestamp);
 GDK_AVAILABLE_IN_ALL
 void     gdk_x11_surface_set_utf8_property (GdkSurface *surface,
-                                            const gchar *name,
-                                            const gchar *value);
+                                            const char *name,
+                                            const char *value);
 GDK_AVAILABLE_IN_ALL
 void     gdk_x11_surface_set_theme_variant (GdkSurface   *surface,
                                             const char  *variant);

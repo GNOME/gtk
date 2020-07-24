@@ -90,12 +90,12 @@ GDK_AVAILABLE_IN_ALL
 GtkWidget* gtk_window_new                      (void);
 GDK_AVAILABLE_IN_ALL
 void       gtk_window_set_title                (GtkWindow           *window,
-						const gchar         *title);
+						const char          *title);
 GDK_AVAILABLE_IN_ALL
-const gchar * gtk_window_get_title             (GtkWindow           *window);
+const char * gtk_window_get_title             (GtkWindow           *window);
 GDK_AVAILABLE_IN_ALL
 void       gtk_window_set_startup_id           (GtkWindow           *window,
-                                                const gchar         *startup_id);
+                                                const char          *startup_id);
 GDK_AVAILABLE_IN_ALL
 void       gtk_window_set_focus                (GtkWindow           *window,
 						GtkWidget           *focus);
@@ -159,13 +159,13 @@ gboolean   gtk_window_get_deletable            (GtkWindow *window);
 
 GDK_AVAILABLE_IN_ALL
 void       gtk_window_set_icon_name                (GtkWindow   *window,
-						    const gchar *name);
+						    const char *name);
 GDK_AVAILABLE_IN_ALL
-const gchar * gtk_window_get_icon_name             (GtkWindow  *window);
+const char * gtk_window_get_icon_name             (GtkWindow  *window);
 GDK_AVAILABLE_IN_ALL
-void       gtk_window_set_default_icon_name        (const gchar *name);
+void       gtk_window_set_default_icon_name        (const char *name);
 GDK_AVAILABLE_IN_ALL
-const gchar * gtk_window_get_default_icon_name     (void);
+const char * gtk_window_get_default_icon_name     (void);
 
 GDK_AVAILABLE_IN_ALL
 void       gtk_window_set_auto_startup_notification (gboolean setting);

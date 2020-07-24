@@ -27,14 +27,14 @@ void  gtk_cups_secrets_service_query_task (gpointer                   source_obj
                                            GCancellable              *cancellable,
                                            GAsyncReadyCallback        callback,
                                            gpointer                   user_data,
-                                           const gchar               *printer_uri,
-                                           gchar                    **auth_info_required);
+                                           const char                *printer_uri,
+                                           char                     **auth_info_required);
 guint gtk_cups_secrets_service_watch      (GBusNameAppearedCallback   appeared,
                                            GBusNameVanishedCallback   vanished,
                                            gpointer                   user_data);
-void  gtk_cups_secrets_service_store      (gchar                    **auth_info,
-                                           gchar                    **auth_info_labels,
-                                           const gchar               *printer_uri);
+void  gtk_cups_secrets_service_store      (char                     **auth_info,
+                                           char                     **auth_info_labels,
+                                           const char                *printer_uri);
 
 G_END_DECLS
 

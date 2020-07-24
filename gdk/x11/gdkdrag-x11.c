@@ -302,7 +302,7 @@ precache_target_list (GdkDrag *drag)
   atoms = gdk_content_formats_get_mime_types (formats, &n_atoms);
 
   _gdk_x11_precache_atoms (gdk_drag_get_display (drag),
-                           (const gchar **) atoms,
+                           (const char **) atoms,
                            n_atoms);
 }
 
@@ -805,7 +805,7 @@ get_client_window_at_coords (GdkSurfaceCache *cache,
 /* Utility functions */
 
 static struct {
-  const gchar *name;
+  const char *name;
   GdkDragAction action;
 } xdnd_actions_table[] = {
     { "XdndActionCopy",    GDK_ACTION_COPY },

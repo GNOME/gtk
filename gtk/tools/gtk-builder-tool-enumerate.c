@@ -28,7 +28,7 @@
 #include "gtkbuilderprivate.h"
 #include "gtk-builder-tool.h"
 
-static const gchar *
+static const char *
 object_get_name (GObject *object)
 {
   if (GTK_IS_BUILDABLE (object))
@@ -45,8 +45,8 @@ do_enumerate (int *argc, const char ***argv)
   int ret;
   GSList *list, *l;
   GObject *object;
-  const gchar *name;
-  const gchar *filename;
+  const char *name;
+  const char *filename;
 
   filename = (*argv)[1];
 

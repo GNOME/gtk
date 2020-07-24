@@ -297,7 +297,7 @@ gtk_file_chooser_get_create_folders (GtkFileChooser *chooser)
  **/
 void
 gtk_file_chooser_set_current_name  (GtkFileChooser *chooser,
-                                    const gchar    *name)
+                                    const char     *name)
 {
   g_return_if_fail (GTK_IS_FILE_CHOOSER (chooser));
   g_return_if_fail (name != NULL);
@@ -320,7 +320,7 @@ gtk_file_chooser_set_current_name  (GtkFileChooser *chooser,
  * whatever the contents of the entry are.  Note also that this string is in
  * UTF-8 encoding, which is not necessarily the system’s encoding for filenames.
  **/
-gchar *
+char *
 gtk_file_chooser_get_current_name (GtkFileChooser *chooser)
 {
   g_return_val_if_fail (GTK_IS_FILE_CHOOSER (chooser), NULL);

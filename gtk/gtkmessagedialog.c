@@ -287,7 +287,7 @@ setup_type (GtkMessageDialog *dialog,
 	    GtkMessageType    type)
 {
   GtkMessageDialogPrivate *priv = gtk_message_dialog_get_instance_private (dialog);
-  const gchar *name = NULL;
+  const char *name = NULL;
   AtkObject *atk_obj;
 
   if (priv->message_type == type)
@@ -337,7 +337,7 @@ update_title (GObject    *dialog,
               GParamSpec *pspec,
               GtkWidget  *label)
 {
-  const gchar *title;
+  const char *title;
 
   title = gtk_window_get_title (GTK_WINDOW (dialog));
   gtk_label_set_label (GTK_LABEL (label), title);
@@ -413,7 +413,7 @@ gtk_message_dialog_set_property (GObject      *object,
       break;
     case PROP_SECONDARY_TEXT:
       {
-	const gchar *txt = g_value_get_string (value);
+	const char *txt = g_value_get_string (value);
 
 	if (gtk_label_get_use_markup (GTK_LABEL (priv->secondary_label)))
 	  gtk_label_set_markup (GTK_LABEL (priv->secondary_label), txt);
@@ -510,12 +510,12 @@ gtk_message_dialog_new (GtkWindow     *parent,
                         GtkDialogFlags flags,
                         GtkMessageType type,
                         GtkButtonsType buttons,
-                        const gchar   *message_format,
+                        const char    *message_format,
                         ...)
 {
   GtkWidget *widget;
   GtkDialog *dialog;
-  gchar* msg = NULL;
+  char * msg = NULL;
   va_list args;
 
   g_return_val_if_fail (parent == NULL || GTK_IS_WINDOW (parent), NULL);
@@ -593,12 +593,12 @@ gtk_message_dialog_new_with_markup (GtkWindow     *parent,
                                     GtkDialogFlags flags,
                                     GtkMessageType type,
                                     GtkButtonsType buttons,
-                                    const gchar   *message_format,
+                                    const char    *message_format,
                                     ...)
 {
   GtkWidget *widget;
   va_list args;
-  gchar *msg = NULL;
+  char *msg = NULL;
 
   g_return_val_if_fail (parent == NULL || GTK_IS_WINDOW (parent), NULL);
 
@@ -628,7 +628,7 @@ gtk_message_dialog_new_with_markup (GtkWindow     *parent,
  **/
 void
 gtk_message_dialog_set_markup (GtkMessageDialog *message_dialog,
-                               const gchar      *str)
+                               const char       *str)
 {
   GtkMessageDialogPrivate *priv = gtk_message_dialog_get_instance_private (message_dialog);
 
@@ -649,12 +649,12 @@ gtk_message_dialog_set_markup (GtkMessageDialog *message_dialog,
  */
 void
 gtk_message_dialog_format_secondary_text (GtkMessageDialog *message_dialog,
-                                          const gchar      *message_format,
+                                          const char       *message_format,
                                           ...)
 {
   GtkMessageDialogPrivate *priv = gtk_message_dialog_get_instance_private (message_dialog);
   va_list args;
-  gchar *msg = NULL;
+  char *msg = NULL;
 
   g_return_if_fail (GTK_IS_MESSAGE_DIALOG (message_dialog));
 
@@ -695,7 +695,7 @@ gtk_message_dialog_format_secondary_text (GtkMessageDialog *message_dialog,
  * to escape it.
 
  * |[<!-- language="C" -->
- * gchar *msg;
+ * char *msg;
  *
  * msg = g_markup_printf_escaped (message_format, ...);
  * gtk_message_dialog_format_secondary_markup (message_dialog,
@@ -705,12 +705,12 @@ gtk_message_dialog_format_secondary_text (GtkMessageDialog *message_dialog,
  */
 void
 gtk_message_dialog_format_secondary_markup (GtkMessageDialog *message_dialog,
-                                            const gchar      *message_format,
+                                            const char       *message_format,
                                             ...)
 {
   GtkMessageDialogPrivate *priv = gtk_message_dialog_get_instance_private (message_dialog);
   va_list args;
-  gchar *msg = NULL;
+  char *msg = NULL;
 
   g_return_if_fail (GTK_IS_MESSAGE_DIALOG (message_dialog));
 

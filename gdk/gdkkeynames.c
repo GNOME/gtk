@@ -43,10 +43,10 @@ gdk_keys_keyval_compare (const void *pkey, const void *pbase)
   return (*(int *) pkey) - ((gdk_key *) pbase)->keyval;
 }
 
-static gchar*
+static char *
 _gdk_keyval_name (guint keyval)
 {
-  static gchar buf[100];
+  static char buf[100];
   gdk_key *found;
 
   /* Check for directly encoded 24-bit UCS characters: */
@@ -66,7 +66,7 @@ _gdk_keyval_name (guint keyval)
              ((found - 1)->keyval == keyval))
         found--;
 	    
-      return (gchar *) (keynames + found->offset);
+      return (char *) (keynames + found->offset);
     }
   else if (keyval != 0)
     {
@@ -85,7 +85,7 @@ gdk_keys_name_compare (const void *pkey, const void *pbase)
 }
 
 static guint
-_gdk_keyval_from_name (const gchar *keyval_name)
+_gdk_keyval_from_name (const char *keyval_name)
 {
   gdk_key *found;
 

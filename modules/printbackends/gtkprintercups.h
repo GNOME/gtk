@@ -47,23 +47,23 @@ struct _GtkPrinterCups
 {
   GtkPrinter parent_instance;
 
-  gchar *device_uri;
-  gchar *original_device_uri;
-  gchar *printer_uri;
-  gchar *hostname;
+  char *device_uri;
+  char *original_device_uri;
+  char *printer_uri;
+  char *hostname;
   int port;
-  gchar **auth_info_required;
-  gchar *original_hostname;
-  gchar *original_resource;
+  char **auth_info_required;
+  char *original_hostname;
+  char *original_resource;
   int original_port;
   gboolean request_original_uri; /* Request PPD from original host */
 
   ipp_pstate_t state;
   gboolean reading_ppd;
-  gchar      *ppd_name;
+  char       *ppd_name;
   ppd_file_t *ppd_file;
 
-  gchar    *media_default;
+  char     *media_default;
   GList    *media_supported;
   GList    *media_size_supported;
   int       media_bottom_margin_default;
@@ -71,13 +71,13 @@ struct _GtkPrinterCups
   int       media_left_margin_default;
   int       media_right_margin_default;
   gboolean  media_margin_default_set;
-  gchar    *sides_default;
+  char     *sides_default;
   GList    *sides_supported;
-  gchar    *output_bin_default;
+  char     *output_bin_default;
   GList    *output_bin_supported;
 
-  gchar  *default_cover_before;
-  gchar  *default_cover_after;
+  char   *default_cover_before;
+  char   *default_cover_after;
 
   int     default_number_up;
 
@@ -91,8 +91,8 @@ struct _GtkPrinterCups
   CdDevice     *colord_device;
   CdProfile    *colord_profile;
   GCancellable *colord_cancellable;
-  gchar        *colord_title;
-  gchar        *colord_qualifier;
+  char         *colord_title;
+  char         *colord_qualifier;
 #endif
 
   gboolean  avahi_browsed;
@@ -122,7 +122,7 @@ GtkPrinterCups          *gtk_printer_cups_new           (const char      *name,
                                                          GtkPrintBackend *backend,
                                                          gpointer         colord_client);
 ppd_file_t 		*gtk_printer_cups_get_ppd       (GtkPrinterCups  *printer);
-const gchar		*gtk_printer_cups_get_ppd_name  (GtkPrinterCups  *printer);
+const char		*gtk_printer_cups_get_ppd_name  (GtkPrinterCups  *printer);
 
 #ifdef HAVE_COLORD
 void                     gtk_printer_cups_update_settings (GtkPrinterCups *printer,

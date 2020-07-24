@@ -35,7 +35,7 @@ gtk_boolean_cell_accessible_get_n_actions (AtkAction *action)
   return parent_action_iface->get_n_actions (action) + 1;
 }
 
-static const gchar *
+static const char *
 gtk_boolean_cell_accessible_get_description (AtkAction *action,
                                              int        i)
 {
@@ -45,7 +45,7 @@ gtk_boolean_cell_accessible_get_description (AtkAction *action,
   return parent_action_iface->get_description (action, i - 1);
 }
 
-static const gchar *
+static const char *
 gtk_boolean_cell_accessible_action_get_name (AtkAction *action,
                                              int        i)
 {
@@ -55,7 +55,7 @@ gtk_boolean_cell_accessible_action_get_name (AtkAction *action,
   return parent_action_iface->get_description (action, i - 1);
 }
 
-static const gchar *
+static const char *
 gtk_boolean_cell_accessible_action_get_localized_name (AtkAction *action,
                                                        int        i)
 {

@@ -339,7 +339,7 @@ _gdk_win32_display_init_monitors (GdkWin32Display *win32_display)
  */
 void
 gdk_win32_display_set_cursor_theme (GdkDisplay  *display,
-                                    const gchar *name,
+                                    const char *name,
                                     int          size)
 {
   int cursor_size;
@@ -492,7 +492,7 @@ register_display_change_notification (GdkDisplay *display)
 }
 
 GdkDisplay *
-_gdk_win32_display_open (const gchar *display_name)
+_gdk_win32_display_open (const char *display_name)
 {
   GdkWin32Display *win32_display;
 
@@ -548,7 +548,7 @@ _gdk_win32_display_open (const gchar *display_name)
 
 G_DEFINE_TYPE (GdkWin32Display, gdk_win32_display, GDK_TYPE_DISPLAY)
 
-static const gchar *
+static const char *
 gdk_win32_display_get_name (GdkDisplay *display)
 {
   HDESK hdesk = GetThreadDesktop (GetCurrentThreadId ());
@@ -882,7 +882,7 @@ _gdk_win32_enable_hidpi (GdkWin32Display *display)
 static void
 gdk_win32_display_init (GdkWin32Display *display)
 {
-  const gchar *scale_str = g_getenv ("GDK_SCALE");
+  const char *scale_str = g_getenv ("GDK_SCALE");
 
   display->monitors = G_LIST_MODEL (g_list_store_new (GDK_TYPE_MONITOR));
 
@@ -927,7 +927,7 @@ gdk_win32_display_check_composited (GdkWin32Display *display)
 
 static void
 gdk_win32_display_notify_startup_complete (GdkDisplay  *display,
-                                           const gchar *startup_id)
+                                           const char *startup_id)
 {
   /* nothing */
 }
@@ -1038,7 +1038,7 @@ _gdk_win32_display_get_monitor_scale_factor (GdkWin32Display *win32_display,
 
 static gboolean
 gdk_win32_display_get_setting (GdkDisplay  *display,
-                               const gchar *name,
+                               const char *name,
                                GValue      *value)
 {
   return _gdk_win32_get_setting (name, value);

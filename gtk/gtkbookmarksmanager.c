@@ -43,7 +43,7 @@ _gtk_bookmark_free (gpointer data)
 static void
 set_error_bookmark_doesnt_exist (GFile *file, GError **error)
 {
-  gchar *uri = g_file_get_uri (file);
+  char *uri = g_file_get_uri (file);
 
   g_set_error (error,
                GTK_FILE_CHOOSER_ERROR,
@@ -58,7 +58,7 @@ static GFile *
 get_legacy_bookmarks_file (void)
 {
   GFile *file;
-  gchar *filename;
+  char *filename;
 
   filename = g_build_filename (g_get_home_dir (), ".gtk-bookmarks", NULL);
   file = g_file_new_for_path (filename);
@@ -71,7 +71,7 @@ static GFile *
 get_bookmarks_file (void)
 {
   GFile *file;
-  gchar *filename;
+  char *filename;
 
   /* Use gtk-3.0's bookmarks file as the format didn't change.
    * Add the 3.0 file format to get_legacy_bookmarks_file() when
@@ -87,7 +87,7 @@ get_bookmarks_file (void)
 static GSList *
 parse_bookmarks (const char *contents)
 {
-  gchar **lines, *space;
+  char **lines, *space;
   GSList *bookmarks = NULL;
   int i;
 
@@ -124,7 +124,7 @@ parse_bookmarks (const char *contents)
 static GSList *
 read_bookmarks (GFile *file)
 {
-  gchar *contents;
+  char *contents;
   GSList *bookmarks = NULL;
 
   if (!g_file_load_contents (file, NULL, &contents,
@@ -184,7 +184,7 @@ save_bookmarks (GFile  *bookmarks_file,
   for (l = bookmarks; l; l = l->next)
     {
       GtkBookmark *bookmark = l->data;
-      gchar *uri;
+      char *uri;
 
       uri = g_file_get_uri (bookmark->file);
       if (!uri)
@@ -393,7 +393,7 @@ _gtk_bookmarks_manager_insert_bookmark (GtkBookmarksManager *manager,
 
   if (link)
     {
-      gchar *uri;
+      char *uri;
       bookmark = link->data;
       uri = g_file_get_uri (bookmark->file);
 
@@ -508,12 +508,12 @@ _gtk_bookmarks_manager_reorder_bookmark (GtkBookmarksManager *manager,
   return TRUE;
 }
 
-gchar *
+char *
 _gtk_bookmarks_manager_get_bookmark_label (GtkBookmarksManager *manager,
 					   GFile               *file)
 {
   GSList *bookmarks;
-  gchar *label = NULL;
+  char *label = NULL;
 
   g_return_val_if_fail (manager != NULL, NULL);
   g_return_val_if_fail (file != NULL, NULL);
@@ -540,7 +540,7 @@ _gtk_bookmarks_manager_get_bookmark_label (GtkBookmarksManager *manager,
 gboolean
 _gtk_bookmarks_manager_set_bookmark_label (GtkBookmarksManager *manager,
 					   GFile               *file,
-					   const gchar         *label,
+					   const char          *label,
 					   GError             **error)
 {
   GFile *bookmarks_file;
@@ -580,7 +580,7 @@ _gtk_bookmarks_manager_get_xdg_type (GtkBookmarksManager *manager,
   GSList *link;
   gboolean match;
   GFile *location;
-  const gchar *path;
+  const char *path;
   GUserDirectory dir;
   GtkBookmark *bookmark;
 

@@ -74,15 +74,15 @@ GType      gtk_image_get_type (void) G_GNUC_CONST;
 GDK_AVAILABLE_IN_ALL
 GtkWidget* gtk_image_new                (void);
 GDK_AVAILABLE_IN_ALL
-GtkWidget* gtk_image_new_from_file      (const gchar     *filename);
+GtkWidget* gtk_image_new_from_file      (const char      *filename);
 GDK_AVAILABLE_IN_ALL
-GtkWidget* gtk_image_new_from_resource  (const gchar     *resource_path);
+GtkWidget* gtk_image_new_from_resource  (const char      *resource_path);
 GDK_AVAILABLE_IN_ALL
 GtkWidget* gtk_image_new_from_pixbuf    (GdkPixbuf       *pixbuf);
 GDK_AVAILABLE_IN_ALL
 GtkWidget* gtk_image_new_from_paintable (GdkPaintable    *paintable);
 GDK_AVAILABLE_IN_ALL
-GtkWidget* gtk_image_new_from_icon_name (const gchar     *icon_name);
+GtkWidget* gtk_image_new_from_icon_name (const char      *icon_name);
 GDK_AVAILABLE_IN_ALL
 GtkWidget* gtk_image_new_from_gicon     (GIcon           *icon);
 
@@ -90,10 +90,10 @@ GDK_AVAILABLE_IN_ALL
 void gtk_image_clear              (GtkImage        *image);
 GDK_AVAILABLE_IN_ALL
 void gtk_image_set_from_file      (GtkImage        *image,
-                                   const gchar     *filename);
+                                   const char      *filename);
 GDK_AVAILABLE_IN_ALL
 void gtk_image_set_from_resource  (GtkImage        *image,
-                                   const gchar     *resource_path);
+                                   const char      *resource_path);
 GDK_AVAILABLE_IN_ALL
 void gtk_image_set_from_pixbuf    (GtkImage        *image,
                                    GdkPixbuf       *pixbuf);
@@ -102,7 +102,7 @@ void gtk_image_set_from_paintable (GtkImage        *image,
                                    GdkPaintable    *paintable);
 GDK_AVAILABLE_IN_ALL
 void gtk_image_set_from_icon_name (GtkImage        *image,
-				   const gchar     *icon_name);
+				   const char      *icon_name);
 GDK_AVAILABLE_IN_ALL
 void gtk_image_set_from_gicon     (GtkImage        *image,
 				   GIcon           *icon);

@@ -515,9 +515,9 @@ gtk_link_button_popup_menu (GtkWidget  *widget,
  * Returns: a new link button widget.
  */
 GtkWidget *
-gtk_link_button_new (const gchar *uri)
+gtk_link_button_new (const char *uri)
 {
-  gchar *utf8_uri = NULL;
+  char *utf8_uri = NULL;
   GtkWidget *retval;
   
   g_return_val_if_fail (uri != NULL, NULL);
@@ -563,8 +563,8 @@ gtk_link_button_new (const gchar *uri)
  * Returns: (transfer none): a new link button widget.
  */
 GtkWidget *
-gtk_link_button_new_with_label (const gchar *uri,
-				const gchar *label)
+gtk_link_button_new_with_label (const char *uri,
+				const char *label)
 {
   GtkWidget *retval;
   
@@ -590,7 +590,7 @@ gtk_link_button_query_tooltip_cb (GtkWidget    *widget,
                                   gpointer      data)
 {
   GtkLinkButton *link_button = GTK_LINK_BUTTON (widget);
-  const gchar *label, *uri;
+  const char *label, *uri;
   const char *text, *markup;
 
   label = gtk_button_get_label (GTK_BUTTON (link_button));
@@ -621,7 +621,7 @@ gtk_link_button_query_tooltip_cb (GtkWidget    *widget,
  */
 void
 gtk_link_button_set_uri (GtkLinkButton *link_button,
-			 const gchar   *uri)
+			 const char    *uri)
 {
   g_return_if_fail (GTK_IS_LINK_BUTTON (link_button));
   g_return_if_fail (uri != NULL);
@@ -643,7 +643,7 @@ gtk_link_button_set_uri (GtkLinkButton *link_button,
  * Returns: a valid URI.  The returned string is owned by the link button
  *   and should not be modified or freed.
  */
-const gchar *
+const char *
 gtk_link_button_get_uri (GtkLinkButton *link_button)
 {
   g_return_val_if_fail (GTK_IS_LINK_BUTTON (link_button), NULL);

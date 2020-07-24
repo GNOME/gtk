@@ -18,7 +18,7 @@ do_sidebar (GtkWidget *do_widget)
   GtkWidget *box;
   GtkWidget *widget;
   GtkWidget *header;
-  const gchar* pages[] = {
+  const char * pages[] = {
     "Welcome to GTK",
     "GtkStackSidebar Widget",
     "Automatic navigation",
@@ -30,7 +30,7 @@ do_sidebar (GtkWidget *do_widget)
     "Page 9",
     NULL
   };
-  const gchar *c = NULL;
+  const char *c = NULL;
   guint i;
 
   if (!window)

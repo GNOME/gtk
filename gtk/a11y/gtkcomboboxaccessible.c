@@ -23,7 +23,7 @@
 
 struct _GtkComboBoxAccessiblePrivate
 {
-  gchar         *name;
+  char          *name;
   int            old_selection;
   gboolean       popup_set;
 };
@@ -95,14 +95,14 @@ gtk_combo_box_accessible_finalize (GObject *object)
   G_OBJECT_CLASS (gtk_combo_box_accessible_parent_class)->finalize (object);
 }
 
-static const gchar *
+static const char *
 gtk_combo_box_accessible_get_name (AtkObject *obj)
 {
   GtkWidget *widget;
   GtkComboBox *combo_box;
   GtkComboBoxAccessible *accessible;
   GtkTreeIter iter;
-  const gchar *name;
+  const char *name;
   GtkTreeModel *model;
   int n_columns;
   int i;
@@ -248,7 +248,7 @@ gtk_combo_box_accessible_get_n_actions (AtkAction *action)
   return 1;
 }
 
-static const gchar *
+static const char *
 gtk_combo_box_accessible_get_keybinding (AtkAction *action,
                                          int        i)
 {
@@ -260,7 +260,7 @@ gtk_combo_box_accessible_get_keybinding (AtkAction *action,
   GPtrArray *target;
   gpointer target_object;
   guint key_val;
-  gchar *return_value = NULL;
+  char *return_value = NULL;
 
   if (i != 0)
     return NULL;
@@ -293,7 +293,7 @@ gtk_combo_box_accessible_get_keybinding (AtkAction *action,
   return return_value;
 }
 
-static const gchar *
+static const char *
 gtk_combo_box_accessible_action_get_name (AtkAction *action,
                                           int        i)
 {
@@ -302,7 +302,7 @@ gtk_combo_box_accessible_action_get_name (AtkAction *action,
   return NULL;
 }
 
-static const gchar *
+static const char *
 gtk_combo_box_accessible_action_get_localized_name (AtkAction *action,
                                                     int        i)
 {
@@ -311,7 +311,7 @@ gtk_combo_box_accessible_action_get_localized_name (AtkAction *action,
   return NULL;
 }
 
-static const gchar *
+static const char *
 gtk_combo_box_accessible_action_get_description (AtkAction *action,
                                                  int        i)
 {

@@ -32,7 +32,7 @@ static GActionEntry win_entries[] = {
   { "close", action_activated },
 };
 
-const gchar *menu_ui =
+const char *menu_ui =
   "<interface>"
   "  <menu id='doc-menu'>"
   "    <section>"

@@ -202,7 +202,7 @@ gtk_spin_button_accessible_set_current_value (AtkValue     *obj,
 static void
 gtk_spin_button_accessible_get_value_and_text (AtkValue  *obj,
                                                gdouble   *value,
-                                               gchar    **text)
+                                               char     **text)
 {
   GtkWidget *widget;
   GtkAdjustment *adjustment;

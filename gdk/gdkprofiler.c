@@ -55,7 +55,7 @@ gdk_profiler_start (int fd)
 
   if (fd == -1)
     {
-      gchar *filename;
+      char *filename;
 
       filename = g_strdup_printf ("gtk.%d.syscap", getpid ());
       g_print ("Writing profiling data to %s\n", filename);

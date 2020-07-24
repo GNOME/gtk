@@ -69,7 +69,7 @@ static void gtk_cell_renderer_text_snapshot   (GtkCellRenderer          *cell,
 static GtkCellEditable *gtk_cell_renderer_text_start_editing (GtkCellRenderer      *cell,
 							      GdkEvent             *event,
 							      GtkWidget            *widget,
-							      const gchar          *path,
+							      const char           *path,
 							      const GdkRectangle   *background_area,
 							      const GdkRectangle   *cell_area,
 							      GtkCellRendererState  flags);
@@ -178,8 +178,8 @@ struct _GtkCellRendererTextPrivate
   PangoUnderline        underline_style;
   PangoWrapMode         wrap_mode;
 
-  gchar *text;
-  gchar *placeholder_text;
+  char *text;
+  char *placeholder_text;
 
   gdouble font_scale;
 
@@ -1073,8 +1073,8 @@ gtk_cell_renderer_text_set_property (GObject      *object,
       break;
     case PROP_MARKUP:
       {
-	const gchar *str;
-	gchar *text = NULL;
+	const char *str;
+	char *text = NULL;
 	GError *error = NULL;
 	PangoAttrList *attrs = NULL;
 
@@ -1143,7 +1143,7 @@ gtk_cell_renderer_text_set_property (GObject      *object,
     case PROP_FONT:
       {
         PangoFontDescription *font_desc = NULL;
-        const gchar *name;
+        const char *name;
 
         name = g_value_get_string (value);
 
@@ -1754,8 +1754,8 @@ gtk_cell_renderer_text_editing_done (GtkCellEditable *entry,
 {
   GtkCellRendererText *celltext = GTK_CELL_RENDERER_TEXT (data);
   GtkCellRendererTextPrivate *priv = gtk_cell_renderer_text_get_instance_private (celltext);
-  const gchar *path;
-  const gchar *new_text;
+  const char *path;
+  const char *new_text;
   gboolean canceled;
 
   g_clear_object (&priv->entry);
@@ -1805,7 +1805,7 @@ static GtkCellEditable *
 gtk_cell_renderer_text_start_editing (GtkCellRenderer      *cell,
 				      GdkEvent             *event,
 				      GtkWidget            *widget,
-				      const gchar          *path,
+				      const char           *path,
 				      const GdkRectangle   *background_area,
 				      const GdkRectangle   *cell_area,
 				      GtkCellRendererState  flags)

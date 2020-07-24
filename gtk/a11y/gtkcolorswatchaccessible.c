@@ -122,14 +122,14 @@ gtk_color_swatch_accessible_get_n_actions (AtkAction *action)
   return 3;
 }
 
-static const gchar *
+static const char *
 gtk_color_swatch_accessible_get_keybinding (AtkAction *action,
                                             int        i)
 {
   return NULL;
 }
 
-static const gchar *
+static const char *
 gtk_color_swatch_accessible_get_name (AtkAction *action,
                                       int        i)
 {
@@ -142,7 +142,7 @@ gtk_color_swatch_accessible_get_name (AtkAction *action,
     }
 }
 
-static const gchar *
+static const char *
 gtk_color_swatch_accessible_get_localized_name (AtkAction *action,
                                                 int        i)
 {
@@ -155,7 +155,7 @@ gtk_color_swatch_accessible_get_localized_name (AtkAction *action,
     }
 }
 
-static const gchar *
+static const char *
 gtk_color_swatch_accessible_get_description (AtkAction *action,
                                              int        i)
 {

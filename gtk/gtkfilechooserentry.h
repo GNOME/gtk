@@ -38,7 +38,7 @@ GtkFileChooserAction _gtk_file_chooser_entry_get_action       (GtkFileChooserEnt
 void               _gtk_file_chooser_entry_set_base_folder    (GtkFileChooserEntry *chooser_entry,
 							       GFile               *folder);
 GFile *            _gtk_file_chooser_entry_get_current_folder (GtkFileChooserEntry *chooser_entry);
-const gchar *      _gtk_file_chooser_entry_get_file_part      (GtkFileChooserEntry *chooser_entry);
+const char *      _gtk_file_chooser_entry_get_file_part      (GtkFileChooserEntry *chooser_entry);
 gboolean           _gtk_file_chooser_entry_get_is_folder      (GtkFileChooserEntry *chooser_entry,
 							       GFile               *file);
 void               _gtk_file_chooser_entry_select_filename    (GtkFileChooserEntry *chooser_entry);

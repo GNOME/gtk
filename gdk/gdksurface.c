@@ -2763,8 +2763,8 @@ add_event_mark (GdkEvent *event,
                 gint64    time,
                 guint64   duration)
 {
-  gchar *message = NULL;
-  const gchar *kind;
+  char *message = NULL;
+  const char *kind;
   GEnumClass *class;
   GEnumValue *value;
   GdkEventType event_type;

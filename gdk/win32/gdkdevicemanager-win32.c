@@ -360,7 +360,7 @@ wintab_init_check (GdkDeviceManagerWin32 *device_manager)
   UINT devix, cursorix;
   int i, num_axes = 0;
   wchar_t devname[100], csrname[100];
-  gchar *devname_utf8, *csrname_utf8, *device_name;
+  char *devname_utf8, *csrname_utf8, *device_name;
   BOOL defcontext_done;
   HMODULE wintab32;
   char *wintab32_dll_path;

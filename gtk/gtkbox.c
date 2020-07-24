@@ -296,7 +296,7 @@ static void
 gtk_box_buildable_add_child (GtkBuildable *buildable,
                              GtkBuilder   *builder,
                              GObject      *child,
-                             const gchar  *type)
+                             const char   *type)
 {
   if (GTK_IS_WIDGET (child))
     gtk_box_append (GTK_BOX (buildable), GTK_WIDGET (child));

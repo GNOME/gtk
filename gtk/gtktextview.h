@@ -160,7 +160,7 @@ struct _GtkTextViewClass
                                   gboolean          extend_selection);
   void (* set_anchor)            (GtkTextView      *text_view);
   void (* insert_at_cursor)      (GtkTextView      *text_view,
-                                  const gchar      *str);
+                                  const char       *str);
   void (* delete_from_cursor)    (GtkTextView      *text_view,
                                   GtkDeleteType     type,
                                   int               count);

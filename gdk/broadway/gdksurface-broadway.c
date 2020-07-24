@@ -660,13 +660,13 @@ gdk_broadway_surface_set_geometry_hints (GdkSurface        *surface,
 
 static void
 gdk_broadway_surface_set_title (GdkSurface  *surface,
-                                const gchar *title)
+                                const char *title)
 {
 }
 
 static void
 gdk_broadway_surface_set_startup_id (GdkSurface  *surface,
-                                     const gchar *startup_id)
+                                     const char *startup_id)
 {
 }
 

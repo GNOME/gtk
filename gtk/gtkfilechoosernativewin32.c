@@ -644,7 +644,7 @@ filechooser_win32_thread (gpointer _data)
                 {
                   gunichar2 *label = g_utf8_to_utf16 (choice->label, -1, NULL, NULL, NULL);
                   DWORD sub_id = 0;
-                  gchar **option;
+                  char **option;
 
                   IFileDialogCustomize_StartVisualGroup (pfdc, dialog_auxiliary_id++, label);
                   hr = IFileDialogCustomize_AddComboBox (pfdc, dialog_control_id);

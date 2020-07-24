@@ -90,7 +90,7 @@ struct _GtkFontChooserIface
 
   /* Signals */
   void (* font_activated) (GtkFontChooser *chooser,
-                           const gchar    *fontname);
+                           const char     *fontname);
 
   /* More methods */
   void              (* set_font_map)            (GtkFontChooser   *fontchooser,
@@ -119,16 +119,16 @@ void             gtk_font_chooser_set_font_desc            (GtkFontChooser      
                                                             const PangoFontDescription *font_desc);
 
 GDK_AVAILABLE_IN_ALL
-gchar*           gtk_font_chooser_get_font                 (GtkFontChooser   *fontchooser);
+char *           gtk_font_chooser_get_font                 (GtkFontChooser   *fontchooser);
 
 GDK_AVAILABLE_IN_ALL
 void             gtk_font_chooser_set_font                 (GtkFontChooser   *fontchooser,
-                                                            const gchar      *fontname);
+                                                            const char       *fontname);
 GDK_AVAILABLE_IN_ALL
-gchar*           gtk_font_chooser_get_preview_text         (GtkFontChooser   *fontchooser);
+char *           gtk_font_chooser_get_preview_text         (GtkFontChooser   *fontchooser);
 GDK_AVAILABLE_IN_ALL
 void             gtk_font_chooser_set_preview_text         (GtkFontChooser   *fontchooser,
-                                                            const gchar      *text);
+                                                            const char       *text);
 GDK_AVAILABLE_IN_ALL
 gboolean         gtk_font_chooser_get_show_preview_entry   (GtkFontChooser   *fontchooser);
 GDK_AVAILABLE_IN_ALL

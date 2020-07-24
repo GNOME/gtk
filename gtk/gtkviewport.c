@@ -139,7 +139,7 @@ static void
 gtk_viewport_buildable_add_child (GtkBuildable *buildable,
                                   GtkBuilder   *builder,
                                   GObject      *child,
-                                  const gchar  *type)
+                                  const char   *type)
 {
   if (GTK_IS_WIDGET (child))
     gtk_viewport_set_child (GTK_VIEWPORT (buildable), GTK_WIDGET (child));

@@ -144,9 +144,9 @@ GtkAssistantPageType  gtk_assistant_get_page_type         (GtkAssistant         
 GDK_AVAILABLE_IN_ALL
 void                  gtk_assistant_set_page_title        (GtkAssistant         *assistant,
                                                            GtkWidget            *page,
-                                                           const gchar          *title);
+                                                           const char           *title);
 GDK_AVAILABLE_IN_ALL
-const gchar *         gtk_assistant_get_page_title        (GtkAssistant         *assistant,
+const char *         gtk_assistant_get_page_title        (GtkAssistant         *assistant,
                                                            GtkWidget            *page);
 
 GDK_AVAILABLE_IN_ALL

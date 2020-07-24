@@ -186,7 +186,7 @@ gtk_image_definition_get_scale (const GtkImageDefinition *def)
     }
 }
 
-const gchar *
+const char *
 gtk_image_definition_get_icon_name (const GtkImageDefinition *def)
 {
   if (def->type != GTK_IMAGE_ICON_NAME)

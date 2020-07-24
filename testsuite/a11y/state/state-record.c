@@ -23,16 +23,16 @@
 #include <gtk/gtk.h>
 #include <string.h>
 
-static gchar **states;
+static char **states;
 
 static void
 record_state_change (AtkObject   *accessible,
-                     const gchar *state,
+                     const char *state,
                      gboolean     set,
                      GString     *string)
 {
   GtkWidget *w;
-  const gchar *name;
+  const char *name;
 
   if (states)
     {
@@ -63,9 +63,9 @@ stop (gpointer data)
 }
 
 static void
-do_action (GtkBuilder *builder, const gchar *action, GString *string)
+do_action (GtkBuilder *builder, const char *action, GString *string)
 {
-  gchar **parts;
+  char **parts;
   int len;
   int i;
 
@@ -134,14 +134,14 @@ do_action (GtkBuilder *builder, const gchar *action, GString *string)
 }
 
 static void
-record_events (const gchar *ui_file,
-               const gchar *in_file,
+record_events (const char *ui_file,
+               const char *in_file,
                GString     *string)
 {
   GtkBuilder *builder;
   GError *error;
-  gchar *contents;
-  gchar **actions;
+  char *contents;
+  char **actions;
   int i, len;
 
   builder = gtk_builder_new ();
@@ -163,9 +163,9 @@ record_events (const gchar *ui_file,
   g_strfreev (actions);
 }
 
-static gchar *
-get_test_file (const gchar *test_file,
-               const gchar *extension,
+static char *
+get_test_file (const char *test_file,
+               const char *extension,
                gboolean     must_exist)
 {
   GString *file = g_string_new (NULL);
@@ -237,7 +237,7 @@ done:
 static void
 test_ui_file (GFile *file)
 {
-  gchar *ui_file, *in_file, *out_file;
+  char *ui_file, *in_file, *out_file;
   GString *record;
   GError *error = NULL;
 
@@ -350,7 +350,7 @@ static const GOptionEntry test_args[] = {
 int
 main (int argc, char *argv[])
 {
-  const gchar *basedir;
+  const char *basedir;
   GFile *dir;
   GError *error = NULL;
   GOptionContext *context;

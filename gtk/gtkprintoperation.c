@@ -528,7 +528,7 @@ typedef struct
   GtkPrintContext *print_context;
   GtkWindow *parent;
   cairo_surface_t *surface;
-  gchar *filename;
+  char *filename;
   gboolean wait;
   PrintPagesData *pages_data;
 } PreviewOp;
@@ -1520,7 +1520,7 @@ gtk_print_operation_get_print_settings (GtkPrintOperation *op)
  **/
 void
 gtk_print_operation_set_job_name (GtkPrintOperation *op,
-				  const gchar       *job_name)
+				  const char        *job_name)
 {
   GtkPrintOperationPrivate *priv = gtk_print_operation_get_instance_private (op);
 
@@ -1690,10 +1690,10 @@ gtk_print_operation_set_track_print_status (GtkPrintOperation  *op,
 void
 _gtk_print_operation_set_status (GtkPrintOperation *op,
 				 GtkPrintStatus     status,
-				 const gchar       *string)
+				 const char        *string)
 {
   GtkPrintOperationPrivate *priv = gtk_print_operation_get_instance_private (op);
-  static const gchar *status_strs[] = {
+  static const char *status_strs[] = {
     NC_("print operation status", "Initial state"),
     NC_("print operation status", "Preparing to print"),
     NC_("print operation status", "Generating data"),
@@ -1758,7 +1758,7 @@ gtk_print_operation_get_status (GtkPrintOperation *op)
  * Returns: a string representation of the status
  *    of the print operation
  **/
-const gchar *
+const char *
 gtk_print_operation_get_status_string (GtkPrintOperation *op)
 {
   g_return_val_if_fail (GTK_IS_PRINT_OPERATION (op), "");
@@ -1855,7 +1855,7 @@ gtk_print_operation_set_allow_async (GtkPrintOperation  *op,
  */
 void
 gtk_print_operation_set_custom_tab_label (GtkPrintOperation  *op,
-					  const gchar        *label)
+					  const char         *label)
 {
   GtkPrintOperationPrivate *priv = gtk_print_operation_get_instance_private (op);
 
@@ -1884,7 +1884,7 @@ gtk_print_operation_set_custom_tab_label (GtkPrintOperation  *op,
  */
 void
 gtk_print_operation_set_export_filename (GtkPrintOperation *op,
-					 const gchar       *filename)
+					 const char        *filename)
 {
   GtkPrintOperationPrivate *priv = gtk_print_operation_get_instance_private (op);
 
@@ -2231,7 +2231,7 @@ static void
 update_progress (PrintPagesData *data)
 {
   GtkPrintOperationPrivate *priv = gtk_print_operation_get_instance_private (data->op);
-  gchar *text = NULL;
+  char *text = NULL;
 
   if (data->progress)
     {

@@ -25,21 +25,21 @@
 #include <glib.h>
 
 typedef struct {
-	gchar	*name;
+	char	*name;
 	int	id;
-	gchar	*bitmap;
+	char	*bitmap;
 	int	hotx;
 	int	hoty;
 } font_info_t;
 
 typedef struct {
-	gchar	*name;
+	char	*name;
 	int	id;
 	int	width;
 	int	height;
 	int	hotx;
 	int	hoty;
-	gchar	*data;
+	char	*data;
 } cursor_info_t;
 
 static GSList *fonts = NULL;
@@ -98,13 +98,13 @@ cursor_info_t *ci;
 }
 
 static int read_bdf_font(fname)
-gchar *fname;
+char *fname;
 {
 	FILE *f;
-	gchar line[2048];
+	char line[2048];
 	int rv = 0;
 	gboolean startchar = FALSE, startbitmap = FALSE;
-	gchar *charname,*p,*bitmap;
+	char *charname,*p,*bitmap;
 	int dx = 0,dy = 0;
 	int w,h,x,y,py;
 	int id,tmp;
@@ -280,7 +280,7 @@ static void compose_cursors_from_fonts()
 	for (l = g_slist_copy (fonts); l; l = g_slist_delete_link (l,l))
 	{
 		font_info_t *fi = l->data;
-		gchar *name;
+		char *name;
 		GSList *ml;
 
 		name = g_strconcat(fi->name, "_mask", NULL);
@@ -301,8 +301,8 @@ static char *dump_cursor(ci, id)
 cursor_info_t *ci;
 int id;
 {
-	static gchar cdata[8192];
-	gchar *p;
+	static char cdata[8192];
+	char *p;
 	int i;
 	int c;
 	gboolean flushed;
@@ -351,7 +351,7 @@ static int dump_cursors()
 	GSList *ptr;
 	FILE *f = stdout;
 
-	fprintf(f, "static const struct { const gchar *name; int type; guchar width; guchar height; guchar hotx; guchar hoty; guchar *data; } cursors[] = {\n");
+	fprintf(f, "static const struct { const char *name; int type; guchar width; guchar height; guchar hotx; guchar hoty; guchar *data; } cursors[] = {\n");
 
 	for (ptr = cursors; ptr; ptr = ptr->next)
 	{
@@ -367,7 +367,7 @@ static int dump_cursors()
 
 int main(argc, argv)
 int argc;
-gchar **argv;
+char **argv;
 {
 	if (argc != 2)
 	{

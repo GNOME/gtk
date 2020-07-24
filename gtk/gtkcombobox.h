@@ -58,8 +58,8 @@ struct _GtkComboBoxClass
 
   /* signals */
   void     (* changed)           (GtkComboBox *combo_box);
-  gchar   *(* format_entry_text) (GtkComboBox *combo_box,
-                                  const gchar *path);
+  char    *(* format_entry_text) (GtkComboBox *combo_box,
+                                  const char *path);
 
   /*< private >*/
 
@@ -144,10 +144,10 @@ GDK_AVAILABLE_IN_ALL
 void          gtk_combo_box_set_id_column        (GtkComboBox *combo_box,
                                                   int          id_column);
 GDK_AVAILABLE_IN_ALL
-const gchar * gtk_combo_box_get_active_id        (GtkComboBox *combo_box);
+const char * gtk_combo_box_get_active_id        (GtkComboBox *combo_box);
 GDK_AVAILABLE_IN_ALL
 gboolean      gtk_combo_box_set_active_id        (GtkComboBox *combo_box,
-                                                  const gchar *active_id);
+                                                  const char *active_id);
 
 GDK_AVAILABLE_IN_ALL
 void          gtk_combo_box_set_child            (GtkComboBox *combo_box,

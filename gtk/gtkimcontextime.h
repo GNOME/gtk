@@ -42,7 +42,7 @@ struct _GtkIMContextIME
   guint opened : 1;
   guint focus : 1;
   GdkRectangle cursor_location;
-  gchar *commit_string;
+  char *commit_string;
 
   GtkIMContextIMEPrivate *priv;
 };

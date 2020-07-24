@@ -17,7 +17,7 @@ response_cb (GtkWidget *dialog,
 
 static gboolean
 activate_link (GtkWidget   *label,
-               const gchar *uri,
+               const char *uri,
                gpointer     data)
 {
   if (g_strcmp0 (uri, "keynav") == 0)

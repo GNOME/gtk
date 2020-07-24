@@ -171,7 +171,7 @@ main (int argc, char **argv)
           !g_type_is_a (all_types[i], GTK_TYPE_SHORTCUT_TRIGGER) &&
           !g_type_is_a (all_types[i], GTK_TYPE_SHORTCUT_ACTION))
 	{
-	  gchar *test_path = g_strdup_printf ("/FinalizeObject/%s", g_type_name (all_types[i]));
+	  char *test_path = g_strdup_printf ("/FinalizeObject/%s", g_type_name (all_types[i]));
 
 	  g_test_add_data_func (test_path, GSIZE_TO_POINTER (all_types[i]), test_finalize_object);
 

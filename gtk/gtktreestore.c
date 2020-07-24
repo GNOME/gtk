@@ -175,13 +175,13 @@ static gboolean gtk_tree_store_has_default_sort_func   (GtkTreeSortable        *
 static gboolean gtk_tree_store_buildable_custom_tag_start (GtkBuildable       *buildable,
                                                            GtkBuilder         *builder,
                                                            GObject            *child,
-                                                           const gchar        *tagname,
+                                                           const char         *tagname,
                                                            GtkBuildableParser *parser,
                                                            gpointer           *data);
 static void     gtk_tree_store_buildable_custom_finished  (GtkBuildable       *buildable,
                                                            GtkBuilder         *builder,
                                                            GObject            *child,
-                                                           const gchar        *tagname,
+                                                           const char         *tagname,
                                                            gpointer            user_data);
 
 static void     gtk_tree_store_move                    (GtkTreeStore           *tree_store,
@@ -1039,7 +1039,7 @@ gtk_tree_store_set_valist_internal (GtkTreeStore *tree_store,
   while (column != -1)
     {
       GValue value = G_VALUE_INIT;
-      gchar *error = NULL;
+      char *error = NULL;
 
       if (column < 0 || column >= priv->n_columns)
 	{
@@ -3317,9 +3317,9 @@ typedef struct {
 
 static void
 tree_model_start_element (GtkBuildableParseContext  *context,
-                          const gchar               *element_name,
-                          const gchar              **names,
-                          const gchar              **values,
+                          const char                *element_name,
+                          const char               **names,
+                          const char               **values,
                           gpointer                   user_data,
                           GError                   **error)
 {
@@ -3338,7 +3338,7 @@ tree_model_start_element (GtkBuildableParseContext  *context,
     }
   else if (strcmp (element_name, "column") == 0)
     {
-      const gchar *type;
+      const char *type;
 
       if (!_gtk_builder_check_parent (data->builder, context, "columns", error))
         return;
@@ -3363,7 +3363,7 @@ tree_model_start_element (GtkBuildableParseContext  *context,
 
 static void
 tree_model_end_element (GtkBuildableParseContext  *context,
-                        const gchar               *element_name,
+                        const char                *element_name,
                         gpointer                   user_data,
                         GError                   **error)
 {
@@ -3388,7 +3388,7 @@ tree_model_end_element (GtkBuildableParseContext  *context,
           if (type == G_TYPE_INVALID)
             {
               g_warning ("Unknown type %s specified in treemodel %s",
-                         (const gchar*)l->data,
+                         (const char *)l->data,
                          gtk_buildable_get_name (GTK_BUILDABLE (data->object)));
               continue;
             }
@@ -3414,7 +3414,7 @@ static gboolean
 gtk_tree_store_buildable_custom_tag_start (GtkBuildable       *buildable,
                                            GtkBuilder         *builder,
                                            GObject            *child,
-                                           const gchar        *tagname,
+                                           const char         *tagname,
                                            GtkBuildableParser *parser,
                                            gpointer           *parser_data)
 {
@@ -3443,7 +3443,7 @@ static void
 gtk_tree_store_buildable_custom_finished (GtkBuildable *buildable,
                                           GtkBuilder   *builder,
                                           GObject      *child,
-                                          const gchar  *tagname,
+                                          const char   *tagname,
                                           gpointer      user_data)
 {
   GSListSubParserData *data;

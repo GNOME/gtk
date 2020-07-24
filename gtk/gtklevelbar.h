@@ -100,14 +100,14 @@ gboolean   gtk_level_bar_get_inverted       (GtkLevelBar *self);
 
 GDK_AVAILABLE_IN_ALL
 void       gtk_level_bar_add_offset_value   (GtkLevelBar *self,
-                                             const gchar *name,
+                                             const char *name,
                                              gdouble      value);
 GDK_AVAILABLE_IN_ALL
 void       gtk_level_bar_remove_offset_value (GtkLevelBar *self,
-                                              const gchar *name);
+                                              const char *name);
 GDK_AVAILABLE_IN_ALL
 gboolean   gtk_level_bar_get_offset_value   (GtkLevelBar *self,
-                                             const gchar *name,
+                                             const char *name,
                                              gdouble     *value);
 
 G_END_DECLS

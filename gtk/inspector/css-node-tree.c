@@ -91,7 +91,7 @@ G_DEFINE_TYPE_WITH_PRIVATE (GtkInspectorCssNodeTree, gtk_inspector_css_node_tree
 
 typedef struct {
   GtkCssNode *node;
-  const gchar *prop_name;
+  const char *prop_name;
   GdkRectangle rect;
   GtkInspectorCssNodeTree *cnt;
 } NodePropEditor;
@@ -276,7 +276,7 @@ strv_sort (char **strv)
                      NULL);
 }
 
-static gchar *
+static char *
 format_state_flags (GtkStateFlags state)
 {
   if (state)
@@ -375,7 +375,7 @@ gtk_inspector_css_node_tree_init (GtkInspectorCssNodeTree *cnt)
     {
       GtkCssStyleProperty *prop;
       GtkTreeIter iter;
-      const gchar *name;
+      const char *name;
 
       prop = _gtk_css_style_property_lookup_by_id (i);
       name = _gtk_style_property_get_name (GTK_STYLE_PROPERTY (prop));
@@ -438,11 +438,11 @@ gtk_inspector_css_node_tree_update_style (GtkInspectorCssNodeTree *cnt,
   for (i = 0; i < _gtk_css_style_property_get_n_properties (); i++)
     {
       GtkCssStyleProperty *prop;
-      const gchar *name;
+      const char *name;
       GtkTreeIter *iter;
       GtkCssSection *section;
-      gchar *location;
-      gchar *value;
+      char *location;
+      char *value;
 
       prop = _gtk_css_style_property_lookup_by_id (i);
       name = _gtk_style_property_get_name (GTK_STYLE_PROPERTY (prop));
@@ -522,7 +522,7 @@ gtk_inspector_css_node_tree_set_display (GtkInspectorCssNodeTree *cnt,
                                          GdkDisplay *display)
 {
   GtkSettings *settings;
-  gchar *theme_name;
+  char *theme_name;
 
   settings = gtk_settings_get_for_display (display);
   g_object_get (settings, "gtk-theme-name", &theme_name, NULL);

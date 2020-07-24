@@ -43,8 +43,8 @@ struct _GtkIMMulticontextPrivate
   GtkWidget             *client_widget;
   GdkRectangle           cursor_location;
 
-  gchar                 *context_id;
-  gchar                 *context_id_aux;
+  char                  *context_id;
+  char                  *context_id_aux;
 
   guint                  use_preedit          : 1;
   guint                  have_cursor_location : 1;
@@ -62,7 +62,7 @@ static void     gtk_im_multicontext_set_delegate       (GtkIMMulticontext       
 static void     gtk_im_multicontext_set_client_widget  (GtkIMContext            *context,
 							GtkWidget               *widget);
 static void     gtk_im_multicontext_get_preedit_string (GtkIMContext            *context,
-							gchar                  **str,
+							char                   **str,
 							PangoAttrList          **attrs,
 							int                    *cursor_pos);
 static gboolean gtk_im_multicontext_filter_keypress    (GtkIMContext            *context,
@@ -75,7 +75,7 @@ static void     gtk_im_multicontext_set_cursor_location (GtkIMContext           
 static void     gtk_im_multicontext_set_use_preedit    (GtkIMContext            *context,
 							gboolean                 use_preedit);
 static gboolean gtk_im_multicontext_get_surrounding    (GtkIMContext            *context,
-							gchar                  **text,
+							char                   **text,
 							int                     *cursor_index);
 static void     gtk_im_multicontext_set_surrounding    (GtkIMContext            *context,
 							const char              *text,
@@ -89,7 +89,7 @@ static void     gtk_im_multicontext_preedit_end_cb          (GtkIMContext      *
 static void     gtk_im_multicontext_preedit_changed_cb      (GtkIMContext      *delegate,
 							     GtkIMMulticontext *multicontext);
 static void     gtk_im_multicontext_commit_cb               (GtkIMContext      *delegate,
-							     const gchar       *str,
+							     const char        *str,
 							     GtkIMMulticontext *multicontext);
 static gboolean gtk_im_multicontext_retrieve_surrounding_cb (GtkIMContext      *delegate,
 							     GtkIMMulticontext *multicontext);
@@ -244,7 +244,7 @@ gtk_im_multicontext_set_delegate (GtkIMMulticontext *multicontext,
     g_signal_emit_by_name (multicontext, "preedit-changed");
 }
 
-static const gchar *
+static const char *
 get_effective_context_id (GtkIMMulticontext *multicontext)
 {
   GtkIMMulticontextPrivate *priv = multicontext->priv;
@@ -329,7 +329,7 @@ gtk_im_multicontext_set_client_widget (GtkIMContext *context,
 
 static void
 gtk_im_multicontext_get_preedit_string (GtkIMContext   *context,
-					gchar         **str,
+					char          **str,
 					PangoAttrList **attrs,
 					int            *cursor_pos)
 {
@@ -377,7 +377,7 @@ gtk_im_multicontext_filter_keypress (GtkIMContext *context,
           if (ch != 0 && !g_unichar_iscntrl (ch))
             {
               int len;
-              gchar buf[10];
+              char buf[10];
 
               len = g_unichar_to_utf8 (ch, buf);
               buf[len] = '\0';
@@ -461,7 +461,7 @@ gtk_im_multicontext_set_use_preedit (GtkIMContext   *context,
 
 static gboolean
 gtk_im_multicontext_get_surrounding (GtkIMContext  *context,
-				     gchar        **text,
+				     char         **text,
 				     int           *cursor_index)
 {
   GtkIMMulticontext *multicontext = GTK_IM_MULTICONTEXT (context);
@@ -516,7 +516,7 @@ gtk_im_multicontext_preedit_changed_cb (GtkIMContext      *delegate,
 
 static void
 gtk_im_multicontext_commit_cb (GtkIMContext      *delegate,
-			       const gchar       *str,
+			       const char        *str,
 			       GtkIMMulticontext *multicontext)
 {
   g_signal_emit_by_name (multicontext, "commit", str);

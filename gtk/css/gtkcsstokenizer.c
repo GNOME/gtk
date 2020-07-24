@@ -31,8 +31,8 @@ struct _GtkCssTokenizer
   int                    ref_count;
   GBytes                *bytes;
 
-  const gchar           *data;
-  const gchar           *end;
+  const char            *data;
+  const char            *end;
 
   GtkCssLocation         position;
 };

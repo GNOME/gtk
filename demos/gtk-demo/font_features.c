@@ -729,7 +729,7 @@ entry_activated (GtkEntry *entry,
                  GtkAdjustment *adjustment)
 {
   gdouble value;
-  gchar *err = NULL;
+  char *err = NULL;
 
   value = g_strtod (gtk_editable_get_text (GTK_EDITABLE (entry)), &err);
   if (err != NULL)

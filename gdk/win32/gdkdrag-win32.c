@@ -2255,7 +2255,7 @@ gdk_win32_drag_cancel (GdkDrag             *drag,
 {
   GdkWin32Drag *drag_win32 = GDK_WIN32_DRAG (drag);
 
-  const gchar *reason_str = NULL;
+  const char *reason_str = NULL;
   switch (reason)
     {
     case GDK_DRAG_CANCEL_NO_TARGET:

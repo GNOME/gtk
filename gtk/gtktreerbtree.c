@@ -36,7 +36,7 @@ static inline void fixup_validation              (GtkTreeRBTree *tree,
 static inline void fixup_total_count             (GtkTreeRBTree *tree,
                                                   GtkTreeRBNode *node);
 #ifdef G_ENABLE_DEBUG
-static void        gtk_tree_rbtree_test               (const gchar   *where,
+static void        gtk_tree_rbtree_test               (const char    *where,
                                                        GtkTreeRBTree *tree);
 static void        gtk_tree_rbtree_debug_spew         (GtkTreeRBTree *tree,
                                                        GString       *s);
@@ -1670,7 +1670,7 @@ gtk_tree_rbtree_test_structure (GtkTreeRBTree *tree)
 }
 
 static void
-gtk_tree_rbtree_test (const gchar   *where,
+gtk_tree_rbtree_test (const char    *where,
                       GtkTreeRBTree *tree)
 {
   GtkTreeRBTree *tmp_tree;

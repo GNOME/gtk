@@ -332,7 +332,7 @@ static void
 gtk_list_box_row_buildable_add_child (GtkBuildable *buildable,
                                       GtkBuilder   *builder,
                                       GObject      *child,
-                                      const gchar  *type)
+                                      const char   *type)
 {
   if (GTK_IS_WIDGET (child))
     gtk_list_box_row_set_child (GTK_LIST_BOX_ROW (buildable), GTK_WIDGET (child));
@@ -3241,7 +3241,7 @@ gtk_list_box_row_get_selectable (GtkListBoxRow *row)
 
 static void
 gtk_list_box_row_set_action_name (GtkActionable *actionable,
-                                  const gchar   *action_name)
+                                  const char    *action_name)
 {
   GtkListBoxRow *row = GTK_LIST_BOX_ROW (actionable);
   GtkListBoxRowPrivate *priv = ROW_PRIV (row);
@@ -3327,7 +3327,7 @@ gtk_list_box_row_set_property (GObject      *obj,
     }
 }
 
-static const gchar *
+static const char *
 gtk_list_box_row_get_action_name (GtkActionable *actionable)
 {
   GtkListBoxRow *row = GTK_LIST_BOX_ROW (actionable);
@@ -3481,7 +3481,7 @@ static void
 gtk_list_box_buildable_add_child (GtkBuildable *buildable,
                                   GtkBuilder   *builder,
                                   GObject      *child,
-                                  const gchar  *type)
+                                  const char   *type)
 {
   if (type && strcmp (type, "placeholder") == 0)
     gtk_list_box_set_placeholder (GTK_LIST_BOX (buildable), GTK_WIDGET (child));

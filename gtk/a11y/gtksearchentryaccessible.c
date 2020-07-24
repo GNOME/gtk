@@ -94,7 +94,7 @@ check_for_selection_change (GtkSearchEntryAccessible *self,
 
 static void
 insert_text_cb (GtkEditable              *editable,
-                gchar                    *new_text,
+                char                     *new_text,
                 int                       new_text_length,
                 int                      *position,
                 GtkSearchEntryAccessible *self)
@@ -278,7 +278,7 @@ gtk_search_entry_accessible_init (GtkSearchEntryAccessible *self)
   atk_object_set_name (atk_obj, _("Search"));
 }
 
-static gchar *
+static char *
 gtk_search_entry_accessible_get_text (AtkText *atk_text,
                                       int      start_pos,
                                       int      end_pos)
@@ -291,7 +291,7 @@ gtk_search_entry_accessible_get_text (AtkText *atk_text,
   return gtk_text_get_display_text (text, start_pos, end_pos);
 }
 
-static gchar *
+static char *
 gtk_search_entry_accessible_get_text_before_offset (AtkText         *atk_text,
                                                     int              offset,
                                                     AtkTextBoundary  boundary_type,
@@ -308,7 +308,7 @@ gtk_search_entry_accessible_get_text_before_offset (AtkText         *atk_text,
                                      start_offset, end_offset);
 }
 
-static gchar *
+static char *
 gtk_search_entry_accessible_get_text_at_offset (AtkText         *atk_text,
                                                 int              offset,
                                                 AtkTextBoundary  boundary_type,
@@ -325,7 +325,7 @@ gtk_search_entry_accessible_get_text_at_offset (AtkText         *atk_text,
                                  start_offset, end_offset);
 }
 
-static gchar *
+static char *
 gtk_search_entry_accessible_get_text_after_offset (AtkText         *atk_text,
                                                    int              offset,
                                                    AtkTextBoundary  boundary_type,
@@ -537,7 +537,7 @@ gtk_search_entry_accessible_get_n_selections (AtkText *text)
   return 0;
 }
 
-static gchar *
+static char *
 gtk_search_entry_accessible_get_selection (AtkText *text,
                                            int      selection_num,
                                            int     *start_pos,
@@ -693,7 +693,7 @@ atk_text_interface_init (AtkTextIface *iface)
 
 static void
 gtk_search_entry_accessible_set_text_contents (AtkEditableText *text,
-                                               const gchar     *string)
+                                               const char      *string)
 {
   GtkWidget *widget;
 
@@ -709,7 +709,7 @@ gtk_search_entry_accessible_set_text_contents (AtkEditableText *text,
 
 static void
 gtk_search_entry_accessible_insert_text (AtkEditableText *text,
-                                         const gchar     *string,
+                                         const char      *string,
                                          int              length,
                                          int             *position)
 {
@@ -909,7 +909,7 @@ gtk_search_entry_accessible_get_n_actions (AtkAction *action)
   return n_actions;
 }
 
-static const gchar *
+static const char *
 gtk_search_entry_accessible_get_keybinding (AtkAction *action,
                                             int        i)
 {
@@ -954,7 +954,7 @@ gtk_search_entry_accessible_get_keybinding (AtkAction *action,
   return NULL;
 }
 
-static const gchar *
+static const char *
 gtk_search_entry_accessible_action_get_name (AtkAction *action,
                                              int        i)
 {
@@ -973,7 +973,7 @@ gtk_search_entry_accessible_action_get_name (AtkAction *action,
   return NULL;
 }
 
-static const gchar*
+static const char *
 gtk_search_entry_accessible_action_get_localized_name (AtkAction *action,
                                                        int        i)
 {
@@ -985,7 +985,7 @@ gtk_search_entry_accessible_action_get_localized_name (AtkAction *action,
   return NULL;
 }
 
-static const gchar *
+static const char *
 gtk_search_entry_accessible_action_get_description (AtkAction *action,
                                                     int        i)
 {

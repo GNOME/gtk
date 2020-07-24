@@ -37,7 +37,7 @@ static void
 node_set (GtkTreeIter *iter)
 {
   int n;
-  gchar *str;
+  char *str;
 
   str = g_strdup_printf ("Row (<span color=\"red\">%d</span>)", node_count++);
   gtk_tree_store_set (base_model, iter, 0, str, -1);
@@ -126,7 +126,7 @@ iter_insert_with_values (GtkWidget *button, GtkTreeView *tree_view)
   GtkTreeIter iter;
   GtkTreeIter selected;
   GtkTreeModel *model = gtk_tree_view_get_model (tree_view);
-  gchar *str1, *str2;
+  char *str1, *str2;
 
   entry = g_object_get_data (G_OBJECT (button), "user_data");
   str1 = g_strdup_printf ("Row (<span color=\"red\">%d</span>)", node_count++);

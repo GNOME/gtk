@@ -527,11 +527,11 @@ gtk_file_chooser_native_init (GtkFileChooserNative *self)
  * Returns: a new #GtkFileChooserNative
  **/
 GtkFileChooserNative *
-gtk_file_chooser_native_new (const gchar          *title,
+gtk_file_chooser_native_new (const char           *title,
                              GtkWindow            *parent,
                              GtkFileChooserAction  action,
-                             const gchar          *accept_label,
-                             const gchar          *cancel_label)
+                             const char           *accept_label,
+                             const char           *cancel_label)
 {
   GtkFileChooserNative *result;
 
@@ -651,7 +651,7 @@ gtk_file_chooser_native_select_file (GtkFileChooser    *chooser,
 
 static void
 gtk_file_chooser_native_set_current_name (GtkFileChooser    *chooser,
-                                          const gchar       *name)
+                                          const char        *name)
 {
   GtkFileChooserNative *self = GTK_FILE_CHOOSER_NATIVE (chooser);
 

@@ -263,7 +263,7 @@ static void                 gtk_icon_view_add_editable                   (GtkCel
 									  GtkCellRenderer        *renderer,
 									  GtkCellEditable        *editable,
 									  GdkRectangle           *cell_area,
-									  const gchar            *path,
+									  const char             *path,
 									  GtkIconView            *icon_view);
 static void                 gtk_icon_view_remove_editable                (GtkCellArea            *area,
 									  GtkCellRenderer        *renderer,
@@ -308,13 +308,13 @@ static void     gtk_icon_view_buildable_init             (GtkBuildableIface  *if
 static gboolean gtk_icon_view_buildable_custom_tag_start (GtkBuildable       *buildable,
                                                           GtkBuilder         *builder,
                                                           GObject            *child,
-                                                          const gchar        *tagname,
+                                                          const char         *tagname,
                                                           GtkBuildableParser *parser,
                                                           gpointer           *data);
 static void     gtk_icon_view_buildable_custom_tag_end   (GtkBuildable       *buildable,
                                                           GtkBuilder         *builder,
                                                           GObject            *child,
-                                                          const gchar        *tagname,
+                                                          const char         *tagname,
                                                           gpointer            data);
 
 
@@ -893,7 +893,7 @@ static void
 gtk_icon_view_buildable_add_child (GtkBuildable *buildable,
                                    GtkBuilder   *builder,
                                    GObject      *child,
-                                   const gchar  *type)
+                                   const char   *type)
 {
   if (GTK_IS_CELL_RENDERER (child))
     _gtk_cell_layout_buildable_add_child (buildable, builder, child, type);
@@ -1941,7 +1941,7 @@ gtk_icon_view_add_editable (GtkCellArea            *area,
 			    GtkCellRenderer        *renderer,
 			    GtkCellEditable        *editable,
 			    GdkRectangle           *cell_area,
-			    const gchar            *path,
+			    const char             *path,
 			    GtkIconView            *icon_view)
 {
   GtkIconViewChild *child;
@@ -4385,7 +4385,7 @@ gtk_icon_view_set_tooltip_query_cb (GtkWidget  *widget,
                                     GtkTooltip *tooltip,
                                     gpointer    data)
 {
-  gchar *str;
+  char *str;
   GtkTreeIter iter;
   GtkTreePath *path;
   GtkTreeModel *model;
@@ -5721,7 +5721,7 @@ get_dest_row (GdkDrop *drop)
 static gboolean
 check_model_dnd (GtkTreeModel *model,
                  GType         required_iface,
-                 const gchar  *signal)
+                 const char   *signal)
 {
   if (model == NULL || !G_TYPE_CHECK_INSTANCE_TYPE ((model), required_iface))
     {
@@ -6746,7 +6746,7 @@ static gboolean
 gtk_icon_view_buildable_custom_tag_start (GtkBuildable       *buildable,
                                           GtkBuilder         *builder,
                                           GObject            *child,
-                                          const gchar        *tagname,
+                                          const char         *tagname,
                                           GtkBuildableParser *parser,
                                           gpointer           *data)
 {
@@ -6762,7 +6762,7 @@ static void
 gtk_icon_view_buildable_custom_tag_end (GtkBuildable *buildable,
                                         GtkBuilder   *builder,
                                         GObject      *child,
-                                        const gchar  *tagname,
+                                        const char   *tagname,
                                         gpointer      data)
 {
   if (!_gtk_cell_layout_buildable_custom_tag_end (buildable, builder,

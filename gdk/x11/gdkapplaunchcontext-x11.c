@@ -293,7 +293,7 @@ gdk_x11_app_launch_context_get_startup_notify_id (GAppLaunchContext *context,
     }
   else if (files_count == 1)
     {
-      gchar *display_name;
+      char *display_name;
 
       if (g_file_is_native (files->data))
         fileinfo = g_file_query_info (files->data,
@@ -389,7 +389,7 @@ gdk_x11_app_launch_context_get_startup_notify_id (GAppLaunchContext *context,
 
 static void
 gdk_x11_app_launch_context_launch_failed (GAppLaunchContext *context,
-                                          const gchar       *startup_notify_id)
+                                          const char        *startup_notify_id)
 {
   GdkAppLaunchContext *ctx;
   GdkX11Screen *screen;
@@ -457,7 +457,7 @@ GdkAppLaunchContext *
 _gdk_x11_display_get_app_launch_context (GdkDisplay *display)
 {
   GdkAppLaunchContext *ctx;
-  const gchar *display_name;
+  const char *display_name;
 
   ctx = g_object_new (GDK_TYPE_X11_APP_LAUNCH_CONTEXT,
                       "display", display,

@@ -45,7 +45,7 @@ combo_changed_cb (GtkAppChooserButton *chooser_button,
 
 static void
 special_item_activated_cb (GtkAppChooserButton *b,
-                           const gchar *item_name,
+                           const char *item_name,
                            gpointer user_data)
 {
   gtk_image_set_from_gicon (GTK_IMAGE (sel_image), g_themed_icon_new ("face-smile"));
@@ -54,7 +54,7 @@ special_item_activated_cb (GtkAppChooserButton *b,
 
 static void
 action_cb (GtkAppChooserButton *b,
-           const gchar *item_name,
+           const char *item_name,
            gpointer user_data)
 {
   g_print ("Activated custom item %s\n", item_name);

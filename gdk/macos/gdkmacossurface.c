@@ -571,7 +571,7 @@ _gdk_macos_surface_get_title (GdkMacosSurface *self)
 
 void
 _gdk_macos_surface_set_title (GdkMacosSurface *self,
-                              const gchar     *title)
+                              const char      *title)
 {
   g_return_if_fail (GDK_IS_MACOS_SURFACE (self));
 

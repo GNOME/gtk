@@ -131,7 +131,7 @@ struct _GtkWidgetPrivate
    * Among other things, the widget name is used to determine
    * the style to use for a widget.
    */
-  gchar *name;
+  char *name;
 
   /* The root this widget belongs to or %NULL if widget is not
    * rooted or is a #GtkRoot itself.

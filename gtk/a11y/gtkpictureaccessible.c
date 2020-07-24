@@ -33,7 +33,7 @@ struct _GtkPictureAccessibleClass
   GtkWidgetAccessibleClass parent_class;
 };
 
-static const gchar *
+static const char *
 gtk_picture_accessible_get_image_description (AtkImage *image)
 {
   GtkWidget* widget;
@@ -103,11 +103,11 @@ gtk_picture_accessible_initialize (AtkObject *accessible,
   accessible->role = ATK_ROLE_IMAGE;
 }
 
-static const gchar *
+static const char *
 gtk_picture_accessible_get_name (AtkObject *accessible)
 {
   GtkWidget* widget;
-  const gchar *name;
+  const char *name;
 
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (accessible));
   if (widget == NULL)

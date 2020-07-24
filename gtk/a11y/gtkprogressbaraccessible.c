@@ -79,7 +79,7 @@ gtk_progress_bar_accessible_get_minimum_value (AtkValue *obj,
 static void
 gtk_progress_bar_accessible_get_value_and_text (AtkValue  *obj,
                                                 gdouble   *value,
-                                                gchar    **text)
+                                                char     **text)
 {
   GtkWidget *widget;
 

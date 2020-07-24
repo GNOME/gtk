@@ -27,7 +27,7 @@ G_BEGIN_DECLS
 GtkCssValue *   gtk_css_color_value_new_transparent     (void) G_GNUC_PURE;
 GtkCssValue *   gtk_css_color_value_new_white           (void) G_GNUC_PURE;
 GtkCssValue *   _gtk_css_color_value_new_literal        (const GdkRGBA  *color) G_GNUC_PURE;
-GtkCssValue *   _gtk_css_color_value_new_name           (const gchar    *name) G_GNUC_PURE;
+GtkCssValue *   _gtk_css_color_value_new_name           (const char     *name) G_GNUC_PURE;
 GtkCssValue *   _gtk_css_color_value_new_shade          (GtkCssValue    *color,
                                                          gdouble         factor) G_GNUC_PURE;
 GtkCssValue *   _gtk_css_color_value_new_alpha          (GtkCssValue    *color,

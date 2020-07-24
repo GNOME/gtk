@@ -121,7 +121,7 @@ GDK_AVAILABLE_IN_ALL
 void              gtk_scale_add_mark           (GtkScale        *scale,
                                                 gdouble          value,
                                                 GtkPositionType  position,
-                                                const gchar     *markup);
+                                                const char      *markup);
 GDK_AVAILABLE_IN_ALL
 void              gtk_scale_clear_marks        (GtkScale        *scale);
 

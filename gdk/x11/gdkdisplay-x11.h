@@ -110,7 +110,7 @@ struct _GdkX11Display
   int primary_monitor;
 
   /* Startup notification */
-  gchar *startup_notification_id;
+  char *startup_notification_id;
 
   /* Time of most recent user interaction. */
   gulong user_time;

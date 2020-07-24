@@ -308,7 +308,7 @@ static void
 gtk_flow_box_child_buildable_add_child (GtkBuildable *buildable,
                                         GtkBuilder   *builder,
                                         GObject      *child,
-                                        const gchar  *type)
+                                        const char   *type)
 {
   if (GTK_IS_WIDGET (child))
     gtk_flow_box_child_set_child (GTK_FLOW_BOX_CHILD (buildable), GTK_WIDGET (child));
@@ -3991,7 +3991,7 @@ static void
 gtk_flow_box_buildable_add_child (GtkBuildable *buildable,
                                   GtkBuilder   *builder,
                                   GObject      *child,
-                                  const gchar  *type)
+                                  const char   *type)
 {
   if (GTK_IS_WIDGET (child))
     gtk_flow_box_insert (GTK_FLOW_BOX (buildable), GTK_WIDGET (child), -1);

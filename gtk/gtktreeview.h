@@ -116,7 +116,7 @@ typedef void     (* GtkTreeViewMappingFunc)    (GtkTreeView             *tree_vi
  */
 typedef gboolean (*GtkTreeViewSearchEqualFunc) (GtkTreeModel            *model,
 						int                      column,
-						const gchar             *key,
+						const char              *key,
 						GtkTreeIter             *iter,
 						gpointer                 search_data);
 
@@ -236,13 +236,13 @@ int                    gtk_tree_view_insert_column                 (GtkTreeView 
 GDK_AVAILABLE_IN_ALL
 int                    gtk_tree_view_insert_column_with_attributes (GtkTreeView               *tree_view,
 								    int                        position,
-								    const gchar               *title,
+								    const char                *title,
 								    GtkCellRenderer           *cell,
 								    ...) G_GNUC_NULL_TERMINATED;
 GDK_AVAILABLE_IN_ALL
 int                    gtk_tree_view_insert_column_with_data_func  (GtkTreeView               *tree_view,
 								    int                        position,
-								    const gchar               *title,
+								    const char                *title,
 								    GtkCellRenderer           *cell,
                                                                     GtkTreeCellDataFunc        func,
                                                                     gpointer                   data,

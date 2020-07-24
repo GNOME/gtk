@@ -102,10 +102,10 @@ get_label_from_button (GtkWidget *button)
   return child;
 }
 
-static const gchar *
+static const char *
 gtk_button_accessible_get_name (AtkObject *obj)
 {
-  const gchar *name = NULL;
+  const char *name = NULL;
   GtkWidget *widget;
   GtkWidget *child;
 
@@ -228,11 +228,11 @@ gtk_button_accessible_get_n_actions (AtkAction *action)
   return 1;
 }
 
-static const gchar *
+static const char *
 gtk_button_accessible_get_keybinding (AtkAction *action,
                                       int        i)
 {
-  gchar *return_value = NULL;
+  char *return_value = NULL;
   GtkWidget *widget;
   GtkWidget *label;
   guint key_val;
@@ -282,7 +282,7 @@ gtk_button_accessible_get_keybinding (AtkAction *action,
   return return_value;
 }
 
-static const gchar *
+static const char *
 gtk_button_accessible_action_get_name (AtkAction *action,
                                        int        i)
 {
@@ -291,7 +291,7 @@ gtk_button_accessible_action_get_name (AtkAction *action,
   return NULL;
 }
 
-static const gchar *
+static const char *
 gtk_button_accessible_action_get_localized_name (AtkAction *action,
                                                  int        i)
 {
@@ -300,7 +300,7 @@ gtk_button_accessible_action_get_localized_name (AtkAction *action,
   return NULL;
 }
 
-static const gchar *
+static const char *
 gtk_button_accessible_action_get_description (AtkAction *action,
                                               int        i)
 {
@@ -320,7 +320,7 @@ atk_action_interface_init (AtkActionIface *iface)
   iface->get_description = gtk_button_accessible_action_get_description;
 }
 
-static const gchar *
+static const char *
 gtk_button_accessible_get_image_description (AtkImage *image)
 {
   GtkWidget *widget;
@@ -405,7 +405,7 @@ gtk_button_accessible_get_image_size (AtkImage *image,
 
 static gboolean
 gtk_button_accessible_set_image_description (AtkImage    *image,
-                                             const gchar *description)
+                                             const char *description)
 {
   GtkWidget *widget;
   GtkWidget *button_image;

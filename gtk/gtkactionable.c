@@ -86,7 +86,7 @@ gtk_actionable_default_init (GtkActionableInterface *iface)
  *
  * Returns: (nullable): the action name, or %NULL if none is set
  **/
-const gchar *
+const char *
 gtk_actionable_get_action_name (GtkActionable *actionable)
 {
   g_return_val_if_fail (GTK_IS_ACTIONABLE (actionable), NULL);
@@ -114,7 +114,7 @@ gtk_actionable_get_action_name (GtkActionable *actionable)
  **/
 void
 gtk_actionable_set_action_name (GtkActionable *actionable,
-                                const gchar   *action_name)
+                                const char    *action_name)
 {
   g_return_if_fail (GTK_IS_ACTIONABLE (actionable));
 
@@ -194,7 +194,7 @@ gtk_actionable_set_action_target_value (GtkActionable *actionable,
  **/
 void
 gtk_actionable_set_action_target (GtkActionable *actionable,
-                                  const gchar   *format_string,
+                                  const char    *format_string,
                                   ...)
 {
   va_list ap;
@@ -223,11 +223,11 @@ gtk_actionable_set_action_target (GtkActionable *actionable,
  **/
 void
 gtk_actionable_set_detailed_action_name (GtkActionable *actionable,
-                                         const gchar   *detailed_action_name)
+                                         const char    *detailed_action_name)
 {
   GError *error = NULL;
   GVariant *target;
-  gchar *name;
+  char *name;
 
   if (detailed_action_name == NULL)
     {

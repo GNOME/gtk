@@ -45,9 +45,9 @@ typedef struct
   GtkIconViewItem *item;
   GtkWidget *widget;
   AtkStateSet *state_set;
-  gchar *text;
-  gchar *action_description;
-  gchar *image_description;
+  char *text;
+  char *action_description;
+  char *image_description;
   guint action_idle_handler;
 } GtkIconViewItemAccessible;
 
@@ -126,7 +126,7 @@ gtk_icon_view_item_accessible_get_n_actions (AtkAction *action)
         return 1;
 }
 
-static const gchar *
+static const char *
 gtk_icon_view_item_accessible_get_description (AtkAction *action,
                                                int        i)
 {
@@ -143,7 +143,7 @@ gtk_icon_view_item_accessible_get_description (AtkAction *action,
     return "Activate item";
 }
 
-static const gchar *
+static const char *
 gtk_icon_view_item_accessible_get_name (AtkAction *action,
                                         int        i)
 {
@@ -156,7 +156,7 @@ gtk_icon_view_item_accessible_get_name (AtkAction *action,
 static gboolean
 gtk_icon_view_item_accessible_set_description (AtkAction   *action,
                                                int          i,
-                                               const gchar *description)
+                                               const char *description)
 {
   GtkIconViewItemAccessible *item;
 
@@ -181,7 +181,7 @@ atk_action_item_interface_init (AtkActionIface *iface)
   iface->get_description = gtk_icon_view_item_accessible_get_description;
 }
 
-static const gchar *
+static const char *
 gtk_icon_view_item_accessible_get_image_description (AtkImage *image)
 {
   GtkIconViewItemAccessible *item;
@@ -193,7 +193,7 @@ gtk_icon_view_item_accessible_get_image_description (AtkImage *image)
 
 static gboolean
 gtk_icon_view_item_accessible_set_image_description (AtkImage    *image,
-                                                     const gchar *description)
+                                                     const char *description)
 {
   GtkIconViewItemAccessible *item;
 
@@ -247,7 +247,7 @@ get_pixbuf_box (GtkIconView     *icon_view,
 
 static gboolean
 get_text_foreach (GtkCellRenderer  *renderer,
-                  gchar           **text)
+                  char            **text)
 {
   if (GTK_IS_CELL_RENDERER_TEXT (renderer))
     {
@@ -257,11 +257,11 @@ get_text_foreach (GtkCellRenderer  *renderer,
   return FALSE;
 }
 
-static gchar *
+static char *
 get_text (GtkIconView     *icon_view,
           GtkIconViewItem *item)
 {
-  gchar *text = NULL;
+  char *text = NULL;
 
   _gtk_icon_view_set_cell_data (icon_view, item);
   gtk_cell_area_foreach (icon_view->priv->cell_area,
@@ -334,7 +334,7 @@ atk_image_item_interface_init (AtkImageIface *iface)
   iface->get_image_position = gtk_icon_view_item_accessible_get_image_position;
 }
 
-static gchar *
+static char *
 gtk_icon_view_item_accessible_get_text (AtkText *text,
                                         int      start_pos,
                                         int      end_pos)
@@ -356,8 +356,8 @@ gtk_icon_view_item_accessible_get_character_at_offset (AtkText *text,
                                                        int      offset)
 {
   GtkIconViewItemAccessible *item;
-  gchar *string;
-  gchar *index;
+  char *string;
+  char *index;
 
   item = GTK_ICON_VIEW_ITEM_ACCESSIBLE (text);
   if (atk_state_set_contains_state (item->state_set, ATK_STATE_DEFUNCT))
@@ -386,7 +386,7 @@ create_pango_layout (GtkIconViewItemAccessible *item)
   return layout;
 }
 
-static gchar *
+static char *
 gtk_icon_view_item_accessible_get_text_before_offset (AtkText         *atk_text,
                                                       int              offset,
                                                       AtkTextBoundary  boundary_type,
@@ -395,7 +395,7 @@ gtk_icon_view_item_accessible_get_text_before_offset (AtkText         *atk_text,
 {
   GtkIconViewItemAccessible *item;
   PangoLayout *layout;
-  gchar *text;
+  char *text;
 
   item = GTK_ICON_VIEW_ITEM_ACCESSIBLE (atk_text);
   if (atk_state_set_contains_state (item->state_set, ATK_STATE_DEFUNCT))
@@ -408,7 +408,7 @@ gtk_icon_view_item_accessible_get_text_before_offset (AtkText         *atk_text,
   return text;
 }
 
-static gchar *
+static char *
 gtk_icon_view_item_accessible_get_text_at_offset (AtkText         *atk_text,
                                                   int              offset,
                                                   AtkTextBoundary  boundary_type,
@@ -417,7 +417,7 @@ gtk_icon_view_item_accessible_get_text_at_offset (AtkText         *atk_text,
 {
   GtkIconViewItemAccessible *item;
   PangoLayout *layout;
-  gchar *text;
+  char *text;
 
   item = GTK_ICON_VIEW_ITEM_ACCESSIBLE (atk_text);
   if (atk_state_set_contains_state (item->state_set, ATK_STATE_DEFUNCT))
@@ -430,7 +430,7 @@ gtk_icon_view_item_accessible_get_text_at_offset (AtkText         *atk_text,
   return text;
 }
 
-static gchar *
+static char *
 gtk_icon_view_item_accessible_get_text_after_offset (AtkText         *atk_text,
                                                      int              offset,
                                                      AtkTextBoundary  boundary_type,
@@ -439,7 +439,7 @@ gtk_icon_view_item_accessible_get_text_after_offset (AtkText         *atk_text,
 {
   GtkIconViewItemAccessible *item;
   PangoLayout *layout;
-  gchar *text;
+  char *text;
 
   item = GTK_ICON_VIEW_ITEM_ACCESSIBLE (atk_text);
   if (atk_state_set_contains_state (item->state_set, ATK_STATE_DEFUNCT))
@@ -480,7 +480,7 @@ gtk_icon_view_item_accessible_get_character_extents (AtkText      *text,
 #if 0
   GtkIconView *icon_view;
   PangoRectangle char_rect;
-  const gchar *item_text;
+  const char *item_text;
   int index;
 #endif
 
@@ -520,7 +520,7 @@ gtk_icon_view_item_accessible_get_offset_at_point (AtkText      *text,
   int offset = 0;
 #if 0
   GtkIconView *icon_view;
-  const gchar *item_text;
+  const char *item_text;
   int index;
   int l_x, l_y;
 #endif

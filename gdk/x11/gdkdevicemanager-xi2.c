@@ -384,8 +384,8 @@ has_abs_axes (GdkDisplay      *display,
 static gboolean
 get_device_ids (GdkDisplay    *display,
                 XIDeviceInfo  *info,
-                gchar        **vendor_id,
-                gchar        **product_id)
+                char         **vendor_id,
+                char         **product_id)
 {
   gulong nitems, bytes_after;
   guint32 *data;
@@ -474,7 +474,7 @@ create_device (GdkX11DeviceManagerXI2 *device_manager,
   GdkDeviceType type;
   GdkDevice *device;
   int num_touches = 0;
-  gchar *vendor_id = NULL, *product_id = NULL;
+  char *vendor_id = NULL, *product_id = NULL;
 
   if (dev->use == XIMasterKeyboard || dev->use == XISlaveKeyboard)
     input_source = GDK_SOURCE_KEYBOARD;
@@ -485,7 +485,7 @@ create_device (GdkX11DeviceManagerXI2 *device_manager,
     input_source = touch_source;
   else
     {
-      gchar *tmp_name;
+      char *tmp_name;
 
       tmp_name = g_ascii_strdown (dev->name, -1);
 
@@ -531,8 +531,8 @@ create_device (GdkX11DeviceManagerXI2 *device_manager,
 
   GDK_DISPLAY_NOTE (display, INPUT,
             ({
-              const gchar *type_names[] = { "logical", "physical", "floating" };
-              const gchar *source_names[] = { "mouse", "pen", "eraser", "cursor", "keyboard", "direct touch", "indirect touch", "trackpoint", "pad" };
+              const char *type_names[] = { "logical", "physical", "floating" };
+              const char *source_names[] = { "mouse", "pen", "eraser", "cursor", "keyboard", "direct touch", "indirect touch", "trackpoint", "pad" };
               g_message ("input device:\n\tname: %s\n\ttype: %s\n\tsource: %s\n\thas cursor: %d\n\ttouches: %d",
                          dev->name,
                          type_names[type],

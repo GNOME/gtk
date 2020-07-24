@@ -309,7 +309,7 @@ gtk_get_interface_age (void)
  *   The returned string is owned by GTK and should not be modified
  *   or freed.
  */
-const gchar*
+const char *
 gtk_check_version (guint required_major,
                    guint required_minor,
                    guint required_micro)
@@ -594,7 +594,7 @@ _gtk_module_has_mixed_deps (GModule *module_to_check)
 static void
 do_pre_parse_initialization (void)
 {
-  const gchar *env_string;
+  const char *env_string;
   double slowdown;
 
   if (pre_initialized)
@@ -965,7 +965,7 @@ gtk_get_locale_direction (void)
    * Do *not* translate it to "predefinito:LTR", if it
    * it isn't default:LTR or default:RTL it will not work
    */
-  gchar            *e   = _("default:LTR");
+  char             *e   = _("default:LTR");
   GtkTextDirection  dir = GTK_TEXT_DIR_LTR;
 
   if (g_strcmp0 (e, "default:RTL") == 0)

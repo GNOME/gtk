@@ -45,8 +45,8 @@ gboolean
 _gtk_mount_operation_lookup_info (GtkMountOperationLookupContext *context,
                                   GPid                            pid,
                                   int                             size_pixels,
-                                  gchar                         **out_name,
-                                  gchar                         **out_command_line,
+                                  char                          **out_name,
+                                  char                          **out_command_line,
                                   GdkTexture                    **out_texture)
 {
   return FALSE;

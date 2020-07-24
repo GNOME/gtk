@@ -262,8 +262,8 @@ load_symbolic_svg (const char     *escaped_file_data,
 {
   GInputStream *stream;
   GdkPixbuf *pixbuf;
-  gchar *data;
-  gchar *svg_width, *svg_height;
+  char *data;
+  char *svg_width, *svg_height;
 
   if (width == 0)
     width = icon_width * scale;

@@ -64,10 +64,10 @@ test_color_to_string (void)
 {
   GdkRGBA rgba;
   GdkRGBA out;
-  gchar *res;
-  gchar *res_de;
-  gchar *res_en;
-  gchar *orig;
+  char *res;
+  char *res_de;
+  char *res_en;
+  char *orig;
 
   /* Using /255. values for the r, g, b components should
    * make sure they round-trip exactly without rounding

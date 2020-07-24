@@ -59,8 +59,8 @@ typedef struct {
         gboolean     antialias;
         gboolean     hinting;
         int          dpi;
-        const gchar *rgba;
-        const gchar *hintstyle;
+        const char *rgba;
+        const char *hintstyle;
 } GsdXftSettings;
 
 typedef enum _GdkWaylandShellVariant
@@ -81,7 +81,7 @@ struct _GdkWaylandDisplay
   guint32    shell_capabilities;
 
   /* Startup notification */
-  gchar *startup_notification_id;
+  char *startup_notification_id;
 
   /* Most recent serial */
   guint32 serial;
@@ -127,7 +127,7 @@ struct _GdkWaylandDisplay
   GList *current_grabbing_popups;
 
   struct wl_cursor_theme *cursor_theme;
-  gchar *cursor_theme_name;
+  char *cursor_theme_name;
   int cursor_theme_size;
   GHashTable *cursor_surface_cache;
 

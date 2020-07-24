@@ -74,8 +74,8 @@ struct _GtkCellRendererProgressClass
 struct _GtkCellRendererProgressPrivate
 {
   int value;
-  gchar *text;
-  gchar *label;
+  char *text;
+  char *label;
   int min_h;
   int min_w;
   int pulse;
@@ -98,12 +98,12 @@ static void gtk_cell_renderer_progress_set_property (GObject                 *ob
 static void gtk_cell_renderer_progress_set_value    (GtkCellRendererProgress *cellprogress,
 						     int                      value);
 static void gtk_cell_renderer_progress_set_text     (GtkCellRendererProgress *cellprogress,
-						     const gchar             *text);
+						     const char              *text);
 static void gtk_cell_renderer_progress_set_pulse    (GtkCellRendererProgress *cellprogress,
 						     int                      pulse);
 static void compute_dimensions                      (GtkCellRenderer         *cell,
 						     GtkWidget               *widget,
-						     const gchar             *text,
+						     const char              *text,
 						     int                     *width,
 						     int                     *height);
 static void gtk_cell_renderer_progress_get_size     (GtkCellRenderer         *cell,
@@ -368,7 +368,7 @@ static void
 recompute_label (GtkCellRendererProgress *cellprogress)
 {
   GtkCellRendererProgressPrivate *priv = gtk_cell_renderer_progress_get_instance_private (cellprogress);
-  gchar *label;
+  char *label;
 
   if (priv->text)
     label = g_strdup (priv->text);
@@ -397,10 +397,10 @@ gtk_cell_renderer_progress_set_value (GtkCellRendererProgress *cellprogress,
 
 static void
 gtk_cell_renderer_progress_set_text (GtkCellRendererProgress *cellprogress, 
-				     const gchar             *text)
+				     const char              *text)
 {
   GtkCellRendererProgressPrivate *priv = gtk_cell_renderer_progress_get_instance_private (cellprogress);
-  gchar *new_text;
+  char *new_text;
 
   new_text = g_strdup (text);
   g_free (priv->text);
@@ -431,7 +431,7 @@ gtk_cell_renderer_progress_set_pulse (GtkCellRendererProgress *cellprogress,
 static void
 compute_dimensions (GtkCellRenderer *cell,
 		    GtkWidget       *widget, 
-		    const gchar     *text, 
+		    const char      *text, 
 		    int             *width, 
 		    int             *height)
 {
@@ -465,7 +465,7 @@ gtk_cell_renderer_progress_get_size (GtkCellRenderer    *cell,
   GtkCellRendererProgress *cellprogress = GTK_CELL_RENDERER_PROGRESS (cell);
   GtkCellRendererProgressPrivate *priv = gtk_cell_renderer_progress_get_instance_private (cellprogress);
   int w, h;
-  gchar *text;
+  char *text;
 
   if (priv->min_w < 0)
     {

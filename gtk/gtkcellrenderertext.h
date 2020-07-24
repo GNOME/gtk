@@ -49,8 +49,8 @@ struct _GtkCellRendererTextClass
   GtkCellRendererClass parent_class;
 
   void (* edited) (GtkCellRendererText *cell_renderer_text,
-		   const gchar         *path,
-		   const gchar         *new_text);
+		   const char          *path,
+		   const char          *new_text);
 
   /*< private >*/
 

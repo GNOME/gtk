@@ -24,7 +24,7 @@
 #include "gtk/gtktexttypes.h" /* Private header, for UNKNOWN_CHAR */
 
 static void
-gtk_text_iter_spew (const GtkTextIter *iter, const gchar *desc)
+gtk_text_iter_spew (const GtkTextIter *iter, const char *desc)
 {
   g_print (" %20s: line %d / char %d / line char %d / line byte %d\n",
            desc,
@@ -157,7 +157,7 @@ count_toggles_in_buffer (GtkTextBuffer *buffer,
 
 static void
 check_specific_tag_in_range (GtkTextBuffer     *buffer,
-                             const gchar       *tag_name,
+                             const char        *tag_name,
                              const GtkTextIter *start,
                              const GtkTextIter *end)
 {
@@ -270,7 +270,7 @@ check_specific_tag_in_range (GtkTextBuffer     *buffer,
 
 static void
 check_specific_tag (GtkTextBuffer *buffer,
-                    const gchar   *tag_name)
+                    const char    *tag_name)
 {
   GtkTextIter start, end;
 
@@ -682,7 +682,7 @@ fill_buffer (GtkTextBuffer *buffer)
 
   for (i = 0; i < 10; i++)
     {
-      gchar *str;
+      char *str;
 
       gtk_text_buffer_get_iter_at_offset (buffer, &iter, 0);
 
@@ -1350,11 +1350,11 @@ test_tag (void)
 
 static void
 check_buffer_contents (GtkTextBuffer *buffer,
-                       const gchar   *contents)
+                       const char    *contents)
 {
   GtkTextIter start;
   GtkTextIter end;
-  gchar *buffer_contents;
+  char *buffer_contents;
 
   gtk_text_buffer_get_start_iter (buffer, &start);
   gtk_text_buffer_get_end_iter (buffer, &end);

@@ -39,7 +39,7 @@ static GOptionEntry entries[] = {
   { NULL }
 };
 
-static gchar *gtk_src_dir = NULL;
+static char *gtk_src_dir = NULL;
 
 static void
 print_selected_path_clicked_cb (GtkWidget *button,
@@ -165,8 +165,8 @@ chooser_selection_changed_cb (GtkFileChooser *chooser,
 }
 
 static void
-add_new_filechooser_button (const gchar          *mnemonic,
-                            const gchar          *chooser_title,
+add_new_filechooser_button (const char           *mnemonic,
+                            const char           *chooser_title,
                             GtkFileChooserAction  action,
                             GtkWidget            *group_box,
                             GtkSizeGroup         *label_group)
@@ -219,7 +219,7 @@ main (int   argc,
   GtkWidget *win, *vbox, *frame, *group_box;
   GtkSizeGroup *label_group;
   GOptionContext *context;
-  gchar *cwd;
+  char *cwd;
   gboolean done = FALSE;
 
   context = g_option_context_new ("- test GtkFileChooserButton widget");

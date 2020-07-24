@@ -120,8 +120,8 @@ query_tooltip_tree_view_cb (GtkWidget  *widget,
   GtkTreeView *tree_view = GTK_TREE_VIEW (widget);
   GtkTreeModel *model = gtk_tree_view_get_model (tree_view);
   GtkTreePath *path = NULL;
-  gchar *tmp;
-  gchar *pathstring;
+  char *tmp;
+  char *pathstring;
 
   char buffer[512];
 

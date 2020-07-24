@@ -2038,7 +2038,7 @@ gdk_event_translate (MSG *msg,
 
   int button;
 
-  gchar buf[256];
+  char buf[256];
   gboolean return_val = FALSE;
 
   int i;

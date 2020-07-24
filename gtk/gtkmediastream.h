@@ -141,13 +141,13 @@ GDK_AVAILABLE_IN_ALL
 void                    gtk_media_stream_error                  (GtkMediaStream *self,
                                                                  GQuark          domain,
                                                                  int             code,
-                                                                 const gchar    *format,
+                                                                 const char     *format,
                                                                  ...) G_GNUC_PRINTF (4, 5);
 GDK_AVAILABLE_IN_ALL
 void                    gtk_media_stream_error_valist           (GtkMediaStream *self,
                                                                  GQuark          domain,
                                                                  int             code,
-                                                                 const gchar    *format,
+                                                                 const char     *format,
                                                                  va_list         args) G_GNUC_PRINTF (4, 0);
 
 G_END_DECLS

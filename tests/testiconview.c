@@ -131,7 +131,7 @@ add_n_items (GtkIconView *icon_list, int n)
   GtkTreeIter iter;
   GtkListStore *store;
   GdkPixbuf *pixbuf;
-  gchar *str, *str2;
+  char *str, *str2;
   int i;
 
   store = GTK_LIST_STORE (gtk_icon_view_get_model (icon_list));
@@ -174,7 +174,7 @@ add_large (GtkWidget *button, GtkIconView *icon_list)
   GtkTreeIter iter;
 
   GdkPixbuf *pixbuf, *pb;
-  gchar *str;
+  char *str;
 
   store = GTK_LIST_STORE (gtk_icon_view_get_model (icon_list));
   pixbuf = gdk_pixbuf_new_from_file ("gnome-textfile.png", NULL);
@@ -275,7 +275,7 @@ item_activated (GtkIconView *icon_view,
 {
   GtkTreeIter iter;
   GtkTreeModel *model;
-  gchar *text;
+  char *text;
 
   model = gtk_icon_view_get_model (icon_view);
   gtk_tree_model_get_iter (model, &iter, path);
@@ -288,7 +288,7 @@ item_activated (GtkIconView *icon_view,
 
 static void
 toggled (GtkCellRendererToggle *cell,
-	 gchar                 *path_string,
+	 char                  *path_string,
 	 gpointer               data)
 {
   GtkTreeModel *model = GTK_TREE_MODEL (data);
@@ -307,8 +307,8 @@ toggled (GtkCellRendererToggle *cell,
 
 static void
 edited (GtkCellRendererText *cell,
-	gchar               *path_string,
-	gchar               *new_text,
+	char                *path_string,
+	char                *new_text,
 	gpointer             data)
 {
   GtkTreeModel *model = GTK_TREE_MODEL (data);
@@ -391,7 +391,7 @@ popup_menu_handler (GtkWidget *widget)
 }
 
 int
-main (int argc, gchar **argv)
+main (int argc, char **argv)
 {
   GtkWidget *paned, *tv;
   GtkWidget *window, *icon_list, *scrolled_window;

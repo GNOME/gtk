@@ -35,7 +35,7 @@ typedef struct _GtkFontChooserDialog              GtkFontChooserDialog;
 GDK_AVAILABLE_IN_ALL
 GType      gtk_font_chooser_dialog_get_type         (void) G_GNUC_CONST;
 GDK_AVAILABLE_IN_ALL
-GtkWidget* gtk_font_chooser_dialog_new              (const gchar          *title,
+GtkWidget* gtk_font_chooser_dialog_new              (const char           *title,
                                                      GtkWindow            *parent);
 
 G_END_DECLS

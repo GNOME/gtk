@@ -319,7 +319,7 @@ gdk_cursor_equal (gconstpointer a,
  *   cursor with the given name
  */
 GdkCursor*
-gdk_cursor_new_from_name (const gchar *name,
+gdk_cursor_new_from_name (const char *name,
                           GdkCursor   *fallback)
 {
   g_return_val_if_fail (name != NULL, NULL);

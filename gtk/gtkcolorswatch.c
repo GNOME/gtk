@@ -60,7 +60,7 @@ struct _GtkColorSwatch
 
   GdkRGBA color;
   gdouble radius[4];
-  gchar *icon;
+  char *icon;
   guint    has_color        : 1;
   guint    use_alpha        : 1;
   guint    selectable       : 1;
@@ -627,7 +627,7 @@ gtk_color_swatch_get_rgba (GtkColorSwatch *swatch,
 
 void
 gtk_color_swatch_set_icon (GtkColorSwatch *swatch,
-                           const gchar    *icon)
+                           const char     *icon)
 {
   swatch->icon = g_strdup (icon);
   update_icon (swatch);

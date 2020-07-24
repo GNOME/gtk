@@ -23,7 +23,7 @@ format_number (GtkTreeViewColumn *col,
                gpointer           data)
 {
   int num;
-  gchar *text;
+  char *text;
 
   gtk_tree_model_get (model, iter, GPOINTER_TO_INT (data), &num, -1);
   text = g_strdup_printf ("%d", num);

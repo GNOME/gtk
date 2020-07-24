@@ -74,13 +74,13 @@ struct _GtkFrameClass
 GDK_AVAILABLE_IN_ALL
 GType      gtk_frame_get_type         (void) G_GNUC_CONST;
 GDK_AVAILABLE_IN_ALL
-GtkWidget* gtk_frame_new              (const gchar   *label);
+GtkWidget* gtk_frame_new              (const char    *label);
 
 GDK_AVAILABLE_IN_ALL
 void          gtk_frame_set_label (GtkFrame    *frame,
-                                   const gchar *label);
+                                   const char *label);
 GDK_AVAILABLE_IN_ALL
-const gchar * gtk_frame_get_label (GtkFrame    *frame);
+const char * gtk_frame_get_label (GtkFrame    *frame);
 
 GDK_AVAILABLE_IN_ALL
 void       gtk_frame_set_label_widget (GtkFrame      *frame,

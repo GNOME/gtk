@@ -177,7 +177,7 @@ has_instance_counts (void)
 static gboolean
 instance_counts_enabled (void)
 {
-  const gchar *string;
+  const char *string;
   guint flags = 0;
 
   string = g_getenv ("GOBJECT_DEBUG");
@@ -204,7 +204,7 @@ cell_data_data (GtkCellLayout   *layout,
 {
   int column;
   int count;
-  gchar *text;
+  char *text;
 
   column = GPOINTER_TO_INT (data);
 
@@ -225,7 +225,7 @@ cell_data_delta (GtkCellLayout   *layout,
   int column;
   int count1;
   int count2;
-  gchar *text;
+  char *text;
 
   column = GPOINTER_TO_INT (data);
 
@@ -286,10 +286,10 @@ key_pressed (GtkEventController     *controller,
 }
 
 static gboolean
-match_string (const gchar *string,
-              const gchar *text)
+match_string (const char *string,
+              const char *text)
 {
-  gchar *lower;
+  char *lower;
   gboolean match = FALSE;
 
   if (string)
@@ -305,11 +305,11 @@ match_string (const gchar *string,
 static gboolean
 match_row (GtkTreeModel *model,
            int           column,
-           const gchar  *key,
+           const char   *key,
            GtkTreeIter  *iter,
            gpointer      data)
 {
-  gchar *type;
+  char *type;
   gboolean match;
 
   gtk_tree_model_get (model, iter, column, &type, -1);

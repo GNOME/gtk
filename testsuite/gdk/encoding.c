@@ -17,7 +17,7 @@ test_to_text_list (void)
       int format;
       const guchar *text;
       int length;
-      gchar **list;
+      char **list;
       int n;
 
       encoding = g_intern_string ("UTF8_STRING");

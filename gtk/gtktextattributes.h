@@ -181,7 +181,7 @@ struct _GtkTextAttributes
 
   int letter_spacing;
 
-  gchar *font_features;
+  char *font_features;
 };
 
 GDK_AVAILABLE_IN_ALL

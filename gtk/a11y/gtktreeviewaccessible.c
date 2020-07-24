@@ -828,7 +828,7 @@ gtk_tree_view_accessible_get_column_header (AtkTable *table,
   return get_header_from_column (tv_col);
 }
 
-static const gchar *
+static const char *
 gtk_tree_view_accessible_get_column_description (AtkTable *table,
                                                  int       in_col)
 {

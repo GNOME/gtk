@@ -105,7 +105,7 @@ static void gtk_text_tag_table_buildable_interface_init (GtkBuildableIface   *if
 static void gtk_text_tag_table_buildable_add_child      (GtkBuildable        *buildable,
 							 GtkBuilder          *builder,
 							 GObject             *child,
-							 const gchar         *type);
+							 const char          *type);
 
 static guint signals[LAST_SIGNAL] = { 0 };
 
@@ -260,7 +260,7 @@ static void
 gtk_text_tag_table_buildable_add_child (GtkBuildable        *buildable,
 					GtkBuilder          *builder,
 					GObject             *child,
-					const gchar         *type)
+					const char          *type)
 {
   if (type && strcmp (type, "tag") == 0)
     gtk_text_tag_table_add (GTK_TEXT_TAG_TABLE (buildable),
@@ -337,7 +337,7 @@ gtk_text_tag_table_add (GtkTextTagTable *table,
  **/
 GtkTextTag*
 gtk_text_tag_table_lookup (GtkTextTagTable *table,
-                           const gchar     *name)
+                           const char      *name)
 {
   GtkTextTagTablePrivate *priv;
 

@@ -50,7 +50,7 @@ GDK_AVAILABLE_IN_ALL
 GtkWidget     *gtk_info_bar_new                    (void);
 
 GDK_AVAILABLE_IN_ALL
-GtkWidget     *gtk_info_bar_new_with_buttons       (const gchar    *first_button_text,
+GtkWidget     *gtk_info_bar_new_with_buttons       (const char     *first_button_text,
                                                     ...);
 
 GDK_AVAILABLE_IN_ALL
@@ -62,11 +62,11 @@ void           gtk_info_bar_remove_action_widget   (GtkInfoBar     *info_bar,
                                                     GtkWidget      *widget);
 GDK_AVAILABLE_IN_ALL
 GtkWidget     *gtk_info_bar_add_button             (GtkInfoBar     *info_bar,
-                                                    const gchar    *button_text,
+                                                    const char     *button_text,
                                                     int             response_id);
 GDK_AVAILABLE_IN_ALL
 void           gtk_info_bar_add_buttons            (GtkInfoBar     *info_bar,
-                                                    const gchar    *first_button_text,
+                                                    const char     *first_button_text,
                                                     ...);
 GDK_AVAILABLE_IN_ALL
 void           gtk_info_bar_add_child              (GtkInfoBar     *info_bar,

@@ -131,7 +131,7 @@ get_utf8_property (GdkDisplay *display,
   int format;
   gulong nitems;
   gulong bytes_after;
-  gchar *val;
+  char *val;
   int err, result;
   char *retval;
   Atom utf8_string;
@@ -588,9 +588,9 @@ static GPid
 pid_get_parent (GPid pid)
 {
   GPid ppid;
-  gchar **tokens;
-  gchar *stat_filename;
-  gchar *stat_contents;
+  char **tokens;
+  char *stat_filename;
+  char *stat_contents;
   gsize stat_len;
 
   ppid = 0;
@@ -616,7 +616,7 @@ pid_get_parent (GPid pid)
         {
           if (g_str_has_prefix (tokens[n], "PPid:"))
             {
-              gchar *endp;
+              char *endp;
 
               endp = NULL;
               ppid = strtoll (tokens[n] + sizeof "PPid:" - 1, &endp, 10);
@@ -641,16 +641,16 @@ pid_get_parent (GPid pid)
   return ppid;
 }
 
-static gchar *
+static char *
 pid_get_env (GPid         pid,
-             const gchar *key)
+             const char *key)
 {
-  gchar *ret;
-  gchar *env_filename;
-  gchar *env;
+  char *ret;
+  char *env_filename;
+  char *env;
   gsize env_len;
   gsize key_len;
-  gchar *end;
+  char *end;
 
   ret = NULL;
 
@@ -676,7 +676,7 @@ pid_get_env (GPid         pid,
               ret = g_strdup (env + n + key_len + 1);
 
               /* skip invalid UTF-8 */
-              if (!g_utf8_validate (ret, -1, (const gchar **) &end))
+              if (!g_utf8_validate (ret, -1, (const char **) &end))
                 *end = '\0';
               break;
             }
@@ -692,14 +692,14 @@ pid_get_env (GPid         pid,
   return ret;
 }
 
-static gchar *
+static char *
 pid_get_command_line (GPid pid)
 {
-  gchar *cmdline_filename;
-  gchar *cmdline_contents;
+  char *cmdline_filename;
+  char *cmdline_contents;
   gsize cmdline_len;
   guint n;
-  gchar *end;
+  char *end;
 
   cmdline_contents = NULL;
 
@@ -718,7 +718,7 @@ pid_get_command_line (GPid pid)
     }
 
   /* skip invalid UTF-8 */
-  if (!g_utf8_validate (cmdline_contents, -1, (const gchar **) &end))
+  if (!g_utf8_validate (cmdline_contents, -1, (const char **) &end))
       *end = '\0';
 
  out:
@@ -765,8 +765,8 @@ out:
   return ppid;
 }
 
-static gchar *
-pid_get_env (GPid pid, const gchar *key)
+static char *
+pid_get_env (GPid pid, const char *key)
 {
   size_t len;
   char **strs;
@@ -793,7 +793,7 @@ pid_get_env (GPid pid, const gchar *key)
 	      ret = g_strdup (strs[i] + key_len + 1);
 
 	      /* skip invalid UTF-8 */
-	      if (!g_utf8_validate (ret, -1, (const gchar **) &end))
+	      if (!g_utf8_validate (ret, -1, (const char **) &end))
 		*end = '\0';
 	      break;
 	    }
@@ -804,7 +804,7 @@ pid_get_env (GPid pid, const gchar *key)
   return ret;
 }
 
-static gchar *
+static char *
 pid_get_command_line (GPid pid)
 {
   size_t len;
@@ -825,7 +825,7 @@ pid_get_command_line (GPid pid)
 
   ret = g_strjoinv (" ", strs);
   /* skip invalid UTF-8 */
-  if (!g_utf8_validate (ret, -1, (const gchar **) &end))
+  if (!g_utf8_validate (ret, -1, (const char **) &end))
     *end = '\0';
 
   g_free (strs);
@@ -842,14 +842,14 @@ pid_get_parent (GPid pid)
   return 0;
 }
 
-static gchar *
+static char *
 pid_get_env (GPid         pid,
-             const gchar *key)
+             const char *key)
 {
   return NULL;
 }
 
-static gchar *
+static char *
 pid_get_command_line (GPid pid)
 {
   return NULL;
@@ -859,26 +859,26 @@ pid_get_command_line (GPid pid)
 
 /* ---------------------------------------------------------------------------------------------------- */
 
-static gchar *
+static char *
 get_name_for_window_with_pid (GtkMountOperationLookupContext *context,
                               GPid                            pid)
 {
   Window window;
   Window windowid_window;
-  gchar *ret;
+  char *ret;
 
   ret = NULL;
 
   window = GPOINTER_TO_INT (g_hash_table_lookup (context->pid_to_window, GINT_TO_POINTER (pid)));
   if (window == None)
     {
-      gchar *windowid_value;
+      char *windowid_value;
 
       /* check for $WINDOWID (set by terminals) and see if we can get the title that way */
       windowid_value = pid_get_env (pid, "WINDOWID");
       if (windowid_value != NULL)
         {
-          gchar *endp;
+          char *endp;
 
           endp = NULL;
           windowid_window = (Window) g_ascii_strtoll (windowid_value, &endp, 10);
@@ -978,7 +978,7 @@ get_texture_for_window_with_pid (GtkMountOperationLookupContext *context,
 
 /* ---------------------------------------------------------------------------------------------------- */
 
-static const gchar *well_known_commands[] =
+static const char *well_known_commands[] =
 {
   /* translators: this string is a name for the 'less' command */
   "less", N_("Terminal Pager"),
@@ -993,8 +993,8 @@ gboolean
 _gtk_mount_operation_lookup_info (GtkMountOperationLookupContext *context,
                                   GPid                            pid,
                                   int                             size_pixels,
-                                  gchar                         **out_name,
-                                  gchar                         **out_command_line,
+                                  char                          **out_name,
+                                  char                          **out_command_line,
                                   GdkTexture                    **out_texture)
 {
   g_return_val_if_fail (out_name != NULL && *out_name == NULL, FALSE);
@@ -1024,8 +1024,8 @@ _gtk_mount_operation_lookup_info (GtkMountOperationLookupContext *context,
       strlen (*out_command_line) > 0 && (*out_command_line)[0] != ' ')
     {
       guint n;
-      gchar *s;
-      gchar *p;
+      char *s;
+      char *p;
 
       /* find the first character after the first argument */
       s = strchr (*out_command_line, ' ');

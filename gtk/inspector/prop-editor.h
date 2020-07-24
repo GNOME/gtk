@@ -30,7 +30,7 @@ G_BEGIN_DECLS
 G_DECLARE_FINAL_TYPE (GtkInspectorPropEditor, gtk_inspector_prop_editor, GTK, INSPECTOR_PROP_EDITOR, GtkBox)
 
 GtkWidget *gtk_inspector_prop_editor_new      (GObject      *object,
-                                               const gchar  *name,
+                                               const char   *name,
                                                GtkSizeGroup *values);
 
 gboolean   gtk_inspector_prop_editor_should_expand (GtkInspectorPropEditor *editor);

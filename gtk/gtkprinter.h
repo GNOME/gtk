@@ -81,21 +81,21 @@ typedef struct _GtkPrintBackend GtkPrintBackend;
 GDK_AVAILABLE_IN_ALL
 GType                    gtk_printer_get_type              (void) G_GNUC_CONST;
 GDK_AVAILABLE_IN_ALL
-GtkPrinter              *gtk_printer_new                   (const gchar     *name,
+GtkPrinter              *gtk_printer_new                   (const char      *name,
 							    GtkPrintBackend *backend,
 							    gboolean         virtual_);
 GDK_AVAILABLE_IN_ALL
 GtkPrintBackend         *gtk_printer_get_backend           (GtkPrinter      *printer);
 GDK_AVAILABLE_IN_ALL
-const gchar *            gtk_printer_get_name              (GtkPrinter      *printer);
+const char *            gtk_printer_get_name              (GtkPrinter      *printer);
 GDK_AVAILABLE_IN_ALL
-const gchar *            gtk_printer_get_state_message     (GtkPrinter      *printer);
+const char *            gtk_printer_get_state_message     (GtkPrinter      *printer);
 GDK_AVAILABLE_IN_ALL
-const gchar *            gtk_printer_get_description       (GtkPrinter      *printer);
+const char *            gtk_printer_get_description       (GtkPrinter      *printer);
 GDK_AVAILABLE_IN_ALL
-const gchar *            gtk_printer_get_location          (GtkPrinter      *printer);
+const char *            gtk_printer_get_location          (GtkPrinter      *printer);
 GDK_AVAILABLE_IN_ALL
-const gchar *            gtk_printer_get_icon_name         (GtkPrinter      *printer);
+const char *            gtk_printer_get_icon_name         (GtkPrinter      *printer);
 GDK_AVAILABLE_IN_ALL
 int                      gtk_printer_get_job_count         (GtkPrinter      *printer);
 GDK_AVAILABLE_IN_ALL

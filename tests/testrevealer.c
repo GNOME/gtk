@@ -2,7 +2,7 @@
 
 int
 main (int argc,
-      gchar ** argv)
+      char ** argv)
 {
   GtkWidget *window, *revealer, *box, *widget, *entry;
 

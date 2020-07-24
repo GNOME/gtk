@@ -96,7 +96,7 @@ struct _GtkAssistantPage
   guint      complete     : 1;
   guint      complete_set : 1;
 
-  gchar *title;
+  char *title;
 
   GtkWidget *page;
   GtkWidget *regular_title;
@@ -178,13 +178,13 @@ static void     gtk_assistant_buildable_add_child        (GtkBuildable       *bu
 static gboolean gtk_assistant_buildable_custom_tag_start (GtkBuildable       *buildable,
                                                           GtkBuilder         *builder,
                                                           GObject            *child,
-                                                          const gchar        *tagname,
+                                                          const char         *tagname,
                                                           GtkBuildableParser *parser,
                                                           gpointer           *data);
 static void     gtk_assistant_buildable_custom_finished  (GtkBuildable       *buildable,
                                                           GtkBuilder         *builder,
                                                           GObject            *child,
-                                                          const gchar        *tagname,
+                                                          const char         *tagname,
                                                           gpointer            user_data);
 
 static GList*   find_page                                (GtkAssistant       *assistant,
@@ -1881,7 +1881,7 @@ gtk_assistant_remove_action_widget (GtkAssistant *assistant,
 void
 gtk_assistant_set_page_title (GtkAssistant *assistant,
                               GtkWidget    *page,
-                              const gchar  *title)
+                              const char   *title)
 {
   GtkAssistantPage *page_info;
   GList *child;
@@ -1907,7 +1907,7 @@ gtk_assistant_set_page_title (GtkAssistant *assistant,
  *
  * Returns: the title for @page
  */
-const gchar*
+const char *
 gtk_assistant_get_page_title (GtkAssistant *assistant,
                               GtkWidget    *page)
 {
@@ -2122,7 +2122,7 @@ gtk_assistant_accessible_ref_child (AtkObject *accessible,
   GtkWidget *widget, *child;
   int n_pages;
   AtkObject *obj;
-  const gchar *title;
+  const char *title;
 
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (accessible));
   if (widget == NULL)
@@ -2211,7 +2211,7 @@ gboolean
 gtk_assistant_buildable_custom_tag_start (GtkBuildable  *buildable,
                                           GtkBuilder    *builder,
                                           GObject       *child,
-                                          const gchar   *tagname,
+                                          const char    *tagname,
                                           GtkBuildableParser *parser,
                                           gpointer      *data)
 {
@@ -2223,7 +2223,7 @@ static void
 gtk_assistant_buildable_custom_finished (GtkBuildable *buildable,
                                          GtkBuilder   *builder,
                                          GObject      *child,
-                                         const gchar  *tagname,
+                                         const char   *tagname,
                                          gpointer      user_data)
 {
   parent_buildable_iface->custom_finished (buildable, builder, child,

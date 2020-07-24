@@ -34,7 +34,7 @@ dialog_response (GtkDialog *d,
                  gpointer   user_data)
 {
   GAppInfo *app_info;
-  const gchar *name;
+  const char *name;
 
   g_print ("Response: %d\n", response_id);
 
@@ -79,7 +79,7 @@ static void
 prepare_dialog (void)
 {
   gboolean use_file = FALSE;
-  gchar *content_type = NULL;
+  char *content_type = NULL;
 
   if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (radio_file)))
     use_file = TRUE;
@@ -183,7 +183,7 @@ int
 main (int argc, char **argv)
 {
   GtkWidget *w1;
-  gchar *path;
+  char *path;
   gboolean done = FALSE;
 
   gtk_init ();

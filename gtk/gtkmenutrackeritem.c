@@ -85,8 +85,8 @@ struct _GtkMenuTrackerItem
   GObject parent_instance;
 
   GtkActionObservable *observable;
-  gchar *action_namespace;
-  gchar *action_and_target;
+  char *action_namespace;
+  char *action_and_target;
   GMenuItem *item;
   GtkMenuTrackerItemRole role : 4;
   guint is_separator : 1;
@@ -289,7 +289,7 @@ gtk_menu_tracker_item_update_visibility (GtkMenuTrackerItem *self)
 static void
 gtk_menu_tracker_item_action_added (GtkActionObserver   *observer,
                                     GtkActionObservable *observable,
-                                    const gchar         *action_name,
+                                    const char          *action_name,
                                     const GVariantType  *parameter_type,
                                     gboolean             enabled,
                                     GVariant            *state)
@@ -362,7 +362,7 @@ gtk_menu_tracker_item_action_added (GtkActionObserver   *observer,
 static void
 gtk_menu_tracker_item_action_enabled_changed (GtkActionObserver   *observer,
                                               GtkActionObservable *observable,
-                                              const gchar         *action_name,
+                                              const char          *action_name,
                                               gboolean             enabled)
 {
   GtkMenuTrackerItem *self = GTK_MENU_TRACKER_ITEM (observer);
@@ -385,7 +385,7 @@ gtk_menu_tracker_item_action_enabled_changed (GtkActionObserver   *observer,
 static void
 gtk_menu_tracker_item_action_state_changed (GtkActionObserver   *observer,
                                             GtkActionObservable *observable,
-                                            const gchar         *action_name,
+                                            const char          *action_name,
                                             GVariant            *state)
 {
   GtkMenuTrackerItem *self = GTK_MENU_TRACKER_ITEM (observer);
@@ -419,7 +419,7 @@ gtk_menu_tracker_item_action_state_changed (GtkActionObserver   *observer,
 static void
 gtk_menu_tracker_item_action_removed (GtkActionObserver   *observer,
                                       GtkActionObservable *observable,
-                                      const gchar         *action_name)
+                                      const char          *action_name)
 {
   GtkMenuTrackerItem *self = GTK_MENU_TRACKER_ITEM (observer);
   gboolean was_sensitive, was_toggled;
@@ -461,8 +461,8 @@ gtk_menu_tracker_item_action_removed (GtkActionObserver   *observer,
 static void
 gtk_menu_tracker_item_primary_accel_changed (GtkActionObserver   *observer,
                                              GtkActionObservable *observable,
-                                             const gchar         *action_name,
-                                             const gchar         *action_and_target)
+                                             const char          *action_name,
+                                             const char          *action_and_target)
 {
   GtkMenuTrackerItem *self = GTK_MENU_TRACKER_ITEM (observer);
 
@@ -485,12 +485,12 @@ _gtk_menu_tracker_item_new (GtkActionObservable *observable,
                             GMenuModel          *model,
                             int                  item_index,
                             gboolean             mac_os_mode,
-                            const gchar         *action_namespace,
+                            const char          *action_namespace,
                             gboolean             is_separator)
 {
   GtkMenuTrackerItem *self;
-  const gchar *action_name;
-  const gchar *hidden_when;
+  const char *action_name;
+  const char *hidden_when;
 
   g_return_val_if_fail (GTK_IS_ACTION_OBSERVABLE (observable), NULL);
   g_return_val_if_fail (G_IS_MENU_MODEL (model), NULL);
@@ -601,7 +601,7 @@ gtk_menu_tracker_item_get_is_separator (GtkMenuTrackerItem *self)
  */
 gboolean
 gtk_menu_tracker_item_get_has_link (GtkMenuTrackerItem *self,
-                                    const gchar        *link_name)
+                                    const char         *link_name)
 {
   GMenuModel *link;
 
@@ -616,10 +616,10 @@ gtk_menu_tracker_item_get_has_link (GtkMenuTrackerItem *self,
     return FALSE;
 }
 
-const gchar *
+const char *
 gtk_menu_tracker_item_get_label (GtkMenuTrackerItem *self)
 {
-  const gchar *label = NULL;
+  const char *label = NULL;
 
   g_menu_item_get_attribute (self->item, G_MENU_ATTRIBUTE_LABEL, "&s", &label);
 
@@ -688,10 +688,10 @@ gtk_menu_tracker_item_get_toggled (GtkMenuTrackerItem *self)
   return self->toggled;
 }
 
-const gchar *
+const char *
 gtk_menu_tracker_item_get_accel (GtkMenuTrackerItem *self)
 {
-  const gchar *accel;
+  const char *accel;
 
   if (!self->action_and_target)
     return NULL;
@@ -705,30 +705,30 @@ gtk_menu_tracker_item_get_accel (GtkMenuTrackerItem *self)
   return gtk_action_muxer_get_primary_accel (GTK_ACTION_MUXER (self->observable), self->action_and_target);
 }
 
-const gchar *
+const char *
 gtk_menu_tracker_item_get_special (GtkMenuTrackerItem *self)
 {
-  const gchar *special = NULL;
+  const char *special = NULL;
 
   g_menu_item_get_attribute (self->item, "x-gtk-private-special", "&s", &special);
 
   return special;
 }
 
-const gchar *
+const char *
 gtk_menu_tracker_item_get_display_hint (GtkMenuTrackerItem *self)
 {
-  const gchar *display_hint = NULL;
+  const char *display_hint = NULL;
 
   g_menu_item_get_attribute (self->item, "display-hint", "&s", &display_hint);
 
   return display_hint;
 }
 
-const gchar *
+const char *
 gtk_menu_tracker_item_get_text_direction (GtkMenuTrackerItem *self)
 {
-  const gchar *text_direction = NULL;
+  const char *text_direction = NULL;
 
   g_menu_item_get_attribute (self->item, "text-direction", "&s", &text_direction);
 
@@ -737,15 +737,15 @@ gtk_menu_tracker_item_get_text_direction (GtkMenuTrackerItem *self)
 
 GMenuModel *
 _gtk_menu_tracker_item_get_link (GtkMenuTrackerItem *self,
-                                 const gchar        *link_name)
+                                 const char         *link_name)
 {
   return g_menu_item_get_link (self->item, link_name);
 }
 
-gchar *
+char *
 _gtk_menu_tracker_item_get_link_namespace (GtkMenuTrackerItem *self)
 {
-  const gchar *namespace;
+  const char *namespace;
 
   if (g_menu_item_get_attribute (self->item, "action-namespace", "&s", &namespace))
     {
@@ -784,7 +784,7 @@ gtk_menu_tracker_item_set_submenu_shown (GtkMenuTrackerItem *self,
 void
 gtk_menu_tracker_item_activated (GtkMenuTrackerItem *self)
 {
-  const gchar *action_name;
+  const char *action_name;
   GVariant *action_target;
 
   g_return_if_fail (GTK_IS_MENU_TRACKER_ITEM (self));
@@ -804,7 +804,7 @@ gtk_menu_tracker_item_activated (GtkMenuTrackerItem *self)
 typedef struct
 {
   GtkMenuTrackerItem *item;
-  gchar              *submenu_action;
+  char               *submenu_action;
   gboolean            first_time;
 } GtkMenuTrackerOpener;
 
@@ -855,7 +855,7 @@ gtk_menu_tracker_opener_update (GtkMenuTrackerOpener *opener)
 
 static void
 gtk_menu_tracker_opener_added (GActionGroup *group,
-                               const gchar  *action_name,
+                               const char   *action_name,
                                gpointer      user_data)
 {
   GtkMenuTrackerOpener *opener = user_data;
@@ -866,7 +866,7 @@ gtk_menu_tracker_opener_added (GActionGroup *group,
 
 static void
 gtk_menu_tracker_opener_removed (GActionGroup *action_group,
-                                 const gchar  *action_name,
+                                 const char   *action_name,
                                  gpointer      user_data)
 {
   GtkMenuTrackerOpener *opener = user_data;
@@ -877,7 +877,7 @@ gtk_menu_tracker_opener_removed (GActionGroup *action_group,
 
 static void
 gtk_menu_tracker_opener_changed (GActionGroup *action_group,
-                                 const gchar  *action_name,
+                                 const char   *action_name,
                                  GVariant     *new_state,
                                  gpointer      user_data)
 {
@@ -909,7 +909,7 @@ gtk_menu_tracker_opener_free (gpointer data)
 
 static GtkMenuTrackerOpener *
 gtk_menu_tracker_opener_new (GtkMenuTrackerItem *item,
-                             const gchar        *submenu_action)
+                             const char         *submenu_action)
 {
   GtkMenuTrackerOpener *opener;
 
@@ -935,7 +935,7 @@ void
 gtk_menu_tracker_item_request_submenu_shown (GtkMenuTrackerItem *self,
                                              gboolean            shown)
 {
-  const gchar *submenu_action;
+  const char *submenu_action;
   gboolean has_submenu_action;
 
   if (shown == self->submenu_requested)

@@ -187,8 +187,8 @@ set_property (GObject      *object,
 static void
 show_object (GtkInspectorPropEditor *editor,
              GObject                *object,
-             const gchar            *name,
-             const gchar            *tab,
+             const char             *name,
+             const char             *tab,
              GtkInspectorPropList   *pl)
 {
   GtkInspectorWindow *iw;
@@ -465,10 +465,10 @@ gtk_inspector_prop_list_class_init (GtkInspectorPropListClass *klass)
 /* Like g_strdup_value_contents, but keeps the type name separate */
 void
 strdup_value_contents (const GValue  *value,
-                       gchar        **contents,
-                       gchar        **type)
+                       char         **contents,
+                       char         **type)
 {
-  const gchar *src;
+  const char *src;
 
   if (G_VALUE_HOLDS_STRING (value))
     {
@@ -482,7 +482,7 @@ strdup_value_contents (const GValue  *value,
         }
       else
         {
-          gchar *s = g_strescape (src, NULL);
+          char *s = g_strescape (src, NULL);
           *contents = g_strdup_printf ("\"%s\"", s);
           g_free (s);
         }
@@ -528,7 +528,7 @@ strdup_value_contents (const GValue  *value,
 
           while (*strv != NULL)
             {
-              gchar *escaped = g_strescape (*strv, NULL);
+              char *escaped = g_strescape (*strv, NULL);
 
               g_string_append_printf (tmp, "\"%s\"", escaped);
               g_free (escaped);

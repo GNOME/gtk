@@ -103,7 +103,7 @@ gdouble            gtk_page_setup_get_page_height   (GtkPageSetup       *setup,
 
 /* Saving and restoring page setup */
 GDK_AVAILABLE_IN_ALL
-GtkPageSetup	  *gtk_page_setup_new_from_file	    (const gchar         *file_name,
+GtkPageSetup	  *gtk_page_setup_new_from_file	    (const char          *file_name,
 						     GError              **error);
 GDK_AVAILABLE_IN_ALL
 gboolean	   gtk_page_setup_load_file	    (GtkPageSetup        *setup,
@@ -115,17 +115,17 @@ gboolean	   gtk_page_setup_to_file	    (GtkPageSetup        *setup,
 						     GError             **error);
 GDK_AVAILABLE_IN_ALL
 GtkPageSetup	  *gtk_page_setup_new_from_key_file (GKeyFile            *key_file,
-						     const gchar         *group_name,
+						     const char          *group_name,
 						     GError             **error);
 GDK_AVAILABLE_IN_ALL
 gboolean           gtk_page_setup_load_key_file     (GtkPageSetup        *setup,
 				                     GKeyFile            *key_file,
-				                     const gchar         *group_name,
+				                     const char          *group_name,
 				                     GError             **error);
 GDK_AVAILABLE_IN_ALL
 void		   gtk_page_setup_to_key_file	    (GtkPageSetup        *setup,
 						     GKeyFile            *key_file,
-						     const gchar         *group_name);
+						     const char          *group_name);
 
 GDK_AVAILABLE_IN_ALL
 GVariant          *gtk_page_setup_to_gvariant       (GtkPageSetup        *setup);

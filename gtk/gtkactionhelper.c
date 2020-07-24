@@ -60,7 +60,7 @@ struct _GtkActionHelper
   GtkActionHelperGroup *group;
 
   GtkActionMuxer *action_context;
-  gchar *action_name;
+  char *action_name;
 
   GVariant *target;
 
@@ -301,7 +301,7 @@ gtk_action_helper_finalize (GObject *object)
 static void
 gtk_action_helper_observer_action_added (GtkActionObserver   *observer,
                                          GtkActionObservable *observable,
-                                         const gchar         *action_name,
+                                         const char          *action_name,
                                          const GVariantType  *parameter_type,
                                          gboolean             enabled,
                                          GVariant            *state)
@@ -312,7 +312,7 @@ gtk_action_helper_observer_action_added (GtkActionObserver   *observer,
 static void
 gtk_action_helper_observer_action_enabled_changed (GtkActionObserver   *observer,
                                                    GtkActionObservable *observable,
-                                                   const gchar         *action_name,
+                                                   const char          *action_name,
                                                    gboolean             enabled)
 {
   gtk_action_helper_action_enabled_changed (GTK_ACTION_HELPER (observer), enabled);
@@ -321,7 +321,7 @@ gtk_action_helper_observer_action_enabled_changed (GtkActionObserver   *observer
 static void
 gtk_action_helper_observer_action_state_changed (GtkActionObserver   *observer,
                                                  GtkActionObservable *observable,
-                                                 const gchar         *action_name,
+                                                 const char          *action_name,
                                                  GVariant            *state)
 {
   gtk_action_helper_action_state_changed (GTK_ACTION_HELPER (observer), state);
@@ -330,7 +330,7 @@ gtk_action_helper_observer_action_state_changed (GtkActionObserver   *observer,
 static void
 gtk_action_helper_observer_action_removed (GtkActionObserver   *observer,
                                            GtkActionObservable *observable,
-                                           const gchar         *action_name)
+                                           const char          *action_name)
 {
   gtk_action_helper_action_removed (GTK_ACTION_HELPER (observer), TRUE);
 }
@@ -405,7 +405,7 @@ gtk_action_helper_new (GtkActionable *widget)
 
 void
 gtk_action_helper_set_action_name (GtkActionHelper *helper,
-                                   const gchar     *action_name)
+                                   const char      *action_name)
 {
   gboolean was_enabled, was_active;
   const GVariantType *parameter_type;
@@ -552,7 +552,7 @@ gtk_action_helper_set_action_target_value (GtkActionHelper *helper,
   g_object_notify (G_OBJECT (helper->widget), "action-target");
 }
 
-const gchar *
+const char *
 gtk_action_helper_get_action_name (GtkActionHelper *helper)
 {
   if (helper == NULL)

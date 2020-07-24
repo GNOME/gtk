@@ -449,7 +449,7 @@ static void      gtk_cell_area_pack_default                  (GtkCellLayout     
 static void      gtk_cell_area_clear                         (GtkCellLayout         *cell_layout);
 static void      gtk_cell_area_add_attribute                 (GtkCellLayout         *cell_layout,
                                                               GtkCellRenderer       *renderer,
-                                                              const gchar           *attribute,
+                                                              const char            *attribute,
                                                               int                    column);
 static void      gtk_cell_area_set_cell_data_func            (GtkCellLayout         *cell_layout,
                                                               GtkCellRenderer       *cell,
@@ -469,7 +469,7 @@ static void      gtk_cell_area_buildable_init                (GtkBuildableIface 
 static void      gtk_cell_area_buildable_custom_tag_end      (GtkBuildable          *buildable,
                                                               GtkBuilder            *builder,
                                                               GObject               *child,
-                                                              const gchar           *tagname,
+                                                              const char            *tagname,
                                                               gpointer               data);
 
 /* Used in foreach loop to check if a child renderer is present */
@@ -506,7 +506,7 @@ typedef struct {
 
 /* Attribute/Cell metadata */
 typedef struct {
-  const gchar *attribute;
+  const char *attribute;
   int          column;
 } CellAttribute;
 
@@ -524,11 +524,11 @@ static CellInfo       *cell_info_new       (GtkCellLayoutDataFunc  func,
                                             GDestroyNotify         destroy);
 static void            cell_info_free      (CellInfo              *info);
 static CellAttribute  *cell_attribute_new  (GtkCellRenderer       *renderer,
-                                            const gchar           *attribute,
+                                            const char            *attribute,
                                             int                    column);
 static void            cell_attribute_free (CellAttribute         *attribute);
 static int             cell_attribute_find (CellAttribute         *cell_attribute,
-                                            const gchar           *attribute);
+                                            const char            *attribute);
 
 /* Internal functions/signal emissions */
 static void            gtk_cell_area_add_editable     (GtkCellArea        *area,
@@ -567,7 +567,7 @@ struct _GtkCellAreaPrivate
   /* Current path is saved as a side-effect
    * of gtk_cell_area_apply_attributes()
    */
-  gchar           *current_path;
+  char            *current_path;
 
   /* Current cell being edited and editable widget used */
   GtkCellEditable *edit_widget;
@@ -849,7 +849,7 @@ cell_info_free (CellInfo *info)
 
 static CellAttribute  *
 cell_attribute_new  (GtkCellRenderer       *renderer,
-                     const gchar           *attribute,
+                     const char            *attribute,
                      int                    column)
 {
   GParamSpec *pspec;
@@ -882,7 +882,7 @@ cell_attribute_free (CellAttribute *attribute)
 /* GCompareFunc for g_slist_find_custom() */
 static int
 cell_attribute_find (CellAttribute *cell_attribute,
-                     const gchar   *attribute)
+                     const char    *attribute)
 {
   return g_strcmp0 (cell_attribute->attribute, attribute);
 }
@@ -1492,7 +1492,7 @@ gtk_cell_area_clear (GtkCellLayout *cell_layout)
 static void
 gtk_cell_area_add_attribute (GtkCellLayout         *cell_layout,
                              GtkCellRenderer       *renderer,
-                             const gchar           *attribute,
+                             const char            *attribute,
                              int                    column)
 {
   gtk_cell_area_attribute_connect (GTK_CELL_AREA (cell_layout),
@@ -1579,7 +1579,7 @@ static void
 gtk_cell_area_buildable_custom_tag_end (GtkBuildable *buildable,
                                         GtkBuilder   *builder,
                                         GObject      *child,
-                                        const gchar  *tagname,
+                                        const char   *tagname,
                                         gpointer      data)
 {
   /* Just ignore the boolean return from here */
@@ -2154,7 +2154,7 @@ gtk_cell_area_get_preferred_width_for_height (GtkCellArea        *area,
 void
 gtk_cell_area_attribute_connect (GtkCellArea        *area,
                                  GtkCellRenderer    *renderer,
-                                 const gchar        *attribute,
+                                 const char         *attribute,
                                  int                 column)
 {
   GtkCellAreaPrivate *priv = gtk_cell_area_get_instance_private (area);
@@ -2220,7 +2220,7 @@ gtk_cell_area_attribute_connect (GtkCellArea        *area,
 void
 gtk_cell_area_attribute_disconnect (GtkCellArea        *area,
                                     GtkCellRenderer    *renderer,
-                                    const gchar        *attribute)
+                                    const char         *attribute)
 {
   GtkCellAreaPrivate *priv = gtk_cell_area_get_instance_private (area);
   CellInfo           *info;
@@ -2263,7 +2263,7 @@ gtk_cell_area_attribute_disconnect (GtkCellArea        *area,
 int
 gtk_cell_area_attribute_get_column (GtkCellArea     *area,
                                     GtkCellRenderer *renderer,
-                                    const gchar     *attribute)
+                                    const char      *attribute)
 {
   GtkCellAreaPrivate *priv = gtk_cell_area_get_instance_private (area);
   CellInfo           *info;
@@ -2327,7 +2327,7 @@ gtk_cell_area_apply_attributes (GtkCellArea  *area,
  * attributes applied to @area. This string belongs to the area and
  * should not be freed.
  */
-const gchar *
+const char *
 gtk_cell_area_get_current_path_string (GtkCellArea *area)
 {
   GtkCellAreaPrivate *priv = gtk_cell_area_get_instance_private (area);
@@ -2388,7 +2388,7 @@ gtk_cell_area_class_install_cell_property (GtkCellAreaClass   *aclass,
  */
 GParamSpec*
 gtk_cell_area_class_find_cell_property (GtkCellAreaClass   *aclass,
-                                        const gchar        *property_name)
+                                        const char         *property_name)
 {
   g_return_val_if_fail (GTK_IS_CELL_AREA_CLASS (aclass), NULL);
   g_return_val_if_fail (property_name != NULL, NULL);
@@ -2442,7 +2442,7 @@ gtk_cell_area_class_list_cell_properties (GtkCellAreaClass  *aclass,
 void
 gtk_cell_area_add_with_properties (GtkCellArea        *area,
                                    GtkCellRenderer    *renderer,
-                                   const gchar        *first_prop_name,
+                                   const char         *first_prop_name,
                                    ...)
 {
   GtkCellAreaClass *class;
@@ -2480,7 +2480,7 @@ gtk_cell_area_add_with_properties (GtkCellArea        *area,
 void
 gtk_cell_area_cell_set (GtkCellArea        *area,
                         GtkCellRenderer    *renderer,
-                        const gchar        *first_prop_name,
+                        const char         *first_prop_name,
                         ...)
 {
   va_list var_args;
@@ -2506,7 +2506,7 @@ gtk_cell_area_cell_set (GtkCellArea        *area,
 void
 gtk_cell_area_cell_get (GtkCellArea        *area,
                         GtkCellRenderer    *renderer,
-                        const gchar        *first_prop_name,
+                        const char         *first_prop_name,
                         ...)
 {
   va_list var_args;
@@ -2548,7 +2548,7 @@ area_set_cell_property (GtkCellArea     *area,
                G_VALUE_TYPE_NAME (value));
   else if (g_param_value_validate (pspec, &tmp_value) && !(pspec->flags & G_PARAM_LAX_VALIDATION))
     {
-      gchar *contents = g_strdup_value_contents (value);
+      char *contents = g_strdup_value_contents (value);
 
       g_warning ("value \"%s\" of type '%s' is invalid for property '%s' of type '%s'",
                  contents,
@@ -2577,10 +2577,10 @@ area_set_cell_property (GtkCellArea     *area,
 void
 gtk_cell_area_cell_set_valist (GtkCellArea        *area,
                                GtkCellRenderer    *renderer,
-                               const gchar        *first_property_name,
+                               const char         *first_property_name,
                                va_list             var_args)
 {
-  const gchar *name;
+  const char *name;
 
   g_return_if_fail (GTK_IS_CELL_AREA (area));
   g_return_if_fail (GTK_IS_CELL_RENDERER (renderer));
@@ -2589,7 +2589,7 @@ gtk_cell_area_cell_set_valist (GtkCellArea        *area,
   while (name)
     {
       GValue value = G_VALUE_INIT;
-      gchar *error = NULL;
+      char *error = NULL;
       GParamSpec *pspec =
         g_param_spec_pool_lookup (cell_property_pool, name,
                                   G_OBJECT_TYPE (area), TRUE);
@@ -2620,7 +2620,7 @@ gtk_cell_area_cell_set_valist (GtkCellArea        *area,
         }
       area_set_cell_property (area, renderer, pspec, &value);
       g_value_unset (&value);
-      name = va_arg (var_args, gchar*);
+      name = va_arg (var_args, char *);
     }
 }
 
@@ -2637,10 +2637,10 @@ gtk_cell_area_cell_set_valist (GtkCellArea        *area,
 void
 gtk_cell_area_cell_get_valist (GtkCellArea        *area,
                                GtkCellRenderer    *renderer,
-                               const gchar        *first_property_name,
+                               const char         *first_property_name,
                                va_list             var_args)
 {
-  const gchar *name;
+  const char *name;
 
   g_return_if_fail (GTK_IS_CELL_AREA (area));
   g_return_if_fail (GTK_IS_CELL_RENDERER (renderer));
@@ -2650,7 +2650,7 @@ gtk_cell_area_cell_get_valist (GtkCellArea        *area,
     {
       GValue value = G_VALUE_INIT;
       GParamSpec *pspec;
-      gchar *error;
+      char *error;
 
       pspec = g_param_spec_pool_lookup (cell_property_pool, name,
                                         G_OBJECT_TYPE (area), TRUE);
@@ -2678,7 +2678,7 @@ gtk_cell_area_cell_get_valist (GtkCellArea        *area,
           break;
         }
       g_value_unset (&value);
-      name = va_arg (var_args, gchar*);
+      name = va_arg (var_args, char *);
     }
 }
 
@@ -2694,7 +2694,7 @@ gtk_cell_area_cell_get_valist (GtkCellArea        *area,
 void
 gtk_cell_area_cell_set_property (GtkCellArea        *area,
                                  GtkCellRenderer    *renderer,
-                                 const gchar        *property_name,
+                                 const char         *property_name,
                                  const GValue       *value)
 {
   GParamSpec *pspec;
@@ -2730,7 +2730,7 @@ gtk_cell_area_cell_set_property (GtkCellArea        *area,
 void
 gtk_cell_area_cell_get_property (GtkCellArea        *area,
                                  GtkCellRenderer    *renderer,
-                                 const gchar        *property_name,
+                                 const char         *property_name,
                                  GValue             *value)
 {
   GParamSpec *pspec;

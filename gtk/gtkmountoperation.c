@@ -197,7 +197,7 @@ gtk_mount_operation_class_init (GtkMountOperationClass *klass)
 static void
 gtk_mount_operation_init (GtkMountOperation *operation)
 {
-  gchar *name_owner;
+  char *name_owner;
 
   operation->priv = gtk_mount_operation_get_instance_private (operation);
 
@@ -375,7 +375,7 @@ pw_dialog_got_response (GtkDialog         *dialog,
           if (text && strlen (text) > 0)
             {
               guint64 pim;
-              gchar *end = NULL;
+              char *end = NULL;
 
               errno = 0;
               pim = g_ascii_strtoull (text, &end, 10);
@@ -421,7 +421,7 @@ static gboolean
 pim_entry_is_valid (GtkWidget *entry_widget)
 {
   const char *text;
-  gchar *end = NULL;
+  char *end = NULL;
   guint64 pim;
 
   if (entry_widget == NULL)
@@ -561,9 +561,9 @@ table_add_entry (GtkMountOperation *operation,
 
 static void
 gtk_mount_operation_ask_password_do_gtk (GtkMountOperation *operation,
-                                         const gchar       *message,
-                                         const gchar       *default_user,
-                                         const gchar       *default_domain)
+                                         const char        *message,
+                                         const char        *default_user,
+                                         const char        *default_domain)
 {
   GtkMountOperationPrivate *priv;
   GtkWidget *widget;
@@ -575,8 +575,8 @@ gtk_mount_operation_ask_password_do_gtk (GtkMountOperation *operation,
   GtkWidget *content_area, *action_area;
   gboolean   can_anonymous;
   guint      rows;
-  gchar *primary;
-  const gchar *secondary;
+  char *primary;
+  const char *secondary;
   PangoAttrList *attrs;
   gboolean use_header;
 
@@ -826,7 +826,7 @@ call_password_proxy_cb (GObject      *source,
   GMountOperationResult result;
   GVariant *result_details;
   GVariantIter iter;
-  const gchar *key;
+  const char *key;
   GVariant *value;
   GError *error = NULL;
 
@@ -867,7 +867,7 @@ gtk_mount_operation_ask_password_do_proxy (GtkMountOperation *operation,
                                            const char        *default_user,
                                            const char        *default_domain)
 {
-  gchar id[255];
+  char id[255];
   g_sprintf(id, "GtkMountOperation%p", operation);
 
   operation->priv->handler_showing = TRUE;
@@ -999,7 +999,7 @@ call_question_proxy_cb (GObject      *source,
   GMountOperationResult result;
   GVariant *result_details;
   GVariantIter iter;
-  const gchar *key;
+  const char *key;
   GVariant *value;
   GError *error = NULL;
 
@@ -1031,7 +1031,7 @@ gtk_mount_operation_ask_question_do_proxy (GtkMountOperation *operation,
                                            const char        *message,
                                            const char        *choices[])
 {
-  gchar id[255];
+  char id[255];
   g_sprintf(id, "GtkMountOperation%p", operation);
 
   operation->priv->handler_showing = TRUE;
@@ -1186,10 +1186,10 @@ add_pid_to_process_list_store (GtkMountOperation              *mount_operation,
                                GtkListStore                   *list_store,
                                GPid                            pid)
 {
-  gchar *command_line;
-  gchar *name;
+  char *command_line;
+  char *name;
   GdkTexture *texture;
-  gchar *markup;
+  char *markup;
   GtkTreeIter iter;
 
   name = NULL;
@@ -1514,7 +1514,7 @@ create_show_processes_dialog (GtkMountOperation *op,
   GtkTreeViewColumn *column;
   GtkCellRenderer *renderer;
   GtkListStore *list_store;
-  gchar *s;
+  char *s;
   gboolean use_header;
   GtkGesture *gesture;
   GtkEventController *controller;
@@ -1652,7 +1652,7 @@ call_processes_proxy_cb (GObject     *source,
   GMountOperationResult result;
   GVariant *result_details;
   GVariantIter iter;
-  const gchar *key;
+  const char *key;
   GVariant *value;
   GError *error = NULL;
 
@@ -1691,7 +1691,7 @@ gtk_mount_operation_show_processes_do_proxy (GtkMountOperation *operation,
                                              GArray            *processes,
                                              const char        *choices[])
 {
-  gchar id[255];
+  char id[255];
   g_sprintf(id, "GtkMountOperation%p", operation);
 
   operation->priv->handler_showing = TRUE;

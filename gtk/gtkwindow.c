@@ -183,8 +183,8 @@ typedef struct
   GdkDisplay            *display;
   GtkApplication        *application;
 
-  gchar   *startup_id;
-  gchar   *title;
+  char    *startup_id;
+  char    *title;
 
   guint    keys_changed_handler;
 
@@ -319,7 +319,7 @@ typedef enum
 
 typedef struct
 {
-  gchar     *icon_name;
+  char      *icon_name;
   guint      realized : 1;
   guint      using_default_icon : 1;
   guint      using_themed_icon : 1;
@@ -440,7 +440,7 @@ static void     gtk_window_set_default_size_internal (GtkWindow    *window,
 
 static void     update_themed_icon                    (GtkWindow    *window);
 static GList   *icon_list_from_theme                  (GtkWindow    *window,
-						       const gchar  *name);
+						       const char   *name);
 static void     gtk_window_realize_icon               (GtkWindow    *window);
 static void     gtk_window_unrealize_icon             (GtkWindow    *window);
 static void     update_window_actions                 (GtkWindow    *window);
@@ -484,7 +484,7 @@ static void gtk_window_release_application (GtkWindow *window);
 
 static GListStore  *toplevel_list = NULL;
 static guint        window_signals[LAST_SIGNAL] = { 0 };
-static gchar       *default_icon_name = NULL;
+static char        *default_icon_name = NULL;
 static gboolean     disable_startup_notification = FALSE;
 
 static GQuark       quark_gtk_window_icon_info = 0;
@@ -505,10 +505,10 @@ static void     gtk_window_buildable_interface_init         (GtkBuildableIface  
 static void     gtk_window_buildable_add_child              (GtkBuildable       *buildable,
                                                              GtkBuilder         *builder,
                                                              GObject            *child,
-                                                             const gchar        *type);
+                                                             const char         *type);
 static void     gtk_window_buildable_set_buildable_property (GtkBuildable       *buildable,
                                                              GtkBuilder         *builder,
-                                                             const gchar        *name,
+                                                             const char         *name,
                                                              const GValue       *value);
 
 static void             gtk_window_shortcut_manager_interface_init      (GtkShortcutManagerInterface *iface);
@@ -575,14 +575,14 @@ add_arrow_bindings (GtkWidgetClass   *widget_class,
 }
 
 static guint32
-extract_time_from_startup_id (const gchar* startup_id)
+extract_time_from_startup_id (const char * startup_id)
 {
-  gchar *timestr = g_strrstr (startup_id, "_TIME");
+  char *timestr = g_strrstr (startup_id, "_TIME");
   guint32 retval = GDK_CURRENT_TIME;
 
   if (timestr)
     {
-      gchar *end;
+      char *end;
       guint32 timestamp; 
     
       /* Skip past the "_TIME" part */
@@ -599,7 +599,7 @@ extract_time_from_startup_id (const gchar* startup_id)
 }
 
 static gboolean
-startup_id_is_fake (const gchar* startup_id)
+startup_id_is_fake (const char * startup_id)
 {
   return strncmp (startup_id, "_TIME", 5) == 0;
 }
@@ -1757,7 +1757,7 @@ static void
 gtk_window_buildable_add_child (GtkBuildable *buildable,
                                 GtkBuilder   *builder,
                                 GObject      *child,
-                                const gchar  *type)
+                                const char   *type)
 {
   if (type && strcmp (type, "titlebar") == 0)
     gtk_window_set_titlebar (GTK_WINDOW (buildable), GTK_WIDGET (child));
@@ -1770,7 +1770,7 @@ gtk_window_buildable_add_child (GtkBuildable *buildable,
 static void
 gtk_window_buildable_set_buildable_property (GtkBuildable *buildable,
                                              GtkBuilder   *builder,
-                                             const gchar  *name,
+                                             const char   *name,
                                              const GValue *value)
 {
   GtkWindow *window = GTK_WINDOW (buildable);
@@ -1969,7 +1969,7 @@ gtk_window_new (void)
  **/
 void
 gtk_window_set_title (GtkWindow   *window,
-                      const gchar *title)
+                      const char *title)
 {
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
   char *new_title;
@@ -1996,7 +1996,7 @@ gtk_window_set_title (GtkWindow   *window,
  * been set explicitly. The returned string is owned by the widget
  * and must not be modified or freed.
  **/
-const gchar *
+const char *
 gtk_window_get_title (GtkWindow *window)
 {
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
@@ -2024,7 +2024,7 @@ gtk_window_get_title (GtkWindow *window)
  **/
 void
 gtk_window_set_startup_id (GtkWindow   *window,
-                           const gchar *startup_id)
+                           const char *startup_id)
 {
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
   GtkWidget *widget;
@@ -3056,7 +3056,7 @@ render_paintable_to_texture (GdkPaintable *paintable)
 
 static GList *
 icon_list_from_theme (GtkWindow   *window,
-		      const gchar *name)
+		      const char *name)
 {
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
   GList *list;
@@ -3208,10 +3208,10 @@ update_themed_icon (GtkWindow *window)
  */
 void 
 gtk_window_set_icon_name (GtkWindow   *window,
-			  const gchar *name)
+			  const char *name)
 {
   GtkWindowIconInfo *info;
-  gchar *tmp;
+  char *tmp;
 
   g_return_if_fail (GTK_IS_WINDOW (window));
 
@@ -3239,7 +3239,7 @@ gtk_window_set_icon_name (GtkWindow   *window,
  * Returns: (nullable): the icon name or %NULL if the window has
  * no themed icon
  */
-const gchar *
+const char *
 gtk_window_get_icon_name (GtkWindow *window)
 {
   GtkWindowIconInfo *info;
@@ -3260,7 +3260,7 @@ gtk_window_get_icon_name (GtkWindow *window)
  * themed icon, see gtk_window_set_icon_name().
  **/
 void
-gtk_window_set_default_icon_name (const gchar *name)
+gtk_window_set_default_icon_name (const char *name)
 {
   GList *tmp_list;
   GList *toplevels;
@@ -3300,7 +3300,7 @@ gtk_window_set_default_icon_name (const gchar *name)
  *
  * Returns: the fallback icon name for windows
  */
-const gchar *
+const char *
 gtk_window_get_default_icon_name (void)
 {
   return default_icon_name;
@@ -3773,7 +3773,7 @@ static gboolean
 gtk_window_should_use_csd (GtkWindow *window)
 {
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-  const gchar *csd_env;
+  const char *csd_env;
 
   if (priv->csd_requested)
     return TRUE;

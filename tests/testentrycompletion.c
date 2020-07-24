@@ -157,11 +157,11 @@ create_completion_model (void)
 
 static gboolean
 match_func (GtkEntryCompletion *completion,
-	    const gchar        *key,
+	    const char         *key,
 	    GtkTreeIter        *iter,
 	    gpointer            user_data)
 {
-  gchar *item = NULL;
+  char *item = NULL;
   GtkTreeModel *model;
 
   gboolean ret = FALSE;
@@ -266,7 +266,7 @@ match_selected_cb (GtkEntryCompletion *completion,
 		   GtkTreeModel       *model,
 		   GtkTreeIter        *iter)
 {
-  gchar *str;
+  char *str;
   GtkWidget *entry;
 
   entry = gtk_entry_completion_get_entry (completion);

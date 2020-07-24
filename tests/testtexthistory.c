@@ -93,7 +93,7 @@ static void
 do_delete (gpointer     funcs_data,
            guint        begin,
            guint        end,
-           const gchar *expected_text,
+           const char *expected_text,
            guint        len)
 {
   Text *t = funcs_data;

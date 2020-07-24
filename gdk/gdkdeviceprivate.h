@@ -36,7 +36,7 @@ struct _GdkDevice
 {
   GObject parent_instance;
 
-  gchar *name;
+  char *name;
   GdkInputSource source;
   gboolean has_cursor;
   GdkAxisFlags axis_flags;
@@ -50,8 +50,8 @@ struct _GdkDevice
   GArray *axes;
   guint num_touches;
 
-  gchar *vendor_id;
-  gchar *product_id;
+  char *vendor_id;
+  char *product_id;
 
   GdkSeat *seat;
   GdkDeviceTool *last_tool;

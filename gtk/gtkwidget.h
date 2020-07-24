@@ -290,7 +290,7 @@ GDK_AVAILABLE_IN_ALL
 GType      gtk_widget_get_type            (void) G_GNUC_CONST;
 GDK_AVAILABLE_IN_ALL
 GtkWidget* gtk_widget_new                 (GType                type,
-                                           const gchar         *first_property_name,
+                                           const char          *first_property_name,
                                            ...);
 GDK_AVAILABLE_IN_ALL
 void       gtk_widget_unparent            (GtkWidget           *widget);
@@ -360,23 +360,23 @@ void       gtk_widget_class_add_binding   (GtkWidgetClass      *widget_class,
                                            guint                keyval,
                                            GdkModifierType      mods,
                                            GtkShortcutFunc      callback,
-                                           const gchar         *format_string,
+                                           const char          *format_string,
                                            ...);
 GDK_AVAILABLE_IN_ALL
 void       gtk_widget_class_add_binding_signal
                                           (GtkWidgetClass      *widget_class,
                                            guint                keyval,
                                            GdkModifierType      mods,
-                                           const gchar         *signal,
-                                           const gchar         *format_string,
+                                           const char          *signal,
+                                           const char          *format_string,
                                            ...);
 GDK_AVAILABLE_IN_ALL
 void       gtk_widget_class_add_binding_action
                                           (GtkWidgetClass      *widget_class,
                                            guint                keyval,
                                            GdkModifierType      mods,
-                                           const gchar         *action_name,
-                                           const gchar         *format_string,
+                                           const char          *action_name,
+                                           const char          *format_string,
                                            ...);
 GDK_AVAILABLE_IN_ALL
 void       gtk_widget_class_add_shortcut  (GtkWidgetClass      *widget_class,
@@ -430,9 +430,9 @@ gboolean  gtk_widget_get_receives_default (GtkWidget           *widget);
 
 GDK_AVAILABLE_IN_ALL
 void                  gtk_widget_set_name               (GtkWidget    *widget,
-                                                         const gchar  *name);
+                                                         const char   *name);
 GDK_AVAILABLE_IN_ALL
-const gchar *         gtk_widget_get_name               (GtkWidget    *widget);
+const char *         gtk_widget_get_name               (GtkWidget    *widget);
 
 
 GDK_AVAILABLE_IN_ALL
@@ -670,7 +670,7 @@ GDK_AVAILABLE_IN_ALL
 const cairo_font_options_t *gtk_widget_get_font_options (GtkWidget *widget);
 GDK_AVAILABLE_IN_ALL
 PangoLayout  *gtk_widget_create_pango_layout  (GtkWidget   *widget,
-                                               const gchar *text);
+                                               const char *text);
 
 /* Functions for setting directionality for widgets */
 
@@ -859,29 +859,29 @@ void    gtk_widget_init_template                        (GtkWidget             *
 GDK_AVAILABLE_IN_ALL
 GObject *gtk_widget_get_template_child                  (GtkWidget             *widget,
                                                          GType                  widget_type,
-                                                         const gchar           *name);
+                                                         const char            *name);
 GDK_AVAILABLE_IN_ALL
 void    gtk_widget_class_set_template                   (GtkWidgetClass        *widget_class,
                                                          GBytes                *template_bytes);
 GDK_AVAILABLE_IN_ALL
 void    gtk_widget_class_set_template_from_resource     (GtkWidgetClass        *widget_class,
-                                                         const gchar           *resource_name);
+                                                         const char            *resource_name);
 GDK_AVAILABLE_IN_ALL
 void    gtk_widget_class_bind_template_callback_full    (GtkWidgetClass        *widget_class,
-                                                         const gchar           *callback_name,
+                                                         const char            *callback_name,
                                                          GCallback              callback_symbol);
 GDK_AVAILABLE_IN_ALL
 void    gtk_widget_class_set_template_scope             (GtkWidgetClass        *widget_class,
                                                          GtkBuilderScope       *scope);
 GDK_AVAILABLE_IN_ALL
 void    gtk_widget_class_bind_template_child_full       (GtkWidgetClass        *widget_class,
-                                                         const gchar           *name,
+                                                         const char            *name,
                                                          gboolean               internal_child,
                                                          gssize                 struct_offset);
 
 GDK_AVAILABLE_IN_ALL
 void                    gtk_widget_insert_action_group  (GtkWidget    *widget,
-                                                         const gchar  *name,
+                                                         const char   *name,
                                                          GActionGroup *group);
 
 GDK_AVAILABLE_IN_ALL

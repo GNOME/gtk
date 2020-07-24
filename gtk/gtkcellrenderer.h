@@ -154,14 +154,14 @@ struct _GtkCellRendererClass
   gboolean           (* activate)                        (GtkCellRenderer      *cell,
                                                           GdkEvent             *event,
                                                           GtkWidget            *widget,
-                                                          const gchar          *path,
+                                                          const char           *path,
                                                           const GdkRectangle   *background_area,
                                                           const GdkRectangle   *cell_area,
                                                           GtkCellRendererState  flags);
   GtkCellEditable *  (* start_editing)                   (GtkCellRenderer      *cell,
                                                           GdkEvent             *event,
                                                           GtkWidget            *widget,
-                                                          const gchar          *path,
+                                                          const char           *path,
                                                           const GdkRectangle   *background_area,
                                                           const GdkRectangle   *cell_area,
                                                           GtkCellRendererState  flags);
@@ -170,7 +170,7 @@ struct _GtkCellRendererClass
   void (* editing_canceled) (GtkCellRenderer *cell);
   void (* editing_started)  (GtkCellRenderer *cell,
 			     GtkCellEditable *editable,
-			     const gchar     *path);
+			     const char      *path);
 
   /*< private >*/
 
@@ -228,7 +228,7 @@ GDK_AVAILABLE_IN_ALL
 gboolean         gtk_cell_renderer_activate       (GtkCellRenderer      *cell,
 						   GdkEvent             *event,
 						   GtkWidget            *widget,
-						   const gchar          *path,
+						   const char           *path,
 						   const GdkRectangle   *background_area,
 						   const GdkRectangle   *cell_area,
 						   GtkCellRendererState  flags);
@@ -236,7 +236,7 @@ GDK_AVAILABLE_IN_ALL
 GtkCellEditable *gtk_cell_renderer_start_editing  (GtkCellRenderer      *cell,
 						   GdkEvent             *event,
 						   GtkWidget            *widget,
-						   const gchar          *path,
+						   const char           *path,
 						   const GdkRectangle   *background_area,
 						   const GdkRectangle   *cell_area,
 						   GtkCellRendererState  flags);

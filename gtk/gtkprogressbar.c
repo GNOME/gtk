@@ -95,7 +95,7 @@ struct _GtkProgressBar
 {
   GtkWidget parent_instance;
 
-  gchar         *text;
+  char          *text;
 
   GtkWidget     *label;
   GtkWidget     *trough_widget;
@@ -571,7 +571,7 @@ gtk_progress_bar_finalize (GObject *object)
   G_OBJECT_CLASS (gtk_progress_bar_parent_class)->finalize (object);
 }
 
-static gchar *
+static char *
 get_current_text (GtkProgressBar *pbar)
 {
   if (pbar->text)
@@ -792,7 +792,7 @@ gtk_progress_bar_pulse (GtkProgressBar *pbar)
  */
 void
 gtk_progress_bar_set_text (GtkProgressBar *pbar,
-                           const gchar    *text)
+                           const char     *text)
 {
   g_return_if_fail (GTK_IS_PROGRESS_BAR (pbar));
 
@@ -975,7 +975,7 @@ gtk_progress_bar_set_inverted (GtkProgressBar *pbar,
  * Returns: (nullable): text, or %NULL; this string is owned by the widget
  * and should not be modified or freed.
  */
-const gchar*
+const char *
 gtk_progress_bar_get_text (GtkProgressBar *pbar)
 {
   g_return_val_if_fail (GTK_IS_PROGRESS_BAR (pbar), NULL);

@@ -652,7 +652,7 @@ gtk_inspector_get_object_name (GObject *object)
 {
   if (GTK_IS_WIDGET (object))
     {
-      const gchar *id;
+      const char *id;
 
       id = gtk_widget_get_name (GTK_WIDGET (object));
       if (id != NULL && g_strcmp0 (id, G_OBJECT_TYPE_NAME (object)) != 0)
@@ -661,7 +661,7 @@ gtk_inspector_get_object_name (GObject *object)
 
   if (GTK_IS_BUILDABLE (object))
     {
-      const gchar *id;
+      const char *id;
 
       id = gtk_buildable_get_name (GTK_BUILDABLE (object));
       if (id != NULL && !g_str_has_prefix (id, "___object_"))
@@ -837,10 +837,10 @@ unmap (GtkWidget *widget)
 }
 
 static gboolean
-match_string (const gchar *string,
-              const gchar *text)
+match_string (const char *string,
+              const char *text)
 {
-  gchar *lower;
+  char *lower;
   gboolean match = FALSE;
 
   if (string)

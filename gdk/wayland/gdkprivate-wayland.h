@@ -153,7 +153,7 @@ void     _gdk_wayland_display_queue_events (GdkDisplay *display);
 
 GdkAppLaunchContext *_gdk_wayland_display_get_app_launch_context (GdkDisplay *display);
 
-GdkDisplay *_gdk_wayland_display_open (const gchar *display_name);
+GdkDisplay *_gdk_wayland_display_open (const char *display_name);
 
 GList *gdk_wayland_display_get_toplevel_surfaces (GdkDisplay *display);
 

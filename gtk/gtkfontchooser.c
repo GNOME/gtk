@@ -249,10 +249,10 @@ gtk_font_chooser_get_font_size (GtkFontChooser *fontchooser)
  *     of the current font, or %NULL if  no font is selected. You must
  *     free this string with g_free().
  */
-gchar *
+char *
 gtk_font_chooser_get_font (GtkFontChooser *fontchooser)
 {
-  gchar *fontname;
+  char *fontname;
 
   g_return_val_if_fail (GTK_IS_FONT_CHOOSER (fontchooser), NULL);
 
@@ -271,7 +271,7 @@ gtk_font_chooser_get_font (GtkFontChooser *fontchooser)
  */
 void
 gtk_font_chooser_set_font (GtkFontChooser *fontchooser,
-                           const gchar    *fontname)
+                           const char     *fontname)
 {
   g_return_if_fail (GTK_IS_FONT_CHOOSER (fontchooser));
   g_return_if_fail (fontname != NULL);
@@ -335,7 +335,7 @@ gtk_font_chooser_set_font_desc (GtkFontChooser             *fontchooser,
  * Returns: (transfer full): the text displayed in the
  *     preview area
  */
-gchar *
+char *
 gtk_font_chooser_get_preview_text (GtkFontChooser *fontchooser)
 {
   char *text;
@@ -357,7 +357,7 @@ gtk_font_chooser_get_preview_text (GtkFontChooser *fontchooser)
  */
 void
 gtk_font_chooser_set_preview_text (GtkFontChooser *fontchooser,
-                                   const gchar    *text)
+                                   const char     *text)
 {
   g_return_if_fail (GTK_IS_FONT_CHOOSER (fontchooser));
   g_return_if_fail (text != NULL);
@@ -429,7 +429,7 @@ gtk_font_chooser_set_filter_func (GtkFontChooser   *fontchooser,
 
 void
 _gtk_font_chooser_font_activated (GtkFontChooser *chooser,
-                                  const gchar    *fontname)
+                                  const char     *fontname)
 {
   g_return_if_fail (GTK_IS_FONT_CHOOSER (chooser));
 

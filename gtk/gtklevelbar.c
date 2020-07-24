@@ -159,7 +159,7 @@ static guint signals[NUM_SIGNALS] = { 0, };
 typedef struct _GtkLevelBarClass   GtkLevelBarClass;
 
 typedef struct {
-  gchar *name;
+  char *name;
   gdouble value;
 } GtkLevelBarOffset;
 
@@ -187,7 +187,7 @@ struct _GtkLevelBarClass {
   GtkWidgetClass parent_class;
 
   void (* offset_changed) (GtkLevelBar *self,
-                           const gchar *name);
+                           const char *name);
 };
 
 static void gtk_level_bar_set_value_internal (GtkLevelBar *self,
@@ -201,7 +201,7 @@ G_DEFINE_TYPE_WITH_CODE (GtkLevelBar, gtk_level_bar, GTK_TYPE_WIDGET,
                                                 gtk_level_bar_buildable_init))
 
 static GtkLevelBarOffset *
-gtk_level_bar_offset_new (const gchar *name,
+gtk_level_bar_offset_new (const char *name,
                           gdouble      value)
 {
   GtkLevelBarOffset *offset = g_slice_new0 (GtkLevelBarOffset);
@@ -224,7 +224,7 @@ offset_find_func (gconstpointer data,
                   gconstpointer user_data)
 {
   const GtkLevelBarOffset *offset = data;
-  const gchar *name = user_data;
+  const char *name = user_data;
 
   return g_strcmp0 (name, offset->name);
 }
@@ -241,7 +241,7 @@ offset_sort_func (gconstpointer a,
 
 static gboolean
 gtk_level_bar_ensure_offset (GtkLevelBar *self,
-                             const gchar *name,
+                             const char *name,
                              gdouble      value)
 {
   GList *existing;
@@ -570,7 +570,7 @@ static void
 update_level_style_classes (GtkLevelBar *self)
 {
   gdouble value;
-  const gchar *value_class = NULL;
+  const char *value_class = NULL;
   GtkLevelBarOffset *offset, *prev_offset;
   GList *l;
   int num_filled, num_blocks, i;
@@ -666,9 +666,9 @@ typedef struct {
 
 static void
 offset_start_element (GtkBuildableParseContext *context,
-                      const gchar              *element_name,
-                      const gchar             **names,
-                      const gchar             **values,
+                      const char               *element_name,
+                      const char              **names,
+                      const char              **values,
                       gpointer                  user_data,
                       GError                  **error)
 {
@@ -686,8 +686,8 @@ offset_start_element (GtkBuildableParseContext *context,
     }
   else if (strcmp (element_name, "offset") == 0)
     {
-      const gchar *name;
-      const gchar *value;
+      const char *name;
+      const char *value;
       GValue gvalue = G_VALUE_INIT;
       GtkLevelBarOffset *offset;
 
@@ -731,7 +731,7 @@ static gboolean
 gtk_level_bar_buildable_custom_tag_start (GtkBuildable       *buildable,
                                           GtkBuilder         *builder,
                                           GObject            *child,
-                                          const gchar        *tagname,
+                                          const char         *tagname,
                                           GtkBuildableParser *parser,
                                           gpointer           *parser_data)
 {
@@ -762,7 +762,7 @@ static void
 gtk_level_bar_buildable_custom_finished (GtkBuildable *buildable,
                                          GtkBuilder   *builder,
                                          GObject      *child,
-                                         const gchar  *tagname,
+                                         const char   *tagname,
                                          gpointer      user_data)
 {
   OffsetsParserData *data = user_data;
@@ -1311,7 +1311,7 @@ gtk_level_bar_set_inverted (GtkLevelBar *self,
  */
 void
 gtk_level_bar_remove_offset_value (GtkLevelBar *self,
-                                   const gchar *name)
+                                   const char *name)
 {
   GList *existing;
 
@@ -1343,7 +1343,7 @@ gtk_level_bar_remove_offset_value (GtkLevelBar *self,
  */
 void
 gtk_level_bar_add_offset_value (GtkLevelBar *self,
-                                const gchar *name,
+                                const char *name,
                                 gdouble      value)
 {
   GQuark name_quark;
@@ -1372,7 +1372,7 @@ gtk_level_bar_add_offset_value (GtkLevelBar *self,
  */
 gboolean
 gtk_level_bar_get_offset_value (GtkLevelBar *self,
-                                const gchar *name,
+                                const char *name,
                                 gdouble     *value)
 {
   GList *existing;

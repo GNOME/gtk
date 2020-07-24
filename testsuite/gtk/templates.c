@@ -252,9 +252,9 @@ test_color_chooser_dialog_show (void)
 
 /* Avoid warnings from GVFS-RemoteVolumeMonitor */
 static gboolean
-ignore_gvfs_warning (const gchar *log_domain,
+ignore_gvfs_warning (const char *log_domain,
                      GLogLevelFlags log_level,
-                     const gchar *message,
+                     const char *message,
                      gpointer user_data)
 {
   if (g_strcmp0 (log_domain, "GVFS-RemoteVolumeMonitor") == 0)

@@ -100,7 +100,7 @@ GDK_AVAILABLE_IN_ALL
 GType                 gdk_device_get_type       (void) G_GNUC_CONST;
 
 GDK_AVAILABLE_IN_ALL
-const gchar *         gdk_device_get_name       (GdkDevice *device);
+const char *         gdk_device_get_name       (GdkDevice *device);
 GDK_AVAILABLE_IN_ALL
 gboolean              gdk_device_get_has_cursor (GdkDevice *device);
 
@@ -142,9 +142,9 @@ GDK_AVAILABLE_IN_ALL
 GdkDeviceType gdk_device_get_device_type (GdkDevice *device);
 
 GDK_AVAILABLE_IN_ALL
-const gchar *gdk_device_get_vendor_id       (GdkDevice *device);
+const char *gdk_device_get_vendor_id       (GdkDevice *device);
 GDK_AVAILABLE_IN_ALL
-const gchar *gdk_device_get_product_id      (GdkDevice *device);
+const char *gdk_device_get_product_id      (GdkDevice *device);
 
 GDK_AVAILABLE_IN_ALL
 GdkSeat     *gdk_device_get_seat            (GdkDevice *device);

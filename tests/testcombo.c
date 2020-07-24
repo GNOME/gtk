@@ -941,7 +941,7 @@ main (int argc, char **argv)
 	GtkTreePath *path;
 	GtkTreeIter iter;
 	GtkCellArea *area;
-        gchar *text;
+        char *text;
         int i;
         gboolean done = FALSE;
 

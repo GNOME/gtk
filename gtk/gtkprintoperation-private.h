@@ -36,16 +36,16 @@ struct _GtkPrintOperationPrivate
   GtkPrintOperationAction action;
   GtkPrintStatus status;
   GError *error;
-  gchar *status_string;
+  char *status_string;
   GtkPageSetup *default_page_setup;
   GtkPrintSettings *print_settings;
-  gchar *job_name;
+  char *job_name;
   int nr_of_pages;
   int nr_of_pages_to_print;
   int page_position;
   int current_page;
   GtkUnit unit;
-  gchar *export_filename;
+  char *export_filename;
   guint use_full_page      : 1;
   guint track_print_status : 1;
   guint show_progress      : 1;
@@ -77,7 +77,7 @@ struct _GtkPrintOperationPrivate
   GtkNumberUpLayout manual_number_up_layout;
 
   GtkWidget *custom_widget;
-  gchar *custom_tab_label;
+  char *custom_tab_label;
   
   gpointer platform_data;
   GDestroyNotify free_platform_data;
@@ -116,7 +116,7 @@ cairo_surface_t *       _gtk_print_operation_platform_backend_create_preview_sur
 										      GtkPageSetup                *page_setup,
 										      gdouble                     *dpi_x,
 										      gdouble                     *dpi_y,
-										      gchar                       **target);
+										      char                        **target);
 void                    _gtk_print_operation_platform_backend_resize_preview_surface (GtkPrintOperation           *op,
 										      GtkPageSetup                *page_setup,
 										      cairo_surface_t             *surface);
@@ -129,7 +129,7 @@ void                    _gtk_print_operation_platform_backend_preview_end_page  
 
 void _gtk_print_operation_set_status (GtkPrintOperation *op,
 				      GtkPrintStatus     status,
-				      const gchar       *string);
+				      const char        *string);
 
 /* GtkPrintContext private functions: */
 

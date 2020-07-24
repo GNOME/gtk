@@ -35,11 +35,11 @@ struct _GtkSearchEnginePrivate {
   GtkSearchEngine *native;
   gboolean native_running;
   gboolean got_results;
-  gchar *native_error;
+  char *native_error;
 
   GtkSearchEngine *model;
   gboolean model_running;
-  gchar *model_error;
+  char *model_error;
 
   gboolean running;
   gboolean recursive;
@@ -253,7 +253,7 @@ finished (GtkSearchEngine *engine,
 
 static void
 error (GtkSearchEngine *engine,
-       const gchar     *message,
+       const char      *message,
        gpointer         data)
 {
   GtkSearchEngine *composite = GTK_SEARCH_ENGINE (data);
@@ -403,7 +403,7 @@ _gtk_search_engine_finished (GtkSearchEngine *engine,
 
 void
 _gtk_search_engine_error (GtkSearchEngine *engine,
-                          const gchar     *error_message)
+                          const char      *error_message)
 {
   g_return_if_fail (GTK_IS_SEARCH_ENGINE (engine));
 

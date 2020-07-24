@@ -49,11 +49,11 @@ struct _GtkCloudprintAccount
 {
   GObject parent_instance;
 
-  gchar *printer_id;
-  gchar *goa_path;
-  gchar *presentation_identity;
+  char *printer_id;
+  char *goa_path;
+  char *presentation_identity;
   RestProxy *rest_proxy;
-  gchar *oauth2_access_token;
+  char *oauth2_access_token;
 };
 
 static void                 gtk_cloudprint_account_class_init      (GtkCloudprintAccountClass *class);
@@ -100,9 +100,9 @@ gtk_cloudprint_account_get_type (void)
  * Returns: the new #GtkCloudprintAccount object
  **/
 GtkCloudprintAccount *
-gtk_cloudprint_account_new (const gchar *id,
-			    const gchar *path,
-			    const gchar *presentation_identity)
+gtk_cloudprint_account_new (const char *id,
+			    const char *path,
+			    const char *presentation_identity)
 {
   GtkCloudprintAccount *account = g_object_new (GTK_TYPE_CLOUDPRINT_ACCOUNT,
 						NULL);
@@ -189,7 +189,7 @@ cloudprint_json_parse (RestProxyCall *call, JsonObject **result, GError **error)
 
   if (!success)
     {
-      const gchar *message = "(no message)";
+      const char *message = "(no message)";
 
       if (json_object_has_member (json_object, "message"))
 	message = json_object_get_string_member (json_object, "message");
@@ -484,7 +484,7 @@ gtk_cloudprint_account_printer_rest_call_cb (RestProxyCall *call,
 
 void
 gtk_cloudprint_account_printer (GtkCloudprintAccount *account,
-				const gchar *printerid,
+				const char *printerid,
 				GCancellable *cancellable,
 				GAsyncReadyCallback callback,
 				gpointer user_data)
@@ -577,17 +577,17 @@ void
 gtk_cloudprint_account_submit (GtkCloudprintAccount *account,
 			       GtkPrinterCloudprint *printer,
 			       GMappedFile *file,
-			       const gchar *title,
+			       const char *title,
 			       GCancellable *cancellable,
 			       GAsyncReadyCallback callback,
 			       gpointer user_data)
 {
   GTask *task;
   RestProxyCall *call;
-  gchar *printerid = NULL;
+  char *printerid = NULL;
   RestParam *param;
   GError *error = NULL;
-  gchar *auth;
+  char *auth;
 
   g_object_get (printer,
 		"printer-id", &printerid,
@@ -655,7 +655,7 @@ gtk_cloudprint_account_submit_finish (GtkCloudprintAccount *account,
   return g_task_propagate_pointer (G_TASK (result), error);
 }
 
-const gchar *
+const char *
 gtk_cloudprint_account_get_presentation_identity (GtkCloudprintAccount *account)
 {
   return account->presentation_identity;

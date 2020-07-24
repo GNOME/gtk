@@ -30,7 +30,7 @@ new_window (GApplication *app,
 
   if (file != NULL)
     {
-      gchar *contents;
+      char *contents;
       gsize length;
 
       if (g_file_load_contents (file, NULL, &contents, &length, NULL, NULL))
@@ -56,7 +56,7 @@ static void
 open (GApplication  *application,
       GFile        **files,
       int            n_files,
-      const gchar   *hint)
+      const char    *hint)
 {
   int i;
 

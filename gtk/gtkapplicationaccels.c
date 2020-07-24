@@ -70,10 +70,10 @@ gtk_application_accels_new (void)
 
 void
 gtk_application_accels_set_accels_for_action (GtkApplicationAccels *accels,
-                                              const gchar          *detailed_action_name,
-                                              const gchar * const  *accelerators)
+                                              const char           *detailed_action_name,
+                                              const char * const  *accelerators)
 {
-  gchar *action_name;
+  char *action_name;
   GVariant *target;
   GtkShortcut *shortcut;
   GtkShortcutTrigger *trigger = NULL;
@@ -173,9 +173,9 @@ append_accelerators (GPtrArray          *accels,
     }
 }
 
-gchar **
+char **
 gtk_application_accels_get_accels_for_action (GtkApplicationAccels *accels,
-                                              const gchar          *detailed_action_name)
+                                              const char           *detailed_action_name)
 {
   GPtrArray *result;
   char *action_name;
@@ -190,7 +190,7 @@ gtk_application_accels_get_accels_for_action (GtkApplicationAccels *accels,
       g_critical ("Error parsing action name: %s", error->message);
       g_error_free (error);
       g_ptr_array_add (result, NULL);
-      return (gchar **) g_ptr_array_free (result, FALSE);
+      return (char **) g_ptr_array_free (result, FALSE);
     }
 
   for (i = 0; i < g_list_model_get_n_items (accels->shortcuts); i++)
@@ -222,7 +222,7 @@ gtk_application_accels_get_accels_for_action (GtkApplicationAccels *accels,
   if (target)
     g_variant_unref (target);
   g_ptr_array_add (result, NULL);
-  return (gchar **) g_ptr_array_free (result, FALSE);
+  return (char **) g_ptr_array_free (result, FALSE);
 }
 
 static gboolean
@@ -262,9 +262,9 @@ get_detailed_name_for_shortcut (GtkShortcut *shortcut)
                                        gtk_shortcut_get_arguments (shortcut));
 }
 
-gchar **
+char **
 gtk_application_accels_get_actions_for_accel (GtkApplicationAccels *accels,
-                                              const gchar          *accel)
+                                              const char           *accel)
 {
   GPtrArray *result;
   guint key, modifiers;
@@ -297,10 +297,10 @@ gtk_application_accels_get_actions_for_accel (GtkApplicationAccels *accels,
     }
 
   g_ptr_array_add (result, NULL);
-  return (gchar **) g_ptr_array_free (result, FALSE);
+  return (char **) g_ptr_array_free (result, FALSE);
 }
 
-gchar **
+char **
 gtk_application_accels_list_action_descriptions (GtkApplicationAccels *accels)
 {
   GPtrArray *result;
@@ -321,7 +321,7 @@ gtk_application_accels_list_action_descriptions (GtkApplicationAccels *accels)
     }
 
   g_ptr_array_add (result, NULL);
-  return (gchar **) g_ptr_array_free (result, FALSE);
+  return (char **) g_ptr_array_free (result, FALSE);
 }
 
 GListModel *

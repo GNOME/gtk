@@ -82,8 +82,8 @@ struct _GtkCupsRequest
   http_status_t last_status;
   ipp_t *ipp_request;
 
-  gchar *server;
-  gchar *resource;
+  char *server;
+  char *resource;
   GIOChannel *data_io;
   int attempts;
 
@@ -93,14 +93,14 @@ struct _GtkCupsRequest
   GtkCupsPollState poll_state;
   guint64 bytes_received;
 
-  gchar *password;
-  gchar *username;
+  char *password;
+  char *username;
 
   int own_http : 1;
   int need_password : 1;
   int need_auth_info : 1;
-  gchar **auth_info_required;
-  gchar **auth_info;
+  char **auth_info_required;
+  char **auth_info;
   GtkCupsPasswordState password_state;
 };
 
@@ -176,8 +176,8 @@ void                    gtk_cups_request_free              (GtkCupsRequest     *
 GtkCupsResult         * gtk_cups_request_get_result        (GtkCupsRequest     *request);
 gboolean                gtk_cups_request_is_done           (GtkCupsRequest     *request);
 void                    gtk_cups_request_encode_option     (GtkCupsRequest     *request,
-						            const gchar        *option,
-							    const gchar        *value);
+						            const char         *option,
+							    const char         *value);
 void                    gtk_cups_request_set_ipp_version   (GtkCupsRequest     *request,
 							    int                 major,
 							    int                 minor);

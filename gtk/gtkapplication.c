@@ -156,7 +156,7 @@ typedef struct
   gboolean         screensaver_active;
   GtkActionMuxer  *muxer;
   GtkBuilder      *menus_builder;
-  gchar           *help_overlay_path;
+  char            *help_overlay_path;
   guint            profiler_id;
 } GtkApplicationPrivate;
 
@@ -191,7 +191,7 @@ static void
 gtk_application_load_resources (GtkApplication *application)
 {
   GtkApplicationPrivate *priv = gtk_application_get_instance_private (application);
-  const gchar *base_path;
+  const char *base_path;
 
   base_path = g_application_get_resource_base_path (G_APPLICATION (application));
 
@@ -201,7 +201,7 @@ gtk_application_load_resources (GtkApplication *application)
   /* Expand the icon search path */
   {
     GtkIconTheme *default_theme;
-    gchar *iconspath;
+    char *iconspath;
 
     default_theme = gtk_icon_theme_get_for_display (gdk_display_get_default ());
     iconspath = g_strconcat (base_path, "/icons/", NULL);
@@ -211,7 +211,7 @@ gtk_application_load_resources (GtkApplication *application)
 
   /* Load the menus */
   {
-    gchar *menuspath;
+    char *menuspath;
 
     menuspath = g_strconcat (base_path, "/gtk/menus.ui", NULL);
     if (g_resources_get_info (menuspath, G_RESOURCE_LOOKUP_FLAGS_NONE, NULL, NULL, NULL))
@@ -230,12 +230,12 @@ gtk_application_load_resources (GtkApplication *application)
 
   /* Help overlay */
   {
-    gchar *path;
+    char *path;
 
     path = g_strconcat (base_path, "/gtk/help-overlay.ui", NULL);
     if (g_resources_get_info (path, G_RESOURCE_LOOKUP_FLAGS_NONE, NULL, NULL, NULL))
       {
-        const gchar * const accels[] = { "<Control>question", NULL };
+        const char * const accels[] = { "<Control>question", NULL };
 
         priv->help_overlay_path = path;
         gtk_application_set_accels_for_action (application, "win.show-help-overlay", accels);
@@ -295,7 +295,7 @@ gtk_application_shutdown (GApplication *g_application)
 
 static gboolean
 gtk_application_local_command_line (GApplication   *application,
-                                    gchar        ***arguments,
+                                    char         ***arguments,
                                     int            *exit_status)
 {
   return G_APPLICATION_CLASS (gtk_application_parent_class)->local_command_line (application, arguments, exit_status);
@@ -317,7 +317,7 @@ gtk_application_add_platform_data (GApplication    *application,
   display = gdk_display_get_default ();
   if (display)
     {
-      const gchar *startup_id;
+      const char *startup_id;
 
       startup_id = gdk_display_get_startup_notification_id (display);
       if (startup_id && g_utf8_validate (startup_id, -1, NULL))
@@ -504,7 +504,7 @@ gtk_application_finalize (GObject *object)
 
 #ifdef G_OS_UNIX
 
-static const gchar org_gnome_Sysprof3_Profiler_xml[] =
+static const char org_gnome_Sysprof3_Profiler_xml[] =
   "<node>"
     "<interface name='org.gnome.Sysprof3.Profiler'>"
       "<property name='Capabilities' type='a{sv}' access='read'/>"
@@ -521,10 +521,10 @@ static GDBusInterfaceInfo *org_gnome_Sysprof3_Profiler;
 
 static void
 sysprof_profiler_method_call (GDBusConnection       *connection,
-                              const gchar           *sender,
-                              const gchar           *object_path,
-                              const gchar           *interface_name,
-                              const gchar           *method_name,
+                              const char            *sender,
+                              const char            *object_path,
+                              const char            *interface_name,
+                              const char            *method_name,
                               GVariant              *parameters,
                               GDBusMethodInvocation *invocation,
                               gpointer               user_data)
@@ -797,7 +797,7 @@ gtk_application_class_init (GtkApplicationClass *class)
  * Returns: a new #GtkApplication instance
  */
 GtkApplication *
-gtk_application_new (const gchar       *application_id,
+gtk_application_new (const char        *application_id,
                      GApplicationFlags  flags)
 {
   g_return_val_if_fail (application_id == NULL || g_application_id_is_valid (application_id), NULL);
@@ -1084,7 +1084,7 @@ guint
 gtk_application_inhibit (GtkApplication             *application,
                          GtkWindow                  *window,
                          GtkApplicationInhibitFlags  flags,
-                         const gchar                *reason)
+                         const char                 *reason)
 {
   GtkApplicationPrivate *priv = gtk_application_get_instance_private (application);
 
@@ -1146,7 +1146,7 @@ gtk_application_get_application_accels (GtkApplication *application)
  * Returns: (transfer full): a %NULL-terminated array of strings,
  *     free with g_strfreev() when done
  */
-gchar **
+char **
 gtk_application_list_action_descriptions (GtkApplication *application)
 {
   GtkApplicationPrivate *priv = gtk_application_get_instance_private (application);
@@ -1176,11 +1176,11 @@ gtk_application_list_action_descriptions (GtkApplication *application)
  */
 void
 gtk_application_set_accels_for_action (GtkApplication      *application,
-                                       const gchar         *detailed_action_name,
-                                       const gchar * const *accels)
+                                       const char          *detailed_action_name,
+                                       const char * const *accels)
 {
   GtkApplicationPrivate *priv = gtk_application_get_instance_private (application);
-  gchar *action_and_target;
+  char *action_and_target;
 
   g_return_if_fail (GTK_IS_APPLICATION (application));
   g_return_if_fail (detailed_action_name != NULL);
@@ -1209,9 +1209,9 @@ gtk_application_set_accels_for_action (GtkApplication      *application,
  * Returns: (transfer full): accelerators for @detailed_action_name, as
  *     a %NULL-terminated array. Free with g_strfreev() when no longer needed
  */
-gchar **
+char **
 gtk_application_get_accels_for_action (GtkApplication *application,
-                                       const gchar    *detailed_action_name)
+                                       const char     *detailed_action_name)
 {
   GtkApplicationPrivate *priv = gtk_application_get_instance_private (application);
 
@@ -1245,9 +1245,9 @@ gtk_application_get_accels_for_action (GtkApplication *application,
  *
  * Returns: (transfer full): a %NULL-terminated array of actions for @accel
  */
-gchar **
+char **
 gtk_application_get_actions_for_accel (GtkApplication *application,
-                                       const gchar    *accel)
+                                       const char     *accel)
 {
   GtkApplicationPrivate *priv = gtk_application_get_instance_private (application);
 
@@ -1269,7 +1269,7 @@ gtk_application_get_action_muxer (GtkApplication *application)
 
 void
 gtk_application_insert_action_group (GtkApplication *application,
-                                     const gchar    *name,
+                                     const char     *name,
                                      GActionGroup   *action_group)
 {
   GtkApplicationPrivate *priv = gtk_application_get_instance_private (application);
@@ -1311,7 +1311,7 @@ gtk_application_handle_window_map (GtkApplication *application,
  */
 GMenu *
 gtk_application_get_menu_by_id (GtkApplication *application,
-                                const gchar    *id)
+                                const char     *id)
 {
   GtkApplicationPrivate *priv = gtk_application_get_instance_private (application);
   GObject *object;

@@ -90,8 +90,8 @@ void  gtk_pad_controller_set_action         (GtkPadController *controller,
                                              GtkPadActionType  type,
                                              int               index,
                                              int               mode,
-                                             const gchar      *label,
-                                             const gchar      *action_name);
+                                             const char       *label,
+                                             const char       *action_name);
 
 G_END_DECLS
 

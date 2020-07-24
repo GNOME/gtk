@@ -931,7 +931,7 @@ gdk_display_device_is_grabbed (GdkDisplay *display,
  * Returns: a string representing the display name. This string is owned
  * by GDK and should not be modified or freed.
  */
-const gchar *
+const char *
 gdk_display_get_name (GdkDisplay *display)
 {
   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
@@ -1127,7 +1127,7 @@ gdk_display_get_app_launch_context (GdkDisplay *display)
  *     display could not be opened
  */
 GdkDisplay *
-gdk_display_open (const gchar *display_name)
+gdk_display_open (const char *display_name)
 {
   return gdk_display_manager_open_display (gdk_display_manager_get (),
                                            display_name);
@@ -1172,7 +1172,7 @@ _gdk_display_get_next_serial (GdkDisplay *display)
  */
 void
 gdk_display_notify_startup_complete (GdkDisplay  *display,
-                                     const gchar *startup_id)
+                                     const char *startup_id)
 {
   g_return_if_fail (GDK_IS_DISPLAY (display));
 
@@ -1188,7 +1188,7 @@ gdk_display_notify_startup_complete (GdkDisplay  *display,
  *
  * Returns: the startup notification ID for @display, or %NULL
  */
-const gchar *
+const char *
 gdk_display_get_startup_notification_id (GdkDisplay *display)
 {
   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);

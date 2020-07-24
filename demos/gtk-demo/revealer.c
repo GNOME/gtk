@@ -25,7 +25,7 @@ static gboolean
 reveal_one (gpointer data)
 {
   GtkWidget *window = data;
-  gchar *name;
+  char *name;
   GtkRevealer *revealer;
 
   name = g_strdup_printf ("revealer%d", count);

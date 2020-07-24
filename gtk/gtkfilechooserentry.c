@@ -55,8 +55,8 @@ struct _GtkFileChooserEntry
 
   GFile *base_folder;
   GFile *current_folder_file;
-  gchar *dir_part;
-  gchar *file_part;
+  char *dir_part;
+  char *file_part;
 
   GtkTreeModel *completion_store;
   GtkFileFilter *current_filter;
@@ -93,7 +93,7 @@ static gboolean gtk_file_chooser_entry_tab_handler    (GtkEventControllerKey *ke
 
 #ifdef G_OS_WIN32
 static int      insert_text_callback      (GtkFileChooserEntry *widget,
-					   const gchar         *new_text,
+					   const char          *new_text,
 					   int                  new_text_length,
 					   int                 *position,
 					   gpointer             user_data);
@@ -184,7 +184,7 @@ _gtk_file_chooser_entry_class_init (GtkFileChooserEntryClass *class)
 
 static gboolean
 match_func (GtkEntryCompletion *compl,
-            const gchar        *key,
+            const char         *key,
             GtkTreeIter        *iter,
             gpointer            user_data)
 {
@@ -375,7 +375,7 @@ has_uri_scheme (const char *str)
 
 static GFile *
 gtk_file_chooser_get_file_for_text (GtkFileChooserEntry *chooser_entry,
-                                    const gchar         *str)
+                                    const char          *str)
 {
   GFile *file;
 
@@ -732,12 +732,12 @@ refresh_current_folder_and_file_part (GtkFileChooserEntry *chooser_entry)
 #ifdef G_OS_WIN32
 static int
 insert_text_callback (GtkFileChooserEntry *chooser_entry,
-		      const gchar	  *new_text,
+		      const char          *new_text,
 		      int        	   new_text_length,
 		      int        	  *position,
 		      gpointer   	   user_data)
 {
-  const gchar *colon = memchr (new_text, ':', new_text_length);
+  const char *colon = memchr (new_text, ':', new_text_length);
   int i;
 
   /* Disallow these characters altogether */
@@ -884,7 +884,7 @@ _gtk_file_chooser_entry_get_current_folder (GtkFileChooserEntry *chooser_entry)
  * Returns: the entered filename - this value is owned by the
  *  chooser entry and must not be modified or freed.
  **/
-const gchar *
+const char *
 _gtk_file_chooser_entry_get_file_part (GtkFileChooserEntry *chooser_entry)
 {
   const char *last_slash, *text;
@@ -994,7 +994,7 @@ _gtk_file_chooser_entry_get_is_folder (GtkFileChooserEntry *chooser_entry,
 void
 _gtk_file_chooser_entry_select_filename (GtkFileChooserEntry *chooser_entry)
 {
-  const gchar *str, *ext;
+  const char *str, *ext;
   glong len = -1;
 
   if (chooser_entry->action == GTK_FILE_CHOOSER_ACTION_SAVE)

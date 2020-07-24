@@ -38,7 +38,7 @@ typedef struct {
   /* This is assumed to be an interned string, it will be
    * compared by simply comparing the pointer.
    */
-  const gchar *contentformat;
+  const char *contentformat;
   gboolean transmute;
 } GdkWin32ContentFormatPair;
 
@@ -129,7 +129,7 @@ struct _GdkWin32Clipdrop
   GObject *parent_instance;
 
   /* interned strings for well-known image formats */
-  const gchar **known_pixbuf_formats;
+  const char **known_pixbuf_formats;
   int n_known_pixbuf_formats;
 
   /* GArray of GdkAtoms for various known Selection and DnD strings.
@@ -238,7 +238,7 @@ void     _gdk_win32_clipdrop_init                                  (void);
 
 gboolean _gdk_win32_format_uses_hdata                              (UINT                         w32format);
 
-gchar  * _gdk_win32_get_clipboard_format_name                      (UINT                         fmt,
+char   * _gdk_win32_get_clipboard_format_name                      (UINT                         fmt,
                                                                     gboolean                    *is_predefined);
 void     _gdk_win32_add_w32format_to_pairs                         (UINT                         format,
                                                                     GArray                      *array,
@@ -249,7 +249,7 @@ int      _gdk_win32_add_contentformat_to_pairs                     (const char  
 void     _gdk_win32_clipboard_default_output_done                  (GObject                     *clipboard,
                                                                     GAsyncResult                *result,
                                                                     gpointer                     user_data);
-gboolean _gdk_win32_transmute_contentformat                        (const gchar                 *from_contentformat,
+gboolean _gdk_win32_transmute_contentformat                        (const char                  *from_contentformat,
                                                                     UINT                         to_w32format,
                                                                     const guchar                *data,
                                                                     int                          length,
@@ -257,7 +257,7 @@ gboolean _gdk_win32_transmute_contentformat                        (const gchar 
                                                                     gsize                       *set_data_length);
 
 gboolean _gdk_win32_transmute_windows_data                         (UINT                         from_w32format,
-                                                                    const gchar                 *to_contentformat,
+                                                                    const char                  *to_contentformat,
                                                                     HANDLE                       hdata,
                                                                     guchar                     **set_data,
                                                                     gsize                       *set_data_length);

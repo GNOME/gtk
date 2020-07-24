@@ -117,7 +117,7 @@ key_test (void)
 }
 
 int
-main (int argc, gchar **argv)
+main (int argc, char **argv)
 {
   GtkWidget *dialog;
   

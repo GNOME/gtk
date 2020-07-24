@@ -129,7 +129,7 @@ test_error_trapping (GdkDisplay *gdk_display)
 }
 
 int
-main (int argc, gchar *argv[])
+main (int argc, char *argv[])
 {
   GdkDisplay *gdk_display;
   GdkDisplay *extra_display;

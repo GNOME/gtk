@@ -131,7 +131,7 @@ static void
 gtk_search_bar_buildable_add_child (GtkBuildable *buildable,
                                     GtkBuilder   *builder,
                                     GObject      *child,
-                                    const gchar  *type)
+                                    const char   *type)
 {
   if (GTK_IS_WIDGET (child))
     gtk_search_bar_set_child (GTK_SEARCH_BAR (buildable), GTK_WIDGET (child));

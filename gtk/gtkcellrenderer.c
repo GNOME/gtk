@@ -258,7 +258,7 @@ gtk_cell_renderer_class_init (GtkCellRendererClass *class)
    * static void
    * text_editing_started (GtkCellRenderer *cell,
    *                       GtkCellEditable *editable,
-   *                       const gchar     *path,
+   *                       const char      *path,
    *                       gpointer         data)
    * {
    *   if (GTK_IS_ENTRY (editable)) 
@@ -769,7 +769,7 @@ gboolean
 gtk_cell_renderer_activate (GtkCellRenderer      *cell,
 			    GdkEvent             *event,
 			    GtkWidget            *widget,
-			    const gchar          *path,
+			    const char           *path,
 			    const GdkRectangle   *background_area,
 			    const GdkRectangle   *cell_area,
 			    GtkCellRendererState  flags)
@@ -816,7 +816,7 @@ GtkCellEditable *
 gtk_cell_renderer_start_editing (GtkCellRenderer      *cell,
 				 GdkEvent             *event,
 				 GtkWidget            *widget,
-				 const gchar          *path,
+				 const char           *path,
 				 const GdkRectangle   *background_area,
 				 const GdkRectangle   *cell_area,
 				 GtkCellRendererState  flags)

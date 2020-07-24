@@ -186,7 +186,7 @@ get_device_property (HDEVINFO          device_infoset,
 
       if (error_code != ERROR_INSUFFICIENT_BUFFER)
         {
-          gchar *emsg = g_win32_error_message (error_code);
+          char *emsg = g_win32_error_message (error_code);
           g_warning ("Failed to get device node property {" G_GUID_FORMAT "},%lu size: %s",
                      g_format_guid (&property_key->fmtid),
                      property_key->pid,
@@ -212,7 +212,7 @@ get_device_property (HDEVINFO          device_infoset,
         {
           DWORD error_code = GetLastError ();
 
-          gchar *emsg = g_win32_error_message (error_code);
+          char *emsg = g_win32_error_message (error_code);
           g_warning ("Failed to get device node property {" G_GUID_FORMAT "},%lu: %s",
                      g_format_guid (&property_key->fmtid),
                      property_key->pid,
@@ -256,7 +256,7 @@ get_monitor_devices (GdkWin32Display *win32_display)
   for (device_index = 0; TRUE; device_index++)
     {
       gunichar2 *p;
-      gchar *instance_path;
+      char *instance_path;
       gunichar2 *prop;
       DWORD proptype;
       HKEY device_registry_key;
@@ -325,7 +325,7 @@ get_monitor_devices (GdkWin32Display *win32_display)
         {
           if (proptype == DEVPROP_TYPE_STRING)
             {
-              gchar *manufacturer = g_utf16_to_utf8 (prop, -1, NULL, NULL, NULL);
+              char *manufacturer = g_utf16_to_utf8 (prop, -1, NULL, NULL, NULL);
               gdk_monitor_set_manufacturer (mon, manufacturer);
               g_free (manufacturer);
             }
@@ -341,7 +341,7 @@ get_monitor_devices (GdkWin32Display *win32_display)
         {
           if (proptype == DEVPROP_TYPE_STRING)
             {
-              gchar *name = g_utf16_to_utf8 (prop, -1, NULL, NULL, NULL);
+              char *name = g_utf16_to_utf8 (prop, -1, NULL, NULL, NULL);
               gdk_monitor_set_model (mon, name);
               g_free (name);
             }
@@ -456,7 +456,7 @@ populate_monitor_devices_from_display_config (GPtrArray *monitors)
       int i;
       GdkWin32Monitor *w32mon;
       GdkMonitor *mon;
-      gchar *path, *path_lower;
+      char *path, *path_lower;
       DISPLAYCONFIG_RATIONAL *refresh;
 
       if ((dispconf_paths[path_index].flags & DISPLAYCONFIG_PATH_ACTIVE) == 0)
@@ -502,7 +502,7 @@ populate_monitor_devices_from_display_config (GPtrArray *monitors)
       if (!tdn.flags.friendlyNameForced)
         {
           /* monitorFriendlyDeviceName is usually nicer */
-          gchar *name = g_utf16_to_utf8 (tdn.monitorFriendlyDeviceName, -1, NULL, NULL, NULL);
+          char *name = g_utf16_to_utf8 (tdn.monitorFriendlyDeviceName, -1, NULL, NULL, NULL);
           gdk_monitor_set_model (mon, name);
           g_free (name);
         }
@@ -574,7 +574,7 @@ enum_monitor (HMONITOR hmonitor,
       for (i_monitor = 0; TRUE; i_monitor++)
         {
           DISPLAY_DEVICEW dd_monitor;
-          gchar *device_id_lower, *tmp;
+          char *device_id_lower, *tmp;
           DWORD i;
           GdkWin32Monitor *w32mon;
           GdkMonitor *mon;
@@ -631,7 +631,7 @@ enum_monitor (HMONITOR hmonitor,
           if (gdk_monitor_get_model (mon) == NULL)
             {
               
-              gchar *name = NULL;
+              char *name = NULL;
 
               /* Only use dd.DeviceName as a last resort, as it is just
                * \\.\DISPLAYX\MonitorY (for some values of X and Y).

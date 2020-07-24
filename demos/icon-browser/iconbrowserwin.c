@@ -44,13 +44,13 @@ icon_browser_window_get_icon_theme (IconBrowserWindow *win)
 
 static void
 add_icon (IconBrowserWindow *win,
-          const gchar       *name,
-          const gchar       *description,
-          const gchar       *context)
+          const char        *name,
+          const char        *description,
+          const char        *context)
 {
   GtkIconTheme *icon_theme = icon_browser_window_get_icon_theme (win);
-  gchar *regular_name;
-  gchar *symbolic_name;
+  char *regular_name;
+  char *symbolic_name;
   IbIcon *icon;
 
   regular_name = g_strdup (name);
@@ -77,9 +77,9 @@ add_icon (IconBrowserWindow *win,
 
 static void
 add_context (IconBrowserWindow *win,
-             const gchar       *id,
-             const gchar       *name,
-             const gchar       *description)
+             const char        *id,
+             const char        *name,
+             const char        *description)
 {
   IbContext *context;
 
@@ -161,7 +161,7 @@ copy_to_clipboard (GtkButton         *button,
 }
 
 static void
-set_image (GtkWidget *image, const gchar *name, int size)
+set_image (GtkWidget *image, const char *name, int size)
 {
   gtk_image_set_from_icon_name (GTK_IMAGE (image), name);
   gtk_image_set_pixel_size (GTK_IMAGE (image), size);
@@ -219,7 +219,7 @@ item_activated (GtkGridView       *view,
 static GdkPaintable *
 get_image_paintable (GtkImage *image)
 {
-  const gchar *icon_name;
+  const char *icon_name;
   GtkIconTheme *icon_theme;
   GtkIconPaintable *icon;
   int size;

@@ -61,7 +61,7 @@ image_size_value_changed (GtkSpinButton *spin_button,
 static void
 set_font_size (GtkWidget *widget, int size)
 {
-  const gchar *class[3] = { "small-font", "medium-font", "large-font" };
+  const char *class[3] = { "small-font", "medium-font", "large-font" };
 
   gtk_widget_add_css_class (widget, class[size]);
 }

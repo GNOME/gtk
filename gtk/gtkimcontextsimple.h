@@ -71,7 +71,7 @@ void          gtk_im_context_simple_add_table (GtkIMContextSimple *context_simpl
 					       int                 n_seqs);
 GDK_AVAILABLE_IN_ALL
 void          gtk_im_context_simple_add_compose_file (GtkIMContextSimple *context_simple,
-                                                      const gchar        *compose_file);
+                                                      const char         *compose_file);
 
 
 G_END_DECLS

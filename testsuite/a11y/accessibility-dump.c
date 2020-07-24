@@ -252,12 +252,12 @@ compare_attr (gconstpointer a, gconstpointer b)
 static void
 dump_text_attributes (GString         *string,
                       int              depth,
-                      const gchar     *name,
+                      const char      *name,
                       AtkAttributeSet *attributes)
 {
   GSList *l;
   AtkAttribute *attr;
-  const gchar *value;
+  const char *value;
 
   if (attributes == NULL)
     return;
@@ -301,7 +301,7 @@ dump_text_attributes (GString         *string,
   atk_attribute_set_free (attributes);
 }
 
-static const gchar *
+static const char *
 layer_name (AtkLayer layer)
 {
   GEnumClass *class;
@@ -334,7 +334,7 @@ dump_atk_text (AtkText *atk_text,
                guint    depth,
                GString *string)
 {
-  gchar *text;
+  char *text;
   int i, start, end;
 
   g_string_append_printf (string, "%*s<AtkText>\n", depth, "");
@@ -436,7 +436,7 @@ dump_atk_value (AtkValue *atk_value,
 {
   AtkRange *range;
   gdouble value;
-  gchar *text;
+  char *text;
 
   value = 0.0;
   text = NULL;
@@ -483,7 +483,7 @@ dump_atk_hyperlink (AtkHyperlink *link,
 
   for (i = 0; i < atk_hyperlink_get_n_anchors (link); i++)
     {
-      gchar *uri;
+      char *uri;
 
       uri = atk_hyperlink_get_uri (link, i);
       g_string_append_printf (string, " %s", uri);
@@ -548,7 +548,7 @@ dump_atk_table (AtkTable *table,
   int n_selected;
   int i, j;
   AtkObject *obj;
-  const gchar *desc;
+  const char *desc;
 
   g_string_append_printf (string, "%*s<AtkTable>\n", depth, "");
 

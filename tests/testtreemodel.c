@@ -47,7 +47,7 @@ list_store_append (GtkTreeModel *model,
 {
   GtkListStore *store = GTK_LIST_STORE (model);
   GtkTreeIter iter;
-  gchar *text;
+  char *text;
 
   text = g_strdup_printf ("row %d", i);
   gtk_list_store_append (store, &iter);
@@ -62,7 +62,7 @@ list_store_prepend (GtkTreeModel *model,
 {
   GtkListStore *store = GTK_LIST_STORE (model);
   GtkTreeIter iter;
-  gchar *text;
+  char *text;
 
   text = g_strdup_printf ("row %d", i);
   gtk_list_store_prepend (store, &iter);
@@ -77,7 +77,7 @@ list_store_insert (GtkTreeModel *model,
 {
   GtkListStore *store = GTK_LIST_STORE (model);
   GtkTreeIter iter;
-  gchar *text;
+  char *text;
   int n;
 
   text = g_strdup_printf ("row %d", i);
@@ -93,7 +93,7 @@ compare (GtkTreeModel *model,
 	 GtkTreeIter  *b,
 	 gpointer      data)
 {
-  gchar *str_a, *str_b;
+  char *str_a, *str_b;
   int result;
 
   gtk_tree_model_get (model, a, 1, &str_a, -1);
@@ -114,7 +114,7 @@ tree_store_append (GtkTreeModel *model,
 {
   GtkTreeStore *store = GTK_TREE_STORE (model);
   GtkTreeIter iter;
-  gchar *text;
+  char *text;
 
   text = g_strdup_printf ("row %d", i);
   gtk_tree_store_append (store, &iter, NULL);
@@ -129,7 +129,7 @@ tree_store_prepend (GtkTreeModel *model,
 {
   GtkTreeStore *store = GTK_TREE_STORE (model);
   GtkTreeIter iter;
-  gchar *text;
+  char *text;
 
   text = g_strdup_printf ("row %d", i);
   gtk_tree_store_prepend (store, &iter, NULL);
@@ -144,7 +144,7 @@ tree_store_insert_flat (GtkTreeModel *model,
 {
   GtkTreeStore *store = GTK_TREE_STORE (model);
   GtkTreeIter iter;
-  gchar *text;
+  char *text;
   int n;
 
   text = g_strdup_printf ("row %d", i);
@@ -188,7 +188,7 @@ tree_store_insert_deep (GtkTreeModel *model,
 {
   GtkTreeStore *store = GTK_TREE_STORE (model);
   GtkTreeIter iter;
-  gchar *text;
+  char *text;
   FindData data;
 
   text = g_strdup_printf ("row %d", i);

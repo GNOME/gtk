@@ -46,7 +46,7 @@ static gboolean ignore_theme_index = FALSE;
 static gboolean quiet = FALSE;
 static gboolean index_only = TRUE;
 static gboolean validate = FALSE;
-static gchar *var_name = (gchar *) "-";
+static char *var_name = (char *) "-";
 
 #define CACHE_NAME "icon-theme.cache"
 
@@ -84,9 +84,9 @@ static int check_dir_mtime (const char        *dir,
 }
 
 static gboolean
-is_cache_up_to_date (const gchar *path)
+is_cache_up_to_date (const char *path)
 {
-  gchar *cache_path;
+  char *cache_path;
   int retval;
 
   cache_path = g_build_filename (path, CACHE_NAME, NULL);
@@ -109,10 +109,10 @@ is_cache_up_to_date (const gchar *path)
 #else  /* !HAVE_FTW_H */
 
 gboolean
-is_cache_up_to_date (const gchar *path)
+is_cache_up_to_date (const char *path)
 {
   GStatBuf path_stat, cache_stat;
-  gchar *cache_path;
+  char *cache_path;
   int retval;
 
   retval = g_stat (path, &path_stat);
@@ -141,10 +141,10 @@ is_cache_up_to_date (const gchar *path)
 #endif  /* !HAVE_FTW_H */
 
 static gboolean
-has_theme_index (const gchar *path)
+has_theme_index (const char *path)
 {
   gboolean result;
-  gchar *index_path;
+  char *index_path;
 
   index_path = g_build_filename (path, "index.theme", NULL);
 
@@ -236,7 +236,7 @@ load_icon_data (const char *path)
   int i;
   int *ivalues;
   GError *error = NULL;
-  gchar **keys;
+  char **keys;
   gsize n_keys;
   IconData *data;
 
@@ -295,16 +295,16 @@ load_icon_data (const char *path)
     }
 
   keys = g_key_file_get_keys (icon_file, "Icon Data", &n_keys, &error);
-  data->display_names = g_new0 (gchar *, 2 * n_keys + 1);
+  data->display_names = g_new0 (char *, 2 * n_keys + 1);
   data->n_display_names = 0;
 
   for (i = 0; i < n_keys; i++)
     {
-      gchar *lang, *name;
+      char *lang, *name;
 
       if (g_str_has_prefix (keys[i], "DisplayName"))
 	{
-	  gchar *open, *close = NULL;
+	  char *open, *close = NULL;
 
 	  open = strchr (keys[i], '[');
 
@@ -350,9 +350,9 @@ load_icon_data (const char *path)
  * probably go to GLib
  */
 static void
-canonicalize_filename (gchar *filename)
+canonicalize_filename (char *filename)
 {
-  gchar *p, *q;
+  char *p, *q;
   gboolean last_was_slash = FALSE;
 
   p = filename;
@@ -418,12 +418,12 @@ canonicalize_filename (gchar *filename)
   *q = '\0';
 }
 
-static gchar *
-follow_links (const gchar *path)
+static char *
+follow_links (const char *path)
 {
-  gchar *target;
-  gchar *d, *s;
-  gchar *path2 = NULL;
+  char *target;
+  char *d, *s;
+  char *path2 = NULL;
 
   path2 = g_strdup (path);
   while (g_file_test (path2, G_FILE_TEST_IS_SYMLINK))
@@ -459,14 +459,14 @@ follow_links (const gchar *path)
 
 static void
 maybe_cache_image_data (Image       *image,
-			const gchar *path)
+			const char *path)
 {
   if (!index_only && !image->image_data &&
       (g_str_has_suffix (path, ".png") || g_str_has_suffix (path, ".xpm")))
     {
       GdkPixbuf *pixbuf;
       ImageData *idata;
-      gchar *path2;
+      char *path2;
 
       idata = g_hash_table_lookup (image_data_hash, path);
       path2 = follow_links (path);
@@ -523,12 +523,12 @@ G_GNUC_END_IGNORE_DEPRECATIONS;
 
 static void
 maybe_cache_icon_data (Image       *image,
-                       const gchar *path)
+                       const char *path)
 {
   if (g_str_has_suffix (path, ".icon"))
     {
       IconData *idata = NULL;
-      gchar *path2 = NULL;
+      char *path2 = NULL;
 
       idata = g_hash_table_lookup (icon_data_hash, path);
       path2 = follow_links (path);
@@ -576,7 +576,7 @@ maybe_cache_icon_data (Image       *image,
  * directory separators on all platforms.
  */
 static void
-replace_backslashes_with_slashes (gchar *path)
+replace_backslashes_with_slashes (char *path)
 {
   size_t i;
   if (path == NULL)
@@ -587,8 +587,8 @@ replace_backslashes_with_slashes (gchar *path)
 }
 
 static GList *
-scan_directory (const gchar *base_path,
-		const gchar *subdir,
+scan_directory (const char *base_path,
+		const char *subdir,
 		GHashTable  *files,
 		GList       *directories,
 		int          depth)
@@ -596,8 +596,8 @@ scan_directory (const gchar *base_path,
   GHashTable *dir_hash;
   GDir *dir;
   GList *list = NULL, *iterator = NULL;
-  const gchar *name;
-  gchar *dir_path;
+  const char *name;
+  char *dir_path;
   gboolean dir_added = FALSE;
   guint dir_index = 0xffff;
 
@@ -620,18 +620,18 @@ scan_directory (const gchar *base_path,
     {
       name = iterator->data;
 
-      gchar *path;
+      char *path;
       gboolean retval;
       int flags = 0;
       Image *image;
-      gchar *basename, *dot;
+      char *basename, *dot;
 
       path = g_build_filename (dir_path, name, NULL);
 
       retval = g_file_test (path, G_FILE_TEST_IS_DIR);
       if (retval)
 	{
-	  gchar *subsubdir;
+	  char *subsubdir;
 
 	  if (subdir)
 	    subsubdir = g_build_path ("/", subdir, name, NULL);
@@ -714,7 +714,7 @@ typedef struct _HashNode HashNode;
 struct _HashNode
 {
   HashNode *next;
-  gchar *name;
+  char *name;
   GList *image_list;
   int offset;
 };
@@ -762,21 +762,21 @@ convert_to_hash (gpointer key, gpointer value, gpointer user_data)
 static GHashTable *string_pool = NULL;
 
 static int
-find_string (const gchar *n)
+find_string (const char *n)
 {
   return GPOINTER_TO_INT (g_hash_table_lookup (string_pool, n));
 }
 
 static void
-add_string (const gchar *n, int offset)
+add_string (const char *n, int offset)
 {
   g_hash_table_insert (string_pool, (gpointer) n, GINT_TO_POINTER (offset));
 }
 
 static gboolean
-write_string (FILE *cache, const gchar *n)
+write_string (FILE *cache, const char *n)
 {
-  gchar *s;
+  char *s;
   int i, l;
 
   l = ALIGN_VALUE (strlen (n) + 1, 4);
@@ -1417,7 +1417,7 @@ write_file (FILE *cache, GHashTable *files, GList *directories)
 }
 
 static gboolean
-validate_file (const gchar *file)
+validate_file (const char *file)
 {
   GMappedFile *map;
   CacheInfo info;
@@ -1469,11 +1469,11 @@ safe_fclose (FILE *f)
 }
 
 static void
-build_cache (const gchar *path)
+build_cache (const char *path)
 {
-  gchar *cache_path, *tmp_cache_path;
+  char *cache_path, *tmp_cache_path;
 #ifdef G_OS_WIN32
-  gchar *bak_cache_path = NULL;
+  char *bak_cache_path = NULL;
 #endif
   GHashTable *files;
   FILE *cache;
@@ -1620,10 +1620,10 @@ opentmp:
 }
 
 static void
-write_csource (const gchar *path)
+write_csource (const char *path)
 {
-  gchar *cache_path;
-  gchar *data;
+  char *cache_path;
+  char *data;
   gsize len;
   int i;
 
@@ -1666,9 +1666,9 @@ static GOptionEntry args[] = {
 };
 
 static void
-printerr_handler (const gchar *string)
+printerr_handler (const char *string)
 {
-  const gchar *charset;
+  const char *charset;
 
   fputs (g_get_prgname (), stderr);
   fputs (": ", stderr);
@@ -1676,7 +1676,7 @@ printerr_handler (const gchar *string)
     fputs (string, stderr); /* charset is UTF-8 already */
   else
     {
-      gchar *result;
+      char *result;
 
       result = g_convert_with_fallback (string, -1, charset, "UTF-8", "?", NULL, NULL, NULL);
 
@@ -1694,7 +1694,7 @@ printerr_handler (const gchar *string)
 int
 main (int argc, char **argv)
 {
-  gchar *path;
+  char *path;
   GOptionContext *context;
 
   if (argc < 2)
@@ -1723,7 +1723,7 @@ main (int argc, char **argv)
 
   if (validate)
     {
-       gchar *file = g_build_filename (path, CACHE_NAME, NULL);
+       char *file = g_build_filename (path, CACHE_NAME, NULL);
 
        if (!g_file_test (file, G_FILE_TEST_IS_REGULAR))
          {

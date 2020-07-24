@@ -27,7 +27,7 @@ static const int n_infos = G_N_ELEMENTS (standard_names);
 static const int n_extra = G_N_ELEMENTS (extra_ppd_names);
 
 typedef struct {
-  const gchar *s;
+  const char *s;
   int          len;
   int          suffix;
   int          offset;
@@ -37,7 +37,7 @@ static NameInfo *names = NULL;
 static int n_names = 0;
 
 static void
-add_name (const gchar *name)
+add_name (const char *name)
 {
   names[n_names].s = name;
   names[n_names].len = strlen (name);
@@ -48,7 +48,7 @@ add_name (const gchar *name)
 }
 
 static int
-find_name (const gchar *name)
+find_name (const char *name)
 {
   int i;
 
@@ -70,12 +70,12 @@ find_name (const gchar *name)
 #define POINTS_PER_INCH 72
 
 static gboolean
-parse_media_size (const gchar *size,
+parse_media_size (const char *size,
                   gdouble     *width_mm, 
                   gdouble     *height_mm)
 {
-  const gchar *p;
-  gchar *e;
+  const char *p;
+  char *e;
   gdouble short_dim, long_dim;
 
   p = size;

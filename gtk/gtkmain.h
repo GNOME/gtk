@@ -64,7 +64,7 @@ GDK_AVAILABLE_IN_ALL
 guint gtk_get_interface_age (void) G_GNUC_CONST;
 
 GDK_AVAILABLE_IN_ALL
-const gchar* gtk_check_version (guint   required_major,
+const char * gtk_check_version (guint   required_major,
                                 guint   required_minor,
                                 guint   required_micro);
 

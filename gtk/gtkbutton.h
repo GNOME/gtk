@@ -79,11 +79,11 @@ GType          gtk_button_get_type          (void) G_GNUC_CONST;
 GDK_AVAILABLE_IN_ALL
 GtkWidget*     gtk_button_new               (void);
 GDK_AVAILABLE_IN_ALL
-GtkWidget*     gtk_button_new_with_label    (const gchar    *label);
+GtkWidget*     gtk_button_new_with_label    (const char     *label);
 GDK_AVAILABLE_IN_ALL
-GtkWidget*     gtk_button_new_from_icon_name (const gchar    *icon_name);
+GtkWidget*     gtk_button_new_from_icon_name (const char     *icon_name);
 GDK_AVAILABLE_IN_ALL
-GtkWidget*     gtk_button_new_with_mnemonic (const gchar    *label);
+GtkWidget*     gtk_button_new_with_mnemonic (const char     *label);
 
 GDK_AVAILABLE_IN_ALL
 void                  gtk_button_set_has_frame      (GtkButton      *button,
@@ -92,9 +92,9 @@ GDK_AVAILABLE_IN_ALL
 gboolean              gtk_button_get_has_frame      (GtkButton      *button);
 GDK_AVAILABLE_IN_ALL
 void                  gtk_button_set_label          (GtkButton      *button,
-						     const gchar    *label);
+						     const char     *label);
 GDK_AVAILABLE_IN_ALL
-const gchar *         gtk_button_get_label          (GtkButton      *button);
+const char *         gtk_button_get_label          (GtkButton      *button);
 GDK_AVAILABLE_IN_ALL
 void                  gtk_button_set_use_underline  (GtkButton      *button,
 						     gboolean        use_underline);

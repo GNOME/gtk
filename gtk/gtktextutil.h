@@ -34,7 +34,7 @@ G_BEGIN_DECLS
  */
 
 GdkPaintable *    gtk_text_util_create_drag_icon  (GtkWidget     *widget,
-                                                   gchar         *text,
+                                                   char          *text,
                                                    gssize         len);
 GdkPaintable *    gtk_text_util_create_rich_drag_icon (GtkWidget     *widget,
                                                    GtkTextBuffer *buffer,

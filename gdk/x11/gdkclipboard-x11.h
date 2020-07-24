@@ -34,7 +34,7 @@ typedef struct _GdkX11Clipboard GdkX11Clipboard;
 GType                   gdk_x11_clipboard_get_type              (void) G_GNUC_CONST;
 
 GdkClipboard *          gdk_x11_clipboard_new                   (GdkDisplay             *display,
-                                                                 const gchar            *selection);
+                                                                 const char             *selection);
 
 GSList *                gdk_x11_clipboard_formats_to_targets    (GdkContentFormats      *formats);
 Atom *                  gdk_x11_clipboard_formats_to_atoms      (GdkDisplay             *display,

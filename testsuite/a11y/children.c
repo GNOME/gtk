@@ -211,11 +211,11 @@ test_add_remove (GtkWidget *widget)
 }
 
 static void
-add_child_test (const gchar      *prefix,
+add_child_test (const char       *prefix,
                 GTestFixtureFunc  test_func,
                 GtkWidget        *widget)
 {
-  gchar *path;
+  char *path;
 
   path = g_strdup_printf ("%s/%s", prefix, G_OBJECT_TYPE_NAME (widget));
   g_test_add_vtable (path,

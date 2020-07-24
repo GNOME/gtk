@@ -60,8 +60,8 @@ struct _GtkPlacesViewClass
                                      GtkPlacesOpenFlags  open_flags);
 
   void    (* show_error_message)     (GtkPlacesSidebar      *sidebar,
-                                      const gchar           *primary,
-                                      const gchar           *secondary);
+                                      const char            *primary,
+                                      const char            *secondary);
 };
 
 struct _GtkPlacesView
@@ -78,7 +78,7 @@ struct _GtkPlacesView
 
   GCancellable                  *cancellable;
 
-  gchar                         *search_query;
+  char                          *search_query;
 
   GtkWidget                     *actionbar;
   GtkWidget                     *address_entry;
@@ -160,7 +160,7 @@ enum {
   LAST_SIGNAL
 };
 
-const gchar *unsupported_protocols [] =
+const char *unsupported_protocols [] =
 {
   "file", "afc", "obex", "http",
   "trash", "burn", "computer",
@@ -184,8 +184,8 @@ emit_open_location (GtkPlacesView      *view,
 
 static void
 emit_show_error_message (GtkPlacesView *view,
-                         gchar         *primary_message,
-                         gchar         *secondary_message)
+                         char          *primary_message,
+                         char          *secondary_message)
 {
   g_signal_emit (view, places_view_signals[SHOW_ERROR_MESSAGE],
                          0, primary_message, secondary_message);
@@ -202,8 +202,8 @@ server_list_load (GtkPlacesView *view)
 {
   GBookmarkFile *bookmarks;
   GError *error = NULL;
-  gchar *datadir;
-  gchar *filename;
+  char *datadir;
+  char *filename;
 
   bookmarks = g_bookmark_file_new ();
   datadir = g_build_filename (g_get_user_config_dir (), "gtk-4.0", NULL);
@@ -262,7 +262,7 @@ server_list_load (GtkPlacesView *view)
 static void
 server_list_save (GBookmarkFile *bookmarks)
 {
-  gchar *filename;
+  char *filename;
 
   filename = g_build_filename (g_get_user_config_dir (), "gtk-4.0", "servers", NULL);
   g_bookmark_file_to_file (bookmarks, filename, NULL);
@@ -276,8 +276,8 @@ server_list_add_server (GtkPlacesView *view,
   GBookmarkFile *bookmarks;
   GFileInfo *info;
   GError *error;
-  gchar *title;
-  gchar *uri;
+  char *title;
+  char *uri;
 
   error = NULL;
   bookmarks = server_list_load (view);
@@ -308,7 +308,7 @@ server_list_add_server (GtkPlacesView *view,
 
 static void
 server_list_remove_server (GtkPlacesView *view,
-                           const gchar   *uri)
+                           const char    *uri)
 {
   GBookmarkFile *bookmarks;
 
@@ -489,7 +489,7 @@ is_external_volume (GVolume *volume)
 {
   gboolean is_external;
   GDrive *drive;
-  gchar *id;
+  char *id;
 
   drive = g_volume_get_drive (volume);
   id = g_volume_get_identifier (volume, G_VOLUME_IDENTIFIER_KIND_CLASS);
@@ -510,7 +510,7 @@ is_external_volume (GVolume *volume)
 
 typedef struct
 {
-  gchar         *uri;
+  char          *uri;
   GtkPlacesView *view;
 } RemoveServerData;
 
@@ -527,7 +527,7 @@ populate_servers (GtkPlacesView *view)
 {
   GBookmarkFile *server_list;
   GtkWidget *child;
-  gchar **uris;
+  char **uris;
   gsize num_uris;
   int i;
 
@@ -561,8 +561,8 @@ populate_servers (GtkPlacesView *view)
       GtkWidget *grid;
       GtkWidget *button;
       GtkWidget *label;
-      gchar *name;
-      gchar *dup_uri;
+      char *name;
+      char *dup_uri;
 
       name = g_bookmark_file_get_title (server_list, uris[i], NULL);
       dup_uri = g_strdup (uris[i]);
@@ -706,9 +706,9 @@ add_volume (GtkPlacesView *view,
   GMount *mount;
   GFile *root;
   GIcon *icon;
-  gchar *identifier;
-  gchar *name;
-  gchar *path;
+  char *identifier;
+  char *name;
+  char *path;
 
   if (is_external_volume (volume))
     return;
@@ -754,10 +754,10 @@ add_mount (GtkPlacesView *view,
   gboolean is_network;
   GFile *root;
   GIcon *icon;
-  gchar *name;
-  gchar *path;
-  gchar *uri;
-  gchar *schema;
+  char *name;
+  char *path;
+  char *uri;
+  char *schema;
 
   icon = g_mount_get_icon (mount);
   name = g_mount_get_name (mount);
@@ -814,8 +814,8 @@ static void
 add_file (GtkPlacesView *view,
           GFile         *file,
           GIcon         *icon,
-          const gchar   *display_name,
-          const gchar   *path,
+          const char    *display_name,
+          const char    *path,
           gboolean       is_network)
 {
   GtkWidget *row;
@@ -939,10 +939,10 @@ populate_networks (GtkPlacesView   *view,
   GList *l;
   GFile *file;
   GFile *activatable_file;
-  gchar *uri;
+  char *uri;
   GFileType type;
   GIcon *icon;
-  gchar *display_name;
+  char *display_name;
 
   for (l = detected_networks; l != NULL; l = l->next)
     {
@@ -1044,7 +1044,7 @@ static void
 fetch_networks (GtkPlacesView *view)
 {
   GFile *network_file;
-  const gchar * const *supported_uris;
+  const char * const *supported_uris;
   gboolean found;
 
   supported_uris = g_vfs_get_supported_uri_schemes (g_vfs_get_default ());
@@ -1565,8 +1565,8 @@ unmount_cb (GtkWidget  *widget,
 
 static void
 attach_protocol_row_to_grid (GtkGrid     *grid,
-                             const gchar *protocol_name,
-                             const gchar *protocol_prefix)
+                             const char *protocol_name,
+                             const char *protocol_prefix)
 {
   GtkWidget *name_label;
   GtkWidget *prefix_label;
@@ -1583,7 +1583,7 @@ attach_protocol_row_to_grid (GtkGrid     *grid,
 static void
 populate_available_protocols_grid (GtkGrid *grid)
 {
-  const gchar* const *supported_protocols;
+  const char * const *supported_protocols;
   gboolean has_any = FALSE;
 
   supported_protocols = g_vfs_get_supported_uri_schemes (g_vfs_get_default ());
@@ -1830,7 +1830,7 @@ on_eject_button_clicked (GtkWidget        *widget,
 static void
 on_connect_button_clicked (GtkPlacesView *view)
 {
-  const gchar *uri;
+  const char *uri;
   GFile *file;
 
   file = NULL;
@@ -1863,8 +1863,8 @@ on_connect_button_clicked (GtkPlacesView *view)
 static void
 on_address_entry_text_changed (GtkPlacesView *view)
 {
-  const gchar* const *supported_protocols;
-  gchar *address, *scheme;
+  const char * const *supported_protocols;
+  char *address, *scheme;
   gboolean supported;
 
   supported = FALSE;
@@ -1918,7 +1918,7 @@ on_recent_servers_listbox_row_activated (GtkPlacesView    *view,
                                          GtkPlacesViewRow *row,
                                          GtkWidget        *listbox)
 {
-  gchar *uri;
+  char *uri;
 
   uri = g_object_get_data (G_OBJECT (row), "uri");
 
@@ -1943,8 +1943,8 @@ listbox_filter_func (GtkListBoxRow *row,
   gboolean is_placeholder;
   gboolean retval;
   gboolean searching;
-  gchar *name;
-  gchar *path;
+  char *name;
+  char *path;
 
   retval = FALSE;
   searching = view->search_query && view->search_query[0] != '\0';
@@ -1992,7 +1992,7 @@ listbox_header_func (GtkListBoxRow *row,
                      gpointer       user_data)
 {
   gboolean row_is_network;
-  gchar *text;
+  char *text;
 
   text = NULL;
   row_is_network = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (row), "is-network"));
@@ -2074,8 +2074,8 @@ listbox_sort_func (GtkListBoxRow *row1,
 {
   gboolean row1_is_network;
   gboolean row2_is_network;
-  gchar *path1;
-  gchar *path2;
+  char *path1;
+  char *path2;
   gboolean *is_placeholder1;
   gboolean *is_placeholder2;
   int retval;
@@ -2443,7 +2443,7 @@ gtk_places_view_get_open_flags (GtkPlacesView *view)
  *
  * Returns: (transfer none): the current search query.
  */
-const gchar*
+const char *
 gtk_places_view_get_search_query (GtkPlacesView *view)
 {
   g_return_val_if_fail (GTK_IS_PLACES_VIEW (view), NULL);
@@ -2461,7 +2461,7 @@ gtk_places_view_get_search_query (GtkPlacesView *view)
  */
 void
 gtk_places_view_set_search_query (GtkPlacesView *view,
-                                  const gchar   *query_text)
+                                  const char    *query_text)
 {
   g_return_if_fail (GTK_IS_PLACES_VIEW (view));
 

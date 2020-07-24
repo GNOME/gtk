@@ -572,7 +572,7 @@ item_activated_cb (GtkGesture     *gesture,
   GtkWidget *item;
   GtkCellView *view;
   GtkTreePath *path;
-  gchar *path_str;
+  char *path_str;
   gboolean is_header = FALSE;
   gboolean has_submenu = FALSE;
 

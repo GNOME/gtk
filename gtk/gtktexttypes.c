@@ -28,17 +28,17 @@
 /* These are used to represent embedded non-character objects
  * if you return a string representation of a text buffer
  */
-const gchar _gtk_text_unknown_char_utf8[] = { '\xEF', '\xBF', '\xBC', '\0' };
+const char _gtk_text_unknown_char_utf8[] = { '\xEF', '\xBF', '\xBC', '\0' };
 
 /* This is to be used only by libgtk test programs */
-const gchar *
+const char *
 gtk_text_unknown_char_utf8_gtk_tests_only (void)
 {
   return _gtk_text_unknown_char_utf8;
 }
 
 gboolean
-gtk_text_byte_begins_utf8_char (const gchar *byte)
+gtk_text_byte_begins_utf8_char (const char *byte)
 {
   return ((*byte & 0xC0) != 0x80);
 }

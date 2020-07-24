@@ -76,10 +76,10 @@ GDK_AVAILABLE_IN_ALL
 GtkWidget *      gtk_scale_button_new              (gdouble          min,
                                                     gdouble          max,
                                                     gdouble          step,
-                                                    const gchar    **icons);
+                                                    const char     **icons);
 GDK_AVAILABLE_IN_ALL
 void             gtk_scale_button_set_icons        (GtkScaleButton  *button,
-                                                    const gchar    **icons);
+                                                    const char     **icons);
 GDK_AVAILABLE_IN_ALL
 gdouble          gtk_scale_button_get_value        (GtkScaleButton  *button);
 GDK_AVAILABLE_IN_ALL

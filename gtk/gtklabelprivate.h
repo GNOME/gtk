@@ -34,7 +34,7 @@ int          _gtk_label_get_link_at     (GtkLabel *label,
                                          int       pos);
 void         _gtk_label_activate_link   (GtkLabel *label, 
                                          int       idx);
-const gchar *_gtk_label_get_link_uri    (GtkLabel *label,
+const char *_gtk_label_get_link_uri    (GtkLabel *label,
                                          int       idx);
 void         _gtk_label_get_link_extent (GtkLabel *label,
                                          int       idx,

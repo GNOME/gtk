@@ -79,7 +79,7 @@ NSWindow          *_gdk_macos_surface_get_native              (GdkMacosSurface  
 CGDirectDisplayID  _gdk_macos_surface_get_screen_id           (GdkMacosSurface    *self);
 const char        *_gdk_macos_surface_get_title               (GdkMacosSurface    *self);
 void               _gdk_macos_surface_set_title               (GdkMacosSurface    *self,
-                                                               const gchar        *title);
+                                                               const char         *title);
 void               _gdk_macos_surface_get_shadow              (GdkMacosSurface    *self,
                                                                int                *top,
                                                                int                *right,

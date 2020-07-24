@@ -81,7 +81,7 @@ tracker_item_changed (GObject    *object,
                       gpointer    user_data)
 {
   GNSMenuItem *item = user_data;
-  const gchar *name = g_param_spec_get_name (pspec);
+  const char *name = g_param_spec_get_name (pspec);
 
   if (name != NULL)
     {
@@ -170,7 +170,7 @@ icon_loaded (GObject      *object,
 
   if (self != nil)
     {
-      const gchar *special = gtk_menu_tracker_item_get_special (aTrackerItem);
+      const char *special = gtk_menu_tracker_item_get_special (aTrackerItem);
 
       if (special && g_str_equal (special, "hide-this"))
         {
@@ -229,7 +229,7 @@ icon_loaded (GObject      *object,
 
 - (void)didChangeLabel
 {
-  gchar *label = _gtk_toolbar_elide_underscores (gtk_menu_tracker_item_get_label (trackerItem));
+  char *label = _gtk_toolbar_elide_underscores (gtk_menu_tracker_item_get_label (trackerItem));
 
   NSString *title = [NSString stringWithUTF8String:label ? : ""];
 
@@ -327,7 +327,7 @@ icon_loaded (GObject      *object,
 
 - (void)didChangeAccel
 {
-  const gchar *accel = gtk_menu_tracker_item_get_accel (trackerItem);
+  const char *accel = gtk_menu_tracker_item_get_accel (trackerItem);
 
   if (accel != NULL)
     {

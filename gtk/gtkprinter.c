@@ -50,10 +50,10 @@ static void gtk_printer_finalize     (GObject *object);
 
 struct _GtkPrinterPrivate
 {
-  gchar *name;
-  gchar *location;
-  gchar *description;
-  gchar *icon_name;
+  char *name;
+  char *location;
+  char *description;
+  char *icon_name;
 
   guint is_active         : 1;
   guint is_paused         : 1;
@@ -65,7 +65,7 @@ struct _GtkPrinterPrivate
   guint accepts_pdf       : 1;
   guint accepts_ps        : 1;
 
-  gchar *state_message;
+  char *state_message;
   int job_count;
 
   GtkPrintBackend *backend;
@@ -377,7 +377,7 @@ gtk_printer_get_property (GObject    *object,
  * Returns: a new #GtkPrinter
  **/
 GtkPrinter *
-gtk_printer_new (const gchar     *name,
+gtk_printer_new (const char      *name,
 		 GtkPrintBackend *backend,
 		 gboolean         virtual_)
 {
@@ -418,7 +418,7 @@ gtk_printer_get_backend (GtkPrinter *printer)
  * 
  * Returns: the name of @printer
  */
-const gchar *
+const char *
 gtk_printer_get_name (GtkPrinter *printer)
 {
   GtkPrinterPrivate *priv = gtk_printer_get_instance_private (printer);
@@ -436,7 +436,7 @@ gtk_printer_get_name (GtkPrinter *printer)
  * 
  * Returns: the description of @printer
  */
-const gchar *
+const char *
 gtk_printer_get_description (GtkPrinter *printer)
 {
   GtkPrinterPrivate *priv = gtk_printer_get_instance_private (printer);
@@ -448,7 +448,7 @@ gtk_printer_get_description (GtkPrinter *printer)
 
 gboolean
 gtk_printer_set_description (GtkPrinter  *printer,
-			     const gchar *description)
+			     const char *description)
 {
   GtkPrinterPrivate *priv = gtk_printer_get_instance_private (printer);
 
@@ -472,7 +472,7 @@ gtk_printer_set_description (GtkPrinter  *printer,
  * 
  * Returns: the state message of @printer
  */
-const gchar *
+const char *
 gtk_printer_get_state_message (GtkPrinter *printer)
 {
   GtkPrinterPrivate *priv = gtk_printer_get_instance_private (printer);
@@ -484,7 +484,7 @@ gtk_printer_get_state_message (GtkPrinter *printer)
 
 gboolean
 gtk_printer_set_state_message (GtkPrinter  *printer,
-			       const gchar *message)
+			       const char *message)
 {
   GtkPrinterPrivate *priv = gtk_printer_get_instance_private (printer);
 
@@ -508,7 +508,7 @@ gtk_printer_set_state_message (GtkPrinter  *printer,
  * 
  * Returns: the location of @printer
  */
-const gchar *
+const char *
 gtk_printer_get_location (GtkPrinter *printer)
 {
   GtkPrinterPrivate *priv = gtk_printer_get_instance_private (printer);
@@ -520,7 +520,7 @@ gtk_printer_get_location (GtkPrinter *printer)
 
 gboolean
 gtk_printer_set_location (GtkPrinter  *printer,
-			  const gchar *location)
+			  const char *location)
 {
   GtkPrinterPrivate *priv = gtk_printer_get_instance_private (printer);
 
@@ -544,7 +544,7 @@ gtk_printer_set_location (GtkPrinter  *printer,
  * 
  * Returns: the icon name for @printer
  */
-const gchar *
+const char *
 gtk_printer_get_icon_name (GtkPrinter *printer)
 {
   GtkPrinterPrivate *priv = gtk_printer_get_instance_private (printer);
@@ -556,7 +556,7 @@ gtk_printer_get_icon_name (GtkPrinter *printer)
 
 void
 gtk_printer_set_icon_name (GtkPrinter  *printer,
-			   const gchar *icon)
+			   const char *icon)
 {
   GtkPrinterPrivate *priv = gtk_printer_get_instance_private (printer);
 

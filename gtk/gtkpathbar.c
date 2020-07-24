@@ -238,7 +238,7 @@ gtk_path_bar_init (GtkPathBar *path_bar)
   home = g_get_home_dir ();
   if (home != NULL)
     {
-      const gchar *desktop;
+      const char *desktop;
 
       path_bar->home_file = g_file_new_for_path (home);
       /* FIXME: Need file system backend specific way of getting the
@@ -986,7 +986,7 @@ gtk_path_bar_update_button_appearance (GtkPathBar *path_bar,
 				       ButtonData *button_data,
 				       gboolean    current_dir)
 {
-  const gchar *dir_name = get_dir_name (button_data);
+  const char *dir_name = get_dir_name (button_data);
 
   gtk_widget_remove_css_class (button_data->button, "text-button");
   gtk_widget_remove_css_class (button_data->button, "image-button");
@@ -1217,7 +1217,7 @@ gtk_path_bar_get_info_callback (GObject      *source,
   struct SetFileInfo *file_info = data;
   GFileInfo *info;
   ButtonData *button_data;
-  const gchar *display_name;
+  const char *display_name;
   gboolean is_hidden;
 
   info = g_file_query_info_finish (file, result, NULL);

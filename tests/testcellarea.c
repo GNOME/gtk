@@ -298,7 +298,7 @@ focus_list_model (void)
 
 static void
 cell_toggled (GtkCellRendererToggle *cell_renderer,
-	      const gchar           *path,
+	      const char            *path,
 	      GtkIconView      *iconview)
 {
   GtkTreeModel *model = gtk_icon_view_get_model (iconview);
@@ -316,8 +316,8 @@ cell_toggled (GtkCellRendererToggle *cell_renderer,
 
 static void
 cell_edited (GtkCellRendererToggle *cell_renderer,
-	     const gchar           *path,
-	     const gchar           *new_text,
+	     const char            *path,
+	     const char            *new_text,
 	     GtkIconView      *iconview)
 {
   GtkTreeModel *model = gtk_icon_view_get_model (iconview);

@@ -283,7 +283,7 @@ gtk_check_button_new (void)
  * Returns: a #GtkWidget.
  */
 GtkWidget*
-gtk_check_button_new_with_label (const gchar *label)
+gtk_check_button_new_with_label (const char *label)
 {
   return g_object_new (GTK_TYPE_CHECK_BUTTON, "label", label, NULL);
 }
@@ -300,7 +300,7 @@ gtk_check_button_new_with_label (const gchar *label)
  * Returns: a new #GtkCheckButton
  */
 GtkWidget*
-gtk_check_button_new_with_mnemonic (const gchar *label)
+gtk_check_button_new_with_mnemonic (const char *label)
 {
   return g_object_new (GTK_TYPE_CHECK_BUTTON, 
                        "label", label, 

@@ -81,7 +81,7 @@
  *     if that could not be created, a newly created GtkIMContextSimple.
  */
 GtkIMContext *
-_gtk_im_module_create (const gchar *context_id)
+_gtk_im_module_create (const char *context_id)
 {
   GIOExtensionPoint *ep;
   GIOExtension *ext;
@@ -141,9 +141,9 @@ match_backend (GdkDisplay *display,
   return TRUE;
 }
 
-static const gchar *
+static const char *
 lookup_immodule (GdkDisplay  *display,
-                 gchar      **immodules_list)
+                 char       **immodules_list)
 {
   guint i;
 
@@ -180,11 +180,11 @@ lookup_immodule (GdkDisplay  *display,
  * 
  * Returns: the context ID (will never be %NULL)
  */
-const gchar *
+const char *
 _gtk_im_module_get_default_context_id (GdkDisplay *display)
 {
-  const gchar *context_id = NULL;
-  const gchar *envvar;
+  const char *context_id = NULL;
+  const char *envvar;
   GtkSettings *settings;
   GIOExtensionPoint *ep;
   GList *l;

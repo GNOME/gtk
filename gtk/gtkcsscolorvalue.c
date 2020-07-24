@@ -43,7 +43,7 @@ struct _GtkCssValue
 
   union
   {
-    gchar *name;
+    char *name;
     GdkRGBA rgba;
 
     struct
@@ -522,7 +522,7 @@ _gtk_css_color_value_new_literal (const GdkRGBA *color)
 }
 
 GtkCssValue *
-_gtk_css_color_value_new_name (const gchar *name)
+_gtk_css_color_value_new_name (const char *name)
 {
   GtkCssValue *value;
 

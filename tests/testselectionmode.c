@@ -82,7 +82,7 @@ add_row (GtkWidget *list, int i)
 {
   GtkWidget *row;
   GtkWidget *label;
-  gchar *text;
+  char *text;
 
   row = selectable_row_new ();
   text = g_strdup_printf ("Docker %d", i);

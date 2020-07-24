@@ -134,7 +134,7 @@ gdk_x11_utf8_to_string_target (const char *utf8_str,
 {
   int len = strlen (utf8_str);
   GString *result = g_string_sized_new (len);
-  const gchar *p = utf8_str;
+  const char *p = utf8_str;
 
   while (*p)
     {
@@ -200,7 +200,7 @@ gdk_x11_text_list_converter_encode (GdkX11TextListConverter *conv,
       g_str_equal (conv->encoding, "TEXT"))
     {
       GConverterResult result;
-      gchar *tmp, *latin1;
+      char *tmp, *latin1;
 
       tmp = g_strndup (inbuf, inbuf_size);
       latin1 = gdk_x11_utf8_to_string_target (tmp, TRUE);

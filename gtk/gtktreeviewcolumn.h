@@ -83,7 +83,7 @@ GtkTreeViewColumn      *gtk_tree_view_column_new                 (void);
 GDK_AVAILABLE_IN_ALL
 GtkTreeViewColumn      *gtk_tree_view_column_new_with_area       (GtkCellArea             *area);
 GDK_AVAILABLE_IN_ALL
-GtkTreeViewColumn      *gtk_tree_view_column_new_with_attributes (const gchar             *title,
+GtkTreeViewColumn      *gtk_tree_view_column_new_with_attributes (const char              *title,
 								  GtkCellRenderer         *cell,
 								  ...) G_GNUC_NULL_TERMINATED;
 GDK_AVAILABLE_IN_ALL
@@ -99,7 +99,7 @@ void                    gtk_tree_view_column_clear               (GtkTreeViewCol
 GDK_AVAILABLE_IN_ALL
 void                    gtk_tree_view_column_add_attribute       (GtkTreeViewColumn       *tree_column,
 								  GtkCellRenderer         *cell_renderer,
-								  const gchar             *attribute,
+								  const char              *attribute,
 								  int                      column);
 GDK_AVAILABLE_IN_ALL
 void                    gtk_tree_view_column_set_attributes      (GtkTreeViewColumn       *tree_column,
@@ -162,9 +162,9 @@ void                    gtk_tree_view_column_clicked             (GtkTreeViewCol
  */
 GDK_AVAILABLE_IN_ALL
 void                    gtk_tree_view_column_set_title           (GtkTreeViewColumn       *tree_column,
-								  const gchar             *title);
+								  const char              *title);
 GDK_AVAILABLE_IN_ALL
-const gchar *           gtk_tree_view_column_get_title           (GtkTreeViewColumn       *tree_column);
+const char *           gtk_tree_view_column_get_title           (GtkTreeViewColumn       *tree_column);
 GDK_AVAILABLE_IN_ALL
 void                    gtk_tree_view_column_set_expand          (GtkTreeViewColumn       *tree_column,
 								  gboolean                 expand);

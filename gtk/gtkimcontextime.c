@@ -101,7 +101,7 @@ static gboolean gtk_im_context_ime_filter_keypress (GtkIMContext   *context,
                                                     GdkEvent       *event);
 static void gtk_im_context_ime_reset               (GtkIMContext   *context);
 static void gtk_im_context_ime_get_preedit_string  (GtkIMContext   *context,
-                                                    gchar         **str,
+                                                    char          **str,
                                                     PangoAttrList **attrs,
                                                     int            *cursor_pos);
 static void gtk_im_context_ime_focus_in            (GtkIMContext   *context);
@@ -323,7 +323,7 @@ static void
 _gtk_im_context_ime_commit_unichar (GtkIMContextIME *context_ime,
                                     gunichar         c)
 {
-  gchar utf8[10];
+  char utf8[10];
   int len;
 
   if (context_ime->priv->dead_key_keyval != 0)
@@ -440,10 +440,10 @@ gtk_im_context_ime_reset (GtkIMContext *context)
 }
 
 
-static gchar *
+static char *
 get_utf8_preedit_string (GtkIMContextIME *context_ime, int *pos_ret)
 {
-  gchar *utf8str = NULL;
+  char *utf8str = NULL;
   HWND hwnd;
   HIMC himc;
   int pos = 0;
@@ -494,7 +494,7 @@ get_utf8_preedit_string (GtkIMContextIME *context_ime, int *pos_ret)
     {
       if (utf8str)
         {
-          gchar *utf8str_new = g_strdup (utf8str);
+          char *utf8str_new = g_strdup (utf8str);
 
           /* Note: We *don't* want to update context_ime->commit_string here!
            * Otherwise it will be updated repeatedly, not what we want!
@@ -529,7 +529,7 @@ get_utf8_preedit_string (GtkIMContextIME *context_ime, int *pos_ret)
 
 
 static PangoAttrList *
-get_pango_attr_list (GtkIMContextIME *context_ime, const gchar *utf8str)
+get_pango_attr_list (GtkIMContextIME *context_ime, const char *utf8str)
 {
   PangoAttrList *attrs = pango_attr_list_new ();
   HWND hwnd;
@@ -544,7 +544,7 @@ get_pango_attr_list (GtkIMContextIME *context_ime, const gchar *utf8str)
 
   if (context_ime->preediting)
     {
-      const gchar *schr = utf8str, *echr;
+      const char *schr = utf8str, *echr;
       guint8 *buf;
       guint16 f_red, f_green, f_blue, b_red, b_green, b_blue;
       glong len, spos = 0, epos, sidx = 0, eidx;
@@ -630,11 +630,11 @@ get_pango_attr_list (GtkIMContextIME *context_ime, const gchar *utf8str)
 
 static void
 gtk_im_context_ime_get_preedit_string (GtkIMContext   *context,
-                                       gchar         **str,
+                                       char          **str,
                                        PangoAttrList **attrs,
                                        int            *cursor_pos)
 {
-  gchar *utf8str = NULL;
+  char *utf8str = NULL;
   int pos = 0;
   GtkIMContextIME *context_ime;
 
@@ -864,7 +864,7 @@ gtk_im_context_ime_set_preedit_font (GtkIMContext *context)
   HWND hwnd;
   HIMC himc;
   HKL ime = GetKeyboardLayout (0);
-  const gchar *lang;
+  const char *lang;
   gunichar wc;
   PangoContext *pango_context;
   PangoFont *font;

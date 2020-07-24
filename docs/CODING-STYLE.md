@@ -474,10 +474,10 @@ The maximum width of each column is given by the longest element in the
 column:
 
 ```c
-  void         gtk_type_set_property (GtkType      *type,
-                                      const gchar  *value,
-                                      GError      **error);
-  const gchar *gtk_type_get_property (GtkType      *type);
+  void        gtk_type_set_property (GtkType      *type,
+                                     const char   *value,
+                                     GError      **error);
+  const char *gtk_type_get_property (GtkType      *type);
 ```
 
 It is also possible to align the columns to the next tab:

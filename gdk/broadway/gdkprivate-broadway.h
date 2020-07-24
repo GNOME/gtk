@@ -89,10 +89,10 @@ void _gdk_broadway_events_got_input      (GdkDisplay *display,
                                           BroadwayInputMsg *message);
 
 void _gdk_broadway_display_init_root_window (GdkDisplay *display);
-GdkDisplay * _gdk_broadway_display_open (const gchar *display_name);
+GdkDisplay * _gdk_broadway_display_open (const char *display_name);
 void _gdk_broadway_display_queue_events (GdkDisplay *display);
 GdkCursor*_gdk_broadway_display_get_cursor_for_name (GdkDisplay  *display,
-                                                     const gchar *name);
+                                                     const char *name);
 GdkCursor *_gdk_broadway_display_get_cursor_for_texture (GdkDisplay *display,
                                                          GdkTexture *texture,
                                                          int         x,

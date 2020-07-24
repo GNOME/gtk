@@ -14,7 +14,7 @@
 typedef struct _TreeItem TreeItem;
 struct _TreeItem
 {
-  const gchar    *label;
+  const char     *label;
   gboolean        alex;
   gboolean        havoc;
   gboolean        tim;
@@ -222,7 +222,7 @@ create_model (void)
 
 static void
 item_toggled (GtkCellRendererToggle *cell,
-              gchar                 *path_str,
+              char                  *path_str,
               gpointer               data)
 {
   GtkTreeModel *model = (GtkTreeModel *)data;

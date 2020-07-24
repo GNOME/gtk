@@ -133,7 +133,7 @@ static void gtk_text_layout_after_mark_set_handler     (GtkTextBuffer     *buffe
                                                         gpointer           data);
 static void gtk_text_layout_after_buffer_insert_text   (GtkTextBuffer     *textbuffer,
                                                         GtkTextIter       *iter,
-                                                        gchar             *str,
+                                                        char              *str,
                                                         int                len,
                                                         gpointer           data);
 static void gtk_text_layout_after_buffer_delete_range  (GtkTextBuffer     *textbuffer,
@@ -146,7 +146,7 @@ static void gtk_text_layout_before_mark_set_handler    (GtkTextBuffer     *buffe
                                                         gpointer           data);
 static void gtk_text_layout_before_buffer_insert_text  (GtkTextBuffer     *textbuffer,
                                                         GtkTextIter       *iter,
-                                                        gchar             *str,
+                                                        char              *str,
                                                         int                len,
                                                         gpointer           data);
 static void gtk_text_layout_before_buffer_delete_range (GtkTextBuffer     *textbuffer,
@@ -587,7 +587,7 @@ gtk_text_layout_get_cursor_visible (GtkTextLayout *layout)
  */
 void
 gtk_text_layout_set_preedit_string (GtkTextLayout *layout,
-				    const gchar   *preedit_string,
+				    const char    *preedit_string,
 				    PangoAttrList *preedit_attrs,
 				    int            cursor_pos)
 {
@@ -2318,7 +2318,7 @@ gtk_text_layout_create_display (GtkTextLayout *layout,
   GtkTextLineSegment *seg;
   GtkTextIter iter;
   GtkTextAttributes *style;
-  gchar *text;
+  char *text;
   int text_pixel_width;
   PangoAttrList *attrs;
   int text_allocated, layout_byte_offset, buffer_byte_offset;
@@ -3849,7 +3849,7 @@ gtk_text_layout_after_mark_set_handler (GtkTextBuffer     *buffer,
 static void
 gtk_text_layout_before_buffer_insert_text (GtkTextBuffer *textbuffer,
                                            GtkTextIter   *iter,
-                                           gchar         *str,
+                                           char          *str,
                                            int            len,
                                            gpointer       data)
 {
@@ -3863,7 +3863,7 @@ gtk_text_layout_before_buffer_insert_text (GtkTextBuffer *textbuffer,
 static void
 gtk_text_layout_after_buffer_insert_text (GtkTextBuffer *textbuffer,
                                           GtkTextIter   *iter,
-                                          gchar         *str,
+                                          char          *str,
                                           int            len,
                                           gpointer       data)
 {

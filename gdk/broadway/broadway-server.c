@@ -1060,8 +1060,8 @@ send_error (HttpRequest *request,
 #define SEC_WEB_SOCKET_KEY_MAGIC "258EAFA5-E914-47DA-95CA-C5AB0DC85B11"
 
 /* 'x3JJHMbDL1EzLkh9GBhXDw==' generates 'HSmrc0sMlYUkAGmm5OPpG2HaGWk=' */
-static gchar *
-generate_handshake_response_wsietf_v7 (const gchar *key)
+static char *
+generate_handshake_response_wsietf_v7 (const char *key)
 {
   gsize digest_len = 20;
   guchar digest[20];

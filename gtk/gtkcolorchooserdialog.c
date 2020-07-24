@@ -277,7 +277,7 @@ gtk_color_chooser_dialog_iface_init (GtkColorChooserInterface *iface)
  * Returns: a new #GtkColorChooserDialog
  */
 GtkWidget *
-gtk_color_chooser_dialog_new (const gchar *title,
+gtk_color_chooser_dialog_new (const char *title,
                               GtkWindow   *parent)
 {
   return g_object_new (GTK_TYPE_COLOR_CHOOSER_DIALOG,

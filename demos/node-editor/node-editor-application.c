@@ -200,7 +200,7 @@ static void
 node_editor_application_open (GApplication  *app,
                               GFile        **files,
                               int            n_files,
-                              const gchar   *hint)
+                              const char    *hint)
 {
   NodeEditorWindow *win;
   int i;

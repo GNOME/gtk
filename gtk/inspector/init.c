@@ -86,7 +86,7 @@ gtk_inspector_init (void)
   if (extension_point == NULL)
     {
       GIOModuleScope *scope;
-      gchar **paths;
+      char **paths;
       int i;
 
       extension_point = g_io_extension_point_register ("gtk-inspector-page");

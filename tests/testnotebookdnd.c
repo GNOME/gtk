@@ -175,7 +175,7 @@ create_notebook (const char     **labels,
 
 static GtkWidget*
 create_notebook_non_dragable_content (const char      **labels,
-                                      const gchar      *group,
+                                      const char       *group,
                                       GtkPositionType   pos)
 {
   GtkWidget *notebook, *title, *page, *action_widget;
@@ -226,7 +226,7 @@ create_notebook_non_dragable_content (const char      **labels,
 
 static GtkWidget*
 create_notebook_with_notebooks (const char      **labels,
-                                const gchar      *group,
+                                const char       *group,
                                 GtkPositionType   pos)
 {
   GtkWidget *notebook, *title, *page;
@@ -287,7 +287,7 @@ quit_cb (GtkWidget *widget,
 }
 
 int
-main (int argc, gchar *argv[])
+main (int argc, char *argv[])
 {
   GtkWidget *window, *grid;
   gboolean done = FALSE;

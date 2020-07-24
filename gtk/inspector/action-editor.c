@@ -34,7 +34,7 @@ struct _GtkInspectorActionEditor
   GtkWidget parent;
 
   GObject *owner;
-  gchar *name;
+  char *name;
   gboolean enabled;
   const GVariantType *parameter_type;
   GVariantType *state_type;
@@ -158,7 +158,7 @@ variant_editor_set_value (GtkWidget *editor,
   else
     {
       GtkWidget *entry;
-      gchar *text;
+      char *text;
 
       entry = gtk_widget_get_first_child (editor);
 
@@ -190,7 +190,7 @@ variant_editor_get_value (GtkWidget *editor)
   else
     {
       GtkWidget *entry;
-      const gchar *text;
+      const char *text;
 
       entry = gtk_widget_get_first_child (editor);
       text = gtk_editable_get_text (GTK_EDITABLE (entry));
@@ -261,7 +261,7 @@ update_enabled (GtkInspectorActionEditor *r,
 
 static void
 action_enabled_changed_cb (GActionGroup             *group,
-                           const gchar              *action_name,
+                           const char               *action_name,
                            gboolean                  enabled,
                            GtkInspectorActionEditor *r)
 {
@@ -279,7 +279,7 @@ update_state (GtkInspectorActionEditor *r,
 
 static void
 action_state_changed_cb (GActionGroup             *group,
-                         const gchar              *action_name,
+                         const char               *action_name,
                          GVariant                 *state,
                          GtkInspectorActionEditor *r)
 {
@@ -454,7 +454,7 @@ gtk_inspector_action_editor_class_init (GtkInspectorActionEditorClass *klass)
 
 GtkWidget *
 gtk_inspector_action_editor_new (GObject      *owner,
-                                 const gchar  *name,
+                                 const char   *name,
                                  GtkSizeGroup *activate)
 {
   return g_object_new (GTK_TYPE_INSPECTOR_ACTION_EDITOR,

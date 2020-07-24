@@ -347,7 +347,7 @@ struct DndSelectFolderData
   GtkFileChooserAction action;
   GCancellable *cancellable;
   GFile *file;
-  gchar **uris;
+  char **uris;
   guint i;
   gboolean selected;
 };
@@ -833,7 +833,7 @@ gtk_file_chooser_button_remove_shortcut_folder (GtkFileChooser  *chooser,
       GtkFileChooserButton *button = GTK_FILE_CHOOSER_BUTTON (chooser);
       GtkTreeIter iter;
       int pos;
-      gchar type;
+      char type;
 
       pos = model_get_type_position (button, ROW_TYPE_SHORTCUT);
       gtk_tree_model_iter_nth_child (button->model, &iter, NULL, pos);
@@ -1288,7 +1288,7 @@ change_icon_theme (GtkFileChooserButton *button)
   do
     {
       GIcon *icon = NULL;
-      gchar type;
+      char type;
       gpointer data;
 
       type = ROW_TYPE_INVALID;
@@ -1549,7 +1549,7 @@ static void
 model_free_row_data (GtkFileChooserButton *button,
                      GtkTreeIter          *iter)
 {
-  gchar type;
+  char type;
   gpointer data;
   GCancellable *cancellable;
 
@@ -1589,7 +1589,7 @@ model_add_special_get_info_cb (GObject      *source,
   GCancellable *model_cancellable = NULL;
   GtkFileChooserButton *button = data->button;
   GFileInfo *info = NULL;
-  gchar *name;
+  char *name;
 
   if (!button->model)
     /* button got destroyed */
@@ -1644,8 +1644,8 @@ out:
 static void
 model_add_special (GtkFileChooserButton *button)
 {
-  const gchar *homedir;
-  const gchar *desktopdir;
+  const char *homedir;
+  const char *desktopdir;
   GtkListStore *store;
   GtkTreeIter iter;
   GFile *file;
@@ -1757,7 +1757,7 @@ model_add_volumes (GtkFileChooserButton *button,
       gpointer *volume;
       GtkTreeIter iter;
       GIcon *icon;
-      gchar *display_name;
+      char *display_name;
 
       volume = l->data;
       if (G_IS_DRIVE (volume))
@@ -1833,7 +1833,7 @@ model_add_bookmarks (GtkFileChooserButton *button,
         }
       else
         {
-          gchar *label;
+          char *label;
           GIcon *icon;
 
           /* Don't call get_info for remote paths to avoid latency and
@@ -1934,7 +1934,7 @@ model_update_current_folder (GtkFileChooserButton *button,
     }
   else
     {
-      gchar *label;
+      char *label;
       GIcon *icon;
 
       /* Don't call get_info for remote paths to avoid latency and
@@ -2045,7 +2045,7 @@ filter_model_visible_func (GtkTreeModel *model,
                            GtkTreeIter  *iter,
                            gpointer      user_data)
 {
-  gchar type;
+  char type;
   gpointer data;
   gboolean retval, is_folder;
 
@@ -2087,7 +2087,7 @@ name_cell_data_func (GtkCellLayout   *layout,
                      GtkTreeIter     *iter,
                      gpointer         user_data)
 {
-  gchar type;
+  char type;
 
   type = 0;
   gtk_tree_model_get (model, iter,
@@ -2107,7 +2107,7 @@ combo_box_row_separator_func (GtkTreeModel *model,
                               GtkTreeIter  *iter,
                               gpointer      user_data)
 {
-  gchar type = ROW_TYPE_INVALID;
+  char type = ROW_TYPE_INVALID;
 
   gtk_tree_model_get (model, iter, TYPE_COLUMN, &type, -1);
 
@@ -2145,7 +2145,7 @@ update_combo_box (GtkFileChooserButton *button)
 
   do
     {
-      gchar type;
+      char type;
       gpointer data;
 
       type = ROW_TYPE_INVALID;
@@ -2247,7 +2247,7 @@ out:
 static void
 update_label_and_image (GtkFileChooserButton *button)
 {
-  gchar *label_text;
+  char *label_text;
   GFile *file;
   gboolean done_changing_selection;
 
@@ -2661,7 +2661,7 @@ combo_box_changed_cb (GtkComboBox *combo_box,
 
   if (gtk_combo_box_get_active_iter (combo_box, &iter))
     {
-      gchar type;
+      char type;
       gpointer data;
 
       type = ROW_TYPE_INVALID;
@@ -2785,7 +2785,7 @@ native_response_cb (GtkFileChooserNative *native,
  * Returns: a new button widget.
  */
 GtkWidget *
-gtk_file_chooser_button_new (const gchar          *title,
+gtk_file_chooser_button_new (const char           *title,
                              GtkFileChooserAction  action)
 {
   g_return_val_if_fail (action == GTK_FILE_CHOOSER_ACTION_OPEN ||
@@ -2833,7 +2833,7 @@ gtk_file_chooser_button_new_with_dialog (GtkWidget *dialog)
  */
 void
 gtk_file_chooser_button_set_title (GtkFileChooserButton *button,
-                                   const gchar          *title)
+                                   const char           *title)
 {
   g_return_if_fail (GTK_IS_FILE_CHOOSER_BUTTON (button));
 
@@ -2853,7 +2853,7 @@ gtk_file_chooser_button_set_title (GtkFileChooserButton *button,
  *
  * Returns: a pointer to the browse dialog’s title.
  */
-const gchar *
+const char *
 gtk_file_chooser_button_get_title (GtkFileChooserButton *button)
 {
   g_return_val_if_fail (GTK_IS_FILE_CHOOSER_BUTTON (button), NULL);

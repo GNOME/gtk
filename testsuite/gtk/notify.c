@@ -40,7 +40,7 @@ assert_notifies (GObject    *object,
 
 typedef struct
 {
-  const gchar *name;
+  const char *name;
   int count;
 } NotifyData;
 
@@ -245,8 +245,8 @@ check_property (GObject *instance, GParamSpec *pspec)
     {
       NotifyData data;
       gulong id;
-      gchar *value;
-      gchar *new_value;
+      char *value;
+      char *new_value;
 
       data.name = pspec->name;
       data.count = 0;
@@ -686,7 +686,7 @@ main (int argc, char **argv)
   otypes = gtk_test_list_all_types (NULL);
   for (i = 0; otypes[i]; i++)
     {
-      gchar *testname;
+      char *testname;
 
       testname = g_strdup_printf ("/Notification/%s", g_type_name (otypes[i]));
       g_test_add_data_func (testname, &otypes[i], test_type);

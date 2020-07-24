@@ -28,7 +28,7 @@ G_DEFINE_TYPE (GtkStatusbarAccessible, gtk_statusbar_accessible, GTK_TYPE_WIDGET
 static void
 text_changed (GtkStatusbar *statusbar,
               guint         context_id,
-              const gchar  *text,
+              const char   *text,
               AtkObject    *obj)
 {
   if (!obj->name)
@@ -52,10 +52,10 @@ gtk_statusbar_accessible_initialize (AtkObject *obj,
   obj->role = ATK_ROLE_STATUSBAR;
 }
 
-static const gchar *
+static const char *
 gtk_statusbar_accessible_get_name (AtkObject *obj)
 {
-  const gchar *name;
+  const char *name;
   GtkWidget *widget;
 
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (obj));

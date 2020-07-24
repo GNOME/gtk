@@ -48,7 +48,7 @@ static void
 on_assistant_prepare (GtkWidget *widget, GtkWidget *page, gpointer data)
 {
   int current_page, n_pages;
-  gchar *title;
+  char *title;
 
   current_page = gtk_assistant_get_current_page (GTK_ASSISTANT (widget));
   n_pages = gtk_assistant_get_n_pages (GTK_ASSISTANT (widget));
@@ -71,7 +71,7 @@ on_entry_changed (GtkWidget *widget, gpointer data)
   GtkAssistant *assistant = GTK_ASSISTANT (data);
   GtkWidget *current_page;
   int page_number;
-  const gchar *text;
+  const char *text;
 
   page_number = gtk_assistant_get_current_page (assistant);
   current_page = gtk_assistant_get_nth_page (assistant, page_number);

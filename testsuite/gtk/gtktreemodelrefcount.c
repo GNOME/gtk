@@ -184,7 +184,7 @@ static void
 dump_iter (GtkTreeModelRefCount *ref_model,
            GtkTreeIter          *iter)
 {
-  gchar *path_str;
+  char *path_str;
   NodeInfo *info;
   GtkTreePath *path;
 

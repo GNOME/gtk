@@ -326,7 +326,7 @@ drag_cancel (GtkDragSource       *source,
 }
 
 static GtkWidget *
-make_image (const gchar *icon_name, int hotspot)
+make_image (const char *icon_name, int hotspot)
 {
   GtkWidget *image;
   GtkDragSource *source;

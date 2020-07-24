@@ -20,8 +20,8 @@
 #include <glib/gstdio.h>
 #include <gtk/gtk.h>
 
-const gchar *uri = "file:///tmp/testrecentchooser.txt";
-const gchar *uri2 = "file:///tmp/testrecentchooser2.txt";
+const char *uri = "file:///tmp/testrecentchooser.txt";
+const char *uri2 = "file:///tmp/testrecentchooser2.txt";
 
 static void
 recent_manager_get_default (void)

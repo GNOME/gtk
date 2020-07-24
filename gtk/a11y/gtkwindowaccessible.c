@@ -71,10 +71,10 @@ on_title_changed (GObject             *gobject,
   g_signal_emit_by_name (atk_obj, "visible-data-changed");
 }
 
-static const gchar *
+static const char *
 gtk_window_accessible_get_name (AtkObject *accessible)
 {
-  const gchar* name;
+  const char * name;
   GtkWidget* widget;
 
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (accessible));

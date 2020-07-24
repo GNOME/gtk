@@ -4,7 +4,7 @@
 #               parameters. if VOID is used as  the  parameter
 #               list, no additional parameters may be present.
 #   BOOLEAN     for boolean types (gboolean)
-#   CHAR        for signed char types (gchar)
+#   CHAR        for signed char types (char)
 #   UCHAR       for unsigned char types (guchar)
 #   INT         for signed integer types (int)
 #   UINT        for unsigned integer types (guint)
@@ -14,7 +14,7 @@
 #   FLAGS       for flag enumeration types (guint)
 #   FLOAT       for single-precision float types (gfloat)
 #   DOUBLE      for double-precision float types (gdouble)
-#   STRING      for string types (gchar*)
+#   STRING      for string types (char *)
 #   BOXED       for boxed (anonymous but reference counted) types (GBoxed*)
 #   POINTER     for anonymous pointer types (gpointer)
 #   OBJECT      for GObject or derived types (GObject*)

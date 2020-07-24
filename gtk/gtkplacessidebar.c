@@ -142,7 +142,7 @@ struct _GtkPlacesSidebar {
   GtkWidget *rename_entry;
   GtkWidget *rename_button;
   GtkWidget *rename_error;
-  gchar *rename_uri;
+  char *rename_uri;
 
   gulong trash_monitor_changed_id;
   GtkWidget *trash_row;
@@ -166,7 +166,7 @@ struct _GtkPlacesSidebar {
 
   GDBusProxy *hostnamed_proxy;
   GCancellable *hostnamed_cancellable;
-  gchar *hostname;
+  char *hostname;
 
   GtkPlacesOpenFlags open_flags;
 
@@ -188,8 +188,8 @@ struct _GtkPlacesSidebarClass {
                                       GFile              *location,
                                       GtkPlacesOpenFlags  open_flags);
   void    (* show_error_message)     (GtkPlacesSidebar   *sidebar,
-                                      const gchar        *primary,
-                                      const gchar        *secondary);
+                                      const char         *primary,
+                                      const char         *secondary);
   GdkDragAction (* drag_action_requested)  (GtkPlacesSidebar   *sidebar,
                                       GFile              *dest_file,
                                       GSList             *source_file_list);
@@ -310,8 +310,8 @@ emit_open_location (GtkPlacesSidebar   *sidebar,
 
 static void
 emit_show_error_message (GtkPlacesSidebar *sidebar,
-                         const gchar      *primary,
-                         const gchar      *secondary)
+                         const char       *primary,
+                         const char       *secondary)
 {
   g_signal_emit (sidebar, places_sidebar_signals[SHOW_ERROR_MESSAGE], 0,
                  primary, secondary);
@@ -411,10 +411,10 @@ static GtkWidget*
 add_place (GtkPlacesSidebar            *sidebar,
            GtkPlacesSidebarPlaceType    place_type,
            GtkPlacesSidebarSectionType  section_type,
-           const gchar                 *name,
+           const char                  *name,
            GIcon                       *start_icon,
            GIcon                       *end_icon,
-           const gchar                 *uri,
+           const char                  *uri,
            GDrive                      *drive,
            GVolume                     *volume,
            GMount                      *mount,
@@ -424,7 +424,7 @@ add_place (GtkPlacesSidebar            *sidebar,
            gpointer                    *cloud_provider_account,
 #endif
            const int                    index,
-           const gchar                 *tooltip)
+           const char                  *tooltip)
 {
   gboolean show_eject, show_unmount;
   gboolean show_eject_button;
@@ -524,7 +524,7 @@ recent_files_setting_is_enabled (GtkPlacesSidebar *sidebar)
 static gboolean
 recent_scheme_is_supported (void)
 {
-  const gchar * const *supported;
+  const char * const *supported;
 
   supported = g_vfs_get_supported_uri_schemes (g_vfs_get_default ());
   if (supported != NULL)
@@ -542,11 +542,11 @@ should_show_recent (GtkPlacesSidebar *sidebar)
 }
 
 static gboolean
-path_is_home_dir (const gchar *path)
+path_is_home_dir (const char *path)
 {
   GFile *home_dir;
   GFile *location;
-  const gchar *home_path;
+  const char *home_path;
   gboolean res;
 
   home_path = g_get_home_dir ();
@@ -566,7 +566,7 @@ path_is_home_dir (const gchar *path)
 static void
 open_home (GtkPlacesSidebar *sidebar)
 {
-  const gchar *home_path;
+  const char *home_path;
   GFile       *home_dir;
 
   home_path = g_get_home_dir ();
@@ -588,12 +588,12 @@ add_special_dirs (GtkPlacesSidebar *sidebar)
   dirs = NULL;
   for (index = 0; index < G_USER_N_DIRECTORIES; index++)
     {
-      const gchar *path;
+      const char *path;
       GFile *root;
       GIcon *start_icon;
-      gchar *name;
-      gchar *mount_uri;
-      gchar *tooltip;
+      char *name;
+      char *mount_uri;
+      char *tooltip;
 
       if (!_gtk_bookmarks_manager_get_is_xdg_dir_builtin (index))
         continue;
@@ -630,16 +630,16 @@ add_special_dirs (GtkPlacesSidebar *sidebar)
       g_free (mount_uri);
       g_free (tooltip);
 
-      dirs = g_list_prepend (dirs, (gchar *)path);
+      dirs = g_list_prepend (dirs, (char *)path);
     }
 
   g_list_free (dirs);
 }
 
-static gchar *
+static char *
 get_home_directory_uri (void)
 {
-  const gchar *home;
+  const char *home;
 
   home = g_get_home_dir ();
   if (!home)
@@ -648,10 +648,10 @@ get_home_directory_uri (void)
   return g_filename_to_uri (home, NULL, NULL);
 }
 
-static gchar *
+static char *
 get_desktop_directory_uri (void)
 {
-  const gchar *name;
+  const char *name;
 
   name = g_get_user_special_dir (G_USER_DIRECTORY_DESKTOP);
 
@@ -668,7 +668,7 @@ static gboolean
 should_show_file (GtkPlacesSidebar *sidebar,
                   GFile            *file)
 {
-  gchar *path;
+  char *path;
 
   path = g_file_get_path (file);
   if (path)
@@ -684,7 +684,7 @@ static gboolean
 file_is_shown (GtkPlacesSidebar *sidebar,
                GFile            *file)
 {
-  gchar *uri;
+  char *uri;
   GtkWidget *row;
   gboolean found = FALSE;
 
@@ -732,9 +732,9 @@ on_app_shortcuts_query_complete (GObject      *source,
 
   if (info)
     {
-      gchar *uri;
-      gchar *tooltip;
-      const gchar *name;
+      char *uri;
+      char *tooltip;
+      const char *name;
       GIcon *start_icon;
 
       name = g_file_info_get_display_name (info);
@@ -804,9 +804,9 @@ on_bookmark_query_info_complete (GObject      *source,
   GFile *root = G_FILE (source);
   GError *error = NULL;
   GFileInfo *info;
-  gchar *bookmark_name;
-  gchar *mount_uri;
-  gchar *tooltip;
+  char *bookmark_name;
+  char *mount_uri;
+  char *tooltip;
   GIcon *start_icon;
 
   info = g_file_query_info_finish (root, result, &error);
@@ -857,7 +857,7 @@ is_external_volume (GVolume *volume)
 {
   gboolean is_external;
   GDrive *drive;
-  gchar *id;
+  char *id;
 
   drive = g_volume_get_drive (volume);
   id = g_volume_get_identifier (volume, G_VOLUME_IDENTIFIER_KIND_CLASS);
@@ -897,10 +897,10 @@ create_cloud_provider_account_row (GtkPlacesSidebar      *sidebar,
 {
   GIcon *end_icon;
   GIcon *start_icon;
-  const gchar *mount_path;
-  const gchar *name;
-  gchar *mount_uri;
-  gchar *tooltip;
+  const char *mount_path;
+  const char *name;
+  char *mount_uri;
+  char *tooltip;
   guint provider_account_status;
 
   start_icon = cloud_providers_account_get_icon (account);
@@ -981,12 +981,12 @@ update_places (GtkPlacesSidebar *sidebar)
   GVolume *volume;
   GSList *bookmarks, *sl;
   int index;
-  gchar *original_uri, *name, *identifier;
+  char *original_uri, *name, *identifier;
   GtkListBoxRow *selected;
-  gchar *home_uri;
+  char *home_uri;
   GIcon *start_icon;
   GFile *root;
-  gchar *tooltip;
+  char *tooltip;
   GList *network_mounts, *network_volumes;
   GIcon *new_bookmark_icon;
   GtkWidget *child;
@@ -1504,7 +1504,7 @@ check_valid_drop_target (GtkPlacesSidebar *sidebar,
   GtkPlacesSidebarPlaceType place_type;
   GtkPlacesSidebarSectionType section_type;
   gboolean valid = FALSE;
-  gchar *uri;
+  char *uri;
   GFile *dest_file;
   int drag_action;
 
@@ -1658,7 +1658,7 @@ drag_motion_callback (GtkDropTarget    *target,
   GdkDragAction action;
   GtkListBoxRow *row;
   GtkPlacesSidebarPlaceType place_type;
-  gchar *drop_target_uri = NULL;
+  char *drop_target_uri = NULL;
   int row_index;
   int row_placeholder_index;
   const GValue *value;
@@ -1777,7 +1777,7 @@ reorder_bookmarks (GtkPlacesSidebar *sidebar,
                    GtkSidebarRow    *row,
                    int               new_position)
 {
-  gchar *uri;
+  char *uri;
   GFile *file;
 
   g_object_get (row, "uri", &uri, NULL);
@@ -1825,7 +1825,7 @@ drag_drop_callback (GtkDropTarget    *target,
   int target_order_index;
   GtkPlacesSidebarPlaceType target_place_type;
   GtkPlacesSidebarSectionType target_section_type;
-  gchar *target_uri;
+  char *target_uri;
   GtkListBoxRow *target_row;
   gboolean result;
 
@@ -1961,8 +1961,8 @@ drive_start_from_bookmark_cb (GObject      *source_object,
 {
   GtkPlacesSidebar *sidebar;
   GError *error;
-  gchar *primary;
-  gchar *name;
+  char *primary;
+  char *name;
 
   sidebar = GTK_PLACES_SIDEBAR (user_data);
 
@@ -1990,8 +1990,8 @@ volume_mount_cb (GObject      *source_object,
   GtkPlacesSidebar *sidebar;
   GVolume *volume;
   GError *error;
-  gchar *primary;
-  gchar *name;
+  char *primary;
+  char *name;
   GMount *mount;
 
   volume = G_VOLUME (source_object);
@@ -2095,7 +2095,7 @@ open_volume (GtkSidebarRow      *row,
 
 static void
 open_uri (GtkPlacesSidebar   *sidebar,
-          const gchar        *uri,
+          const char         *uri,
           GtkPlacesOpenFlags  open_flags)
 {
   GFile *location;
@@ -2109,7 +2109,7 @@ static void
 open_row (GtkSidebarRow      *row,
           GtkPlacesOpenFlags  open_flags)
 {
-  gchar *uri;
+  char *uri;
   GDrive *drive;
   GVolume *volume;
   GtkPlacesSidebarPlaceType place_type;
@@ -2176,8 +2176,8 @@ add_shortcut_cb (GSimpleAction *action,
                  gpointer       data)
 {
   GtkPlacesSidebar *sidebar = data;
-  gchar *uri;
-  gchar *name;
+  char *uri;
+  char *name;
   GFile *location;
 
   g_object_get (sidebar->context_row,
@@ -2202,9 +2202,9 @@ rename_entry_changed (GtkEntry         *entry,
                       GtkPlacesSidebar *sidebar)
 {
   GtkPlacesSidebarPlaceType type;
-  gchar *name;
-  gchar *uri;
-  const gchar *new_name;
+  char *name;
+  char *uri;
+  const char *new_name;
   gboolean found = FALSE;
   GtkWidget *row;
 
@@ -2248,7 +2248,7 @@ static void
 do_rename (GtkButton        *button,
            GtkPlacesSidebar *sidebar)
 {
-  gchar *new_text;
+  char *new_text;
   GFile *file;
 
   new_text = g_strdup (gtk_editable_get_text (GTK_EDITABLE (sidebar->rename_entry)));
@@ -2290,7 +2290,7 @@ create_rename_popover (GtkPlacesSidebar *sidebar)
   GtkWidget *entry;
   GtkWidget *button;
   GtkWidget *error;
-  gchar *str;
+  char *str;
 
   if (sidebar->rename_popover)
     return;
@@ -2385,8 +2385,8 @@ setup_popover_shadowing (GtkWidget *popover)
 static void
 show_rename_popover (GtkSidebarRow *row)
 {
-  gchar *name;
-  gchar *uri;
+  char *name;
+  char *uri;
   GtkPlacesSidebar *sidebar;
 
   g_object_get (row,
@@ -2444,7 +2444,7 @@ static void
 remove_bookmark (GtkSidebarRow *row)
 {
   GtkPlacesSidebarPlaceType type;
-  gchar *uri;
+  char *uri;
   GFile *file;
   GtkPlacesSidebar *sidebar;
 
@@ -2510,8 +2510,8 @@ unmount_mount_cb (GObject      *source_object,
     {
       if (error->code != G_IO_ERROR_FAILED_HANDLED)
         {
-          gchar *name;
-          gchar *primary;
+          char *name;
+          char *primary;
 
           name = g_mount_get_name (mount);
           primary = g_strdup_printf (_("Unable to unmount “%s”"), name);
@@ -2679,8 +2679,8 @@ drive_stop_cb (GObject      *source_object,
 {
   GtkPlacesSidebar *sidebar;
   GError *error;
-  gchar *primary;
-  gchar *name;
+  char *primary;
+  char *name;
 
   sidebar = user_data;
 
@@ -2708,8 +2708,8 @@ drive_eject_cb (GObject      *source_object,
 {
   GtkPlacesSidebar *sidebar;
   GError *error;
-  gchar *primary;
-  gchar *name;
+  char *primary;
+  char *name;
 
   sidebar = user_data;
 
@@ -2737,8 +2737,8 @@ volume_eject_cb (GObject      *source_object,
 {
   GtkPlacesSidebar *sidebar;
   GError *error;
-  gchar *primary;
-  gchar *name;
+  char *primary;
+  char *name;
 
   sidebar = user_data;
 
@@ -2766,8 +2766,8 @@ mount_eject_cb (GObject      *source_object,
 {
   GtkPlacesSidebar *sidebar;
   GError *error;
-  gchar *primary;
-  gchar *name;
+  char *primary;
+  char *name;
 
   sidebar = user_data;
 
@@ -2914,8 +2914,8 @@ drive_poll_for_media_cb (GObject      *source_object,
 {
   GtkPlacesSidebar *sidebar;
   GError *error;
-  gchar *primary;
-  gchar *name;
+  char *primary;
+  char *name;
 
   sidebar = GTK_PLACES_SIDEBAR (user_data);
 
@@ -2962,8 +2962,8 @@ drive_start_cb (GObject      *source_object,
 {
   GtkPlacesSidebar *sidebar;
   GError *error;
-  gchar *primary;
-  gchar *name;
+  char *primary;
+  char *name;
 
   sidebar = GTK_PLACES_SIDEBAR (user_data);
 
@@ -3550,7 +3550,7 @@ list_box_sort_func (GtkListBoxRow *row1,
 {
   GtkPlacesSidebarSectionType section_type_1, section_type_2;
   GtkPlacesSidebarPlaceType place_type_1, place_type_2;
-  gchar *label_1, *label_2;
+  char *label_1, *label_2;
   int index_1, index_2;
   int retval = 0;
 
@@ -3636,7 +3636,7 @@ update_hostname (GtkPlacesSidebar *sidebar)
 {
   GVariant *variant;
   gsize len;
-  const gchar *hostname;
+  const char *hostname;
 
   if (sidebar->hostnamed_proxy == NULL)
     return;
@@ -4478,8 +4478,8 @@ gtk_places_sidebar_set_location (GtkPlacesSidebar *sidebar,
                                  GFile            *location)
 {
   GtkWidget *row;
-  gchar *row_uri;
-  gchar *uri;
+  char *row_uri;
+  char *uri;
   gboolean found = FALSE;
 
   g_return_if_fail (GTK_IS_PLACES_SIDEBAR (sidebar));
@@ -4548,7 +4548,7 @@ gtk_places_sidebar_get_location (GtkPlacesSidebar *sidebar)
 
   if (selected)
     {
-      gchar *uri;
+      char *uri;
 
       g_object_get (selected, "uri", &uri, NULL);
       file = g_file_new_for_uri (uri);
@@ -4558,11 +4558,11 @@ gtk_places_sidebar_get_location (GtkPlacesSidebar *sidebar)
   return file;
 }
 
-gchar *
+char *
 gtk_places_sidebar_get_location_title (GtkPlacesSidebar *sidebar)
 {
   GtkListBoxRow *selected;
-  gchar *title;
+  char *title;
 
   g_return_val_if_fail (sidebar != NULL, NULL);
 
@@ -4904,7 +4904,7 @@ gtk_places_sidebar_get_nth_bookmark (GtkPlacesSidebar *sidebar,
        row = gtk_widget_get_next_sibling (row))
     {
       GtkPlacesSidebarPlaceType place_type;
-      gchar *uri;
+      char *uri;
 
       if (!GTK_IS_LIST_BOX_ROW (row))
         continue;

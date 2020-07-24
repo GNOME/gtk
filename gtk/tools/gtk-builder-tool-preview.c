@@ -34,8 +34,8 @@ set_window_title (GtkWindow  *window,
                   const char *filename,
                   const char *id)
 {
-  gchar *name;
-  gchar *title;
+  char *name;
+  char *title;
 
   name = g_path_get_basename (filename);
 

@@ -37,15 +37,15 @@ typedef struct _GtkFileChooserButton        GtkFileChooserButton;
 GDK_AVAILABLE_IN_ALL
 GType                 gtk_file_chooser_button_get_type         (void) G_GNUC_CONST;
 GDK_AVAILABLE_IN_ALL
-GtkWidget *           gtk_file_chooser_button_new              (const gchar          *title,
+GtkWidget *           gtk_file_chooser_button_new              (const char           *title,
 								GtkFileChooserAction  action);
 GDK_AVAILABLE_IN_ALL
 GtkWidget *           gtk_file_chooser_button_new_with_dialog  (GtkWidget            *dialog);
 GDK_AVAILABLE_IN_ALL
-const gchar *         gtk_file_chooser_button_get_title        (GtkFileChooserButton *button);
+const char *         gtk_file_chooser_button_get_title        (GtkFileChooserButton *button);
 GDK_AVAILABLE_IN_ALL
 void                  gtk_file_chooser_button_set_title        (GtkFileChooserButton *button,
-								const gchar          *title);
+								const char           *title);
 GDK_AVAILABLE_IN_ALL
 int                   gtk_file_chooser_button_get_width_chars  (GtkFileChooserButton *button);
 GDK_AVAILABLE_IN_ALL

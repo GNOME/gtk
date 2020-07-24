@@ -88,9 +88,9 @@ measure_available_space_finished (GObject      *object,
   GError *error;
   guint64 free_space;
   guint64 total_space;
-  gchar *formatted_free_size;
-  gchar *formatted_total_size;
-  gchar *label;
+  char *formatted_free_size;
+  char *formatted_total_size;
+  char *label;
   guint plural_form;
 
   error = NULL;

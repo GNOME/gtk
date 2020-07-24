@@ -54,7 +54,7 @@ struct _GtkVolumeButtonClass
 
 #define EPSILON (1e-10)
 
-static const gchar * const icons[] =
+static const char * const icons[] =
 {
   "audio-volume-muted",
   "audio-volume-high",
@@ -63,7 +63,7 @@ static const gchar * const icons[] =
   NULL
 };
 
-static const gchar * const icons_symbolic[] =
+static const char * const icons_symbolic[] =
 {
   "audio-volume-muted-symbolic",
   "audio-volume-high-symbolic",
@@ -93,7 +93,7 @@ G_DEFINE_TYPE (GtkVolumeButton, gtk_volume_button, GTK_TYPE_SCALE_BUTTON)
 static gboolean
 get_symbolic (GtkScaleButton *button)
 {
-  gchar **icon_list;
+  char **icon_list;
   gboolean ret;
 
   g_object_get (button, "icons", &icon_list, NULL);

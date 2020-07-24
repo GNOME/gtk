@@ -59,9 +59,9 @@ struct _GtkShortcutsSection
 {
   GtkBox            parent_instance;
 
-  gchar            *name;
-  gchar            *title;
-  gchar            *view_name;
+  char             *name;
+  char             *title;
+  char             *view_name;
   guint             max_height;
 
   GtkStack         *stack;
@@ -106,7 +106,7 @@ static GParamSpec *properties[LAST_PROP];
 static guint signals[LAST_SIGNAL];
 
 static void gtk_shortcuts_section_set_view_name    (GtkShortcutsSection *self,
-                                                    const gchar         *view_name);
+                                                    const char          *view_name);
 static void gtk_shortcuts_section_set_max_height   (GtkShortcutsSection *self,
                                                     guint                max_height);
 static void gtk_shortcuts_section_add_group        (GtkShortcutsSection *self,
@@ -130,7 +130,7 @@ static void
 gtk_shortcuts_section_buildable_add_child (GtkBuildable *buildable,
                                            GtkBuilder   *builder,
                                            GObject      *child,
-                                           const gchar  *type)
+                                           const char   *type)
 {
   if (GTK_IS_SHORTCUTS_GROUP (child))
     gtk_shortcuts_section_add_group (GTK_SHORTCUTS_SECTION (buildable), GTK_SHORTCUTS_GROUP (child));
@@ -417,7 +417,7 @@ gtk_shortcuts_section_init (GtkShortcutsSection *self)
 
 static void
 gtk_shortcuts_section_set_view_name (GtkShortcutsSection *self,
-                                     const gchar         *view_name)
+                                     const char          *view_name)
 {
   if (g_strcmp0 (self->view_name, view_name) == 0)
     return;
@@ -484,7 +484,7 @@ update_group_visibility (GtkWidget *child, gpointer data)
 
   if (GTK_IS_SHORTCUTS_GROUP (child))
     {
-      gchar *view;
+      char *view;
       gboolean match;
 
       g_object_get (child, "view", &view, NULL);

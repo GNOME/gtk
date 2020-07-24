@@ -28,7 +28,7 @@ static void
 add_custom_css (void)
 {
   GtkCssProvider *provider;
-  const gchar data[] =
+  const char data[] =
   "levelbar block.my-offset {"
   "   background: magenta;"
   "}";

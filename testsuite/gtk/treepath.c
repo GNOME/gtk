@@ -64,10 +64,10 @@ test_prepend (void)
 static void
 test_to_string (void)
 {
-  const gchar *str = "0:1:2:3:4:5:6:7:8:9:10";
+  const char *str = "0:1:2:3:4:5:6:7:8:9:10";
   GtkTreePath *p;
   int *indices;
-  gchar *s;
+  char *s;
   int i;
 
   p = gtk_tree_path_new_from_string (str);

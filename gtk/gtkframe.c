@@ -125,7 +125,7 @@ static void gtk_frame_buildable_init                (GtkBuildableIface *iface);
 static void gtk_frame_buildable_add_child           (GtkBuildable *buildable,
                                                      GtkBuilder   *builder,
                                                      GObject      *child,
-                                                     const gchar  *type);
+                                                     const char   *type);
 static void     gtk_frame_measure (GtkWidget           *widget,
                                    GtkOrientation       orientation,
                                    int                  for_size,
@@ -212,7 +212,7 @@ static void
 gtk_frame_buildable_add_child (GtkBuildable *buildable,
                                GtkBuilder   *builder,
                                GObject      *child,
-                               const gchar  *type)
+                               const char   *type)
 {
   if (type && strcmp (type, "label") == 0)
     gtk_frame_set_label_widget (GTK_FRAME (buildable), GTK_WIDGET (child));
@@ -313,7 +313,7 @@ gtk_frame_get_property (GObject         *object,
  * Returns: a new #GtkFrame widget
  **/
 GtkWidget*
-gtk_frame_new (const gchar *label)
+gtk_frame_new (const char *label)
 {
   return g_object_new (GTK_TYPE_FRAME, "label", label, NULL);
 }
@@ -328,7 +328,7 @@ gtk_frame_new (const gchar *label)
  **/
 void
 gtk_frame_set_label (GtkFrame *frame,
-                     const gchar *label)
+                     const char *label)
 {
   g_return_if_fail (GTK_IS_FRAME (frame));
 
@@ -352,7 +352,7 @@ gtk_frame_set_label (GtkFrame *frame,
  *               a #GtkLabel. This string is owned by GTK+ and
  *               must not be modified or freed.
  **/
-const gchar *
+const char *
 gtk_frame_get_label (GtkFrame *frame)
 {
   GtkFramePrivate *priv = gtk_frame_get_instance_private (frame);

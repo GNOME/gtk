@@ -28,7 +28,7 @@ main (int argc, char **argv)
   guint         n_properties;
   guint         i;
   int           max_prop_name_length = 0;
-  gchar        *pattern = NULL;
+  char         *pattern = NULL;
 
   gtk_init ();
 
@@ -51,7 +51,7 @@ main (int argc, char **argv)
     {
       GValue      value = {0};
       GParamSpec *prop = props[i];
-      gchar      *value_str;
+      char       *value_str;
       int         spacing = max_prop_name_length - strlen (prop->name) + 1;
       gboolean    deprecated;
 

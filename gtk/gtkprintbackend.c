@@ -132,8 +132,8 @@ gtk_print_backend_load_modules (void)
 {
   GList *result;
   GtkPrintBackend *backend;
-  gchar *setting;
-  gchar **backends;
+  char *setting;
+  char **backends;
   int i;
   GtkSettings *settings;
   GIOExtensionPoint *ep;
@@ -201,7 +201,7 @@ static void                 request_password                       (GtkPrintBack
                                                                     gpointer             auth_info_default,
                                                                     gpointer             auth_info_display,
                                                                     gpointer             auth_info_visible,
-                                                                    const gchar         *prompt,
+                                                                    const char          *prompt,
                                                                     gboolean             can_store_auth_info);
 
 static void
@@ -506,7 +506,7 @@ gtk_print_backend_printer_list_is_done (GtkPrintBackend *backend)
 
 GtkPrinter *
 gtk_print_backend_find_printer (GtkPrintBackend *backend,
-                                const gchar     *printer_name)
+                                const char      *printer_name)
 {
   GtkPrinter *result = NULL;
   guint i;
@@ -544,8 +544,8 @@ gtk_print_backend_print_stream (GtkPrintBackend        *backend,
 
 void 
 gtk_print_backend_set_password (GtkPrintBackend  *backend,
-                                gchar           **auth_info_required,
-                                gchar           **auth_info,
+                                char            **auth_info_required,
+                                char            **auth_info,
                                 gboolean          store_auth_info)
 {
   g_return_if_fail (GTK_IS_PRINT_BACKEND (backend));
@@ -569,7 +569,7 @@ static void
 store_entry (GtkEntry  *entry,
              gpointer   user_data)
 {
-  gchar **data = (gchar **) user_data;
+  char **data = (char **) user_data;
 
   if (*data != NULL)
     {
@@ -619,24 +619,24 @@ request_password (GtkPrintBackend  *backend,
                   gpointer          auth_info_default,
                   gpointer          auth_info_display,
                   gpointer          auth_info_visible,
-                  const gchar      *prompt,
+                  const char       *prompt,
                   gboolean          can_store_auth_info)
 {
   GtkPrintBackendPrivate *priv = backend->priv;
   GtkWidget *dialog, *box, *main_box, *label, *icon, *vbox, *entry, *chkbtn;
   GtkWidget *focus = NULL;
   GtkWidget *content_area;
-  gchar     *markup;
+  char      *markup;
   int        length;
   int        i;
-  gchar    **ai_required = (gchar **) auth_info_required;
-  gchar    **ai_default = (gchar **) auth_info_default;
-  gchar    **ai_display = (gchar **) auth_info_display;
+  char     **ai_required = (char **) auth_info_required;
+  char     **ai_default = (char **) auth_info_default;
+  char     **ai_display = (char **) auth_info_display;
   gboolean  *ai_visible = (gboolean *) auth_info_visible;
 
   priv->auth_info_required = g_strdupv (ai_required);
   length = g_strv_length (ai_required);
-  priv->auth_info = g_new0 (gchar *, length + 1);
+  priv->auth_info = g_new0 (char *, length + 1);
   priv->store_auth_info = FALSE;
 
   dialog = gtk_dialog_new_with_buttons ( _("Authentication"), NULL, GTK_DIALOG_MODAL, 

@@ -163,7 +163,7 @@ static const GdkDebugKey gdk_debug_keys[] = {
 G_DEFINE_CONSTRUCTOR(stash_desktop_startup_notification_id)
 #endif
 
-static gchar *startup_notification_id = NULL;
+static char *startup_notification_id = NULL;
 
 static void
 stash_desktop_startup_notification_id (void)
@@ -209,8 +209,8 @@ gdk_parse_debug_var (const char        *variable,
   guint i;
   guint result = 0;
   const char *string;
-  const gchar *p;
-  const gchar *q;
+  const char *p;
+  const char *q;
   gboolean invert;
   gboolean help;
 
@@ -352,7 +352,7 @@ gdk_display_open_default (void)
  * Returns: (nullable) (transfer none): the original value of the
  *   DESKTOP_STARTUP_ID environment variable, or %NULL.
  */
-const gchar *
+const char *
 gdk_get_startup_notification_id (void)
 {
   return startup_notification_id;
@@ -402,11 +402,11 @@ gdk_unichar_direction (gunichar ch)
 }
 
 PangoDirection
-gdk_find_base_dir (const gchar *text,
+gdk_find_base_dir (const char *text,
                    int          length)
 {
   PangoDirection dir = PANGO_DIRECTION_NEUTRAL;
-  const gchar *p;
+  const char *p;
 
   g_return_val_if_fail (text != NULL || length == 0, PANGO_DIRECTION_NEUTRAL);
 

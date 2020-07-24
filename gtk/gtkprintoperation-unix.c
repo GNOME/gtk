@@ -62,7 +62,7 @@ typedef struct
 typedef struct _PrinterFinder PrinterFinder;
 
 static void printer_finder_free (PrinterFinder *finder);
-static void find_printer        (const gchar   *printer,
+static void find_printer        (const char    *printer,
 				 GFunc          func,
 				 gpointer       data);
 
@@ -147,14 +147,14 @@ op_unix_free (GtkPrintOperationUnix *op_unix)
   g_free (op_unix);
 }
 
-static gchar *
-shell_command_substitute_file (const gchar *cmd,
-			       const gchar *pdf_filename,
-			       const gchar *settings_filename,
+static char *
+shell_command_substitute_file (const char *cmd,
+			       const char *pdf_filename,
+			       const char *settings_filename,
                                gboolean    *pdf_filename_replaced,
                                gboolean    *settings_filename_replaced)
 {
-  const gchar *inptr, *start;
+  const char *inptr, *start;
   GString *final;
 
   g_return_val_if_fail (cmd != NULL, NULL);
@@ -206,21 +206,21 @@ static void
 gtk_print_operation_unix_launch_preview (GtkPrintOperation *op,
                                          cairo_surface_t   *surface,
                                          GtkWindow         *parent,
-                                         const gchar       *filename)
+                                         const char        *filename)
 {
   GAppInfo *appinfo;
   GdkAppLaunchContext *context;
-  gchar *cmd;
-  gchar *preview_cmd;
+  char *cmd;
+  char *preview_cmd;
   GtkSettings *settings;
   GtkPrintSettings *print_settings = NULL;
   GtkPageSetup *page_setup;
   GKeyFile *key_file = NULL;
-  gchar *data = NULL;
+  char *data = NULL;
   gsize data_len;
-  gchar *settings_filename = NULL;
-  gchar *quoted_filename;
-  gchar *quoted_settings_filename;
+  char *settings_filename = NULL;
+  char *quoted_filename;
+  char *quoted_settings_filename;
   gboolean filename_used = FALSE;
   gboolean settings_used = FALSE;
   GdkDisplay *display;
@@ -305,7 +305,7 @@ gtk_print_operation_unix_launch_preview (GtkPrintOperation *op,
 
   if (error != NULL)
     {
-      gchar* uri;
+      char * uri;
 
       g_warning ("Error launching preview: %s", error->message);
 
@@ -431,7 +431,7 @@ get_print_dialog (GtkPrintOperation *op,
 {
   GtkPrintOperationPrivate *priv = op->priv;
   GtkWidget *pd, *label;
-  const gchar *custom_tab_label;
+  const char *custom_tab_label;
 
   pd = gtk_print_unix_dialog_new (NULL, parent);
 
@@ -712,7 +712,7 @@ gtk_print_operation_unix_run_dialog_async (GtkPrintOperation          *op,
 {
   GtkWidget *pd;
   PrintResponseData *rdata;
-  const gchar *printer_name;
+  const char *printer_name;
 
   rdata = g_new (PrintResponseData, 1);
   rdata->op = g_object_ref (op);
@@ -784,9 +784,9 @@ gtk_print_operation_unix_create_preview_surface (GtkPrintOperation *op,
                                                  GtkPageSetup      *page_setup,
                                                  gdouble           *dpi_x,
                                                  gdouble           *dpi_y,
-                                                 gchar            **target)
+                                                 char             **target)
 {
-  gchar *filename;
+  char *filename;
   int fd;
   GtkPaperSize *paper_size;
   gdouble w, h;
@@ -851,7 +851,7 @@ gtk_print_operation_unix_run_dialog (GtkPrintOperation *op,
  {
   GtkWidget *pd;
   PrintResponseData rdata;
-  const gchar *printer_name;
+  const char *printer_name;
    
   rdata.op = op;
   rdata.do_print = FALSE;
@@ -1056,7 +1056,7 @@ struct _PrinterFinder
   gboolean found_printer;
   GFunc func;
   gpointer data;
-  gchar *printer_name;
+  char *printer_name;
   GList *backends;
   guint timeout_tag;
   GtkPrinter *printer;
@@ -1205,7 +1205,7 @@ printer_finder_free (PrinterFinder *finder)
 }
 
 static void 
-find_printer (const gchar *printer,
+find_printer (const char *printer,
 	      GFunc        func,
 	      gpointer     data)
 {
@@ -1260,7 +1260,7 @@ void
 _gtk_print_operation_platform_backend_launch_preview (GtkPrintOperation *op,
                                                       cairo_surface_t   *surface,
                                                       GtkWindow         *parent,
-                                                      const gchar       *filename)
+                                                      const char        *filename)
 {
   if (gdk_should_use_portal ())
     gtk_print_operation_portal_launch_preview (op, surface, parent, filename);
@@ -1273,7 +1273,7 @@ _gtk_print_operation_platform_backend_create_preview_surface (GtkPrintOperation 
 							      GtkPageSetup      *page_setup,
 							      gdouble           *dpi_x,
 							      gdouble           *dpi_y,
-							      gchar            **target)
+							      char             **target)
 {
   return gtk_print_operation_unix_create_preview_surface (op, page_setup, dpi_x, dpi_y, target);
 }

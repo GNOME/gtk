@@ -502,7 +502,7 @@ gtk_page_setup_get_page_height (GtkPageSetup *setup,
  */
 gboolean
 gtk_page_setup_load_file (GtkPageSetup *setup,
-                          const gchar  *file_name,
+                          const char   *file_name,
 			  GError      **error)
 {
   gboolean retval = FALSE;
@@ -534,7 +534,7 @@ gtk_page_setup_load_file (GtkPageSetup *setup,
  * Returns: the restored #GtkPageSetup
  */
 GtkPageSetup *
-gtk_page_setup_new_from_file (const gchar  *file_name,
+gtk_page_setup_new_from_file (const char   *file_name,
 			      GError      **error)
 {
   GtkPageSetup *setup = gtk_page_setup_new ();
@@ -585,7 +585,7 @@ string_to_enum (GType type,
 gboolean
 gtk_page_setup_load_key_file (GtkPageSetup *setup,
                               GKeyFile     *key_file,
-                              const gchar  *group_name,
+                              const char   *group_name,
                               GError      **error)
 {
   GtkPaperSize *paper_size;
@@ -671,7 +671,7 @@ out:
  */
 GtkPageSetup *
 gtk_page_setup_new_from_key_file (GKeyFile     *key_file,
-				  const gchar  *group_name,
+				  const char   *group_name,
 				  GError      **error)
 {
   GtkPageSetup *setup = gtk_page_setup_new ();
@@ -756,7 +756,7 @@ enum_to_string (GType type,
 void
 gtk_page_setup_to_key_file (GtkPageSetup *setup,
 			    GKeyFile     *key_file,
-			    const gchar  *group_name)
+			    const char   *group_name)
 {
   GtkPaperSize *paper_size;
   char *orientation;

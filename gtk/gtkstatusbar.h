@@ -46,11 +46,11 @@ GDK_AVAILABLE_IN_ALL
 GtkWidget* gtk_statusbar_new          	(void);
 GDK_AVAILABLE_IN_ALL
 guint	   gtk_statusbar_get_context_id	(GtkStatusbar *statusbar,
-					 const gchar  *context_description);
+					 const char   *context_description);
 GDK_AVAILABLE_IN_ALL
 guint      gtk_statusbar_push          	(GtkStatusbar *statusbar,
 					 guint	       context_id,
-					 const gchar  *text);
+					 const char   *text);
 GDK_AVAILABLE_IN_ALL
 void       gtk_statusbar_pop          	(GtkStatusbar *statusbar,
 					 guint	       context_id);

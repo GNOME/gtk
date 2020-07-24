@@ -80,7 +80,7 @@ text_view_error_free (TextViewError *e)
   g_free (e->message);
 }
 
-static gchar *
+static char *
 get_current_text (GtkTextBuffer *buffer)
 {
   GtkTextIter start, end;

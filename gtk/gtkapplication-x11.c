@@ -41,7 +41,7 @@ gtk_application_impl_x11_handle_window_realize (GtkApplicationImpl *impl,
 {
   GtkApplicationImplDBus *dbus = (GtkApplicationImplDBus *) impl;
   GdkSurface *gdk_surface;
-  gchar *window_path;
+  char *window_path;
 
   gdk_surface = gtk_native_get_surface (GTK_NATIVE (window));
 

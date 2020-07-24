@@ -81,17 +81,17 @@ GDK_AVAILABLE_IN_ALL
 guint32       gdk_x11_display_get_user_time (GdkDisplay *display);
 
 GDK_AVAILABLE_IN_ALL
-const gchar * gdk_x11_display_get_startup_notification_id         (GdkDisplay *display);
+const char * gdk_x11_display_get_startup_notification_id         (GdkDisplay *display);
 GDK_AVAILABLE_IN_ALL
 void          gdk_x11_display_set_startup_notification_id         (GdkDisplay  *display,
-                                                                   const gchar *startup_id);
+                                                                   const char *startup_id);
 GDK_AVAILABLE_IN_ALL
 void          gdk_x11_display_set_program_class                   (GdkDisplay  *display,
                                                                    const char  *program_class);
 
 GDK_AVAILABLE_IN_ALL
 void          gdk_x11_display_set_cursor_theme (GdkDisplay  *display,
-                                                const gchar *theme,
+                                                const char *theme,
                                                 const int    size);
 
 GDK_AVAILABLE_IN_ALL
@@ -126,7 +126,7 @@ GDK_AVAILABLE_IN_ALL
 void                           gdk_x11_display_error_trap_pop_ignored (GdkDisplay *display);
 
 GDK_AVAILABLE_IN_ALL
-void        gdk_x11_set_sm_client_id (const gchar *sm_client_id);
+void        gdk_x11_set_sm_client_id (const char *sm_client_id);
 
 G_END_DECLS
 

@@ -10,14 +10,14 @@ typedef GtkApplicationClass TestAppClass;
 static GType test_app_get_type (void);
 G_DEFINE_TYPE (TestApp, test_app, GTK_TYPE_APPLICATION)
 
-static GtkWidget *create_row (const gchar *label);
+static GtkWidget *create_row (const char *label);
 
 static void
 activate_first_row (GSimpleAction *simple,
                     GVariant      *parameter,
                     gpointer       user_data)
 {
-  const gchar *text = "First row activated (no parameter action)";
+  const char *text = "First row activated (no parameter action)";
 
   g_print ("%s\n", text);
   gtk_label_set_label (GTK_LABEL (user_data), text);
@@ -28,7 +28,7 @@ activate_print_string (GSimpleAction *simple,
                        GVariant      *parameter,
                        gpointer       user_data)
 {
-  const gchar *text = g_variant_get_string (parameter, NULL);
+  const char *text = g_variant_get_string (parameter, NULL);
 
   g_print ("%s\n", text);
   gtk_label_set_label (GTK_LABEL (user_data), text);
@@ -40,7 +40,7 @@ activate_print_int (GSimpleAction *simple,
                     gpointer       user_data)
 {
   const int value = g_variant_get_int32 (parameter);
-  gchar *text;
+  char *text;
 
   text = g_strdup_printf ("Row %d activated (int action)", value);
 
@@ -54,7 +54,7 @@ row_without_gaction_activated_cb (GtkListBox    *list,
                                   gpointer       user_data)
 {
   int index = gtk_list_box_row_get_index (row);
-  gchar *text;
+  char *text;
 
   text = g_strdup_printf ("Row %d activated (signal based)", index);
 
@@ -72,7 +72,7 @@ add_separator (GtkListBoxRow *row, GtkListBoxRow *before, gpointer data)
 }
 
 static GtkWidget *
-create_row (const gchar *text)
+create_row (const char *text)
 {
   GtkWidget *row_content, *label;
 
@@ -94,7 +94,7 @@ new_window (GApplication *app)
   GtkListBoxRow *row;
 
   int i;
-  gchar *text, *text2;
+  char *text, *text2;
 
   window = gtk_application_window_new (GTK_APPLICATION (app));
   gtk_window_set_default_size (GTK_WINDOW (window), 300, 300);

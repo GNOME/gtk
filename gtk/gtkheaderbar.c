@@ -132,7 +132,7 @@ struct _GtkHeaderBarPrivate
   GtkWidget *title_widget;
 
   gboolean show_title_buttons;
-  gchar *decoration_layout;
+  char *decoration_layout;
   gboolean track_default_decoration;
 
   GtkWidget *start_window_controls;
@@ -245,7 +245,7 @@ update_title (GtkHeaderBar *bar)
 {
   GtkHeaderBarPrivate *priv = gtk_header_bar_get_instance_private (bar);
   GtkRoot *root;
-  const gchar *title = NULL;
+  const char *title = NULL;
 
   if (!priv->title_label)
     return;
@@ -656,7 +656,7 @@ static void
 gtk_header_bar_buildable_add_child (GtkBuildable *buildable,
                                     GtkBuilder   *builder,
                                     GObject      *child,
-                                    const gchar  *type)
+                                    const char   *type)
 {
   if (g_strcmp0 (type, "title") == 0)
     gtk_header_bar_set_title_widget (GTK_HEADER_BAR (buildable), GTK_WIDGET (child));
@@ -803,7 +803,7 @@ gtk_header_bar_set_show_title_buttons (GtkHeaderBar *bar,
  */
 void
 gtk_header_bar_set_decoration_layout (GtkHeaderBar *bar,
-                                      const gchar  *layout)
+                                      const char   *layout)
 {
   GtkHeaderBarPrivate *priv;
 
@@ -826,7 +826,7 @@ gtk_header_bar_set_decoration_layout (GtkHeaderBar *bar,
  *
  * Returns: the decoration layout
  */
-const gchar *
+const char *
 gtk_header_bar_get_decoration_layout (GtkHeaderBar *bar)
 {
   GtkHeaderBarPrivate *priv;

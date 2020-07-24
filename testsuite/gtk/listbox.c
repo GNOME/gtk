@@ -52,7 +52,7 @@ test_sort (void)
   GtkListBoxRow *row;
   GtkWidget *label;
   int i, r;
-  gchar *s;
+  char *s;
   int count;
 
   list = GTK_LIST_BOX (gtk_list_box_new ());
@@ -108,7 +108,7 @@ test_selection (void)
   GtkListBoxRow *row, *row2;
   GtkWidget *label;
   int i;
-  gchar *s;
+  char *s;
   int count;
   int index;
 
@@ -197,7 +197,7 @@ test_multi_selection (void)
   GtkListBoxRow *row, *row2;
   GtkWidget *label;
   int i;
-  gchar *s;
+  char *s;
   int count;
 
   list = GTK_LIST_BOX (gtk_list_box_new ());
@@ -310,7 +310,7 @@ test_filter (void)
   GtkListBox *list;
   GtkListBoxRow *row;
   int i;
-  gchar *s;
+  char *s;
   GtkWidget *label;
   int count;
 
@@ -357,7 +357,7 @@ header_func (GtkListBoxRow *row,
   int i;
   int *count = data;
   GtkWidget *header;
-  gchar *s;
+  char *s;
 
   (*count)++;
 
@@ -402,7 +402,7 @@ test_header (void)
   GtkListBox *list;
   GtkListBoxRow *row;
   int i;
-  gchar *s;
+  char *s;
   GtkWidget *label;
   int count;
 

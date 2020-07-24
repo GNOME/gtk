@@ -17,7 +17,7 @@
 typedef struct
 {
   int    number;
-  gchar *product;
+  char *product;
   int    yummy;
 }
 Item;
@@ -224,7 +224,7 @@ separator_row (GtkTreeModel *model,
 static void
 editing_started (GtkCellRenderer *cell,
                  GtkCellEditable *editable,
-                 const gchar     *path,
+                 const char      *path,
                  gpointer         data)
 {
   gtk_combo_box_set_row_separator_func (GTK_COMBO_BOX (editable),
@@ -233,8 +233,8 @@ editing_started (GtkCellRenderer *cell,
 
 static void
 cell_edited (GtkCellRendererText *cell,
-             const gchar         *path_string,
-             const gchar         *new_text,
+             const char          *path_string,
+             const char          *new_text,
              gpointer             data)
 {
   GtkTreeModel *model = (GtkTreeModel *)data;
@@ -262,7 +262,7 @@ cell_edited (GtkCellRendererText *cell,
     case COLUMN_ITEM_PRODUCT:
       {
         int i;
-        gchar *old_text;
+        char *old_text;
 
         gtk_tree_model_get (model, &iter, column, &old_text, -1);
         g_free (old_text);

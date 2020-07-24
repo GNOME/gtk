@@ -257,7 +257,7 @@ gdk_x11_drop_finalize (GObject *object)
 static void
 print_target_list (GdkContentFormats *formats)
 {
-  gchar *name = gdk_content_formats_to_string (formats);
+  char *name = gdk_content_formats_to_string (formats);
   g_message ("DND formats: %s", name);
   g_free (name);
 }
@@ -270,7 +270,7 @@ print_target_list (GdkContentFormats *formats)
 /* Utility functions */
 
 static struct {
-  const gchar *name;
+  const char *name;
   GdkDragAction action;
 } xdnd_actions_table[] = {
     { "XdndActionCopy",    GDK_ACTION_COPY },

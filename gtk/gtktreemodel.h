@@ -195,7 +195,7 @@ struct _GtkTreeModelIface
 GDK_AVAILABLE_IN_ALL
 GtkTreePath *gtk_tree_path_new              (void);
 GDK_AVAILABLE_IN_ALL
-GtkTreePath *gtk_tree_path_new_from_string  (const gchar       *path);
+GtkTreePath *gtk_tree_path_new_from_string  (const char        *path);
 GDK_AVAILABLE_IN_ALL
 GtkTreePath *gtk_tree_path_new_from_indices (int                first_index,
 					     ...);
@@ -203,7 +203,7 @@ GDK_AVAILABLE_IN_ALL
 GtkTreePath *gtk_tree_path_new_from_indicesv (int              *indices,
 					      gsize             length);
 GDK_AVAILABLE_IN_ALL
-gchar       *gtk_tree_path_to_string        (GtkTreePath       *path);
+char        *gtk_tree_path_to_string        (GtkTreePath       *path);
 GDK_AVAILABLE_IN_ALL
 GtkTreePath *gtk_tree_path_new_first        (void);
 GDK_AVAILABLE_IN_ALL
@@ -314,9 +314,9 @@ gboolean          gtk_tree_model_get_iter        (GtkTreeModel *tree_model,
 GDK_AVAILABLE_IN_ALL
 gboolean          gtk_tree_model_get_iter_from_string (GtkTreeModel *tree_model,
 						       GtkTreeIter  *iter,
-						       const gchar  *path_string);
+						       const char   *path_string);
 GDK_AVAILABLE_IN_ALL
-gchar *           gtk_tree_model_get_string_from_iter (GtkTreeModel *tree_model,
+char *           gtk_tree_model_get_string_from_iter (GtkTreeModel *tree_model,
                                                        GtkTreeIter  *iter);
 GDK_AVAILABLE_IN_ALL
 gboolean          gtk_tree_model_get_iter_first  (GtkTreeModel *tree_model,

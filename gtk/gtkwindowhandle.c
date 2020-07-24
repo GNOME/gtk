@@ -268,7 +268,7 @@ perform_titlebar_action (GtkWindowHandle *self,
                          int              n_press)
 {
   GtkSettings *settings;
-  gchar *action = NULL;
+  char *action = NULL;
   gboolean retval = TRUE;
 
   settings = gtk_widget_get_settings (GTK_WIDGET (self));
@@ -576,7 +576,7 @@ static void
 gtk_window_handle_buildable_add_child (GtkBuildable *buildable,
                                        GtkBuilder   *builder,
                                        GObject      *child,
-                                       const gchar  *type)
+                                       const char   *type)
 {
   if (GTK_IS_WIDGET (child))
     gtk_window_handle_set_child (GTK_WINDOW_HANDLE (buildable), GTK_WIDGET (child));

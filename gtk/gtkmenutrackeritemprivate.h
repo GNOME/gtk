@@ -46,23 +46,23 @@ GtkMenuTrackerItem *   _gtk_menu_tracker_item_new                       (GtkActi
                                                                          GMenuModel          *model,
                                                                          int                  item_index,
                                                                          gboolean             mac_os_mode,
-                                                                         const gchar         *action_namespace,
+                                                                         const char          *action_namespace,
                                                                          gboolean             is_separator);
 
-const gchar *           gtk_menu_tracker_item_get_special               (GtkMenuTrackerItem *self);
+const char *           gtk_menu_tracker_item_get_special               (GtkMenuTrackerItem *self);
 
-const gchar *           gtk_menu_tracker_item_get_display_hint          (GtkMenuTrackerItem *self);
+const char *           gtk_menu_tracker_item_get_display_hint          (GtkMenuTrackerItem *self);
 
-const gchar *           gtk_menu_tracker_item_get_text_direction        (GtkMenuTrackerItem *self);
+const char *           gtk_menu_tracker_item_get_text_direction        (GtkMenuTrackerItem *self);
 
 GtkActionObservable *  _gtk_menu_tracker_item_get_observable            (GtkMenuTrackerItem *self);
 
 gboolean                gtk_menu_tracker_item_get_is_separator          (GtkMenuTrackerItem *self);
 
 gboolean                gtk_menu_tracker_item_get_has_link              (GtkMenuTrackerItem *self,
-                                                                         const gchar        *link_name);
+                                                                         const char         *link_name);
 
-const gchar *           gtk_menu_tracker_item_get_label                 (GtkMenuTrackerItem *self);
+const char *           gtk_menu_tracker_item_get_label                 (GtkMenuTrackerItem *self);
 
 GIcon *                 gtk_menu_tracker_item_get_icon                  (GtkMenuTrackerItem *self);
 
@@ -74,12 +74,12 @@ GtkMenuTrackerItemRole  gtk_menu_tracker_item_get_role                  (GtkMenu
 
 gboolean                gtk_menu_tracker_item_get_toggled               (GtkMenuTrackerItem *self);
 
-const gchar *           gtk_menu_tracker_item_get_accel                 (GtkMenuTrackerItem *self);
+const char *           gtk_menu_tracker_item_get_accel                 (GtkMenuTrackerItem *self);
 
 GMenuModel *           _gtk_menu_tracker_item_get_link                  (GtkMenuTrackerItem *self,
-                                                                         const gchar        *link_name);
+                                                                         const char         *link_name);
 
-gchar *                _gtk_menu_tracker_item_get_link_namespace        (GtkMenuTrackerItem *self);
+char *                _gtk_menu_tracker_item_get_link_namespace        (GtkMenuTrackerItem *self);
 
 gboolean                gtk_menu_tracker_item_may_disappear             (GtkMenuTrackerItem *self);
 

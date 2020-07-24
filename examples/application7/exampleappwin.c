@@ -20,7 +20,7 @@ static void
 search_text_changed (GtkEntry         *entry,
                      ExampleAppWindow *win)
 {
-  const gchar *text;
+  const char *text;
   GtkWidget *tab;
   GtkWidget *view;
   GtkTextBuffer *buffer;
@@ -120,9 +120,9 @@ void
 example_app_window_open (ExampleAppWindow *win,
                          GFile            *file)
 {
-  gchar *basename;
+  char *basename;
   GtkWidget *scrolled, *view;
-  gchar *contents;
+  char *contents;
   gsize length;
   GtkTextBuffer *buffer;
   GtkTextTag *tag;

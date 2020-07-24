@@ -24,7 +24,7 @@
 
 G_DEFINE_TYPE (GtkLockButtonAccessible, gtk_lock_button_accessible, GTK_TYPE_BUTTON_ACCESSIBLE)
 
-static const gchar *
+static const char *
 gtk_lock_button_accessible_get_name (AtkObject *obj)
 {
   GtkLockButton *lockbutton;

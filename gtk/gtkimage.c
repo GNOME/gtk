@@ -398,7 +398,7 @@ gtk_image_get_property (GObject     *object,
  * Returns: a new #GtkImage
  **/
 GtkWidget*
-gtk_image_new_from_file   (const gchar *filename)
+gtk_image_new_from_file   (const char *filename)
 {
   GtkImage *image;
 
@@ -429,7 +429,7 @@ gtk_image_new_from_file   (const gchar *filename)
  * Returns: a new #GtkImage
  **/
 GtkWidget*
-gtk_image_new_from_resource (const gchar *resource_path)
+gtk_image_new_from_resource (const char *resource_path)
 {
   GtkImage *image;
 
@@ -512,7 +512,7 @@ gtk_image_new_from_paintable (GdkPaintable *paintable)
  * Returns: a new #GtkImage displaying the themed icon
  **/
 GtkWidget*
-gtk_image_new_from_icon_name (const gchar *icon_name)
+gtk_image_new_from_icon_name (const char *icon_name)
 {
   GtkImage *image;
 
@@ -580,8 +580,8 @@ on_loader_size_prepared (GdkPixbufLoader *loader,
 
 static GdkPixbufAnimation *
 load_scalable_with_loader (GtkImage    *image,
-			   const gchar *file_path,
-			   const gchar *resource_path,
+			   const char *file_path,
+			   const char *resource_path,
 			   int         *scale_factor_out)
 {
   GdkPixbufLoader *loader;
@@ -649,7 +649,7 @@ load_scalable_with_loader (GtkImage    *image,
  **/
 void
 gtk_image_set_from_file   (GtkImage    *image,
-                           const gchar *filename)
+                           const char *filename)
 {
   GdkPixbufAnimation *anim;
   int scale_factor;
@@ -697,7 +697,7 @@ gtk_image_set_from_file   (GtkImage    *image,
 #endif
 
 static gboolean
-resource_is_pixdata (const gchar *resource_path)
+resource_is_pixdata (const char *resource_path)
 {
   const guint8 *stream;
   guint32 magic;
@@ -731,7 +731,7 @@ out:
  **/
 void
 gtk_image_set_from_resource (GtkImage    *image,
-			     const gchar *resource_path)
+			     const char *resource_path)
 {
   GdkPixbufAnimation *animation;
   int scale_factor = 1;
@@ -828,7 +828,7 @@ gtk_image_set_from_pixbuf (GtkImage  *image,
  **/
 void
 gtk_image_set_from_icon_name  (GtkImage    *image,
-			       const gchar *icon_name)
+			       const char *icon_name)
 {
   g_return_if_fail (GTK_IS_IMAGE (image));
 
@@ -994,7 +994,7 @@ gtk_image_get_paintable (GtkImage *image)
  *
  * Returns: (transfer none) (allow-none): the icon name, or %NULL
  **/
-const gchar *
+const char *
 gtk_image_get_icon_name (GtkImage *image)
 {
   g_return_val_if_fail (GTK_IS_IMAGE (image), NULL);

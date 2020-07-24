@@ -38,9 +38,9 @@ G_BEGIN_DECLS
 
 GDK_AVAILABLE_IN_ALL
 Atom                  gdk_x11_get_xatom_by_name_for_display (GdkDisplay  *display,
-                                                             const gchar *atom_name);
+                                                             const char *atom_name);
 GDK_AVAILABLE_IN_ALL
-const gchar *         gdk_x11_get_xatom_name_for_display (GdkDisplay  *display,
+const char *         gdk_x11_get_xatom_name_for_display (GdkDisplay  *display,
                                                           Atom         xatom);
 
 G_END_DECLS

@@ -42,14 +42,14 @@ typedef struct _GtkLabel GtkLabel;
 GDK_AVAILABLE_IN_ALL
 GType                 gtk_label_get_type          (void) G_GNUC_CONST;
 GDK_AVAILABLE_IN_ALL
-GtkWidget*            gtk_label_new               (const gchar   *str);
+GtkWidget*            gtk_label_new               (const char    *str);
 GDK_AVAILABLE_IN_ALL
-GtkWidget*            gtk_label_new_with_mnemonic (const gchar   *str);
+GtkWidget*            gtk_label_new_with_mnemonic (const char    *str);
 GDK_AVAILABLE_IN_ALL
 void                  gtk_label_set_text          (GtkLabel      *self,
-						   const gchar   *str);
+						   const char    *str);
 GDK_AVAILABLE_IN_ALL
-const gchar*          gtk_label_get_text          (GtkLabel      *self);
+const char *          gtk_label_get_text          (GtkLabel      *self);
 GDK_AVAILABLE_IN_ALL
 void                  gtk_label_set_attributes    (GtkLabel      *self,
 						   PangoAttrList *attrs);
@@ -57,12 +57,12 @@ GDK_AVAILABLE_IN_ALL
 PangoAttrList        *gtk_label_get_attributes    (GtkLabel      *self);
 GDK_AVAILABLE_IN_ALL
 void                  gtk_label_set_label         (GtkLabel      *self,
-						   const gchar   *str);
+						   const char    *str);
 GDK_AVAILABLE_IN_ALL
-const gchar *         gtk_label_get_label         (GtkLabel      *self);
+const char *         gtk_label_get_label         (GtkLabel      *self);
 GDK_AVAILABLE_IN_ALL
 void                  gtk_label_set_markup        (GtkLabel      *self,
-						   const gchar   *str);
+						   const char    *str);
 GDK_AVAILABLE_IN_ALL
 void                  gtk_label_set_use_markup    (GtkLabel      *self,
 						   gboolean       setting);
@@ -76,7 +76,7 @@ gboolean              gtk_label_get_use_underline (GtkLabel      *self);
 
 GDK_AVAILABLE_IN_ALL
 void     gtk_label_set_markup_with_mnemonic       (GtkLabel         *self,
-						   const gchar      *str);
+						   const char       *str);
 GDK_AVAILABLE_IN_ALL
 guint    gtk_label_get_mnemonic_keyval            (GtkLabel         *self);
 GDK_AVAILABLE_IN_ALL
@@ -86,7 +86,7 @@ GDK_AVAILABLE_IN_ALL
 GtkWidget *gtk_label_get_mnemonic_widget          (GtkLabel         *self);
 GDK_AVAILABLE_IN_ALL
 void     gtk_label_set_text_with_mnemonic         (GtkLabel         *self,
-						   const gchar      *str);
+						   const char       *str);
 GDK_AVAILABLE_IN_ALL
 void     gtk_label_set_justify                    (GtkLabel         *self,
 						   GtkJustification  jtype);
@@ -150,7 +150,7 @@ GDK_AVAILABLE_IN_ALL
 gboolean     gtk_label_get_single_line_mode  (GtkLabel *self);
 
 GDK_AVAILABLE_IN_ALL
-const gchar *gtk_label_get_current_uri (GtkLabel *self);
+const char *gtk_label_get_current_uri (GtkLabel *self);
 
 GDK_AVAILABLE_IN_ALL
 void         gtk_label_set_xalign (GtkLabel *self,

@@ -867,13 +867,13 @@ int           gtk_style_context_get_scale    (GtkStyleContext *context);
 
 GDK_AVAILABLE_IN_ALL
 void     gtk_style_context_add_class    (GtkStyleContext *context,
-                                         const gchar     *class_name);
+                                         const char      *class_name);
 GDK_AVAILABLE_IN_ALL
 void     gtk_style_context_remove_class (GtkStyleContext *context,
-                                         const gchar     *class_name);
+                                         const char      *class_name);
 GDK_AVAILABLE_IN_ALL
 gboolean gtk_style_context_has_class    (GtkStyleContext *context,
-                                         const gchar     *class_name);
+                                         const char      *class_name);
 
 GDK_AVAILABLE_IN_ALL
 void        gtk_style_context_set_display (GtkStyleContext *context,
@@ -883,7 +883,7 @@ GdkDisplay *gtk_style_context_get_display (GtkStyleContext *context);
 
 GDK_AVAILABLE_IN_ALL
 gboolean gtk_style_context_lookup_color (GtkStyleContext *context,
-                                         const gchar     *color_name,
+                                         const char      *color_name,
                                          GdkRGBA         *color);
 
 /* Some helper functions to retrieve most common properties */

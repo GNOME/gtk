@@ -2542,7 +2542,7 @@ gtk_tree_model_sort_build_level (GtkTreeModelSort *tree_model_sort,
 	      if (parent_level)
 	        {
 	          GtkTreePath *level;
-		  gchar *str;
+		  char *str;
 
 		  level = gtk_tree_model_sort_elt_get_path (parent_level,
 							    parent_elt);

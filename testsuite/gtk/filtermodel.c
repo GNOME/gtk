@@ -50,7 +50,7 @@ create_tree_store_set_values (GtkTreeStore *store,
                               gboolean      visible)
 {
   GtkTreePath *path;
-  gchar *path_string;
+  char *path_string;
 
   path = gtk_tree_model_get_path (GTK_TREE_MODEL (store), iter);
   path_string = gtk_tree_path_to_string (path);
@@ -525,7 +525,7 @@ check_filter_model_recurse (FilterTest  *fixture,
       if (visible)
         {
           GtkTreePath *tmp;
-          gchar *filter_str, *store_str;
+          char *filter_str, *store_str;
 
           g_assert_true (filter_has_next);
 
@@ -607,7 +607,7 @@ check_filter_model_with_root (FilterTest  *fixture,
 
 static void
 check_level_length (GtkTreeModelFilter *filter,
-                    const gchar        *level,
+                    const char         *level,
                     const int           expected_length)
 {
   if (!level)
@@ -633,7 +633,7 @@ check_level_length (GtkTreeModelFilter *filter,
 
 static void
 set_path_visibility (FilterTest  *fixture,
-                     const gchar *path,
+                     const char *path,
                      gboolean     visible)
 {
   GtkTreeIter store_iter;
@@ -648,7 +648,7 @@ set_path_visibility (FilterTest  *fixture,
 #if 0
 static void
 insert_path_with_visibility (FilterTest  *fixture,
-                             const gchar *path_string,
+                             const char *path_string,
                              gboolean     visible)
 {
   int position;
@@ -6184,7 +6184,7 @@ specific_bug_621076_visible_func (GtkTreeModel *model,
                                   gpointer      data)
 {
   gboolean visible = FALSE;
-  gchar *str = NULL;
+  char *str = NULL;
 
   gtk_tree_model_get (model, iter, 0, &str, -1);
   if (str != NULL && g_str_has_prefix (str, "visible"))
@@ -6480,7 +6480,7 @@ specific_bug_657353_visible_func (GtkTreeModel *model,
                                   GtkTreeIter  *iter,
                                   gpointer      data)
 {
-  gchar *str;
+  char *str;
   gboolean ret = FALSE;
 
   gtk_tree_model_get (model, iter, 0, &str, -1);

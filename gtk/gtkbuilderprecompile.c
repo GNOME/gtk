@@ -119,9 +119,9 @@ typedef struct {
 
 static void
 record_start_element (GMarkupParseContext  *context,
-                      const gchar          *element_name,
-                      const gchar         **names,
-                      const gchar         **values,
+                      const char           *element_name,
+                      const char          **names,
+                      const char          **values,
                       gpointer              user_data,
                       GError              **error)
 {
@@ -147,7 +147,7 @@ record_start_element (GMarkupParseContext  *context,
 
 static void
 record_end_element (GMarkupParseContext  *context,
-                    const gchar          *element_name,
+                    const char           *element_name,
                     gpointer              user_data,
                     GError              **error)
 {
@@ -158,7 +158,7 @@ record_end_element (GMarkupParseContext  *context,
 
 static void
 record_text (GMarkupParseContext  *context,
-             const gchar          *text,
+             const char           *text,
              gsize                 text_len,
              gpointer              user_data,
              GError              **error)
@@ -303,7 +303,7 @@ marshal_tree (GString *marshaled,
  * returns: A #GByte with the precompiled data
  **/
 GBytes *
-_gtk_buildable_parser_precompile (const gchar         *text,
+_gtk_buildable_parser_precompile (const char          *text,
                                   gssize               text_len,
                                   GError             **error)
 {
@@ -424,15 +424,15 @@ replay_start_element (GtkBuildableParseContext *context,
 {
   const char *element_name;
   guint32 i, n_attrs;
-  const gchar **attr_names;
-  const gchar **attr_values;
+  const char **attr_names;
+  const char **attr_values;
   GError *tmp_error = NULL;
 
   element_name = demarshal_string (tree, strings);
   n_attrs = demarshal_uint32 (tree);
 
-  attr_names = g_newa (const gchar *, n_attrs + 1);
-  attr_values = g_newa (const gchar *, n_attrs + 1);
+  attr_names = g_newa (const char *, n_attrs + 1);
+  attr_values = g_newa (const char *, n_attrs + 1);
   for (i = 0; i < n_attrs; i++)
     {
       attr_names[i] = demarshal_string (tree, strings);
@@ -505,7 +505,7 @@ replay_text (GtkBuildableParseContext *context,
 }
 
 gboolean
-_gtk_buildable_parser_is_precompiled (const gchar          *data,
+_gtk_buildable_parser_is_precompiled (const char           *data,
                                       gssize                data_len)
 {
   return
@@ -518,7 +518,7 @@ _gtk_buildable_parser_is_precompiled (const gchar          *data,
 
 gboolean
 _gtk_buildable_parser_replay_precompiled (GtkBuildableParseContext *context,
-                                          const gchar          *data,
+                                          const char           *data,
                                           gssize                data_len,
                                           GError              **error)
 {

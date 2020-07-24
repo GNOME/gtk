@@ -99,7 +99,7 @@ new_window (GApplication *app,
 
   if (file != NULL)
     {
-      gchar *contents;
+      char *contents;
       gsize length;
 
       if (g_file_load_contents (file, NULL, &contents, &length, NULL, NULL))
@@ -125,7 +125,7 @@ static void
 plug_man_open (GApplication  *application,
                 GFile        **files,
                 int            n_files,
-                const gchar   *hint)
+                const char    *hint)
 {
   int i;
 
@@ -184,7 +184,7 @@ static gboolean is_red_plugin_enabled;
 static gboolean is_black_plugin_enabled;
 
 static gboolean
-plugin_enabled (const gchar *name)
+plugin_enabled (const char *name)
 {
   if (g_strcmp0 (name, "red") == 0)
     return is_red_plugin_enabled;
@@ -228,7 +228,7 @@ plugin_action (GAction  *action,
 }
 
 static void
-enable_plugin (const gchar *name)
+enable_plugin (const char *name)
 {
   GMenuModel *plugin_menu;
   GAction *action;
@@ -246,8 +246,8 @@ enable_plugin (const gchar *name)
     {
       GMenu *section;
       GMenuItem *item;
-      gchar *label;
-      gchar *action_name;
+      char *label;
+      char *action_name;
 
       section = g_menu_new ();
       label = g_strdup_printf ("Turn text %s", name);
@@ -272,7 +272,7 @@ enable_plugin (const gchar *name)
 }
 
 static void
-disable_plugin (const gchar *name)
+disable_plugin (const char *name)
 {
   GMenuModel *plugin_menu;
 
@@ -285,7 +285,7 @@ disable_plugin (const gchar *name)
 
       for (i = 0; i < g_menu_model_get_n_items (plugin_menu); i++)
         {
-           gchar *id;
+           char *id;
            if (g_menu_model_get_item_attribute (plugin_menu, i, "id", "s", &id))
              {
                if (g_strcmp0 (id, name) == 0)
@@ -311,7 +311,7 @@ disable_plugin (const gchar *name)
 
 static void
 enable_or_disable_plugin (GtkToggleButton *button,
-                          const gchar     *name)
+                          const char      *name)
 {
   if (plugin_enabled (name))
     disable_plugin (name);
@@ -498,7 +498,7 @@ main (int argc, char **argv)
 {
   PlugMan *plug_man;
   int status;
-  const gchar *accels[] = { "F11", NULL };
+  const char *accels[] = { "F11", NULL };
 
   plug_man = plug_man_new ();
   gtk_application_set_accels_for_action (GTK_APPLICATION (plug_man),

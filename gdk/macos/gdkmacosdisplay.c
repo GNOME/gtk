@@ -94,7 +94,7 @@ get_monitor (GdkMacosDisplay *self,
 
 static gboolean
 gdk_macos_display_get_setting (GdkDisplay  *display,
-                               const gchar *setting,
+                               const char *setting,
                                GValue      *value)
 {
   return _gdk_macos_display_get_setting (GDK_MACOS_DISPLAY (display), setting, value);
@@ -343,7 +343,7 @@ gdk_macos_display_load_display_link (GdkMacosDisplay *self)
   g_source_attach (self->frame_source, NULL);
 }
 
-static const gchar *
+static const char *
 gdk_macos_display_get_name (GdkDisplay *display)
 {
   return GDK_MACOS_DISPLAY (display)->name;
@@ -382,7 +382,7 @@ gdk_macos_display_has_pending (GdkDisplay *display)
 
 static void
 gdk_macos_display_notify_startup_complete (GdkDisplay  *display,
-                                           const gchar *startup_notification_id)
+                                           const char *startup_notification_id)
 {
   /* Not Supported */
 }
@@ -677,7 +677,7 @@ gdk_macos_display_init (GdkMacosDisplay *self)
 }
 
 GdkDisplay *
-_gdk_macos_display_open (const gchar *display_name)
+_gdk_macos_display_open (const char *display_name)
 {
   static GdkMacosDisplay *self;
   ProcessSerialNumber psn = { 0, kCurrentProcess };

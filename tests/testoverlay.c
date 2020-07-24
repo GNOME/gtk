@@ -220,7 +220,7 @@ test_scrolling (void)
   GtkWidget *text;
   GtkWidget *child;
   GtkTextBuffer *buffer;
-  gchar *contents;
+  char *contents;
   gsize len;
 
   win = gtk_window_new ();
@@ -261,7 +261,7 @@ test_scrolling (void)
   return win;
 }
 
-static const gchar *buffer =
+static const char *buffer =
 "<interface>"
 "  <object class='GtkWindow' id='window'>"
 "    <property name='title'>GtkBuilder support</property>"
@@ -368,7 +368,7 @@ test_chase (void)
   GtkWidget *text;
   GtkWidget *child;
   GtkTextBuffer *text_buffer;
-  gchar *contents;
+  char *contents;
   gsize len;
   GtkEventController *controller;
 

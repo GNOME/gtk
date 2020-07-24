@@ -222,7 +222,7 @@ gtk_tooltip_dispose (GObject *object)
  */
 void
 gtk_tooltip_set_markup (GtkTooltip  *tooltip,
-			const gchar *markup)
+			const char *markup)
 {
   g_return_if_fail (GTK_IS_TOOLTIP (tooltip));
 
@@ -239,7 +239,7 @@ gtk_tooltip_set_markup (GtkTooltip  *tooltip,
  */
 void
 gtk_tooltip_set_text (GtkTooltip  *tooltip,
-                      const gchar *text)
+                      const char *text)
 {
   g_return_if_fail (GTK_IS_TOOLTIP (tooltip));
 
@@ -275,7 +275,7 @@ gtk_tooltip_set_icon (GtkTooltip   *tooltip,
  */
 void
 gtk_tooltip_set_icon_from_icon_name (GtkTooltip  *tooltip,
-				     const gchar *icon_name)
+				     const char *icon_name)
 {
   g_return_if_fail (GTK_IS_TOOLTIP (tooltip));
 

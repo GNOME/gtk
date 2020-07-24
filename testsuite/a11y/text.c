@@ -23,7 +23,7 @@
 
 static void
 set_text (GtkWidget   *widget,
-          const gchar *text)
+          const char *text)
 {
   if (GTK_IS_LABEL (widget))
     gtk_label_set_text (GTK_LABEL (widget), text);
@@ -37,11 +37,11 @@ set_text (GtkWidget   *widget,
 
 static void
 append_text (GtkWidget   *widget,
-             const gchar *text)
+             const char *text)
 {
   if (GTK_IS_LABEL (widget))
     {
-      gchar *tmp;
+      char *tmp;
 
       tmp = g_strconcat (gtk_label_get_text (GTK_LABEL (widget)), text, NULL);
       gtk_label_set_text (GTK_LABEL (widget), tmp);
@@ -49,7 +49,7 @@ append_text (GtkWidget   *widget,
     }
   else if (GTK_IS_EDITABLE (widget))
     {
-      gchar *tmp;
+      char *tmp;
 
       tmp = g_strconcat (gtk_editable_get_text (GTK_EDITABLE (widget)), text, NULL);
       gtk_editable_set_text (GTK_EDITABLE (widget), tmp);
@@ -72,8 +72,8 @@ static void
 test_basic (GtkWidget *widget)
 {
   AtkText *atk_text;
-  const gchar *text = "Text goes here";
-  gchar *ret;
+  const char *text = "Text goes here";
+  char *ret;
   int count;
   gunichar c;
 
@@ -128,8 +128,8 @@ static void
 test_text_changed (GtkWidget *widget)
 {
   AtkText *atk_text;
-  const gchar *text = "Täxt goes here";
-  const gchar *text2 = "Täxt again";
+  const char *text = "Täxt goes here";
+  const char *text2 = "Täxt again";
   SignalData delete_data;
   SignalData insert_data;
   gboolean cant_append = FALSE;
@@ -200,11 +200,11 @@ typedef struct {
   AtkTextBoundary boundary;
   int start;
   int end;
-  const gchar *word;
+  const char *word;
 } Word;
 
 #ifdef DUMP_RESULTS
-static const gchar *
+static const char *
 boundary (AtkTextBoundary b)
 {
   switch (b)
@@ -220,7 +220,7 @@ boundary (AtkTextBoundary b)
     }
 }
 
-static const gchar *
+static const char *
 gravity (int g)
 {
   if (g < 0) return "before";
@@ -228,10 +228,10 @@ gravity (int g)
   else return "around";
 }
 
-const gchar *
+const char *
 char_rep (gunichar c)
 {
-  static gchar out[6];
+  static char out[6];
 
   switch (c)
     {
@@ -246,8 +246,8 @@ char_rep (gunichar c)
     }
 }
 
-gchar *
-escape (const gchar *p)
+char *
+escape (const char *p)
 {
   GString *s;
 
@@ -272,11 +272,11 @@ show_text_attributes (PangoLayout *l)
 {
   const PangoLogAttr *attr;
   int n_attrs;
-  const gchar *s;
-  gchar e;
-  const gchar *p;
+  const char *s;
+  char e;
+  const char *p;
   int i;
-  const gchar *text;
+  const char *text;
   GSList *lines, *li;
   glong so, eo;
 
@@ -385,7 +385,7 @@ static void
 test_words (GtkWidget *widget)
 {
   AtkText *atk_text;
-  const gchar *text = "abc! def\nghi jkl\nmno";
+  const char *text = "abc! def\nghi jkl\nmno";
   Word expected[] = {
     { -1,  0, ATK_TEXT_BOUNDARY_CHAR,            0,  0, "" },
     { -1,  1, ATK_TEXT_BOUNDARY_CHAR,            0,  1, "a" },
@@ -831,7 +831,7 @@ test_words (GtkWidget *widget)
     {  0, -1, }
   };
   int start, end;
-  gchar *word;
+  char *word;
   int i;
 
   atk_text = ATK_TEXT (gtk_widget_get_accessible (widget));
@@ -964,9 +964,9 @@ static void
 test_selection (GtkWidget *widget)
 {
   AtkText *atk_text;
-  const gchar *text = "Bla bla bla";
+  const char *text = "Bla bla bla";
   int n;
-  gchar *ret;
+  char *ret;
   int start, end;
   SelectionData data1;
   SelectionData data2;
@@ -1030,11 +1030,11 @@ setup_test (GtkWidget *widget)
 }
 
 static void
-add_text_test (const gchar      *prefix,
+add_text_test (const char       *prefix,
                GTestFixtureFunc  test_func,
                GtkWidget        *widget)
 {
-  gchar *path;
+  char *path;
 
   path = g_strdup_printf ("%s/%s", prefix, G_OBJECT_TYPE_NAME (widget));
   g_test_add_vtable (path,
@@ -1062,7 +1062,7 @@ test_bold_label (void)
 {
   GtkWidget *label;
   AtkObject *atk_obj;
-  gchar *text;
+  char *text;
 
   /*http://bugzilla.gnome.org/show_bug.cgi?id=126797 */
 

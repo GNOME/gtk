@@ -180,7 +180,7 @@ static gboolean dialog_get_reverse                 (GtkPrintUnixDialog *dialog);
 static int      dialog_get_n_copies                (GtkPrintUnixDialog *dialog);
 
 static gboolean set_active_printer                 (GtkPrintUnixDialog *dialog,
-                                                    const gchar        *printer_name);
+                                                    const char         *printer_name);
 static void redraw_page_layout_preview             (GtkPrintUnixDialog *dialog);
 static GListModel *load_print_backends             (GtkPrintUnixDialog *dialog);
 
@@ -188,9 +188,9 @@ static GListModel *load_print_backends             (GtkPrintUnixDialog *dialog);
 static void gtk_print_unix_dialog_buildable_init                    (GtkBuildableIface *iface);
 static GObject *gtk_print_unix_dialog_buildable_get_internal_child  (GtkBuildable *buildable,
                                                                      GtkBuilder   *builder,
-                                                                     const gchar  *childname);
+                                                                     const char   *childname);
 
-static const gchar common_paper_sizes[][16] = {
+static const char common_paper_sizes[][16] = {
   "na_letter",
   "na_legal",
   "iso_a4",
@@ -332,7 +332,7 @@ struct _GtkPrintUnixDialog
   gulong options_changed_handler;
   gulong mark_conflicts_id;
 
-  gchar *format_for_printer;
+  char *format_for_printer;
 
   int current_page;
   GtkCssNode *collate_paper_node;
@@ -968,7 +968,7 @@ gtk_print_unix_dialog_buildable_init (GtkBuildableIface *iface)
 static GObject *
 gtk_print_unix_dialog_buildable_get_internal_child (GtkBuildable *buildable,
                                                     GtkBuilder   *builder,
-                                                    const gchar  *childname)
+                                                    const char   *childname)
 {
   GtkPrintUnixDialog *dialog = GTK_PRINT_UNIX_DIALOG (buildable);
 
@@ -1201,11 +1201,11 @@ default_printer_list_sort_func (gconstpointer a,
 }
 
 static GtkWidget *
-wrap_in_frame (const gchar *label,
+wrap_in_frame (const char *label,
                GtkWidget   *child)
 {
   GtkWidget *box, *label_widget;
-  gchar *bold_text;
+  char *bold_text;
 
   label_widget = gtk_label_new (NULL);
   gtk_widget_set_halign (label_widget, GTK_ALIGN_START);
@@ -1230,7 +1230,7 @@ wrap_in_frame (const gchar *label,
 
 static gboolean
 setup_option (GtkPrintUnixDialog     *dialog,
-              const gchar            *option_name,
+              const char             *option_name,
               GtkPrinterOptionWidget *widget)
 {
   GtkPrinterOption *option;
@@ -1341,7 +1341,7 @@ add_option_to_table (GtkPrinterOption *option,
 
 static void
 setup_page_table (GtkPrinterOptionSet *options,
-                  const gchar         *group,
+                  const char          *group,
                   GtkWidget           *table,
                   GtkWidget           *page)
 {
@@ -1381,7 +1381,7 @@ update_print_at_option (GtkPrintUnixDialog *dialog)
   option = gtk_printer_option_set_lookup (dialog->options, "gtk-print-time-text");
   if (option != NULL)
     {
-      const gchar *text;
+      const char *text;
 
       text = gtk_editable_get_text (GTK_EDITABLE (dialog->print_at_entry));
       gtk_printer_option_set (option, text);
@@ -1441,7 +1441,7 @@ static void
 update_dialog_from_settings (GtkPrintUnixDialog *dialog)
 {
   GList *groups, *l;
-  gchar *group;
+  char *group;
   GtkWidget *table, *frame;
   gboolean has_advanced, has_job;
   guint nrows;
@@ -1559,7 +1559,7 @@ update_dialog_from_capabilities (GtkPrintUnixDialog *dialog)
 {
   GtkPrintCapabilities caps;
   gboolean can_collate;
-  const gchar *copies;
+  const char *copies;
   GtkWidget *button;
 
   copies = gtk_editable_get_text (GTK_EDITABLE (dialog->copies_spin));
@@ -2055,7 +2055,7 @@ update_print_at_entry_sensitivity (GtkWidget *button,
 }
 
 static gboolean
-is_range_separator (gchar c)
+is_range_separator (char c)
 {
   return (c == ',' || c == ';' || c == ':');
 }
@@ -2065,8 +2065,8 @@ dialog_get_page_ranges (GtkPrintUnixDialog *dialog,
                         int                *n_ranges_out)
 {
   int i, n_ranges;
-  const gchar *text, *p;
-  gchar *next;
+  const char *text, *p;
+  char *next;
   GtkPageRange *ranges;
   int start, end;
 
@@ -2228,8 +2228,8 @@ static int
 dialog_get_n_copies (GtkPrintUnixDialog *dialog)
 {
   GtkAdjustment *adjustment;
-  const gchar *text;
-  gchar *endptr = NULL;
+  const char *text;
+  char *endptr = NULL;
   int n_copies;
 
   adjustment = gtk_spin_button_get_adjustment (GTK_SPIN_BUTTON (dialog->copies_spin));
@@ -2292,7 +2292,7 @@ dialog_set_reverse (GtkPrintUnixDialog *dialog,
 static int
 dialog_get_pages_per_sheet (GtkPrintUnixDialog *dialog)
 {
-  const gchar *val;
+  const char *val;
   int num;
 
   val = gtk_printer_option_widget_get_value (dialog->pages_per_sheet);
@@ -2314,7 +2314,7 @@ dialog_get_number_up_layout (GtkPrintUnixDialog *dialog)
 {
   GtkPrintCapabilities       caps;
   GtkNumberUpLayout          layout;
-  const gchar               *val;
+  const char                *val;
   GEnumClass                *enum_class;
   GEnumValue                *enum_value;
 
@@ -2367,7 +2367,7 @@ draw_page (GtkDrawingArea *da,
   gboolean landscape;
   PangoLayout *layout;
   PangoFontDescription *font;
-  gchar *text;
+  char *text;
   GdkRGBA color;
   GtkNumberUpLayout number_up_layout;
   int start_x, end_x, start_y, end_y;
@@ -3035,7 +3035,7 @@ paper_size_changed (GtkDropDown *combo_box,
  * Returns: a new #GtkPrintUnixDialog
  */
 GtkWidget *
-gtk_print_unix_dialog_new (const gchar *title,
+gtk_print_unix_dialog_new (const char *title,
                            GtkWindow   *parent)
 {
   GtkWidget *result;
@@ -3164,7 +3164,7 @@ gtk_print_unix_dialog_get_current_page (GtkPrintUnixDialog *dialog)
 
 static gboolean
 set_active_printer (GtkPrintUnixDialog *dialog,
-                    const gchar        *printer_name)
+                    const char         *printer_name)
 {
   GListModel *model;
   GtkPrinter *printer;
@@ -3206,7 +3206,7 @@ void
 gtk_print_unix_dialog_set_settings (GtkPrintUnixDialog *dialog,
                                     GtkPrintSettings   *settings)
 {
-  const gchar *printer;
+  const char *printer;
   GtkPageRange *ranges;
   int num_ranges;
 

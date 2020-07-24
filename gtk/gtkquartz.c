@@ -216,20 +216,20 @@ _gtk_quartz_get_selection_data_from_pasteboard (NSPasteboard *pasteboard,
     {
       if ([[pasteboard types] containsObject:NSFilenamesPboardType])
         {
-           gchar **uris;
+           char **uris;
            NSArray *files = [pasteboard propertyListForType:NSFilenamesPboardType];
            int n_files = [files count];
            int i;
 
            selection_data->target = g_intern_static_string ("text/uri-list");
 
-           uris = (gchar **) g_malloc (sizeof (gchar*) * (n_files + 1));
+           uris = (char **) g_malloc (sizeof (char *) * (n_files + 1));
            for (i = 0; i < n_files; ++i)
              {
                NSString* uriString = [files objectAtIndex:i];
                uriString = [@"file://" stringByAppendingString:uriString];
                uriString = [uriString stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-               uris[i] = (gchar *) [uriString cStringUsingEncoding:NSUTF8StringEncoding];
+               uris[i] = (char *) [uriString cStringUsingEncoding:NSUTF8StringEncoding];
              }
            uris[i] = NULL;
 
@@ -238,12 +238,12 @@ _gtk_quartz_get_selection_data_from_pasteboard (NSPasteboard *pasteboard,
          }
       else if ([[pasteboard types] containsObject:NSURLPboardType])
         {
-          gchar *uris[2];
+          char *uris[2];
           NSURL *url = [NSURL URLFromPasteboard:pasteboard];
 
           selection_data->target = g_intern_static_string ("text/uri-list");
 
-          uris[0] = (gchar *) [[url description] UTF8String];
+          uris[0] = (char *) [[url description] UTF8String];
 
           uris[1] = NULL;
           gtk_selection_data_set_uris (selection_data, uris);
@@ -308,7 +308,7 @@ _gtk_quartz_set_selection_data_for_pasteboard (NSPasteboard     *pasteboard,
     }
   else if ([type isEqualTo:NSURLPboardType])
     {
-      gchar **uris;
+      char **uris;
 
       uris = gtk_selection_data_get_uris (selection_data);
       if (uris != NULL)
@@ -335,16 +335,16 @@ _gtk_quartz_set_selection_data_for_pasteboard (NSPasteboard     *pasteboard,
  * to test for that and remove the last element.
  */
 
-static const gchar *
+static const char *
 get_bundle_path (void)
 {
-  static gchar *path = NULL;
+  static char *path = NULL;
 
   if (path == NULL)
     {
       NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-      gchar *resource_path = g_strdup ([[[NSBundle mainBundle] resourcePath] UTF8String]);
-      gchar *base;
+      char *resource_path = g_strdup ([[[NSBundle mainBundle] resourcePath] UTF8String]);
+      char *base;
       [pool drain];
 
       base = g_path_get_basename (resource_path);
@@ -360,10 +360,10 @@ get_bundle_path (void)
   return path;
 }
 
-const gchar *
+const char *
 _gtk_get_datadir (void)
 {
-  static gchar *path = NULL;
+  static char *path = NULL;
 
   if (path == NULL)
     path = g_build_filename (get_bundle_path (), "share", NULL);
@@ -371,10 +371,10 @@ _gtk_get_datadir (void)
   return path;
 }
 
-const gchar *
+const char *
 _gtk_get_libdir (void)
 {
-  static gchar *path = NULL;
+  static char *path = NULL;
 
   if (path == NULL)
     path = g_build_filename (get_bundle_path (), "lib", NULL);
@@ -382,10 +382,10 @@ _gtk_get_libdir (void)
   return path;
 }
 
-const gchar *
+const char *
 _gtk_get_localedir (void)
 {
-  static gchar *path = NULL;
+  static char *path = NULL;
 
   if (path == NULL)
     path = g_build_filename (get_bundle_path (), "share", "locale", NULL);
@@ -393,10 +393,10 @@ _gtk_get_localedir (void)
   return path;
 }
 
-const gchar *
+const char *
 _gtk_get_sysconfdir (void)
 {
-  static gchar *path = NULL;
+  static char *path = NULL;
 
   if (path == NULL)
     path = g_build_filename (get_bundle_path (), "etc", NULL);
@@ -404,7 +404,7 @@ _gtk_get_sysconfdir (void)
   return path;
 }
 
-const gchar *
+const char *
 _gtk_get_data_prefix (void)
 {
   return get_bundle_path ();

@@ -63,10 +63,10 @@ add_item (GtkInspectorMenu *sl,
 {
   GtkTreeIter iter;
   GVariant *value;
-  gchar *label = NULL;
-  gchar *action = NULL;
-  gchar *target = NULL;
-  gchar *icon = NULL;
+  char *label = NULL;
+  char *action = NULL;
+  char *target = NULL;
+  char *icon = NULL;
   GMenuModel *model;
 
   g_menu_model_get_item_attribute (menu, idx, G_MENU_ATTRIBUTE_LABEL, "s", &label);

@@ -65,9 +65,9 @@ struct _GtkPrintBackendCloudprint
 
 struct
 {
-  gchar *id;
-  gchar *path;
-  gchar *presentation_identity;
+  char *id;
+  char *path;
+  char *presentation_identity;
 } typedef TGOAAccount;
 
 static GObjectClass *backend_parent_class;
@@ -213,7 +213,7 @@ _cairo_write (void                *closure,
 
   while (length > 0)
     {
-      g_io_channel_write_chars (io, (const gchar *) data, length, &written, &error);
+      g_io_channel_write_chars (io, (const char *) data, length, &written, &error);
 
       if (error != NULL)
 	{
@@ -257,7 +257,7 @@ typedef struct {
   GIOChannel *target_io;
   gpointer user_data;
   GDestroyNotify dnotify;
-  gchar *path;
+  char *path;
 
   /* Base64 encoding state */
   int b64state;
@@ -315,7 +315,7 @@ cloudprint_print_cb (GtkPrintBackendCloudprint *print_backend,
 {
   _PrintStreamData *ps = (_PrintStreamData *) user_data;
   gsize encodedlen;
-  gchar encoded[4]; /* Up to 4 bytes are needed to finish encoding */
+  char encoded[4]; /* Up to 4 bytes are needed to finish encoding */
   GError *error = NULL;
 
   encodedlen = g_base64_encode_close (FALSE,
@@ -391,11 +391,11 @@ cloudprint_write (GIOChannel   *source,
 		  GIOCondition  con,
 		  gpointer      user_data)
 {
-  gchar buf[_STREAM_MAX_CHUNK_SIZE];
+  char buf[_STREAM_MAX_CHUNK_SIZE];
   /* Base64 converts 24 bits into 32 bits, so divide the number of
    * bytes by 3 (rounding up) and multiply by 4. Also, if the previous
    * call left a non-zero state we may need an extra 4 bytes. */
-  gchar encoded[(_STREAM_MAX_CHUNK_SIZE / 3 + 1) * 4 + 4];
+  char encoded[(_STREAM_MAX_CHUNK_SIZE / 3 + 1) * 4 + 4];
   gsize bytes_read;
   GError *error = NULL;
   GIOStatus read_status;
@@ -454,7 +454,7 @@ gtk_print_backend_cloudprint_print_stream (GtkPrintBackend        *print_backend
 					   gpointer                user_data,
 					   GDestroyNotify          dnotify)
 {
-  const gchar *prefix = "data:application/pdf;base64,";
+  const char *prefix = "data:application/pdf;base64,";
   GError *internal_error = NULL;
   _PrintStreamData *ps;
   int tmpfd;
@@ -560,7 +560,7 @@ get_accounts (GVariant *output)
     {
       for (i = 0; i < g_variant_n_children (objects); i++)
 	{
-	  const gchar *object_name;
+	  const char *object_name;
 	  GVariant    *object_variant;
 
 	  g_variant_get_child (objects, i, "{&o@a{sa{sv}}}",
@@ -571,7 +571,7 @@ get_accounts (GVariant *output)
 	    {
 	      for (j = 0; j < g_variant_n_children (object_variant); j++)
 		{
-		  const gchar *service_name;
+		  const char *service_name;
 		  GVariant    *service_variant;
 
 		  g_variant_get_child (object_variant, j, "{&s@a{sv}}",
@@ -582,14 +582,14 @@ get_accounts (GVariant *output)
 		    {
 		      TGOAAccount *account;
 		      gboolean     printers_disabled = FALSE;
-		      gchar       *provider_type = NULL;
+		      char        *provider_type = NULL;
 
 		      account = g_new0 (TGOAAccount, 1);
 
 		      account->path = g_strdup (object_name);
 		      for (k = 0; k < g_variant_n_children (service_variant); k++)
 			{
-			  const gchar *property_name;
+			  const char *property_name;
 			  GVariant    *property_variant;
 			  GVariant    *value;
 
@@ -914,7 +914,7 @@ cloudprint_printer_get_options (GtkPrinter           *printer,
 {
   GtkPrinterOptionSet *set;
   GtkPrinterOption *option;
-  const gchar *n_up[] = { "1" };
+  const char *n_up[] = { "1" };
 
   set = gtk_printer_option_set_new ();
 
@@ -1010,7 +1010,7 @@ cloudprint_printer_request_details (GtkPrinter *printer)
 {
   GtkPrintBackendCloudprint *backend;
   GtkCloudprintAccount *account = NULL;
-  gchar *printerid = NULL;
+  char *printerid = NULL;
 
   g_object_get (printer,
 		"cloudprint-account", &account,

@@ -798,7 +798,7 @@ static void
 example_app_open (GApplication  *app,
                   GFile        **files,
                   int            n_files,
-                  const gchar   *hint)
+                  const char    *hint)
 {
   GList *windows;
   ExampleAppWindow *win;
@@ -1138,7 +1138,7 @@ example_app_startup (GApplication *app)
 {
   GtkBuilder *builder;
   GMenuModel *app_menu;
-  const gchar *quit_accels[2] = { "&lt;Ctrl&gt;Q", NULL };
+  const char *quit_accels[2] = { "&lt;Ctrl&gt;Q", NULL };
 
   G_APPLICATION_CLASS (example_app_parent_class)->startup (app);
 
@@ -1476,7 +1476,7 @@ static void
 search_text_changed (GtkEntry         *entry,
                      ExampleAppWindow *win)
 {
-  const gchar *text;
+  const char *text;
   GtkWidget *tab;
   GtkWidget *view;
   GtkTextBuffer *buffer;

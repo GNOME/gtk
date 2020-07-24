@@ -47,7 +47,7 @@ _gtk_tree_data_list_free (GtkTreeDataList *list,
     {
       next = tmp->next;
       if (g_type_is_a (column_headers [i], G_TYPE_STRING))
-	g_free ((gchar *) tmp->data.v_pointer);
+	g_free ((char *) tmp->data.v_pointer);
       else if (g_type_is_a (column_headers [i], G_TYPE_OBJECT) && tmp->data.v_pointer != NULL)
 	g_object_unref (tmp->data.v_pointer);
       else if (g_type_is_a (column_headers [i], G_TYPE_BOXED) && tmp->data.v_pointer != NULL)
@@ -129,7 +129,7 @@ _gtk_tree_data_list_node_to_value (GtkTreeDataList *list,
       g_value_set_boolean (value, (gboolean) list->data.v_int);
       break;
     case G_TYPE_CHAR:
-      g_value_set_schar (value, (gchar) list->data.v_char);
+      g_value_set_schar (value, (char) list->data.v_char);
       break;
     case G_TYPE_UCHAR:
       g_value_set_uchar (value, (guchar) list->data.v_uchar);
@@ -165,7 +165,7 @@ _gtk_tree_data_list_node_to_value (GtkTreeDataList *list,
       g_value_set_double (value, (gdouble) list->data.v_double);
       break;
     case G_TYPE_STRING:
-      g_value_set_string (value, (gchar *) list->data.v_pointer);
+      g_value_set_string (value, (char *) list->data.v_pointer);
       break;
     case G_TYPE_POINTER:
       g_value_set_pointer (value, (gpointer) list->data.v_pointer);
@@ -327,7 +327,7 @@ _gtk_tree_data_list_compare_func (GtkTreeModel *model,
   GValue a_value = G_VALUE_INIT;
   GValue b_value = G_VALUE_INIT;
   int retval;
-  const gchar *stra, *strb;
+  const char *stra, *strb;
 
   gtk_tree_model_get_value (model, a, column, &a_value);
   gtk_tree_model_get_value (model, b, column, &b_value);

@@ -40,15 +40,15 @@ struct _GtkSidebarRow
   GIcon *end_icon;
   GtkWidget *start_icon_widget;
   GtkWidget *end_icon_widget;
-  gchar *label;
-  gchar *tooltip;
+  char *label;
+  char *tooltip;
   GtkWidget *label_widget;
   gboolean ejectable;
   GtkWidget *eject_button;
   int order_index;
   GtkPlacesSidebarSectionType section_type;
   GtkPlacesSidebarPlaceType place_type;
-  gchar *uri;
+  char *uri;
   GDrive *drive;
   GVolume *volume;
   GMount *mount;
