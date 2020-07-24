@@ -735,12 +735,7 @@ render_border_node (GskGLRenderer   *self,
     float h;
   } sizes[4];
 
-  if (widths[0] == widths[1] &&
-      widths[0] == widths[2] &&
-      widths[0] == widths[3] &&
-      gdk_rgba_equal (&colors[0], &colors[1]) &&
-      gdk_rgba_equal (&colors[0], &colors[2]) &&
-      gdk_rgba_equal (&colors[0], &colors[3]))
+  if (gsk_border_node_get_uniform (node))
     {
       ops_set_program (builder, &self->programs->inset_shadow_program);
       ops_set_inset_shadow (builder, transform_rect (self, builder, rounded_outline),
