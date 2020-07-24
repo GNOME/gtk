@@ -542,6 +542,12 @@ gsk_border_node_diff (GskRenderNode  *node1,
   GskBorderNode *self1 = (GskBorderNode *) node1;
   GskBorderNode *self2 = (GskBorderNode *) node2;
 
+  if (self1->uniform &&
+      self2->uniform &&
+      gdk_rgba_equal (&self1->border_color[0], &self2->border_color[0]) &&
+      self1->border_width[0] == self2->border_width[0])
+    return;
+
   if (gsk_rounded_rect_equal (&self1->outline, &self2->outline) &&
       gdk_rgba_equal (&self1->border_color[0], &self2->border_color[0]) &&
       gdk_rgba_equal (&self1->border_color[1], &self2->border_color[1]) &&
