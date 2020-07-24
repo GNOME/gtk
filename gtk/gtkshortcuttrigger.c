@@ -122,6 +122,10 @@ gtk_shortcut_trigger_trigger (GtkShortcutTrigger *self,
  *   - two valid trigger strings, separated by a `|` character, for a
  *     #GtkAlternativeTrigger: `<Control>q|<Control>w`
  *
+ * Note that you will have to escape the `<` and `>` characters when specifying
+ * triggers in XML files, such as GtkBuilder ui files. Use `&lt;` instead of
+ * `<` and `&gt;` instead of `>`.
+ *
  * Returns: (nullable) (transfer full): a new #GtkShortcutTrigger
  *   or %NULL on error
  */

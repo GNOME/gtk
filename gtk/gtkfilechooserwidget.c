@@ -5701,7 +5701,6 @@ static void
 request_response_and_add_to_recent_list (GtkFileChooserWidget *impl)
 {
   gtk_widget_activate_action (GTK_WIDGET (impl), "response.activate", NULL);
-  g_signal_emit_by_name (impl, "response-requested");
   add_selection_to_recent_list (impl);
 }
 

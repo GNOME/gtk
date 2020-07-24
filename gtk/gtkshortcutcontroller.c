@@ -50,7 +50,7 @@
  *         <property name='scope'>managed</property>
  *         <child>
  *           <object class='GtkShortcut'>
- *             <property name='trigger'>&lt;Control&gt;k</property>
+ *             <property name='trigger'>&amp;lt;Control&amp;gt;k</property>
  *             <property name='action'>activate</property>
  *           </object>
  *         </child>
@@ -58,6 +58,11 @@
  *     </child>
  *   </object>
  * ]|
+ *
+ * This example creates a #GtkActivateAction for triggering the `activate`
+ * signal of the GtkButton. See gtk_shortcut_action_parse_string() for the syntax
+ * for other kinds of #GtkShortcutAction. See gtk_shortcut_trigger_parse_string()
+ * to learn more about the syntax for triggers.
  **/
 
 #include "config.h"

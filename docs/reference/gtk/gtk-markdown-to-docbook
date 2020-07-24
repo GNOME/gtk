@@ -177,6 +177,7 @@ def ConvertToDocbook(infile, outfile):
     subprocess.check_call(["pandoc", infile, "-o", outfile,
                            "--from=" + input_format,
                            "--to=" + output_format,
+                           "--standalone",
                            "--top-level-division=" + division])
 
 def ExpandGtkDocAbbreviations(infile, outfile):
