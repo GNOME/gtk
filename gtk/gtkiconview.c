@@ -3914,8 +3914,8 @@ void
 gtk_icon_view_scroll_to_path (GtkIconView *icon_view,
 			      GtkTreePath *path,
 			      gboolean     use_align,
-			      gfloat       row_align,
-			      gfloat       col_align)
+			      float        row_align,
+			      float        col_align)
 {
   GtkIconViewItem *item = NULL;
   GtkWidget *widget;
@@ -3953,7 +3953,7 @@ gtk_icon_view_scroll_to_path (GtkIconView *icon_view,
     {
       int width, height;
       int x, y;
-      gfloat offset;
+      float offset;
       GdkRectangle item_area = 
 	{ 
 	  item->cell_area.x - icon_view->priv->item_padding, 

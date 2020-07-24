@@ -267,8 +267,8 @@ struct _GtkLabel
   char    *label;
   char    *text;
 
-  gfloat   xalign;
-  gfloat   yalign;
+  float    xalign;
+  float    yalign;
 
   guint    mnemonics_visible  : 1;
   guint    jtype              : 2;
@@ -3180,7 +3180,7 @@ get_layout_location (GtkLabel  *self,
   GtkWidget *widget = GTK_WIDGET (self);
   int req_width, x, y;
   int req_height;
-  gfloat xalign, yalign;
+  float xalign, yalign;
   PangoRectangle logical;
   int baseline, layout_baseline, baseline_offset;
   int label_width, label_height;
@@ -5816,7 +5816,7 @@ _gtk_label_get_link_focused (GtkLabel *self,
  */
 void
 gtk_label_set_xalign (GtkLabel *self,
-                      gfloat    xalign)
+                      float     xalign)
 {
   g_return_if_fail (GTK_IS_LABEL (self));
 
@@ -5839,7 +5839,7 @@ gtk_label_set_xalign (GtkLabel *self,
  *
  * Returns: the xalign property
  */
-gfloat
+float
 gtk_label_get_xalign (GtkLabel *self)
 {
   g_return_val_if_fail (GTK_IS_LABEL (self), 0.5);
@@ -5856,7 +5856,7 @@ gtk_label_get_xalign (GtkLabel *self)
  */
 void
 gtk_label_set_yalign (GtkLabel *self,
-                      gfloat    yalign)
+                      float     yalign)
 {
   g_return_if_fail (GTK_IS_LABEL (self));
 
@@ -5879,7 +5879,7 @@ gtk_label_set_yalign (GtkLabel *self,
  *
  * Returns: the yalign property
  */
-gfloat
+float
 gtk_label_get_yalign (GtkLabel *self)
 {
   g_return_val_if_fail (GTK_IS_LABEL (self), 0.5);

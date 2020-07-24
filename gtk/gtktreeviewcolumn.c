@@ -161,7 +161,7 @@ struct _GtkTreeViewColumnPrivate
   GtkWidget *arrow;
   GtkWidget *frame;
   gulong property_changed_signal;
-  gfloat xalign;
+  float xalign;
 
   /* Sizing fields */
   /* see gtk+/doc/tree-column-sizing.txt for more information on them */
@@ -2457,7 +2457,7 @@ gtk_tree_view_column_get_widget (GtkTreeViewColumn *tree_column)
  **/
 void
 gtk_tree_view_column_set_alignment (GtkTreeViewColumn *tree_column,
-                                    gfloat             xalign)
+                                    float              xalign)
 {
   GtkTreeViewColumnPrivate *priv;
 
@@ -2484,7 +2484,7 @@ gtk_tree_view_column_set_alignment (GtkTreeViewColumn *tree_column,
  * 
  * Returns: The current alignent of @tree_column.
  **/
-gfloat
+float
 gtk_tree_view_column_get_alignment (GtkTreeViewColumn *tree_column)
 {
   g_return_val_if_fail (GTK_IS_TREE_VIEW_COLUMN (tree_column), 0.5);

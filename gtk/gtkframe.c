@@ -87,7 +87,7 @@ typedef struct
   GtkWidget *child;
 
   guint has_frame : 1;
-  gfloat label_xalign;
+  float label_xalign;
 } GtkFramePrivate;
 
 enum {
@@ -443,7 +443,7 @@ gtk_frame_get_label_widget (GtkFrame *frame)
  **/
 void
 gtk_frame_set_label_align (GtkFrame *frame,
-                           gfloat    xalign)
+                           float     xalign)
 {
   GtkFramePrivate *priv = gtk_frame_get_instance_private (frame);
 
@@ -465,7 +465,7 @@ gtk_frame_set_label_align (GtkFrame *frame,
  * Retrieves the X alignment of the frame’s label. See
  * gtk_frame_set_label_align().
  **/
-gfloat
+float
 gtk_frame_get_label_align (GtkFrame *frame)
 {
   GtkFramePrivate *priv = gtk_frame_get_instance_private (frame);

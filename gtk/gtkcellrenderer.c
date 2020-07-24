@@ -118,8 +118,8 @@ static void gtk_cell_renderer_real_get_aligned_area              (GtkCellRendere
 
 struct _GtkCellRendererPrivate
 {
-  gfloat xalign;
-  gfloat yalign;
+  float xalign;
+  float yalign;
 
   int width;
   int height;
@@ -931,8 +931,8 @@ gtk_cell_renderer_get_fixed_size (GtkCellRenderer *cell,
  **/
 void
 gtk_cell_renderer_set_alignment (GtkCellRenderer *cell,
-                                 gfloat           xalign,
-                                 gfloat           yalign)
+                                 float            xalign,
+                                 float            yalign)
 {
   GtkCellRendererPrivate *priv;
 
@@ -972,8 +972,8 @@ gtk_cell_renderer_set_alignment (GtkCellRenderer *cell,
  **/
 void
 gtk_cell_renderer_get_alignment (GtkCellRenderer *cell,
-                                 gfloat          *xalign,
-                                 gfloat          *yalign)
+                                 float           *xalign,
+                                 float           *yalign)
 {
   GtkCellRendererPrivate *priv;
 

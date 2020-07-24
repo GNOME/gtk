@@ -207,8 +207,8 @@ GDK_AVAILABLE_IN_ALL
 void             gtk_icon_view_scroll_to_path     (GtkIconView            *icon_view,
                                                    GtkTreePath            *path,
                                                    gboolean                use_align,
-                                                   gfloat                  row_align,
-                                                   gfloat                  col_align);
+                                                   float                   row_align,
+                                                   float                   col_align);
 
 /* Drag-and-Drop support */
 GDK_AVAILABLE_IN_ALL

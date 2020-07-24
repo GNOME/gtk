@@ -182,9 +182,9 @@ GDK_AVAILABLE_IN_ALL
 GtkWidget              *gtk_tree_view_column_get_widget          (GtkTreeViewColumn       *tree_column);
 GDK_AVAILABLE_IN_ALL
 void                    gtk_tree_view_column_set_alignment       (GtkTreeViewColumn       *tree_column,
-								  gfloat                   xalign);
+								  float                    xalign);
 GDK_AVAILABLE_IN_ALL
-gfloat                  gtk_tree_view_column_get_alignment       (GtkTreeViewColumn       *tree_column);
+float                   gtk_tree_view_column_get_alignment       (GtkTreeViewColumn       *tree_column);
 GDK_AVAILABLE_IN_ALL
 void                    gtk_tree_view_column_set_reorderable     (GtkTreeViewColumn       *tree_column,
 								  gboolean                 reorderable);

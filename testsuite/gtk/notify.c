@@ -313,8 +313,8 @@ check_property (GObject *instance, GParamSpec *pspec)
       guint i;
       NotifyData data;
       gulong id;
-      gfloat value;
-      gfloat new_value;
+      float value;
+      float new_value;
       int current_count;
 
       data.name = pspec->name;

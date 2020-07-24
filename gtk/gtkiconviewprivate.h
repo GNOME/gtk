@@ -151,8 +151,8 @@ struct _GtkIconViewPrivate
 
   /* scroll to */
   GtkTreeRowReference *scroll_to_path;
-  gfloat scroll_to_row_align;
-  gfloat scroll_to_col_align;
+  float scroll_to_row_align;
+  float scroll_to_col_align;
   guint scroll_to_use_align : 1;
 
   guint source_set : 1;

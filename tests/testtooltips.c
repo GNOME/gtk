@@ -181,9 +181,9 @@ static struct Rectangle
 {
   int x;
   int y;
-  gfloat r;
-  gfloat g;
-  gfloat b;
+  float r;
+  float g;
+  float b;
   const char *tooltip;
 }
 rectangles[] =

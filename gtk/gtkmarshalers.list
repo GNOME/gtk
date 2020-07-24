@@ -12,7 +12,7 @@
 #   ULONG       for unsigned long integer types (gulong)
 #   ENUM        for enumeration types (int)
 #   FLAGS       for flag enumeration types (guint)
-#   FLOAT       for single-precision float types (gfloat)
+#   FLOAT       for single-precision float types (float)
 #   DOUBLE      for double-precision float types (gdouble)
 #   STRING      for string types (char *)
 #   BOXED       for boxed (anonymous but reference counted) types (GBoxed*)

@@ -153,9 +153,9 @@ gboolean   gtk_entry_get_activates_default      (GtkEntry      *entry);
 
 GDK_AVAILABLE_IN_ALL
 void       gtk_entry_set_alignment              (GtkEntry      *entry,
-                                                 gfloat         xalign);
+                                                 float          xalign);
 GDK_AVAILABLE_IN_ALL
-gfloat     gtk_entry_get_alignment              (GtkEntry      *entry);
+float      gtk_entry_get_alignment              (GtkEntry      *entry);
 
 GDK_AVAILABLE_IN_ALL
 void                gtk_entry_set_completion (GtkEntry           *entry,

@@ -60,7 +60,7 @@ int main (int argc, char **argv)
   GtkBox *vbox;
   GtkFrame *frame;
   GtkGrid *grid;
-  gfloat xalign;
+  float xalign;
   gboolean done = FALSE;
 
   gtk_init ();

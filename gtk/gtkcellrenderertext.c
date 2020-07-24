@@ -1812,7 +1812,7 @@ gtk_cell_renderer_text_start_editing (GtkCellRenderer      *cell,
 {
   GtkCellRendererText *celltext = GTK_CELL_RENDERER_TEXT (cell);
   GtkCellRendererTextPrivate *priv = gtk_cell_renderer_text_get_instance_private (celltext);
-  gfloat xalign, yalign;
+  float xalign, yalign;
 
   /* If the cell isn't editable we return NULL. */
   if (!priv->editable)

@@ -383,7 +383,7 @@ gtk_cell_renderer_toggle_get_size (GtkCellRenderer    *cell,
 
   if (cell_area)
     {
-      gfloat xalign, yalign;
+      float xalign, yalign;
 
       gtk_cell_renderer_get_alignment (cell, &xalign, &yalign);
 

@@ -464,7 +464,7 @@ gtk_cell_renderer_pixbuf_get_size (GtkCellRenderer    *cell,
   
   if (cell_area && pixbuf_width > 0 && pixbuf_height > 0)
     {
-      gfloat xalign, yalign;
+      float xalign, yalign;
 
       gtk_cell_renderer_get_alignment (cell, &xalign, &yalign);
       if (x_offset)

@@ -436,8 +436,8 @@ typedef struct
   /* Scroll-to functionality when unrealized */
   GtkTreeRowReference *scroll_to_path;
   GtkTreeViewColumn *scroll_to_column;
-  gfloat scroll_to_row_align;
-  gfloat scroll_to_col_align;
+  float scroll_to_row_align;
+  float scroll_to_col_align;
 
   /* Interactive search */
   int selected_iter;
@@ -11218,8 +11218,8 @@ gtk_tree_view_scroll_to_cell (GtkTreeView       *tree_view,
                               GtkTreePath       *path,
                               GtkTreeViewColumn *column,
 			      gboolean           use_align,
-                              gfloat             row_align,
-                              gfloat             col_align)
+                              float              row_align,
+                              float              col_align)
 {
   GtkTreeViewPrivate *priv = gtk_tree_view_get_instance_private (tree_view);
 

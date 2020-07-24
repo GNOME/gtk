@@ -255,7 +255,6 @@ static const char *types[] =
   " int ",
   " char ",
   "char ",
-  "gfloat",
   "float",
   "double",
   "gint8",

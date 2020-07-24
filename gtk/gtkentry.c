@@ -2341,7 +2341,8 @@ gtk_entry_get_has_frame (GtkEntry *entry)
  * text is shorter than the width of the entry.
  **/
 void
-gtk_entry_set_alignment (GtkEntry *entry, gfloat xalign)
+gtk_entry_set_alignment (GtkEntry *entry,
+                         float     xalign)
 {
   GtkEntryPrivate *priv = gtk_entry_get_instance_private (entry);
 
@@ -2358,7 +2359,7 @@ gtk_entry_set_alignment (GtkEntry *entry, gfloat xalign)
  *
  * Returns: the alignment
  **/
-gfloat
+float
 gtk_entry_get_alignment (GtkEntry *entry)
 {
   GtkEntryPrivate *priv = gtk_entry_get_instance_private (entry);

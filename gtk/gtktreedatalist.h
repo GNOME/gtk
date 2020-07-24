@@ -35,7 +35,7 @@ struct _GtkTreeDataList
     gulong	   v_ulong;
     gint64	   v_int64;
     guint64        v_uint64;
-    gfloat	   v_float;
+    float	   v_float;
     gdouble        v_double;
     gpointer	   v_pointer;
   } data;

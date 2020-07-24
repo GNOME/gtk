@@ -484,8 +484,8 @@ It is also possible to align the columns to the next tab:
 
 ```c
   void          gtk_type_set_prop           (GtkType *type,
-                                             gfloat   value);
-  gfloat        gtk_type_get_prop           (GtkType *type);
+                                             float    value);
+  float         gtk_type_get_prop           (GtkType *type);
   int           gtk_type_update_foobar      (GtkType *type);
 ```
 

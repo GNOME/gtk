@@ -89,9 +89,9 @@ GDK_AVAILABLE_IN_ALL
 GtkWidget *gtk_frame_get_label_widget (GtkFrame      *frame);
 GDK_AVAILABLE_IN_ALL
 void       gtk_frame_set_label_align  (GtkFrame      *frame,
-                                       gfloat         xalign);
+                                       float          xalign);
 GDK_AVAILABLE_IN_ALL
-gfloat     gtk_frame_get_label_align  (GtkFrame      *frame);
+float      gtk_frame_get_label_align  (GtkFrame      *frame);
 
 GDK_AVAILABLE_IN_ALL
 void       gtk_frame_set_child        (GtkFrame      *frame,

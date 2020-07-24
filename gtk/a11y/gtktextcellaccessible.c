@@ -495,7 +495,7 @@ gtk_text_cell_accessible_get_character_extents (AtkText      *text,
   PangoRectangle char_rect;
   GtkTextCellAccessible *text_cell = GTK_TEXT_CELL_ACCESSIBLE (text);
   char *renderer_text;
-  gfloat xalign, yalign;
+  float xalign, yalign;
   int x_offset, y_offset, index;
   int xpad, ypad;
 
@@ -573,7 +573,7 @@ gtk_text_cell_accessible_get_offset_at_point (AtkText      *text,
   GdkRectangle rendered_rect;
   GtkTextCellAccessible *text_cell = GTK_TEXT_CELL_ACCESSIBLE (text);
   char *renderer_text;
-  gfloat xalign, yalign;
+  float xalign, yalign;
   int x_offset, y_offset, index;
   int xpad, ypad;
   int x_temp, y_temp;

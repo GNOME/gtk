@@ -252,12 +252,12 @@ void             gtk_cell_renderer_get_fixed_size (GtkCellRenderer      *cell,
 
 GDK_AVAILABLE_IN_ALL
 void             gtk_cell_renderer_set_alignment  (GtkCellRenderer      *cell,
-                                                   gfloat                xalign,
-                                                   gfloat                yalign);
+                                                   float                 xalign,
+                                                   float                 yalign);
 GDK_AVAILABLE_IN_ALL
 void             gtk_cell_renderer_get_alignment  (GtkCellRenderer      *cell,
-                                                   gfloat               *xalign,
-                                                   gfloat               *yalign);
+                                                   float                *xalign,
+                                                   float                *yalign);
 
 GDK_AVAILABLE_IN_ALL
 void             gtk_cell_renderer_set_padding    (GtkCellRenderer      *cell,

@@ -154,17 +154,17 @@ const char *gtk_label_get_current_uri (GtkLabel *self);
 
 GDK_AVAILABLE_IN_ALL
 void         gtk_label_set_xalign (GtkLabel *self,
-                                   gfloat    xalign);
+                                   float     xalign);
 
 GDK_AVAILABLE_IN_ALL
-gfloat       gtk_label_get_xalign (GtkLabel *self);
+float        gtk_label_get_xalign (GtkLabel *self);
 
 GDK_AVAILABLE_IN_ALL
 void         gtk_label_set_yalign (GtkLabel *self,
-                                   gfloat    yalign);
+                                   float     yalign);
 
 GDK_AVAILABLE_IN_ALL
-gfloat       gtk_label_get_yalign (GtkLabel *self);
+float        gtk_label_get_yalign (GtkLabel *self);
 
 GDK_AVAILABLE_IN_ALL
 void         gtk_label_set_extra_menu (GtkLabel   *self,

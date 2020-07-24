@@ -80,8 +80,8 @@ struct _GtkCellRendererProgressPrivate
   int min_w;
   int pulse;
   int offset;
-  gfloat text_xalign;
-  gfloat text_yalign;
+  float text_xalign;
+  float text_yalign;
   GtkOrientation orientation;
   gboolean inverted;
 };
@@ -642,7 +642,7 @@ gtk_cell_renderer_progress_snapshot (GtkCellRenderer      *cell,
 
   if (priv->label)
     {
-      gfloat text_xalign;
+      float text_xalign;
 
       layout = gtk_widget_create_pango_layout (widget, priv->label);
       pango_layout_get_pixel_extents (layout, NULL, &logical_rect);

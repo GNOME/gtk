@@ -291,7 +291,7 @@ gtk_cell_renderer_spinner_get_size (GtkCellRenderer    *cellr,
   gdouble align;
   int w, h;
   int xpad, ypad;
-  gfloat xalign, yalign;
+  float xalign, yalign;
   gboolean rtl;
 
   rtl = gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL;

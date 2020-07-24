@@ -280,8 +280,8 @@ void                   gtk_tree_view_scroll_to_cell                (GtkTreeView 
 								    GtkTreePath               *path,
 								    GtkTreeViewColumn         *column,
 								    gboolean                   use_align,
-								    gfloat                     row_align,
-								    gfloat                     col_align);
+								    float                      row_align,
+								    float                      col_align);
 GDK_AVAILABLE_IN_ALL
 void                   gtk_tree_view_row_activated                 (GtkTreeView               *tree_view,
 								    GtkTreePath               *path,
