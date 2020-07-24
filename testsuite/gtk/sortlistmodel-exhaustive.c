@@ -167,6 +167,29 @@ sort_list_model_new (GListModel *source,
 
 #define N_MODELS 8
 
+static char *
+create_test_name (guint id)
+{
+  GString *s = g_string_new ("");
+
+  if (id & (1 << 0))
+    g_string_append (s, "set-model");
+  else
+    g_string_append (s, "construct-with-model");
+
+  if (id & (1 << 1))
+    g_string_append (s, "/set-sorter");
+  else
+    g_string_append (s, "/construct-with-sorter");
+
+  if (id & (1 << 2))
+    g_string_append (s, "/incremental");
+  else
+    g_string_append (s, "/non-incremental");
+
+  return g_string_free (s, FALSE);
+}
+
 static GtkSortListModel *
 create_sort_list_model (gconstpointer  model_id,
                         gboolean       track_changes,
@@ -418,12 +441,15 @@ add_test_for_all_models (const char    *name,
                          GTestDataFunc  test_func)
 {
   guint i;
+  char *test;
 
   for (i = 0; i < N_MODELS; i++)
     {
-      char *path = g_strdup_printf ("/sorterlistmodel/model%u/%s", i, name);
+      test = create_test_name (i);
+      char *path = g_strdup_printf ("/sorterlistmodel/%s/%s", test, name);
       g_test_add_data_func (path, GUINT_TO_POINTER (i), test_func);
       g_free (path);
+      g_free (test);
     }
 }
 
