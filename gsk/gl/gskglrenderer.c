@@ -2443,8 +2443,7 @@ render_repeat_node (GskGLRenderer   *self,
   if (node_is_invisible (child))
     return;
 
-  if (child_bounds != NULL &&
-      !graphene_rect_equal (child_bounds, &child->bounds))
+  if (!graphene_rect_equal (child_bounds, &child->bounds))
     {
       /* TODO: Implement these repeat nodes. */
       render_fallback_node (self, node, builder);
