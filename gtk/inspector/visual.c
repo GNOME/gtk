@@ -204,7 +204,7 @@ get_font_scale (GtkInspectorVisual *vis)
 
 static void
 update_font_scale (GtkInspectorVisual *vis,
-                   gdouble             factor,
+                   double              factor,
                    gboolean            update_adjustment,
                    gboolean            update_entry)
 {
@@ -228,7 +228,7 @@ static void
 font_scale_adjustment_changed (GtkAdjustment      *adjustment,
                                GtkInspectorVisual *vis)
 {
-  gdouble factor;
+  double factor;
 
   factor = gtk_adjustment_get_value (adjustment);
   update_font_scale (vis, factor, FALSE, TRUE);
@@ -238,7 +238,7 @@ static void
 font_scale_entry_activated (GtkEntry           *entry,
                             GtkInspectorVisual *vis)
 {
-  gdouble factor;
+  double factor;
   char *err = NULL;
 
   factor = g_strtod (gtk_editable_get_text (GTK_EDITABLE (entry)), &err);
@@ -772,7 +772,7 @@ init_cursor_size (GtkInspectorVisual *vis)
   if (size == 0)
     size = 32;
 
-  gtk_adjustment_set_value (vis->scale_adjustment, (gdouble)size);
+  gtk_adjustment_set_value (vis->scale_adjustment, (double)size);
   g_signal_connect (vis->cursor_size_adjustment, "value-changed",
                     G_CALLBACK (cursor_size_changed), vis);
 }
@@ -816,7 +816,7 @@ init_scale (GtkInspectorVisual *vis)
 #if defined (GDK_WINDOWING_X11)
   if (GDK_IS_X11_DISPLAY (vis->display))
     {
-      gdouble scale;
+      double scale;
 
       scale = gdk_monitor_get_scale_factor (gdk_x11_display_get_primary_monitor (vis->display));
       gtk_adjustment_set_value (vis->scale_adjustment, scale);
@@ -845,7 +845,7 @@ init_animation (GtkInspectorVisual *vis)
 
 static void
 update_slowdown (GtkInspectorVisual *vis,
-                 gdouble slowdown,
+                 double slowdown,
                  gboolean update_adjustment,
                  gboolean update_entry)
 {
@@ -868,8 +868,8 @@ static void
 slowdown_adjustment_changed (GtkAdjustment *adjustment,
                              GtkInspectorVisual *vis)
 {
-  gdouble value = gtk_adjustment_get_value (adjustment);
-  gdouble previous = CLAMP (log2 (_gtk_get_slowdown ()),
+  double value = gtk_adjustment_get_value (adjustment);
+  double previous = CLAMP (log2 (_gtk_get_slowdown ()),
                             gtk_adjustment_get_lower (adjustment),
                             gtk_adjustment_get_upper (adjustment));
 
@@ -881,7 +881,7 @@ static void
 slowdown_entry_activated (GtkEntry *entry,
                           GtkInspectorVisual *vis)
 {
-  gdouble slowdown;
+  double slowdown;
   char *err = NULL;
 
   slowdown = g_strtod (gtk_editable_get_text (GTK_EDITABLE (entry)), &err);

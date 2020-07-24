@@ -728,7 +728,7 @@ static void
 entry_activated (GtkEntry *entry,
                  GtkAdjustment *adjustment)
 {
-  gdouble value;
+  double value;
   char *err = NULL;
 
   value = g_strtod (gtk_editable_get_text (GTK_EDITABLE (entry)), &err);
@@ -939,7 +939,7 @@ instance_changed (GtkComboBox *combo)
     {
       Axis *axis;
       Axis akey;
-      gdouble value;
+      double value;
 
       value = coords[ai[i].axis_index];
 

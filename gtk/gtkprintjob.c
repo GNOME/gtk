@@ -78,7 +78,7 @@ struct _GtkPrintJob
   int num_page_ranges;
   GtkPageSet page_set;
   int num_copies;
-  gdouble scale;
+  double scale;
   guint number_up;
   GtkNumberUpLayout number_up_layout;
 
@@ -476,7 +476,7 @@ gtk_print_job_get_surface (GtkPrintJob  *job,
 			   GError      **error)
 {
   char *filename = NULL;
-  gdouble width, height;
+  double width, height;
   GtkPaperSize *paper_size;
   int fd;
   GError *tmp_error;
@@ -813,7 +813,7 @@ gtk_print_job_set_num_copies (GtkPrintJob *job,
  *
  * Returns: the scale
  */
-gdouble
+double
 gtk_print_job_get_scale (GtkPrintJob *job)
 
 {
@@ -829,7 +829,7 @@ gtk_print_job_get_scale (GtkPrintJob *job)
  */
 void
 gtk_print_job_set_scale (GtkPrintJob *job,
-                         gdouble      scale)
+                         double       scale)
 {
   job->scale = scale;
 }

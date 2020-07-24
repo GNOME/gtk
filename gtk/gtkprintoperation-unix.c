@@ -74,7 +74,7 @@ unix_start_page (GtkPrintOperation *op,
   GtkPrintOperationUnix *op_unix;  
   GtkPaperSize *paper_size;
   cairo_surface_type_t type;
-  gdouble w, h;
+  double w, h;
 
   op_unix = op->priv->platform_data;
   
@@ -522,7 +522,7 @@ finish_print (PrintResponseData *rdata,
   GtkPrintOperation *op = rdata->op;
   GtkPrintOperationPrivate *priv = op->priv;
   GtkPrintJob *job;
-  gdouble top, bottom, left, right;
+  double top, bottom, left, right;
   
   if (rdata->do_print)
     {
@@ -782,14 +782,14 @@ close_preview (void *data)
 static cairo_surface_t *
 gtk_print_operation_unix_create_preview_surface (GtkPrintOperation *op,
                                                  GtkPageSetup      *page_setup,
-                                                 gdouble           *dpi_x,
-                                                 gdouble           *dpi_y,
+                                                 double            *dpi_x,
+                                                 double            *dpi_y,
                                                  char             **target)
 {
   char *filename;
   int fd;
   GtkPaperSize *paper_size;
-  gdouble w, h;
+  double w, h;
   cairo_surface_t *surface;
   static cairo_user_data_key_t key;
   
@@ -836,7 +836,7 @@ gtk_print_operation_unix_resize_preview_surface (GtkPrintOperation *op,
                                                  GtkPageSetup      *page_setup,
                                                  cairo_surface_t   *surface)
 {
-  gdouble w, h;
+  double w, h;
   
   w = gtk_page_setup_get_paper_width (page_setup, GTK_UNIT_POINTS);
   h = gtk_page_setup_get_paper_height (page_setup, GTK_UNIT_POINTS);
@@ -1271,8 +1271,8 @@ _gtk_print_operation_platform_backend_launch_preview (GtkPrintOperation *op,
 cairo_surface_t *
 _gtk_print_operation_platform_backend_create_preview_surface (GtkPrintOperation *op,
 							      GtkPageSetup      *page_setup,
-							      gdouble           *dpi_x,
-							      gdouble           *dpi_y,
+							      double            *dpi_x,
+							      double            *dpi_y,
 							      char             **target)
 {
   return gtk_print_operation_unix_create_preview_surface (op, page_setup, dpi_x, dpi_y, target);

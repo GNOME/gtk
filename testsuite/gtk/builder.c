@@ -736,7 +736,7 @@ test_spin_button (void)
     "</interface>";
   GObject *obj;
   GtkAdjustment *adjustment;
-  gdouble value;
+  double value;
   
   builder = builder_new_from_string (buffer, -1, NULL);
   obj = gtk_builder_get_object (builder, "spinbutton1");

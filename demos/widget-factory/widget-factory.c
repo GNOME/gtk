@@ -482,7 +482,7 @@ pulse_it (GtkWidget *widget)
 static void
 update_pulse_time (GtkAdjustment *adjustment, GtkWidget *widget)
 {
-  gdouble value;
+  double value;
   guint pulse_id;
 
   value = gtk_adjustment_get_value (adjustment);
@@ -537,11 +537,11 @@ on_entry_icon_release (GtkEntry            *entry,
 
 static void
 on_scale_button_value_changed (GtkScaleButton *button,
-                               gdouble         value,
+                               double          value,
                                gpointer        user_data)
 {
   GtkAdjustment *adjustment;
-  gdouble val;
+  double val;
   char *str;
 
   adjustment = gtk_scale_button_get_adjustment (button);

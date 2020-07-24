@@ -433,7 +433,7 @@ fill_pinch_event (GdkMacosDisplay *display,
   } last_state = FP_STATE_IDLE;
   GdkSeat *seat;
   GdkTouchpadGesturePhase phase;
-  gdouble angle_delta = 0.0;
+  double angle_delta = 0.0;
 
   g_assert (GDK_IS_MACOS_DISPLAY (display));
   g_assert (GDK_IS_MACOS_SURFACE (surface));
@@ -590,8 +590,8 @@ fill_scroll_event (GdkMacosDisplay *self,
   GdkDevice *pointer;
   GdkEvent *ret = NULL;
   GdkSeat *seat;
-  gdouble dx;
-  gdouble dy;
+  double dx;
+  double dy;
 
   g_assert (GDK_IS_MACOS_SURFACE (surface));
   g_assert (nsevent != NULL);
@@ -606,8 +606,8 @@ fill_scroll_event (GdkMacosDisplay *self,
 
   if ([nsevent hasPreciseScrollingDeltas])
     {
-      gdouble sx;
-      gdouble sy;
+      double sx;
+      double sy;
 
       /*
        * TODO: We probably need another event type for the

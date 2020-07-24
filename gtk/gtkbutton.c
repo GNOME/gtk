@@ -310,8 +310,8 @@ gtk_button_class_init (GtkButtonClass *klass)
 static void
 click_pressed_cb (GtkGestureClick *gesture,
                   guint            n_press,
-                  gdouble          x,
-                  gdouble          y,
+                  double           x,
+                  double           y,
                   GtkWidget       *widget)
 {
   GtkButton *button = GTK_BUTTON (widget);
@@ -353,8 +353,8 @@ touch_release_in_button (GtkGestureClick *gesture,
 static void
 click_released_cb (GtkGestureClick *gesture,
                    guint            n_press,
-                   gdouble          x,
-                   gdouble          y,
+                   double           x,
+                   double           y,
                    GtkWidget       *widget)
 {
   GtkButton *button = GTK_BUTTON (widget);

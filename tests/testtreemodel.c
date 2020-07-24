@@ -211,7 +211,7 @@ test_run (const char        *title,
 {
   int i, k, d, items;
   GTimer *timer;
-  gdouble elapsed;
+  double elapsed;
   int memused;
 #ifdef HAVE_MALLINFO
   int uordblks_before = 0;

@@ -105,7 +105,7 @@ portal_start_page (GtkPrintOperation *op,
   GtkPrintOperationPortal *op_portal = op->priv->platform_data;
   GtkPaperSize *paper_size;
   cairo_surface_type_t type;
-  gdouble w, h;
+  double w, h;
 
   paper_size = gtk_page_setup_get_paper_size (page_setup);
 

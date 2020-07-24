@@ -45,8 +45,8 @@ enum {
 
 struct _GtkGestureRotatePrivate
 {
-  gdouble initial_angle;
-  gdouble accum_touchpad_angle;
+  double initial_angle;
+  double accum_touchpad_angle;
 };
 
 static guint signals[LAST_SIGNAL] = { 0 };
@@ -75,13 +75,13 @@ gtk_gesture_rotate_constructor (GType                  type,
 
 static gboolean
 _gtk_gesture_rotate_get_angle (GtkGestureRotate *rotate,
-                               gdouble          *angle)
+                               double           *angle)
 {
   GtkGestureRotatePrivate *priv;
   GdkEvent *last_event;
-  gdouble x1, y1, x2, y2;
+  double x1, y1, x2, y2;
   GtkGesture *gesture;
-  gdouble dx, dy;
+  double dx, dy;
   GList *sequences = NULL;
   GdkTouchpadGesturePhase phase;
   gboolean retval = FALSE;
@@ -137,7 +137,7 @@ static gboolean
 _gtk_gesture_rotate_check_emit (GtkGestureRotate *gesture)
 {
   GtkGestureRotatePrivate *priv;
-  gdouble angle, delta;
+  double angle, delta;
 
   if (!_gtk_gesture_rotate_get_angle (gesture, &angle))
     return FALSE;
@@ -279,11 +279,11 @@ gtk_gesture_rotate_new (void)
  *
  * Returns: the angle delta in radians
  **/
-gdouble
+double
 gtk_gesture_rotate_get_angle_delta (GtkGestureRotate *gesture)
 {
   GtkGestureRotatePrivate *priv;
-  gdouble angle;
+  double angle;
 
   g_return_val_if_fail (GTK_IS_GESTURE_ROTATE (gesture), 0.0);
 

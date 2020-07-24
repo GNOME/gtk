@@ -1804,7 +1804,7 @@ gtk_settings_load_from_key_file (GtkSettings       *settings,
 
         case G_TYPE_DOUBLE:
           {
-            gdouble d_val;
+            double d_val;
 
             g_value_init (&svalue.value, G_TYPE_DOUBLE);
             d_val = g_key_file_get_double (keyfile, "Settings", key, &error);

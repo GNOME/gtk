@@ -34,8 +34,8 @@ static GtkOrientation o;
 static void
 toggle_orientation (GtkGestureClick *gesture,
                     guint            n_press,
-                    gdouble          x,
-                    gdouble          y,
+                    double           x,
+                    double           y,
                     GtkGrid         *grid)
 {
   o = 1 - o;

@@ -291,10 +291,10 @@ struct _GtkTextViewPrivate
 struct _GtkTextPendingScroll
 {
   GtkTextMark   *mark;
-  gdouble        within_margin;
+  double         within_margin;
   gboolean       use_align;
-  gdouble        xalign;
-  gdouble        yalign;
+  double         xalign;
+  double         yalign;
 };
 
 typedef enum 
@@ -392,16 +392,16 @@ static void gtk_text_view_state_flags_changed  (GtkWidget        *widget,
 
 static void gtk_text_view_click_gesture_pressed (GtkGestureClick *gesture,
                                                       int                   n_press,
-                                                      gdouble               x,
-                                                      gdouble               y,
+                                                      double                x,
+                                                      double                y,
                                                       GtkTextView          *text_view);
 static void gtk_text_view_drag_gesture_update        (GtkGestureDrag *gesture,
-                                                      gdouble         offset_x,
-                                                      gdouble         offset_y,
+                                                      double          offset_x,
+                                                      double          offset_y,
                                                       GtkTextView    *text_view);
 static void gtk_text_view_drag_gesture_end           (GtkGestureDrag *gesture,
-                                                      gdouble         offset_x,
-                                                      gdouble         offset_y,
+                                                      double          offset_x,
+                                                      double          offset_y,
                                                       GtkTextView    *text_view);
 
 static gboolean gtk_text_view_key_controller_key_pressed  (GtkEventControllerKey *controller,
@@ -540,10 +540,10 @@ static void gtk_text_view_do_popup               (GtkTextView       *text_view,
 static void cancel_pending_scroll                (GtkTextView   *text_view);
 static void gtk_text_view_queue_scroll           (GtkTextView   *text_view,
                                                   GtkTextMark   *mark,
-                                                  gdouble        within_margin,
+                                                  double         within_margin,
                                                   gboolean       use_align,
-                                                  gdouble        xalign,
-                                                  gdouble        yalign);
+                                                  double         xalign,
+                                                  double         yalign);
 
 static gboolean gtk_text_view_flush_scroll         (GtkTextView *text_view);
 static void     gtk_text_view_update_adjustments   (GtkTextView *text_view);
@@ -674,7 +674,7 @@ get_buffer (GtkTextView *text_view)
 #define LOWER_OFFSET_ANCHOR 0.2
 
 static gboolean
-check_scroll (gdouble offset, GtkAdjustment *adjustment)
+check_scroll (double offset, GtkAdjustment *adjustment)
 {
   if ((offset > UPPER_OFFSET_ANCHOR &&
        gtk_adjustment_get_value (adjustment) + gtk_adjustment_get_page_size (adjustment) < gtk_adjustment_get_upper (adjustment)) ||
@@ -691,7 +691,7 @@ gtk_text_view_drop_motion_scroll_timeout (gpointer data)
   GtkTextView *text_view;
   GtkTextViewPrivate *priv;
   GtkTextIter newplace;
-  gdouble pointer_xoffset, pointer_yoffset;
+  double pointer_xoffset, pointer_yoffset;
 
   text_view = GTK_TEXT_VIEW (data);
   priv = text_view->priv;
@@ -703,8 +703,8 @@ gtk_text_view_drop_motion_scroll_timeout (gpointer data)
 
   gtk_text_buffer_move_mark (get_buffer (text_view), priv->dnd_mark, &newplace);
 
-  pointer_xoffset = (gdouble) priv->dnd_x / text_window_get_width (priv->text_window);
-  pointer_yoffset = (gdouble) priv->dnd_y / text_window_get_height (priv->text_window);
+  pointer_xoffset = (double) priv->dnd_x / text_window_get_width (priv->text_window);
+  pointer_yoffset = (double) priv->dnd_y / text_window_get_height (priv->text_window);
 
   if (check_scroll (pointer_xoffset, priv->hadjustment) ||
       check_scroll (pointer_yoffset, priv->vadjustment))
@@ -2392,10 +2392,10 @@ gtk_text_view_get_line_at_y (GtkTextView *text_view,
 static gboolean
 _gtk_text_view_scroll_to_iter (GtkTextView   *text_view,
                                GtkTextIter   *iter,
-                               gdouble        within_margin,
+                               double         within_margin,
                                gboolean       use_align,
-                               gdouble        xalign,
-                               gdouble        yalign,
+                               double         xalign,
+                               double         yalign,
                                gboolean       with_border)
 {
   GtkTextViewPrivate *priv = text_view->priv;
@@ -2628,10 +2628,10 @@ _gtk_text_view_scroll_to_iter (GtkTextView   *text_view,
 gboolean
 gtk_text_view_scroll_to_iter (GtkTextView   *text_view,
                               GtkTextIter   *iter,
-                              gdouble        within_margin,
+                              double         within_margin,
                               gboolean       use_align,
-                              gdouble        xalign,
-                              gdouble        yalign)
+                              double         xalign,
+                              double         yalign)
 {
   return _gtk_text_view_scroll_to_iter (text_view,
                                         iter,
@@ -2665,10 +2665,10 @@ cancel_pending_scroll (GtkTextView *text_view)
 static void
 gtk_text_view_queue_scroll (GtkTextView   *text_view,
                             GtkTextMark   *mark,
-                            gdouble        within_margin,
+                            double         within_margin,
                             gboolean       use_align,
-                            gdouble        xalign,
-                            gdouble        yalign)
+                            double         xalign,
+                            double         yalign)
 {
   GtkTextIter iter;
   GtkTextPendingScroll *scroll;
@@ -2881,10 +2881,10 @@ flush_update_im_spot_location (GtkTextView *text_view)
 void
 gtk_text_view_scroll_to_mark (GtkTextView *text_view,
                               GtkTextMark *mark,
-                              gdouble      within_margin,
+                              double       within_margin,
                               gboolean     use_align,
-                              gdouble      xalign,
-                              gdouble      yalign)
+                              double       xalign,
+                              double       yalign)
 {  
   g_return_if_fail (GTK_IS_TEXT_VIEW (text_view));
   g_return_if_fail (GTK_IS_TEXT_MARK (mark));
@@ -5340,7 +5340,7 @@ get_iter_from_gesture (GtkTextView *text_view,
   GdkEventSequence *sequence;
   GtkTextViewPrivate *priv;
   int xcoord, ycoord;
-  gdouble px, py;
+  double px, py;
 
   priv = text_view->priv;
   sequence =
@@ -5365,8 +5365,8 @@ get_iter_from_gesture (GtkTextView *text_view,
 static void
 gtk_text_view_click_gesture_pressed (GtkGestureClick *gesture,
                                      int              n_press,
-                                     gdouble          x,
-                                     gdouble          y,
+                                     double           x,
+                                     double           y,
                                      GtkTextView     *text_view)
 {
   GdkEventSequence *sequence;
@@ -6112,7 +6112,7 @@ gtk_text_view_move_cursor (GtkTextView     *text_view,
   if (!cursor_visible (text_view))
     {
       GtkScrollStep scroll_step;
-      gdouble old_xpos, old_ypos;
+      double old_xpos, old_ypos;
 
       switch (step) 
 	{
@@ -6359,7 +6359,7 @@ gtk_text_view_move_viewport (GtkTextView     *text_view,
                              int              count)
 {
   GtkAdjustment *adjustment;
-  gdouble increment;
+  double increment;
   
   switch (step) 
     {
@@ -6423,8 +6423,8 @@ gtk_text_view_scroll_pages (GtkTextView *text_view,
   GtkTextIter old_insert;
   GtkTextIter new_insert;
   GtkTextIter anchor;
-  gdouble newval;
-  gdouble oldval;
+  double newval;
+  double oldval;
   int y0, y1;
 
   priv = text_view->priv;
@@ -6515,8 +6515,8 @@ gtk_text_view_scroll_hpages (GtkTextView *text_view,
   GtkTextMark *insert_mark;
   GtkTextIter old_insert;
   GtkTextIter new_insert;
-  gdouble newval;
-  gdouble oldval;
+  double newval;
+  double oldval;
   int y, height;
 
   priv = text_view->priv;
@@ -7187,7 +7187,7 @@ drag_gesture_get_text_surface_coords (GtkGestureDrag *gesture,
                                      int            *x,
                                      int            *y)
 {
-  gdouble sx, sy, ox, oy;
+  double sx, sy, ox, oy;
 
   if (!gtk_gesture_drag_get_start_point (gesture, &sx, &sy) ||
       !gtk_gesture_drag_get_offset (gesture, &ox, &oy))
@@ -7206,8 +7206,8 @@ drag_gesture_get_text_surface_coords (GtkGestureDrag *gesture,
 
 static void
 gtk_text_view_drag_gesture_update (GtkGestureDrag *gesture,
-                                   gdouble         offset_x,
-                                   gdouble         offset_y,
+                                   double          offset_x,
+                                   double          offset_y,
                                    GtkTextView    *text_view)
 {
   int start_x, start_y, x, y;
@@ -7324,8 +7324,8 @@ gtk_text_view_drag_gesture_update (GtkGestureDrag *gesture,
 
 static void
 gtk_text_view_drag_gesture_end (GtkGestureDrag *gesture,
-                                gdouble         offset_x,
-                                gdouble         offset_y,
+                                double          offset_x,
+                                double          offset_y,
                                 GtkTextView    *text_view)
 {
   gboolean is_touchscreen, clicked_in_selection;
@@ -7970,9 +7970,9 @@ gtk_text_view_set_hadjustment_values (GtkTextView *text_view)
 {
   GtkTextViewPrivate *priv;
   int screen_width;
-  gdouble old_value;
-  gdouble new_value;
-  gdouble new_upper;
+  double old_value;
+  double new_value;
+  double new_upper;
 
   priv = text_view->priv;
 
@@ -7983,7 +7983,7 @@ gtk_text_view_set_hadjustment_values (GtkTextView *text_view)
   g_object_set (priv->hadjustment,
                 "lower", 0.0,
                 "upper", new_upper,
-                "page-size", (gdouble)screen_width,
+                "page-size", (double)screen_width,
                 "step-increment", screen_width * 0.1,
                 "page-increment", screen_width * 0.9,
                 NULL);
@@ -8000,9 +8000,9 @@ gtk_text_view_set_vadjustment_values (GtkTextView *text_view)
   GtkTextIter first_para;
   int screen_height;
   int y;
-  gdouble old_value;
-  gdouble new_value;
-  gdouble new_upper;
+  double old_value;
+  double new_value;
+  double new_upper;
 
   priv = text_view->priv;
 
@@ -8013,7 +8013,7 @@ gtk_text_view_set_vadjustment_values (GtkTextView *text_view)
   g_object_set (priv->vadjustment,
                 "lower", 0.0,
                 "upper", new_upper,
-                "page-size", (gdouble)screen_height,
+                "page-size", (double)screen_height,
                 "step-increment", screen_height * 0.1,
                 "page-increment", screen_height * 0.9,
                 NULL);

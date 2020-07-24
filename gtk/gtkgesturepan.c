@@ -105,8 +105,8 @@ gtk_gesture_pan_set_property (GObject      *object,
 }
 
 static void
-direction_from_offset (gdouble          offset_x,
-                       gdouble          offset_y,
+direction_from_offset (double           offset_x,
+                       double           offset_y,
                        GtkOrientation   orientation,
                        GtkPanDirection *direction)
 {
@@ -130,11 +130,11 @@ direction_from_offset (gdouble          offset_x,
 
 static gboolean
 guess_direction (GtkGesturePan   *gesture,
-                 gdouble          offset_x,
-                 gdouble          offset_y,
+                 double           offset_x,
+                 double           offset_y,
                  GtkPanDirection *direction)
 {
-  gdouble abs_x, abs_y;
+  double abs_x, abs_y;
 
   abs_x = ABS (offset_x);
   abs_y = ABS (offset_y);
@@ -169,13 +169,13 @@ check_orientation_matches (GtkGesturePan   *gesture,
 
 static void
 gtk_gesture_pan_drag_update (GtkGestureDrag *gesture,
-                             gdouble         offset_x,
-                             gdouble         offset_y)
+                             double          offset_x,
+                             double          offset_y)
 {
   GtkGesturePanPrivate *priv;
   GtkPanDirection direction;
   GtkGesturePan *pan;
-  gdouble offset;
+  double offset;
 
   pan = GTK_GESTURE_PAN (gesture);
   priv = gtk_gesture_pan_get_instance_private (pan);
@@ -204,8 +204,8 @@ gtk_gesture_pan_drag_update (GtkGestureDrag *gesture,
 
 static void
 gtk_gesture_pan_drag_end (GtkGestureDrag *gesture,
-                          gdouble         offset_x,
-                          gdouble         offset_y)
+                          double          offset_x,
+                          double          offset_y)
 {
   GtkGesturePanPrivate *priv;
 

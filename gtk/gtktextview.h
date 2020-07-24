@@ -199,17 +199,17 @@ GtkTextBuffer *gtk_text_view_get_buffer            (GtkTextView   *text_view);
 GDK_AVAILABLE_IN_ALL
 gboolean       gtk_text_view_scroll_to_iter        (GtkTextView   *text_view,
                                                     GtkTextIter   *iter,
-                                                    gdouble        within_margin,
+                                                    double         within_margin,
                                                     gboolean       use_align,
-                                                    gdouble        xalign,
-                                                    gdouble        yalign);
+                                                    double         xalign,
+                                                    double         yalign);
 GDK_AVAILABLE_IN_ALL
 void           gtk_text_view_scroll_to_mark        (GtkTextView   *text_view,
                                                     GtkTextMark   *mark,
-                                                    gdouble        within_margin,
+                                                    double         within_margin,
                                                     gboolean       use_align,
-                                                    gdouble        xalign,
-                                                    gdouble        yalign);
+                                                    double         xalign,
+                                                    double         yalign);
 GDK_AVAILABLE_IN_ALL
 void           gtk_text_view_scroll_mark_onscreen  (GtkTextView   *text_view,
                                                     GtkTextMark   *mark);

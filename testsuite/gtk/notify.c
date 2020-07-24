@@ -272,10 +272,10 @@ check_property (GObject *instance, GParamSpec *pspec)
       guint i;
       NotifyData data;
       gulong id;
-      gdouble value;
-      gdouble new_value;
+      double value;
+      double new_value;
       int current_count;
-      gdouble delta;
+      double delta;
 
       data.name = pspec->name;
       data.count = 0;

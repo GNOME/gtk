@@ -6,8 +6,8 @@ int cursor_x, cursor_y;
 
 static void
 motion_cb (GtkEventControllerMotion *motion,
-           gdouble                   x,
-           gdouble                   y,
+           double                    x,
+           double                    y,
            GtkWidget                *widget)
 {
   float processing_ms = gtk_adjustment_get_value (adjustment);

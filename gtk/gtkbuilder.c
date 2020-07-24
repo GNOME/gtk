@@ -2132,7 +2132,7 @@ gtk_builder_value_from_string_type (GtkBuilder   *builder,
     case G_TYPE_FLOAT:
     case G_TYPE_DOUBLE:
       {
-        gdouble d;
+        double d;
         char *endptr = NULL;
         errno = 0;
         d = g_ascii_strtod (string, &endptr);

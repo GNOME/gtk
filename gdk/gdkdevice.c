@@ -52,11 +52,11 @@ typedef struct _GdkAxisInfo GdkAxisInfo;
 struct _GdkAxisInfo
 {
   GdkAxisUse use;
-  gdouble min_axis;
-  gdouble max_axis;
-  gdouble min_value;
-  gdouble max_value;
-  gdouble resolution;
+  double min_axis;
+  double max_axis;
+  double min_value;
+  double max_value;
+  double resolution;
 };
 
 enum {
@@ -550,7 +550,7 @@ gdk_device_get_property (GObject    *object,
 void
 gdk_device_get_state (GdkDevice       *device,
                       GdkSurface      *surface,
-                      gdouble         *axes,
+                      double          *axes,
                       GdkModifierType *mask)
 {
   g_return_if_fail (GDK_IS_DEVICE (device));
@@ -608,7 +608,7 @@ gdk_device_get_surface_at_position (GdkDevice *device,
                                     double    *win_x,
                                     double    *win_y)
 {
-  gdouble tmp_x, tmp_y;
+  double tmp_x, tmp_y;
   GdkSurface *surface;
 
   g_return_val_if_fail (GDK_IS_DEVICE (device), NULL);
@@ -873,9 +873,9 @@ gdk_device_get_n_axes (GdkDevice *device)
  **/
 gboolean
 gdk_device_get_axis (GdkDevice  *device,
-                     gdouble    *axes,
+                     double     *axes,
                      GdkAxisUse  use,
-                     gdouble    *value)
+                     double     *value)
 {
   int i;
 
@@ -994,9 +994,9 @@ _gdk_device_reset_axes (GdkDevice *device)
 guint
 _gdk_device_add_axis (GdkDevice   *device,
                       GdkAxisUse   use,
-                      gdouble      min_value,
-                      gdouble      max_value,
-                      gdouble      resolution)
+                      double       min_value,
+                      double       max_value,
+                      double       resolution)
 {
   GdkAxisInfo axis_info;
   guint pos;
@@ -1039,9 +1039,9 @@ void
 _gdk_device_get_axis_info (GdkDevice   *device,
                            guint        index_,
                            GdkAxisUse   *use,
-                           gdouble      *min_value,
-                           gdouble      *max_value,
-                           gdouble      *resolution)
+                           double       *min_value,
+                           double       *max_value,
+                           double       *resolution)
 {
   GdkAxisInfo *info;
 
@@ -1078,17 +1078,17 @@ gboolean
 _gdk_device_translate_surface_coord (GdkDevice *device,
                                      GdkSurface *surface,
                                      guint      index_,
-                                     gdouble    value,
-                                     gdouble   *axis_value)
+                                     double     value,
+                                     double    *axis_value)
 {
   GdkAxisInfo axis_info;
   GdkAxisInfo *axis_info_x, *axis_info_y;
-  gdouble device_width, device_height;
-  gdouble x_offset, y_offset;
-  gdouble x_scale, y_scale;
-  gdouble x_min, y_min;
-  gdouble x_resolution, y_resolution;
-  gdouble device_aspect;
+  double device_width, device_height;
+  double x_offset, y_offset;
+  double x_scale, y_scale;
+  double x_min, y_min;
+  double x_resolution, y_resolution;
+  double device_aspect;
   int surface_width, surface_height;
 
   if (index_ >= device->axes->len)
@@ -1179,16 +1179,16 @@ _gdk_device_translate_surface_coord (GdkDevice *device,
 gboolean
 _gdk_device_translate_screen_coord (GdkDevice *device,
                                     GdkSurface *surface,
-                                    gdouble    surface_root_x,
-                                    gdouble    surface_root_y,
-                                    gdouble    screen_width,
-                                    gdouble    screen_height,
+                                    double     surface_root_x,
+                                    double     surface_root_y,
+                                    double     screen_width,
+                                    double     screen_height,
                                     guint      index_,
-                                    gdouble    value,
-                                    gdouble   *axis_value)
+                                    double     value,
+                                    double    *axis_value)
 {
   GdkAxisInfo axis_info;
-  gdouble axis_width, scale, offset;
+  double axis_width, scale, offset;
 
   if (index_ >= device->axes->len)
     return FALSE;
@@ -1229,11 +1229,11 @@ _gdk_device_translate_screen_coord (GdkDevice *device,
 gboolean
 _gdk_device_translate_axis (GdkDevice *device,
                             guint      index_,
-                            gdouble    value,
-                            gdouble   *axis_value)
+                            double     value,
+                            double    *axis_value)
 {
   GdkAxisInfo axis_info;
-  gdouble axis_width, out;
+  double axis_width, out;
 
   if (index_ >= device->axes->len)
     return FALSE;
@@ -1258,8 +1258,8 @@ void
 _gdk_device_query_state (GdkDevice        *device,
                          GdkSurface        *surface,
                          GdkSurface       **child_surface,
-                         gdouble          *win_x,
-                         gdouble          *win_y,
+                         double           *win_x,
+                         double           *win_y,
                          GdkModifierType  *mask)
 {
   GDK_DEVICE_GET_CLASS (device)->query_state (device,
@@ -1272,8 +1272,8 @@ _gdk_device_query_state (GdkDevice        *device,
 
 GdkSurface *
 _gdk_device_surface_at_position (GdkDevice       *device,
-                                 gdouble         *win_x,
-                                 gdouble         *win_y,
+                                 double          *win_x,
+                                 double          *win_y,
                                  GdkModifierType *mask)
 {
   return GDK_DEVICE_GET_CLASS (device)->surface_at_position (device,

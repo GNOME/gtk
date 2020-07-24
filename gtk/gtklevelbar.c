@@ -160,7 +160,7 @@ typedef struct _GtkLevelBarClass   GtkLevelBarClass;
 
 typedef struct {
   char *name;
-  gdouble value;
+  double value;
 } GtkLevelBarOffset;
 
 struct _GtkLevelBar {
@@ -170,9 +170,9 @@ struct _GtkLevelBar {
 
   GtkLevelBarMode bar_mode;
 
-  gdouble min_value;
-  gdouble max_value;
-  gdouble cur_value;
+  double min_value;
+  double max_value;
+  double cur_value;
 
   GList *offsets;
 
@@ -191,7 +191,7 @@ struct _GtkLevelBarClass {
 };
 
 static void gtk_level_bar_set_value_internal (GtkLevelBar *self,
-                                              gdouble      value);
+                                              double       value);
 
 static void gtk_level_bar_buildable_init (GtkBuildableIface *iface);
 
@@ -202,7 +202,7 @@ G_DEFINE_TYPE_WITH_CODE (GtkLevelBar, gtk_level_bar, GTK_TYPE_WIDGET,
 
 static GtkLevelBarOffset *
 gtk_level_bar_offset_new (const char *name,
-                          gdouble      value)
+                          double       value)
 {
   GtkLevelBarOffset *offset = g_slice_new0 (GtkLevelBarOffset);
 
@@ -242,7 +242,7 @@ offset_sort_func (gconstpointer a,
 static gboolean
 gtk_level_bar_ensure_offset (GtkLevelBar *self,
                              const char *name,
-                             gdouble      value)
+                             double       value)
 {
   GList *existing;
   GtkLevelBarOffset *offset = NULL;
@@ -271,7 +271,7 @@ gtk_level_bar_ensure_offset (GtkLevelBar *self,
 #ifndef G_DISABLE_CHECKS
 static gboolean
 gtk_level_bar_value_in_interval (GtkLevelBar *self,
-                                 gdouble      value)
+                                 double       value)
 {
   return ((value >= self->min_value) &&
           (value <= self->max_value));
@@ -411,7 +411,7 @@ gtk_level_bar_allocate_trough_continuous (GtkLevelBar *self,
                                           int          baseline)
 {
   GtkAllocation block_area;
-  gdouble fill_percentage;
+  double fill_percentage;
   gboolean inverted;
   int block_min;
 
@@ -569,7 +569,7 @@ update_mode_style_classes (GtkLevelBar *self)
 static void
 update_level_style_classes (GtkLevelBar *self)
 {
-  gdouble value;
+  double value;
   const char *value_class = NULL;
   GtkLevelBarOffset *offset, *prev_offset;
   GList *l;
@@ -1070,8 +1070,8 @@ gtk_level_bar_new (void)
  * Returns: a #GtkLevelBar
  */
 GtkWidget *
-gtk_level_bar_new_for_interval (gdouble min_value,
-                                gdouble max_value)
+gtk_level_bar_new_for_interval (double min_value,
+                                double max_value)
 {
   return g_object_new (GTK_TYPE_LEVEL_BAR,
                        "min-value", min_value,
@@ -1087,7 +1087,7 @@ gtk_level_bar_new_for_interval (gdouble min_value,
  *
  * Returns: a positive value
  */
-gdouble
+double
 gtk_level_bar_get_min_value (GtkLevelBar *self)
 {
   g_return_val_if_fail (GTK_IS_LEVEL_BAR (self), 0.0);
@@ -1103,7 +1103,7 @@ gtk_level_bar_get_min_value (GtkLevelBar *self)
  *
  * Returns: a positive value
  */
-gdouble
+double
 gtk_level_bar_get_max_value (GtkLevelBar *self)
 {
   g_return_val_if_fail (GTK_IS_LEVEL_BAR (self), 0.0);
@@ -1120,7 +1120,7 @@ gtk_level_bar_get_max_value (GtkLevelBar *self)
  * Returns: a value in the interval between
  *     #GtkLevelBar:min-value and #GtkLevelBar:max-value
  */
-gdouble
+double
 gtk_level_bar_get_value (GtkLevelBar *self)
 {
   g_return_val_if_fail (GTK_IS_LEVEL_BAR (self), 0.0);
@@ -1130,7 +1130,7 @@ gtk_level_bar_get_value (GtkLevelBar *self)
 
 static void
 gtk_level_bar_set_value_internal (GtkLevelBar *self,
-                                  gdouble      value)
+                                  double       value)
 {
   self->cur_value = value;
 
@@ -1151,7 +1151,7 @@ gtk_level_bar_set_value_internal (GtkLevelBar *self,
  */
 void
 gtk_level_bar_set_min_value (GtkLevelBar *self,
-                             gdouble      value)
+                             double       value)
 {
   g_return_if_fail (GTK_IS_LEVEL_BAR (self));
   g_return_if_fail (value >= 0.0);
@@ -1181,7 +1181,7 @@ gtk_level_bar_set_min_value (GtkLevelBar *self,
  */
 void
 gtk_level_bar_set_max_value (GtkLevelBar *self,
-                             gdouble      value)
+                             double       value)
 {
   g_return_if_fail (GTK_IS_LEVEL_BAR (self));
   g_return_if_fail (value >= 0.0);
@@ -1210,7 +1210,7 @@ gtk_level_bar_set_max_value (GtkLevelBar *self,
  */
 void
 gtk_level_bar_set_value (GtkLevelBar *self,
-                         gdouble      value)
+                         double       value)
 {
   g_return_if_fail (GTK_IS_LEVEL_BAR (self));
 
@@ -1344,7 +1344,7 @@ gtk_level_bar_remove_offset_value (GtkLevelBar *self,
 void
 gtk_level_bar_add_offset_value (GtkLevelBar *self,
                                 const char *name,
-                                gdouble      value)
+                                double       value)
 {
   GQuark name_quark;
 
@@ -1373,7 +1373,7 @@ gtk_level_bar_add_offset_value (GtkLevelBar *self,
 gboolean
 gtk_level_bar_get_offset_value (GtkLevelBar *self,
                                 const char *name,
-                                gdouble     *value)
+                                double      *value)
 {
   GList *existing;
   GtkLevelBarOffset *offset = NULL;

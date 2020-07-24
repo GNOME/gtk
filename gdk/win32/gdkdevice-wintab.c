@@ -57,7 +57,7 @@ get_current_mask (void)
 static void
 gdk_device_wintab_get_state (GdkDevice       *device,
                              GdkSurface       *window,
-                             gdouble         *axes,
+                             double          *axes,
                              GdkModifierType *mask)
 {
   GdkDeviceWintab *device_wintab;
@@ -177,8 +177,8 @@ gdk_device_wintab_ungrab (GdkDevice *device,
 
 static GdkSurface *
 gdk_device_wintab_surface_at_position (GdkDevice       *device,
-                                       gdouble         *win_x,
-                                       gdouble         *win_y,
+                                       double          *win_x,
+                                       double          *win_y,
                                        GdkModifierType *mask)
 {
   return NULL;
@@ -187,14 +187,14 @@ gdk_device_wintab_surface_at_position (GdkDevice       *device,
 void
 _gdk_device_wintab_translate_axes (GdkDeviceWintab *device_wintab,
                                    GdkSurface       *window,
-                                   gdouble         *axes,
-                                   gdouble         *x,
-                                   gdouble         *y)
+                                   double          *axes,
+                                   double          *x,
+                                   double          *y)
 {
   GdkDevice *device;
   GdkSurface *impl_surface;
   int root_x, root_y;
-  gdouble temp_x, temp_y;
+  double temp_x, temp_y;
   int i;
 
   device = GDK_DEVICE (device_wintab);

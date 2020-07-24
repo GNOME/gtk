@@ -49,15 +49,15 @@ void        _gtk_magnifier_set_inspected     (GtkMagnifier *magnifier,
                                               GtkWidget    *inspected);
 
 void        _gtk_magnifier_set_coords        (GtkMagnifier *magnifier,
-                                              gdouble       x,
-                                              gdouble       y);
+                                              double        x,
+                                              double        y);
 void        _gtk_magnifier_get_coords        (GtkMagnifier *magnifier,
-                                              gdouble      *x,
-                                              gdouble      *y);
+                                              double       *x,
+                                              double       *y);
 
 void        _gtk_magnifier_set_magnification (GtkMagnifier *magnifier,
-                                              gdouble       magnification);
-gdouble     _gtk_magnifier_get_magnification (GtkMagnifier *magnifier);
+                                              double        magnification);
+double      _gtk_magnifier_get_magnification (GtkMagnifier *magnifier);
 
 void        _gtk_magnifier_set_resize        (GtkMagnifier *magnifier,
                                               gboolean      resize);

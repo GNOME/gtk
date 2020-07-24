@@ -36,10 +36,10 @@ void        gtk_color_swatch_set_rgba         (GtkColorSwatch *swatch,
 gboolean    gtk_color_swatch_get_rgba         (GtkColorSwatch *swatch,
                                                GdkRGBA        *color);
 void        gtk_color_swatch_set_hsva         (GtkColorSwatch *swatch,
-                                               gdouble         h,
-                                               gdouble         s,
-                                               gdouble         v,
-                                               gdouble         a);
+                                               double          h,
+                                               double          s,
+                                               double          v,
+                                               double          a);
 void        gtk_color_swatch_set_can_drop     (GtkColorSwatch *swatch,
                                                gboolean        can_drop);
 void        gtk_color_swatch_set_icon         (GtkColorSwatch *swatch,

@@ -309,10 +309,10 @@ gtk_print_settings_set_bool (GtkPrintSettings *settings,
  *
  * Returns: the floating point number associated with @key
  */
-gdouble
+double
 gtk_print_settings_get_double_with_default (GtkPrintSettings *settings,
 					    const char       *key,
-					    gdouble           def)
+					    double            def)
 {
   const char *val;
 
@@ -332,7 +332,7 @@ gtk_print_settings_get_double_with_default (GtkPrintSettings *settings,
  * 
  * Returns: the double value of @key
  */
-gdouble
+double
 gtk_print_settings_get_double (GtkPrintSettings *settings,
 			       const char       *key)
 {
@@ -350,7 +350,7 @@ gtk_print_settings_get_double (GtkPrintSettings *settings,
 void
 gtk_print_settings_set_double (GtkPrintSettings *settings,
 			       const char       *key,
-			       gdouble           value)
+			       double            value)
 {
   char buf[G_ASCII_DTOSTR_BUF_SIZE];
   
@@ -369,12 +369,12 @@ gtk_print_settings_set_double (GtkPrintSettings *settings,
  * 
  * Returns: the length value of @key, converted to @unit
  */
-gdouble
+double
 gtk_print_settings_get_length (GtkPrintSettings *settings,
 			       const char       *key,
 			       GtkUnit           unit)
 {
-  gdouble length = gtk_print_settings_get_double (settings, key);
+  double length = gtk_print_settings_get_double (settings, key);
   return _gtk_print_convert_from_mm (length, unit);
 }
 
@@ -390,7 +390,7 @@ gtk_print_settings_get_length (GtkPrintSettings *settings,
 void
 gtk_print_settings_set_length (GtkPrintSettings *settings,
 			       const char       *key,
-			       gdouble           value, 
+			       double            value, 
 			       GtkUnit           unit)
 {
   gtk_print_settings_set_double (settings, key,
@@ -580,7 +580,7 @@ gtk_print_settings_get_paper_size (GtkPrintSettings *settings)
 {
   const char *val;
   const char *name;
-  gdouble w, h;
+  double w, h;
 
   val = gtk_print_settings_get (settings, GTK_PRINT_SETTINGS_PAPER_FORMAT);
   if (val == NULL)
@@ -648,7 +648,7 @@ gtk_print_settings_set_paper_size (GtkPrintSettings *settings,
  * 
  * Returns: the paper width, in units of @unit
  */
-gdouble
+double
 gtk_print_settings_get_paper_width (GtkPrintSettings *settings,
 				    GtkUnit           unit)
 {
@@ -665,7 +665,7 @@ gtk_print_settings_get_paper_width (GtkPrintSettings *settings,
  */
 void
 gtk_print_settings_set_paper_width (GtkPrintSettings *settings,
-				    gdouble           width, 
+				    double            width, 
 				    GtkUnit           unit)
 {
   gtk_print_settings_set_length (settings, GTK_PRINT_SETTINGS_PAPER_WIDTH, width, unit);
@@ -681,7 +681,7 @@ gtk_print_settings_set_paper_width (GtkPrintSettings *settings,
  * 
  * Returns: the paper height, in units of @unit
  */
-gdouble
+double
 gtk_print_settings_get_paper_height (GtkPrintSettings *settings,
 				     GtkUnit           unit)
 {
@@ -700,7 +700,7 @@ gtk_print_settings_get_paper_height (GtkPrintSettings *settings,
  */
 void
 gtk_print_settings_set_paper_height (GtkPrintSettings *settings,
-				     gdouble           height, 
+				     double            height, 
 				     GtkUnit           unit)
 {
   gtk_print_settings_set_length (settings, 
@@ -1195,7 +1195,7 @@ gtk_print_settings_set_resolution_xy (GtkPrintSettings *settings,
  * 
  * Returns: the resolution in lpi (lines per inch)
  */
-gdouble
+double
 gtk_print_settings_get_printer_lpi (GtkPrintSettings *settings)
 {
   return gtk_print_settings_get_double_with_default (settings, GTK_PRINT_SETTINGS_PRINTER_LPI, 150.0);
@@ -1210,7 +1210,7 @@ gtk_print_settings_get_printer_lpi (GtkPrintSettings *settings)
  */
 void
 gtk_print_settings_set_printer_lpi (GtkPrintSettings *settings,
-				    gdouble           lpi)
+				    double            lpi)
 {
   gtk_print_settings_set_double (settings, GTK_PRINT_SETTINGS_PRINTER_LPI,
 			         lpi);
@@ -1224,7 +1224,7 @@ gtk_print_settings_set_printer_lpi (GtkPrintSettings *settings,
  * 
  * Returns: the scale in percent
  */
-gdouble
+double
 gtk_print_settings_get_scale (GtkPrintSettings *settings)
 {
   return gtk_print_settings_get_double_with_default (settings,
@@ -1241,7 +1241,7 @@ gtk_print_settings_get_scale (GtkPrintSettings *settings)
  */
 void
 gtk_print_settings_set_scale (GtkPrintSettings *settings,
-			      gdouble           scale)
+			      double            scale)
 {
   gtk_print_settings_set_double (settings, GTK_PRINT_SETTINGS_SCALE,
 				 scale);

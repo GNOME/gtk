@@ -19,7 +19,7 @@
 
 static void
 value_changed (GtkWidget *button,
-               gdouble volume,
+               double volume,
                gpointer user_data)
 {
   g_message ("volume changed to %f", volume);

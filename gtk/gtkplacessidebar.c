@@ -271,23 +271,23 @@ static void  check_unmount_and_eject       (GMount   *mount,
                                             gboolean *show_eject);
 static void on_row_pressed  (GtkGestureClick *gesture,
                              int                   n_press,
-                             gdouble               x,
-                             gdouble               y,
+                             double                x,
+                             double                y,
                              GtkSidebarRow        *row);
 static void on_row_released (GtkGestureClick *gesture,
                              int                   n_press,
-                             gdouble               x,
-                             gdouble               y,
+                             double                x,
+                             double                y,
                              GtkSidebarRow        *row);
 static void on_row_dragged  (GtkGestureDrag *gesture,
-                             gdouble         x,
-                             gdouble         y,
+                             double          x,
+                             double          y,
                              GtkSidebarRow  *row);
 
 static void popup_menu_cb    (GtkSidebarRow   *row);
 static void long_press_cb    (GtkGesture      *gesture,
-                              gdouble          x,
-                              gdouble          y,
+                              double           x,
+                              double           y,
                               GtkPlacesSidebar *sidebar);
 static void stop_drop_feedback (GtkPlacesSidebar *sidebar);
 static GMountOperation * get_mount_operation (GtkPlacesSidebar *sidebar);
@@ -3383,8 +3383,8 @@ on_row_activated (GtkListBox    *list_box,
 static void
 on_row_pressed (GtkGestureClick *gesture,
                 int              n_press,
-                gdouble          x,
-                gdouble          y,
+                double           x,
+                double           y,
                 GtkSidebarRow   *row)
 {
   GtkPlacesSidebar *sidebar;
@@ -3410,8 +3410,8 @@ on_row_pressed (GtkGestureClick *gesture,
 static void
 on_row_released (GtkGestureClick *gesture,
                  int              n_press,
-                 gdouble          x,
-                 gdouble          y,
+                 double           x,
+                 double           y,
                  GtkSidebarRow   *row)
 {
   GtkPlacesSidebar *sidebar;
@@ -3452,8 +3452,8 @@ on_row_released (GtkGestureClick *gesture,
 
 static void
 on_row_dragged (GtkGestureDrag *gesture,
-                gdouble         x,
-                gdouble         y,
+                double          x,
+                double          y,
                 GtkSidebarRow  *row)
 {
   GtkPlacesSidebar *sidebar;
@@ -3532,8 +3532,8 @@ popup_menu_cb (GtkSidebarRow *row)
 
 static void
 long_press_cb (GtkGesture       *gesture,
-               gdouble           x,
-               gdouble           y,
+               double            x,
+               double            y,
                GtkPlacesSidebar *sidebar)
 {
   GtkWidget *row;

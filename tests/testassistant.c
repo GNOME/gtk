@@ -109,7 +109,7 @@ progress_timeout (GtkWidget *assistant)
 {
   GtkWidget *progress;
   int current_page;
-  gdouble value;
+  double value;
 
   current_page = gtk_assistant_get_current_page (GTK_ASSISTANT (assistant));
   progress = gtk_assistant_get_nth_page (GTK_ASSISTANT (assistant), current_page);

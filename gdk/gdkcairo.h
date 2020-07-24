@@ -35,8 +35,8 @@ void       gdk_cairo_set_source_rgba    (cairo_t              *cr,
 GDK_AVAILABLE_IN_ALL
 void       gdk_cairo_set_source_pixbuf  (cairo_t              *cr,
                                          const GdkPixbuf      *pixbuf,
-                                         gdouble               pixbuf_x,
-                                         gdouble               pixbuf_y);
+                                         double                pixbuf_x,
+                                         double                pixbuf_y);
 
 GDK_AVAILABLE_IN_ALL
 void       gdk_cairo_rectangle          (cairo_t              *cr,

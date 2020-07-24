@@ -2013,7 +2013,7 @@ gtk_stack_snapshot_crossfade (GtkWidget   *widget,
 {
   GtkStack *stack = GTK_STACK (widget);
   GtkStackPrivate *priv = gtk_stack_get_instance_private (stack);
-  gdouble progress = gtk_progress_tracker_get_progress (&priv->tracker, FALSE);
+  double progress = gtk_progress_tracker_get_progress (&priv->tracker, FALSE);
 
   gtk_snapshot_push_cross_fade (snapshot, progress);
 
@@ -2411,13 +2411,13 @@ gtk_stack_measure (GtkWidget      *widget,
     {
       if (orientation == GTK_ORIENTATION_VERTICAL && !priv->vhomogeneous)
         {
-          gdouble t = priv->interpolate_size ? gtk_progress_tracker_get_ease_out_cubic (&priv->tracker, FALSE) : 1.0;
+          double t = priv->interpolate_size ? gtk_progress_tracker_get_ease_out_cubic (&priv->tracker, FALSE) : 1.0;
           *minimum = LERP (*minimum, priv->last_visible_widget_height, t);
           *natural = LERP (*natural, priv->last_visible_widget_height, t);
         }
       if (orientation == GTK_ORIENTATION_HORIZONTAL && !priv->hhomogeneous)
         {
-          gdouble t = priv->interpolate_size ? gtk_progress_tracker_get_ease_out_cubic (&priv->tracker, FALSE) : 1.0;
+          double t = priv->interpolate_size ? gtk_progress_tracker_get_ease_out_cubic (&priv->tracker, FALSE) : 1.0;
           *minimum = LERP (*minimum, priv->last_visible_widget_width, t);
           *natural = LERP (*natural, priv->last_visible_widget_width, t);
         }

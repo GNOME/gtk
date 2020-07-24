@@ -71,8 +71,8 @@ struct _GtkIMContextWayland
   GtkWidget *widget;
 
   GtkGesture *gesture;
-  gdouble press_x;
-  gdouble press_y;
+  double press_x;
+  double press_y;
 
   struct {
     char *text;
@@ -493,8 +493,8 @@ gtk_im_context_wayland_finalize (GObject *object)
 static void
 pressed_cb (GtkGestureClick     *gesture,
             int                  n_press,
-            gdouble              x,
-            gdouble              y,
+            double               x,
+            double               y,
             GtkIMContextWayland *context)
 {
   if (n_press == 1)
@@ -507,8 +507,8 @@ pressed_cb (GtkGestureClick     *gesture,
 static void
 released_cb (GtkGestureClick     *gesture,
              int                  n_press,
-             gdouble              x,
-             gdouble              y,
+             double               x,
+             double               y,
              GtkIMContextWayland *context)
 {
   GtkIMContextWaylandGlobal *global;

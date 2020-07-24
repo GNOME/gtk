@@ -140,8 +140,8 @@ static void set_cursor_if_appropriate (GtkTextView *text_view,
 static void
 released_cb (GtkGestureClick *gesture,
              guint            n_press,
-             gdouble          x,
-             gdouble          y,
+             double           x,
+             double           y,
              GtkWidget       *text_view)
 {
   GtkTextIter start, end, iter;
@@ -168,8 +168,8 @@ released_cb (GtkGestureClick *gesture,
 
 static void
 motion_cb (GtkEventControllerMotion *controller,
-           gdouble                   x,
-           gdouble                   y,
+           double                    x,
+           double                    y,
            GtkTextView              *text_view)
 {
   set_cursor_if_appropriate (text_view, x, y);

@@ -167,15 +167,15 @@ GtkEntryCompletion *gtk_entry_get_completion (GtkEntry           *entry);
  */
 GDK_AVAILABLE_IN_ALL
 void           gtk_entry_set_progress_fraction   (GtkEntry     *entry,
-                                                  gdouble       fraction);
+                                                  double        fraction);
 GDK_AVAILABLE_IN_ALL
-gdouble        gtk_entry_get_progress_fraction   (GtkEntry     *entry);
+double         gtk_entry_get_progress_fraction   (GtkEntry     *entry);
 
 GDK_AVAILABLE_IN_ALL
 void           gtk_entry_set_progress_pulse_step (GtkEntry     *entry,
-                                                  gdouble       fraction);
+                                                  double        fraction);
 GDK_AVAILABLE_IN_ALL
-gdouble        gtk_entry_get_progress_pulse_step (GtkEntry     *entry);
+double         gtk_entry_get_progress_pulse_step (GtkEntry     *entry);
 
 GDK_AVAILABLE_IN_ALL
 void           gtk_entry_progress_pulse          (GtkEntry     *entry);

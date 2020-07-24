@@ -136,8 +136,8 @@ static void       gtk_tooltip_set_surface          (GtkTooltip      *tooltip,
 static void       gtk_tooltip_handle_event_internal (GdkEventType   event_type,
                                                      GdkSurface    *surface,
                                                      GtkWidget     *target_widget,
-                                                     gdouble       dx,
-                                                     gdouble       dy);
+                                                     double        dx,
+                                                     double        dy);
 
 static GQuark quark_current_tooltip;
 

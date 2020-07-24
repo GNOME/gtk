@@ -85,8 +85,8 @@ struct _GtkPrintBackendClass
   void                  (*printer_request_details)           (GtkPrinter          *printer);
   cairo_surface_t *     (*printer_create_cairo_surface)      (GtkPrinter          *printer,
 							      GtkPrintSettings    *settings,
-							      gdouble              height,
-							      gdouble              width,
+							      double               height,
+							      double               width,
 							      GIOChannel          *cache_io);
   GtkPrinterOptionSet * (*printer_get_options)               (GtkPrinter          *printer,
 							      GtkPrintSettings    *settings,
@@ -104,10 +104,10 @@ struct _GtkPrintBackendClass
   GList  *              (*printer_list_papers)               (GtkPrinter          *printer);
   GtkPageSetup *        (*printer_get_default_page_size)     (GtkPrinter          *printer);
   gboolean              (*printer_get_hard_margins)          (GtkPrinter          *printer,
-							      gdouble             *top,
-							      gdouble             *bottom,
-							      gdouble             *left,
-							      gdouble             *right);
+							      double              *top,
+							      double              *bottom,
+							      double              *left,
+							      double              *right);
   GtkPrintCapabilities  (*printer_get_capabilities)          (GtkPrinter          *printer);
 
   /* Signals */
@@ -135,10 +135,10 @@ struct _GtkPrintBackendClass
 
   gboolean              (*printer_get_hard_margins_for_paper_size) (GtkPrinter    *printer,
 								    GtkPaperSize  *paper_size,
-								    gdouble       *top,
-								    gdouble       *bottom,
-								    gdouble       *left,
-								    gdouble       *right);
+								    double        *top,
+								    double        *bottom,
+								    double        *left,
+								    double        *right);
 };
 
 #define GTK_PRINT_BACKEND_EXTENSION_POINT_NAME "gtk-print-backend"

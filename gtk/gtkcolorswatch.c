@@ -59,7 +59,7 @@ struct _GtkColorSwatch
   GtkWidget parent_instance;
 
   GdkRGBA color;
-  gdouble radius[4];
+  double radius[4];
   char *icon;
   guint    has_color        : 1;
   guint    use_alpha        : 1;
@@ -270,8 +270,8 @@ swatch_primary_action (GtkColorSwatch *swatch)
 
 static void
 hold_action (GtkGestureLongPress *gesture,
-             gdouble              x,
-             gdouble              y,
+             double               x,
+             double               y,
              GtkColorSwatch      *swatch)
 {
   do_popup (swatch);
@@ -281,8 +281,8 @@ hold_action (GtkGestureLongPress *gesture,
 static void
 tap_action (GtkGestureClick *gesture,
             int              n_press,
-            gdouble          x,
-            gdouble          y,
+            double           x,
+            double           y,
             GtkColorSwatch  *swatch)
 {
   guint button;

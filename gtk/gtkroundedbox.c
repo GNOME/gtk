@@ -56,8 +56,8 @@ _gtk_rounded_box_init_rect (GskRoundedRect *box,
 static void
 gtk_rounded_box_clamp_border_radius (GskRoundedRect *box)
 {
-  gdouble factor = 1.0;
-  gdouble corners;
+  double factor = 1.0;
+  double corners;
 
   corners = box->corner[GSK_CORNER_TOP_LEFT].width + box->corner[GSK_CORNER_TOP_RIGHT].width;
   if (corners != 0)

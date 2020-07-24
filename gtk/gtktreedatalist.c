@@ -162,7 +162,7 @@ _gtk_tree_data_list_node_to_value (GtkTreeDataList *list,
       g_value_set_float (value, (float) list->data.v_float);
       break;
     case G_TYPE_DOUBLE:
-      g_value_set_double (value, (gdouble) list->data.v_double);
+      g_value_set_double (value, (double) list->data.v_double);
       break;
     case G_TYPE_STRING:
       g_value_set_string (value, (char *) list->data.v_pointer);

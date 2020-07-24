@@ -86,9 +86,9 @@ GtkWidget       * gtk_scale_new                (GtkOrientation   orientation,
                                                 GtkAdjustment   *adjustment);
 GDK_AVAILABLE_IN_ALL
 GtkWidget       * gtk_scale_new_with_range     (GtkOrientation   orientation,
-                                                gdouble          min,
-                                                gdouble          max,
-                                                gdouble          step);
+                                                double           min,
+                                                double           max,
+                                                double           step);
 GDK_AVAILABLE_IN_ALL
 void              gtk_scale_set_digits         (GtkScale        *scale,
                                                 int              digits);
@@ -119,7 +119,7 @@ void              gtk_scale_get_layout_offsets (GtkScale        *scale,
 
 GDK_AVAILABLE_IN_ALL
 void              gtk_scale_add_mark           (GtkScale        *scale,
-                                                gdouble          value,
+                                                double           value,
                                                 GtkPositionType  position,
                                                 const char      *markup);
 GDK_AVAILABLE_IN_ALL

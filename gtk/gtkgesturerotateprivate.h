@@ -33,8 +33,8 @@ struct _GtkGestureRotateClass
   GtkGestureClass parent_class;
 
   void (* angle_changed) (GtkGestureRotate *gesture,
-                          gdouble           angle,
-                          gdouble           delta);
+                          double            angle,
+                          double            delta);
   /*< private >*/
   gpointer padding[10];
 };

@@ -831,8 +831,8 @@ gtk_paned_buildable_iface_init (GtkBuildableIface *iface)
 
 static gboolean
 initiates_touch_drag (GtkPaned *paned,
-                      gdouble   start_x,
-                      gdouble   start_y)
+                      double    start_x,
+                      double    start_y)
 {
   int handle_size, handle_pos, drag_pos;
   graphene_rect_t handle_area;
@@ -864,8 +864,8 @@ initiates_touch_drag (GtkPaned *paned,
 
 static void
 gesture_drag_begin_cb (GtkGestureDrag *gesture,
-                       gdouble         start_x,
-                       gdouble         start_y,
+                       double          start_x,
+                       double          start_y,
                        GtkPaned       *paned)
 {
   GdkEventSequence *sequence;
@@ -914,11 +914,11 @@ gesture_drag_begin_cb (GtkGestureDrag *gesture,
 
 static void
 gesture_drag_update_cb (GtkGestureDrag   *gesture,
-                        gdouble           offset_x,
-                        gdouble           offset_y,
+                        double            offset_x,
+                        double            offset_y,
                         GtkPaned         *paned)
 {
-  gdouble start_x, start_y;
+  double start_x, start_y;
 
   gtk_gesture_drag_get_start_point (GTK_GESTURE_DRAG (gesture),
                                &start_x, &start_y);
@@ -927,8 +927,8 @@ gesture_drag_update_cb (GtkGestureDrag   *gesture,
 
 static void
 gesture_drag_end_cb (GtkGestureDrag *gesture,
-                     gdouble         offset_x,
-                     gdouble         offset_y,
+                     double          offset_x,
+                     double          offset_y,
                      GtkPaned       *paned)
 {
   if (!paned->panning)
@@ -1080,7 +1080,7 @@ gtk_paned_compute_position (GtkPaned *paned,
       else if (!paned->resize_start_child && paned->resize_end_child)
         pos = start_child_req;
       else if (start_child_req + end_child_req != 0)
-        pos = allocation * ((gdouble)start_child_req / (start_child_req + end_child_req)) + 0.5;
+        pos = allocation * ((double)start_child_req / (start_child_req + end_child_req)) + 0.5;
       else
         pos = allocation * 0.5 + 0.5;
     }
@@ -1094,7 +1094,7 @@ gtk_paned_compute_position (GtkPaned *paned,
           if (paned->resize_start_child && !paned->resize_end_child)
             pos = paned->start_child_size + allocation - paned->last_allocation;
           else if (!(!paned->resize_start_child && paned->resize_end_child))
-            pos = allocation * ((gdouble) paned->start_child_size / (paned->last_allocation)) + 0.5;
+            pos = allocation * ((double) paned->start_child_size / (paned->last_allocation)) + 0.5;
           else
             pos = paned->start_child_size;
         }

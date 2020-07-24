@@ -2477,7 +2477,7 @@ transmute_cf_dib_to_image_bmp (const guchar    *data,
     {
       if (p[3] != 0)
         {
-          gdouble inverse_alpha = 255./p[3];
+          double inverse_alpha = 255./p[3];
 
           p[0] = p[0] * inverse_alpha + 0.5;
           p[1] = p[1] * inverse_alpha + 0.5;

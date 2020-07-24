@@ -124,7 +124,7 @@ gtk_level_bar_accessible_set_current_value (AtkValue     *obj,
 
 static void
 gtk_level_bar_accessible_get_value_and_text (AtkValue  *obj,
-                                             gdouble   *value,
+                                             double    *value,
                                              char     **text)
 {
   GtkWidget *widget;
@@ -153,7 +153,7 @@ gtk_level_bar_accessible_get_range (AtkValue *obj)
 
 static void
 gtk_level_bar_accessible_set_value (AtkValue      *obj,
-                                    const gdouble  value)
+                                    const double   value)
 {
   GtkWidget *widget;
   GtkLevelBar *level_bar;

@@ -13,11 +13,11 @@
 
 int
 spinbutton_hex_spin_input (GtkSpinButton *spin_button,
-                           gdouble       *new_val)
+                           double        *new_val)
 {
   const char *buf;
   char *err;
-  gdouble res;
+  double res;
 
   buf = gtk_editable_get_text (GTK_EDITABLE (spin_button));
   res = strtol (buf, &err, 16);
@@ -33,7 +33,7 @@ spinbutton_hex_spin_output (GtkSpinButton *spin_button)
 {
   GtkAdjustment *adjustment;
   char *buf;
-  gdouble val;
+  double val;
 
   adjustment = gtk_spin_button_get_adjustment (spin_button);
   val = gtk_adjustment_get_value (adjustment);
@@ -50,7 +50,7 @@ spinbutton_hex_spin_output (GtkSpinButton *spin_button)
 
 int
 spinbutton_time_spin_input (GtkSpinButton *spin_button,
-                            gdouble       *new_val)
+                            double        *new_val)
 {
   const char *text;
   char **str;
@@ -92,8 +92,8 @@ spinbutton_time_spin_output (GtkSpinButton *spin_button)
 {
   GtkAdjustment *adjustment;
   char *buf;
-  gdouble hours;
-  gdouble minutes;
+  double hours;
+  double minutes;
 
   adjustment = gtk_spin_button_get_adjustment (spin_button);
   hours = gtk_adjustment_get_value (adjustment) / 60.0;
@@ -123,7 +123,7 @@ static const char *month[12] = {
 
 int
 spinbutton_month_spin_input (GtkSpinButton *spin_button,
-                             gdouble       *new_val)
+                             double        *new_val)
 {
   int i;
   char *tmp1, *tmp2;
@@ -145,7 +145,7 @@ spinbutton_month_spin_input (GtkSpinButton *spin_button,
       *new_val = 0.0;
       return GTK_INPUT_ERROR;
     }
-  *new_val = (gdouble) i;
+  *new_val = (double) i;
 
   return TRUE;
 }
@@ -154,7 +154,7 @@ int
 spinbutton_month_spin_output (GtkSpinButton *spin_button)
 {
   GtkAdjustment *adjustment;
-  gdouble value;
+  double value;
   int i;
 
   adjustment = gtk_spin_button_get_adjustment (spin_button);

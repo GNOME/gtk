@@ -89,14 +89,14 @@ static GParamSpec *color_properties[N_COLOR_PROPS] = { NULL, };
 
 static void
 rgb_to_hsv (GdkRGBA *rgba,
-            gdouble *h_out,
-            gdouble *s_out,
-            gdouble *v_out)
+            double  *h_out,
+            double  *s_out,
+            double  *v_out)
 {
-  gdouble red, green, blue;
-  gdouble h, s, v;
-  gdouble min, max;
-  gdouble delta;
+  double red, green, blue;
+  double h, s, v;
+  double min, max;
+  double delta;
 
   red = rgba->red;
   green = rgba->green;

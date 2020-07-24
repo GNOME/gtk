@@ -153,8 +153,8 @@ static void gtk_path_bar_update_button_appearance (GtkPathBar       *path_bar,
 						   gboolean          current_dir);
 
 static gboolean gtk_path_bar_scroll_controller_scroll (GtkEventControllerScroll *scroll,
-                                                       gdouble                   dx,
-                                                       gdouble                   dy,
+                                                       double                    dx,
+                                                       double                    dy,
                                                        GtkPathBar               *path_bar);
 
 static void
@@ -671,8 +671,8 @@ gtk_path_bar_size_allocate (GtkWidget *widget,
 
 static gboolean
 gtk_path_bar_scroll_controller_scroll (GtkEventControllerScroll *scroll,
-                                       gdouble                   dx,
-                                       gdouble                   dy,
+                                       double                    dx,
+                                       double                    dy,
                                        GtkPathBar               *path_bar)
 {
   if (dy > 0)

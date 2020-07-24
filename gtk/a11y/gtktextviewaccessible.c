@@ -557,7 +557,7 @@ gtk_text_view_accessible_get_run_attributes (AtkText *text,
   GtkTextIter iter;
   AtkAttributeSet *attrib_set = NULL;
   GSList *tags, *temp_tags;
-  gdouble scale = 1;
+  double scale = 1;
   gboolean val_set = FALSE;
 
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (text));
@@ -788,7 +788,7 @@ gtk_text_view_accessible_get_run_attributes (AtkText *text,
       g_object_get (tag, "scale-set", &scale_set, NULL);
       if (scale_set)
         {
-          gdouble font_scale;
+          double font_scale;
           g_object_get (tag, "scale", &font_scale, NULL);
           val_set = TRUE;
           scale *= font_scale;

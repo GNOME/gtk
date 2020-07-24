@@ -213,8 +213,8 @@ gdk_cairo_surface_paint_pixbuf (cairo_surface_t *surface,
 void
 gdk_cairo_set_source_pixbuf (cairo_t         *cr,
                              const GdkPixbuf *pixbuf,
-                             gdouble          pixbuf_x,
-                             gdouble          pixbuf_y)
+                             double           pixbuf_x,
+                             double           pixbuf_y)
 {
   cairo_format_t format;
   cairo_surface_t *surface;

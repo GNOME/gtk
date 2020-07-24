@@ -229,9 +229,9 @@ typedef struct
   gint64     last_scroll_time;
   guint      conceil_timer;
 
-  gdouble    current_pos;
-  gdouble    source_pos;
-  gdouble    target_pos;
+  double     current_pos;
+  double     source_pos;
+  double     target_pos;
   GtkProgressTracker tracker;
   guint      tick_id;
   guint      over_timeout_id;
@@ -280,8 +280,8 @@ typedef struct
   GtkGesture *drag_gesture;
   GtkGesture *pan_gesture;
 
-  gdouble drag_start_x;
-  gdouble drag_start_y;
+  double drag_start_x;
+  double drag_start_y;
 
   guint                  kinetic_scrolling         : 1;
   guint                  capture_button_press      : 1;
@@ -289,11 +289,11 @@ typedef struct
 
   guint                  deceleration_id;
 
-  gdouble                x_velocity;
-  gdouble                y_velocity;
+  double                 x_velocity;
+  double                 y_velocity;
 
-  gdouble                unclamped_hadj_value;
-  gdouble                unclamped_vadj_value;
+  double                 unclamped_hadj_value;
+  double                 unclamped_vadj_value;
 } GtkScrolledWindowPrivate;
 
 typedef struct
@@ -386,7 +386,7 @@ static void  gtk_scrolled_window_unmap                 (GtkWidget           *wid
 static void  gtk_scrolled_window_realize               (GtkWidget           *widget);
 static void _gtk_scrolled_window_set_adjustment_value  (GtkScrolledWindow *scrolled_window,
                                                         GtkAdjustment     *adjustment,
-                                                        gdouble            value);
+                                                        double             value);
 
 static void gtk_scrolled_window_cancel_deceleration (GtkScrolledWindow *scrolled_window);
 
@@ -402,7 +402,7 @@ static void     remove_indicator     (GtkScrolledWindow *sw,
 static gboolean maybe_hide_indicator (gpointer data);
 
 static void     indicator_start_fade (Indicator *indicator,
-                                      gdouble    pos);
+                                      double     pos);
 static void     indicator_set_over   (Indicator *indicator,
                                       gboolean   over);
 
@@ -900,8 +900,8 @@ policy_may_be_visible (GtkPolicyType policy)
 
 static void
 scrolled_window_drag_begin_cb (GtkScrolledWindow *scrolled_window,
-                               gdouble            start_x,
-                               gdouble            start_y,
+                               double             start_x,
+                               double             start_y,
                                GtkGesture        *gesture)
 {
   GtkScrolledWindowPrivate *priv = gtk_scrolled_window_get_instance_private (scrolled_window);
@@ -947,14 +947,14 @@ gtk_scrolled_window_invalidate_overshoot (GtkScrolledWindow *scrolled_window)
 
 static void
 scrolled_window_drag_update_cb (GtkScrolledWindow *scrolled_window,
-                                gdouble            offset_x,
-                                gdouble            offset_y,
+                                double             offset_x,
+                                double             offset_y,
                                 GtkGesture        *gesture)
 {
   GtkScrolledWindowPrivate *priv = gtk_scrolled_window_get_instance_private (scrolled_window);
   GtkAdjustment *hadjustment;
   GtkAdjustment *vadjustment;
-  gdouble dx, dy;
+  double dx, dy;
 
   gtk_scrolled_window_invalidate_overshoot (scrolled_window);
 
@@ -999,8 +999,8 @@ scrolled_window_drag_end_cb (GtkScrolledWindow *scrolled_window,
 
 static void
 gtk_scrolled_window_decelerate (GtkScrolledWindow *scrolled_window,
-                                gdouble            x_velocity,
-                                gdouble            y_velocity)
+                                double             x_velocity,
+                                double             y_velocity)
 {
   GtkScrolledWindowPrivate *priv = gtk_scrolled_window_get_instance_private (scrolled_window);
   gboolean overshoot;
@@ -1024,16 +1024,16 @@ gtk_scrolled_window_decelerate (GtkScrolledWindow *scrolled_window,
 
 static void
 scrolled_window_swipe_cb (GtkScrolledWindow *scrolled_window,
-                          gdouble            x_velocity,
-                          gdouble            y_velocity)
+                          double             x_velocity,
+                          double             y_velocity)
 {
   gtk_scrolled_window_decelerate (scrolled_window, -x_velocity, -y_velocity);
 }
 
 static void
 scrolled_window_long_press_cb (GtkScrolledWindow *scrolled_window,
-                               gdouble            x,
-                               gdouble            y,
+                               double             x,
+                               double             y,
                                GtkGesture        *gesture)
 {
   GdkEventSequence *sequence;
@@ -1116,8 +1116,8 @@ indicator_set_over (Indicator *indicator,
 static gboolean
 coords_close_to_indicator (GtkScrolledWindow *sw,
                            Indicator         *indicator,
-                           gdouble            x,
-                           gdouble            y)
+                           double             x,
+                           double             y)
 {
   GtkScrolledWindowPrivate *priv = gtk_scrolled_window_get_instance_private (sw);
   graphene_rect_t indicator_bounds;
@@ -1162,8 +1162,8 @@ static gboolean
 check_update_scrollbar_proximity (GtkScrolledWindow *sw,
                                   Indicator         *indicator,
                                   GtkWidget         *target,
-                                  gdouble            x,
-                                  gdouble            y)
+                                  double             x,
+                                  double             y)
 {
   GtkScrolledWindowPrivate *priv = gtk_scrolled_window_get_instance_private (sw);
   gboolean indicator_close, on_scrollbar, on_other_scrollbar;
@@ -1196,17 +1196,17 @@ check_update_scrollbar_proximity (GtkScrolledWindow *sw,
   return indicator_close;
 }
 
-static gdouble
+static double
 get_scroll_unit (GtkScrolledWindow *sw,
                  GtkOrientation     orientation)
 {
-  gdouble scroll_unit;
+  double scroll_unit;
 
 #ifndef GDK_WINDOWING_QUARTZ
   GtkScrolledWindowPrivate *priv = gtk_scrolled_window_get_instance_private (sw);
   GtkScrollbar *scrollbar;
   GtkAdjustment *adj;
-  gdouble page_size;
+  double page_size;
 
   if (orientation == GTK_ORIENTATION_HORIZONTAL)
     scrollbar = GTK_SCROLLBAR (priv->hscrollbar);
@@ -1316,8 +1316,8 @@ scroll_controller_scroll_begin (GtkEventControllerScroll *scroll,
 
 static gboolean
 scroll_controller_scroll (GtkEventControllerScroll *scroll,
-                          gdouble                   delta_x,
-                          gdouble                   delta_y,
+                          double                    delta_x,
+                          double                    delta_y,
                           GtkScrolledWindow        *scrolled_window)
 {
   GtkScrolledWindowPrivate *priv = gtk_scrolled_window_get_instance_private (scrolled_window);
@@ -1331,7 +1331,7 @@ scroll_controller_scroll (GtkEventControllerScroll *scroll,
 
   if (shifted)
     {
-      gdouble delta;
+      double delta;
 
       delta = delta_x;
       delta_x = delta_y;
@@ -1342,8 +1342,8 @@ scroll_controller_scroll (GtkEventControllerScroll *scroll,
       may_hscroll (scrolled_window))
     {
       GtkAdjustment *adj;
-      gdouble new_value;
-      gdouble scroll_unit;
+      double new_value;
+      double scroll_unit;
 
       adj = gtk_scrollbar_get_adjustment (GTK_SCROLLBAR (priv->hscrollbar));
       scroll_unit = get_scroll_unit (scrolled_window, GTK_ORIENTATION_HORIZONTAL);
@@ -1357,8 +1357,8 @@ scroll_controller_scroll (GtkEventControllerScroll *scroll,
       may_vscroll (scrolled_window))
     {
       GtkAdjustment *adj;
-      gdouble new_value;
-      gdouble scroll_unit;
+      double new_value;
+      double scroll_unit;
 
       adj = gtk_scrollbar_get_adjustment (GTK_SCROLLBAR (priv->vscrollbar));
       scroll_unit = get_scroll_unit (scrolled_window, GTK_ORIENTATION_VERTICAL);
@@ -1398,11 +1398,11 @@ scroll_controller_scroll_end (GtkEventControllerScroll *scroll,
 
 static void
 scroll_controller_decelerate (GtkEventControllerScroll *scroll,
-                              gdouble                   initial_vel_x,
-                              gdouble                   initial_vel_y,
+                              double                    initial_vel_x,
+                              double                    initial_vel_y,
                               GtkScrolledWindow        *scrolled_window)
 {
-  gdouble unit_x, unit_y;
+  double unit_x, unit_y;
   gboolean shifted;
   GdkModifierType state;
 
@@ -2898,7 +2898,7 @@ gtk_scrolled_window_scroll_child (GtkScrolledWindow *scrolled_window,
 
   if (adjustment)
     {
-      gdouble value = gtk_adjustment_get_value (adjustment);
+      double value = gtk_adjustment_get_value (adjustment);
       
       switch (scroll)
         {
@@ -3028,7 +3028,7 @@ _gtk_scrolled_window_get_overshoot (GtkScrolledWindow *scrolled_window,
 {
   GtkScrolledWindowPrivate *priv = gtk_scrolled_window_get_instance_private (scrolled_window);
   GtkAdjustment *vadjustment, *hadjustment;
-  gdouble lower, upper, x, y;
+  double lower, upper, x, y;
 
   /* Vertical overshoot */
   vadjustment = gtk_scrollbar_get_adjustment (GTK_SCROLLBAR (priv->vscrollbar));
@@ -3201,10 +3201,10 @@ uninstall_scroll_cursor (GtkScrolledWindow *scrolled_window)
 static void
 _gtk_scrolled_window_set_adjustment_value (GtkScrolledWindow *scrolled_window,
                                            GtkAdjustment     *adjustment,
-                                           gdouble            value)
+                                           double             value)
 {
   GtkScrolledWindowPrivate *priv = gtk_scrolled_window_get_instance_private (scrolled_window);
-  gdouble lower, upper, *prev_value;
+  double lower, upper, *prev_value;
   GtkPositionType edge_pos;
   gboolean vertical;
 
@@ -3257,7 +3257,7 @@ scrolled_window_deceleration_cb (GtkWidget         *widget,
   GtkScrolledWindowPrivate *priv = gtk_scrolled_window_get_instance_private (scrolled_window);
   GtkAdjustment *hadjustment, *vadjustment;
   gint64 current_time;
-  gdouble position, elapsed;
+  double position, elapsed;
 
   current_time = gdk_frame_clock_get_frame_time (frame_clock);
   elapsed = (current_time - data->last_deceleration_time) / 1000000.0;
@@ -3338,7 +3338,7 @@ gtk_scrolled_window_start_deceleration (GtkScrolledWindow *scrolled_window)
 
   if (may_hscroll (scrolled_window))
     {
-      gdouble lower,upper;
+      double lower,upper;
       GtkAdjustment *hadjustment;
 
       hadjustment = gtk_scrollbar_get_adjustment (GTK_SCROLLBAR (priv->hscrollbar));
@@ -3357,7 +3357,7 @@ gtk_scrolled_window_start_deceleration (GtkScrolledWindow *scrolled_window)
 
   if (may_vscroll (scrolled_window))
     {
-      gdouble lower,upper;
+      double lower,upper;
       GtkAdjustment *vadjustment;
 
       vadjustment = gtk_scrollbar_get_adjustment (GTK_SCROLLBAR (priv->vscrollbar));
@@ -3456,7 +3456,7 @@ maybe_emit_edge_reached (GtkScrolledWindow *scrolled_window,
                          GtkAdjustment *adjustment)
 {
   GtkScrolledWindowPrivate *priv = gtk_scrolled_window_get_instance_private (scrolled_window);
-  gdouble value, lower, upper, page_size;
+  double value, lower, upper, page_size;
   GtkPositionType edge_pos;
   gboolean vertical;
 
@@ -3591,7 +3591,7 @@ gtk_scrolled_window_unmap (GtkWidget *widget)
 
 static void
 indicator_set_fade (Indicator *indicator,
-                    gdouble    pos)
+                    double     pos)
 {
   gboolean visible, changed;
 
@@ -3623,7 +3623,7 @@ indicator_fade_cb (GtkWidget     *widget,
                    gpointer       user_data)
 {
   Indicator *indicator = user_data;
-  gdouble t;
+  double t;
 
   gtk_progress_tracker_advance_frame (&indicator->tracker,
                                       gdk_frame_clock_get_frame_time (frame_clock));
@@ -3643,7 +3643,7 @@ indicator_fade_cb (GtkWidget     *widget,
 
 static void
 indicator_start_fade (Indicator *indicator,
-                      gdouble    target)
+                      double     target)
 {
   if (indicator->target_pos == target)
     return;

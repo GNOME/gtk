@@ -85,7 +85,7 @@ static gboolean cb_query_tooltip (GtkWidget       *button,
                                   GtkTooltip      *tooltip,
                                   gpointer         user_data);
 static void     cb_value_changed (GtkVolumeButton *button,
-                                  gdouble          value,
+                                  double           value,
                                   gpointer         user_data);
 
 G_DEFINE_TYPE (GtkVolumeButton, gtk_volume_button, GTK_TYPE_SCALE_BUTTON)
@@ -222,7 +222,7 @@ cb_query_tooltip (GtkWidget  *button,
 {
   GtkScaleButton *scale_button = GTK_SCALE_BUTTON (button);
   GtkAdjustment *adjustment;
-  gdouble val;
+  double val;
   char *str;
 
   adjustment = gtk_scale_button_get_adjustment (scale_button);
@@ -257,7 +257,7 @@ cb_query_tooltip (GtkWidget  *button,
 }
 
 static void
-cb_value_changed (GtkVolumeButton *button, gdouble value, gpointer user_data)
+cb_value_changed (GtkVolumeButton *button, double value, gpointer user_data)
 {
   gtk_widget_trigger_tooltip_query (GTK_WIDGET (button));
 }

@@ -112,17 +112,17 @@ struct _GtkPrintContext
   cairo_t *cr;
   GtkPageSetup *page_setup;
 
-  gdouble surface_dpi_x;
-  gdouble surface_dpi_y;
+  double surface_dpi_x;
+  double surface_dpi_y;
   
-  gdouble pixels_per_unit_x;
-  gdouble pixels_per_unit_y;
+  double pixels_per_unit_x;
+  double pixels_per_unit_y;
 
   gboolean has_hard_margins;
-  gdouble hard_margin_top;
-  gdouble hard_margin_bottom;
-  gdouble hard_margin_left;
-  gdouble hard_margin_right;
+  double hard_margin_top;
+  double hard_margin_bottom;
+  double hard_margin_left;
+  double hard_margin_right;
 
 };
 
@@ -241,7 +241,7 @@ _gtk_print_context_rotate_according_to_orientation (GtkPrintContext *context)
   cairo_t *cr = context->cr;
   cairo_matrix_t matrix;
   GtkPaperSize *paper_size;
-  gdouble width, height;
+  double width, height;
 
   paper_size = gtk_page_setup_get_paper_size (context->page_setup);
 
@@ -287,7 +287,7 @@ _gtk_print_context_reverse_according_to_orientation (GtkPrintContext *context)
 {
   cairo_t *cr = context->cr;
   cairo_matrix_t matrix;
-  gdouble width, height;
+  double width, height;
 
   width = gtk_page_setup_get_paper_width (context->page_setup, GTK_UNIT_INCH);
   width = width * context->surface_dpi_x / context->pixels_per_unit_x;
@@ -315,7 +315,7 @@ _gtk_print_context_reverse_according_to_orientation (GtkPrintContext *context)
 void
 _gtk_print_context_translate_into_margin (GtkPrintContext *context)
 {
-  gdouble dx, dy;
+  double dx, dy;
 
   g_return_if_fail (GTK_IS_PRINT_CONTEXT (context));
 
@@ -405,11 +405,11 @@ gtk_print_context_get_page_setup (GtkPrintContext *context)
  *
  * Returns: the width of @context
  */
-gdouble
+double
 gtk_print_context_get_width (GtkPrintContext *context)
 {
   GtkPrintOperationPrivate *priv;
-  gdouble width;
+  double width;
 
   g_return_val_if_fail (GTK_IS_PRINT_CONTEXT (context), 0);
 
@@ -432,11 +432,11 @@ gtk_print_context_get_width (GtkPrintContext *context)
  *
  * Returns: the height of @context
  */
-gdouble
+double
 gtk_print_context_get_height (GtkPrintContext *context)
 {
   GtkPrintOperationPrivate *priv;
-  gdouble height;
+  double height;
 
   g_return_val_if_fail (GTK_IS_PRINT_CONTEXT (context), 0);
 
@@ -460,7 +460,7 @@ gtk_print_context_get_height (GtkPrintContext *context)
  *
  * Returns: the horizontal resolution of @context
  */
-gdouble
+double
 gtk_print_context_get_dpi_x (GtkPrintContext *context)
 {
   g_return_val_if_fail (GTK_IS_PRINT_CONTEXT (context), 0);
@@ -477,7 +477,7 @@ gtk_print_context_get_dpi_x (GtkPrintContext *context)
  *
  * Returns: the vertical resolution of @context
  */
-gdouble
+double
 gtk_print_context_get_dpi_y (GtkPrintContext *context)
 {
   g_return_val_if_fail (GTK_IS_PRINT_CONTEXT (context), 0);
@@ -499,10 +499,10 @@ gtk_print_context_get_dpi_y (GtkPrintContext *context)
  */
 gboolean
 gtk_print_context_get_hard_margins (GtkPrintContext *context,
-				    gdouble         *top,
-				    gdouble         *bottom,
-				    gdouble         *left,
-				    gdouble         *right)
+				    double          *top,
+				    double          *bottom,
+				    double          *left,
+				    double          *right)
 {
   if (context->has_hard_margins)
     {
@@ -527,10 +527,10 @@ gtk_print_context_get_hard_margins (GtkPrintContext *context,
  */
 void
 _gtk_print_context_set_hard_margins (GtkPrintContext *context,
-				     gdouble          top,
-				     gdouble          bottom,
-				     gdouble          left,
-				     gdouble          right)
+				     double           top,
+				     double           bottom,
+				     double           left,
+				     double           right)
 {
   context->hard_margin_top    = top;
   context->hard_margin_bottom = bottom;

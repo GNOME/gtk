@@ -60,8 +60,8 @@ void                 _gtk_printer_prepare_for_print         (GtkPrinter         
 							     GtkPageSetup        *page_setup);
 cairo_surface_t *    _gtk_printer_create_cairo_surface      (GtkPrinter          *printer,
 							     GtkPrintSettings    *settings,
-							     gdouble              width,
-							     gdouble              height,
+							     double               width,
+							     double               height,
 							     GIOChannel          *cache_io);
 GHashTable *         _gtk_printer_get_custom_widgets        (GtkPrinter          *printer);
 

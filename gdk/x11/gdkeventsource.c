@@ -130,7 +130,7 @@ create_synth_crossing_event (GdkEventType     evtype,
                              GdkEvent        *real_event)
 {
   GdkEvent *event;
-  gdouble x, y;
+  double x, y;
 
   g_assert (evtype == GDK_ENTER_NOTIFY || evtype == GDK_LEAVE_NOTIFY);
 

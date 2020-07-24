@@ -62,7 +62,7 @@ typedef struct
 typedef struct
 {
   GdkSurface *surface_under_pointer;   /* surface that last got a normal enter event */
-  gdouble toplevel_x, toplevel_y;
+  double toplevel_x, toplevel_y;
   guint32 state;
   guint32 button;
   GdkDevice *last_physical_device;

@@ -818,8 +818,8 @@ static void     gtk_tree_view_search_pressed_cb         (GtkGesture       *gestu
                                                          double            y,
 							 GtkTreeView      *tree_view);
 static gboolean gtk_tree_view_search_scroll_event       (GtkWidget        *entry,
-							 gdouble           dx,
-                                                         gdouble           dy,
+							 double            dx,
+                                                         double            dy,
 							 GtkTreeView      *tree_view);
 static gboolean gtk_tree_view_search_key_pressed        (GtkEventControllerKey *key,
                                                          guint                  keyval,
@@ -886,45 +886,45 @@ static void     grab_focus_and_unset_draw_keyfocus   (GtkTreeView *tree_view);
 /* Gestures */
 static void gtk_tree_view_column_click_gesture_pressed (GtkGestureClick *gesture,
                                                              int                   n_press,
-                                                             gdouble               x,
-                                                             gdouble               y,
+                                                             double                x,
+                                                             double                y,
                                                              GtkTreeView          *tree_view);
 
 static void gtk_tree_view_click_gesture_pressed        (GtkGestureClick *gesture,
                                                              int                   n_press,
-                                                             gdouble               x,
-                                                             gdouble               y,
+                                                             double                x,
+                                                             double                y,
                                                              GtkTreeView          *tree_view);
 static void gtk_tree_view_click_gesture_released       (GtkGestureClick *gesture,
                                                              int                   n_press,
-                                                             gdouble               x,
-                                                             gdouble               y,
+                                                             double                x,
+                                                             double                y,
                                                              GtkTreeView          *tree_view);
 
 static void gtk_tree_view_column_drag_gesture_begin         (GtkGestureDrag *gesture,
-                                                             gdouble         start_x,
-                                                             gdouble         start_y,
+                                                             double          start_x,
+                                                             double          start_y,
                                                              GtkTreeView    *tree_view);
 static void gtk_tree_view_column_drag_gesture_update        (GtkGestureDrag *gesture,
-                                                             gdouble         offset_x,
-                                                             gdouble         offset_y,
+                                                             double          offset_x,
+                                                             double          offset_y,
                                                              GtkTreeView    *tree_view);
 static void gtk_tree_view_column_drag_gesture_end           (GtkGestureDrag *gesture,
-                                                             gdouble         offset_x,
-                                                             gdouble         offset_y,
+                                                             double          offset_x,
+                                                             double          offset_y,
                                                              GtkTreeView    *tree_view);
 
 static void gtk_tree_view_drag_gesture_begin                (GtkGestureDrag *gesture,
-                                                             gdouble         start_x,
-                                                             gdouble         start_y,
+                                                             double          start_x,
+                                                             double          start_y,
                                                              GtkTreeView    *tree_view);
 static void gtk_tree_view_drag_gesture_update               (GtkGestureDrag *gesture,
-                                                             gdouble         offset_x,
-                                                             gdouble         offset_y,
+                                                             double          offset_x,
+                                                             double          offset_y,
                                                              GtkTreeView    *tree_view);
 static void gtk_tree_view_drag_gesture_end                  (GtkGestureDrag *gesture,
-                                                             gdouble         offset_x,
-                                                             gdouble         offset_y,
+                                                             double          offset_x,
+                                                             double          offset_y,
                                                              GtkTreeView    *tree_view);
 static void gtk_tree_view_motion_controller_enter           (GtkEventControllerMotion *controller,
                                                              double                    x,
@@ -3012,8 +3012,8 @@ gtk_tree_view_click_gesture_pressed (GtkGestureClick *gesture,
 
 static void
 gtk_tree_view_drag_gesture_begin (GtkGestureDrag *gesture,
-                                  gdouble         start_x,
-                                  gdouble         start_y,
+                                  double          start_x,
+                                  double          start_y,
                                   GtkTreeView    *tree_view)
 {
   GtkTreeViewPrivate *priv = gtk_tree_view_get_instance_private (tree_view);
@@ -3053,8 +3053,8 @@ gtk_tree_view_drag_gesture_begin (GtkGestureDrag *gesture,
 static void
 gtk_tree_view_column_click_gesture_pressed (GtkGestureClick *gesture,
                                             int              n_press,
-                                            gdouble          x,
-                                            gdouble          y,
+                                            double           x,
+                                            double           y,
                                             GtkTreeView     *tree_view)
 {
   GtkTreeViewPrivate *priv = gtk_tree_view_get_instance_private (tree_view);
@@ -3086,8 +3086,8 @@ gtk_tree_view_column_click_gesture_pressed (GtkGestureClick *gesture,
 
 static void
 gtk_tree_view_column_drag_gesture_begin (GtkGestureDrag *gesture,
-                                         gdouble         start_x,
-                                         gdouble         start_y,
+                                         double          start_x,
+                                         double          start_y,
                                          GtkTreeView    *tree_view)
 {
   GtkTreeViewPrivate *priv = gtk_tree_view_get_instance_private (tree_view);
@@ -3227,8 +3227,8 @@ gtk_tree_view_button_release_column_resize (GtkTreeView *tree_view)
 
 static void
 gtk_tree_view_column_drag_gesture_end (GtkGestureDrag *gesture,
-                                       gdouble         offset_x,
-                                       gdouble         offset_y,
+                                       double          offset_x,
+                                       double          offset_y,
                                        GtkTreeView    *tree_view)
 {
   GtkTreeViewPrivate *priv = gtk_tree_view_get_instance_private (tree_view);
@@ -3248,8 +3248,8 @@ gtk_tree_view_column_drag_gesture_end (GtkGestureDrag *gesture,
 
 static void
 gtk_tree_view_drag_gesture_end (GtkGestureDrag *gesture,
-                                gdouble         offset_x,
-                                gdouble         offset_y,
+                                double          offset_x,
+                                double          offset_y,
                                 GtkTreeView    *tree_view)
 {
   gtk_tree_view_stop_rubber_band (tree_view);
@@ -3258,8 +3258,8 @@ gtk_tree_view_drag_gesture_end (GtkGestureDrag *gesture,
 static void
 gtk_tree_view_click_gesture_released (GtkGestureClick *gesture,
                                       int              n_press,
-                                      gdouble          x,
-                                      gdouble          y,
+                                      double           x,
+                                      double           y,
                                       GtkTreeView     *tree_view)
 {
   GtkTreeViewPrivate *priv = gtk_tree_view_get_instance_private (tree_view);
@@ -3550,8 +3550,8 @@ update_prelight (GtkTreeView *tree_view,
 
 static gboolean
 gtk_tree_view_motion_resize_column (GtkTreeView *tree_view,
-                                    gdouble      x,
-                                    gdouble      y)
+                                    double       x,
+                                    double       y)
 {
   GtkTreeViewPrivate *priv = gtk_tree_view_get_instance_private (tree_view);
   int new_width;
@@ -3577,7 +3577,7 @@ gtk_tree_view_update_current_reorder (GtkTreeView *tree_view)
   GtkTreeViewColumnReorder *reorder = NULL;
   GdkEventSequence *sequence;
   GList *list;
-  gdouble x;
+  double x;
 
   sequence = gtk_gesture_single_get_current_sequence
     (GTK_GESTURE_SINGLE (priv->column_drag_gesture));
@@ -3607,7 +3607,7 @@ gtk_tree_view_vertical_autoscroll (GtkTreeView *tree_view)
   if (gtk_gesture_is_recognized (priv->drag_gesture))
     {
       GdkEventSequence *sequence;
-      gdouble py;
+      double py;
 
       sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (priv->drag_gesture));
       gtk_gesture_get_point (priv->drag_gesture, sequence, NULL, &py);
@@ -3642,7 +3642,7 @@ gtk_tree_view_horizontal_autoscroll (GtkTreeView *tree_view)
   GtkTreeViewPrivate *priv = gtk_tree_view_get_instance_private (tree_view);
   GdkEventSequence *sequence;
   GdkRectangle visible_rect;
-  gdouble x;
+  double x;
   int offset;
 
   sequence = gtk_gesture_single_get_current_sequence
@@ -3669,8 +3669,8 @@ gtk_tree_view_horizontal_autoscroll (GtkTreeView *tree_view)
 
 static void
 gtk_tree_view_motion_drag_column (GtkTreeView *tree_view,
-                                  gdouble      x,
-                                  gdouble      y)
+                                  double       x,
+                                  double       y)
 {
   GtkTreeViewPrivate *priv = gtk_tree_view_get_instance_private (tree_view);
   GtkTreeViewColumn *column = priv->drag_column;
@@ -3849,7 +3849,7 @@ gtk_tree_view_update_rubber_band_selection (GtkTreeView *tree_view)
   GtkTreeViewPrivate *priv = gtk_tree_view_get_instance_private (tree_view);
   GtkTreeRBTree *start_tree, *end_tree;
   GtkTreeRBNode *start_node, *end_node;
-  gdouble start_y, offset_y;
+  double start_y, offset_y;
   int bin_y;
 
   if (!gtk_gesture_is_active (priv->drag_gesture))
@@ -3986,7 +3986,7 @@ static void
 gtk_tree_view_update_rubber_band (GtkTreeView *tree_view)
 {
   GtkTreeViewPrivate *priv = gtk_tree_view_get_instance_private (tree_view);
-  gdouble start_x, start_y, offset_x, offset_y, x, y;
+  double start_x, start_y, offset_x, offset_y, x, y;
   int bin_x, bin_y;
 
   if (!gtk_gesture_is_recognized (priv->drag_gesture))
@@ -4016,7 +4016,7 @@ gtk_tree_view_snapshot_rubber_band (GtkTreeView *tree_view,
                                     GtkSnapshot *snapshot)
 {
   GtkTreeViewPrivate *priv = gtk_tree_view_get_instance_private (tree_view);
-  gdouble start_x, start_y, offset_x, offset_y;
+  double start_x, start_y, offset_x, offset_y;
   GdkRectangle rect;
   GtkStyleContext *context;
   int bin_x, bin_y;
@@ -4054,12 +4054,12 @@ gtk_tree_view_snapshot_rubber_band (GtkTreeView *tree_view,
 
 static void
 gtk_tree_view_column_drag_gesture_update (GtkGestureDrag *gesture,
-                                          gdouble         offset_x,
-                                          gdouble         offset_y,
+                                          double          offset_x,
+                                          double          offset_y,
                                           GtkTreeView    *tree_view)
 {
   GtkTreeViewPrivate *priv = gtk_tree_view_get_instance_private (tree_view);
-  gdouble start_x, start_y, x, y;
+  double start_x, start_y, x, y;
   GdkEventSequence *sequence;
 
   sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
@@ -4079,8 +4079,8 @@ gtk_tree_view_column_drag_gesture_update (GtkGestureDrag *gesture,
 
 static void
 gtk_tree_view_drag_gesture_update (GtkGestureDrag *gesture,
-                                   gdouble         offset_x,
-                                   gdouble         offset_y,
+                                   double          offset_x,
+                                   double          offset_y,
                                    GtkTreeView    *tree_view)
 {
   GtkTreeViewPrivate *priv = gtk_tree_view_get_instance_private (tree_view);
@@ -5537,7 +5537,7 @@ get_separator_height (GtkTreeView *tree_view)
 {
   GtkStyleContext *context;
   GtkCssStyle *style;
-  gdouble d;
+  double d;
   int min_size;
 
   context = gtk_widget_get_style_context (GTK_WIDGET (tree_view));
@@ -6554,7 +6554,7 @@ gtk_tree_view_top_row_to_dy (GtkTreeView *tree_view)
   new_dy = MAX (0, new_dy);
 
   priv->in_top_row_to_dy = TRUE;
-  gtk_adjustment_set_value (priv->vadjustment, (gdouble)new_dy);
+  gtk_adjustment_set_value (priv->vadjustment, (double)new_dy);
   priv->in_top_row_to_dy = FALSE;
 }
 
@@ -7017,7 +7017,7 @@ gtk_tree_view_maybe_begin_dragging_row (GtkTreeView *tree_view)
 {
   GtkTreeViewPrivate *priv = gtk_tree_view_get_instance_private (tree_view);
   GtkWidget *widget = GTK_WIDGET (tree_view);
-  gdouble start_x, start_y, offset_x, offset_y;
+  double start_x, start_y, offset_x, offset_y;
   TreeViewDragInfo *di;
   GtkTreePath *path = NULL;
   int button;
@@ -13130,8 +13130,8 @@ gtk_tree_view_get_dest_row_at_pos (GtkTreeView             *tree_view,
   GtkTreeViewPrivate *priv = gtk_tree_view_get_instance_private (tree_view);
   int cell_y;
   int bin_x, bin_y;
-  gdouble offset_into_row;
-  gdouble fourth;
+  double offset_into_row;
+  double fourth;
   GdkRectangle cell;
   GtkTreeViewColumn *column = NULL;
   GtkTreePath *tmp_path = NULL;
@@ -13720,8 +13720,8 @@ gtk_tree_view_search_pressed_cb (GtkGesture  *gesture,
 
 static gboolean
 gtk_tree_view_search_scroll_event (GtkWidget   *widget,
-                                   gdouble      dx,
-                                   gdouble      dy,
+                                   double       dx,
+                                   double       dy,
 				   GtkTreeView *tree_view)
 {
   GtkTreeViewPrivate *priv = gtk_tree_view_get_instance_private (tree_view);

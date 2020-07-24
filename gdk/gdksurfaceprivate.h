@@ -125,8 +125,8 @@ struct _GdkSurfaceClass
                                          int             *root_y);
   gboolean     (* get_device_state)     (GdkSurface       *surface,
                                          GdkDevice       *device,
-                                         gdouble         *x,
-                                         gdouble         *y,
+                                         double          *x,
+                                         double          *y,
                                          GdkModifierType *mask);
 
   void         (* set_input_region)     (GdkSurface      *surface,

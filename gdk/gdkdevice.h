@@ -116,7 +116,7 @@ GdkAxisUse     gdk_device_get_axis_use  (GdkDevice         *device,
 GDK_AVAILABLE_IN_ALL
 void     gdk_device_get_state    (GdkDevice         *device,
                                   GdkSurface         *surface,
-                                  gdouble           *axes,
+                                  double            *axes,
                                   GdkModifierType   *mask);
 GDK_AVAILABLE_IN_ALL
 GdkSurface * gdk_device_get_surface_at_position (GdkDevice *device,
@@ -127,9 +127,9 @@ GDK_AVAILABLE_IN_ALL
 int      gdk_device_get_n_axes     (GdkDevice       *device);
 GDK_AVAILABLE_IN_ALL
 gboolean gdk_device_get_axis     (GdkDevice         *device,
-                                  gdouble           *axes,
+                                  double            *axes,
                                   GdkAxisUse         use,
-                                  gdouble           *value);
+                                  double            *value);
 GDK_AVAILABLE_IN_ALL
 GdkDisplay * gdk_device_get_display (GdkDevice      *device);
 

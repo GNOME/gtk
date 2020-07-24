@@ -76,7 +76,7 @@ size_prepared_cb (GdkPixbufLoader *loader,
                   int              height,
                   gpointer         data)
 {
-  gdouble *scale = data;
+  double *scale = data;
 
   width = MAX (*scale * width, 1);
   height = MAX (*scale * height, 1);
@@ -91,7 +91,7 @@ size_prepared_cb (GdkPixbufLoader *loader,
 GdkPixbuf *
 _gdk_pixbuf_new_from_stream_scaled (GInputStream  *stream,
                                     const char    *format,
-                                    gdouble        scale,
+                                    double         scale,
                                     GCancellable  *cancellable,
                                     GError       **error)
 {

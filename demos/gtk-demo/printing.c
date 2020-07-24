@@ -15,7 +15,7 @@
 typedef struct
 {
   char *resourcename;
-  gdouble font_size;
+  double font_size;
 
   int lines_per_page;
   char **lines;
@@ -62,7 +62,7 @@ draw_page (GtkPrintOperation *operation,
   cairo_t *cr;
   PangoLayout *layout;
   int text_width, text_height;
-  gdouble width;
+  double width;
   int line, i;
   PangoFontDescription *desc;
   char *page_str;

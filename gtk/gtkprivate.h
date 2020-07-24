@@ -96,8 +96,8 @@ guint32    gtk_get_current_event_time   (void);
 void check_crossing_invariants (GtkWidget       *widget,
                                 GtkCrossingData *crossing);
 
-gdouble _gtk_get_slowdown (void);
-void    _gtk_set_slowdown (gdouble slowdown_factor);
+double _gtk_get_slowdown (void);
+void    _gtk_set_slowdown (double slowdown_factor);
 
 char *gtk_get_portal_request_path (GDBusConnection  *connection,
                                    char            **token);

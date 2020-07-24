@@ -110,10 +110,10 @@ GDK_AVAILABLE_IN_ALL
 void              gtk_print_job_set_num_copies  (GtkPrintJob       *job,
                                                  int                num_copies);
 GDK_AVAILABLE_IN_ALL
-gdouble           gtk_print_job_get_scale       (GtkPrintJob       *job);
+double            gtk_print_job_get_scale       (GtkPrintJob       *job);
 GDK_AVAILABLE_IN_ALL
 void              gtk_print_job_set_scale       (GtkPrintJob       *job,
-                                                 gdouble            scale);
+                                                 double             scale);
 GDK_AVAILABLE_IN_ALL
 guint             gtk_print_job_get_n_up        (GtkPrintJob       *job);
 GDK_AVAILABLE_IN_ALL

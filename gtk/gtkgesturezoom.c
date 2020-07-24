@@ -45,7 +45,7 @@ enum {
 
 struct _GtkGestureZoomPrivate
 {
-  gdouble initial_distance;
+  double initial_distance;
 };
 
 static guint signals[LAST_SIGNAL] = { 0 };
@@ -74,13 +74,13 @@ gtk_gesture_zoom_constructor (GType                  type,
 
 static gboolean
 _gtk_gesture_zoom_get_distance (GtkGestureZoom *zoom,
-                                gdouble        *distance)
+                                double         *distance)
 {
   GdkEvent *last_event;
-  gdouble x1, y1, x2, y2;
+  double x1, y1, x2, y2;
   GtkGesture *gesture;
   GList *sequences = NULL;
-  gdouble dx, dy;
+  double dx, dy;
   GdkTouchpadGesturePhase phase;
   gboolean retval = FALSE;
 
@@ -131,7 +131,7 @@ static gboolean
 _gtk_gesture_zoom_check_emit (GtkGestureZoom *gesture)
 {
   GtkGestureZoomPrivate *priv;
-  gdouble distance, zoom;
+  double distance, zoom;
 
   if (!_gtk_gesture_zoom_get_distance (gesture, &distance))
     return FALSE;
@@ -241,11 +241,11 @@ gtk_gesture_zoom_new (void)
  *
  * Returns: the scale delta
  **/
-gdouble
+double
 gtk_gesture_zoom_get_scale_delta (GtkGestureZoom *gesture)
 {
   GtkGestureZoomPrivate *priv;
-  gdouble distance;
+  double distance;
 
   g_return_val_if_fail (GTK_IS_GESTURE_ZOOM (gesture), 1.0);
 

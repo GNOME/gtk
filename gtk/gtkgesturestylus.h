@@ -46,11 +46,11 @@ GtkGesture *      gtk_gesture_stylus_new      (void);
 GDK_AVAILABLE_IN_ALL
 gboolean          gtk_gesture_stylus_get_axis (GtkGestureStylus *gesture,
 					       GdkAxisUse        axis,
-					       gdouble          *value);
+					       double           *value);
 GDK_AVAILABLE_IN_ALL
 gboolean          gtk_gesture_stylus_get_axes (GtkGestureStylus  *gesture,
 					       GdkAxisUse         axes[],
-					       gdouble          **values);
+					       double           **values);
 GDK_AVAILABLE_IN_ALL
 gboolean          gtk_gesture_stylus_get_backlog (GtkGestureStylus  *gesture,
 						  GdkTimeCoord     **backlog,

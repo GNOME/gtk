@@ -69,8 +69,8 @@ static void                 lpr_printer_prepare_for_print         (GtkPrinter   
 								   GtkPageSetup            *page_setup);
 static cairo_surface_t *    lpr_printer_create_cairo_surface      (GtkPrinter              *printer,
 								   GtkPrintSettings        *settings,
-								   gdouble                  width,
-								   gdouble                  height,
+								   double                   width,
+								   double                   height,
 								   GIOChannel              *cache_io);
 static void                 gtk_print_backend_lpr_print_stream    (GtkPrintBackend         *print_backend,
 								   GtkPrintJob             *job,
@@ -184,8 +184,8 @@ _cairo_write (void                *closure,
 static cairo_surface_t *
 lpr_printer_create_cairo_surface (GtkPrinter       *printer,
 				  GtkPrintSettings *settings,
-				  gdouble           width, 
-				  gdouble           height,
+				  double            width, 
+				  double            height,
 				  GIOChannel       *cache_io)
 {
   cairo_surface_t *surface;

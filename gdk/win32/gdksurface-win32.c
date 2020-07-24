@@ -249,8 +249,8 @@ gdk_win32_impl_frame_clock_after_paint (GdkFrameClock *clock,
 
           if (SUCCEEDED (hr))
             {
-              timings->refresh_interval = timing_info.qpcRefreshPeriod * (gdouble)G_USEC_PER_SEC / tick_frequency.QuadPart;
-              timings->presentation_time = timing_info.qpcCompose * (gdouble)G_USEC_PER_SEC / tick_frequency.QuadPart;
+              timings->refresh_interval = timing_info.qpcRefreshPeriod * (double)G_USEC_PER_SEC / tick_frequency.QuadPart;
+              timings->presentation_time = timing_info.qpcCompose * (double)G_USEC_PER_SEC / tick_frequency.QuadPart;
             }
         }
 
@@ -1804,8 +1804,8 @@ gdk_win32_surface_get_root_coords (GdkSurface *window,
 static gboolean
 gdk_surface_win32_get_device_state (GdkSurface       *window,
                                    GdkDevice       *device,
-                                   gdouble         *x,
-                                   gdouble         *y,
+                                   double          *x,
+                                   double          *y,
                                    GdkModifierType *mask)
 {
   GdkSurface *child;
@@ -2249,9 +2249,9 @@ unsnap (GdkSurface  *window,
       /* If the window fits into new work area without resizing it,
        * place it into new work area without resizing it.
        */
-      gdouble left, right, up, down, hratio, vratio;
-      gdouble hscale, vscale;
-      gdouble new_left, new_up;
+      double left, right, up, down, hratio, vratio;
+      double hscale, vscale;
+      double new_left, new_up;
 
       left = impl->snap_stash->x;
       right = 1.0 - (impl->snap_stash->x + impl->snap_stash->width);
@@ -2265,7 +2265,7 @@ unsnap (GdkSurface  *window,
           hscale = hratio / (1.0 + hratio);
         }
 
-      new_left = (gdouble) (rect.width - impl->snap_stash_int->width) * hscale;
+      new_left = (double) (rect.width - impl->snap_stash_int->width) * hscale;
 
       vscale = 1.0;
 
@@ -2275,7 +2275,7 @@ unsnap (GdkSurface  *window,
           vscale = vratio / (1.0 + vratio);
         }
 
-      new_up = (gdouble) (rect.height - impl->snap_stash_int->height) * vscale;
+      new_up = (double) (rect.height - impl->snap_stash_int->height) * vscale;
 
       rect.x = round (rect.x + new_left);
       rect.y = round (rect.y + new_up);
@@ -2360,10 +2360,10 @@ stash_window (GdkSurface          *window,
   wwidth = (hmonitor_info.rcWork.right - hmonitor_info.rcWork.left) / impl->surface_scale;
   wheight = (hmonitor_info.rcWork.bottom - hmonitor_info.rcWork.top) / impl->surface_scale;
 
-  impl->snap_stash->x = (gdouble) (x) / (gdouble) (wwidth);
-  impl->snap_stash->y = (gdouble) (y) / (gdouble) (wheight);
-  impl->snap_stash->width = (gdouble) width / (gdouble) (wwidth);
-  impl->snap_stash->height = (gdouble) height / (gdouble) (wheight);
+  impl->snap_stash->x = (double) (x) / (double) (wwidth);
+  impl->snap_stash->y = (double) (y) / (double) (wheight);
+  impl->snap_stash->width = (double) width / (double) (wwidth);
+  impl->snap_stash->height = (double) height / (double) (wheight);
 
   impl->snap_stash_int->x = x;
   impl->snap_stash_int->y = y;
@@ -2730,7 +2730,7 @@ static void
 adjust_indicator_rectangle (GdkRectangle *rect,
                             gboolean      inward)
 {
-  gdouble inverter;
+  double inverter;
   const int gap = AEROSNAP_INDICATOR_EDGE_GAP;
 #if defined(MORE_AEROSNAP_DEBUGGING)
   GdkRectangle cache = *rect;
@@ -2759,12 +2759,12 @@ rounded_rectangle (cairo_t  *cr,
                    int       y,
                    int       width,
                    int       height,
-                   gdouble   radius,
-                   gdouble   line_width,
+                   double    radius,
+                   double    line_width,
                    GdkRGBA  *fill,
                    GdkRGBA  *outline)
 {
-  gdouble degrees = M_PI / 180.0;
+  double degrees = M_PI / 180.0;
 
   if (fill == NULL && outline == NULL)
     return;
@@ -2798,8 +2798,8 @@ rounded_rectangle (cairo_t  *cr,
 }
 
 /* Translates linear animation scale into some kind of curve */
-static gdouble
-curve (gdouble val)
+static double
+curve (double val)
 {
   /* TODO: try different curves. For now it's just linear */
   return val;
@@ -2814,10 +2814,10 @@ draw_indicator (GdkW32DragMoveResizeContext *context,
   GdkRGBA fill = {0, 0, 1.0, 0.8};
   GdkRectangle current_rect;
   gint64 current_time = g_get_monotonic_time ();
-  gdouble animation_progress;
+  double animation_progress;
   gboolean last_draw;
-  gdouble line_width;
-  gdouble corner_radius;
+  double line_width;
+  double corner_radius;
   gint64 animation_duration;
   GdkWin32Surface *impl = GDK_WIN32_SURFACE (context->window);
 
@@ -2836,7 +2836,7 @@ draw_indicator (GdkW32DragMoveResizeContext *context,
   if (timestamp != 0)
     current_time = timestamp;
 
-  animation_progress = (gdouble) (current_time - context->indicator_start_time) / animation_duration;
+  animation_progress = (double) (current_time - context->indicator_start_time) / animation_duration;
 
   if (animation_progress > 1.0)
     animation_progress = 1.0;
@@ -2919,7 +2919,7 @@ redraw_indicator (gpointer user_data)
   HDC hdc;
   POINT source_point = { 0, 0 };
   gboolean last_draw;
-  gdouble indicator_opacity;
+  double indicator_opacity;
   GdkWin32Surface *impl;
   gboolean do_source_remove = FALSE;
 

@@ -426,8 +426,8 @@ draw_cb (GtkDrawingArea *drawing_area,
 /* Draw a rectangle on the surface at the given position */
 static void
 draw_brush (GtkWidget *widget,
-            gdouble    x,
-            gdouble    y)
+            double     x,
+            double     y)
 {
   cairo_t *cr;
 

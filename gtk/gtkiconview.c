@@ -2562,11 +2562,11 @@ gtk_icon_view_set_hadjustment_values (GtkIconView *icon_view)
 {
   int width;
   GtkAdjustment *adj = icon_view->priv->hadjustment;
-  gdouble old_page_size;
-  gdouble old_upper;
-  gdouble old_value;
-  gdouble new_value;
-  gdouble new_upper;
+  double old_page_size;
+  double old_upper;
+  double old_value;
+  double new_value;
+  double new_upper;
 
   width = gtk_widget_get_width (GTK_WIDGET (icon_view));
 

@@ -159,7 +159,7 @@ struct _GtkScalePrivate
 
 struct _GtkScaleMark
 {
-  gdouble          value;
+  double           value;
   int              stop_position;
   char            *markup;
   GtkWidget       *label_widget;
@@ -214,7 +214,7 @@ static void     gtk_scale_buildable_custom_finished  (GtkBuildable       *builda
                                                       const char         *tagname,
                                                       gpointer            user_data);
 static char   * gtk_scale_format_value               (GtkScale           *scale,
-                                                      gdouble             value);
+                                                      double              value);
 
 
 G_DEFINE_TYPE_WITH_CODE (GtkScale, gtk_scale, GTK_TYPE_RANGE,
@@ -288,14 +288,14 @@ gtk_scale_notify (GObject    *object,
       GtkScaleMark *mark;
       GSList *m;
       int i, n;
-      gdouble *values;
+      double *values;
 
       priv->marks = g_slist_sort_with_data (priv->marks,
                                             compare_marks,
                                             GINT_TO_POINTER (gtk_range_get_inverted (GTK_RANGE (scale))));
 
       n = g_slist_length (priv->marks);
-      values = g_new (gdouble, n);
+      values = g_new (double, n);
       for (m = priv->marks, i = 0; m; m = m->next, i++)
         {
           mark = m->data;
@@ -945,9 +945,9 @@ gtk_scale_new (GtkOrientation  orientation,
  */
 GtkWidget *
 gtk_scale_new_with_range (GtkOrientation orientation,
-                          gdouble        min,
-                          gdouble        max,
-                          gdouble        step)
+                          double         min,
+                          double         max,
+                          double         step)
 {
   GtkAdjustment *adj;
   int digits;
@@ -1654,7 +1654,7 @@ gtk_scale_clear_marks (GtkScale *scale)
  */
 void
 gtk_scale_add_mark (GtkScale        *scale,
-                    gdouble          value,
+                    double           value,
                     GtkPositionType  position,
                     const char      *markup)
 {
@@ -1662,7 +1662,7 @@ gtk_scale_add_mark (GtkScale        *scale,
   GtkScalePrivate *priv = gtk_scale_get_instance_private (scale);
   GtkScaleMark *mark;
   GSList *m;
-  gdouble *values;
+  double *values;
   int n, i;
   GtkWidget *marks_widget;
 
@@ -1758,7 +1758,7 @@ gtk_scale_add_mark (GtkScale        *scale,
     }
 
   n = g_slist_length (priv->marks);
-  values = g_new (gdouble, n);
+  values = g_new (double, n);
   for (m = priv->marks, i = 0; m; m = m->next, i++)
     {
       mark = m->data;
@@ -1797,7 +1797,7 @@ typedef struct
 
 typedef struct
 {
-  gdouble value;
+  double value;
   GtkPositionType position;
   GString *markup;
   char *context;
@@ -1835,7 +1835,7 @@ marks_start_element (GtkBuildableParseContext *context,
   else if (strcmp (element_name, "mark") == 0)
     {
       const char *value_str;
-      gdouble value = 0;
+      double value = 0;
       const char *position_str = NULL;
       GtkPositionType position = GTK_POS_BOTTOM;
       const char *msg_context = NULL;

@@ -50,8 +50,8 @@ enum
 };
 
 static void hold_action (GtkGestureLongPress *gesture,
-                         gdouble              x,
-                         gdouble              y,
+                         double               x,
+                         double               y,
                          GtkWidget           *scale);
 
 static void click_action (GtkGestureClick *gesture,
@@ -87,9 +87,9 @@ gtk_color_scale_snapshot_trough (GtkColorScale  *scale,
           int stride;
           GBytes *bytes;
           guchar *data, *p;
-          gdouble h;
+          double h;
           float r, g, b;
-          gdouble f;
+          double f;
           int hue_x, hue_y;
 
           stride = width * 3;
@@ -260,8 +260,8 @@ scale_set_property (GObject      *object,
 
 static void
 hold_action (GtkGestureLongPress *gesture,
-             gdouble              x,
-             gdouble              y,
+             double               x,
+             double               y,
              GtkWidget           *scale)
 {
   gtk_widget_activate_action (scale,

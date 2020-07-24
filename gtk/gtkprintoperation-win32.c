@@ -2010,8 +2010,8 @@ _gtk_print_operation_platform_backend_preview_end_page (GtkPrintOperation *op,
 cairo_surface_t *
 _gtk_print_operation_platform_backend_create_preview_surface (GtkPrintOperation *op,
 							      GtkPageSetup      *page_setup,
-							      gdouble           *dpi_x,
-							      gdouble           *dpi_y,
+							      double            *dpi_x,
+							      double            *dpi_y,
 							      char             **target)
 {
   GtkPaperSize *paper_size;

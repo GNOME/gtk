@@ -358,8 +358,8 @@ do_popup_menu (GtkWidget   *icon_list,
 static void
 press_handler (GtkGestureClick *gesture,
                guint            n_press,
-               gdouble          x,
-               gdouble          y,
+               double           x,
+               double           y,
                GtkWidget       *widget)
 {
   GtkTreePath *path = NULL;

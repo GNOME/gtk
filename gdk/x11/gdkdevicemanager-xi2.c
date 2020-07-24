@@ -204,9 +204,9 @@ static void
 translate_valuator_class (GdkDisplay          *display,
                           GdkDevice           *device,
                           Atom                 valuator_label,
-                          gdouble              min,
-                          gdouble              max,
-                          gdouble              resolution)
+                          double               min,
+                          double               max,
+                          double               resolution)
 {
   static gboolean initialized = FALSE;
   static Atom label_atoms [GDK_AXIS_LAST] = { 0 };
@@ -1187,25 +1187,25 @@ set_user_time (GdkEvent *event)
     gdk_x11_surface_set_user_time (surface, time);
 }
 
-static gdouble *
+static double *
 translate_axes (GdkDevice       *device,
-                gdouble          x,
-                gdouble          y,
+                double           x,
+                double           y,
                 GdkSurface       *surface,
                 XIValuatorState *valuators)
 {
   guint n_axes, i;
-  gdouble *axes;
-  gdouble *vals;
+  double *axes;
+  double *vals;
 
   n_axes = gdk_device_get_n_axes (device);
-  axes = g_new0 (gdouble, n_axes);
+  axes = g_new0 (double, n_axes);
   vals = valuators->values;
 
   for (i = 0; i < MIN (valuators->mask_len * 8, n_axes); i++)
     {
       GdkAxisUse use;
-      gdouble val;
+      double val;
 
       if (!XIMaskIsSet (valuators->mask, i))
         {
@@ -1313,13 +1313,13 @@ get_event_surface (GdkEventTranslator *translator,
 static gboolean
 scroll_valuators_changed (GdkX11DeviceXI2 *device,
                           XIValuatorState *valuators,
-                          gdouble         *dx,
-                          gdouble         *dy)
+                          double          *dx,
+                          double          *dy)
 {
   gboolean has_scroll_valuators = FALSE;
   GdkScrollDirection direction;
   guint n_axes, i, n_val;
-  gdouble *vals;
+  double *vals;
 
   n_axes = gdk_device_get_n_axes (GDK_DEVICE (device));
   vals = valuators->values;
@@ -1328,7 +1328,7 @@ scroll_valuators_changed (GdkX11DeviceXI2 *device,
 
   for (i = 0; i < MIN (valuators->mask_len * 8, n_axes); i++)
     {
-      gdouble delta;
+      double delta;
 
       if (!XIMaskIsSet (valuators->mask, i))
         continue;
@@ -1704,7 +1704,7 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
     case XI_Motion:
       {
         XIDeviceEvent *xev = (XIDeviceEvent *) ev;
-        gdouble delta_x, delta_y;
+        double delta_x, delta_y;
 
         double x, y;
         double *axes;

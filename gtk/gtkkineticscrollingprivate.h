@@ -25,18 +25,18 @@ G_BEGIN_DECLS
 
 typedef struct _GtkKineticScrolling GtkKineticScrolling;
 
-GtkKineticScrolling *    gtk_kinetic_scrolling_new  (gdouble               lower,
-                                                     gdouble               upper,
-                                                     gdouble               overshoot_width,
-                                                     gdouble               decel_friction,
-                                                     gdouble               overshoot_friction,
-                                                     gdouble               initial_position,
-                                                     gdouble               initial_velocity);
+GtkKineticScrolling *    gtk_kinetic_scrolling_new  (double                lower,
+                                                     double                upper,
+                                                     double                overshoot_width,
+                                                     double                decel_friction,
+                                                     double                overshoot_friction,
+                                                     double                initial_position,
+                                                     double                initial_velocity);
 void                     gtk_kinetic_scrolling_free (GtkKineticScrolling  *kinetic);
 
 gboolean                 gtk_kinetic_scrolling_tick (GtkKineticScrolling  *data,
-                                                     gdouble               time_delta,
-                                                     gdouble              *position);
+                                                     double                time_delta,
+                                                     double               *position);
 
 G_END_DECLS
 

@@ -188,8 +188,8 @@ void _gdk_synthesize_crossing_events (GdkDisplay                 *display,
                                       GdkDevice                  *device,
                                       GdkDevice                  *source_device,
                                       GdkCrossingMode             mode,
-                                      gdouble                     toplevel_x,
-                                      gdouble                     toplevel_y,
+                                      double                      toplevel_x,
+                                      double                      toplevel_y,
                                       GdkModifierType             mask,
                                       guint32                     time_,
                                       GdkEvent                   *event_in_queue,
@@ -331,8 +331,8 @@ struct _GdkGeometry
   int base_height;
   int width_inc;
   int height_inc;
-  gdouble min_aspect;
-  gdouble max_aspect;
+  double min_aspect;
+  double max_aspect;
   GdkGravity win_gravity;
 };
 

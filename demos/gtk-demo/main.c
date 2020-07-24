@@ -270,8 +270,6 @@ static const char *types[] =
   "gshort",
   "gushort",
   "gulong",
-  "gdouble",
-  "gldouble",
   "gpointer",
   "NULL",
   "GList",

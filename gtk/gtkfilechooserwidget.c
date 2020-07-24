@@ -1914,8 +1914,8 @@ file_list_update_popover (GtkFileChooserWidget *impl)
 
 static void
 file_list_show_popover (GtkFileChooserWidget *impl,
-                        gdouble               x,
-                        gdouble               y)
+                        double                x,
+                        double                y)
 {
   GdkRectangle rect;
   GtkTreeSelection *selection;
@@ -2062,8 +2062,8 @@ click_cb (GtkGesture           *gesture,
 
 static void
 long_press_cb (GtkGesture           *gesture,
-               gdouble               x,
-               gdouble               y,
+               double                x,
+               double                y,
                GtkFileChooserWidget *impl)
 {
   file_list_show_popover (impl, x, y);

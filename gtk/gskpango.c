@@ -140,7 +140,7 @@ gsk_pango_renderer_draw_trapezoid (PangoRenderer   *renderer,
 {
   GskPangoRenderer *crenderer = (GskPangoRenderer *) (renderer);
   cairo_t *cr;
-  gdouble x, y;
+  double x, y;
 
   cr = gtk_snapshot_append_cairo (crenderer->snapshot, &crenderer->bounds);
 

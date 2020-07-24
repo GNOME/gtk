@@ -57,7 +57,7 @@ struct _GtkRangeClass
 
   void (* value_changed)    (GtkRange     *range);
   void (* adjust_bounds)    (GtkRange     *range,
-                             gdouble	   new_value);
+                             double	   new_value);
 
   /* action signals for keybindings */
   void (* move_slider)      (GtkRange     *range,
@@ -69,7 +69,7 @@ struct _GtkRangeClass
 
   gboolean (* change_value) (GtkRange     *range,
                              GtkScrollType scroll,
-                             gdouble       new_value);
+                             double        new_value);
 
   /*< private > */
 
@@ -114,17 +114,17 @@ void               gtk_range_get_slider_range              (GtkRange      *range
 
 GDK_AVAILABLE_IN_ALL
 void               gtk_range_set_increments                (GtkRange      *range,
-                                                            gdouble        step,
-                                                            gdouble        page);
+                                                            double         step,
+                                                            double         page);
 GDK_AVAILABLE_IN_ALL
 void               gtk_range_set_range                     (GtkRange      *range,
-                                                            gdouble        min,
-                                                            gdouble        max);
+                                                            double         min,
+                                                            double         max);
 GDK_AVAILABLE_IN_ALL
 void               gtk_range_set_value                     (GtkRange      *range,
-                                                            gdouble        value);
+                                                            double         value);
 GDK_AVAILABLE_IN_ALL
-gdouble            gtk_range_get_value                     (GtkRange      *range);
+double             gtk_range_get_value                     (GtkRange      *range);
 
 GDK_AVAILABLE_IN_ALL
 void               gtk_range_set_show_fill_level           (GtkRange      *range,
@@ -138,9 +138,9 @@ GDK_AVAILABLE_IN_ALL
 gboolean           gtk_range_get_restrict_to_fill_level    (GtkRange      *range);
 GDK_AVAILABLE_IN_ALL
 void               gtk_range_set_fill_level                (GtkRange      *range,
-                                                            gdouble        fill_level);
+                                                            double         fill_level);
 GDK_AVAILABLE_IN_ALL
-gdouble            gtk_range_get_fill_level                (GtkRange      *range);
+double             gtk_range_get_fill_level                (GtkRange      *range);
 GDK_AVAILABLE_IN_ALL
 void               gtk_range_set_round_digits              (GtkRange      *range,
                                                             int            round_digits);

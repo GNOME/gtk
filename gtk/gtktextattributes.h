@@ -152,7 +152,7 @@ struct _GtkTextAttributes
 
   PangoFontDescription *font;
 
-  gdouble font_scale;
+  double font_scale;
 
   int left_margin;
   int right_margin;

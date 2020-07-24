@@ -152,19 +152,19 @@ GdkDevice * _gdk_x11_device_manager_xi2_lookup    (GdkX11DeviceManagerXI2 *devic
 void     _gdk_x11_device_xi2_add_scroll_valuator  (GdkX11DeviceXI2    *device,
                                                    guint               n_valuator,
                                                    GdkScrollDirection  direction,
-                                                   gdouble             increment);
+                                                   double              increment);
 gboolean  _gdk_x11_device_xi2_get_scroll_delta    (GdkX11DeviceXI2    *device,
                                                    guint               n_valuator,
-                                                   gdouble             valuator_value,
+                                                   double              valuator_value,
                                                    GdkScrollDirection *direction_ret,
-                                                   gdouble            *delta_ret);
+                                                   double             *delta_ret);
 void     _gdk_device_xi2_reset_scroll_valuators   (GdkX11DeviceXI2    *device);
 
-gdouble  gdk_x11_device_xi2_get_last_axis_value (GdkX11DeviceXI2 *device,
+double   gdk_x11_device_xi2_get_last_axis_value (GdkX11DeviceXI2 *device,
                                                  int              n_axis);
 
 void     gdk_x11_device_xi2_store_axes          (GdkX11DeviceXI2 *device,
-                                                 gdouble         *axes,
+                                                 double          *axes,
                                                  int              n_axes);
 
 gboolean   _gdk_x11_display_supports_cursor_alpha   (GdkDisplay    *display);

@@ -266,7 +266,7 @@ update_from_editor (GtkColorEditor        *editor,
 /* UI construction {{{1 */
 
 static guint
-scale_round (gdouble value, gdouble scale)
+scale_round (double value, double scale)
 {
   value = floor (value * scale + 0.5);
   value = MAX (value, 0);

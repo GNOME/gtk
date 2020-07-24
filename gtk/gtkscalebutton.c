@@ -159,8 +159,8 @@ static void     cb_popup_mapped                 (GtkWidget           *popup,
                                                  gpointer             user_data);
 
 static gboolean gtk_scale_button_scroll_controller_scroll (GtkEventControllerScroll *scroll,
-                                                           gdouble                   dx,
-                                                           gdouble                   dy,
+                                                           double                    dx,
+                                                           double                    dy,
                                                            GtkScaleButton           *button);
 
 G_DEFINE_TYPE_WITH_CODE (GtkScaleButton, gtk_scale_button, GTK_TYPE_WIDGET,
@@ -547,9 +547,9 @@ gtk_scale_button_dispose (GObject *object)
  * Returns: a new #GtkScaleButton
  */
 GtkWidget *
-gtk_scale_button_new (gdouble       min,
-		      gdouble       max,
-		      gdouble       step,
+gtk_scale_button_new (double        min,
+		      double        max,
+		      double        step,
 		      const char **icons)
 {
   GtkScaleButton *button;
@@ -573,7 +573,7 @@ gtk_scale_button_new (gdouble       min,
  *
  * Returns: current value of the scale button
  */
-gdouble
+double
 gtk_scale_button_get_value (GtkScaleButton * button)
 {
   GtkScaleButtonPrivate *priv = gtk_scale_button_get_instance_private (button);
@@ -595,7 +595,7 @@ gtk_scale_button_get_value (GtkScaleButton * button)
  */
 void
 gtk_scale_button_set_value (GtkScaleButton *button,
-			    gdouble         value)
+			    double          value)
 {
   GtkScaleButtonPrivate *priv = gtk_scale_button_get_instance_private (button);
 
@@ -753,13 +753,13 @@ gtk_scale_button_set_orientation_private (GtkScaleButton *button,
 
 static gboolean
 gtk_scale_button_scroll_controller_scroll (GtkEventControllerScroll *scroll,
-                                           gdouble                   dx,
-                                           gdouble                   dy,
+                                           double                    dx,
+                                           double                    dy,
                                            GtkScaleButton           *button)
 {
   GtkScaleButtonPrivate *priv = gtk_scale_button_get_instance_private (button);
   GtkAdjustment *adjustment;
-  gdouble d;
+  double d;
 
   adjustment = priv->adjustment;
 
@@ -811,7 +811,7 @@ button_click (GtkScaleButton *button,
   GtkScaleButtonPrivate *priv = gtk_scale_button_get_instance_private (button);
   GtkAdjustment *adjustment = priv->adjustment;
   gboolean can_continue = TRUE;
-  gdouble val;
+  double val;
 
   val = gtk_scale_button_get_value (button);
 
@@ -864,7 +864,7 @@ gtk_scale_button_update_icon (GtkScaleButton *button)
 {
   GtkScaleButtonPrivate *priv = gtk_scale_button_get_instance_private (button);
   GtkAdjustment *adjustment;
-  gdouble value;
+  double value;
   const char *name;
   guint num_icons;
 
@@ -889,7 +889,7 @@ gtk_scale_button_update_icon (GtkScaleButton *button)
   /* The 2-icons special case */
   if (num_icons == 2)
     {
-      gdouble limit;
+      double limit;
 
       limit = (gtk_adjustment_get_upper (adjustment) - gtk_adjustment_get_lower (adjustment)) / 2 + gtk_adjustment_get_lower (adjustment);
       if (value < limit)
@@ -912,7 +912,7 @@ gtk_scale_button_update_icon (GtkScaleButton *button)
     }
   else
     {
-      gdouble step;
+      double step;
       guint i;
 
       step = (gtk_adjustment_get_upper (adjustment) - gtk_adjustment_get_lower (adjustment)) / (num_icons - 2); i = (guint) ((value - gtk_adjustment_get_lower (adjustment)) / step) + 2;
@@ -929,8 +929,8 @@ cb_scale_value_changed (GtkRange *range,
 {
   GtkScaleButton *button = user_data;
   GtkScaleButtonPrivate *priv = gtk_scale_button_get_instance_private (button);
-  gdouble value;
-  gdouble upper, lower;
+  double value;
+  double upper, lower;
 
   value = gtk_range_get_value (range);
   upper = gtk_adjustment_get_upper (priv->adjustment);

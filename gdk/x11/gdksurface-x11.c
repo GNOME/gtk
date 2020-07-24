@@ -2292,8 +2292,8 @@ gdk_surface_get_geometry_hints (GdkSurface      *surface,
     {
       *geom_mask |= GDK_HINT_ASPECT;
 
-      geometry->min_aspect = (gdouble) size_hints->min_aspect.x / (gdouble) size_hints->min_aspect.y;
-      geometry->max_aspect = (gdouble) size_hints->max_aspect.x / (gdouble) size_hints->max_aspect.y;
+      geometry->min_aspect = (double) size_hints->min_aspect.x / (double) size_hints->min_aspect.y;
+      geometry->max_aspect = (double) size_hints->max_aspect.x / (double) size_hints->max_aspect.y;
     }
 
   if (size_hints->flags & PWinGravity)
@@ -2711,8 +2711,8 @@ gdk_x11_surface_get_frame_extents (GdkSurface    *surface,
 static gboolean
 gdk_x11_surface_get_device_state (GdkSurface       *surface,
                                  GdkDevice       *device,
-                                 gdouble         *x,
-                                 gdouble         *y,
+                                 double          *x,
+                                 double          *y,
                                  GdkModifierType *mask)
 {
   GdkSurface *child;
@@ -3841,8 +3841,8 @@ get_move_resize_data (GdkDisplay *display,
 
 static void
 check_maximize (MoveResizeData *mv_resize,
-                gdouble         x_root,
-                gdouble         y_root)
+                double          x_root,
+                double          y_root)
 {
   GdkSurfaceState state;
   int y;
@@ -3863,8 +3863,8 @@ check_maximize (MoveResizeData *mv_resize,
 
 static void
 check_unmaximize (MoveResizeData *mv_resize,
-                  gdouble         x_root,
-                  gdouble         y_root)
+                  double          x_root,
+                  double          y_root)
 {
   GdkSurfaceState state;
   int dx, dy;

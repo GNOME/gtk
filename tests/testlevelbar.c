@@ -44,7 +44,7 @@ static gboolean
 increase_level (gpointer data)
 {
   GtkLevelBar *bar = data;
-  gdouble value;
+  double value;
 
   value = gtk_level_bar_get_value (bar);
   value += 0.1;

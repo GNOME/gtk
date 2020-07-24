@@ -68,7 +68,7 @@ struct _GtkCellRendererSpinPrivate
 {
   GtkWidget *spin;
   GtkAdjustment *adjustment;
-  gdouble climb_rate;
+  double climb_rate;
   guint   digits;
 };
 

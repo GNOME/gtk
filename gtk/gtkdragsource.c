@@ -86,8 +86,8 @@ struct _GtkDragSource
   int hot_x;
   int hot_y;
 
-  gdouble start_x;
-  gdouble start_y;
+  double start_x;
+  double start_y;
 
   GdkDrag *drag;
 };

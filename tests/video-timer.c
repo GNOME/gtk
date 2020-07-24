@@ -4,7 +4,7 @@
 #include "variable.h"
 
 typedef struct {
-  gdouble angle;
+  double angle;
   gint64 stream_time;
   gint64 clock_time;
   gint64 frame_counter;

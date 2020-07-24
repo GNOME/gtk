@@ -132,7 +132,7 @@ gdk_rgba_is_opaque (const GdkRGBA *rgba)
 static gboolean
 parse_rgb_value (const char   *str,
                  char        **endp,
-                 gdouble      *number)
+                 double       *number)
 {
   const char *p;
 
@@ -186,7 +186,7 @@ gdk_rgba_parse (GdkRGBA     *rgba,
                 const char *spec)
 {
   gboolean has_alpha;
-  gdouble r, g, b, a;
+  double r, g, b, a;
   char *str = (char *) spec;
   char *p;
 

@@ -643,7 +643,7 @@ gtk_print_operation_preview_handler (GtkPrintOperation        *op,
 				     GtkPrintContext          *context,
 				     GtkWindow                *parent)
 {
-  gdouble dpi_x, dpi_y;
+  double dpi_x, dpi_y;
   PreviewOp *pop;
   GtkPageSetup *page_setup;
   cairo_t *cr;
@@ -870,7 +870,7 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
    * {
    *   cairo_t *cr;
    *   PangoLayout *layout;
-   *   gdouble width, text_height;
+   *   double width, text_height;
    *   int layout_height;
    *   PangoFontDescription *desc;
    *   
@@ -893,7 +893,7 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
    *   pango_layout_set_alignment (layout, PANGO_ALIGN_CENTER);
    *      		      
    *   pango_layout_get_size (layout, NULL, &layout_height);
-   *   text_height = (gdouble)layout_height / PANGO_SCALE;
+   *   text_height = (double)layout_height / PANGO_SCALE;
    *   
    *   cairo_move_to (cr, width / 2,  (HEADER_HEIGHT - text_height) / 2);
    *   pango_cairo_show_layout (cr, layout);
@@ -1948,7 +1948,7 @@ pdf_start_page (GtkPrintOperation *op,
 		GtkPageSetup      *page_setup)
 {
   cairo_surface_t *surface = op->priv->platform_data;
-  gdouble w, h;
+  double w, h;
 
   w = gtk_page_setup_get_paper_width (page_setup, GTK_UNIT_POINTS);
   h = gtk_page_setup_get_paper_height (page_setup, GTK_UNIT_POINTS);
@@ -1994,7 +1994,7 @@ run_pdf (GtkPrintOperation  *op,
   GtkPageSetup *page_setup;
   cairo_surface_t *surface;
   cairo_t *cr;
-  gdouble width, height;
+  double width, height;
   
   priv->print_context = _gtk_print_context_new (op);
   
@@ -2390,13 +2390,13 @@ common_render_page (GtkPrintOperation *op,
   else
     {
       GtkPageOrientation  orientation;
-      gdouble             paper_width, paper_height;
-      gdouble             page_width, page_height;
-      gdouble             context_width, context_height;
-      gdouble             bottom_margin, top_margin, left_margin, right_margin;
-      gdouble             x_step, y_step;
-      gdouble             x_scale, y_scale, scale;
-      gdouble             horizontal_offset = 0.0, vertical_offset = 0.0;
+      double              paper_width, paper_height;
+      double              page_width, page_height;
+      double              context_width, context_height;
+      double              bottom_margin, top_margin, left_margin, right_margin;
+      double              x_step, y_step;
+      double              x_scale, y_scale, scale;
+      double              horizontal_offset = 0.0, vertical_offset = 0.0;
       int                 columns, rows, x, y, tmp_length;
 
       page_setup = gtk_print_context_get_page_setup (print_context);

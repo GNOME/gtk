@@ -235,8 +235,8 @@ static void     gtk_combo_box_real_popup           (GtkComboBox      *combo_box)
 static gboolean gtk_combo_box_real_popdown         (GtkComboBox      *combo_box);
 
 static gboolean gtk_combo_box_scroll_controller_scroll (GtkEventControllerScroll *scroll,
-                                                        gdouble                   dx,
-                                                        gdouble                   dy,
+                                                        double                    dx,
+                                                        double                    dy,
                                                         GtkComboBox              *combo_box);
 
 /* listening to the model */
@@ -522,7 +522,7 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
    * {
    *   GtkTreeIter iter;
    *   GtkTreeModel model;
-   *   gdouble      value;
+   *   double       value;
    *
    *   model = gtk_combo_box_get_model (combo);
    *
@@ -1664,8 +1664,8 @@ tree_first (GtkComboBox  *combo,
 
 static gboolean
 gtk_combo_box_scroll_controller_scroll (GtkEventControllerScroll *scroll,
-                                        gdouble                   dx,
-                                        gdouble                   dy,
+                                        double                    dx,
+                                        double                    dy,
                                         GtkComboBox              *combo_box)
 {
   GtkComboBoxPrivate *priv = gtk_combo_box_get_instance_private (combo_box);

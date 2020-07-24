@@ -68,7 +68,7 @@ struct _GtkPaperSize
   char *display_name;
   char *ppd_name;
 
-  gdouble width, height; /* Stored in mm */
+  double width, height; /* Stored in mm */
   gboolean is_custom;
   gboolean is_ipp;
 };
@@ -103,8 +103,8 @@ lookup_paper_info (const char *name)
 
 static gboolean
 parse_media_size (const char *size,
-                  gdouble     *width_mm,
-                  gdouble     *height_mm)
+                  double      *width_mm,
+                  double      *height_mm)
 {
   const char *p;
   char *e;
@@ -145,8 +145,8 @@ parse_media_size (const char *size,
 static gboolean
 parse_full_media_size_name (const char   *full_name,
                             char        **name,
-                            gdouble      *width_mm,
-                            gdouble      *height_mm)
+                            double       *width_mm,
+                            double       *height_mm)
 {
   const char *p;
   const char *end_of_name;
@@ -313,8 +313,8 @@ improve_displayname (const char *name)
 GtkPaperSize *
 gtk_paper_size_new_from_ppd (const char *ppd_name,
                              const char *ppd_display_name,
-                             gdouble      width,
-                             gdouble      height)
+                             double       width,
+                             double       height)
 {
   char *name;
   const char *lookup_ppd_name;
@@ -391,8 +391,8 @@ gtk_paper_size_new_from_ppd (const char *ppd_name,
  */
 GtkPaperSize *
 gtk_paper_size_new_from_ipp (const char *ipp_name,
-                             gdouble      width,
-                             gdouble      height)
+                             double       width,
+                             double       height)
 {
   GtkPaperSize *size;
   const char   *name = NULL;
@@ -479,8 +479,8 @@ gtk_paper_size_new_from_ipp (const char *ipp_name,
 GtkPaperSize *
 gtk_paper_size_new_custom (const char *name,
                            const char *display_name,
-                           gdouble      width,
-                           gdouble      height,
+                           double       width,
+                           double       height,
                            GtkUnit      unit)
 {
   GtkPaperSize *size;
@@ -681,7 +681,7 @@ gtk_paper_size_get_ppd_name (GtkPaperSize *size)
  *
  * Returns: the paper width
  */
-gdouble
+double
 gtk_paper_size_get_width (GtkPaperSize *size,
                           GtkUnit       unit)
 {
@@ -698,7 +698,7 @@ gtk_paper_size_get_width (GtkPaperSize *size,
  *
  * Returns: the paper height
  */
-gdouble
+double
 gtk_paper_size_get_height (GtkPaperSize *size,
                            GtkUnit       unit)
 {
@@ -744,8 +744,8 @@ gtk_paper_size_is_ipp (GtkPaperSize *size)
  */
 void
 gtk_paper_size_set_size (GtkPaperSize *size,
-                         gdouble       width,
-                         gdouble       height,
+                         double        width,
+                         double        height,
                          GtkUnit       unit)
 {
   g_return_if_fail (size != NULL);
@@ -833,11 +833,11 @@ gtk_paper_size_get_default (void)
  *
  * Returns: the default top margin
  */
-gdouble
+double
 gtk_paper_size_get_default_top_margin (GtkPaperSize *size,
                                        GtkUnit       unit)
 {
-  gdouble margin;
+  double margin;
 
   margin = _gtk_print_convert_to_mm (0.25, GTK_UNIT_INCH);
   return _gtk_print_convert_from_mm (margin, unit);
@@ -852,11 +852,11 @@ gtk_paper_size_get_default_top_margin (GtkPaperSize *size,
  *
  * Returns: the default bottom margin
  */
-gdouble
+double
 gtk_paper_size_get_default_bottom_margin (GtkPaperSize *size,
                                           GtkUnit       unit)
 {
-  gdouble margin;
+  double margin;
   const char *name;
 
   margin = _gtk_print_convert_to_mm (0.25, GTK_UNIT_INCH);
@@ -879,11 +879,11 @@ gtk_paper_size_get_default_bottom_margin (GtkPaperSize *size,
  *
  * Returns: the default left margin
  */
-gdouble
+double
 gtk_paper_size_get_default_left_margin (GtkPaperSize *size,
                                         GtkUnit       unit)
 {
-  gdouble margin;
+  double margin;
 
   margin = _gtk_print_convert_to_mm (0.25, GTK_UNIT_INCH);
   return _gtk_print_convert_from_mm (margin, unit);
@@ -898,11 +898,11 @@ gtk_paper_size_get_default_left_margin (GtkPaperSize *size,
  *
  * Returns: the default right margin
  */
-gdouble
+double
 gtk_paper_size_get_default_right_margin (GtkPaperSize *size,
                                          GtkUnit       unit)
 {
-  gdouble margin;
+  double margin;
 
   margin = _gtk_print_convert_to_mm (0.25, GTK_UNIT_INCH);
   return _gtk_print_convert_from_mm (margin, unit);
@@ -931,7 +931,7 @@ gtk_paper_size_new_from_key_file (GKeyFile     *key_file,
   char *ppd_name = NULL;
   char *display_name = NULL;
   char *freeme = NULL;
-  gdouble width, height;
+  double width, height;
   GError *err = NULL;
 
   g_return_val_if_fail (key_file != NULL, NULL);
@@ -1089,7 +1089,7 @@ gtk_paper_size_new_from_gvariant (GVariant *variant)
   const char *name;
   const char *ppd_name;
   const char *display_name;
-  gdouble width, height;
+  double width, height;
 
   g_return_val_if_fail (g_variant_is_of_type (variant, G_VARIANT_TYPE_VARDICT), NULL);
 

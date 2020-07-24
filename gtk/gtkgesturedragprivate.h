@@ -32,14 +32,14 @@ struct _GtkGestureDragClass
   GtkGestureSingleClass parent_class;
 
   void (* drag_begin)  (GtkGestureDrag *gesture,
-                        gdouble         start_x,
-                        gdouble         start_y);
+                        double          start_x,
+                        double          start_y);
   void (* drag_update) (GtkGestureDrag *gesture,
-                        gdouble         offset_x,
-                        gdouble         offset_y);
+                        double          offset_x,
+                        double          offset_y);
   void (* drag_end)    (GtkGestureDrag *gesture,
-                        gdouble         offset_x,
-                        gdouble         offset_y);
+                        double          offset_x,
+                        double          offset_y);
   /*<private>*/
   gpointer padding[10];
 };

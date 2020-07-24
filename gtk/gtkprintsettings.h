@@ -108,24 +108,24 @@ void              gtk_print_settings_set_bool                (GtkPrintSettings  
 							      const char           *key,
 							      gboolean              value);
 GDK_AVAILABLE_IN_ALL
-gdouble           gtk_print_settings_get_double              (GtkPrintSettings     *settings,
+double            gtk_print_settings_get_double              (GtkPrintSettings     *settings,
 							      const char           *key);
 GDK_AVAILABLE_IN_ALL
-gdouble           gtk_print_settings_get_double_with_default (GtkPrintSettings     *settings,
+double            gtk_print_settings_get_double_with_default (GtkPrintSettings     *settings,
 							      const char           *key,
-							      gdouble               def);
+							      double                def);
 GDK_AVAILABLE_IN_ALL
 void              gtk_print_settings_set_double              (GtkPrintSettings     *settings,
 							      const char           *key,
-							      gdouble               value);
+							      double                value);
 GDK_AVAILABLE_IN_ALL
-gdouble           gtk_print_settings_get_length              (GtkPrintSettings     *settings,
+double            gtk_print_settings_get_length              (GtkPrintSettings     *settings,
 							      const char           *key,
 							      GtkUnit               unit);
 GDK_AVAILABLE_IN_ALL
 void              gtk_print_settings_set_length              (GtkPrintSettings     *settings,
 							      const char           *key,
-							      gdouble               value,
+							      double                value,
 							      GtkUnit               unit);
 GDK_AVAILABLE_IN_ALL
 int               gtk_print_settings_get_int                 (GtkPrintSettings     *settings,
@@ -221,18 +221,18 @@ GDK_AVAILABLE_IN_ALL
 void                  gtk_print_settings_set_paper_size        (GtkPrintSettings   *settings,
 								GtkPaperSize       *paper_size);
 GDK_AVAILABLE_IN_ALL
-gdouble               gtk_print_settings_get_paper_width       (GtkPrintSettings   *settings,
+double                gtk_print_settings_get_paper_width       (GtkPrintSettings   *settings,
 								GtkUnit             unit);
 GDK_AVAILABLE_IN_ALL
 void                  gtk_print_settings_set_paper_width       (GtkPrintSettings   *settings,
-								gdouble             width,
+								double              width,
 								GtkUnit             unit);
 GDK_AVAILABLE_IN_ALL
-gdouble               gtk_print_settings_get_paper_height      (GtkPrintSettings   *settings,
+double                gtk_print_settings_get_paper_height      (GtkPrintSettings   *settings,
 								GtkUnit             unit);
 GDK_AVAILABLE_IN_ALL
 void                  gtk_print_settings_set_paper_height      (GtkPrintSettings   *settings,
-								gdouble             height,
+								double              height,
 								GtkUnit             unit);
 GDK_AVAILABLE_IN_ALL
 gboolean              gtk_print_settings_get_use_color         (GtkPrintSettings   *settings);
@@ -288,15 +288,15 @@ void                  gtk_print_settings_set_resolution_xy     (GtkPrintSettings
 								int                 resolution_x,
 								int                 resolution_y);
 GDK_AVAILABLE_IN_ALL
-gdouble               gtk_print_settings_get_printer_lpi       (GtkPrintSettings   *settings);
+double                gtk_print_settings_get_printer_lpi       (GtkPrintSettings   *settings);
 GDK_AVAILABLE_IN_ALL
 void                  gtk_print_settings_set_printer_lpi       (GtkPrintSettings   *settings,
-								gdouble             lpi);
+								double              lpi);
 GDK_AVAILABLE_IN_ALL
-gdouble               gtk_print_settings_get_scale             (GtkPrintSettings   *settings);
+double                gtk_print_settings_get_scale             (GtkPrintSettings   *settings);
 GDK_AVAILABLE_IN_ALL
 void                  gtk_print_settings_set_scale             (GtkPrintSettings   *settings,
-								gdouble             scale);
+								double              scale);
 GDK_AVAILABLE_IN_ALL
 GtkPrintPages         gtk_print_settings_get_print_pages       (GtkPrintSettings   *settings);
 GDK_AVAILABLE_IN_ALL

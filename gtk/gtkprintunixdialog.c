@@ -2192,7 +2192,7 @@ dialog_set_print_pages (GtkPrintUnixDialog *dialog,
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (dialog->all_pages_radio), TRUE);
 }
 
-static gdouble
+static double
 dialog_get_scale (GtkPrintUnixDialog *dialog)
 {
   if (gtk_widget_is_sensitive (dialog->scale_spin))
@@ -2203,7 +2203,7 @@ dialog_get_scale (GtkPrintUnixDialog *dialog)
 
 static void
 dialog_set_scale (GtkPrintUnixDialog *dialog,
-                  gdouble             val)
+                  double              val)
 {
   gtk_spin_button_set_value (GTK_SPIN_BUTTON (dialog->scale_spin), val);
 }
@@ -2359,10 +2359,10 @@ draw_page (GtkDrawingArea *da,
   GtkWidget *widget = GTK_WIDGET (da);
   GtkPrintUnixDialog *dialog = GTK_PRINT_UNIX_DIALOG (data);
   GtkStyleContext *context;
-  gdouble ratio;
+  double ratio;
   int w, h, tmp;
   int pages_x, pages_y, i, x, y, layout_w, layout_h;
-  gdouble page_width, page_height;
+  double page_width, page_height;
   GtkPageOrientation orientation;
   gboolean landscape;
   PangoLayout *layout;
@@ -2374,8 +2374,8 @@ draw_page (GtkDrawingArea *da,
   int dx, dy;
   gboolean horizontal;
   GtkPageSetup *page_setup;
-  gdouble paper_width, paper_height;
-  gdouble pos_x, pos_y;
+  double paper_width, paper_height;
+  double pos_x, pos_y;
   int pages_per_sheet;
   gboolean ltr = TRUE;
 
@@ -2479,8 +2479,8 @@ draw_page (GtkDrawingArea *da,
 
   i = 1;
 
-  page_width = (gdouble)w / pages_x;
-  page_height = (gdouble)h / pages_y;
+  page_width = (double)w / pages_x;
+  page_height = (double)h / pages_y;
 
   layout  = pango_cairo_create_layout (cr);
 

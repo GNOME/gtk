@@ -5,12 +5,12 @@
 
 static void
 hsv_to_rgb (GdkRGBA *rgba,
-            gdouble  h,
-            gdouble  s,
-            gdouble  v)
+            double   h,
+            double   s,
+            double   v)
 {
-  gdouble hue, saturation, value;
-  gdouble f, p, q, t;
+  double hue, saturation, value;
+  double f, p, q, t;
 
   rgba->alpha = 1.0;
 

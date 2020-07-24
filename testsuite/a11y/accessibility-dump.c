@@ -435,7 +435,7 @@ dump_atk_value (AtkValue *atk_value,
                 GString  *string)
 {
   AtkRange *range;
-  gdouble value;
+  double value;
   char *text;
 
   value = 0.0;

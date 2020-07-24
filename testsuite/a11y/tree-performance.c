@@ -147,7 +147,7 @@ static void
 test_performance_list (void)
 {
   GtkBuilder *builder;
-  gdouble elapsed;
+  double elapsed;
   GtkWidget *window;
   GError *error = NULL;
 
@@ -172,7 +172,7 @@ static void
 test_a11y_performance_list (void)
 {
   GtkBuilder *builder;
-  gdouble elapsed;
+  double elapsed;
   GtkWidget *window;
   GError *error = NULL;
   int count_before;
@@ -294,7 +294,7 @@ static void
 test_performance_tree (void)
 {
   GtkBuilder *builder;
-  gdouble elapsed;
+  double elapsed;
   GtkWidget *window;
   GError *error = NULL;
 
@@ -319,7 +319,7 @@ static void
 test_a11y_performance_tree (void)
 {
   GtkBuilder *builder;
-  gdouble elapsed;
+  double elapsed;
   GtkWidget *window;
   GError *error = NULL;
   int count_before;

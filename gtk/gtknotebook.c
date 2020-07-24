@@ -2430,8 +2430,8 @@ gtk_notebook_page_tab_label_is_visible (GtkNotebookPage *page)
 
 static gboolean
 in_tabs (GtkNotebook *notebook,
-         gdouble      x,
-         gdouble      y)
+         double       x,
+         double       y)
 {
   graphene_rect_t tabs_bounds;
 
@@ -2444,8 +2444,8 @@ in_tabs (GtkNotebook *notebook,
 
 static GList*
 get_tab_at_pos (GtkNotebook *notebook,
-                gdouble      x,
-                gdouble      y)
+                double       x,
+                double       y)
 {
   GtkNotebookPage *page;
   GList *children;

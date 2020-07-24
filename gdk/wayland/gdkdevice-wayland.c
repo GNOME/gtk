@@ -73,8 +73,8 @@ typedef struct _GdkWaylandTabletPadData GdkWaylandTabletPadData;
 struct _GdkWaylandTouchData
 {
   uint32_t id;
-  gdouble x;
-  gdouble y;
+  double x;
+  double y;
   GdkSurface *surface;
   uint32_t touch_down_serial;
   guint initial_touch : 1;
@@ -85,7 +85,7 @@ struct _GdkWaylandPointerFrameData
   GdkEvent *event;
 
   /* Specific to the scroll event */
-  gdouble delta_x, delta_y;
+  double delta_x, delta_y;
   int32_t discrete_x, discrete_y;
   gint8 is_scroll_stop;
   enum wl_pointer_axis_source source;
@@ -147,7 +147,7 @@ struct _GdkWaylandTabletPadGroupData
   struct {
     guint source;
     gboolean is_stop;
-    gdouble value;
+    double value;
   } axis_tmp_info;
 };
 
@@ -186,7 +186,7 @@ struct _GdkWaylandTabletData
   GdkWaylandTabletToolData *current_tool;
 
   int axis_indices[GDK_AXIS_LAST];
-  gdouble *axes;
+  double *axes;
 };
 
 struct _GdkWaylandSeat
@@ -253,7 +253,7 @@ struct _GdkWaylandSeat
 
   /* Some tracking on gesture events */
   guint gesture_n_fingers;
-  gdouble gesture_scale;
+  double gesture_scale;
 
   GdkCursor *grab_cursor;
 };
@@ -310,10 +310,10 @@ static void deliver_key_event (GdkWaylandSeat       *seat,
 static void
 gdk_wayland_device_get_state (GdkDevice       *device,
                               GdkSurface       *surface,
-                              gdouble         *axes,
+                              double          *axes,
                               GdkModifierType *mask)
 {
-  gdouble x, y;
+  double x, y;
 
   gdk_surface_get_device_position (surface, device, &x, &y, mask);
 
@@ -538,8 +538,8 @@ static void
 gdk_wayland_device_query_state (GdkDevice        *device,
                                 GdkSurface       *surface,
                                 GdkSurface      **child_surface,
-                                gdouble          *win_x,
-                                gdouble          *win_y,
+                                double           *win_x,
+                                double           *win_y,
                                 GdkModifierType  *mask)
 {
   GdkWaylandPointerData *pointer;
@@ -788,8 +788,8 @@ gdk_wayland_device_ungrab (GdkDevice *device,
 
 static GdkSurface *
 gdk_wayland_device_surface_at_position (GdkDevice       *device,
-                                        gdouble         *win_x,
-                                        gdouble         *win_y,
+                                        double          *win_x,
+                                        double          *win_y,
                                         GdkModifierType *mask)
 {
   GdkWaylandPointerData *pointer;
@@ -1357,8 +1357,8 @@ flush_discrete_scroll_event (GdkWaylandSeat     *seat,
 
 static void
 flush_smooth_scroll_event (GdkWaylandSeat *seat,
-                           gdouble         delta_x,
-                           gdouble         delta_y,
+                           double          delta_x,
+                           double          delta_y,
                            gboolean        is_stop)
 {
   GdkEvent *event;
@@ -2543,8 +2543,8 @@ emit_gesture_swipe_event (GdkWaylandSeat          *seat,
                           GdkTouchpadGesturePhase  phase,
                           guint32                  _time,
                           guint32                  n_fingers,
-                          gdouble                  dx,
-                          gdouble                  dy)
+                          double                   dx,
+                          double                   dy)
 {
   GdkEvent *event;
 
@@ -2638,10 +2638,10 @@ emit_gesture_pinch_event (GdkWaylandSeat          *seat,
                           GdkTouchpadGesturePhase  phase,
                           guint32                  _time,
                           guint                    n_fingers,
-                          gdouble                  dx,
-                          gdouble                  dy,
-                          gdouble                  scale,
-                          gdouble                  angle_delta)
+                          double                   dx,
+                          double                   dy,
+                          double                   scale,
+                          double                   angle_delta)
 {
   GdkEvent *event;
 
@@ -3393,7 +3393,7 @@ gdk_wayland_device_tablet_clone_tool_axes (GdkWaylandTabletData *tablet,
     g_free (tablet->axes);
 
   tablet->axes =
-    g_new0 (gdouble, gdk_device_get_n_axes (tablet->stylus_device));
+    g_new0 (double, gdk_device_get_n_axes (tablet->stylus_device));
 
   g_object_thaw_notify (G_OBJECT (tablet->stylus_device));
 }
@@ -3402,7 +3402,7 @@ static void
 gdk_wayland_mimic_device_axes (GdkDevice *logical,
                                GdkDevice *physical)
 {
-  gdouble axis_min, axis_max, axis_resolution;
+  double axis_min, axis_max, axis_resolution;
   GdkAxisUse axis_use;
   int axis_count;
   int i;
@@ -3510,7 +3510,7 @@ static double *
 tablet_copy_axes (GdkWaylandTabletData *tablet)
 {
   return g_memdup (tablet->axes,
-                   sizeof (gdouble) * gdk_device_get_n_axes (tablet->stylus_device));
+                   sizeof (double) * gdk_device_get_n_axes (tablet->stylus_device));
 }
 
 static void
@@ -3917,7 +3917,7 @@ tablet_pad_strip_handle_position (void                           *data,
             g_message ("tablet pad strip handle position, strip = %p position = %d",
                        wp_tablet_pad_strip, position));
 
-  group->axis_tmp_info.value = (gdouble) position / 65535;
+  group->axis_tmp_info.value = (double) position / 65535;
 }
 
 static void

@@ -70,8 +70,8 @@
 
 typedef struct
 {
-  gdouble dx;
-  gdouble dy;
+  double dx;
+  double dy;
   guint32 evtime;
 } ScrollHistoryElem;
 
@@ -82,8 +82,8 @@ struct _GtkEventControllerScroll
   GArray *scroll_history;
 
   /* For discrete event coalescing */
-  gdouble cur_dx;
-  gdouble cur_dy;
+  double cur_dx;
+  double cur_dy;
 
   guint active : 1;
 };
@@ -115,8 +115,8 @@ G_DEFINE_TYPE (GtkEventControllerScroll, gtk_event_controller_scroll,
 
 static void
 scroll_history_push (GtkEventControllerScroll *scroll,
-                     gdouble                   delta_x,
-                     gdouble                   delta_y,
+                     double                    delta_x,
+                     double                    delta_y,
                      guint32                   evtime)
 {
   ScrollHistoryElem new_item;
@@ -153,10 +153,10 @@ scroll_history_reset (GtkEventControllerScroll *scroll)
 
 static void
 scroll_history_finish (GtkEventControllerScroll *scroll,
-                       gdouble                  *velocity_x,
-                       gdouble                  *velocity_y)
+                       double                   *velocity_x,
+                       double                   *velocity_y)
 {
-  gdouble accum_dx = 0, accum_dy = 0;
+  double accum_dx = 0, accum_dy = 0;
   guint32 first = 0, last = 0;
   guint i;
 
@@ -244,7 +244,7 @@ gtk_event_controller_scroll_handle_event (GtkEventController *controller,
 {
   GtkEventControllerScroll *scroll = GTK_EVENT_CONTROLLER_SCROLL (controller);
   GdkScrollDirection direction = GDK_SCROLL_SMOOTH;
-  gdouble dx = 0, dy = 0;
+  double dx = 0, dy = 0;
   gboolean handled = GDK_EVENT_PROPAGATE;
 
   if (gdk_event_get_event_type (event) != GDK_SCROLL)
@@ -342,7 +342,7 @@ gtk_event_controller_scroll_handle_event (GtkEventController *controller,
 
       if (scroll->flags & GTK_EVENT_CONTROLLER_SCROLL_KINETIC)
         {
-          gdouble vel_x, vel_y;
+          double vel_x, vel_y;
 
           scroll_history_finish (scroll, &vel_x, &vel_y);
           g_signal_emit (controller, signals[DECELERATE], 0, vel_x, vel_y);

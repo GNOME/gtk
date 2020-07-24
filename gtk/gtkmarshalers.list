@@ -13,7 +13,7 @@
 #   ENUM        for enumeration types (int)
 #   FLAGS       for flag enumeration types (guint)
 #   FLOAT       for single-precision float types (float)
-#   DOUBLE      for double-precision float types (gdouble)
+#   DOUBLE      for double-precision float types (double)
 #   STRING      for string types (char *)
 #   BOXED       for boxed (anonymous but reference counted) types (GBoxed*)
 #   POINTER     for anonymous pointer types (gpointer)

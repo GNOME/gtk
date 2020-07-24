@@ -377,7 +377,7 @@ create_pango_layout (GtkTextCellAccessible *text)
   gboolean foreground_set, strikethrough_set, strikethrough;
   gboolean scale_set, underline_set, rise_set;
   char *renderer_text;
-  gdouble scale;
+  double scale;
   int rise;
   GtkRendererCellAccessible *gail_renderer;
   GtkCellRendererText *gtk_renderer;

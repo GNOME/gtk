@@ -490,7 +490,7 @@ unit_widget_get (GtkWidget *unit_widget)
 
 static void
 unit_widget_set (GtkWidget *unit_widget,
-                 gdouble    value)
+                 double     value)
 {
   UnitWidget *data;
 

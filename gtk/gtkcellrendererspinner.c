@@ -288,7 +288,7 @@ gtk_cell_renderer_spinner_get_size (GtkCellRenderer    *cellr,
 {
   GtkCellRendererSpinner *cell = GTK_CELL_RENDERER_SPINNER (cellr);
   GtkCellRendererSpinnerPrivate *priv = gtk_cell_renderer_spinner_get_instance_private (cell);
-  gdouble align;
+  double align;
   int w, h;
   int xpad, ypad;
   float xalign, yalign;
@@ -346,9 +346,9 @@ gtk_paint_spinner (GtkStyleContext *context,
 {
   GdkRGBA color;
   guint num_steps;
-  gdouble dx, dy;
-  gdouble radius;
-  gdouble half;
+  double dx, dy;
+  double radius;
+  double half;
   int i;
   guint real_step;
 
@@ -375,7 +375,7 @@ gtk_paint_spinner (GtkStyleContext *context,
       int inset = 0.7 * radius;
 
       /* transparency is a function of time and initial value */
-      gdouble t = (gdouble) ((i + num_steps - real_step)
+      double t = (double) ((i + num_steps - real_step)
                              % num_steps) / num_steps;
 
       cairo_save (cr);

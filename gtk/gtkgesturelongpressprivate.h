@@ -33,8 +33,8 @@ struct _GtkGestureLongPressClass
   GtkGestureSingleClass parent_class;
 
   void (* pressed)   (GtkGestureLongPress *gesture,
-                      gdouble              x,
-                      gdouble              y);
+                      double               x,
+                      double               y);
   void (* cancelled) (GtkGestureLongPress *gesture);
 
   /*< private >*/

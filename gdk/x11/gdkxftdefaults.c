@@ -109,7 +109,7 @@ get_boolean_default (GdkX11Screen *x11_screen,
 static gboolean
 get_double_default (GdkX11Screen *x11_screen,
 		    const char *option,
-		    gdouble     *value)
+		    double      *value)
 {
   Display *dpy = GDK_SCREEN_XDISPLAY (x11_screen);
   char     *v, *e;

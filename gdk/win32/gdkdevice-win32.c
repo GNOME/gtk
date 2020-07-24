@@ -32,7 +32,7 @@ G_DEFINE_TYPE (GdkDeviceWin32, gdk_device_win32, GDK_TYPE_DEVICE)
 static void
 gdk_device_win32_get_state (GdkDevice       *device,
                             GdkSurface       *window,
-                            gdouble         *axes,
+                            double          *axes,
                             GdkModifierType *mask)
 {
   double x, y;
@@ -166,8 +166,8 @@ screen_to_client (HWND hwnd, POINT screen_pt, POINT *client_pt)
 
 GdkSurface *
 _gdk_device_win32_surface_at_position (GdkDevice       *device,
-                                       gdouble         *win_x,
-                                       gdouble         *win_y,
+                                       double          *win_x,
+                                       double          *win_y,
                                        GdkModifierType *mask)
 {
   GdkSurface *window = NULL;

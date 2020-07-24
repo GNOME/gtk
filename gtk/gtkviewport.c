@@ -163,7 +163,7 @@ viewport_set_adjustment_values (GtkViewport    *viewport,
   GtkScrollablePolicy scroll_policy;
   GtkScrollablePolicy other_scroll_policy;
   GtkOrientation other_orientation;
-  gdouble upper, value;
+  double upper, value;
   int viewport_size, other_viewport_size;
   int view_width, view_height;
 
@@ -223,7 +223,7 @@ viewport_set_adjustment_values (GtkViewport    *viewport,
   if (orientation == GTK_ORIENTATION_HORIZONTAL &&
       _gtk_widget_get_direction (GTK_WIDGET (viewport)) == GTK_TEXT_DIR_RTL)
     {
-      gdouble dist = gtk_adjustment_get_upper (adjustment)
+      double dist = gtk_adjustment_get_upper (adjustment)
                      - value
                      - gtk_adjustment_get_page_size (adjustment);
       value = upper - dist - viewport_size;

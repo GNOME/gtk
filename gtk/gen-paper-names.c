@@ -71,12 +71,12 @@ find_name (const char *name)
 
 static gboolean
 parse_media_size (const char *size,
-                  gdouble     *width_mm, 
-                  gdouble     *height_mm)
+                  double      *width_mm, 
+                  double      *height_mm)
 {
   const char *p;
   char *e;
-  gdouble short_dim, long_dim;
+  double short_dim, long_dim;
 
   p = size;
   
@@ -114,7 +114,7 @@ int
 main (int argc, char *argv[])
 {
   int i, j, offset;
-  gdouble width, height;
+  double width, height;
 
   names = (NameInfo *) malloc (sizeof (NameInfo) * (4 + n_infos + 2 * n_extra));
   n_names = 0;

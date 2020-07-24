@@ -181,7 +181,7 @@ struct _GtkCellRendererTextPrivate
   char *text;
   char *placeholder_text;
 
-  gdouble font_scale;
+  double font_scale;
 
   int rise;
   int fixed_height_rows;

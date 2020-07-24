@@ -2020,7 +2020,7 @@ entry_progress_timeout (gpointer data)
     }
   else
     {
-      gdouble fraction;
+      double fraction;
 
       fraction = gtk_entry_get_progress_fraction (GTK_ENTRY (data));
 
@@ -2463,8 +2463,8 @@ spin_button_time_output_func (GtkSpinButton *spin_button)
 {
   GtkAdjustment *adjustment;
   static char buf[6];
-  gdouble hours;
-  gdouble minutes;
+  double hours;
+  double minutes;
 
   adjustment = gtk_spin_button_get_adjustment (spin_button);
   hours = gtk_adjustment_get_value (adjustment) / 60.0;
@@ -2477,7 +2477,7 @@ spin_button_time_output_func (GtkSpinButton *spin_button)
 
 static int
 spin_button_month_input_func (GtkSpinButton *spin_button,
-			      gdouble       *new_val)
+			      double        *new_val)
 {
   int i;
   static const char *month[12] = { "January", "February", "March", "April",
@@ -2502,7 +2502,7 @@ spin_button_month_input_func (GtkSpinButton *spin_button,
       *new_val = 0.0;
       return GTK_INPUT_ERROR;
     }
-  *new_val = (gdouble) i;
+  *new_val = (double) i;
   return TRUE;
 }
 
@@ -2510,7 +2510,7 @@ static int
 spin_button_month_output_func (GtkSpinButton *spin_button)
 {
   GtkAdjustment *adjustment;
-  gdouble value;
+  double value;
   int i;
   static const char *month[12] = { "January", "February", "March", "April",
 			      "May", "June", "July", "August", "September",
@@ -2529,11 +2529,11 @@ spin_button_month_output_func (GtkSpinButton *spin_button)
 
 static int
 spin_button_hex_input_func (GtkSpinButton *spin_button,
-			    gdouble       *new_val)
+			    double        *new_val)
 {
   const char *buf;
   char *err;
-  gdouble res;
+  double res;
 
   buf = gtk_editable_get_text (GTK_EDITABLE (spin_button));
   res = strtol(buf, &err, 16);
@@ -2549,7 +2549,7 @@ spin_button_hex_output_func (GtkSpinButton *spin_button)
 {
   GtkAdjustment *adjustment;
   static char buf[7];
-  gdouble val;
+  double val;
 
   adjustment = gtk_spin_button_get_adjustment (spin_button);
   val = gtk_adjustment_get_value (adjustment);
@@ -3516,7 +3516,7 @@ create_display_screen (GtkWidget *widget)
 
 static char *
 reformat_value (GtkScale *scale,
-                gdouble   value)
+                double    value)
 {
   return g_strdup_printf ("-->%0.*g<--",
                           gtk_scale_get_digits (scale), value);
@@ -5115,7 +5115,7 @@ static gboolean
 progress_timeout (gpointer data)
 {
   ProgressData *pdata = data;
-  gdouble new_val;
+  double new_val;
   char *text;
 
   if (pdata->activity)

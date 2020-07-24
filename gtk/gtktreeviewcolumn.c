@@ -91,12 +91,12 @@ static void gtk_tree_view_column_update_button                 (GtkTreeViewColum
 
 /* Button signal handlers */
 static void column_button_drag_begin  (GtkGestureDrag    *gesture,
-                                       gdouble            x,
-                                       gdouble            y,
+                                       double             x,
+                                       double             y,
                                        GtkTreeViewColumn *column);
 static void column_button_drag_update (GtkGestureDrag    *gesture,
-                                       gdouble            offset_x,
-                                       gdouble            offset_y,
+                                       double             offset_x,
+                                       double             offset_y,
                                        GtkTreeViewColumn *column);
 
 static void gtk_tree_view_column_button_clicked                (GtkWidget               *widget,
@@ -1045,8 +1045,8 @@ gtk_tree_view_column_update_button (GtkTreeViewColumn *tree_column)
 
 static void
 column_button_drag_begin (GtkGestureDrag    *gesture,
-                          gdouble            x,
-                          gdouble            y,
+                          double             x,
+                          double             y,
                           GtkTreeViewColumn *column)
 {
   GtkTreeViewColumnPrivate *priv = column->priv;
@@ -1065,8 +1065,8 @@ column_button_drag_begin (GtkGestureDrag    *gesture,
 
 static void
 column_button_drag_update (GtkGestureDrag    *gesture,
-                           gdouble            offset_x,
-                           gdouble            offset_y,
+                           double             offset_x,
+                           double             offset_y,
                            GtkTreeViewColumn *column)
 {
   GtkTreeViewColumnPrivate *priv = column->priv;

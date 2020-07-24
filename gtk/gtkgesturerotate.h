@@ -46,7 +46,7 @@ GDK_AVAILABLE_IN_ALL
 GtkGesture * gtk_gesture_rotate_new             (void);
 
 GDK_AVAILABLE_IN_ALL
-gdouble      gtk_gesture_rotate_get_angle_delta (GtkGestureRotate *gesture);
+double       gtk_gesture_rotate_get_angle_delta (GtkGestureRotate *gesture);
 
 G_END_DECLS
 

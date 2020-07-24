@@ -33,12 +33,12 @@ struct _GtkGestureClickClass
 
   void     (* pressed)  (GtkGestureClick *gesture,
                          int              n_press,
-                         gdouble          x,
-                         gdouble          y);
+                         double           x,
+                         double           y);
   void     (* released) (GtkGestureClick *gesture,
                          int              n_press,
-                         gdouble          x,
-                         gdouble          y);
+                         double           x,
+                         double           y);
   void     (* stopped)  (GtkGestureClick *gesture);
 
   /*<private>*/

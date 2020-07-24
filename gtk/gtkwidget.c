@@ -797,8 +797,8 @@ gtk_widget_real_snapshot (GtkWidget   *widget,
 
 static gboolean
 gtk_widget_real_contains (GtkWidget *widget,
-                          gdouble    x,
-                          gdouble    y)
+                          double     x,
+                          double     y)
 {
   GtkCssBoxes boxes;
 
@@ -1887,7 +1887,7 @@ _gtk_widget_emulate_press (GtkWidget      *widget,
 {
   GtkWidget *next_child, *parent;
   GdkEvent *press;
-  gdouble x, y;
+  double x, y;
   graphene_point_t p;
 
   if (event_widget == widget)
@@ -9735,8 +9735,8 @@ gtk_widget_get_allocation (GtkWidget     *widget,
  **/
 gboolean
 gtk_widget_contains (GtkWidget  *widget,
-                     gdouble     x,
-                     gdouble     y)
+                     double      x,
+                     double      y)
 {
   g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
 
@@ -9767,8 +9767,8 @@ gtk_widget_can_be_picked (GtkWidget    *widget,
 
 static GtkWidget *
 gtk_widget_do_pick (GtkWidget    *widget,
-                    gdouble       x,
-                    gdouble       y,
+                    double        x,
+                    double        y,
                     GtkPickFlags  flags)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
@@ -9874,8 +9874,8 @@ gtk_widget_do_pick (GtkWidget    *widget,
  **/
 GtkWidget *
 gtk_widget_pick (GtkWidget    *widget,
-                 gdouble       x,
-                 gdouble       y,
+                 double        x,
+                 double        y,
                  GtkPickFlags  flags)
 {
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
@@ -10101,7 +10101,7 @@ gtk_widget_get_allocated_baseline (GtkWidget *widget)
  **/
 void
 gtk_widget_set_opacity (GtkWidget *widget,
-                        gdouble    opacity)
+                        double     opacity)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
   guint8 alpha;
@@ -10131,7 +10131,7 @@ gtk_widget_set_opacity (GtkWidget *widget,
  *
  * Returns: the requested opacity for this widget.
  **/
-gdouble
+double
 gtk_widget_get_opacity (GtkWidget *widget)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);

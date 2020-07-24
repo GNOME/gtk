@@ -81,8 +81,8 @@ point_press (PointState *point,
 static void
 point_update (PointState *point,
               GtkWidget  *widget,
-              gdouble     x,
-              gdouble     y)
+              double      x,
+              double      y)
 {
   GdkDisplay *display;
   GdkDevice *device;
@@ -247,7 +247,7 @@ typedef struct {
 } GestureData;
 
 static void
-press_cb (GtkGesture *g, int n_press, gdouble x, gdouble y, gpointer data)
+press_cb (GtkGesture *g, int n_press, double x, double y, gpointer data)
 {
   GtkEventController *c = GTK_EVENT_CONTROLLER (g);
   GdkEventSequence *sequence;

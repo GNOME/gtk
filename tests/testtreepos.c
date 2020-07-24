@@ -55,8 +55,8 @@ clicked_icon (GtkTreeView  *tv,
 static void
 release_event (GtkGestureClick *gesture,
                guint            n_press,
-               gdouble          x,
-               gdouble          y,
+               double           x,
+               double           y,
                GtkTreeView     *tv)
 {
   GtkTreePath *path;

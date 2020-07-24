@@ -32,17 +32,17 @@ struct _GtkGestureStylusClass
   GtkGestureSingleClass parent_class;
 
   void (*proximity) (GtkGestureStylus *gesture,
-                     gdouble           x,
-                     gdouble           y);
+                     double            x,
+                     double            y);
   void (*down)      (GtkGestureStylus *gesture,
-                     gdouble           x,
-                     gdouble           y);
+                     double            x,
+                     double            y);
   void (*motion)    (GtkGestureStylus *gesture,
-                     gdouble           x,
-                     gdouble           y);
+                     double            x,
+                     double            y);
   void (*up)        (GtkGestureStylus *gesture,
-                     gdouble           x,
-                     gdouble           y);
+                     double            x,
+                     double            y);
 
   /*< private >*/
   gpointer padding[10];

@@ -93,8 +93,8 @@ static void                 gtk_print_backend_file_print_stream    (GtkPrintBack
 								    GDestroyNotify           dnotify);
 static cairo_surface_t *    file_printer_create_cairo_surface      (GtkPrinter              *printer,
 								    GtkPrintSettings        *settings,
-								    gdouble                  width,
-								    gdouble                  height,
+								    double                   width,
+								    double                   height,
 								    GIOChannel              *cache_io);
 
 static GList *              file_printer_list_papers               (GtkPrinter              *printer);
@@ -318,8 +318,8 @@ _cairo_write (void                *closure,
 static cairo_surface_t *
 file_printer_create_cairo_surface (GtkPrinter       *printer,
 				   GtkPrintSettings *settings,
-				   gdouble           width, 
-				   gdouble           height,
+				   double            width, 
+				   double            height,
 				   GIOChannel       *cache_io)
 {
   cairo_surface_t *surface;
@@ -770,7 +770,7 @@ file_printer_prepare_for_print (GtkPrinter       *printer,
 				GtkPrintSettings *settings,
 				GtkPageSetup     *page_setup)
 {
-  gdouble scale;
+  double scale;
   GtkPrintPages pages;
   GtkPageRange *ranges;
   int n_ranges;

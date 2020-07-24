@@ -2163,8 +2163,8 @@ gdk_drag_get_current_actions (GdkModifierType  state,
 
 static void
 gdk_drag_update (GdkDrag         *drag,
-                 gdouble          x_root,
-                 gdouble          y_root,
+                 double           x_root,
+                 double           y_root,
                  GdkModifierType  mods,
                  guint32          evtime)
 {

@@ -150,7 +150,7 @@ gtk_pad_controller_activate_action (GtkPadController        *controller,
 static void
 gtk_pad_controller_activate_action_with_axis (GtkPadController        *controller,
                                               const ActionEntryData   *entry,
-                                              gdouble                  value)
+                                              double                   value)
 {
   g_action_group_activate_action (controller->action_group,
                                   entry->action_name,
@@ -227,7 +227,7 @@ gtk_pad_controller_handle_event (GtkEventController *controller,
   const ActionEntryData *entry;
   GtkPadActionType type;
   guint index, mode, group;
-  gdouble value = 0;
+  double value = 0;
 
   gdk_pad_event_get_group_mode (event, &group, &mode);
   if (event_type == GDK_PAD_GROUP_MODE)

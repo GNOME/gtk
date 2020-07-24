@@ -12,7 +12,7 @@ static GtkWidget *progress_bar = NULL;
 static gboolean
 apply_changes_gradually (gpointer data)
 {
-  gdouble fraction;
+  double fraction;
 
   /* Work, work, work... */
   fraction = gtk_progress_bar_get_fraction (GTK_PROGRESS_BAR (progress_bar));

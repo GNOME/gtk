@@ -114,8 +114,8 @@ void                    _gtk_print_operation_platform_backend_launch_preview    
 										      const char                  *filename);
 cairo_surface_t *       _gtk_print_operation_platform_backend_create_preview_surface (GtkPrintOperation           *op,
 										      GtkPageSetup                *page_setup,
-										      gdouble                     *dpi_x,
-										      gdouble                     *dpi_y,
+										      double                      *dpi_x,
+										      double                      *dpi_y,
 										      char                        **target);
 void                    _gtk_print_operation_platform_backend_resize_preview_surface (GtkPrintOperation           *op,
 										      GtkPageSetup                *page_setup,
@@ -140,10 +140,10 @@ void             _gtk_print_context_translate_into_margin           (GtkPrintCon
 void             _gtk_print_context_rotate_according_to_orientation (GtkPrintContext   *context);
 void             _gtk_print_context_reverse_according_to_orientation (GtkPrintContext *context);
 void             _gtk_print_context_set_hard_margins                (GtkPrintContext   *context,
-								     gdouble            top,
-								     gdouble            bottom,
-								     gdouble            left,
-								     gdouble            right);
+								     double             top,
+								     double             bottom,
+								     double             left,
+								     double             right);
 
 G_END_DECLS
 

@@ -1003,8 +1003,8 @@ _gdk_win32_display_update_cursors (GdkWin32Display *display)
 
 GdkPixbuf *
 gdk_win32_icon_to_pixbuf_libgtk_only (HICON hicon,
-                                      gdouble *x_hot,
-                                      gdouble *y_hot)
+                                      double *x_hot,
+                                      double *y_hot)
 {
   GdkPixbuf *pixbuf = NULL;
   ICONINFO ii;

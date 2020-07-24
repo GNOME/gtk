@@ -602,7 +602,7 @@ printer_changed_callback (GtkDropDown            *combo_box,
    after the decimal point, and not to many such digits if they
    are nonzero. I wish printf let you specify max precision for %f... */
 static char *
-double_to_string (gdouble d,
+double_to_string (double d,
                   GtkUnit unit)
 {
   char *val, *p;

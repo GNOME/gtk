@@ -71,7 +71,7 @@ g_settings_set_mapping_int (const GValue       *value,
         variant = g_variant_new_handle ((guint) l);
     }
   else if (g_variant_type_equal (expected_type, G_VARIANT_TYPE_DOUBLE))
-    variant = g_variant_new_double ((gdouble) l);
+    variant = g_variant_new_double ((double) l);
 
   return variant;
 }
@@ -81,7 +81,7 @@ g_settings_set_mapping_float (const GValue       *value,
                               const GVariantType *expected_type)
 {
   GVariant *variant = NULL;
-  gdouble d;
+  double d;
   gint64 l;
 
   if (G_VALUE_HOLDS_DOUBLE (value))
@@ -126,7 +126,7 @@ g_settings_set_mapping_float (const GValue       *value,
         variant = g_variant_new_handle ((guint) l);
     }
   else if (g_variant_type_equal (expected_type, G_VARIANT_TYPE_DOUBLE))
-    variant = g_variant_new_double ((gdouble) d);
+    variant = g_variant_new_double ((double) d);
 
   return variant;
 }
@@ -180,7 +180,7 @@ g_settings_set_mapping_unsigned_int (const GValue       *value,
         variant = g_variant_new_handle ((guint) u);
     }
   else if (g_variant_type_equal (expected_type, G_VARIANT_TYPE_DOUBLE))
-    variant = g_variant_new_double ((gdouble) u);
+    variant = g_variant_new_double ((double) u);
 
   return variant;
 }
@@ -237,7 +237,7 @@ g_settings_get_mapping_float (GValue   *value,
                               GVariant *variant)
 {
   const GVariantType *type;
-  gdouble d;
+  double d;
   gint64 l;
 
   type = g_variant_get_type (variant);

@@ -584,7 +584,7 @@ get_current_toplevel (GdkDisplay      *display,
 		      GdkModifierType *state_out)
 {
   GdkSurface *pointer_surface;
-  gdouble x, y;
+  double x, y;
   GdkModifierType state;
 
   pointer_surface = _gdk_device_surface_at_position (device, &x, &y, &state);

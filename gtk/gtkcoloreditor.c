@@ -95,7 +95,7 @@ G_DEFINE_TYPE_WITH_CODE (GtkColorEditor, gtk_color_editor, GTK_TYPE_BOX,
                                                 gtk_color_editor_iface_init))
 
 static guint
-scale_round (gdouble value, gdouble scale)
+scale_round (double value, double scale)
 {
   value = floor (value * scale + 0.5);
   value = MAX (value, 0);
@@ -161,7 +161,7 @@ static void
 hsv_changed (GtkColorEditor *editor)
 {
   GdkRGBA color;
-  gdouble h, s, v, a;
+  double h, s, v, a;
 
   h = gtk_adjustment_get_value (editor->h_adj);
   s = gtk_adjustment_get_value (editor->s_adj);
@@ -333,7 +333,7 @@ static void
 value_changed (GtkAdjustment *a,
                GtkAdjustment *as)
 {
-  gdouble scale;
+  double scale;
 
   scale = gtk_adjustment_get_upper (as) / gtk_adjustment_get_upper (a);
   g_signal_handlers_block_by_func (as, value_changed, a);
@@ -343,7 +343,7 @@ value_changed (GtkAdjustment *a,
 
 static GtkAdjustment *
 scaled_adjustment (GtkAdjustment *a,
-                   gdouble        scale)
+                   double         scale)
 {
   GtkAdjustment *as;
 

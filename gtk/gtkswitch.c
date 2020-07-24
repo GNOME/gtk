@@ -196,8 +196,8 @@ gtk_switch_begin_toggle_animation (GtkSwitch *self)
 static void
 gtk_switch_click_gesture_pressed (GtkGestureClick *gesture,
                                   int              n_press,
-                                  gdouble          x,
-                                  gdouble          y,
+                                  double           x,
+                                  double           y,
                                   GtkSwitch       *self)
 {
   graphene_rect_t switch_bounds;
@@ -216,8 +216,8 @@ gtk_switch_click_gesture_pressed (GtkGestureClick *gesture,
 static void
 gtk_switch_click_gesture_released (GtkGestureClick *gesture,
                                    int              n_press,
-                                   gdouble          x,
-                                   gdouble          y,
+                                   double           x,
+                                   double           y,
                                    GtkSwitch       *self)
 {
   GdkEventSequence *sequence;
@@ -235,7 +235,7 @@ gtk_switch_click_gesture_released (GtkGestureClick *gesture,
 static void
 gtk_switch_pan_gesture_pan (GtkGesturePan   *gesture,
                             GtkPanDirection  direction,
-                            gdouble          offset,
+                            double           offset,
                             GtkSwitch       *self)
 {
   GtkWidget *widget = GTK_WIDGET (self);
@@ -261,8 +261,8 @@ gtk_switch_pan_gesture_pan (GtkGesturePan   *gesture,
 
 static void
 gtk_switch_pan_gesture_drag_end (GtkGestureDrag *gesture,
-                                 gdouble         x,
-                                 gdouble         y,
+                                 double          x,
+                                 double          y,
                                  GtkSwitch      *self)
 {
   GdkEventSequence *sequence;

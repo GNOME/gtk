@@ -79,10 +79,10 @@ typedef enum _GdkWin32AeroSnapState GdkWin32AeroSnapState;
 
 struct _GdkRectangleDouble
 {
-  gdouble x;
-  gdouble y;
-  gdouble width;
-  gdouble height;
+  double x;
+  double y;
+  double width;
+  double height;
 };
 
 typedef struct _GdkRectangleDouble GdkRectangleDouble;
@@ -311,7 +311,7 @@ struct _GdkWin32Surface
    * we remember the opacity value here and apply it
    * during UpdateLayredWindow() call, for layered windows.
    */
-  gdouble          layered_opacity;
+  double           layered_opacity;
 
   HDC              hdc;
   int              hdc_count;

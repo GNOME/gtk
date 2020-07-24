@@ -51,11 +51,11 @@ create_widget_factory_content (void)
 
 static void
 set_adjustment_to_fraction (GtkAdjustment *adjustment,
-                            gdouble        fraction)
+                            double         fraction)
 {
-  gdouble upper = gtk_adjustment_get_upper (adjustment);
-  gdouble lower = gtk_adjustment_get_lower (adjustment);
-  gdouble page_size = gtk_adjustment_get_page_size (adjustment);
+  double upper = gtk_adjustment_get_upper (adjustment);
+  double lower = gtk_adjustment_get_lower (adjustment);
+  double page_size = gtk_adjustment_get_page_size (adjustment);
 
   gtk_adjustment_set_value (adjustment,
                             (1 - fraction) * lower +
@@ -69,7 +69,7 @@ scroll_viewport (GtkWidget     *viewport,
 {
   static gint64 start_time;
   gint64 now = gdk_frame_clock_get_frame_time (frame_clock);
-  gdouble elapsed;
+  double elapsed;
   GtkAdjustment *hadjustment, *vadjustment;
 
   if (start_time == 0)

@@ -36,7 +36,7 @@ struct _GtkTreeDataList
     gint64	   v_int64;
     guint64        v_uint64;
     float	   v_float;
-    gdouble        v_double;
+    double         v_double;
     gpointer	   v_pointer;
   } data;
 };

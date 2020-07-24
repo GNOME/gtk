@@ -275,8 +275,8 @@ struct _GtkWidgetClass
                                                 GtkSnapshot          *snapshot);
 
   gboolean     (* contains)                    (GtkWidget *widget,
-                                                gdouble    x,
-                                                gdouble    y);
+                                                double     x,
+                                                double     y);
 
   /*< private >*/
 
@@ -644,12 +644,12 @@ gboolean     gtk_widget_translate_coordinates (GtkWidget  *src_widget,
 
 GDK_AVAILABLE_IN_ALL
 gboolean     gtk_widget_contains              (GtkWidget  *widget,
-                                               gdouble     x,
-                                               gdouble     y);
+                                               double      x,
+                                               double      y);
 GDK_AVAILABLE_IN_ALL
 GtkWidget *  gtk_widget_pick                  (GtkWidget   *widget,
-                                               gdouble      x,
-                                               gdouble      y,
+                                               double       x,
+                                               double       y,
                                                GtkPickFlags flags);
 
 GDK_AVAILABLE_IN_ALL

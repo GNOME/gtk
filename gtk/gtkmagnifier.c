@@ -33,7 +33,7 @@ typedef struct _GtkMagnifierPrivate GtkMagnifierPrivate;
 struct _GtkMagnifierPrivate
 {
   GdkPaintable *paintable;
-  gdouble magnification;
+  double magnification;
   int x;
   int y;
   gboolean resize;
@@ -253,8 +253,8 @@ _gtk_magnifier_set_inspected (GtkMagnifier *magnifier,
 
 void
 _gtk_magnifier_set_coords (GtkMagnifier *magnifier,
-                           gdouble       x,
-                           gdouble       y)
+                           double        x,
+                           double        y)
 {
   GtkMagnifierPrivate *priv;
 
@@ -274,8 +274,8 @@ _gtk_magnifier_set_coords (GtkMagnifier *magnifier,
 
 void
 _gtk_magnifier_get_coords (GtkMagnifier *magnifier,
-                           gdouble      *x,
-                           gdouble      *y)
+                           double       *x,
+                           double       *y)
 {
   GtkMagnifierPrivate *priv;
 
@@ -292,7 +292,7 @@ _gtk_magnifier_get_coords (GtkMagnifier *magnifier,
 
 void
 _gtk_magnifier_set_magnification (GtkMagnifier *magnifier,
-                                  gdouble       magnification)
+                                  double        magnification)
 {
   GtkMagnifierPrivate *priv;
 
@@ -313,7 +313,7 @@ _gtk_magnifier_set_magnification (GtkMagnifier *magnifier,
     gtk_widget_queue_draw (GTK_WIDGET (magnifier));
 }
 
-gdouble
+double
 _gtk_magnifier_get_magnification (GtkMagnifier *magnifier)
 {
   GtkMagnifierPrivate *priv;

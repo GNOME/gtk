@@ -36,7 +36,7 @@ void               _gtk_range_set_has_origin               (GtkRange      *range
                                                             gboolean       has_origin);
 gboolean           _gtk_range_get_has_origin               (GtkRange      *range);
 void               _gtk_range_set_stop_values              (GtkRange      *range,
-                                                            gdouble       *values,
+                                                            double        *values,
                                                             int            n_values);
 int                _gtk_range_get_stop_positions           (GtkRange      *range,
                                                             int          **values);

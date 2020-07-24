@@ -1322,8 +1322,8 @@ get_edge_for_coordinates (GtkWindow *window,
 static void
 click_gesture_pressed_cb (GtkGestureClick *gesture,
                           int              n_press,
-                          gdouble          x,
-                          gdouble          y,
+                          double           x,
+                          double           y,
                           GtkWindow       *window)
 {
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
@@ -6903,8 +6903,8 @@ gtk_window_update_pointer_focus (GtkWindow        *window,
                                  GdkDevice        *device,
                                  GdkEventSequence *sequence,
                                  GtkWidget        *target,
-                                 gdouble           x,
-                                 gdouble           y)
+                                 double            x,
+                                 double            y)
 {
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
   GtkPointerFocus *focus;

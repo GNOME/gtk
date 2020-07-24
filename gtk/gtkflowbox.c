@@ -2600,9 +2600,9 @@ autoscroll_cb (GtkWidget     *widget,
   GtkFlowBox *box = GTK_FLOW_BOX (data);
   GtkFlowBoxPrivate *priv = BOX_PRIV (box);
   GtkAdjustment *adjustment;
-  gdouble factor;
-  gdouble increment;
-  gdouble value;
+  double factor;
+  double increment;
+  double value;
 
   if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
     adjustment = priv->vadjustment;
@@ -2649,7 +2649,7 @@ autoscroll_cb (GtkWidget     *widget,
   if (priv->rubberband_select)
     {
       GdkEventSequence *sequence;
-      gdouble x, y;
+      double x, y;
       GtkFlowBoxChild *child;
 
       sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (priv->drag_gesture));
@@ -2744,12 +2744,12 @@ update_autoscroll_mode (GtkFlowBox *box,
 
 static void
 gtk_flow_box_drag_gesture_update (GtkGestureDrag *gesture,
-                                  gdouble         offset_x,
-                                  gdouble         offset_y,
+                                  double          offset_x,
+                                  double          offset_y,
                                   GtkFlowBox     *box)
 {
   GtkFlowBoxPrivate *priv = BOX_PRIV (box);
-  gdouble start_x, start_y;
+  double start_x, start_y;
   GtkFlowBoxChild *child;
   GtkCssNode *widget_node;
 
@@ -2796,8 +2796,8 @@ gtk_flow_box_drag_gesture_update (GtkGestureDrag *gesture,
 static void
 gtk_flow_box_click_gesture_pressed (GtkGestureClick *gesture,
                                     guint            n_press,
-                                    gdouble          x,
-                                    gdouble          y,
+                                    double           x,
+                                    double           y,
                                     GtkFlowBox      *box)
 {
   GtkFlowBoxPrivate *priv = BOX_PRIV (box);
@@ -2825,8 +2825,8 @@ gtk_flow_box_click_gesture_pressed (GtkGestureClick *gesture,
 
 static void
 gtk_flow_box_click_unpaired_release (GtkGestureClick  *gesture,
-                                     gdouble           x,
-                                     gdouble           y,
+                                     double            x,
+                                     double            y,
                                      guint             button,
                                      GdkEventSequence *sequence,
                                      GtkFlowBox       *box)
@@ -2846,8 +2846,8 @@ gtk_flow_box_click_unpaired_release (GtkGestureClick  *gesture,
 static void
 gtk_flow_box_click_gesture_released (GtkGestureClick *gesture,
                                      guint            n_press,
-                                     gdouble          x,
-                                     gdouble          y,
+                                     double           x,
+                                     double           y,
                                      GtkFlowBox      *box)
 {
   GtkFlowBoxPrivate *priv = BOX_PRIV (box);
@@ -2902,8 +2902,8 @@ gtk_flow_box_click_gesture_stopped (GtkGestureClick *gesture,
 
 static void
 gtk_flow_box_drag_gesture_begin (GtkGestureDrag *gesture,
-                                 gdouble         start_x,
-                                 gdouble         start_y,
+                                 double          start_x,
+                                 double          start_y,
                                  GtkWidget      *widget)
 {
   GtkFlowBoxPrivate *priv = BOX_PRIV (widget);
@@ -2943,8 +2943,8 @@ gtk_flow_box_stop_rubberband (GtkFlowBox *box)
 
 static void
 gtk_flow_box_drag_gesture_end (GtkGestureDrag *gesture,
-                               gdouble         offset_x,
-                               gdouble         offset_y,
+                               double          offset_x,
+                               double          offset_y,
                                GtkFlowBox     *box)
 {
   GtkFlowBoxPrivate *priv = BOX_PRIV (box);

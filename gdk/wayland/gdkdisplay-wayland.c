@@ -1445,11 +1445,11 @@ get_order (const char *s)
   return 0;
 }
 
-static gdouble
+static double
 get_dpi_from_gsettings (GdkWaylandDisplay *display_wayland)
 {
   GSettings *settings;
-  gdouble factor;
+  double factor;
 
   settings = g_hash_table_lookup (display_wayland->settings,
                                   "org.gnome.desktop.interface");

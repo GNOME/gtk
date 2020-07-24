@@ -3105,8 +3105,8 @@ gdk_wayland_surface_get_root_coords (GdkSurface *surface,
 static gboolean
 gdk_wayland_surface_get_device_state (GdkSurface       *surface,
                                       GdkDevice        *device,
-                                      gdouble          *x,
-                                      gdouble          *y,
+                                      double           *x,
+                                      double           *y,
                                       GdkModifierType  *mask)
 {
   gboolean return_val;

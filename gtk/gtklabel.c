@@ -475,8 +475,8 @@ static void gtk_label_select_region_index (GtkLabel *self,
                                            int       end_index);
 
 static void gtk_label_update_active_link  (GtkWidget *widget,
-                                           gdouble    x,
-                                           gdouble    y);
+                                           double     x,
+                                           double     y);
 
 static gboolean gtk_label_mnemonic_activate (GtkWidget         *widget,
 					     gboolean           group_cycling);
@@ -519,21 +519,21 @@ static void          emit_activate_link         (GtkLabel     *self,
 /* Event controller callbacks */
 static void   gtk_label_click_gesture_pressed  (GtkGestureClick *gesture,
                                                      int                   n_press,
-                                                     gdouble               x,
-                                                     gdouble               y,
+                                                     double                x,
+                                                     double                y,
                                                      GtkLabel             *self);
 static void   gtk_label_click_gesture_released (GtkGestureClick *gesture,
                                                      int                   n_press,
-                                                     gdouble               x,
-                                                     gdouble               y,
+                                                     double                x,
+                                                     double                y,
                                                      GtkLabel             *self);
 static void   gtk_label_drag_gesture_begin          (GtkGestureDrag *gesture,
-                                                     gdouble         start_x,
-                                                     gdouble         start_y,
+                                                     double          start_x,
+                                                     double          start_y,
                                                      GtkLabel       *self);
 static void   gtk_label_drag_gesture_update         (GtkGestureDrag *gesture,
-                                                     gdouble         offset_x,
-                                                     gdouble         offset_y,
+                                                     double          offset_x,
+                                                     double          offset_y,
                                                      GtkLabel       *self);
 
 /* Actions */
@@ -3912,8 +3912,8 @@ out:
 static void
 gtk_label_click_gesture_pressed (GtkGestureClick *gesture,
                                  int              n_press,
-                                 gdouble          widget_x,
-                                 gdouble          widget_y,
+                                 double           widget_x,
+                                 double           widget_y,
                                  GtkLabel        *self)
 {
   GtkLabelSelectionInfo *info = self->select_info;
@@ -3989,8 +3989,8 @@ gtk_label_click_gesture_pressed (GtkGestureClick *gesture,
 static void
 gtk_label_click_gesture_released (GtkGestureClick *gesture,
                                   int              n_press,
-                                  gdouble          x,
-                                  gdouble          y,
+                                  double           x,
+                                  double           y,
                                   GtkLabel        *self)
 {
   GtkLabelSelectionInfo *info = self->select_info;
@@ -4054,8 +4054,8 @@ get_selection_paintable (GtkLabel *self)
 
 static void
 gtk_label_drag_gesture_begin (GtkGestureDrag *gesture,
-                              gdouble         start_x,
-                              gdouble         start_y,
+                              double          start_x,
+                              double          start_y,
                               GtkLabel       *self)
 {
   GtkLabelSelectionInfo *info = self->select_info;
@@ -4122,14 +4122,14 @@ gtk_label_drag_gesture_begin (GtkGestureDrag *gesture,
 
 static void
 gtk_label_drag_gesture_update (GtkGestureDrag *gesture,
-                               gdouble         offset_x,
-                               gdouble         offset_y,
+                               double          offset_x,
+                               double          offset_y,
                                GtkLabel       *self)
 {
   GtkLabelSelectionInfo *info = self->select_info;
   GtkWidget *widget = GTK_WIDGET (self);
   GdkEventSequence *sequence;
-  gdouble x, y;
+  double x, y;
   int index;
 
   if (info == NULL || !info->selectable)
@@ -4215,8 +4215,8 @@ gtk_label_drag_gesture_update (GtkGestureDrag *gesture,
 
 static void
 gtk_label_update_active_link (GtkWidget *widget,
-                              gdouble    x,
-                              gdouble    y)
+                              double     x,
+                              double     y)
 {
   GtkLabel *self = GTK_LABEL (widget);
   GtkLabelSelectionInfo *info = self->select_info;

@@ -2755,9 +2755,9 @@ gdk_event_translate (MSG *msg,
       delta_x = delta_y = 0.0;
 
       if (msg->message == WM_MOUSEWHEEL)
-        delta_y = (double) GET_WHEEL_DELTA_WPARAM (msg->wParam) / (gdouble) WHEEL_DELTA;
+        delta_y = (double) GET_WHEEL_DELTA_WPARAM (msg->wParam) / (double) WHEEL_DELTA;
       else if (msg->message == WM_MOUSEHWHEEL)
-        delta_x = (double) GET_WHEEL_DELTA_WPARAM (msg->wParam) / (gdouble) WHEEL_DELTA;
+        delta_x = (double) GET_WHEEL_DELTA_WPARAM (msg->wParam) / (double) WHEEL_DELTA;
       /* Positive delta scrolls up, not down,
          see API documentation for WM_MOUSEWHEEL message.
        */
@@ -3291,7 +3291,7 @@ gdk_event_translate (MSG *msg,
 	  RECT decorated_rect;
 	  RECT undecorated_drag;
 	  int decoration_width, decoration_height;
-	  gdouble drag_aspect;
+	  double drag_aspect;
 	  int drag_width, drag_height, new_width, new_height;
 
 	  GetClientRect (GDK_SURFACE_HWND (window), &rect);
@@ -3313,7 +3313,7 @@ gdk_event_translate (MSG *msg,
 	  drag_width = undecorated_drag.right - undecorated_drag.left;
 	  drag_height = undecorated_drag.bottom - undecorated_drag.top;
 
-	  drag_aspect = (gdouble) drag_width / drag_height;
+	  drag_aspect = (double) drag_width / drag_height;
 
 	  GDK_NOTE (EVENTS, g_print (" (ASPECT:%g--%g curr: %g)",
 				     impl->hints.min_aspect, impl->hints.max_aspect, drag_aspect));

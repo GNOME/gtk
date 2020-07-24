@@ -270,8 +270,8 @@ static void calendar_invalidate_day_num (GtkCalendar *widget,
                                          int        day);
 
 static gboolean gtk_calendar_scroll_controller_scroll (GtkEventControllerScroll *scroll,
-                                                       gdouble                   dx,
-                                                       gdouble                   dy,
+                                                       double                    dx,
+                                                       double                    dy,
                                                        GtkWidget                *widget);
 
 static void     calendar_set_month_prev (GtkCalendar *calendar);
@@ -1139,8 +1139,8 @@ gtk_calendar_button_press (GtkGestureClick *gesture,
 
 static gboolean
 gtk_calendar_scroll_controller_scroll (GtkEventControllerScroll *scroll,
-                                       gdouble                   dx,
-                                       gdouble                   dy,
+                                       double                    dx,
+                                       double                    dy,
                                        GtkWidget                *widget)
 {
   GtkCalendar *calendar = GTK_CALENDAR (widget);

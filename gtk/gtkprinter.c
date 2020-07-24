@@ -928,8 +928,8 @@ _gtk_printer_prepare_for_print (GtkPrinter       *printer,
 cairo_surface_t *
 _gtk_printer_create_cairo_surface (GtkPrinter       *printer,
 				   GtkPrintSettings *settings,
-				   gdouble           width, 
-				   gdouble           height,
+				   double            width, 
+				   double            height,
 				   GIOChannel       *cache_io)
 {
   GtkPrinterPrivate *priv = gtk_printer_get_instance_private (printer);
@@ -999,10 +999,10 @@ gtk_printer_get_default_page_size (GtkPrinter *printer)
  */
 gboolean
 gtk_printer_get_hard_margins (GtkPrinter *printer,
-			      gdouble    *top,
-			      gdouble    *bottom,
-			      gdouble    *left,
-			      gdouble    *right)
+			      double     *top,
+			      double     *bottom,
+			      double     *left,
+			      double     *right)
 {
   GtkPrinterPrivate *priv = gtk_printer_get_instance_private (printer);
   GtkPrintBackendClass *backend_class = GTK_PRINT_BACKEND_GET_CLASS (priv->backend);
@@ -1031,10 +1031,10 @@ gtk_printer_get_hard_margins (GtkPrinter *printer,
 gboolean
 gtk_printer_get_hard_margins_for_paper_size (GtkPrinter   *printer,
 					     GtkPaperSize *paper_size,
-					     gdouble      *top,
-					     gdouble      *bottom,
-					     gdouble      *left,
-					     gdouble      *right)
+					     double       *top,
+					     double       *bottom,
+					     double       *left,
+					     double       *right)
 {
   GtkPrinterPrivate *priv = gtk_printer_get_instance_private (printer);
   GtkPrintBackendClass *backend_class = GTK_PRINT_BACKEND_GET_CLASS (priv->backend);

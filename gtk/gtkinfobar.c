@@ -439,8 +439,8 @@ close_button_clicked_cb (GtkWidget  *button,
 static void
 click_released_cb (GtkGestureClick *gesture,
                    guint            n_press,
-                   gdouble          x,
-                   gdouble          y,
+                   double           x,
+                   double           y,
                    GtkInfoBar      *info_bar)
 {
   if (info_bar->default_response && info_bar->default_response_sensitive)

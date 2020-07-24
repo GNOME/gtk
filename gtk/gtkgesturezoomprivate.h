@@ -33,7 +33,7 @@ struct _GtkGestureZoomClass
   GtkGestureClass parent_class;
 
   void (* scale_changed) (GtkGestureZoom *gesture,
-                          gdouble         scale);
+                          double          scale);
   /*< private >*/
   gpointer padding[10];
 };

@@ -101,8 +101,8 @@ struct _GtkProgressBar
   GtkWidget     *trough_widget;
   GtkWidget     *progress_widget;
 
-  gdouble        fraction;
-  gdouble        pulse_fraction;
+  double         fraction;
+  double         pulse_fraction;
 
   double         activity_pos;
   guint          activity_blocks;
@@ -113,7 +113,7 @@ struct _GtkProgressBar
   GtkProgressTracker tracker;
   gint64             pulse1;
   gint64             pulse2;
-  gdouble            last_iteration;
+  double             last_iteration;
 
   guint          activity_dir  : 1;
   guint          activity_mode : 1;
@@ -587,7 +587,7 @@ tick_cb (GtkWidget     *widget,
 {
   GtkProgressBar *pbar = GTK_PROGRESS_BAR (widget);
   gint64 frame_time;
-  gdouble iteration, pulse_iterations, current_iterations, fraction;
+  double iteration, pulse_iterations, current_iterations, fraction;
 
   if (pbar->pulse2 == 0 && pbar->pulse1 == 0)
     return G_SOURCE_CONTINUE;
@@ -714,7 +714,7 @@ gtk_progress_bar_set_activity_mode (GtkProgressBar *pbar,
  */
 void
 gtk_progress_bar_set_fraction (GtkProgressBar *pbar,
-                               gdouble         fraction)
+                               double          fraction)
 {
   g_return_if_fail (GTK_IS_PROGRESS_BAR (pbar));
 
@@ -884,7 +884,7 @@ gtk_progress_bar_get_show_text (GtkProgressBar *pbar)
  */
 void
 gtk_progress_bar_set_pulse_step (GtkProgressBar *pbar,
-                                 gdouble         fraction)
+                                 double          fraction)
 {
   g_return_if_fail (GTK_IS_PROGRESS_BAR (pbar));
 
@@ -991,7 +991,7 @@ gtk_progress_bar_get_text (GtkProgressBar *pbar)
  *
  * Returns: a fraction from 0.0 to 1.0
  */
-gdouble
+double
 gtk_progress_bar_get_fraction (GtkProgressBar *pbar)
 {
   g_return_val_if_fail (GTK_IS_PROGRESS_BAR (pbar), 0);
@@ -1007,7 +1007,7 @@ gtk_progress_bar_get_fraction (GtkProgressBar *pbar)
  *
  * Returns: a fraction from 0.0 to 1.0
  */
-gdouble
+double
 gtk_progress_bar_get_pulse_step (GtkProgressBar *pbar)
 {
   g_return_val_if_fail (GTK_IS_PROGRESS_BAR (pbar), 0);

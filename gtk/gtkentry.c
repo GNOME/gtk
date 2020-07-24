@@ -1504,8 +1504,8 @@ get_icon_position_from_controller (GtkEntry           *entry,
 static void
 icon_pressed_cb (GtkGestureClick *gesture,
                  int                   n_press,
-                 gdouble               x,
-                 gdouble               y,
+                 double                x,
+                 double                y,
                  GtkEntry             *entry)
 {
   GtkEntryPrivate *priv = gtk_entry_get_instance_private (entry);
@@ -1524,8 +1524,8 @@ icon_pressed_cb (GtkGestureClick *gesture,
 static void
 icon_released_cb (GtkGestureClick *gesture,
                   int              n_press,
-                  gdouble          x,
-                  gdouble          y,
+                  double           x,
+                  double           y,
                   GtkEntry        *entry)
 {
   GtkEntryPrivate *priv = gtk_entry_get_instance_private (entry);
@@ -1541,12 +1541,12 @@ icon_released_cb (GtkGestureClick *gesture,
 
 static void
 icon_drag_update_cb (GtkGestureDrag *gesture,
-                     gdouble         x,
-                     gdouble         y,
+                     double          x,
+                     double          y,
                      GtkEntry       *entry)
 {
   GtkEntryPrivate *priv = gtk_entry_get_instance_private (entry);
-  gdouble start_x, start_y;
+  double start_x, start_y;
   GtkEntryIconPosition pos;
   EntryIconInfo *icon_info;
 
@@ -3254,10 +3254,10 @@ gtk_entry_ensure_progress_widget (GtkEntry *entry)
  */
 void
 gtk_entry_set_progress_fraction (GtkEntry *entry,
-                                 gdouble   fraction)
+                                 double    fraction)
 {
   GtkEntryPrivate *priv = gtk_entry_get_instance_private (entry);
-  gdouble          old_fraction;
+  double           old_fraction;
 
   g_return_if_fail (GTK_IS_ENTRY (entry));
 
@@ -3283,7 +3283,7 @@ gtk_entry_set_progress_fraction (GtkEntry *entry,
  *
  * Returns: a fraction from 0.0 to 1.0
  */
-gdouble
+double
 gtk_entry_get_progress_fraction (GtkEntry *entry)
 {
   GtkEntryPrivate *priv = gtk_entry_get_instance_private (entry);
@@ -3306,7 +3306,7 @@ gtk_entry_get_progress_fraction (GtkEntry *entry)
  */
 void
 gtk_entry_set_progress_pulse_step (GtkEntry *entry,
-                                   gdouble   fraction)
+                                   double    fraction)
 {
   GtkEntryPrivate *priv = gtk_entry_get_instance_private (entry);
 
@@ -3331,7 +3331,7 @@ gtk_entry_set_progress_pulse_step (GtkEntry *entry,
  *
  * Returns: a fraction from 0.0 to 1.0
  */
-gdouble
+double
 gtk_entry_get_progress_pulse_step (GtkEntry *entry)
 {
   GtkEntryPrivate *priv = gtk_entry_get_instance_private (entry);

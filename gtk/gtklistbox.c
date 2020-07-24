@@ -281,17 +281,17 @@ static void                 gtk_list_box_set_accept_unpaired_release    (GtkList
 
 static void gtk_list_box_click_gesture_pressed  (GtkGestureClick  *gesture,
                                                  guint             n_press,
-                                                 gdouble           x,
-                                                 gdouble           y,
+                                                 double            x,
+                                                 double            y,
                                                  GtkListBox       *box);
 static void gtk_list_box_click_gesture_released (GtkGestureClick  *gesture,
                                                  guint             n_press,
-                                                 gdouble           x,
-                                                 gdouble           y,
+                                                 double            x,
+                                                 double            y,
                                                  GtkListBox       *box);
 static void gtk_list_box_click_unpaired_release (GtkGestureClick  *gesture,
-                                                 gdouble           x,
-                                                 gdouble           y,
+                                                 double            x,
+                                                 double            y,
                                                  guint             button,
                                                  GdkEventSequence *sequence,
                                                  GtkListBox       *box);
@@ -1782,8 +1782,8 @@ gtk_list_box_select_and_activate_full (GtkListBox    *box,
 static void
 gtk_list_box_click_gesture_pressed (GtkGestureClick *gesture,
                                     guint            n_press,
-                                    gdouble          x,
-                                    gdouble          y,
+                                    double           x,
+                                    double           y,
                                     GtkListBox      *box)
 {
   GtkListBoxRow *row;
@@ -1802,8 +1802,8 @@ gtk_list_box_click_gesture_pressed (GtkGestureClick *gesture,
 
 static void
 gtk_list_box_click_unpaired_release (GtkGestureClick  *gesture,
-                                     gdouble           x,
-                                     gdouble           y,
+                                     double            x,
+                                     double            y,
                                      guint             button,
                                      GdkEventSequence *sequence,
                                      GtkListBox       *box)
@@ -1822,8 +1822,8 @@ gtk_list_box_click_unpaired_release (GtkGestureClick  *gesture,
 static void
 gtk_list_box_click_gesture_released (GtkGestureClick *gesture,
                                      guint            n_press,
-                                     gdouble          x,
-                                     gdouble          y,
+                                     double           x,
+                                     double           y,
                                      GtkListBox      *box)
 {
   /* Take a ref to protect against reentrancy

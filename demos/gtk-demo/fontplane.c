@@ -39,7 +39,7 @@ val_to_xy (GtkFontPlane *plane,
            int           *x,
            int           *y)
 {
-  gdouble u, v;
+  double u, v;
   int width, height;
 
   width = gtk_widget_get_allocated_width (GTK_WIDGET (plane));
@@ -129,7 +129,7 @@ update_value (GtkFontPlane *plane,
               int            y)
 {
   GtkWidget *widget = GTK_WIDGET (plane);
-  gdouble u, v;
+  double u, v;
 
   u = CLAMP (x * (1.0 / gtk_widget_get_allocated_width (widget)), 0, 1);
   v = CLAMP (1 - y * (1.0 / gtk_widget_get_allocated_height (widget)), 0, 1);
@@ -142,8 +142,8 @@ update_value (GtkFontPlane *plane,
 
 static void
 plane_drag_gesture_begin (GtkGestureDrag *gesture,
-                          gdouble         start_x,
-                          gdouble         start_y,
+                          double          start_x,
+                          double          start_y,
                           GtkFontPlane  *plane)
 {
   guint button;
@@ -164,11 +164,11 @@ plane_drag_gesture_begin (GtkGestureDrag *gesture,
 
 static void
 plane_drag_gesture_update (GtkGestureDrag *gesture,
-                           gdouble         offset_x,
-                           gdouble         offset_y,
+                           double          offset_x,
+                           double          offset_y,
                            GtkFontPlane  *plane)
 {
-  gdouble start_x, start_y;
+  double start_x, start_y;
 
   gtk_gesture_drag_get_start_point (GTK_GESTURE_DRAG (gesture),
                                     &start_x, &start_y);
@@ -177,8 +177,8 @@ plane_drag_gesture_update (GtkGestureDrag *gesture,
 
 static void
 plane_drag_gesture_end (GtkGestureDrag *gesture,
-                        gdouble         offset_x,
-                        gdouble         offset_y,
+                        double          offset_x,
+                        double          offset_y,
                         GtkFontPlane  *plane)
 {
   set_cross_cursor (GTK_WIDGET (plane), FALSE);

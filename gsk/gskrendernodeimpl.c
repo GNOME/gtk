@@ -985,7 +985,7 @@ draw_shadow_side (cairo_t               *cr,
                   cairo_rectangle_int_t *drawn_rect)
 {
   GskBlurFlags blur_flags = GSK_BLUR_REPEAT;
-  gdouble clip_radius;
+  double clip_radius;
   int x1, x2, y1, y2;
 
   clip_radius = gsk_cairo_blur_compute_pixels (radius);

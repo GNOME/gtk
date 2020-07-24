@@ -1705,7 +1705,7 @@ gdk_surface_get_device_position (GdkSurface       *surface,
                                  double          *y,
                                  GdkModifierType *mask)
 {
-  gdouble tmp_x, tmp_y;
+  double tmp_x, tmp_y;
   GdkModifierType tmp_mask;
 
   g_return_if_fail (GDK_IS_SURFACE (surface));

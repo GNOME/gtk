@@ -185,16 +185,16 @@ static void                 cups_printer_request_details           (GtkPrinter  
 static gboolean             cups_request_default_printer           (GtkPrintBackendCups               *print_backend);
 static gboolean             cups_request_ppd                       (GtkPrinter                        *printer);
 static gboolean             cups_printer_get_hard_margins          (GtkPrinter                        *printer,
-								    gdouble                           *top,
-								    gdouble                           *bottom,
-								    gdouble                           *left,
-								    gdouble                           *right);
+								    double                            *top,
+								    double                            *bottom,
+								    double                            *left,
+								    double                            *right);
 static gboolean             cups_printer_get_hard_margins_for_paper_size (GtkPrinter                  *printer,
 									  GtkPaperSize                *paper_size,
-									  gdouble                     *top,
-									  gdouble                     *bottom,
-									  gdouble                     *left,
-									  gdouble                     *right);
+									  double                      *top,
+									  double                      *bottom,
+									  double                      *left,
+									  double                      *right);
 static GtkPrintCapabilities cups_printer_get_capabilities          (GtkPrinter                        *printer);
 static void                 set_option_from_settings               (GtkPrinterOption                  *option,
 								    GtkPrintSettings                  *setting);
@@ -210,8 +210,8 @@ static void                 gtk_print_backend_cups_print_stream    (GtkPrintBack
 								    GDestroyNotify                     dnotify);
 static cairo_surface_t *    cups_printer_create_cairo_surface      (GtkPrinter                        *printer,
 								    GtkPrintSettings                  *settings,
-								    gdouble                            width,
-								    gdouble                            height,
+								    double                             width,
+								    double                             height,
 								    GIOChannel                        *cache_io);
 
 static void                 gtk_print_backend_cups_set_password    (GtkPrintBackend                   *backend,
@@ -381,8 +381,8 @@ _cairo_write_to_cups (void                *closure,
 static cairo_surface_t *
 cups_printer_create_cairo_surface (GtkPrinter       *printer,
 				   GtkPrintSettings *settings,
-				   gdouble           width,
-				   gdouble           height,
+				   double            width,
+				   double            height,
 				   GIOChannel       *cache_io)
 {
   cairo_surface_t *surface;
@@ -6763,10 +6763,10 @@ cups_printer_get_default_page_size (GtkPrinter *printer)
 
 static gboolean
 cups_printer_get_hard_margins (GtkPrinter *printer,
-			       gdouble    *top,
-			       gdouble    *bottom,
-			       gdouble    *left,
-			       gdouble    *right)
+			       double     *top,
+			       double     *bottom,
+			       double     *left,
+			       double     *right)
 {
   GtkPrinterCups *cups_printer = GTK_PRINTER_CUPS (printer);
   ppd_file_t     *ppd_file;
@@ -6796,10 +6796,10 @@ cups_printer_get_hard_margins (GtkPrinter *printer,
 static gboolean
 cups_printer_get_hard_margins_for_paper_size (GtkPrinter   *printer,
 					      GtkPaperSize *paper_size,
-					      gdouble      *top,
-					      gdouble      *bottom,
-					      gdouble      *left,
-					      gdouble      *right)
+					      double       *top,
+					      double       *bottom,
+					      double       *left,
+					      double       *right)
 {
   ppd_file_t *ppd_file;
   ppd_size_t *size;

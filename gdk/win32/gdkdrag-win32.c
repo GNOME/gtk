@@ -2307,8 +2307,8 @@ gdk_win32_drag_drop_performed (GdkDrag *drag,
 
 static void
 gdk_local_drag_update (GdkDrag *drag,
-                       gdouble  x_root,
-                       gdouble  y_root,
+                       double   x_root,
+                       double   y_root,
                        DWORD    grfKeyState,
                        guint32  evtime)
 {

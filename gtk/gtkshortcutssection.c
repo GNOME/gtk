@@ -121,7 +121,7 @@ static gboolean gtk_shortcuts_section_change_current_page (GtkShortcutsSection *
 
 static void gtk_shortcuts_section_pan_gesture_pan (GtkGesturePan       *gesture,
                                                    GtkPanDirection      direction,
-                                                   gdouble              offset,
+                                                   double               offset,
                                                    GtkShortcutsSection *self);
 
 static GtkBuildableIface *parent_buildable_iface;
@@ -753,7 +753,7 @@ gtk_shortcuts_section_change_current_page (GtkShortcutsSection *self,
 static void
 gtk_shortcuts_section_pan_gesture_pan (GtkGesturePan       *gesture,
                                        GtkPanDirection      direction,
-                                       gdouble              offset,
+                                       double               offset,
                                        GtkShortcutsSection *self)
 {
   if (offset < 50)

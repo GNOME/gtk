@@ -61,8 +61,8 @@ test_basic (GtkWidget *widget)
   NotifyData notify_data;
   AtkObject *atk_object;
   AtkValue *atk_value;
-  gdouble value = 50;
-  gdouble ret;
+  double value = 50;
+  double ret;
   char *text;
 
   atk_object = gtk_widget_get_accessible (widget);

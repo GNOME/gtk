@@ -127,17 +127,17 @@ GDK_AVAILABLE_IN_ALL
 GtkPrintCapabilities     gtk_printer_get_capabilities      (GtkPrinter       *printer);
 GDK_AVAILABLE_IN_ALL
 gboolean                 gtk_printer_get_hard_margins      (GtkPrinter       *printer,
-                                                            gdouble          *top,
-                                                            gdouble          *bottom,
-                                                            gdouble          *left,
-                                                            gdouble          *right);
+                                                            double           *top,
+                                                            double           *bottom,
+                                                            double           *left,
+                                                            double           *right);
 GDK_AVAILABLE_IN_ALL
 gboolean                 gtk_printer_get_hard_margins_for_paper_size (GtkPrinter       *printer,
 								      GtkPaperSize     *paper_size,
-								      gdouble          *top,
-								      gdouble          *bottom,
-								      gdouble          *left,
-								      gdouble          *right);
+								      double           *top,
+								      double           *bottom,
+								      double           *left,
+								      double           *right);
 
 /**
  * GtkPrinterFunc:

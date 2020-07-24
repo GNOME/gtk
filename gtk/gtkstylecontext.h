@@ -904,8 +904,8 @@ GDK_AVAILABLE_IN_ALL
 void        gtk_render_insertion_cursor
                                    (GtkStyleContext     *context,
                                     cairo_t             *cr,
-                                    gdouble              x,
-                                    gdouble              y,
+                                    double               x,
+                                    double               y,
                                     PangoLayout         *layout,
                                     int                  index,
                                     PangoDirection       direction);
