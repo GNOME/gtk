@@ -535,7 +535,7 @@ ops_set_viewport (RenderOpBuilder       *builder,
   op = ops_begin (builder, OP_CHANGE_VIEWPORT);
   op->viewport = *viewport;
 
-  if (builder->current_program != NULL)
+  if (current_program_state != NULL)
     current_program_state->viewport = *viewport;
 
   prev_viewport = builder->current_viewport;
@@ -680,6 +680,8 @@ ops_set_border_width (RenderOpBuilder *builder,
   ProgramState *current_program_state = get_current_program_state (builder);
   OpBorder *op;
 
+  g_assert (current_program_state);
+
   if (memcmp (current_program_state->border.widths,
               widths, sizeof (float) * 4) == 0)
     return;
@@ -780,6 +782,8 @@ ops_set_inset_shadow (RenderOpBuilder      *self,
   ProgramState *current_program_state = get_current_program_state (self);
   OpShadow *op;
 
+  g_assert (current_program_state);
+
   op = ops_begin (self, OP_CHANGE_INSET_SHADOW);
 
   if (!rounded_rect_equal (&outline, &current_program_state->inset_shadow.outline))
@@ -836,6 +840,8 @@ ops_set_unblurred_outset_shadow (RenderOpBuilder      *self,
 {
   ProgramState *current_program_state = get_current_program_state (self);
   OpShadow *op;
+
+  g_assert (current_program_state);
 
   op = ops_begin (self, OP_CHANGE_UNBLURRED_OUTSET_SHADOW);
 
