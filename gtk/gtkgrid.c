@@ -185,10 +185,10 @@ gtk_grid_set_property (GObject      *object,
 static void
 grid_attach (GtkGrid   *grid,
              GtkWidget *widget,
-             gint       left,
-             gint       top,
-             gint       width,
-             gint       height)
+             int        left,
+             int        top,
+             int        width,
+             int        height)
 {
   GtkGridPrivate *priv = gtk_grid_get_instance_private (grid);
   GtkGridLayoutChild *grid_child;
@@ -209,17 +209,17 @@ grid_attach (GtkGrid   *grid,
  * @op_pos, @op_span determine the rows/columns
  * in which the touching has to happen.
  */
-static gint
+static int
 find_attach_position (GtkGrid         *grid,
                       GtkOrientation   orientation,
-                      gint             op_pos,
-                      gint             op_span,
+                      int              op_pos,
+                      int              op_span,
                       gboolean         max)
 {
   GtkGridPrivate *priv = gtk_grid_get_instance_private (grid);
   GtkWidget *child;
   gboolean hit;
-  gint pos;
+  int pos;
 
   if (max)
     pos = -G_MAXINT;
@@ -470,10 +470,10 @@ gtk_grid_new (void)
 void
 gtk_grid_attach (GtkGrid   *grid,
                  GtkWidget *child,
-                 gint       left,
-                 gint       top,
-                 gint       width,
-                 gint       height)
+                 int        left,
+                 int        top,
+                 int        width,
+                 int        height)
 {
   g_return_if_fail (GTK_IS_GRID (grid));
   g_return_if_fail (GTK_IS_WIDGET (child));
@@ -509,12 +509,12 @@ gtk_grid_attach_next_to (GtkGrid         *grid,
                          GtkWidget       *child,
                          GtkWidget       *sibling,
                          GtkPositionType  side,
-                         gint             width,
-                         gint             height)
+                         int              width,
+                         int              height)
 {
   GtkGridPrivate *priv = gtk_grid_get_instance_private (grid);
   GtkGridLayoutChild *grid_sibling;
-  gint left, top;
+  int left, top;
 
   g_return_if_fail (GTK_IS_GRID (grid));
   g_return_if_fail (GTK_IS_WIDGET (child));
@@ -594,8 +594,8 @@ gtk_grid_attach_next_to (GtkGrid         *grid,
  */
 GtkWidget *
 gtk_grid_get_child_at (GtkGrid *grid,
-                       gint     left,
-                       gint     top)
+                       int      left,
+                       int      top)
 {
   GtkGridPrivate *priv = gtk_grid_get_instance_private (grid);
   GtkWidget *child;
@@ -657,7 +657,7 @@ gtk_grid_remove (GtkGrid   *grid,
  */
 void
 gtk_grid_insert_row (GtkGrid *grid,
-                     gint     position)
+                     int      position)
 {
   GtkGridPrivate *priv = gtk_grid_get_instance_private (grid);
   GtkWidget *child;
@@ -696,7 +696,7 @@ gtk_grid_insert_row (GtkGrid *grid,
  */
 void
 gtk_grid_remove_row (GtkGrid *grid,
-                     gint     position)
+                     int      position)
 {
   GtkGridPrivate *priv = gtk_grid_get_instance_private (grid);
   GtkWidget *child;
@@ -746,7 +746,7 @@ gtk_grid_remove_row (GtkGrid *grid,
  */
 void
 gtk_grid_insert_column (GtkGrid *grid,
-                        gint     position)
+                        int      position)
 {
   GtkGridPrivate *priv = gtk_grid_get_instance_private (grid);
   GtkWidget *child;
@@ -785,7 +785,7 @@ gtk_grid_insert_column (GtkGrid *grid,
  */
 void
 gtk_grid_remove_column (GtkGrid *grid,
-                        gint     position)
+                        int      position)
 {
   GtkGridPrivate *priv = gtk_grid_get_instance_private (grid);
   GtkWidget *child;
@@ -1059,7 +1059,7 @@ gtk_grid_get_column_spacing (GtkGrid *grid)
  */
 void
 gtk_grid_set_row_baseline_position (GtkGrid            *grid,
-				    gint                row,
+				    int                 row,
 				    GtkBaselinePosition pos)
 {
   GtkGridPrivate *priv = gtk_grid_get_instance_private (grid);
@@ -1084,7 +1084,7 @@ gtk_grid_set_row_baseline_position (GtkGrid            *grid,
  */
 GtkBaselinePosition
 gtk_grid_get_row_baseline_position (GtkGrid      *grid,
-				    gint          row)
+				    int           row)
 {
   GtkGridPrivate *priv = gtk_grid_get_instance_private (grid);
 
@@ -1105,7 +1105,7 @@ gtk_grid_get_row_baseline_position (GtkGrid      *grid,
  */
 void
 gtk_grid_set_baseline_row (GtkGrid *grid,
-			   gint     row)
+			   int      row)
 {
   GtkGridPrivate *priv = gtk_grid_get_instance_private (grid);
   int old_row;
@@ -1128,7 +1128,7 @@ gtk_grid_set_baseline_row (GtkGrid *grid,
  *
  * Returns: the row index defining the global baseline
  */
-gint
+int
 gtk_grid_get_baseline_row (GtkGrid *grid)
 {
   GtkGridPrivate *priv = gtk_grid_get_instance_private (grid);
@@ -1152,10 +1152,10 @@ gtk_grid_get_baseline_row (GtkGrid *grid)
 void
 gtk_grid_query_child (GtkGrid   *grid,
                       GtkWidget *child,
-                      gint      *left,
-                      gint      *top,
-                      gint      *width,
-                      gint      *height)
+                      int       *left,
+                      int       *top,
+                      int       *width,
+                      int       *height)
 {
   GtkGridPrivate *priv = gtk_grid_get_instance_private (grid);
   GtkGridLayoutChild *grid_child;

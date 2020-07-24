@@ -29,7 +29,7 @@ struct _GtkBooleanCellAccessiblePrivate
 
 static AtkActionIface *parent_action_iface;
 
-static gint
+static int
 gtk_boolean_cell_accessible_get_n_actions (AtkAction *action)
 {
   return parent_action_iface->get_n_actions (action) + 1;
@@ -37,7 +37,7 @@ gtk_boolean_cell_accessible_get_n_actions (AtkAction *action)
 
 static const gchar *
 gtk_boolean_cell_accessible_get_description (AtkAction *action,
-                                             gint       i)
+                                             int        i)
 {
   if (i == 0)
     return C_("Action description", "Toggles the cell");
@@ -47,7 +47,7 @@ gtk_boolean_cell_accessible_get_description (AtkAction *action,
 
 static const gchar *
 gtk_boolean_cell_accessible_action_get_name (AtkAction *action,
-                                             gint       i)
+                                             int        i)
 {
   if (i == 0)
     return "toggle";
@@ -57,7 +57,7 @@ gtk_boolean_cell_accessible_action_get_name (AtkAction *action,
 
 static const gchar *
 gtk_boolean_cell_accessible_action_get_localized_name (AtkAction *action,
-                                                       gint       i)
+                                                       int        i)
 {
   if (i == 0)
     return C_("Action name", "Toggle");
@@ -67,7 +67,7 @@ gtk_boolean_cell_accessible_action_get_localized_name (AtkAction *action,
 
 static gboolean
 gtk_boolean_cell_accessible_do_action (AtkAction *action,
-                                       gint       i)
+                                       int        i)
 {
   if (i == 0)
     return parent_action_iface->do_action (action, 2);

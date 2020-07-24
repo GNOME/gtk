@@ -127,7 +127,7 @@ static void gtk_text_buffer_finalize   (GObject            *object);
 static void gtk_text_buffer_real_insert_text           (GtkTextBuffer     *buffer,
                                                         GtkTextIter       *iter,
                                                         const gchar       *text,
-                                                        gint               len);
+                                                        int                len);
 static void gtk_text_buffer_real_insert_paintable      (GtkTextBuffer     *buffer,
                                                         GtkTextIter       *iter,
                                                         GdkPaintable      *paintable);
@@ -1176,7 +1176,7 @@ gtk_text_buffer_get_tag_table (GtkTextBuffer *buffer)
 void
 gtk_text_buffer_set_text (GtkTextBuffer *buffer,
                           const gchar   *text,
-                          gint           len)
+                          int            len)
 {
   GtkTextIter start, end;
 
@@ -1211,7 +1211,7 @@ static void
 gtk_text_buffer_real_insert_text (GtkTextBuffer *buffer,
                                   GtkTextIter   *iter,
                                   const gchar   *text,
-                                  gint           len)
+                                  int            len)
 {
   g_return_if_fail (GTK_IS_TEXT_BUFFER (buffer));
   g_return_if_fail (iter != NULL);
@@ -1231,7 +1231,7 @@ static void
 gtk_text_buffer_emit_insert (GtkTextBuffer *buffer,
                              GtkTextIter   *iter,
                              const gchar   *text,
-                             gint           len)
+                             int            len)
 {
   g_return_if_fail (GTK_IS_TEXT_BUFFER (buffer));
   g_return_if_fail (iter != NULL);
@@ -1268,7 +1268,7 @@ void
 gtk_text_buffer_insert (GtkTextBuffer *buffer,
                         GtkTextIter   *iter,
                         const gchar   *text,
-                        gint           len)
+                        int            len)
 {
   g_return_if_fail (GTK_IS_TEXT_BUFFER (buffer));
   g_return_if_fail (iter != NULL);
@@ -1290,7 +1290,7 @@ gtk_text_buffer_insert (GtkTextBuffer *buffer,
 void
 gtk_text_buffer_insert_at_cursor (GtkTextBuffer *buffer,
                                   const gchar   *text,
-                                  gint           len)
+                                  int            len)
 {
   GtkTextIter iter;
 
@@ -1326,7 +1326,7 @@ gboolean
 gtk_text_buffer_insert_interactive (GtkTextBuffer *buffer,
                                     GtkTextIter   *iter,
                                     const gchar   *text,
-                                    gint           len,
+                                    int            len,
                                     gboolean       default_editable)
 {
   g_return_val_if_fail (GTK_IS_TEXT_BUFFER (buffer), FALSE);
@@ -1363,7 +1363,7 @@ gtk_text_buffer_insert_interactive (GtkTextBuffer *buffer,
 gboolean
 gtk_text_buffer_insert_interactive_at_cursor (GtkTextBuffer *buffer,
                                               const gchar   *text,
-                                              gint           len,
+                                              int            len,
                                               gboolean       default_editable)
 {
   GtkTextIter iter;
@@ -1616,7 +1616,7 @@ insert_range_not_inside_self (GtkTextBuffer     *buffer,
   
   while (TRUE)
     {
-      gint start_offset;
+      int start_offset;
       GtkTextIter start_iter;
       GSList *tags;
       GSList *tmp_list;
@@ -1821,11 +1821,11 @@ void
 gtk_text_buffer_insert_with_tags (GtkTextBuffer *buffer,
                                   GtkTextIter   *iter,
                                   const gchar   *text,
-                                  gint           len,
+                                  int            len,
                                   GtkTextTag    *first_tag,
                                   ...)
 {
-  gint start_offset;
+  int start_offset;
   GtkTextIter start;
   va_list args;
   GtkTextTag *tag;
@@ -1872,11 +1872,11 @@ void
 gtk_text_buffer_insert_with_tags_by_name  (GtkTextBuffer *buffer,
                                            GtkTextIter   *iter,
                                            const gchar   *text,
-                                           gint           len,
+                                           int            len,
                                            const gchar   *first_tag_name,
                                            ...)
 {
-  gint start_offset;
+  int start_offset;
   GtkTextIter start;
   va_list args;
   const gchar *tag_name;
@@ -3074,7 +3074,7 @@ gtk_text_buffer_remove_tag_by_name (GtkTextBuffer     *buffer,
   gtk_text_buffer_emit_tag (buffer, tag, FALSE, start, end);
 }
 
-static gint
+static int
 pointer_cmp (gconstpointer a,
              gconstpointer b)
 {
@@ -3220,8 +3220,8 @@ gtk_text_buffer_remove_all_tags (GtkTextBuffer     *buffer,
 void
 gtk_text_buffer_get_iter_at_line_offset (GtkTextBuffer *buffer,
                                          GtkTextIter   *iter,
-                                         gint           line_number,
-                                         gint           char_offset)
+                                         int            line_number,
+                                         int            char_offset)
 {
   GtkTextIter end_line_iter;
 
@@ -3264,8 +3264,8 @@ gtk_text_buffer_get_iter_at_line_offset (GtkTextBuffer *buffer,
 void
 gtk_text_buffer_get_iter_at_line_index  (GtkTextBuffer *buffer,
                                          GtkTextIter   *iter,
-                                         gint           line_number,
-                                         gint           byte_index)
+                                         int            line_number,
+                                         int            byte_index)
 {
   GtkTextIter end_line_iter;
 
@@ -3302,7 +3302,7 @@ gtk_text_buffer_get_iter_at_line_index  (GtkTextBuffer *buffer,
 void
 gtk_text_buffer_get_iter_at_line (GtkTextBuffer *buffer,
                                   GtkTextIter   *iter,
-                                  gint           line_number)
+                                  int            line_number)
 {
   g_return_if_fail (iter != NULL);
   g_return_if_fail (GTK_IS_TEXT_BUFFER (buffer));
@@ -3324,7 +3324,7 @@ gtk_text_buffer_get_iter_at_line (GtkTextBuffer *buffer,
 void
 gtk_text_buffer_get_iter_at_offset (GtkTextBuffer *buffer,
                                     GtkTextIter   *iter,
-                                    gint           char_offset)
+                                    int            char_offset)
 {
   g_return_if_fail (iter != NULL);
   g_return_if_fail (GTK_IS_TEXT_BUFFER (buffer));
@@ -3475,7 +3475,7 @@ gtk_text_buffer_get_has_selection (GtkTextBuffer *buffer)
  * 
  * Returns: number of lines in the buffer
  **/
-gint
+int
 gtk_text_buffer_get_line_count (GtkTextBuffer *buffer)
 {
   g_return_val_if_fail (GTK_IS_TEXT_BUFFER (buffer), 0);
@@ -3494,7 +3494,7 @@ gtk_text_buffer_get_line_count (GtkTextBuffer *buffer)
  * 
  * Returns: number of characters in the buffer
  **/
-gint
+int
 gtk_text_buffer_get_char_count (GtkTextBuffer *buffer)
 {
   g_return_val_if_fail (GTK_IS_TEXT_BUFFER (buffer), 0);
@@ -3969,7 +3969,7 @@ gtk_text_buffer_backspace (GtkTextBuffer *buffer,
   GtkTextIter end;
   gboolean retval = FALSE;
   const PangoLogAttr *attrs;
-  gint offset;
+  int offset;
   gboolean backspace_deletes_character;
 
   g_return_val_if_fail (GTK_IS_TEXT_BUFFER (buffer), FALSE);
@@ -4217,21 +4217,21 @@ gtk_text_buffer_end_user_action (GtkTextBuffer *buffer)
 typedef struct _CacheEntry CacheEntry;
 struct _CacheEntry
 {
-  gint line;
-  gint char_len;
+  int line;
+  int char_len;
   PangoLogAttr *attrs;
 };
 
 struct _GtkTextLogAttrCache
 {
-  gint chars_changed_stamp;
+  int chars_changed_stamp;
   CacheEntry entries[ATTR_CACHE_SIZE];
 };
 
 static void
 free_log_attr_cache (GtkTextLogAttrCache *cache)
 {
-  gint i;
+  int i;
 
   for (i = 0; i < ATTR_CACHE_SIZE; i++)
     g_free (cache->entries[i].attrs);
@@ -4242,7 +4242,7 @@ free_log_attr_cache (GtkTextLogAttrCache *cache)
 static void
 clear_log_attr_cache (GtkTextLogAttrCache *cache)
 {
-  gint i;
+  int i;
 
   for (i = 0; i < ATTR_CACHE_SIZE; i++)
     {
@@ -4253,12 +4253,12 @@ clear_log_attr_cache (GtkTextLogAttrCache *cache)
 
 static PangoLogAttr*
 compute_log_attrs (const GtkTextIter *iter,
-                   gint              *char_lenp)
+                   int               *char_lenp)
 {
   GtkTextIter start;
   GtkTextIter end;
   gchar *paragraph;
-  gint char_len, byte_len;
+  int char_len, byte_len;
   PangoLogAttr *attrs = NULL;
   
   start = *iter;
@@ -4295,12 +4295,12 @@ compute_log_attrs (const GtkTextIter *iter,
 const PangoLogAttr *
 _gtk_text_buffer_get_line_log_attrs (GtkTextBuffer     *buffer,
                                      const GtkTextIter *anywhere_in_line,
-                                     gint              *char_len)
+                                     int               *char_len)
 {
   GtkTextBufferPrivate *priv;
-  gint line;
+  int line;
   GtkTextLogAttrCache *cache;
-  gint i;
+  int i;
   
   g_return_val_if_fail (GTK_IS_TEXT_BUFFER (buffer), NULL);
   g_return_val_if_fail (anywhere_in_line != NULL, NULL);
@@ -4383,7 +4383,7 @@ _gtk_text_buffer_get_text_before (GtkTextBuffer   *buffer,
                                   GtkTextIter     *start,
                                   GtkTextIter     *end)
 {
-  gint line_number;
+  int line_number;
 
   *start = *position;
   *end = *start;
@@ -4492,7 +4492,7 @@ _gtk_text_buffer_get_text_at (GtkTextBuffer   *buffer,
                               GtkTextIter     *start,
                               GtkTextIter     *end)
 {
-  gint line_number;
+  int line_number;
 
   *start = *position;
   *end = *start;
@@ -4869,7 +4869,7 @@ gtk_text_buffer_insert_with_attributes (GtkTextBuffer *buffer,
   do
     {
       GtkTextTag *tag;
-      gint start, end;
+      int start, end;
 
       pango_attr_iterator_range (attr, &start, &end);
 
@@ -4906,7 +4906,7 @@ void
 gtk_text_buffer_insert_markup (GtkTextBuffer *buffer,
                                GtkTextIter   *iter,
                                const gchar   *markup,
-                               gint           len)
+                               int            len)
 {
   PangoAttrList *attributes;
   gchar *text;

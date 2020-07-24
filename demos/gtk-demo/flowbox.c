@@ -716,7 +716,7 @@ do_flowbox (GtkWidget *do_widget)
     "YellowGreen",
     NULL
   };
-  gint i;
+  int i;
 
   if (!window)
     {

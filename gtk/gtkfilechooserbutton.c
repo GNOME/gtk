@@ -279,7 +279,7 @@ static void          set_info_for_file_at_iter         (GtkFileChooserButton *bu
                                                         GFile                *file,
                                                         GtkTreeIter          *iter);
 
-static gint          model_get_type_position      (GtkFileChooserButton *button,
+static int           model_get_type_position      (GtkFileChooserButton *button,
                                                    RowType               row_type);
 static void          model_free_row_data          (GtkFileChooserButton *button,
                                                    GtkTreeIter          *iter);
@@ -292,8 +292,8 @@ static void          model_add_bookmarks          (GtkFileChooserButton *button,
 static void          model_update_current_folder  (GtkFileChooserButton *button,
                                                    GFile                *file);
 static void          model_remove_rows            (GtkFileChooserButton *button,
-                                                   gint                  pos,
-                                                   gint                  n_rows);
+                                                   int                   pos,
+                                                   int                   n_rows);
 
 static gboolean      filter_model_visible_func    (GtkTreeModel         *model,
                                                    GtkTreeIter          *iter,
@@ -321,10 +321,10 @@ static void     button_clicked_cb                (GtkButton      *real_button,
                                                   gpointer        user_data);
 
 static void     dialog_response_cb               (GtkDialog      *dialog,
-                                                  gint            response,
+                                                  int             response,
                                                   gpointer        user_data);
 static void     native_response_cb               (GtkFileChooserNative *native,
-                                                  gint            response,
+                                                  int             response,
                                                   gpointer        user_data);
 static void     volumes_changed                  (GVolumeMonitor *volume_monitor,
                                                   gpointer        volume,
@@ -793,7 +793,7 @@ gtk_file_chooser_button_add_shortcut_folder (GtkFileChooser  *chooser,
     {
       GtkFileChooserButton *button = GTK_FILE_CHOOSER_BUTTON (chooser);
       GtkTreeIter iter;
-      gint pos;
+      int pos;
 
       pos = model_get_type_position (button, ROW_TYPE_SHORTCUT);
       pos += button->n_shortcuts;
@@ -832,7 +832,7 @@ gtk_file_chooser_button_remove_shortcut_folder (GtkFileChooser  *chooser,
     {
       GtkFileChooserButton *button = GTK_FILE_CHOOSER_BUTTON (chooser);
       GtkTreeIter iter;
-      gint pos;
+      int pos;
       gchar type;
 
       pos = model_get_type_position (button, ROW_TYPE_SHORTCUT);
@@ -1240,7 +1240,7 @@ change_icon_theme_get_info_cb (GObject      *source,
   icon = _gtk_file_info_get_icon (info, ICON_SIZE, gtk_widget_get_scale_factor (GTK_WIDGET (data->button)));
   if (icon)
     {
-      gint width = 0;
+      int width = 0;
       GtkTreeIter iter;
       GtkTreePath *path;
 
@@ -1276,7 +1276,7 @@ static void
 change_icon_theme (GtkFileChooserButton *button)
 {
   GtkTreeIter iter;
-  gint width = 0;
+  int width = 0;
 
   g_slist_free_full (button->change_icon_theme_cancellables, (GDestroyNotify)g_cancellable_cancel);
   button->change_icon_theme_cancellables = NULL;
@@ -1490,11 +1490,11 @@ set_info_for_file_at_iter (GtkFileChooserButton *button,
 }
 
 /* Shortcuts Model */
-static gint
+static int
 model_get_type_position (GtkFileChooserButton *button,
                          RowType               row_type)
 {
-  gint retval = 0;
+  int retval = 0;
 
   if (row_type == ROW_TYPE_SPECIAL)
     return retval;
@@ -1649,7 +1649,7 @@ model_add_special (GtkFileChooserButton *button)
   GtkListStore *store;
   GtkTreeIter iter;
   GFile *file;
-  gint pos;
+  int pos;
 
   store = GTK_LIST_STORE (button->model);
   pos = model_get_type_position (button, ROW_TYPE_SPECIAL);
@@ -1743,7 +1743,7 @@ model_add_volumes (GtkFileChooserButton *button,
                    GSList               *volumes)
 {
   GtkListStore *store;
-  gint pos;
+  int pos;
   GSList *l;
 
   if (!volumes)
@@ -1804,7 +1804,7 @@ model_add_bookmarks (GtkFileChooserButton *button,
 {
   GtkListStore *store;
   GtkTreeIter iter;
-  gint pos;
+  int pos;
   GSList *l;
 
   if (!bookmarks)
@@ -1888,7 +1888,7 @@ model_update_current_folder (GtkFileChooserButton *button,
 {
   GtkListStore *store;
   GtkTreeIter iter;
-  gint pos;
+  int pos;
 
   if (!file)
     return;
@@ -1970,7 +1970,7 @@ model_add_other (GtkFileChooserButton *button)
 {
   GtkListStore *store;
   GtkTreeIter iter;
-  gint pos;
+  int pos;
   GIcon *icon;
 
   store = GTK_LIST_STORE (button->model);
@@ -2002,8 +2002,8 @@ model_add_other (GtkFileChooserButton *button)
 
 static void
 model_remove_rows (GtkFileChooserButton *button,
-                   gint                  pos,
-                   gint                  n_rows)
+                   int                   pos,
+                   int                   n_rows)
 {
   GtkListStore *store;
 
@@ -2188,7 +2188,7 @@ update_combo_box (GtkFileChooserButton *button)
 
   if (!row_found)
     {
-      gint pos;
+      int pos;
 
       /* If it hasn't been found already, update & select the current-folder row. */
       if (file)
@@ -2716,7 +2716,7 @@ button_clicked_cb (GtkButton *real_button,
 
 static void
 common_response_cb (GtkFileChooserButton *button,
-                    gint       response)
+                    int        response)
 {
   if (response == GTK_RESPONSE_ACCEPT ||
       response == GTK_RESPONSE_OK)
@@ -2740,7 +2740,7 @@ common_response_cb (GtkFileChooserButton *button,
 
 static void
 dialog_response_cb (GtkDialog *dialog,
-                    gint       response,
+                    int        response,
                     gpointer   user_data)
 {
   GtkFileChooserButton *button = GTK_FILE_CHOOSER_BUTTON (user_data);
@@ -2756,7 +2756,7 @@ dialog_response_cb (GtkDialog *dialog,
 
 static void
 native_response_cb (GtkFileChooserNative *native,
-                    gint       response,
+                    int        response,
                     gpointer   user_data)
 {
   GtkFileChooserButton *button = GTK_FILE_CHOOSER_BUTTON (user_data);
@@ -2872,7 +2872,7 @@ gtk_file_chooser_button_get_title (GtkFileChooserButton *button)
  *
  * Returns: an integer width (in characters) that the button will use to size itself.
  */
-gint
+int
 gtk_file_chooser_button_get_width_chars (GtkFileChooserButton *button)
 {
   g_return_val_if_fail (GTK_IS_FILE_CHOOSER_BUTTON (button), -1);
@@ -2889,7 +2889,7 @@ gtk_file_chooser_button_get_width_chars (GtkFileChooserButton *button)
  */
 void
 gtk_file_chooser_button_set_width_chars (GtkFileChooserButton *button,
-                                         gint                  n_chars)
+                                         int                   n_chars)
 {
   g_return_if_fail (GTK_IS_FILE_CHOOSER_BUTTON (button));
 

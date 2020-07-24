@@ -240,7 +240,7 @@ static void
 signal_monitor_rows_reordered (GtkTreeModel *model,
                                GtkTreePath  *path,
                                GtkTreeIter  *iter,
-                               gint         *new_order,
+                               int          *new_order,
                                gpointer      data)
 {
   signal_monitor_generic_handler (data, ROWS_REORDERED,

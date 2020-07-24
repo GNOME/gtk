@@ -2,18 +2,18 @@
 
 static gboolean
 clicked_icon (GtkTreeView  *tv,
-              gint          x,
-              gint          y,
+              int           x,
+              int           y,
               GtkTreePath **path)
 {
   GtkTreeViewColumn *col;
-  gint cell_x, cell_y;
-  gint cell_pos, cell_width;
+  int cell_x, cell_y;
+  int cell_pos, cell_width;
   GList *cells, *l;
-  gint depth;
-  gint level_indentation;
-  gint expander_size;
-  gint indent;
+  int depth;
+  int level_indentation;
+  int expander_size;
+  int indent;
 
   if (gtk_tree_view_get_path_at_pos (tv, x, y, path, &col, &cell_x, &cell_y))
     {
@@ -60,7 +60,7 @@ release_event (GtkGestureClick *gesture,
                GtkTreeView     *tv)
 {
   GtkTreePath *path;
-  gint tx, ty;
+  int tx, ty;
 
   gtk_tree_view_convert_widget_to_tree_coords (tv, x, y, &tx, &ty);
 

@@ -88,9 +88,9 @@ struct _GdkX11DeviceManagerXI2
 
   GList *devices;
 
-  gint opcode;
-  gint major;
-  gint minor;
+  int opcode;
+  int major;
+  int minor;
 };
 
 struct _GdkX11DeviceManagerXI2Class
@@ -211,7 +211,7 @@ translate_valuator_class (GdkDisplay          *display,
   static gboolean initialized = FALSE;
   static Atom label_atoms [GDK_AXIS_LAST] = { 0 };
   GdkAxisUse use = GDK_AXIS_IGNORE;
-  gint i;
+  int i;
 
   if (!initialized)
     {
@@ -253,7 +253,7 @@ translate_device_classes (GdkDisplay      *display,
                           XIAnyClassInfo **classes,
                           guint            n_classes)
 {
-  gint i;
+  int i;
 
   g_object_freeze_notify (G_OBJECT (device));
 
@@ -317,7 +317,7 @@ static gboolean
 is_touch_device (XIAnyClassInfo **classes,
                  guint            n_classes,
                  GdkInputSource  *device_type,
-                 gint            *num_touches)
+                 int             *num_touches)
 {
 #ifdef XINPUT_2_2
   guint i;
@@ -473,7 +473,7 @@ create_device (GdkX11DeviceManagerXI2 *device_manager,
   GdkInputSource touch_source;
   GdkDeviceType type;
   GdkDevice *device;
-  gint num_touches = 0;
+  int num_touches = 0;
   gchar *vendor_id = NULL, *product_id = NULL;
 
   if (dev->use == XIMasterKeyboard || dev->use == XISlaveKeyboard)
@@ -666,7 +666,7 @@ detach_from_seat (GdkDevice *device)
 
 static void
 remove_device (GdkX11DeviceManagerXI2 *device_manager,
-               gint                    device_id)
+               int                     device_id)
 {
   GdkDevice *device;
 
@@ -893,7 +893,7 @@ handle_hierarchy_changed (GdkX11DeviceManagerXI2 *device_manager,
   Display *xdisplay;
   XIDeviceInfo *info;
   int ndevices;
-  gint i;
+  int i;
 
   display = device_manager->display;
   xdisplay = GDK_DISPLAY_XDISPLAY (display);
@@ -1128,7 +1128,7 @@ handle_property_change (GdkX11DeviceManagerXI2 *device_manager,
 }
 
 static GdkCrossingMode
-translate_crossing_mode (gint mode)
+translate_crossing_mode (int mode)
 {
   switch (mode)
     {
@@ -1149,7 +1149,7 @@ translate_crossing_mode (gint mode)
 }
 
 static GdkNotifyType
-translate_notify_type (gint detail)
+translate_notify_type (int detail)
 {
   switch (detail)
     {
@@ -2025,7 +2025,7 @@ gdk_x11_device_manager_xi2_get_surface (GdkEventTranslator *translator,
 
 GdkDevice *
 _gdk_x11_device_manager_xi2_lookup (GdkX11DeviceManagerXI2 *device_manager_xi2,
-                                    gint                    device_id)
+                                    int                     device_id)
 {
   return g_hash_table_lookup (device_manager_xi2->id_table,
                               GINT_TO_POINTER (device_id));

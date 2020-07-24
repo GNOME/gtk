@@ -119,7 +119,7 @@ gtk_gesture_long_press_begin (GtkGesture       *gesture,
   GdkEvent *event;
   GdkEventType event_type;
   GtkWidget *widget;
-  gint delay;
+  int delay;
 
   priv = gtk_gesture_long_press_get_instance_private (GTK_GESTURE_LONG_PRESS (gesture));
   sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
@@ -139,7 +139,7 @@ gtk_gesture_long_press_begin (GtkGesture       *gesture,
                 "gtk-long-press-time", &delay,
                 NULL);
 
-  delay = (gint)(priv->delay_factor * delay);
+  delay = (int)(priv->delay_factor * delay);
 
   gtk_gesture_get_point (gesture, sequence,
                          &priv->initial_x, &priv->initial_y);

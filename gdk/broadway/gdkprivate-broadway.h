@@ -55,8 +55,8 @@ GdkDrag * _gdk_broadway_surface_drag_begin        (GdkSurface          *surface,
                                                    double              dy);
 void     _gdk_broadway_surface_translate          (GdkSurface *surface,
                                                    cairo_region_t *area,
-                                                   gint       dx,
-                                                   gint       dy);
+                                                   int        dx,
+                                                   int        dy);
 gboolean _gdk_broadway_moveresize_handle_event    (GdkDisplay *display,
                                                    BroadwayInputMsg *msg);
 gboolean _gdk_broadway_moveresize_configure_done  (GdkDisplay *display,
@@ -69,13 +69,13 @@ void     _gdk_broadway_surface_grab_check_unmap   (GdkSurface *surface,
                                                    gulong     serial);
 
 void gdk_broadway_surface_move_resize (GdkSurface *surface,
-                                       gint        x,
-                                       gint        y,
-                                       gint        width,
-                                       gint        height);
+                                       int         x,
+                                       int         y,
+                                       int         width,
+                                       int         height);
 
 void _gdk_keymap_keys_changed     (GdkDisplay      *display);
-gint _gdk_broadway_get_group_for_state (GdkDisplay      *display,
+int  _gdk_broadway_get_group_for_state (GdkDisplay      *display,
                                         GdkModifierType  state);
 void _gdk_keymap_add_virtual_modifiers_compat (GdkKeymap       *keymap,
                                                GdkModifierType *modifiers);

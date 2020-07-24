@@ -450,8 +450,8 @@ typedef struct
   gchar *object;
   GParamSpec *pspec;
   gchar *value;
-  gint line;
-  gint col;
+  int line;
+  int col;
 } DelayedProperty;
 
 typedef struct
@@ -919,7 +919,7 @@ _gtk_builder_apply_properties (GtkBuilder  *builder,
   GtkBuildableIface *iface;
   GtkBuildable *buildable;
   gboolean custom_set_property;
-  gint i;
+  int i;
 
   g_assert (info->object != NULL);
   g_assert (info->type != G_TYPE_INVALID);
@@ -2108,7 +2108,7 @@ gtk_builder_value_from_string_type (GtkBuilder   *builder,
       }
     case G_TYPE_ENUM:
       {
-        gint enum_value;
+        int enum_value;
         if (!_gtk_builder_enum_from_string (type, string, &enum_value, error))
           {
             ret = FALSE;
@@ -2408,13 +2408,13 @@ gtk_builder_value_from_string_type (GtkBuilder   *builder,
 gboolean
 _gtk_builder_enum_from_string (GType         type,
                                const gchar  *string,
-                               gint         *enum_value,
+                               int          *enum_value,
                                GError      **error)
 {
   GEnumClass *eclass;
   GEnumValue *ev;
   gchar *endptr;
-  gint value;
+  int value;
   gboolean ret;
 
   g_return_val_if_fail (G_TYPE_IS_ENUM (type), FALSE);
@@ -2847,7 +2847,7 @@ _gtk_builder_prefix_error (GtkBuilder                *builder,
                            GError                   **error)
 {
   GtkBuilderPrivate *priv = gtk_builder_get_instance_private (builder);
-  gint line, col;
+  int line, col;
 
   gtk_buildable_parse_context_get_position (context, &line, &col);
   g_prefix_error (error, "%s:%d:%d ", priv->filename, line, col);
@@ -2874,7 +2874,7 @@ _gtk_builder_error_unhandled_tag (GtkBuilder                *builder,
                                   GError                   **error)
 {
   GtkBuilderPrivate *priv = gtk_builder_get_instance_private (builder);
-  gint line, col;
+  int line, col;
 
   gtk_buildable_parse_context_get_position (context, &line, &col);
   g_set_error (error,
@@ -2907,7 +2907,7 @@ _gtk_builder_check_parent (GtkBuilder                *builder,
 {
   GtkBuilderPrivate *priv = gtk_builder_get_instance_private (builder);
   GPtrArray *stack;
-  gint line, col;
+  int line, col;
   const gchar *parent;
   const gchar *element;
 
@@ -2933,8 +2933,8 @@ _gtk_builder_check_parent (GtkBuilder                *builder,
 GObject *
 gtk_builder_lookup_object (GtkBuilder   *builder,
                            const gchar  *name,
-                           gint          line,
-                           gint          col,
+                           int           line,
+                           int           col,
                            GError      **error)
 {
   GtkBuilderPrivate *priv = gtk_builder_get_instance_private (builder);
@@ -2970,8 +2970,8 @@ gtk_builder_lookup_object (GtkBuilder   *builder,
 GObject *
 _gtk_builder_lookup_object (GtkBuilder  *builder,
                             const gchar *name,
-                            gint         line,
-                            gint         col)
+                            int          line,
+                            int          col)
 {
   GtkBuilderPrivate *priv = gtk_builder_get_instance_private (builder);
   GObject *obj;

@@ -303,8 +303,8 @@ gtk_print_backend_lpr_print_stream (GtkPrintBackend        *print_backend,
   GError *print_error = NULL;
   _PrintStreamData *ps;
   GtkPrintSettings *settings;
-  gint argc;
-  gint in_fd;
+  int argc;
+  int in_fd;
   gchar **argv = NULL;
   const char *cmd_line;
 
@@ -448,7 +448,7 @@ lpr_printer_prepare_for_print (GtkPrinter       *printer,
   double scale;
   GtkPrintPages pages;
   GtkPageRange *ranges;
-  gint n_ranges;
+  int n_ranges;
 
   pages = gtk_print_settings_get_print_pages (settings);
   gtk_print_job_set_pages (print_job, pages);

@@ -446,11 +446,11 @@ gtk_path_bar_size_allocate (GtkWidget *widget,
   GtkTextDirection direction;
   GtkAllocation child_allocation;
   GList *list, *first_button;
-  gint width;
-  gint allocation_width;
+  int width;
+  int allocation_width;
   gboolean need_sliders = TRUE;
-  gint up_slider_offset = 0;
-  gint down_slider_offset = 0;
+  int up_slider_offset = 0;
+  int down_slider_offset = 0;
   GtkRequisition child_requisition;
 
   /* No path is set; we don't have to allocate anything. */
@@ -487,7 +487,7 @@ gtk_path_bar_size_allocate (GtkWidget *widget,
   else
     {
       gboolean reached_end = FALSE;
-      gint slider_space = 2 * path_bar->slider_width;
+      int slider_space = 2 * path_bar->slider_width;
 
       if (path_bar->first_scrolled_button)
 	first_button = path_bar->first_scrolled_button;
@@ -689,7 +689,7 @@ gtk_path_bar_scroll_down (GtkPathBar *path_bar)
   GtkAllocation allocation, button_allocation;
   GList *list;
   GList *down_button = NULL;
-  gint space_available;
+  int space_available;
 
   if (gtk_widget_get_child_visible (BUTTON_DATA (path_bar->button_list->data)->button))
     {

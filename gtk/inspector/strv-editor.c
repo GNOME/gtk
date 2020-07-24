@@ -132,7 +132,7 @@ gtk_inspector_strv_editor_set_strv (GtkInspectorStrvEditor  *editor,
                                     gchar                  **strv)
 {
   GtkWidget *child;
-  gint i;
+  int i;
 
   editor->blocked = TRUE;
 

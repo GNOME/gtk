@@ -44,7 +44,7 @@
 #define GET_UINT32(cache, offset) (GUINT32_FROM_BE (*(guint32 *)((cache) + (offset))))
 
 struct _GtkIconCache {
-  gint ref_count;
+  int ref_count;
 
   GMappedFile *map;
   gchar *buffer;
@@ -153,13 +153,13 @@ gtk_icon_cache_new (const gchar *data)
   return cache;
 }
 
-static gint
+static int
 get_directory_index (GtkIconCache *cache,
                      const gchar *directory)
 {
   guint32 dir_list_offset;
-  gint n_dirs;
-  gint i;
+  int n_dirs;
+  int i;
 
   dir_list_offset = GET_UINT32 (cache->buffer, 8);
 
@@ -181,7 +181,7 @@ gtk_icon_cache_list_icons_in_directory (GtkIconCache *cache,
                                         const gchar  *directory,
                                         GtkStringSet *set)
 {
-  gint directory_index;
+  int directory_index;
   guint32 hash_offset, n_buckets;
   guint32 chain_offset;
   guint32 image_list_offset, n_images;

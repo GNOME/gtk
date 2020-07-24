@@ -64,7 +64,7 @@ GtkCellRenderer *gtk_cell_renderer_text_new      (void);
 
 GDK_AVAILABLE_IN_ALL
 void             gtk_cell_renderer_text_set_fixed_height_from_font (GtkCellRendererText *renderer,
-								    gint                 number_of_rows);
+								    int                  number_of_rows);
 
 
 G_END_DECLS

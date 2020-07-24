@@ -319,17 +319,17 @@ remove_palette (GtkColorChooserWidget *cc)
 static void
 add_palette (GtkColorChooserWidget  *cc,
              GtkOrientation          orientation,
-             gint                    colors_per_line,
-             gint                    n_colors,
+             int                     colors_per_line,
+             int                     n_colors,
              GdkRGBA                *colors,
              const gchar           **names)
 {
   GtkWidget *grid;
   GtkWidget *p;
   AtkObject *atk_obj;
-  gint line, pos;
-  gint i;
-  gint left, right;
+  int line, pos;
+  int i;
+  int left, right;
 
   if (colors == NULL)
     {
@@ -474,7 +474,7 @@ add_default_palette (GtkColorChooserWidget *cc)
     NC_("Color name", "White")
   };
   GdkRGBA colors[9*3];
-  gint i, j;
+  int i, j;
 
   for (i = 0; i < 9; i++)
     for (j = 0; j < 3; j++)
@@ -537,7 +537,7 @@ gtk_color_chooser_widget_init (GtkColorChooserWidget *cc)
   GtkWidget *p;
   GtkWidget *button;
   GtkWidget *label;
-  gint i;
+  int i;
   double color[4];
   GdkRGBA rgba;
   GVariant *variant;
@@ -856,8 +856,8 @@ gtk_color_chooser_widget_set_rgba (GtkColorChooser *chooser,
 static void
 gtk_color_chooser_widget_add_palette (GtkColorChooser *chooser,
                                       GtkOrientation   orientation,
-                                      gint             colors_per_line,
-                                      gint             n_colors,
+                                      int              colors_per_line,
+                                      int              n_colors,
                                       GdkRGBA         *colors)
 {
   GtkColorChooserWidget *cc = GTK_COLOR_CHOOSER_WIDGET (chooser);

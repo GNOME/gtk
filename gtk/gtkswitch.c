@@ -195,7 +195,7 @@ gtk_switch_begin_toggle_animation (GtkSwitch *self)
 
 static void
 gtk_switch_click_gesture_pressed (GtkGestureClick *gesture,
-                                  gint             n_press,
+                                  int              n_press,
                                   gdouble          x,
                                   gdouble          y,
                                   GtkSwitch       *self)
@@ -215,7 +215,7 @@ gtk_switch_click_gesture_pressed (GtkGestureClick *gesture,
 
 static void
 gtk_switch_click_gesture_released (GtkGestureClick *gesture,
-                                   gint             n_press,
+                                   int              n_press,
                                    gdouble          x,
                                    gdouble          y,
                                    GtkSwitch       *self)
@@ -303,7 +303,7 @@ gtk_switch_measure (GtkWidget      *widget,
                     int            *natural_baseline)
 {
   GtkSwitch *self = GTK_SWITCH (widget);
-  gint slider_minimum, slider_natural;
+  int slider_minimum, slider_natural;
   int on_nat, off_nat;
 
   gtk_widget_measure (self->slider, orientation, -1,

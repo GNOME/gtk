@@ -93,7 +93,7 @@ new_window (GApplication *app)
   GtkWidget *row_content;
   GtkListBoxRow *row;
 
-  gint i;
+  int i;
   gchar *text, *text2;
 
   window = gtk_application_window_new (GTK_APPLICATION (app));

@@ -186,7 +186,7 @@ gboolean          gtk_recent_manager_move_item      (GtkRecentManager     *manag
 GDK_AVAILABLE_IN_ALL
 GList *           gtk_recent_manager_get_items      (GtkRecentManager     *manager);
 GDK_AVAILABLE_IN_ALL
-gint              gtk_recent_manager_purge_items    (GtkRecentManager     *manager,
+int               gtk_recent_manager_purge_items    (GtkRecentManager     *manager,
 						     GError              **error);
 
 
@@ -245,7 +245,7 @@ gchar *               gtk_recent_info_get_short_name       (GtkRecentInfo  *info
 GDK_AVAILABLE_IN_ALL
 gchar *               gtk_recent_info_get_uri_display      (GtkRecentInfo  *info) G_GNUC_MALLOC;
 GDK_AVAILABLE_IN_ALL
-gint                  gtk_recent_info_get_age              (GtkRecentInfo  *info);
+int                   gtk_recent_info_get_age              (GtkRecentInfo  *info);
 GDK_AVAILABLE_IN_ALL
 gboolean              gtk_recent_info_is_local             (GtkRecentInfo  *info);
 GDK_AVAILABLE_IN_ALL

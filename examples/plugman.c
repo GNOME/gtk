@@ -124,10 +124,10 @@ plug_man_activate (GApplication *application)
 static void
 plug_man_open (GApplication  *application,
                 GFile        **files,
-                gint           n_files,
+                int            n_files,
                 const gchar   *hint)
 {
-  gint i;
+  int i;
 
   for (i = 0; i < n_files; i++)
     new_window (application, files[i]);
@@ -281,7 +281,7 @@ disable_plugin (const gchar *name)
   plugin_menu = find_plugin_menu ();
   if (plugin_menu)
     {
-      gint i;
+      int i;
 
       for (i = 0; i < g_menu_model_get_n_items (plugin_menu); i++)
         {

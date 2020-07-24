@@ -50,7 +50,7 @@ typedef struct
   GMenu *combined;
 
   GSList *inhibitors;
-  gint quit_inhibit;
+  int quit_inhibit;
   guint next_cookie;
   NSObject *delegate;
 } GtkApplicationImplQuartz;
@@ -89,7 +89,7 @@ G_DEFINE_TYPE (GtkApplicationImplQuartz, gtk_application_impl_quartz, GTK_TYPE_A
 -(void)application:(NSApplication *)theApplication openFiles:(NSArray *)filenames
 {
   GFile **files;
-  gint i;
+  int i;
   GApplicationFlags flags;
 
   flags = g_application_get_flags (G_APPLICATION (quartz->impl.application));

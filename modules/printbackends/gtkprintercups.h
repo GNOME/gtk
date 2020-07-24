@@ -51,11 +51,11 @@ struct _GtkPrinterCups
   gchar *original_device_uri;
   gchar *printer_uri;
   gchar *hostname;
-  gint port;
+  int port;
   gchar **auth_info_required;
   gchar *original_hostname;
   gchar *original_resource;
-  gint original_port;
+  int original_port;
   gboolean request_original_uri; /* Request PPD from original host */
 
   ipp_pstate_t state;
@@ -66,10 +66,10 @@ struct _GtkPrinterCups
   gchar    *media_default;
   GList    *media_supported;
   GList    *media_size_supported;
-  gint      media_bottom_margin_default;
-  gint      media_top_margin_default;
-  gint      media_left_margin_default;
-  gint      media_right_margin_default;
+  int       media_bottom_margin_default;
+  int       media_top_margin_default;
+  int       media_left_margin_default;
+  int       media_right_margin_default;
   gboolean  media_margin_default_set;
   gchar    *sides_default;
   GList    *sides_supported;
@@ -79,11 +79,11 @@ struct _GtkPrinterCups
   gchar  *default_cover_before;
   gchar  *default_cover_after;
 
-  gint    default_number_up;
+  int     default_number_up;
 
   gboolean remote;
   guint get_remote_ppd_poll;
-  gint  get_remote_ppd_attempts;
+  int   get_remote_ppd_attempts;
   GtkCupsConnectionTest *remote_cups_connection_test;
 
 #ifdef HAVE_COLORD

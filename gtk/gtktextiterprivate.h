@@ -39,8 +39,8 @@ GtkTextLine *       _gtk_text_iter_get_text_line              (const GtkTextIter
 GtkTextBTree *      _gtk_text_iter_get_btree                  (const GtkTextIter *iter);
 gboolean            _gtk_text_iter_forward_indexable_segment  (GtkTextIter       *iter);
 gboolean            _gtk_text_iter_backward_indexable_segment (GtkTextIter       *iter);
-gint                _gtk_text_iter_get_segment_byte           (const GtkTextIter *iter);
-gint                _gtk_text_iter_get_segment_char           (const GtkTextIter *iter);
+int                 _gtk_text_iter_get_segment_byte           (const GtkTextIter *iter);
+int                 _gtk_text_iter_get_segment_char           (const GtkTextIter *iter);
 gboolean            _gtk_text_iter_same_line                  (const GtkTextIter *lhs,
                                                                const GtkTextIter *rhs);
 

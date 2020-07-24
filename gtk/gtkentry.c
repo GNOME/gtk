@@ -288,8 +288,8 @@ static void   gtk_entry_size_allocate        (GtkWidget        *widget,
 static void   gtk_entry_snapshot             (GtkWidget        *widget,
                                               GtkSnapshot      *snapshot);
 static gboolean gtk_entry_query_tooltip      (GtkWidget        *widget,
-                                              gint              x,
-                                              gint              y,
+                                              int               x,
+                                              int               y,
                                               gboolean          keyboard_tip,
                                               GtkTooltip       *tooltip);
 static void   gtk_entry_direction_changed    (GtkWidget        *widget,
@@ -1407,7 +1407,7 @@ gtk_entry_finalize (GObject *object)
   GtkEntry *entry = GTK_ENTRY (object);
   GtkEntryPrivate *priv = gtk_entry_get_instance_private (entry);
   EntryIconInfo *icon_info = NULL;
-  gint i;
+  int i;
 
   for (i = 0; i < MAX_ICONS; i++)
     {
@@ -1503,7 +1503,7 @@ get_icon_position_from_controller (GtkEntry           *entry,
 
 static void
 icon_pressed_cb (GtkGestureClick *gesture,
-                 gint                  n_press,
+                 int                   n_press,
                  gdouble               x,
                  gdouble               y,
                  GtkEntry             *entry)
@@ -1523,7 +1523,7 @@ icon_pressed_cb (GtkGestureClick *gesture,
 
 static void
 icon_released_cb (GtkGestureClick *gesture,
-                  gint             n_press,
+                  int              n_press,
                   gdouble          x,
                   gdouble          y,
                   GtkEntry        *entry)
@@ -1682,7 +1682,7 @@ gtk_entry_size_allocate (GtkWidget *widget,
   const gboolean is_rtl = gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL;
   GtkEntry *entry = GTK_ENTRY (widget);
   GtkEntryPrivate *priv = gtk_entry_get_instance_private (entry);
-  gint i;
+  int i;
   GtkAllocation text_alloc;
 
   text_alloc.x = 0;
@@ -2193,7 +2193,7 @@ gtk_entry_get_overwrite_mode (GtkEntry *entry)
  **/
 void
 gtk_entry_set_max_length (GtkEntry     *entry,
-                          gint          max)
+                          int           max)
 {
   GtkEntryPrivate *priv = gtk_entry_get_instance_private (entry);
 
@@ -2215,7 +2215,7 @@ gtk_entry_set_max_length (GtkEntry     *entry,
  * Returns: the maximum allowed number of characters
  *               in #GtkEntry, or 0 if there is no maximum.
  **/
-gint
+int
 gtk_entry_get_max_length (GtkEntry *entry)
 {
   GtkEntryPrivate *priv = gtk_entry_get_instance_private (entry);
@@ -2784,10 +2784,10 @@ gtk_entry_get_icon_storage_type (GtkEntry             *entry,
  *
  * Returns: the index of the icon at the given position, or -1
  */
-gint
+int
 gtk_entry_get_icon_at_pos (GtkEntry *entry,
-                           gint      x,
-                           gint      y)
+                           int       x,
+                           int       y)
 {
   GtkEntryPrivate *priv = gtk_entry_get_instance_private (entry);
   guint i;
@@ -2865,12 +2865,12 @@ gtk_entry_set_icon_drag_source (GtkEntry             *entry,
  * Returns: index of the icon which is the source of the current
  *          DND operation, or -1.
  */
-gint
+int
 gtk_entry_get_current_icon_drag_source (GtkEntry *entry)
 {
   GtkEntryPrivate *priv = gtk_entry_get_instance_private (entry);
   EntryIconInfo *icon_info = NULL;
-  gint i;
+  int i;
 
   g_return_val_if_fail (GTK_IS_ENTRY (entry), -1);
 
@@ -3123,15 +3123,15 @@ gtk_entry_set_icon_tooltip_markup (GtkEntry             *entry,
 
 static gboolean
 gtk_entry_query_tooltip (GtkWidget  *widget,
-                         gint        x,
-                         gint        y,
+                         int         x,
+                         int         y,
                          gboolean    keyboard_tip,
                          GtkTooltip *tooltip)
 {
   GtkEntry *entry = GTK_ENTRY (widget);
   GtkEntryPrivate *priv = gtk_entry_get_instance_private (entry);
   EntryIconInfo *icon_info;
-  gint icon_pos;
+  int icon_pos;
 
   if (!keyboard_tip)
     {

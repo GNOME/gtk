@@ -146,7 +146,7 @@ static void     printer_status_cb                  (GtkPrintBackend    *backend,
 static void     update_collate_icon                (GtkToggleButton    *toggle_button,
                                                     GtkPrintUnixDialog *dialog);
 static void     error_dialogs                      (GtkPrintUnixDialog *print_dialog,
-						    gint                print_dialog_response_id,
+						    int                 print_dialog_response_id,
 						    gpointer            data);
 static gboolean page_range_entry_focus_changed     (GtkWidget          *entry,
                                                     GParamSpec         *pspec,
@@ -177,7 +177,7 @@ static void     draw_page                          (GtkDrawingArea      *da,
 
 static gboolean dialog_get_collate                 (GtkPrintUnixDialog *dialog);
 static gboolean dialog_get_reverse                 (GtkPrintUnixDialog *dialog);
-static gint     dialog_get_n_copies                (GtkPrintUnixDialog *dialog);
+static int      dialog_get_n_copies                (GtkPrintUnixDialog *dialog);
 
 static gboolean set_active_printer                 (GtkPrintUnixDialog *dialog,
                                                     const gchar        *printer_name);
@@ -334,7 +334,7 @@ struct _GtkPrintUnixDialog
 
   gchar *format_for_printer;
 
-  gint current_page;
+  int current_page;
   GtkCssNode *collate_paper_node;
   GtkCssNode *page_layout_paper_node;
 };
@@ -566,7 +566,7 @@ on_confirmation_dialog_response (GtkWidget *dialog,
  */
 static void
 error_dialogs (GtkPrintUnixDialog *dialog,
-               gint                dialog_response_id,
+               int                 dialog_response_id,
                gpointer            data)
 {
   if (dialog != NULL && dialog_response_id == GTK_RESPONSE_OK)
@@ -1275,10 +1275,10 @@ add_option_to_extension_point (GtkPrinterOption *option,
     gtk_box_append (GTK_BOX (extension_point), widget);
 }
 
-static gint
+static int
 grid_rows (GtkGrid *table)
 {
-  gint t0, t1, l, t, w, h;
+  int t0, t1, l, t, w, h;
   GtkWidget *c;
   gboolean first;
 
@@ -1345,7 +1345,7 @@ setup_page_table (GtkPrinterOptionSet *options,
                   GtkWidget           *table,
                   GtkWidget           *page)
 {
-  gint nrows;
+  int nrows;
 
   gtk_printer_option_set_foreach_in_group (options, group,
                                            add_option_to_table,
@@ -1671,7 +1671,7 @@ fill_paper_sizes (GtkPrintUnixDialog *dialog,
   GList *list, *l;
   GtkPageSetup *page_setup;
   GtkPaperSize *paper_size;
-  gint i;
+  int i;
 
   g_list_store_remove_all (dialog->page_setup_list);
 
@@ -1930,14 +1930,14 @@ static void
 paint_page (GtkPrintUnixDialog *dialog,
             GtkWidget  *widget,
             cairo_t    *cr,
-            gint        x,
-            gint        y,
+            int         x,
+            int         y,
             const char *text,
-            gint        text_x)
+            int         text_x)
 {
   GtkStyleContext *context;
-  gint width, height;
-  gint text_y;
+  int width, height;
+  int text_y;
   GdkRGBA color;
 
   width = 20;
@@ -1973,9 +1973,9 @@ draw_collate (GtkDrawingArea *da,
   GtkPrintUnixDialog *dialog = GTK_PRINT_UNIX_DIALOG (data);
   GtkWidget *widget = GTK_WIDGET (da);
   gboolean collate, reverse, rtl;
-  gint copies;
-  gint text_x;
-  gint x, y, x1, x2, p1, p2;
+  int copies;
+  int text_x;
+  int x, y, x1, x2, p1, p2;
 
   collate = dialog_get_collate (dialog);
   reverse = dialog_get_reverse (dialog);
@@ -2062,13 +2062,13 @@ is_range_separator (gchar c)
 
 static GtkPageRange *
 dialog_get_page_ranges (GtkPrintUnixDialog *dialog,
-                        gint               *n_ranges_out)
+                        int                *n_ranges_out)
 {
-  gint i, n_ranges;
+  int i, n_ranges;
   const gchar *text, *p;
   gchar *next;
   GtkPageRange *ranges;
-  gint start, end;
+  int start, end;
 
   text = gtk_editable_get_text (GTK_EDITABLE (dialog->page_range_entry));
 
@@ -2143,9 +2143,9 @@ dialog_get_page_ranges (GtkPrintUnixDialog *dialog,
 static void
 dialog_set_page_ranges (GtkPrintUnixDialog *dialog,
                         GtkPageRange       *ranges,
-                        gint                n_ranges)
+                        int                 n_ranges)
 {
-  gint i;
+  int i;
   GString *s = g_string_new (NULL);
 
   for (i = 0; i < n_ranges; i++)
@@ -2224,13 +2224,13 @@ dialog_set_page_set (GtkPrintUnixDialog *dialog,
   gtk_drop_down_set_selected (GTK_DROP_DOWN (dialog->page_set_combo), (guint)val);
 }
 
-static gint
+static int
 dialog_get_n_copies (GtkPrintUnixDialog *dialog)
 {
   GtkAdjustment *adjustment;
   const gchar *text;
   gchar *endptr = NULL;
-  gint n_copies;
+  int n_copies;
 
   adjustment = gtk_spin_button_get_adjustment (GTK_SPIN_BUTTON (dialog->copies_spin));
 
@@ -2254,7 +2254,7 @@ dialog_get_n_copies (GtkPrintUnixDialog *dialog)
 
 static void
 dialog_set_n_copies (GtkPrintUnixDialog *dialog,
-                     gint                n_copies)
+                     int                 n_copies)
 {
   gtk_spin_button_set_value (GTK_SPIN_BUTTON (dialog->copies_spin), n_copies);
 }
@@ -2289,11 +2289,11 @@ dialog_set_reverse (GtkPrintUnixDialog *dialog,
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (dialog->reverse_check), reverse);
 }
 
-static gint
+static int
 dialog_get_pages_per_sheet (GtkPrintUnixDialog *dialog)
 {
   const gchar *val;
-  gint num;
+  int num;
 
   val = gtk_printer_option_widget_get_value (dialog->pages_per_sheet);
 
@@ -2360,8 +2360,8 @@ draw_page (GtkDrawingArea *da,
   GtkPrintUnixDialog *dialog = GTK_PRINT_UNIX_DIALOG (data);
   GtkStyleContext *context;
   gdouble ratio;
-  gint w, h, tmp;
-  gint pages_x, pages_y, i, x, y, layout_w, layout_h;
+  int w, h, tmp;
+  int pages_x, pages_y, i, x, y, layout_w, layout_h;
   gdouble page_width, page_height;
   GtkPageOrientation orientation;
   gboolean landscape;
@@ -2370,13 +2370,13 @@ draw_page (GtkDrawingArea *da,
   gchar *text;
   GdkRGBA color;
   GtkNumberUpLayout number_up_layout;
-  gint start_x, end_x, start_y, end_y;
-  gint dx, dy;
+  int start_x, end_x, start_y, end_y;
+  int dx, dy;
   gboolean horizontal;
   GtkPageSetup *page_setup;
   gdouble paper_width, paper_height;
   gdouble pos_x, pos_y;
-  gint pages_per_sheet;
+  int pages_per_sheet;
   gboolean ltr = TRUE;
 
   orientation = gtk_page_setup_get_orientation (dialog->page_setup);
@@ -2623,7 +2623,7 @@ draw_page (GtkDrawingArea *da,
     {
       PangoContext *pango_c = NULL;
       PangoFontDescription *pango_f = NULL;
-      gint font_size = 12 * PANGO_SCALE;
+      int font_size = 12 * PANGO_SCALE;
 
       pos_x += 1;
       pos_y += 1;
@@ -2906,7 +2906,7 @@ update_number_up_layout (GtkPrintUnixDialog *dialog)
 
 static void
 custom_paper_dialog_response_cb (GtkDialog *custom_paper_dialog,
-                                 gint       response_id,
+                                 int        response_id,
                                  gpointer   user_data)
 {
   GtkPrintUnixDialog *dialog = GTK_PRINT_UNIX_DIALOG (user_data);
@@ -3131,7 +3131,7 @@ gtk_print_unix_dialog_get_page_setup_set (GtkPrintUnixDialog *dialog)
  */
 void
 gtk_print_unix_dialog_set_current_page (GtkPrintUnixDialog *dialog,
-                                        gint                current_page)
+                                        int                 current_page)
 {
   g_return_if_fail (GTK_IS_PRINT_UNIX_DIALOG (dialog));
 
@@ -3154,7 +3154,7 @@ gtk_print_unix_dialog_set_current_page (GtkPrintUnixDialog *dialog,
  *
  * Returns: the current page of @dialog
  */
-gint
+int
 gtk_print_unix_dialog_get_current_page (GtkPrintUnixDialog *dialog)
 {
   g_return_val_if_fail (GTK_IS_PRINT_UNIX_DIALOG (dialog), -1);
@@ -3208,7 +3208,7 @@ gtk_print_unix_dialog_set_settings (GtkPrintUnixDialog *dialog,
 {
   const gchar *printer;
   GtkPageRange *ranges;
-  gint num_ranges;
+  int num_ranges;
 
   g_return_if_fail (GTK_IS_PRINT_UNIX_DIALOG (dialog));
   g_return_if_fail (settings == NULL || GTK_IS_PRINT_SETTINGS (settings));
@@ -3270,7 +3270,7 @@ gtk_print_unix_dialog_get_settings (GtkPrintUnixDialog *dialog)
   GtkPrintSettings *settings;
   GtkPrintPages print_pages;
   GtkPageRange *ranges;
-  gint n_ranges;
+  int n_ranges;
 
   g_return_val_if_fail (GTK_IS_PRINT_UNIX_DIALOG (dialog), NULL);
 

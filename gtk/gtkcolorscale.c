@@ -84,7 +84,7 @@ gtk_color_scale_snapshot_trough (GtkColorScale  *scale,
       if (!priv->hue_texture)
         {
           GdkTexture *texture;
-          gint stride;
+          int stride;
           GBytes *bytes;
           guchar *data, *p;
           gdouble h;

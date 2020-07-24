@@ -39,7 +39,7 @@ _gtk_tree_data_list_free (GtkTreeDataList *list,
 			  GType           *column_headers)
 {
   GtkTreeDataList *tmp, *next;
-  gint i = 0;
+  int i = 0;
 
   tmp = list;
 
@@ -64,7 +64,7 @@ _gtk_tree_data_list_free (GtkTreeDataList *list,
 gboolean
 _gtk_tree_data_list_check_type (GType type)
 {
-  gint i = 0;
+  int i = 0;
   static const GType type_list[] =
   {
     G_TYPE_BOOLEAN,
@@ -135,7 +135,7 @@ _gtk_tree_data_list_node_to_value (GtkTreeDataList *list,
       g_value_set_uchar (value, (guchar) list->data.v_uchar);
       break;
     case G_TYPE_INT:
-      g_value_set_int (value, (gint) list->data.v_int);
+      g_value_set_int (value, (int) list->data.v_int);
       break;
     case G_TYPE_UINT:
       g_value_set_uint (value, (guint) list->data.v_uint);
@@ -316,17 +316,17 @@ _gtk_tree_data_list_node_copy (GtkTreeDataList *list,
   return new_list;
 }
 
-gint
+int
 _gtk_tree_data_list_compare_func (GtkTreeModel *model,
 				  GtkTreeIter  *a,
 				  GtkTreeIter  *b,
 				  gpointer      user_data)
 {
-  gint column = GPOINTER_TO_INT (user_data);
+  int column = GPOINTER_TO_INT (user_data);
   GType type = gtk_tree_model_get_column_type (model, column);
   GValue a_value = G_VALUE_INIT;
   GValue b_value = G_VALUE_INIT;
-  gint retval;
+  int retval;
   const gchar *stra, *strb;
 
   gtk_tree_model_get_value (model, a, column, &a_value);
@@ -465,12 +465,12 @@ _gtk_tree_data_list_compare_func (GtkTreeModel *model,
 
 
 GList *
-_gtk_tree_data_list_header_new (gint   n_columns,
+_gtk_tree_data_list_header_new (int    n_columns,
 				GType *types)
 {
   GList *retval = NULL;
 
-  gint i;
+  int i;
 
   for (i = 0; i < n_columns; i ++)
     {
@@ -511,7 +511,7 @@ _gtk_tree_data_list_header_free (GList *list)
 
 GtkTreeDataSortHeader *
 _gtk_tree_data_list_get_header (GList   *header_list,
-				gint     sort_column_id)
+				int      sort_column_id)
 {
   GtkTreeDataSortHeader *header = NULL;
 
@@ -527,7 +527,7 @@ _gtk_tree_data_list_get_header (GList   *header_list,
 
 GList *
 _gtk_tree_data_list_set_header (GList                  *header_list,
-				gint                    sort_column_id,
+				int                     sort_column_id,
 				GtkTreeIterCompareFunc  func,
 				gpointer                data,
 				GDestroyNotify          destroy)

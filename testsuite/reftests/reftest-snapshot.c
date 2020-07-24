@@ -197,7 +197,7 @@ quit_when_idle (gpointer loop)
   return G_SOURCE_REMOVE;
 }
 
-static gint inhibit_count;
+static int inhibit_count;
 static GMainLoop *loop;
 
 G_MODULE_EXPORT void

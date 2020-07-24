@@ -126,7 +126,7 @@ main (int argc, char *argv[])
 {
   GtkWidget *window, *list, *sw, *row;
   GtkWidget *hbox, *vbox, *combo, *button;
-  gint i;
+  int i;
   gchar *text;
   GtkCssProvider *provider;
 

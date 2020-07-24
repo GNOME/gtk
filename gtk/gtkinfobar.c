@@ -157,7 +157,7 @@ struct _GtkInfoBarClass
 {
   GtkWidgetClass parent_class;
 
-  void (* response) (GtkInfoBar *info_bar, gint response_id);
+  void (* response) (GtkInfoBar *info_bar, int response_id);
   void (* close)    (GtkInfoBar *info_bar);
 };
 
@@ -298,7 +298,7 @@ clear_response_data (GtkWidget *widget)
 
 static GtkWidget *
 find_button (GtkInfoBar *info_bar,
-             gint        response_id)
+             int         response_id)
 {
   GtkWidget *child;
 
@@ -501,7 +501,7 @@ gtk_info_bar_buildable_interface_init (GtkBuildableIface *iface)
   iface->custom_finished = gtk_info_bar_buildable_custom_finished;
 }
 
-static gint
+static int
 get_response_for_widget (GtkInfoBar *info_bar,
                          GtkWidget  *widget)
 {
@@ -518,7 +518,7 @@ static void
 action_widget_activated (GtkWidget  *widget,
                          GtkInfoBar *info_bar)
 {
-  gint response_id;
+  int response_id;
 
   response_id = get_response_for_widget (info_bar, widget);
   gtk_info_bar_response (info_bar, response_id);
@@ -538,7 +538,7 @@ action_widget_activated (GtkWidget  *widget,
 void
 gtk_info_bar_add_action_widget (GtkInfoBar *info_bar,
                                 GtkWidget  *child,
-                                gint        response_id)
+                                int         response_id)
 {
   ResponseData *ad;
   guint signal_id;
@@ -610,7 +610,7 @@ gtk_info_bar_remove_action_widget (GtkInfoBar *info_bar,
 GtkWidget*
 gtk_info_bar_add_button (GtkInfoBar  *info_bar,
                          const gchar *button_text,
-                         gint         response_id)
+                         int          response_id)
 {
   GtkWidget *button;
 
@@ -633,7 +633,7 @@ add_buttons_valist (GtkInfoBar  *info_bar,
                     va_list      args)
 {
   const gchar* text;
-  gint response_id;
+  int response_id;
 
   g_return_if_fail (GTK_IS_INFO_BAR (info_bar));
 
@@ -641,7 +641,7 @@ add_buttons_valist (GtkInfoBar  *info_bar,
     return;
 
   text = first_button_text;
-  response_id = va_arg (args, gint);
+  response_id = va_arg (args, int);
 
   while (text != NULL)
     {
@@ -749,7 +749,7 @@ update_default_response (GtkInfoBar *info_bar,
  */
 void
 gtk_info_bar_set_response_sensitive (GtkInfoBar *info_bar,
-                                     gint        response_id,
+                                     int         response_id,
                                      gboolean    setting)
 {
   GtkWidget *child;
@@ -784,7 +784,7 @@ gtk_info_bar_set_response_sensitive (GtkInfoBar *info_bar,
  */
 void
 gtk_info_bar_set_default_response (GtkInfoBar *info_bar,
-                                   gint        response_id)
+                                   int         response_id)
 {
   GtkWidget *child;
   GtkWidget *window;
@@ -820,7 +820,7 @@ gtk_info_bar_set_default_response (GtkInfoBar *info_bar,
  */
 void
 gtk_info_bar_response (GtkInfoBar *info_bar,
-                       gint        response_id)
+                       int         response_id)
 {
   g_return_if_fail (GTK_IS_INFO_BAR (info_bar));
 
@@ -830,9 +830,9 @@ gtk_info_bar_response (GtkInfoBar *info_bar,
 typedef struct
 {
   gchar *name;
-  gint response_id;
-  gint line;
-  gint col;
+  int response_id;
+  int line;
+  int col;
 } ActionWidgetInfo;
 
 typedef struct
@@ -840,11 +840,11 @@ typedef struct
   GtkInfoBar *info_bar;
   GtkBuilder *builder;
   GSList *items;
-  gint response_id;
+  int response_id;
   gboolean is_text;
   GString *string;
-  gint line;
-  gint col;
+  int line;
+  int col;
 } SubParserData;
 
 static void

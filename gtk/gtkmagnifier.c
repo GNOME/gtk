@@ -34,8 +34,8 @@ struct _GtkMagnifierPrivate
 {
   GdkPaintable *paintable;
   gdouble magnification;
-  gint x;
-  gint y;
+  int x;
+  int y;
   gboolean resize;
 };
 
@@ -136,7 +136,7 @@ gtk_magnifier_measure (GtkWidget      *widget,
 {
   GtkMagnifier *magnifier = GTK_MAGNIFIER (widget);
   GtkMagnifierPrivate *priv = gtk_magnifier_get_instance_private (magnifier);
-  gint size;
+  int size;
 
   if (priv->resize)
     {

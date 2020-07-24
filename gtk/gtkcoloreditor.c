@@ -70,7 +70,7 @@ struct _GtkColorEditor
   GtkWidget *picker_button;
   GtkColorPicker *picker;
 
-  gint popup_position;
+  int popup_position;
 
   guint text_changed : 1;
   guint use_alpha    : 1;
@@ -204,8 +204,8 @@ popup_edit (GtkWidget  *widget,
   GtkWidget *popup = NULL;
   GtkRoot *root;
   GtkWidget *focus;
-  gint position;
-  gint s, e;
+  int position;
+  int s, e;
   const char *param;
 
   param = g_variant_get_string (parameters, NULL);
@@ -273,7 +273,7 @@ get_child_position (GtkOverlay     *overlay,
 {
   GtkRequisition req;
   GtkAllocation alloc;
-  gint s, e;
+  int s, e;
   double x, y;
 
   gtk_widget_get_preferred_size (widget, &req, NULL);

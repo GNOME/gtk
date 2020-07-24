@@ -72,8 +72,8 @@ gdk_macos_device_surface_at_position (GdkDevice       *device,
   GdkMacosDisplay *display;
   GdkMacosSurface *surface;
   NSPoint point;
-  gint x;
-  gint y;
+  int x;
+  int y;
 
   g_assert (GDK_IS_MACOS_DEVICE (device));
   g_assert (win_x != NULL);

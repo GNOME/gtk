@@ -11,7 +11,7 @@
 #include <math.h>
 #include <stdlib.h>
 
-gint
+int
 spinbutton_hex_spin_input (GtkSpinButton *spin_button,
                            gdouble       *new_val)
 {
@@ -28,7 +28,7 @@ spinbutton_hex_spin_input (GtkSpinButton *spin_button,
     return TRUE;
 }
 
-gint
+int
 spinbutton_hex_spin_output (GtkSpinButton *spin_button)
 {
   GtkAdjustment *adjustment;
@@ -40,7 +40,7 @@ spinbutton_hex_spin_output (GtkSpinButton *spin_button)
   if (fabs (val) < 1e-5)
     buf = g_strdup ("0x00");
   else
-    buf = g_strdup_printf ("0x%.2X", (gint) val);
+    buf = g_strdup_printf ("0x%.2X", (int) val);
   if (strcmp (buf, gtk_editable_get_text (GTK_EDITABLE (spin_button))))
     gtk_editable_set_text (GTK_EDITABLE (spin_button), buf);
   g_free (buf);
@@ -48,15 +48,15 @@ spinbutton_hex_spin_output (GtkSpinButton *spin_button)
   return TRUE;
 }
 
-gint
+int
 spinbutton_time_spin_input (GtkSpinButton *spin_button,
                             gdouble       *new_val)
 {
   const gchar *text;
   gchar **str;
   gboolean found = FALSE;
-  gint hours;
-  gint minutes;
+  int hours;
+  int minutes;
   gchar *endh;
   gchar *endm;
 
@@ -87,7 +87,7 @@ spinbutton_time_spin_input (GtkSpinButton *spin_button,
   return TRUE;
 }
 
-gint
+int
 spinbutton_time_spin_output (GtkSpinButton *spin_button)
 {
   GtkAdjustment *adjustment;
@@ -121,11 +121,11 @@ static const char *month[12] = {
   "December"
 };
 
-gint
+int
 spinbutton_month_spin_input (GtkSpinButton *spin_button,
                              gdouble       *new_val)
 {
-  gint i;
+  int i;
   gchar *tmp1, *tmp2;
   gboolean found = FALSE;
 
@@ -150,12 +150,12 @@ spinbutton_month_spin_input (GtkSpinButton *spin_button,
   return TRUE;
 }
 
-gint
+int
 spinbutton_month_spin_output (GtkSpinButton *spin_button)
 {
   GtkAdjustment *adjustment;
   gdouble value;
-  gint i;
+  int i;
 
   adjustment = gtk_spin_button_get_adjustment (spin_button);
   value = gtk_adjustment_get_value (adjustment);

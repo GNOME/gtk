@@ -56,7 +56,7 @@ GSList *_gtk_bookmarks_manager_list_bookmarks (GtkBookmarksManager *manager);
 
 gboolean _gtk_bookmarks_manager_insert_bookmark (GtkBookmarksManager *manager,
 						 GFile               *file,
-						 gint                 position,
+						 int                  position,
 						 GError             **error);
 
 gboolean _gtk_bookmarks_manager_remove_bookmark (GtkBookmarksManager *manager,
@@ -65,7 +65,7 @@ gboolean _gtk_bookmarks_manager_remove_bookmark (GtkBookmarksManager *manager,
 
 gboolean _gtk_bookmarks_manager_reorder_bookmark (GtkBookmarksManager *manager,
 						  GFile               *file,
-						  gint                 new_position,
+						  int                  new_position,
 						  GError             **error);
 
 gboolean _gtk_bookmarks_manager_has_bookmark (GtkBookmarksManager *manager,

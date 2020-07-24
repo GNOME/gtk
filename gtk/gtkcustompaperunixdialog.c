@@ -245,7 +245,7 @@ gtk_print_save_custom_papers (GListStore *store)
   GKeyFile *keyfile;
   gchar *filename, *data, *parentdir;
   gsize len;
-  gint i = 0;
+  int i = 0;
 
   keyfile = g_key_file_new ();
 
@@ -618,7 +618,7 @@ add_custom_paper (GtkCustomPaperUnixDialog *dialog)
   GtkPageSetup *page_setup;
   GtkPaperSize *paper_size;
   gchar *name;
-  gint i;
+  int i;
 
   i = 1;
   name = NULL;

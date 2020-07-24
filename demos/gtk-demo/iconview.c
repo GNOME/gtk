@@ -90,7 +90,7 @@ fill_store (GtkListStore *store)
   g_dir_close (dir);
 }
 
-static gint
+static int
 sort_func (GtkTreeModel *model,
            GtkTreeIter  *a,
            GtkTreeIter  *b,

@@ -222,7 +222,7 @@ gtk_font_chooser_get_font_face (GtkFontChooser *fontchooser)
  * Returns: A n integer representing the selected font size,
  *     or -1 if no font size is selected.
  */
-gint
+int
 gtk_font_chooser_get_font_size (GtkFontChooser *fontchooser)
 {
   g_return_val_if_fail (GTK_IS_FONT_CHOOSER (fontchooser), -1);

@@ -21,7 +21,7 @@
 #include <string.h>
 
 GtkTreeStore *base_model;
-static gint node_count = 0;
+static int node_count = 0;
 
 static void
 selection_changed (GtkTreeSelection *selection,
@@ -36,7 +36,7 @@ selection_changed (GtkTreeSelection *selection,
 static void
 node_set (GtkTreeIter *iter)
 {
-  gint n;
+  int n;
   gchar *str;
 
   str = g_strdup_printf ("Row (<span color=\"red\">%d</span>)", node_count++);
@@ -290,7 +290,7 @@ quit_cb (GtkWidget *widget,
 }
 
 static void
-make_window (gint view_type)
+make_window (int view_type)
 {
   GtkWidget *window;
   GtkWidget *vbox;

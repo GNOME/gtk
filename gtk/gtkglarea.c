@@ -650,8 +650,8 @@ gtk_gl_area_size_allocate (GtkWidget *widget,
 static void
 gtk_gl_area_draw_error_screen (GtkGLArea   *area,
                                GtkSnapshot *snapshot,
-                               gint         width,
-                               gint         height)
+                               int          width,
+                               int          height)
 {
   GtkGLAreaPrivate *priv = gtk_gl_area_get_instance_private (area);
   PangoLayout *layout;
@@ -1088,8 +1088,8 @@ gtk_gl_area_get_use_es (GtkGLArea *area)
  */
 void
 gtk_gl_area_set_required_version (GtkGLArea *area,
-                                  gint       major,
-                                  gint       minor)
+                                  int        major,
+                                  int        minor)
 {
   GtkGLAreaPrivate *priv = gtk_gl_area_get_instance_private (area);
 
@@ -1110,8 +1110,8 @@ gtk_gl_area_set_required_version (GtkGLArea *area,
  */
 void
 gtk_gl_area_get_required_version (GtkGLArea *area,
-                                  gint      *major,
-                                  gint      *minor)
+                                  int       *major,
+                                  int       *minor)
 {
   GtkGLAreaPrivate *priv = gtk_gl_area_get_instance_private (area);
 

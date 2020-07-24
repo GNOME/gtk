@@ -88,12 +88,12 @@ GDK_AVAILABLE_IN_ALL
 gboolean        gtk_gl_area_get_use_es                  (GtkGLArea    *area);
 GDK_AVAILABLE_IN_ALL
 void            gtk_gl_area_set_required_version        (GtkGLArea    *area,
-                                                         gint          major,
-                                                         gint          minor);
+                                                         int           major,
+                                                         int           minor);
 GDK_AVAILABLE_IN_ALL
 void            gtk_gl_area_get_required_version        (GtkGLArea    *area,
-                                                         gint         *major,
-                                                         gint         *minor);
+                                                         int          *major,
+                                                         int          *minor);
 GDK_AVAILABLE_IN_ALL
 gboolean        gtk_gl_area_get_has_depth_buffer        (GtkGLArea    *area);
 GDK_AVAILABLE_IN_ALL

@@ -282,7 +282,7 @@ gtk_cloudprint_account_got_oauth2_access_token_cb (GObject *source,
   RestProxyCall *call;
   RestProxy *rest;
   GVariant *output;
-  gint   expires_in = 0;
+  int    expires_in = 0;
   GError *error = NULL;
 
   output = g_dbus_connection_call_finish (G_DBUS_CONNECTION (source),
@@ -350,7 +350,7 @@ gtk_cloudprint_account_ensure_credentials_cb (GObject *source,
   GTask *task = user_data;
   GtkCloudprintAccount *account = g_task_get_task_data (task);
   GVariant *output;
-  gint expires_in = 0;
+  int expires_in = 0;
   GError *error = NULL;
 
   output = g_dbus_connection_call_finish (G_DBUS_CONNECTION (source),

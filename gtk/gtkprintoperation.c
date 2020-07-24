@@ -151,7 +151,7 @@ typedef struct _PrintPagesData PrintPagesData;
 static void          preview_iface_init      (GtkPrintOperationPreviewIface *iface);
 static GtkPageSetup *create_page_setup       (GtkPrintOperation             *op);
 static void          common_render_page      (GtkPrintOperation             *op,
-					      gint                           page_nr);
+					      int                            page_nr);
 static void          increment_page_sequence (PrintPagesData *data);
 static void          prepare_data            (PrintPagesData *data);
 static void          clamp_page_ranges       (PrintPagesData *data);
@@ -258,7 +258,7 @@ gtk_print_operation_init (GtkPrintOperation *operation)
 
 static void
 preview_iface_render_page (GtkPrintOperationPreview *preview,
-			   gint                      page_nr)
+			   int                       page_nr)
 {
 
   GtkPrintOperation *op;
@@ -297,7 +297,7 @@ preview_iface_end_preview (GtkPrintOperationPreview *preview)
 
 static gboolean
 preview_iface_is_selected (GtkPrintOperationPreview *preview,
-			   gint                      page_nr)
+			   int                       page_nr)
 {
   GtkPrintOperation *op = GTK_PRINT_OPERATION (preview);
   GtkPrintOperationPrivate *priv = gtk_print_operation_get_instance_private (op);
@@ -500,20 +500,20 @@ gtk_print_operation_get_property (GObject    *object,
 struct _PrintPagesData
 {
   GtkPrintOperation *op;
-  gint uncollated_copies;
-  gint collated_copies;
-  gint uncollated, collated, total;
+  int uncollated_copies;
+  int collated_copies;
+  int uncollated, collated, total;
 
-  gint range, num_ranges;
+  int range, num_ranges;
   GtkPageRange *ranges;
   GtkPageRange one_range;
 
-  gint page;
-  gint sheet;
-  gint first_position, last_position;
-  gint first_sheet;
-  gint num_of_sheets;
-  gint *pages;
+  int page;
+  int sheet;
+  int first_position, last_position;
+  int first_sheet;
+  int num_of_sheets;
+  int *pages;
 
   GtkWidget *progress;
  
@@ -865,13 +865,13 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
    * static void
    * draw_page (GtkPrintOperation *operation,
    *            GtkPrintContext   *context,
-   *            gint               page_nr,
+   *            int                page_nr,
    *            gpointer           user_data)
    * {
    *   cairo_t *cr;
    *   PangoLayout *layout;
    *   gdouble width, text_height;
-   *   gint layout_height;
+   *   int layout_height;
    *   PangoFontDescription *desc;
    *   
    *   cr = gtk_print_context_get_cairo_context (context);
@@ -1555,7 +1555,7 @@ gtk_print_operation_set_job_name (GtkPrintOperation *op,
  **/
 void
 gtk_print_operation_set_n_pages (GtkPrintOperation *op,
-				 gint               n_pages)
+				 int                n_pages)
 {
   GtkPrintOperationPrivate *priv = gtk_print_operation_get_instance_private (op);
 
@@ -1586,7 +1586,7 @@ gtk_print_operation_set_n_pages (GtkPrintOperation *op,
  **/
 void
 gtk_print_operation_set_current_page (GtkPrintOperation *op,
-				      gint               current_page)
+				      int                current_page)
 {
   GtkPrintOperationPrivate *priv = gtk_print_operation_get_instance_private (op);
 
@@ -2058,8 +2058,8 @@ static void
 clamp_page_ranges (PrintPagesData *data)
 {
   GtkPrintOperationPrivate *priv = gtk_print_operation_get_instance_private (data->op);
-  gint                      num_of_correct_ranges;
-  gint                      i;
+  int                       num_of_correct_ranges;
+  int                       i;
 
   num_of_correct_ranges = 0;
 
@@ -2096,7 +2096,7 @@ static void
 increment_page_sequence (PrintPagesData *data)
 {
   GtkPrintOperationPrivate *priv = gtk_print_operation_get_instance_private (data->op);
-  gint inc;
+  int inc;
 
   if (data->total == -1)
     {
@@ -2351,7 +2351,7 @@ gtk_print_operation_draw_page_finish (GtkPrintOperation *op)
 
 static void
 common_render_page (GtkPrintOperation *op,
-		    gint               page_nr)
+		    int                page_nr)
 {
   GtkPrintOperationPrivate *priv = gtk_print_operation_get_instance_private (op);
   GtkPageSetup *page_setup;
@@ -2397,7 +2397,7 @@ common_render_page (GtkPrintOperation *op,
       gdouble             x_step, y_step;
       gdouble             x_scale, y_scale, scale;
       gdouble             horizontal_offset = 0.0, vertical_offset = 0.0;
-      gint                columns, rows, x, y, tmp_length;
+      int                 columns, rows, x, y, tmp_length;
 
       page_setup = gtk_print_context_get_page_setup (print_context);
       orientation = gtk_page_setup_get_orientation (page_setup);
@@ -2582,7 +2582,7 @@ prepare_data (PrintPagesData *data)
   GtkPrintOperationPrivate *priv = gtk_print_operation_get_instance_private (data->op);
   GtkPageSetup             *page_setup;
   gboolean                  paginated = FALSE;
-  gint                      i, j, counter;
+  int                       i, j, counter;
 
   if (priv->manual_collation)
     {
@@ -2657,7 +2657,7 @@ prepare_data (PrintPagesData *data)
   for (i = 0; i < data->num_ranges; i++)
     priv->nr_of_pages_to_print += data->ranges[i].end - data->ranges[i].start + 1;
 
-  data->pages = g_new (gint, priv->nr_of_pages_to_print);
+  data->pages = g_new (int, priv->nr_of_pages_to_print);
   counter = 0;
   for (i = 0; i < data->num_ranges; i++)
     for (j = data->ranges[i].start; j <= data->ranges[i].end; j++)
@@ -2797,7 +2797,7 @@ print_pages_idle (gpointer user_data)
   
 static void
 handle_progress_response (GtkWidget *dialog, 
-			  gint       response,
+			  int        response,
 			  gpointer   data)
 {
   GtkPrintOperation *op = (GtkPrintOperation *)data;
@@ -3250,7 +3250,7 @@ gtk_print_operation_get_has_selection (GtkPrintOperation *op)
  *
  * Returns: the number of pages that will be printed
  **/
-gint
+int
 gtk_print_operation_get_n_pages_to_print (GtkPrintOperation *op)
 {
   GtkPrintOperationPrivate *priv = gtk_print_operation_get_instance_private (op);

@@ -486,7 +486,7 @@ It is also possible to align the columns to the next tab:
   void          gtk_type_set_prop           (GtkType *type,
                                              gfloat   value);
   gfloat        gtk_type_get_prop           (GtkType *type);
-  gint          gtk_type_update_foobar      (GtkType *type);
+  int           gtk_type_update_foobar      (GtkType *type);
 ```
 
 Public headers should never be included directly:

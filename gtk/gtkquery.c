@@ -125,7 +125,7 @@ gtk_query_matches_string (GtkQuery    *query,
   GtkQueryPrivate *priv = gtk_query_get_instance_private (query);
   gchar *prepared;
   gboolean found;
-  gint i;
+  int i;
 
   if (!priv->text)
     return FALSE;

@@ -193,7 +193,7 @@ constraint_editor_window_load (ConstraintEditorWindow *self,
 
 static void
 open_response_cb (GtkNativeDialog        *dialog,
-                  gint                    response,
+                  int                     response,
                   ConstraintEditorWindow *self)
 {
   gtk_native_dialog_hide (dialog);
@@ -285,7 +285,7 @@ serialize_model (GListModel *list)
 
 static void
 save_response_cb (GtkNativeDialog        *dialog,
-                  gint                    response,
+                  int                     response,
                   ConstraintEditorWindow *self)
 {
   gtk_native_dialog_hide (dialog);

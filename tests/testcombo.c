@@ -736,7 +736,7 @@ capital_sensitive (GtkCellLayout   *cell_layout,
 static gboolean
 capital_animation (gpointer data)
 {
-  static gint insert_count = 0;
+  static int insert_count = 0;
   GtkTreeModel *model = GTK_TREE_MODEL (data);
   GtkTreePath *path;
   GtkTreeIter iter, parent;
@@ -879,7 +879,7 @@ set_sensitive (GtkCellLayout   *cell_layout,
 	       gpointer         data)
 {
   GtkTreePath *path;
-  gint *indices;
+  int *indices;
   gboolean sensitive;
 
   path = gtk_tree_model_get_path (tree_model, iter);
@@ -910,7 +910,7 @@ static void
 displayed_row_changed (GtkComboBox *combo,
                        GtkCellView *cell)
 {
-  gint row;
+  int row;
   GtkTreePath *path;
 
   row = gtk_combo_box_get_active (combo);
@@ -942,7 +942,7 @@ main (int argc, char **argv)
 	GtkTreeIter iter;
 	GtkCellArea *area;
         gchar *text;
-        gint i;
+        int i;
         gboolean done = FALSE;
 
         gtk_init ();

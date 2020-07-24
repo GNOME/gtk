@@ -150,9 +150,9 @@ struct _GtkPlacesSidebar {
   /* DND */
   gboolean   dragging_over;
   GtkWidget *drag_row;
-  gint drag_row_height;
-  gint drag_row_x;
-  gint drag_row_y;
+  int drag_row_height;
+  int drag_row_x;
+  int drag_row_y;
   GtkWidget *row_placeholder;
   DropState drop_state;
 
@@ -270,12 +270,12 @@ static void  check_unmount_and_eject       (GMount   *mount,
                                             gboolean *show_unmount,
                                             gboolean *show_eject);
 static void on_row_pressed  (GtkGestureClick *gesture,
-                             gint                  n_press,
+                             int                   n_press,
                              gdouble               x,
                              gdouble               y,
                              GtkSidebarRow        *row);
 static void on_row_released (GtkGestureClick *gesture,
-                             gint                  n_press,
+                             int                   n_press,
                              gdouble               x,
                              gdouble               y,
                              GtkSidebarRow        *row);
@@ -423,7 +423,7 @@ add_place (GtkPlacesSidebar            *sidebar,
 #else
            gpointer                    *cloud_provider_account,
 #endif
-           const gint                   index,
+           const int                    index,
            const gchar                 *tooltip)
 {
   gboolean show_eject, show_unmount;
@@ -583,7 +583,7 @@ static void
 add_special_dirs (GtkPlacesSidebar *sidebar)
 {
   GList *dirs;
-  gint index;
+  int index;
 
   dirs = NULL;
   for (index = 0; index < G_USER_N_DIRECTORIES; index++)
@@ -980,7 +980,7 @@ update_places (GtkPlacesSidebar *sidebar)
   GList *volumes;
   GVolume *volume;
   GSList *bookmarks, *sl;
-  gint index;
+  int index;
   gchar *original_uri, *name, *identifier;
   GtkListBoxRow *selected;
   gchar *home_uri;
@@ -1506,7 +1506,7 @@ check_valid_drop_target (GtkPlacesSidebar *sidebar,
   gboolean valid = FALSE;
   gchar *uri;
   GFile *dest_file;
-  gint drag_action;
+  int drag_action;
 
   g_return_val_if_fail (value != NULL, TRUE);
 
@@ -1659,8 +1659,8 @@ drag_motion_callback (GtkDropTarget    *target,
   GtkListBoxRow *row;
   GtkPlacesSidebarPlaceType place_type;
   gchar *drop_target_uri = NULL;
-  gint row_index;
-  gint row_placeholder_index;
+  int row_index;
+  int row_placeholder_index;
   const GValue *value;
 
   sidebar->dragging_over = TRUE;
@@ -1775,7 +1775,7 @@ drag_motion_callback (GtkDropTarget    *target,
 static void
 reorder_bookmarks (GtkPlacesSidebar *sidebar,
                    GtkSidebarRow    *row,
-                   gint              new_position)
+                   int               new_position)
 {
   gchar *uri;
   GFile *file;
@@ -1792,7 +1792,7 @@ reorder_bookmarks (GtkPlacesSidebar *sidebar,
 static void
 drop_files_as_bookmarks (GtkPlacesSidebar *sidebar,
                          GSList           *files,
-                         gint              position)
+                         int               position)
 {
   GSList *l;
 
@@ -1822,7 +1822,7 @@ drag_drop_callback (GtkDropTarget    *target,
                     double            y,
                     GtkPlacesSidebar *sidebar)
 {
-  gint target_order_index;
+  int target_order_index;
   GtkPlacesSidebarPlaceType target_place_type;
   GtkPlacesSidebarSectionType target_section_type;
   gchar *target_uri;
@@ -2351,7 +2351,7 @@ static void
 update_popover_shadowing (GtkWidget *row,
                           gboolean   shown)
 {
-  gint count;
+  int count;
 
   count = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (row), "popover-count"));
   count = shown ? count + 1 : count - 1;
@@ -3382,7 +3382,7 @@ on_row_activated (GtkListBox    *list_box,
 
 static void
 on_row_pressed (GtkGestureClick *gesture,
-                gint             n_press,
+                int              n_press,
                 gdouble          x,
                 gdouble          y,
                 GtkSidebarRow   *row)
@@ -3400,8 +3400,8 @@ on_row_pressed (GtkGestureClick *gesture,
   if (section_type == SECTION_BOOKMARKS)
     {
       sidebar->drag_row = GTK_WIDGET (row);
-      sidebar->drag_row_x = (gint)x;
-      sidebar->drag_row_y = (gint)y;
+      sidebar->drag_row_x = (int)x;
+      sidebar->drag_row_y = (int)y;
     }
 
   g_object_unref (sidebar);
@@ -3409,7 +3409,7 @@ on_row_pressed (GtkGestureClick *gesture,
 
 static void
 on_row_released (GtkGestureClick *gesture,
-                 gint             n_press,
+                 int              n_press,
                  gdouble          x,
                  gdouble          y,
                  GtkSidebarRow   *row)
@@ -3543,7 +3543,7 @@ long_press_cb (GtkGesture       *gesture,
     popup_menu_cb (GTK_SIDEBAR_ROW (row));
 }
 
-static gint
+static int
 list_box_sort_func (GtkListBoxRow *row1,
                     GtkListBoxRow *row2,
                     gpointer       user_data)
@@ -3551,8 +3551,8 @@ list_box_sort_func (GtkListBoxRow *row1,
   GtkPlacesSidebarSectionType section_type_1, section_type_2;
   GtkPlacesSidebarPlaceType place_type_1, place_type_2;
   gchar *label_1, *label_2;
-  gint index_1, index_2;
-  gint retval = 0;
+  int index_1, index_2;
+  int retval = 0;
 
   g_object_get (row1,
                 "label", &label_1,
@@ -4889,7 +4889,7 @@ gtk_places_sidebar_get_shortcuts (GtkPlacesSidebar *sidebar)
  */
 GFile *
 gtk_places_sidebar_get_nth_bookmark (GtkPlacesSidebar *sidebar,
-                                     gint              n)
+                                     int               n)
 {
   GtkWidget *row;
   int k;

@@ -394,7 +394,7 @@ gdk_display_manager_open_display (GdkDisplayManager *manager,
   const gchar *backend_list;
   GdkDisplay *display;
   gchar **backends;
-  gint i, j;
+  int i, j;
   gboolean allow_any;
 
   if (allowed_backends == NULL)

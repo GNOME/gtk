@@ -108,8 +108,8 @@ typedef gboolean (*GtkTickCallback) (GtkWidget     *widget,
  */
 struct _GtkRequisition
 {
-  gint width;
-  gint height;
+  int width;
+  int height;
 };
 
 /* The widget is the base of the tree for displayable objects.
@@ -256,8 +256,8 @@ struct _GtkWidgetClass
   AtkObject *  (* get_accessible)     (GtkWidget       *widget);
 
   gboolean     (* query_tooltip)      (GtkWidget  *widget,
-                                       gint        x,
-                                       gint        y,
+                                       int         x,
+                                       int         y,
                                        gboolean    keyboard_tooltip,
                                        GtkTooltip *tooltip);
 
@@ -529,12 +529,12 @@ void       gtk_widget_error_bell          (GtkWidget           *widget);
 
 GDK_AVAILABLE_IN_ALL
 void       gtk_widget_set_size_request    (GtkWidget           *widget,
-                                           gint                 width,
-                                           gint                 height);
+                                           int                  width,
+                                           int                  height);
 GDK_AVAILABLE_IN_ALL
 void       gtk_widget_get_size_request    (GtkWidget           *widget,
-                                           gint                *width,
-                                           gint                *height);
+                                           int                 *width,
+                                           int                 *height);
 GDK_AVAILABLE_IN_ALL
 void       gtk_widget_set_opacity         (GtkWidget           *widget,
                                            double               opacity);
@@ -551,7 +551,7 @@ GtkWidget*   gtk_widget_get_ancestor    (GtkWidget      *widget,
                                          GType           widget_type);
 
 GDK_AVAILABLE_IN_ALL
-gint          gtk_widget_get_scale_factor (GtkWidget *widget);
+int           gtk_widget_get_scale_factor (GtkWidget *widget);
 GDK_AVAILABLE_IN_ALL
 GdkDisplay *  gtk_widget_get_display     (GtkWidget *widget);
 GDK_AVAILABLE_IN_ALL
@@ -610,25 +610,25 @@ GDK_AVAILABLE_IN_ALL
 void     gtk_widget_set_valign        (GtkWidget *widget,
                                        GtkAlign   align);
 GDK_AVAILABLE_IN_ALL
-gint     gtk_widget_get_margin_start  (GtkWidget *widget);
+int      gtk_widget_get_margin_start  (GtkWidget *widget);
 GDK_AVAILABLE_IN_ALL
 void     gtk_widget_set_margin_start  (GtkWidget *widget,
-                                       gint       margin);
+                                       int        margin);
 GDK_AVAILABLE_IN_ALL
-gint     gtk_widget_get_margin_end    (GtkWidget *widget);
+int      gtk_widget_get_margin_end    (GtkWidget *widget);
 GDK_AVAILABLE_IN_ALL
 void     gtk_widget_set_margin_end    (GtkWidget *widget,
-                                       gint       margin);
+                                       int        margin);
 GDK_AVAILABLE_IN_ALL
-gint     gtk_widget_get_margin_top    (GtkWidget *widget);
+int      gtk_widget_get_margin_top    (GtkWidget *widget);
 GDK_AVAILABLE_IN_ALL
 void     gtk_widget_set_margin_top    (GtkWidget *widget,
-                                       gint       margin);
+                                       int        margin);
 GDK_AVAILABLE_IN_ALL
-gint     gtk_widget_get_margin_bottom (GtkWidget *widget);
+int      gtk_widget_get_margin_bottom (GtkWidget *widget);
 GDK_AVAILABLE_IN_ALL
 void     gtk_widget_set_margin_bottom (GtkWidget *widget,
-                                       gint       margin);
+                                       int        margin);
 
 GDK_AVAILABLE_IN_ALL
 gboolean     gtk_widget_is_ancestor     (GtkWidget      *widget,

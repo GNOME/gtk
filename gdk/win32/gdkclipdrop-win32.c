@@ -630,7 +630,7 @@ free_queue_item (GdkWin32ClipboardThreadQueueItem *item)
   GdkWin32ClipboardThreadAdvertise *adv;
   GdkWin32ClipboardThreadRetrieve *retr;
   GdkWin32ClipboardThreadStore    *store;
-  gint i;
+  int i;
 
   switch (item->item_type)
     {
@@ -706,7 +706,7 @@ static gboolean
 process_advertise (GdkWin32ClipboardThreadAdvertise *adv)
 {
   DWORD error_code;
-  gint i;
+  int i;
 
   if (g_get_monotonic_time () > adv->parent.end_time)
     {
@@ -785,7 +785,7 @@ static gboolean
 process_store (GdkWin32ClipboardThreadStore *store)
 {
   DWORD error_code;
-  gint i;
+  int i;
 
   if (g_get_monotonic_time () > store->parent.end_time)
     {
@@ -911,7 +911,7 @@ static gboolean
 process_retrieve (GdkWin32ClipboardThreadRetrieve *retr)
 {
   DWORD error_code;
-  gint i;
+  int i;
   UINT fmt, fmt_to_use;
   HANDLE hdata;
   GdkWin32ContentFormatPair *pair;
@@ -1290,7 +1290,7 @@ inner_clipboard_window_procedure (HWND   hwnd,
 
         if (API_CALL (OpenClipboard, (hwnd)))
           {
-            gint i;
+            int i;
             GdkWin32ContentFormatPair *pair;
 
             for (pair = NULL, i = 0;
@@ -1310,7 +1310,7 @@ inner_clipboard_window_procedure (HWND   hwnd,
       }
     case WM_RENDERFORMAT:
       {
-        gint i;
+        int i;
         GdkWin32ClipboardThreadRender *render;
         GdkWin32ClipboardThreadRender *returned_render;
         GdkWin32ContentFormatPair *pair;
@@ -1880,7 +1880,7 @@ gchar *
 _gdk_win32_get_clipboard_format_name (UINT      fmt,
                                       gboolean *is_predefined)
 {
-  gint registered_name_w_len = 1024;
+  int registered_name_w_len = 1024;
   wchar_t *registered_name_w = g_malloc (registered_name_w_len);
   gchar *registered_name = NULL;
   int gcfn_result;
@@ -1959,7 +1959,7 @@ static GArray *
 get_compatibility_w32formats_for_contentformat (const gchar *contentformat)
 {
   GArray *result = NULL;
-  gint i;
+  int i;
   GdkWin32Clipdrop *clipdrop = _gdk_win32_clipdrop_get ();
 
   result = g_hash_table_lookup (clipdrop->compatibility_w32formats, contentformat);
@@ -2021,7 +2021,7 @@ _gdk_win32_add_w32format_to_pairs (UINT                      w32format,
   const gchar *interned_w32format_name;
   GdkWin32ContentFormatPair pair;
   GArray *comp_pairs;
-  gint i, j;
+  int i, j;
 
   if (w32format_name != NULL)
     {
@@ -2073,7 +2073,7 @@ _gdk_win32_add_w32format_to_pairs (UINT                      w32format,
 
 static void
 transmute_cf_unicodetext_to_utf8_string (const guchar    *data,
-                                         gint             length,
+                                         int              length,
                                          guchar         **set_data,
                                          gsize           *set_data_length,
                                          GDestroyNotify  *set_data_destroy)
@@ -2113,7 +2113,7 @@ transmute_cf_unicodetext_to_utf8_string (const guchar    *data,
 
 static void
 transmute_utf8_string_to_cf_unicodetext (const guchar    *data,
-                                         gint             length,
+                                         int              length,
                                          guchar         **set_data,
                                          gsize           *set_data_length,
                                          GDestroyNotify  *set_data_destroy)
@@ -2121,7 +2121,7 @@ transmute_utf8_string_to_cf_unicodetext (const guchar    *data,
   glong wclen;
   GError *err = NULL;
   glong size;
-  gint i;
+  int i;
   wchar_t *wcptr, *p;
 
   wcptr = g_utf8_to_utf16 ((char *) data, length, NULL, &wclen, &err);
@@ -2188,7 +2188,7 @@ wchar_to_str (const wchar_t  *wstr,
 
 static void
 transmute_utf8_string_to_cf_text (const guchar    *data,
-                                  gint             length,
+                                  int              length,
                                   guchar         **set_data,
                                   gsize           *set_data_length,
                                   GDestroyNotify  *set_data_destroy)
@@ -2196,7 +2196,7 @@ transmute_utf8_string_to_cf_text (const guchar    *data,
   glong rlen;
   GError *err = NULL;
   gsize size;
-  gint i;
+  int i;
   char *strptr, *p;
   wchar_t *wcptr;
 
@@ -2274,7 +2274,7 @@ str_to_wchar (const char  *str,
 
 static void
 transmute_cf_text_to_utf8_string (const guchar    *data,
-                                  gint             length,
+                                  int              length,
                                   guchar         **set_data,
                                   gsize           *set_data_length,
                                   GDestroyNotify  *set_data_destroy)
@@ -2320,7 +2320,7 @@ transmute_cf_text_to_utf8_string (const guchar    *data,
 
 static void
 transmute_cf_dib_to_image_bmp (const guchar    *data,
-                               gint             length,
+                               int              length,
                                guchar         **set_data,
                                gsize           *set_data_length,
                                GDestroyNotify  *set_data_destroy)
@@ -2354,8 +2354,8 @@ transmute_cf_dib_to_image_bmp (const guchar    *data,
   BITMAPINFOHEADER *bi = (BITMAPINFOHEADER *) data;
   BITMAPFILEHEADER *bf;
   gpointer result;
-  gint data_length = length;
-  gint new_length;
+  int data_length = length;
+  int new_length;
   gboolean make_dibv5 = FALSE;
   BITMAPV5HEADER *bV5;
   guchar *p;
@@ -2490,7 +2490,7 @@ transmute_cf_dib_to_image_bmp (const guchar    *data,
 
 static void
 transmute_cf_shell_id_list_to_text_uri_list (const guchar    *data,
-                                             gint             length,
+                                             int              length,
                                              guchar         **set_data,
                                              gsize           *set_data_length,
                                              GDestroyNotify  *set_data_destroy)
@@ -2540,12 +2540,12 @@ transmute_cf_shell_id_list_to_text_uri_list (const guchar    *data,
 
 void
 transmute_image_bmp_to_cf_dib (const guchar    *data,
-                               gint             length,
+                               int              length,
                                guchar         **set_data,
                                gsize           *set_data_length,
                                GDestroyNotify  *set_data_destroy)
 {
-  gint size;
+  int size;
   guchar *ptr;
 
   g_return_if_fail (length >= sizeof (BITMAPFILEHEADER));
@@ -2630,7 +2630,7 @@ gboolean
 _gdk_win32_transmute_contentformat (const gchar   *from_contentformat,
                                     UINT           to_w32format,
                                     const guchar  *data,
-                                    gint           length,
+                                    int            length,
                                     guchar       **set_data,
                                     gsize         *set_data_length)
 {
@@ -2682,16 +2682,16 @@ _gdk_win32_transmute_contentformat (const gchar   *from_contentformat,
   return TRUE;
 }
 
-gint
+int
 _gdk_win32_add_contentformat_to_pairs (const char *contentformat,
                                        GArray     *array)
 {
-  gint added_count = 0;
+  int added_count = 0;
   wchar_t *contentformat_w;
   GdkWin32ContentFormatPair fmt;
-  gint i;
+  int i;
   GArray *comp_pairs;
-  gint starting_point;
+  int starting_point;
   const wchar_t *prefix = L"application/x.windows.";
   size_t prefix_len = wcslen (prefix);
   size_t offset = 0;
@@ -2732,7 +2732,7 @@ _gdk_win32_add_contentformat_to_pairs (const char *contentformat,
   comp_pairs = get_compatibility_w32formats_for_contentformat (contentformat);
   for (i = 0; comp_pairs != NULL && i < comp_pairs->len; i++)
     {
-      gint j;
+      int j;
 
       fmt = g_array_index (comp_pairs, GdkWin32ContentFormatPair, i);
 
@@ -2834,7 +2834,7 @@ clipboard_store_hdata_ready (GObject      *clipboard,
                              gpointer      user_data)
 {
   GError *error = NULL;
-  gint i;
+  int i;
   gboolean no_other_streams;
   GdkWin32ClipboardHDataPrepAndStream *prep_and_stream = (GdkWin32ClipboardHDataPrepAndStream *) user_data;
   GdkWin32ClipboardStorePrep *prep = prep_and_stream->prep;

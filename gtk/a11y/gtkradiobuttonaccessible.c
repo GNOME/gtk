@@ -75,7 +75,7 @@ gtk_radio_button_accessible_ref_relation_set (AtkObject *obj)
         AtkObject **accessible_array;
         guint list_length;
         AtkRelation* relation;
-        gint i = 0;
+        int i = 0;
 
         list_length = g_slist_length (list);
         accessible_array = g_new (AtkObject *, list_length);

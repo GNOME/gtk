@@ -53,7 +53,7 @@ on_back_button_clicked (GtkButton *button, gpointer user_data)
 {
   const gchar *seq[] = { "1", "2", "3" };
   const gchar *vis;
-  gint i;
+  int i;
 
   vis = gtk_stack_get_visible_child_name (GTK_STACK (stack));
 
@@ -72,7 +72,7 @@ on_forward_button_clicked (GtkButton *button, gpointer user_data)
 {
   const gchar *seq[] = { "1", "2", "3" };
   const gchar *vis;
-  gint i;
+  int i;
 
   vis = gtk_stack_get_visible_child_name (GTK_STACK (stack));
 
@@ -104,8 +104,8 @@ update_forward_button_sensitivity (GtkStack *_stack, GParamSpec *pspec, GtkWidge
   gtk_widget_set_sensitive (button, g_strcmp0 (vis, "3") != 0);
 }
 
-gint
-main (gint argc,
+int
+main (int argc,
       gchar ** argv)
 {
   GtkWidget *window, *box, *button, *hbox, *combo, *layout;

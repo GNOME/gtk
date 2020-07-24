@@ -56,8 +56,8 @@ struct _GtkIMContextWaylandClass
 
 struct preedit {
   gchar *text;
-  gint cursor_begin;
-  gint cursor_end;
+  int cursor_begin;
+  int cursor_end;
 };
 
 struct surrounding_delete {
@@ -76,8 +76,8 @@ struct _GtkIMContextWayland
 
   struct {
     gchar *text;
-    gint cursor_idx;
-    gint anchor_idx;
+    int cursor_idx;
+    int anchor_idx;
   } surrounding;
 
   enum zwp_text_input_v3_change_cause surrounding_change;
@@ -143,8 +143,8 @@ static void
 text_input_preedit (void                     *data,
                     struct zwp_text_input_v3 *text_input,
                     const char               *text,
-                    gint                      cursor_begin,
-                    gint                      cursor_end)
+                    int                       cursor_begin,
+                    int                       cursor_end)
 {
   GtkIMContextWayland *context;
   GtkIMContextWaylandGlobal *global = data;
@@ -240,7 +240,7 @@ text_input_delete_surrounding_text_apply (GtkIMContextWaylandGlobal *global,
 {
   GtkIMContextWayland *context;
   gboolean retval;
-  gint len;
+  int len;
   struct surrounding_delete defaults = {0};
 
   context = GTK_IM_CONTEXT_WAYLAND (global->current);
@@ -492,7 +492,7 @@ gtk_im_context_wayland_finalize (GObject *object)
 
 static void
 pressed_cb (GtkGestureClick     *gesture,
-            gint                 n_press,
+            int                  n_press,
             gdouble              x,
             gdouble              y,
             GtkIMContextWayland *context)
@@ -506,7 +506,7 @@ pressed_cb (GtkGestureClick     *gesture,
 
 static void
 released_cb (GtkGestureClick     *gesture,
-             gint                 n_press,
+             int                  n_press,
              gdouble              x,
              gdouble              y,
              GtkIMContextWayland *context)
@@ -572,7 +572,7 @@ static void
 gtk_im_context_wayland_get_preedit_string (GtkIMContext   *context,
                                            gchar         **str,
                                            PangoAttrList **attrs,
-                                           gint           *cursor_pos)
+                                           int            *cursor_pos)
 {
   GtkIMContextWayland *context_wayland = GTK_IM_CONTEXT_WAYLAND (context);
   const char *preedit_str;
@@ -859,8 +859,8 @@ gtk_im_context_wayland_set_use_preedit (GtkIMContext *context,
 static void
 gtk_im_context_wayland_set_surrounding (GtkIMContext *context,
                                         const gchar  *text,
-                                        gint          len,
-                                        gint          cursor_index)
+                                        int           len,
+                                        int           cursor_index)
 {
   GtkIMContextWayland *context_wayland;
 
@@ -883,7 +883,7 @@ gtk_im_context_wayland_set_surrounding (GtkIMContext *context,
 static gboolean
 gtk_im_context_wayland_get_surrounding (GtkIMContext  *context,
                                         gchar        **text,
-                                        gint          *cursor_index)
+                                        int           *cursor_index)
 {
   GtkIMContextWayland *context_wayland;
 

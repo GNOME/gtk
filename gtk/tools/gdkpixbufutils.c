@@ -72,8 +72,8 @@ load_from_stream (GdkPixbufLoader  *loader,
 
 static void
 size_prepared_cb (GdkPixbufLoader *loader,
-                  gint             width,
-                  gint             height,
+                  int              width,
+                  int              height,
                   gpointer         data)
 {
   gdouble *scale = data;
@@ -120,8 +120,8 @@ _gdk_pixbuf_new_from_stream_scaled (GInputStream  *stream,
 
 static void
 size_prepared_cb2 (GdkPixbufLoader *loader,
-                   gint             width,
-                   gint             height,
+                   int              width,
+                   int              height,
                    gpointer         data)
 {
   int *scales = data;

@@ -83,9 +83,9 @@ void                gtk_entry_completion_set_match_func         (GtkEntryComplet
                                                                  GDestroyNotify               func_notify);
 GDK_AVAILABLE_IN_ALL
 void                gtk_entry_completion_set_minimum_key_length (GtkEntryCompletion          *completion,
-                                                                 gint                         length);
+                                                                 int                          length);
 GDK_AVAILABLE_IN_ALL
-gint                gtk_entry_completion_get_minimum_key_length (GtkEntryCompletion          *completion);
+int                 gtk_entry_completion_get_minimum_key_length (GtkEntryCompletion          *completion);
 GDK_AVAILABLE_IN_ALL
 gchar *             gtk_entry_completion_compute_prefix         (GtkEntryCompletion          *completion,
                                                                  const char                  *key);
@@ -125,9 +125,9 @@ const gchar         *gtk_entry_completion_get_completion_prefix (GtkEntryComplet
 /* convenience */
 GDK_AVAILABLE_IN_ALL
 void                gtk_entry_completion_set_text_column        (GtkEntryCompletion          *completion,
-                                                                 gint                         column);
+                                                                 int                          column);
 GDK_AVAILABLE_IN_ALL
-gint                gtk_entry_completion_get_text_column        (GtkEntryCompletion          *completion);
+int                 gtk_entry_completion_get_text_column        (GtkEntryCompletion          *completion);
 
 G_END_DECLS
 

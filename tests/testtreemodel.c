@@ -25,8 +25,8 @@
 
 #include <gtk/gtk.h>
 
-static gint repeats = 2;
-static gint max_size = 8;
+static int repeats = 2;
+static int max_size = 8;
 
 static GOptionEntry entries[] = {
   { "repeats", 'r', 0, G_OPTION_ARG_INT, &repeats, "Average over N repetitions", "N" },
@@ -37,13 +37,13 @@ static GOptionEntry entries[] = {
 
 typedef void (ClearFunc)(GtkTreeModel *model);
 typedef void (InsertFunc)(GtkTreeModel *model,
-			  gint          items,
-			  gint          i);
+			  int           items,
+			  int           i);
 
 static void
 list_store_append (GtkTreeModel *model,
-		   gint          items,
-		   gint          i)
+		   int           items,
+		   int           i)
 {
   GtkListStore *store = GTK_LIST_STORE (model);
   GtkTreeIter iter;
@@ -57,8 +57,8 @@ list_store_append (GtkTreeModel *model,
 
 static void
 list_store_prepend (GtkTreeModel *model,
-		    gint          items,
-		    gint          i)
+		    int           items,
+		    int           i)
 {
   GtkListStore *store = GTK_LIST_STORE (model);
   GtkTreeIter iter;
@@ -72,13 +72,13 @@ list_store_prepend (GtkTreeModel *model,
 
 static void
 list_store_insert (GtkTreeModel *model,
-		   gint          items,
-		   gint          i)
+		   int           items,
+		   int           i)
 {
   GtkListStore *store = GTK_LIST_STORE (model);
   GtkTreeIter iter;
   gchar *text;
-  gint n;
+  int n;
 
   text = g_strdup_printf ("row %d", i);
   n = g_random_int_range (0, i + 1);
@@ -87,14 +87,14 @@ list_store_insert (GtkTreeModel *model,
   g_free (text);
 }
 
-static gint
+static int
 compare (GtkTreeModel *model,
 	 GtkTreeIter  *a,
 	 GtkTreeIter  *b,
 	 gpointer      data)
 {
   gchar *str_a, *str_b;
-  gint result;
+  int result;
 
   gtk_tree_model_get (model, a, 1, &str_a, -1);
   gtk_tree_model_get (model, b, 1, &str_b, -1);
@@ -109,8 +109,8 @@ compare (GtkTreeModel *model,
 
 static void
 tree_store_append (GtkTreeModel *model,
-		   gint          items,
-		   gint          i)
+		   int           items,
+		   int           i)
 {
   GtkTreeStore *store = GTK_TREE_STORE (model);
   GtkTreeIter iter;
@@ -124,8 +124,8 @@ tree_store_append (GtkTreeModel *model,
 
 static void
 tree_store_prepend (GtkTreeModel *model,
-		    gint          items,
-		    gint          i)
+		    int           items,
+		    int           i)
 {
   GtkTreeStore *store = GTK_TREE_STORE (model);
   GtkTreeIter iter;
@@ -139,13 +139,13 @@ tree_store_prepend (GtkTreeModel *model,
 
 static void
 tree_store_insert_flat (GtkTreeModel *model,
-			gint          items,
-			gint          i)
+			int           items,
+			int           i)
 {
   GtkTreeStore *store = GTK_TREE_STORE (model);
   GtkTreeIter iter;
   gchar *text;
-  gint n;
+  int n;
 
   text = g_strdup_printf ("row %d", i);
   n = g_random_int_range (0, i + 1);
@@ -155,8 +155,8 @@ tree_store_insert_flat (GtkTreeModel *model,
 }
 
 typedef struct {
-  gint i;
-  gint n;
+  int i;
+  int n;
   gboolean found;
   GtkTreeIter iter;
 } FindData;
@@ -183,8 +183,8 @@ find_nth (GtkTreeModel *model,
 
 static void
 tree_store_insert_deep (GtkTreeModel *model,
-			gint          items,
-			gint          i)
+			int           items,
+			int           i)
 {
   GtkTreeStore *store = GTK_TREE_STORE (model);
   GtkTreeIter iter;
@@ -209,7 +209,7 @@ test_run (const char        *title,
 	  ClearFunc    *clear,
 	  InsertFunc   *insert)
 {
-  gint i, k, d, items;
+  int i, k, d, items;
   GTimer *timer;
   gdouble elapsed;
   int memused;

@@ -37,9 +37,9 @@ void               _gtk_range_set_has_origin               (GtkRange      *range
 gboolean           _gtk_range_get_has_origin               (GtkRange      *range);
 void               _gtk_range_set_stop_values              (GtkRange      *range,
                                                             gdouble       *values,
-                                                            gint           n_values);
-gint               _gtk_range_get_stop_positions           (GtkRange      *range,
-                                                            gint         **values);
+                                                            int            n_values);
+int                _gtk_range_get_stop_positions           (GtkRange      *range,
+                                                            int          **values);
 
 GtkWidget         *gtk_range_get_slider_widget             (GtkRange *range);
 GtkWidget         *gtk_range_get_trough_widget             (GtkRange *range);

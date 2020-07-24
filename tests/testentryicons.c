@@ -2,7 +2,7 @@
 #include <stdio.h>
 
 static void
-clear_pressed (GtkEntry *entry, gint icon, gpointer data)
+clear_pressed (GtkEntry *entry, int icon, gpointer data)
 {
    if (icon == GTK_ENTRY_ICON_SECONDARY)
      gtk_editable_set_text (GTK_EDITABLE (entry), "");

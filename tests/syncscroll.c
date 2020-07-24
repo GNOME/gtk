@@ -3,7 +3,7 @@
 static void
 fill_text_view (GtkWidget *tv, const gchar *text)
 {
-  gint i;
+  int i;
   GString *s;
 
   s = g_string_new ("");

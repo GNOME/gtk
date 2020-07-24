@@ -29,15 +29,15 @@ G_BEGIN_DECLS
 struct _GdkDevicePadInterface {
   GTypeInterface parent_interface;
 
-  gint (* get_n_groups)      (GdkDevicePad        *pad);
+  int (* get_n_groups)       (GdkDevicePad        *pad);
 
-  gint (* get_group_n_modes) (GdkDevicePad        *pad,
-                              gint                 group);
-  gint (* get_n_features)    (GdkDevicePad        *pad,
+  int (* get_group_n_modes)  (GdkDevicePad        *pad,
+                              int                  group);
+  int (* get_n_features)     (GdkDevicePad        *pad,
                               GdkDevicePadFeature  feature);
-  gint (* get_feature_group) (GdkDevicePad        *pad,
+  int (* get_feature_group)  (GdkDevicePad        *pad,
                               GdkDevicePadFeature  feature,
-                              gint                 idx);
+                              int                  idx);
 };
 
 G_END_DECLS

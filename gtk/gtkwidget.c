@@ -548,7 +548,7 @@ struct _GtkStateData
   guint         flags_to_set;
   guint         flags_to_unset;
 
-  gint          old_scale_factor;
+  int           old_scale_factor;
 };
 
 /* --- prototypes --- */
@@ -584,8 +584,8 @@ static void	gtk_widget_real_direction_changed(GtkWidget         *widget,
                                                   GtkTextDirection   previous_direction);
 
 static gboolean gtk_widget_real_query_tooltip    (GtkWidget         *widget,
-						  gint               x,
-						  gint               y,
+						  int                x,
+						  int                y,
 						  gboolean           keyboard_tip,
 						  GtkTooltip        *tooltip);
 static void     gtk_widget_real_css_changed      (GtkWidget         *widget,
@@ -659,8 +659,8 @@ static GtkSizeRequestMode gtk_widget_real_get_request_mode      (GtkWidget      
 static void                  template_data_free                 (GtkWidgetTemplate*template_data);
 
 static void gtk_widget_set_usize_internal (GtkWidget          *widget,
-					   gint                width,
-					   gint                height);
+					   int                 width,
+					   int                 height);
 
 static gboolean event_surface_is_still_viewable (GdkEvent *event);
 
@@ -673,7 +673,7 @@ static void gtk_widget_queue_compute_expand (GtkWidget *widget);
 
 
 /* --- variables --- */
-static gint             GtkWidget_private_offset = 0;
+static int              GtkWidget_private_offset = 0;
 static gpointer         gtk_widget_parent_class = NULL;
 static guint            widget_signals[LAST_SIGNAL] = { 0 };
 GtkTextDirection gtk_default_direction = GTK_TEXT_DIR_LTR;
@@ -2097,7 +2097,7 @@ gtk_widget_needs_press_emulation (GtkWidget        *widget,
   return !sequence_press_handled;
 }
 
-static gint
+static int
 _gtk_widget_set_sequence_state_internal (GtkWidget             *widget,
                                          GdkEventSequence      *sequence,
                                          GtkEventSequenceState  state,
@@ -2109,7 +2109,7 @@ _gtk_widget_set_sequence_state_internal (GtkWidget             *widget,
   GtkWidget *target;
   GList *group = NULL;
   GdkEventSequence *seq;
-  gint n_handled = 0;
+  int n_handled = 0;
   guint i;
 
   if (state != GTK_EVENT_SEQUENCE_CLAIMED &&
@@ -3582,7 +3582,7 @@ gtk_widget_get_frame_clock (GtkWidget *widget)
     }
 }
 
-static gint
+static int
 get_number (GtkCssValue *value)
 {
   double d = _gtk_css_number_value_get (value, 100);
@@ -3672,9 +3672,9 @@ effective_align (GtkAlign         align,
 
 static void
 adjust_for_align (GtkAlign  align,
-                  gint      natural_size,
-                  gint     *allocated_pos,
-                  gint     *allocated_size)
+                  int       natural_size,
+                  int      *allocated_pos,
+                  int      *allocated_size)
 {
   switch (align)
     {
@@ -3709,8 +3709,8 @@ gtk_widget_adjust_size_allocation (GtkWidget     *widget,
                                    GtkAllocation *allocation)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
-  gint natural_width, natural_height;
-  gint min_width, min_height;
+  int natural_width, natural_height;
+  int min_width, min_height;
 
   if (priv->halign == GTK_ALIGN_FILL && priv->valign == GTK_ALIGN_FILL)
     return;
@@ -3969,8 +3969,8 @@ gtk_widget_common_ancestor (GtkWidget *widget_a,
 {
   GtkWidget *parent_a;
   GtkWidget *parent_b;
-  gint depth_a = 0;
-  gint depth_b = 0;
+  int depth_a = 0;
+  int depth_b = 0;
 
   parent_a = widget_a;
   while (parent_a->priv->parent)
@@ -4636,8 +4636,8 @@ gtk_widget_grab_focus_child (GtkWidget *widget)
 
 static gboolean
 gtk_widget_real_query_tooltip (GtkWidget  *widget,
-			       gint        x,
-			       gint        y,
+			       int         x,
+			       int         y,
 			       gboolean    keyboard_tip,
 			       GtkTooltip *tooltip)
 {
@@ -4660,8 +4660,8 @@ gtk_widget_real_query_tooltip (GtkWidget  *widget,
 
 gboolean
 gtk_widget_query_tooltip (GtkWidget  *widget,
-                          gint        x,
-                          gint        y,
+                          int         x,
+                          int         y,
                           gboolean    keyboard_mode,
                           GtkTooltip *tooltip)
 {
@@ -6462,7 +6462,7 @@ _gtk_widget_scale_changed (GtkWidget *widget)
  *
  * Returns: the scale factor for @widget
  */
-gint
+int
 gtk_widget_get_scale_factor (GtkWidget *widget)
 {
   GtkRoot *root;
@@ -6655,8 +6655,8 @@ gtk_widget_error_bell (GtkWidget *widget)
 
 static void
 gtk_widget_set_usize_internal (GtkWidget          *widget,
-			       gint                width,
-			       gint                height)
+			       int                 width,
+			       int                 height)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
   gboolean changed = FALSE;
@@ -6723,8 +6723,8 @@ gtk_widget_set_usize_internal (GtkWidget          *widget,
  **/
 void
 gtk_widget_set_size_request (GtkWidget *widget,
-                             gint       width,
-                             gint       height)
+                             int        width,
+                             int        height)
 {
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (width >= -1);
@@ -6750,8 +6750,8 @@ gtk_widget_set_size_request (GtkWidget *widget,
  **/
 void
 gtk_widget_get_size_request (GtkWidget *widget,
-                             gint      *width,
-                             gint      *height)
+                             int       *width,
+                             int       *height)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
 
@@ -7427,8 +7427,8 @@ gtk_widget_real_unrealize (GtkWidget *widget)
 void
 gtk_widget_adjust_size_request (GtkWidget      *widget,
                                 GtkOrientation  orientation,
-                                gint           *minimum_size,
-                                gint           *natural_size)
+                                int            *minimum_size,
+                                int            *natural_size)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
 
@@ -7457,8 +7457,8 @@ gtk_widget_adjust_size_request (GtkWidget      *widget,
 
 void
 gtk_widget_adjust_baseline_request (GtkWidget *widget,
-                                    gint      *minimum_baseline,
-                                    gint      *natural_baseline)
+                                    int       *minimum_baseline,
+                                    int       *natural_baseline)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
 
@@ -7564,7 +7564,7 @@ gtk_widget_propagate_state (GtkWidget          *widget,
   GtkStateFlags new_flags, old_flags = priv->state_flags;
   GtkStateData child_data;
   GtkWidget *child;
-  gint new_scale_factor = gtk_widget_get_scale_factor (widget);
+  int new_scale_factor = gtk_widget_get_scale_factor (widget);
 
   priv->state_flags |= data->flags_to_set;
   priv->state_flags &= ~(data->flags_to_unset);
@@ -7996,8 +7996,8 @@ gtk_widget_set_expand (GtkWidget     *widget,
                        gboolean       expand)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
-  gint expand_prop;
-  gint expand_set_prop;
+  int expand_prop;
+  int expand_set_prop;
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
@@ -8042,7 +8042,7 @@ gtk_widget_set_expand_set (GtkWidget      *widget,
                            gboolean        set)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
-  gint prop;
+  int prop;
 
   set = set != FALSE;
 
@@ -8393,8 +8393,8 @@ typedef struct
 {
   gchar *target;
   AtkRelationType type;
-  gint line;
-  gint col;
+  int line;
+  int col;
 } AtkRelationData;
 
 static void
@@ -8955,7 +8955,7 @@ gtk_widget_buildable_custom_finished (GtkBuildable *buildable,
 	{
 	  AtkObject *accessible;
 	  AtkAction *action;
-	  gint i, n_actions;
+	  int i, n_actions;
 	  GSList *l;
 
 	  accessible = gtk_widget_get_accessible (GTK_WIDGET (buildable));
@@ -9156,7 +9156,7 @@ gtk_widget_set_valign (GtkWidget *widget,
  *
  * Returns: The start margin of @widget
  */
-gint
+int
 gtk_widget_get_margin_start (GtkWidget *widget)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
@@ -9176,7 +9176,7 @@ gtk_widget_get_margin_start (GtkWidget *widget)
  */
 void
 gtk_widget_set_margin_start (GtkWidget *widget,
-                             gint       margin)
+                             int        margin)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
 
@@ -9201,7 +9201,7 @@ gtk_widget_set_margin_start (GtkWidget *widget,
  *
  * Returns: The end margin of @widget
  */
-gint
+int
 gtk_widget_get_margin_end (GtkWidget *widget)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
@@ -9221,7 +9221,7 @@ gtk_widget_get_margin_end (GtkWidget *widget)
  */
 void
 gtk_widget_set_margin_end (GtkWidget *widget,
-                           gint       margin)
+                           int        margin)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
 
@@ -9246,7 +9246,7 @@ gtk_widget_set_margin_end (GtkWidget *widget,
  *
  * Returns: The top margin of @widget
  */
-gint
+int
 gtk_widget_get_margin_top (GtkWidget *widget)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
@@ -9266,7 +9266,7 @@ gtk_widget_get_margin_top (GtkWidget *widget)
  */
 void
 gtk_widget_set_margin_top (GtkWidget *widget,
-                           gint       margin)
+                           int        margin)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
 
@@ -9289,7 +9289,7 @@ gtk_widget_set_margin_top (GtkWidget *widget,
  *
  * Returns: The bottom margin of @widget
  */
-gint
+int
 gtk_widget_get_margin_bottom (GtkWidget *widget)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
@@ -9309,7 +9309,7 @@ gtk_widget_get_margin_bottom (GtkWidget *widget)
  */
 void
 gtk_widget_set_margin_bottom (GtkWidget *widget,
-                              gint       margin)
+                              int        margin)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
 

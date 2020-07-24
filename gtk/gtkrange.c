@@ -92,11 +92,11 @@ struct _GtkRangePrivate
   gdouble  fill_level;
   gdouble *marks;
 
-  gint *mark_pos;
-  gint  n_marks;
-  gint  round_digits;                /* Round off value to this many digits, -1 for no rounding */
-  gint  slide_initial_slider_position;
-  gint  slide_initial_coordinate_delta;
+  int *mark_pos;
+  int   n_marks;
+  int   round_digits;                /* Round off value to this many digits, -1 for no rounding */
+  int   slide_initial_slider_position;
+  int   slide_initial_coordinate_delta;
 
   guint flippable              : 1;
   guint inverted               : 1;
@@ -225,11 +225,11 @@ static void          gtk_range_direction_changed        (GtkWidget     *widget,
                                                          GtkTextDirection  previous_direction);
 static void          gtk_range_measure_trough           (GtkGizmo       *gizmo,
                                                          GtkOrientation  orientation,
-                                                         gint            for_size,
-                                                         gint           *minimum,
-                                                         gint           *natural,
-                                                         gint           *minimum_baseline,
-                                                         gint           *natural_baseline);
+                                                         int             for_size,
+                                                         int            *minimum,
+                                                         int            *natural,
+                                                         int            *minimum_baseline,
+                                                         int            *natural_baseline);
 static void          gtk_range_allocate_trough          (GtkGizmo            *gizmo,
                                                          int                  width,
                                                          int                  height,
@@ -943,8 +943,8 @@ gtk_range_get_range_rect (GtkRange     *range,
  **/
 void
 gtk_range_get_slider_range (GtkRange *range,
-                            gint     *slider_start,
-                            gint     *slider_end)
+                            int      *slider_start,
+                            int      *slider_end)
 {
   GtkRangePrivate *priv = gtk_range_get_instance_private (range);
   graphene_rect_t slider_bounds;
@@ -1303,16 +1303,16 @@ gtk_range_finalize (GObject *object)
 static void
 gtk_range_measure_trough (GtkGizmo       *gizmo,
                           GtkOrientation  orientation,
-                          gint            for_size,
-                          gint           *minimum,
-                          gint           *natural,
-                          gint           *minimum_baseline,
-                          gint           *natural_baseline)
+                          int             for_size,
+                          int            *minimum,
+                          int            *natural,
+                          int            *minimum_baseline,
+                          int            *natural_baseline)
 {
   GtkWidget *widget = gtk_widget_get_parent (GTK_WIDGET (gizmo));
   GtkRange *range = GTK_RANGE (widget);
   GtkRangePrivate *priv = gtk_range_get_instance_private (range);
-  gint min, nat;
+  int min, nat;
 
   gtk_widget_measure (priv->slider_widget,
                       orientation, -1,
@@ -1486,7 +1486,7 @@ clamp_dimensions (int        range_width,
                   GtkBorder *border,
                   gboolean   border_expands_horizontally)
 {
-  gint extra, shortage;
+  int extra, shortage;
 
   /* Width */
   extra = range_width - border->left - border->right - *width;
@@ -1720,8 +1720,8 @@ coord_to_value (GtkRange *range,
   GtkRangePrivate *priv = gtk_range_get_instance_private (range);
   gdouble frac;
   gdouble value;
-  gint    trough_length;
-  gint    slider_length;
+  int     trough_length;
+  int     slider_length;
   graphene_rect_t slider_bounds;
 
   if (!gtk_widget_compute_bounds (priv->slider_widget, priv->slider_widget, &slider_bounds))
@@ -1977,8 +1977,8 @@ gtk_range_click_gesture_released (GtkGestureClick *gesture,
 /* During a slide, move the slider as required given new mouse position */
 static void
 update_slider_position (GtkRange *range,
-                        gint      mouse_x,
-                        gint      mouse_y)
+                        int       mouse_x,
+                        int       mouse_y)
 {
   GtkRangePrivate *priv = gtk_range_get_instance_private (range);
   graphene_rect_t trough_bounds;
@@ -1990,7 +1990,7 @@ update_slider_position (GtkRange *range,
   gdouble mark_value;
   gdouble mark_delta;
   gdouble zoom;
-  gint i;
+  int i;
   double x, y;
 
   gtk_widget_translate_coordinates (GTK_WIDGET (range), priv->trough_widget,
@@ -2220,7 +2220,7 @@ update_autoscroll_mode (GtkRange *range,
   if (priv->zoom)
     {
       int width, height;
-      gint size, pos;
+      int size, pos;
 
       width = gtk_widget_get_width (GTK_WIDGET (range));
       height = gtk_widget_get_height (GTK_WIDGET (range));
@@ -2336,7 +2336,7 @@ apply_marks (GtkRange *range,
              gdouble  *newval)
 {
   GtkRangePrivate *priv = gtk_range_get_instance_private (range);
-  gint i;
+  int i;
   gdouble mark;
 
   for (i = 0; i < priv->n_marks; i++)
@@ -2635,7 +2635,7 @@ gtk_range_calc_marks (GtkRange *range)
   GtkRangePrivate *priv = gtk_range_get_instance_private (range);
   GdkRectangle slider;
   double x, y;
-  gint i;
+  int i;
 
   for (i = 0; i < priv->n_marks; i++)
     {
@@ -2670,7 +2670,7 @@ gtk_range_real_change_value (GtkRange      *range,
   if (priv->round_digits >= 0)
     {
       gdouble power;
-      gint i;
+      int i;
 
       i = priv->round_digits;
       power = 1;
@@ -2780,16 +2780,16 @@ _gtk_range_get_has_origin (GtkRange *range)
 void
 _gtk_range_set_stop_values (GtkRange *range,
                             gdouble  *values,
-                            gint      n_values)
+                            int       n_values)
 {
   GtkRangePrivate *priv = gtk_range_get_instance_private (range);
-  gint i;
+  int i;
 
   g_free (priv->marks);
   priv->marks = g_new (gdouble, n_values);
 
   g_free (priv->mark_pos);
-  priv->mark_pos = g_new (gint, n_values);
+  priv->mark_pos = g_new (int, n_values);
 
   priv->n_marks = n_values;
 
@@ -2799,16 +2799,16 @@ _gtk_range_set_stop_values (GtkRange *range,
   gtk_range_calc_marks (range);
 }
 
-gint
+int
 _gtk_range_get_stop_positions (GtkRange  *range,
-                               gint     **values)
+                               int      **values)
 {
   GtkRangePrivate *priv = gtk_range_get_instance_private (range);
 
   gtk_range_calc_marks (range);
 
   if (values)
-    *values = g_memdup (priv->mark_pos, priv->n_marks * sizeof (gint));
+    *values = g_memdup (priv->mark_pos, priv->n_marks * sizeof (int));
 
   return priv->n_marks;
 }
@@ -2823,7 +2823,7 @@ _gtk_range_get_stop_positions (GtkRange  *range,
  */
 void
 gtk_range_set_round_digits (GtkRange *range,
-                            gint      round_digits)
+                            int       round_digits)
 {
   GtkRangePrivate *priv = gtk_range_get_instance_private (range);
 
@@ -2846,7 +2846,7 @@ gtk_range_set_round_digits (GtkRange *range,
  *
  * Returns: the number of digits to round to
  */
-gint
+int
 gtk_range_get_round_digits (GtkRange *range)
 {
   GtkRangePrivate *priv = gtk_range_get_instance_private (range);

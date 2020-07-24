@@ -142,8 +142,8 @@ typedef struct {
   GtkProgressTracker tracker;
   gboolean first_frame_skipped;
 
-  gint last_visible_widget_width;
-  gint last_visible_widget_height;
+  int last_visible_widget_width;
+  int last_visible_widget_height;
 
   gboolean interpolate_size;
 
@@ -886,7 +886,7 @@ get_simple_transition_type (gboolean               new_child_first,
     }
 }
 
-static gint
+static int
 get_bin_window_x (GtkStack *stack)
 {
   GtkStackPrivate *priv = gtk_stack_get_instance_private (stack);
@@ -906,7 +906,7 @@ get_bin_window_x (GtkStack *stack)
   return x;
 }
 
-static gint
+static int
 get_bin_window_y (GtkStack *stack)
 {
   GtkStackPrivate *priv = gtk_stack_get_instance_private (stack);
@@ -2038,7 +2038,7 @@ gtk_stack_snapshot_under (GtkWidget   *widget,
   GtkStack *stack = GTK_STACK (widget);
   GtkStackPrivate *priv = gtk_stack_get_instance_private (stack);
   int widget_width, widget_height;
-  gint x, y, width, height, pos_x, pos_y;
+  int x, y, width, height, pos_x, pos_y;
 
 
   x = y = 0;
@@ -2382,7 +2382,7 @@ gtk_stack_measure (GtkWidget      *widget,
   GtkStackPrivate *priv = gtk_stack_get_instance_private (stack);
   GtkStackPage *child_info;
   GtkWidget *child;
-  gint child_min, child_nat;
+  int child_min, child_nat;
   GList *l;
 
   *minimum = 0;

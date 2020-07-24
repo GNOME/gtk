@@ -211,7 +211,7 @@ static void gtk_expander_measure (GtkWidget      *widget,
 
 /* Gestures */
 static void     gesture_click_released_cb (GtkGestureClick *gesture,
-                                           gint             n_press,
+                                           int              n_press,
                                            gdouble          x,
                                            gdouble          y,
                                            GtkExpander     *expander);
@@ -565,7 +565,7 @@ gtk_expander_size_allocate (GtkWidget *widget,
 
 static void
 gesture_click_released_cb (GtkGestureClick *gesture,
-                           gint             n_press,
+                           int              n_press,
                            gdouble          x,
                            gdouble          y,
                            GtkExpander     *expander)

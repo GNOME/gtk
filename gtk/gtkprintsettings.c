@@ -408,10 +408,10 @@ gtk_print_settings_set_length (GtkPrintSettings *settings,
  * 
  * Returns: the integer value of @key
  */
-gint
+int
 gtk_print_settings_get_int_with_default (GtkPrintSettings *settings,
 					 const gchar      *key,
-					 gint              def)
+					 int               def)
 {
   const gchar *val;
 
@@ -431,7 +431,7 @@ gtk_print_settings_get_int_with_default (GtkPrintSettings *settings,
  * 
  * Returns: the integer value of @key 
  */
-gint
+int
 gtk_print_settings_get_int (GtkPrintSettings *settings,
 			    const gchar      *key)
 {
@@ -449,7 +449,7 @@ gtk_print_settings_get_int (GtkPrintSettings *settings,
 void
 gtk_print_settings_set_int (GtkPrintSettings *settings,
 			    const gchar      *key,
-			    gint              value)
+			    int               value)
 {
   gchar buf[128];
   g_sprintf (buf, "%d", value);
@@ -1051,7 +1051,7 @@ gtk_print_settings_set_number_up_layout (GtkPrintSettings  *settings,
  * 
  * Returns: the number of copies to print
  */
-gint
+int
 gtk_print_settings_get_n_copies (GtkPrintSettings *settings)
 {
   return gtk_print_settings_get_int_with_default (settings, GTK_PRINT_SETTINGS_N_COPIES, 1);
@@ -1066,7 +1066,7 @@ gtk_print_settings_get_n_copies (GtkPrintSettings *settings)
  */
 void
 gtk_print_settings_set_n_copies (GtkPrintSettings *settings,
-				 gint              num_copies)
+				 int               num_copies)
 {
   gtk_print_settings_set_int (settings, GTK_PRINT_SETTINGS_N_COPIES,
 			      num_copies);
@@ -1080,7 +1080,7 @@ gtk_print_settings_set_n_copies (GtkPrintSettings *settings,
  * 
  * Returns: the number of pages per sheet
  */
-gint
+int
 gtk_print_settings_get_number_up (GtkPrintSettings *settings)
 {
   return gtk_print_settings_get_int_with_default (settings, GTK_PRINT_SETTINGS_NUMBER_UP, 1);
@@ -1095,7 +1095,7 @@ gtk_print_settings_get_number_up (GtkPrintSettings *settings)
  */
 void
 gtk_print_settings_set_number_up (GtkPrintSettings *settings,
-				  gint              number_up)
+				  int               number_up)
 {
   gtk_print_settings_set_int (settings, GTK_PRINT_SETTINGS_NUMBER_UP,
 				number_up);
@@ -1109,7 +1109,7 @@ gtk_print_settings_set_number_up (GtkPrintSettings *settings,
  * 
  * Returns: the resolution in dpi
  */
-gint
+int
 gtk_print_settings_get_resolution (GtkPrintSettings *settings)
 {
   return gtk_print_settings_get_int_with_default (settings, GTK_PRINT_SETTINGS_RESOLUTION, 300);
@@ -1126,7 +1126,7 @@ gtk_print_settings_get_resolution (GtkPrintSettings *settings)
  */
 void
 gtk_print_settings_set_resolution (GtkPrintSettings *settings,
-				   gint              resolution)
+				   int               resolution)
 {
   gtk_print_settings_set_int (settings, GTK_PRINT_SETTINGS_RESOLUTION,
 			      resolution);
@@ -1144,7 +1144,7 @@ gtk_print_settings_set_resolution (GtkPrintSettings *settings,
  * 
  * Returns: the horizontal resolution in dpi
  */
-gint
+int
 gtk_print_settings_get_resolution_x (GtkPrintSettings *settings)
 {
   return gtk_print_settings_get_int_with_default (settings, GTK_PRINT_SETTINGS_RESOLUTION_X, 300);
@@ -1158,7 +1158,7 @@ gtk_print_settings_get_resolution_x (GtkPrintSettings *settings)
  * 
  * Returns: the vertical resolution in dpi
  */
-gint
+int
 gtk_print_settings_get_resolution_y (GtkPrintSettings *settings)
 {
   return gtk_print_settings_get_int_with_default (settings, GTK_PRINT_SETTINGS_RESOLUTION_Y, 300);
@@ -1176,8 +1176,8 @@ gtk_print_settings_get_resolution_y (GtkPrintSettings *settings)
  */
 void
 gtk_print_settings_set_resolution_xy (GtkPrintSettings *settings,
-				      gint              resolution_x,
-				      gint              resolution_y)
+				      int               resolution_x,
+				      int               resolution_y)
 {
   gtk_print_settings_set_int (settings, GTK_PRINT_SETTINGS_RESOLUTION_X,
 			      resolution_x);
@@ -1323,12 +1323,12 @@ gtk_print_settings_set_print_pages (GtkPrintSettings *settings,
  */
 GtkPageRange *
 gtk_print_settings_get_page_ranges (GtkPrintSettings *settings,
-				    gint             *num_ranges)
+				    int              *num_ranges)
 {
   const gchar *val;
   gchar **range_strs;
   GtkPageRange *ranges;
-  gint i, n;
+  int i, n;
   
   val = gtk_print_settings_get (settings, GTK_PRINT_SETTINGS_PAGE_RANGES);
 
@@ -1349,16 +1349,16 @@ gtk_print_settings_get_page_ranges (GtkPrintSettings *settings,
 
   for (i = 0; i < n; i++)
     {
-      gint start, end;
+      int start, end;
       gchar *str;
 
-      start = (gint)strtol (range_strs[i], &str, 10);
+      start = (int)strtol (range_strs[i], &str, 10);
       end = start;
 
       if (*str == '-')
 	{
 	  str++;
-	  end = (gint)strtol (str, NULL, 10);
+	  end = (int)strtol (str, NULL, 10);
 	}
 
       ranges[i].start = start;
@@ -1382,10 +1382,10 @@ gtk_print_settings_get_page_ranges (GtkPrintSettings *settings,
 void
 gtk_print_settings_set_page_ranges  (GtkPrintSettings *settings,
 				     GtkPageRange     *page_ranges,
-				     gint              num_ranges)
+				     int               num_ranges)
 {
   GString *s;
-  gint i;
+  int i;
   
   s = g_string_new ("");
 

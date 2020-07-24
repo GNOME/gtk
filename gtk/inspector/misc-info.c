@@ -103,7 +103,7 @@ format_state_flags (GtkStateFlags state)
 {
   GFlagsClass *fclass;
   GString *str;
-  gint i;
+  int i;
 
   str = g_string_new ("");
 

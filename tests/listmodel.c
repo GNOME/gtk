@@ -14,7 +14,7 @@ typedef struct
   GObject parent;
 
   gchar *label;
-  gint id;
+  int id;
 } MyObject;
 
 typedef struct
@@ -115,10 +115,10 @@ create_widget (gpointer item,
   return label;
 }
 
-static gint
+static int
 compare_items (gconstpointer a, gconstpointer b, gpointer data)
 {
-  gint id_a, id_b;
+  int id_a, id_b;
 
   g_object_get ((gpointer)a, "id", &id_a, NULL);
   g_object_get ((gpointer)b, "id", &id_b, NULL);
@@ -129,7 +129,7 @@ compare_items (gconstpointer a, gconstpointer b, gpointer data)
 static void
 add_some (GtkButton *button, GListStore *store)
 {
-  gint n, i;
+  int n, i;
   guint n_items;
   GObject *obj;
   gchar *label;
@@ -152,7 +152,7 @@ add_some (GtkButton *button, GListStore *store)
 static void
 remove_some (GtkButton *button, GListStore *store)
 {
-  gint n, i;
+  int n, i;
   guint n_items;
 
   for (n = 0; n < 50; n++)
@@ -170,7 +170,7 @@ main (int argc, char *argv[])
 {
   GtkWidget *window, *grid, *sw, *box, *button;
   GListStore *store;
-  gint i;
+  int i;
 
   gtk_init ();
 

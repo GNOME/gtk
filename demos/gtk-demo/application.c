@@ -92,7 +92,7 @@ activate_new (GSimpleAction *action,
 
 static void
 open_response_cb (GtkNativeDialog *dialog,
-                  gint             response_id,
+                  int              response_id,
                   gpointer         user_data)
 {
   GtkFileChooserNative *native = user_data;
@@ -245,8 +245,8 @@ update_statusbar (GtkTextBuffer         *buffer,
                   DemoApplicationWindow *window)
 {
   gchar *msg;
-  gint row, col;
-  gint count;
+  int row, col;
+  int count;
   GtkTextIter iter;
 
   /* clear any previous message, underflow is allowed */

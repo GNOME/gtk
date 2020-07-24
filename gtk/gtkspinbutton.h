@@ -149,7 +149,7 @@ GDK_AVAILABLE_IN_ALL
 gdouble		gtk_spin_button_get_value          (GtkSpinButton  *spin_button);
 
 GDK_AVAILABLE_IN_ALL
-gint		gtk_spin_button_get_value_as_int   (GtkSpinButton  *spin_button);
+int		gtk_spin_button_get_value_as_int   (GtkSpinButton  *spin_button);
 
 GDK_AVAILABLE_IN_ALL
 void		gtk_spin_button_set_value	   (GtkSpinButton  *spin_button,

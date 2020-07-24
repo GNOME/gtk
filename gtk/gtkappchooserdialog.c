@@ -124,7 +124,7 @@ add_or_find_application (GtkAppChooserDialog *self)
 
 static void
 gtk_app_chooser_dialog_response (GtkDialog *dialog,
-                                 gint       response_id,
+                                 int        response_id,
                                  gpointer   user_data)
 {
   GtkAppChooserDialog *self = GTK_APP_CHOOSER_DIALOG (dialog);

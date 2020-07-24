@@ -36,10 +36,10 @@ typedef void (*GdkRoundTripCallback)  (GdkDisplay *display,
 struct _GdkChildInfoX11
 {
   Window window;
-  gint x;
-  gint y;
-  gint width;
-  gint height;
+  int x;
+  int y;
+  int width;
+  int height;
   guint is_mapped : 1;
   guint has_wm_state : 1;
   guint window_class : 2;

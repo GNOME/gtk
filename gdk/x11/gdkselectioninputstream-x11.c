@@ -325,12 +325,12 @@ get_selection_property (Display  *display,
                         Window    owner,
                         Atom      property,
                         Atom     *ret_type,
-                        gint     *ret_format)
+                        int      *ret_format)
 {
   gulong nitems;
   gulong nbytes;
   Atom prop_type;
-  gint prop_format;
+  int prop_format;
   guchar *data = NULL;
 
   if (XGetWindowProperty (display, owner, property,
@@ -390,7 +390,7 @@ gdk_x11_selection_input_stream_xevent (GdkDisplay   *display,
   Window xwindow;
   GBytes *bytes;
   Atom type;
-  gint format;
+  int format;
 
   xdisplay = gdk_x11_display_get_xdisplay (priv->display);
   xwindow = GDK_X11_DISPLAY (priv->display)->leader_window;

@@ -103,12 +103,12 @@ gdk_x11_get_xatom_by_name_for_display (GdkDisplay  *display,
 void
 _gdk_x11_precache_atoms (GdkDisplay          *display,
 			 const gchar * const *atom_names,
-			 gint                 n_atoms)
+			 int                  n_atoms)
 {
   Atom *xatoms;
   const char **xatom_names;
-  gint n_xatoms;
-  gint i;
+  int n_xatoms;
+  int i;
 
   xatoms = g_new (Atom, n_atoms);
   xatom_names = g_new (const char *, n_atoms);

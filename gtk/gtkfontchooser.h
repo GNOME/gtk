@@ -81,7 +81,7 @@ struct _GtkFontChooserIface
   /* Methods */
   PangoFontFamily * (* get_font_family)         (GtkFontChooser  *fontchooser);
   PangoFontFace *   (* get_font_face)           (GtkFontChooser  *fontchooser);
-  gint              (* get_font_size)           (GtkFontChooser  *fontchooser);
+  int               (* get_font_size)           (GtkFontChooser  *fontchooser);
 
   void              (* set_filter_func)         (GtkFontChooser   *fontchooser,
                                                  GtkFontFilterFunc filter,
@@ -109,7 +109,7 @@ PangoFontFamily *gtk_font_chooser_get_font_family          (GtkFontChooser   *fo
 GDK_AVAILABLE_IN_ALL
 PangoFontFace   *gtk_font_chooser_get_font_face            (GtkFontChooser   *fontchooser);
 GDK_AVAILABLE_IN_ALL
-gint             gtk_font_chooser_get_font_size            (GtkFontChooser   *fontchooser);
+int              gtk_font_chooser_get_font_size            (GtkFontChooser   *fontchooser);
 
 GDK_AVAILABLE_IN_ALL
 PangoFontDescription *

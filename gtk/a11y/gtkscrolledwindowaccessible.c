@@ -30,8 +30,8 @@ visibility_changed (GObject    *object,
 {
   if (!g_strcmp0 (pspec->name, "visible"))
     {
-      gint index;
-      gint n_children;
+      int index;
+      int n_children;
       gboolean child_added = FALSE;
       AtkObject *child;
       GtkWidget *widget;
@@ -104,7 +104,7 @@ gtk_scrolled_window_accessible_get_n_children (AtkObject *object)
 {
   GtkWidget *widget;
   GtkScrolledWindow *scrolled_window;
-  gint n_children;
+  int n_children;
 
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (object));
   if (widget == NULL)
@@ -125,7 +125,7 @@ gtk_scrolled_window_accessible_get_n_children (AtkObject *object)
 
 static AtkObject *
 gtk_scrolled_window_accessible_ref_child (AtkObject *obj,
-                                          gint       child)
+                                          int        child)
 {
   GtkWidget *widget;
   GtkScrolledWindow *scrolled_window;

@@ -25,7 +25,7 @@
 #include <stdlib.h>
 
 static gboolean gdk_event_source_prepare  (GSource     *source,
-                                           gint        *timeout);
+                                           int         *timeout);
 static gboolean gdk_event_source_check    (GSource     *source);
 static gboolean gdk_event_source_dispatch (GSource     *source,
                                            GSourceFunc  callback,
@@ -54,7 +54,7 @@ static GList *event_sources = NULL;
 
 static gboolean
 gdk_event_source_prepare (GSource *source,
-                          gint    *timeout)
+                          int     *timeout)
 {
   GdkDisplay *display = ((GdkEventSource*) source)->display;
   gboolean retval;

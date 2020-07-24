@@ -61,7 +61,7 @@ _gtk_pango_get_default_attributes (AtkAttributeSet *attributes,
                                    PangoLayout     *layout)
 {
   PangoContext *context;
-  gint i;
+  int i;
   PangoWrapMode mode;
 
   context = pango_layout_get_context (layout);
@@ -169,9 +169,9 @@ _gtk_pango_get_default_attributes (AtkAttributeSet *attributes,
 AtkAttributeSet *
 _gtk_pango_get_run_attributes (AtkAttributeSet *attributes,
                                PangoLayout     *layout,
-                               gint             offset,
-                               gint            *start_offset,
-                               gint            *end_offset)
+                               int              offset,
+                               int             *start_offset,
+                               int             *end_offset)
 {
   PangoAttrIterator *iter;
   PangoAttrList *attr;
@@ -180,7 +180,7 @@ _gtk_pango_get_run_attributes (AtkAttributeSet *attributes,
   PangoAttrColor *pango_color;
   PangoAttrLanguage *pango_lang;
   PangoAttrFloat *pango_float;
-  gint index, start_index, end_index;
+  int index, start_index, end_index;
   gboolean is_next;
   glong len;
   const gchar *text;
@@ -336,13 +336,13 @@ _gtk_pango_get_run_attributes (AtkAttributeSet *attributes,
  *
  * Returns: the new position
  */
-static gint
+static int
 _gtk_pango_move_chars (PangoLayout *layout,
-                       gint         offset,
-                       gint         count)
+                       int          offset,
+                       int          count)
 {
   const PangoLogAttr *attrs;
-  gint n_attrs;
+  int n_attrs;
 
   attrs = pango_layout_get_log_attrs_readonly (layout, &n_attrs);
 
@@ -382,13 +382,13 @@ _gtk_pango_move_chars (PangoLayout *layout,
  *
  * Returns: the new position
  */
-static gint
+static int
 _gtk_pango_move_words (PangoLayout  *layout,
-                       gint          offset,
-                       gint          count)
+                       int           offset,
+                       int           count)
 {
   const PangoLogAttr *attrs;
-  gint n_attrs;
+  int n_attrs;
 
   attrs = pango_layout_get_log_attrs_readonly (layout, &n_attrs);
 
@@ -428,13 +428,13 @@ _gtk_pango_move_words (PangoLayout  *layout,
  *
  * Returns: the new position
  */
-static gint
+static int
 _gtk_pango_move_sentences (PangoLayout  *layout,
-                           gint          offset,
-                           gint          count)
+                           int           offset,
+                           int           count)
 {
   const PangoLogAttr *attrs;
-  gint n_attrs;
+  int n_attrs;
 
   attrs = pango_layout_get_log_attrs_readonly (layout, &n_attrs);
 
@@ -470,10 +470,10 @@ _gtk_pango_move_sentences (PangoLayout  *layout,
  */
 static gboolean
 _gtk_pango_is_inside_word (PangoLayout  *layout,
-                           gint          offset)
+                           int           offset)
 {
   const PangoLogAttr *attrs;
-  gint n_attrs;
+  int n_attrs;
 
   attrs = pango_layout_get_log_attrs_readonly (layout, &n_attrs);
 
@@ -499,10 +499,10 @@ _gtk_pango_is_inside_word (PangoLayout  *layout,
  */
 static gboolean
 _gtk_pango_is_inside_sentence (PangoLayout  *layout,
-                               gint          offset)
+                               int           offset)
 {
   const PangoLogAttr *attrs;
-  gint n_attrs;
+  int n_attrs;
 
   attrs = pango_layout_get_log_attrs_readonly (layout, &n_attrs);
 
@@ -519,13 +519,13 @@ _gtk_pango_is_inside_sentence (PangoLayout  *layout,
 static void
 pango_layout_get_line_before (PangoLayout     *layout,
                               AtkTextBoundary  boundary_type,
-                              gint             offset,
-                              gint            *start_offset,
-                              gint            *end_offset)
+                              int              offset,
+                              int             *start_offset,
+                              int             *end_offset)
 {
   PangoLayoutIter *iter;
   PangoLayoutLine *line, *prev_line = NULL, *prev_prev_line = NULL;
-  gint index, start_index, end_index;
+  int index, start_index, end_index;
   const gchar *text;
   gboolean found = FALSE;
 
@@ -592,13 +592,13 @@ pango_layout_get_line_before (PangoLayout     *layout,
 static void
 pango_layout_get_line_at (PangoLayout     *layout,
                           AtkTextBoundary  boundary_type,
-                          gint             offset,
-                          gint            *start_offset,
-                          gint            *end_offset)
+                          int              offset,
+                          int             *start_offset,
+                          int             *end_offset)
 {
   PangoLayoutIter *iter;
   PangoLayoutLine *line, *prev_line = NULL;
-  gint index, start_index, end_index;
+  int index, start_index, end_index;
   const gchar *text;
   gboolean found = FALSE;
 
@@ -656,13 +656,13 @@ pango_layout_get_line_at (PangoLayout     *layout,
 static void
 pango_layout_get_line_after (PangoLayout     *layout,
                              AtkTextBoundary  boundary_type,
-                             gint             offset,
-                             gint            *start_offset,
-                             gint            *end_offset)
+                             int              offset,
+                             int             *start_offset,
+                             int             *end_offset)
 {
   PangoLayoutIter *iter;
   PangoLayoutLine *line, *prev_line = NULL;
-  gint index, start_index, end_index;
+  int index, start_index, end_index;
   const gchar *text;
   gboolean found = FALSE;
 
@@ -746,14 +746,14 @@ pango_layout_get_line_after (PangoLayout     *layout,
 gchar *
 _gtk_pango_get_text_before (PangoLayout     *layout,
                             AtkTextBoundary  boundary_type,
-                            gint             offset,
-                            gint            *start_offset,
-                            gint            *end_offset)
+                            int              offset,
+                            int             *start_offset,
+                            int             *end_offset)
 {
   const gchar *text;
-  gint start, end;
+  int start, end;
   const PangoLogAttr *attrs;
-  gint n_attrs;
+  int n_attrs;
 
   text = pango_layout_get_text (layout);
 
@@ -851,14 +851,14 @@ _gtk_pango_get_text_before (PangoLayout     *layout,
 gchar *
 _gtk_pango_get_text_after (PangoLayout     *layout,
                            AtkTextBoundary  boundary_type,
-                           gint             offset,
-                           gint            *start_offset,
-                           gint            *end_offset)
+                           int              offset,
+                           int             *start_offset,
+                           int             *end_offset)
 {
   const gchar *text;
-  gint start, end;
+  int start, end;
   const PangoLogAttr *attrs;
-  gint n_attrs;
+  int n_attrs;
 
   text = pango_layout_get_text (layout);
 
@@ -962,14 +962,14 @@ _gtk_pango_get_text_after (PangoLayout     *layout,
 gchar *
 _gtk_pango_get_text_at (PangoLayout     *layout,
                         AtkTextBoundary  boundary_type,
-                        gint             offset,
-                        gint            *start_offset,
-                        gint            *end_offset)
+                        int              offset,
+                        int             *start_offset,
+                        int             *end_offset)
 {
   const gchar *text;
-  gint start, end;
+  int start, end;
   const PangoLogAttr *attrs;
-  gint n_attrs;
+  int n_attrs;
 
   text = pango_layout_get_text (layout);
 

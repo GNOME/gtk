@@ -56,8 +56,8 @@ static void gtk_cell_renderer_accel_set_property (GObject         *object,
 static void gtk_cell_renderer_accel_get_preferred_width 
                                                  (GtkCellRenderer *cell,
                                                   GtkWidget       *widget,
-                                                  gint            *minimum_size,
-                                                  gint            *natural_size);
+                                                  int             *minimum_size,
+                                                  int             *natural_size);
 static GtkCellEditable *
            gtk_cell_renderer_accel_start_editing (GtkCellRenderer      *cell,
                                                   GdkEvent             *event,
@@ -427,8 +427,8 @@ gtk_cell_renderer_accel_set_property (GObject      *object,
 static void
 gtk_cell_renderer_accel_get_preferred_width (GtkCellRenderer *cell,
                                              GtkWidget       *widget,
-                                             gint            *minimum_size,
-                                             gint            *natural_size)
+                                             int             *minimum_size,
+                                             int             *natural_size)
 
 {
   GtkCellRendererAccelPrivate *priv = gtk_cell_renderer_accel_get_instance_private (GTK_CELL_RENDERER_ACCEL (cell));

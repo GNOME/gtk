@@ -157,7 +157,7 @@ static void
 add_widget_to_closure (GHashTable *widgets,
                        GHashTable *groups,
                        GtkWidget  *widget,
-		       gint        orientation)
+		       int         orientation)
 {
   GSList *tmp_groups, *tmp_widgets;
 
@@ -441,8 +441,8 @@ gtk_size_group_get_widgets (GtkSizeGroup *size_group)
 
 typedef struct {
   gchar *name;
-  gint line;
-  gint col;
+  int line;
+  int col;
 } ItemData;
 
 static void

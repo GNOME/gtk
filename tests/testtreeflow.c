@@ -46,7 +46,7 @@ static const char *words[] =
 static void
 initialize_model (void)
 {
-  gint i;
+  int i;
   GtkTreeIter iter;
 
   model = (GtkTreeModel *) gtk_list_store_new (NUM_COLUMNS, G_TYPE_STRING);
@@ -63,7 +63,7 @@ initialize_model (void)
 static void
 futz_row (void)
 {
-  gint i;
+  int i;
   GtkTreePath *path;
   GtkTreeIter iter;
   GtkTreeIter iter2;
@@ -110,7 +110,7 @@ futz_row (void)
 static gboolean
 futz (void)
 {
-  gint i;
+  int i;
 
   for (i = 0; i < 15; i++)
     futz_row ();

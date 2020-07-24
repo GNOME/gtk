@@ -82,7 +82,7 @@ fetch_request_mode (GtkWidget *widget)
     return GTK_WIDGET_GET_CLASS (widget)->get_request_mode (widget);
 }
 
-static gint
+static int
 get_number (GtkCssValue *value)
 {
   double d = _gtk_css_number_value_get (value, 100);
@@ -133,18 +133,18 @@ get_box_padding (GtkCssStyle *style,
 static void
 gtk_widget_query_size_for_orientation (GtkWidget        *widget,
                                        GtkOrientation    orientation,
-                                       gint              for_size,
-                                       gint             *minimum,
-                                       gint             *natural,
-                                       gint             *minimum_baseline,
-                                       gint             *natural_baseline)
+                                       int               for_size,
+                                       int              *minimum,
+                                       int              *natural,
+                                       int              *minimum_baseline,
+                                       int              *natural_baseline)
 {
   const gboolean baselines_requested = (minimum_baseline != NULL || natural_baseline != NULL);
   SizeRequestCache *cache;
-  gint min_size = 0;
-  gint nat_size = 0;
-  gint min_baseline = -1;
-  gint nat_baseline = -1;
+  int min_size = 0;
+  int nat_size = 0;
+  int min_baseline = -1;
+  int nat_baseline = -1;
   gboolean found_in_cache;
 
   gtk_widget_ensure_resize (widget);
@@ -647,7 +647,7 @@ gtk_widget_get_preferred_size (GtkWidget      *widget,
     }
 }
 
-static gint
+static int
 compare_gap (gconstpointer p1,
 	     gconstpointer p2,
 	     gpointer      data)
@@ -656,14 +656,14 @@ compare_gap (gconstpointer p1,
   const guint *c1 = p1;
   const guint *c2 = p2;
 
-  const gint d1 = MAX (sizes[*c1].natural_size -
+  const int d1 = MAX (sizes[*c1].natural_size -
                        sizes[*c1].minimum_size,
                        0);
-  const gint d2 = MAX (sizes[*c2].natural_size -
+  const int d2 = MAX (sizes[*c2].natural_size -
                        sizes[*c2].minimum_size,
                        0);
 
-  gint delta = (d2 - d1);
+  int delta = (d2 - d1);
 
   if (0 == delta)
     delta = (*c2 - *c1);
@@ -689,13 +689,13 @@ compare_gap (gconstpointer p1,
  * Returns: The remainder of @extra_space after redistributing space
  * to @sizes.
  */
-gint
-gtk_distribute_natural_allocation (gint              extra_space,
+int
+gtk_distribute_natural_allocation (int               extra_space,
 				   guint             n_requested_sizes,
 				   GtkRequestedSize *sizes)
 {
   guint *spreading;
-  gint   i;
+  int    i;
 
   g_return_val_if_fail (extra_space >= 0, 0);
 
@@ -735,11 +735,11 @@ gtk_distribute_natural_allocation (gint              extra_space,
        * Sort order and reducing remaining space by assigned space
        * ensures that space is distributed equally.
        */
-      gint glue = (extra_space + i) / (i + 1);
-      gint gap = sizes[(spreading[i])].natural_size
+      int glue = (extra_space + i) / (i + 1);
+      int gap = sizes[(spreading[i])].natural_size
 	- sizes[(spreading[i])].minimum_size;
 
-      gint extra = MIN (glue, gap);
+      int extra = MIN (glue, gap);
 
       sizes[spreading[i]].minimum_size += extra;
 

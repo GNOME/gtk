@@ -394,12 +394,12 @@ gdk_macos_keymap_lookup_key (GdkKeymap          *keymap,
 
 static guint
 translate_keysym (guint            hardware_keycode,
-                  gint             group,
+                  int              group,
                   GdkModifierType  state,
-                  gint            *effective_group,
-                  gint            *effective_level)
+                  int             *effective_group,
+                  int             *effective_level)
 {
-  gint level;
+  int level;
   guint tmp_keyval;
 
   level = (state & GDK_SHIFT_MASK) ? 1 : 0;
@@ -463,7 +463,7 @@ gdk_macos_keymap_get_entries_for_keycode (GdkKeymap     *keymap,
                                           guint          hardware_keycode,
                                           GdkKeymapKey **keys,
                                           guint        **keyvals,
-                                          gint          *n_entries)
+                                          int           *n_entries)
 {
   GArray *keys_array;
   GArray *keyvals_array;
@@ -527,10 +527,10 @@ static gboolean
 gdk_macos_keymap_translate_keyboard_state (GdkKeymap       *keymap,
                                            guint            hardware_keycode,
                                            GdkModifierType  state,
-                                           gint             group,
+                                           int              group,
                                            guint           *keyval,
-                                           gint            *effective_group,
-                                           gint            *level,
+                                           int             *effective_group,
+                                           int             *level,
                                            GdkModifierType *consumed_modifiers)
 {
   guint tmp_keyval;

@@ -34,7 +34,7 @@ static void
 update_statusbar (void)
 {
   gchar *msg;
-  gint row, col;
+  int row, col;
   GtkTextIter iter;
   const char *print_str;
 

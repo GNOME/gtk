@@ -69,7 +69,7 @@ typedef gboolean (* GtkTreeModelFilterVisibleFunc) (GtkTreeModel *model,
 typedef void (* GtkTreeModelFilterModifyFunc) (GtkTreeModel *model,
                                                GtkTreeIter  *iter,
                                                GValue       *value,
-                                               gint          column,
+                                               int           column,
                                                gpointer      data);
 
 typedef struct _GtkTreeModelFilter          GtkTreeModelFilter;
@@ -95,7 +95,7 @@ struct _GtkTreeModelFilterClass
                    GtkTreeModel       *child_model,
                    GtkTreeIter        *iter,
                    GValue             *value,
-                   gint                column);
+                   int                 column);
 
   /*< private >*/
 
@@ -115,14 +115,14 @@ void          gtk_tree_model_filter_set_visible_func           (GtkTreeModelFilt
                                                                 GDestroyNotify                destroy);
 GDK_AVAILABLE_IN_ALL
 void          gtk_tree_model_filter_set_modify_func            (GtkTreeModelFilter           *filter,
-                                                                gint                          n_columns,
+                                                                int                           n_columns,
                                                                 GType                        *types,
                                                                 GtkTreeModelFilterModifyFunc  func,
                                                                 gpointer                      data,
                                                                 GDestroyNotify                destroy);
 GDK_AVAILABLE_IN_ALL
 void          gtk_tree_model_filter_set_visible_column         (GtkTreeModelFilter           *filter,
-                                                                gint                          column);
+                                                                int                           column);
 
 GDK_AVAILABLE_IN_ALL
 GtkTreeModel *gtk_tree_model_filter_get_model                  (GtkTreeModelFilter           *filter);

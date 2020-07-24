@@ -37,7 +37,7 @@
 
 
 #define TREE_TEXT_SCALE 0.8
-#define TREE_CHECKBOX_SIZE (gint)(0.8 * 13)
+#define TREE_CHECKBOX_SIZE (int)(0.8 * 13)
 
 typedef struct
 {
@@ -89,8 +89,8 @@ typedef struct
   GdkSeat *grab_seat;
 
   GtkInspectorOverlay *flash_overlay;
-  gint flash_count;
-  gint flash_cnx;
+  int flash_count;
+  int flash_cnx;
 
   GArray *objects;
 

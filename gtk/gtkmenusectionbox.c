@@ -48,14 +48,14 @@ struct _GtkMenuSectionBox
   gboolean             iconic;
   gboolean             inline_buttons;
   gboolean             circular;
-  gint                 depth;
+  int                  depth;
   GtkPopoverMenuFlags  flags;
   GtkSizeGroup        *indicators;
 };
 
 typedef struct
 {
-  gint     n_items;
+  int      n_items;
   gboolean previous_is_iconic;
 } MenuData;
 
@@ -91,7 +91,7 @@ gtk_menu_section_box_sync_separators (GtkMenuSectionBox *box,
   gboolean has_separator;
   gboolean has_label;
   gboolean separator_condition;
-  gint n_items_before;
+  int n_items_before;
   GtkWidget *child;
 
   n_items_before =  data->n_items;
@@ -203,7 +203,7 @@ gtk_popover_item_activate (GtkWidget *button,
 }
 
 static void
-gtk_menu_section_box_remove_func (gint     position,
+gtk_menu_section_box_remove_func (int      position,
                                   gpointer user_data)
 {
   GtkMenuSectionBox *box = user_data;
@@ -291,7 +291,7 @@ open_submenu (GtkWidget *button,
 
 static void
 gtk_menu_section_box_insert_func (GtkMenuTrackerItem *item,
-                                  gint                position,
+                                  int                 position,
                                   gpointer            user_data)
 {
   GtkMenuSectionBox *box = user_data;

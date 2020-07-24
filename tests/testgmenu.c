@@ -350,7 +350,7 @@ create_action_treeview (GActionGroup *group)
   GtkTreeViewColumn *column;
   GtkCellRenderer *cell;
   gchar **group_actions;
-  gint i;
+  int i;
 
   store = gtk_list_store_new (2, G_TYPE_STRING, G_TYPE_STRING);
   group_actions = g_action_group_list_actions (group);

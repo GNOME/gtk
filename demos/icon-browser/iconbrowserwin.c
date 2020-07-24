@@ -161,7 +161,7 @@ copy_to_clipboard (GtkButton         *button,
 }
 
 static void
-set_image (GtkWidget *image, const gchar *name, gint size)
+set_image (GtkWidget *image, const gchar *name, int size)
 {
   gtk_image_set_from_icon_name (GTK_IMAGE (image), name);
   gtk_image_set_pixel_size (GTK_IMAGE (image), size);

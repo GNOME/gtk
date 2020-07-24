@@ -48,7 +48,7 @@ typedef struct _GtkTextTagInfo GtkTextTagInfo;
 struct _GtkTextTagInfo {
   GtkTextTag *tag;
   GtkTextBTreeNode *tag_root; /* highest-level node containing the tag */
-  gint toggle_count;      /* total toggles of this tag below tag_root */
+  int toggle_count;      /* total toggles of this tag below tag_root */
 };
 
 /* Body of a segment that toggles a tag on or off */
@@ -64,7 +64,7 @@ struct _GtkTextToggleBody {
 
 /* Split seg at index, returning list of two new segments, and freeing seg */
 typedef GtkTextLineSegment* (*GtkTextSegSplitFunc)      (GtkTextLineSegment *seg,
-                                                         gint                index);
+                                                         int                 index);
 
 /* Delete seg which is contained in line; if tree_gone, the tree is being
  * freed in its entirety, which may matter for some reason (?)

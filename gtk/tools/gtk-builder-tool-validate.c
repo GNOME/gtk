@@ -61,7 +61,7 @@ do_validate_template (const gchar *filename,
   GObject *object;
   GtkBuilder *builder;
   GError *error = NULL;
-  gint ret;
+  int ret;
 
   /* Only make a fake type if it doesn't exist yet.
    * This lets us e.g. validate the GtkFileChooserWidget template.
@@ -122,7 +122,7 @@ validate_file (const char *filename)
 {
   GtkBuilder *builder;
   GError *error = NULL;
-  gint ret;
+  int ret;
   gchar *class_name = NULL;
   gchar *parent_name = NULL;
 

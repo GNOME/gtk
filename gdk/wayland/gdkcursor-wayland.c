@@ -104,7 +104,7 @@ static const struct {
 static const gchar *
 name_fallback (const gchar *name)
 {
-  gint i;
+  int i;
 
   for (i = 0; i < G_N_ELEMENTS (name_map); i++)
     {

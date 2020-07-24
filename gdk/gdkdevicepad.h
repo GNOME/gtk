@@ -54,20 +54,20 @@ GDK_AVAILABLE_IN_ALL
 GType gdk_device_pad_get_type          (void) G_GNUC_CONST;
 
 GDK_AVAILABLE_IN_ALL
-gint  gdk_device_pad_get_n_groups      (GdkDevicePad *pad);
+int   gdk_device_pad_get_n_groups      (GdkDevicePad *pad);
 
 GDK_AVAILABLE_IN_ALL
-gint  gdk_device_pad_get_group_n_modes (GdkDevicePad *pad,
-                                        gint          group_idx);
+int   gdk_device_pad_get_group_n_modes (GdkDevicePad *pad,
+                                        int           group_idx);
 
 GDK_AVAILABLE_IN_ALL
-gint  gdk_device_pad_get_n_features    (GdkDevicePad        *pad,
+int   gdk_device_pad_get_n_features    (GdkDevicePad        *pad,
                                         GdkDevicePadFeature  feature);
 
 GDK_AVAILABLE_IN_ALL
-gint  gdk_device_pad_get_feature_group (GdkDevicePad        *pad,
+int   gdk_device_pad_get_feature_group (GdkDevicePad        *pad,
                                         GdkDevicePadFeature  feature,
-                                        gint                 feature_idx);
+                                        int                  feature_idx);
 
 G_END_DECLS
 

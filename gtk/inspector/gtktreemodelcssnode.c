@@ -23,7 +23,7 @@
 struct _GtkTreeModelCssNodePrivate
 {
   GtkTreeModelCssNodeGetFunc    get_func;
-  gint                          n_columns;
+  int                           n_columns;
   GType                        *column_types;
 
   GtkCssNode                   *root;
@@ -48,7 +48,7 @@ G_DEFINE_TYPE_WITH_CODE (GtkTreeModelCssNode, gtk_tree_model_css_node, G_TYPE_OB
 
 static GtkCssNode *
 get_nth_child (GtkCssNode *node,
-               gint        i)
+               int         i)
 {
   for (node = gtk_css_node_get_first_child (node);
        node != NULL && i > 0;
@@ -75,7 +75,7 @@ gtk_tree_model_css_node_get_flags (GtkTreeModel *tree_model)
   return GTK_TREE_MODEL_ITERS_PERSIST;
 }
 
-static gint
+static int
 gtk_tree_model_css_node_get_n_columns (GtkTreeModel *tree_model)
 {
   GtkTreeModelCssNode *nodemodel = GTK_TREE_MODEL_CSS_NODE (tree_model);
@@ -86,7 +86,7 @@ gtk_tree_model_css_node_get_n_columns (GtkTreeModel *tree_model)
 
 static GType
 gtk_tree_model_css_node_get_column_type (GtkTreeModel *tree_model,
-                                         gint          column)
+                                         int           column)
 {
   GtkTreeModelCssNode *nodemodel = GTK_TREE_MODEL_CSS_NODE (tree_model);
   GtkTreeModelCssNodePrivate *priv = nodemodel->priv;
@@ -156,7 +156,7 @@ gtk_tree_model_css_node_get_path (GtkTreeModel *tree_model,
 static void
 gtk_tree_model_css_node_get_value (GtkTreeModel *tree_model,
                                    GtkTreeIter  *iter,
-                                   gint          column,
+                                   int           column,
                                    GValue       *value)
 {
   GtkTreeModelCssNode *nodemodel = GTK_TREE_MODEL_CSS_NODE (tree_model);
@@ -246,7 +246,7 @@ gtk_tree_model_css_node_iter_has_child (GtkTreeModel *tree_model,
   return gtk_css_node_get_first_child (node) != NULL;
 }
 
-static gint
+static int
 gtk_tree_model_css_node_iter_n_children (GtkTreeModel *tree_model,
                                          GtkTreeIter  *iter)
 {
@@ -270,7 +270,7 @@ static gboolean
 gtk_tree_model_css_node_iter_nth_child (GtkTreeModel *tree_model,
                                         GtkTreeIter  *iter,
                                         GtkTreeIter  *parent,
-                                        gint          n)
+                                        int           n)
 {
   GtkTreeModelCssNode *nodemodel = GTK_TREE_MODEL_CSS_NODE (tree_model);
   GtkTreeModelCssNodePrivate *priv = nodemodel->priv;
@@ -364,13 +364,13 @@ gtk_tree_model_css_node_init (GtkTreeModelCssNode *nodemodel)
 
 GtkTreeModel *
 gtk_tree_model_css_node_new (GtkTreeModelCssNodeGetFunc get_func,
-                             gint                       n_columns,
+                             int                        n_columns,
 			     ...)
 {
   GtkTreeModel *result;
   va_list args;
   GType *types;
-  gint i;
+  int i;
 
   g_return_val_if_fail (get_func != NULL, NULL);
   g_return_val_if_fail (n_columns > 0, NULL);
@@ -394,7 +394,7 @@ gtk_tree_model_css_node_new (GtkTreeModelCssNodeGetFunc get_func,
 
 GtkTreeModel *
 gtk_tree_model_css_node_newv (GtkTreeModelCssNodeGetFunc  get_func,
-                              gint                        n_columns,
+                              int                         n_columns,
 			      GType                      *types)
 {
   GtkTreeModelCssNode *result;

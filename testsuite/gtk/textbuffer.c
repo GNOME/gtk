@@ -90,13 +90,13 @@ check_get_set_text (GtkTextBuffer *buffer,
     g_error ("%d chars, expected 0", n);
 }
 
-static gint
+static int
 count_toggles_at_iter (GtkTextIter *iter,
                        GtkTextTag  *of_tag)
 {
   GSList *tags;
   GSList *tmp;
-  gint count = 0;
+  int count = 0;
   
   /* get toggle-ons and toggle-offs */
   tags = gtk_text_iter_get_toggled_tags (iter, TRUE);
@@ -119,14 +119,14 @@ count_toggles_at_iter (GtkTextIter *iter,
   return count;
 }
 
-static gint
+static int
 count_toggles_in_range_by_char (GtkTextBuffer     *buffer,
                                 GtkTextTag        *of_tag,
                                 const GtkTextIter *start,
                                 const GtkTextIter *end)
 {
   GtkTextIter iter;
-  gint count = 0;
+  int count = 0;
   
   iter = *start;
   do
@@ -144,7 +144,7 @@ count_toggles_in_range_by_char (GtkTextBuffer     *buffer,
   return count;
 }
 
-static gint
+static int
 count_toggles_in_buffer (GtkTextBuffer *buffer,
                          GtkTextTag    *of_tag)
 {
@@ -164,9 +164,9 @@ check_specific_tag_in_range (GtkTextBuffer     *buffer,
   GtkTextIter iter;
   GtkTextTag *tag;
   gboolean state;
-  gint count;
-  gint buffer_count;
-  gint last_offset;
+  int count;
+  int buffer_count;
+  int last_offset;
 
   if (gtk_text_iter_compare (start, end) > 0)
     {
@@ -189,7 +189,7 @@ check_specific_tag_in_range (GtkTextBuffer     *buffer,
     {
       do
         {
-          gint this_offset;
+          int this_offset;
           
           ++count;
 
@@ -233,7 +233,7 @@ check_specific_tag_in_range (GtkTextBuffer     *buffer,
     {
       do
         {
-          gint this_offset;
+          int this_offset;
           
           ++count;
 
@@ -289,13 +289,13 @@ run_tests (GtkTextBuffer *buffer)
   GtkTextIter start;
   GtkTextIter end;
   GtkTextIter mark;
-  gint i, j;
-  gint num_chars;
+  int i, j;
+  int num_chars;
   GtkTextMark *bar_mark;
   GtkTextTag *tag;
   GHashTable *tag_states;
-  gint count;
-  gint buffer_count;
+  int count;
+  int buffer_count;
   
   gtk_text_buffer_get_bounds (buffer, &start, &end);
 
@@ -809,7 +809,7 @@ test_line_separation (const char* str,
   GtkTextBuffer* buffer;
   gboolean on_next_line;
   gboolean on_end_iter;
-  gint new_pos;
+  int new_pos;
 
   buffer = gtk_text_buffer_new (NULL);
 
@@ -1464,7 +1464,7 @@ test_get_iter (void)
 {
   GtkTextBuffer *buffer;
   GtkTextIter iter;
-  gint offset;
+  int offset;
 
   buffer = gtk_text_buffer_new (NULL);
 

@@ -114,27 +114,27 @@ GDK_AVAILABLE_IN_ALL
 gboolean         gtk_icon_theme_has_icon             (GtkIconTheme                *self,
                                                       const gchar                 *icon_name);
 GDK_AVAILABLE_IN_ALL
-gint             *gtk_icon_theme_get_icon_sizes      (GtkIconTheme                *self,
+int              *gtk_icon_theme_get_icon_sizes      (GtkIconTheme                *self,
                                                       const gchar                 *icon_name);
 GDK_AVAILABLE_IN_ALL
 GtkIconPaintable *gtk_icon_theme_lookup_icon         (GtkIconTheme                *self,
                                                       const char                  *icon_name,
                                                       const char                  *fallbacks[],
-                                                      gint                         size,
-                                                      gint                         scale,
+                                                      int                          size,
+                                                      int                          scale,
                                                       GtkTextDirection             direction,
                                                       GtkIconLookupFlags           flags);
 GDK_AVAILABLE_IN_ALL
 GtkIconPaintable *gtk_icon_theme_lookup_by_gicon     (GtkIconTheme                *self,
                                                       GIcon                       *icon,
-                                                      gint                         size,
-                                                      gint                         scale,
+                                                      int                          size,
+                                                      int                          scale,
                                                       GtkTextDirection             direction,
                                                       GtkIconLookupFlags           flags);
 GDK_AVAILABLE_IN_ALL
 GtkIconPaintable *gtk_icon_paintable_new_for_file    (GFile                       *file,
-                                                      gint                         size,
-                                                      gint                         scale);
+                                                      int                          size,
+                                                      int                          scale);
 GDK_AVAILABLE_IN_ALL
 char **               gtk_icon_theme_get_icon_names  (GtkIconTheme                *self);
 

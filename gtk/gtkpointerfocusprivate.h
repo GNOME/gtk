@@ -24,7 +24,7 @@ typedef struct _GtkPointerFocus GtkPointerFocus;
 
 struct _GtkPointerFocus
 {
-  gint ref_count;
+  int ref_count;
   GdkDevice *device;
   GdkEventSequence *sequence;
   GtkWindow *toplevel;

@@ -521,7 +521,7 @@ gtk_style_context_get_state (GtkStyleContext *context)
  **/
 void
 gtk_style_context_set_scale (GtkStyleContext *context,
-                             gint             scale)
+                             int              scale)
 {
   GtkStyleContextPrivate *priv = gtk_style_context_get_instance_private (context);
 
@@ -552,7 +552,7 @@ gtk_style_context_set_scale (GtkStyleContext *context,
  *
  * Returns: the scale
  **/
-gint
+int
 gtk_style_context_get_scale (GtkStyleContext *context)
 {
   GtkStyleContextPrivate *priv = gtk_style_context_get_instance_private (context);
@@ -988,8 +988,8 @@ draw_insertion_cursor (GtkStyleContext *context,
 {
   GdkRGBA primary_color;
   GdkRGBA secondary_color;
-  gint stem_width;
-  gint offset;
+  int stem_width;
+  int offset;
 
   cairo_save (cr);
   cairo_new_path (cr);
@@ -1010,8 +1010,8 @@ draw_insertion_cursor (GtkStyleContext *context,
 
   if (draw_arrow)
     {
-      gint arrow_width;
-      gint ax, ay;
+      int arrow_width;
+      int ax, ay;
 
       arrow_width = stem_width + 1;
 
@@ -1049,8 +1049,8 @@ get_insertion_cursor_bounds (gdouble          height,
                              gboolean         draw_arrow,
                              graphene_rect_t *bounds)
 {
-  gint stem_width;
-  gint offset;
+  int stem_width;
+  int offset;
 
   stem_width = height * aspect_ratio + 1;
   if (direction == PANGO_DIRECTION_LTR)

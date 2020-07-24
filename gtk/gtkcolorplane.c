@@ -53,11 +53,11 @@ G_DEFINE_TYPE_WITH_PRIVATE (GtkColorPlane, gtk_color_plane, GTK_TYPE_WIDGET)
 
 static void
 sv_to_xy (GtkColorPlane *plane,
-          gint          *x,
-          gint          *y)
+          int           *x,
+          int           *y)
 {
   gdouble s, v;
-  gint width, height;
+  int width, height;
 
   width = gtk_widget_get_width (GTK_WIDGET (plane));
   height = gtk_widget_get_height (GTK_WIDGET (plane));
@@ -74,8 +74,8 @@ plane_snapshot (GtkWidget   *widget,
                 GtkSnapshot *snapshot)
 {
   GtkColorPlane *plane = GTK_COLOR_PLANE (widget);
-  gint x, y;
-  gint width, height;
+  int x, y;
+  int width, height;
 
   sv_to_xy (plane, &x, &y);
   width = gtk_widget_get_width (widget);
@@ -119,13 +119,13 @@ create_texture (GtkColorPlane *plane)
 {
   GtkWidget *widget = GTK_WIDGET (plane);
   GBytes *bytes;
-  gint width, height, stride;
+  int width, height, stride;
   guint red, green, blue;
   guint32 *data, *p;
   float h, s, v;
   float r, g, b;
   gdouble sf, vf;
-  gint x, y;
+  int x, y;
 
   if (!gtk_widget_get_realized (widget))
     return;
@@ -230,8 +230,8 @@ sv_changed (GtkColorPlane *plane)
 
 static void
 update_color (GtkColorPlane *plane,
-              gint           x,
-              gint           y)
+              int            x,
+              int            y)
 {
   GtkWidget *widget = GTK_WIDGET (plane);
   gdouble s, v;

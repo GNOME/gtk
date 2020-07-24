@@ -166,7 +166,7 @@ add_check_row (GtkInspectorGeneral *gen,
                GtkListBox          *list,
                const gchar         *name,
                gboolean             value,
-               gint                 indent)
+               int                  indent)
 {
   GtkWidget *row, *box, *label, *check;
 
@@ -206,7 +206,7 @@ add_label_row (GtkInspectorGeneral *gen,
                GtkListBox          *list,
                const char          *name,
                const char          *value,
-               gint                 indent)
+               int                  indent)
 {
   GtkWidget *box;
   GtkWidget *label;
@@ -566,7 +566,7 @@ populate_monitor (gpointer item,
   gchar *name;
   gchar *value;
   GdkRectangle rect;
-  gint scale;
+  int scale;
   char *scale_str = NULL;
   const char *manufacturer;
   const char *model;

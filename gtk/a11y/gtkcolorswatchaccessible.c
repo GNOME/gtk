@@ -116,7 +116,7 @@ _gtk_color_swatch_accessible_init (GtkColorSwatchAccessible *self)
   ATK_OBJECT (self)->role = ATK_ROLE_RADIO_BUTTON;
 }
 
-static gint
+static int
 gtk_color_swatch_accessible_get_n_actions (AtkAction *action)
 {
   return 3;
@@ -124,14 +124,14 @@ gtk_color_swatch_accessible_get_n_actions (AtkAction *action)
 
 static const gchar *
 gtk_color_swatch_accessible_get_keybinding (AtkAction *action,
-                                            gint       i)
+                                            int        i)
 {
   return NULL;
 }
 
 static const gchar *
 gtk_color_swatch_accessible_get_name (AtkAction *action,
-                                      gint       i)
+                                      int        i)
 {
   switch (i)
     {
@@ -144,7 +144,7 @@ gtk_color_swatch_accessible_get_name (AtkAction *action,
 
 static const gchar *
 gtk_color_swatch_accessible_get_localized_name (AtkAction *action,
-                                                gint       i)
+                                                int        i)
 {
   switch (i)
     {
@@ -157,7 +157,7 @@ gtk_color_swatch_accessible_get_localized_name (AtkAction *action,
 
 static const gchar *
 gtk_color_swatch_accessible_get_description (AtkAction *action,
-                                             gint       i)
+                                             int        i)
 {
   switch (i)
     {
@@ -170,7 +170,7 @@ gtk_color_swatch_accessible_get_description (AtkAction *action,
 
 static gboolean
 gtk_color_swatch_accessible_do_action (AtkAction *action,
-                                       gint       i)
+                                       int        i)
 {
   GtkWidget *widget;
 

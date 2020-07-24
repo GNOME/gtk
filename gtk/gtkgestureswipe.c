@@ -108,11 +108,11 @@ _gtk_gesture_swipe_clear_backlog (GtkGestureSwipe *gesture,
                                   guint32          evtime)
 {
   GtkGestureSwipePrivate *priv;
-  gint i, length = 0;
+  int i, length = 0;
 
   priv = gtk_gesture_swipe_get_instance_private (gesture);
 
-  for (i = 0; i < (gint) priv->events->len; i++)
+  for (i = 0; i < (int) priv->events->len; i++)
     {
       EventData *data;
 

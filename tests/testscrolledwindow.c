@@ -27,7 +27,7 @@ content_width_changed (GtkSpinButton *spin_button,
   gdouble value;
 
   value = gtk_spin_button_get_value (spin_button);
-  gtk_scrolled_window_set_min_content_width (swindow, (gint)value);
+  gtk_scrolled_window_set_min_content_width (swindow, (int)value);
 }
 
 static void
@@ -38,7 +38,7 @@ content_height_changed (GtkSpinButton *spin_button,
   gdouble value;
 
   value = gtk_spin_button_get_value (spin_button);
-  gtk_scrolled_window_set_min_content_height (swindow, (gint)value);
+  gtk_scrolled_window_set_min_content_height (swindow, (int)value);
 }
 
 static void

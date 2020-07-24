@@ -278,7 +278,7 @@ _gtk_quartz_set_selection_data_for_pasteboard (NSPasteboard     *pasteboard,
 {
   NSString *type;
   GdkDisplay *display;
-  gint format;
+  int format;
   const guchar *data;
   NSUInteger length;
 

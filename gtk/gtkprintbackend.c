@@ -134,7 +134,7 @@ gtk_print_backend_load_modules (void)
   GtkPrintBackend *backend;
   gchar *setting;
   gchar **backends;
-  gint i;
+  int i;
   GtkSettings *settings;
   GIOExtensionPoint *ep;
 
@@ -582,11 +582,11 @@ store_entry (GtkEntry  *entry,
 
 static void
 password_dialog_response (GtkWidget       *dialog,
-                          gint             response_id,
+                          int              response_id,
                           GtkPrintBackend *backend)
 {
   GtkPrintBackendPrivate *priv = backend->priv;
-  gint i, auth_info_len;
+  int i, auth_info_len;
 
   if (response_id == GTK_RESPONSE_OK)
     gtk_print_backend_set_password (backend, priv->auth_info_required, priv->auth_info, priv->store_auth_info);
@@ -627,8 +627,8 @@ request_password (GtkPrintBackend  *backend,
   GtkWidget *focus = NULL;
   GtkWidget *content_area;
   gchar     *markup;
-  gint       length;
-  gint       i;
+  int        length;
+  int        i;
   gchar    **ai_required = (gchar **) auth_info_required;
   gchar    **ai_default = (gchar **) auth_info_default;
   gchar    **ai_display = (gchar **) auth_info_display;

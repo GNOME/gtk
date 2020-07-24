@@ -129,7 +129,7 @@ void        gdk_win32_display_check_composited (GdkWin32Display *display);
 guint      _gdk_win32_display_get_monitor_scale_factor (GdkWin32Display *win32_display,
                                                         HMONITOR         hmonitor,
                                                         HWND             hwnd,
-                                                        gint             *dpi);
+                                                        int              *dpi);
 
 typedef struct _GdkWin32MessageFilter GdkWin32MessageFilter;
 

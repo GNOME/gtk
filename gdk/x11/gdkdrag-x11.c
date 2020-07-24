@@ -78,7 +78,7 @@ typedef enum
 
 typedef struct {
   guint32 xid;
-  gint x, y, width, height;
+  int x, y, width, height;
   gboolean mapped;
   gboolean shape_selected;
   gboolean shape_valid;
@@ -90,7 +90,7 @@ struct _GdkSurfaceCache {
   GHashTable *child_hash;
   guint old_event_mask;
   GdkDisplay *display;
-  gint ref_count;
+  int ref_count;
 };
 
 
@@ -100,8 +100,8 @@ struct _GdkX11Drag
 
   GdkDragProtocol protocol;
 
-  gint start_x;                /* Where the drag started */
-  gint start_y;
+  int start_x;                /* Where the drag started */
+  int start_y;
   guint16 last_x;              /* Coordinates from last event */
   guint16 last_y;
   gulong timestamp;            /* Timestamp we claimed the DND selection with */
@@ -118,8 +118,8 @@ struct _GdkX11Drag
   GdkDragAction actions;
   GdkDragAction current_action;
 
-  gint hot_x;
-  gint hot_y;
+  int hot_x;
+  int hot_y;
 
   Window dest_xid;             /* The last window we looked up */
   Window proxy_xid;            /* The proxy window for dest_xid (or dest_xid if no proxying happens) */
@@ -136,8 +136,8 @@ struct _GdkX11DragClass
 };
 
 typedef struct {
-  gint keysym;
-  gint modifiers;
+  int keysym;
+  int modifiers;
 } GrabKey;
 
 static GrabKey grab_keys[] = {
@@ -186,14 +186,14 @@ gdk_x11_drag_init (GdkX11Drag *drag)
 static void        gdk_x11_drag_finalize     (GObject          *object);
 static Window      gdk_x11_drag_find_surface (GdkDrag          *drag,
                                               GdkSurface       *drag_surface,
-                                              gint             x_root,
-                                              gint             y_root,
+                                              int              x_root,
+                                              int              y_root,
                                               GdkDragProtocol *protocol);
 static gboolean    gdk_x11_drag_drag_motion  (GdkDrag         *drag,
                                               Window           proxy_xid,
                                               GdkDragProtocol  protocol,
-                                              gint             x_root,
-                                              gint             y_root,
+                                              int              x_root,
+                                              int              y_root,
                                               GdkDragAction    suggested_action,
                                               GdkDragAction    possible_actions,
                                               guint32          time);
@@ -201,8 +201,8 @@ static void        gdk_x11_drag_drop         (GdkDrag         *drag,
                                               guint32          time_);
 static GdkSurface * gdk_x11_drag_get_drag_surface (GdkDrag    *drag);
 static void        gdk_x11_drag_set_hotspot  (GdkDrag         *drag,
-                                              gint             hot_x,
-                                              gint             hot_y);
+                                              int              hot_x,
+                                              int              hot_y);
 static void        gdk_x11_drag_drop_done    (GdkDrag         *drag,
                                               gboolean         success);
 static void        gdk_x11_drag_set_cursor   (GdkDrag *drag,
@@ -328,10 +328,10 @@ free_cache_child (GdkCacheChild *child,
 static void
 gdk_surface_cache_add (GdkSurfaceCache *cache,
                        guint32          xid,
-                       gint             x,
-                       gint             y,
-                       gint             width,
-                       gint             height,
+                       int              x,
+                       int              y,
+                       int              width,
+                       int              height,
                        gboolean         mapped)
 { 
   GdkCacheChild *child = g_new (GdkCacheChild, 1);
@@ -531,7 +531,7 @@ gdk_surface_cache_new (GdkDisplay *display)
       GList *toplevel_windows, *list;
       GdkSurface *surface;
       GdkX11Surface *impl;
-      gint x, y, width, height;
+      int x, y, width, height;
 
       toplevel_windows = gdk_x11_display_get_toplevel_windows (display);
       for (list = toplevel_windows; list; list = list->next)
@@ -649,8 +649,8 @@ gdk_surface_cache_get (GdkDisplay *display)
 static gboolean
 is_pointer_within_shape (GdkDisplay    *display,
                          GdkCacheChild *child,
-                         gint           x_pos,
-                         gint           y_pos)
+                         int            x_pos,
+                         int            y_pos)
 {
   if (!child->shape_selected)
     {
@@ -696,8 +696,8 @@ static Window
 get_client_window_at_coords_recurse (GdkDisplay *display,
                                      Window      win,
                                      gboolean    is_toplevel,
-                                     gint        x,
-                                     gint        y)
+                                     int         x,
+                                     int         y)
 {
   GdkChildInfoX11 *children;
   unsigned int nchildren;
@@ -749,8 +749,8 @@ get_client_window_at_coords_recurse (GdkDisplay *display,
 static Window
 get_client_window_at_coords (GdkSurfaceCache *cache,
                              Window          ignore,
-                             gint            x_root,
-                             gint            y_root)
+                             int             x_root,
+                             int             y_root)
 {
   GList *tmp_list;
   Window retval = None;
@@ -815,14 +815,14 @@ static struct {
     { "XdndActionPrivate", GDK_ACTION_COPY },
   };
 
-static const gint xdnd_n_actions = G_N_ELEMENTS (xdnd_actions_table);
+static const int xdnd_n_actions = G_N_ELEMENTS (xdnd_actions_table);
 
 static GdkDragAction
 xdnd_action_from_atom (GdkDisplay *display,
                        Atom        xatom)
 {
   const char *name;
-  gint i;
+  int i;
 
   if (xatom == None)
     return 0;
@@ -840,7 +840,7 @@ static Atom
 xdnd_action_to_atom (GdkDisplay    *display,
                      GdkDragAction  action)
 {
-  gint i;
+  int i;
 
   for (i = 0; i < xdnd_n_actions; i++)
     if (action == xdnd_actions_table[i].action)
@@ -938,8 +938,8 @@ xdnd_set_actions (GdkX11Drag *drag_x11)
 {
   GdkDrag *drag = GDK_DRAG (drag_x11);
   Atom *atomlist;
-  gint i;
-  gint n_atoms;
+  int i;
+  int n_atoms;
   guint actions;
   GdkDisplay *display = gdk_drag_get_display (drag);
 
@@ -1143,8 +1143,8 @@ xdnd_send_drop (GdkX11Drag *drag_x11,
 
 static void
 xdnd_send_motion (GdkX11Drag *drag_x11,
-                  gint               x_root,
-                  gint               y_root,
+                  int                x_root,
+                  int                y_root,
                   GdkDragAction      action,
                   guint32            time)
 {
@@ -1341,8 +1341,8 @@ drag_find_window_cache (GdkX11Drag *drag_x11,
 static Window
 gdk_x11_drag_find_surface (GdkDrag         *drag,
                            GdkSurface      *drag_surface,
-                           gint             x_root,
-                           gint             y_root,
+                           int              x_root,
+                           int              y_root,
                            GdkDragProtocol *protocol)
 {
   GdkX11Screen *screen_x11;
@@ -1406,8 +1406,8 @@ static gboolean
 gdk_x11_drag_drag_motion (GdkDrag *drag,
                                   Window          proxy_xid,
                                   GdkDragProtocol protocol,
-                                  gint            x_root,
-                                  gint            y_root,
+                                  int             x_root,
+                                  int             y_root,
                                   GdkDragAction   suggested_action,
                                   GdkDragAction   possible_actions,
                                   guint32         time)
@@ -1602,8 +1602,8 @@ gdk_x11_drag_get_drag_surface (GdkDrag *drag)
 
 static void
 gdk_x11_drag_set_hotspot (GdkDrag *drag,
-                                  gint            hot_x,
-                                  gint            hot_y)
+                                  int             hot_x,
+                                  int             hot_y)
 {
   GdkX11Drag *x11_drag = GDK_X11_DRAG (drag);
 
@@ -1874,7 +1874,7 @@ drag_grab (GdkDrag *drag)
   GdkDisplay *display;
   Window root;
   GdkSeat *seat;
-  gint keycode, i;
+  int keycode, i;
   GdkCursor *cursor;
 
   if (!x11_drag->ipc_surface)
@@ -1900,11 +1900,11 @@ drag_grab (GdkDrag *drag)
 
   for (i = 0; i < G_N_ELEMENTS (grab_keys); ++i)
     {
-      gint deviceid = gdk_x11_device_get_id (gdk_seat_get_keyboard (seat));
+      int deviceid = gdk_x11_device_get_id (gdk_seat_get_keyboard (seat));
       unsigned char mask[XIMaskLen(XI_LASTEVENT)];
       XIGrabModifiers mods;
       XIEventMask evmask;
-      gint num_mods;
+      int num_mods;
 
       keycode = XKeysymToKeycode (GDK_DISPLAY_XDISPLAY (display),
                                   grab_keys[i].keysym);
@@ -1946,7 +1946,7 @@ drag_ungrab (GdkDrag *drag)
   GdkDisplay *display;
   GdkDevice *keyboard;
   Window root;
-  gint keycode, i;
+  int keycode, i;
 
   if (!x11_drag->grab_seat)
     return;
@@ -1961,7 +1961,7 @@ drag_ungrab (GdkDrag *drag)
   for (i = 0; i < G_N_ELEMENTS (grab_keys); ++i)
     {
       XIGrabModifiers mods;
-      gint num_mods;
+      int num_mods;
 
       keycode = XKeysymToKeycode (GDK_DISPLAY_XDISPLAY (display),
                                   grab_keys[i].keysym);
@@ -2106,7 +2106,7 @@ gdk_x11_drag_drop_performed (GdkDrag *drag,
 
 static void
 gdk_drag_get_current_actions (GdkModifierType  state,
-                              gint             button,
+                              int              button,
                               GdkDragAction    actions,
                               GdkDragAction   *suggested_action,
                               GdkDragAction   *possible_actions)
@@ -2208,7 +2208,7 @@ gdk_dnd_handle_key_event (GdkDrag  *drag,
   GdkX11Drag *x11_drag = GDK_X11_DRAG (drag);
   GdkModifierType state;
   GdkDevice *pointer;
-  gint dx, dy;
+  int dx, dy;
 
   dx = dy = 0;
   state = gdk_event_get_modifier_state (event);

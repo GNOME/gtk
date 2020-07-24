@@ -69,7 +69,7 @@ struct _GtkCellRendererComboPrivate
 
   gboolean has_entry;
 
-  gint text_column;
+  int text_column;
 
   gulong focus_out_id;
 };

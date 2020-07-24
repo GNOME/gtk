@@ -92,7 +92,7 @@ void          gdk_x11_display_set_program_class                   (GdkDisplay  *
 GDK_AVAILABLE_IN_ALL
 void          gdk_x11_display_set_cursor_theme (GdkDisplay  *display,
                                                 const gchar *theme,
-                                                const gint   size);
+                                                const int    size);
 
 GDK_AVAILABLE_IN_ALL
 void gdk_x11_display_broadcast_startup_message (GdkDisplay *display,
@@ -115,13 +115,13 @@ void        gdk_x11_display_ungrab            (GdkDisplay *display);
 
 GDK_AVAILABLE_IN_ALL
 void        gdk_x11_display_set_surface_scale (GdkDisplay *display,
-                                               gint scale);
+                                               int scale);
 
 GDK_AVAILABLE_IN_ALL
 void                           gdk_x11_display_error_trap_push        (GdkDisplay *display);
 /* warn unused because you could use pop_ignored otherwise */
 GDK_AVAILABLE_IN_ALL
-G_GNUC_WARN_UNUSED_RESULT gint gdk_x11_display_error_trap_pop         (GdkDisplay *display);
+G_GNUC_WARN_UNUSED_RESULT int  gdk_x11_display_error_trap_pop         (GdkDisplay *display);
 GDK_AVAILABLE_IN_ALL
 void                           gdk_x11_display_error_trap_pop_ignored (GdkDisplay *display);
 

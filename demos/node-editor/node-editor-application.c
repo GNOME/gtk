@@ -199,11 +199,11 @@ node_editor_application_activate (GApplication *app)
 static void
 node_editor_application_open (GApplication  *app,
                               GFile        **files,
-                              gint           n_files,
+                              int            n_files,
                               const gchar   *hint)
 {
   NodeEditorWindow *win;
-  gint i;
+  int i;
 
   for (i = 0; i < n_files; i++)
     {

@@ -101,17 +101,17 @@ GDK_AVAILABLE_IN_ALL
 void     gtk_label_set_width_chars                (GtkLabel         *self,
                                                    int               n_chars);
 GDK_AVAILABLE_IN_ALL
-gint     gtk_label_get_width_chars                (GtkLabel         *self);
+int      gtk_label_get_width_chars                (GtkLabel         *self);
 GDK_AVAILABLE_IN_ALL
 void     gtk_label_set_max_width_chars            (GtkLabel         *self,
                                                    int               n_chars);
 GDK_AVAILABLE_IN_ALL
-gint     gtk_label_get_max_width_chars            (GtkLabel         *self);
+int      gtk_label_get_max_width_chars            (GtkLabel         *self);
 GDK_AVAILABLE_IN_ALL
 void     gtk_label_set_lines                      (GtkLabel         *self,
-                                                   gint              lines);
+                                                   int               lines);
 GDK_AVAILABLE_IN_ALL
-gint     gtk_label_get_lines                      (GtkLabel         *self);
+int      gtk_label_get_lines                      (GtkLabel         *self);
 GDK_AVAILABLE_IN_ALL
 void     gtk_label_set_wrap                       (GtkLabel         *self,
                                                    gboolean          wrap);
@@ -129,19 +129,19 @@ GDK_AVAILABLE_IN_ALL
 gboolean gtk_label_get_selectable                 (GtkLabel         *self);
 GDK_AVAILABLE_IN_ALL
 void     gtk_label_select_region                  (GtkLabel         *self,
-						   gint              start_offset,
-						   gint              end_offset);
+						   int               start_offset,
+						   int               end_offset);
 GDK_AVAILABLE_IN_ALL
 gboolean gtk_label_get_selection_bounds           (GtkLabel         *self,
-                                                   gint             *start,
-                                                   gint             *end);
+                                                   int              *start,
+                                                   int              *end);
 
 GDK_AVAILABLE_IN_ALL
 PangoLayout *gtk_label_get_layout         (GtkLabel *self);
 GDK_AVAILABLE_IN_ALL
 void         gtk_label_get_layout_offsets (GtkLabel *self,
-                                           gint     *x,
-                                           gint     *y);
+                                           int      *x,
+                                           int      *y);
 
 GDK_AVAILABLE_IN_ALL
 void         gtk_label_set_single_line_mode  (GtkLabel *self,

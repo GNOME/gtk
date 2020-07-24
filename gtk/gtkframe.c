@@ -128,11 +128,11 @@ static void gtk_frame_buildable_add_child           (GtkBuildable *buildable,
                                                      const gchar  *type);
 static void     gtk_frame_measure (GtkWidget           *widget,
                                    GtkOrientation       orientation,
-                                   gint                 for_size,
-                                   gint                *minimum_size,
-                                   gint                *natural_size,
-                                   gint                *minimum_baseline,
-                                   gint                *natural_baseline);
+                                   int                  for_size,
+                                   int                 *minimum_size,
+                                   int                 *natural_size,
+                                   int                 *minimum_baseline,
+                                   int                 *natural_baseline);
 static void     gtk_frame_compute_expand (GtkWidget *widget,
                                           gboolean  *hexpand,
                                           gboolean  *vexpand);
@@ -533,14 +533,14 @@ gtk_frame_real_compute_child_allocation (GtkFrame      *frame,
 {
   GtkFramePrivate *priv = gtk_frame_get_instance_private (frame);
   int frame_width, frame_height;
-  gint height;
+  int height;
 
   frame_width = gtk_widget_get_width (GTK_WIDGET (frame));
   frame_height = gtk_widget_get_height (GTK_WIDGET (frame));
 
   if (priv->label_widget)
     {
-      gint nat_width, width;
+      int nat_width, width;
 
       gtk_widget_measure (priv->label_widget, GTK_ORIENTATION_HORIZONTAL, -1,
                           NULL, &nat_width, NULL, NULL);
@@ -560,11 +560,11 @@ gtk_frame_real_compute_child_allocation (GtkFrame      *frame,
 static void
 gtk_frame_measure (GtkWidget      *widget,
                    GtkOrientation  orientation,
-                   gint            for_size,
-                   gint            *minimum,
-                   gint            *natural,
-                   gint            *minimum_baseline,
-                   gint            *natural_baseline)
+                   int             for_size,
+                   int             *minimum,
+                   int             *natural,
+                   int             *minimum_baseline,
+                   int             *natural_baseline)
 {
   GtkFrame *frame = GTK_FRAME (widget);
   GtkFramePrivate *priv = gtk_frame_get_instance_private (frame);

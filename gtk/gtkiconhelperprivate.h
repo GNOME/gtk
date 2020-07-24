@@ -50,12 +50,12 @@ void _gtk_icon_helper_set_paintable (GtkIconHelper *self,
 				     GdkPaintable  *paintable);
 
 gboolean _gtk_icon_helper_set_pixel_size   (GtkIconHelper *self,
-                                            gint           pixel_size);
+                                            int            pixel_size);
 gboolean _gtk_icon_helper_set_use_fallback (GtkIconHelper *self,
                                             gboolean       use_fallback);
 
 GtkImageType _gtk_icon_helper_get_storage_type (GtkIconHelper *self);
-gint _gtk_icon_helper_get_pixel_size (GtkIconHelper *self);
+int _gtk_icon_helper_get_pixel_size (GtkIconHelper *self);
 gboolean _gtk_icon_helper_get_use_fallback (GtkIconHelper *self);
 
 GIcon *_gtk_icon_helper_peek_gicon (GtkIconHelper *self);

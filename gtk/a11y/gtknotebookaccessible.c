@@ -33,7 +33,7 @@ struct _GtkNotebookAccessiblePrivate
    * need to be created
    */
   GHashTable * pages;
-  gint         selected_page;
+  int          selected_page;
 };
 
 static void atk_selection_interface_init (AtkSelectionIface *iface);
@@ -46,7 +46,7 @@ static void
 create_notebook_page_accessible (GtkNotebookAccessible *accessible,
                                  GtkNotebook           *notebook,
                                  GtkWidget             *child,
-                                 gint                   page_num)
+                                 int                    page_num)
 {
   AtkObject *obj;
 
@@ -96,7 +96,7 @@ gtk_notebook_accessible_initialize (AtkObject *obj,
 {
   GtkNotebookAccessible *accessible;
   GtkNotebook *notebook;
-  gint i;
+  int i;
 
   ATK_OBJECT_CLASS (gtk_notebook_accessible_parent_class)->initialize (obj, data);
 
@@ -131,7 +131,7 @@ gtk_notebook_accessible_finalize (GObject *object)
 
 static AtkObject *
 gtk_notebook_accessible_ref_child (AtkObject *obj,
-                                   gint       i)
+                                   int        i)
 {
   AtkObject *child;
   GtkNotebookAccessible *accessible;
@@ -199,7 +199,7 @@ gtk_notebook_accessible_update_page (GtkNotebookAccessible *self,
  */
 static gboolean
 gtk_notebook_accessible_add_selection (AtkSelection *selection,
-                                       gint          i)
+                                       int           i)
 {
   GtkNotebook *notebook;
   GtkWidget *widget;
@@ -238,12 +238,12 @@ gtk_notebook_accessible_init (GtkNotebookAccessible *notebook)
 
 static AtkObject *
 gtk_notebook_accessible_ref_selection (AtkSelection *selection,
-                                       gint          i)
+                                       int           i)
 {
   AtkObject *accessible;
   GtkWidget *widget;
   GtkNotebook *notebook;
-  gint pagenum;
+  int pagenum;
 
   if (i != 0)
     return NULL;
@@ -264,7 +264,7 @@ gtk_notebook_accessible_ref_selection (AtkSelection *selection,
 /* Always return 1 because there can only be one page
  * selected at any time
  */
-static gint
+static int
 gtk_notebook_accessible_get_selection_count (AtkSelection *selection)
 {
   GtkWidget *widget;
@@ -283,11 +283,11 @@ gtk_notebook_accessible_get_selection_count (AtkSelection *selection)
 
 static gboolean
 gtk_notebook_accessible_is_child_selected (AtkSelection *selection,
-                                           gint          i)
+                                           int           i)
 {
   GtkWidget *widget;
   GtkNotebook *notebook;
-  gint pagenumber;
+  int pagenumber;
 
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (selection));
   if (widget == NULL)

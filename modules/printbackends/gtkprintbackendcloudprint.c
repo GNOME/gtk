@@ -260,8 +260,8 @@ typedef struct {
   gchar *path;
 
   /* Base64 encoding state */
-  gint b64state;
-  gint b64save;
+  int b64state;
+  int b64save;
 } _PrintStreamData;
 
 static void
@@ -551,7 +551,7 @@ get_accounts (GVariant *output)
 {
   GVariant *objects;
   GList    *result = NULL;
-  gint      i, j, k;
+  int       i, j, k;
 
   g_variant_get (output, "(@a{oa{sa{sv}}})",
                  &objects);
@@ -950,7 +950,7 @@ cloudprint_printer_prepare_for_print (GtkPrinter       *printer,
   if (gtk_print_job_get_pages (print_job) == GTK_PRINT_PAGES_RANGES)
     {
       GtkPageRange *page_ranges;
-      gint num_page_ranges;
+      int num_page_ranges;
       page_ranges = gtk_print_settings_get_page_ranges (settings, &num_page_ranges);
       gtk_print_job_set_page_ranges (print_job, page_ranges, num_page_ranges);
     }

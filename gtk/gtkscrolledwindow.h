@@ -130,15 +130,15 @@ GDK_AVAILABLE_IN_ALL
 gboolean       gtk_scrolled_window_get_has_frame     (GtkScrolledWindow *scrolled_window);
 
 GDK_AVAILABLE_IN_ALL
-gint           gtk_scrolled_window_get_min_content_width  (GtkScrolledWindow *scrolled_window);
+int            gtk_scrolled_window_get_min_content_width  (GtkScrolledWindow *scrolled_window);
 GDK_AVAILABLE_IN_ALL
 void           gtk_scrolled_window_set_min_content_width  (GtkScrolledWindow *scrolled_window,
-                                                           gint               width);
+                                                           int                width);
 GDK_AVAILABLE_IN_ALL
-gint           gtk_scrolled_window_get_min_content_height (GtkScrolledWindow *scrolled_window);
+int            gtk_scrolled_window_get_min_content_height (GtkScrolledWindow *scrolled_window);
 GDK_AVAILABLE_IN_ALL
 void           gtk_scrolled_window_set_min_content_height (GtkScrolledWindow *scrolled_window,
-                                                           gint               height);
+                                                           int                height);
 GDK_AVAILABLE_IN_ALL
 void           gtk_scrolled_window_set_kinetic_scrolling  (GtkScrolledWindow *scrolled_window,
                                                            gboolean           kinetic_scrolling);
@@ -159,15 +159,15 @@ gboolean       gtk_scrolled_window_get_overlay_scrolling (GtkScrolledWindow   *s
 
 GDK_AVAILABLE_IN_ALL
 void           gtk_scrolled_window_set_max_content_width  (GtkScrolledWindow *scrolled_window,
-                                                           gint               width);
+                                                           int                width);
 GDK_AVAILABLE_IN_ALL
-gint           gtk_scrolled_window_get_max_content_width  (GtkScrolledWindow *scrolled_window);
+int            gtk_scrolled_window_get_max_content_width  (GtkScrolledWindow *scrolled_window);
 
 GDK_AVAILABLE_IN_ALL
 void           gtk_scrolled_window_set_max_content_height (GtkScrolledWindow *scrolled_window,
-                                                           gint               height);
+                                                           int                height);
 GDK_AVAILABLE_IN_ALL
-gint           gtk_scrolled_window_get_max_content_height (GtkScrolledWindow *scrolled_window);
+int            gtk_scrolled_window_get_max_content_height (GtkScrolledWindow *scrolled_window);
 
 GDK_AVAILABLE_IN_ALL
 void           gtk_scrolled_window_set_propagate_natural_width  (GtkScrolledWindow *scrolled_window,

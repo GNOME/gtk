@@ -25,10 +25,10 @@
 typedef struct _GtkMenuTracker GtkMenuTracker;
 
 typedef void         (* GtkMenuTrackerInsertFunc)                       (GtkMenuTrackerItem       *item,
-                                                                         gint                      position,
+                                                                         int                       position,
                                                                          gpointer                  user_data);
 
-typedef void         (* GtkMenuTrackerRemoveFunc)                       (gint                      position,
+typedef void         (* GtkMenuTrackerRemoveFunc)                       (int                       position,
                                                                          gpointer                  user_data);
 
 

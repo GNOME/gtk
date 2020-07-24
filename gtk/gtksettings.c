@@ -114,7 +114,7 @@ struct _GtkSettings
   GdkDisplay *display;
   GSList *style_cascades;
   GtkCssProvider *theme_provider;
-  gint font_size;
+  int font_size;
   gboolean font_size_absolute;
   gchar *font_family;
   cairo_font_options_t *font_options;
@@ -1006,7 +1006,7 @@ gtk_settings_finalize (GObject *object)
 
 GtkStyleCascade *
 _gtk_settings_get_style_cascade (GtkSettings *settings,
-                                 gint         scale)
+                                 int          scale)
 {
   GtkStyleCascade *new_cascade;
   GSList *list;
@@ -1459,8 +1459,8 @@ gtk_settings_set_property_value_internal (GtkSettings            *settings,
 static void
 settings_update_double_click (GtkSettings *settings)
 {
-  gint double_click_time;
-  gint double_click_distance;
+  int double_click_time;
+  int double_click_distance;
 
   g_object_get (settings,
                 "gtk-double-click-time", &double_click_time,
@@ -1475,7 +1475,7 @@ static void
 settings_update_cursor_theme (GtkSettings *settings)
 {
   gchar *theme = NULL;
-  gint size = 0;
+  int size = 0;
 
   g_object_get (settings,
                 "gtk-cursor-theme-name", &theme,
@@ -1491,10 +1491,10 @@ settings_update_cursor_theme (GtkSettings *settings)
 static void
 settings_update_font_options (GtkSettings *settings)
 {
-  gint hinting;
+  int hinting;
   gchar *hint_style_str;
   cairo_hint_style_t hint_style;
-  gint antialias;
+  int antialias;
   cairo_antialias_t antialias_mode;
   gchar *rgba_str;
   cairo_subpixel_order_t subpixel_order;
@@ -1734,7 +1734,7 @@ gtk_settings_load_from_key_file (GtkSettings       *settings,
   GKeyFile *keyfile;
   gchar **keys;
   gsize n_keys;
-  gint i;
+  int i;
 
   error = NULL;
   keys = NULL;
@@ -1793,7 +1793,7 @@ gtk_settings_load_from_key_file (GtkSettings       *settings,
         case G_TYPE_INT:
         case G_TYPE_UINT:
           {
-            gint i_val;
+            int i_val;
 
             g_value_init (&svalue.value, G_TYPE_LONG);
             i_val = g_key_file_get_integer (keyfile, "Settings", key, &error);
@@ -1906,7 +1906,7 @@ static void
 settings_update_xsettings (GtkSettings *settings)
 {
   GParamSpec **pspecs;
-  gint i;
+  int i;
 
   pspecs = g_object_class_list_properties (G_OBJECT_GET_CLASS (settings), NULL);
   for (i = 0; pspecs[i]; i++)
@@ -1991,7 +1991,7 @@ gtk_settings_get_enable_animations (GtkSettings *settings)
   return g_value_get_boolean (&svalue->value);
 }
 
-gint
+int
 gtk_settings_get_dnd_drag_threshold (GtkSettings *settings)
 {
   GtkSettingsPropertyValue *svalue = &settings->property_values[PROP_DND_DRAG_THRESHOLD - 1];
@@ -2031,7 +2031,7 @@ gtk_settings_get_font_family (GtkSettings *settings)
   return settings->font_family;
 }
 
-gint
+int
 gtk_settings_get_font_size (GtkSettings *settings)
 {
   settings_update_font_name (settings);

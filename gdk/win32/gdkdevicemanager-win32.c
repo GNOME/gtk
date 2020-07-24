@@ -44,7 +44,7 @@
 
 static GList     *wintab_contexts = NULL;
 static GdkSurface *wintab_window = NULL;
-extern gint       _gdk_input_ignore_core;
+extern int        _gdk_input_ignore_core;
 
 typedef UINT (WINAPI *t_WTInfoA) (UINT a, UINT b, LPVOID c);
 typedef UINT (WINAPI *t_WTInfoW) (UINT a, UINT b, LPVOID c);
@@ -627,7 +627,7 @@ wintab_init_check (GdkDeviceManagerWin32 *device_manager)
               num_axes += 2;
             }
 
-          device->last_axis_data = g_new (gint, num_axes);
+          device->last_axis_data = g_new (int, num_axes);
 
           GDK_NOTE (INPUT, g_print ("device: (%u) %s axes: %d\n",
                                     cursorix,
@@ -778,7 +778,7 @@ _gdk_input_set_tablet_active (void)
 }
 
 static void
-decode_tilt (gint   *axis_data,
+decode_tilt (int    *axis_data,
              AXIS   *axes,
              PACKET *packet)
 {
@@ -878,7 +878,7 @@ gdk_input_other_event (GdkDisplay *display,
   GdkEvent *event;
 
   PACKET packet;
-  gint num_axes;
+  int num_axes;
   double x, y;
   guint translated_buttons, button_diff, button_mask;
 

@@ -107,7 +107,7 @@ icon_loaded (GObject      *object,
   GNSMenuItem *item = user_data;
   GError *error = NULL;
   GdkPixbuf *pixbuf;
-  gint scale = 1;
+  int scale = 1;
 
 #ifdef AVAILABLE_MAC_OS_X_VERSION_10_7_AND_LATER
        /* we need a run-time check for the backingScaleFactor selector because we
@@ -279,7 +279,7 @@ icon_loaded (GObject      *object,
 
       GtkIconTheme *theme;
       GtkIconPaintable *icon;
-      gint scale = 1;
+      int scale = 1;
 
       if (!parsed)
         {
@@ -380,7 +380,7 @@ icon_loaded (GObject      *object,
 
 static void
 menu_item_inserted (GtkMenuTrackerItem *item,
-                    gint                position,
+                    int                 position,
                     gpointer            user_data)
 {
   GNSMenu *menu = user_data;
@@ -389,7 +389,7 @@ menu_item_inserted (GtkMenuTrackerItem *item,
 }
 
 static void
-menu_item_removed (gint     position,
+menu_item_removed (int      position,
                    gpointer user_data)
 {
   GNSMenu *menu = user_data;

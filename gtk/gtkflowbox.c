@@ -115,7 +115,7 @@ static void gtk_flow_box_apply_filter        (GtkFlowBox      *box,
                                               GtkFlowBoxChild *child);
 static void gtk_flow_box_apply_sort          (GtkFlowBox      *box,
                                               GtkFlowBoxChild *child);
-static gint gtk_flow_box_sort                (GtkFlowBoxChild *a,
+static int gtk_flow_box_sort                 (GtkFlowBoxChild *a,
                                               GtkFlowBoxChild *b,
                                               GtkFlowBox      *box);
 
@@ -133,18 +133,18 @@ static void gtk_flow_box_check_model_compat  (GtkFlowBox *box);
 static void
 path_from_horizontal_line_rects (cairo_t      *cr,
                                  GdkRectangle *lines,
-                                 gint          n_lines)
+                                 int           n_lines)
 {
-  gint start_line, end_line;
+  int start_line, end_line;
   GdkRectangle *r;
-  gint i;
+  int i;
 
   /* Join rows vertically by extending to the middle */
   for (i = 0; i < n_lines - 1; i++)
     {
       GdkRectangle *r1 = &lines[i];
       GdkRectangle *r2 = &lines[i+1];
-      gint gap, old;
+      int gap, old;
 
       gap = r2->y - (r1->y + r1->height);
       r1->height += gap / 2;
@@ -191,18 +191,18 @@ path_from_horizontal_line_rects (cairo_t      *cr,
 static void
 path_from_vertical_line_rects (cairo_t      *cr,
                                GdkRectangle *lines,
-                               gint          n_lines)
+                               int           n_lines)
 {
-  gint start_line, end_line;
+  int start_line, end_line;
   GdkRectangle *r;
-  gint i;
+  int i;
 
   /* Join rows horizontally by extending to the middle */
   for (i = 0; i < n_lines - 1; i++)
     {
       GdkRectangle *r1 = &lines[i];
       GdkRectangle *r2 = &lines[i+1];
-      gint gap, old;
+      int gap, old;
 
       gap = r2->x - (r1->x + r1->width);
       r1->width += gap / 2;
@@ -609,7 +609,7 @@ gtk_flow_box_child_get_child (GtkFlowBoxChild *self)
  * Returns: the index of the @child, or -1 if the @child is not
  *     in a flow box.
  */
-gint
+int
 gtk_flow_box_child_get_index (GtkFlowBoxChild *child)
 {
   GtkFlowBoxChildPrivate *priv;
@@ -739,7 +739,7 @@ struct _GtkFlowBoxClass
   void (*toggle_cursor_child)        (GtkFlowBox        *box);
   gboolean (*move_cursor)            (GtkFlowBox        *box,
                                       GtkMovementStep    step,
-                                      gint               count,
+                                      int                count,
                                       gboolean           extend,
                                       gboolean           modify);
   void (*select_all)                 (GtkFlowBox        *box);
@@ -832,11 +832,11 @@ child_is_visible (GtkWidget *child)
          gtk_widget_get_child_visible (child);
 }
 
-static gint
+static int
 get_visible_children (GtkFlowBox *box)
 {
   GSequenceIter *iter;
-  gint i = 0;
+  int i = 0;
 
   for (iter = g_sequence_get_begin_iter (BOX_PRIV (box)->children);
        !g_sequence_iter_is_end (iter);
@@ -1171,7 +1171,7 @@ gtk_flow_box_get_above_focusable (GtkFlowBox    *box,
                                   GSequenceIter *iter)
 {
   GtkFlowBoxChild *child = NULL;
-  gint i;
+  int i;
 
   while (TRUE)
     {
@@ -1197,7 +1197,7 @@ gtk_flow_box_get_below_focusable (GtkFlowBox    *box,
                                   GSequenceIter *iter)
 {
   GtkFlowBoxChild *child = NULL;
-  gint i;
+  int i;
 
   while (TRUE)
     {
@@ -1228,19 +1228,19 @@ gtk_flow_box_get_below_focusable (GtkFlowBox    *box,
 static void
 get_max_item_size (GtkFlowBox     *box,
                    GtkOrientation  orientation,
-                   gint           *min_size,
-                   gint           *nat_size)
+                   int            *min_size,
+                   int            *nat_size)
 {
   GSequenceIter *iter;
-  gint max_min_size = 0;
-  gint max_nat_size = 0;
+  int max_min_size = 0;
+  int max_nat_size = 0;
 
   for (iter = g_sequence_get_begin_iter (BOX_PRIV (box)->children);
        !g_sequence_iter_is_end (iter);
        iter = g_sequence_iter_next (iter))
     {
       GtkWidget *child;
-      gint child_min, child_nat;
+      int child_min, child_nat;
 
       child = g_sequence_get (iter);
 
@@ -1269,20 +1269,20 @@ get_max_item_size (GtkFlowBox     *box,
 static void
 get_largest_size_for_opposing_orientation (GtkFlowBox     *box,
                                            GtkOrientation  orientation,
-                                           gint            item_size,
-                                           gint           *min_item_size,
-                                           gint           *nat_item_size)
+                                           int             item_size,
+                                           int            *min_item_size,
+                                           int            *nat_item_size)
 {
   GSequenceIter *iter;
-  gint max_min_size = 0;
-  gint max_nat_size = 0;
+  int max_min_size = 0;
+  int max_nat_size = 0;
 
   for (iter = g_sequence_get_begin_iter (BOX_PRIV (box)->children);
        !g_sequence_iter_is_end (iter);
        iter = g_sequence_iter_next (iter))
     {
       GtkWidget *child;
-      gint       child_min, child_nat;
+      int        child_min, child_nat;
 
       child = g_sequence_get (iter);
 
@@ -1312,16 +1312,16 @@ static GSequenceIter *
 get_largest_size_for_line_in_opposing_orientation (GtkFlowBox       *box,
                                                    GtkOrientation    orientation,
                                                    GSequenceIter    *cursor,
-                                                   gint              line_length,
+                                                   int               line_length,
                                                    GtkRequestedSize *item_sizes,
-                                                   gint              extra_pixels,
-                                                   gint             *min_item_size,
-                                                   gint             *nat_item_size)
+                                                   int               extra_pixels,
+                                                   int              *min_item_size,
+                                                   int              *nat_item_size)
 {
   GSequenceIter *iter;
-  gint max_min_size = 0;
-  gint max_nat_size = 0;
-  gint i;
+  int max_min_size = 0;
+  int max_nat_size = 0;
+  int i;
 
   i = 0;
   for (iter = cursor;
@@ -1329,7 +1329,7 @@ get_largest_size_for_line_in_opposing_orientation (GtkFlowBox       *box,
        iter = g_sequence_iter_next (iter))
     {
       GtkWidget *child;
-      gint child_min, child_nat, this_item_size;
+      int child_min, child_nat, this_item_size;
 
       child = g_sequence_get (iter);
 
@@ -1366,17 +1366,17 @@ get_largest_size_for_line_in_opposing_orientation (GtkFlowBox       *box,
 }
 
 /* fit_aligned_item_requests() helper */
-static gint
+static int
 gather_aligned_item_requests (GtkFlowBox       *box,
                               GtkOrientation    orientation,
-                              gint              line_length,
-                              gint              item_spacing,
-                              gint              n_children,
+                              int               line_length,
+                              int               item_spacing,
+                              int               n_children,
                               GtkRequestedSize *item_sizes)
 {
   GSequenceIter *iter;
-  gint i;
-  gint extra_items, natural_line_size = 0;
+  int i;
+  int extra_items, natural_line_size = 0;
 
   extra_items = n_children % line_length;
 
@@ -1387,8 +1387,8 @@ gather_aligned_item_requests (GtkFlowBox       *box,
     {
       GtkWidget *child;
       GtkAlign item_align;
-      gint child_min, child_nat;
-      gint position;
+      int child_min, child_nat;
+      int position;
 
       child = g_sequence_get (iter);
 
@@ -1424,14 +1424,14 @@ gather_aligned_item_requests (GtkFlowBox       *box,
 static GtkRequestedSize *
 fit_aligned_item_requests (GtkFlowBox     *box,
                            GtkOrientation  orientation,
-                           gint            avail_size,
-                           gint            item_spacing,
-                           gint           *line_length, /* in-out */
-                           gint            items_per_line,
-                           gint            n_children)
+                           int             avail_size,
+                           int             item_spacing,
+                           int            *line_length, /* in-out */
+                           int             items_per_line,
+                           int             n_children)
 {
   GtkRequestedSize *sizes, *try_sizes;
-  gint try_line_size, try_length;
+  int try_line_size, try_length;
 
   sizes = g_new0 (GtkRequestedSize, *line_length);
 
@@ -1478,14 +1478,14 @@ fit_aligned_item_requests (GtkFlowBox     *box,
 
 typedef struct {
   GArray *requested;
-  gint    extra_pixels;
+  int     extra_pixels;
 } AllocatedLine;
 
-static gint
+static int
 get_offset_pixels (GtkAlign align,
-                   gint     pixels)
+                   int      pixels)
 {
-  gint offset;
+  int offset;
 
   switch (align) {
   case GTK_ALIGN_START:
@@ -1516,19 +1516,19 @@ gtk_flow_box_size_allocate (GtkWidget *widget,
   GtkFlowBox *box = GTK_FLOW_BOX (widget);
   GtkFlowBoxPrivate  *priv = BOX_PRIV (box);
   GtkAllocation child_allocation;
-  gint avail_size, avail_other_size, min_items, item_spacing, line_spacing;
+  int avail_size, avail_other_size, min_items, item_spacing, line_spacing;
   GtkAlign item_align;
   GtkAlign line_align;
   GtkRequestedSize *line_sizes = NULL;
   GtkRequestedSize *item_sizes = NULL;
-  gint min_item_size, nat_item_size;
-  gint line_length;
-  gint item_size = 0;
-  gint line_size = 0, min_fixed_line_size = 0, nat_fixed_line_size = 0;
-  gint line_offset, item_offset, n_children, n_lines, line_count;
-  gint extra_pixels = 0, extra_per_item = 0, extra_extra = 0;
-  gint extra_line_pixels = 0, extra_per_line = 0, extra_line_extra = 0;
-  gint i, this_line_size;
+  int min_item_size, nat_item_size;
+  int line_length;
+  int item_size = 0;
+  int line_size = 0, min_fixed_line_size = 0, nat_fixed_line_size = 0;
+  int line_offset, item_offset, n_children, n_lines, line_count;
+  int extra_pixels = 0, extra_per_item = 0, extra_extra = 0;
+  int extra_line_pixels = 0, extra_per_line = 0, extra_line_extra = 0;
+  int i, this_line_size;
   GSequenceIter *iter;
 
   min_items = MAX (1, priv->min_children_per_line);
@@ -1755,8 +1755,8 @@ gtk_flow_box_size_allocate (GtkWidget *widget,
        iter = g_sequence_iter_next (iter))
     {
       GtkWidget *child;
-      gint position;
-      gint this_item_size;
+      int position;
+      int this_item_size;
 
       child = g_sequence_get (iter);
 
@@ -1804,7 +1804,7 @@ gtk_flow_box_size_allocate (GtkWidget *widget,
                * any leading items */
               if (line_count == n_lines -1)
                 {
-                  gint extra_items = n_children % line_length;
+                  int extra_items = n_children % line_length;
 
                   if (priv->homogeneous)
                     {
@@ -1813,7 +1813,7 @@ gtk_flow_box_size_allocate (GtkWidget *widget,
                     }
                   else
                     {
-                      gint j;
+                      int j;
 
                       for (j = 0; j < (line_length - extra_items); j++)
                         {
@@ -1828,7 +1828,7 @@ gtk_flow_box_size_allocate (GtkWidget *widget,
       /* Push the index along for the last line when spreading to the end */
       if (item_align == GTK_ALIGN_END && line_count == n_lines -1)
         {
-          gint extra_items = n_children % line_length;
+          int extra_items = n_children % line_length;
 
           position += line_length - extra_items;
         }
@@ -1891,14 +1891,14 @@ gtk_flow_box_get_request_mode (GtkWidget *widget)
 static void
 get_largest_aligned_line_length (GtkFlowBox     *box,
                                  GtkOrientation  orientation,
-                                 gint            line_length,
-                                 gint           *min_size,
-                                 gint           *nat_size)
+                                 int             line_length,
+                                 int            *min_size,
+                                 int            *nat_size)
 {
   GSequenceIter *iter;
-  gint max_min_size = 0;
-  gint max_nat_size = 0;
-  gint spacing, i;
+  int max_min_size = 0;
+  int max_nat_size = 0;
+  int spacing, i;
   GtkRequestedSize *aligned_item_sizes;
 
   if (orientation == GTK_ORIENTATION_HORIZONTAL)
@@ -1916,7 +1916,7 @@ get_largest_aligned_line_length (GtkFlowBox     *box,
        iter = g_sequence_iter_next (iter))
     {
       GtkWidget *child;
-      gint child_min, child_nat;
+      int child_min, child_nat;
 
       child = g_sequence_get (iter);
       if (!child_is_visible (child))
@@ -1970,9 +1970,9 @@ gtk_flow_box_measure (GtkWidget      *widget,
     {
       if (for_size < 0)
         {
-          gint min_item_width, nat_item_width;
-          gint min_items, nat_items;
-          gint min_width, nat_width;
+          int min_item_width, nat_item_width;
+          int min_items, nat_items;
+          int min_width, nat_width;
 
           min_items = MAX (1, priv->min_children_per_line);
           nat_items = MAX (min_items, priv->max_children_per_line);
@@ -1998,7 +1998,7 @@ gtk_flow_box_measure (GtkWidget      *widget,
                     }
                   else
                     {
-                      gint min_line_length, nat_line_length;
+                      int min_line_length, nat_line_length;
 
                       get_largest_aligned_line_length (box,
                                                        GTK_ORIENTATION_HORIZONTAL,
@@ -2033,7 +2033,7 @@ gtk_flow_box_measure (GtkWidget      *widget,
           else /* GTK_ORIENTATION_VERTICAL */
             {
               /* Return the width for the minimum height */
-              gint min_height;
+              int min_height;
               int dummy;
 
               gtk_flow_box_measure (widget,
@@ -2053,10 +2053,10 @@ gtk_flow_box_measure (GtkWidget      *widget,
         }
       else
         {
-          gint min_item_height, nat_item_height;
-          gint min_items;
-          gint min_width, nat_width;
-          gint avail_size, n_children;
+          int min_item_height, nat_item_height;
+          int min_items;
+          int min_width, nat_width;
+          int avail_size, n_children;
 
           min_items = MAX (1, priv->min_children_per_line);
 
@@ -2074,9 +2074,9 @@ gtk_flow_box_measure (GtkWidget      *widget,
             }
           else /* GTK_ORIENTATION_VERTICAL */
             {
-              gint min_height;
-              gint line_length;
-              gint item_size, extra_pixels;
+              int min_height;
+              int line_length;
+              int item_size, extra_pixels;
               int dummy;
 
               n_children = get_visible_children (box);
@@ -2126,8 +2126,8 @@ gtk_flow_box_measure (GtkWidget      *widget,
 
               if (priv->homogeneous)
                 {
-                  gint min_item_width, nat_item_width;
-                  gint lines;
+                  int min_item_width, nat_item_width;
+                  int lines;
 
                   /* Here we just use the largest height-for-width and
                    * add up the size accordingly
@@ -2152,7 +2152,7 @@ gtk_flow_box_measure (GtkWidget      *widget,
                 }
               else
                 {
-                  gint min_line_width, nat_line_width, i;
+                  int min_line_width, nat_line_width, i;
                   gboolean first_line = TRUE;
                   GtkRequestedSize *item_sizes;
                   GSequenceIter *iter;
@@ -2216,9 +2216,9 @@ gtk_flow_box_measure (GtkWidget      *widget,
     {
       if (for_size < 0)
         {
-          gint min_item_height, nat_item_height;
-          gint min_items, nat_items;
-          gint min_height, nat_height;
+          int min_item_height, nat_item_height;
+          int min_items, nat_items;
+          int min_height, nat_height;
 
           min_items = MAX (1, priv->min_children_per_line);
           nat_items = MAX (min_items, priv->max_children_per_line);
@@ -2226,7 +2226,7 @@ gtk_flow_box_measure (GtkWidget      *widget,
           if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
             {
               /* Return the height for the minimum width */
-              gint min_width;
+              int min_width;
               int dummy;
 
               gtk_flow_box_measure (widget,
@@ -2259,7 +2259,7 @@ gtk_flow_box_measure (GtkWidget      *widget,
                     }
                   else
                     {
-                      gint min_line_length, nat_line_length;
+                      int min_line_length, nat_line_length;
 
                       get_largest_aligned_line_length (box,
                                                        GTK_ORIENTATION_VERTICAL,
@@ -2302,10 +2302,10 @@ gtk_flow_box_measure (GtkWidget      *widget,
         }
       else
         {
-          gint min_item_width, nat_item_width;
-          gint min_items;
-          gint min_height, nat_height;
-          gint avail_size, n_children;
+          int min_item_width, nat_item_width;
+          int min_items;
+          int min_height, nat_height;
+          int avail_size, n_children;
 
           min_items = MAX (1, priv->min_children_per_line);
 
@@ -2314,9 +2314,9 @@ gtk_flow_box_measure (GtkWidget      *widget,
 
           if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
             {
-              gint min_width;
-              gint line_length;
-              gint item_size, extra_pixels;
+              int min_width;
+              int line_length;
+              int item_size, extra_pixels;
               int dummy;
 
               n_children = get_visible_children (box);
@@ -2366,8 +2366,8 @@ gtk_flow_box_measure (GtkWidget      *widget,
 
               if (priv->homogeneous)
                 {
-                  gint min_item_height, nat_item_height;
-                  gint lines;
+                  int min_item_height, nat_item_height;
+                  int lines;
 
                   /* Here we just use the largest height-for-width and
                    * add up the size accordingly
@@ -2391,7 +2391,7 @@ gtk_flow_box_measure (GtkWidget      *widget,
                 }
               else
                 {
-                  gint min_line_height, nat_line_height, i;
+                  int min_line_height, nat_line_height, i;
                   gboolean first_line = TRUE;
                   GtkRequestedSize *item_sizes;
                   GSequenceIter *iter;
@@ -2701,13 +2701,13 @@ get_view_rect (GtkFlowBox   *box,
 
 static void
 update_autoscroll_mode (GtkFlowBox *box,
-                        gint        x,
-                        gint        y)
+                        int         x,
+                        int         y)
 {
   GtkFlowBoxPrivate *priv = BOX_PRIV (box);
   GtkScrollType mode = GTK_SCROLL_NONE;
   GdkRectangle rect;
-  gint size, pos;
+  int size, pos;
 
   if (priv->rubberband_select && get_view_rect (box, &rect))
     {
@@ -3127,7 +3127,7 @@ gtk_flow_box_add_move_binding (GtkWidgetClass  *widget_class,
                                guint            keyval,
                                GdkModifierType  modmask,
                                GtkMovementStep  step,
-                               gint             count)
+                               int              count)
 {
   gtk_widget_class_add_binding_signal (widget_class,
                                        keyval, modmask,
@@ -3180,7 +3180,7 @@ gtk_flow_box_disable_move_cursor (GtkFlowBox *box)
 static gboolean
 gtk_flow_box_move_cursor (GtkFlowBox      *box,
                           GtkMovementStep  step,
-                          gint             count,
+                          int              count,
                           gboolean         extend,
                           gboolean         modify)
 {
@@ -3189,9 +3189,9 @@ gtk_flow_box_move_cursor (GtkFlowBox      *box,
   GtkFlowBoxChild *prev;
   GtkFlowBoxChild *next;
   GtkAllocation allocation;
-  gint page_size;
+  int page_size;
   GSequenceIter *iter;
-  gint start;
+  int start;
   GtkAdjustment *adjustment;
   gboolean vertical;
 
@@ -3286,7 +3286,7 @@ gtk_flow_box_move_cursor (GtkFlowBox      *box,
 
           if (count < 0)
             {
-              gint i = 0;
+              int i = 0;
 
               /* Up */
               while (iter != NULL)
@@ -3311,7 +3311,7 @@ gtk_flow_box_move_cursor (GtkFlowBox      *box,
             }
           else
             {
-              gint i = 0;
+              int i = 0;
 
               /* Down */
               while (!g_sequence_iter_is_end (iter))
@@ -3946,7 +3946,7 @@ gtk_flow_box_bound_model_changed (GListModel *list,
 {
   GtkFlowBox *box = user_data;
   GtkFlowBoxPrivate *priv = BOX_PRIV (box);
-  gint i;
+  int i;
 
   while (removed--)
     {
@@ -4058,7 +4058,7 @@ gtk_flow_box_insert_css_node (GtkFlowBox    *box,
 void
 gtk_flow_box_insert (GtkFlowBox *box,
                      GtkWidget  *widget,
-                     gint        position)
+                     int         position)
 {
   GtkFlowBoxPrivate *priv;
   GtkFlowBoxChild *child;
@@ -4111,7 +4111,7 @@ gtk_flow_box_insert (GtkFlowBox *box,
  */
 GtkFlowBoxChild *
 gtk_flow_box_get_child_at_index (GtkFlowBox *box,
-                                 gint        idx)
+                                 int         idx)
 {
   GSequenceIter *iter;
 
@@ -4139,8 +4139,8 @@ gtk_flow_box_get_child_at_index (GtkFlowBox *box,
  */
 GtkFlowBoxChild *
 gtk_flow_box_get_child_at_pos (GtkFlowBox *box,
-                               gint        x,
-                               gint        y)
+                               int         x,
+                               int         y)
 {
   GtkWidget *child = gtk_widget_pick (GTK_WIDGET (box), x, y, GTK_PICK_DEFAULT);
 
@@ -4893,7 +4893,7 @@ gtk_flow_box_set_sort_func (GtkFlowBox         *box,
   gtk_flow_box_invalidate_sort (box);
 }
 
-static gint
+static int
 gtk_flow_box_sort (GtkFlowBoxChild *a,
                    GtkFlowBoxChild *b,
                    GtkFlowBox      *box)

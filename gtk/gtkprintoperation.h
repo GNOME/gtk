@@ -161,11 +161,11 @@ struct _GtkPrintOperationClass
                                   GtkPrintContext   *context);
   void     (*request_page_setup) (GtkPrintOperation *operation,
                                   GtkPrintContext   *context,
-                                  gint               page_nr,
+                                  int                page_nr,
                                   GtkPageSetup      *setup);
   void     (*draw_page)          (GtkPrintOperation *operation,
                                   GtkPrintContext   *context,
-                                  gint               page_nr);
+                                  int                page_nr);
   void     (*end_print)          (GtkPrintOperation *operation,
                                   GtkPrintContext   *context);
   void     (*status_changed)     (GtkPrintOperation *operation);
@@ -237,10 +237,10 @@ void                    gtk_print_operation_set_job_name           (GtkPrintOper
                                                                     const gchar        *job_name);
 GDK_AVAILABLE_IN_ALL
 void                    gtk_print_operation_set_n_pages            (GtkPrintOperation  *op,
-                                                                    gint                n_pages);
+                                                                    int                 n_pages);
 GDK_AVAILABLE_IN_ALL
 void                    gtk_print_operation_set_current_page       (GtkPrintOperation  *op,
-                                                                    gint                current_page);
+                                                                    int                 current_page);
 GDK_AVAILABLE_IN_ALL
 void                    gtk_print_operation_set_use_full_page      (GtkPrintOperation  *op,
                                                                     gboolean            full_page);
@@ -298,7 +298,7 @@ void                    gtk_print_operation_set_embed_page_setup   (GtkPrintOper
 GDK_AVAILABLE_IN_ALL
 gboolean                gtk_print_operation_get_embed_page_setup   (GtkPrintOperation  *op);
 GDK_AVAILABLE_IN_ALL
-gint                    gtk_print_operation_get_n_pages_to_print   (GtkPrintOperation  *op);
+int                     gtk_print_operation_get_n_pages_to_print   (GtkPrintOperation  *op);
 
 GDK_AVAILABLE_IN_ALL
 GtkPageSetup           *gtk_print_run_page_setup_dialog            (GtkWindow          *parent,

@@ -225,7 +225,7 @@ gtk_print_operation_unix_launch_preview (GtkPrintOperation *op,
   gboolean settings_used = FALSE;
   GdkDisplay *display;
   GError *error = NULL;
-  gint fd;
+  int fd;
   gboolean retval;
 
   cairo_surface_destroy (surface);
@@ -609,7 +609,7 @@ finish_print (PrintResponseData *rdata,
 
 static void 
 handle_print_response (GtkWidget *dialog,
-		       gint       response,
+		       int        response,
 		       gpointer   data)
 {
   GtkPrintUnixDialog *pd = GTK_PRINT_UNIX_DIALOG (dialog);
@@ -749,7 +749,7 @@ write_preview (void                *closure,
                const unsigned char *data,
                unsigned int         length)
 {
-  gint fd = GPOINTER_TO_INT (closure);
+  int fd = GPOINTER_TO_INT (closure);
   gssize written;
   
   while (length > 0) 
@@ -774,7 +774,7 @@ write_preview (void                *closure,
 static void
 close_preview (void *data)
 {
-  gint fd = GPOINTER_TO_INT (data);
+  int fd = GPOINTER_TO_INT (data);
 
   close (fd);
 }
@@ -787,7 +787,7 @@ gtk_print_operation_unix_create_preview_surface (GtkPrintOperation *op,
                                                  gchar            **target)
 {
   gchar *filename;
-  gint fd;
+  int fd;
   GtkPaperSize *paper_size;
   gdouble w, h;
   cairo_surface_t *surface;
@@ -920,7 +920,7 @@ page_setup_data_free (gpointer data)
 
 static void
 handle_page_setup_response (GtkWidget *dialog,
-			    gint       response,
+			    int        response,
 			    gpointer   data)
 {
   GtkPageSetupUnixDialog *psd;

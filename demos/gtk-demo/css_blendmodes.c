@@ -75,7 +75,7 @@ setup_listbox (GtkBuilder       *builder,
 {
   GtkWidget *normal_row;
   GtkWidget *listbox;
-  gint i;
+  int i;
 
   normal_row = NULL;
   listbox = gtk_list_box_new ();

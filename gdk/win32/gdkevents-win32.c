@@ -100,9 +100,9 @@
 #define SYNAPSIS_ICON_WINDOW_CLASS "SynTrackCursorWindowClass"
 
 static gboolean gdk_event_translate (MSG        *msg,
-				     gint       *ret_valp);
+				     int        *ret_valp);
 static gboolean gdk_event_prepare  (GSource     *source,
-				    gint        *timeout);
+				    int         *timeout);
 static gboolean gdk_event_check    (GSource     *source);
 static gboolean gdk_event_dispatch (GSource     *source,
 				    GSourceFunc  callback,
@@ -111,7 +111,7 @@ static gboolean gdk_event_dispatch (GSource     *source,
 /* Private variable declarations
  */
 
-extern gint       _gdk_input_ignore_core;
+extern int        _gdk_input_ignore_core;
 
 typedef struct
 {
@@ -139,8 +139,8 @@ static GdkSurface *implicit_grab_surface = NULL;
 
 static GdkSurface *mouse_window = NULL;
 static GdkSurface *mouse_window_ignored_leave = NULL;
-static gint current_x, current_y;
-static gint current_root_x, current_root_y;
+static int current_x, current_y;
+static int current_root_x, current_root_y;
 
 static UINT got_gdk_events_message;
 static HWND modal_win32_dialog = NULL;
@@ -250,7 +250,7 @@ inner_window_procedure (HWND   hwnd,
 {
   MSG msg;
   DWORD pos;
-  gint ret_val = 0;
+  int ret_val = 0;
 
   msg.hwnd = hwnd;
   msg.message = message;
@@ -687,10 +687,10 @@ get_active_group (void)
   return _gdk_win32_keymap_get_active_group (keymap);
 }
 
-static gint
+static int
 build_pointer_event_state (MSG *msg)
 {
-  gint state;
+  int state;
 
   state = 0;
 
@@ -912,7 +912,7 @@ _gdk_win32_append_event (GdkEvent *event)
 static GdkWin32MessageFilterReturn
 apply_message_filters (GdkDisplay *display,
                        MSG        *msg,
-                       gint       *ret_valp,
+                       int        *ret_valp,
                        GList     **filters)
 {
   GdkWin32MessageFilterReturn result = GDK_WIN32_MESSAGE_FILTER_CONTINUE;
@@ -1324,7 +1324,7 @@ _gdk_win32_hrgn_to_region (HRGN  hrgn,
   RGNDATA *rgndata;
   RECT *rects;
   cairo_region_t *result;
-  gint nbytes;
+  int nbytes;
   guint i;
 
   if ((nbytes = GetRegionData (hrgn, 0, NULL)) == 0)
@@ -1364,7 +1364,7 @@ _gdk_win32_hrgn_to_region (HRGN  hrgn,
 static void
 adjust_drag (LONG *drag,
 	     LONG  curr,
-	     gint  inc)
+	     int   inc)
 {
   if (*drag > curr)
     *drag = curr + ((*drag + inc/2 - curr) / inc) * inc;
@@ -1482,7 +1482,7 @@ handle_nchittest (HWND hwnd,
                   GdkSurface *window,
                   gint16 screen_x,
                   gint16 screen_y,
-                  gint *ret_valp)
+                  int *ret_valp)
 {
   RECT rect;
   GdkWin32Surface *impl;
@@ -1569,7 +1569,7 @@ handle_dpi_changed (GdkSurface *window,
 
 static void
 generate_button_event (GdkEventType      type,
-                       gint              button,
+                       int               button,
                        GdkSurface        *window,
                        MSG              *msg)
 {
@@ -1820,7 +1820,7 @@ ensure_stacking_on_activate_app (MSG       *msg,
 }
 
 static gboolean
-handle_wm_sysmenu (GdkSurface *window, MSG *msg, gint *ret_valp)
+handle_wm_sysmenu (GdkSurface *window, MSG *msg, int *ret_valp)
 {
   GdkWin32Surface *impl;
   LONG_PTR style, tmp_style;
@@ -2006,8 +2006,8 @@ _gdk_win32_surface_fill_min_max_info (GdkSurface  *window,
 			     GDK_BUTTON5_MASK)
 
 static gboolean
-gdk_event_translate (MSG  *msg,
-		     gint *ret_valp)
+gdk_event_translate (MSG *msg,
+		     int *ret_valp)
 {
   RECT rect, *drag, orig_drag;
   POINT point;
@@ -2021,7 +2021,7 @@ gdk_event_translate (MSG  *msg,
   GdkEvent *event;
 
   wchar_t wbuf[100];
-  gint ccount;
+  int ccount;
 
   GdkDisplay *display;
   GdkSurface *window = NULL;
@@ -2036,7 +2036,7 @@ gdk_event_translate (MSG  *msg,
   GdkDeviceGrabInfo *pointer_grab = NULL;
   GdkSurface *grab_window = NULL;
 
-  gint button;
+  int button;
 
   gchar buf[256];
   gboolean return_val = FALSE;
@@ -2308,7 +2308,7 @@ gdk_event_translate (MSG  *msg,
     {
       if (both_shift_pressed[0] != 0 && both_shift_pressed[1] != 0)
         {
-          gint tmp_retval;
+          int tmp_retval;
           MSG fake_release = *msg;
           int pressed_shift = msg->lParam & 0xffffff;
 
@@ -2508,7 +2508,7 @@ gdk_event_translate (MSG  *msg,
 
       if (pointer_grab == NULL && implicit_grab_surface != NULL)
 	{
-	  gint state = build_pointer_event_state (msg);
+	  int state = build_pointer_event_state (msg);
 
 	  /* We keep the implicit grab until no buttons at all are held down */
 	  if ((state & GDK_ANY_BUTTON_MASK & ~(GDK_BUTTON1_MASK << (button - 1))) == 0)
@@ -3602,7 +3602,7 @@ _gdk_win32_display_queue_events (GdkDisplay *display)
 
 static gboolean
 gdk_event_prepare (GSource *source,
-		   gint    *timeout)
+		   int     *timeout)
 {
   GdkWin32EventSource *event_source = (GdkWin32EventSource *)source;
   gboolean retval;

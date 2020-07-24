@@ -9,7 +9,7 @@
 
 static void
 response_cb (GtkWidget *dialog,
-             gint       response_id,
+             int        response_id,
              gpointer   data)
 {
   gtk_window_destroy (GTK_WINDOW (dialog));

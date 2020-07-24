@@ -87,7 +87,7 @@ static gboolean
 is_cache_up_to_date (const gchar *path)
 {
   gchar *cache_path;
-  gint retval;
+  int retval;
 
   cache_path = g_build_filename (path, CACHE_NAME, NULL);
   retval = g_stat (cache_path, &cache_dir_stat);
@@ -176,7 +176,7 @@ typedef struct
   char **display_names;
 
   guint32 offset;
-  gint size;
+  int size;
 } IconData;
 
 static GHashTable *image_data_hash = NULL;
@@ -234,7 +234,7 @@ load_icon_data (const char *path)
   char *str;
   char *split_point;
   int i;
-  gint *ivalues;
+  int *ivalues;
   GError *error = NULL;
   gchar **keys;
   gsize n_keys;
@@ -591,7 +591,7 @@ scan_directory (const gchar *base_path,
 		const gchar *subdir,
 		GHashTable  *files,
 		GList       *directories,
-		gint         depth)
+		int          depth)
 {
   GHashTable *dir_hash;
   GDir *dir;
@@ -716,7 +716,7 @@ struct _HashNode
   HashNode *next;
   gchar *name;
   GList *image_list;
-  gint offset;
+  int offset;
 };
 
 static guint
@@ -733,7 +733,7 @@ icon_name_hash (gconstpointer key)
 }
 
 typedef struct {
-  gint size;
+  int size;
   HashNode **nodes;
 } HashContext;
 
@@ -822,7 +822,7 @@ write_image_data (FILE *cache, ImageData *image_data, int offset)
 {
   guint8 *s;
   guint len;
-  gint i;
+  int i;
   GdkPixdata *pixdata = &image_data->pixdata;
 
   /* Type 0 is GdkPixdata */
@@ -970,10 +970,10 @@ write_header (FILE *cache, guint32 dir_list_offset)
 	  write_card32 (cache, dir_list_offset));
 }
 
-static gint
+static int
 get_image_meta_data_size (Image *image)
 {
-  gint i;
+  int i;
 
   /* The complication with storing the size in both
    * IconData and Image is necessary since we attribute
@@ -1032,7 +1032,7 @@ get_image_meta_data_size (Image *image)
   return image->icon_data_size;
 }
 
-static gint
+static int
 get_image_pixel_data_size (Image *image)
 {
   /* The complication with storing the size in both
@@ -1057,10 +1057,10 @@ get_image_pixel_data_size (Image *image)
   return image->pixel_data_size;
 }
 
-static gint
+static int
 get_image_data_size (Image *image)
 {
-  gint len;
+  int len;
 
   len = 0;
 
@@ -1625,7 +1625,7 @@ write_csource (const gchar *path)
   gchar *cache_path;
   gchar *data;
   gsize len;
-  gint i;
+  int i;
 
   cache_path = g_build_filename (path, CACHE_NAME, NULL);
   if (!g_file_get_contents (cache_path, &data, &len, NULL))

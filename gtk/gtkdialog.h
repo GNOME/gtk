@@ -120,7 +120,7 @@ struct _GtkDialogClass
 
   /*< public >*/
 
-  void (* response) (GtkDialog *dialog, gint response_id);
+  void (* response) (GtkDialog *dialog, int response_id);
 
   /* Keybinding signals */
 
@@ -147,11 +147,11 @@ GtkWidget* gtk_dialog_new_with_buttons (const gchar     *title,
 GDK_AVAILABLE_IN_ALL
 void       gtk_dialog_add_action_widget (GtkDialog   *dialog,
                                          GtkWidget   *child,
-                                         gint         response_id);
+                                         int          response_id);
 GDK_AVAILABLE_IN_ALL
 GtkWidget* gtk_dialog_add_button        (GtkDialog   *dialog,
                                          const gchar *button_text,
-                                         gint         response_id);
+                                         int          response_id);
 GDK_AVAILABLE_IN_ALL
 void       gtk_dialog_add_buttons       (GtkDialog   *dialog,
                                          const gchar *first_button_text,
@@ -159,22 +159,22 @@ void       gtk_dialog_add_buttons       (GtkDialog   *dialog,
 
 GDK_AVAILABLE_IN_ALL
 void gtk_dialog_set_response_sensitive (GtkDialog *dialog,
-                                        gint       response_id,
+                                        int        response_id,
                                         gboolean   setting);
 GDK_AVAILABLE_IN_ALL
 void gtk_dialog_set_default_response   (GtkDialog *dialog,
-                                        gint       response_id);
+                                        int        response_id);
 GDK_AVAILABLE_IN_ALL
 GtkWidget* gtk_dialog_get_widget_for_response (GtkDialog *dialog,
-                                               gint       response_id);
+                                               int        response_id);
 GDK_AVAILABLE_IN_ALL
-gint gtk_dialog_get_response_for_widget (GtkDialog *dialog,
+int gtk_dialog_get_response_for_widget (GtkDialog *dialog,
                                          GtkWidget *widget);
 
 /* Emit response signal */
 GDK_AVAILABLE_IN_ALL
 void gtk_dialog_response           (GtkDialog *dialog,
-                                    gint       response_id);
+                                    int        response_id);
 
 GDK_AVAILABLE_IN_ALL
 GtkWidget * gtk_dialog_get_content_area (GtkDialog *dialog);

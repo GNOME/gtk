@@ -191,7 +191,7 @@ needs_explicit_setting (GParamSpec *pspec,
     { "GtkGridLayoutChild", "left-attach", PROP_KIND_LAYOUT },
   };
   gboolean found;
-  gint k;
+  int k;
   const char *class_name;
 
   class_name = g_type_name (pspec->owner_type);
@@ -241,7 +241,7 @@ keep_for_rewrite (const char *class_name,
     { "GtkStack", "needs-attention", PROP_KIND_PACKING },
   };
   gboolean found;
-  gint k;
+  int k;
   char *canonical_name;
 
   canonical_name = g_strdup (property_name);
@@ -629,7 +629,7 @@ static gboolean
 property_can_be_omitted (Element      *element,
                          MyParserData *data)
 {
-  gint i;
+  int i;
   gboolean bound;
   gboolean translatable;
   const char *class_name;
@@ -700,7 +700,7 @@ property_has_been_removed (Element      *element,
   };
   gchar *canonical_name;
   gboolean found;
-  gint i, k;
+  int i, k;
   PropKind kind;
 
   kind = get_prop_kind (element);

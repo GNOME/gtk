@@ -72,65 +72,65 @@ void    _gtk_cell_area_box_init_groups                         (GtkCellAreaBoxCo
 
 /* Update cell-group sizes */
 void    _gtk_cell_area_box_context_push_group_width             (GtkCellAreaBoxContext *box_context,
-                                                                gint                   group_idx,
-                                                                gint                   minimum_width,
-                                                                gint                   natural_width);
+                                                                int                    group_idx,
+                                                                int                    minimum_width,
+                                                                int                    natural_width);
 
 void    _gtk_cell_area_box_context_push_group_height_for_width  (GtkCellAreaBoxContext *box_context,
-                                                                gint                   group_idx,
-                                                                gint                   for_width,
-                                                                gint                   minimum_height,
-                                                                gint                   natural_height);
+                                                                int                    group_idx,
+                                                                int                    for_width,
+                                                                int                    minimum_height,
+                                                                int                    natural_height);
 
 void    _gtk_cell_area_box_context_push_group_height            (GtkCellAreaBoxContext *box_context,
-                                                                gint                   group_idx,
-                                                                gint                   minimum_height,
-                                                                gint                   natural_height);
+                                                                int                    group_idx,
+                                                                int                    minimum_height,
+                                                                int                    natural_height);
 
 void    _gtk_cell_area_box_context_push_group_width_for_height  (GtkCellAreaBoxContext *box_context,
-                                                                gint                   group_idx,
-                                                                gint                   for_height,
-                                                                gint                   minimum_width,
-                                                                gint                   natural_width);
+                                                                int                    group_idx,
+                                                                int                    for_height,
+                                                                int                    minimum_width,
+                                                                int                    natural_width);
 
 /* Fetch cell-group sizes */
 void    _gtk_cell_area_box_context_get_group_width              (GtkCellAreaBoxContext *box_context,
-                                                                gint                   group_idx,
-                                                                gint                  *minimum_width,
-                                                                gint                  *natural_width);
+                                                                int                    group_idx,
+                                                                int                   *minimum_width,
+                                                                int                   *natural_width);
 
 void    _gtk_cell_area_box_context_get_group_height_for_width   (GtkCellAreaBoxContext *box_context,
-                                                                gint                   group_idx,
-                                                                gint                   for_width,
-                                                                gint                  *minimum_height,
-                                                                gint                  *natural_height);
+                                                                int                    group_idx,
+                                                                int                    for_width,
+                                                                int                   *minimum_height,
+                                                                int                   *natural_height);
 
 void    _gtk_cell_area_box_context_get_group_height             (GtkCellAreaBoxContext *box_context,
-                                                                gint                   group_idx,
-                                                                gint                  *minimum_height,
-                                                                gint                  *natural_height);
+                                                                int                    group_idx,
+                                                                int                   *minimum_height,
+                                                                int                   *natural_height);
 
 void    _gtk_cell_area_box_context_get_group_width_for_height   (GtkCellAreaBoxContext *box_context,
-                                                                gint                   group_idx,
-                                                                gint                   for_height,
-                                                                gint                  *minimum_width,
-                                                                gint                  *natural_width);
+                                                                int                    group_idx,
+                                                                int                    for_height,
+                                                                int                   *minimum_width,
+                                                                int                   *natural_width);
 
 GtkRequestedSize *_gtk_cell_area_box_context_get_widths         (GtkCellAreaBoxContext *box_context,
-                                                                gint                  *n_widths);
+                                                                int                   *n_widths);
 GtkRequestedSize *_gtk_cell_area_box_context_get_heights        (GtkCellAreaBoxContext *box_context,
-                                                                gint                  *n_heights);
+                                                                int                   *n_heights);
 
 /* Private context/area interaction */
 typedef struct {
-  gint group_idx; /* Groups containing only invisible cells are not allocated */
-  gint position;  /* Relative group allocation position in the orientation of the box */
-  gint size;      /* Full allocated size of the cells in this group spacing inclusive */
+  int group_idx; /* Groups containing only invisible cells are not allocated */
+  int position;  /* Relative group allocation position in the orientation of the box */
+  int size;      /* Full allocated size of the cells in this group spacing inclusive */
 } GtkCellAreaBoxAllocation;
 
 GtkCellAreaBoxAllocation *
 _gtk_cell_area_box_context_get_orientation_allocs (GtkCellAreaBoxContext *context,
-                                                  gint                  *n_allocs);
+                                                  int                   *n_allocs);
 
 G_END_DECLS
 

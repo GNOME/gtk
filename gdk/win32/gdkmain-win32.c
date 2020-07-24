@@ -170,7 +170,7 @@ _gdk_win32_print_system_palette (void)
   g_free (pe);
 }
 
-static gint
+static int
 palette_size (HPALETTE hpal)
 {
   WORD npal = 0;
@@ -185,7 +185,7 @@ void
 _gdk_win32_print_hpalette (HPALETTE hpal)
 {
   PALETTEENTRY *pe;
-  gint n, npal;
+  int n, npal;
 
   npal = palette_size (hpal);
   pe = g_new (PALETTEENTRY, npal);

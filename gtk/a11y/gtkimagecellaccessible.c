@@ -79,8 +79,8 @@ gtk_image_cell_accessible_set_image_description (AtkImage    *image,
 
 static void
 gtk_image_cell_accessible_get_image_position (AtkImage     *image,
-                                              gint         *x,
-                                              gint         *y,
+                                              int          *x,
+                                              int          *y,
                                               AtkCoordType  coord_type)
 {
   atk_component_get_extents (ATK_COMPONENT (image), x, y, NULL, NULL,
@@ -89,8 +89,8 @@ gtk_image_cell_accessible_get_image_position (AtkImage     *image,
 
 static void
 gtk_image_cell_accessible_get_image_size (AtkImage *image,
-                                          gint     *width,
-                                          gint     *height)
+                                          int      *width,
+                                          int      *height)
 {
   GtkImageCellAccessible *cell = GTK_IMAGE_CELL_ACCESSIBLE (image);
   GtkCellRenderer *cell_renderer;

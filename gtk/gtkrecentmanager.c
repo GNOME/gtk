@@ -159,7 +159,7 @@ struct _GtkRecentInfo
 
   gboolean is_private;
 
-  gint ref_count;
+  int ref_count;
 };
 
 struct _GtkRecentManagerPrivate
@@ -168,7 +168,7 @@ struct _GtkRecentManagerPrivate
 
   guint is_dirty : 1;
 
-  gint size;
+  int size;
 
   GBookmarkFile *recent_items;
 
@@ -210,9 +210,9 @@ static void     gtk_recent_manager_real_changed        (GtkRecentManager  *manag
 static void     gtk_recent_manager_set_filename        (GtkRecentManager  *manager,
                                                         const gchar       *filename);
 static void     gtk_recent_manager_clamp_to_age        (GtkRecentManager  *manager,
-                                                        gint               age);
+                                                        int                age);
 static void     gtk_recent_manager_clamp_to_size       (GtkRecentManager  *manager,
-                                                        const gint         size);
+                                                        const int          size);
 
 static void     gtk_recent_manager_enabled_changed     (GtkRecentManager  *manager);
 
@@ -453,8 +453,8 @@ gtk_recent_manager_real_changed (GtkRecentManager *manager)
       else
         {
           GtkSettings *settings;
-          gint age;
-          gint max_size = MAX_LIST_SIZE;
+          int age;
+          int max_size = MAX_LIST_SIZE;
           gboolean enabled;
 
           settings = gtk_settings_get_default ();
@@ -657,7 +657,7 @@ build_recent_items_list (GtkRecentManager *manager)
 {
   GtkRecentManagerPrivate *priv = manager->priv;
   GError *read_error;
-  gint size;
+  int size;
 
   if (!priv->recent_items)
     {
@@ -970,7 +970,7 @@ gtk_recent_manager_add_full (GtkRecentManager    *manager,
 
   if (data->groups && ((char*)data->groups)[0] != '\0')
     {
-      gint j;
+      int j;
 
       for (j = 0; (data->groups)[j] != NULL; j++)
         g_bookmark_file_add_group (priv->recent_items, uri, (data->groups)[j]);
@@ -1344,12 +1344,12 @@ purge_recent_items_list (GtkRecentManager  *manager,
  * Returns: the number of items that have been removed from the
  *   recently used resources list
  */
-gint
+int
 gtk_recent_manager_purge_items (GtkRecentManager  *manager,
                                 GError           **error)
 {
   GtkRecentManagerPrivate *priv;
-  gint count, purged;
+  int count, purged;
 
   g_return_val_if_fail (GTK_IS_RECENT_MANAGER (manager), -1);
 
@@ -1412,7 +1412,7 @@ gtk_recent_manager_changed (GtkRecentManager *manager)
 
 static void
 gtk_recent_manager_clamp_to_age (GtkRecentManager *manager,
-                                 gint              age)
+                                 int               age)
 {
   GtkRecentManagerPrivate *priv = manager->priv;
   gchar **uris;
@@ -1430,10 +1430,10 @@ gtk_recent_manager_clamp_to_age (GtkRecentManager *manager,
     {
       const gchar *uri = uris[i];
       time_t modified;
-      gint item_age;
+      int item_age;
 
       modified = g_bookmark_file_get_modified (priv->recent_items, uri, NULL);
-      item_age = (gint) ((now - modified) / (60 * 60 * 24));
+      item_age = (int) ((now - modified) / (60 * 60 * 24));
       if (item_age > age)
         g_bookmark_file_remove_item (priv->recent_items, uri, NULL);
     }
@@ -1443,7 +1443,7 @@ gtk_recent_manager_clamp_to_age (GtkRecentManager *manager,
 
 static void
 gtk_recent_manager_clamp_to_size (GtkRecentManager *manager,
-                                  const gint        size)
+                                  const int         size)
 {
   GtkRecentManagerPrivate *priv = manager->priv;
   gchar **uris;
@@ -2176,11 +2176,11 @@ gtk_recent_info_get_uri_display (GtkRecentInfo *info)
  * Returns: a positive integer containing the number of days
  *   elapsed since the time this resource was last modified
  */
-gint
+int
 gtk_recent_info_get_age (GtkRecentInfo *info)
 {
   time_t now, delta;
-  gint retval;
+  int retval;
 
   g_return_val_if_fail (info != NULL, -1);
 
@@ -2188,7 +2188,7 @@ gtk_recent_info_get_age (GtkRecentInfo *info)
 
   delta = now - info->modified;
 
-  retval = (gint) (delta / (60 * 60 * 24));
+  retval = (int) (delta / (60 * 60 * 24));
 
   return retval;
 }

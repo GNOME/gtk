@@ -326,8 +326,8 @@ gtk_font_chooser_widget_update_marks (GtkFontChooserWidget *self)
 {
   GtkAdjustment *adj, *spin_adj;
   const int *sizes;
-  gint *font_sizes;
-  gint i, n_sizes;
+  int *font_sizes;
+  int i, n_sizes;
   gdouble value, spin_value;
   gpointer item;
 
@@ -356,7 +356,7 @@ gtk_font_chooser_widget_update_marks (GtkFontChooserWidget *self)
 
   if (n_sizes < 2)
     {
-      static const gint fallback_sizes[] = {
+      static const int fallback_sizes[] = {
         6, 8, 9, 10, 11, 12, 13, 14, 16, 20, 24, 36, 48, 72
       };
 
@@ -955,7 +955,7 @@ gtk_font_chooser_widget_get_family (GtkFontChooser *chooser)
     return pango_font_face_get_family (item);
 }
 
-static gint
+static int
 gtk_font_chooser_widget_get_size (GtkFontChooser *chooser)
 {
   GtkFontChooserWidget *fontchooser = GTK_FONT_CHOOSER_WIDGET (chooser);
@@ -1223,7 +1223,7 @@ find_language_and_script (GtkFontChooserWidget *fontchooser,
                           hb_tag_t             *lang_tag,
                           hb_tag_t             *script_tag)
 {
-  gint i, j, k;
+  int i, j, k;
   hb_tag_t scripts[80];
   unsigned int n_scripts;
   unsigned int count;

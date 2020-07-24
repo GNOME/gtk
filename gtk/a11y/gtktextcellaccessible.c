@@ -27,8 +27,8 @@
 struct _GtkTextCellAccessiblePrivate
 {
   gchar *cell_text;
-  gint caret_pos;
-  gint cell_length;
+  int caret_pos;
+  int cell_length;
   PangoLayout *layout;
 };
 
@@ -38,45 +38,45 @@ static const gchar* gtk_text_cell_accessible_get_name    (AtkObject      *atk_ob
 /* atktext.h */
 
 static gchar*    gtk_text_cell_accessible_get_text                (AtkText        *text,
-                                                        gint            start_pos,
-                                                        gint            end_pos);
+                                                        int             start_pos,
+                                                        int             end_pos);
 static gunichar gtk_text_cell_accessible_get_character_at_offset  (AtkText        *text,
-                                                         gint           offset);
+                                                         int            offset);
 static gchar*   gtk_text_cell_accessible_get_text_before_offset   (AtkText        *text,
-                                                         gint           offset,
+                                                         int            offset,
                                                          AtkTextBoundary boundary_type,
-                                                         gint           *start_offset,
-                                                         gint           *end_offset);
+                                                         int            *start_offset,
+                                                         int            *end_offset);
 static gchar*   gtk_text_cell_accessible_get_text_at_offset       (AtkText        *text,
-                                                         gint           offset,
+                                                         int            offset,
                                                          AtkTextBoundary boundary_type,
-                                                         gint           *start_offset,
-                                                         gint           *end_offset);
+                                                         int            *start_offset,
+                                                         int            *end_offset);
 static gchar*   gtk_text_cell_accessible_get_text_after_offset    (AtkText        *text,
-                                                         gint           offset,
+                                                         int            offset,
                                                          AtkTextBoundary boundary_type,
-                                                         gint           *start_offset,
-                                                         gint           *end_offset);
-static gint      gtk_text_cell_accessible_get_character_count     (AtkText        *text);
-static gint      gtk_text_cell_accessible_get_caret_offset        (AtkText        *text);
+                                                         int            *start_offset,
+                                                         int            *end_offset);
+static int       gtk_text_cell_accessible_get_character_count     (AtkText        *text);
+static int       gtk_text_cell_accessible_get_caret_offset        (AtkText        *text);
 static gboolean  gtk_text_cell_accessible_set_caret_offset        (AtkText        *text,
-                                                         gint           offset);
+                                                         int            offset);
 static void      gtk_text_cell_accessible_get_character_extents   (AtkText        *text,
-                                                         gint           offset,
-                                                         gint           *x,
-                                                         gint           *y,
-                                                         gint           *width,
-                                                         gint           *height,
+                                                         int            offset,
+                                                         int            *x,
+                                                         int            *y,
+                                                         int            *width,
+                                                         int            *height,
                                                          AtkCoordType   coords);
-static gint      gtk_text_cell_accessible_get_offset_at_point     (AtkText        *text,
-                                                         gint           x,
-                                                         gint           y,
+static int       gtk_text_cell_accessible_get_offset_at_point     (AtkText        *text,
+                                                         int            x,
+                                                         int            y,
                                                          AtkCoordType   coords);
 static AtkAttributeSet* gtk_text_cell_accessible_get_run_attributes 
                                                         (AtkText        *text,
-                                                         gint           offset,
-                                                         gint           *start_offset,      
-                                                         gint           *end_offset); 
+                                                         int            offset,
+                                                         int            *start_offset,      
+                                                         int            *end_offset); 
 static AtkAttributeSet* gtk_text_cell_accessible_get_default_attributes 
                                                         (AtkText        *text);
 
@@ -138,7 +138,7 @@ gtk_text_cell_accessible_update_cache (GtkCellAccessible *cell,
 {
   GtkTextCellAccessible *text_cell = GTK_TEXT_CELL_ACCESSIBLE (cell);
   AtkObject *obj = ATK_OBJECT (cell);
-  gint text_length;
+  int text_length;
   gchar *text;
   GtkCellRenderer *renderer;
 
@@ -203,8 +203,8 @@ gtk_text_cell_accessible_init (GtkTextCellAccessible *text_cell)
 
 static gchar *
 gtk_text_cell_accessible_get_text (AtkText *atk_text,
-                                   gint     start_pos,
-                                   gint     end_pos)
+                                   int      start_pos,
+                                   int      end_pos)
 {
   gchar *text;
 
@@ -217,10 +217,10 @@ gtk_text_cell_accessible_get_text (AtkText *atk_text,
 
 static gchar *
 gtk_text_cell_accessible_get_text_before_offset (AtkText         *atk_text,
-                                                 gint             offset,
+                                                 int              offset,
                                                  AtkTextBoundary  boundary_type,
-                                                 gint            *start_offset,
-                                                 gint            *end_offset)
+                                                 int             *start_offset,
+                                                 int             *end_offset)
 {
   GtkTextCellAccessible *text_cell = GTK_TEXT_CELL_ACCESSIBLE (atk_text);
   gchar *text;
@@ -232,10 +232,10 @@ gtk_text_cell_accessible_get_text_before_offset (AtkText         *atk_text,
 
 static gchar *
 gtk_text_cell_accessible_get_text_at_offset (AtkText         *atk_text,
-                                             gint             offset,
+                                             int              offset,
                                              AtkTextBoundary  boundary_type,
-                                             gint            *start_offset,
-                                             gint            *end_offset)
+                                             int             *start_offset,
+                                             int             *end_offset)
 {
   GtkTextCellAccessible *text_cell = GTK_TEXT_CELL_ACCESSIBLE (atk_text);
   gchar *text;
@@ -247,10 +247,10 @@ gtk_text_cell_accessible_get_text_at_offset (AtkText         *atk_text,
 
 static gchar *
 gtk_text_cell_accessible_get_text_after_offset (AtkText         *atk_text,
-                                                gint             offset,
+                                                int              offset,
                                                 AtkTextBoundary  boundary_type,
-                                                gint            *start_offset,
-                                                gint            *end_offset)
+                                                int             *start_offset,
+                                                int             *end_offset)
 {
   GtkTextCellAccessible *text_cell = GTK_TEXT_CELL_ACCESSIBLE (atk_text);
   gchar *text;
@@ -260,7 +260,7 @@ gtk_text_cell_accessible_get_text_after_offset (AtkText         *atk_text,
   return text;
 }
 
-static gint
+static int
 gtk_text_cell_accessible_get_character_count (AtkText *text)
 {
   if (GTK_TEXT_CELL_ACCESSIBLE (text)->priv->cell_text != NULL)
@@ -269,7 +269,7 @@ gtk_text_cell_accessible_get_character_count (AtkText *text)
     return 0;
 }
 
-static gint
+static int
 gtk_text_cell_accessible_get_caret_offset (AtkText *text)
 {
   return GTK_TEXT_CELL_ACCESSIBLE (text)->priv->caret_pos;
@@ -277,7 +277,7 @@ gtk_text_cell_accessible_get_caret_offset (AtkText *text)
 
 static gboolean
 gtk_text_cell_accessible_set_caret_offset (AtkText *text,
-                                           gint     offset)
+                                           int      offset)
 {
   GtkTextCellAccessible *text_cell = GTK_TEXT_CELL_ACCESSIBLE (text);
 
@@ -303,9 +303,9 @@ gtk_text_cell_accessible_set_caret_offset (AtkText *text,
 
 static AtkAttributeSet *
 gtk_text_cell_accessible_get_run_attributes (AtkText *text,
-                                             gint     offset,
-                                             gint    *start_offset,
-                                             gint    *end_offset)
+                                             int      offset,
+                                             int     *start_offset,
+                                             int     *end_offset)
 {
   AtkAttributeSet *attrib_set = NULL;
   GtkTextCellAccessible *text_cell = GTK_TEXT_CELL_ACCESSIBLE (text);
@@ -378,7 +378,7 @@ create_pango_layout (GtkTextCellAccessible *text)
   gboolean scale_set, underline_set, rise_set;
   gchar *renderer_text;
   gdouble scale;
-  gint rise;
+  int rise;
   GtkRendererCellAccessible *gail_renderer;
   GtkCellRendererText *gtk_renderer;
 
@@ -479,11 +479,11 @@ add_attr (PangoAttrList *attr_list,
 
 static void
 gtk_text_cell_accessible_get_character_extents (AtkText      *text,
-                                                gint          offset,
-                                                gint         *x,
-                                                gint         *y,
-                                                gint         *width,
-                                                gint         *height,
+                                                int           offset,
+                                                int          *x,
+                                                int          *y,
+                                                int          *width,
+                                                int          *height,
                                                 AtkCoordType  coords)
 {
   GtkRendererCellAccessible *gail_renderer;
@@ -496,8 +496,8 @@ gtk_text_cell_accessible_get_character_extents (AtkText      *text,
   GtkTextCellAccessible *text_cell = GTK_TEXT_CELL_ACCESSIBLE (text);
   gchar *renderer_text;
   gfloat xalign, yalign;
-  gint x_offset, y_offset, index;
-  gint xpad, ypad;
+  int x_offset, y_offset, index;
+  int xpad, ypad;
 
   if (!GTK_TEXT_CELL_ACCESSIBLE (text)->priv->cell_text)
     {
@@ -559,10 +559,10 @@ gtk_text_cell_accessible_get_character_extents (AtkText      *text,
   g_object_unref (gtk_renderer);
 }
 
-static gint
+static int
 gtk_text_cell_accessible_get_offset_at_point (AtkText      *text,
-                                              gint          x,
-                                              gint          y,
+                                              int           x,
+                                              int           y,
                                               AtkCoordType  coords)
 {
   AtkObject *parent;
@@ -574,9 +574,9 @@ gtk_text_cell_accessible_get_offset_at_point (AtkText      *text,
   GtkTextCellAccessible *text_cell = GTK_TEXT_CELL_ACCESSIBLE (text);
   gchar *renderer_text;
   gfloat xalign, yalign;
-  gint x_offset, y_offset, index;
-  gint xpad, ypad;
-  gint x_temp, y_temp;
+  int x_offset, y_offset, index;
+  int xpad, ypad;
+  int x_temp, y_temp;
   gboolean ret;
 
   if (!GTK_TEXT_CELL_ACCESSIBLE (text)->priv->cell_text)
@@ -665,7 +665,7 @@ gtk_text_cell_accessible_get_offset_at_point (AtkText      *text,
 
 static gunichar
 gtk_text_cell_accessible_get_character_at_offset (AtkText *text,
-                                                  gint     offset)
+                                                  int      offset)
 {
   gchar *index;
   gchar *string;

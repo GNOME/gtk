@@ -33,7 +33,7 @@ typedef struct _GdkWaylandEventSource {
 
 static gboolean
 gdk_event_source_prepare (GSource *base,
-                          gint    *timeout)
+                          int     *timeout)
 {
   GdkWaylandEventSource *source = (GdkWaylandEventSource *) base;
   GdkWaylandDisplay *display = (GdkWaylandDisplay *) source->display;

@@ -139,9 +139,9 @@ get_busy (GSimpleAction *action,
   gtk_widget_set_sensitive (window, FALSE);
 }
 
-static gint current_page = 0;
+static int current_page = 0;
 static gboolean
-on_page (gint i)
+on_page (int i)
 {
   return current_page == i;
 }
@@ -422,7 +422,7 @@ static void
 spin_value_changed (GtkAdjustment *adjustment, GtkWidget *label)
 {
   GtkWidget *w;
-  gint v;
+  int v;
   gchar *text;
 
   v = (int)gtk_adjustment_get_value (adjustment);
@@ -454,8 +454,8 @@ spin_value_reset (GtkWidget *button, GtkAdjustment *adjustment)
   dismiss (button);
 }
 
-static gint pulse_time = 250;
-static gint pulse_entry_mode = 0;
+static int pulse_time = 250;
+static int pulse_entry_mode = 0;
 
 static void
 remove_pulse (gpointer pulse_id)
@@ -557,9 +557,9 @@ on_scale_button_value_changed (GtkScaleButton *button,
     }
   else
     {
-      gint percent;
+      int percent;
 
-      percent = (gint) (100. * val / (gtk_adjustment_get_upper (adjustment) - gtk_adjustment_get_lower (adjustment)) + .5);
+      percent = (int) (100. * val / (gtk_adjustment_get_upper (adjustment) - gtk_adjustment_get_lower (adjustment)) + .5);
 
       str = g_strdup_printf (C_("volume percentage", "%d %%"), percent);
     }
@@ -627,7 +627,7 @@ static void
 on_range_from_changed (GtkSpinButton *from)
 {
   GtkSpinButton *to;
-  gint v1, v2;
+  int v1, v2;
 
   to = GTK_SPIN_BUTTON (g_object_get_data (G_OBJECT (from), "range_to_spin"));
 
@@ -642,7 +642,7 @@ static void
 on_range_to_changed (GtkSpinButton *to)
 {
   GtkSpinButton *from;
-  gint v1, v2;
+  int v1, v2;
 
   from = GTK_SPIN_BUTTON (g_object_get_data (G_OBJECT (to), "range_from_spin"));
 
@@ -654,7 +654,7 @@ on_range_to_changed (GtkSpinButton *to)
 }
 
 static void
-info_bar_response (GtkWidget *infobar, gint response_id)
+info_bar_response (GtkWidget *infobar, int response_id)
 {
   if (response_id == GTK_RESPONSE_CLOSE)
     gtk_widget_hide (infobar);
@@ -1025,7 +1025,7 @@ populate_colors (GtkWidget *widget, GtkWidget *chooser)
     { "7.5", "#C48299", NULL },
     { "10", "#C68292", NULL }
   };
-  gint i;
+  int i;
   GtkWidget *row, *box, *label, *swatch;
   GtkWidget *sw;
   GdkRGBA rgba;
@@ -1331,7 +1331,7 @@ my_text_view_set_adjustment (MyTextView *tv, GtkAdjustment *adjustment)
 }
 
 static void
-close_selection_dialog (GtkWidget *dialog, gint response, GtkWidget *tv)
+close_selection_dialog (GtkWidget *dialog, int response, GtkWidget *tv)
 {
   GtkWidget *box;
   GtkWidget *child;
@@ -1886,7 +1886,7 @@ activate (GApplication *app)
     { "app.paste", { "<Control>v", NULL } },
     { "win.delete", { "Delete", NULL } },
   };
-  gint i;
+  int i;
   GPermission *permission;
   GAction *action;
   GError *error = NULL;
@@ -2282,7 +2282,7 @@ main (int argc, char *argv[])
     { "check-off-disabled", NULL, NULL, "false", NULL },
     { "radio-x-disabled", NULL, "s", "'x'", NULL },
   };
-  gint status;
+  int status;
 
   app = gtk_application_new ("org.gtk.WidgetFactory4", G_APPLICATION_NON_UNIQUE);
 

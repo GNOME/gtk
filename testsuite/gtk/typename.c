@@ -24,7 +24,7 @@ type_name_mangle (const gchar *name,
                   gboolean     split_first_cap)
 {
   GString *symbol_name = g_string_new ("");
-  gint i;
+  int i;
 
   for (i = 0; name[i] != '\0'; i++)
     {

@@ -110,7 +110,7 @@ get_secret_cb (GObject      *source_object,
                      *value = NULL;
   GVariantIter       *iter = NULL;
   guint               i, required_len;
-  gint                pw_field = -1;
+  int                 pw_field = -1;
 
   task = user_data;
   task_data = g_task_get_task_data (task);
@@ -899,7 +899,7 @@ gtk_cups_secrets_service_watch (GBusNameAppearedCallback appeared,
 static void
 cleanup_task_data (gpointer data)
 {
-  gint                i;
+  int                 i;
   SecretsServiceData *task_data = data;
 
   g_free (task_data->collection_path);

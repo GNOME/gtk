@@ -1,13 +1,13 @@
 #include <gtk/gtk.h>
 
-static gint
+static int
 sort_list (GtkListBoxRow *row1,
            GtkListBoxRow *row2,
            gpointer       data)
 {
   GtkWidget *label1, *label2;
-  gint n1, n2;
-  gint *count = data;
+  int n1, n2;
+  int *count = data;
 
   (*count)++;
 
@@ -51,9 +51,9 @@ test_sort (void)
   GtkListBox *list;
   GtkListBoxRow *row;
   GtkWidget *label;
-  gint i, r;
+  int i, r;
   gchar *s;
-  gint count;
+  int count;
 
   list = GTK_LIST_BOX (gtk_list_box_new ());
   g_object_ref_sink (list);
@@ -94,7 +94,7 @@ on_row_selected (GtkListBox    *list_box,
                  GtkListBoxRow *row,
                  gpointer       data)
 {
-  gint *i = data;
+  int *i = data;
 
   (*i)++;
 
@@ -107,10 +107,10 @@ test_selection (void)
   GtkListBox *list;
   GtkListBoxRow *row, *row2;
   GtkWidget *label;
-  gint i;
+  int i;
   gchar *s;
-  gint count;
-  gint index;
+  int count;
+  int index;
 
   list = GTK_LIST_BOX (gtk_list_box_new ());
   g_object_ref_sink (list);
@@ -184,7 +184,7 @@ test_selection (void)
 static void
 on_selected_rows_changed (GtkListBox *box, gpointer data)
 {
-  gint *i = data;
+  int *i = data;
 
   (*i)++;
 }
@@ -196,9 +196,9 @@ test_multi_selection (void)
   GList *l;
   GtkListBoxRow *row, *row2;
   GtkWidget *label;
-  gint i;
+  int i;
   gchar *s;
-  gint count;
+  int count;
 
   list = GTK_LIST_BOX (gtk_list_box_new ());
   g_object_ref_sink (list);
@@ -272,9 +272,9 @@ static gboolean
 filter_func (GtkListBoxRow *row,
              gpointer       data)
 {
-  gint *count = data;
+  int *count = data;
   GtkWidget *child;
-  gint i;
+  int i;
 
   (*count)++;
 
@@ -287,7 +287,7 @@ filter_func (GtkListBoxRow *row,
 static void
 check_filtered (GtkListBox *list)
 {
-  gint count;
+  int count;
   GtkWidget *row;
 
   count = 0;
@@ -309,10 +309,10 @@ test_filter (void)
 {
   GtkListBox *list;
   GtkListBoxRow *row;
-  gint i;
+  int i;
   gchar *s;
   GtkWidget *label;
-  gint count;
+  int count;
 
   list = GTK_LIST_BOX (gtk_list_box_new ());
   g_object_ref_sink (list);
@@ -354,8 +354,8 @@ header_func (GtkListBoxRow *row,
              gpointer       data)
 {
   GtkWidget *child;
-  gint i;
-  gint *count = data;
+  int i;
+  int *count = data;
   GtkWidget *header;
   gchar *s;
 
@@ -379,7 +379,7 @@ header_func (GtkListBoxRow *row,
 static void
 check_headers (GtkListBox *list)
 {
-  gint count;
+  int count;
   GtkWidget *row;
 
   count = 0;
@@ -401,10 +401,10 @@ test_header (void)
 {
   GtkListBox *list;
   GtkListBoxRow *row;
-  gint i;
+  int i;
   gchar *s;
   GtkWidget *label;
-  gint count;
+  int count;
 
   list = GTK_LIST_BOX (gtk_list_box_new ());
   g_object_ref_sink (list);

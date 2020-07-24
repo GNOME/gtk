@@ -84,12 +84,12 @@ GtkPadController *gtk_pad_controller_new    (GActionGroup     *group,
 GDK_AVAILABLE_IN_ALL
 void  gtk_pad_controller_set_action_entries (GtkPadController        *controller,
                                              const GtkPadActionEntry *entries,
-                                             gint                     n_entries);
+                                             int                      n_entries);
 GDK_AVAILABLE_IN_ALL
 void  gtk_pad_controller_set_action         (GtkPadController *controller,
                                              GtkPadActionType  type,
-                                             gint              index,
-                                             gint              mode,
+                                             int               index,
+                                             int               mode,
                                              const gchar      *label,
                                              const gchar      *action_name);
 

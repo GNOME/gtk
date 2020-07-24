@@ -131,7 +131,7 @@ get_labels (guint key, GdkModifierType modifier, guint *n_mods)
   gchar key_label[6];
   const gchar *tmp;
   gunichar ch;
-  gint i = 0;
+  int i = 0;
   gchar **retval;
 
   if (modifier & GDK_SHIFT_MASK)
@@ -260,7 +260,7 @@ display_shortcut (GtkWidget       *self,
                   GdkModifierType  modifier)
 {
   gchar **keys = NULL;
-  gint i;
+  int i;
   guint n_mods;
 
   keys = get_labels (key, modifier, &n_mods);
@@ -288,7 +288,7 @@ parse_combination (GtkShortcutLabel *self,
                    const gchar      *str)
 {
   gchar **accels;
-  gint k;
+  int k;
   GdkModifierType modifier = 0;
   guint key = 0;
   gboolean retval = TRUE;
@@ -316,7 +316,7 @@ parse_sequence (GtkShortcutLabel *self,
                 const gchar      *str)
 {
   gchar **accels;
-  gint k;
+  int k;
   gboolean retval = TRUE;
 
   accels = g_strsplit (str, "+", 0);
@@ -377,7 +377,7 @@ static void
 gtk_shortcut_label_rebuild (GtkShortcutLabel *self)
 {
   gchar **accels;
-  gint k;
+  int k;
 
   clear_children (self);
 

@@ -117,7 +117,7 @@ keynav_failed (GtkWidget        *view,
   GtkTreePath *path;
   GtkTreeModel *model;
   GtkTreeIter iter;
-  gint col;
+  int col;
   GtkTreePath *sel;
 
   if (view == views->view1 && direction == GTK_DIR_DOWN)

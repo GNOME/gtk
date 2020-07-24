@@ -286,7 +286,7 @@ test_forward_to_tag_toggle (void)
   GtkTextTag *bold_tag;
   GtkTextTag *editable_tag;
   GtkTextIter iter;
-  gint offset;
+  int offset;
 
   buffer = gtk_text_buffer_new (NULL);
 
@@ -332,8 +332,8 @@ test_forward_to_tag_toggle (void)
 
 static void
 check_forward_line_end (const gchar *buffer_text,
-                        gint         initial_offset,
-                        gint         result_offset,
+                        int          initial_offset,
+                        int          result_offset,
                         gboolean     ret)
 {
   GtkTextBuffer *buffer;
@@ -364,7 +364,7 @@ test_forward_to_line_end (void)
 
 static void
 check_word_boundaries (const gchar *buffer_text,
-                       gint         offset,
+                       int          offset,
                        gboolean     starts_word,
                        gboolean     ends_word,
                        gboolean     inside_word)
@@ -386,8 +386,8 @@ check_word_boundaries (const gchar *buffer_text,
 
 static void
 check_forward_word_end (const gchar *buffer_text,
-                        gint         initial_offset,
-                        gint         result_offset,
+                        int          initial_offset,
+                        int          result_offset,
                         gboolean     ret)
 {
   GtkTextBuffer *buffer;
@@ -406,8 +406,8 @@ check_forward_word_end (const gchar *buffer_text,
 
 static void
 check_backward_word_start (const gchar *buffer_text,
-                           gint         initial_offset,
-                           gint         result_offset,
+                           int          initial_offset,
+                           int          result_offset,
                            gboolean     ret)
 {
   GtkTextBuffer *buffer;
@@ -453,8 +453,8 @@ test_word_boundaries (void)
 
 static void
 check_forward_visible_word_end (GtkTextBuffer *buffer,
-                                gint           initial_offset,
-                                gint           result_offset,
+                                int            initial_offset,
+                                int            result_offset,
                                 gboolean       ret)
 {
   GtkTextIter iter;
@@ -467,8 +467,8 @@ check_forward_visible_word_end (GtkTextBuffer *buffer,
 
 static void
 check_backward_visible_word_start (GtkTextBuffer *buffer,
-                                   gint           initial_offset,
-                                   gint           result_offset,
+                                   int            initial_offset,
+                                   int            result_offset,
                                    gboolean       ret)
 {
   GtkTextIter iter;
@@ -536,7 +536,7 @@ test_visible_word_boundaries (void)
 
 static void
 check_is_cursor_position (const gchar *buffer_text,
-                          gint         offset,
+                          int          offset,
                           gboolean     ret)
 {
   GtkTextBuffer *buffer;
@@ -554,8 +554,8 @@ check_is_cursor_position (const gchar *buffer_text,
 static void
 check_cursor_position (const gchar *buffer_text,
                        gboolean     forward,
-                       gint         initial_offset,
-                       gint         result_offset,
+                       int          initial_offset,
+                       int          result_offset,
                        gboolean     ret)
 {
   GtkTextBuffer *buffer;
@@ -604,8 +604,8 @@ test_cursor_positions (void)
 static void
 check_visible_cursor_position (GtkTextBuffer *buffer,
                                gboolean       forward,
-                               gint           initial_offset,
-                               gint           result_offset,
+                               int            initial_offset,
+                               int            result_offset,
                                gboolean       ret)
 {
   GtkTextIter iter;
@@ -658,7 +658,7 @@ test_visible_cursor_positions (void)
 
 static void
 check_sentence_boundaries (const gchar *buffer_text,
-                           gint         offset,
+                           int          offset,
                            gboolean     starts_sentence,
                            gboolean     ends_sentence,
                            gboolean     inside_sentence)
@@ -680,8 +680,8 @@ check_sentence_boundaries (const gchar *buffer_text,
 
 static void
 check_forward_sentence_end (const gchar *buffer_text,
-                            gint         initial_offset,
-                            gint         result_offset,
+                            int          initial_offset,
+                            int          result_offset,
                             gboolean     ret)
 {
   GtkTextBuffer *buffer;
@@ -700,8 +700,8 @@ check_forward_sentence_end (const gchar *buffer_text,
 
 static void
 check_backward_sentence_start (const gchar *buffer_text,
-                               gint         initial_offset,
-                               gint         result_offset,
+                               int          initial_offset,
+                               int          result_offset,
                                gboolean     ret)
 {
   GtkTextBuffer *buffer;
@@ -749,7 +749,7 @@ test_backward_line (void)
   GtkTextBuffer *buffer;
   GtkTextIter iter, start, end;
   gboolean ret;
-  gint offset;
+  int offset;
 
   buffer = gtk_text_buffer_new (NULL);
   gtk_text_buffer_get_start_iter (buffer, &iter);

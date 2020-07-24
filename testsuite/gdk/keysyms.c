@@ -18,7 +18,7 @@ test_keysyms_basic (void)
     { GDK_KEY_MonBrightnessUp, "MonBrightnessUp", NULL },
     { 0, NULL }
   };
-  gint i;
+  int i;
 
  for (i = 0; tests[i].keyval != 0; i++)
    {

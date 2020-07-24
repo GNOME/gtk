@@ -182,7 +182,7 @@ create_calendar(void)
   GtkWidget *calendar = gtk_calendar_new ();
   GtkWidget *button;
   GtkWidget *frame, *label, *bbox;
-  gint i;
+  int i;
   struct {
     const char *prop_name;
     const char *label;

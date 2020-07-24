@@ -48,7 +48,7 @@ struct _GdkX11Display
 
   GSource *event_source;
 
-  gint grab_count;
+  int grab_count;
 
   /* Visual infos for creating Windows */
   int window_depth;
@@ -56,7 +56,7 @@ struct _GdkX11Display
   Colormap window_colormap;
 
   /* Keyboard related information */
-  gint xkb_event_type;
+  int xkb_event_type;
   gboolean use_xkb;
 
   /* Whether we were able to turn on detectable-autorepeat using
@@ -69,14 +69,14 @@ struct _GdkX11Display
   guint      keymap_serial;
 
   gboolean have_xfixes;
-  gint xfixes_event_base;
+  int xfixes_event_base;
 
   gboolean have_xcomposite;
 
   gboolean have_randr12;
   gboolean have_randr13;
   gboolean have_randr15;
-  gint xrandr_event_base;
+  int xrandr_event_base;
 
   /* If the SECURITY extension is in place, whether this client holds
    * a trusted authorization and so is allowed to make various requests
@@ -120,16 +120,16 @@ struct _GdkX11Display
 
   guint have_shapes : 1;
   guint have_input_shapes : 1;
-  gint shape_event_base;
+  int shape_event_base;
 
   GSList *error_traps;
 
-  gint wm_moveresize_button;
+  int wm_moveresize_button;
 
   /* GLX information */
-  gint glx_version;
-  gint glx_error_base;
-  gint glx_event_base;
+  int glx_version;
+  int glx_error_base;
+  int glx_event_base;
 
   /* Translation between X server time and system-local monotonic time */
   gint64 server_time_query_time;
@@ -152,8 +152,8 @@ struct _GdkX11Display
   guint has_async_glx_swap_buffers : 1;
 
 #ifdef HAVE_XDAMAGE
-  gint damage_event_base;
-  gint damage_error_base;
+  int damage_event_base;
+  int damage_error_base;
   guint have_damage;
 #endif
 };

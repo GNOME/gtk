@@ -32,14 +32,14 @@
 /* atkcomponent.h */
 
 static void                  gtk_window_accessible_get_extents      (AtkComponent         *component,
-                                                           gint                 *x,
-                                                           gint                 *y,
-                                                           gint                 *width,
-                                                           gint                 *height,
+                                                           int                  *x,
+                                                           int                  *y,
+                                                           int                  *width,
+                                                           int                  *height,
                                                            AtkCoordType         coord_type);
 static void                  gtk_window_accessible_get_size         (AtkComponent         *component,
-                                                           gint                 *width,
-                                                           gint                 *height);
+                                                           int                  *width,
+                                                           int                  *height);
 
 static void atk_component_interface_init (AtkComponentIface *iface);
 static void atk_window_interface_init (AtkWindowIface *iface);
@@ -94,12 +94,12 @@ gtk_window_accessible_get_name (AtkObject *accessible)
   return name;
 }
 
-static gint
+static int
 gtk_window_accessible_get_index_in_parent (AtkObject *accessible)
 {
   GtkWidget* widget;
   AtkObject* atk_obj;
-  gint index = -1;
+  int index = -1;
 
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (accessible));
   if (widget == NULL)
@@ -121,7 +121,7 @@ gtk_window_accessible_get_index_in_parent (AtkObject *accessible)
         }
       else
         {
-          gint i, sibling_count;
+          int i, sibling_count;
 
           sibling_count = atk_object_get_n_accessible_children (atk_obj);
           for (i = 0; i < sibling_count && index == -1; ++i)
@@ -204,12 +204,12 @@ gtk_window_accessible_ref_state_set (AtkObject *accessible)
   return state_set;
 }
 
-static gint
+static int
 gtk_window_accessible_get_n_children (AtkObject *object)
 {
   GtkWidget *window;
   GtkWidget *child;
-  gint count = 0;
+  int count = 0;
 
   window = gtk_accessible_get_widget (GTK_ACCESSIBLE (object));
   for (child = gtk_widget_get_first_child (GTK_WIDGET (window));
@@ -222,7 +222,7 @@ gtk_window_accessible_get_n_children (AtkObject *object)
 
 static AtkObject *
 gtk_window_accessible_ref_child (AtkObject *object,
-                                 gint       i)
+                                 int        i)
 {
   GtkWidget *window, *child;
   int pos;
@@ -270,10 +270,10 @@ gtk_window_accessible_init (GtkWindowAccessible *accessible)
 
 static void
 gtk_window_accessible_get_extents (AtkComponent  *component,
-                                   gint          *x,
-                                   gint          *y,
-                                   gint          *width,
-                                   gint          *height,
+                                   int           *x,
+                                   int           *y,
+                                   int           *width,
+                                   int           *height,
                                    AtkCoordType   coord_type)
 {
   GtkWidget *widget;
@@ -301,8 +301,8 @@ gtk_window_accessible_get_extents (AtkComponent  *component,
 
 static void
 gtk_window_accessible_get_size (AtkComponent *component,
-                                gint         *width,
-                                gint         *height)
+                                int          *width,
+                                int          *height)
 {
   GtkWidget *widget;
   GdkSurface *surface;

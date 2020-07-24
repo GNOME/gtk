@@ -35,16 +35,16 @@ G_BEGIN_DECLS
 
 GDK_AVAILABLE_IN_ALL
 cairo_region_t    *gdk_pango_layout_line_get_clip_region (PangoLayoutLine *line,
-                                                     gint             x_origin,
-                                                     gint             y_origin,
-                                                     const gint      *index_ranges,
-                                                     gint             n_ranges);
+                                                     int              x_origin,
+                                                     int              y_origin,
+                                                     const int       *index_ranges,
+                                                     int              n_ranges);
 GDK_AVAILABLE_IN_ALL
 cairo_region_t    *gdk_pango_layout_get_clip_region      (PangoLayout     *layout,
-                                                     gint             x_origin,
-                                                     gint             y_origin,
-                                                     const gint      *index_ranges,
-                                                     gint             n_ranges);
+                                                     int              x_origin,
+                                                     int              y_origin,
+                                                     const int       *index_ranges,
+                                                     int              n_ranges);
 
 G_END_DECLS
 

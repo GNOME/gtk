@@ -82,7 +82,7 @@ gtk_inspector_type_popover_set_gtype (GtkInspectorTypePopover *self,
   const gchar *name;
   GType *interfaces;
   GType tmp;
-  gint i;
+  int i;
   GtkWidget *child;
 
   g_return_if_fail (GTK_IS_INSPECTOR_TYPE_POPOVER (self));

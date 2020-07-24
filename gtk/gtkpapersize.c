@@ -400,7 +400,7 @@ gtk_paper_size_new_from_ipp (const gchar *ipp_name,
   float         x_dimension;
   float         y_dimension;
   gchar        *display_name = NULL;
-  gint          i;
+  int           i;
 
   /* Find paper size according to its name */
   for (i = 0; i < G_N_ELEMENTS (standard_names_offsets); i++)

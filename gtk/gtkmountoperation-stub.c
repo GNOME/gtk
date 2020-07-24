@@ -44,7 +44,7 @@ _gtk_mount_operation_lookup_context_free (GtkMountOperationLookupContext *contex
 gboolean
 _gtk_mount_operation_lookup_info (GtkMountOperationLookupContext *context,
                                   GPid                            pid,
-                                  gint                            size_pixels,
+                                  int                             size_pixels,
                                   gchar                         **out_name,
                                   gchar                         **out_command_line,
                                   GdkTexture                    **out_texture)

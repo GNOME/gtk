@@ -193,9 +193,9 @@ _gdk_device_wintab_translate_axes (GdkDeviceWintab *device_wintab,
 {
   GdkDevice *device;
   GdkSurface *impl_surface;
-  gint root_x, root_y;
+  int root_x, root_y;
   gdouble temp_x, temp_y;
-  gint i;
+  int i;
 
   device = GDK_DEVICE (device_wintab);
   impl_surface = window;

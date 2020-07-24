@@ -850,7 +850,7 @@ gdk_device_get_device_type (GdkDevice *device)
  *
  * Returns: the number of axes.
  **/
-gint
+int
 gdk_device_get_n_axes (GdkDevice *device)
 {
   g_return_val_if_fail (GDK_IS_DEVICE (device), 0);
@@ -877,7 +877,7 @@ gdk_device_get_axis (GdkDevice  *device,
                      GdkAxisUse  use,
                      gdouble    *value)
 {
-  gint i;
+  int i;
 
   g_return_val_if_fail (GDK_IS_DEVICE (device), FALSE);
   g_return_val_if_fail (device->source != GDK_SOURCE_KEYBOARD, FALSE);
@@ -980,7 +980,7 @@ gdk_device_ungrab (GdkDevice  *device,
 void
 _gdk_device_reset_axes (GdkDevice *device)
 {
-  gint i;
+  int i;
 
   for (i = device->axes->len - 1; i >= 0; i--)
     g_array_remove_index (device->axes, i);
@@ -1061,7 +1061,7 @@ find_axis_info (GArray     *array,
                 GdkAxisUse  use)
 {
   GdkAxisInfo *info;
-  gint i;
+  int i;
 
   for (i = 0; i < GDK_AXIS_LAST; i++)
     {
@@ -1089,7 +1089,7 @@ _gdk_device_translate_surface_coord (GdkDevice *device,
   gdouble x_min, y_min;
   gdouble x_resolution, y_resolution;
   gdouble device_aspect;
-  gint surface_width, surface_height;
+  int surface_width, surface_height;
 
   if (index_ >= device->axes->len)
     return FALSE;

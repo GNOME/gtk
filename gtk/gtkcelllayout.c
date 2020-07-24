@@ -149,7 +149,7 @@ static void   gtk_cell_layout_default_clear              (GtkCellLayout         
 static void   gtk_cell_layout_default_add_attribute      (GtkCellLayout         *cell_layout,
 							  GtkCellRenderer       *cell,
 							  const gchar           *attribute,
-							  gint                   column);
+							  int                    column);
 static void   gtk_cell_layout_default_set_cell_data_func (GtkCellLayout         *cell_layout,
 							  GtkCellRenderer       *cell,
 							  GtkCellLayoutDataFunc  func,
@@ -159,7 +159,7 @@ static void   gtk_cell_layout_default_clear_attributes   (GtkCellLayout         
 							  GtkCellRenderer       *cell);
 static void   gtk_cell_layout_default_reorder            (GtkCellLayout         *cell_layout,
 							  GtkCellRenderer       *cell,
-							  gint                   position);
+							  int                    position);
 static GList *gtk_cell_layout_default_get_cells          (GtkCellLayout         *cell_layout);
 
 
@@ -242,7 +242,7 @@ static void
 gtk_cell_layout_default_add_attribute (GtkCellLayout         *cell_layout,
 				       GtkCellRenderer       *cell,
 				       const gchar           *attribute,
-				       gint                   column)
+				       int                    column)
 {
   GtkCellLayoutIface *iface;
   GtkCellArea        *area;
@@ -308,7 +308,7 @@ gtk_cell_layout_default_clear_attributes (GtkCellLayout         *cell_layout,
 static void
 gtk_cell_layout_default_reorder (GtkCellLayout         *cell_layout,
 				 GtkCellRenderer       *cell,
-				 gint                   position)
+				 int                    position)
 {
   GtkCellLayoutIface *iface;
   GtkCellArea        *area;
@@ -414,7 +414,7 @@ gtk_cell_layout_set_attributesv (GtkCellLayout   *cell_layout,
                                  va_list          args)
 {
   gchar *attribute;
-  gint column;
+  int column;
 
   attribute = va_arg (args, gchar *);
 
@@ -422,7 +422,7 @@ gtk_cell_layout_set_attributesv (GtkCellLayout   *cell_layout,
 
   while (attribute != NULL)
     {
-      column = va_arg (args, gint);
+      column = va_arg (args, int);
 
       gtk_cell_layout_add_attribute (cell_layout, cell, attribute, column);
 
@@ -475,7 +475,7 @@ void
 gtk_cell_layout_add_attribute (GtkCellLayout   *cell_layout,
                                GtkCellRenderer *cell,
                                const gchar     *attribute,
-                               gint             column)
+                               int              column)
 {
   g_return_if_fail (GTK_IS_CELL_LAYOUT (cell_layout));
   g_return_if_fail (GTK_IS_CELL_RENDERER (cell));
@@ -547,7 +547,7 @@ gtk_cell_layout_clear_attributes (GtkCellLayout   *cell_layout,
 void
 gtk_cell_layout_reorder (GtkCellLayout   *cell_layout,
                          GtkCellRenderer *cell,
-                         gint             position)
+                         int              position)
 {
   g_return_if_fail (GTK_IS_CELL_LAYOUT (cell_layout));
   g_return_if_fail (GTK_IS_CELL_RENDERER (cell));

@@ -23,7 +23,7 @@ show_dialog (void)
 {
   GtkWidget *dialog;
   GtkWidget *label;
-  gint width_chars, max_width_chars, default_width, default_height;
+  int width_chars, max_width_chars, default_width, default_height;
   gboolean resizable;
 
   width_chars = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (width_chars_spin));

@@ -54,7 +54,7 @@
 #include <gdkscreen-x11.h>
 #include <gdkprivate-x11.h>
 
-static gint
+static int
 parse_boolean (char *v)
 {
   gchar c0, c1;
@@ -87,7 +87,7 @@ get_boolean_default (GdkX11Screen *x11_screen,
 {
   Display *dpy = GDK_SCREEN_XDISPLAY (x11_screen);
   gchar *v;
-  gint i;
+  int i;
 
   if (GDK_DISPLAY_DEBUG_CHECK (GDK_SCREEN_DISPLAY (x11_screen), DEFAULT_SETTINGS))
       return FALSE;
@@ -136,7 +136,7 @@ get_double_default (GdkX11Screen *x11_screen,
 static gboolean
 get_integer_default (GdkX11Screen *x11_screen,
 		     const gchar *option,
-		     gint        *value)
+		     int         *value)
 {
   Display *dpy = GDK_SCREEN_XDISPLAY (x11_screen);
   gchar *v, *e;

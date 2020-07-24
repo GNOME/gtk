@@ -39,7 +39,7 @@ typedef struct _GdkX11KeymapClass GdkX11KeymapClass;
 
 GType gdk_x11_keymap_get_type (void);
 
-gint gdk_x11_keymap_get_group_for_state (GdkKeymap *keymap,
+int gdk_x11_keymap_get_group_for_state  (GdkKeymap *keymap,
                                          guint      state);
 
 gboolean gdk_x11_keymap_key_is_modifier (GdkKeymap *keymap,

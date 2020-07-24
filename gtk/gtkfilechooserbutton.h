@@ -47,10 +47,10 @@ GDK_AVAILABLE_IN_ALL
 void                  gtk_file_chooser_button_set_title        (GtkFileChooserButton *button,
 								const gchar          *title);
 GDK_AVAILABLE_IN_ALL
-gint                  gtk_file_chooser_button_get_width_chars  (GtkFileChooserButton *button);
+int                   gtk_file_chooser_button_get_width_chars  (GtkFileChooserButton *button);
 GDK_AVAILABLE_IN_ALL
 void                  gtk_file_chooser_button_set_width_chars  (GtkFileChooserButton *button,
-								gint                  n_chars);
+								int                   n_chars);
 GDK_AVAILABLE_IN_ALL
 gboolean              gtk_file_chooser_button_get_modal        (GtkFileChooserButton *button);
 GDK_AVAILABLE_IN_ALL

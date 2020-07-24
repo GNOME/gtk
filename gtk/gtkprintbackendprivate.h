@@ -216,7 +216,7 @@ void        gtk_printer_set_icon_name         (GtkPrinter      *printer,
 					       const gchar     *icon);
 GDK_AVAILABLE_IN_ALL
 gboolean    gtk_printer_set_job_count         (GtkPrinter      *printer,
-					       gint             count);
+					       int              count);
 GDK_AVAILABLE_IN_ALL
 gboolean    gtk_printer_set_location          (GtkPrinter      *printer,
 					       const gchar     *location);

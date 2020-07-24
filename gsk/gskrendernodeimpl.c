@@ -3740,8 +3740,8 @@ blur_once (cairo_surface_t *src,
 {
   int width, height, src_rowstride, dest_rowstride, n_channels;
   guchar *p_src, *p_dest, *c1, *c2;
-  gint x, y, i, i1, i2, width_minus_1, height_minus_1, radius_plus_1;
-  gint r, g, b, a;
+  int x, y, i, i1, i2, width_minus_1, height_minus_1, radius_plus_1;
+  int r, g, b, a;
   guchar *p_dest_row, *p_dest_col;
 
   width = cairo_image_surface_get_width (src);

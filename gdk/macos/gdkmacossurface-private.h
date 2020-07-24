@@ -81,10 +81,10 @@ const char        *_gdk_macos_surface_get_title               (GdkMacosSurface  
 void               _gdk_macos_surface_set_title               (GdkMacosSurface    *self,
                                                                const gchar        *title);
 void               _gdk_macos_surface_get_shadow              (GdkMacosSurface    *self,
-                                                               gint               *top,
-                                                               gint               *right,
-                                                               gint               *bottom,
-                                                               gint               *left);
+                                                               int                *top,
+                                                               int                *right,
+                                                               int                *bottom,
+                                                               int                *left);
 NSView            *_gdk_macos_surface_get_view                (GdkMacosSurface    *self);
 gboolean           _gdk_macos_surface_get_modal_hint          (GdkMacosSurface    *self);
 void               _gdk_macos_surface_set_modal_hint          (GdkMacosSurface    *self,

@@ -33,8 +33,8 @@ typedef struct _GdkWin32DragUtilityData GdkWin32DragUtilityData;
  */
 struct _GdkWin32DragUtilityData
 {
-  gint             last_x;         /* Coordinates from last event, in GDK space */
-  gint             last_y;
+  int              last_x;         /* Coordinates from last event, in GDK space */
+  int              last_y;
   DWORD            last_key_state; /* Key state from last event */
   GdkWin32DndState state;
 };
@@ -74,10 +74,10 @@ struct _GdkWin32Drag
   GdkWin32DragUtilityData util_data;
 
   guint scale;             /* Temporarily caches the HiDPI scale */
-  gint  hot_x;             /* Hotspot offset from the top-left of the drag-window, scaled (can be added to GDK space coordinates) */
-  gint  hot_y;
-  gint  start_x;           /* Coordinates of the drag start, in GDK space */
-  gint  start_y;
+  int   hot_x;             /* Hotspot offset from the top-left of the drag-window, scaled (can be added to GDK space coordinates) */
+  int   hot_y;
+  int   start_x;           /* Coordinates of the drag start, in GDK space */
+  int   start_y;
 
   guint drag_status : 4;   /* Current status of drag */
   guint drop_failed : 1;   /* Whether the drop was unsuccessful */
@@ -96,21 +96,21 @@ GdkDrag *_gdk_win32_find_drag_for_dest_window     (HWND             dest_window)
 GdkDrop  *_gdk_win32_get_drop_for_dest_surface     (GdkSurface      *dest);
 
 gboolean _gdk_win32_local_drop_target_will_emit_motion   (GdkDrop *drop,
-                                                          gint     x_root,
-                                                          gint     y_root,
+                                                          int      x_root,
+                                                          int      y_root,
                                                           DWORD    grfKeyState);
 
 void     _gdk_win32_local_drop_target_dragenter          (GdkDrag        *drag,
                                                           GdkSurface     *dest_surface,
-                                                          gint            x_root,
-                                                          gint            y_root,
+                                                          int             x_root,
+                                                          int             y_root,
                                                           DWORD           grfKeyState,
                                                           guint32         time_,
                                                           GdkDragAction  *actions);
 void     _gdk_win32_local_drop_target_dragover           (GdkDrop        *drop,
                                                           GdkDrag        *drag,
-                                                          gint            x_root,
-                                                          gint            y_root,
+                                                          int             x_root,
+                                                          int             y_root,
                                                           DWORD           grfKeyState,
                                                           guint32         time_,
                                                           GdkDragAction  *actions);

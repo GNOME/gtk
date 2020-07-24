@@ -58,8 +58,8 @@ const char *tabs4 [] = {
 static GtkNotebook*
 window_creation_function (GtkNotebook *source_notebook,
                           GtkWidget   *child,
-                          gint         x,
-                          gint         y,
+                          int          x,
+                          int          y,
                           gpointer     data)
 {
   GtkWidget *window, *notebook;
@@ -230,7 +230,7 @@ create_notebook_with_notebooks (const char      **labels,
                                 GtkPositionType   pos)
 {
   GtkWidget *notebook, *title, *page;
-  gint count = 0;
+  int count = 0;
 
   notebook = gtk_notebook_new ();
   g_signal_connect (notebook, "create-window",
@@ -286,8 +286,8 @@ quit_cb (GtkWidget *widget,
   g_main_context_wakeup (NULL);
 }
 
-gint
-main (gint argc, gchar *argv[])
+int
+main (int argc, gchar *argv[])
 {
   GtkWidget *window, *grid;
   gboolean done = FALSE;

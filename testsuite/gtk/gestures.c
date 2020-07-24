@@ -5,8 +5,8 @@
 
 typedef struct {
   GtkWidget *widget;
-  gint x;
-  gint y;
+  int x;
+  int y;
   guint state;
   guint pressed : 1;
 } PointState;
@@ -247,7 +247,7 @@ typedef struct {
 } GestureData;
 
 static void
-press_cb (GtkGesture *g, gint n_press, gdouble x, gdouble y, gpointer data)
+press_cb (GtkGesture *g, int n_press, gdouble x, gdouble y, gpointer data)
 {
   GtkEventController *c = GTK_EVENT_CONTROLLER (g);
   GdkEventSequence *sequence;

@@ -187,7 +187,7 @@ void
 _gdk_win32_display_init_monitors (GdkWin32Display *win32_display)
 {
   GPtrArray *new_monitors;
-  gint i;
+  int i;
   GdkWin32Monitor *primary_to_move = NULL;
 
   for (i = 0; i < g_list_model_get_n_items (win32_display->monitors); i++)
@@ -340,10 +340,10 @@ _gdk_win32_display_init_monitors (GdkWin32Display *win32_display)
 void
 gdk_win32_display_set_cursor_theme (GdkDisplay  *display,
                                     const gchar *name,
-                                    gint         size)
+                                    int          size)
 {
-  gint cursor_size;
-  gint w, h;
+  int cursor_size;
+  int w, h;
   Win32CursorTheme *theme;
   GdkWin32Display *win32_display = GDK_WIN32_DISPLAY (display);
 
@@ -957,7 +957,7 @@ guint
 _gdk_win32_display_get_monitor_scale_factor (GdkWin32Display *win32_display,
                                              HMONITOR         hmonitor,
                                              HWND             hwnd,
-                                             gint            *dpi)
+                                             int             *dpi)
 {
   gboolean is_scale_acquired = FALSE;
   gboolean use_dpi_for_monitor = FALSE;

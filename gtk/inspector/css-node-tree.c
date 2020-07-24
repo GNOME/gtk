@@ -282,7 +282,7 @@ format_state_flags (GtkStateFlags state)
   if (state)
     {
       GString *str;
-      gint i;
+      int i;
       gboolean first = TRUE;
 
       str = g_string_new ("");
@@ -348,7 +348,7 @@ static void
 gtk_inspector_css_node_tree_init (GtkInspectorCssNodeTree *cnt)
 {
   GtkInspectorCssNodeTreePrivate *priv;
-  gint i;
+  int i;
 
   cnt->priv = gtk_inspector_css_node_tree_get_instance_private (cnt);
   gtk_widget_init_template (GTK_WIDGET (cnt));
@@ -433,7 +433,7 @@ gtk_inspector_css_node_tree_update_style (GtkInspectorCssNodeTree *cnt,
                                           GtkCssStyle             *new_style)
 {
   GtkInspectorCssNodeTreePrivate *priv = cnt->priv;
-  gint i;
+  int i;
 
   for (i = 0; i < _gtk_css_style_property_get_n_properties (); i++)
     {

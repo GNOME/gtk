@@ -92,14 +92,14 @@ static gboolean gtk_file_chooser_entry_tab_handler    (GtkEventControllerKey *ke
                                                        GtkFileChooserEntry   *chooser_entry);
 
 #ifdef G_OS_WIN32
-static gint     insert_text_callback      (GtkFileChooserEntry *widget,
+static int      insert_text_callback      (GtkFileChooserEntry *widget,
 					   const gchar         *new_text,
-					   gint                 new_text_length,
-					   gint                *position,
+					   int                  new_text_length,
+					   int                 *position,
 					   gpointer             user_data);
 static void     delete_text_callback      (GtkFileChooserEntry *widget,
-					   gint                 start_pos,
-					   gint                 end_pos,
+					   int                  start_pos,
+					   int                  end_pos,
 					   gpointer             user_data);
 #endif
 
@@ -315,7 +315,7 @@ match_selected_callback (GtkEntryCompletion  *completion,
                          GtkFileChooserEntry *chooser_entry)
 {
   char *path;
-  gint pos;
+  int pos;
 
   gtk_tree_model_get (model, iter,
                       FULL_PATH_COLUMN, &path,
@@ -480,7 +480,7 @@ gtk_file_chooser_entry_tab_handler (GtkEventControllerKey *key,
                                     GtkFileChooserEntry   *chooser_entry)
 {
   GtkEditable *editable = GTK_EDITABLE (chooser_entry);
-  gint start, end;
+  int start, end;
 
   if (keyval == GDK_KEY_Escape &&
       chooser_entry->eat_escape)
@@ -730,15 +730,15 @@ refresh_current_folder_and_file_part (GtkFileChooserEntry *chooser_entry)
 }
 
 #ifdef G_OS_WIN32
-static gint
+static int
 insert_text_callback (GtkFileChooserEntry *chooser_entry,
 		      const gchar	  *new_text,
-		      gint       	   new_text_length,
-		      gint       	  *position,
+		      int        	   new_text_length,
+		      int        	  *position,
 		      gpointer   	   user_data)
 {
   const gchar *colon = memchr (new_text, ':', new_text_length);
-  gint i;
+  int i;
 
   /* Disallow these characters altogether */
   for (i = 0; i < new_text_length; i++)
@@ -773,8 +773,8 @@ insert_text_callback (GtkFileChooserEntry *chooser_entry,
 
 static void
 delete_text_callback (GtkFileChooserEntry *chooser_entry,
-		      gint                 start_pos,
-		      gint                 end_pos,
+		      int                  start_pos,
+		      int                  end_pos,
 		      gpointer             user_data)
 {
   /* If deleting a drive letter, delete the colon, too */
@@ -1006,7 +1006,7 @@ _gtk_file_chooser_entry_select_filename (GtkFileChooserEntry *chooser_entry)
        len = g_utf8_pointer_to_offset (str, ext);
     }
 
-  gtk_editable_select_region (GTK_EDITABLE (chooser_entry), 0, (gint) len);
+  gtk_editable_select_region (GTK_EDITABLE (chooser_entry), 0, (int) len);
 }
 
 void

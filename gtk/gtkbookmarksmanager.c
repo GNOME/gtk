@@ -89,7 +89,7 @@ parse_bookmarks (const char *contents)
 {
   gchar **lines, *space;
   GSList *bookmarks = NULL;
-  gint i;
+  int i;
 
   lines = g_strsplit (contents, "\n", -1);
 
@@ -379,7 +379,7 @@ _gtk_bookmarks_manager_has_bookmark (GtkBookmarksManager *manager,
 gboolean
 _gtk_bookmarks_manager_insert_bookmark (GtkBookmarksManager *manager,
 					GFile               *file,
-					gint                 position,
+					int                  position,
 					GError             **error)
 {
   GSList *link;
@@ -463,7 +463,7 @@ _gtk_bookmarks_manager_remove_bookmark (GtkBookmarksManager *manager,
 gboolean
 _gtk_bookmarks_manager_reorder_bookmark (GtkBookmarksManager *manager,
 					 GFile               *file,
-					 gint                 new_position,
+					 int                  new_position,
 					 GError             **error)
 {
   GSList *link;

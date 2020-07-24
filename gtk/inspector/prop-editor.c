@@ -468,7 +468,7 @@ enum_changed (GObject *object, GParamSpec *pspec, gpointer data)
 {
   GValue val = G_VALUE_INIT;
   GEnumClass *eclass;
-  gint i;
+  int i;
 
   eclass = G_ENUM_CLASS (g_type_class_peek (pspec->value_type));
 
@@ -495,7 +495,7 @@ flags_modified (GtkCheckButton *button, ObjectProperty *p)
   gboolean active;
   GFlagsClass *fclass;
   guint flags;
-  gint i;
+  int i;
   GValue val = G_VALUE_INIT;
 
   active = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button));
@@ -552,7 +552,7 @@ flags_changed (GObject *object, GParamSpec *pspec, gpointer data)
   GValue val = G_VALUE_INIT;
   GFlagsClass *fclass;
   guint flags;
-  gint i;
+  int i;
   GtkPopover *popover;
   GtkWidget *sw;
   GtkWidget *viewport;
@@ -622,7 +622,7 @@ unichar_changed (GObject *object, GParamSpec *pspec, gpointer data)
   gunichar old_val = unichar_get_value (entry);
   GValue val = G_VALUE_INIT;
   gchar buf[7];
-  gint len;
+  int len;
 
   g_value_init (&val, pspec->value_type);
   get_property_value (object, pspec, &val);
@@ -940,7 +940,7 @@ property_editor (GObject                *object,
       {
         GEnumClass *eclass;
         char **names;
-        gint j;
+        int j;
 
         eclass = G_ENUM_CLASS (g_type_class_ref (spec->value_type));
 
@@ -971,7 +971,7 @@ property_editor (GObject                *object,
         GtkWidget *sw;
         GtkWidget *popover;
         GFlagsClass *fclass;
-        gint j;
+        int j;
 
         popover = gtk_popover_new ();
         prop_edit = gtk_menu_button_new ();
@@ -1172,7 +1172,7 @@ attribute_mapping_changed (GtkDropDown            *dropdown,
                            GParamSpec             *pspec,
                            GtkInspectorPropEditor *self)
 {
-  gint col;
+  int col;
   gpointer layout;
   GtkCellRenderer *cell;
   GtkCellArea *area;
@@ -1266,14 +1266,14 @@ attribute_editor (GObject                *object,
   gpointer layout;
   GtkCellArea *area;
   GtkTreeModel *model = NULL;
-  gint col = -1;
+  int col = -1;
   GtkWidget *label;
   GtkWidget *button;
   GtkWidget *box;
   GtkWidget *dropdown;
   GListStore *store;
   GtkListItemFactory *factory;
-  gint i;
+  int i;
   AttributeHolder *holder;
   gboolean sensitive;
 
@@ -1429,7 +1429,7 @@ struct _GSettingsSchemaKey
   GVariant *minimum, *maximum;
   GVariant *default_value;
 
-  gint ref_count;
+  int ref_count;
 };
 
 typedef struct

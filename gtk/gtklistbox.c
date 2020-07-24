@@ -147,7 +147,7 @@ struct _GtkListBoxClass
   void (*toggle_cursor_row)   (GtkListBox      *box);
   void (*move_cursor)         (GtkListBox      *box,
                                GtkMovementStep  step,
-                               gint             count,
+                               int              count,
                                gboolean         extend,
                                gboolean         modify);
   void (*selected_rows_changed) (GtkListBox    *box);
@@ -161,8 +161,8 @@ typedef struct
   GSequenceIter *iter;
   GtkWidget *header;
   GtkActionHelper *action_helper;
-  gint y;
-  gint height;
+  int y;
+  int height;
   guint visible     :1;
   guint selected    :1;
   guint activatable :1;
@@ -237,7 +237,7 @@ static void                 gtk_list_box_add_move_binding             (GtkWidget
                                                                        guint                keyval,
                                                                        GdkModifierType      modmask,
                                                                        GtkMovementStep      step,
-                                                                       gint                 count);
+                                                                       int                  count);
 static void                 gtk_list_box_update_cursor                (GtkListBox          *box,
                                                                        GtkListBoxRow       *row,
                                                                        gboolean             grab_focus);
@@ -260,7 +260,7 @@ static void                 gtk_list_box_activate_cursor_row          (GtkListBo
 static void                 gtk_list_box_toggle_cursor_row            (GtkListBox          *box);
 static void                 gtk_list_box_move_cursor                  (GtkListBox          *box,
                                                                        GtkMovementStep      step,
-                                                                       gint                 count,
+                                                                       int                  count,
                                                                        gboolean             extend,
                                                                        gboolean             modify);
 static void                 gtk_list_box_parent_cb                    (GObject             *object,
@@ -749,7 +749,7 @@ gtk_list_box_get_selected_row (GtkListBox *box)
  */
 GtkListBoxRow *
 gtk_list_box_get_row_at_index (GtkListBox *box,
-                               gint        index_)
+                               int         index_)
 {
   GSequenceIter *iter;
 
@@ -791,7 +791,7 @@ row_y_cmp_func (gconstpointer a,
  */
 GtkListBoxRow *
 gtk_list_box_get_row_at_y (GtkListBox *box,
-                           gint        y)
+                           int         y)
 {
   GSequenceIter *iter;
 
@@ -1248,7 +1248,7 @@ gtk_list_box_invalidate_filter (GtkListBox *box)
   gtk_widget_queue_resize (GTK_WIDGET (box));
 }
 
-static gint
+static int
 do_sort (GtkListBoxRow *a,
          GtkListBoxRow *b,
          GtkListBox    *box)
@@ -1457,7 +1457,7 @@ gtk_list_box_add_move_binding (GtkWidgetClass  *widget_class,
                                guint            keyval,
                                GdkModifierType  modmask,
                                GtkMovementStep  step,
-                               gint             count)
+                               int              count)
 {
   gtk_widget_class_add_binding_signal (widget_class,
                                        keyval, modmask,
@@ -1482,7 +1482,7 @@ ensure_row_visible (GtkListBox    *box,
                     GtkListBoxRow *row)
 {
   GtkWidget *header;
-  gint y, height;
+  int y, height;
   graphene_rect_t rect;
 
   if (!box->adjustment)
@@ -2016,7 +2016,7 @@ gtk_list_box_focus (GtkWidget        *widget,
 
 static void
 list_box_add_visible_rows (GtkListBox *box,
-                           gint        n)
+                           int         n)
 {
   int was_zero;
 
@@ -2426,8 +2426,8 @@ gtk_list_box_measure (GtkWidget     *widget,
            iter = g_sequence_iter_next (iter))
         {
           GtkListBoxRow *row;
-          gint row_min;
-          gint row_nat;
+          int row_min;
+          int row_nat;
 
           row = g_sequence_get (iter);
 
@@ -2475,7 +2475,7 @@ gtk_list_box_measure (GtkWidget     *widget,
            iter = g_sequence_iter_next (iter))
         {
           GtkListBoxRow *row;
-          gint row_min = 0;
+          int row_min = 0;
 
           row = g_sequence_get (iter);
           if (!row_is_visible (row))
@@ -2607,7 +2607,7 @@ gtk_list_box_prepend (GtkListBox *box,
 void
 gtk_list_box_insert (GtkListBox *box,
                      GtkWidget  *child,
-                     gint        position)
+                     int         position)
 {
   GtkListBoxRow *row;
   GSequenceIter *prev = NULL;
@@ -2727,15 +2727,15 @@ gtk_list_box_toggle_cursor_row (GtkListBox *box)
 static void
 gtk_list_box_move_cursor (GtkListBox      *box,
                           GtkMovementStep  step,
-                          gint             count,
+                          int              count,
                           gboolean         extend,
                           gboolean         modify)
 {
   GtkListBoxRow *row;
-  gint page_size;
+  int page_size;
   GSequenceIter *iter;
-  gint start_y;
-  gint end_y;
+  int start_y;
+  int end_y;
   int height;
 
   row = NULL;
@@ -2750,7 +2750,7 @@ gtk_list_box_move_cursor (GtkListBox      *box,
     case GTK_MOVEMENT_DISPLAY_LINES:
       if (box->cursor_row != NULL)
         {
-          gint i = count;
+          int i = count;
 
           iter = ROW_PRIV (box->cursor_row)->iter;
 
@@ -3091,7 +3091,7 @@ gtk_list_box_row_set_header (GtkListBoxRow *row,
  *
  * Returns: the index of the @row, or -1 if the @row is not in a listbox
  */
-gint
+int
 gtk_list_box_row_get_index (GtkListBoxRow *row)
 {
   GtkListBoxRowPrivate *priv = ROW_PRIV (row);

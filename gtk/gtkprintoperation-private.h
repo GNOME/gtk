@@ -40,10 +40,10 @@ struct _GtkPrintOperationPrivate
   GtkPageSetup *default_page_setup;
   GtkPrintSettings *print_settings;
   gchar *job_name;
-  gint nr_of_pages;
-  gint nr_of_pages_to_print;
-  gint page_position;
-  gint current_page;
+  int nr_of_pages;
+  int nr_of_pages_to_print;
+  int page_position;
+  int current_page;
   GtkUnit unit;
   gchar *export_filename;
   guint use_full_page      : 1;
@@ -65,9 +65,9 @@ struct _GtkPrintOperationPrivate
   
   GtkPrintPages print_pages;
   GtkPageRange *page_ranges;
-  gint num_page_ranges;
+  int num_page_ranges;
   
-  gint manual_num_copies;
+  int manual_num_copies;
   guint manual_collation   : 1;
   guint manual_reverse     : 1;
   guint manual_orientation : 1;

@@ -30,7 +30,7 @@ kinetic_scrolling (void)
   GtkListStore *store;
   GtkWidget *textview;
   GdkContentFormats *targets;
-  gint i;
+  int i;
 
   window = gtk_window_new ();
   gtk_window_set_default_size (GTK_WINDOW (window), 400, 400);

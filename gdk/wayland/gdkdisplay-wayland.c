@@ -1072,7 +1072,7 @@ get_cursor_theme (GdkWaylandDisplay *display_wayland,
 void
 gdk_wayland_display_set_cursor_theme (GdkDisplay  *display,
                                       const gchar *name,
-                                      gint         size)
+                                      int          size)
 {
   GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY(display);
   struct wl_cursor_theme *theme;
@@ -1473,7 +1473,7 @@ struct _TranslationEntry {
   GType type;
   union {
     const char *s;
-    gint         i;
+    int          i;
     gboolean     b;
   } fallback;
 };
@@ -1798,7 +1798,7 @@ init_settings (GdkDisplay *display)
   GSettingsSchemaSource *source;
   GSettingsSchema *schema;
   GSettings *settings;
-  gint i;
+  int i;
 
   if (gdk_should_use_portal ())
     {

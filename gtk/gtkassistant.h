@@ -94,7 +94,7 @@ typedef struct _GtkAssistantPage GtkAssistantPage;
  *
  * Returns: The next page number.
  */
-typedef gint (*GtkAssistantPageFunc) (gint current_page, gpointer data);
+typedef int (*GtkAssistantPageFunc) (int current_page, gpointer data);
 
 GDK_AVAILABLE_IN_ALL
 GType                 gtk_assistant_page_get_type         (void) G_GNUC_CONST;
@@ -107,28 +107,28 @@ void                  gtk_assistant_next_page             (GtkAssistant         
 GDK_AVAILABLE_IN_ALL
 void                  gtk_assistant_previous_page         (GtkAssistant         *assistant);
 GDK_AVAILABLE_IN_ALL
-gint                  gtk_assistant_get_current_page      (GtkAssistant         *assistant);
+int                   gtk_assistant_get_current_page      (GtkAssistant         *assistant);
 GDK_AVAILABLE_IN_ALL
 void                  gtk_assistant_set_current_page      (GtkAssistant         *assistant,
-                                                           gint                  page_num);
+                                                           int                   page_num);
 GDK_AVAILABLE_IN_ALL
-gint                  gtk_assistant_get_n_pages           (GtkAssistant         *assistant);
+int                   gtk_assistant_get_n_pages           (GtkAssistant         *assistant);
 GDK_AVAILABLE_IN_ALL
 GtkWidget            *gtk_assistant_get_nth_page          (GtkAssistant         *assistant,
-                                                           gint                  page_num);
+                                                           int                   page_num);
 GDK_AVAILABLE_IN_ALL
-gint                  gtk_assistant_prepend_page          (GtkAssistant         *assistant,
+int                   gtk_assistant_prepend_page          (GtkAssistant         *assistant,
                                                            GtkWidget            *page);
 GDK_AVAILABLE_IN_ALL
-gint                  gtk_assistant_append_page           (GtkAssistant         *assistant,
+int                   gtk_assistant_append_page           (GtkAssistant         *assistant,
                                                            GtkWidget            *page);
 GDK_AVAILABLE_IN_ALL
-gint                  gtk_assistant_insert_page           (GtkAssistant         *assistant,
+int                   gtk_assistant_insert_page           (GtkAssistant         *assistant,
                                                            GtkWidget            *page,
-                                                           gint                  position);
+                                                           int                   position);
 GDK_AVAILABLE_IN_ALL
 void                  gtk_assistant_remove_page           (GtkAssistant         *assistant,
-                                                           gint                  page_num);
+                                                           int                   page_num);
 GDK_AVAILABLE_IN_ALL
 void                  gtk_assistant_set_forward_page_func (GtkAssistant         *assistant,
                                                            GtkAssistantPageFunc  page_func,

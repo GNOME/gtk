@@ -32,8 +32,8 @@ activate_cb (GtkApplication *app,
   gtk_search_bar_set_key_capture_widget (GTK_SEARCH_BAR (search_bar), window);
 }
 
-gint
-main (gint argc,
+int
+main (int argc,
     gchar *argv[])
 {
   GtkApplication *app;

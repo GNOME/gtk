@@ -31,7 +31,7 @@ typedef struct {
   const gchar *cache;
   gsize cache_size;
   guint32 n_directories;
-  gint flags;
+  int flags;
 } CacheInfo;
 
 gboolean gtk_icon_cache_validate (CacheInfo *info);

@@ -126,8 +126,8 @@ do_delete (gpointer     funcs_data,
 
 static void
 do_select (gpointer funcs_data,
-           gint     selection_insert,
-           gint     selection_bound)
+           int      selection_insert,
+           int      selection_bound)
 {
   Text *text = funcs_data;
 

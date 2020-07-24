@@ -55,7 +55,7 @@ GType      gdk_win32_display_get_type            (void);
 GDK_AVAILABLE_IN_ALL
 void       gdk_win32_display_set_cursor_theme    (GdkDisplay  *display,
                                                   const gchar *name,
-                                                  gint         size);
+                                                  int          size);
 
 /**
  * GdkWin32MessageFilterReturn:
@@ -88,7 +88,7 @@ typedef enum {
  */
 typedef GdkWin32MessageFilterReturn (*GdkWin32MessageFilterFunc) (GdkWin32Display *display,
                                                                   MSG             *message,
-                                                                  gint            *return_value,
+                                                                  int             *return_value,
                                                                   gpointer         data);
 
 GDK_AVAILABLE_IN_ALL

@@ -36,11 +36,11 @@ adjustment_get_normalized_value (GtkAdjustment *adj)
 
 static void
 val_to_xy (GtkFontPlane *plane,
-           gint          *x,
-           gint          *y)
+           int           *x,
+           int           *y)
 {
   gdouble u, v;
-  gint width, height;
+  int width, height;
 
   width = gtk_widget_get_allocated_width (GTK_WIDGET (plane));
   height = gtk_widget_get_allocated_height (GTK_WIDGET (plane));
@@ -57,8 +57,8 @@ plane_snapshot (GtkWidget   *widget,
                 GtkSnapshot *snapshot)
 {
   GtkFontPlane *plane = GTK_FONT_PLANE (widget);
-  gint x, y;
-  gint width, height;
+  int x, y;
+  int width, height;
   cairo_t *cr;
 
   val_to_xy (plane, &x, &y);
@@ -125,8 +125,8 @@ adjustment_set_normalized_value (GtkAdjustment *adj,
 
 static void
 update_value (GtkFontPlane *plane,
-              gint           x,
-              gint           y)
+              int            x,
+              int            y)
 {
   GtkWidget *widget = GTK_WIDGET (plane);
   gdouble u, v;

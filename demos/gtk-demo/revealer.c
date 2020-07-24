@@ -6,7 +6,7 @@
 
 #include <gtk/gtk.h>
 
-static gint count = 0;
+static int count = 0;
 static guint timeout = 0;
 
 static void

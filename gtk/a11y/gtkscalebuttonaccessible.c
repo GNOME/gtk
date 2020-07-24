@@ -128,7 +128,7 @@ gtk_scale_button_accessible_init (GtkScaleButtonAccessible *self)
 
 static gboolean
 gtk_scale_button_accessible_do_action (AtkAction *action,
-                                       gint       i)
+                                       int        i)
 {
   GtkWidget *widget;
 
@@ -152,7 +152,7 @@ gtk_scale_button_accessible_do_action (AtkAction *action,
     }
 }
 
-static gint
+static int
 gtk_scale_button_accessible_get_n_actions (AtkAction *action)
 {
   return 2;
@@ -160,7 +160,7 @@ gtk_scale_button_accessible_get_n_actions (AtkAction *action)
 
 static const gchar *
 gtk_scale_button_accessible_get_description (AtkAction *action,
-                                             gint       i)
+                                             int        i)
 {
   switch (i)
     {
@@ -175,7 +175,7 @@ gtk_scale_button_accessible_get_description (AtkAction *action,
 
 static const gchar *
 gtk_scale_button_accessible_action_get_name (AtkAction *action,
-                                             gint       i)
+                                             int        i)
 {
   switch (i)
     {
@@ -190,7 +190,7 @@ gtk_scale_button_accessible_action_get_name (AtkAction *action,
 
 static const gchar *
 gtk_scale_button_accessible_action_get_localized_name (AtkAction *action,
-                                                       gint       i)
+                                                       int        i)
 {
   switch (i)
     {

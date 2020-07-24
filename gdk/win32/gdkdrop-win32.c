@@ -83,8 +83,8 @@ struct _GdkWin32Drop
   GdkDragAction    actions;
 
   guint            scale;          /* Temporarily caches the HiDPI scale */
-  gint             last_x;         /* Coordinates from last event, in GDK space */
-  gint             last_y;
+  int              last_x;         /* Coordinates from last event, in GDK space */
+  int              last_y;
   DWORD            last_key_state; /* Key state from last event */
 
   /* Just like GdkDrop->formats, but an array, and with format IDs
@@ -117,7 +117,7 @@ G_DEFINE_TYPE (GdkWin32Drop, gdk_win32_drop, GDK_TYPE_DROP)
 struct _drop_target_context
 {
   IDropTarget                     idt;
-  gint                            ref_count;
+  int                             ref_count;
 
   /* The drop object we create when a drag enters our surface.
    * The drop object is destroyed when the drag leaves.
@@ -454,8 +454,8 @@ set_source_actions_helper (GdkDrop       *drop,
 void
 _gdk_win32_local_drop_target_dragenter (GdkDrag        *drag,
                                         GdkSurface     *dest_surface,
-                                        gint            x_root,
-                                        gint            y_root,
+                                        int             x_root,
+                                        int             y_root,
                                         DWORD           grfKeyState,
                                         guint32         time_,
                                         GdkDragAction  *actions)
@@ -514,8 +514,8 @@ idroptarget_dragenter (LPDROPTARGET This,
   GdkDrop *drop;
   GdkWin32Drop *drop_win32;
   GdkDisplay *display;
-  gint pt_x;
-  gint pt_y;
+  int pt_x;
+  int pt_y;
   GdkDrag *drag;
   GdkDragAction source_actions;
   GdkDragAction dest_actions;
@@ -574,8 +574,8 @@ idroptarget_dragenter (LPDROPTARGET This,
 
 gboolean
 _gdk_win32_local_drop_target_will_emit_motion (GdkDrop *drop,
-                                               gint     x_root,
-                                               gint     y_root,
+                                               int      x_root,
+                                               int      y_root,
                                                DWORD    grfKeyState)
 {
   GdkWin32Drop *drop_win32 = GDK_WIN32_DROP (drop);
@@ -591,8 +591,8 @@ _gdk_win32_local_drop_target_will_emit_motion (GdkDrop *drop,
 void
 _gdk_win32_local_drop_target_dragover (GdkDrop        *drop,
                                        GdkDrag        *drag,
-                                       gint            x_root,
-                                       gint            y_root,
+                                       int             x_root,
+                                       int             y_root,
                                        DWORD           grfKeyState,
                                        guint32         time_,
                                        GdkDragAction  *actions)
@@ -639,8 +639,8 @@ idroptarget_dragover (LPDROPTARGET This,
 {
   drop_target_context *ctx = (drop_target_context *) This;
   GdkWin32Drop *drop_win32 = GDK_WIN32_DROP (ctx->drop);
-  gint pt_x = pt.x / drop_win32->scale + _gdk_offset_x;
-  gint pt_y = pt.y / drop_win32->scale + _gdk_offset_y;
+  int pt_x = pt.x / drop_win32->scale + _gdk_offset_x;
+  int pt_y = pt.y / drop_win32->scale + _gdk_offset_y;
   GdkDragAction source_actions;
   GdkDragAction dest_actions;
 
@@ -743,8 +743,8 @@ idroptarget_drop (LPDROPTARGET This,
 {
   drop_target_context *ctx = (drop_target_context *) This;
   GdkWin32Drop *drop_win32 = GDK_WIN32_DROP (ctx->drop);
-  gint pt_x = pt.x / drop_win32->scale + _gdk_offset_x;
-  gint pt_y = pt.y / drop_win32->scale + _gdk_offset_y;
+  int pt_x = pt.x / drop_win32->scale + _gdk_offset_x;
+  int pt_y = pt.y / drop_win32->scale + _gdk_offset_y;
   GdkDragAction dest_action;
 
   GDK_NOTE (DND, g_print ("idroptarget_drop %p ", This));
@@ -930,7 +930,7 @@ close_it (gpointer data)
 static GdkWin32MessageFilterReturn
 gdk_dropfiles_filter (GdkWin32Display *display,
                       MSG             *msg,
-                      gint            *ret_valp,
+                      int             *ret_valp,
                       gpointer         data)
 {
   GdkSurface *window;
@@ -939,7 +939,7 @@ gdk_dropfiles_filter (GdkWin32Display *display,
   GString *result;
   HANDLE hdrop;
   POINT pt;
-  gint nfiles, i;
+  int nfiles, i;
   gchar *fileName, *linkedFile;
 
   if (msg->message != WM_DROPFILES)

@@ -655,7 +655,7 @@ static GtkWidget *
 create_window (void)
 {
   GtkWidget *window, *vbox, *button;
-  gint i;
+  int i;
 
   window = gtk_window_new ();
   vbox   = gtk_box_new (GTK_ORIENTATION_VERTICAL, 6);

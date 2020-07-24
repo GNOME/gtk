@@ -45,8 +45,8 @@ struct _GdkSurface
 
   gpointer widget;
 
-  gint x;
-  gint y;
+  int x;
+  int y;
 
   guint8 resize_count;
 
@@ -81,11 +81,11 @@ struct _GdkSurface
 
   guint update_and_descendants_freeze_count;
 
-  gint width, height;
-  gint shadow_top;
-  gint shadow_left;
-  gint shadow_right;
-  gint shadow_bottom;
+  int width, height;
+  int shadow_top;
+  int shadow_left;
+  int shadow_right;
+  int shadow_bottom;
 
   GdkCursor *cursor;
   GHashTable *device_cursor;
@@ -114,15 +114,15 @@ struct _GdkSurfaceClass
 
   void         (* hide)                 (GdkSurface       *surface);
   void         (* get_geometry)         (GdkSurface       *surface,
-                                         gint            *x,
-                                         gint            *y,
-                                         gint            *width,
-                                         gint            *height);
+                                         int             *x,
+                                         int             *y,
+                                         int             *width,
+                                         int             *height);
   void         (* get_root_coords)      (GdkSurface       *surface,
-                                         gint             x,
-                                         gint             y,
-                                         gint            *root_x,
-                                         gint            *root_y);
+                                         int              x,
+                                         int              y,
+                                         int             *root_x,
+                                         int             *root_y);
   gboolean     (* get_device_state)     (GdkSurface       *surface,
                                          GdkDevice       *device,
                                          gdouble         *x,
@@ -155,7 +155,7 @@ struct _GdkSurfaceClass
                                          double              dx,
                                          double              dy);
 
-  gint         (* get_scale_factor)       (GdkSurface      *surface);
+  int          (* get_scale_factor)       (GdkSurface      *surface);
   void         (* get_unscaled_size)      (GdkSurface      *surface,
                                            int            *unscaled_width,
                                            int            *unscaled_height);
@@ -163,10 +163,10 @@ struct _GdkSurfaceClass
   void         (* set_opaque_region)      (GdkSurface      *surface,
                                            cairo_region_t *region);
   void         (* set_shadow_width)       (GdkSurface      *surface,
-                                           gint            left,
-                                           gint            right,
-                                           gint            top,
-                                           gint            bottom);
+                                           int             left,
+                                           int             right,
+                                           int             top,
+                                           int             bottom);
   GdkGLContext *(*create_gl_context)      (GdkSurface      *surface,
                                            gboolean        attached,
                                            GdkGLContext   *share,

@@ -555,7 +555,7 @@ grid_request_init (GridRequest    *request,
 
 /* Sums allocations for lines spanned by child and their spacing.
  */
-static gint
+static int
 compute_allocation_for_child (GridRequest        *request,
                               GtkGridLayoutChild *child,
                               GtkOrientation      orientation)
@@ -717,8 +717,8 @@ grid_request_homogeneous (GridRequest    *request,
   GtkGridLayout *self = request->layout;
   GridLineData *linedata;
   GridLines *lines;
-  gint minimum, natural;
-  gint i;
+  int minimum, natural;
+  int i;
 
   linedata = &self->linedata[orientation];
   lines = &request->lines[orientation];
@@ -1393,7 +1393,7 @@ gtk_grid_layout_get_size_for_size (GtkGridLayout  *self,
 {
   GridRequest request;
   GridLines *lines;
-  gint min_size, nat_size;
+  int min_size, nat_size;
 
   *minimum = 0;
   *natural = 0;
@@ -1491,7 +1491,7 @@ grid_request_allocate_children (GridRequest *request,
 {
   GtkWidget *child;
   GtkAllocation child_allocation;
-  gint x, y, width, height, baseline, ignore;
+  int x, y, width, height, baseline, ignore;
 
 
   for (child = gtk_widget_get_first_child (request->widget);

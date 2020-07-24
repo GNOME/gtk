@@ -269,8 +269,8 @@ gtk_tree_create_row_drag_content (GtkTreeModel *tree_model,
   GdkContentProvider *content;
   GtkTreeRowData *trd;
   gchar *path_str;
-  gint len;
-  gint struct_size;
+  int len;
+  int struct_size;
   
   g_return_val_if_fail (GTK_IS_TREE_MODEL (tree_model), FALSE);
   g_return_val_if_fail (path != NULL, FALSE);

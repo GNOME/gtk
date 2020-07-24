@@ -53,17 +53,17 @@
  * Returns: the number of strings stored in list, or 0,
  *     if the conversion failed
  */
-gint
+int
 gdk_x11_display_text_property_to_text_list (GdkDisplay   *display,
                                             const char   *encoding,
-                                            gint          format,
+                                            int           format,
                                             const guchar *text,
-                                            gint          length,
+                                            int           length,
                                             gchar      ***list)
 {
   XTextProperty property;
-  gint count = 0;
-  gint res;
+  int count = 0;
+  int res;
   gchar **local_list;
   g_return_val_if_fail (GDK_IS_DISPLAY (display), 0);
 
@@ -108,15 +108,15 @@ gdk_x11_free_text_list (gchar **list)
   XFreeStringList (list);
 }
 
-static gint
+static int
 make_list (const gchar  *text,
-           gint          length,
+           int           length,
            gboolean      latin1,
            gchar      ***list)
 {
   GSList *strings = NULL;
-  gint n_strings = 0;
-  gint i;
+  int n_strings = 0;
+  int i;
   const gchar *p = text;
   const gchar *q;
   GSList *tmp_list;
@@ -186,12 +186,12 @@ make_list (const gchar  *text,
   return n_strings;
 }
 
-gint
+int
 _gdk_x11_display_text_property_to_utf8_list (GdkDisplay    *display,
                                              const char    *encoding,
-                                             gint           format,
+                                             int            format,
                                              const guchar  *text,
-                                             gint           length,
+                                             int            length,
                                              gchar       ***list)
 {
   if (g_str_equal (encoding, "STRING"))
@@ -205,11 +205,11 @@ _gdk_x11_display_text_property_to_utf8_list (GdkDisplay    *display,
   else
     {
       gchar **local_list;
-      gint local_count;
-      gint i;
+      int local_count;
+      int i;
       const gchar *charset = NULL;
       gboolean need_conversion = !g_get_charset (&charset);
-      gint count = 0;
+      int count = 0;
       GError *error = NULL;
 
       /* Probably COMPOUND text, we fall back to Xlib routines
@@ -285,15 +285,15 @@ _gdk_x11_display_text_property_to_utf8_list (GdkDisplay    *display,
  *
  * Returns: 0 upon success, non-zero upon failure
  */
-gint
+int
 gdk_x11_display_string_to_compound_text (GdkDisplay  *display,
                                          const char  *str,
                                          const char **encoding,
-                                         gint        *format,
+                                         int         *format,
                                          guchar     **ctext,
-                                         gint        *length)
+                                         int         *length)
 {
-  gint res;
+  int res;
   XTextProperty property;
 
   g_return_val_if_fail (GDK_IS_DISPLAY (display), 0);
@@ -343,9 +343,9 @@ gboolean
 gdk_x11_display_utf8_to_compound_text (GdkDisplay  *display,
                                        const char  *str,
                                        const char **encoding,
-                                       gint        *format,
+                                       int         *format,
                                        guchar     **ctext,
-                                       gint        *length)
+                                       int         *length)
 {
   gboolean need_conversion;
   const gchar *charset;

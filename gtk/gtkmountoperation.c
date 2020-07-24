@@ -338,7 +338,7 @@ remember_button_toggled (GtkToggleButton   *button,
 
 static void
 pw_dialog_got_response (GtkDialog         *dialog,
-                        gint               response_id,
+                        int                response_id,
                         GtkMountOperation *mount_op)
 {
   GtkMountOperationPrivate *priv = mount_op->priv;
@@ -910,7 +910,7 @@ gtk_mount_operation_ask_password (GMountOperation   *mount_op,
 
 static void
 question_dialog_button_clicked (GtkDialog       *dialog,
-                                gint             button_number,
+                                int              button_number,
                                 GMountOperation *op)
 {
   GtkMountOperationPrivate *priv;
@@ -1065,7 +1065,7 @@ gtk_mount_operation_ask_question (GMountOperation *op,
 
 static void
 show_processes_button_clicked (GtkDialog       *dialog,
-                               gint             button_number,
+                               int              button_number,
                                GMountOperation *op)
 {
   GtkMountOperationPrivate *priv;
@@ -1088,7 +1088,7 @@ show_processes_button_clicked (GtkDialog       *dialog,
   g_object_unref (op);
 }
 
-static gint
+static int
 pid_equal (gconstpointer a,
            gconstpointer b)
 {
@@ -1107,7 +1107,7 @@ diff_sorted_arrays (GArray         *array1,
                     GArray         *added_indices,
                     GArray         *removed_indices)
 {
-  gint order;
+  int order;
   guint n1, n2;
   guint elem_size;
 
@@ -1289,8 +1289,8 @@ update_process_list_store (GtkMountOperation *mount_operation,
    * items as appropriate
    */
   current_pids = g_array_new (FALSE, FALSE, sizeof (GPid));
-  pid_indices_to_add = g_array_new (FALSE, FALSE, sizeof (gint));
-  pid_indices_to_remove = g_array_new (FALSE, FALSE, sizeof (gint));
+  pid_indices_to_add = g_array_new (FALSE, FALSE, sizeof (int));
+  pid_indices_to_remove = g_array_new (FALSE, FALSE, sizeof (int));
 
   if (gtk_tree_model_get_iter_first (GTK_TREE_MODEL (list_store), &iter))
     {
@@ -1445,8 +1445,8 @@ do_popup_menu_for_process_tree_view (GtkWidget         *widget,
 
       gdk_event_get_position (event, &x, &y);
       if (gtk_tree_view_get_path_at_pos (GTK_TREE_VIEW (op->priv->process_tree_view),
-                                         (gint) x,
-                                         (gint) y,
+                                         (int) x,
+                                         (int) y,
                                          &path,
                                          NULL,
                                          NULL,

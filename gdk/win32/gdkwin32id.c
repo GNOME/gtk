@@ -39,7 +39,7 @@ gdk_handle_hash (HANDLE *handle)
 #endif
 }
 
-static gint
+static int
 gdk_handle_equal (HANDLE *a,
 		  HANDLE *b)
 {

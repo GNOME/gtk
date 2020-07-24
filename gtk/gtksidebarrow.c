@@ -45,7 +45,7 @@ struct _GtkSidebarRow
   GtkWidget *label_widget;
   gboolean ejectable;
   GtkWidget *eject_button;
-  gint order_index;
+  int order_index;
   GtkPlacesSidebarSectionType section_type;
   GtkPlacesSidebarPlaceType place_type;
   gchar *uri;
@@ -91,7 +91,7 @@ cloud_row_update (GtkSidebarRow *self)
 {
   CloudProvidersAccount *account;
   GIcon *end_icon;
-  gint provider_status;
+  int provider_status;
 
   account = CLOUD_PROVIDERS_ACCOUNT (self->cloud_provider_account);
   provider_status = cloud_providers_account_get_status (account);

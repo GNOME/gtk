@@ -476,7 +476,7 @@ param_expression_validate (GParamSpec *pspec,
   return changed;
 }
 
-static gint
+static int
 param_expression_values_cmp (GParamSpec   *pspec,
                              const GValue *value1,
                              const GValue *value2)

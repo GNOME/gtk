@@ -26,26 +26,26 @@
 
 typedef struct {
 	gchar	*name;
-	gint	id;
+	int	id;
 	gchar	*bitmap;
-	gint	hotx;
-	gint	hoty;
+	int	hotx;
+	int	hoty;
 } font_info_t;
 
 typedef struct {
 	gchar	*name;
-	gint	id;
-	gint	width;
-	gint	height;
-	gint	hotx;
-	gint	hoty;
+	int	id;
+	int	width;
+	int	height;
+	int	hotx;
+	int	hoty;
 	gchar	*data;
 } cursor_info_t;
 
 static GSList *fonts = NULL;
 static GSList *cursors = NULL;
 
-static gint dw,dh;
+static int dw,dh;
 
 static gboolean debug = FALSE;
 
@@ -97,17 +97,17 @@ cursor_info_t *ci;
 	}
 }
 
-static gint read_bdf_font(fname)
+static int read_bdf_font(fname)
 gchar *fname;
 {
 	FILE *f;
 	gchar line[2048];
-	gint rv = 0;
+	int rv = 0;
 	gboolean startchar = FALSE, startbitmap = FALSE;
 	gchar *charname,*p,*bitmap;
-	gint dx = 0,dy = 0;
-	gint w,h,x,y,py;
-	gint id,tmp;
+	int dx = 0,dy = 0;
+	int w,h,x,y,py;
+	int id,tmp;
 
 	dw = 0;
 	dh = 0;
@@ -210,7 +210,7 @@ gchar *fname;
 	return rv;
 }
 
-static gint font_info_compare(fi, name)
+static int font_info_compare(fi, name)
 font_info_t *fi;
 char *name;
 {
@@ -303,8 +303,8 @@ int id;
 {
 	static gchar cdata[8192];
 	gchar *p;
-	gint i;
-	gint c;
+	int i;
+	int c;
 	gboolean flushed;
 
 	sprintf(cdata, "  { \"%s\", %d, %d, %d, %d, %d, \n    \"",
@@ -351,7 +351,7 @@ static int dump_cursors()
 	GSList *ptr;
 	FILE *f = stdout;
 
-	fprintf(f, "static const struct { const gchar *name; gint type; guchar width; guchar height; guchar hotx; guchar hoty; guchar *data; } cursors[] = {\n");
+	fprintf(f, "static const struct { const gchar *name; int type; guchar width; guchar height; guchar hotx; guchar hoty; guchar *data; } cursors[] = {\n");
 
 	for (ptr = cursors; ptr; ptr = ptr->next)
 	{
@@ -365,8 +365,8 @@ static int dump_cursors()
 	return 0;
 }
 
-gint main(argc, argv)
-gint argc;
+int main(argc, argv)
+int argc;
 gchar **argv;
 {
 	if (argc != 2)

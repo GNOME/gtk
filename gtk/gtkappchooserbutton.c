@@ -117,7 +117,7 @@ struct _GtkAppChooserButton {
 
   gchar *content_type;
   gchar *heading;
-  gint last_active;
+  int last_active;
   gboolean show_dialog_item;
   gboolean show_default_item;
   gboolean modal;
@@ -172,7 +172,7 @@ get_first_iter (GtkListStore *store,
 typedef struct {
   GtkAppChooserButton *self;
   GAppInfo *info;
-  gint active_index;
+  int active_index;
 } SelectAppData;
 
 static void
@@ -238,7 +238,7 @@ gtk_app_chooser_button_select_application (GtkAppChooserButton *self,
 
 static void
 other_application_dialog_response_cb (GtkDialog *dialog,
-                                      gint       response_id,
+                                      int        response_id,
                                       gpointer   user_data)
 {
   GtkAppChooserButton *self = user_data;

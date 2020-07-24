@@ -364,7 +364,7 @@ dialog_destroy (GtkWidget *widget,
 
 static void
 dialog_response (GtkDialog *dialog,
-                 gint       response,
+                 int        response,
                  gpointer   data)
 {
   if (response == GTK_RESPONSE_CANCEL)
@@ -640,8 +640,8 @@ gtk_color_button_get_property (GObject    *object,
 static void
 gtk_color_button_add_palette (GtkColorChooser *chooser,
                               GtkOrientation   orientation,
-                              gint             colors_per_line,
-                              gint             n_colors,
+                              int              colors_per_line,
+                              int              n_colors,
                               GdkRGBA         *colors)
 {
   GtkColorButton *button = GTK_COLOR_BUTTON (chooser);

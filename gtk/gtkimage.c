@@ -552,17 +552,17 @@ gtk_image_new_from_gicon (GIcon *icon)
 
 typedef struct {
   GtkImage *image;
-  gint scale_factor;
+  int scale_factor;
 } LoaderData;
 
 static void
 on_loader_size_prepared (GdkPixbufLoader *loader,
-			 gint             width,
-			 gint             height,
+			 int              width,
+			 int              height,
 			 gpointer         user_data)
 {
   LoaderData *loader_data = user_data;
-  gint scale_factor;
+  int scale_factor;
   GdkPixbufFormat *format;
 
   /* Let the regular icon helper code path handle non-scalable images */
@@ -582,7 +582,7 @@ static GdkPixbufAnimation *
 load_scalable_with_loader (GtkImage    *image,
 			   const gchar *file_path,
 			   const gchar *resource_path,
-			   gint        *scale_factor_out)
+			   int         *scale_factor_out)
 {
   GdkPixbufLoader *loader;
   GBytes *bytes;
@@ -652,7 +652,7 @@ gtk_image_set_from_file   (GtkImage    *image,
                            const gchar *filename)
 {
   GdkPixbufAnimation *anim;
-  gint scale_factor;
+  int scale_factor;
   GdkTexture *texture;
   GdkPaintable *scaler;
 
@@ -734,7 +734,7 @@ gtk_image_set_from_resource (GtkImage    *image,
 			     const gchar *resource_path)
 {
   GdkPixbufAnimation *animation;
-  gint scale_factor = 1;
+  int scale_factor = 1;
   GdkTexture *texture;
   GdkPaintable *scaler;
 
@@ -1288,7 +1288,7 @@ gtk_image_system_setting_changed (GtkWidget        *widget,
  */
 void 
 gtk_image_set_pixel_size (GtkImage *image,
-			  gint      pixel_size)
+			  int       pixel_size)
 {
   g_return_if_fail (GTK_IS_IMAGE (image));
 
@@ -1308,7 +1308,7 @@ gtk_image_set_pixel_size (GtkImage *image,
  *
  * Returns: the pixel size used for named icons.
  */
-gint
+int
 gtk_image_get_pixel_size (GtkImage *image)
 {
   g_return_val_if_fail (GTK_IS_IMAGE (image), -1);

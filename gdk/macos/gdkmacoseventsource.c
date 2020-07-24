@@ -89,7 +89,7 @@ static gboolean run_loop_polling_async = FALSE;
 /* Between run_loop_before_waiting() and run_loop_after_waiting();
  * max_prioritiy to pass to g_main_loop_check()
  */
-static gint run_loop_max_priority;
+static int run_loop_max_priority;
 
 /* Timer that we've added to wake up the run loop when a GLib timeout
  */
@@ -148,7 +148,7 @@ static NSAutoreleasePool *autorelease_pool;
  * a run loop iteration, so we need to detect that and avoid triggering
  * our "run the GLib main looop while the run loop is active machinery.
  */
-static gint getting_events = 0;
+static int getting_events = 0;
 
 /************************************************************
  *********              Select Thread               *********
@@ -199,7 +199,7 @@ static GPollFD *next_pollfds;
 static guint next_n_pollfds;
 
 /* Pipe used to wake up the select thread */
-static gint select_thread_wakeup_pipe[2];
+static int select_thread_wakeup_pipe[2];
 
 /* Run loop source used to wake up the main thread */
 static CFRunLoopSourceRef select_main_thread_source;
@@ -365,7 +365,7 @@ dump_poll_result (GPollFD *ufds,
                   guint    nfds)
 {
   GString *s;
-  gint i;
+  int i;
 
   s = g_string_new ("");
   for (i = 0; i < nfds; i++)
@@ -393,7 +393,7 @@ pollfds_equal (GPollFD *old_pollfds,
                GPollFD *new_pollfds,
                guint    new_n_pollfds)
 {
-  gint i;
+  int i;
 
   if (old_n_pollfds != new_n_pollfds)
     return FALSE;
@@ -417,15 +417,15 @@ pollfds_equal (GPollFD *old_pollfds,
  *   0: No file descriptors ready, asynchronous poll not needed
  * > 0: Number of file descriptors ready
  */
-static gint
+static int
 select_thread_start_poll (GPollFD *ufds,
                           guint    nfds,
-                          gint     timeout)
+                          int      timeout)
 {
-  gint n_ready;
+  int n_ready;
   gboolean have_new_pollfds = FALSE;
-  gint poll_fd_index = -1;
-  gint i;
+  int poll_fd_index = -1;
+  int i;
 
   for (i = 0; i < nfds; i++)
     if (ufds[i].fd == -1)
@@ -575,8 +575,8 @@ select_thread_start_poll (GPollFD *ufds,
 static int
 select_thread_collect_poll (GPollFD *ufds, guint nfds)
 {
-  gint i;
-  gint n_ready = 0;
+  int i;
+  int n_ready = 0;
 
   SELECT_THREAD_LOCK ();
 
@@ -640,7 +640,7 @@ _gdk_macos_event_source_get_pending (void)
 
 static gboolean
 gdk_macos_event_source_prepare (GSource *source,
-                                gint    *timeout)
+                                int     *timeout)
 {
   GdkMacosEventSource *event_source = (GdkMacosEventSource *)source;
   gboolean retval;
@@ -737,14 +737,14 @@ static GSourceFuncs event_funcs = {
  *********             Our Poll Function            *********
  ************************************************************/
 
-static gint
+static int
 poll_func (GPollFD *ufds,
            guint    nfds,
-           gint     timeout_)
+           int      timeout_)
 {
   NSEvent *event;
   NSDate *limit_date;
-  gint n_ready;
+  int n_ready;
 
   static GPollFD *last_ufds;
 
@@ -808,12 +808,12 @@ poll_func (GPollFD *ufds,
 /* Wrapper around g_main_context_query() that handles reallocating
  * run_loop_pollfds up to the proper size
  */
-static gint
+static int
 query_main_context (GMainContext *context,
                     int           max_priority,
                     int          *timeout)
 {
-  gint nfds;
+  int nfds;
 
   if (!run_loop_pollfds)
     {
@@ -869,8 +869,8 @@ static void
 run_loop_before_sources (void)
 {
   GMainContext *context = g_main_context_default ();
-  gint max_priority;
-  gint nfds;
+  int max_priority;
+  int nfds;
 
   /* Before we let the CFRunLoop process sources, we want to check if there
    * are any pending GLib main loop sources more urgent than
@@ -909,8 +909,8 @@ static void
 run_loop_before_waiting (void)
 {
   GMainContext *context = g_main_context_default ();
-  gint timeout;
-  gint n_ready;
+  int timeout;
+  int n_ready;
 
   /* At this point, the CFRunLoop is ready to wait. We start a GMain loop
    * iteration by calling the check() and query() stages. We start a

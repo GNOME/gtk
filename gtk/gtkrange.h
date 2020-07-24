@@ -109,8 +109,8 @@ void               gtk_range_get_range_rect                (GtkRange      *range
                                                             GdkRectangle  *range_rect);
 GDK_AVAILABLE_IN_ALL
 void               gtk_range_get_slider_range              (GtkRange      *range,
-                                                            gint          *slider_start,
-                                                            gint          *slider_end);
+                                                            int           *slider_start,
+                                                            int           *slider_end);
 
 GDK_AVAILABLE_IN_ALL
 void               gtk_range_set_increments                (GtkRange      *range,
@@ -143,9 +143,9 @@ GDK_AVAILABLE_IN_ALL
 gdouble            gtk_range_get_fill_level                (GtkRange      *range);
 GDK_AVAILABLE_IN_ALL
 void               gtk_range_set_round_digits              (GtkRange      *range,
-                                                            gint           round_digits);
+                                                            int            round_digits);
 GDK_AVAILABLE_IN_ALL
-gint                gtk_range_get_round_digits              (GtkRange      *range);
+int                 gtk_range_get_round_digits              (GtkRange      *range);
 
 
 G_END_DECLS

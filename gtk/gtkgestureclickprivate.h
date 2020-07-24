@@ -32,11 +32,11 @@ struct _GtkGestureClickClass
   GtkGestureSingleClass parent_class;
 
   void     (* pressed)  (GtkGestureClick *gesture,
-                         gint             n_press,
+                         int              n_press,
                          gdouble          x,
                          gdouble          y);
   void     (* released) (GtkGestureClick *gesture,
-                         gint             n_press,
+                         int              n_press,
                          gdouble          x,
                          gdouble          y);
   void     (* stopped)  (GtkGestureClick *gesture);

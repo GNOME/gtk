@@ -89,8 +89,8 @@ static void
 walk_accessible_tree (AtkObject *accessible,
                       gpointer   data)
 {
-  gint *count = data;
-  gint i;
+  int *count = data;
+  int i;
 
   (*count)++;
 
@@ -130,7 +130,7 @@ populate_list (GtkBuilder *builder)
   GtkTreeView *tv;
   GtkListStore *store;
   GtkTreeIter iter;
-  gint i;
+  int i;
 
   tv = (GtkTreeView *)gtk_builder_get_object (builder, "treeview1");
   store = (GtkListStore *)gtk_tree_view_get_model (tv);
@@ -175,8 +175,8 @@ test_a11y_performance_list (void)
   gdouble elapsed;
   GtkWidget *window;
   GError *error = NULL;
-  gint count_before;
-  gint count_after;
+  int count_before;
+  int count_after;
 
   builder = gtk_builder_new ();
   gtk_builder_add_from_string (builder, list_ui, -1, &error);
@@ -271,7 +271,7 @@ populate_tree (GtkBuilder *builder)
   GtkTreeView *tv;
   GtkTreeStore *store;
   GtkTreeIter iter;
-  gint i;
+  int i;
 
   tv = (GtkTreeView *)gtk_builder_get_object (builder, "treeview1");
   store = (GtkTreeStore *)gtk_tree_view_get_model (tv);
@@ -322,8 +322,8 @@ test_a11y_performance_tree (void)
   gdouble elapsed;
   GtkWidget *window;
   GError *error = NULL;
-  gint count_before;
-  gint count_after;
+  int count_before;
+  int count_after;
 
   builder = gtk_builder_new ();
   gtk_builder_add_from_string (builder, tree_ui, -1, &error);

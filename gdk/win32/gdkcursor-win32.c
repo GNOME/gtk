@@ -381,12 +381,12 @@ gdk_win32_hcursor_get_handle (GdkWin32HCursor *cursor)
 }
 
 static HCURSOR
-hcursor_from_x_cursor (gint         i,
+hcursor_from_x_cursor (int          i,
                        const gchar *name)
 {
-  gint j, x, y, ofs;
+  int j, x, y, ofs;
   HCURSOR rv;
-  gint w, h;
+  int w, h;
   guchar *and_plane, *xor_plane;
 
   w = GetSystemMetrics (SM_CXCURSOR);
@@ -410,9 +410,9 @@ hcursor_from_x_cursor (gint         i,
 
 	  for (x = 0; x < cursors[i].width && x < w ; x++, j++)
 	    {
-	      gint pofs = ofs + x / 8;
+	      int pofs = ofs + x / 8;
 	      guchar data = (cursors[i].data[j/4] & (0xc0 >> (2 * (j%4)))) >> (2 * (3 - (j%4)));
-	      gint bit = 7 - (j % cursors[i].width) % 8;
+	      int bit = 7 - (j % cursors[i].width) % 8;
 
 	      if (data)
 		{
@@ -510,10 +510,10 @@ win32_cursor_create_win32hcursor (GdkWin32Display *display,
 static Win32Cursor *
 win32_cursor_new (GdkWin32CursorLoadType load_type,
                   gpointer               resource_name,
-                  gint                   width,
-                  gint                   height,
+                  int                    width,
+                  int                    height,
                   guint                  load_flags,
-                  gint                   xcursor_number)
+                  int                    xcursor_number)
 {
   Win32Cursor *result;
 
@@ -545,7 +545,7 @@ win32_cursor_destroy (gpointer data)
 
 static void
 win32_cursor_theme_load_from (Win32CursorTheme *theme,
-                              gint              size,
+                              int               size,
                               const gchar      *dir)
 {
   GDir *gdir;
@@ -600,11 +600,11 @@ win32_cursor_theme_load_from (Win32CursorTheme *theme,
 static void
 win32_cursor_theme_load_from_dirs (Win32CursorTheme *theme,
                                    const gchar      *name,
-                                   gint              size)
+                                   int               size)
 {
   gchar *theme_dir;
   const gchar * const *dirs;
-  gint i;
+  int i;
 
   dirs = g_get_system_data_dirs ();
 
@@ -624,9 +624,9 @@ win32_cursor_theme_load_from_dirs (Win32CursorTheme *theme,
 
 static void
 win32_cursor_theme_load_system (Win32CursorTheme *theme,
-                                gint              size)
+                                int               size)
 {
-  gint             i;
+  int              i;
   HCURSOR          shared_hcursor;
   HCURSOR          x_hcursor;
   Win32Cursor     *cursor;
@@ -690,7 +690,7 @@ win32_cursor_theme_load_system (Win32CursorTheme *theme,
 
 Win32CursorTheme *
 win32_cursor_theme_load (const gchar *name,
-                         gint        size)
+                         int         size)
 {
   Win32CursorTheme *result = g_new0 (Win32CursorTheme, 1);
 
@@ -801,7 +801,7 @@ static GdkWin32HCursor *
 win32hcursor_x_from_name (GdkWin32Display *display,
                           const gchar     *name)
 {
-  gint i;
+  int i;
 
   for (i = 0; i < G_N_ELEMENTS (cursors); i++)
     if (cursors[i].name == NULL || strcmp (cursors[i].name, name) == 0)
@@ -856,7 +856,7 @@ win32hcursor_from_name (GdkWin32Display *display,
 static GdkWin32HCursor *
 create_blank_win32hcursor (GdkWin32Display *display)
 {
-  gint w, h;
+  int w, h;
   guchar *and_plane, *xor_plane;
   HCURSOR rv;
 
@@ -901,8 +901,8 @@ gdk_win32hcursor_create_for_name (GdkWin32Display  *display,
 static HICON
 pixbuf_to_hicon (GdkPixbuf *pixbuf,
                  gboolean   is_icon,
-                 gint       x,
-                 gint       y);
+                 int        x,
+                 int        y);
 
 static GdkWin32HCursor *
 gdk_win32hcursor_create_for_texture (GdkWin32Display *display,
@@ -912,7 +912,7 @@ gdk_win32hcursor_create_for_texture (GdkWin32Display *display,
 {
   cairo_surface_t *surface;
   GdkPixbuf *pixbuf;
-  gint width, height;
+  int width, height;
   HICON icon;
 
   surface = gdk_texture_download_surface (texture);
@@ -1015,7 +1015,7 @@ gdk_win32_icon_to_pixbuf_libgtk_only (HICON hicon,
   } bmi;
   HDC hdc;
   guchar *pixels, *bits;
-  gint rowstride, x, y, w, h;
+  int rowstride, x, y, w, h;
 
   if (!GDI_CALL (GetIconInfo, (hicon, &ii)))
     return NULL;
@@ -1113,7 +1113,7 @@ gdk_win32_icon_to_pixbuf_libgtk_only (HICON hicon,
 	{
 	  for (x = 0; x < w; x++)
 	    {
-	      const gint bit = 7 - (x % 8);
+	      const int bit = 7 - (x % 8);
 	      printf ("%c ", ((bits[bpl*y+x/8])&(1<<bit)) ? ' ' : 'X');
 	    }
 	  printf ("\n");
@@ -1135,7 +1135,7 @@ gdk_win32_icon_to_pixbuf_libgtk_only (HICON hicon,
 	    }
 	  for (x = 0; x < w; x++)
 	    {
-	      const gint bit = 7 - (x % 8);
+	      const int bit = 7 - (x % 8);
 	      if ((*andp) & (1<<bit))
 		{
 		  if ((*xorp) & (1<<bit))
@@ -1183,7 +1183,7 @@ gdk_win32_icon_to_pixbuf_libgtk_only (HICON hicon,
  */
 
 static HBITMAP
-create_alpha_bitmap (gint     size,
+create_alpha_bitmap (int      size,
 		     guchar **outdata)
 {
   BITMAPV5HEADER bi;
@@ -1221,9 +1221,9 @@ create_alpha_bitmap (gint     size,
 }
 
 static HBITMAP
-create_color_bitmap (gint     size,
+create_color_bitmap (int      size,
 		     guchar **outdata,
-		     gint     bits)
+		     int      bits)
 {
   struct {
     BITMAPV4HEADER bmiHeader;
@@ -1272,7 +1272,7 @@ pixbuf_to_hbitmaps_alpha_winxp (GdkPixbuf *pixbuf,
   HBITMAP hColorBitmap, hMaskBitmap;
   guchar *indata, *inrow;
   guchar *colordata, *colorrow, *maskdata, *maskbyte;
-  gint width, height, size, i, i_offset, j, j_offset, rowstride;
+  int width, height, size, i, i_offset, j, j_offset, rowstride;
   guint maskstride, mask_bit;
 
   width = gdk_pixbuf_get_width (pixbuf); /* width of icon */
@@ -1350,7 +1350,7 @@ pixbuf_to_hbitmaps_normal (GdkPixbuf *pixbuf,
   HBITMAP hColorBitmap, hMaskBitmap;
   guchar *indata, *inrow;
   guchar *colordata, *colorrow, *maskdata, *maskbyte;
-  gint width, height, size, i, i_offset, j, j_offset, rowstride, nc, bmstride;
+  int width, height, size, i, i_offset, j, j_offset, rowstride, nc, bmstride;
   gboolean has_alpha;
   guint maskstride, mask_bit;
 
@@ -1432,8 +1432,8 @@ pixbuf_to_hbitmaps_normal (GdkPixbuf *pixbuf,
 static HICON
 pixbuf_to_hicon (GdkPixbuf *pixbuf,
 		 gboolean   is_icon,
-		 gint       x,
-		 gint       y)
+		 int        x,
+		 int        y)
 {
   ICONINFO ii;
   HICON icon;
@@ -1464,7 +1464,7 @@ _gdk_win32_texture_to_hicon (GdkTexture *texture)
 {
   cairo_surface_t *surface;
   GdkPixbuf *pixbuf;
-  gint width, height;
+  int width, height;
   HICON icon;
   
   surface = gdk_texture_download_surface (texture);
@@ -1482,8 +1482,8 @@ _gdk_win32_texture_to_hicon (GdkTexture *texture)
 
 HICON
 _gdk_win32_pixbuf_to_hcursor (GdkPixbuf *pixbuf,
-			      gint       x_hotspot,
-			      gint       y_hotspot)
+			      int        x_hotspot,
+			      int        y_hotspot)
 {
   return pixbuf_to_hicon (pixbuf, FALSE, x_hotspot, y_hotspot);
 }

@@ -130,7 +130,7 @@ gboolean   _gdk_device_translate_axis         (GdkDevice *device,
                                                gdouble   *axis_value);
 
 GdkTimeCoord ** _gdk_device_allocate_history  (GdkDevice *device,
-                                               gint       n_events);
+                                               int        n_events);
 
 void    _gdk_device_add_physical_device         (GdkDevice *device,
                                                  GdkDevice *physical);

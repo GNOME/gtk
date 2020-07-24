@@ -990,7 +990,7 @@ static void
 gtk_action_muxer_free_group (gpointer data)
 {
   Group *group = data;
-  gint i;
+  int i;
 
   /* 'for loop' or 'four loop'? */
   for (i = 0; i < 4; i++)
@@ -1230,7 +1230,7 @@ gtk_action_muxer_insert (GtkActionMuxer *muxer,
 {
   gchar **actions;
   Group *group;
-  gint i;
+  int i;
 
   /* TODO: diff instead of ripout and replace */
   gtk_action_muxer_remove (muxer, prefix);
@@ -1284,7 +1284,7 @@ gtk_action_muxer_remove (GtkActionMuxer *muxer,
   if (group != NULL)
     {
       gchar **actions;
-      gint i;
+      int i;
 
       g_hash_table_steal (muxer->groups, prefix);
 

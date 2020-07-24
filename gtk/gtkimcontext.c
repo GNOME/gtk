@@ -125,16 +125,16 @@ struct _GtkIMContextPrivate {
 static void     gtk_im_context_real_get_preedit_string (GtkIMContext   *context,
 							gchar         **str,
 							PangoAttrList **attrs,
-							gint           *cursor_pos);
+							int            *cursor_pos);
 static gboolean gtk_im_context_real_filter_keypress    (GtkIMContext   *context,
 							GdkEvent       *event);
 static gboolean gtk_im_context_real_get_surrounding    (GtkIMContext   *context,
 							gchar         **text,
-							gint           *cursor_index);
+							int            *cursor_index);
 static void     gtk_im_context_real_set_surrounding    (GtkIMContext   *context,
 							const char     *text,
-							gint            len,
-							gint            cursor_index);
+							int             len,
+							int             cursor_index);
 
 static void     gtk_im_context_get_property            (GObject        *obj,
                                                         guint           property_id,
@@ -360,7 +360,7 @@ static void
 gtk_im_context_real_get_preedit_string (GtkIMContext       *context,
 					gchar             **str,
 					PangoAttrList     **attrs,
-					gint               *cursor_pos)
+					int                *cursor_pos)
 {
   if (str)
     *str = g_strdup ("");
@@ -380,14 +380,14 @@ gtk_im_context_real_filter_keypress (GtkIMContext *context,
 typedef struct
 {
   gchar *text;
-  gint cursor_index;
+  int cursor_index;
 } SurroundingInfo;
 
 static void
 gtk_im_context_real_set_surrounding (GtkIMContext  *context,
 				     const gchar   *text,
-				     gint           len,
-				     gint           cursor_index)
+				     int            len,
+				     int            cursor_index)
 {
   SurroundingInfo *info = g_object_get_data (G_OBJECT (context),
                                              "gtk-im-surrounding-info");
@@ -403,7 +403,7 @@ gtk_im_context_real_set_surrounding (GtkIMContext  *context,
 static gboolean
 gtk_im_context_real_get_surrounding (GtkIMContext *context,
 				     gchar       **text,
-				     gint         *cursor_index)
+				     int          *cursor_index)
 {
   gboolean result;
   gboolean info_is_local = FALSE;
@@ -486,7 +486,7 @@ void
 gtk_im_context_get_preedit_string (GtkIMContext   *context,
 				   gchar         **str,
 				   PangoAttrList **attrs,
-				   gint           *cursor_pos)
+				   int            *cursor_pos)
 {
   GtkIMContextClass *klass;
   
@@ -743,8 +743,8 @@ gtk_im_context_set_use_preedit (GtkIMContext *context,
 void
 gtk_im_context_set_surrounding (GtkIMContext  *context,
 				const gchar   *text,
-				gint           len,
-				gint           cursor_index)
+				int            len,
+				int            cursor_index)
 {
   GtkIMContextClass *klass;
   
@@ -792,11 +792,11 @@ gtk_im_context_set_surrounding (GtkIMContext  *context,
 gboolean
 gtk_im_context_get_surrounding (GtkIMContext *context,
 				gchar       **text,
-				gint         *cursor_index)
+				int          *cursor_index)
 {
   GtkIMContextClass *klass;
   gchar *local_text = NULL;
-  gint local_index;
+  int local_index;
   gboolean result = FALSE;
   
   g_return_val_if_fail (GTK_IS_IM_CONTEXT (context), FALSE);
@@ -841,8 +841,8 @@ gtk_im_context_get_surrounding (GtkIMContext *context,
  **/
 gboolean
 gtk_im_context_delete_surrounding (GtkIMContext *context,
-				   gint          offset,
-				   gint          n_chars)
+				   int           offset,
+				   int           n_chars)
 {
   gboolean result;
   

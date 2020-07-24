@@ -65,7 +65,7 @@ check_for_selection_change (GtkSearchEntryAccessible *self,
                             GtkEditable              *editable)
 {
   gboolean ret_val = FALSE;
-  gint start, end;
+  int start, end;
 
   if (gtk_editable_get_selection_bounds (editable, &start, &end))
     {
@@ -95,8 +95,8 @@ check_for_selection_change (GtkSearchEntryAccessible *self,
 static void
 insert_text_cb (GtkEditable              *editable,
                 gchar                    *new_text,
-                gint                      new_text_length,
-                gint                     *position,
+                int                       new_text_length,
+                int                      *position,
                 GtkSearchEntryAccessible *self)
 {
   int length;
@@ -114,8 +114,8 @@ insert_text_cb (GtkEditable              *editable,
 
 static void
 delete_text_cb (GtkEditable              *editable,
-                gint                      start,
-                gint                      end,
+                int                       start,
+                int                       end,
                 GtkSearchEntryAccessible *self)
 {
   GtkText *text;
@@ -280,8 +280,8 @@ gtk_search_entry_accessible_init (GtkSearchEntryAccessible *self)
 
 static gchar *
 gtk_search_entry_accessible_get_text (AtkText *atk_text,
-                                      gint     start_pos,
-                                      gint     end_pos)
+                                      int      start_pos,
+                                      int      end_pos)
 {
   GtkText *text = get_text_widget (GTK_ACCESSIBLE (atk_text));
 
@@ -293,10 +293,10 @@ gtk_search_entry_accessible_get_text (AtkText *atk_text,
 
 static gchar *
 gtk_search_entry_accessible_get_text_before_offset (AtkText         *atk_text,
-                                                    gint             offset,
+                                                    int              offset,
                                                     AtkTextBoundary  boundary_type,
-                                                    gint            *start_offset,
-                                                    gint            *end_offset)
+                                                    int             *start_offset,
+                                                    int             *end_offset)
 {
   GtkText *text = get_text_widget (GTK_ACCESSIBLE (atk_text));
 
@@ -310,10 +310,10 @@ gtk_search_entry_accessible_get_text_before_offset (AtkText         *atk_text,
 
 static gchar *
 gtk_search_entry_accessible_get_text_at_offset (AtkText         *atk_text,
-                                                gint             offset,
+                                                int              offset,
                                                 AtkTextBoundary  boundary_type,
-                                                gint            *start_offset,
-                                                gint            *end_offset)
+                                                int             *start_offset,
+                                                int             *end_offset)
 {
   GtkText *text = get_text_widget (GTK_ACCESSIBLE (atk_text));
 
@@ -327,10 +327,10 @@ gtk_search_entry_accessible_get_text_at_offset (AtkText         *atk_text,
 
 static gchar *
 gtk_search_entry_accessible_get_text_after_offset (AtkText         *atk_text,
-                                                   gint             offset,
+                                                   int              offset,
                                                    AtkTextBoundary  boundary_type,
-                                                   gint            *start_offset,
-                                                   gint            *end_offset)
+                                                   int             *start_offset,
+                                                   int             *end_offset)
 {
   GtkText *text = get_text_widget (GTK_ACCESSIBLE (atk_text));
 
@@ -342,7 +342,7 @@ gtk_search_entry_accessible_get_text_after_offset (AtkText         *atk_text,
                                     start_offset, end_offset);
 }
 
-static gint
+static int
 gtk_search_entry_accessible_get_character_count (AtkText *atk_text)
 {
   GtkText *text = get_text_widget (GTK_ACCESSIBLE (atk_text));
@@ -361,7 +361,7 @@ gtk_search_entry_accessible_get_character_count (AtkText *atk_text)
   return char_count;
 }
 
-static gint
+static int
 gtk_search_entry_accessible_get_caret_offset (AtkText *atk_text)
 {
   GtkWidget *widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (atk_text));
@@ -379,7 +379,7 @@ gtk_search_entry_accessible_get_caret_offset (AtkText *atk_text)
 
 static gboolean
 gtk_search_entry_accessible_set_caret_offset (AtkText *atk_text,
-                                              gint     offset)
+                                              int      offset)
 {
   GtkWidget *widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (atk_text));
   if (widget == NULL)
@@ -393,7 +393,7 @@ gtk_search_entry_accessible_set_caret_offset (AtkText *atk_text,
 static AtkAttributeSet *
 add_text_attribute (AtkAttributeSet  *attributes,
                     AtkTextAttribute  attr,
-                    gint              i)
+                    int               i)
 {
   AtkAttribute *at;
 
@@ -406,9 +406,9 @@ add_text_attribute (AtkAttributeSet  *attributes,
 
 static AtkAttributeSet *
 gtk_search_entry_accessible_get_run_attributes (AtkText *atk_text,
-                                                gint     offset,
-                                                gint    *start_offset,
-                                                gint    *end_offset)
+                                                int      offset,
+                                                int     *start_offset,
+                                                int     *end_offset)
 {
   GtkText *text = get_text_widget (GTK_ACCESSIBLE (atk_text));
 
@@ -448,11 +448,11 @@ gtk_search_entry_accessible_get_default_attributes (AtkText *atk_text)
 
 static void
 gtk_search_entry_accessible_get_character_extents (AtkText      *atk_text,
-                                                   gint          offset,
-                                                   gint         *x,
-                                                   gint         *y,
-                                                   gint         *width,
-                                                   gint         *height,
+                                                   int           offset,
+                                                   int          *x,
+                                                   int          *y,
+                                                   int          *width,
+                                                   int          *height,
                                                    AtkCoordType  coords)
 {
   GtkText *text = get_text_widget (GTK_ACCESSIBLE (atk_text));
@@ -480,10 +480,10 @@ gtk_search_entry_accessible_get_character_extents (AtkText      *atk_text,
   *height = char_rect.height;
 }
 
-static gint
+static int
 gtk_search_entry_accessible_get_offset_at_point (AtkText      *atk_text,
-                                                 gint          x,
-                                                 gint          y,
+                                                 int           x,
+                                                 int           y,
                                                  AtkCoordType  coords)
 {
   GtkText *text = get_text_widget (GTK_ACCESSIBLE (atk_text));
@@ -521,11 +521,11 @@ gtk_search_entry_accessible_get_offset_at_point (AtkText      *atk_text,
   return offset;
 }
 
-static gint
+static int
 gtk_search_entry_accessible_get_n_selections (AtkText *text)
 {
   GtkWidget *widget;
-  gint start, end;
+  int start, end;
 
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (text));
   if (widget == NULL)
@@ -539,9 +539,9 @@ gtk_search_entry_accessible_get_n_selections (AtkText *text)
 
 static gchar *
 gtk_search_entry_accessible_get_selection (AtkText *text,
-                                           gint     selection_num,
-                                           gint    *start_pos,
-                                           gint    *end_pos)
+                                           int      selection_num,
+                                           int     *start_pos,
+                                           int     *end_pos)
 {
   GtkEditable *editable;
   GtkWidget *widget;
@@ -570,8 +570,8 @@ gtk_search_entry_accessible_get_selection (AtkText *text,
 
 static gboolean
 gtk_search_entry_accessible_add_selection (AtkText *text,
-                                           gint     start_pos,
-                                           gint     end_pos)
+                                           int      start_pos,
+                                           int      end_pos)
 {
   GtkEntry *entry;
   GtkWidget *widget;
@@ -594,10 +594,10 @@ gtk_search_entry_accessible_add_selection (AtkText *text,
 
 static gboolean
 gtk_search_entry_accessible_remove_selection (AtkText *text,
-                                              gint     selection_num)
+                                              int      selection_num)
 {
   GtkWidget *widget;
-  gint start, end;
+  int start, end;
 
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (text));
   if (widget == NULL)
@@ -617,12 +617,12 @@ gtk_search_entry_accessible_remove_selection (AtkText *text,
 
 static gboolean
 gtk_search_entry_accessible_set_selection (AtkText *text,
-                                           gint     selection_num,
-                                           gint     start_pos,
-                                           gint     end_pos)
+                                           int      selection_num,
+                                           int      start_pos,
+                                           int      end_pos)
 {
   GtkWidget *widget;
-  gint start, end;
+  int start, end;
 
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (text));
   if (widget == NULL)
@@ -642,7 +642,7 @@ gtk_search_entry_accessible_set_selection (AtkText *text,
 
 static gunichar
 gtk_search_entry_accessible_get_character_at_offset (AtkText *atk_text,
-                                                     gint     offset)
+                                                     int      offset)
 {
   GtkText *text;
   char *contents;
@@ -710,8 +710,8 @@ gtk_search_entry_accessible_set_text_contents (AtkEditableText *text,
 static void
 gtk_search_entry_accessible_insert_text (AtkEditableText *text,
                                          const gchar     *string,
-                                         gint             length,
-                                         gint            *position)
+                                         int              length,
+                                         int             *position)
 {
   GtkWidget *widget;
   GtkEditable *editable;
@@ -737,8 +737,8 @@ gtk_search_entry_accessible_insert_text (AtkEditableText *text,
 
 static void
 gtk_search_entry_accessible_copy_text (AtkEditableText *text,
-                                       gint             start_pos,
-                                       gint             end_pos)
+                                       int              start_pos,
+                                       int              end_pos)
 {
   GtkWidget *widget;
   GtkEditable *editable;
@@ -758,8 +758,8 @@ gtk_search_entry_accessible_copy_text (AtkEditableText *text,
 
 static void
 gtk_search_entry_accessible_cut_text (AtkEditableText *text,
-                                      gint             start_pos,
-                                      gint             end_pos)
+                                      int              start_pos,
+                                      int              end_pos)
 {
   GtkWidget *widget;
   GtkEditable *editable;
@@ -782,8 +782,8 @@ gtk_search_entry_accessible_cut_text (AtkEditableText *text,
 
 static void
 gtk_search_entry_accessible_delete_text (AtkEditableText *text,
-                                         gint             start_pos,
-                                         gint             end_pos)
+                                         int              start_pos,
+                                         int              end_pos)
 {
   GtkWidget *widget;
   GtkEditable *editable;
@@ -826,7 +826,7 @@ paste_received_cb (GObject      *clipboard,
 
 static void
 gtk_search_entry_accessible_paste_text (AtkEditableText *text,
-                                        gint             position)
+                                        int              position)
 {
   GtkWidget *widget;
   GtkEditable *editable;
@@ -864,7 +864,7 @@ atk_editable_text_interface_init (AtkEditableTextIface *iface)
 
 static gboolean
 gtk_search_entry_accessible_do_action (AtkAction *action,
-                                       gint       i)
+                                       int        i)
 {
   GtkWidget *widget;
 
@@ -890,7 +890,7 @@ gtk_search_entry_accessible_do_action (AtkAction *action,
   return FALSE;
 }
 
-static gint
+static int
 gtk_search_entry_accessible_get_n_actions (AtkAction *action)
 {
   GtkAccessible *accessible = GTK_ACCESSIBLE (action);
@@ -911,7 +911,7 @@ gtk_search_entry_accessible_get_n_actions (AtkAction *action)
 
 static const gchar *
 gtk_search_entry_accessible_get_keybinding (AtkAction *action,
-                                            gint       i)
+                                            int        i)
 {
   GtkWidget *widget;
   GtkWidget *label;
@@ -956,7 +956,7 @@ gtk_search_entry_accessible_get_keybinding (AtkAction *action,
 
 static const gchar *
 gtk_search_entry_accessible_action_get_name (AtkAction *action,
-                                             gint       i)
+                                             int        i)
 {
   switch (i)
     {
@@ -975,7 +975,7 @@ gtk_search_entry_accessible_action_get_name (AtkAction *action,
 
 static const gchar*
 gtk_search_entry_accessible_action_get_localized_name (AtkAction *action,
-                                                       gint       i)
+                                                       int        i)
 {
   if (i == 0)
     return C_("Action name", "Activate");
@@ -987,7 +987,7 @@ gtk_search_entry_accessible_action_get_localized_name (AtkAction *action,
 
 static const gchar *
 gtk_search_entry_accessible_action_get_description (AtkAction *action,
-                                                    gint       i)
+                                                    int        i)
 {
   if (i == 0)
     return C_("Action description", "Activates the entry");

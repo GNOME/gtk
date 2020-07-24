@@ -137,7 +137,7 @@ gtk_button_accessible_get_name (AtkObject *obj)
   return name;
 }
 
-static gint
+static int
 gtk_button_accessible_get_n_children (AtkObject* obj)
 {
   return 0;
@@ -145,7 +145,7 @@ gtk_button_accessible_get_n_children (AtkObject* obj)
 
 static AtkObject *
 gtk_button_accessible_ref_child (AtkObject *obj,
-                                 gint       i)
+                                 int        i)
 {
   return NULL;
 }
@@ -204,7 +204,7 @@ gtk_button_accessible_init (GtkButtonAccessible *button)
 
 static gboolean
 gtk_button_accessible_do_action (AtkAction *action,
-                                 gint       i)
+                                 int        i)
 {
   GtkWidget *widget;
 
@@ -222,7 +222,7 @@ gtk_button_accessible_do_action (AtkAction *action,
   return TRUE;
 }
 
-static gint
+static int
 gtk_button_accessible_get_n_actions (AtkAction *action)
 {
   return 1;
@@ -230,7 +230,7 @@ gtk_button_accessible_get_n_actions (AtkAction *action)
 
 static const gchar *
 gtk_button_accessible_get_keybinding (AtkAction *action,
-                                      gint       i)
+                                      int        i)
 {
   gchar *return_value = NULL;
   GtkWidget *widget;
@@ -284,7 +284,7 @@ gtk_button_accessible_get_keybinding (AtkAction *action,
 
 static const gchar *
 gtk_button_accessible_action_get_name (AtkAction *action,
-                                       gint       i)
+                                       int        i)
 {
   if (i == 0)
     return "click";
@@ -293,7 +293,7 @@ gtk_button_accessible_action_get_name (AtkAction *action,
 
 static const gchar *
 gtk_button_accessible_action_get_localized_name (AtkAction *action,
-                                                 gint       i)
+                                                 int        i)
 {
   if (i == 0)
     return C_("Action name", "Click");
@@ -302,7 +302,7 @@ gtk_button_accessible_action_get_localized_name (AtkAction *action,
 
 static const gchar *
 gtk_button_accessible_action_get_description (AtkAction *action,
-                                              gint       i)
+                                              int        i)
 {
   if (i == 0)
     return C_("Action description", "Clicks the button");
@@ -343,8 +343,8 @@ gtk_button_accessible_get_image_description (AtkImage *image)
 
 static void
 gtk_button_accessible_get_image_position (AtkImage     *image,
-                                          gint         *x,
-                                          gint         *y,
+                                          int          *x,
+                                          int          *y,
                                           AtkCoordType  coord_type)
 {
   GtkWidget *widget;
@@ -375,8 +375,8 @@ gtk_button_accessible_get_image_position (AtkImage     *image,
 
 static void
 gtk_button_accessible_get_image_size (AtkImage *image,
-                                      gint     *width,
-                                      gint     *height)
+                                      int      *width,
+                                      int      *height)
 {
   GtkWidget *widget;
   GtkWidget *button_image;

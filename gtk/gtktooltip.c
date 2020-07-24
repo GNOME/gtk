@@ -418,10 +418,10 @@ gtk_tooltip_window_hide (GtkWidget *widget,
 
 GtkWidget *
 _gtk_widget_find_at_coords (GdkSurface *surface,
-                            gint       surface_x,
-                            gint       surface_y,
-                            gint      *widget_x,
-                            gint      *widget_y)
+                            int        surface_x,
+                            int        surface_y,
+                            int       *widget_x,
+                            int       *widget_y)
 {
   GtkWidget *event_widget;
   GtkWidget *picked_widget;
@@ -450,7 +450,7 @@ _gtk_widget_find_at_coords (GdkSurface *surface,
   return picked_widget;
 }
 
-static gint
+static int
 tooltip_browse_mode_expired (gpointer data)
 {
   GtkTooltip *tooltip;
@@ -531,8 +531,8 @@ gtk_tooltip_set_surface (GtkTooltip *tooltip,
 static gboolean
 gtk_tooltip_run_requery (GtkWidget  **widget,
 			 GtkTooltip  *tooltip,
-			 gint        *x,
-			 gint        *y)
+			 int         *x,
+			 int         *y)
 {
   gboolean has_tooltip = FALSE;
   gboolean return_value = FALSE;
@@ -699,7 +699,7 @@ static void
 gtk_tooltip_show_tooltip (GdkDisplay *display)
 {
   double px, py;
-  gint x, y;
+  int x, y;
   GdkSurface *surface;
   GtkWidget *tooltip_widget;
   GdkSeat *seat;
@@ -801,7 +801,7 @@ gtk_tooltip_hide_tooltip (GtkTooltip *tooltip)
     gtk_widget_hide (tooltip->window);
 }
 
-static gint
+static int
 tooltip_popup_timeout (gpointer data)
 {
   GdkDisplay *display;

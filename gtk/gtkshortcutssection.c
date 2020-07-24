@@ -78,7 +78,7 @@ struct _GtkShortcutsSectionClass
   GtkBoxClass parent_class;
 
   gboolean (* change_current_page) (GtkShortcutsSection *self,
-                                    gint                 offset);
+                                    int                  offset);
 
 };
 
@@ -117,7 +117,7 @@ static void gtk_shortcuts_section_filter_groups    (GtkShortcutsSection *self);
 static void gtk_shortcuts_section_reflow_groups    (GtkShortcutsSection *self);
 
 static gboolean gtk_shortcuts_section_change_current_page (GtkShortcutsSection *self,
-                                                           gint                 offset);
+                                                           int                  offset);
 
 static void gtk_shortcuts_section_pan_gesture_pan (GtkGesturePan       *gesture,
                                                    GtkPanDirection      direction,
@@ -729,7 +729,7 @@ gtk_shortcuts_section_reflow_groups (GtkShortcutsSection *self)
 
 static gboolean
 gtk_shortcuts_section_change_current_page (GtkShortcutsSection *self,
-                                           gint                 offset)
+                                           int                  offset)
 {
   GtkWidget *child;
 

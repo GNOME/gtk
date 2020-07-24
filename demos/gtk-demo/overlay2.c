@@ -12,9 +12,9 @@ static void
 margin_changed (GtkAdjustment *adjustment,
                 GtkTextView   *text)
 {
-  gint value;
+  int value;
 
-  value = (gint)gtk_adjustment_get_value (adjustment);
+  value = (int)gtk_adjustment_get_value (adjustment);
   gtk_text_view_set_left_margin (GTK_TEXT_VIEW (text), value);
   g_object_set (tag, "pixels-above-lines", value, NULL);
 }

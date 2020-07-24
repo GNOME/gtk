@@ -89,7 +89,7 @@ gdk_device_win32_query_state (GdkDevice        *device,
 {
   POINT point;
   HWND hwnd, hwndc;
-  gint scale;
+  int scale;
 
   if (window)
     {

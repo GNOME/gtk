@@ -35,7 +35,7 @@ accel_edited_callback (GtkCellRendererText *cell,
   g_print ("%u %d %u\n", keyval, mask, hardware_keycode);
   
   gtk_list_store_set (GTK_LIST_STORE (model), &iter,
-                      0, (gint)mask,
+                      0, (int)mask,
                       1, keyval,
                       2, hardware_keycode,
                       -1);
@@ -63,7 +63,7 @@ key_test (void)
   GtkListStore *store;
   GtkTreeViewColumn *column;
   GtkCellRenderer *rend;
-  gint i;
+  int i;
   GtkWidget *box, *entry;
 
   /* create window */
@@ -116,8 +116,8 @@ key_test (void)
   return window;
 }
 
-gint
-main (gint argc, gchar **argv)
+int
+main (int argc, gchar **argv)
 {
   GtkWidget *dialog;
   

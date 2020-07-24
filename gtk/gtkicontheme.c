@@ -349,8 +349,8 @@ struct _GtkIconThemeClass
 
 typedef struct {
   gchar **icon_names;
-  gint size;
-  gint scale;
+  int size;
+  int scale;
   GtkIconLookupFlags flags;
 } IconKey;
 
@@ -389,8 +389,8 @@ struct _GtkIconPaintable
 
   /* Parameters influencing the scaled icon
    */
-  gint desired_size;
-  gint desired_scale;
+  int desired_size;
+  int desired_scale;
   guint is_svg          : 1;
   guint is_resource     : 1;
   guint is_symbolic     : 1;
@@ -427,11 +427,11 @@ typedef struct
 typedef struct
 {
   IconThemeDirType type;
-  gint size;
-  gint min_size;
-  gint max_size;
-  gint threshold;
-  gint scale;
+  int size;
+  int min_size;
+  int max_size;
+  int threshold;
+  int scale;
 
   GArray *icon_files;
   GHashTable *icon_hash; /* name (interned) -> file index */
@@ -467,8 +467,8 @@ static void              theme_dir_destroy                (IconThemeDir     *dir
 static void              theme_destroy                    (IconTheme        *theme);
 static GtkIconPaintable *theme_lookup_icon                (IconTheme        *theme,
                                                            const gchar      *icon_name,
-                                                           gint              size,
-                                                           gint              scale,
+                                                           int               size,
+                                                           int               scale,
                                                            gboolean          allow_svg);
 static gboolean          theme_has_icon                   (IconTheme        *theme,
                                                            const gchar      *icon_name);
@@ -1215,7 +1215,7 @@ pixbuf_supports_svg (void)
 {
   GSList *formats;
   GSList *tmp_list;
-  static gint found_svg = -1;
+  static int found_svg = -1;
 
   if (found_svg != -1)
     return found_svg;
@@ -1745,7 +1745,7 @@ static void
 insert_theme (GtkIconTheme *self,
               const gchar  *theme_name)
 {
-  gint i;
+  int i;
   GList *l;
   gchar **dirs;
   gchar **scaled_dirs;
@@ -1963,7 +1963,7 @@ static void
 load_themes (GtkIconTheme *self)
 {
   GDir *gdir;
-  gint base;
+  int base;
   gchar *dir;
   const gchar *file;
   GTimeVal tv;
@@ -2014,7 +2014,7 @@ load_themes (GtkIconTheme *self)
   for (j = 0; self->resource_path[j]; j++)
     {
       gchar **children;
-      gint i;
+      int i;
 
       dir = self->resource_path[j];
       children = g_resources_enumerate_children (dir, 0, NULL);
@@ -2142,8 +2142,8 @@ icon_uri_is_symbolic (const gchar *icon_name,
 static GtkIconPaintable *
 real_choose_icon (GtkIconTheme      *self,
                   const gchar       *icon_names[],
-                  gint               size,
-                  gint               scale,
+                  int                size,
+                  int                scale,
                   GtkIconLookupFlags flags,
                   gboolean           non_blocking)
 {
@@ -2152,7 +2152,7 @@ real_choose_icon (GtkIconTheme      *self,
   UnthemedIcon *unthemed_icon = NULL;
   const gchar *icon_name = NULL;
   IconTheme *theme = NULL;
-  gint i;
+  int i;
   IconKey key;
 
   if (!ensure_valid_themes (self, non_blocking))
@@ -2296,8 +2296,8 @@ icon_name_list_add_icon (GtkStrvBuilder *icons,
 static GtkIconPaintable *
 choose_icon (GtkIconTheme      *self,
              const gchar       *icon_names[],
-             gint               size,
-             gint               scale,
+             int                size,
+             int                scale,
              GtkTextDirection   direction,
              GtkIconLookupFlags flags,
              gboolean           non_blocking)
@@ -2459,8 +2459,8 @@ GtkIconPaintable *
 gtk_icon_theme_lookup_icon (GtkIconTheme       *self,
                             const char         *icon_name,
                             const char         *fallbacks[],
-                            gint                size,
-                            gint                scale,
+                            int                 size,
+                            int                 scale,
                             GtkTextDirection    direction,
                             GtkIconLookupFlags  flags)
 {
@@ -2609,7 +2609,7 @@ add_size (gpointer key,
           gpointer value,
           gpointer user_data)
 {
-  gint **res_p = user_data;
+  int **res_p = user_data;
 
   **res_p = GPOINTER_TO_INT (key);
 
@@ -2631,14 +2631,14 @@ add_size (gpointer key,
  * available. The array should be freed with g_free() when it is no
  * longer needed.
  */
-gint *
+int *
 gtk_icon_theme_get_icon_sizes (GtkIconTheme *self,
                                const gchar  *icon_name)
 {
   GList *l;
   int i;
   GHashTable *sizes;
-  gint *result, *r;
+  int *result, *r;
 
   g_return_val_if_fail (GTK_IS_ICON_THEME (self), NULL);
 
@@ -2670,7 +2670,7 @@ gtk_icon_theme_get_icon_sizes (GtkIconTheme *self,
         }
     }
 
-  r = result = g_new0 (gint, g_hash_table_size (sizes) + 1);
+  r = result = g_new0 (int, g_hash_table_size (sizes) + 1);
 
   g_hash_table_foreach (sizes, add_size, &r);
   g_hash_table_destroy (sizes);
@@ -2747,7 +2747,7 @@ gtk_icon_theme_get_icon_names (GtkIconTheme *self)
 static gboolean
 rescan_themes (GtkIconTheme *self)
 {
-  gint stat_res;
+  int stat_res;
   GStatBuf stat_buf;
   GTimeVal tv;
   guint i;
@@ -2840,11 +2840,11 @@ theme_dir_destroy (IconThemeDir *dir)
 
 static int
 theme_dir_size_difference (IconThemeDirSize *dir_size,
-                           gint              size,
-                           gint              scale)
+                           int               size,
+                           int               scale)
 {
-  gint scaled_size, scaled_dir_size;
-  gint min, max;
+  int scaled_size, scaled_dir_size;
+  int min, max;
 
   scaled_size = size * scale;
   scaled_dir_size = dir_size->size * dir_size->scale;
@@ -2942,13 +2942,13 @@ best_suffix (IconCacheFlag suffix,
 
 /* returns TRUE if dir_a is a better match */
 static gboolean
-compare_dir_size_matches (IconThemeDirSize *dir_a, gint difference_a,
-                          IconThemeDirSize *dir_b, gint difference_b,
-                          gint requested_size,
-                          gint requested_scale)
+compare_dir_size_matches (IconThemeDirSize *dir_a, int difference_a,
+                          IconThemeDirSize *dir_b, int difference_b,
+                          int requested_size,
+                          int requested_scale)
 {
-  gint diff_a;
-  gint diff_b;
+  int diff_a;
+  int diff_b;
 
   if (difference_a == 0)
     {
@@ -3008,13 +3008,13 @@ compare_dir_size_matches (IconThemeDirSize *dir_a, gint difference_a,
 static GtkIconPaintable *
 theme_lookup_icon (IconTheme   *theme,
                    const gchar *icon_name, /* interned */
-                   gint         size,
-                   gint         scale,
+                   int          size,
+                   int          scale,
                    gboolean     allow_svg)
 {
   IconThemeDirSize *min_dir_size;
   IconThemeFile *min_file;
-  gint min_difference;
+  int min_difference;
   IconCacheFlag min_suffix;
   int i;
 
@@ -3033,7 +3033,7 @@ theme_lookup_icon (IconTheme   *theme,
       IconThemeDirSize *dir_size = &g_array_index (theme->dir_sizes, IconThemeDirSize, i);
       IconThemeFile *file;
       guint best_suffix;
-      gint difference;
+      int difference;
       gpointer file_index;
 
       if (!g_hash_table_lookup_extended (dir_size->icon_hash, icon_name, NULL, &file_index))
@@ -3192,11 +3192,11 @@ theme_dir_size_equal (IconThemeDirSize *a,
 static guint32
 theme_ensure_dir_size (IconTheme *theme,
                        IconThemeDirType type,
-                       gint size,
-                       gint min_size,
-                       gint max_size,
-                       gint threshold,
-                       gint scale)
+                       int size,
+                       int min_size,
+                       int max_size,
+                       int threshold,
+                       int scale)
 {
   guint32 index;
   IconThemeDirSize new = { 0 };
@@ -3297,14 +3297,14 @@ theme_subdir_load (GtkIconTheme *self,
 {
   gchar *type_string;
   IconThemeDirType type;
-  gint size;
-  gint min_size;
-  gint max_size;
-  gint threshold;
+  int size;
+  int min_size;
+  int max_size;
+  int threshold;
   GError *error = NULL;
   guint32 dir_size_index;
   IconThemeDirSize *dir_size;
-  gint scale;
+  int scale;
   guint i;
 
   size = g_key_file_get_integer (theme_file, subdir, "Size", &error);
@@ -3717,7 +3717,7 @@ icon_ensure_texture__locked (GtkIconPaintable *icon,
 {
   GdkPixbuf *source_pixbuf;
   gint64 before;
-  gint pixel_size;
+  int pixel_size;
   GError *load_error = NULL;
 
   icon_cache_mark_used_if_cached (icon);
@@ -4018,8 +4018,8 @@ icon_paintable_init (GdkPaintableInterface *iface)
  */
 GtkIconPaintable *
 gtk_icon_paintable_new_for_file (GFile *file,
-                                 gint   size,
-                                 gint   scale)
+                                 int    size,
+                                 int    scale)
 {
   GtkIconPaintable *icon;
 
@@ -4052,7 +4052,7 @@ gtk_icon_paintable_new_for_pixbuf (GtkIconTheme *icon_theme,
                                    int           scale)
 {
   GtkIconPaintable *icon;
-  gint width, height;
+  int width, height;
 
   if (size <= 0)
     {
@@ -4086,8 +4086,8 @@ gtk_icon_paintable_new_for_pixbuf (GtkIconTheme *icon_theme,
 GtkIconPaintable *
 gtk_icon_theme_lookup_by_gicon (GtkIconTheme       *self,
                                 GIcon              *gicon,
-                                gint                size,
-                                gint                scale,
+                                int                 size,
+                                int                 scale,
                                 GtkTextDirection    direction,
                                 GtkIconLookupFlags  flags)
 {

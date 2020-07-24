@@ -442,7 +442,7 @@ gtk_file_system_model_get_flags (GtkTreeModel *tree_model)
   return GTK_TREE_MODEL_LIST_ONLY;
 }
 
-static gint
+static int
 gtk_file_system_model_get_n_columns (GtkTreeModel *tree_model)
 {
   GtkFileSystemModel *model = GTK_FILE_SYSTEM_MODEL (tree_model);
@@ -452,7 +452,7 @@ gtk_file_system_model_get_n_columns (GtkTreeModel *tree_model)
 
 static GType
 gtk_file_system_model_get_column_type (GtkTreeModel *tree_model,
-				       gint          i)
+				       int           i)
 {
   GtkFileSystemModel *model = GTK_FILE_SYSTEM_MODEL (tree_model);
   
@@ -473,7 +473,7 @@ static gboolean
 gtk_file_system_model_iter_nth_child (GtkTreeModel *tree_model,
 				      GtkTreeIter  *iter,
 				      GtkTreeIter  *parent,
-				      gint          n)
+				      int           n)
 {
   GtkFileSystemModel *model = GTK_FILE_SYSTEM_MODEL (tree_model);
   char *node;
@@ -554,7 +554,7 @@ gtk_file_system_model_get_path (GtkTreeModel *tree_model,
 static void
 gtk_file_system_model_get_value (GtkTreeModel *tree_model,
 				 GtkTreeIter  *iter,
-				 gint          column,
+				 int           column,
 				 GValue       *value)
 {
   GtkFileSystemModel *model = GTK_FILE_SYSTEM_MODEL (tree_model);
@@ -611,7 +611,7 @@ gtk_file_system_model_iter_has_child (GtkTreeModel *tree_model,
   return FALSE;
 }
 
-static gint
+static int
 gtk_file_system_model_iter_n_children (GtkTreeModel *tree_model,
 				       GtkTreeIter  *iter)
 {
@@ -787,7 +787,7 @@ gtk_file_system_model_sort_node (GtkFileSystemModel *model, guint node)
 
 static gboolean
 gtk_file_system_model_get_sort_column_id (GtkTreeSortable  *sortable,
-                                          gint             *sort_column_id,
+                                          int              *sort_column_id,
                                           GtkSortType      *order)
 {
   GtkFileSystemModel *model = GTK_FILE_SYSTEM_MODEL (sortable);
@@ -806,7 +806,7 @@ gtk_file_system_model_get_sort_column_id (GtkTreeSortable  *sortable,
 
 static void
 gtk_file_system_model_set_sort_column_id (GtkTreeSortable  *sortable,
-                                          gint              sort_column_id,
+                                          int               sort_column_id,
                                           GtkSortType       order)
 {
   GtkFileSystemModel *model = GTK_FILE_SYSTEM_MODEL (sortable);
@@ -847,7 +847,7 @@ gtk_file_system_model_set_sort_column_id (GtkTreeSortable  *sortable,
 
 static void
 gtk_file_system_model_set_sort_func (GtkTreeSortable        *sortable,
-                                     gint                    sort_column_id,
+                                     int                     sort_column_id,
                                      GtkTreeIterCompareFunc  func,
                                      gpointer                data,
                                      GDestroyNotify          destroy)
@@ -1265,7 +1265,7 @@ gtk_file_system_model_got_enumerator (GObject *dir, GAsyncResult *res, gpointer 
 
 static void
 gtk_file_system_model_set_n_columns (GtkFileSystemModel *model,
-                                     gint                n_columns,
+                                     int                 n_columns,
                                      va_list             args)
 {
   guint i;

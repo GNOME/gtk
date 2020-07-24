@@ -275,7 +275,7 @@ gtk_accelerator_parse_with_keycode (const gchar     *accelerator,
 {
   guint keyval;
   GdkModifierType mods;
-  gint len;
+  int len;
   gboolean error;
 
   if (accelerator_key)
@@ -377,7 +377,7 @@ gtk_accelerator_parse_with_keycode (const gchar     *accelerator,
             {
                char keystring[5];
                gchar *endptr;
-               gint tmp_keycode;
+               int tmp_keycode;
 
                memcpy (keystring, accelerator, 4);
                keystring [4] = '\000';
@@ -424,7 +424,7 @@ gtk_accelerator_parse_with_keycode (const gchar     *accelerator,
           if (keyval && accelerator_codes != NULL)
             {
               GdkKeymapKey *keys;
-              gint n_keys, i, j;
+              int n_keys, i, j;
 
               if (!gdk_display_map_keyval (display, keyval, &keys, &n_keys))
                 {

@@ -39,28 +39,28 @@ G_BEGIN_DECLS
 #define GTK_SIZE_REQUEST_CACHED_SIZES   (5)
 
 typedef struct {
-  gint minimum_size;
-  gint natural_size;
+  int minimum_size;
+  int natural_size;
 } CachedSizeX;
 
 typedef struct {
-  gint minimum_size;
-  gint natural_size;
-  gint minimum_baseline;
-  gint natural_baseline;
+  int minimum_size;
+  int natural_size;
+  int minimum_baseline;
+  int natural_baseline;
 } CachedSizeY;
 
 typedef struct
 {
-  gint       lower_for_size; /* The minimum for_size with the same result */
-  gint       upper_for_size; /* The maximum for_size with the same result */
+  int        lower_for_size; /* The minimum for_size with the same result */
+  int        upper_for_size; /* The maximum for_size with the same result */
   CachedSizeX cached_size;
 } SizeRequestX;
 
 typedef struct
 {
-  gint       lower_for_size; /* The minimum for_size with the same result */
-  gint       upper_for_size; /* The maximum for_size with the same result */
+  int        lower_for_size; /* The minimum for_size with the same result */
+  int        upper_for_size; /* The maximum for_size with the same result */
   CachedSizeY cached_size;
 } SizeRequestY;
 

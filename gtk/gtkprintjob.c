@@ -75,9 +75,9 @@ struct _GtkPrintJob
 
   GtkPrintPages print_pages;
   GtkPageRange *page_ranges;
-  gint num_page_ranges;
+  int num_page_ranges;
   GtkPageSet page_set;
-  gint num_copies;
+  int num_copies;
   gdouble scale;
   guint number_up;
   GtkNumberUpLayout number_up_layout;
@@ -724,7 +724,7 @@ gtk_print_job_set_pages (GtkPrintJob   *job,
  */
 GtkPageRange *
 gtk_print_job_get_page_ranges (GtkPrintJob *job,
-                               gint        *n_ranges)
+                               int         *n_ranges)
 {
   *n_ranges = job->num_page_ranges;
   return job->page_ranges;
@@ -742,7 +742,7 @@ gtk_print_job_get_page_ranges (GtkPrintJob *job,
 void
 gtk_print_job_set_page_ranges (GtkPrintJob  *job,
                                GtkPageRange *ranges,
-                               gint          n_ranges)
+                               int           n_ranges)
 {
   g_free (job->page_ranges);
   job->page_ranges = ranges;
@@ -785,7 +785,7 @@ gtk_print_job_set_page_set (GtkPrintJob *job,
  *
  * Returns: the number of copies
  */
-gint
+int
 gtk_print_job_get_num_copies (GtkPrintJob *job)
 {
   return job->num_copies;
@@ -800,7 +800,7 @@ gtk_print_job_get_num_copies (GtkPrintJob *job)
  */
 void
 gtk_print_job_set_num_copies (GtkPrintJob *job,
-                              gint         num_copies)
+                              int          num_copies)
 {
   job->num_copies = num_copies;
 }

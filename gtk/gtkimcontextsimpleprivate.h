@@ -27,11 +27,11 @@ G_BEGIN_DECLS
 extern const GtkComposeTableCompact gtk_compose_table_compact;
 
 gboolean gtk_check_algorithmically (const guint16                *compose_buffer,
-                                    gint                          n_compose,
+                                    int                           n_compose,
                                     gunichar                     *output);
 gboolean gtk_check_compact_table   (const GtkComposeTableCompact *table,
                                     guint16                      *compose_buffer,
-                                    gint                          n_compose,
+                                    int                           n_compose,
                                     gboolean                     *compose_finish,
                                     gboolean                     *compose_match,
                                     gunichar                     *output_char);

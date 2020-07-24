@@ -123,7 +123,7 @@ set_search_by (GSimpleAction *action,
 
 static void
 icon_press_cb (GtkEntry       *entry,
-               gint            position,
+               int             position,
                gpointer        data)
 {
   if (position == GTK_ENTRY_ICON_PRIMARY)

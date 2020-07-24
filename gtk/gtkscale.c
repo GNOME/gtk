@@ -147,7 +147,7 @@ struct _GtkScalePrivate
   GtkWidget    *top_marks_widget;
   GtkWidget    *bottom_marks_widget;
 
-  gint          digits;
+  int           digits;
 
   GtkScaleFormatValueFunc format_value_func;
   gpointer format_value_func_user_data;
@@ -199,8 +199,8 @@ static void     gtk_scale_get_range_border        (GtkRange       *range,
                                                    GtkBorder      *border);
 static void     gtk_scale_finalize                (GObject        *object);
 static void     gtk_scale_real_get_layout_offsets (GtkScale       *scale,
-                                                   gint           *x,
-                                                   gint           *y);
+                                                   int            *x,
+                                                   int            *y);
 static void     gtk_scale_buildable_interface_init   (GtkBuildableIface  *iface);
 static gboolean gtk_scale_buildable_custom_tag_start (GtkBuildable       *buildable,
                                                       GtkBuilder         *builder,
@@ -222,11 +222,11 @@ G_DEFINE_TYPE_WITH_CODE (GtkScale, gtk_scale, GTK_TYPE_RANGE,
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
                                                 gtk_scale_buildable_interface_init))
 
-static gint
+static int
 compare_marks (gconstpointer a, gconstpointer b, gpointer data)
 {
   gboolean inverted = GPOINTER_TO_INT (data);
-  gint val;
+  int val;
   const GtkScaleMark *ma, *mb;
 
   val = inverted ? -1 : 1;
@@ -287,7 +287,7 @@ gtk_scale_notify (GObject    *object,
     {
       GtkScaleMark *mark;
       GSList *m;
-      gint i, n;
+      int i, n;
       gdouble *values;
 
       priv->marks = g_slist_sort_with_data (priv->marks,
@@ -950,7 +950,7 @@ gtk_scale_new_with_range (GtkOrientation orientation,
                           gdouble        step)
 {
   GtkAdjustment *adj;
-  gint digits;
+  int digits;
 
   g_return_val_if_fail (min < max, NULL);
   g_return_val_if_fail (step != 0.0, NULL);
@@ -963,7 +963,7 @@ gtk_scale_new_with_range (GtkOrientation orientation,
     }
   else
     {
-      digits = abs ((gint) floor (log10 (fabs (step))));
+      digits = abs ((int) floor (log10 (fabs (step))));
       if (digits > 5)
         digits = 5;
     }
@@ -994,7 +994,7 @@ gtk_scale_new_with_range (GtkOrientation orientation,
  */
 void
 gtk_scale_set_digits (GtkScale *scale,
-		      gint      digits)
+		      int       digits)
 {
   GtkScalePrivate *priv = gtk_scale_get_instance_private (scale);
   GtkRange *range;
@@ -1025,7 +1025,7 @@ gtk_scale_set_digits (GtkScale *scale,
  *
  * Returns: the number of decimal places that are displayed
  */
-gint
+int
 gtk_scale_get_digits (GtkScale *scale)
 {
   GtkScalePrivate *priv = gtk_scale_get_instance_private (scale);
@@ -1314,11 +1314,11 @@ gtk_scale_get_range_border (GtkRange  *range,
 static void
 gtk_scale_measure_mark (GtkGizmo       *gizmo,
                         GtkOrientation  orientation,
-                        gint            for_size,
-                        gint           *minimum,
-                        gint           *natural,
-                        gint           *minimum_baseline,
-                        gint           *natural_baseline)
+                        int             for_size,
+                        int            *minimum,
+                        int            *natural,
+                        int            *minimum_baseline,
+                        int            *natural_baseline)
 {
   GtkScaleMark *mark = g_object_get_data (G_OBJECT (gizmo), "mark");
 
@@ -1343,11 +1343,11 @@ gtk_scale_measure_mark (GtkGizmo       *gizmo,
 static void
 gtk_scale_measure_marks (GtkGizmo       *gizmo,
                          GtkOrientation  orientation,
-                         gint            for_size,
-                         gint           *minimum,
-                         gint           *natural,
-                         gint           *minimum_baseline,
-                         gint           *natural_baseline)
+                         int             for_size,
+                         int            *minimum,
+                         int            *natural,
+                         int            *minimum_baseline,
+                         int            *natural_baseline)
 {
   GtkWidget *widget = GTK_WIDGET (gizmo);
   GtkScale *scale = GTK_SCALE (gtk_widget_get_parent (widget));;
@@ -1464,8 +1464,8 @@ gtk_scale_measure (GtkWidget      *widget,
 
 static void
 gtk_scale_real_get_layout_offsets (GtkScale *scale,
-                                   gint     *x,
-                                   gint     *y)
+                                   int      *x,
+                                   int      *y)
 {
   GtkScalePrivate *priv = gtk_scale_get_instance_private (scale);
   graphene_rect_t value_bounds;
@@ -1486,7 +1486,7 @@ gtk_scale_real_get_layout_offsets (GtkScale *scale,
 
 static gchar *
 weed_out_neg_zero (gchar *str,
-                   gint   digits)
+                   int    digits)
 {
   if (str[0] == '-')
     {
@@ -1571,11 +1571,11 @@ gtk_scale_get_layout (GtkScale *scale)
  */
 void 
 gtk_scale_get_layout_offsets (GtkScale *scale,
-                              gint     *x,
-                              gint     *y)
+                              int      *x,
+                              int      *y)
 {
-  gint local_x = 0; 
-  gint local_y = 0;
+  int local_x = 0; 
+  int local_y = 0;
 
   g_return_if_fail (GTK_IS_SCALE (scale));
 
@@ -1663,7 +1663,7 @@ gtk_scale_add_mark (GtkScale        *scale,
   GtkScaleMark *mark;
   GSList *m;
   gdouble *values;
-  gint n, i;
+  int n, i;
   GtkWidget *marks_widget;
 
   g_return_if_fail (GTK_IS_SCALE (scale));

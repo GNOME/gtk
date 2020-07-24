@@ -27,7 +27,7 @@ value_changed (GtkWidget *button,
 
 static void
 response_cb (GtkDialog *dialog,
-             gint       arg1,
+             int        arg1,
              gpointer   user_data)
 {
   gtk_window_destroy (GTK_WINDOW (dialog));

@@ -50,7 +50,7 @@ static double
 gtk_css_animation_get_progress (GtkCssAnimation *animation)
 {
   gboolean reverse, odd_iteration;
-  gint cycle = gtk_progress_tracker_get_iteration_cycle (&animation->tracker);
+  int cycle = gtk_progress_tracker_get_iteration_cycle (&animation->tracker);
   odd_iteration = cycle % 2 > 0;
 
   switch (animation->direction)

@@ -861,9 +861,9 @@ GtkStateFlags gtk_style_context_get_state    (GtkStyleContext *context);
 
 GDK_AVAILABLE_IN_ALL
 void          gtk_style_context_set_scale    (GtkStyleContext *context,
-                                              gint             scale);
+                                              int              scale);
 GDK_AVAILABLE_IN_ALL
-gint          gtk_style_context_get_scale    (GtkStyleContext *context);
+int           gtk_style_context_get_scale    (GtkStyleContext *context);
 
 GDK_AVAILABLE_IN_ALL
 void     gtk_style_context_add_class    (GtkStyleContext *context,

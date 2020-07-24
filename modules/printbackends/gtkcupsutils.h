@@ -85,20 +85,20 @@ struct _GtkCupsRequest
   gchar *server;
   gchar *resource;
   GIOChannel *data_io;
-  gint attempts;
+  int attempts;
 
   GtkCupsResult *result;
 
-  gint state;
+  int state;
   GtkCupsPollState poll_state;
   guint64 bytes_received;
 
   gchar *password;
   gchar *username;
 
-  gint own_http : 1;
-  gint need_password : 1;
-  gint need_auth_info : 1;
+  int own_http : 1;
+  int need_password : 1;
+  int need_auth_info : 1;
   gchar **auth_info_required;
   gchar **auth_info;
   GtkCupsPasswordState password_state;
@@ -110,7 +110,7 @@ struct _GtkCupsConnectionTest
   http_addrlist_t       *addrlist;
   http_addrlist_t       *current_addr;
   http_addrlist_t       *last_wrong_addr;
-  gint                   socket;
+  int                    socket;
 };
 
 #define GTK_CUPS_REQUEST_START 0
@@ -142,14 +142,14 @@ enum
 
 GtkCupsRequest        * gtk_cups_request_new_with_username (http_t             *connection,
 							    GtkCupsRequestType  req_type,
-							    gint                operation_id,
+							    int                 operation_id,
 							    GIOChannel         *data_io,
 							    const char         *server,
 							    const char         *resource,
 							    const char         *username);
 GtkCupsRequest        * gtk_cups_request_new               (http_t             *connection,
 							    GtkCupsRequestType  req_type,
-							    gint                operation_id,
+							    int                 operation_id,
 							    GIOChannel         *data_io,
 							    const char         *server,
 							    const char         *resource);
@@ -179,8 +179,8 @@ void                    gtk_cups_request_encode_option     (GtkCupsRequest     *
 						            const gchar        *option,
 							    const gchar        *value);
 void                    gtk_cups_request_set_ipp_version   (GtkCupsRequest     *request,
-							    gint                major,
-							    gint                minor);
+							    int                 major,
+							    int                 minor);
 gboolean                gtk_cups_result_is_error           (GtkCupsResult      *result);
 ipp_t                 * gtk_cups_result_get_response       (GtkCupsResult      *result);
 GtkCupsErrorType        gtk_cups_result_get_error_type     (GtkCupsResult      *result);

@@ -90,7 +90,7 @@ main (int argc, char *argv[])
     {
       FcConfig *config;
       PangoFontMap *fontmap;
-      gint i;
+      int i;
 
       /* Create a custom font configuration by adding font files specified
        * on the commandline to the default config.

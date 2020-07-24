@@ -67,7 +67,7 @@ cell_data_func (GtkTreeViewColumn *col,
                 GtkTreeIter       *iter,
                 gpointer           data)
 {
-  gint num;
+  int num;
   GValue gvalue = { 0, };
   gchar *value;
 
@@ -82,12 +82,12 @@ cell_data_func (GtkTreeViewColumn *col,
 static void
 add_columns (GtkInspectorTreeData *sl)
 {
-  gint n_columns;
+  int n_columns;
   GtkCellRenderer *cell;
   GType type;
   gchar *title;
   GtkTreeViewColumn *col;
-  gint i;
+  int i;
 
   n_columns = gtk_tree_model_get_n_columns (sl->object);
   for (i = 0; i < n_columns; i++)

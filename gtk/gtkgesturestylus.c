@@ -223,7 +223,7 @@ gtk_gesture_stylus_get_axes (GtkGestureStylus  *gesture,
 {
   GdkEvent *event;
   GArray *array;
-  gint i = 0;
+  int i = 0;
 
   g_return_val_if_fail (GTK_IS_GESTURE_STYLUS (gesture), FALSE);
   g_return_val_if_fail (values != NULL, FALSE);

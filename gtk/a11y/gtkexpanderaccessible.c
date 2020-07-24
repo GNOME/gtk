@@ -57,7 +57,7 @@ gtk_expander_accessible_get_name (AtkObject *obj)
   return gtk_expander_accessible_get_full_text (GTK_EXPANDER (widget));
 }
 
-static gint
+static int
 gtk_expander_accessible_get_n_children (AtkObject *obj)
 {
   GtkWidget *widget;
@@ -74,7 +74,7 @@ gtk_expander_accessible_get_n_children (AtkObject *obj)
 
 static AtkObject *
 gtk_expander_accessible_ref_child (AtkObject *obj,
-                                   gint       i)
+                                   int        i)
 {
   AtkObject *accessible;
   GtkWidget *widget;
@@ -160,7 +160,7 @@ gtk_expander_accessible_init (GtkExpanderAccessible *self)
 
 static gboolean
 gtk_expander_accessible_do_action (AtkAction *action,
-                                   gint       i)
+                                   int        i)
 {
   GtkWidget *widget;
 
@@ -178,7 +178,7 @@ gtk_expander_accessible_do_action (AtkAction *action,
   return TRUE;
 }
 
-static gint
+static int
 gtk_expander_accessible_get_n_actions (AtkAction *action)
 {
   return 1;
@@ -186,7 +186,7 @@ gtk_expander_accessible_get_n_actions (AtkAction *action)
 
 static const gchar *
 gtk_expander_accessible_get_keybinding (AtkAction *action,
-                                        gint       i)
+                                        int        i)
 {
   gchar *return_value = NULL;
   GtkWidget *widget;
@@ -214,7 +214,7 @@ gtk_expander_accessible_get_keybinding (AtkAction *action,
 
 static const gchar *
 gtk_expander_accessible_action_get_name (AtkAction *action,
-                                         gint       i)
+                                         int        i)
 {
   if (i == 0)
     return "activate";
@@ -223,7 +223,7 @@ gtk_expander_accessible_action_get_name (AtkAction *action,
 
 static const gchar *
 gtk_expander_accessible_action_get_localized_name (AtkAction *action,
-                                                   gint       i)
+                                                   int        i)
 {
   if (i == 0)
     return C_("Action name", "Activate");
@@ -232,7 +232,7 @@ gtk_expander_accessible_action_get_localized_name (AtkAction *action,
 
 static const gchar *
 gtk_expander_accessible_action_get_description (AtkAction *action,
-                                                gint       i)
+                                                int        i)
 {
   if (i == 0)
     return C_("Action description", "Activates the expander");

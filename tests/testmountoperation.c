@@ -38,7 +38,7 @@ got_reply (GMountOperation       *op,
 
       if (ask_question)
         {
-          gint choice = g_mount_operation_get_choice (op);
+          int choice = g_mount_operation_get_choice (op);
           g_print ("User chose: %d\n", choice);
         }
       else

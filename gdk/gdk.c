@@ -403,7 +403,7 @@ gdk_unichar_direction (gunichar ch)
 
 PangoDirection
 gdk_find_base_dir (const gchar *text,
-                   gint         length)
+                   int          length)
 {
   PangoDirection dir = PANGO_DIRECTION_NEUTRAL;
   const gchar *p;

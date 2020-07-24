@@ -63,7 +63,7 @@ print_selected (GtkFileChooser *chooser)
 
 static void
 response_cb (GtkDialog *dialog,
-	     gint       response_id,
+	     int        response_id,
              gpointer   data)
 {
   gboolean *done = data;

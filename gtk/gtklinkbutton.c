@@ -121,8 +121,8 @@ static void     gtk_link_button_popup_menu   (GtkWidget        *widget,
                                               const char       *action_name,
                                               GVariant         *parameters);
 static gboolean gtk_link_button_query_tooltip_cb (GtkWidget    *widget,
-                                                  gint          x,
-                                                  gint          y,
+                                                  int           x,
+                                                  int           y,
                                                   gboolean      keyboard_tip,
                                                   GtkTooltip   *tooltip,
                                                   gpointer      data);
@@ -583,8 +583,8 @@ gtk_link_button_new_with_label (const gchar *uri,
 
 static gboolean 
 gtk_link_button_query_tooltip_cb (GtkWidget    *widget,
-                                  gint          x,
-                                  gint          y,
+                                  int           x,
+                                  int           y,
                                   gboolean      keyboard_tip,
                                   GtkTooltip   *tooltip,
                                   gpointer      data)

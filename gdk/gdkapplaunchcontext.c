@@ -205,7 +205,7 @@ gdk_app_launch_context_get_display (GdkAppLaunchContext *context)
  */
 void
 gdk_app_launch_context_set_desktop (GdkAppLaunchContext *context,
-                                    gint                 desktop)
+                                    int                  desktop)
 {
   g_return_if_fail (GDK_IS_APP_LAUNCH_CONTEXT (context));
 

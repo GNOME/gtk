@@ -47,8 +47,8 @@ gtk_picture_accessible_get_image_description (AtkImage *image)
 
 static void
 gtk_picture_accessible_get_image_position (AtkImage     *image,
-                                           gint         *x,
-                                           gint         *y,
+                                           int          *x,
+                                           int          *y,
                                            AtkCoordType  coord_type)
 {
   atk_component_get_extents (ATK_COMPONENT (image), x, y, NULL, NULL,
@@ -57,8 +57,8 @@ gtk_picture_accessible_get_image_position (AtkImage     *image,
 
 static void
 gtk_picture_accessible_get_image_size (AtkImage *image,
-                                       gint     *width,
-                                       gint     *height)
+                                       int      *width,
+                                       int      *height)
 {
   GtkWidget* widget;
   GdkPaintable *paintable;

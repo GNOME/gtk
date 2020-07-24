@@ -1237,7 +1237,7 @@ _gtk_css_find_theme_dir (const gchar *dir,
   gchar *file;
   gchar *base;
   gchar *subsubdir;
-  gint i;
+  int i;
   gchar *path;
 
   if (variant)

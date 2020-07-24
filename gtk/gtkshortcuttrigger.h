@@ -61,7 +61,7 @@ GDK_AVAILABLE_IN_ALL
 gboolean                gtk_shortcut_trigger_equal              (gconstpointer       trigger1,
                                                                  gconstpointer       trigger2);
 GDK_AVAILABLE_IN_ALL
-gint                    gtk_shortcut_trigger_compare            (gconstpointer       trigger1,
+int                     gtk_shortcut_trigger_compare            (gconstpointer       trigger1,
                                                                  gconstpointer       trigger2);
 
 GDK_AVAILABLE_IN_ALL

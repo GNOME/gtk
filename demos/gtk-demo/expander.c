@@ -13,7 +13,7 @@
 static GtkWidget *window = NULL;
 
 static void
-response_cb (GtkDialog *dialog, gint response_id)
+response_cb (GtkDialog *dialog, int response_id)
 {
   gtk_window_destroy (GTK_WINDOW (window));
   window = NULL;

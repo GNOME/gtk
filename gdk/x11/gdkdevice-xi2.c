@@ -47,7 +47,7 @@ struct _GdkX11DeviceXI2
 {
   GdkDevice parent_instance;
 
-  gint device_id;
+  int device_id;
   GArray *scroll_valuators;
   gdouble *last_axes;
 };
@@ -199,7 +199,7 @@ gdk_x11_device_xi2_get_state (GdkDevice       *device,
     {
       GdkDisplay *display;
       XIDeviceInfo *info;
-      gint i, j, ndevices;
+      int i, j, ndevices;
       Screen *xscreen;
 
       display = gdk_device_get_display (device);
@@ -228,7 +228,7 @@ gdk_x11_device_xi2_get_state (GdkDevice       *device,
             case GDK_AXIS_Y:
             case GDK_AXIS_IGNORE:
                 {
-                  gint root_x, root_y;
+                  int root_x, root_y;
 
                   /* FIXME: Maybe root coords caching should happen here */
                   gdk_surface_get_origin (surface, &root_x, &root_y);
@@ -387,7 +387,7 @@ gdk_x11_device_xi2_grab (GdkDevice    *device,
   XIEventMask mask;
   Window xwindow;
   Cursor xcursor;
-  gint status;
+  int status;
 
   display = gdk_device_get_display (device);
   device_manager_xi2 = GDK_X11_DEVICE_MANAGER_XI2 (GDK_X11_DISPLAY (display)->device_manager);
@@ -498,7 +498,7 @@ gdk_x11_device_xi2_surface_at_position (GdkDevice       *device,
     }
   else
     {
-      gint width, height;
+      int width, height;
       GList *toplevels, *list;
       Window pointer_window;
 
@@ -628,10 +628,10 @@ gdk_x11_device_xi2_surface_at_position (GdkDevice       *device,
 guchar *
 _gdk_x11_device_xi2_translate_event_mask (GdkX11DeviceManagerXI2 *device_manager_xi2,
                                           GdkEventMask            event_mask,
-                                          gint                   *len)
+                                          int                    *len)
 {
   guchar *mask;
-  gint minor;
+  int minor;
 
   g_object_get (device_manager_xi2, "minor", &minor, NULL);
 
@@ -707,7 +707,7 @@ _gdk_x11_device_xi2_translate_state (XIModifierState *mods_state,
 
   if (buttons_state)
     {
-      gint len, i;
+      int len, i;
 
       /* We're only interested in the first 3 buttons */
       len = MIN (3, buttons_state->mask_len * 8);
@@ -827,7 +827,7 @@ _gdk_device_xi2_unset_scroll_valuators (GdkX11DeviceXI2 *device)
                           device->scroll_valuators->len);
 }
 
-gint
+int
 _gdk_x11_device_xi2_get_id (GdkX11DeviceXI2 *device)
 {
   g_return_val_if_fail (GDK_IS_X11_DEVICE_XI2 (device), 0);
@@ -837,7 +837,7 @@ _gdk_x11_device_xi2_get_id (GdkX11DeviceXI2 *device)
 
 gdouble
 gdk_x11_device_xi2_get_last_axis_value (GdkX11DeviceXI2 *device,
-                                        gint             n_axis)
+                                        int              n_axis)
 {
   if (n_axis >= gdk_device_get_n_axes (GDK_DEVICE (device)))
     return 0;
@@ -851,7 +851,7 @@ gdk_x11_device_xi2_get_last_axis_value (GdkX11DeviceXI2 *device,
 void
 gdk_x11_device_xi2_store_axes (GdkX11DeviceXI2 *device,
                                gdouble         *axes,
-                               gint             n_axes)
+                               int              n_axes)
 {
   g_free (device->last_axes);
 

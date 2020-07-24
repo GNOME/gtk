@@ -83,7 +83,7 @@ check_string (CacheInfo *info,
 
   if (info->flags & CHECK_STRINGS)
     {
-      gint i;
+      int i;
       gchar c;
 
       /* assume no string is longer than 1k */
@@ -109,7 +109,7 @@ check_string_utf8 (CacheInfo *info,
 
   if (info->flags & CHECK_STRINGS)
     {
-      gint i;
+      int i;
       gchar c;
 
       /* assume no string is longer than 1k */
@@ -132,7 +132,7 @@ check_directory_list (CacheInfo *info,
                       guint32    offset)
 {
   guint32 directory_offset;
-  gint i;
+  int i;
 
   check ("offset, directory list", get_uint32 (info, offset, &info->n_directories));
 
@@ -199,7 +199,7 @@ check_display_name_list (CacheInfo *info,
                          guint32    offset)
 {
   guint32 n_display_names, ofs;
-  gint i;
+  int i;
 
   check ("offset, display name list",
          get_uint32 (info, offset, &n_display_names));
@@ -306,7 +306,7 @@ check_image_list (CacheInfo *info,
                   guint32    offset)
 {
   guint32 n_images;
-  gint i;
+  int i;
 
   check ("offset, image list", get_uint32 (info, offset, &n_images));
 
@@ -350,7 +350,7 @@ check_hash (CacheInfo *info,
             guint32    offset)
 {
   guint32 n_buckets, icon_offset;
-  gint i;
+  int i;
 
   check ("offset, hash size", get_uint32 (info, offset, &n_buckets));
 

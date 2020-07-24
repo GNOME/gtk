@@ -52,10 +52,10 @@ gtk_cell_accessible_parent_get_type (void)
 void
 gtk_cell_accessible_parent_get_cell_extents (GtkCellAccessibleParent *parent,
                                              GtkCellAccessible       *cell,
-                                             gint                    *x,
-                                             gint                    *y,
-                                             gint                    *width,
-                                             gint                    *height,
+                                             int                     *x,
+                                             int                     *y,
+                                             int                     *width,
+                                             int                     *height,
                                              AtkCoordType             coord_type)
 {
   GtkCellAccessibleParentIface *iface;
@@ -207,8 +207,8 @@ gtk_cell_accessible_parent_update_relationset (GtkCellAccessibleParent *parent,
 void
 gtk_cell_accessible_parent_get_cell_position (GtkCellAccessibleParent *parent,
                                               GtkCellAccessible       *cell,
-                                              gint                    *row,
-                                              gint                    *column)
+                                              int                     *row,
+                                              int                     *column)
 {
   GtkCellAccessibleParentIface *iface;
 

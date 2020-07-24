@@ -84,7 +84,7 @@ load_resources_recurse (const char *path,
                         gsize      *size_out)
 {
   gchar **names;
-  gint i;
+  int i;
   GListStore *result;
 
   result = g_list_store_new (RESOURCE_TYPE_HOLDER);
@@ -92,10 +92,10 @@ load_resources_recurse (const char *path,
   names = g_resources_enumerate_children (path, 0, NULL);
   for (i = 0; names[i]; i++)
     {
-      gint len;
+      int len;
       gchar *p;
       gboolean has_slash;
-      gint count;
+      int count;
       gsize size;
       GListModel *children;
       ResourceHolder *holder;
@@ -306,7 +306,7 @@ close_details (GtkWidget                *button,
 static GListModel *
 load_resources (void)
 {
-  gint count = 0;
+  int count = 0;
   gsize size = 0;
 
   return load_resources_recurse ("/", &count, &size);

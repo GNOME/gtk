@@ -350,7 +350,7 @@ filechooser_win32_thread_done (gpointer _data)
   for (l = self->choices; l; l = l->next)
     {
       GtkFileChooserNativeChoice *choice = (GtkFileChooserNativeChoice*) l->data;
-      gint sel = g_array_index (data->choices_selections, gint,
+      int sel = g_array_index (data->choices_selections, int,
                                 g_slist_position (self->choices, l));
 
       if (sel >= 0)
@@ -755,7 +755,7 @@ filechooser_win32_thread (gpointer _data)
 
       if (data->choices_selections)
         g_array_free (data->choices_selections, TRUE);
-      data->choices_selections = g_array_sized_new (FALSE, FALSE, sizeof(gint),
+      data->choices_selections = g_array_sized_new (FALSE, FALSE, sizeof(int),
                                                     g_slist_length (data->self->choices));
 
       hr = IFileDialog_QueryInterface (pfd, &IID_IFileDialogCustomize, (LPVOID *) &pfdc);
@@ -767,7 +767,7 @@ filechooser_win32_thread (gpointer _data)
             {
               GtkFileChooserNativeChoice *choice = (GtkFileChooserNativeChoice*) l->data;
               DWORD dialog_item_id = (DWORD) g_slist_position (data->self->choices, l);
-              gint val = -1;
+              int val = -1;
 
               if (choice->options)
                 {
@@ -777,7 +777,7 @@ filechooser_win32_thread (gpointer _data)
                                                                     dialog_item_id,
                                                                     &dialog_sub_item_id);
                   if (SUCCEEDED (hr))
-                    val = (gint) dialog_sub_item_id;
+                    val = (int) dialog_sub_item_id;
                 }
               else
                 {

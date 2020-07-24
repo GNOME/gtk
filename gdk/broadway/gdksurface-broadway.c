@@ -405,7 +405,7 @@ gdk_broadway_surface_hide (GdkSurface *surface)
   _gdk_surface_clear_update_area (surface);
 }
 
-static gint
+static int
 gdk_broadway_surface_get_scale_factor (GdkSurface *surface)
 {
   GdkBroadwayDisplay *broadway_display;
@@ -456,10 +456,10 @@ sync_child_root_pos (GdkSurface *parent)
 static void
 gdk_broadway_surface_move_resize_internal (GdkSurface *surface,
                                            gboolean    with_move,
-                                           gint        x,
-                                           gint        y,
-                                           gint        width,
-                                           gint        height)
+                                           int         x,
+                                           int         y,
+                                           int         width,
+                                           int         height)
 {
   GdkBroadwaySurface *impl = GDK_BROADWAY_SURFACE (surface);
   GdkBroadwayDisplay *broadway_display;
@@ -522,10 +522,10 @@ gdk_broadway_surface_move_resize_internal (GdkSurface *surface,
 
 void
 gdk_broadway_surface_move_resize (GdkSurface *surface,
-                                  gint        x,
-                                  gint        y,
-                                  gint        width,
-                                  gint        height)
+                                  int         x,
+                                  int         y,
+                                  int         width,
+                                  int         height)
 {
   gdk_broadway_surface_move_resize_internal (surface, TRUE,
                                              x, y,
@@ -534,8 +534,8 @@ gdk_broadway_surface_move_resize (GdkSurface *surface,
 
 static void
 gdk_broadway_surface_toplevel_resize (GdkSurface *surface,
-                                      gint        width,
-                                      gint        height)
+                                      int         width,
+                                      int         height)
 {
   gdk_broadway_surface_move_resize_internal (surface, FALSE,
                                              0, 0,
@@ -544,8 +544,8 @@ gdk_broadway_surface_toplevel_resize (GdkSurface *surface,
 
 static void
 gdk_broadway_surface_move (GdkSurface *surface,
-                           gint        x,
-                           gint        y)
+                           int         x,
+                           int         y)
 {
   gdk_broadway_surface_move_resize_internal (surface, TRUE, x, y, -1, -1);
 }
@@ -696,10 +696,10 @@ gdk_broadway_surface_set_transient_for (GdkSurface *surface,
 
 static void
 gdk_broadway_surface_get_geometry (GdkSurface *surface,
-                                   gint       *x,
-                                   gint       *y,
-                                   gint       *width,
-                                   gint       *height)
+                                   int        *x,
+                                   int        *y,
+                                   int        *width,
+                                   int        *height)
 {
   g_return_if_fail (GDK_IS_SURFACE (surface));
 
@@ -718,10 +718,10 @@ gdk_broadway_surface_get_geometry (GdkSurface *surface,
 
 static void
 gdk_broadway_surface_get_root_coords (GdkSurface *surface,
-                                      gint        x,
-                                      gint        y,
-                                      gint       *root_x,
-                                      gint       *root_y)
+                                      int         x,
+                                      int         y,
+                                      int        *root_x,
+                                      int        *root_y)
 {
   GdkBroadwaySurface *impl;
 
@@ -839,13 +839,13 @@ struct _MoveResizeData
   GdkSurface *moveresize_emulation_surface;
   gboolean is_resize;
   GdkSurfaceEdge resize_edge;
-  gint moveresize_button;
-  gint moveresize_x;
-  gint moveresize_y;
-  gint moveresize_orig_x;
-  gint moveresize_orig_y;
-  gint moveresize_orig_width;
-  gint moveresize_orig_height;
+  int moveresize_button;
+  int moveresize_x;
+  int moveresize_y;
+  int moveresize_orig_x;
+  int moveresize_orig_y;
+  int moveresize_orig_width;
+  int moveresize_orig_height;
   long moveresize_process_time;
   GdkSurfaceHints moveresize_geom_mask;
   GdkGeometry moveresize_geometry;
@@ -876,17 +876,17 @@ get_move_resize_data (GdkDisplay *display,
 
 static void
 update_pos (MoveResizeData *mv_resize,
-            gint            new_root_x,
-            gint            new_root_y)
+            int             new_root_x,
+            int             new_root_y)
 {
-  gint dx, dy;
+  int dx, dy;
 
   dx = new_root_x - mv_resize->moveresize_x;
   dy = new_root_y - mv_resize->moveresize_y;
 
   if (mv_resize->is_resize)
     {
-      gint x, y, w, h;
+      int x, y, w, h;
 
       x = mv_resize->moveresize_orig_x;
       y = mv_resize->moveresize_orig_y;
@@ -951,7 +951,7 @@ update_pos (MoveResizeData *mv_resize,
     }
   else
     {
-      gint x, y;
+      int x, y;
 
       x = mv_resize->moveresize_orig_x + dx;
       y = mv_resize->moveresize_orig_y + dy;
@@ -1129,7 +1129,7 @@ create_moveresize_surface (MoveResizeData *mv_resize,
 static void
 calculate_unmoving_origin (MoveResizeData *mv_resize)
 {
-  gint x, y, width, height;
+  int x, y, width, height;
 
   if (mv_resize->moveresize_geom_mask & GDK_HINT_WIN_GRAVITY &&
       mv_resize->moveresize_geometry.win_gravity == GDK_GRAVITY_STATIC)

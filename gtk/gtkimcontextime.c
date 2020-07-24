@@ -103,7 +103,7 @@ static void gtk_im_context_ime_reset               (GtkIMContext   *context);
 static void gtk_im_context_ime_get_preedit_string  (GtkIMContext   *context,
                                                     gchar         **str,
                                                     PangoAttrList **attrs,
-                                                    gint           *cursor_pos);
+                                                    int            *cursor_pos);
 static void gtk_im_context_ime_focus_in            (GtkIMContext   *context);
 static void gtk_im_context_ime_focus_out           (GtkIMContext   *context);
 static void gtk_im_context_ime_set_cursor_location (GtkIMContext   *context,
@@ -117,11 +117,11 @@ static void gtk_im_context_ime_set_preedit_font (GtkIMContext    *context);
 static GdkWin32MessageFilterReturn
 gtk_im_context_ime_message_filter               (GdkWin32Display *display,
                                                  MSG             *msg,
-                                                 gint            *ret_valp,
+                                                 int             *ret_valp,
                                                  gpointer         data);
 static void get_window_position                 (GdkSurface       *win,
-                                                 gint            *x,
-                                                 gint            *y);
+                                                 int             *x,
+                                                 int             *y);
 
 G_DEFINE_TYPE_WITH_CODE (GtkIMContextIME, gtk_im_context_ime, GTK_TYPE_IM_CONTEXT,
 			 gtk_im_module_ensure_extension_point ();
@@ -441,12 +441,12 @@ gtk_im_context_ime_reset (GtkIMContext *context)
 
 
 static gchar *
-get_utf8_preedit_string (GtkIMContextIME *context_ime, gint *pos_ret)
+get_utf8_preedit_string (GtkIMContextIME *context_ime, int *pos_ret)
 {
   gchar *utf8str = NULL;
   HWND hwnd;
   HIMC himc;
-  gint pos = 0;
+  int pos = 0;
 
   if (pos_ret)
     *pos_ret = 0;
@@ -632,10 +632,10 @@ static void
 gtk_im_context_ime_get_preedit_string (GtkIMContext   *context,
                                        gchar         **str,
                                        PangoAttrList **attrs,
-                                       gint           *cursor_pos)
+                                       int            *cursor_pos)
 {
   gchar *utf8str = NULL;
-  gint pos = 0;
+  int pos = 0;
   GtkIMContextIME *context_ime;
 
   context_ime = GTK_IM_CONTEXT_IME (context);
@@ -799,7 +799,7 @@ static void
 gtk_im_context_ime_set_cursor_location (GtkIMContext *context,
                                         GdkRectangle *area)
 {
-  gint wx = 0, wy = 0;
+  int wx = 0, wy = 0;
   GtkIMContextIME *context_ime;
   COMPOSITIONFORM cf;
   HWND hwnd;
@@ -974,7 +974,7 @@ ERROR_OUT:
 static GdkWin32MessageFilterReturn
 gtk_im_context_ime_message_filter (GdkWin32Display *display,
                                    MSG             *msg,
-                                   gint            *ret_valp,
+                                   int             *ret_valp,
                                    gpointer         data)
 {
   GtkIMContext *context;
@@ -1006,7 +1006,7 @@ gtk_im_context_ime_message_filter (GdkWin32Display *display,
     {
     case WM_IME_COMPOSITION:
       {
-        gint wx = 0, wy = 0;
+        int wx = 0, wy = 0;
         CANDIDATEFORM cf;
 
         get_window_position (context_ime->client_surface, &wx, &wy);
@@ -1111,7 +1111,7 @@ gtk_im_context_ime_message_filter (GdkWin32Display *display,
  * x and y must be initialized to 0.
  */
 static void
-get_window_position (GdkSurface *surface, gint *x, gint *y)
+get_window_position (GdkSurface *surface, int *x, int *y)
 {
   GdkSurface *parent, *toplevel;
 

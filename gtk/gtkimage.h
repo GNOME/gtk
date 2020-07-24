@@ -108,7 +108,7 @@ void gtk_image_set_from_gicon     (GtkImage        *image,
 				   GIcon           *icon);
 GDK_AVAILABLE_IN_ALL
 void gtk_image_set_pixel_size     (GtkImage        *image,
-				   gint             pixel_size);
+				   int              pixel_size);
 GDK_AVAILABLE_IN_ALL
 void gtk_image_set_icon_size      (GtkImage        *image,
                                    GtkIconSize      icon_size);
@@ -124,7 +124,7 @@ const char *gtk_image_get_icon_name (GtkImage     *image);
 GDK_AVAILABLE_IN_ALL
 GIcon *    gtk_image_get_gicon     (GtkImage              *image);
 GDK_AVAILABLE_IN_ALL
-gint       gtk_image_get_pixel_size (GtkImage             *image);
+int        gtk_image_get_pixel_size (GtkImage             *image);
 GDK_AVAILABLE_IN_ALL
 GtkIconSize gtk_image_get_icon_size (GtkImage             *image);
 

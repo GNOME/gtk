@@ -28,7 +28,7 @@ typedef struct _GtkSortKeysClass GtkSortKeysClass;
 struct _GtkSortKeys
 {
   const GtkSortKeysClass *klass;
-  gint ref_count;
+  int ref_count;
 
   gsize key_size;
   gsize key_align; /* must be power of 2 */

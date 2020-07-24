@@ -192,7 +192,7 @@ populate_tree (GtkBuilder *builder)
 }
 
 typedef struct {
-  gint count;
+  int count;
   AtkObject *descendant;
 } SignalData;
 

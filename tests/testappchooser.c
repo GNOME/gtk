@@ -30,7 +30,7 @@ static GtkWidget *def, *recommended, *fallback, *other, *all;
 
 static void
 dialog_response (GtkDialog *d,
-                 gint       response_id,
+                 int        response_id,
                  gpointer   user_data)
 {
   GAppInfo *app_info;

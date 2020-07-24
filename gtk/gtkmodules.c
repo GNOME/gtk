@@ -150,7 +150,7 @@ _gtk_get_module_path (const gchar *type)
   gchar **paths = get_module_path();
   gchar **path;
   gchar **result;
-  gint count = 0;
+  int count = 0;
 
   for (path = paths; *path; path++)
     count++;
@@ -160,7 +160,7 @@ _gtk_get_module_path (const gchar *type)
   count = 0;
   for (path = get_module_path (); *path; path++)
     {
-      gint use_version, use_host;
+      int use_version, use_host;
       
       for (use_version = TRUE; use_version >= FALSE; use_version--)
 	for (use_host = TRUE; use_host >= FALSE; use_host--)

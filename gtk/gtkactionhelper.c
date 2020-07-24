@@ -70,7 +70,7 @@ struct _GtkActionHelper
 
   GtkButtonRole role;
 
-  gint reporting;
+  int reporting;
 };
 
 enum

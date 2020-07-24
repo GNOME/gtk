@@ -59,7 +59,7 @@ struct _GtkPlacesViewRow
 
   GCancellable  *cancellable;
 
-  gint           is_network : 1;
+  int            is_network : 1;
 };
 
 G_DEFINE_TYPE (GtkPlacesViewRow, gtk_places_view_row, GTK_TYPE_LIST_BOX_ROW)

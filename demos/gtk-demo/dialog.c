@@ -16,7 +16,7 @@ message_dialog_clicked (GtkButton *button,
                         gpointer   user_data)
 {
   GtkWidget *dialog;
-  static gint i = 1;
+  static int i = 1;
 
   dialog = gtk_message_dialog_new (GTK_WINDOW (window),
                                    GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,

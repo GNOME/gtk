@@ -63,7 +63,7 @@ void             gtk_text_tag_table_foreach  (GtkTextTagTable        *table,
                                               GtkTextTagTableForeach  func,
                                               gpointer                data);
 GDK_AVAILABLE_IN_ALL
-gint             gtk_text_tag_table_get_size (GtkTextTagTable        *table);
+int              gtk_text_tag_table_get_size (GtkTextTagTable        *table);
 
 G_END_DECLS
 

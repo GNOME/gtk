@@ -541,7 +541,7 @@ gboolean
 gdk_keymap_get_entries_for_keyval (GdkKeymap     *keymap,
                                    guint          keyval,
                                    GdkKeymapKey **keys,
-                                   gint          *n_keys)
+                                   int           *n_keys)
 {
   GArray *array;
 
@@ -621,7 +621,7 @@ gdk_keymap_get_entries_for_keycode (GdkKeymap     *keymap,
                                     guint          hardware_keycode,
                                     GdkKeymapKey **keys,
                                     guint        **keyvals,
-                                    gint          *n_entries)
+                                    int           *n_entries)
 {
   g_return_val_if_fail (GDK_IS_KEYMAP (keymap), FALSE);
   g_return_val_if_fail (n_entries != NULL, FALSE);
@@ -723,10 +723,10 @@ gboolean
 gdk_keymap_translate_keyboard_state (GdkKeymap       *keymap,
                                      guint            hardware_keycode,
                                      GdkModifierType  state,
-                                     gint             group,
+                                     int              group,
                                      guint           *keyval,
-                                     gint            *effective_group,
-                                     gint            *level,
+                                     int             *effective_group,
+                                     int             *level,
                                      GdkModifierType *consumed_modifiers)
 {
   g_return_val_if_fail (GDK_IS_KEYMAP (keymap), FALSE);

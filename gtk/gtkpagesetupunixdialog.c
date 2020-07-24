@@ -480,7 +480,7 @@ fill_paper_sizes_from_printer (GtkPageSetupUnixDialog *dialog,
   GList *list, *l;
   GtkPageSetup *current_page_setup, *page_setup;
   GtkPaperSize *paper_size;
-  gint i;
+  int i;
 
   g_list_store_remove_all (dialog->page_setup_list);
 
@@ -608,7 +608,7 @@ double_to_string (gdouble d,
   gchar *val, *p;
   struct lconv *locale_data;
   const gchar *decimal_point;
-  gint decimal_point_len;
+  int decimal_point_len;
 
   locale_data = localeconv ();
   decimal_point = locale_data->decimal_point;
@@ -637,7 +637,7 @@ double_to_string (gdouble d,
 
 static void
 custom_paper_dialog_response_cb (GtkDialog *custom_paper_dialog,
-                                 gint       response_id,
+                                 int        response_id,
                                  gpointer   user_data)
 {
   GtkPageSetupUnixDialog *dialog = GTK_PAGE_SETUP_UNIX_DIALOG (user_data);

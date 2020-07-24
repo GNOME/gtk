@@ -128,11 +128,11 @@ struct _GtkPrintBackendCups
 
   guint list_printers_poll;
   guint list_printers_pending : 1;
-  gint  list_printers_attempts;
+  int   list_printers_attempts;
   guint got_default_printer   : 1;
   guint default_printer_poll;
   GtkCupsConnectionTest *cups_connection_test;
-  gint  reading_ppds;
+  int   reading_ppds;
 
   GList      *requests;
   GHashTable *auth;
@@ -392,7 +392,7 @@ cups_printer_create_cairo_surface (GtkPrinter       *printer,
   ppd_attr_t      *ppd_attr_screen_freq = NULL;
   ppd_attr_t      *ppd_attr_res_screen_freq = NULL;
   gchar           *res_string = NULL;
-  gint             level = 2;
+  int              level = 2;
 
   G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 
@@ -557,7 +557,7 @@ add_cups_options (const gchar *key,
   GtkPrinterCups *printer = data->printer;
   gboolean custom_value = FALSE;
   gchar *new_value = NULL;
-  gint i;
+  int i;
 
   if (!key || !value)
     return;
@@ -1008,8 +1008,8 @@ gtk_print_backend_cups_set_password (GtkPrintBackend  *backend,
   gchar *username = NULL;
   gchar *hostname = NULL;
   gchar *password = NULL;
-  gint   length;
-  gint   i;
+  int    length;
+  int    i;
 
   length = g_strv_length (auth_info_required);
 
@@ -1091,8 +1091,8 @@ request_password (gpointer data)
   gchar                    **auth_info_default;
   gchar                    **auth_info_display;
   gboolean                  *auth_info_visible;
-  gint                       length = 3;
-  gint                       i;
+  int                        length = 3;
+  int                        i;
 
   if (dispatch->backend->authentication_lock)
     return G_SOURCE_REMOVE;
@@ -1268,8 +1268,8 @@ check_auth_info (gpointer user_data)
         }
       else
         {
-          gint length;
-          gint i;
+          int length;
+          int i;
 
           length = g_strv_length (dispatch->request->auth_info_required);
 
@@ -1305,7 +1305,7 @@ lookup_auth_info_cb (GObject      *source_object,
   GtkPrintCupsDispatchWatch  *dispatch;
   gchar                     **auth_info;
   GError                     *error = NULL;
-  gint                        i;
+  int                         i;
 
   task = (GTask *) res;
   dispatch = user_data;
@@ -1396,8 +1396,8 @@ request_auth_info (gpointer user_data)
   const char                 *printer_uri;
   gchar                      *prompt = NULL;
   char                       *printer_name = NULL;
-  gint                        length;
-  gint                        i;
+  int                         length;
+  int                         i;
   gboolean                   *auth_info_visible = NULL;
   gchar                     **auth_info_default = NULL;
   gchar                     **auth_info_display = NULL;
@@ -1519,7 +1519,7 @@ cups_dispatch_watch_check (GSource *source)
 
 static gboolean
 cups_dispatch_watch_prepare (GSource *source,
-			     gint    *timeout_)
+			     int     *timeout_)
 {
   GtkPrintCupsDispatchWatch *dispatch;
   gboolean result;
@@ -1820,7 +1820,7 @@ cups_job_info_poll_timeout (gpointer user_data)
 static void
 cups_begin_polling_info (GtkPrintBackendCups *print_backend,
 			 GtkPrintJob         *job,
-			 gint                 job_id)
+			 int                  job_id)
 {
   CupsJobPollData *data;
 
@@ -1844,7 +1844,7 @@ mark_printer_inactive (GtkPrinter      *printer,
   g_signal_emit_by_name (backend, "printer-removed", printer);
 }
 
-static gint
+static int
 find_printer (GtkPrinter  *printer,
 	      const gchar *find_name)
 {
@@ -1956,8 +1956,8 @@ typedef struct
   gchar *state_msg;
   const gchar *reason_msg;
   PrinterStateLevel reason_level;
-  gint state;
-  gint job_count;
+  int state;
+  int job_count;
   gboolean is_paused;
   gboolean is_accepting_jobs;
   const gchar *default_cover_before;
@@ -1968,7 +1968,7 @@ typedef struct
   gboolean avahi_printer;
   gchar   *avahi_resource_path;
   gchar  **auth_info_required;
-  gint     default_number_up;
+  int      default_number_up;
   guchar   ipp_version_major;
   guchar   ipp_version_minor;
   gboolean supports_copies;
@@ -2047,7 +2047,7 @@ get_server_ipp_version (guchar *ipp_version_major,
     }
 }
 
-static gint
+static int
 ipp_version_cmp (guchar ipp_version_major1,
                  guchar ipp_version_minor1,
                  guchar ipp_version_major2,
@@ -2075,7 +2075,7 @@ cups_printer_handle_attribute (GtkPrintBackendCups *cups_backend,
 			       ipp_attribute_t *attr,
 			       PrinterSetupInfo *info)
 {
-  gint i, j;
+  int i, j;
   if (strcmp (ippGetName (attr), "printer-name") == 0 &&
       ippGetValueTag (attr) == IPP_TAG_NAME)
     info->printer_name = ippGetString (attr, 0, NULL);
@@ -2272,7 +2272,7 @@ cups_printer_handle_attribute (GtkPrintBackendCups *cups_backend,
     {
       ipp_attribute_t *iter;
       ipp_t           *col;
-      gint             num_of_margins = 0;
+      int              num_of_margins = 0;
 
       for (i = 0; i < ippGetCount (attr); i++)
         {
@@ -2590,7 +2590,7 @@ get_reason_msg_desc (guint i,
 static void
 set_info_state_message (PrinterSetupInfo *info)
 {
-  gint i;
+  int i;
 
   if (info->state_msg == NULL || strlen (info->state_msg) == 0)
     {
@@ -2843,7 +2843,7 @@ typedef struct
   gchar               *printer_uri;
   gchar               *location;
   gchar               *host;
-  gint                 port;
+  int                  port;
   gchar               *printer_name;
   gchar               *name;
   gchar               *resource_path;
@@ -3085,10 +3085,10 @@ avahi_service_resolver_cb (GObject      *source_object,
   gchar                   *key;
   gchar                   *value;
   gsize                    length;
-  gint                     interface;
-  gint                     protocol;
-  gint                     aprotocol;
-  gint                     i, j;
+  int                      interface;
+  int                      protocol;
+  int                      aprotocol;
+  int                      i, j;
 
   output = g_dbus_connection_call_finish (G_DBUS_CONNECTION (source_object),
                                           res,
@@ -3260,8 +3260,8 @@ avahi_service_browser_signal_handler (GDBusConnection *connection,
   gchar               *type;
   gchar               *domain;
   guint                flags;
-  gint                 interface;
-  gint                 protocol;
+  int                  interface;
+  int                  protocol;
 
   if (g_strcmp0 (signal_name, "ItemNew") == 0)
     {
@@ -3347,7 +3347,7 @@ avahi_service_browser_new_cb (GObject      *source_object,
   GtkPrintBackendCups *cups_backend;
   GVariant            *output;
   GError              *error = NULL;
-  gint                 i;
+  int                  i;
 
   output = g_dbus_connection_call_finish (G_DBUS_CONNECTION (source_object),
                                           res,
@@ -3895,7 +3895,7 @@ cups_request_ppd (GtkPrinter *printer)
   GetPPDData *data;
   int fd;
   const gchar *hostname;
-  gint port;
+  int port;
 
   cups_printer = GTK_PRINTER_CUPS (printer);
 
@@ -4507,7 +4507,7 @@ static const struct {
  * https://mail.gnome.org/archives/desktop-devel-list/2016-March/msg00075.html
  */
 static gchar *
-get_ipp_choice_translation_string (gint  index,
+get_ipp_choice_translation_string (int   index,
 				   guint i)
 {
   gchar *translation;
@@ -5122,7 +5122,7 @@ strptr_cmp (const void *a,
 static gboolean
 string_in_table (const gchar *str,
 		 const gchar *table[],
-		 gint         table_len)
+		 int          table_len)
 {
   return bsearch (&str, table, table_len, sizeof (char *), (void *)strptr_cmp) != NULL;
 }
@@ -5207,7 +5207,7 @@ handle_group (GtkPrinterOptionSet *set,
 	      ppd_group_t         *toplevel_group,
 	      GtkPrintSettings    *settings)
 {
-  gint i;
+  int i;
   const gchar *name;
 
   /* Ignore installable options */
@@ -5248,7 +5248,7 @@ get_ipp_option_translation (const gchar  *ipp_option_name,
                             gchar       **gtk_option_name,
                             gchar       **translation)
 {
-  gint i;
+  int i;
 
   *gtk_option_name = NULL;
   *translation = NULL;
@@ -5280,7 +5280,7 @@ get_ipp_choice_translation (const gchar  *ipp_option_name,
   gchar       *translation = NULL;
   gsize        ipp_choice_length;
   gchar       *endptr;
-  gint         i;
+  int          i;
 
   for (i = 0; ipp_choice_translations[i].ipp_option_name != NULL; i++)
     {
@@ -5529,9 +5529,9 @@ cups_printer_get_options (GtkPrinter           *printer,
       char **cover = NULL;
       char **cover_display = NULL;
       char **cover_display_translated = NULL;
-      gint num_of_covers = 0;
+      int num_of_covers = 0;
       gconstpointer value;
-      gint j;
+      int j;
 
        /* Translators, this string is used to label the pages-per-sheet option
         * in the print dialog
@@ -5732,7 +5732,7 @@ cups_printer_get_options (GtkPrinter           *printer,
       if (strcmp (name, "cups-job-sheets") == 0)
         {
           gchar **values;
-          gint    num_values;
+          int     num_values;
 
           values = g_strsplit (opts[i].value, ",", 2);
           num_values = g_strv_length (values);
@@ -5953,7 +5953,7 @@ typedef struct {
 static void
 map_settings_to_option (GtkPrinterOption  *option,
 			const NameMapping  table[],
-			gint               n_elements,
+			int                n_elements,
 			GtkPrintSettings  *settings,
 			const gchar       *standard_name,
 			const gchar       *cups_name,
@@ -6016,7 +6016,7 @@ map_settings_to_option (GtkPrinterOption  *option,
 static void
 map_option_to_settings (const gchar       *value,
 			const NameMapping  table[],
-			gint               n_elements,
+			int                n_elements,
 			GtkPrintSettings  *settings,
 			const gchar       *standard_name,
 			const gchar       *cups_name,
@@ -6436,7 +6436,7 @@ cups_printer_prepare_for_print (GtkPrinter       *printer,
 {
   GtkPrintPages pages;
   GtkPageRange *ranges;
-  gint n_ranges;
+  int n_ranges;
   GtkPageSet page_set;
   GtkPaperSize *paper_size;
   const char *ppd_paper_name;
@@ -6615,10 +6615,10 @@ static GtkPageSetup *
 create_page_setup_from_media (gchar     *media,
                               MediaSize *media_size,
                               gboolean   media_margin_default_set,
-                              gint       media_bottom_margin_default,
-                              gint       media_top_margin_default,
-                              gint       media_left_margin_default,
-                              gint       media_right_margin_default)
+                              int        media_bottom_margin_default,
+                              int        media_top_margin_default,
+                              int        media_left_margin_default,
+                              int        media_right_margin_default)
 {
   GtkPageSetup *page_setup;
   GtkPaperSize *paper_size;

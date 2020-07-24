@@ -335,7 +335,7 @@ gtk_adjustment_dispatch_properties_changed (GObject     *object,
                                             GParamSpec **pspecs)
 {
   gboolean changed = FALSE;
-  gint i;
+  int i;
 
   G_OBJECT_CLASS (gtk_adjustment_parent_class)->dispatch_properties_changed (object, n_pspecs, pspecs);
 

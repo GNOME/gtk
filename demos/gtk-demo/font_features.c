@@ -295,7 +295,7 @@ update_display (void)
   GList *l;
   PangoAttrList *attrs;
   PangoAttribute *attr;
-  gint ins, bound;
+  int ins, bound;
   guint start, end;
   PangoLanguage *lang;
   char *font_desc;
@@ -479,7 +479,7 @@ update_script_combo (void)
 {
   GtkListStore *store;
   hb_font_t *hb_font;
-  gint i, j, k;
+  int i, j, k;
   PangoFont *pango_font;
   GHashTable *tags;
   GHashTableIter iter;
@@ -593,7 +593,7 @@ update_script_combo (void)
 static void
 update_features (void)
 {
-  gint i, j;
+  int i, j;
   GtkTreeModel *model;
   GtkTreeIter iter;
   guint script_index, lang_index;

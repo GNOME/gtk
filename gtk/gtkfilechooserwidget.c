@@ -288,7 +288,7 @@ struct _GtkFileChooserWidget
   GtkWidget *toplevel_current_focus_widget;
   GtkWidget *toplevel_last_focus_widget;
 
-  gint sort_column;
+  int sort_column;
   GtkSortType sort_order;
 
   ClockFormat clock_format;
@@ -464,7 +464,7 @@ static void down_folder_handler     (GtkFileChooserWidget *impl);
 static void home_folder_handler     (GtkFileChooserWidget *impl);
 static void desktop_folder_handler  (GtkFileChooserWidget *impl);
 static void quick_bookmark_handler  (GtkFileChooserWidget *impl,
-                                     gint                   bookmark_index);
+                                     int                    bookmark_index);
 static void show_hidden_handler     (GtkFileChooserWidget *impl);
 static void search_shortcut_handler (GtkFileChooserWidget *impl);
 static void recent_shortcut_handler (GtkFileChooserWidget *impl);
@@ -532,7 +532,7 @@ static void     recent_clear_model           (GtkFileChooserWidget *impl,
                                               gboolean               remove_from_treeview);
 static gboolean recent_should_respond        (GtkFileChooserWidget *impl);
 static void     clear_model_cache            (GtkFileChooserWidget *impl,
-                                              gint                  column);
+                                              int                   column);
 static void     set_model_filter             (GtkFileChooserWidget *impl,
                                               GtkFileFilter        *filter);
 static void     switch_to_home_dir           (GtkFileChooserWidget *impl);
@@ -1031,7 +1031,7 @@ selection_check_foreach_cb (GtkTreeModel *model,
 /* Checks whether the selected items in the file list are all files or all folders */
 static void
 selection_check (GtkFileChooserWidget *impl,
-                 gint                  *num_selected,
+                 int                   *num_selected,
                  gboolean              *all_files,
                  gboolean              *all_folders)
 {
@@ -1537,7 +1537,7 @@ change_sort_directories_first_state (GSimpleAction *action,
 
 static void
 clear_model_cache (GtkFileChooserWidget *impl,
-                   gint                  column)
+                   int                   column)
 {
   if (impl->browse_files_model)
     _gtk_file_system_model_clear_cache (impl->browse_files_model, column);
@@ -1703,7 +1703,7 @@ file_list_drag_drop_cb (GtkDropTarget        *dest,
 static void
 check_file_list_popover_sensitivity (GtkFileChooserWidget *impl)
 {
-  gint num_selected;
+  int num_selected;
   gboolean all_files;
   gboolean all_folders;
   gboolean active;
@@ -2071,8 +2071,8 @@ long_press_cb (GtkGesture           *gesture,
 
 typedef struct {
   OperationMode operation_mode;
-  gint general_column;
-  gint model_column;
+  int general_column;
+  int model_column;
 } ColumnMap;
 
 /* Sets the sort column IDs for the file list; needs to be done whenever we
@@ -2093,8 +2093,8 @@ file_list_set_sort_column_ids (GtkFileChooserWidget *impl)
 
 static gboolean
 file_list_query_tooltip_cb (GtkWidget  *widget,
-                            gint        x,
-                            gint        y,
+                            int         x,
+                            int         y,
                             gboolean    keyboard_tip,
                             GtkTooltip *tooltip,
                             gpointer    user_data)
@@ -2142,7 +2142,7 @@ file_list_query_tooltip_cb (GtkWidget  *widget,
 static void
 set_icon_cell_renderer_fixed_size (GtkFileChooserWidget *impl)
 {
-  gint xpad, ypad;
+  int xpad, ypad;
 
   gtk_cell_renderer_get_padding (impl->list_pixbuf_renderer, &xpad, &ypad);
   gtk_cell_renderer_set_fixed_size (impl->list_pixbuf_renderer,
@@ -2154,13 +2154,13 @@ static GtkWidget *
 get_accept_action_widget (GtkDialog *dialog,
                           gboolean   sensitive_only)
 {
-  gint response[] = {
+  int response[] = {
     GTK_RESPONSE_ACCEPT,
     GTK_RESPONSE_OK,
     GTK_RESPONSE_YES,
     GTK_RESPONSE_APPLY
   };
-  gint i;
+  int i;
   GtkWidget *widget;
 
   for (i = 0; i < G_N_ELEMENTS (response); i++)
@@ -3254,10 +3254,10 @@ settings_load (GtkFileChooserWidget *impl)
   gboolean sort_directories_first;
   DateFormat date_format;
   TypeFormat type_format;
-  gint sort_column;
+  int sort_column;
   GtkSortType sort_order;
   StartupMode startup_mode;
-  gint sidebar_width;
+  int sidebar_width;
   GSettings *settings;
 
   settings = _gtk_file_chooser_get_settings_for_widget (GTK_WIDGET (impl));
@@ -3504,7 +3504,7 @@ gtk_file_chooser_widget_unmap (GtkWidget *widget)
   GTK_WIDGET_CLASS (gtk_file_chooser_widget_parent_class)->unmap (widget);
 }
 
-static gint
+static int
 compare_directory (GtkFileSystemModel   *model,
                    GtkTreeIter          *a,
                    GtkTreeIter          *b,
@@ -3521,14 +3521,14 @@ compare_directory (GtkFileSystemModel   *model,
   return 0;
 }
 
-static gint
+static int
 compare_name (GtkFileSystemModel   *model,
               GtkTreeIter          *a,
               GtkTreeIter          *b,
               GtkFileChooserWidget *impl)
 {
   const char *key_a, *key_b;
-  gint result;
+  int result;
 
   key_a = g_value_get_string (_gtk_file_system_model_get_value (model, a, MODEL_COL_NAME_COLLATED));
   key_b = g_value_get_string (_gtk_file_system_model_get_value (model, b, MODEL_COL_NAME_COLLATED));
@@ -3545,7 +3545,7 @@ compare_name (GtkFileSystemModel   *model,
   return result;
 }
 
-static gint
+static int
 compare_size (GtkFileSystemModel   *model,
               GtkTreeIter          *a,
               GtkTreeIter          *b,
@@ -3559,7 +3559,7 @@ compare_size (GtkFileSystemModel   *model,
   return size_a < size_b ? -1 : (size_a == size_b ? 0 : 1);
 }
 
-static gint
+static int
 compare_type (GtkFileSystemModel   *model,
               GtkTreeIter          *a,
               GtkTreeIter          *b,
@@ -3573,7 +3573,7 @@ compare_type (GtkFileSystemModel   *model,
   return g_strcmp0 (key_a, key_b);
 }
 
-static gint
+static int
 compare_time (GtkFileSystemModel   *model,
               GtkTreeIter          *a,
               GtkTreeIter          *b,
@@ -3587,7 +3587,7 @@ compare_time (GtkFileSystemModel   *model,
   return ta < tb ? -1 : (ta == tb ? 0 : 1);
 }
 
-static gint
+static int
 compare_location (GtkFileSystemModel   *model,
                   GtkTreeIter          *a,
                   GtkTreeIter          *b,
@@ -3602,7 +3602,7 @@ compare_location (GtkFileSystemModel   *model,
 }
 
 /* Sort callback for the filename column */
-static gint
+static int
 name_sort_func (GtkTreeModel *model,
                 GtkTreeIter  *a,
                 GtkTreeIter  *b,
@@ -3610,7 +3610,7 @@ name_sort_func (GtkTreeModel *model,
 {
   GtkFileSystemModel *fs_model = GTK_FILE_SYSTEM_MODEL (model);
   GtkFileChooserWidget *impl = user_data;
-  gint result;
+  int result;
 
   result = compare_directory (fs_model, a, b, impl);
 
@@ -3621,7 +3621,7 @@ name_sort_func (GtkTreeModel *model,
 }
 
 /* Sort callback for the size column */
-static gint
+static int
 size_sort_func (GtkTreeModel *model,
                 GtkTreeIter  *a,
                 GtkTreeIter  *b,
@@ -3629,7 +3629,7 @@ size_sort_func (GtkTreeModel *model,
 {
   GtkFileSystemModel *fs_model = GTK_FILE_SYSTEM_MODEL (model);
   GtkFileChooserWidget *impl = user_data;
-  gint result;
+  int result;
 
   result = compare_directory (fs_model, a, b, impl);
 
@@ -3640,7 +3640,7 @@ size_sort_func (GtkTreeModel *model,
 }
 
 /* Sort callback for the type column */
-static gint
+static int
 type_sort_func (GtkTreeModel *model,
                 GtkTreeIter  *a,
                 GtkTreeIter  *b,
@@ -3648,7 +3648,7 @@ type_sort_func (GtkTreeModel *model,
 {
   GtkFileSystemModel *fs_model = GTK_FILE_SYSTEM_MODEL (model);
   GtkFileChooserWidget *impl = user_data;
-  gint result;
+  int result;
 
   result = compare_directory (fs_model, a, b, impl);
 
@@ -3659,7 +3659,7 @@ type_sort_func (GtkTreeModel *model,
 }
 
 /* Sort callback for the time column */
-static gint
+static int
 time_sort_func (GtkTreeModel *model,
                 GtkTreeIter  *a,
                 GtkTreeIter  *b,
@@ -3667,7 +3667,7 @@ time_sort_func (GtkTreeModel *model,
 {
   GtkFileSystemModel *fs_model = GTK_FILE_SYSTEM_MODEL (model);
   GtkFileChooserWidget *impl = user_data;
-  gint result;
+  int result;
 
   result = compare_directory (fs_model, a, b, impl);
 
@@ -3677,7 +3677,7 @@ time_sort_func (GtkTreeModel *model,
   return result;
 }
 
-static gint
+static int
 recent_sort_func (GtkTreeModel *model,
                   GtkTreeIter  *a,
                   GtkTreeIter  *b,
@@ -3685,7 +3685,7 @@ recent_sort_func (GtkTreeModel *model,
 {
   GtkFileSystemModel *fs_model = GTK_FILE_SYSTEM_MODEL (model);
   GtkFileChooserWidget *impl = user_data;
-  gint result;
+  int result;
 
   result = compare_time (fs_model, a, b, impl);
 
@@ -3698,7 +3698,7 @@ recent_sort_func (GtkTreeModel *model,
   return result;
 }
 
-static gint
+static int
 search_sort_func (GtkTreeModel *model,
                   GtkTreeIter  *a,
                   GtkTreeIter  *b,
@@ -3706,7 +3706,7 @@ search_sort_func (GtkTreeModel *model,
 {
   GtkFileSystemModel *fs_model = GTK_FILE_SYSTEM_MODEL (model);
   GtkFileChooserWidget *impl = user_data;
-  gint result;
+  int result;
 
   result = compare_location (fs_model, a, b, impl);
 
@@ -3726,7 +3726,7 @@ static void
 list_sort_column_changed_cb (GtkTreeSortable       *sortable,
                              GtkFileChooserWidget *impl)
 {
-  gint sort_column_id;
+  int sort_column_id;
   GtkSortType sort_type;
 
   if (gtk_tree_sortable_get_sort_column_id (sortable, &sort_column_id, &sort_type))
@@ -4173,7 +4173,7 @@ my_g_format_date_for_display (GtkFileChooserWidget *impl,
   GDateTime *now_date, *date;
   const gchar *format;
   gchar *date_str;
-  gint days_ago;
+  int days_ago;
 
   time = g_date_time_new_from_unix_local (secs);
   date = g_date_time_new_local (g_date_time_get_year (time),
@@ -4652,12 +4652,12 @@ struct update_chooser_entry_selected_foreach_closure {
   GtkTreeIter first_selected_iter;
 };
 
-static gint
+static int
 compare_utf8_filenames (const gchar *a,
                         const gchar *b)
 {
   gchar *a_folded, *b_folded;
-  gint retval;
+  int retval;
 
   a_folded = g_utf8_strdown (a, -1);
   b_folded = g_utf8_strdown (b, -1);
@@ -5685,7 +5685,7 @@ get_display_name_from_file_list (GtkFileChooserWidget *impl)
 static void
 add_custom_button_to_dialog (GtkDialog   *dialog,
                              const gchar *mnemonic_label,
-                             gint         response_id)
+                             int          response_id)
 {
   GtkWidget *button;
 
@@ -7166,7 +7166,7 @@ places_shortcut_handler (GtkFileChooserWidget *impl)
 
 static void
 quick_bookmark_handler (GtkFileChooserWidget *impl,
-                        gint                  bookmark_index)
+                        int                   bookmark_index)
 {
   GFile *file;
 
@@ -7225,7 +7225,7 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
   };
   GObjectClass *gobject_class = G_OBJECT_CLASS (class);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (class);
-  gint i;
+  int i;
 
   gobject_class->finalize = gtk_file_chooser_widget_finalize;
   gobject_class->constructed = gtk_file_chooser_widget_constructed;

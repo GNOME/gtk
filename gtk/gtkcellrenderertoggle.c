@@ -56,10 +56,10 @@ static void gtk_cell_renderer_toggle_set_property  (GObject                    *
 static void gtk_cell_renderer_toggle_get_size   (GtkCellRenderer            *cell,
 						 GtkWidget                  *widget,
 						 const GdkRectangle         *cell_area,
-						 gint                       *x_offset,
-						 gint                       *y_offset,
-						 gint                       *width,
-						 gint                       *height);
+						 int                        *x_offset,
+						 int                        *y_offset,
+						 int                        *width,
+						 int                        *height);
 static void gtk_cell_renderer_toggle_snapshot   (GtkCellRenderer            *cell,
 						 GtkSnapshot                *snapshot,
 						 GtkWidget                  *widget,
@@ -352,14 +352,14 @@ static void
 gtk_cell_renderer_toggle_get_size (GtkCellRenderer    *cell,
 				   GtkWidget          *widget,
 				   const GdkRectangle *cell_area,
-				   gint               *x_offset,
-				   gint               *y_offset,
-				   gint               *width,
-				   gint               *height)
+				   int                *x_offset,
+				   int                *y_offset,
+				   int                *width,
+				   int                *height)
 {
-  gint calc_width;
-  gint calc_height;
-  gint xpad, ypad;
+  int calc_width;
+  int calc_height;
+  int xpad, ypad;
   GtkStyleContext *context;
   GtkBorder border, padding;
 
@@ -417,9 +417,9 @@ gtk_cell_renderer_toggle_snapshot (GtkCellRenderer      *cell,
   GtkCellRendererToggle *celltoggle = GTK_CELL_RENDERER_TOGGLE (cell);
   GtkCellRendererTogglePrivate *priv = gtk_cell_renderer_toggle_get_instance_private (celltoggle);
   GtkStyleContext *context;
-  gint width, height;
-  gint x_offset, y_offset;
-  gint xpad, ypad;
+  int width, height;
+  int x_offset, y_offset;
+  int xpad, ypad;
   GtkStateFlags state;
   GtkBorder padding, border;
 
@@ -478,7 +478,7 @@ gtk_cell_renderer_toggle_snapshot (GtkCellRenderer      *cell,
   gtk_snapshot_pop (snapshot);
 }
 
-static gint
+static int
 gtk_cell_renderer_toggle_activate (GtkCellRenderer      *cell,
 				   GdkEvent             *event,
 				   GtkWidget            *widget,

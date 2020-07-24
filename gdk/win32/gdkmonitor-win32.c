@@ -396,7 +396,7 @@ populate_monitor_devices_from_display_config (GPtrArray *monitors)
   UINT32 dispconf_path_count;
   fixedDISPLAYCONFIG_PATH_INFO *dispconf_paths;
   DISPLAYCONFIG_MODE_INFO *dispconf_modes;
-  gint path_index;
+  int path_index;
 
   user32 = LoadLibraryA ("user32.dll");
 
@@ -453,7 +453,7 @@ populate_monitor_devices_from_display_config (GPtrArray *monitors)
   for (path_index = 0; path_index < dispconf_path_count; path_index++)
     {
       fixedDISPLAYCONFIG_TARGET_DEVICE_NAME tdn;
-      gint i;
+      int i;
       GdkWin32Monitor *w32mon;
       GdkMonitor *mon;
       gchar *path, *path_lower;
@@ -742,7 +742,7 @@ enum_monitor (HMONITOR hmonitor,
 static void
 prune_monitors (EnumMonitorData *data)
 {
-  gint i;
+  int i;
 
   for (i = 0; i < data->monitors->len; i++)
     {
@@ -759,7 +759,7 @@ GPtrArray *
 _gdk_win32_display_get_monitor_list (GdkWin32Display *win32_display)
 {
   EnumMonitorData data;
-  gint i;
+  int i;
 
   data.display = win32_display;
   data.monitors = get_monitor_devices (win32_display);

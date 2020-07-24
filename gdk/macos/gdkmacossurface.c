@@ -122,7 +122,7 @@ gdk_macos_surface_hide (GdkSurface *surface)
   _gdk_surface_clear_update_area (surface);
 }
 
-static gint
+static int
 gdk_macos_surface_get_scale_factor (GdkSurface *surface)
 {
   GdkMacosSurface *self = (GdkMacosSurface *)surface;
@@ -541,10 +541,10 @@ _gdk_macos_surface_new (GdkMacosDisplay   *display,
 
 void
 _gdk_macos_surface_get_shadow (GdkMacosSurface *self,
-                               gint            *top,
-                               gint            *right,
-                               gint            *bottom,
-                               gint            *left)
+                               int             *top,
+                               int             *right,
+                               int             *bottom,
+                               int             *left)
 {
 
   g_return_if_fail (GDK_IS_MACOS_SURFACE (self));

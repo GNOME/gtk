@@ -846,7 +846,7 @@ static const struct {
   const char *x_target;
   const char *mime_type;
   const char *type;
-  gint format;
+  int format;
   MimeTypeHandleFunc handler;
 } special_targets[] = {
   { "UTF8_STRING",   "text/plain;charset=utf-8", "UTF8_STRING",   8,  handle_utf8 },
@@ -901,7 +901,7 @@ gdk_x11_selection_output_streams_request (GdkDisplay                   *display,
       gulong n_atoms;
       gulong nbytes;
       Atom prop_type;
-      gint prop_format;
+      int prop_format;
       Atom *atoms = NULL;
       int error;
 

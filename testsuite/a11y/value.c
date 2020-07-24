@@ -24,7 +24,7 @@
 
 static void
 set_value (GtkWidget   *widget,
-           gint value)
+           int value)
 {
   if (GTK_IS_LEVEL_BAR (widget))
     gtk_level_bar_set_value (GTK_LEVEL_BAR (widget), value);
@@ -42,7 +42,7 @@ set_value (GtkWidget   *widget,
 
 typedef struct
 {
-  gint count;
+  int count;
   gchar *last_name;
 } NotifyData;
 

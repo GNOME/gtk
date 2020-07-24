@@ -40,8 +40,8 @@ struct _GdkDeviceWintab
   GdkDevice parent_instance;
 
   gboolean sends_core;
-  gint *last_axis_data;
-  gint button_state;
+  int *last_axis_data;
+  int button_state;
 
   /* WINTAB stuff: */
   HCTX hctx;

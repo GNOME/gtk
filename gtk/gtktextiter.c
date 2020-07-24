@@ -59,14 +59,14 @@ struct G_GNUC_MAY_ALIAS _GtkTextRealIter
 
      If the line byte offset is valid, so is the segment byte offset;
      and ditto for char offsets. */
-  gint line_byte_offset;
-  gint line_char_offset;
+  int line_byte_offset;
+  int line_char_offset;
   /* These two are valid if >= 0 */
-  gint cached_char_index;
-  gint cached_line_number;
+  int cached_char_index;
+  int cached_line_number;
   /* Stamps to detect the buffer changing under us */
-  gint chars_changed_stamp;
-  gint segments_changed_stamp;
+  int chars_changed_stamp;
+  int segments_changed_stamp;
   /* Valid if the segments_changed_stamp is up-to-date */
   GtkTextLineSegment *segment;     /* indexable segment we index */
   GtkTextLineSegment *any_segment; /* first segment in our location,
@@ -76,11 +76,11 @@ struct G_GNUC_MAY_ALIAS _GtkTextRealIter
 
      If the line byte offset is valid, so is the segment byte offset;
      and ditto for char offsets. */
-  gint segment_byte_offset;
-  gint segment_char_offset;
+  int segment_byte_offset;
+  int segment_char_offset;
 
   /* padding */
-  gint pad1;
+  int pad1;
   gpointer pad2;
 };
 
@@ -108,7 +108,7 @@ iter_set_common (GtkTextRealIter *iter,
 static void
 iter_set_from_byte_offset (GtkTextRealIter *iter,
                            GtkTextLine *line,
-                           gint byte_offset)
+                           int byte_offset)
 {
   iter_set_common (iter, line);
 
@@ -125,7 +125,7 @@ iter_set_from_byte_offset (GtkTextRealIter *iter,
 static void
 iter_set_from_char_offset (GtkTextRealIter *iter,
                            GtkTextLine *line,
-                           gint char_offset)
+                           int char_offset)
 {
   iter_set_common (iter, line);
 
@@ -145,7 +145,7 @@ iter_set_from_segment (GtkTextRealIter *iter,
                        GtkTextLineSegment *segment)
 {
   GtkTextLineSegment *seg;
-  gint byte_offset;
+  int byte_offset;
 
   /* This could theoretically be optimized by computing all the iter
      fields in this same loop, but I'm skipping it for now. */
@@ -278,7 +278,7 @@ static GtkTextRealIter*
 iter_init_from_byte_offset (GtkTextIter *iter,
                             GtkTextBTree *tree,
                             GtkTextLine *line,
-                            gint line_byte_offset)
+                            int line_byte_offset)
 {
   GtkTextRealIter *real;
 
@@ -302,7 +302,7 @@ static GtkTextRealIter*
 iter_init_from_char_offset (GtkTextIter *iter,
                             GtkTextBTree *tree,
                             GtkTextLine *line,
-                            gint line_char_offset)
+                            int line_char_offset)
 {
   GtkTextRealIter *real;
 
@@ -322,14 +322,14 @@ invalidate_char_index (GtkTextRealIter *iter)
 }
 
 static inline void
-adjust_char_index (GtkTextRealIter *iter, gint count)
+adjust_char_index (GtkTextRealIter *iter, int count)
 {
   if (iter->cached_char_index >= 0)
     iter->cached_char_index += count;
 }
 
 static inline void
-adjust_line_number (GtkTextRealIter *iter, gint count)
+adjust_line_number (GtkTextRealIter *iter, int count)
 {
   if (iter->cached_line_number >= 0)
     iter->cached_line_number += count;
@@ -509,7 +509,7 @@ _gtk_text_iter_get_any_segment (const GtkTextIter *iter)
   return real->any_segment;
 }
 
-gint
+int
 _gtk_text_iter_get_segment_byte (const GtkTextIter *iter)
 {
   GtkTextRealIter *real;
@@ -528,7 +528,7 @@ _gtk_text_iter_get_segment_byte (const GtkTextIter *iter)
   return real->segment_byte_offset;
 }
 
-gint
+int
 _gtk_text_iter_get_segment_char (const GtkTextIter *iter)
 {
   GtkTextRealIter *real;
@@ -591,7 +591,7 @@ _gtk_text_iter_get_btree (const GtkTextIter *iter)
  *
  * Returns: a character offset
  **/
-gint
+int
 gtk_text_iter_get_offset (const GtkTextIter *iter)
 {
   GtkTextRealIter *real;
@@ -629,7 +629,7 @@ gtk_text_iter_get_offset (const GtkTextIter *iter)
  *
  * Returns: a line number
  **/
-gint
+int
 gtk_text_iter_get_line (const GtkTextIter *iter)
 {
   GtkTextRealIter *real;
@@ -660,7 +660,7 @@ gtk_text_iter_get_line (const GtkTextIter *iter)
  *
  * Returns: offset from start of line
  **/
-gint
+int
 gtk_text_iter_get_line_offset (const GtkTextIter *iter)
 {
   GtkTextRealIter *real;
@@ -691,7 +691,7 @@ gtk_text_iter_get_line_offset (const GtkTextIter *iter)
  *
  * Returns: distance from start of line, in bytes
  **/
-gint
+int
 gtk_text_iter_get_line_index (const GtkTextIter *iter)
 {
   GtkTextRealIter *real;
@@ -721,11 +721,11 @@ gtk_text_iter_get_line_index (const GtkTextIter *iter)
  * 
  * Returns: offset in visible characters from the start of the line 
  **/
-gint
+int
 gtk_text_iter_get_visible_line_offset (const GtkTextIter *iter)
 {
   GtkTextRealIter *real;
-  gint vis_offset;
+  int vis_offset;
   GtkTextLineSegment *seg;
   GtkTextIter pos;
   
@@ -786,11 +786,11 @@ gtk_text_iter_get_visible_line_offset (const GtkTextIter *iter)
  * 
  * Returns: byte index of @iter with respect to the start of the line
  **/
-gint
+int
 gtk_text_iter_get_visible_line_index (const GtkTextIter *iter)
 {
   GtkTextRealIter *real;
-  gint vis_offset;
+  int vis_offset;
   GtkTextLineSegment *seg;
   GtkTextIter pos;
   
@@ -1345,8 +1345,8 @@ GSList*
 gtk_text_iter_get_tags (const GtkTextIter *iter)
 {
   GtkTextTag** tags;
-  gint tag_count = 0;
-  gint i;
+  int tag_count = 0;
+  int i;
   GSList *retval;
   
   g_return_val_if_fail (iter != NULL, NULL);
@@ -1462,7 +1462,7 @@ gtk_text_iter_get_attributes (const GtkTextIter  *iter,
                               GtkTextAttributes  *values)
 {
   GtkTextTag** tags;
-  gint tag_count = 0;
+  int tag_count = 0;
 
   /* Get the tags at this spot */
   tags = _gtk_text_btree_get_tags (iter, &tag_count);
@@ -1674,11 +1674,11 @@ gtk_text_iter_is_start (const GtkTextIter *iter)
  *
  * Returns: number of characters in the line
  **/
-gint
+int
 gtk_text_iter_get_chars_in_line (const GtkTextIter   *iter)
 {
   GtkTextRealIter *real;
-  gint count;
+  int count;
   GtkTextLineSegment *seg;
 
   g_return_val_if_fail (iter != NULL, 0);
@@ -1726,11 +1726,11 @@ gtk_text_iter_get_chars_in_line (const GtkTextIter   *iter)
  *
  * Returns: number of bytes in the line
  **/
-gint
+int
 gtk_text_iter_get_bytes_in_line (const GtkTextIter   *iter)
 {
   GtkTextRealIter *real;
-  gint count;
+  int count;
   GtkTextLineSegment *seg;
 
   g_return_val_if_fail (iter != NULL, 0);
@@ -1896,7 +1896,7 @@ forward_char (GtkTextRealIter *real)
 
       if (real->line_byte_offset >= 0)
         {
-          gint bytes;
+          int bytes;
           const char * start =
             real->segment->body.chars + real->segment_byte_offset;
 
@@ -1936,8 +1936,8 @@ _gtk_text_iter_forward_indexable_segment (GtkTextIter *iter)
   GtkTextLineSegment *seg;
   GtkTextLineSegment *any_seg;
   GtkTextRealIter *real;
-  gint chars_skipped;
-  gint bytes_skipped;
+  int chars_skipped;
+  int bytes_skipped;
 
   g_return_val_if_fail (iter != NULL, FALSE);
 
@@ -2070,8 +2070,8 @@ _gtk_text_iter_backward_indexable_segment (GtkTextIter *iter)
   GtkTextLineSegment *any_seg;
   GtkTextLineSegment *prev_seg;
   GtkTextLineSegment *prev_any_seg;
-  gint bytes_skipped;
-  gint chars_skipped;
+  int bytes_skipped;
+  int chars_skipped;
 
   g_return_val_if_fail (iter != NULL, FALSE);
 
@@ -2270,7 +2270,7 @@ gtk_text_iter_backward_char (GtkTextIter *iter)
  * Returns: whether @iter moved and is dereferenceable
  **/
 gboolean
-gtk_text_iter_forward_chars (GtkTextIter *iter, gint count)
+gtk_text_iter_forward_chars (GtkTextIter *iter, int count)
 {
   GtkTextRealIter *real;
 
@@ -2301,8 +2301,8 @@ gtk_text_iter_forward_chars (GtkTextIter *iter, gint count)
     }
   else
     {
-      gint current_char_index;
-      gint new_char_index;
+      int current_char_index;
+      int new_char_index;
 
       check_invariants (iter);
 
@@ -2342,7 +2342,7 @@ gtk_text_iter_forward_chars (GtkTextIter *iter, gint count)
  *
  **/
 gboolean
-gtk_text_iter_backward_chars (GtkTextIter *iter, gint count)
+gtk_text_iter_backward_chars (GtkTextIter *iter, int count)
 {
   GtkTextRealIter *real;
 
@@ -2375,7 +2375,7 @@ gtk_text_iter_backward_chars (GtkTextIter *iter, gint count)
       if (real->line_byte_offset >= 0)
         {
           const char *p;
-          gint new_byte_offset;
+          int new_byte_offset;
 
           /* if in the last fourth of the segment walk backwards */
           if (count < real->segment_char_offset / 4)
@@ -2407,8 +2407,8 @@ gtk_text_iter_backward_chars (GtkTextIter *iter, gint count)
        */
       if (TRUE || count > MAX_LINEAR_SCAN)
         {
-          gint current_char_index;
-          gint new_char_index;
+          int current_char_index;
+          int new_char_index;
 
           current_char_index = gtk_text_iter_get_offset (iter);
 
@@ -2455,7 +2455,7 @@ gtk_text_iter_backward_chars (GtkTextIter *iter, gint count)
  **/
 gboolean
 gtk_text_iter_forward_text_chars  (GtkTextIter *iter,
-                                   gint         count)
+                                   int          count)
 {
 
 
@@ -2476,7 +2476,7 @@ gtk_text_iter_forward_text_chars  (GtkTextIter *iter,
  **/
 gboolean
 gtk_text_iter_backward_text_chars (GtkTextIter *iter,
-                                   gint         count)
+                                   int          count)
 {
 
 
@@ -2552,7 +2552,7 @@ gtk_text_iter_backward_line (GtkTextIter *iter)
   GtkTextLine *new_line;
   GtkTextRealIter *real;
   gboolean offset_will_change;
-  gint offset;
+  int offset;
 
   g_return_val_if_fail (iter != NULL, FALSE);
 
@@ -2626,7 +2626,7 @@ gtk_text_iter_backward_line (GtkTextIter *iter)
  * Returns: whether @iter moved and is dereferenceable
  **/
 gboolean
-gtk_text_iter_forward_lines (GtkTextIter *iter, gint count)
+gtk_text_iter_forward_lines (GtkTextIter *iter, int count)
 {
   FIX_OVERFLOWS (count);
   
@@ -2641,7 +2641,7 @@ gtk_text_iter_forward_lines (GtkTextIter *iter, gint count)
     }
   else
     {
-      gint old_line;
+      int old_line;
 
       if (gtk_text_iter_is_end (iter))
         return FALSE;
@@ -2677,7 +2677,7 @@ gtk_text_iter_forward_lines (GtkTextIter *iter, gint count)
  * Returns: whether @iter moved and is dereferenceable
  **/
 gboolean
-gtk_text_iter_backward_lines (GtkTextIter *iter, gint count)
+gtk_text_iter_backward_lines (GtkTextIter *iter, int count)
 {
   FIX_OVERFLOWS (count);
   
@@ -2691,7 +2691,7 @@ gtk_text_iter_backward_lines (GtkTextIter *iter, gint count)
     }
   else
     {
-      gint old_line;
+      int old_line;
 
       old_line = gtk_text_iter_get_line (iter);
 
@@ -2791,7 +2791,7 @@ gtk_text_iter_backward_visible_line (GtkTextIter *iter)
  **/
 gboolean
 gtk_text_iter_forward_visible_lines (GtkTextIter *iter,
-                                     gint         count)
+                                     int          count)
 {
   FIX_OVERFLOWS (count);
   
@@ -2829,7 +2829,7 @@ gtk_text_iter_forward_visible_lines (GtkTextIter *iter,
  **/
 gboolean
 gtk_text_iter_backward_visible_lines (GtkTextIter *iter,
-                                      gint         count)
+                                      int          count)
 {
   FIX_OVERFLOWS (count);
   
@@ -2850,23 +2850,23 @@ gtk_text_iter_backward_visible_lines (GtkTextIter *iter,
 }
 
 typedef gboolean (* FindLogAttrFunc) (const PangoLogAttr *attrs,
-                                      gint                offset,
-                                      gint                len,
-                                      gint               *found_offset,
+                                      int                 offset,
+                                      int                 len,
+                                      int                *found_offset,
                                       gboolean            already_moved_initially);
 
 typedef gboolean (* TestLogAttrFunc) (const PangoLogAttr *attrs,
-                                      gint                offset,
-                                      gint                min_offset,
-                                      gint                len);
+                                      int                 offset,
+                                      int                 min_offset,
+                                      int                 len);
 
 /* Word funcs */
 
 static gboolean
 find_word_end_func (const PangoLogAttr *attrs,
-                    gint                offset,
-                    gint                len,
-                    gint               *found_offset,
+                    int                 offset,
+                    int                 len,
+                    int                *found_offset,
                     gboolean            already_moved_initially)
 {
   if (!already_moved_initially)
@@ -2889,18 +2889,18 @@ find_word_end_func (const PangoLogAttr *attrs,
 
 static gboolean
 is_word_end_func (const PangoLogAttr *attrs,
-                  gint                offset,
-                  gint                min_offset,
-                  gint                len)
+                  int                 offset,
+                  int                 min_offset,
+                  int                 len)
 {
   return attrs[offset].is_word_end;
 }
 
 static gboolean
 find_word_start_func (const PangoLogAttr *attrs,
-                      gint                offset,
-                      gint                len,
-                      gint               *found_offset,
+                      int                 offset,
+                      int                 len,
+                      int                *found_offset,
                       gboolean            already_moved_initially)
 {
   if (!already_moved_initially)
@@ -2923,18 +2923,18 @@ find_word_start_func (const PangoLogAttr *attrs,
 
 static gboolean
 is_word_start_func (const PangoLogAttr *attrs,
-                    gint                offset,
-                    gint                min_offset,
-                    gint                len)
+                    int                 offset,
+                    int                 min_offset,
+                    int                 len)
 {
   return attrs[offset].is_word_start;
 }
 
 static gboolean
 inside_word_func (const PangoLogAttr *attrs,
-                  gint                offset,
-                  gint                min_offset,
-                  gint                len)
+                  int                 offset,
+                  int                 min_offset,
+                  int                 len)
 {
   /* Find next word start or end */
   while (offset >= min_offset &&
@@ -2951,9 +2951,9 @@ inside_word_func (const PangoLogAttr *attrs,
 
 static gboolean
 find_sentence_end_func (const PangoLogAttr *attrs,
-                        gint                offset,
-                        gint                len,
-                        gint               *found_offset,
+                        int                 offset,
+                        int                 len,
+                        int                *found_offset,
                         gboolean            already_moved_initially)
 {
   if (!already_moved_initially)
@@ -2976,18 +2976,18 @@ find_sentence_end_func (const PangoLogAttr *attrs,
 
 static gboolean
 is_sentence_end_func (const PangoLogAttr *attrs,
-                      gint                offset,
-                      gint                min_offset,
-                      gint                len)
+                      int                 offset,
+                      int                 min_offset,
+                      int                 len)
 {
   return attrs[offset].is_sentence_end;
 }
 
 static gboolean
 find_sentence_start_func (const PangoLogAttr *attrs,
-                          gint                offset,
-                          gint                len,
-                          gint               *found_offset,
+                          int                 offset,
+                          int                 len,
+                          int                *found_offset,
                           gboolean            already_moved_initially)
 {
   if (!already_moved_initially)
@@ -3010,18 +3010,18 @@ find_sentence_start_func (const PangoLogAttr *attrs,
 
 static gboolean
 is_sentence_start_func (const PangoLogAttr *attrs,
-                        gint                offset,
-                        gint                min_offset,
-                        gint                len)
+                        int                 offset,
+                        int                 min_offset,
+                        int                 len)
 {
   return attrs[offset].is_sentence_start;
 }
 
 static gboolean
 inside_sentence_func (const PangoLogAttr *attrs,
-                      gint                offset,
-                      gint                min_offset,
-                      gint                len)
+                      int                 offset,
+                      int                 min_offset,
+                      int                 len)
 {
   /* Find next sentence start or end */
   while (!(attrs[offset].is_sentence_start || attrs[offset].is_sentence_end))
@@ -3038,9 +3038,9 @@ static gboolean
 test_log_attrs (const GtkTextIter *iter,
                 TestLogAttrFunc    func)
 {
-  gint char_len;
+  int char_len;
   const PangoLogAttr *attrs;
-  gint offset;
+  int offset;
 
   g_return_val_if_fail (iter != NULL, FALSE);
 
@@ -3057,12 +3057,12 @@ test_log_attrs (const GtkTextIter *iter,
 static gboolean
 find_line_log_attrs (const GtkTextIter *iter,
                      FindLogAttrFunc    func,
-                     gint              *found_offset,
+                     int               *found_offset,
                      gboolean           already_moved_initially)
 {
-  gint char_len;
+  int char_len;
   const PangoLogAttr *attrs;
-  gint offset;
+  int offset;
 
   g_return_val_if_fail (iter != NULL, FALSE);
   
@@ -3092,7 +3092,7 @@ find_by_log_attrs (GtkTextIter     *arg_iter,
 
   while (TRUE)
     {
-      gint offset = 0;
+      int offset = 0;
       gboolean found;
 
       found = find_line_log_attrs (&iter, func, &offset, already_moved_initially);
@@ -3170,11 +3170,11 @@ find_visible_by_log_attrs (GtkTextIter     *iter,
 }
 
 typedef gboolean (* OneStepFunc) (GtkTextIter *iter);
-typedef gboolean (* MultipleStepFunc) (GtkTextIter *iter, gint count);
+typedef gboolean (* MultipleStepFunc) (GtkTextIter *iter, int count);
 				  
 static gboolean 
 move_multiple_steps (GtkTextIter *iter, 
-		     gint count,
+		     int count,
 		     OneStepFunc step_forward,
 		     MultipleStepFunc n_steps_backward)
 {
@@ -3254,7 +3254,7 @@ gtk_text_iter_backward_word_start (GtkTextIter *iter)
  **/
 gboolean
 gtk_text_iter_forward_word_ends (GtkTextIter      *iter,
-                                 gint              count)
+                                 int               count)
 {
   return move_multiple_steps (iter, count, 
 			      gtk_text_iter_forward_word_end,
@@ -3272,7 +3272,7 @@ gtk_text_iter_forward_word_ends (GtkTextIter      *iter,
  **/
 gboolean
 gtk_text_iter_backward_word_starts (GtkTextIter      *iter,
-                                    gint               count)
+                                    int                count)
 {
   return move_multiple_steps (iter, count, 
 			      gtk_text_iter_backward_word_start,
@@ -3326,7 +3326,7 @@ gtk_text_iter_backward_visible_word_start (GtkTextIter      *iter)
  **/
 gboolean
 gtk_text_iter_forward_visible_word_ends (GtkTextIter *iter,
-					 gint         count)
+					 int          count)
 {
   return move_multiple_steps (iter, count, 
 			      gtk_text_iter_forward_visible_word_end,
@@ -3344,7 +3344,7 @@ gtk_text_iter_forward_visible_word_ends (GtkTextIter *iter,
  **/
 gboolean
 gtk_text_iter_backward_visible_word_starts (GtkTextIter *iter,
-					    gint         count)
+					    int          count)
 {
   return move_multiple_steps (iter, count, 
 			      gtk_text_iter_backward_visible_word_start,
@@ -3509,7 +3509,7 @@ gtk_text_iter_backward_sentence_start (GtkTextIter *iter)
  **/
 gboolean
 gtk_text_iter_forward_sentence_ends (GtkTextIter      *iter,
-                                     gint              count)
+                                     int               count)
 {
   return move_multiple_steps (iter, count, 
 			      gtk_text_iter_forward_sentence_end,
@@ -3529,7 +3529,7 @@ gtk_text_iter_forward_sentence_ends (GtkTextIter      *iter,
  **/
 gboolean
 gtk_text_iter_backward_sentence_starts (GtkTextIter *iter,
-                                        gint         count)
+                                        int          count)
 {
   return move_multiple_steps (iter, count, 
 			      gtk_text_iter_backward_sentence_start,
@@ -3538,9 +3538,9 @@ gtk_text_iter_backward_sentence_starts (GtkTextIter *iter,
 
 static gboolean
 find_forward_cursor_pos_func (const PangoLogAttr *attrs,
-                              gint                offset,
-                              gint                len,
-                              gint               *found_offset,
+                              int                 offset,
+                              int                 len,
+                              int                *found_offset,
                               gboolean            already_moved_initially)
 {
   if (!already_moved_initially)
@@ -3562,9 +3562,9 @@ find_forward_cursor_pos_func (const PangoLogAttr *attrs,
 
 static gboolean
 find_backward_cursor_pos_func (const PangoLogAttr *attrs,
-                               gint                offset,
-                               gint                len,
-                               gint               *found_offset,
+                               int                 offset,
+                               int                 len,
+                               int                *found_offset,
                                gboolean            already_moved_initially)
 {
   if (!already_moved_initially)
@@ -3586,9 +3586,9 @@ find_backward_cursor_pos_func (const PangoLogAttr *attrs,
 
 static gboolean
 is_cursor_pos_func (const PangoLogAttr *attrs,
-                    gint          offset,
-                    gint          min_offset,
-                    gint          len)
+                    int           offset,
+                    int           min_offset,
+                    int           len)
 {
   return attrs[offset].is_cursor_position;
 }
@@ -3642,7 +3642,7 @@ gtk_text_iter_backward_cursor_position (GtkTextIter *iter)
  **/
 gboolean
 gtk_text_iter_forward_cursor_positions (GtkTextIter *iter,
-                                        gint         count)
+                                        int          count)
 {
   return move_multiple_steps (iter, count, 
 			      gtk_text_iter_forward_cursor_position,
@@ -3661,7 +3661,7 @@ gtk_text_iter_forward_cursor_positions (GtkTextIter *iter,
  **/
 gboolean
 gtk_text_iter_backward_cursor_positions (GtkTextIter *iter,
-                                         gint         count)
+                                         int          count)
 {
   return move_multiple_steps (iter, count, 
 			      gtk_text_iter_backward_cursor_position,
@@ -3710,7 +3710,7 @@ gtk_text_iter_backward_visible_cursor_position (GtkTextIter *iter)
  **/
 gboolean
 gtk_text_iter_forward_visible_cursor_positions (GtkTextIter *iter,
-						gint         count)
+						int          count)
 {
   return move_multiple_steps (iter, count, 
 			      gtk_text_iter_forward_visible_cursor_position,
@@ -3729,7 +3729,7 @@ gtk_text_iter_forward_visible_cursor_positions (GtkTextIter *iter,
  **/
 gboolean
 gtk_text_iter_backward_visible_cursor_positions (GtkTextIter *iter,
-						 gint         count)
+						 int          count)
 {
   return move_multiple_steps (iter, count, 
 			      gtk_text_iter_backward_visible_cursor_position,
@@ -3766,10 +3766,10 @@ gtk_text_iter_is_cursor_position (const GtkTextIter *iter)
  **/
 void
 gtk_text_iter_set_line_offset (GtkTextIter *iter,
-                               gint         char_on_line)
+                               int          char_on_line)
 {
   GtkTextRealIter *real;
-  gint chars_in_line;
+  int chars_in_line;
   
   g_return_if_fail (iter != NULL);
 
@@ -3805,10 +3805,10 @@ gtk_text_iter_set_line_offset (GtkTextIter *iter,
  **/
 void
 gtk_text_iter_set_line_index (GtkTextIter *iter,
-                              gint         byte_on_line)
+                              int          byte_on_line)
 {
   GtkTextRealIter *real;
-  gint bytes_in_line;
+  int bytes_in_line;
   
   g_return_if_fail (iter != NULL);
 
@@ -3850,9 +3850,9 @@ gtk_text_iter_set_line_index (GtkTextIter *iter,
  **/
 void
 gtk_text_iter_set_visible_line_offset (GtkTextIter *iter,
-                                       gint         char_on_line)
+                                       int          char_on_line)
 {
-  gint chars_seen = 0;
+  int chars_seen = 0;
   GtkTextIter pos;
 
   g_return_if_fail (iter != NULL);
@@ -3891,10 +3891,10 @@ gtk_text_iter_set_visible_line_offset (GtkTextIter *iter,
  **/
 void
 gtk_text_iter_set_visible_line_index (GtkTextIter *iter,
-                                      gint         byte_on_line)
+                                      int          byte_on_line)
 {
   GtkTextRealIter *real;
-  gint offset = 0;
+  int offset = 0;
   GtkTextIter pos;
   GtkTextLineSegment *seg;
   
@@ -3952,10 +3952,10 @@ gtk_text_iter_set_visible_line_index (GtkTextIter *iter,
  **/
 void
 gtk_text_iter_set_line (GtkTextIter *iter,
-                        gint         line_number)
+                        int          line_number)
 {
   GtkTextLine *line;
-  gint real_line;
+  int real_line;
   GtkTextRealIter *real;
 
   g_return_if_fail (iter != NULL);
@@ -3987,12 +3987,12 @@ gtk_text_iter_set_line (GtkTextIter *iter,
  **/
 void
 gtk_text_iter_set_offset (GtkTextIter *iter,
-                          gint         char_offset)
+                          int          char_offset)
 {
   GtkTextLine *line;
   GtkTextRealIter *real;
-  gint line_start;
-  gint real_char_index;
+  int line_start;
+  int real_char_index;
 
   g_return_if_fail (iter != NULL);
 
@@ -4094,8 +4094,8 @@ find_paragraph_delimiter_for_line (GtkTextIter *iter)
 gboolean
 gtk_text_iter_forward_to_line_end (GtkTextIter *iter)
 {
-  gint current_offset;
-  gint new_offset;
+  int current_offset;
+  int new_offset;
 
   
   g_return_val_if_fail (iter != NULL, FALSE);
@@ -4317,7 +4317,7 @@ matches_pred (GtkTextIter *iter,
               GtkTextCharPredicate pred,
               gpointer user_data)
 {
-  gint ch;
+  int ch;
 
   ch = gtk_text_iter_get_char (iter);
 
@@ -4399,12 +4399,12 @@ gtk_text_iter_backward_find_char (GtkTextIter         *iter,
 
 static void
 forward_chars_with_skipping (GtkTextIter *iter,
-                             gint         count,
+                             int          count,
                              gboolean     skip_invisible,
                              gboolean     skip_nontext,
                              gboolean     skip_decomp)
 {
-  gint i;
+  int i;
 
   g_return_if_fail (count >= 0);
 
@@ -4436,7 +4436,7 @@ forward_chars_with_skipping (GtkTextIter *iter,
           gchar *normal;
           gchar *casefold;
           gchar buffer[6];
-          gint buffer_len;
+          int buffer_len;
 
           buffer_len = g_unichar_to_utf8 (gtk_text_iter_get_char (iter), buffer);
           casefold = g_utf8_casefold (buffer, buffer_len);
@@ -4455,7 +4455,7 @@ forward_chars_with_skipping (GtkTextIter *iter,
 
 static const gchar *
 pointer_from_offset_skipping_decomp (const gchar *str,
-                                     gint         offset)
+                                     int          offset)
 {
   gchar *casefold, *normal;
   const gchar *p, *q;
@@ -4508,7 +4508,7 @@ utf8_strcasestr (const gchar *haystack,
   gchar *p;
   gchar *casefold;
   gchar *caseless_haystack;
-  gint i;
+  int i;
 
   g_return_val_if_fail (haystack != NULL, NULL);
   g_return_val_if_fail (needle != NULL, NULL);
@@ -4564,7 +4564,7 @@ utf8_strrcasestr (const gchar *haystack,
   gchar *p;
   gchar *casefold;
   gchar *caseless_haystack;
-  gint i;
+  int i;
 
   g_return_val_if_fail (haystack != NULL, NULL);
   g_return_val_if_fail (needle != NULL, NULL);
@@ -4624,8 +4624,8 @@ utf8_caselessnmatch (const gchar *s1,
   gchar *casefold;
   gchar *normalized_s1;
   gchar *normalized_s2;
-  gint len_s1;
-  gint len_s2;
+  int len_s1;
+  int len_s2;
   gboolean ret = FALSE;
 
   g_return_val_if_fail (s1 != NULL, FALSE);
@@ -4665,7 +4665,7 @@ lines_match (const GtkTextIter *start,
   GtkTextIter next;
   gchar *line_text;
   const gchar *found;
-  gint offset;
+  int offset;
 
   if (*lines == NULL || **lines == '\0')
     {
@@ -4765,8 +4765,8 @@ lines_match (const GtkTextIter *start,
 static gchar **
 strbreakup (const char *string,
             const char *delimiter,
-            gint        max_tokens,
-            gint       *num_strings,
+            int         max_tokens,
+            int        *num_strings,
             gboolean    case_insensitive)
 {
   GSList *string_list = NULL, *slist;
@@ -4968,8 +4968,8 @@ vectors_equal_ignoring_trailing (gchar    **vec1,
 
   while (*i1 && *i2)
     {
-      gint len1;
-      gint len2;
+      int len1;
+      int len2;
 
       if (!case_insensitive)
         {
@@ -5037,7 +5037,7 @@ typedef struct _LinesWindow LinesWindow;
 
 struct _LinesWindow
 {
-  gint n_lines;
+  int n_lines;
   gchar **lines;
 
   GtkTextIter first_line_start;
@@ -5051,7 +5051,7 @@ static void
 lines_window_init (LinesWindow       *win,
                    const GtkTextIter *start)
 {
-  gint i;
+  int i;
   GtkTextIter line_start;
   GtkTextIter line_end;
 
@@ -5196,7 +5196,7 @@ gtk_text_iter_backward_search (const GtkTextIter *iter,
 {
   gchar **lines = NULL;
   gchar **l;
-  gint n_lines;
+  int n_lines;
   LinesWindow win;
   gboolean retval = FALSE;
   gboolean visible_only;
@@ -5272,7 +5272,7 @@ gtk_text_iter_backward_search (const GtkTextIter *iter,
                                            case_insensitive))
         {
           /* Match! */
-          gint offset;
+          int offset;
           GtkTextIter start_tmp;
           GtkTextIter end_tmp;
 
@@ -5391,7 +5391,7 @@ _gtk_text_iter_same_line (const GtkTextIter *lhs,
  * 
  * Returns: -1 if @lhs is less than @rhs, 1 if @lhs is greater, 0 if they are equal
  **/
-gint
+int
 gtk_text_iter_compare (const GtkTextIter *lhs,
                        const GtkTextIter *rhs)
 {
@@ -5410,7 +5410,7 @@ gtk_text_iter_compare (const GtkTextIter *lhs,
   
   if (real_lhs->line == real_rhs->line)
     {
-      gint left_index, right_index;
+      int left_index, right_index;
 
       if (real_lhs->line_byte_offset >= 0 &&
           real_rhs->line_byte_offset >= 0)
@@ -5437,7 +5437,7 @@ gtk_text_iter_compare (const GtkTextIter *lhs,
     }
   else
     {
-      gint line1, line2;
+      int line1, line2;
 
       line1 = gtk_text_iter_get_line (lhs);
       line2 = gtk_text_iter_get_line (rhs);
@@ -5512,11 +5512,11 @@ gtk_text_iter_order (GtkTextIter *first,
 void
 _gtk_text_btree_get_iter_at_char (GtkTextBTree *tree,
                                   GtkTextIter *iter,
-                                  gint char_index)
+                                  int char_index)
 {
   GtkTextRealIter *real = (GtkTextRealIter*)iter;
-  gint real_char_index;
-  gint line_start;
+  int real_char_index;
+  int line_start;
   GtkTextLine *line;
 
   g_return_if_fail (iter != NULL);
@@ -5535,12 +5535,12 @@ _gtk_text_btree_get_iter_at_char (GtkTextBTree *tree,
 void
 _gtk_text_btree_get_iter_at_line_char (GtkTextBTree *tree,
                                        GtkTextIter  *iter,
-                                       gint          line_number,
-                                       gint          char_on_line)
+                                       int           line_number,
+                                       int           char_on_line)
 {
   GtkTextRealIter *real = (GtkTextRealIter*)iter;
   GtkTextLine *line;
-  gint real_line;
+  int real_line;
 
   g_return_if_fail (iter != NULL);
   g_return_if_fail (tree != NULL);
@@ -5558,12 +5558,12 @@ _gtk_text_btree_get_iter_at_line_char (GtkTextBTree *tree,
 void
 _gtk_text_btree_get_iter_at_line_byte (GtkTextBTree   *tree,
                                        GtkTextIter    *iter,
-                                       gint            line_number,
-                                       gint            byte_index)
+                                       int             line_number,
+                                       int             byte_index)
 {
   GtkTextRealIter *real = (GtkTextRealIter*)iter;
   GtkTextLine *line;
-  gint real_line;
+  int real_line;
 
   g_return_if_fail (iter != NULL);
   g_return_if_fail (tree != NULL);
@@ -5582,7 +5582,7 @@ void
 _gtk_text_btree_get_iter_at_line      (GtkTextBTree   *tree,
                                        GtkTextIter    *iter,
                                        GtkTextLine    *line,
-                                       gint            byte_offset)
+                                       int             byte_offset)
 {
   g_return_if_fail (iter != NULL);
   g_return_if_fail (tree != NULL);
@@ -5739,7 +5739,7 @@ void
 _gtk_text_iter_check (const GtkTextIter *iter)
 {
   const GtkTextRealIter *real = (const GtkTextRealIter*)iter;
-  gint line_char_offset, line_byte_offset, seg_char_offset, seg_byte_offset;
+  int line_char_offset, line_byte_offset, seg_char_offset, seg_byte_offset;
   GtkTextLineSegment *byte_segment = NULL;
   GtkTextLineSegment *byte_any_segment = NULL;
   GtkTextLineSegment *char_segment = NULL;
@@ -5866,8 +5866,8 @@ _gtk_text_iter_check (const GtkTextIter *iter)
          segment. */
       if (char_segment->type == &gtk_text_char_type)
         {
-          gint byte_offset = 0;
-          gint char_offset = 0;
+          int byte_offset = 0;
+          int char_offset = 0;
           while (char_offset < seg_char_offset)
             {
               const char * start = char_segment->body.chars + byte_offset;
@@ -5891,7 +5891,7 @@ _gtk_text_iter_check (const GtkTextIter *iter)
 
   if (real->cached_line_number >= 0)
     {
-      gint should_be;
+      int should_be;
 
       should_be = _gtk_text_line_get_number (real->line);
       if (real->cached_line_number != should_be)
@@ -5904,7 +5904,7 @@ _gtk_text_iter_check (const GtkTextIter *iter)
                                           efficiently, not a real
                                           invariant. */
         {
-          gint char_index;
+          int char_index;
 
           char_index = _gtk_text_line_char_index (real->line);
           char_index += real->line_char_offset;

@@ -22,7 +22,7 @@ format_number (GtkTreeViewColumn *col,
                GtkTreeIter       *iter,
                gpointer           data)
 {
-  gint num;
+  int num;
   gchar *text;
 
   gtk_tree_model_get (model, iter, GPOINTER_TO_INT (data), &num, -1);
@@ -35,11 +35,11 @@ static void
 filter_modify_func (GtkTreeModel *model,
                     GtkTreeIter  *iter,
                     GValue       *value,
-                    gint          column,
+                    int           column,
                     gpointer      data)
 {
   GtkTreeModelFilter *filter_model = GTK_TREE_MODEL_FILTER (model);
-  gint width, height;
+  int width, height;
   GtkTreeModel *child_model;
   GtkTreeIter child_iter;
 
@@ -75,7 +75,7 @@ visible_func (GtkTreeModel *model,
               GtkTreeIter  *iter,
               gpointer      data)
 {
-  gint width;
+  int width;
 
   gtk_tree_model_get (model, iter,
                       WIDTH_COLUMN, &width,

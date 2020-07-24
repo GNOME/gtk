@@ -50,7 +50,7 @@ load_types (void)
 int
 main (int argc, char *argv[])
 {
-  gint i;
+  int i;
 
   gtk_init ();
   load_types ();

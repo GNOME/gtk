@@ -209,20 +209,20 @@ void     gtk_window_close         (GtkWindow *window);
  */
 GDK_AVAILABLE_IN_ALL
 void     gtk_window_set_default_size (GtkWindow   *window,
-                                      gint         width,
-                                      gint         height);
+                                      int          width,
+                                      int          height);
 GDK_AVAILABLE_IN_ALL
 void     gtk_window_get_default_size (GtkWindow   *window,
-                                      gint        *width,
-                                      gint        *height);
+                                      int         *width,
+                                      int         *height);
 GDK_AVAILABLE_IN_ALL
 void     gtk_window_resize           (GtkWindow   *window,
-                                      gint         width,
-                                      gint         height);
+                                      int          width,
+                                      int          height);
 GDK_AVAILABLE_IN_ALL
 void     gtk_window_get_size         (GtkWindow   *window,
-                                      gint        *width,
-                                      gint        *height);
+                                      int         *width,
+                                      int         *height);
 
 GDK_AVAILABLE_IN_ALL
 GtkWindowGroup *gtk_window_get_group (GtkWindow   *window);

@@ -483,7 +483,7 @@ gtk_menu_tracker_item_init_observer_iface (GtkActionObserverInterface *iface)
 GtkMenuTrackerItem *
 _gtk_menu_tracker_item_new (GtkActionObservable *observable,
                             GMenuModel          *model,
-                            gint                 item_index,
+                            int                  item_index,
                             gboolean             mac_os_mode,
                             const gchar         *action_namespace,
                             gboolean             is_separator)

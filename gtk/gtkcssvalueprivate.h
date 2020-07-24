@@ -37,7 +37,7 @@ typedef struct _GtkCssValueClass      GtkCssValueClass;
 /* using define instead of struct here so compilers get the packing right */
 #define GTK_CSS_VALUE_BASE \
   const GtkCssValueClass *class; \
-  gint ref_count; \
+  int ref_count; \
   guint is_computed: 1;
 
 struct _GtkCssValueClass {

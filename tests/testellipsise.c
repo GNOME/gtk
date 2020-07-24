@@ -29,7 +29,7 @@ combo_changed_cb (GtkWidget *combo,
 		  gpointer   data)
 {
   GtkWidget *label = GTK_WIDGET (data);
-  gint active;
+  int active;
 
   active = gtk_combo_box_get_active (GTK_COMBO_BOX (combo));
   gtk_label_set_ellipsize (GTK_LABEL (label), (PangoEllipsizeMode)active);

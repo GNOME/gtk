@@ -125,7 +125,7 @@ chooser_get_files (FileChooserQuartzData *data)
   if (!data->save)
     {
       NSArray *urls;
-      gint i;
+      int i;
 
       urls = [(NSOpenPanel *)data->panel URLs];
 

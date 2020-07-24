@@ -722,8 +722,8 @@ gdk_drag_get_drag_surface (GdkDrag *drag)
  */
 void
 gdk_drag_set_hotspot (GdkDrag *drag,
-                      gint     hot_x,
-                      gint     hot_y)
+                      int      hot_x,
+                      int      hot_y)
 {
   g_return_if_fail (GDK_IS_DRAG (drag));
 
@@ -807,7 +807,7 @@ GdkCursor *
 gdk_drag_get_cursor (GdkDrag       *drag,
                      GdkDragAction  action)
 {
-  gint i;
+  int i;
 
   for (i = 0 ; i < G_N_ELEMENTS (drag_cursors) - 1; i++)
     if (drag_cursors[i].action == action)

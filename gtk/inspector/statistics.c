@@ -84,14 +84,14 @@ enum
 
 G_DEFINE_TYPE_WITH_PRIVATE (GtkInspectorStatistics, gtk_inspector_statistics, GTK_TYPE_BOX)
 
-static gint
+static int
 add_type_count (GtkInspectorStatistics *sl, GType type)
 {
-  gint cumulative;
-  gint self;
+  int cumulative;
+  int self;
   GType *children;
   guint n_children;
-  gint i;
+  int i;
   TypeData *data;
 
   cumulative = 0;
@@ -202,8 +202,8 @@ cell_data_data (GtkCellLayout   *layout,
                 GtkTreeIter     *iter,
                 gpointer         data)
 {
-  gint column;
-  gint count;
+  int column;
+  int count;
   gchar *text;
 
   column = GPOINTER_TO_INT (data);
@@ -222,9 +222,9 @@ cell_data_delta (GtkCellLayout   *layout,
                  GtkTreeIter     *iter,
                  gpointer         data)
 {
-  gint column;
-  gint count1;
-  gint count2;
+  int column;
+  int count1;
+  int count2;
   gchar *text;
 
   column = GPOINTER_TO_INT (data);
@@ -304,7 +304,7 @@ match_string (const gchar *string,
 
 static gboolean
 match_row (GtkTreeModel *model,
-           gint          column,
+           int           column,
            const gchar  *key,
            GtkTreeIter  *iter,
            gpointer      data)

@@ -79,8 +79,8 @@ enum
 };
 
 static gboolean cb_query_tooltip (GtkWidget       *button,
-                                  gint             x,
-                                  gint             y,
+                                  int              x,
+                                  int              y,
                                   gboolean         keyboard_mode,
                                   GtkTooltip      *tooltip,
                                   gpointer         user_data);
@@ -214,8 +214,8 @@ gtk_volume_button_new (void)
 
 static gboolean
 cb_query_tooltip (GtkWidget  *button,
-                  gint        x,
-                  gint        y,
+                  int         x,
+                  int         y,
                   gboolean    keyboard_mode,
                   GtkTooltip *tooltip,
                   gpointer    user_data)

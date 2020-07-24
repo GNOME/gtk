@@ -27,7 +27,7 @@
 
 
 static gboolean gdk_event_source_prepare  (GSource     *source,
-                                           gint        *timeout);
+                                           int         *timeout);
 static gboolean gdk_event_source_check    (GSource     *source);
 static gboolean gdk_event_source_dispatch (GSource     *source,
                                            GSourceFunc  callback,
@@ -340,7 +340,7 @@ gdk_check_xpending (GdkDisplay *display)
 
 static gboolean
 gdk_event_source_prepare (GSource *source,
-                          gint    *timeout)
+                          int     *timeout)
 {
   GdkDisplay *display = ((GdkEventSource*) source)->display;
   gboolean retval;
@@ -488,7 +488,7 @@ gdk_x11_event_source_select_events (GdkEventSource *source,
 {
   unsigned int xmask = extra_x_mask;
   GList *list;
-  gint i;
+  int i;
 
   list = source->translators;
 

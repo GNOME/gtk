@@ -279,7 +279,7 @@ gtk_event_controller_scroll_handle_event (GtkEventController *controller,
 
       if (scroll->flags & GTK_EVENT_CONTROLLER_SCROLL_DISCRETE)
         {
-          gint steps;
+          int steps;
 
           scroll->cur_dx += dx;
           scroll->cur_dy += dy;

@@ -343,8 +343,8 @@ gtk_buildable_parse_context_get_element_stack (GtkBuildableParseContext *context
  */
 void
 gtk_buildable_parse_context_get_position (GtkBuildableParseContext *context,
-                                          gint                *line_number,
-                                          gint                *char_number)
+                                          int                 *line_number,
+                                          int                 *char_number)
 
 {
   if (context->ctx)
@@ -397,7 +397,7 @@ error_missing_attribute (ParserData   *data,
                          const gchar  *attribute,
                          GError      **error)
 {
-  gint line, col;
+  int line, col;
 
   gtk_buildable_parse_context_get_position (&data->ctx, &line, &col);
 
@@ -414,7 +414,7 @@ error_invalid_tag (ParserData   *data,
                    const gchar  *expected,
                    GError      **error)
 {
-  gint line, col;
+  int line, col;
 
   gtk_buildable_parse_context_get_position (&data->ctx, &line, &col);
 
@@ -437,7 +437,7 @@ error_unhandled_tag (ParserData   *data,
                      const gchar  *tag,
                      GError      **error)
 {
-  gint line, col;
+  int line, col;
 
   gtk_buildable_parse_context_get_position (&data->ctx, &line, &col);
   g_set_error (error,
@@ -496,8 +496,8 @@ parse_requires (ParserData   *data,
   const gchar  *library = NULL;
   const gchar  *version = NULL;
   gchar **split;
-  gint version_major = 0;
-  gint version_minor = 0;
+  int version_major = 0;
+  int version_minor = 0;
 
   if (!g_markup_collect_attributes (element_name, names, values, error,
                                     G_MARKUP_COLLECT_STRING, "lib", &library,
@@ -560,7 +560,7 @@ parse_object (GtkBuildableParseContext  *context,
   const gchar *type_func = NULL;
   const gchar *object_id = NULL;
   gchar *internal_id = NULL;
-  gint line;
+  int line;
 
   child_info = state_peek_info (data, ChildInfo);
   if (child_info && child_info->tag_type == TAG_OBJECT)
@@ -688,7 +688,7 @@ parse_template (GtkBuildableParseContext  *context,
   ObjectInfo *object_info;
   const gchar *object_class = NULL;
   const gchar *parent_class = NULL;
-  gint line;
+  int line;
   GType template_type;
   GType parsed_type;
 
@@ -860,7 +860,7 @@ parse_property (ParserData   *data,
   gboolean translatable = FALSE;
   ObjectInfo *object_info;
   GParamSpec *pspec = NULL;
-  gint line, col;
+  int line, col;
 
   object_info = state_peek_info (data, ObjectInfo);
   if (!object_info ||

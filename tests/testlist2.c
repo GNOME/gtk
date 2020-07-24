@@ -50,7 +50,7 @@ static void
 add_row_below (GtkButton *button, GtkWidget *child)
 {
   GtkWidget *revealer, *row, *list;
-  gint index;
+  int index;
 
   row = gtk_widget_get_parent (child);
   index = gtk_list_box_row_get_index (GTK_LIST_BOX_ROW (row));
@@ -109,7 +109,7 @@ quit_cb (GtkWidget *widget,
 int main (int argc, char *argv[])
 {
   GtkWidget *window, *list, *sw, *row;
-  gint i;
+  int i;
   gchar *text;
   gboolean done = FALSE;
 

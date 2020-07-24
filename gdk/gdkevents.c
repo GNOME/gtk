@@ -734,7 +734,7 @@ gdk_motion_event_push_history (GdkEvent *event,
   GdkMotionEvent *self = (GdkMotionEvent *) event;
   GdkTimeCoord hist;
   GdkDevice *device;
-  gint i, n_axes;
+  int i, n_axes;
 
   g_assert (GDK_IS_EVENT_TYPE (event, GDK_MOTION_NOTIFY));
   g_assert (GDK_IS_EVENT_TYPE (history_event, GDK_MOTION_NOTIFY));

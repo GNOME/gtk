@@ -36,7 +36,7 @@ record_state_change (AtkObject   *accessible,
 
   if (states)
     {
-      gint i;
+      int i;
 
       for (i = 0; states[i]; i++)
         {
@@ -66,8 +66,8 @@ static void
 do_action (GtkBuilder *builder, const gchar *action, GString *string)
 {
   gchar **parts;
-  gint len;
-  gint i;
+  int len;
+  int i;
 
   parts = g_strsplit (action, " ", 0);
   len = g_strv_length (parts);
@@ -142,7 +142,7 @@ record_events (const gchar *ui_file,
   GError *error;
   gchar *contents;
   gchar **actions;
-  gint i, len;
+  int i, len;
 
   builder = gtk_builder_new ();
   error = NULL;

@@ -22,7 +22,7 @@ static gchar *
 get_content (void)
 {
   GString *s;
-  gint i;
+  int i;
 
   s = g_string_new ("");
   for (i = 1; i <= 150; i++)
@@ -34,7 +34,7 @@ get_content (void)
 static void
 mode_changed (GtkComboBox *combo, GtkScrolledWindow *sw)
 {
-  gint active = gtk_combo_box_get_active (combo);
+  int active = gtk_combo_box_get_active (combo);
 
   gtk_scrolled_window_set_overlay_scrolling (sw, active == 1);
 }

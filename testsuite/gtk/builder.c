@@ -1880,7 +1880,7 @@ test_add_objects (void)
 {
   GtkBuilder *builder;
   GError *error;
-  gint ret;
+  int ret;
   GObject *obj;
   const gchar *objects[2] = {"mainbox", NULL};
   const gchar *objects2[3] = {"mainbox", "window2", NULL};

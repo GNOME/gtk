@@ -150,7 +150,7 @@ text_buffer_changed_cb (GtkTextBuffer *buffer,
 {
   GtkWindow *window = user_data;
   BloatPad *app;
-  gint old_n, n;
+  int old_n, n;
 
   app = (BloatPad *) gtk_window_get_application (window);
 
@@ -293,10 +293,10 @@ bloat_pad_activate (GApplication *application)
 static void
 bloat_pad_open (GApplication  *application,
                 GFile        **files,
-                gint           n_files,
+                int            n_files,
                 const gchar   *hint)
 {
-  gint i;
+  int i;
 
   for (i = 0; i < n_files; i++)
     new_window (application, files[i]);
@@ -400,7 +400,7 @@ edit_accels (GSimpleAction *action,
   GtkWidget *entry;
   gchar **actions;
   GtkWidget *dialog;
-  gint i;
+  int i;
 
   dialog = gtk_dialog_new ();
   gtk_window_set_application (GTK_WINDOW (dialog), app);
@@ -482,7 +482,7 @@ static void
 dump_accels (GtkApplication *app)
 {
   gchar **actions;
-  gint i;
+  int i;
 
   actions = gtk_application_list_action_descriptions (app);
   for (i = 0; actions[i]; i++)
@@ -512,7 +512,7 @@ bloat_pad_startup (GApplication *application)
   GIcon *icon2;
   GEmblem *emblem;
   GFile *file;
-  gint i;
+  int i;
   struct {
     const gchar *action_and_target;
     const gchar *accelerators[2];

@@ -88,8 +88,8 @@ GdkSurface      *gdk_drag_get_drag_surface (GdkDrag *drag);
 
 GDK_AVAILABLE_IN_ALL
 void            gdk_drag_set_hotspot (GdkDrag *drag,
-                                      gint     hot_x,
-                                      gint     hot_y);
+                                      int      hot_x,
+                                      int      hot_y);
 
 GDK_AVAILABLE_IN_ALL
 GdkContentProvider *

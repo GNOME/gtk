@@ -9,7 +9,7 @@
 #include <gtk/gtkunixprint.h>
 
 static void
-done_cb (GtkDialog *dialog, gint response, gpointer data)
+done_cb (GtkDialog *dialog, int response, gpointer data)
 {
   gtk_window_destroy (GTK_WINDOW (dialog));
 }

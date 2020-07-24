@@ -30,7 +30,7 @@ const cairo_font_options_t *
                     gtk_settings_get_font_options            (GtkSettings            *settings);
 GdkDisplay         *_gtk_settings_get_display                (GtkSettings            *settings);
 GtkStyleCascade    *_gtk_settings_get_style_cascade          (GtkSettings            *settings,
-                                                              gint                    scale);
+                                                              int                     scale);
 
 typedef enum
 {
@@ -44,9 +44,9 @@ GtkSettingsSource  _gtk_settings_get_setting_source (GtkSettings *settings,
                                                      const gchar *name);
 
 gboolean gtk_settings_get_enable_animations  (GtkSettings *settings);
-gint     gtk_settings_get_dnd_drag_threshold (GtkSettings *settings);
+int      gtk_settings_get_dnd_drag_threshold (GtkSettings *settings);
 const gchar *gtk_settings_get_font_family    (GtkSettings *settings);
-gint         gtk_settings_get_font_size      (GtkSettings *settings);
+int          gtk_settings_get_font_size      (GtkSettings *settings);
 gboolean     gtk_settings_get_font_size_is_absolute (GtkSettings *settings);
 
 G_END_DECLS

@@ -49,9 +49,9 @@ GDK_AVAILABLE_IN_ALL
 GtkPageSetup *       gtk_print_unix_dialog_get_page_setup          (GtkPrintUnixDialog *dialog);
 GDK_AVAILABLE_IN_ALL
 void                 gtk_print_unix_dialog_set_current_page        (GtkPrintUnixDialog *dialog,
-								    gint                current_page);
+								    int                 current_page);
 GDK_AVAILABLE_IN_ALL
-gint                 gtk_print_unix_dialog_get_current_page        (GtkPrintUnixDialog *dialog);
+int                  gtk_print_unix_dialog_get_current_page        (GtkPrintUnixDialog *dialog);
 GDK_AVAILABLE_IN_ALL
 void                 gtk_print_unix_dialog_set_settings            (GtkPrintUnixDialog *dialog,
 								    GtkPrintSettings   *settings);

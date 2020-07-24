@@ -58,7 +58,7 @@ typedef struct _GdkWaylandSelection GdkWaylandSelection;
 typedef struct {
         gboolean     antialias;
         gboolean     hinting;
-        gint         dpi;
+        int          dpi;
         const gchar *rgba;
         const gchar *hintstyle;
 } GsdXftSettings;

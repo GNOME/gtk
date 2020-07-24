@@ -258,7 +258,7 @@ static void
 add_group (GtkInspectorActions *sl,
            GActionGroup        *group)
 {
-  gint i;
+  int i;
   gchar **names;
 
   names = g_action_group_list_actions (group);
@@ -271,7 +271,7 @@ static void
 add_muxer (GtkInspectorActions *sl,
            GtkActionMuxer      *muxer)
 {
-  gint i;
+  int i;
   gchar **names;
 
   names = gtk_action_muxer_list_actions (muxer);

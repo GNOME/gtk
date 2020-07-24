@@ -73,13 +73,13 @@ struct _GtkCellRendererProgressClass
 
 struct _GtkCellRendererProgressPrivate
 {
-  gint value;
+  int value;
   gchar *text;
   gchar *label;
-  gint min_h;
-  gint min_w;
-  gint pulse;
-  gint offset;
+  int min_h;
+  int min_w;
+  int pulse;
+  int offset;
   gfloat text_xalign;
   gfloat text_yalign;
   GtkOrientation orientation;
@@ -96,23 +96,23 @@ static void gtk_cell_renderer_progress_set_property (GObject                 *ob
 						     const GValue            *value,
 						     GParamSpec              *pspec);
 static void gtk_cell_renderer_progress_set_value    (GtkCellRendererProgress *cellprogress,
-						     gint                     value);
+						     int                      value);
 static void gtk_cell_renderer_progress_set_text     (GtkCellRendererProgress *cellprogress,
 						     const gchar             *text);
 static void gtk_cell_renderer_progress_set_pulse    (GtkCellRendererProgress *cellprogress,
-						     gint                     pulse);
+						     int                      pulse);
 static void compute_dimensions                      (GtkCellRenderer         *cell,
 						     GtkWidget               *widget,
 						     const gchar             *text,
-						     gint                    *width,
-						     gint                    *height);
+						     int                     *width,
+						     int                     *height);
 static void gtk_cell_renderer_progress_get_size     (GtkCellRenderer         *cell,
 						     GtkWidget               *widget,
 						     const GdkRectangle      *cell_area,
-						     gint                    *x_offset,
-						     gint                    *y_offset,
-						     gint                    *width,
-						     gint                    *height);
+						     int                     *x_offset,
+						     int                     *y_offset,
+						     int                     *width,
+						     int                     *height);
 static void gtk_cell_renderer_progress_snapshot     (GtkCellRenderer         *cell,
 						     GtkSnapshot             *snapshot,
 						     GtkWidget               *widget,
@@ -383,7 +383,7 @@ recompute_label (GtkCellRendererProgress *cellprogress)
 
 static void
 gtk_cell_renderer_progress_set_value (GtkCellRendererProgress *cellprogress, 
-				      gint                     value)
+				      int                      value)
 {
   GtkCellRendererProgressPrivate *priv = gtk_cell_renderer_progress_get_instance_private (cellprogress);
 
@@ -411,7 +411,7 @@ gtk_cell_renderer_progress_set_text (GtkCellRendererProgress *cellprogress,
 
 static void
 gtk_cell_renderer_progress_set_pulse (GtkCellRendererProgress *cellprogress, 
-				      gint                     pulse)
+				      int                      pulse)
 {
   GtkCellRendererProgressPrivate *priv = gtk_cell_renderer_progress_get_instance_private (cellprogress);
 
@@ -432,12 +432,12 @@ static void
 compute_dimensions (GtkCellRenderer *cell,
 		    GtkWidget       *widget, 
 		    const gchar     *text, 
-		    gint            *width, 
-		    gint            *height)
+		    int             *width, 
+		    int             *height)
 {
   PangoRectangle logical_rect;
   PangoLayout *layout;
-  gint xpad, ypad;
+  int xpad, ypad;
   
   layout = gtk_widget_create_pango_layout (widget, text);
   pango_layout_get_pixel_extents (layout, NULL, &logical_rect);
@@ -457,14 +457,14 @@ static void
 gtk_cell_renderer_progress_get_size (GtkCellRenderer    *cell,
 				     GtkWidget          *widget,
 				     const GdkRectangle *cell_area,
-				     gint               *x_offset,
-				     gint               *y_offset,
-				     gint               *width,
-				     gint               *height)
+				     int                *x_offset,
+				     int                *y_offset,
+				     int                *width,
+				     int                *height)
 {
   GtkCellRendererProgress *cellprogress = GTK_CELL_RENDERER_PROGRESS (cell);
   GtkCellRendererProgressPrivate *priv = gtk_cell_renderer_progress_get_instance_private (cellprogress);
-  gint w, h;
+  int w, h;
   gchar *text;
 
   if (priv->min_w < 0)
@@ -501,12 +501,12 @@ gtk_cell_renderer_progress_get_size (GtkCellRenderer    *cell,
   if (y_offset) *y_offset = 0;
 }
 
-static inline gint
-get_bar_size (gint pulse,
-	      gint value,
-	      gint full_size)
+static inline int
+get_bar_size (int pulse,
+	      int value,
+	      int full_size)
 {
-  gint bar_size;
+  int bar_size;
 
   if (pulse < 0)
     bar_size = full_size * MAX (0, value) / 100;
@@ -520,15 +520,15 @@ get_bar_size (gint pulse,
   return bar_size;
 }
 
-static inline gint
-get_bar_position (gint     start,
-		  gint     full_size,
-		  gint     bar_size,
-		  gint     pulse,
-		  gint     offset,
+static inline int
+get_bar_position (int      start,
+		  int      full_size,
+		  int      bar_size,
+		  int      pulse,
+		  int      offset,
 		  gboolean is_rtl)
 {
-  gint position;
+  int position;
 
   if (pulse < 0 || pulse == 0 || pulse == G_MAXINT)
     {
@@ -559,8 +559,8 @@ gtk_cell_renderer_progress_snapshot (GtkCellRenderer      *cell,
   GtkBorder padding;
   PangoLayout *layout;
   PangoRectangle logical_rect;
-  gint x, y, w, h, x_pos, y_pos, bar_position, bar_size, start, full_size;
-  gint xpad, ypad;
+  int x, y, w, h, x_pos, y_pos, bar_position, bar_size, start, full_size;
+  int xpad, ypad;
   GdkRectangle clip;
   gboolean is_rtl;
 

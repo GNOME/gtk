@@ -265,7 +265,7 @@ static gboolean
 perform_titlebar_action (GtkWindowHandle *self,
                          GdkEvent        *event,
                          guint            button,
-                         gint             n_press)
+                         int              n_press)
 {
   GtkSettings *settings;
   gchar *action = NULL;

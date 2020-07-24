@@ -34,7 +34,7 @@ G_BEGIN_DECLS
  * Also remembers whether the data needs to be transmuted.
  */
 typedef struct {
-  gint w32format;
+  int w32format;
   /* This is assumed to be an interned string, it will be
    * compared by simply comparing the pointer.
    */
@@ -208,7 +208,7 @@ struct _GdkWin32Clipdrop
    * anything in the queue. If there is, then the queue
    * processing (which requires expensice locks) can happen.
    */
-  gint              dnd_queue_counter;
+  int               dnd_queue_counter;
 
   /* We don't actually support multiple simultaneous drags,
    * for obvious reasons (though this might change with
@@ -243,7 +243,7 @@ gchar  * _gdk_win32_get_clipboard_format_name                      (UINT        
 void     _gdk_win32_add_w32format_to_pairs                         (UINT                         format,
                                                                     GArray                      *array,
                                                                     GdkContentFormatsBuilder    *builder);
-gint     _gdk_win32_add_contentformat_to_pairs                     (const char                  *target,
+int      _gdk_win32_add_contentformat_to_pairs                     (const char                  *target,
                                                                     GArray                      *array);
 
 void     _gdk_win32_clipboard_default_output_done                  (GObject                     *clipboard,
@@ -252,7 +252,7 @@ void     _gdk_win32_clipboard_default_output_done                  (GObject     
 gboolean _gdk_win32_transmute_contentformat                        (const gchar                 *from_contentformat,
                                                                     UINT                         to_w32format,
                                                                     const guchar                *data,
-                                                                    gint                         length,
+                                                                    int                          length,
                                                                     guchar                     **set_data,
                                                                     gsize                       *set_data_length);
 

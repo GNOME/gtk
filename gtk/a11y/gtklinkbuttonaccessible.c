@@ -60,7 +60,7 @@ gtk_link_button_accessible_link_new (GtkLinkButtonAccessible *button)
 
 static gchar *
 gtk_link_button_accessible_link_get_uri (AtkHyperlink *atk_link,
-                                         gint          i)
+                                         int           i)
 {
   GtkLinkButtonAccessibleLink *l = (GtkLinkButtonAccessibleLink *)atk_link;
   GtkWidget *widget;
@@ -72,7 +72,7 @@ gtk_link_button_accessible_link_get_uri (AtkHyperlink *atk_link,
   return g_strdup (uri);
 }
 
-static gint
+static int
 gtk_link_button_accessible_link_get_n_anchors (AtkHyperlink *atk_link)
 {
   return 1;
@@ -86,7 +86,7 @@ gtk_link_button_accessible_link_is_valid (AtkHyperlink *atk_link)
 
 static AtkObject *
 gtk_link_button_accessible_link_get_object (AtkHyperlink *atk_link,
-                                            gint          i)
+                                            int           i)
 {
   GtkLinkButtonAccessibleLink *l = (GtkLinkButtonAccessibleLink *)atk_link;
 
@@ -111,7 +111,7 @@ _gtk_link_button_accessible_link_class_init (GtkLinkButtonAccessibleLinkClass *c
 
 static gboolean
 gtk_link_button_accessible_link_do_action (AtkAction *action,
-                                           gint       i)
+                                           int        i)
 {
   GtkLinkButtonAccessibleLink *l = (GtkLinkButtonAccessibleLink *)action;
   GtkWidget *widget;
@@ -131,7 +131,7 @@ gtk_link_button_accessible_link_do_action (AtkAction *action,
   return TRUE;
 }
 
-static gint
+static int
 gtk_link_button_accessible_link_get_n_actions (AtkAction *action)
 {
   return 1;
@@ -139,7 +139,7 @@ gtk_link_button_accessible_link_get_n_actions (AtkAction *action)
 
 static const gchar *
 gtk_link_button_accessible_link_get_name (AtkAction *action,
-                                          gint       i)
+                                          int        i)
 {
   if (i != 0)
     return NULL;

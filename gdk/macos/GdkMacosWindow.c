@@ -609,7 +609,7 @@
 {
   GdkMacosSurface *surface = gdk_surface;
   NSRect rect;
-  gint shadow_top;
+  int shadow_top;
 
   /* Allow the window to move up "shadow_top" more than normally allowed
    * by the default impl. This makes it possible to move windows with

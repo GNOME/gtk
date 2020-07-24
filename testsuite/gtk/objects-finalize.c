@@ -129,7 +129,7 @@ main (int argc, char **argv)
 {
   const GType *all_types;
   guint n_types = 0, i;
-  gint result;
+  int result;
   const char *display, *x_r_d;
 
   /* These must be set before gtk_test_init */

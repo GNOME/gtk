@@ -72,8 +72,8 @@ typedef struct {
   gboolean translatable:1;
   gboolean bound:1;
   gchar *context;
-  gint line;
-  gint col;
+  int line;
+  int col;
 } PropertyInfo;
 
 typedef struct _ExpressionInfo ExpressionInfo;
@@ -124,8 +124,8 @@ typedef struct
   gchar *source;
   gchar *source_property;
   GBindingFlags flags;
-  gint line;
-  gint col;
+  int line;
+  int col;
 } BindingInfo;
 
 typedef struct
@@ -135,15 +135,15 @@ typedef struct
   GParamSpec *target_pspec;
   char *object_name;
   ExpressionInfo *expr;
-  gint line;
-  gint col;
+  int line;
+  int col;
 } BindingExpressionInfo;
 
 typedef struct {
   guint    tag_type;
   gchar   *library;
-  gint     major;
-  gint     minor;
+  int      major;
+  int      minor;
 } RequiresInfo;
 
 struct _GtkBuildableParseContext {
@@ -182,10 +182,10 @@ typedef struct {
 
   const char **requested_objects; /* NULL if all the objects are requested */
   gboolean inside_requested_object;
-  gint requested_object_level;
-  gint cur_object_level;
+  int requested_object_level;
+  int cur_object_level;
 
-  gint object_counter;
+  int object_counter;
 
   GHashTable *object_ids;
 } ParserData;
@@ -238,7 +238,7 @@ gboolean _gtk_builder_boolean_from_string (const gchar  *string,
 					   GError      **error);
 gboolean _gtk_builder_enum_from_string (GType         type,
                                         const gchar  *string,
-                                        gint         *enum_value,
+                                        int          *enum_value,
                                         GError      **error);
 gboolean  _gtk_builder_flags_from_string (GType         type,
                                           GFlagsValue  *aliases,
@@ -276,13 +276,13 @@ gboolean _gtk_builder_check_parent        (GtkBuilder                *builder,
                                            GError                   **error);
 GObject *gtk_builder_lookup_object        (GtkBuilder                *builder,
                                            const gchar               *name,
-                                           gint                       line,
-                                           gint                       col,
+                                           int                        line,
+                                           int                        col,
                                            GError                   **error);
 GObject *_gtk_builder_lookup_object       (GtkBuilder                *builder,
                                            const gchar               *name,
-                                           gint                       line,
-                                           gint                       col);
+                                           int                        line,
+                                           int                        col);
 gboolean _gtk_builder_lookup_failed       (GtkBuilder                *builder,
                                            GError                   **error);
 GModule *gtk_builder_get_module           (GtkBuilder                *builder);

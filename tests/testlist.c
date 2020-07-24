@@ -9,7 +9,7 @@ struct _Row
 {
   GtkListBoxRow parent_instance;
   GtkWidget *label;
-  gint sort_id;
+  int sort_id;
 };
 
 struct _RowClass
@@ -44,7 +44,7 @@ row_class_init (RowClass *class)
 }
 
 static GtkWidget *
-row_new (const gchar* text, gint sort_id) {
+row_new (const gchar* text, int sort_id) {
   Row *row;
 
   row = g_object_new (row_get_type (), NULL);

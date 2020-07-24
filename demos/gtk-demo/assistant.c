@@ -47,7 +47,7 @@ on_assistant_close_cancel (GtkWidget *widget, gpointer data)
 static void
 on_assistant_prepare (GtkWidget *widget, GtkWidget *page, gpointer data)
 {
-  gint current_page, n_pages;
+  int current_page, n_pages;
   gchar *title;
 
   current_page = gtk_assistant_get_current_page (GTK_ASSISTANT (widget));
@@ -70,7 +70,7 @@ on_entry_changed (GtkWidget *widget, gpointer data)
 {
   GtkAssistant *assistant = GTK_ASSISTANT (data);
   GtkWidget *current_page;
-  gint page_number;
+  int page_number;
   const gchar *text;
 
   page_number = gtk_assistant_get_current_page (assistant);

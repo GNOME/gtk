@@ -27,7 +27,7 @@ struct _ListSort
   const gchar *word_2;
   const gchar *word_3;
   const gchar *word_4;
-  gint number_1;
+  int number_1;
 };
 
 static ListSort data[] =
@@ -105,7 +105,7 @@ main (int argc, char *argv[])
   GtkCellRenderer *renderer;
   GtkTreeViewColumn *column;
   GtkTreeIter iter;
-  gint i;
+  int i;
 
   GtkWidget *entry, *button;
   GtkWidget *window2, *vbox2, *scrolled_window2, *tree_view2;
@@ -155,7 +155,7 @@ main (int argc, char *argv[])
   /* 12 iters now, 12 later... */
   for (i = 0; data[i].word_1 != NULL; i++)
     {
-      gint k;
+      int k;
       GtkTreeIter child_iter;
 
 
@@ -374,7 +374,7 @@ main (int argc, char *argv[])
 
   for (i = 0; data[i].word_1 != NULL; i++)
     {
-      gint k;
+      int k;
       
       gtk_tree_store_prepend (GTK_TREE_STORE (model), &iter, NULL);
       gtk_tree_store_set (GTK_TREE_STORE (model), &iter,

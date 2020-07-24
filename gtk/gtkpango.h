@@ -37,25 +37,25 @@ AtkAttributeSet *_gtk_pango_get_default_attributes (AtkAttributeSet *attributes,
 
 AtkAttributeSet *_gtk_pango_get_run_attributes     (AtkAttributeSet *attributes,
                                                     PangoLayout     *layout,
-                                                    gint             offset,
-                                                    gint            *start_offset,
-                                                    gint            *end_offset);
+                                                    int              offset,
+                                                    int             *start_offset,
+                                                    int             *end_offset);
 
 gchar *_gtk_pango_get_text_before (PangoLayout     *layout,
                                    AtkTextBoundary  boundary_type,
-                                   gint             offset,
-                                   gint            *start_offset,
-                                   gint            *end_offset);
+                                   int              offset,
+                                   int             *start_offset,
+                                   int             *end_offset);
 gchar *_gtk_pango_get_text_at     (PangoLayout     *layout,
                                    AtkTextBoundary  boundary_type,
-                                   gint             offset,
-                                   gint            *start_offset,
-                                   gint            *end_offset);
+                                   int              offset,
+                                   int             *start_offset,
+                                   int             *end_offset);
 gchar *_gtk_pango_get_text_after  (PangoLayout     *layout,
                                    AtkTextBoundary  boundary_type,
-                                   gint             offset,
-                                   gint            *start_offset,
-                                   gint            *end_offset);
+                                   int              offset,
+                                   int             *start_offset,
+                                   int             *end_offset);
 
 PangoAttrList *_gtk_pango_attr_list_merge (PangoAttrList *into,
                                            PangoAttrList *from);

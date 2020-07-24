@@ -310,7 +310,7 @@ broadway_output_set_transient_for (BroadwayOutput *output,
   append_uint16 (output, parent_id);
 }
 
-static gint append_node_depth = -1;
+static int append_node_depth = -1;
 
 static void
 append_type (BroadwayOutput *output, guint32 type, BroadwayNode *node)

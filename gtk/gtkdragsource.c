@@ -736,7 +736,7 @@ gtk_drag_check_threshold (GtkWidget *widget,
                           int        current_x,
                           int        current_y)
 {
-  gint drag_threshold;
+  int drag_threshold;
 
   g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
 

@@ -172,7 +172,7 @@ static OutputFormat
 format_from_settings (GtkPrintSettings *settings)
 {
   const gchar *value;
-  gint i;
+  int i;
 
   if (settings == NULL)
     return N_FORMATS;
@@ -535,7 +535,7 @@ set_printer_format_from_option_set (GtkPrinter          *printer,
 {
   GtkPrinterOption *format_option;
   const gchar *value;
-  gint i;
+  int i;
 
   format_option = gtk_printer_option_set_lookup (set, "output-file-format");
   if (format_option && format_option->value)
@@ -590,7 +590,7 @@ file_printer_output_file_format_changed (GtkPrinterOption    *format_option,
 
       if (dot)
         {
-          gint i;
+          int i;
 
           /*  check if the file extension matches one of the known ones  */
           for (i = 0; i < N_FORMATS; i++)
@@ -637,10 +637,10 @@ file_printer_get_options (GtkPrinter           *printer,
   const char *format_names[N_FORMATS] = { N_("PDF"), N_("PostScript"), N_("SVG") };
   const char *supported_formats[N_FORMATS];
   const char *display_format_names[N_FORMATS];
-  gint n_formats = 0;
+  int n_formats = 0;
   OutputFormat format;
   char *uri;
-  gint current_format = 0;
+  int current_format = 0;
   _OutputFormatChangedData *format_changed_data;
 
   format = format_from_settings (settings);
@@ -773,7 +773,7 @@ file_printer_prepare_for_print (GtkPrinter       *printer,
   gdouble scale;
   GtkPrintPages pages;
   GtkPageRange *ranges;
-  gint n_ranges;
+  int n_ranges;
   OutputFormat format;
 
   pages = gtk_print_settings_get_print_pages (settings);

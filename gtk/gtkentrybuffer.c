@@ -75,7 +75,7 @@ struct _GtkEntryBufferPrivate
   gsize  normal_text_bytes;
   guint  normal_text_chars;
 
-  gint   max_length;
+  int    max_length;
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE (GtkEntryBuffer, gtk_entry_buffer, G_TYPE_OBJECT)
@@ -437,7 +437,7 @@ gtk_entry_buffer_class_init (GtkEntryBufferClass *klass)
  **/
 GtkEntryBuffer*
 gtk_entry_buffer_new (const gchar *initial_chars,
-                      gint         n_initial_chars)
+                      int          n_initial_chars)
 {
   GtkEntryBuffer *buffer = g_object_new (GTK_TYPE_ENTRY_BUFFER, NULL);
   if (initial_chars)
@@ -533,7 +533,7 @@ gtk_entry_buffer_get_text (GtkEntryBuffer *buffer)
 void
 gtk_entry_buffer_set_text (GtkEntryBuffer *buffer,
                            const gchar    *chars,
-                           gint            n_chars)
+                           int             n_chars)
 {
   g_return_if_fail (GTK_IS_ENTRY_BUFFER (buffer));
   g_return_if_fail (chars != NULL);
@@ -557,7 +557,7 @@ gtk_entry_buffer_set_text (GtkEntryBuffer *buffer,
  **/
 void
 gtk_entry_buffer_set_max_length (GtkEntryBuffer *buffer,
-                                 gint            max_length)
+                                 int             max_length)
 {
   GtkEntryBufferPrivate *priv = gtk_entry_buffer_get_instance_private (buffer);
 
@@ -585,7 +585,7 @@ gtk_entry_buffer_set_max_length (GtkEntryBuffer *buffer,
  * Returns: the maximum allowed number of characters
  *               in #GtkEntryBuffer, or 0 if there is no maximum.
  */
-gint
+int
 gtk_entry_buffer_get_max_length (GtkEntryBuffer *buffer)
 {
   GtkEntryBufferPrivate *priv = gtk_entry_buffer_get_instance_private (buffer);
@@ -618,7 +618,7 @@ guint
 gtk_entry_buffer_insert_text (GtkEntryBuffer *buffer,
                               guint           position,
                               const gchar    *chars,
-                              gint            n_chars)
+                              int             n_chars)
 {
   GtkEntryBufferPrivate *pv = gtk_entry_buffer_get_instance_private (buffer);
   GtkEntryBufferClass *klass;
@@ -673,7 +673,7 @@ gtk_entry_buffer_insert_text (GtkEntryBuffer *buffer,
 guint
 gtk_entry_buffer_delete_text (GtkEntryBuffer *buffer,
                               guint           position,
-                              gint            n_chars)
+                              int             n_chars)
 {
   GtkEntryBufferClass *klass;
   guint length;

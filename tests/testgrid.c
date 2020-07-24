@@ -258,7 +258,7 @@ scrolling (void)
   GtkWidget *viewport;
   GtkWidget *grid;
   GtkWidget *child;
-  gint i;
+  int i;
 
   window = gtk_window_new ();
   gtk_window_set_title (GTK_WINDOW (window), "Scrolling");

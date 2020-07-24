@@ -55,8 +55,8 @@ static void drawing_area_set_color (DrawingArea *area,
 
 static void
 drawing_area_ensure_surface (DrawingArea *area,
-                             gint         width,
-                             gint         height)
+                             int          width,
+                             int          height)
 {
   if (!area->surface ||
       cairo_image_surface_get_width (area->surface) != width ||
@@ -195,7 +195,7 @@ drawing_area_root (GtkWidget *widget)
   GSimpleActionGroup *action_group;
   GSimpleAction *action;
   GtkWidget *toplevel;
-  gint i;
+  int i;
 
   GTK_WIDGET_CLASS (drawing_area_parent_class)->root (widget);
 

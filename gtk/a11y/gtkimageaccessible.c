@@ -177,7 +177,7 @@ name_from_icon_name (const gchar *icon_name)
 {
   gchar *name;
   const gchar *label;
-  gint i;
+  int i;
 
   name = g_strdup (icon_name);
   if (g_str_has_suffix (name, "-symbolic"))
@@ -281,8 +281,8 @@ gtk_image_accessible_get_image_description (AtkImage *image)
 
 static void
 gtk_image_accessible_get_image_position (AtkImage     *image,
-                                         gint         *x,
-                                         gint         *y,
+                                         int          *x,
+                                         int          *y,
                                          AtkCoordType  coord_type)
 {
   atk_component_get_extents (ATK_COMPONENT (image), x, y, NULL, NULL,
@@ -291,8 +291,8 @@ gtk_image_accessible_get_image_position (AtkImage     *image,
 
 static void
 gtk_image_accessible_get_image_size (AtkImage *image,
-                                     gint     *width,
-                                     gint     *height)
+                                     int      *width,
+                                     int      *height)
 {
   GtkWidget* widget;
   GtkImage *gtk_image;

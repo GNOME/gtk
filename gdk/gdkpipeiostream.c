@@ -34,7 +34,7 @@ typedef struct _GdkIOPipe GdkIOPipe;
 
 struct _GdkIOPipe
 {
-  gint ref_count;
+  int ref_count;
 
   GMutex mutex;
   GCond cond;

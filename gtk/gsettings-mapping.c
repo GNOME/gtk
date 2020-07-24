@@ -48,7 +48,7 @@ g_settings_set_mapping_int (const GValue       *value,
   else if (g_variant_type_equal (expected_type, G_VARIANT_TYPE_INT32))
     {
       if (G_MININT32 <= l && l <= G_MAXINT32)
-        variant = g_variant_new_int32 ((gint) l);
+        variant = g_variant_new_int32 ((int) l);
     }
   else if (g_variant_type_equal (expected_type, G_VARIANT_TYPE_UINT32))
     {
@@ -103,7 +103,7 @@ g_settings_set_mapping_float (const GValue       *value,
   else if (g_variant_type_equal (expected_type, G_VARIANT_TYPE_INT32))
     {
       if (G_MININT32 <= l && l <= G_MAXINT32)
-        variant = g_variant_new_int32 ((gint) l);
+        variant = g_variant_new_int32 ((int) l);
     }
   else if (g_variant_type_equal (expected_type, G_VARIANT_TYPE_UINT32))
     {
@@ -157,7 +157,7 @@ g_settings_set_mapping_unsigned_int (const GValue       *value,
   else if (g_variant_type_equal (expected_type, G_VARIANT_TYPE_INT32))
     {
       if (u <= G_MAXINT32)
-        variant = g_variant_new_int32 ((gint) u);
+        variant = g_variant_new_int32 ((int) u);
     }
   else if (g_variant_type_equal (expected_type, G_VARIANT_TYPE_UINT32))
     {

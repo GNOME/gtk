@@ -101,7 +101,7 @@ recent_manager_add (void)
 typedef struct {
   GtkRecentManager *manager;
   GMainLoop *main_loop;
-  gint counter;
+  int counter;
 } AddManyClosure;
 
 static void
@@ -284,7 +284,7 @@ recent_manager_purge (void)
 {
   GtkRecentManager *manager;
   GtkRecentData *recent_data;
-  gint n;
+  int n;
   GError *error;
 
   manager = gtk_recent_manager_get_default ();

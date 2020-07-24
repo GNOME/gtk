@@ -516,7 +516,7 @@ static void
 gtk_css_calc_array_add (GPtrArray *array, GtkCssValue *value)
 {
   gsize i;
-  gint calc_term_order;
+  int calc_term_order;
 
   calc_term_order = gtk_css_number_value_get_calc_term_order (value);
 

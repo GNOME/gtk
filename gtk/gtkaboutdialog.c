@@ -249,8 +249,8 @@ static void                 follow_if_link                  (GtkAboutDialog     
                                                              GtkTextIter        *iter);
 static void                 set_cursor_if_appropriate       (GtkAboutDialog     *about,
                                                              GtkTextView        *text_view,
-                                                             gint                x,
-                                                             gint                y);
+                                                             int                 x,
+                                                             int                 y);
 static void                 populate_credits_page           (GtkAboutDialog     *about);
 static void                 populate_license_page           (GtkAboutDialog     *about);
 static void                 populate_system_page            (GtkAboutDialog     *about);
@@ -1728,8 +1728,8 @@ gtk_about_dialog_set_logo_icon_name (GtkAboutDialog *about,
   if (icon_name)
     {
       GtkIconTheme *icon_theme = gtk_icon_theme_get_for_display (gtk_widget_get_display (GTK_WIDGET (about)));
-      gint *sizes = gtk_icon_theme_get_icon_sizes (icon_theme, icon_name);
-      gint i, best_size = 0;
+      int *sizes = gtk_icon_theme_get_icon_sizes (icon_theme, icon_name);
+      int i, best_size = 0;
 
       for (i = 0; sizes[i]; i++)
         {
@@ -1842,7 +1842,7 @@ text_view_released (GtkGestureClick *gesture,
   GtkWidget *text_view;
   GtkTextIter start, end, iter;
   GtkTextBuffer *buffer;
-  gint tx, ty;
+  int tx, ty;
 
   if (gtk_gesture_single_get_current_button (GTK_GESTURE_SINGLE (gesture)) != GDK_BUTTON_PRIMARY)
     return;
@@ -1867,8 +1867,8 @@ text_view_released (GtkGestureClick *gesture,
 static void
 set_cursor_if_appropriate (GtkAboutDialog *about,
                            GtkTextView    *text_view,
-                           gint            x,
-                           gint            y)
+                           int             x,
+                           int             y)
 {
   GSList *tags = NULL, *tagp = NULL;
   GtkTextIter iter;
@@ -1908,7 +1908,7 @@ text_view_motion (GtkEventControllerMotion *motion,
                   double                    y,
                   GtkAboutDialog           *about)
 {
-  gint tx, ty;
+  int tx, ty;
   GtkWidget *widget;
 
   widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (motion));
@@ -2045,7 +2045,7 @@ text_buffer_new (GtkAboutDialog  *about,
 static void
 add_credits_section (GtkAboutDialog  *about,
                      GtkGrid         *grid,
-                     gint            *row,
+                     int             *row,
                      gchar           *title,
                      gchar          **people)
 {
@@ -2173,7 +2173,7 @@ add_credits_section (GtkAboutDialog  *about,
 static void
 populate_credits_page (GtkAboutDialog *about)
 {
-  gint row;
+  int row;
 
   row = 0;
 

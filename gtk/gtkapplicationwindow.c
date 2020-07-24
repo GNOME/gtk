@@ -465,7 +465,7 @@ gtk_application_window_real_size_allocate (GtkWidget *widget,
     {
       GtkAllocation menubar_allocation;
       GtkAllocation child_allocation;
-      gint menubar_height;
+      int menubar_height;
       GtkWidget *child;
 
       _gtk_window_set_allocation (GTK_WINDOW (widget), width, height, &child_allocation);

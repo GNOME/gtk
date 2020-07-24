@@ -55,10 +55,10 @@ activate (GApplication *application)
 static void
 open (GApplication  *application,
       GFile        **files,
-      gint           n_files,
+      int            n_files,
       const gchar   *hint)
 {
-  gint i;
+  int i;
 
   for (i = 0; i < n_files; i++)
     new_window (application, files[i]);

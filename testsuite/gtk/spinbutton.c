@@ -1,6 +1,6 @@
 #include <gtk/gtk.h>
 
-static gint value_changed_count;
+static int value_changed_count;
 
 static void
 value_changed_cb (GtkSpinButton *spin)
@@ -37,7 +37,7 @@ test_value_changed (void)
   g_assert_cmpint (value_changed_count, ==, 5);
 }
 
-static gint adjustment_changed_count;
+static int adjustment_changed_count;
 
 static void
 adjustment_changed_cb (GObject *object, GParamSpec *pspec)

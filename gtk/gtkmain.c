@@ -146,8 +146,8 @@
 
 static GtkWindowGroup *gtk_main_get_window_group (GtkWidget   *widget);
 
-static gint pre_initialized = FALSE;
-static gint gtk_initialized = FALSE;
+static int pre_initialized = FALSE;
+static int gtk_initialized = FALSE;
 static GList *current_events = NULL;
 
 typedef struct {
@@ -314,8 +314,8 @@ gtk_check_version (guint required_major,
                    guint required_minor,
                    guint required_micro)
 {
-  gint gtk_effective_micro = 100 * GTK_MINOR_VERSION + GTK_MICRO_VERSION;
-  gint required_effective_micro = 100 * required_minor + required_micro;
+  int gtk_effective_micro = 100 * GTK_MINOR_VERSION + GTK_MICRO_VERSION;
+  int required_effective_micro = 100 * required_minor + required_micro;
 
   if (required_major > GTK_MAJOR_VERSION)
     return "GTK version too old (major mismatch)";
@@ -688,7 +688,7 @@ do_post_parse_initialization (void)
 guint
 gtk_get_display_debug_flags (GdkDisplay *display)
 {
-  gint i;
+  int i;
 
   if (display == NULL)
     display = gdk_display_get_default ();
@@ -712,7 +712,7 @@ void
 gtk_set_display_debug_flags (GdkDisplay *display,
                              guint       flags)
 {
-  gint i;
+  int i;
 
   for (i = 0; i < N_DEBUG_DISPLAYS; i++)
     {
@@ -763,7 +763,7 @@ gtk_set_debug_flags (guint flags)
 gboolean
 gtk_simulate_touchscreen (void)
 {
-  static gint test_touchscreen;
+  static int test_touchscreen;
 
   if (test_touchscreen == 0)
     test_touchscreen = g_getenv ("GTK_TEST_TOUCHSCREEN") != NULL ? 1 : -1;
@@ -1996,7 +1996,7 @@ gtk_propagate_event_internal (GtkWidget *widget,
                               GdkEvent  *event,
                               GtkWidget *topmost)
 {
-  gint handled_event = FALSE;
+  int handled_event = FALSE;
   GtkWidget *target = widget;
   GtkWidgetStack widget_array;
   int i;

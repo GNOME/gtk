@@ -139,9 +139,9 @@ gboolean   gtk_entry_get_overwrite_mode         (GtkEntry      *entry);
 /* text is truncated if needed */
 GDK_AVAILABLE_IN_ALL
 void       gtk_entry_set_max_length 		(GtkEntry      *entry,
-						 gint           max);
+						 int            max);
 GDK_AVAILABLE_IN_ALL
-gint       gtk_entry_get_max_length             (GtkEntry      *entry);
+int        gtk_entry_get_max_length             (GtkEntry      *entry);
 GDK_AVAILABLE_IN_ALL
 guint16    gtk_entry_get_text_length            (GtkEntry      *entry);
 
@@ -225,9 +225,9 @@ GDK_AVAILABLE_IN_ALL
 gboolean     gtk_entry_get_icon_sensitive                (GtkEntry             *entry,
 							  GtkEntryIconPosition  icon_pos);
 GDK_AVAILABLE_IN_ALL
-gint         gtk_entry_get_icon_at_pos                   (GtkEntry             *entry,
-							  gint                  x,
-							  gint                  y);
+int          gtk_entry_get_icon_at_pos                   (GtkEntry             *entry,
+							  int                   x,
+							  int                   y);
 GDK_AVAILABLE_IN_ALL
 void         gtk_entry_set_icon_tooltip_text             (GtkEntry             *entry,
 							  GtkEntryIconPosition  icon_pos,
@@ -248,7 +248,7 @@ void         gtk_entry_set_icon_drag_source              (GtkEntry             *
 							  GdkContentProvider   *provider,
 							  GdkDragAction         actions);
 GDK_AVAILABLE_IN_ALL
-gint         gtk_entry_get_current_icon_drag_source      (GtkEntry             *entry);
+int          gtk_entry_get_current_icon_drag_source      (GtkEntry             *entry);
 GDK_AVAILABLE_IN_ALL
 void         gtk_entry_get_icon_area                     (GtkEntry             *entry,
                                                           GtkEntryIconPosition  icon_pos,

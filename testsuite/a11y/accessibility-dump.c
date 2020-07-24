@@ -240,7 +240,7 @@ dump_attribute_set (GString         *string,
     }
 }
 
-static gint
+static int
 compare_attr (gconstpointer a, gconstpointer b)
 {
   const AtkAttribute *aattr = a;
@@ -251,7 +251,7 @@ compare_attr (gconstpointer a, gconstpointer b)
 
 static void
 dump_text_attributes (GString         *string,
-                      gint             depth,
+                      int              depth,
                       const gchar     *name,
                       AtkAttributeSet *attributes)
 {
@@ -335,7 +335,7 @@ dump_atk_text (AtkText *atk_text,
                GString *string)
 {
   gchar *text;
-  gint i, start, end;
+  int i, start, end;
 
   g_string_append_printf (string, "%*s<AtkText>\n", depth, "");
 
@@ -363,7 +363,7 @@ dump_atk_image (AtkImage *atk_image,
                 guint     depth,
                 GString  *string)
 {
-  gint width, height;
+  int width, height;
 
   g_string_append_printf (string, "%*s<AtkImage>\n", depth, "");
 
@@ -378,7 +378,7 @@ dump_atk_action (AtkAction *atk_action,
                  guint      depth,
                  GString   *string)
 {
-  gint i;
+  int i;
 
   g_string_append_printf (string, "%*s<AtkAction>\n", depth, "");
 
@@ -399,7 +399,7 @@ dump_atk_selection (AtkSelection *atk_selection,
                     GString      *string)
 {
   guint n_selections, n_counted_selections;
-  gint i;
+  int i;
 
   g_string_append_printf (string, "%*s<AtkSelection>\n", depth, "");
 
@@ -474,7 +474,7 @@ dump_atk_hyperlink (AtkHyperlink *link,
                     guint         depth,
                     GString      *string)
 {
-  gint i;
+  int i;
 
   g_string_append_printf (string, "%*s<AtkHyperlink>\n", depth, "");
   g_string_append_printf (string, "%*sstart index: %d\n", depth, "", atk_hyperlink_get_start_index (link));
@@ -512,7 +512,7 @@ dump_atk_hypertext (AtkHypertext *hypertext,
                     guint         depth,
                     GString      *string)
 {
-  gint i;
+  int i;
   AtkHyperlink *link;
 
   g_string_append_printf (string, "%*s<AtkHypertext>\n", depth, "");
@@ -529,7 +529,7 @@ dump_atk_streamable_content (AtkStreamableContent *content,
                              guint                 depth,
                              GString              *string)
 {
-  gint i;
+  int i;
 
   g_string_append_printf (string, "%*s<AtkStreamableContent>\n", depth, "");
 
@@ -544,9 +544,9 @@ dump_atk_table (AtkTable *table,
                 guint     depth,
                 GString  *string)
 {
-  gint *selected;
-  gint n_selected;
-  gint i, j;
+  int *selected;
+  int n_selected;
+  int i, j;
   AtkObject *obj;
   const gchar *desc;
 
@@ -634,10 +634,10 @@ dump_atk_table_cell (AtkTableCell *table_cell,
                      guint     depth,
                      GString  *string)
 {
-  gint i;
+  int i;
   AtkObject *obj;
   GPtrArray *cells;
-  gint row = -1, column = -1;
+  int row = -1, column = -1;
 
   g_string_append_printf (string, "%*s<AtkTableCell>\n", depth, "");
 

@@ -973,7 +973,7 @@ gtk_entry_completion_set_match_func (GtkEntryCompletion          *completion,
  */
 void
 gtk_entry_completion_set_minimum_key_length (GtkEntryCompletion *completion,
-                                             gint                length)
+                                             int                 length)
 {
   g_return_if_fail (GTK_IS_ENTRY_COMPLETION (completion));
   g_return_if_fail (length >= 0);
@@ -995,7 +995,7 @@ gtk_entry_completion_set_minimum_key_length (GtkEntryCompletion *completion,
  *
  * Returns: The currently used minimum key length
  */
-gint
+int
 gtk_entry_completion_get_minimum_key_length (GtkEntryCompletion *completion)
 {
   g_return_val_if_fail (GTK_IS_ENTRY_COMPLETION (completion), 0);
@@ -1056,7 +1056,7 @@ gtk_entry_completion_complete (GtkEntryCompletion *completion)
  */
 void
 gtk_entry_completion_set_text_column (GtkEntryCompletion *completion,
-                                      gint                column)
+                                      int                 column)
 {
   GtkCellRenderer *cell;
 
@@ -1086,7 +1086,7 @@ gtk_entry_completion_set_text_column (GtkEntryCompletion *completion,
  *
  * Returns: the column containing the strings
  */
-gint
+int
 gtk_entry_completion_get_text_column (GtkEntryCompletion *completion)
 {
   g_return_val_if_fail (GTK_IS_ENTRY_COMPLETION (completion), -1);
@@ -1101,12 +1101,12 @@ void
 _gtk_entry_completion_resize_popup (GtkEntryCompletion *completion)
 {
   GtkAllocation allocation;
-  gint matches, items, height;
+  int matches, items, height;
   GdkSurface *surface;
   GtkRequisition entry_req;
   GtkRequisition tree_req;
   GtkTreePath *path;
-  gint width;
+  int width;
 
   surface = gtk_native_get_surface (gtk_widget_get_native (completion->entry));
 
@@ -1303,8 +1303,8 @@ gtk_entry_completion_real_insert_prefix (GtkEntryCompletion *completion,
 {
   if (prefix)
     {
-      gint key_len;
-      gint prefix_len;
+      int key_len;
+      int prefix_len;
       const gchar *key;
 
       prefix_len = g_utf8_strlen (prefix, -1);
@@ -1314,7 +1314,7 @@ gtk_entry_completion_real_insert_prefix (GtkEntryCompletion *completion,
 
       if (prefix_len > key_len)
         {
-          gint pos = prefix_len;
+          int pos = prefix_len;
 
           gtk_editable_insert_text (GTK_EDITABLE (completion->entry),
                                     prefix + strlen (key), -1, &pos);
@@ -1349,7 +1349,7 @@ static void
 gtk_entry_completion_insert_completion_text (GtkEntryCompletion *completion,
                                              const gchar        *new_text)
 {
-  gint len;
+  int len;
   GtkText *text = gtk_entry_get_text_widget (GTK_ENTRY (completion->entry));
   GtkEntryBuffer *buffer = gtk_text_get_buffer (text);
 
@@ -1632,7 +1632,7 @@ gtk_entry_completion_get_inline_selection (GtkEntryCompletion *completion)
 }
 
 
-static gint
+static int
 gtk_entry_completion_timeout (gpointer data)
 {
   GtkEntryCompletion *completion = GTK_ENTRY_COMPLETION (data);
@@ -1643,7 +1643,7 @@ gtk_entry_completion_timeout (gpointer data)
       g_utf8_strlen (gtk_editable_get_text (GTK_EDITABLE (completion->entry)), -1)
       >= completion->minimum_key_length)
     {
-      gint matches;
+      int matches;
       gboolean popup_single;
 
       gtk_entry_completion_complete (completion);
@@ -1691,7 +1691,7 @@ gtk_entry_completion_key_pressed (GtkEventControllerKey *controller,
                                   GdkModifierType        state,
                                   gpointer               user_data)
 {
-  gint matches;
+  int matches;
   GtkEntryCompletion *completion = GTK_ENTRY_COMPLETION (user_data);
   GtkWidget *widget = completion->entry;
   GtkText *text = gtk_entry_get_text_widget (GTK_ENTRY (widget));

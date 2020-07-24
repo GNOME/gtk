@@ -69,7 +69,7 @@ gtk_statusbar_accessible_get_name (AtkObject *obj)
   return gtk_statusbar_get_message (GTK_STATUSBAR (widget));
 }
 
-static gint
+static int
 gtk_statusbar_accessible_get_n_children (AtkObject *obj)
 {
   return 0;
@@ -77,7 +77,7 @@ gtk_statusbar_accessible_get_n_children (AtkObject *obj)
 
 static AtkObject*
 gtk_statusbar_accessible_ref_child (AtkObject *obj,
-                                    gint       i)
+                                    int        i)
 {
   return NULL;
 }

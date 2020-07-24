@@ -324,7 +324,7 @@ set_indicator_size (GtkTreeViewColumn *column,
 		    GtkTreeIter *iter,
 		    gpointer data)
 {
-  gint size;
+  int size;
   GtkTreePath *path;
 
   path = gtk_tree_model_get_path (model, iter);
@@ -354,7 +354,7 @@ main (int argc, char *argv[])
   GtkWidget *tree_view;
   GtkTreeModel *model;
   GtkCellRenderer *renderer;
-  gint col_offset;
+  int col_offset;
   GtkTreeViewColumn *column;
   gboolean done = FALSE;
 

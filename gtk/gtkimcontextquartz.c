@@ -61,7 +61,7 @@ static void
 quartz_get_preedit_string (GtkIMContext *context,
                            gchar **str,
                            PangoAttrList **attrs,
-                           gint *cursor_pos)
+                           int *cursor_pos)
 {
   GtkIMContextQuartz *qc = GTK_IM_CONTEXT_QUARTZ (context);
 
@@ -288,7 +288,7 @@ static void
 quartz_set_cursor_location (GtkIMContext *context, GdkRectangle *area)
 {
   GtkIMContextQuartz *qc = GTK_IM_CONTEXT_QUARTZ (context);
-  gint x, y;
+  int x, y;
   NSView *nsview;
   GdkSurface *surface;
 

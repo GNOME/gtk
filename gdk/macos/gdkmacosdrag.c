@@ -248,7 +248,7 @@ gdk_macos_drag_drop_performed (GdkDrag *drag,
 
 static void
 gdk_drag_get_current_actions (GdkModifierType  state,
-                              gint             button,
+                              int              button,
                               GdkDragAction    actions,
                               GdkDragAction   *suggested_action,
                               GdkDragAction   *possible_actions)
@@ -414,7 +414,7 @@ gdk_dnd_handle_key_event (GdkDrag  *drag,
   GdkMacosDrag *self = GDK_MACOS_DRAG (drag);
   GdkModifierType state;
   GdkDevice *pointer;
-  gint dx, dy;
+  int dx, dy;
 
   dx = dy = 0;
   state = gdk_event_get_modifier_state (event);

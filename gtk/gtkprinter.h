@@ -97,7 +97,7 @@ const gchar *            gtk_printer_get_location          (GtkPrinter      *pri
 GDK_AVAILABLE_IN_ALL
 const gchar *            gtk_printer_get_icon_name         (GtkPrinter      *printer);
 GDK_AVAILABLE_IN_ALL
-gint                     gtk_printer_get_job_count         (GtkPrinter      *printer);
+int                      gtk_printer_get_job_count         (GtkPrinter      *printer);
 GDK_AVAILABLE_IN_ALL
 gboolean                 gtk_printer_is_active             (GtkPrinter      *printer);
 GDK_AVAILABLE_IN_ALL
@@ -117,7 +117,7 @@ GList                   *gtk_printer_list_papers           (GtkPrinter      *pri
 GDK_AVAILABLE_IN_ALL
 GtkPageSetup            *gtk_printer_get_default_page_size (GtkPrinter      *printer);
 GDK_AVAILABLE_IN_ALL
-gint                     gtk_printer_compare               (GtkPrinter *a,
+int                      gtk_printer_compare               (GtkPrinter *a,
 						    	    GtkPrinter *b);
 GDK_AVAILABLE_IN_ALL
 gboolean                 gtk_printer_has_details           (GtkPrinter       *printer);

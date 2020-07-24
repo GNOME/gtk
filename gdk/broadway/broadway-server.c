@@ -63,7 +63,7 @@ struct _BroadwayServer {
   GList *surfaces;
   BroadwaySurface *root;
   gint32 focused_surface_id; /* -1 => none */
-  gint show_keyboard;
+  int show_keyboard;
 
   guint32 next_texture_id;
   GHashTable *textures;
@@ -970,7 +970,7 @@ broadway_server_get_screen_size (BroadwayServer   *server,
 
 static void
 broadway_server_fake_roundtrip_reply (BroadwayServer *server,
-                                      gint            id,
+                                      int             id,
                                       guint32         tag)
 {
   BroadwayInputMsg msg;
@@ -1001,7 +1001,7 @@ broadway_server_flush (BroadwayServer *server)
 
 void
 broadway_server_roundtrip (BroadwayServer *server,
-                           gint            id,
+                           int             id,
                            guint32         tag)
 {
   if (server->output)
@@ -1565,7 +1565,7 @@ broadway_server_query_mouse (BroadwayServer *server,
 
 void
 broadway_server_destroy_surface (BroadwayServer *server,
-                                 gint id)
+                                 int id)
 {
   BroadwaySurface *surface;
 
@@ -1594,7 +1594,7 @@ broadway_server_destroy_surface (BroadwayServer *server,
 
 gboolean
 broadway_server_surface_show (BroadwayServer *server,
-                              gint id)
+                              int id)
 {
   BroadwaySurface *surface;
   gboolean sent = FALSE;
@@ -1616,7 +1616,7 @@ broadway_server_surface_show (BroadwayServer *server,
 
 gboolean
 broadway_server_surface_hide (BroadwayServer *server,
-                              gint id)
+                              int id)
 {
   BroadwaySurface *surface;
   gboolean sent = FALSE;
@@ -1646,7 +1646,7 @@ broadway_server_surface_hide (BroadwayServer *server,
 
 void
 broadway_server_surface_raise (BroadwayServer *server,
-                               gint id)
+                               int id)
 {
   BroadwaySurface *surface;
 
@@ -1676,7 +1676,7 @@ broadway_server_set_show_keyboard (BroadwayServer *server,
 
 void
 broadway_server_surface_lower (BroadwayServer *server,
-                               gint id)
+                               int id)
 {
   BroadwaySurface *surface;
 
@@ -1693,7 +1693,7 @@ broadway_server_surface_lower (BroadwayServer *server,
 
 void
 broadway_server_surface_set_transient_for (BroadwayServer *server,
-                                           gint id, gint parent)
+                                           int id, int parent)
 {
   BroadwaySurface *surface;
 
@@ -1865,7 +1865,7 @@ decode_nodes (BroadwayServer *server,
 /* passes ownership of nodes */
 void
 broadway_server_surface_update_nodes (BroadwayServer   *server,
-                                      gint              id,
+                                      int               id,
                                       guint32          data[],
                                       int              len,
                                       GHashTable      *client_texture_map)
@@ -1946,7 +1946,7 @@ broadway_server_release_texture (BroadwayServer   *server,
 
 gboolean
 broadway_server_surface_move_resize (BroadwayServer *server,
-                                     gint id,
+                                     int id,
                                      gboolean with_move,
                                      int x,
                                      int y,
@@ -1989,7 +1989,7 @@ broadway_server_surface_move_resize (BroadwayServer *server,
 
 void
 broadway_server_focus_surface (BroadwayServer *server,
-                               gint new_focused_surface)
+                               int new_focused_surface)
 {
   BroadwayInputMsg focus_msg;
 
@@ -2010,8 +2010,8 @@ broadway_server_focus_surface (BroadwayServer *server,
 
 guint32
 broadway_server_grab_pointer (BroadwayServer *server,
-                              gint client_id,
-                              gint id,
+                              int client_id,
+                              int id,
                               gboolean owner_events,
                               guint32 event_mask,
                               guint32 time_)

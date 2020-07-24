@@ -72,13 +72,13 @@ struct _GtkTextClass
   void (* activate)           (GtkText         *self);
   void (* move_cursor)        (GtkText         *self,
                                GtkMovementStep  step,
-                               gint             count,
+                               int              count,
                                gboolean         extend);
   void (* insert_at_cursor)   (GtkText         *self,
                                const gchar     *str);
   void (* delete_from_cursor) (GtkText         *self,
                                GtkDeleteType    type,
-                               gint             count);
+                               int              count);
   void (* backspace)          (GtkText         *self);
   void (* cut_clipboard)      (GtkText         *self);
   void (* copy_clipboard)     (GtkText         *self);

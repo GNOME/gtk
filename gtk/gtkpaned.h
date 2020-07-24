@@ -79,10 +79,10 @@ GDK_AVAILABLE_IN_ALL
 gboolean    gtk_paned_get_shrink_end_child (GtkPaned *paned);
 
 GDK_AVAILABLE_IN_ALL
-gint        gtk_paned_get_position (GtkPaned       *paned);
+int         gtk_paned_get_position (GtkPaned       *paned);
 GDK_AVAILABLE_IN_ALL
 void        gtk_paned_set_position (GtkPaned       *paned,
-                                    gint            position);
+                                    int             position);
 
 GDK_AVAILABLE_IN_ALL
 void        gtk_paned_set_wide_handle (GtkPaned    *paned,

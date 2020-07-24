@@ -230,7 +230,7 @@ program_list_selection_activated (GtkTreeView       *view,
 
 static gboolean
 gtk_app_chooser_search_equal_func (GtkTreeModel *model,
-                                   gint          column,
+                                   int           column,
                                    const gchar  *key,
                                    GtkTreeIter  *iter,
                                    gpointer      user_data)
@@ -263,7 +263,7 @@ gtk_app_chooser_search_equal_func (GtkTreeModel *model,
     }
 }
 
-static gint
+static int
 gtk_app_chooser_sort_func (GtkTreeModel *model,
                            GtkTreeIter  *a,
                            GtkTreeIter  *b,
@@ -274,7 +274,7 @@ gtk_app_chooser_sort_func (GtkTreeModel *model,
   gboolean a_heading, b_heading;
   gboolean a_default, b_default;
   gchar *a_name, *b_name, *a_casefold, *b_casefold;
-  gint retval = 0;
+  int retval = 0;
 
   /* this returns:
    * - <0 if a should show before b
@@ -415,7 +415,7 @@ gtk_app_chooser_selection_func (GtkTreeSelection *selection,
   return !heading;
 }
 
-static gint
+static int
 compare_apps_func (gconstpointer a,
                    gconstpointer b)
 {

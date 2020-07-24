@@ -42,7 +42,7 @@ do_enumerate (int *argc, const char ***argv)
 {
   GtkBuilder *builder;
   GError *error = NULL;
-  gint ret;
+  int ret;
   GSList *list, *l;
   GObject *object;
   const gchar *name;

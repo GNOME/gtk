@@ -50,8 +50,8 @@ test_basic (void)
   g_object_unref (a);
 }
 
-static gint changed_count;
-static gint value_changed_count;
+static int changed_count;
+static int value_changed_count;
 
 static void
 changed_cb (GtkAdjustment *a)

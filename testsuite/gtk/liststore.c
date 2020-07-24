@@ -99,8 +99,8 @@ list_store_teardown (ListStore     *fixture,
 
 static void
 check_model (ListStore *fixture,
-	     gint      *new_order,
-	     gint       skip)
+	     int       *new_order,
+	     int        skip)
 {
   int i;
   GtkTreePath *path;

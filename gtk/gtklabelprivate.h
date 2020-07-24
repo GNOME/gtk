@@ -26,24 +26,24 @@ G_BEGIN_DECLS
 
 void _gtk_label_mnemonics_visible_apply_recursively (GtkWidget *widget,
                                                      gboolean   mnemonics_visible);
-gint _gtk_label_get_cursor_position (GtkLabel *label);
-gint _gtk_label_get_selection_bound (GtkLabel *label);
+int _gtk_label_get_cursor_position (GtkLabel *label);
+int _gtk_label_get_selection_bound (GtkLabel *label);
 
-gint         _gtk_label_get_n_links     (GtkLabel *label);
-gint         _gtk_label_get_link_at     (GtkLabel *label,
-                                         gint      pos);
+int          _gtk_label_get_n_links     (GtkLabel *label);
+int          _gtk_label_get_link_at     (GtkLabel *label,
+                                         int       pos);
 void         _gtk_label_activate_link   (GtkLabel *label, 
-                                         gint      idx);
+                                         int       idx);
 const gchar *_gtk_label_get_link_uri    (GtkLabel *label,
-                                         gint      idx);
+                                         int       idx);
 void         _gtk_label_get_link_extent (GtkLabel *label,
-                                         gint      idx,
-                                         gint     *start,
-                                         gint     *end);
+                                         int       idx,
+                                         int      *start,
+                                         int      *end);
 gboolean     _gtk_label_get_link_visited (GtkLabel *label,
-                                          gint      idx);
+                                          int       idx);
 gboolean     _gtk_label_get_link_focused (GtkLabel *label,
-                                          gint      idx);
+                                          int       idx);
                              
 G_END_DECLS
 

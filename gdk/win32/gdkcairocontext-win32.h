@@ -53,8 +53,8 @@ struct _GdkWin32CairoContext
    * around between repaints, and only re-allocate it
    * if it's too small. */
   cairo_surface_t *db_surface;
-  gint             db_width;
-  gint             db_height;
+  int              db_width;
+  int              db_height;
 
   /* Surface for the window DC (in non-layered mode).
    * A reference of the cache surface (in layered mode). */

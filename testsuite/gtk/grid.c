@@ -25,7 +25,7 @@ test_attach (void)
 {
   GtkGrid *g;
   GtkWidget *child, *sibling, *z, *A, *B;
-  gint left, top, width, height;
+  int left, top, width, height;
 
   g = (GtkGrid *)gtk_grid_new ();
 

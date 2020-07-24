@@ -644,7 +644,7 @@ check_toggled_cb (GtkToggleButton        *toggle_button,
 
 static void
 dialog_response_callback (GtkDialog              *dialog,
-                          gint                    response_id,
+                          int                     response_id,
                           GtkPrinterOptionWidget *widget)
 {
   GtkPrinterOptionWidgetPrivate *priv = widget->priv;
@@ -1075,7 +1075,7 @@ static gchar *
 trim_long_filename (const gchar *filename)
 {
   const gchar *home;
-  gint len, offset;
+  int len, offset;
   gchar *result;
 
   home = g_get_home_dir ();

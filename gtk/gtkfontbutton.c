@@ -86,7 +86,7 @@ struct _GtkFontButton
   PangoFontFamily      *font_family;
   PangoFontFace        *font_face;
   PangoFontMap         *font_map;
-  gint                  font_size;
+  int                   font_size;
   char                 *font_features;
   PangoLanguage        *language;
   gchar                *preview_text;
@@ -137,7 +137,7 @@ static void gtk_font_button_clicked                 (GtkButton         *button,
 
 /* Dialog response functions */
 static void response_cb                             (GtkDialog         *dialog,
-                                                     gint               response_id,
+                                                     int                response_id,
                                                      gpointer           data);
 static void dialog_destroy                          (GtkWidget         *widget,
                                                      gpointer           data);
@@ -218,7 +218,7 @@ gtk_font_button_update_font_data (GtkFontButton *font_button)
 {
   PangoFontFamily **families;
   PangoFontFace **faces;
-  gint n_families, n_faces, i;
+  int n_families, n_faces, i;
   const gchar *family;
 
   g_assert (font_button->font_desc != NULL);
@@ -983,7 +983,7 @@ gtk_font_button_clicked (GtkButton *button,
 
 static void
 response_cb (GtkDialog *dialog,
-             gint       response_id,
+             int        response_id,
              gpointer   data)
 {
   GtkFontButton *font_button = GTK_FONT_BUTTON (data);

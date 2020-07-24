@@ -114,8 +114,8 @@ G_DEFINE_TYPE (GtkPadController, gtk_pad_controller, GTK_TYPE_EVENT_CONTROLLER)
 static const ActionEntryData *
 gtk_pad_action_find_match (GtkPadController *controller,
                            GtkPadActionType  type,
-                           gint              index,
-                           gint              mode)
+                           int               index,
+                           int               mode)
 {
   guint i;
 
@@ -167,7 +167,7 @@ gtk_pad_controller_handle_mode_switch (GtkPadController *controller,
   if (GDK_IS_WAYLAND_DISPLAY (gdk_device_get_display (pad)))
     {
       const ActionEntryData *entry;
-      gint elem, idx, n_features;
+      int elem, idx, n_features;
 
       for (elem = GTK_PAD_ACTION_BUTTON; elem <= GTK_PAD_ACTION_STRIP; elem++)
         {
@@ -421,7 +421,7 @@ gtk_pad_controller_new (GActionGroup *group,
                        NULL);
 }
 
-static gint
+static int
 entry_compare_func (gconstpointer a,
                     gconstpointer b)
 {
@@ -474,9 +474,9 @@ gtk_pad_controller_add_entry (GtkPadController        *controller,
 void
 gtk_pad_controller_set_action_entries (GtkPadController        *controller,
                                        const GtkPadActionEntry *entries,
-                                       gint                     n_entries)
+                                       int                      n_entries)
 {
-  gint i;
+  int i;
 
   g_return_if_fail (GTK_IS_PAD_CONTROLLER (controller));
   g_return_if_fail (entries != NULL);

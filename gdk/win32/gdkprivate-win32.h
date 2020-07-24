@@ -163,22 +163,22 @@ gulong _gdk_win32_get_next_tick (gulong suggested_tick);
 
 void _gdk_surface_init_position     (GdkSurface *window);
 void _gdk_surface_move_resize_child (GdkSurface *window,
-                                     gint       x,
-                                     gint       y,
-                                     gint       width,
-                                     gint       height);
+                                     int        x,
+                                     int        y,
+                                     int        width,
+                                     int        height);
 
 gboolean _gdk_win32_surface_enable_transparency (GdkSurface *window);
 
 
 /* GdkSurfaceImpl methods */
 void _gdk_win32_surface_scroll (GdkSurface *window,
-                                gint       dx,
-                                gint       dy);
+                                int        dx,
+                                int        dy);
 void _gdk_win32_surface_move_region (GdkSurface       *window,
                                      const cairo_region_t *region,
-                                     gint             dx,
-                                     gint             dy);
+                                     int              dx,
+                                     int              dy);
 
 
 void _gdk_win32_selection_init (void);
@@ -189,8 +189,8 @@ void     gdk_win32_handle_table_insert  (HANDLE   *handle,
 void     gdk_win32_handle_table_remove  (HANDLE handle);
 
 HRGN      _gdk_win32_cairo_region_to_hrgn (const cairo_region_t *region,
-                                           gint                  x_origin,
-                                           gint                  y_origin);
+                                           int                   x_origin,
+                                           int                   y_origin);
 
 cairo_region_t *_gdk_win32_hrgn_to_region    (HRGN  hrgn,
                                               guint scale);
@@ -270,13 +270,13 @@ extern GdkDeviceManagerWin32 *_gdk_device_manager;
  * to the left and/or above the primary monitor) to get GDK
  * coordinates, which should be non-negative on the whole screen.
  */
-extern gint              _gdk_offset_x, _gdk_offset_y;
+extern int               _gdk_offset_x, _gdk_offset_y;
 
 extern HDC               _gdk_display_hdc;
 extern HINSTANCE         _gdk_dll_hinstance;
 extern HINSTANCE         _gdk_app_hmodule;
 
-extern gint              _gdk_input_ignore_core;
+extern int               _gdk_input_ignore_core;
 
 /* These are thread specific, but GDK/win32 works OK only when invoked
  * from a single thread anyway.
@@ -316,15 +316,15 @@ void  _gdk_win32_end_modal_call (GdkWin32ModalOpKind kind);
 
 /* Options */
 extern gboolean          _gdk_input_ignore_wintab;
-extern gint              _gdk_max_colors;
+extern int               _gdk_max_colors;
 
 /* Convert a pixbuf to an HICON (or HCURSOR).  Supports alpha under
  * Windows XP, thresholds alpha otherwise.
  */
 HICON _gdk_win32_texture_to_hicon  (GdkTexture *texture);
 HICON _gdk_win32_pixbuf_to_hcursor (GdkPixbuf *pixbuf,
-                                    gint       x_hotspot,
-                                    gint       y_hotspot);
+                                    int        x_hotspot,
+                                    int        y_hotspot);
 
 void _gdk_win32_display_init_cursors (GdkWin32Display     *display);
 void _gdk_win32_display_finalize_cursors (GdkWin32Display *display);
@@ -351,14 +351,14 @@ typedef struct _Win32Cursor Win32Cursor;
 struct _Win32Cursor {
   GdkWin32CursorLoadType load_type;
   gunichar2 *resource_name;
-  gint width;
-  gint height;
+  int width;
+  int height;
   guint load_flags;
-  gint xcursor_number;
+  int xcursor_number;
 };
 
 Win32CursorTheme *win32_cursor_theme_load             (const gchar      *name,
-                                                       gint              size);
+                                                       int               size);
 Win32Cursor *     win32_cursor_theme_get_cursor       (Win32CursorTheme *theme,
                                                        const gchar      *name);
 void              win32_cursor_theme_destroy          (Win32CursorTheme *theme);
@@ -420,8 +420,8 @@ gboolean _gdk_win32_get_window_rect             (GdkSurface  *window,
 void     _gdk_win32_do_emit_configure_event     (GdkSurface  *window,
                                                  RECT        rect);
 void      gdk_win32_surface_do_move_resize_drag  (GdkSurface  *window,
-                                                  gint        x,
-                                                  gint        y);
+                                                  int         x,
+                                                  int         y);
 void      gdk_win32_surface_end_move_resize_drag (GdkSurface  *window);
 gboolean _gdk_win32_surface_fill_min_max_info    (GdkSurface  *window,
                                                   MINMAXINFO *mmi);

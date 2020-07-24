@@ -105,7 +105,7 @@ struct _GtkTextBufferClass
   void (* insert_text)            (GtkTextBuffer      *buffer,
                                    GtkTextIter        *pos,
                                    const gchar        *new_text,
-                                   gint                new_text_length);
+                                   int                 new_text_length);
 
   void (* insert_paintable)       (GtkTextBuffer      *buffer,
                                    GtkTextIter        *iter,
@@ -167,9 +167,9 @@ GType        gtk_text_buffer_get_type       (void) G_GNUC_CONST;
 GDK_AVAILABLE_IN_ALL
 GtkTextBuffer *gtk_text_buffer_new            (GtkTextTagTable *table);
 GDK_AVAILABLE_IN_ALL
-gint           gtk_text_buffer_get_line_count (GtkTextBuffer   *buffer);
+int            gtk_text_buffer_get_line_count (GtkTextBuffer   *buffer);
 GDK_AVAILABLE_IN_ALL
-gint           gtk_text_buffer_get_char_count (GtkTextBuffer   *buffer);
+int            gtk_text_buffer_get_char_count (GtkTextBuffer   *buffer);
 
 
 GDK_AVAILABLE_IN_ALL
@@ -179,29 +179,29 @@ GtkTextTagTable* gtk_text_buffer_get_tag_table (GtkTextBuffer  *buffer);
 GDK_AVAILABLE_IN_ALL
 void gtk_text_buffer_set_text          (GtkTextBuffer *buffer,
                                         const gchar   *text,
-                                        gint           len);
+                                        int            len);
 
 /* Insert into the buffer */
 GDK_AVAILABLE_IN_ALL
 void gtk_text_buffer_insert            (GtkTextBuffer *buffer,
                                         GtkTextIter   *iter,
                                         const gchar   *text,
-                                        gint           len);
+                                        int            len);
 GDK_AVAILABLE_IN_ALL
 void gtk_text_buffer_insert_at_cursor  (GtkTextBuffer *buffer,
                                         const gchar   *text,
-                                        gint           len);
+                                        int            len);
 
 GDK_AVAILABLE_IN_ALL
 gboolean gtk_text_buffer_insert_interactive           (GtkTextBuffer *buffer,
                                                        GtkTextIter   *iter,
                                                        const gchar   *text,
-                                                       gint           len,
+                                                       int            len,
                                                        gboolean       default_editable);
 GDK_AVAILABLE_IN_ALL
 gboolean gtk_text_buffer_insert_interactive_at_cursor (GtkTextBuffer *buffer,
                                                        const gchar   *text,
-                                                       gint           len,
+                                                       int            len,
                                                        gboolean       default_editable);
 
 GDK_AVAILABLE_IN_ALL
@@ -220,7 +220,7 @@ GDK_AVAILABLE_IN_ALL
 void    gtk_text_buffer_insert_with_tags          (GtkTextBuffer     *buffer,
                                                    GtkTextIter       *iter,
                                                    const gchar       *text,
-                                                   gint               len,
+                                                   int                len,
                                                    GtkTextTag        *first_tag,
                                                    ...) G_GNUC_NULL_TERMINATED;
 
@@ -228,7 +228,7 @@ GDK_AVAILABLE_IN_ALL
 void    gtk_text_buffer_insert_with_tags_by_name  (GtkTextBuffer     *buffer,
                                                    GtkTextIter       *iter,
                                                    const gchar       *text,
-                                                   gint               len,
+                                                   int                len,
                                                    const gchar       *first_tag_name,
                                                    ...) G_GNUC_NULL_TERMINATED;
 
@@ -236,7 +236,7 @@ GDK_AVAILABLE_IN_ALL
 void     gtk_text_buffer_insert_markup            (GtkTextBuffer     *buffer,
                                                    GtkTextIter       *iter,
                                                    const gchar       *markup,
-                                                   gint               len);
+                                                   int                len);
 
 /* Delete from the buffer */
 GDK_AVAILABLE_IN_ALL
@@ -371,21 +371,21 @@ GtkTextTag    *gtk_text_buffer_create_tag (GtkTextBuffer *buffer,
 GDK_AVAILABLE_IN_ALL
 void gtk_text_buffer_get_iter_at_line_offset (GtkTextBuffer *buffer,
                                               GtkTextIter   *iter,
-                                              gint           line_number,
-                                              gint           char_offset);
+                                              int            line_number,
+                                              int            char_offset);
 GDK_AVAILABLE_IN_ALL
 void gtk_text_buffer_get_iter_at_line_index  (GtkTextBuffer *buffer,
                                               GtkTextIter   *iter,
-                                              gint           line_number,
-                                              gint           byte_index);
+                                              int            line_number,
+                                              int            byte_index);
 GDK_AVAILABLE_IN_ALL
 void gtk_text_buffer_get_iter_at_offset      (GtkTextBuffer *buffer,
                                               GtkTextIter   *iter,
-                                              gint           char_offset);
+                                              int            char_offset);
 GDK_AVAILABLE_IN_ALL
 void gtk_text_buffer_get_iter_at_line        (GtkTextBuffer *buffer,
                                               GtkTextIter   *iter,
-                                              gint           line_number);
+                                              int            line_number);
 GDK_AVAILABLE_IN_ALL
 void gtk_text_buffer_get_start_iter          (GtkTextBuffer *buffer,
                                               GtkTextIter   *iter);

@@ -51,8 +51,8 @@ compare_textures (GdkTexture *expected,
                   gboolean    ignore_alpha)
 {
   guchar *expected_data, *test_data;
-  gint width, height;
-  gint x, y;
+  int width, height;
+  int x, y;
 
   g_assert_cmpint (gdk_texture_get_width (expected), ==, gdk_texture_get_width (test));
   g_assert_cmpint (gdk_texture_get_height (expected), ==, gdk_texture_get_height (test));

@@ -87,7 +87,7 @@ struct _GtkTextTagTablePrivate
   GSList     *anonymous;
   GSList     *buffers;
 
-  gint anon_count;
+  int anon_count;
 
   guint seen_invisible : 1;
 };
@@ -463,7 +463,7 @@ gtk_text_tag_table_foreach (GtkTextTagTable       *table,
  * 
  * Returns: number of tags in @table
  **/
-gint
+int
 gtk_text_tag_table_get_size (GtkTextTagTable *table)
 {
   GtkTextTagTablePrivate *priv;

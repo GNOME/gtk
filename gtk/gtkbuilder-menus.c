@@ -305,7 +305,7 @@ gtk_builder_menu_text (GtkBuildableParseContext  *context,
                        GError                   **error)
 {
   GtkBuilderMenuState *state = user_data;
-  gint i;
+  int i;
 
   for (i = 0; i < text_len; i++)
     if (!g_ascii_isspace (text[i]))

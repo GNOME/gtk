@@ -30,9 +30,9 @@ struct _GtkIconViewItem
 {
   GdkRectangle cell_area;
 
-  gint index;
+  int index;
 
-  gint row, col;
+  int row, col;
 
   guint selected : 1;
   guint selected_before_rubberbanding : 1;
@@ -63,7 +63,7 @@ struct _GtkIconViewClass
   void    (* toggle_cursor_item)     (GtkIconView      *icon_view);
   gboolean (* move_cursor)           (GtkIconView      *icon_view,
                                       GtkMovementStep   step,
-                                      gint              count,
+                                      int               count,
                                       gboolean          extend,
                                       gboolean          modify);
   gboolean (* activate_cursor_item)  (GtkIconView      *icon_view);
@@ -80,7 +80,7 @@ struct _GtkIconViewPrivate
 
   GPtrArray          *row_contexts;
 
-  gint width, height;
+  int width, height;
   double mouse_x;
   double mouse_y;
 
@@ -97,14 +97,14 @@ struct _GtkIconViewPrivate
   GtkAdjustment *hadjustment;
   GtkAdjustment *vadjustment;
 
-  gint rubberband_x1, rubberband_y1;
-  gint rubberband_x2, rubberband_y2;
+  int rubberband_x1, rubberband_y1;
+  int rubberband_x2, rubberband_y2;
   GdkDevice *rubberband_device;
   GtkCssNode *rubberband_node;
 
   guint scroll_timeout_id;
-  gint scroll_value_diff;
-  gint event_last_x, event_last_y;
+  int scroll_value_diff;
+  int event_last_x, event_last_y;
 
   GtkIconViewItem *anchor_item;
   GtkIconViewItem *cursor_item;
@@ -114,27 +114,27 @@ struct _GtkIconViewPrivate
 
   GtkOrientation item_orientation;
 
-  gint columns;
-  gint item_width;
-  gint spacing;
-  gint row_spacing;
-  gint column_spacing;
-  gint margin;
-  gint item_padding;
+  int columns;
+  int item_width;
+  int spacing;
+  int row_spacing;
+  int column_spacing;
+  int margin;
+  int item_padding;
 
-  gint text_column;
-  gint markup_column;
-  gint pixbuf_column;
-  gint tooltip_column;
+  int text_column;
+  int markup_column;
+  int pixbuf_column;
+  int tooltip_column;
 
   GtkCellRenderer *pixbuf_cell;
   GtkCellRenderer *text_cell;
 
   /* Drag-and-drop. */
   GdkModifierType start_button_mask;
-  gint pressed_button;
-  gint press_start_x;
-  gint press_start_y;
+  int pressed_button;
+  int press_start_x;
+  int press_start_y;
 
   GdkContentFormats *source_formats;
   GtkDropTargetAsync *dest;
@@ -181,8 +181,8 @@ void                 _gtk_icon_view_set_cursor_item                (GtkIconView 
                                                                     GtkIconViewItem        *item,
                                                                     GtkCellRenderer        *cursor_cell);
 GtkIconViewItem *    _gtk_icon_view_get_item_at_coords             (GtkIconView            *icon_view,
-                                                                    gint                    x,
-                                                                    gint                    y,
+                                                                    int                     x,
+                                                                    int                     y,
                                                                     gboolean                only_in_cell,
                                                                     GtkCellRenderer       **cell_at_pos);
 void                 _gtk_icon_view_select_item                    (GtkIconView            *icon_view,

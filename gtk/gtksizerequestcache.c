@@ -34,7 +34,7 @@ _gtk_size_request_cache_init (SizeRequestCache *cache)
 static void
 free_sizes_x (SizeRequestX **sizes)
 {
-  gint i;
+  int i;
 
   for (i = 0; i < GTK_SIZE_REQUEST_CACHED_SIZES && sizes[i] != NULL; i++)
     g_slice_free (SizeRequestX, sizes[i]);
@@ -45,7 +45,7 @@ free_sizes_x (SizeRequestX **sizes)
 static void
 free_sizes_y (SizeRequestY **sizes)
 {
-  gint i;
+  int i;
 
   for (i = 0; i < GTK_SIZE_REQUEST_CACHED_SIZES && sizes[i] != NULL; i++)
     g_slice_free (SizeRequestY, sizes[i]);

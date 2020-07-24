@@ -23,7 +23,7 @@ typedef struct {
   const gchar *string;
   gboolean is_editable;
   gboolean is_sensitive;
-  gint progress;
+  int progress;
 } ListEntry;
 
 enum {
@@ -52,7 +52,7 @@ create_model (void)
 {
   GtkTreeStore *model;
   GtkTreeIter iter;
-  gint i;
+  int i;
 
   model = gtk_tree_store_new (NUM_COLUMNS,
 			      G_TYPE_STRING,
@@ -184,7 +184,7 @@ enum {
 };
 
 static void
-create_control (GtkWidget *box, gint number, gint cntl, CallbackData *data)
+create_control (GtkWidget *box, int number, int cntl, CallbackData *data)
 {
   GtkWidget *checkbutton;
   GCallback  callback = NULL;
@@ -227,8 +227,8 @@ quit_cb (GtkWidget *widget,
   g_main_context_wakeup (NULL);
 }
 
-gint
-main (gint argc, gchar **argv)
+int
+main (int argc, gchar **argv)
 {
   GtkWidget *window;
   GtkWidget *scrolled_window;

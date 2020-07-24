@@ -218,16 +218,16 @@ struct _GtkCalendar
 
   GDateTime *date;
 
-  gint  day_month[6][7];
-  gint  day[6][7];
+  int   day_month[6][7];
+  int   day[6][7];
 
-  gint  num_marked_dates;
-  gint  marked_date[31];
+  int   num_marked_dates;
+  int   marked_date[31];
 
-  gint  focus_row;
-  gint  focus_col;
+  int   focus_row;
+  int   focus_col;
 
-  gint week_start;
+  int week_start;
 };
 
 struct _GtkCalendarClass
@@ -264,10 +264,10 @@ static void     gtk_calendar_focus_controller_focus     (GtkEventController    *
                                                          GtkWidget             *widget);
 
 static void calendar_invalidate_day     (GtkCalendar *widget,
-                                         gint       row,
-                                         gint       col);
+                                         int        row,
+                                         int        col);
 static void calendar_invalidate_day_num (GtkCalendar *widget,
-                                         gint       day);
+                                         int        day);
 
 static gboolean gtk_calendar_scroll_controller_scroll (GtkEventControllerScroll *scroll,
                                                        gdouble                   dx,
@@ -551,7 +551,7 @@ gtk_calendar_init (GtkCalendar *calendar)
   GtkGesture *gesture;
   GtkDragSource *source;
   GtkDropTarget *target;
-  gint i;
+  int i;
 #ifdef G_OS_WIN32
   wchar_t wbuffer[100];
 #else
@@ -562,8 +562,8 @@ gtk_calendar_init (GtkCalendar *calendar)
   gchar *year_before;
 #ifdef HAVE__NL_TIME_FIRST_WEEKDAY
   union { unsigned int word; char *string; } langinfo;
-  gint week_1stday = 0;
-  gint first_weekday = 1;
+  int week_1stday = 0;
+  int first_weekday = 1;
   guint week_origin;
 #else
   gchar *week_start;
@@ -961,8 +961,8 @@ calendar_select_and_focus_day (GtkCalendar *calendar,
                                int          day)
 {
   GDateTime *new_date;
-  gint row;
-  gint col;
+  int row;
+  int col;
 
   for (row = 0; row < 6; row ++)
     for (col = 0; col < 7; col++)
@@ -1080,15 +1080,15 @@ gtk_calendar_get_property (GObject      *object,
 
 static void
 calendar_invalidate_day_num (GtkCalendar *calendar,
-                             gint         day)
+                             int          day)
 {
   gtk_widget_queue_draw (GTK_WIDGET (calendar));
 }
 
 static void
 calendar_invalidate_day (GtkCalendar *calendar,
-                         gint         row,
-                         gint         col)
+                         int          row,
+                         int          col)
 {
   gtk_widget_queue_draw (GTK_WIDGET (calendar));
 }
@@ -1237,10 +1237,10 @@ gtk_calendar_key_controller_key_pressed (GtkEventControllerKey *controller,
                                          GtkWidget             *widget)
 {
   GtkCalendar *calendar = GTK_CALENDAR (widget);
-  gint return_val;
-  gint old_focus_row;
-  gint old_focus_col;
-  gint row, col, day;
+  int return_val;
+  int old_focus_row;
+  int old_focus_col;
+  int row, col, day;
 
   return_val = FALSE;
 

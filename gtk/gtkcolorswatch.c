@@ -280,7 +280,7 @@ hold_action (GtkGestureLongPress *gesture,
 
 static void
 tap_action (GtkGestureClick *gesture,
-            gint             n_press,
+            int              n_press,
             gdouble          x,
             gdouble          y,
             GtkColorSwatch  *swatch)
@@ -331,7 +331,7 @@ gtk_color_swatch_measure (GtkWidget *widget,
                           int            *natural_baseline)
 {
   GtkColorSwatch *swatch = GTK_COLOR_SWATCH (widget);
-  gint w, h, min;
+  int w, h, min;
 
   gtk_widget_measure (swatch->overlay_widget,
                       orientation,

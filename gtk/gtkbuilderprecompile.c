@@ -178,7 +178,7 @@ static const GMarkupParser record_parser =
   NULL, // error, fails immediately
 };
 
-static gint
+static int
 compare_string (gconstpointer _a,
                 gconstpointer _b)
 {

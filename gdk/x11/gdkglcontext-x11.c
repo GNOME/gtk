@@ -1278,7 +1278,7 @@ get_cached_gl_visuals (GdkDisplay *display, int *system, int *rgba)
 {
   gboolean found;
   Atom type_return;
-  gint format_return;
+  int format_return;
   gulong nitems_return;
   gulong bytes_after_return;
   guchar *data = NULL;
@@ -1521,8 +1521,8 @@ gdk_x11_display_make_gl_context_current (GdkDisplay   *display,
  */
 gboolean
 gdk_x11_display_get_glx_version (GdkDisplay *display,
-                                 gint       *major,
-                                 gint       *minor)
+                                 int        *major,
+                                 int        *minor)
 {
   g_return_val_if_fail (GDK_IS_DISPLAY (display), FALSE);
 

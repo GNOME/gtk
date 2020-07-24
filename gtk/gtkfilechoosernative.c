@@ -548,7 +548,7 @@ gtk_file_chooser_native_new (const gchar          *title,
 
 static void
 dialog_response_cb (GtkDialog *dialog,
-                    gint response_id,
+                    int response_id,
                     gpointer data)
 {
   GtkFileChooserNative *self = data;

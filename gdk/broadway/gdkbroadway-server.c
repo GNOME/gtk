@@ -501,7 +501,7 @@ _gdk_broadway_server_new_surface (GdkBroadwayServer *server,
 
 void
 _gdk_broadway_server_destroy_surface (GdkBroadwayServer *server,
-                                     gint id)
+                                     int id)
 {
   BroadwayRequestDestroySurface msg;
 
@@ -512,7 +512,7 @@ _gdk_broadway_server_destroy_surface (GdkBroadwayServer *server,
 
 gboolean
 _gdk_broadway_server_surface_show (GdkBroadwayServer *server,
-                                  gint id)
+                                  int id)
 {
   BroadwayRequestShowSurface msg;
 
@@ -525,7 +525,7 @@ _gdk_broadway_server_surface_show (GdkBroadwayServer *server,
 
 gboolean
 _gdk_broadway_server_surface_hide (GdkBroadwayServer *server,
-                                  gint id)
+                                  int id)
 {
   BroadwayRequestHideSurface msg;
 
@@ -538,7 +538,7 @@ _gdk_broadway_server_surface_hide (GdkBroadwayServer *server,
 
 void
 _gdk_broadway_server_surface_focus (GdkBroadwayServer *server,
-                                   gint id)
+                                   int id)
 {
   BroadwayRequestFocusSurface msg;
 
@@ -549,7 +549,7 @@ _gdk_broadway_server_surface_focus (GdkBroadwayServer *server,
 
 void
 _gdk_broadway_server_surface_set_transient_for (GdkBroadwayServer *server,
-                                               gint id, gint parent)
+                                               int id, int parent)
 {
   BroadwayRequestSetTransientFor msg;
 
@@ -692,7 +692,7 @@ gdk_broadway_server_surface_set_nodes (GdkBroadwayServer *server,
 
 gboolean
 _gdk_broadway_server_surface_move_resize (GdkBroadwayServer *server,
-                                         gint id,
+                                         int id,
                                          gboolean with_move,
                                          int x,
                                          int y,
@@ -716,7 +716,7 @@ _gdk_broadway_server_surface_move_resize (GdkBroadwayServer *server,
 
 GdkGrabStatus
 _gdk_broadway_server_grab_pointer (GdkBroadwayServer *server,
-                                   gint id,
+                                   int id,
                                    gboolean owner_events,
                                    guint32 event_mask,
                                    guint32 time_)

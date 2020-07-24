@@ -593,7 +593,7 @@ gtk_application_impl_dbus_publish_menu (GtkApplicationImplDBus  *dbus,
                                         guint                   *id,
                                         gchar                  **path)
 {
-  gint i;
+  int i;
 
   if (dbus->session == NULL)
     return;

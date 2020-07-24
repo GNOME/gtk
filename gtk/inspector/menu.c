@@ -58,7 +58,7 @@ static void
 add_item (GtkInspectorMenu *sl,
           GtkStackPage     *page,
           GMenuModel       *menu,
-          gint              idx,
+          int               idx,
           GtkTreeIter      *parent)
 {
   GtkTreeIter iter;
@@ -117,8 +117,8 @@ add_menu (GtkInspectorMenu *sl,
           GMenuModel       *menu,
           GtkTreeIter      *parent)
 {
-  gint n_items;
-  gint i;
+  int n_items;
+  int i;
 
   g_object_set (page, "visible", TRUE, NULL);
 

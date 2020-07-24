@@ -166,7 +166,7 @@ typedef struct {
 } Arc;
 
 static inline guint
-mem_hash (gconstpointer v, gint len)
+mem_hash (gconstpointer v, int len)
 {
   const signed char *p;
   const signed char *end;

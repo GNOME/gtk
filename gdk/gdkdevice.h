@@ -124,7 +124,7 @@ GdkSurface * gdk_device_get_surface_at_position (GdkDevice *device,
                                                  double    *win_y);
 
 GDK_AVAILABLE_IN_ALL
-gint     gdk_device_get_n_axes     (GdkDevice       *device);
+int      gdk_device_get_n_axes     (GdkDevice       *device);
 GDK_AVAILABLE_IN_ALL
 gboolean gdk_device_get_axis     (GdkDevice         *device,
                                   gdouble           *axes,

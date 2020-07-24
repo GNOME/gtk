@@ -130,7 +130,7 @@ static GtkCssImage *
 gtk_css_image_recolor_load (GtkCssImageRecolor  *recolor,
                             GtkCssStyle         *style,
                             GtkCssValue         *palette,
-                            gint                 scale,
+                            int                  scale,
                             GError             **gerror)
 {
   GError *local_error = NULL;

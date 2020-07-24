@@ -30,7 +30,7 @@ struct _TreeEntry {
   const gchar *description;
   const gchar *fine_print;
   const gchar *fine_print_color;
-  gint progress;
+  int progress;
   TreeEntry *entries;
 };
 
@@ -249,7 +249,7 @@ populate_model (GtkTreeStore *model,
 		TreeEntry    *entries)
 {
   GtkTreeIter iter;
-  gint        i;
+  int         i;
 
   for (i = 0; entries[i].info != NULL; i++)
     {
@@ -272,7 +272,7 @@ static GtkTreeModel *
 create_model (void)
 {
   GtkTreeStore *model;
-  gint          i;
+  int           i;
 
   model = gtk_tree_store_new (NUM_COLUMNS,
 			      G_TYPE_STRING,
@@ -299,8 +299,8 @@ quit_cb (GtkWidget *widget,
   g_main_context_wakeup (NULL);
 }
 
-gint
-main (gint argc, gchar **argv)
+int
+main (int argc, gchar **argv)
 {
   GtkWidget *window;
   GtkWidget *scrolled_window;

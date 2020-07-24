@@ -209,7 +209,7 @@ update_font_scale (GtkInspectorVisual *vis,
                    gboolean            update_entry)
 {
   g_object_set (gtk_settings_get_for_display (vis->display),
-                "gtk-xft-dpi", (gint)(factor * 96 * 1024),
+                "gtk-xft-dpi", (int)(factor * 96 * 1024),
                 NULL);
 
   if (update_adjustment)
@@ -757,7 +757,7 @@ init_cursors (GtkInspectorVisual *vis)
 static void
 cursor_size_changed (GtkAdjustment *adjustment, GtkInspectorVisual *vis)
 {
-  gint size;
+  int size;
 
   size = gtk_adjustment_get_value (adjustment);
   g_object_set (gtk_settings_get_for_display (vis->display), "gtk-cursor-theme-size", size, NULL);
@@ -766,7 +766,7 @@ cursor_size_changed (GtkAdjustment *adjustment, GtkInspectorVisual *vis)
 static void
 init_cursor_size (GtkInspectorVisual *vis)
 {
-  gint size;
+  int size;
 
   g_object_get (gtk_settings_get_for_display (vis->display), "gtk-cursor-theme-size", &size, NULL);
   if (size == 0)
@@ -803,7 +803,7 @@ init_font_scale (GtkInspectorVisual *vis)
 static void
 scale_changed (GtkAdjustment *adjustment, GtkInspectorVisual *vis)
 {
-  gint scale;
+  int scale;
 
   scale = gtk_adjustment_get_value (adjustment);
   gdk_x11_display_set_surface_scale (vis->display, scale);
