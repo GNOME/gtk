@@ -1178,25 +1178,24 @@ intersect_rounded_rectilinear (const graphene_rect_t *non_rounded,
                                const GskRoundedRect  *rounded,
                                GskRoundedRect        *result)
 {
-  int n_corners = 0;
   bool corners[4];
 
   /* Intersects with top left corner? */
-  n_corners += corners[0] = rounded_rect_has_corner (rounded, 0) &&
-                            graphene_rect_intersects (non_rounded,
-                                                      &rounded_rect_corner (rounded, 0));
+  corners[0] = rounded_rect_has_corner (rounded, 0) &&
+               graphene_rect_intersects (non_rounded,
+                                         &rounded_rect_corner (rounded, 0));
   /* top right? */
-  n_corners += corners[1] = rounded_rect_has_corner (rounded, 1) &&
-                            graphene_rect_intersects (non_rounded,
-                                                      &rounded_rect_corner (rounded, 1));
+  corners[1] = rounded_rect_has_corner (rounded, 1) &&
+               graphene_rect_intersects (non_rounded,
+                                         &rounded_rect_corner (rounded, 1));
   /* bottom right? */
-  n_corners += corners[2] = rounded_rect_has_corner (rounded, 2) &&
-                            graphene_rect_intersects (non_rounded,
-                                                      &rounded_rect_corner (rounded, 2));
+  corners[2] = rounded_rect_has_corner (rounded, 2) &&
+               graphene_rect_intersects (non_rounded,
+                                         &rounded_rect_corner (rounded, 2));
   /* bottom left */
-  n_corners += corners[3] = rounded_rect_has_corner (rounded, 3) &&
-                            graphene_rect_intersects (non_rounded,
-                                                      &rounded_rect_corner (rounded, 3));
+  corners[3] = rounded_rect_has_corner (rounded, 3) &&
+               graphene_rect_intersects (non_rounded,
+                                         &rounded_rect_corner (rounded, 3));
 
   if (corners[0] && !_graphene_rect_contains_rect (non_rounded, &rounded_rect_corner (rounded, 0)))
     return false;
