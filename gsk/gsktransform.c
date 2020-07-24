@@ -93,6 +93,10 @@ G_DEFINE_BOXED_TYPE (GskTransform, gsk_transform,
 
 static gboolean
 gsk_transform_is_identity (GskTransform *self);
+static GskTransform *
+gsk_transform_matrix_with_category (GskTransform           *next,
+                                    const graphene_matrix_t*matrix,
+                                    GskTransformCategory    category);
 
 static inline gboolean
 gsk_transform_has_class (GskTransform            *self,
@@ -448,7 +452,7 @@ static const GskTransformClass GSK_TRANSFORM_TRANSFORM_CLASS =
   gsk_matrix_transform_equal,
 };
 
-GskTransform *
+static GskTransform *
 gsk_transform_matrix_with_category (GskTransform            *next,
                                     const graphene_matrix_t *matrix,
                                     GskTransformCategory     category)
