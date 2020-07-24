@@ -187,7 +187,7 @@ create_sort_list_model (gconstpointer  model_id,
       break;
 
     case 1:
-      //gtk_sort_list_model_set_incremental (model, TRUE);
+      gtk_sort_list_model_set_incremental (model, TRUE);
       break;
 
     default:
