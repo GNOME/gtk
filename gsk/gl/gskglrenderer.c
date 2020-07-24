@@ -216,6 +216,19 @@ graphene_rect_intersects (const graphene_rect_t *r1,
   return true;
 }
 
+static inline bool G_GNUC_PURE __attribute__((always_inline))
+_graphene_rect_contains_rect (const graphene_rect_t *r1,
+                              const graphene_rect_t *r2)
+{
+  if (r2->origin.x >= r1->origin.x &&
+      (r2->origin.x + r2->size.width) <= (r1->origin.x + r1->size.width) &&
+      r2->origin.y >= r1->origin.y &&
+      (r2->origin.y + r2->size.height) <= (r1->origin.y + r1->size.height))
+    return true;
+
+  return false;
+}
+
 static inline void
 sort_border_sides (const GdkRGBA *colors,
                    int           *indices)
@@ -1183,13 +1196,13 @@ intersect_rounded_rectilinear (const graphene_rect_t *non_rounded,
                             graphene_rect_intersects (non_rounded,
                                                       &rounded_rect_corner (rounded, 3));
 
-  if (corners[0] && !graphene_rect_contains_rect (non_rounded, &rounded_rect_corner (rounded, 0)))
+  if (corners[0] && !_graphene_rect_contains_rect (non_rounded, &rounded_rect_corner (rounded, 0)))
     return false;
-  if (corners[1] && !graphene_rect_contains_rect (non_rounded, &rounded_rect_corner (rounded, 1)))
+  if (corners[1] && !_graphene_rect_contains_rect (non_rounded, &rounded_rect_corner (rounded, 1)))
     return false;
-  if (corners[2] && !graphene_rect_contains_rect (non_rounded, &rounded_rect_corner (rounded, 2)))
+  if (corners[2] && !_graphene_rect_contains_rect (non_rounded, &rounded_rect_corner (rounded, 2)))
     return false;
-  if (corners[3] && !graphene_rect_contains_rect (non_rounded, &rounded_rect_corner (rounded, 3)))
+  if (corners[3] && !_graphene_rect_contains_rect (non_rounded, &rounded_rect_corner (rounded, 3)))
     return false;
 
   /* We do intersect with at least one of the corners, but in such a way that the
