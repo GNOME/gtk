@@ -122,6 +122,20 @@ typedef struct
       GdkRGBA color;
       GskRoundedRect outline;
     } border;
+    struct {
+      GskRoundedRect outline;
+      float dx;
+      float dy;
+      float spread;
+      GdkRGBA color;
+    } inset_shadow;
+    struct {
+      GskRoundedRect outline;
+      float dx;
+      float dy;
+      float spread;
+      GdkRGBA color;
+    } unblurred_outset_shadow;
   };
 } ProgramState;
 
@@ -237,6 +251,18 @@ void              ops_set_border_width   (RenderOpBuilder         *builder,
 
 void              ops_set_border_color   (RenderOpBuilder         *builder,
                                           const GdkRGBA           *color);
+void              ops_set_inset_shadow   (RenderOpBuilder         *self,
+                                          const GskRoundedRect     outline,
+                                          float                    spread,
+                                          const GdkRGBA           *color,
+                                          float                    dx,
+                                          float                    dy);
+void              ops_set_unblurred_outset_shadow   (RenderOpBuilder         *self,
+                                                     const GskRoundedRect     outline,
+                                                     float                    spread,
+                                                     const GdkRGBA           *color,
+                                                     float                    dx,
+                                                     float                    dy);
 
 GskQuadVertex *   ops_draw               (RenderOpBuilder        *builder,
                                           const GskQuadVertex     vertex_data[GL_N_VERTICES]);

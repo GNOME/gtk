@@ -747,3 +747,118 @@ ops_get_buffer (RenderOpBuilder *builder)
 {
   return &builder->render_ops;
 }
+
+void
+ops_set_inset_shadow (RenderOpBuilder      *self,
+                      const GskRoundedRect  outline,
+                      float                 spread,
+                      const GdkRGBA        *color,
+                      float                 dx,
+                      float                 dy)
+{
+  ProgramState *current_program_state = get_current_program_state (self);
+  OpShadow *op;
+
+  op = ops_begin (self, OP_CHANGE_INSET_SHADOW);
+
+  if (!rounded_rect_equal (&outline, &current_program_state->inset_shadow.outline))
+    {
+      op->outline.value = outline;
+      op->outline.send = TRUE;
+      op->outline.send_corners = !rounded_rect_corners_equal (&current_program_state->inset_shadow.outline,
+                                                              &outline);
+      current_program_state->inset_shadow.outline = outline;
+    }
+  else
+    op->outline.send = FALSE;
+
+  if (spread != current_program_state->inset_shadow.spread)
+    {
+      op->spread.value = spread;
+      op->spread.send = TRUE;
+
+      current_program_state->inset_shadow.spread = spread;
+    }
+  else
+    op->spread.send = FALSE;
+
+  if (!gdk_rgba_equal (color, &current_program_state->inset_shadow.color))
+    {
+      op->color.value = color;
+      op->color.send = TRUE;
+
+      current_program_state->inset_shadow.color = *color;
+    }
+  else
+    op->color.send = FALSE;
+
+  if (dx != current_program_state->inset_shadow.dx ||
+      dy != current_program_state->inset_shadow.dy)
+    {
+      op->offset.value[0] = dx;
+      op->offset.value[1] = dy;
+      op->offset.send = TRUE;
+
+      current_program_state->inset_shadow.dx = dx;
+      current_program_state->inset_shadow.dy = dy;
+    }
+  else
+    op->offset.send = FALSE;
+}
+void
+ops_set_unblurred_outset_shadow (RenderOpBuilder      *self,
+                                 const GskRoundedRect  outline,
+                                 float                 spread,
+                                 const GdkRGBA        *color,
+                                 float                 dx,
+                                 float                 dy)
+{
+  ProgramState *current_program_state = get_current_program_state (self);
+  OpShadow *op;
+
+  op = ops_begin (self, OP_CHANGE_UNBLURRED_OUTSET_SHADOW);
+
+  if (!rounded_rect_equal (&outline, &current_program_state->unblurred_outset_shadow.outline))
+    {
+      op->outline.value = outline;
+      op->outline.send = TRUE;
+      op->outline.send_corners = !rounded_rect_corners_equal (&current_program_state->unblurred_outset_shadow.outline,
+                                                              &outline);
+      current_program_state->unblurred_outset_shadow.outline = outline;
+    }
+  else
+    op->outline.send = FALSE;
+
+  if (spread != current_program_state->unblurred_outset_shadow.spread)
+    {
+      op->spread.value = spread;
+      op->spread.send = TRUE;
+
+      current_program_state->unblurred_outset_shadow.spread = spread;
+    }
+  else
+    op->spread.send = FALSE;
+
+  if (!gdk_rgba_equal (color, &current_program_state->unblurred_outset_shadow.color))
+    {
+      op->color.value = color;
+      op->color.send = TRUE;
+
+      current_program_state->unblurred_outset_shadow.color = *color;
+    }
+  else
+    op->color.send = FALSE;
+
+  if (dx != current_program_state->unblurred_outset_shadow.dx ||
+      dy != current_program_state->unblurred_outset_shadow.dy)
+    {
+      op->offset.value[0] = dx;
+      op->offset.value[1] = dy;
+      op->offset.send = TRUE;
+
+      current_program_state->unblurred_outset_shadow.dx = dx;
+      current_program_state->unblurred_outset_shadow.dy = dy;
+    }
+  else
+    op->offset.send = FALSE;
+}

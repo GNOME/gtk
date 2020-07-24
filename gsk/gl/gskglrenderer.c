@@ -742,15 +742,9 @@ render_border_node (GskGLRenderer   *self,
       gdk_rgba_equal (&colors[0], &colors[2]) &&
       gdk_rgba_equal (&colors[0], &colors[3]))
     {
-      OpShadow *op;
-
       ops_set_program (builder, &self->programs->inset_shadow_program);
-      op = ops_begin (builder, OP_CHANGE_INSET_SHADOW);
-      op->color = &colors[0];
-      op->outline = transform_rect (self, builder, rounded_outline);
-      op->spread = widths[0];
-      op->offset[0] = 0;
-      op->offset[1] = 0;
+      ops_set_inset_shadow (builder, transform_rect (self, builder, rounded_outline),
+                            widths[0], &colors[0], 0, 0);
 
       load_vertex_data (ops_draw (builder, NULL), node, builder);
       return;
@@ -1607,17 +1601,14 @@ render_unblurred_inset_shadow_node (GskGLRenderer   *self,
   const float dx = gsk_inset_shadow_node_get_dx (node);
   const float dy = gsk_inset_shadow_node_get_dy (node);
   const float spread = gsk_inset_shadow_node_get_spread (node);
-  OpShadow *op;
 
   g_assert (blur_radius == 0);
 
   ops_set_program (builder, &self->programs->inset_shadow_program);
-  op = ops_begin (builder, OP_CHANGE_INSET_SHADOW);
-  op->color = gsk_inset_shadow_node_peek_color (node);
-  op->outline = transform_rect (self, builder, gsk_inset_shadow_node_peek_outline (node));
-  op->spread = spread;
-  op->offset[0] = dx;
-  op->offset[1] = dy;
+  ops_set_inset_shadow (builder, transform_rect (self, builder, gsk_inset_shadow_node_peek_outline (node)),
+                        spread,
+                        gsk_inset_shadow_node_peek_color (node),
+                        dx, dy);
 
   load_vertex_data (ops_draw (builder, NULL), node, builder);
 }
@@ -1635,7 +1626,6 @@ render_inset_shadow_node (GskGLRenderer   *self,
   const GskRoundedRect *node_outline = gsk_inset_shadow_node_peek_outline (node);
   float texture_width;
   float texture_height;
-  OpShadow *op;
   int blurred_texture_id;
 
   g_assert (blur_radius > 0);
@@ -1699,12 +1689,10 @@ render_inset_shadow_node (GskGLRenderer   *self,
 
       /* Actual inset shadow outline drawing */
       ops_set_program (builder, &self->programs->inset_shadow_program);
-      op = ops_begin (builder, OP_CHANGE_INSET_SHADOW);
-      op->color = gsk_inset_shadow_node_peek_color (node);
-      op->outline = transform_rect (self, builder, &outline_to_blur);
-      op->spread = spread * scale;
-      op->offset[0] = dx * scale;
-      op->offset[1] = dy * scale;
+      ops_set_inset_shadow (builder, transform_rect (self, builder, &outline_to_blur),
+                            spread * scale,
+                            gsk_inset_shadow_node_peek_color (node),
+                            dx * scale, dy * scale);
 
       ops_draw (builder, (GskQuadVertex[GL_N_VERTICES]) {
         { { 0,             0              }, { 0, 1 }, },
@@ -1772,15 +1760,12 @@ render_unblurred_outset_shadow_node (GskGLRenderer   *self,
   const float spread = gsk_outset_shadow_node_get_spread (node);
   const float dx = gsk_outset_shadow_node_get_dx (node);
   const float dy = gsk_outset_shadow_node_get_dy (node);
-  OpShadow *op;
 
   ops_set_program (builder, &self->programs->unblurred_outset_shadow_program);
-  op = ops_begin (builder, OP_CHANGE_UNBLURRED_OUTSET_SHADOW);
-  op->color = gsk_outset_shadow_node_peek_color (node);
-  op->outline = transform_rect (self, builder, outline);
-  op->spread = spread;
-  op->offset[0] = dx;
-  op->offset[1] = dy;
+  ops_set_unblurred_outset_shadow (builder, transform_rect (self, builder, outline),
+                                   spread,
+                                   gsk_outset_shadow_node_peek_color (node),
+                                   dx, dy);
 
   load_vertex_data (ops_draw (builder, NULL), node, builder);
 }
@@ -1803,7 +1788,7 @@ render_outset_shadow_node (GskGLRenderer   *self,
   const float dy = gsk_outset_shadow_node_get_dy (node);
   GskRoundedRect scaled_outline;
   int texture_width, texture_height;
-  OpShadow *shadow;
+  OpOutsetShadow *shadow;
   int blurred_texture_id;
   int cached_tid;
   bool do_slicing;
@@ -1928,7 +1913,8 @@ render_outset_shadow_node (GskGLRenderer   *self,
       ops_set_texture (builder, blurred_texture_id);
 
       shadow = ops_begin (builder, OP_CHANGE_OUTSET_SHADOW);
-      shadow->outline = transform_rect (self, builder, outline);
+      shadow->outline.value = transform_rect (self, builder, outline);
+      shadow->outline.send = TRUE;
 
       tx1 = 0; tx2 = 1;
       ty1 = 0; ty2 = 1;
@@ -1956,7 +1942,8 @@ render_outset_shadow_node (GskGLRenderer   *self,
   ops_set_texture (builder, blurred_texture_id);
 
   shadow = ops_begin (builder, OP_CHANGE_OUTSET_SHADOW);
-  shadow->outline = transform_rect (self, builder, outline);
+  shadow->outline.value = transform_rect (self, builder, outline);
+  shadow->outline.send = TRUE;
 
   {
     const float min_x = floorf (builder->dx + outline->bounds.origin.x - spread - (blur_extra / 2.0) + dx);
@@ -2610,15 +2597,27 @@ apply_inset_shadow_op (const Program  *program,
                        const OpShadow *op)
 {
   OP_PRINT (" -> inset shadow. Color: %s, Offset: (%f, %f), Spread: %f, Outline: %s",
-            gdk_rgba_to_string (op->color),
-            op->offset[0],
-            op->offset[1],
-            op->spread,
-            gsk_rounded_rect_to_string (&op->outline));
-  glUniform4fv (program->inset_shadow.color_location, 1, (float *)op->color);
-  glUniform2fv (program->inset_shadow.offset_location, 1, op->offset);
-  glUniform1f (program->inset_shadow.spread_location, op->spread);
-  glUniform4fv (program->inset_shadow.outline_rect_location, 3, (float *)&op->outline.bounds);
+            op->color.send ? gdk_rgba_to_string (op->color.value) : "don't send",
+            op->offset.send ? op->offset.value[0] : -1337.0,
+            op->offset.send ? op->offset.value[1] : -1337.0,
+            op->spread.send ? op->spread.value : -1337.0,
+            op->outline.send ? gsk_rounded_rect_to_string (&op->outline.value) : "don't send");
+  if (op->outline.send)
+    {
+      if (op->outline.send_corners)
+        glUniform4fv (program->inset_shadow.outline_rect_location, 3, (float *)&op->outline.value);
+      else
+        glUniform4fv (program->inset_shadow.outline_rect_location, 1, (float *)&op->outline.value);
+    }
+
+  if (op->color.send)
+    glUniform4fv (program->inset_shadow.color_location, 1, (float *)op->color.value);
+
+  if (op->spread.send)
+    glUniform1f (program->inset_shadow.spread_location, op->spread.value);
+
+  if (op->offset.send)
+    glUniform2fv (program->inset_shadow.offset_location, 1, op->offset.value);
 }
 
 static inline void
@@ -2626,18 +2625,31 @@ apply_unblurred_outset_shadow_op (const Program  *program,
                                   const OpShadow *op)
 {
   OP_PRINT (" -> unblurred outset shadow");
-  glUniform4fv (program->unblurred_outset_shadow.color_location, 1, (float *)op->color);
-  glUniform2fv (program->unblurred_outset_shadow.offset_location, 1, op->offset);
-  glUniform1f (program->unblurred_outset_shadow.spread_location, op->spread);
-  glUniform4fv (program->unblurred_outset_shadow.outline_rect_location, 3, (float *)&op->outline.bounds);
+
+  if (op->outline.send)
+    {
+      if (op->outline.send_corners)
+        glUniform4fv (program->unblurred_outset_shadow.outline_rect_location, 3, (float *)&op->outline.value);
+      else
+        glUniform4fv (program->unblurred_outset_shadow.outline_rect_location, 1, (float *)&op->outline.value);
+    }
+
+  if (op->color.send)
+    glUniform4fv (program->unblurred_outset_shadow.color_location, 1, (float *)op->color.value);
+
+  if (op->spread.send)
+    glUniform1f (program->unblurred_outset_shadow.spread_location, op->spread.value);
+
+  if (op->offset.send)
+    glUniform2fv (program->unblurred_outset_shadow.offset_location, 1, op->offset.value);
 }
 
 static inline void
-apply_outset_shadow_op (const Program  *program,
-                        const OpShadow *op)
+apply_outset_shadow_op (const Program        *program,
+                        const OpOutsetShadow *op)
 {
   OP_PRINT (" -> outset shadow");
-  glUniform4fv (program->outset_shadow.outline_rect_location, 3, (float *)&op->outline.bounds);
+  glUniform4fv (program->outset_shadow.outline_rect_location, 3, (float *)&op->outline.value.bounds);
 }
 
 static inline void
@@ -2694,6 +2706,7 @@ static inline void
 apply_cross_fade_op (const Program     *program,
                      const OpCrossFade *op)
 {
+  OP_PRINT (" -> Cross fade");
   /* End texture id */
   glUniform1i (program->cross_fade.source2_location, 1);
   glActiveTexture (GL_TEXTURE0 + 1);
@@ -3505,6 +3518,7 @@ gsk_gl_renderer_render_ops (GskGLRenderer *self)
           break;
 
         case OP_CLEAR:
+          OP_PRINT ("-> CLEAR");
           glClearColor (0, 0, 0, 0);
           glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
           break;

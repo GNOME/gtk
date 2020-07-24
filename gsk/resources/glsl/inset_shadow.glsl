@@ -35,9 +35,9 @@ _IN_ _ROUNDED_RECT_UNIFORM_ transformed_inside_outline;
 void main() {
   vec2 frag = get_frag_coord();
 
-  float alpha = clamp (rounded_rect_coverage(decode_rect(transformed_outside_outline), frag) -
-                       rounded_rect_coverage(decode_rect(transformed_inside_outline), frag),
-                       0.0, 1.0);
+  float alpha = clamp(rounded_rect_coverage(decode_rect(transformed_outside_outline), frag) -
+                      rounded_rect_coverage(decode_rect(transformed_inside_outline), frag),
+                      0.0, 1.0);
 
   setOutputColor(final_color * alpha);
 }

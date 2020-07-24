@@ -41,11 +41,30 @@ typedef enum
   OP_LAST
 } OpKind;
 
+
+typedef struct { float value; guint send: 1; }    FloatUniformValue;
+typedef struct { float value[2]; guint send: 1; } Float2UniformValue;
+typedef struct { GskRoundedRect value; guint send: 1; guint send_corners: 1; } RRUniformValue;
+typedef struct { const GdkRGBA *value; guint send: 1; } RGBAUniformValue;
+
 /* OpNode are allocated within OpBuffer.pos, but we keep
  * a secondary index into the locations of that buffer
  * from OpBuffer.index. This allows peeking at the kind
  * and quickly replacing existing entries when necessary.
  */
+typedef struct
+{
+  RRUniformValue outline;
+  FloatUniformValue spread;
+  Float2UniformValue offset;
+  RGBAUniformValue color;
+} OpShadow;
+
+typedef struct
+{
+  RRUniformValue outline;
+} OpOutsetShadow;
+
 typedef struct
 {
   guint  pos;
@@ -127,14 +146,6 @@ typedef struct
   graphene_size_t size;
   float dir[2];
 } OpBlur;
-
-typedef struct
-{
-  GskRoundedRect outline;
-  float spread;
-  float offset[2];
-  const GdkRGBA *color;
-} OpShadow;
 
 typedef struct
 {
