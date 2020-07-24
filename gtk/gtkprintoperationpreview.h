@@ -50,9 +50,9 @@ struct _GtkPrintOperationPreviewIface
 
   /* methods */
   void              (*render_page)    (GtkPrintOperationPreview *preview,
-				       gint                      page_nr);
+				       int                       page_nr);
   gboolean          (*is_selected)    (GtkPrintOperationPreview *preview,
-				       gint                      page_nr);
+				       int                       page_nr);
   void              (*end_preview)    (GtkPrintOperationPreview *preview);
 
   /* Padding for future expansion */
@@ -71,12 +71,12 @@ GType   gtk_print_operation_preview_get_type       (void) G_GNUC_CONST;
 
 GDK_AVAILABLE_IN_ALL
 void     gtk_print_operation_preview_render_page (GtkPrintOperationPreview *preview,
-						  gint                      page_nr);
+						  int                       page_nr);
 GDK_AVAILABLE_IN_ALL
 void     gtk_print_operation_preview_end_preview (GtkPrintOperationPreview *preview);
 GDK_AVAILABLE_IN_ALL
 gboolean gtk_print_operation_preview_is_selected (GtkPrintOperationPreview *preview,
-						  gint                      page_nr);
+						  int                       page_nr);
 
 G_END_DECLS
 

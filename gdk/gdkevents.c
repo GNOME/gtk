@@ -120,7 +120,7 @@ value_event_collect_value (GValue      *value,
   return NULL;
 }
 
-static gchar *
+static char *
 value_event_lcopy_value (const GValue *value,
                          guint         n_collect_values,
                          GTypeCValue  *collect_values,
@@ -734,7 +734,7 @@ gdk_motion_event_push_history (GdkEvent *event,
   GdkMotionEvent *self = (GdkMotionEvent *) event;
   GdkTimeCoord hist;
   GdkDevice *device;
-  gint i, n_axes;
+  int i, n_axes;
 
   g_assert (GDK_IS_EVENT_TYPE (event, GDK_MOTION_NOTIFY));
   g_assert (GDK_IS_EVENT_TYPE (history_event, GDK_MOTION_NOTIFY));
@@ -993,12 +993,12 @@ gdk_event_triggers_context_menu (GdkEvent *event)
 static gboolean
 gdk_events_get_axis_distances (GdkEvent *event1,
                                GdkEvent *event2,
-                               gdouble  *x_distance,
-                               gdouble  *y_distance,
-                               gdouble  *distance)
+                               double   *x_distance,
+                               double   *y_distance,
+                               double   *distance)
 {
-  gdouble x1, x2, y1, y2;
-  gdouble xd, yd;
+  double x1, x2, y1, y2;
+  double xd, yd;
 
   if (!gdk_event_get_position (event1, &x1, &y1) ||
       !gdk_event_get_position (event2, &x2, &y2))
@@ -1033,7 +1033,7 @@ gdk_events_get_axis_distances (GdkEvent *event1,
 gboolean
 gdk_events_get_distance (GdkEvent *event1,
                          GdkEvent *event2,
-                         gdouble  *distance)
+                         double   *distance)
 {
   return gdk_events_get_axis_distances (event1, event2,
                                         NULL, NULL,
@@ -1056,9 +1056,9 @@ gdk_events_get_distance (GdkEvent *event1,
 gboolean
 gdk_events_get_angle (GdkEvent *event1,
                       GdkEvent *event2,
-                      gdouble  *angle)
+                      double   *angle)
 {
-  gdouble x_distance, y_distance, distance;
+  double x_distance, y_distance, distance;
 
   if (!gdk_events_get_axis_distances (event1, event2,
                                       &x_distance, &y_distance,
@@ -1097,10 +1097,10 @@ gdk_events_get_angle (GdkEvent *event1,
 gboolean
 gdk_events_get_center (GdkEvent *event1,
                        GdkEvent *event2,
-                       gdouble  *x,
-                       gdouble  *y)
+                       double   *x,
+                       double   *y)
 {
-  gdouble x1, x2, y1, y2;
+  double x1, x2, y1, y2;
 
   if (!gdk_event_get_position (event1, &x1, &y1) ||
       !gdk_event_get_position (event2, &x2, &y2))

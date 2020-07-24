@@ -55,4 +55,4 @@ void           signal_monitor_append_signal_path      (SignalMonitor *m,
                                                        GtkTreePath   *path);
 void           signal_monitor_append_signal           (SignalMonitor *m,
                                                        SignalName     signal,
-                                                       const gchar   *path_string);
+                                                       const char    *path_string);

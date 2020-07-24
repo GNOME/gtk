@@ -46,7 +46,7 @@ GDK_AVAILABLE_IN_ALL
 GtkGesture * gtk_gesture_zoom_new             (void);
 
 GDK_AVAILABLE_IN_ALL
-gdouble      gtk_gesture_zoom_get_scale_delta (GtkGestureZoom *gesture);
+double       gtk_gesture_zoom_get_scale_delta (GtkGestureZoom *gesture);
 
 G_END_DECLS
 

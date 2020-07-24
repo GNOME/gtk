@@ -128,8 +128,8 @@ test_error_trapping (GdkDisplay *gdk_display)
   XSync (d, TRUE);
 }
 
-gint
-main (gint argc, gchar *argv[])
+int
+main (int argc, char *argv[])
 {
   GdkDisplay *gdk_display;
   GdkDisplay *extra_display;

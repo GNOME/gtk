@@ -77,7 +77,7 @@ lookup_cached_xatom (GdkDisplay *display,
  **/
 Atom
 gdk_x11_get_xatom_by_name_for_display (GdkDisplay  *display,
-				       const gchar *atom_name)
+				       const char *atom_name)
 {
   Atom xatom = None;
 
@@ -102,13 +102,13 @@ gdk_x11_get_xatom_by_name_for_display (GdkDisplay  *display,
 
 void
 _gdk_x11_precache_atoms (GdkDisplay          *display,
-			 const gchar * const *atom_names,
-			 gint                 n_atoms)
+			 const char * const *atom_names,
+			 int                  n_atoms)
 {
   Atom *xatoms;
   const char **xatom_names;
-  gint n_xatoms;
-  gint i;
+  int n_xatoms;
+  int i;
 
   xatoms = g_new (Atom, n_atoms);
   xatom_names = g_new (const char *, n_atoms);
@@ -147,7 +147,7 @@ _gdk_x11_precache_atoms (GdkDisplay          *display,
  * Returns: name of the X atom; this string is owned by GDK,
  *   so it shouldn’t be modified or freed. 
  **/
-const gchar *
+const char *
 gdk_x11_get_xatom_name_for_display (GdkDisplay *display,
 				    Atom        xatom)
 
@@ -197,7 +197,7 @@ gdk_x11_get_xatom_name_for_display (GdkDisplay *display,
 
 Atom
 _gdk_x11_get_xatom_for_display_printf (GdkDisplay    *display,
-                                       const gchar   *format,
+                                       const char    *format,
                                        ...)
 {
   va_list args;

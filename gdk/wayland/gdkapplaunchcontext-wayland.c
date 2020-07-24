@@ -49,7 +49,7 @@ typedef struct _GdkWaylandAppLaunchContextClass GdkWaylandAppLaunchContextClass;
 struct _GdkWaylandAppLaunchContext
 {
   GdkAppLaunchContext base;
-  gchar *name;
+  char *name;
   guint serial;
 };
 

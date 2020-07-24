@@ -59,7 +59,7 @@ notify_preview_text_cb (GObject *fontchooser, GParamSpec *pspec, gpointer data)
 }
 
 static void
-font_activated_cb (GtkFontChooser *chooser, const gchar *font_name, gpointer data)
+font_activated_cb (GtkFontChooser *chooser, const char *font_name, gpointer data)
 {
   g_debug ("font-activated: %s", font_name);
 }
@@ -90,7 +90,7 @@ main (int argc, char *argv[])
     {
       FcConfig *config;
       PangoFontMap *fontmap;
-      gint i;
+      int i;
 
       /* Create a custom font configuration by adding font files specified
        * on the commandline to the default config.

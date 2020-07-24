@@ -37,7 +37,7 @@
 
 static struct {
   GdkDragAction action;
-  const gchar  *name;
+  const char   *name;
   GdkCursor    *cursor;
 } drag_cursors[] = {
   { GDK_ACTION_ASK,     "dnd-ask",  NULL },
@@ -604,7 +604,7 @@ gdk_drag_write_async (GdkDrag             *drag,
       return;
     }
 
-  mime_formats = gdk_content_formats_new ((const gchar *[2]) { mime_type, NULL }, 1);
+  mime_formats = gdk_content_formats_new ((const char *[2]) { mime_type, NULL }, 1);
   mime_formats = gdk_content_formats_union_serialize_gtypes (mime_formats);
   gtype = gdk_content_formats_match_gtype (formats, mime_formats);
   if (gtype != G_TYPE_INVALID)
@@ -722,8 +722,8 @@ gdk_drag_get_drag_surface (GdkDrag *drag)
  */
 void
 gdk_drag_set_hotspot (GdkDrag *drag,
-                      gint     hot_x,
-                      gint     hot_y)
+                      int      hot_x,
+                      int      hot_y)
 {
   g_return_if_fail (GDK_IS_DRAG (drag));
 
@@ -807,7 +807,7 @@ GdkCursor *
 gdk_drag_get_cursor (GdkDrag       *drag,
                      GdkDragAction  action)
 {
-  gint i;
+  int i;
 
   for (i = 0 ; i < G_N_ELEMENTS (drag_cursors) - 1; i++)
     if (drag_cursors[i].action == action)

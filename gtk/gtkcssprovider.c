@@ -122,7 +122,7 @@ struct _GtkCssProviderPrivate
   GArray *rulesets;
   GtkCssSelectorTree *tree;
   GResource *resource;
-  gchar *path;
+  char *path;
 };
 
 enum {
@@ -1090,7 +1090,7 @@ gtk_css_provider_load_internal (GtkCssProvider *self,
  **/
 void
 gtk_css_provider_load_from_data (GtkCssProvider  *css_provider,
-                                 const gchar     *data,
+                                 const char      *data,
                                  gssize           length)
 {
   GBytes *bytes;
@@ -1144,7 +1144,7 @@ gtk_css_provider_load_from_file (GtkCssProvider  *css_provider,
  **/
 void
 gtk_css_provider_load_from_path (GtkCssProvider  *css_provider,
-                                 const gchar     *path)
+                                 const char      *path)
 {
   GFile *file;
 
@@ -1171,10 +1171,10 @@ gtk_css_provider_load_from_path (GtkCssProvider  *css_provider,
  */
 void
 gtk_css_provider_load_from_resource (GtkCssProvider *css_provider,
-			             const gchar    *resource_path)
+			             const char     *resource_path)
 {
   GFile *file;
-  gchar *uri, *escaped;
+  char *uri, *escaped;
 
   g_return_if_fail (GTK_IS_CSS_PROVIDER (css_provider));
   g_return_if_fail (resource_path != NULL);
@@ -1192,10 +1192,10 @@ gtk_css_provider_load_from_resource (GtkCssProvider *css_provider,
   g_object_unref (file);
 }
 
-gchar *
+char *
 _gtk_get_theme_dir (void)
 {
-  const gchar *var;
+  const char *var;
 
   var = g_getenv ("GTK_DATA_PREFIX");
   if (var == NULL)
@@ -1206,7 +1206,7 @@ _gtk_get_theme_dir (void)
 /* Return the path that this providers gtk.css was loaded from,
  * if it is part of a theme, otherwise NULL.
  */
-const gchar *
+const char *
 _gtk_css_provider_get_theme_dir (GtkCssProvider *provider)
 {
   GtkCssProviderPrivate *priv = gtk_css_provider_get_instance_private (provider);
@@ -1228,17 +1228,17 @@ _gtk_css_provider_get_theme_dir (GtkCssProvider *provider)
  * $dir/$subdir/gtk-4.0/gtk-$variant.css
  * and return the first found file.
  */
-static gchar *
-_gtk_css_find_theme_dir (const gchar *dir,
-                         const gchar *subdir,
-                         const gchar *name,
-                         const gchar *variant)
+static char *
+_gtk_css_find_theme_dir (const char *dir,
+                         const char *subdir,
+                         const char *name,
+                         const char *variant)
 {
-  gchar *file;
-  gchar *base;
-  gchar *subsubdir;
-  gint i;
-  gchar *path;
+  char *file;
+  char *base;
+  char *subsubdir;
+  int i;
+  char *path;
 
   if (variant)
     file = g_strconcat ("gtk-", variant, ".css", NULL);
@@ -1271,11 +1271,11 @@ _gtk_css_find_theme_dir (const gchar *dir,
 
 #undef MINOR
 
-static gchar *
-_gtk_css_find_theme (const gchar *name,
-                     const gchar *variant)
+static char *
+_gtk_css_find_theme (const char *name,
+                     const char *variant)
 {
-  gchar *path;
+  char *path;
   const char *const *dirs;
   int i;
   char *dir;
@@ -1321,11 +1321,11 @@ _gtk_css_find_theme (const gchar *name,
  **/
 void
 gtk_css_provider_load_named (GtkCssProvider *provider,
-                             const gchar    *name,
-                             const gchar    *variant)
+                             const char     *name,
+                             const char     *variant)
 {
-  gchar *path;
-  gchar *resource_path;
+  char *path;
+  char *resource_path;
 
   g_return_if_fail (GTK_IS_CSS_PROVIDER (provider));
   g_return_if_fail (name != NULL);

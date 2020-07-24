@@ -24,8 +24,8 @@
 #include "gdkprivate-broadway.h"
 
 static void gdk_broadway_device_get_state (GdkDevice       *device,
-                                           GdkSurface       *surface,
-                                           gdouble         *axes,
+                                           GdkSurface      *surface,
+                                           double          *axes,
                                            GdkModifierType *mask);
 static void gdk_broadway_device_set_surface_cursor (GdkDevice *device,
                                                     GdkSurface *surface,
@@ -46,8 +46,8 @@ static GdkGrabStatus gdk_broadway_device_grab   (GdkDevice     *device,
 static void          gdk_broadway_device_ungrab (GdkDevice     *device,
                                                  guint32        time_);
 static GdkSurface * gdk_broadway_device_surface_at_position (GdkDevice       *device,
-                                                             gdouble         *win_x,
-                                                             gdouble         *win_y,
+                                                             double          *win_x,
+                                                             double          *win_y,
                                                              GdkModifierType *mask);
 
 
@@ -79,11 +79,11 @@ gdk_broadway_device_init (GdkBroadwayDevice *device_core)
 
 static void
 gdk_broadway_device_get_state (GdkDevice       *device,
-                               GdkSurface       *surface,
-                               gdouble         *axes,
+                               GdkSurface      *surface,
+                               double          *axes,
                                GdkModifierType *mask)
 {
-  gdouble x, y;
+  double x, y;
 
   gdk_surface_get_device_position (surface, device, &x, &y, mask);
 
@@ -271,8 +271,8 @@ gdk_broadway_device_ungrab (GdkDevice *device,
 
 static GdkSurface *
 gdk_broadway_device_surface_at_position (GdkDevice       *device,
-                                         gdouble         *win_x,
-                                         gdouble         *win_y,
+                                         double          *win_x,
+                                         double          *win_y,
                                          GdkModifierType *mask)
 {
   GdkSurface *surface = NULL;

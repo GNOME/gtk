@@ -50,24 +50,24 @@ GDK_AVAILABLE_IN_ALL
 void       gtk_progress_bar_pulse                (GtkProgressBar *pbar);
 GDK_AVAILABLE_IN_ALL
 void       gtk_progress_bar_set_text             (GtkProgressBar *pbar,
-                                                  const gchar    *text);
+                                                  const char     *text);
 GDK_AVAILABLE_IN_ALL
 void       gtk_progress_bar_set_fraction         (GtkProgressBar *pbar,
-                                                  gdouble         fraction);
+                                                  double          fraction);
 
 GDK_AVAILABLE_IN_ALL
 void       gtk_progress_bar_set_pulse_step       (GtkProgressBar *pbar,
-                                                  gdouble         fraction);
+                                                  double          fraction);
 GDK_AVAILABLE_IN_ALL
 void       gtk_progress_bar_set_inverted         (GtkProgressBar *pbar,
                                                   gboolean        inverted);
 
 GDK_AVAILABLE_IN_ALL
-const gchar *      gtk_progress_bar_get_text       (GtkProgressBar *pbar);
+const char *      gtk_progress_bar_get_text       (GtkProgressBar *pbar);
 GDK_AVAILABLE_IN_ALL
-gdouble            gtk_progress_bar_get_fraction   (GtkProgressBar *pbar);
+double             gtk_progress_bar_get_fraction   (GtkProgressBar *pbar);
 GDK_AVAILABLE_IN_ALL
-gdouble            gtk_progress_bar_get_pulse_step (GtkProgressBar *pbar);
+double             gtk_progress_bar_get_pulse_step (GtkProgressBar *pbar);
 
 GDK_AVAILABLE_IN_ALL
 gboolean           gtk_progress_bar_get_inverted    (GtkProgressBar *pbar);

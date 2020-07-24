@@ -47,19 +47,19 @@ cairo_t      *gtk_print_context_get_cairo_context    (GtkPrintContext *context);
 GDK_AVAILABLE_IN_ALL
 GtkPageSetup *gtk_print_context_get_page_setup       (GtkPrintContext *context);
 GDK_AVAILABLE_IN_ALL
-gdouble       gtk_print_context_get_width            (GtkPrintContext *context);
+double        gtk_print_context_get_width            (GtkPrintContext *context);
 GDK_AVAILABLE_IN_ALL
-gdouble       gtk_print_context_get_height           (GtkPrintContext *context);
+double        gtk_print_context_get_height           (GtkPrintContext *context);
 GDK_AVAILABLE_IN_ALL
-gdouble       gtk_print_context_get_dpi_x            (GtkPrintContext *context);
+double        gtk_print_context_get_dpi_x            (GtkPrintContext *context);
 GDK_AVAILABLE_IN_ALL
-gdouble       gtk_print_context_get_dpi_y            (GtkPrintContext *context);
+double        gtk_print_context_get_dpi_y            (GtkPrintContext *context);
 GDK_AVAILABLE_IN_ALL
 gboolean      gtk_print_context_get_hard_margins     (GtkPrintContext *context,
-						      gdouble         *top,
-						      gdouble         *bottom,
-						      gdouble         *left,
-						      gdouble         *right);
+						      double          *top,
+						      double          *bottom,
+						      double          *left,
+						      double          *right);
 
 /* Fonts */
 GDK_AVAILABLE_IN_ALL

@@ -225,7 +225,7 @@ typedef struct
 {
   IDropSource                     ids;
   IDropSourceNotify               idsn;
-  gint                            ref_count;
+  int                             ref_count;
   GdkDrag                        *drag;
 
   /* These are thread-local
@@ -1207,7 +1207,7 @@ query (LPDATAOBJECT                This,
        GdkWin32ContentFormatPair **pair)
 {
   data_object *ctx = (data_object *) This;
-  gint i;
+  int i;
 
   if (pair)
     *pair = NULL;
@@ -1633,8 +1633,8 @@ data_object_new (GdkDrag *drag)
 
   for (i = 0; i < n_mime_types; i++)
     {
-      gint added_count = 0;
-      gint j;
+      int added_count = 0;
+      int j;
 
       GDK_NOTE (DND, g_print ("DataObject supports contentformat 0x%p (%s)\n", mime_types[i], mime_types[i]));
 
@@ -1790,8 +1790,8 @@ _gdk_win32_surface_drag_begin (GdkSurface         *surface,
  * Unless, of course, we keep the LOCAL protocol around.
  */
 typedef struct {
-  gint x;
-  gint y;
+  int x;
+  int y;
   HWND ignore;
   HWND result;
 } find_window_enum_arg;
@@ -1834,8 +1834,8 @@ find_window_enum_proc (HWND   hwnd,
 static HWND
 gdk_win32_drag_find_window (GdkDrag    *drag,
                             GdkSurface *drag_surface,
-                            gint        x_root,
-                            gint        y_root)
+                            int         x_root,
+                            int         y_root)
 {
   GdkWin32Drag *drag_win32 = GDK_WIN32_DRAG (drag);
   find_window_enum_arg a;
@@ -1903,8 +1903,8 @@ _gdk_win32_get_drop_for_dest_window (HWND dest_window)
 static gboolean
 gdk_win32_local_drag_motion (GdkDrag         *drag,
                              HWND             dest_window,
-                             gint             x_root,
-                             gint             y_root,
+                             int              x_root,
+                             int              y_root,
                              GdkDragAction    possible_actions,
                              DWORD            key_state,
                              guint32          time_)
@@ -2087,7 +2087,7 @@ gdk_drag_anim_timeout (gpointer data)
   gint64 current_time;
   double f;
   double t;
-  gint x, y;
+  int x, y;
 
   if (!frame_clock)
     return G_SOURCE_REMOVE;
@@ -2255,7 +2255,7 @@ gdk_win32_drag_cancel (GdkDrag             *drag,
 {
   GdkWin32Drag *drag_win32 = GDK_WIN32_DRAG (drag);
 
-  const gchar *reason_str = NULL;
+  const char *reason_str = NULL;
   switch (reason)
     {
     case GDK_DRAG_CANCEL_NO_TARGET:
@@ -2307,8 +2307,8 @@ gdk_win32_drag_drop_performed (GdkDrag *drag,
 
 static void
 gdk_local_drag_update (GdkDrag *drag,
-                       gdouble  x_root,
-                       gdouble  y_root,
+                       double   x_root,
+                       double   y_root,
                        DWORD    grfKeyState,
                        guint32  evtime)
 {
@@ -2381,7 +2381,7 @@ gdk_dnd_handle_key_event (GdkDrag  *drag,
   GdkWin32Drag *drag_win32 = GDK_WIN32_DRAG (drag);
   GdkModifierType state;
   GdkDevice *pointer;
-  gint dx, dy;
+  int dx, dy;
 
   GDK_NOTE (DND, g_print ("gdk_dnd_handle_key_event: 0x%p\n", drag));
 
@@ -2546,8 +2546,8 @@ gdk_win32_drag_get_drag_surface (GdkDrag *drag)
 
 static void
 gdk_win32_drag_set_hotspot (GdkDrag *drag,
-                            gint     hot_x,
-                            gint     hot_y)
+                            int      hot_x,
+                            int      hot_y)
 {
   GdkWin32Drag *drag_win32 = GDK_WIN32_DRAG (drag);
 

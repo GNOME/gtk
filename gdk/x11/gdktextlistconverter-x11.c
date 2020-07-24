@@ -38,7 +38,7 @@ struct _GdkX11TextListConverter
   GdkDisplay *display;
   
   const char *encoding; /* interned */
-  gint format;
+  int format;
 
   guint encoder : 1;
 };
@@ -82,7 +82,7 @@ gdk_x11_text_list_converter_decode (GdkX11TextListConverter *conv,
                                     gsize                   *bytes_written,
                                     GError                 **error)
 {
-  gint count;
+  int count;
   char **list;
 
   if (!(flags & G_CONVERTER_INPUT_AT_END))
@@ -132,9 +132,9 @@ char *
 gdk_x11_utf8_to_string_target (const char *utf8_str,
                                gboolean    return_latin1)
 {
-  gint len = strlen (utf8_str);
+  int len = strlen (utf8_str);
   GString *result = g_string_sized_new (len);
-  const gchar *p = utf8_str;
+  const char *p = utf8_str;
 
   while (*p)
     {
@@ -164,7 +164,7 @@ gdk_x11_utf8_to_string_target (const char *utf8_str,
               else
                 {
                   char buf[7];
-                  gint buflen;
+                  int buflen;
 
                   buflen = g_unichar_to_utf8 (ch, buf);
                   g_string_append_len (result, buf, buflen);
@@ -200,7 +200,7 @@ gdk_x11_text_list_converter_encode (GdkX11TextListConverter *conv,
       g_str_equal (conv->encoding, "TEXT"))
     {
       GConverterResult result;
-      gchar *tmp, *latin1;
+      char *tmp, *latin1;
 
       tmp = g_strndup (inbuf, inbuf_size);
       latin1 = gdk_x11_utf8_to_string_target (tmp, TRUE);
@@ -223,8 +223,8 @@ gdk_x11_text_list_converter_encode (GdkX11TextListConverter *conv,
       GConverterResult result;
       guchar *text;
       const char *encoding;
-      gint format;
-      gint new_length;
+      int format;
+      int new_length;
       char *tmp;
 
       tmp = g_strndup (inbuf, inbuf_size);

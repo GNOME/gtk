@@ -33,7 +33,7 @@ struct _GtkPictureAccessibleClass
   GtkWidgetAccessibleClass parent_class;
 };
 
-static const gchar *
+static const char *
 gtk_picture_accessible_get_image_description (AtkImage *image)
 {
   GtkWidget* widget;
@@ -47,8 +47,8 @@ gtk_picture_accessible_get_image_description (AtkImage *image)
 
 static void
 gtk_picture_accessible_get_image_position (AtkImage     *image,
-                                           gint         *x,
-                                           gint         *y,
+                                           int          *x,
+                                           int          *y,
                                            AtkCoordType  coord_type)
 {
   atk_component_get_extents (ATK_COMPONENT (image), x, y, NULL, NULL,
@@ -57,8 +57,8 @@ gtk_picture_accessible_get_image_position (AtkImage     *image,
 
 static void
 gtk_picture_accessible_get_image_size (AtkImage *image,
-                                       gint     *width,
-                                       gint     *height)
+                                       int      *width,
+                                       int      *height)
 {
   GtkWidget* widget;
   GdkPaintable *paintable;
@@ -103,11 +103,11 @@ gtk_picture_accessible_initialize (AtkObject *accessible,
   accessible->role = ATK_ROLE_IMAGE;
 }
 
-static const gchar *
+static const char *
 gtk_picture_accessible_get_name (AtkObject *accessible)
 {
   GtkWidget* widget;
-  const gchar *name;
+  const char *name;
 
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (accessible));
   if (widget == NULL)

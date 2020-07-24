@@ -14,13 +14,13 @@
 
 typedef struct
 {
-  gchar *resourcename;
-  gdouble font_size;
+  char *resourcename;
+  double font_size;
 
-  gint lines_per_page;
-  gchar **lines;
-  gint num_lines;
-  gint num_pages;
+  int lines_per_page;
+  char **lines;
+  int num_lines;
+  int num_pages;
 } PrintData;
 
 static void
@@ -55,17 +55,17 @@ begin_print (GtkPrintOperation *operation,
 static void
 draw_page (GtkPrintOperation *operation,
            GtkPrintContext   *context,
-           gint               page_nr,
+           int                page_nr,
            gpointer           user_data)
 {
   PrintData *data = (PrintData *)user_data;
   cairo_t *cr;
   PangoLayout *layout;
-  gint text_width, text_height;
-  gdouble width;
-  gint line, i;
+  int text_width, text_height;
+  double width;
+  int line, i;
   PangoFontDescription *desc;
-  gchar *page_str;
+  char *page_str;
 
   cr = gtk_print_context_get_cairo_context (context);
   width = gtk_print_context_get_width (context);

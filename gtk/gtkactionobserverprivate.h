@@ -42,49 +42,49 @@ struct _GtkActionObserverInterface
 
   void (* action_added)           (GtkActionObserver    *observer,
                                    GtkActionObservable  *observable,
-                                   const gchar          *action_name,
+                                   const char           *action_name,
                                    const GVariantType   *parameter_type,
                                    gboolean              enabled,
                                    GVariant             *state);
   void (* action_enabled_changed) (GtkActionObserver    *observer,
                                    GtkActionObservable  *observable,
-                                   const gchar          *action_name,
+                                   const char           *action_name,
                                    gboolean              enabled);
   void (* action_state_changed)   (GtkActionObserver    *observer,
                                    GtkActionObservable  *observable,
-                                   const gchar          *action_name,
+                                   const char           *action_name,
                                    GVariant             *state);
   void (* action_removed)         (GtkActionObserver    *observer,
                                    GtkActionObservable  *observable,
-                                   const gchar          *action_name);
+                                   const char           *action_name);
   void (* primary_accel_changed)  (GtkActionObserver    *observer,
                                    GtkActionObservable  *observable,
-                                   const gchar          *action_name,
-                                   const gchar          *action_and_target);
+                                   const char           *action_name,
+                                   const char           *action_and_target);
 };
 
 GType                   gtk_action_observer_get_type                    (void);
 void                    gtk_action_observer_action_added                (GtkActionObserver   *observer,
                                                                          GtkActionObservable *observable,
-                                                                         const gchar         *action_name,
+                                                                         const char          *action_name,
                                                                          const GVariantType  *parameter_type,
                                                                          gboolean             enabled,
                                                                          GVariant            *state);
 void                    gtk_action_observer_action_enabled_changed      (GtkActionObserver   *observer,
                                                                          GtkActionObservable *observable,
-                                                                         const gchar         *action_name,
+                                                                         const char          *action_name,
                                                                          gboolean             enabled);
 void                    gtk_action_observer_action_state_changed        (GtkActionObserver   *observer,
                                                                          GtkActionObservable *observable,
-                                                                         const gchar         *action_name,
+                                                                         const char          *action_name,
                                                                          GVariant            *state);
 void                    gtk_action_observer_action_removed              (GtkActionObserver   *observer,
                                                                          GtkActionObservable *observable,
-                                                                         const gchar         *action_name);
+                                                                         const char          *action_name);
 void                    gtk_action_observer_primary_accel_changed       (GtkActionObserver   *observer,
                                                                          GtkActionObservable *observable,
-                                                                         const gchar         *action_name,
-                                                                         const gchar         *action_and_target);
+                                                                         const char          *action_name,
+                                                                         const char          *action_and_target);
 
 G_END_DECLS
 

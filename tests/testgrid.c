@@ -1,12 +1,12 @@
 #include <gtk/gtk.h>
 
 static GtkWidget *
-oriented_test_widget (const gchar *label, const gchar *color)
+oriented_test_widget (const char *label, const char *color)
 {
   GtkWidget *box;
   GtkWidget *widget;
   GtkCssProvider *provider;
-  gchar *data;
+  char *data;
 
   widget = gtk_label_new (label);
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
@@ -24,7 +24,7 @@ oriented_test_widget (const gchar *label, const gchar *color)
 }
 
 static GtkWidget *
-test_widget (const gchar *label, const gchar *color)
+test_widget (const char *label, const char *color)
 {
   return oriented_test_widget (label, color);
 }
@@ -34,8 +34,8 @@ static GtkOrientation o;
 static void
 toggle_orientation (GtkGestureClick *gesture,
                     guint            n_press,
-                    gdouble          x,
-                    gdouble          y,
+                    double           x,
+                    double           y,
                     GtkGrid         *grid)
 {
   o = 1 - o;
@@ -258,7 +258,7 @@ scrolling (void)
   GtkWidget *viewport;
   GtkWidget *grid;
   GtkWidget *child;
-  gint i;
+  int i;
 
   window = gtk_window_new ();
   gtk_window_set_title (GTK_WINDOW (window), "Scrolling");
@@ -277,7 +277,7 @@ scrolling (void)
 
   for (i = 1; i < 16; i++)
     {
-      gchar *color;
+      char *color;
       color = g_strdup_printf ("#%02x00%02x", 128 + 8*i, 128 - 8*i);
       child = test_widget (color, color);
       gtk_grid_attach (GTK_GRID (grid), child, 0, i, i + 1, 1);
@@ -287,7 +287,7 @@ scrolling (void)
 
   for (i = 1; i < 16; i++)
     {
-      gchar *color;
+      char *color;
       color = g_strdup_printf ("#%02x00%02x", 128 - 8*i, 128 + 8*i);
       child = oriented_test_widget (color, color);
       gtk_grid_attach (GTK_GRID (grid), child, i, 0, 1, i);

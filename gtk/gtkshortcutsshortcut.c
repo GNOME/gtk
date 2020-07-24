@@ -58,7 +58,7 @@ struct _GtkShortcutsShortcut
   gboolean subtitle_set;
   gboolean icon_set;
   GtkTextDirection direction;
-  gchar *action_name;
+  char *action_name;
   GtkShortcutType  shortcut_type;
 };
 
@@ -89,7 +89,7 @@ static GParamSpec *properties[LAST_PROP];
 
 static void
 gtk_shortcuts_shortcut_set_accelerator (GtkShortcutsShortcut *self,
-                                        const gchar          *accelerator)
+                                        const char           *accelerator)
 {
   gtk_shortcut_label_set_accelerator (self->accelerator, accelerator);
 }
@@ -128,7 +128,7 @@ gtk_shortcuts_shortcut_set_title_size_group (GtkShortcutsShortcut *self,
 static void
 update_subtitle_from_type (GtkShortcutsShortcut *self)
 {
-  const gchar *subtitle;
+  const char *subtitle;
 
   if (self->subtitle_set)
     return;
@@ -196,7 +196,7 @@ gtk_shortcuts_shortcut_set_subtitle_set (GtkShortcutsShortcut *self,
 
 static void
 gtk_shortcuts_shortcut_set_subtitle (GtkShortcutsShortcut *self,
-                                     const gchar          *subtitle)
+                                     const char           *subtitle)
 {
   gtk_label_set_label (self->subtitle, subtitle);
   gtk_widget_set_visible (GTK_WIDGET (self->subtitle), subtitle && subtitle[0]);
@@ -341,7 +341,7 @@ gtk_shortcuts_shortcut_set_type (GtkShortcutsShortcut *self,
 
 static void
 gtk_shortcuts_shortcut_set_action_name (GtkShortcutsShortcut *self,
-                                        const gchar          *action_name)
+                                        const char           *action_name)
 {
   g_free (self->action_name);
   self->action_name = g_strdup (action_name);
@@ -478,8 +478,8 @@ gtk_shortcuts_shortcut_update_accel (GtkShortcutsShortcut *self,
                                      GtkWindow            *window)
 {
   GtkApplication *app;
-  gchar **accels;
-  gchar *str;
+  char **accels;
+  char *str;
 
   if (self->action_name == NULL)
     return;

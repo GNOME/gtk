@@ -56,7 +56,7 @@ void                    gtk_action_muxer_insert                         (GtkActi
                                                                          GActionGroup   *action_group);
 
 void                    gtk_action_muxer_remove                         (GtkActionMuxer *muxer,
-                                                                         const gchar    *prefix);
+                                                                         const char     *prefix);
 GActionGroup *          gtk_action_muxer_find                           (GtkActionMuxer *muxer,
                                                                          const char     *action_name,
                                                                          const char    **unprefixed_name);

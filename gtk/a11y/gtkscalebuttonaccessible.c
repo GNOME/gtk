@@ -128,7 +128,7 @@ gtk_scale_button_accessible_init (GtkScaleButtonAccessible *self)
 
 static gboolean
 gtk_scale_button_accessible_do_action (AtkAction *action,
-                                       gint       i)
+                                       int        i)
 {
   GtkWidget *widget;
 
@@ -152,15 +152,15 @@ gtk_scale_button_accessible_do_action (AtkAction *action,
     }
 }
 
-static gint
+static int
 gtk_scale_button_accessible_get_n_actions (AtkAction *action)
 {
   return 2;
 }
 
-static const gchar *
+static const char *
 gtk_scale_button_accessible_get_description (AtkAction *action,
-                                             gint       i)
+                                             int        i)
 {
   switch (i)
     {
@@ -173,9 +173,9 @@ gtk_scale_button_accessible_get_description (AtkAction *action,
     }
 }
 
-static const gchar *
+static const char *
 gtk_scale_button_accessible_action_get_name (AtkAction *action,
-                                             gint       i)
+                                             int        i)
 {
   switch (i)
     {
@@ -188,9 +188,9 @@ gtk_scale_button_accessible_action_get_name (AtkAction *action,
     }
 }
 
-static const gchar *
+static const char *
 gtk_scale_button_accessible_action_get_localized_name (AtkAction *action,
-                                                       gint       i)
+                                                       int        i)
 {
   switch (i)
     {
@@ -300,8 +300,8 @@ gtk_scale_button_accessible_set_current_value (AtkValue     *obj,
 
 static void
 gtk_scale_button_accessible_get_value_and_text (AtkValue  *obj,
-                                                gdouble   *value,
-                                                gchar    **text)
+                                                double    *value,
+                                                char     **text)
 {
   GtkWidget *widget;
   GtkAdjustment *adjustment;
@@ -333,7 +333,7 @@ gtk_scale_button_accessible_get_range (AtkValue *obj)
 
 static void
 gtk_scale_button_accessible_set_value (AtkValue      *obj,
-                                       const gdouble  value)
+                                       const double   value)
 {
   GtkWidget *widget;
   GtkAdjustment *adjustment;
@@ -346,7 +346,7 @@ gtk_scale_button_accessible_set_value (AtkValue      *obj,
   gtk_adjustment_set_value (adjustment, value);
 }
 
-static gdouble
+static double
 gtk_scale_button_accessible_get_increment (AtkValue *obj)
 {
   GtkWidget *widget;

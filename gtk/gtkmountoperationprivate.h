@@ -37,9 +37,9 @@ GtkMountOperationLookupContext *_gtk_mount_operation_lookup_context_get  (GdkDis
 
 gboolean _gtk_mount_operation_lookup_info         (GtkMountOperationLookupContext *context,
                                                    GPid                            pid,
-                                                   gint                            size_pixels,
-                                                   gchar                         **out_name,
-                                                   gchar                         **out_command_line,
+                                                   int                             size_pixels,
+                                                   char                          **out_name,
+                                                   char                          **out_command_line,
                                                    GdkTexture                    **out_texture);
 
 void     _gtk_mount_operation_lookup_context_free (GtkMountOperationLookupContext *context);

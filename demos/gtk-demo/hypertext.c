@@ -18,7 +18,7 @@ static void
 insert_link (GtkTextBuffer *buffer,
              GtkTextIter   *iter,
              const char    *text,
-             gint           page)
+             int            page)
 {
   GtkTextTag *tag;
 
@@ -35,7 +35,7 @@ insert_link (GtkTextBuffer *buffer,
  */
 static void
 show_page (GtkTextBuffer *buffer,
-           gint           page)
+           int            page)
 {
   GtkTextIter iter;
 
@@ -91,7 +91,7 @@ follow_if_link (GtkWidget   *text_view,
   for (tagp = tags;  tagp != NULL;  tagp = tagp->next)
     {
       GtkTextTag *tag = tagp->data;
-      gint page = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (tag), "page"));
+      int page = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (tag), "page"));
 
       if (page != 0)
         {
@@ -134,14 +134,14 @@ key_pressed (GtkEventController *controller,
 }
 
 static void set_cursor_if_appropriate (GtkTextView *text_view,
-                                       gint         x,
-                                       gint         y);
+                                       int          x,
+                                       int          y);
 
 static void
 released_cb (GtkGestureClick *gesture,
              guint            n_press,
-             gdouble          x,
-             gdouble          y,
+             double           x,
+             double           y,
              GtkWidget       *text_view)
 {
   GtkTextIter start, end, iter;
@@ -168,8 +168,8 @@ released_cb (GtkGestureClick *gesture,
 
 static void
 motion_cb (GtkEventControllerMotion *controller,
-           gdouble                   x,
-           gdouble                   y,
+           double                    x,
+           double                    y,
            GtkTextView              *text_view)
 {
   set_cursor_if_appropriate (text_view, x, y);
@@ -183,8 +183,8 @@ static gboolean hovering_over_link = FALSE;
  */
 static void
 set_cursor_if_appropriate (GtkTextView    *text_view,
-                           gint            x,
-                           gint            y)
+                           int             x,
+                           int             y)
 {
   GSList *tags = NULL, *tagp = NULL;
   GtkTextIter iter;
@@ -196,7 +196,7 @@ set_cursor_if_appropriate (GtkTextView    *text_view,
       for (tagp = tags;  tagp != NULL;  tagp = tagp->next)
         {
           GtkTextTag *tag = tagp->data;
-          gint page = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (tag), "page"));
+          int page = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (tag), "page"));
 
           if (page != 0)
             {

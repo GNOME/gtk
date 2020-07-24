@@ -59,11 +59,11 @@ static void             cell_info_new                   (GtkTreeViewAccessible  
                                                          GtkTreeRBNode          *node,
                                                          GtkTreeViewColumn      *tv_col,
                                                          GtkCellAccessible      *cell);
-static gint             get_column_number               (GtkTreeView            *tree_view,
+static int              get_column_number               (GtkTreeView            *tree_view,
                                                          GtkTreeViewColumn      *column);
 
 static gboolean         get_rbtree_column_from_index    (GtkTreeView            *tree_view,
-                                                         gint                    index,
+                                                         int                     index,
                                                          GtkTreeRBTree         **tree,
                                                          GtkTreeRBNode         **node,
                                                          GtkTreeViewColumn     **column);
@@ -216,7 +216,7 @@ gtk_tree_view_accessible_widget_unset (GtkAccessible *gtkaccessible)
   GTK_ACCESSIBLE_CLASS (gtk_tree_view_accessible_parent_class)->widget_unset (gtkaccessible);
 }
 
-static gint
+static int
 get_n_rows (GtkTreeView *tree_view)
 {
   GtkTreeRBTree *tree;
@@ -229,7 +229,7 @@ get_n_rows (GtkTreeView *tree_view)
   return tree->root->total_count;
 }
 
-static gint
+static int
 get_n_columns (GtkTreeView *tree_view)
 {
   guint i, visible_columns;
@@ -247,7 +247,7 @@ get_n_columns (GtkTreeView *tree_view)
   return visible_columns;
 }
 
-static gint
+static int
 gtk_tree_view_accessible_get_n_children (AtkObject *obj)
 {
   GtkWidget *widget;
@@ -421,7 +421,7 @@ create_cell (GtkTreeView           *treeview,
 
 static AtkObject *
 gtk_tree_view_accessible_ref_child (AtkObject *obj,
-                                    gint       i)
+                                    int        i)
 {
   GtkWidget *widget;
   GtkTreeViewAccessible *accessible;
@@ -502,16 +502,16 @@ gtk_tree_view_accessible_init (GtkTreeViewAccessible *view)
 
 static AtkObject *
 gtk_tree_view_accessible_ref_accessible_at_point (AtkComponent *component,
-                                                  gint          x,
-                                                  gint          y,
+                                                  int           x,
+                                                  int           y,
                                                   AtkCoordType  coord_type)
 {
   GtkWidget *widget;
   GtkTreeView *tree_view;
   GtkTreePath *path;
   GtkTreeViewColumn *column;
-  gint x_pos, y_pos;
-  gint bx, by;
+  int x_pos, y_pos;
+  int bx, by;
   GtkCellAccessible *cell;
   GtkTreeRBTree *tree;
   GtkTreeRBNode *node;
@@ -550,13 +550,13 @@ atk_component_interface_init (AtkComponentIface *iface)
 
 /* atktable.h */
 
-static gint
+static int
 gtk_tree_view_accessible_get_index_at (AtkTable *table,
-                                       gint      row,
-                                       gint      column)
+                                       int       row,
+                                       int       column)
 {
   GtkWidget *widget;
-  gint n_cols, n_rows;
+  int n_cols, n_rows;
 
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (table));
   if (widget == NULL)
@@ -571,12 +571,12 @@ gtk_tree_view_accessible_get_index_at (AtkTable *table,
   return (row + 1) * n_cols + column;
 }
 
-static gint
+static int
 gtk_tree_view_accessible_get_column_at_index (AtkTable *table,
-                                              gint      index)
+                                              int       index)
 {
   GtkWidget *widget;
-  gint n_columns;
+  int n_columns;
 
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (table));
   if (widget == NULL)
@@ -593,9 +593,9 @@ gtk_tree_view_accessible_get_column_at_index (AtkTable *table,
   return index % n_columns;
 }
 
-static gint
+static int
 gtk_tree_view_accessible_get_row_at_index (AtkTable *table,
-                                           gint      index)
+                                           int       index)
 {
   GtkWidget *widget;
   GtkTreeView *tree_view;
@@ -616,10 +616,10 @@ gtk_tree_view_accessible_get_row_at_index (AtkTable *table,
 
 static AtkObject *
 gtk_tree_view_accessible_table_ref_at (AtkTable *table,
-                                       gint      row,
-                                       gint      column)
+                                       int       row,
+                                       int       column)
 {
-  gint index;
+  int index;
 
   index = gtk_tree_view_accessible_get_index_at (table, row, column);
   if (index == -1)
@@ -628,7 +628,7 @@ gtk_tree_view_accessible_table_ref_at (AtkTable *table,
   return gtk_tree_view_accessible_ref_child (ATK_OBJECT (table), index);
 }
 
-static gint
+static int
 gtk_tree_view_accessible_get_n_rows (AtkTable *table)
 {
   GtkWidget *widget;
@@ -640,7 +640,7 @@ gtk_tree_view_accessible_get_n_rows (AtkTable *table)
   return get_n_rows (GTK_TREE_VIEW (widget));
 }
 
-static gint
+static int
 gtk_tree_view_accessible_get_n_columns (AtkTable *table)
 {
   GtkWidget *widget;
@@ -654,7 +654,7 @@ gtk_tree_view_accessible_get_n_columns (AtkTable *table)
 
 static gboolean
 gtk_tree_view_accessible_is_row_selected (AtkTable *table,
-                                          gint      row)
+                                          int       row)
 {
   GtkWidget *widget;
   GtkTreeRBTree *tree;
@@ -678,8 +678,8 @@ gtk_tree_view_accessible_is_row_selected (AtkTable *table,
 
 static gboolean
 gtk_tree_view_accessible_is_selected (AtkTable *table,
-                                      gint      row,
-                                      gint      column)
+                                      int       row,
+                                      int       column)
 {
   return gtk_tree_view_accessible_is_row_selected (table, row);
 }
@@ -712,13 +712,13 @@ get_selected_rows (GtkTreeModel *model,
   g_array_append_val (data->array, id);
 }
 
-static gint
+static int
 gtk_tree_view_accessible_get_selected_rows (AtkTable  *table,
-                                            gint     **rows_selected)
+                                            int      **rows_selected)
 {
   SelectedRowsData data;
   GtkWidget *widget;
-  gint n_rows;
+  int n_rows;
 
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (table));
   if (widget == NULL)
@@ -729,7 +729,7 @@ gtk_tree_view_accessible_get_selected_rows (AtkTable  *table,
     }
 
   data.treeview = GTK_TREE_VIEW (widget);
-  data.array = g_array_new (FALSE, FALSE, sizeof (gint));
+  data.array = g_array_new (FALSE, FALSE, sizeof (int));
 
   gtk_tree_selection_selected_foreach (gtk_tree_view_get_selection (data.treeview),
                                        get_selected_rows,
@@ -737,7 +737,7 @@ gtk_tree_view_accessible_get_selected_rows (AtkTable  *table,
 
   n_rows = data.array->len;
   if (rows_selected)
-    *rows_selected = (gint *) g_array_free (data.array, FALSE);
+    *rows_selected = (int *) g_array_free (data.array, FALSE);
   else
     g_array_free (data.array, TRUE);
   
@@ -746,7 +746,7 @@ gtk_tree_view_accessible_get_selected_rows (AtkTable  *table,
 
 static gboolean
 gtk_tree_view_accessible_add_row_selection (AtkTable *table,
-                                            gint      row)
+                                            int       row)
 {
   GtkTreeView *treeview;
   GtkTreePath *path;
@@ -778,7 +778,7 @@ gtk_tree_view_accessible_add_row_selection (AtkTable *table,
 
 static gboolean
 gtk_tree_view_accessible_remove_row_selection (AtkTable *table,
-                                               gint      row)
+                                               int       row)
 {
   GtkTreeView *treeview;
   GtkTreePath *path;
@@ -810,7 +810,7 @@ gtk_tree_view_accessible_remove_row_selection (AtkTable *table,
 
 static AtkObject *
 gtk_tree_view_accessible_get_column_header (AtkTable *table,
-                                            gint      in_col)
+                                            int       in_col)
 {
   GtkWidget *widget;
   GtkTreeView *tree_view;
@@ -828,9 +828,9 @@ gtk_tree_view_accessible_get_column_header (AtkTable *table,
   return get_header_from_column (tv_col);
 }
 
-static const gchar *
+static const char *
 gtk_tree_view_accessible_get_column_description (AtkTable *table,
-                                                 gint      in_col)
+                                                 int       in_col)
 {
   GtkWidget *widget;
   GtkTreeView *tree_view;
@@ -872,11 +872,11 @@ atk_table_interface_init (AtkTableIface *iface)
 
 static gboolean
 gtk_tree_view_accessible_add_selection (AtkSelection *selection,
-                                        gint          i)
+                                        int           i)
 {
   AtkTable *table;
-  gint n_columns;
-  gint row;
+  int n_columns;
+  int row;
 
   table = ATK_TABLE (selection);
   n_columns = gtk_tree_view_accessible_get_n_columns (table);
@@ -907,13 +907,13 @@ gtk_tree_view_accessible_clear_selection (AtkSelection *selection)
 
 static AtkObject *
 gtk_tree_view_accessible_ref_selection (AtkSelection *selection,
-                                        gint          i)
+                                        int           i)
 {
   AtkTable *table;
-  gint row;
-  gint n_selected;
-  gint n_columns;
-  gint *selected;
+  int row;
+  int n_selected;
+  int n_columns;
+  int *selected;
 
   table = ATK_TABLE (selection);
   n_columns = gtk_tree_view_accessible_get_n_columns (table);
@@ -927,11 +927,11 @@ gtk_tree_view_accessible_ref_selection (AtkSelection *selection,
   return gtk_tree_view_accessible_table_ref_at (table, row, i % n_columns);
 }
 
-static gint
+static int
 gtk_tree_view_accessible_get_selection_count (AtkSelection *selection)
 {
   AtkTable *table;
-  gint n_selected;
+  int n_selected;
 
   table = ATK_TABLE (selection);
   n_selected = gtk_tree_view_accessible_get_selected_rows (table, NULL);
@@ -942,10 +942,10 @@ gtk_tree_view_accessible_get_selection_count (AtkSelection *selection)
 
 static gboolean
 gtk_tree_view_accessible_is_child_selected (AtkSelection *selection,
-                                            gint          i)
+                                            int           i)
 {
   GtkWidget *widget;
-  gint row;
+  int row;
 
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (selection));
   if (widget == NULL)
@@ -1012,7 +1012,7 @@ gtk_tree_view_accessible_get_cell_area (GtkCellAccessibleParent *parent,
           /* Values from gtktreeview.c ... */
 #define _TREE_VIEW_EXPANDER_SIZE 16
 #define _TREE_VIEW_HORIZONTAL_SEPARATOR 4
-          gint expander_size = _TREE_VIEW_EXPANDER_SIZE + (_TREE_VIEW_HORIZONTAL_SEPARATOR / 2);
+          int expander_size = _TREE_VIEW_EXPANDER_SIZE + (_TREE_VIEW_HORIZONTAL_SEPARATOR / 2);
           cell_rect->x += expander_size + EXTRA_EXPANDER_PADDING;
           cell_rect->width -= expander_size + EXTRA_EXPANDER_PADDING;
         }
@@ -1024,10 +1024,10 @@ gtk_tree_view_accessible_get_cell_area (GtkCellAccessibleParent *parent,
        */
       if (top_cell != cell)
         {
-          gint cell_index;
+          int cell_index;
           gboolean found;
-          gint cell_start;
-          gint cell_width;
+          int cell_start;
+          int cell_width;
           GList *renderers;
           GtkCellRenderer *renderer;
 
@@ -1050,16 +1050,16 @@ gtk_tree_view_accessible_get_cell_area (GtkCellAccessibleParent *parent,
 static void
 gtk_tree_view_accessible_get_cell_extents (GtkCellAccessibleParent *parent,
                                            GtkCellAccessible       *cell,
-                                           gint                    *x,
-                                           gint                    *y,
-                                           gint                    *width,
-                                           gint                    *height,
+                                           int                     *x,
+                                           int                     *y,
+                                           int                     *width,
+                                           int                     *height,
                                            AtkCoordType             coord_type)
 {
   GtkWidget *widget;
   GtkTreeView *tree_view;
   GdkRectangle cell_rect;
-  gint w_x, w_y;
+  int w_x, w_y;
 
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (parent));
   if (widget == NULL)
@@ -1098,7 +1098,7 @@ gtk_tree_view_accessible_grab_cell_focus (GtkCellAccessibleParent *parent,
   GtkTreeViewAccessibleCellInfo *cell_info;
   GtkCellRenderer *renderer = NULL;
   GtkWidget *toplevel;
-  gint index;
+  int index;
 
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (parent));
   if (widget == NULL)
@@ -1356,8 +1356,8 @@ gtk_tree_view_accessible_update_relationset (GtkCellAccessibleParent *parent,
 static void
 gtk_tree_view_accessible_get_cell_position (GtkCellAccessibleParent *parent,
                                             GtkCellAccessible       *cell,
-                                            gint                    *row,
-                                            gint                    *column)
+                                            int                     *row,
+                                            int                     *column)
 {
   GtkWidget *widget;
   GtkTreeView *tree_view;
@@ -1437,7 +1437,7 @@ is_cell_showing (GtkTreeView  *tree_view,
 {
   GdkRectangle rect, *visible_rect;
   GdkRectangle rect1, *tree_cell_rect;
-  gint bx, by;
+  int bx, by;
   gboolean is_showing;
 
  /* A cell is considered "SHOWING" if any part of the cell is
@@ -1514,7 +1514,7 @@ cell_info_new (GtkTreeViewAccessible *self,
 /* Returns the column number of the specified GtkTreeViewColumn
  * The column must be visible.
  */
-static gint
+static int
 get_column_number (GtkTreeView       *treeview,
                    GtkTreeViewColumn *column)
 {
@@ -1543,7 +1543,7 @@ get_column_number (GtkTreeView       *treeview,
 
 static gboolean
 get_rbtree_column_from_index (GtkTreeView        *tree_view,
-                              gint                index,
+                              int                 index,
                               GtkTreeRBTree     **tree,
                               GtkTreeRBNode     **node,
                               GtkTreeViewColumn **column)

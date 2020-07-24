@@ -142,8 +142,8 @@ typedef struct {
   GtkProgressTracker tracker;
   gboolean first_frame_skipped;
 
-  gint last_visible_widget_width;
-  gint last_visible_widget_height;
+  int last_visible_widget_width;
+  int last_visible_widget_height;
 
   gboolean interpolate_size;
 
@@ -886,7 +886,7 @@ get_simple_transition_type (gboolean               new_child_first,
     }
 }
 
-static gint
+static int
 get_bin_window_x (GtkStack *stack)
 {
   GtkStackPrivate *priv = gtk_stack_get_instance_private (stack);
@@ -906,7 +906,7 @@ get_bin_window_x (GtkStack *stack)
   return x;
 }
 
-static gint
+static int
 get_bin_window_y (GtkStack *stack)
 {
   GtkStackPrivate *priv = gtk_stack_get_instance_private (stack);
@@ -1291,8 +1291,8 @@ stack_child_visibility_notify_cb (GObject    *obj,
 GtkStackPage *
 gtk_stack_add_titled (GtkStack   *stack,
                      GtkWidget   *child,
-                     const gchar *name,
-                     const gchar *title)
+                     const char *name,
+                     const char *title)
 {
   g_return_val_if_fail (GTK_IS_STACK (stack), NULL);
   g_return_val_if_fail (GTK_IS_WIDGET (child), NULL);
@@ -1314,7 +1314,7 @@ gtk_stack_add_titled (GtkStack   *stack,
 GtkStackPage *
 gtk_stack_add_named (GtkStack   *stack,
                     GtkWidget   *child,
-                    const gchar *name)
+                    const char *name)
 {
   g_return_val_if_fail (GTK_IS_STACK (stack), NULL);
   g_return_val_if_fail (GTK_IS_WIDGET (child), NULL);
@@ -1491,7 +1491,7 @@ gtk_stack_get_page (GtkStack  *stack,
  */
 GtkWidget *
 gtk_stack_get_child_by_name (GtkStack    *stack,
-                             const gchar *name)
+                             const char *name)
 {
   GtkStackPrivate *priv = gtk_stack_get_instance_private (stack);
   GtkStackPage *info;
@@ -1810,7 +1810,7 @@ gtk_stack_get_visible_child (GtkStack *stack)
  *
  * Returns: (transfer none) (nullable): the name of the visible child of the #GtkStack
  */
-const gchar *
+const char *
 gtk_stack_get_visible_child_name (GtkStack *stack)
 {
   GtkStackPrivate *priv = gtk_stack_get_instance_private (stack);
@@ -1881,7 +1881,7 @@ gtk_stack_set_visible_child (GtkStack  *stack,
  */
 void
 gtk_stack_set_visible_child_name (GtkStack   *stack,
-                                 const gchar *name)
+                                 const char *name)
 {
   GtkStackPrivate *priv = gtk_stack_get_instance_private (stack);
 
@@ -1904,7 +1904,7 @@ gtk_stack_set_visible_child_name (GtkStack   *stack,
  */
 void
 gtk_stack_set_visible_child_full (GtkStack               *stack,
-                                  const gchar            *name,
+                                  const char             *name,
                                   GtkStackTransitionType  transition)
 {
   GtkStackPrivate *priv = gtk_stack_get_instance_private (stack);
@@ -2013,7 +2013,7 @@ gtk_stack_snapshot_crossfade (GtkWidget   *widget,
 {
   GtkStack *stack = GTK_STACK (widget);
   GtkStackPrivate *priv = gtk_stack_get_instance_private (stack);
-  gdouble progress = gtk_progress_tracker_get_progress (&priv->tracker, FALSE);
+  double progress = gtk_progress_tracker_get_progress (&priv->tracker, FALSE);
 
   gtk_snapshot_push_cross_fade (snapshot, progress);
 
@@ -2038,7 +2038,7 @@ gtk_stack_snapshot_under (GtkWidget   *widget,
   GtkStack *stack = GTK_STACK (widget);
   GtkStackPrivate *priv = gtk_stack_get_instance_private (stack);
   int widget_width, widget_height;
-  gint x, y, width, height, pos_x, pos_y;
+  int x, y, width, height, pos_x, pos_y;
 
 
   x = y = 0;
@@ -2382,7 +2382,7 @@ gtk_stack_measure (GtkWidget      *widget,
   GtkStackPrivate *priv = gtk_stack_get_instance_private (stack);
   GtkStackPage *child_info;
   GtkWidget *child;
-  gint child_min, child_nat;
+  int child_min, child_nat;
   GList *l;
 
   *minimum = 0;
@@ -2411,13 +2411,13 @@ gtk_stack_measure (GtkWidget      *widget,
     {
       if (orientation == GTK_ORIENTATION_VERTICAL && !priv->vhomogeneous)
         {
-          gdouble t = priv->interpolate_size ? gtk_progress_tracker_get_ease_out_cubic (&priv->tracker, FALSE) : 1.0;
+          double t = priv->interpolate_size ? gtk_progress_tracker_get_ease_out_cubic (&priv->tracker, FALSE) : 1.0;
           *minimum = LERP (*minimum, priv->last_visible_widget_height, t);
           *natural = LERP (*natural, priv->last_visible_widget_height, t);
         }
       if (orientation == GTK_ORIENTATION_HORIZONTAL && !priv->hhomogeneous)
         {
-          gdouble t = priv->interpolate_size ? gtk_progress_tracker_get_ease_out_cubic (&priv->tracker, FALSE) : 1.0;
+          double t = priv->interpolate_size ? gtk_progress_tracker_get_ease_out_cubic (&priv->tracker, FALSE) : 1.0;
           *minimum = LERP (*minimum, priv->last_visible_widget_width, t);
           *natural = LERP (*natural, priv->last_visible_widget_width, t);
         }

@@ -89,7 +89,7 @@ gsk_vulkan_renderer_update_images_cb (GdkVulkanContext  *context,
                                       GskVulkanRenderer *self)
 {
   GdkSurface *window;
-  gint scale_factor;
+  int scale_factor;
   gsize width, height;
   guint i;
 

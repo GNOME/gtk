@@ -78,7 +78,7 @@ struct _ChildInfoState
 
   guint current_child;
   guint n_children_found;
-  gint current_request;
+  int current_request;
   gboolean have_error;
   gboolean child_has_error;
 };

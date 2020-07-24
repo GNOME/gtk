@@ -27,7 +27,7 @@
 
 G_BEGIN_DECLS
 
-gchar ** _gtk_get_module_path          (const gchar  *type);
+char ** _gtk_get_module_path          (const char   *type);
 
 G_END_DECLS
 

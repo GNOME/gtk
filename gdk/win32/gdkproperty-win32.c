@@ -33,14 +33,14 @@
 #include "gdkprivate-win32.h"
 #include "gdkwin32.h"
 
-static gchar*
+static char *
 _get_system_font_name (HDC hdc)
 {
   NONCLIENTMETRICSW ncm;
   PangoFontDescription *font_desc;
-  gchar *result, *font_desc_string;
+  char *result, *font_desc_string;
   int logpixelsy;
-  gint font_size;
+  int font_size;
 
   ncm.cbSize = sizeof(NONCLIENTMETRICSW);
   if (!SystemParametersInfoW (SPI_GETNONCLIENTMETRICS, ncm.cbSize, &ncm, 0))
@@ -98,7 +98,7 @@ _get_system_font_name (HDC hdc)
 
 */
 gboolean
-_gdk_win32_get_setting (const gchar *name,
+_gdk_win32_get_setting (const char *name,
                         GValue      *value)
 {
   /*
@@ -107,21 +107,21 @@ _gdk_win32_get_setting (const gchar *name,
    */
   if (strcmp ("gtk-double-click-time", name) == 0)
     {
-      gint i = GetDoubleClickTime ();
+      int i = GetDoubleClickTime ();
       GDK_NOTE(MISC, g_print("gdk_display_get_setting(\"%s\") : %d\n", name, i));
       g_value_set_int (value, i);
       return TRUE;
     }
   else if (strcmp ("gtk-double-click-distance", name) == 0)
     {
-      gint i = MAX(GetSystemMetrics (SM_CXDOUBLECLK), GetSystemMetrics (SM_CYDOUBLECLK));
+      int i = MAX(GetSystemMetrics (SM_CXDOUBLECLK), GetSystemMetrics (SM_CYDOUBLECLK));
       GDK_NOTE(MISC, g_print("gdk_display_get_setting(\"%s\") : %d\n", name, i));
       g_value_set_int (value, i);
       return TRUE;
     }
   else if (strcmp ("gtk-dnd-drag-threshold", name) == 0)
     {
-      gint i = MAX(GetSystemMetrics (SM_CXDRAG), GetSystemMetrics (SM_CYDRAG));
+      int i = MAX(GetSystemMetrics (SM_CXDRAG), GetSystemMetrics (SM_CYDRAG));
       GDK_NOTE(MISC, g_print("gdk_display_get_setting(\"%s\") : %d\n", name, i));
       g_value_set_int (value, i);
       return TRUE;
@@ -188,7 +188,7 @@ _gdk_win32_get_setting (const gchar *name,
     }
   else if (strcmp ("gtk-font-name", name) == 0)
     {
-      gchar *font_name = _get_system_font_name (_gdk_display_hdc);
+      char *font_name = _get_system_font_name (_gdk_display_hdc);
 
       if (font_name)
         {

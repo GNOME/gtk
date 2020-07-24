@@ -56,7 +56,7 @@ void _gdk_x11_error_handler_push (void);
 void _gdk_x11_error_handler_pop  (void);
 
 void          gdk_display_setup_window_visual            (GdkDisplay     *display,
-                                                          gint            depth,
+                                                          int             depth,
                                                           Visual         *visual,
                                                           Colormap        colormap,
                                                           gboolean        rgba);
@@ -70,23 +70,23 @@ void _gdk_x11_display_add_window    (GdkDisplay *display,
 void _gdk_x11_display_remove_window (GdkDisplay *display,
                                      XID         xid);
 
-gint _gdk_x11_display_send_xevent (GdkDisplay *display,
-                                   Window      window,
-                                   gboolean    propagate,
-                                   glong       event_mask,
-                                   XEvent     *event_send);
+int _gdk_x11_display_send_xevent (GdkDisplay *display,
+                                  Window      window,
+                                  gboolean    propagate,
+                                  glong       event_mask,
+                                  XEvent     *event_send);
 
 cairo_region_t* _gdk_x11_xwindow_get_shape  (Display *xdisplay,
                                              Window   window,
-                                             gint     scale,
-                                             gint     shape_type);
+                                             int      scale,
+                                             int      shape_type);
 
 void     _gdk_x11_region_get_xrectangles   (const cairo_region_t  *region,
-                                            gint                   x_offset,
-                                            gint                   y_offset,
-                                            gint                   scale,
+                                            int                    x_offset,
+                                            int                    y_offset,
+                                            int                    scale,
                                             XRectangle           **rects,
-                                            gint                  *n_rects);
+                                            int                   *n_rects);
 
 gboolean _gdk_x11_moveresize_handle_event   (const XEvent *event);
 gboolean _gdk_x11_moveresize_configure_done (GdkDisplay *display,
@@ -114,7 +114,7 @@ gboolean _gdk_x11_display_is_root_window (GdkDisplay *display,
 
 void _gdk_x11_display_update_grab_info        (GdkDisplay *display,
                                                GdkDevice  *device,
-                                               gint        status);
+                                               int         status);
 void _gdk_x11_display_update_grab_info_ungrab (GdkDisplay *display,
                                                GdkDevice  *device,
                                                guint32     time,
@@ -124,12 +124,12 @@ void _gdk_x11_display_queue_events            (GdkDisplay *display);
 
 GdkAppLaunchContext *_gdk_x11_display_get_app_launch_context (GdkDisplay *display);
 
-gint        _gdk_x11_display_text_property_to_utf8_list (GdkDisplay     *display,
+int         _gdk_x11_display_text_property_to_utf8_list (GdkDisplay     *display,
                                                          const char     *encoding,
-                                                         gint            format,
+                                                         int             format,
                                                          const guchar   *text,
-                                                         gint            length,
-                                                         gchar        ***list);
+                                                         int             length,
+                                                         char         ***list);
 char *      gdk_x11_utf8_to_string_target               (const char     *utf8_str,
                                                          gboolean        return_latin1);
 
@@ -139,33 +139,33 @@ GdkX11DeviceManagerXI2 *_gdk_x11_device_manager_new (GdkDisplay *display);
 
 guchar * _gdk_x11_device_xi2_translate_event_mask (GdkX11DeviceManagerXI2 *device_manager_xi2,
                                                    GdkEventMask            event_mask,
-                                                   gint                   *len);
+                                                   int                    *len);
 guint    _gdk_x11_device_xi2_translate_state      (XIModifierState *mods_state,
                                                    XIButtonState   *buttons_state,
                                                    XIGroupState    *group_state);
-gint     _gdk_x11_device_xi2_get_id               (GdkX11DeviceXI2 *device);
+int      _gdk_x11_device_xi2_get_id               (GdkX11DeviceXI2 *device);
 void     _gdk_device_xi2_unset_scroll_valuators   (GdkX11DeviceXI2 *device);
 
 
 GdkDevice * _gdk_x11_device_manager_xi2_lookup    (GdkX11DeviceManagerXI2 *device_manager_xi2,
-                                                   gint                    device_id);
+                                                   int                     device_id);
 void     _gdk_x11_device_xi2_add_scroll_valuator  (GdkX11DeviceXI2    *device,
                                                    guint               n_valuator,
                                                    GdkScrollDirection  direction,
-                                                   gdouble             increment);
+                                                   double              increment);
 gboolean  _gdk_x11_device_xi2_get_scroll_delta    (GdkX11DeviceXI2    *device,
                                                    guint               n_valuator,
-                                                   gdouble             valuator_value,
+                                                   double              valuator_value,
                                                    GdkScrollDirection *direction_ret,
-                                                   gdouble            *delta_ret);
+                                                   double             *delta_ret);
 void     _gdk_device_xi2_reset_scroll_valuators   (GdkX11DeviceXI2    *device);
 
-gdouble  gdk_x11_device_xi2_get_last_axis_value (GdkX11DeviceXI2 *device,
-                                                 gint             n_axis);
+double   gdk_x11_device_xi2_get_last_axis_value (GdkX11DeviceXI2 *device,
+                                                 int              n_axis);
 
 void     gdk_x11_device_xi2_store_axes          (GdkX11DeviceXI2 *device,
-                                                 gdouble         *axes,
-                                                 gint             n_axes);
+                                                 double          *axes,
+                                                 int              n_axes);
 
 gboolean   _gdk_x11_display_supports_cursor_alpha   (GdkDisplay    *display);
 gboolean   _gdk_x11_display_supports_cursor_color   (GdkDisplay    *display);
@@ -186,11 +186,11 @@ GdkSurface * _gdk_x11_display_create_surface (GdkDisplay     *display,
 GList *    gdk_x11_display_get_toplevel_windows     (GdkDisplay *display);
 
 void _gdk_x11_precache_atoms (GdkDisplay          *display,
-                              const gchar * const *atom_names,
-                              gint                 n_atoms);
+                              const char * const *atom_names,
+                              int                  n_atoms);
 
 Atom _gdk_x11_get_xatom_for_display_printf         (GdkDisplay    *display,
-                                                    const gchar   *format,
+                                                    const char    *format,
                                                     ...) G_GNUC_PRINTF (2, 3);
 
 GdkDrag        *gdk_x11_drag_find                       (GdkDisplay             *display,
@@ -232,10 +232,10 @@ GdkDrag        * _gdk_x11_surface_drag_begin (GdkSurface          *window,
                                               double              dy);
 
 void gdk_x11_surface_get_root_coords (GdkSurface *surface,
-                                      gint        x,
-                                      gint        y,
-                                      gint       *root_x,
-                                      gint       *root_y);
+                                      int         x,
+                                      int         y,
+                                      int        *root_x,
+                                      int        *root_y);
 
 void gdk_x11_surface_show (GdkSurface *surface,
                            gboolean    already_mapped);
@@ -244,14 +244,14 @@ void gdk_x11_surface_set_opacity (GdkSurface *surface,
                                   double      opacity);
 gboolean gdk_x11_surface_supports_edge_constraints (GdkSurface *surface);
 
-GdkGrabStatus _gdk_x11_convert_grab_status (gint status);
+GdkGrabStatus _gdk_x11_convert_grab_status (int status);
 
 cairo_surface_t * _gdk_x11_display_create_bitmap_surface (GdkDisplay *display,
                                                           int         width,
                                                           int         height);
 
-extern const gint        _gdk_x11_event_mask_table[];
-extern const gint        _gdk_x11_event_mask_table_size;
+extern const int         _gdk_x11_event_mask_table[];
+extern const int         _gdk_x11_event_mask_table_size;
 
 #define GDK_SCREEN_DISPLAY(screen)    (GDK_X11_SCREEN (screen)->display)
 #define GDK_SCREEN_XROOTWIN(screen)   (GDK_X11_SCREEN (screen)->xroot_window)

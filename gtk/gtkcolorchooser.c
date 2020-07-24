@@ -214,8 +214,8 @@ gtk_color_chooser_set_use_alpha (GtkColorChooser *chooser,
 void
 gtk_color_chooser_add_palette (GtkColorChooser *chooser,
                                GtkOrientation   orientation,
-                               gint             colors_per_line,
-                               gint             n_colors,
+                               int              colors_per_line,
+                               int              n_colors,
                                GdkRGBA         *colors)
 {
   g_return_if_fail (GTK_IS_COLOR_CHOOSER (chooser));

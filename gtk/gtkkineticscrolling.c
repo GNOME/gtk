@@ -60,34 +60,34 @@ typedef enum {
 struct _GtkKineticScrolling
 {
   GtkKineticScrollingPhase phase;
-  gdouble lower;
-  gdouble upper;
-  gdouble overshoot_width;
-  gdouble decel_friction;
-  gdouble overshoot_friction;
+  double lower;
+  double upper;
+  double overshoot_width;
+  double decel_friction;
+  double overshoot_friction;
 
-  gdouble c1;
-  gdouble c2;
-  gdouble equilibrium_position;
+  double c1;
+  double c2;
+  double equilibrium_position;
 
-  gdouble t;
-  gdouble position;
-  gdouble velocity;
+  double t;
+  double position;
+  double velocity;
 };
 
 static void gtk_kinetic_scrolling_init_overshoot (GtkKineticScrolling *data,
-                                                  gdouble              equilibrium_position,
-                                                  gdouble              initial_position,
-                                                  gdouble              initial_velocity);
+                                                  double               equilibrium_position,
+                                                  double               initial_position,
+                                                  double               initial_velocity);
 
 GtkKineticScrolling *
-gtk_kinetic_scrolling_new (gdouble lower,
-                           gdouble upper,
-                           gdouble overshoot_width,
-                           gdouble decel_friction,
-                           gdouble overshoot_friction,
-                           gdouble initial_position,
-                           gdouble initial_velocity)
+gtk_kinetic_scrolling_new (double lower,
+                           double upper,
+                           double overshoot_width,
+                           double decel_friction,
+                           double overshoot_friction,
+                           double initial_position,
+                           double initial_velocity)
 {
   GtkKineticScrolling *data;
 
@@ -131,9 +131,9 @@ gtk_kinetic_scrolling_free (GtkKineticScrolling *kinetic)
 
 static void
 gtk_kinetic_scrolling_init_overshoot (GtkKineticScrolling *data,
-                                      gdouble              equilibrium_position,
-                                      gdouble              initial_position,
-                                      gdouble              initial_velocity)
+                                      double               equilibrium_position,
+                                      double               initial_position,
+                                      double               initial_velocity)
 {
   data->phase = GTK_KINETIC_SCROLLING_PHASE_OVERSHOOTING;
   data->equilibrium_position = equilibrium_position;
@@ -144,16 +144,16 @@ gtk_kinetic_scrolling_init_overshoot (GtkKineticScrolling *data,
 
 gboolean
 gtk_kinetic_scrolling_tick (GtkKineticScrolling *data,
-                            gdouble              time_delta,
-                            gdouble             *position)
+                            double               time_delta,
+                            double              *position)
 {
   switch(data->phase)
     {
     case GTK_KINETIC_SCROLLING_PHASE_DECELERATING:
       {
-        gdouble last_position = data->position;
-        gdouble last_time = data->t;
-        gdouble exp_part;
+        double last_position = data->position;
+        double last_time = data->t;
+        double exp_part;
 
         data->t += time_delta;
 
@@ -181,7 +181,7 @@ gtk_kinetic_scrolling_tick (GtkKineticScrolling *data,
 
     case GTK_KINETIC_SCROLLING_PHASE_OVERSHOOTING:
       {
-        gdouble exp_part, pos;
+        double exp_part, pos;
 
         data->t += time_delta;
         exp_part = exp(-data->overshoot_friction / 2 * data->t);

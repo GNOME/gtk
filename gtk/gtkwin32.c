@@ -101,7 +101,7 @@ find_first_manifest (HMODULE  module_handle,
  * g_once_init_enter (leaking once is OK, Windows will clean up after us).
  */
 void
-_gtk_load_dll_with_libgtk3_manifest (const gchar *dll_name)
+_gtk_load_dll_with_libgtk3_manifest (const char *dll_name)
 {
   HANDLE activation_ctx_handle;
   ACTCTXA activation_ctx_descriptor;
@@ -151,14 +151,14 @@ _gtk_load_dll_with_libgtk3_manifest (const gchar *dll_name)
     g_free (resource_name);
 }
 
-const gchar *
+const char *
 _gtk_get_libdir (void)
 {
   static char *gtk_libdir = NULL;
   if (gtk_libdir == NULL)
     {
-      gchar *root = g_win32_get_package_installation_directory_of_module (gtk_dll);
-      gchar *slash = strrchr (root, '\\');
+      char *root = g_win32_get_package_installation_directory_of_module (gtk_dll);
+      char *slash = strrchr (root, '\\');
       if (slash != NULL &&
           g_ascii_strcasecmp (slash + 1, ".libs") == 0)
         gtk_libdir = g_strdup (GTK_LIBDIR);
@@ -170,14 +170,14 @@ _gtk_get_libdir (void)
   return gtk_libdir;
 }
 
-const gchar *
+const char *
 _gtk_get_localedir (void)
 {
   static char *gtk_localedir = NULL;
   if (gtk_localedir == NULL)
     {
-      const gchar *p;
-      gchar *root, *temp;
+      const char *p;
+      char *root, *temp;
 
       /* GTK_LOCALEDIR ends in either /lib/locale or
        * /share/locale. Scan for that slash.
@@ -201,13 +201,13 @@ _gtk_get_localedir (void)
   return gtk_localedir;
 }
 
-const gchar *
+const char *
 _gtk_get_datadir (void)
 {
   static char *gtk_datadir = NULL;
   if (gtk_datadir == NULL)
     {
-      gchar *root = g_win32_get_package_installation_directory_of_module (gtk_dll);
+      char *root = g_win32_get_package_installation_directory_of_module (gtk_dll);
       gtk_datadir = g_build_filename (root, "share", NULL);
       g_free (root);
     }
@@ -215,13 +215,13 @@ _gtk_get_datadir (void)
   return gtk_datadir;
 }
 
-const gchar *
+const char *
 _gtk_get_sysconfdir (void)
 {
   static char *gtk_sysconfdir = NULL;
   if (gtk_sysconfdir == NULL)
     {
-      gchar *root = g_win32_get_package_installation_directory_of_module (gtk_dll);
+      char *root = g_win32_get_package_installation_directory_of_module (gtk_dll);
       gtk_sysconfdir = g_build_filename (root, "etc", NULL);
       g_free (root);
     }
@@ -229,7 +229,7 @@ _gtk_get_sysconfdir (void)
   return gtk_sysconfdir;
 }
 
-const gchar *
+const char *
 _gtk_get_data_prefix (void)
 {
   static char *gtk_data_prefix = NULL;

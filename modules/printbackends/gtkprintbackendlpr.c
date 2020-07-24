@@ -69,8 +69,8 @@ static void                 lpr_printer_prepare_for_print         (GtkPrinter   
 								   GtkPageSetup            *page_setup);
 static cairo_surface_t *    lpr_printer_create_cairo_surface      (GtkPrinter              *printer,
 								   GtkPrintSettings        *settings,
-								   gdouble                  width,
-								   gdouble                  height,
+								   double                   width,
+								   double                   height,
 								   GIOChannel              *cache_io);
 static void                 gtk_print_backend_lpr_print_stream    (GtkPrintBackend         *print_backend,
 								   GtkPrintJob             *job,
@@ -160,7 +160,7 @@ _cairo_write (void                *closure,
 
   while (length > 0) 
     {
-      g_io_channel_write_chars (io, (const gchar*)data, length, &written, &error);
+      g_io_channel_write_chars (io, (const char *)data, length, &written, &error);
 
       if (error != NULL)
 	{
@@ -184,8 +184,8 @@ _cairo_write (void                *closure,
 static cairo_surface_t *
 lpr_printer_create_cairo_surface (GtkPrinter       *printer,
 				  GtkPrintSettings *settings,
-				  gdouble           width, 
-				  gdouble           height,
+				  double            width, 
+				  double            height,
 				  GIOChannel       *cache_io)
 {
   cairo_surface_t *surface;
@@ -240,7 +240,7 @@ lpr_write (GIOChannel   *source,
            GIOCondition  con,
            gpointer      user_data)
 {
-  gchar buf[_LPR_MAX_CHUNK_SIZE];
+  char buf[_LPR_MAX_CHUNK_SIZE];
   gsize bytes_read;
   GError *error;
   GIOStatus status;
@@ -303,9 +303,9 @@ gtk_print_backend_lpr_print_stream (GtkPrintBackend        *print_backend,
   GError *print_error = NULL;
   _PrintStreamData *ps;
   GtkPrintSettings *settings;
-  gint argc;
-  gint in_fd;
-  gchar **argv = NULL;
+  int argc;
+  int in_fd;
+  char **argv = NULL;
   const char *cmd_line;
 
   settings = gtk_print_job_get_settings (job);
@@ -448,7 +448,7 @@ lpr_printer_prepare_for_print (GtkPrinter       *printer,
   double scale;
   GtkPrintPages pages;
   GtkPageRange *ranges;
-  gint n_ranges;
+  int n_ranges;
 
   pages = gtk_print_settings_get_print_pages (settings);
   gtk_print_job_set_pages (print_job, pages);

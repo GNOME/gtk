@@ -21,7 +21,7 @@ source_toggled (GtkToggleButton *button)
     {
       GtkTextBuffer *buffer;
       GtkTextIter start, end;
-      gchar *markup;
+      char *markup;
 
       buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view2));
       gtk_text_buffer_get_bounds (buffer, &start, &end);
@@ -50,7 +50,7 @@ do_markup (GtkWidget *do_widget)
       GtkTextBuffer *buffer;
       GtkTextIter iter;
       GBytes *bytes;
-      const gchar *markup;
+      const char *markup;
       GtkWidget *header;
       GtkWidget *show_source;
 
@@ -102,7 +102,7 @@ do_markup (GtkWidget *do_widget)
       gtk_stack_add_named (GTK_STACK (stack), sw, "source");
 
       bytes = g_resources_lookup_data ("/markup/markup.txt", 0, NULL);
-      markup = (const gchar *)g_bytes_get_data (bytes, NULL);
+      markup = (const char *)g_bytes_get_data (bytes, NULL);
 
       buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view));
       gtk_text_buffer_get_start_iter (buffer, &iter);

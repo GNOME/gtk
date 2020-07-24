@@ -25,7 +25,7 @@ enum
 
 
 static GdkPixbuf *file_pixbuf, *folder_pixbuf;
-gchar *parent;
+char *parent;
 GtkWidget *up_button;
 
 /* Loads the images for the demo and returns whether the operation succeeded */
@@ -47,7 +47,7 @@ static void
 fill_store (GtkListStore *store)
 {
   GDir *dir;
-  const gchar *name;
+  const char *name;
   GtkTreeIter iter;
 
   /* First clear the store */
@@ -62,7 +62,7 @@ fill_store (GtkListStore *store)
   name = g_dir_read_name (dir);
   while (name != NULL)
     {
-      gchar *path, *display_name;
+      char *path, *display_name;
       gboolean is_dir;
 
       /* We ignore hidden files that start with a '.' */
@@ -90,14 +90,14 @@ fill_store (GtkListStore *store)
   g_dir_close (dir);
 }
 
-static gint
+static int
 sort_func (GtkTreeModel *model,
            GtkTreeIter  *a,
            GtkTreeIter  *b,
            gpointer      user_data)
 {
   gboolean is_dir_a, is_dir_b;
-  gchar *name_a, *name_b;
+  char *name_a, *name_b;
   int ret;
 
   /* We need this function because we want to sort
@@ -158,7 +158,7 @@ item_activated (GtkIconView *icon_view,
                 gpointer     user_data)
 {
   GtkListStore *store;
-  gchar *path;
+  char *path;
   GtkTreeIter iter;
   gboolean is_dir;
 
@@ -192,7 +192,7 @@ up_clicked (GtkButton *item,
             gpointer   user_data)
 {
   GtkListStore *store;
-  gchar *dir_name;
+  char *dir_name;
 
   store = GTK_LIST_STORE (user_data);
 

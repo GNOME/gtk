@@ -35,7 +35,7 @@ GtkPrinterCloudprint *gtk_printer_cloudprint_new	(const char *name,
 							 gboolean is_virtual,
 							 GtkPrintBackend *backend,
 							 GtkCloudprintAccount *account,
-							 const gchar *id);
+							 const char *id);
 GType	gtk_printer_cloudprint_get_type			(void) G_GNUC_CONST;
 
 G_END_DECLS

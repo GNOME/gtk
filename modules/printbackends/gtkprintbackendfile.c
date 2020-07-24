@@ -65,7 +65,7 @@ typedef enum
   N_FORMATS
 } OutputFormat;
 
-static const gchar* formats[N_FORMATS] =
+static const char * formats[N_FORMATS] =
 {
   "pdf",
   "ps",
@@ -93,8 +93,8 @@ static void                 gtk_print_backend_file_print_stream    (GtkPrintBack
 								    GDestroyNotify           dnotify);
 static cairo_surface_t *    file_printer_create_cairo_surface      (GtkPrinter              *printer,
 								    GtkPrintSettings        *settings,
-								    gdouble                  width,
-								    gdouble                  height,
+								    double                   width,
+								    double                   height,
 								    GIOChannel              *cache_io);
 
 static GList *              file_printer_list_papers               (GtkPrinter              *printer);
@@ -171,8 +171,8 @@ gtk_print_backend_file_class_finalize (GtkPrintBackendFileClass *class)
 static OutputFormat
 format_from_settings (GtkPrintSettings *settings)
 {
-  const gchar *value;
-  gint i;
+  const char *value;
+  int i;
 
   if (settings == NULL)
     return N_FORMATS;
@@ -191,19 +191,19 @@ format_from_settings (GtkPrintSettings *settings)
   return (OutputFormat) i;
 }
 
-static gchar *
+static char *
 output_file_from_settings (GtkPrintSettings *settings,
-			   const gchar      *default_format)
+			   const char       *default_format)
 {
-  gchar *uri = NULL;
+  char *uri = NULL;
 
   if (settings)
     uri = g_strdup (gtk_print_settings_get (settings, GTK_PRINT_SETTINGS_OUTPUT_URI));
 
   if (uri == NULL)
     { 
-      const gchar *extension, *basename = NULL, *output_dir = NULL;
-      gchar *name, *locale_name, *path;
+      const char *extension, *basename = NULL, *output_dir = NULL;
+      char *name, *locale_name, *path;
 
       if (default_format)
         extension = default_format;
@@ -244,11 +244,11 @@ output_file_from_settings (GtkPrintSettings *settings,
             output_dir = gtk_print_settings_get (settings, GTK_PRINT_SETTINGS_OUTPUT_DIR);
           if (output_dir == NULL)
             {
-              const gchar *document_dir = g_get_user_special_dir (G_USER_DIRECTORY_DOCUMENTS);
+              const char *document_dir = g_get_user_special_dir (G_USER_DIRECTORY_DOCUMENTS);
 
               if (document_dir == NULL)
                 {
-                  gchar *current_dir = g_get_current_dir ();
+                  char *current_dir = g_get_current_dir ();
                   path = g_build_filename (current_dir, locale_name, NULL);
                   g_free (current_dir);
                 }
@@ -289,7 +289,7 @@ _cairo_write (void                *closure,
     {
       GIOStatus status;
 
-      status = g_io_channel_write_chars (io, (const gchar *) data, length, &written, &error);
+      status = g_io_channel_write_chars (io, (const char *) data, length, &written, &error);
 
       if (status == G_IO_STATUS_ERROR)
         {
@@ -318,8 +318,8 @@ _cairo_write (void                *closure,
 static cairo_surface_t *
 file_printer_create_cairo_surface (GtkPrinter       *printer,
 				   GtkPrintSettings *settings,
-				   gdouble           width, 
-				   gdouble           height,
+				   double            width, 
+				   double            height,
 				   GIOChannel       *cache_io)
 {
   cairo_surface_t *surface;
@@ -368,7 +368,7 @@ file_print_cb (GtkPrintBackendFile *print_backend,
                GError              *error,
                gpointer            user_data)
 {
-  gchar *uri;
+  char *uri;
 
   _PrintStreamData *ps = (_PrintStreamData *) user_data;
   GtkRecentManager *recent_manager;
@@ -403,7 +403,7 @@ file_write (GIOChannel   *source,
             GIOCondition  con,
             gpointer      user_data)
 {
-  gchar buf[_STREAM_MAX_CHUNK_SIZE];
+  char buf[_STREAM_MAX_CHUNK_SIZE];
   gsize bytes_read;
   GError *error;
   GIOStatus read_status;
@@ -462,7 +462,7 @@ gtk_print_backend_file_print_stream (GtkPrintBackend        *print_backend,
   GError *internal_error = NULL;
   _PrintStreamData *ps;
   GtkPrintSettings *settings;
-  gchar *uri;
+  char *uri;
   GFile *file = NULL;
 
   settings = gtk_print_job_get_settings (job);
@@ -534,8 +534,8 @@ set_printer_format_from_option_set (GtkPrinter          *printer,
 				    GtkPrinterOptionSet *set)
 {
   GtkPrinterOption *format_option;
-  const gchar *value;
-  gint i;
+  const char *value;
+  int i;
 
   format_option = gtk_printer_option_set_lookup (set, "output-file-format");
   if (format_option && format_option->value)
@@ -574,7 +574,7 @@ file_printer_output_file_format_changed (GtkPrinterOption    *format_option,
 					 gpointer             user_data)
 {
   GtkPrinterOption *uri_option;
-  gchar            *base = NULL;
+  char             *base = NULL;
   _OutputFormatChangedData *data = (_OutputFormatChangedData *) user_data;
 
   if (! format_option->value)
@@ -585,12 +585,12 @@ file_printer_output_file_format_changed (GtkPrinterOption    *format_option,
 
   if (uri_option && uri_option->value)
     {
-      const gchar *uri = uri_option->value;
-      const gchar *dot = strrchr (uri, '.');
+      const char *uri = uri_option->value;
+      const char *dot = strrchr (uri, '.');
 
       if (dot)
         {
-          gint i;
+          int i;
 
           /*  check if the file extension matches one of the known ones  */
           for (i = 0; i < N_FORMATS; i++)
@@ -614,7 +614,7 @@ file_printer_output_file_format_changed (GtkPrinterOption    *format_option,
 
   if (base)
     {
-      gchar *tmp = g_strdup_printf ("%s.%s", base, format_option->value);
+      char *tmp = g_strdup_printf ("%s.%s", base, format_option->value);
 
       gtk_printer_option_set (uri_option, tmp);
       g_free (tmp);
@@ -637,10 +637,10 @@ file_printer_get_options (GtkPrinter           *printer,
   const char *format_names[N_FORMATS] = { N_("PDF"), N_("PostScript"), N_("SVG") };
   const char *supported_formats[N_FORMATS];
   const char *display_format_names[N_FORMATS];
-  gint n_formats = 0;
+  int n_formats = 0;
   OutputFormat format;
   char *uri;
-  gint current_format = 0;
+  int current_format = 0;
   _OutputFormatChangedData *format_changed_data;
 
   format = format_from_settings (settings);
@@ -770,10 +770,10 @@ file_printer_prepare_for_print (GtkPrinter       *printer,
 				GtkPrintSettings *settings,
 				GtkPageSetup     *page_setup)
 {
-  gdouble scale;
+  double scale;
   GtkPrintPages pages;
   GtkPageRange *ranges;
-  gint n_ranges;
+  int n_ranges;
   OutputFormat format;
 
   pages = gtk_print_settings_get_print_pages (settings);

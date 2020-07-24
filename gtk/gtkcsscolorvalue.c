@@ -43,20 +43,20 @@ struct _GtkCssValue
 
   union
   {
-    gchar *name;
+    char *name;
     GdkRGBA rgba;
 
     struct
     {
       GtkCssValue *color;
-      gdouble factor;
+      double factor;
     } shade, alpha;
 
     struct
     {
       GtkCssValue *color1;
       GtkCssValue *color2;
-      gdouble factor;
+      double factor;
     } mix;
   } sym_col;
 };
@@ -522,7 +522,7 @@ _gtk_css_color_value_new_literal (const GdkRGBA *color)
 }
 
 GtkCssValue *
-_gtk_css_color_value_new_name (const gchar *name)
+_gtk_css_color_value_new_name (const char *name)
 {
   GtkCssValue *value;
 
@@ -537,7 +537,7 @@ _gtk_css_color_value_new_name (const gchar *name)
 
 GtkCssValue *
 _gtk_css_color_value_new_shade (GtkCssValue *color,
-                                gdouble      factor)
+                                double       factor)
 {
   GtkCssValue *value;
 
@@ -562,7 +562,7 @@ _gtk_css_color_value_new_shade (GtkCssValue *color,
 
 GtkCssValue *
 _gtk_css_color_value_new_alpha (GtkCssValue *color,
-                                gdouble      factor)
+                                double       factor)
 {
   GtkCssValue *value;
 
@@ -588,7 +588,7 @@ _gtk_css_color_value_new_alpha (GtkCssValue *color,
 GtkCssValue *
 _gtk_css_color_value_new_mix (GtkCssValue *color1,
                               GtkCssValue *color2,
-                              gdouble      factor)
+                              double       factor)
 {
   GtkCssValue *value;
 

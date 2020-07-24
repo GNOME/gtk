@@ -37,28 +37,28 @@
 G_BEGIN_DECLS
 
 GDK_AVAILABLE_IN_ALL
-gint     gdk_x11_display_text_property_to_text_list (GdkDisplay   *display,
+int      gdk_x11_display_text_property_to_text_list (GdkDisplay   *display,
                                                      const char   *encoding,
-                                                     gint          format,
+                                                     int           format,
                                                      const guchar *text,
-                                                     gint          length,
-                                                     gchar      ***list);
+                                                     int           length,
+                                                     char       ***list);
 GDK_AVAILABLE_IN_ALL
-void     gdk_x11_free_text_list                     (gchar       **list);
+void     gdk_x11_free_text_list                     (char        **list);
 GDK_AVAILABLE_IN_ALL
-gint     gdk_x11_display_string_to_compound_text    (GdkDisplay   *display,
+int      gdk_x11_display_string_to_compound_text    (GdkDisplay   *display,
                                                      const char   *str,
                                                      const char  **encoding,
-                                                     gint         *format,
+                                                     int          *format,
                                                      guchar      **ctext,
-                                                     gint         *length);
+                                                     int          *length);
 GDK_AVAILABLE_IN_ALL
 gboolean gdk_x11_display_utf8_to_compound_text      (GdkDisplay   *display,
                                                      const char   *str,
                                                      const char  **encoding,
-                                                     gint         *format,
+                                                     int          *format,
                                                      guchar      **ctext,
-                                                     gint         *length);
+                                                     int          *length);
 GDK_AVAILABLE_IN_ALL
 void     gdk_x11_free_compound_text                 (guchar       *ctext);
 

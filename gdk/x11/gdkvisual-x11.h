@@ -57,10 +57,10 @@ struct _GdkX11Visual
   GObject parent_instance;
 
   GdkVisualType type;
-  gint depth;
+  int depth;
   GdkByteOrder byte_order;
-  gint colormap_size;
-  gint bits_per_rgb;
+  int colormap_size;
+  int bits_per_rgb;
 
   guint32 red_mask;
   guint32 green_mask;

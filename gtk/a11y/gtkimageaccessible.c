@@ -25,8 +25,8 @@
 
 struct _GtkImageAccessiblePrivate
 {
-  gchar *image_description;
-  gchar *stock_name;
+  char *image_description;
+  char *stock_name;
 };
 
 static void atk_image_interface_init (AtkImageIface  *iface);
@@ -45,8 +45,8 @@ gtk_image_accessible_initialize (AtkObject *accessible,
 }
 
 typedef struct {
-  const gchar *name;
-  const gchar *label;
+  const char *name;
+  const char *label;
 } NameMapEntry;
 
 static const NameMapEntry name_map[] = {
@@ -129,11 +129,11 @@ static const NameMapEntry name_map[] = {
 };
 
 /* GTK+ internal methods */
-static gchar *
-elide_underscores (const gchar *original)
+static char *
+elide_underscores (const char *original)
 {
-  gchar *q, *result;
-  const gchar *p, *end;
+  char *q, *result;
+  const char *p, *end;
   gsize len;
   gboolean last_underscore;
 
@@ -172,12 +172,12 @@ elide_underscores (const gchar *original)
   return result;
 }
 
-static gchar *
-name_from_icon_name (const gchar *icon_name)
+static char *
+name_from_icon_name (const char *icon_name)
 {
-  gchar *name;
-  const gchar *label;
-  gint i;
+  char *name;
+  const char *label;
+  int i;
 
   name = g_strdup (icon_name);
   if (g_str_has_suffix (name, "-symbolic"))
@@ -209,13 +209,13 @@ gtk_image_accessible_finalize (GObject *object)
   G_OBJECT_CLASS (gtk_image_accessible_parent_class)->finalize (object);
 }
 
-static const gchar *
+static const char *
 gtk_image_accessible_get_name (AtkObject *accessible)
 {
   GtkWidget* widget;
   GtkImage *image;
   GtkImageAccessible *image_accessible;
-  const gchar *name;
+  const char *name;
   GtkImageType storage_type;
 
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (accessible));
@@ -241,7 +241,7 @@ gtk_image_accessible_get_name (AtkObject *accessible)
   else if (storage_type == GTK_IMAGE_GICON)
     {
       GIcon *icon;
-      const gchar * const *icon_names;
+      const char * const *icon_names;
 
       icon = gtk_image_get_gicon (image);
       if (G_IS_THEMED_ICON (icon))
@@ -271,7 +271,7 @@ gtk_image_accessible_init (GtkImageAccessible *image)
   image->priv = gtk_image_accessible_get_instance_private (image);
 }
 
-static const gchar *
+static const char *
 gtk_image_accessible_get_image_description (AtkImage *image)
 {
   GtkImageAccessible *accessible = GTK_IMAGE_ACCESSIBLE (image);
@@ -281,8 +281,8 @@ gtk_image_accessible_get_image_description (AtkImage *image)
 
 static void
 gtk_image_accessible_get_image_position (AtkImage     *image,
-                                         gint         *x,
-                                         gint         *y,
+                                         int          *x,
+                                         int          *y,
                                          AtkCoordType  coord_type)
 {
   atk_component_get_extents (ATK_COMPONENT (image), x, y, NULL, NULL,
@@ -291,8 +291,8 @@ gtk_image_accessible_get_image_position (AtkImage     *image,
 
 static void
 gtk_image_accessible_get_image_size (AtkImage *image,
-                                     gint     *width,
-                                     gint     *height)
+                                     int      *width,
+                                     int      *height)
 {
   GtkWidget* widget;
   GtkImage *gtk_image;
@@ -318,7 +318,7 @@ gtk_image_accessible_get_image_size (AtkImage *image,
 
 static gboolean
 gtk_image_accessible_set_image_description (AtkImage    *image,
-                                            const gchar *description)
+                                            const char *description)
 {
   GtkImageAccessible* accessible = GTK_IMAGE_ACCESSIBLE (image);
 

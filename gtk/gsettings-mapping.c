@@ -48,7 +48,7 @@ g_settings_set_mapping_int (const GValue       *value,
   else if (g_variant_type_equal (expected_type, G_VARIANT_TYPE_INT32))
     {
       if (G_MININT32 <= l && l <= G_MAXINT32)
-        variant = g_variant_new_int32 ((gint) l);
+        variant = g_variant_new_int32 ((int) l);
     }
   else if (g_variant_type_equal (expected_type, G_VARIANT_TYPE_UINT32))
     {
@@ -71,7 +71,7 @@ g_settings_set_mapping_int (const GValue       *value,
         variant = g_variant_new_handle ((guint) l);
     }
   else if (g_variant_type_equal (expected_type, G_VARIANT_TYPE_DOUBLE))
-    variant = g_variant_new_double ((gdouble) l);
+    variant = g_variant_new_double ((double) l);
 
   return variant;
 }
@@ -81,7 +81,7 @@ g_settings_set_mapping_float (const GValue       *value,
                               const GVariantType *expected_type)
 {
   GVariant *variant = NULL;
-  gdouble d;
+  double d;
   gint64 l;
 
   if (G_VALUE_HOLDS_DOUBLE (value))
@@ -103,7 +103,7 @@ g_settings_set_mapping_float (const GValue       *value,
   else if (g_variant_type_equal (expected_type, G_VARIANT_TYPE_INT32))
     {
       if (G_MININT32 <= l && l <= G_MAXINT32)
-        variant = g_variant_new_int32 ((gint) l);
+        variant = g_variant_new_int32 ((int) l);
     }
   else if (g_variant_type_equal (expected_type, G_VARIANT_TYPE_UINT32))
     {
@@ -126,7 +126,7 @@ g_settings_set_mapping_float (const GValue       *value,
         variant = g_variant_new_handle ((guint) l);
     }
   else if (g_variant_type_equal (expected_type, G_VARIANT_TYPE_DOUBLE))
-    variant = g_variant_new_double ((gdouble) d);
+    variant = g_variant_new_double ((double) d);
 
   return variant;
 }
@@ -157,7 +157,7 @@ g_settings_set_mapping_unsigned_int (const GValue       *value,
   else if (g_variant_type_equal (expected_type, G_VARIANT_TYPE_INT32))
     {
       if (u <= G_MAXINT32)
-        variant = g_variant_new_int32 ((gint) u);
+        variant = g_variant_new_int32 ((int) u);
     }
   else if (g_variant_type_equal (expected_type, G_VARIANT_TYPE_UINT32))
     {
@@ -180,7 +180,7 @@ g_settings_set_mapping_unsigned_int (const GValue       *value,
         variant = g_variant_new_handle ((guint) u);
     }
   else if (g_variant_type_equal (expected_type, G_VARIANT_TYPE_DOUBLE))
-    variant = g_variant_new_double ((gdouble) u);
+    variant = g_variant_new_double ((double) u);
 
   return variant;
 }
@@ -237,7 +237,7 @@ g_settings_get_mapping_float (GValue   *value,
                               GVariant *variant)
 {
   const GVariantType *type;
-  gdouble d;
+  double d;
   gint64 l;
 
   type = g_variant_get_type (variant);
@@ -330,7 +330,7 @@ g_settings_set_mapping (const GValue       *value,
                         const GVariantType *expected_type,
                         gpointer            user_data)
 {
-  gchar *type_string;
+  char *type_string;
 
   if (G_VALUE_HOLDS_BOOLEAN (value))
     {
@@ -379,7 +379,7 @@ g_settings_set_mapping (const GValue       *value,
     {
       if (g_value_get_boxed (value) == NULL)
         return NULL;
-      return g_variant_new_strv ((const gchar **) g_value_get_boxed (value),
+      return g_variant_new_strv ((const char **) g_value_get_boxed (value),
                                  -1);
     }
 
@@ -485,7 +485,7 @@ g_settings_get_mapping (GValue   *value,
         {
           GEnumClass *eclass;
           GEnumValue *evalue;
-          const gchar *nick;
+          const char *nick;
 
           /* GParamSpecEnum holds a ref on the class so we just peek... */
           eclass = g_type_class_peek (G_VALUE_TYPE (value));
@@ -514,7 +514,7 @@ g_settings_get_mapping (GValue   *value,
         {
           GFlagsClass *fclass;
           GFlagsValue *fvalue;
-          const gchar *nick;
+          const char *nick;
           GVariantIter iter;
           guint flags = 0;
 

@@ -35,8 +35,8 @@ gtk_pointer_focus_new (GtkWindow        *toplevel,
                        GtkWidget        *widget,
                        GdkDevice        *device,
                        GdkEventSequence *sequence,
-                       gdouble           x,
-                       gdouble           y)
+                       double            x,
+                       double            y)
 {
   GtkPointerFocus *focus;
 
@@ -108,8 +108,8 @@ gtk_pointer_focus_get_implicit_grab (GtkPointerFocus *focus)
 
 void
 gtk_pointer_focus_set_coordinates (GtkPointerFocus *focus,
-                                   gdouble          x,
-                                   gdouble          y)
+                                   double           x,
+                                   double           y)
 {
   focus->x = x;
   focus->y = y;

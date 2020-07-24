@@ -53,7 +53,7 @@ typedef void (*GtkPrintJobCompleteFunc) (GtkPrintJob  *print_job,
 GDK_AVAILABLE_IN_ALL
 GType                    gtk_print_job_get_type               (void) G_GNUC_CONST;
 GDK_AVAILABLE_IN_ALL
-GtkPrintJob             *gtk_print_job_new                    (const gchar              *title,
+GtkPrintJob             *gtk_print_job_new                    (const char               *title,
 							       GtkPrinter               *printer,
 							       GtkPrintSettings         *settings,
 							       GtkPageSetup             *page_setup);
@@ -62,12 +62,12 @@ GtkPrintSettings        *gtk_print_job_get_settings           (GtkPrintJob      
 GDK_AVAILABLE_IN_ALL
 GtkPrinter              *gtk_print_job_get_printer            (GtkPrintJob              *job);
 GDK_AVAILABLE_IN_ALL
-const gchar *            gtk_print_job_get_title              (GtkPrintJob              *job);
+const char *            gtk_print_job_get_title              (GtkPrintJob              *job);
 GDK_AVAILABLE_IN_ALL
 GtkPrintStatus           gtk_print_job_get_status             (GtkPrintJob              *job);
 GDK_AVAILABLE_IN_ALL
 gboolean                 gtk_print_job_set_source_file        (GtkPrintJob              *job,
-							       const gchar              *filename,
+							       const char               *filename,
 							       GError                  **error);
 GDK_AVAILABLE_IN_ALL
 gboolean                 gtk_print_job_set_source_fd          (GtkPrintJob              *job,
@@ -94,26 +94,26 @@ void              gtk_print_job_set_pages       (GtkPrintJob       *job,
                                                  GtkPrintPages      pages);
 GDK_AVAILABLE_IN_ALL
 GtkPageRange *    gtk_print_job_get_page_ranges (GtkPrintJob       *job,
-                                                 gint              *n_ranges);
+                                                 int               *n_ranges);
 GDK_AVAILABLE_IN_ALL
 void              gtk_print_job_set_page_ranges (GtkPrintJob       *job,
                                                  GtkPageRange      *ranges,
-                                                 gint               n_ranges);
+                                                 int                n_ranges);
 GDK_AVAILABLE_IN_ALL
 GtkPageSet        gtk_print_job_get_page_set    (GtkPrintJob       *job);
 GDK_AVAILABLE_IN_ALL
 void              gtk_print_job_set_page_set    (GtkPrintJob       *job,
                                                  GtkPageSet         page_set);
 GDK_AVAILABLE_IN_ALL
-gint              gtk_print_job_get_num_copies  (GtkPrintJob       *job);
+int               gtk_print_job_get_num_copies  (GtkPrintJob       *job);
 GDK_AVAILABLE_IN_ALL
 void              gtk_print_job_set_num_copies  (GtkPrintJob       *job,
-                                                 gint               num_copies);
+                                                 int                num_copies);
 GDK_AVAILABLE_IN_ALL
-gdouble           gtk_print_job_get_scale       (GtkPrintJob       *job);
+double            gtk_print_job_get_scale       (GtkPrintJob       *job);
 GDK_AVAILABLE_IN_ALL
 void              gtk_print_job_set_scale       (GtkPrintJob       *job,
-                                                 gdouble            scale);
+                                                 double             scale);
 GDK_AVAILABLE_IN_ALL
 guint             gtk_print_job_get_n_up        (GtkPrintJob       *job);
 GDK_AVAILABLE_IN_ALL

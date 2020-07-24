@@ -490,7 +490,7 @@ main (int argc, char **argv)
   otypes = gtk_test_list_all_types (NULL);
   for (i = 0; otypes[i]; i++)
     {
-      gchar *testname;
+      char *testname;
 
       if (otypes[i] == GTK_TYPE_FILE_CHOOSER_NATIVE)
         continue;

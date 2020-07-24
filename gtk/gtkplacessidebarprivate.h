@@ -95,7 +95,7 @@ void               gtk_places_sidebar_remove_shortcut            (GtkPlacesSideb
 GListModel *       gtk_places_sidebar_get_shortcuts              (GtkPlacesSidebar   *sidebar);
 
 GFile *            gtk_places_sidebar_get_nth_bookmark           (GtkPlacesSidebar   *sidebar,
-                                                                  gint                n);
+                                                                  int                 n);
 void               gtk_places_sidebar_set_drop_targets_visible   (GtkPlacesSidebar   *sidebar,
                                                                   gboolean            visible);
 gboolean           gtk_places_sidebar_get_show_trash             (GtkPlacesSidebar   *sidebar);
@@ -137,7 +137,7 @@ typedef enum {
   N_PLACES
 } GtkPlacesSidebarPlaceType;
 
-gchar *gtk_places_sidebar_get_location_title (GtkPlacesSidebar *sidebar);
+char *gtk_places_sidebar_get_location_title (GtkPlacesSidebar *sidebar);
 
 G_END_DECLS
 

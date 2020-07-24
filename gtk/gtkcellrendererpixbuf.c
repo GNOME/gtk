@@ -63,10 +63,10 @@ static void gtk_cell_renderer_pixbuf_set_property  (GObject                    *
 static void gtk_cell_renderer_pixbuf_get_size   (GtkCellRenderer            *cell,
 						 GtkWidget                  *widget,
 						 const GdkRectangle         *rectangle,
-						 gint                       *x_offset,
-						 gint                       *y_offset,
-						 gint                       *width,
-						 gint                       *height);
+						 int                        *x_offset,
+						 int                        *y_offset,
+						 int                        *width,
+						 int                        *height);
 static void gtk_cell_renderer_pixbuf_snapshot   (GtkCellRenderer            *cell,
 						 GtkSnapshot                *snapshot,
 						 GtkWidget                  *widget,
@@ -412,18 +412,18 @@ static void
 gtk_cell_renderer_pixbuf_get_size (GtkCellRenderer    *cell,
 				   GtkWidget          *widget,
 				   const GdkRectangle *cell_area,
-				   gint               *x_offset,
-				   gint               *y_offset,
-				   gint               *width,
-				   gint               *height)
+				   int                *x_offset,
+				   int                *y_offset,
+				   int                *width,
+				   int                *height)
 {
   GtkCellRendererPixbuf *cellpixbuf = GTK_CELL_RENDERER_PIXBUF (cell);
   GtkCellRendererPixbufPrivate *priv = gtk_cell_renderer_pixbuf_get_instance_private (cellpixbuf);
-  gint pixbuf_width;
-  gint pixbuf_height;
-  gint calc_width;
-  gint calc_height;
-  gint xpad, ypad;
+  int pixbuf_width;
+  int pixbuf_height;
+  int calc_width;
+  int calc_height;
+  int xpad, ypad;
   GtkStyleContext *context;
   GtkIconHelper *icon_helper;
 
@@ -459,12 +459,12 @@ gtk_cell_renderer_pixbuf_get_size (GtkCellRenderer    *cell,
     }
 
   gtk_cell_renderer_get_padding (cell, &xpad, &ypad);
-  calc_width  = (gint) xpad * 2 + pixbuf_width;
-  calc_height = (gint) ypad * 2 + pixbuf_height;
+  calc_width  = (int) xpad * 2 + pixbuf_width;
+  calc_height = (int) ypad * 2 + pixbuf_height;
   
   if (cell_area && pixbuf_width > 0 && pixbuf_height > 0)
     {
-      gfloat xalign, yalign;
+      float xalign, yalign;
 
       gtk_cell_renderer_get_alignment (cell, &xalign, &yalign);
       if (x_offset)
@@ -508,7 +508,7 @@ gtk_cell_renderer_pixbuf_snapshot (GtkCellRenderer      *cell,
   GtkStyleContext *context;
   GdkRectangle pix_rect;
   gboolean is_expander;
-  gint xpad, ypad;
+  int xpad, ypad;
   GtkIconHelper *icon_helper;
 
   gtk_cell_renderer_pixbuf_get_size (cell, widget, (GdkRectangle *) cell_area,

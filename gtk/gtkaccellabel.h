@@ -44,7 +44,7 @@ typedef struct _GtkAccelLabel	     GtkAccelLabel;
 GDK_AVAILABLE_IN_ALL
 GType	   gtk_accel_label_get_type	     (void) G_GNUC_CONST;
 GDK_AVAILABLE_IN_ALL
-GtkWidget *gtk_accel_label_new		     (const gchar   *string);
+GtkWidget *gtk_accel_label_new		     (const char    *string);
 GDK_AVAILABLE_IN_ALL
 guint	   gtk_accel_label_get_accel_width   (GtkAccelLabel *accel_label);
 GDK_AVAILABLE_IN_ALL

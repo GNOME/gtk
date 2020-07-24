@@ -57,15 +57,15 @@ struct _GdkX11Surface
   guint frame_sync_enabled : 1;
   guint tracking_damage: 1;
 
-  gint surface_scale;
+  int surface_scale;
 
   /* Width and height not divided by surface_scale - this matters in the
    * corner-case where the window manager assigns us a size that isn't
    * a multiple of surface_scale - for example for a maximized window
    * with an odd-sized title-bar.
    */
-  gint unscaled_width;
-  gint unscaled_height;
+  int unscaled_width;
+  int unscaled_height;
 
   cairo_surface_t *cairo_surface;
 
@@ -184,8 +184,8 @@ gboolean        _gdk_x11_surface_syncs_frames        (GdkSurface *surface);
 void            gdk_x11_surface_pre_damage           (GdkSurface *surface);
 
 void            gdk_x11_surface_move                 (GdkSurface *surface,
-                                                      gint        x,
-                                                      gint        y);
+                                                      int         x,
+                                                      int         y);
 void            gdk_x11_surface_check_monitor        (GdkSurface *surface,
                                                       GdkMonitor *monitor);
 

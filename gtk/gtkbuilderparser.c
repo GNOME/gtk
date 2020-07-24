@@ -70,9 +70,9 @@ possibly_finish_subparser (GtkBuildableParseContext *context)
 
 static void
 proxy_start_element (GMarkupParseContext *gm_context,
-                     const gchar         *element_name,
-                     const gchar        **attribute_names,
-                     const gchar        **attribute_values,
+                     const char          *element_name,
+                     const char         **attribute_names,
+                     const char         **attribute_values,
                      gpointer             user_data,
                      GError             **error)
 {
@@ -89,7 +89,7 @@ proxy_start_element (GMarkupParseContext *gm_context,
 
 static void
 proxy_end_element (GMarkupParseContext *gm_context,
-                   const gchar         *element_name,
+                   const char          *element_name,
                    gpointer             user_data,
                    GError             **error)
 {
@@ -105,7 +105,7 @@ proxy_end_element (GMarkupParseContext *gm_context,
 
 static void
 proxy_text (GMarkupParseContext *gm_context,
-            const gchar         *text,
+            const char          *text,
             gsize                text_len,
             gpointer             user_data,
             GError             **error)
@@ -172,7 +172,7 @@ gtk_buildable_parse_context_free (GtkBuildableParseContext *context)
 
 static gboolean
 gtk_buildable_parse_context_parse (GtkBuildableParseContext *context,
-                                   const gchar          *text,
+                                   const char           *text,
                                    gssize                text_len,
                                    GError              **error)
 {
@@ -343,8 +343,8 @@ gtk_buildable_parse_context_get_element_stack (GtkBuildableParseContext *context
  */
 void
 gtk_buildable_parse_context_get_position (GtkBuildableParseContext *context,
-                                          gint                *line_number,
-                                          gint                *char_number)
+                                          int                 *line_number,
+                                          int                 *char_number)
 
 {
   if (context->ctx)
@@ -393,11 +393,11 @@ state_pop (ParserData *data)
 
 static void
 error_missing_attribute (ParserData   *data,
-                         const gchar  *tag,
-                         const gchar  *attribute,
+                         const char   *tag,
+                         const char   *attribute,
                          GError      **error)
 {
-  gint line, col;
+  int line, col;
 
   gtk_buildable_parse_context_get_position (&data->ctx, &line, &col);
 
@@ -410,11 +410,11 @@ error_missing_attribute (ParserData   *data,
 
 static void
 error_invalid_tag (ParserData   *data,
-                   const gchar  *tag,
-                   const gchar  *expected,
+                   const char   *tag,
+                   const char   *expected,
                    GError      **error)
 {
-  gint line, col;
+  int line, col;
 
   gtk_buildable_parse_context_get_position (&data->ctx, &line, &col);
 
@@ -434,10 +434,10 @@ error_invalid_tag (ParserData   *data,
 
 static void
 error_unhandled_tag (ParserData   *data,
-                     const gchar  *tag,
+                     const char   *tag,
                      GError      **error)
 {
-  gint line, col;
+  int line, col;
 
   gtk_buildable_parse_context_get_position (&data->ctx, &line, &col);
   g_set_error (error,
@@ -487,17 +487,17 @@ builder_construct (ParserData  *data,
 
 static void
 parse_requires (ParserData   *data,
-                const gchar  *element_name,
-                const gchar **names,
-                const gchar **values,
+                const char   *element_name,
+                const char **names,
+                const char **values,
                 GError      **error)
 {
   RequiresInfo *req_info;
-  const gchar  *library = NULL;
-  const gchar  *version = NULL;
-  gchar **split;
-  gint version_major = 0;
-  gint version_minor = 0;
+  const char   *library = NULL;
+  const char   *version = NULL;
+  char **split;
+  int version_major = 0;
+  int version_minor = 0;
 
   if (!g_markup_collect_attributes (element_name, names, values, error,
                                     G_MARKUP_COLLECT_STRING, "lib", &library,
@@ -530,7 +530,7 @@ parse_requires (ParserData   *data,
 }
 
 static gboolean
-is_requested_object (const gchar *object,
+is_requested_object (const char *object,
                      ParserData  *data)
 {
   int i;
@@ -547,20 +547,20 @@ is_requested_object (const gchar *object,
 static void
 parse_object (GtkBuildableParseContext  *context,
               ParserData                *data,
-              const gchar               *element_name,
-              const gchar              **names,
-              const gchar              **values,
+              const char                *element_name,
+              const char               **names,
+              const char               **values,
               GError                   **error)
 {
   ObjectInfo *object_info;
   ChildInfo* child_info;
   GType object_type = G_TYPE_INVALID;
-  const gchar *object_class = NULL;
-  const gchar *constructor = NULL;
-  const gchar *type_func = NULL;
-  const gchar *object_id = NULL;
-  gchar *internal_id = NULL;
-  gint line;
+  const char *object_class = NULL;
+  const char *constructor = NULL;
+  const char *type_func = NULL;
+  const char *object_id = NULL;
+  char *internal_id = NULL;
+  int line;
 
   child_info = state_peek_info (data, ChildInfo);
   if (child_info && child_info->tag_type == TAG_OBJECT)
@@ -680,15 +680,15 @@ parse_object (GtkBuildableParseContext  *context,
 static void
 parse_template (GtkBuildableParseContext  *context,
                 ParserData                *data,
-                const gchar               *element_name,
-                const gchar              **names,
-                const gchar              **values,
+                const char                *element_name,
+                const char               **names,
+                const char               **values,
                 GError                   **error)
 {
   ObjectInfo *object_info;
-  const gchar *object_class = NULL;
-  const gchar *parent_class = NULL;
-  gint line;
+  const char *object_class = NULL;
+  const char *parent_class = NULL;
+  int line;
   GType template_type;
   GType parsed_type;
 
@@ -796,16 +796,16 @@ free_object_info (ObjectInfo *info)
 
 static void
 parse_child (ParserData   *data,
-             const gchar  *element_name,
-             const gchar **names,
-             const gchar **values,
+             const char   *element_name,
+             const char **names,
+             const char **values,
              GError      **error)
 
 {
   ObjectInfo* object_info;
   ChildInfo *child_info;
-  const gchar *type = NULL;
-  const gchar *internal_child = NULL;
+  const char *type = NULL;
+  const char *internal_child = NULL;
 
   object_info = state_peek_info (data, ObjectInfo);
   if (!object_info ||
@@ -845,22 +845,22 @@ free_child_info (ChildInfo *info)
 
 static void
 parse_property (ParserData   *data,
-                const gchar  *element_name,
-                const gchar **names,
-                const gchar **values,
+                const char   *element_name,
+                const char **names,
+                const char **values,
                 GError      **error)
 {
   PropertyInfo *info;
-  const gchar *name = NULL;
-  const gchar *context = NULL;
-  const gchar *bind_source = NULL;
-  const gchar *bind_property = NULL;
-  const gchar *bind_flags_str = NULL;
+  const char *name = NULL;
+  const char *context = NULL;
+  const char *bind_source = NULL;
+  const char *bind_property = NULL;
+  const char *bind_flags_str = NULL;
   GBindingFlags bind_flags = G_BINDING_DEFAULT;
   gboolean translatable = FALSE;
   ObjectInfo *object_info;
   GParamSpec *pspec = NULL;
-  gint line, col;
+  int line, col;
 
   object_info = state_peek_info (data, ObjectInfo);
   if (!object_info ||
@@ -948,9 +948,9 @@ parse_property (ParserData   *data,
 
 static void
 parse_binding (ParserData   *data,
-               const gchar  *element_name,
-               const gchar **names,
-               const gchar **values,
+               const char   *element_name,
+               const char **names,
+               const char **values,
                GError      **error)
 {
   BindingExpressionInfo *info;
@@ -1111,9 +1111,9 @@ check_expression_parent (ParserData *data)
 
 static void
 parse_constant_expression (ParserData   *data,
-                           const gchar  *element_name,
-                           const gchar **names,
-                           const gchar **values,
+                           const char   *element_name,
+                           const char **names,
+                           const char **values,
                            GError      **error)
 {
   ExpressionInfo *info;
@@ -1161,9 +1161,9 @@ parse_constant_expression (ParserData   *data,
 
 static void
 parse_closure_expression (ParserData   *data,
-                          const gchar  *element_name,
-                          const gchar **names,
-                          const gchar **values,
+                          const char   *element_name,
+                          const char **names,
+                          const char **values,
                           GError      **error)
 {
   ExpressionInfo *info;
@@ -1223,9 +1223,9 @@ parse_closure_expression (ParserData   *data,
 
 static void
 parse_lookup_expression (ParserData   *data,
-                         const gchar  *element_name,
-                         const gchar **names,
-                         const gchar **values,
+                         const char   *element_name,
+                         const char **names,
+                         const char **values,
                          GError      **error)
 {
   ExpressionInfo *info;
@@ -1445,15 +1445,15 @@ expression_info_construct (GtkBuilder      *builder,
 
 static void
 parse_signal (ParserData   *data,
-              const gchar  *element_name,
-              const gchar **names,
-              const gchar **values,
+              const char   *element_name,
+              const char **names,
+              const char **values,
               GError      **error)
 {
   SignalInfo *info;
-  const gchar *name;
-  const gchar *handler = NULL;
-  const gchar *object = NULL;
+  const char *name;
+  const char *handler = NULL;
+  const char *object = NULL;
   gboolean after = FALSE;
   gboolean swapped = -1;
   ObjectInfo *object_info;
@@ -1555,12 +1555,12 @@ free_requires_info (RequiresInfo *info,
 
 static void
 parse_interface (ParserData   *data,
-                 const gchar  *element_name,
-                 const gchar **names,
-                 const gchar **values,
+                 const char   *element_name,
+                 const char **names,
+                 const char **values,
                  GError      **error)
 {
-  const gchar *domain = NULL;
+  const char *domain = NULL;
 
   if (!g_markup_collect_attributes (element_name, names, values, error,
                                     G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "domain", &domain,
@@ -1587,7 +1587,7 @@ parse_interface (ParserData   *data,
 static SubParser *
 create_subparser (GObject       *object,
                   GObject       *child,
-                  const gchar   *element_name,
+                  const char    *element_name,
                   GtkBuildableParser *parser,
                   gpointer       user_data)
 {
@@ -1613,9 +1613,9 @@ free_subparser (SubParser *subparser)
 
 static gboolean
 subparser_start (GtkBuildableParseContext  *context,
-                 const gchar               *element_name,
-                 const gchar              **names,
-                 const gchar              **values,
+                 const char                *element_name,
+                 const char               **names,
+                 const char               **values,
                  ParserData                *data,
                  GError                   **error)
 {
@@ -1638,7 +1638,7 @@ subparser_start (GtkBuildableParseContext  *context,
 
 static void
 subparser_end (GtkBuildableParseContext  *context,
-               const gchar               *element_name,
+               const char                *element_name,
                ParserData                *data,
                GError                   **error)
 {
@@ -1673,9 +1673,9 @@ subparser_end (GtkBuildableParseContext  *context,
 
 static gboolean
 parse_custom (GtkBuildableParseContext  *context,
-              const gchar               *element_name,
-              const gchar              **names,
-              const gchar              **values,
+              const char                *element_name,
+              const char               **names,
+              const char               **values,
               ParserData                *data,
               GError                   **error)
 {
@@ -1738,9 +1738,9 @@ parse_custom (GtkBuildableParseContext  *context,
 
 static void
 start_element (GtkBuildableParseContext  *context,
-               const gchar               *element_name,
-               const gchar              **names,
-               const gchar              **values,
+               const char                *element_name,
+               const char               **names,
+               const char               **values,
                gpointer                   user_data,
                GError                   **error)
 {
@@ -1815,12 +1815,12 @@ start_element (GtkBuildableParseContext  *context,
     error_unhandled_tag (data, element_name, error);
 }
 
-const gchar *
-_gtk_builder_parser_translate (const gchar *domain,
-                               const gchar *context,
-                               const gchar *text)
+const char *
+_gtk_builder_parser_translate (const char *domain,
+                               const char *context,
+                               const char *text)
 {
-  const gchar *s;
+  const char *s;
 
   if (context)
     s = g_dpgettext2 (domain, context, text);
@@ -1832,7 +1832,7 @@ _gtk_builder_parser_translate (const gchar *domain,
 
 static void
 end_element (GtkBuildableParseContext  *context,
-             const gchar               *element_name,
+             const char                *element_name,
              gpointer                   user_data,
              GError                   **error)
 {
@@ -1865,7 +1865,7 @@ end_element (GtkBuildableParseContext  *context,
 
           if (prop_info->translatable && prop_info->text->len)
             {
-              const gchar *translated;
+              const char *translated;
 
               translated = _gtk_builder_parser_translate (data->domain,
                                                           prop_info->context,
@@ -2054,7 +2054,7 @@ end_element (GtkBuildableParseContext  *context,
 /* text is not nul-terminated */
 static void
 text (GtkBuildableParseContext  *context,
-      const gchar               *text,
+      const char                *text,
       gsize                      text_len,
       gpointer                   user_data,
       GError                   **error)
@@ -2159,13 +2159,13 @@ static const GtkBuildableParser parser = {
 
 void
 _gtk_builder_parser_parse_buffer (GtkBuilder   *builder,
-                                  const gchar  *filename,
-                                  const gchar  *buffer,
+                                  const char   *filename,
+                                  const char   *buffer,
                                   gssize        length,
                                   const char  **requested_objs,
                                   GError      **error)
 {
-  const gchar* domain;
+  const char * domain;
   ParserData data;
   GSList *l;
   gint64 before = g_get_monotonic_time ();

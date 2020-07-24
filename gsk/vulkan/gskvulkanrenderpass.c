@@ -352,7 +352,7 @@ gsk_vulkan_render_pass_add_node (GskVulkanRenderPass           *self,
         int i;
         guint count;
         guint texture_index;
-        gint x_position;
+        int x_position;
         GskVulkanRenderer *renderer = GSK_VULKAN_RENDERER (gsk_vulkan_render_get_renderer (render));
 
         if (has_color_glyphs)

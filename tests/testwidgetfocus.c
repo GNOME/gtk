@@ -202,8 +202,8 @@ gtk_focus_widget_snapshot (GtkWidget *widget, GtkSnapshot *snapshot)
 
 static void
 motion_cb (GtkEventControllerMotion *controller,
-           gdouble                   x,
-           gdouble                   y,
+           double                    x,
+           double                    y,
            GtkWidget                *widget)
 {
   GtkFocusWidget *self = GTK_FOCUS_WIDGET (widget);

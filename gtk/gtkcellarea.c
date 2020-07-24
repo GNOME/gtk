@@ -75,8 +75,8 @@
  *
  * |[<!-- language="C" -->
  * GtkTreeIter iter;
- * gint        minimum_width;
- * gint        natural_width;
+ * int         minimum_width;
+ * int         natural_width;
  *
  * valid = gtk_tree_model_get_iter_first (model, &iter);
  * while (valid)
@@ -111,8 +111,8 @@
  * |[<!-- language="C" -->
  * static void
  * foo_get_preferred_width (GtkWidget       *widget,
- *                          gint            *minimum_size,
- *                          gint            *natural_size)
+ *                          int             *minimum_size,
+ *                          int             *natural_size)
  * {
  *   Foo        *foo  = FOO (widget);
  *   FooPrivate *priv = foo->priv;
@@ -141,10 +141,10 @@
  *
  * |[<!-- language="C" -->
  * GtkTreeIter iter;
- * gint        minimum_height;
- * gint        natural_height;
- * gint        full_minimum_height = 0;
- * gint        full_natural_height = 0;
+ * int         minimum_height;
+ * int         natural_height;
+ * int         full_minimum_height = 0;
+ * int         full_natural_height = 0;
  *
  * valid = gtk_tree_model_get_iter_first (model, &iter);
  * while (valid)
@@ -197,8 +197,8 @@
  * GtkAllocation allocation;
  * GdkRectangle  cell_area = { 0, };
  * GtkTreeIter   iter;
- * gint          minimum_width;
- * gint          natural_width;
+ * int           minimum_width;
+ * int           natural_width;
  *
  * gtk_widget_get_allocation (widget, &allocation);
  * cell_area.width = allocation.width;
@@ -262,7 +262,7 @@
  * {
  *   Foo        *foo  = FOO (widget);
  *   FooPrivate *priv = foo->priv;
- *   gint        focus_row;
+ *   int         focus_row;
  *   gboolean    have_focus = FALSE;
  *
  *   focus_row = priv->focus_row;
@@ -385,7 +385,7 @@ static void      gtk_cell_area_real_foreach_alloc                  (GtkCellArea 
 								    const GdkRectangle  *background_area,
 								    GtkCellAllocCallback callback,
 								    gpointer             callback_data);
-static gint      gtk_cell_area_real_event                          (GtkCellArea          *area,
+static int       gtk_cell_area_real_event                          (GtkCellArea          *area,
                                                                     GtkCellAreaContext   *context,
                                                                     GtkWidget            *widget,
                                                                     GdkEvent             *event,
@@ -412,25 +412,25 @@ static GtkSizeRequestMode  gtk_cell_area_real_get_request_mode     (GtkCellArea 
 static void      gtk_cell_area_real_get_preferred_width            (GtkCellArea           *area,
 								    GtkCellAreaContext    *context,
 								    GtkWidget             *widget,
-								    gint                  *minimum_width,
-								    gint                  *natural_width);
+								    int                   *minimum_width,
+								    int                   *natural_width);
 static void      gtk_cell_area_real_get_preferred_height           (GtkCellArea           *area,
 								    GtkCellAreaContext    *context,
 								    GtkWidget             *widget,
-								    gint                  *minimum_height,
-								    gint                  *natural_height);
+								    int                   *minimum_height,
+								    int                   *natural_height);
 static void      gtk_cell_area_real_get_preferred_height_for_width (GtkCellArea           *area,
                                                                     GtkCellAreaContext    *context,
                                                                     GtkWidget             *widget,
-                                                                    gint                   width,
-                                                                    gint                  *minimum_height,
-                                                                    gint                  *natural_height);
+                                                                    int                    width,
+                                                                    int                   *minimum_height,
+                                                                    int                   *natural_height);
 static void      gtk_cell_area_real_get_preferred_width_for_height (GtkCellArea           *area,
                                                                     GtkCellAreaContext    *context,
                                                                     GtkWidget             *widget,
-                                                                    gint                   height,
-                                                                    gint                  *minimum_width,
-                                                                    gint                  *natural_width);
+                                                                    int                    height,
+                                                                    int                   *minimum_width,
+                                                                    int                   *natural_width);
 static gboolean  gtk_cell_area_real_is_activatable                 (GtkCellArea           *area);
 static gboolean  gtk_cell_area_real_activate                       (GtkCellArea           *area,
                                                                     GtkCellAreaContext    *context,
@@ -449,8 +449,8 @@ static void      gtk_cell_area_pack_default                  (GtkCellLayout     
 static void      gtk_cell_area_clear                         (GtkCellLayout         *cell_layout);
 static void      gtk_cell_area_add_attribute                 (GtkCellLayout         *cell_layout,
                                                               GtkCellRenderer       *renderer,
-                                                              const gchar           *attribute,
-                                                              gint                   column);
+                                                              const char            *attribute,
+                                                              int                    column);
 static void      gtk_cell_area_set_cell_data_func            (GtkCellLayout         *cell_layout,
                                                               GtkCellRenderer       *cell,
                                                               GtkCellLayoutDataFunc  func,
@@ -460,7 +460,7 @@ static void      gtk_cell_area_clear_attributes              (GtkCellLayout     
                                                               GtkCellRenderer       *renderer);
 static void      gtk_cell_area_reorder                       (GtkCellLayout         *cell_layout,
                                                               GtkCellRenderer       *cell,
-                                                              gint                   position);
+                                                              int                    position);
 static GList    *gtk_cell_area_get_cells                     (GtkCellLayout         *cell_layout);
 static GtkCellArea *gtk_cell_area_get_area                   (GtkCellLayout         *cell_layout);
 
@@ -469,7 +469,7 @@ static void      gtk_cell_area_buildable_init                (GtkBuildableIface 
 static void      gtk_cell_area_buildable_custom_tag_end      (GtkBuildable          *buildable,
                                                               GtkBuilder            *builder,
                                                               GObject               *child,
-                                                              const gchar           *tagname,
+                                                              const char            *tagname,
                                                               gpointer               data);
 
 /* Used in foreach loop to check if a child renderer is present */
@@ -498,16 +498,16 @@ typedef struct {
 
 /* Used in foreach loop to get a cell by position */
 typedef struct {
-  gint             x;
-  gint             y;
+  int              x;
+  int              y;
   GtkCellRenderer *renderer;
   GdkRectangle     cell_area;
 } CellByPositionData;
 
 /* Attribute/Cell metadata */
 typedef struct {
-  const gchar *attribute;
-  gint         column;
+  const char *attribute;
+  int          column;
 } CellAttribute;
 
 typedef struct {
@@ -524,11 +524,11 @@ static CellInfo       *cell_info_new       (GtkCellLayoutDataFunc  func,
                                             GDestroyNotify         destroy);
 static void            cell_info_free      (CellInfo              *info);
 static CellAttribute  *cell_attribute_new  (GtkCellRenderer       *renderer,
-                                            const gchar           *attribute,
-                                            gint                   column);
+                                            const char            *attribute,
+                                            int                    column);
 static void            cell_attribute_free (CellAttribute         *attribute);
-static gint            cell_attribute_find (CellAttribute         *cell_attribute,
-                                            const gchar           *attribute);
+static int             cell_attribute_find (CellAttribute         *cell_attribute,
+                                            const char            *attribute);
 
 /* Internal functions/signal emissions */
 static void            gtk_cell_area_add_editable     (GtkCellArea        *area,
@@ -567,7 +567,7 @@ struct _GtkCellAreaPrivate
   /* Current path is saved as a side-effect
    * of gtk_cell_area_apply_attributes()
    */
-  gchar           *current_path;
+  char            *current_path;
 
   /* Current cell being edited and editable widget used */
   GtkCellEditable *edit_widget;
@@ -849,8 +849,8 @@ cell_info_free (CellInfo *info)
 
 static CellAttribute  *
 cell_attribute_new  (GtkCellRenderer       *renderer,
-                     const gchar           *attribute,
-                     gint                   column)
+                     const char            *attribute,
+                     int                    column)
 {
   GParamSpec *pspec;
 
@@ -880,9 +880,9 @@ cell_attribute_free (CellAttribute *attribute)
 }
 
 /* GCompareFunc for g_slist_find_custom() */
-static gint
+static int
 cell_attribute_find (CellAttribute *cell_attribute,
-                     const gchar   *attribute)
+                     const char    *attribute)
 {
   return g_strcmp0 (cell_attribute->attribute, attribute);
 }
@@ -1011,7 +1011,7 @@ gtk_cell_area_real_foreach_alloc (GtkCellArea         *area,
                g_type_name (G_TYPE_FROM_INSTANCE (area)));
 }
 
-static gint
+static int
 gtk_cell_area_real_event (GtkCellArea          *area,
                           GtkCellAreaContext   *context,
                           GtkWidget            *widget,
@@ -1306,8 +1306,8 @@ static void
 gtk_cell_area_real_get_preferred_width (GtkCellArea        *area,
 					GtkCellAreaContext *context,
 					GtkWidget          *widget,
-					gint               *minimum_width,
-					gint               *natural_width)
+					int                *minimum_width,
+					int                *natural_width)
 {
   g_warning ("GtkCellAreaClass::get_preferred_width not implemented for '%s'",
 	     g_type_name (G_TYPE_FROM_INSTANCE (area)));
@@ -1317,8 +1317,8 @@ static void
 gtk_cell_area_real_get_preferred_height (GtkCellArea        *area,
 					 GtkCellAreaContext *context,
 					 GtkWidget          *widget,
-					 gint               *minimum_height,
-					 gint               *natural_height)
+					 int                *minimum_height,
+					 int                *natural_height)
 {
   g_warning ("GtkCellAreaClass::get_preferred_height not implemented for '%s'",
 	     g_type_name (G_TYPE_FROM_INSTANCE (area)));
@@ -1328,9 +1328,9 @@ static void
 gtk_cell_area_real_get_preferred_height_for_width (GtkCellArea        *area,
                                                    GtkCellAreaContext *context,
                                                    GtkWidget          *widget,
-						   gint                width,
-                                                   gint               *minimum_height,
-                                                   gint               *natural_height)
+						   int                 width,
+                                                   int                *minimum_height,
+                                                   int                *natural_height)
 {
   /* If the area doesnt do height-for-width, fallback on base preferred height */
   GTK_CELL_AREA_GET_CLASS (area)->get_preferred_height (area, context, widget, minimum_height, natural_height);
@@ -1340,9 +1340,9 @@ static void
 gtk_cell_area_real_get_preferred_width_for_height (GtkCellArea        *area,
                                                    GtkCellAreaContext *context,
                                                    GtkWidget          *widget,
-                                                   gint                height,
-                                                   gint               *minimum_width,
-                                                   gint               *natural_width)
+                                                   int                 height,
+                                                   int                *minimum_width,
+                                                   int                *natural_width)
 {
   /* If the area doesnt do width-for-height, fallback on base preferred width */
   GTK_CELL_AREA_GET_CLASS (area)->get_preferred_width (area, context, widget, minimum_width, natural_width);
@@ -1492,8 +1492,8 @@ gtk_cell_area_clear (GtkCellLayout *cell_layout)
 static void
 gtk_cell_area_add_attribute (GtkCellLayout         *cell_layout,
                              GtkCellRenderer       *renderer,
-                             const gchar           *attribute,
-                             gint                   column)
+                             const char            *attribute,
+                             int                    column)
 {
   gtk_cell_area_attribute_connect (GTK_CELL_AREA (cell_layout),
                                    renderer, attribute, column);
@@ -1531,7 +1531,7 @@ gtk_cell_area_clear_attributes (GtkCellLayout         *cell_layout,
 static void
 gtk_cell_area_reorder (GtkCellLayout   *cell_layout,
                        GtkCellRenderer *cell,
-                       gint             position)
+                       int              position)
 {
   g_warning ("GtkCellLayout::reorder not implemented for '%s'",
              g_type_name (G_TYPE_FROM_INSTANCE (cell_layout)));
@@ -1579,7 +1579,7 @@ static void
 gtk_cell_area_buildable_custom_tag_end (GtkBuildable *buildable,
                                         GtkBuilder   *builder,
                                         GObject      *child,
-                                        const gchar  *tagname,
+                                        const char   *tagname,
                                         gpointer      data)
 {
   /* Just ignore the boolean return from here */
@@ -1747,7 +1747,7 @@ gtk_cell_area_foreach_alloc (GtkCellArea          *area,
  *
  * Returns: %TRUE if the event was handled by @area.
  */
-gint
+int
 gtk_cell_area_event (GtkCellArea          *area,
                      GtkCellAreaContext   *context,
                      GtkWidget            *widget,
@@ -1901,8 +1901,8 @@ gtk_cell_area_get_cell_at_position (GtkCellArea          *area,
                                     GtkCellAreaContext   *context,
                                     GtkWidget            *widget,
                                     const GdkRectangle   *cell_area,
-                                    gint                  x,
-                                    gint                  y,
+                                    int                   x,
+                                    int                   y,
                                     GdkRectangle         *alloc_area)
 {
   CellByPositionData data = { x, y, NULL, { 0, } };
@@ -2014,8 +2014,8 @@ void
 gtk_cell_area_get_preferred_width (GtkCellArea        *area,
                                    GtkCellAreaContext *context,
                                    GtkWidget          *widget,
-                                   gint               *minimum_width,
-                                   gint               *natural_width)
+                                   int                *minimum_width,
+                                   int                *natural_width)
 {
   g_return_if_fail (GTK_IS_CELL_AREA (area));
   g_return_if_fail (GTK_IS_WIDGET (widget));
@@ -2052,9 +2052,9 @@ void
 gtk_cell_area_get_preferred_height_for_width (GtkCellArea        *area,
                                               GtkCellAreaContext *context,
                                               GtkWidget          *widget,
-                                              gint                width,
-                                              gint               *minimum_height,
-                                              gint               *natural_height)
+                                              int                 width,
+                                              int                *minimum_height,
+                                              int                *natural_height)
 {
   GtkCellAreaClass *class;
 
@@ -2086,8 +2086,8 @@ void
 gtk_cell_area_get_preferred_height (GtkCellArea        *area,
                                     GtkCellAreaContext *context,
                                     GtkWidget          *widget,
-                                    gint               *minimum_height,
-                                    gint               *natural_height)
+                                    int                *minimum_height,
+                                    int                *natural_height)
 {
   g_return_if_fail (GTK_IS_CELL_AREA (area));
   g_return_if_fail (GTK_IS_WIDGET (widget));
@@ -2124,9 +2124,9 @@ void
 gtk_cell_area_get_preferred_width_for_height (GtkCellArea        *area,
                                               GtkCellAreaContext *context,
                                               GtkWidget          *widget,
-                                              gint                height,
-                                              gint               *minimum_width,
-                                              gint               *natural_width)
+                                              int                 height,
+                                              int                *minimum_width,
+                                              int                *natural_width)
 {
   GtkCellAreaClass *class;
 
@@ -2154,8 +2154,8 @@ gtk_cell_area_get_preferred_width_for_height (GtkCellArea        *area,
 void
 gtk_cell_area_attribute_connect (GtkCellArea        *area,
                                  GtkCellRenderer    *renderer,
-                                 const gchar        *attribute,
-                                 gint                column)
+                                 const char         *attribute,
+                                 int                 column)
 {
   GtkCellAreaPrivate *priv = gtk_cell_area_get_instance_private (area);
   CellInfo           *info;
@@ -2220,7 +2220,7 @@ gtk_cell_area_attribute_connect (GtkCellArea        *area,
 void
 gtk_cell_area_attribute_disconnect (GtkCellArea        *area,
                                     GtkCellRenderer    *renderer,
-                                    const gchar        *attribute)
+                                    const char         *attribute)
 {
   GtkCellAreaPrivate *priv = gtk_cell_area_get_instance_private (area);
   CellInfo           *info;
@@ -2260,10 +2260,10 @@ gtk_cell_area_attribute_disconnect (GtkCellArea        *area,
  *
  * Returns: the model column, or -1
  */
-gint
+int
 gtk_cell_area_attribute_get_column (GtkCellArea     *area,
                                     GtkCellRenderer *renderer,
-                                    const gchar     *attribute)
+                                    const char      *attribute)
 {
   GtkCellAreaPrivate *priv = gtk_cell_area_get_instance_private (area);
   CellInfo           *info;
@@ -2327,7 +2327,7 @@ gtk_cell_area_apply_attributes (GtkCellArea  *area,
  * attributes applied to @area. This string belongs to the area and
  * should not be freed.
  */
-const gchar *
+const char *
 gtk_cell_area_get_current_path_string (GtkCellArea *area)
 {
   GtkCellAreaPrivate *priv = gtk_cell_area_get_instance_private (area);
@@ -2388,7 +2388,7 @@ gtk_cell_area_class_install_cell_property (GtkCellAreaClass   *aclass,
  */
 GParamSpec*
 gtk_cell_area_class_find_cell_property (GtkCellAreaClass   *aclass,
-                                        const gchar        *property_name)
+                                        const char         *property_name)
 {
   g_return_val_if_fail (GTK_IS_CELL_AREA_CLASS (aclass), NULL);
   g_return_val_if_fail (property_name != NULL, NULL);
@@ -2442,7 +2442,7 @@ gtk_cell_area_class_list_cell_properties (GtkCellAreaClass  *aclass,
 void
 gtk_cell_area_add_with_properties (GtkCellArea        *area,
                                    GtkCellRenderer    *renderer,
-                                   const gchar        *first_prop_name,
+                                   const char         *first_prop_name,
                                    ...)
 {
   GtkCellAreaClass *class;
@@ -2480,7 +2480,7 @@ gtk_cell_area_add_with_properties (GtkCellArea        *area,
 void
 gtk_cell_area_cell_set (GtkCellArea        *area,
                         GtkCellRenderer    *renderer,
-                        const gchar        *first_prop_name,
+                        const char         *first_prop_name,
                         ...)
 {
   va_list var_args;
@@ -2506,7 +2506,7 @@ gtk_cell_area_cell_set (GtkCellArea        *area,
 void
 gtk_cell_area_cell_get (GtkCellArea        *area,
                         GtkCellRenderer    *renderer,
-                        const gchar        *first_prop_name,
+                        const char         *first_prop_name,
                         ...)
 {
   va_list var_args;
@@ -2548,7 +2548,7 @@ area_set_cell_property (GtkCellArea     *area,
                G_VALUE_TYPE_NAME (value));
   else if (g_param_value_validate (pspec, &tmp_value) && !(pspec->flags & G_PARAM_LAX_VALIDATION))
     {
-      gchar *contents = g_strdup_value_contents (value);
+      char *contents = g_strdup_value_contents (value);
 
       g_warning ("value \"%s\" of type '%s' is invalid for property '%s' of type '%s'",
                  contents,
@@ -2577,10 +2577,10 @@ area_set_cell_property (GtkCellArea     *area,
 void
 gtk_cell_area_cell_set_valist (GtkCellArea        *area,
                                GtkCellRenderer    *renderer,
-                               const gchar        *first_property_name,
+                               const char         *first_property_name,
                                va_list             var_args)
 {
-  const gchar *name;
+  const char *name;
 
   g_return_if_fail (GTK_IS_CELL_AREA (area));
   g_return_if_fail (GTK_IS_CELL_RENDERER (renderer));
@@ -2589,7 +2589,7 @@ gtk_cell_area_cell_set_valist (GtkCellArea        *area,
   while (name)
     {
       GValue value = G_VALUE_INIT;
-      gchar *error = NULL;
+      char *error = NULL;
       GParamSpec *pspec =
         g_param_spec_pool_lookup (cell_property_pool, name,
                                   G_OBJECT_TYPE (area), TRUE);
@@ -2620,7 +2620,7 @@ gtk_cell_area_cell_set_valist (GtkCellArea        *area,
         }
       area_set_cell_property (area, renderer, pspec, &value);
       g_value_unset (&value);
-      name = va_arg (var_args, gchar*);
+      name = va_arg (var_args, char *);
     }
 }
 
@@ -2637,10 +2637,10 @@ gtk_cell_area_cell_set_valist (GtkCellArea        *area,
 void
 gtk_cell_area_cell_get_valist (GtkCellArea        *area,
                                GtkCellRenderer    *renderer,
-                               const gchar        *first_property_name,
+                               const char         *first_property_name,
                                va_list             var_args)
 {
-  const gchar *name;
+  const char *name;
 
   g_return_if_fail (GTK_IS_CELL_AREA (area));
   g_return_if_fail (GTK_IS_CELL_RENDERER (renderer));
@@ -2650,7 +2650,7 @@ gtk_cell_area_cell_get_valist (GtkCellArea        *area,
     {
       GValue value = G_VALUE_INIT;
       GParamSpec *pspec;
-      gchar *error;
+      char *error;
 
       pspec = g_param_spec_pool_lookup (cell_property_pool, name,
                                         G_OBJECT_TYPE (area), TRUE);
@@ -2678,7 +2678,7 @@ gtk_cell_area_cell_get_valist (GtkCellArea        *area,
           break;
         }
       g_value_unset (&value);
-      name = va_arg (var_args, gchar*);
+      name = va_arg (var_args, char *);
     }
 }
 
@@ -2694,7 +2694,7 @@ gtk_cell_area_cell_get_valist (GtkCellArea        *area,
 void
 gtk_cell_area_cell_set_property (GtkCellArea        *area,
                                  GtkCellRenderer    *renderer,
-                                 const gchar        *property_name,
+                                 const char         *property_name,
                                  const GValue       *value)
 {
   GParamSpec *pspec;
@@ -2730,7 +2730,7 @@ gtk_cell_area_cell_set_property (GtkCellArea        *area,
 void
 gtk_cell_area_cell_get_property (GtkCellArea        *area,
                                  GtkCellRenderer    *renderer,
-                                 const gchar        *property_name,
+                                 const char         *property_name,
                                  GValue             *value)
 {
   GParamSpec *pspec;
@@ -3454,9 +3454,9 @@ gtk_cell_area_request_renderer (GtkCellArea        *area,
                                 GtkCellRenderer    *renderer,
                                 GtkOrientation      orientation,
                                 GtkWidget          *widget,
-                                gint                for_size,
-                                gint               *minimum_size,
-                                gint               *natural_size)
+                                int                 for_size,
+                                int                *minimum_size,
+                                int                *natural_size)
 {
   GtkBorder border;
   GtkStyleContext *context;

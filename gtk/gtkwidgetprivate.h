@@ -131,7 +131,7 @@ struct _GtkWidgetPrivate
    * Among other things, the widget name is used to determine
    * the style to use for a widget.
    */
-  gchar *name;
+  char *name;
 
   /* The root this widget belongs to or %NULL if widget is not
    * rooted or is a #GtkRoot itself.
@@ -150,7 +150,7 @@ struct _GtkWidgetPrivate
   GskTransform *allocated_transform;
   int allocated_width;
   int allocated_height;
-  gint allocated_size_baseline;
+  int allocated_size_baseline;
 
   GskTransform *transform;
   int width;
@@ -289,8 +289,8 @@ GtkEventController **gtk_widget_list_controllers           (GtkWidget           
                                                             guint               *out_n_controllers);
 
 gboolean          gtk_widget_query_tooltip                 (GtkWidget  *widget,
-                                                            gint        x,
-                                                            gint        y,
+                                                            int         x,
+                                                            int         y,
                                                             gboolean    keyboard_mode,
                                                             GtkTooltip *tooltip);
 
@@ -298,11 +298,11 @@ void              gtk_widget_snapshot                      (GtkWidget           
                                                             GtkSnapshot          *snapshot);
 void              gtk_widget_adjust_size_request           (GtkWidget      *widget,
                                                             GtkOrientation  orientation,
-                                                            gint           *minimum_size,
-                                                            gint           *natural_size);
+                                                            int            *minimum_size,
+                                                            int            *natural_size);
 void              gtk_widget_adjust_baseline_request       (GtkWidget *widget,
-                                                            gint      *minimum_baseline,
-                                                            gint      *natural_baseline);
+                                                            int       *minimum_baseline,
+                                                            int       *natural_baseline);
 
 void              gtk_widget_forall                        (GtkWidget            *widget,
                                                             GtkCallback           callback,

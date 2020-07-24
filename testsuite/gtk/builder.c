@@ -43,9 +43,9 @@ _BUILDER_TEST_EXPORT void signal_extra2 (GtkButton *button, GParamSpec *spec);
 
 
 static GtkBuilder *
-builder_new_from_string (const gchar *buffer,
+builder_new_from_string (const char *buffer,
                          gsize length,
-                         const gchar *domain)
+                         const char *domain)
 {
   GtkBuilder *builder;
   GError *error = NULL;
@@ -202,7 +202,7 @@ test_connect_signals (void)
 {
   GtkBuilder *builder;
   GObject *window;
-  const gchar buffer[] =
+  const char buffer[] =
     "<interface>"
     "  <object class=\"GtkButton\" id=\"button\"/>"
     "  <object class=\"GtkWindow\" id=\"window1\">"
@@ -214,26 +214,26 @@ test_connect_signals (void)
     "            object=\"button\" after=\"yes\"/>"
     "  </object>"
     "</interface>";
-  const gchar buffer_order[] =
+  const char buffer_order[] =
     "<interface>"
     "  <object class=\"GtkWindow\" id=\"window1\">"
     "    <signal name=\"notify::title\" handler=\"signal_first\"/>"
     "    <signal name=\"notify::title\" handler=\"signal_second\"/>"
     "  </object>"
     "</interface>";
-  const gchar buffer_extra[] =
+  const char buffer_extra[] =
     "<interface>"
     "  <object class=\"GtkWindow\" id=\"window2\">"
     "    <signal name=\"notify::title\" handler=\"signal_extra\"/>"
     "  </object>"
     "</interface>";
-  const gchar buffer_extra2[] =
+  const char buffer_extra2[] =
     "<interface>"
     "  <object class=\"GtkWindow\" id=\"window3\">"
     "    <signal name=\"notify::title\" handler=\"signal_extra2\"/>"
     "  </object>"
     "</interface>";
-  const gchar buffer_after_child[] =
+  const char buffer_after_child[] =
     "<interface>"
     "  <object class=\"GtkWindow\" id=\"window1\">"
     "    <child>"
@@ -297,9 +297,9 @@ static void
 test_domain (void)
 {
   GtkBuilder *builder;
-  const gchar buffer1[] = "<interface/>";
-  const gchar buffer2[] = "<interface domain=\"domain\"/>";
-  const gchar *domain;
+  const char buffer1[] = "<interface/>";
+  const char buffer2[] = "<interface domain=\"domain\"/>";
+  const char *domain;
   
   builder = builder_new_from_string (buffer1, -1, NULL);
   domain = gtk_builder_get_translation_domain (builder);
@@ -323,7 +323,7 @@ static void
 test_translation (void)
 {
   GtkBuilder *builder;
-  const gchar buffer[] =
+  const char buffer[] =
     "<interface>"
     "  <object class=\"GtkWindow\" id=\"window1\">"
     "    <child>"
@@ -353,7 +353,7 @@ static void
 test_sizegroup (void)
 {
   GtkBuilder * builder;
-  const gchar buffer1[] =
+  const char buffer1[] =
     "<interface domain=\"test\">"
     "  <object class=\"GtkSizeGroup\" id=\"sizegroup1\">"
     "    <property name=\"mode\">horizontal</property>"
@@ -376,7 +376,7 @@ test_sizegroup (void)
     "    </child>"
     "  </object>"
     "</interface>";
-  const gchar buffer2[] =
+  const char buffer2[] =
     "<interface domain=\"test\">"
     "  <object class=\"GtkSizeGroup\" id=\"sizegroup1\">"
     "    <property name=\"mode\">horizontal</property>"
@@ -384,7 +384,7 @@ test_sizegroup (void)
     "    </widgets>"
     "   </object>"
     "</interface>";
-  const gchar buffer3[] =
+  const char buffer3[] =
     "<interface domain=\"test\">"
     "  <object class=\"GtkSizeGroup\" id=\"sizegroup1\">"
     "    <property name=\"mode\">horizontal</property>"
@@ -454,7 +454,7 @@ test_sizegroup (void)
 static void
 test_list_store (void)
 {
-  const gchar buffer1[] =
+  const char buffer1[] =
     "<interface>"
     "  <object class=\"GtkListStore\" id=\"liststore1\">"
     "    <columns>"
@@ -513,7 +513,7 @@ test_list_store (void)
   GtkBuilder *builder;
   GObject *store;
   GtkTreeIter iter;
-  gchar *surname, *lastname;
+  char *surname, *lastname;
   int age;
   
   builder = builder_new_from_string (buffer1, -1, NULL);
@@ -613,7 +613,7 @@ test_list_store (void)
 static void
 test_tree_store (void)
 {
-  const gchar buffer[] =
+  const char buffer[] =
     "<interface domain=\"test\">"
     "  <object class=\"GtkTreeStore\" id=\"treestore1\">"
     "    <columns>"
@@ -637,7 +637,7 @@ test_tree_store (void)
 static void
 test_types (void)
 {
-  const gchar buffer[] = 
+  const char buffer[] = 
     "<interface>"
     "  <object class=\"GtkBox\" id=\"box\"/>"
     "  <object class=\"GtkButton\" id=\"button\"/>"
@@ -663,19 +663,19 @@ test_types (void)
     "  <object class=\"GtkViewport\" id=\"viewport\"/>"
     "  <object class=\"GtkWindow\" id=\"window\"/>"
     "</interface>";
-  const gchar buffer2[] = 
+  const char buffer2[] = 
     "<interface>"
     "  <object class=\"GtkWindow\" type-func=\"gtk_window_get_type\" id=\"window\"/>"
     "</interface>";
-  const gchar buffer3[] = 
+  const char buffer3[] = 
     "<interface>"
     "  <object class=\"XXXInvalidType\" type-func=\"gtk_window_get_type\" id=\"window\"/>"
     "</interface>";
-  const gchar buffer4[] =
+  const char buffer4[] =
     "<interface>"
     "  <object class=\"GtkWindow\" type-func=\"xxx_invalid_get_type_function\" id=\"window\"/>"
     "</interface>";
-  const gchar buffer5[] =
+  const char buffer5[] =
     "<interface>"
     "  <object type-func=\"gtk_window_get_type\" id=\"window\"/>"
     "</interface>";
@@ -719,7 +719,7 @@ static void
 test_spin_button (void)
 {
   GtkBuilder *builder;
-  const gchar buffer[] =
+  const char buffer[] =
     "<interface>"
     "<object class=\"GtkAdjustment\" id=\"adjustment1\">"
     "<property name=\"lower\">0</property>"
@@ -736,7 +736,7 @@ test_spin_button (void)
     "</interface>";
   GObject *obj;
   GtkAdjustment *adjustment;
-  gdouble value;
+  double value;
   
   builder = builder_new_from_string (buffer, -1, NULL);
   obj = gtk_builder_get_object (builder, "spinbutton1");
@@ -763,7 +763,7 @@ static void
 test_notebook (void)
 {
   GtkBuilder *builder;
-  const gchar buffer[] =
+  const char buffer[] =
     "<interface>"
     "  <object class=\"GtkNotebook\" id=\"notebook1\">"
     "    <child>"
@@ -825,13 +825,13 @@ static void
 test_construct_only_property (void)
 {
   GtkBuilder *builder;
-  const gchar buffer[] =
+  const char buffer[] =
     "<interface>"
     "  <object class=\"GtkWindow\" id=\"window1\">"
     "    <property name=\"css-name\">amazing</property>"
     "  </object>"
     "</interface>";
-  const gchar buffer2[] =
+  const char buffer2[] =
     "<interface>"
     "  <object class=\"GtkTextTagTable\" id=\"tagtable1\"/>"
     "  <object class=\"GtkTextBuffer\" id=\"textbuffer1\">"
@@ -860,7 +860,7 @@ static void
 test_object_properties (void)
 {
   GtkBuilder *builder;
-  const gchar buffer[] =
+  const char buffer[] =
     "<interface>"
     "  <object class=\"GtkWindow\" id=\"window1\">"
     "    <child>"
@@ -878,7 +878,7 @@ test_object_properties (void)
     "    </child>"
     "  </object>"
     "</interface>";
-  const gchar buffer2[] =
+  const char buffer2[] =
     "<interface>"
     "  <object class=\"GtkWindow\" id=\"window2\"/>"
     "</interface>";
@@ -904,7 +904,7 @@ test_children (void)
 {
   GtkBuilder * builder;
   GtkWidget *content_area;
-  const gchar buffer1[] =
+  const char buffer1[] =
     "<interface>"
     "  <object class=\"GtkWindow\" id=\"window1\">"
     "    <child>"
@@ -914,7 +914,7 @@ test_children (void)
     "    </child>"
     "  </object>"
     "</interface>";
-  const gchar buffer2[] =
+  const char buffer2[] =
     "<interface>"
     "  <object class=\"GtkDialog\" id=\"dialog1\">"
     "    <property name=\"use_header_bar\">1</property>"
@@ -982,7 +982,7 @@ static void
 test_layout_properties (void)
 {
   GtkBuilder * builder;
-  const gchar buffer1[] =
+  const char buffer1[] =
     "<interface>"
     "  <object class=\"GtkGrid\" id=\"grid1\">"
     "    <child>"
@@ -1021,7 +1021,7 @@ static void
 test_treeview_column (void)
 {
   GtkBuilder *builder;
-  const gchar buffer[] =
+  const char buffer[] =
     "<interface>"
     "<object class=\"GtkListStore\" id=\"liststore1\">"
     "  <columns>"
@@ -1096,7 +1096,7 @@ static void
 test_icon_view (void)
 {
   GtkBuilder *builder;
-  const gchar buffer[] =
+  const char buffer[] =
     "<interface>"
     "  <object class=\"GtkListStore\" id=\"liststore1\">"
     "    <columns>"
@@ -1142,7 +1142,7 @@ static void
 test_combo_box (void)
 {
   GtkBuilder *builder;
-  const gchar buffer[] =
+  const char buffer[] =
     "<interface>"
     "  <object class=\"GtkListStore\" id=\"liststore1\">"
     "    <columns>"
@@ -1198,7 +1198,7 @@ static void
 test_combo_box_entry (void)
 {
   GtkBuilder *builder;
-  const gchar buffer[] =
+  const char buffer[] =
     "<interface>"
     "  <object class=\"GtkListStore\" id=\"liststore1\">"
     "    <columns>"
@@ -1239,7 +1239,7 @@ test_combo_box_entry (void)
     "  </object>"
     "</interface>";
   GObject *window, *combobox, *renderer;
-  gchar *text;
+  char *text;
 
   builder = builder_new_from_string (buffer, -1, NULL);
   combobox = gtk_builder_get_object (builder, "comboboxentry1");
@@ -1270,7 +1270,7 @@ static void
 test_cell_view (void)
 {
   GtkBuilder *builder;
-  const gchar *buffer =
+  const char *buffer =
     "<interface>"
     "  <object class=\"GtkListStore\" id=\"liststore1\">"
     "    <columns>"
@@ -1329,7 +1329,7 @@ static void
 test_dialog (void)
 {
   GtkBuilder * builder;
-  const gchar buffer1[] =
+  const char buffer1[] =
     "<interface>"
     "  <object class=\"GtkDialog\" id=\"dialog1\">"
     "    <child internal-child=\"content_area\">"
@@ -1374,7 +1374,7 @@ static void
 test_message_dialog (void)
 {
   GtkBuilder * builder;
-  const gchar buffer1[] =
+  const char buffer1[] =
     "<interface>"
     "  <object class=\"GtkMessageDialog\" id=\"dialog1\">"
     "    <child internal-child=\"message_area\">"
@@ -1404,7 +1404,7 @@ test_message_dialog (void)
 static void
 test_widget (void)
 {
-  const gchar *buffer =
+  const char *buffer =
     "<interface>"
     "  <object class=\"GtkWindow\" id=\"window1\">"
     "    <property name=\"focus-widget\">button1</property>"
@@ -1414,7 +1414,7 @@ test_widget (void)
     "    </child>"
     "  </object>"
    "</interface>";
-  const gchar *buffer2 =
+  const char *buffer2 =
     "<interface>"
     "  <object class=\"GtkWindow\" id=\"window1\">"
     "    <child>"
@@ -1424,7 +1424,7 @@ test_widget (void)
     "    </child>"
     "  </object>"
    "</interface>";
-  const gchar *buffer3 =
+  const char *buffer3 =
     "<interface>"
     "  <object class=\"GtkWindow\" id=\"window1\">"
     "    <child>"
@@ -1454,7 +1454,7 @@ test_widget (void)
     "    </child>"
     "  </object>"
     "</interface>";
-  const gchar *buffer4 =
+  const char *buffer4 =
     "<interface>"
     "  <object class=\"GtkWindow\" id=\"window1\">"
     "    <child>"
@@ -1523,20 +1523,20 @@ test_widget (void)
 static void
 test_window (void)
 {
-  const gchar *buffer1 =
+  const char *buffer1 =
     "<interface>"
     "  <object class=\"GtkWindow\" id=\"window1\">"
     "     <property name=\"title\"></property>"
     "  </object>"
    "</interface>";
-  const gchar *buffer2 =
+  const char *buffer2 =
     "<interface>"
     "  <object class=\"GtkWindow\" id=\"window1\">"
     "  </object>"
    "</interface>";
   GtkBuilder *builder;
   GObject *window1;
-  gchar *title;
+  char *title;
   
   builder = builder_new_from_string (buffer1, -1, NULL);
   window1 = gtk_builder_get_object (builder, "window1");
@@ -1700,7 +1700,7 @@ static void
 test_reference_counting (void)
 {
   GtkBuilder *builder;
-  const gchar buffer1[] =
+  const char buffer1[] =
     "<interface>"
     "  <object class=\"GtkListStore\" id=\"liststore1\"/>"
     "  <object class=\"GtkListStore\" id=\"liststore2\"/>"
@@ -1712,7 +1712,7 @@ test_reference_counting (void)
     "    </child>"
     "  </object>"
     "</interface>";
-  const gchar buffer2[] =
+  const char buffer2[] =
     "<interface>"
     "  <object class=\"GtkBox\" id=\"vbox1\">"
     "        <property name=\"orientation\">vertical</property>"
@@ -1782,7 +1782,7 @@ test_pango_attributes (void)
 {
   GtkBuilder *builder;
   FoundAttrs found = { 0, };
-  const gchar buffer[] =
+  const char buffer[] =
     "<interface>"
     "  <object class=\"GtkLabel\" id=\"label1\">"
     "    <attributes>"
@@ -1795,7 +1795,7 @@ test_pango_attributes (void)
     "    </attributes>"
     "  </object>"
     "</interface>";
-  const gchar err_buffer1[] =
+  const char err_buffer1[] =
     "<interface>"
     "  <object class=\"GtkLabel\" id=\"label1\">"
     "    <attributes>"
@@ -1803,7 +1803,7 @@ test_pango_attributes (void)
     "    </attributes>"
     "  </object>"
     "</interface>";
-  const gchar err_buffer2[] =
+  const char err_buffer2[] =
     "<interface>"
     "  <object class=\"GtkLabel\" id=\"label1\">"
     "    <attributes>"
@@ -1860,8 +1860,8 @@ test_requires (void)
 {
   GtkBuilder *builder;
   GError     *error = NULL;
-  gchar      *buffer;
-  const gchar buffer_fmt[] =
+  char       *buffer;
+  const char buffer_fmt[] =
     "<interface>"
     "  <requires lib=\"gtk+\" version=\"%d.%d\"/>"
     "</interface>";
@@ -1880,11 +1880,11 @@ test_add_objects (void)
 {
   GtkBuilder *builder;
   GError *error;
-  gint ret;
+  int ret;
   GObject *obj;
-  const gchar *objects[2] = {"mainbox", NULL};
-  const gchar *objects2[3] = {"mainbox", "window2", NULL};
-  const gchar buffer[] =
+  const char *objects[2] = {"mainbox", NULL};
+  const char *objects2[3] = {"mainbox", "window2", NULL};
+  const char buffer[] =
     "<interface>"
     "  <object class=\"GtkWindow\" id=\"window\">"
     "    <child>"
@@ -1947,7 +1947,7 @@ test_message_area (void)
 {
   GtkBuilder *builder;
   GObject *obj, *obj1;
-  const gchar buffer[] =
+  const char buffer[] =
     "<interface>"
     "  <object class=\"GtkInfoBar\" id=\"infobar1\">"
     "    <child>"
@@ -1988,7 +1988,7 @@ test_gmenu (void)
 {
   GtkBuilder *builder;
   GObject *obj, *obj1;
-  const gchar buffer[] =
+  const char buffer[] =
     "<interface>"
     "  <object class=\"GtkWindow\" id=\"window\">"
     "  </object>"
@@ -2062,7 +2062,7 @@ test_level_bar (void)
   GtkBuilder *builder;
   GError *error = NULL;
   GObject *obj, *obj1;
-  const gchar buffer1[] =
+  const char buffer1[] =
     "<interface>"
     "  <object class=\"GtkWindow\" id=\"window\">"
     "    <child>"
@@ -2079,7 +2079,7 @@ test_level_bar (void)
     "    </child>"
     "  </object>"
     "</interface>";
-  const gchar buffer2[] =
+  const char buffer2[] =
     "<interface>"
     "  <object class=\"GtkLevelBar\" id=\"levelbar\">"
     "    <offsets>"
@@ -2087,7 +2087,7 @@ test_level_bar (void)
     "    </offsets>"
     "  </object>"
     "</interface>";
-  const gchar buffer3[] =
+  const char buffer3[] =
     "<interface>"
     "  <object class=\"GtkLevelBar\" id=\"levelbar\">"
     "    <offsets>"
@@ -2130,7 +2130,7 @@ test_expose_object (void)
   GError *error = NULL;
   GtkWidget *menu;
   GObject *obj;
-  const gchar buffer[] =
+  const char buffer[] =
     "<interface>"
     "  <object class=\"GtkMenuButton\" id=\"button\">"
     "    <property name=\"popover\">external_menu</property>"
@@ -2159,7 +2159,7 @@ test_no_ids (void)
   GtkBuilder *builder;
   GError *error = NULL;
   GObject *obj;
-  const gchar buffer[] =
+  const char buffer[] =
     "<interface>"
     "  <object class=\"GtkInfoBar\">"
     "    <child>"
@@ -2196,7 +2196,7 @@ test_no_ids (void)
 static void
 test_property_bindings (void)
 {
-  const gchar *buffer =
+  const char *buffer =
     "<interface>"
     "  <object class=\"GtkWindow\" id=\"window\">"
     "    <child>"
@@ -2339,7 +2339,7 @@ static void
 test_anaconda_signal (void)
 {
   GtkBuilder *builder;
-  const gchar buffer[] = 
+  const char buffer[] = 
     "<?xml version='1.0' encoding='UTF-8'?>"
     "<!-- Generated with glade 3.18.3 -->"
     "<interface>"
@@ -2388,7 +2388,7 @@ test_file_filter (void)
   GObject *obj;
   GtkFileFilter *filter;
 
-  const gchar buffer[] =
+  const char buffer[] =
     "<interface>"
     "  <object class='GtkFileFilter' id='filter1'>"
     "    <property name='name'>Text and Images</property>"
@@ -2447,7 +2447,7 @@ static void
 test_transforms (void)
 {
   GtkBuilder * builder;
-  const gchar buffer1[] =
+  const char buffer1[] =
     "<interface>"
     "  <object class=\"GtkFixed\" id=\"fixed1\">"
     "    <child>"

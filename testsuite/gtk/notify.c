@@ -40,8 +40,8 @@ assert_notifies (GObject    *object,
 
 typedef struct
 {
-  const gchar *name;
-  gint count;
+  const char *name;
+  int count;
 } NotifyData;
 
 static void
@@ -64,12 +64,12 @@ check_property (GObject *instance, GParamSpec *pspec)
   if (G_TYPE_IS_ENUM (pspec->value_type))
     {
       GEnumClass *class;
-      gint i;
+      int i;
       NotifyData data;
       gulong id;
-      gint first;
-      gint value;
-      gint current_count;
+      int first;
+      int value;
+      int current_count;
 
       class = g_type_class_ref (pspec->value_type);
 
@@ -103,11 +103,11 @@ check_property (GObject *instance, GParamSpec *pspec)
   else if (G_TYPE_IS_FLAGS (pspec->value_type))
     {
       GFlagsClass *class;
-      gint i;
+      int i;
       NotifyData data;
       gulong id;
       guint value;
-      gint current_count;
+      int current_count;
 
       class = g_type_class_ref (pspec->value_type);
 
@@ -165,11 +165,11 @@ check_property (GObject *instance, GParamSpec *pspec)
   else if (pspec->value_type == G_TYPE_INT)
     {
       GParamSpecInt *p = G_PARAM_SPEC_INT (pspec);
-      gint i;
+      int i;
       NotifyData data;
       gulong id;
-      gint value;
-      gint current_count;
+      int value;
+      int current_count;
 
       data.name = pspec->name;
       data.count = 0;
@@ -202,7 +202,7 @@ check_property (GObject *instance, GParamSpec *pspec)
       NotifyData data;
       gulong id;
       guint value;
-      gint current_count;
+      int current_count;
       guint minimum, maximum;
 
       if (G_IS_PARAM_SPEC_UINT (pspec))
@@ -245,8 +245,8 @@ check_property (GObject *instance, GParamSpec *pspec)
     {
       NotifyData data;
       gulong id;
-      gchar *value;
-      gchar *new_value;
+      char *value;
+      char *new_value;
 
       data.name = pspec->name;
       data.count = 0;
@@ -272,10 +272,10 @@ check_property (GObject *instance, GParamSpec *pspec)
       guint i;
       NotifyData data;
       gulong id;
-      gdouble value;
-      gdouble new_value;
-      gint current_count;
-      gdouble delta;
+      double value;
+      double new_value;
+      int current_count;
+      double delta;
 
       data.name = pspec->name;
       data.count = 0;
@@ -313,9 +313,9 @@ check_property (GObject *instance, GParamSpec *pspec)
       guint i;
       NotifyData data;
       gulong id;
-      gfloat value;
-      gfloat new_value;
-      gint current_count;
+      float value;
+      float new_value;
+      int current_count;
 
       data.name = pspec->name;
       data.count = 0;
@@ -678,7 +678,7 @@ main (int argc, char **argv)
 {
   const GType *otypes;
   guint i;
-  gint result;
+  int result;
 
   gtk_test_init (&argc, &argv);
   gtk_test_register_all_types();
@@ -686,7 +686,7 @@ main (int argc, char **argv)
   otypes = gtk_test_list_all_types (NULL);
   for (i = 0; otypes[i]; i++)
     {
-      gchar *testname;
+      char *testname;
 
       testname = g_strdup_printf ("/Notification/%s", g_type_name (otypes[i]));
       g_test_add_data_func (testname, &otypes[i], test_type);

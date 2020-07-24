@@ -91,7 +91,7 @@ struct _GtkTextAppearance
   GdkRGBA *strikethrough_rgba;
 
   /* super/subscript rise, can be negative */
-  gint rise;
+  int rise;
 
   guint underline : 4;          /* PangoUnderline */
   guint overline  : 2;          /* PangoOverline */
@@ -152,15 +152,15 @@ struct _GtkTextAttributes
 
   PangoFontDescription *font;
 
-  gdouble font_scale;
+  double font_scale;
 
-  gint left_margin;
-  gint right_margin;
-  gint indent;
+  int left_margin;
+  int right_margin;
+  int indent;
 
-  gint pixels_above_lines;
-  gint pixels_below_lines;
-  gint pixels_inside_wrap;
+  int pixels_above_lines;
+  int pixels_below_lines;
+  int pixels_inside_wrap;
 
   PangoTabArray *tabs;
 
@@ -174,14 +174,14 @@ struct _GtkTextAttributes
   guint no_fallback: 1;
   guint no_breaks : 1;
   guint show_spaces : 3; /* PangoShowFlags */
-  gint  no_hyphens : 1;
+  int   no_hyphens : 1;
 
 
   GdkRGBA *pg_bg_rgba;
 
-  gint letter_spacing;
+  int letter_spacing;
 
-  gchar *font_features;
+  char *font_features;
 };
 
 GDK_AVAILABLE_IN_ALL

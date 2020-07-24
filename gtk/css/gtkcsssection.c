@@ -23,7 +23,7 @@
 
 struct _GtkCssSection
 {
-  gint                ref_count;
+  int                 ref_count;
   GtkCssSection      *parent;
   GFile              *file;
   GtkCssLocation      start_location;

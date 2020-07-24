@@ -455,7 +455,7 @@ gdk_gl_context_push_debug_group_printf (GdkGLContext *context,
                                         ...)
 {
   GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (context);
-  gchar *message;
+  char *message;
   va_list args;
 
   if (priv->use_khr_debug)
@@ -501,7 +501,7 @@ gdk_gl_context_label_object_printf  (GdkGLContext *context,
                                      ...)
 {
   GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (context);
-  gchar *message;
+  char *message;
   va_list args;
 
   if (priv->use_khr_debug)

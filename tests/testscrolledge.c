@@ -23,10 +23,10 @@ static guint add_rows_id = 0;
 static void
 populate_list (GtkListBox *list)
 {
-  gint i;
-  gchar *text;
+  int i;
+  char *text;
   GtkWidget *row, *label;
-  gint n;
+  int n;
   GtkWidget *child;
 
   for (child = gtk_widget_get_first_child (GTK_WIDGET (list)), n = 0;

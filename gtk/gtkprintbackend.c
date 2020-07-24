@@ -132,9 +132,9 @@ gtk_print_backend_load_modules (void)
 {
   GList *result;
   GtkPrintBackend *backend;
-  gchar *setting;
-  gchar **backends;
-  gint i;
+  char *setting;
+  char **backends;
+  int i;
   GtkSettings *settings;
   GIOExtensionPoint *ep;
 
@@ -183,16 +183,16 @@ static void                 fallback_printer_request_details       (GtkPrinter  
 static gboolean             fallback_printer_mark_conflicts        (GtkPrinter          *printer,
 								    GtkPrinterOptionSet *options);
 static gboolean             fallback_printer_get_hard_margins      (GtkPrinter          *printer,
-                                                                    gdouble             *top,
-                                                                    gdouble             *bottom,
-                                                                    gdouble             *left,
-                                                                    gdouble             *right);
+                                                                    double              *top,
+                                                                    double              *bottom,
+                                                                    double              *left,
+                                                                    double              *right);
 static gboolean             fallback_printer_get_hard_margins_for_paper_size (GtkPrinter          *printer,
 									      GtkPaperSize        *paper_size,
-									      gdouble             *top,
-									      gdouble             *bottom,
-									      gdouble             *left,
-									      gdouble             *right);
+									      double              *top,
+									      double              *bottom,
+									      double              *left,
+									      double              *right);
 static GList *              fallback_printer_list_papers           (GtkPrinter          *printer);
 static GtkPageSetup *       fallback_printer_get_default_page_size (GtkPrinter          *printer);
 static GtkPrintCapabilities fallback_printer_get_capabilities      (GtkPrinter          *printer);
@@ -201,7 +201,7 @@ static void                 request_password                       (GtkPrintBack
                                                                     gpointer             auth_info_default,
                                                                     gpointer             auth_info_display,
                                                                     gpointer             auth_info_visible,
-                                                                    const gchar         *prompt,
+                                                                    const char          *prompt,
                                                                     gboolean             can_store_auth_info);
 
 static void
@@ -380,10 +380,10 @@ fallback_printer_mark_conflicts (GtkPrinter          *printer,
 
 static gboolean
 fallback_printer_get_hard_margins (GtkPrinter *printer,
-				   gdouble    *top,
-				   gdouble    *bottom,
-				   gdouble    *left,
-				   gdouble    *right)
+				   double     *top,
+				   double     *bottom,
+				   double     *left,
+				   double     *right)
 {
   return FALSE;
 }
@@ -391,10 +391,10 @@ fallback_printer_get_hard_margins (GtkPrinter *printer,
 static gboolean
 fallback_printer_get_hard_margins_for_paper_size (GtkPrinter   *printer,
 						  GtkPaperSize *paper_size,
-						  gdouble      *top,
-						  gdouble      *bottom,
-						  gdouble      *left,
-						  gdouble      *right)
+						  double       *top,
+						  double       *bottom,
+						  double       *left,
+						  double       *right)
 {
   return FALSE;
 }
@@ -506,7 +506,7 @@ gtk_print_backend_printer_list_is_done (GtkPrintBackend *backend)
 
 GtkPrinter *
 gtk_print_backend_find_printer (GtkPrintBackend *backend,
-                                const gchar     *printer_name)
+                                const char      *printer_name)
 {
   GtkPrinter *result = NULL;
   guint i;
@@ -544,8 +544,8 @@ gtk_print_backend_print_stream (GtkPrintBackend        *backend,
 
 void 
 gtk_print_backend_set_password (GtkPrintBackend  *backend,
-                                gchar           **auth_info_required,
-                                gchar           **auth_info,
+                                char            **auth_info_required,
+                                char            **auth_info,
                                 gboolean          store_auth_info)
 {
   g_return_if_fail (GTK_IS_PRINT_BACKEND (backend));
@@ -569,7 +569,7 @@ static void
 store_entry (GtkEntry  *entry,
              gpointer   user_data)
 {
-  gchar **data = (gchar **) user_data;
+  char **data = (char **) user_data;
 
   if (*data != NULL)
     {
@@ -582,11 +582,11 @@ store_entry (GtkEntry  *entry,
 
 static void
 password_dialog_response (GtkWidget       *dialog,
-                          gint             response_id,
+                          int              response_id,
                           GtkPrintBackend *backend)
 {
   GtkPrintBackendPrivate *priv = backend->priv;
-  gint i, auth_info_len;
+  int i, auth_info_len;
 
   if (response_id == GTK_RESPONSE_OK)
     gtk_print_backend_set_password (backend, priv->auth_info_required, priv->auth_info, priv->store_auth_info);
@@ -619,24 +619,24 @@ request_password (GtkPrintBackend  *backend,
                   gpointer          auth_info_default,
                   gpointer          auth_info_display,
                   gpointer          auth_info_visible,
-                  const gchar      *prompt,
+                  const char       *prompt,
                   gboolean          can_store_auth_info)
 {
   GtkPrintBackendPrivate *priv = backend->priv;
   GtkWidget *dialog, *box, *main_box, *label, *icon, *vbox, *entry, *chkbtn;
   GtkWidget *focus = NULL;
   GtkWidget *content_area;
-  gchar     *markup;
-  gint       length;
-  gint       i;
-  gchar    **ai_required = (gchar **) auth_info_required;
-  gchar    **ai_default = (gchar **) auth_info_default;
-  gchar    **ai_display = (gchar **) auth_info_display;
+  char      *markup;
+  int        length;
+  int        i;
+  char     **ai_required = (char **) auth_info_required;
+  char     **ai_default = (char **) auth_info_default;
+  char     **ai_display = (char **) auth_info_display;
   gboolean  *ai_visible = (gboolean *) auth_info_visible;
 
   priv->auth_info_required = g_strdupv (ai_required);
   length = g_strv_length (ai_required);
-  priv->auth_info = g_new0 (gchar *, length + 1);
+  priv->auth_info = g_new0 (char *, length + 1);
   priv->store_auth_info = FALSE;
 
   dialog = gtk_dialog_new_with_buttons ( _("Authentication"), NULL, GTK_DIALOG_MODAL, 

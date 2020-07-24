@@ -202,7 +202,7 @@ my_dialog_init (MyDialog *dialog)
 static void
 my_dialog_class_init (MyDialogClass *class)
 {
-  gchar *buffer;
+  char *buffer;
   gsize size;
   GBytes *bytes;
 
@@ -271,7 +271,7 @@ my_dialog2_init (MyDialog2 *dialog)
 static void
 my_dialog2_class_init (MyDialog2Class *class)
 {
-  gchar *buffer;
+  char *buffer;
   gsize size;
   GBytes *bytes;
 

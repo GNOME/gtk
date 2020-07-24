@@ -101,18 +101,18 @@ GType		gtk_spin_button_get_type	   (void) G_GNUC_CONST;
 GDK_AVAILABLE_IN_ALL
 void		gtk_spin_button_configure	   (GtkSpinButton  *spin_button,
 						    GtkAdjustment  *adjustment,
-						    gdouble	    climb_rate,
+						    double	    climb_rate,
 						    guint	    digits);
 
 GDK_AVAILABLE_IN_ALL
 GtkWidget*	gtk_spin_button_new		   (GtkAdjustment  *adjustment,
-						    gdouble	    climb_rate,
+						    double	    climb_rate,
 						    guint	    digits);
 
 GDK_AVAILABLE_IN_ALL
-GtkWidget*	gtk_spin_button_new_with_range	   (gdouble  min,
-						    gdouble  max,
-						    gdouble  step);
+GtkWidget*	gtk_spin_button_new_with_range	   (double   min,
+						    double   max,
+						    double   step);
 
 GDK_AVAILABLE_IN_ALL
 void		gtk_spin_button_set_adjustment	   (GtkSpinButton  *spin_button,
@@ -129,31 +129,31 @@ guint           gtk_spin_button_get_digits         (GtkSpinButton  *spin_button)
 
 GDK_AVAILABLE_IN_ALL
 void		gtk_spin_button_set_increments	   (GtkSpinButton  *spin_button,
-						    gdouble         step,
-						    gdouble         page);
+						    double          step,
+						    double          page);
 GDK_AVAILABLE_IN_ALL
 void            gtk_spin_button_get_increments     (GtkSpinButton  *spin_button,
-						    gdouble        *step,
-						    gdouble        *page);
+						    double         *step,
+						    double         *page);
 
 GDK_AVAILABLE_IN_ALL
 void		gtk_spin_button_set_range	   (GtkSpinButton  *spin_button,
-						    gdouble         min,
-						    gdouble         max);
+						    double          min,
+						    double          max);
 GDK_AVAILABLE_IN_ALL
 void            gtk_spin_button_get_range          (GtkSpinButton  *spin_button,
-						    gdouble        *min,
-						    gdouble        *max);
+						    double         *min,
+						    double         *max);
 
 GDK_AVAILABLE_IN_ALL
-gdouble		gtk_spin_button_get_value          (GtkSpinButton  *spin_button);
+double		gtk_spin_button_get_value          (GtkSpinButton  *spin_button);
 
 GDK_AVAILABLE_IN_ALL
-gint		gtk_spin_button_get_value_as_int   (GtkSpinButton  *spin_button);
+int		gtk_spin_button_get_value_as_int   (GtkSpinButton  *spin_button);
 
 GDK_AVAILABLE_IN_ALL
 void		gtk_spin_button_set_value	   (GtkSpinButton  *spin_button,
-						    gdouble	    value);
+						    double	    value);
 
 GDK_AVAILABLE_IN_ALL
 void		gtk_spin_button_set_update_policy  (GtkSpinButton  *spin_button,
@@ -170,7 +170,7 @@ gboolean        gtk_spin_button_get_numeric        (GtkSpinButton  *spin_button)
 GDK_AVAILABLE_IN_ALL
 void		gtk_spin_button_spin		   (GtkSpinButton  *spin_button,
 						    GtkSpinType     direction,
-						    gdouble	    increment);
+						    double	    increment);
 
 GDK_AVAILABLE_IN_ALL
 void		gtk_spin_button_set_wrap	   (GtkSpinButton  *spin_button,

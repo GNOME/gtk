@@ -3,7 +3,7 @@
 int
 main (int argc, char **argv)
 {
-  const gchar *display_name;
+  const char *display_name;
   GdkDisplay *display;
   GtkWidget *win, *but;
   gboolean has_display;

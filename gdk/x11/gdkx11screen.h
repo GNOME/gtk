@@ -63,7 +63,7 @@ gboolean gdk_x11_screen_supports_net_wm_hint (GdkX11Screen *screen,
 
 GDK_AVAILABLE_IN_ALL
 XID      gdk_x11_screen_get_monitor_output   (GdkX11Screen *screen,
-                                              gint          monitor_num);
+                                              int           monitor_num);
 
 GDK_AVAILABLE_IN_ALL
 guint32  gdk_x11_screen_get_number_of_desktops (GdkX11Screen *screen);

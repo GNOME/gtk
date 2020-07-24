@@ -33,8 +33,8 @@ update_title (GtkWindow *window)
 static void
 update_statusbar (void)
 {
-  gchar *msg;
-  gint row, col;
+  char *msg;
+  int row, col;
   GtkTextIter iter;
   const char *print_str;
 
@@ -675,7 +675,7 @@ static GActionEntry app_entries[] = {
   { "print", activate_print, NULL, NULL, NULL }
 };
 
-static const gchar ui_info[] =
+static const char ui_info[] =
   "<interface>"
   "  <menu id='menubar'>"
   "    <submenu>"

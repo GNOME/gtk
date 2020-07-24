@@ -666,7 +666,7 @@ NSArray * _gtk_file_filter_get_as_pattern_nsstrings (GtkFileFilter *filter)
               {
                 pattern = g_string_erase (pattern, 0, 1);
               }
-            gchar *pattern_c = g_string_free (pattern, FALSE);
+            char *pattern_c = g_string_free (pattern, FALSE);
             NSString *pattern_nsstring = [NSString stringWithUTF8String:pattern_c];
             g_free (pattern_c);
             [pattern_nsstring retain];
@@ -682,7 +682,7 @@ NSArray * _gtk_file_filter_get_as_pattern_nsstrings (GtkFileFilter *filter)
             for (l = formats; l; l = l->next)
               {
                 int i;
-                gchar **extensions;
+                char **extensions;
 
                 extensions = gdk_pixbuf_format_get_extensions (l->data);
 

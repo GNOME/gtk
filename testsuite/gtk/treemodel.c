@@ -133,7 +133,7 @@ signal_monitor_generic_handler (SignalMonitor *m,
 
   if (g_queue_is_empty (m->queue))
     {
-      gchar *path_str;
+      char *path_str;
 
       path_str = gtk_tree_path_to_string (path);
       g_error ("Signal queue empty, got signal %s path %s",
@@ -164,7 +164,7 @@ signal_monitor_generic_handler (SignalMonitor *m,
       (gtk_tree_path_get_depth (s->path) != 0 &&
        gtk_tree_path_compare (s->path, path) != 0))
     {
-      gchar *path_str, *s_path_str;
+      char *path_str, *s_path_str;
 
       s_path_str = gtk_tree_path_to_string (s->path);
       path_str = gtk_tree_path_to_string (path);
@@ -240,7 +240,7 @@ static void
 signal_monitor_rows_reordered (GtkTreeModel *model,
                                GtkTreePath  *path,
                                GtkTreeIter  *iter,
-                               gint         *new_order,
+                               int          *new_order,
                                gpointer      data)
 {
   signal_monitor_generic_handler (data, ROWS_REORDERED,
@@ -329,7 +329,7 @@ signal_monitor_append_signal_reordered (SignalMonitor *m,
 void
 signal_monitor_append_signal (SignalMonitor *m,
                               SignalName     signal,
-                              const gchar   *path_string)
+                              const char    *path_string)
 {
   Signal *s;
   GtkTreePath *path;

@@ -88,7 +88,7 @@ GDK_AVAILABLE_IN_ALL
 GtkWidget *           gtk_flow_box_child_get_child          (GtkFlowBoxChild *self);
 
 GDK_AVAILABLE_IN_ALL
-gint                  gtk_flow_box_child_get_index           (GtkFlowBoxChild *child);
+int                   gtk_flow_box_child_get_index           (GtkFlowBoxChild *child);
 GDK_AVAILABLE_IN_ALL
 gboolean              gtk_flow_box_child_is_selected         (GtkFlowBoxChild *child);
 GDK_AVAILABLE_IN_ALL
@@ -145,18 +145,18 @@ gboolean              gtk_flow_box_get_activate_on_single_click (GtkFlowBox     
 GDK_AVAILABLE_IN_ALL
 void                  gtk_flow_box_insert                       (GtkFlowBox        *box,
                                                                  GtkWidget         *widget,
-                                                                 gint               position);
+                                                                 int                position);
 GDK_AVAILABLE_IN_ALL
 void                  gtk_flow_box_remove                       (GtkFlowBox        *box,
                                                                  GtkWidget         *widget);
 GDK_AVAILABLE_IN_ALL
 GtkFlowBoxChild      *gtk_flow_box_get_child_at_index           (GtkFlowBox        *box,
-                                                                 gint               idx);
+                                                                 int                idx);
 
 GDK_AVAILABLE_IN_ALL
 GtkFlowBoxChild      *gtk_flow_box_get_child_at_pos             (GtkFlowBox        *box,
-                                                                 gint               x,
-                                                                 gint               y);
+                                                                 int                x,
+                                                                 int                y);
 
 typedef void (* GtkFlowBoxForeachFunc) (GtkFlowBox      *box,
                                         GtkFlowBoxChild *child,
@@ -201,9 +201,9 @@ void                  gtk_flow_box_set_filter_func              (GtkFlowBox     
 GDK_AVAILABLE_IN_ALL
 void                  gtk_flow_box_invalidate_filter            (GtkFlowBox        *box);
 
-typedef gint (*GtkFlowBoxSortFunc) (GtkFlowBoxChild *child1,
-                                    GtkFlowBoxChild *child2,
-                                    gpointer         user_data);
+typedef int (*GtkFlowBoxSortFunc) (GtkFlowBoxChild *child1,
+                                   GtkFlowBoxChild *child2,
+                                   gpointer         user_data);
 
 GDK_AVAILABLE_IN_ALL
 void                  gtk_flow_box_set_sort_func                (GtkFlowBox        *box,

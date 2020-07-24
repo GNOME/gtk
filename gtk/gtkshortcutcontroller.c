@@ -147,7 +147,7 @@ static void
 gtk_shortcut_controller_buildable_add_child (GtkBuildable  *buildable,
                                              GtkBuilder    *builder,
                                              GObject       *child,
-                                             const gchar   *type)
+                                             const char    *type)
 {
   if (type != NULL)
     {

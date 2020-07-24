@@ -47,7 +47,7 @@ static void _get_read_data      (GtkCupsRequest *request);
 
 struct _GtkCupsResult
 {
-  gchar *error_msg;
+  char *error_msg;
   ipp_t *ipp_response;
   GtkCupsErrorType error_type;
 
@@ -105,7 +105,7 @@ gtk_cups_result_set_error (GtkCupsResult    *result,
 GtkCupsRequest *
 gtk_cups_request_new_with_username (http_t             *connection,
                                     GtkCupsRequestType  req_type, 
-                                    gint                operation_id,
+                                    int                 operation_id,
                                     GIOChannel         *data_io,
                                     const char         *server,
                                     const char         *resource,
@@ -197,7 +197,7 @@ gtk_cups_request_new_with_username (http_t             *connection,
 GtkCupsRequest *
 gtk_cups_request_new (http_t             *connection,
                       GtkCupsRequestType  req_type, 
-                      gint                operation_id,
+                      int                 operation_id,
                       GIOChannel         *data_io,
                       const char         *server,
                       const char         *resource)
@@ -404,7 +404,7 @@ static const ipp_option_t ipp_options[] = {
 
 
 static ipp_tag_t
-_find_option_tag (const gchar *option)
+_find_option_tag (const char *option)
 {
   int lower_bound, upper_bound, num_options;
   int current_option;
@@ -456,8 +456,8 @@ _find_option_tag (const gchar *option)
  */
 void
 gtk_cups_request_encode_option (GtkCupsRequest *request,
-                                const gchar    *option,
-			        const gchar    *value)
+                                const char     *option,
+			        const char     *value)
 {
   ipp_tag_t option_tag;
 
@@ -650,8 +650,8 @@ gtk_cups_request_encode_option (GtkCupsRequest *request,
 				
 void
 gtk_cups_request_set_ipp_version (GtkCupsRequest     *request,
-				  gint                major,
-				  gint                minor)
+				  int                 major,
+				  int                 minor)
 {
   ippSetVersion (request->ipp_request, major, minor);
 }
@@ -690,7 +690,7 @@ _connect (GtkCupsRequest *request)
 static void 
 _post_send (GtkCupsRequest *request)
 {
-  gchar length[255];
+  char length[255];
   struct stat data_info;
 
   GTK_NOTE (PRINTING,
@@ -1500,7 +1500,7 @@ gtk_cups_connection_test_new (const char *server,
                               const int   port)
 {
   GtkCupsConnectionTest *result = NULL;
-  gchar                 *port_str = NULL;
+  char                  *port_str = NULL;
 
   result = g_new (GtkCupsConnectionTest, 1);
 
@@ -1537,9 +1537,9 @@ gtk_cups_connection_test_get_state (GtkCupsConnectionTest *test)
 {
   GtkCupsConnectionState result = GTK_CUPS_CONNECTION_NOT_AVAILABLE;
   http_addrlist_t       *iter;
-  gint                   error_code;
-  gint                   flags;
-  gint                   code;
+  int                    error_code;
+  int                    flags;
+  int                    code;
 
   if (test == NULL)
     return GTK_CUPS_CONNECTION_NOT_AVAILABLE;

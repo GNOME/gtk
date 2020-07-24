@@ -42,7 +42,7 @@ struct _GtkIconHelper
 
   GtkImageDefinition *def;
 
-  gint pixel_size;
+  int pixel_size;
 
   guint use_fallback : 1;
   guint texture_is_symbolic : 1;
@@ -85,13 +85,13 @@ static GdkPaintable *
 ensure_paintable_for_gicon (GtkIconHelper    *self,
                             GtkCssStyle      *style,
                             GtkTextDirection  dir,
-                            gint              scale,
+                            int               scale,
                             gboolean          preload,
                             GIcon            *gicon,
                             gboolean         *symbolic)
 {
   GtkIconTheme *icon_theme;
-  gint width, height;
+  int width, height;
   GtkIconPaintable *icon;
   GtkIconLookupFlags flags;
 
@@ -478,7 +478,7 @@ _gtk_icon_helper_set_gicon (GtkIconHelper *self,
 
 void
 _gtk_icon_helper_set_icon_name (GtkIconHelper *self,
-                                const gchar   *icon_name)
+                                const char    *icon_name)
 {
   gtk_icon_helper_take_definition (self, gtk_image_definition_new_icon_name (icon_name));
 }
@@ -492,7 +492,7 @@ _gtk_icon_helper_set_paintable (GtkIconHelper *self,
 
 gboolean
 _gtk_icon_helper_set_pixel_size (GtkIconHelper *self,
-                                 gint           pixel_size)
+                                 int            pixel_size)
 {
   if (self->pixel_size != pixel_size)
     {
@@ -528,7 +528,7 @@ _gtk_icon_helper_get_use_fallback (GtkIconHelper *self)
   return self->use_fallback;
 }
 
-gint
+int
 _gtk_icon_helper_get_pixel_size (GtkIconHelper *self)
 {
   return self->pixel_size;
@@ -552,7 +552,7 @@ _gtk_icon_helper_peek_paintable (GtkIconHelper *self)
   return gtk_image_definition_get_paintable (self->def);
 }
 
-const gchar *
+const char *
 _gtk_icon_helper_get_icon_name (GtkIconHelper *self)
 {
   return gtk_image_definition_get_icon_name (self->def);

@@ -215,7 +215,7 @@ gdk_display_manager_get_property (GObject      *object,
     }
 }
 
-static const gchar *allowed_backends;
+static const char *allowed_backends;
 
 /**
  * gdk_set_allowed_backends:
@@ -250,7 +250,7 @@ static const gchar *allowed_backends;
  * in order to take effect.
  */
 void
-gdk_set_allowed_backends (const gchar *backends)
+gdk_set_allowed_backends (const char *backends)
 {
   allowed_backends = g_strdup (backends);
 }
@@ -389,12 +389,12 @@ gdk_display_manager_list_displays (GdkDisplayManager *manager)
  */
 GdkDisplay *
 gdk_display_manager_open_display (GdkDisplayManager *manager,
-                                  const gchar       *name)
+                                  const char        *name)
 {
-  const gchar *backend_list;
+  const char *backend_list;
   GdkDisplay *display;
-  gchar **backends;
-  gint i, j;
+  char **backends;
+  int i, j;
   gboolean allow_any;
 
   if (allowed_backends == NULL)
@@ -419,7 +419,7 @@ gdk_display_manager_open_display (GdkDisplayManager *manager,
 
   for (i = 0; display == NULL && backends[i] != NULL; i++)
     {
-      const gchar *backend = backends[i];
+      const char *backend = backends[i];
       gboolean any = g_str_equal (backend, "*");
 
       if (!allow_any && !any && !strstr (allowed_backends, backend))

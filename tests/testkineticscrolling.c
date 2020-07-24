@@ -30,7 +30,7 @@ kinetic_scrolling (void)
   GtkListStore *store;
   GtkWidget *textview;
   GdkContentFormats *targets;
-  gint i;
+  int i;
 
   window = gtk_window_new ();
   gtk_window_set_default_size (GTK_WINDOW (window), 400, 400);
@@ -93,7 +93,7 @@ kinetic_scrolling (void)
   for (i = 0; i < 80; i++)
     {
       GtkTreeIter iter;
-      gchar *iter_label = g_strdup_printf ("Row number %d", i);
+      char *iter_label = g_strdup_printf ("Row number %d", i);
 
       gtk_list_store_append (store, &iter);
       gtk_list_store_set (store, &iter, 0, iter_label, -1);

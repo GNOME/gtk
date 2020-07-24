@@ -58,10 +58,10 @@ struct _GtkTreeModelCssNodeClass
 GType         gtk_tree_model_css_node_get_type          (void) G_GNUC_CONST;
 
 GtkTreeModel *gtk_tree_model_css_node_new               (GtkTreeModelCssNodeGetFunc get_func,
-                                                         gint            n_columns,
+                                                         int             n_columns,
 					                 ...);
 GtkTreeModel *gtk_tree_model_css_node_newv              (GtkTreeModelCssNodeGetFunc get_func,
-                                                         gint            n_columns,
+                                                         int             n_columns,
 					                 GType          *types);
 
 void          gtk_tree_model_css_node_set_root_node     (GtkTreeModelCssNode    *model,

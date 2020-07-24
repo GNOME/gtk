@@ -152,7 +152,7 @@ GetLocalizedName (NSScreen *screen)
   return g_steal_pointer (&name);
 }
 
-static gchar *
+static char *
 GetConnectorName (CGDirectDisplayID screen_id)
 {
   guint unit = CGDisplayUnitNumber (screen_id);
@@ -193,8 +193,8 @@ _gdk_macos_monitor_reconfigure (GdkMacosMonitor *self)
   CGRect bounds;
   size_t width;
   size_t pixel_width;
-  gchar *connector;
-  gchar *name;
+  char *connector;
+  char *name;
   int refresh_rate;
   int scale_factor = 1;
   int width_mm;

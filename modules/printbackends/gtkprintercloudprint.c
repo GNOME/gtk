@@ -43,7 +43,7 @@ struct _GtkPrinterCloudprint
   GtkPrinter parent_instance;
 
   GtkCloudprintAccount *account;
-  gchar *id;
+  char *id;
 };
 
 enum {
@@ -109,7 +109,7 @@ gtk_printer_cloudprint_new (const char *name,
 			    gboolean is_virtual,
 			    GtkPrintBackend *backend,
 			    GtkCloudprintAccount *account,
-			    const gchar *id)
+			    const char *id)
 {
   return g_object_new (GTK_TYPE_PRINTER_CLOUDPRINT,
 		       "name", name,

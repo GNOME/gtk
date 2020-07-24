@@ -45,7 +45,7 @@ gtk_action_observable_default_init (GtkActionObservableInterface *iface)
  */
 void
 gtk_action_observable_register_observer (GtkActionObservable *observable,
-                                         const gchar         *action_name,
+                                         const char          *action_name,
                                          GtkActionObserver   *observer)
 {
   g_return_if_fail (GTK_IS_ACTION_OBSERVABLE (observable));
@@ -68,7 +68,7 @@ gtk_action_observable_register_observer (GtkActionObservable *observable,
  */
 void
 gtk_action_observable_unregister_observer (GtkActionObservable *observable,
-                                           const gchar         *action_name,
+                                           const char          *action_name,
                                            GtkActionObserver   *observer)
 {
   g_return_if_fail (GTK_IS_ACTION_OBSERVABLE (observable));

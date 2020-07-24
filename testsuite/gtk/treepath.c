@@ -23,8 +23,8 @@ static void
 test_append (void)
 {
   GtkTreePath *p;
-  gint i;
-  gint *indices;
+  int i;
+  int *indices;
 
   p = gtk_tree_path_new ();
   for (i = 0; i < 100; i++)
@@ -44,8 +44,8 @@ static void
 test_prepend (void)
 {
   GtkTreePath *p;
-  gint i;
-  gint *indices;
+  int i;
+  int *indices;
 
   p = gtk_tree_path_new ();
   for (i = 0; i < 100; i++)
@@ -64,11 +64,11 @@ test_prepend (void)
 static void
 test_to_string (void)
 {
-  const gchar *str = "0:1:2:3:4:5:6:7:8:9:10";
+  const char *str = "0:1:2:3:4:5:6:7:8:9:10";
   GtkTreePath *p;
-  gint *indices;
-  gchar *s;
-  gint i;
+  int *indices;
+  char *s;
+  int i;
 
   p = gtk_tree_path_new_from_string (str);
   indices = gtk_tree_path_get_indices (p);
@@ -85,8 +85,8 @@ static void
 test_from_indices (void)
 {
   GtkTreePath *p;
-  gint *indices;
-  gint i;
+  int *indices;
+  int i;
 
   p = gtk_tree_path_new_from_indices (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, -1);
   g_assert_cmpint (gtk_tree_path_get_depth (p), ==, 10);
@@ -111,9 +111,9 @@ test_navigation (void)
 {
   GtkTreePath *p;
   GtkTreePath *q;
-  gint *pi;
-  gint *qi;
-  gint i;
+  int *pi;
+  int *qi;
+  int i;
   gboolean res;
 
   p = gtk_tree_path_new_from_indices (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, -1);

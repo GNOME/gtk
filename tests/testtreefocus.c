@@ -22,7 +22,7 @@
 typedef struct _TreeStruct TreeStruct;
 struct _TreeStruct
 {
-  const gchar *label;
+  const char *label;
   gboolean alex;
   gboolean havoc;
   gboolean tim;
@@ -224,7 +224,7 @@ make_model (void)
 
 static void
 alex_toggled (GtkCellRendererToggle *cell,
-	      gchar                 *path_str,
+	      char                  *path_str,
 	      gpointer               data)
 {
   GtkTreeModel *model = (GtkTreeModel *) data;
@@ -243,7 +243,7 @@ alex_toggled (GtkCellRendererToggle *cell,
 
 static void
 havoc_toggled (GtkCellRendererToggle *cell,
-	       gchar                 *path_str,
+	       char                  *path_str,
 	       gpointer               data)
 {
   GtkTreeModel *model = (GtkTreeModel *) data;
@@ -262,7 +262,7 @@ havoc_toggled (GtkCellRendererToggle *cell,
 
 static void
 owen_toggled (GtkCellRendererToggle *cell,
-	      gchar                 *path_str,
+	      char                  *path_str,
 	      gpointer               data)
 {
   GtkTreeModel *model = (GtkTreeModel *) data;
@@ -281,7 +281,7 @@ owen_toggled (GtkCellRendererToggle *cell,
 
 static void
 tim_toggled (GtkCellRendererToggle *cell,
-	     gchar                 *path_str,
+	     char                  *path_str,
 	     gpointer               data)
 {
   GtkTreeModel *model = (GtkTreeModel *) data;
@@ -300,7 +300,7 @@ tim_toggled (GtkCellRendererToggle *cell,
 
 static void
 dave_toggled (GtkCellRendererToggle *cell,
-	      gchar                 *path_str,
+	      char                  *path_str,
 	      gpointer               data)
 {
   GtkTreeModel *model = (GtkTreeModel *) data;
@@ -324,7 +324,7 @@ set_indicator_size (GtkTreeViewColumn *column,
 		    GtkTreeIter *iter,
 		    gpointer data)
 {
-  gint size;
+  int size;
   GtkTreePath *path;
 
   path = gtk_tree_model_get_path (model, iter);
@@ -354,7 +354,7 @@ main (int argc, char *argv[])
   GtkWidget *tree_view;
   GtkTreeModel *model;
   GtkCellRenderer *renderer;
-  gint col_offset;
+  int col_offset;
   GtkTreeViewColumn *column;
   gboolean done = FALSE;
 

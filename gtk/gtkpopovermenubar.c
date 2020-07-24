@@ -354,7 +354,7 @@ static GParamSpec * bar_props[LAST_PROP];
 G_DEFINE_TYPE (GtkPopoverMenuBar, gtk_popover_menu_bar, GTK_TYPE_WIDGET)
 
 static void
-tracker_remove (gint     position,
+tracker_remove (int      position,
                 gpointer user_data)
 {
   GtkWidget *bar = user_data;
@@ -383,7 +383,7 @@ popover_unmap (GtkPopover        *popover,
 
 static void
 tracker_insert (GtkMenuTrackerItem *item,
-                gint                position,
+                int                 position,
                 gpointer            user_data)
 {
   GtkPopoverMenuBar *bar = user_data;

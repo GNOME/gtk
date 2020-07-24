@@ -170,7 +170,7 @@ static void
 gtk_column_view_buildable_add_child (GtkBuildable  *buildable,
                                      GtkBuilder    *builder,
                                      GObject       *child,
-                                     const gchar   *type)
+                                     const char    *type)
 {
   if (GTK_IS_COLUMN_VIEW_COLUMN (child))
     {

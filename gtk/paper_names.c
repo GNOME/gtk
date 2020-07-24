@@ -9,10 +9,10 @@
  */
 
 typedef struct {
-  const gchar *name;
-  const gchar *size;
-  const gchar *display_name;
-  const gchar *ppd_name;
+  const char *name;
+  const char *size;
+  const char *display_name;
+  const char *ppd_name;
 } PaperInfo;
 
 static const PaperInfo standard_names[] = {

@@ -34,7 +34,7 @@ G_BEGIN_DECLS
  */
 
 GdkPaintable *    gtk_text_util_create_drag_icon  (GtkWidget     *widget,
-                                                   gchar         *text,
+                                                   char          *text,
                                                    gssize         len);
 GdkPaintable *    gtk_text_util_create_rich_drag_icon (GtkWidget     *widget,
                                                    GtkTextBuffer *buffer,
@@ -42,7 +42,7 @@ GdkPaintable *    gtk_text_util_create_rich_drag_icon (GtkWidget     *widget,
                                                    GtkTextIter   *end);
 
 gboolean _gtk_text_util_get_block_cursor_location (PangoLayout    *layout,
-						   gint            index_,
+						   int             index_,
 						   PangoRectangle *rectangle,
 						   gboolean       *at_line_end);
 

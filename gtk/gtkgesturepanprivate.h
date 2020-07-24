@@ -33,7 +33,7 @@ struct _GtkGesturePanClass
 
   void (* pan) (GtkGesturePan *gesture,
                 GtkPanDirection direction,
-                gdouble         offset);
+                double          offset);
 
   /*< private >*/
   gpointer padding[10];

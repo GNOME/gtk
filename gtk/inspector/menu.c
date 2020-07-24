@@ -58,15 +58,15 @@ static void
 add_item (GtkInspectorMenu *sl,
           GtkStackPage     *page,
           GMenuModel       *menu,
-          gint              idx,
+          int               idx,
           GtkTreeIter      *parent)
 {
   GtkTreeIter iter;
   GVariant *value;
-  gchar *label = NULL;
-  gchar *action = NULL;
-  gchar *target = NULL;
-  gchar *icon = NULL;
+  char *label = NULL;
+  char *action = NULL;
+  char *target = NULL;
+  char *icon = NULL;
   GMenuModel *model;
 
   g_menu_model_get_item_attribute (menu, idx, G_MENU_ATTRIBUTE_LABEL, "s", &label);
@@ -117,8 +117,8 @@ add_menu (GtkInspectorMenu *sl,
           GMenuModel       *menu,
           GtkTreeIter      *parent)
 {
-  gint n_items;
-  gint i;
+  int n_items;
+  int i;
 
   g_object_set (page, "visible", TRUE, NULL);
 

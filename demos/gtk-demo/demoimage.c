@@ -17,7 +17,7 @@ G_DEFINE_TYPE(DemoImage, demo_image, GTK_TYPE_WIDGET)
 static GdkPaintable *
 get_image_paintable (GtkImage *image)
 {
-  const gchar *icon_name;
+  const char *icon_name;
   GtkIconTheme *icon_theme;
   GtkIconPaintable *icon;
 

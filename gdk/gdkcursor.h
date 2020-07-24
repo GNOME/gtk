@@ -50,7 +50,7 @@ GdkCursor* gdk_cursor_new_from_texture   (GdkTexture      *texture,
 					  int              hotspot_y,
                                           GdkCursor       *fallback);
 GDK_AVAILABLE_IN_ALL
-GdkCursor*  gdk_cursor_new_from_name	 (const gchar     *name,
+GdkCursor*  gdk_cursor_new_from_name	 (const char      *name,
                                           GdkCursor       *fallback);
 
 GDK_AVAILABLE_IN_ALL

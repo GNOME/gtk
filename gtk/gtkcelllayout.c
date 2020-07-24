@@ -148,8 +148,8 @@ static void   gtk_cell_layout_default_pack_end           (GtkCellLayout         
 static void   gtk_cell_layout_default_clear              (GtkCellLayout         *cell_layout);
 static void   gtk_cell_layout_default_add_attribute      (GtkCellLayout         *cell_layout,
 							  GtkCellRenderer       *cell,
-							  const gchar           *attribute,
-							  gint                   column);
+							  const char            *attribute,
+							  int                    column);
 static void   gtk_cell_layout_default_set_cell_data_func (GtkCellLayout         *cell_layout,
 							  GtkCellRenderer       *cell,
 							  GtkCellLayoutDataFunc  func,
@@ -159,7 +159,7 @@ static void   gtk_cell_layout_default_clear_attributes   (GtkCellLayout         
 							  GtkCellRenderer       *cell);
 static void   gtk_cell_layout_default_reorder            (GtkCellLayout         *cell_layout,
 							  GtkCellRenderer       *cell,
-							  gint                   position);
+							  int                    position);
 static GList *gtk_cell_layout_default_get_cells          (GtkCellLayout         *cell_layout);
 
 
@@ -241,8 +241,8 @@ gtk_cell_layout_default_clear (GtkCellLayout *cell_layout)
 static void
 gtk_cell_layout_default_add_attribute (GtkCellLayout         *cell_layout,
 				       GtkCellRenderer       *cell,
-				       const gchar           *attribute,
-				       gint                   column)
+				       const char            *attribute,
+				       int                    column)
 {
   GtkCellLayoutIface *iface;
   GtkCellArea        *area;
@@ -308,7 +308,7 @@ gtk_cell_layout_default_clear_attributes (GtkCellLayout         *cell_layout,
 static void
 gtk_cell_layout_default_reorder (GtkCellLayout         *cell_layout,
 				 GtkCellRenderer       *cell,
-				 gint                   position)
+				 int                    position)
 {
   GtkCellLayoutIface *iface;
   GtkCellArea        *area;
@@ -413,20 +413,20 @@ gtk_cell_layout_set_attributesv (GtkCellLayout   *cell_layout,
                                  GtkCellRenderer *cell,
                                  va_list          args)
 {
-  gchar *attribute;
-  gint column;
+  char *attribute;
+  int column;
 
-  attribute = va_arg (args, gchar *);
+  attribute = va_arg (args, char *);
 
   gtk_cell_layout_clear_attributes (cell_layout, cell);
 
   while (attribute != NULL)
     {
-      column = va_arg (args, gint);
+      column = va_arg (args, int);
 
       gtk_cell_layout_add_attribute (cell_layout, cell, attribute, column);
 
-      attribute = va_arg (args, gchar *);
+      attribute = va_arg (args, char *);
     }
 }
 
@@ -474,8 +474,8 @@ gtk_cell_layout_set_attributes (GtkCellLayout   *cell_layout,
 void
 gtk_cell_layout_add_attribute (GtkCellLayout   *cell_layout,
                                GtkCellRenderer *cell,
-                               const gchar     *attribute,
-                               gint             column)
+                               const char      *attribute,
+                               int              column)
 {
   g_return_if_fail (GTK_IS_CELL_LAYOUT (cell_layout));
   g_return_if_fail (GTK_IS_CELL_RENDERER (cell));
@@ -547,7 +547,7 @@ gtk_cell_layout_clear_attributes (GtkCellLayout   *cell_layout,
 void
 gtk_cell_layout_reorder (GtkCellLayout   *cell_layout,
                          GtkCellRenderer *cell,
-                         gint             position)
+                         int              position)
 {
   g_return_if_fail (GTK_IS_CELL_LAYOUT (cell_layout));
   g_return_if_fail (GTK_IS_CELL_RENDERER (cell));
@@ -604,15 +604,15 @@ typedef struct {
   GtkCellLayout   *cell_layout;
   GtkCellRenderer *renderer;
   GtkBuilder      *builder;
-  gchar           *attr_name;
+  char            *attr_name;
   GString         *string;
 } AttributesSubParserData;
 
 static void
 attributes_start_element (GtkBuildableParseContext *context,
-                          const gchar              *element_name,
-                          const gchar             **names,
-                          const gchar             **values,
+                          const char               *element_name,
+                          const char              **names,
+                          const char              **values,
                           gpointer                  user_data,
                           GError                  **error)
 {
@@ -620,7 +620,7 @@ attributes_start_element (GtkBuildableParseContext *context,
 
   if (strcmp (element_name, "attribute") == 0)
     {
-      const gchar *name;
+      const char *name;
 
       if (!_gtk_builder_check_parent (data->builder, context, "attributes", error))
         return;
@@ -655,7 +655,7 @@ attributes_start_element (GtkBuildableParseContext *context,
 
 static void
 attributes_text_element (GtkBuildableParseContext  *context,
-                         const gchar               *text,
+                         const char                *text,
                          gsize                      text_len,
                          gpointer                   user_data,
                          GError                   **error)
@@ -668,7 +668,7 @@ attributes_text_element (GtkBuildableParseContext  *context,
 
 static void
 attributes_end_element (GtkBuildableParseContext  *context,
-                        const gchar               *element_name,
+                        const char                *element_name,
                         gpointer                   user_data,
                         GError                   **error)
 {
@@ -708,8 +708,8 @@ static void
 gtk_cell_layout_buildable_set_cell_property (GtkCellArea     *area,
 					     GtkBuilder      *builder,
 					     GtkCellRenderer *cell,
-					     gchar           *name,
-					     const gchar     *value)
+					     char            *name,
+					     const char      *value)
 {
   GParamSpec *pspec;
   GValue gvalue = G_VALUE_INIT;
@@ -744,16 +744,16 @@ typedef struct {
   GtkCellLayout   *cell_layout;
   GtkCellRenderer *renderer;
   GString         *string;
-  gchar           *cell_prop_name;
-  gchar           *context;
+  char            *cell_prop_name;
+  char            *context;
   gboolean         translatable;
 } CellPackingSubParserData;
 
 static void
 cell_packing_start_element (GtkBuildableParseContext *context,
-                            const gchar              *element_name,
-                            const gchar             **names,
-                            const gchar             **values,
+                            const char               *element_name,
+                            const char              **names,
+                            const char              **values,
                             gpointer                  user_data,
                             GError                  **error)
 {
@@ -761,9 +761,9 @@ cell_packing_start_element (GtkBuildableParseContext *context,
 
   if (strcmp (element_name, "property") == 0)
     {
-      const gchar *name;
+      const char *name;
       gboolean translatable = FALSE;
-      const gchar *ctx = NULL;
+      const char *ctx = NULL;
 
       if (!_gtk_builder_check_parent (data->builder, context, "cell-packing", error))
         return;
@@ -803,7 +803,7 @@ cell_packing_start_element (GtkBuildableParseContext *context,
 
 static void
 cell_packing_text_element (GtkBuildableParseContext *context,
-                           const gchar              *text,
+                           const char               *text,
                            gsize                     text_len,
                            gpointer                  user_data,
                            GError                  **error)
@@ -816,7 +816,7 @@ cell_packing_text_element (GtkBuildableParseContext *context,
 
 static void
 cell_packing_end_element (GtkBuildableParseContext *context,
-                          const gchar              *element_name,
+                          const char               *element_name,
                           gpointer                  user_data,
                           GError                  **error)
 {
@@ -830,8 +830,8 @@ cell_packing_end_element (GtkBuildableParseContext *context,
       /* translate the string */
       if (data->string->len && data->translatable)
 	{
-	  const gchar *translated;
-	  const gchar* domain;
+	  const char *translated;
+	  const char * domain;
 
 	  domain = gtk_builder_get_translation_domain (data->builder);
 
@@ -872,7 +872,7 @@ gboolean
 _gtk_cell_layout_buildable_custom_tag_start (GtkBuildable       *buildable,
                                              GtkBuilder         *builder,
                                              GObject            *child,
-                                             const gchar        *tagname,
+                                             const char         *tagname,
                                              GtkBuildableParser *parser,
                                              gpointer           *data)
 {
@@ -917,7 +917,7 @@ gboolean
 _gtk_cell_layout_buildable_custom_tag_end (GtkBuildable *buildable,
 					   GtkBuilder   *builder,
 					   GObject      *child,
-					   const gchar  *tagname,
+					   const char   *tagname,
 					   gpointer     *data)
 {
   AttributesSubParserData *attr_data;
@@ -947,7 +947,7 @@ void
 _gtk_cell_layout_buildable_add_child (GtkBuildable      *buildable,
 				      GtkBuilder        *builder,
 				      GObject           *child,
-				      const gchar       *type)
+				      const char        *type)
 {
   g_return_if_fail (GTK_IS_CELL_LAYOUT (buildable));
   g_return_if_fail (GTK_IS_CELL_RENDERER (child));

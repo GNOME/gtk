@@ -20,7 +20,7 @@ typedef struct
   cairo_t *cr;
   GdkRGBA draw_color;
   GtkPadController *pad_controller;
-  gdouble brush_size;
+  double brush_size;
 } DrawingArea;
 
 typedef struct
@@ -38,7 +38,7 @@ static GtkPadActionEntry pad_actions[] = {
   { GTK_PAD_ACTION_STRIP, -1, -1, N_("Brush size"), "pad.brush_size" },
 };
 
-static const gchar *pad_colors[] = {
+static const char *pad_colors[] = {
   "black",
   "pink",
   "green",
@@ -55,8 +55,8 @@ static void drawing_area_set_color (DrawingArea *area,
 
 static void
 drawing_area_ensure_surface (DrawingArea *area,
-                             gint         width,
-                             gint         height)
+                             int          width,
+                             int          height)
 {
   if (!area->surface ||
       cairo_image_surface_get_width (area->surface) != width ||
@@ -154,7 +154,7 @@ on_pad_button_activate (GSimpleAction *action,
                         GVariant      *parameter,
                         DrawingArea   *area)
 {
-  const gchar *color = g_object_get_data (G_OBJECT (action), "color");
+  const char *color = g_object_get_data (G_OBJECT (action), "color");
   GdkRGBA rgba;
 
   gdk_rgba_parse (&rgba, color);
@@ -166,7 +166,7 @@ on_pad_knob_change (GSimpleAction *action,
                     GVariant      *parameter,
                     DrawingArea   *area)
 {
-  gdouble value = g_variant_get_double (parameter);
+  double value = g_variant_get_double (parameter);
 
   area->brush_size = value;
 }
@@ -195,7 +195,7 @@ drawing_area_root (GtkWidget *widget)
   GSimpleActionGroup *action_group;
   GSimpleAction *action;
   GtkWidget *toplevel;
-  gint i;
+  int i;
 
   GTK_WIDGET_CLASS (drawing_area_parent_class)->root (widget);
 
@@ -255,9 +255,9 @@ drawing_area_class_init (DrawingAreaClass *klass)
 static void
 drawing_area_apply_stroke (DrawingArea   *area,
                            GdkDeviceTool *tool,
-                           gdouble        x,
-                           gdouble        y,
-                           gdouble        pressure)
+                           double         x,
+                           double         y,
+                           double         pressure)
 {
   if (gdk_device_tool_get_tool_type (tool) == GDK_DEVICE_TOOL_TYPE_ERASER)
     {
@@ -281,8 +281,8 @@ drawing_area_apply_stroke (DrawingArea   *area,
 
 static void
 stylus_gesture_down (GtkGestureStylus *gesture,
-                     gdouble           x,
-                     gdouble           y,
+                     double            x,
+                     double            y,
                      DrawingArea      *area)
 {
   cairo_new_path (area->cr);
@@ -290,13 +290,13 @@ stylus_gesture_down (GtkGestureStylus *gesture,
 
 static void
 stylus_gesture_motion (GtkGestureStylus *gesture,
-                       gdouble           x,
-                       gdouble           y,
+                       double            x,
+                       double            y,
                        DrawingArea      *area)
 {
   GdkTimeCoord *backlog;
   GdkDeviceTool *tool;
-  gdouble pressure;
+  double pressure;
   guint n_items;
 
   tool = gtk_gesture_stylus_get_device_tool (gesture);

@@ -64,7 +64,7 @@ gtk_paned_accessible_get_current_value (AtkValue *obj,
                                         GValue   *value)
 {
   GtkWidget* widget;
-  gint current_value;
+  int current_value;
 
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (obj));
   if (widget == NULL)
@@ -81,7 +81,7 @@ gtk_paned_accessible_get_maximum_value (AtkValue *obj,
                                         GValue   *value)
 {
   GtkWidget* widget;
-  gint maximum_value;
+  int maximum_value;
 
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (obj));
   if (widget == NULL)
@@ -100,7 +100,7 @@ gtk_paned_accessible_get_minimum_value (AtkValue *obj,
                                         GValue   *value)
 {
   GtkWidget* widget;
-  gint minimum_value;
+  int minimum_value;
 
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (obj));
   if (widget == NULL)
@@ -124,7 +124,7 @@ gtk_paned_accessible_set_current_value (AtkValue     *obj,
                                         const GValue *value)
 {
   GtkWidget* widget;
-  gint new_value;
+  int new_value;
 
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (obj));
   if (widget == NULL)
@@ -143,8 +143,8 @@ gtk_paned_accessible_set_current_value (AtkValue     *obj,
 
 static void
 gtk_paned_accessible_get_value_and_text (AtkValue  *obj,
-                                         gdouble   *value,
-                                         gchar    **text)
+                                         double    *value,
+                                         char     **text)
 {
   GtkWidget *widget;
   GtkPaned *paned;
@@ -160,8 +160,8 @@ static AtkRange *
 gtk_paned_accessible_get_range (AtkValue *obj)
 {
   GtkWidget *widget;
-  gint minimum_value;
-  gint maximum_value;
+  int minimum_value;
+  int maximum_value;
 
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (obj));
 
@@ -175,7 +175,7 @@ gtk_paned_accessible_get_range (AtkValue *obj)
 
 static void
 gtk_paned_accessible_set_value (AtkValue      *obj,
-                                const gdouble  value)
+                                const double   value)
 {
   GtkWidget *widget;
   GtkPaned *paned;
@@ -183,7 +183,7 @@ gtk_paned_accessible_set_value (AtkValue      *obj,
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (obj));
   paned = GTK_PANED (widget);
 
-  gtk_paned_set_position (paned, (gint)(value + 0.5));
+  gtk_paned_set_position (paned, (int)(value + 0.5));
 }
 
 static void

@@ -521,7 +521,7 @@ gtk_style_context_get_state (GtkStyleContext *context)
  **/
 void
 gtk_style_context_set_scale (GtkStyleContext *context,
-                             gint             scale)
+                             int              scale)
 {
   GtkStyleContextPrivate *priv = gtk_style_context_get_instance_private (context);
 
@@ -552,7 +552,7 @@ gtk_style_context_set_scale (GtkStyleContext *context,
  *
  * Returns: the scale
  **/
-gint
+int
 gtk_style_context_get_scale (GtkStyleContext *context)
 {
   GtkStyleContextPrivate *priv = gtk_style_context_get_instance_private (context);
@@ -672,7 +672,7 @@ gtk_style_context_restore (GtkStyleContext *context)
  **/
 void
 gtk_style_context_add_class (GtkStyleContext *context,
-                             const gchar     *class_name)
+                             const char      *class_name)
 {
   GtkStyleContextPrivate *priv = gtk_style_context_get_instance_private (context);
   GQuark class_quark;
@@ -694,7 +694,7 @@ gtk_style_context_add_class (GtkStyleContext *context,
  **/
 void
 gtk_style_context_remove_class (GtkStyleContext *context,
-                                const gchar     *class_name)
+                                const char      *class_name)
 {
   GtkStyleContextPrivate *priv = gtk_style_context_get_instance_private (context);
   GQuark class_quark;
@@ -721,7 +721,7 @@ gtk_style_context_remove_class (GtkStyleContext *context,
  **/
 gboolean
 gtk_style_context_has_class (GtkStyleContext *context,
-                             const gchar     *class_name)
+                             const char      *class_name)
 {
   GtkStyleContextPrivate *priv = gtk_style_context_get_instance_private (context);
   GQuark class_quark;
@@ -843,7 +843,7 @@ gtk_style_context_resolve_color (GtkStyleContext    *context,
  **/
 gboolean
 gtk_style_context_lookup_color (GtkStyleContext *context,
-                                const gchar     *color_name,
+                                const char      *color_name,
                                 GdkRGBA         *color)
 {
   GtkStyleContextPrivate *priv = gtk_style_context_get_instance_private (context);
@@ -978,9 +978,9 @@ _gtk_style_context_get_cursor_color (GtkStyleContext *context,
 static void
 draw_insertion_cursor (GtkStyleContext *context,
                        cairo_t         *cr,
-                       gdouble          x,
-                       gdouble          y,
-                       gdouble          height,
+                       double           x,
+                       double           y,
+                       double           height,
                        float            aspect_ratio,
                        gboolean         is_primary,
                        PangoDirection   direction,
@@ -988,8 +988,8 @@ draw_insertion_cursor (GtkStyleContext *context,
 {
   GdkRGBA primary_color;
   GdkRGBA secondary_color;
-  gint stem_width;
-  gint offset;
+  int stem_width;
+  int offset;
 
   cairo_save (cr);
   cairo_new_path (cr);
@@ -1010,8 +1010,8 @@ draw_insertion_cursor (GtkStyleContext *context,
 
   if (draw_arrow)
     {
-      gint arrow_width;
-      gint ax, ay;
+      int arrow_width;
+      int ax, ay;
 
       arrow_width = stem_width + 1;
 
@@ -1043,14 +1043,14 @@ draw_insertion_cursor (GtkStyleContext *context,
 }
 
 static void
-get_insertion_cursor_bounds (gdouble          height,
+get_insertion_cursor_bounds (double           height,
                              float            aspect_ratio,
                              PangoDirection   direction,
                              gboolean         draw_arrow,
                              graphene_rect_t *bounds)
 {
-  gint stem_width;
-  gint offset;
+  int stem_width;
+  int offset;
 
   stem_width = height * aspect_ratio + 1;
   if (direction == PANGO_DIRECTION_LTR)
@@ -1084,7 +1084,7 @@ get_insertion_cursor_bounds (gdouble          height,
 static void
 snapshot_insertion_cursor (GtkSnapshot     *snapshot,
                            GtkStyleContext *context,
-                           gdouble          height,
+                           double           height,
                            float            aspect_ratio,
                            gboolean         is_primary,
                            PangoDirection   direction,
@@ -1140,8 +1140,8 @@ snapshot_insertion_cursor (GtkSnapshot     *snapshot,
 void
 gtk_render_insertion_cursor (GtkStyleContext *context,
                              cairo_t         *cr,
-                             gdouble          x,
-                             gdouble          y,
+                             double           x,
+                             double           y,
                              PangoLayout     *layout,
                              int              index,
                              PangoDirection   direction)
@@ -1237,8 +1237,8 @@ gtk_render_insertion_cursor (GtkStyleContext *context,
 void
 gtk_snapshot_render_insertion_cursor (GtkSnapshot     *snapshot,
                                       GtkStyleContext *context,
-                                      gdouble          x,
-                                      gdouble          y,
+                                      double           x,
+                                      double           y,
                                       PangoLayout     *layout,
                                       int              index,
                                       PangoDirection   direction)
@@ -1324,7 +1324,7 @@ gtk_snapshot_render_insertion_cursor (GtkSnapshot     *snapshot,
 static AtkAttributeSet *
 add_attribute (AtkAttributeSet  *attributes,
                AtkTextAttribute  attr,
-               const gchar      *value)
+               const char       *value)
 {
   AtkAttribute *at;
 
@@ -1354,7 +1354,7 @@ _gtk_style_context_get_attributes (AtkAttributeSet *attributes,
                                    GtkStyleContext *context)
 {
   const GdkRGBA *color; 
-  gchar *value;
+  char *value;
 
   color = gtk_css_color_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BACKGROUND_COLOR));
   value = g_strdup_printf ("%u,%u,%u",

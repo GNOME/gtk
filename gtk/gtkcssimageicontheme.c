@@ -46,7 +46,7 @@ gtk_css_image_icon_theme_snapshot (GtkCssImage *image,
   GtkCssImageIconTheme *icon_theme = GTK_CSS_IMAGE_ICON_THEME (image);
   GtkIconPaintable *icon;
   double icon_width, icon_height;
-  gint size;
+  int size;
   double x, y;
 
   size = floor (MIN (width, height));

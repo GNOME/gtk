@@ -362,7 +362,7 @@ gtk_shortcut_trigger_equal (gconstpointer trigger1,
  *     @trigger1 is found, respectively, to be less than, to match,
  *     or be greater than @trigger2.
  **/
-gint
+int
 gtk_shortcut_trigger_compare (gconstpointer trigger1,
                               gconstpointer trigger2)
 {

@@ -45,9 +45,9 @@ GtkWidget*      gtk_picture_new_for_pixbuf              (GdkPixbuf              
 GDK_AVAILABLE_IN_ALL
 GtkWidget*      gtk_picture_new_for_file                (GFile                  *file);
 GDK_AVAILABLE_IN_ALL
-GtkWidget*      gtk_picture_new_for_filename            (const gchar            *filename);
+GtkWidget*      gtk_picture_new_for_filename            (const char             *filename);
 GDK_AVAILABLE_IN_ALL
-GtkWidget*      gtk_picture_new_for_resource            (const gchar            *resource_path);
+GtkWidget*      gtk_picture_new_for_resource            (const char             *resource_path);
 
 GDK_AVAILABLE_IN_ALL
 void            gtk_picture_set_paintable               (GtkPicture             *self,
@@ -61,10 +61,10 @@ GDK_AVAILABLE_IN_ALL
 GFile *         gtk_picture_get_file                    (GtkPicture             *self);
 GDK_AVAILABLE_IN_ALL
 void            gtk_picture_set_filename                (GtkPicture             *self,
-                                                         const gchar            *filename);
+                                                         const char             *filename);
 GDK_AVAILABLE_IN_ALL
 void            gtk_picture_set_resource                (GtkPicture             *self,
-                                                         const gchar            *resource_path);
+                                                         const char             *resource_path);
 GDK_AVAILABLE_IN_ALL
 void            gtk_picture_set_pixbuf                  (GtkPicture             *self,
                                                          GdkPixbuf              *pixbuf);

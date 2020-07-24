@@ -66,7 +66,7 @@ struct _GtkNativeDialogPrivate
   guint modal : 1;
 
   /* Run state */
-  gint run_response_id;
+  int run_response_id;
   GMainLoop *run_loop; /* Non-NULL when in run */
 };
 

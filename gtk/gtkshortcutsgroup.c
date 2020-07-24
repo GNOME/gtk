@@ -47,7 +47,7 @@ struct _GtkShortcutsGroup
   GtkBox    parent_instance;
 
   GtkLabel *title;
-  gchar    *view;
+  char     *view;
   guint     height;
 
   GtkSizeGroup *accel_size_group;
@@ -148,7 +148,7 @@ static void
 gtk_shortcuts_group_buildable_add_child (GtkBuildable *buildable,
                                          GtkBuilder   *builder,
                                          GObject      *child,
-                                         const gchar  *type)
+                                         const char   *type)
 {
   if (GTK_IS_SHORTCUTS_SHORTCUT (child))
     {

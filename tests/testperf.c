@@ -69,7 +69,7 @@ main (int argc, char *argv[])
       GSubprocessLauncher *launcher;
       GSubprocess *subprocess;
       int fd;
-      gchar *name;
+      char *name;
       SysprofCaptureReader *reader;
       SysprofCaptureCursor *cursor;
       SysprofCaptureCondition *condition;

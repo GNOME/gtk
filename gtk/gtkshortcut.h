@@ -35,7 +35,7 @@ GtkShortcut *   gtk_shortcut_new                                (GtkShortcutTrig
 GDK_AVAILABLE_IN_ALL
 GtkShortcut *   gtk_shortcut_new_with_arguments                 (GtkShortcutTrigger     *trigger,
                                                                  GtkShortcutAction      *action,
-                                                                 const gchar            *format_string,
+                                                                 const char             *format_string,
                                                                  ...);
 
 GDK_AVAILABLE_IN_ALL

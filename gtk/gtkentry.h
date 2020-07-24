@@ -139,9 +139,9 @@ gboolean   gtk_entry_get_overwrite_mode         (GtkEntry      *entry);
 /* text is truncated if needed */
 GDK_AVAILABLE_IN_ALL
 void       gtk_entry_set_max_length 		(GtkEntry      *entry,
-						 gint           max);
+						 int            max);
 GDK_AVAILABLE_IN_ALL
-gint       gtk_entry_get_max_length             (GtkEntry      *entry);
+int        gtk_entry_get_max_length             (GtkEntry      *entry);
 GDK_AVAILABLE_IN_ALL
 guint16    gtk_entry_get_text_length            (GtkEntry      *entry);
 
@@ -153,9 +153,9 @@ gboolean   gtk_entry_get_activates_default      (GtkEntry      *entry);
 
 GDK_AVAILABLE_IN_ALL
 void       gtk_entry_set_alignment              (GtkEntry      *entry,
-                                                 gfloat         xalign);
+                                                 float          xalign);
 GDK_AVAILABLE_IN_ALL
-gfloat     gtk_entry_get_alignment              (GtkEntry      *entry);
+float      gtk_entry_get_alignment              (GtkEntry      *entry);
 
 GDK_AVAILABLE_IN_ALL
 void                gtk_entry_set_completion (GtkEntry           *entry,
@@ -167,23 +167,23 @@ GtkEntryCompletion *gtk_entry_get_completion (GtkEntry           *entry);
  */
 GDK_AVAILABLE_IN_ALL
 void           gtk_entry_set_progress_fraction   (GtkEntry     *entry,
-                                                  gdouble       fraction);
+                                                  double        fraction);
 GDK_AVAILABLE_IN_ALL
-gdouble        gtk_entry_get_progress_fraction   (GtkEntry     *entry);
+double         gtk_entry_get_progress_fraction   (GtkEntry     *entry);
 
 GDK_AVAILABLE_IN_ALL
 void           gtk_entry_set_progress_pulse_step (GtkEntry     *entry,
-                                                  gdouble       fraction);
+                                                  double        fraction);
 GDK_AVAILABLE_IN_ALL
-gdouble        gtk_entry_get_progress_pulse_step (GtkEntry     *entry);
+double         gtk_entry_get_progress_pulse_step (GtkEntry     *entry);
 
 GDK_AVAILABLE_IN_ALL
 void           gtk_entry_progress_pulse          (GtkEntry     *entry);
 GDK_AVAILABLE_IN_ALL
-const gchar*   gtk_entry_get_placeholder_text    (GtkEntry             *entry);
+const char *   gtk_entry_get_placeholder_text    (GtkEntry             *entry);
 GDK_AVAILABLE_IN_ALL
 void           gtk_entry_set_placeholder_text    (GtkEntry             *entry,
-                                                  const gchar          *text);
+                                                  const char           *text);
 /* Setting and managing icons
  */
 GDK_AVAILABLE_IN_ALL
@@ -193,7 +193,7 @@ void           gtk_entry_set_icon_from_paintable         (GtkEntry             *
 GDK_AVAILABLE_IN_ALL
 void           gtk_entry_set_icon_from_icon_name         (GtkEntry             *entry,
 							  GtkEntryIconPosition  icon_pos,
-							  const gchar          *icon_name);
+							  const char           *icon_name);
 GDK_AVAILABLE_IN_ALL
 void           gtk_entry_set_icon_from_gicon             (GtkEntry             *entry,
 							  GtkEntryIconPosition  icon_pos,
@@ -205,7 +205,7 @@ GDK_AVAILABLE_IN_ALL
 GdkPaintable * gtk_entry_get_icon_paintable              (GtkEntry             *entry,
 							  GtkEntryIconPosition  icon_pos);
 GDK_AVAILABLE_IN_ALL
-const gchar* gtk_entry_get_icon_name                     (GtkEntry             *entry,
+const char * gtk_entry_get_icon_name                     (GtkEntry             *entry,
 							  GtkEntryIconPosition  icon_pos);
 GDK_AVAILABLE_IN_ALL
 GIcon*       gtk_entry_get_icon_gicon                    (GtkEntry             *entry,
@@ -225,22 +225,22 @@ GDK_AVAILABLE_IN_ALL
 gboolean     gtk_entry_get_icon_sensitive                (GtkEntry             *entry,
 							  GtkEntryIconPosition  icon_pos);
 GDK_AVAILABLE_IN_ALL
-gint         gtk_entry_get_icon_at_pos                   (GtkEntry             *entry,
-							  gint                  x,
-							  gint                  y);
+int          gtk_entry_get_icon_at_pos                   (GtkEntry             *entry,
+							  int                   x,
+							  int                   y);
 GDK_AVAILABLE_IN_ALL
 void         gtk_entry_set_icon_tooltip_text             (GtkEntry             *entry,
 							  GtkEntryIconPosition  icon_pos,
-							  const gchar          *tooltip);
+							  const char           *tooltip);
 GDK_AVAILABLE_IN_ALL
-gchar *      gtk_entry_get_icon_tooltip_text             (GtkEntry             *entry,
+char *      gtk_entry_get_icon_tooltip_text             (GtkEntry             *entry,
                                                           GtkEntryIconPosition  icon_pos);
 GDK_AVAILABLE_IN_ALL
 void         gtk_entry_set_icon_tooltip_markup           (GtkEntry             *entry,
 							  GtkEntryIconPosition  icon_pos,
-							  const gchar          *tooltip);
+							  const char           *tooltip);
 GDK_AVAILABLE_IN_ALL
-gchar *      gtk_entry_get_icon_tooltip_markup           (GtkEntry             *entry,
+char *      gtk_entry_get_icon_tooltip_markup           (GtkEntry             *entry,
                                                           GtkEntryIconPosition  icon_pos);
 GDK_AVAILABLE_IN_ALL
 void         gtk_entry_set_icon_drag_source              (GtkEntry             *entry,
@@ -248,7 +248,7 @@ void         gtk_entry_set_icon_drag_source              (GtkEntry             *
 							  GdkContentProvider   *provider,
 							  GdkDragAction         actions);
 GDK_AVAILABLE_IN_ALL
-gint         gtk_entry_get_current_icon_drag_source      (GtkEntry             *entry);
+int          gtk_entry_get_current_icon_drag_source      (GtkEntry             *entry);
 GDK_AVAILABLE_IN_ALL
 void         gtk_entry_get_icon_area                     (GtkEntry             *entry,
                                                           GtkEntryIconPosition  icon_pos,

@@ -62,7 +62,7 @@ struct _GtkPrintJob
 {
   GObject parent_instance;
 
-  gchar *title;
+  char *title;
 
   GIOChannel *spool_io;
   cairo_surface_t *surface;
@@ -75,10 +75,10 @@ struct _GtkPrintJob
 
   GtkPrintPages print_pages;
   GtkPageRange *page_ranges;
-  gint num_page_ranges;
+  int num_page_ranges;
   GtkPageSet page_set;
-  gint num_copies;
-  gdouble scale;
+  int num_copies;
+  double scale;
   guint number_up;
   GtkNumberUpLayout number_up_layout;
 
@@ -297,7 +297,7 @@ gtk_print_job_finalize (GObject *object)
  * Returns: a new #GtkPrintJob
  **/
 GtkPrintJob *
-gtk_print_job_new (const gchar      *title,
+gtk_print_job_new (const char       *title,
 		   GtkPrinter       *printer,
 		   GtkPrintSettings *settings,
 		   GtkPageSetup     *page_setup)
@@ -352,7 +352,7 @@ gtk_print_job_get_printer (GtkPrintJob *job)
  * 
  * Returns: the title of @job
  */
-const gchar *
+const char *
 gtk_print_job_get_title (GtkPrintJob *job)
 {
   g_return_val_if_fail (GTK_IS_PRINT_JOB (job), NULL);
@@ -405,7 +405,7 @@ gtk_print_job_set_status (GtkPrintJob   *job,
  **/
 gboolean
 gtk_print_job_set_source_file (GtkPrintJob *job,
-			       const gchar *filename,
+			       const char *filename,
 			       GError     **error)
 {
   GError *tmp_error;
@@ -475,8 +475,8 @@ cairo_surface_t *
 gtk_print_job_get_surface (GtkPrintJob  *job,
 			   GError      **error)
 {
-  gchar *filename = NULL;
-  gdouble width, height;
+  char *filename = NULL;
+  double width, height;
   GtkPaperSize *paper_size;
   int fd;
   GError *tmp_error;
@@ -724,7 +724,7 @@ gtk_print_job_set_pages (GtkPrintJob   *job,
  */
 GtkPageRange *
 gtk_print_job_get_page_ranges (GtkPrintJob *job,
-                               gint        *n_ranges)
+                               int         *n_ranges)
 {
   *n_ranges = job->num_page_ranges;
   return job->page_ranges;
@@ -742,7 +742,7 @@ gtk_print_job_get_page_ranges (GtkPrintJob *job,
 void
 gtk_print_job_set_page_ranges (GtkPrintJob  *job,
                                GtkPageRange *ranges,
-                               gint          n_ranges)
+                               int           n_ranges)
 {
   g_free (job->page_ranges);
   job->page_ranges = ranges;
@@ -785,7 +785,7 @@ gtk_print_job_set_page_set (GtkPrintJob *job,
  *
  * Returns: the number of copies
  */
-gint
+int
 gtk_print_job_get_num_copies (GtkPrintJob *job)
 {
   return job->num_copies;
@@ -800,7 +800,7 @@ gtk_print_job_get_num_copies (GtkPrintJob *job)
  */
 void
 gtk_print_job_set_num_copies (GtkPrintJob *job,
-                              gint         num_copies)
+                              int          num_copies)
 {
   job->num_copies = num_copies;
 }
@@ -813,7 +813,7 @@ gtk_print_job_set_num_copies (GtkPrintJob *job,
  *
  * Returns: the scale
  */
-gdouble
+double
 gtk_print_job_get_scale (GtkPrintJob *job)
 
 {
@@ -829,7 +829,7 @@ gtk_print_job_get_scale (GtkPrintJob *job)
  */
 void
 gtk_print_job_set_scale (GtkPrintJob *job,
-                         gdouble      scale)
+                         double       scale)
 {
   job->scale = scale;
 }

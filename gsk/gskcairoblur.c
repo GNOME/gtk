@@ -306,8 +306,8 @@ gsk_cairo_blur_start_drawing (cairo_t         *cr,
   double clip_x1, clip_x2, clip_y1, clip_y2, clip_width, clip_height;
   cairo_surface_t *surface;
   cairo_t *blur_cr;
-  gdouble clip_radius;
-  gdouble x_scale, y_scale;
+  double clip_radius;
+  double x_scale, y_scale;
   gboolean blur_x = (blur_flags & GSK_BLUR_X) != 0;
   gboolean blur_y = (blur_flags & GSK_BLUR_Y) != 0;
 
@@ -377,7 +377,7 @@ gsk_cairo_blur_finish_drawing (cairo_t         *cr,
 {
   cairo_t *original_cr;
   cairo_surface_t *surface;
-  gdouble x_scale;
+  double x_scale;
 
   if (!needs_blur (radius, blur_flags))
     return cr;

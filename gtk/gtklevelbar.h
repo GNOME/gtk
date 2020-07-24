@@ -64,8 +64,8 @@ GDK_AVAILABLE_IN_ALL
 GtkWidget *gtk_level_bar_new                (void);
 
 GDK_AVAILABLE_IN_ALL
-GtkWidget *gtk_level_bar_new_for_interval   (gdouble      min_value,
-                                             gdouble      max_value);
+GtkWidget *gtk_level_bar_new_for_interval   (double       min_value,
+                                             double       max_value);
 
 GDK_AVAILABLE_IN_ALL
 void       gtk_level_bar_set_mode           (GtkLevelBar *self,
@@ -75,21 +75,21 @@ GtkLevelBarMode gtk_level_bar_get_mode      (GtkLevelBar *self);
 
 GDK_AVAILABLE_IN_ALL
 void       gtk_level_bar_set_value          (GtkLevelBar *self,
-                                             gdouble      value);
+                                             double       value);
 GDK_AVAILABLE_IN_ALL
-gdouble    gtk_level_bar_get_value          (GtkLevelBar *self);
+double     gtk_level_bar_get_value          (GtkLevelBar *self);
 
 GDK_AVAILABLE_IN_ALL
 void       gtk_level_bar_set_min_value      (GtkLevelBar *self,
-                                             gdouble      value);
+                                             double       value);
 GDK_AVAILABLE_IN_ALL
-gdouble    gtk_level_bar_get_min_value      (GtkLevelBar *self);
+double     gtk_level_bar_get_min_value      (GtkLevelBar *self);
 
 GDK_AVAILABLE_IN_ALL
 void       gtk_level_bar_set_max_value      (GtkLevelBar *self,
-                                             gdouble      value);
+                                             double       value);
 GDK_AVAILABLE_IN_ALL
-gdouble    gtk_level_bar_get_max_value      (GtkLevelBar *self);
+double     gtk_level_bar_get_max_value      (GtkLevelBar *self);
 
 GDK_AVAILABLE_IN_ALL
 void       gtk_level_bar_set_inverted       (GtkLevelBar *self,
@@ -100,15 +100,15 @@ gboolean   gtk_level_bar_get_inverted       (GtkLevelBar *self);
 
 GDK_AVAILABLE_IN_ALL
 void       gtk_level_bar_add_offset_value   (GtkLevelBar *self,
-                                             const gchar *name,
-                                             gdouble      value);
+                                             const char *name,
+                                             double       value);
 GDK_AVAILABLE_IN_ALL
 void       gtk_level_bar_remove_offset_value (GtkLevelBar *self,
-                                              const gchar *name);
+                                              const char *name);
 GDK_AVAILABLE_IN_ALL
 gboolean   gtk_level_bar_get_offset_value   (GtkLevelBar *self,
-                                             const gchar *name,
-                                             gdouble     *value);
+                                             const char *name,
+                                             double      *value);
 
 G_END_DECLS
 

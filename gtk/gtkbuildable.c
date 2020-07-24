@@ -57,7 +57,7 @@ gtk_buildable_default_init (GtkBuildableInterface *iface)
  **/
 void
 gtk_buildable_set_name (GtkBuildable *buildable,
-                        const gchar  *name)
+                        const char   *name)
 {
   GtkBuildableIface *iface;
 
@@ -87,7 +87,7 @@ gtk_buildable_set_name (GtkBuildable *buildable,
  *
  * Returns: the name set with gtk_buildable_set_name()
  **/
-const gchar *
+const char *
 gtk_buildable_get_name (GtkBuildable *buildable)
 {
   GtkBuildableIface *iface;
@@ -99,7 +99,7 @@ gtk_buildable_get_name (GtkBuildable *buildable)
   if (iface->get_name)
     return (* iface->get_name) (buildable);
   else
-    return (const gchar*)g_object_get_data (G_OBJECT (buildable),
+    return (const char *)g_object_get_data (G_OBJECT (buildable),
 					    "gtk-builder-name");
 }
 
@@ -117,7 +117,7 @@ void
 gtk_buildable_add_child (GtkBuildable *buildable,
 			 GtkBuilder   *builder,
 			 GObject      *child,
-			 const gchar  *type)
+			 const char   *type)
 {
   GtkBuildableIface *iface;
 
@@ -142,7 +142,7 @@ gtk_buildable_add_child (GtkBuildable *buildable,
 void
 gtk_buildable_set_buildable_property (GtkBuildable *buildable,
 				      GtkBuilder   *builder,
-				      const gchar  *name,
+				      const char   *name,
 				      const GValue *value)
 {
   GtkBuildableIface *iface;
@@ -200,7 +200,7 @@ gtk_buildable_parser_finished (GtkBuildable *buildable,
 GObject *
 gtk_buildable_construct_child (GtkBuildable *buildable,
                                GtkBuilder   *builder,
-                               const gchar  *name)
+                               const char   *name)
 {
   GtkBuildableIface *iface;
 
@@ -233,7 +233,7 @@ gboolean
 gtk_buildable_custom_tag_start (GtkBuildable       *buildable,
                                 GtkBuilder         *builder,
                                 GObject            *child,
-                                const gchar        *tagname,
+                                const char         *tagname,
                                 GtkBuildableParser *parser,
                                 gpointer           *data)
 {
@@ -265,7 +265,7 @@ void
 gtk_buildable_custom_tag_end (GtkBuildable  *buildable,
                               GtkBuilder    *builder,
                               GObject       *child,
-                              const gchar   *tagname,
+                              const char    *tagname,
                               gpointer       data)
 {
   GtkBuildableIface *iface;
@@ -294,7 +294,7 @@ void
 gtk_buildable_custom_finished (GtkBuildable  *buildable,
 			       GtkBuilder    *builder,
 			       GObject       *child,
-			       const gchar   *tagname,
+			       const char    *tagname,
 			       gpointer       data)
 {
   GtkBuildableIface *iface;
@@ -320,7 +320,7 @@ gtk_buildable_custom_finished (GtkBuildable  *buildable,
 GObject *
 gtk_buildable_get_internal_child (GtkBuildable *buildable,
                                   GtkBuilder   *builder,
-                                  const gchar  *childname)
+                                  const char   *childname)
 {
   GtkBuildableIface *iface;
 

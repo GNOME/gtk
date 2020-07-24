@@ -27,7 +27,7 @@ struct _GtkTreeDataList
   GtkTreeDataList *next;
 
   union {
-    gint	   v_int;
+    int 	   v_int;
     gint8          v_char;
     guint8         v_uchar;
     guint	   v_uint;
@@ -35,15 +35,15 @@ struct _GtkTreeDataList
     gulong	   v_ulong;
     gint64	   v_int64;
     guint64        v_uint64;
-    gfloat	   v_float;
-    gdouble        v_double;
+    float	   v_float;
+    double         v_double;
     gpointer	   v_pointer;
   } data;
 };
 
 typedef struct _GtkTreeDataSortHeader
 {
-  gint sort_column_id;
+  int sort_column_id;
   GtkTreeIterCompareFunc func;
   gpointer data;
   GDestroyNotify destroy;
@@ -63,17 +63,17 @@ GtkTreeDataList *_gtk_tree_data_list_node_copy      (GtkTreeDataList *list,
                                                      GType            type);
 
 /* Header code */
-gint                   _gtk_tree_data_list_compare_func (GtkTreeModel *model,
+int                    _gtk_tree_data_list_compare_func (GtkTreeModel *model,
 							 GtkTreeIter  *a,
 							 GtkTreeIter  *b,
 							 gpointer      user_data);
-GList *                _gtk_tree_data_list_header_new  (gint          n_columns,
+GList *                _gtk_tree_data_list_header_new  (int           n_columns,
 							GType        *types);
 void                   _gtk_tree_data_list_header_free (GList        *header_list);
 GtkTreeDataSortHeader *_gtk_tree_data_list_get_header  (GList        *header_list,
-							gint          sort_column_id);
+							int           sort_column_id);
 GList                 *_gtk_tree_data_list_set_header  (GList                  *header_list,
-							gint                    sort_column_id,
+							int                     sort_column_id,
 							GtkTreeIterCompareFunc  func,
 							gpointer                data,
 							GDestroyNotify          destroy);

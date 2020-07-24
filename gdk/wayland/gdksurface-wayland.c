@@ -111,17 +111,17 @@ struct _GdkWaylandSurface
   int pending_buffer_offset_x;
   int pending_buffer_offset_y;
 
-  gchar *title;
+  char *title;
 
   struct {
     gboolean was_set;
 
-    gchar *application_id;
-    gchar *app_menu_path;
-    gchar *menubar_path;
-    gchar *window_object_path;
-    gchar *application_object_path;
-    gchar *unique_bus_name;
+    char *application_id;
+    char *app_menu_path;
+    char *menubar_path;
+    char *window_object_path;
+    char *application_object_path;
+    char *unique_bus_name;
   } application;
 
   GdkGeometry geometry_hints;
@@ -288,10 +288,10 @@ static void gdk_wayland_surface_sync_opaque_region (GdkSurface *surface);
 static void unset_transient_for_exported (GdkSurface *surface);
 
 static void gdk_wayland_surface_move_resize (GdkSurface *surface,
-                                             gint        x,
-                                             gint        y,
-                                             gint        width,
-                                             gint        height);
+                                             int         x,
+                                             int         y,
+                                             int         width,
+                                             int         height);
 
 static void update_popup_layout_state (GdkSurface     *surface,
                                        int             x,
@@ -387,7 +387,7 @@ gdk_wayland_surface_update_size (GdkSurface *surface,
   gdk_surface_invalidate_rect (surface, NULL);
 }
 
-static const gchar *
+static const char *
 get_default_title (void)
 {
   const char *title;
@@ -1688,7 +1688,7 @@ gdk_wayland_surface_create_xdg_toplevel (GdkSurface *surface)
 {
   GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (gdk_surface_get_display (surface));
   GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
-  const gchar *app_id;
+  const char *app_id;
 
   gdk_surface_freeze_updates (surface);
 
@@ -2135,8 +2135,8 @@ update_popup_layout_state (GdkSurface     *surface,
                            int             height,
                            GdkPopupLayout *layout)
 {
-  gint surface_x, surface_y;
-  gint surface_width, surface_height;
+  int surface_x, surface_y;
+  int surface_width, surface_height;
   GdkRectangle best_rect;
   GdkRectangle flipped_rect;
   GdkGravity rect_anchor;
@@ -2239,8 +2239,8 @@ create_dynamic_positioner (GdkSurface     *surface,
   GdkRectangle geometry;
   uint32_t constraint_adjustment = ZXDG_POSITIONER_V6_CONSTRAINT_ADJUSTMENT_NONE;
   const GdkRectangle *anchor_rect;
-  gint real_anchor_rect_x, real_anchor_rect_y;
-  gint anchor_rect_width, anchor_rect_height;
+  int real_anchor_rect_x, real_anchor_rect_y;
+  int anchor_rect_width, anchor_rect_height;
   int rect_anchor_dx;
   int rect_anchor_dy;
   GdkGravity rect_anchor;
@@ -2761,10 +2761,10 @@ gdk_wayland_surface_hide (GdkSurface *surface)
 
 static void
 gdk_wayland_surface_move_resize (GdkSurface *surface,
-                                 gint        x,
-                                 gint        y,
-                                 gint        width,
-                                 gint        height)
+                                 int         x,
+                                 int         y,
+                                 int         width,
+                                 int         height)
 {
   GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
 
@@ -3048,10 +3048,10 @@ gdk_wayland_surface_present_popup (GdkSurface     *surface,
 
 static void
 gdk_wayland_surface_get_geometry (GdkSurface *surface,
-                                  gint       *x,
-                                  gint       *y,
-                                  gint       *width,
-                                  gint       *height)
+                                  int        *x,
+                                  int        *y,
+                                  int        *width,
+                                  int        *height)
 {
   if (!GDK_SURFACE_DESTROYED (surface))
     {
@@ -3068,10 +3068,10 @@ gdk_wayland_surface_get_geometry (GdkSurface *surface,
 
 static void
 gdk_wayland_surface_get_root_coords (GdkSurface *surface,
-                                     gint        x,
-                                     gint        y,
-                                     gint       *root_x,
-                                     gint       *root_y)
+                                     int         x,
+                                     int         y,
+                                     int        *root_x,
+                                     int        *root_y)
 {
   /*
    * Wayland does not have a global coordinate space shared between surfaces. In
@@ -3105,8 +3105,8 @@ gdk_wayland_surface_get_root_coords (GdkSurface *surface,
 static gboolean
 gdk_wayland_surface_get_device_state (GdkSurface       *surface,
                                       GdkDevice        *device,
-                                      gdouble          *x,
-                                      gdouble          *y,
+                                      double           *x,
+                                      double           *y,
                                       GdkModifierType  *mask)
 {
   gboolean return_val;
@@ -3393,7 +3393,7 @@ gdk_wayland_surface_set_geometry_hints (GdkSurface         *surface,
 
 static void
 gdk_wayland_surface_set_title (GdkSurface  *surface,
-                               const gchar *title)
+                               const char *title)
 {
   GdkWaylandSurface *impl;
   const char *end;
@@ -3429,7 +3429,7 @@ gdk_wayland_surface_set_title (GdkSurface  *surface,
 
 static void
 gdk_wayland_surface_set_startup_id (GdkSurface  *surface,
-                                    const gchar *startup_id)
+                                    const char *startup_id)
 {
 }
 
@@ -3826,7 +3826,7 @@ gdk_wayland_surface_destroy_notify (GdkSurface *surface)
   g_object_unref (surface);
 }
 
-static gint
+static int
 gdk_wayland_surface_get_scale_factor (GdkSurface *surface)
 {
   GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
@@ -3859,7 +3859,7 @@ gdk_wayland_surface_set_shadow_width (GdkSurface *surface,
                                       int         bottom)
 {
   GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
-  gint new_width, new_height;
+  int new_width, new_height;
 
   if (GDK_SURFACE_DESTROYED (surface))
     return;

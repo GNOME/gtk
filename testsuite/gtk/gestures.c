@@ -5,8 +5,8 @@
 
 typedef struct {
   GtkWidget *widget;
-  gint x;
-  gint y;
+  int x;
+  int y;
   guint state;
   guint pressed : 1;
 } PointState;
@@ -81,8 +81,8 @@ point_press (PointState *point,
 static void
 point_update (PointState *point,
               GtkWidget  *widget,
-              gdouble     x,
-              gdouble     y)
+              double      x,
+              double      y)
 {
   GdkDisplay *display;
   GdkDevice *device;
@@ -189,7 +189,7 @@ point_release (PointState *point,
   g_object_unref (ev);
 }
 
-static const gchar *
+static const char *
 phase_nick (GtkPropagationPhase phase)
 {
  GTypeClass *class;
@@ -202,7 +202,7 @@ phase_nick (GtkPropagationPhase phase)
  return value->value_nick;
 }
 
-static const gchar *
+static const char *
 state_nick (GtkEventSequenceState state)
 {
  GTypeClass *class;
@@ -247,13 +247,13 @@ typedef struct {
 } GestureData;
 
 static void
-press_cb (GtkGesture *g, gint n_press, gdouble x, gdouble y, gpointer data)
+press_cb (GtkGesture *g, int n_press, double x, double y, gpointer data)
 {
   GtkEventController *c = GTK_EVENT_CONTROLLER (g);
   GdkEventSequence *sequence;
   GtkPropagationPhase phase;
   GestureData *gd = data;
-  const gchar *name;
+  const char *name;
   
   name = g_object_get_data (G_OBJECT (g), "name");
   phase = gtk_event_controller_get_propagation_phase (c);
@@ -275,7 +275,7 @@ static void
 cancel_cb (GtkGesture *g, GdkEventSequence *sequence, gpointer data)
 {
   GestureData *gd = data;
-  const gchar *name;
+  const char *name;
   
   name = g_object_get_data (G_OBJECT (g), "name");
   
@@ -288,7 +288,7 @@ static void
 begin_cb (GtkGesture *g, GdkEventSequence *sequence, gpointer data)
 {
   GestureData *gd = data;
-  const gchar *name;
+  const char *name;
 
   name = g_object_get_data (G_OBJECT (g), "name");
 
@@ -304,7 +304,7 @@ static void
 end_cb (GtkGesture *g, GdkEventSequence *sequence, gpointer data)
 {
   GestureData *gd = data;
-  const gchar *name;
+  const char *name;
 
   name = g_object_get_data (G_OBJECT (g), "name");
 
@@ -317,7 +317,7 @@ static void
 update_cb (GtkGesture *g, GdkEventSequence *sequence, gpointer data)
 {
   GestureData *gd = data;
-  const gchar *name;
+  const char *name;
   
   name = g_object_get_data (G_OBJECT (g), "name");
   
@@ -330,7 +330,7 @@ static void
 state_changed_cb (GtkGesture *g, GdkEventSequence *sequence, GtkEventSequenceState state, gpointer data)
 {
   GestureData *gd = data;
-  const gchar *name;
+  const char *name;
   
   name = g_object_get_data (G_OBJECT (g), "name");
   
@@ -344,7 +344,7 @@ state_changed_cb (GtkGesture *g, GdkEventSequence *sequence, GtkEventSequenceSta
 
 
 static GtkGesture *
-add_gesture (GtkWidget *w, const gchar *name, GtkPropagationPhase phase, GString *str, GtkEventSequenceState state)
+add_gesture (GtkWidget *w, const char *name, GtkPropagationPhase phase, GString *str, GtkEventSequenceState state)
 {
   GtkGesture *g;
   GestureData *data;
@@ -370,7 +370,7 @@ add_gesture (GtkWidget *w, const gchar *name, GtkPropagationPhase phase, GString
 }
 
 static GtkGesture *
-add_mt_gesture (GtkWidget *w, const gchar *name, GtkPropagationPhase phase, GString *str, GtkEventSequenceState state)
+add_mt_gesture (GtkWidget *w, const char *name, GtkPropagationPhase phase, GString *str, GtkEventSequenceState state)
 {
   GtkGesture *g;
   GestureData *data;

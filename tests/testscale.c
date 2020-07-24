@@ -64,8 +64,8 @@ trough (GtkToggleButton *button)
     }
 }
 
-gdouble marks[3] = { 0.0, 50.0, 100.0 };
-gdouble extra_marks[2] = { 20.0, 40.0 };
+double marks[3] = { 0.0, 50.0, 100.0 };
+double extra_marks[2] = { 20.0, 40.0 };
 
 static void
 extra (GtkToggleButton *button)
@@ -108,22 +108,22 @@ int main (int argc, char *argv[])
   GtkWidget *button;
   GtkWidget *frame;
   GtkWidget *scale;
-  const gchar *labels[3] = {
+  const char *labels[3] = {
     "<small>Left</small>",
     "<small>Middle</small>",
     "<small>Right</small>"
   };
 
-  gdouble bath_marks[4] = { 0.0, 33.3, 66.6, 100.0 };
-  const gchar *bath_labels[4] = {
+  double bath_marks[4] = { 0.0, 33.3, 66.6, 100.0 };
+  const char *bath_labels[4] = {
     "<span color='blue' size='small'>Cold</span>",
     "<span size='small'>Baby bath</span>",
     "<span size='small'>Hot tub</span>",
     "<span color='Red' size='small'>Hot</span>"
   };
 
-  gdouble pos_marks[4] = { 0.0, 33.3, 66.6, 100.0 };
-  const gchar *pos_labels[4] = { "Left", "Right", "Top", "Bottom" };
+  double pos_marks[4] = { 0.0, 33.3, 66.6, 100.0 };
+  const char *pos_labels[4] = { "Left", "Right", "Top", "Bottom" };
   gboolean done = FALSE;
 
   gtk_init ();

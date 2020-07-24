@@ -28,11 +28,11 @@
 
 struct _GtkCssTokenizer
 {
-  gint                   ref_count;
+  int                    ref_count;
   GBytes                *bytes;
 
-  const gchar           *data;
-  const gchar           *end;
+  const char            *data;
+  const char            *end;
 
   GtkCssLocation         position;
 };

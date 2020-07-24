@@ -183,8 +183,8 @@ typedef struct
   GdkDisplay            *display;
   GtkApplication        *application;
 
-  gchar   *startup_id;
-  gchar   *title;
+  char    *startup_id;
+  char    *title;
 
   guint    keys_changed_handler;
 
@@ -196,9 +196,9 @@ typedef struct
 
   guint    focus_visible_timeout;
 
-  gint     scale;
+  int      scale;
 
-  gint title_height;
+  int title_height;
   GtkWidget *title_box;
   GtkWidget *titlebar;
   GtkWidget *key_press_focus;
@@ -319,7 +319,7 @@ typedef enum
 
 typedef struct
 {
-  gchar     *icon_name;
+  char      *icon_name;
   guint      realized : 1;
   guint      using_default_icon : 1;
   guint      using_themed_icon : 1;
@@ -336,14 +336,14 @@ struct _GtkWindowGeometryInfo
   /* from last gtk_window_resize () - if > 0, indicates that
    * we should resize to this size.
    */
-  gint           resize_width;  
-  gint           resize_height;
+  int            resize_width;  
+  int            resize_height;
 
   /* Default size - used only the FIRST time we map a window,
    * only if > 0.
    */
-  gint           default_width; 
-  gint           default_height;
+  int            default_width; 
+  int            default_height;
 
   GtkWindowLastGeometryInfo last;
 };
@@ -389,7 +389,7 @@ static gboolean surface_event             (GdkSurface         *surface,
                                            GdkEvent           *event,
                                            GtkWidget          *widget);
 
-static gint gtk_window_focus              (GtkWidget        *widget,
+static int gtk_window_focus              (GtkWidget        *widget,
 				           GtkDirectionType  direction);
 static void gtk_window_move_focus         (GtkWidget         *widget,
                                            GtkDirectionType   dir);
@@ -416,14 +416,14 @@ static gboolean gtk_window_compare_hints             (GdkGeometry  *geometry_a,
 static void     gtk_window_constrain_size            (GtkWindow    *window,
                                                       GdkGeometry  *geometry,
                                                       guint         flags,
-                                                      gint          width,
-                                                      gint          height,
-                                                      gint         *new_width,
-                                                      gint         *new_height);
+                                                      int           width,
+                                                      int           height,
+                                                      int          *new_width,
+                                                      int          *new_height);
 static void     gtk_window_update_fixed_size         (GtkWindow    *window,
                                                       GdkGeometry  *new_geometry,
-                                                      gint          new_width,
-                                                      gint          new_height);
+                                                      int           new_width,
+                                                      int           new_height);
 static void     gtk_window_compute_hints             (GtkWindow    *window,
                                                       GdkGeometry  *new_geometry,
                                                       guint        *new_flags);
@@ -434,13 +434,13 @@ static void     gtk_window_compute_configure_request (GtkWindow    *window,
 
 static void     gtk_window_set_default_size_internal (GtkWindow    *window,
                                                       gboolean      change_width,
-                                                      gint          width,
+                                                      int           width,
                                                       gboolean      change_height,
-                                                      gint          height);
+                                                      int           height);
 
 static void     update_themed_icon                    (GtkWindow    *window);
 static GList   *icon_list_from_theme                  (GtkWindow    *window,
-						       const gchar  *name);
+						       const char   *name);
 static void     gtk_window_realize_icon               (GtkWindow    *window);
 static void     gtk_window_unrealize_icon             (GtkWindow    *window);
 static void     update_window_actions                 (GtkWindow    *window);
@@ -484,7 +484,7 @@ static void gtk_window_release_application (GtkWindow *window);
 
 static GListStore  *toplevel_list = NULL;
 static guint        window_signals[LAST_SIGNAL] = { 0 };
-static gchar       *default_icon_name = NULL;
+static char        *default_icon_name = NULL;
 static gboolean     disable_startup_notification = FALSE;
 
 static GQuark       quark_gtk_window_icon_info = 0;
@@ -505,10 +505,10 @@ static void     gtk_window_buildable_interface_init         (GtkBuildableIface  
 static void     gtk_window_buildable_add_child              (GtkBuildable       *buildable,
                                                              GtkBuilder         *builder,
                                                              GObject            *child,
-                                                             const gchar        *type);
+                                                             const char         *type);
 static void     gtk_window_buildable_set_buildable_property (GtkBuildable       *buildable,
                                                              GtkBuilder         *builder,
-                                                             const gchar        *name,
+                                                             const char         *name,
                                                              const GValue       *value);
 
 static void             gtk_window_shortcut_manager_interface_init      (GtkShortcutManagerInterface *iface);
@@ -575,14 +575,14 @@ add_arrow_bindings (GtkWidgetClass   *widget_class,
 }
 
 static guint32
-extract_time_from_startup_id (const gchar* startup_id)
+extract_time_from_startup_id (const char * startup_id)
 {
-  gchar *timestr = g_strrstr (startup_id, "_TIME");
+  char *timestr = g_strrstr (startup_id, "_TIME");
   guint32 retval = GDK_CURRENT_TIME;
 
   if (timestr)
     {
-      gchar *end;
+      char *end;
       guint32 timestamp; 
     
       /* Skip past the "_TIME" part */
@@ -599,7 +599,7 @@ extract_time_from_startup_id (const gchar* startup_id)
 }
 
 static gboolean
-startup_id_is_fake (const gchar* startup_id)
+startup_id_is_fake (const char * startup_id)
 {
   return strncmp (startup_id, "_TIME", 5) == 0;
 }
@@ -1210,7 +1210,7 @@ constraints_for_edge (GdkSurfaceEdge edge)
     }
 }
 
-static gint
+static int
 get_number (GtkCssValue *value)
 {
   double d = _gtk_css_number_value_get (value, 100);
@@ -1321,9 +1321,9 @@ get_edge_for_coordinates (GtkWindow *window,
 
 static void
 click_gesture_pressed_cb (GtkGestureClick *gesture,
-                          gint             n_press,
-                          gdouble          x,
-                          gdouble          y,
+                          int              n_press,
+                          double           x,
+                          double           y,
                           GtkWindow       *window)
 {
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
@@ -1757,7 +1757,7 @@ static void
 gtk_window_buildable_add_child (GtkBuildable *buildable,
                                 GtkBuilder   *builder,
                                 GObject      *child,
-                                const gchar  *type)
+                                const char   *type)
 {
   if (type && strcmp (type, "titlebar") == 0)
     gtk_window_set_titlebar (GTK_WINDOW (buildable), GTK_WIDGET (child));
@@ -1770,7 +1770,7 @@ gtk_window_buildable_add_child (GtkBuildable *buildable,
 static void
 gtk_window_buildable_set_buildable_property (GtkBuildable *buildable,
                                              GtkBuilder   *builder,
-                                             const gchar  *name,
+                                             const char   *name,
                                              const GValue *value)
 {
   GtkWindow *window = GTK_WINDOW (buildable);
@@ -1969,7 +1969,7 @@ gtk_window_new (void)
  **/
 void
 gtk_window_set_title (GtkWindow   *window,
-                      const gchar *title)
+                      const char *title)
 {
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
   char *new_title;
@@ -1996,7 +1996,7 @@ gtk_window_set_title (GtkWindow   *window,
  * been set explicitly. The returned string is owned by the widget
  * and must not be modified or freed.
  **/
-const gchar *
+const char *
 gtk_window_get_title (GtkWindow *window)
 {
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
@@ -2024,7 +2024,7 @@ gtk_window_get_title (GtkWindow *window)
  **/
 void
 gtk_window_set_startup_id (GtkWindow   *window,
-                           const gchar *startup_id)
+                           const char *startup_id)
 {
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
   GtkWidget *widget;
@@ -3056,15 +3056,15 @@ render_paintable_to_texture (GdkPaintable *paintable)
 
 static GList *
 icon_list_from_theme (GtkWindow   *window,
-		      const gchar *name)
+		      const char *name)
 {
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
   GList *list;
   GtkIconTheme *icon_theme;
   GtkIconPaintable *info;
   GdkTexture *texture;
-  gint *sizes;
-  gint i;
+  int *sizes;
+  int i;
 
   icon_theme = gtk_icon_theme_get_for_display (priv->display);
 
@@ -3208,10 +3208,10 @@ update_themed_icon (GtkWindow *window)
  */
 void 
 gtk_window_set_icon_name (GtkWindow   *window,
-			  const gchar *name)
+			  const char *name)
 {
   GtkWindowIconInfo *info;
-  gchar *tmp;
+  char *tmp;
 
   g_return_if_fail (GTK_IS_WINDOW (window));
 
@@ -3239,7 +3239,7 @@ gtk_window_set_icon_name (GtkWindow   *window,
  * Returns: (nullable): the icon name or %NULL if the window has
  * no themed icon
  */
-const gchar *
+const char *
 gtk_window_get_icon_name (GtkWindow *window)
 {
   GtkWindowIconInfo *info;
@@ -3260,7 +3260,7 @@ gtk_window_get_icon_name (GtkWindow *window)
  * themed icon, see gtk_window_set_icon_name().
  **/
 void
-gtk_window_set_default_icon_name (const gchar *name)
+gtk_window_set_default_icon_name (const char *name)
 {
   GList *tmp_list;
   GList *toplevels;
@@ -3300,7 +3300,7 @@ gtk_window_set_default_icon_name (const gchar *name)
  *
  * Returns: the fallback icon name for windows
  */
-const gchar *
+const char *
 gtk_window_get_default_icon_name (void)
 {
   return default_icon_name;
@@ -3311,13 +3311,13 @@ gtk_window_get_default_icon_name (void)
 
 static void
 gtk_window_update_csd_size (GtkWindow *window,
-                            gint      *width,
-                            gint      *height,
-                            gint       apply)
+                            int       *width,
+                            int       *height,
+                            int        apply)
 {
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
   GtkBorder window_border = { 0 };
-  gint w, h;
+  int w, h;
 
   if (!priv->decorated ||
       priv->fullscreen)
@@ -3331,8 +3331,8 @@ gtk_window_update_csd_size (GtkWindow *window,
       gtk_widget_get_visible (priv->title_box) &&
       gtk_widget_get_child_visible (priv->title_box))
     {
-      gint minimum_height;
-      gint natural_height;
+      int minimum_height;
+      int natural_height;
 
       gtk_widget_measure (priv->title_box, GTK_ORIENTATION_VERTICAL, -1,
                           &minimum_height, &natural_height,
@@ -3356,9 +3356,9 @@ gtk_window_update_csd_size (GtkWindow *window,
 static void
 gtk_window_set_default_size_internal (GtkWindow    *window,
                                       gboolean      change_width,
-                                      gint          width,
+                                      int           width,
                                       gboolean      change_height,
-                                      gint          height)
+                                      int           height)
 {
   GtkWindowGeometryInfo *info;
 
@@ -3440,8 +3440,8 @@ gtk_window_set_default_size_internal (GtkWindow    *window,
  */
 void
 gtk_window_set_default_size (GtkWindow   *window,
-			     gint         width,
-			     gint         height)
+			     int          width,
+			     int          height)
 {
   g_return_if_fail (GTK_IS_WINDOW (window));
   g_return_if_fail (width >= -1);
@@ -3464,8 +3464,8 @@ gtk_window_set_default_size (GtkWindow   *window,
  **/
 void
 gtk_window_get_default_size (GtkWindow *window,
-			     gint      *width,
-			     gint      *height)
+			     int       *width,
+			     int       *height)
 {
   GtkWindowGeometryInfo *info;
 
@@ -3518,8 +3518,8 @@ gtk_window_get_default_size (GtkWindow *window,
  **/
 void
 gtk_window_resize (GtkWindow *window,
-                   gint       width,
-                   gint       height)
+                   int        width,
+                   int        height)
 {
   GtkWindowGeometryInfo *info;
   
@@ -3608,11 +3608,11 @@ gtk_window_resize (GtkWindow *window,
  */
 void
 gtk_window_get_size (GtkWindow *window,
-                     gint      *width,
-                     gint      *height)
+                     int       *width,
+                     int       *height)
 {
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-  gint w, h;
+  int w, h;
 
   g_return_if_fail (GTK_IS_WINDOW (window));
 
@@ -3773,7 +3773,7 @@ static gboolean
 gtk_window_should_use_csd (GtkWindow *window)
 {
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-  const gchar *csd_env;
+  const char *csd_env;
 
   if (priv->csd_requested)
     return TRUE;
@@ -4010,8 +4010,8 @@ gtk_window_unmap (GtkWidget *widget)
 
 static void
 gtk_window_guess_default_size (GtkWindow *window,
-                               gint      *width,
-                               gint      *height)
+                               int       *width,
+                               int       *height)
 {
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
   GtkWidget *widget;
@@ -5211,8 +5211,8 @@ _gtk_window_unset_focus_and_default (GtkWindow *window,
 static void
 gtk_window_compute_configure_request_size (GtkWindow   *window,
                                            guint        flags,
-                                           gint        *width,
-                                           gint        *height)
+                                           int         *width,
+                                           int         *height)
 {
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
   GtkWindowGeometryInfo *info;
@@ -5236,8 +5236,8 @@ gtk_window_compute_configure_request_size (GtkWindow   *window,
           /* Take width of shadows/headerbar into account. We want to set the
            * default size of the content area and not the window area.
            */
-          gint default_width_csd = info->default_width;
-          gint default_height_csd = info->default_height;
+          int default_width_csd = info->default_width;
+          int default_height_csd = info->default_height;
           gtk_window_update_csd_size (window,
                                       &default_width_csd, &default_height_csd,
                                       INCLUDE_CSD_SIZE);
@@ -5262,8 +5262,8 @@ gtk_window_compute_configure_request_size (GtkWindow   *window,
     }
   else if (info)
     {
-      gint resize_width_csd = info->resize_width;
-      gint resize_height_csd = info->resize_height;
+      int resize_width_csd = info->resize_width;
+      int resize_height_csd = info->resize_height;
       gtk_window_update_csd_size (window,
                                   &resize_width_csd, &resize_height_csd,
                                   INCLUDE_CSD_SIZE);
@@ -5681,10 +5681,10 @@ static void
 gtk_window_constrain_size (GtkWindow   *window,
 			   GdkGeometry *geometry,
 			   guint        flags,
-			   gint         width,
-			   gint         height,
-			   gint        *new_width,
-			   gint        *new_height)
+			   int          width,
+			   int          height,
+			   int         *new_width,
+			   int         *new_height)
 {
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
   guint geometry_flags;
@@ -5711,8 +5711,8 @@ gtk_window_constrain_size (GtkWindow   *window,
 static void
 gtk_window_update_fixed_size (GtkWindow   *window,
                               GdkGeometry *new_geometry,
-                              gint         new_width,
-                              gint         new_height)
+                              int          new_width,
+                              int          new_height)
 {
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
   GtkWindowGeometryInfo *info;
@@ -5726,8 +5726,8 @@ gtk_window_update_fixed_size (GtkWindow   *window,
   info = gtk_window_get_geometry_info (window, FALSE);
   if (info)
     {
-      gint default_width_csd = info->default_width;
-      gint default_height_csd = info->default_height;
+      int default_width_csd = info->default_width;
+      int default_height_csd = info->default_height;
 
       gtk_window_update_csd_size (window,
                                   &default_width_csd, &default_height_csd,
@@ -5735,14 +5735,14 @@ gtk_window_update_fixed_size (GtkWindow   *window,
 
       if (info->default_width > -1)
         {
-          gint w = MAX (MAX (default_width_csd, new_width), new_geometry->min_width);
+          int w = MAX (MAX (default_width_csd, new_width), new_geometry->min_width);
           new_geometry->min_width = w;
           new_geometry->max_width = w;
         }
 
       if (info->default_height > -1)
         {
-          gint h = MAX (MAX (default_height_csd, new_height), new_geometry->min_height);
+          int h = MAX (MAX (default_height_csd, new_height), new_geometry->min_height);
           new_geometry->min_height = h;
           new_geometry->max_height = h;
         }
@@ -6596,7 +6596,7 @@ static void gtk_window_set_debugging (GdkDisplay *display,
 
 static void
 warn_response (GtkDialog *dialog,
-               gint       response)
+               int        response)
 {
   GtkWidget *check;
   gboolean remember;
@@ -6903,8 +6903,8 @@ gtk_window_update_pointer_focus (GtkWindow        *window,
                                  GdkDevice        *device,
                                  GdkEventSequence *sequence,
                                  GtkWidget        *target,
-                                 gdouble           x,
-                                 gdouble           y)
+                                 double            x,
+                                 double            y)
 {
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
   GtkPointerFocus *focus;

@@ -66,8 +66,8 @@ css_error_free (gpointer data)
 
 static gboolean
 query_tooltip_cb (GtkWidget             *widget,
-                  gint                   x,
-                  gint                   y,
+                  int                    x,
+                  int                    y,
                   gboolean               keyboard_tip,
                   GtkTooltip            *tooltip,
                   GtkInspectorCssEditor *ce)
@@ -77,14 +77,14 @@ query_tooltip_cb (GtkWidget             *widget,
 
   if (keyboard_tip)
     {
-      gint offset;
+      int offset;
 
       g_object_get (ce->priv->text, "cursor-position", &offset, NULL);
       gtk_text_buffer_get_iter_at_offset (ce->priv->text, &iter, offset);
     }
   else
     {
-      gint bx, by, trailing;
+      int bx, by, trailing;
 
       gtk_text_view_window_to_buffer_coords (GTK_TEXT_VIEW (ce->priv->view), GTK_TEXT_WINDOW_TEXT,
                                              x, y, &bx, &by);
@@ -171,7 +171,7 @@ disable_toggled (GtkToggleButton       *button,
                                                 GTK_STYLE_PROVIDER_PRIORITY_USER);
 }
 
-static gchar *
+static char *
 get_current_text (GtkTextBuffer *buffer)
 {
   GtkTextIter start, end;
@@ -221,7 +221,7 @@ save_to_file (GtkInspectorCssEditor *ce,
 
 static void
 save_response (GtkWidget             *dialog,
-               gint                   response,
+               int                    response,
                GtkInspectorCssEditor *ce)
 {
   gtk_widget_hide (dialog);
@@ -258,7 +258,7 @@ save_clicked (GtkButton             *button,
 static void
 update_style (GtkInspectorCssEditor *ce)
 {
-  gchar *text;
+  char *text;
 
   g_list_free_full (ce->priv->errors, css_error_free);
   ce->priv->errors = NULL;

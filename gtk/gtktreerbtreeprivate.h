@@ -66,7 +66,7 @@ struct _GtkTreeRBNode
   /* count is the number of nodes beneath us, plus 1 for ourselves.
    * i.e. node->left->count + node->right->count + 1
    */
-  gint count;
+  int count;
 
   GtkTreeRBNode *left;
   GtkTreeRBNode *right;
@@ -83,7 +83,7 @@ struct _GtkTreeRBNode
    * of all trees in ->children, iff children exists because
    * the thing is expanded.
    */
-  gint offset;
+  int offset;
 
   /* Child trees */
   GtkTreeRBTree *children;
@@ -104,25 +104,25 @@ void            gtk_tree_rbtree_remove                  (GtkTreeRBTree          
 void            gtk_tree_rbtree_destroy                 (GtkTreeRBTree                 *tree);
 GtkTreeRBNode * gtk_tree_rbtree_insert_before           (GtkTreeRBTree                 *tree,
                                                          GtkTreeRBNode                 *node,
-                                                         gint                           height,
+                                                         int                            height,
                                                          gboolean                       valid);
 GtkTreeRBNode * gtk_tree_rbtree_insert_after            (GtkTreeRBTree                 *tree,
                                                          GtkTreeRBNode                 *node,
-                                                         gint                           height,
+                                                         int                            height,
                                                          gboolean                       valid);
 void            gtk_tree_rbtree_remove_node             (GtkTreeRBTree                 *tree,
                                                          GtkTreeRBNode                 *node);
 gboolean        gtk_tree_rbtree_is_nil                  (GtkTreeRBNode                 *node);
 void            gtk_tree_rbtree_reorder                 (GtkTreeRBTree                 *tree,
-                                                         gint                          *new_order,
-                                                         gint                           length);
+                                                         int                           *new_order,
+                                                         int                            length);
 gboolean        gtk_tree_rbtree_contains                (GtkTreeRBTree                 *tree,
                                                          GtkTreeRBTree                 *potential_child);
 GtkTreeRBNode * gtk_tree_rbtree_find_count              (GtkTreeRBTree                 *tree,
-                                                         gint                           count);
+                                                         int                            count);
 void            gtk_tree_rbtree_node_set_height         (GtkTreeRBTree                 *tree,
                                                          GtkTreeRBNode                 *node,
-                                                         gint                           height);
+                                                         int                            height);
 void            gtk_tree_rbtree_node_mark_invalid       (GtkTreeRBTree                 *tree,
                                                          GtkTreeRBNode                 *node);
 void            gtk_tree_rbtree_node_mark_valid         (GtkTreeRBTree                 *tree,
@@ -130,9 +130,9 @@ void            gtk_tree_rbtree_node_mark_valid         (GtkTreeRBTree          
 void            gtk_tree_rbtree_column_invalid          (GtkTreeRBTree                 *tree);
 void            gtk_tree_rbtree_mark_invalid            (GtkTreeRBTree                 *tree);
 void            gtk_tree_rbtree_set_fixed_height        (GtkTreeRBTree                 *tree,
-                                                         gint                           height,
+                                                         int                            height,
                                                          gboolean                       mark_valid);
-gint            gtk_tree_rbtree_node_find_offset        (GtkTreeRBTree                 *tree,
+int             gtk_tree_rbtree_node_find_offset        (GtkTreeRBTree                 *tree,
                                                          GtkTreeRBNode                 *node);
 guint           gtk_tree_rbtree_node_get_index          (GtkTreeRBTree                 *tree,
                                                          GtkTreeRBNode                 *node);
@@ -140,8 +140,8 @@ gboolean        gtk_tree_rbtree_find_index              (GtkTreeRBTree          
                                                          guint                          index,
                                                          GtkTreeRBTree                **new_tree,
                                                          GtkTreeRBNode                **new_node);
-gint            gtk_tree_rbtree_find_offset             (GtkTreeRBTree                 *tree,
-                                                         gint                           offset,
+int             gtk_tree_rbtree_find_offset             (GtkTreeRBTree                 *tree,
+                                                         int                            offset,
                                                          GtkTreeRBTree                **new_tree,
                                                          GtkTreeRBNode                **new_node);
 void            gtk_tree_rbtree_traverse                (GtkTreeRBTree                 *tree,
@@ -163,7 +163,7 @@ void            gtk_tree_rbtree_prev_full               (GtkTreeRBTree          
                                                          GtkTreeRBTree                **new_tree,
                                                          GtkTreeRBNode                **new_node);
 
-gint            gtk_tree_rbtree_get_depth               (GtkTreeRBTree                 *tree);
+int             gtk_tree_rbtree_get_depth               (GtkTreeRBTree                 *tree);
 
 
 G_END_DECLS

@@ -50,12 +50,12 @@ lookup_flags_to_string (GtkIconLookupFlags flags)
 
 static void
 assert_icon_lookup_size (const char         *icon_name,
-                         gint                size,
+                         int                 size,
                          GtkTextDirection    direction,
                          GtkIconLookupFlags  flags,
                          gboolean            fallbacks,
                          const char         *filename,
-                         gint                pixbuf_size)
+                         int                 pixbuf_size)
 {
   GtkIconPaintable *info;
   GFile *file;
@@ -111,7 +111,7 @@ assert_icon_lookup_size (const char         *icon_name,
 
 static void
 assert_icon_lookup (const char         *icon_name,
-                    gint                size,
+                    int                 size,
                     GtkTextDirection    direction,
                     GtkIconLookupFlags  flags,
                     gboolean            fallbacks,
@@ -122,7 +122,7 @@ assert_icon_lookup (const char         *icon_name,
 
 static void
 assert_icon_lookup_fails (const char         *icon_name,
-                          gint                size,
+                          int                 size,
                           GtkTextDirection    direction,
                           GtkIconLookupFlags  flags)
 {
@@ -160,7 +160,7 @@ log_writer (GLogLevelFlags   log_level,
 
   if (g_str_has_prefix (msg, "\tlookup name: "))
     {
-      gchar *s;
+      char *s;
       s = g_strchomp (g_strdup (msg + strlen ("\tlookup name: ")));
       lookups = g_list_append (lookups, s);
     }
@@ -170,7 +170,7 @@ log_writer (GLogLevelFlags   log_level,
 
 static void
 assert_lookup_order (const char         *icon_name,
-                     gint                size,
+                     int                 size,
                      GtkTextDirection    direction,
                      GtkIconLookupFlags  flags,
                      gboolean            fallbacks,
@@ -179,7 +179,7 @@ assert_lookup_order (const char         *icon_name,
 {
   guint debug_flags;
   va_list args;
-  const gchar *s;
+  const char *s;
   GtkIconPaintable *info;
   GList *l;
 
@@ -216,7 +216,7 @@ assert_lookup_order (const char         *icon_name,
     {
       g_assert (l != NULL);
       g_assert_cmpstr (s, ==, l->data);
-      s = va_arg (args, gchar*);
+      s = va_arg (args, char *);
       l = l->next;
     }
   g_assert (l == NULL);
@@ -734,7 +734,7 @@ test_inherit (void)
 static void
 test_nonsquare_symbolic (void)
 {
-  gint width, height, size;
+  int width, height, size;
   GtkIconTheme *icon_theme;
   GtkIconPaintable *info;
   GFile *file;
@@ -745,7 +745,7 @@ test_nonsquare_symbolic (void)
   GskRenderNode *node;
   graphene_rect_t bounds;
 
-  gchar *path = g_build_filename (g_test_get_dir (G_TEST_DIST),
+  char *path = g_build_filename (g_test_get_dir (G_TEST_DIST),
                                   "icons",
                                   "scalable",
                                   "nonsquare-symbolic.svg",

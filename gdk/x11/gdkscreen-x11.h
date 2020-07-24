@@ -37,17 +37,17 @@ struct _GdkX11Screen
   Display *xdisplay;
   Screen *xscreen;
   Window xroot_window;
-  gint screen_num;
+  int screen_num;
 
-  gint surface_scale;
+  int surface_scale;
   gboolean fixed_surface_scale;
 
   /* Xft resources for the display, used for default values for
    * the Xft/ XSETTINGS
    */
-  gint xft_hintstyle;
-  gint xft_rgba;
-  gint xft_dpi;
+  int xft_hintstyle;
+  int xft_rgba;
+  int xft_dpi;
 
   /* Window manager */
   long last_wmspec_check_time;
@@ -72,10 +72,10 @@ struct _GdkX11Screen
   guint xft_hinting : 1;
 
   /* Visual Part */
-  gint nvisuals;
+  int nvisuals;
   GdkX11Visual **visuals;
   GdkX11Visual *system_visual;
-  gint available_depths[7];
+  int available_depths[7];
   GdkVisualType available_types[6];
   gint16 navailable_depths;
   gint16 navailable_types;
@@ -94,7 +94,7 @@ struct _GdkX11ScreenClass
 
 GType       _gdk_x11_screen_get_type (void);
 GdkX11Screen *_gdk_x11_screen_new           (GdkDisplay   *display,
-                                             gint          screen_number,
+                                             int           screen_number,
                                              gboolean      setup_display);
 
 void _gdk_x11_screen_update_visuals_for_gl  (GdkX11Screen *screen);
@@ -102,10 +102,10 @@ void _gdk_x11_screen_window_manager_changed (GdkX11Screen *screen);
 void _gdk_x11_screen_size_changed           (GdkX11Screen *screen,
                                              const XEvent *event);
 void _gdk_x11_screen_get_edge_monitors      (GdkX11Screen *screen,
-                                             gint         *top,
-                                             gint         *bottom,
-                                             gint         *left,
-                                             gint         *right);
+                                             int          *top,
+                                             int          *bottom,
+                                             int          *left,
+                                             int          *right);
 void _gdk_x11_screen_set_surface_scale      (GdkX11Screen *x11_screen,
                                              int           scale);
 gboolean _gdk_x11_screen_get_monitor_work_area (GdkX11Screen *screen,

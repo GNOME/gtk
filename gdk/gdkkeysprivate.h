@@ -48,16 +48,16 @@ struct _GdkKeymapClass
                                          guint          hardware_keycode,
                                          GdkKeymapKey **keys,
                                          guint        **keyvals,
-                                         gint          *n_entries);
+                                         int           *n_entries);
   guint (* lookup_key)                  (GdkKeymap          *keymap,
                                          const GdkKeymapKey *key);
   gboolean (* translate_keyboard_state) (GdkKeymap       *keymap,
                                          guint            hardware_keycode,
                                          GdkModifierType  state,
-                                         gint             group,
+                                         int              group,
                                          guint           *keyval,
-                                         gint            *effective_group,
-                                         gint            *level,
+                                         int             *effective_group,
+                                         int             *level,
                                          GdkModifierType *consumed_modifiers);
   guint (* get_modifier_state)          (GdkKeymap *keymap);
 
@@ -94,20 +94,20 @@ guint          gdk_keymap_lookup_key               (GdkKeymap           *keymap,
 gboolean       gdk_keymap_translate_keyboard_state (GdkKeymap           *keymap,
                                                     guint                hardware_keycode,
                                                     GdkModifierType      state,
-                                                    gint                 group,
+                                                    int                  group,
                                                     guint               *keyval,
-                                                    gint                *effective_group,
-                                                    gint                *level,
+                                                    int                 *effective_group,
+                                                    int                 *level,
                                                     GdkModifierType     *consumed_modifiers);
 gboolean       gdk_keymap_get_entries_for_keyval   (GdkKeymap           *keymap,
                                                     guint                keyval,
                                                     GdkKeymapKey       **keys,
-                                                    gint                *n_keys);
+                                                    int                 *n_keys);
 gboolean       gdk_keymap_get_entries_for_keycode  (GdkKeymap           *keymap,
                                                     guint                hardware_keycode,
                                                     GdkKeymapKey       **keys,
                                                     guint              **keyvals,
-                                                    gint                *n_entries);
+                                                    int                 *n_entries);
 
 PangoDirection gdk_keymap_get_direction            (GdkKeymap           *keymap);
 gboolean       gdk_keymap_have_bidi_layouts        (GdkKeymap           *keymap);

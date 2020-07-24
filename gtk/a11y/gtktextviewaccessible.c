@@ -35,14 +35,14 @@
 
 struct _GtkTextViewAccessiblePrivate
 {
-  gint insert_offset;
-  gint selection_bound;
+  int insert_offset;
+  int selection_bound;
 };
 
 static void       insert_text_cb        (GtkTextBuffer    *buffer,
                                                          GtkTextIter      *arg1,
-                                                         gchar            *arg2,
-                                                         gint             arg3,
+                                                         char             *arg2,
+                                                         int              arg3,
                                                          gpointer         user_data);
 static void       delete_range_cb       (GtkTextBuffer    *buffer,
                                                          GtkTextIter      *arg1,
@@ -178,10 +178,10 @@ gtk_text_view_accessible_init (GtkTextViewAccessible *accessible)
   accessible->priv = gtk_text_view_accessible_get_instance_private (accessible);
 }
 
-static gchar *
+static char *
 gtk_text_view_accessible_get_text (AtkText *text,
-                                   gint     start_offset,
-                                   gint     end_offset)
+                                   int      start_offset,
+                                   int      end_offset)
 {
   GtkTextView *view;
   GtkTextBuffer *buffer;
@@ -200,12 +200,12 @@ gtk_text_view_accessible_get_text (AtkText *text,
   return gtk_text_buffer_get_text (buffer, &start, &end, FALSE);
 }
 
-static gchar *
+static char *
 gtk_text_view_accessible_get_text_after_offset (AtkText         *text,
-                                                gint             offset,
+                                                int              offset,
                                                 AtkTextBoundary  boundary_type,
-                                                gint            *start_offset,
-                                                gint            *end_offset)
+                                                int             *start_offset,
+                                                int             *end_offset)
 {
   GtkWidget *widget;
   GtkTextView *view;
@@ -243,12 +243,12 @@ gtk_text_view_accessible_get_text_after_offset (AtkText         *text,
   return gtk_text_buffer_get_slice (buffer, &start, &end, FALSE);
 }
 
-static gchar *
+static char *
 gtk_text_view_accessible_get_text_at_offset (AtkText         *text,
-                                             gint             offset,
+                                             int              offset,
                                              AtkTextBoundary  boundary_type,
-                                             gint            *start_offset,
-                                             gint            *end_offset)
+                                             int             *start_offset,
+                                             int             *end_offset)
 {
   GtkWidget *widget;
   GtkTextView *view;
@@ -288,12 +288,12 @@ gtk_text_view_accessible_get_text_at_offset (AtkText         *text,
   return gtk_text_buffer_get_slice (buffer, &start, &end, FALSE);
 }
 
-static gchar *
+static char *
 gtk_text_view_accessible_get_text_before_offset (AtkText         *text,
-                                                 gint             offset,
+                                                 int              offset,
                                                  AtkTextBoundary  boundary_type,
-                                                 gint            *start_offset,
-                                                 gint            *end_offset)
+                                                 int             *start_offset,
+                                                 int             *end_offset)
 {
   GtkWidget *widget;
   GtkTextView *view;
@@ -347,12 +347,12 @@ gtk_text_view_accessible_get_text_before_offset (AtkText         *text,
 
 static gunichar
 gtk_text_view_accessible_get_character_at_offset (AtkText *text,
-                                                  gint     offset)
+                                                  int      offset)
 {
   GtkWidget *widget;
   GtkTextIter start, end;
   GtkTextBuffer *buffer;
-  gchar *string;
+  char *string;
   gunichar unichar;
 
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (text));
@@ -373,7 +373,7 @@ gtk_text_view_accessible_get_character_at_offset (AtkText *text,
   return unichar;
 }
 
-static gint
+static int
 gtk_text_view_accessible_get_character_count (AtkText *text)
 {
   GtkWidget *widget;
@@ -387,7 +387,7 @@ gtk_text_view_accessible_get_character_count (AtkText *text)
   return gtk_text_buffer_get_char_count (buffer);
 }
 
-static gint
+static int
 get_insert_offset (GtkTextBuffer *buffer)
 {
   GtkTextMark *insert;
@@ -398,7 +398,7 @@ get_insert_offset (GtkTextBuffer *buffer)
   return gtk_text_iter_get_offset (&iter);
 }
 
-static gint
+static int
 gtk_text_view_accessible_get_caret_offset (AtkText *text)
 {
   GtkWidget *widget;
@@ -414,7 +414,7 @@ gtk_text_view_accessible_get_caret_offset (AtkText *text)
 
 static gboolean
 gtk_text_view_accessible_set_caret_offset (AtkText *text,
-                                           gint     offset)
+                                           int      offset)
 {
   GtkTextView *view;
   GtkWidget *widget;
@@ -435,15 +435,15 @@ gtk_text_view_accessible_set_caret_offset (AtkText *text,
   return TRUE;
 }
 
-static gint
+static int
 gtk_text_view_accessible_get_offset_at_point (AtkText      *text,
-                                              gint          x,
-                                              gint          y,
+                                              int           x,
+                                              int           y,
                                               AtkCoordType  coords)
 {
   GtkTextView *view;
   GtkTextIter iter;
-  gint buff_x, buff_y;
+  int buff_x, buff_y;
   GtkWidget *widget;
   GdkRectangle rect;
 
@@ -477,11 +477,11 @@ gtk_text_view_accessible_get_offset_at_point (AtkText      *text,
 
 static void
 gtk_text_view_accessible_get_character_extents (AtkText      *text,
-                                                gint          offset,
-                                                gint         *x,
-                                                gint         *y,
-                                                gint         *width,
-                                                gint         *height,
+                                                int           offset,
+                                                int          *x,
+                                                int          *y,
+                                                int          *width,
+                                                int          *height,
                                                 AtkCoordType  coords)
 {
   GtkTextView *view;
@@ -521,7 +521,7 @@ gtk_text_view_accessible_get_character_extents (AtkText      *text,
 static AtkAttributeSet *
 add_text_attribute (AtkAttributeSet  *attributes,
                     AtkTextAttribute  attr,
-                    gchar            *value)
+                    char             *value)
 {
   AtkAttribute *at;
 
@@ -535,10 +535,10 @@ add_text_attribute (AtkAttributeSet  *attributes,
 static AtkAttributeSet *
 add_text_int_attribute (AtkAttributeSet  *attributes,
                         AtkTextAttribute  attr,
-                        gint              i)
+                        int               i)
 
 {
-  gchar *value;
+  char *value;
 
   value = g_strdup (atk_text_attribute_get_value (attr, i));
 
@@ -547,9 +547,9 @@ add_text_int_attribute (AtkAttributeSet  *attributes,
 
 static AtkAttributeSet *
 gtk_text_view_accessible_get_run_attributes (AtkText *text,
-                                             gint     offset,
-                                             gint    *start_offset,
-                                             gint    *end_offset)
+                                             int      offset,
+                                             int     *start_offset,
+                                             int     *end_offset)
 {
   GtkTextView *view;
   GtkTextBuffer *buffer;
@@ -557,7 +557,7 @@ gtk_text_view_accessible_get_run_attributes (AtkText *text,
   GtkTextIter iter;
   AtkAttributeSet *attrib_set = NULL;
   GSList *tags, *temp_tags;
-  gdouble scale = 1;
+  double scale = 1;
   gboolean val_set = FALSE;
 
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (text));
@@ -686,7 +686,7 @@ gtk_text_view_accessible_get_run_attributes (AtkText *text,
       if (val_set)
         {
           GdkRGBA *rgba;
-          gchar *value;
+          char *value;
 
           g_object_get (tag, "foreground-rgba", &rgba, NULL);
           value = g_strdup_printf ("%u,%u,%u",
@@ -709,7 +709,7 @@ gtk_text_view_accessible_get_run_attributes (AtkText *text,
       if (val_set)
         {
           GdkRGBA *rgba;
-          gchar *value;
+          char *value;
 
           g_object_get (tag, "background-rgba", &rgba, NULL);
           value = g_strdup_printf ("%u,%u,%u",
@@ -732,7 +732,7 @@ gtk_text_view_accessible_get_run_attributes (AtkText *text,
 
       if (val_set)
         {
-          gchar *value;
+          char *value;
           g_object_get (tag, "family", &value, NULL);
           attrib_set = add_text_attribute (attrib_set, ATK_TEXT_ATTR_FAMILY_NAME, value);
         }
@@ -749,7 +749,7 @@ gtk_text_view_accessible_get_run_attributes (AtkText *text,
 
       if (val_set)
         {
-          gchar *value;
+          char *value;
           g_object_get (tag, "language", &value, NULL);
           attrib_set = add_text_attribute (attrib_set, ATK_TEXT_ATTR_LANGUAGE, value);
         }
@@ -766,8 +766,8 @@ gtk_text_view_accessible_get_run_attributes (AtkText *text,
 
       if (val_set)
         {
-          gint weight;
-          gchar *value;
+          int weight;
+          char *value;
           g_object_get (tag, "weight", &weight, NULL);
           value = g_strdup_printf ("%d", weight);
           attrib_set = add_text_attribute (attrib_set, ATK_TEXT_ATTR_WEIGHT, value);
@@ -788,7 +788,7 @@ gtk_text_view_accessible_get_run_attributes (AtkText *text,
       g_object_get (tag, "scale-set", &scale_set, NULL);
       if (scale_set)
         {
-          gdouble font_scale;
+          double font_scale;
           g_object_get (tag, "scale", &font_scale, NULL);
           val_set = TRUE;
           scale *= font_scale;
@@ -797,7 +797,7 @@ gtk_text_view_accessible_get_run_attributes (AtkText *text,
     }
   if (val_set)
     {
-      gchar *value;
+      char *value;
       value = g_strdup_printf ("%g", scale);
       attrib_set = add_text_attribute (attrib_set, ATK_TEXT_ATTR_SCALE, value);
     }
@@ -811,8 +811,8 @@ gtk_text_view_accessible_get_run_attributes (AtkText *text,
       g_object_get (tag, "size-set", &val_set, NULL);
       if (val_set)
         {
-          gint size;
-          gchar *value;
+          int size;
+          char *value;
           g_object_get (tag, "size", &size, NULL);
           value = g_strdup_printf ("%i", size);
           attrib_set = add_text_attribute (attrib_set, ATK_TEXT_ATTR_SIZE, value);
@@ -861,8 +861,8 @@ gtk_text_view_accessible_get_run_attributes (AtkText *text,
       g_object_get (tag, "rise-set", &val_set, NULL);
       if (val_set)
         {
-          gint rise;
-          gchar *value;
+          int rise;
+          char *value;
           g_object_get (tag, "rise", &rise, NULL);
           value = g_strdup_printf ("%i", rise);
           attrib_set = add_text_attribute (attrib_set, ATK_TEXT_ATTR_RISE, value);
@@ -895,8 +895,8 @@ gtk_text_view_accessible_get_run_attributes (AtkText *text,
       g_object_get (tag, "pixels-inside-wrap-set", &val_set, NULL);
       if (val_set)
         {
-          gint pixels;
-          gchar *value;
+          int pixels;
+          char *value;
           g_object_get (tag, "pixels-inside-wrap", &pixels, NULL);
           value = g_strdup_printf ("%i", pixels);
           attrib_set = add_text_attribute (attrib_set, ATK_TEXT_ATTR_PIXELS_INSIDE_WRAP, value);
@@ -913,8 +913,8 @@ gtk_text_view_accessible_get_run_attributes (AtkText *text,
       g_object_get (tag, "pixels-below-lines-set", &val_set, NULL);
       if (val_set)
         {
-          gint pixels;
-          gchar *value;
+          int pixels;
+          char *value;
           g_object_get (tag, "pixels-below-lines", &pixels, NULL);
           value = g_strdup_printf ("%i", pixels);
           attrib_set = add_text_attribute (attrib_set, ATK_TEXT_ATTR_PIXELS_BELOW_LINES, value);
@@ -931,8 +931,8 @@ gtk_text_view_accessible_get_run_attributes (AtkText *text,
       g_object_get (tag, "pixels-above-lines-set", &val_set, NULL);
       if (val_set)
         {
-          gint pixels;
-          gchar *value;
+          int pixels;
+          char *value;
           g_object_get (tag, "pixels-above-lines", &pixels, NULL);
           value = g_strdup_printf ("%i", pixels);
           attrib_set = add_text_attribute (attrib_set, ATK_TEXT_ATTR_PIXELS_ABOVE_LINES, value);
@@ -981,8 +981,8 @@ gtk_text_view_accessible_get_run_attributes (AtkText *text,
       g_object_get (tag, "indent-set", &val_set, NULL);
       if (val_set)
         {
-          gint indent;
-          gchar *value;
+          int indent;
+          char *value;
           g_object_get (tag, "indent", &indent, NULL);
           value = g_strdup_printf ("%i", indent);
           attrib_set = add_text_attribute (attrib_set, ATK_TEXT_ATTR_INDENT, value);
@@ -999,8 +999,8 @@ gtk_text_view_accessible_get_run_attributes (AtkText *text,
       g_object_get (tag, "right-margin-set", &val_set, NULL);
       if (val_set)
         {
-          gint margin;
-          gchar *value;
+          int margin;
+          char *value;
           g_object_get (tag, "right-margin", &margin, NULL);
           value = g_strdup_printf ("%i", margin);
           attrib_set = add_text_attribute (attrib_set, ATK_TEXT_ATTR_RIGHT_MARGIN, value);
@@ -1017,8 +1017,8 @@ gtk_text_view_accessible_get_run_attributes (AtkText *text,
       g_object_get (tag, "left-margin-set", &val_set, NULL);
       if (val_set)
         {
-          gint margin;
-          gchar *value;
+          int margin;
+          char *value;
           g_object_get (tag, "left-margin", &margin, NULL);
           value = g_strdup_printf ("%i", margin);
           attrib_set = add_text_attribute (attrib_set, ATK_TEXT_ATTR_LEFT_MARGIN, value);
@@ -1039,7 +1039,7 @@ gtk_text_view_accessible_get_default_attributes (AtkText *text)
   GtkTextAttributes *text_attrs;
   AtkAttributeSet *attributes;
   PangoFontDescription *font;
-  gchar *value;
+  char *value;
 
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (text));
   if (widget == NULL)
@@ -1100,7 +1100,7 @@ gtk_text_view_accessible_get_default_attributes (AtkText *text)
   value = g_strdup_printf ("%g", text_attrs->font_scale);
   attributes = add_text_attribute (attributes, ATK_TEXT_ATTR_SCALE, value);
 
-  value = g_strdup ((gchar *)(text_attrs->language));
+  value = g_strdup ((char *)(text_attrs->language));
   attributes = add_text_attribute (attributes, ATK_TEXT_ATTR_LANGUAGE, value);
 
   value = g_strdup_printf ("%i", text_attrs->appearance.rise);
@@ -1128,7 +1128,7 @@ gtk_text_view_accessible_get_default_attributes (AtkText *text)
   return attributes;
 }
 
-static gint
+static int
 gtk_text_view_accessible_get_n_selections (AtkText *text)
 {
   GtkWidget *widget;
@@ -1145,17 +1145,17 @@ gtk_text_view_accessible_get_n_selections (AtkText *text)
   return 0;
 }
 
-static gchar *
+static char *
 gtk_text_view_accessible_get_selection (AtkText *atk_text,
-                                        gint     selection_num,
-                                        gint    *start_pos,
-                                        gint    *end_pos)
+                                        int      selection_num,
+                                        int     *start_pos,
+                                        int     *end_pos)
 {
   GtkTextView *view;
   GtkWidget *widget;
   GtkTextBuffer *buffer;
   GtkTextIter start, end;
-  gchar *text;
+  char *text;
 
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (atk_text));
   if (widget == NULL)
@@ -1180,8 +1180,8 @@ gtk_text_view_accessible_get_selection (AtkText *atk_text,
 
 static gboolean
 gtk_text_view_accessible_add_selection (AtkText *text,
-                                        gint     start_pos,
-                                        gint     end_pos)
+                                        int      start_pos,
+                                        int      end_pos)
 {
   GtkWidget *widget;
   GtkTextBuffer *buffer;
@@ -1207,7 +1207,7 @@ gtk_text_view_accessible_add_selection (AtkText *text,
 
 static gboolean
 gtk_text_view_accessible_remove_selection (AtkText *text,
-                                           gint     selection_num)
+                                           int      selection_num)
 {
   GtkWidget *widget;
   GtkTextBuffer *buffer;
@@ -1237,9 +1237,9 @@ gtk_text_view_accessible_remove_selection (AtkText *text,
 
 static gboolean
 gtk_text_view_accessible_set_selection (AtkText *text,
-                                        gint     selection_num,
-                                        gint     start_pos,
-                                        gint     end_pos)
+                                        int      selection_num,
+                                        int      start_pos,
+                                        int      end_pos)
 {
   GtkWidget *widget;
   GtkTextBuffer *buffer;
@@ -1293,8 +1293,8 @@ atk_text_interface_init (AtkTextIface *iface)
 static gboolean
 gtk_text_view_accessible_set_run_attributes (AtkEditableText *text,
                                              AtkAttributeSet *attributes,
-                                             gint             start_offset,
-                                             gint             end_offset)
+                                             int              start_offset,
+                                             int              end_offset)
 {
   GtkTextView *view;
   GtkTextBuffer *buffer;
@@ -1302,9 +1302,9 @@ gtk_text_view_accessible_set_run_attributes (AtkEditableText *text,
   GtkTextTag *tag;
   GtkTextIter start;
   GtkTextIter end;
-  gint j;
+  int j;
   GdkRGBA *color;
-  gchar** RGB_vals;
+  char ** RGB_vals;
   GSList *l;
 
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (text));
@@ -1327,8 +1327,8 @@ gtk_text_view_accessible_set_run_attributes (AtkEditableText *text,
 
   for (l = attributes; l; l = l->next)
     {
-      gchar *name;
-      gchar *value;
+      char *name;
+      char *value;
       AtkAttribute *at;
 
       at = l->data;
@@ -1512,7 +1512,7 @@ gtk_text_view_accessible_set_run_attributes (AtkEditableText *text,
 
 static void
 gtk_text_view_accessible_set_text_contents (AtkEditableText *text,
-                                            const gchar     *string)
+                                            const char      *string)
 {
   GtkTextView *view;
   GtkWidget *widget;
@@ -1532,9 +1532,9 @@ gtk_text_view_accessible_set_text_contents (AtkEditableText *text,
 
 static void
 gtk_text_view_accessible_insert_text (AtkEditableText *text,
-                                      const gchar     *string,
-                                      gint             length,
-                                      gint            *position)
+                                      const char      *string,
+                                      int              length,
+                                      int             *position)
 {
   GtkTextView *view;
   GtkWidget *widget;
@@ -1556,13 +1556,13 @@ gtk_text_view_accessible_insert_text (AtkEditableText *text,
 
 static void
 gtk_text_view_accessible_copy_text (AtkEditableText *text,
-                                    gint             start_pos,
-                                    gint             end_pos)
+                                    int              start_pos,
+                                    int              end_pos)
 {
   GtkWidget *widget;
   GtkTextBuffer *buffer;
   GtkTextIter start, end;
-  gchar *str;
+  char *str;
   GdkClipboard *clipboard;
 
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (text));
@@ -1581,14 +1581,14 @@ gtk_text_view_accessible_copy_text (AtkEditableText *text,
 
 static void
 gtk_text_view_accessible_cut_text (AtkEditableText *text,
-                                   gint             start_pos,
-                                   gint             end_pos)
+                                   int              start_pos,
+                                   int              end_pos)
 {
   GtkTextView *view;
   GtkWidget *widget;
   GtkTextBuffer *buffer;
   GtkTextIter start, end;
-  gchar *str;
+  char *str;
   GdkClipboard *clipboard;
 
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (text));
@@ -1610,8 +1610,8 @@ gtk_text_view_accessible_cut_text (AtkEditableText *text,
 
 static void
 gtk_text_view_accessible_delete_text (AtkEditableText *text,
-                                      gint             start_pos,
-                                      gint             end_pos)
+                                      int              start_pos,
+                                      int              end_pos)
 {
   GtkTextView *view;
   GtkWidget *widget;
@@ -1636,7 +1636,7 @@ gtk_text_view_accessible_delete_text (AtkEditableText *text,
 typedef struct
 {
   GtkTextBuffer* buffer;
-  gint position;
+  int position;
 } PasteData;
 
 static void
@@ -1661,7 +1661,7 @@ paste_received (GObject      *clipboard,
 
 static void
 gtk_text_view_accessible_paste_text (AtkEditableText *text,
-                                     gint             position)
+                                     int              position)
 {
   GtkTextView *view;
   GtkWidget *widget;
@@ -1732,13 +1732,13 @@ gtk_text_view_accessible_update_cursor (GtkTextViewAccessible *accessible,
 static void
 insert_text_cb (GtkTextBuffer *buffer,
                 GtkTextIter   *iter,
-                gchar         *text,
-                gint           len,
+                char          *text,
+                int            len,
                 gpointer       data)
 {
   GtkTextViewAccessible *accessible = data;
-  gint position;
-  gint length;
+  int position;
+  int length;
 
   position = gtk_text_iter_get_offset (iter);
   length = g_utf8_strlen (text, len);
@@ -1755,7 +1755,7 @@ delete_range_cb (GtkTextBuffer *buffer,
                  gpointer       data)
 {
   GtkTextViewAccessible *accessible = data;
-  gint offset, length;
+  int offset, length;
 
   offset = gtk_text_iter_get_offset (start);
   length = gtk_text_iter_get_offset (end) - offset;

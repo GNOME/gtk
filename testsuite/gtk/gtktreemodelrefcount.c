@@ -184,7 +184,7 @@ static void
 dump_iter (GtkTreeModelRefCount *ref_model,
            GtkTreeIter          *iter)
 {
-  gchar *path_str;
+  char *path_str;
   NodeInfo *info;
   GtkTreePath *path;
 
@@ -232,7 +232,7 @@ gtk_tree_model_ref_count_dump (GtkTreeModelRefCount *ref_model)
 static gboolean
 check_iter (GtkTreeModelRefCount *ref_model,
             GtkTreeIter          *iter,
-            gint                  expected_ref_count,
+            int                   expected_ref_count,
             gboolean              may_assert)
 {
   NodeInfo *info;
@@ -267,7 +267,7 @@ check_iter (GtkTreeModelRefCount *ref_model,
 gboolean
 gtk_tree_model_ref_count_check_level (GtkTreeModelRefCount *ref_model,
                                       GtkTreeIter          *parent,
-                                      gint                  expected_ref_count,
+                                      int                   expected_ref_count,
                                       gboolean              recurse,
                                       gboolean              may_assert)
 {
@@ -299,7 +299,7 @@ gtk_tree_model_ref_count_check_level (GtkTreeModelRefCount *ref_model,
 gboolean
 gtk_tree_model_ref_count_check_node (GtkTreeModelRefCount *ref_model,
                                      GtkTreeIter          *iter,
-                                     gint                  expected_ref_count,
+                                     int                   expected_ref_count,
                                      gboolean              may_assert)
 {
   return check_iter (ref_model, iter, expected_ref_count, may_assert);

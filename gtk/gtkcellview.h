@@ -44,9 +44,9 @@ GDK_AVAILABLE_IN_ALL
 GtkWidget        *gtk_cell_view_new_with_context        (GtkCellArea        *area,
                                                          GtkCellAreaContext *context);
 GDK_AVAILABLE_IN_ALL
-GtkWidget        *gtk_cell_view_new_with_text           (const gchar     *text);
+GtkWidget        *gtk_cell_view_new_with_text           (const char      *text);
 GDK_AVAILABLE_IN_ALL
-GtkWidget        *gtk_cell_view_new_with_markup         (const gchar     *markup);
+GtkWidget        *gtk_cell_view_new_with_markup         (const char      *markup);
 GDK_AVAILABLE_IN_ALL
 GtkWidget        *gtk_cell_view_new_with_texture        (GdkTexture      *texture);
 GDK_AVAILABLE_IN_ALL

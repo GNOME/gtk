@@ -40,7 +40,7 @@ GtkActionMuxer *        gtk_application_get_parent_muxer_for_window     (GtkWind
 
 GtkActionMuxer *        gtk_application_get_action_muxer                (GtkApplication           *application);
 void                    gtk_application_insert_action_group             (GtkApplication           *application,
-                                                                         const gchar              *name,
+                                                                         const char               *name,
                                                                          GActionGroup             *action_group);
 
 GtkApplicationAccels *  gtk_application_get_application_accels          (GtkApplication           *application);
@@ -93,7 +93,7 @@ typedef struct
   guint       (* inhibit)                   (GtkApplicationImpl          *impl,
                                              GtkWindow                   *window,
                                              GtkApplicationInhibitFlags   flags,
-                                             const gchar                 *reason);
+                                             const char                  *reason);
   void        (* uninhibit)                 (GtkApplicationImpl          *impl,
                                              guint                        cookie);
   gboolean    (* is_inhibited)              (GtkApplicationImpl          *impl,
@@ -118,20 +118,20 @@ typedef struct
 
   GDBusConnection *session;
 
-  const gchar     *application_id;
-  const gchar     *unique_name;
-  const gchar     *object_path;
+  const char      *application_id;
+  const char      *unique_name;
+  const char      *object_path;
 
-  gchar           *app_menu_path;
+  char            *app_menu_path;
   guint            app_menu_id;
 
-  gchar           *menubar_path;
+  char            *menubar_path;
   guint            menubar_id;
 
   /* Session management... */
   GDBusProxy      *sm_proxy;
   GDBusProxy      *client_proxy;
-  gchar           *client_path;
+  char            *client_path;
   GDBusProxy      *ss_proxy;
 
   /* Portal support */
@@ -181,13 +181,13 @@ void                    gtk_application_impl_set_menubar                (GtkAppl
 guint                   gtk_application_impl_inhibit                    (GtkApplicationImpl          *impl,
                                                                          GtkWindow                   *window,
                                                                          GtkApplicationInhibitFlags   flags,
-                                                                         const gchar                 *reason);
+                                                                         const char                  *reason);
 void                    gtk_application_impl_uninhibit                  (GtkApplicationImpl          *impl,
                                                                          guint                        cookie);
 gboolean                gtk_application_impl_is_inhibited               (GtkApplicationImpl          *impl,
                                                                          GtkApplicationInhibitFlags   flags);
 
-gchar *                 gtk_application_impl_dbus_get_window_path       (GtkApplicationImplDBus      *dbus,
+char *                 gtk_application_impl_dbus_get_window_path       (GtkApplicationImplDBus      *dbus,
                                                                          GtkWindow                   *window);
 gboolean                gtk_application_impl_prefers_app_menu           (GtkApplicationImpl          *impl);
 

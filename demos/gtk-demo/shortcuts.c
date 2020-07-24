@@ -8,12 +8,12 @@
 
 static void
 show_shortcuts (GtkWidget   *window,
-                const gchar *id,
-                const gchar *view)
+                const char *id,
+                const char *view)
 {
   GtkBuilder *builder;
   GtkWidget *overlay;
-  gchar *path;
+  char *path;
 
   path = g_strdup_printf ("/shortcuts/%s.ui", id);
   builder = gtk_builder_new_from_resource (path);

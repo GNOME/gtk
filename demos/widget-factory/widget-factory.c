@@ -139,9 +139,9 @@ get_busy (GSimpleAction *action,
   gtk_widget_set_sensitive (window, FALSE);
 }
 
-static gint current_page = 0;
+static int current_page = 0;
 static gboolean
-on_page (gint i)
+on_page (int i)
 {
   return current_page == i;
 }
@@ -250,12 +250,12 @@ activate_about (GSimpleAction *action,
                 gpointer       user_data)
 {
   GtkApplication *app = user_data;
-  const gchar *authors[] = {
+  const char *authors[] = {
     "Andrea Cimitan",
     "Cosimo Cecchi",
     NULL
   };
-  gchar *version;
+  char *version;
   GString *s;
 
   s = g_string_new ("");
@@ -422,8 +422,8 @@ static void
 spin_value_changed (GtkAdjustment *adjustment, GtkWidget *label)
 {
   GtkWidget *w;
-  gint v;
-  gchar *text;
+  int v;
+  char *text;
 
   v = (int)gtk_adjustment_get_value (adjustment);
 
@@ -454,8 +454,8 @@ spin_value_reset (GtkWidget *button, GtkAdjustment *adjustment)
   dismiss (button);
 }
 
-static gint pulse_time = 250;
-static gint pulse_entry_mode = 0;
+static int pulse_time = 250;
+static int pulse_entry_mode = 0;
 
 static void
 remove_pulse (gpointer pulse_id)
@@ -482,7 +482,7 @@ pulse_it (GtkWidget *widget)
 static void
 update_pulse_time (GtkAdjustment *adjustment, GtkWidget *widget)
 {
-  gdouble value;
+  double value;
   guint pulse_id;
 
   value = gtk_adjustment_get_value (adjustment);
@@ -537,12 +537,12 @@ on_entry_icon_release (GtkEntry            *entry,
 
 static void
 on_scale_button_value_changed (GtkScaleButton *button,
-                               gdouble         value,
+                               double          value,
                                gpointer        user_data)
 {
   GtkAdjustment *adjustment;
-  gdouble val;
-  gchar *str;
+  double val;
+  char *str;
 
   adjustment = gtk_scale_button_get_adjustment (button);
   val = gtk_scale_button_get_value (button);
@@ -557,9 +557,9 @@ on_scale_button_value_changed (GtkScaleButton *button,
     }
   else
     {
-      gint percent;
+      int percent;
 
-      percent = (gint) (100. * val / (gtk_adjustment_get_upper (adjustment) - gtk_adjustment_get_lower (adjustment)) + .5);
+      percent = (int) (100. * val / (gtk_adjustment_get_upper (adjustment) - gtk_adjustment_get_lower (adjustment)) + .5);
 
       str = g_strdup_printf (C_("volume percentage", "%d %%"), percent);
     }
@@ -627,7 +627,7 @@ static void
 on_range_from_changed (GtkSpinButton *from)
 {
   GtkSpinButton *to;
-  gint v1, v2;
+  int v1, v2;
 
   to = GTK_SPIN_BUTTON (g_object_get_data (G_OBJECT (from), "range_to_spin"));
 
@@ -642,7 +642,7 @@ static void
 on_range_to_changed (GtkSpinButton *to)
 {
   GtkSpinButton *from;
-  gint v1, v2;
+  int v1, v2;
 
   from = GTK_SPIN_BUTTON (g_object_get_data (G_OBJECT (to), "range_from_spin"));
 
@@ -654,7 +654,7 @@ on_range_to_changed (GtkSpinButton *to)
 }
 
 static void
-info_bar_response (GtkWidget *infobar, gint response_id)
+info_bar_response (GtkWidget *infobar, int response_id)
 {
   if (response_id == GTK_RESPONSE_CLOSE)
     gtk_widget_hide (infobar);
@@ -703,7 +703,7 @@ action_dialog_button_clicked (GtkButton *button, GtkWidget *page)
 static void
 page_changed_cb (GtkWidget *stack, GParamSpec *pspec, gpointer data)
 {
-  const gchar *name;
+  const char *name;
   GtkWidget *window;
   GtkWidget *page;
 
@@ -853,10 +853,10 @@ update_title_header (GtkListBoxRow *row,
                      gpointer       data)
 {
   GtkWidget *header;
-  gchar *title;
+  char *title;
 
   header = gtk_list_box_row_get_header (row);
-  title = (gchar *)g_object_get_data (G_OBJECT (row), "title");
+  title = (char *)g_object_get_data (G_OBJECT (row), "title");
   if (!header && title)
     {
       title = g_strdup_printf ("<b>%s</b>", title);
@@ -881,8 +881,8 @@ overshot (GtkScrolledWindow *sw, GtkPositionType pos, GtkWidget *widget)
 {
   GtkWidget *box, *row, *label, *swatch;
   GdkRGBA rgba;
-  const gchar *color;
-  gchar *text;
+  const char *color;
+  char *text;
   GtkWidget *silver;
   GtkWidget *gold;
 
@@ -983,7 +983,7 @@ set_color (GtkListBox *box, GtkListBoxRow *row, GtkColorChooser *chooser)
 static void
 populate_colors (GtkWidget *widget, GtkWidget *chooser)
 {
-  struct { const gchar *name; const gchar *color; const gchar *title; } colors[] = {
+  struct { const char *name; const char *color; const char *title; } colors[] = {
     { "2.5", "#C8828C", "Red" },
     { "5", "#C98286", NULL },
     { "7.5", "#C9827F", NULL },
@@ -1025,7 +1025,7 @@ populate_colors (GtkWidget *widget, GtkWidget *chooser)
     { "7.5", "#C48299", NULL },
     { "10", "#C68292", NULL }
   };
-  gint i;
+  int i;
   GtkWidget *row, *box, *label, *swatch;
   GtkWidget *sw;
   GdkRGBA rgba;
@@ -1081,7 +1081,7 @@ populate_colors (GtkWidget *widget, GtkWidget *chooser)
 
 typedef struct {
   GtkWidget *flowbox;
-  gchar *filename;
+  char *filename;
 } BackgroundData;
 
 static void
@@ -1127,11 +1127,11 @@ background_loaded_cb (GObject      *source,
 static void
 populate_flowbox (GtkWidget *flowbox)
 {
-  const gchar *location;
+  const char *location;
   GDir *dir;
   GError *error = NULL;
-  const gchar *name;
-  gchar *filename;
+  const char *name;
+  char *filename;
   GFile *file;
   GInputStream *stream;
   BackgroundData *bd;
@@ -1288,7 +1288,7 @@ my_text_view_class_init (MyTextViewClass *class)
 }
 
 static void
-my_text_view_set_background (MyTextView *tv, const gchar *filename, gboolean is_resource)
+my_text_view_set_background (MyTextView *tv, const char *filename, gboolean is_resource)
 {
   GError *error = NULL;
   GFile *file;
@@ -1331,12 +1331,12 @@ my_text_view_set_adjustment (MyTextView *tv, GtkAdjustment *adjustment)
 }
 
 static void
-close_selection_dialog (GtkWidget *dialog, gint response, GtkWidget *tv)
+close_selection_dialog (GtkWidget *dialog, int response, GtkWidget *tv)
 {
   GtkWidget *box;
   GtkWidget *child;
   GList *children;
-  const gchar *filename;
+  const char *filename;
   gboolean is_resource;
 
   gtk_widget_hide (dialog);
@@ -1352,7 +1352,7 @@ close_selection_dialog (GtkWidget *dialog, gint response, GtkWidget *tv)
     return;
 
   child = children->data;
-  filename = (const gchar *)g_object_get_data (G_OBJECT (child), "filename");
+  filename = (const char *)g_object_get_data (G_OBJECT (child), "filename");
   is_resource = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (child), "is-resource"));
 
   g_list_free (children);
@@ -1377,8 +1377,8 @@ static void
 handle_insert (GtkWidget *button, GtkWidget *textview)
 {
   GtkTextBuffer *buffer;
-  const gchar *id;
-  const gchar *text;
+  const char *id;
+  const char *text;
 
   id = gtk_buildable_get_name (GTK_BUILDABLE (button));
 
@@ -1402,7 +1402,7 @@ handle_cutcopypaste (GtkWidget *button, GtkWidget *textview)
 {
   GtkTextBuffer *buffer;
   GdkClipboard *clipboard;
-  const gchar *id;
+  const char *id;
 
   clipboard = gtk_widget_get_clipboard (textview);
   buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (textview));
@@ -1421,7 +1421,7 @@ handle_cutcopypaste (GtkWidget *button, GtkWidget *textview)
 static void
 clipboard_formats_notify (GdkClipboard *clipboard, GdkEvent *event, GtkWidget *button)
 {
-  const gchar *id;
+  const char *id;
   gboolean has_text;
 
   id = gtk_buildable_get_name (GTK_BUILDABLE (button));
@@ -1434,7 +1434,7 @@ clipboard_formats_notify (GdkClipboard *clipboard, GdkEvent *event, GtkWidget *b
 static void
 textbuffer_notify_selection (GObject *object, GParamSpec *pspec, GtkWidget *button)
 {
-  const gchar *id;
+  const char *id;
   gboolean has_selection;
 
   id = gtk_buildable_get_name (GTK_BUILDABLE (button));
@@ -1469,7 +1469,7 @@ page_combo_separator_func (GtkTreeModel *model,
                            GtkTreeIter  *iter,
                            gpointer      data)
 {
-  gchar *text;
+  char *text;
   gboolean res;
 
   gtk_tree_model_get (model, iter, 0, &text, -1);
@@ -1594,7 +1594,7 @@ text_view_add_to_context_menu (GtkTextView *text_view)
 static void
 open_popover_text_changed (GtkEntry *entry, GParamSpec *pspec, GtkWidget *button)
 {
-  const gchar *text;
+  const char *text;
 
   text = gtk_editable_get_text (GTK_EDITABLE (entry));
   gtk_widget_set_sensitive (button, strlen (text) > 0);
@@ -1864,8 +1864,8 @@ activate (GApplication *app)
     { "print", activate_print, NULL, NULL, NULL },
   };
   struct {
-    const gchar *action_and_target;
-    const gchar *accelerators[2];
+    const char *action_and_target;
+    const char *accelerators[2];
   } accels[] = {
     { "app.about", { "F1", NULL } },
     { "app.quit", { "<Control>q", NULL } },
@@ -1878,15 +1878,15 @@ activate (GApplication *app)
     { "win.lock", { "<Control>l", NULL } },
   };
   struct {
-    const gchar *action_and_target;
-    const gchar *accelerators[2];
+    const char *action_and_target;
+    const char *accelerators[2];
   } late_accels[] = {
     { "app.cut", { "<Control>x", NULL } },
     { "app.copy", { "<Control>c", NULL } },
     { "app.paste", { "<Control>v", NULL } },
     { "win.delete", { "Delete", NULL } },
   };
-  gint i;
+  int i;
   GPermission *permission;
   GAction *action;
   GError *error = NULL;
@@ -2282,7 +2282,7 @@ main (int argc, char *argv[])
     { "check-off-disabled", NULL, NULL, "false", NULL },
     { "radio-x-disabled", NULL, "s", "'x'", NULL },
   };
-  gint status;
+  int status;
 
   app = gtk_application_new ("org.gtk.WidgetFactory4", G_APPLICATION_NON_UNIQUE);
 

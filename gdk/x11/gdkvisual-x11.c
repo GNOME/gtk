@@ -52,7 +52,7 @@ void
 _gdk_x11_screen_init_visuals (GdkX11Screen *x11_screen,
                               gboolean      setup_display)
 {
-  static const gint possible_depths[8] = { 32, 30, 24, 16, 15, 8, 4, 1 };
+  static const int possible_depths[8] = { 32, 30, 24, 16, 15, 8, 4, 1 };
   static const GdkVisualType possible_types[6] =
     {
       GDK_VISUAL_DIRECT_COLOR,
@@ -198,7 +198,7 @@ _gdk_x11_screen_init_visuals (GdkX11Screen *x11_screen,
 #ifdef G_ENABLE_DEBUG
   if (GDK_DISPLAY_DEBUG_CHECK (GDK_SCREEN_DISPLAY (x11_screen), MISC))
     {
-      static const gchar *const visual_names[] =
+      static const char *const visual_names[] =
       {
         "static gray",
         "grayscale",

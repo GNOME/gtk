@@ -51,8 +51,8 @@ struct _GdkWaylandDrag
   struct wl_data_source *data_source;
   struct wl_data_offer *offer;
   uint32_t serial;
-  gint hot_x;
-  gint hot_y;
+  int hot_x;
+  int hot_y;
 };
 
 struct _GdkWaylandDragClass
@@ -122,12 +122,12 @@ gdk_wayland_drag_get_drag_surface (GdkDrag *drag)
 
 static void
 gdk_wayland_drag_set_hotspot (GdkDrag *drag,
-                              gint     hot_x,
-                              gint     hot_y)
+                              int      hot_x,
+                              int      hot_y)
 {
   GdkWaylandDrag *drag_wayland = GDK_WAYLAND_DRAG (drag);
-  gint prev_hot_x = drag_wayland->hot_x;
-  gint prev_hot_y = drag_wayland->hot_y;
+  int prev_hot_x = drag_wayland->hot_x;
+  int prev_hot_y = drag_wayland->hot_y;
   const GdkRectangle damage_rect = { .width = 1, .height = 1 };
 
   drag_wayland->hot_x = hot_x;

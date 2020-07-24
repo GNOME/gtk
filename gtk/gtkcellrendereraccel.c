@@ -56,23 +56,23 @@ static void gtk_cell_renderer_accel_set_property (GObject         *object,
 static void gtk_cell_renderer_accel_get_preferred_width 
                                                  (GtkCellRenderer *cell,
                                                   GtkWidget       *widget,
-                                                  gint            *minimum_size,
-                                                  gint            *natural_size);
+                                                  int             *minimum_size,
+                                                  int             *natural_size);
 static GtkCellEditable *
            gtk_cell_renderer_accel_start_editing (GtkCellRenderer      *cell,
                                                   GdkEvent             *event,
                                                   GtkWidget            *widget,
-                                                  const gchar          *path,
+                                                  const char           *path,
                                                   const GdkRectangle   *background_area,
                                                   const GdkRectangle   *cell_area,
                                                   GtkCellRendererState  flags);
-static gchar *convert_keysym_state_to_string     (GtkCellRendererAccel *accel,
+static char *convert_keysym_state_to_string     (GtkCellRendererAccel *accel,
                                                   guint                 keysym,
                                                   GdkModifierType       mask,
                                                   guint                 keycode);
 static GtkWidget *gtk_cell_editable_widget_new (GtkCellRenderer          *cell,
                                                    GtkCellRendererAccelMode  mode,
-                                                   const gchar              *path);
+                                                   const char               *path);
 
 enum {
   ACCEL_EDITED,
@@ -102,13 +102,13 @@ struct _GtkCellRendererAccelClass
   GtkCellRendererTextClass parent_class;
 
   void (* accel_edited)  (GtkCellRendererAccel *accel,
-                          const gchar          *path_string,
+                          const char           *path_string,
                           guint                 accel_key,
                           GdkModifierType       accel_mods,
                           guint                 hardware_keycode);
 
   void (* accel_cleared) (GtkCellRendererAccel *accel,
-                          const gchar          *path_string);
+                          const char           *path_string);
 
   /* Padding for future expansion */
   void (*_gtk_reserved0) (void);
@@ -133,7 +133,7 @@ G_DEFINE_TYPE_WITH_PRIVATE (GtkCellRendererAccel, gtk_cell_renderer_accel, GTK_T
 static void
 gtk_cell_renderer_accel_init (GtkCellRendererAccel *cell_accel)
 {
-  gchar *text;
+  char *text;
 
   text = convert_keysym_state_to_string (cell_accel, 0, 0, 0);
   g_object_set (cell_accel, "text", text, NULL);
@@ -282,7 +282,7 @@ gtk_cell_renderer_accel_new (void)
   return g_object_new (GTK_TYPE_CELL_RENDERER_ACCEL, NULL);
 }
 
-static gchar *
+static char *
 convert_keysym_state_to_string (GtkCellRendererAccel *accel,
                                 guint                 keysym,
                                 GdkModifierType       mask,
@@ -310,7 +310,7 @@ convert_keysym_state_to_string (GtkCellRendererAccel *accel,
         }
       else 
         {
-          gchar *name;
+          char *name;
 
           name = gtk_accelerator_get_label_with_keycode (NULL, keysym, keycode, mask);
           if (name == NULL)
@@ -416,7 +416,7 @@ gtk_cell_renderer_accel_set_property (GObject      *object,
 
   if (changed)
     {
-      gchar *text;
+      char *text;
 
       text = convert_keysym_state_to_string (accel, priv->accel_key, priv->accel_mods, priv->keycode);
       g_object_set (accel, "text", text, NULL);
@@ -427,8 +427,8 @@ gtk_cell_renderer_accel_set_property (GObject      *object,
 static void
 gtk_cell_renderer_accel_get_preferred_width (GtkCellRenderer *cell,
                                              GtkWidget       *widget,
-                                             gint            *minimum_size,
-                                             gint            *natural_size)
+                                             int             *minimum_size,
+                                             int             *natural_size)
 
 {
   GtkCellRendererAccelPrivate *priv = gtk_cell_renderer_accel_get_instance_private (GTK_CELL_RENDERER_ACCEL (cell));
@@ -456,7 +456,7 @@ static GtkCellEditable *
 gtk_cell_renderer_accel_start_editing (GtkCellRenderer      *cell,
                                        GdkEvent             *event,
                                        GtkWidget            *widget,
-                                       const gchar          *path,
+                                       const char           *path,
                                        const GdkRectangle   *background_area,
                                        const GdkRectangle   *cell_area,
                                        GtkCellRendererState  flags)
@@ -488,7 +488,7 @@ struct _GtkCellEditableWidget
 
   gboolean editing_canceled;
   GtkCellRendererAccelMode accel_mode;
-  gchar *path;
+  char *path;
   GtkCellRenderer *cell;
   GtkWidget *label;
 };
@@ -710,7 +710,7 @@ gtk_cell_editable_widget_init (GtkCellEditableWidget *box)
 static GtkWidget *
 gtk_cell_editable_widget_new (GtkCellRenderer          *cell,
                               GtkCellRendererAccelMode  mode,
-                              const gchar              *path)
+                              const char               *path)
 {
   GtkCellEditableWidget *box;
 

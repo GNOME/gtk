@@ -141,7 +141,7 @@ static const struct {
   const char *mime_type;
   GInputStream * (* convert) (GdkX11Clipboard *, GInputStream *, const char *, int);
   const char *type;
-  gint format;
+  int format;
 } special_targets[] = {
   { "UTF8_STRING",   "text/plain;charset=utf-8", no_convert,        "UTF8_STRING",   8 },
   { "COMPOUND_TEXT", "text/plain;charset=utf-8", text_list_convert, "COMPOUND_TEXT", 8 },
@@ -823,7 +823,7 @@ gdk_x11_clipboard_init (GdkX11Clipboard *cb)
 
 GdkClipboard *
 gdk_x11_clipboard_new (GdkDisplay  *display,
-                       const gchar *selection)
+                       const char *selection)
 {
   GdkX11Clipboard *cb;
 

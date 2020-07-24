@@ -335,7 +335,7 @@ row_inserted_cb (GtkTreeModel   *model,
                  GtkTreeIter    *iter,
                  GtkTreePopover *popover)
 {
-  gint *indices, depth, index;
+  int *indices, depth, index;
   GtkWidget *item;
   GtkWidget *box;
 
@@ -389,7 +389,7 @@ row_changed_cb (GtkTreeModel   *model,
 {
   gboolean is_separator = FALSE;
   GtkWidget *item;
-  gint *indices, depth, index;
+  int *indices, depth, index;
 
   item = gtk_tree_popover_get_path_item (popover, path);
 
@@ -422,7 +422,7 @@ static void
 row_reordered_cb (GtkTreeModel   *model,
                   GtkTreePath    *path,
                   GtkTreeIter    *iter,
-                  gint           *new_order,
+                  int            *new_order,
                   GtkTreePopover *popover)
 {
   rebuild_menu (popover);
@@ -572,7 +572,7 @@ item_activated_cb (GtkGesture     *gesture,
   GtkWidget *item;
   GtkCellView *view;
   GtkTreePath *path;
-  gchar *path_str;
+  char *path_str;
   gboolean is_header = FALSE;
   gboolean has_submenu = FALSE;
 

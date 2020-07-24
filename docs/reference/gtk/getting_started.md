@@ -426,8 +426,8 @@ draw_cb (GtkDrawingArea *drawing_area,
 /* Draw a rectangle on the surface at the given position */
 static void
 draw_brush (GtkWidget *widget,
-            gdouble    x,
-            gdouble    y)
+            double     x,
+            double     y)
 {
   cairo_t *cr;
 
@@ -797,8 +797,8 @@ example_app_activate (GApplication *app)
 static void
 example_app_open (GApplication  *app,
                   GFile        **files,
-                  gint           n_files,
-                  const gchar   *hint)
+                  int            n_files,
+                  const char    *hint)
 {
   GList *windows;
   ExampleAppWindow *win;
@@ -1138,7 +1138,7 @@ example_app_startup (GApplication *app)
 {
   GtkBuilder *builder;
   GMenuModel *app_menu;
-  const gchar *quit_accels[2] = { "&lt;Ctrl&gt;Q", NULL };
+  const char *quit_accels[2] = { "&lt;Ctrl&gt;Q", NULL };
 
   G_APPLICATION_CLASS (example_app_parent_class)->startup (app);
 
@@ -1476,7 +1476,7 @@ static void
 search_text_changed (GtkEntry         *entry,
                      ExampleAppWindow *win)
 {
-  const gchar *text;
+  const char *text;
   GtkWidget *tab;
   GtkWidget *view;
   GtkTextBuffer *buffer;

@@ -36,9 +36,9 @@ void
 example_app_window_open (ExampleAppWindow *win,
                          GFile            *file)
 {
-  gchar *basename;
+  char *basename;
   GtkWidget *scrolled, *view;
-  gchar *contents;
+  char *contents;
   gsize length;
 
   basename = g_file_get_basename (file);

@@ -216,7 +216,7 @@ gtk_accel_label_init (GtkAccelLabel *accel_label)
  * Returns: a new #GtkAccelLabel.
  */
 GtkWidget *
-gtk_accel_label_new (const gchar *string)
+gtk_accel_label_new (const char *string)
 {
   return g_object_new (GTK_TYPE_ACCEL_LABEL,
                        "label", string,

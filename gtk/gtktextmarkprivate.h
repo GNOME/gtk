@@ -40,7 +40,7 @@ G_BEGIN_DECLS
 
 struct _GtkTextMarkBody {
   GtkTextMark *obj;
-  gchar *name;
+  char *name;
   GtkTextBTree *tree;
   GtkTextLine *line;
   guint visible : 1;

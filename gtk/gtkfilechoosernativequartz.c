@@ -125,7 +125,7 @@ chooser_get_files (FileChooserQuartzData *data)
   if (!data->save)
     {
       NSArray *urls;
-      gint i;
+      int i;
 
       urls = [(NSOpenPanel *)data->panel URLs];
 
@@ -159,7 +159,7 @@ chooser_set_current_folder (FileChooserQuartzData *data,
 
   if (folder != NULL)
     {
-      gchar *uri;
+      char *uri;
 
       uri = g_file_get_uri (folder);
       [data->panel setDirectoryURL:[NSURL URLWithString:[NSString stringWithUTF8String:uri]]];
@@ -169,7 +169,7 @@ chooser_set_current_folder (FileChooserQuartzData *data,
 
 static void
 chooser_set_current_name (FileChooserQuartzData *data,
-                          const gchar           *name)
+                          const char            *name)
 {
 
   if (name != NULL)
@@ -274,7 +274,7 @@ filechooser_quartz_launch (FileChooserQuartzData *data)
   if (data->current_file)
     {
       GFile *folder;
-      gchar *name;
+      char *name;
 
       folder = g_file_get_parent (data->current_file);
       name = g_file_get_basename (data->current_file);
@@ -392,11 +392,11 @@ filechooser_quartz_launch (FileChooserQuartzData *data)
   return TRUE;
 }
 
-static gchar *
-strip_mnemonic (const gchar *s)
+static char *
+strip_mnemonic (const char *s)
 {
-  gchar *escaped;
-  gchar *ret = NULL;
+  char *escaped;
+  char *ret = NULL;
 
   if (s == NULL)
     return NULL;

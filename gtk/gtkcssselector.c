@@ -982,7 +982,7 @@ string_has_number (const char *string,
 static gboolean
 parse_plus_b (GtkCssParser *parser,
               gboolean      negate,
-              gint         *b)
+              int          *b)
 {
   const GtkCssToken *token;
   gboolean has_seen_sign;
@@ -1039,9 +1039,9 @@ parse_plus_b (GtkCssParser *parser,
 
 static gboolean
 parse_n_plus_b (GtkCssParser *parser,
-                gint          before,
-                gint         *a,
-                gint         *b)
+                int           before,
+                int          *a,
+                int          *b)
 {
   const GtkCssToken *token;
 
@@ -1080,9 +1080,9 @@ parse_n_plus_b (GtkCssParser *parser,
                 
 static gboolean
 parse_a_n_plus_b (GtkCssParser *parser,
-                  gint          seen_sign,
-                  gint         *a,
-                  gint         *b)
+                  int           seen_sign,
+                  int          *a,
+                  int          *b)
 {
   const GtkCssToken *token;
 
@@ -1197,7 +1197,7 @@ parse_a_n_plus_b_arg (GtkCssParser *parser,
                       guint         arg,
                       gpointer      data)
 {
-  gint *ab = data;
+  int *ab = data;
 
   if (!parse_a_n_plus_b (parser, FALSE, &ab[0], &ab[1]))
     return 0;
@@ -1327,7 +1327,7 @@ gtk_css_selector_parse_selector_pseudo_class (GtkCssParser   *parser,
     {
       if (gtk_css_token_is_function (token, "nth-child"))
         {
-          gint ab[2];
+          int ab[2];
 
           if (!gtk_css_parser_consume_function (parser, 1, 1, parse_a_n_plus_b_arg, ab))
             {
@@ -1345,7 +1345,7 @@ gtk_css_selector_parse_selector_pseudo_class (GtkCssParser   *parser,
         }
       else if (gtk_css_token_is_function (token, "nth-last-child"))
         {
-          gint ab[2];
+          int ab[2];
 
           if (!gtk_css_parser_consume_function (parser, 1, 1, parse_a_n_plus_b_arg, ab))
             {

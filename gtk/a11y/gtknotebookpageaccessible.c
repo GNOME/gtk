@@ -78,7 +78,7 @@ get_label_from_notebook_page (GtkNotebookPageAccessible *page)
   return find_label_child (child);
 }
 
-static const gchar *
+static const char *
 gtk_notebook_page_accessible_get_name (AtkObject *accessible)
 {
   GtkWidget *label;
@@ -103,7 +103,7 @@ gtk_notebook_page_accessible_get_parent (AtkObject *accessible)
   return ATK_OBJECT (page->priv->notebook);
 }
 
-static gint
+static int
 gtk_notebook_page_accessible_get_n_children (AtkObject *accessible)
 {
   return 1;
@@ -111,7 +111,7 @@ gtk_notebook_page_accessible_get_n_children (AtkObject *accessible)
 
 static AtkObject *
 gtk_notebook_page_accessible_ref_child (AtkObject *accessible,
-                                        gint       i)
+                                        int        i)
 {
   AtkObject *child_obj;
   GtkNotebookPageAccessible *page = NULL;
@@ -185,7 +185,7 @@ gtk_notebook_page_accessible_ref_state_set (AtkObject *accessible)
   return merged_state_set;
 }
 
-static gint
+static int
 gtk_notebook_page_accessible_get_index_in_parent (AtkObject *accessible)
 {
   GtkNotebookPageAccessible *page;
@@ -278,8 +278,8 @@ gtk_notebook_page_accessible_invalidate (GtkNotebookPageAccessible *page)
 
 static AtkObject*
 gtk_notebook_page_accessible_ref_accessible_at_point (AtkComponent *component,
-                                                      gint          x,
-                                                      gint          y,
+                                                      int           x,
+                                                      int           y,
                                                       AtkCoordType  coord_type)
 {
   /* There is only one child so we return it */
@@ -292,10 +292,10 @@ gtk_notebook_page_accessible_ref_accessible_at_point (AtkComponent *component,
 
 static void
 gtk_notebook_page_accessible_get_extents (AtkComponent *component,
-                                          gint         *x,
-                                          gint         *y,
-                                          gint         *width,
-                                          gint         *height,
+                                          int          *x,
+                                          int          *y,
+                                          int          *width,
+                                          int          *height,
                                           AtkCoordType  coord_type)
 {
   GtkWidget *label;

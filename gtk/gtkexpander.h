@@ -40,9 +40,9 @@ GDK_AVAILABLE_IN_ALL
 GType                 gtk_expander_get_type            (void) G_GNUC_CONST;
 
 GDK_AVAILABLE_IN_ALL
-GtkWidget            *gtk_expander_new                 (const gchar *label);
+GtkWidget            *gtk_expander_new                 (const char *label);
 GDK_AVAILABLE_IN_ALL
-GtkWidget            *gtk_expander_new_with_mnemonic   (const gchar *label);
+GtkWidget            *gtk_expander_new_with_mnemonic   (const char *label);
 
 GDK_AVAILABLE_IN_ALL
 void                  gtk_expander_set_expanded        (GtkExpander *expander,
@@ -52,9 +52,9 @@ gboolean              gtk_expander_get_expanded        (GtkExpander *expander);
 
 GDK_AVAILABLE_IN_ALL
 void                  gtk_expander_set_label           (GtkExpander *expander,
-                                                        const gchar *label);
+                                                        const char *label);
 GDK_AVAILABLE_IN_ALL
-const gchar *         gtk_expander_get_label           (GtkExpander *expander);
+const char *         gtk_expander_get_label           (GtkExpander *expander);
 
 GDK_AVAILABLE_IN_ALL
 void                  gtk_expander_set_use_underline   (GtkExpander *expander,

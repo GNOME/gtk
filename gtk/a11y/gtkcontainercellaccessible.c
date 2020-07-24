@@ -24,7 +24,7 @@
 struct _GtkContainerCellAccessiblePrivate
 {
   GList *children;
-  gint n_children;
+  int n_children;
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE (GtkContainerCellAccessible, gtk_container_cell_accessible, GTK_TYPE_CELL_ACCESSIBLE)
@@ -41,7 +41,7 @@ gtk_container_cell_accessible_finalize (GObject *obj)
 }
 
 
-static gint
+static int
 gtk_container_cell_accessible_get_n_children (AtkObject *obj)
 {
   GtkContainerCellAccessible *cell = GTK_CONTAINER_CELL_ACCESSIBLE (obj);
@@ -51,7 +51,7 @@ gtk_container_cell_accessible_get_n_children (AtkObject *obj)
 
 static AtkObject *
 gtk_container_cell_accessible_ref_child (AtkObject *obj,
-                                         gint       child)
+                                         int        child)
 {
   GtkContainerCellAccessible *cell = GTK_CONTAINER_CELL_ACCESSIBLE (obj);
   GList *l;

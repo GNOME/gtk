@@ -296,7 +296,7 @@ static void
 gtk_box_buildable_add_child (GtkBuildable *buildable,
                              GtkBuilder   *builder,
                              GObject      *child,
-                             const gchar  *type)
+                             const char   *type)
 {
   if (GTK_IS_WIDGET (child))
     gtk_box_append (GTK_BOX (buildable), GTK_WIDGET (child));
@@ -323,7 +323,7 @@ gtk_box_buildable_iface_init (GtkBuildableIface *iface)
  **/
 GtkWidget*
 gtk_box_new (GtkOrientation orientation,
-             gint           spacing)
+             int            spacing)
 {
   return g_object_new (GTK_TYPE_BOX,
                        "orientation", orientation,
@@ -390,7 +390,7 @@ gtk_box_get_homogeneous (GtkBox *box)
  */
 void
 gtk_box_set_spacing (GtkBox *box,
-		     gint    spacing)
+		     int     spacing)
 {
   GtkBoxLayout *box_layout;
 
@@ -412,7 +412,7 @@ gtk_box_set_spacing (GtkBox *box,
  *
  * Returns: spacing between children
  **/
-gint
+int
 gtk_box_get_spacing (GtkBox *box)
 {
   GtkLayoutManager *box_layout;

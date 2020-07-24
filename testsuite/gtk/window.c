@@ -26,7 +26,7 @@ on_draw (GtkDrawingArea *da,
          int             height,
          gpointer        data)
 {
-  gint i, j;
+  int i, j;
 
   for (i = 0; 20 * i < width; i++)
     {
@@ -64,7 +64,7 @@ test_default_size (void)
 {
   GtkWidget *window;
   GtkWidget *da;
-  gint w, h;
+  int w, h;
   gboolean done;
 
   window = gtk_window_new ();
@@ -152,7 +152,7 @@ test_resize (void)
 {
   GtkWidget *window;
   GtkWidget *da;
-  gint w, h;
+  int w, h;
   gboolean done;
 
   window = gtk_window_new ();
@@ -214,7 +214,7 @@ static void
 test_resize_popup (void)
 {
   GtkWidget *window;
-  gint w, h;
+  int w, h;
   gboolean done;
 
   /* testcase for the dnd window */
@@ -244,7 +244,7 @@ static void
 test_show_hide (void)
 {
   GtkWidget *window;
-  gint w, h, w1, h1;
+  int w, h, w1, h1;
   gboolean done;
 
   /*http://bugzilla.gnome.org/show_bug.cgi?id=696882 */
@@ -293,7 +293,7 @@ test_show_hide (void)
 int
 main (int argc, char *argv[])
 {
-  gint i;
+  int i;
 
   gtk_test_init (&argc, &argv);
 

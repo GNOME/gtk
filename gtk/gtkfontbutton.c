@@ -68,8 +68,8 @@ struct _GtkFontButton
 {
   GtkWidget parent_instance;
 
-  gchar         *title;
-  gchar         *fontname;
+  char          *title;
+  char          *fontname;
 
   guint         use_font : 1;
   guint         use_size : 1;
@@ -86,10 +86,10 @@ struct _GtkFontButton
   PangoFontFamily      *font_family;
   PangoFontFace        *font_face;
   PangoFontMap         *font_map;
-  gint                  font_size;
+  int                   font_size;
   char                 *font_features;
   PangoLanguage        *language;
-  gchar                *preview_text;
+  char                 *preview_text;
   GtkFontFilterFunc     font_filter;
   gpointer              font_filter_data;
   GDestroyNotify        font_filter_data_destroy;
@@ -137,7 +137,7 @@ static void gtk_font_button_clicked                 (GtkButton         *button,
 
 /* Dialog response functions */
 static void response_cb                             (GtkDialog         *dialog,
-                                                     gint               response_id,
+                                                     int                response_id,
                                                      gpointer           data);
 static void dialog_destroy                          (GtkWidget         *widget,
                                                      gpointer           data);
@@ -218,8 +218,8 @@ gtk_font_button_update_font_data (GtkFontButton *font_button)
 {
   PangoFontFamily **families;
   PangoFontFace **faces;
-  gint n_families, n_faces, i;
-  const gchar *family;
+  int n_families, n_faces, i;
+  const char *family;
 
   g_assert (font_button->font_desc != NULL);
 
@@ -237,7 +237,7 @@ gtk_font_button_update_font_data (GtkFontButton *font_button)
   faces = NULL;
   for (i = 0; i < n_families; i++)
     {
-      const gchar *name = pango_font_family_get_name (families[i]);
+      const char *name = pango_font_family_get_name (families[i]);
 
       if (!g_ascii_strcasecmp (name, family))
         {
@@ -267,7 +267,7 @@ gtk_font_button_update_font_data (GtkFontButton *font_button)
   g_free (faces);
 }
 
-static gchar *
+static char *
 gtk_font_button_get_preview_text (GtkFontButton *font_button)
 {
   if (font_button->font_dialog)
@@ -278,7 +278,7 @@ gtk_font_button_get_preview_text (GtkFontButton *font_button)
 
 static void
 gtk_font_button_set_preview_text (GtkFontButton *font_button,
-                                  const gchar   *preview_text)
+                                  const char    *preview_text)
 {
   if (font_button->font_dialog)
     {
@@ -721,7 +721,7 @@ gtk_font_button_new (void)
  * Returns: a new font picker widget.
  */
 GtkWidget *
-gtk_font_button_new_with_font (const gchar *fontname)
+gtk_font_button_new_with_font (const char *fontname)
 {
   return g_object_new (GTK_TYPE_FONT_BUTTON, "font", fontname, NULL);
 } 
@@ -735,9 +735,9 @@ gtk_font_button_new_with_font (const gchar *fontname)
  */
 void
 gtk_font_button_set_title (GtkFontButton *font_button, 
-                           const gchar   *title)
+                           const char    *title)
 {
-  gchar *old_title;
+  char *old_title;
   g_return_if_fail (GTK_IS_FONT_BUTTON (font_button));
 
   old_title = font_button->title;
@@ -758,7 +758,7 @@ gtk_font_button_set_title (GtkFontButton *font_button,
  *
  * Returns: an internal copy of the title string which must not be freed.
  */
-const gchar*
+const char *
 gtk_font_button_get_title (GtkFontButton *font_button)
 {
   g_return_val_if_fail (GTK_IS_FONT_BUTTON (font_button), NULL);
@@ -888,7 +888,7 @@ gtk_font_button_set_use_size (GtkFontButton *font_button,
     }
 }
 
-static const gchar *
+static const char *
 gtk_font_button_get_font_name (GtkFontButton *font_button)
 {
   g_return_val_if_fail (GTK_IS_FONT_BUTTON (font_button), NULL);
@@ -898,7 +898,7 @@ gtk_font_button_get_font_name (GtkFontButton *font_button)
 
 static void
 gtk_font_button_set_font_name (GtkFontButton *font_button,
-                               const gchar    *fontname)
+                               const char     *fontname)
 {
   PangoFontDescription *font_desc;
 
@@ -983,7 +983,7 @@ gtk_font_button_clicked (GtkButton *button,
 
 static void
 response_cb (GtkDialog *dialog,
-             gint       response_id,
+             int        response_id,
              gpointer   data)
 {
   GtkFontButton *font_button = GTK_FONT_BUTTON (data);
@@ -1095,7 +1095,7 @@ skip:
     }
 }
 
-static gchar *
+static char *
 pango_font_description_to_css (PangoFontDescription *desc,
                                const char           *features,
                                const char           *language)
@@ -1257,7 +1257,7 @@ gtk_font_button_label_use_font (GtkFontButton *font_button)
   else
     {
       PangoFontDescription *desc;
-      gchar *data;
+      char *data;
 
       if (!font_button->provider)
         {
@@ -1285,9 +1285,9 @@ gtk_font_button_label_use_font (GtkFontButton *font_button)
 static void
 gtk_font_button_update_font_info (GtkFontButton *font_button)
 {
-  const gchar *fam_name;
-  const gchar *face_name;
-  gchar *family_style;
+  const char *fam_name;
+  const char *face_name;
+  char *family_style;
 
   if (font_button->font_family)
     fam_name = pango_font_family_get_name (font_button->font_family);
@@ -1309,7 +1309,7 @@ gtk_font_button_update_font_info (GtkFontButton *font_button)
   if ((font_button->level & GTK_FONT_CHOOSER_LEVEL_SIZE) != 0)
     {
       /* mirror Pango, which doesn't translate this either */
-      gchar *size = g_strdup_printf ("%2.4g%s",
+      char *size = g_strdup_printf ("%2.4g%s",
                                      pango_font_description_get_size (font_button->font_desc) / (double)PANGO_SCALE,
                                      pango_font_description_get_size_is_absolute (font_button->font_desc) ? "px" : "");
 

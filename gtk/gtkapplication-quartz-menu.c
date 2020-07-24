@@ -81,7 +81,7 @@ tracker_item_changed (GObject    *object,
                       gpointer    user_data)
 {
   GNSMenuItem *item = user_data;
-  const gchar *name = g_param_spec_get_name (pspec);
+  const char *name = g_param_spec_get_name (pspec);
 
   if (name != NULL)
     {
@@ -107,7 +107,7 @@ icon_loaded (GObject      *object,
   GNSMenuItem *item = user_data;
   GError *error = NULL;
   GdkPixbuf *pixbuf;
-  gint scale = 1;
+  int scale = 1;
 
 #ifdef AVAILABLE_MAC_OS_X_VERSION_10_7_AND_LATER
        /* we need a run-time check for the backingScaleFactor selector because we
@@ -170,7 +170,7 @@ icon_loaded (GObject      *object,
 
   if (self != nil)
     {
-      const gchar *special = gtk_menu_tracker_item_get_special (aTrackerItem);
+      const char *special = gtk_menu_tracker_item_get_special (aTrackerItem);
 
       if (special && g_str_equal (special, "hide-this"))
         {
@@ -229,7 +229,7 @@ icon_loaded (GObject      *object,
 
 - (void)didChangeLabel
 {
-  gchar *label = _gtk_toolbar_elide_underscores (gtk_menu_tracker_item_get_label (trackerItem));
+  char *label = _gtk_toolbar_elide_underscores (gtk_menu_tracker_item_get_label (trackerItem));
 
   NSString *title = [NSString stringWithUTF8String:label ? : ""];
 
@@ -279,7 +279,7 @@ icon_loaded (GObject      *object,
 
       GtkIconTheme *theme;
       GtkIconPaintable *icon;
-      gint scale = 1;
+      int scale = 1;
 
       if (!parsed)
         {
@@ -327,7 +327,7 @@ icon_loaded (GObject      *object,
 
 - (void)didChangeAccel
 {
-  const gchar *accel = gtk_menu_tracker_item_get_accel (trackerItem);
+  const char *accel = gtk_menu_tracker_item_get_accel (trackerItem);
 
   if (accel != NULL)
     {
@@ -380,7 +380,7 @@ icon_loaded (GObject      *object,
 
 static void
 menu_item_inserted (GtkMenuTrackerItem *item,
-                    gint                position,
+                    int                 position,
                     gpointer            user_data)
 {
   GNSMenu *menu = user_data;
@@ -389,7 +389,7 @@ menu_item_inserted (GtkMenuTrackerItem *item,
 }
 
 static void
-menu_item_removed (gint     position,
+menu_item_removed (int      position,
                    gpointer user_data)
 {
   GNSMenu *menu = user_data;

@@ -33,8 +33,8 @@ struct _GtkGestureSwipeClass
   GtkGestureSingleClass parent_class;
 
   void (* swipe) (GtkGestureSwipe *gesture,
-                  gdouble          velocity_x,
-                  gdouble          velocity_y);
+                  double           velocity_x,
+                  double           velocity_y);
 
   /*< private >*/
   gpointer padding[10];

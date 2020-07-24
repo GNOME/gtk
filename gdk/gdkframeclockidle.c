@@ -85,7 +85,7 @@ static GSource *sleep_source;
 
 static gboolean
 sleep_source_prepare (GSource *source,
-                      gint    *timeout)
+                      int     *timeout)
 {
   sleep_source_prepare_time = g_source_get_time (source);
   *timeout = -1;

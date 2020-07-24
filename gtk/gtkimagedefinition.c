@@ -26,26 +26,26 @@ typedef struct _GtkImageDefinitionPaintable GtkImageDefinitionPaintable;
 
 struct _GtkImageDefinitionEmpty {
   GtkImageType type;
-  gint ref_count;
+  int ref_count;
 };
 
 struct _GtkImageDefinitionIconName {
   GtkImageType type;
-  gint ref_count;
+  int ref_count;
 
   char *icon_name;
 };
 
 struct _GtkImageDefinitionGIcon {
   GtkImageType type;
-  gint ref_count;
+  int ref_count;
 
   GIcon *gicon;
 };
 
 struct _GtkImageDefinitionPaintable {
   GtkImageType type;
-  gint ref_count;
+  int ref_count;
 
   GdkPaintable *paintable;
 };
@@ -171,7 +171,7 @@ gtk_image_definition_get_storage_type (const GtkImageDefinition *def)
   return def->type;
 }
 
-gint
+int
 gtk_image_definition_get_scale (const GtkImageDefinition *def)
 {
   switch (def->type)
@@ -186,7 +186,7 @@ gtk_image_definition_get_scale (const GtkImageDefinition *def)
     }
 }
 
-const gchar *
+const char *
 gtk_image_definition_get_icon_name (const GtkImageDefinition *def)
 {
   if (def->type != GTK_IMAGE_ICON_NAME)

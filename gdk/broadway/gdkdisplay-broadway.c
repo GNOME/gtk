@@ -175,7 +175,7 @@ create_touchscreen (GdkDisplay *display)
 }
 
 GdkDisplay *
-_gdk_broadway_display_open (const gchar *display_name)
+_gdk_broadway_display_open (const char *display_name)
 {
   GdkDisplay *display;
   GdkBroadwayDisplay *broadway_display;
@@ -225,12 +225,12 @@ _gdk_broadway_display_open (const gchar *display_name)
   return display;
 }
 
-static const gchar *
+static const char *
 gdk_broadway_display_get_name (GdkDisplay *display)
 {
   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
 
-  return (gchar *) "Broadway";
+  return (char *) "Broadway";
 }
 
 static void
@@ -311,7 +311,7 @@ gdk_broadway_display_finalize (GObject *object)
 
 static void
 gdk_broadway_display_notify_startup_complete (GdkDisplay  *display,
-					      const gchar *startup_id)
+					      const char *startup_id)
 {
 }
 

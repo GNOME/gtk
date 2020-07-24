@@ -153,8 +153,8 @@ static void gtk_path_bar_update_button_appearance (GtkPathBar       *path_bar,
 						   gboolean          current_dir);
 
 static gboolean gtk_path_bar_scroll_controller_scroll (GtkEventControllerScroll *scroll,
-                                                       gdouble                   dx,
-                                                       gdouble                   dy,
+                                                       double                    dx,
+                                                       double                    dy,
                                                        GtkPathBar               *path_bar);
 
 static void
@@ -238,7 +238,7 @@ gtk_path_bar_init (GtkPathBar *path_bar)
   home = g_get_home_dir ();
   if (home != NULL)
     {
-      const gchar *desktop;
+      const char *desktop;
 
       path_bar->home_file = g_file_new_for_path (home);
       /* FIXME: Need file system backend specific way of getting the
@@ -446,11 +446,11 @@ gtk_path_bar_size_allocate (GtkWidget *widget,
   GtkTextDirection direction;
   GtkAllocation child_allocation;
   GList *list, *first_button;
-  gint width;
-  gint allocation_width;
+  int width;
+  int allocation_width;
   gboolean need_sliders = TRUE;
-  gint up_slider_offset = 0;
-  gint down_slider_offset = 0;
+  int up_slider_offset = 0;
+  int down_slider_offset = 0;
   GtkRequisition child_requisition;
 
   /* No path is set; we don't have to allocate anything. */
@@ -487,7 +487,7 @@ gtk_path_bar_size_allocate (GtkWidget *widget,
   else
     {
       gboolean reached_end = FALSE;
-      gint slider_space = 2 * path_bar->slider_width;
+      int slider_space = 2 * path_bar->slider_width;
 
       if (path_bar->first_scrolled_button)
 	first_button = path_bar->first_scrolled_button;
@@ -671,8 +671,8 @@ gtk_path_bar_size_allocate (GtkWidget *widget,
 
 static gboolean
 gtk_path_bar_scroll_controller_scroll (GtkEventControllerScroll *scroll,
-                                       gdouble                   dx,
-                                       gdouble                   dy,
+                                       double                    dx,
+                                       double                    dy,
                                        GtkPathBar               *path_bar)
 {
   if (dy > 0)
@@ -689,7 +689,7 @@ gtk_path_bar_scroll_down (GtkPathBar *path_bar)
   GtkAllocation allocation, button_allocation;
   GList *list;
   GList *down_button = NULL;
-  gint space_available;
+  int space_available;
 
   if (gtk_widget_get_child_visible (BUTTON_DATA (path_bar->button_list->data)->button))
     {
@@ -986,7 +986,7 @@ gtk_path_bar_update_button_appearance (GtkPathBar *path_bar,
 				       ButtonData *button_data,
 				       gboolean    current_dir)
 {
-  const gchar *dir_name = get_dir_name (button_data);
+  const char *dir_name = get_dir_name (button_data);
 
   gtk_widget_remove_css_class (button_data->button, "text-button");
   gtk_widget_remove_css_class (button_data->button, "image-button");
@@ -1217,7 +1217,7 @@ gtk_path_bar_get_info_callback (GObject      *source,
   struct SetFileInfo *file_info = data;
   GFileInfo *info;
   ButtonData *button_data;
-  const gchar *display_name;
+  const char *display_name;
   gboolean is_hidden;
 
   info = g_file_query_info_finish (file, result, NULL);

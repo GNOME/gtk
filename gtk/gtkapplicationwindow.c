@@ -119,7 +119,7 @@ G_DEFINE_TYPE_WITH_CODE (GtkApplicationWindowActions, gtk_application_window_act
 
 static void
 gtk_application_window_actions_activate_action_full (GRemoteActionGroup *remote,
-                                                     const gchar        *action_name,
+                                                     const char         *action_name,
                                                      GVariant           *parameter,
                                                      GVariant           *platform_data)
 {
@@ -137,7 +137,7 @@ gtk_application_window_actions_activate_action_full (GRemoteActionGroup *remote,
 
 static void
 gtk_application_window_actions_change_action_state_full (GRemoteActionGroup *remote,
-                                                         const gchar        *action_name,
+                                                         const char         *action_name,
                                                          GVariant           *value,
                                                          GVariant           *platform_data)
 {
@@ -278,7 +278,7 @@ gtk_application_window_shell_shows_menubar_changed (GObject    *object,
   gtk_application_window_update_menubar (window);
 }
 
-static gchar **
+static char **
 gtk_application_window_list_actions (GActionGroup *group)
 {
   GtkApplicationWindow *window = GTK_APPLICATION_WINDOW (group);
@@ -293,7 +293,7 @@ gtk_application_window_list_actions (GActionGroup *group)
 
 static gboolean
 gtk_application_window_query_action (GActionGroup        *group,
-                                     const gchar         *action_name,
+                                     const char          *action_name,
                                      gboolean            *enabled,
                                      const GVariantType **parameter_type,
                                      const GVariantType **state_type,
@@ -312,7 +312,7 @@ gtk_application_window_query_action (GActionGroup        *group,
 
 static void
 gtk_application_window_activate_action (GActionGroup *group,
-                                        const gchar  *action_name,
+                                        const char   *action_name,
                                         GVariant     *parameter)
 {
   GtkApplicationWindow *window = GTK_APPLICATION_WINDOW (group);
@@ -326,7 +326,7 @@ gtk_application_window_activate_action (GActionGroup *group,
 
 static void
 gtk_application_window_change_action_state (GActionGroup *group,
-                                            const gchar  *action_name,
+                                            const char   *action_name,
                                             GVariant     *state)
 {
   GtkApplicationWindow *window = GTK_APPLICATION_WINDOW (group);
@@ -340,7 +340,7 @@ gtk_application_window_change_action_state (GActionGroup *group,
 
 static GAction *
 gtk_application_window_lookup_action (GActionMap  *action_map,
-                                      const gchar *action_name)
+                                      const char *action_name)
 {
   GtkApplicationWindow *window = GTK_APPLICATION_WINDOW (action_map);
   GtkApplicationWindowPrivate *priv = gtk_application_window_get_instance_private (window);
@@ -366,7 +366,7 @@ gtk_application_window_add_action (GActionMap *action_map,
 
 static void
 gtk_application_window_remove_action (GActionMap  *action_map,
-                                      const gchar *action_name)
+                                      const char *action_name)
 {
   GtkApplicationWindow *window = GTK_APPLICATION_WINDOW (action_map);
   GtkApplicationWindowPrivate *priv = gtk_application_window_get_instance_private (window);
@@ -465,7 +465,7 @@ gtk_application_window_real_size_allocate (GtkWidget *widget,
     {
       GtkAllocation menubar_allocation;
       GtkAllocation child_allocation;
-      gint menubar_height;
+      int menubar_height;
       GtkWidget *child;
 
       _gtk_window_set_allocation (GTK_WINDOW (widget), width, height, &child_allocation);

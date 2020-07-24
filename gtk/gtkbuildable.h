@@ -43,22 +43,22 @@ struct _GtkBuildableParser
 {
   /* Called for open tags <foo bar="baz"> */
   void (*start_element)  (GtkBuildableParseContext *context,
-                          const gchar              *element_name,
-                          const gchar             **attribute_names,
-                          const gchar             **attribute_values,
+                          const char               *element_name,
+                          const char              **attribute_names,
+                          const char              **attribute_values,
                           gpointer                  user_data,
                           GError                  **error);
 
   /* Called for close tags </foo> */
   void (*end_element)    (GtkBuildableParseContext *context,
-                          const gchar              *element_name,
+                          const char               *element_name,
                           gpointer                  user_data,
                           GError                  **error);
 
   /* Called for character data */
   /* text is not nul-terminated */
   void (*text)           (GtkBuildableParseContext *context,
-                          const gchar              *text,
+                          const char               *text,
                           gsize                     text_len,
                           gpointer                  user_data,
                           GError                  **error);
@@ -127,41 +127,41 @@ struct _GtkBuildableIface
 
   /* virtual table */
   void          (* set_name)               (GtkBuildable       *buildable,
-                                            const gchar        *name);
-  const gchar * (* get_name)               (GtkBuildable       *buildable);
+                                            const char         *name);
+  const char * (* get_name)               (GtkBuildable       *buildable);
   void          (* add_child)              (GtkBuildable       *buildable,
                                             GtkBuilder         *builder,
                                             GObject            *child,
-                                            const gchar        *type);
+                                            const char         *type);
   void          (* set_buildable_property) (GtkBuildable       *buildable,
                                             GtkBuilder         *builder,
-                                            const gchar        *name,
+                                            const char         *name,
                                             const GValue       *value);
   GObject *     (* construct_child)        (GtkBuildable       *buildable,
                                             GtkBuilder         *builder,
-                                            const gchar        *name);
+                                            const char         *name);
   gboolean      (* custom_tag_start)       (GtkBuildable       *buildable,
                                             GtkBuilder         *builder,
                                             GObject            *child,
-                                            const gchar        *tagname,
+                                            const char         *tagname,
                                             GtkBuildableParser *parser,
                                             gpointer           *data);
   void          (* custom_tag_end)         (GtkBuildable       *buildable,
                                             GtkBuilder         *builder,
                                             GObject            *child,
-                                            const gchar        *tagname,
+                                            const char         *tagname,
                                             gpointer            data);
   void          (* custom_finished)        (GtkBuildable       *buildable,
                                             GtkBuilder         *builder,
                                             GObject            *child,
-                                            const gchar        *tagname,
+                                            const char         *tagname,
                                             gpointer            data);
   void          (* parser_finished)        (GtkBuildable       *buildable,
                                             GtkBuilder         *builder);
 
   GObject *     (* get_internal_child)     (GtkBuildable       *buildable,
                                             GtkBuilder         *builder,
-                                            const gchar        *childname);
+                                            const char         *childname);
 };
 
 
@@ -170,41 +170,41 @@ GType     gtk_buildable_get_type               (void) G_GNUC_CONST;
 
 GDK_AVAILABLE_IN_ALL
 void      gtk_buildable_set_name               (GtkBuildable        *buildable,
-						const gchar         *name);
+						const char          *name);
 GDK_AVAILABLE_IN_ALL
-const gchar * gtk_buildable_get_name           (GtkBuildable        *buildable);
+const char * gtk_buildable_get_name           (GtkBuildable        *buildable);
 GDK_AVAILABLE_IN_ALL
 void      gtk_buildable_add_child              (GtkBuildable        *buildable,
 						GtkBuilder          *builder,
 						GObject             *child,
-						const gchar         *type);
+						const char          *type);
 GDK_AVAILABLE_IN_ALL
 void      gtk_buildable_set_buildable_property (GtkBuildable        *buildable,
 						GtkBuilder          *builder,
-						const gchar         *name,
+						const char          *name,
 						const GValue        *value);
 GDK_AVAILABLE_IN_ALL
 GObject * gtk_buildable_construct_child        (GtkBuildable        *buildable,
 						GtkBuilder          *builder,
-						const gchar         *name);
+						const char          *name);
 GDK_AVAILABLE_IN_ALL
 gboolean  gtk_buildable_custom_tag_start       (GtkBuildable        *buildable,
 						GtkBuilder          *builder,
 						GObject             *child,
-						const gchar         *tagname,
+						const char          *tagname,
 						GtkBuildableParser  *parser,
 						gpointer            *data);
 GDK_AVAILABLE_IN_ALL
 void      gtk_buildable_custom_tag_end         (GtkBuildable        *buildable,
 						GtkBuilder          *builder,
 						GObject             *child,
-						const gchar         *tagname,
+						const char          *tagname,
 						gpointer             data);
 GDK_AVAILABLE_IN_ALL
 void      gtk_buildable_custom_finished        (GtkBuildable        *buildable,
 						GtkBuilder          *builder,
 						GObject             *child,
-						const gchar         *tagname,
+						const char          *tagname,
 						gpointer             data);
 GDK_AVAILABLE_IN_ALL
 void      gtk_buildable_parser_finished        (GtkBuildable        *buildable,
@@ -212,7 +212,7 @@ void      gtk_buildable_parser_finished        (GtkBuildable        *buildable,
 GDK_AVAILABLE_IN_ALL
 GObject * gtk_buildable_get_internal_child     (GtkBuildable        *buildable,
 						GtkBuilder          *builder,
-						const gchar         *childname);
+						const char          *childname);
 
 GDK_AVAILABLE_IN_ALL
 void          gtk_buildable_parse_context_push              (GtkBuildableParseContext *context,
@@ -226,8 +226,8 @@ GDK_AVAILABLE_IN_ALL
 GPtrArray    *gtk_buildable_parse_context_get_element_stack (GtkBuildableParseContext *context);
 GDK_AVAILABLE_IN_ALL
 void          gtk_buildable_parse_context_get_position      (GtkBuildableParseContext *context,
-                                                             gint                     *line_number,
-                                                             gint                     *char_number);
+                                                             int                      *line_number,
+                                                             int                      *char_number);
 
 G_END_DECLS
 

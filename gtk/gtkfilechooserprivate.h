@@ -62,8 +62,8 @@ struct _GtkFileChooserIface
                                             GError           **error);
   GFile *        (*get_current_folder)     (GtkFileChooser    *chooser);
   void           (*set_current_name)       (GtkFileChooser    *chooser,
-                                            const gchar       *name);
-  gchar *        (*get_current_name)       (GtkFileChooser    *chooser);
+                                            const char        *name);
+  char *        (*get_current_name)       (GtkFileChooser    *chooser);
   gboolean       (*select_file)            (GtkFileChooser    *chooser,
                                             GFile             *file,
                                             GError           **error);

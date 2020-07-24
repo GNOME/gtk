@@ -93,7 +93,7 @@ gboolean                gdk_gl_context_has_unpack_subimage      (GdkGLContext   
 void                    gdk_gl_context_push_debug_group         (GdkGLContext    *context,
                                                                  const char      *message);
 void                    gdk_gl_context_push_debug_group_printf  (GdkGLContext    *context,
-                                                                 const gchar     *format,
+                                                                 const char      *format,
                                                                  ...)  G_GNUC_PRINTF (2, 3);
 void                    gdk_gl_context_pop_debug_group          (GdkGLContext    *context);
 void                    gdk_gl_context_label_object             (GdkGLContext    *context,

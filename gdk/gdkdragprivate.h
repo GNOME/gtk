@@ -35,8 +35,8 @@ struct _GdkDragClass {
 
   GdkSurface*  (*get_drag_surface) (GdkDrag *drag);
   void        (*set_hotspot)   (GdkDrag  *drag,
-                                gint             hot_x,
-                                gint             hot_y);
+                                int              hot_x,
+                                int              hot_y);
   void        (*drop_done)     (GdkDrag   *drag,
                                 gboolean          success);
 

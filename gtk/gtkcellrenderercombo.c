@@ -69,7 +69,7 @@ struct _GtkCellRendererComboPrivate
 
   gboolean has_entry;
 
-  gint text_column;
+  int text_column;
 
   gulong focus_out_id;
 };
@@ -89,7 +89,7 @@ static void gtk_cell_renderer_combo_set_property (GObject      *object,
 static GtkCellEditable *gtk_cell_renderer_combo_start_editing (GtkCellRenderer     *cell,
                                                                GdkEvent            *event,
                                                                GtkWidget           *widget,
-                                                               const gchar         *path,
+                                                               const char          *path,
                                                                const GdkRectangle  *background_area,
                                                                const GdkRectangle  *cell_area,
                                                                GtkCellRendererState flags);
@@ -347,8 +347,8 @@ gtk_cell_renderer_combo_editing_done (GtkCellEditable *combo,
 {
   GtkCellRendererCombo *cell = GTK_CELL_RENDERER_COMBO (data);
   GtkCellRendererComboPrivate *priv = gtk_cell_renderer_combo_get_instance_private (cell);
-  const gchar *path;
-  gchar *new_text = NULL;
+  const char *path;
+  char *new_text = NULL;
   GtkTreeModel *model;
   GtkTreeIter iter;
   GtkEntry *entry;
@@ -416,7 +416,7 @@ find_text (GtkTreeModel *model,
 {
   SearchData *search_data = (SearchData *)data;
   GtkCellRendererComboPrivate *priv = gtk_cell_renderer_combo_get_instance_private (search_data->cell);
-  gchar *text, *cell_text;
+  char *text, *cell_text;
 
   gtk_tree_model_get (model, iter, priv->text_column, &text, -1);
   g_object_get (GTK_CELL_RENDERER_TEXT (search_data->cell),
@@ -438,7 +438,7 @@ static GtkCellEditable *
 gtk_cell_renderer_combo_start_editing (GtkCellRenderer     *cell,
                                        GdkEvent            *event,
                                        GtkWidget           *widget,
-                                       const gchar         *path,
+                                       const char          *path,
                                        const GdkRectangle  *background_area,
                                        const GdkRectangle  *cell_area,
                                        GtkCellRendererState flags)
@@ -448,7 +448,7 @@ gtk_cell_renderer_combo_start_editing (GtkCellRenderer     *cell,
   GtkWidget *combo;
   SearchData search_data;
   gboolean editable;
-  gchar *text;
+  char *text;
 
   g_object_get (cell, "editable", &editable, NULL);
   if (editable == FALSE)

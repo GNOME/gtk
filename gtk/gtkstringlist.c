@@ -246,8 +246,8 @@ typedef struct
   GtkBuilder    *builder;
   GtkStringList *list;
   GString       *string;
-  const gchar   *domain;
-  gchar         *context;
+  const char    *domain;
+  char          *context;
 
   guint          translatable : 1;
   guint          is_text      : 1;
@@ -255,9 +255,9 @@ typedef struct
 
 static void
 item_start_element (GtkBuildableParseContext  *context,
-                    const gchar               *element_name,
-                    const gchar              **names,
-                    const gchar              **values,
+                    const char                *element_name,
+                    const char               **names,
+                    const char               **values,
                     gpointer                   user_data,
                     GError                   **error)
 {
@@ -276,7 +276,7 @@ item_start_element (GtkBuildableParseContext  *context,
   else if (strcmp (element_name, "item") == 0)
     {
       gboolean translatable = FALSE;
-      const gchar *msg_context = NULL;
+      const char *msg_context = NULL;
 
       if (!_gtk_builder_check_parent (data->builder, context, "items", error))
         return;
@@ -305,7 +305,7 @@ item_start_element (GtkBuildableParseContext  *context,
 
 static void
 item_text (GtkBuildableParseContext  *context,
-           const gchar               *text,
+           const char                *text,
            gsize                      text_len,
            gpointer                   user_data,
            GError                   **error)
@@ -318,7 +318,7 @@ item_text (GtkBuildableParseContext  *context,
 
 static void
 item_end_element (GtkBuildableParseContext  *context,
-                  const gchar               *element_name,
+                  const char                *element_name,
                   gpointer                   user_data,
                   GError                   **error)
 {
@@ -357,7 +357,7 @@ static gboolean
 gtk_string_list_buildable_custom_tag_start (GtkBuildable       *buildable,
                                             GtkBuilder         *builder,
                                             GObject            *child,
-                                            const gchar        *tagname,
+                                            const char         *tagname,
                                             GtkBuildableParser *parser,
                                             gpointer           *parser_data)
 {
@@ -384,7 +384,7 @@ static void
 gtk_string_list_buildable_custom_finished (GtkBuildable *buildable,
                                            GtkBuilder   *builder,
                                            GObject      *child,
-                                           const gchar  *tagname,
+                                           const char   *tagname,
                                            gpointer      user_data)
 {
   if (strcmp (tagname, "items") == 0)

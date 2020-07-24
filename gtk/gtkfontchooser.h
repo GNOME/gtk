@@ -81,7 +81,7 @@ struct _GtkFontChooserIface
   /* Methods */
   PangoFontFamily * (* get_font_family)         (GtkFontChooser  *fontchooser);
   PangoFontFace *   (* get_font_face)           (GtkFontChooser  *fontchooser);
-  gint              (* get_font_size)           (GtkFontChooser  *fontchooser);
+  int               (* get_font_size)           (GtkFontChooser  *fontchooser);
 
   void              (* set_filter_func)         (GtkFontChooser   *fontchooser,
                                                  GtkFontFilterFunc filter,
@@ -90,7 +90,7 @@ struct _GtkFontChooserIface
 
   /* Signals */
   void (* font_activated) (GtkFontChooser *chooser,
-                           const gchar    *fontname);
+                           const char     *fontname);
 
   /* More methods */
   void              (* set_font_map)            (GtkFontChooser   *fontchooser,
@@ -109,7 +109,7 @@ PangoFontFamily *gtk_font_chooser_get_font_family          (GtkFontChooser   *fo
 GDK_AVAILABLE_IN_ALL
 PangoFontFace   *gtk_font_chooser_get_font_face            (GtkFontChooser   *fontchooser);
 GDK_AVAILABLE_IN_ALL
-gint             gtk_font_chooser_get_font_size            (GtkFontChooser   *fontchooser);
+int              gtk_font_chooser_get_font_size            (GtkFontChooser   *fontchooser);
 
 GDK_AVAILABLE_IN_ALL
 PangoFontDescription *
@@ -119,16 +119,16 @@ void             gtk_font_chooser_set_font_desc            (GtkFontChooser      
                                                             const PangoFontDescription *font_desc);
 
 GDK_AVAILABLE_IN_ALL
-gchar*           gtk_font_chooser_get_font                 (GtkFontChooser   *fontchooser);
+char *           gtk_font_chooser_get_font                 (GtkFontChooser   *fontchooser);
 
 GDK_AVAILABLE_IN_ALL
 void             gtk_font_chooser_set_font                 (GtkFontChooser   *fontchooser,
-                                                            const gchar      *fontname);
+                                                            const char       *fontname);
 GDK_AVAILABLE_IN_ALL
-gchar*           gtk_font_chooser_get_preview_text         (GtkFontChooser   *fontchooser);
+char *           gtk_font_chooser_get_preview_text         (GtkFontChooser   *fontchooser);
 GDK_AVAILABLE_IN_ALL
 void             gtk_font_chooser_set_preview_text         (GtkFontChooser   *fontchooser,
-                                                            const gchar      *text);
+                                                            const char       *text);
 GDK_AVAILABLE_IN_ALL
 gboolean         gtk_font_chooser_get_show_preview_entry   (GtkFontChooser   *fontchooser);
 GDK_AVAILABLE_IN_ALL

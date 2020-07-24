@@ -276,17 +276,17 @@ _get_dummy_window_hwnd (GdkWGLDummy *dummy)
                     NULL);
 }
 
-static gint
+static int
 _gdk_init_dummy_context (GdkWGLDummy *dummy);
 
 #define PIXEL_ATTRIBUTES 17
 
-static gint
+static int
 _get_wgl_pfd (HDC                    hdc,
               PIXELFORMATDESCRIPTOR *pfd,
               GdkWin32Display       *display)
 {
-  gint best_pf = 0;
+  int best_pf = 0;
 
   pfd->nSize = sizeof (PIXELFORMATDESCRIPTOR);
 
@@ -294,9 +294,9 @@ _get_wgl_pfd (HDC                    hdc,
     {
       GdkWGLDummy dummy;
       UINT num_formats;
-      gint colorbits = GetDeviceCaps (hdc, BITSPIXEL);
+      int colorbits = GetDeviceCaps (hdc, BITSPIXEL);
       guint extra_fields = 1;
-      gint i = 0;
+      int i = 0;
       int pixelAttribs[PIXEL_ATTRIBUTES];
 
       /* Save up the HDC and HGLRC that we are currently using, to restore back to it when we are done here */
@@ -384,12 +384,12 @@ _get_wgl_pfd (HDC                    hdc,
 /* in WGL, for many OpenGL items, we need a dummy WGL context, so create
  * one and cache it for later use
  */
-static gint
+static int
 _gdk_init_dummy_context (GdkWGLDummy *dummy)
 {
   PIXELFORMATDESCRIPTOR pfd;
   gboolean set_pixel_format_result = FALSE;
-  gint best_idx = 0;
+  int best_idx = 0;
 
   _get_dummy_window_hwnd (dummy);
 
@@ -419,7 +419,7 @@ static gboolean
 _gdk_win32_display_init_gl (GdkDisplay *display)
 {
   GdkWin32Display *display_win32 = GDK_WIN32_DISPLAY (display);
-  gint best_idx = 0;
+  int best_idx = 0;
   GdkWGLDummy dummy;
 
   if (display_win32->have_wgl)
@@ -628,7 +628,7 @@ gl_fail:
 
 static gboolean
 _set_pixformat_for_hdc (HDC              hdc,
-                        gint            *best_idx,
+                        int             *best_idx,
                         GdkWin32Display *display)
 {
   PIXELFORMATDESCRIPTOR pfd;
@@ -658,13 +658,13 @@ gdk_win32_gl_context_realize (GdkGLContext *context,
 
   /* These are the real WGL context items that we will want to use later */
   HGLRC hglrc;
-  gint pixel_format;
+  int pixel_format;
   gboolean debug_bit, compat_bit, legacy_bit;
 
   /* request flags and specific versions for core (3.2+) WGL context */
-  gint flags = 0;
-  gint glver_major = 0;
-  gint glver_minor = 0;
+  int flags = 0;
+  int glver_major = 0;
+  int glver_minor = 0;
 
   GdkSurface *surface = gdk_gl_context_get_surface (context);
   GdkWin32Surface *impl = GDK_WIN32_SURFACE (surface);
@@ -870,8 +870,8 @@ _gdk_win32_display_make_gl_context_current (GdkDisplay *display,
  */
 gboolean
 gdk_win32_display_get_wgl_version (GdkDisplay *display,
-                                   gint *major,
-                                   gint *minor)
+                                   int *major,
+                                   int *minor)
 {
   g_return_val_if_fail (GDK_IS_DISPLAY (display), FALSE);
 

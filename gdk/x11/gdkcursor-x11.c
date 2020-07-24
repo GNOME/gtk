@@ -147,9 +147,9 @@ static const struct {
 
 static XcursorImage*
 create_cursor_image (GdkTexture *texture,
-                     gint        x,
-                     gint        y,
-		     gint        scale)
+                     int         x,
+                     int         y,
+		     int         scale)
 {
   XcursorImage *xcimage;
 
@@ -184,10 +184,10 @@ gdk_x11_cursor_create_for_texture (GdkDisplay *display,
   return xcursor;
 }
 
-static const gchar *
-name_fallback (const gchar *name)
+static const char *
+name_fallback (const char *name)
 {
-  gint i;
+  int i;
 
   for (i = 0; i < G_N_ELEMENTS (name_map); i++)
     {
@@ -239,9 +239,9 @@ gdk_x11_cursor_create_for_texture (GdkDisplay *display,
 
 static Cursor
 gdk_x11_cursor_create_for_name (GdkDisplay  *display,
-                                const gchar *name)
+                                const char *name)
 {
-  gint i;
+  int i;
 
   if (g_str_equal (name, "none"))
     return get_blank_cursor (display);
@@ -279,13 +279,13 @@ gdk_x11_cursor_create_for_name (GdkDisplay  *display,
  */
 void
 gdk_x11_display_set_cursor_theme (GdkDisplay  *display,
-                                  const gchar *theme,
-                                  const gint   size)
+                                  const char *theme,
+                                  const int    size)
 {
 #if defined(HAVE_XCURSOR) && defined(HAVE_XFIXES) && XFIXES_MAJOR >= 2
   Display *xdisplay;
-  gchar *old_theme;
-  gint old_size;
+  char *old_theme;
+  int old_size;
   gpointer cursor, xcursor;
   GHashTableIter iter;
 

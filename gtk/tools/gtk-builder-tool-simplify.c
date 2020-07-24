@@ -130,9 +130,9 @@ static GMarkupParser parser = {
   NULL
 };
 
-static const gchar *
+static const char *
 canonical_boolean_value (MyParserData *data,
-                         const gchar  *string)
+                         const char   *string)
 {
   GValue value = G_VALUE_INIT;
   gboolean b = FALSE;
@@ -191,7 +191,7 @@ needs_explicit_setting (GParamSpec *pspec,
     { "GtkGridLayoutChild", "left-attach", PROP_KIND_LAYOUT },
   };
   gboolean found;
-  gint k;
+  int k;
   const char *class_name;
 
   class_name = g_type_name (pspec->owner_type);
@@ -241,7 +241,7 @@ keep_for_rewrite (const char *class_name,
     { "GtkStack", "needs-attention", PROP_KIND_PACKING },
   };
   gboolean found;
-  gint k;
+  int k;
   char *canonical_name;
 
   canonical_name = g_strdup (property_name);
@@ -348,13 +348,13 @@ is_container_element (Element *element)
 }
 
 static void
-canonicalize_key (gchar *key)
+canonicalize_key (char *key)
 {
-  gchar *p;
+  char *p;
 
   for (p = key; *p != 0; p++)
     {
-      gchar c = *p;
+      char c = *p;
 
       /* We may meet something like AtkObject::accessible-name */
       if (c == ':' && ((p > key && p[-1] == ':') || p[1] == ':'))
@@ -382,14 +382,14 @@ static struct {
 
 static GParamSpec *
 get_property_pspec (MyParserData *data,
-                    const gchar  *class_name,
-                    const gchar  *property_name,
+                    const char   *class_name,
+                    const char   *property_name,
                     PropKind      kind)
 {
   GType type;
   GObjectClass *class;
   GParamSpec *pspec;
-  gchar *canonical_name;
+  char *canonical_name;
 
   type = g_type_from_name (class_name);
   if (type == G_TYPE_INVALID)
@@ -471,7 +471,7 @@ static gboolean
 value_is_default (Element      *element,
                   MyParserData *data,
                   GParamSpec   *pspec,
-                  const gchar  *value_string)
+                  const char   *value_string)
 {
   GValue value = { 0, };
   gboolean ret;
@@ -602,7 +602,7 @@ property_is_boolean (Element      *element,
   for (i = 0; element->attribute_names[i]; i++)
     {
       if (strcmp (element->attribute_names[i], "name") == 0)
-        property_name = (const gchar *)element->attribute_values[i];
+        property_name = (const char *)element->attribute_values[i];
     }
 
   pspec = get_property_pspec (data, class_name, property_name, kind);
@@ -629,7 +629,7 @@ static gboolean
 property_can_be_omitted (Element      *element,
                          MyParserData *data)
 {
-  gint i;
+  int i;
   gboolean bound;
   gboolean translatable;
   const char *class_name;
@@ -653,7 +653,7 @@ property_can_be_omitted (Element      *element,
       else if (strcmp (element->attribute_names[i], "translatable") == 0)
         translatable = TRUE;
       else if (strcmp (element->attribute_names[i], "name") == 0)
-        property_name = (const gchar *)element->attribute_values[i];
+        property_name = (const char *)element->attribute_values[i];
     }
 
   if (data->convert3to4 &&
@@ -683,8 +683,8 @@ static gboolean
 property_has_been_removed (Element      *element,
                            MyParserData *data)
 {
-  const gchar *class_name;
-  const gchar *property_name;
+  const char *class_name;
+  const char *property_name;
   struct _Prop {
     const char *class;
     const char *property;
@@ -698,9 +698,9 @@ property_has_been_removed (Element      *element,
     { "GtkHeaderBar", "position", PROP_KIND_PACKING },
     { "GtkPopoverMenu", "position",PROP_KIND_PACKING },
   };
-  gchar *canonical_name;
+  char *canonical_name;
   gboolean found;
-  gint i, k;
+  int i, k;
   PropKind kind;
 
   kind = get_prop_kind (element);
@@ -711,7 +711,7 @@ property_has_been_removed (Element      *element,
   for (i = 0; element->attribute_names[i]; i++)
     {
       if (strcmp (element->attribute_names[i], "name") == 0)
-        property_name = (const gchar *)element->attribute_values[i];
+        property_name = (const char *)element->attribute_values[i];
     }
 
   canonical_name = g_strdup (property_name);
@@ -737,8 +737,8 @@ property_has_been_removed (Element      *element,
 static void
 maybe_rename_property (Element *element, MyParserData *data)
 {
-  const gchar *class_name;
-  const gchar *property_name;
+  const char *class_name;
+  const char *property_name;
   struct _Prop {
     const char *class;
     const char *property;
@@ -773,7 +773,7 @@ maybe_rename_property (Element *element, MyParserData *data)
       if (strcmp (element->attribute_names[i], "name") == 0)
         {
           prop_name_index = i;
-          property_name = (const gchar *)element->attribute_values[i];
+          property_name = (const char *)element->attribute_values[i];
         }
     }
 
@@ -1860,7 +1860,7 @@ simplify_file (const char *filename,
                gboolean    convert3to4)
 {
   GMarkupParseContext *context;
-  gchar *buffer;
+  char *buffer;
   MyParserData data;
   GError *error = NULL;
 

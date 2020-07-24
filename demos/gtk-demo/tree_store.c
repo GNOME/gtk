@@ -14,7 +14,7 @@
 typedef struct _TreeItem TreeItem;
 struct _TreeItem
 {
-  const gchar    *label;
+  const char     *label;
   gboolean        alex;
   gboolean        havoc;
   gboolean        tim;
@@ -222,7 +222,7 @@ create_model (void)
 
 static void
 item_toggled (GtkCellRendererToggle *cell,
-              gchar                 *path_str,
+              char                  *path_str,
               gpointer               data)
 {
   GtkTreeModel *model = (GtkTreeModel *)data;
@@ -230,7 +230,7 @@ item_toggled (GtkCellRendererToggle *cell,
   GtkTreeIter iter;
   gboolean toggle_item;
 
-  gint *column;
+  int *column;
 
   column = g_object_get_data (G_OBJECT (cell), "column");
 
@@ -252,7 +252,7 @@ item_toggled (GtkCellRendererToggle *cell,
 static void
 add_columns (GtkTreeView *treeview)
 {
-  gint col_offset;
+  int col_offset;
   GtkCellRenderer *renderer;
   GtkTreeViewColumn *column;
   GtkTreeModel *model = gtk_tree_view_get_model (treeview);
@@ -272,7 +272,7 @@ add_columns (GtkTreeView *treeview)
   /* alex column */
   renderer = gtk_cell_renderer_toggle_new ();
   g_object_set (renderer, "xalign", 0.0, NULL);
-  g_object_set_data (G_OBJECT (renderer), "column", (gint *)ALEX_COLUMN);
+  g_object_set_data (G_OBJECT (renderer), "column", (int *)ALEX_COLUMN);
 
   g_signal_connect (renderer, "toggled", G_CALLBACK (item_toggled), model);
 
@@ -294,7 +294,7 @@ add_columns (GtkTreeView *treeview)
   /* havoc column */
   renderer = gtk_cell_renderer_toggle_new ();
   g_object_set (renderer, "xalign", 0.0, NULL);
-  g_object_set_data (G_OBJECT (renderer), "column", (gint *)HAVOC_COLUMN);
+  g_object_set_data (G_OBJECT (renderer), "column", (int *)HAVOC_COLUMN);
 
   g_signal_connect (renderer, "toggled", G_CALLBACK (item_toggled), model);
 
@@ -315,7 +315,7 @@ add_columns (GtkTreeView *treeview)
   /* tim column */
   renderer = gtk_cell_renderer_toggle_new ();
   g_object_set (renderer, "xalign", 0.0, NULL);
-  g_object_set_data (G_OBJECT (renderer), "column", (gint *)TIM_COLUMN);
+  g_object_set_data (G_OBJECT (renderer), "column", (int *)TIM_COLUMN);
 
   g_signal_connect (renderer, "toggled", G_CALLBACK (item_toggled), model);
 
@@ -337,7 +337,7 @@ add_columns (GtkTreeView *treeview)
   /* owen column */
   renderer = gtk_cell_renderer_toggle_new ();
   g_object_set (renderer, "xalign", 0.0, NULL);
-  g_object_set_data (G_OBJECT (renderer), "column", (gint *)OWEN_COLUMN);
+  g_object_set_data (G_OBJECT (renderer), "column", (int *)OWEN_COLUMN);
 
   g_signal_connect (renderer, "toggled", G_CALLBACK (item_toggled), model);
 
@@ -358,7 +358,7 @@ add_columns (GtkTreeView *treeview)
   /* dave column */
   renderer = gtk_cell_renderer_toggle_new ();
   g_object_set (renderer, "xalign", 0.0, NULL);
-  g_object_set_data (G_OBJECT (renderer), "column", (gint *)DAVE_COLUMN);
+  g_object_set_data (G_OBJECT (renderer), "column", (int *)DAVE_COLUMN);
 
   g_signal_connect (renderer, "toggled", G_CALLBACK (item_toggled), model);
 

@@ -48,14 +48,14 @@ struct _GtkMenuSectionBox
   gboolean             iconic;
   gboolean             inline_buttons;
   gboolean             circular;
-  gint                 depth;
+  int                  depth;
   GtkPopoverMenuFlags  flags;
   GtkSizeGroup        *indicators;
 };
 
 typedef struct
 {
-  gint     n_items;
+  int      n_items;
   gboolean previous_is_iconic;
 } MenuData;
 
@@ -66,7 +66,7 @@ static void        gtk_menu_section_box_sync_separators (GtkMenuSectionBox  *box
 static void        gtk_menu_section_box_new_submenu     (GtkMenuTrackerItem *item,
                                                          GtkMenuSectionBox  *toplevel,
                                                          GtkWidget          *focus,
-                                                         const gchar        *name);
+                                                         const char         *name);
 static GtkWidget * gtk_menu_section_box_new_section     (GtkMenuTrackerItem *item,
                                                          GtkMenuSectionBox  *parent);
 
@@ -91,7 +91,7 @@ gtk_menu_section_box_sync_separators (GtkMenuSectionBox *box,
   gboolean has_separator;
   gboolean has_label;
   gboolean separator_condition;
-  gint n_items_before;
+  int n_items_before;
   GtkWidget *child;
 
   n_items_before =  data->n_items;
@@ -203,7 +203,7 @@ gtk_popover_item_activate (GtkWidget *button,
 }
 
 static void
-gtk_menu_section_box_remove_func (gint     position,
+gtk_menu_section_box_remove_func (int      position,
                                   gpointer user_data)
 {
   GtkMenuSectionBox *box = user_data;
@@ -291,7 +291,7 @@ open_submenu (GtkWidget *button,
 
 static void
 gtk_menu_section_box_insert_func (GtkMenuTrackerItem *item,
-                                  gint                position,
+                                  int                 position,
                                   gpointer            user_data)
 {
   GtkMenuSectionBox *box = user_data;
@@ -325,7 +325,7 @@ gtk_menu_section_box_insert_func (GtkMenuTrackerItem *item,
         {
           GtkWidget *stack = NULL;
           GtkWidget *parent = NULL;
-          gchar *name;
+          char *name;
 
           widget = g_object_new (GTK_TYPE_MODEL_BUTTON,
                                  "menu-name", gtk_menu_tracker_item_get_label (item),
@@ -517,7 +517,7 @@ static void
 gtk_menu_section_box_new_submenu (GtkMenuTrackerItem *item,
                                   GtkMenuSectionBox  *toplevel,
                                   GtkWidget          *focus,
-                                  const gchar        *name)
+                                  const char         *name)
 {
   GtkMenuSectionBox *box;
   GtkWidget *button;
@@ -556,9 +556,9 @@ gtk_menu_section_box_new_section (GtkMenuTrackerItem *item,
                                   GtkMenuSectionBox  *parent)
 {
   GtkMenuSectionBox *box;
-  const gchar *label;
-  const gchar *hint;
-  const gchar *text_direction;
+  const char *label;
+  const char *hint;
+  const char *text_direction;
 
   box = g_object_new (GTK_TYPE_MENU_SECTION_BOX, NULL);
   box->indicators = g_object_ref (parent->indicators);

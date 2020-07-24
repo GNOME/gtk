@@ -181,14 +181,14 @@ typedef struct
 {
   GtkActionMuxer *muxer;
   GSList       *watchers;
-  gchar        *fullname;
+  char         *fullname;
 } Action;
 
 typedef struct
 {
   GtkActionMuxer *muxer;
   GActionGroup *group;
-  gchar        *prefix;
+  char         *prefix;
   gulong        handler_ids[4];
 } Group;
 
@@ -210,8 +210,8 @@ gtk_action_muxer_append_group_actions (const char *prefix,
                                        Group      *group,
                                        GHashTable *actions)
 {
-  gchar **group_actions;
-  gchar **action;
+  char **group_actions;
+  char **action;
 
   group_actions = g_action_group_list_actions (group->group);
   for (action = group_actions; *action; action++)
@@ -265,11 +265,11 @@ gtk_action_muxer_list_actions (GtkActionMuxer *muxer)
 
 static Group *
 gtk_action_muxer_find_group (GtkActionMuxer  *muxer,
-                             const gchar     *full_name,
-                             const gchar    **action_name)
+                             const char      *full_name,
+                             const char     **action_name)
 {
-  const gchar *dot;
-  gchar *prefix;
+  const char *dot;
+  char *prefix;
   const char *name;
   Group *group;
 
@@ -323,7 +323,7 @@ find_observers (GtkActionMuxer *muxer,
 
 void
 gtk_action_muxer_action_enabled_changed (GtkActionMuxer *muxer,
-                                         const gchar    *action_name,
+                                         const char     *action_name,
                                          gboolean        enabled)
 {
   GtkWidgetAction *iter;
@@ -355,12 +355,12 @@ gtk_action_muxer_action_enabled_changed (GtkActionMuxer *muxer,
 
 static void
 gtk_action_muxer_group_action_enabled_changed (GActionGroup *action_group,
-                                               const gchar  *action_name,
+                                               const char   *action_name,
                                                gboolean      enabled,
                                                gpointer      user_data)
 {
   Group *group = user_data;
-  gchar *fullname;
+  char *fullname;
 
   fullname = g_strconcat (group->prefix, ".", action_name, NULL);
   gtk_action_muxer_action_enabled_changed (group->muxer, fullname, enabled);
@@ -369,7 +369,7 @@ gtk_action_muxer_group_action_enabled_changed (GActionGroup *action_group,
 
 void
 gtk_action_muxer_action_state_changed (GtkActionMuxer *muxer,
-                                       const gchar    *action_name,
+                                       const char     *action_name,
                                        GVariant       *state)
 {
   Action *action;
@@ -382,12 +382,12 @@ gtk_action_muxer_action_state_changed (GtkActionMuxer *muxer,
 
 static void
 gtk_action_muxer_group_action_state_changed (GActionGroup *action_group,
-                                             const gchar  *action_name,
+                                             const char   *action_name,
                                              GVariant     *state,
                                              gpointer      user_data)
 {
   Group *group = user_data;
-  gchar *fullname;
+  char *fullname;
 
   fullname = g_strconcat (group->prefix, ".", action_name, NULL);
   gtk_action_muxer_action_state_changed (group->muxer, fullname, state);
@@ -496,7 +496,7 @@ gtk_action_muxer_action_added (GtkActionMuxer     *muxer,
 
 static void
 gtk_action_muxer_action_added_to_group (GActionGroup *action_group,
-                                        const gchar  *action_name,
+                                        const char   *action_name,
                                         gpointer      user_data)
 {
   Group *group = user_data;
@@ -543,7 +543,7 @@ gtk_action_muxer_action_removed (GtkActionMuxer *muxer,
 
 static void
 gtk_action_muxer_action_removed_from_group (GActionGroup *action_group,
-                                            const gchar  *action_name,
+                                            const char   *action_name,
                                             gpointer      user_data)
 {
   Group *group = user_data;
@@ -570,8 +570,8 @@ gtk_action_muxer_action_removed_from_group (GActionGroup *action_group,
 
 static void
 gtk_action_muxer_primary_accel_changed (GtkActionMuxer *muxer,
-                                        const gchar    *action_name,
-                                        const gchar    *action_and_target)
+                                        const char     *action_name,
+                                        const char     *action_and_target)
 {
   Action *action;
   GSList *node;
@@ -719,7 +719,7 @@ prop_actions_connect (GtkActionMuxer *muxer)
 
 static gboolean
 action_muxer_query_action (GtkActionMuxer      *muxer,
-                           const gchar         *action_name,
+                           const char          *action_name,
                            gboolean            *enabled,
                            const GVariantType **parameter_type,
                            const GVariantType **state_type,
@@ -729,7 +729,7 @@ action_muxer_query_action (GtkActionMuxer      *muxer,
 {
   GtkWidgetAction *action;
   Group *group;
-  const gchar *unprefixed_name;
+  const char *unprefixed_name;
 
   if (muxer->widget)
     {
@@ -785,7 +785,7 @@ action_muxer_query_action (GtkActionMuxer      *muxer,
 
 gboolean
 gtk_action_muxer_query_action (GtkActionMuxer      *muxer,
-                               const gchar         *action_name,
+                               const char          *action_name,
                                gboolean            *enabled,
                                const GVariantType **parameter_type,
                                const GVariantType **state_type,
@@ -809,10 +809,10 @@ gtk_action_muxer_has_action (GtkActionMuxer *muxer,
 
 void
 gtk_action_muxer_activate_action (GtkActionMuxer *muxer,
-                                  const gchar    *action_name,
+                                  const char     *action_name,
                                   GVariant       *parameter)
 {
-  const gchar *unprefixed_name;
+  const char *unprefixed_name;
   Group *group;
 
   if (muxer->widget)
@@ -854,7 +854,7 @@ gtk_action_muxer_change_action_state (GtkActionMuxer *muxer,
                                       GVariant       *state)
 {
   GtkWidgetAction *action;
-  const gchar *unprefixed_name;
+  const char *unprefixed_name;
   Group *group;
 
   if (muxer->widget)
@@ -920,7 +920,7 @@ static void gtk_action_muxer_free_action (gpointer data);
 
 static void
 gtk_action_muxer_register_observer (GtkActionObservable *observable,
-                                    const gchar         *name,
+                                    const char          *name,
                                     GtkActionObserver   *observer)
 {
   GtkActionMuxer *muxer = GTK_ACTION_MUXER (observable);
@@ -972,7 +972,7 @@ gtk_action_muxer_register_observer (GtkActionObservable *observable,
 
 static void
 gtk_action_muxer_unregister_observer (GtkActionObservable *observable,
-                                      const gchar         *name,
+                                      const char          *name,
                                       GtkActionObserver   *observer)
 {
   GtkActionMuxer *muxer = GTK_ACTION_MUXER (observable);
@@ -990,7 +990,7 @@ static void
 gtk_action_muxer_free_group (gpointer data)
 {
   Group *group = data;
-  gint i;
+  int i;
 
   /* 'for loop' or 'four loop'? */
   for (i = 0; i < 4; i++)
@@ -1225,12 +1225,12 @@ gtk_action_muxer_class_init (GObjectClass *class)
  */
 void
 gtk_action_muxer_insert (GtkActionMuxer *muxer,
-                         const gchar    *prefix,
+                         const char     *prefix,
                          GActionGroup   *action_group)
 {
-  gchar **actions;
+  char **actions;
   Group *group;
-  gint i;
+  int i;
 
   /* TODO: diff instead of ripout and replace */
   gtk_action_muxer_remove (muxer, prefix);
@@ -1272,7 +1272,7 @@ gtk_action_muxer_insert (GtkActionMuxer *muxer,
  */
 void
 gtk_action_muxer_remove (GtkActionMuxer *muxer,
-                         const gchar    *prefix)
+                         const char     *prefix)
 {
   Group *group;
 
@@ -1283,8 +1283,8 @@ gtk_action_muxer_remove (GtkActionMuxer *muxer,
 
   if (group != NULL)
     {
-      gchar **actions;
-      gint i;
+      char **actions;
+      int i;
 
       g_hash_table_steal (muxer->groups, prefix);
 
@@ -1372,9 +1372,9 @@ gtk_action_muxer_set_primary_accel (GtkActionMuxer *muxer,
   gtk_action_muxer_primary_accel_changed (muxer, NULL, action_and_target);
 }
 
-const gchar *
+const char *
 gtk_action_muxer_get_primary_accel (GtkActionMuxer *muxer,
-                                    const gchar    *action_and_target)
+                                    const char     *action_and_target)
 {
    guint position;
 
@@ -1388,9 +1388,9 @@ gtk_action_muxer_get_primary_accel (GtkActionMuxer *muxer,
   return gtk_action_muxer_get_primary_accel (muxer->parent, action_and_target);
 }
 
-gchar *
-gtk_print_action_and_target (const gchar *action_namespace,
-                             const gchar *action_name,
+char *
+gtk_print_action_and_target (const char *action_namespace,
+                             const char *action_name,
                              GVariant    *target)
 {
   GString *result;
@@ -1415,12 +1415,12 @@ gtk_print_action_and_target (const gchar *action_namespace,
   return g_string_free (result, FALSE);
 }
 
-gchar *
-gtk_normalise_detailed_action_name (const gchar *detailed_action_name)
+char *
+gtk_normalise_detailed_action_name (const char *detailed_action_name)
 {
   GError *error = NULL;
-  gchar *action_and_target;
-  gchar *action_name;
+  char *action_and_target;
+  char *action_name;
   GVariant *target;
 
   g_action_parse_detailed_name (detailed_action_name, &action_name, &target, &error);

@@ -85,7 +85,7 @@
  * provided input method.
  *
  * |[<!-- language="C" -->
- * GtkIMContext * im_module_create(const gchar *context_id);
+ * GtkIMContext * im_module_create(const char *context_id);
  * ]|
  * This function should return a pointer to a newly created instance of the
  * #GtkIMContext subclass identified by @context_id. The context ID is the same
@@ -123,18 +123,18 @@ struct _GtkIMContextPrivate {
 };
 
 static void     gtk_im_context_real_get_preedit_string (GtkIMContext   *context,
-							gchar         **str,
+							char          **str,
 							PangoAttrList **attrs,
-							gint           *cursor_pos);
+							int            *cursor_pos);
 static gboolean gtk_im_context_real_filter_keypress    (GtkIMContext   *context,
 							GdkEvent       *event);
 static gboolean gtk_im_context_real_get_surrounding    (GtkIMContext   *context,
-							gchar         **text,
-							gint           *cursor_index);
+							char          **text,
+							int            *cursor_index);
 static void     gtk_im_context_real_set_surrounding    (GtkIMContext   *context,
 							const char     *text,
-							gint            len,
-							gint            cursor_index);
+							int             len,
+							int             cursor_index);
 
 static void     gtk_im_context_get_property            (GObject        *obj,
                                                         guint           property_id,
@@ -358,9 +358,9 @@ gtk_im_context_init (GtkIMContext *im_context)
 
 static void
 gtk_im_context_real_get_preedit_string (GtkIMContext       *context,
-					gchar             **str,
+					char              **str,
 					PangoAttrList     **attrs,
-					gint               *cursor_pos)
+					int                *cursor_pos)
 {
   if (str)
     *str = g_strdup ("");
@@ -379,15 +379,15 @@ gtk_im_context_real_filter_keypress (GtkIMContext *context,
 
 typedef struct
 {
-  gchar *text;
-  gint cursor_index;
+  char *text;
+  int cursor_index;
 } SurroundingInfo;
 
 static void
 gtk_im_context_real_set_surrounding (GtkIMContext  *context,
-				     const gchar   *text,
-				     gint           len,
-				     gint           cursor_index)
+				     const char    *text,
+				     int            len,
+				     int            cursor_index)
 {
   SurroundingInfo *info = g_object_get_data (G_OBJECT (context),
                                              "gtk-im-surrounding-info");
@@ -402,8 +402,8 @@ gtk_im_context_real_set_surrounding (GtkIMContext  *context,
 
 static gboolean
 gtk_im_context_real_get_surrounding (GtkIMContext *context,
-				     gchar       **text,
-				     gint         *cursor_index)
+				     char        **text,
+				     int          *cursor_index)
 {
   gboolean result;
   gboolean info_is_local = FALSE;
@@ -484,9 +484,9 @@ gtk_im_context_set_client_widget (GtkIMContext *context,
  **/
 void
 gtk_im_context_get_preedit_string (GtkIMContext   *context,
-				   gchar         **str,
+				   char          **str,
 				   PangoAttrList **attrs,
-				   gint           *cursor_pos)
+				   int            *cursor_pos)
 {
   GtkIMContextClass *klass;
   
@@ -742,9 +742,9 @@ gtk_im_context_set_use_preedit (GtkIMContext *context,
  **/
 void
 gtk_im_context_set_surrounding (GtkIMContext  *context,
-				const gchar   *text,
-				gint           len,
-				gint           cursor_index)
+				const char    *text,
+				int            len,
+				int            cursor_index)
 {
   GtkIMContextClass *klass;
   
@@ -791,12 +791,12 @@ gtk_im_context_set_surrounding (GtkIMContext  *context,
  **/
 gboolean
 gtk_im_context_get_surrounding (GtkIMContext *context,
-				gchar       **text,
-				gint         *cursor_index)
+				char        **text,
+				int          *cursor_index)
 {
   GtkIMContextClass *klass;
-  gchar *local_text = NULL;
-  gint local_index;
+  char *local_text = NULL;
+  int local_index;
   gboolean result = FALSE;
   
   g_return_val_if_fail (GTK_IS_IM_CONTEXT (context), FALSE);
@@ -841,8 +841,8 @@ gtk_im_context_get_surrounding (GtkIMContext *context,
  **/
 gboolean
 gtk_im_context_delete_surrounding (GtkIMContext *context,
-				   gint          offset,
-				   gint          n_chars)
+				   int           offset,
+				   int           n_chars)
 {
   gboolean result;
   

@@ -16,8 +16,8 @@ static GtkWidget *placeholder;
 
 static void
 on_name_appeared (GDBusConnection *connection,
-                  const gchar     *name,
-                  const gchar     *name_owner,
+                  const char      *name,
+                  const char      *name_owner,
                   gpointer         user_data)
 {
   name_seen = TRUE;
@@ -25,7 +25,7 @@ on_name_appeared (GDBusConnection *connection,
 
 static void
 on_name_vanished (GDBusConnection *connection,
-                  const gchar     *name,
+                  const char      *name,
                   gpointer         user_data)
 {
   if (!name_seen)
@@ -55,7 +55,7 @@ do_application_demo (GtkWidget *toplevel)
 
   if (placeholder == NULL)
     {
-      const gchar *command;
+      const char *command;
       GError *error = NULL;
 
       if (g_file_test ("./gtk4-demo-application" APP_EXTENSION, G_FILE_TEST_IS_EXECUTABLE))

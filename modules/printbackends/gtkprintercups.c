@@ -259,7 +259,7 @@ gtk_printer_cups_get_property (GObject    *object,
 static void
 colord_update_ui_from_settings (GtkPrinterCups *printer)
 {
-  const gchar *title = NULL;
+  const char *title = NULL;
 
   /* not yet connected to colord */
   if (printer->colord_client == NULL)
@@ -373,10 +373,10 @@ gtk_printer_cups_update_settings (GtkPrinterCups *printer,
                                   GtkPrintSettings *settings,
                                   GtkPrinterOptionSet *set)
 {
-  gchar *qualifier = NULL;
-  gchar **qualifiers = NULL;
+  char *qualifier = NULL;
+  char **qualifiers = NULL;
   GtkPrinterOption *option;
-  const gchar *format[3];
+  const char *format[3];
 
   /* nothing set yet */
   if (printer->colord_device == NULL)
@@ -420,7 +420,7 @@ gtk_printer_cups_update_settings (GtkPrinterCups *printer,
 
   qualifiers = g_strsplit (qualifier, ",", -1);
   cd_device_get_profile_for_qualifiers (printer->colord_device,
-                                        (const gchar **) qualifiers,
+                                        (const char **) qualifiers,
                                         printer->colord_cancellable,
                                         colord_client_device_get_profile_for_qualifiers_cb,
                                         g_object_ref (printer));
@@ -497,7 +497,7 @@ out:
 static void
 colord_update_device (GtkPrinterCups *printer)
 {
-  gchar *colord_device_id = NULL;
+  char *colord_device_id = NULL;
 
   /* not yet connected to the daemon */
   if (!cd_client_get_connected (printer->colord_client))
@@ -640,10 +640,10 @@ gtk_printer_cups_get_ppd (GtkPrinterCups *printer)
   return printer->ppd_file;
 }
 
-const gchar *
+const char *
 gtk_printer_cups_get_ppd_name (GtkPrinterCups  *printer)
 {
-  const gchar *result;
+  const char *result;
 
   result = printer->ppd_name;
 

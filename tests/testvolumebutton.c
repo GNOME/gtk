@@ -19,7 +19,7 @@
 
 static void
 value_changed (GtkWidget *button,
-               gdouble volume,
+               double volume,
                gpointer user_data)
 {
   g_message ("volume changed to %f", volume);
@@ -27,7 +27,7 @@ value_changed (GtkWidget *button,
 
 static void
 response_cb (GtkDialog *dialog,
-             gint       arg1,
+             int        arg1,
              gpointer   user_data)
 {
   gtk_window_destroy (GTK_WINDOW (dialog));

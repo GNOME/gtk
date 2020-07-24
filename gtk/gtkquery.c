@@ -26,10 +26,10 @@
 
 struct _GtkQueryPrivate
 {
-  gchar *text;
+  char *text;
   GFile *location;
   GList *mime_types;
-  gchar **words;
+  char **words;
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE (GtkQuery, gtk_query, G_TYPE_OBJECT)
@@ -68,7 +68,7 @@ gtk_query_new (void)
 }
 
 
-const gchar *
+const char *
 gtk_query_get_text (GtkQuery *query)
 {
   GtkQueryPrivate *priv = gtk_query_get_instance_private (query);
@@ -78,7 +78,7 @@ gtk_query_get_text (GtkQuery *query)
 
 void
 gtk_query_set_text (GtkQuery    *query,
-                    const gchar *text)
+                    const char *text)
 {
   GtkQueryPrivate *priv = gtk_query_get_instance_private (query);
 
@@ -106,10 +106,10 @@ gtk_query_set_location (GtkQuery *query,
   g_set_object (&priv->location, file);
 }
 
-static gchar *
-prepare_string_for_compare (const gchar *string)
+static char *
+prepare_string_for_compare (const char *string)
 {
-  gchar *normalized, *res;
+  char *normalized, *res;
 
   normalized = g_utf8_normalize (string, -1, G_NORMALIZE_NFD);
   res = g_utf8_strdown (normalized, -1);
@@ -120,12 +120,12 @@ prepare_string_for_compare (const gchar *string)
 
 gboolean
 gtk_query_matches_string (GtkQuery    *query,
-                          const gchar *string)
+                          const char *string)
 {
   GtkQueryPrivate *priv = gtk_query_get_instance_private (query);
-  gchar *prepared;
+  char *prepared;
   gboolean found;
-  gint i;
+  int i;
 
   if (!priv->text)
     return FALSE;

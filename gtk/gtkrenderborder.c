@@ -510,7 +510,7 @@ snapshot_frame_stroke (GtkSnapshot          *snapshot,
 
 static void
 color_shade (const GdkRGBA *color,
-             gdouble        factor,
+             double         factor,
              GdkRGBA       *color_return)
 {
   GtkHSLA hsla;

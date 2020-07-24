@@ -310,8 +310,8 @@ gtk_button_class_init (GtkButtonClass *klass)
 static void
 click_pressed_cb (GtkGestureClick *gesture,
                   guint            n_press,
-                  gdouble          x,
-                  gdouble          y,
+                  double           x,
+                  double           y,
                   GtkWidget       *widget)
 {
   GtkButton *button = GTK_BUTTON (widget);
@@ -353,8 +353,8 @@ touch_release_in_button (GtkGestureClick *gesture,
 static void
 click_released_cb (GtkGestureClick *gesture,
                    guint            n_press,
-                   gdouble          x,
-                   gdouble          y,
+                   double           x,
+                   double           y,
                    GtkWidget       *widget)
 {
   GtkButton *button = GTK_BUTTON (widget);
@@ -470,7 +470,7 @@ gtk_button_dispose (GObject *object)
 
 static void
 gtk_button_set_action_name (GtkActionable *actionable,
-                            const gchar   *action_name)
+                            const char    *action_name)
 {
   GtkButton *button = GTK_BUTTON (actionable);
   GtkButtonPrivate *priv = gtk_button_get_instance_private (button);
@@ -573,7 +573,7 @@ gtk_button_get_property (GObject         *object,
     }
 }
 
-static const gchar *
+static const char *
 gtk_button_get_action_name (GtkActionable *actionable)
 {
   GtkButton *button = GTK_BUTTON (actionable);
@@ -606,7 +606,7 @@ static void
 gtk_button_buildable_add_child (GtkBuildable *buildable,
                                 GtkBuilder   *builder,
                                 GObject      *child,
-                                const gchar  *type)
+                                const char   *type)
 {
   if (GTK_IS_WIDGET (child))
     gtk_button_set_child (GTK_BUTTON (buildable), GTK_WIDGET (child));
@@ -646,7 +646,7 @@ gtk_button_new (void)
  * Returns: The newly created #GtkButton widget.
  */
 GtkWidget*
-gtk_button_new_with_label (const gchar *label)
+gtk_button_new_with_label (const char *label)
 {
   return g_object_new (GTK_TYPE_BUTTON, "label", label, NULL);
 }
@@ -664,7 +664,7 @@ gtk_button_new_with_label (const gchar *label)
  * Returns: a new #GtkButton displaying the themed icon
  */
 GtkWidget*
-gtk_button_new_from_icon_name (const gchar *icon_name)
+gtk_button_new_from_icon_name (const char *icon_name)
 {
   GtkWidget *button;
 
@@ -690,7 +690,7 @@ gtk_button_new_from_icon_name (const gchar *icon_name)
  * Returns: a new #GtkButton
  */
 GtkWidget*
-gtk_button_new_with_mnemonic (const gchar *label)
+gtk_button_new_with_mnemonic (const char *label)
 {
   return g_object_new (GTK_TYPE_BUTTON, "label", label, "use-underline", TRUE,  NULL);
 }
@@ -824,7 +824,7 @@ gtk_button_finish_activate (GtkButton *button,
  */
 void
 gtk_button_set_label (GtkButton   *button,
-                      const gchar *label)
+                      const char *label)
 {
   GtkButtonPrivate *priv = gtk_button_get_instance_private (button);
   GtkWidget *child;
@@ -874,7 +874,7 @@ gtk_button_set_label (GtkButton   *button,
  * Returns: (nullable): The text of the label widget. This string is owned
  * by the widget and must not be modified or freed.
  */
-const gchar *
+const char *
 gtk_button_get_label (GtkButton *button)
 {
   GtkButtonPrivate *priv = gtk_button_get_instance_private (button);

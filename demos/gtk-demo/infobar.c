@@ -8,7 +8,7 @@
 
 static void
 on_bar_response (GtkInfoBar *info_bar,
-                 gint        response_id,
+                 int         response_id,
                  gpointer    user_data)
 {
   GtkWidget *dialog;

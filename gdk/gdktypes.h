@@ -62,8 +62,8 @@ G_BEGIN_DECLS
  */
 struct _GdkPoint
 {
-  gint x;
-  gint y;
+  int x;
+  int y;
 };
 typedef struct _GdkPoint              GdkPoint;
 
@@ -405,8 +405,8 @@ typedef struct _GdkKeymapKey GdkKeymapKey;
 struct _GdkKeymapKey
 {
   guint keycode;
-  gint  group;
-  gint  level;
+  int   group;
+  int   level;
 };
 
 

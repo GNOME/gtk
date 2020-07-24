@@ -473,13 +473,13 @@
                                             GTK_STATE_FLAG_ACTIVE)
 
 typedef struct {
-  gchar               *name;           /* Name of the template automatic child */
+  char                *name;           /* Name of the template automatic child */
   gboolean             internal_child; /* Whether the automatic widget should be exported as an <internal-child> */
   gssize               offset;         /* Instance private data offset where to set the automatic child (or 0) */
 } AutomaticChildClass;
 
 typedef struct {
-  gchar     *callback_name;
+  char      *callback_name;
   GCallback  callback_symbol;
 } CallbackSymbol;
 
@@ -548,7 +548,7 @@ struct _GtkStateData
   guint         flags_to_set;
   guint         flags_to_unset;
 
-  gint          old_scale_factor;
+  int           old_scale_factor;
 };
 
 /* --- prototypes --- */
@@ -584,8 +584,8 @@ static void	gtk_widget_real_direction_changed(GtkWidget         *widget,
                                                   GtkTextDirection   previous_direction);
 
 static gboolean gtk_widget_real_query_tooltip    (GtkWidget         *widget,
-						  gint               x,
-						  gint               y,
+						  int                x,
+						  int                y,
 						  gboolean           keyboard_tip,
 						  GtkTooltip        *tooltip);
 static void     gtk_widget_real_css_changed      (GtkWidget         *widget,
@@ -629,26 +629,26 @@ static AtkObject*	gtk_widget_ref_accessible		(AtkImplementor *implementor);
 
 static void             gtk_widget_buildable_interface_init     (GtkBuildableIface  *iface);
 static void             gtk_widget_buildable_set_name           (GtkBuildable       *buildable,
-                                                                 const gchar        *name);
-static const gchar *    gtk_widget_buildable_get_name           (GtkBuildable       *buildable);
+                                                                 const char         *name);
+static const char *    gtk_widget_buildable_get_name           (GtkBuildable       *buildable);
 static GObject *        gtk_widget_buildable_get_internal_child (GtkBuildable       *buildable,
                                                                  GtkBuilder         *builder,
-                                                                 const gchar        *childname);
+                                                                 const char         *childname);
 static gboolean         gtk_widget_buildable_custom_tag_start   (GtkBuildable       *buildable,
                                                                  GtkBuilder         *builder,
                                                                  GObject            *child,
-                                                                 const gchar        *tagname,
+                                                                 const char         *tagname,
                                                                  GtkBuildableParser *parser,
                                                                  gpointer           *data);
 static void             gtk_widget_buildable_custom_tag_end     (GtkBuildable       *buildable,
                                                                  GtkBuilder         *builder,
                                                                  GObject            *child,
-                                                                 const gchar        *tagname,
+                                                                 const char         *tagname,
                                                                  gpointer            data);
 static void             gtk_widget_buildable_custom_finished    (GtkBuildable       *buildable,
                                                                  GtkBuilder         *builder,
                                                                  GObject            *child,
-                                                                 const gchar        *tagname,
+                                                                 const char         *tagname,
                                                                  gpointer            data);
 static void             gtk_widget_buildable_parser_finished    (GtkBuildable       *buildable,
                                                                  GtkBuilder         *builder);
@@ -659,8 +659,8 @@ static GtkSizeRequestMode gtk_widget_real_get_request_mode      (GtkWidget      
 static void                  template_data_free                 (GtkWidgetTemplate*template_data);
 
 static void gtk_widget_set_usize_internal (GtkWidget          *widget,
-					   gint                width,
-					   gint                height);
+					   int                 width,
+					   int                 height);
 
 static gboolean event_surface_is_still_viewable (GdkEvent *event);
 
@@ -673,7 +673,7 @@ static void gtk_widget_queue_compute_expand (GtkWidget *widget);
 
 
 /* --- variables --- */
-static gint             GtkWidget_private_offset = 0;
+static int              GtkWidget_private_offset = 0;
 static gpointer         gtk_widget_parent_class = NULL;
 static guint            widget_signals[LAST_SIGNAL] = { 0 };
 GtkTextDirection gtk_default_direction = GTK_TEXT_DIR_LTR;
@@ -797,8 +797,8 @@ gtk_widget_real_snapshot (GtkWidget   *widget,
 
 static gboolean
 gtk_widget_real_contains (GtkWidget *widget,
-                          gdouble    x,
-                          gdouble    y)
+                          double     x,
+                          double     y)
 {
   GtkCssBoxes boxes;
 
@@ -1887,7 +1887,7 @@ _gtk_widget_emulate_press (GtkWidget      *widget,
 {
   GtkWidget *next_child, *parent;
   GdkEvent *press;
-  gdouble x, y;
+  double x, y;
   graphene_point_t p;
 
   if (event_widget == widget)
@@ -2097,7 +2097,7 @@ gtk_widget_needs_press_emulation (GtkWidget        *widget,
   return !sequence_press_handled;
 }
 
-static gint
+static int
 _gtk_widget_set_sequence_state_internal (GtkWidget             *widget,
                                          GdkEventSequence      *sequence,
                                          GtkEventSequenceState  state,
@@ -2109,7 +2109,7 @@ _gtk_widget_set_sequence_state_internal (GtkWidget             *widget,
   GtkWidget *target;
   GList *group = NULL;
   GdkEventSequence *seq;
-  gint n_handled = 0;
+  int n_handled = 0;
   guint i;
 
   if (state != GTK_EVENT_SEQUENCE_CLAIMED &&
@@ -2334,7 +2334,7 @@ gtk_widget_init (GTypeInstance *instance, gpointer g_class)
  **/
 GtkWidget*
 gtk_widget_new (GType        type,
-		const gchar *first_property_name,
+		const char *first_property_name,
 		...)
 {
   GtkWidget *widget;
@@ -3582,7 +3582,7 @@ gtk_widget_get_frame_clock (GtkWidget *widget)
     }
 }
 
-static gint
+static int
 get_number (GtkCssValue *value)
 {
   double d = _gtk_css_number_value_get (value, 100);
@@ -3672,9 +3672,9 @@ effective_align (GtkAlign         align,
 
 static void
 adjust_for_align (GtkAlign  align,
-                  gint      natural_size,
-                  gint     *allocated_pos,
-                  gint     *allocated_size)
+                  int       natural_size,
+                  int      *allocated_pos,
+                  int      *allocated_size)
 {
   switch (align)
     {
@@ -3709,8 +3709,8 @@ gtk_widget_adjust_size_allocation (GtkWidget     *widget,
                                    GtkAllocation *allocation)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
-  gint natural_width, natural_height;
-  gint min_width, min_height;
+  int natural_width, natural_height;
+  int min_width, min_height;
 
   if (priv->halign == GTK_ALIGN_FILL && priv->valign == GTK_ALIGN_FILL)
     return;
@@ -3969,8 +3969,8 @@ gtk_widget_common_ancestor (GtkWidget *widget_a,
 {
   GtkWidget *parent_a;
   GtkWidget *parent_b;
-  gint depth_a = 0;
-  gint depth_b = 0;
+  int depth_a = 0;
+  int depth_b = 0;
 
   parent_a = widget_a;
   while (parent_a->priv->parent)
@@ -4122,7 +4122,7 @@ gtk_widget_class_add_binding (GtkWidgetClass  *widget_class,
                               guint            keyval,
                               GdkModifierType  mods,
                               GtkShortcutFunc  func,
-                              const gchar     *format_string,
+                              const char      *format_string,
                               ...)
 {
   GtkShortcut *shortcut;
@@ -4168,8 +4168,8 @@ void
 gtk_widget_class_add_binding_signal (GtkWidgetClass  *widget_class,
                                      guint            keyval,
                                      GdkModifierType  mods,
-                                     const gchar     *signal,
-                                     const gchar     *format_string,
+                                     const char      *signal,
+                                     const char      *format_string,
                                      ...)
 {
   GtkShortcut *shortcut;
@@ -4217,8 +4217,8 @@ void
 gtk_widget_class_add_binding_action (GtkWidgetClass  *widget_class,
                                      guint            keyval,
                                      GdkModifierType  mods,
-                                     const gchar     *action_name,
-                                     const gchar     *format_string,
+                                     const char      *action_name,
+                                     const char      *format_string,
                                      ...)
 {
   GtkShortcut *shortcut;
@@ -4636,8 +4636,8 @@ gtk_widget_grab_focus_child (GtkWidget *widget)
 
 static gboolean
 gtk_widget_real_query_tooltip (GtkWidget  *widget,
-			       gint        x,
-			       gint        y,
+			       int         x,
+			       int         y,
 			       gboolean    keyboard_tip,
 			       GtkTooltip *tooltip)
 {
@@ -4660,8 +4660,8 @@ gtk_widget_real_query_tooltip (GtkWidget  *widget,
 
 gboolean
 gtk_widget_query_tooltip (GtkWidget  *widget,
-                          gint        x,
-                          gint        y,
+                          int         x,
+                          int         y,
                           gboolean    keyboard_mode,
                           GtkTooltip *tooltip)
 {
@@ -5243,7 +5243,7 @@ _gtk_widget_set_has_grab (GtkWidget *widget,
  */
 void
 gtk_widget_set_name (GtkWidget	 *widget,
-		     const gchar *name)
+		     const char *name)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
 
@@ -5267,7 +5267,7 @@ gtk_widget_set_name (GtkWidget	 *widget,
  * Returns: name of the widget. This string is owned by GTK+ and
  * should not be modified or freed
  **/
-const gchar*
+const char *
 gtk_widget_get_name (GtkWidget *widget)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
@@ -6327,7 +6327,7 @@ gtk_widget_create_pango_context (GtkWidget *widget)
  **/
 PangoLayout *
 gtk_widget_create_pango_layout (GtkWidget   *widget,
-				const gchar *text)
+				const char *text)
 {
   PangoLayout *layout;
   PangoContext *context;
@@ -6462,7 +6462,7 @@ _gtk_widget_scale_changed (GtkWidget *widget)
  *
  * Returns: the scale factor for @widget
  */
-gint
+int
 gtk_widget_get_scale_factor (GtkWidget *widget)
 {
   GtkRoot *root;
@@ -6655,8 +6655,8 @@ gtk_widget_error_bell (GtkWidget *widget)
 
 static void
 gtk_widget_set_usize_internal (GtkWidget          *widget,
-			       gint                width,
-			       gint                height)
+			       int                 width,
+			       int                 height)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
   gboolean changed = FALSE;
@@ -6723,8 +6723,8 @@ gtk_widget_set_usize_internal (GtkWidget          *widget,
  **/
 void
 gtk_widget_set_size_request (GtkWidget *widget,
-                             gint       width,
-                             gint       height)
+                             int        width,
+                             int        height)
 {
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (width >= -1);
@@ -6750,8 +6750,8 @@ gtk_widget_set_size_request (GtkWidget *widget,
  **/
 void
 gtk_widget_get_size_request (GtkWidget *widget,
-                             gint      *width,
-                             gint      *height)
+                             int       *width,
+                             int       *height)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
 
@@ -7427,8 +7427,8 @@ gtk_widget_real_unrealize (GtkWidget *widget)
 void
 gtk_widget_adjust_size_request (GtkWidget      *widget,
                                 GtkOrientation  orientation,
-                                gint           *minimum_size,
-                                gint           *natural_size)
+                                int            *minimum_size,
+                                int            *natural_size)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
 
@@ -7457,8 +7457,8 @@ gtk_widget_adjust_size_request (GtkWidget      *widget,
 
 void
 gtk_widget_adjust_baseline_request (GtkWidget *widget,
-                                    gint      *minimum_baseline,
-                                    gint      *natural_baseline)
+                                    int       *minimum_baseline,
+                                    int       *natural_baseline)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
 
@@ -7564,7 +7564,7 @@ gtk_widget_propagate_state (GtkWidget          *widget,
   GtkStateFlags new_flags, old_flags = priv->state_flags;
   GtkStateData child_data;
   GtkWidget *child;
-  gint new_scale_factor = gtk_widget_get_scale_factor (widget);
+  int new_scale_factor = gtk_widget_get_scale_factor (widget);
 
   priv->state_flags |= data->flags_to_set;
   priv->state_flags &= ~(data->flags_to_unset);
@@ -7996,8 +7996,8 @@ gtk_widget_set_expand (GtkWidget     *widget,
                        gboolean       expand)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
-  gint expand_prop;
-  gint expand_set_prop;
+  int expand_prop;
+  int expand_set_prop;
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
@@ -8042,7 +8042,7 @@ gtk_widget_set_expand_set (GtkWidget      *widget,
                            gboolean        set)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
-  gint prop;
+  int prop;
 
   set = set != FALSE;
 
@@ -8287,7 +8287,7 @@ static void
 gtk_widget_buildable_add_child (GtkBuildable  *buildable,
                                 GtkBuilder    *builder,
                                 GObject       *child,
-                                const gchar   *type)
+                                const char    *type)
 {
   if (type != NULL)
     {
@@ -8326,13 +8326,13 @@ gtk_widget_buildable_interface_init (GtkBuildableIface *iface)
 
 static void
 gtk_widget_buildable_set_name (GtkBuildable *buildable,
-			       const gchar  *name)
+			       const char   *name)
 {
   g_object_set_qdata_full (G_OBJECT (buildable), quark_builder_set_name,
                            g_strdup (name), g_free);
 }
 
-static const gchar *
+static const char *
 gtk_widget_buildable_get_name (GtkBuildable *buildable)
 {
   return g_object_get_qdata (G_OBJECT (buildable), quark_builder_set_name);
@@ -8341,7 +8341,7 @@ gtk_widget_buildable_get_name (GtkBuildable *buildable)
 static GObject *
 gtk_widget_buildable_get_internal_child (GtkBuildable *buildable,
 					 GtkBuilder   *builder,
-					 const gchar  *childname)
+					 const char   *childname)
 {
   GtkWidgetClass *class;
   GSList *l;
@@ -8383,18 +8383,18 @@ gtk_widget_buildable_get_internal_child (GtkBuildable *buildable,
 
 typedef struct
 {
-  gchar *action_name;
+  char *action_name;
   GString *description;
-  gchar *context;
+  char *context;
   gboolean translatable;
 } AtkActionData;
 
 typedef struct
 {
-  gchar *target;
+  char *target;
   AtkRelationType type;
-  gint line;
-  gint col;
+  int line;
+  int col;
 } AtkRelationData;
 
 static void
@@ -8461,9 +8461,9 @@ typedef struct
 
 static void
 accessibility_start_element (GtkBuildableParseContext  *context,
-                             const gchar               *element_name,
-                             const gchar              **names,
-                             const gchar              **values,
+                             const char                *element_name,
+                             const char               **names,
+                             const char               **values,
                              gpointer                   user_data,
                              GError                   **error)
 {
@@ -8471,8 +8471,8 @@ accessibility_start_element (GtkBuildableParseContext  *context,
 
   if (strcmp (element_name, "relation") == 0)
     {
-      gchar *target = NULL;
-      gchar *type = NULL;
+      char *target = NULL;
+      char *type = NULL;
       AtkRelationData *relation;
       AtkRelationType relation_type;
 
@@ -8507,9 +8507,9 @@ accessibility_start_element (GtkBuildableParseContext  *context,
     }
   else if (strcmp (element_name, "action") == 0)
     {
-      const gchar *action_name;
-      const gchar *description = NULL;
-      const gchar *msg_context = NULL;
+      const char *action_name;
+      const char *description = NULL;
+      const char *msg_context = NULL;
       gboolean translatable = FALSE;
       AtkActionData *action;
 
@@ -8538,7 +8538,7 @@ accessibility_start_element (GtkBuildableParseContext  *context,
     }
   else if (strcmp (element_name, "role") == 0)
     {
-      const gchar *type;
+      const char *type;
       AtkRole role;
 
       if (!_gtk_builder_check_parent (data->builder, context, "accessibility", error))
@@ -8595,7 +8595,7 @@ accessibility_start_element (GtkBuildableParseContext  *context,
 
 static void
 accessibility_text (GtkBuildableParseContext  *context,
-                    const gchar               *text,
+                    const char                *text,
                     gsize                      text_len,
                     gpointer                   user_data,
                     GError                   **error)
@@ -8625,9 +8625,9 @@ typedef struct
 
 static void
 style_start_element (GtkBuildableParseContext  *context,
-                     const gchar               *element_name,
-                     const gchar              **names,
-                     const gchar              **values,
+                     const char                *element_name,
+                     const char               **names,
+                     const char               **values,
                      gpointer                   user_data,
                      GError                   **error)
 {
@@ -8635,7 +8635,7 @@ style_start_element (GtkBuildableParseContext  *context,
 
   if (strcmp (element_name, "class") == 0)
     {
-      const gchar *name;
+      const char *name;
 
       if (!_gtk_builder_check_parent (data->builder, context, "style", error))
         return;
@@ -8708,9 +8708,9 @@ layout_property_info_free (gpointer data)
 
 static void
 layout_start_element (GtkBuildableParseContext  *context,
-                      const gchar               *element_name,
-                      const gchar              **names,
-                      const gchar              **values,
+                      const char                *element_name,
+                      const char               **names,
+                      const char               **values,
                       gpointer                   user_data,
                       GError                   **error)
 {
@@ -8764,7 +8764,7 @@ layout_start_element (GtkBuildableParseContext  *context,
 
 static void
 layout_text (GtkBuildableParseContext  *context,
-             const gchar               *text,
+             const char                *text,
              gsize                      text_len,
              gpointer                   user_data,
              GError                   **error)
@@ -8816,7 +8816,7 @@ static gboolean
 gtk_widget_buildable_custom_tag_start (GtkBuildable       *buildable,
                                        GtkBuilder         *builder,
                                        GObject            *child,
-                                       const gchar        *tagname,
+                                       const char         *tagname,
                                        GtkBuildableParser *parser,
                                        gpointer           *parser_data)
 {
@@ -8867,7 +8867,7 @@ static void
 gtk_widget_buildable_custom_tag_end (GtkBuildable  *buildable,
                                      GtkBuilder    *builder,
                                      GObject       *child,
-                                     const gchar   *tagname,
+                                     const char    *tagname,
                                      gpointer       data)
 {
 }
@@ -8942,7 +8942,7 @@ static void
 gtk_widget_buildable_custom_finished (GtkBuildable *buildable,
                                       GtkBuilder   *builder,
                                       GObject      *child,
-                                      const gchar  *tagname,
+                                      const char   *tagname,
                                       gpointer      user_data)
 {
   if (strcmp (tagname, "accessibility") == 0)
@@ -8955,7 +8955,7 @@ gtk_widget_buildable_custom_finished (GtkBuildable *buildable,
 	{
 	  AtkObject *accessible;
 	  AtkAction *action;
-	  gint i, n_actions;
+	  int i, n_actions;
 	  GSList *l;
 
 	  accessible = gtk_widget_get_accessible (GTK_WIDGET (buildable));
@@ -8976,7 +8976,7 @@ gtk_widget_buildable_custom_finished (GtkBuildable *buildable,
 
 	          if (i < n_actions)
                     {
-                      const gchar *description;
+                      const char *description;
 
                       if (action_data->translatable && action_data->description->len)
                         description = _gtk_builder_parser_translate (gtk_builder_get_translation_domain (builder),
@@ -9156,7 +9156,7 @@ gtk_widget_set_valign (GtkWidget *widget,
  *
  * Returns: The start margin of @widget
  */
-gint
+int
 gtk_widget_get_margin_start (GtkWidget *widget)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
@@ -9176,7 +9176,7 @@ gtk_widget_get_margin_start (GtkWidget *widget)
  */
 void
 gtk_widget_set_margin_start (GtkWidget *widget,
-                             gint       margin)
+                             int        margin)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
 
@@ -9201,7 +9201,7 @@ gtk_widget_set_margin_start (GtkWidget *widget,
  *
  * Returns: The end margin of @widget
  */
-gint
+int
 gtk_widget_get_margin_end (GtkWidget *widget)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
@@ -9221,7 +9221,7 @@ gtk_widget_get_margin_end (GtkWidget *widget)
  */
 void
 gtk_widget_set_margin_end (GtkWidget *widget,
-                           gint       margin)
+                           int        margin)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
 
@@ -9246,7 +9246,7 @@ gtk_widget_set_margin_end (GtkWidget *widget,
  *
  * Returns: The top margin of @widget
  */
-gint
+int
 gtk_widget_get_margin_top (GtkWidget *widget)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
@@ -9266,7 +9266,7 @@ gtk_widget_get_margin_top (GtkWidget *widget)
  */
 void
 gtk_widget_set_margin_top (GtkWidget *widget,
-                           gint       margin)
+                           int        margin)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
 
@@ -9289,7 +9289,7 @@ gtk_widget_set_margin_top (GtkWidget *widget,
  *
  * Returns: The bottom margin of @widget
  */
-gint
+int
 gtk_widget_get_margin_bottom (GtkWidget *widget)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
@@ -9309,7 +9309,7 @@ gtk_widget_get_margin_bottom (GtkWidget *widget)
  */
 void
 gtk_widget_set_margin_bottom (GtkWidget *widget,
-                              gint       margin)
+                              int        margin)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
 
@@ -9735,8 +9735,8 @@ gtk_widget_get_allocation (GtkWidget     *widget,
  **/
 gboolean
 gtk_widget_contains (GtkWidget  *widget,
-                     gdouble     x,
-                     gdouble     y)
+                     double      x,
+                     double      y)
 {
   g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
 
@@ -9767,8 +9767,8 @@ gtk_widget_can_be_picked (GtkWidget    *widget,
 
 static GtkWidget *
 gtk_widget_do_pick (GtkWidget    *widget,
-                    gdouble       x,
-                    gdouble       y,
+                    double        x,
+                    double        y,
                     GtkPickFlags  flags)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
@@ -9874,8 +9874,8 @@ gtk_widget_do_pick (GtkWidget    *widget,
  **/
 GtkWidget *
 gtk_widget_pick (GtkWidget    *widget,
-                 gdouble       x,
-                 gdouble       y,
+                 double        x,
+                 double        y,
                  GtkPickFlags  flags)
 {
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
@@ -10101,7 +10101,7 @@ gtk_widget_get_allocated_baseline (GtkWidget *widget)
  **/
 void
 gtk_widget_set_opacity (GtkWidget *widget,
-                        gdouble    opacity)
+                        double     opacity)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
   guint8 alpha;
@@ -10131,7 +10131,7 @@ gtk_widget_set_opacity (GtkWidget *widget,
  *
  * Returns: the requested opacity for this widget.
  **/
-gdouble
+double
 gtk_widget_get_opacity (GtkWidget *widget)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
@@ -10580,7 +10580,7 @@ _gtk_widget_get_action_muxer (GtkWidget *widget,
  */
 void
 gtk_widget_insert_action_group (GtkWidget    *widget,
-                                const gchar  *name,
+                                const char   *name,
                                 GActionGroup *group)
 {
   GtkActionMuxer *muxer;
@@ -10600,7 +10600,7 @@ gtk_widget_insert_action_group (GtkWidget    *widget,
  *                 GtkBuilder automated templates               *
  ****************************************************************/
 static AutomaticChildClass *
-template_child_class_new (const gchar *name,
+template_child_class_new (const char *name,
                           gboolean     internal_child,
                           gssize       offset)
 {
@@ -10766,7 +10766,7 @@ gtk_widget_init_template (GtkWidget *widget)
    * there is no infinite recursion.
    */
   if (!gtk_builder_extend_with_template  (builder, G_OBJECT (widget), class_type,
-					  (const gchar *)g_bytes_get_data (template->data, NULL),
+					  (const char *)g_bytes_get_data (template->data, NULL),
 					  g_bytes_get_size (template->data),
 					  &error))
     {
@@ -10862,7 +10862,7 @@ gtk_widget_class_set_template (GtkWidgetClass    *widget_class,
  */
 void
 gtk_widget_class_set_template_from_resource (GtkWidgetClass    *widget_class,
-					     const gchar       *resource_name)
+					     const char        *resource_name)
 {
   GError *error = NULL;
   GBytes *bytes = NULL;
@@ -10907,7 +10907,7 @@ gtk_widget_class_set_template_from_resource (GtkWidgetClass    *widget_class,
  */
 void
 gtk_widget_class_bind_template_callback_full (GtkWidgetClass *widget_class,
-                                              const gchar    *callback_name,
+                                              const char     *callback_name,
                                               GCallback       callback_symbol)
 {
   GtkWidgetTemplate *template;
@@ -10990,7 +10990,7 @@ gtk_widget_class_set_template_scope (GtkWidgetClass  *widget_class,
  */
 void
 gtk_widget_class_bind_template_child_full (GtkWidgetClass *widget_class,
-                                           const gchar    *name,
+                                           const char     *name,
                                            gboolean        internal_child,
                                            gssize          struct_offset)
 {
@@ -11028,7 +11028,7 @@ gtk_widget_class_bind_template_child_full (GtkWidgetClass *widget_class,
 GObject *
 gtk_widget_get_template_child (GtkWidget   *widget,
                                GType        widget_type,
-                               const gchar *name)
+                               const char *name)
 {
   GHashTable *auto_child_hash;
   GObject *ret = NULL;

@@ -43,10 +43,10 @@ progressive_prepared_callback (GdkPixbufLoader *loader,
 
 static void
 progressive_updated_callback (GdkPixbufLoader *loader,
-                              gint                 x,
-                              gint                 y,
-                              gint                 width,
-                              gint                 height,
+                              int                  x,
+                              int                  y,
+                              int                  width,
+                              int                  height,
                               gpointer     data)
 {
   GtkWidget *picture;
@@ -58,7 +58,7 @@ progressive_updated_callback (GdkPixbufLoader *loader,
   gtk_picture_set_pixbuf (GTK_PICTURE (picture), pixbuf);
 }
 
-static gint
+static int
 progressive_timeout (gpointer data)
 {
   GtkWidget *picture;

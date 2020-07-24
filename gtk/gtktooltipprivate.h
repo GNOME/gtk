@@ -38,10 +38,10 @@ void _gtk_tooltip_hide                   (GtkWidget          *widget);
 void gtk_tooltip_trigger_tooltip_query   (GtkWidget          *widget);
 
 GtkWidget * _gtk_widget_find_at_coords   (GdkSurface         *surface,
-                                          gint                surface_x,
-                                          gint                surface_y,
-                                          gint               *widget_x,
-                                          gint               *widget_y);
+                                          int                 surface_x,
+                                          int                 surface_y,
+                                          int                *widget_x,
+                                          int                *widget_y);
 
 void gtk_tooltip_maybe_allocate          (GtkNative          *native);
 void gtk_tooltip_unset_surface           (GtkNative          *native);

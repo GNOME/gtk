@@ -44,10 +44,10 @@
 #define ELLIPSIS_CHARACTER "\xe2\x80\xa6"
 
 static void
-append_n_lines (GString *str, const gchar *text, GSList *lines, gint n_lines)
+append_n_lines (GString *str, const char *text, GSList *lines, int n_lines)
 {
   PangoLayoutLine *line;
-  gint i;
+  int i;
 
   for (i = 0; i < n_lines; i++)
     {
@@ -60,10 +60,10 @@ append_n_lines (GString *str, const gchar *text, GSList *lines, gint n_lines)
 static void
 limit_layout_lines (PangoLayout *layout)
 {
-  const gchar *text;
+  const char *text;
   GString     *str;
   GSList      *lines, *elem;
-  gint         n_lines;
+  int          n_lines;
 
   n_lines = pango_layout_get_line_count (layout);
   
@@ -93,7 +93,7 @@ limit_layout_lines (PangoLayout *layout)
 /**
  * gtk_text_util_create_drag_icon:
  * @widget: #GtkWidget to extract the pango context
- * @text: a #gchar to render the icon
+ * @text: a #char to render the icon
  * @len: length of @text, or -1 for NUL-terminated text
  *
  * Creates a drag and drop icon from @text.
@@ -102,7 +102,7 @@ limit_layout_lines (PangoLayout *layout)
  */
 GdkPaintable *
 gtk_text_util_create_drag_icon (GtkWidget *widget,
-                                gchar     *text,
+                                char      *text,
                                 gssize     len)
 {
   GtkCssStyle *style;
@@ -110,7 +110,7 @@ gtk_text_util_create_drag_icon (GtkWidget *widget,
   PangoContext *context;
   PangoLayout  *layout;
   GdkPaintable *paintable;
-  gint          layout_width;
+  int           layout_width;
   const GdkRGBA *color;
 
   g_return_val_if_fail (widget != NULL, NULL);
@@ -166,7 +166,7 @@ set_attributes_from_style (GtkWidget         *widget,
   values->font = gtk_css_style_get_pango_font (style);
 }
 
-static gint
+static int
 get_border_window_size (GtkTextView       *text_view,
                         GtkTextWindowType  window_type)
 {
@@ -188,7 +188,7 @@ gtk_text_util_create_rich_drag_icon (GtkWidget     *widget,
   GtkAllocation      allocation;
   GdkPaintable      *paintable;
   GtkSnapshot       *snapshot;
-  gint               layout_width, layout_height;
+  int                layout_width, layout_height;
   GtkTextBuffer     *new_buffer;
   GtkTextLayout     *layout;
   GtkTextAttributes *style;
@@ -261,10 +261,10 @@ gtk_text_util_create_rich_drag_icon (GtkWidget     *widget,
   return paintable;
 }
 
-static gint
+static int
 layout_get_char_width (PangoLayout *layout)
 {
-  gint width;
+  int width;
   PangoFontMetrics *metrics;
   const PangoFontDescription *font_desc;
   PangoContext *context = pango_layout_get_context (layout);
@@ -293,15 +293,15 @@ layout_get_char_width (PangoLayout *layout)
  */
 gboolean
 _gtk_text_util_get_block_cursor_location (PangoLayout    *layout,
-					  gint            index,
+					  int             index,
 					  PangoRectangle *pos,
 					  gboolean       *at_line_end)
 {
   PangoRectangle strong_pos, weak_pos;
   PangoLayoutLine *layout_line;
   gboolean rtl;
-  gint line_no;
-  const gchar *text;
+  int line_no;
+  const char *text;
 
   g_return_val_if_fail (layout != NULL, FALSE);
   g_return_val_if_fail (index >= 0, FALSE);
@@ -363,9 +363,9 @@ _gtk_text_util_get_block_cursor_location (PangoLayout    *layout,
 	{
 	  PangoLayoutIter *iter;
 	  PangoRectangle line_rect;
-	  gint i;
-	  gint left, right;
-	  const gchar *p;
+	  int i;
+	  int left, right;
+	  const char *p;
 
 	  p = g_utf8_prev_char (text + index);
 

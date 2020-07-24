@@ -67,7 +67,7 @@ static void
 calendar_set_signal_strings (char         *sig_str,
 				  CalendarData *data)
 {
-  const gchar *prev_sig;
+  const char *prev_sig;
 
   prev_sig = gtk_label_get_text (GTK_LABEL (data->prev_sig));
   gtk_label_set_text (GTK_LABEL (data->prev2_sig), prev_sig);
@@ -182,7 +182,7 @@ create_calendar(void)
   GtkWidget *calendar = gtk_calendar_new ();
   GtkWidget *button;
   GtkWidget *frame, *label, *bbox;
-  gint i;
+  int i;
   struct {
     const char *prop_name;
     const char *label;

@@ -94,10 +94,10 @@ static guint fps_counter;
 struct _GdkFrameClockPrivate
 {
   gint64 frame_counter;
-  gint n_timings;
-  gint current;
+  int n_timings;
+  int current;
   GdkFrameTimings *timings[FRAME_HISTORY_MAX_LENGTH];
-  gint n_freeze_inhibitors;
+  int n_freeze_inhibitors;
 };
 
 G_DEFINE_ABSTRACT_TYPE_WITH_PRIVATE (GdkFrameClock, gdk_frame_clock, G_TYPE_OBJECT)
@@ -489,7 +489,7 @@ gdk_frame_clock_get_timings (GdkFrameClock *frame_clock,
                              gint64         frame_counter)
 {
   GdkFrameClockPrivate *priv;
-  gint pos;
+  int pos;
 
   g_return_val_if_fail (GDK_IS_FRAME_CLOCK (frame_clock), NULL);
 

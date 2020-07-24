@@ -54,7 +54,7 @@ struct _GtkVolumeButtonClass
 
 #define EPSILON (1e-10)
 
-static const gchar * const icons[] =
+static const char * const icons[] =
 {
   "audio-volume-muted",
   "audio-volume-high",
@@ -63,7 +63,7 @@ static const gchar * const icons[] =
   NULL
 };
 
-static const gchar * const icons_symbolic[] =
+static const char * const icons_symbolic[] =
 {
   "audio-volume-muted-symbolic",
   "audio-volume-high-symbolic",
@@ -79,13 +79,13 @@ enum
 };
 
 static gboolean cb_query_tooltip (GtkWidget       *button,
-                                  gint             x,
-                                  gint             y,
+                                  int              x,
+                                  int              y,
                                   gboolean         keyboard_mode,
                                   GtkTooltip      *tooltip,
                                   gpointer         user_data);
 static void     cb_value_changed (GtkVolumeButton *button,
-                                  gdouble          value,
+                                  double           value,
                                   gpointer         user_data);
 
 G_DEFINE_TYPE (GtkVolumeButton, gtk_volume_button, GTK_TYPE_SCALE_BUTTON)
@@ -93,7 +93,7 @@ G_DEFINE_TYPE (GtkVolumeButton, gtk_volume_button, GTK_TYPE_SCALE_BUTTON)
 static gboolean
 get_symbolic (GtkScaleButton *button)
 {
-  gchar **icon_list;
+  char **icon_list;
   gboolean ret;
 
   g_object_get (button, "icons", &icon_list, NULL);
@@ -214,15 +214,15 @@ gtk_volume_button_new (void)
 
 static gboolean
 cb_query_tooltip (GtkWidget  *button,
-                  gint        x,
-                  gint        y,
+                  int         x,
+                  int         y,
                   gboolean    keyboard_mode,
                   GtkTooltip *tooltip,
                   gpointer    user_data)
 {
   GtkScaleButton *scale_button = GTK_SCALE_BUTTON (button);
   GtkAdjustment *adjustment;
-  gdouble val;
+  double val;
   char *str;
 
   adjustment = gtk_scale_button_get_adjustment (scale_button);
@@ -257,7 +257,7 @@ cb_query_tooltip (GtkWidget  *button,
 }
 
 static void
-cb_value_changed (GtkVolumeButton *button, gdouble value, gpointer user_data)
+cb_value_changed (GtkVolumeButton *button, double value, gpointer user_data)
 {
   gtk_widget_trigger_tooltip_query (GTK_WIDGET (button));
 }

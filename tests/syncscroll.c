@@ -1,9 +1,9 @@
 #include <gtk/gtk.h>
 
 static void
-fill_text_view (GtkWidget *tv, const gchar *text)
+fill_text_view (GtkWidget *tv, const char *text)
 {
-  gint i;
+  int i;
   GString *s;
 
   s = g_string_new ("");

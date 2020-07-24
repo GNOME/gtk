@@ -577,7 +577,7 @@ gtk_popover_menu_new (void)
  */
 void
 gtk_popover_menu_open_submenu (GtkPopoverMenu *popover,
-                               const gchar    *name)
+                               const char     *name)
 {
   GtkWidget *stack;
 

@@ -67,7 +67,7 @@ gdk_rectangle_union (const GdkRectangle *src1,
 		     const GdkRectangle *src2,
 		     GdkRectangle       *dest)
 {
-  gint dest_x, dest_y;
+  int dest_x, dest_y;
   
   g_return_if_fail (src1 != NULL);
   g_return_if_fail (src2 != NULL);
@@ -102,9 +102,9 @@ gdk_rectangle_intersect (const GdkRectangle *src1,
 			 const GdkRectangle *src2,
 			 GdkRectangle       *dest)
 {
-  gint dest_x, dest_y;
-  gint dest_x2, dest_y2;
-  gint return_val;
+  int dest_x, dest_y;
+  int dest_x2, dest_y2;
+  int return_val;
 
   g_return_val_if_fail (src1 != NULL, FALSE);
   g_return_val_if_fail (src2 != NULL, FALSE);

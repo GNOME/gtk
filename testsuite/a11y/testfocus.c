@@ -1,6 +1,6 @@
 #include <gtk/gtk.h>
 
-static const gchar *
+static const char *
 get_name (gpointer obj)
 {
   GtkWidget *widget;
@@ -66,7 +66,7 @@ notify_cb (GObject *obj, GParamSpec *pspec, gpointer data)
 }
 
 static void
-state_change_cb (AtkObject *obj, const gchar *name, gboolean state_set)
+state_change_cb (AtkObject *obj, const char *name, gboolean state_set)
 {
   AtkStateSet *set;
 

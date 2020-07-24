@@ -77,7 +77,7 @@ struct _GtkFontChooserDialogClass
 static void     gtk_font_chooser_dialog_buildable_interface_init     (GtkBuildableIface *iface);
 static GObject *gtk_font_chooser_dialog_buildable_get_internal_child (GtkBuildable *buildable,
                                                                       GtkBuilder   *builder,
-                                                                      const gchar  *childname);
+                                                                      const char   *childname);
 
 G_DEFINE_TYPE_WITH_CODE (GtkFontChooserDialog, gtk_font_chooser_dialog, GTK_TYPE_DIALOG,
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_FONT_CHOOSER,
@@ -121,7 +121,7 @@ gtk_font_chooser_dialog_get_property (GObject      *object,
 
 static void
 font_activated_cb (GtkFontChooser *fontchooser,
-                   const gchar    *fontname,
+                   const char     *fontname,
                    gpointer        user_data)
 {
   GtkDialog *dialog = user_data;
@@ -287,7 +287,7 @@ gtk_font_chooser_dialog_init (GtkFontChooserDialog *dialog)
  * Returns: a new #GtkFontChooserDialog
  */
 GtkWidget*
-gtk_font_chooser_dialog_new (const gchar *title,
+gtk_font_chooser_dialog_new (const char *title,
                              GtkWindow   *parent)
 {
   GtkFontChooserDialog *dialog;
@@ -310,7 +310,7 @@ gtk_font_chooser_dialog_buildable_interface_init (GtkBuildableIface *iface)
 static GObject *
 gtk_font_chooser_dialog_buildable_get_internal_child (GtkBuildable *buildable,
                                                       GtkBuilder   *builder,
-                                                      const gchar  *childname)
+                                                      const char   *childname)
 {
   GtkFontChooserDialog *dialog = GTK_FONT_CHOOSER_DIALOG (buildable);
 

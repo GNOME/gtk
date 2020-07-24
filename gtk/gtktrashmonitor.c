@@ -34,7 +34,7 @@ struct _GtkTrashMonitor
   gulong file_monitor_changed_id;
 
   gboolean pending;
-  gint timeout_id;
+  int timeout_id;
 
   guint has_trash : 1;
 };

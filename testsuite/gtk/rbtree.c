@@ -61,11 +61,11 @@ count_total (GtkTreeRBTree *tree,
   return res;
 }
 
-static gint
+static int
 _count_nodes (GtkTreeRBTree *tree,
               GtkTreeRBNode *node)
 {
-  gint res;
+  int res;
   if (gtk_tree_rbtree_is_nil (node))
     return 0;
 
@@ -84,7 +84,7 @@ static void
 gtk_tree_rbtree_test_height (GtkTreeRBTree *tree,
                              GtkTreeRBNode *node)
 {
-  gint computed_offset = 0;
+  int computed_offset = 0;
 
   /* This whole test is sort of a useless truism. */
 
@@ -113,7 +113,7 @@ gtk_tree_rbtree_test_height (GtkTreeRBTree *tree,
 static void
 gtk_tree_rbtree_test_dirty (GtkTreeRBTree *tree,
                             GtkTreeRBNode *node,
-                            gint           expected_dirtyness)
+                            int            expected_dirtyness)
 {
   g_assert (node);
 
@@ -230,9 +230,9 @@ gtk_tree_rbtree_test (GtkTreeRBTree *tree)
 static void
 gtk_rbtree_print_node (GtkTreeRBTree *tree,
                        GtkTreeRBNode *node,
-                       gint           depth)
+                       int            depth)
 {
-  gint i;
+  int i;
   for (i = 0; i < depth; i++)
     g_print ("\t");
 
@@ -429,13 +429,13 @@ test_remove_root (void)
   gtk_tree_rbtree_free (tree);
 }
 
-static gint *
+static int *
 fisher_yates_shuffle (guint n_items)
 {
-  gint *list;
+  int *list;
   guint i, j;
 
-  list = g_new (gint, n_items);
+  list = g_new (int, n_items);
 
   for (i = 0; i < n_items; i++)
     {
@@ -448,7 +448,7 @@ fisher_yates_shuffle (guint n_items)
 }
 
 static GtkTreeRBTree *
-create_unsorted_tree (gint *order,
+create_unsorted_tree (int *order,
                       guint n)
 {
   GtkTreeRBTree *tree;
@@ -480,7 +480,7 @@ test_reorder (void)
   guint n = g_test_perf () ? 1000000 : 100;
   GtkTreeRBTree *tree;
   GtkTreeRBNode *node;
-  gint *reorder;
+  int *reorder;
   guint i;
   double elapsed;
 

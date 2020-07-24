@@ -29,8 +29,8 @@
 #include "gtk-builder-tool.h"
 
 static GType
-make_fake_type (const gchar *type_name,
-                const gchar *parent_name)
+make_fake_type (const char *type_name,
+                const char *parent_name)
 {
   GType parent_type;
   GTypeQuery query;
@@ -53,15 +53,15 @@ make_fake_type (const gchar *type_name,
 }
 
 static void
-do_validate_template (const gchar *filename,
-                      const gchar *type_name,
-                      const gchar *parent_name)
+do_validate_template (const char *filename,
+                      const char *type_name,
+                      const char *parent_name)
 {
   GType template_type;
   GObject *object;
   GtkBuilder *builder;
   GError *error = NULL;
-  gint ret;
+  int ret;
 
   /* Only make a fake type if it doesn't exist yet.
    * This lets us e.g. validate the GtkFileChooserWidget template.
@@ -91,11 +91,11 @@ do_validate_template (const gchar *filename,
 }
 
 static gboolean
-parse_template_error (const gchar  *message,
-                      gchar       **class_name,
-                      gchar       **parent_name)
+parse_template_error (const char   *message,
+                      char        **class_name,
+                      char        **parent_name)
 {
-  gchar *p;
+  char *p;
 
   p = strstr (message, "(class '");
   if (p)
@@ -122,9 +122,9 @@ validate_file (const char *filename)
 {
   GtkBuilder *builder;
   GError *error = NULL;
-  gint ret;
-  gchar *class_name = NULL;
-  gchar *parent_name = NULL;
+  int ret;
+  char *class_name = NULL;
+  char *parent_name = NULL;
 
   builder = gtk_builder_new ();
   ret = gtk_builder_add_from_file (builder, filename, &error);

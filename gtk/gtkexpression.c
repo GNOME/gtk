@@ -319,7 +319,7 @@ value_expression_collect_value (GValue      *value,
   return NULL;
 }
 
-static gchar *
+static char *
 value_expression_lcopy_value (const GValue *value,
                               guint         n_collect_values,
                               GTypeCValue  *collect_values,
@@ -476,7 +476,7 @@ param_expression_validate (GParamSpec *pspec,
   return changed;
 }
 
-static gint
+static int
 param_expression_values_cmp (GParamSpec   *pspec,
                              const GValue *value1,
                              const GValue *value2)

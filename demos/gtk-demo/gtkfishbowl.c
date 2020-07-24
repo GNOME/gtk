@@ -98,7 +98,7 @@ gtk_fishbowl_measure (GtkWidget      *widget,
   GHashTableIter iter;
   gpointer key, value;
   GtkFishbowlChild *child;
-  gint child_min, child_nat;
+  int child_min, child_nat;
 
   *minimum = 0;
   *natural = 0;

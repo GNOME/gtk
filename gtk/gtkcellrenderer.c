@@ -93,22 +93,22 @@ static void set_cell_bg_color               (GtkCellRenderer      *cell,
 static GtkSizeRequestMode gtk_cell_renderer_real_get_request_mode(GtkCellRenderer         *cell);
 static void gtk_cell_renderer_real_get_preferred_width           (GtkCellRenderer         *cell,
                                                                   GtkWidget               *widget,
-                                                                  gint                    *minimum_size,
-                                                                  gint                    *natural_size);
+                                                                  int                     *minimum_size,
+                                                                  int                     *natural_size);
 static void gtk_cell_renderer_real_get_preferred_height          (GtkCellRenderer         *cell,
                                                                   GtkWidget               *widget,
-                                                                  gint                    *minimum_size,
-                                                                  gint                    *natural_size);
+                                                                  int                     *minimum_size,
+                                                                  int                     *natural_size);
 static void gtk_cell_renderer_real_get_preferred_height_for_width(GtkCellRenderer         *cell,
                                                                   GtkWidget               *widget,
-                                                                  gint                     width,
-                                                                  gint                    *minimum_height,
-                                                                  gint                    *natural_height);
+                                                                  int                      width,
+                                                                  int                     *minimum_height,
+                                                                  int                     *natural_height);
 static void gtk_cell_renderer_real_get_preferred_width_for_height(GtkCellRenderer         *cell,
                                                                   GtkWidget               *widget,
-                                                                  gint                     height,
-                                                                  gint                    *minimum_width,
-                                                                  gint                    *natural_width);
+                                                                  int                      height,
+                                                                  int                     *minimum_width,
+                                                                  int                     *natural_width);
 static void gtk_cell_renderer_real_get_aligned_area              (GtkCellRenderer         *cell,
 								  GtkWidget               *widget,
 								  GtkCellRendererState     flags,
@@ -118,11 +118,11 @@ static void gtk_cell_renderer_real_get_aligned_area              (GtkCellRendere
 
 struct _GtkCellRendererPrivate
 {
-  gfloat xalign;
-  gfloat yalign;
+  float xalign;
+  float yalign;
 
-  gint width;
-  gint height;
+  int width;
+  int height;
 
   guint16 xpad;
   guint16 ypad;
@@ -169,7 +169,7 @@ enum {
   LAST_SIGNAL
 };
 
-static gint GtkCellRenderer_private_offset;
+static int GtkCellRenderer_private_offset;
 static guint  cell_renderer_signals[LAST_SIGNAL] = { 0 };
 
 static inline gpointer
@@ -258,7 +258,7 @@ gtk_cell_renderer_class_init (GtkCellRendererClass *class)
    * static void
    * text_editing_started (GtkCellRenderer *cell,
    *                       GtkCellEditable *editable,
-   *                       const gchar     *path,
+   *                       const char      *path,
    *                       gpointer         data)
    * {
    *   if (GTK_IS_ENTRY (editable)) 
@@ -769,7 +769,7 @@ gboolean
 gtk_cell_renderer_activate (GtkCellRenderer      *cell,
 			    GdkEvent             *event,
 			    GtkWidget            *widget,
-			    const gchar          *path,
+			    const char           *path,
 			    const GdkRectangle   *background_area,
 			    const GdkRectangle   *cell_area,
 			    GtkCellRendererState  flags)
@@ -816,7 +816,7 @@ GtkCellEditable *
 gtk_cell_renderer_start_editing (GtkCellRenderer      *cell,
 				 GdkEvent             *event,
 				 GtkWidget            *widget,
-				 const gchar          *path,
+				 const char           *path,
 				 const GdkRectangle   *background_area,
 				 const GdkRectangle   *cell_area,
 				 GtkCellRendererState  flags)
@@ -866,8 +866,8 @@ gtk_cell_renderer_start_editing (GtkCellRenderer      *cell,
  **/
 void
 gtk_cell_renderer_set_fixed_size (GtkCellRenderer *cell,
-				  gint             width,
-				  gint             height)
+				  int              width,
+				  int              height)
 {
   GtkCellRendererPrivate *priv;
 
@@ -906,8 +906,8 @@ gtk_cell_renderer_set_fixed_size (GtkCellRenderer *cell,
  **/
 void
 gtk_cell_renderer_get_fixed_size (GtkCellRenderer *cell,
-				  gint            *width,
-				  gint            *height)
+				  int             *width,
+				  int             *height)
 {
   GtkCellRendererPrivate *priv;
 
@@ -931,8 +931,8 @@ gtk_cell_renderer_get_fixed_size (GtkCellRenderer *cell,
  **/
 void
 gtk_cell_renderer_set_alignment (GtkCellRenderer *cell,
-                                 gfloat           xalign,
-                                 gfloat           yalign)
+                                 float            xalign,
+                                 float            yalign)
 {
   GtkCellRendererPrivate *priv;
 
@@ -972,8 +972,8 @@ gtk_cell_renderer_set_alignment (GtkCellRenderer *cell,
  **/
 void
 gtk_cell_renderer_get_alignment (GtkCellRenderer *cell,
-                                 gfloat          *xalign,
-                                 gfloat          *yalign)
+                                 float           *xalign,
+                                 float           *yalign)
 {
   GtkCellRendererPrivate *priv;
 
@@ -997,8 +997,8 @@ gtk_cell_renderer_get_alignment (GtkCellRenderer *cell,
  **/
 void
 gtk_cell_renderer_set_padding (GtkCellRenderer *cell,
-                               gint             xpad,
-                               gint             ypad)
+                               int              xpad,
+                               int              ypad)
 {
   GtkCellRendererPrivate *priv;
 
@@ -1037,8 +1037,8 @@ gtk_cell_renderer_set_padding (GtkCellRenderer *cell,
  **/
 void
 gtk_cell_renderer_get_padding (GtkCellRenderer *cell,
-                               gint            *xpad,
-                               gint            *ypad)
+                               int             *xpad,
+                               int             *ypad)
 {
   GtkCellRendererPrivate *priv;
 
@@ -1191,8 +1191,8 @@ static void
 gtk_cell_renderer_real_get_preferred_size (GtkCellRenderer   *cell,
                                            GtkWidget         *widget,
                                            GtkOrientation     orientation,
-                                           gint              *minimum_size,
-                                           gint              *natural_size)
+                                           int               *minimum_size,
+                                           int               *natural_size)
 {
   GtkRequisition min_req;
 
@@ -1234,8 +1234,8 @@ gtk_cell_renderer_real_get_request_mode (GtkCellRenderer *cell)
 static void
 gtk_cell_renderer_real_get_preferred_width (GtkCellRenderer *cell,
                                             GtkWidget       *widget,
-                                            gint            *minimum_size,
-                                            gint            *natural_size)
+                                            int             *minimum_size,
+                                            int             *natural_size)
 {
   gtk_cell_renderer_real_get_preferred_size (cell, widget, GTK_ORIENTATION_HORIZONTAL, 
                                              minimum_size, natural_size);
@@ -1244,8 +1244,8 @@ gtk_cell_renderer_real_get_preferred_width (GtkCellRenderer *cell,
 static void
 gtk_cell_renderer_real_get_preferred_height (GtkCellRenderer *cell,
                                              GtkWidget       *widget,
-                                             gint            *minimum_size,
-                                             gint            *natural_size)
+                                             int             *minimum_size,
+                                             int             *natural_size)
 {
   gtk_cell_renderer_real_get_preferred_size (cell, widget, GTK_ORIENTATION_VERTICAL, 
                                              minimum_size, natural_size);
@@ -1255,9 +1255,9 @@ gtk_cell_renderer_real_get_preferred_height (GtkCellRenderer *cell,
 static void
 gtk_cell_renderer_real_get_preferred_height_for_width (GtkCellRenderer *cell,
                                                        GtkWidget       *widget,
-                                                       gint             width,
-                                                       gint            *minimum_height,
-                                                       gint            *natural_height)
+                                                       int              width,
+                                                       int             *minimum_height,
+                                                       int             *natural_height)
 {
   /* Fall back on the height reported from ->get_size() */
   gtk_cell_renderer_get_preferred_height (cell, widget, minimum_height, natural_height);
@@ -1266,9 +1266,9 @@ gtk_cell_renderer_real_get_preferred_height_for_width (GtkCellRenderer *cell,
 static void
 gtk_cell_renderer_real_get_preferred_width_for_height (GtkCellRenderer *cell,
                                                        GtkWidget       *widget,
-                                                       gint             height,
-                                                       gint            *minimum_width,
-                                                       gint            *natural_width)
+                                                       int              height,
+                                                       int             *minimum_width,
+                                                       int             *natural_width)
 {
   /* Fall back on the width reported from ->get_size() */
   gtk_cell_renderer_get_preferred_width (cell, widget, minimum_width, natural_width);
@@ -1285,8 +1285,8 @@ gtk_cell_renderer_real_get_aligned_area (GtkCellRenderer         *cell,
 					 const GdkRectangle      *cell_area,
 					 GdkRectangle            *aligned_area)
 {
-  gint opposite_size, x_offset, y_offset;
-  gint natural_size;
+  int opposite_size, x_offset, y_offset;
+  int natural_size;
 
   g_return_if_fail (GTK_IS_CELL_RENDERER (cell));
   g_return_if_fail (GTK_IS_WIDGET (widget));
@@ -1345,10 +1345,10 @@ void
 _gtk_cell_renderer_calc_offset    (GtkCellRenderer      *cell,
 				   const GdkRectangle   *cell_area,
 				   GtkTextDirection      direction,
-				   gint                  width,
-				   gint                  height,
-				   gint                 *x_offset,
-				   gint                 *y_offset)
+				   int                   width,
+				   int                   height,
+				   int                  *x_offset,
+				   int                  *y_offset)
 { 
   GtkCellRendererPrivate *priv;
 
@@ -1402,11 +1402,11 @@ gtk_cell_renderer_get_request_mode (GtkCellRenderer *cell)
 void
 gtk_cell_renderer_get_preferred_width (GtkCellRenderer *cell,
                                        GtkWidget       *widget,
-                                       gint            *minimum_size,
-                                       gint            *natural_size)
+                                       int             *minimum_size,
+                                       int             *natural_size)
 {
   GtkCellRendererClass *klass;
-  gint width;
+  int width;
 
   g_return_if_fail (GTK_IS_CELL_RENDERER (cell));
   g_return_if_fail (GTK_IS_WIDGET (widget));
@@ -1448,11 +1448,11 @@ gtk_cell_renderer_get_preferred_width (GtkCellRenderer *cell,
 void
 gtk_cell_renderer_get_preferred_height (GtkCellRenderer *cell,
                                         GtkWidget       *widget,
-                                        gint            *minimum_size,
-                                        gint            *natural_size)
+                                        int             *minimum_size,
+                                        int             *natural_size)
 {
   GtkCellRendererClass *klass;
-  gint height;
+  int height;
 
   g_return_if_fail (GTK_IS_CELL_RENDERER (cell));
   g_return_if_fail (GTK_IS_WIDGET (widget));
@@ -1496,12 +1496,12 @@ gtk_cell_renderer_get_preferred_height (GtkCellRenderer *cell,
 void
 gtk_cell_renderer_get_preferred_width_for_height (GtkCellRenderer *cell,
                                                   GtkWidget       *widget,
-                                                  gint             height,
-                                                  gint            *minimum_width,
-                                                  gint            *natural_width)
+                                                  int              height,
+                                                  int             *minimum_width,
+                                                  int             *natural_width)
 {
   GtkCellRendererClass *klass;
-  gint width;
+  int width;
 
   g_return_if_fail (GTK_IS_CELL_RENDERER (cell));
   g_return_if_fail (GTK_IS_WIDGET (widget));
@@ -1544,12 +1544,12 @@ gtk_cell_renderer_get_preferred_width_for_height (GtkCellRenderer *cell,
 void
 gtk_cell_renderer_get_preferred_height_for_width (GtkCellRenderer *cell,
                                                   GtkWidget       *widget,
-                                                  gint             width,
-                                                  gint            *minimum_height,
-                                                  gint            *natural_height)
+                                                  int              width,
+                                                  int             *minimum_height,
+                                                  int             *natural_height)
 {
   GtkCellRendererClass *klass;
-  gint height;
+  int height;
 
   g_return_if_fail (GTK_IS_CELL_RENDERER (cell));
   g_return_if_fail (GTK_IS_WIDGET (widget));
@@ -1594,8 +1594,8 @@ gtk_cell_renderer_get_preferred_size (GtkCellRenderer *cell,
                                       GtkRequisition  *minimum_size,
                                       GtkRequisition  *natural_size)
 {
-  gint min_width, nat_width;
-  gint min_height, nat_height;
+  int min_width, nat_width;
+  int min_height, nat_height;
 
   g_return_if_fail (GTK_IS_CELL_RENDERER (cell));
 

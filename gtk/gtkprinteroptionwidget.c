@@ -53,7 +53,7 @@ static void deconstruct_widgets (GtkPrinterOptionWidget *widget);
 static void construct_widgets   (GtkPrinterOptionWidget *widget);
 static void update_widgets      (GtkPrinterOptionWidget *widget);
 
-static gchar *trim_long_filename (const gchar *filename);
+static char *trim_long_filename (const char *filename);
 
 struct GtkPrinterOptionWidgetPrivate
 {
@@ -516,8 +516,8 @@ combo_box_new (void)
 
 static void
 combo_box_append (GtkWidget   *combo,
-                  const gchar *display_text,
-                  const gchar *value)
+                  const char *display_text,
+                  const char *value)
 {
   GtkWidget *dropdown;
   GListModel *model;
@@ -537,7 +537,7 @@ combo_box_append (GtkWidget   *combo,
 
 static void
 combo_box_set (GtkWidget   *combo,
-               const gchar *value)
+               const char *value)
 {
   GtkWidget *dropdown;
   GListModel *model;
@@ -563,7 +563,7 @@ combo_box_set (GtkWidget   *combo,
     }
 }
 
-static gchar *
+static char *
 combo_box_get (GtkWidget *combo, gboolean *custom)
 {
   GtkWidget *dropdown;
@@ -644,7 +644,7 @@ check_toggled_cb (GtkToggleButton        *toggle_button,
 
 static void
 dialog_response_callback (GtkDialog              *dialog,
-                          gint                    response_id,
+                          int                     response_id,
                           GtkPrinterOptionWidget *widget)
 {
   GtkPrinterOptionWidgetPrivate *priv = widget->priv;
@@ -739,13 +739,13 @@ filesave_choose_cb (GtkWidget              *button,
   gtk_window_present (GTK_WINDOW (dialog));
 }
 
-static gchar *
-filter_numeric (const gchar *val,
+static char *
+filter_numeric (const char *val,
                 gboolean     allow_neg,
 		gboolean     allow_dec,
                 gboolean    *changed_out)
 {
-  gchar *filtered_val;
+  char *filtered_val;
   int i, j;
   int len = strlen (val);
   gboolean dec_set = FALSE;
@@ -789,8 +789,8 @@ combo_changed_cb (GtkWidget              *combo,
 		  GtkPrinterOptionWidget *widget)
 {
   GtkPrinterOptionWidgetPrivate *priv = widget->priv;
-  gchar *value;
-  gchar *filtered_val = NULL;
+  char *value;
+  char *filtered_val = NULL;
   gboolean changed;
   gboolean custom = TRUE;
 
@@ -849,7 +849,7 @@ entry_changed_cb (GtkWidget              *entry,
 		  GtkPrinterOptionWidget *widget)
 {
   GtkPrinterOptionWidgetPrivate *priv = widget->priv;
-  const gchar *value;
+  const char *value;
   
   g_signal_handler_block (priv->source, priv->source_changed_handler);
   value = gtk_editable_get_text (GTK_EDITABLE (entry));
@@ -865,7 +865,7 @@ radio_changed_cb (GtkWidget              *button,
 		  GtkPrinterOptionWidget *widget)
 {
   GtkPrinterOptionWidgetPrivate *priv = widget->priv;
-  gchar *value;
+  char *value;
   
   g_signal_handler_block (priv->source, priv->source_changed_handler);
   value = g_object_get_data (G_OBJECT (button), "value");
@@ -877,9 +877,9 @@ radio_changed_cb (GtkWidget              *button,
 
 static void
 select_maybe (GtkWidget   *widget, 
-	      const gchar *value)
+	      const char *value)
 {
-  gchar *v = g_object_get_data (G_OBJECT (widget), "value");
+  char *v = g_object_get_data (G_OBJECT (widget), "value");
       
   if (strcmp (value, v) == 0)
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), TRUE);
@@ -887,7 +887,7 @@ select_maybe (GtkWidget   *widget,
 
 static void
 alternative_set (GtkWidget   *box,
-                 const gchar *value)
+                 const char *value)
 {
   GtkWidget *child;
 
@@ -899,8 +899,8 @@ alternative_set (GtkWidget   *box,
 
 static GSList *
 alternative_append (GtkWidget              *box,
-		    const gchar            *label,
-                    const gchar            *value,
+		    const char             *label,
+                    const char             *value,
 		    GtkPrinterOptionWidget *widget,
 		    GSList                 *group)
 {
@@ -1071,17 +1071,17 @@ construct_widgets (GtkPrinterOptionWidget *widget)
  * If the filename exceeds FILENAME_LENGTH_MAX, then trim it and replace
  * the first three letters with three dots.
  */
-static gchar *
-trim_long_filename (const gchar *filename)
+static char *
+trim_long_filename (const char *filename)
 {
-  const gchar *home;
-  gint len, offset;
-  gchar *result;
+  const char *home;
+  int len, offset;
+  char *result;
 
   home = g_get_home_dir ();
   if (g_str_has_prefix (filename, home))
     {
-      gchar *homeless_filename;
+      char *homeless_filename;
 
       offset = g_utf8_strlen (home, -1);
       len = g_utf8_strlen (filename, -1);
@@ -1095,7 +1095,7 @@ trim_long_filename (const gchar *filename)
   len = g_utf8_strlen (result, -1);
   if (len > FILENAME_LENGTH_MAX)
     {
-      gchar *suffix;
+      char *suffix;
 
       suffix = g_utf8_substring (result, len - FILENAME_LENGTH_MAX, len);
       g_free (result);
@@ -1153,8 +1153,8 @@ update_widgets (GtkPrinterOptionWidget *widget)
       }
     case GTK_PRINTER_OPTION_TYPE_FILESAVE:
       {
-        gchar *text;
-        gchar *filename;
+        char *text;
+        char *filename;
 
         filename = g_filename_from_uri (source->value, NULL, NULL);
         if (filename != NULL)
@@ -1162,7 +1162,7 @@ update_widgets (GtkPrinterOptionWidget *widget)
             text = g_filename_to_utf8 (filename, -1, NULL, NULL, NULL);
             if (text != NULL)
               {
-                gchar *short_filename;
+                char *short_filename;
 
                 short_filename = trim_long_filename (text);
                 gtk_button_set_label (GTK_BUTTON (priv->button), short_filename);
@@ -1201,7 +1201,7 @@ gtk_printer_option_widget_get_external_label (GtkPrinterOptionWidget  *widget)
   return widget->priv->label;
 }
 
-const gchar *
+const char *
 gtk_printer_option_widget_get_value (GtkPrinterOptionWidget *widget)
 {
   GtkPrinterOptionWidgetPrivate *priv = widget->priv;

@@ -99,7 +99,7 @@ GDK_AVAILABLE_IN_ALL
 GList *          gtk_tree_selection_get_selected_rows   (GtkTreeSelection            *selection,
                                                          GtkTreeModel               **model);
 GDK_AVAILABLE_IN_ALL
-gint             gtk_tree_selection_count_selected_rows (GtkTreeSelection            *selection);
+int              gtk_tree_selection_count_selected_rows (GtkTreeSelection            *selection);
 GDK_AVAILABLE_IN_ALL
 void             gtk_tree_selection_selected_foreach    (GtkTreeSelection            *selection,
 							 GtkTreeSelectionForeachFunc  func,

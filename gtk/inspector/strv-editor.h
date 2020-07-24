@@ -55,9 +55,9 @@ G_BEGIN_DECLS
 GType gtk_inspector_strv_editor_get_type (void);
 
 void    gtk_inspector_strv_editor_set_strv (GtkInspectorStrvEditor  *editor,
-                                            gchar                  **strv);
+                                            char                   **strv);
 
-gchar **gtk_inspector_strv_editor_get_strv (GtkInspectorStrvEditor  *editor);
+char **gtk_inspector_strv_editor_get_strv (GtkInspectorStrvEditor  *editor);
 
 G_END_DECLS
 

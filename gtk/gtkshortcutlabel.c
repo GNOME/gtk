@@ -38,8 +38,8 @@
 struct _GtkShortcutLabel
 {
   GtkWidget parent_instance;
-  gchar  *accelerator;
-  gchar  *disabled_text;
+  char   *accelerator;
+  char   *disabled_text;
 };
 
 struct _GtkShortcutLabelClass
@@ -58,11 +58,11 @@ enum {
 
 static GParamSpec *properties[LAST_PROP];
 
-static gchar *
+static char *
 get_modifier_label (guint key)
 {
-  const gchar *subscript;
-  const gchar *label;
+  const char *subscript;
+  const char *label;
 
   switch (key)
     {
@@ -123,16 +123,16 @@ get_modifier_label (guint key)
   return g_strdup_printf ("%s <small><b>%s</b></small>", label, subscript);
 }
 
-static gchar **
+static char **
 get_labels (guint key, GdkModifierType modifier, guint *n_mods)
 {
-  const gchar *labels[16];
+  const char *labels[16];
   GList *freeme = NULL;
-  gchar key_label[6];
-  const gchar *tmp;
+  char key_label[6];
+  const char *tmp;
   gunichar ch;
-  gint i = 0;
-  gchar **retval;
+  int i = 0;
+  char **retval;
 
   if (modifier & GDK_SHIFT_MASK)
     labels[i++] = C_("keyboard label", "Shift");
@@ -190,7 +190,7 @@ get_labels (guint key, GdkModifierType modifier, guint *n_mods)
         case GDK_KEY_Super_L:   case GDK_KEY_Super_R:
         case GDK_KEY_Hyper_L:   case GDK_KEY_Hyper_R:
           freeme = g_list_prepend (freeme, get_modifier_label (key));
-          labels[i++] = (const gchar*)freeme->data;
+          labels[i++] = (const char *)freeme->data;
            break;
         case GDK_KEY_Left:
           labels[i++] = "\xe2\x86\x90";
@@ -236,7 +236,7 @@ get_labels (guint key, GdkModifierType modifier, guint *n_mods)
 
   labels[i] = NULL;
 
-  retval = g_strdupv ((gchar **)labels);
+  retval = g_strdupv ((char **)labels);
 
   g_list_free_full (freeme, g_free);
 
@@ -244,7 +244,7 @@ get_labels (guint key, GdkModifierType modifier, guint *n_mods)
 }
 
 static GtkWidget *
-dim_label (const gchar *text)
+dim_label (const char *text)
 {
   GtkWidget *label;
 
@@ -259,8 +259,8 @@ display_shortcut (GtkWidget       *self,
                   guint            key,
                   GdkModifierType  modifier)
 {
-  gchar **keys = NULL;
-  gint i;
+  char **keys = NULL;
+  int i;
   guint n_mods;
 
   keys = get_labels (key, modifier, &n_mods);
@@ -285,10 +285,10 @@ display_shortcut (GtkWidget       *self,
 
 static gboolean
 parse_combination (GtkShortcutLabel *self,
-                   const gchar      *str)
+                   const char       *str)
 {
-  gchar **accels;
-  gint k;
+  char **accels;
+  int k;
   GdkModifierType modifier = 0;
   guint key = 0;
   gboolean retval = TRUE;
@@ -313,10 +313,10 @@ parse_combination (GtkShortcutLabel *self,
 
 static gboolean
 parse_sequence (GtkShortcutLabel *self,
-                const gchar      *str)
+                const char       *str)
 {
-  gchar **accels;
-  gint k;
+  char **accels;
+  int k;
   gboolean retval = TRUE;
 
   accels = g_strsplit (str, "+", 0);
@@ -336,9 +336,9 @@ parse_sequence (GtkShortcutLabel *self,
 
 static gboolean
 parse_range (GtkShortcutLabel *self,
-             const gchar      *str)
+             const char       *str)
 {
-  gchar *dots;
+  char *dots;
 
   dots = strstr (str, "...");
   if (!dots)
@@ -376,8 +376,8 @@ clear_children (GtkShortcutLabel *self)
 static void
 gtk_shortcut_label_rebuild (GtkShortcutLabel *self)
 {
-  gchar **accels;
-  gint k;
+  char **accels;
+  int k;
 
   clear_children (self);
 
@@ -518,7 +518,7 @@ gtk_shortcut_label_init (GtkShortcutLabel *self)
  * Returns: (transfer full): a newly-allocated #GtkShortcutLabel
  */
 GtkWidget *
-gtk_shortcut_label_new (const gchar *accelerator)
+gtk_shortcut_label_new (const char *accelerator)
 {
   return g_object_new (GTK_TYPE_SHORTCUT_LABEL,
                        "accelerator", accelerator,
@@ -533,7 +533,7 @@ gtk_shortcut_label_new (const gchar *accelerator)
  *
  * Returns: (transfer none)(nullable): the current accelerator.
  */
-const gchar *
+const char *
 gtk_shortcut_label_get_accelerator (GtkShortcutLabel *self)
 {
   g_return_val_if_fail (GTK_IS_SHORTCUT_LABEL (self), NULL);
@@ -550,7 +550,7 @@ gtk_shortcut_label_get_accelerator (GtkShortcutLabel *self)
  */
 void
 gtk_shortcut_label_set_accelerator (GtkShortcutLabel *self,
-                                    const gchar      *accelerator)
+                                    const char       *accelerator)
 {
   g_return_if_fail (GTK_IS_SHORTCUT_LABEL (self));
 
@@ -572,7 +572,7 @@ gtk_shortcut_label_set_accelerator (GtkShortcutLabel *self,
  * Returns: (transfer none)(nullable): the current text displayed when no
  * accelerator is set.
  */
-const gchar *
+const char *
 gtk_shortcut_label_get_disabled_text (GtkShortcutLabel *self)
 {
   g_return_val_if_fail (GTK_IS_SHORTCUT_LABEL (self), NULL);
@@ -589,7 +589,7 @@ gtk_shortcut_label_get_disabled_text (GtkShortcutLabel *self)
  */
 void
 gtk_shortcut_label_set_disabled_text (GtkShortcutLabel *self,
-                                      const gchar      *disabled_text)
+                                      const char       *disabled_text)
 {
   g_return_if_fail (GTK_IS_SHORTCUT_LABEL (self));
 

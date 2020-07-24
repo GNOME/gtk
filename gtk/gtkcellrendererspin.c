@@ -68,7 +68,7 @@ struct _GtkCellRendererSpinPrivate
 {
   GtkWidget *spin;
   GtkAdjustment *adjustment;
-  gdouble climb_rate;
+  double climb_rate;
   guint   digits;
 };
 
@@ -92,7 +92,7 @@ static gboolean gtk_cell_renderer_spin_key_pressed (GtkEventControllerKey *contr
 static GtkCellEditable * gtk_cell_renderer_spin_start_editing (GtkCellRenderer     *cell,
 							       GdkEvent            *event,
 							       GtkWidget           *widget,
-							       const gchar         *path,
+							       const char          *path,
 							       const GdkRectangle  *background_area,
 							       const GdkRectangle  *cell_area,
 							       GtkCellRendererState flags);
@@ -252,8 +252,8 @@ gtk_cell_renderer_spin_focus_changed (GtkWidget  *widget,
                                       GParamSpec *pspec,
                                       gpointer    data)
 {
-  const gchar *path;
-  const gchar *new_text;
+  const char *path;
+  const char *new_text;
   gboolean canceled;
 
   if (gtk_widget_has_focus (widget))
@@ -325,7 +325,7 @@ static GtkCellEditable *
 gtk_cell_renderer_spin_start_editing (GtkCellRenderer      *cell,
 				      GdkEvent             *event,
 				      GtkWidget            *widget,
-				      const gchar          *path,
+				      const char           *path,
 				      const GdkRectangle   *background_area,
 				      const GdkRectangle   *cell_area,
 				      GtkCellRendererState  flags)
@@ -334,7 +334,7 @@ gtk_cell_renderer_spin_start_editing (GtkCellRenderer      *cell,
   GtkCellRendererText *cell_text = GTK_CELL_RENDERER_TEXT (cell);
   GtkEventController *key_controller;
   gboolean editable;
-  gchar *text;
+  char *text;
 
   g_object_get (cell_text, "editable", &editable, NULL);
   if (!editable)

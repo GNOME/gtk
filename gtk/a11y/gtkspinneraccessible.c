@@ -56,8 +56,8 @@ gtk_spinner_accessible_init (GtkSpinnerAccessible *self)
 
 static void
 gtk_spinner_accessible_image_get_size (AtkImage *image,
-                                       gint     *width,
-                                       gint     *height)
+                                       int      *width,
+                                       int      *height)
 {
   GtkWidget *widget;
 

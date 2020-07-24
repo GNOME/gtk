@@ -218,8 +218,8 @@ split_decorations (GtkSettings *settings,
                    GtkBuilder  *builder)
 {
   GtkWidget *sheader, *mheader;
-  gchar *layout, *p1, *p2;
-  gchar **p;
+  char *layout, *p1, *p2;
+  char **p;
 
   sheader = (GtkWidget *)gtk_builder_get_object (builder, "sidebar-header");
   mheader = (GtkWidget *)gtk_builder_get_object (builder, "main-header");
@@ -359,7 +359,7 @@ create_stacked_headerbar (GtkApplication *app)
 
 /* technorama */
 
-static const gchar css[] =
+static const char css[] =
  ".main.background { "
  " background-image: linear-gradient(to bottom, red, blue);"
  " border-width: 0px; "
@@ -505,7 +505,7 @@ create_technorama (GtkApplication *app)
 }
 
 struct {
-  const gchar *name;
+  const char *name;
   void (*cb) (GtkApplication *app);
 } buttons[] =
 {

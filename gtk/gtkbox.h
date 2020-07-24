@@ -70,7 +70,7 @@ GDK_AVAILABLE_IN_ALL
 GType       gtk_box_get_type            (void) G_GNUC_CONST;
 GDK_AVAILABLE_IN_ALL
 GtkWidget*  gtk_box_new                 (GtkOrientation  orientation,
-                                         gint            spacing);
+                                         int             spacing);
 GDK_AVAILABLE_IN_ALL
 void        gtk_box_set_homogeneous     (GtkBox         *box,
                                          gboolean        homogeneous);
@@ -78,9 +78,9 @@ GDK_AVAILABLE_IN_ALL
 gboolean    gtk_box_get_homogeneous     (GtkBox         *box);
 GDK_AVAILABLE_IN_ALL
 void        gtk_box_set_spacing         (GtkBox         *box,
-                                         gint            spacing);
+                                         int             spacing);
 GDK_AVAILABLE_IN_ALL
-gint        gtk_box_get_spacing         (GtkBox         *box);
+int         gtk_box_get_spacing         (GtkBox         *box);
 GDK_AVAILABLE_IN_ALL
 void        gtk_box_set_baseline_position (GtkBox             *box,
                                            GtkBaselinePosition position);

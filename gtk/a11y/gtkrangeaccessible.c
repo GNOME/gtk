@@ -152,7 +152,7 @@ gtk_range_accessible_get_maximum_value (AtkValue *obj,
 {
   GtkWidget *widget;
   GtkAdjustment *adjustment;
-  gdouble max;
+  double max;
 
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (obj));
   adjustment = gtk_range_get_adjustment (GTK_RANGE (widget));
@@ -223,8 +223,8 @@ gtk_range_accessible_set_current_value (AtkValue     *obj,
 
 static void
 gtk_range_accessible_get_value_and_text (AtkValue  *obj,
-                                         gdouble   *value,
-                                         gchar    **text)
+                                         double    *value,
+                                         char     **text)
 {
   GtkWidget *widget;
   GtkAdjustment *adjustment;
@@ -243,7 +243,7 @@ gtk_range_accessible_get_range (AtkValue *obj)
 {
   GtkWidget *widget;
   GtkAdjustment *adjustment;
-  gdouble min, max;
+  double min, max;
 
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (obj));
   adjustment = gtk_range_get_adjustment (GTK_RANGE (widget));
@@ -262,7 +262,7 @@ gtk_range_accessible_get_range (AtkValue *obj)
 
 static void
 gtk_range_accessible_set_value (AtkValue      *obj,
-                                const gdouble  value)
+                                const double   value)
 {
   GtkWidget *widget;
   GtkAdjustment *adjustment;
@@ -275,7 +275,7 @@ gtk_range_accessible_set_value (AtkValue      *obj,
   gtk_adjustment_set_value (adjustment, value);
 }
 
-static gdouble
+static double
 gtk_range_accessible_get_increment (AtkValue *obj)
 {
   GtkWidget *widget;

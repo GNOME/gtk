@@ -103,7 +103,7 @@ static void
 gtk_multi_filter_buildable_add_child (GtkBuildable *buildable,
                                       GtkBuilder   *builder,
                                       GObject      *child,
-                                      const gchar  *type)
+                                      const char   *type)
 {
   if (GTK_IS_FILTER (child))
     gtk_multi_filter_append (GTK_MULTI_FILTER (buildable), g_object_ref (GTK_FILTER (child)));

@@ -21,9 +21,9 @@
 #include <gtk/gtk.h>
 
 typedef struct {
-  const gchar *name;
-  const gchar *tooltip;
-  const gchar *interface;
+  const char *name;
+  const char *tooltip;
+  const char *interface;
   GtkWidget   *window;
 } TestInterface;
 
@@ -655,7 +655,7 @@ static GtkWidget *
 create_window (void)
 {
   GtkWidget *window, *vbox, *button;
-  gint i;
+  int i;
 
   window = gtk_window_new ();
   vbox   = gtk_box_new (GTK_ORIENTATION_VERTICAL, 6);

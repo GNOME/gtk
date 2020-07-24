@@ -41,14 +41,14 @@ typedef struct _GtkRequestedSize         GtkRequestedSize;
 struct _GtkRequestedSize
 {
   gpointer data;
-  gint     minimum_size;
-  gint     natural_size;
+  int      minimum_size;
+  int      natural_size;
 };
 
 
 /* General convenience function to aid in allocating natural sizes */
 GDK_AVAILABLE_IN_ALL
-gint                gtk_distribute_natural_allocation               (gint              extra_space,
+int                 gtk_distribute_natural_allocation               (int               extra_space,
                                                                      guint             n_requested_sizes,
                                                                      GtkRequestedSize *sizes);
 

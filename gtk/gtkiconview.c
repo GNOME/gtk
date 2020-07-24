@@ -202,8 +202,8 @@ static void                 gtk_icon_view_layout                         (GtkIco
 static void                 gtk_icon_view_snapshot_item                  (GtkIconView            *icon_view,
 									  GtkSnapshot            *snapshot,
 									  GtkIconViewItem        *item,
-									  gint                    x,
-									  gint                    y,
+									  int                     x,
+									  int                     y,
 									  gboolean                draw_focus);
 static void                 gtk_icon_view_snapshot_rubberband            (GtkIconView            *icon_view,
 								          GtkSnapshot            *snapshot);
@@ -213,16 +213,16 @@ static void                 gtk_icon_view_queue_draw_item                (GtkIco
 									  GtkIconViewItem        *item);
 static void                 gtk_icon_view_start_rubberbanding            (GtkIconView            *icon_view,
                                                                           GdkDevice              *device,
-									  gint                    x,
-									  gint                    y);
+									  int                     x,
+									  int                     y);
 static void                 gtk_icon_view_stop_rubberbanding             (GtkIconView            *icon_view);
 static void                 gtk_icon_view_update_rubberband_selection    (GtkIconView            *icon_view);
 static gboolean             gtk_icon_view_item_hit_test                  (GtkIconView            *icon_view,
 									  GtkIconViewItem        *item,
-									  gint                    x,
-									  gint                    y,
-									  gint                    width,
-									  gint                    height);
+									  int                     x,
+									  int                     y,
+									  int                     width,
+									  int                     height);
 static gboolean             gtk_icon_view_unselect_all_internal          (GtkIconView            *icon_view);
 static void                 gtk_icon_view_update_rubberband              (GtkIconView            *icon_view);
 static void                 gtk_icon_view_item_invalidate_size           (GtkIconViewItem        *item);
@@ -231,20 +231,20 @@ static void                 gtk_icon_view_add_move_binding               (GtkWid
 									  guint                   keyval,
 									  guint                   modmask,
 									  GtkMovementStep         step,
-									  gint                    count);
+									  int                     count);
 static gboolean             gtk_icon_view_real_move_cursor               (GtkIconView            *icon_view,
 									  GtkMovementStep         step,
-									  gint                    count,
+									  int                     count,
                                                                           gboolean                extend,
                                                                           gboolean                modify);
 static void                 gtk_icon_view_move_cursor_up_down            (GtkIconView            *icon_view,
-									  gint                    count);
+									  int                     count);
 static void                 gtk_icon_view_move_cursor_page_up_down       (GtkIconView            *icon_view,
-									  gint                    count);
+									  int                     count);
 static void                 gtk_icon_view_move_cursor_left_right         (GtkIconView            *icon_view,
-									  gint                    count);
+									  int                     count);
 static void                 gtk_icon_view_move_cursor_start_end          (GtkIconView            *icon_view,
-									  gint                    count);
+									  int                     count);
 static void                 gtk_icon_view_scroll_to_item                 (GtkIconView            *icon_view,
 									  GtkIconViewItem        *item);
 static gboolean             gtk_icon_view_select_all_between             (GtkIconView            *icon_view,
@@ -263,7 +263,7 @@ static void                 gtk_icon_view_add_editable                   (GtkCel
 									  GtkCellRenderer        *renderer,
 									  GtkCellEditable        *editable,
 									  GdkRectangle           *cell_area,
-									  const gchar            *path,
+									  const char             *path,
 									  GtkIconView            *icon_view);
 static void                 gtk_icon_view_remove_editable                (GtkCellArea            *area,
 									  GtkCellRenderer        *renderer,
@@ -308,13 +308,13 @@ static void     gtk_icon_view_buildable_init             (GtkBuildableIface  *if
 static gboolean gtk_icon_view_buildable_custom_tag_start (GtkBuildable       *buildable,
                                                           GtkBuilder         *builder,
                                                           GObject            *child,
-                                                          const gchar        *tagname,
+                                                          const char         *tagname,
                                                           GtkBuildableParser *parser,
                                                           gpointer           *data);
 static void     gtk_icon_view_buildable_custom_tag_end   (GtkBuildable       *buildable,
                                                           GtkBuilder         *builder,
                                                           GObject            *child,
-                                                          const gchar        *tagname,
+                                                          const char         *tagname,
                                                           gpointer            data);
 
 
@@ -893,7 +893,7 @@ static void
 gtk_icon_view_buildable_add_child (GtkBuildable *buildable,
                                    GtkBuilder   *builder,
                                    GObject      *child,
-                                   const gchar  *type)
+                                   const char   *type)
 {
   if (GTK_IS_CELL_RENDERER (child))
     _gtk_cell_layout_buildable_add_child (buildable, builder, child, type);
@@ -1251,7 +1251,7 @@ gtk_icon_view_get_property (GObject      *object,
 
 /* GtkWidget methods */
 
-static gint
+static int
 gtk_icon_view_get_n_items (GtkIconView *icon_view)
 {
   GtkIconViewPrivate *priv = icon_view->priv;
@@ -1267,7 +1267,7 @@ adjust_wrap_width (GtkIconView *icon_view)
 {
   if (icon_view->priv->text_cell)
     {
-      gint pixbuf_width, wrap_width;
+      int pixbuf_width, wrap_width;
 
       if (icon_view->priv->items && icon_view->priv->pixbuf_cell)
         {
@@ -1341,9 +1341,9 @@ static void
 cell_area_get_preferred_size (GtkIconView        *icon_view,
                               GtkCellAreaContext *context,
                               GtkOrientation      orientation,
-                              gint                for_size,
-                              gint               *minimum,
-                              gint               *natural)
+                              int                 for_size,
+                              int                *minimum,
+                              int                *natural)
 {
   if (orientation == GTK_ORIENTATION_HORIZONTAL)
     {
@@ -1384,9 +1384,9 @@ gtk_icon_view_is_empty (GtkIconView *icon_view)
 static void
 gtk_icon_view_get_preferred_item_size (GtkIconView    *icon_view,
                                        GtkOrientation  orientation,
-                                       gint            for_size,
-                                       gint           *minimum,
-                                       gint           *natural)
+                                       int             for_size,
+                                       int            *minimum,
+                                       int            *natural)
 {
   GtkIconViewPrivate *priv = icon_view->priv;
   GtkCellAreaContext *context;
@@ -1460,11 +1460,11 @@ gtk_icon_view_get_preferred_item_size (GtkIconView    *icon_view,
 static void
 gtk_icon_view_compute_n_items_for_size (GtkIconView    *icon_view,
                                         GtkOrientation  orientation,
-                                        gint            size,
-                                        gint           *min_items,
-                                        gint           *min_item_size,
-                                        gint           *max_items,
-                                        gint           *max_item_size)
+                                        int             size,
+                                        int            *min_items,
+                                        int            *min_item_size,
+                                        int            *max_items,
+                                        int            *max_item_size)
 {
   GtkIconViewPrivate *priv = icon_view->priv;
   int minimum, natural, spacing;
@@ -1659,7 +1659,7 @@ gtk_icon_view_snapshot (GtkWidget   *widget,
   GtkIconView *icon_view;
   GList *icons;
   GtkTreePath *path;
-  gint dest_index;
+  int dest_index;
   GtkIconViewDropPosition dest_pos;
   GtkIconViewItem *dest_item = NULL;
   GtkStyleContext *context;
@@ -1784,8 +1784,8 @@ rubberband_scroll_timeout (gpointer data)
 
 static GtkIconViewItem *
 _gtk_icon_view_get_item_at_widget_coords (GtkIconView      *icon_view,
-                                          gint              x,
-                                          gint              y,
+                                          int               x,
+                                          int               y,
                                           gboolean          only_in_cell,
                                           GtkCellRenderer **cell_at_pos)
 {
@@ -1803,7 +1803,7 @@ gtk_icon_view_motion (GtkEventController *controller,
                       gpointer            user_data)
 {
   GtkIconView *icon_view;
-  gint abs_y;
+  int abs_y;
   GdkDevice *device;
 
   icon_view = GTK_ICON_VIEW (user_data);
@@ -1941,7 +1941,7 @@ gtk_icon_view_add_editable (GtkCellArea            *area,
 			    GtkCellRenderer        *renderer,
 			    GtkCellEditable        *editable,
 			    GdkRectangle           *cell_area,
-			    const gchar            *path,
+			    const char             *path,
 			    GtkIconView            *icon_view)
 {
   GtkIconViewChild *child;
@@ -2303,7 +2303,7 @@ gtk_icon_view_key_pressed (GtkEventControllerKey *controller,
 static void
 gtk_icon_view_update_rubberband (GtkIconView *icon_view)
 {
-  gint x, y;
+  int x, y;
 
   x = MAX (icon_view->priv->mouse_x, 0);
   y = MAX (icon_view->priv->mouse_y, 0);
@@ -2318,8 +2318,8 @@ gtk_icon_view_update_rubberband (GtkIconView *icon_view)
 static void
 gtk_icon_view_start_rubberbanding (GtkIconView  *icon_view,
                                    GdkDevice    *device,
-				   gint          x,
-				   gint          y)
+				   int           x,
+				   int           y)
 {
   GtkIconViewPrivate *priv = icon_view->priv;
   GList *items;
@@ -2371,7 +2371,7 @@ static void
 gtk_icon_view_update_rubberband_selection (GtkIconView *icon_view)
 {
   GList *items;
-  gint x, y, width, height;
+  int x, y, width, height;
   gboolean dirty = FALSE;
   
   x = MIN (icon_view->priv->rubberband_x1,
@@ -2430,10 +2430,10 @@ hit_test (GtkCellRenderer    *renderer,
 static gboolean
 gtk_icon_view_item_hit_test (GtkIconView      *icon_view,
 			     GtkIconViewItem  *item,
-			     gint              x,
-			     gint              y,
-			     gint              width,
-			     gint              height)
+			     int               x,
+			     int               y,
+			     int               width,
+			     int               height)
 {
   HitTestData data = { { x, y, width, height }, FALSE };
   GtkCellAreaContext *context;
@@ -2562,11 +2562,11 @@ gtk_icon_view_set_hadjustment_values (GtkIconView *icon_view)
 {
   int width;
   GtkAdjustment *adj = icon_view->priv->hadjustment;
-  gdouble old_page_size;
-  gdouble old_upper;
-  gdouble old_value;
-  gdouble new_value;
-  gdouble new_upper;
+  double old_page_size;
+  double old_upper;
+  double old_value;
+  double new_value;
+  double new_upper;
 
   width = gtk_widget_get_width (GTK_WIDGET (icon_view));
 
@@ -2699,7 +2699,7 @@ gtk_icon_view_adjustment_changed (GtkAdjustment *adjustment,
   gtk_widget_queue_draw (GTK_WIDGET (icon_view));
 }
 
-static gint
+static int
 compare_sizes (gconstpointer p1,
 	       gconstpointer p2,
                gpointer      unused)
@@ -2714,9 +2714,9 @@ gtk_icon_view_layout (GtkIconView *icon_view)
   GtkIconViewPrivate *priv = icon_view->priv;
   GtkWidget *widget = GTK_WIDGET (icon_view);
   GList *items;
-  gint item_width = 0; /* this doesn't include item_padding */
-  gint n_columns, n_rows, n_items;
-  gint col, row;
+  int item_width = 0; /* this doesn't include item_padding */
+  int n_columns, n_rows, n_items;
+  int col, row;
   GtkRequestedSize *sizes;
   gboolean rtl;
   int width, height;
@@ -2855,8 +2855,8 @@ static void
 gtk_icon_view_snapshot_item (GtkIconView     *icon_view,
                              GtkSnapshot     *snapshot,
                              GtkIconViewItem *item,
-                             gint             x,
-                             gint             y,
+                             int              x,
+                             int              y,
                              gboolean         draw_focus)
 {
   GdkRectangle cell_area;
@@ -2954,7 +2954,7 @@ gtk_icon_view_queue_draw_path (GtkIconView *icon_view,
 			       GtkTreePath *path)
 {
   GList *l;
-  gint index;
+  int index;
 
   index = gtk_tree_path_get_indices (path)[0];
 
@@ -3056,8 +3056,8 @@ gtk_icon_view_item_free (GtkIconViewItem *item)
 
 GtkIconViewItem *
 _gtk_icon_view_get_item_at_coords (GtkIconView          *icon_view,
-                                   gint                  x,
-                                   gint                  y,
+                                   int                   x,
+                                   int                   y,
                                    gboolean              only_in_cell,
                                    GtkCellRenderer     **cell_at_pos)
 {
@@ -3208,7 +3208,7 @@ gtk_icon_view_row_inserted (GtkTreeModel *model,
 			    gpointer      data)
 {
   GtkIconView *icon_view = GTK_ICON_VIEW (data);
-  gint index;
+  int index;
   GtkIconViewItem *item;
   GList *list;
 
@@ -3250,7 +3250,7 @@ gtk_icon_view_row_deleted (GtkTreeModel *model,
 			   gpointer      data)
 {
   GtkIconView *icon_view = GTK_ICON_VIEW (data);
-  gint index;
+  int index;
   GtkIconViewItem *item;
   GList *list, *next;
   gboolean emit = FALSE;
@@ -3306,7 +3306,7 @@ static void
 gtk_icon_view_rows_reordered (GtkTreeModel *model,
 			      GtkTreePath  *parent,
 			      GtkTreeIter  *iter,
-			      gint         *new_order,
+			      int          *new_order,
 			      gpointer      data)
 {
   GtkIconView *icon_view = GTK_ICON_VIEW (data);
@@ -3314,7 +3314,7 @@ gtk_icon_view_rows_reordered (GtkTreeModel *model,
   int length;
   GList *items = NULL, *list;
   GtkIconViewItem **item_array;
-  gint *order;
+  int *order;
 
   /* ignore changes in branches */
   if (iter != NULL)
@@ -3325,7 +3325,7 @@ gtk_icon_view_rows_reordered (GtkTreeModel *model,
 
   length = gtk_tree_model_iter_n_children (model, NULL);
 
-  order = g_new (gint, length);
+  order = g_new (int, length);
   for (i = 0; i < length; i++)
     order [new_order[i]] = i;
 
@@ -3382,7 +3382,7 @@ gtk_icon_view_add_move_binding (GtkWidgetClass *widget_class,
 				guint           keyval,
 				guint           modmask,
 				GtkMovementStep step,
-				gint            count)
+				int             count)
 {
   
   gtk_widget_class_add_binding_signal (widget_class,
@@ -3412,7 +3412,7 @@ gtk_icon_view_add_move_binding (GtkWidgetClass *widget_class,
 static gboolean
 gtk_icon_view_real_move_cursor (GtkIconView     *icon_view,
 				GtkMovementStep  step,
-				gint             count,
+				int              count,
                                 gboolean         extend,
                                 gboolean         modify)
 {
@@ -3468,10 +3468,10 @@ gtk_icon_view_real_move_cursor (GtkIconView     *icon_view,
 static GtkIconViewItem *
 find_item (GtkIconView     *icon_view,
 	   GtkIconViewItem *current,
-	   gint             row_ofs,
-	   gint             col_ofs)
+	   int              row_ofs,
+	   int              col_ofs)
 {
-  gint row, col;
+  int row, col;
   GList *items;
   GtkIconViewItem *item;
 
@@ -3493,10 +3493,10 @@ find_item (GtkIconView     *icon_view,
 static GtkIconViewItem *
 find_item_page_up_down (GtkIconView     *icon_view,
 			GtkIconViewItem *current,
-			gint             count)
+			int              count)
 {
   GList *item, *next;
-  gint y, col;
+  int y, col;
   
   col = current->col;
   y = current->cell_area.y + count * gtk_adjustment_get_page_size (icon_view->priv->vadjustment);
@@ -3546,7 +3546,7 @@ gtk_icon_view_select_all_between (GtkIconView     *icon_view,
 {
   GList *items;
   GtkIconViewItem *item;
-  gint row1, row2, col1, col2;
+  int row1, row2, col1, col2;
   gboolean dirty = FALSE;
   
   if (anchor->row < cursor->row)
@@ -3593,12 +3593,12 @@ gtk_icon_view_select_all_between (GtkIconView     *icon_view,
 
 static void 
 gtk_icon_view_move_cursor_up_down (GtkIconView *icon_view,
-				   gint         count)
+				   int          count)
 {
   GtkIconViewItem *item;
   GtkCellRenderer *cell = NULL;
   gboolean dirty = FALSE;
-  gint step;
+  int step;
   GtkDirectionType direction;
 
   if (!gtk_widget_has_focus (GTK_WIDGET (icon_view)))
@@ -3690,7 +3690,7 @@ gtk_icon_view_move_cursor_up_down (GtkIconView *icon_view,
 
 static void 
 gtk_icon_view_move_cursor_page_up_down (GtkIconView *icon_view,
-					gint         count)
+					int          count)
 {
   GtkIconViewItem *item;
   gboolean dirty = FALSE;
@@ -3745,12 +3745,12 @@ gtk_icon_view_move_cursor_page_up_down (GtkIconView *icon_view,
 
 static void 
 gtk_icon_view_move_cursor_left_right (GtkIconView *icon_view,
-				      gint         count)
+				      int          count)
 {
   GtkIconViewItem *item;
   GtkCellRenderer *cell = NULL;
   gboolean dirty = FALSE;
-  gint step;
+  int step;
   GtkDirectionType direction;
 
   if (!gtk_widget_has_focus (GTK_WIDGET (icon_view)))
@@ -3842,7 +3842,7 @@ gtk_icon_view_move_cursor_left_right (GtkIconView *icon_view,
 
 static void 
 gtk_icon_view_move_cursor_start_end (GtkIconView *icon_view,
-				     gint         count)
+				     int          count)
 {
   GtkIconViewItem *item;
   GList *list;
@@ -3914,8 +3914,8 @@ void
 gtk_icon_view_scroll_to_path (GtkIconView *icon_view,
 			      GtkTreePath *path,
 			      gboolean     use_align,
-			      gfloat       row_align,
-			      gfloat       col_align)
+			      float        row_align,
+			      float        col_align)
 {
   GtkIconViewItem *item = NULL;
   GtkWidget *widget;
@@ -3952,8 +3952,8 @@ gtk_icon_view_scroll_to_path (GtkIconView *icon_view,
   if (use_align)
     {
       int width, height;
-      gint x, y;
-      gfloat offset;
+      int x, y;
+      float offset;
       GdkRectangle item_area = 
 	{ 
 	  item->cell_area.x - icon_view->priv->item_padding, 
@@ -3991,7 +3991,7 @@ gtk_icon_view_scroll_to_item (GtkIconView     *icon_view,
   GtkWidget *widget = GTK_WIDGET (icon_view);
   GtkAdjustment *hadj, *vadj;
   int widget_width, widget_height;
-  gint x, y;
+  int x, y;
   GdkRectangle item_area;
 
   item_area.x = item->cell_area.x - priv->item_padding;
@@ -4148,8 +4148,8 @@ gtk_icon_view_new_with_model (GtkTreeModel *model)
  **/
 GtkTreePath *
 gtk_icon_view_get_path_at_pos (GtkIconView *icon_view,
-			       gint         x,
-			       gint         y)
+			       int          x,
+			       int          y)
 {
   GtkIconViewItem *item;
   GtkTreePath *path;
@@ -4179,8 +4179,8 @@ gtk_icon_view_get_path_at_pos (GtkIconView *icon_view,
  **/
 gboolean 
 gtk_icon_view_get_item_at_pos (GtkIconView      *icon_view,
-			       gint              x,
-			       gint              y,
+			       int               x,
+			       int               y,
 			       GtkTreePath     **path,
 			       GtkCellRenderer **cell)
 {
@@ -4336,8 +4336,8 @@ gtk_icon_view_set_tooltip_cell (GtkIconView     *icon_view,
  */
 gboolean
 gtk_icon_view_get_tooltip_context (GtkIconView   *icon_view,
-                                   gint          *x,
-                                   gint          *y,
+                                   int           *x,
+                                   int           *y,
                                    gboolean       keyboard_tip,
                                    GtkTreeModel **model,
                                    GtkTreePath  **path,
@@ -4379,13 +4379,13 @@ gtk_icon_view_get_tooltip_context (GtkIconView   *icon_view,
 
 static gboolean
 gtk_icon_view_set_tooltip_query_cb (GtkWidget  *widget,
-                                    gint        x,
-                                    gint        y,
+                                    int         x,
+                                    int         y,
                                     gboolean    keyboard_tip,
                                     GtkTooltip *tooltip,
                                     gpointer    data)
 {
-  gchar *str;
+  char *str;
   GtkTreeIter iter;
   GtkTreePath *path;
   GtkTreeModel *model;
@@ -4433,7 +4433,7 @@ gtk_icon_view_set_tooltip_query_cb (GtkWidget  *widget,
  */
 void
 gtk_icon_view_set_tooltip_column (GtkIconView *icon_view,
-                                  gint         column)
+                                  int          column)
 {
   g_return_if_fail (GTK_IS_ICON_VIEW (icon_view));
 
@@ -4471,7 +4471,7 @@ gtk_icon_view_set_tooltip_column (GtkIconView *icon_view,
  * Returns: the index of the tooltip column that is currently being
  * used, or -1 if this is disabled.
  */
-gint
+int
 gtk_icon_view_get_tooltip_column (GtkIconView *icon_view)
 {
   g_return_val_if_fail (GTK_IS_ICON_VIEW (icon_view), 0);
@@ -4498,8 +4498,8 @@ gtk_icon_view_get_visible_range (GtkIconView  *icon_view,
 				 GtkTreePath **start_path,
 				 GtkTreePath **end_path)
 {
-  gint start_index = -1;
-  gint end_index = -1;
+  int start_index = -1;
+  int end_index = -1;
   GList *icons;
 
   g_return_val_if_fail (GTK_IS_ICON_VIEW (icon_view), FALSE);
@@ -4853,7 +4853,7 @@ update_pixbuf_cell (GtkIconView *icon_view)
  **/
 void
 gtk_icon_view_set_text_column (GtkIconView *icon_view,
-			       gint          column)
+			       int           column)
 {
   if (column == icon_view->priv->text_column)
     return;
@@ -4888,7 +4888,7 @@ gtk_icon_view_set_text_column (GtkIconView *icon_view,
  *
  * Returns: the text column, or -1 if it’s unset.
  */
-gint
+int
 gtk_icon_view_get_text_column (GtkIconView  *icon_view)
 {
   g_return_val_if_fail (GTK_IS_ICON_VIEW (icon_view), -1);
@@ -4908,7 +4908,7 @@ gtk_icon_view_get_text_column (GtkIconView  *icon_view)
  **/
 void
 gtk_icon_view_set_markup_column (GtkIconView *icon_view,
-				 gint         column)
+				 int          column)
 {
   if (column == icon_view->priv->markup_column)
     return;
@@ -4943,7 +4943,7 @@ gtk_icon_view_set_markup_column (GtkIconView *icon_view,
  *
  * Returns: the markup column, or -1 if it’s unset.
  */
-gint
+int
 gtk_icon_view_get_markup_column (GtkIconView  *icon_view)
 {
   g_return_val_if_fail (GTK_IS_ICON_VIEW (icon_view), -1);
@@ -4961,7 +4961,7 @@ gtk_icon_view_get_markup_column (GtkIconView  *icon_view)
  **/
 void
 gtk_icon_view_set_pixbuf_column (GtkIconView *icon_view,
-				 gint         column)
+				 int          column)
 {
   if (column == icon_view->priv->pixbuf_column)
     return;
@@ -4997,7 +4997,7 @@ gtk_icon_view_set_pixbuf_column (GtkIconView *icon_view,
  *
  * Returns: the pixbuf column, or -1 if it’s unset.
  */
-gint
+int
 gtk_icon_view_get_pixbuf_column (GtkIconView  *icon_view)
 {
   g_return_val_if_fail (GTK_IS_ICON_VIEW (icon_view), -1);
@@ -5190,7 +5190,7 @@ gtk_icon_view_path_is_selected (GtkIconView *icon_view,
  *
  * Returns: The row in which the item is displayed
  */
-gint
+int
 gtk_icon_view_get_item_row (GtkIconView *icon_view,
                             GtkTreePath *path)
 {
@@ -5219,7 +5219,7 @@ gtk_icon_view_get_item_row (GtkIconView *icon_view,
  *
  * Returns: The column in which the item is displayed
  */
-gint
+int
 gtk_icon_view_get_item_column (GtkIconView *icon_view,
                                GtkTreePath *path)
 {
@@ -5321,7 +5321,7 @@ gtk_icon_view_get_item_orientation (GtkIconView *icon_view)
  */
 void 
 gtk_icon_view_set_columns (GtkIconView *icon_view,
-			   gint         columns)
+			   int          columns)
 {
   g_return_if_fail (GTK_IS_ICON_VIEW (icon_view));
   
@@ -5346,7 +5346,7 @@ gtk_icon_view_set_columns (GtkIconView *icon_view,
  * 
  * Returns: the number of columns, or -1
  */
-gint
+int
 gtk_icon_view_get_columns (GtkIconView *icon_view)
 {
   g_return_val_if_fail (GTK_IS_ICON_VIEW (icon_view), -1);
@@ -5365,7 +5365,7 @@ gtk_icon_view_get_columns (GtkIconView *icon_view)
  */
 void 
 gtk_icon_view_set_item_width (GtkIconView *icon_view,
-			      gint         item_width)
+			      int          item_width)
 {
   g_return_if_fail (GTK_IS_ICON_VIEW (icon_view));
   
@@ -5392,7 +5392,7 @@ gtk_icon_view_set_item_width (GtkIconView *icon_view,
  * 
  * Returns: the width of a single item, or -1
  */
-gint
+int
 gtk_icon_view_get_item_width (GtkIconView *icon_view)
 {
   g_return_val_if_fail (GTK_IS_ICON_VIEW (icon_view), -1);
@@ -5412,7 +5412,7 @@ gtk_icon_view_get_item_width (GtkIconView *icon_view)
  */
 void 
 gtk_icon_view_set_spacing (GtkIconView *icon_view,
-			   gint         spacing)
+			   int          spacing)
 {
   g_return_if_fail (GTK_IS_ICON_VIEW (icon_view));
   
@@ -5437,7 +5437,7 @@ gtk_icon_view_set_spacing (GtkIconView *icon_view,
  * 
  * Returns: the space between cells 
  */
-gint
+int
 gtk_icon_view_get_spacing (GtkIconView *icon_view)
 {
   g_return_val_if_fail (GTK_IS_ICON_VIEW (icon_view), -1);
@@ -5455,7 +5455,7 @@ gtk_icon_view_get_spacing (GtkIconView *icon_view)
  */
 void 
 gtk_icon_view_set_row_spacing (GtkIconView *icon_view,
-			       gint         row_spacing)
+			       int          row_spacing)
 {
   g_return_if_fail (GTK_IS_ICON_VIEW (icon_view));
   
@@ -5480,7 +5480,7 @@ gtk_icon_view_set_row_spacing (GtkIconView *icon_view,
  * 
  * Returns: the space between rows
  */
-gint
+int
 gtk_icon_view_get_row_spacing (GtkIconView *icon_view)
 {
   g_return_val_if_fail (GTK_IS_ICON_VIEW (icon_view), -1);
@@ -5498,7 +5498,7 @@ gtk_icon_view_get_row_spacing (GtkIconView *icon_view)
  */
 void 
 gtk_icon_view_set_column_spacing (GtkIconView *icon_view,
-				  gint         column_spacing)
+				  int          column_spacing)
 {
   g_return_if_fail (GTK_IS_ICON_VIEW (icon_view));
   
@@ -5523,7 +5523,7 @@ gtk_icon_view_set_column_spacing (GtkIconView *icon_view,
  * 
  * Returns: the space between columns
  */
-gint
+int
 gtk_icon_view_get_column_spacing (GtkIconView *icon_view)
 {
   g_return_val_if_fail (GTK_IS_ICON_VIEW (icon_view), -1);
@@ -5542,7 +5542,7 @@ gtk_icon_view_get_column_spacing (GtkIconView *icon_view)
  */
 void 
 gtk_icon_view_set_margin (GtkIconView *icon_view,
-			  gint         margin)
+			  int          margin)
 {
   g_return_if_fail (GTK_IS_ICON_VIEW (icon_view));
   
@@ -5567,7 +5567,7 @@ gtk_icon_view_set_margin (GtkIconView *icon_view,
  * 
  * Returns: the space at the borders 
  */
-gint
+int
 gtk_icon_view_get_margin (GtkIconView *icon_view)
 {
   g_return_val_if_fail (GTK_IS_ICON_VIEW (icon_view), -1);
@@ -5585,7 +5585,7 @@ gtk_icon_view_get_margin (GtkIconView *icon_view)
  */
 void
 gtk_icon_view_set_item_padding (GtkIconView *icon_view,
-				gint         item_padding)
+				int          item_padding)
 {
   g_return_if_fail (GTK_IS_ICON_VIEW (icon_view));
   
@@ -5610,7 +5610,7 @@ gtk_icon_view_set_item_padding (GtkIconView *icon_view,
  * 
  * Returns: the padding around items
  */
-gint
+int
 gtk_icon_view_get_item_padding (GtkIconView *icon_view)
 {
   g_return_val_if_fail (GTK_IS_ICON_VIEW (icon_view), -1);
@@ -5721,7 +5721,7 @@ get_dest_row (GdkDrop *drop)
 static gboolean
 check_model_dnd (GtkTreeModel *model,
                  GType         required_iface,
-                 const gchar  *signal)
+                 const char   *signal)
 {
   if (model == NULL || !G_TYPE_CHECK_INSTANCE_TYPE ((model), required_iface))
     {
@@ -5756,8 +5756,8 @@ remove_scroll_timeout (GtkIconView *icon_view)
 static void
 gtk_icon_view_autoscroll (GtkIconView *icon_view)
 {
-  gint px, py, width, height;
-  gint hoffset, voffset;
+  int px, py, width, height;
+  int hoffset, voffset;
 
   px = icon_view->priv->event_last_x;
   py = icon_view->priv->event_last_y;
@@ -5794,8 +5794,8 @@ drag_scroll_timeout (gpointer data)
 static gboolean
 set_destination (GtkIconView        *icon_view,
 		 GtkDropTargetAsync *dest,
-		 gint                x,
-		 gint                y,
+		 int                 x,
+		 int                 y,
 		 GdkDragAction      *suggested_action,
 		 GType              *target)
 {
@@ -5834,7 +5834,7 @@ set_destination (GtkIconView        *icon_view,
 
   if (!gtk_icon_view_get_dest_item_at_pos (icon_view, x, y, &path, &pos)) 
     {
-      gint n_children;
+      int n_children;
       GtkTreeModel *model;
       
       /* the row got dropped on empty space, let's setup a special case
@@ -6473,7 +6473,7 @@ gtk_icon_view_set_drag_dest_item (GtkIconView              *icon_view,
       && gtk_tree_path_get_depth (path) == 1
       && gtk_tree_path_get_indices (path)[0] == 0)
     {
-      gint n_children;
+      int n_children;
 
       n_children = gtk_tree_model_iter_n_children (icon_view->priv->model,
                                                    NULL);
@@ -6537,8 +6537,8 @@ gtk_icon_view_get_drag_dest_item (GtkIconView              *icon_view,
  **/
 gboolean
 gtk_icon_view_get_dest_item_at_pos (GtkIconView              *icon_view,
-				    gint                      drag_x,
-				    gint                      drag_y,
+				    int                       drag_x,
+				    int                       drag_y,
 				    GtkTreePath             **path,
 				    GtkIconViewDropPosition  *pos)
 {
@@ -6602,7 +6602,7 @@ gtk_icon_view_create_drag_icon (GtkIconView *icon_view,
   GtkSnapshot *snapshot;
   GdkPaintable *paintable;
   GList *l;
-  gint index;
+  int index;
 
   g_return_val_if_fail (GTK_IS_ICON_VIEW (icon_view), NULL);
   g_return_val_if_fail (path != NULL, NULL);
@@ -6746,7 +6746,7 @@ static gboolean
 gtk_icon_view_buildable_custom_tag_start (GtkBuildable       *buildable,
                                           GtkBuilder         *builder,
                                           GObject            *child,
-                                          const gchar        *tagname,
+                                          const char         *tagname,
                                           GtkBuildableParser *parser,
                                           gpointer           *data)
 {
@@ -6762,7 +6762,7 @@ static void
 gtk_icon_view_buildable_custom_tag_end (GtkBuildable *buildable,
                                         GtkBuilder   *builder,
                                         GObject      *child,
-                                        const gchar  *tagname,
+                                        const char   *tagname,
                                         gpointer      data)
 {
   if (!_gtk_cell_layout_buildable_custom_tag_end (buildable, builder,

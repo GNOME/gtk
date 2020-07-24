@@ -46,13 +46,13 @@ GType                 gtk_font_button_get_type       (void) G_GNUC_CONST;
 GDK_AVAILABLE_IN_ALL
 GtkWidget            *gtk_font_button_new            (void);
 GDK_AVAILABLE_IN_ALL
-GtkWidget            *gtk_font_button_new_with_font  (const gchar   *fontname);
+GtkWidget            *gtk_font_button_new_with_font  (const char    *fontname);
 
 GDK_AVAILABLE_IN_ALL
-const gchar *         gtk_font_button_get_title      (GtkFontButton *font_button);
+const char *         gtk_font_button_get_title      (GtkFontButton *font_button);
 GDK_AVAILABLE_IN_ALL
 void                  gtk_font_button_set_title      (GtkFontButton *font_button,
-                                                      const gchar   *title);
+                                                      const char    *title);
 GDK_AVAILABLE_IN_ALL
 gboolean              gtk_font_button_get_modal      (GtkFontButton *font_button);
 GDK_AVAILABLE_IN_ALL

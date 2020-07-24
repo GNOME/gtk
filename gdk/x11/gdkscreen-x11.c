@@ -106,7 +106,7 @@ static void
 gdk_x11_screen_finalize (GObject *object)
 {
   GdkX11Screen *x11_screen = GDK_X11_SCREEN (object);
-  gint          i;
+  int           i;
 
   /* Visual Part */
   for (i = 0; i < x11_screen->nvisuals; i++)
@@ -131,7 +131,7 @@ gdk_x11_screen_finalize (GObject *object)
  */
 XID
 gdk_x11_screen_get_monitor_output (GdkX11Screen *x11_screen,
-                                   gint          monitor_num)
+                                   int           monitor_num)
 {
   GdkX11Display *x11_display = GDK_X11_DISPLAY (x11_screen->display);
   GdkX11Monitor *monitor;
@@ -874,7 +874,7 @@ init_multihead (GdkX11Screen *screen)
 
 GdkX11Screen *
 _gdk_x11_screen_new (GdkDisplay *display,
-		     gint	 screen_number,
+		     int	 screen_number,
                      gboolean    setup_display)
 {
   GdkX11Screen *x11_screen;
@@ -913,7 +913,7 @@ _gdk_x11_screen_new (GdkDisplay *display,
 
 void
 _gdk_x11_screen_set_surface_scale (GdkX11Screen *x11_screen,
-				  gint          scale)
+				  int           scale)
 {
   GdkX11Display *x11_display = GDK_X11_DISPLAY (x11_screen->display);
   GList *toplevels, *l;
@@ -995,17 +995,17 @@ _gdk_x11_screen_size_changed (GdkX11Screen *screen,
 
 void
 _gdk_x11_screen_get_edge_monitors (GdkX11Screen *x11_screen,
-                                   gint      *top,
-                                   gint      *bottom,
-                                   gint      *left,
-                                   gint      *right)
+                                   int       *top,
+                                   int       *bottom,
+                                   int       *left,
+                                   int       *right)
 {
 #ifdef HAVE_XFREE_XINERAMA
-  gint          top_most_pos = HeightOfScreen (x11_screen->xscreen);
-  gint          left_most_pos = WidthOfScreen (x11_screen->xscreen);
-  gint          bottom_most_pos = 0;
-  gint          right_most_pos = 0;
-  gint          i;
+  int           top_most_pos = HeightOfScreen (x11_screen->xscreen);
+  int           left_most_pos = WidthOfScreen (x11_screen->xscreen);
+  int           bottom_most_pos = 0;
+  int           right_most_pos = 0;
+  int           i;
   XineramaScreenInfo *x_monitors;
   int x_n_monitors;
 #endif
@@ -1061,7 +1061,7 @@ _gdk_x11_screen_window_manager_changed (GdkX11Screen *screen)
 
 gboolean
 gdk_x11_screen_get_setting (GdkX11Screen   *x11_screen,
-			    const gchar *name,
+			    const char *name,
 			    GValue      *value)
 {
   const GValue *setting;
@@ -1102,7 +1102,7 @@ get_net_supporting_wm_check (GdkX11Screen *screen,
 {
   GdkDisplay *display;
   Atom type;
-  gint format;
+  int format;
   gulong n_items;
   gulong bytes_after;
   guchar *data;
@@ -1135,7 +1135,7 @@ fetch_net_wm_check_window (GdkX11Screen *x11_screen)
   GdkDisplay *display;
   Window window;
   GTimeVal tv;
-  gint error;
+  int error;
 
   display = x11_screen->display;
 
@@ -1234,7 +1234,7 @@ gdk_x11_screen_supports_net_wm_hint (GdkX11Screen *x11_screen,
        * refetch it.
        */
       Atom type;
-      gint format;
+      int format;
       gulong bytes_after;
 
       x11_screen->need_refetch_net_supported = FALSE;
@@ -1302,10 +1302,10 @@ gdk_x11_screen_get_window_manager_name (GdkX11Screen *x11_screen)
       if (x11_screen->wmspec_check_window != None)
         {
           Atom type;
-          gint format;
+          int format;
           gulong n_items;
           gulong bytes_after;
-          gchar *name;
+          char *name;
 
           name = NULL;
 
@@ -1357,11 +1357,11 @@ gdk_x11_screen_class_init (GdkX11ScreenClass *klass)
 
 static guint32
 get_netwm_cardinal_property (GdkX11Screen *x11_screen,
-                             const gchar  *name)
+                             const char   *name)
 {
   guint32 prop = 0;
   Atom type;
-  gint format;
+  int format;
   gulong nitems;
   gulong bytes_after;
   guchar *data;

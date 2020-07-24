@@ -74,7 +74,7 @@ gtk_action_observer_default_init (GtkActionObserverInterface *class)
 void
 gtk_action_observer_action_added (GtkActionObserver   *observer,
                                   GtkActionObservable *observable,
-                                  const gchar         *action_name,
+                                  const char          *action_name,
                                   const GVariantType  *parameter_type,
                                   gboolean             enabled,
                                   GVariant            *state)
@@ -101,7 +101,7 @@ gtk_action_observer_action_added (GtkActionObserver   *observer,
 void
 gtk_action_observer_action_enabled_changed (GtkActionObserver   *observer,
                                             GtkActionObservable *observable,
-                                            const gchar         *action_name,
+                                            const char          *action_name,
                                             gboolean             enabled)
 {
   g_return_if_fail (GTK_IS_ACTION_OBSERVER (observer));
@@ -126,7 +126,7 @@ gtk_action_observer_action_enabled_changed (GtkActionObserver   *observer,
 void
 gtk_action_observer_action_state_changed (GtkActionObserver   *observer,
                                           GtkActionObservable *observable,
-                                          const gchar         *action_name,
+                                          const char          *action_name,
                                           GVariant            *state)
 {
   g_return_if_fail (GTK_IS_ACTION_OBSERVER (observer));
@@ -150,7 +150,7 @@ gtk_action_observer_action_state_changed (GtkActionObserver   *observer,
 void
 gtk_action_observer_action_removed (GtkActionObserver   *observer,
                                     GtkActionObservable *observable,
-                                    const gchar         *action_name)
+                                    const char          *action_name)
 {
   g_return_if_fail (GTK_IS_ACTION_OBSERVER (observer));
 
@@ -175,8 +175,8 @@ gtk_action_observer_action_removed (GtkActionObserver   *observer,
 void
 gtk_action_observer_primary_accel_changed (GtkActionObserver   *observer,
                                            GtkActionObservable *observable,
-                                           const gchar         *action_name,
-                                           const gchar         *action_and_target)
+                                           const char          *action_name,
+                                           const char          *action_and_target)
 {
   GtkActionObserverInterface *iface;
 

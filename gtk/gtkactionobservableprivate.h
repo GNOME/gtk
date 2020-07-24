@@ -40,19 +40,19 @@ struct _GtkActionObservableInterface
   GTypeInterface g_iface;
 
   void (* register_observer)   (GtkActionObservable *observable,
-                                const gchar         *action_name,
+                                const char          *action_name,
                                 GtkActionObserver   *observer);
   void (* unregister_observer) (GtkActionObservable *observable,
-                                const gchar         *action_name,
+                                const char          *action_name,
                                 GtkActionObserver   *observer);
 };
 
 GType                   gtk_action_observable_get_type                  (void);
 void                    gtk_action_observable_register_observer         (GtkActionObservable *observable,
-                                                                         const gchar         *action_name,
+                                                                         const char          *action_name,
                                                                          GtkActionObserver   *observer);
 void                    gtk_action_observable_unregister_observer       (GtkActionObservable *observable,
-                                                                         const gchar         *action_name,
+                                                                         const char          *action_name,
                                                                          GtkActionObserver   *observer);
 
 G_END_DECLS

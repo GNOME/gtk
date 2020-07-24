@@ -58,7 +58,7 @@ remove_string (GtkButton              *button,
 
 static void
 add_string (GtkInspectorStrvEditor *editor,
-            const gchar            *str)
+            const char             *str)
 {
   GtkWidget *box;
   GtkWidget *entry;
@@ -129,10 +129,10 @@ gtk_inspector_strv_editor_class_init (GtkInspectorStrvEditorClass *class)
 
 void
 gtk_inspector_strv_editor_set_strv (GtkInspectorStrvEditor  *editor,
-                                    gchar                  **strv)
+                                    char                   **strv)
 {
   GtkWidget *child;
-  gint i;
+  int i;
 
   editor->blocked = TRUE;
 
@@ -150,7 +150,7 @@ gtk_inspector_strv_editor_set_strv (GtkInspectorStrvEditor  *editor,
   emit_changed (editor);
 }
 
-gchar **
+char **
 gtk_inspector_strv_editor_get_strv (GtkInspectorStrvEditor *editor)
 {
   GtkWidget *child;
@@ -170,5 +170,5 @@ gtk_inspector_strv_editor_get_strv (GtkInspectorStrvEditor *editor)
 
   g_ptr_array_add (p, NULL);
 
-  return (gchar **)g_ptr_array_free (p, FALSE);
+  return (char **)g_ptr_array_free (p, FALSE);
 }

@@ -249,7 +249,7 @@ gtk_shortcut_new (GtkShortcutTrigger *trigger,
 GtkShortcut *
 gtk_shortcut_new_with_arguments (GtkShortcutTrigger *trigger,
                                  GtkShortcutAction  *action,
-                                 const gchar        *format_string,
+                                 const char         *format_string,
                                  ...)
 {
   GtkShortcut *shortcut;

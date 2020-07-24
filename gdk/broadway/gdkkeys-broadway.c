@@ -142,7 +142,7 @@ gdk_broadway_keymap_get_entries_for_keycode (GdkKeymap     *keymap,
 					     guint          hardware_keycode,
 					     GdkKeymapKey **keys,
 					     guint        **keyvals,
-					     gint          *n_entries)
+					     int           *n_entries)
 {
   if (n_entries)
     *n_entries = 1;
@@ -171,10 +171,10 @@ static gboolean
 gdk_broadway_keymap_translate_keyboard_state (GdkKeymap       *keymap,
 					      guint            hardware_keycode,
 					      GdkModifierType  state,
-					      gint             group,
+					      int              group,
 					      guint           *keyval,
-					      gint            *effective_group,
-					      gint            *level,
+					      int             *effective_group,
+					      int             *level,
 					      GdkModifierType *consumed_modifiers)
 {
   if (keyval)

@@ -40,8 +40,8 @@ struct _GdkDeviceWintab
   GdkDevice parent_instance;
 
   gboolean sends_core;
-  gint *last_axis_data;
-  gint button_state;
+  int *last_axis_data;
+  int button_state;
 
   /* WINTAB stuff: */
   HCTX hctx;
@@ -62,9 +62,9 @@ GType gdk_device_wintab_get_type (void) G_GNUC_CONST;
 
 void         _gdk_device_wintab_translate_axes (GdkDeviceWintab *device,
                                                 GdkSurface       *window,
-                                                gdouble         *axes,
-                                                gdouble         *x,
-                                                gdouble         *y);
+                                                double          *axes,
+                                                double          *x,
+                                                double          *y);
 
 G_END_DECLS
 

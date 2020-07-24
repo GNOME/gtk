@@ -34,17 +34,17 @@ enum {
 #define N_ITEMS 1000
 
 static GtkFlowBox    *the_flowbox       = NULL;
-static gint           items_type       = SIMPLE_ITEMS;
+static int            items_type       = SIMPLE_ITEMS;
 
 static void
 populate_flowbox_simple (GtkFlowBox *flowbox)
 {
   GtkWidget *widget, *frame;
-  gint i;
+  int i;
 
   for (i = 0; i < N_ITEMS; i++)
     {
-      gchar *text = g_strdup_printf ("Item %02d", i);
+      char *text = g_strdup_printf ("Item %02d", i);
 
       widget = gtk_label_new (text);
       frame  = gtk_frame_new (NULL);
@@ -62,7 +62,7 @@ static void
 populate_flowbox_focus (GtkFlowBox *flowbox)
 {
   GtkWidget *widget, *frame, *box;
-  gint i;
+  int i;
   gboolean sensitive;
 
   for (i = 0; i < 200; i++)
@@ -110,7 +110,7 @@ static void
 populate_flowbox_buttons (GtkFlowBox *flowbox)
 {
   GtkWidget *widget;
-  gint i;
+  int i;
 
   for (i = 0; i < 50; i++)
     {
@@ -125,9 +125,9 @@ static void
 populate_flowbox_wrappy (GtkFlowBox *flowbox)
 {
   GtkWidget *widget, *frame;
-  gint i;
+  int i;
 
-  const gchar *strings[] = {
+  const char *strings[] = {
     "These are", "some wrappy label", "texts", "of various", "lengths.",
     "They should always be", "shown", "consecutively. Except it's",
     "hard to say", "where exactly the", "label", "will wrap", "and where exactly",
@@ -156,11 +156,11 @@ static void
 populate_flowbox_images (GtkFlowBox *flowbox)
 {
   GtkWidget *widget, *image, *label;
-  gint i;
+  int i;
 
   for (i = 0; i < N_ITEMS; i++)
     {
-      gchar *text = g_strdup_printf ("Item %02d", i);
+      char *text = g_strdup_printf ("Item %02d", i);
 
       widget = gtk_box_new (GTK_ORIENTATION_VERTICAL, 6);
       gtk_widget_set_hexpand (widget, TRUE);
@@ -242,7 +242,7 @@ static void
 line_length_changed (GtkSpinButton *spin,
                      GtkFlowBox *flowbox)
 {
-  gint length = gtk_spin_button_get_value_as_int (spin);
+  int length = gtk_spin_button_get_value_as_int (spin);
 
   gtk_flow_box_set_min_children_per_line (flowbox, length);
 }
@@ -251,7 +251,7 @@ static void
 max_line_length_changed (GtkSpinButton *spin,
                          GtkFlowBox *flowbox)
 {
-  gint length = gtk_spin_button_get_value_as_int (spin);
+  int length = gtk_spin_button_get_value_as_int (spin);
 
   gtk_flow_box_set_max_children_per_line (flowbox, length);
 }
@@ -261,7 +261,7 @@ spacing_changed (GtkSpinButton *button,
                  gpointer       data)
 {
   GtkOrientation orientation = GPOINTER_TO_INT (data);
-  gint           state = gtk_spin_button_get_value_as_int (button);
+  int            state = gtk_spin_button_get_value_as_int (button);
 
   if (orientation == GTK_ORIENTATION_HORIZONTAL)
     gtk_flow_box_set_column_spacing (the_flowbox, state);
@@ -319,7 +319,7 @@ on_selected_children_changed (GtkFlowBox *self)
 static gboolean
 filter_func (GtkFlowBoxChild *child, gpointer user_data)
 {
-  gint index;
+  int index;
 
   index = gtk_flow_box_child_get_index (child);
 
@@ -338,15 +338,15 @@ filter_toggled (GtkToggleButton *button,
     gtk_flow_box_set_filter_func (flowbox, NULL, NULL, NULL);
 }
 
-static gint
+static int
 sort_func (GtkFlowBoxChild *a,
            GtkFlowBoxChild *b,
            gpointer         data)
 {
-  gchar *ida, *idb;
+  char *ida, *idb;
 
-  ida = (gchar *)g_object_get_data (G_OBJECT (gtk_flow_box_child_get_child (a)), "id");
-  idb = (gchar *)g_object_get_data (G_OBJECT (gtk_flow_box_child_get_child (b)), "id");
+  ida = (char *)g_object_get_data (G_OBJECT (gtk_flow_box_child_get_child (a)), "id");
+  idb = (char *)g_object_get_data (G_OBJECT (gtk_flow_box_child_get_child (b)), "id");
   return g_strcmp0 (ida, idb);
 }
 

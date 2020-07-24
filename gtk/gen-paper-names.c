@@ -23,21 +23,21 @@
 
 #include "paper_names.c"
 
-static const gint n_infos = G_N_ELEMENTS (standard_names);
-static const gint n_extra = G_N_ELEMENTS (extra_ppd_names);
+static const int n_infos = G_N_ELEMENTS (standard_names);
+static const int n_extra = G_N_ELEMENTS (extra_ppd_names);
 
 typedef struct {
-  const gchar *s;
-  gint         len;
-  gint         suffix;
-  gint         offset;
+  const char *s;
+  int          len;
+  int          suffix;
+  int          offset;
 } NameInfo;
 
 static NameInfo *names = NULL;
-static gint n_names = 0;
+static int n_names = 0;
 
 static void
-add_name (const gchar *name)
+add_name (const char *name)
 {
   names[n_names].s = name;
   names[n_names].len = strlen (name);
@@ -47,10 +47,10 @@ add_name (const gchar *name)
   n_names++;
 }
 
-static gint
-find_name (const gchar *name)
+static int
+find_name (const char *name)
 {
-  gint i;
+  int i;
 
   if (!name)
     return -1;
@@ -70,13 +70,13 @@ find_name (const gchar *name)
 #define POINTS_PER_INCH 72
 
 static gboolean
-parse_media_size (const gchar *size,
-                  gdouble     *width_mm, 
-                  gdouble     *height_mm)
+parse_media_size (const char *size,
+                  double      *width_mm, 
+                  double      *height_mm)
 {
-  const gchar *p;
-  gchar *e;
-  gdouble short_dim, long_dim;
+  const char *p;
+  char *e;
+  double short_dim, long_dim;
 
   p = size;
   
@@ -113,8 +113,8 @@ parse_media_size (const gchar *size,
 int 
 main (int argc, char *argv[])
 {
-  gint i, j, offset;
-  gdouble width, height;
+  int i, j, offset;
+  double width, height;
 
   names = (NameInfo *) malloc (sizeof (NameInfo) * (4 + n_infos + 2 * n_extra));
   n_names = 0;

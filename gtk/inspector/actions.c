@@ -75,7 +75,7 @@ gtk_inspector_actions_init (GtkInspectorActions *sl)
 
 static void
 action_added (GObject             *owner,
-              const gchar         *action_name,
+              const char          *action_name,
               GtkInspectorActions *sl)
 {
   ActionHolder *holder = action_holder_new (owner, action_name);
@@ -170,7 +170,7 @@ bind_parameter_cb (GtkSignalListItemFactory *factory,
   owner = action_holder_get_owner (ACTION_HOLDER (item));
   name = action_holder_get_name (ACTION_HOLDER (item));
   if (G_IS_ACTION_GROUP (owner))
-    parameter = (const gchar *)g_action_group_get_action_parameter_type (G_ACTION_GROUP (owner), name);
+    parameter = (const char *)g_action_group_get_action_parameter_type (G_ACTION_GROUP (owner), name);
   else if (GTK_IS_ACTION_MUXER (owner))
     gtk_action_muxer_query_action (GTK_ACTION_MUXER (owner), name,
                                    NULL, (const GVariantType **)&parameter, NULL, NULL, NULL);
@@ -258,8 +258,8 @@ static void
 add_group (GtkInspectorActions *sl,
            GActionGroup        *group)
 {
-  gint i;
-  gchar **names;
+  int i;
+  char **names;
 
   names = g_action_group_list_actions (group);
   for (i = 0; names[i]; i++)
@@ -271,8 +271,8 @@ static void
 add_muxer (GtkInspectorActions *sl,
            GtkActionMuxer      *muxer)
 {
-  gint i;
-  gchar **names;
+  int i;
+  char **names;
 
   names = gtk_action_muxer_list_actions (muxer);
   for (i = 0; names[i]; i++)

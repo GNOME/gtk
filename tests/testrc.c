@@ -24,8 +24,8 @@
  * the _-prefix stripping.
  */
 struct {
-  gchar    *pattern;
-  gchar    *test;
+  char     *pattern;
+  char     *test;
   gboolean  match;
 } tests[] = {
   { "", "", TRUE },
@@ -50,7 +50,7 @@ load_types (void)
 int
 main (int argc, char *argv[])
 {
-  gint i;
+  int i;
 
   gtk_init ();
   load_types ();
@@ -58,7 +58,7 @@ main (int argc, char *argv[])
   for (i = 0; tests[i].test; i++)
     {
       GSList *list;
-      gchar *path, *rpath;
+      char *path, *rpath;
       gboolean result;
       
       list = _gtk_rc_parse_widget_class_path (tests[i].pattern);

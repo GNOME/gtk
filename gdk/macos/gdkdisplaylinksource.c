@@ -32,7 +32,7 @@ static gint64 host_to_frame_clock_time (gint64 host_time);
 
 static gboolean
 gdk_display_link_source_prepare (GSource *source,
-                                 gint    *timeout_)
+                                 int     *timeout_)
 {
   GdkDisplayLinkSource *impl = (GdkDisplayLinkSource *)source;
   gint64 now;

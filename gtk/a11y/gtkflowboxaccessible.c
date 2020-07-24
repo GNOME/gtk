@@ -66,7 +66,7 @@ gtk_flow_box_accessible_class_init (GtkFlowBoxAccessibleClass *klass)
 
 static gboolean
 gtk_flow_box_accessible_add_selection (AtkSelection *selection,
-                                       gint          idx)
+                                       int           idx)
 {
   GtkWidget *box;
   GtkWidget *child;
@@ -91,7 +91,7 @@ gtk_flow_box_accessible_add_selection (AtkSelection *selection,
 
 static gboolean
 gtk_flow_box_accessible_remove_selection (AtkSelection *selection,
-                                          gint          idx)
+                                          int           idx)
 {
   GtkWidget *box;
   GtkWidget *child;
@@ -142,7 +142,7 @@ gtk_flow_box_accessible_select_all (AtkSelection *selection)
 
 typedef struct
 {
-  gint idx;
+  int idx;
   GtkWidget *child;
 } FindSelectedData;
 
@@ -164,7 +164,7 @@ find_selected_child (GtkFlowBox      *box,
 
 static AtkObject *
 gtk_flow_box_accessible_ref_selection (AtkSelection *selection,
-                                       gint          idx)
+                                       int           idx)
 {
   GtkWidget *box;
   AtkObject *accessible;
@@ -191,15 +191,15 @@ count_selected (GtkFlowBox      *box,
                 GtkFlowBoxChild *child,
                 gpointer         data)
 {
-  gint *count = data;
+  int *count = data;
   *count += 1;
 }
 
-static gint
+static int
 gtk_flow_box_accessible_get_selection_count (AtkSelection *selection)
 {
   GtkWidget *box;
-  gint count;
+  int count;
 
   box = gtk_accessible_get_widget (GTK_ACCESSIBLE (selection));
   if (box == NULL)
@@ -213,7 +213,7 @@ gtk_flow_box_accessible_get_selection_count (AtkSelection *selection)
 
 static gboolean
 gtk_flow_box_accessible_is_child_selected (AtkSelection *selection,
-                                           gint          idx)
+                                           int           idx)
 {
   GtkWidget *box;
   GtkFlowBoxChild *child;

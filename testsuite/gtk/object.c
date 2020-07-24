@@ -316,7 +316,7 @@ main (int   argc,
         G_TYPE_IS_OBJECT (otypes[i]) &&
         !G_TYPE_IS_ABSTRACT (otypes[i]))
       {
-        gchar *testpath = g_strdup_printf ("/properties/%s", g_type_name (otypes[i]));
+        char *testpath = g_strdup_printf ("/properties/%s", g_type_name (otypes[i]));
         g_test_add_data_func (testpath, (void*) otypes[i], widget_property_tests);
         g_free (testpath);
       }

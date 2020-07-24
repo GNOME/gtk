@@ -102,15 +102,15 @@ struct _GtkStatusbarClass
 
   void  (*text_pushed)  (GtkStatusbar   *statusbar,
                          guint           context_id,
-                         const gchar    *text);
+                         const char     *text);
   void  (*text_popped)  (GtkStatusbar   *statusbar,
                          guint           context_id,
-                         const gchar    *text);
+                         const char     *text);
 };
 
 struct _GtkStatusbarMsg
 {
-  gchar *text;
+  char *text;
   guint context_id;
   guint message_id;
 };
@@ -124,7 +124,7 @@ enum
 
 static void     gtk_statusbar_update            (GtkStatusbar      *statusbar,
 						 guint              context_id,
-						 const gchar       *text);
+						 const char        *text);
 
 static void     gtk_statusbar_msg_free          (GtkStatusbarMsg *msg);
 
@@ -235,7 +235,7 @@ gtk_statusbar_new (void)
 static void
 gtk_statusbar_update (GtkStatusbar *statusbar,
 		      guint	    context_id,
-		      const gchar  *text)
+		      const char   *text)
 {
   g_return_if_fail (GTK_IS_STATUSBAR (statusbar));
 
@@ -259,9 +259,9 @@ gtk_statusbar_update (GtkStatusbar *statusbar,
  */
 guint
 gtk_statusbar_get_context_id (GtkStatusbar *statusbar,
-			      const gchar  *context_description)
+			      const char   *context_description)
 {
-  gchar *string;
+  char *string;
   guint id;
   
   g_return_val_if_fail (GTK_IS_STATUSBAR (statusbar), 0);
@@ -286,7 +286,7 @@ gtk_statusbar_get_context_id (GtkStatusbar *statusbar,
 static GtkStatusbarMsg *
 gtk_statusbar_msg_create (GtkStatusbar *statusbar,
 		          guint         context_id,
-		          const gchar  *text)
+		          const char   *text)
 {
   GtkStatusbarMsg *msg;
 
@@ -320,7 +320,7 @@ gtk_statusbar_msg_free (GtkStatusbarMsg *msg)
 guint
 gtk_statusbar_push (GtkStatusbar *statusbar,
 		    guint	  context_id,
-		    const gchar  *text)
+		    const char   *text)
 {
   GtkStatusbarMsg *msg;
 

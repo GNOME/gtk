@@ -62,7 +62,7 @@ _gdk_wayland_display_finalize_cursors (GdkWaylandDisplay *display)
 }
 
 static const struct {
-  const gchar *css_name, *traditional_name;
+  const char *css_name, *traditional_name;
 } name_map[] = {
   { "default",      "left_ptr" },
   { "help",         "question_arrow" },
@@ -101,10 +101,10 @@ static const struct {
   { "zoom-out",     "left_ptr" }
 };
 
-static const gchar *
-name_fallback (const gchar *name)
+static const char *
+name_fallback (const char *name)
 {
-  gint i;
+  int i;
 
   for (i = 0; i < G_N_ELEMENTS (name_map); i++)
     {

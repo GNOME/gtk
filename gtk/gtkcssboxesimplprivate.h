@@ -311,8 +311,8 @@ gtk_css_boxes_get_outline_rect (GtkCssBoxes *boxes)
 static inline void
 gtk_css_boxes_clamp_border_radius (GskRoundedRect *box)
 {
-  gdouble factor = 1.0;
-  gdouble corners;
+  double factor = 1.0;
+  double corners;
 
   corners = box->corner[GSK_CORNER_TOP_LEFT].width + box->corner[GSK_CORNER_TOP_RIGHT].width;
   if (corners != 0)

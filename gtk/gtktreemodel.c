@@ -163,7 +163,7 @@
  * GtkTreeModel *list_store;
  * GtkTreeIter iter;
  * gboolean valid;
- * gint row_count = 0;
+ * int row_count = 0;
  *
  * // make a new list_store
  * list_store = gtk_list_store_new (N_COLUMNS,
@@ -180,8 +180,8 @@
  *                                        &iter);
  * while (valid)
  *  {
- *    gchar *str_data;
- *    gint   int_data;
+ *    char *str_data;
+ *    int    int_data;
  *
  *    // Make sure you terminate calls to gtk_tree_model_get() with a “-1” value
  *    gtk_tree_model_get (list_store, &iter,
@@ -254,9 +254,9 @@ static guint tree_model_signals[LAST_SIGNAL] = { 0 };
 
 struct _GtkTreePath
 {
-  gint depth;    /* Number of elements */
-  gint alloc;    /* Number of allocated elements */
-  gint *indices;
+  int depth;    /* Number of elements */
+  int alloc;    /* Number of allocated elements */
+  int *indices;
 };
 
 typedef struct
@@ -294,7 +294,7 @@ static void      gtk_tree_row_ref_deleted   (RowRefList        *refs,
 static void      gtk_tree_row_ref_reordered (RowRefList        *refs,
                                              GtkTreePath       *path,
                                              GtkTreeIter       *iter,
-                                             gint              *new_order);
+                                             int               *new_order);
 
 GType
 gtk_tree_model_get_type (void)
@@ -569,12 +569,12 @@ rows_reordered_marshal (GClosure          *closure,
   void (* rows_reordered_callback) (GtkTreeModel *tree_model,
                                     GtkTreePath  *path,
                                     GtkTreeIter  *iter,
-                                    gint         *new_order);
+                                    int          *new_order);
 
   GObject *model = g_value_get_object (param_values + 0);
   GtkTreePath *path = (GtkTreePath *)g_value_get_boxed (param_values + 1);
   GtkTreeIter *iter = (GtkTreeIter *)g_value_get_boxed (param_values + 2);
-  gint *new_order = (gint *)g_value_get_pointer (param_values + 3);
+  int *new_order = (int *)g_value_get_pointer (param_values + 3);
 
   /* first, we need to update internal row references */
   gtk_tree_row_ref_reordered ((RowRefList *)g_object_get_data (model, ROW_REF_DATA_STRING),
@@ -626,12 +626,12 @@ gtk_tree_path_new (void)
  * Returns: A newly-created #GtkTreePath-struct, or %NULL
  */
 GtkTreePath *
-gtk_tree_path_new_from_string (const gchar *path)
+gtk_tree_path_new_from_string (const char *path)
 {
   GtkTreePath *retval;
-  const gchar *orig_path = path;
-  gchar *ptr;
-  gint i;
+  const char *orig_path = path;
+  char *ptr;
+  int i;
 
   g_return_val_if_fail (path != NULL, NULL);
   g_return_val_if_fail (*path != '\000', NULL);
@@ -674,7 +674,7 @@ gtk_tree_path_new_from_string (const gchar *path)
  * Returns: A newly created #GtkTreePath-struct
  */
 GtkTreePath *
-gtk_tree_path_new_from_indices (gint first_index,
+gtk_tree_path_new_from_indices (int first_index,
                                 ...)
 {
   int arg;
@@ -689,7 +689,7 @@ gtk_tree_path_new_from_indices (gint first_index,
   while (arg != -1)
     {
       gtk_tree_path_append_index (path, arg);
-      arg = va_arg (args, gint);
+      arg = va_arg (args, int);
     }
 
   va_end (args);
@@ -707,7 +707,7 @@ gtk_tree_path_new_from_indices (gint first_index,
  * Returns: A newly created #GtkTreePath-struct
  */
 GtkTreePath *
-gtk_tree_path_new_from_indicesv (gint *indices,
+gtk_tree_path_new_from_indicesv (int *indices,
                                  gsize length)
 {
   GtkTreePath *path;
@@ -717,8 +717,8 @@ gtk_tree_path_new_from_indicesv (gint *indices,
   path = gtk_tree_path_new ();
   path->alloc = length;
   path->depth = length;
-  path->indices = g_new (gint, length);
-  memcpy (path->indices, indices, length * sizeof (gint));
+  path->indices = g_new (int, length);
+  memcpy (path->indices, indices, length * sizeof (int));
 
   return path;
 }
@@ -736,11 +736,11 @@ gtk_tree_path_new_from_indicesv (gint *indices,
  * Returns: A newly-allocated string.
  *     Must be freed with g_free().
  */
-gchar *
+char *
 gtk_tree_path_to_string (GtkTreePath *path)
 {
-  gchar *retval, *ptr, *end;
-  gint i, n;
+  char *retval, *ptr, *end;
+  int i, n;
 
   g_return_val_if_fail (path != NULL, NULL);
 
@@ -748,7 +748,7 @@ gtk_tree_path_to_string (GtkTreePath *path)
     return NULL;
 
   n = path->depth * 12;
-  ptr = retval = g_new0 (gchar, n);
+  ptr = retval = g_new0 (char, n);
   end = ptr + n;
   g_snprintf (retval, end - ptr, "%d", path->indices[0]);
   while (*ptr != '\000')
@@ -795,7 +795,7 @@ gtk_tree_path_new_first (void)
  */
 void
 gtk_tree_path_append_index (GtkTreePath *path,
-                            gint         index_)
+                            int          index_)
 {
   g_return_if_fail (path != NULL);
   g_return_if_fail (index_ >= 0);
@@ -803,7 +803,7 @@ gtk_tree_path_append_index (GtkTreePath *path,
   if (path->depth == path->alloc)
     {
       path->alloc = MAX (path->alloc * 2, 1);
-      path->indices = g_renew (gint, path->indices, path->alloc);
+      path->indices = g_renew (int, path->indices, path->alloc);
     }
 
   path->depth += 1;
@@ -821,19 +821,19 @@ gtk_tree_path_append_index (GtkTreePath *path,
  */
 void
 gtk_tree_path_prepend_index (GtkTreePath *path,
-                             gint       index)
+                             int        index)
 {
   if (path->depth == path->alloc)
     {
-      gint *indices;
+      int *indices;
       path->alloc = MAX (path->alloc * 2, 1);
-      indices = g_new (gint, path->alloc);
-      memcpy (indices + 1, path->indices, path->depth * sizeof (gint));
+      indices = g_new (int, path->alloc);
+      memcpy (indices + 1, path->indices, path->depth * sizeof (int));
       g_free (path->indices);
       path->indices = indices;
     }
   else if (path->depth > 0)
-    memmove (path->indices + 1, path->indices, path->depth * sizeof (gint));
+    memmove (path->indices + 1, path->indices, path->depth * sizeof (int));
 
   path->depth += 1;
   path->indices[0] = index;
@@ -847,7 +847,7 @@ gtk_tree_path_prepend_index (GtkTreePath *path,
  *
  * Returns: The depth of @path
  */
-gint
+int
 gtk_tree_path_get_depth (GtkTreePath *path)
 {
   g_return_val_if_fail (path != NULL, 0);
@@ -868,7 +868,7 @@ gtk_tree_path_get_depth (GtkTreePath *path)
  *
  * Returns: The current indices, or %NULL
  */
-gint *
+int *
 gtk_tree_path_get_indices (GtkTreePath *path)
 {
   g_return_val_if_fail (path != NULL, NULL);
@@ -891,9 +891,9 @@ gtk_tree_path_get_indices (GtkTreePath *path)
  * Returns: (array length=depth) (transfer none): The current
  *     indices, or %NULL
  */
-gint *
+int *
 gtk_tree_path_get_indices_with_depth (GtkTreePath *path,
-                                      gint        *depth)
+                                      int         *depth)
 {
   g_return_val_if_fail (path != NULL, NULL);
 
@@ -937,8 +937,8 @@ gtk_tree_path_copy (const GtkTreePath *path)
   retval = g_slice_new (GtkTreePath);
   retval->depth = path->depth;
   retval->alloc = retval->depth;
-  retval->indices = g_new (gint, path->alloc);
-  memcpy (retval->indices, path->indices, path->depth * sizeof (gint));
+  retval->indices = g_new (int, path->alloc);
+  memcpy (retval->indices, path->indices, path->depth * sizeof (int));
   return retval;
 }
 
@@ -959,11 +959,11 @@ G_DEFINE_BOXED_TYPE (GtkTreePath, gtk_tree_path,
  *
  * Returns: the relative positions of @a and @b
  */
-gint
+int
 gtk_tree_path_compare (const GtkTreePath *a,
                        const GtkTreePath *b)
 {
-  gint p = 0, q = 0;
+  int p = 0, q = 0;
 
   g_return_val_if_fail (a != NULL, 0);
   g_return_val_if_fail (b != NULL, 0);
@@ -995,7 +995,7 @@ gboolean
 gtk_tree_path_is_ancestor (GtkTreePath *path,
                            GtkTreePath *descendant)
 {
-  gint i;
+  int i;
 
   g_return_val_if_fail (path != NULL, FALSE);
   g_return_val_if_fail (descendant != NULL, FALSE);
@@ -1028,7 +1028,7 @@ gboolean
 gtk_tree_path_is_descendant (GtkTreePath *path,
                              GtkTreePath *ancestor)
 {
-  gint i;
+  int i;
 
   g_return_val_if_fail (path != NULL, FALSE);
   g_return_val_if_fail (ancestor != NULL, FALSE);
@@ -1205,7 +1205,7 @@ gtk_tree_model_get_flags (GtkTreeModel *tree_model)
  *
  * Returns: the number of columns
  */
-gint
+int
 gtk_tree_model_get_n_columns (GtkTreeModel *tree_model)
 {
   GtkTreeModelIface *iface;
@@ -1228,7 +1228,7 @@ gtk_tree_model_get_n_columns (GtkTreeModel *tree_model)
  */
 GType
 gtk_tree_model_get_column_type (GtkTreeModel *tree_model,
-                                gint          index)
+                                int           index)
 {
   GtkTreeModelIface *iface;
 
@@ -1286,7 +1286,7 @@ gtk_tree_model_get_iter (GtkTreeModel *tree_model,
 gboolean
 gtk_tree_model_get_iter_from_string (GtkTreeModel *tree_model,
                                      GtkTreeIter  *iter,
-                                     const gchar  *path_string)
+                                     const char   *path_string)
 {
   gboolean retval;
   GtkTreePath *path;
@@ -1319,12 +1319,12 @@ gtk_tree_model_get_iter_from_string (GtkTreeModel *tree_model,
  * Returns: a newly-allocated string.
  *     Must be freed with g_free().
  */
-gchar *
+char *
 gtk_tree_model_get_string_from_iter (GtkTreeModel *tree_model,
                                      GtkTreeIter  *iter)
 {
   GtkTreePath *path;
-  gchar *ret;
+  char *ret;
 
   g_return_val_if_fail (GTK_IS_TREE_MODEL (tree_model), NULL);
   g_return_val_if_fail (iter != NULL, NULL);
@@ -1408,7 +1408,7 @@ gtk_tree_model_get_path (GtkTreeModel *tree_model,
 void
 gtk_tree_model_get_value (GtkTreeModel *tree_model,
                           GtkTreeIter  *iter,
-                          gint          column,
+                          int           column,
                           GValue       *value)
 {
   GtkTreeModelIface *iface;
@@ -1574,7 +1574,7 @@ gtk_tree_model_iter_has_child (GtkTreeModel *tree_model,
  *
  * Returns: the number of children of @iter
  */
-gint
+int
 gtk_tree_model_iter_n_children (GtkTreeModel *tree_model,
                                 GtkTreeIter  *iter)
 {
@@ -1609,7 +1609,7 @@ gboolean
 gtk_tree_model_iter_nth_child (GtkTreeModel *tree_model,
                                GtkTreeIter  *iter,
                                GtkTreeIter  *parent,
-                               gint          n)
+                               int           n)
 {
   GtkTreeModelIface *iface;
 
@@ -1775,17 +1775,17 @@ gtk_tree_model_get_valist (GtkTreeModel *tree_model,
                            GtkTreeIter  *iter,
                            va_list      var_args)
 {
-  gint column;
+  int column;
 
   g_return_if_fail (GTK_IS_TREE_MODEL (tree_model));
   g_return_if_fail (iter != NULL);
 
-  column = va_arg (var_args, gint);
+  column = va_arg (var_args, int);
 
   while (column != -1)
     {
       GValue value = G_VALUE_INIT;
-      gchar *error = NULL;
+      char *error = NULL;
 
       if (column >= gtk_tree_model_get_n_columns (tree_model))
         {
@@ -1809,7 +1809,7 @@ gtk_tree_model_get_valist (GtkTreeModel *tree_model,
 
       g_value_unset (&value);
 
-      column = va_arg (var_args, gint);
+      column = va_arg (var_args, int);
     }
 }
 
@@ -1920,7 +1920,7 @@ void
 gtk_tree_model_rows_reordered (GtkTreeModel *tree_model,
                                GtkTreePath  *path,
                                GtkTreeIter  *iter,
-                               gint         *new_order)
+                               int          *new_order)
 {
   g_return_if_fail (GTK_IS_TREE_MODEL (tree_model));
   g_return_if_fail (new_order != NULL);
@@ -1951,8 +1951,8 @@ void
 gtk_tree_model_rows_reordered_with_length (GtkTreeModel *tree_model,
                                            GtkTreePath  *path,
                                            GtkTreeIter  *iter,
-                                           gint         *new_order,
-                                           gint          length)
+                                           int          *new_order,
+                                           int           length)
 {
   g_return_if_fail (GTK_IS_TREE_MODEL (tree_model));
   g_return_if_fail (new_order != NULL);
@@ -2040,7 +2040,7 @@ gtk_tree_model_foreach (GtkTreeModel            *model,
 
 static void gtk_tree_row_reference_unref_path (GtkTreePath  *path,
                                                GtkTreeModel *model,
-                                               gint          depth);
+                                               int           depth);
 
 
 G_DEFINE_BOXED_TYPE (GtkTreeRowReference, gtk_tree_row_reference,
@@ -2109,7 +2109,7 @@ gtk_tree_row_ref_inserted (RowRefList  *refs,
 
       if (reference->path->depth >= path->depth)
         {
-          gint i;
+          int i;
           gboolean ancestor = TRUE;
 
           for (i = 0; i < path->depth - 1; i ++)
@@ -2155,7 +2155,7 @@ gtk_tree_row_ref_deleted (RowRefList  *refs,
 
       if (reference->path)
         {
-          gint i;
+          int i;
 
           if (path->depth > reference->path->depth)
             goto next;
@@ -2194,10 +2194,10 @@ static void
 gtk_tree_row_ref_reordered (RowRefList  *refs,
                             GtkTreePath *path,
                             GtkTreeIter *iter,
-                            gint        *new_order)
+                            int         *new_order)
 {
   GSList *tmp_list;
-  gint length;
+  int length;
 
   if (refs == NULL)
     return;
@@ -2216,13 +2216,13 @@ gtk_tree_row_ref_reordered (RowRefList  *refs,
       if ((reference->path) &&
           (gtk_tree_path_is_ancestor (path, reference->path)))
         {
-          gint ref_depth = gtk_tree_path_get_depth (reference->path);
-          gint depth = gtk_tree_path_get_depth (path);
+          int ref_depth = gtk_tree_path_get_depth (reference->path);
+          int depth = gtk_tree_path_get_depth (path);
 
           if (ref_depth > depth)
             {
-              gint i;
-              gint *indices = gtk_tree_path_get_indices (reference->path);
+              int i;
+              int *indices = gtk_tree_path_get_indices (reference->path);
 
               for (i = 0; i < length; i++)
                 {
@@ -2246,8 +2246,8 @@ static void
 gtk_tree_row_reference_unref_path_helper (GtkTreePath  *path,
                                           GtkTreeModel *model,
                                           GtkTreeIter  *parent_iter,
-                                          gint          depth,
-                                          gint          current_depth)
+                                          int           depth,
+                                          int           current_depth)
 {
   GtkTreeIter iter;
 
@@ -2262,7 +2262,7 @@ gtk_tree_row_reference_unref_path_helper (GtkTreePath  *path,
 static void
 gtk_tree_row_reference_unref_path (GtkTreePath  *path,
                                    GtkTreeModel *model,
-                                   gint          depth)
+                                   int           depth)
 {
   GtkTreeIter iter;
 
@@ -2343,7 +2343,7 @@ gtk_tree_row_reference_new_proxy (GObject      *proxy,
   GtkTreeRowReference *reference;
   RowRefList *refs;
   GtkTreeIter parent_iter;
-  gint i;
+  int i;
 
   g_return_val_if_fail (G_IS_OBJECT (proxy), NULL);
   g_return_val_if_fail (GTK_IS_TREE_MODEL (model), NULL);
@@ -2559,7 +2559,7 @@ void
 gtk_tree_row_reference_reordered (GObject     *proxy,
                                   GtkTreePath *path,
                                   GtkTreeIter *iter,
-                                  gint        *new_order)
+                                  int         *new_order)
 {
   g_return_if_fail (G_IS_OBJECT (proxy));
 

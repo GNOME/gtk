@@ -125,7 +125,7 @@ gtk_print_operation_preview_base_init (gpointer g_iface)
  */
 void    
 gtk_print_operation_preview_render_page (GtkPrintOperationPreview *preview,
-					 gint			   page_nr)
+					 int			   page_nr)
 {
   g_return_if_fail (GTK_IS_PRINT_OPERATION_PREVIEW (preview));
 
@@ -161,7 +161,7 @@ gtk_print_operation_preview_end_preview (GtkPrintOperationPreview *preview)
  */
 gboolean
 gtk_print_operation_preview_is_selected (GtkPrintOperationPreview *preview,
-					 gint                      page_nr)
+					 int                       page_nr)
 {
   g_return_val_if_fail (GTK_IS_PRINT_OPERATION_PREVIEW (preview), FALSE);
 

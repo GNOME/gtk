@@ -49,8 +49,8 @@ struct _GtkCellRendererTextClass
   GtkCellRendererClass parent_class;
 
   void (* edited) (GtkCellRendererText *cell_renderer_text,
-		   const gchar         *path,
-		   const gchar         *new_text);
+		   const char          *path,
+		   const char          *new_text);
 
   /*< private >*/
 
@@ -64,7 +64,7 @@ GtkCellRenderer *gtk_cell_renderer_text_new      (void);
 
 GDK_AVAILABLE_IN_ALL
 void             gtk_cell_renderer_text_set_fixed_height_from_font (GtkCellRendererText *renderer,
-								    gint                 number_of_rows);
+								    int                  number_of_rows);
 
 
 G_END_DECLS

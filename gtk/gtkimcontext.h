@@ -54,19 +54,19 @@ struct _GtkIMContextClass
   void     (*preedit_start)        (GtkIMContext *context);
   void     (*preedit_end)          (GtkIMContext *context);
   void     (*preedit_changed)      (GtkIMContext *context);
-  void     (*commit)               (GtkIMContext *context, const gchar *str);
+  void     (*commit)               (GtkIMContext *context, const char *str);
   gboolean (*retrieve_surrounding) (GtkIMContext *context);
   gboolean (*delete_surrounding)   (GtkIMContext *context,
-				    gint          offset,
-				    gint          n_chars);
+				    int           offset,
+				    int           n_chars);
 
   /* Virtual functions */
   void     (*set_client_widget)   (GtkIMContext   *context,
 				   GtkWidget      *widget);
   void     (*get_preedit_string)  (GtkIMContext   *context,
-				   gchar         **str,
+				   char          **str,
 				   PangoAttrList **attrs,
-				   gint           *cursor_pos);
+				   int            *cursor_pos);
   gboolean (*filter_keypress)     (GtkIMContext   *context,
 			           GdkEvent       *event);
   void     (*focus_in)            (GtkIMContext   *context);
@@ -77,12 +77,12 @@ struct _GtkIMContextClass
   void     (*set_use_preedit)     (GtkIMContext   *context,
 				   gboolean        use_preedit);
   void     (*set_surrounding)     (GtkIMContext   *context,
-				   const gchar    *text,
-				   gint            len,
-				   gint            cursor_index);
+				   const char     *text,
+				   int             len,
+				   int             cursor_index);
   gboolean (*get_surrounding)     (GtkIMContext   *context,
-				   gchar         **text,
-				   gint           *cursor_index);
+				   char          **text,
+				   int            *cursor_index);
   /*< private >*/
   /* Padding for future expansion */
   void (*_gtk_reserved1) (void);
@@ -101,9 +101,9 @@ void     gtk_im_context_set_client_widget   (GtkIMContext       *context,
                                              GtkWidget          *widget);
 GDK_AVAILABLE_IN_ALL
 void     gtk_im_context_get_preedit_string  (GtkIMContext       *context,
-					     gchar             **str,
+					     char              **str,
 					     PangoAttrList     **attrs,
-					     gint               *cursor_pos);
+					     int                *cursor_pos);
 GDK_AVAILABLE_IN_ALL
 gboolean gtk_im_context_filter_keypress     (GtkIMContext       *context,
                                              GdkEvent           *event);
@@ -132,17 +132,17 @@ void     gtk_im_context_set_use_preedit     (GtkIMContext       *context,
 					     gboolean            use_preedit);
 GDK_AVAILABLE_IN_ALL
 void     gtk_im_context_set_surrounding     (GtkIMContext       *context,
-					     const gchar        *text,
-					     gint                len,
-					     gint                cursor_index);
+					     const char         *text,
+					     int                 len,
+					     int                 cursor_index);
 GDK_AVAILABLE_IN_ALL
 gboolean gtk_im_context_get_surrounding     (GtkIMContext       *context,
-					     gchar             **text,
-					     gint               *cursor_index);
+					     char              **text,
+					     int                *cursor_index);
 GDK_AVAILABLE_IN_ALL
 gboolean gtk_im_context_delete_surrounding  (GtkIMContext       *context,
-					     gint                offset,
-					     gint                n_chars);
+					     int                 offset,
+					     int                 n_chars);
 
 G_END_DECLS
 

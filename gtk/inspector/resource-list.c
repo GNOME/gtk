@@ -83,8 +83,8 @@ load_resources_recurse (const char *path,
                         int        *count_out,
                         gsize      *size_out)
 {
-  gchar **names;
-  gint i;
+  char **names;
+  int i;
   GListStore *result;
 
   result = g_list_store_new (RESOURCE_TYPE_HOLDER);
@@ -92,10 +92,10 @@ load_resources_recurse (const char *path,
   names = g_resources_enumerate_children (path, 0, NULL);
   for (i = 0; names[i]; i++)
     {
-      gint len;
-      gchar *p;
+      int len;
+      char *p;
       gboolean has_slash;
-      gint count;
+      int count;
       gsize size;
       GListModel *children;
       ResourceHolder *holder;
@@ -149,11 +149,11 @@ populate_details (GtkInspectorResourceList *rl,
   const char *path;
   const char *name;
   GBytes *bytes;
-  gchar *type;
+  char *type;
   gconstpointer data;
   gsize size;
   GError *error = NULL;
-  gchar *markup;
+  char *markup;
 
   path = resource_holder_get_path (holder);
   name = resource_holder_get_name (holder);
@@ -175,10 +175,10 @@ populate_details (GtkInspectorResourceList *rl,
     }
   else
     {
-      gchar *text;
-      gchar *content_image;
-      gchar *content_text;
-      gchar *content_video;
+      char *text;
+      char *content_image;
+      char *content_text;
+      char *content_video;
 
       content_image = g_content_type_from_mime_type ("image/*");
       content_text = g_content_type_from_mime_type ("text/*");
@@ -306,7 +306,7 @@ close_details (GtkWidget                *button,
 static GListModel *
 load_resources (void)
 {
-  gint count = 0;
+  int count = 0;
   gsize size = 0;
 
   return load_resources_recurse ("/", &count, &size);
@@ -412,10 +412,10 @@ unroot (GtkWidget *widget)
 }
 
 static gboolean
-match_string (const gchar *string,
-              const gchar *text)
+match_string (const char *string,
+              const char *text)
 {
-  gchar *lower;
+  char *lower;
   gboolean match = FALSE;
 
   if (string)

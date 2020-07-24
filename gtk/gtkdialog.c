@@ -92,7 +92,7 @@
  * |[<!-- language="C" -->
  * // Function to open a dialog box with a message
  * void
- * quick_message (GtkWindow *parent, gchar *message)
+ * quick_message (GtkWindow *parent, char *message)
  * {
  *  GtkWidget *dialog, *label, *content_area;
  *  GtkDialogFlags flags;
@@ -169,7 +169,7 @@ typedef struct
   GtkWidget *action_box;
   GtkSizeGroup *size_group;
 
-  gint use_header_bar;
+  int use_header_bar;
   gboolean constructed;
   ResponseData *action_widgets;
 } GtkDialogPrivate;
@@ -179,11 +179,11 @@ struct _ResponseData
   ResponseData *next;
   GtkDialog *dialog;
   GtkWidget *widget;
-  gint response_id;
+  int response_id;
 };
 
 static void      gtk_dialog_add_buttons_valist   (GtkDialog    *dialog,
-                                                  const gchar  *first_button_text,
+                                                  const char   *first_button_text,
                                                   va_list       args);
 
 static gboolean  gtk_dialog_close_request        (GtkWindow    *window);
@@ -199,18 +199,18 @@ static void     gtk_dialog_buildable_interface_init   (GtkBuildableIface  *iface
 static gboolean gtk_dialog_buildable_custom_tag_start (GtkBuildable       *buildable,
                                                        GtkBuilder         *builder,
                                                        GObject            *child,
-                                                       const gchar        *tagname,
+                                                       const char         *tagname,
                                                        GtkBuildableParser *parser,
                                                        gpointer           *data);
 static void     gtk_dialog_buildable_custom_finished  (GtkBuildable       *buildable,
                                                        GtkBuilder         *builder,
                                                        GObject            *child,
-                                                       const gchar        *tagname,
+                                                       const char         *tagname,
                                                        gpointer            user_data);
 static void     gtk_dialog_buildable_add_child        (GtkBuildable       *buildable,
                                                        GtkBuilder         *builder,
                                                        GObject            *child,
-                                                       const gchar        *type);
+                                                       const char         *type);
 
 
 enum {
@@ -233,7 +233,7 @@ G_DEFINE_TYPE_WITH_CODE (GtkDialog, gtk_dialog, GTK_TYPE_WINDOW,
 
 static void
 set_use_header_bar (GtkDialog *dialog,
-                    gint       use_header_bar)
+                    int        use_header_bar)
 {
   GtkDialogPrivate *priv = gtk_dialog_get_instance_private (dialog);
 
@@ -300,7 +300,7 @@ gtk_dialog_get_property (GObject      *object,
 static void
 action_widget_activated (GtkWidget *widget, GtkDialog *dialog)
 {
-  gint response_id;
+  int response_id;
 
   response_id = gtk_dialog_get_response_for_widget (dialog, widget);
 
@@ -310,7 +310,7 @@ action_widget_activated (GtkWidget *widget, GtkDialog *dialog)
 static void
 add_response_data (GtkDialog *dialog,
                    GtkWidget *child,
-                   gint       response_id)
+                   int        response_id)
 {
   ResponseData *ad;
   guint signal_id;
@@ -338,7 +338,7 @@ add_response_data (GtkDialog *dialog,
 static void
 add_to_header_bar (GtkDialog *dialog,
                    GtkWidget *child,
-                   gint       response_id)
+                   int        response_id)
 {
   GtkDialogPrivate *priv = gtk_dialog_get_instance_private (dialog);
 
@@ -358,7 +358,7 @@ add_to_header_bar (GtkDialog *dialog,
 static void
 apply_response_for_action_area (GtkDialog *dialog,
                                 GtkWidget *child,
-                                gint       response_id)
+                                int        response_id)
 {
   GtkDialogPrivate *priv = gtk_dialog_get_instance_private (dialog);
 
@@ -368,7 +368,7 @@ apply_response_for_action_area (GtkDialog *dialog,
 static void
 add_to_action_area (GtkDialog *dialog,
                     GtkWidget *child,
-                    gint       response_id)
+                    int        response_id)
 {
   GtkDialogPrivate *priv = gtk_dialog_get_instance_private (dialog);
 
@@ -419,7 +419,7 @@ gtk_dialog_constructed (GObject *object)
         {
           gboolean has_default;
           ResponseData *rd;
-          gint response_id;
+          int response_id;
 
           child = l->data;
 
@@ -673,7 +673,7 @@ gtk_dialog_new (void)
 }
 
 static GtkWidget*
-gtk_dialog_new_empty (const gchar     *title,
+gtk_dialog_new_empty (const char      *title,
                       GtkWindow       *parent,
                       GtkDialogFlags   flags)
 {
@@ -742,10 +742,10 @@ gtk_dialog_new_empty (const gchar     *title,
  * Returns: a new #GtkDialog
  */
 GtkWidget*
-gtk_dialog_new_with_buttons (const gchar    *title,
+gtk_dialog_new_with_buttons (const char     *title,
                              GtkWindow      *parent,
                              GtkDialogFlags  flags,
-                             const gchar    *first_button_text,
+                             const char     *first_button_text,
                              ...)
 {
   GtkDialog *dialog;
@@ -832,7 +832,7 @@ get_response_data (GtkDialog *dialog,
 void
 gtk_dialog_add_action_widget (GtkDialog *dialog,
                               GtkWidget *child,
-                              gint       response_id)
+                              int        response_id)
 {
   GtkDialogPrivate *priv = gtk_dialog_get_instance_private (dialog);
 
@@ -871,8 +871,8 @@ gtk_dialog_add_action_widget (GtkDialog *dialog,
  **/
 GtkWidget*
 gtk_dialog_add_button (GtkDialog   *dialog,
-                       const gchar *button_text,
-                       gint         response_id)
+                       const char *button_text,
+                       int          response_id)
 {
   GtkWidget *button;
 
@@ -889,11 +889,11 @@ gtk_dialog_add_button (GtkDialog   *dialog,
 
 static void
 gtk_dialog_add_buttons_valist (GtkDialog      *dialog,
-                               const gchar    *first_button_text,
+                               const char     *first_button_text,
                                va_list         args)
 {
-  const gchar* text;
-  gint response_id;
+  const char * text;
+  int response_id;
 
   g_return_if_fail (GTK_IS_DIALOG (dialog));
 
@@ -901,13 +901,13 @@ gtk_dialog_add_buttons_valist (GtkDialog      *dialog,
     return;
 
   text = first_button_text;
-  response_id = va_arg (args, gint);
+  response_id = va_arg (args, int);
 
   while (text != NULL)
     {
       gtk_dialog_add_button (dialog, text, response_id);
 
-      text = va_arg (args, gchar*);
+      text = va_arg (args, char *);
       if (text == NULL)
         break;
       response_id = va_arg (args, int);
@@ -927,7 +927,7 @@ gtk_dialog_add_buttons_valist (GtkDialog      *dialog,
  */
 void
 gtk_dialog_add_buttons (GtkDialog   *dialog,
-                        const gchar *first_button_text,
+                        const char *first_button_text,
                         ...)
 {
   va_list args;
@@ -953,7 +953,7 @@ gtk_dialog_add_buttons (GtkDialog   *dialog,
  **/
 void
 gtk_dialog_set_response_sensitive (GtkDialog *dialog,
-                                   gint       response_id,
+                                   int        response_id,
                                    gboolean   setting)
 {
   GtkDialogPrivate *priv = gtk_dialog_get_instance_private (dialog);
@@ -979,7 +979,7 @@ gtk_dialog_set_response_sensitive (GtkDialog *dialog,
  **/
 void
 gtk_dialog_set_default_response (GtkDialog *dialog,
-                                 gint       response_id)
+                                 int        response_id)
 {
   GtkDialogPrivate *priv = gtk_dialog_get_instance_private (dialog);
   ResponseData *rd;
@@ -1007,7 +1007,7 @@ gtk_dialog_set_default_response (GtkDialog *dialog,
  **/
 void
 gtk_dialog_response (GtkDialog *dialog,
-                     gint       response_id)
+                     int        response_id)
 {
   g_return_if_fail (GTK_IS_DIALOG (dialog));
 
@@ -1030,7 +1030,7 @@ gtk_dialog_response (GtkDialog *dialog,
  */
 GtkWidget*
 gtk_dialog_get_widget_for_response (GtkDialog *dialog,
-                                    gint       response_id)
+                                    int        response_id)
 {
   GtkDialogPrivate *priv = gtk_dialog_get_instance_private (dialog);
   ResponseData *rd;
@@ -1057,7 +1057,7 @@ gtk_dialog_get_widget_for_response (GtkDialog *dialog,
  * Returns: the response id of @widget, or %GTK_RESPONSE_NONE
  *  if @widget doesn’t have a response id set.
  */
-gint
+int
 gtk_dialog_get_response_for_widget (GtkDialog *dialog,
 				    GtkWidget *widget)
 {
@@ -1071,24 +1071,24 @@ gtk_dialog_get_response_for_widget (GtkDialog *dialog,
 }
 
 typedef struct {
-  gchar *widget_name;
-  gint response_id;
+  char *widget_name;
+  int response_id;
   gboolean is_default;
-  gint line;
-  gint col;
+  int line;
+  int col;
 } ActionWidgetInfo;
 
 typedef struct {
   GtkDialog *dialog;
   GtkBuilder *builder;
   GSList *items;
-  gint response_id;
+  int response_id;
   gboolean is_default;
   gboolean is_text;
   GString *string;
   gboolean in_action_widgets;
-  gint line;
-  gint col;
+  int line;
+  int col;
 } SubParserData;
 
 static void
@@ -1102,9 +1102,9 @@ free_action_widget_info (gpointer data)
 
 static void
 parser_start_element (GtkBuildableParseContext *context,
-                      const gchar              *element_name,
-                      const gchar             **names,
-                      const gchar             **values,
+                      const char               *element_name,
+                      const char              **names,
+                      const char              **values,
                       gpointer                  user_data,
                       GError                  **error)
 {
@@ -1112,7 +1112,7 @@ parser_start_element (GtkBuildableParseContext *context,
 
   if (strcmp (element_name, "action-widget") == 0)
     {
-      const gchar *response;
+      const char *response;
       gboolean is_default = FALSE;
       GValue gvalue = G_VALUE_INIT;
 
@@ -1162,7 +1162,7 @@ parser_start_element (GtkBuildableParseContext *context,
 
 static void
 parser_text_element (GtkBuildableParseContext *context,
-                     const gchar              *text,
+                     const char               *text,
                      gsize                     text_len,
                      gpointer                  user_data,
                      GError                  **error)
@@ -1175,7 +1175,7 @@ parser_text_element (GtkBuildableParseContext *context,
 
 static void
 parser_end_element (GtkBuildableParseContext  *context,
-                    const gchar               *element_name,
+                    const char                *element_name,
                     gpointer                   user_data,
                     GError                   **error)
 {
@@ -1209,7 +1209,7 @@ static gboolean
 gtk_dialog_buildable_custom_tag_start (GtkBuildable       *buildable,
                                        GtkBuilder         *builder,
                                        GObject            *child,
-                                       const gchar        *tagname,
+                                       const char         *tagname,
                                        GtkBuildableParser *parser,
                                        gpointer           *parser_data)
 {
@@ -1240,7 +1240,7 @@ static void
 gtk_dialog_buildable_custom_finished (GtkBuildable *buildable,
 				      GtkBuilder   *builder,
 				      GObject      *child,
-				      const gchar  *tagname,
+				      const char   *tagname,
 				      gpointer      user_data)
 {
   GtkDialog *dialog = GTK_DIALOG (buildable);
@@ -1326,7 +1326,7 @@ static void
 gtk_dialog_buildable_add_child (GtkBuildable  *buildable,
                                 GtkBuilder    *builder,
                                 GObject       *child,
-                                const gchar   *type)
+                                const char    *type)
 {
   GtkDialog *dialog = GTK_DIALOG (buildable);
   GtkDialogPrivate *priv = gtk_dialog_get_instance_private (dialog);

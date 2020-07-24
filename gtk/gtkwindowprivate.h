@@ -104,8 +104,8 @@ void             gtk_window_update_pointer_focus (GtkWindow        *window,
                                                   GdkDevice        *device,
                                                   GdkEventSequence *sequence,
                                                   GtkWidget        *target,
-                                                  gdouble           x,
-                                                  gdouble           y);
+                                                  double            x,
+                                                  double            y);
 void             gtk_window_set_pointer_focus_grab (GtkWindow        *window,
                                                     GdkDevice        *device,
                                                     GdkEventSequence *sequence,

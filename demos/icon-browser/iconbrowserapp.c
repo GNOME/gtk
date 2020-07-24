@@ -43,7 +43,7 @@ about_activated (GSimpleAction *action,
                  gpointer       user_data)
 {
   GtkApplication *app = user_data;
-  const gchar *authors[] = {
+  const char *authors[] = {
     "The GTK Team",
     NULL
   };
@@ -103,7 +103,7 @@ static GActionEntry app_entries[] =
 static void
 icon_browser_app_startup (GApplication *app)
 {
-  const gchar *quit_accels[2] = { "<Ctrl>Q", NULL };
+  const char *quit_accels[2] = { "<Ctrl>Q", NULL };
 
   G_APPLICATION_CLASS (icon_browser_app_parent_class)->startup (app);
 

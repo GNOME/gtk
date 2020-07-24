@@ -127,16 +127,16 @@
  */
 static cairo_region_t*
 layout_iter_get_line_clip_region (PangoLayoutIter *iter,
-				  gint             x_origin,
-				  gint             y_origin,
-				  const gint      *index_ranges,
-				  gint             n_ranges)
+				  int              x_origin,
+				  int              y_origin,
+				  const int       *index_ranges,
+				  int              n_ranges)
 {
   PangoLayoutLine *line;
   cairo_region_t *clip_region;
   PangoRectangle logical_rect;
-  gint baseline;
-  gint i;
+  int baseline;
+  int i;
 
   line = pango_layout_iter_get_line_readonly (iter);
 
@@ -148,9 +148,9 @@ layout_iter_get_line_clip_region (PangoLayoutIter *iter,
   i = 0;
   while (i < n_ranges)
     {  
-      gint *pixel_ranges = NULL;
-      gint n_pixel_ranges = 0;
-      gint j;
+      int *pixel_ranges = NULL;
+      int n_pixel_ranges = 0;
+      int j;
 
       /* Note that get_x_ranges returns layout coordinates
        */
@@ -212,10 +212,10 @@ layout_iter_get_line_clip_region (PangoLayoutIter *iter,
  **/
 cairo_region_t*
 gdk_pango_layout_line_get_clip_region (PangoLayoutLine *line,
-                                       gint             x_origin,
-                                       gint             y_origin,
-                                       const gint      *index_ranges,
-                                       gint             n_ranges)
+                                       int              x_origin,
+                                       int              y_origin,
+                                       const int       *index_ranges,
+                                       int              n_ranges)
 {
   cairo_region_t *clip_region;
   PangoLayoutIter *iter;
@@ -256,10 +256,10 @@ gdk_pango_layout_line_get_clip_region (PangoLayoutLine *line,
  **/
 cairo_region_t*
 gdk_pango_layout_get_clip_region (PangoLayout *layout,
-                                  gint         x_origin,
-                                  gint         y_origin,
-                                  const gint  *index_ranges,
-                                  gint         n_ranges)
+                                  int          x_origin,
+                                  int          y_origin,
+                                  const int   *index_ranges,
+                                  int          n_ranges)
 {
   PangoLayoutIter *iter;  
   cairo_region_t *clip_region;
@@ -275,7 +275,7 @@ gdk_pango_layout_get_clip_region (PangoLayout *layout,
     {
       PangoRectangle logical_rect;
       cairo_region_t *line_region;
-      gint baseline;
+      int baseline;
       
       pango_layout_iter_get_line_extents (iter, NULL, &logical_rect);
       baseline = pango_layout_iter_get_baseline (iter);      

@@ -36,7 +36,7 @@ struct _GtkNativeDialogClass
 {
   GObjectClass parent_class;
 
-  void (* response) (GtkNativeDialog *self, gint response_id);
+  void (* response) (GtkNativeDialog *self, int response_id);
 
   /* <private> */
   void (* show) (GtkNativeDialog *self);

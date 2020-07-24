@@ -428,7 +428,7 @@ gtk_css_style_get_pango_attributes (GtkCssStyle *style)
   GtkTextDecorationStyle decoration_style;
   const GdkRGBA *color;
   const GdkRGBA *decoration_color;
-  gint letter_spacing;
+  int letter_spacing;
   GtkCssFontVariantLigature ligatures;
   GtkCssFontVariantNumeric numeric;
   GtkCssFontVariantEastAsian east_asian;

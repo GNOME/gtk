@@ -70,7 +70,7 @@ struct _GtkSearchEngineClass
 			       GList           *hits);
   void     (*finished)        (GtkSearchEngine *engine);
   void     (*error)           (GtkSearchEngine *engine, 
-			       const gchar     *error_message);
+			       const char      *error_message);
 };
 
 GType            _gtk_search_engine_get_type        (void);
@@ -87,7 +87,7 @@ void	         _gtk_search_engine_hits_added      (GtkSearchEngine *engine,
 void             _gtk_search_engine_finished        (GtkSearchEngine *engine,
                                                      gboolean         got_results);
 void	         _gtk_search_engine_error           (GtkSearchEngine *engine, 
-						     const gchar     *error_message);
+						     const char      *error_message);
 
 void             _gtk_search_hit_free (GtkSearchHit *hit);
 GtkSearchHit    *_gtk_search_hit_dup (GtkSearchHit *hit);

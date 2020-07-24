@@ -435,11 +435,11 @@ paper_size_to_win32 (GtkPaperSize *paper_size)
   return 0;
 }
 
-static gchar*
+static char *
 get_default_printer (void)
 {
   wchar_t *win32_printer_name = NULL;
-  gchar *printer_name = NULL;
+  char *printer_name = NULL;
   DWORD needed;
 
   GetDefaultPrinterW (NULL, &needed);
@@ -1585,7 +1585,7 @@ gtk_print_operation_run_without_dialog (GtkPrintOperation *op,
       /* No printer selected. Get the system default printer and store
        * it in settings.
        */
-      gchar *tmp_printer = get_default_printer ();
+      char *tmp_printer = get_default_printer ();
       if (!tmp_printer)
 	{
 	  result = GTK_PRINT_OPERATION_RESULT_ERROR;
@@ -1970,7 +1970,7 @@ void
 _gtk_print_operation_platform_backend_launch_preview (GtkPrintOperation *op,
 						      cairo_surface_t   *surface,
 						      GtkWindow         *parent,
-						      const gchar       *filename)
+						      const char        *filename)
 {
   HDC dc;
   HENHMETAFILE metafile;
@@ -2010,9 +2010,9 @@ _gtk_print_operation_platform_backend_preview_end_page (GtkPrintOperation *op,
 cairo_surface_t *
 _gtk_print_operation_platform_backend_create_preview_surface (GtkPrintOperation *op,
 							      GtkPageSetup      *page_setup,
-							      gdouble           *dpi_x,
-							      gdouble           *dpi_y,
-							      gchar            **target)
+							      double            *dpi_x,
+							      double            *dpi_y,
+							      char             **target)
 {
   GtkPaperSize *paper_size;
   HDC metafile_dc;

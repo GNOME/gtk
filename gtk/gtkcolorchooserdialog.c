@@ -98,7 +98,7 @@ color_activated_cb (GtkColorChooser *chooser,
 
 static void
 gtk_color_chooser_dialog_response (GtkDialog *dialog,
-                                   gint       response_id,
+                                   int        response_id,
                                    gpointer   user_data)
 {
   if (response_id == GTK_RESPONSE_OK)
@@ -249,8 +249,8 @@ gtk_color_chooser_dialog_set_rgba (GtkColorChooser *chooser,
 static void
 gtk_color_chooser_dialog_add_palette (GtkColorChooser *chooser,
                                       GtkOrientation   orientation,
-                                      gint             colors_per_line,
-                                      gint             n_colors,
+                                      int              colors_per_line,
+                                      int              n_colors,
                                       GdkRGBA         *colors)
 {
   GtkColorChooserDialog *cc = GTK_COLOR_CHOOSER_DIALOG (chooser);
@@ -277,7 +277,7 @@ gtk_color_chooser_dialog_iface_init (GtkColorChooserInterface *iface)
  * Returns: a new #GtkColorChooserDialog
  */
 GtkWidget *
-gtk_color_chooser_dialog_new (const gchar *title,
+gtk_color_chooser_dialog_new (const char *title,
                               GtkWindow   *parent)
 {
   return g_object_new (GTK_TYPE_COLOR_CHOOSER_DIALOG,

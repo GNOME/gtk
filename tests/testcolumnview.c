@@ -129,7 +129,7 @@ row_data_update_info (RowData   *data,
 static void
 copy_attribute (GFileInfo   *to,
                 GFileInfo   *from,
-                const gchar *attribute)
+                const char *attribute)
 {
   GFileAttributeType type;
   gpointer value;

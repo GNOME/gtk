@@ -135,7 +135,7 @@ guint
 gtk_application_impl_inhibit (GtkApplicationImpl         *impl,
                               GtkWindow                  *window,
                               GtkApplicationInhibitFlags  flags,
-                              const gchar                *reason)
+                              const char                 *reason)
 {
   return GTK_APPLICATION_IMPL_GET_CLASS (impl)->inhibit (impl, window, flags, reason);
 }

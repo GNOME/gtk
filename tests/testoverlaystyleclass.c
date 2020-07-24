@@ -27,7 +27,7 @@ main (int argc, char *argv[])
 {
   GtkWidget *win, *overlay, *grid, *main_child, *child, *label, *sw;
   GtkCssProvider *provider;
-  gchar *str;
+  char *str;
 
   gtk_init ();
 

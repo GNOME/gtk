@@ -48,18 +48,18 @@ char *           gtk_css_provider_to_string      (GtkCssProvider  *provider);
 
 GDK_AVAILABLE_IN_ALL
 void             gtk_css_provider_load_from_data (GtkCssProvider  *css_provider,
-                                                  const gchar     *data,
+                                                  const char      *data,
                                                   gssize           length);
 GDK_AVAILABLE_IN_ALL
 void             gtk_css_provider_load_from_file (GtkCssProvider  *css_provider,
                                                   GFile           *file);
 GDK_AVAILABLE_IN_ALL
 void             gtk_css_provider_load_from_path (GtkCssProvider  *css_provider,
-                                                  const gchar     *path);
+                                                  const char      *path);
 
 GDK_AVAILABLE_IN_ALL
 void             gtk_css_provider_load_from_resource (GtkCssProvider *css_provider,
-                                                      const gchar    *resource_path);
+                                                      const char     *resource_path);
 
 GDK_AVAILABLE_IN_ALL
 void             gtk_css_provider_load_named     (GtkCssProvider  *provider,

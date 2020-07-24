@@ -33,7 +33,7 @@ G_DEFINE_TYPE (GdkWin32CairoContext, gdk_win32_cairo_context, GDK_TYPE_CAIRO_CON
 
 void
 gdk_win32_surface_get_queued_window_rect (GdkSurface *surface,
-                                          gint        scale,
+                                          int         scale,
                                           RECT       *return_window_rect)
 {
   RECT window_rect;
@@ -79,9 +79,9 @@ gdk_win32_surface_apply_queued_move_resize (GdkSurface *surface,
 
 static cairo_surface_t *
 create_cairo_surface_for_layered_window (GdkWin32Surface  *impl,
-                                         gint                  width,
-                                         gint                  height,
-                                         gint                  scale)
+                                         int                   width,
+                                         int                   height,
+                                         int                   scale)
 {
   if (width > impl->dib_width ||
       height > impl->dib_height)
@@ -146,7 +146,7 @@ gdk_win32_cairo_context_begin_frame (GdkDrawContext *draw_context,
   GdkWin32Surface *impl;
   int scale;
   cairo_t *cr;
-  gint width, height;
+  int width, height;
   RECT queued_window_rect;
 
   surface = gdk_draw_context_get_surface (draw_context);
@@ -236,7 +236,7 @@ gdk_win32_cairo_context_end_frame (GdkDrawContext *draw_context,
 {
   GdkWin32CairoContext *self = GDK_WIN32_CAIRO_CONTEXT (draw_context);
   GdkSurface *surface;
-  gint scale;
+  int scale;
 
   surface = gdk_draw_context_get_surface (draw_context);
   scale = gdk_surface_get_scale_factor (surface);

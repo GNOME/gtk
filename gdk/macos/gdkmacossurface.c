@@ -122,7 +122,7 @@ gdk_macos_surface_hide (GdkSurface *surface)
   _gdk_surface_clear_update_area (surface);
 }
 
-static gint
+static int
 gdk_macos_surface_get_scale_factor (GdkSurface *surface)
 {
   GdkMacosSurface *self = (GdkMacosSurface *)surface;
@@ -230,8 +230,8 @@ gdk_macos_surface_get_root_coords (GdkSurface *surface,
 static gboolean
 gdk_macos_surface_get_device_state (GdkSurface      *surface,
                                     GdkDevice       *device,
-                                    gdouble         *x,
-                                    gdouble         *y,
+                                    double          *x,
+                                    double          *y,
                                     GdkModifierType *mask)
 {
   GdkDisplay *display;
@@ -541,10 +541,10 @@ _gdk_macos_surface_new (GdkMacosDisplay   *display,
 
 void
 _gdk_macos_surface_get_shadow (GdkMacosSurface *self,
-                               gint            *top,
-                               gint            *right,
-                               gint            *bottom,
-                               gint            *left)
+                               int             *top,
+                               int             *right,
+                               int             *bottom,
+                               int             *left)
 {
 
   g_return_if_fail (GDK_IS_MACOS_SURFACE (self));
@@ -571,7 +571,7 @@ _gdk_macos_surface_get_title (GdkMacosSurface *self)
 
 void
 _gdk_macos_surface_set_title (GdkMacosSurface *self,
-                              const gchar     *title)
+                              const char      *title)
 {
   g_return_if_fail (GDK_IS_MACOS_SURFACE (self));
 

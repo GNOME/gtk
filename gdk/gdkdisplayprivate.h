@@ -62,7 +62,7 @@ typedef struct
 typedef struct
 {
   GdkSurface *surface_under_pointer;   /* surface that last got a normal enter event */
-  gdouble toplevel_x, toplevel_y;
+  double toplevel_x, toplevel_y;
   guint32 state;
   guint32 button;
   GdkDevice *last_physical_device;
@@ -116,7 +116,7 @@ struct _GdkDisplayClass
   GType vk_context_type;      /* type for GdkVulkanContext, must be set if vk_extension_name != NULL */
   const char *vk_extension_name; /* Name of required windowing vulkan extension or %NULL (default) if Vulkan isn't supported */
 
-  const gchar *              (*get_name)           (GdkDisplay *display);
+  const char *              (*get_name)           (GdkDisplay *display);
   void                       (*beep)               (GdkDisplay *display);
   void                       (*sync)               (GdkDisplay *display);
   void                       (*flush)              (GdkDisplay *display);
@@ -130,8 +130,8 @@ struct _GdkDisplayClass
   gulong                     (*get_next_serial) (GdkDisplay *display);
 
   void                       (*notify_startup_complete) (GdkDisplay  *display,
-                                                         const gchar *startup_id);
-  const gchar *              (*get_startup_notification_id) (GdkDisplay  *display);
+                                                         const char *startup_id);
+  const char *              (*get_startup_notification_id) (GdkDisplay  *display);
 
   void                       (*event_data_copy) (GdkDisplay     *display,
                                                  GdkEvent       *event,

@@ -39,13 +39,13 @@ struct _GtkTextLineDisplayCache
 
 #if DEBUG_LINE_DISPLAY_CACHE
   guint       log_source;
-  gint        hits;
-  gint        misses;
-  gint        inval;
-  gint        inval_cursors;
-  gint        inval_by_line;
-  gint        inval_by_range;
-  gint        inval_by_y_range;
+  int         hits;
+  int         misses;
+  int         inval;
+  int         inval_cursors;
+  int         inval_by_line;
+  int         inval_by_range;
+  int         inval_by_y_range;
 #endif
 };
 
@@ -151,7 +151,7 @@ check_disposition (GtkTextLineDisplayCache *cache,
                    GtkTextLayout           *layout)
 {
   GSequenceIter *iter;
-  gint last = G_MAXUINT;
+  int last = G_MAXUINT;
 
   g_assert (cache != NULL);
   g_assert (cache->sorted_by_line != NULL);
@@ -571,7 +571,7 @@ gtk_text_line_display_cache_invalidate_range (GtkTextLineDisplayCache *cache,
 static GSequenceIter *
 find_iter_at_at_y (GtkTextLineDisplayCache *cache,
                    GtkTextLayout           *layout,
-                   gint                     y)
+                   int                      y)
 {
   GtkTextBTree *btree;
   GSequenceIter *left;
@@ -599,8 +599,8 @@ find_iter_at_at_y (GtkTextLineDisplayCache *cache,
   for (;;)
     {
       GtkTextLineDisplay *display;
-      gint cache_y;
-      gint cache_height;
+      int cache_y;
+      int cache_height;
 
       if (left == right)
         mid = left;
@@ -651,8 +651,8 @@ find_iter_at_at_y (GtkTextLineDisplayCache *cache,
 void
 gtk_text_line_display_cache_invalidate_y_range (GtkTextLineDisplayCache *cache,
                                                 GtkTextLayout           *layout,
-                                                gint                     y,
-                                                gint                     old_height,
+                                                int                      y,
+                                                int                      old_height,
                                                 gboolean                 cursors_only)
 {
   GSequenceIter *iter;
@@ -672,8 +672,8 @@ gtk_text_line_display_cache_invalidate_y_range (GtkTextLineDisplayCache *cache,
   while (!g_sequence_iter_is_end (iter))
     {
       GtkTextLineDisplay *display;
-      gint cache_y;
-      gint cache_height;
+      int cache_y;
+      int cache_height;
 
       display = g_sequence_get (iter);
       iter = g_sequence_iter_next (iter);

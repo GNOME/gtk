@@ -119,10 +119,10 @@ static void
 gtk_cell_renderer_graph_get_size (GtkCellRenderer    *cell,
                                   GtkWidget          *widget,
                                   const GdkRectangle *cell_area,
-                                  gint               *x_offset,
-                                  gint               *y_offset,
-                                  gint               *width,
-                                  gint               *height)
+                                  int                *x_offset,
+                                  int                *y_offset,
+                                  int                *width,
+                                  int                *height)
 {
   int xpad, ypad;
 

@@ -124,7 +124,7 @@ add_or_find_application (GtkAppChooserDialog *self)
 
 static void
 gtk_app_chooser_dialog_response (GtkDialog *dialog,
-                                 gint       response_id,
+                                 int        response_id,
                                  gpointer   user_data)
 {
   GtkAppChooserDialog *self = GTK_APP_CHOOSER_DIALOG (dialog);
@@ -175,13 +175,13 @@ get_extension (const char *basename)
 static void
 set_dialog_properties (GtkAppChooserDialog *self)
 {
-  gchar *name;
-  gchar *extension;
-  gchar *description;
-  gchar *string;
+  char *name;
+  char *extension;
+  char *description;
+  char *string;
   gboolean unknown;
-  gchar *title;
-  gchar *subtitle;
+  char *title;
+  char *subtitle;
   gboolean use_header;
   GtkWidget *header;
 
@@ -381,8 +381,8 @@ gtk_app_chooser_dialog_refresh (GtkAppChooser *object)
 }
 
 static void
-show_error_dialog (const gchar *primary,
-                   const gchar *secondary,
+show_error_dialog (const char *primary,
+                   const char *secondary,
                    GtkWindow   *parent)
 {
   GtkWidget *message_dialog;
@@ -409,7 +409,7 @@ software_button_clicked_cb (GtkButton           *button,
 {
   GSubprocess *process;
   GError *error = NULL;
-  gchar *option;
+  char *option;
 
   if (self->content_type)
     option = g_strconcat ("--search=", self->content_type, NULL);
@@ -432,7 +432,7 @@ software_button_clicked_cb (GtkButton           *button,
 static void
 ensure_software_button (GtkAppChooserDialog *self)
 {
-  gchar *path;
+  char *path;
 
   path = g_find_program_in_path ("gnome-software");
   if (path != NULL)
@@ -705,7 +705,7 @@ gtk_app_chooser_dialog_new (GtkWindow      *parent,
 GtkWidget *
 gtk_app_chooser_dialog_new_for_content_type (GtkWindow      *parent,
                                              GtkDialogFlags  flags,
-                                             const gchar    *content_type)
+                                             const char     *content_type)
 {
   GtkWidget *retval;
 
@@ -746,7 +746,7 @@ gtk_app_chooser_dialog_get_widget (GtkAppChooserDialog *self)
  */
 void
 gtk_app_chooser_dialog_set_heading (GtkAppChooserDialog *self,
-                                    const gchar         *heading)
+                                    const char          *heading)
 {
   g_return_if_fail (GTK_IS_APP_CHOOSER_DIALOG (self));
 
@@ -778,7 +778,7 @@ gtk_app_chooser_dialog_set_heading (GtkAppChooserDialog *self,
  * Returns: (nullable): the text to display at the top of the dialog, or %NULL, in which
  *     case a default text is displayed
  */
-const gchar *
+const char *
 gtk_app_chooser_dialog_get_heading (GtkAppChooserDialog *self)
 {
   g_return_val_if_fail (GTK_IS_APP_CHOOSER_DIALOG (self), NULL);

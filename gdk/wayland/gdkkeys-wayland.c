@@ -84,7 +84,7 @@ static PangoDirection
 gdk_wayland_keymap_get_direction (GdkKeymap *keymap)
 {
   GdkWaylandKeymap *keymap_wayland = GDK_WAYLAND_KEYMAP (keymap);
-  gint i;
+  int i;
 
   for (i = 0; i < xkb_keymap_num_layouts (keymap_wayland->xkb_keymap); i++)
     {
@@ -138,16 +138,16 @@ gdk_wayland_keymap_get_entries_for_keyval (GdkKeymap *keymap,
   max_keycode = xkb_keymap_max_keycode (xkb_keymap);
   for (keycode = min_keycode; keycode < max_keycode; keycode++)
     {
-      gint num_layouts, layout;
+      int num_layouts, layout;
       num_layouts = xkb_keymap_num_layouts_for_key (xkb_keymap, keycode);
       for (layout = 0; layout < num_layouts; layout++)
         {
-          gint num_levels, level;
+          int num_levels, level;
           num_levels = xkb_keymap_num_levels_for_key (xkb_keymap, keycode, layout);
           for (level = 0; level < num_levels; level++)
             {
               const xkb_keysym_t *syms;
-              gint num_syms, sym;
+              int num_syms, sym;
               num_syms = xkb_keymap_key_get_syms_by_level (xkb_keymap, keycode, layout, level, &syms);
               for (sym = 0; sym < num_syms; sym++)
                 {
@@ -174,12 +174,12 @@ gdk_wayland_keymap_get_entries_for_keycode (GdkKeymap     *keymap,
 					    guint          hardware_keycode,
 					    GdkKeymapKey **keys,
 					    guint        **keyvals,
-					    gint          *n_entries)
+					    int           *n_entries)
 {
   struct xkb_keymap *xkb_keymap = GDK_WAYLAND_KEYMAP (keymap)->xkb_keymap;
-  gint num_layouts, layout;
-  gint num_entries;
-  gint i;
+  int num_layouts, layout;
+  int num_entries;
+  int i;
 
   num_layouts = xkb_keymap_num_layouts_for_key (xkb_keymap, hardware_keycode);
 
@@ -197,7 +197,7 @@ gdk_wayland_keymap_get_entries_for_keycode (GdkKeymap     *keymap,
   i = 0;
   for (layout = 0; layout < num_layouts; layout++)
     {
-      gint num_levels, level;
+      int num_levels, level;
       num_levels = xkb_keymap_num_levels_for_key (xkb_keymap, hardware_keycode, layout);
       for (level = 0; level < num_levels; level++)
         {
@@ -306,10 +306,10 @@ static gboolean
 gdk_wayland_keymap_translate_keyboard_state (GdkKeymap       *keymap,
 					     guint            hardware_keycode,
 					     GdkModifierType  state,
-					     gint             group,
+					     int              group,
 					     guint           *keyval,
-					     gint            *effective_group,
-					     gint            *effective_level,
+					     int             *effective_group,
+					     int             *effective_level,
 					     GdkModifierType *consumed_modifiers)
 {
   struct xkb_keymap *xkb_keymap;
@@ -390,9 +390,9 @@ _gdk_wayland_keymap_init (GdkWaylandKeymap *keymap)
 static void
 update_direction (GdkWaylandKeymap *keymap)
 {
-  gint num_layouts;
-  gint i;
-  gint *rtl;
+  int num_layouts;
+  int i;
+  int *rtl;
   xkb_keycode_t min_keycode, max_keycode;
   guint key;
   gboolean have_rtl, have_ltr;
@@ -400,7 +400,7 @@ update_direction (GdkWaylandKeymap *keymap)
   num_layouts = xkb_keymap_num_layouts (keymap->xkb_keymap);
 
   keymap->direction = g_renew (PangoDirection, keymap->direction, num_layouts);
-  rtl = g_newa (gint, num_layouts);
+  rtl = g_newa (int, num_layouts);
   for (i = 0; i < num_layouts; i++)
     rtl[i] = 0;
 
@@ -408,15 +408,15 @@ update_direction (GdkWaylandKeymap *keymap)
   max_keycode = xkb_keymap_max_keycode (keymap->xkb_keymap);
   for (key = min_keycode; key < max_keycode; key++)
     {
-       gint layouts, layout;
+       int layouts, layout;
 
        layouts = xkb_keymap_num_layouts_for_key (keymap->xkb_keymap, key);
        g_assert (layouts <= num_layouts);
        for (layout = 0; layout < layouts; layout++)
          {
            const xkb_keysym_t *syms;
-           gint num_syms;
-           gint sym;
+           int num_syms;
+           int sym;
 
            num_syms = xkb_keymap_key_get_syms_by_level (keymap->xkb_keymap, key, layout, 0, &syms);
            for (sym = 0; sym < num_syms; sym++)

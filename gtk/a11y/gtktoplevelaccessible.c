@@ -55,7 +55,7 @@ gtk_toplevel_accessible_object_finalize (GObject *obj)
   G_OBJECT_CLASS (gtk_toplevel_accessible_parent_class)->finalize (obj);
 }
 
-static gint
+static int
 gtk_toplevel_accessible_get_n_children (AtkObject *obj)
 {
   GtkToplevelAccessible *toplevel = GTK_TOPLEVEL_ACCESSIBLE (obj);
@@ -65,7 +65,7 @@ gtk_toplevel_accessible_get_n_children (AtkObject *obj)
 
 static AtkObject *
 gtk_toplevel_accessible_ref_child (AtkObject *obj,
-                                   gint       i)
+                                   int        i)
 {
   GtkToplevelAccessible *toplevel;
   GtkWidget *widget;
@@ -147,7 +147,7 @@ show_event_watcher (GSignalInvocationHint *ihint,
   AtkObject *atk_obj = ATK_OBJECT (toplevel);
   GObject *object;
   GtkWidget *widget;
-  gint n_children;
+  int n_children;
   AtkObject *child;
 
   object = g_value_get_object (param_values + 0);

@@ -34,7 +34,7 @@ static void create_window (GApplication *app, const char *contents);
 static void
 show_action_dialog (GSimpleAction *action)
 {
-  const gchar *name;
+  const char *name;
   GtkWidget *dialog;
 
   name = g_action_get_name (G_ACTION (action));
@@ -58,9 +58,9 @@ show_action_infobar (GSimpleAction *action,
                      gpointer       data)
 {
   DemoApplicationWindow *window = data;
-  gchar *text;
-  const gchar *name;
-  const gchar *value;
+  char *text;
+  const char *name;
+  const char *value;
 
   name = g_action_get_name (G_ACTION (action));
   value = g_variant_get_string (parameter, NULL);
@@ -92,7 +92,7 @@ activate_new (GSimpleAction *action,
 
 static void
 open_response_cb (GtkNativeDialog *dialog,
-                  gint             response_id,
+                  int              response_id,
                   gpointer         user_data)
 {
   GtkFileChooserNative *native = user_data;
@@ -185,7 +185,7 @@ activate_about (GSimpleAction *action,
 {
   GtkWidget *window = user_data;
 
-  const gchar *authors[] = {
+  const char *authors[] = {
     "Peter Mattis",
     "Spencer Kimball",
     "Josh MacDonald",
@@ -193,7 +193,7 @@ activate_about (GSimpleAction *action,
     NULL
   };
 
-  const gchar *documentors[] = {
+  const char *documentors[] = {
     "Owen Taylor",
     "Tony Gale",
     "Matthias Clasen <mclasen@redhat.com>",
@@ -244,9 +244,9 @@ static void
 update_statusbar (GtkTextBuffer         *buffer,
                   DemoApplicationWindow *window)
 {
-  gchar *msg;
-  gint row, col;
-  gint count;
+  char *msg;
+  int row, col;
+  int count;
   GtkTextIter iter;
 
   /* clear any previous message, underflow is allowed */

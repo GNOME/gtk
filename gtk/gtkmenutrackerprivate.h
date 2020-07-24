@@ -25,10 +25,10 @@
 typedef struct _GtkMenuTracker GtkMenuTracker;
 
 typedef void         (* GtkMenuTrackerInsertFunc)                       (GtkMenuTrackerItem       *item,
-                                                                         gint                      position,
+                                                                         int                       position,
                                                                          gpointer                  user_data);
 
-typedef void         (* GtkMenuTrackerRemoveFunc)                       (gint                      position,
+typedef void         (* GtkMenuTrackerRemoveFunc)                       (int                       position,
                                                                          gpointer                  user_data);
 
 
@@ -37,13 +37,13 @@ GtkMenuTracker *        gtk_menu_tracker_new                            (GtkActi
                                                                          gboolean                  with_separators,
                                                                          gboolean                  merge_sections,
                                                                          gboolean                  mac_os_mode,
-                                                                         const gchar              *action_namespace,
+                                                                         const char               *action_namespace,
                                                                          GtkMenuTrackerInsertFunc  insert_func,
                                                                          GtkMenuTrackerRemoveFunc  remove_func,
                                                                          gpointer                  user_data);
 
 GtkMenuTracker *        gtk_menu_tracker_new_for_item_link              (GtkMenuTrackerItem       *item,
-                                                                         const gchar              *link_name,
+                                                                         const char               *link_name,
                                                                          gboolean                  merge_sections,
                                                                          gboolean                  mac_os_mode,
                                                                          GtkMenuTrackerInsertFunc  insert_func,

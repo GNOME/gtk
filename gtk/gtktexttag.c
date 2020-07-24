@@ -862,7 +862,7 @@ gtk_text_tag_init (GtkTextTag *text_tag)
  * Returns: a new #GtkTextTag
  **/
 GtkTextTag*
-gtk_text_tag_new (const gchar *name)
+gtk_text_tag_new (const char *name)
 {
   GtkTextTag *tag;
 
@@ -1117,7 +1117,7 @@ set_font_desc_fields (PangoFontDescription *desc,
     pango_font_description_set_stretch (desc, pango_font_description_get_stretch (desc));
   if (to_set & PANGO_FONT_MASK_SIZE)
     {
-      gint size = pango_font_description_get_size (desc);
+      int size = pango_font_description_get_size (desc);
       if (size <= 0)
 	{
 	  size = 10 * PANGO_SCALE;
@@ -1291,7 +1291,7 @@ gtk_text_tag_set_property (GObject      *object,
     case PROP_FONT:
       {
         PangoFontDescription *font_desc = NULL;
-        const gchar *name;
+        const char *name;
 
         name = g_value_get_string (value);
 
@@ -1788,7 +1788,7 @@ gtk_text_tag_get_property (GObject      *object,
 
     case PROP_FONT:
         {
-          gchar *str;
+          char *str;
 
 	  gtk_text_tag_ensure_font (tag);
 
@@ -2112,9 +2112,9 @@ gtk_text_tag_get_property (GObject      *object,
  */
 
 typedef struct {
-  gint high;
-  gint low;
-  gint delta;
+  int high;
+  int low;
+  int delta;
 } DeltaData;
 
 static void
@@ -2135,7 +2135,7 @@ delta_priority_foreach (GtkTextTag *tag, gpointer user_data)
  * 
  * Returns: The tag’s priority.
  **/
-gint
+int
 gtk_text_tag_get_priority (GtkTextTag *tag)
 {
   g_return_val_if_fail (GTK_IS_TEXT_TAG (tag), 0);
@@ -2162,7 +2162,7 @@ gtk_text_tag_get_priority (GtkTextTag *tag)
  **/
 void
 gtk_text_tag_set_priority (GtkTextTag *tag,
-                           gint        priority)
+                           int         priority)
 {
   GtkTextTagPrivate *priv;
   DeltaData dd;

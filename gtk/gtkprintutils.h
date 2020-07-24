@@ -27,8 +27,8 @@ G_BEGIN_DECLS
 #define MM_PER_INCH 25.4
 #define POINTS_PER_INCH 72
 
-gdouble _gtk_print_convert_to_mm   (gdouble len, GtkUnit unit);
-gdouble _gtk_print_convert_from_mm (gdouble len, GtkUnit unit);
+double _gtk_print_convert_to_mm   (double len, GtkUnit unit);
+double _gtk_print_convert_from_mm (double len, GtkUnit unit);
 
 G_END_DECLS
 

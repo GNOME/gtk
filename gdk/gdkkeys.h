@@ -38,7 +38,7 @@ GDK_AVAILABLE_IN_ALL
 const char *gdk_keyval_name      (guint        keyval) G_GNUC_CONST;
 
 GDK_AVAILABLE_IN_ALL
-guint    gdk_keyval_from_name    (const gchar *keyval_name);
+guint    gdk_keyval_from_name    (const char *keyval_name);
 GDK_AVAILABLE_IN_ALL
 void     gdk_keyval_convert_case (guint        symbol,
 				  guint       *lower,

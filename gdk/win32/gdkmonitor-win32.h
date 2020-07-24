@@ -34,7 +34,7 @@ struct _GdkWin32Monitor
   GdkRectangle work_rect;
 
   /* Device instance path (used to match GdkWin32Monitor to monitor device) */
-  gchar *instance_path;
+  char *instance_path;
 
   /* TRUE if monitor is made up by us
    * (this happens when system has logical monitors, but no physical ones).

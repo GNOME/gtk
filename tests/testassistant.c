@@ -24,7 +24,7 @@
 #include <gtk/gtk.h>
 
 static GtkWidget*
-get_test_page (const gchar *text)
+get_test_page (const char *text)
 {
   return gtk_label_new (text);
 }
@@ -50,7 +50,7 @@ complete_cb (GtkWidget *check,
 	     
 static GtkWidget *
 add_completion_test_page (GtkWidget   *assistant,
-			  const gchar *text, 
+			  const char *text, 
 			  gboolean     visible,
 			  gboolean     complete)
 {
@@ -108,8 +108,8 @@ static gboolean
 progress_timeout (GtkWidget *assistant)
 {
   GtkWidget *progress;
-  gint current_page;
-  gdouble value;
+  int current_page;
+  double value;
 
   current_page = gtk_assistant_get_current_page (GTK_ASSISTANT (assistant));
   progress = gtk_assistant_get_nth_page (GTK_ASSISTANT (assistant), current_page);
@@ -315,16 +315,16 @@ create_generous_assistant (GtkWidget *widget)
     }
 }
 
-static gchar selected_branch = 'A';
+static char selected_branch = 'A';
 
 static void
-select_branch (GtkWidget *widget, gchar branch)
+select_branch (GtkWidget *widget, char branch)
 {
   selected_branch = branch;
 }
 
-static gint
-nonlinear_assistant_forward_page (gint current_page, gpointer data)
+static int
+nonlinear_assistant_forward_page (int current_page, gpointer data)
 {
   switch (current_page)
     {
@@ -408,8 +408,8 @@ create_nonlinear_assistant (GtkWidget *widget)
     }
 }
 
-static gint
-looping_assistant_forward_page (gint current_page, gpointer data)
+static int
+looping_assistant_forward_page (int current_page, gpointer data)
 {
   switch (current_page)
     {
@@ -572,7 +572,7 @@ static void
 flip_pages (GtkButton *button, GtkAssistant *assistant)
 {
   GtkWidget *page;
-  gchar *title;
+  char *title;
 
   page = gtk_assistant_get_nth_page (assistant, 1);
 
@@ -677,10 +677,10 @@ quit_cb (GtkWidget *widget,
 }
 
 int
-main (int argc, gchar *argv[])
+main (int argc, char *argv[])
 {
   GtkWidget *window, *box, *button;
-  gint i;
+  int i;
   gboolean done = FALSE;
 
   gtk_init ();

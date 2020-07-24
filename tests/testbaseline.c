@@ -28,7 +28,7 @@ static void
 baseline_row_value_changed (GtkSpinButton *spin_button,
 			    GtkGrid *grid)
 {
-  gint row = gtk_spin_button_get_value_as_int (spin_button);
+  int row = gtk_spin_button_get_value_as_int (spin_button);
 
   gtk_grid_set_baseline_row (grid, row);
 }
@@ -53,15 +53,15 @@ static void
 image_size_value_changed (GtkSpinButton *spin_button,
 			  GtkImage *image)
 {
-  gint size = gtk_spin_button_get_value_as_int (spin_button);
+  int size = gtk_spin_button_get_value_as_int (spin_button);
 
   gtk_image_set_pixel_size (GTK_IMAGE (image), size);
 }
 
 static void
-set_font_size (GtkWidget *widget, gint size)
+set_font_size (GtkWidget *widget, int size)
 {
-  const gchar *class[3] = { "small-font", "medium-font", "large-font" };
+  const char *class[3] = { "small-font", "medium-font", "large-font" };
 
   gtk_widget_add_css_class (widget, class[size]);
 }

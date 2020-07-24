@@ -180,7 +180,7 @@ find_class (const GtkCssNodeDeclaration *decl,
             GQuark                       class_quark,
             guint                       *position)
 {
-  gint min, max, mid;
+  int min, max, mid;
   gboolean found = FALSE;
   guint pos;
 

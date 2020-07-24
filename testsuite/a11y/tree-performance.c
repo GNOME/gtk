@@ -22,7 +22,7 @@
 
 #define N_ROWS 10000
 
-const gchar list_ui[] =
+const char list_ui[] =
   "<interface>"
   "  <object class='GtkListStore' id='liststore1'>"
   "    <columns>"
@@ -89,8 +89,8 @@ static void
 walk_accessible_tree (AtkObject *accessible,
                       gpointer   data)
 {
-  gint *count = data;
-  gint i;
+  int *count = data;
+  int i;
 
   (*count)++;
 
@@ -130,7 +130,7 @@ populate_list (GtkBuilder *builder)
   GtkTreeView *tv;
   GtkListStore *store;
   GtkTreeIter iter;
-  gint i;
+  int i;
 
   tv = (GtkTreeView *)gtk_builder_get_object (builder, "treeview1");
   store = (GtkListStore *)gtk_tree_view_get_model (tv);
@@ -147,7 +147,7 @@ static void
 test_performance_list (void)
 {
   GtkBuilder *builder;
-  gdouble elapsed;
+  double elapsed;
   GtkWidget *window;
   GError *error = NULL;
 
@@ -172,11 +172,11 @@ static void
 test_a11y_performance_list (void)
 {
   GtkBuilder *builder;
-  gdouble elapsed;
+  double elapsed;
   GtkWidget *window;
   GError *error = NULL;
-  gint count_before;
-  gint count_after;
+  int count_before;
+  int count_after;
 
   builder = gtk_builder_new ();
   gtk_builder_add_from_string (builder, list_ui, -1, &error);
@@ -205,7 +205,7 @@ test_a11y_performance_list (void)
   g_test_message ("%d accessibles before, %d after\n", count_before, count_after);
 }
 
-const gchar tree_ui[] =
+const char tree_ui[] =
   "<interface>"
   "  <object class='GtkTreeStore' id='treestore1'>"
   "    <columns>"
@@ -271,7 +271,7 @@ populate_tree (GtkBuilder *builder)
   GtkTreeView *tv;
   GtkTreeStore *store;
   GtkTreeIter iter;
-  gint i;
+  int i;
 
   tv = (GtkTreeView *)gtk_builder_get_object (builder, "treeview1");
   store = (GtkTreeStore *)gtk_tree_view_get_model (tv);
@@ -294,7 +294,7 @@ static void
 test_performance_tree (void)
 {
   GtkBuilder *builder;
-  gdouble elapsed;
+  double elapsed;
   GtkWidget *window;
   GError *error = NULL;
 
@@ -319,11 +319,11 @@ static void
 test_a11y_performance_tree (void)
 {
   GtkBuilder *builder;
-  gdouble elapsed;
+  double elapsed;
   GtkWidget *window;
   GError *error = NULL;
-  gint count_before;
-  gint count_after;
+  int count_before;
+  int count_after;
 
   builder = gtk_builder_new ();
   gtk_builder_add_from_string (builder, tree_ui, -1, &error);

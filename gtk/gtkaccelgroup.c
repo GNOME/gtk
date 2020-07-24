@@ -114,7 +114,7 @@ gtk_accelerator_valid (guint           keyval,
 }
 
 static inline gboolean
-is_alt (const gchar *string)
+is_alt (const char *string)
 {
   return ((string[0] == '<') &&
           (string[1] == 'a' || string[1] == 'A') &&
@@ -124,7 +124,7 @@ is_alt (const gchar *string)
 }
 
 static inline gboolean
-is_ctl (const gchar *string)
+is_ctl (const char *string)
 {
   return ((string[0] == '<') &&
           (string[1] == 'c' || string[1] == 'C') &&
@@ -134,7 +134,7 @@ is_ctl (const gchar *string)
 }
 
 static inline gboolean
-is_ctrl (const gchar *string)
+is_ctrl (const char *string)
 {
   return ((string[0] == '<') &&
           (string[1] == 'c' || string[1] == 'C') &&
@@ -145,7 +145,7 @@ is_ctrl (const gchar *string)
 }
 
 static inline gboolean
-is_shft (const gchar *string)
+is_shft (const char *string)
 {
   return ((string[0] == '<') &&
           (string[1] == 's' || string[1] == 'S') &&
@@ -156,7 +156,7 @@ is_shft (const gchar *string)
 }
 
 static inline gboolean
-is_shift (const gchar *string)
+is_shift (const char *string)
 {
   return ((string[0] == '<') &&
           (string[1] == 's' || string[1] == 'S') &&
@@ -168,7 +168,7 @@ is_shift (const gchar *string)
 }
 
 static inline gboolean
-is_control (const gchar *string)
+is_control (const char *string)
 {
   return ((string[0] == '<') &&
           (string[1] == 'c' || string[1] == 'C') &&
@@ -182,7 +182,7 @@ is_control (const gchar *string)
 }
 
 static inline gboolean
-is_meta (const gchar *string)
+is_meta (const char *string)
 {
   return ((string[0] == '<') &&
           (string[1] == 'm' || string[1] == 'M') &&
@@ -193,7 +193,7 @@ is_meta (const gchar *string)
 }
 
 static inline gboolean
-is_super (const gchar *string)
+is_super (const char *string)
 {
   return ((string[0] == '<') &&
           (string[1] == 's' || string[1] == 'S') &&
@@ -205,7 +205,7 @@ is_super (const gchar *string)
 }
 
 static inline gboolean
-is_hyper (const gchar *string)
+is_hyper (const char *string)
 {
   return ((string[0] == '<') &&
           (string[1] == 'h' || string[1] == 'H') &&
@@ -217,7 +217,7 @@ is_hyper (const gchar *string)
 }
 
 static inline gboolean
-is_primary (const gchar *string)
+is_primary (const char *string)
 {
   return ((string[0] == '<') &&
           (string[1] == 'p' || string[1] == 'P') &&
@@ -231,7 +231,7 @@ is_primary (const gchar *string)
 }
 
 static inline gboolean
-is_keycode (const gchar *string)
+is_keycode (const char *string)
 {
   return (string[0] == '0' &&
           string[1] == 'x' &&
@@ -267,7 +267,7 @@ is_keycode (const gchar *string)
  * Returns: %TRUE if parsing succeeded
  */
 gboolean
-gtk_accelerator_parse_with_keycode (const gchar     *accelerator,
+gtk_accelerator_parse_with_keycode (const char      *accelerator,
                                     GdkDisplay      *display,
                                     guint           *accelerator_key,
                                     guint          **accelerator_codes,
@@ -275,7 +275,7 @@ gtk_accelerator_parse_with_keycode (const gchar     *accelerator,
 {
   guint keyval;
   GdkModifierType mods;
-  gint len;
+  int len;
   gboolean error;
 
   if (accelerator_key)
@@ -360,7 +360,7 @@ gtk_accelerator_parse_with_keycode (const gchar     *accelerator,
             }
           else
             {
-              gchar last_ch;
+              char last_ch;
 
               last_ch = *accelerator;
               while (last_ch && last_ch != '>')
@@ -376,8 +376,8 @@ gtk_accelerator_parse_with_keycode (const gchar     *accelerator,
           if (len >= 4 && is_keycode (accelerator))
             {
                char keystring[5];
-               gchar *endptr;
-               gint tmp_keycode;
+               char *endptr;
+               int tmp_keycode;
 
                memcpy (keystring, accelerator, 4);
                keystring [4] = '\000';
@@ -424,7 +424,7 @@ gtk_accelerator_parse_with_keycode (const gchar     *accelerator,
           if (keyval && accelerator_codes != NULL)
             {
               GdkKeymapKey *keys;
-              gint n_keys, i, j;
+              int n_keys, i, j;
 
               if (!gdk_display_map_keyval (display, keyval, &keys, &n_keys))
                 {
@@ -510,7 +510,7 @@ out:
  * be set to 0 (zero).
  */
 gboolean
-gtk_accelerator_parse (const gchar     *accelerator,
+gtk_accelerator_parse (const char      *accelerator,
                        guint           *accelerator_key,
                        GdkModifierType *accelerator_mods)
 {
@@ -532,19 +532,19 @@ gtk_accelerator_parse (const gchar     *accelerator,
  *
  * Returns: a newly allocated accelerator name.
  */
-gchar *
+char *
 gtk_accelerator_name_with_keycode (GdkDisplay      *display,
                                    guint            accelerator_key,
                                    guint            keycode,
                                    GdkModifierType  accelerator_mods)
 {
-  gchar *gtk_name;
+  char *gtk_name;
 
   gtk_name = gtk_accelerator_name (accelerator_key, accelerator_mods);
 
   if (!accelerator_key)
     {
-      gchar *name;
+      char *name;
       name = g_strdup_printf ("%s0x%02x", gtk_name, keycode);
       g_free (gtk_name);
       return name;
@@ -647,19 +647,19 @@ gtk_accelerator_name (guint           accelerator_key,
  *
  * Returns: a newly-allocated string representing the accelerator.
  */
-gchar *
+char *
 gtk_accelerator_get_label_with_keycode (GdkDisplay      *display,
                                         guint            accelerator_key,
                                         guint            keycode,
                                         GdkModifierType  accelerator_mods)
 {
-  gchar *gtk_label;
+  char *gtk_label;
 
   gtk_label = gtk_accelerator_get_label (accelerator_key, accelerator_mods);
 
   if (!accelerator_key)
     {
-      gchar *label;
+      char *label;
       label = g_strdup_printf ("%s0x%02x", gtk_label, keycode);
       g_free (gtk_label);
       return label;
@@ -803,7 +803,7 @@ append_separator (GString *string)
  *
  * Returns: a newly-allocated string representing the accelerator.
  */
-gchar*
+char *
 gtk_accelerator_get_label (guint           accelerator_key,
                            GdkModifierType accelerator_mods)
 {

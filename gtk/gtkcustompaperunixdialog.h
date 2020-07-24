@@ -31,7 +31,7 @@ typedef struct _GtkCustomPaperUnixDialog         GtkCustomPaperUnixDialog;
 GDK_AVAILABLE_IN_ALL
 GType             gtk_custom_paper_unix_dialog_get_type           (void) G_GNUC_CONST;
 GtkWidget *       _gtk_custom_paper_unix_dialog_new                (GtkWindow   *parent,
-                                                                    const gchar *title);
+                                                                    const char *title);
 GtkUnit           _gtk_print_get_default_user_units                (void);
 void              _gtk_print_load_custom_papers                    (GtkListStore *store);
 void               gtk_print_load_custom_papers                    (GListStore *store);

@@ -34,7 +34,7 @@ G_BEGIN_DECLS
 
 GType      gtk_inspector_action_editor_get_type (void);
 GtkWidget *gtk_inspector_action_editor_new      (GObject      *owner,
-                                                 const gchar  *name,
+                                                 const char   *name,
                                                  GtkSizeGroup *activate);
 void       gtk_inspector_action_editor_update   (GtkInspectorActionEditor *r,
                                                  gboolean                  enabled,

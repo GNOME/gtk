@@ -19,12 +19,12 @@
 #include <glib.h>
 
 /* Keep in sync with gtkbuilder.c ! */
-static gchar *
-type_name_mangle (const gchar *name,
+static char *
+type_name_mangle (const char *name,
                   gboolean     split_first_cap)
 {
   GString *symbol_name = g_string_new ("");
-  gint i;
+  int i;
 
   for (i = 0; name[i] != '\0'; i++)
     {
@@ -44,9 +44,9 @@ type_name_mangle (const gchar *name,
 }
 
 static void
-check (const gchar *TN, const gchar *gtf, const char *gtf_splitcap)
+check (const char *TN, const char *gtf, const char *gtf_splitcap)
 {
-  gchar *symbol;
+  char *symbol;
 
   symbol = type_name_mangle (TN, FALSE);
   g_assert_cmpstr (symbol, ==, gtf);

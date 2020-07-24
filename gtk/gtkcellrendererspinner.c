@@ -88,7 +88,7 @@ struct _GtkCellRendererSpinnerPrivate
   gboolean active;
   guint pulse;
   GtkIconSize icon_size;
-  gint size;
+  int size;
 };
 
 
@@ -103,10 +103,10 @@ static void gtk_cell_renderer_spinner_set_property (GObject         *object,
 static void gtk_cell_renderer_spinner_get_size     (GtkCellRenderer *cell,
                                                     GtkWidget          *widget,
                                                     const GdkRectangle *cell_area,
-                                                    gint               *x_offset,
-                                                    gint               *y_offset,
-                                                    gint               *width,
-                                                    gint               *height);
+                                                    int                *x_offset,
+                                                    int                *y_offset,
+                                                    int                *width,
+                                                    int                *height);
 static void gtk_cell_renderer_spinner_snapshot     (GtkCellRenderer      *cell,
                                                     GtkSnapshot          *snapshot,
                                                     GtkWidget            *widget,
@@ -281,17 +281,17 @@ static void
 gtk_cell_renderer_spinner_get_size (GtkCellRenderer    *cellr,
                                     GtkWidget          *widget,
                                     const GdkRectangle *cell_area,
-                                    gint               *x_offset,
-                                    gint               *y_offset,
-                                    gint               *width,
-                                    gint               *height)
+                                    int                *x_offset,
+                                    int                *y_offset,
+                                    int                *width,
+                                    int                *height)
 {
   GtkCellRendererSpinner *cell = GTK_CELL_RENDERER_SPINNER (cellr);
   GtkCellRendererSpinnerPrivate *priv = gtk_cell_renderer_spinner_get_instance_private (cell);
-  gdouble align;
-  gint w, h;
-  gint xpad, ypad;
-  gfloat xalign, yalign;
+  double align;
+  int w, h;
+  int xpad, ypad;
+  float xalign, yalign;
   gboolean rtl;
 
   rtl = gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL;
@@ -339,17 +339,17 @@ static void
 gtk_paint_spinner (GtkStyleContext *context,
                    cairo_t         *cr,
                    guint            step,
-                   gint             x,
-                   gint             y,
-                   gint             width,
-                   gint             height)
+                   int              x,
+                   int              y,
+                   int              width,
+                   int              height)
 {
   GdkRGBA color;
   guint num_steps;
-  gdouble dx, dy;
-  gdouble radius;
-  gdouble half;
-  gint i;
+  double dx, dy;
+  double radius;
+  double half;
+  int i;
   guint real_step;
 
   num_steps = 12;
@@ -372,10 +372,10 @@ gtk_paint_spinner (GtkStyleContext *context,
 
   for (i = 0; i < num_steps; i++)
     {
-      gint inset = 0.7 * radius;
+      int inset = 0.7 * radius;
 
       /* transparency is a function of time and initial value */
-      gdouble t = (gdouble) ((i + num_steps - real_step)
+      double t = (double) ((i + num_steps - real_step)
                              % num_steps) / num_steps;
 
       cairo_save (cr);
@@ -411,7 +411,7 @@ gtk_cell_renderer_spinner_snapshot (GtkCellRenderer      *cellr,
   GtkCellRendererSpinnerPrivate *priv = gtk_cell_renderer_spinner_get_instance_private (cell);
   GdkRectangle pix_rect;
   GdkRectangle draw_rect;
-  gint xpad, ypad;
+  int xpad, ypad;
   cairo_t *cr;
 
   if (!priv->active)

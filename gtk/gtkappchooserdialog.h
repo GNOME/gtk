@@ -50,15 +50,15 @@ GtkWidget *   gtk_app_chooser_dialog_new                  (GtkWindow           *
 GDK_AVAILABLE_IN_ALL
 GtkWidget *   gtk_app_chooser_dialog_new_for_content_type (GtkWindow           *parent,
                                                            GtkDialogFlags       flags,
-                                                           const gchar         *content_type);
+                                                           const char          *content_type);
 
 GDK_AVAILABLE_IN_ALL
 GtkWidget *   gtk_app_chooser_dialog_get_widget           (GtkAppChooserDialog *self);
 GDK_AVAILABLE_IN_ALL
 void          gtk_app_chooser_dialog_set_heading          (GtkAppChooserDialog *self,
-                                                           const gchar         *heading);
+                                                           const char          *heading);
 GDK_AVAILABLE_IN_ALL
-const gchar * gtk_app_chooser_dialog_get_heading          (GtkAppChooserDialog *self);
+const char * gtk_app_chooser_dialog_get_heading          (GtkAppChooserDialog *self);
 
 G_END_DECLS
 

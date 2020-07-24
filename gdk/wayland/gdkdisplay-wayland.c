@@ -610,7 +610,7 @@ _gdk_wayland_display_prepare_cursor_themes (GdkWaylandDisplay *display_wayland)
 static void init_settings (GdkDisplay *display);
 
 GdkDisplay *
-_gdk_wayland_display_open (const gchar *display_name)
+_gdk_wayland_display_open (const char *display_name)
 {
   struct wl_display *wl_display;
   GdkDisplay *display;
@@ -758,10 +758,10 @@ gdk_wayland_display_finalize (GObject *object)
   G_OBJECT_CLASS (gdk_wayland_display_parent_class)->finalize (object);
 }
 
-static const gchar *
+static const char *
 gdk_wayland_display_get_name (GdkDisplay *display)
 {
-  const gchar *name;
+  const char *name;
 
   name = g_getenv ("WAYLAND_DISPLAY");
   if (name == NULL)
@@ -830,7 +830,7 @@ static void
 gdk_wayland_display_make_default (GdkDisplay *display)
 {
   GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
-  const gchar *startup_id;
+  const char *startup_id;
 
   g_free (display_wayland->startup_notification_id);
   display_wayland->startup_notification_id = NULL;
@@ -870,7 +870,7 @@ gdk_wayland_display_get_next_serial (GdkDisplay *display)
  *
  * Returns: the startup notification ID for @display, or %NULL
  */
-const gchar *
+const char *
 gdk_wayland_display_get_startup_notification_id (GdkDisplay  *display)
 {
   return GDK_WAYLAND_DISPLAY (display)->startup_notification_id;
@@ -903,10 +903,10 @@ gdk_wayland_display_set_startup_notification_id (GdkDisplay *display,
 
 static void
 gdk_wayland_display_notify_startup_complete (GdkDisplay  *display,
-					     const gchar *startup_id)
+					     const char *startup_id)
 {
   GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
-  gchar *free_this = NULL;
+  char *free_this = NULL;
 
   if (startup_id == NULL)
     {
@@ -1071,8 +1071,8 @@ get_cursor_theme (GdkWaylandDisplay *display_wayland,
 
 void
 gdk_wayland_display_set_cursor_theme (GdkDisplay  *display,
-                                      const gchar *name,
-                                      gint         size)
+                                      const char *name,
+                                      int          size)
 {
   GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY(display);
   struct wl_cursor_theme *theme;
@@ -1116,7 +1116,7 @@ static void
 _gdk_wayland_display_load_cursor_theme (GdkWaylandDisplay *display_wayland)
 {
   guint size;
-  const gchar *name;
+  const char *name;
   GValue v = G_VALUE_INIT;
   gint64 before = g_get_monotonic_time ();
 
@@ -1445,11 +1445,11 @@ get_order (const char *s)
   return 0;
 }
 
-static gdouble
+static double
 get_dpi_from_gsettings (GdkWaylandDisplay *display_wayland)
 {
   GSettings *settings;
-  gdouble factor;
+  double factor;
 
   settings = g_hash_table_lookup (display_wayland->settings,
                                   "org.gnome.desktop.interface");
@@ -1467,13 +1467,13 @@ get_dpi_from_gsettings (GdkWaylandDisplay *display_wayland)
 typedef struct _TranslationEntry TranslationEntry;
 struct _TranslationEntry {
   gboolean valid;
-  const gchar *schema;
-  const gchar *key;
-  const gchar *setting;
+  const char *schema;
+  const char *key;
+  const char *setting;
   GType type;
   union {
     const char *s;
-    gint         i;
+    int          i;
     gboolean     b;
   } fallback;
 };
@@ -1798,7 +1798,7 @@ init_settings (GdkDisplay *display)
   GSettingsSchemaSource *source;
   GSettingsSchema *schema;
   GSettings *settings;
-  gint i;
+  int i;
 
   if (gdk_should_use_portal ())
     {
@@ -1994,7 +1994,7 @@ set_value_from_entry (GdkDisplay       *display,
     case G_TYPE_STRING:
       if (settings && entry->valid)
         {
-          gchar *s;
+          char *s;
           s = g_settings_get_string (settings, entry->key);
           g_value_set_string (value, s);
           g_free (s);
@@ -2053,7 +2053,7 @@ set_decoration_layout_from_entry (GdkDisplay       *display,
 
   if (settings)
     {
-      gchar *s = g_settings_get_string (settings, entry->key);
+      char *s = g_settings_get_string (settings, entry->key);
 
       translate_wm_button_layout_to_gtk (s);
       g_value_set_string (value, s);
@@ -2585,11 +2585,11 @@ gdk_wayland_display_get_output_scale (GdkWaylandDisplay *display_wayland,
  **/
 gboolean
 gdk_wayland_display_query_registry (GdkDisplay  *display,
-				    const gchar *global)
+				    const char *global)
 {
   GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
   GHashTableIter iter;
-  gchar *value;
+  char *value;
 
   g_return_val_if_fail (GDK_IS_WAYLAND_DISPLAY (display), FALSE);
   g_return_val_if_fail (global != NULL, FALSE);

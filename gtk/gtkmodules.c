@@ -101,14 +101,14 @@ split_file_list (const char *str)
   return files;
 }
 
-static gchar **
+static char **
 get_module_path (void)
 {
-  const gchar *module_path_env;
-  const gchar *exe_prefix;
-  gchar *module_path;
-  gchar *default_dir;
-  static gchar **result = NULL;
+  const char *module_path_env;
+  const char *exe_prefix;
+  char *module_path;
+  char *default_dir;
+  static char **result = NULL;
 
   if (result)
     return result;
@@ -144,28 +144,28 @@ get_module_path (void)
  * 
  * Returns: the search path for the module type. Free with g_strfreev().
  **/
-gchar **
-_gtk_get_module_path (const gchar *type)
+char **
+_gtk_get_module_path (const char *type)
 {
-  gchar **paths = get_module_path();
-  gchar **path;
-  gchar **result;
-  gint count = 0;
+  char **paths = get_module_path();
+  char **path;
+  char **result;
+  int count = 0;
 
   for (path = paths; *path; path++)
     count++;
 
-  result = g_new (gchar *, count * 4 + 1);
+  result = g_new (char *, count * 4 + 1);
 
   count = 0;
   for (path = get_module_path (); *path; path++)
     {
-      gint use_version, use_host;
+      int use_version, use_host;
       
       for (use_version = TRUE; use_version >= FALSE; use_version--)
 	for (use_host = TRUE; use_host >= FALSE; use_host--)
 	  {
-	    gchar *tmp_dir;
+	    char *tmp_dir;
 	    
 	    if (use_version && use_host)
 	      tmp_dir = g_build_filename (*path, GTK_BINARY_VERSION, GTK_HOST, type, NULL);

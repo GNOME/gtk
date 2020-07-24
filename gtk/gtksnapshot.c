@@ -1706,10 +1706,10 @@ gtk_snapshot_append_color (GtkSnapshot           *snapshot,
 void
 gtk_snapshot_render_background (GtkSnapshot     *snapshot,
                                 GtkStyleContext *context,
-                                gdouble          x,
-                                gdouble          y,
-                                gdouble          width,
-                                gdouble          height)
+                                double           x,
+                                double           y,
+                                double           width,
+                                double           height)
 {
   GtkCssBoxes boxes;
 
@@ -1738,10 +1738,10 @@ gtk_snapshot_render_background (GtkSnapshot     *snapshot,
 void
 gtk_snapshot_render_frame (GtkSnapshot     *snapshot,
                            GtkStyleContext *context,
-                           gdouble          x,
-                           gdouble          y,
-                           gdouble          width,
-                           gdouble          height)
+                           double           x,
+                           double           y,
+                           double           width,
+                           double           height)
 {
   GtkCssBoxes boxes;
 
@@ -1770,10 +1770,10 @@ gtk_snapshot_render_frame (GtkSnapshot     *snapshot,
 void
 gtk_snapshot_render_focus (GtkSnapshot     *snapshot,
                            GtkStyleContext *context,
-                           gdouble          x,
-                           gdouble          y,
-                           gdouble          width,
-                           gdouble          height)
+                           double           x,
+                           double           y,
+                           double           width,
+                           double           height)
 {
   GtkCssBoxes boxes;
 
@@ -1801,8 +1801,8 @@ gtk_snapshot_render_focus (GtkSnapshot     *snapshot,
 void
 gtk_snapshot_render_layout (GtkSnapshot     *snapshot,
                             GtkStyleContext *context,
-                            gdouble          x,
-                            gdouble          y,
+                            double           x,
+                            double           y,
                             PangoLayout     *layout)
 {
   const bool needs_translate = (x != 0 || y != 0);

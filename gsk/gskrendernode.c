@@ -115,7 +115,7 @@ value_render_node_collect_value (GValue      *value,
   return NULL;
 }
 
-static gchar *
+static char *
 value_render_node_lcopy_value (const GValue *value,
                                guint         n_collect_values,
                                GTypeCValue  *collect_values,

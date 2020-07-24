@@ -12,7 +12,7 @@ static GtkWidget *progress_bar = NULL;
 static gboolean
 apply_changes_gradually (gpointer data)
 {
-  gdouble fraction;
+  double fraction;
 
   /* Work, work, work... */
   fraction = gtk_progress_bar_get_fraction (GTK_PROGRESS_BAR (progress_bar));
@@ -47,8 +47,8 @@ on_assistant_close_cancel (GtkWidget *widget, gpointer data)
 static void
 on_assistant_prepare (GtkWidget *widget, GtkWidget *page, gpointer data)
 {
-  gint current_page, n_pages;
-  gchar *title;
+  int current_page, n_pages;
+  char *title;
 
   current_page = gtk_assistant_get_current_page (GTK_ASSISTANT (widget));
   n_pages = gtk_assistant_get_n_pages (GTK_ASSISTANT (widget));
@@ -70,8 +70,8 @@ on_entry_changed (GtkWidget *widget, gpointer data)
 {
   GtkAssistant *assistant = GTK_ASSISTANT (data);
   GtkWidget *current_page;
-  gint page_number;
-  const gchar *text;
+  int page_number;
+  const char *text;
 
   page_number = gtk_assistant_get_current_page (assistant);
   current_page = gtk_assistant_get_nth_page (assistant, page_number);

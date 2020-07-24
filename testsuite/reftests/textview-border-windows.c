@@ -20,7 +20,7 @@
 static void
 set_border_window_size (GtkTextView       *text_view,
                         GtkTextWindowType  win,
-                        gint               size)
+                        int                size)
 {
   GtkWidget *label;
 

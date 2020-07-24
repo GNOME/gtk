@@ -78,7 +78,7 @@ _gdk_macos_settings_load (GdkMacosSettings *settings)
   settings->double_click_time = fval * 1000;
 
   name = [[NSFont systemFontOfSize:0] familyName];
-  pt_size = (gint)[[NSFont userFontOfSize:0] pointSize];
+  pt_size = (int)[[NSFont userFontOfSize:0] pointSize];
   /* Let's try to use the "views" font size (12pt) by default. This is
    * used for lists/text/other "content" which is the largest parts of
    * apps, using the "regular control" size (13pt) looks a bit out of
@@ -96,7 +96,7 @@ _gdk_macos_settings_load (GdkMacosSettings *settings)
 
 gboolean
 _gdk_macos_display_get_setting (GdkMacosDisplay *self,
-                                const gchar     *setting,
+                                const char      *setting,
                                 GValue          *value)
 {
   GDK_BEGIN_MACOS_ALLOC_POOL;

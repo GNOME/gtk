@@ -464,7 +464,7 @@ gtk_radio_button_new (GSList *group)
  */
 GtkWidget*
 gtk_radio_button_new_with_label (GSList      *group,
-				 const gchar *label)
+				 const char *label)
 {
   GtkWidget *radio_button;
 
@@ -493,7 +493,7 @@ gtk_radio_button_new_with_label (GSList      *group,
  */
 GtkWidget*
 gtk_radio_button_new_with_mnemonic (GSList      *group,
-				    const gchar *label)
+				    const char *label)
 {
   GtkWidget *radio_button;
 
@@ -539,7 +539,7 @@ gtk_radio_button_new_from_widget (GtkRadioButton *radio_group_member)
  */
 GtkWidget*
 gtk_radio_button_new_with_label_from_widget (GtkRadioButton *radio_group_member,
-					     const gchar    *label)
+					     const char     *label)
 {
   GSList *l = NULL;
   if (radio_group_member)
@@ -561,7 +561,7 @@ gtk_radio_button_new_with_label_from_widget (GtkRadioButton *radio_group_member,
  **/
 GtkWidget*
 gtk_radio_button_new_with_mnemonic_from_widget (GtkRadioButton *radio_group_member,
-					        const gchar    *label)
+					        const char     *label)
 {
   GSList *l = NULL;
   if (radio_group_member)

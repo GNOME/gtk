@@ -73,8 +73,8 @@ typedef struct _GdkWaylandTabletPadData GdkWaylandTabletPadData;
 struct _GdkWaylandTouchData
 {
   uint32_t id;
-  gdouble x;
-  gdouble y;
+  double x;
+  double y;
   GdkSurface *surface;
   uint32_t touch_down_serial;
   guint initial_touch : 1;
@@ -85,7 +85,7 @@ struct _GdkWaylandPointerFrameData
   GdkEvent *event;
 
   /* Specific to the scroll event */
-  gdouble delta_x, delta_y;
+  double delta_x, delta_y;
   int32_t discrete_x, discrete_y;
   gint8 is_scroll_stop;
   enum wl_pointer_axis_source source;
@@ -147,7 +147,7 @@ struct _GdkWaylandTabletPadGroupData
   struct {
     guint source;
     gboolean is_stop;
-    gdouble value;
+    double value;
   } axis_tmp_info;
 };
 
@@ -161,7 +161,7 @@ struct _GdkWaylandTabletPadData
 
   guint enter_serial;
   uint32_t n_buttons;
-  gchar *path;
+  char *path;
 
   GList *rings;
   GList *strips;
@@ -171,8 +171,8 @@ struct _GdkWaylandTabletPadData
 struct _GdkWaylandTabletData
 {
   struct zwp_tablet_v2 *wp_tablet;
-  gchar *name;
-  gchar *path;
+  char *name;
+  char *path;
   uint32_t vid;
   uint32_t pid;
 
@@ -185,8 +185,8 @@ struct _GdkWaylandTabletData
 
   GdkWaylandTabletToolData *current_tool;
 
-  gint axis_indices[GDK_AXIS_LAST];
-  gdouble *axes;
+  int axis_indices[GDK_AXIS_LAST];
+  double *axes;
 };
 
 struct _GdkWaylandSeat
@@ -253,7 +253,7 @@ struct _GdkWaylandSeat
 
   /* Some tracking on gesture events */
   guint gesture_n_fingers;
-  gdouble gesture_scale;
+  double gesture_scale;
 
   GdkCursor *grab_cursor;
 };
@@ -310,10 +310,10 @@ static void deliver_key_event (GdkWaylandSeat       *seat,
 static void
 gdk_wayland_device_get_state (GdkDevice       *device,
                               GdkSurface       *surface,
-                              gdouble         *axes,
+                              double          *axes,
                               GdkModifierType *mask)
 {
-  gdouble x, y;
+  double x, y;
 
   gdk_surface_get_device_position (surface, device, &x, &y, mask);
 
@@ -538,8 +538,8 @@ static void
 gdk_wayland_device_query_state (GdkDevice        *device,
                                 GdkSurface       *surface,
                                 GdkSurface      **child_surface,
-                                gdouble          *win_x,
-                                gdouble          *win_y,
+                                double           *win_x,
+                                double           *win_y,
                                 GdkModifierType  *mask)
 {
   GdkWaylandPointerData *pointer;
@@ -788,8 +788,8 @@ gdk_wayland_device_ungrab (GdkDevice *device,
 
 static GdkSurface *
 gdk_wayland_device_surface_at_position (GdkDevice       *device,
-                                        gdouble         *win_x,
-                                        gdouble         *win_y,
+                                        double          *win_x,
+                                        double          *win_y,
                                         GdkModifierType *mask)
 {
   GdkWaylandPointerData *pointer;
@@ -833,7 +833,7 @@ gdk_wayland_device_init (GdkWaylandDevice *device_core)
   _gdk_device_add_axis (device, GDK_AXIS_Y, 0, 0, 1);
 }
 
-static gint
+static int
 gdk_wayland_device_pad_get_n_groups (GdkDevicePad *pad)
 {
   GdkSeat *seat = gdk_device_get_seat (GDK_DEVICE (pad));
@@ -846,9 +846,9 @@ gdk_wayland_device_pad_get_n_groups (GdkDevicePad *pad)
   return g_list_length (data->mode_groups);
 }
 
-static gint
+static int
 gdk_wayland_device_pad_get_group_n_modes (GdkDevicePad *pad,
-                                          gint          n_group)
+                                          int           n_group)
 {
   GdkSeat *seat = gdk_device_get_seat (GDK_DEVICE (pad));
   GdkWaylandTabletPadGroupData *group;
@@ -865,7 +865,7 @@ gdk_wayland_device_pad_get_group_n_modes (GdkDevicePad *pad,
   return group->n_modes;
 }
 
-static gint
+static int
 gdk_wayland_device_pad_get_n_features (GdkDevicePad        *pad,
                                        GdkDevicePadFeature  feature)
 {
@@ -889,16 +889,16 @@ gdk_wayland_device_pad_get_n_features (GdkDevicePad        *pad,
     }
 }
 
-static gint
+static int
 gdk_wayland_device_pad_get_feature_group (GdkDevicePad        *pad,
                                           GdkDevicePadFeature  feature,
-                                          gint                 idx)
+                                          int                  idx)
 {
   GdkSeat *seat = gdk_device_get_seat (GDK_DEVICE (pad));
   GdkWaylandTabletPadGroupData *group;
   GdkWaylandTabletPadData *data;
   GList *l;
-  gint i;
+  int i;
 
   data = gdk_wayland_seat_find_pad (GDK_WAYLAND_SEAT (seat),
                                     GDK_DEVICE (pad));
@@ -1357,8 +1357,8 @@ flush_discrete_scroll_event (GdkWaylandSeat     *seat,
 
 static void
 flush_smooth_scroll_event (GdkWaylandSeat *seat,
-                           gdouble         delta_x,
-                           gdouble         delta_y,
+                           double          delta_x,
+                           double          delta_y,
                            gboolean        is_stop)
 {
   GdkEvent *event;
@@ -2543,8 +2543,8 @@ emit_gesture_swipe_event (GdkWaylandSeat          *seat,
                           GdkTouchpadGesturePhase  phase,
                           guint32                  _time,
                           guint32                  n_fingers,
-                          gdouble                  dx,
-                          gdouble                  dy)
+                          double                   dx,
+                          double                   dy)
 {
   GdkEvent *event;
 
@@ -2638,10 +2638,10 @@ emit_gesture_pinch_event (GdkWaylandSeat          *seat,
                           GdkTouchpadGesturePhase  phase,
                           guint32                  _time,
                           guint                    n_fingers,
-                          gdouble                  dx,
-                          gdouble                  dy,
-                          gdouble                  scale,
-                          gdouble                  angle_delta)
+                          double                   dx,
+                          double                   dy,
+                          double                   scale,
+                          double                   angle_delta)
 {
   GdkEvent *event;
 
@@ -2853,8 +2853,8 @@ tablet_handle_done (void                 *data,
   GdkWaylandSeat *seat = GDK_WAYLAND_SEAT (tablet->seat);
   GdkDisplay *display = gdk_seat_get_display (GDK_SEAT (seat));
   GdkDevice *logical_device, *stylus_device;
-  gchar *logical_name;
-  gchar *vid, *pid;
+  char *logical_name;
+  char *vid, *pid;
 
   vid = g_strdup_printf ("%.4x", tablet->vid);
   pid = g_strdup_printf ("%.4x", tablet->pid);
@@ -3344,7 +3344,7 @@ static void
 gdk_wayland_device_tablet_clone_tool_axes (GdkWaylandTabletData *tablet,
                                            GdkDeviceTool        *tool)
 {
-  gint axis_pos;
+  int axis_pos;
 
   g_object_freeze_notify (G_OBJECT (tablet->stylus_device));
   _gdk_device_reset_axes (tablet->stylus_device);
@@ -3393,7 +3393,7 @@ gdk_wayland_device_tablet_clone_tool_axes (GdkWaylandTabletData *tablet,
     g_free (tablet->axes);
 
   tablet->axes =
-    g_new0 (gdouble, gdk_device_get_n_axes (tablet->stylus_device));
+    g_new0 (double, gdk_device_get_n_axes (tablet->stylus_device));
 
   g_object_thaw_notify (G_OBJECT (tablet->stylus_device));
 }
@@ -3402,10 +3402,10 @@ static void
 gdk_wayland_mimic_device_axes (GdkDevice *logical,
                                GdkDevice *physical)
 {
-  gdouble axis_min, axis_max, axis_resolution;
+  double axis_min, axis_max, axis_resolution;
   GdkAxisUse axis_use;
-  gint axis_count;
-  gint i;
+  int axis_count;
+  int i;
 
   g_object_freeze_notify (G_OBJECT (logical));
   _gdk_device_reset_axes (logical);
@@ -3510,7 +3510,7 @@ static double *
 tablet_copy_axes (GdkWaylandTabletData *tablet)
 {
   return g_memdup (tablet->axes,
-                   sizeof (gdouble) * gdk_device_get_n_axes (tablet->stylus_device));
+                   sizeof (double) * gdk_device_get_n_axes (tablet->stylus_device));
 }
 
 static void
@@ -3607,7 +3607,7 @@ tablet_tool_handle_pressure (void                      *data,
 {
   GdkWaylandTabletToolData *tool = data;
   GdkWaylandTabletData *tablet = tool->current_tablet;
-  gint axis_index = tablet->axis_indices[GDK_AXIS_PRESSURE];
+  int axis_index = tablet->axis_indices[GDK_AXIS_PRESSURE];
 
   _gdk_device_translate_axis (tablet->stylus_device, axis_index,
                               pressure, &tablet->axes[axis_index]);
@@ -3624,7 +3624,7 @@ tablet_tool_handle_distance (void                      *data,
 {
   GdkWaylandTabletToolData *tool = data;
   GdkWaylandTabletData *tablet = tool->current_tablet;
-  gint axis_index = tablet->axis_indices[GDK_AXIS_DISTANCE];
+  int axis_index = tablet->axis_indices[GDK_AXIS_DISTANCE];
 
   _gdk_device_translate_axis (tablet->stylus_device, axis_index,
                               distance, &tablet->axes[axis_index]);
@@ -3642,8 +3642,8 @@ tablet_tool_handle_tilt (void                      *data,
 {
   GdkWaylandTabletToolData *tool = data;
   GdkWaylandTabletData *tablet = tool->current_tablet;
-  gint xtilt_axis_index = tablet->axis_indices[GDK_AXIS_XTILT];
-  gint ytilt_axis_index = tablet->axis_indices[GDK_AXIS_YTILT];
+  int xtilt_axis_index = tablet->axis_indices[GDK_AXIS_XTILT];
+  int ytilt_axis_index = tablet->axis_indices[GDK_AXIS_YTILT];
 
   _gdk_device_translate_axis (tablet->stylus_device, xtilt_axis_index,
                               wl_fixed_to_double (xtilt),
@@ -3701,7 +3701,7 @@ tablet_tool_handle_rotation (void                      *data,
 {
   GdkWaylandTabletToolData *tool = data;
   GdkWaylandTabletData *tablet = tool->current_tablet;
-  gint axis_index = tablet->axis_indices[GDK_AXIS_ROTATION];
+  int axis_index = tablet->axis_indices[GDK_AXIS_ROTATION];
 
   _gdk_device_translate_axis (tablet->stylus_device, axis_index,
                               wl_fixed_to_double (degrees),
@@ -3720,7 +3720,7 @@ tablet_tool_handle_slider (void                      *data,
 {
   GdkWaylandTabletToolData *tool = data;
   GdkWaylandTabletData *tablet = tool->current_tablet;
-  gint axis_index = tablet->axis_indices[GDK_AXIS_SLIDER];
+  int axis_index = tablet->axis_indices[GDK_AXIS_SLIDER];
 
   _gdk_device_translate_axis (tablet->stylus_device, axis_index,
                               position, &tablet->axes[axis_index]);
@@ -3917,7 +3917,7 @@ tablet_pad_strip_handle_position (void                           *data,
             g_message ("tablet pad strip handle position, strip = %p position = %d",
                        wp_tablet_pad_strip, position));
 
-  group->axis_tmp_info.value = (gdouble) position / 65535;
+  group->axis_tmp_info.value = (double) position / 65535;
 }
 
 static void
@@ -4175,7 +4175,7 @@ tablet_pad_handle_button (void                     *data,
   GdkWaylandTabletPadData *pad = data;
   GdkWaylandTabletPadGroupData *group;
   GdkEvent *event;
-  gint n_group;
+  int n_group;
 
   GDK_SEAT_NOTE (pad->seat, EVENTS,
             g_message ("tablet pad handle button, pad = %p, button = %d, state = %d",
@@ -5077,7 +5077,7 @@ gdk_wayland_seat_get_wl_seat (GdkSeat *seat)
  *
  * Returns: the /dev/input/event* path of this device
  **/
-const gchar *
+const char *
 gdk_wayland_device_get_node_path (GdkDevice *device)
 {
   GdkWaylandTabletData *tablet;
@@ -5113,7 +5113,7 @@ void
 gdk_wayland_device_pad_set_feedback (GdkDevice           *device,
                                      GdkDevicePadFeature  feature,
                                      guint                feature_idx,
-                                     const gchar         *label)
+                                     const char          *label)
 {
   GdkWaylandTabletPadData *pad;
   GdkWaylandTabletPadGroupData *group;

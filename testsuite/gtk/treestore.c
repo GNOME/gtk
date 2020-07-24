@@ -102,8 +102,8 @@ tree_store_teardown (TreeStore     *fixture,
 
 static void
 check_model (TreeStore *fixture,
-	     gint      *new_order,
-	     gint       skip)
+	     int       *new_order,
+	     int        skip)
 {
   int i;
   GtkTreePath *path;
@@ -1062,7 +1062,7 @@ static void
 specific_bug_698396 (void)
 {
   GtkTreeStore *tree_store;
-  gint new_order[1] = { 0 };
+  int new_order[1] = { 0 };
 
   /*http://bugzilla.gnome.org/show_bug.cgi?id=698396 */
 

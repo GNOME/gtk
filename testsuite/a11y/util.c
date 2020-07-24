@@ -23,7 +23,7 @@
 static void
 test_toolkit_name (void)
 {
-  const gchar *s;
+  const char *s;
 
   s = atk_get_toolkit_name ();
   g_assert_cmpstr (s, ==, "gtk");
@@ -32,7 +32,7 @@ test_toolkit_name (void)
 static void
 test_toolkit_version (void)
 {
-  const gchar *s;
+  const char *s;
 
   s = atk_get_toolkit_version ();
   g_assert_cmpstr (s, ==, GTK_VERSION);

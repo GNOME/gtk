@@ -100,7 +100,7 @@ GDK_AVAILABLE_IN_ALL
 GType                 gdk_device_get_type       (void) G_GNUC_CONST;
 
 GDK_AVAILABLE_IN_ALL
-const gchar *         gdk_device_get_name       (GdkDevice *device);
+const char *         gdk_device_get_name       (GdkDevice *device);
 GDK_AVAILABLE_IN_ALL
 gboolean              gdk_device_get_has_cursor (GdkDevice *device);
 
@@ -116,7 +116,7 @@ GdkAxisUse     gdk_device_get_axis_use  (GdkDevice         *device,
 GDK_AVAILABLE_IN_ALL
 void     gdk_device_get_state    (GdkDevice         *device,
                                   GdkSurface         *surface,
-                                  gdouble           *axes,
+                                  double            *axes,
                                   GdkModifierType   *mask);
 GDK_AVAILABLE_IN_ALL
 GdkSurface * gdk_device_get_surface_at_position (GdkDevice *device,
@@ -124,12 +124,12 @@ GdkSurface * gdk_device_get_surface_at_position (GdkDevice *device,
                                                  double    *win_y);
 
 GDK_AVAILABLE_IN_ALL
-gint     gdk_device_get_n_axes     (GdkDevice       *device);
+int      gdk_device_get_n_axes     (GdkDevice       *device);
 GDK_AVAILABLE_IN_ALL
 gboolean gdk_device_get_axis     (GdkDevice         *device,
-                                  gdouble           *axes,
+                                  double            *axes,
                                   GdkAxisUse         use,
-                                  gdouble           *value);
+                                  double            *value);
 GDK_AVAILABLE_IN_ALL
 GdkDisplay * gdk_device_get_display (GdkDevice      *device);
 
@@ -142,9 +142,9 @@ GDK_AVAILABLE_IN_ALL
 GdkDeviceType gdk_device_get_device_type (GdkDevice *device);
 
 GDK_AVAILABLE_IN_ALL
-const gchar *gdk_device_get_vendor_id       (GdkDevice *device);
+const char *gdk_device_get_vendor_id       (GdkDevice *device);
 GDK_AVAILABLE_IN_ALL
-const gchar *gdk_device_get_product_id      (GdkDevice *device);
+const char *gdk_device_get_product_id      (GdkDevice *device);
 
 GDK_AVAILABLE_IN_ALL
 GdkSeat     *gdk_device_get_seat            (GdkDevice *device);

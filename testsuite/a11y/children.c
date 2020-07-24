@@ -49,9 +49,9 @@ test_scrolled_window_child_count (void)
 }
 
 typedef struct {
-  gint count;
-  gint index;
-  gint n_children;
+  int count;
+  int index;
+  int n_children;
   gpointer parent;
 } SignalData;
 
@@ -68,7 +68,7 @@ children_changed (AtkObject  *accessible,
 
 static void
 remove_child (STATE *state,
-              gint i)
+              int i)
 {
   GtkWidget *child;
 
@@ -109,7 +109,7 @@ parent_notify (AtkObject *obj, GParamSpec *pspec, SignalData *data)
 }
 
 static gboolean
-do_create_child (STATE *state, gint i)
+do_create_child (STATE *state, int i)
 {
   if (GTK_IS_ENTRY (state->widget))
     {
@@ -143,8 +143,8 @@ test_add_remove (GtkWidget *widget)
   SignalData remove_data;
   SignalData parent_data[3] = { { 0, }, };
   STATE state;
-  gint i, j;
-  gint step_children;
+  int i, j;
+  int step_children;
 
   state.widget = widget;
   accessible = gtk_widget_get_accessible (widget);
@@ -211,11 +211,11 @@ test_add_remove (GtkWidget *widget)
 }
 
 static void
-add_child_test (const gchar      *prefix,
+add_child_test (const char       *prefix,
                 GTestFixtureFunc  test_func,
                 GtkWidget        *widget)
 {
-  gchar *path;
+  char *path;
 
   path = g_strdup_printf ("%s/%s", prefix, G_OBJECT_TYPE_NAME (widget));
   g_test_add_vtable (path,

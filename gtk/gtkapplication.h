@@ -72,7 +72,7 @@ GDK_AVAILABLE_IN_ALL
 GType            gtk_application_get_type      (void) G_GNUC_CONST;
 
 GDK_AVAILABLE_IN_ALL
-GtkApplication * gtk_application_new           (const gchar       *application_id,
+GtkApplication * gtk_application_new           (const char        *application_id,
                                                 GApplicationFlags  flags);
 
 GDK_AVAILABLE_IN_ALL
@@ -103,7 +103,7 @@ GDK_AVAILABLE_IN_ALL
 guint            gtk_application_inhibit            (GtkApplication             *application,
                                                      GtkWindow                  *window,
                                                      GtkApplicationInhibitFlags  flags,
-                                                     const gchar                *reason);
+                                                     const char                 *reason);
 GDK_AVAILABLE_IN_ALL
 void             gtk_application_uninhibit          (GtkApplication             *application,
                                                      guint                       cookie);
@@ -116,24 +116,24 @@ GDK_AVAILABLE_IN_ALL
 GtkWindow *      gtk_application_get_active_window  (GtkApplication             *application);
 
 GDK_AVAILABLE_IN_ALL
-gchar **         gtk_application_list_action_descriptions        (GtkApplication       *application);
+char **         gtk_application_list_action_descriptions        (GtkApplication       *application);
 
 GDK_AVAILABLE_IN_ALL
-gchar **         gtk_application_get_accels_for_action           (GtkApplication       *application,
-                                                                  const gchar          *detailed_action_name);
+char **         gtk_application_get_accels_for_action           (GtkApplication       *application,
+                                                                  const char           *detailed_action_name);
 GDK_AVAILABLE_IN_ALL
-gchar **         gtk_application_get_actions_for_accel           (GtkApplication       *application,
-                                                                  const gchar          *accel);
+char **         gtk_application_get_actions_for_accel           (GtkApplication       *application,
+                                                                  const char           *accel);
 
 
 GDK_AVAILABLE_IN_ALL
 void             gtk_application_set_accels_for_action           (GtkApplication       *application,
-                                                                  const gchar          *detailed_action_name,
-                                                                  const gchar * const  *accels);
+                                                                  const char           *detailed_action_name,
+                                                                  const char * const  *accels);
 
 GDK_AVAILABLE_IN_ALL
 GMenu *          gtk_application_get_menu_by_id                  (GtkApplication       *application,
-                                                                  const gchar          *id);
+                                                                  const char           *id);
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkApplication, g_object_unref)
 

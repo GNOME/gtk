@@ -230,7 +230,7 @@ gtk_widget_accessible_get_parent (AtkObject *accessible)
    */
   if (GTK_IS_NOTEBOOK (parent_widget))
     {
-      gint page_num;
+      int page_num;
       GtkWidget *child;
       GtkNotebook *notebook;
 
@@ -465,12 +465,12 @@ gtk_widget_accessible_ref_state_set (AtkObject *accessible)
   return state_set;
 }
 
-static gint
+static int
 gtk_widget_accessible_get_index_in_parent (AtkObject *accessible)
 {
   GtkWidget *widget;
   GtkWidget *parent_widget;
-  gint index;
+  int index;
   GtkWidget *ch;
 
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (accessible));
@@ -488,7 +488,7 @@ gtk_widget_accessible_get_index_in_parent (AtkObject *accessible)
         return 0;
       else
         {
-          gint n_children, i;
+          int n_children, i;
           gboolean found = FALSE;
 
           n_children = atk_object_get_n_accessible_children (parent);
@@ -592,10 +592,10 @@ gtk_widget_accessible_init (GtkWidgetAccessible *accessible)
 
 static void
 gtk_widget_accessible_get_extents (AtkComponent   *component,
-                                   gint           *x,
-                                   gint           *y,
-                                   gint           *width,
-                                   gint           *height,
+                                   int            *x,
+                                   int            *y,
+                                   int            *width,
+                                   int            *height,
                                    AtkCoordType    coord_type)
 {
   GtkWidget *widget;
@@ -663,10 +663,10 @@ gtk_widget_accessible_grab_focus (AtkComponent *component)
 
 static gboolean
 gtk_widget_accessible_set_extents (AtkComponent *component,
-                                   gint          x,
-                                   gint          y,
-                                   gint          width,
-                                   gint          height,
+                                   int           x,
+                                   int           y,
+                                   int           width,
+                                   int           height,
                                    AtkCoordType  coord_type)
 {
   return FALSE;
@@ -674,8 +674,8 @@ gtk_widget_accessible_set_extents (AtkComponent *component,
 
 static gboolean
 gtk_widget_accessible_set_position (AtkComponent *component,
-                                    gint          x,
-                                    gint          y,
+                                    int           x,
+                                    int           y,
                                     AtkCoordType  coord_type)
 {
   return FALSE;
@@ -683,8 +683,8 @@ gtk_widget_accessible_set_position (AtkComponent *component,
 
 static gboolean
 gtk_widget_accessible_set_size (AtkComponent *component,
-                                gint          width,
-                                gint          height)
+                                int           width,
+                                int           height)
 {
   return FALSE;
 }

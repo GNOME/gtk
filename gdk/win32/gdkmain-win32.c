@@ -52,7 +52,7 @@ static gboolean gdk_synchronize = FALSE;
 void
 _gdk_win32_surfaceing_init (void)
 {
-  gchar buf[10];
+  char buf[10];
 
   if (getenv ("GDK_IGNORE_WINTAB") != NULL)
     _gdk_input_ignore_wintab = TRUE;
@@ -77,18 +77,18 @@ _gdk_win32_surfaceing_init (void)
 }
 
 void
-_gdk_win32_api_failed (const gchar *where,
-                       const gchar *api)
+_gdk_win32_api_failed (const char *where,
+                       const char *api)
 {
   DWORD error_code = GetLastError ();
-  gchar *msg = g_win32_error_message (error_code);
+  char *msg = g_win32_error_message (error_code);
   g_warning ("%s: %s failed with code %lu: %s", where, api, error_code, msg);
   g_free (msg);
 }
 
 void
-_gdk_other_api_failed (const gchar *where,
-		      const gchar *api)
+_gdk_other_api_failed (const char *where,
+		      const char *api)
 {
   g_warning ("%s: %s failed", where, api);
 }
@@ -104,14 +104,14 @@ _gdk_other_api_failed (const gchar *where,
  * function’s return value is used in debugging output right after the call,
  * and the return value isn’t used after that.
  */
-static gchar *
-static_printf (const gchar *format,
+static char *
+static_printf (const char *format,
 	       ...)
 {
-  static gchar buf[10000];
-  gchar *msg;
-  static gchar *bufp = buf;
-  gchar *retval;
+  static char buf[10000];
+  char *msg;
+  static char *bufp = buf;
+  char *retval;
   va_list args;
 
   va_start (args, format);
@@ -170,7 +170,7 @@ _gdk_win32_print_system_palette (void)
   g_free (pe);
 }
 
-static gint
+static int
 palette_size (HPALETTE hpal)
 {
   WORD npal = 0;
@@ -185,7 +185,7 @@ void
 _gdk_win32_print_hpalette (HPALETTE hpal)
 {
   PALETTEENTRY *pe;
-  gint n, npal;
+  int n, npal;
 
   npal = palette_size (hpal);
   pe = g_new (PALETTEENTRY, npal);
@@ -244,7 +244,7 @@ _gdk_win32_print_dc (HDC hdc)
   DeleteObject (hrgn);
 }
 
-gchar *
+char *
 _gdk_win32_drag_protocol_to_string (GdkDragProtocol protocol)
 {
   switch (protocol)
@@ -261,12 +261,12 @@ _gdk_win32_drag_protocol_to_string (GdkDragProtocol protocol)
   return NULL;
 }
 
-gchar *
+char *
 _gdk_win32_surface_state_to_string (GdkSurfaceState state)
 {
-  gchar buf[100];
-  gchar *bufp = buf;
-  gchar *s = "";
+  char buf[100];
+  char *bufp = buf;
+  char *s = "";
 
   buf[0] = '\0';
 
@@ -287,12 +287,12 @@ _gdk_win32_surface_state_to_string (GdkSurfaceState state)
   return static_printf ("%s", buf);
 }
 
-gchar *
+char *
 _gdk_win32_surface_style_to_string (LONG style)
 {
-  gchar buf[1000];
-  gchar *bufp = buf;
-  gchar *s = "";
+  char buf[1000];
+  char *bufp = buf;
+  char *s = "";
 
   buf[0] = '\0';
 
@@ -329,12 +329,12 @@ _gdk_win32_surface_style_to_string (LONG style)
   return static_printf ("%s", buf);
 }
 
-gchar *
+char *
 _gdk_win32_surface_exstyle_to_string (LONG style)
 {
-  gchar buf[1000];
-  gchar *bufp = buf;
-  gchar *s = "";
+  char buf[1000];
+  char *bufp = buf;
+  char *s = "";
 
   buf[0] = '\0';
 
@@ -375,12 +375,12 @@ _gdk_win32_surface_exstyle_to_string (LONG style)
   return static_printf ("%s", buf);
 }
 
-gchar *
+char *
 _gdk_win32_surface_pos_bits_to_string (UINT flags)
 {
-  gchar buf[1000];
-  gchar *bufp = buf;
-  gchar *s = "";
+  char buf[1000];
+  char *bufp = buf;
+  char *s = "";
 
   buf[0] = '\0';
 
@@ -407,12 +407,12 @@ _gdk_win32_surface_pos_bits_to_string (UINT flags)
   return static_printf ("%s", buf);
 }
 
-gchar *
+char *
 _gdk_win32_drag_action_to_string (GdkDragAction actions)
 {
-  gchar buf[100];
-  gchar *bufp = buf;
-  gchar *s = "";
+  char buf[100];
+  char *bufp = buf;
+  char *s = "";
 
   buf[0] = '\0';
 
@@ -429,7 +429,7 @@ _gdk_win32_drag_action_to_string (GdkDragAction actions)
   return static_printf ("%s", buf);
 }
 
-gchar *
+char *
 _gdk_win32_rop2_to_string (int rop2)
 {
   switch (rop2)
@@ -458,7 +458,7 @@ _gdk_win32_rop2_to_string (int rop2)
   return NULL;
 }
 
-gchar *
+char *
 _gdk_win32_lbstyle_to_string (UINT brush_style)
 {
   switch (brush_style)
@@ -477,7 +477,7 @@ _gdk_win32_lbstyle_to_string (UINT brush_style)
   return NULL;
 }
 
-gchar *
+char *
 _gdk_win32_pstype_to_string (DWORD pen_style)
 {
   switch (pen_style & PS_TYPE_MASK)
@@ -490,7 +490,7 @@ _gdk_win32_pstype_to_string (DWORD pen_style)
   return NULL;
 }
 
-gchar *
+char *
 _gdk_win32_psstyle_to_string (DWORD pen_style)
 {
   switch (pen_style & PS_STYLE_MASK)
@@ -512,7 +512,7 @@ _gdk_win32_psstyle_to_string (DWORD pen_style)
   return NULL;
 }
 
-gchar *
+char *
 _gdk_win32_psendcap_to_string (DWORD pen_style)
 {
   switch (pen_style & PS_ENDCAP_MASK)
@@ -528,7 +528,7 @@ _gdk_win32_psendcap_to_string (DWORD pen_style)
   return NULL;
 }
 
-gchar *
+char *
 _gdk_win32_psjoin_to_string (DWORD pen_style)
 {
   switch (pen_style & PS_JOIN_MASK)
@@ -544,7 +544,7 @@ _gdk_win32_psjoin_to_string (DWORD pen_style)
   return NULL;
 }
 
-gchar *
+char *
 _gdk_win32_message_to_string (UINT msg)
 {
   switch (msg)
@@ -781,16 +781,16 @@ _gdk_win32_message_to_string (UINT msg)
   return NULL;
 }
 
-gchar *
+char *
 _gdk_win32_key_to_string (LONG lParam)
 {
   char buf[100];
-  gchar *keyname_utf8;
+  char *keyname_utf8;
 
   if (GetKeyNameText (lParam, buf, sizeof (buf)) &&
       (keyname_utf8 = g_locale_to_utf8 (buf, -1, NULL, NULL, NULL)) != NULL)
     {
-      gchar *retval = static_printf ("%s", keyname_utf8);
+      char *retval = static_printf ("%s", keyname_utf8);
 
       g_free (keyname_utf8);
 
@@ -800,7 +800,7 @@ _gdk_win32_key_to_string (LONG lParam)
   return static_printf ("unk-%#lx", lParam);
 }
 
-gchar *
+char *
 _gdk_win32_cf_to_string (UINT format)
 {
   char buf[100];
@@ -844,13 +844,13 @@ _gdk_win32_cf_to_string (UINT format)
     }
 }
 
-gchar *
+char *
 _gdk_win32_data_to_string (const guchar *data,
 			   int           nbytes)
 {
   GString *s = g_string_new ("");
   int i;
-  gchar *retval;
+  char *retval;
 
   for (i = 0; i < nbytes; i++)
     if (data[i] >=' ' && data[i] <= '~')
@@ -864,7 +864,7 @@ _gdk_win32_data_to_string (const guchar *data,
   return retval;
 }
 
-gchar *
+char *
 _gdk_win32_rect_to_string (const RECT *rect)
 {
   return static_printf ("%ldx%ld@%+ld%+ld",
@@ -872,7 +872,7 @@ _gdk_win32_rect_to_string (const RECT *rect)
 			rect->left, rect->top);
 }
 
-gchar *
+char *
 _gdk_win32_gdkrectangle_to_string (const GdkRectangle *rect)
 {
   return static_printf ("%dx%d@%+d%+d",
@@ -880,7 +880,7 @@ _gdk_win32_gdkrectangle_to_string (const GdkRectangle *rect)
 			rect->x, rect->y);
 }
 
-gchar *
+char *
 _gdk_win32_cairo_region_to_string (const cairo_region_t *rgn)
 {
   cairo_rectangle_int_t extents;
@@ -890,7 +890,7 @@ _gdk_win32_cairo_region_to_string (const cairo_region_t *rgn)
 			extents.x, extents.y);
 }
 
-gchar *
+char *
 _gdk_win32_surface_description (GdkSurface *d)
 {
   g_return_val_if_fail (GDK_IS_SURFACE (d), NULL);

@@ -196,7 +196,7 @@ add_widget (GtkInspectorSizeGroups *sl,
 {
   GtkWidget *row;
   GtkWidget *label;
-  gchar *text;
+  char *text;
 
   row = g_object_new (size_group_row_get_type (), "widget", widget, NULL);
   text = g_strdup_printf ("%p (%s)", widget, g_type_name_from_instance ((GTypeInstance*)widget));

@@ -141,8 +141,8 @@ take_window_shot (Window         child,
   XWindowAttributes attrs;
   Window xid;
   Display *dpy;
-  gint x = 0, y = 0;
-  gint width, height;
+  int x = 0, y = 0;
+  int width, height;
 
   GdkPixbuf *tmp, *tmp2;
   GdkPixbuf *retval = NULL;

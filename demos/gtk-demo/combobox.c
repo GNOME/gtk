@@ -38,7 +38,7 @@ create_icon_store (void)
 
   GtkTreeIter iter;
   GtkListStore *store;
-  gint i;
+  int i;
 
   store = gtk_list_store_new (2, G_TYPE_STRING, G_TYPE_STRING);
 
@@ -77,7 +77,7 @@ set_sensitive (GtkCellLayout   *cell_layout,
                gpointer         data)
 {
   GtkTreePath *path;
-  gint *indices;
+  int *indices;
   gboolean sensitive;
 
   path = gtk_tree_model_get_path (tree_model, iter);
@@ -175,7 +175,7 @@ create_capital_store (void)
 
   GtkTreeIter iter, iter2;
   GtkTreeStore *store;
-  gint i;
+  int i;
 
   store = gtk_tree_store_new (1, G_TYPE_STRING);
 

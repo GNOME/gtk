@@ -80,10 +80,10 @@ typedef struct _GtkTreeSortableIface GtkTreeSortableIface;
  * Returns: a negative integer, zero or a positive integer depending on whether
  *   @a sorts before, with or after @b
  */
-typedef gint (* GtkTreeIterCompareFunc) (GtkTreeModel *model,
-					 GtkTreeIter  *a,
-					 GtkTreeIter  *b,
-					 gpointer      user_data);
+typedef int (* GtkTreeIterCompareFunc) (GtkTreeModel *model,
+					GtkTreeIter  *a,
+					GtkTreeIter  *b,
+					gpointer      user_data);
 
 
 /**
@@ -113,13 +113,13 @@ struct _GtkTreeSortableIface
 
   /* virtual table */
   gboolean (* get_sort_column_id)    (GtkTreeSortable        *sortable,
-				      gint                   *sort_column_id,
+				      int                    *sort_column_id,
 				      GtkSortType            *order);
   void     (* set_sort_column_id)    (GtkTreeSortable        *sortable,
-				      gint                    sort_column_id,
+				      int                     sort_column_id,
 				      GtkSortType             order);
   void     (* set_sort_func)         (GtkTreeSortable        *sortable,
-				      gint                    sort_column_id,
+				      int                     sort_column_id,
 				      GtkTreeIterCompareFunc  sort_func,
 				      gpointer                user_data,
 				      GDestroyNotify          destroy);
@@ -138,15 +138,15 @@ GDK_AVAILABLE_IN_ALL
 void     gtk_tree_sortable_sort_column_changed   (GtkTreeSortable        *sortable);
 GDK_AVAILABLE_IN_ALL
 gboolean gtk_tree_sortable_get_sort_column_id    (GtkTreeSortable        *sortable,
-						  gint                   *sort_column_id,
+						  int                    *sort_column_id,
 						  GtkSortType            *order);
 GDK_AVAILABLE_IN_ALL
 void     gtk_tree_sortable_set_sort_column_id    (GtkTreeSortable        *sortable,
-						  gint                    sort_column_id,
+						  int                     sort_column_id,
 						  GtkSortType             order);
 GDK_AVAILABLE_IN_ALL
 void     gtk_tree_sortable_set_sort_func         (GtkTreeSortable        *sortable,
-						  gint                    sort_column_id,
+						  int                     sort_column_id,
 						  GtkTreeIterCompareFunc  sort_func,
 						  gpointer                user_data,
 						  GDestroyNotify          destroy);

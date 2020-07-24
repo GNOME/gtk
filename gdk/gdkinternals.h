@@ -188,8 +188,8 @@ void _gdk_synthesize_crossing_events (GdkDisplay                 *display,
                                       GdkDevice                  *device,
                                       GdkDevice                  *source_device,
                                       GdkCrossingMode             mode,
-                                      gdouble                     toplevel_x,
-                                      gdouble                     toplevel_y,
+                                      double                      toplevel_x,
+                                      double                      toplevel_y,
                                       GdkModifierType             mask,
                                       guint32                     time_,
                                       GdkEvent                   *event_in_queue,
@@ -271,20 +271,20 @@ void gdk_device_get_position  (GdkDevice        *device,
 
 
 void gdk_surface_get_root_coords (GdkSurface *surface,
-                                  gint        x,
-                                  gint        y,
-                                  gint       *root_x,
-                                  gint       *root_y);
+                                  int         x,
+                                  int         y,
+                                  int        *root_x,
+                                  int        *root_y);
 void gdk_surface_get_origin      (GdkSurface *surface,
-                                  gint       *x,
-                                  gint       *y);
+                                  int        *x,
+                                  int        *y);
 
 
 void gdk_surface_get_geometry (GdkSurface *surface,
-                               gint       *x,
-                               gint       *y,
-                               gint       *width,
-                               gint       *height);
+                               int        *x,
+                               int        *y,
+                               int        *width,
+                               int        *height);
 
 GdkGLContext *gdk_surface_get_shared_data_gl_context (GdkSurface *surface);
 
@@ -323,26 +323,26 @@ typedef struct _GdkGeometry GdkGeometry;
 
 struct _GdkGeometry
 {
-  gint min_width;
-  gint min_height;
-  gint max_width;
-  gint max_height;
-  gint base_width;
-  gint base_height;
-  gint width_inc;
-  gint height_inc;
-  gdouble min_aspect;
-  gdouble max_aspect;
+  int min_width;
+  int min_height;
+  int max_width;
+  int max_height;
+  int base_width;
+  int base_height;
+  int width_inc;
+  int height_inc;
+  double min_aspect;
+  double max_aspect;
   GdkGravity win_gravity;
 };
 
 GDK_AVAILABLE_IN_ALL
 void       gdk_surface_constrain_size      (GdkGeometry    *geometry,
                                             GdkSurfaceHints  flags,
-                                            gint            width,
-                                            gint            height,
-                                            gint           *new_width,
-                                            gint           *new_height);
+                                            int             width,
+                                            int             height,
+                                            int            *new_width,
+                                            int            *new_height);
 
 /*
  * GdkSeatGrabPrepareFunc:
@@ -376,16 +376,16 @@ GdkKeymap *  gdk_display_get_keymap  (GdkDisplay *display);
 void gdk_surface_begin_resize_drag            (GdkSurface     *surface,
                                                GdkSurfaceEdge  edge,
                                                GdkDevice      *device,
-                                               gint            button,
-                                               gint            x,
-                                               gint            y,
+                                               int             button,
+                                               int             x,
+                                               int             y,
                                                guint32         timestamp);
 
 void gdk_surface_begin_move_drag              (GdkSurface     *surface,
                                                GdkDevice      *device,
-                                               gint            button,
-                                               gint            x,
-                                               gint            y,
+                                               int             button,
+                                               int             x,
+                                               int             y,
                                                guint32         timestamp);
 
 G_END_DECLS

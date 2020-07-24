@@ -23,7 +23,7 @@ static void
 search_text_changed (GtkEntry         *entry,
                      ExampleAppWindow *win)
 {
-  const gchar *text;
+  const char *text;
   GtkWidget *tab;
   GtkWidget *view;
   GtkTextBuffer *buffer;
@@ -53,7 +53,7 @@ static void
 find_word (GtkButton        *button,
            ExampleAppWindow *win)
 {
-  const gchar *word;
+  const char *word;
 
   word = gtk_button_get_label (button);
   gtk_editable_set_text (GTK_EDITABLE (win->searchentry), word);
@@ -67,7 +67,7 @@ update_words (ExampleAppWindow *win)
   GtkWidget *tab, *view, *row;
   GtkTextBuffer *buffer;
   GtkTextIter start, end;
-  gchar *word, *key;
+  char *word, *key;
   GtkWidget *child;
 
   tab = gtk_stack_get_visible_child (GTK_STACK (win->stack));
@@ -212,9 +212,9 @@ void
 example_app_window_open (ExampleAppWindow *win,
                          GFile            *file)
 {
-  gchar *basename;
+  char *basename;
   GtkWidget *scrolled, *view;
-  gchar *contents;
+  char *contents;
   gsize length;
   GtkTextBuffer *buffer;
   GtkTextTag *tag;

@@ -90,13 +90,13 @@ static void        gtk_cell_view_buildable_init             (GtkBuildableIface  
 static gboolean    gtk_cell_view_buildable_custom_tag_start (GtkBuildable       *buildable,
                                                              GtkBuilder         *builder,
                                                              GObject            *child,
-                                                             const gchar        *tagname,
+                                                             const char         *tagname,
                                                              GtkBuildableParser *parser,
                                                              gpointer           *data);
 static void        gtk_cell_view_buildable_custom_tag_end   (GtkBuildable       *buildable,
                                                              GtkBuilder         *builder,
                                                              GObject            *child,
-                                                             const gchar        *tagname,
+                                                             const char         *tagname,
                                                              gpointer            data);
 
 static GtkSizeRequestMode gtk_cell_view_get_request_mode       (GtkWidget             *widget);
@@ -289,7 +289,7 @@ static void
 gtk_cell_view_buildable_add_child (GtkBuildable *buildable,
                                    GtkBuilder   *builder,
                                    GObject      *child,
-                                   const gchar  *type)
+                                   const char   *type)
 {
   if (GTK_IS_CELL_RENDERER (child))
     _gtk_cell_layout_buildable_add_child (buildable, builder, child, type);
@@ -492,7 +492,7 @@ gtk_cell_view_size_allocate (GtkWidget *widget,
 {
   GtkCellView *cellview = GTK_CELL_VIEW (widget);
   GtkCellViewPrivate *priv = gtk_cell_view_get_instance_private (cellview);
-  gint alloc_width, alloc_height;
+  int alloc_width, alloc_height;
 
   gtk_cell_area_context_get_allocation (priv->context, &alloc_width, &alloc_height);
 
@@ -515,9 +515,9 @@ static void
 gtk_cell_view_request_model (GtkCellView        *cellview,
 			     GtkTreeIter        *parent,
 			     GtkOrientation      orientation,
-			     gint                for_size,
-			     gint               *minimum_size,
-			     gint               *natural_size)
+			     int                 for_size,
+			     int                *minimum_size,
+			     int                *natural_size)
 {
   GtkCellViewPrivate *priv = gtk_cell_view_get_instance_private (cellview);
   GtkTreeIter         iter;
@@ -529,7 +529,7 @@ gtk_cell_view_request_model (GtkCellView        *cellview,
   valid = gtk_tree_model_iter_children (priv->model, &iter, parent);
   while (valid)
     {
-      gint min, nat;
+      int min, nat;
 
       gtk_cell_area_apply_attributes (priv->area, priv->model, &iter, FALSE, FALSE);
 
@@ -589,7 +589,7 @@ gtk_cell_view_measure (GtkWidget      *widget,
     {
       if (priv->fit_model)
         {
-          gint min = 0, nat = 0;
+          int min = 0, nat = 0;
           gtk_cell_view_request_model (cellview, NULL, GTK_ORIENTATION_HORIZONTAL, -1, &min, &nat);
         }
       else
@@ -606,7 +606,7 @@ gtk_cell_view_measure (GtkWidget      *widget,
     {
       if (priv->fit_model)
         {
-          gint min = 0, nat = 0;
+          int min = 0, nat = 0;
           gtk_cell_view_request_model (cellview, NULL, GTK_ORIENTATION_VERTICAL, -1, &min, &nat);
         }
       else
@@ -623,7 +623,7 @@ gtk_cell_view_measure (GtkWidget      *widget,
     {
       if (priv->fit_model)
         {
-          gint min = 0, nat = 0;
+          int min = 0, nat = 0;
           gtk_cell_view_request_model (cellview, NULL, GTK_ORIENTATION_HORIZONTAL, for_size, &min, &nat);
 
           *minimum = min;
@@ -642,7 +642,7 @@ gtk_cell_view_measure (GtkWidget      *widget,
    {
       if (priv->fit_model)
         {
-          gint min = 0, nat = 0;
+          int min = 0, nat = 0;
           gtk_cell_view_request_model (cellview, NULL, GTK_ORIENTATION_VERTICAL, for_size, &min, &nat);
 
           *minimum = min;
@@ -750,7 +750,7 @@ static gboolean
 gtk_cell_view_buildable_custom_tag_start (GtkBuildable       *buildable,
                                           GtkBuilder         *builder,
                                           GObject            *child,
-                                          const gchar        *tagname,
+                                          const char         *tagname,
                                           GtkBuildableParser *parser,
                                           gpointer           *data)
 {
@@ -767,7 +767,7 @@ static void
 gtk_cell_view_buildable_custom_tag_end (GtkBuildable *buildable,
 					GtkBuilder   *builder,
 					GObject      *child,
-					const gchar  *tagname,
+					const char   *tagname,
 					gpointer      data)
 {
   if (_gtk_cell_layout_buildable_custom_tag_end (buildable, builder, child, tagname,
@@ -870,7 +870,7 @@ gtk_cell_view_new_with_context (GtkCellArea        *area,
  * Returns: A newly created #GtkCellView widget.
  */
 GtkWidget *
-gtk_cell_view_new_with_text (const gchar *text)
+gtk_cell_view_new_with_text (const char *text)
 {
   GtkCellView *cellview;
   GtkCellRenderer *renderer;
@@ -901,7 +901,7 @@ gtk_cell_view_new_with_text (const gchar *text)
  * Returns: A newly created #GtkCellView widget.
  */
 GtkWidget *
-gtk_cell_view_new_with_markup (const gchar *markup)
+gtk_cell_view_new_with_markup (const char *markup)
 {
   GtkCellView *cellview;
   GtkCellRenderer *renderer;

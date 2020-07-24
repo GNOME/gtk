@@ -109,10 +109,10 @@ _gtk_print_get_default_user_units (void)
    * Do *not* translate it to "predefinito:mm", if it
    * it isn't default:mm or default:inch it will not work
    */
-  gchar *e = _("default:mm");
+  char *e = _("default:mm");
 
 #ifdef HAVE__NL_MEASUREMENT_MEASUREMENT
-  gchar *imperial = NULL;
+  char *imperial = NULL;
 
   imperial = nl_langinfo (_NL_MEASUREMENT_MEASUREMENT);
   if (imperial && imperial[0] == 2 )
@@ -243,16 +243,16 @@ static void
 gtk_print_save_custom_papers (GListStore *store)
 {
   GKeyFile *keyfile;
-  gchar *filename, *data, *parentdir;
+  char *filename, *data, *parentdir;
   gsize len;
-  gint i = 0;
+  int i = 0;
 
   keyfile = g_key_file_new ();
 
   for (i = 0; i < g_list_model_get_n_items (G_LIST_MODEL (store)); i++)
     {
       GtkPageSetup *page_setup;
-      gchar group[32];
+      char group[32];
 
       page_setup = g_list_model_get_item (G_LIST_MODEL (store), i);
       g_snprintf (group, sizeof (group), "Paper%u", i);
@@ -397,7 +397,7 @@ gtk_custom_paper_unix_dialog_finalize (GObject *object)
  */
 GtkWidget *
 _gtk_custom_paper_unix_dialog_new (GtkWindow   *parent,
-                                   const gchar *title)
+                                   const char *title)
 {
   GtkWidget *result;
 
@@ -490,7 +490,7 @@ unit_widget_get (GtkWidget *unit_widget)
 
 static void
 unit_widget_set (GtkWidget *unit_widget,
-                 gdouble    value)
+                 double     value)
 {
   UnitWidget *data;
 
@@ -591,7 +591,7 @@ unit_widget_changed (GtkCustomPaperUnixDialog *dialog)
 
 static gboolean
 custom_paper_name_used (GtkCustomPaperUnixDialog *dialog,
-                        const gchar              *name)
+                        const char               *name)
 {
   GtkPageSetup *page_setup;
   GtkPaperSize *paper_size;
@@ -617,8 +617,8 @@ add_custom_paper (GtkCustomPaperUnixDialog *dialog)
 {
   GtkPageSetup *page_setup;
   GtkPaperSize *paper_size;
-  gchar *name;
-  gint i;
+  char *name;
+  int i;
 
   i = 1;
   name = NULL;
@@ -740,11 +740,11 @@ margins_from_printer_changed (GtkCustomPaperUnixDialog *dialog)
 }
 
 static GtkWidget *
-wrap_in_frame (const gchar *label,
+wrap_in_frame (const char *label,
                GtkWidget   *child)
 {
   GtkWidget *frame, *label_widget;
-  gchar *bold_text;
+  char *bold_text;
 
   label_widget = gtk_label_new (NULL);
   gtk_widget_set_halign (label_widget, GTK_ALIGN_START);

@@ -111,8 +111,8 @@
 
 typedef struct
 {
-  const gchar *name;
-  const gchar *url;
+  const char *name;
+  const char *url;
 } LicenseInfo;
 
 /* LicenseInfo for each GtkLicense type; keep in the same order as the enumeration */
@@ -142,8 +142,8 @@ G_STATIC_ASSERT (G_N_ELEMENTS (gtk_license_info) - 1 == GTK_LICENSE_MPL_2_0);
 
 typedef struct
 {
-  gchar *heading;
-  gchar **people;
+  char *heading;
+  char **people;
 } CreditSection;
 
 typedef struct _GtkAboutDialogClass GtkAboutDialogClass;
@@ -152,19 +152,19 @@ struct _GtkAboutDialog
 {
   GtkDialog parent_instance;
 
-  gchar *name;
-  gchar *version;
-  gchar *copyright;
-  gchar *comments;
-  gchar *website_url;
-  gchar *website_text;
-  gchar *translator_credits;
-  gchar *license;
-  gchar *system_information;
+  char *name;
+  char *version;
+  char *copyright;
+  char *comments;
+  char *website_url;
+  char *website_text;
+  char *translator_credits;
+  char *license;
+  char *system_information;
 
-  gchar **authors;
-  gchar **documenters;
-  gchar **artists;
+  char **authors;
+  char **documenters;
+  char **artists;
 
   GSList *credit_sections;
 
@@ -209,7 +209,7 @@ struct _GtkAboutDialogClass
   GtkDialogClass parent_class;
 
   gboolean (*activate_link) (GtkAboutDialog *dialog,
-                             const gchar    *uri);
+                             const char     *uri);
 };
 
 enum
@@ -249,15 +249,15 @@ static void                 follow_if_link                  (GtkAboutDialog     
                                                              GtkTextIter        *iter);
 static void                 set_cursor_if_appropriate       (GtkAboutDialog     *about,
                                                              GtkTextView        *text_view,
-                                                             gint                x,
-                                                             gint                y);
+                                                             int                 x,
+                                                             int                 y);
 static void                 populate_credits_page           (GtkAboutDialog     *about);
 static void                 populate_license_page           (GtkAboutDialog     *about);
 static void                 populate_system_page            (GtkAboutDialog     *about);
 static gboolean             gtk_about_dialog_activate_link  (GtkAboutDialog     *about,
-                                                             const gchar        *uri);
+                                                             const char         *uri);
 static gboolean             emit_activate_link              (GtkAboutDialog     *about,
-							     const gchar        *uri);
+							     const char         *uri);
 static gboolean             text_view_key_pressed           (GtkEventController *controller,
                                                              guint               keyval,
                                                              guint               keycode,
@@ -630,7 +630,7 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
 
 static gboolean
 emit_activate_link (GtkAboutDialog *about,
-                    const gchar    *uri)
+                    const char     *uri)
 {
   gboolean handled = FALSE;
 
@@ -704,7 +704,7 @@ update_credits_button_visibility (GtkAboutDialog *about)
 
 static void
 switch_page (GtkAboutDialog *about,
-             const gchar    *name)
+             const char     *name)
 {
   gtk_stack_set_visible_child_name (GTK_STACK (about->stack), name);
 
@@ -855,13 +855,13 @@ gtk_about_dialog_set_property (GObject      *object,
       gtk_about_dialog_set_logo (about, g_value_get_object (value));
       break;
     case PROP_AUTHORS:
-      gtk_about_dialog_set_authors (about, (const gchar**)g_value_get_boxed (value));
+      gtk_about_dialog_set_authors (about, (const char **)g_value_get_boxed (value));
       break;
     case PROP_DOCUMENTERS:
-      gtk_about_dialog_set_documenters (about, (const gchar**)g_value_get_boxed (value));
+      gtk_about_dialog_set_documenters (about, (const char **)g_value_get_boxed (value));
       break;
     case PROP_ARTISTS:
-      gtk_about_dialog_set_artists (about, (const gchar**)g_value_get_boxed (value));
+      gtk_about_dialog_set_artists (about, (const char **)g_value_get_boxed (value));
       break;
     case PROP_TRANSLATOR_CREDITS:
       gtk_about_dialog_set_translator_credits (about, g_value_get_string (value));
@@ -978,7 +978,7 @@ toggle_license (GtkToggleButton *button,
 
 static gboolean
 gtk_about_dialog_activate_link (GtkAboutDialog *about,
-                                const gchar    *uri)
+                                const char     *uri)
 {
   gtk_show_uri (GTK_WINDOW (about), uri, GDK_CURRENT_TIME);
   return TRUE;
@@ -991,11 +991,11 @@ update_website (GtkAboutDialog *about)
 
   if (about->website_url)
     {
-      gchar *markup;
+      char *markup;
 
       if (about->website_text)
         {
-          gchar *escaped;
+          char *escaped;
 
           escaped = g_markup_escape_text (about->website_text, -1);
           markup = g_strdup_printf ("<a href=\"%s\">%s</a>",
@@ -1029,7 +1029,7 @@ update_website (GtkAboutDialog *about)
  * Returns: The program name. The string is owned by the about
  *  dialog and must not be modified.
  */
-const gchar *
+const char *
 gtk_about_dialog_get_program_name (GtkAboutDialog *about)
 {
   g_return_val_if_fail (GTK_IS_ABOUT_DIALOG (about), NULL);
@@ -1040,7 +1040,7 @@ gtk_about_dialog_get_program_name (GtkAboutDialog *about)
 static void
 update_name_version (GtkAboutDialog *about)
 {
-  gchar *title_string, *name_string;
+  char *title_string, *name_string;
 
   title_string = g_strdup_printf (_("About %s"), about->name);
   gtk_window_set_title (GTK_WINDOW (about), title_string);
@@ -1070,9 +1070,9 @@ update_name_version (GtkAboutDialog *about)
  */
 void
 gtk_about_dialog_set_program_name (GtkAboutDialog *about,
-                                   const gchar    *name)
+                                   const char     *name)
 {
-  gchar *tmp;
+  char *tmp;
 
   g_return_if_fail (GTK_IS_ABOUT_DIALOG (about));
 
@@ -1095,7 +1095,7 @@ gtk_about_dialog_set_program_name (GtkAboutDialog *about,
  * Returns: The version string. The string is owned by the about
  *  dialog and must not be modified.
  */
-const gchar *
+const char *
 gtk_about_dialog_get_version (GtkAboutDialog *about)
 {
   g_return_val_if_fail (GTK_IS_ABOUT_DIALOG (about), NULL);
@@ -1112,9 +1112,9 @@ gtk_about_dialog_get_version (GtkAboutDialog *about)
  */
 void
 gtk_about_dialog_set_version (GtkAboutDialog *about,
-                              const gchar    *version)
+                              const char     *version)
 {
-  gchar *tmp;
+  char *tmp;
 
   g_return_if_fail (GTK_IS_ABOUT_DIALOG (about));
 
@@ -1136,7 +1136,7 @@ gtk_about_dialog_set_version (GtkAboutDialog *about,
  * Returns: The copyright string. The string is owned by the about
  *  dialog and must not be modified.
  */
-const gchar *
+const char *
 gtk_about_dialog_get_copyright (GtkAboutDialog *about)
 {
   g_return_val_if_fail (GTK_IS_ABOUT_DIALOG (about), NULL);
@@ -1154,9 +1154,9 @@ gtk_about_dialog_get_copyright (GtkAboutDialog *about)
  */
 void
 gtk_about_dialog_set_copyright (GtkAboutDialog *about,
-                                const gchar    *copyright)
+                                const char     *copyright)
 {
-  gchar *copyright_string, *tmp;
+  char *copyright_string, *tmp;
 
   g_return_if_fail (GTK_IS_ABOUT_DIALOG (about));
 
@@ -1188,7 +1188,7 @@ gtk_about_dialog_set_copyright (GtkAboutDialog *about,
  * Returns: The comments. The string is owned by the about
  *  dialog and must not be modified.
  */
-const gchar *
+const char *
 gtk_about_dialog_get_comments (GtkAboutDialog *about)
 {
   g_return_val_if_fail (GTK_IS_ABOUT_DIALOG (about), NULL);
@@ -1206,9 +1206,9 @@ gtk_about_dialog_get_comments (GtkAboutDialog *about)
  */
 void
 gtk_about_dialog_set_comments (GtkAboutDialog *about,
-                               const gchar    *comments)
+                               const char     *comments)
 {
-  gchar *tmp;
+  char *tmp;
 
   g_return_if_fail (GTK_IS_ABOUT_DIALOG (about));
 
@@ -1238,7 +1238,7 @@ gtk_about_dialog_set_comments (GtkAboutDialog *about,
  * Returns: The license information. The string is owned by the about
  *  dialog and must not be modified.
  */
-const gchar *
+const char *
 gtk_about_dialog_get_license (GtkAboutDialog *about)
 {
   g_return_val_if_fail (GTK_IS_ABOUT_DIALOG (about), NULL);
@@ -1257,9 +1257,9 @@ gtk_about_dialog_get_license (GtkAboutDialog *about)
  */
 void
 gtk_about_dialog_set_license (GtkAboutDialog *about,
-                              const gchar    *license)
+                              const char     *license)
 {
-  gchar *tmp;
+  char *tmp;
 
   g_return_if_fail (GTK_IS_ABOUT_DIALOG (about));
 
@@ -1292,7 +1292,7 @@ gtk_about_dialog_set_license (GtkAboutDialog *about,
  *
  * Returns: the system information
  */
-const gchar *
+const char *
 gtk_about_dialog_get_system_information (GtkAboutDialog *about)
 {
   g_return_val_if_fail (GTK_IS_ABOUT_DIALOG (about), NULL);
@@ -1313,7 +1313,7 @@ gtk_about_dialog_get_system_information (GtkAboutDialog *about)
  */
 void
 gtk_about_dialog_set_system_information (GtkAboutDialog *about,
-                                         const gchar    *system_information)
+                                         const char     *system_information)
 {
   g_return_if_fail (GTK_IS_ABOUT_DIALOG (about));
 
@@ -1374,7 +1374,7 @@ gtk_about_dialog_set_wrap_license (GtkAboutDialog *about,
  * Returns: The website URL. The string is owned by the about
  *  dialog and must not be modified.
  */
-const gchar *
+const char *
 gtk_about_dialog_get_website (GtkAboutDialog *about)
 {
   g_return_val_if_fail (GTK_IS_ABOUT_DIALOG (about), NULL);
@@ -1391,9 +1391,9 @@ gtk_about_dialog_get_website (GtkAboutDialog *about)
  */
 void
 gtk_about_dialog_set_website (GtkAboutDialog *about,
-                              const gchar    *website)
+                              const char     *website)
 {
-  gchar *tmp;
+  char *tmp;
 
   g_return_if_fail (GTK_IS_ABOUT_DIALOG (about));
 
@@ -1415,7 +1415,7 @@ gtk_about_dialog_set_website (GtkAboutDialog *about,
  * Returns: The label used for the website link. The string is
  *     owned by the about dialog and must not be modified.
  */
-const gchar *
+const char *
 gtk_about_dialog_get_website_label (GtkAboutDialog *about)
 {
   g_return_val_if_fail (GTK_IS_ABOUT_DIALOG (about), NULL);
@@ -1432,9 +1432,9 @@ gtk_about_dialog_get_website_label (GtkAboutDialog *about)
  */
 void
 gtk_about_dialog_set_website_label (GtkAboutDialog *about,
-                                    const gchar    *website_label)
+                                    const char     *website_label)
 {
-  gchar *tmp;
+  char *tmp;
 
   g_return_if_fail (GTK_IS_ABOUT_DIALOG (about));
 
@@ -1458,12 +1458,12 @@ gtk_about_dialog_set_website_label (GtkAboutDialog *about,
  *  %NULL-terminated string array containing the authors. The array is
  *  owned by the about dialog and must not be modified.
  */
-const gchar * const *
+const char * const *
 gtk_about_dialog_get_authors (GtkAboutDialog *about)
 {
   g_return_val_if_fail (GTK_IS_ABOUT_DIALOG (about), NULL);
 
-  return (const gchar * const *) about->authors;
+  return (const char * const *) about->authors;
 }
 
 /**
@@ -1476,14 +1476,14 @@ gtk_about_dialog_get_authors (GtkAboutDialog *about)
  */
 void
 gtk_about_dialog_set_authors (GtkAboutDialog  *about,
-                              const gchar    **authors)
+                              const char     **authors)
 {
-  gchar **tmp;
+  char **tmp;
 
   g_return_if_fail (GTK_IS_ABOUT_DIALOG (about));
 
   tmp = about->authors;
-  about->authors = g_strdupv ((gchar **)authors);
+  about->authors = g_strdupv ((char **)authors);
   g_strfreev (tmp);
 
   update_credits_button_visibility (about);
@@ -1502,12 +1502,12 @@ gtk_about_dialog_set_authors (GtkAboutDialog  *about,
  *  %NULL-terminated string array containing the documenters. The
  *  array is owned by the about dialog and must not be modified.
  */
-const gchar * const *
+const char * const *
 gtk_about_dialog_get_documenters (GtkAboutDialog *about)
 {
   g_return_val_if_fail (GTK_IS_ABOUT_DIALOG (about), NULL);
 
-  return (const gchar * const *)about->documenters;
+  return (const char * const *)about->documenters;
 }
 
 /**
@@ -1520,14 +1520,14 @@ gtk_about_dialog_get_documenters (GtkAboutDialog *about)
  */
 void
 gtk_about_dialog_set_documenters (GtkAboutDialog *about,
-                                  const gchar   **documenters)
+                                  const char    **documenters)
 {
-  gchar **tmp;
+  char **tmp;
 
   g_return_if_fail (GTK_IS_ABOUT_DIALOG (about));
 
   tmp = about->documenters;
-  about->documenters = g_strdupv ((gchar **)documenters);
+  about->documenters = g_strdupv ((char **)documenters);
   g_strfreev (tmp);
 
   update_credits_button_visibility (about);
@@ -1546,12 +1546,12 @@ gtk_about_dialog_set_documenters (GtkAboutDialog *about,
  *  %NULL-terminated string array containing the artists. The array is
  *  owned by the about dialog and must not be modified.
  */
-const gchar * const *
+const char * const *
 gtk_about_dialog_get_artists (GtkAboutDialog *about)
 {
   g_return_val_if_fail (GTK_IS_ABOUT_DIALOG (about), NULL);
 
-  return (const gchar * const *)about->artists;
+  return (const char * const *)about->artists;
 }
 
 /**
@@ -1564,14 +1564,14 @@ gtk_about_dialog_get_artists (GtkAboutDialog *about)
  */
 void
 gtk_about_dialog_set_artists (GtkAboutDialog *about,
-                              const gchar   **artists)
+                              const char    **artists)
 {
-  gchar **tmp;
+  char **tmp;
 
   g_return_if_fail (GTK_IS_ABOUT_DIALOG (about));
 
   tmp = about->artists;
-  about->artists = g_strdupv ((gchar **)artists);
+  about->artists = g_strdupv ((char **)artists);
   g_strfreev (tmp);
 
   update_credits_button_visibility (about);
@@ -1589,7 +1589,7 @@ gtk_about_dialog_set_artists (GtkAboutDialog *about,
  * Returns: The translator credits string. The string is
  *   owned by the about dialog and must not be modified.
  */
-const gchar *
+const char *
 gtk_about_dialog_get_translator_credits (GtkAboutDialog *about)
 {
   g_return_val_if_fail (GTK_IS_ABOUT_DIALOG (about), NULL);
@@ -1621,9 +1621,9 @@ gtk_about_dialog_get_translator_credits (GtkAboutDialog *about)
  */
 void
 gtk_about_dialog_set_translator_credits (GtkAboutDialog *about,
-                                         const gchar    *translator_credits)
+                                         const char     *translator_credits)
 {
-  gchar *tmp;
+  char *tmp;
 
   g_return_if_fail (GTK_IS_ABOUT_DIALOG (about));
 
@@ -1696,7 +1696,7 @@ gtk_about_dialog_set_logo (GtkAboutDialog *about,
  *   The string is owned by the dialog. If you want to keep a reference
  *   to it, you have to call g_strdup() on it.
  */
-const gchar *
+const char *
 gtk_about_dialog_get_logo_icon_name (GtkAboutDialog *about)
 {
   g_return_val_if_fail (GTK_IS_ABOUT_DIALOG (about), NULL);
@@ -1716,7 +1716,7 @@ gtk_about_dialog_get_logo_icon_name (GtkAboutDialog *about)
  */
 void
 gtk_about_dialog_set_logo_icon_name (GtkAboutDialog *about,
-                                     const gchar    *icon_name)
+                                     const char     *icon_name)
 {
   g_return_if_fail (GTK_IS_ABOUT_DIALOG (about));
 
@@ -1728,8 +1728,8 @@ gtk_about_dialog_set_logo_icon_name (GtkAboutDialog *about,
   if (icon_name)
     {
       GtkIconTheme *icon_theme = gtk_icon_theme_get_for_display (gtk_widget_get_display (GTK_WIDGET (about)));
-      gint *sizes = gtk_icon_theme_get_icon_sizes (icon_theme, icon_name);
-      gint i, best_size = 0;
+      int *sizes = gtk_icon_theme_get_icon_sizes (icon_theme, icon_name);
+      int i, best_size = 0;
 
       for (i = 0; sizes[i]; i++)
         {
@@ -1772,7 +1772,7 @@ follow_if_link (GtkAboutDialog *about,
                 GtkTextIter    *iter)
 {
   GSList *tags = NULL, *tagp = NULL;
-  gchar *uri = NULL;
+  char *uri = NULL;
 
   tags = gtk_text_iter_get_tags (iter);
   for (tagp = tags; tagp != NULL && !uri; tagp = tagp->next)
@@ -1842,7 +1842,7 @@ text_view_released (GtkGestureClick *gesture,
   GtkWidget *text_view;
   GtkTextIter start, end, iter;
   GtkTextBuffer *buffer;
-  gint tx, ty;
+  int tx, ty;
 
   if (gtk_gesture_single_get_current_button (GTK_GESTURE_SINGLE (gesture)) != GDK_BUTTON_PRIMARY)
     return;
@@ -1867,8 +1867,8 @@ text_view_released (GtkGestureClick *gesture,
 static void
 set_cursor_if_appropriate (GtkAboutDialog *about,
                            GtkTextView    *text_view,
-                           gint            x,
-                           gint            y)
+                           int             x,
+                           int             y)
 {
   GSList *tags = NULL, *tagp = NULL;
   GtkTextIter iter;
@@ -1880,7 +1880,7 @@ set_cursor_if_appropriate (GtkAboutDialog *about,
   for (tagp = tags;  tagp != NULL;  tagp = tagp->next)
     {
       GtkTextTag *tag = tagp->data;
-      gchar *uri = g_object_get_data (G_OBJECT (tag), "uri");
+      char *uri = g_object_get_data (G_OBJECT (tag), "uri");
 
       if (uri != NULL)
         {
@@ -1908,7 +1908,7 @@ text_view_motion (GtkEventControllerMotion *motion,
                   double                    y,
                   GtkAboutDialog           *about)
 {
-  gint tx, ty;
+  int tx, ty;
   GtkWidget *widget;
 
   widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (motion));
@@ -1922,10 +1922,10 @@ text_view_motion (GtkEventControllerMotion *motion,
 
 static GtkTextBuffer *
 text_buffer_new (GtkAboutDialog  *about,
-		 gchar          **strings)
+		 char           **strings)
 {
-  gchar **p;
-  gchar *q0, *q1, *q2, *r1, *r2;
+  char **p;
+  char *q0, *q1, *q2, *r1, *r2;
   GtkTextBuffer *buffer;
   GdkRGBA color;
   GdkRGBA link_color;
@@ -1972,9 +1972,9 @@ text_buffer_new (GtkAboutDialog  *about,
           if (q1 && q2)
             {
               GtkTextIter end;
-              gchar *link;
-              gchar *uri;
-              const gchar *link_type;
+              char *link;
+              char *uri;
+              const char *link_type;
 
               if (*q1 == '<')
                 {
@@ -2005,7 +2005,7 @@ text_buffer_new (GtkAboutDialog  *about,
                                                 NULL);
               if (strcmp (link_type, "email") == 0)
                 {
-                  gchar *escaped;
+                  char *escaped;
 
                   escaped = g_uri_escape_string (link, NULL, FALSE);
                   uri = g_strconcat ("mailto:", escaped, NULL);
@@ -2045,14 +2045,14 @@ text_buffer_new (GtkAboutDialog  *about,
 static void
 add_credits_section (GtkAboutDialog  *about,
                      GtkGrid         *grid,
-                     gint            *row,
-                     gchar           *title,
-                     gchar          **people)
+                     int             *row,
+                     char            *title,
+                     char           **people)
 {
   GtkWidget *label;
-  gchar *markup;
-  gchar **p;
-  gchar *q0, *q1, *q2, *r1, *r2;
+  char *markup;
+  char **p;
+  char *q0, *q1, *q2, *r1, *r2;
 
   if (people == NULL)
     return;
@@ -2102,14 +2102,14 @@ add_credits_section (GtkAboutDialog  *about,
 
           if (q1 && q2)
             {
-              gchar *link;
-              gchar *text;
-              gchar *name;
+              char *link;
+              char *text;
+              char *name;
 
               if (*q1 == '<')
                 {
                   /* email */
-                  gchar *escaped;
+                  char *escaped;
 
                   text = g_strstrip (g_strndup (q0, q1 - q0));
                   name = g_markup_escape_text (text, -1);
@@ -2173,7 +2173,7 @@ add_credits_section (GtkAboutDialog  *about,
 static void
 populate_credits_page (GtkAboutDialog *about)
 {
-  gint row;
+  int row;
 
   row = 0;
 
@@ -2188,7 +2188,7 @@ populate_credits_page (GtkAboutDialog *about)
       strcmp (about->translator_credits, "translator_credits") != 0 &&
       strcmp (about->translator_credits, "translator-credits") != 0)
     {
-      gchar **translators;
+      char **translators;
 
       translators = g_strsplit (about->translator_credits, "\n", 0);
       add_credits_section (about, GTK_GRID (about->credits_grid), &row, _("Translated by"), translators);
@@ -2213,7 +2213,7 @@ static void
 populate_license_page (GtkAboutDialog *about)
 {
   GtkTextBuffer *buffer;
-  gchar *strings[2];
+  char *strings[2];
 
   gtk_text_view_set_wrap_mode (GTK_TEXT_VIEW (about->license_view), about->wrap_license ? GTK_WRAP_WORD : GTK_WRAP_NONE);
 
@@ -2228,7 +2228,7 @@ static void
 populate_system_page (GtkAboutDialog *about)
 {
   GtkTextBuffer *buffer;
-  gchar *strings[2];
+  char *strings[2];
 
   strings[0] = about->system_information;
   strings[1] = NULL;
@@ -2275,7 +2275,7 @@ close_cb (GtkAboutDialog *about,
  */
 void
 gtk_show_about_dialog (GtkWindow   *parent,
-                       const gchar *first_property_name,
+                       const char *first_property_name,
                        ...)
 {
   static GtkWidget *global_about_dialog = NULL;
@@ -2349,9 +2349,9 @@ gtk_about_dialog_set_license_type (GtkAboutDialog *about,
       /* custom licenses use the contents of the :license property */
       if (about->license_type != GTK_LICENSE_CUSTOM)
         {
-          const gchar *name;
-          const gchar *url;
-          gchar *license_string;
+          const char *name;
+          const char *url;
+          char *license_string;
           GString *str;
 
           name = _(gtk_license_info[about->license_type].name);
@@ -2417,8 +2417,8 @@ gtk_about_dialog_get_license_type (GtkAboutDialog *about)
  */
 void
 gtk_about_dialog_add_credit_section (GtkAboutDialog  *about,
-                                     const gchar     *section_name,
-                                     const gchar    **people)
+                                     const char      *section_name,
+                                     const char     **people)
 {
   CreditSection *new_entry;
 
@@ -2427,8 +2427,8 @@ gtk_about_dialog_add_credit_section (GtkAboutDialog  *about,
   g_return_if_fail (people != NULL);
 
   new_entry = g_slice_new (CreditSection);
-  new_entry->heading = g_strdup ((gchar *)section_name);
-  new_entry->people = g_strdupv ((gchar **)people);
+  new_entry->heading = g_strdup ((char *)section_name);
+  new_entry->people = g_strdupv ((char **)people);
 
   about->credit_sections = g_slist_append (about->credit_sections, new_entry);
   update_credits_button_visibility (about);

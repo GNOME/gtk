@@ -41,10 +41,10 @@ typedef struct _EventData EventData;
 
 struct _GtkGestureDragPrivate
 {
-  gdouble start_x;
-  gdouble start_y;
-  gdouble last_x;
-  gdouble last_y;
+  double start_x;
+  double start_y;
+  double last_x;
+  double last_y;
 };
 
 enum {
@@ -102,7 +102,7 @@ gtk_gesture_drag_update (GtkGesture       *gesture,
                          GdkEventSequence *sequence)
 {
   GtkGestureDragPrivate *priv;
-  gdouble x, y;
+  double x, y;
 
   priv = gtk_gesture_drag_get_instance_private (GTK_GESTURE_DRAG (gesture));
   gtk_gesture_get_point (gesture, sequence, &priv->last_x, &priv->last_y);
@@ -118,7 +118,7 @@ gtk_gesture_drag_end (GtkGesture       *gesture,
 {
   GtkGestureDragPrivate *priv;
   GdkEventSequence *current;
-  gdouble x, y;
+  double x, y;
 
   current = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
 
@@ -234,8 +234,8 @@ gtk_gesture_drag_new (void)
  **/
 gboolean
 gtk_gesture_drag_get_start_point (GtkGestureDrag *gesture,
-                                  gdouble        *x,
-                                  gdouble        *y)
+                                  double         *x,
+                                  double         *y)
 {
   GtkGestureDragPrivate *priv;
   GdkEventSequence *sequence;
@@ -272,8 +272,8 @@ gtk_gesture_drag_get_start_point (GtkGestureDrag *gesture,
  **/
 gboolean
 gtk_gesture_drag_get_offset (GtkGestureDrag *gesture,
-                             gdouble        *x,
-                             gdouble        *y)
+                             double         *x,
+                             double         *y)
 {
   GtkGestureDragPrivate *priv;
   GdkEventSequence *sequence;

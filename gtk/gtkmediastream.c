@@ -1178,8 +1178,8 @@ gtk_media_stream_gerror (GtkMediaStream *self,
 void
 gtk_media_stream_error (GtkMediaStream *self,
                         GQuark          domain,
-                        gint            code,
-                        const gchar    *format,
+                        int             code,
+                        const char     *format,
                         ...)
 {
   GError *error;
@@ -1212,8 +1212,8 @@ gtk_media_stream_error (GtkMediaStream *self,
 void
 gtk_media_stream_error_valist (GtkMediaStream *self,
                                GQuark          domain,
-                               gint            code,
-                               const gchar    *format,
+                               int             code,
+                               const char     *format,
                                va_list         args)
 {
   GError *error;

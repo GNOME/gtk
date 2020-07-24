@@ -75,7 +75,7 @@ unregister_client (GtkApplicationImplDBus *dbus)
 static void
 send_quit_response (GtkApplicationImplDBus *dbus,
                     gboolean                will_quit,
-                    const gchar            *reason)
+                    const char             *reason)
 {
   g_debug ("Calling EndSessionResponse %d '%s'", will_quit, reason);
 
@@ -89,8 +89,8 @@ send_quit_response (GtkApplicationImplDBus *dbus,
 
 static void
 client_proxy_signal (GDBusProxy  *proxy,
-                     const gchar *sender_name,
-                     const gchar *signal_name,
+                     const char *sender_name,
+                     const char *signal_name,
                      GVariant    *parameters,
                      gpointer     user_data)
 {
@@ -124,13 +124,13 @@ client_proxy_signal (GDBusProxy  *proxy,
 static GDBusProxy*
 gtk_application_get_proxy_if_service_present (GDBusConnection *connection,
                                               GDBusProxyFlags  flags,
-                                              const gchar     *bus_name,
-                                              const gchar     *object_path,
-                                              const gchar     *interface,
+                                              const char      *bus_name,
+                                              const char      *object_path,
+                                              const char      *interface,
                                               GError         **error)
 {
   GDBusProxy *proxy;
-  gchar *owner;
+  char *owner;
 
   proxy = g_dbus_proxy_new_sync (connection,
                                  flags,
@@ -442,8 +442,8 @@ gtk_application_impl_dbus_startup (GtkApplicationImpl *impl,
 
   if (dbus->session)
     {
-      const gchar *id;
-      const gchar *id2;
+      const char *id;
+      const char *id2;
       GValue value = G_VALUE_INIT;
 
       g_value_init (&value, G_TYPE_STRING);
@@ -549,7 +549,7 @@ gtk_application_impl_dbus_window_added (GtkApplicationImpl *impl,
 {
   GtkApplicationImplDBus *dbus = (GtkApplicationImplDBus *) impl;
   GActionGroup *actions;
-  gchar *path;
+  char *path;
   guint id;
 
   if (!dbus->session || !GTK_IS_APPLICATION_WINDOW (window))
@@ -588,12 +588,12 @@ gtk_application_impl_dbus_active_window_changed (GtkApplicationImpl *impl,
 
 static void
 gtk_application_impl_dbus_publish_menu (GtkApplicationImplDBus  *dbus,
-                                        const gchar             *type,
+                                        const char              *type,
                                         GMenuModel              *model,
                                         guint                   *id,
-                                        gchar                  **path)
+                                        char                   **path)
 {
-  gint i;
+  int i;
 
   if (dbus->session == NULL)
     return;
@@ -677,7 +677,7 @@ static guint
 gtk_application_impl_dbus_inhibit (GtkApplicationImpl         *impl,
                                    GtkWindow                  *window,
                                    GtkApplicationInhibitFlags  flags,
-                                   const gchar                *reason)
+                                   const char                 *reason)
 {
   GtkApplicationImplDBus *dbus = (GtkApplicationImplDBus *) impl;
   GVariant *res;
@@ -897,7 +897,7 @@ gtk_application_impl_dbus_class_init (GtkApplicationImplDBusClass *class)
   gobject_class->finalize = gtk_application_impl_dbus_finalize;
 }
 
-gchar *
+char *
 gtk_application_impl_dbus_get_window_path (GtkApplicationImplDBus *dbus,
                                            GtkWindow *window)
 {

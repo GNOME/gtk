@@ -28,7 +28,7 @@ struct _GdkWin32ALPNSink
 {
   ITfActiveLanguageProfileNotifySink itf_alpn_sink;
 
-  gint ref_count;
+  int ref_count;
 };
 
 typedef struct _GdkWin32ALPNSink GdkWin32ALPNSink;

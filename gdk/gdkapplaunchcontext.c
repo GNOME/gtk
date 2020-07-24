@@ -60,14 +60,14 @@
  */
 
 static void    gdk_app_launch_context_finalize    (GObject           *object);
-static gchar * gdk_app_launch_context_get_display_name (GAppLaunchContext *context,
+static char * gdk_app_launch_context_get_display_name (GAppLaunchContext *context,
                                                         GAppInfo          *info,
                                                         GList             *files);
-static gchar * gdk_app_launch_context_get_startup_notify_id (GAppLaunchContext *context,
+static char * gdk_app_launch_context_get_startup_notify_id (GAppLaunchContext *context,
                                                              GAppInfo          *info,
                                                              GList             *files);
 static void    gdk_app_launch_context_launch_failed (GAppLaunchContext *context,
-                                                     const gchar       *startup_notify_id);
+                                                     const char        *startup_notify_id);
 
 
 enum
@@ -157,7 +157,7 @@ gdk_app_launch_context_finalize (GObject *object)
   G_OBJECT_CLASS (gdk_app_launch_context_parent_class)->finalize (object);
 }
 
-static gchar *
+static char *
 gdk_app_launch_context_get_display_name (GAppLaunchContext *context,
                                          GAppInfo          *info,
                                          GList             *files)
@@ -205,7 +205,7 @@ gdk_app_launch_context_get_display (GdkAppLaunchContext *context)
  */
 void
 gdk_app_launch_context_set_desktop (GdkAppLaunchContext *context,
-                                    gint                 desktop)
+                                    int                  desktop)
 {
   g_return_if_fail (GDK_IS_APP_LAUNCH_CONTEXT (context));
 
@@ -298,6 +298,6 @@ gdk_app_launch_context_get_startup_notify_id (GAppLaunchContext *context,
 
 static void
 gdk_app_launch_context_launch_failed (GAppLaunchContext *context,
-                                      const gchar       *startup_notify_id)
+                                      const char        *startup_notify_id)
 {
 }

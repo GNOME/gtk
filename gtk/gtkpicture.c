@@ -541,13 +541,13 @@ gtk_picture_new_for_resource (const char *resource_path)
 }
 
 typedef struct {
-  gint scale_factor;
+  int scale_factor;
 } LoaderData;
 
 static void
 on_loader_size_prepared (GdkPixbufLoader *loader,
-			 gint             width,
-			 gint             height,
+			 int              width,
+			 int              height,
 			 gpointer         user_data)
 {
   LoaderData *loader_data = user_data;
@@ -568,7 +568,7 @@ on_loader_size_prepared (GdkPixbufLoader *loader,
 
 static GdkPaintable *
 load_scalable_with_loader (GFile *file,
-                           gint   scale_factor)
+                           int    scale_factor)
 {
   GdkPixbufLoader *loader;
   GBytes *bytes;

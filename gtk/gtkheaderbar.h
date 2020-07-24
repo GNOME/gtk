@@ -63,9 +63,9 @@ void         gtk_header_bar_set_show_title_buttons (GtkHeaderBar *bar,
 
 GDK_AVAILABLE_IN_ALL
 void         gtk_header_bar_set_decoration_layout (GtkHeaderBar *bar,
-                                                   const gchar  *layout);
+                                                   const char   *layout);
 GDK_AVAILABLE_IN_ALL
-const gchar *gtk_header_bar_get_decoration_layout (GtkHeaderBar *bar);
+const char *gtk_header_bar_get_decoration_layout (GtkHeaderBar *bar);
 
 G_END_DECLS
 

@@ -135,13 +135,13 @@ static void     gtk_size_group_buildable_init             (GtkBuildableIface  *i
 static gboolean gtk_size_group_buildable_custom_tag_start (GtkBuildable       *buildable,
                                                            GtkBuilder         *builder,
                                                            GObject            *child,
-                                                           const gchar        *tagname,
+                                                           const char         *tagname,
                                                            GtkBuildableParser *parser,
                                                            gpointer           *data);
 static void     gtk_size_group_buildable_custom_finished  (GtkBuildable       *buildable,
                                                            GtkBuilder         *builder,
                                                            GObject            *child,
-                                                           const gchar        *tagname,
+                                                           const char         *tagname,
                                                            gpointer            user_data);
 
 G_STATIC_ASSERT (GTK_SIZE_GROUP_HORIZONTAL == (1 << GTK_ORIENTATION_HORIZONTAL));
@@ -157,7 +157,7 @@ static void
 add_widget_to_closure (GHashTable *widgets,
                        GHashTable *groups,
                        GtkWidget  *widget,
-		       gint        orientation)
+		       int         orientation)
 {
   GSList *tmp_groups, *tmp_widgets;
 
@@ -440,9 +440,9 @@ gtk_size_group_get_widgets (GtkSizeGroup *size_group)
 }
 
 typedef struct {
-  gchar *name;
-  gint line;
-  gint col;
+  char *name;
+  int line;
+  int col;
 } ItemData;
 
 static void
@@ -462,9 +462,9 @@ typedef struct {
 
 static void
 size_group_start_element (GtkBuildableParseContext  *context,
-                          const gchar               *element_name,
-                          const gchar              **names,
-                          const gchar              **values,
+                          const char                *element_name,
+                          const char               **names,
+                          const char               **values,
                           gpointer                   user_data,
                           GError                   **error)
 {
@@ -472,7 +472,7 @@ size_group_start_element (GtkBuildableParseContext  *context,
 
   if (strcmp (element_name, "widget") == 0)
     {
-      const gchar *name;
+      const char *name;
       ItemData *item_data;
 
       if (!_gtk_builder_check_parent (data->builder, context, "widgets", error))
@@ -518,7 +518,7 @@ static gboolean
 gtk_size_group_buildable_custom_tag_start (GtkBuildable       *buildable,
                                            GtkBuilder         *builder,
                                            GObject            *child,
-                                           const gchar        *tagname,
+                                           const char         *tagname,
                                            GtkBuildableParser *parser,
                                            gpointer           *parser_data)
 {
@@ -547,7 +547,7 @@ static void
 gtk_size_group_buildable_custom_finished (GtkBuildable  *buildable,
                                           GtkBuilder    *builder,
                                           GObject       *child,
-                                          const gchar   *tagname,
+                                          const char    *tagname,
                                           gpointer       user_data)
 {
   GSList *l;

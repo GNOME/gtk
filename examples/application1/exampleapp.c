@@ -27,8 +27,8 @@ example_app_activate (GApplication *app)
 static void
 example_app_open (GApplication  *app,
                   GFile        **files,
-                  gint           n_files,
-                  const gchar   *hint)
+                  int            n_files,
+                  const char    *hint)
 {
   GList *windows;
   ExampleAppWindow *win;

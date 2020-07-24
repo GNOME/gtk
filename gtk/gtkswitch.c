@@ -195,9 +195,9 @@ gtk_switch_begin_toggle_animation (GtkSwitch *self)
 
 static void
 gtk_switch_click_gesture_pressed (GtkGestureClick *gesture,
-                                  gint             n_press,
-                                  gdouble          x,
-                                  gdouble          y,
+                                  int              n_press,
+                                  double           x,
+                                  double           y,
                                   GtkSwitch       *self)
 {
   graphene_rect_t switch_bounds;
@@ -215,9 +215,9 @@ gtk_switch_click_gesture_pressed (GtkGestureClick *gesture,
 
 static void
 gtk_switch_click_gesture_released (GtkGestureClick *gesture,
-                                   gint             n_press,
-                                   gdouble          x,
-                                   gdouble          y,
+                                   int              n_press,
+                                   double           x,
+                                   double           y,
                                    GtkSwitch       *self)
 {
   GdkEventSequence *sequence;
@@ -235,7 +235,7 @@ gtk_switch_click_gesture_released (GtkGestureClick *gesture,
 static void
 gtk_switch_pan_gesture_pan (GtkGesturePan   *gesture,
                             GtkPanDirection  direction,
-                            gdouble          offset,
+                            double           offset,
                             GtkSwitch       *self)
 {
   GtkWidget *widget = GTK_WIDGET (self);
@@ -261,8 +261,8 @@ gtk_switch_pan_gesture_pan (GtkGesturePan   *gesture,
 
 static void
 gtk_switch_pan_gesture_drag_end (GtkGestureDrag *gesture,
-                                 gdouble         x,
-                                 gdouble         y,
+                                 double          x,
+                                 double          y,
                                  GtkSwitch      *self)
 {
   GdkEventSequence *sequence;
@@ -303,7 +303,7 @@ gtk_switch_measure (GtkWidget      *widget,
                     int            *natural_baseline)
 {
   GtkSwitch *self = GTK_SWITCH (widget);
-  gint slider_minimum, slider_natural;
+  int slider_minimum, slider_natural;
   int on_nat, off_nat;
 
   gtk_widget_measure (self->slider, orientation, -1,
@@ -364,7 +364,7 @@ gtk_switch_allocate (GtkWidget *widget,
 
 static void
 gtk_switch_set_action_name (GtkActionable *actionable,
-                            const gchar   *action_name)
+                            const char    *action_name)
 {
   GtkSwitch *self = GTK_SWITCH (actionable);
 
@@ -386,7 +386,7 @@ gtk_switch_set_action_target_value (GtkActionable *actionable,
   gtk_action_helper_set_action_target_value (self->action_helper, action_target);
 }
 
-static const gchar *
+static const char *
 gtk_switch_get_action_name (GtkActionable *actionable)
 {
   GtkSwitch *self = GTK_SWITCH (actionable);

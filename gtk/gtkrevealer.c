@@ -100,9 +100,9 @@ typedef struct {
   GtkRevealerTransitionType transition_type;
   guint transition_duration;
 
-  gdouble current_pos;
-  gdouble source_pos;
-  gdouble target_pos;
+  double current_pos;
+  double source_pos;
+  double target_pos;
 
   guint tick_id;
   GtkProgressTracker tracker;
@@ -123,7 +123,7 @@ static void gtk_revealer_measure (GtkWidget      *widget,
                                   int            *natural_baseline);
 
 static void     gtk_revealer_set_position (GtkRevealer *revealer,
-                                           gdouble      pos);
+                                           double       pos);
 
 static void gtk_revealer_buildable_iface_init (GtkBuildableIface *iface);
 
@@ -138,7 +138,7 @@ static void
 gtk_revealer_buildable_add_child (GtkBuildable *buildable,
                                   GtkBuilder   *builder,
                                   GObject      *child,
-                                  const gchar  *type)
+                                  const char   *type)
 {
   if (GTK_IS_WIDGET (child))
     gtk_revealer_set_child (GTK_REVEALER (buildable), GTK_WIDGET (child));
@@ -552,7 +552,7 @@ gtk_revealer_size_allocate (GtkWidget *widget,
 
 static void
 gtk_revealer_set_position (GtkRevealer *revealer,
-                           gdouble      pos)
+                           double       pos)
 {
   GtkRevealerPrivate *priv = gtk_revealer_get_instance_private (revealer);
   gboolean new_visible;
@@ -595,7 +595,7 @@ gtk_revealer_animate_cb (GtkWidget     *widget,
 {
   GtkRevealer *revealer = GTK_REVEALER (widget);
   GtkRevealerPrivate *priv = gtk_revealer_get_instance_private (revealer);
-  gdouble ease;
+  double ease;
 
   gtk_progress_tracker_advance_frame (&priv->tracker,
                                       gdk_frame_clock_get_frame_time (frame_clock));
@@ -614,7 +614,7 @@ gtk_revealer_animate_cb (GtkWidget     *widget,
 
 static void
 gtk_revealer_start_animation (GtkRevealer *revealer,
-                              gdouble      target)
+                              double       target)
 {
   GtkRevealerPrivate *priv = gtk_revealer_get_instance_private (revealer);
   GtkWidget *widget = GTK_WIDGET (revealer);

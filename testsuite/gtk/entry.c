@@ -17,17 +17,17 @@
 
 #include <gtk/gtk.h>
 
-static gint serial = 0;
+static int serial = 0;
 
 typedef struct {
-  gint serial;
-  gint count;
-  gint start;
-  gint end;
-  gchar *text;
-  gchar *new_text;
-  gint position;
-  gint length;
+  int serial;
+  int count;
+  int start;
+  int end;
+  char *text;
+  char *new_text;
+  int position;
+  int length;
 } EntryData;
 
 static void
@@ -48,9 +48,9 @@ notify (GtkEditable *editable, GParamSpec *pspec, EntryData *data)
 
 static void
 insert_text (GtkEditable *editable,
-             const gchar *new_text,
-             gint         new_text_length,
-             gint        *position,
+             const char *new_text,
+             int          new_text_length,
+             int         *position,
              EntryData   *data)
 {
   data->serial = serial++;
@@ -71,8 +71,8 @@ insert_text (GtkEditable *editable,
 
 static void
 delete_text (GtkEditable *editable,
-             gint         start_pos,
-             gint         end_pos,
+             int          start_pos,
+             int          end_pos,
              EntryData   *data)
 {
   data->serial = serial++;
@@ -111,7 +111,7 @@ static void
 test_insert (void)
 {
   GtkWidget *entry;
-  gint pos;
+  int pos;
   EntryData data1;
   EntryData data2;
   EntryData data3;
@@ -213,7 +213,7 @@ static void
 test_delete (void)
 {
   GtkWidget *entry;
-  gint pos;
+  int pos;
   EntryData data1;
   EntryData data2;
   EntryData data3;

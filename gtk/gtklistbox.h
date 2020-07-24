@@ -93,9 +93,9 @@ typedef gboolean (*GtkListBoxFilterFunc) (GtkListBoxRow *row,
  * Returns: < 0 if @row1 should be before @row2, 0 if they are
  *     equal and > 0 otherwise
  */
-typedef gint (*GtkListBoxSortFunc) (GtkListBoxRow *row1,
-                                    GtkListBoxRow *row2,
-                                    gpointer       user_data);
+typedef int (*GtkListBoxSortFunc) (GtkListBoxRow *row1,
+                                   GtkListBoxRow *row2,
+                                   gpointer       user_data);
 
 /**
  * GtkListBoxUpdateHeaderFunc:
@@ -142,7 +142,7 @@ GDK_AVAILABLE_IN_ALL
 void       gtk_list_box_row_set_header    (GtkListBoxRow *row,
                                            GtkWidget     *header);
 GDK_AVAILABLE_IN_ALL
-gint       gtk_list_box_row_get_index     (GtkListBoxRow *row);
+int        gtk_list_box_row_get_index     (GtkListBoxRow *row);
 GDK_AVAILABLE_IN_ALL
 void       gtk_list_box_row_changed       (GtkListBoxRow *row);
 
@@ -170,7 +170,7 @@ void           gtk_list_box_prepend                      (GtkListBox            
 GDK_AVAILABLE_IN_ALL
 void           gtk_list_box_insert                       (GtkListBox                    *box,
                                                           GtkWidget                     *child,
-                                                          gint                           position);
+                                                          int                            position);
 GDK_AVAILABLE_IN_ALL
 void           gtk_list_box_remove                       (GtkListBox                    *box,
                                                           GtkWidget                     *child);
@@ -178,10 +178,10 @@ GDK_AVAILABLE_IN_ALL
 GtkListBoxRow* gtk_list_box_get_selected_row             (GtkListBox                    *box);
 GDK_AVAILABLE_IN_ALL
 GtkListBoxRow* gtk_list_box_get_row_at_index             (GtkListBox                    *box,
-                                                          gint                           index_);
+                                                          int                            index_);
 GDK_AVAILABLE_IN_ALL
 GtkListBoxRow* gtk_list_box_get_row_at_y                 (GtkListBox                    *box,
-                                                          gint                           y);
+                                                          int                            y);
 GDK_AVAILABLE_IN_ALL
 void           gtk_list_box_select_row                   (GtkListBox                    *box,
                                                           GtkListBoxRow                 *row);

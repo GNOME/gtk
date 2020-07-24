@@ -197,7 +197,7 @@ static void gtk_expander_buildable_init           (GtkBuildableIface *iface);
 static void gtk_expander_buildable_add_child      (GtkBuildable *buildable,
                                                    GtkBuilder   *builder,
                                                    GObject      *child,
-                                                   const gchar  *type);
+                                                   const char   *type);
 
 
 /* GtkWidget      */
@@ -211,9 +211,9 @@ static void gtk_expander_measure (GtkWidget      *widget,
 
 /* Gestures */
 static void     gesture_click_released_cb (GtkGestureClick *gesture,
-                                           gint             n_press,
-                                           gdouble          x,
-                                           gdouble          y,
+                                           int              n_press,
+                                           double           x,
+                                           double           y,
                                            GtkExpander     *expander);
 
 G_DEFINE_TYPE_WITH_CODE (GtkExpander, gtk_expander, GTK_TYPE_WIDGET,
@@ -431,7 +431,7 @@ static void
 gtk_expander_buildable_add_child (GtkBuildable  *buildable,
                                   GtkBuilder    *builder,
                                   GObject       *child,
-                                  const gchar   *type)
+                                  const char    *type)
 {
   if (g_strcmp0 (type, "label") == 0)
     gtk_expander_set_label_widget (GTK_EXPANDER (buildable), GTK_WIDGET (child));
@@ -565,9 +565,9 @@ gtk_expander_size_allocate (GtkWidget *widget,
 
 static void
 gesture_click_released_cb (GtkGestureClick *gesture,
-                           gint             n_press,
-                           gdouble          x,
-                           gdouble          y,
+                           int              n_press,
+                           double           x,
+                           double           y,
                            GtkExpander     *expander)
 {
   gtk_widget_activate (GTK_WIDGET (expander));
@@ -806,7 +806,7 @@ gtk_expander_measure (GtkWidget      *widget,
  * Returns: a new #GtkExpander widget.
  */
 GtkWidget *
-gtk_expander_new (const gchar *label)
+gtk_expander_new (const char *label)
 {
   return g_object_new (GTK_TYPE_EXPANDER, "label", label, NULL);
 }
@@ -826,7 +826,7 @@ gtk_expander_new (const gchar *label)
  * Returns: a new #GtkExpander widget.
  */
 GtkWidget *
-gtk_expander_new_with_mnemonic (const gchar *label)
+gtk_expander_new_with_mnemonic (const char *label)
 {
   return g_object_new (GTK_TYPE_EXPANDER,
                        "label", label,
@@ -921,7 +921,7 @@ gtk_expander_get_expanded (GtkExpander *expander)
  */
 void
 gtk_expander_set_label (GtkExpander *expander,
-                        const gchar *label)
+                        const char *label)
 {
   g_return_if_fail (GTK_IS_EXPANDER (expander));
 
@@ -970,7 +970,7 @@ gtk_expander_set_label (GtkExpander *expander,
  * Returns: (nullable): The text of the label widget. This string is owned
  *     by the widget and must not be modified or freed.
  */
-const gchar *
+const char *
 gtk_expander_get_label (GtkExpander *expander)
 {
   g_return_val_if_fail (GTK_IS_EXPANDER (expander), NULL);

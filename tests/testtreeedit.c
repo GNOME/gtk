@@ -20,10 +20,10 @@
 #include <gtk/gtk.h>
 
 typedef struct {
-  const gchar *string;
+  const char *string;
   gboolean is_editable;
   gboolean is_sensitive;
-  gint progress;
+  int progress;
 } ListEntry;
 
 enum {
@@ -52,7 +52,7 @@ create_model (void)
 {
   GtkTreeStore *model;
   GtkTreeIter iter;
-  gint i;
+  int i;
 
   model = gtk_tree_store_new (NUM_COLUMNS,
 			      G_TYPE_STRING,
@@ -81,7 +81,7 @@ create_model (void)
 
 static void
 editable_toggled (GtkCellRendererToggle *cell,
-		  gchar                 *path_string,
+		  char                  *path_string,
 		  gpointer               data)
 {
   GtkTreeModel *model = GTK_TREE_MODEL (data);
@@ -100,7 +100,7 @@ editable_toggled (GtkCellRendererToggle *cell,
 
 static void
 sensitive_toggled (GtkCellRendererToggle *cell,
-		   gchar                 *path_string,
+		   char                  *path_string,
 		   gpointer               data)
 {
   GtkTreeModel *model = GTK_TREE_MODEL (data);
@@ -119,8 +119,8 @@ sensitive_toggled (GtkCellRendererToggle *cell,
 
 static void
 edited (GtkCellRendererText *cell,
-	gchar               *path_string,
-	gchar               *new_text,
+	char                *path_string,
+	char                *new_text,
 	gpointer             data)
 {
   GtkTreeModel *model = GTK_TREE_MODEL (data);
@@ -184,11 +184,11 @@ enum {
 };
 
 static void
-create_control (GtkWidget *box, gint number, gint cntl, CallbackData *data)
+create_control (GtkWidget *box, int number, int cntl, CallbackData *data)
 {
   GtkWidget *checkbutton;
   GCallback  callback = NULL;
-  gchar *name = NULL;
+  char *name = NULL;
 
   switch (cntl)
     {
@@ -227,8 +227,8 @@ quit_cb (GtkWidget *widget,
   g_main_context_wakeup (NULL);
 }
 
-gint
-main (gint argc, gchar **argv)
+int
+main (int argc, char **argv)
 {
   GtkWidget *window;
   GtkWidget *scrolled_window;

@@ -67,9 +67,9 @@ void
 example_app_window_open (ExampleAppWindow *win,
                          GFile            *file)
 {
-  gchar *basename;
+  char *basename;
   GtkWidget *scrolled, *view;
-  gchar *contents;
+  char *contents;
   gsize length;
   GtkTextBuffer *buffer;
   GtkTextTag *tag;

@@ -108,11 +108,11 @@ _gtk_gesture_swipe_clear_backlog (GtkGestureSwipe *gesture,
                                   guint32          evtime)
 {
   GtkGestureSwipePrivate *priv;
-  gint i, length = 0;
+  int i, length = 0;
 
   priv = gtk_gesture_swipe_get_instance_private (gesture);
 
-  for (i = 0; i < (gint) priv->events->len; i++)
+  for (i = 0; i < (int) priv->events->len; i++)
     {
       EventData *data;
 
@@ -136,7 +136,7 @@ gtk_gesture_swipe_update (GtkGesture       *gesture,
   GtkGestureSwipe *swipe = GTK_GESTURE_SWIPE (gesture);
   GtkGestureSwipePrivate *priv;
   EventData new;
-  gdouble x, y;
+  double x, y;
 
   priv = gtk_gesture_swipe_get_instance_private (swipe);
   _gtk_gesture_get_last_update_time (gesture, sequence, &new.evtime);
@@ -151,14 +151,14 @@ gtk_gesture_swipe_update (GtkGesture       *gesture,
 
 static void
 _gtk_gesture_swipe_calculate_velocity (GtkGestureSwipe *gesture,
-                                       gdouble         *velocity_x,
-                                       gdouble         *velocity_y)
+                                       double          *velocity_x,
+                                       double          *velocity_y)
 {
   GtkGestureSwipePrivate *priv;
   GdkEventSequence *sequence;
   guint32 evtime, diff_time;
   EventData *start, *end;
-  gdouble diff_x, diff_y;
+  double diff_x, diff_y;
 
   priv = gtk_gesture_swipe_get_instance_private (gesture);
   *velocity_x = *velocity_y = 0;
@@ -191,7 +191,7 @@ gtk_gesture_swipe_end (GtkGesture       *gesture,
 {
   GtkGestureSwipe *swipe = GTK_GESTURE_SWIPE (gesture);
   GtkGestureSwipePrivate *priv;
-  gdouble velocity_x, velocity_y;
+  double velocity_x, velocity_y;
   GdkEventSequence *seq;
 
   seq = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
@@ -283,10 +283,10 @@ gtk_gesture_swipe_new (void)
  **/
 gboolean
 gtk_gesture_swipe_get_velocity (GtkGestureSwipe *gesture,
-                                gdouble         *velocity_x,
-                                gdouble         *velocity_y)
+                                double          *velocity_x,
+                                double          *velocity_y)
 {
-  gdouble vel_x, vel_y;
+  double vel_x, vel_y;
 
   g_return_val_if_fail (GTK_IS_GESTURE (gesture), FALSE);
 

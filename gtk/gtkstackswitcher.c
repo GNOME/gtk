@@ -122,8 +122,8 @@ on_button_toggled (GtkWidget        *button,
 
 static void
 rebuild_child (GtkWidget   *self,
-               const gchar *icon_name,
-               const gchar *title,
+               const char *icon_name,
+               const char *title,
                gboolean     use_underline)
 {
   GtkWidget *button_child;
@@ -162,8 +162,8 @@ update_button (GtkStackSwitcher *self,
                GtkStackPage     *page,
                GtkWidget        *button)
 {
-  gchar *title;
-  gchar *icon_name;
+  char *title;
+  char *icon_name;
   gboolean needs_attention;
   gboolean visible;
   gboolean use_underline;

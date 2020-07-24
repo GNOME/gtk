@@ -46,7 +46,7 @@ static GActionEntry app_entries[] =
 static void
 example_app_startup (GApplication *app)
 {
-  const gchar *quit_accels[2] = { "<Ctrl>Q", NULL };
+  const char *quit_accels[2] = { "<Ctrl>Q", NULL };
 
   G_APPLICATION_CLASS (example_app_parent_class)->startup (app);
 
@@ -70,8 +70,8 @@ example_app_activate (GApplication *app)
 static void
 example_app_open (GApplication  *app,
                   GFile        **files,
-                  gint           n_files,
-                  const gchar   *hint)
+                  int            n_files,
+                  const char    *hint)
 {
   GList *windows;
   ExampleAppWindow *win;

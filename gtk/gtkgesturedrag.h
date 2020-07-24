@@ -46,12 +46,12 @@ GtkGesture * gtk_gesture_drag_new               (void);
 
 GDK_AVAILABLE_IN_ALL
 gboolean     gtk_gesture_drag_get_start_point   (GtkGestureDrag *gesture,
-                                                 gdouble        *x,
-                                                 gdouble        *y);
+                                                 double         *x,
+                                                 double         *y);
 GDK_AVAILABLE_IN_ALL
 gboolean     gtk_gesture_drag_get_offset        (GtkGestureDrag *gesture,
-                                                 gdouble        *x,
-                                                 gdouble        *y);
+                                                 double         *x,
+                                                 double         *y);
 
 G_END_DECLS
 

@@ -39,7 +39,7 @@ _gtk_tree_data_list_free (GtkTreeDataList *list,
 			  GType           *column_headers)
 {
   GtkTreeDataList *tmp, *next;
-  gint i = 0;
+  int i = 0;
 
   tmp = list;
 
@@ -47,7 +47,7 @@ _gtk_tree_data_list_free (GtkTreeDataList *list,
     {
       next = tmp->next;
       if (g_type_is_a (column_headers [i], G_TYPE_STRING))
-	g_free ((gchar *) tmp->data.v_pointer);
+	g_free ((char *) tmp->data.v_pointer);
       else if (g_type_is_a (column_headers [i], G_TYPE_OBJECT) && tmp->data.v_pointer != NULL)
 	g_object_unref (tmp->data.v_pointer);
       else if (g_type_is_a (column_headers [i], G_TYPE_BOXED) && tmp->data.v_pointer != NULL)
@@ -64,7 +64,7 @@ _gtk_tree_data_list_free (GtkTreeDataList *list,
 gboolean
 _gtk_tree_data_list_check_type (GType type)
 {
-  gint i = 0;
+  int i = 0;
   static const GType type_list[] =
   {
     G_TYPE_BOOLEAN,
@@ -129,13 +129,13 @@ _gtk_tree_data_list_node_to_value (GtkTreeDataList *list,
       g_value_set_boolean (value, (gboolean) list->data.v_int);
       break;
     case G_TYPE_CHAR:
-      g_value_set_schar (value, (gchar) list->data.v_char);
+      g_value_set_schar (value, (char) list->data.v_char);
       break;
     case G_TYPE_UCHAR:
       g_value_set_uchar (value, (guchar) list->data.v_uchar);
       break;
     case G_TYPE_INT:
-      g_value_set_int (value, (gint) list->data.v_int);
+      g_value_set_int (value, (int) list->data.v_int);
       break;
     case G_TYPE_UINT:
       g_value_set_uint (value, (guint) list->data.v_uint);
@@ -159,13 +159,13 @@ _gtk_tree_data_list_node_to_value (GtkTreeDataList *list,
       g_value_set_flags (value, list->data.v_uint);
       break;
     case G_TYPE_FLOAT:
-      g_value_set_float (value, (gfloat) list->data.v_float);
+      g_value_set_float (value, (float) list->data.v_float);
       break;
     case G_TYPE_DOUBLE:
-      g_value_set_double (value, (gdouble) list->data.v_double);
+      g_value_set_double (value, (double) list->data.v_double);
       break;
     case G_TYPE_STRING:
-      g_value_set_string (value, (gchar *) list->data.v_pointer);
+      g_value_set_string (value, (char *) list->data.v_pointer);
       break;
     case G_TYPE_POINTER:
       g_value_set_pointer (value, (gpointer) list->data.v_pointer);
@@ -316,18 +316,18 @@ _gtk_tree_data_list_node_copy (GtkTreeDataList *list,
   return new_list;
 }
 
-gint
+int
 _gtk_tree_data_list_compare_func (GtkTreeModel *model,
 				  GtkTreeIter  *a,
 				  GtkTreeIter  *b,
 				  gpointer      user_data)
 {
-  gint column = GPOINTER_TO_INT (user_data);
+  int column = GPOINTER_TO_INT (user_data);
   GType type = gtk_tree_model_get_column_type (model, column);
   GValue a_value = G_VALUE_INIT;
   GValue b_value = G_VALUE_INIT;
-  gint retval;
-  const gchar *stra, *strb;
+  int retval;
+  const char *stra, *strb;
 
   gtk_tree_model_get_value (model, a, column, &a_value);
   gtk_tree_model_get_value (model, b, column, &b_value);
@@ -465,12 +465,12 @@ _gtk_tree_data_list_compare_func (GtkTreeModel *model,
 
 
 GList *
-_gtk_tree_data_list_header_new (gint   n_columns,
+_gtk_tree_data_list_header_new (int    n_columns,
 				GType *types)
 {
   GList *retval = NULL;
 
-  gint i;
+  int i;
 
   for (i = 0; i < n_columns; i ++)
     {
@@ -511,7 +511,7 @@ _gtk_tree_data_list_header_free (GList *list)
 
 GtkTreeDataSortHeader *
 _gtk_tree_data_list_get_header (GList   *header_list,
-				gint     sort_column_id)
+				int      sort_column_id)
 {
   GtkTreeDataSortHeader *header = NULL;
 
@@ -527,7 +527,7 @@ _gtk_tree_data_list_get_header (GList   *header_list,
 
 GList *
 _gtk_tree_data_list_set_header (GList                  *header_list,
-				gint                    sort_column_id,
+				int                     sort_column_id,
 				GtkTreeIterCompareFunc  func,
 				gpointer                data,
 				GDestroyNotify          destroy)

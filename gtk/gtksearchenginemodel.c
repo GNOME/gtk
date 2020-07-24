@@ -60,7 +60,7 @@ static gboolean
 info_matches_query (GtkQuery  *query,
                     GFileInfo *info)
 {
-  const gchar *display_name;
+  const char *display_name;
 
   display_name = g_file_info_get_display_name (info);
   if (display_name == NULL)

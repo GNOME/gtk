@@ -192,12 +192,12 @@ gtk_builder_cscope_get_module (GtkBuilderCScope *self)
  *
  * Keep in sync with testsuite/gtk/typename.c !
  */
-static gchar *
-type_name_mangle (const gchar *name,
+static char *
+type_name_mangle (const char *name,
                   gboolean     split_first_cap)
 {
   GString *symbol_name = g_string_new ("");
-  gint i;
+  int i;
 
   for (i = 0; name[i] != '\0'; i++)
     {
@@ -218,7 +218,7 @@ type_name_mangle (const gchar *name,
 
 static GType
 gtk_builder_cscope_resolve_type_lazily (GtkBuilderCScope *self,
-                                        const gchar      *name)
+                                        const char       *name)
 {
   GModule *module;
   GType (*func) (void);
@@ -435,7 +435,7 @@ gtk_builder_cscope_new (void)
  */
 void
 gtk_builder_cscope_add_callback_symbol (GtkBuilderCScope *self,
-                                        const gchar      *callback_name,
+                                        const char       *callback_name,
                                         GCallback         callback_symbol)
 {
   GtkBuilderCScopePrivate *priv = gtk_builder_cscope_get_instance_private (self);
@@ -463,12 +463,12 @@ gtk_builder_cscope_add_callback_symbol (GtkBuilderCScope *self,
  */
 void
 gtk_builder_cscope_add_callback_symbols (GtkBuilderCScope *self,
-                                         const gchar      *first_callback_name,
+                                         const char       *first_callback_name,
                                          GCallback         first_callback_symbol,
                                          ...)
 {
   va_list var_args;
-  const gchar *callback_name;
+  const char *callback_name;
   GCallback callback_symbol;
 
   g_return_if_fail (GTK_IS_BUILDER_CSCOPE (self));
@@ -484,7 +484,7 @@ gtk_builder_cscope_add_callback_symbols (GtkBuilderCScope *self,
 
     gtk_builder_cscope_add_callback_symbol (self, callback_name, callback_symbol);
 
-    callback_name = va_arg (var_args, const gchar*);
+    callback_name = va_arg (var_args, const char *);
 
     if (callback_name)
       callback_symbol = va_arg (var_args, GCallback);
@@ -506,7 +506,7 @@ gtk_builder_cscope_add_callback_symbols (GtkBuilderCScope *self,
  */
 GCallback
 gtk_builder_cscope_lookup_callback_symbol (GtkBuilderCScope *self,
-                                           const gchar      *callback_name)
+                                           const char       *callback_name)
 {
   GtkBuilderCScopePrivate *priv = gtk_builder_cscope_get_instance_private (self);
 

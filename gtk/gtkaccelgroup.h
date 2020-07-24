@@ -41,28 +41,28 @@ GDK_AVAILABLE_IN_ALL
 gboolean gtk_accelerator_valid		      (guint	        keyval,
 					       GdkModifierType  modifiers) G_GNUC_CONST;
 GDK_AVAILABLE_IN_ALL
-gboolean gtk_accelerator_parse		      (const gchar     *accelerator,
+gboolean gtk_accelerator_parse		      (const char      *accelerator,
 					       guint	       *accelerator_key,
 					       GdkModifierType *accelerator_mods);
 GDK_AVAILABLE_IN_ALL
-gboolean gtk_accelerator_parse_with_keycode   (const gchar     *accelerator,
+gboolean gtk_accelerator_parse_with_keycode   (const char      *accelerator,
                                                GdkDisplay      *display,
                                                guint           *accelerator_key,
                                                guint          **accelerator_codes,
                                                GdkModifierType *accelerator_mods);
 GDK_AVAILABLE_IN_ALL
-gchar*	 gtk_accelerator_name		      (guint	        accelerator_key,
+char *	 gtk_accelerator_name		      (guint	        accelerator_key,
 					       GdkModifierType  accelerator_mods);
 GDK_AVAILABLE_IN_ALL
-gchar*	 gtk_accelerator_name_with_keycode    (GdkDisplay      *display,
+char *	 gtk_accelerator_name_with_keycode    (GdkDisplay      *display,
                                                guint            accelerator_key,
                                                guint            keycode,
                                                GdkModifierType  accelerator_mods);
 GDK_AVAILABLE_IN_ALL
-gchar*   gtk_accelerator_get_label            (guint           accelerator_key,
+char *   gtk_accelerator_get_label            (guint           accelerator_key,
                                                GdkModifierType accelerator_mods);
 GDK_AVAILABLE_IN_ALL
-gchar*   gtk_accelerator_get_label_with_keycode (GdkDisplay      *display,
+char *   gtk_accelerator_get_label_with_keycode (GdkDisplay      *display,
                                                  guint            accelerator_key,
                                                  guint            keycode,
                                                  GdkModifierType  accelerator_mods);

@@ -53,11 +53,11 @@ G_DEFINE_TYPE_WITH_PRIVATE (GtkColorPlane, gtk_color_plane, GTK_TYPE_WIDGET)
 
 static void
 sv_to_xy (GtkColorPlane *plane,
-          gint          *x,
-          gint          *y)
+          int           *x,
+          int           *y)
 {
-  gdouble s, v;
-  gint width, height;
+  double s, v;
+  int width, height;
 
   width = gtk_widget_get_width (GTK_WIDGET (plane));
   height = gtk_widget_get_height (GTK_WIDGET (plane));
@@ -74,8 +74,8 @@ plane_snapshot (GtkWidget   *widget,
                 GtkSnapshot *snapshot)
 {
   GtkColorPlane *plane = GTK_COLOR_PLANE (widget);
-  gint x, y;
-  gint width, height;
+  int x, y;
+  int width, height;
 
   sv_to_xy (plane, &x, &y);
   width = gtk_widget_get_width (widget);
@@ -119,13 +119,13 @@ create_texture (GtkColorPlane *plane)
 {
   GtkWidget *widget = GTK_WIDGET (plane);
   GBytes *bytes;
-  gint width, height, stride;
+  int width, height, stride;
   guint red, green, blue;
   guint32 *data, *p;
   float h, s, v;
   float r, g, b;
-  gdouble sf, vf;
-  gint x, y;
+  double sf, vf;
+  int x, y;
 
   if (!gtk_widget_get_realized (widget))
     return;
@@ -230,11 +230,11 @@ sv_changed (GtkColorPlane *plane)
 
 static void
 update_color (GtkColorPlane *plane,
-              gint           x,
-              gint           y)
+              int            x,
+              int            y)
 {
   GtkWidget *widget = GTK_WIDGET (plane);
-  gdouble s, v;
+  double s, v;
 
   s = CLAMP (1 - y * (1.0 / gtk_widget_get_height (widget)), 0, 1);
   v = CLAMP (x * (1.0 / gtk_widget_get_width (widget)), 0, 1);
@@ -246,8 +246,8 @@ update_color (GtkColorPlane *plane,
 
 static void
 hold_action (GtkGestureLongPress *gesture,
-             gdouble              x,
-             gdouble              y,
+             double               x,
+             double               y,
              GtkWidget           *plane)
 {
   gtk_widget_activate_action (plane,
@@ -257,10 +257,10 @@ hold_action (GtkGestureLongPress *gesture,
 
 static void
 sv_move (GtkColorPlane *plane,
-         gdouble        ds,
-         gdouble        dv)
+         double         ds,
+         double         dv)
 {
-  gdouble s, v;
+  double s, v;
 
   s = gtk_adjustment_get_value (plane->priv->s_adj);
   v = gtk_adjustment_get_value (plane->priv->v_adj);
@@ -319,7 +319,7 @@ key_controller_key_pressed (GtkEventControllerKey *controller,
                             GtkWidget             *widget)
 {
   GtkColorPlane *plane = GTK_COLOR_PLANE (widget);
-  gdouble step;
+  double step;
 
   if ((state & GDK_ALT_MASK) != 0)
     step = 0.1;
@@ -346,8 +346,8 @@ key_controller_key_pressed (GtkEventControllerKey *controller,
 
 static void
 plane_drag_gesture_begin (GtkGestureDrag *gesture,
-                          gdouble         start_x,
-                          gdouble         start_y,
+                          double          start_x,
+                          double          start_y,
                           GtkWidget      *plane)
 {
   guint button;
@@ -375,11 +375,11 @@ plane_drag_gesture_begin (GtkGestureDrag *gesture,
 
 static void
 plane_drag_gesture_update (GtkGestureDrag *gesture,
-                           gdouble         offset_x,
-                           gdouble         offset_y,
+                           double          offset_x,
+                           double          offset_y,
                            GtkColorPlane  *plane)
 {
-  gdouble start_x, start_y;
+  double start_x, start_y;
 
   gtk_gesture_drag_get_start_point (GTK_GESTURE_DRAG (gesture),
                                     &start_x, &start_y);
@@ -388,8 +388,8 @@ plane_drag_gesture_update (GtkGestureDrag *gesture,
 
 static void
 plane_drag_gesture_end (GtkGestureDrag *gesture,
-                        gdouble         offset_x,
-                        gdouble         offset_y,
+                        double          offset_x,
+                        double          offset_y,
                         GtkColorPlane  *plane)
 {
   set_cross_cursor (GTK_WIDGET (plane), FALSE);

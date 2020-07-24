@@ -68,7 +68,7 @@ struct _ViewColumnModel
   GtkListStore parent;
   GtkTreeView *view;
   GList *columns;
-  gint stamp;
+  int stamp;
 };
 
 struct _ViewColumnModelClass
@@ -94,7 +94,7 @@ static void view_column_model_init (ViewColumnModel *model)
   model->stamp = g_random_int ();
 }
 
-static gint
+static int
 view_column_model_get_n_columns (GtkTreeModel *tree_model)
 {
   return 2;
@@ -102,7 +102,7 @@ view_column_model_get_n_columns (GtkTreeModel *tree_model)
 
 static GType
 view_column_model_get_column_type (GtkTreeModel *tree_model,
-				   gint          index)
+				   int           index)
 {
   switch (index)
     {
@@ -123,7 +123,7 @@ view_column_model_get_iter (GtkTreeModel *tree_model,
 {
   ViewColumnModel *view_model = (ViewColumnModel *)tree_model;
   GList *list;
-  gint i;
+  int i;
 
   g_return_val_if_fail (gtk_tree_path_get_depth (path) > 0, FALSE);
 
@@ -146,7 +146,7 @@ view_column_model_get_path (GtkTreeModel *tree_model,
   ViewColumnModel *view_model = (ViewColumnModel *)tree_model;
   GtkTreePath *retval;
   GList *list;
-  gint i = 0;
+  int i = 0;
 
   g_return_val_if_fail (iter->stamp == view_model->stamp, NULL);
 
@@ -167,7 +167,7 @@ view_column_model_get_path (GtkTreeModel *tree_model,
 static void
 view_column_model_get_value (GtkTreeModel *tree_model,
 			     GtkTreeIter  *iter,
-			     gint          column,
+			     int           column,
 			     GValue       *value)
 {
 #ifndef G_DISABLE_CHECKS
@@ -237,18 +237,18 @@ view_column_model_iter_has_child (GtkTreeModel *tree_model,
   return FALSE;
 }
 
-static gint
+static int
 view_column_model_iter_n_children (GtkTreeModel *tree_model,
 				   GtkTreeIter  *iter)
 {
   return g_list_length (((ViewColumnModel *)tree_model)->columns);
 }
 
-static gint
+static int
 view_column_model_iter_nth_child (GtkTreeModel *tree_model,
  				  GtkTreeIter  *iter,
 				  GtkTreeIter  *parent,
-				  gint          n)
+				  int           n)
 {
   ViewColumnModel *view_model = (ViewColumnModel *)tree_model;
 
@@ -385,7 +385,7 @@ static void
 update_columns (GtkTreeView *view, ViewColumnModel *view_model)
 {
   GList *old_columns = view_model->columns;
-  gint old_length, length;
+  int old_length, length;
   GList *a, *b;
 
   view_model->columns = gtk_tree_view_get_columns (view_model->view);
@@ -396,7 +396,7 @@ update_columns (GtkTreeView *view, ViewColumnModel *view_model)
   if (length != old_length)
     {
       GtkTreePath *path;
-      gint i = 0;
+      int i = 0;
 
       /* where are they different */
       for (a = old_columns, b = view_model->columns; a && b; a = a->next, b = b->next)
@@ -423,9 +423,9 @@ update_columns (GtkTreeView *view, ViewColumnModel *view_model)
     }
   else
     {
-      gint i;
-      gint m = 0, n = 1;
-      gint *new_order;
+      int i;
+      int m = 0, n = 1;
+      int *new_order;
       GtkTreePath *path;
 
       new_order = g_new (int, length);
@@ -505,13 +505,13 @@ view_column_model_new (GtkTreeView *view)
 static void
 add_clicked (GtkWidget *button, gpointer data)
 {
-  static gint i = 0;
+  static int i = 0;
 
   GtkTreeIter iter;
   GtkTreeViewColumn *column;
   GtkTreeSelection *selection;
   GtkCellRenderer *cell;
-  gchar *label = g_strdup_printf ("Column %d", i);
+  char *label = g_strdup_printf ("Column %d", i);
 
   cell = gtk_cell_renderer_text_new ();
   column = gtk_tree_view_column_new_with_attributes (label, cell, "text", 0, NULL);
@@ -546,7 +546,7 @@ get_visible (GtkTreeViewColumn *tree_column,
 
 static void
 set_visible (GtkCellRendererToggle *cell,
-	     gchar                 *path_str,
+	     char                  *path_str,
 	     gpointer               data)
 {
   GtkTreeView *tree_view = (GtkTreeView *) data;
@@ -576,7 +576,7 @@ move_to_left (GtkTreeModel *src,
   GtkTreeIter iter;
   GtkTreeViewColumn *column;
   GtkTreeSelection *selection;
-  gchar *label;
+  char *label;
 
   gtk_tree_model_get (src, src_iter, 0, &label, 1, &column, -1);
 
@@ -606,9 +606,9 @@ move_to_right (GtkTreeIter  *src_iter,
 	       GtkTreeModel *dest,
 	       GtkTreeIter  *dest_iter)
 {
-  gchar *label;
+  char *label;
   GtkTreeViewColumn *column;
-  gint before = -1;
+  int before = -1;
 
   gtk_tree_model_get (GTK_TREE_MODEL (left_tree_model),
 		      src_iter, 0, &label, 1, &column, -1);
@@ -636,8 +636,8 @@ move_up_or_down (GtkTreeModel *src,
 		 GtkTreeIter  *dest_iter)
 {
   GtkTreeViewColumn *column;
-  gchar *label;
-  gint before = -1;
+  char *label;
+  int before = -1;
   
   gtk_tree_model_get (src, src_iter, 0, &label, 1, &column, -1);
 
@@ -732,7 +732,7 @@ main (int argc, char *argv[])
   GtkWidget *swindow;
   GtkTreeModel *sample_model;
   GdkContentFormats *targets;
-  gint i;
+  int i;
   gboolean done = FALSE;
 
   gtk_init ();
@@ -750,7 +750,7 @@ main (int argc, char *argv[])
   for (i = 0; i < 10; i++)
     {
       GtkTreeIter iter;
-      gchar *string = g_strdup_printf ("%d", i);
+      char *string = g_strdup_printf ("%d", i);
       gtk_list_store_append (GTK_LIST_STORE (sample_model), &iter);
       gtk_list_store_set (GTK_LIST_STORE (sample_model), &iter, 0, string, -1);
       g_free (string);

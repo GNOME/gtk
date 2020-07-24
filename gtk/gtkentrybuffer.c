@@ -70,12 +70,12 @@ typedef struct _GtkEntryBufferPrivate GtkEntryBufferPrivate;
 struct _GtkEntryBufferPrivate
 {
   /* Only valid if this class is not derived */
-  gchar *normal_text;
+  char *normal_text;
   gsize  normal_text_size;
   gsize  normal_text_bytes;
   guint  normal_text_chars;
 
-  gint   max_length;
+  int    max_length;
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE (GtkEntryBuffer, gtk_entry_buffer, G_TYPE_OBJECT)
@@ -90,15 +90,15 @@ G_DEFINE_TYPE_WITH_PRIVATE (GtkEntryBuffer, gtk_entry_buffer, G_TYPE_OBJECT)
 
 /* Overwrite a memory that might contain sensitive information. */
 static void
-trash_area (gchar *area,
+trash_area (char *area,
             gsize  len)
 {
-  volatile gchar *varea = (volatile gchar *)area;
+  volatile char *varea = (volatile char *)area;
   while (len-- > 0)
     *varea++ = 0;
 }
 
-static const gchar*
+static const char *
 gtk_entry_buffer_normal_get_text (GtkEntryBuffer *buffer,
                                   gsize          *n_bytes)
 {
@@ -124,7 +124,7 @@ gtk_entry_buffer_normal_get_length (GtkEntryBuffer *buffer)
 static guint
 gtk_entry_buffer_normal_insert_text (GtkEntryBuffer *buffer,
                                      guint           position,
-                                     const gchar    *chars,
+                                     const char     *chars,
                                      guint           n_chars)
 {
   GtkEntryBufferPrivate *pv = gtk_entry_buffer_get_instance_private (buffer);
@@ -137,7 +137,7 @@ gtk_entry_buffer_normal_insert_text (GtkEntryBuffer *buffer,
   /* Need more memory */
   if (n_bytes + pv->normal_text_bytes + 1 > pv->normal_text_size)
     {
-      gchar *et_new;
+      char *et_new;
 
       prev_size = pv->normal_text_size;
 
@@ -211,7 +211,7 @@ gtk_entry_buffer_normal_delete_text (GtkEntryBuffer *buffer,
 static void
 gtk_entry_buffer_real_inserted_text (GtkEntryBuffer *buffer,
                                      guint           position,
-                                     const gchar    *chars,
+                                     const char     *chars,
                                      guint           n_chars)
 {
   g_object_notify_by_pspec (G_OBJECT (buffer), entry_buffer_props[PROP_TEXT]);
@@ -436,8 +436,8 @@ gtk_entry_buffer_class_init (GtkEntryBufferClass *klass)
  * Returns: A new GtkEntryBuffer object.
  **/
 GtkEntryBuffer*
-gtk_entry_buffer_new (const gchar *initial_chars,
-                      gint         n_initial_chars)
+gtk_entry_buffer_new (const char *initial_chars,
+                      int          n_initial_chars)
 {
   GtkEntryBuffer *buffer = g_object_new (GTK_TYPE_ENTRY_BUFFER, NULL);
   if (initial_chars)
@@ -504,7 +504,7 @@ gtk_entry_buffer_get_bytes (GtkEntryBuffer *buffer)
  *      storage in the buffer and must not be freed, modified or
  *      stored.
  **/
-const gchar*
+const char *
 gtk_entry_buffer_get_text (GtkEntryBuffer *buffer)
 {
   GtkEntryBufferClass *klass;
@@ -532,8 +532,8 @@ gtk_entry_buffer_get_text (GtkEntryBuffer *buffer)
  **/
 void
 gtk_entry_buffer_set_text (GtkEntryBuffer *buffer,
-                           const gchar    *chars,
-                           gint            n_chars)
+                           const char     *chars,
+                           int             n_chars)
 {
   g_return_if_fail (GTK_IS_ENTRY_BUFFER (buffer));
   g_return_if_fail (chars != NULL);
@@ -557,7 +557,7 @@ gtk_entry_buffer_set_text (GtkEntryBuffer *buffer,
  **/
 void
 gtk_entry_buffer_set_max_length (GtkEntryBuffer *buffer,
-                                 gint            max_length)
+                                 int             max_length)
 {
   GtkEntryBufferPrivate *priv = gtk_entry_buffer_get_instance_private (buffer);
 
@@ -585,7 +585,7 @@ gtk_entry_buffer_set_max_length (GtkEntryBuffer *buffer,
  * Returns: the maximum allowed number of characters
  *               in #GtkEntryBuffer, or 0 if there is no maximum.
  */
-gint
+int
 gtk_entry_buffer_get_max_length (GtkEntryBuffer *buffer)
 {
   GtkEntryBufferPrivate *priv = gtk_entry_buffer_get_instance_private (buffer);
@@ -617,8 +617,8 @@ gtk_entry_buffer_get_max_length (GtkEntryBuffer *buffer)
 guint
 gtk_entry_buffer_insert_text (GtkEntryBuffer *buffer,
                               guint           position,
-                              const gchar    *chars,
-                              gint            n_chars)
+                              const char     *chars,
+                              int             n_chars)
 {
   GtkEntryBufferPrivate *pv = gtk_entry_buffer_get_instance_private (buffer);
   GtkEntryBufferClass *klass;
@@ -673,7 +673,7 @@ gtk_entry_buffer_insert_text (GtkEntryBuffer *buffer,
 guint
 gtk_entry_buffer_delete_text (GtkEntryBuffer *buffer,
                               guint           position,
-                              gint            n_chars)
+                              int             n_chars)
 {
   GtkEntryBufferClass *klass;
   guint length;
@@ -706,7 +706,7 @@ gtk_entry_buffer_delete_text (GtkEntryBuffer *buffer,
 void
 gtk_entry_buffer_emit_inserted_text (GtkEntryBuffer *buffer,
                                      guint           position,
-                                     const gchar    *chars,
+                                     const char     *chars,
                                      guint           n_chars)
 {
   g_return_if_fail (GTK_IS_ENTRY_BUFFER (buffer));

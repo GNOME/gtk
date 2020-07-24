@@ -16,9 +16,9 @@
 
 typedef struct
 {
-  gint   number;
-  gchar *product;
-  gint   yummy;
+  int    number;
+  char *product;
+  int    yummy;
 }
 Item;
 
@@ -74,7 +74,7 @@ add_items (void)
 static GtkTreeModel *
 create_items_model (void)
 {
-  gint i = 0;
+  int i = 0;
   GtkListStore *model;
   GtkTreeIter iter;
 
@@ -109,7 +109,7 @@ static GtkTreeModel *
 create_numbers_model (void)
 {
 #define N_NUMBERS 10
-  gint i = 0;
+  int i = 0;
   GtkListStore *model;
   GtkTreeIter iter;
 
@@ -192,7 +192,7 @@ remove_item (GtkWidget *widget, gpointer data)
 
   if (gtk_tree_selection_get_selected (selection, NULL, &iter))
     {
-      gint i;
+      int i;
       GtkTreePath *path;
 
       path = gtk_tree_model_get_path (model, &iter);
@@ -211,7 +211,7 @@ separator_row (GtkTreeModel *model,
                gpointer      data)
 {
   GtkTreePath *path;
-  gint idx;
+  int idx;
 
   path = gtk_tree_model_get_path (model, iter);
   idx = gtk_tree_path_get_indices (path)[0];
@@ -224,7 +224,7 @@ separator_row (GtkTreeModel *model,
 static void
 editing_started (GtkCellRenderer *cell,
                  GtkCellEditable *editable,
-                 const gchar     *path,
+                 const char      *path,
                  gpointer         data)
 {
   gtk_combo_box_set_row_separator_func (GTK_COMBO_BOX (editable),
@@ -233,15 +233,15 @@ editing_started (GtkCellRenderer *cell,
 
 static void
 cell_edited (GtkCellRendererText *cell,
-             const gchar         *path_string,
-             const gchar         *new_text,
+             const char          *path_string,
+             const char          *new_text,
              gpointer             data)
 {
   GtkTreeModel *model = (GtkTreeModel *)data;
   GtkTreePath *path = gtk_tree_path_new_from_string (path_string);
   GtkTreeIter iter;
 
-  gint column = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (cell), "column"));
+  int column = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (cell), "column"));
 
   gtk_tree_model_get_iter (model, &iter, path);
 
@@ -249,7 +249,7 @@ cell_edited (GtkCellRendererText *cell,
     {
     case COLUMN_ITEM_NUMBER:
       {
-        gint i;
+        int i;
 
         i = gtk_tree_path_get_indices (path)[0];
         g_array_index (articles, Item, i).number = atoi (new_text);
@@ -261,8 +261,8 @@ cell_edited (GtkCellRendererText *cell,
 
     case COLUMN_ITEM_PRODUCT:
       {
-        gint i;
-        gchar *old_text;
+        int i;
+        char *old_text;
 
         gtk_tree_model_get (model, &iter, column, &old_text, -1);
         g_free (old_text);

@@ -157,11 +157,11 @@ create_completion_model (void)
 
 static gboolean
 match_func (GtkEntryCompletion *completion,
-	    const gchar        *key,
+	    const char         *key,
 	    GtkTreeIter        *iter,
 	    gpointer            user_data)
 {
-  gchar *item = NULL;
+  char *item = NULL;
   GtkTreeModel *model;
 
   gboolean ret = FALSE;
@@ -182,7 +182,7 @@ match_func (GtkEntryCompletion *completion,
   return ret;
 }
 
-static gint timer_count = 0;
+static int timer_count = 0;
 
 static const char *dynamic_completions[] = {
   "GNOME",
@@ -210,12 +210,12 @@ static const char *dynamic_completions[] = {
   "zombie"
 };
 
-static gint
+static int
 animation_timer (GtkEntryCompletion *completion)
 {
   GtkTreeIter iter;
-  gint n_completions = G_N_ELEMENTS (dynamic_completions);
-  gint n;
+  int n_completions = G_N_ELEMENTS (dynamic_completions);
+  int n;
   static GtkListStore *old_store = NULL;
   GtkListStore *store = GTK_LIST_STORE (gtk_entry_completion_get_model (completion));
 
@@ -266,7 +266,7 @@ match_selected_cb (GtkEntryCompletion *completion,
 		   GtkTreeModel       *model,
 		   GtkTreeIter        *iter)
 {
-  gchar *str;
+  char *str;
   GtkWidget *entry;
 
   entry = gtk_entry_completion_get_entry (completion);

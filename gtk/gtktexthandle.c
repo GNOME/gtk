@@ -49,8 +49,8 @@ struct _GtkTextHandle
 
   GdkRectangle pointing_to;
   GtkBorder border;
-  gint dx;
-  gint dy;
+  int dx;
+  int dy;
   guint role : 2;
   guint dragged : 1;
   guint mode_visible : 1;
@@ -334,8 +334,8 @@ gtk_text_handle_class_init (GtkTextHandleClass *klass)
 
 static void
 handle_drag_begin (GtkGestureDrag *gesture,
-                   gdouble         x,
-                   gdouble         y,
+                   double          x,
+                   double          y,
                    GtkTextHandle  *handle)
 {
   GtkWidget *widget;
@@ -360,13 +360,13 @@ handle_drag_begin (GtkGestureDrag *gesture,
 
 static void
 handle_drag_update (GtkGestureDrag *gesture,
-                    gdouble         offset_x,
-                    gdouble         offset_y,
+                    double          offset_x,
+                    double          offset_y,
                     GtkWidget      *widget)
 {
   GtkTextHandle *handle = GTK_TEXT_HANDLE (widget);
-  gdouble start_x, start_y;
-  gint x, y;
+  double start_x, start_y;
+  int x, y;
 
   gtk_gesture_drag_get_start_point (gesture, &start_x, &start_y);
 
@@ -388,8 +388,8 @@ handle_drag_update (GtkGestureDrag *gesture,
 
 static void
 handle_drag_end (GtkGestureDrag *gesture,
-                 gdouble         offset_x,
-                 gdouble         offset_y,
+                 double          offset_x,
+                 double          offset_y,
                  GtkTextHandle  *handle)
 {
   g_signal_emit (handle, signals[DRAG_FINISHED], 0);

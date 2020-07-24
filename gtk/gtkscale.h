@@ -56,8 +56,8 @@ struct _GtkScaleClass
   GtkRangeClass parent_class;
 
   void (* get_layout_offsets) (GtkScale *scale,
-                               gint     *x,
-                               gint     *y);
+                               int      *x,
+                               int      *y);
 
   /*< private >*/
 
@@ -86,14 +86,14 @@ GtkWidget       * gtk_scale_new                (GtkOrientation   orientation,
                                                 GtkAdjustment   *adjustment);
 GDK_AVAILABLE_IN_ALL
 GtkWidget       * gtk_scale_new_with_range     (GtkOrientation   orientation,
-                                                gdouble          min,
-                                                gdouble          max,
-                                                gdouble          step);
+                                                double           min,
+                                                double           max,
+                                                double           step);
 GDK_AVAILABLE_IN_ALL
 void              gtk_scale_set_digits         (GtkScale        *scale,
-                                                gint             digits);
+                                                int              digits);
 GDK_AVAILABLE_IN_ALL
-gint              gtk_scale_get_digits         (GtkScale        *scale);
+int               gtk_scale_get_digits         (GtkScale        *scale);
 GDK_AVAILABLE_IN_ALL
 void              gtk_scale_set_draw_value     (GtkScale        *scale,
                                                 gboolean         draw_value);
@@ -114,14 +114,14 @@ GDK_AVAILABLE_IN_ALL
 PangoLayout     * gtk_scale_get_layout         (GtkScale        *scale);
 GDK_AVAILABLE_IN_ALL
 void              gtk_scale_get_layout_offsets (GtkScale        *scale,
-                                                gint            *x,
-                                                gint            *y);
+                                                int             *x,
+                                                int             *y);
 
 GDK_AVAILABLE_IN_ALL
 void              gtk_scale_add_mark           (GtkScale        *scale,
-                                                gdouble          value,
+                                                double           value,
                                                 GtkPositionType  position,
-                                                const gchar     *markup);
+                                                const char      *markup);
 GDK_AVAILABLE_IN_ALL
 void              gtk_scale_clear_marks        (GtkScale        *scale);
 

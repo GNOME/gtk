@@ -215,7 +215,7 @@ gtk_css_change_to_string (GtkCssChange change)
   return g_string_free (string, FALSE);
 }
 
-const gchar *
+const char *
 gtk_css_pseudoclass_name (GtkStateFlags state)
 {
   static const char * state_names[] = {

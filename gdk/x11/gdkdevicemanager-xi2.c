@@ -88,9 +88,9 @@ struct _GdkX11DeviceManagerXI2
 
   GList *devices;
 
-  gint opcode;
-  gint major;
-  gint minor;
+  int opcode;
+  int major;
+  int minor;
 };
 
 struct _GdkX11DeviceManagerXI2Class
@@ -204,14 +204,14 @@ static void
 translate_valuator_class (GdkDisplay          *display,
                           GdkDevice           *device,
                           Atom                 valuator_label,
-                          gdouble              min,
-                          gdouble              max,
-                          gdouble              resolution)
+                          double               min,
+                          double               max,
+                          double               resolution)
 {
   static gboolean initialized = FALSE;
   static Atom label_atoms [GDK_AXIS_LAST] = { 0 };
   GdkAxisUse use = GDK_AXIS_IGNORE;
-  gint i;
+  int i;
 
   if (!initialized)
     {
@@ -253,7 +253,7 @@ translate_device_classes (GdkDisplay      *display,
                           XIAnyClassInfo **classes,
                           guint            n_classes)
 {
-  gint i;
+  int i;
 
   g_object_freeze_notify (G_OBJECT (device));
 
@@ -317,7 +317,7 @@ static gboolean
 is_touch_device (XIAnyClassInfo **classes,
                  guint            n_classes,
                  GdkInputSource  *device_type,
-                 gint            *num_touches)
+                 int             *num_touches)
 {
 #ifdef XINPUT_2_2
   guint i;
@@ -384,8 +384,8 @@ has_abs_axes (GdkDisplay      *display,
 static gboolean
 get_device_ids (GdkDisplay    *display,
                 XIDeviceInfo  *info,
-                gchar        **vendor_id,
-                gchar        **product_id)
+                char         **vendor_id,
+                char         **product_id)
 {
   gulong nitems, bytes_after;
   guint32 *data;
@@ -473,8 +473,8 @@ create_device (GdkX11DeviceManagerXI2 *device_manager,
   GdkInputSource touch_source;
   GdkDeviceType type;
   GdkDevice *device;
-  gint num_touches = 0;
-  gchar *vendor_id = NULL, *product_id = NULL;
+  int num_touches = 0;
+  char *vendor_id = NULL, *product_id = NULL;
 
   if (dev->use == XIMasterKeyboard || dev->use == XISlaveKeyboard)
     input_source = GDK_SOURCE_KEYBOARD;
@@ -485,7 +485,7 @@ create_device (GdkX11DeviceManagerXI2 *device_manager,
     input_source = touch_source;
   else
     {
-      gchar *tmp_name;
+      char *tmp_name;
 
       tmp_name = g_ascii_strdown (dev->name, -1);
 
@@ -531,8 +531,8 @@ create_device (GdkX11DeviceManagerXI2 *device_manager,
 
   GDK_DISPLAY_NOTE (display, INPUT,
             ({
-              const gchar *type_names[] = { "logical", "physical", "floating" };
-              const gchar *source_names[] = { "mouse", "pen", "eraser", "cursor", "keyboard", "direct touch", "indirect touch", "trackpoint", "pad" };
+              const char *type_names[] = { "logical", "physical", "floating" };
+              const char *source_names[] = { "mouse", "pen", "eraser", "cursor", "keyboard", "direct touch", "indirect touch", "trackpoint", "pad" };
               g_message ("input device:\n\tname: %s\n\ttype: %s\n\tsource: %s\n\thas cursor: %d\n\ttouches: %d",
                          dev->name,
                          type_names[type],
@@ -666,7 +666,7 @@ detach_from_seat (GdkDevice *device)
 
 static void
 remove_device (GdkX11DeviceManagerXI2 *device_manager,
-               gint                    device_id)
+               int                     device_id)
 {
   GdkDevice *device;
 
@@ -893,7 +893,7 @@ handle_hierarchy_changed (GdkX11DeviceManagerXI2 *device_manager,
   Display *xdisplay;
   XIDeviceInfo *info;
   int ndevices;
-  gint i;
+  int i;
 
   display = device_manager->display;
   xdisplay = GDK_DISPLAY_XDISPLAY (display);
@@ -1128,7 +1128,7 @@ handle_property_change (GdkX11DeviceManagerXI2 *device_manager,
 }
 
 static GdkCrossingMode
-translate_crossing_mode (gint mode)
+translate_crossing_mode (int mode)
 {
   switch (mode)
     {
@@ -1149,7 +1149,7 @@ translate_crossing_mode (gint mode)
 }
 
 static GdkNotifyType
-translate_notify_type (gint detail)
+translate_notify_type (int detail)
 {
   switch (detail)
     {
@@ -1187,25 +1187,25 @@ set_user_time (GdkEvent *event)
     gdk_x11_surface_set_user_time (surface, time);
 }
 
-static gdouble *
+static double *
 translate_axes (GdkDevice       *device,
-                gdouble          x,
-                gdouble          y,
+                double           x,
+                double           y,
                 GdkSurface       *surface,
                 XIValuatorState *valuators)
 {
   guint n_axes, i;
-  gdouble *axes;
-  gdouble *vals;
+  double *axes;
+  double *vals;
 
   n_axes = gdk_device_get_n_axes (device);
-  axes = g_new0 (gdouble, n_axes);
+  axes = g_new0 (double, n_axes);
   vals = valuators->values;
 
   for (i = 0; i < MIN (valuators->mask_len * 8, n_axes); i++)
     {
       GdkAxisUse use;
-      gdouble val;
+      double val;
 
       if (!XIMaskIsSet (valuators->mask, i))
         {
@@ -1313,13 +1313,13 @@ get_event_surface (GdkEventTranslator *translator,
 static gboolean
 scroll_valuators_changed (GdkX11DeviceXI2 *device,
                           XIValuatorState *valuators,
-                          gdouble         *dx,
-                          gdouble         *dy)
+                          double          *dx,
+                          double          *dy)
 {
   gboolean has_scroll_valuators = FALSE;
   GdkScrollDirection direction;
   guint n_axes, i, n_val;
-  gdouble *vals;
+  double *vals;
 
   n_axes = gdk_device_get_n_axes (GDK_DEVICE (device));
   vals = valuators->values;
@@ -1328,7 +1328,7 @@ scroll_valuators_changed (GdkX11DeviceXI2 *device,
 
   for (i = 0; i < MIN (valuators->mask_len * 8, n_axes); i++)
     {
-      gdouble delta;
+      double delta;
 
       if (!XIMaskIsSet (valuators->mask, i))
         continue;
@@ -1704,7 +1704,7 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
     case XI_Motion:
       {
         XIDeviceEvent *xev = (XIDeviceEvent *) ev;
-        gdouble delta_x, delta_y;
+        double delta_x, delta_y;
 
         double x, y;
         double *axes;
@@ -2025,7 +2025,7 @@ gdk_x11_device_manager_xi2_get_surface (GdkEventTranslator *translator,
 
 GdkDevice *
 _gdk_x11_device_manager_xi2_lookup (GdkX11DeviceManagerXI2 *device_manager_xi2,
-                                    gint                    device_id)
+                                    int                     device_id)
 {
   return g_hash_table_lookup (device_manager_xi2->id_table,
                               GINT_TO_POINTER (device_id));

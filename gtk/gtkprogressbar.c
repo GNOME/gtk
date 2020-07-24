@@ -95,14 +95,14 @@ struct _GtkProgressBar
 {
   GtkWidget parent_instance;
 
-  gchar         *text;
+  char          *text;
 
   GtkWidget     *label;
   GtkWidget     *trough_widget;
   GtkWidget     *progress_widget;
 
-  gdouble        fraction;
-  gdouble        pulse_fraction;
+  double         fraction;
+  double         pulse_fraction;
 
   double         activity_pos;
   guint          activity_blocks;
@@ -113,7 +113,7 @@ struct _GtkProgressBar
   GtkProgressTracker tracker;
   gint64             pulse1;
   gint64             pulse2;
-  gdouble            last_iteration;
+  double             last_iteration;
 
   guint          activity_dir  : 1;
   guint          activity_mode : 1;
@@ -571,7 +571,7 @@ gtk_progress_bar_finalize (GObject *object)
   G_OBJECT_CLASS (gtk_progress_bar_parent_class)->finalize (object);
 }
 
-static gchar *
+static char *
 get_current_text (GtkProgressBar *pbar)
 {
   if (pbar->text)
@@ -587,7 +587,7 @@ tick_cb (GtkWidget     *widget,
 {
   GtkProgressBar *pbar = GTK_PROGRESS_BAR (widget);
   gint64 frame_time;
-  gdouble iteration, pulse_iterations, current_iterations, fraction;
+  double iteration, pulse_iterations, current_iterations, fraction;
 
   if (pbar->pulse2 == 0 && pbar->pulse1 == 0)
     return G_SOURCE_CONTINUE;
@@ -714,7 +714,7 @@ gtk_progress_bar_set_activity_mode (GtkProgressBar *pbar,
  */
 void
 gtk_progress_bar_set_fraction (GtkProgressBar *pbar,
-                               gdouble         fraction)
+                               double          fraction)
 {
   g_return_if_fail (GTK_IS_PROGRESS_BAR (pbar));
 
@@ -792,7 +792,7 @@ gtk_progress_bar_pulse (GtkProgressBar *pbar)
  */
 void
 gtk_progress_bar_set_text (GtkProgressBar *pbar,
-                           const gchar    *text)
+                           const char     *text)
 {
   g_return_if_fail (GTK_IS_PROGRESS_BAR (pbar));
 
@@ -884,7 +884,7 @@ gtk_progress_bar_get_show_text (GtkProgressBar *pbar)
  */
 void
 gtk_progress_bar_set_pulse_step (GtkProgressBar *pbar,
-                                 gdouble         fraction)
+                                 double          fraction)
 {
   g_return_if_fail (GTK_IS_PROGRESS_BAR (pbar));
 
@@ -975,7 +975,7 @@ gtk_progress_bar_set_inverted (GtkProgressBar *pbar,
  * Returns: (nullable): text, or %NULL; this string is owned by the widget
  * and should not be modified or freed.
  */
-const gchar*
+const char *
 gtk_progress_bar_get_text (GtkProgressBar *pbar)
 {
   g_return_val_if_fail (GTK_IS_PROGRESS_BAR (pbar), NULL);
@@ -991,7 +991,7 @@ gtk_progress_bar_get_text (GtkProgressBar *pbar)
  *
  * Returns: a fraction from 0.0 to 1.0
  */
-gdouble
+double
 gtk_progress_bar_get_fraction (GtkProgressBar *pbar)
 {
   g_return_val_if_fail (GTK_IS_PROGRESS_BAR (pbar), 0);
@@ -1007,7 +1007,7 @@ gtk_progress_bar_get_fraction (GtkProgressBar *pbar)
  *
  * Returns: a fraction from 0.0 to 1.0
  */
-gdouble
+double
 gtk_progress_bar_get_pulse_step (GtkProgressBar *pbar)
 {
   g_return_val_if_fail (GTK_IS_PROGRESS_BAR (pbar), 0);

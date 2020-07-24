@@ -72,11 +72,11 @@ load_from_stream (GdkPixbufLoader  *loader,
 
 static void
 size_prepared_cb (GdkPixbufLoader *loader,
-                  gint             width,
-                  gint             height,
+                  int              width,
+                  int              height,
                   gpointer         data)
 {
-  gdouble *scale = data;
+  double *scale = data;
 
   width = MAX (*scale * width, 1);
   height = MAX (*scale * height, 1);
@@ -91,7 +91,7 @@ size_prepared_cb (GdkPixbufLoader *loader,
 GdkPixbuf *
 _gdk_pixbuf_new_from_stream_scaled (GInputStream  *stream,
                                     const char    *format,
-                                    gdouble        scale,
+                                    double         scale,
                                     GCancellable  *cancellable,
                                     GError       **error)
 {
@@ -120,8 +120,8 @@ _gdk_pixbuf_new_from_stream_scaled (GInputStream  *stream,
 
 static void
 size_prepared_cb2 (GdkPixbufLoader *loader,
-                   gint             width,
-                   gint             height,
+                   int              width,
+                   int              height,
                    gpointer         data)
 {
   int *scales = data;
@@ -262,8 +262,8 @@ load_symbolic_svg (const char     *escaped_file_data,
 {
   GInputStream *stream;
   GdkPixbuf *pixbuf;
-  gchar *data;
-  gchar *svg_width, *svg_height;
+  char *data;
+  char *svg_width, *svg_height;
 
   if (width == 0)
     width = icon_width * scale;

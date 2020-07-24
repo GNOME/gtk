@@ -77,7 +77,7 @@ change_justify_state (GSimpleAction *action,
                       gpointer       user_data)
 {
   GtkTextView *text = g_object_get_data (user_data, "bloatpad-text");
-  const gchar *str;
+  const char *str;
 
   str = g_variant_get_string (state, NULL);
 
@@ -150,7 +150,7 @@ text_buffer_changed_cb (GtkTextBuffer *buffer,
 {
   GtkWindow *window = user_data;
   BloatPad *app;
-  gint old_n, n;
+  int old_n, n;
 
   app = (BloatPad *) gtk_window_get_application (window);
 
@@ -265,7 +265,7 @@ new_window (GApplication *app,
 
   if (file != NULL)
     {
-      gchar *contents;
+      char *contents;
       gsize length;
 
       if (g_file_load_contents (file, NULL, &contents, &length, NULL, NULL))
@@ -293,10 +293,10 @@ bloat_pad_activate (GApplication *application)
 static void
 bloat_pad_open (GApplication  *application,
                 GFile        **files,
-                gint           n_files,
-                const gchar   *hint)
+                int            n_files,
+                const char    *hint)
 {
-  gint i;
+  int i;
 
   for (i = 0; i < n_files; i++)
     new_window (application, files[i]);
@@ -345,9 +345,9 @@ combo_changed (GtkComboBox *combo,
                gpointer     user_data)
 {
   GtkEntry *entry = g_object_get_data (user_data, "entry");
-  const gchar *action;
-  gchar **accels;
-  gchar *str;
+  const char *action;
+  char **accels;
+  char *str;
 
   action = gtk_combo_box_get_active_id (combo);
 
@@ -368,9 +368,9 @@ response (GtkDialog *dialog,
 {
   GtkEntry *entry = g_object_get_data (user_data, "entry");
   GtkComboBox *combo = g_object_get_data (user_data, "combo");
-  const gchar *action;
-  const gchar *str;
-  gchar **accels;
+  const char *action;
+  const char *str;
+  char **accels;
 
   if (response_id == GTK_RESPONSE_CLOSE)
     {
@@ -386,7 +386,7 @@ response (GtkDialog *dialog,
   str = gtk_editable_get_text (GTK_EDITABLE (entry));
   accels = g_strsplit (str, ",", 0);
 
-  gtk_application_set_accels_for_action (gtk_window_get_application (user_data), action, (const gchar **) accels);
+  gtk_application_set_accels_for_action (gtk_window_get_application (user_data), action, (const char **) accels);
   g_strfreev (accels);
 }
 
@@ -398,9 +398,9 @@ edit_accels (GSimpleAction *action,
   GtkApplication *app = user_data;
   GtkWidget *combo;
   GtkWidget *entry;
-  gchar **actions;
+  char **actions;
   GtkWidget *dialog;
-  gint i;
+  int i;
 
   dialog = gtk_dialog_new ();
   gtk_window_set_application (GTK_WINDOW (dialog), app);
@@ -426,7 +426,7 @@ update_time (gpointer user_data)
 {
   BloatPad *bloatpad = user_data;
   GDateTime *now;
-  gchar *time;
+  char *time;
 
   while (g_menu_model_get_n_items (G_MENU_MODEL (bloatpad->time)))
     g_menu_remove (bloatpad->time, 0);
@@ -481,14 +481,14 @@ static GActionEntry app_entries[] = {
 static void
 dump_accels (GtkApplication *app)
 {
-  gchar **actions;
-  gint i;
+  char **actions;
+  int i;
 
   actions = gtk_application_list_action_descriptions (app);
   for (i = 0; actions[i]; i++)
     {
-      gchar **accels;
-      gchar *str;
+      char **accels;
+      char *str;
 
       accels = gtk_application_get_accels_for_action (app, actions[i]);
 
@@ -512,10 +512,10 @@ bloat_pad_startup (GApplication *application)
   GIcon *icon2;
   GEmblem *emblem;
   GFile *file;
-  gint i;
+  int i;
   struct {
-    const gchar *action_and_target;
-    const gchar *accelerators[2];
+    const char *action_and_target;
+    const char *accelerators[2];
   } accels[] = {
     { "app.new", { "<Control>n", NULL } },
     { "app.quit", { "<Control>q", NULL } },
@@ -592,7 +592,7 @@ bloat_pad_startup (GApplication *application)
   g_object_unref (item);
   g_object_unref (icon);
 
-  const gchar *new_accels[] = { "<Control>n", "<Control>t", NULL };
+  const char *new_accels[] = { "<Control>n", "<Control>t", NULL };
   gtk_application_set_accels_for_action (GTK_APPLICATION (application), "app.new", new_accels);
 
   dump_accels (GTK_APPLICATION (application));
@@ -657,7 +657,7 @@ main (int argc, char **argv)
 {
   BloatPad *bloat_pad;
   int status;
-  const gchar *accels[] = { "F11", NULL };
+  const char *accels[] = { "F11", NULL };
 
   bloat_pad = bloat_pad_new ();
 

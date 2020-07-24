@@ -37,16 +37,16 @@ GType gtk_tooltip_get_type (void);
 
 GDK_AVAILABLE_IN_ALL
 void gtk_tooltip_set_markup              (GtkTooltip         *tooltip,
-                                          const gchar        *markup);
+                                          const char         *markup);
 GDK_AVAILABLE_IN_ALL
 void gtk_tooltip_set_text                (GtkTooltip         *tooltip,
-                                          const gchar        *text);
+                                          const char         *text);
 GDK_AVAILABLE_IN_ALL
 void gtk_tooltip_set_icon                (GtkTooltip         *tooltip,
                                           GdkPaintable       *paintable);
 GDK_AVAILABLE_IN_ALL
 void gtk_tooltip_set_icon_from_icon_name (GtkTooltip         *tooltip,
-				          const gchar        *icon_name);
+				          const char         *icon_name);
 GDK_AVAILABLE_IN_ALL
 void gtk_tooltip_set_icon_from_gicon     (GtkTooltip         *tooltip,
 					  GIcon              *gicon);

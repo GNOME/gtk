@@ -1,8 +1,8 @@
 #include <gtk/gtk.h>
 
-gint
-main (gint argc,
-      gchar ** argv)
+int
+main (int argc,
+      char ** argv)
 {
   GtkWidget *window, *revealer, *box, *widget, *entry;
 

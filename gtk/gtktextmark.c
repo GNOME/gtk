@@ -192,7 +192,7 @@ gtk_text_mark_set_property (GObject      *object,
 			    const GValue *value,
 			    GParamSpec   *pspec)
 {
-  gchar *tmp;
+  char *tmp;
   GtkTextMark *mark = GTK_TEXT_MARK (object);
   GtkTextLineSegment *seg = mark->segment;
 
@@ -257,7 +257,7 @@ gtk_text_mark_get_property (GObject    *object,
  * Returns: new #GtkTextMark
  **/
 GtkTextMark *
-gtk_text_mark_new (const gchar *name,
+gtk_text_mark_new (const char *name,
 		   gboolean     left_gravity)
 {
   return g_object_new (GTK_TYPE_TEXT_MARK,

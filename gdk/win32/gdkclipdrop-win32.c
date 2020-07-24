@@ -297,7 +297,7 @@ Otherwise it's similar to how the clipboard works. Only the DnD server
 #define CLIPBOARD_RENDER_TIMEOUT (G_USEC_PER_SEC * 29)
 
 gboolean _gdk_win32_transmute_windows_data (UINT          from_w32format,
-                                            const gchar  *to_contentformat,
+                                            const char   *to_contentformat,
                                             HANDLE        hdata,
                                             guchar      **set_data,
                                             gsize        *set_data_length);
@@ -347,7 +347,7 @@ typedef struct _GdkWin32ClipboardStorePrepElement GdkWin32ClipboardStorePrepElem
 struct _GdkWin32ClipboardStorePrepElement
 {
   UINT           w32format;
-  const gchar   *contentformat;
+  const char    *contentformat;
   HANDLE         handle;
   GOutputStream *stream;
 };
@@ -630,7 +630,7 @@ free_queue_item (GdkWin32ClipboardThreadQueueItem *item)
   GdkWin32ClipboardThreadAdvertise *adv;
   GdkWin32ClipboardThreadRetrieve *retr;
   GdkWin32ClipboardThreadStore    *store;
-  gint i;
+  int i;
 
   switch (item->item_type)
     {
@@ -706,7 +706,7 @@ static gboolean
 process_advertise (GdkWin32ClipboardThreadAdvertise *adv)
 {
   DWORD error_code;
-  gint i;
+  int i;
 
   if (g_get_monotonic_time () > adv->parent.end_time)
     {
@@ -785,7 +785,7 @@ static gboolean
 process_store (GdkWin32ClipboardThreadStore *store)
 {
   DWORD error_code;
-  gint i;
+  int i;
 
   if (g_get_monotonic_time () > store->parent.end_time)
     {
@@ -889,7 +889,7 @@ grab_data_from_hdata (GdkWin32ClipboardThreadRetrieve *retr,
 
   if (data == NULL)
     {
-      gchar *length_str = g_strdup_printf ("%" G_GSIZE_FORMAT, length);
+      char *length_str = g_strdup_printf ("%" G_GSIZE_FORMAT, length);
       send_response (retr->parent.item_type,
                      retr->parent.opaque_task,
                      g_error_new (G_IO_ERROR, G_IO_ERROR_FAILED,
@@ -911,7 +911,7 @@ static gboolean
 process_retrieve (GdkWin32ClipboardThreadRetrieve *retr)
 {
   DWORD error_code;
-  gint i;
+  int i;
   UINT fmt, fmt_to_use;
   HANDLE hdata;
   GdkWin32ContentFormatPair *pair;
@@ -1290,7 +1290,7 @@ inner_clipboard_window_procedure (HWND   hwnd,
 
         if (API_CALL (OpenClipboard, (hwnd)))
           {
-            gint i;
+            int i;
             GdkWin32ContentFormatPair *pair;
 
             for (pair = NULL, i = 0;
@@ -1310,7 +1310,7 @@ inner_clipboard_window_procedure (HWND   hwnd,
       }
     case WM_RENDERFORMAT:
       {
-        gint i;
+        int i;
         GdkWin32ClipboardThreadRender *render;
         GdkWin32ClipboardThreadRender *returned_render;
         GdkWin32ContentFormatPair *pair;
@@ -1609,22 +1609,22 @@ gdk_win32_clipdrop_init (GdkWin32Clipdrop *win32_clipdrop)
   win32_clipdrop->n_known_pixbuf_formats = 0;
   for (rover = pixbuf_formats; rover != NULL; rover = rover->next)
     {
-      gchar **mime_types =
+      char **mime_types =
 	gdk_pixbuf_format_get_mime_types ((GdkPixbufFormat *) rover->data);
-      gchar **mime_type;
+      char **mime_type;
 
       for (mime_type = mime_types; *mime_type != NULL; mime_type++)
 	win32_clipdrop->n_known_pixbuf_formats++;
     }
 
-  win32_clipdrop->known_pixbuf_formats = g_new (const gchar *, win32_clipdrop->n_known_pixbuf_formats);
+  win32_clipdrop->known_pixbuf_formats = g_new (const char *, win32_clipdrop->n_known_pixbuf_formats);
 
   i = 0;
   for (rover = pixbuf_formats; rover != NULL; rover = rover->next)
     {
-      gchar **mime_types =
+      char **mime_types =
 	gdk_pixbuf_format_get_mime_types ((GdkPixbufFormat *) rover->data);
-      gchar **mime_type;
+      char **mime_type;
 
       for (mime_type = mime_types; *mime_type != NULL; mime_type++)
 	win32_clipdrop->known_pixbuf_formats[i++] = g_intern_string (*mime_type);
@@ -1840,7 +1840,7 @@ gdk_win32_clipdrop_init (GdkWin32Clipdrop *win32_clipdrop)
 
 #define CLIPBOARD_IDLE_ABORT_TIME 30
 
-static const gchar *
+static const char *
 predefined_name (UINT fmt)
 {
 #define CASE(fmt) case fmt: return #fmt
@@ -1876,15 +1876,15 @@ predefined_name (UINT fmt)
     }
 }
 
-gchar *
+char *
 _gdk_win32_get_clipboard_format_name (UINT      fmt,
                                       gboolean *is_predefined)
 {
-  gint registered_name_w_len = 1024;
+  int registered_name_w_len = 1024;
   wchar_t *registered_name_w = g_malloc (registered_name_w_len);
-  gchar *registered_name = NULL;
+  char *registered_name = NULL;
   int gcfn_result;
-  const gchar *predef = predefined_name (fmt);
+  const char *predef = predefined_name (fmt);
 
   /* TODO: cache the result in a hash table */
 
@@ -1934,13 +1934,13 @@ _gdk_win32_get_clipboard_format_name (UINT      fmt,
  * Does nothing for strings that already look like a mime/type
  * (no spaces, one slash, with at least one char on each side of the slash).
  */
-const gchar *
-_gdk_win32_get_clipboard_format_name_as_interned_mimetype (gchar *w32format_name)
+const char *
+_gdk_win32_get_clipboard_format_name_as_interned_mimetype (char *w32format_name)
 {
-  gchar *mime_type;
-  const gchar *result;
-  gchar *space = strchr (w32format_name, ' ');
-  gchar *slash = strchr (w32format_name, '/');
+  char *mime_type;
+  const char *result;
+  char *space = strchr (w32format_name, ' ');
+  char *slash = strchr (w32format_name, '/');
 
   if (space == NULL &&
       slash > w32format_name &&
@@ -1956,10 +1956,10 @@ _gdk_win32_get_clipboard_format_name_as_interned_mimetype (gchar *w32format_name
 }
 
 static GArray *
-get_compatibility_w32formats_for_contentformat (const gchar *contentformat)
+get_compatibility_w32formats_for_contentformat (const char *contentformat)
 {
   GArray *result = NULL;
-  gint i;
+  int i;
   GdkWin32Clipdrop *clipdrop = _gdk_win32_clipdrop_get ();
 
   result = g_hash_table_lookup (clipdrop->compatibility_w32formats, contentformat);
@@ -2017,11 +2017,11 @@ _gdk_win32_add_w32format_to_pairs (UINT                      w32format,
                                    GdkContentFormatsBuilder *builder)
 {
   gboolean predef;
-  gchar *w32format_name = _gdk_win32_get_clipboard_format_name (w32format, &predef);
-  const gchar *interned_w32format_name;
+  char *w32format_name = _gdk_win32_get_clipboard_format_name (w32format, &predef);
+  const char *interned_w32format_name;
   GdkWin32ContentFormatPair pair;
   GArray *comp_pairs;
-  gint i, j;
+  int i, j;
 
   if (w32format_name != NULL)
     {
@@ -2073,13 +2073,13 @@ _gdk_win32_add_w32format_to_pairs (UINT                      w32format,
 
 static void
 transmute_cf_unicodetext_to_utf8_string (const guchar    *data,
-                                         gint             length,
+                                         int              length,
                                          guchar         **set_data,
                                          gsize           *set_data_length,
                                          GDestroyNotify  *set_data_destroy)
 {
   wchar_t *ptr, *p, *q;
-  gchar *result;
+  char *result;
   glong wclen, u8_len;
 
   /* Strip out \r */
@@ -2113,7 +2113,7 @@ transmute_cf_unicodetext_to_utf8_string (const guchar    *data,
 
 static void
 transmute_utf8_string_to_cf_unicodetext (const guchar    *data,
-                                         gint             length,
+                                         int              length,
                                          guchar         **set_data,
                                          gsize           *set_data_length,
                                          GDestroyNotify  *set_data_destroy)
@@ -2121,7 +2121,7 @@ transmute_utf8_string_to_cf_unicodetext (const guchar    *data,
   glong wclen;
   GError *err = NULL;
   glong size;
-  gint i;
+  int i;
   wchar_t *wcptr, *p;
 
   wcptr = g_utf8_to_utf16 ((char *) data, length, NULL, &wclen, &err);
@@ -2188,7 +2188,7 @@ wchar_to_str (const wchar_t  *wstr,
 
 static void
 transmute_utf8_string_to_cf_text (const guchar    *data,
-                                  gint             length,
+                                  int              length,
                                   guchar         **set_data,
                                   gsize           *set_data_length,
                                   GDestroyNotify  *set_data_destroy)
@@ -2196,7 +2196,7 @@ transmute_utf8_string_to_cf_text (const guchar    *data,
   glong rlen;
   GError *err = NULL;
   gsize size;
-  gint i;
+  int i;
   char *strptr, *p;
   wchar_t *wcptr;
 
@@ -2274,18 +2274,18 @@ str_to_wchar (const char  *str,
 
 static void
 transmute_cf_text_to_utf8_string (const guchar    *data,
-                                  gint             length,
+                                  int              length,
                                   guchar         **set_data,
                                   gsize           *set_data_length,
                                   GDestroyNotify  *set_data_destroy)
 {
   char *ptr, *p, *q;
-  gchar *result;
+  char *result;
   glong wclen, u8_len;
   wchar_t *wstr;
 
   /* Strip out \r */
-  ptr = (gchar *) data;
+  ptr = (char *) data;
   p = ptr;
   q = ptr;
   wclen = 0;
@@ -2320,7 +2320,7 @@ transmute_cf_text_to_utf8_string (const guchar    *data,
 
 static void
 transmute_cf_dib_to_image_bmp (const guchar    *data,
-                               gint             length,
+                               int              length,
                                guchar         **set_data,
                                gsize           *set_data_length,
                                GDestroyNotify  *set_data_destroy)
@@ -2354,8 +2354,8 @@ transmute_cf_dib_to_image_bmp (const guchar    *data,
   BITMAPINFOHEADER *bi = (BITMAPINFOHEADER *) data;
   BITMAPFILEHEADER *bf;
   gpointer result;
-  gint data_length = length;
-  gint new_length;
+  int data_length = length;
+  int new_length;
   gboolean make_dibv5 = FALSE;
   BITMAPV5HEADER *bV5;
   guchar *p;
@@ -2477,7 +2477,7 @@ transmute_cf_dib_to_image_bmp (const guchar    *data,
     {
       if (p[3] != 0)
         {
-          gdouble inverse_alpha = 255./p[3];
+          double inverse_alpha = 255./p[3];
 
           p[0] = p[0] * inverse_alpha + 0.5;
           p[1] = p[1] * inverse_alpha + 0.5;
@@ -2490,7 +2490,7 @@ transmute_cf_dib_to_image_bmp (const guchar    *data,
 
 static void
 transmute_cf_shell_id_list_to_text_uri_list (const guchar    *data,
-                                             gint             length,
+                                             int              length,
                                              guchar         **set_data,
                                              gsize           *set_data_length,
                                              GDestroyNotify  *set_data_destroy)
@@ -2509,11 +2509,11 @@ transmute_cf_shell_id_list_to_text_uri_list (const guchar    *data,
 
       if (SHGetPathFromIDListW (file_id_full, path_w))
         {
-          gchar *filename = g_utf16_to_utf8 (path_w, -1, NULL, NULL, NULL);
+          char *filename = g_utf16_to_utf8 (path_w, -1, NULL, NULL, NULL);
 
           if (filename)
             {
-              gchar *uri = g_filename_to_uri (filename, NULL, NULL);
+              char *uri = g_filename_to_uri (filename, NULL, NULL);
 
               if (uri)
                 {
@@ -2540,12 +2540,12 @@ transmute_cf_shell_id_list_to_text_uri_list (const guchar    *data,
 
 void
 transmute_image_bmp_to_cf_dib (const guchar    *data,
-                               gint             length,
+                               int              length,
                                guchar         **set_data,
                                gsize           *set_data_length,
                                GDestroyNotify  *set_data_destroy)
 {
-  gint size;
+  int size;
   guchar *ptr;
 
   g_return_if_fail (length >= sizeof (BITMAPFILEHEADER));
@@ -2566,7 +2566,7 @@ transmute_image_bmp_to_cf_dib (const guchar    *data,
 
 gboolean
 _gdk_win32_transmute_windows_data (UINT          from_w32format,
-                                   const gchar  *to_contentformat,
+                                   const char   *to_contentformat,
                                    HANDLE        hdata,
                                    guchar      **set_data,
                                    gsize        *set_data_length)
@@ -2627,10 +2627,10 @@ _gdk_win32_transmute_windows_data (UINT          from_w32format,
 }
 
 gboolean
-_gdk_win32_transmute_contentformat (const gchar   *from_contentformat,
+_gdk_win32_transmute_contentformat (const char    *from_contentformat,
                                     UINT           to_w32format,
                                     const guchar  *data,
-                                    gint           length,
+                                    int            length,
                                     guchar       **set_data,
                                     gsize         *set_data_length)
 {
@@ -2682,16 +2682,16 @@ _gdk_win32_transmute_contentformat (const gchar   *from_contentformat,
   return TRUE;
 }
 
-gint
+int
 _gdk_win32_add_contentformat_to_pairs (const char *contentformat,
                                        GArray     *array)
 {
-  gint added_count = 0;
+  int added_count = 0;
   wchar_t *contentformat_w;
   GdkWin32ContentFormatPair fmt;
-  gint i;
+  int i;
   GArray *comp_pairs;
-  gint starting_point;
+  int starting_point;
   const wchar_t *prefix = L"application/x.windows.";
   size_t prefix_len = wcslen (prefix);
   size_t offset = 0;
@@ -2732,7 +2732,7 @@ _gdk_win32_add_contentformat_to_pairs (const char *contentformat,
   comp_pairs = get_compatibility_w32formats_for_contentformat (contentformat);
   for (i = 0; comp_pairs != NULL && i < comp_pairs->len; i++)
     {
-      gint j;
+      int j;
 
       fmt = g_array_index (comp_pairs, GdkWin32ContentFormatPair, i);
 
@@ -2834,7 +2834,7 @@ clipboard_store_hdata_ready (GObject      *clipboard,
                              gpointer      user_data)
 {
   GError *error = NULL;
-  gint i;
+  int i;
   gboolean no_other_streams;
   GdkWin32ClipboardHDataPrepAndStream *prep_and_stream = (GdkWin32ClipboardHDataPrepAndStream *) user_data;
   GdkWin32ClipboardStorePrep *prep = prep_and_stream->prep;

@@ -39,17 +39,17 @@ struct _ScrollValuator
   guint n_valuator       : 4;
   guint direction        : 4;
   guint last_value_valid : 1;
-  gdouble last_value;
-  gdouble increment;
+  double last_value;
+  double increment;
 };
 
 struct _GdkX11DeviceXI2
 {
   GdkDevice parent_instance;
 
-  gint device_id;
+  int device_id;
   GArray *scroll_valuators;
-  gdouble *last_axes;
+  double *last_axes;
 };
 
 struct _GdkX11DeviceXI2Class
@@ -72,7 +72,7 @@ static void gdk_x11_device_xi2_set_property (GObject      *object,
 
 static void gdk_x11_device_xi2_get_state (GdkDevice       *device,
                                           GdkSurface       *surface,
-                                          gdouble         *axes,
+                                          double          *axes,
                                           GdkModifierType *mask);
 static void gdk_x11_device_xi2_set_surface_cursor (GdkDevice *device,
                                                   GdkSurface *surface,
@@ -80,8 +80,8 @@ static void gdk_x11_device_xi2_set_surface_cursor (GdkDevice *device,
 static void gdk_x11_device_xi2_query_state (GdkDevice        *device,
                                             GdkSurface        *surface,
                                             GdkSurface       **child_surface,
-                                            gdouble          *win_x,
-                                            gdouble          *win_y,
+                                            double           *win_x,
+                                            double           *win_y,
                                             GdkModifierType  *mask);
 
 static GdkGrabStatus gdk_x11_device_xi2_grab   (GdkDevice     *device,
@@ -95,8 +95,8 @@ static void          gdk_x11_device_xi2_ungrab (GdkDevice     *device,
                                                 guint32        time_);
 
 static GdkSurface * gdk_x11_device_xi2_surface_at_position (GdkDevice       *device,
-                                                            gdouble         *win_x,
-                                                            gdouble         *win_y,
+                                                            double          *win_x,
+                                                            double          *win_y,
                                                             GdkModifierType *mask);
 
 
@@ -190,7 +190,7 @@ gdk_x11_device_xi2_set_property (GObject      *object,
 static void
 gdk_x11_device_xi2_get_state (GdkDevice       *device,
                               GdkSurface       *surface,
-                              gdouble         *axes,
+                              double          *axes,
                               GdkModifierType *mask)
 {
   GdkX11DeviceXI2 *device_xi2 = GDK_X11_DEVICE_XI2 (device);
@@ -199,7 +199,7 @@ gdk_x11_device_xi2_get_state (GdkDevice       *device,
     {
       GdkDisplay *display;
       XIDeviceInfo *info;
-      gint i, j, ndevices;
+      int i, j, ndevices;
       Screen *xscreen;
 
       display = gdk_device_get_display (device);
@@ -214,7 +214,7 @@ gdk_x11_device_xi2_get_state (GdkDevice       *device,
         {
           XIAnyClassInfo *class_info = info->classes[i];
           GdkAxisUse use;
-          gdouble value;
+          double value;
 
           if (class_info->type != XIValuatorClass)
             continue;
@@ -228,7 +228,7 @@ gdk_x11_device_xi2_get_state (GdkDevice       *device,
             case GDK_AXIS_Y:
             case GDK_AXIS_IGNORE:
                 {
-                  gint root_x, root_y;
+                  int root_x, root_y;
 
                   /* FIXME: Maybe root coords caching should happen here */
                   gdk_surface_get_origin (surface, &root_x, &root_y);
@@ -285,15 +285,15 @@ static void
 gdk_x11_device_xi2_query_state (GdkDevice        *device,
                                 GdkSurface        *surface,
                                 GdkSurface       **child_surface,
-                                gdouble          *win_x,
-                                gdouble          *win_y,
+                                double           *win_x,
+                                double           *win_y,
                                 GdkModifierType  *mask)
 {
   GdkX11DeviceXI2 *device_xi2 = GDK_X11_DEVICE_XI2 (device);
   GdkDisplay *display;
   GdkX11Screen *default_screen;
   Window xroot_window, xchild_window, xwindow;
-  gdouble xroot_x, xroot_y, xwin_x, xwin_y;
+  double xroot_x, xroot_y, xwin_x, xwin_y;
   XIButtonState button_state;
   XIModifierState mod_state;
   XIGroupState group_state;
@@ -387,7 +387,7 @@ gdk_x11_device_xi2_grab (GdkDevice    *device,
   XIEventMask mask;
   Window xwindow;
   Cursor xcursor;
-  gint status;
+  int status;
 
   display = gdk_device_get_display (device);
   device_manager_xi2 = GDK_X11_DEVICE_MANAGER_XI2 (GDK_X11_DISPLAY (display)->device_manager);
@@ -447,8 +447,8 @@ gdk_x11_device_xi2_ungrab (GdkDevice *device,
 
 static GdkSurface *
 gdk_x11_device_xi2_surface_at_position (GdkDevice       *device,
-                                        gdouble         *win_x,
-                                        gdouble         *win_y,
+                                        double          *win_x,
+                                        double          *win_y,
                                         GdkModifierType *mask)
 {
   GdkX11Surface *impl;
@@ -458,7 +458,7 @@ gdk_x11_device_xi2_surface_at_position (GdkDevice       *device,
   Display *xdisplay;
   GdkSurface *surface;
   Window xwindow, root, child, last = None;
-  gdouble xroot_x, xroot_y, xwin_x, xwin_y;
+  double xroot_x, xroot_y, xwin_x, xwin_y;
   XIButtonState button_state = { 0 };
   XIModifierState mod_state;
   XIGroupState group_state;
@@ -498,7 +498,7 @@ gdk_x11_device_xi2_surface_at_position (GdkDevice       *device,
     }
   else
     {
-      gint width, height;
+      int width, height;
       GList *toplevels, *list;
       Window pointer_window;
 
@@ -628,10 +628,10 @@ gdk_x11_device_xi2_surface_at_position (GdkDevice       *device,
 guchar *
 _gdk_x11_device_xi2_translate_event_mask (GdkX11DeviceManagerXI2 *device_manager_xi2,
                                           GdkEventMask            event_mask,
-                                          gint                   *len)
+                                          int                    *len)
 {
   guchar *mask;
-  gint minor;
+  int minor;
 
   g_object_get (device_manager_xi2, "minor", &minor, NULL);
 
@@ -707,7 +707,7 @@ _gdk_x11_device_xi2_translate_state (XIModifierState *mods_state,
 
   if (buttons_state)
     {
-      gint len, i;
+      int len, i;
 
       /* We're only interested in the first 3 buttons */
       len = MIN (3, buttons_state->mask_len * 8);
@@ -744,7 +744,7 @@ void
 _gdk_x11_device_xi2_add_scroll_valuator (GdkX11DeviceXI2    *device,
                                          guint               n_valuator,
                                          GdkScrollDirection  direction,
-                                         gdouble             increment)
+                                         double              increment)
 {
   ScrollValuator scroll;
 
@@ -762,9 +762,9 @@ _gdk_x11_device_xi2_add_scroll_valuator (GdkX11DeviceXI2    *device,
 gboolean
 _gdk_x11_device_xi2_get_scroll_delta (GdkX11DeviceXI2    *device,
                                       guint               n_valuator,
-                                      gdouble             valuator_value,
+                                      double              valuator_value,
                                       GdkScrollDirection *direction_ret,
-                                      gdouble            *delta_ret)
+                                      double             *delta_ret)
 {
   guint i;
 
@@ -827,7 +827,7 @@ _gdk_device_xi2_unset_scroll_valuators (GdkX11DeviceXI2 *device)
                           device->scroll_valuators->len);
 }
 
-gint
+int
 _gdk_x11_device_xi2_get_id (GdkX11DeviceXI2 *device)
 {
   g_return_val_if_fail (GDK_IS_X11_DEVICE_XI2 (device), 0);
@@ -835,9 +835,9 @@ _gdk_x11_device_xi2_get_id (GdkX11DeviceXI2 *device)
   return device->device_id;
 }
 
-gdouble
+double
 gdk_x11_device_xi2_get_last_axis_value (GdkX11DeviceXI2 *device,
-                                        gint             n_axis)
+                                        int              n_axis)
 {
   if (n_axis >= gdk_device_get_n_axes (GDK_DEVICE (device)))
     return 0;
@@ -850,13 +850,13 @@ gdk_x11_device_xi2_get_last_axis_value (GdkX11DeviceXI2 *device,
 
 void
 gdk_x11_device_xi2_store_axes (GdkX11DeviceXI2 *device,
-                               gdouble         *axes,
-                               gint             n_axes)
+                               double          *axes,
+                               int              n_axes)
 {
   g_free (device->last_axes);
 
   if (axes && n_axes)
-    device->last_axes = g_memdup (axes, sizeof (gdouble) * n_axes);
+    device->last_axes = g_memdup (axes, sizeof (double) * n_axes);
   else
     device->last_axes = NULL;
 }

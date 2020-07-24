@@ -101,7 +101,7 @@ _gdk_x11_surfaceing_init (void)
 }
 
 GdkGrabStatus
-_gdk_x11_convert_grab_status (gint status)
+_gdk_x11_convert_grab_status (int status)
 {
   switch (status)
     {
@@ -323,7 +323,7 @@ _gdk_x11_error_handler_pop  (void)
     }
 }
 
-gint
+int
 _gdk_x11_display_send_xevent (GdkDisplay *display,
                               Window      window,
                               gboolean    propagate,
@@ -348,15 +348,15 @@ _gdk_x11_display_send_xevent (GdkDisplay *display,
 
 void
 _gdk_x11_region_get_xrectangles (const cairo_region_t *region,
-                                 gint             x_offset,
-                                 gint             y_offset,
-                                 gint             scale,
+                                 int              x_offset,
+                                 int              y_offset,
+                                 int              scale,
                                  XRectangle     **rects,
-                                 gint            *n_rects)
+                                 int             *n_rects)
 {
   XRectangle *rectangles;
   cairo_rectangle_int_t box;
-  gint i, n;
+  int i, n;
   
   n = cairo_region_num_rectangles (region);
   rectangles = g_new (XRectangle, n);

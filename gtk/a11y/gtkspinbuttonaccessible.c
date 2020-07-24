@@ -201,8 +201,8 @@ gtk_spin_button_accessible_set_current_value (AtkValue     *obj,
 
 static void
 gtk_spin_button_accessible_get_value_and_text (AtkValue  *obj,
-                                               gdouble   *value,
-                                               gchar    **text)
+                                               double    *value,
+                                               char     **text)
 {
   GtkWidget *widget;
   GtkAdjustment *adjustment;
@@ -234,7 +234,7 @@ gtk_spin_button_accessible_get_range (AtkValue *obj)
 
 static void
 gtk_spin_button_accessible_set_value (AtkValue      *obj,
-                                const gdouble  value)
+                                const double   value)
 {
   GtkWidget *widget;
   GtkAdjustment *adjustment;
@@ -247,7 +247,7 @@ gtk_spin_button_accessible_set_value (AtkValue      *obj,
   gtk_adjustment_set_value (adjustment, value);
 }
 
-static gdouble
+static double
 gtk_spin_button_accessible_get_increment (AtkValue *obj)
 {
   GtkWidget *widget;

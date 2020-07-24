@@ -257,7 +257,7 @@ gdk_x11_drop_finalize (GObject *object)
 static void
 print_target_list (GdkContentFormats *formats)
 {
-  gchar *name = gdk_content_formats_to_string (formats);
+  char *name = gdk_content_formats_to_string (formats);
   g_message ("DND formats: %s", name);
   g_free (name);
 }
@@ -270,7 +270,7 @@ print_target_list (GdkContentFormats *formats)
 /* Utility functions */
 
 static struct {
-  const gchar *name;
+  const char *name;
   GdkDragAction action;
 } xdnd_actions_table[] = {
     { "XdndActionCopy",    GDK_ACTION_COPY },
@@ -280,14 +280,14 @@ static struct {
     { "XdndActionPrivate", GDK_ACTION_COPY },
   };
 
-static const gint xdnd_n_actions = G_N_ELEMENTS (xdnd_actions_table);
+static const int xdnd_n_actions = G_N_ELEMENTS (xdnd_actions_table);
 
 static GdkDragAction
 xdnd_action_from_atom (GdkDisplay *display,
                        Atom        xatom)
 {
   const char *name;
-  gint i;
+  int i;
 
   if (xatom == None)
     return 0;
@@ -305,7 +305,7 @@ static Atom
 xdnd_action_to_atom (GdkDisplay    *display,
                      GdkDragAction  action)
 {
-  gint i;
+  int i;
 
   for (i = 0; i < xdnd_n_actions; i++)
     if (action == xdnd_actions_table[i].action)
@@ -343,7 +343,7 @@ gdk_x11_drop_read_actions (GdkDrop *drop)
   gulong nitems, after;
   guchar *data;
   Atom *atoms;
-  gint i;
+  int i;
 
   drag = gdk_drop_get_drag (drop);
 
@@ -439,7 +439,7 @@ xdnd_enter_filter (GdkSurface   *surface,
   GdkX11Drop *drop_x11;
   GdkDrag *drag;
   GdkSeat *seat;
-  gint i;
+  int i;
   Atom type;
   int format;
   gulong nitems, after;
@@ -449,7 +449,7 @@ xdnd_enter_filter (GdkSurface   *surface,
   GPtrArray *formats;
   Window source_window;
   gboolean get_types;
-  gint version;
+  int version;
 
   source_window = xevent->xclient.data.l[0];
   get_types = ((xevent->xclient.data.l[1] & 1) != 0);

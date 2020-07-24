@@ -23,8 +23,8 @@
 
 #define EPSILON 1e-10
 
-static gdouble
-double_normalize (gdouble n)
+static double
+double_normalize (double n)
 {
   if (fabs (1.0 - n) < EPSILON)
     n = 1.0;
@@ -37,7 +37,7 @@ double_normalize (gdouble n)
 static void
 spin_xalign_cb (GtkSpinButton *spin, GtkFrame *frame)
 {
-  gdouble xalign;
+  double xalign;
 
   xalign = double_normalize (gtk_spin_button_get_value (spin));
   gtk_frame_set_label_align (frame, xalign);
@@ -60,7 +60,7 @@ int main (int argc, char **argv)
   GtkBox *vbox;
   GtkFrame *frame;
   GtkGrid *grid;
-  gfloat xalign;
+  float xalign;
   gboolean done = FALSE;
 
   gtk_init ();

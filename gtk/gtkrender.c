@@ -37,10 +37,10 @@
 static void
 gtk_do_render_icon (GtkStyleContext        *context,
                     cairo_t                *cr,
-                    gdouble                 x,
-                    gdouble                 y,
-                    gdouble                 width,
-                    gdouble                 height)
+                    double                  x,
+                    double                  y,
+                    double                  width,
+                    double                  height)
 {
   GtkSnapshot *snapshot;
   GskRenderNode *node;
@@ -81,10 +81,10 @@ gtk_do_render_icon (GtkStyleContext        *context,
 void
 gtk_render_check (GtkStyleContext *context,
                   cairo_t         *cr,
-                  gdouble          x,
-                  gdouble          y,
-                  gdouble          width,
-                  gdouble          height)
+                  double           x,
+                  double           y,
+                  double           width,
+                  double           height)
 {
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
   g_return_if_fail (cr != NULL);
@@ -115,10 +115,10 @@ gtk_render_check (GtkStyleContext *context,
 void
 gtk_render_option (GtkStyleContext *context,
                    cairo_t         *cr,
-                   gdouble          x,
-                   gdouble          y,
-                   gdouble          width,
-                   gdouble          height)
+                   double           x,
+                   double           y,
+                   double           width,
+                   double           height)
 {
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
   g_return_if_fail (cr != NULL);
@@ -147,10 +147,10 @@ gtk_render_option (GtkStyleContext *context,
 void
 gtk_render_arrow (GtkStyleContext *context,
                   cairo_t         *cr,
-                  gdouble          angle,
-                  gdouble          x,
-                  gdouble          y,
-                  gdouble          size)
+                  double           angle,
+                  double           x,
+                  double           y,
+                  double           size)
 {
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
   g_return_if_fail (cr != NULL);
@@ -180,10 +180,10 @@ gtk_render_arrow (GtkStyleContext *context,
 void
 gtk_render_background (GtkStyleContext *context,
                        cairo_t         *cr,
-                       gdouble          x,
-                       gdouble          y,
-                       gdouble          width,
-                       gdouble          height)
+                       double           x,
+                       double           y,
+                       double           width,
+                       double           height)
 {
   GtkSnapshot *snapshot;
   GskRenderNode *node;
@@ -226,10 +226,10 @@ gtk_render_background (GtkStyleContext *context,
 void
 gtk_render_frame (GtkStyleContext *context,
                   cairo_t         *cr,
-                  gdouble          x,
-                  gdouble          y,
-                  gdouble          width,
-                  gdouble          height)
+                  double           x,
+                  double           y,
+                  double           width,
+                  double           height)
 {
   GtkSnapshot *snapshot;
   GskRenderNode *node;
@@ -273,10 +273,10 @@ gtk_render_frame (GtkStyleContext *context,
 void
 gtk_render_expander (GtkStyleContext *context,
                      cairo_t         *cr,
-                     gdouble          x,
-                     gdouble          y,
-                     gdouble          width,
-                     gdouble          height)
+                     double           x,
+                     double           y,
+                     double           width,
+                     double           height)
 {
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
   g_return_if_fail (cr != NULL);
@@ -305,10 +305,10 @@ gtk_render_expander (GtkStyleContext *context,
 void
 gtk_render_focus (GtkStyleContext *context,
                   cairo_t         *cr,
-                  gdouble          x,
-                  gdouble          y,
-                  gdouble          width,
-                  gdouble          height)
+                  double           x,
+                  double           y,
+                  double           width,
+                  double           height)
 {
   GtkSnapshot *snapshot;
   GskRenderNode *node;
@@ -345,8 +345,8 @@ gtk_render_focus (GtkStyleContext *context,
 void
 gtk_render_layout (GtkStyleContext *context,
                    cairo_t         *cr,
-                   gdouble          x,
-                   gdouble          y,
+                   double           x,
+                   double           y,
                    PangoLayout     *layout)
 {
   GtkSnapshot *snapshot;
@@ -372,10 +372,10 @@ gtk_render_layout (GtkStyleContext *context,
 static void
 gtk_do_render_line (GtkStyleContext *context,
                     cairo_t         *cr,
-                    gdouble          x0,
-                    gdouble          y0,
-                    gdouble          x1,
-                    gdouble          y1)
+                    double           x0,
+                    double           y0,
+                    double           x1,
+                    double           y1)
 {
   const GdkRGBA *color;
 
@@ -409,10 +409,10 @@ gtk_do_render_line (GtkStyleContext *context,
 void
 gtk_render_line (GtkStyleContext *context,
                  cairo_t         *cr,
-                 gdouble          x0,
-                 gdouble          y0,
-                 gdouble          x1,
-                 gdouble          y1)
+                 double           x0,
+                 double           y0,
+                 double           x1,
+                 double           y1)
 {
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
   g_return_if_fail (cr != NULL);
@@ -440,10 +440,10 @@ gtk_render_line (GtkStyleContext *context,
 void
 gtk_render_handle (GtkStyleContext *context,
                    cairo_t         *cr,
-                   gdouble          x,
-                   gdouble          y,
-                   gdouble          width,
-                   gdouble          height)
+                   double           x,
+                   double           y,
+                   double           width,
+                   double           height)
 {
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
   g_return_if_fail (cr != NULL);
@@ -473,10 +473,10 @@ gtk_render_handle (GtkStyleContext *context,
 void
 gtk_render_activity (GtkStyleContext *context,
                      cairo_t         *cr,
-                     gdouble          x,
-                     gdouble          y,
-                     gdouble          width,
-                     gdouble          height)
+                     double           x,
+                     double           y,
+                     double           width,
+                     double           height)
 {
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
   g_return_if_fail (cr != NULL);
@@ -506,8 +506,8 @@ void
 gtk_render_icon (GtkStyleContext *context,
                  cairo_t         *cr,
                  GdkTexture      *texture,
-                 gdouble          x,
-                 gdouble          y)
+                 double           x,
+                 double           y)
 {
   GtkSnapshot *snapshot;
   GskRenderNode *node;

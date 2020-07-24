@@ -18,7 +18,7 @@
 #include "config.h"
 #include <gtk/gtk.h>
 
-static gint num_windows = 0;
+static int num_windows = 0;
 
 static gboolean done = FALSE;
 

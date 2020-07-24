@@ -218,7 +218,7 @@ gtk_toggle_button_new (void)
  * Returns: a new toggle button.
  */
 GtkWidget*
-gtk_toggle_button_new_with_label (const gchar *label)
+gtk_toggle_button_new_with_label (const char *label)
 {
   return g_object_new (GTK_TYPE_TOGGLE_BUTTON, "label", label, NULL);
 }
@@ -235,7 +235,7 @@ gtk_toggle_button_new_with_label (const gchar *label)
  * Returns: a new #GtkToggleButton
  */
 GtkWidget*
-gtk_toggle_button_new_with_mnemonic (const gchar *label)
+gtk_toggle_button_new_with_mnemonic (const char *label)
 {
   return g_object_new (GTK_TYPE_TOGGLE_BUTTON, 
 		       "label", label, 

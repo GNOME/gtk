@@ -56,10 +56,10 @@ enum {
 
 struct _GtkGestureLongPressPrivate
 {
-  gdouble initial_x;
-  gdouble initial_y;
+  double initial_x;
+  double initial_y;
 
-  gdouble delay_factor;
+  double delay_factor;
   guint timeout_id;
   guint delay;
   guint cancelled : 1;
@@ -98,7 +98,7 @@ _gtk_gesture_long_press_timeout (gpointer user_data)
   GtkGestureLongPress *gesture = user_data;
   GtkGestureLongPressPrivate *priv;
   GdkEventSequence *sequence;
-  gdouble x, y;
+  double x, y;
 
   priv = gtk_gesture_long_press_get_instance_private (gesture);
   sequence = gtk_gesture_get_last_updated_sequence (GTK_GESTURE (gesture));
@@ -119,7 +119,7 @@ gtk_gesture_long_press_begin (GtkGesture       *gesture,
   GdkEvent *event;
   GdkEventType event_type;
   GtkWidget *widget;
-  gint delay;
+  int delay;
 
   priv = gtk_gesture_long_press_get_instance_private (GTK_GESTURE_LONG_PRESS (gesture));
   sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
@@ -139,7 +139,7 @@ gtk_gesture_long_press_begin (GtkGesture       *gesture,
                 "gtk-long-press-time", &delay,
                 NULL);
 
-  delay = (gint)(priv->delay_factor * delay);
+  delay = (int)(priv->delay_factor * delay);
 
   gtk_gesture_get_point (gesture, sequence,
                          &priv->initial_x, &priv->initial_y);
@@ -153,7 +153,7 @@ gtk_gesture_long_press_update (GtkGesture       *gesture,
 {
   GtkGestureLongPressPrivate *priv;
   GtkWidget *widget;
-  gdouble x, y;
+  double x, y;
 
   widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (gesture));
   priv = gtk_gesture_long_press_get_instance_private (GTK_GESTURE_LONG_PRESS (gesture));

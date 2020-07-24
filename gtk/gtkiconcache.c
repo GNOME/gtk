@@ -44,10 +44,10 @@
 #define GET_UINT32(cache, offset) (GUINT32_FROM_BE (*(guint32 *)((cache) + (offset))))
 
 struct _GtkIconCache {
-  gint ref_count;
+  int ref_count;
 
   GMappedFile *map;
-  gchar *buffer;
+  char *buffer;
 
   guint32 last_chain_offset;
 };
@@ -75,12 +75,12 @@ gtk_icon_cache_unref (GtkIconCache *cache)
 }
 
 GtkIconCache *
-gtk_icon_cache_new_for_path (const gchar *path)
+gtk_icon_cache_new_for_path (const char *path)
 {
   GtkIconCache *cache = NULL;
   GMappedFile *map;
 
-  gchar *cache_filename;
+  char *cache_filename;
   GStatBuf st;
   GStatBuf path_st;
 
@@ -141,25 +141,25 @@ gtk_icon_cache_new_for_path (const gchar *path)
 }
 
 GtkIconCache *
-gtk_icon_cache_new (const gchar *data)
+gtk_icon_cache_new (const char *data)
 {
   GtkIconCache *cache;
 
   cache = g_new0 (GtkIconCache, 1);
   cache->ref_count = 1;
   cache->map = NULL;
-  cache->buffer = (gchar *)data;
+  cache->buffer = (char *)data;
 
   return cache;
 }
 
-static gint
+static int
 get_directory_index (GtkIconCache *cache,
-                     const gchar *directory)
+                     const char *directory)
 {
   guint32 dir_list_offset;
-  gint n_dirs;
-  gint i;
+  int n_dirs;
+  int i;
 
   dir_list_offset = GET_UINT32 (cache->buffer, 8);
 
@@ -168,7 +168,7 @@ get_directory_index (GtkIconCache *cache,
   for (i = 0; i < n_dirs; i++)
     {
       guint32 name_offset = GET_UINT32 (cache->buffer, dir_list_offset + 4 + 4 * i);
-      gchar *name = cache->buffer + name_offset;
+      char *name = cache->buffer + name_offset;
       if (strcmp (name, directory) == 0)
         return i;
     }
@@ -178,10 +178,10 @@ get_directory_index (GtkIconCache *cache,
 
 GHashTable *
 gtk_icon_cache_list_icons_in_directory (GtkIconCache *cache,
-                                        const gchar  *directory,
+                                        const char   *directory,
                                         GtkStringSet *set)
 {
-  gint directory_index;
+  int directory_index;
   guint32 hash_offset, n_buckets;
   guint32 chain_offset;
   guint32 image_list_offset, n_images;

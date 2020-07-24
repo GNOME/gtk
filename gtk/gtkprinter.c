@@ -50,10 +50,10 @@ static void gtk_printer_finalize     (GObject *object);
 
 struct _GtkPrinterPrivate
 {
-  gchar *name;
-  gchar *location;
-  gchar *description;
-  gchar *icon_name;
+  char *name;
+  char *location;
+  char *description;
+  char *icon_name;
 
   guint is_active         : 1;
   guint is_paused         : 1;
@@ -65,8 +65,8 @@ struct _GtkPrinterPrivate
   guint accepts_pdf       : 1;
   guint accepts_ps        : 1;
 
-  gchar *state_message;
-  gint job_count;
+  char *state_message;
+  int job_count;
 
   GtkPrintBackend *backend;
 };
@@ -377,7 +377,7 @@ gtk_printer_get_property (GObject    *object,
  * Returns: a new #GtkPrinter
  **/
 GtkPrinter *
-gtk_printer_new (const gchar     *name,
+gtk_printer_new (const char      *name,
 		 GtkPrintBackend *backend,
 		 gboolean         virtual_)
 {
@@ -418,7 +418,7 @@ gtk_printer_get_backend (GtkPrinter *printer)
  * 
  * Returns: the name of @printer
  */
-const gchar *
+const char *
 gtk_printer_get_name (GtkPrinter *printer)
 {
   GtkPrinterPrivate *priv = gtk_printer_get_instance_private (printer);
@@ -436,7 +436,7 @@ gtk_printer_get_name (GtkPrinter *printer)
  * 
  * Returns: the description of @printer
  */
-const gchar *
+const char *
 gtk_printer_get_description (GtkPrinter *printer)
 {
   GtkPrinterPrivate *priv = gtk_printer_get_instance_private (printer);
@@ -448,7 +448,7 @@ gtk_printer_get_description (GtkPrinter *printer)
 
 gboolean
 gtk_printer_set_description (GtkPrinter  *printer,
-			     const gchar *description)
+			     const char *description)
 {
   GtkPrinterPrivate *priv = gtk_printer_get_instance_private (printer);
 
@@ -472,7 +472,7 @@ gtk_printer_set_description (GtkPrinter  *printer,
  * 
  * Returns: the state message of @printer
  */
-const gchar *
+const char *
 gtk_printer_get_state_message (GtkPrinter *printer)
 {
   GtkPrinterPrivate *priv = gtk_printer_get_instance_private (printer);
@@ -484,7 +484,7 @@ gtk_printer_get_state_message (GtkPrinter *printer)
 
 gboolean
 gtk_printer_set_state_message (GtkPrinter  *printer,
-			       const gchar *message)
+			       const char *message)
 {
   GtkPrinterPrivate *priv = gtk_printer_get_instance_private (printer);
 
@@ -508,7 +508,7 @@ gtk_printer_set_state_message (GtkPrinter  *printer,
  * 
  * Returns: the location of @printer
  */
-const gchar *
+const char *
 gtk_printer_get_location (GtkPrinter *printer)
 {
   GtkPrinterPrivate *priv = gtk_printer_get_instance_private (printer);
@@ -520,7 +520,7 @@ gtk_printer_get_location (GtkPrinter *printer)
 
 gboolean
 gtk_printer_set_location (GtkPrinter  *printer,
-			  const gchar *location)
+			  const char *location)
 {
   GtkPrinterPrivate *priv = gtk_printer_get_instance_private (printer);
 
@@ -544,7 +544,7 @@ gtk_printer_set_location (GtkPrinter  *printer,
  * 
  * Returns: the icon name for @printer
  */
-const gchar *
+const char *
 gtk_printer_get_icon_name (GtkPrinter *printer)
 {
   GtkPrinterPrivate *priv = gtk_printer_get_instance_private (printer);
@@ -556,7 +556,7 @@ gtk_printer_get_icon_name (GtkPrinter *printer)
 
 void
 gtk_printer_set_icon_name (GtkPrinter  *printer,
-			   const gchar *icon)
+			   const char *icon)
 {
   GtkPrinterPrivate *priv = gtk_printer_get_instance_private (printer);
 
@@ -575,7 +575,7 @@ gtk_printer_set_icon_name (GtkPrinter  *printer,
  * 
  * Returns: the number of jobs on @printer
  */
-gint 
+int 
 gtk_printer_get_job_count (GtkPrinter *printer)
 {
   GtkPrinterPrivate *priv = gtk_printer_get_instance_private (printer);
@@ -587,7 +587,7 @@ gtk_printer_get_job_count (GtkPrinter *printer)
 
 gboolean
 gtk_printer_set_job_count (GtkPrinter *printer,
-			   gint        count)
+			   int         count)
 {
   GtkPrinterPrivate *priv = gtk_printer_get_instance_private (printer);
 
@@ -928,8 +928,8 @@ _gtk_printer_prepare_for_print (GtkPrinter       *printer,
 cairo_surface_t *
 _gtk_printer_create_cairo_surface (GtkPrinter       *printer,
 				   GtkPrintSettings *settings,
-				   gdouble           width, 
-				   gdouble           height,
+				   double            width, 
+				   double            height,
 				   GIOChannel       *cache_io)
 {
   GtkPrinterPrivate *priv = gtk_printer_get_instance_private (printer);
@@ -999,10 +999,10 @@ gtk_printer_get_default_page_size (GtkPrinter *printer)
  */
 gboolean
 gtk_printer_get_hard_margins (GtkPrinter *printer,
-			      gdouble    *top,
-			      gdouble    *bottom,
-			      gdouble    *left,
-			      gdouble    *right)
+			      double     *top,
+			      double     *bottom,
+			      double     *left,
+			      double     *right)
 {
   GtkPrinterPrivate *priv = gtk_printer_get_instance_private (printer);
   GtkPrintBackendClass *backend_class = GTK_PRINT_BACKEND_GET_CLASS (priv->backend);
@@ -1031,10 +1031,10 @@ gtk_printer_get_hard_margins (GtkPrinter *printer,
 gboolean
 gtk_printer_get_hard_margins_for_paper_size (GtkPrinter   *printer,
 					     GtkPaperSize *paper_size,
-					     gdouble      *top,
-					     gdouble      *bottom,
-					     gdouble      *left,
-					     gdouble      *right)
+					     double       *top,
+					     double       *bottom,
+					     double       *left,
+					     double       *right)
 {
   GtkPrinterPrivate *priv = gtk_printer_get_instance_private (printer);
   GtkPrintBackendClass *backend_class = GTK_PRINT_BACKEND_GET_CLASS (priv->backend);
@@ -1079,7 +1079,7 @@ gtk_printer_get_capabilities (GtkPrinter *printer)
  * Returns: 0 if the printer match, a negative value if @a < @b, 
  *   or a positive value if @a > @b
  */
-gint
+int
 gtk_printer_compare (GtkPrinter *a, 
                      GtkPrinter *b)
 {

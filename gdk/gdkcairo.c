@@ -91,7 +91,7 @@ gdk_cairo_region (cairo_t              *cr,
                   const cairo_region_t *region)
 {
   cairo_rectangle_int_t box;
-  gint n_boxes, i;
+  int n_boxes, i;
 
   g_return_if_fail (cr != NULL);
   g_return_if_fail (region != NULL);
@@ -109,7 +109,7 @@ void
 gdk_cairo_surface_paint_pixbuf (cairo_surface_t *surface,
                                 const GdkPixbuf *pixbuf)
 {
-  gint width, height;
+  int width, height;
   guchar *gdk_pixels, *cairo_pixels;
   int gdk_rowstride, cairo_stride;
   int n_channels;
@@ -213,8 +213,8 @@ gdk_cairo_surface_paint_pixbuf (cairo_surface_t *surface,
 void
 gdk_cairo_set_source_pixbuf (cairo_t         *cr,
                              const GdkPixbuf *pixbuf,
-                             gdouble          pixbuf_x,
-                             gdouble          pixbuf_y)
+                             double           pixbuf_x,
+                             double           pixbuf_y)
 {
   cairo_format_t format;
   cairo_surface_t *surface;
@@ -312,7 +312,7 @@ gdk_cairo_region_create_from_surface (cairo_surface_t *surface)
   GdkRectangle extents, rect;
   cairo_surface_t *image;
   cairo_t *cr;
-  gint x, y, stride;
+  int x, y, stride;
   guchar *data;
 
   _gdk_cairo_surface_extents (surface, &extents);
@@ -347,7 +347,7 @@ gdk_cairo_region_create_from_surface (cairo_surface_t *surface)
       for (x = 0; x < extents.width; x++)
         {
           /* Search for a continuous range of "non transparent pixels"*/
-          gint x0 = x;
+          int x0 = x;
           while (x < extents.width)
             {
 #if G_BYTE_ORDER == G_LITTLE_ENDIAN

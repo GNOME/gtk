@@ -9,8 +9,8 @@
 
 static GtkGesture *rotate = NULL;
 static GtkGesture *zoom = NULL;
-static gdouble swipe_x = 0;
-static gdouble swipe_y = 0;
+static double swipe_x = 0;
+static double swipe_y = 0;
 static gboolean long_pressed = FALSE;
 
 static gboolean
@@ -26,8 +26,8 @@ touchpad_swipe_gesture_begin (GtkGesture       *gesture,
 
 static void
 swipe_gesture_swept (GtkGestureSwipe *gesture,
-                     gdouble          velocity_x,
-                     gdouble          velocity_y,
+                     double           velocity_x,
+                     double           velocity_y,
                      GtkWidget       *widget)
 {
   swipe_x = velocity_x / 10;
@@ -37,8 +37,8 @@ swipe_gesture_swept (GtkGestureSwipe *gesture,
 
 static void
 long_press_gesture_pressed (GtkGestureLongPress *gesture,
-                            gdouble              x,
-                            gdouble              y,
+                            double               x,
+                            double               y,
                             GtkWidget           *widget)
 {
   long_pressed = TRUE;
@@ -56,8 +56,8 @@ long_press_gesture_end (GtkGesture       *gesture,
 
 static void
 rotation_angle_changed (GtkGestureRotate *gesture,
-                        gdouble           angle,
-                        gdouble           delta,
+                        double            angle,
+                        double            delta,
                         GtkWidget        *widget)
 {
   gtk_widget_queue_draw (widget);
@@ -65,7 +65,7 @@ rotation_angle_changed (GtkGestureRotate *gesture,
 
 static void
 zoom_scale_changed (GtkGestureZoom *gesture,
-                    gdouble         scale,
+                    double          scale,
                     GtkWidget      *widget)
 {
   gtk_widget_queue_draw (widget);
@@ -93,8 +93,8 @@ drawing_area_draw (GtkDrawingArea *area,
     {
       cairo_pattern_t *pat;
       cairo_matrix_t matrix;
-      gdouble angle, scale;
-      gdouble x_center, y_center;
+      double angle, scale;
+      double x_center, y_center;
 
       gtk_gesture_get_bounding_box_center (GTK_GESTURE (zoom), &x_center, &y_center);
 

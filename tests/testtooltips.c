@@ -59,8 +59,8 @@ my_tooltip_class_init (MyTooltipClass *tt_class)
 
 static gboolean
 query_tooltip_cb (GtkWidget  *widget,
-		  gint        x,
-		  gint        y,
+		  int         x,
+		  int         y,
 		  gboolean    keyboard_tip,
 		  GtkTooltip *tooltip,
 		  gpointer    data)
@@ -73,8 +73,8 @@ query_tooltip_cb (GtkWidget  *widget,
 
 static gboolean
 query_tooltip_text_view_cb (GtkWidget  *widget,
-			    gint        x,
-			    gint        y,
+			    int         x,
+			    int         y,
 			    gboolean    keyboard_tip,
 			    GtkTooltip *tooltip,
 			    gpointer    data)
@@ -86,14 +86,14 @@ query_tooltip_text_view_cb (GtkWidget  *widget,
 
   if (keyboard_tip)
     {
-      gint offset;
+      int offset;
 
       g_object_get (buffer, "cursor-position", &offset, NULL);
       gtk_text_buffer_get_iter_at_offset (buffer, &iter, offset);
     }
   else
     {
-      gint bx, by, trailing;
+      int bx, by, trailing;
 
       gtk_text_view_window_to_buffer_coords (text_view, GTK_TEXT_WINDOW_TEXT,
 					     x, y, &bx, &by);
@@ -110,8 +110,8 @@ query_tooltip_text_view_cb (GtkWidget  *widget,
 
 static gboolean
 query_tooltip_tree_view_cb (GtkWidget  *widget,
-			    gint        x,
-			    gint        y,
+			    int         x,
+			    int         y,
 			    gboolean    keyboard_tip,
 			    GtkTooltip *tooltip,
 			    gpointer    data)
@@ -120,8 +120,8 @@ query_tooltip_tree_view_cb (GtkWidget  *widget,
   GtkTreeView *tree_view = GTK_TREE_VIEW (widget);
   GtkTreeModel *model = gtk_tree_view_get_model (tree_view);
   GtkTreePath *path = NULL;
-  gchar *tmp;
-  gchar *pathstring;
+  char *tmp;
+  char *pathstring;
 
   char buffer[512];
 
@@ -179,11 +179,11 @@ selection_changed_cb (GtkTreeSelection *selection,
 
 static struct Rectangle
 {
-  gint x;
-  gint y;
-  gfloat r;
-  gfloat g;
-  gfloat b;
+  int x;
+  int y;
+  float r;
+  float g;
+  float b;
   const char *tooltip;
 }
 rectangles[] =
@@ -195,13 +195,13 @@ rectangles[] =
 
 static gboolean
 query_tooltip_drawing_area_cb (GtkWidget  *widget,
-			       gint        x,
-			       gint        y,
+			       int         x,
+			       int         y,
 			       gboolean    keyboard_tip,
 			       GtkTooltip *tooltip,
 			       gpointer    data)
 {
-  gint i;
+  int i;
 
   if (keyboard_tip)
     return FALSE;
@@ -228,7 +228,7 @@ drawing_area_draw (GtkDrawingArea *drawing_area,
                    int             height,
 		   gpointer        data)
 {
-  gint i;
+  int i;
 
   cairo_set_source_rgb (cr, 1.0, 1.0, 1.0);
   cairo_paint (cr);
@@ -249,8 +249,8 @@ drawing_area_draw (GtkDrawingArea *drawing_area,
 
 static gboolean
 query_tooltip_label_cb (GtkWidget  *widget,
-			gint        x,
-			gint        y,
+			int         x,
+			int         y,
 			gboolean    keyboard_tip,
 			GtkTooltip *tooltip,
 			gpointer    data)

@@ -47,8 +47,8 @@ GtkGesture *    gtk_gesture_swipe_new           (void);
 
 GDK_AVAILABLE_IN_ALL
 gboolean        gtk_gesture_swipe_get_velocity  (GtkGestureSwipe *gesture,
-                                                 gdouble         *velocity_x,
-                                                 gdouble         *velocity_y);
+                                                 double          *velocity_x,
+                                                 double          *velocity_y);
 
 G_END_DECLS
 

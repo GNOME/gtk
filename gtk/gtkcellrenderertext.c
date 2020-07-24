@@ -69,24 +69,24 @@ static void gtk_cell_renderer_text_snapshot   (GtkCellRenderer          *cell,
 static GtkCellEditable *gtk_cell_renderer_text_start_editing (GtkCellRenderer      *cell,
 							      GdkEvent             *event,
 							      GtkWidget            *widget,
-							      const gchar          *path,
+							      const char           *path,
 							      const GdkRectangle   *background_area,
 							      const GdkRectangle   *cell_area,
 							      GtkCellRendererState  flags);
 
 static void       gtk_cell_renderer_text_get_preferred_width            (GtkCellRenderer       *cell,
                                                                          GtkWidget             *widget,
-                                                                         gint                  *minimal_size,
-                                                                         gint                  *natural_size);
+                                                                         int                   *minimal_size,
+                                                                         int                   *natural_size);
 static void       gtk_cell_renderer_text_get_preferred_height           (GtkCellRenderer       *cell,
                                                                          GtkWidget             *widget,
-                                                                         gint                  *minimal_size,
-                                                                         gint                  *natural_size);
+                                                                         int                   *minimal_size,
+                                                                         int                   *natural_size);
 static void       gtk_cell_renderer_text_get_preferred_height_for_width (GtkCellRenderer       *cell,
                                                                          GtkWidget             *widget,
-                                                                         gint                   width,
-                                                                         gint                  *minimum_height,
-                                                                         gint                  *natural_height);
+                                                                         int                    width,
+                                                                         int                   *minimum_height,
+                                                                         int                   *natural_height);
 static void       gtk_cell_renderer_text_get_aligned_area               (GtkCellRenderer       *cell,
 									 GtkWidget             *widget,
 									 GtkCellRendererState   flags,
@@ -178,16 +178,16 @@ struct _GtkCellRendererTextPrivate
   PangoUnderline        underline_style;
   PangoWrapMode         wrap_mode;
 
-  gchar *text;
-  gchar *placeholder_text;
+  char *text;
+  char *placeholder_text;
 
-  gdouble font_scale;
+  double font_scale;
 
-  gint rise;
-  gint fixed_height_rows;
-  gint width_chars;
-  gint max_width_chars;
-  gint wrap_width;
+  int rise;
+  int fixed_height_rows;
+  int width_chars;
+  int max_width_chars;
+  int wrap_width;
 
   guint in_entry_menu     : 1;
   guint strikethrough     : 1;
@@ -951,7 +951,7 @@ set_font_desc_fields (PangoFontDescription *desc,
     pango_font_description_set_stretch (desc, pango_font_description_get_stretch (desc));
   if (to_set & PANGO_FONT_MASK_SIZE)
     {
-      gint size = pango_font_description_get_size (desc);
+      int size = pango_font_description_get_size (desc);
       if (size <= 0)
 	{
 	  size = 10 * PANGO_SCALE;
@@ -1073,8 +1073,8 @@ gtk_cell_renderer_text_set_property (GObject      *object,
       break;
     case PROP_MARKUP:
       {
-	const gchar *str;
-	gchar *text = NULL;
+	const char *str;
+	char *text = NULL;
 	GError *error = NULL;
 	PangoAttrList *attrs = NULL;
 
@@ -1143,7 +1143,7 @@ gtk_cell_renderer_text_set_property (GObject      *object,
     case PROP_FONT:
       {
         PangoFontDescription *font_desc = NULL;
-        const gchar *name;
+        const char *name;
 
         name = g_value_get_string (value);
 
@@ -1437,7 +1437,7 @@ get_layout (GtkCellRendererText *celltext,
   PangoAttrList *attr_list;
   PangoLayout *layout;
   PangoUnderline uline;
-  gint xpad;
+  int xpad;
   gboolean placeholder_layout = show_placeholder_text (celltext);
 
   layout = gtk_widget_create_pango_layout (widget, placeholder_layout ?
@@ -1562,7 +1562,7 @@ get_layout (GtkCellRendererText *celltext,
   if (priv->wrap_width != -1)
     {
       PangoRectangle rect;
-      gint           width, text_width;
+      int            width, text_width;
 
       pango_layout_get_extents (layout, NULL, &rect);
       text_width = rect.width;
@@ -1606,10 +1606,10 @@ get_size (GtkCellRenderer    *cell,
 	  GtkWidget          *widget,
 	  const GdkRectangle *cell_area,
 	  PangoLayout        *layout,
-	  gint               *x_offset,
-	  gint               *y_offset,
-	  gint               *width,
-	  gint               *height)
+	  int                *x_offset,
+	  int                *y_offset,
+	  int                *width,
+	  int                *height)
 {
   GtkCellRendererText *celltext = GTK_CELL_RENDERER_TEXT (cell);
   GtkCellRendererTextPrivate *priv = gtk_cell_renderer_text_get_instance_private (celltext);
@@ -1626,7 +1626,7 @@ get_size (GtkCellRenderer    *cell,
       PangoContext *context;
       PangoFontMetrics *metrics;
       PangoFontDescription *font_desc;
-      gint row_height;
+      int row_height;
 
       style_context = gtk_widget_get_style_context (widget);
 
@@ -1702,9 +1702,9 @@ gtk_cell_renderer_text_snapshot (GtkCellRenderer      *cell,
   GtkCellRendererTextPrivate *priv = gtk_cell_renderer_text_get_instance_private (celltext);
   GtkStyleContext *context;
   PangoLayout *layout;
-  gint x_offset = 0;
-  gint y_offset = 0;
-  gint xpad, ypad;
+  int x_offset = 0;
+  int y_offset = 0;
+  int xpad, ypad;
   PangoRectangle rect;
 
   layout = get_layout (celltext, widget, cell_area, flags);
@@ -1754,8 +1754,8 @@ gtk_cell_renderer_text_editing_done (GtkCellEditable *entry,
 {
   GtkCellRendererText *celltext = GTK_CELL_RENDERER_TEXT (data);
   GtkCellRendererTextPrivate *priv = gtk_cell_renderer_text_get_instance_private (celltext);
-  const gchar *path;
-  const gchar *new_text;
+  const char *path;
+  const char *new_text;
   gboolean canceled;
 
   g_clear_object (&priv->entry);
@@ -1805,14 +1805,14 @@ static GtkCellEditable *
 gtk_cell_renderer_text_start_editing (GtkCellRenderer      *cell,
 				      GdkEvent             *event,
 				      GtkWidget            *widget,
-				      const gchar          *path,
+				      const char           *path,
 				      const GdkRectangle   *background_area,
 				      const GdkRectangle   *cell_area,
 				      GtkCellRendererState  flags)
 {
   GtkCellRendererText *celltext = GTK_CELL_RENDERER_TEXT (cell);
   GtkCellRendererTextPrivate *priv = gtk_cell_renderer_text_get_instance_private (celltext);
-  gfloat xalign, yalign;
+  float xalign, yalign;
 
   /* If the cell isn't editable we return NULL. */
   if (!priv->editable)
@@ -1864,7 +1864,7 @@ gtk_cell_renderer_text_start_editing (GtkCellRenderer      *cell,
  **/
 void
 gtk_cell_renderer_text_set_fixed_height_from_font (GtkCellRendererText *renderer,
-						   gint                 number_of_rows)
+						   int                  number_of_rows)
 {
   GtkCellRendererTextPrivate *priv = gtk_cell_renderer_text_get_instance_private (renderer);
   GtkCellRenderer *cell = GTK_CELL_RENDERER (renderer);
@@ -1874,7 +1874,7 @@ gtk_cell_renderer_text_set_fixed_height_from_font (GtkCellRendererText *renderer
 
   if (number_of_rows == -1)
     {
-      gint width, height;
+      int width, height;
 
       gtk_cell_renderer_get_fixed_size (cell, &width, &height);
       gtk_cell_renderer_set_fixed_size (cell, width, -1);
@@ -1889,8 +1889,8 @@ gtk_cell_renderer_text_set_fixed_height_from_font (GtkCellRendererText *renderer
 static void
 gtk_cell_renderer_text_get_preferred_width (GtkCellRenderer *cell,
                                             GtkWidget       *widget,
-                                            gint            *minimum_size,
-                                            gint            *natural_size)
+                                            int             *minimum_size,
+                                            int             *natural_size)
 {
   GtkCellRendererText        *celltext = GTK_CELL_RENDERER_TEXT (cell);
   GtkCellRendererTextPrivate *priv = gtk_cell_renderer_text_get_instance_private (celltext);
@@ -1898,8 +1898,8 @@ gtk_cell_renderer_text_get_preferred_width (GtkCellRenderer *cell,
   PangoContext               *context;
   PangoFontMetrics           *metrics;
   PangoRectangle              rect;
-  gint char_width, text_width, ellipsize_chars, xpad;
-  gint min_width, nat_width;
+  int char_width, text_width, ellipsize_chars, xpad;
+  int min_width, nat_width;
 
   /* "width-chars" Hard-coded minimum width:
    *    - minimum size should be MAX (width-chars, strlen ("..."));
@@ -1955,7 +1955,7 @@ gtk_cell_renderer_text_get_preferred_width (GtkCellRenderer *cell,
 
   if (priv->max_width_chars > 0)
     {
-      gint max_width = xpad * 2 + PANGO_PIXELS (char_width) * priv->max_width_chars;
+      int max_width = xpad * 2 + PANGO_PIXELS (char_width) * priv->max_width_chars;
       
       min_width = MIN (min_width, max_width);
       nat_width = MIN (nat_width, max_width);
@@ -1971,13 +1971,13 @@ gtk_cell_renderer_text_get_preferred_width (GtkCellRenderer *cell,
 static void
 gtk_cell_renderer_text_get_preferred_height_for_width (GtkCellRenderer *cell,
                                                        GtkWidget       *widget,
-                                                       gint             width,
-                                                       gint            *minimum_height,
-                                                       gint            *natural_height)
+                                                       int              width,
+                                                       int             *minimum_height,
+                                                       int             *natural_height)
 {
   GtkCellRendererText *celltext = GTK_CELL_RENDERER_TEXT (cell);
   PangoLayout         *layout;
-  gint                 text_height, xpad, ypad;
+  int                  text_height, xpad, ypad;
 
   gtk_cell_renderer_get_padding (cell, &xpad, &ypad);
 
@@ -1998,10 +1998,10 @@ gtk_cell_renderer_text_get_preferred_height_for_width (GtkCellRenderer *cell,
 static void
 gtk_cell_renderer_text_get_preferred_height (GtkCellRenderer *cell,
                                              GtkWidget       *widget,
-                                             gint            *minimum_size,
-                                             gint            *natural_size)
+                                             int             *minimum_size,
+                                             int             *natural_size)
 {
-  gint min_width;
+  int min_width;
 
   /* Thankfully cell renderers dont rotate, so they only have to do
    * height-for-width and not the opposite. Here we have only to return
@@ -2024,8 +2024,8 @@ gtk_cell_renderer_text_get_aligned_area (GtkCellRenderer       *cell,
 {
   GtkCellRendererText *celltext = GTK_CELL_RENDERER_TEXT (cell);
   PangoLayout *layout;
-  gint x_offset = 0;
-  gint y_offset = 0;
+  int x_offset = 0;
+  int y_offset = 0;
 
   layout = get_layout (celltext, widget, cell_area, flags);
   get_size (cell, widget, cell_area, layout, &x_offset, &y_offset, 

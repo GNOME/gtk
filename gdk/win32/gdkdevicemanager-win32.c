@@ -44,7 +44,7 @@
 
 static GList     *wintab_contexts = NULL;
 static GdkSurface *wintab_window = NULL;
-extern gint       _gdk_input_ignore_core;
+extern int        _gdk_input_ignore_core;
 
 typedef UINT (WINAPI *t_WTInfoA) (UINT a, UINT b, LPVOID c);
 typedef UINT (WINAPI *t_WTInfoW) (UINT a, UINT b, LPVOID c);
@@ -360,7 +360,7 @@ wintab_init_check (GdkDeviceManagerWin32 *device_manager)
   UINT devix, cursorix;
   int i, num_axes = 0;
   wchar_t devname[100], csrname[100];
-  gchar *devname_utf8, *csrname_utf8, *device_name;
+  char *devname_utf8, *csrname_utf8, *device_name;
   BOOL defcontext_done;
   HMODULE wintab32;
   char *wintab32_dll_path;
@@ -627,7 +627,7 @@ wintab_init_check (GdkDeviceManagerWin32 *device_manager)
               num_axes += 2;
             }
 
-          device->last_axis_data = g_new (gint, num_axes);
+          device->last_axis_data = g_new (int, num_axes);
 
           GDK_NOTE (INPUT, g_print ("device: (%u) %s axes: %d\n",
                                     cursorix,
@@ -778,7 +778,7 @@ _gdk_input_set_tablet_active (void)
 }
 
 static void
-decode_tilt (gint   *axis_data,
+decode_tilt (int    *axis_data,
              AXIS   *axes,
              PACKET *packet)
 {
@@ -878,7 +878,7 @@ gdk_input_other_event (GdkDisplay *display,
   GdkEvent *event;
 
   PACKET packet;
-  gint num_axes;
+  int num_axes;
   double x, y;
   guint translated_buttons, button_diff, button_mask;
 
@@ -1044,7 +1044,7 @@ gdk_input_other_event (GdkDisplay *display,
       if (event_type == GDK_BUTTON_PRESS ||
           event_type == GDK_BUTTON_RELEASE)
         {
-          axes = g_new (gdouble, num_axes);
+          axes = g_new (double, num_axes);
 
           _gdk_device_wintab_translate_axes (source_device,
                                              window,
@@ -1080,7 +1080,7 @@ gdk_input_other_event (GdkDisplay *display,
         }
       else
         {
-          axes = g_new (gdouble, num_axes);
+          axes = g_new (double, num_axes);
           _gdk_device_wintab_translate_axes (source_device,
                                              window,
                                              axes,

@@ -81,8 +81,8 @@ struct _GtkAppChooserWidget {
 
   GtkWidget *overlay;
 
-  gchar *content_type;
-  gchar *default_text;
+  char *content_type;
+  char *default_text;
 
   guint show_default     : 1;
   guint show_recommended : 1;
@@ -230,13 +230,13 @@ program_list_selection_activated (GtkTreeView       *view,
 
 static gboolean
 gtk_app_chooser_search_equal_func (GtkTreeModel *model,
-                                   gint          column,
-                                   const gchar  *key,
+                                   int           column,
+                                   const char   *key,
                                    GtkTreeIter  *iter,
                                    gpointer      user_data)
 {
-  gchar *name;
-  gchar *exec_name;
+  char *name;
+  char *exec_name;
   gboolean ret;
 
   if (key != NULL)
@@ -263,7 +263,7 @@ gtk_app_chooser_search_equal_func (GtkTreeModel *model,
     }
 }
 
-static gint
+static int
 gtk_app_chooser_sort_func (GtkTreeModel *model,
                            GtkTreeIter  *a,
                            GtkTreeIter  *b,
@@ -273,8 +273,8 @@ gtk_app_chooser_sort_func (GtkTreeModel *model,
   gboolean a_fallback, b_fallback;
   gboolean a_heading, b_heading;
   gboolean a_default, b_default;
-  gchar *a_name, *b_name, *a_casefold, *b_casefold;
-  gint retval = 0;
+  char *a_name, *b_name, *a_casefold, *b_casefold;
+  int retval = 0;
 
   /* this returns:
    * - <0 if a should show before b
@@ -415,7 +415,7 @@ gtk_app_chooser_selection_func (GtkTreeSelection *selection,
   return !heading;
 }
 
-static gint
+static int
 compare_apps_func (gconstpointer a,
                    gconstpointer b)
 {
@@ -424,7 +424,7 @@ compare_apps_func (gconstpointer a,
 
 static gboolean
 gtk_app_chooser_widget_add_section (GtkAppChooserWidget *self,
-                                    const gchar         *heading_title,
+                                    const char          *heading_title,
                                     gboolean             show_headings,
                                     gboolean             recommended,
                                     gboolean             fallback,
@@ -434,7 +434,7 @@ gtk_app_chooser_widget_add_section (GtkAppChooserWidget *self,
   gboolean heading_added, unref_icon;
   GtkTreeIter iter;
   GAppInfo *app;
-  gchar *app_string, *bold_string;
+  char *app_string, *bold_string;
   GIcon *icon;
   GList *l;
   gboolean retval;
@@ -512,7 +512,7 @@ gtk_app_chooser_add_default (GtkAppChooserWidget *self,
 {
   GtkTreeIter iter;
   GIcon *icon;
-  gchar *string;
+  char *string;
   gboolean unref_icon;
 
   unref_icon = FALSE;
@@ -558,8 +558,8 @@ gtk_app_chooser_add_default (GtkAppChooserWidget *self,
 static void
 update_no_applications_label (GtkAppChooserWidget *self)
 {
-  gchar *text = NULL, *desc = NULL;
-  const gchar *string;
+  char *text = NULL, *desc = NULL;
+  const char *string;
 
   if (self->default_text == NULL)
     {
@@ -1125,7 +1125,7 @@ gtk_app_chooser_widget_iface_init (GtkAppChooserIface *iface)
  * Returns: a newly created #GtkAppChooserWidget
  */
 GtkWidget *
-gtk_app_chooser_widget_new (const gchar *content_type)
+gtk_app_chooser_widget_new (const char *content_type)
 {
   return g_object_new (GTK_TYPE_APP_CHOOSER_WIDGET,
                        "content-type", content_type,
@@ -1347,7 +1347,7 @@ gtk_app_chooser_widget_get_show_all (GtkAppChooserWidget *self)
  */
 void
 gtk_app_chooser_widget_set_default_text (GtkAppChooserWidget *self,
-                                         const gchar         *text)
+                                         const char          *text)
 {
   g_return_if_fail (GTK_IS_APP_CHOOSER_WIDGET (self));
 
@@ -1371,7 +1371,7 @@ gtk_app_chooser_widget_set_default_text (GtkAppChooserWidget *self,
  *
  * Returns: the value of #GtkAppChooserWidget:default-text
  */
-const gchar *
+const char *
 gtk_app_chooser_widget_get_default_text (GtkAppChooserWidget *self)
 {
   g_return_val_if_fail (GTK_IS_APP_CHOOSER_WIDGET (self), NULL);

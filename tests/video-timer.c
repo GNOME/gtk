@@ -4,7 +4,7 @@
 #include "variable.h"
 
 typedef struct {
-  gdouble angle;
+  double angle;
   gint64 stream_time;
   gint64 clock_time;
   gint64 frame_counter;
@@ -152,7 +152,7 @@ static void
 adjust_clock_for_phase (gint64 frame_clock_time,
                         gint64 presentation_time)
 {
-  static gint count = 0;
+  static int count = 0;
   static gint64 previous_frame_clock_time;
   static gint64 previous_presentation_time;
   gint64 phase = presentation_time - frame_clock_time;

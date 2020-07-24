@@ -107,7 +107,7 @@ struct _GtkFontChooserWidget
   GtkWidget       *preview;
   GtkWidget       *preview2;
   GtkWidget       *font_name_label;
-  gchar           *preview_text;
+  char            *preview_text;
   gboolean         show_preview_entry;
 
   GtkWidget *size_label;
@@ -160,9 +160,9 @@ static void gtk_font_chooser_widget_get_property         (GObject         *objec
                                                           GParamSpec      *pspec);
 static void gtk_font_chooser_widget_finalize             (GObject         *object);
 
-static gchar   *gtk_font_chooser_widget_get_font         (GtkFontChooserWidget *fontchooser);
+static char    *gtk_font_chooser_widget_get_font         (GtkFontChooserWidget *fontchooser);
 static void     gtk_font_chooser_widget_set_font         (GtkFontChooserWidget *fontchooser,
-                                                          const gchar          *fontname);
+                                                          const char           *fontname);
 
 static PangoFontDescription *gtk_font_chooser_widget_get_font_desc  (GtkFontChooserWidget *fontchooser);
 static void                  gtk_font_chooser_widget_merge_font_desc(GtkFontChooserWidget       *fontchooser,
@@ -171,9 +171,9 @@ static void                  gtk_font_chooser_widget_take_font_desc (GtkFontChoo
                                                                      PangoFontDescription *font_desc);
 
 
-static const gchar *gtk_font_chooser_widget_get_preview_text (GtkFontChooserWidget *fontchooser);
+static const char *gtk_font_chooser_widget_get_preview_text (GtkFontChooserWidget *fontchooser);
 static void         gtk_font_chooser_widget_set_preview_text (GtkFontChooserWidget *fontchooser,
-                                                              const gchar          *text);
+                                                              const char           *text);
 
 static gboolean gtk_font_chooser_widget_get_show_preview_entry (GtkFontChooserWidget *fontchooser);
 static void     gtk_font_chooser_widget_set_show_preview_entry (GtkFontChooserWidget *fontchooser,
@@ -293,7 +293,7 @@ size_change_cb (GtkAdjustment *adjustment,
 {
   GtkFontChooserWidget *fontchooser = user_data;
   PangoFontDescription *font_desc;
-  gdouble size = gtk_adjustment_get_value (adjustment);
+  double size = gtk_adjustment_get_value (adjustment);
 
   font_desc = pango_font_description_new ();
   if (pango_font_description_get_size_is_absolute (fontchooser->font_desc))
@@ -309,8 +309,8 @@ output_cb (GtkSpinButton *spin,
            gpointer       data)
 {
   GtkAdjustment *adjustment;
-  gchar *text;
-  gdouble value;
+  char *text;
+  double value;
 
   adjustment = gtk_spin_button_get_adjustment (spin);
   value = gtk_adjustment_get_value (adjustment);
@@ -326,9 +326,9 @@ gtk_font_chooser_widget_update_marks (GtkFontChooserWidget *self)
 {
   GtkAdjustment *adj, *spin_adj;
   const int *sizes;
-  gint *font_sizes;
-  gint i, n_sizes;
-  gdouble value, spin_value;
+  int *font_sizes;
+  int i, n_sizes;
+  double value, spin_value;
   gpointer item;
 
   item = gtk_single_selection_get_selected_item (self->selection);
@@ -356,7 +356,7 @@ gtk_font_chooser_widget_update_marks (GtkFontChooserWidget *self)
 
   if (n_sizes < 2)
     {
-      static const gint fallback_sizes[] = {
+      static const int fallback_sizes[] = {
         6, 8, 9, 10, 11, 12, 13, 14, 16, 20, 24, 36, 48, 72
       };
 
@@ -376,11 +376,11 @@ gtk_font_chooser_widget_update_marks (GtkFontChooserWidget *self)
   spin_value = gtk_adjustment_get_value (spin_adj);
 
   if (spin_value < sizes[0])
-    value = (gdouble) sizes[0];
+    value = (double) sizes[0];
   else if (spin_value > sizes[n_sizes - 1])
-    value = (gdouble)sizes[n_sizes - 1];
+    value = (double)sizes[n_sizes - 1];
   else
-    value = (gdouble)spin_value;
+    value = (double)spin_value;
 
   /* ensure clamping doesn't callback into font resizing code */
   g_signal_handlers_block_by_func (adj, size_change_cb, self);
@@ -412,7 +412,7 @@ row_activated_cb (GtkWidget *view,
                   gpointer   user_data)
 {
   GtkFontChooserWidget *fontchooser = user_data;
-  gchar *fontname;
+  char *fontname;
 
   fontname = gtk_font_chooser_widget_get_font (fontchooser);
   _gtk_font_chooser_font_activated (GTK_FONT_CHOOSER (fontchooser), fontname);
@@ -812,9 +812,9 @@ gtk_font_chooser_widget_init (GtkFontChooserWidget *self)
 
   /* Set the upper values of the spin/scale with G_MAXINT / PANGO_SCALE */
   gtk_spin_button_set_range (GTK_SPIN_BUTTON (self->size_spin),
-			     1.0, (gdouble)(G_MAXINT / PANGO_SCALE));
+			     1.0, (double)(G_MAXINT / PANGO_SCALE));
   gtk_adjustment_set_upper (gtk_range_get_adjustment (GTK_RANGE (self->size_slider)),
-			    (gdouble)(G_MAXINT / PANGO_SCALE));
+			    (double)(G_MAXINT / PANGO_SCALE));
 
   self->tweak_action = G_ACTION (g_simple_action_new_stateful ("tweak", NULL, g_variant_new_boolean (FALSE)));
   g_signal_connect (self->tweak_action, "change-state", G_CALLBACK (change_tweak), self);
@@ -955,7 +955,7 @@ gtk_font_chooser_widget_get_family (GtkFontChooser *chooser)
     return pango_font_face_get_family (item);
 }
 
-static gint
+static int
 gtk_font_chooser_widget_get_size (GtkFontChooser *chooser)
 {
   GtkFontChooserWidget *fontchooser = GTK_FONT_CHOOSER_WIDGET (chooser);
@@ -967,7 +967,7 @@ gtk_font_chooser_widget_get_size (GtkFontChooser *chooser)
   return -1;
 }
 
-static gchar *
+static char *
 gtk_font_chooser_widget_get_font (GtkFontChooserWidget *fontchooser)
 {
   PangoFontDescription *desc = gtk_font_chooser_widget_get_font_desc (fontchooser);
@@ -989,7 +989,7 @@ gtk_font_chooser_widget_get_font_desc (GtkFontChooserWidget *self)
 
 static void
 gtk_font_chooser_widget_set_font (GtkFontChooserWidget *fontchooser,
-                                  const gchar          *fontname)
+                                  const char           *fontname)
 {
   PangoFontDescription *font_desc;
 
@@ -1223,7 +1223,7 @@ find_language_and_script (GtkFontChooserWidget *fontchooser,
                           hb_tag_t             *lang_tag,
                           hb_tag_t             *script_tag)
 {
-  gint i, j, k;
+  int i, j, k;
   hb_tag_t scripts[80];
   unsigned int n_scripts;
   unsigned int count;
@@ -1871,7 +1871,7 @@ gtk_font_chooser_widget_take_font_desc (GtkFontChooserWidget *fontchooser,
   pango_font_description_free (font_desc);
 }
 
-static const gchar*
+static const char *
 gtk_font_chooser_widget_get_preview_text (GtkFontChooserWidget *fontchooser)
 {
 
@@ -1880,7 +1880,7 @@ gtk_font_chooser_widget_get_preview_text (GtkFontChooserWidget *fontchooser)
 
 static void
 gtk_font_chooser_widget_set_preview_text (GtkFontChooserWidget *fontchooser,
-                                          const gchar          *text)
+                                          const char           *text)
 {
   g_free (fontchooser->preview_text);
   fontchooser->preview_text = g_strdup (text);

@@ -52,7 +52,7 @@ struct _GtkSettingsValue
   /* origin should be something like "filename:linenumber" for rc files,
    * or e.g. "XProperty" for other sources
    */
-  gchar *origin;
+  char *origin;
 
   /* valid types are LONG, DOUBLE and STRING corresponding to the token parsed,
    * or a GSTRING holding an unparsed statement
@@ -71,7 +71,7 @@ GtkSettings*    gtk_settings_get_for_display         (GdkDisplay *display);
 
 GDK_AVAILABLE_IN_ALL
 void     gtk_settings_reset_property       (GtkSettings            *settings,
-                                            const gchar            *name);
+                                            const char             *name);
 
 G_END_DECLS
 

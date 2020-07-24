@@ -36,16 +36,16 @@ GtkApplicationAccels *
                 gtk_application_accels_new                          (void);
 
 void            gtk_application_accels_set_accels_for_action        (GtkApplicationAccels *accels,
-                                                                     const gchar          *detailed_action_name,
-                                                                     const gchar * const  *accelerators);
+                                                                     const char           *detailed_action_name,
+                                                                     const char * const  *accelerators);
 
-gchar **        gtk_application_accels_get_accels_for_action        (GtkApplicationAccels *accels,
-                                                                     const gchar          *detailed_action_name);
+char **        gtk_application_accels_get_accels_for_action        (GtkApplicationAccels *accels,
+                                                                     const char           *detailed_action_name);
 
-gchar **        gtk_application_accels_get_actions_for_accel        (GtkApplicationAccels *accels,
-                                                                     const gchar          *accel);
+char **        gtk_application_accels_get_actions_for_accel        (GtkApplicationAccels *accels,
+                                                                     const char           *accel);
 
-gchar **        gtk_application_accels_list_action_descriptions     (GtkApplicationAccels *accels);
+char **        gtk_application_accels_list_action_descriptions     (GtkApplicationAccels *accels);
 
 GListModel *    gtk_application_accels_get_shortcuts                (GtkApplicationAccels *accels);
 

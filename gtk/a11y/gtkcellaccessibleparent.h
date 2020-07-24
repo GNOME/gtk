@@ -49,10 +49,10 @@ struct _GtkCellAccessibleParentIface
   GTypeInterface parent;
   void     ( *get_cell_extents) (GtkCellAccessibleParent *parent,
                                  GtkCellAccessible       *cell,
-                                 gint                    *x,
-                                 gint                    *y,
-                                 gint                    *width,
-                                 gint                    *height,
+                                 int                     *x,
+                                 int                     *y,
+                                 int                     *width,
+                                 int                     *height,
                                  AtkCoordType             coord_type);
   void     ( *get_cell_area)    (GtkCellAccessibleParent *parent,
                                  GtkCellAccessible       *cell,
@@ -77,8 +77,8 @@ struct _GtkCellAccessibleParentIface
                                  AtkRelationSet          *relationset);
   void     ( *get_cell_position) (GtkCellAccessibleParent *parent,
                                   GtkCellAccessible       *cell,
-                                  gint                    *row,
-                                  gint                    *column);
+                                  int                     *row,
+                                  int                     *column);
   GPtrArray *   ( *get_column_header_cells) (GtkCellAccessibleParent *parent,
                                              GtkCellAccessible       *cell);
   GPtrArray *   ( *get_row_header_cells)    (GtkCellAccessibleParent *parent,
@@ -91,10 +91,10 @@ GType    gtk_cell_accessible_parent_get_type         (void);
 GDK_AVAILABLE_IN_ALL
 void     gtk_cell_accessible_parent_get_cell_extents (GtkCellAccessibleParent *parent,
                                                       GtkCellAccessible       *cell,
-                                                      gint                    *x,
-                                                      gint                    *y,
-                                                      gint                    *width,
-                                                      gint                    *height,
+                                                      int                     *x,
+                                                      int                     *y,
+                                                      int                     *width,
+                                                      int                     *height,
                                                       AtkCoordType             coord_type);
 GDK_AVAILABLE_IN_ALL
 void     gtk_cell_accessible_parent_get_cell_area    (GtkCellAccessibleParent *parent,
@@ -126,8 +126,8 @@ void     gtk_cell_accessible_parent_update_relationset (GtkCellAccessibleParent 
 GDK_AVAILABLE_IN_ALL
 void     gtk_cell_accessible_parent_get_cell_position(GtkCellAccessibleParent *parent,
                                                       GtkCellAccessible       *cell,
-                                                      gint                    *row,
-                                                      gint                    *column);
+                                                      int                     *row,
+                                                      int                     *column);
 GDK_AVAILABLE_IN_ALL
 GPtrArray   *gtk_cell_accessible_parent_get_column_header_cells (GtkCellAccessibleParent *parent,
                                                                  GtkCellAccessible       *cell);

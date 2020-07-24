@@ -51,16 +51,16 @@ GType        gtk_query_get_type       (void);
 
 GtkQuery    *gtk_query_new            (void);
 
-const gchar *gtk_query_get_text       (GtkQuery    *query);
+const char *gtk_query_get_text       (GtkQuery    *query);
 void         gtk_query_set_text       (GtkQuery    *query,
-                                       const gchar *text);
+                                       const char *text);
 
 GFile       *gtk_query_get_location   (GtkQuery    *query);
 void         gtk_query_set_location   (GtkQuery    *query,
                                        GFile       *file);
 
 gboolean     gtk_query_matches_string (GtkQuery    *query,
-                                       const gchar *string);
+                                       const char *string);
 
 G_END_DECLS
 

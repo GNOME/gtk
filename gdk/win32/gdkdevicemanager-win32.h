@@ -46,7 +46,7 @@ struct _GdkDeviceManagerWin32
    * of our context (WT_PROXIMITY). Bumped down when we either
    * receive a WT_PACKET, or a WT_CSRCHANGE.
    */
-  gint dev_entered_proximity;
+  int dev_entered_proximity;
 };
 
 struct _GdkDeviceManagerWin32Class

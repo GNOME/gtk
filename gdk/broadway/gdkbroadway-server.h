@@ -32,7 +32,7 @@ void               _gdk_broadway_server_query_mouse              (GdkBroadwaySer
 								  gint32             *root_y,
 								  guint32            *mask);
 GdkGrabStatus      _gdk_broadway_server_grab_pointer             (GdkBroadwayServer  *server,
-								  gint                id,
+								  int                 id,
 								  gboolean            owner_events,
 								  guint32             event_mask,
 								  guint32             time_);
@@ -45,23 +45,23 @@ guint32            _gdk_broadway_server_new_surface               (GdkBroadwaySe
 								  int                 width,
 								  int                 height);
 void               _gdk_broadway_server_destroy_surface           (GdkBroadwayServer  *server,
-								  gint                id);
+								  int                 id);
 gboolean           _gdk_broadway_server_surface_show              (GdkBroadwayServer  *server,
-								  gint                id);
+								  int                 id);
 gboolean           _gdk_broadway_server_surface_hide              (GdkBroadwayServer  *server,
-								  gint                id);
+								  int                 id);
 void               _gdk_broadway_server_surface_focus             (GdkBroadwayServer  *server,
-								  gint                id);
+								  int                 id);
 void               _gdk_broadway_server_surface_set_transient_for (GdkBroadwayServer  *server,
-								  gint                id,
-								  gint                parent);
+								  int                 id,
+								  int                 parent);
 void               _gdk_broadway_server_set_show_keyboard        (GdkBroadwayServer  *server,
 								  gboolean            show_keyboard);
 gboolean           _gdk_broadway_server_surface_translate         (GdkBroadwayServer  *server,
-								  gint                id,
+								  int                 id,
 								  cairo_region_t     *area,
-								  gint                dx,
-								  gint                dy);
+								  int                 dx,
+								  int                 dy);
 guint32             gdk_broadway_server_upload_texture           (GdkBroadwayServer  *server,
                                                                   GdkTexture         *texture);
 void                gdk_broadway_server_release_texture          (GdkBroadwayServer  *server,
@@ -70,7 +70,7 @@ void               gdk_broadway_server_surface_set_nodes          (GdkBroadwaySe
                                                                   guint32            id,
                                                                   GArray             *nodes);
 gboolean           _gdk_broadway_server_surface_move_resize       (GdkBroadwayServer  *server,
-								  gint                id,
+								  int                 id,
 								  gboolean            with_move,
 								  int                 x,
 								  int                 y,

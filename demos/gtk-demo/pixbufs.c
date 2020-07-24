@@ -39,7 +39,7 @@ static GdkPixbuf *frame;
 
 /* Background image */
 static GdkPixbuf *background;
-static gint back_width, back_height;
+static int back_width, back_height;
 
 /* Images */
 static GdkPixbuf *images[N_IMAGES];
@@ -51,7 +51,7 @@ static GtkWidget *da;
 static gboolean
 load_pixbufs (GError **error)
 {
-  gint i;
+  int i;
 
   if (background)
     return TRUE; /* already loaded earlier */

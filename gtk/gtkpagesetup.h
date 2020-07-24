@@ -52,32 +52,32 @@ GDK_AVAILABLE_IN_ALL
 void               gtk_page_setup_set_paper_size    (GtkPageSetup       *setup,
 						     GtkPaperSize       *size);
 GDK_AVAILABLE_IN_ALL
-gdouble            gtk_page_setup_get_top_margin    (GtkPageSetup       *setup,
+double             gtk_page_setup_get_top_margin    (GtkPageSetup       *setup,
 						     GtkUnit             unit);
 GDK_AVAILABLE_IN_ALL
 void               gtk_page_setup_set_top_margin    (GtkPageSetup       *setup,
-						     gdouble             margin,
+						     double              margin,
 						     GtkUnit             unit);
 GDK_AVAILABLE_IN_ALL
-gdouble            gtk_page_setup_get_bottom_margin (GtkPageSetup       *setup,
+double             gtk_page_setup_get_bottom_margin (GtkPageSetup       *setup,
 						     GtkUnit             unit);
 GDK_AVAILABLE_IN_ALL
 void               gtk_page_setup_set_bottom_margin (GtkPageSetup       *setup,
-						     gdouble             margin,
+						     double              margin,
 						     GtkUnit             unit);
 GDK_AVAILABLE_IN_ALL
-gdouble            gtk_page_setup_get_left_margin   (GtkPageSetup       *setup,
+double             gtk_page_setup_get_left_margin   (GtkPageSetup       *setup,
 						     GtkUnit             unit);
 GDK_AVAILABLE_IN_ALL
 void               gtk_page_setup_set_left_margin   (GtkPageSetup       *setup,
-						     gdouble             margin,
+						     double              margin,
 						     GtkUnit             unit);
 GDK_AVAILABLE_IN_ALL
-gdouble            gtk_page_setup_get_right_margin  (GtkPageSetup       *setup,
+double             gtk_page_setup_get_right_margin  (GtkPageSetup       *setup,
 						     GtkUnit             unit);
 GDK_AVAILABLE_IN_ALL
 void               gtk_page_setup_set_right_margin  (GtkPageSetup       *setup,
-						     gdouble             margin,
+						     double              margin,
 						     GtkUnit             unit);
 
 GDK_AVAILABLE_IN_ALL
@@ -86,24 +86,24 @@ void gtk_page_setup_set_paper_size_and_default_margins (GtkPageSetup    *setup,
 
 /* These take orientation, but not margins into consideration */
 GDK_AVAILABLE_IN_ALL
-gdouble            gtk_page_setup_get_paper_width   (GtkPageSetup       *setup,
+double             gtk_page_setup_get_paper_width   (GtkPageSetup       *setup,
 						     GtkUnit             unit);
 GDK_AVAILABLE_IN_ALL
-gdouble            gtk_page_setup_get_paper_height  (GtkPageSetup       *setup,
+double             gtk_page_setup_get_paper_height  (GtkPageSetup       *setup,
 						     GtkUnit             unit);
 
 
 /* These take orientation, and margins into consideration */
 GDK_AVAILABLE_IN_ALL
-gdouble            gtk_page_setup_get_page_width    (GtkPageSetup       *setup,
+double             gtk_page_setup_get_page_width    (GtkPageSetup       *setup,
 						     GtkUnit             unit);
 GDK_AVAILABLE_IN_ALL
-gdouble            gtk_page_setup_get_page_height   (GtkPageSetup       *setup,
+double             gtk_page_setup_get_page_height   (GtkPageSetup       *setup,
 						     GtkUnit             unit);
 
 /* Saving and restoring page setup */
 GDK_AVAILABLE_IN_ALL
-GtkPageSetup	  *gtk_page_setup_new_from_file	    (const gchar         *file_name,
+GtkPageSetup	  *gtk_page_setup_new_from_file	    (const char          *file_name,
 						     GError              **error);
 GDK_AVAILABLE_IN_ALL
 gboolean	   gtk_page_setup_load_file	    (GtkPageSetup        *setup,
@@ -115,17 +115,17 @@ gboolean	   gtk_page_setup_to_file	    (GtkPageSetup        *setup,
 						     GError             **error);
 GDK_AVAILABLE_IN_ALL
 GtkPageSetup	  *gtk_page_setup_new_from_key_file (GKeyFile            *key_file,
-						     const gchar         *group_name,
+						     const char          *group_name,
 						     GError             **error);
 GDK_AVAILABLE_IN_ALL
 gboolean           gtk_page_setup_load_key_file     (GtkPageSetup        *setup,
 				                     GKeyFile            *key_file,
-				                     const gchar         *group_name,
+				                     const char          *group_name,
 				                     GError             **error);
 GDK_AVAILABLE_IN_ALL
 void		   gtk_page_setup_to_key_file	    (GtkPageSetup        *setup,
 						     GKeyFile            *key_file,
-						     const gchar         *group_name);
+						     const char          *group_name);
 
 GDK_AVAILABLE_IN_ALL
 GVariant          *gtk_page_setup_to_gvariant       (GtkPageSetup        *setup);

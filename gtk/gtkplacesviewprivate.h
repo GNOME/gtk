@@ -44,9 +44,9 @@ GtkPlacesOpenFlags gtk_places_view_get_open_flags                (GtkPlacesView 
 void               gtk_places_view_set_open_flags                (GtkPlacesView      *view,
                                                                   GtkPlacesOpenFlags  flags);
 
-const gchar*       gtk_places_view_get_search_query              (GtkPlacesView      *view);
+const char *       gtk_places_view_get_search_query              (GtkPlacesView      *view);
 void               gtk_places_view_set_search_query              (GtkPlacesView      *view,
-                                                                  const gchar        *query_text);
+                                                                  const char         *query_text);
 
 gboolean           gtk_places_view_get_loading                   (GtkPlacesView         *view);
 

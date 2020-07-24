@@ -102,9 +102,9 @@ struct _GtkShortcutsWindowClass
 typedef struct
 {
   GHashTable     *keywords;
-  gchar          *initial_section;
-  gchar          *last_section_name;
-  gchar          *view_name;
+  char           *initial_section;
+  char           *last_section_name;
+  char           *view_name;
   GtkSizeGroup   *search_text_group;
   GtkSizeGroup   *search_image_group;
   GHashTable     *search_items_hash;
@@ -130,7 +130,7 @@ typedef struct
   GtkShortcutsWindow *self;
   GtkBuilder        *builder;
   GQueue            *stack;
-  gchar             *property_name;
+  char              *property_name;
   guint              translatable : 1;
 } ViewsParserData;
 
@@ -213,18 +213,18 @@ gtk_shortcuts_window_add_search_item (GtkWidget *child, gpointer data)
   GtkShortcutsWindow *self = data;
   GtkShortcutsWindowPrivate *priv = gtk_shortcuts_window_get_instance_private (self);
   GtkWidget *item;
-  gchar *accelerator = NULL;
-  gchar *title = NULL;
-  gchar *hash_key = NULL;
+  char *accelerator = NULL;
+  char *title = NULL;
+  char *hash_key = NULL;
   GIcon *icon = NULL;
   gboolean icon_set = FALSE;
   gboolean subtitle_set = FALSE;
   GtkTextDirection direction;
   GtkShortcutType shortcut_type;
-  gchar *action_name = NULL;
-  gchar *subtitle;
-  gchar *str;
-  gchar *keywords;
+  char *action_name = NULL;
+  char *subtitle;
+  char *str;
+  char *keywords;
 
   if (GTK_IS_SHORTCUTS_SHORTCUT (child))
     {
@@ -314,7 +314,7 @@ section_notify_cb (GObject    *section,
 
   if (strcmp (pspec->name, "section-name") == 0)
     {
-      gchar *name;
+      char *name;
 
       g_object_get (section, "section-name", &name, NULL);
       g_object_set (gtk_stack_get_page (priv->stack, GTK_WIDGET (section)), "name", name, NULL);
@@ -322,7 +322,7 @@ section_notify_cb (GObject    *section,
     }
   else if (strcmp (pspec->name, "title") == 0)
     {
-      gchar *title;
+      char *title;
       GtkWidget *label;
 
       label = g_object_get_data (section, "gtk-shortcuts-title");
@@ -338,9 +338,9 @@ gtk_shortcuts_window_add_section (GtkShortcutsWindow  *self,
 {
   GtkShortcutsWindowPrivate *priv = gtk_shortcuts_window_get_instance_private (self);
   GtkListBoxRow *row;
-  gchar *title;
-  gchar *name;
-  const gchar *visible_section;
+  char *title;
+  char *name;
+  const char *visible_section;
   GtkWidget *label;
   GtkWidget *child;
 
@@ -393,7 +393,7 @@ static void
 gtk_shortcuts_window_buildable_add_child (GtkBuildable *buildable,
                                           GtkBuilder   *builder,
                                           GObject      *child,
-                                          const gchar  *type)
+                                          const char   *type)
 {
   if (GTK_IS_SHORTCUTS_SECTION (child))
     gtk_shortcuts_window_add_section (GTK_SHORTCUTS_WINDOW (buildable),
@@ -412,7 +412,7 @@ gtk_shortcuts_window_buildable_iface_init (GtkBuildableIface *iface)
 
 static void
 gtk_shortcuts_window_set_view_name (GtkShortcutsWindow *self,
-                                    const gchar        *view_name)
+                                    const char         *view_name)
 {
   GtkShortcutsWindowPrivate *priv = gtk_shortcuts_window_get_instance_private (self);
   GtkWidget *section;
@@ -431,7 +431,7 @@ gtk_shortcuts_window_set_view_name (GtkShortcutsWindow *self,
 
 static void
 gtk_shortcuts_window_set_section_name (GtkShortcutsWindow *self,
-                                       const gchar        *section_name)
+                                       const char         *section_name)
 {
   GtkShortcutsWindowPrivate *priv = gtk_shortcuts_window_get_instance_private (self);
   GtkWidget *section = NULL;
@@ -544,10 +544,10 @@ gtk_shortcuts_window__entry__changed (GtkShortcutsWindow *self,
                                      GtkSearchEntry      *search_entry)
 {
   GtkShortcutsWindowPrivate *priv = gtk_shortcuts_window_get_instance_private (self);
-  gchar *downcase = NULL;
+  char *downcase = NULL;
   GHashTableIter iter;
-  const gchar *text;
-  const gchar *last_section_name;
+  const char *text;
+  const char *last_section_name;
   gpointer key;
   gpointer value;
   gboolean has_result;
@@ -581,7 +581,7 @@ gtk_shortcuts_window__entry__changed (GtkShortcutsWindow *self,
   while (g_hash_table_iter_next (&iter, &key, &value))
     {
       GtkWidget *widget = key;
-      const gchar *keywords = value;
+      const char *keywords = value;
       gboolean match;
 
       if (hidden_by_direction (widget))
@@ -692,7 +692,7 @@ gtk_shortcuts_window_get_property (GObject    *object,
 
         if (child != NULL)
           {
-            gchar *name = NULL;
+            char *name = NULL;
 
             g_object_get (gtk_stack_get_page (priv->stack, child),
                                      "name", &name,

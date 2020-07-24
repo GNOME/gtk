@@ -266,7 +266,7 @@ update_from_editor (GtkColorEditor        *editor,
 /* UI construction {{{1 */
 
 static guint
-scale_round (gdouble value, gdouble scale)
+scale_round (double value, double scale)
 {
   value = floor (value * scale + 0.5);
   value = MAX (value, 0);
@@ -274,7 +274,7 @@ scale_round (gdouble value, gdouble scale)
   return (guint)value;
 }
 
-static gchar *
+static char *
 accessible_color_name (GdkRGBA *color)
 {
   if (color->alpha < 1.0)
@@ -319,17 +319,17 @@ remove_palette (GtkColorChooserWidget *cc)
 static void
 add_palette (GtkColorChooserWidget  *cc,
              GtkOrientation          orientation,
-             gint                    colors_per_line,
-             gint                    n_colors,
+             int                     colors_per_line,
+             int                     n_colors,
              GdkRGBA                *colors,
-             const gchar           **names)
+             const char            **names)
 {
   GtkWidget *grid;
   GtkWidget *p;
   AtkObject *atk_obj;
-  gint line, pos;
-  gint i;
-  gint left, right;
+  int line, pos;
+  int i;
+  int left, right;
 
   if (colors == NULL)
     {
@@ -363,7 +363,7 @@ add_palette (GtkColorChooserWidget  *cc,
         }
       else
         {
-          gchar *text, *name;
+          char *text, *name;
 
           name = accessible_color_name (&colors[i]);
           text = g_strdup_printf (_("Color: %s"), name);
@@ -411,7 +411,7 @@ remove_default_palette (GtkColorChooserWidget *cc)
 static void
 add_default_palette (GtkColorChooserWidget *cc)
 {
-  const gchar *default_colors[9][3] = {
+  const char *default_colors[9][3] = {
     { "#ef2929", "#cc0000", "#a40000" }, /* Scarlet Red */
     { "#fcaf3e", "#f57900", "#ce5c00" }, /* Orange */
     { "#fce94f", "#edd400", "#c4a000" }, /* Butter */
@@ -422,7 +422,7 @@ add_default_palette (GtkColorChooserWidget *cc)
     { "#888a85", "#555753", "#2e3436" }, /* Aluminum 1 */
     { "#eeeeec", "#d3d7cf", "#babdb6" }  /* Aluminum 2 */
   };
-  const gchar *color_names[] = {
+  const char *color_names[] = {
     NC_("Color name", "Light Scarlet Red"),
     NC_("Color name", "Scarlet Red"),
     NC_("Color name", "Dark Scarlet Red"),
@@ -451,7 +451,7 @@ add_default_palette (GtkColorChooserWidget *cc)
     NC_("Color name", "Aluminum 2"),
     NC_("Color name", "Dark Aluminum 2")
   };
-  const gchar *default_grays[9] = {
+  const char *default_grays[9] = {
     "#000000", /* black */
     "#2e3436", /* very dark gray */
     "#555753", /* darker gray */
@@ -462,7 +462,7 @@ add_default_palette (GtkColorChooserWidget *cc)
     "#f3f3f3", /* very light gray */
     "#ffffff"  /* white */
   };
-  const gchar *gray_names[] = {
+  const char *gray_names[] = {
     NC_("Color name", "Black"),
     NC_("Color name", "Very Dark Gray"),
     NC_("Color name", "Darker Gray"),
@@ -474,7 +474,7 @@ add_default_palette (GtkColorChooserWidget *cc)
     NC_("Color name", "White")
   };
   GdkRGBA colors[9*3];
-  gint i, j;
+  int i, j;
 
   for (i = 0; i < 9; i++)
     for (j = 0; j < 3; j++)
@@ -537,14 +537,14 @@ gtk_color_chooser_widget_init (GtkColorChooserWidget *cc)
   GtkWidget *p;
   GtkWidget *button;
   GtkWidget *label;
-  gint i;
+  int i;
   double color[4];
   GdkRGBA rgba;
   GVariant *variant;
   GVariantIter iter;
   gboolean selected;
   AtkObject *atk_obj;
-  gchar *text, *name;
+  char *text, *name;
 
   cc->use_alpha = TRUE;
 
@@ -856,8 +856,8 @@ gtk_color_chooser_widget_set_rgba (GtkColorChooser *chooser,
 static void
 gtk_color_chooser_widget_add_palette (GtkColorChooser *chooser,
                                       GtkOrientation   orientation,
-                                      gint             colors_per_line,
-                                      gint             n_colors,
+                                      int              colors_per_line,
+                                      int              n_colors,
                                       GdkRGBA         *colors)
 {
   GtkColorChooserWidget *cc = GTK_COLOR_CHOOSER_WIDGET (chooser);

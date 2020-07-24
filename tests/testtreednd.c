@@ -29,7 +29,7 @@ my_model_drag_data_get (GtkTreeDragSource *source,
 {
   GdkContentProvider *content;
   GtkTreeIter iter;
-  gchar *text;
+  char *text;
 
   gtk_tree_model_get_iter (GTK_TREE_MODEL (source), &iter, path);
   gtk_tree_model_get (GTK_TREE_MODEL (source), &iter, 0, &text, -1);

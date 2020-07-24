@@ -73,7 +73,7 @@ gdk_device_pad_default_init (GdkDevicePadInterface *pad)
  *
  * Returns: The number of button/ring/strip groups in the pad.
  **/
-gint
+int
 gdk_device_pad_get_n_groups (GdkDevicePad *pad)
 {
   GdkDevicePadInterface *iface = GDK_DEVICE_PAD_GET_IFACE (pad);
@@ -92,9 +92,9 @@ gdk_device_pad_get_n_groups (GdkDevicePad *pad)
  *
  * Returns: The number of modes available in @group.
  **/
-gint
+int
 gdk_device_pad_get_group_n_modes (GdkDevicePad *pad,
-                                  gint          group_idx)
+                                  int           group_idx)
 {
   GdkDevicePadInterface *iface = GDK_DEVICE_PAD_GET_IFACE (pad);
 
@@ -113,7 +113,7 @@ gdk_device_pad_get_group_n_modes (GdkDevicePad *pad,
  *
  * Returns: The amount of elements of type @feature that this pad has.
  **/
-gint
+int
 gdk_device_pad_get_n_features (GdkDevicePad        *pad,
                                GdkDevicePadFeature  feature)
 {
@@ -135,10 +135,10 @@ gdk_device_pad_get_n_features (GdkDevicePad        *pad,
  *
  * Returns: The group number of the queried pad feature.
  **/
-gint
+int
 gdk_device_pad_get_feature_group (GdkDevicePad        *pad,
                                   GdkDevicePadFeature  feature,
-                                  gint                 idx)
+                                  int                  idx)
 {
   GdkDevicePadInterface *iface = GDK_DEVICE_PAD_GET_IFACE (pad);
 

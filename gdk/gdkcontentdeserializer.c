@@ -835,7 +835,7 @@ init (void)
   for (f = formats; f; f = f->next)
     {
       GdkPixbufFormat *fmt = f->data;
-      gchar *name; 
+      char *name; 
  
       name = gdk_pixbuf_format_get_name (fmt);
       if (g_str_equal (name, "png"))
@@ -854,7 +854,7 @@ init (void)
   for (f = formats; f; f = f->next)
     {
       GdkPixbufFormat *fmt = f->data;
-      gchar **mimes, **m;
+      char **mimes, **m;
 
       mimes = gdk_pixbuf_format_get_mime_types (fmt);
       for (m = mimes; *m; m++)

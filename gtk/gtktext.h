@@ -90,7 +90,7 @@ GDK_AVAILABLE_IN_ALL
 void            gtk_text_set_max_length                 (GtkText         *self,
                                                          int              length);
 GDK_AVAILABLE_IN_ALL
-gint            gtk_text_get_max_length                 (GtkText         *self);
+int             gtk_text_get_max_length                 (GtkText         *self);
 GDK_AVAILABLE_IN_ALL
 guint16         gtk_text_get_text_length                (GtkText         *self);
 

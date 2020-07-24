@@ -81,7 +81,7 @@ spinner_timeout (gpointer data)
 static GtkTreeModel *
 create_model (void)
 {
-  gint i = 0;
+  int i = 0;
   GtkListStore *store;
   GtkTreeIter iter;
 

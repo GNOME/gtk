@@ -54,14 +54,14 @@ void         gtk_cell_area_box_pack_end    (GtkCellAreaBox  *box,
                                             gboolean         align,
                                             gboolean         fixed);
 GDK_AVAILABLE_IN_ALL
-gint         gtk_cell_area_box_get_spacing (GtkCellAreaBox  *box);
+int          gtk_cell_area_box_get_spacing (GtkCellAreaBox  *box);
 GDK_AVAILABLE_IN_ALL
 void         gtk_cell_area_box_set_spacing (GtkCellAreaBox  *box,
-                                            gint             spacing);
+                                            int              spacing);
 
 /* Private interaction with GtkCellAreaBoxContext */
 gboolean    _gtk_cell_area_box_group_visible (GtkCellAreaBox  *box,
-                                              gint             group_idx);
+                                              int              group_idx);
 
 G_END_DECLS
 

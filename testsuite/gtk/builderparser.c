@@ -23,9 +23,9 @@
 #include <gtk/gtk.h>
 
 static void
-test_file (const gchar *filename, GString *string)
+test_file (const char *filename, GString *string)
 {
-  gchar *contents;
+  char *contents;
   gsize  length;
   GError *error = NULL;
   gboolean ret;
@@ -59,10 +59,10 @@ test_file (const gchar *filename, GString *string)
   g_object_unref (builder);
 }
 
-static gchar *
-get_expected_filename (const gchar *filename)
+static char *
+get_expected_filename (const char *filename)
 {
-  gchar *f, *p, *expected;
+  char *f, *p, *expected;
 
   f = g_strdup (filename);
   p = strstr (f, ".ui");
@@ -78,9 +78,9 @@ get_expected_filename (const gchar *filename)
 static void
 test_parse (gconstpointer d)
 {
-  const gchar *filename = d;
-  gchar *expected_file;
-  gchar *expected;
+  const char *filename = d;
+  char *expected_file;
+  char *expected;
   GError *error = NULL;
   GString *string;
 
@@ -106,8 +106,8 @@ main (int argc, char *argv[])
 {
   GDir *dir;
   GError *error = NULL;
-  const gchar *name;
-  gchar *path;
+  const char *name;
+  char *path;
 
   gtk_test_init (&argc, &argv, NULL);
 

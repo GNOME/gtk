@@ -64,8 +64,8 @@ scribble_draw (GtkDrawingArea *da,
 /* Draw a rectangle on the screen */
 static void
 draw_brush (GtkWidget *widget,
-            gdouble    x,
-            gdouble    y)
+            double     x,
+            double     y)
 {
   GdkRectangle update_rect;
   cairo_t *cr;

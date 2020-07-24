@@ -102,10 +102,10 @@ get_label_from_button (GtkWidget *button)
   return child;
 }
 
-static const gchar *
+static const char *
 gtk_button_accessible_get_name (AtkObject *obj)
 {
-  const gchar *name = NULL;
+  const char *name = NULL;
   GtkWidget *widget;
   GtkWidget *child;
 
@@ -137,7 +137,7 @@ gtk_button_accessible_get_name (AtkObject *obj)
   return name;
 }
 
-static gint
+static int
 gtk_button_accessible_get_n_children (AtkObject* obj)
 {
   return 0;
@@ -145,7 +145,7 @@ gtk_button_accessible_get_n_children (AtkObject* obj)
 
 static AtkObject *
 gtk_button_accessible_ref_child (AtkObject *obj,
-                                 gint       i)
+                                 int        i)
 {
   return NULL;
 }
@@ -204,7 +204,7 @@ gtk_button_accessible_init (GtkButtonAccessible *button)
 
 static gboolean
 gtk_button_accessible_do_action (AtkAction *action,
-                                 gint       i)
+                                 int        i)
 {
   GtkWidget *widget;
 
@@ -222,17 +222,17 @@ gtk_button_accessible_do_action (AtkAction *action,
   return TRUE;
 }
 
-static gint
+static int
 gtk_button_accessible_get_n_actions (AtkAction *action)
 {
   return 1;
 }
 
-static const gchar *
+static const char *
 gtk_button_accessible_get_keybinding (AtkAction *action,
-                                      gint       i)
+                                      int        i)
 {
-  gchar *return_value = NULL;
+  char *return_value = NULL;
   GtkWidget *widget;
   GtkWidget *label;
   guint key_val;
@@ -282,27 +282,27 @@ gtk_button_accessible_get_keybinding (AtkAction *action,
   return return_value;
 }
 
-static const gchar *
+static const char *
 gtk_button_accessible_action_get_name (AtkAction *action,
-                                       gint       i)
+                                       int        i)
 {
   if (i == 0)
     return "click";
   return NULL;
 }
 
-static const gchar *
+static const char *
 gtk_button_accessible_action_get_localized_name (AtkAction *action,
-                                                 gint       i)
+                                                 int        i)
 {
   if (i == 0)
     return C_("Action name", "Click");
   return NULL;
 }
 
-static const gchar *
+static const char *
 gtk_button_accessible_action_get_description (AtkAction *action,
-                                              gint       i)
+                                              int        i)
 {
   if (i == 0)
     return C_("Action description", "Clicks the button");
@@ -320,7 +320,7 @@ atk_action_interface_init (AtkActionIface *iface)
   iface->get_description = gtk_button_accessible_action_get_description;
 }
 
-static const gchar *
+static const char *
 gtk_button_accessible_get_image_description (AtkImage *image)
 {
   GtkWidget *widget;
@@ -343,8 +343,8 @@ gtk_button_accessible_get_image_description (AtkImage *image)
 
 static void
 gtk_button_accessible_get_image_position (AtkImage     *image,
-                                          gint         *x,
-                                          gint         *y,
+                                          int          *x,
+                                          int          *y,
                                           AtkCoordType  coord_type)
 {
   GtkWidget *widget;
@@ -375,8 +375,8 @@ gtk_button_accessible_get_image_position (AtkImage     *image,
 
 static void
 gtk_button_accessible_get_image_size (AtkImage *image,
-                                      gint     *width,
-                                      gint     *height)
+                                      int      *width,
+                                      int      *height)
 {
   GtkWidget *widget;
   GtkWidget *button_image;
@@ -405,7 +405,7 @@ gtk_button_accessible_get_image_size (AtkImage *image,
 
 static gboolean
 gtk_button_accessible_set_image_description (AtkImage    *image,
-                                             const gchar *description)
+                                             const char *description)
 {
   GtkWidget *widget;
   GtkWidget *button_image;

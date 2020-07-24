@@ -66,33 +66,33 @@ gtk_switch_accessible_init (GtkSwitchAccessible *self)
 {
 }
 
-static gint
+static int
 gtk_switch_action_get_n_actions (AtkAction *action)
 {
   return 1;
 }
 
-static const gchar *
+static const char *
 gtk_switch_action_get_name (AtkAction *action,
-                            gint       i)
+                            int        i)
 {
   if (i == 0)
     return "toggle";
   return NULL;
 }
 
-static const gchar *
+static const char *
 gtk_switch_action_get_localized_name (AtkAction *action,
-                                      gint       i)
+                                      int        i)
 {
   if (i == 0)
     return C_("Action name", "Toggle");
   return NULL;
 }
 
-static const gchar *
+static const char *
 gtk_switch_action_get_description (AtkAction *action,
-                                   gint       i)
+                                   int        i)
 {
   if (i == 0)
     return C_("Action description", "Toggles the switch");
@@ -101,7 +101,7 @@ gtk_switch_action_get_description (AtkAction *action,
 
 static gboolean
 gtk_switch_action_do_action (AtkAction *action,
-                             gint       i)
+                             int        i)
 {
   GtkSwitch *sw;
   GtkWidget *widget;

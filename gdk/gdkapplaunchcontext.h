@@ -43,7 +43,7 @@ GdkDisplay *         gdk_app_launch_context_get_display   (GdkAppLaunchContext *
 
 GDK_AVAILABLE_IN_ALL
 void                 gdk_app_launch_context_set_desktop   (GdkAppLaunchContext *context,
-                                                           gint                 desktop);
+                                                           int                  desktop);
 GDK_AVAILABLE_IN_ALL
 void                 gdk_app_launch_context_set_timestamp (GdkAppLaunchContext *context,
                                                            guint32              timestamp);

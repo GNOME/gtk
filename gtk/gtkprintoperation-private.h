@@ -36,16 +36,16 @@ struct _GtkPrintOperationPrivate
   GtkPrintOperationAction action;
   GtkPrintStatus status;
   GError *error;
-  gchar *status_string;
+  char *status_string;
   GtkPageSetup *default_page_setup;
   GtkPrintSettings *print_settings;
-  gchar *job_name;
-  gint nr_of_pages;
-  gint nr_of_pages_to_print;
-  gint page_position;
-  gint current_page;
+  char *job_name;
+  int nr_of_pages;
+  int nr_of_pages_to_print;
+  int page_position;
+  int current_page;
   GtkUnit unit;
-  gchar *export_filename;
+  char *export_filename;
   guint use_full_page      : 1;
   guint track_print_status : 1;
   guint show_progress      : 1;
@@ -65,9 +65,9 @@ struct _GtkPrintOperationPrivate
   
   GtkPrintPages print_pages;
   GtkPageRange *page_ranges;
-  gint num_page_ranges;
+  int num_page_ranges;
   
-  gint manual_num_copies;
+  int manual_num_copies;
   guint manual_collation   : 1;
   guint manual_reverse     : 1;
   guint manual_orientation : 1;
@@ -77,7 +77,7 @@ struct _GtkPrintOperationPrivate
   GtkNumberUpLayout manual_number_up_layout;
 
   GtkWidget *custom_widget;
-  gchar *custom_tab_label;
+  char *custom_tab_label;
   
   gpointer platform_data;
   GDestroyNotify free_platform_data;
@@ -114,9 +114,9 @@ void                    _gtk_print_operation_platform_backend_launch_preview    
 										      const char                  *filename);
 cairo_surface_t *       _gtk_print_operation_platform_backend_create_preview_surface (GtkPrintOperation           *op,
 										      GtkPageSetup                *page_setup,
-										      gdouble                     *dpi_x,
-										      gdouble                     *dpi_y,
-										      gchar                       **target);
+										      double                      *dpi_x,
+										      double                      *dpi_y,
+										      char                        **target);
 void                    _gtk_print_operation_platform_backend_resize_preview_surface (GtkPrintOperation           *op,
 										      GtkPageSetup                *page_setup,
 										      cairo_surface_t             *surface);
@@ -129,7 +129,7 @@ void                    _gtk_print_operation_platform_backend_preview_end_page  
 
 void _gtk_print_operation_set_status (GtkPrintOperation *op,
 				      GtkPrintStatus     status,
-				      const gchar       *string);
+				      const char        *string);
 
 /* GtkPrintContext private functions: */
 
@@ -140,10 +140,10 @@ void             _gtk_print_context_translate_into_margin           (GtkPrintCon
 void             _gtk_print_context_rotate_according_to_orientation (GtkPrintContext   *context);
 void             _gtk_print_context_reverse_according_to_orientation (GtkPrintContext *context);
 void             _gtk_print_context_set_hard_margins                (GtkPrintContext   *context,
-								     gdouble            top,
-								     gdouble            bottom,
-								     gdouble            left,
-								     gdouble            right);
+								     double             top,
+								     double             bottom,
+								     double             left,
+								     double             right);
 
 G_END_DECLS
 
