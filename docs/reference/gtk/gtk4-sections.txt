@@ -7639,3 +7639,10 @@ gtk_selection_filter_model_new_for_type
 gtk_selection_filter_model_set_model
 gtk_selection_filter_model_get_model
 </SECTION>
+
+<SECTION>
+<FILE>gtkapplicationlist</FILE>
+<TITLE>GtkApplicationList</TITLE>
+GtkApplicationList
+gtk_application_list_new
+</SECTION>
