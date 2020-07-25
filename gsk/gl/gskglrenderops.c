@@ -829,6 +829,14 @@ ops_set_inset_shadow (RenderOpBuilder      *self,
     }
   else
     op->offset.send = FALSE;
+
+  if (!op->outline.send &&
+      !op->spread.send &&
+      !op->offset.send &&
+      !op->color.send)
+    {
+      op_buffer_pop_tail (&self->render_ops);
+    }
 }
 void
 ops_set_unblurred_outset_shadow (RenderOpBuilder      *self,
