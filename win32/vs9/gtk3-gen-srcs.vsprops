@@ -11,14 +11,14 @@
 	/>
 	<UserMacro
 		Name="GeneratedGdkSources"
-		Value="..\..\config.h;..\..\gdk\gdkconfig.h;..\..\gdk\gdkversionmacros.h;..\..\gdk\gdkmarshalers.h;..\..\gdk\gdkmarshalers.c;..\..\gdk\gdkresources.h;..\..\gdk\gdkresources.c"
+		Value="..\config.h;..\gdk\gdkconfig.h;..\gdk\gdkversionmacros.h;..\gdk\gdkmarshalers.h;..\gdk\gdkmarshalers.c;..\gdk\gdkresources.h;..\gdk\gdkresources.c"
 	/>
 	<UserMacro
 		Name="GeneratedGtkSources"
-		Value="..\..\gtk\gtk-win32.rc;..\..\gtk\libgtk3.manifest;..\..\gtk\gtkdbusgenerated.h;..\..\gtk\gtkdbusgenerated.c"
+		Value="..\gtk\gtk-win32.rc;..\gtk\libgtk3.manifest;..\gtk\gtkdbusgenerated.h;..\gtk\gtkdbusgenerated.c"
 	/>
 	<UserMacro
 		Name="GeneratedDemoSources"
-		Value="..\..\demos\gtk-demo\demos.h"
+		Value="..\demos\gtk-demo\demos.h"
 	/>
 </VisualStudioPropertySheet>
