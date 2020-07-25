@@ -23,10 +23,10 @@
 
 void
 _gtk_hsla_init (GtkHSLA *hsla,
-                double   hue,
-                double   saturation,
-                double   lightness,
-                double   alpha)
+                float    hue,
+                float    saturation,
+                float    lightness,
+                float    alpha)
 {
   g_return_if_fail (hsla != NULL);
 
@@ -43,12 +43,12 @@ void
 _gtk_hsla_init_from_rgba (GtkHSLA       *hsla,
                           const GdkRGBA *rgba)
 {
-  double min;
-  double max;
-  double red;
-  double green;
-  double blue;
-  double delta;
+  float min;
+  float max;
+  float red;
+  float green;
+  float blue;
+  float delta;
   
   g_return_if_fail (hsla != NULL);
   g_return_if_fail (rgba != NULL);
@@ -112,10 +112,10 @@ void
 _gdk_rgba_init_from_hsla (GdkRGBA       *rgba,
                           const GtkHSLA *hsla)
 {
-  double hue;
-  double lightness;
-  double saturation;
-  double m1, m2;
+  float hue;
+  float lightness;
+  float saturation;
+  float m1, m2;
   
   lightness = hsla->lightness;
   saturation = hsla->saturation;
@@ -186,7 +186,7 @@ _gdk_rgba_init_from_hsla (GdkRGBA       *rgba,
 void
 _gtk_hsla_shade (GtkHSLA       *dest,
                  const GtkHSLA *src,
-                 double         factor)
+                 float          factor)
 {
   g_return_if_fail (dest != NULL);
   g_return_if_fail (src != NULL);

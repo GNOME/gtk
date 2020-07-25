@@ -91,8 +91,8 @@ struct _GtkGridView
   guint max_columns;
   /* set in size_allocate */
   guint n_columns;
-  double column_width;
   int unknown_row_height;
+  double column_width;
 };
 
 struct _GtkGridViewClass

@@ -49,9 +49,9 @@ struct _GtkEventControllerKey
 
   GdkModifierType state;
 
-  GdkEvent *current_event;
-
   gboolean is_focus;
+
+  GdkEvent *current_event;
 };
 
 struct _GtkEventControllerKeyClass

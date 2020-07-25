@@ -68,6 +68,7 @@ struct _GdkContentDeserializer
   GValue value;
   GInputStream *stream;
   int priority;
+  gboolean returned;
   GCancellable *cancellable;
   gpointer user_data;
   GAsyncReadyCallback callback;
@@ -77,7 +78,6 @@ struct _GdkContentDeserializer
   GDestroyNotify task_notify;
 
   GError *error;
-  gboolean returned;
 };
 
 struct _GdkContentDeserializerClass

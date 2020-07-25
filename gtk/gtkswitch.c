@@ -90,10 +90,11 @@ struct _GtkSwitch
 
   double handle_pos;
   guint tick_id;
-  GtkProgressTracker tracker;
 
   guint state                 : 1;
   guint is_active             : 1;
+
+  GtkProgressTracker tracker;
 
   GtkWidget *on_image;
   GtkWidget *off_image;

@@ -149,23 +149,23 @@ struct _GtkScalePrivate
 
   int           digits;
 
+  guint         draw_value : 1;
+  guint         value_pos  : 2;
+
   GtkScaleFormatValueFunc format_value_func;
   gpointer format_value_func_user_data;
   GDestroyNotify format_value_func_destroy_notify;
-
-  guint         draw_value : 1;
-  guint         value_pos  : 2;
 };
 
 struct _GtkScaleMark
 {
   double           value;
   int              stop_position;
+  GtkPositionType  position; /* always GTK_POS_TOP or GTK_POS_BOTTOM */
   char            *markup;
   GtkWidget       *label_widget;
   GtkWidget       *indicator_widget;
   GtkWidget       *widget;
-  GtkPositionType  position; /* always GTK_POS_TOP or GTK_POS_BOTTOM */
 };
 
 enum {

@@ -65,10 +65,10 @@ struct _GskPangoRenderer
   GdkRGBA               *error_color;
 
   GskPangoRendererState  state;
-  GskPangoShapeHandler shape_handler;
 
-  /* house-keeping options */
   guint                  is_cached_renderer : 1;
+
+  GskPangoShapeHandler   shape_handler;
 };
 
 struct _GskPangoRendererClass

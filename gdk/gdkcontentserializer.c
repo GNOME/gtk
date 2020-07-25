@@ -70,6 +70,7 @@ struct _GdkContentSerializer
   GValue value;
   GOutputStream *stream;
   int priority;
+  gboolean returned;
   GCancellable *cancellable;
   gpointer user_data;
   GAsyncReadyCallback callback;
@@ -79,7 +80,6 @@ struct _GdkContentSerializer
   GDestroyNotify task_notify;
 
   GError *error;
-  gboolean returned;
 };
 
 struct _GdkContentSerializerClass

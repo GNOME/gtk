@@ -60,9 +60,10 @@ struct _GtkWidgetPaintable
   GtkWidget *widget;
   guint snapshot_count;
 
+  guint         pending_update_cb;      /* the idle source that updates the valid image to be the new current image */
+
   GdkPaintable *current_image;          /* the image that we are presenting */
   GdkPaintable *pending_image;          /* the image that we should be presenting */
-  guint         pending_update_cb;      /* the idle source that updates the valid image to be the new current image */
 };
 
 struct _GtkWidgetPaintableClass

@@ -190,9 +190,8 @@ struct _GtkApplicationWindowPrivate
   GtkWidget *menubar;
 
   gboolean show_menubar;
+  guint id;
   GMenu *menubar_section;
-
-  guint            id;
 
   GtkShortcutsWindow *help_overlay;
 };

@@ -59,7 +59,6 @@ struct _GtkColorSwatch
   GtkWidget parent_instance;
 
   GdkRGBA color;
-  double radius[4];
   char *icon;
   guint    has_color        : 1;
   guint    use_alpha        : 1;

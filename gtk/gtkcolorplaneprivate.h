@@ -18,40 +18,16 @@
 #ifndef __GTK_COLOR_PLANE_H__
 #define __GTK_COLOR_PLANE_H__
 
-#include <gtk/gtkdrawingarea.h>
 #include <gtk/gtktypes.h>
 
 G_BEGIN_DECLS
 
 #define GTK_TYPE_COLOR_PLANE            (gtk_color_plane_get_type ())
 #define GTK_COLOR_PLANE(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_COLOR_PLANE, GtkColorPlane))
-#define GTK_COLOR_PLANE_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_COLOR_PLANE, GtkColorPlaneClass))
 #define GTK_IS_COLOR_PLANE(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_COLOR_PLANE))
-#define GTK_IS_COLOR_PLANE_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_COLOR_PLANE))
-#define GTK_COLOR_PLANE_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_COLOR_PLANE, GtkColorPlaneClass))
 
 
 typedef struct _GtkColorPlane         GtkColorPlane;
-typedef struct _GtkColorPlaneClass    GtkColorPlaneClass;
-typedef struct _GtkColorPlanePrivate  GtkColorPlanePrivate;
-
-struct _GtkColorPlane
-{
-  GtkWidget parent_instance;
-
-  GtkColorPlanePrivate *priv;
-};
-
-struct _GtkColorPlaneClass
-{
-  GtkWidgetClass parent_class;
-
-  /* Padding for future expansion */
-  void (*_gtk_reserved1) (void);
-  void (*_gtk_reserved2) (void);
-  void (*_gtk_reserved3) (void);
-  void (*_gtk_reserved4) (void);
-};
 
 
 GType       gtk_color_plane_get_type (void) G_GNUC_CONST;
