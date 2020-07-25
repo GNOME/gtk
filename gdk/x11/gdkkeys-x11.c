@@ -55,8 +55,8 @@ typedef struct _DirectionCacheEntry DirectionCacheEntry;
 struct _DirectionCacheEntry
 {
   guint serial;
-  Atom group_atom;
   PangoDirection direction;
+  Atom group_atom;
 };
 
 struct _GdkX11Keymap

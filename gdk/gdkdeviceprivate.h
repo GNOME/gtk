@@ -40,13 +40,13 @@ struct _GdkDevice
   GdkInputSource source;
   gboolean has_cursor;
   GdkAxisFlags axis_flags;
+  GdkDeviceType type;
   GdkDisplay *display;
   /* The paired logical device for logical devices,
    * or the associated logical device for physical ones
    */
   GdkDevice *associated;
   GList *physical_devices;
-  GdkDeviceType type;
   GArray *axes;
   guint num_touches;
 

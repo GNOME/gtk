@@ -48,8 +48,6 @@ struct _GdkSurface
   int x;
   int y;
 
-  guint8 resize_count;
-
   GdkGLContext *gl_paint_context;
 
   cairo_region_t *update_area;
@@ -63,16 +61,17 @@ struct _GdkSurface
   GdkSurfaceState old_state;
   GdkSurfaceState state;
 
+  guint8 resize_count;
+
   guint8 alpha;
   guint8 fullscreen_mode;
 
   guint modal_hint : 1;
-
   guint destroyed : 2;
-
   guint in_update : 1;
   guint frame_clock_events_paused : 1;
   guint autohide : 1;
+  guint shortcuts_inhibited : 1;
 
   struct {
     GdkGravity surface_anchor;
@@ -101,7 +100,6 @@ struct _GdkSurface
 
   cairo_region_t *opaque_region;
 
-  guint shortcuts_inhibited : 1;
   GdkSeat *current_shortcuts_inhibited_seat;
 };
 
