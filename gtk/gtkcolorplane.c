@@ -33,14 +33,21 @@
 #include "gtkshortcutaction.h"
 #include "gtkshortcut.h"
 
-struct _GtkColorPlanePrivate
+struct _GtkColorPlane
 {
+  GtkWidget parent_instance;
+
   GtkAdjustment *h_adj;
   GtkAdjustment *s_adj;
   GtkAdjustment *v_adj;
 
   GdkTexture *texture;
 };
+
+typedef struct
+{
+  GtkWidgetClass parent_class;
+} GtkColorPlaneClass;
 
 enum {
   PROP_0,
@@ -49,7 +56,7 @@ enum {
   PROP_V_ADJUSTMENT
 };
 
-G_DEFINE_TYPE_WITH_PRIVATE (GtkColorPlane, gtk_color_plane, GTK_TYPE_WIDGET)
+G_DEFINE_TYPE (GtkColorPlane, gtk_color_plane, GTK_TYPE_WIDGET)
 
 static void
 sv_to_xy (GtkColorPlane *plane,
@@ -62,8 +69,8 @@ sv_to_xy (GtkColorPlane *plane,
   width = gtk_widget_get_width (GTK_WIDGET (plane));
   height = gtk_widget_get_height (GTK_WIDGET (plane));
 
-  s = gtk_adjustment_get_value (plane->priv->s_adj);
-  v = gtk_adjustment_get_value (plane->priv->v_adj);
+  s = gtk_adjustment_get_value (plane->s_adj);
+  v = gtk_adjustment_get_value (plane->v_adj);
 
   *x = CLAMP (width * v, 0, width - 1);
   *y = CLAMP (height * (1 - s), 0, height - 1);
@@ -82,7 +89,7 @@ plane_snapshot (GtkWidget   *widget,
   height = gtk_widget_get_height (widget);
 
   gtk_snapshot_append_texture (snapshot,
-                               plane->priv->texture,
+                               plane->texture,
                                &GRAPHENE_RECT_INIT (0, 0, width, height));
   if (gtk_widget_has_visible_focus (widget))
     {
@@ -136,7 +143,7 @@ create_texture (GtkColorPlane *plane)
   if (width == 0 || height == 0)
     return;
 
-  g_clear_object (&plane->priv->texture);
+  g_clear_object (&plane->texture);
 
   stride = width * 4;
 
@@ -144,7 +151,7 @@ create_texture (GtkColorPlane *plane)
 
   if (width > 1 && height > 1)
     {
-      h = gtk_adjustment_get_value (plane->priv->h_adj);
+      h = gtk_adjustment_get_value (plane->h_adj);
       sf = 1.0 / (height - 1);
       vf = 1.0 / (width - 1);
       for (y = 0; y < height; y++)
@@ -168,7 +175,7 @@ create_texture (GtkColorPlane *plane)
     }
 
   bytes = g_bytes_new_take (data, height * stride);
-  plane->priv->texture = gdk_memory_texture_new (width, height,
+  plane->texture = gdk_memory_texture_new (width, height,
                                                  GDK_MEMORY_DEFAULT,
                                                  bytes,
                                                  stride);
@@ -198,9 +205,8 @@ static void
 plane_unrealize (GtkWidget *widget)
 {
   GtkColorPlane *plane = GTK_COLOR_PLANE (widget);
-  GtkColorPlanePrivate *priv = gtk_color_plane_get_instance_private (plane);
 
-  g_clear_object (&priv->texture);
+  g_clear_object (&plane->texture);
 
   GTK_WIDGET_CLASS (gtk_color_plane_parent_class)->unrealize (widget);
 }
@@ -238,8 +244,8 @@ update_color (GtkColorPlane *plane,
 
   s = CLAMP (1 - y * (1.0 / gtk_widget_get_height (widget)), 0, 1);
   v = CLAMP (x * (1.0 / gtk_widget_get_width (widget)), 0, 1);
-  gtk_adjustment_set_value (plane->priv->s_adj, s);
-  gtk_adjustment_set_value (plane->priv->v_adj, v);
+  gtk_adjustment_set_value (plane->s_adj, s);
+  gtk_adjustment_set_value (plane->v_adj, v);
 
   gtk_widget_queue_draw (widget);
 }
@@ -262,8 +268,8 @@ sv_move (GtkColorPlane *plane,
 {
   double s, v;
 
-  s = gtk_adjustment_get_value (plane->priv->s_adj);
-  v = gtk_adjustment_get_value (plane->priv->v_adj);
+  s = gtk_adjustment_get_value (plane->s_adj);
+  v = gtk_adjustment_get_value (plane->v_adj);
 
   if (s + ds > 1)
     {
@@ -303,8 +309,8 @@ sv_move (GtkColorPlane *plane,
       v += dv;
     }
 
-  gtk_adjustment_set_value (plane->priv->s_adj, s);
-  gtk_adjustment_set_value (plane->priv->v_adj, v);
+  gtk_adjustment_set_value (plane->s_adj, s);
+  gtk_adjustment_set_value (plane->v_adj, v);
   return;
 
 error:
@@ -405,8 +411,6 @@ gtk_color_plane_init (GtkColorPlane *plane)
   GtkShortcutAction *action;
   GtkShortcut *shortcut;
 
-  plane->priv = gtk_color_plane_get_instance_private (plane);
-
   gtk_widget_set_focusable (GTK_WIDGET (plane), TRUE);
 
   atk_obj = gtk_widget_get_accessible (GTK_WIDGET (plane));
@@ -418,11 +422,11 @@ gtk_color_plane_init (GtkColorPlane *plane)
 
   gesture = gtk_gesture_drag_new ();
   g_signal_connect (gesture, "drag-begin",
-		    G_CALLBACK (plane_drag_gesture_begin), plane);
+                    G_CALLBACK (plane_drag_gesture_begin), plane);
   g_signal_connect (gesture, "drag-update",
-		    G_CALLBACK (plane_drag_gesture_update), plane);
+                    G_CALLBACK (plane_drag_gesture_update), plane);
   g_signal_connect (gesture, "drag-end",
-		    G_CALLBACK (plane_drag_gesture_end), plane);
+                    G_CALLBACK (plane_drag_gesture_end), plane);
   gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (gesture), 0);
   gtk_widget_add_controller (GTK_WIDGET (plane), GTK_EVENT_CONTROLLER (gesture));
 
@@ -452,20 +456,20 @@ plane_finalize (GObject *object)
 {
   GtkColorPlane *plane = GTK_COLOR_PLANE (object);
 
-  g_clear_object (&plane->priv->texture);
+  g_clear_object (&plane->texture);
 
-  g_clear_object (&plane->priv->h_adj);
-  g_clear_object (&plane->priv->s_adj);
-  g_clear_object (&plane->priv->v_adj);
+  g_clear_object (&plane->h_adj);
+  g_clear_object (&plane->s_adj);
+  g_clear_object (&plane->v_adj);
 
   G_OBJECT_CLASS (gtk_color_plane_parent_class)->finalize (object);
 }
 
 static void
 plane_set_property (GObject      *object,
-		    guint         prop_id,
-		    const GValue *value,
-		    GParamSpec   *pspec)
+                    guint         prop_id,
+                    const GValue *value,
+                    GParamSpec   *pspec)
 {
   GtkColorPlane *plane = GTK_COLOR_PLANE (object);
   GtkAdjustment *adjustment;
@@ -478,26 +482,26 @@ plane_set_property (GObject      *object,
     case PROP_H_ADJUSTMENT:
       adjustment = g_value_get_object (value);
       if (adjustment)
-	{
-	  plane->priv->h_adj = g_object_ref_sink (adjustment);
-	  g_signal_connect_swapped (adjustment, "value-changed", G_CALLBACK (h_changed), plane);
-	}
+        {
+          plane->h_adj = g_object_ref_sink (adjustment);
+          g_signal_connect_swapped (adjustment, "value-changed", G_CALLBACK (h_changed), plane);
+        }
       break;
     case PROP_S_ADJUSTMENT:
       adjustment = g_value_get_object (value);
       if (adjustment)
-	{
-	  plane->priv->s_adj = g_object_ref_sink (adjustment);
-	  g_signal_connect_swapped (adjustment, "value-changed", G_CALLBACK (sv_changed), plane);
-	}
+        {
+          plane->s_adj = g_object_ref_sink (adjustment);
+          g_signal_connect_swapped (adjustment, "value-changed", G_CALLBACK (sv_changed), plane);
+        }
       break;
     case PROP_V_ADJUSTMENT:
       adjustment = g_value_get_object (value);
       if (adjustment)
-	{
-	  plane->priv->v_adj = g_object_ref_sink (adjustment);
-	  g_signal_connect_swapped (adjustment, "value-changed", G_CALLBACK (sv_changed), plane);
-	}
+        {
+          plane->v_adj = g_object_ref_sink (adjustment);
+          g_signal_connect_swapped (adjustment, "value-changed", G_CALLBACK (sv_changed), plane);
+        }
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -524,27 +528,27 @@ gtk_color_plane_class_init (GtkColorPlaneClass *class)
                                    g_param_spec_object ("h-adjustment",
                                                         "Hue Adjustment",
                                                         "Hue Adjustment",
-							GTK_TYPE_ADJUSTMENT,
-							GTK_PARAM_WRITABLE |
-							G_PARAM_CONSTRUCT_ONLY));
+                                                        GTK_TYPE_ADJUSTMENT,
+                                                        GTK_PARAM_WRITABLE |
+                                                        G_PARAM_CONSTRUCT_ONLY));
 
   g_object_class_install_property (object_class,
                                    PROP_S_ADJUSTMENT,
                                    g_param_spec_object ("s-adjustment",
                                                         "Saturation Adjustment",
                                                         "Saturation Adjustment",
-							GTK_TYPE_ADJUSTMENT,
-							GTK_PARAM_WRITABLE |
-							G_PARAM_CONSTRUCT_ONLY));
+                                                        GTK_TYPE_ADJUSTMENT,
+                                                        GTK_PARAM_WRITABLE |
+                                                        G_PARAM_CONSTRUCT_ONLY));
 
   g_object_class_install_property (object_class,
                                    PROP_V_ADJUSTMENT,
                                    g_param_spec_object ("v-adjustment",
                                                         "Value Adjustment",
                                                         "Value Adjustment",
-							GTK_TYPE_ADJUSTMENT,
-							GTK_PARAM_WRITABLE |
-							G_PARAM_CONSTRUCT_ONLY));
+                                                        GTK_TYPE_ADJUSTMENT,
+                                                        GTK_PARAM_WRITABLE |
+                                                        G_PARAM_CONSTRUCT_ONLY));
 
   gtk_widget_class_set_css_name (widget_class, "plane");
 }
