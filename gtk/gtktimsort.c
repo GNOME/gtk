@@ -85,7 +85,7 @@ gtk_tim_sort_init (GtkTimSort       *self,
 void
 gtk_tim_sort_finish (GtkTimSort *self)
 {
-  g_free (self->tmp);
+  g_clear_pointer (&self->tmp, g_free);
 }
 
 void

@@ -148,6 +148,9 @@ gtk_sort_list_model_get_item (GListModel *list,
   if (self->model == NULL)
     return NULL;
 
+  if (position >= self->n_items)
+    return NULL;
+
   if (self->positions)
     position = pos_from_key (self, self->positions[position]);
 

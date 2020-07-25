@@ -91,6 +91,22 @@ add (GListStore *store,
   g_object_unref (object);
 }
 
+static void
+insert (GListStore *store,
+        guint       position,
+        guint       number)
+{
+  GObject *object;
+
+  /* 0 cannot be differentiated from NULL, so don't use it */
+  g_assert (number != 0);
+
+  object = g_object_new (G_TYPE_OBJECT, NULL);
+  g_object_set_qdata (object, number_quark, GUINT_TO_POINTER (number));
+  g_list_store_insert (store, position, object);
+  g_object_unref (object);
+}
+
 #define assert_model(model, expected) G_STMT_START{ \
   char *s = model_to_string (G_LIST_MODEL (model)); \
   if (!g_str_equal (s, expected)) \
@@ -104,6 +120,11 @@ add (GListStore *store,
   if (!g_str_equal (changes->str, expected)) \
      g_assertion_message_cmpstr (G_LOG_DOMAIN, __FILE__, __LINE__, G_STRFUNC, \
          #model " == " #expected, changes->str, "==", expected); \
+  g_string_set_size (changes, 0); \
+}G_STMT_END
+
+#define ignore_changes(model) G_STMT_START{ \
+  GString *changes = g_object_get_qdata (G_OBJECT (model), changes_quark); \
   g_string_set_size (changes, 0); \
 }G_STMT_END
 
@@ -398,7 +419,7 @@ test_stability (void)
   GtkSortListModel *sort;
   GListStore *store;
   GtkSorter *sorter;
-  
+
   store = new_store ((guint[]) { 11, 31, 21, 1, 0 });
   sort = new_model (store);
   assert_model (sort, "1 11 21 31");
@@ -409,6 +430,106 @@ test_stability (void)
   g_object_unref (sorter);
   assert_model (sort, "11 31 21 1");
   assert_changes (sort, "0-4+4");
+
+  g_object_unref (store);
+  g_object_unref (sort);
+}
+
+static GListStore *
+new_shuffled_store (guint size)
+{
+  GListStore *store = new_empty_store ();
+  guint i;
+
+  add (store, 1);
+
+  for (i = 1; i < size; i++)
+    insert (store, g_random_int_range (0, i), i + 1);
+
+  return store;
+}
+
+/* Test that we don't crash when things are removed from the
+ * model while it is incrementally sorting.
+ */
+static void
+test_incremental_remove (void)
+{
+  GListStore *store;
+  GtkSortListModel *model;
+  GtkSorter *sorter;
+  guint i;
+  GListStore *removed;
+  const guint n_items = 100000;
+
+  store = new_shuffled_store (n_items);
+  model = new_model (NULL);
+  gtk_sort_list_model_set_incremental (model, TRUE);
+
+  gtk_sort_list_model_set_model (model, G_LIST_MODEL (store));
+
+  sorter = gtk_custom_sorter_new (compare, NULL, NULL);
+  gtk_sort_list_model_set_sorter (model, sorter);
+  g_object_unref (sorter);
+
+  removed = g_list_store_new (G_TYPE_OBJECT);
+
+  while (gtk_sort_list_model_get_pending (model) != 0)
+    {
+      g_main_context_iteration (NULL, TRUE);
+
+      /* randomly remove items while the sort is ongoing */
+      if (g_list_model_get_n_items (G_LIST_MODEL (removed)) < 100)
+        {
+          guint position;
+
+          position = g_random_int_range (0, g_list_model_get_n_items (G_LIST_MODEL (store)) - 10);
+          for (i = 0; i < 10; i++)
+            {
+              GObject *item = g_list_model_get_item (G_LIST_MODEL (store), position + i);
+              g_list_store_append (removed, item);
+              g_object_unref (item);
+            }
+          g_list_store_splice (store, position, 10, NULL, 0);
+        }
+    }
+
+  g_assert_cmpuint (gtk_sort_list_model_get_pending (model), ==, 0);
+
+  gtk_sort_list_model_set_incremental (model, FALSE);
+
+  /* add them back */
+  for (i = 0; i < g_list_model_get_n_items (G_LIST_MODEL (removed)); i++)
+    {
+      GObject *item = g_list_model_get_item (G_LIST_MODEL (removed), i);
+      g_list_store_append (store, item);
+      g_object_unref (item);
+    }
+
+  g_assert_cmpuint (g_list_model_get_n_items (G_LIST_MODEL (model)), ==, n_items);
+
+  for (i = 0; i < g_list_model_get_n_items (G_LIST_MODEL (model)); i++)
+    g_assert_cmpuint (i + 1, ==, get (G_LIST_MODEL (model), i));
+
+  ignore_changes (model);
+
+  g_object_unref (store);
+  g_object_unref (model);
+  g_object_unref (removed);
+}
+
+static void
+test_out_of_bounds_access (void)
+{
+  GtkSortListModel *sort;
+  GListStore *store;
+  gpointer item;
+
+  store = new_store ((guint[]) { 4, 8, 2, 6, 10, 0 });
+  sort = new_model (store);
+
+  item = g_list_model_get_item (G_LIST_MODEL (sort), GTK_INVALID_LIST_POSITION);
+  g_assert_null (item);
 
   g_object_unref (store);
   g_object_unref (sort);
@@ -432,6 +553,8 @@ main (int argc, char *argv[])
   g_test_add_func ("/sortlistmodel/remove_items", test_remove_items);
 #endif
   g_test_add_func ("/sortlistmodel/stability", test_stability);
+  g_test_add_func ("/sortlistmodel/incremental/remove", test_incremental_remove);
+  g_test_add_func ("/sortlistmodel/oob-access", test_out_of_bounds_access);
 
   return g_test_run ();
 }
