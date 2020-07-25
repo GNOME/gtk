@@ -29,10 +29,10 @@ struct _GtkCssTransition
   GtkStyleAnimation parent;
 
   guint               property;
+  guint               finished;
   GtkCssValue        *start;
   GtkCssValue        *ease;
   GtkProgressTracker  tracker;
-  guint               finished;
 };
 
 

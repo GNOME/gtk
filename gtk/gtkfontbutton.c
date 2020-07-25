@@ -76,17 +76,19 @@ struct _GtkFontButton
   guint         show_preview_entry : 1;
   guint         modal    : 1;
 
+  GtkFontChooserLevel level;
+
   GtkWidget     *button;
   GtkWidget     *font_dialog;
   GtkWidget     *font_label;
   GtkWidget     *size_label;
   GtkWidget     *font_size_box;
 
+  int                   font_size;
   PangoFontDescription *font_desc;
   PangoFontFamily      *font_family;
   PangoFontFace        *font_face;
   PangoFontMap         *font_map;
-  int                   font_size;
   char                 *font_features;
   PangoLanguage        *language;
   char                 *preview_text;
@@ -94,8 +96,6 @@ struct _GtkFontButton
   gpointer              font_filter_data;
   GDestroyNotify        font_filter_data_destroy;
   GtkCssProvider       *provider;
-
-  GtkFontChooserLevel level;
 };
 
 struct _GtkFontButtonClass

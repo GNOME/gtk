@@ -87,7 +87,7 @@ struct _GtkRangePrivate
   GtkWidget    *highlight_widget;
   GtkWidget    *slider_widget;
 
-  GtkOrientation     orientation;
+  GtkGesture *drag_gesture;
 
   double   fill_level;
   double *marks;
@@ -113,7 +113,7 @@ struct _GtkRangePrivate
   /* Whether dragging is ongoing */
   guint in_drag                : 1;
 
-  GtkGesture *drag_gesture;
+  GtkOrientation     orientation;
 
   GtkScrollType autoscroll_mode;
   guint autoscroll_id;

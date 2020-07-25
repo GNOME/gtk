@@ -39,10 +39,6 @@ struct _GtkTextTagPrivate
                          * a pointer to the key from the entry in
                          * tkxt->tagTable, so it needn't be freed
                          * explicitly. */
-  int priority;  /* Priority of this tag within widget.  0
-                         * means lowest priority.  Exactly one tag
-                         * has each integer value between 0 and
-                         * numTags-1. */
   /*
    * Information for displaying text with this tag.  The information
    * belows acts as an override on information specified by lower-priority
@@ -53,6 +49,10 @@ struct _GtkTextTagPrivate
 
   GtkTextAttributes *values;
 
+  int priority;  /* Priority of this tag within widget.  0
+                         * means lowest priority.  Exactly one tag
+                         * has each integer value between 0 and
+                         * numTags-1. */
   /* Flags for whether a given value is set; if a value is unset, then
    * this tag does not affect it.
    */

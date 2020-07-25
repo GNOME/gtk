@@ -154,14 +154,14 @@ struct _GtkTextLayout
   */
   guint keyboard_direction : 2;
 
+  guint overwrite_mode : 1;
+
   /* The preedit string and attributes, if any */
 
   char *preedit_string;
   PangoAttrList *preedit_attrs;
   int preedit_len;
   int preedit_cursor;
-
-  guint overwrite_mode : 1;
 };
 
 struct _GtkTextLayoutClass

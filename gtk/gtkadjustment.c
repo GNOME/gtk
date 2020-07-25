@@ -57,9 +57,9 @@ struct _GtkAdjustmentPrivate {
   double target;
 
   guint duration;
+  guint tick_id;
   gint64 start_time;
   gint64 end_time;
-  guint tick_id;
   GdkFrameClock *clock;
 };
 typedef struct _GtkAdjustmentPrivate GtkAdjustmentPrivate;

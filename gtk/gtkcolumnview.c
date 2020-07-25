@@ -118,21 +118,21 @@ struct _GtkColumnView
 
   GtkAdjustment *hadjustment;
 
-  gboolean reorderable;
-  gboolean show_column_separators;
+  guint reorderable : 1;
+  guint show_column_separators : 1;
+  guint in_column_resize : 1;
+  guint in_column_reorder : 1;
 
-  gboolean in_column_resize;
-  gboolean in_column_reorder;
   int drag_pos;
   int drag_x;
   int drag_offset;
   int drag_column_x;
 
-  GtkGesture *drag_gesture;
-
   guint autoscroll_id;
   double autoscroll_x;
   double autoscroll_delta;
+
+  GtkGesture *drag_gesture;
 };
 
 struct _GtkColumnViewClass

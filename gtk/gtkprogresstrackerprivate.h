@@ -35,11 +35,11 @@ typedef struct _GtkProgressTracker GtkProgressTracker;
 
 struct _GtkProgressTracker
 {
-  gboolean is_running;
   guint64 last_frame_time;
   guint64 duration;
   double iteration;
   double iteration_count;
+  gboolean is_running;
 };
 
 void                 gtk_progress_tracker_init_copy           (GtkProgressTracker *source,

@@ -51,10 +51,10 @@ typedef struct _GtkWidgetSurfaceTransformData
   GtkWidget *tracked_parent;
   guint parent_surface_transform_changed_id;
 
-  GList *callbacks;
-
   gboolean cached_surface_transform_valid;
+
   graphene_matrix_t cached_surface_transform;
+  GList *callbacks;
 } GtkWidgetSurfaceTransformData;
 
 struct _GtkWidgetPrivate
@@ -105,8 +105,9 @@ struct _GtkWidgetPrivate
   guint   halign              : 4;
   guint   valign              : 4;
 
+  guint user_alpha            : 8;
+
   GtkOverflow overflow;
-  guint8 user_alpha;
 
 #ifdef G_ENABLE_CONSISTENCY_CHECKS
   /* Number of gtk_widget_push_verify_invariants () */
@@ -115,12 +116,13 @@ struct _GtkWidgetPrivate
 
   int width_request;
   int height_request;
-  void (* resize_func) (GtkWidget *);
-  GtkBorder margin;
 
   /* Animations and other things to update on clock ticks */
   guint clock_tick_id;
   GList *tick_callbacks;
+
+  void (* resize_func) (GtkWidget *);
+  GtkBorder margin;
 
   /* Surface relative transform updates callbacks */
   GtkWidgetSurfaceTransformData *surface_transform_data;
@@ -152,10 +154,10 @@ struct _GtkWidgetPrivate
   int allocated_height;
   int allocated_size_baseline;
 
-  GskTransform *transform;
   int width;
   int height;
   int baseline;
+  GskTransform *transform;
 
   /* The widget's requested sizes */
   SizeRequestCache requests;
