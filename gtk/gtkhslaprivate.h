@@ -25,17 +25,17 @@ G_BEGIN_DECLS
 typedef struct _GtkHSLA GtkHSLA;
 
 struct _GtkHSLA {
-  double hue;
-  double saturation;
-  double lightness;
-  double alpha;
+  float hue;
+  float saturation;
+  float lightness;
+  float alpha;
 };
 
 void            _gtk_hsla_init              (GtkHSLA          *hsla,
-                                             double            hue,
-                                             double            saturation,
-                                             double            lightness,
-                                             double            alpha);
+                                             float             hue,
+                                             float             saturation,
+                                             float             lightness,
+                                             float             alpha);
 void            _gtk_hsla_init_from_rgba    (GtkHSLA          *hsla,
                                              const GdkRGBA    *rgba);
 /* Yes, I can name that function like this! */
@@ -44,7 +44,7 @@ void            _gdk_rgba_init_from_hsla    (GdkRGBA          *rgba,
 
 void            _gtk_hsla_shade             (GtkHSLA          *dest,
                                              const GtkHSLA    *src,
-                                             double            factor);
+                                             float             factor);
 
 G_END_DECLS
 
