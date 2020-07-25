@@ -10,15 +10,13 @@ First you obviously need developer packages for the compile-time
 dependencies: GDK-Pixbuf, Pango, atk, glib, gettext-runtime, libiconv at least.
 See http://ftp.gnome.org/pub/gnome/binaries/win32/dependencies .
 
-For people compiling GTK+ with Visual C++ 2005 or later, it is
-recommended that the same compiler is used for at least GDK-Pixbuf,
-Pango, atk and glib so that crashes and errors caused by different CRTs
-can be avoided.  The VS 2008 project files and/or VS Makefiles are
-either already available or will be available in the next stable release.
-Unfortunately compiling with Microsoft's compilers versions 2003 or earlier
-is not supported as compiling the latest stable GLib (which *is* required for
-building this GTK+ release) requires features from newer compilers
-and/or Platform SDKs
+For people compiling GTK+ with Visual C++ or later, it is recommended that
+the same compiler is used for at least GDK-Pixbuf, Pango, atk and glib
+so that crashes and errors caused by different CRTs can be avoided. Currently
+building with Visual Studio 2008 or later is supported, either via Visual Studio
+project files or via the Meson build system, as described in the below sections.
+Interchanging between Visual Studio 2015, 2017 and 2019 builds should be fine
+as they use the same CRT (UCRT) DLLs.
 
 After installing the dependencies, there are two ways to build GTK+
 for win32.
@@ -152,16 +150,12 @@ would require such for ABI stability).
 2) Microsoft's tools
 --------------------
 
-Use the Microsoft compiler, cl and Make, nmake. Say nmake -f
-makefile.msc in gdk and gtk. Be prepared to manually edit various
-makefile.msc files, and the makefile snippets in build/win32.
-
-There are also VS 2008~2017 solution and project files to build GTK+, which
+There are VS 2008~2019 solution and project files to build GTK+, which
 are maintained by Chun-wei Fan.  They should build GTK+ out of the box,
 provided that the afore-mentioned dependencies are installed.  They will
 build GDK with the Win32 backend, GTK+ itself (with GAIL/a11y built in),
 the GAIL-Util library and the gtk-demo program.  Please also refer to the
-README file(s) that reside in build/win32 on how to enable additional features
+README file(s) that reside in win32 on how to enable additional features
 that are not enabled by default, such as EGL support via libANGLE, which
 emulate the GL/EGL calls using Direct3D 9/11.
 
