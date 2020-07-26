@@ -425,7 +425,7 @@ gtk_flatten_list_model_init (GtkFlattenListModel *self)
 
 /**
  * gtk_flatten_list_model_new:
- * @model: (nullable) (transfer none): the model to be flattened
+ * @model: (nullable) (transfer full): the model to be flattened
  *
  * Creates a new #GtkFlattenListModel that flattens @list.
  *
@@ -441,6 +441,9 @@ gtk_flatten_list_model_new (GListModel *model)
   result = g_object_new (GTK_TYPE_FLATTEN_LIST_MODEL,
                          "model", model,
                          NULL);
+
+  /* we consume the reference */
+  g_clear_object (&model);
 
   return result;
 }

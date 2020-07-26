@@ -174,28 +174,29 @@ constraint_view_init (ConstraintView *self)
   manager = gtk_constraint_layout_new ();
   gtk_widget_set_layout_manager (GTK_WIDGET (self), manager);
 
-  all_children = gtk_widget_observe_children (GTK_WIDGET (self));
-  all_constraints = gtk_constraint_layout_observe_constraints (GTK_CONSTRAINT_LAYOUT (manager));
   guides = gtk_constraint_layout_observe_guides (GTK_CONSTRAINT_LAYOUT (manager));
+
+  all_constraints = gtk_constraint_layout_observe_constraints (GTK_CONSTRAINT_LAYOUT (manager));
   filter = gtk_custom_filter_new (omit_internal, NULL, NULL);
   constraints = (GListModel *)gtk_filter_list_model_new (all_constraints, filter);
   g_object_unref (filter);
+  g_object_unref (all_constraints);
+
+  all_children = gtk_widget_observe_children (GTK_WIDGET (self));
   filter = gtk_custom_filter_new (omit_internal, NULL, NULL);
   children = (GListModel *)gtk_filter_list_model_new (all_children, filter);
   g_object_unref (filter);
+  g_object_unref (all_children);
 
   list = g_list_store_new (G_TYPE_LIST_MODEL);
   g_list_store_append (list, children);
   g_list_store_append (list, guides);
   g_list_store_append (list, constraints);
-  self->model = G_LIST_MODEL (gtk_flatten_list_model_new (G_LIST_MODEL (list)));
   g_object_unref (children);
   g_object_unref (guides);
   g_object_unref (constraints);
-  g_object_unref (all_children);
-  g_object_unref (all_constraints);
-  g_object_unref (list);
 
+  self->model = G_LIST_MODEL (gtk_flatten_list_model_new (G_LIST_MODEL (list)));
 
   controller = (GtkEventController *)gtk_gesture_drag_new ();
   g_signal_connect (controller, "drag-begin", G_CALLBACK (drag_begin), self);

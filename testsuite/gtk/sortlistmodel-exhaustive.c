@@ -433,7 +433,6 @@ test_stability (gconstpointer model_id)
   g_object_unref (sort2);
   g_object_unref (sort1);
   g_object_unref (flatten);
-  g_object_unref (store);
 }
 
 static void
