@@ -31,13 +31,13 @@ GDK_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (GtkMultiSelection, gtk_multi_selection, GTK, MULTI_SELECTION, GObject)
 
 GDK_AVAILABLE_IN_ALL
-GListModel *    gtk_multi_selection_new                (GListModel           *model);
+GtkMultiSelection * gtk_multi_selection_new                (GListModel           *model);
 
 GDK_AVAILABLE_IN_ALL
-GListModel *    gtk_multi_selection_get_model          (GtkMultiSelection    *self);
+GListModel *        gtk_multi_selection_get_model          (GtkMultiSelection    *self);
 GDK_AVAILABLE_IN_ALL
-void            gtk_multi_selection_set_model          (GtkMultiSelection    *self,
-                                                        GListModel           *model);
+void                gtk_multi_selection_set_model          (GtkMultiSelection    *self,
+                                                            GListModel           *model);
 
 G_END_DECLS
 

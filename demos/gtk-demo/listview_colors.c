@@ -884,7 +884,7 @@ do_listview_colors (GtkWidget *do_widget)
 
       sort_model = gtk_sort_list_model_new (gtk_color_list_new (0), NULL);
       gtk_sort_list_model_set_incremental (sort_model, TRUE);
-      selection = GTK_MULTI_SELECTION (gtk_multi_selection_new (G_LIST_MODEL (sort_model)));
+      selection = gtk_multi_selection_new (G_LIST_MODEL (sort_model));
 
       window = gtk_window_new ();
       gtk_window_set_title (GTK_WINDOW (window), "Colors");

@@ -253,7 +253,7 @@ new_model (GListStore *store)
   GtkSelectionModel *result;
   GString *changes;
 
-  result = GTK_SELECTION_MODEL (gtk_multi_selection_new (G_LIST_MODEL (store)));
+  result = GTK_SELECTION_MODEL (gtk_multi_selection_new (g_object_ref (G_LIST_MODEL (store))));
 
   changes = g_string_new ("");
   g_object_set_qdata_full (G_OBJECT(result), changes_quark, changes, free_changes);
