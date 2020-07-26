@@ -144,6 +144,11 @@ test_type (gconstpointer data)
       if ((pspec->flags & G_PARAM_READABLE) == 0)
 	continue;
 
+      /* This is set via class_init, and we have a11y tests to verify it */
+      if (g_type_is_a (type, GTK_TYPE_ACCESSIBLE) &&
+          strcmp (pspec->name, "accessible-role") == 0)
+        continue;
+
       /* This is set via construct property */
       if (g_type_is_a (type, GTK_TYPE_BUILDER) &&
           strcmp (pspec->name, "scope") == 0)
@@ -387,7 +392,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 	continue;
 
       if (g_type_is_a (type, GTK_TYPE_WIDGET) &&
-	  (strcmp (pspec->name, "name") == 0 ||
+          (strcmp (pspec->name, "name") == 0 ||
 	   strcmp (pspec->name, "display") == 0 ||
 	   strcmp (pspec->name, "style") == 0))
 	continue;

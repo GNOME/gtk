@@ -522,6 +522,10 @@ test_type (gconstpointer data)
            g_str_equal (pspec->name, "vexpand")))
         continue;
 
+      if (g_type_is_a (type, GTK_TYPE_ACCESSIBLE) &&
+          g_str_equal (pspec->name, "accessible-role"))
+        continue;
+
       if (pspec->owner_type == GTK_TYPE_ENTRY &&
           g_str_equal (pspec->name, "im-module"))
         continue;

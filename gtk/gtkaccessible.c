@@ -62,7 +62,6 @@ gtk_accessible_default_init (GtkAccessibleInterface *iface)
                        GTK_TYPE_ACCESSIBLE_ROLE,
                        GTK_ACCESSIBLE_ROLE_NONE,
                        G_PARAM_READWRITE |
-                       G_PARAM_CONSTRUCT_ONLY |
                        G_PARAM_STATIC_STRINGS);
 
   g_object_interface_install_property (iface, pspec);

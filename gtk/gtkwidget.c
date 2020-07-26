@@ -1721,7 +1721,19 @@ gtk_widget_set_property (GObject         *object,
       gtk_widget_set_layout_manager (widget, g_value_dup_object (value));
       break;
     case PROP_ACCESSIBLE_ROLE:
-      priv->accessible_role = g_value_get_enum (value);
+      if (priv->at_context == NULL)
+        {
+          priv->accessible_role = g_value_get_enum (value);
+          g_object_notify_by_pspec (object, pspec);
+        }
+      else
+        {
+          char *role_str = g_enum_to_string (GTK_TYPE_ACCESSIBLE_ROLE, priv->accessible_role);
+          g_critical ("Widget of type “%s” already has an accessible role of type “%s”",
+                      G_OBJECT_TYPE_NAME (object),
+                      role_str);
+          g_free (role_str);
+        }
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -8111,8 +8123,8 @@ gtk_widget_accessible_get_at_context (GtkAccessible *accessible)
       else
         role = class_priv->accessible_role;
 
-      priv->at_context = gtk_at_context_create (role, accessible);
       priv->accessible_role = role;
+      priv->at_context = gtk_at_context_create (role, accessible);
     }
 
   return priv->at_context;
