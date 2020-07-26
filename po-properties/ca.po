@@ -2259,7 +2259,7 @@ msgstr "Si el representador de cel·les està en mode d'edició"
 
 #: gtk/gtkcellrenderer.c:441
 msgid "Cell background set"
-msgstr "Conjunt de fons de la cel·la"
+msgstr "Fons de la cel·la definit"
 
 #: gtk/gtkcellrenderer.c:442
 msgid "Whether the cell background color is set"
@@ -2495,7 +2495,7 @@ msgstr "Color de fons com a GdkColor"
 
 #: gtk/gtkcellrenderertext.c:313
 msgid "Background color as RGBA"
-msgstr "Color RGBA de fons"
+msgstr "Color de fons com a RGBA"
 
 #: gtk/gtkcellrenderertext.c:314 gtk/gtkcellview.c:249 gtk/gtktexttag.c:247
 msgid "Background color as a GdkRGBA"
@@ -2607,7 +2607,7 @@ msgstr ""
 
 #: gtk/gtkcellrenderertext.c:450 gtk/gtktexttag.c:516
 msgid "Strikethrough"
-msgstr "Ratlla"
+msgstr "Ratllat"
 
 #: gtk/gtkcellrenderertext.c:451 gtk/gtktexttag.c:517
 msgid "Whether to strike through the text"
@@ -2615,7 +2615,7 @@ msgstr "Si s'ha de ratllar el text"
 
 #: gtk/gtkcellrenderertext.c:457 gtk/gtktexttag.c:524
 msgid "Underline"
-msgstr "Subratlla"
+msgstr "Subratllat"
 
 #: gtk/gtkcellrenderertext.c:458 gtk/gtktexttag.c:525
 msgid "Style of underline for this text"
@@ -2702,7 +2702,7 @@ msgstr "El text que es mostra quan una cel·la editable està buida"
 
 #: gtk/gtkcellrenderertext.c:606 gtk/gtkcellview.c:353 gtk/gtktexttag.c:722
 msgid "Background set"
-msgstr "Conjunt de fons"
+msgstr "Fons definit"
 
 #: gtk/gtkcellrenderertext.c:607 gtk/gtkcellview.c:354 gtk/gtktexttag.c:723
 msgid "Whether this tag affects the background color"
@@ -2710,7 +2710,7 @@ msgstr "Si aquesta etiqueta afecta el color de fons"
 
 #: gtk/gtkcellrenderertext.c:610 gtk/gtktexttag.c:730
 msgid "Foreground set"
-msgstr "Primer pla"
+msgstr "Primer pla definit"
 
 #: gtk/gtkcellrenderertext.c:611 gtk/gtktexttag.c:731
 msgid "Whether this tag affects the foreground color"
@@ -2726,7 +2726,7 @@ msgstr "Com afecta aquesta etiqueta l'editabilitat"
 
 #: gtk/gtkcellrenderertext.c:618 gtk/gtktexttag.c:738
 msgid "Font family set"
-msgstr "Famílies de tipus de lletra"
+msgstr "Família de tipus de lletra definida"
 
 #: gtk/gtkcellrenderertext.c:619 gtk/gtktexttag.c:739
 msgid "Whether this tag affects the font family"
@@ -2734,7 +2734,7 @@ msgstr "Com afecta aquesta etiqueta la família de tipus de lletra"
 
 #: gtk/gtkcellrenderertext.c:622 gtk/gtktexttag.c:742
 msgid "Font style set"
-msgstr "Estils de tipus de lletra"
+msgstr "Estil de tipus de lletra definit"
 
 #: gtk/gtkcellrenderertext.c:623 gtk/gtktexttag.c:743
 msgid "Whether this tag affects the font style"
@@ -2742,7 +2742,7 @@ msgstr "Com afecta aquesta etiqueta l'estil de tipus de lletra"
 
 #: gtk/gtkcellrenderertext.c:626 gtk/gtktexttag.c:746
 msgid "Font variant set"
-msgstr "Variants de tipus de lletra"
+msgstr "Variant de tipus de lletra definida"
 
 #: gtk/gtkcellrenderertext.c:627 gtk/gtktexttag.c:747
 msgid "Whether this tag affects the font variant"
@@ -2750,7 +2750,7 @@ msgstr "Com afecta aquesta etiqueta la variant de tipus de lletra"
 
 #: gtk/gtkcellrenderertext.c:630 gtk/gtktexttag.c:750
 msgid "Font weight set"
-msgstr "Pes de tipus de lletra"
+msgstr "Pes de tipus de lletra definit"
 
 #: gtk/gtkcellrenderertext.c:631 gtk/gtktexttag.c:751
 msgid "Whether this tag affects the font weight"
@@ -2758,7 +2758,7 @@ msgstr "Si aquesta etiqueta afecta el pes del tipus de lletra"
 
 #: gtk/gtkcellrenderertext.c:634 gtk/gtktexttag.c:754
 msgid "Font stretch set"
-msgstr "Estirament del tipus de lletra"
+msgstr "Estirament del tipus de lletra definit"
 
 #: gtk/gtkcellrenderertext.c:635 gtk/gtktexttag.c:755
 msgid "Whether this tag affects the font stretch"
@@ -2766,7 +2766,7 @@ msgstr "Com afecta aquesta etiqueta l'estirament de tipus de lletra"
 
 #: gtk/gtkcellrenderertext.c:638 gtk/gtktexttag.c:758
 msgid "Font size set"
-msgstr "Mides del tipus de lletra"
+msgstr "Mida del tipus de lletra definit"
 
 #: gtk/gtkcellrenderertext.c:639 gtk/gtktexttag.c:759
 msgid "Whether this tag affects the font size"
@@ -2774,7 +2774,7 @@ msgstr "Si aquesta etiqueta afecta la mida del tipus de lletra"
 
 #: gtk/gtkcellrenderertext.c:642 gtk/gtktexttag.c:762
 msgid "Font scale set"
-msgstr "Escala del tipus de lletra"
+msgstr "Escala del tipus de lletra definit"
 
 #: gtk/gtkcellrenderertext.c:643 gtk/gtktexttag.c:763
 msgid "Whether this tag scales the font size by a factor"
@@ -2782,7 +2782,7 @@ msgstr "Si aquesta etiqueta escala la mida del tipus de lletra per un factor"
 
 #: gtk/gtkcellrenderertext.c:646 gtk/gtktexttag.c:782
 msgid "Rise set"
-msgstr "Elevació"
+msgstr "Elevació definida"
 
 #: gtk/gtkcellrenderertext.c:647 gtk/gtktexttag.c:783
 msgid "Whether this tag affects the rise"
@@ -2806,7 +2806,7 @@ msgstr "Si aquesta etiqueta afecta el subratllat"
 
 #: gtk/gtkcellrenderertext.c:658 gtk/gtktexttag.c:770
 msgid "Language set"
-msgstr "Idioma"
+msgstr "Llengua definida"
 
 #: gtk/gtkcellrenderertext.c:659 gtk/gtktexttag.c:771
 msgid "Whether this tag affects the language the text is rendered as"
@@ -2814,7 +2814,7 @@ msgstr "Si aquesta etiqueta afecta l'idioma amb què es representa el text"
 
 #: gtk/gtkcellrenderertext.c:662
 msgid "Ellipsize set"
-msgstr "Punts suspensius"
+msgstr "Punts suspensius definits"
 
 #: gtk/gtkcellrenderertext.c:663
 msgid "Whether this tag affects the ellipsize mode"
@@ -2822,7 +2822,7 @@ msgstr "Si aquesta etiqueta afecta el mode de punts suspensius"
 
 #: gtk/gtkcellrenderertext.c:666
 msgid "Align set"
-msgstr "Alineació activada"
+msgstr "Alineació definida"
 
 #: gtk/gtkcellrenderertext.c:667
 msgid "Whether this tag affects the alignment mode"

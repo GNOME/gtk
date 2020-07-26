@@ -4038,7 +4038,7 @@ msgstr "Ajusta el volum"
 
 #: gtk/gtkvolumebutton.c:232
 msgid "Muted"
-msgstr "Silencia"
+msgstr "Silenciat"
 
 #: gtk/gtkvolumebutton.c:236
 msgid "Full Volume"
@@ -5175,7 +5175,7 @@ msgstr "Amplades proporcionals"
 #: gtk/open-type-layout.h:94
 msgctxt "OpenType layout"
 msgid "Quarter Widths"
-msgstr "Dividir amplades"
+msgstr "Quarts d'amplada"
 
 #: gtk/open-type-layout.h:95
 msgctxt "OpenType layout"
@@ -6241,7 +6241,7 @@ msgstr "Súper B"
 #: gtk/paper_names_offsets.c:158
 msgctxt "paper size"
 msgid "Wide Format"
-msgstr "Format ample"
+msgstr "Foto ampla"
 
 #: gtk/paper_names_offsets.c:159
 msgctxt "paper size"
@@ -6346,7 +6346,7 @@ msgstr "Sobre prc4"
 #: gtk/paper_names_offsets.c:179
 msgctxt "paper size"
 msgid "prc5 Envelope"
-msgstr "Sobre c5"
+msgstr "Sobre prc5"
 
 #: gtk/paper_names_offsets.c:180
 msgctxt "paper size"
