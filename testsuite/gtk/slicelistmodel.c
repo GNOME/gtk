@@ -191,6 +191,8 @@ new_model (GListStore *store, guint offset, guint size)
   GtkSliceListModel *result;
   GString *changes;
 
+  if (store)
+    g_object_ref (store);
   result = gtk_slice_list_model_new (G_LIST_MODEL (store), offset, size);
 
   changes = g_string_new ("");
