@@ -210,6 +210,8 @@ new_model (GListStore *store)
   GtkFlattenListModel *result;
   GString *changes;
 
+  if (store)
+    g_object_ref (store);
   result = gtk_flatten_list_model_new (G_LIST_MODEL (store));
   changes = g_string_new ("");
   g_object_set_qdata_full (G_OBJECT(result), changes_quark, changes, free_changes);

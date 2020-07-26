@@ -116,7 +116,6 @@ static GListModel *
 object_tree_widget_get_children (GObject *object)
 {
   GtkWidget *widget = GTK_WIDGET (object);
-  GtkFlattenListModel *flatten;
   GListStore *list;
   GListModel *sublist;
 
@@ -130,10 +129,7 @@ object_tree_widget_get_children (GObject *object)
   g_list_store_append (list, sublist);
   g_object_unref (sublist);
 
-  flatten = gtk_flatten_list_model_new (G_LIST_MODEL (list));
-  g_object_unref (list);
-
-  return G_LIST_MODEL (flatten);
+  return G_LIST_MODEL (gtk_flatten_list_model_new (G_LIST_MODEL (list)));
 }
 
 static GListModel *
@@ -211,7 +207,6 @@ list_model_for_properties (GObject     *object,
                            const char **props)
 {
   GListStore *concat;
-  GListModel *result;
   guint i;
 
   if (props[1] == NULL)
@@ -225,9 +220,7 @@ list_model_for_properties (GObject     *object,
       g_object_unref (tmp);
     }
 
-  result = G_LIST_MODEL (gtk_flatten_list_model_new (G_LIST_MODEL (concat)));
-  g_object_unref (concat);
-  return result;
+  return G_LIST_MODEL (gtk_flatten_list_model_new (G_LIST_MODEL (concat)));
 }
 
 static GListModel *
@@ -310,7 +303,6 @@ object_tree_tree_view_get_children (GObject *object)
   GtkTreeView *treeview = GTK_TREE_VIEW (object);
   GListStore *columns, *selection, *result_list;
   GListModel *props;
-  GtkFlattenListModel *result;
   guint i;
 
   props = list_model_for_properties (object, (const char *[2]) { "model", NULL });
@@ -330,10 +322,8 @@ object_tree_tree_view_get_children (GObject *object)
   g_object_unref (selection);
   g_list_store_append (result_list, columns);
   g_object_unref (columns);
-  result = gtk_flatten_list_model_new (G_LIST_MODEL (result_list));
-  g_object_unref (result_list);
 
-  return G_LIST_MODEL (result);
+  return G_LIST_MODEL (gtk_flatten_list_model_new (G_LIST_MODEL (result_list)));
 }
 
 static GListModel *
@@ -341,7 +331,6 @@ object_tree_column_view_get_children (GObject *object)
 {
   GtkColumnView *view = GTK_COLUMN_VIEW (object);
   GListStore *result_list;
-  GtkFlattenListModel *result;
   GListModel *columns, *sublist;
 
   result_list = g_list_store_new (G_TYPE_LIST_MODEL);
@@ -353,10 +342,7 @@ object_tree_column_view_get_children (GObject *object)
   g_list_store_append (result_list, sublist);
   g_object_unref (sublist);
 
-  result = gtk_flatten_list_model_new (G_LIST_MODEL (result_list));
-  g_object_unref (result_list);
-
-  return G_LIST_MODEL (result);
+  return G_LIST_MODEL (gtk_flatten_list_model_new (G_LIST_MODEL (result_list)));
 }
 
 static GListModel *
@@ -602,12 +588,11 @@ static GListModel *
 object_get_children (GObject *object)
 {
   GType object_type;
-  GListModel *result, *children;
+  GListModel *children;
   GListStore *result_list;
   guint i;
 
   object_type = G_OBJECT_TYPE (object);
-  result = NULL;
   result_list = NULL;
 
   for (i = 0; i < G_N_ELEMENTS (object_tree_class_funcs); i++)
@@ -619,32 +604,17 @@ object_get_children (GObject *object)
       if (children == NULL)
         continue;
 
-      if (result_list)
-        {
-          g_list_store_append (result_list, children);
-          g_object_unref (children);
-        }
-      else if (result == NULL)
-        {
-          result = children;
-        }
-      else
-        {
-          result_list = g_list_store_new (G_TYPE_LIST_MODEL);
-          g_list_store_append (result_list, result);
-          g_object_unref (result);
-          g_list_store_append (result_list, children);
-          g_object_unref (children);
-        }
+      if (!result_list)
+        result_list = g_list_store_new (G_TYPE_LIST_MODEL);
+
+      g_list_store_append (result_list, children);
+      g_object_unref (children);
     }
 
   if (result_list)
-    {
-      result = G_LIST_MODEL (gtk_flatten_list_model_new (G_LIST_MODEL (result_list)));
-      g_object_unref (result_list);
-    }
-
-  return result;
+    return G_LIST_MODEL (gtk_flatten_list_model_new (G_LIST_MODEL (result_list)));
+  else
+    return NULL;
 }
 
 static const char *
@@ -1167,7 +1137,6 @@ create_root_model (GdkDisplay *display)
 {
   GtkFilter *custom_filter;
   GtkFilterListModel *filter;
-  GtkFlattenListModel *flatten;
   GListStore *list, *special;
   gpointer item;
 
@@ -1182,16 +1151,13 @@ create_root_model (GdkDisplay *display)
   g_object_unref (special);
 
   filter = gtk_filter_list_model_new (NULL, NULL);
-  custom_filter = gtk_custom_filter_new (toplevel_filter_func,
-                                         display, NULL);
+  custom_filter = gtk_custom_filter_new (toplevel_filter_func, display, NULL);
   gtk_filter_list_model_set_filter (filter, custom_filter);
   gtk_filter_list_model_set_model (filter, gtk_window_get_toplevels ());
   g_list_store_append (list, filter);
   g_object_unref (filter);
 
-  flatten = gtk_flatten_list_model_new (G_LIST_MODEL (list));
-  g_object_unref (list);
-  return G_LIST_MODEL (flatten);
+  return G_LIST_MODEL (gtk_flatten_list_model_new (G_LIST_MODEL (list)));
 }
 
 static void
@@ -1332,18 +1298,13 @@ void
 gtk_inspector_object_tree_set_display (GtkInspectorObjectTree *wt,
                                        GdkDisplay *display)
 {
-  GListModel *root_model;
-
-  root_model = create_root_model (display);
-  wt->priv->tree_model = gtk_tree_list_model_new (FALSE,
-                                                  root_model,
+  wt->priv->tree_model = gtk_tree_list_model_new (create_root_model (display),
+                                                  FALSE,
                                                   FALSE,
                                                   create_model_for_object,
                                                   NULL,
                                                   NULL);
-  wt->priv->selection = gtk_single_selection_new (G_LIST_MODEL (wt->priv->tree_model));
-  g_object_unref (root_model);
-
+  wt->priv->selection = gtk_single_selection_new (g_object_ref (G_LIST_MODEL (wt->priv->tree_model)));
   gtk_column_view_set_model (GTK_COLUMN_VIEW (wt->priv->list),
                              G_LIST_MODEL (wt->priv->selection));
 }

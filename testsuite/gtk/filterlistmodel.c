@@ -167,8 +167,7 @@ new_model (guint               size,
     filter = gtk_custom_filter_new (filter_func, data, NULL);
   else
     filter = NULL;
-  result = gtk_filter_list_model_new (G_LIST_MODEL (new_store (1, size, 1)), filter);
-  g_clear_object (&filter);
+  result = gtk_filter_list_model_new (g_object_ref (G_LIST_MODEL (new_store (1, size, 1))), filter);
   changes = g_string_new ("");
   g_object_set_qdata_full (G_OBJECT(result), changes_quark, changes, free_changes);
   g_signal_connect (result, "items-changed", G_CALLBACK (items_changed), changes);

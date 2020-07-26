@@ -203,7 +203,7 @@ test_nested (void)
   filter = gtk_string_filter_new (NULL);
   gtk_string_filter_set_search (GTK_STRING_FILTER (filter), "word");
   list = G_LIST_MODEL (g_list_store_new (G_TYPE_OBJECT));
-  filtered = gtk_filter_list_model_new (list, filter);
+  filtered = gtk_filter_list_model_new (list, g_object_ref (filter));
 
   list_expr = gtk_object_expression_new (G_OBJECT (filtered));
   filter_expr = gtk_property_expression_new (GTK_TYPE_FILTER_LIST_MODEL, list_expr, "filter");
@@ -262,8 +262,6 @@ test_nested (void)
   g_assert_cmpint (counter, ==, 0);
 
   g_object_unref (filtered);
-  g_object_unref (list);
-  g_object_unref (filter);
   gtk_expression_unref (expr);
 }
 
@@ -292,7 +290,7 @@ test_nested_this_destroyed (void)
   filter = gtk_string_filter_new (NULL);
   gtk_string_filter_set_search (GTK_STRING_FILTER (filter), "word");
   list = G_LIST_MODEL (g_list_store_new (G_TYPE_OBJECT));
-  filtered = gtk_filter_list_model_new (list, filter);
+  filtered = gtk_filter_list_model_new (list, g_object_ref (filter));
 
   list_expr = gtk_object_expression_new (G_OBJECT (filtered));
   filter_expr = gtk_property_expression_new (GTK_TYPE_FILTER_LIST_MODEL, list_expr, "filter");
@@ -333,7 +331,6 @@ test_nested_this_destroyed (void)
   g_assert_cmpint (counter, ==, 0);
 
   g_object_unref (filtered);
-  g_object_unref (list);
   g_object_unref (filter);
   gtk_expression_unref (expr);
 }
@@ -492,11 +489,8 @@ test_bind_child (void)
                                       "filter");
 
   filter = gtk_string_filter_new (NULL);
-  child = gtk_filter_list_model_new (NULL, NULL);
-  gtk_filter_list_model_set_filter (child, filter);
+  child = gtk_filter_list_model_new (NULL, filter);
   target = gtk_filter_list_model_new (G_LIST_MODEL (child), NULL);
-  g_object_unref (child);
-  g_object_unref (filter);
 
   gtk_expression_bind (expr, target, "filter", child);
   g_assert_true (gtk_filter_list_model_get_filter (child) == gtk_filter_list_model_get_filter (target));
@@ -528,7 +522,7 @@ test_nested_bind (void)
   gtk_string_filter_set_search (GTK_STRING_FILTER (filter2), "sausage");
 
   list = G_LIST_MODEL (g_list_store_new (G_TYPE_OBJECT));
-  filtered = gtk_filter_list_model_new (list, filter2);
+  filtered = gtk_filter_list_model_new (list, g_object_ref (filter2));
 
   filter_expr = gtk_property_expression_new (GTK_TYPE_FILTER_LIST_MODEL,
                                              gtk_object_expression_new (G_OBJECT (filtered)),
@@ -566,7 +560,6 @@ test_nested_bind (void)
   g_object_unref (filter2);
   g_object_unref (filter3);
   g_object_unref (filtered);
-  g_object_unref (list);
 
   gtk_expression_unref (expr);
   gtk_expression_unref (filter_expr);
@@ -709,7 +702,6 @@ test_bind_object (void)
 
   gtk_expression_unref (expr);
   g_object_unref (model);
-  g_object_unref (store);
 }
 
 int

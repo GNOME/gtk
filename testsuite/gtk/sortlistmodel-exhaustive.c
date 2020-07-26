@@ -200,9 +200,9 @@ create_sort_list_model (gconstpointer  model_id,
   guint id = GPOINTER_TO_UINT (model_id);
 
   if (track_changes)
-    model = sort_list_model_new (id & 1 ? NULL : source, id & 2 ? NULL : sorter);
+    model = sort_list_model_new (((id & 1) || !source) ? NULL : g_object_ref (source), ((id & 2) || !sorter) ? NULL : g_object_ref (sorter));
   else
-    model = gtk_sort_list_model_new (id & 1 ? NULL : source, id & 2 ? NULL : sorter);
+    model = gtk_sort_list_model_new (((id & 1) || !source) ? NULL : g_object_ref (source), ((id & 2) || !sorter) ? NULL : g_object_ref (sorter));
 
   switch (id >> 2)
   {
@@ -433,7 +433,6 @@ test_stability (gconstpointer model_id)
   g_object_unref (sort2);
   g_object_unref (sort1);
   g_object_unref (flatten);
-  g_object_unref (store);
 }
 
 static void

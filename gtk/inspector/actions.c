@@ -46,7 +46,7 @@ struct _GtkInspectorActions
 
   GObject *object;
 
-  GListModel *actions;
+  GListStore *actions;
   GtkColumnViewColumn *name;
 };
 
@@ -79,7 +79,7 @@ action_added (GObject             *owner,
               GtkInspectorActions *sl)
 {
   ActionHolder *holder = action_holder_new (owner, action_name);
-  g_list_store_append (G_LIST_STORE (sl->actions), holder);
+  g_list_store_append (sl->actions, holder);
   g_object_unref (holder);
 }
 
@@ -283,7 +283,7 @@ add_muxer (GtkInspectorActions *sl,
 static gboolean
 reload (GtkInspectorActions *sl)
 {
-  g_list_store_remove_all (G_LIST_STORE (sl->actions));
+  g_list_store_remove_all (sl->actions);
 
   if (GTK_IS_APPLICATION (sl->object))
     {
@@ -395,12 +395,11 @@ constructed (GObject *object)
   gtk_column_view_column_set_sorter (sl->name, sorter);
   g_object_unref (sorter);
 
-  sl->actions = G_LIST_MODEL (g_list_store_new (ACTION_TYPE_HOLDER));
-  sorted = G_LIST_MODEL (gtk_sort_list_model_new (sl->actions,
-                                                  gtk_column_view_get_sorter (GTK_COLUMN_VIEW (sl->list))));
+  sl->actions = g_list_store_new (ACTION_TYPE_HOLDER);
+  sorted = G_LIST_MODEL (gtk_sort_list_model_new (g_object_ref (G_LIST_MODEL (sl->actions)),
+                                                  g_object_ref (gtk_column_view_get_sorter (GTK_COLUMN_VIEW (sl->list)))));
   model = G_LIST_MODEL (gtk_no_selection_new (sorted));
   gtk_column_view_set_model (GTK_COLUMN_VIEW (sl->list), model);
-  g_object_unref (sorted);
   g_object_unref (model);
 }
 

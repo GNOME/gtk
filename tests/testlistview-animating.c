@@ -127,7 +127,6 @@ main (int   argc,
     add (store);
   sorter = gtk_numeric_sorter_new (gtk_cclosure_expression_new (G_TYPE_UINT, NULL, 0, NULL, (GCallback)get_number, NULL, NULL));
   sort = gtk_sort_list_model_new (G_LIST_MODEL (store), sorter);
-  g_object_unref (sorter);
 
   win = gtk_window_new ();
   gtk_window_set_default_size (GTK_WINDOW (win), 400, 600);
@@ -149,7 +148,7 @@ main (int   argc,
   factory = gtk_signal_list_item_factory_new ();
   g_signal_connect (factory, "setup", G_CALLBACK (setup_list_item), NULL);
   g_signal_connect (factory, "bind", G_CALLBACK (bind_list_item), NULL);
-  listview = gtk_list_view_new_with_factory (factory);
+  listview = gtk_list_view_new_with_factory (NULL, factory);
 
   gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (sw), listview);
 
@@ -181,8 +180,6 @@ main (int   argc,
   toplevels = gtk_window_get_toplevels ();
   while (g_list_model_get_n_items (toplevels))
     g_main_context_iteration (NULL, TRUE);
-
-  g_object_unref (store);
 
   return 0;
 }

@@ -1136,8 +1136,8 @@ activate (GApplication *app)
   g_signal_connect (search_bar, "notify::search-mode-enabled", G_CALLBACK (clear_search), NULL);
 
   listmodel = create_demo_model ();
-  treemodel = gtk_tree_list_model_new (FALSE,
-                                       G_LIST_MODEL (listmodel),
+  treemodel = gtk_tree_list_model_new (G_LIST_MODEL (listmodel),
+                                       FALSE,
                                        TRUE,
                                        get_child_model,
                                        NULL,
@@ -1145,6 +1145,7 @@ activate (GApplication *app)
   filter_model = gtk_filter_list_model_new (G_LIST_MODEL (treemodel), NULL);
   filter = gtk_custom_filter_new ((GtkCustomFilterFunc)demo_filter_by_name, filter_model, NULL);
   gtk_filter_list_model_set_filter (filter_model, filter);
+  g_object_unref (filter);
   search_entry = GTK_WIDGET (gtk_builder_get_object (builder, "search-entry"));
   g_signal_connect (search_entry, "search-changed", G_CALLBACK (demo_search_changed_cb), filter);
 

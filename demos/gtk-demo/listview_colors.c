@@ -663,7 +663,7 @@ create_color_grid (void)
   GtkWidget *gridview;
   GtkListItemFactory *factory;
 
-  gridview = gtk_grid_view_new ();
+  gridview = gtk_grid_view_new (NULL);
   gtk_scrollable_set_hscroll_policy (GTK_SCROLLABLE (gridview), GTK_SCROLL_NATURAL);
   gtk_scrollable_set_vscroll_policy (GTK_SCROLLABLE (gridview), GTK_SCROLL_NATURAL);
 
@@ -884,7 +884,7 @@ do_listview_colors (GtkWidget *do_widget)
 
       sort_model = gtk_sort_list_model_new (gtk_color_list_new (0), NULL);
       gtk_sort_list_model_set_incremental (sort_model, TRUE);
-      selection = GTK_MULTI_SELECTION (gtk_multi_selection_new (G_LIST_MODEL (sort_model)));
+      selection = gtk_multi_selection_new (G_LIST_MODEL (sort_model));
 
       window = gtk_window_new ();
       gtk_window_set_title (GTK_WINDOW (window), "Colors");
@@ -950,7 +950,7 @@ do_listview_colors (GtkWidget *do_widget)
 
       factory = gtk_signal_list_item_factory_new ();
       g_signal_connect (factory, "setup", G_CALLBACK (setup_selection_listitem_cb), NULL);
-      selection_view = gtk_grid_view_new_with_factory (factory);
+      selection_view = gtk_grid_view_new_with_factory (NULL, factory);
       gtk_widget_add_css_class (selection_view, "compact");
       gtk_grid_view_set_max_columns (GTK_GRID_VIEW (selection_view), 200);
       gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (sw), selection_view);
@@ -970,7 +970,6 @@ do_listview_colors (GtkWidget *do_widget)
 
       no_selection = G_LIST_MODEL (gtk_no_selection_new (selection_filter));
       gtk_grid_view_set_model (GTK_GRID_VIEW (selection_view), no_selection);
-      g_object_unref (selection_filter);
       g_object_unref (no_selection);
 
       selection_info_toggle = gtk_toggle_button_new ();

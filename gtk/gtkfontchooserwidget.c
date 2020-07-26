@@ -784,7 +784,7 @@ update_fontlist (GtkFontChooserWidget *self)
   if ((self->level & GTK_FONT_CHOOSER_LEVEL_STYLE) == 0)
     model = g_object_ref (G_LIST_MODEL (fontmap));
   else
-    model = G_LIST_MODEL (gtk_flatten_list_model_new (G_LIST_MODEL (fontmap)));
+    model = G_LIST_MODEL (gtk_flatten_list_model_new (G_LIST_MODEL (g_object_ref (fontmap))));
   gtk_filter_list_model_set_model (self->filter_model, model);
   g_object_unref (model);
 }

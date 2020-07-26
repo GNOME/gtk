@@ -692,7 +692,6 @@ static void
 constructed (GObject *object)
 {
   GtkInspectorResourceList *rl = GTK_INSPECTOR_RESOURCE_LIST (object);
-  GListModel *root_model;
   GListModel *sort_model;
   GtkSorter *column_sorter;
   GtkSorter *sorter;
@@ -702,9 +701,8 @@ constructed (GObject *object)
   g_signal_connect (rl->close_details_button, "clicked",
                     G_CALLBACK (close_details), rl);
  
-  root_model = load_resources ();
-  rl->tree_model = gtk_tree_list_model_new (FALSE,
-                                            root_model,
+  rl->tree_model = gtk_tree_list_model_new (load_resources (),
+                                            FALSE,
                                             FALSE,
                                             create_model_for_object,
                                             NULL,
@@ -712,11 +710,8 @@ constructed (GObject *object)
 
   column_sorter = gtk_column_view_get_sorter (GTK_COLUMN_VIEW (rl->list));
   sorter = gtk_tree_list_row_sorter_new (g_object_ref (column_sorter));
-  sort_model = G_LIST_MODEL (gtk_sort_list_model_new (G_LIST_MODEL (rl->tree_model), sorter));
+  sort_model = G_LIST_MODEL (gtk_sort_list_model_new (g_object_ref (G_LIST_MODEL (rl->tree_model)), sorter));
   rl->selection = gtk_single_selection_new (sort_model);
-  g_object_unref (root_model);
-  g_object_unref (sort_model);
-  g_object_unref (sorter);
 
   gtk_column_view_set_model (GTK_COLUMN_VIEW (rl->list), G_LIST_MODEL (rl->selection));
 

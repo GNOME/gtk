@@ -746,12 +746,11 @@ main (int argc, char *argv[])
       dirmodel = create_list_model_for_directory (root);
       g_object_unref (root);
     }
-  tree = gtk_tree_list_model_new (FALSE,
-                                  dirmodel,
+  tree = gtk_tree_list_model_new (dirmodel,
+                                  FALSE,
                                   TRUE,
                                   create_list_model_for_file_info,
                                   NULL, NULL);
-  g_object_unref (dirmodel);
 
   sorter = gtk_tree_list_row_sorter_new (g_object_ref (gtk_column_view_get_sorter (GTK_COLUMN_VIEW (view))));
   sort = gtk_sort_list_model_new (G_LIST_MODEL (tree), sorter);
@@ -759,7 +758,6 @@ main (int argc, char *argv[])
   custom_filter = gtk_custom_filter_new (match_file, g_object_ref (search_entry), g_object_unref);
   filter = gtk_filter_list_model_new (G_LIST_MODEL (sort), custom_filter);
   g_signal_connect (search_entry, "search-changed", G_CALLBACK (search_changed_cb), custom_filter);
-  g_object_unref (custom_filter);
 
   gtk_column_view_set_model (GTK_COLUMN_VIEW (view), G_LIST_MODEL (filter));
 
@@ -771,12 +769,10 @@ main (int argc, char *argv[])
   gtk_box_append (GTK_BOX (vbox), statusbar);
 
   g_object_unref (filter);
-  g_object_unref (sort);
-  g_object_unref (tree);
 
   list = gtk_list_view_new_with_factory (
+             g_object_ref (gtk_column_view_get_columns (GTK_COLUMN_VIEW (view))),
              gtk_builder_list_item_factory_new_from_bytes (scope, g_bytes_new_static (factory_ui, strlen (factory_ui))));
-  gtk_list_view_set_model (GTK_LIST_VIEW (list), gtk_column_view_get_columns (GTK_COLUMN_VIEW (view)));
   gtk_box_append (GTK_BOX (hbox), list);
 
   g_object_unref (scope);
@@ -786,7 +782,6 @@ main (int argc, char *argv[])
   toplevels = gtk_window_get_toplevels ();
   while (g_list_model_get_n_items (toplevels))
     g_main_context_iteration (NULL, TRUE);
-
 
   return 0;
 }

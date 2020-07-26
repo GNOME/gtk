@@ -807,14 +807,12 @@ gtk_print_unix_dialog_init (GtkPrintUnixDialog *dialog)
   g_list_store_append (store, dialog->manage_papers_list);
   paper_size_list = G_LIST_MODEL (gtk_flatten_list_model_new (G_LIST_MODEL (store)));
   gtk_drop_down_set_model (GTK_DROP_DOWN (dialog->paper_size_combo), paper_size_list);
-  g_object_unref (store);
   g_object_unref (paper_size_list);
 
   /* Load backends */
   model = load_print_backends (dialog);
   sorter = gtk_custom_sorter_new (default_printer_list_sort_func, NULL, NULL);
   sorted = G_LIST_MODEL (gtk_sort_list_model_new (model, sorter));
-  g_object_unref (sorter);
 
   filter = gtk_every_filter_new ();
 
@@ -831,7 +829,6 @@ gtk_print_unix_dialog_init (GtkPrintUnixDialog *dialog)
   gtk_multi_filter_append (GTK_MULTI_FILTER (filter), filter1);
 
   filtered = G_LIST_MODEL (gtk_filter_list_model_new (sorted, filter));
-  g_object_unref (filter);
 
   selection = G_LIST_MODEL (gtk_single_selection_new (filtered));
   gtk_single_selection_set_autoselect (GTK_SINGLE_SELECTION (selection), FALSE);
@@ -840,8 +837,6 @@ gtk_print_unix_dialog_init (GtkPrintUnixDialog *dialog)
   g_signal_connect (selection, "items-changed", G_CALLBACK (printer_added_cb), dialog);
   g_signal_connect_swapped (selection, "notify::selected", G_CALLBACK (selected_printer_changed), dialog);
   g_object_unref (selection);
-  g_object_unref (filtered);
-  g_object_unref (model);
 
   gtk_print_load_custom_papers (dialog->custom_paper_list);
 
@@ -1037,7 +1032,6 @@ load_print_backends (GtkPrintUnixDialog *dialog)
 {
   GList *node;
   GListStore *lists;
-  GListModel *model;
 
   lists = g_list_store_new (G_TYPE_LIST_MODEL);
 
@@ -1053,11 +1047,7 @@ load_print_backends (GtkPrintUnixDialog *dialog)
       g_list_store_append (lists, gtk_print_backend_get_printers (backend));
     }
 
-  model = G_LIST_MODEL (gtk_flatten_list_model_new (G_LIST_MODEL (lists)));
-
-  g_object_unref (lists);
-
-  return model;
+  return G_LIST_MODEL (gtk_flatten_list_model_new (G_LIST_MODEL (lists)));
 }
 
 static void

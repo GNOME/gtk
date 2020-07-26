@@ -2130,7 +2130,7 @@ gtk_list_base_set_model (GtkListBase *self,
       if (GTK_IS_SELECTION_MODEL (model))
         selection_model = GTK_SELECTION_MODEL (g_object_ref (model));
       else
-        selection_model = GTK_SELECTION_MODEL (gtk_single_selection_new (model));
+        selection_model = GTK_SELECTION_MODEL (gtk_single_selection_new (g_object_ref (model)));
 
       gtk_list_item_manager_set_model (priv->item_manager, selection_model);
       gtk_list_base_set_anchor (self, 0, 0.0, GTK_PACK_START, 0.0, GTK_PACK_START);

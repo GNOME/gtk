@@ -220,8 +220,7 @@ new_model (gpointer model)
       GtkSorter *sorter;
 
       sorter = gtk_custom_sorter_new (compare, NULL, NULL);
-      result = gtk_sort_list_model_new (model, sorter);
-      g_object_unref (sorter);
+      result = gtk_sort_list_model_new (g_object_ref (model), sorter);
     }
   else
     result = gtk_sort_list_model_new (NULL, NULL);

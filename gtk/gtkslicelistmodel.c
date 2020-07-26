@@ -30,11 +30,12 @@
  * @short_description: A list model that presents a slice out of a larger list
  * @see_also: #GListModel
  *
- * #GtkSliceListModel is a list model that takes a list model and presents a slice of
- * that model.
+ * #GtkSliceListModel is a list model that takes a list model and presents a
+ * slice of that model.
  *
- * This is useful when implementing paging by setting the size to the number of elements
- * per page and updating the offset whenever a different page is opened.
+ * This is useful when implementing paging by setting the size to the number
+ * of elements per page and updating the offset whenever a different page is
+ * opened.
  */
 
 #define DEFAULT_SIZE 10
@@ -300,7 +301,7 @@ gtk_slice_list_model_init (GtkSliceListModel *self)
 
 /**
  * gtk_slice_list_model_new:
- * @model: (transfer none) (allow-none): The model to use
+ * @model: (transfer full) (allow-none): The model to use, or %NULL
  * @offset: the offset of the slice
  * @size: maximum size of the slice
  *
@@ -314,13 +315,20 @@ gtk_slice_list_model_new (GListModel *model,
                           guint       offset,
                           guint       size)
 {
+  GtkSliceListModel *self;
+
   g_return_val_if_fail (model == NULL || G_IS_LIST_MODEL (model), NULL);
 
-  return g_object_new (GTK_TYPE_SLICE_LIST_MODEL,
+  self = g_object_new (GTK_TYPE_SLICE_LIST_MODEL,
                        "model", model,
                        "offset", offset,
                        "size", size,
                        NULL);
+
+  /* consume the reference */
+  g_clear_object (&model);
+
+  return self;
 }
 
 /**

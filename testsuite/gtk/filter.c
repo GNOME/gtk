@@ -189,7 +189,7 @@ new_model (guint      size,
 {
   GtkFilterListModel *result;
 
-  result = gtk_filter_list_model_new (G_LIST_MODEL (new_store (1, size, 1)), filter);
+  result = gtk_filter_list_model_new (g_object_ref (G_LIST_MODEL (new_store (1, size, 1))), g_object_ref (filter));
 
   return result;
 }

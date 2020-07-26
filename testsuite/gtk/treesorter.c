@@ -158,8 +158,8 @@ new_child_model (gpointer item,
 static GListModel *
 new_model (guint size)
 {
-  return G_LIST_MODEL (gtk_tree_list_model_new (FALSE,
-                                                G_LIST_MODEL (new_store (1, size, 1)),
+  return G_LIST_MODEL (gtk_tree_list_model_new (G_LIST_MODEL (new_store (1, size, 1)),
+                                                FALSE,
                                                 TRUE,
                                                 new_child_model,
                                                 NULL, NULL));
@@ -179,9 +179,7 @@ test_simple (void)
   sort = gtk_sort_list_model_new (model, sorter);
   assert_model (sort, "1 2 21 3 31 32 321");
 
-  g_object_unref (sorter);
   g_object_unref (sort);
-  g_object_unref (model);
 }
 
 static GtkSorter *

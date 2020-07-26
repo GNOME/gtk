@@ -308,7 +308,6 @@ gtk_page_setup_unix_dialog_init (GtkPageSetupUnixDialog *dialog)
   g_list_store_append (store, dialog->manage_papers_list);
   paper_size_list = G_LIST_MODEL (gtk_flatten_list_model_new (G_LIST_MODEL (store)));
   gtk_drop_down_set_model (GTK_DROP_DOWN (dialog->paper_size_combo), paper_size_list);
-  g_object_unref (store);
   g_object_unref (paper_size_list);
 
   /* Do this in code, we want the translatable strings without the markup */
@@ -325,8 +324,6 @@ gtk_page_setup_unix_dialog_init (GtkPageSetupUnixDialog *dialog)
 
   filter = gtk_custom_filter_new (match_func, NULL, NULL);
   dialog->printer_list = G_LIST_MODEL (gtk_filter_list_model_new (full_list, filter));
-  g_object_unref (full_list);
-  g_object_unref (filter);
 
   factory = gtk_signal_list_item_factory_new ();
   g_signal_connect (factory, "setup", G_CALLBACK (setup_printer_item), dialog);

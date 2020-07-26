@@ -322,12 +322,9 @@ gtk_custom_paper_unix_dialog_init (GtkCustomPaperUnixDialog *dialog)
   g_object_unref (printer_list);
 
   full_list = G_LIST_MODEL (gtk_flatten_list_model_new (G_LIST_MODEL (printer_list_list)));
-  g_object_unref (printer_list_list);
 
   filter = gtk_custom_filter_new (match_func, NULL, NULL);
   dialog->printer_list = G_LIST_MODEL (gtk_filter_list_model_new (full_list, filter));
-  g_object_unref (full_list);
-  g_object_unref (filter);
 
   dialog->custom_paper_list = g_list_store_new (GTK_TYPE_PAGE_SETUP);
   gtk_print_load_custom_papers (dialog->custom_paper_list);
@@ -896,20 +893,16 @@ populate_dialog (GtkCustomPaperUnixDialog *dialog)
   gtk_box_append (GTK_BOX (vbox), scrolled);
   gtk_widget_show (scrolled);
 
-  listview = gtk_list_view_new ();
-  gtk_widget_set_size_request (listview, 140, -1);
-
-  model = G_LIST_MODEL (gtk_single_selection_new (G_LIST_MODEL (dialog->custom_paper_list)));
-  gtk_list_view_set_model (GTK_LIST_VIEW (listview), model);
+  model = G_LIST_MODEL (gtk_single_selection_new (g_object_ref (G_LIST_MODEL (dialog->custom_paper_list))));
   g_signal_connect (model, "notify::selected", G_CALLBACK (selected_custom_paper_changed), dialog);
-  g_object_unref (model);
 
   factory = gtk_signal_list_item_factory_new ();
   g_signal_connect (factory, "setup", G_CALLBACK (setup_item), NULL);
   g_signal_connect (factory, "bind", G_CALLBACK (bind_item), NULL);
   g_signal_connect (factory, "unbind", G_CALLBACK (unbind_item), NULL);
-  gtk_list_view_set_factory (GTK_LIST_VIEW (listview), factory);
-  g_object_unref (factory);
+
+  listview = gtk_list_view_new_with_factory (model, factory);
+  gtk_widget_set_size_request (listview, 140, -1);
 
   dialog->listview = listview;
 

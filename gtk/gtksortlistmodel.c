@@ -828,8 +828,8 @@ gtk_sort_list_model_init (GtkSortListModel *self)
 
 /**
  * gtk_sort_list_model_new:
- * @model: (allow-none): the model to sort
- * @sorter: (allow-none): the #GtkSorter to sort @model with
+ * @model: (allow-none) (transfer full): the model to sort, or %NULL
+ * @sorter: (allow-none) (transfer full): the #GtkSorter to sort @model with, or %NULL
  *
  * Creates a new sort list model that uses the @sorter to sort @model.
  *
@@ -848,6 +848,10 @@ gtk_sort_list_model_new (GListModel *model,
                          "model", model,
                          "sorter", sorter,
                          NULL);
+
+  /* consume the references */
+  g_clear_object (&model);
+  g_clear_object (&sorter);
 
   return result;
 }

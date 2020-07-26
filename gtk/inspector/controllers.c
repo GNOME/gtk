@@ -244,13 +244,11 @@ gtk_inspector_controllers_set_object (GtkInspectorControllers *self,
   gtk_property_lookup_list_model_set_object (self->model, object);
 
   map_model = gtk_map_list_model_new (G_LIST_MODEL (self->model), map_to_controllers, NULL, NULL);
-  g_object_unref (self->model);
 
   flatten_model = gtk_flatten_list_model_new (G_LIST_MODEL (map_model));
 
   sorter = gtk_custom_sorter_new (compare_controllers, NULL, NULL);
   sort_model = gtk_sort_list_model_new (G_LIST_MODEL (flatten_model), sorter);
-  g_object_unref (sorter);
 
   gtk_list_box_bind_model (GTK_LIST_BOX (self->listbox),
                            G_LIST_MODEL (sort_model),
@@ -259,8 +257,6 @@ gtk_inspector_controllers_set_object (GtkInspectorControllers *self,
                            NULL);
 
   g_object_unref (sort_model);
-  g_object_unref (flatten_model);
-  g_object_unref (map_model);
 }
 
 static void

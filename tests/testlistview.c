@@ -318,7 +318,6 @@ get_file_path (GFileInfo *info)
 static GListModel *
 create_list_model_for_directory (gpointer file)
 {
-  GtkSortListModel *sort;
   GtkDirectoryList *dir;
   GtkSorter *sorter;
 
@@ -327,12 +326,8 @@ create_list_model_for_directory (gpointer file)
 
   dir = create_directory_list (file);
   sorter = gtk_string_sorter_new (gtk_cclosure_expression_new (G_TYPE_STRING, NULL, 0, NULL, (GCallback) get_file_path, NULL, NULL));
-  sort = gtk_sort_list_model_new (G_LIST_MODEL (dir), sorter);
 
-  g_object_unref (sorter);
-  g_object_unref (dir);
-
-  return G_LIST_MODEL (sort);
+  return G_LIST_MODEL (gtk_sort_list_model_new (G_LIST_MODEL (dir), sorter));
 }
 
 typedef struct _RowData RowData;
@@ -594,7 +589,6 @@ int
 main (int argc, char *argv[])
 {
   GtkWidget *win, *vbox, *sw, *listview, *search_entry, *statusbar;
-  GListModel *dirmodel;
   GtkTreeListModel *tree;
   GtkFilterListModel *filter;
   GtkFilter *custom_filter;
@@ -621,26 +615,23 @@ main (int argc, char *argv[])
 
   factory = gtk_signal_list_item_factory_new ();
   g_signal_connect (factory, "setup", G_CALLBACK (setup_widget), NULL);
-  listview = gtk_list_view_new_with_factory (factory);
+  listview = gtk_list_view_new_with_factory (NULL, factory);
   gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (sw), listview);
 
   if (argc > 1)
     root = g_file_new_for_commandline_arg (argv[1]);
   else
     root = g_file_new_for_path (g_get_current_dir ());
-  dirmodel = create_list_model_for_directory (root);
-  tree = gtk_tree_list_model_new (FALSE,
-                                  dirmodel,
+  tree = gtk_tree_list_model_new (create_list_model_for_directory (root),
+                                  FALSE,
                                   TRUE,
                                   create_list_model_for_file_info,
                                   NULL, NULL);
-  g_object_unref (dirmodel);
   g_object_unref (root);
 
   custom_filter = gtk_custom_filter_new (match_file, search_entry, NULL);
   filter = gtk_filter_list_model_new (G_LIST_MODEL (tree), custom_filter);
   g_signal_connect (search_entry, "search-changed", G_CALLBACK (search_changed_cb), custom_filter);
-  g_object_unref (custom_filter);
 
   selectionmodel = file_info_selection_new (G_LIST_MODEL (filter));
   g_object_unref (filter);
@@ -654,7 +645,6 @@ main (int argc, char *argv[])
   update_statusbar (GTK_STATUSBAR (statusbar));
   gtk_box_append (GTK_BOX (vbox), statusbar);
 
-  g_object_unref (tree);
   g_object_unref (selectionmodel);
 
   gtk_widget_show (win);

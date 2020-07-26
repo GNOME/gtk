@@ -51,7 +51,7 @@ GDK_AVAILABLE_IN_ALL
 GType           gtk_column_view_get_type                        (void) G_GNUC_CONST;
 
 GDK_AVAILABLE_IN_ALL
-GtkWidget *     gtk_column_view_new                             (void);
+GtkWidget *     gtk_column_view_new                             (GListModel             *model);
 
 GDK_AVAILABLE_IN_ALL
 GListModel *    gtk_column_view_get_columns                     (GtkColumnView          *self);

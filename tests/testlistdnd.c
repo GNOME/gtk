@@ -191,8 +191,8 @@ create_child_model (gpointer item,
 static GListModel *
 create_tree_model (guint n, guint m)
 {
-  return G_LIST_MODEL (gtk_tree_list_model_new (FALSE,
-                                                create_model (0, n, m, TRUE),
+  return G_LIST_MODEL (gtk_tree_list_model_new (create_model (0, n, m, TRUE),
+                                                FALSE,
                                                 FALSE,
                                                 create_child_model,
                                                 GUINT_TO_POINTER (m), NULL));
@@ -342,35 +342,25 @@ main (int argc, char *argv[])
   gtk_scrolled_window_set_has_frame (GTK_SCROLLED_WINDOW (sw), TRUE);
   gtk_stack_add_titled (GTK_STACK (stack), sw, "grid", "GtkGridView");
 
-  grid = gtk_grid_view_new ();
-  gtk_grid_view_set_min_columns (GTK_GRID_VIEW (grid), 20);
-  gtk_grid_view_set_max_columns (GTK_GRID_VIEW (grid), 20);
-
-  gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (sw), grid);
-
   model = create_model (0, 400, 1, FALSE);
-  gtk_grid_view_set_model (GTK_GRID_VIEW (grid), model);
-  g_object_unref (model);
-
   factory = gtk_signal_list_item_factory_new ();
   g_signal_connect (factory, "setup", G_CALLBACK (setup_item), NULL);
   g_signal_connect (factory, "bind", G_CALLBACK (bind_item), NULL);
   g_signal_connect (factory, "unbind", G_CALLBACK (unbind_item), NULL);
 
-  gtk_grid_view_set_factory (GTK_GRID_VIEW (grid), factory);
-  g_object_unref (factory);
+  grid = gtk_grid_view_new_with_factory (model, factory);
+  gtk_grid_view_set_min_columns (GTK_GRID_VIEW (grid), 20);
+  gtk_grid_view_set_max_columns (GTK_GRID_VIEW (grid), 20);
+
+  gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (sw), grid);
 
   /* list */
   sw = gtk_scrolled_window_new ();
   gtk_scrolled_window_set_has_frame (GTK_SCROLLED_WINDOW (sw), TRUE);
   gtk_stack_add_titled (GTK_STACK (stack), sw, "list", "GtkListView");
 
-  list = gtk_list_view_new ();
+  list = gtk_list_view_new (create_model (0, 400, 1, FALSE));
   gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (sw), list);
-
-  model = create_model (0, 400, 1, FALSE);
-  gtk_list_view_set_model (GTK_LIST_VIEW (list), model);
-  g_object_unref (model);
 
   factory = gtk_signal_list_item_factory_new ();
   g_signal_connect (factory, "setup", G_CALLBACK (setup_item), NULL);
@@ -385,11 +375,7 @@ main (int argc, char *argv[])
   gtk_scrolled_window_set_has_frame (GTK_SCROLLED_WINDOW (sw), TRUE);
   gtk_stack_add_titled (GTK_STACK (stack), sw, "column", "GtkColumnView");
 
-  cv = gtk_column_view_new ();
-
-  model = create_model (0, 400, 1, FALSE);
-  gtk_column_view_set_model (GTK_COLUMN_VIEW (cv), model);
-  g_object_unref (model);
+  cv = gtk_column_view_new (create_model (0, 400, 1, FALSE));
 
   for (guint i = 0; i < 20; i++)
     {
@@ -415,12 +401,8 @@ main (int argc, char *argv[])
   gtk_scrolled_window_set_has_frame (GTK_SCROLLED_WINDOW (sw), TRUE);
   gtk_stack_add_titled (GTK_STACK (stack), sw, "tree", "Tree");
 
-  list = gtk_list_view_new ();
+  list = gtk_list_view_new (create_tree_model (20, 20));
   gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (sw), list);
-
-  model = create_tree_model (20, 20);
-  gtk_list_view_set_model (GTK_LIST_VIEW (list), model);
-  g_object_unref (model);
 
   factory = gtk_signal_list_item_factory_new ();
   g_signal_connect (factory, "setup", G_CALLBACK (setup_tree_item), NULL);

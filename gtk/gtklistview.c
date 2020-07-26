@@ -102,17 +102,15 @@
  *
  * ...
  *
+ *   model = create_application_list ();
+ *
  *   factory = gtk_signal_list_item_factory_new ();
  *   g_signal_connect (factory, "setup", G_CALLBACK (setup_listitem_cb), NULL);
  *   g_signal_connect (factory, "bind", G_CALLBACK (bind_listitem_cb), NULL);
  *
- *   list = gtk_list_view_new_with_factory (factory);
+ *   list = gtk_list_view_new_with_factory (model, factory);
  *
  *   g_signal_connect (list, "activate", G_CALLBACK (activate_cb), NULL);
- *
- *   model = create_application_list ();
- *   gtk_list_view_set_model (GTK_LIST_VIEW (list), model);
- *   g_object_unref (model);
  *
  *   gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (sw), list);
  * ]|
@@ -931,52 +929,66 @@ gtk_list_view_init (GtkListView *self)
 
 /**
  * gtk_list_view_new:
+ * @model: (allow-none) (transfer full): the model to use, or %NULL
  *
- * Creates a new empty #GtkListView.
+ * Creates a new #GtkListView.
  *
- * You most likely want to call gtk_list_view_set_factory() to
- * set up a way to map its items to widgets and gtk_list_view_set_model()
- * to set a model to provide items next.
+ * You most likely want to call gtk_list_view_set_factory()
+ * to set up a way to map its items to widgets.
  *
  * Returns: a new #GtkListView
  **/
 GtkWidget *
-gtk_list_view_new (void)
+gtk_list_view_new (GListModel *model)
 {
-  return g_object_new (GTK_TYPE_LIST_VIEW, NULL);
+  GtkWidget *result;
+
+  g_return_val_if_fail (model == NULL || G_IS_LIST_MODEL (model), NULL);
+
+  result = g_object_new (GTK_TYPE_LIST_VIEW,
+                         "model", model,
+                         NULL);
+
+  /* consume the reference */
+  g_clear_object (&model);
+
+  return result;
 }
 
 /**
  * gtk_list_view_new_with_factory:
- * @factory: (transfer full): The factory to populate items with
+ * @model: (allow-none) (transfer full): the model to use, or %NULL
+ * @factory: (allow-none) (transfer full): The factory to populate items with, or %NULL
  *
  * Creates a new #GtkListView that uses the given @factory for
  * mapping items to widgets.
  *
- * You most likely want to call gtk_list_view_set_model() to set
- * a model next.
- *
  * The function takes ownership of the
  * argument, so you can write code like
  * ```
- *   list_view = gtk_list_view_new_with_factory (
- *     gtk_builder_list_item_factory_newfrom_resource ("/resource.ui"));
+ *   list_view = gtk_list_view_new_with_factory (create_model (),
+ *     gtk_builder_list_item_factory_new_from_resource ("/resource.ui"));
  * ```
  *
  * Returns: a new #GtkListView using the given @factory
  **/
 GtkWidget *
-gtk_list_view_new_with_factory (GtkListItemFactory *factory)
+gtk_list_view_new_with_factory (GListModel         *model,
+                                GtkListItemFactory *factory)
 {
   GtkWidget *result;
 
-  g_return_val_if_fail (GTK_IS_LIST_ITEM_FACTORY (factory), NULL);
+  g_return_val_if_fail (model == NULL || G_IS_LIST_MODEL (model), NULL);
+  g_return_val_if_fail (factory == NULL || GTK_IS_LIST_ITEM_FACTORY (factory), NULL);
 
   result = g_object_new (GTK_TYPE_LIST_VIEW,
+                         "model", model,
                          "factory", factory,
                          NULL);
 
-  g_object_unref (factory);
+  /* consume the references */
+  g_clear_object (&model);
+  g_clear_object (&factory);
 
   return result;
 }

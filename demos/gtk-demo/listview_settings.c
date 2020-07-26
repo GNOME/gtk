@@ -214,7 +214,6 @@ transform_settings_to_keys (GBinding     *binding,
   GtkSortListModel *sort_model;
   GtkFilterListModel *filter_model;
   GtkFilter *filter;
-  GtkNoSelection *selection_model;
   char **keys;
   guint i;
 
@@ -242,21 +241,13 @@ transform_settings_to_keys (GBinding     *binding,
   g_object_unref (settings);
 
   sort_model = gtk_sort_list_model_new (G_LIST_MODEL (store),
-                                        gtk_column_view_get_sorter (GTK_COLUMN_VIEW (data)));
-  g_object_unref (store);
+                                        g_object_ref (gtk_column_view_get_sorter (GTK_COLUMN_VIEW (data))));
 
   filter = gtk_string_filter_new (gtk_property_expression_new (SETTINGS_TYPE_KEY, NULL, "name"));
-  filter_model = gtk_filter_list_model_new (G_LIST_MODEL (sort_model), filter);
-  g_object_unref (sort_model);
-
   g_set_object (&current_filter, filter);
+  filter_model = gtk_filter_list_model_new (G_LIST_MODEL (sort_model), filter);
 
-  g_object_unref (filter);
-
-  selection_model = gtk_no_selection_new (G_LIST_MODEL (filter_model));
-  g_object_unref (filter_model);
-
-  g_value_take_object (to_value, selection_model);
+  g_value_take_object (to_value, gtk_no_selection_new (G_LIST_MODEL (filter_model)));
 
   return TRUE;
 }
@@ -403,8 +394,8 @@ do_listview_settings (GtkWidget *do_widget)
       g_object_unref (actions);
 
       model = create_settings_model (NULL, NULL);
-      treemodel = gtk_tree_list_model_new (FALSE,
-                                           model,
+      treemodel = gtk_tree_list_model_new (model,
+                                           FALSE,
                                            TRUE,
                                            create_settings_model,
                                            NULL,
@@ -418,8 +409,6 @@ do_listview_settings (GtkWidget *do_widget)
                                    columnview, NULL);
       gtk_list_view_set_model (GTK_LIST_VIEW (listview), G_LIST_MODEL (selection));
       g_object_unref (selection);
-      g_object_unref (treemodel);
-      g_object_unref (model);
 
       name_column = GTK_COLUMN_VIEW_COLUMN (gtk_builder_get_object (builder, "name_column"));
       sorter = gtk_string_sorter_new (gtk_property_expression_new (SETTINGS_TYPE_KEY, NULL, "name"));

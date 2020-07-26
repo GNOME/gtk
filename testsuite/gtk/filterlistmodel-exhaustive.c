@@ -135,6 +135,10 @@ filter_list_model_new (GListModel *source,
   GListStore *check;
   guint i;
 
+  if (source)
+    g_object_ref (source);
+  if (filter)
+    g_object_ref (filter);
   model = gtk_filter_list_model_new (source, filter);
   check = g_list_store_new (G_TYPE_OBJECT);
   for (i = 0; i < g_list_model_get_n_items (G_LIST_MODEL (model)); i++)
@@ -443,8 +447,6 @@ test_model_changes (gconstpointer model_id)
   g_object_unref (model2);
   g_object_unref (flatten2);
   g_object_unref (flatten1);
-  g_object_unref (store2);
-  g_object_unref (store1);
   g_object_unref (multi);
 }
 
