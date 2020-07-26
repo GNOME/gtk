@@ -1304,7 +1304,7 @@ gtk_inspector_object_tree_set_display (GtkInspectorObjectTree *wt,
                                                   create_model_for_object,
                                                   NULL,
                                                   NULL);
-  wt->priv->selection = gtk_single_selection_new (G_LIST_MODEL (wt->priv->tree_model));
+  wt->priv->selection = gtk_single_selection_new (g_object_ref (G_LIST_MODEL (wt->priv->tree_model)));
   gtk_column_view_set_model (GTK_COLUMN_VIEW (wt->priv->list),
                              G_LIST_MODEL (wt->priv->selection));
 }

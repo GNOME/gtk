@@ -453,7 +453,7 @@ gtk_single_selection_init (GtkSingleSelection *self)
 
 /**
  * gtk_single_selection_new:
- * @model: (transfer none): the #GListModel to manage
+ * @model: (allow-none) (transfer full): the #GListModel to manage, or %NULL
  *
  * Creates a new selection to handle @model.
  *
@@ -462,11 +462,18 @@ gtk_single_selection_init (GtkSingleSelection *self)
 GtkSingleSelection *
 gtk_single_selection_new (GListModel *model)
 {
+  GtkSingleSelection *self;
+
   g_return_val_if_fail (G_IS_LIST_MODEL (model), NULL);
 
-  return g_object_new (GTK_TYPE_SINGLE_SELECTION,
+  self = g_object_new (GTK_TYPE_SINGLE_SELECTION,
                        "model", model,
                        NULL);
+
+  /* consume the reference */
+  g_clear_object (&model);
+
+  return self;
 }
 
 /**

@@ -1239,7 +1239,7 @@ gtk_inspector_recorder_init (GtkInspectorRecorder *recorder)
                                                      TRUE,
                                                      create_list_model_for_render_node_paintable,
                                                      NULL, NULL);
-  recorder->render_node_selection = gtk_single_selection_new (G_LIST_MODEL (recorder->render_node_model));
+  recorder->render_node_selection = gtk_single_selection_new (g_object_ref (G_LIST_MODEL (recorder->render_node_model)));
   g_signal_connect (recorder->render_node_selection, "notify::selected-item", G_CALLBACK (render_node_list_selection_changed), recorder);
 
   factory = gtk_signal_list_item_factory_new ();
