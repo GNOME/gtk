@@ -370,20 +370,27 @@ gtk_multi_selection_init (GtkMultiSelection *self)
 
 /**
  * gtk_multi_selection_new:
- * @model: (transfer none): the #GListModel to manage
+ * @model: (allow-none) (transfer full): the #GListModel to manage, or %NULL
  *
  * Creates a new selection to handle @model.
  *
- * Returns: (transfer full) (type GtkMultiSelection): a new #GtkMultiSelection
+ * Returns: (transfer full): a new #GtkMultiSelection
  **/
-GListModel *
+GtkMultiSelection *
 gtk_multi_selection_new (GListModel *model)
 {
+  GtkMultiSelection *self;
+
   g_return_val_if_fail (G_IS_LIST_MODEL (model), NULL);
 
-  return g_object_new (GTK_TYPE_MULTI_SELECTION,
+  self = g_object_new (GTK_TYPE_MULTI_SELECTION,
                        "model", model,
                        NULL);
+
+  /* consume the reference */
+  g_clear_object (&model);
+
+  return self;
 }
 
 /**
