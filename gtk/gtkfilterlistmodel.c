@@ -614,8 +614,8 @@ gtk_filter_list_model_init (GtkFilterListModel *self)
 
 /**
  * gtk_filter_list_model_new:
- * @model: (allow-none): the model to sort
- * @filter: (allow-none): filter or %NULL to not filter items
+ * @model: (allow-none) (transfer full): the model to sort, or %NULL
+ * @filter: (allow-none) (transfer full): filter or %NULL to not filter items
  *
  * Creates a new #GtkFilterListModel that will filter @model using the given
  * @filter.
@@ -635,6 +635,10 @@ gtk_filter_list_model_new (GListModel *model,
                          "model", model,
                          "filter", filter,
                          NULL);
+
+  /* consume the references */
+  g_clear_object (&model);
+  g_clear_object (&filter);
 
   return result;
 }

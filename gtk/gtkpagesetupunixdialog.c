@@ -324,8 +324,6 @@ gtk_page_setup_unix_dialog_init (GtkPageSetupUnixDialog *dialog)
 
   filter = gtk_custom_filter_new (match_func, NULL, NULL);
   dialog->printer_list = G_LIST_MODEL (gtk_filter_list_model_new (full_list, filter));
-  g_object_unref (full_list);
-  g_object_unref (filter);
 
   factory = gtk_signal_list_item_factory_new ();
   g_signal_connect (factory, "setup", G_CALLBACK (setup_printer_item), dialog);

@@ -640,7 +640,6 @@ main (int argc, char *argv[])
   custom_filter = gtk_custom_filter_new (match_file, search_entry, NULL);
   filter = gtk_filter_list_model_new (G_LIST_MODEL (tree), custom_filter);
   g_signal_connect (search_entry, "search-changed", G_CALLBACK (search_changed_cb), custom_filter);
-  g_object_unref (custom_filter);
 
   selectionmodel = file_info_selection_new (G_LIST_MODEL (filter));
   g_object_unref (filter);
@@ -654,7 +653,6 @@ main (int argc, char *argv[])
   update_statusbar (GTK_STATUSBAR (statusbar));
   gtk_box_append (GTK_BOX (vbox), statusbar);
 
-  g_object_unref (tree);
   g_object_unref (selectionmodel);
 
   gtk_widget_show (win);

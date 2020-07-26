@@ -622,7 +622,7 @@ gtk_inspector_prop_list_set_object (GtkInspectorPropList *pl,
   if (GTK_IS_WIDGET (object))
     g_signal_connect_object (object, "destroy", G_CALLBACK (cleanup_object), pl, G_CONNECT_SWAPPED);
 
-  filtered = G_LIST_MODEL (gtk_filter_list_model_new (G_LIST_MODEL (store), pl->priv->filter));
+  filtered = G_LIST_MODEL (gtk_filter_list_model_new (G_LIST_MODEL (store), g_object_ref (pl->priv->filter)));
   sorted = gtk_sort_list_model_new (filtered, NULL);
   list = G_LIST_MODEL (gtk_no_selection_new (G_LIST_MODEL (sorted)));
 
@@ -635,7 +635,6 @@ gtk_inspector_prop_list_set_object (GtkInspectorPropList *pl,
   g_object_unref (list);
   g_object_unref (sorted);
   g_object_unref (filtered);
-  g_object_unref (store);
 
   return TRUE;
 }

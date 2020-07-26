@@ -325,8 +325,6 @@ gtk_custom_paper_unix_dialog_init (GtkCustomPaperUnixDialog *dialog)
 
   filter = gtk_custom_filter_new (match_func, NULL, NULL);
   dialog->printer_list = G_LIST_MODEL (gtk_filter_list_model_new (full_list, filter));
-  g_object_unref (full_list);
-  g_object_unref (filter);
 
   dialog->custom_paper_list = g_list_store_new (GTK_TYPE_PAGE_SETUP);
   gtk_print_load_custom_papers (dialog->custom_paper_list);
