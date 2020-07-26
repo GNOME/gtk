@@ -771,8 +771,8 @@ main (int argc, char *argv[])
   g_object_unref (filter);
 
   list = gtk_list_view_new_with_factory (
+             g_object_ref (gtk_column_view_get_columns (GTK_COLUMN_VIEW (view))),
              gtk_builder_list_item_factory_new_from_bytes (scope, g_bytes_new_static (factory_ui, strlen (factory_ui))));
-  gtk_list_view_set_model (GTK_LIST_VIEW (list), gtk_column_view_get_columns (GTK_COLUMN_VIEW (view)));
   gtk_box_append (GTK_BOX (hbox), list);
 
   g_object_unref (scope);
@@ -782,7 +782,6 @@ main (int argc, char *argv[])
   toplevels = gtk_window_get_toplevels ();
   while (g_list_model_get_n_items (toplevels))
     g_main_context_iteration (NULL, TRUE);
-
 
   return 0;
 }

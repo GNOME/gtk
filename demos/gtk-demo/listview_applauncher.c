@@ -166,14 +166,6 @@ do_listview_applauncher (GtkWidget *do_widget)
       g_signal_connect (factory, "setup", G_CALLBACK (setup_listitem_cb), NULL);
       g_signal_connect (factory, "bind", G_CALLBACK (bind_listitem_cb), NULL);
 
-      /* Create the list widget here.
-       */
-      list = gtk_list_view_new_with_factory (factory);
-      /* We connect the activate signal here. It's the function we defined
-       * above for launching the selected application.
-       */
-      g_signal_connect (list, "activate", G_CALLBACK (activate_cb), NULL);
-
       /* And of course we need to set the data model. Here we call the function
        * we wrote above that gives us the list of applications. Then we set
        * it on the list widget.
@@ -181,8 +173,15 @@ do_listview_applauncher (GtkWidget *do_widget)
        * to create as many listitems as it needs to show itself to the user.
        */
       model = create_application_list ();
-      gtk_list_view_set_model (GTK_LIST_VIEW (list), model);
-      g_object_unref (model);
+
+      /* Create the list widget here.
+       */
+      list = gtk_list_view_new_with_factory (model, factory);
+
+      /* We connect the activate signal here. It's the function we defined
+       * above for launching the selected application.
+       */
+      g_signal_connect (list, "activate", G_CALLBACK (activate_cb), NULL);
 
       /* List widgets should always be contained in a #GtkScrolledWindow,
        * because otherwise they might get too large or they might not

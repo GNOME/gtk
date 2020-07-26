@@ -893,20 +893,16 @@ populate_dialog (GtkCustomPaperUnixDialog *dialog)
   gtk_box_append (GTK_BOX (vbox), scrolled);
   gtk_widget_show (scrolled);
 
-  listview = gtk_list_view_new ();
-  gtk_widget_set_size_request (listview, 140, -1);
-
   model = G_LIST_MODEL (gtk_single_selection_new (g_object_ref (G_LIST_MODEL (dialog->custom_paper_list))));
-  gtk_list_view_set_model (GTK_LIST_VIEW (listview), model);
   g_signal_connect (model, "notify::selected", G_CALLBACK (selected_custom_paper_changed), dialog);
-  g_object_unref (model);
 
   factory = gtk_signal_list_item_factory_new ();
   g_signal_connect (factory, "setup", G_CALLBACK (setup_item), NULL);
   g_signal_connect (factory, "bind", G_CALLBACK (bind_item), NULL);
   g_signal_connect (factory, "unbind", G_CALLBACK (unbind_item), NULL);
-  gtk_list_view_set_factory (GTK_LIST_VIEW (listview), factory);
-  g_object_unref (factory);
+
+  listview = gtk_list_view_new_with_factory (model, factory);
+  gtk_widget_set_size_request (listview, 140, -1);
 
   dialog->listview = listview;
 
