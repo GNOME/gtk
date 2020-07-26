@@ -37,8 +37,7 @@ typedef struct _GtkListListModelClass GtkListListModelClass;
 
 GType                   gtk_list_list_model_get_type            (void) G_GNUC_CONST;
 
-GtkListListModel *      gtk_list_list_model_new                 (GType                   item_type,
-                                                                 gpointer                (* get_first) (gpointer),
+GtkListListModel *      gtk_list_list_model_new                 (gpointer                (* get_first) (gpointer),
                                                                  gpointer                (* get_next) (gpointer, gpointer),
                                                                  gpointer                (* get_previous) (gpointer, gpointer),
                                                                  gpointer                (* get_last) (gpointer),
@@ -46,8 +45,7 @@ GtkListListModel *      gtk_list_list_model_new                 (GType          
                                                                  gpointer                data,
                                                                  GDestroyNotify          notify);
 
-GtkListListModel *      gtk_list_list_model_new_with_size       (GType                   item_type,
-                                                                 guint                   n_items,
+GtkListListModel *      gtk_list_list_model_new_with_size       (guint                   n_items,
                                                                  gpointer                (* get_first) (gpointer),
                                                                  gpointer                (* get_next) (gpointer, gpointer),
                                                                  gpointer                (* get_previous) (gpointer, gpointer),

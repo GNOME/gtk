@@ -36,7 +36,6 @@ struct _GtkListListModel
 {
   GObject parent_instance;
 
-  GType item_type;
   guint n_items;
   gpointer (* get_first) (gpointer);
   gpointer (* get_next) (gpointer, gpointer);
@@ -55,9 +54,7 @@ struct _GtkListListModelClass
 static GType
 gtk_list_list_model_get_item_type (GListModel *list)
 {
-  GtkListListModel *self = GTK_LIST_LIST_MODEL (list);
-
-  return self->item_type;
+  return G_TYPE_OBJECT;
 }
 
 static guint
@@ -143,8 +140,7 @@ gtk_list_list_model_init (GtkListListModel *self)
 }
 
 GtkListListModel *
-gtk_list_list_model_new (GType          item_type,
-                         gpointer       (* get_first) (gpointer),
+gtk_list_list_model_new (gpointer       (* get_first) (gpointer),
                          gpointer       (* get_next) (gpointer, gpointer),
                          gpointer       (* get_previous) (gpointer, gpointer),
                          gpointer       (* get_last) (gpointer),
@@ -161,8 +157,7 @@ gtk_list_list_model_new (GType          item_type,
        item = get_next (item, data))
     n_items++;
 
-  return gtk_list_list_model_new_with_size (item_type,
-                                            n_items,
+  return gtk_list_list_model_new_with_size (n_items,
                                             get_first,
                                             get_next,
                                             get_previous,
@@ -173,8 +168,7 @@ gtk_list_list_model_new (GType          item_type,
 }
 
 GtkListListModel *
-gtk_list_list_model_new_with_size (GType          item_type,
-                                   guint          n_items,
+gtk_list_list_model_new_with_size (guint          n_items,
                                    gpointer       (* get_first) (gpointer),
                                    gpointer       (* get_next) (gpointer, gpointer),
                                    gpointer       (* get_previous) (gpointer, gpointer),
@@ -185,7 +179,6 @@ gtk_list_list_model_new_with_size (GType          item_type,
 {
   GtkListListModel *result;
 
-  g_return_val_if_fail (g_type_is_a (item_type, G_TYPE_OBJECT), NULL);
   g_return_val_if_fail (get_first != NULL, NULL);
   g_return_val_if_fail (get_next != NULL, NULL);
   g_return_val_if_fail (get_previous != NULL, NULL);
@@ -193,7 +186,6 @@ gtk_list_list_model_new_with_size (GType          item_type,
 
   result = g_object_new (GTK_TYPE_LIST_LIST_MODEL, NULL);
 
-  result->item_type = item_type;
   result->n_items = n_items;
   result->get_first = get_first;
   result->get_next = get_next;

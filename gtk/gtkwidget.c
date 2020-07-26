@@ -11535,8 +11535,7 @@ gtk_widget_observe_children (GtkWidget *widget)
   if (priv->children_observer)
     return g_object_ref (G_LIST_MODEL (priv->children_observer));
 
-  priv->children_observer = gtk_list_list_model_new (GTK_TYPE_WIDGET,
-                                                     (gpointer) gtk_widget_get_first_child,
+  priv->children_observer = gtk_list_list_model_new ((gpointer) gtk_widget_get_first_child,
                                                      (gpointer) gtk_widget_get_next_sibling,
                                                      (gpointer) gtk_widget_get_prev_sibling,
                                                      (gpointer) gtk_widget_get_last_child,
@@ -11622,14 +11621,13 @@ gtk_widget_observe_controllers (GtkWidget *widget)
   if (priv->controller_observer)
     return g_object_ref (G_LIST_MODEL (priv->controller_observer));
 
-  priv->controller_observer = gtk_list_list_model_new (GTK_TYPE_EVENT_CONTROLLER,
-                                                      gtk_widget_controller_list_get_first,
-                                                      gtk_widget_controller_list_get_next,
-                                                      gtk_widget_controller_list_get_prev,
-                                                      NULL,
-                                                      (gpointer) g_object_ref,
-                                                      widget,
-                                                      gtk_widget_controller_observer_destroyed);
+  priv->controller_observer = gtk_list_list_model_new (gtk_widget_controller_list_get_first,
+                                                       gtk_widget_controller_list_get_next,
+                                                       gtk_widget_controller_list_get_prev,
+                                                       NULL,
+                                                       (gpointer) g_object_ref,
+                                                       widget,
+                                                       gtk_widget_controller_observer_destroyed);
 
   return G_LIST_MODEL (priv->controller_observer);
 }
