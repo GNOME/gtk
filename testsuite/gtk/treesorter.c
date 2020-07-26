@@ -179,9 +179,7 @@ test_simple (void)
   sort = gtk_sort_list_model_new (model, sorter);
   assert_model (sort, "1 2 21 3 31 32 321");
 
-  g_object_unref (sorter);
   g_object_unref (sort);
-  g_object_unref (model);
 }
 
 static GtkSorter *

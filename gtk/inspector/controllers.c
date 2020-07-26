@@ -249,7 +249,6 @@ gtk_inspector_controllers_set_object (GtkInspectorControllers *self,
 
   sorter = gtk_custom_sorter_new (compare_controllers, NULL, NULL);
   sort_model = gtk_sort_list_model_new (G_LIST_MODEL (flatten_model), sorter);
-  g_object_unref (sorter);
 
   gtk_list_box_bind_model (GTK_LIST_BOX (self->listbox),
                            G_LIST_MODEL (sort_model),
@@ -258,7 +257,6 @@ gtk_inspector_controllers_set_object (GtkInspectorControllers *self,
                            NULL);
 
   g_object_unref (sort_model);
-  g_object_unref (flatten_model);
 }
 
 static void

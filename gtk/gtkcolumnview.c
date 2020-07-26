@@ -1500,8 +1500,8 @@ gtk_column_view_get_list_view (GtkColumnView *self)
  * |[
  *   gtk_column_view_column_set_sorter (column, sorter);
  *   gtk_column_view_append_column (view, column);
- *   model = gtk_sort_list_model_new (store,
- *                                    gtk_column_view_get_sorter (view));
+ *   sorter = g_object_ref (gtk_column_view_get_sorter (view)));
+ *   model = gtk_sort_list_model_new (store, sorter);
  *   selection = gtk_no_selection_new (model);
  *   gtk_column_view_set_model (view, selection);
  * ]|

@@ -318,7 +318,6 @@ get_file_path (GFileInfo *info)
 static GListModel *
 create_list_model_for_directory (gpointer file)
 {
-  GtkSortListModel *sort;
   GtkDirectoryList *dir;
   GtkSorter *sorter;
 
@@ -327,12 +326,8 @@ create_list_model_for_directory (gpointer file)
 
   dir = create_directory_list (file);
   sorter = gtk_string_sorter_new (gtk_cclosure_expression_new (G_TYPE_STRING, NULL, 0, NULL, (GCallback) get_file_path, NULL, NULL));
-  sort = gtk_sort_list_model_new (G_LIST_MODEL (dir), sorter);
 
-  g_object_unref (sorter);
-  g_object_unref (dir);
-
-  return G_LIST_MODEL (sort);
+  return G_LIST_MODEL (gtk_sort_list_model_new (G_LIST_MODEL (dir), sorter));
 }
 
 typedef struct _RowData RowData;

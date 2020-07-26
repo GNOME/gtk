@@ -200,9 +200,9 @@ create_sort_list_model (gconstpointer  model_id,
   guint id = GPOINTER_TO_UINT (model_id);
 
   if (track_changes)
-    model = sort_list_model_new (id & 1 ? NULL : source, id & 2 ? NULL : sorter);
+    model = sort_list_model_new (((id & 1) || !source) ? NULL : g_object_ref (source), ((id & 2) || !sorter) ? NULL : g_object_ref (sorter));
   else
-    model = gtk_sort_list_model_new (id & 1 ? NULL : source, id & 2 ? NULL : sorter);
+    model = gtk_sort_list_model_new (((id & 1) || !source) ? NULL : g_object_ref (source), ((id & 2) || !sorter) ? NULL : g_object_ref (sorter));
 
   switch (id >> 2)
   {

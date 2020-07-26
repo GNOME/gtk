@@ -247,6 +247,8 @@ new_model (guint      size,
 {
   GtkSortListModel *result;
 
+  if (sorter)
+    g_object_ref (sorter);
   result = gtk_sort_list_model_new (G_LIST_MODEL (fisher_yates_shuffle (new_store (1, size, 1))), sorter);
 
   return result;
@@ -630,8 +632,8 @@ test_stable (void)
   gtk_multi_sorter_append (GTK_MULTI_SORTER (multi), b);
   model1 = new_model (20, multi);
   g_object_unref (multi);
-  model2b = gtk_sort_list_model_new (gtk_sort_list_model_get_model (model1), b);
-  model2 = gtk_sort_list_model_new (G_LIST_MODEL (model2b), a);
+  model2b = gtk_sort_list_model_new (g_object_ref (gtk_sort_list_model_get_model (model1)), g_object_ref (b));
+  model2 = gtk_sort_list_model_new (g_object_ref (G_LIST_MODEL (model2b)), g_object_ref (a));
   assert_model_equal (model1, model2);
 
   modify_sorter (a);
