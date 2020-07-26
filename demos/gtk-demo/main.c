@@ -1136,8 +1136,8 @@ activate (GApplication *app)
   g_signal_connect (search_bar, "notify::search-mode-enabled", G_CALLBACK (clear_search), NULL);
 
   listmodel = create_demo_model ();
-  treemodel = gtk_tree_list_model_new (FALSE,
-                                       G_LIST_MODEL (listmodel),
+  treemodel = gtk_tree_list_model_new (G_LIST_MODEL (listmodel),
+                                       FALSE,
                                        TRUE,
                                        get_child_model,
                                        NULL,

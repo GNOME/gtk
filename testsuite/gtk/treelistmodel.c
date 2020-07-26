@@ -170,7 +170,7 @@ new_model (guint    size,
   GtkTreeListModel *tree;
   GString *changes;
 
-  tree = gtk_tree_list_model_new (TRUE, G_LIST_MODEL (new_store (size, size, size)), expanded, create_sub_model_cb, NULL, NULL);
+  tree = gtk_tree_list_model_new (G_LIST_MODEL (new_store (size, size, size)), TRUE, expanded, create_sub_model_cb, NULL, NULL);
   changes = g_string_new ("");
   g_object_set_qdata_full (G_OBJECT(tree), changes_quark, changes, free_changes);
   g_signal_connect (tree, "items-changed", G_CALLBACK (items_changed), changes);

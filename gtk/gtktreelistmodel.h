@@ -58,8 +58,8 @@ G_DECLARE_FINAL_TYPE (GtkTreeListRow, gtk_tree_list_row, GTK, TREE_LIST_ROW, GOb
 typedef GListModel * (* GtkTreeListModelCreateModelFunc) (gpointer item, gpointer user_data);
 
 GDK_AVAILABLE_IN_ALL
-GtkTreeListModel *      gtk_tree_list_model_new                 (gboolean                passthrough,
-                                                                 GListModel             *root,
+GtkTreeListModel *      gtk_tree_list_model_new                 (GListModel             *root,
+                                                                 gboolean                passthrough,
                                                                  gboolean                autoexpand,
                                                                  GtkTreeListModelCreateModelFunc create_func,
                                                                  gpointer                user_data,

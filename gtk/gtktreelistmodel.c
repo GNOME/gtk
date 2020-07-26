@@ -734,8 +734,8 @@ gtk_tree_list_model_init (GtkTreeListModel *self)
 
 /**
  * gtk_tree_list_model_new:
+ * @root: (transfer full): The #GListModel to use as root
  * @passthrough: %TRUE to pass through items from the models
- * @root: The #GListModel to use as root
  * @autoexpand: %TRUE to set the autoexpand property and expand the @root model
  * @create_func: Function to call to create the #GListModel for the children
  *     of an item
@@ -743,12 +743,12 @@ gtk_tree_list_model_init (GtkTreeListModel *self)
  * @user_destroy: Function to call to free @user_data
  *
  * Creates a new empty #GtkTreeListModel displaying @root with all rows collapsed.
- * 
- * Returns: a newly created #GtkTreeListModel. 
+ *
+ * Returns: a newly created #GtkTreeListModel.
  **/
 GtkTreeListModel *
-gtk_tree_list_model_new (gboolean                         passthrough,
-                         GListModel                      *root,
+gtk_tree_list_model_new (GListModel                      *root,
+                         gboolean                         passthrough,
                          gboolean                         autoexpand,
                          GtkTreeListModelCreateModelFunc  create_func,
                          gpointer                         user_data,
@@ -768,7 +768,7 @@ gtk_tree_list_model_new (gboolean                         passthrough,
   self->user_data = user_data;
   self->user_destroy = user_destroy;
 
-  gtk_tree_list_model_init_node (self, &self->root_node, g_object_ref (root));
+  gtk_tree_list_model_init_node (self, &self->root_node, root);
 
   return self;
 }
