@@ -813,7 +813,6 @@ gtk_print_unix_dialog_init (GtkPrintUnixDialog *dialog)
   model = load_print_backends (dialog);
   sorter = gtk_custom_sorter_new (default_printer_list_sort_func, NULL, NULL);
   sorted = G_LIST_MODEL (gtk_sort_list_model_new (model, sorter));
-  g_object_unref (sorter);
 
   filter = gtk_every_filter_new ();
 
@@ -839,7 +838,6 @@ gtk_print_unix_dialog_init (GtkPrintUnixDialog *dialog)
   g_signal_connect_swapped (selection, "notify::selected", G_CALLBACK (selected_printer_changed), dialog);
   g_object_unref (selection);
   g_object_unref (filtered);
-  g_object_unref (model);
 
   gtk_print_load_custom_papers (dialog->custom_paper_list);
 

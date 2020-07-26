@@ -242,8 +242,7 @@ transform_settings_to_keys (GBinding     *binding,
   g_object_unref (settings);
 
   sort_model = gtk_sort_list_model_new (G_LIST_MODEL (store),
-                                        gtk_column_view_get_sorter (GTK_COLUMN_VIEW (data)));
-  g_object_unref (store);
+                                        g_object_ref (gtk_column_view_get_sorter (GTK_COLUMN_VIEW (data))));
 
   filter = gtk_string_filter_new (gtk_property_expression_new (SETTINGS_TYPE_KEY, NULL, "name"));
   g_set_object (&current_filter, filter);

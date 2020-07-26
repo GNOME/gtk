@@ -770,7 +770,6 @@ main (int argc, char *argv[])
   gtk_box_append (GTK_BOX (vbox), statusbar);
 
   g_object_unref (filter);
-  g_object_unref (tree);
 
   list = gtk_list_view_new_with_factory (
              gtk_builder_list_item_factory_new_from_bytes (scope, g_bytes_new_static (factory_ui, strlen (factory_ui))));
