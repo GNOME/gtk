@@ -412,7 +412,7 @@ gtk_map_list_model_augment (GtkRbTree *map,
 
 /**
  * gtk_map_list_model_new:
- * @model: (allow-none): The model to map or %NULL for none
+ * @model: (transfer full) (allow-none): The model to map or %NULL for none
  * @map_func: (allow-none): map function or %NULL to not map items
  * @user_data: (closure): user data passed to @map_func
  * @user_destroy: destroy notifier for @user_data
@@ -434,6 +434,9 @@ gtk_map_list_model_new (GListModel             *model,
   result = g_object_new (GTK_TYPE_MAP_LIST_MODEL,
                          "model", model,
                          NULL);
+
+  /* consume the reference */
+  g_clear_object (&model);
 
   if (map_func)
     gtk_map_list_model_set_map_func (result, map_func, user_data, user_destroy);

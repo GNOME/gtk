@@ -196,6 +196,8 @@ new_model (GListStore *store)
   GtkMapListModel *result;
   GString *changes;
 
+  if (store)
+    g_object_ref (store);
   result = gtk_map_list_model_new (G_LIST_MODEL (store), map_multiply, GUINT_TO_POINTER (2), NULL);
   changes = g_string_new ("");
   g_object_set_qdata_full (G_OBJECT(result), changes_quark, changes, free_changes);

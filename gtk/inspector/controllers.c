@@ -244,7 +244,6 @@ gtk_inspector_controllers_set_object (GtkInspectorControllers *self,
   gtk_property_lookup_list_model_set_object (self->model, object);
 
   map_model = gtk_map_list_model_new (G_LIST_MODEL (self->model), map_to_controllers, NULL, NULL);
-  g_object_unref (self->model);
 
   flatten_model = gtk_flatten_list_model_new (G_LIST_MODEL (map_model));
 
