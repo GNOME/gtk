@@ -49,6 +49,7 @@
 #include <gtk/gtkbinlayout.h>
 #include <gtk/gtkbitset.h>
 #include <gtk/gtkbookmarklist.h>
+#include <gtk/gtkboolfilter.h>
 #include <gtk/gtkborder.h>
 #include <gtk/gtkboxlayout.h>
 #include <gtk/gtkbox.h>

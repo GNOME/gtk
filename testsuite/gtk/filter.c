@@ -310,6 +310,50 @@ test_string_properties (void)
 }
 
 static void
+test_bool_simple (void)
+{
+  GtkFilterListModel *model;
+  GtkExpression *expr;
+  GtkFilter *filter;
+
+  filter = gtk_bool_filter_new (
+               gtk_cclosure_expression_new (G_TYPE_BOOLEAN,
+                                            NULL,
+                                            0, NULL,
+                                            G_CALLBACK (divisible_by),
+                                            GUINT_TO_POINTER (3), NULL));
+  model = new_model (20, filter);
+  assert_model (model, "3 6 9 12 15 18");
+
+  gtk_bool_filter_set_invert (GTK_BOOL_FILTER (filter), TRUE);
+  assert_model (model, "1 2 4 5 7 8 10 11 13 14 16 17 19 20");
+
+  gtk_bool_filter_set_invert (GTK_BOOL_FILTER (filter), FALSE);
+  assert_model (model, "3 6 9 12 15 18");
+
+  expr = gtk_cclosure_expression_new (G_TYPE_BOOLEAN,
+                                      NULL,
+                                      0, NULL,
+                                      G_CALLBACK (divisible_by),
+                                      GUINT_TO_POINTER (5), NULL);
+  gtk_bool_filter_set_expression (GTK_BOOL_FILTER (filter), expr);
+  gtk_expression_unref (expr);
+  assert_model (model, "5 10 15 20");
+
+  gtk_bool_filter_set_invert (GTK_BOOL_FILTER (filter), TRUE);
+  assert_model (model, "1 2 3 4 6 7 8 9 11 12 13 14 16 17 18 19");
+
+  gtk_bool_filter_set_expression (GTK_BOOL_FILTER (filter), NULL);
+  assert_model (model, "");
+
+  gtk_bool_filter_set_invert (GTK_BOOL_FILTER (filter), FALSE);
+  assert_model (model, "");
+
+  g_object_unref (filter);
+  g_object_unref (model);
+}
+
+static void
 test_every_dispose (void)
 {
   GtkFilter *filter, *filter1, *filter2;
@@ -343,6 +387,7 @@ main (int argc, char *argv[])
   g_test_add_func ("/filter/any/simple", test_any_simple);
   g_test_add_func ("/filter/string/simple", test_string_simple);
   g_test_add_func ("/filter/string/properties", test_string_properties);
+  g_test_add_func ("/filter/bool/simple", test_bool_simple);
   g_test_add_func ("/filter/every/dispose", test_every_dispose);
 
   return g_test_run ();
