@@ -837,7 +837,6 @@ gtk_print_unix_dialog_init (GtkPrintUnixDialog *dialog)
   g_signal_connect (selection, "items-changed", G_CALLBACK (printer_added_cb), dialog);
   g_signal_connect_swapped (selection, "notify::selected", G_CALLBACK (selected_printer_changed), dialog);
   g_object_unref (selection);
-  g_object_unref (filtered);
 
   gtk_print_load_custom_papers (dialog->custom_paper_list);
 

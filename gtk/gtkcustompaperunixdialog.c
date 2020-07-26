@@ -896,7 +896,7 @@ populate_dialog (GtkCustomPaperUnixDialog *dialog)
   listview = gtk_list_view_new ();
   gtk_widget_set_size_request (listview, 140, -1);
 
-  model = G_LIST_MODEL (gtk_single_selection_new (G_LIST_MODEL (dialog->custom_paper_list)));
+  model = G_LIST_MODEL (gtk_single_selection_new (g_object_ref (G_LIST_MODEL (dialog->custom_paper_list))));
   gtk_list_view_set_model (GTK_LIST_VIEW (listview), model);
   g_signal_connect (model, "notify::selected", G_CALLBACK (selected_custom_paper_changed), dialog);
   g_object_unref (model);

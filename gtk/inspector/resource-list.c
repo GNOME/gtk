@@ -712,7 +712,6 @@ constructed (GObject *object)
   sorter = gtk_tree_list_row_sorter_new (g_object_ref (column_sorter));
   sort_model = G_LIST_MODEL (gtk_sort_list_model_new (g_object_ref (G_LIST_MODEL (rl->tree_model)), sorter));
   rl->selection = gtk_single_selection_new (sort_model);
-  g_object_unref (sort_model);
 
   gtk_column_view_set_model (GTK_COLUMN_VIEW (rl->list), G_LIST_MODEL (rl->selection));
 

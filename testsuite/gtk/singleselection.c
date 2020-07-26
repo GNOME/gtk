@@ -249,7 +249,7 @@ new_model (GListStore *store, gboolean autoselect, gboolean can_unselect)
   GtkSelectionModel *result;
   GString *changes;
 
-  result = GTK_SELECTION_MODEL (gtk_single_selection_new (G_LIST_MODEL (store)));
+  result = GTK_SELECTION_MODEL (gtk_single_selection_new (g_object_ref (G_LIST_MODEL (store))));
 
   /* We want to return an empty selection unless autoselect is true,
    * so undo the initial selection due to autoselect defaulting to TRUE.

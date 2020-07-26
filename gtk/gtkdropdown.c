@@ -668,7 +668,6 @@ gtk_drop_down_set_model (GtkDropDown *self,
 
       filter_model = G_LIST_MODEL (gtk_filter_list_model_new (g_object_ref (model), NULL));
       g_set_object (&self->filter_model, filter_model);
-      g_object_unref (filter_model);
 
       update_filter (self);
 
@@ -677,7 +676,7 @@ gtk_drop_down_set_model (GtkDropDown *self,
       gtk_list_view_set_model (GTK_LIST_VIEW (self->popup_list), selection);
       g_object_unref (selection);
 
-      selection = G_LIST_MODEL (gtk_single_selection_new (model));
+      selection = G_LIST_MODEL (gtk_single_selection_new (g_object_ref (model)));
       g_set_object (&self->selection, selection);
       g_object_unref (selection);
 
