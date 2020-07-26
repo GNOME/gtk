@@ -140,6 +140,50 @@ gtk_test_accessible_has_property (GtkAccessible         *accessible,
   return gtk_at_context_has_accessible_property (context, property);
 }
 
+/**
+ * gtk_test_accessible_check_property:
+ * @accessible: a #GtkAccessible
+ * @property: a #GtkAccessibleProperty
+ * @...: the expected value of @property
+ *
+ * Checks whether the accessible @property of @accessible is set to
+ * a specific value.
+ *
+ * Returns: (transfer full): the value of the accessible property
+ */
+char *
+gtk_test_accessible_check_property (GtkAccessible         *accessible,
+                                    GtkAccessibleProperty  property,
+                                    ...)
+{
+  char *res = NULL;
+  va_list args;
+
+  va_start (args, property);
+
+  GtkAccessibleValue *check_value =
+    gtk_accessible_value_collect_for_property (property, &args);
+
+  va_end (args);
+
+  if (check_value == NULL)
+    return g_strdup ("undefined");
+
+  GtkATContext *context = gtk_accessible_get_at_context (accessible);
+  GtkAccessibleValue *real_value =
+    gtk_at_context_get_accessible_property (context, property);
+
+  if (gtk_accessible_value_equal (check_value, real_value))
+    goto out;
+
+  res = gtk_accessible_value_to_string (real_value);
+
+out:
+  gtk_accessible_value_unref (check_value);
+
+  return res;
+}
+
 gboolean
 gtk_test_accessible_has_state (GtkAccessible      *accessible,
                                GtkAccessibleState  state)
@@ -153,6 +197,50 @@ gtk_test_accessible_has_state (GtkAccessible      *accessible,
     return FALSE;
 
   return gtk_at_context_has_accessible_state (context, state);
+}
+
+/**
+ * gtk_test_accessible_check_state:
+ * @accessible: a #GtkAccessible
+ * @state: a #GtkAccessibleState
+ * @...: the expected value of @state
+ *
+ * Checks whether the accessible @state of @accessible is set to
+ * a specific value.
+ *
+ * Returns: (transfer full): the value of the accessible state
+ */
+char *
+gtk_test_accessible_check_state (GtkAccessible      *accessible,
+                                 GtkAccessibleState  state,
+                                 ...)
+{
+  char *res = NULL;
+  va_list args;
+
+  va_start (args, state);
+
+  GtkAccessibleValue *check_value =
+    gtk_accessible_value_collect_for_state (state, &args);
+
+  va_end (args);
+
+  if (check_value == NULL)
+    return g_strdup ("undefined");
+
+  GtkATContext *context = gtk_accessible_get_at_context (accessible);
+  GtkAccessibleValue *real_value =
+    gtk_at_context_get_accessible_state (context, state);
+
+  if (gtk_accessible_value_equal (check_value, real_value))
+    goto out;
+
+  res = gtk_accessible_value_to_string (real_value);
+
+out:
+  gtk_accessible_value_unref (check_value);
+
+  return res;
 }
 
 gboolean
@@ -170,6 +258,50 @@ gtk_test_accessible_has_relation (GtkAccessible         *accessible,
   return gtk_at_context_has_accessible_relation (context, relation);
 }
 
+/**
+ * gtk_test_accessible_check_relation:
+ * @accessible: a #GtkAccessible
+ * @relation: a #GtkAccessibleRelation
+ * @...: the expected value of @relation
+ *
+ * Checks whether the accessible @relation of @accessible is set to
+ * a specific value.
+ *
+ * Returns: (transfer full): the value of the accessible relation
+ */
+char *
+gtk_test_accessible_check_relation (GtkAccessible         *accessible,
+                                    GtkAccessibleRelation  relation,
+                                    ...)
+{
+  char *res = NULL;
+  va_list args;
+
+  va_start (args, relation);
+
+  GtkAccessibleValue *check_value =
+    gtk_accessible_value_collect_for_relation (relation, &args);
+
+  va_end (args);
+
+  if (check_value == NULL)
+    return g_strdup ("undefined");
+
+  GtkATContext *context = gtk_accessible_get_at_context (accessible);
+  GtkAccessibleValue *real_value =
+    gtk_at_context_get_accessible_relation (context, relation);
+
+  if (gtk_accessible_value_equal (check_value, real_value))
+    goto out;
+
+  res = gtk_accessible_value_to_string (real_value);
+
+out:
+  gtk_accessible_value_unref (check_value);
+
+  return res;
+}
+
 void
 gtk_test_accessible_assertion_message_role (const char        *domain,
                                             const char        *file,
@@ -177,69 +309,18 @@ gtk_test_accessible_assertion_message_role (const char        *domain,
                                             const char        *func,
                                             const char        *expr,
                                             GtkAccessible     *accessible,
-                                            GtkAccessibleRole  role)
+                                            GtkAccessibleRole  expected_role,
+                                            GtkAccessibleRole  actual_role)
 {
-  char *role_name = g_enum_to_string (GTK_TYPE_ACCESSIBLE_ROLE, role);
-  char *s = g_strdup_printf ("%s:accessible-role == %s",
+  char *role_name = g_enum_to_string (GTK_TYPE_ACCESSIBLE_ROLE, actual_role);
+  char *s = g_strdup_printf ("assertion failed: (%s): %s.accessible-role = %s (%d)",
+                             expr,
                              G_OBJECT_TYPE_NAME (accessible),
-                             role_name);
+                             role_name,
+                             actual_role);
 
-  g_assertion_message_expr (domain, file, line, func, s);
+  g_assertion_message (domain, file, line, func, s);
 
   g_free (role_name);
-  g_free (s);
-}
-
-void
-gtk_test_accessible_assertion_message_property (const char            *domain,
-                                                const char            *file,
-                                                int                    line,
-                                                const char            *func,
-                                                const char            *expr,
-                                                GtkAccessible         *accessible,
-                                                GtkAccessibleProperty  property)
-{
-  char *s = g_strdup_printf ("%s:accessible-property == %s",
-                             G_OBJECT_TYPE_NAME (accessible),
-                             gtk_accessible_property_get_attribute_name (property));
-
-  g_assertion_message_expr (domain, file, line, func, s);
-
-  g_free (s);
-}
-
-void
-gtk_test_accessible_assertion_message_state (const char         *domain,
-                                             const char         *file,
-                                             int                 line,
-                                             const char         *func,
-                                             const char         *expr,
-                                             GtkAccessible      *accessible,
-                                             GtkAccessibleState  state)
-{
-  char *s = g_strdup_printf ("%s:accessible-state == %s",
-                             G_OBJECT_TYPE_NAME (accessible),
-                             gtk_accessible_state_get_attribute_name (state));
-
-  g_assertion_message_expr (domain, file, line, func, s);
-
-  g_free (s);
-}
-
-void
-gtk_test_accessible_assertion_message_relation (const char            *domain,
-                                                const char            *file,
-                                                int                    line,
-                                                const char            *func,
-                                                const char            *expr,
-                                                GtkAccessible         *accessible,
-                                                GtkAccessibleRelation  relation)
-{
-  char *s = g_strdup_printf ("%s:accessible-relation == %s",
-                             G_OBJECT_TYPE_NAME (accessible),
-                             gtk_accessible_relation_get_attribute_name (relation));
-
-  g_assertion_message_expr (domain, file, line, func, s);
-
   g_free (s);
 }
