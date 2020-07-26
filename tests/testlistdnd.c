@@ -381,11 +381,7 @@ main (int argc, char *argv[])
   gtk_scrolled_window_set_has_frame (GTK_SCROLLED_WINDOW (sw), TRUE);
   gtk_stack_add_titled (GTK_STACK (stack), sw, "column", "GtkColumnView");
 
-  cv = gtk_column_view_new ();
-
-  model = create_model (0, 400, 1, FALSE);
-  gtk_column_view_set_model (GTK_COLUMN_VIEW (cv), model);
-  g_object_unref (model);
+  cv = gtk_column_view_new (create_model (0, 400, 1, FALSE));
 
   for (guint i = 0; i < 20; i++)
     {

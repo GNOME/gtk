@@ -1179,19 +1179,30 @@ gtk_column_view_init (GtkColumnView *self)
 
 /**
  * gtk_column_view_new:
+ * @model: (allow-none) (transfer full): the list model to use, or %NULL
  *
- * Creates a new empty #GtkColumnView.
+ * Creates a new #GtkColumnView.
  *
- * You most likely want to call gtk_column_view_set_factory() to
- * set up a way to map its items to widgets and gtk_column_view_set_model()
- * to set a model to provide items next.
+ * You most likely want to call gtk_column_view_append_column() to
+ * add columns next.
  *
  * Returns: a new #GtkColumnView
  **/
 GtkWidget *
-gtk_column_view_new (void)
+gtk_column_view_new (GListModel *model)
 {
-  return g_object_new (GTK_TYPE_COLUMN_VIEW, NULL);
+  GtkWidget *result;
+
+  g_return_val_if_fail (model == NULL || G_IS_LIST_MODEL (model), NULL);
+
+  result = g_object_new (GTK_TYPE_COLUMN_VIEW,
+                         "model", model,
+                         NULL);
+
+  /* consume the reference */
+  g_clear_object (&model);
+
+  return result;
 }
 
 /**
