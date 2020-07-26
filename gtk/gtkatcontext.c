@@ -453,6 +453,24 @@ gtk_at_context_has_accessible_state (GtkATContext       *self,
 }
 
 /*< private >
+ * gtk_at_context_get_accessible_state:
+ * @self: a #GtkATContext
+ * @state: a #GtkAccessibleState
+ *
+ * Retrieves the value for the accessible state of a #GtkATContext.
+ *
+ * Returns: (transfer none): the value for the given state
+ */
+GtkAccessibleValue *
+gtk_at_context_get_accessible_state (GtkATContext       *self,
+                                     GtkAccessibleState  state)
+{
+  g_return_val_if_fail (GTK_IS_AT_CONTEXT (self), NULL);
+
+  return gtk_accessible_attribute_set_get_value (self->states, state);
+}
+
+/*< private >
  * gtk_at_context_set_accessible_property:
  * @self: a #GtkATContext
  * @property: a #GtkAccessibleProperty
@@ -497,6 +515,24 @@ gtk_at_context_has_accessible_property (GtkATContext          *self,
 }
 
 /*< private >
+ * gtk_at_context_get_accessible_property:
+ * @self: a #GtkATContext
+ * @property: a #GtkAccessibleProperty
+ *
+ * Retrieves the value for the accessible property of a #GtkATContext.
+ *
+ * Returns: (transfer none): the value for the given property
+ */
+GtkAccessibleValue *
+gtk_at_context_get_accessible_property (GtkATContext          *self,
+                                        GtkAccessibleProperty  property)
+{
+  g_return_val_if_fail (GTK_IS_AT_CONTEXT (self), NULL);
+
+  return gtk_accessible_attribute_set_get_value (self->properties, property);
+}
+
+/*< private >
  * gtk_at_context_set_accessible_relation:
  * @self: a #GtkATContext
  * @relation: a #GtkAccessibleRelation
@@ -538,4 +574,22 @@ gtk_at_context_has_accessible_relation (GtkATContext          *self,
   g_return_val_if_fail (GTK_IS_AT_CONTEXT (self), FALSE);
 
   return gtk_accessible_attribute_set_contains (self->relations, relation);
+}
+
+/*< private >
+ * gtk_at_context_get_accessible_relation:
+ * @self: a #GtkATContext
+ * @relation: a #GtkAccessibleRelation
+ *
+ * Retrieves the value for the accessible relation of a #GtkATContext.
+ *
+ * Returns: (transfer none): the value for the given relation
+ */
+GtkAccessibleValue *
+gtk_at_context_get_accessible_relation (GtkATContext          *self,
+                                        GtkAccessibleRelation  relation)
+{
+  g_return_val_if_fail (GTK_IS_AT_CONTEXT (self), NULL);
+
+  return gtk_accessible_attribute_set_get_value (self->relations, relation);
 }

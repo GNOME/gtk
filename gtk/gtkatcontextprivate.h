@@ -105,26 +105,32 @@ struct _GtkATContextClass
                          GtkAccessibleAttributeSet   *relations);
 };
 
-GtkATContext *  gtk_at_context_create                   (GtkAccessibleRole      accessible_role,
-                                                         GtkAccessible         *accessible);
+GtkATContext *          gtk_at_context_create                   (GtkAccessibleRole      accessible_role,
+                                                                 GtkAccessible         *accessible);
 
-void            gtk_at_context_update                   (GtkATContext          *self);
+void                    gtk_at_context_update                   (GtkATContext          *self);
 
-void            gtk_at_context_set_accessible_state     (GtkATContext          *self,
-                                                         GtkAccessibleState     state,
-                                                         GtkAccessibleValue    *value);
-gboolean        gtk_at_context_has_accessible_state     (GtkATContext          *self,
-                                                         GtkAccessibleState     state);
-void            gtk_at_context_set_accessible_property  (GtkATContext          *self,
-                                                         GtkAccessibleProperty  property,
-                                                         GtkAccessibleValue    *value);
-gboolean        gtk_at_context_has_accessible_property  (GtkATContext          *self,
-                                                         GtkAccessibleProperty  property);
-void            gtk_at_context_set_accessible_relation  (GtkATContext          *self,
-                                                         GtkAccessibleRelation  property,
-                                                         GtkAccessibleValue    *value);
-gboolean        gtk_at_context_has_accessible_relation  (GtkATContext          *self,
-                                                         GtkAccessibleRelation  relation);
+void                    gtk_at_context_set_accessible_state     (GtkATContext          *self,
+                                                                 GtkAccessibleState     state,
+                                                                 GtkAccessibleValue    *value);
+gboolean                gtk_at_context_has_accessible_state     (GtkATContext          *self,
+                                                                 GtkAccessibleState     state);
+GtkAccessibleValue *    gtk_at_context_get_accessible_state     (GtkATContext          *self,
+                                                                 GtkAccessibleState     state);
+void                    gtk_at_context_set_accessible_property  (GtkATContext          *self,
+                                                                 GtkAccessibleProperty  property,
+                                                                 GtkAccessibleValue    *value);
+gboolean                gtk_at_context_has_accessible_property  (GtkATContext          *self,
+                                                                 GtkAccessibleProperty  property);
+GtkAccessibleValue *    gtk_at_context_get_accessible_property  (GtkATContext          *self,
+                                                                 GtkAccessibleProperty  property);
+void                    gtk_at_context_set_accessible_relation  (GtkATContext          *self,
+                                                                 GtkAccessibleRelation  property,
+                                                                 GtkAccessibleValue    *value);
+gboolean                gtk_at_context_has_accessible_relation  (GtkATContext          *self,
+                                                                 GtkAccessibleRelation  relation);
+GtkAccessibleValue *    gtk_at_context_get_accessible_relation  (GtkATContext          *self,
+                                                                 GtkAccessibleRelation  relation);
 
 const char *    gtk_accessible_property_get_attribute_name      (GtkAccessibleProperty property);
 const char *    gtk_accessible_relation_get_attribute_name      (GtkAccessibleRelation relation);
