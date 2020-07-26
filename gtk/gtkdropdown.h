@@ -31,11 +31,11 @@ GDK_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (GtkDropDown, gtk_drop_down, GTK, DROP_DOWN, GtkWidget)
 
 GDK_AVAILABLE_IN_ALL
-GtkWidget *     gtk_drop_down_new                               (void);
+GtkWidget *     gtk_drop_down_new                               (GListModel             *model,
+                                                                 GtkExpression          *expression);
 
 GDK_AVAILABLE_IN_ALL
-void            gtk_drop_down_set_from_strings                  (GtkDropDown            *self,
-                                                                 const char *const      *texts);
+GtkWidget *     gtk_drop_down_new_from_strings                  (const char * const *    strings);
 
 GDK_AVAILABLE_IN_ALL
 void            gtk_drop_down_set_model                         (GtkDropDown            *self,

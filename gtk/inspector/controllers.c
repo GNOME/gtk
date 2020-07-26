@@ -148,8 +148,7 @@ create_controller_widget (gpointer item,
   phases[3] = C_("event phase", "Target");
   phases[4] = NULL;
 
-  dropdown = gtk_drop_down_new ();
-  gtk_drop_down_set_from_strings (GTK_DROP_DOWN (dropdown), phases);
+  dropdown = gtk_drop_down_new_from_strings (phases);
   gtk_drop_down_set_selected (GTK_DROP_DOWN (dropdown), gtk_event_controller_get_propagation_phase (controller));
   gtk_box_append (GTK_BOX (box), dropdown);
   gtk_widget_set_halign (label, GTK_ALIGN_END);

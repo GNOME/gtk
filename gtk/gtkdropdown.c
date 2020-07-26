@@ -62,9 +62,9 @@
  * and expects to obtain these from the model by evaluating an expression
  * that has to be provided via gtk_drop_down_set_expression().
  *
- * The convenience method gtk_drop_down_set_from_strings() can be used
- * to set up a model that is populated from an array of strings and
- * an expression for obtaining those strings.
+ * GtkDropDown knows how to obtain strings from the items in a
+ * #GtkStringList; for other models, you have to provide an expression
+ * to find the strings.
  *
  * GtkDropDown can optionally allow search in the popup, which is
  * useful if the list of options is long. To enable the search entry,
@@ -602,19 +602,47 @@ gtk_drop_down_init (GtkDropDown *self)
 
 /**
  * gtk_drop_down_new:
+ * @model: (transfer full) (allow-none): the model to use or %NULL for none
+ * @expression: (transfer full) (allow-none): the expression to use or %NULL for none
  *
- * Creates a new empty #GtkDropDown.
+ * Creates a new #GtkDropDown.
  *
- * You most likely want to call gtk_drop_down_set_factory() to
- * set up a way to map its items to widgets and gtk_drop_down_set_model()
- * to set a model to provide items next.
+ * You may want to call gtk_drop_down_set_factory()
+ * to set up a way to map its items to widgets.
  *
  * Returns: a new #GtkDropDown
  **/
 GtkWidget *
-gtk_drop_down_new (void)
+gtk_drop_down_new (GListModel    *model,
+                   GtkExpression *expression)
 {
-  return g_object_new (GTK_TYPE_DROP_DOWN, NULL);
+  GtkWidget *self;
+
+  self = g_object_new (GTK_TYPE_DROP_DOWN,
+                       "model", model,
+                       "expression", expression,
+                       NULL);
+
+  /* we're consuming the references */
+  g_clear_object (&model);
+  g_clear_pointer (&expression, gtk_expression_unref);
+
+  return self;
+}
+
+/**
+ * gtk_drop_down_new_from_strings:
+ * @strings: (array zero-terminated=1): The strings to put in the dropdown
+ *
+ * Creates a new #GtkDropDown that is populated with
+ * the strings in @strings.
+ *
+ * Returns: a new #GtkDropDown
+ */
+GtkWidget *
+gtk_drop_down_new_from_strings (const char * const *strings)
+{
+  return gtk_drop_down_new (G_LIST_MODEL (gtk_string_list_new (strings)), NULL);
 }
 
 /**
@@ -922,28 +950,4 @@ gtk_drop_down_get_expression (GtkDropDown *self)
   g_return_val_if_fail (GTK_IS_DROP_DOWN (self), NULL);
 
   return self->expression;
-}
-
-/**
- * gtk_drop_down_set_from_strings:
- * @self: a #GtkDropDown
- * @texts: (array zero-terminated=1) (element-type utf8): a %NULL-terminated string array
- *
- * Populates @self with the strings in @text,
- * by creating a suitable model and factory.
- */
-void
-gtk_drop_down_set_from_strings (GtkDropDown       *self,
-                                const char *const *texts)
-{
-  GListModel *model;
-
-  g_return_if_fail (GTK_IS_DROP_DOWN (self));
-  g_return_if_fail (texts != NULL);
-
-  set_default_factory (self);
-
-  model = G_LIST_MODEL (gtk_string_list_new (texts));
-  gtk_drop_down_set_model (self, model);
-  g_object_unref (model);
 }

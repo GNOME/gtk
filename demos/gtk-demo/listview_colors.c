@@ -1003,8 +1003,7 @@ do_listview_colors (GtkWidget *do_widget)
       g_signal_connect (selection, "items-changed", G_CALLBACK (items_changed_cb), label);
       gtk_header_bar_pack_start (GTK_HEADER_BAR (header), label);
 
-      dropdown = gtk_drop_down_new ();
-      gtk_drop_down_set_from_strings (GTK_DROP_DOWN (dropdown), (const char *[]) { "8", "64", "512", "4096", "32768", "262144", "2097152", "16777216", NULL });
+      dropdown = gtk_drop_down_new_from_strings  ((const char * const[]) { "8", "64", "512", "4096", "32768", "262144", "2097152", "16777216", NULL });
       g_signal_connect (dropdown, "notify::selected",
                         G_CALLBACK (limit_changed_cb), 
                         gtk_sort_list_model_get_model (sort_model));
@@ -1082,7 +1081,7 @@ do_listview_colors (GtkWidget *do_widget)
       g_list_store_append (sorters, multi_sorter);
       g_object_unref (multi_sorter);
 
-      dropdown = gtk_drop_down_new ();
+      dropdown = gtk_drop_down_new (G_LIST_MODEL (sorters), NULL);
       box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
       gtk_box_append (GTK_BOX (box), gtk_label_new ("Sort by:"));
       gtk_box_append (GTK_BOX (box), dropdown);
@@ -1095,9 +1094,6 @@ do_listview_colors (GtkWidget *do_widget)
                                                 NULL, NULL);
       gtk_drop_down_set_expression (GTK_DROP_DOWN (dropdown), expression);
       gtk_expression_unref (expression);
-
-      gtk_drop_down_set_model (GTK_DROP_DOWN (dropdown), G_LIST_MODEL (sorters));
-      g_object_unref (sorters);
 
       g_object_bind_property (dropdown, "selected-item", sort_model, "sorter", G_BINDING_SYNC_CREATE);
 
@@ -1113,7 +1109,7 @@ do_listview_colors (GtkWidget *do_widget)
       set_title (factory, "Everything");
       g_list_store_append (factories, factory);
 
-      dropdown = gtk_drop_down_new ();
+      dropdown = gtk_drop_down_new (G_LIST_MODEL (factories), NULL);
       box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
       gtk_box_append (GTK_BOX (box), gtk_label_new ("Show:"));
       gtk_box_append (GTK_BOX (box), dropdown);
@@ -1126,9 +1122,6 @@ do_listview_colors (GtkWidget *do_widget)
                                                 NULL, NULL);
       gtk_drop_down_set_expression (GTK_DROP_DOWN (dropdown), expression);
       gtk_expression_unref (expression);
-
-      gtk_drop_down_set_model (GTK_DROP_DOWN (dropdown), G_LIST_MODEL (factories));
-      g_object_unref (factories);
 
       g_object_bind_property (dropdown, "selected-item", gridview, "factory", G_BINDING_SYNC_CREATE);
     }
