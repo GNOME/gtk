@@ -37,6 +37,7 @@
 #include "gtktogglebutton.h"
 #include "gtkorientable.h"
 #include "gtkprivate.h"
+#include "gtkstringlist.h"
 
 #include "gtkprinteroptionwidget.h"
 
@@ -479,7 +480,7 @@ combo_box_entry_new (void)
   gtk_widget_add_css_class (hbox, "linked");
 
   entry = gtk_entry_new ();
-  button = gtk_drop_down_new ();
+  button = gtk_drop_down_new (NULL, NULL);
   combo_box_set_model (button);
 
   factory = gtk_signal_list_item_factory_new ();
@@ -506,7 +507,7 @@ combo_box_new (void)
 {
   GtkWidget *combo_box;
 
-  combo_box = gtk_drop_down_new ();
+  combo_box = gtk_drop_down_new (NULL, NULL);
 
   combo_box_set_model (combo_box);
   combo_box_set_view (combo_box);
@@ -938,8 +939,7 @@ construct_widgets (GtkPrinterOptionWidget *widget)
       const char * strings[2];
       strings[0] = _("Not available");
       strings[1] = NULL;
-      priv->combo = gtk_drop_down_new ();
-      gtk_drop_down_set_from_strings (GTK_DROP_DOWN (priv->combo), strings);
+      priv->combo = gtk_drop_down_new_from_strings (strings);
       gtk_drop_down_set_selected (GTK_DROP_DOWN (priv->combo), 0);
       gtk_widget_set_sensitive (GTK_WIDGET (widget), FALSE);
       gtk_widget_show (priv->combo);

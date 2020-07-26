@@ -1015,8 +1015,7 @@ populate_dialog (GtkCustomPaperUnixDialog *dialog)
   gtk_grid_attach (GTK_GRID (grid), hbox, 0, 4, 2, 1);
   gtk_widget_show (hbox);
 
-  combo = gtk_drop_down_new ();
-  gtk_drop_down_set_model (GTK_DROP_DOWN (combo), dialog->printer_list);
+  combo = gtk_drop_down_new (g_object_ref (dialog->printer_list), NULL);
 
   factory = gtk_signal_list_item_factory_new ();
   g_signal_connect (factory, "setup", G_CALLBACK (setup_printer_item), dialog);

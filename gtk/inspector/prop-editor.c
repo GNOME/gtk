@@ -939,20 +939,16 @@ property_editor (GObject                *object,
     {
       {
         GEnumClass *eclass;
-        char **names;
+        GtkStringList *names;
         int j;
 
         eclass = G_ENUM_CLASS (g_type_class_ref (spec->value_type));
 
-        names = g_new (char *, eclass->n_values + 1);
+        names = gtk_string_list_new (NULL);
         for (j = 0; j < eclass->n_values; j++)
-          names[j] = (char *)eclass->values[j].value_name;
-        names[eclass->n_values] = NULL;
+          gtk_string_list_append (names, eclass->values[j].value_name);
 
-        prop_edit = gtk_drop_down_new ();
-        gtk_drop_down_set_from_strings (GTK_DROP_DOWN (prop_edit), (const char **)names);
-
-        g_free (names);
+        prop_edit = gtk_drop_down_new (G_LIST_MODEL (names), NULL);
 
         connect_controller (G_OBJECT (prop_edit), "notify::selected",
                             object, spec, G_CALLBACK (enum_modified));
@@ -1298,7 +1294,7 @@ attribute_editor (GObject                *object,
   gtk_box_append (GTK_BOX (box), button);
 
   gtk_box_append (GTK_BOX (box), gtk_label_new (_("Column:")));
-  dropdown = gtk_drop_down_new ();
+  dropdown = gtk_drop_down_new (NULL, NULL);
 
   store = g_list_store_new (ATTRIBUTE_TYPE_HOLDER);
   holder = attribute_holder_new (-1, TRUE);

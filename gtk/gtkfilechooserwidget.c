@@ -7918,18 +7918,13 @@ gtk_file_chooser_widget_add_choice (GtkFileChooser  *chooser,
     {
       GtkWidget *box;
       GtkWidget *combo;
-      GListModel *model;
 
       box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
       gtk_box_append (GTK_BOX (box), gtk_label_new (label));
 
-      combo = gtk_drop_down_new ();
+      combo = gtk_drop_down_new_from_strings ((const char * const *)options);
       g_hash_table_insert (impl->choices, g_strdup (id), combo);
       gtk_box_append (GTK_BOX (box), combo);
-
-      model = G_LIST_MODEL (gtk_string_list_new ((const char * const *)options));
-      gtk_drop_down_set_model (GTK_DROP_DOWN (combo), model);
-      g_object_unref (model);
 
       widget = box;
     }

@@ -44,6 +44,7 @@
 #include "gtkbinlayout.h"
 #include "gtkeditable.h"
 #include "gtkentry.h"
+#include "gtkstringlist.h"
 
 #ifdef GDK_WINDOWING_X11
 #include "x11/gdkx.h"
@@ -502,13 +503,14 @@ theme_to_pos (GBinding *binding,
               GValue *to,
               gpointer user_data)
 {
-  char **names = user_data;
+  GtkStringList *names = user_data;
   const char *theme = g_value_get_string (from);
-  int i;
+  guint i, n;
 
-  for (i = 0; names[i]; i++)
+  for (i = 0, n = g_list_model_get_n_items (G_LIST_MODEL (names)); i < n; i++)
     {
-      if (strcmp (names[i], theme) == 0)
+      const char *name = gtk_string_list_get_string (names, i);
+      if (strcmp (name, theme) == 0)
         {
           g_value_set_uint (to, i);
           return TRUE;
@@ -523,9 +525,9 @@ pos_to_theme (GBinding *binding,
               GValue *to,
               gpointer user_data)
 {
-  char **names = user_data;
+  GtkStringList *names = user_data;
   int pos = g_value_get_uint (from);
-  g_value_set_string (to, names[pos]);
+  g_value_set_string (to, gtk_string_list_get_string (names, pos));
   return TRUE;
 }
 
@@ -537,9 +539,9 @@ init_theme (GtkInspectorVisual *vis)
   char *theme, *path;
   char **builtin_themes;
   GList *list, *l;
+  GtkStringList *names;
   guint i;
   const char * const *dirs;
-  char **names;
 
   t = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
   /* Builtin themes */
@@ -576,20 +578,19 @@ init_theme (GtkInspectorVisual *vis)
   while (g_hash_table_iter_next (&iter, (gpointer *)&theme, NULL))
     list = g_list_insert_sorted (list, theme, (GCompareFunc)strcmp);
 
-  names = g_new (char *, g_list_length (list) + 1);
+  names = gtk_string_list_new (NULL);
   for (l = list, i = 0; l; l = l->next, i++)
-    names[i] = g_strdup (l->data);
-  names[i] = NULL;
+    gtk_string_list_append (names, (const char *)l->data);
 
   g_list_free (list);
   g_hash_table_destroy (t);
 
-  gtk_drop_down_set_from_strings (GTK_DROP_DOWN (vis->theme_combo), (const char **)names);
+  gtk_drop_down_set_model (GTK_DROP_DOWN (vis->theme_combo), G_LIST_MODEL (names));
 
   g_object_bind_property_full (gtk_settings_get_for_display (vis->display), "gtk-theme-name",
                                vis->theme_combo, "selected",
                                G_BINDING_BIDIRECTIONAL | G_BINDING_SYNC_CREATE,
-                               theme_to_pos, pos_to_theme, names, (GDestroyNotify)g_strfreev);
+                               theme_to_pos, pos_to_theme, names, (GDestroyNotify)g_object_unref);
 
   if (g_getenv ("GTK_THEME") != NULL)
     {
@@ -654,8 +655,8 @@ init_icons (GtkInspectorVisual *vis)
   GHashTableIter iter;
   char *theme, *path;
   GList *list, *l;
-  char **names;
   int i;
+  GtkStringList *names;
 
   t = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
 
@@ -672,20 +673,19 @@ init_icons (GtkInspectorVisual *vis)
   while (g_hash_table_iter_next (&iter, (gpointer *)&theme, NULL))
     list = g_list_insert_sorted (list, theme, (GCompareFunc)strcmp);
 
-  names = g_new (char *, g_list_length (list) + 1);
+  names = gtk_string_list_new (NULL);
   for (l = list, i = 0; l; l = l->next, i++)
-    names[i] = g_strdup (l->data);
-  names[i] = NULL;
+    gtk_string_list_append (names, (const char *)l->data);
 
   g_hash_table_destroy (t);
   g_list_free (list);
 
-  gtk_drop_down_set_from_strings (GTK_DROP_DOWN (vis->icon_combo), (const char **)names);
+  gtk_drop_down_set_model (GTK_DROP_DOWN (vis->icon_combo), G_LIST_MODEL (names));
 
   g_object_bind_property_full (gtk_settings_get_for_display (vis->display), "gtk-icon-theme-name",
                                vis->icon_combo, "selected",
                                G_BINDING_BIDIRECTIONAL | G_BINDING_SYNC_CREATE,
-                               theme_to_pos, pos_to_theme, names, (GDestroyNotify)g_strfreev);
+                               theme_to_pos, pos_to_theme, names, (GDestroyNotify)g_object_unref);
 }
 
 static void
@@ -720,7 +720,7 @@ init_cursors (GtkInspectorVisual *vis)
   GHashTableIter iter;
   char *theme, *path;
   GList *list, *l;
-  char **names;
+  GtkStringList *names;
   int i;
 
   t = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
@@ -738,20 +738,19 @@ init_cursors (GtkInspectorVisual *vis)
   while (g_hash_table_iter_next (&iter, (gpointer *)&theme, NULL))
     list = g_list_insert_sorted (list, theme, (GCompareFunc)strcmp);
 
-  names = g_new (char *, g_list_length (list) + 1);
+  names = gtk_string_list_new (NULL);
   for (l = list, i = 0; l; l = l->next, i++)
-    names[i] = g_strdup (l->data);
-  names[i] = NULL;
+    gtk_string_list_append (names, (const char *)l->data);
 
   g_hash_table_destroy (t);
   g_list_free (list);
 
-  gtk_drop_down_set_from_strings (GTK_DROP_DOWN (vis->cursor_combo), (const char **)names);
+  gtk_drop_down_set_model (GTK_DROP_DOWN (vis->cursor_combo), G_LIST_MODEL (names));
 
   g_object_bind_property_full (gtk_settings_get_for_display (vis->display), "gtk-cursor-theme-name",
                                vis->cursor_combo, "selected",
                                G_BINDING_BIDIRECTIONAL | G_BINDING_SYNC_CREATE,
-                               theme_to_pos, pos_to_theme, names, (GDestroyNotify)g_strfreev);
+                               theme_to_pos, pos_to_theme, names, (GDestroyNotify)g_object_unref);
 }
 
 static void

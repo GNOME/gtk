@@ -254,7 +254,7 @@ do_dropdown (GtkWidget *do_widget)
       gtk_widget_set_margin_bottom (box, 10);
       gtk_window_set_child (GTK_WINDOW (window), box);
 
-      button = gtk_drop_down_new ();
+      button = gtk_drop_down_new (NULL, NULL);
 
       model = G_LIST_MODEL (pango_cairo_font_map_get_default ());
       gtk_drop_down_set_model (GTK_DROP_DOWN (button), model);

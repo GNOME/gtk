@@ -32,6 +32,7 @@
 #include "gtkswitch.h"
 #include "gtkwidgetprivate.h"
 #include "gtkstack.h"
+#include "gtkstringlist.h"
 
 
 typedef struct {
@@ -246,8 +247,7 @@ add_size_group (GtkInspectorSizeGroups *sl,
   gtk_widget_set_valign (label, GTK_ALIGN_BASELINE);
   gtk_box_append (GTK_BOX (box2), label);
 
-  dropdown = gtk_drop_down_new ();
-  gtk_drop_down_set_from_strings (GTK_DROP_DOWN (dropdown), modes);
+  dropdown = gtk_drop_down_new_from_strings (modes);
   g_object_set (dropdown, "margin", 10, NULL);
   gtk_widget_set_halign (dropdown, GTK_ALIGN_END);
   gtk_widget_set_valign (dropdown, GTK_ALIGN_BASELINE);

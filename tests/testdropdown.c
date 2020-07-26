@@ -469,7 +469,7 @@ main (int argc, char *argv[])
   gtk_widget_set_margin_bottom (box, 10);
   gtk_window_set_child (GTK_WINDOW (window), box);
 
-  button = gtk_drop_down_new ();
+  button = gtk_drop_down_new (NULL, NULL);
 
   model = G_LIST_MODEL (pango_cairo_font_map_get_default ());
   gtk_drop_down_set_model (GTK_DROP_DOWN (button), model);
@@ -513,7 +513,7 @@ main (int argc, char *argv[])
   button = drop_down_new_from_strings (device_titles, device_icons, device_descriptions);
   gtk_box_append (GTK_BOX (box), button);
 
-  button = gtk_drop_down_new ();
+  button = gtk_drop_down_new (NULL, NULL);
 
   store = g_list_store_new (GTK_TYPE_STRING_PAIR);
   g_list_store_append (store, gtk_string_pair_new ("1", "One"));
@@ -536,7 +536,7 @@ main (int argc, char *argv[])
   gtk_widget_add_css_class (hbox, "linked");
 
   entry = gtk_entry_new ();
-  button = gtk_drop_down_new ();
+  button = gtk_drop_down_new (NULL, NULL);
 
   gtk_drop_down_set_model (GTK_DROP_DOWN (button), G_LIST_MODEL (store));
 
