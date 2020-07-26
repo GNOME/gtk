@@ -281,7 +281,7 @@ GtkWidget *
 create_weather_view (void)
 {
   GtkWidget *listview;
-  GListModel *model, *selection;
+  GListModel *selection;
   GtkListItemFactory *factory;
 
   factory = gtk_signal_list_item_factory_new ();
@@ -290,11 +290,9 @@ create_weather_view (void)
   listview = gtk_list_view_new_with_factory (factory);
   gtk_orientable_set_orientation (GTK_ORIENTABLE (listview), GTK_ORIENTATION_HORIZONTAL);
   gtk_list_view_set_show_separators (GTK_LIST_VIEW (listview), TRUE);
-  model = create_weather_model ();
-  selection = G_LIST_MODEL (gtk_no_selection_new (model));
+  selection = G_LIST_MODEL (gtk_no_selection_new (create_weather_model ()));
   gtk_list_view_set_model (GTK_LIST_VIEW (listview), selection);
   g_object_unref (selection);
-  g_object_unref (model);
 
   return listview;
 }

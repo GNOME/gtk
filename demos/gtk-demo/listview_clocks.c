@@ -462,7 +462,6 @@ do_listview_clocks (GtkWidget *do_widget)
     {
       GtkWidget *gridview, *sw;
       GtkListItemFactory *factory;
-      GListModel *model;
       GtkNoSelection *selection;
 
       /* This is the normal window setup code every demo does */
@@ -489,12 +488,10 @@ do_listview_clocks (GtkWidget *do_widget)
       gtk_scrollable_set_hscroll_policy (GTK_SCROLLABLE (gridview), GTK_SCROLL_NATURAL);
       gtk_scrollable_set_vscroll_policy (GTK_SCROLLABLE (gridview), GTK_SCROLL_NATURAL);
 
-      model = create_clocks_model ();
-      selection = gtk_no_selection_new (model);
+      selection = gtk_no_selection_new (create_clocks_model ());
       gtk_grid_view_set_model (GTK_GRID_VIEW (gridview), G_LIST_MODEL (selection));
       gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (sw), gridview);
       g_object_unref (selection);
-      g_object_unref (model);
     }
 
   if (!gtk_widget_get_visible (window))

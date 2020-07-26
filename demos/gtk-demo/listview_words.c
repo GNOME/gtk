@@ -226,7 +226,6 @@ do_listview_words (GtkWidget *do_widget)
       g_signal_connect (filter_model, "notify::pending", G_CALLBACK (update_title_cb), progress);
       update_title_cb (filter_model);
 
-      g_object_unref (filter_model);
     }
 
   if (!gtk_widget_get_visible (window))
