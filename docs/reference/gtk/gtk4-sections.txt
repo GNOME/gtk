@@ -7572,6 +7572,19 @@ gtk_expression_get_type
 </SECTION>
 
 <SECTION>
+<FILE>gtkboolfilter</FILE>
+GtkBoolFilter
+gtk_bool_filter_new
+gtk_bool_filter_get_expression
+gtk_bool_filter_set_expression
+gtk_bool_filter_get_invert
+gtk_bool_filter_set_invert
+
+<SUBSECTION Private>
+gtk_bool_filter_get_type
+</SECTION>
+
+<SECTION>
 <FILE>gtkstringfilter</FILE>
 GtkStringFilter
 GtkStringFilterMatchMode
