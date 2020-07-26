@@ -85,7 +85,7 @@ gtk_inspector_list_data_set_object (GtkInspectorListData *sl,
   g_object_set (page, "visible", TRUE, NULL);
 
   sl->object = G_LIST_MODEL (object);
-  selection = gtk_no_selection_new (sl->object);
+  selection = gtk_no_selection_new (g_object_ref (sl->object));
   gtk_column_view_set_model (sl->view, G_LIST_MODEL (selection));
   g_object_unref (selection);
 }

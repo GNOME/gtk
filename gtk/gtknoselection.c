@@ -216,7 +216,7 @@ gtk_no_selection_init (GtkNoSelection *self)
 
 /**
  * gtk_no_selection_new:
- * @model: (transfer none): the #GListModel to manage
+ * @model: (allow-none) (transfer full): the #GListModel to manage, or %NULL
  *
  * Creates a new selection to handle @model.
  *
@@ -225,11 +225,18 @@ gtk_no_selection_init (GtkNoSelection *self)
 GtkNoSelection *
 gtk_no_selection_new (GListModel *model)
 {
+  GtkNoSelection *self;
+
   g_return_val_if_fail (G_IS_LIST_MODEL (model), NULL);
 
-  return g_object_new (GTK_TYPE_NO_SELECTION,
+  self = g_object_new (GTK_TYPE_NO_SELECTION,
                        "model", model,
                        NULL);
+
+  /* consume the reference */
+  g_clear_object (&model);
+
+  return self;
 }
 
 /**
@@ -253,8 +260,8 @@ gtk_no_selection_get_model (GtkNoSelection *self)
  * @self: a #GtkNoSelection
  * @model: (allow-none): A #GListModel to wrap
  *
- * Sets the model that @self should wrap. If @model is %NULL, this
- * model will be empty.
+ * Sets the model that @self should wrap.
+ * If @model is %NULL, this model will be empty.
  **/
 void
 gtk_no_selection_set_model (GtkNoSelection *self,

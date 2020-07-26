@@ -400,7 +400,6 @@ constructed (GObject *object)
                                                   g_object_ref (gtk_column_view_get_sorter (GTK_COLUMN_VIEW (sl->list)))));
   model = G_LIST_MODEL (gtk_no_selection_new (sorted));
   gtk_column_view_set_model (GTK_COLUMN_VIEW (sl->list), model);
-  g_object_unref (sorted);
   g_object_unref (model);
 }
 

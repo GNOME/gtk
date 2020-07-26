@@ -970,7 +970,6 @@ do_listview_colors (GtkWidget *do_widget)
 
       no_selection = G_LIST_MODEL (gtk_no_selection_new (selection_filter));
       gtk_grid_view_set_model (GTK_GRID_VIEW (selection_view), no_selection);
-      g_object_unref (selection_filter);
       g_object_unref (no_selection);
 
       selection_info_toggle = gtk_toggle_button_new ();

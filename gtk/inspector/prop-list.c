@@ -633,7 +633,6 @@ gtk_inspector_prop_list_set_object (GtkInspectorPropList *pl,
   gtk_widget_show (GTK_WIDGET (pl));
 
   g_object_unref (list);
-  g_object_unref (sorted);
 
   return TRUE;
 }
