@@ -1298,18 +1298,13 @@ void
 gtk_inspector_object_tree_set_display (GtkInspectorObjectTree *wt,
                                        GdkDisplay *display)
 {
-  GListModel *root_model;
-
-  root_model = create_root_model (display);
-  wt->priv->tree_model = gtk_tree_list_model_new (FALSE,
-                                                  root_model,
+  wt->priv->tree_model = gtk_tree_list_model_new (create_root_model (display),
+                                                  FALSE,
                                                   FALSE,
                                                   create_model_for_object,
                                                   NULL,
                                                   NULL);
   wt->priv->selection = gtk_single_selection_new (G_LIST_MODEL (wt->priv->tree_model));
-  g_object_unref (root_model);
-
   gtk_column_view_set_model (GTK_COLUMN_VIEW (wt->priv->list),
                              G_LIST_MODEL (wt->priv->selection));
 }

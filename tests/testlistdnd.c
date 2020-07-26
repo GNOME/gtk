@@ -191,8 +191,8 @@ create_child_model (gpointer item,
 static GListModel *
 create_tree_model (guint n, guint m)
 {
-  return G_LIST_MODEL (gtk_tree_list_model_new (FALSE,
-                                                create_model (0, n, m, TRUE),
+  return G_LIST_MODEL (gtk_tree_list_model_new (create_model (0, n, m, TRUE),
+                                                FALSE,
                                                 FALSE,
                                                 create_child_model,
                                                 GUINT_TO_POINTER (m), NULL));

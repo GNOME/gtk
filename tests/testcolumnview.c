@@ -746,12 +746,11 @@ main (int argc, char *argv[])
       dirmodel = create_list_model_for_directory (root);
       g_object_unref (root);
     }
-  tree = gtk_tree_list_model_new (FALSE,
-                                  dirmodel,
+  tree = gtk_tree_list_model_new (dirmodel,
+                                  FALSE,
                                   TRUE,
                                   create_list_model_for_file_info,
                                   NULL, NULL);
-  g_object_unref (dirmodel);
 
   sorter = gtk_tree_list_row_sorter_new (g_object_ref (gtk_column_view_get_sorter (GTK_COLUMN_VIEW (view))));
   sort = gtk_sort_list_model_new (G_LIST_MODEL (tree), sorter);

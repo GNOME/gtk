@@ -1234,8 +1234,8 @@ gtk_inspector_recorder_init (GtkInspectorRecorder *recorder)
                            NULL);
 
   recorder->render_node_root_model = g_list_store_new (GDK_TYPE_PAINTABLE);
-  recorder->render_node_model = gtk_tree_list_model_new (FALSE,
-                                                     G_LIST_MODEL (recorder->render_node_root_model),
+  recorder->render_node_model = gtk_tree_list_model_new (g_object_ref (G_LIST_MODEL (recorder->render_node_root_model)),
+                                                     FALSE,
                                                      TRUE,
                                                      create_list_model_for_render_node_paintable,
                                                      NULL, NULL);

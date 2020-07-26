@@ -589,7 +589,6 @@ int
 main (int argc, char *argv[])
 {
   GtkWidget *win, *vbox, *sw, *listview, *search_entry, *statusbar;
-  GListModel *dirmodel;
   GtkTreeListModel *tree;
   GtkFilterListModel *filter;
   GtkFilter *custom_filter;
@@ -623,13 +622,11 @@ main (int argc, char *argv[])
     root = g_file_new_for_commandline_arg (argv[1]);
   else
     root = g_file_new_for_path (g_get_current_dir ());
-  dirmodel = create_list_model_for_directory (root);
-  tree = gtk_tree_list_model_new (FALSE,
-                                  dirmodel,
+  tree = gtk_tree_list_model_new (create_list_model_for_directory (root),
+                                  FALSE,
                                   TRUE,
                                   create_list_model_for_file_info,
                                   NULL, NULL);
-  g_object_unref (dirmodel);
   g_object_unref (root);
 
   custom_filter = gtk_custom_filter_new (match_file, search_entry, NULL);
