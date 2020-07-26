@@ -431,6 +431,45 @@ selected_changed2 (GtkDropDown *dropdown,
   g_object_unref (pair);
 }
 
+static void
+setup_app_item (GtkSignalListItemFactory *factory,
+                GtkListItem              *item)
+{
+  GtkWidget *box;
+  GtkWidget *label;
+  GtkWidget *icon;
+
+  box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
+
+  icon = gtk_image_new ();
+  gtk_box_append (GTK_BOX (box), icon);
+
+  label = gtk_label_new ("");
+  gtk_label_set_xalign (GTK_LABEL (label), 0);
+  gtk_box_append (GTK_BOX (box), label);
+
+  gtk_list_item_set_child (item, box);
+}
+
+static void
+bind_app_item (GtkSignalListItemFactory *factory,
+               GtkListItem              *item)
+{
+  GAppInfo *info;
+  GtkWidget *box;
+  GtkWidget *label;
+  GtkWidget *icon;
+
+  info = gtk_list_item_get_item (item);
+  box = gtk_list_item_get_child (item);
+
+  icon = gtk_widget_get_first_child (box);
+  label = gtk_widget_get_next_sibling (icon);
+
+  gtk_image_set_from_gicon (GTK_IMAGE (icon), g_app_info_get_icon (info));
+  gtk_label_set_label (GTK_LABEL (label), g_app_info_get_display_name (info));
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -454,6 +493,7 @@ main (int argc, char *argv[])
   GtkListItemFactory *factory;
   GtkWidget *entry;
   GtkWidget *hbox;
+  GtkApplicationList *apps;
 
   gtk_init ();
 
@@ -559,6 +599,20 @@ main (int argc, char *argv[])
   gtk_box_append (GTK_BOX (box), hbox);
 
   g_object_unref (store);
+
+  button = gtk_drop_down_new ();
+
+  apps = gtk_application_list_new ();
+  gtk_drop_down_set_model (GTK_DROP_DOWN (button), G_LIST_MODEL (apps));
+  g_object_unref (apps);
+
+  factory = gtk_signal_list_item_factory_new ();
+  g_signal_connect (factory, "setup", G_CALLBACK (setup_app_item), NULL);
+  g_signal_connect (factory, "bind", G_CALLBACK (bind_app_item), NULL);
+  gtk_drop_down_set_factory (GTK_DROP_DOWN (button), factory);
+  g_object_unref (factory);
+
+  gtk_box_append (GTK_BOX (box), button);
 
   gtk_window_present (GTK_WINDOW (window));
 
