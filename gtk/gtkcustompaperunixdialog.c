@@ -322,7 +322,6 @@ gtk_custom_paper_unix_dialog_init (GtkCustomPaperUnixDialog *dialog)
   g_object_unref (printer_list);
 
   full_list = G_LIST_MODEL (gtk_flatten_list_model_new (G_LIST_MODEL (printer_list_list)));
-  g_object_unref (printer_list_list);
 
   filter = gtk_custom_filter_new (match_func, NULL, NULL);
   dialog->printer_list = G_LIST_MODEL (gtk_filter_list_model_new (full_list, filter));

@@ -443,8 +443,6 @@ test_model_changes (gconstpointer model_id)
   g_object_unref (model2);
   g_object_unref (flatten2);
   g_object_unref (flatten1);
-  g_object_unref (store2);
-  g_object_unref (store1);
   g_object_unref (multi);
 }
 

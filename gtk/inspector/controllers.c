@@ -260,7 +260,6 @@ gtk_inspector_controllers_set_object (GtkInspectorControllers *self,
 
   g_object_unref (sort_model);
   g_object_unref (flatten_model);
-  g_object_unref (map_model);
 }
 
 static void
