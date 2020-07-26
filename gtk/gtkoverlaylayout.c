@@ -31,6 +31,20 @@
 
 #include <graphene-gobject.h>
 
+
+/**
+ * SECTION:gtkoverlaylayout
+ * @Title: GtkOverlayLayout
+ * @Short_description: Layout manager that places widgets as overlays
+ *
+ * GtkOverlayLayout is the layout manager used by #GtkOverlay.
+ * It places widgets as overlays on top of the main child.
+ *
+ * This is not a reusable layout manager, since it expects its widget
+ * to be a #GtkOverlay. It only listed here so that its layout
+ * properties get documented.
+ */
+
 struct _GtkOverlayLayout
 {
   GtkLayoutManager parent_instance;
