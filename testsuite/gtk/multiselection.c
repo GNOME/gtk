@@ -615,6 +615,7 @@ test_selection_filter (void)
 
   g_object_unref (store);
   g_object_unref (selection);
+  g_object_unref (filter);
 }
 
 static void

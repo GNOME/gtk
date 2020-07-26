@@ -37,7 +37,6 @@
 
 enum {
   PROP_0,
-  PROP_ITEM_TYPE,
   PROP_MODEL,
   NUM_PROPERTIES
 };
@@ -46,7 +45,6 @@ struct _GtkSelectionFilterModel
 {
   GObject parent_instance;
 
-  GType item_type;
   GtkSelectionModel *model;
   GtkBitset *selection;
 };
@@ -61,9 +59,7 @@ static GParamSpec *properties[NUM_PROPERTIES] = { NULL, };
 static GType
 gtk_selection_filter_model_get_item_type (GListModel *list)
 {
-  GtkSelectionFilterModel *self = GTK_SELECTION_FILTER_MODEL (list);
-
-  return self->item_type;
+  return G_TYPE_OBJECT;
 }
 
 static guint
@@ -159,10 +155,6 @@ gtk_selection_filter_model_set_property (GObject      *object,
 
   switch (prop_id)
     {
-    case PROP_ITEM_TYPE:
-      self->item_type = g_value_get_gtype (value);
-      break;
-
     case PROP_MODEL:
       gtk_selection_filter_model_set_model (self, g_value_get_object (value));
       break;
@@ -183,10 +175,6 @@ gtk_selection_filter_model_get_property (GObject     *object,
 
   switch (prop_id)
     {
-    case PROP_ITEM_TYPE:
-      g_value_set_gtype (value, self->item_type);
-      break;
-
     case PROP_MODEL:
       g_value_set_object (value, self->model);
       break;
@@ -230,18 +218,6 @@ gtk_selection_filter_model_class_init (GtkSelectionFilterModelClass *class)
   gobject_class->dispose = gtk_selection_filter_model_dispose;
 
   /**
-   * GtkSelectionFilterModel:item-type:
-   *
-   * The #GType for elements of this object
-   */
-  properties[PROP_ITEM_TYPE] =
-      g_param_spec_gtype ("item-type",
-                          P_("Item type"),
-                          P_("The type of elements of this object"),
-                          G_TYPE_OBJECT,
-                          GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_EXPLICIT_NOTIFY);
-
-  /**
    * GtkSelectionFilterModel:model:
    *
    * The model being filtered
@@ -263,7 +239,7 @@ gtk_selection_filter_model_init (GtkSelectionFilterModel *self)
 
 /**
  * gtk_selection_filter_model_new:
- * @model: the selection model to filter
+ * @model: (allow-none) (transfer none): the selection model to filter, or %NULL
  *
  * Creates a new #GtkSelectionFilterModel that will include the
  * selected items from the underlying selection model.
@@ -273,35 +249,8 @@ gtk_selection_filter_model_init (GtkSelectionFilterModel *self)
 GtkSelectionFilterModel *
 gtk_selection_filter_model_new (GtkSelectionModel *model)
 {
-  GtkSelectionFilterModel *result;
-
-  g_return_val_if_fail (GTK_IS_SELECTION_MODEL (model), NULL);
-
-  result = g_object_new (GTK_TYPE_SELECTION_FILTER_MODEL,
-                         "item-type", g_list_model_get_item_type (G_LIST_MODEL (model)),
-                         "model", model,
-                         NULL);
-
-  return result;
-}
-
-/**
- * gtk_selection_filter_model_new_for_type:
- * @item_type: the type of the items that will be returned
- *
- * Creates a new empty selection filter model set up to return items
- * of type @item_type. It is up to the application to set a proper
- * selection model to ensure the item type is matched.
- *
- * Returns: a new #GtkSelectionFilterModel
- **/
-GtkSelectionFilterModel *
-gtk_selection_filter_model_new_for_type (GType item_type)
-{
-  g_return_val_if_fail (g_type_is_a (item_type, G_TYPE_OBJECT), NULL);
-
   return g_object_new (GTK_TYPE_SELECTION_FILTER_MODEL,
-                       "item-type", item_type,
+                       "model", model,
                        NULL);
 }
 
@@ -325,8 +274,6 @@ gtk_selection_filter_model_set_model (GtkSelectionFilterModel *self,
 
   g_return_if_fail (GTK_IS_SELECTION_FILTER_MODEL (self));
   g_return_if_fail (model == NULL || GTK_IS_SELECTION_MODEL (model));
-  g_return_if_fail (model == NULL || g_type_is_a (g_list_model_get_item_type (G_LIST_MODEL (model)),
-                                                  self->item_type));
 
   if (self->model == model)
     return;
