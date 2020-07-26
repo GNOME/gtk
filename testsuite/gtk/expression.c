@@ -262,8 +262,6 @@ test_nested (void)
   g_assert_cmpint (counter, ==, 0);
 
   g_object_unref (filtered);
-  g_object_unref (list);
-  g_object_unref (filter);
   gtk_expression_unref (expr);
 }
 

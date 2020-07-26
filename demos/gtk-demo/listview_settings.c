@@ -246,12 +246,8 @@ transform_settings_to_keys (GBinding     *binding,
   g_object_unref (store);
 
   filter = gtk_string_filter_new (gtk_property_expression_new (SETTINGS_TYPE_KEY, NULL, "name"));
-  filter_model = gtk_filter_list_model_new (G_LIST_MODEL (sort_model), filter);
-  g_object_unref (sort_model);
-
   g_set_object (&current_filter, filter);
-
-  g_object_unref (filter);
+  filter_model = gtk_filter_list_model_new (G_LIST_MODEL (sort_model), filter);
 
   selection_model = gtk_no_selection_new (G_LIST_MODEL (filter_model));
   g_object_unref (filter_model);

@@ -830,7 +830,6 @@ gtk_print_unix_dialog_init (GtkPrintUnixDialog *dialog)
   gtk_multi_filter_append (GTK_MULTI_FILTER (filter), filter1);
 
   filtered = G_LIST_MODEL (gtk_filter_list_model_new (sorted, filter));
-  g_object_unref (filter);
 
   selection = G_LIST_MODEL (gtk_single_selection_new (filtered));
   gtk_single_selection_set_autoselect (GTK_SINGLE_SELECTION (selection), FALSE);

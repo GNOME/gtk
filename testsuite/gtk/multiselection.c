@@ -627,7 +627,7 @@ test_set_model (void)
   
   store = new_store (1, 5, 1);
   m1 = G_LIST_MODEL (store);
-  m2 = G_LIST_MODEL (gtk_slice_list_model_new (m1, 0, 3));
+  m2 = G_LIST_MODEL (gtk_slice_list_model_new (g_object_ref (m1), 0, 3));
   selection = new_model (store);
   assert_selection (selection, "");
   assert_selection_changes (selection, "");

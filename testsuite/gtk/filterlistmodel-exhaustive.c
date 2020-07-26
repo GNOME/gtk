@@ -135,6 +135,10 @@ filter_list_model_new (GListModel *source,
   GListStore *check;
   guint i;
 
+  if (source)
+    g_object_ref (source);
+  if (filter)
+    g_object_ref (filter);
   model = gtk_filter_list_model_new (source, filter);
   check = g_list_store_new (G_TYPE_OBJECT);
   for (i = 0; i < g_list_model_get_n_items (G_LIST_MODEL (model)); i++)
