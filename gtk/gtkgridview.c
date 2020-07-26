@@ -1177,52 +1177,65 @@ gtk_grid_view_init (GtkGridView *self)
 
 /**
  * gtk_grid_view_new:
+ * @model: (allow-none) (transfer full): the model to use, or %NULL
  *
- * Creates a new empty #GtkGridView.
+ * Creates a new #GtkGridView.
  *
  * You most likely want to call gtk_grid_view_set_factory() to
- * set up a way to map its items to widgets and gtk_grid_view_set_model()
- * to set a model to provide items next.
+ * set up a way to map its items to widgets next.
  *
  * Returns: a new #GtkGridView
  **/
 GtkWidget *
-gtk_grid_view_new (void)
+gtk_grid_view_new (GListModel *model)
 {
-  return g_object_new (GTK_TYPE_GRID_VIEW, NULL);
+  GtkWidget *result;
+
+  g_return_val_if_fail (model == NULL || G_IS_LIST_MODEL (model), NULL);
+
+  result = g_object_new (GTK_TYPE_GRID_VIEW,
+                         "model", model,
+                         NULL);
+
+  /* consume the reference */
+  g_clear_object (&model);
+
+  return result;
 }
 
 /**
  * gtk_grid_view_new_with_factory:
- * @factory: (transfer full): The factory to populate items with
+ * @model: (allow-none) (transfer full): the model to use, or %NULL
+ * @factory: (allow-none) (transfer full): The factory to populate items with, or %NULL
  *
  * Creates a new #GtkGridView that uses the given @factory for
  * mapping items to widgets.
  *
- * You most likely want to call gtk_grid_view_set_model() to set
- * a model next.
- *
  * The function takes ownership of the
  * argument, so you can write code like
  * ```
- *   grid_view = gtk_grid_view_new_with_factory (
- *     gtk_builder_list_item_factory_newfrom_resource ("/resource.ui"));
+ *   grid_view = gtk_grid_view_new_with_factory (create_model (),
+ *     gtk_builder_list_item_factory_new_from_resource ("/resource.ui"));
  * ```
  *
  * Returns: a new #GtkGridView using the given @factory
  **/
 GtkWidget *
-gtk_grid_view_new_with_factory (GtkListItemFactory *factory)
+gtk_grid_view_new_with_factory (GListModel         *model,
+                                GtkListItemFactory *factory)
 {
   GtkWidget *result;
 
   g_return_val_if_fail (GTK_IS_LIST_ITEM_FACTORY (factory), NULL);
 
   result = g_object_new (GTK_TYPE_GRID_VIEW,
+                         "model", model,
                          "factory", factory,
                          NULL);
 
-  g_object_unref (factory);
+  /* consume the references */
+  g_clear_object (&model);
+  g_clear_object (&factory);
 
   return result;
 }

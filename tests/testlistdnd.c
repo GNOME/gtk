@@ -342,23 +342,17 @@ main (int argc, char *argv[])
   gtk_scrolled_window_set_has_frame (GTK_SCROLLED_WINDOW (sw), TRUE);
   gtk_stack_add_titled (GTK_STACK (stack), sw, "grid", "GtkGridView");
 
-  grid = gtk_grid_view_new ();
-  gtk_grid_view_set_min_columns (GTK_GRID_VIEW (grid), 20);
-  gtk_grid_view_set_max_columns (GTK_GRID_VIEW (grid), 20);
-
-  gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (sw), grid);
-
   model = create_model (0, 400, 1, FALSE);
-  gtk_grid_view_set_model (GTK_GRID_VIEW (grid), model);
-  g_object_unref (model);
-
   factory = gtk_signal_list_item_factory_new ();
   g_signal_connect (factory, "setup", G_CALLBACK (setup_item), NULL);
   g_signal_connect (factory, "bind", G_CALLBACK (bind_item), NULL);
   g_signal_connect (factory, "unbind", G_CALLBACK (unbind_item), NULL);
 
-  gtk_grid_view_set_factory (GTK_GRID_VIEW (grid), factory);
-  g_object_unref (factory);
+  grid = gtk_grid_view_new_with_factory (model, factory);
+  gtk_grid_view_set_min_columns (GTK_GRID_VIEW (grid), 20);
+  gtk_grid_view_set_max_columns (GTK_GRID_VIEW (grid), 20);
+
+  gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (sw), grid);
 
   /* list */
   sw = gtk_scrolled_window_new ();

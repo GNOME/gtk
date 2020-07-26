@@ -48,9 +48,10 @@ GDK_AVAILABLE_IN_ALL
 GType           gtk_grid_view_get_type                          (void) G_GNUC_CONST;
 
 GDK_AVAILABLE_IN_ALL
-GtkWidget *     gtk_grid_view_new                               (void);
+GtkWidget *     gtk_grid_view_new                               (GListModel             *model);
 GDK_AVAILABLE_IN_ALL
-GtkWidget *     gtk_grid_view_new_with_factory                  (GtkListItemFactory     *factory);
+GtkWidget *     gtk_grid_view_new_with_factory                  (GListModel             *model,
+                                                                 GtkListItemFactory     *factory);
 
 GDK_AVAILABLE_IN_ALL
 GListModel *    gtk_grid_view_get_model                         (GtkGridView            *self);
