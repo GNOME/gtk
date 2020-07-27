@@ -73,6 +73,10 @@
  * A GtkCheckButton without indicator changes the name of its main node
  * to button and adds a .check style class to it. The subnode is invisible
  * in this case.
+ *
+ * # Accessibility
+ *
+ * GtkCheckButton uses the #GTK_ACCESSIBLE_ROLE_CHECKBOX role.
  */
 
 typedef struct {

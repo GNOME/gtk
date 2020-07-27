@@ -157,6 +157,10 @@
  *   </action-widgets>
  * </object>
  * ]|
+ *
+ * # Accessibility
+ *
+ * GtkDialog uses the #GTK_ACCESSIBLE_ROLE_DIALOG role.
  */
 
 typedef struct _ResponseData ResponseData;

@@ -78,6 +78,10 @@
  * Other style classes that may be added to scrollbars inside #GtkScrolledWindow
  * include the positional classes (.left, .right, .top, .bottom) and style
  * classes related to overlay scrolling (.overlay-indicator, .dragging, .hovering).
+ *
+ * # Accessibility
+ *
+ * GtkScrollbar uses the #GTK_ACCESSIBLE_ROLE_SCROLLBAR role.
  */
 
 typedef struct _GtkScrollbarClass   GtkScrollbarClass;

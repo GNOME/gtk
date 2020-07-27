@@ -90,32 +90,6 @@
  * not desired, the automatic sizing can be turned off by explicitly
  * setting #GtkSpinButton::width-chars to a value != -1.
  *
- * # CSS nodes
- *
- * |[<!-- language="plain" -->
- * spinbutton.horizontal
- * ├── text
- * │    ├── undershoot.left
- * │    ╰── undershoot.right
- * ├── button.down
- * ╰── button.up
- * ]|
- *
- * |[<!-- language="plain" -->
- * spinbutton.vertical
- * ├── button.up
- * ├── text
- * │    ├── undershoot.left
- * │    ╰── undershoot.right
- * ╰── button.down
- * ]|
- *
- * GtkSpinButtons main CSS node has the name spinbutton. It creates subnodes
- * for the entry and the two buttons, with these names. The button nodes have
- * the style classes .up and .down. The GtkText subnodes (if present) are put
- * below the text node. The orientation of the spin button is reflected in
- * the .vertical or .horizontal style class on the main node.
- *
  * ## Using a GtkSpinButton to get an integer
  *
  * |[<!-- language="C" -->
@@ -178,6 +152,36 @@
  *   gtk_widget_show (window);
  * }
  * ]|
+ *
+ * # CSS nodes
+ *
+ * |[<!-- language="plain" -->
+ * spinbutton.horizontal
+ * ├── text
+ * │    ├── undershoot.left
+ * │    ╰── undershoot.right
+ * ├── button.down
+ * ╰── button.up
+ * ]|
+ *
+ * |[<!-- language="plain" -->
+ * spinbutton.vertical
+ * ├── button.up
+ * ├── text
+ * │    ├── undershoot.left
+ * │    ╰── undershoot.right
+ * ╰── button.down
+ * ]|
+ *
+ * GtkSpinButtons main CSS node has the name spinbutton. It creates subnodes
+ * for the entry and the two buttons, with these names. The button nodes have
+ * the style classes .up and .down. The GtkText subnodes (if present) are put
+ * below the text node. The orientation of the spin button is reflected in
+ * the .vertical or .horizontal style class on the main node.
+ *
+ * # Accessiblity
+ *
+ * GtkSpinButton uses the #GTK_ACCESSIBLE_ROLE_SPIN_BUTTON role.
  */
 
 typedef struct _GtkSpinButton      GtkSpinButton;

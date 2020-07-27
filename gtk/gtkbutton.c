@@ -49,6 +49,10 @@
  * #GtkLockButton, #GtkColorButton or #GtkFontButton use style classes such as
  * .toggle, .popup, .scale, .lock, .color on the button node
  * to differentiate themselves from a plain GtkButton.
+ *
+ * # Accessibility
+ *
+ * GtkButton uses the #GTK_ACCESSIBLE_ROLE_BUTTON role.
  */
 
 #include "config.h"

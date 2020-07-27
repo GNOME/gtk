@@ -46,6 +46,10 @@
  *
  * GtkSeparator has a single CSS node with name separator. The node
  * gets one of the .horizontal or .vertical style classes.
+ *
+ * # Accessibility
+ *
+ * GtkSeparator uses the #GTK_ACCESSIBLE_ROLE_SEPARATOR role.
  */
 
 typedef struct _GtkSeparatorClass GtkSeparatorClass;

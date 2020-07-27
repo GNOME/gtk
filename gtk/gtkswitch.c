@@ -47,6 +47,10 @@
  *
  * GtkSwitch has four css nodes, the main node with the name switch and subnodes
  * for the slider and the on and off labels. Neither of them is using any style classes.
+ *
+ * # Accessibility
+ *
+ * GtkSwitch uses the #GTK_ACCESSIBLE_ROLE_SWITCH role.
  */
 
 #include "config.h"

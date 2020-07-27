@@ -69,27 +69,6 @@
  * The group list does not need to be freed, as each #GtkRadioButton will remove
  * itself and its list item when it is destroyed.
  *
- * # CSS nodes
- *
- * |[<!-- language="plain" -->
- * radiobutton
- * ├── radio
- * ╰── <child>
- * ]|
- *
- * A GtkRadioButton with indicator (see gtk_check_button_set_draw_indicator())) has a
- * main CSS node with name radiobutton and a subnode with name radio.
- *
- * |[<!-- language="plain" -->
- * button.radio
- * ├── radio
- * ╰── <child>
- * ]|
- *
- * A GtkRadioButton without indicator changes the name of its main node
- * to button and adds a .radio style class to it. The subnode is invisible
- * in this case.
- *
  * ## How to create a group of two radio buttons.
  *
  * |[<!-- language="C" -->
@@ -124,6 +103,31 @@
  * selected button.
  * Inside the #GtkToggleButton::toggled handler, gtk_toggle_button_get_active()
  * can be used to determine if the button has been selected or deselected.
+ *
+ * # CSS nodes
+ *
+ * |[<!-- language="plain" -->
+ * radiobutton
+ * ├── radio
+ * ╰── <child>
+ * ]|
+ *
+ * A GtkRadioButton with indicator (see gtk_check_button_set_draw_indicator())) has a
+ * main CSS node with name radiobutton and a subnode with name radio.
+ *
+ * |[<!-- language="plain" -->
+ * button.radio
+ * ├── radio
+ * ╰── <child>
+ * ]|
+ *
+ * A GtkRadioButton without indicator changes the name of its main node
+ * to button and adds a .radio style class to it. The subnode is invisible
+ * in this case.
+ *
+ * # Accessibility
+ *
+ * GtkRadioButton uses the #GTK_ACCESSIBLE_ROLE_RADIO role.
  */
 
 typedef struct _GtkRadioButtonClass         GtkRadioButtonClass;
