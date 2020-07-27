@@ -109,10 +109,19 @@ gtk_accessible_get_accessible_role (GtkAccessible *self)
  * @first_state: the first #GtkAccessibleState
  * @...: a list of state and value pairs, terminated by -1
  *
- * Updates a list of accessible states.
+ * Updates a list of accessible states. See the #GtkAccessibleState
+ * documentation for the value types of accessible states.
  *
  * This function should be called by #GtkWidget types whenever an accessible
  * state change must be communicated to assistive technologies.
+ *
+ * Example:
+ * |[
+ *   value = GTK_ACCESSIBLE_TRISTATE_MIXED;
+ *   gtk_accessible_update_state (GTK_ACCESSIBLE (check_button),
+ *                                GTK_ACCESSIBLE_STATE_CHECKED, value,
+ *                                -1);
+ * ]|
  */
 void
 gtk_accessible_update_state (GtkAccessible      *self,
@@ -195,10 +204,19 @@ gtk_accessible_update_state_value (GtkAccessible      *self,
  * @first_property: the first #GtkAccessibleProperty
  * @...: a list of property and value pairs, terminated by -1
  *
- * Updates a list of accessible properties.
+ * Updates a list of accessible properties. See the #GtkAccessibleProperty
+ * documentation for the value types of accessible properties.
  *
  * This function should be called by #GtkWidget types whenever an accessible
  * property change must be communicated to assistive technologies.
+ *
+ * Example:
+ * |[
+ *   value = gtk_adjustment_get_value (adjustment);
+ *   gtk_accessible_update_property (GTK_ACCESSIBLE (spin_button),
+                                     GTK_ACCESSIBLE_PROPERTY_VALUE_NOW, value,
+                                     -1);
+ * ]|
  */
 void
 gtk_accessible_update_property (GtkAccessible         *self,
