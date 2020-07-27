@@ -1,6 +1,16 @@
 Overview of Changes in GTK 3.99.0
 =================================
 
+* Remove the old accessibility implementation and
+  add the foundations for a new one that is based
+  on ARIA. The relevant widget api is GtkAccessible,
+  the backend implementations will use GtkATContext.
+  Currently, there is just a nascent test backend.
+
+* The GTK headers have been updated to use char *,
+  int, float and double instead of the corresponding
+  GLib types.
+
 * Add GtkEditableLabel, a label that can be edited
 
 * Add GtkBookmarkList, a list model for bookmarks
@@ -35,6 +45,7 @@ Overview of Changes in GTK 3.99.0
 
 * GtkFilterListModel:
  - Add incremental filtering
+ - Add a boolean filter, GtkBoolFilter
 
 * GtkSortListModel:
  - Use timsort
