@@ -209,7 +209,7 @@ set_widget_type (GtkFishbowl *fishbowl,
                         widget_types[selected_widget_type].name);
 }
 
-void
+G_MODULE_EXPORT void
 fishbowl_next_button_clicked_cb (GtkButton *source,
                                  gpointer   user_data)
 {
@@ -224,7 +224,7 @@ fishbowl_next_button_clicked_cb (GtkButton *source,
   set_widget_type (fishbowl, new_index);
 }
 
-void
+G_MODULE_EXPORT void
 fishbowl_prev_button_clicked_cb (GtkButton *source,
                                  gpointer   user_data)
 {
@@ -239,7 +239,7 @@ fishbowl_prev_button_clicked_cb (GtkButton *source,
   set_widget_type (fishbowl, new_index);
 }
 
-void
+G_MODULE_EXPORT void
 fishbowl_changes_toggled_cb (GtkToggleButton *button,
                              gpointer         user_data)
 {
@@ -249,7 +249,7 @@ fishbowl_changes_toggled_cb (GtkToggleButton *button,
     gtk_button_set_icon_name (GTK_BUTTON (button), "changes-allow");
 }
 
-char *
+G_MODULE_EXPORT char *
 format_header_cb (GObject *object,
                   guint    count,
                   double   fps)
