@@ -189,6 +189,9 @@ static GtkTristateAccessibleValue tristate_values[] = {
 GtkAccessibleValue *
 gtk_tristate_accessible_value_new (GtkAccessibleTristate value)
 {
+  g_return_val_if_fail (value >= GTK_ACCESSIBLE_TRISTATE_FALSE &&
+                        value <= GTK_ACCESSIBLE_TRISTATE_MIXED, NULL);
+
   return gtk_accessible_value_ref ((GtkAccessibleValue *) &tristate_values[value]);
 }
 
@@ -344,6 +347,10 @@ static GtkTokenAccessibleValue orientation_values[] = {
 GtkAccessibleValue *
 gtk_orientation_accessible_value_new (GtkOrientation value)
 {
+  g_return_val_if_fail (value >= GTK_ORIENTATION_HORIZONTAL &&
+                        value <= GTK_ORIENTATION_VERTICAL,
+                        NULL);
+
   return gtk_accessible_value_ref ((GtkAccessibleValue *) &orientation_values[value]);
 }
 

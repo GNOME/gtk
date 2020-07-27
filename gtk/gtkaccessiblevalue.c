@@ -904,6 +904,8 @@ gtk_accessible_value_get_default_for_state (GtkAccessibleState state)
 {
   const GtkAccessibleCollect *cstate = &collect_states[state];
 
+  g_return_val_if_fail (state <= GTK_ACCESSIBLE_STATE_SELECTED, NULL);
+
   switch (cstate->value)
     {
     case GTK_ACCESSIBLE_STATE_BUSY:
@@ -1240,6 +1242,8 @@ gtk_accessible_value_collect_for_state (GtkAccessibleState  state,
 {
   const GtkAccessibleCollect *cstate = &collect_states[state];
 
+  g_return_val_if_fail (state <= GTK_ACCESSIBLE_STATE_SELECTED, NULL);
+
   return gtk_accessible_value_collect_valist (cstate, args);
 }
 
@@ -1259,6 +1263,8 @@ gtk_accessible_value_collect_for_state_value (GtkAccessibleState  state,
 {
   const GtkAccessibleCollect *cstate = &collect_states[state];
 
+  g_return_val_if_fail (state <= GTK_ACCESSIBLE_STATE_SELECTED, NULL);
+
   return gtk_accessible_value_collect_value (cstate, value);
 }
 
@@ -1275,6 +1281,8 @@ GtkAccessibleValue *
 gtk_accessible_value_get_default_for_property (GtkAccessibleProperty property)
 {
   const GtkAccessibleCollect *cstate = &collect_props[property];
+
+  g_return_val_if_fail (property <= GTK_ACCESSIBLE_PROPERTY_VALUE_TEXT, NULL);
 
   switch (cstate->value)
     {
@@ -1340,6 +1348,8 @@ gtk_accessible_value_collect_for_property (GtkAccessibleProperty  property,
 {
   const GtkAccessibleCollect *cstate = &collect_props[property];
 
+  g_return_val_if_fail (property <= GTK_ACCESSIBLE_PROPERTY_VALUE_TEXT, NULL);
+
   return gtk_accessible_value_collect_valist (cstate, args);
 }
 
@@ -1359,6 +1369,8 @@ gtk_accessible_value_collect_for_property_value (GtkAccessibleProperty  property
 {
   const GtkAccessibleCollect *cstate = &collect_props[property];
 
+  g_return_val_if_fail (property <= GTK_ACCESSIBLE_PROPERTY_VALUE_TEXT, NULL);
+
   return gtk_accessible_value_collect_value (cstate, value);
 }
 
@@ -1375,6 +1387,8 @@ GtkAccessibleValue *
 gtk_accessible_value_get_default_for_relation (GtkAccessibleRelation relation)
 {
   const GtkAccessibleCollect *cstate = &collect_rels[relation];
+
+  g_return_val_if_fail (relation <= GTK_ACCESSIBLE_RELATION_SET_SIZE, NULL);
 
   switch (cstate->value)
     {
@@ -1429,6 +1443,8 @@ gtk_accessible_value_collect_for_relation (GtkAccessibleRelation  relation,
 {
   const GtkAccessibleCollect *cstate = &collect_rels[relation];
 
+  g_return_val_if_fail (relation <= GTK_ACCESSIBLE_RELATION_SET_SIZE, NULL);
+
   return gtk_accessible_value_collect_valist (cstate, args);
 }
 
@@ -1448,6 +1464,8 @@ gtk_accessible_value_collect_for_relation_value (GtkAccessibleRelation  relation
 {
   const GtkAccessibleCollect *cstate = &collect_rels[relation];
 
+  g_return_val_if_fail (relation <= GTK_ACCESSIBLE_RELATION_SET_SIZE, NULL);
+ 
   return gtk_accessible_value_collect_value (cstate, value);
 }
 
