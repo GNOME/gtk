@@ -232,6 +232,34 @@ test_invalid_state (gconstpointer data)
 }
 
 static void
+test_update_multiple_states (void)
+{
+  TestObject *object;
+
+  object = test_object_new (GTK_ACCESSIBLE_ROLE_CHECKBOX);
+
+  gtk_accessible_update_state (GTK_ACCESSIBLE (object),
+                               GTK_ACCESSIBLE_STATE_BUSY, TRUE,
+                               GTK_ACCESSIBLE_STATE_CHECKED, GTK_ACCESSIBLE_TRISTATE_MIXED,
+                               -1);
+
+  gtk_test_accessible_assert_state (object, GTK_ACCESSIBLE_STATE_BUSY, TRUE);
+  gtk_test_accessible_assert_state (object, GTK_ACCESSIBLE_STATE_CHECKED, GTK_ACCESSIBLE_TRISTATE_MIXED);
+
+  gtk_accessible_update_state (GTK_ACCESSIBLE (object),
+                               GTK_ACCESSIBLE_STATE_BUSY, FALSE,
+                               GTK_ACCESSIBLE_STATE_CHECKED, GTK_ACCESSIBLE_TRISTATE_TRUE,
+                               GTK_ACCESSIBLE_STATE_BUSY, TRUE,
+                               GTK_ACCESSIBLE_STATE_BUSY, FALSE,
+                               -1);
+
+  gtk_test_accessible_assert_state (object, GTK_ACCESSIBLE_STATE_BUSY, FALSE);
+  gtk_test_accessible_assert_state (object, GTK_ACCESSIBLE_STATE_CHECKED, GTK_ACCESSIBLE_TRISTATE_TRUE);
+
+  g_object_unref (object);
+}
+
+static void
 test_autocomplete_property (gconstpointer data)
 {
   GtkAccessibleProperty property = GPOINTER_TO_UINT (data);
@@ -446,6 +474,34 @@ test_sort_property (gconstpointer data)
 }
 
 static void
+test_update_multiple_properties (void)
+{
+  TestObject *object;
+
+  object = test_object_new (GTK_ACCESSIBLE_ROLE_CHECKBOX);
+
+  gtk_accessible_update_property (GTK_ACCESSIBLE (object),
+                                  GTK_ACCESSIBLE_PROPERTY_VALUE_MAX, 100.,
+                                  GTK_ACCESSIBLE_PROPERTY_VALUE_MIN, 10.,
+                                  -1);
+
+  gtk_test_accessible_assert_property (object, GTK_ACCESSIBLE_PROPERTY_VALUE_MAX, 100.);
+  gtk_test_accessible_assert_property (object, GTK_ACCESSIBLE_PROPERTY_VALUE_MIN, 10.);
+
+  gtk_accessible_update_property (GTK_ACCESSIBLE (object),
+                                  GTK_ACCESSIBLE_PROPERTY_VALUE_MAX, 99.,
+                                  GTK_ACCESSIBLE_PROPERTY_VALUE_MIN, 11.,
+                                  GTK_ACCESSIBLE_PROPERTY_VALUE_MAX, 98.,
+                                  GTK_ACCESSIBLE_PROPERTY_VALUE_MAX, 97.,
+                                  -1);
+
+  gtk_test_accessible_assert_property (object, GTK_ACCESSIBLE_PROPERTY_VALUE_MAX, 97.);
+  gtk_test_accessible_assert_property (object, GTK_ACCESSIBLE_PROPERTY_VALUE_MIN, 11.);
+
+  g_object_unref (object);
+}
+
+static void
 test_int_relation (gconstpointer data)
 {
   GtkAccessibleRelation relation = GPOINTER_TO_UINT (data);
@@ -594,6 +650,8 @@ main (int argc, char *argv[])
   g_test_add_data_func ("/a11y/state/pressed", GUINT_TO_POINTER (GTK_ACCESSIBLE_STATE_PRESSED), test_tristate_state);
   g_test_add_data_func ("/a11y/state/selected", GUINT_TO_POINTER (GTK_ACCESSIBLE_STATE_SELECTED), test_maybe_boolean_state);
 
+  g_test_add_func ("/a11y/state/update-multiple", test_update_multiple_states);
+
   g_test_add_data_func ("/a11y/property/autocomplete", GUINT_TO_POINTER (GTK_ACCESSIBLE_PROPERTY_AUTOCOMPLETE), test_autocomplete_property);
   g_test_add_data_func ("/a11y/property/description", GUINT_TO_POINTER (GTK_ACCESSIBLE_PROPERTY_DESCRIPTION), test_string_property);
   g_test_add_data_func ("/a11y/property/has-popup", GUINT_TO_POINTER (GTK_ACCESSIBLE_PROPERTY_HAS_POPUP), test_boolean_property);
@@ -613,6 +671,8 @@ main (int argc, char *argv[])
   g_test_add_data_func ("/a11y/property/value-min", GUINT_TO_POINTER (GTK_ACCESSIBLE_PROPERTY_VALUE_MIN), test_number_property);
   g_test_add_data_func ("/a11y/property/value-now", GUINT_TO_POINTER (GTK_ACCESSIBLE_PROPERTY_VALUE_NOW), test_number_property);
   g_test_add_data_func ("/a11y/property/value-text", GUINT_TO_POINTER (GTK_ACCESSIBLE_PROPERTY_VALUE_TEXT), test_string_property);
+
+  g_test_add_func ("/a11y/property/update-multiple", test_update_multiple_properties);
 
   g_test_add_data_func ("/a11y/relation/active-descendant", GUINT_TO_POINTER (GTK_ACCESSIBLE_RELATION_ACTIVE_DESCENDANT), test_ref_relation);
   g_test_add_data_func ("/a11y/relation/col-count", GUINT_TO_POINTER (GTK_ACCESSIBLE_RELATION_COL_COUNT), test_int_relation);
