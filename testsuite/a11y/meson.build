@@ -13,6 +13,8 @@ tests = [
   { 'name': 'accessible' },
   { 'name': 'button' },
   { 'name': 'checkbutton' },
+  { 'name': 'dialog' },
+  { 'name': 'window' },
 ]
 
 
