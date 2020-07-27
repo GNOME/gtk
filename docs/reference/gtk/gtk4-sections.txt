@@ -89,25 +89,6 @@ gtk_accel_label_get_type
 </SECTION>
 
 <SECTION>
-<FILE>gtkaccessible</FILE>
-<TITLE>GtkAccessible</TITLE>
-GtkAccessible
-gtk_accessible_get_widget
-gtk_accessible_set_widget
-
-<SUBSECTION Standard>
-GTK_ACCESSIBLE
-GTK_TYPE_ACCESSIBLE
-GTK_ACCESSIBLE_CLASS
-GTK_ACCESSIBLE_GET_CLASS
-GTK_IS_ACCESSIBLE
-GTK_IS_ACCESSIBLE_CLASS
-<SUBSECTION Private>
-GtkAccessiblePrivate
-gtk_accessible_get_type
-</SECTION>
-
-<SECTION>
 <FILE>gtkadjustment</FILE>
 <TITLE>GtkAdjustment</TITLE>
 GtkAdjustment
@@ -7659,7 +7640,18 @@ GtkAccessible
 GtkAccessibleRole
 GtkAccessibleState
 GtkAccessibleProperty
+GtkAccessibleRelation
+GtkAccessibleTristate
+GtkAccessibleInvalidState
+GtkAccessibleAutocomplete
+GtkAccessibleSort
 gtk_accessible_update_state
+gtk_accessible_update_state_value
+gtk_accessible_update_property
+gtk_accessible_update_property_value
+gtk_accessible_update_relation
+gtk_accessible_update_relation_value
+
 <SUBSECTION Standard>
 GTK_TYPE_ACCESSIBLE
 GTK_TYPE_ACCESSIBLE_PROPERTY

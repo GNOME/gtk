@@ -28,8 +28,8 @@
  * “AT”. Every accessible implementation has:
  *
  *  - a “role”, represented by a value of the #GtkAccessibleRole enumeration
- *  - a “state”, represented by a set of #GtkAccessibleState and
- *    #GtkAccessibleProperty values
+ *  - a “state”, represented by a set of #GtkAccessibleState,
+ *       #GtkAccessibleProperty and #GtkAccessibleRelation values
  *
  * The role cannot be changed after instantiating a #GtkAccessible
  * implementation.
