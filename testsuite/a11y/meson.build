@@ -11,6 +11,7 @@ testdatadir = join_paths(installed_test_datadir, 'gtk')
 #  - 'suites': (array): additional test suites
 tests = [
   { 'name': 'button' },
+  { 'name': 'accessible' },
 ]
 
 
