@@ -207,6 +207,17 @@ foreach func : check_functions
   endif
 endforeach
 
+# Check for __uint128_t (gcc) by checking for 128-bit division
+uint128_t_src = '''int main() {
+static __uint128_t v1 = 100;
+static __uint128_t v2 = 10;
+static __uint128_t u;
+u = v1 / v2;
+}'''
+if cc.compiles(uint128_t_src, name : '__uint128_t available')
+  cdata.set('HAVE_UINT128_T', 1)
+endif
+
 # Disable deprecation checks for all libraries we depend on on stable branches.
 # This is so newer versions of those libraries don't cause more warnings with
 # a stable GTK version.
