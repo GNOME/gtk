@@ -1,4 +1,5 @@
 inspector_sources = files(
+  'a11y.c',
   'action-editor.c',
   'actions.c',
   'baselineoverlay.c',

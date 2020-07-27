@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface domain="gtk40">
+  <template class="GtkInspectorA11y" parent="GtkWidget">
+    <child>
+      <object class="GtkBox" id="box">
+        <property name="orientation">vertical</property>
+        <child>
+          <object class="GtkBox">
+            <property name="margin-start">10</property>
+            <property name="margin-end">10</property>
+            <property name="margin-top">10</property>
+            <property name="margin-bottom">10</property>
+            <property name="spacing">40</property>
+            <child>
+              <object class="GtkLabel">
+                <property name="label" translatable="yes">Role</property>
+                <property name="halign">start</property>
+                <property name="valign">baseline</property>
+                <property name="xalign">0.0</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel" id="role">
+                <property name="selectable">1</property>
+                <property name="halign">end</property>
+                <property name="valign">baseline</property>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkScrolledWindow">
+            <property name="vexpand">1</property>
+            <child>
+              <object class="GtkColumnView" id="attributes">
+                <property name="show-column-separators">1</property>
+                <style>
+                  <class name="frame"/>
+                </style>
+                <child>
+                  <object class="GtkColumnViewColumn">
+                    <property name="title" translatable="yes">Attribute</property>
+                    <property name="expand">1</property>
+                    <property name="factory">
+                      <object class="GtkSignalListItemFactory">
+                        <signal name="setup" handler="setup_cell_cb"/>
+                        <signal name="bind" handler="bind_name_cb"/>
+                      </object>
+                    </property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkColumnViewColumn">
+                    <property name="title" translatable="yes">Value</property>
+                    <property name="expand">1</property>
+                    <property name="factory">
+                      <object class="GtkSignalListItemFactory">
+                        <signal name="setup" handler="setup_cell_cb"/>
+                        <signal name="bind" handler="bind_value_cb"/>
+                      </object>
+                    </property>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>

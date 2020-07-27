@@ -24,6 +24,7 @@
 
 #include "init.h"
 
+#include "a11y.h"
 #include "actions.h"
 #include "cellrenderergraph.h"
 #include "controllers.h"
@@ -61,6 +62,7 @@ gtk_inspector_init (void)
 
   g_type_ensure (GTK_TYPE_CELL_RENDERER_GRAPH);
   g_type_ensure (GTK_TYPE_GRAPH_DATA);
+  g_type_ensure (GTK_TYPE_INSPECTOR_A11Y);
   g_type_ensure (GTK_TYPE_INSPECTOR_ACTIONS);
   g_type_ensure (GTK_TYPE_INSPECTOR_CONTROLLERS);
   g_type_ensure (GTK_TYPE_INSPECTOR_CSS_EDITOR);

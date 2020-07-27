@@ -524,6 +524,16 @@
                                         </property>
                                       </object>
                                     </child>
+                                    <child>
+                                      <object class="GtkStackPage">
+                                        <property name="name">a11y</property>
+                                        <property name="title" translatable="yes">Accessibility</property>
+                                        <property name="child">
+                                          <object class="GtkInspectorA11y" id="a11y">
+                                          </object>
+                                        </property>
+                                      </object>
+                                    </child>
                                   </object>
                                 </child>
                               </object>

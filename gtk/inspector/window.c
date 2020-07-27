@@ -35,6 +35,7 @@
 #include "css-node-tree.h"
 #include "object-tree.h"
 #include "size-groups.h"
+#include "a11y.h"
 #include "actions.h"
 #include "shortcuts.h"
 #include "list-data.h"
@@ -108,6 +109,7 @@ set_selected_object (GtkInspectorWindow *iw,
   gtk_inspector_menu_set_object (GTK_INSPECTOR_MENU (iw->menu), selected);
   gtk_inspector_controllers_set_object (GTK_INSPECTOR_CONTROLLERS (iw->controllers), selected);
   gtk_inspector_magnifier_set_object (GTK_INSPECTOR_MAGNIFIER (iw->magnifier), selected);
+  gtk_inspector_a11y_set_object (GTK_INSPECTOR_A11Y (iw->a11y), selected);
 
   for (l = iw->extra_pages; l != NULL; l = l->next)
     g_object_set (l->data, "object", selected, NULL);
@@ -638,6 +640,7 @@ gtk_inspector_window_class_init (GtkInspectorWindowClass *klass)
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, misc_info);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, controllers);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, magnifier);
+  gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, a11y);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, sidebar_revealer);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, css_editor);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, visual);
