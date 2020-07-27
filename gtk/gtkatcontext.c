@@ -329,8 +329,8 @@ gtk_at_context_get_accessible_role (GtkATContext *self)
   return self->accessible_role;
 }
 
-/*< private >
- * gtk_at_context_create:
+/**
+ * gtk_at_context_create: (constructor)
  * @accessible_role: the accessible role used by the #GtkATContext
  * @accessible: the #GtkAccessible implementation using the #GtkATContext
  *
@@ -340,7 +340,7 @@ gtk_at_context_get_accessible_role (GtkATContext *self)
  * The #GtkATContext implementation being instantiated will depend on the
  * platform.
  *
- * Returns: (nullable): the #GtkATContext
+ * Returns: (nullable) (transfer full): the #GtkATContext
  */
 GtkATContext *
 gtk_at_context_create (GtkAccessibleRole  accessible_role,

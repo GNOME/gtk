@@ -29,10 +29,7 @@ test_object_accessible_get_at_context (GtkAccessible *accessible)
   TestObject *self = (TestObject*)accessible;
 
   if (self->at_context == NULL)
-    self->at_context = g_object_new (g_type_from_name ("GtkTestATContext"),
-                                     "accessible-role", self->role,
-                                     "accessible", accessible,
-                                     NULL);
+    self->at_context = gtk_at_context_create (self->role, accessible);
 
   return self->at_context;
 }
@@ -622,24 +619,10 @@ test_reflist_relation (gconstpointer data)
   g_object_unref (third);
 }
 
-static void
-ensure_test_at_context_type (void)
-{
-  GtkWidget *button;
-
-  button = gtk_button_new ();
-
-  g_object_ref_sink (button);
-
-  g_object_unref (button);
-}
-
 int
 main (int argc, char *argv[])
 {
   gtk_test_init (&argc, &argv, NULL);
-
-  ensure_test_at_context_type ();
 
   g_test_add_data_func ("/a11y/state/busy", GUINT_TO_POINTER (GTK_ACCESSIBLE_STATE_BUSY), test_boolean_state);
   g_test_add_data_func ("/a11y/state/checked", GUINT_TO_POINTER (GTK_ACCESSIBLE_STATE_CHECKED), test_tristate_state);

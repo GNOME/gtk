@@ -36,8 +36,12 @@ GDK_AVAILABLE_IN_ALL
 GDK_DECLARE_INTERNAL_TYPE (GtkATContext, gtk_at_context, GTK, AT_CONTEXT, GObject)
 
 GDK_AVAILABLE_IN_ALL
-GtkAccessible *         gtk_at_context_get_accessible           (GtkATContext *self);
+GtkAccessible *         gtk_at_context_get_accessible           (GtkATContext      *self);
 GDK_AVAILABLE_IN_ALL
-GtkAccessibleRole       gtk_at_context_get_accessible_role      (GtkATContext *self);
+GtkAccessibleRole       gtk_at_context_get_accessible_role      (GtkATContext      *self);
+
+GDK_AVAILABLE_IN_ALL
+GtkATContext *          gtk_at_context_create                   (GtkAccessibleRole  accessible_role,
+                                                                 GtkAccessible     *accessible);
 
 G_END_DECLS

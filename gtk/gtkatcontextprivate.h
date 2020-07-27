@@ -105,9 +105,6 @@ struct _GtkATContextClass
                          GtkAccessibleAttributeSet   *relations);
 };
 
-GtkATContext *          gtk_at_context_create                   (GtkAccessibleRole      accessible_role,
-                                                                 GtkAccessible         *accessible);
-
 void                    gtk_at_context_update                   (GtkATContext          *self);
 
 void                    gtk_at_context_set_accessible_state     (GtkATContext          *self,
