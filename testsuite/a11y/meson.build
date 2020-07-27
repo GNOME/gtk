@@ -10,8 +10,9 @@ testdatadir = join_paths(installed_test_datadir, 'gtk')
 #  - 'link_args': (array): additional linker arguments
 #  - 'suites': (array): additional test suites
 tests = [
-  { 'name': 'button' },
   { 'name': 'accessible' },
+  { 'name': 'button' },
+  { 'name': 'checkbutton' },
 ]
 
 
