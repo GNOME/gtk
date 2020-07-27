@@ -1047,10 +1047,20 @@ gtk_accessible_value_collect_valist (const GtkAccessibleCollect *cstate,
 
         gpointer value = va_arg (*args, gpointer);
 
-        if (ctor == NULL)
-          res = gtk_reference_accessible_value_new (value);
+        if (value == NULL)
+          {
+            if (ctor == NULL)
+              res = gtk_undefined_accessible_value_new ();
+            else
+              res = (* ctor) (value);
+          }
         else
-          res = (* ctor) (value);
+          {
+            if (ctor == NULL)
+              res = gtk_reference_accessible_value_new (value);
+            else
+              res = (* ctor) (value);
+          }
       }
       break;
 
@@ -1061,10 +1071,20 @@ gtk_accessible_value_collect_valist (const GtkAccessibleCollect *cstate,
 
         GList *value = va_arg (*args, gpointer);
 
-        if (ctor == NULL)
-          res = gtk_reference_list_accessible_value_new (value);
+        if (value == NULL)
+          {
+            if (ctor == NULL)
+              res = gtk_undefined_accessible_value_new ();
+            else
+              res = (* ctor) (value);
+          }
         else
-          res = (* ctor) (value);
+          {
+            if (ctor == NULL)
+              res = gtk_reference_list_accessible_value_new (value);
+            else
+              res = (* ctor) (value);
+          }
       }
       break;
 
