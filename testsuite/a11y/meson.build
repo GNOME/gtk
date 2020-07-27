@@ -15,6 +15,7 @@ tests = [
   { 'name': 'checkbutton' },
   { 'name': 'dialog' },
   { 'name': 'progressbar' },
+  { 'name': 'separator' },
   { 'name': 'window' },
 ]
 
