@@ -570,7 +570,7 @@ test_ref_relation (gconstpointer data)
 
   gtk_test_accessible_assert_role (object, GTK_ACCESSIBLE_ROLE_CHECKBOX);
 
-  //gtk_test_accessible_assert_relation (object, relation, GTK_ACCESSIBLE_VALUE_UNDEFINED);
+  gtk_test_accessible_assert_relation (object, relation, NULL);
 
   gtk_accessible_update_relation (GTK_ACCESSIBLE (object),
                                   relation, other,
@@ -596,7 +596,7 @@ test_reflist_relation (gconstpointer data)
 
   gtk_test_accessible_assert_role (object, GTK_ACCESSIBLE_ROLE_CHECKBOX);
 
-  //gtk_test_accessible_assert_relation (object, relation, GTK_ACCESSIBLE_VALUE_UNDEFINED);
+  gtk_test_accessible_assert_relation (object, relation, NULL);
 
   refs = g_list_append (NULL, other);
 
