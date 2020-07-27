@@ -29,11 +29,11 @@ set of *states*.
 
 Roles define the taxonomy and semantics of a UI control to any assistive
 technology application; for instance, a button will have a role of
-%GTK\_ACCESSIBLE\_ROLE\_BUTTON`; an entry will have a role of
-%GTK\_ACCESSIBLE\_ROLE\_TEXTBOX`; a toggle button will have a role of
-%GTK\_ACCESSIBLE\_ROLE\_CHECKBOX`; etc.
+`GTK_ACCESSIBLE_ROLE_BUTTON`; an entry will have a role of
+`GTK_ACCESSIBLE_ROLE_TEXTBOX`; a toggle button will have a role of
+`GTK_ACCESSIBLE_ROLE_CHECKBOX`; etc.
 
-Each role is part of the widget's instance, and **CANNOT** be changed over
+Each role is part of the widget's instance, and **cannot** be changed over
 time or as the result of a user action. Roles allows assistive technology
 applications to identify a UI control and decide how to present it to a
 user; if a part of the application's UI changes role, the control needs to
@@ -41,7 +41,8 @@ be removed and replaced with another one with the appropriate role.
 
 #### List of accessible roles
 
-Each role name is part of the `GtkAccessibleRole` enumeration.
+Each role name is part of the #GtkAccessibleRole enumeration.
+
 | Role name | Description |
 |-----------|-------------|
 | `ALERT` | A message with important information |
@@ -60,12 +61,13 @@ States, or properties, provide specific information about an accessible UI
 control, and describe it for the assistive technology applications.
 
 Unlike roles, states may change over time, or in response to user action;
-for instance, a toggle button will change its %GTK\_ACCESSIBLE\_STATE\_CHECKED
+for instance, a toggle button will change its `GTK_ACCESSIBLE_STATE_CHECKED`
 state every time it is toggled, either by the user or programmatically.
 
 #### List of accessible states
 
 Each state name is part of the #GtkAccessibleState enumeration.
+
 | State name | Description |
 |------------|-------------|
 | `...` | … |
@@ -79,26 +81,27 @@ out of the box, there are some additional properties and considerations for
 application developers. For instance, if your application presents the user
 with a form to fill out, you should ensure that:
 
- * the container of the form has a `Gtk.AccessibleRole.FORM` role
- * each text entry widget in the form has the `GtkAccessible:labelled-by`
-   property pointing to the label widget that describes it
+ * the container of the form has a `GTK_ACCESSIBLE_ROLE_FORM` role
+ * each text entry widget in the form has the `GTK_ACCESSIBLE_RELATION_LABELLED_BY`
+   relation pointing to the label widget that describes it
 
-Another example: if you create a tool bar containing buttons with only icons, you should ensure that:
+Another example: if you create a tool bar containing buttons with only icons,
+you should ensure that:
 
- * the container has a `Gtk.AccessibleRole.TOOLBAR` role
- * each button has a `GtkAccessible:label` property set with the user
+ * the container has a `GTK_ACCESSIBLE_ROLE_TOOLBAR` role
+ * each button has a `GTK_ACCESSIBLE_PROPERTY_LABEL` property set with the user
    readable and localised action performed when pressed; for instance "Copy",
    "Paste", "Add layer", or "Remove"
 
 GTK will try to fill in some information by using ancillary UI control
 property, for instance the accessible label will be taken from the label or
 placeholder text used by the UI control, or from its tooltip, if the
-`GtkAccessible:label` or the `GtkAccessible:labelled-by` properties are
-unset. Nevertheless, it is good practice and project hygiene to explicitly
-specify the accessible properties, just like it's good practice to specify
-tooltips and style classes.
+`GTK_ACCESSIBLE_PROPERTY_LABEL` property or the `GTK_ACCESSIBLE_RELATION_LABELLED_BY`
+relation are unset. Nevertheless, it is good practice and project hygiene
+to explicitly specify the accessible properties, just like it's good practice
+to specify tooltips and style classes.
 
-Application developers using GTK **SHOULD** ensure that their UI controls
+Application developers using GTK **should** ensure that their UI controls
 are accessible as part of the development process. When using `GtkBuilder`
 templates and UI definition files, GTK provides a validation tool that
 verifies that each UI element has a valid role and properties; this tool can
@@ -106,11 +109,11 @@ be used as part of the application's test suite to avoid regressions.
 
 ## Implementations
 
-Each UI control implements the `GtkAccessible` interface to allow widget and
+Each UI control implements the #GtkAccessible interface to allow widget and
 application developers to specify the roles, state, and relations between UI
 controls. This API is purely descriptive.
 
-Each `GtkAccessible` implementation must provide a `GtkATContext` instance,
+Each `GtkAccessible` implementation must provide a #GtkATContext instance,
 which acts as a proxy to the specific platform's accessibility API:
 
  * AT-SPI on Linux/BSD
