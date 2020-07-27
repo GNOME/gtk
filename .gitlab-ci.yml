@@ -68,6 +68,7 @@ style-check-diff:
 fedora-x86_64:
   extends: .build-fedora-default
   stage: build
+  needs: []
   variables:
     EXTRA_MESON_FLAGS: "--buildtype=debug --default-library=both"
   script:
@@ -82,6 +83,7 @@ fedora-x86_64:
 release-build:
   extends: .build-fedora-default
   stage: build
+  needs: []
   variables:
     EXTRA_MESON_FLAGS: "--buildtype=release"
   script:
@@ -109,6 +111,7 @@ release-build:
 
 msys2-mingw64:
   extends: .mingw-defaults
+  needs: []
   variables:
     MSYSTEM: "MINGW64"
     CHERE_INVOKING: "yes"
@@ -139,37 +142,44 @@ msys2-mingw64:
 
 flatpak-manual:demo:
   extends: .flatpak-manual
+  needs: []
   variables:
     APPID: org.gtk.Demo4
 
 flatpak-master:demo:
   extends: .flatpak-master
+  needs: []
   variables:
     APPID: org.gtk.Demo4
 
 flatpak-manual:widget-factory:
   extends: .flatpak-manual
+  needs: []
   variables:
     APPID: org.gtk.WidgetFactory4
 
 flatpak-master:widget-factory:
   extends: .flatpak-master
+  needs: []
   variables:
     APPID: org.gtk.WidgetFactory4
 
 flatpak-manual:icon-browser:
   extends: .flatpak-manual
+  needs: []
   variables:
     APPID: org.gtk.IconBrowser4
 
 flatpak-master:icon-browser:
   extends: .flatpak-master
+  needs: []
   variables:
     APPID: org.gtk.IconBrowser4
 
 static-scan:
   image: $FEDORA_IMAGE
   stage: analysis
+  needs: []
   variables:
     EXTRA_MESON_FLAGS: "--buildtype=debug"
   script:
@@ -186,6 +196,7 @@ asan-build:
   image: $FEDORA_IMAGE
   tags: [ asan ]
   stage: analysis
+  needs: []
   variables:
   script:
     - CC=clang meson --buildtype=debugoptimized -Db_sanitize=address -Db_lundef=false -Dintrospection=false _build
@@ -199,6 +210,7 @@ asan-build:
 reference:
   image: $DOCS_IMAGE
   stage: docs
+  needs: []
   variables:
     EXTRA_MESON_FLAGS: "--buildtype=release"
   script:
@@ -214,6 +226,7 @@ reference:
 
 pages:
   stage: deploy
+  needs: ['reference']
   script:
     - mv _reference/ public/
   artifacts:
