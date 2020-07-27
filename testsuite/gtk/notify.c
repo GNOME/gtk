@@ -373,8 +373,7 @@ test_type (gconstpointer data)
     return;
 
   /* non-GTK+ */
-  if (g_str_equal (g_type_name (type), "AtkObject") ||
-      g_str_equal (g_type_name (type), "GdkPixbufSimpleAnim"))
+  if (g_str_equal (g_type_name (type), "GdkPixbufSimpleAnim"))
     return;
 
   /* Deprecated, not getting fixed */
@@ -505,8 +504,7 @@ test_type (gconstpointer data)
         continue;
 
       /* non-GTK+ */
-      if (g_str_equal (g_type_name (pspec->owner_type), "AtkObject") ||
-          g_str_equal (g_type_name (pspec->owner_type), "GdkPixbufSimpleAnim") || 
+      if (g_str_equal (g_type_name (pspec->owner_type), "GdkPixbufSimpleAnim") || 
           g_str_equal (g_type_name (pspec->owner_type), "GMountOperation")) 
         continue;
 
@@ -522,6 +520,10 @@ test_type (gconstpointer data)
            g_str_equal (pspec->name, "is-focus") ||
            g_str_equal (pspec->name, "hexpand") ||
            g_str_equal (pspec->name, "vexpand")))
+        continue;
+
+      if (g_type_is_a (type, GTK_TYPE_ACCESSIBLE) &&
+          g_str_equal (pspec->name, "accessible-role"))
         continue;
 
       if (pspec->owner_type == GTK_TYPE_ENTRY &&

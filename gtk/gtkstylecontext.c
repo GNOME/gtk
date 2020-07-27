@@ -1321,58 +1321,6 @@ gtk_snapshot_render_insertion_cursor (GtkSnapshot     *snapshot,
     }
 }
 
-static AtkAttributeSet *
-add_attribute (AtkAttributeSet  *attributes,
-               AtkTextAttribute  attr,
-               const char       *value)
-{
-  AtkAttribute *at;
-
-  at = g_new (AtkAttribute, 1);
-  at->name = g_strdup (atk_text_attribute_get_name (attr));
-  at->value = g_strdup (value);
-
-  return g_slist_prepend (attributes, at);
-}
-
-/*
- * _gtk_style_context_get_attributes:
- * @attributes: a #AtkAttributeSet to add attributes to
- * @context: the #GtkStyleContext to get attributes from
- * @flags: the state to use with @context
- *
- * Adds the foreground and background color from @context to
- * @attributes, after translating them to ATK attributes.
- *
- * This is a convenience function that can be used in
- * implementing the #AtkText interface in widgets.
- *
- * Returns: the modified #AtkAttributeSet
- */
-AtkAttributeSet *
-_gtk_style_context_get_attributes (AtkAttributeSet *attributes,
-                                   GtkStyleContext *context)
-{
-  const GdkRGBA *color; 
-  char *value;
-
-  color = gtk_css_color_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BACKGROUND_COLOR));
-  value = g_strdup_printf ("%u,%u,%u",
-                           (guint) ceil (color->red * 65536 - color->red),
-                           (guint) ceil (color->green * 65536 - color->green),
-                           (guint) ceil (color->blue * 65536 - color->blue));
-  attributes = add_attribute (attributes, ATK_TEXT_ATTR_BG_COLOR, value);
-
-  color = gtk_css_color_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_COLOR));
-  value = g_strdup_printf ("%u,%u,%u",
-                           (guint) ceil (color->red * 65536 - color->red),
-                           (guint) ceil (color->green * 65536 - color->green),
-                           (guint) ceil (color->blue * 65536 - color->blue));
-  attributes = add_attribute (attributes, ATK_TEXT_ATTR_FG_COLOR, value);
-
-  return attributes;
-}
-
 /**
  * GtkStyleContextPrintFlags:
  * @GTK_STYLE_CONTEXT_PRINT_NONE: Default value.

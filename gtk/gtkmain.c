@@ -134,7 +134,6 @@
 #include "gtkroot.h"
 #include "gtknative.h"
 
-#include "a11y/gtkaccessibility.h"
 #include "inspector/window.h"
 
 #define GDK_ARRAY_ELEMENT_TYPE GtkWidget *
@@ -183,6 +182,7 @@ static const GdkDebugKey gtk_debug_keys[] = {
   { "interactive", GTK_DEBUG_INTERACTIVE, "Enable the GTK inspector" },
   { "touchscreen", GTK_DEBUG_TOUCHSCREEN, "Pretend the pointer is a touchscreen" },
   { "snapshot", GTK_DEBUG_SNAPSHOT, "Generate debug render nodes" },
+  { "accessibility", GTK_DEBUG_A11Y, "Information about accessibility state changes" },
 };
 #endif /* G_ENABLE_DEBUG */
 
@@ -644,7 +644,6 @@ static void
 default_display_notify_cb (GdkDisplayManager *dm)
 {
   debug_flags[0].display = gdk_display_get_default ();
-  _gtk_accessibility_init ();
 }
 
 static void

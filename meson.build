@@ -29,7 +29,6 @@ endif
 glib_req           = '>= @0@.@1@.@2@'.format(glib_major_req, glib_minor_req, glib_micro_req)
 pango_req          = '>= 1.45.0'
 fribidi_req        = '>= 0.19.7'
-atk_req            = '>= 2.15.1'
 cairo_req          = '>= 1.14.0'
 gdk_pixbuf_req     = '>= 2.30.0'
 introspection_req  = '>= 1.39.0'
@@ -367,8 +366,6 @@ pixbuf_dep     = dependency('gdk-pixbuf-2.0', version: gdk_pixbuf_req,
                             fallback : ['gdk-pixbuf', 'gdkpixbuf_dep'])
 epoxy_dep      = dependency('epoxy', version: epoxy_req,
                             fallback: ['libepoxy', 'libepoxy_dep'])
-atk_dep        = dependency('atk', version: atk_req,
-                            fallback : ['atk', 'libatk_dep'])
 harfbuzz_dep   = dependency('harfbuzz', version: '>= 0.9', required: false)
 xkbdep         = dependency('xkbcommon', version: xkbcommon_req, required: wayland_enabled)
 graphene_dep   = dependency('graphene-gobject-1.0', version: graphene_req,
@@ -376,7 +373,6 @@ graphene_dep   = dependency('graphene-gobject-1.0', version: graphene_req,
 iso_codes_dep  = dependency('iso-codes', required: false)
 
 fontconfig_dep = [] # only used in x11 backend
-atkbridge_dep  = [] # only used in x11 backend
 
 if os_win32
   platform_gio_dep = giowin32_dep
@@ -474,8 +470,6 @@ cdata.set('HAVE_CAIRO_SCRIPT_INTERPRETER', cairo_csi_dep.found())
 cdata.set('HAVE_HARFBUZZ', harfbuzz_dep.found())
 cdata.set('HAVE_PANGOFT', pangoft_dep.found())
 
-atk_pkgs = ['atk']
-
 wayland_pkgs = []
 if wayland_enabled
   wlclientdep    = dependency('wayland-client', version:  wayland_req)
@@ -510,7 +504,6 @@ if x11_enabled
   xfixes_dep     = dependency('xfixes', required: false)
   xcomposite_dep = dependency('xcomposite', required: false)
   fontconfig_dep = dependency('fontconfig')
-  atkbridge_dep  = dependency('atk-bridge-2.0', version: atk_req)
 
   backend_immodules += ['xim']
 
@@ -528,8 +521,6 @@ if x11_enabled
   if xcomposite_dep.found()
     x11_pkgs += ['xcomposite']
   endif
-
-  atk_pkgs += ['atk-bridge-2.0']
 
   cdata.set('HAVE_XCURSOR', xcursor_dep.found())
   cdata.set('HAVE_XDAMAGE', xdamage_dep.found())
@@ -765,8 +756,7 @@ pkgconf.set('GDK_PACKAGES', gdk_packages)
 pkgconf.set('GSK_PACKAGES',
             ' '.join([ 'graphene-gobject-1.0', graphene_req ]))
 pkgconf.set('GTK_PACKAGES',
-            ' '.join([ 'atk', atk_req,
-                       'gio-2.0', glib_req ]))
+            ' '.join([ 'gio-2.0', glib_req ]))
 
 # Requires.private
 pc_gdk_extra_libs += cairo_libs
@@ -777,7 +767,7 @@ pkgconf.set('GDK_PRIVATE_PACKAGES',
                        'epoxy', epoxy_req ] + x11_pkgs + wayland_pkgs + cairo_backends))
 pkgconf.set('GSK_PRIVATE_PACKAGES', '') # all already in GDK_PRIVATE_PACKAGES
 pangoft2_pkgs = (wayland_enabled or x11_enabled) ? ['pangoft2'] : []
-pkgconf.set('GTK_PRIVATE_PACKAGES', ' '.join(atk_pkgs + pangoft2_pkgs))
+pkgconf.set('GTK_PRIVATE_PACKAGES', ' '.join(pangoft2_pkgs))
 
 pkgconf.set('GDK_EXTRA_LIBS', ' '.join(pc_gdk_extra_libs))
 pkgconf.set('GSK_EXTRA_LIBS', '')

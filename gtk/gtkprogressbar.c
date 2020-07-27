@@ -39,8 +39,6 @@
 #include "gtkstylecontextprivate.h"
 #include "gtkwidgetprivate.h"
 
-#include "a11y/gtkprogressbaraccessibleprivate.h"
-
 #include <string.h>
 
 /**
@@ -250,9 +248,9 @@ gtk_progress_bar_class_init (GtkProgressBarClass *class)
 
   g_object_class_install_properties (gobject_class, NUM_PROPERTIES, progress_props);
 
-  gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_PROGRESS_BAR_ACCESSIBLE);
   gtk_widget_class_set_css_name (widget_class, I_("progressbar"));
   gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BOX_LAYOUT);
+  gtk_widget_class_set_accessible_role (widget_class, GTK_ACCESSIBLE_ROLE_PROGRESS_BAR);
 }
 
 static void
@@ -645,6 +643,9 @@ gtk_progress_bar_act_mode_enter (GtkProgressBar *pbar)
   gboolean inverted;
 
   gtk_widget_add_css_class (pbar->progress_widget, GTK_STYLE_CLASS_PULSE);
+  gtk_accessible_update_state (GTK_ACCESSIBLE (pbar),
+                               GTK_ACCESSIBLE_STATE_BUSY, TRUE,
+                               -1);
 
   inverted = pbar->inverted;
   if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
@@ -682,6 +683,9 @@ gtk_progress_bar_act_mode_leave (GtkProgressBar *pbar)
     gtk_widget_remove_tick_callback (GTK_WIDGET (pbar), pbar->tick_id);
   pbar->tick_id = 0;
 
+  gtk_accessible_update_state (GTK_ACCESSIBLE (pbar),
+                               GTK_ACCESSIBLE_STATE_BUSY, FALSE,
+                               -1);
   gtk_widget_remove_css_class (pbar->progress_widget, GTK_STYLE_CLASS_PULSE);
   update_node_classes (pbar);
 }
@@ -732,13 +736,12 @@ gtk_progress_bar_set_fraction (GtkProgressBar *pbar,
   gtk_widget_queue_allocate (pbar->trough_widget);
   update_fraction_classes (pbar);
 
-  {
-    AtkObject *accessible =
-      _gtk_widget_peek_accessible (GTK_WIDGET (pbar));
+  gtk_accessible_update_property (GTK_ACCESSIBLE (pbar),
+                                  GTK_ACCESSIBLE_PROPERTY_VALUE_MAX, 1.0,
+                                  GTK_ACCESSIBLE_PROPERTY_VALUE_MIN, 0.0,
+                                  GTK_ACCESSIBLE_PROPERTY_VALUE_NOW, fraction,
+                                  -1);
 
-    if (accessible != NULL)
-      gtk_progress_bar_accessible_update_value (GTK_PROGRESS_BAR_ACCESSIBLE (accessible));
-  }
 
   g_object_notify_by_pspec (G_OBJECT (pbar), progress_props[PROP_FRACTION]);
 }

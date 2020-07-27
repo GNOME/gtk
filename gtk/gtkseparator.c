@@ -26,6 +26,7 @@
 
 #include "gtkseparator.h"
 
+#include "gtkaccessible.h"
 #include "gtkintl.h"
 #include "gtkorientable.h"
 #include "gtkprivate.h"
@@ -70,6 +71,24 @@ enum {
 G_DEFINE_TYPE_WITH_CODE (GtkSeparator, gtk_separator, GTK_TYPE_WIDGET,
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_ORIENTABLE, NULL))
 
+static void
+gtk_separator_set_orientation (GtkSeparator   *self,
+                               GtkOrientation  orientation)
+{
+  if (self->orientation != orientation)
+    {
+      self->orientation = orientation;
+
+      gtk_widget_update_orientation (GTK_WIDGET (self), orientation);
+      gtk_widget_queue_resize (GTK_WIDGET (self));
+
+      gtk_accessible_update_property (GTK_ACCESSIBLE (self),
+                                      GTK_ACCESSIBLE_PROPERTY_ORIENTATION, orientation,
+                                      -1);
+
+      g_object_notify (G_OBJECT (self), "orientation");
+    }
+}
 
 static void
 gtk_separator_set_property (GObject      *object,
@@ -82,14 +101,7 @@ gtk_separator_set_property (GObject      *object,
   switch (prop_id)
     {
     case PROP_ORIENTATION:
-      if (separator->orientation != g_value_get_enum (value))
-        {
-          separator->orientation = g_value_get_enum (value);
-          gtk_widget_update_orientation (GTK_WIDGET (object),
-                                         separator->orientation);
-          gtk_widget_queue_resize (GTK_WIDGET (object));
-          g_object_notify_by_pspec (object, pspec);
-        }
+      gtk_separator_set_orientation (separator, g_value_get_enum (value));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -136,8 +148,8 @@ gtk_separator_class_init (GtkSeparatorClass *class)
 
   g_object_class_override_property (object_class, PROP_ORIENTATION, "orientation");
 
-  gtk_widget_class_set_accessible_role (widget_class, ATK_ROLE_SEPARATOR);
   gtk_widget_class_set_css_name (widget_class, I_("separator"));
+  gtk_widget_class_set_accessible_role (widget_class, GTK_ACCESSIBLE_ROLE_SEPARATOR);
 }
 
 /**

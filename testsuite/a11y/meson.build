@@ -1,156 +1,71 @@
-testexecdir = join_paths(installed_test_bindir, 'a11y')
-testdatadir = join_paths(installed_test_datadir, 'a11y')
+testexecdir = join_paths(installed_test_bindir, 'gtk')
+testdatadir = join_paths(installed_test_datadir, 'gtk')
 
-a11y_state_tests = [
-  'about',
-  'accessible-name',
-  'actionbar',
-  'assistant',
-  #'buttons',
-  'calendar',
-  'colorchooser',
-  'combos',
-  'entries',
-  'expander',
-  'headerbar',
-  'hello-world',
-  'iconview',
-  'infobar',
-  'label',
-  'link',
-  'listbox',
-  'lockbutton',
-  'menubutton',
-  'menubutton2',
-  'messagedialog',
-  'mnemonic',
-  'notebook',
-  'paned',
-  'pickers',
-  'placeholder-text',
-  'progress',
-  'range',
-  'scale-drawvalue',
-  'spinner',
-  'statusbar',
-  'stack',
-  'text',
-  'tooltips',
-  'tree',
+# Available keys for each test:
+#
+#  - 'name': the test name; used for the test and to determine the base
+#            source file for the test (MANDATORY)
+#  - 'sources': (array): additional sources needed by the test
+#  - 'c_args': (array): additional compiler arguments
+#  - 'link_args': (array): additional linker arguments
+#  - 'suites': (array): additional test suites
+tests = [
+  { 'name': 'button' },
+  { 'name': 'accessible' },
 ]
 
-a11y_dump_bin = executable('accessibility-dump',
-  'accessibility-dump.c',
-  c_args: common_cflags,
-  dependencies: libgtk_dep,
-  install: get_option('install-tests'),
-  install_dir: testexecdir,
-)
 
-foreach t: a11y_state_tests
-  ui_path = join_paths(meson.current_source_dir(), t + '.ui')
-  test (t + ' state',
-    a11y_dump_bin,
-    args: [ '--tap', '-k', ui_path ],
-    protocol: 'tap',
-    env: [
-      'G_TEST_SRCDIR=@0@'.format(meson.current_source_dir()),
-      'G_TEST_BUILDDIR=@0@'.format(meson.current_build_dir()),
-    ],
-    suite: 'a11y',
+# Tests that are expected to fail
+xfail = [
+]
+
+is_debug = get_option('buildtype').startswith('debug')
+
+test_cargs = []
+
+foreach flag: common_cflags
+  if flag not in ['-Werror=missing-prototypes', '-Werror=missing-declarations', '-fvisibility=hidden']
+    test_cargs += flag
+  endif
+endforeach
+
+test_env = environment()
+test_env.set('GTK_TEST_ACCESSIBLE', '1')
+test_env.set('GSK_RENDERER', 'cairo')
+test_env.set('G_TEST_SRCDIR', meson.current_source_dir())
+test_env.set('G_TEST_BUILDDIR', meson.current_build_dir())
+test_env.set('GIO_USE_VFS', 'local')
+test_env.set('GSETTINGS_BACKEND', 'memory')
+test_env.set('G_ENABLE_DIAGNOSTIC', '0')
+
+foreach t : tests
+  test_name = t.get('name')
+  test_srcs = ['@0@.c'.format(test_name)] + t.get('sources', [])
+  test_extra_cargs = t.get('c_args', [])
+  test_extra_ldflags = t.get('link_args', [])
+  test_extra_suites = t.get('suites', [])
+  test_timeout = 60
+
+  test_exe = executable(test_name, test_srcs,
+    c_args: test_cargs + test_extra_cargs,
+    link_args: test_extra_ldflags,
+    dependencies: libgtk_dep,
+    install: get_option('install-tests'),
+    install_dir: testexecdir,
+  )
+
+  expect_fail = xfail.contains(test_name)
+
+  if test_extra_suites.contains('slow')
+    test_timeout = 90
+  endif
+
+  test(test_name, test_exe,
+       args: [ '--tap', '-k' ],
+       protocol: 'tap',
+       timeout: test_timeout,
+       env: test_env,
+       suite: ['a11y'] + test_extra_suites,
+       should_fail: expect_fail,
   )
 endforeach
-
-a11y_tests = [
-  'tree-performance',
-  'text',
-  'children',
-  'derive',
-  'value',
-  'misc',
-  'tree-relationships',
-  'util',
-]
-
-foreach t: a11y_tests
-  test_prefix = 'a11y'
-
-  test (t,
-        executable (t, '@0@.c'.format(t),
-                    install: get_option('install-tests'),
-                    c_args: common_cflags,
-                    install_dir: testexecdir,
-                    dependencies: libgtk_dep),
-        args: [ '--tap', '-k', ],
-        protocol: 'tap',
-        timeout: 120,
-        env: [
-               'G_TEST_SRCDIR=@0@'.format(meson.current_source_dir()),
-               'G_TEST_BUILDDIR=@0@'.format(meson.current_build_dir()),
-             ],
-        suite: 'a11y')
-endforeach
-
-a11y_installed_tests = [
-  'tests.test',
-  'children.test',
-  'tree.test',
-  'value.test',
-  'derive.test',
-  'text.test',
-  'util.test',
-  'misc.test',
-]
-
-installed_test_data = [
-  'about.ui',             'about.txt',
-  'accessible-name.ui',   'accessible-name.txt',
-  'actionbar.ui',         'actionbar.txt',
-  'assistant.ui',         'assistant.txt',
-  'buttons.ui',           'buttons.txt',
-  'calendar.ui',          'calendar.txt',
-  'colorchooser.ui',      'colorchooser.txt',
-  'combos.ui',            'combos.txt',
-  'entries.ui',           'entries.txt',
-  'expander.ui',          'expander.txt',
-  'headerbar.ui',         'headerbar.txt',
-  'hello-world.ui',       'hello-world.txt',
-  'iconview.ui',          'iconview.txt',
-  'infobar.ui',           'infobar.txt',
-  'label.ui',             'label.txt',
-  'link.ui',              'link.txt',
-  'listbox.ui',           'listbox.txt',
-  'lockbutton.ui',        'lockbutton.txt',
-  'menubutton.ui',        'menubutton.txt',
-  'menubutton2.ui',       'menubutton2.txt',
-  'messagedialog.ui',     'messagedialog.txt',
-  'mnemonic.ui',          'mnemonic.txt',
-  'notebook.ui',          'notebook.txt',
-  'paned.ui',             'paned.txt',
-  'pickers.ui',           'pickers.txt',
-  'placeholder-text.ui',  'placeholder-text.txt',
-  'progress.ui',          'progress.txt',
-  'range.ui',             'range.txt',
-  'scale-drawvalue.ui',   'scale-drawvalue.txt',
-  'spinner.ui',           'spinner.txt',
-  'stack.ui',             'stack.txt',
-  'statusbar.ui',         'statusbar.txt',
-  'text.ui',              'text.txt',
-  'tooltips.ui',          'tooltips.txt',
-  'tree.ui',              'tree.txt',
-]
-
-if get_option('install-tests')
-  test_cdata = configuration_data()
-  test_cdata.set('libexecdir', gtk_libexecdir)
-
-  foreach t: a11y_installed_tests
-    configure_file(input: '@0@.in'.format(t),
-                   output: t,
-                   configuration: test_cdata,
-                   install: true,
-                   install_dir: testdatadir)
-  endforeach
-
-  install_data(installed_test_data, install_dir: testexecdir)
-endif

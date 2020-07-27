@@ -27,7 +27,6 @@
 
 #include "gtkmessagedialog.h"
 
-#include "gtkaccessible.h"
 #include "gtkbox.h"
 #include "gtkbuildable.h"
 #include "gtkdialogprivate.h"
@@ -150,8 +149,6 @@ gtk_message_dialog_class_init (GtkMessageDialogClass *class)
   widget_class = GTK_WIDGET_CLASS (class);
   gobject_class = G_OBJECT_CLASS (class);
   
-  gtk_widget_class_set_accessible_role (widget_class, ATK_ROLE_ALERT);
-
   gobject_class->constructed = gtk_message_dialog_constructed;
   gobject_class->set_property = gtk_message_dialog_set_property;
   gobject_class->get_property = gtk_message_dialog_get_property;
@@ -287,47 +284,11 @@ setup_type (GtkMessageDialog *dialog,
 	    GtkMessageType    type)
 {
   GtkMessageDialogPrivate *priv = gtk_message_dialog_get_instance_private (dialog);
-  const char *name = NULL;
-  AtkObject *atk_obj;
 
   if (priv->message_type == type)
     return;
 
   priv->message_type = type;
-
-  switch (type)
-    {
-    case GTK_MESSAGE_INFO:
-      name = _("Information");
-      break;
-
-    case GTK_MESSAGE_QUESTION:
-      name = _("Question");
-      break;
-
-    case GTK_MESSAGE_WARNING:
-      name = _("Warning");
-      break;
-
-    case GTK_MESSAGE_ERROR:
-      name = _("Error");
-      break;
-
-    case GTK_MESSAGE_OTHER:
-      break;
-
-    default:
-      g_warning ("Unknown GtkMessageType %u", type);
-      break;
-    }
-
-  atk_obj = gtk_widget_get_accessible (GTK_WIDGET (dialog));
-  if (GTK_IS_ACCESSIBLE (atk_obj))
-    {
-      atk_object_set_role (atk_obj, ATK_ROLE_ALERT);
-      if (name)
-        atk_object_set_name (atk_obj, name);
-    }
 
   g_object_notify (G_OBJECT (dialog), "message-type");
 }

@@ -25,37 +25,10 @@
 #ifndef __GTK_PANGO_H__
 #define __GTK_PANGO_H__
 
-
 #include <pango/pangocairo.h>
-#include <atk/atk.h>
 #include  "gtkbuildable.h"
 
 G_BEGIN_DECLS
-
-AtkAttributeSet *_gtk_pango_get_default_attributes (AtkAttributeSet *attributes,
-                                                    PangoLayout     *layout);
-
-AtkAttributeSet *_gtk_pango_get_run_attributes     (AtkAttributeSet *attributes,
-                                                    PangoLayout     *layout,
-                                                    int              offset,
-                                                    int             *start_offset,
-                                                    int             *end_offset);
-
-char *_gtk_pango_get_text_before (PangoLayout     *layout,
-                                   AtkTextBoundary  boundary_type,
-                                   int              offset,
-                                   int             *start_offset,
-                                   int             *end_offset);
-char *_gtk_pango_get_text_at     (PangoLayout     *layout,
-                                   AtkTextBoundary  boundary_type,
-                                   int              offset,
-                                   int             *start_offset,
-                                   int             *end_offset);
-char *_gtk_pango_get_text_after  (PangoLayout     *layout,
-                                   AtkTextBoundary  boundary_type,
-                                   int              offset,
-                                   int             *start_offset,
-                                   int             *end_offset);
 
 PangoAttrList *_gtk_pango_attr_list_merge (PangoAttrList *into,
                                            PangoAttrList *from);

@@ -46,6 +46,7 @@
 #include <gtk/gtkapplicationwindow.h>
 #include <gtk/gtkaspectframe.h>
 #include <gtk/gtkassistant.h>
+#include <gtk/gtkatcontext.h>
 #include <gtk/gtkbinlayout.h>
 #include <gtk/gtkbitset.h>
 #include <gtk/gtkbookmarklist.h>
@@ -259,6 +260,7 @@
 #include <gtk/gtktextview.h>
 #include <gtk/gtktogglebutton.h>
 #include <gtk/gtktooltip.h>
+#include <gtk/gtktestatcontext.h>
 #include <gtk/gtktestutils.h>
 #include <gtk/gtktreednd.h>
 #include <gtk/gtktreeexpander.h>

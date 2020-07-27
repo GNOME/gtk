@@ -55,8 +55,6 @@
 #include "gtkboxlayout.h"
 #include "gtktextprivate.h"
 
-#include "a11y/gtkspinbuttonaccessible.h"
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
@@ -549,9 +547,9 @@ gtk_spin_button_class_init (GtkSpinButtonClass *class)
   add_spin_binding (widget_class, GDK_KEY_Page_Up, GDK_CONTROL_MASK, GTK_SCROLL_END);
   add_spin_binding (widget_class, GDK_KEY_Page_Down, GDK_CONTROL_MASK, GTK_SCROLL_START);
 
-  gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_SPIN_BUTTON_ACCESSIBLE);
   gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BOX_LAYOUT);
   gtk_widget_class_set_css_name (widget_class, I_("spinbutton"));
+  gtk_widget_class_set_accessible_role (widget_class, GTK_ACCESSIBLE_ROLE_SPIN_BUTTON);
 }
 
 static GtkEditable *
@@ -1072,9 +1070,16 @@ adjustment_changed_cb (GtkAdjustment *adjustment, gpointer data)
 {
   GtkSpinButton *spin_button = GTK_SPIN_BUTTON (data);
 
-  spin_button->timer_step = gtk_adjustment_get_step_increment (spin_button->adjustment);
+  spin_button->timer_step = gtk_adjustment_get_step_increment (adjustment);
 
   update_buttons_sensitivity (spin_button);
+
+  gtk_accessible_update_property (GTK_ACCESSIBLE (spin_button),
+                                  GTK_ACCESSIBLE_PROPERTY_VALUE_MAX, gtk_adjustment_get_upper (adjustment),
+                                  GTK_ACCESSIBLE_PROPERTY_VALUE_MIN, gtk_adjustment_get_lower (adjustment),
+                                  GTK_ACCESSIBLE_PROPERTY_VALUE_NOW, gtk_adjustment_get_value (adjustment),
+                                  -1);
+
   gtk_widget_queue_resize (GTK_WIDGET (spin_button));
 }
 
@@ -1253,6 +1258,10 @@ gtk_spin_button_value_changed (GtkAdjustment *adjustment,
     gtk_spin_button_default_output (spin_button);
 
   g_signal_emit (spin_button, spinbutton_signals[VALUE_CHANGED], 0);
+
+  gtk_accessible_update_property (GTK_ACCESSIBLE (spin_button),
+                                  GTK_ACCESSIBLE_PROPERTY_VALUE_NOW, gtk_adjustment_get_value (adjustment),
+                                  -1);
 
   update_buttons_sensitivity (spin_button);
 

@@ -78,6 +78,7 @@ struct _GtkInspectorLogs
   GtkWidget *text;
   GtkWidget *constraints;
   GtkWidget *layout;
+  GtkWidget *a11y;
 
   GdkDisplay *display;
 };
@@ -174,6 +175,7 @@ flag_toggled (GtkWidget        *button,
   update_flag (logs->text, &flags, GTK_DEBUG_TEXT);
   update_flag (logs->constraints, &flags, GTK_DEBUG_CONSTRAINTS);
   update_flag (logs->layout, &flags, GTK_DEBUG_LAYOUT);
+  update_flag (logs->a11y, &flags, GTK_DEBUG_A11Y);
   gtk_set_display_debug_flags (logs->display, flags);
 }
 
@@ -217,6 +219,7 @@ gtk_inspector_logs_class_init (GtkInspectorLogsClass *klass)
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorLogs, text);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorLogs, constraints);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorLogs, layout);
+  gtk_widget_class_bind_template_child (widget_class, GtkInspectorLogs, a11y);
   gtk_widget_class_bind_template_callback (widget_class, flag_toggled);
 
   gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BOX_LAYOUT);

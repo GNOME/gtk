@@ -1037,7 +1037,6 @@ make_directory_button (GtkPathBar  *path_bar,
 		       gboolean     current_dir,
 		       gboolean     file_is_hidden)
 {
-  AtkObject *atk_obj;
   GtkWidget *child = NULL;
   ButtonData *button_data;
   GdkContentProvider *content;
@@ -1048,7 +1047,6 @@ make_directory_button (GtkPathBar  *path_bar,
   button_data = g_new0 (ButtonData, 1);
   button_data->type = find_button_type (path_bar, file);
   button_data->button = gtk_toggle_button_new ();
-  atk_obj = gtk_widget_get_accessible (button_data->button);
   gtk_widget_set_focus_on_click (button_data->button, FALSE);
 
   switch (button_data->type)
@@ -1057,7 +1055,6 @@ make_directory_button (GtkPathBar  *path_bar,
       button_data->image = gtk_image_new ();
       child = button_data->image;
       button_data->label = NULL;
-      atk_object_set_name (atk_obj, _("File System Root"));
       break;
     case HOME_BUTTON:
     case DESKTOP_BUTTON:

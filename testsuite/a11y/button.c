@@ -1,0 +1,37 @@
+#include <gtk/gtk.h>
+
+static void
+button_role (void)
+{
+  GtkWidget *button = gtk_button_new ();
+  g_object_ref_sink (button);
+
+  gtk_test_accessible_assert_role (button, GTK_ACCESSIBLE_ROLE_BUTTON);
+
+  /* Simple command buttons have a "pressed" state set to "undefined" */
+  gtk_test_accessible_assert_state (button, GTK_ACCESSIBLE_STATE_PRESSED, GTK_ACCESSIBLE_VALUE_UNDEFINED);
+
+  g_object_unref (button);
+}
+
+static void
+button_label (void)
+{
+  GtkWidget *button = gtk_button_new_with_label ("Hello");
+  g_object_ref_sink (button);
+
+  gtk_test_accessible_assert_property (button, GTK_ACCESSIBLE_PROPERTY_LABEL, "Hello");
+
+  g_object_unref (button);
+}
+
+int
+main (int argc, char *argv[])
+{
+  gtk_test_init (&argc, &argv, NULL);
+
+  g_test_add_func ("/a11y/button/role", button_role);
+  g_test_add_func ("/a11y/button/label", button_label);
+
+  return g_test_run ();
+}

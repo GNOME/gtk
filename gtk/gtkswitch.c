@@ -69,8 +69,6 @@
 #include "gtkstylecontextprivate.h"
 #include "gtkwidgetprivate.h"
 
-#include "a11y/gtkswitchaccessible.h"
-
 typedef struct _GtkSwitchClass   GtkSwitchClass;
 
 /**
@@ -607,10 +605,9 @@ gtk_switch_class_init (GtkSwitchClass *klass)
   g_object_class_override_property (gobject_class, PROP_ACTION_NAME, "action-name");
   g_object_class_override_property (gobject_class, PROP_ACTION_TARGET, "action-target");
 
-  gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_SWITCH_ACCESSIBLE);
-  gtk_widget_class_set_accessible_role (widget_class, ATK_ROLE_TOGGLE_BUTTON);
-
   gtk_widget_class_set_css_name (widget_class, I_("switch"));
+
+  gtk_widget_class_set_accessible_role (widget_class, GTK_ACCESSIBLE_ROLE_SWITCH);
 }
 
 static void
@@ -692,7 +689,6 @@ gtk_switch_set_active (GtkSwitch *self,
 
   if (self->is_active != is_active)
     {
-      AtkObject *accessible;
       gboolean handled;
 
       self->is_active = is_active;
@@ -706,8 +702,9 @@ gtk_switch_set_active (GtkSwitch *self,
 
       g_object_notify_by_pspec (G_OBJECT (self), switch_props[PROP_ACTIVE]);
 
-      accessible = gtk_widget_get_accessible (GTK_WIDGET (self));
-      atk_object_notify_state_change (accessible, ATK_STATE_CHECKED, self->is_active);
+      gtk_accessible_update_state (GTK_ACCESSIBLE (self),
+                                   GTK_ACCESSIBLE_STATE_CHECKED, is_active,
+                                   -1);
 
       gtk_widget_queue_allocate (GTK_WIDGET (self));
     }

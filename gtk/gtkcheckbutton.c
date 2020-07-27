@@ -172,11 +172,42 @@ gtk_check_button_get_property (GObject      *object,
 }
 
 static void
+update_accessible_state (GtkCheckButton *check_button)
+{
+  GtkCheckButtonPrivate *priv = gtk_check_button_get_instance_private (check_button);
+
+  GtkAccessibleTristate checked_state;
+
+  if (priv->inconsistent)
+    checked_state = GTK_ACCESSIBLE_TRISTATE_MIXED;
+  else if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (check_button)))
+    checked_state = GTK_ACCESSIBLE_TRISTATE_TRUE;
+  else
+    checked_state = GTK_ACCESSIBLE_TRISTATE_FALSE;
+
+  gtk_accessible_update_state (GTK_ACCESSIBLE (check_button),
+                               GTK_ACCESSIBLE_STATE_CHECKED, checked_state,
+                               -1);
+}
+
+static void
+gtk_check_button_notify (GObject    *object,
+                         GParamSpec *pspec)
+{
+  if (pspec->name == I_("active"))
+    update_accessible_state (GTK_CHECK_BUTTON (object));
+
+  if (G_OBJECT_CLASS (gtk_check_button_parent_class)->notify)
+    G_OBJECT_CLASS (gtk_check_button_parent_class)->notify (object, pspec);
+}
+
+static void
 gtk_check_button_class_init (GtkCheckButtonClass *class)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (class);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (class);
 
+  object_class->notify = gtk_check_button_notify;
   object_class->finalize = gtk_check_button_finalize;
   object_class->set_property = gtk_check_button_set_property;
   object_class->get_property = gtk_check_button_get_property;
@@ -200,8 +231,8 @@ gtk_check_button_class_init (GtkCheckButtonClass *class)
   g_object_class_install_properties (object_class, NUM_PROPERTIES, props);
 
   gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BOX_LAYOUT);
-  gtk_widget_class_set_accessible_role (widget_class, ATK_ROLE_CHECK_BOX);
   gtk_widget_class_set_css_name (widget_class, I_("checkbutton"));
+  gtk_widget_class_set_accessible_role (widget_class, GTK_ACCESSIBLE_ROLE_CHECKBOX);
 }
 
 static void
@@ -393,6 +424,8 @@ gtk_check_button_set_inconsistent (GtkCheckButton *check_button,
         gtk_widget_set_state_flags (GTK_WIDGET (check_button), GTK_STATE_FLAG_INCONSISTENT, FALSE);
       else
         gtk_widget_unset_state_flags (GTK_WIDGET (check_button), GTK_STATE_FLAG_INCONSISTENT);
+
+      update_accessible_state (check_button);
 
       g_object_notify_by_pspec (G_OBJECT (check_button), props[PROP_INCONSISTENT]);
     }

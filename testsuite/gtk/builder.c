@@ -1432,22 +1432,10 @@ test_widget (void)
     "        <property name=\"orientation\">vertical</property>"
     "        <child>"
     "          <object class=\"GtkLabel\" id=\"label1\">"
-    "            <child internal-child=\"accessible\">"
-    "              <object class=\"AtkObject\" id=\"a11y-label1\">"
-    "                <property name=\"AtkObject::accessible-name\">A Label</property>"
-    "              </object>"
-    "            </child>"
-    "            <accessibility>"
-    "              <relation target=\"button1\" type=\"label-for\"/>"
-    "            </accessibility>"
     "          </object>"
     "        </child>"
     "        <child>"
     "          <object class=\"GtkButton\" id=\"button1\">"
-    "            <accessibility>"
-    "              <action action_name=\"click\" description=\"Sliff\"/>"
-    "              <action action_name=\"clack\" translatable=\"yes\">Sniff</action>"
-    "            </accessibility>"
     "          </object>"
     "        </child>"
     "      </object>"
@@ -1460,19 +1448,12 @@ test_widget (void)
     "    <child>"
     "      <object class=\"GtkLabel\" id=\"label1\">"
     "         <property name=\"label\">Thelabel</property>"
-    "         <accessibility>"
-    "            <role type=\"static\"/>"
-    "         </accessibility>"
     "      </object>"
     "    </child>"
     "  </object>"
    "</interface>";
   GtkBuilder *builder;
   GObject *window1, *button1, *label1;
-  AtkObject *accessible;
-  AtkRelationSet *relation_set;
-  AtkRelation *relation;
-  char *name;
   
   builder = builder_new_from_string (buffer, -1, NULL);
   button1 = gtk_builder_get_object (builder, "button1");
@@ -1494,28 +1475,14 @@ test_widget (void)
 
   window1 = gtk_builder_get_object (builder, "window1");
   label1 = gtk_builder_get_object (builder, "label1");
+  g_assert (GTK_IS_LABEL (label1));
 
-  accessible = gtk_widget_get_accessible (GTK_WIDGET (label1));
-  relation_set = atk_object_ref_relation_set (accessible);
-  g_assert_cmpint (atk_relation_set_get_n_relations (relation_set), ==, 1);
-  relation = atk_relation_set_get_relation (relation_set, 0);
-  g_assert (relation != NULL);
-  g_assert_true (ATK_IS_RELATION (relation));
-  g_assert_cmpint (atk_relation_get_relation_type (relation), !=, ATK_RELATION_LABELLED_BY);
-  g_object_unref (relation_set);
-
-  g_object_get (G_OBJECT (accessible), "accessible-name", &name, NULL);
-  g_assert_cmpstr (name, ==, "A Label");
-  g_free (name);
-  
   gtk_window_destroy (GTK_WINDOW (window1));
   g_object_unref (builder);
 
   builder = builder_new_from_string (buffer4, -1, NULL);
   label1 = gtk_builder_get_object (builder, "label1");
-
-  accessible = gtk_widget_get_accessible (GTK_WIDGET (label1));
-  g_assert (atk_object_get_role (accessible) == ATK_ROLE_STATIC);
+  g_assert (GTK_IS_LABEL (label1));
 
   g_object_unref (builder);
 }

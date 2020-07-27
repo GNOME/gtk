@@ -1150,4 +1150,458 @@ typedef enum {
   GTK_SYSTEM_SETTING_ICON_THEME
 } GtkSystemSetting;
 
+/**
+ * GtkAccessibleRole:
+ * @GTK_ACCESSIBLE_ROLE_ALERT: An element with important, and usually
+ *   time-sensitive, information
+ * @GTK_ACCESSIBLE_ROLE_ALERT_DIALOG: A type of dialog that contains an
+ *   alert message
+ * @GTK_ACCESSIBLE_ROLE_BANNER: Unused
+ * @GTK_ACCESSIBLE_ROLE_BUTTON: An input element that allows for
+ *   user-triggered actions when clicked or pressed
+ * @GTK_ACCESSIBLE_ROLE_CAPTION: Unused
+ * @GTK_ACCESSIBLE_ROLE_CELL: Unused
+ * @GTK_ACCESSIBLE_ROLE_CHECKBOX: A checkable input element that has
+ *   three possible values: `true`, `false`, or `mixed`
+ * @GTK_ACCESSIBLE_ROLE_COLUMN_HEADER: Unused
+ * @GTK_ACCESSIBLE_ROLE_COMBO_BOX: An input that controls another element,
+ *   such as a list or a grid, that can dynamically pop up to help the user
+ *   set the value of the input
+ * @GTK_ACCESSIBLE_ROLE_COMMAND: An abstract widget that performs an
+ *   action, but does not receive input
+ * @GTK_ACCESSIBLE_ROLE_COMPOSITE: Unused
+ * @GTK_ACCESSIBLE_ROLE_DIALOG: A dialog is a window that is designed to interrupt
+ *    the current processing of an application in order to prompt the user to enter
+ *    information or require a response.
+ * @GTK_ACCESSIBLE_ROLE_DOCUMENT: Unused
+ * @GTK_ACCESSIBLE_ROLE_FEED: Unused
+ * @GTK_ACCESSIBLE_ROLE_FORM: Unused
+ * @GTK_ACCESSIBLE_ROLE_GENERIC: Unused
+ * @GTK_ACCESSIBLE_ROLE_GRID: Unused
+ * @GTK_ACCESSIBLE_ROLE_GRID_CELL: Unused
+ * @GTK_ACCESSIBLE_ROLE_GROUP: Unused
+ * @GTK_ACCESSIBLE_ROLE_HEADING: Unused
+ * @GTK_ACCESSIBLE_ROLE_IMG: Unused
+ * @GTK_ACCESSIBLE_ROLE_INPUT: Unused
+ * @GTK_ACCESSIBLE_ROLE_LABEL: Unused
+ * @GTK_ACCESSIBLE_ROLE_LANDMARK: Unused
+ * @GTK_ACCESSIBLE_ROLE_LEGEND: Unused
+ * @GTK_ACCESSIBLE_ROLE_LINK: Unused
+ * @GTK_ACCESSIBLE_ROLE_LIST_BOX: Unused
+ * @GTK_ACCESSIBLE_ROLE_LIST_ITEM: Unused
+ * @GTK_ACCESSIBLE_ROLE_LOG: Unused
+ * @GTK_ACCESSIBLE_ROLE_MAIN: Unused
+ * @GTK_ACCESSIBLE_ROLE_MARQUEE: Unused
+ * @GTK_ACCESSIBLE_ROLE_METER: Unused
+ * @GTK_ACCESSIBLE_ROLE_MATH: Unused
+ * @GTK_ACCESSIBLE_ROLE_MENU: Unused
+ * @GTK_ACCESSIBLE_ROLE_MENU_BAR: Unused
+ * @GTK_ACCESSIBLE_ROLE_MENU_ITEM: Unused
+ * @GTK_ACCESSIBLE_ROLE_MENU_ITEM_CHECKBOX: Unused
+ * @GTK_ACCESSIBLE_ROLE_MENU_ITEM_RADIO: Unused
+ * @GTK_ACCESSIBLE_ROLE_NAVIGATION: Unused
+ * @GTK_ACCESSIBLE_ROLE_NOTE: Unused
+ * @GTK_ACCESSIBLE_ROLE_OPTION: Unused
+ * @GTK_ACCESSIBLE_ROLE_PRESENTATION: Unused
+ * @GTK_ACCESSIBLE_ROLE_PROGRESS_BAR: An element that displays the progress
+ *    status for tasks that take a long time.
+ * @GTK_ACCESSIBLE_ROLE_RADIO: A checkable input in a group of radio roles,
+ *    only one of which can be checked at a time.
+ * @GTK_ACCESSIBLE_ROLE_RADIO_GROUP: Unused
+ * @GTK_ACCESSIBLE_ROLE_RANGE: Unused
+ * @GTK_ACCESSIBLE_ROLE_REGION: Unused
+ * @GTK_ACCESSIBLE_ROLE_ROW: Unused
+ * @GTK_ACCESSIBLE_ROLE_ROW_GROUP: Unused
+ * @GTK_ACCESSIBLE_ROLE_ROW_HEADER: Unused
+ * @GTK_ACCESSIBLE_ROLE_SCROLLBAR: A graphical object that controls the scrolling
+ *    of content within a viewing area, regardless of whether the content is fully
+ *    displayed within the viewing area.
+ * @GTK_ACCESSIBLE_ROLE_SEARCH: Unused
+ * @GTK_ACCESSIBLE_ROLE_SEARCH_BOX: Unused
+ * @GTK_ACCESSIBLE_ROLE_SECTION: Unused
+ * @GTK_ACCESSIBLE_ROLE_SECTION_HEAD: Unused
+ * @GTK_ACCESSIBLE_ROLE_SELECT: Unused
+ * @GTK_ACCESSIBLE_ROLE_SEPARATOR: A divider that separates and distinguishes
+ *    sections of content or groups of menuitems.
+ * @GTK_ACCESSIBLE_ROLE_SLIDER: A user input where the user selects a value
+ *    from within a given range.
+ * @GTK_ACCESSIBLE_ROLE_SPIN_BUTTON: A form of range that expects the user to
+ *    select from among discrete choices.
+ * @GTK_ACCESSIBLE_ROLE_STATUS: Unused
+ * @GTK_ACCESSIBLE_ROLE_STRUCTURE: Unused
+ * @GTK_ACCESSIBLE_ROLE_SWITCH: A type of checkbox that represents on/off values,
+ *    as opposed to checked/unchecked values.
+ * @GTK_ACCESSIBLE_ROLE_TAB: Unused
+ * @GTK_ACCESSIBLE_ROLE_TABLE: Unused
+ * @GTK_ACCESSIBLE_ROLE_TAB_LIST: Unused
+ * @GTK_ACCESSIBLE_ROLE_TAB_PANEL: Unused
+ * @GTK_ACCESSIBLE_ROLE_TEXT_BOX: Unused
+ * @GTK_ACCESSIBLE_ROLE_TIME: Unused
+ * @GTK_ACCESSIBLE_ROLE_TIMER: Unused
+ * @GTK_ACCESSIBLE_ROLE_TOOLBAR: Unused
+ * @GTK_ACCESSIBLE_ROLE_TOOLTIP: Unused
+ * @GTK_ACCESSIBLE_ROLE_TREE: Unused
+ * @GTK_ACCESSIBLE_ROLE_TREE_GRID: Unused
+ * @GTK_ACCESSIBLE_ROLE_TREE_ITEM: Unused
+ * @GTK_ACCESSIBLE_ROLE_WIDGET: An interactive component of a graphical user
+ *    interface. This is the role that GTK uses by default for widgets.
+ * @GTK_ACCESSIBLE_ROLE_WINDOW: Unused
+ *
+ * The accessible role for a #GtkAccessible implementation.
+ *
+ * Abstract roles are only used as part of the ontology; application
+ * developers must not use abstract roles in their code.
+ */
+typedef enum {
+  GTK_ACCESSIBLE_ROLE_ALERT,
+  GTK_ACCESSIBLE_ROLE_ALERT_DIALOG,
+  GTK_ACCESSIBLE_ROLE_BANNER,
+  GTK_ACCESSIBLE_ROLE_BUTTON,
+  GTK_ACCESSIBLE_ROLE_CAPTION,
+  GTK_ACCESSIBLE_ROLE_CELL,
+  GTK_ACCESSIBLE_ROLE_CHECKBOX,
+  GTK_ACCESSIBLE_ROLE_COLUMN_HEADER,
+  GTK_ACCESSIBLE_ROLE_COMBO_BOX,
+  GTK_ACCESSIBLE_ROLE_COMMAND,
+  GTK_ACCESSIBLE_ROLE_COMPOSITE,
+  GTK_ACCESSIBLE_ROLE_DIALOG,
+  GTK_ACCESSIBLE_ROLE_DOCUMENT,
+  GTK_ACCESSIBLE_ROLE_FEED,
+  GTK_ACCESSIBLE_ROLE_FORM,
+  GTK_ACCESSIBLE_ROLE_GENERIC,
+  GTK_ACCESSIBLE_ROLE_GRID,
+  GTK_ACCESSIBLE_ROLE_GRID_CELL,
+  GTK_ACCESSIBLE_ROLE_GROUP,
+  GTK_ACCESSIBLE_ROLE_HEADING,
+  GTK_ACCESSIBLE_ROLE_IMG,
+  GTK_ACCESSIBLE_ROLE_INPUT,
+  GTK_ACCESSIBLE_ROLE_LABEL,
+  GTK_ACCESSIBLE_ROLE_LANDMARK,
+  GTK_ACCESSIBLE_ROLE_LEGEND,
+  GTK_ACCESSIBLE_ROLE_LINK,
+  GTK_ACCESSIBLE_ROLE_LIST,
+  GTK_ACCESSIBLE_ROLE_LIST_BOX,
+  GTK_ACCESSIBLE_ROLE_LIST_ITEM,
+  GTK_ACCESSIBLE_ROLE_LOG,
+  GTK_ACCESSIBLE_ROLE_MAIN,
+  GTK_ACCESSIBLE_ROLE_MARQUEE,
+  GTK_ACCESSIBLE_ROLE_METER,
+  GTK_ACCESSIBLE_ROLE_MENU,
+  GTK_ACCESSIBLE_ROLE_MENU_BAR,
+  GTK_ACCESSIBLE_ROLE_MENU_ITEM,
+  GTK_ACCESSIBLE_ROLE_MENU_ITEM_CHECKBOX,
+  GTK_ACCESSIBLE_ROLE_MENU_ITEM_RADIO,
+  GTK_ACCESSIBLE_ROLE_NAVIGATION,
+  GTK_ACCESSIBLE_ROLE_NONE,
+  GTK_ACCESSIBLE_ROLE_OPTION,
+  GTK_ACCESSIBLE_ROLE_PRESENTATION,
+  GTK_ACCESSIBLE_ROLE_PROGRESS_BAR,
+  GTK_ACCESSIBLE_ROLE_RADIO,
+  GTK_ACCESSIBLE_ROLE_RADIO_GROUP,
+  GTK_ACCESSIBLE_ROLE_RANGE,
+  GTK_ACCESSIBLE_ROLE_REGION,
+  GTK_ACCESSIBLE_ROLE_ROW,
+  GTK_ACCESSIBLE_ROLE_ROW_GROUP,
+  GTK_ACCESSIBLE_ROLE_ROW_HEADER,
+  GTK_ACCESSIBLE_ROLE_SCROLLBAR,
+  GTK_ACCESSIBLE_ROLE_SEARCH,
+  GTK_ACCESSIBLE_ROLE_SEARCH_BOX,
+  GTK_ACCESSIBLE_ROLE_SECTION,
+  GTK_ACCESSIBLE_ROLE_SECTION_HEAD,
+  GTK_ACCESSIBLE_ROLE_SELECT,
+  GTK_ACCESSIBLE_ROLE_SEPARATOR,
+  GTK_ACCESSIBLE_ROLE_SLIDER,
+  GTK_ACCESSIBLE_ROLE_SPIN_BUTTON,
+  GTK_ACCESSIBLE_ROLE_STATUS,
+  GTK_ACCESSIBLE_ROLE_STRUCTURE,
+  GTK_ACCESSIBLE_ROLE_SWITCH,
+  GTK_ACCESSIBLE_ROLE_TAB,
+  GTK_ACCESSIBLE_ROLE_TABLE,
+  GTK_ACCESSIBLE_ROLE_TAB_LIST,
+  GTK_ACCESSIBLE_ROLE_TAB_PANEL,
+  GTK_ACCESSIBLE_ROLE_TEXT_BOX,
+  GTK_ACCESSIBLE_ROLE_TIME,
+  GTK_ACCESSIBLE_ROLE_TIMER,
+  GTK_ACCESSIBLE_ROLE_TOOLBAR,
+  GTK_ACCESSIBLE_ROLE_TOOLTIP,
+  GTK_ACCESSIBLE_ROLE_TREE,
+  GTK_ACCESSIBLE_ROLE_TREE_GRID,
+  GTK_ACCESSIBLE_ROLE_TREE_ITEM,
+  GTK_ACCESSIBLE_ROLE_WIDGET,
+  GTK_ACCESSIBLE_ROLE_WINDOW
+} GtkAccessibleRole;
+
+/**
+ * GtkAccessibleState:
+ * @GTK_ACCESSIBLE_STATE_BUSY: A “busy” state. This state has boolean values
+ * @GTK_ACCESSIBLE_STATE_CHECKED: A “checked” state; indicates the current
+ *   state of a #GtkCheckButton. Value type: #GtkAccessibleTristate
+ * @GTK_ACCESSIBLE_STATE_DISABLED: A “disabled” state; corresponds to the
+ *   #GtkWidget:sensitive property on #GtkWidget. It indicates a UI element
+ *   that is perceivable, but not editable or operable. Value type: boolean
+ * @GTK_ACCESSIBLE_STATE_EXPANDED: An “expanded” state; corresponds to the
+ *   #GtkExpander:expanded property on #GtkExpander. Value type: boolean
+ *   or undefined
+ * @GTK_ACCESSIBLE_STATE_HIDDEN: A “hidden” state; corresponds to the
+ *   #GtkWidget:visible property on #GtkWidget. You can use this state
+ *   explicitly on UI elements that should not be exposed to an assistive
+ *   technology. Value type: boolean
+ *   See also: %GTK_ACCESSIBLE_STATE_DISABLED
+ * @GTK_ACCESSIBLE_STATE_INVALID: An “invalid” state; set when a widget
+ *   is showing an error. Value type: #GtkAccessibleInvalidState
+ * @GTK_ACCESSIBLE_STATE_PRESSED: A “pressed” state; indicates the current
+ *   state of a #GtkToggleButton. Value type: #GtkAccessibleTristate
+ *   enumeration
+ * @GTK_ACCESSIBLE_STATE_SELECTED: A “selected” state; set when a widget
+ *   is selected. Value type: boolean or undefined
+ *
+ * The possible accessible states of a #GtkAccessible.
+ */
+typedef enum {
+  GTK_ACCESSIBLE_STATE_BUSY,
+  GTK_ACCESSIBLE_STATE_CHECKED,
+  GTK_ACCESSIBLE_STATE_DISABLED,
+  GTK_ACCESSIBLE_STATE_EXPANDED,
+  GTK_ACCESSIBLE_STATE_HIDDEN,
+  GTK_ACCESSIBLE_STATE_INVALID,
+  GTK_ACCESSIBLE_STATE_PRESSED,
+  GTK_ACCESSIBLE_STATE_SELECTED
+} GtkAccessibleState;
+
+/**
+ * GTK_ACCESSIBLE_VALUE_UNDEFINED:
+ *
+ * An undefined value. The accessible attribute is either unset, or its
+ * value is undefined.
+ */
+#define GTK_ACCESSIBLE_VALUE_UNDEFINED  (-1)
+
+/**
+ * GtkAccessibleProperty:
+ * @GTK_ACCESSIBLE_PROPERTY_AUTOCOMPLETE: Indicates whether inputting text
+ *    could trigger display of one or more predictions of the user's intended
+ *    value for a combobox, searchbox, or textbox and specifies how predictions
+ *    would be presented if they were made. Value type: #GtkAccessibleAutocomplete
+ * @GTK_ACCESSIBLE_PROPERTY_DESCRIPTION: Defines a string value that describes
+ *    or annotates the current element. Value type: string
+ * @GTK_ACCESSIBLE_PROPERTY_HAS_POPUP: Indicates the availability and type of
+ *    interactive popup element, such as menu or dialog, that can be triggered
+ *    by an element.
+ * @GTK_ACCESSIBLE_PROPERTY_KEY_SHORTCUTS: Indicates keyboard shortcuts that an
+ *    author has implemented to activate or give focus to an element. Value type:
+ *    string
+ * @GTK_ACCESSIBLE_PROPERTY_LABEL: Defines a string value that labels the current
+ *    element. Value type: string
+ * @GTK_ACCESSIBLE_PROPERTY_LEVEL: Defines the hierarchical level of an element
+ *    within a structure. Value type: integer
+ * @GTK_ACCESSIBLE_PROPERTY_MODAL: Indicates whether an element is modal when
+ *    displayed. Value type: boolean
+ * @GTK_ACCESSIBLE_PROPERTY_MULTI_LINE: Indicates whether a text box accepts
+ *    multiple lines of input or only a single line. Value type: boolean
+ * @GTK_ACCESSIBLE_PROPERTY_MULTI_SELECTABLE: Indicates that the user may select
+ *    more than one item from the current selectable descendants. Value type:
+ *    boolean
+ * @GTK_ACCESSIBLE_PROPERTY_ORIENTATION: Indicates whether the element's
+ *    orientation is horizontal, vertical, or unknown/ambiguous. Value type:
+ *    #GtkOrientation
+ * @GTK_ACCESSIBLE_PROPERTY_PLACEHOLDER: Defines a short hint (a word or short
+ *    phrase) intended to aid the user with data entry when the control has no
+ *    value. A hint could be a sample value or a brief description of the expected
+ *    format. Value type: string
+ * @GTK_ACCESSIBLE_PROPERTY_READ_ONLY: Indicates that the element is not editable,
+ *    but is otherwise operable. Value type: boolean
+ * @GTK_ACCESSIBLE_PROPERTY_REQUIRED: Indicates that user input is required on
+ *    the element before a form may be submitted. Value type: boolean
+ * @GTK_ACCESSIBLE_PROPERTY_ROLE_DESCRIPTION: Defines a human-readable,
+ *    author-localized description for the role of an element. Value type: string
+ * @GTK_ACCESSIBLE_PROPERTY_SORT: Indicates if items in a table or grid are
+ *    sorted in ascending or descending order. Possible property values are in
+ *    the #GtkAccessibleSort enumeration. Value type: #GtkAccessibleSort
+ * @GTK_ACCESSIBLE_PROPERTY_VALUE_MAX: Defines the maximum allowed value for a
+ *    range widget. Value type: double
+ * @GTK_ACCESSIBLE_PROPERTY_VALUE_MIN: Defines the minimum allowed value for a
+ *    range widget. Value type: double
+ * @GTK_ACCESSIBLE_PROPERTY_VALUE_NOW: Defines the current value for a range widget.
+ *    Value type: double
+ * @GTK_ACCESSIBLE_PROPERTY_VALUE_TEXT: Defines the human readable text alternative
+ *    of aria-valuenow for a range widget. Value type: string
+ *
+ * The possible accessible properties of a #GtkAccessible.
+ */
+typedef enum {
+  GTK_ACCESSIBLE_PROPERTY_AUTOCOMPLETE,
+  GTK_ACCESSIBLE_PROPERTY_DESCRIPTION,
+  GTK_ACCESSIBLE_PROPERTY_HAS_POPUP,
+  GTK_ACCESSIBLE_PROPERTY_KEY_SHORTCUTS,
+  GTK_ACCESSIBLE_PROPERTY_LABEL,
+  GTK_ACCESSIBLE_PROPERTY_LEVEL,
+  GTK_ACCESSIBLE_PROPERTY_MODAL,
+  GTK_ACCESSIBLE_PROPERTY_MULTI_LINE,
+  GTK_ACCESSIBLE_PROPERTY_MULTI_SELECTABLE,
+  GTK_ACCESSIBLE_PROPERTY_ORIENTATION,
+  GTK_ACCESSIBLE_PROPERTY_PLACEHOLDER,
+  GTK_ACCESSIBLE_PROPERTY_READ_ONLY,
+  GTK_ACCESSIBLE_PROPERTY_REQUIRED,
+  GTK_ACCESSIBLE_PROPERTY_ROLE_DESCRIPTION,
+  GTK_ACCESSIBLE_PROPERTY_SORT,
+  GTK_ACCESSIBLE_PROPERTY_VALUE_MAX,
+  GTK_ACCESSIBLE_PROPERTY_VALUE_MIN,
+  GTK_ACCESSIBLE_PROPERTY_VALUE_NOW,
+  GTK_ACCESSIBLE_PROPERTY_VALUE_TEXT
+} GtkAccessibleProperty;
+
+/**
+ * GtkAccessibleRelation:
+ * @GTK_ACCESSIBLE_RELATION_ACTIVE_DESCENDANT: Identifies the currently active
+ *    element when focus is on a composite widget, combobox, textbox, group,
+ *    or application. Value type: reference
+ * @GTK_ACCESSIBLE_RELATION_COL_COUNT: Defines the total number of columns
+ *    in a table, grid, or treegrid. Value type: integer
+ * @GTK_ACCESSIBLE_RELATION_COL_INDEX: Defines an element's column index or
+ *    position with respect to the total number of columns within a table,
+ *    grid, or treegrid. Value type: integer
+ * @GTK_ACCESSIBLE_RELATION_COL_INDEX_TEXT: Defines a human readable text
+ *   alternative of @GTK_ACCESSIBLE_RELATION_COL_INDEX. Value type: string
+ * @GTK_ACCESSIBLE_RELATION_COL_SPAN: Defines the number of columns spanned
+ *   by a cell or gridcell within a table, grid, or treegrid. Value type: integer
+ * @GTK_ACCESSIBLE_RELATION_CONTROLS: Identifies the element (or elements) whose
+ *    contents or presence are controlled by the current element. Value type: reference
+ * @GTK_ACCESSIBLE_RELATION_DESCRIBED_BY: Identifies the element (or elements)
+ *    that describes the object. Value type: reference
+ * @GTK_ACCESSIBLE_RELATION_DETAILS: Identifies the element (or elements) that
+ *    provide additional information related to the object. Value type: reference
+ * @GTK_ACCESSIBLE_RELATION_ERROR_MESSAGE: Identifies the element that provides
+ *    an error message for an object. Value type: reference
+ * @GTK_ACCESSIBLE_RELATION_FLOW_TO: Identifies the next element (or elements)
+ *    in an alternate reading order of content which, at the user's discretion,
+ *    allows assistive technology to override the general default of reading in
+ *    document source order. Value type: reference
+ * @GTK_ACCESSIBLE_RELATION_LABELLED_BY: Identifies the element (or elements)
+ *    that labels the current element. Value type: reference
+ * @GTK_ACCESSIBLE_RELATION_OWNS: Identifies an element (or elements) in order
+ *    to define a visual, functional, or contextual parent/child relationship
+ *    between elements where the widget hierarchy cannot be used to represent
+ *    the relationship. Value type: reference
+ * @GTK_ACCESSIBLE_RELATION_POS_IN_SET: Defines an element's number or position
+ *    in the current set of listitems or treeitems. Value type: integer
+ * @GTK_ACCESSIBLE_RELATION_ROW_COUNT: Defines the total number of rows in a table,
+ *    grid, or treegrid. Value type: integer
+ * @GTK_ACCESSIBLE_RELATION_ROW_INDEX: Defines an element's row index or position
+ *    with respect to the total number of rows within a table, grid, or treegrid.
+ *    Value type: integer
+ * @GTK_ACCESSIBLE_RELATION_ROW_INDEX_TEXT: Defines a human readable text
+ *    alternative of aria-rowindex. Value type: string
+ * @GTK_ACCESSIBLE_RELATION_ROW_SPAN: Defines the number of rows spanned by a
+ *    cell or gridcell within a table, grid, or treegrid. Value type: integer
+ * @GTK_ACCESSIBLE_RELATION_SET_SIZE: Defines the number of items in the current
+ *    set of listitems or treeitems. Value type: integer
+ *
+ * The possible accessible relations of a #GtkAccessible.
+ * Accessible relations can be references to other widgets,
+ * integers or strings.
+ */
+typedef enum {
+  GTK_ACCESSIBLE_RELATION_ACTIVE_DESCENDANT,
+  GTK_ACCESSIBLE_RELATION_COL_COUNT,
+  GTK_ACCESSIBLE_RELATION_COL_INDEX,
+  GTK_ACCESSIBLE_RELATION_COL_INDEX_TEXT,
+  GTK_ACCESSIBLE_RELATION_COL_SPAN,
+  GTK_ACCESSIBLE_RELATION_CONTROLS,
+  GTK_ACCESSIBLE_RELATION_DESCRIBED_BY,
+  GTK_ACCESSIBLE_RELATION_DETAILS,
+  GTK_ACCESSIBLE_RELATION_ERROR_MESSAGE,
+  GTK_ACCESSIBLE_RELATION_FLOW_TO,
+  GTK_ACCESSIBLE_RELATION_LABELLED_BY,
+  GTK_ACCESSIBLE_RELATION_OWNS,
+  GTK_ACCESSIBLE_RELATION_POS_IN_SET,
+  GTK_ACCESSIBLE_RELATION_ROW_COUNT,
+  GTK_ACCESSIBLE_RELATION_ROW_INDEX,
+  GTK_ACCESSIBLE_RELATION_ROW_INDEX_TEXT,
+  GTK_ACCESSIBLE_RELATION_ROW_SPAN,
+  GTK_ACCESSIBLE_RELATION_SET_SIZE
+} GtkAccessibleRelation;
+
+/**
+ * GtkAccessibleTristate:
+ * @GTK_ACCESSIBLE_TRISTATE_FALSE: The state is `false`
+ * @GTK_ACCESSIBLE_TRISTATE_TRUE: The state is `true`
+ * @GTK_ACCESSIBLE_TRISTATE_MIXED: The state is `mixed`
+ *
+ * The possible values for the %GTK_ACCESSIBLE_STATE_PRESSED
+ * accessible state.
+ *
+ * Note that the %GTK_ACCESSIBLE_TRISTATE_FALSE and
+ * %GTK_ACCESSIBLE_TRISTATE_TRUE have the same values
+ * as %FALSE and %TRUE.
+ */
+typedef enum {
+  GTK_ACCESSIBLE_TRISTATE_FALSE,
+  GTK_ACCESSIBLE_TRISTATE_TRUE,
+  GTK_ACCESSIBLE_TRISTATE_MIXED
+} GtkAccessibleTristate;
+
+/**
+ * GtkAccessibleInvalidState:
+ * @GTK_ACCESSIBLE_INVALID_FALSE: There are no detected errors in the value
+ * @GTK_ACCESSIBLE_INVALID_TRUE: The value entered by the user has failed validation
+ * @GTK_ACCESSIBLE_INVALID_GRAMMAR: A grammatical error was detected
+ * @GTK_ACCESSIBLE_INVALID_SPELLING: A spelling error was detected
+ *
+ * The possible values for the %GTK_ACCESSIBLE_STATE_INVALID
+ * accessible state.
+ *
+ * Note that the %GTK_ACCESSIBLE_INVALID_FALSE and
+ * %GTK_ACCESSIBLE_INVALID_TRUE have the same values
+ * as %FALSE and %TRUE.
+ */
+typedef enum { /*< prefix=GTK_ACCESSIBLE_INVALID >*/
+  GTK_ACCESSIBLE_INVALID_FALSE,
+  GTK_ACCESSIBLE_INVALID_TRUE,
+  GTK_ACCESSIBLE_INVALID_GRAMMAR,
+  GTK_ACCESSIBLE_INVALID_SPELLING,
+} GtkAccessibleInvalidState;
+
+/**
+ * GtkAccessibleAutocomplete:
+ * @GTK_ACCESSIBLE_AUTOCOMPLETE_NONE: Automatic suggestions are not displayed.
+ * @GTK_ACCESSIBLE_AUTOCOMPLETE_INLINE: When a user is providing input, text
+ *    suggesting one way to complete the provided input may be dynamically
+ *    inserted after the caret.
+ * @GTK_ACCESSIBLE_AUTOCOMPLETE_LIST: When a user is providing input, an element
+ *    containing a collection of values that could complete the provided input
+ *    may be displayed.
+ * @GTK_ACCESSIBLE_AUTOCOMPLETE_BOTH: When a user is providing input, an element
+ *    containing a collection of values that could complete the provided input
+ *    may be displayed. If displayed, one value in the collection is automatically
+ *    selected, and the text needed to complete the automatically selected value
+ *    appears after the caret in the input.
+ *
+ * The possible values for the %GTK_ACCESSIBLE_PROPERTY_AUTOCOMPLETE
+ * accessible property.
+ */
+typedef enum { /*< prefix=GTK_ACCESSIBLE_AUTOCOMPLETE >*/
+  GTK_ACCESSIBLE_AUTOCOMPLETE_NONE,
+  GTK_ACCESSIBLE_AUTOCOMPLETE_INLINE,
+  GTK_ACCESSIBLE_AUTOCOMPLETE_LIST,
+  GTK_ACCESSIBLE_AUTOCOMPLETE_BOTH
+} GtkAccessibleAutocomplete;
+
+/**
+ * GtkAccessibleSort:
+ * @GTK_ACCESSIBLE_SORT_NONE: There is no defined sort applied to the column.
+ * @GTK_ACCESSIBLE_SORT_ASCENDING: Items are sorted in ascending order by this column.
+ * @GTK_ACCESSIBLE_SORT_DESCENDING: Items are sorted in descending order by this column.
+ * @GTK_ACCESSIBLE_SORT_OTHER: A sort algorithm other than ascending or
+ *    descending has been applied.
+ *
+ * The possible values for the %GTK_ACCESSIBLE_PROPERTY_SORT
+ * accessible property.
+ */
+typedef enum { /*< prefix=GTK_ACCESSIBLE_SORT >*/
+  GTK_ACCESSIBLE_SORT_NONE,
+  GTK_ACCESSIBLE_SORT_ASCENDING,
+  GTK_ACCESSIBLE_SORT_DESCENDING,
+  GTK_ACCESSIBLE_SORT_OTHER
+} GtkAccessibleSort;
+
 #endif /* __GTK_ENUMS_H__ */

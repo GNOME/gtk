@@ -21,7 +21,6 @@ endif
 #  - 'suites': (array): additional test suites
 tests = [
   { 'name': 'accel' },
-  { 'name': 'accessible' },
   { 'name': 'action' },
   { 'name': 'adjustment' },
   { 'name': 'bitset' },

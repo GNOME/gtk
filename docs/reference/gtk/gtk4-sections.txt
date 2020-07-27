@@ -89,25 +89,6 @@ gtk_accel_label_get_type
 </SECTION>
 
 <SECTION>
-<FILE>gtkaccessible</FILE>
-<TITLE>GtkAccessible</TITLE>
-GtkAccessible
-gtk_accessible_get_widget
-gtk_accessible_set_widget
-
-<SUBSECTION Standard>
-GTK_ACCESSIBLE
-GTK_TYPE_ACCESSIBLE
-GTK_ACCESSIBLE_CLASS
-GTK_ACCESSIBLE_GET_CLASS
-GTK_IS_ACCESSIBLE
-GTK_IS_ACCESSIBLE_CLASS
-<SUBSECTION Private>
-GtkAccessiblePrivate
-gtk_accessible_get_type
-</SECTION>
-
-<SECTION>
 <FILE>gtkadjustment</FILE>
 <TITLE>GtkAdjustment</TITLE>
 GtkAdjustment
@@ -7651,4 +7632,53 @@ gtk_selection_filter_model_new
 gtk_selection_filter_model_new_for_type
 gtk_selection_filter_model_set_model
 gtk_selection_filter_model_get_model
+</SECTION>
+
+<SECTION>
+<FILE>gtkaccessible</FILE>
+GtkAccessible
+GtkAccessibleRole
+GtkAccessibleState
+GtkAccessibleProperty
+GtkAccessibleRelation
+GtkAccessibleTristate
+GtkAccessibleInvalidState
+GtkAccessibleAutocomplete
+GtkAccessibleSort
+gtk_accessible_update_state
+gtk_accessible_update_state_value
+gtk_accessible_update_property
+gtk_accessible_update_property_value
+gtk_accessible_update_relation
+gtk_accessible_update_relation_value
+
+<SUBSECTION Standard>
+GTK_TYPE_ACCESSIBLE
+GTK_TYPE_ACCESSIBLE_PROPERTY
+GTK_TYPE_ACCESSIBLE_ROLE
+GTK_TYPE_ACCESSIBLE_STATE
+GTK_ACCESSIBLE
+GTK_ACCESSIBLE_GET_IFACE
+GTK_IS_ACCESSIBLE
+<SUBSECTION Private>
+gtk_accessible_get_type
+</SECTION>
+
+<SECTION>
+<FILE>gtkatcontext</FILE>
+GtkATContext
+gtk_at_context_get_accessible
+gtk_at_context_get_accessible_role
+<SUBSECTION>
+gtk_at_context_create
+<SUBSECTION Standard>
+GTK_TYPE_AT_CONTEXT
+GTK_AT_CONTEXT
+GTK_AT_CONTEXT_CLASS
+GTK_AT_CONTEXT_GET_CLASS
+GTK_IS_AT_CONTEXT
+GTK_IS_AT_CONTEXT_CLASS
+<SUBSECTION Private>
+GtkATContextClass
+gtk_at_context_get_type
 </SECTION>
