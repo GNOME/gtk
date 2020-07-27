@@ -1333,26 +1333,29 @@ typedef enum {
 
 /**
  * GtkAccessibleState:
- * @GTK_ACCESSIBLE_STATE_BUSY: A “busy” state
+ * @GTK_ACCESSIBLE_STATE_BUSY: A “busy” state. This state has boolean values
  * @GTK_ACCESSIBLE_STATE_CHECKED: A “checked” state; indicates the current
- *   state of a #GtkCheckButton
+ *   state of a #GtkCheckButton. Value type: #GtkAccessibleTristate
  * @GTK_ACCESSIBLE_STATE_DISABLED: A “disabled” state; corresponds to the
  *   #GtkWidget:sensitive property on #GtkWidget. It indicates a UI element
- *   that is perceivable, but not editable or operable
+ *   that is perceivable, but not editable or operable. Value type: boolean
  * @GTK_ACCESSIBLE_STATE_EXPANDED: An “expanded” state; corresponds to the
- *   #GtkExpander:expanded property on #GtkExpander
+ *   #GtkExpander:expanded property on #GtkExpander. Value type: boolean
+ *   or undefined
  * @GTK_ACCESSIBLE_STATE_HIDDEN: A “hidden” state; corresponds to the
  *   #GtkWidget:visible property on #GtkWidget. You can use this state
  *   explicitly on UI elements that should not be exposed to an assistive
- *   technology. See also: %GTK_ACCESSIBLE_STATE_DISABLED
+ *   technology. Value type: boolean
+ *   See also: %GTK_ACCESSIBLE_STATE_DISABLED
  * @GTK_ACCESSIBLE_STATE_INVALID: An “invalid” state; set when a widget
- *   is showing an error
+ *   is showing an error. Value type: #GtkAccessibleInvalidState
  * @GTK_ACCESSIBLE_STATE_PRESSED: A “pressed” state; indicates the current
- *   state of a #GtkToggleButton
+ *   state of a #GtkToggleButton. Value type: #GtkAccessibleTristate
+ *   enumeration
  * @GTK_ACCESSIBLE_STATE_SELECTED: A “selected” state; set when a widget
- *   is selected
+ *   is selected. Value type: boolean or undefined
  *
- * The possible accessible state of a #GtkAccessible.
+ * The possible accessible states of a #GtkAccessible.
  */
 typedef enum {
   GTK_ACCESSIBLE_STATE_BUSY,
@@ -1367,6 +1370,58 @@ typedef enum {
 
 #define GTK_ACCESSIBLE_VALUE_UNDEFINED  (-1)
 
+/**
+ * GtkAccessibleProperty:
+ * @GTK_ACCESSIBLE_PROPERTY_AUTOCOMPLETE: Indicates whether inputting text
+ *    could trigger display of one or more predictions of the user's intended
+ *    value for a combobox, searchbox, or textbox and specifies how predictions
+ *    would be presented if they were made. Value type: #GtkAccessibleAutocomplete
+ * @GTK_ACCESSIBLE_PROPERTY_DESCRIPTION: Defines a string value that describes
+ *    or annotates the current element. Value type: string
+ * @GTK_ACCESSIBLE_PROPERTY_HAS_POPUP: Indicates the availability and type of
+ *    interactive popup element, such as menu or dialog, that can be triggered
+ *    by an element.
+ * @GTK_ACCESSIBLE_PROPERTY_KEY_SHORTCUTS: Indicates keyboard shortcuts that an
+ *    author has implemented to activate or give focus to an element. Value type:
+ *    string
+ * @GTK_ACCESSIBLE_PROPERTY_LABEL: Defines a string value that labels the current
+ *    element. Value type: string
+ * @GTK_ACCESSIBLE_PROPERTY_LEVEL: Defines the hierarchical level of an element
+ *    within a structure. Value type: integer
+ * @GTK_ACCESSIBLE_PROPERTY_MODAL: Indicates whether an element is modal when
+ *    displayed. Value type: boolean
+ * @GTK_ACCESSIBLE_PROPERTY_MULTI_LINE: Indicates whether a text box accepts
+ *    multiple lines of input or only a single line. Value type: boolean
+ * @GTK_ACCESSIBLE_PROPERTY_MULTI_SELECTABLE: Indicates that the user may select
+ *    more than one item from the current selectable descendants. Value type:
+ *    boolean
+ * @GTK_ACCESSIBLE_PROPERTY_ORIENTATION: Indicates whether the element's
+ *    orientation is horizontal, vertical, or unknown/ambiguous. Value type:
+ *    #GtkOrientation
+ * @GTK_ACCESSIBLE_PROPERTY_PLACEHOLDER: Defines a short hint (a word or short
+ *    phrase) intended to aid the user with data entry when the control has no
+ *    value. A hint could be a sample value or a brief description of the expected
+ *    format. Value type: string
+ * @GTK_ACCESSIBLE_PROPERTY_READ_ONLY: Indicates that the element is not editable,
+ *    but is otherwise operable. Value type: boolean
+ * @GTK_ACCESSIBLE_PROPERTY_REQUIRED: Indicates that user input is required on
+ *    the element before a form may be submitted. Value type: boolean
+ * @GTK_ACCESSIBLE_PROPERTY_ROLE_DESCRIPTION: Defines a human-readable,
+ *    author-localized description for the role of an element. Value type: string
+ * @GTK_ACCESSIBLE_PROPERTY_SORT: Indicates if items in a table or grid are
+ *    sorted in ascending or descending order. Possible property values are in
+ *    the #GtkAccessibleSort enumeration. Value type: #GtkAccessibleSort
+ * @GTK_ACCESSIBLE_PROPERTY_VALUE_MAX: Defines the maximum allowed value for a
+ *    range widget. Value type: double
+ * @GTK_ACCESSIBLE_PROPERTY_VALUE_MIN: Defines the minimum allowed value for a
+ *    range widget. Value type: double
+ * @GTK_ACCESSIBLE_PROPERTY_VALUE_NOW: Defines the current value for a range widget.
+ *    Value type: double
+ * @GTK_ACCESSIBLE_PROPERTY_VALUE_TEXT: Defines the human readable text alternative
+ *    of aria-valuenow for a range widget. Value type: string
+ *
+ * The possible accessible properties of a #GtkAccessible.
+ */
 typedef enum {
   GTK_ACCESSIBLE_PROPERTY_AUTOCOMPLETE,
   GTK_ACCESSIBLE_PROPERTY_DESCRIPTION,
@@ -1389,6 +1444,56 @@ typedef enum {
   GTK_ACCESSIBLE_PROPERTY_VALUE_TEXT
 } GtkAccessibleProperty;
 
+/**
+ * GtkAccessibleRelation:
+ * @GTK_ACCESSIBLE_RELATION_ACTIVE_DESCENDANT: Identifies the currently active
+ *    element when focus is on a composite widget, combobox, textbox, group,
+ *    or application. Value type: reference
+ * @GTK_ACCESSIBLE_RELATION_COL_COUNT: Defines the total number of columns
+ *    in a table, grid, or treegrid. Value type: integer
+ * @GTK_ACCESSIBLE_RELATION_COL_INDEX: Defines an element's column index or
+ *    position with respect to the total number of columns within a table,
+ *    grid, or treegrid. Value type: integer
+ * @GTK_ACCESSIBLE_RELATION_COL_INDEX_TEXT: Defines a human readable text
+ *   alternative of @GTK_ACCESSIBLE_RELATION_COL_INDEX. Value type: string
+ * @GTK_ACCESSIBLE_RELATION_COL_SPAN: Defines the number of columns spanned
+ *   by a cell or gridcell within a table, grid, or treegrid. Value type: integer
+ * @GTK_ACCESSIBLE_RELATION_CONTROLS: Identifies the element (or elements) whose
+ *    contents or presence are controlled by the current element. Value type: reference
+ * @GTK_ACCESSIBLE_RELATION_DESCRIBED_BY: Identifies the element (or elements)
+ *    that describes the object. Value type: reference
+ * @GTK_ACCESSIBLE_RELATION_DETAILS: Identifies the element (or elements) that
+ *    provide additional information related to the object. Value type: reference
+ * @GTK_ACCESSIBLE_RELATION_ERROR_MESSAGE: Identifies the element that provides
+ *    an error message for an object. Value type: reference
+ * @GTK_ACCESSIBLE_RELATION_FLOW_TO: Identifies the next element (or elements)
+ *    in an alternate reading order of content which, at the user's discretion,
+ *    allows assistive technology to override the general default of reading in
+ *    document source order. Value type: reference
+ * @GTK_ACCESSIBLE_RELATION_LABELLED_BY: Identifies the element (or elements)
+ *    that labels the current element. Value type: reference
+ * @GTK_ACCESSIBLE_RELATION_OWNS: Identifies an element (or elements) in order
+ *    to define a visual, functional, or contextual parent/child relationship
+ *    between elements where the widget hierarchy cannot be used to represent
+ *    the relationship. Value type: reference
+ * @GTK_ACCESSIBLE_RELATION_POS_IN_SET: Defines an element's number or position
+ *    in the current set of listitems or treeitems. Value type: integer
+ * @GTK_ACCESSIBLE_RELATION_ROW_COUNT: Defines the total number of rows in a table,
+ *    grid, or treegrid. Value type: integer
+ * @GTK_ACCESSIBLE_RELATION_ROW_INDEX: Defines an element's row index or position
+ *    with respect to the total number of rows within a table, grid, or treegrid.
+ *    Value type: integer
+ * @GTK_ACCESSIBLE_RELATION_ROW_INDEX_TEXT: Defines a human readable text
+ *    alternative of aria-rowindex. Value type: string
+ * @GTK_ACCESSIBLE_RELATION_ROW_SPAN: Defines the number of rows spanned by a
+ *    cell or gridcell within a table, grid, or treegrid. Value type: integer
+ * @GTK_ACCESSIBLE_RELATION_SET_SIZE: Defines the number of items in the current
+ *    set of listitems or treeitems. Value type: integer
+ *
+ * The possible accessible relations of a #GtkAccessible.
+ * Accessible relations can be references to other widgets,
+ * integers or strings.
+ */
 typedef enum {
   GTK_ACCESSIBLE_RELATION_ACTIVE_DESCENDANT,
   GTK_ACCESSIBLE_RELATION_COL_COUNT,
@@ -1410,12 +1515,39 @@ typedef enum {
   GTK_ACCESSIBLE_RELATION_SET_SIZE
 } GtkAccessibleRelation;
 
+/**
+ * GtkAccessibleTristate:
+ * @GTK_ACCESSIBLE_TRISTATE_FALSE: The state is `false`
+ * @GTK_ACCESSIBLE_TRISTATE_TRUE: The state is `true`
+ * @GTK_ACCESSIBLE_TRISTATE_MIXED: The state is `mixed`
+ *
+ * The possible values for the %GTK_ACCESSIBLE_STATE_PRESSED
+ * accessible state.
+ *
+ * Note that the %GTK_ACCESSIBLE_TRISTATE_FALSE and
+ * %GTK_ACCESSIBLE_TRISTATE_TRUE have the same values
+ * as %FALSE and %TRUE.
+ */
 typedef enum {
   GTK_ACCESSIBLE_TRISTATE_FALSE,
   GTK_ACCESSIBLE_TRISTATE_TRUE,
   GTK_ACCESSIBLE_TRISTATE_MIXED
 } GtkAccessibleTristate;
 
+/**
+ * GtkAccessibleInvalidState:
+ * @GTK_ACCESSIBLE_INVALID_FALSE: There are no detected errors in the value
+ * @GTK_ACCESSIBLE_INVALID_TRUE: The value entered by the user has failed validation
+ * @GTK_ACCESSIBLE_INVALID_GRAMMAR: A grammatical error was detected
+ * @GTK_ACCESSIBLE_INVALID_SPELLING: A spelling error was detected
+ *
+ * The possible values for the %GTK_ACCESSIBLE_STATE_INVALID
+ * accessible state.
+ *
+ * Note that the %GTK_ACCESSIBLE_INVALID_FALSE and
+ * %GTK_ACCESSIBLE_INVALID_TRUE have the same values
+ * as %FALSE and %TRUE.
+ */
 typedef enum { /*< prefix=GTK_ACCESSIBLE_INVALID >*/
   GTK_ACCESSIBLE_INVALID_FALSE,
   GTK_ACCESSIBLE_INVALID_TRUE,
@@ -1423,6 +1555,24 @@ typedef enum { /*< prefix=GTK_ACCESSIBLE_INVALID >*/
   GTK_ACCESSIBLE_INVALID_SPELLING,
 } GtkAccessibleInvalidState;
 
+/**
+ * GtkAccessibleAutocomplete:
+ * @GTK_ACCESSIBLE_AUTOCOMPLETE_NONE: Automatic suggestions are not displayed.
+ * @GTK_ACCESSIBLE_AUTOCOMPLETE_INLINE: When a user is providing input, text
+ *    suggesting one way to complete the provided input may be dynamically
+ *    inserted after the caret.
+ * @GTK_ACCESSIBLE_AUTOCOMPLETE_LIST: When a user is providing input, an element
+ *    containing a collection of values that could complete the provided input
+ *    may be displayed.
+ * @GTK_ACCESSIBLE_AUTOCOMPLETE_BOTH: When a user is providing input, an element
+ *    containing a collection of values that could complete the provided input
+ *    may be displayed. If displayed, one value in the collection is automatically
+ *    selected, and the text needed to complete the automatically selected value
+ *    appears after the caret in the input.
+ *
+ * The possible values for the %GTK_ACCESSIBLE_PROPERTY_AUTOCOMPLETE
+ * accessible property.
+ */
 typedef enum { /*< prefix=GTK_ACCESSIBLE_AUTOCOMPLETE >*/
   GTK_ACCESSIBLE_AUTOCOMPLETE_NONE,
   GTK_ACCESSIBLE_AUTOCOMPLETE_INLINE,
@@ -1430,6 +1580,17 @@ typedef enum { /*< prefix=GTK_ACCESSIBLE_AUTOCOMPLETE >*/
   GTK_ACCESSIBLE_AUTOCOMPLETE_BOTH
 } GtkAccessibleAutocomplete;
 
+/**
+ * GtkAccessibleSort:
+ * @GTK_ACCESSIBLE_SORT_NONE: There is no defined sort applied to the column.
+ * @GTK_ACCESSIBLE_SORT_ASCENDING: Items are sorted in ascending order by this column.
+ * @GTK_ACCESSIBLE_SORT_DESCENDING: Items are sorted in descending order by this column.
+ * @GTK_ACCESSIBLE_SORT_OTHER: A sort algorithm other than ascending or
+ *    descending has been applied.
+ *
+ * The possible values for the %GTK_ACCESSIBLE_PROPERTY_SORT
+ * accessible property.
+ */
 typedef enum { /*< prefix=GTK_ACCESSIBLE_SORT >*/
   GTK_ACCESSIBLE_SORT_NONE,
   GTK_ACCESSIBLE_SORT_ASCENDING,
