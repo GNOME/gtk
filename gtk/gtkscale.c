@@ -125,6 +125,10 @@
  * If the scale is displaying the value (see #GtkScale:draw-value), there is
  * subnode with name value. This node will get the .top or .bottom style classes
  * similar to the marks node.
+ *
+ * # Accessibility
+ *
+ * GtkScale uses the #GTK_ACCESSIBLE_ROLE_SLIDER role.
  */
 
 

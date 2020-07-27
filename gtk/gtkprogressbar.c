@@ -85,6 +85,10 @@
  * .right, .top or .bottom added when the progress 'touches' the corresponding
  * end of the GtkProgressBar. The .osd class on the progressbar node is for use
  * in overlays like the one Epiphany has for page loading progress.
+ *
+ * # Accessibility
+ *
+ * GtkProgressBar uses the #GTK_ACCESSIBLE_ROLE_PROGRESS_BAR role.
  */
 
 typedef struct _GtkProgressBarClass         GtkProgressBarClass;
