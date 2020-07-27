@@ -1080,19 +1080,17 @@ do_listview_colors (GtkWidget *do_widget)
       g_list_store_append (sorters, multi_sorter);
       g_object_unref (multi_sorter);
 
-      dropdown = gtk_drop_down_new (G_LIST_MODEL (sorters), NULL);
-      box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
-      gtk_box_append (GTK_BOX (box), gtk_label_new ("Sort by:"));
-      gtk_box_append (GTK_BOX (box), dropdown);
-      gtk_header_bar_pack_end (GTK_HEADER_BAR (header), box);
-
       expression = gtk_cclosure_expression_new (G_TYPE_STRING,
                                                 NULL,
                                                 0, NULL,
                                                 (GCallback)get_title,
                                                 NULL, NULL);
-      gtk_drop_down_set_expression (GTK_DROP_DOWN (dropdown), expression);
-      gtk_expression_unref (expression);
+
+      dropdown = gtk_drop_down_new (G_LIST_MODEL (sorters), expression);
+      box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
+      gtk_box_append (GTK_BOX (box), gtk_label_new ("Sort by:"));
+      gtk_box_append (GTK_BOX (box), dropdown);
+      gtk_header_bar_pack_end (GTK_HEADER_BAR (header), box);
 
       g_object_bind_property (dropdown, "selected-item", sort_model, "sorter", G_BINDING_SYNC_CREATE);
 
@@ -1108,19 +1106,16 @@ do_listview_colors (GtkWidget *do_widget)
       set_title (factory, "Everything");
       g_list_store_append (factories, factory);
 
-      dropdown = gtk_drop_down_new (G_LIST_MODEL (factories), NULL);
-      box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
-      gtk_box_append (GTK_BOX (box), gtk_label_new ("Show:"));
-      gtk_box_append (GTK_BOX (box), dropdown);
-      gtk_header_bar_pack_end (GTK_HEADER_BAR (header), box);
-
       expression = gtk_cclosure_expression_new (G_TYPE_STRING,
                                                 NULL,
                                                 0, NULL,
                                                 (GCallback)get_title,
                                                 NULL, NULL);
-      gtk_drop_down_set_expression (GTK_DROP_DOWN (dropdown), expression);
-      gtk_expression_unref (expression);
+      dropdown = gtk_drop_down_new (G_LIST_MODEL (factories), expression);
+      box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
+      gtk_box_append (GTK_BOX (box), gtk_label_new ("Show:"));
+      gtk_box_append (GTK_BOX (box), dropdown);
+      gtk_header_bar_pack_end (GTK_HEADER_BAR (header), box);
 
       g_object_bind_property (dropdown, "selected-item", gridview, "factory", G_BINDING_SYNC_CREATE);
     }
