@@ -1368,6 +1368,12 @@ typedef enum {
   GTK_ACCESSIBLE_STATE_SELECTED
 } GtkAccessibleState;
 
+/**
+ * GTK_ACCESSIBLE_VALUE_UNDEFINED:
+ *
+ * An undefined value. The accessible attribute is either unset, or its
+ * value is undefined.
+ */
 #define GTK_ACCESSIBLE_VALUE_UNDEFINED  (-1)
 
 /**
