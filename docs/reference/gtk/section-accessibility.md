@@ -50,6 +50,13 @@ Each role name is part of the #GtkAccessibleRole enumeration.
 | `CHECKBOX` | A control that has three possible value: `true`, `false`, or `undefined` | #GtkCheckButton |
 | `COLUMNHEADER` | The header of a column in a list or grid | - |
 | `COMBOBOX` | A control that can be expanded to show a list of possible values to select | #GtkComboBox |
+| `DIALOG` | A dialog that prompts the user to enter information or require a response | #GtkDialog and subclasses |
+| `PROGRESS_BAR` | An element that display progress | #GtkProgressBar |
+| `RADIO` | A checkable input in a group of radio roles | #GtkRadioButton |
+| `SCROLLBAR` | A graphical object controlling the scolling of content | #GtkScrollbar |
+| `SEPARATOR` | A divider that separates sections of content or groups of items | #GtkSeparator |
+| `SPIN_BUTTON` | A range control that allows seelcting among discrete choices | #GtkSpinButton |
+| `SWITCH` | A control that represents on/off values | #GtkSwitch |
 | `...` | … |
 
 See the [WAI-ARIA](https://www.w3.org/WAI/PF/aria/appendices#quickref) list
