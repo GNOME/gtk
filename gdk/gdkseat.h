@@ -78,6 +78,8 @@ GDK_AVAILABLE_IN_ALL
 GList *        gdk_seat_get_physical_devices    (GdkSeat             *seat,
                                                  GdkSeatCapabilities  capabilities);
 
+GList *        gdk_seat_get_tools               (GdkSeat *seat);
+
 GDK_AVAILABLE_IN_ALL
 GdkDevice *    gdk_seat_get_pointer             (GdkSeat             *seat);
 GDK_AVAILABLE_IN_ALL

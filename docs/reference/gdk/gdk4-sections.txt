@@ -439,6 +439,7 @@ gdk_seat_get_capabilities
 gdk_seat_get_pointer
 gdk_seat_get_keyboard
 gdk_seat_get_physical_devices
+gdk_seat_get_tools
 
 <SUBSECTION Standard>
 GDK_SEAT

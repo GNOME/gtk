@@ -279,13 +279,12 @@ gdk_seat_default_get_physical_devices (GdkSeat             *seat,
   return devices;
 }
 
-static GdkDeviceTool *
-gdk_seat_default_get_tool (GdkSeat *seat,
-                           guint64  serial,
-                           guint64  hw_id)
+static GList *
+gdk_seat_default_get_tools (GdkSeat *seat)
 {
   GdkSeatDefaultPrivate *priv;
   GdkDeviceTool *tool;
+  GList *tools = NULL;
   guint i;
 
   priv = gdk_seat_default_get_instance_private (GDK_SEAT_DEFAULT (seat));
@@ -296,12 +295,10 @@ gdk_seat_default_get_tool (GdkSeat *seat,
   for (i = 0; i < priv->tools->len; i++)
     {
       tool = g_ptr_array_index (priv->tools, i);
-
-      if (tool->serial == serial && tool->hw_id == hw_id)
-        return tool;
+      tools = g_list_prepend (tools, tool);
     }
 
-  return NULL;
+  return tools;
 }
 
 static void
@@ -319,8 +316,7 @@ gdk_seat_default_class_init (GdkSeatDefaultClass *klass)
 
   seat_class->get_logical_device = gdk_seat_default_get_logical_device;
   seat_class->get_physical_devices = gdk_seat_default_get_physical_devices;
-
-  seat_class->get_tool = gdk_seat_default_get_tool;
+  seat_class->get_tools = gdk_seat_default_get_tools;
 }
 
 static void

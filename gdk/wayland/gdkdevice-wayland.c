@@ -4749,6 +4749,22 @@ gdk_wayland_seat_get_physical_devices (GdkSeat             *seat,
   return physical_devices;
 }
 
+static GList *
+gdk_wayland_seat_get_tools (GdkSeat *seat)
+{
+  GdkWaylandSeat *wayland_seat = GDK_WAYLAND_SEAT (seat);
+  GList *tools = NULL, *l;
+
+  for (l = wayland_seat->tablet_tools; l; l = l->next)
+    {
+      GdkWaylandTabletToolData *tool = l->data;
+
+      tools = g_list_prepend (tools, tool->tool);
+    }
+
+  return tools;
+}
+
 static void
 gdk_wayland_seat_class_init (GdkWaylandSeatClass *klass)
 {
@@ -4762,6 +4778,7 @@ gdk_wayland_seat_class_init (GdkWaylandSeatClass *klass)
   seat_class->ungrab = gdk_wayland_seat_ungrab;
   seat_class->get_logical_device = gdk_wayland_seat_get_logical_device;
   seat_class->get_physical_devices = gdk_wayland_seat_get_physical_devices;
+  seat_class->get_tools = gdk_wayland_seat_get_tools;
 }
 
 static void

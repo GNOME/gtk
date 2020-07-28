@@ -22,6 +22,7 @@
 #include <glib-object.h>
 #include "gdkdisplay.h"
 #include "gdkdevice.h"
+#include "gdkdevicetoolprivate.h"
 #include "gdkseatprivate.h"
 #include "gdkdeviceprivate.h"
 #include "gdkintl.h"
@@ -439,10 +440,44 @@ gdk_seat_get_tool (GdkSeat *seat,
                    guint64  serial,
                    guint64  hw_id)
 {
+  GdkDeviceTool *match = NULL;
+  GList *tools, *l;
+
+  tools = gdk_seat_get_tools (seat);
+
+  for (l = tools; l; l = l->next)
+    {
+      GdkDeviceTool *tool = l->data;
+
+      if (tool->serial == serial && tool->hw_id == hw_id)
+        {
+          match = tool;
+          break;
+        }
+    }
+
+  g_list_free (tools);
+
+  return match;
+}
+
+/**
+ * gdk_seat_get_tools:
+ * @seat: A #GdkSeat
+ *
+ * Returns all #GdkDeviceTool<!-- -->s that are known to the
+ * application.
+ *
+ * Returns: (transfer container) (element-type Gdk.DeviceTool): A list of tools. Free with
+ * g_list_free().
+ **/
+GList *
+gdk_seat_get_tools (GdkSeat *seat)
+{
   GdkSeatClass *seat_class;
 
   g_return_val_if_fail (GDK_IS_SEAT (seat), NULL);
 
   seat_class = GDK_SEAT_GET_CLASS (seat);
-  return seat_class->get_tool (seat, serial, hw_id);
+  return seat_class->get_tools (seat);
 }
