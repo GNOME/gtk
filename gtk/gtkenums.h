@@ -1235,7 +1235,8 @@ typedef enum {
  * @GTK_ACCESSIBLE_ROLE_TABLE: Unused
  * @GTK_ACCESSIBLE_ROLE_TAB_LIST: Unused
  * @GTK_ACCESSIBLE_ROLE_TAB_PANEL: Unused
- * @GTK_ACCESSIBLE_ROLE_TEXT_BOX: Unused
+ * @GTK_ACCESSIBLE_ROLE_TEXT_BOX: A type of input that allows free-form text
+ *    as its value.
  * @GTK_ACCESSIBLE_ROLE_TIME: Unused
  * @GTK_ACCESSIBLE_ROLE_TIMER: Unused
  * @GTK_ACCESSIBLE_ROLE_TOOLBAR: Unused

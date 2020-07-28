@@ -158,6 +158,10 @@
  * applied to the whole text. Note that specifying ranges does not make much
  * sense with translatable attributes. Use markup embedded in the translatable
  * content instead.
+ *
+ * # Accessibility
+ *
+ * GtkEntry uses the #GTK_ACCESSIBLE_ROLE_TEXT_BOX role.
  */
 
 #define MAX_ICONS 2
@@ -983,6 +987,7 @@ gtk_entry_class_init (GtkEntryClass *class)
                   GTK_TYPE_ENTRY_ICON_POSITION);
 
   gtk_widget_class_set_css_name (widget_class, I_("entry"));
+  gtk_widget_class_set_accessible_role (widget_class, GTK_ACCESSIBLE_ROLE_TEXT_BOX);
 }
 
 static GtkEditable *
@@ -1016,7 +1021,16 @@ gtk_entry_set_property (GObject         *object,
   GtkEntryPrivate *priv = gtk_entry_get_instance_private (entry);
 
   if (gtk_editable_delegate_set_property (object, prop_id, value, pspec))
-    return;
+    {
+      if (prop_id == PROP_EDITING_CANCELED + 1 + GTK_EDITABLE_PROP_EDITABLE)
+        {
+          gtk_accessible_update_property (GTK_ACCESSIBLE (entry),
+                                          GTK_ACCESSIBLE_PROPERTY_READ_ONLY, !g_value_get_boolean (value),
+                                          -1);
+        }
+
+      return;
+    }
 
   switch (prop_id)
     {
@@ -1028,7 +1042,6 @@ gtk_entry_set_property (GObject         *object,
     case PROP_ACTIVATES_DEFAULT:
     case PROP_TRUNCATE_MULTILINE:
     case PROP_OVERWRITE_MODE:
-    case PROP_PLACEHOLDER_TEXT:
     case PROP_IM_MODULE:
     case PROP_INPUT_PURPOSE:
     case PROP_INPUT_HINTS:
@@ -1036,6 +1049,10 @@ gtk_entry_set_property (GObject         *object,
     case PROP_TABS:
     case PROP_ENABLE_EMOJI_COMPLETION:
       g_object_set_property (G_OBJECT (priv->text), pspec->name, value);
+      break;
+
+    case PROP_PLACEHOLDER_TEXT:
+      gtk_entry_set_placeholder_text (entry, g_value_get_string (value));
       break;
 
     case PROP_HAS_FRAME:
@@ -3381,6 +3398,10 @@ gtk_entry_set_placeholder_text (GtkEntry    *entry,
   g_return_if_fail (GTK_IS_ENTRY (entry));
 
   gtk_text_set_placeholder_text (GTK_TEXT (priv->text), text);
+
+  gtk_accessible_update_property (GTK_ACCESSIBLE (entry),
+                                  GTK_ACCESSIBLE_PROPERTY_PLACEHOLDER, text,
+                                  -1);
 }
 
 /**
