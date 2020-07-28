@@ -49,7 +49,16 @@ enum
   N_PROPS
 };
 
+enum
+{
+  STATE_CHANGE,
+
+  LAST_SIGNAL
+};
+
 static GParamSpec *obj_props[N_PROPS];
+
+static guint obj_signals[LAST_SIGNAL];
 
 static void
 gtk_at_context_finalize (GObject *gobject)
@@ -162,6 +171,17 @@ gtk_at_context_class_init (GtkATContextClass *klass)
                          G_PARAM_READWRITE |
                          G_PARAM_CONSTRUCT_ONLY |
                          G_PARAM_STATIC_STRINGS);
+
+  obj_signals[STATE_CHANGE] =
+    g_signal_new ("state-change",
+                  G_TYPE_FROM_CLASS (gobject_class),
+                  G_SIGNAL_RUN_FIRST,
+                  G_STRUCT_OFFSET (GtkATContextClass, state_change),
+                  NULL, NULL,
+                  NULL,
+                  G_TYPE_NONE, 6,
+                  G_TYPE_UINT, G_TYPE_UINT, G_TYPE_UINT,
+                  G_TYPE_POINTER, G_TYPE_POINTER, G_TYPE_POINTER);
 
   g_object_class_install_properties (gobject_class, N_PROPS, obj_props);
 }
@@ -399,13 +419,9 @@ gtk_at_context_update (GtkATContext *self)
   GtkAccessibleRelationChange changed_relations =
     gtk_accessible_attribute_set_get_changed (self->relations);
 
-  GTK_AT_CONTEXT_GET_CLASS (self)->state_change (self,
-                                                 changed_states,
-                                                 changed_properties,
-                                                 changed_relations,
-                                                 self->states,
-                                                 self->properties,
-                                                 self->relations);
+  g_signal_emit (self, obj_signals[STATE_CHANGE], 0,
+                 changed_states, changed_properties, changed_relations,
+                 self->states, self->properties, self->relations);
 }
 
 /*< private >
