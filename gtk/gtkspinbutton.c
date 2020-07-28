@@ -1643,6 +1643,12 @@ gtk_spin_button_configure (GtkSpinButton *spin_button,
 
   g_object_thaw_notify (G_OBJECT (spin_button));
 
+  gtk_accessible_update_property (GTK_ACCESSIBLE (spin_button),
+                                  GTK_ACCESSIBLE_PROPERTY_VALUE_MAX, gtk_adjustment_get_upper (adjustment),
+                                  GTK_ACCESSIBLE_PROPERTY_VALUE_MIN, gtk_adjustment_get_lower (adjustment),
+                                  GTK_ACCESSIBLE_PROPERTY_VALUE_NOW, gtk_adjustment_get_value (adjustment),
+                                  -1);
+
   gtk_spin_button_value_changed (adjustment, spin_button);
 }
 
