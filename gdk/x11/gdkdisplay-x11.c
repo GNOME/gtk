@@ -1760,15 +1760,9 @@ device_grab_update_callback (GdkDisplay *display,
                              gpointer    data,
                              gulong      serial)
 {
-  GdkPointerSurfaceInfo *pointer_info;
   GdkDevice *device = data;
 
-  pointer_info = _gdk_display_get_pointer_info (display, device);
-  _gdk_display_device_grab_update (display, device,
-                                   pointer_info->last_physical_device != NULL
-                                     ? pointer_info->last_physical_device
-                                     : device,
-                                   serial);
+  _gdk_display_device_grab_update (display, device, serial);
 }
 
 #define XSERVER_TIME_IS_LATER(time1, time2)                        \

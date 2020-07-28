@@ -603,7 +603,6 @@ get_current_toplevel (GdkDisplay      *display,
 static void
 switch_to_pointer_grab (GdkDisplay        *display,
                         GdkDevice         *device,
-                        GdkDevice         *source_device,
 			GdkDeviceGrabInfo *grab,
 			GdkDeviceGrabInfo *last_grab,
 			guint32            time,
@@ -680,7 +679,6 @@ _gdk_display_update_last_event (GdkDisplay     *display,
 void
 _gdk_display_device_grab_update (GdkDisplay *display,
                                  GdkDevice  *device,
-                                 GdkDevice  *source_device,
                                  gulong      current_serial)
 {
   GdkDeviceGrabInfo *current_grab, *next_grab;
@@ -705,7 +703,7 @@ _gdk_display_device_grab_update (GdkDisplay *display,
 	  if (!current_grab->activated)
             {
               if (gdk_device_get_source (device) != GDK_SOURCE_KEYBOARD)
-                switch_to_pointer_grab (display, device, source_device, current_grab, NULL, time, current_serial);
+                switch_to_pointer_grab (display, device, current_grab, NULL, time, current_serial);
             }
 
 	  break;
@@ -733,7 +731,7 @@ _gdk_display_device_grab_update (GdkDisplay *display,
       g_hash_table_insert (display->device_grabs, device, grabs);
 
       if (gdk_device_get_source (device) != GDK_SOURCE_KEYBOARD)
-        switch_to_pointer_grab (display, device, source_device,
+        switch_to_pointer_grab (display, device,
                                 next_grab, current_grab,
                                 time, current_serial);
 

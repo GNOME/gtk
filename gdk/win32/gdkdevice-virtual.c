@@ -151,7 +151,7 @@ gdk_device_virtual_ungrab (GdkDevice *device,
       ReleaseCapture ();
     }
 
-  _gdk_display_device_grab_update (display, device, device, 0);
+  _gdk_display_device_grab_update (display, device, 0);
 }
 
 static void

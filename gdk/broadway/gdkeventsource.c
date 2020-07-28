@@ -280,7 +280,6 @@ _gdk_broadway_events_got_input (GdkDisplay *display,
   case BROADWAY_EVENT_UNGRAB_NOTIFY:
     _gdk_display_device_grab_update (display,
                                      display_broadway->core_pointer,
-                                     display_broadway->pointer,
                                      message->base.serial);
     break;
 

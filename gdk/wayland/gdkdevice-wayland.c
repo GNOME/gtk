@@ -1515,7 +1515,6 @@ pointer_handle_leave (void              *data,
                                     display_serial, NULL, TRUE);
       _gdk_display_device_grab_update (seat->display,
                                        seat->logical_pointer,
-                                       seat->pointer,
                                        display_serial);
     }
 

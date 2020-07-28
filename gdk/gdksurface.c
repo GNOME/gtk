@@ -2244,7 +2244,7 @@ _gdk_windowing_got_event (GdkDisplay *display,
             source_device = pointer_info->last_physical_device;
         }
 
-      _gdk_display_device_grab_update (display, device, source_device, serial);
+      _gdk_display_device_grab_update (display, device, serial);
     }
 
   event_surface = gdk_event_get_surface (event);
@@ -2272,8 +2272,7 @@ _gdk_windowing_got_event (GdkDisplay *display,
                                         serial,
                                         gdk_event_get_time (event),
                                         TRUE);
-          _gdk_display_device_grab_update (display, device,
-                                           source_device, serial);
+          _gdk_display_device_grab_update (display, device, serial);
         }
     }
   else if (type == GDK_BUTTON_RELEASE ||
@@ -2292,7 +2291,7 @@ _gdk_windowing_got_event (GdkDisplay *display,
             {
               button_release_grab->serial_end = serial;
               button_release_grab->implicit_ungrab = FALSE;
-              _gdk_display_device_grab_update (display, device, source_device, serial);
+              _gdk_display_device_grab_update (display, device, serial);
             }
         }
     }
