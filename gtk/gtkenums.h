@@ -1217,7 +1217,8 @@ typedef enum {
  *    of content within a viewing area, regardless of whether the content is fully
  *    displayed within the viewing area.
  * @GTK_ACCESSIBLE_ROLE_SEARCH: Unused
- * @GTK_ACCESSIBLE_ROLE_SEARCH_BOX: Unused
+ * @GTK_ACCESSIBLE_ROLE_SEARCH_BOX: A type of textbox intended for specifying
+ *    search criteria.
  * @GTK_ACCESSIBLE_ROLE_SECTION: Unused
  * @GTK_ACCESSIBLE_ROLE_SECTION_HEAD: Unused
  * @GTK_ACCESSIBLE_ROLE_SELECT: Unused
