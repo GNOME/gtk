@@ -492,7 +492,6 @@ generate_grab_broken_event (GdkDisplay *display,
 
       event = gdk_grab_broken_event_new (surface,
                                          device,
-                                         device,
                                          grab_surface,
                                          implicit);
 

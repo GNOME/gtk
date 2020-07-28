@@ -117,7 +117,6 @@ handle_focus_change (GdkEvent *event)
 
       focus_event = gdk_focus_event_new (gdk_event_get_surface (event),
                                          gdk_event_get_device (event),
-                                         gdk_event_get_source_device (event),
                                          focus_in);
       gdk_display_put_event (gdk_event_get_display (event), focus_event);
       gdk_event_unref (focus_event);
@@ -138,7 +137,6 @@ create_synth_crossing_event (GdkEventType     evtype,
   event = gdk_crossing_event_new (evtype,
                                   gdk_event_get_surface (real_event),
                                   gdk_event_get_device (real_event),
-                                  gdk_event_get_source_device (real_event),
                                   gdk_event_get_time (real_event),
                                   gdk_event_get_modifier_state (real_event),
                                   x, y,

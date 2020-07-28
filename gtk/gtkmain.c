@@ -1127,7 +1127,6 @@ rewrite_event_for_surface (GdkEvent  *event,
       return gdk_button_event_new (type,
                                    new_surface,
                                    gdk_event_get_device (event),
-                                   gdk_event_get_source_device (event),
                                    gdk_event_get_device_tool (event),
                                    gdk_event_get_time (event),
                                    gdk_event_get_modifier_state (event),
@@ -1137,7 +1136,6 @@ rewrite_event_for_surface (GdkEvent  *event,
     case GDK_MOTION_NOTIFY:
       return gdk_motion_event_new (new_surface,
                                    gdk_event_get_device (event),
-                                   gdk_event_get_source_device (event),
                                    gdk_event_get_device_tool (event),
                                    gdk_event_get_time (event),
                                    gdk_event_get_modifier_state (event),
@@ -1151,7 +1149,6 @@ rewrite_event_for_surface (GdkEvent  *event,
                                   gdk_event_get_event_sequence (event),
                                   new_surface,
                                   gdk_event_get_device (event),
-                                  gdk_event_get_source_device (event),
                                   gdk_event_get_time (event),
                                   gdk_event_get_modifier_state (event),
                                   x, y,
@@ -1161,7 +1158,6 @@ rewrite_event_for_surface (GdkEvent  *event,
       gdk_touchpad_event_get_deltas (event, &dx, &dy);
       return gdk_touchpad_event_new_swipe (new_surface,
                                            gdk_event_get_device (event),
-                                           gdk_event_get_source_device (event),
                                            gdk_event_get_time (event),
                                            gdk_event_get_modifier_state (event),
                                            gdk_touchpad_event_get_gesture_phase (event),
@@ -1172,7 +1168,6 @@ rewrite_event_for_surface (GdkEvent  *event,
       gdk_touchpad_event_get_deltas (event, &dx, &dy);
       return gdk_touchpad_event_new_pinch (new_surface,
                                            gdk_event_get_device (event),
-                                           gdk_event_get_source_device (event),
                                            gdk_event_get_time (event),
                                            gdk_event_get_modifier_state (event),
                                            gdk_touchpad_event_get_gesture_phase (event),
@@ -1266,7 +1261,6 @@ rewrite_event_for_toplevel (GdkEvent *event)
   return gdk_key_event_new (gdk_event_get_event_type (event),
                             surface,
                             gdk_event_get_device (event),
-                            gdk_event_get_source_device (event),
                             gdk_event_get_time (event),
                             gdk_key_event_get_keycode (event),
                             gdk_event_get_modifier_state (event),
@@ -1541,6 +1535,17 @@ handle_pointing_event (GdkEvent *event)
 
   type = gdk_event_get_event_type (event);
   sequence = gdk_event_get_event_sequence (event);
+
+  if (type == GDK_SCROLL &&
+      (gdk_device_get_source (device) == GDK_SOURCE_TOUCHPAD ||
+       gdk_device_get_source (device) == GDK_SOURCE_TRACKPOINT ||
+       gdk_device_get_source (device) == GDK_SOURCE_MOUSE))
+    {
+      /* A bit of a kludge, resolve target lookups for scrolling devices
+       * on the seat pointer.
+       */
+      device = gdk_seat_get_pointer (gdk_event_get_seat (event));
+    }
 
   switch ((guint) type)
     {

@@ -42,7 +42,6 @@ typedef struct _GdkEventClass   GdkEventClass;
  * @event_type: the specialized event type
  * @surface: the surface of the event
  * @device: the device of the event
- * @source_device: the source device
  * @time: a serial identifier of the event that can be used to order
  *   two events
  * @flags: event flags
@@ -63,7 +62,6 @@ struct _GdkEvent
 
   /* The devices associated to the event */
   GdkDevice *device;
-  GdkDevice *source_device;
 
   guint32 time;
   guint16 flags;
@@ -450,7 +448,6 @@ void gdk_event_init_types (void);
 GdkEvent * gdk_button_event_new         (GdkEventType     type,
                                          GdkSurface      *surface,
                                          GdkDevice       *device,
-                                         GdkDevice       *source_device,
                                          GdkDeviceTool   *tool,
                                          guint32          time,
                                          GdkModifierType  state,
@@ -461,7 +458,6 @@ GdkEvent * gdk_button_event_new         (GdkEventType     type,
 
 GdkEvent * gdk_motion_event_new         (GdkSurface      *surface,
                                          GdkDevice       *device,
-                                         GdkDevice       *source_device,
                                          GdkDeviceTool   *tool,
                                          guint32          time,
                                          GdkModifierType  state,
@@ -472,7 +468,6 @@ GdkEvent * gdk_motion_event_new         (GdkSurface      *surface,
 GdkEvent * gdk_crossing_event_new       (GdkEventType     type,
                                          GdkSurface      *surface,
                                          GdkDevice       *device,
-                                         GdkDevice       *source_device,
                                          guint32          time,
                                          GdkModifierType  state,
                                          double           x,
@@ -483,14 +478,12 @@ GdkEvent * gdk_crossing_event_new       (GdkEventType     type,
 GdkEvent * gdk_proximity_event_new      (GdkEventType     type,
                                          GdkSurface      *surface,
                                          GdkDevice       *device,
-                                         GdkDevice       *source_device,
                                          GdkDeviceTool   *tool,
                                          guint32          time);
 
 GdkEvent * gdk_key_event_new            (GdkEventType      type,
                                          GdkSurface       *surface,
                                          GdkDevice        *device,
-                                         GdkDevice        *source_device,
                                          guint32           time,
                                          guint             keycode,
                                          GdkModifierType   modifiers,
@@ -500,7 +493,6 @@ GdkEvent * gdk_key_event_new            (GdkEventType      type,
 
 GdkEvent * gdk_focus_event_new          (GdkSurface      *surface,
                                          GdkDevice       *device,
-                                         GdkDevice       *source_device,
                                          gboolean         focus_in);
 
 GdkEvent * gdk_configure_event_new      (GdkSurface      *surface,
@@ -511,7 +503,6 @@ GdkEvent * gdk_delete_event_new         (GdkSurface      *surface);
 
 GdkEvent * gdk_scroll_event_new         (GdkSurface      *surface,
                                          GdkDevice       *device,
-                                         GdkDevice       *source_device,
                                          GdkDeviceTool   *tool,
                                          guint32          time,
                                          GdkModifierType  state,
@@ -521,7 +512,6 @@ GdkEvent * gdk_scroll_event_new         (GdkSurface      *surface,
 
 GdkEvent * gdk_scroll_event_new_discrete (GdkSurface         *surface,
                                           GdkDevice          *device,
-                                          GdkDevice          *source_device,
                                           GdkDeviceTool      *tool,
                                           guint32             time,
                                           GdkModifierType     state,
@@ -532,7 +522,6 @@ GdkEvent * gdk_touch_event_new          (GdkEventType      type,
                                          GdkEventSequence *sequence,
                                          GdkSurface       *surface,
                                          GdkDevice        *device,
-                                         GdkDevice        *source_device,
                                          guint32           time,
                                          GdkModifierType   state,
                                          double            x,
@@ -542,7 +531,6 @@ GdkEvent * gdk_touch_event_new          (GdkEventType      type,
 
 GdkEvent * gdk_touchpad_event_new_swipe (GdkSurface      *surface,
                                          GdkDevice       *device,
-                                         GdkDevice       *source_device,
                                          guint32          time,
                                          GdkModifierType  state,
                                          GdkTouchpadGesturePhase  phase,
@@ -554,7 +542,6 @@ GdkEvent * gdk_touchpad_event_new_swipe (GdkSurface      *surface,
 
 GdkEvent * gdk_touchpad_event_new_pinch (GdkSurface              *surface,
                                          GdkDevice               *device,
-                                         GdkDevice               *source_device,
                                          guint32                  time,
                                          GdkModifierType          state,
                                          GdkTouchpadGesturePhase  phase,
@@ -568,7 +555,6 @@ GdkEvent * gdk_touchpad_event_new_pinch (GdkSurface              *surface,
 
 GdkEvent * gdk_pad_event_new_ring       (GdkSurface      *surface,
                                          GdkDevice       *device,
-                                         GdkDevice       *source_device,
                                          guint32          time,
                                          guint            group,
                                          guint            index,
@@ -577,7 +563,6 @@ GdkEvent * gdk_pad_event_new_ring       (GdkSurface      *surface,
 
 GdkEvent * gdk_pad_event_new_strip      (GdkSurface      *surface,
                                          GdkDevice       *device,
-                                         GdkDevice       *source_device,
                                          guint32          time,
                                          guint            group,
                                          guint            index,
@@ -587,7 +572,6 @@ GdkEvent * gdk_pad_event_new_strip      (GdkSurface      *surface,
 GdkEvent * gdk_pad_event_new_button     (GdkEventType     type,
                                          GdkSurface      *surface,
                                          GdkDevice       *device,
-                                         GdkDevice       *source_device,
                                          guint32          time,
                                          guint            group,
                                          guint            button,
@@ -595,7 +579,6 @@ GdkEvent * gdk_pad_event_new_button     (GdkEventType     type,
 
 GdkEvent * gdk_pad_event_new_group_mode (GdkSurface      *surface,
                                          GdkDevice       *device,
-                                         GdkDevice       *source_device,
                                          guint32          time,
                                          guint            group,
                                          guint            mode);
@@ -610,7 +593,6 @@ GdkEvent * gdk_dnd_event_new            (GdkEventType     type,
 
 GdkEvent * gdk_grab_broken_event_new    (GdkSurface      *surface,
                                          GdkDevice       *device,
-                                         GdkDevice       *source_device,
                                          GdkSurface      *grab_surface,
                                          gboolean         implicit);
 

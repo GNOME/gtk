@@ -611,7 +611,7 @@ gtk_gesture_handle_event (GtkEventController *controller,
   GdkModifierType state;
   GtkWidget *target;
 
-  source_device = gdk_event_get_source_device (event);
+  source_device = gdk_event_get_device (event);
 
   if (!source_device)
     return FALSE;

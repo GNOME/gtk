@@ -1849,7 +1849,7 @@ gtk_list_box_click_gesture_released (GtkGestureClick *gesture,
           state = gdk_event_get_modifier_state (event);
           extend = (state & GDK_SHIFT_MASK) != 0;
           modify = (state & GDK_CONTROL_MASK) != 0;
-          source = gdk_device_get_source (gdk_event_get_source_device (event));
+          source = gdk_device_get_source (gdk_event_get_device (event));
 
           if (source == GDK_SOURCE_TOUCHSCREEN)
             modify = !modify;

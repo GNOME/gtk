@@ -2875,7 +2875,7 @@ gtk_flow_box_click_gesture_released (GtkGestureClick *gesture,
 
           sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
           event = gtk_gesture_get_last_event (GTK_GESTURE (gesture), sequence);
-          source = gdk_device_get_source (gdk_event_get_source_device (event));
+          source = gdk_device_get_source (gdk_event_get_device (event));
 
           if (source == GDK_SOURCE_TOUCHSCREEN)
             modify = !modify;

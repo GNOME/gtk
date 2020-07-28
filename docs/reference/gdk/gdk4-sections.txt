@@ -475,7 +475,6 @@ gdk_event_unref
 gdk_event_get_event_type
 gdk_event_get_surface
 gdk_event_get_device
-gdk_event_get_source_device
 gdk_event_get_device_tool
 gdk_event_get_time
 gdk_event_get_display

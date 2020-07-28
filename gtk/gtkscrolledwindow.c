@@ -1254,7 +1254,7 @@ captured_motion (GtkEventController *controller,
   state = gtk_event_controller_get_current_event_state (controller);
   event = gtk_event_controller_get_current_event (controller);
 
-  source_device = gdk_event_get_source_device (event);
+  source_device = gdk_event_get_device (event);
   input_source = gdk_device_get_source (source_device);
 
   if (priv->hscrollbar_visible)

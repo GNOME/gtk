@@ -351,9 +351,6 @@ GDK_AVAILABLE_IN_ALL
 GdkDevice *             gdk_event_get_device            (GdkEvent *event);
 
 GDK_AVAILABLE_IN_ALL
-GdkDevice *             gdk_event_get_source_device     (GdkEvent *event);
-
-GDK_AVAILABLE_IN_ALL
 GdkDeviceTool *         gdk_event_get_device_tool       (GdkEvent *event);
 
 GDK_AVAILABLE_IN_ALL

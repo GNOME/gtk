@@ -873,7 +873,7 @@ gesture_drag_begin_cb (GtkGestureDrag *gesture,
 
   sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
   event = gtk_gesture_get_last_event (GTK_GESTURE (gesture), sequence);
-  device = gdk_event_get_source_device (event);
+  device = gdk_event_get_device (event);
   paned->panning = FALSE;
 
   is_touch = (gdk_event_get_event_type (event) == GDK_TOUCH_BEGIN ||

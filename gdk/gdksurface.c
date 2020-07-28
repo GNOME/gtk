@@ -2222,13 +2222,12 @@ _gdk_windowing_got_event (GdkDisplay *display,
   gboolean unlink_event = FALSE;
   GdkDeviceGrabInfo *button_release_grab;
   GdkPointerSurfaceInfo *pointer_info = NULL;
-  GdkDevice *device, *source_device;
+  GdkDevice *device;
   GdkEventType type;
 
   _gdk_display_update_last_event (display, event);
 
   device = gdk_event_get_device (event);
-  source_device = gdk_event_get_source_device (event);
 
   if (device)
     {
@@ -2236,12 +2235,7 @@ _gdk_windowing_got_event (GdkDisplay *display,
           gdk_device_get_source (device) != GDK_SOURCE_TABLET_PAD)
         {
           pointer_info = _gdk_display_get_pointer_info (display, device);
-
-          if (source_device != pointer_info->last_physical_device &&
-              gdk_device_get_device_type (source_device) == GDK_DEVICE_TYPE_PHYSICAL)
-            pointer_info->last_physical_device = source_device;
-          else if (pointer_info->last_physical_device)
-            source_device = pointer_info->last_physical_device;
+          pointer_info->last_physical_device = device;
         }
 
       _gdk_display_device_grab_update (display, device, serial);
