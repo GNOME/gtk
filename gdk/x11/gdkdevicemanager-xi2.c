@@ -1197,7 +1197,7 @@ translate_axes (GdkDevice       *device,
   double *vals;
 
   n_axes = gdk_device_get_n_axes (device);
-  axes = g_new0 (double, n_axes);
+  axes = g_new0 (double, GDK_AXIS_LAST);
   vals = valuators->values;
 
   for (i = 0; i < MIN (valuators->mask_len * 8, n_axes); i++)
@@ -1206,10 +1206,7 @@ translate_axes (GdkDevice       *device,
       double val;
 
       if (!XIMaskIsSet (valuators->mask, i))
-        {
-          axes[i] = gdk_x11_device_xi2_get_last_axis_value (GDK_X11_DEVICE_XI2 (device), i);
-          continue;
-        }
+        continue;
 
       use = gdk_device_get_axis_use (device, i);
       val = *vals++;
@@ -1220,13 +1217,13 @@ translate_axes (GdkDevice       *device,
         case GDK_AXIS_Y:
             {
               if (use == GDK_AXIS_X)
-                axes[i] = x;
+                axes[use] = x;
               else
-                axes[i] = y;
+                axes[use] = y;
             }
           break;
         default:
-          _gdk_device_translate_axis (device, i, val, &axes[i]);
+          _gdk_device_translate_axis (device, i, val, &axes[use]);
           break;
         }
     }

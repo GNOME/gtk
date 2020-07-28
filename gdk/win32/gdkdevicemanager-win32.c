@@ -1044,7 +1044,7 @@ gdk_input_other_event (GdkDisplay *display,
       if (event_type == GDK_BUTTON_PRESS ||
           event_type == GDK_BUTTON_RELEASE)
         {
-          axes = g_new (double, num_axes);
+          axes = g_new (double, GDK_AXIS_LAST);
 
           _gdk_device_wintab_translate_axes (source_device,
                                              window,
@@ -1080,7 +1080,7 @@ gdk_input_other_event (GdkDisplay *display,
         }
       else
         {
-          axes = g_new (double, num_axes);
+          axes = g_new (double, GDK_AXIS_LAST);
           _gdk_device_wintab_translate_axes (source_device,
                                              window,
                                              axes,

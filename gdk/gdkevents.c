@@ -732,25 +732,24 @@ gdk_motion_event_push_history (GdkEvent *event,
                                GdkEvent *history_event)
 {
   GdkMotionEvent *self = (GdkMotionEvent *) event;
+  GdkDeviceTool *tool;
   GdkTimeCoord hist;
-  GdkDevice *device;
-  int i, n_axes;
+  int i;
 
   g_assert (GDK_IS_EVENT_TYPE (event, GDK_MOTION_NOTIFY));
   g_assert (GDK_IS_EVENT_TYPE (history_event, GDK_MOTION_NOTIFY));
 
-  device = gdk_event_get_device (history_event);
-  n_axes = gdk_device_get_n_axes (device);
+  if (!self->tool)
+    return;
+
+  tool = gdk_event_get_device_tool (history_event);
 
   memset (&hist, 0, sizeof (GdkTimeCoord));
   hist.time = gdk_event_get_time (history_event);
-  hist.flags = gdk_device_get_axes (device);
+  hist.flags = gdk_device_tool_get_axes (tool);
 
-  for (i = 0; i < n_axes; i++)
-    {
-      GdkAxisUse use = gdk_device_get_axis_use (device, i);
-      gdk_event_get_axis (history_event, use, &hist.axes[use]);
-    }
+  for (i = GDK_AXIS_X; i < GDK_AXIS_LAST; i++)
+    gdk_event_get_axis (history_event, i, &hist.axes[i]);
 
   if (G_UNLIKELY (!self->history))
     self->history = g_array_new (FALSE, TRUE, sizeof (GdkTimeCoord));
@@ -952,10 +951,8 @@ gdk_event_get_axis (GdkEvent   *event,
   if (!gdk_event_get_axes (event, &axes, &n_axes))
     return FALSE;
 
-  if (axis_use >= gdk_device_get_n_axes (event->device))
-    return FALSE;
-
-  return gdk_device_get_axis (event->device, axes, axis_use, value);
+  *value = axes[axis_use];
+  return TRUE;
 }
 
 /**
@@ -1408,7 +1405,7 @@ gdk_button_event_get_axes (GdkEvent  *event,
     return FALSE;
 
   *axes = self->axes;
-  *n_axes = gdk_device_get_n_axes (source_device);
+  *n_axes = GDK_AXIS_LAST;
 
   return TRUE;
 }
@@ -1985,7 +1982,7 @@ gdk_touch_event_get_axes (GdkEvent  *event,
     return FALSE;
 
   *axes = self->axes;
-  *n_axes = gdk_device_get_n_axes (source_device);
+  *n_axes = GDK_AXIS_LAST;
 
   return TRUE;
 }
@@ -2865,7 +2862,7 @@ gdk_motion_event_get_axes (GdkEvent  *event,
     return FALSE;
 
   *axes = self->axes;
-  *n_axes = gdk_device_get_n_axes (source_device);
+  *n_axes = GDK_AXIS_LAST;
 
   return TRUE;
 }

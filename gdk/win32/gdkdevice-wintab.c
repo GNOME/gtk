@@ -201,18 +201,18 @@ _gdk_device_wintab_translate_axes (GdkDeviceWintab *device_wintab,
                                                   minfo.rcWork.bottom - minfo.rcWork.top,
                                                   i,
                                                   device_wintab->last_axis_data[i],
-                                                  &axes[i]);
+                                                  &axes[use]);
             }
           if (use == GDK_AXIS_X)
-            temp_x = axes[i];
+            temp_x = axes[use];
           else if (use == GDK_AXIS_Y)
-            temp_y = axes[i];
+            temp_y = axes[use];
 
           break;
         default:
           _gdk_device_translate_axis (device, i,
                                       device_wintab->last_axis_data[i],
-                                      &axes[i]);
+                                      &axes[use]);
           break;
         }
     }

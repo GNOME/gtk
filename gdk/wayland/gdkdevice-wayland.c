@@ -186,7 +186,7 @@ struct _GdkWaylandTabletData
   GdkWaylandTabletToolData *current_tool;
 
   int axis_indices[GDK_AXIS_LAST];
-  double *axes;
+  double axes[GDK_AXIS_LAST];
 };
 
 struct _GdkWaylandSeat
@@ -2755,9 +2755,6 @@ _gdk_wayland_seat_remove_tablet (GdkWaylandSeat       *seat,
   if (tablet->pointer_info.focus)
     g_object_unref (tablet->pointer_info.focus);
 
-  if (tablet->axes)
-    g_free (tablet->axes);
-
   wl_surface_destroy (tablet->pointer_info.pointer_surface);
   g_object_unref (tablet->logical_device);
   g_object_unref (tablet->stylus_device);
@@ -3371,12 +3368,6 @@ gdk_wayland_device_tablet_clone_tool_axes (GdkWaylandTabletData *tablet,
       tablet->axis_indices[GDK_AXIS_SLIDER] = axis_pos;
     }
 
-  if (tablet->axes)
-    g_free (tablet->axes);
-
-  tablet->axes =
-    g_new0 (double, gdk_device_get_n_axes (tablet->stylus_device));
-
   g_object_thaw_notify (G_OBJECT (tablet->stylus_device));
 }
 
@@ -3492,7 +3483,7 @@ static double *
 tablet_copy_axes (GdkWaylandTabletData *tablet)
 {
   return g_memdup (tablet->axes,
-                   sizeof (double) * gdk_device_get_n_axes (tablet->stylus_device));
+                   sizeof (double) * GDK_AXIS_LAST);
 }
 
 static void
@@ -3592,7 +3583,7 @@ tablet_tool_handle_pressure (void                      *data,
   int axis_index = tablet->axis_indices[GDK_AXIS_PRESSURE];
 
   _gdk_device_translate_axis (tablet->stylus_device, axis_index,
-                              pressure, &tablet->axes[axis_index]);
+                              pressure, &tablet->axes[GDK_AXIS_PRESSURE]);
 
   GDK_SEAT_NOTE (tool->seat, EVENTS,
             g_message ("tablet tool %d pressure %d",
@@ -3609,7 +3600,7 @@ tablet_tool_handle_distance (void                      *data,
   int axis_index = tablet->axis_indices[GDK_AXIS_DISTANCE];
 
   _gdk_device_translate_axis (tablet->stylus_device, axis_index,
-                              distance, &tablet->axes[axis_index]);
+                              distance, &tablet->axes[GDK_AXIS_DISTANCE]);
 
   GDK_SEAT_NOTE (tool->seat, EVENTS,
             g_message ("tablet tool %d distance %d",
@@ -3629,10 +3620,10 @@ tablet_tool_handle_tilt (void                      *data,
 
   _gdk_device_translate_axis (tablet->stylus_device, xtilt_axis_index,
                               wl_fixed_to_double (xtilt),
-                              &tablet->axes[xtilt_axis_index]);
+                              &tablet->axes[GDK_AXIS_XTILT]);
   _gdk_device_translate_axis (tablet->stylus_device, ytilt_axis_index,
                               wl_fixed_to_double (ytilt),
-                              &tablet->axes[ytilt_axis_index]);
+                              &tablet->axes[GDK_AXIS_YTILT]);
 
   GDK_SEAT_NOTE (tool->seat, EVENTS,
             g_message ("tablet tool %d tilt %f/%f",
@@ -3687,7 +3678,7 @@ tablet_tool_handle_rotation (void                      *data,
 
   _gdk_device_translate_axis (tablet->stylus_device, axis_index,
                               wl_fixed_to_double (degrees),
-                              &tablet->axes[axis_index]);
+                              &tablet->axes[GDK_AXIS_ROTATION]);
 
   GDK_SEAT_NOTE (tool->seat, EVENTS,
             g_message ("tablet tool %d rotation %f",
@@ -3705,7 +3696,7 @@ tablet_tool_handle_slider (void                      *data,
   int axis_index = tablet->axis_indices[GDK_AXIS_SLIDER];
 
   _gdk_device_translate_axis (tablet->stylus_device, axis_index,
-                              position, &tablet->axes[axis_index]);
+                              position, &tablet->axes[GDK_AXIS_SLIDER]);
 
   GDK_SEAT_NOTE (tool->seat, EVENTS,
             g_message ("tablet tool %d slider %d",
