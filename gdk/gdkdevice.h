@@ -107,22 +107,10 @@ GDK_AVAILABLE_IN_ALL
 GdkInputSource gdk_device_get_source (GdkDevice    *device);
 
 GDK_AVAILABLE_IN_ALL
-GdkAxisUse     gdk_device_get_axis_use  (GdkDevice         *device,
-                                         guint              index_);
-
-
-GDK_AVAILABLE_IN_ALL
 GdkSurface * gdk_device_get_surface_at_position (GdkDevice *device,
                                                  double    *win_x,
                                                  double    *win_y);
 
-GDK_AVAILABLE_IN_ALL
-int      gdk_device_get_n_axes     (GdkDevice       *device);
-GDK_AVAILABLE_IN_ALL
-gboolean gdk_device_get_axis     (GdkDevice         *device,
-                                  double            *axes,
-                                  GdkAxisUse         use,
-                                  double            *value);
 GDK_AVAILABLE_IN_ALL
 GdkDisplay * gdk_device_get_display (GdkDevice      *device);
 

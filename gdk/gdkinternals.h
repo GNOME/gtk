@@ -268,7 +268,13 @@ void gdk_device_ungrab        (GdkDevice        *device,
 void gdk_device_get_position  (GdkDevice        *device,
                                double           *x,
                                double           *y);
-
+int gdk_device_get_n_axes     (GdkDevice       *device);
+gboolean gdk_device_get_axis  (GdkDevice         *device,
+			       double            *axes,
+			       GdkAxisUse         use,
+			       double            *value);
+GdkAxisUse gdk_device_get_axis_use  (GdkDevice         *device,
+				     guint              index_);
 
 void gdk_surface_get_root_coords (GdkSurface *surface,
                                   int         x,
