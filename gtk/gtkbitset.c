@@ -32,7 +32,7 @@
  * #GtkBitset is a data structure for representing a set of unsigned integers.
  * Another name for this data structure is "bitmap".
  *
- * The current implemenation is based on [roaring bitmaps](https://roaringbitmap.org/).
+ * The current implementation is based on [roaring bitmaps](https://roaringbitmap.org/).
  *
  * A bitset allows adding a set of integers and provides support for set operations
  * like unions, intersections and checks for equality or if a value is contained
