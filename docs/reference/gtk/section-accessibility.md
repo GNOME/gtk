@@ -57,6 +57,7 @@ Each role name is part of the #GtkAccessibleRole enumeration.
 | `SEPARATOR` | A divider that separates sections of content or groups of items | #GtkSeparator |
 | `SPIN_BUTTON` | A range control that allows seelcting among discrete choices | #GtkSpinButton |
 | `SWITCH` | A control that represents on/off values | #GtkSwitch |
+| `WINDOW` | An application window | #GtkWindow |
 | `...` | … |
 
 See the [WAI-ARIA](https://www.w3.org/WAI/PF/aria/appendices#quickref) list

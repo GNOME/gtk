@@ -462,6 +462,12 @@ gtk_progress_bar_init (GtkProgressBar *pbar)
   pbar->orientation = GTK_ORIENTATION_VERTICAL; /* Just to force an update... */
   gtk_progress_bar_set_orientation (pbar, GTK_ORIENTATION_HORIZONTAL);
   gtk_widget_update_orientation (GTK_WIDGET (pbar), pbar->orientation);
+
+  gtk_accessible_update_property (GTK_ACCESSIBLE (pbar),
+                                  GTK_ACCESSIBLE_PROPERTY_VALUE_MAX, 1.0,
+                                  GTK_ACCESSIBLE_PROPERTY_VALUE_MIN, 0.0,
+                                  GTK_ACCESSIBLE_PROPERTY_VALUE_NOW, 0.0,
+                                  -1);
 }
 
 static void

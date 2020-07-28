@@ -659,6 +659,10 @@ gtk_switch_init (GtkSwitch *self)
 
   self->slider = gtk_gizmo_new ("slider", NULL, NULL, NULL, NULL, NULL, NULL);
   gtk_widget_set_parent (self->slider, GTK_WIDGET (self));
+
+  gtk_accessible_update_state (GTK_ACCESSIBLE (self),
+                               GTK_ACCESSIBLE_STATE_CHECKED, FALSE,
+                               -1);
 }
 
 /**

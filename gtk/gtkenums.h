@@ -1245,7 +1245,7 @@ typedef enum {
  * @GTK_ACCESSIBLE_ROLE_TREE_ITEM: Unused
  * @GTK_ACCESSIBLE_ROLE_WIDGET: An interactive component of a graphical user
  *    interface. This is the role that GTK uses by default for widgets.
- * @GTK_ACCESSIBLE_ROLE_WINDOW: Unused
+ * @GTK_ACCESSIBLE_ROLE_WINDOW: An application window.
  *
  * The accessible role for a #GtkAccessible implementation.
  *

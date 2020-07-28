@@ -293,6 +293,7 @@ gtk_check_button_init (GtkCheckButton *check_button)
   priv->draw_indicator = TRUE;
   draw_indicator_changed (check_button);
   gtk_check_button_update_node_state (GTK_WIDGET (check_button));
+  update_accessible_state (check_button);
 }
 
 /**

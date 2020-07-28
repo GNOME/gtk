@@ -155,6 +155,10 @@
  *
  * GtkWindow adds the .titlebar and .default-decoration style classes to the
  * widget that is added as a titlebar child.
+ *
+ * # Accessibility
+ *
+ * GtkWindow uses the #GTK_ACCESSIBLE_ROLE_WINDOW role.
  */
 
 #define MENU_BAR_ACCEL GDK_KEY_F10
@@ -1114,6 +1118,8 @@ gtk_window_class_init (GtkWindowClass *klass)
   add_tab_bindings (widget_class, GDK_CONTROL_MASK | GDK_SHIFT_MASK, GTK_DIR_TAB_BACKWARD);
 
   gtk_widget_class_set_css_name (widget_class, I_("window"));
+
+  gtk_widget_class_set_accessible_role (widget_class, GTK_ACCESSIBLE_ROLE_WINDOW);
 }
 
 /**
@@ -2208,19 +2214,17 @@ gtk_window_real_activate_default (GtkWindow *window)
  * gtk_window_set_modal:
  * @window: a #GtkWindow
  * @modal: whether the window is modal
- * 
+ *
  * Sets a window modal or non-modal. Modal windows prevent interaction
  * with other windows in the same application. To keep modal dialogs
  * on top of main application windows, use
  * gtk_window_set_transient_for() to make the dialog transient for the
  * parent; most [window managers][gtk-X11-arch]
  * will then disallow lowering the dialog below the parent.
- * 
- * 
  **/
 void
 gtk_window_set_modal (GtkWindow *window,
-		      gboolean   modal)
+                      gboolean   modal)
 {
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
   GtkWidget *widget;
@@ -2233,19 +2237,23 @@ gtk_window_set_modal (GtkWindow *window,
 
   priv->modal = modal;
   widget = GTK_WIDGET (window);
-  
+
   if (_gtk_widget_get_realized (widget))
     gdk_toplevel_set_modal (GDK_TOPLEVEL (priv->surface), modal);
 
   if (gtk_widget_get_visible (widget))
     {
       if (priv->modal)
-	gtk_grab_add (widget);
+        gtk_grab_add (widget);
       else
-	gtk_grab_remove (widget);
+        gtk_grab_remove (widget);
     }
 
   update_window_actions (window);
+
+  gtk_accessible_update_property (GTK_ACCESSIBLE (window),
+                                  GTK_ACCESSIBLE_PROPERTY_MODAL, modal,
+                                  -1);
 
   g_object_notify_by_pspec (G_OBJECT (window), window_props[PROP_MODAL]);
 }
