@@ -300,7 +300,7 @@ test_string_property (gconstpointer data)
 
   gtk_test_accessible_assert_role (object, GTK_ACCESSIBLE_ROLE_CHECKBOX);
 
-  gtk_test_accessible_assert_property (object, property, "");
+  gtk_test_accessible_assert_property (object, property, NULL);
 
   gtk_accessible_update_property (GTK_ACCESSIBLE (object),
                                   property, "some string that holds no particular value",
@@ -538,7 +538,7 @@ test_string_relation (gconstpointer data)
 
   gtk_test_accessible_assert_role (object, GTK_ACCESSIBLE_ROLE_CHECKBOX);
 
-  gtk_test_accessible_assert_relation (object, relation, "");
+  gtk_test_accessible_assert_relation (object, relation, NULL);
 
   gtk_accessible_update_relation (GTK_ACCESSIBLE (object),
                                   relation, "some string that holds no particular value",

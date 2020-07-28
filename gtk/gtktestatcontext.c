@@ -161,13 +161,16 @@ gtk_test_accessible_check_property (GtkAccessible         *accessible,
 
   va_start (args, property);
 
+  GError *error = NULL;
   GtkAccessibleValue *check_value =
-    gtk_accessible_value_collect_for_property (property, &args);
+    gtk_accessible_value_collect_for_property (property, &error, &args);
 
   va_end (args);
 
+  g_assert_no_error (error);
+
   if (check_value == NULL)
-    return g_strdup ("undefined");
+    check_value = gtk_accessible_value_get_default_for_property (property);
 
   GtkATContext *context = gtk_accessible_get_at_context (accessible);
   GtkAccessibleValue *real_value =
@@ -220,13 +223,16 @@ gtk_test_accessible_check_state (GtkAccessible      *accessible,
 
   va_start (args, state);
 
+  GError *error = NULL;
   GtkAccessibleValue *check_value =
-    gtk_accessible_value_collect_for_state (state, &args);
+    gtk_accessible_value_collect_for_state (state, &error, &args);
 
   va_end (args);
 
+  g_assert_no_error (error);
+
   if (check_value == NULL)
-    return g_strdup ("undefined");
+    check_value = gtk_accessible_value_get_default_for_state (state);
 
   GtkATContext *context = gtk_accessible_get_at_context (accessible);
   GtkAccessibleValue *real_value =
@@ -279,13 +285,16 @@ gtk_test_accessible_check_relation (GtkAccessible         *accessible,
 
   va_start (args, relation);
 
+  GError *error = NULL;
   GtkAccessibleValue *check_value =
-    gtk_accessible_value_collect_for_relation (relation, &args);
+    gtk_accessible_value_collect_for_relation (relation, &error, &args);
 
   va_end (args);
 
+  g_assert_no_error (error);
+
   if (check_value == NULL)
-    return g_strdup ("undefined");
+    check_value = gtk_accessible_value_get_default_for_relation (relation);
 
   GtkATContext *context = gtk_accessible_get_at_context (accessible);
   GtkAccessibleValue *real_value =

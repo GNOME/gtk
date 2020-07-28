@@ -93,21 +93,27 @@ gboolean                gtk_accessible_value_equal                      (const G
 
 GtkAccessibleValue *    gtk_accessible_value_get_default_for_state      (GtkAccessibleState             state);
 GtkAccessibleValue *    gtk_accessible_value_collect_for_state          (GtkAccessibleState             state,
+                                                                         GError                       **error,
                                                                          va_list                       *args);
 GtkAccessibleValue *    gtk_accessible_value_collect_for_state_value    (GtkAccessibleState             state,
-                                                                         const GValue                  *value);
+                                                                         const GValue                  *value,
+                                                                         GError                       **error);
 
 GtkAccessibleValue *    gtk_accessible_value_get_default_for_property   (GtkAccessibleProperty          property);
 GtkAccessibleValue *    gtk_accessible_value_collect_for_property       (GtkAccessibleProperty          property,
+                                                                         GError                       **error,
                                                                          va_list                       *args);
 GtkAccessibleValue *    gtk_accessible_value_collect_for_property_value (GtkAccessibleProperty          property,
-                                                                         const GValue                  *value);
+                                                                         const GValue                  *value,
+                                                                         GError                       **error);
 
 GtkAccessibleValue *    gtk_accessible_value_get_default_for_relation   (GtkAccessibleRelation          relation);
 GtkAccessibleValue *    gtk_accessible_value_collect_for_relation       (GtkAccessibleRelation          relation,
+                                                                         GError                       **error,
                                                                          va_list                       *args);
 GtkAccessibleValue *    gtk_accessible_value_collect_for_relation_value (GtkAccessibleRelation          relation,
-                                                                         const GValue                  *value);
+                                                                         const GValue                  *value,
+                                                                         GError                       **error);
 
 /* Basic values */
 GtkAccessibleValue *            gtk_undefined_accessible_value_new      (void);

@@ -64,7 +64,7 @@ G_STMT_START { \
   GtkAccessibleProperty __p = (property); \
   char *__value = gtk_test_accessible_check_property (__a, __p, (value)); \
   if (__value == NULL) ; else { \
-    char *__msg = g_strdup_printf ("assertion failed: (" #accessible ".accessible-property(" #property ") == " #value ": value = '%s'", __value); \
+    char *__msg = g_strdup_printf ("assertion failed: (" #accessible ".accessible-property(" #property ") == " #value "): value = '%s'", __value); \
     g_assertion_message (G_LOG_DOMAIN, __FILE__, __LINE__, G_STRFUNC, __msg); \
     g_free (__msg); \
   } \
@@ -86,7 +86,7 @@ G_STMT_START { \
   GtkAccessibleRelation __r = (relation); \
   char *__value = gtk_test_accessible_check_relation (__a, __r, (value)); \
   if (__value == NULL); else { \
-    char *__msg = g_strdup_printf ("assertion failed: (" #accessible ".accessible-relation(" #relation ") == " #value ": value = '%s'", __value); \
+    char *__msg = g_strdup_printf ("assertion failed: (" #accessible ".accessible-relation(" #relation ") == " #value "): value = '%s'", __value); \
     g_assertion_message (G_LOG_DOMAIN, __FILE__, __LINE__, G_STRFUNC, __msg); \
     g_free (__msg); \
   } \
@@ -105,10 +105,10 @@ G_STMT_START { \
 #define gtk_test_accessible_assert_state(accessible,state,value) \
 G_STMT_START { \
   GtkAccessible *__a = GTK_ACCESSIBLE (accessible); \
-  GtkAccessibleRelation __s = (state); \
+  GtkAccessibleState __s = (state); \
   char *__value = gtk_test_accessible_check_state (__a, __s, (value)); \
   if (__value == NULL); else { \
-    char *__msg = g_strdup_printf ("assertion failed: (" #accessible ".accessible-state(" #state ") == " #value ": value = '%s'", __value); \
+    char *__msg = g_strdup_printf ("assertion failed: (" #accessible ".accessible-state(" #state ") == " #value "): value = '%s'", __value); \
     g_assertion_message (G_LOG_DOMAIN, __FILE__, __LINE__, G_STRFUNC, __msg); \
     g_free (__msg); \
   } \
