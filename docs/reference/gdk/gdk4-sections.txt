@@ -362,7 +362,6 @@ gdk_device_get_device_type
 gdk_device_get_display
 gdk_device_get_has_cursor
 gdk_device_get_n_axes
-gdk_device_get_axes
 gdk_device_get_seat
 gdk_device_get_num_touches
 gdk_device_get_device_tool

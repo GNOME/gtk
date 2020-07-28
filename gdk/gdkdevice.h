@@ -143,9 +143,6 @@ GDK_AVAILABLE_IN_ALL
 GdkSeat     *gdk_device_get_seat            (GdkDevice *device);
 
 GDK_AVAILABLE_IN_ALL
-GdkAxisFlags gdk_device_get_axes            (GdkDevice *device);
-
-GDK_AVAILABLE_IN_ALL
 guint           gdk_device_get_num_touches  (GdkDevice *device);
 
 GDK_AVAILABLE_IN_ALL
