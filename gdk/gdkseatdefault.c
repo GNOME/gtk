@@ -228,7 +228,6 @@ device_get_capability (GdkDevice *device)
     case GDK_SOURCE_TOUCHSCREEN:
       return GDK_SEAT_CAPABILITY_TOUCH;
     case GDK_SOURCE_PEN:
-    case GDK_SOURCE_CURSOR:
       return GDK_SEAT_CAPABILITY_TABLET_STYLUS;
     case GDK_SOURCE_TABLET_PAD:
       return GDK_SEAT_CAPABILITY_TABLET_PAD;

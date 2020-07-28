@@ -40,7 +40,6 @@ typedef struct _GdkTimeCoord GdkTimeCoord;
  * @GDK_SOURCE_MOUSE: the device is a mouse. (This will be reported for the core
  *                    pointer, even if it is something else, such as a trackball.)
  * @GDK_SOURCE_PEN: the device is a stylus of a graphics tablet or similar device.
- * @GDK_SOURCE_CURSOR: the device is a graphics tablet “puck” or similar device.
  * @GDK_SOURCE_KEYBOARD: the device is a keyboard.
  * @GDK_SOURCE_TOUCHSCREEN: the device is a direct-input touch device, such
  *     as a touchscreen or tablet
@@ -56,7 +55,6 @@ typedef enum
 {
   GDK_SOURCE_MOUSE,
   GDK_SOURCE_PEN,
-  GDK_SOURCE_CURSOR,
   GDK_SOURCE_KEYBOARD,
   GDK_SOURCE_TOUCHSCREEN,
   GDK_SOURCE_TOUCHPAD,
