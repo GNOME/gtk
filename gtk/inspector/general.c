@@ -675,15 +675,13 @@ init_media (GtkInspectorGeneral *gen)
 static void populate_seats (GtkInspectorGeneral *gen);
 
 static void
-add_device (GtkInspectorGeneral *gen,
-            GdkDevice           *device)
+add_tool (GtkInspectorGeneral *gen,
+          GdkDeviceTool       *tool)
 {
-  const char *name, *value;
+  GdkAxisFlags axes;
+  gchar *value;
   GString *str;
   int i;
-  guint n_touches;
-  char *text;
-  GdkAxisFlags axes;
   const char *axis_name[] = {
     "Ignore",
     "X",
@@ -698,24 +696,26 @@ add_device (GtkInspectorGeneral *gen,
     "Rotation",
     "Slider"
   };
-  const char *source_name[] = {
-    "Mouse",
+  const char *tool_type[] = {
+    "Unknown",
     "Pen",
-    "Cursor",
-    "Keyboard",
-    "Touchscreen",
-    "Touchpad",
-    "Trackpoint",
-    "Pad"
+    "Eraser",
+    "Brush",
+    "Pencil",
+    "Airbrush",
+    "Mouse",
+    "Lens",
   };
 
-  name = gdk_device_get_name (device);
-  value = source_name[gdk_device_get_source (device)];
-  add_label_row (gen, GTK_LIST_BOX (gen->device_box), name, value, 10);
-
   str = g_string_new ("");
+  value = g_strdup_printf ("Serial %" G_GUINT64_FORMAT, gdk_device_tool_get_serial (tool));
+  add_label_row (gen, GTK_LIST_BOX (gen->device_box), "Tool", value, 10);
+  g_free (value);
 
-  axes = gdk_device_get_axes (device);
+  add_label_row (gen, GTK_LIST_BOX (gen->device_box), "Type",
+                 tool_type[gdk_device_tool_get_tool_type (tool)], 20);
+
+  axes = gdk_device_tool_get_axes (tool);
   for (i = GDK_AXIS_X; i < GDK_AXIS_LAST; i++)
     {
       if ((axes & (1 << i)) != 0)
@@ -730,6 +730,29 @@ add_device (GtkInspectorGeneral *gen,
     add_label_row (gen, GTK_LIST_BOX (gen->device_box), "Axes", str->str, 20);
 
   g_string_free (str, TRUE);
+}
+
+static void
+add_device (GtkInspectorGeneral *gen,
+            GdkDevice           *device)
+{
+  const char *name, *value;
+  guint n_touches;
+  char *text;
+  const char *source_name[] = {
+    "Mouse",
+    "Pen",
+    "Cursor",
+    "Keyboard",
+    "Touchscreen",
+    "Touchpad",
+    "Trackpoint",
+    "Pad"
+  };
+
+  name = gdk_device_get_name (device);
+  value = source_name[gdk_device_get_source (device)];
+  add_label_row (gen, GTK_LIST_BOX (gen->device_box), name, value, 10);
 
   g_object_get (device, "num-touches", &n_touches, NULL);
   if (n_touches > 0)
@@ -786,6 +809,8 @@ add_seat (GtkInspectorGeneral *gen,
       g_object_set_data (G_OBJECT (seat), "inspector-connected", GINT_TO_POINTER (1));
       g_signal_connect_swapped (seat, "device-added", G_CALLBACK (populate_seats), gen);
       g_signal_connect_swapped (seat, "device-removed", G_CALLBACK (populate_seats), gen);
+      g_signal_connect_swapped (seat, "tool-added", G_CALLBACK (populate_seats), gen);
+      g_signal_connect_swapped (seat, "tool-removed", G_CALLBACK (populate_seats), gen);
     }
 
   text = g_strdup_printf ("Seat %d", num);
@@ -799,6 +824,13 @@ add_seat (GtkInspectorGeneral *gen,
 
   for (l = list; l; l = l->next)
     add_device (gen, GDK_DEVICE (l->data));
+
+  g_list_free (list);
+
+  list = gdk_seat_get_tools (seat);
+
+  for (l = list; l; l = l->next)
+    add_tool (gen, l->data);
 
   g_list_free (list);
 }
