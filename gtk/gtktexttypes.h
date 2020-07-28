@@ -44,7 +44,7 @@ typedef struct _GtkTextMarkBody GtkTextMarkBody;
 
 #ifdef G_OS_WIN32
 #ifdef GTK_COMPILATION
-#define VARIABLE __declspec(dllexport)
+#define VARIABLE extern __declspec(dllexport)
 #else
 #define VARIABLE extern __declspec(dllimport)
 #endif
