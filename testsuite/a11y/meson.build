@@ -17,6 +17,7 @@ tests = [
   { 'name': 'progressbar' },
   { 'name': 'scrollbar' },
   { 'name': 'separator' },
+  { 'name': 'spinbutton' },
   { 'name': 'switch' },
   { 'name': 'window' },
 ]
