@@ -154,6 +154,7 @@ static void gtk_progress_bar_get_property         (GObject        *object,
 static void     gtk_progress_bar_act_mode_enter   (GtkProgressBar *progress);
 static void     gtk_progress_bar_act_mode_leave   (GtkProgressBar *progress);
 static void     gtk_progress_bar_finalize         (GObject        *object);
+static void     gtk_progress_bar_dispose          (GObject        *object);
 static void     gtk_progress_bar_set_orientation  (GtkProgressBar *progress,
                                                    GtkOrientation  orientation);
 static void     gtk_progress_bar_direction_changed (GtkWidget        *widget,
@@ -173,6 +174,7 @@ gtk_progress_bar_class_init (GtkProgressBarClass *class)
 
   gobject_class->set_property = gtk_progress_bar_set_property;
   gobject_class->get_property = gtk_progress_bar_get_property;
+  gobject_class->dispose = gtk_progress_bar_dispose;
   gobject_class->finalize = gtk_progress_bar_finalize;
 
   widget_class->direction_changed = gtk_progress_bar_direction_changed;
@@ -556,19 +558,26 @@ gtk_progress_bar_new (void)
 }
 
 static void
-gtk_progress_bar_finalize (GObject *object)
+gtk_progress_bar_dispose (GObject *object)
 {
   GtkProgressBar *pbar = GTK_PROGRESS_BAR (object);
 
   if (pbar->activity_mode)
     gtk_progress_bar_act_mode_leave (pbar);
 
-  g_free (pbar->text);
-
   g_clear_pointer (&pbar->label, gtk_widget_unparent);
+  g_clear_pointer (&pbar->progress_widget, gtk_widget_unparent);
+  g_clear_pointer (&pbar->trough_widget, gtk_widget_unparent);
 
-  gtk_widget_unparent (pbar->progress_widget);
-  gtk_widget_unparent (pbar->trough_widget);
+  G_OBJECT_CLASS (gtk_progress_bar_parent_class)->dispose (object);
+}
+
+static void
+gtk_progress_bar_finalize (GObject *object)
+{
+  GtkProgressBar *pbar = GTK_PROGRESS_BAR (object);
+
+  g_free (pbar->text);
 
   G_OBJECT_CLASS (gtk_progress_bar_parent_class)->finalize (object);
 }
