@@ -86,6 +86,7 @@ examples/bp/bloatpad.c
 examples/bp/gtk/help-overlay.ui
 examples/bp/gtk/menus.ui
 examples/plugman.c
+gtk/inspector/a11y.ui
 gtk/inspector/actions.ui
 gtk/inspector/actions.ui.h
 gtk/inspector/css-editor.ui

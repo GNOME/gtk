@@ -324,6 +324,7 @@ gtk/gtkwidgetpaintable.c
 gtk/gtkwindow.c
 gtk/gtkwindowcontrols.c
 gtk/gtkwindowhandle.c
+gtk/inspector/a11y.ui
 gtk/inspector/action-editor.c
 gtk/inspector/actions.ui
 gtk/inspector/controllers.c
