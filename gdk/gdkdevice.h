@@ -112,11 +112,6 @@ GdkAxisUse     gdk_device_get_axis_use  (GdkDevice         *device,
 
 
 GDK_AVAILABLE_IN_ALL
-void     gdk_device_get_state    (GdkDevice         *device,
-                                  GdkSurface         *surface,
-                                  double            *axes,
-                                  GdkModifierType   *mask);
-GDK_AVAILABLE_IN_ALL
 GdkSurface * gdk_device_get_surface_at_position (GdkDevice *device,
                                                  double    *win_x,
                                                  double    *win_y);

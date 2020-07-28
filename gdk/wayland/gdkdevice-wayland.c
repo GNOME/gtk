@@ -308,23 +308,6 @@ static void deliver_key_event (GdkWaylandSeat       *seat,
                                gboolean              from_key_repeat);
 
 static void
-gdk_wayland_device_get_state (GdkDevice       *device,
-                              GdkSurface       *surface,
-                              double          *axes,
-                              GdkModifierType *mask)
-{
-  double x, y;
-
-  gdk_surface_get_device_position (surface, device, &x, &y, mask);
-
-  if (axes)
-    {
-      axes[0] = x;
-      axes[1] = y;
-    }
-}
-
-static void
 gdk_wayland_pointer_stop_cursor_animation (GdkWaylandPointerData *pointer)
 {
   if (pointer->cursor_timeout_id > 0)
@@ -814,7 +797,6 @@ gdk_wayland_device_class_init (GdkWaylandDeviceClass *klass)
 {
   GdkDeviceClass *device_class = GDK_DEVICE_CLASS (klass);
 
-  device_class->get_state = gdk_wayland_device_get_state;
   device_class->set_surface_cursor = gdk_wayland_device_set_surface_cursor;
   device_class->query_state = gdk_wayland_device_query_state;
   device_class->grab = gdk_wayland_device_grab;

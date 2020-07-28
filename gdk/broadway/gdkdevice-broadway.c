@@ -23,10 +23,6 @@
 #include "gdksurfaceprivate.h"
 #include "gdkprivate-broadway.h"
 
-static void gdk_broadway_device_get_state (GdkDevice       *device,
-                                           GdkSurface      *surface,
-                                           double          *axes,
-                                           GdkModifierType *mask);
 static void gdk_broadway_device_set_surface_cursor (GdkDevice *device,
                                                     GdkSurface *surface,
                                                     GdkCursor *cursor);
@@ -58,7 +54,6 @@ gdk_broadway_device_class_init (GdkBroadwayDeviceClass *klass)
 {
   GdkDeviceClass *device_class = GDK_DEVICE_CLASS (klass);
 
-  device_class->get_state = gdk_broadway_device_get_state;
   device_class->set_surface_cursor = gdk_broadway_device_set_surface_cursor;
   device_class->query_state = gdk_broadway_device_query_state;
   device_class->grab = gdk_broadway_device_grab;
@@ -75,23 +70,6 @@ gdk_broadway_device_init (GdkBroadwayDevice *device_core)
 
   _gdk_device_add_axis (device, GDK_AXIS_X, 0, 0, 1);
   _gdk_device_add_axis (device, GDK_AXIS_Y, 0, 0, 1);
-}
-
-static void
-gdk_broadway_device_get_state (GdkDevice       *device,
-                               GdkSurface      *surface,
-                               double          *axes,
-                               GdkModifierType *mask)
-{
-  double x, y;
-
-  gdk_surface_get_device_position (surface, device, &x, &y, mask);
-
-  if (axes)
-    {
-      axes[0] = x;
-      axes[1] = y;
-    }
 }
 
 static void

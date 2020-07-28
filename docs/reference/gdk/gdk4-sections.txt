@@ -374,7 +374,6 @@ gdk_device_get_scroll_lock_state
 gdk_device_has_bidi_layouts
 
 <SUBSECTION>
-gdk_device_get_state
 gdk_device_get_surface_at_position
 GdkTimeCoord
 gdk_device_get_axis

@@ -532,37 +532,6 @@ gdk_device_get_property (GObject    *object,
     }
 }
 
-/**
- * gdk_device_get_state: (skip)
- * @device: a #GdkDevice.
- * @surface: a #GdkSurface.
- * @axes: (nullable) (array): an array of doubles to store the values of
- * the axes of @device in, or %NULL.
- * @mask: (optional) (out): location to store the modifiers, or %NULL.
- *
- * Gets the current state of a pointer device relative to @surface. As a
- * physical device’s coordinates are those of its logical pointer, this
- * function may not be called on devices of type %GDK_DEVICE_TYPE_PHYSICAL,
- * unless there is an ongoing grab on them.
- *
- * See also: gdk_seat_grab().
- */
-void
-gdk_device_get_state (GdkDevice       *device,
-                      GdkSurface      *surface,
-                      double          *axes,
-                      GdkModifierType *mask)
-{
-  g_return_if_fail (GDK_IS_DEVICE (device));
-  g_return_if_fail (device->source != GDK_SOURCE_KEYBOARD);
-  g_return_if_fail (GDK_IS_SURFACE (surface));
-  g_return_if_fail (gdk_device_get_device_type (device) != GDK_DEVICE_TYPE_PHYSICAL ||
-                    gdk_display_device_is_grabbed (gdk_device_get_display (device), device));
-
-  if (GDK_DEVICE_GET_CLASS (device)->get_state)
-    GDK_DEVICE_GET_CLASS (device)->get_state (device, surface, axes, mask);
-}
-
 /*
  * gdk_device_get_position:
  * @device: pointer device to query status about.

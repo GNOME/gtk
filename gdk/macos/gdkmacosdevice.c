@@ -127,26 +127,6 @@ gdk_macos_device_ungrab (GdkDevice *device,
 }
 
 static void
-gdk_macos_device_get_state (GdkDevice       *device,
-                            GdkSurface      *surface,
-                            double          *axes,
-                            GdkModifierType *mask)
-{
-  double x_pos, y_pos;
-
-  g_assert (GDK_IS_MACOS_DEVICE (device));
-  g_assert (GDK_IS_MACOS_SURFACE (surface));
-
-  gdk_surface_get_device_position (surface, device, &x_pos, &y_pos, mask);
-
-  if (axes != NULL)
-    {
-      axes[0] = x_pos;
-      axes[1] = y_pos;
-    }
-}
-
-static void
 gdk_macos_device_query_state (GdkDevice        *device,
                               GdkSurface       *surface,
                               GdkSurface      **child_surface,
@@ -192,7 +172,6 @@ gdk_macos_device_class_init (GdkMacosDeviceClass *klass)
 {
   GdkDeviceClass *device_class = GDK_DEVICE_CLASS (klass);
 
-  device_class->get_state = gdk_macos_device_get_state;
   device_class->grab = gdk_macos_device_grab;
   device_class->query_state = gdk_macos_device_query_state;
   device_class->set_surface_cursor = gdk_macos_device_set_surface_cursor;

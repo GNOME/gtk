@@ -30,23 +30,6 @@
 G_DEFINE_TYPE (GdkDeviceWin32, gdk_device_win32, GDK_TYPE_DEVICE)
 
 static void
-gdk_device_win32_get_state (GdkDevice       *device,
-                            GdkSurface       *window,
-                            double          *axes,
-                            GdkModifierType *mask)
-{
-  double x, y;
-
-  gdk_surface_get_device_position (window, device, &x, &y, mask);
-
-  if (axes)
-    {
-      axes[0] = round (x);
-      axes[1] = round (y);
-    }
-}
-
-static void
 gdk_device_win32_set_surface_cursor (GdkDevice *device,
                                     GdkSurface *window,
                                     GdkCursor *cursor)
@@ -224,7 +207,6 @@ gdk_device_win32_class_init (GdkDeviceWin32Class *klass)
 {
   GdkDeviceClass *device_class = GDK_DEVICE_CLASS (klass);
 
-  device_class->get_state = gdk_device_win32_get_state;
   device_class->set_surface_cursor = gdk_device_win32_set_surface_cursor;
   device_class->query_state = gdk_device_win32_query_state;
   device_class->grab = gdk_device_win32_grab;

@@ -70,10 +70,6 @@ static void gdk_x11_device_xi2_set_property (GObject      *object,
                                              const GValue *value,
                                              GParamSpec   *pspec);
 
-static void gdk_x11_device_xi2_get_state (GdkDevice       *device,
-                                          GdkSurface       *surface,
-                                          double          *axes,
-                                          GdkModifierType *mask);
 static void gdk_x11_device_xi2_set_surface_cursor (GdkDevice *device,
                                                   GdkSurface *surface,
                                                   GdkCursor *cursor);
@@ -115,7 +111,6 @@ gdk_x11_device_xi2_class_init (GdkX11DeviceXI2Class *klass)
   object_class->get_property = gdk_x11_device_xi2_get_property;
   object_class->set_property = gdk_x11_device_xi2_set_property;
 
-  device_class->get_state = gdk_x11_device_xi2_get_state;
   device_class->set_surface_cursor = gdk_x11_device_xi2_set_surface_cursor;
   device_class->query_state = gdk_x11_device_xi2_query_state;
   device_class->grab = gdk_x11_device_xi2_grab;
@@ -185,78 +180,6 @@ gdk_x11_device_xi2_set_property (GObject      *object,
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
     }
-}
-
-static void
-gdk_x11_device_xi2_get_state (GdkDevice       *device,
-                              GdkSurface       *surface,
-                              double          *axes,
-                              GdkModifierType *mask)
-{
-  GdkX11DeviceXI2 *device_xi2 = GDK_X11_DEVICE_XI2 (device);
-
-  if (axes)
-    {
-      GdkDisplay *display;
-      XIDeviceInfo *info;
-      int i, j, ndevices;
-      Screen *xscreen;
-
-      display = gdk_device_get_display (device);
-      xscreen = GDK_X11_SCREEN (GDK_X11_DISPLAY (display)->screen)->xscreen;
-
-      gdk_x11_display_error_trap_push (display);
-      info = XIQueryDevice (GDK_DISPLAY_XDISPLAY (display),
-                            device_xi2->device_id, &ndevices);
-      gdk_x11_display_error_trap_pop_ignored (display);
-
-      for (i = 0, j = 0; info && i < info->num_classes; i++)
-        {
-          XIAnyClassInfo *class_info = info->classes[i];
-          GdkAxisUse use;
-          double value;
-
-          if (class_info->type != XIValuatorClass)
-            continue;
-
-          value = ((XIValuatorClassInfo *) class_info)->value;
-          use = gdk_device_get_axis_use (device, j);
-
-          switch ((guint) use)
-            {
-            case GDK_AXIS_X:
-            case GDK_AXIS_Y:
-            case GDK_AXIS_IGNORE:
-                {
-                  int root_x, root_y;
-
-                  /* FIXME: Maybe root coords caching should happen here */
-                  gdk_surface_get_origin (surface, &root_x, &root_y);
-                  _gdk_device_translate_screen_coord (device, surface,
-                                                      root_x, root_y,
-                                                      WidthOfScreen (xscreen),
-                                                      HeightOfScreen (xscreen),
-                                                      j, value,
-                                                      &axes[j]);
-                }
-              break;
-            default:
-              _gdk_device_translate_axis (device, j, value, &axes[j]);
-              break;
-            }
-
-          j++;
-        }
-
-      if (info)
-        XIFreeDeviceInfo (info);
-    }
-
-  if (mask)
-    gdk_x11_device_xi2_query_state (device, surface,
-                                    NULL,
-                                    NULL, NULL,
-                                    mask);
 }
 
 static void
