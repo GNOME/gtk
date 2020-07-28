@@ -35,7 +35,7 @@
             <attribute name="target">highcontrast-inverse</attribute>
           </item>
         </section>
-      </submenu> 
+      </submenu>
       <item>
         <attribute name="label" translatable="yes">Transition Pages</attribute>
         <attribute name="action">win.transition</attribute>
@@ -790,11 +790,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                           </object>
                         </child>
                         <child>
-                          <object class="GtkSeparator" id="separator1">
-                            <property name="orientation">vertical</property>
-                          </object>
-                        </child>
-                        <child>
                           <object class="GtkBox" id="box19">
                             <property name="orientation">vertical</property>
                             <property name="spacing">10</property>
@@ -887,11 +882,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                 <property name="halign">center</property>
                               </object>
                             </child>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="GtkSeparator" id="separator2">
-                            <property name="orientation">vertical</property>
                           </object>
                         </child>
                         <child>
@@ -1043,11 +1033,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                           </object>
                         </child>
                         <child>
-                          <object class="GtkSeparator" id="separator3">
-                            <property name="orientation">vertical</property>
-                          </object>
-                        </child>
-                        <child>
                           <object class="GtkBox" id="box26">
                             <property name="orientation">vertical</property>
                             <property name="spacing">10</property>
@@ -1143,11 +1128,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                 </child>
                               </object>
                             </child>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="GtkSeparator" id="separator4">
-                            <property name="orientation">vertical</property>
                           </object>
                         </child>
                         <child>
@@ -1248,9 +1228,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                           </object>
                         </child>
                       </object>
-                    </child>
-                    <child>
-                      <object class="GtkSeparator" id="separator5"/>
                     </child>
                     <child>
                       <object class="GtkBox" id="box5">
@@ -1569,9 +1546,6 @@ microphone-sensitivity-medium-symbolic</property>
                               </object>
                             </child>
                             <child>
-                              <object class="GtkSeparator"/>
-                            </child>
-                            <child>
                               <object class="GtkFrame" id="page2frame1">
                                 <child>
                                   <object class="GtkBox">
@@ -1638,9 +1612,6 @@ microphone-sensitivity-medium-symbolic</property>
                                   </object>
                                 </child>
                               </object>
-                            </child>
-                            <child>
-                              <object class="GtkSeparator"/>
                             </child>
                             <child>
                               <object class="GtkScrolledWindow">
@@ -1899,11 +1870,6 @@ microphone-sensitivity-medium-symbolic</property>
                           </object>
                         </child>
                         <child>
-                          <object class="GtkSeparator">
-                            <property name="orientation">vertical</property>
-                          </object>
-                        </child>
-                        <child>
                           <object class="GtkBox">
                             <property name="orientation">vertical</property>
                             <property name="spacing">10</property>
@@ -1980,9 +1946,6 @@ microphone-sensitivity-medium-symbolic</property>
                                       </object>
                                     </child>
                                     <child>
-                                      <object class="GtkSeparator"/>
-                                    </child>
-                                    <child>
                                       <object class="GtkScrolledWindow">
                                         <property name="vexpand">1</property>
                                         <child>
@@ -2005,9 +1968,6 @@ microphone-sensitivity-medium-symbolic</property>
                                   </object>
                                 </child>
                               </object>
-                            </child>
-                            <child>
-                              <object class="GtkSeparator"/>
                             </child>
                             <child>
                               <object class="GtkBox">
@@ -2070,11 +2030,6 @@ microphone-sensitivity-medium-symbolic</property>
                           </object>
                         </child>
                         <child>
-                          <object class="GtkSeparator">
-                            <property name="orientation">vertical</property>
-                          </object>
-                        </child>
-                        <child>
                           <object class="GtkBox" id="filler2">
                             <property name="orientation">vertical</property>
                             <property name="spacing">10</property>
@@ -2082,9 +2037,6 @@ microphone-sensitivity-medium-symbolic</property>
                               <object class="GtkCalendar">
                                 <property name="halign">center</property>
                               </object>
-                            </child>
-                            <child>
-                              <object class="GtkSeparator"/>
                             </child>
                             <child>
                               <object class="GtkExpander" id="expander1">
@@ -2261,9 +2213,6 @@ microphone-sensitivity-medium-symbolic</property>
                           </object>
                         </child>
                         <child>
-                          <object class="GtkSeparator"/>
-                        </child>
-                        <child>
                           <object class="GtkScrolledWindow">
                             <property name="hscrollbar-policy">never</property>
                             <property name="vexpand">1</property>
@@ -2276,11 +2225,6 @@ microphone-sensitivity-medium-symbolic</property>
                             </child>
                           </object>
                         </child>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkSeparator">
-                        <property name="orientation">vertical</property>
                       </object>
                     </child>
                     <child>
@@ -2371,9 +2315,6 @@ microphone-sensitivity-medium-symbolic</property>
                               </object>
                             </child>
                           </object>
-                        </child>
-                        <child>
-                          <object class="GtkSeparator"/>
                         </child>
                         <child>
                           <object class="GtkFrame">
@@ -2853,11 +2794,6 @@ microphone-sensitivity-medium-symbolic</property>
                       </object>
                     </child>
                     <child>
-                      <object class="GtkSeparator">
-                        <property name="orientation">vertical</property>
-                      </object>
-                    </child>
-                    <child>
                       <object class="GtkBox">
                         <property name="orientation">vertical</property>
                         <property name="spacing">10</property>
@@ -2882,9 +2818,6 @@ microphone-sensitivity-medium-symbolic</property>
                               <class name="linked"/>
                             </style>
                           </object>
-                        </child>
-                        <child>
-                          <object class="GtkSeparator"/>
                         </child>
                         <child>
                           <object class="GtkNotebook">
