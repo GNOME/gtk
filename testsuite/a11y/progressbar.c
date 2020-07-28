@@ -35,12 +35,15 @@ progress_bar_properties (void)
   gtk_test_accessible_assert_property (widget, GTK_ACCESSIBLE_PROPERTY_VALUE_MAX, 1.);
   gtk_test_accessible_assert_property (widget, GTK_ACCESSIBLE_PROPERTY_VALUE_MIN, 0.);
   gtk_test_accessible_assert_property (widget, GTK_ACCESSIBLE_PROPERTY_VALUE_NOW, 0.);
+  gtk_test_accessible_assert_property (widget, GTK_ACCESSIBLE_PROPERTY_VALUE_TEXT, NULL);
 
   gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR (widget), 0.5);
 
   gtk_test_accessible_assert_property (widget, GTK_ACCESSIBLE_PROPERTY_VALUE_MAX, 1.);
   gtk_test_accessible_assert_property (widget, GTK_ACCESSIBLE_PROPERTY_VALUE_MIN, 0.);
   gtk_test_accessible_assert_property (widget, GTK_ACCESSIBLE_PROPERTY_VALUE_NOW, 0.5);
+  gtk_test_accessible_assert_property (widget, GTK_ACCESSIBLE_PROPERTY_VALUE_TEXT, NULL);
+  g_assert_false (gtk_test_accessible_has_property (GTK_ACCESSIBLE (widget), GTK_ACCESSIBLE_PROPERTY_VALUE_TEXT));
 
   g_object_unref (widget);
 }

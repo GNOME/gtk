@@ -739,16 +739,16 @@ void
 gtk_progress_bar_set_fraction (GtkProgressBar *pbar,
                                double          fraction)
 {
+  char *text = NULL;
+
   g_return_if_fail (GTK_IS_PROGRESS_BAR (pbar));
 
   pbar->fraction = CLAMP (fraction, 0.0, 1.0);
 
   if (pbar->label)
     {
-      char *text = get_current_text (pbar);
+      text = get_current_text (pbar);
       gtk_label_set_label (GTK_LABEL (pbar->label), text);
-
-      g_free (text);
     }
 
   gtk_progress_bar_set_activity_mode (pbar, FALSE);
@@ -761,6 +761,18 @@ gtk_progress_bar_set_fraction (GtkProgressBar *pbar,
                                   GTK_ACCESSIBLE_PROPERTY_VALUE_NOW, fraction,
                                   -1);
 
+  if (text != NULL)
+    {
+      gtk_accessible_update_property (GTK_ACCESSIBLE (pbar),
+                                      GTK_ACCESSIBLE_PROPERTY_VALUE_TEXT, text,
+                                      -1);
+    }
+  else
+    {
+      gtk_accessible_reset_property (GTK_ACCESSIBLE (pbar), GTK_ACCESSIBLE_PROPERTY_VALUE_TEXT);
+    }
+
+  g_free (text);
 
   g_object_notify_by_pspec (G_OBJECT (pbar), progress_props[PROP_FRACTION]);
 }
