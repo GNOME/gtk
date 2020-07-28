@@ -19,7 +19,7 @@
  */
 
 /*
- * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
+ * Modified by the GTK+ Team and others 1997-2020.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
@@ -655,11 +655,9 @@ build_key_event_state (GdkEvent *event,
 		       BYTE     *key_state)
 {
   GdkWin32Keymap *keymap;
+  keymap = GDK_WIN32_KEYMAP (_gdk_win32_display_get_keymap (_gdk_display));
 
-  event->key.state = 0;
-
-  if (key_state[VK_SHIFT] & 0x80)
-    event->key.state |= GDK_SHIFT_MASK;
+  event->key.state = _gdk_win32_keymap_get_mod_mask (keymap);
 
   if (key_state[VK_CAPITAL] & 0x01)
     event->key.state |= GDK_LOCK_MASK;
@@ -675,26 +673,7 @@ build_key_event_state (GdkEvent *event,
   if (key_state[VK_XBUTTON2] & 0x80)
     event->key.state |= GDK_BUTTON5_MASK;
 
-  keymap = GDK_WIN32_KEYMAP (_gdk_win32_display_get_keymap (_gdk_display));
   event->key.group = _gdk_win32_keymap_get_active_group (keymap);
-
-  if (_gdk_win32_keymap_has_altgr (keymap) &&
-      (key_state[VK_LCONTROL] & 0x80) &&
-      (key_state[VK_RMENU] & 0x80))
-    {
-      event->key.state |= GDK_MOD2_MASK;
-      if (key_state[VK_RCONTROL] & 0x80)
-	event->key.state |= GDK_CONTROL_MASK;
-      if (key_state[VK_LMENU] & 0x80)
-	event->key.state |= GDK_MOD1_MASK;
-    }
-  else
-    {
-      if (key_state[VK_CONTROL] & 0x80)
-	event->key.state |= GDK_CONTROL_MASK;
-      if (key_state[VK_MENU] & 0x80)
-	event->key.state |= GDK_MOD1_MASK;
-    }
 }
 
 static gint

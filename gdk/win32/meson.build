@@ -13,6 +13,8 @@ gdk_win32_sources = files(
   'gdkglcontext-win32.c',
   'gdkglobals-win32.c',
   'gdkkeys-win32.c',
+  'gdkkeys-win32-impl.c',
+  'gdkkeys-win32-impl-wow64.c',
   'gdkmain-win32.c',
   'gdkmonitor-win32.c',
   'gdkproperty-win32.c',

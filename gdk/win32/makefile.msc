@@ -47,6 +47,8 @@ gdk_win32_OBJECTS = \
 	gdkglobals-win32.obj \
 	gdkinput.obj \
 	gdkkeys-win32.obj \
+	gdkkeys-win32-impl.obj \
+	gdkkeys-win32-impl-wow64.obj \
 	gdkmain-win32.obj \
 	gdkproperty-win32.obj \
 	gdkscreen-win32.obj \
