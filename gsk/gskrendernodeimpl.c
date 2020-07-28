@@ -392,6 +392,7 @@ struct _GskBorderNode
 {
   GskRenderNode render_node;
 
+  bool uniform: 1;
   GskRoundedRect outline;
   float border_width[4];
   GdkRGBA border_color[4];
@@ -541,6 +542,12 @@ gsk_border_node_diff (GskRenderNode  *node1,
   GskBorderNode *self1 = (GskBorderNode *) node1;
   GskBorderNode *self2 = (GskBorderNode *) node2;
 
+  if (self1->uniform &&
+      self2->uniform &&
+      gdk_rgba_equal (&self1->border_color[0], &self2->border_color[0]) &&
+      self1->border_width[0] == self2->border_width[0])
+    return;
+
   if (gsk_rounded_rect_equal (&self1->outline, &self2->outline) &&
       gdk_rgba_equal (&self1->border_color[0], &self2->border_color[0]) &&
       gdk_rgba_equal (&self1->border_color[1], &self2->border_color[1]) &&
@@ -620,9 +627,9 @@ gsk_border_node_peek_colors (GskRenderNode *node)
  * Returns: (transfer full) (type GskBorderNode): A new #GskRenderNode
  */
 GskRenderNode *
-gsk_border_node_new (const GskRoundedRect     *outline,
-                     const float               border_width[4],
-                     const GdkRGBA             border_color[4])
+gsk_border_node_new (const GskRoundedRect *outline,
+                     const float           border_width[4],
+                     const GdkRGBA         border_color[4])
 {
   GskBorderNode *self;
   GskRenderNode *node;
@@ -638,9 +645,27 @@ gsk_border_node_new (const GskRoundedRect     *outline,
   memcpy (self->border_width, border_width, sizeof (self->border_width));
   memcpy (self->border_color, border_color, sizeof (self->border_color));
 
+  if (border_width[0] == border_width[1] &&
+      border_width[0] == border_width[2] &&
+      border_width[0] == border_width[3] &&
+      gdk_rgba_equal (&border_color[0], &border_color[1]) &&
+      gdk_rgba_equal (&border_color[0], &border_color[2]) &&
+      gdk_rgba_equal (&border_color[0], &border_color[3]))
+    self->uniform = TRUE;
+  else
+    self->uniform = FALSE;
+
+
   graphene_rect_init_from_rect (&node->bounds, &self->outline.bounds);
 
   return node;
+}
+
+/** Private */
+bool
+gsk_border_node_get_uniform (GskRenderNode *self)
+{
+  return  ((GskBorderNode *)self)->uniform;
 }
 
 /*** GSK_TEXTURE_NODE ***/

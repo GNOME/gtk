@@ -1,6 +1,12 @@
 #include "gskglrenderopsprivate.h"
 #include "gsktransform.h"
 
+typedef struct
+{
+  GskRoundedRect rect;
+  bool is_rectilinear;
+} ClipStackEntry;
+
 static inline gboolean
 rect_equal (const graphene_rect_t *a,
             const graphene_rect_t *b)
@@ -310,33 +316,37 @@ void
 ops_push_clip (RenderOpBuilder      *self,
                const GskRoundedRect *clip)
 {
+  ClipStackEntry entry;
+
   if (G_UNLIKELY (self->clip_stack == NULL))
-    self->clip_stack = g_array_new (FALSE, TRUE, sizeof (GskRoundedRect));
+    self->clip_stack = g_array_new (FALSE, TRUE, sizeof (ClipStackEntry));
 
   g_assert (self->clip_stack != NULL);
 
-  g_array_append_val (self->clip_stack, *clip);
-  self->current_clip = &g_array_index (self->clip_stack, GskRoundedRect, self->clip_stack->len - 1);
-  self->clip_is_rectilinear = gsk_rounded_rect_is_rectilinear (self->current_clip);
+  entry.rect = *clip;
+  entry.is_rectilinear = gsk_rounded_rect_is_rectilinear (clip);
+  g_array_append_val (self->clip_stack, entry);
+  self->current_clip = &g_array_index (self->clip_stack, ClipStackEntry, self->clip_stack->len - 1).rect;
+  self->clip_is_rectilinear = entry.is_rectilinear;
   ops_set_clip (self, clip);
 }
 
 void
 ops_pop_clip (RenderOpBuilder *self)
 {
-  const GskRoundedRect *head;
+  const ClipStackEntry *head;
 
   g_assert (self->clip_stack);
   g_assert (self->clip_stack->len >= 1);
 
   self->clip_stack->len --;
-  head = &g_array_index (self->clip_stack, GskRoundedRect, self->clip_stack->len - 1);
+  head = &g_array_index (self->clip_stack, ClipStackEntry, self->clip_stack->len - 1);
 
   if (self->clip_stack->len >= 1)
     {
-      self->current_clip = head;
-      self->clip_is_rectilinear = gsk_rounded_rect_is_rectilinear (self->current_clip);
-      ops_set_clip (self, head);
+      self->current_clip = &head->rect;
+      self->clip_is_rectilinear = head->is_rectilinear;
+      ops_set_clip (self, &head->rect);
     }
   else
     {
@@ -525,7 +535,7 @@ ops_set_viewport (RenderOpBuilder       *builder,
   op = ops_begin (builder, OP_CHANGE_VIEWPORT);
   op->viewport = *viewport;
 
-  if (builder->current_program != NULL)
+  if (current_program_state != NULL)
     current_program_state->viewport = *viewport;
 
   prev_viewport = builder->current_viewport;
@@ -618,21 +628,32 @@ ops_set_color_matrix (RenderOpBuilder         *builder,
 {
   ProgramState *current_program_state = get_current_program_state (builder);
   OpColorMatrix *op;
+  bool offset_equal;
+
+  offset_equal = memcmp (offset,
+                         &current_program_state->color_matrix.offset,
+                         sizeof (graphene_vec4_t)) == 0;
 
   if (memcmp (matrix,
               &current_program_state->color_matrix.matrix,
               sizeof (graphene_matrix_t)) == 0 &&
-      memcmp (offset,
-              &current_program_state->color_matrix.offset,
-              sizeof (graphene_vec4_t)) == 0)
+      offset_equal)
     return;
 
   current_program_state->color_matrix.matrix = *matrix;
-  current_program_state->color_matrix.offset = *offset;
 
   op = ops_begin (builder, OP_CHANGE_COLOR_MATRIX);
   op->matrix = matrix;
-  op->offset = offset;
+
+  if (!offset_equal)
+    {
+      op->offset.value = offset;
+      op->offset.send = TRUE;
+
+      current_program_state->color_matrix.offset = *offset;
+    }
+  else
+    op->offset.send = FALSE;
 }
 
 void
@@ -658,6 +679,8 @@ ops_set_border_width (RenderOpBuilder *builder,
 {
   ProgramState *current_program_state = get_current_program_state (builder);
   OpBorder *op;
+
+  g_assert (current_program_state);
 
   if (memcmp (current_program_state->border.widths,
               widths, sizeof (float) * 4) == 0)
@@ -746,4 +769,194 @@ OpBuffer *
 ops_get_buffer (RenderOpBuilder *builder)
 {
   return &builder->render_ops;
+}
+
+void
+ops_set_inset_shadow (RenderOpBuilder      *self,
+                      const GskRoundedRect  outline,
+                      float                 spread,
+                      const GdkRGBA        *color,
+                      float                 dx,
+                      float                 dy)
+{
+  ProgramState *current_program_state = get_current_program_state (self);
+  OpShadow *op;
+
+  g_assert (current_program_state);
+
+  op = ops_begin (self, OP_CHANGE_INSET_SHADOW);
+
+  if (!rounded_rect_equal (&outline, &current_program_state->inset_shadow.outline))
+    {
+      op->outline.value = outline;
+      op->outline.send = TRUE;
+      op->outline.send_corners = !rounded_rect_corners_equal (&current_program_state->inset_shadow.outline,
+                                                              &outline);
+      current_program_state->inset_shadow.outline = outline;
+    }
+  else
+    op->outline.send = FALSE;
+
+  if (spread != current_program_state->inset_shadow.spread)
+    {
+      op->spread.value = spread;
+      op->spread.send = TRUE;
+
+      current_program_state->inset_shadow.spread = spread;
+    }
+  else
+    op->spread.send = FALSE;
+
+  if (!gdk_rgba_equal (color, &current_program_state->inset_shadow.color))
+    {
+      op->color.value = color;
+      op->color.send = TRUE;
+
+      current_program_state->inset_shadow.color = *color;
+    }
+  else
+    op->color.send = FALSE;
+
+  if (dx != current_program_state->inset_shadow.dx ||
+      dy != current_program_state->inset_shadow.dy)
+    {
+      op->offset.value[0] = dx;
+      op->offset.value[1] = dy;
+      op->offset.send = TRUE;
+
+      current_program_state->inset_shadow.dx = dx;
+      current_program_state->inset_shadow.dy = dy;
+    }
+  else
+    op->offset.send = FALSE;
+
+  if (!op->outline.send &&
+      !op->spread.send &&
+      !op->offset.send &&
+      !op->color.send)
+    {
+      op_buffer_pop_tail (&self->render_ops);
+    }
+}
+void
+ops_set_unblurred_outset_shadow (RenderOpBuilder      *self,
+                                 const GskRoundedRect  outline,
+                                 float                 spread,
+                                 const GdkRGBA        *color,
+                                 float                 dx,
+                                 float                 dy)
+{
+  ProgramState *current_program_state = get_current_program_state (self);
+  OpShadow *op;
+
+  g_assert (current_program_state);
+
+  op = ops_begin (self, OP_CHANGE_UNBLURRED_OUTSET_SHADOW);
+
+  if (!rounded_rect_equal (&outline, &current_program_state->unblurred_outset_shadow.outline))
+    {
+      op->outline.value = outline;
+      op->outline.send = TRUE;
+      op->outline.send_corners = !rounded_rect_corners_equal (&current_program_state->unblurred_outset_shadow.outline,
+                                                              &outline);
+      current_program_state->unblurred_outset_shadow.outline = outline;
+    }
+  else
+    op->outline.send = FALSE;
+
+  if (spread != current_program_state->unblurred_outset_shadow.spread)
+    {
+      op->spread.value = spread;
+      op->spread.send = TRUE;
+
+      current_program_state->unblurred_outset_shadow.spread = spread;
+    }
+  else
+    op->spread.send = FALSE;
+
+  if (!gdk_rgba_equal (color, &current_program_state->unblurred_outset_shadow.color))
+    {
+      op->color.value = color;
+      op->color.send = TRUE;
+
+      current_program_state->unblurred_outset_shadow.color = *color;
+    }
+  else
+    op->color.send = FALSE;
+
+  if (dx != current_program_state->unblurred_outset_shadow.dx ||
+      dy != current_program_state->unblurred_outset_shadow.dy)
+    {
+      op->offset.value[0] = dx;
+      op->offset.value[1] = dy;
+      op->offset.send = TRUE;
+
+      current_program_state->unblurred_outset_shadow.dx = dx;
+      current_program_state->unblurred_outset_shadow.dy = dy;
+    }
+  else
+    op->offset.send = FALSE;
+}
+
+void
+ops_set_linear_gradient (RenderOpBuilder     *self,
+                         guint                n_color_stops,
+                         const GskColorStop  *color_stops,
+                         float                start_x,
+                         float                start_y,
+                         float                end_x,
+                         float                end_y)
+{
+  ProgramState *current_program_state = get_current_program_state (self);
+  OpLinearGradient *op;
+  const guint real_n_color_stops = MIN (MAX_GRADIENT_STOPS, n_color_stops);
+
+  g_assert (current_program_state);
+
+  op = ops_begin (self, OP_CHANGE_LINEAR_GRADIENT);
+
+  /* We always save the n_color_stops value in the op so the renderer can use it in
+   * cases where we send the color stops, but not n_color_stops */
+  op->n_color_stops.value = real_n_color_stops;
+  if (current_program_state->linear_gradient.n_color_stops != real_n_color_stops)
+    {
+      op->n_color_stops.send = TRUE;
+      current_program_state->linear_gradient.n_color_stops = real_n_color_stops;
+    }
+  else
+    op->n_color_stops.send = FALSE;
+
+  op->color_stops.send = FALSE;
+  if (!op->n_color_stops.send)
+    {
+      g_assert (current_program_state->linear_gradient.n_color_stops == real_n_color_stops);
+
+      for (guint i = 0; i < real_n_color_stops; i ++)
+        {
+          const GskColorStop *s1 = &color_stops[i];
+          const GskColorStop *s2 = &current_program_state->linear_gradient.color_stops[i];
+
+          if (s1->offset != s2->offset ||
+              !gdk_rgba_equal (&s1->color, &s2->color))
+            {
+              op->color_stops.send = TRUE;
+              break;
+            }
+        }
+    }
+  else
+    op->color_stops.send = TRUE;
+
+  if (op->color_stops.send)
+    {
+      op->color_stops.value = color_stops;
+      memcpy (&current_program_state->linear_gradient.color_stops,
+              color_stops,
+              sizeof (GskColorStop) * real_n_color_stops);
+    }
+
+  op->start_point[0] = start_x;
+  op->start_point[1] = start_y;
+  op->end_point[0] = end_x;
+  op->end_point[1] = end_y;
 }

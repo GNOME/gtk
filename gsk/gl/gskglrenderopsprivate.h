@@ -14,6 +14,7 @@
 
 #define GL_N_VERTICES 6
 #define GL_N_PROGRAMS 13
+#define MAX_GRADIENT_STOPS 8
 
 typedef struct
 {
@@ -122,6 +123,26 @@ typedef struct
       GdkRGBA color;
       GskRoundedRect outline;
     } border;
+    struct {
+      GskRoundedRect outline;
+      float dx;
+      float dy;
+      float spread;
+      GdkRGBA color;
+    } inset_shadow;
+    struct {
+      GskRoundedRect outline;
+      float dx;
+      float dy;
+      float spread;
+      GdkRGBA color;
+    } unblurred_outset_shadow;
+    struct {
+      int n_color_stops;
+      GskColorStop color_stops[MAX_GRADIENT_STOPS];
+      float start_point[2];
+      float end_point[2];
+    } linear_gradient;
   };
 } ProgramState;
 
@@ -174,7 +195,7 @@ typedef struct
   GArray *clip_stack;
   /* Pointer into clip_stack */
   const GskRoundedRect *current_clip;
-  guint clip_is_rectilinear;
+  bool clip_is_rectilinear;
 } RenderOpBuilder;
 
 
@@ -237,6 +258,26 @@ void              ops_set_border_width   (RenderOpBuilder         *builder,
 
 void              ops_set_border_color   (RenderOpBuilder         *builder,
                                           const GdkRGBA           *color);
+void              ops_set_inset_shadow   (RenderOpBuilder         *self,
+                                          const GskRoundedRect     outline,
+                                          float                    spread,
+                                          const GdkRGBA           *color,
+                                          float                    dx,
+                                          float                    dy);
+void              ops_set_unblurred_outset_shadow   (RenderOpBuilder         *self,
+                                                     const GskRoundedRect     outline,
+                                                     float                    spread,
+                                                     const GdkRGBA           *color,
+                                                     float                    dx,
+                                                     float                    dy);
+
+void              ops_set_linear_gradient (RenderOpBuilder     *self,
+                                           guint                n_color_stops,
+                                           const GskColorStop  *color_stops,
+                                           float                start_x,
+                                           float                start_y,
+                                           float                end_x,
+                                           float                end_y);
 
 GskQuadVertex *   ops_draw               (RenderOpBuilder        *builder,
                                           const GskQuadVertex     vertex_data[GL_N_VERTICES]);

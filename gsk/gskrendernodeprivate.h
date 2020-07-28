@@ -94,6 +94,8 @@ void            gsk_render_node_diff_impossible         (GskRenderNode          
                                                          GskRenderNode               *node2,
                                                          cairo_region_t              *region);
 
+bool            gsk_border_node_get_uniform             (GskRenderNode               *self);
+
 G_END_DECLS
 
 #endif /* __GSK_RENDER_NODE_PRIVATE_H__ */

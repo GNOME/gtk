@@ -174,6 +174,8 @@ bind_parameter_cb (GtkSignalListItemFactory *factory,
   else if (GTK_IS_ACTION_MUXER (owner))
     gtk_action_muxer_query_action (GTK_ACTION_MUXER (owner), name,
                                    NULL, (const GVariantType **)&parameter, NULL, NULL, NULL);
+  else
+    parameter = "(Unknown)";
 
   gtk_label_set_label (GTK_LABEL (label), parameter);
 }

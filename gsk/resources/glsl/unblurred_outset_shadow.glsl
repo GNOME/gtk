@@ -41,3 +41,4 @@ void main() {
 
   setOutputColor(final_color * alpha);
 }
+

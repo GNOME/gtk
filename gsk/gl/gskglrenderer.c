@@ -191,13 +191,42 @@ dump_node (GskRenderNode *node,
   cairo_surface_destroy (surface);
 }
 
-static inline gboolean G_GNUC_PURE
+static inline bool G_GNUC_PURE __attribute__((always_inline))
 node_is_invisible (const GskRenderNode *node)
 {
   return node->bounds.size.width == 0.0f ||
          node->bounds.size.height == 0.0f ||
          isnan (node->bounds.size.width) ||
          isnan (node->bounds.size.height);
+}
+
+static inline bool G_GNUC_PURE __attribute__((always_inline))
+graphene_rect_intersects (const graphene_rect_t *r1,
+                          const graphene_rect_t *r2)
+{
+  /* Assume both rects are already normalized, as they usually are */
+  if (r1->origin.x > (r2->origin.x + r2->size.width) ||
+      (r1->origin.x + r1->size.width) < r2->origin.x)
+    return false;
+
+  if (r1->origin.y > (r2->origin.y + r2->size.height) ||
+      (r1->origin.y + r1->size.height) < r2->origin.y)
+    return false;
+
+  return true;
+}
+
+static inline bool G_GNUC_PURE __attribute__((always_inline))
+_graphene_rect_contains_rect (const graphene_rect_t *r1,
+                              const graphene_rect_t *r2)
+{
+  if (r2->origin.x >= r1->origin.x &&
+      (r2->origin.x + r2->size.width) <= (r1->origin.x + r1->size.width) &&
+      r2->origin.y >= r1->origin.y &&
+      (r2->origin.y + r2->size.height) <= (r1->origin.y + r1->size.height))
+    return true;
+
+  return false;
 }
 
 static inline void
@@ -535,8 +564,8 @@ render_fallback_node (GskGLRenderer   *self,
                       RenderOpBuilder *builder)
 {
   const float scale = ops_get_scale (builder);
-  const int surface_width = ceilf (node->bounds.size.width) * scale;
-  const int surface_height = ceilf (node->bounds.size.height) * scale;
+  const int surface_width = ceilf (node->bounds.size.width * scale);
+  const int surface_height = ceilf (node->bounds.size.height * scale);
   cairo_surface_t *surface;
   cairo_surface_t *rendered_surface;
   cairo_t *cr;
@@ -570,7 +599,7 @@ render_fallback_node (GskGLRenderer   *self,
     cr = cairo_create (rendered_surface);
 
     cairo_save (cr);
-    cairo_translate (cr, -node->bounds.origin.x, -node->bounds.origin.y);
+    cairo_translate (cr, - floorf (node->bounds.origin.x), - floorf (node->bounds.origin.y));
     gsk_render_node_draw (node, cr);
     cairo_restore (cr);
     cairo_destroy (cr);
@@ -585,7 +614,7 @@ render_fallback_node (GskGLRenderer   *self,
   /* We draw upside down here, so it matches what GL does. */
   cairo_save (cr);
   cairo_scale (cr, 1, -1);
-  cairo_translate (cr, 0, -surface_height / scale);
+  cairo_translate (cr, 0, - surface_height / scale);
   cairo_set_source_surface (cr, rendered_surface, 0, 0);
   cairo_rectangle (cr, 0, 0, surface_width / scale, surface_height / scale);
   cairo_fill (cr);
@@ -619,10 +648,12 @@ render_fallback_node (GskGLRenderer   *self,
                                            texture_id,
                                            surface,
                                            GL_NEAREST, GL_NEAREST);
-  gdk_gl_context_label_object_printf  (self->gl_context, GL_TEXTURE, texture_id,
-                                       "Fallback %s %d",
-                                       g_type_name_from_instance ((GTypeInstance *) node),
-                                       texture_id);
+
+  if (gdk_gl_context_has_debug (self->gl_context))
+    gdk_gl_context_label_object_printf  (self->gl_context, GL_TEXTURE, texture_id,
+                                         "Fallback %s %d",
+                                         g_type_name_from_instance ((GTypeInstance *) node),
+                                         texture_id);
 
   cairo_surface_destroy (surface);
   cairo_surface_destroy (rendered_surface);
@@ -735,22 +766,11 @@ render_border_node (GskGLRenderer   *self,
     float h;
   } sizes[4];
 
-  if (widths[0] == widths[1] &&
-      widths[0] == widths[2] &&
-      widths[0] == widths[3] &&
-      gdk_rgba_equal (&colors[0], &colors[1]) &&
-      gdk_rgba_equal (&colors[0], &colors[2]) &&
-      gdk_rgba_equal (&colors[0], &colors[3]))
+  if (gsk_border_node_get_uniform (node))
     {
-      OpShadow *op;
-
       ops_set_program (builder, &self->programs->inset_shadow_program);
-      op = ops_begin (builder, OP_CHANGE_INSET_SHADOW);
-      op->color = &colors[0];
-      op->outline = transform_rect (self, builder, rounded_outline);
-      op->spread = widths[0];
-      op->offset[0] = 0;
-      op->offset[1] = 0;
+      ops_set_inset_shadow (builder, transform_rect (self, builder, rounded_outline),
+                            widths[0], &colors[0], 0, 0);
 
       load_vertex_data (ops_draw (builder, NULL), node, builder);
       return;
@@ -1109,16 +1129,15 @@ render_linear_gradient_node (GskGLRenderer   *self,
   const GskColorStop *stops = gsk_linear_gradient_node_peek_color_stops (node, NULL);
   const graphene_point_t *start = gsk_linear_gradient_node_peek_start (node);
   const graphene_point_t *end = gsk_linear_gradient_node_peek_end (node);
-  OpLinearGradient *op;
 
   ops_set_program (builder, &self->programs->linear_gradient_program);
-  op = ops_begin (builder, OP_CHANGE_LINEAR_GRADIENT);
-  op->color_stops = stops;
-  op->n_color_stops = n_color_stops;
-  op->start_point.x = start->x + builder->dx;
-  op->start_point.y = start->y + builder->dy;
-  op->end_point.x = end->x + builder->dx;
-  op->end_point.y = end->y + builder->dy;
+  ops_set_linear_gradient (builder,
+                           n_color_stops,
+                           stops,
+                           builder->dx + start->x,
+                           builder->dy + start->y,
+                           builder->dx + end->x,
+                           builder->dy + end->y);
 
   load_vertex_data (ops_draw (builder, NULL), node, builder);
 }
@@ -1158,33 +1177,32 @@ intersect_rounded_rectilinear (const graphene_rect_t *non_rounded,
                                const GskRoundedRect  *rounded,
                                GskRoundedRect        *result)
 {
-  int n_corners = 0;
   bool corners[4];
 
   /* Intersects with top left corner? */
-  n_corners += corners[0] = rounded_rect_has_corner (rounded, 0) &&
-                            graphene_rect_intersection (non_rounded,
-                                                        &rounded_rect_corner (rounded, 0), NULL);
+  corners[0] = rounded_rect_has_corner (rounded, 0) &&
+               graphene_rect_intersects (non_rounded,
+                                         &rounded_rect_corner (rounded, 0));
   /* top right? */
-  n_corners += corners[1] = rounded_rect_has_corner (rounded, 1) &&
-                            graphene_rect_intersection (non_rounded,
-                                                        &rounded_rect_corner (rounded, 1), NULL);
+  corners[1] = rounded_rect_has_corner (rounded, 1) &&
+               graphene_rect_intersects (non_rounded,
+                                         &rounded_rect_corner (rounded, 1));
   /* bottom right? */
-  n_corners += corners[2] = rounded_rect_has_corner (rounded, 2) &&
-                            graphene_rect_intersection (non_rounded,
-                                                        &rounded_rect_corner (rounded, 2), NULL);
+  corners[2] = rounded_rect_has_corner (rounded, 2) &&
+               graphene_rect_intersects (non_rounded,
+                                         &rounded_rect_corner (rounded, 2));
   /* bottom left */
-  n_corners += corners[3] = rounded_rect_has_corner (rounded, 3) &&
-                            graphene_rect_intersection (non_rounded,
-                                                        &rounded_rect_corner (rounded, 3), NULL);
+  corners[3] = rounded_rect_has_corner (rounded, 3) &&
+               graphene_rect_intersects (non_rounded,
+                                         &rounded_rect_corner (rounded, 3));
 
-  if (corners[0] && !graphene_rect_contains_rect (non_rounded, &rounded_rect_corner (rounded, 0)))
+  if (corners[0] && !_graphene_rect_contains_rect (non_rounded, &rounded_rect_corner (rounded, 0)))
     return false;
-  if (corners[1] && !graphene_rect_contains_rect (non_rounded, &rounded_rect_corner (rounded, 1)))
+  if (corners[1] && !_graphene_rect_contains_rect (non_rounded, &rounded_rect_corner (rounded, 1)))
     return false;
-  if (corners[2] && !graphene_rect_contains_rect (non_rounded, &rounded_rect_corner (rounded, 2)))
+  if (corners[2] && !_graphene_rect_contains_rect (non_rounded, &rounded_rect_corner (rounded, 2)))
     return false;
-  if (corners[3] && !graphene_rect_contains_rect (non_rounded, &rounded_rect_corner (rounded, 3)))
+  if (corners[3] && !_graphene_rect_contains_rect (non_rounded, &rounded_rect_corner (rounded, 3)))
     return false;
 
   /* We do intersect with at least one of the corners, but in such a way that the
@@ -1607,17 +1625,14 @@ render_unblurred_inset_shadow_node (GskGLRenderer   *self,
   const float dx = gsk_inset_shadow_node_get_dx (node);
   const float dy = gsk_inset_shadow_node_get_dy (node);
   const float spread = gsk_inset_shadow_node_get_spread (node);
-  OpShadow *op;
 
   g_assert (blur_radius == 0);
 
   ops_set_program (builder, &self->programs->inset_shadow_program);
-  op = ops_begin (builder, OP_CHANGE_INSET_SHADOW);
-  op->color = gsk_inset_shadow_node_peek_color (node);
-  op->outline = transform_rect (self, builder, gsk_inset_shadow_node_peek_outline (node));
-  op->spread = spread;
-  op->offset[0] = dx;
-  op->offset[1] = dy;
+  ops_set_inset_shadow (builder, transform_rect (self, builder, gsk_inset_shadow_node_peek_outline (node)),
+                        spread,
+                        gsk_inset_shadow_node_peek_color (node),
+                        dx, dy);
 
   load_vertex_data (ops_draw (builder, NULL), node, builder);
 }
@@ -1635,7 +1650,6 @@ render_inset_shadow_node (GskGLRenderer   *self,
   const GskRoundedRect *node_outline = gsk_inset_shadow_node_peek_outline (node);
   float texture_width;
   float texture_height;
-  OpShadow *op;
   int blurred_texture_id;
 
   g_assert (blur_radius > 0);
@@ -1699,12 +1713,10 @@ render_inset_shadow_node (GskGLRenderer   *self,
 
       /* Actual inset shadow outline drawing */
       ops_set_program (builder, &self->programs->inset_shadow_program);
-      op = ops_begin (builder, OP_CHANGE_INSET_SHADOW);
-      op->color = gsk_inset_shadow_node_peek_color (node);
-      op->outline = transform_rect (self, builder, &outline_to_blur);
-      op->spread = spread * scale;
-      op->offset[0] = dx * scale;
-      op->offset[1] = dy * scale;
+      ops_set_inset_shadow (builder, transform_rect (self, builder, &outline_to_blur),
+                            spread * scale,
+                            gsk_inset_shadow_node_peek_color (node),
+                            dx * scale, dy * scale);
 
       ops_draw (builder, (GskQuadVertex[GL_N_VERTICES]) {
         { { 0,             0              }, { 0, 1 }, },
@@ -1772,15 +1784,12 @@ render_unblurred_outset_shadow_node (GskGLRenderer   *self,
   const float spread = gsk_outset_shadow_node_get_spread (node);
   const float dx = gsk_outset_shadow_node_get_dx (node);
   const float dy = gsk_outset_shadow_node_get_dy (node);
-  OpShadow *op;
 
   ops_set_program (builder, &self->programs->unblurred_outset_shadow_program);
-  op = ops_begin (builder, OP_CHANGE_UNBLURRED_OUTSET_SHADOW);
-  op->color = gsk_outset_shadow_node_peek_color (node);
-  op->outline = transform_rect (self, builder, outline);
-  op->spread = spread;
-  op->offset[0] = dx;
-  op->offset[1] = dy;
+  ops_set_unblurred_outset_shadow (builder, transform_rect (self, builder, outline),
+                                   spread,
+                                   gsk_outset_shadow_node_peek_color (node),
+                                   dx, dy);
 
   load_vertex_data (ops_draw (builder, NULL), node, builder);
 }
@@ -1803,7 +1812,7 @@ render_outset_shadow_node (GskGLRenderer   *self,
   const float dy = gsk_outset_shadow_node_get_dy (node);
   GskRoundedRect scaled_outline;
   int texture_width, texture_height;
-  OpShadow *shadow;
+  OpOutsetShadow *shadow;
   int blurred_texture_id;
   int cached_tid;
   bool do_slicing;
@@ -1862,10 +1871,13 @@ render_outset_shadow_node (GskGLRenderer   *self,
 
       gsk_gl_driver_create_render_target (self->gl_driver, texture_width, texture_height,
                                           &texture_id, &render_target);
-      gdk_gl_context_label_object_printf (self->gl_context, GL_TEXTURE, texture_id,
-                                          "Outset Shadow Temp %d", texture_id);
-      gdk_gl_context_label_object_printf  (self->gl_context, GL_FRAMEBUFFER, render_target,
-                                           "Outset Shadow FB Temp %d", render_target);
+      if (gdk_gl_context_has_debug (self->gl_context))
+        {
+          gdk_gl_context_label_object_printf (self->gl_context, GL_TEXTURE, texture_id,
+                                              "Outset Shadow Temp %d", texture_id);
+          gdk_gl_context_label_object_printf  (self->gl_context, GL_FRAMEBUFFER, render_target,
+                                               "Outset Shadow FB Temp %d", render_target);
+        }
 
       ops_set_program (builder, &self->programs->color_program);
       graphene_matrix_init_ortho (&item_proj,
@@ -1928,7 +1940,8 @@ render_outset_shadow_node (GskGLRenderer   *self,
       ops_set_texture (builder, blurred_texture_id);
 
       shadow = ops_begin (builder, OP_CHANGE_OUTSET_SHADOW);
-      shadow->outline = transform_rect (self, builder, outline);
+      shadow->outline.value = transform_rect (self, builder, outline);
+      shadow->outline.send = TRUE;
 
       tx1 = 0; tx2 = 1;
       ty1 = 0; ty2 = 1;
@@ -1956,7 +1969,8 @@ render_outset_shadow_node (GskGLRenderer   *self,
   ops_set_texture (builder, blurred_texture_id);
 
   shadow = ops_begin (builder, OP_CHANGE_OUTSET_SHADOW);
-  shadow->outline = transform_rect (self, builder, outline);
+  shadow->outline.value = transform_rect (self, builder, outline);
+  shadow->outline.send = TRUE;
 
   {
     const float min_x = floorf (builder->dx + outline->bounds.origin.x - spread - (blur_extra / 2.0) + dx);
@@ -2428,8 +2442,7 @@ render_repeat_node (GskGLRenderer   *self,
   if (node_is_invisible (child))
     return;
 
-  if (child_bounds != NULL &&
-      !graphene_rect_equal (child_bounds, &child->bounds))
+  if (!graphene_rect_equal (child_bounds, &child->bounds))
     {
       /* TODO: Implement these repeat nodes. */
       render_fallback_node (self, node, builder);
@@ -2574,13 +2587,16 @@ apply_color_matrix_op (const Program       *program,
                        const OpColorMatrix *op)
 {
   float mat[16];
-  float vec[4];
   OP_PRINT (" -> Color Matrix");
   graphene_matrix_to_float (op->matrix, mat);
   glUniformMatrix4fv (program->color_matrix.color_matrix_location, 1, GL_FALSE, mat);
 
-  graphene_vec4_to_float (op->offset, vec);
-  glUniform4fv (program->color_matrix.color_offset_location, 1, vec);
+  if (op->offset.send)
+    {
+      float vec[4];
+      graphene_vec4_to_float (op->offset.value, vec);
+      glUniform4fv (program->color_matrix.color_offset_location, 1, vec);
+    }
 }
 
 static inline void
@@ -2610,15 +2626,27 @@ apply_inset_shadow_op (const Program  *program,
                        const OpShadow *op)
 {
   OP_PRINT (" -> inset shadow. Color: %s, Offset: (%f, %f), Spread: %f, Outline: %s",
-            gdk_rgba_to_string (op->color),
-            op->offset[0],
-            op->offset[1],
-            op->spread,
-            gsk_rounded_rect_to_string (&op->outline));
-  glUniform4fv (program->inset_shadow.color_location, 1, (float *)op->color);
-  glUniform2fv (program->inset_shadow.offset_location, 1, op->offset);
-  glUniform1f (program->inset_shadow.spread_location, op->spread);
-  glUniform4fv (program->inset_shadow.outline_rect_location, 3, (float *)&op->outline.bounds);
+            op->color.send ? gdk_rgba_to_string (op->color.value) : "don't send",
+            op->offset.send ? op->offset.value[0] : -1337.0,
+            op->offset.send ? op->offset.value[1] : -1337.0,
+            op->spread.send ? op->spread.value : -1337.0,
+            op->outline.send ? gsk_rounded_rect_to_string (&op->outline.value) : "don't send");
+  if (op->outline.send)
+    {
+      if (op->outline.send_corners)
+        glUniform4fv (program->inset_shadow.outline_rect_location, 3, (float *)&op->outline.value);
+      else
+        glUniform4fv (program->inset_shadow.outline_rect_location, 1, (float *)&op->outline.value);
+    }
+
+  if (op->color.send)
+    glUniform4fv (program->inset_shadow.color_location, 1, (float *)op->color.value);
+
+  if (op->spread.send)
+    glUniform1f (program->inset_shadow.spread_location, op->spread.value);
+
+  if (op->offset.send)
+    glUniform2fv (program->inset_shadow.offset_location, 1, op->offset.value);
 }
 
 static inline void
@@ -2626,18 +2654,31 @@ apply_unblurred_outset_shadow_op (const Program  *program,
                                   const OpShadow *op)
 {
   OP_PRINT (" -> unblurred outset shadow");
-  glUniform4fv (program->unblurred_outset_shadow.color_location, 1, (float *)op->color);
-  glUniform2fv (program->unblurred_outset_shadow.offset_location, 1, op->offset);
-  glUniform1f (program->unblurred_outset_shadow.spread_location, op->spread);
-  glUniform4fv (program->unblurred_outset_shadow.outline_rect_location, 3, (float *)&op->outline.bounds);
+
+  if (op->outline.send)
+    {
+      if (op->outline.send_corners)
+        glUniform4fv (program->unblurred_outset_shadow.outline_rect_location, 3, (float *)&op->outline.value);
+      else
+        glUniform4fv (program->unblurred_outset_shadow.outline_rect_location, 1, (float *)&op->outline.value);
+    }
+
+  if (op->color.send)
+    glUniform4fv (program->unblurred_outset_shadow.color_location, 1, (float *)op->color.value);
+
+  if (op->spread.send)
+    glUniform1f (program->unblurred_outset_shadow.spread_location, op->spread.value);
+
+  if (op->offset.send)
+    glUniform2fv (program->unblurred_outset_shadow.offset_location, 1, op->offset.value);
 }
 
 static inline void
-apply_outset_shadow_op (const Program  *program,
-                        const OpShadow *op)
+apply_outset_shadow_op (const Program        *program,
+                        const OpOutsetShadow *op)
 {
   OP_PRINT (" -> outset shadow");
-  glUniform4fv (program->outset_shadow.outline_rect_location, 3, (float *)&op->outline.bounds);
+  glUniform4fv (program->outset_shadow.outline_rect_location, 3, (float *)&op->outline.value.bounds);
 }
 
 static inline void
@@ -2645,12 +2686,16 @@ apply_linear_gradient_op (const Program          *program,
                           const OpLinearGradient *op)
 {
   OP_PRINT (" -> Linear gradient");
-  glUniform1i (program->linear_gradient.num_color_stops_location, op->n_color_stops);
-  glUniform1fv (program->linear_gradient.color_stops_location,
-                op->n_color_stops * 5,
-                (float *)op->color_stops);
-  glUniform2f (program->linear_gradient.start_point_location, op->start_point.x, op->start_point.y);
-  glUniform2f (program->linear_gradient.end_point_location, op->end_point.x, op->end_point.y);
+  if (op->n_color_stops.send)
+    glUniform1i (program->linear_gradient.num_color_stops_location, op->n_color_stops.value);
+
+  if (op->color_stops.send)
+    glUniform1fv (program->linear_gradient.color_stops_location,
+                  op->n_color_stops.value * 5,
+                  (float *)op->color_stops.value);
+
+  glUniform2f (program->linear_gradient.start_point_location, op->start_point[0], op->start_point[1]);
+  glUniform2f (program->linear_gradient.end_point_location, op->end_point[0], op->end_point[1]);
 }
 
 static inline void
@@ -2694,6 +2739,7 @@ static inline void
 apply_cross_fade_op (const Program     *program,
                      const OpCrossFade *op)
 {
+  OP_PRINT (" -> Cross fade");
   /* End texture id */
   glUniform1i (program->cross_fade.source2_location, 1);
   glActiveTexture (GL_TEXTURE0 + 1);
@@ -3163,8 +3209,8 @@ gsk_gl_renderer_add_render_ops (GskGLRenderer   *self,
                                     &node->bounds,
                                     &transformed_node_bounds);
 
-    if (!graphene_rect_intersection (&builder->current_clip->bounds,
-                                     &transformed_node_bounds, NULL))
+    if (!graphene_rect_intersects (&builder->current_clip->bounds,
+                                   &transformed_node_bounds))
       return;
   }
 
@@ -3356,14 +3402,17 @@ add_offscreen_ops (GskGLRenderer         *self,
   height = ceilf (height * scale);
 
   gsk_gl_driver_create_render_target (self->gl_driver, width, height, &texture_id, &render_target);
-  gdk_gl_context_label_object_printf (self->gl_context, GL_TEXTURE, texture_id,
-                                      "Offscreen<%s> %d",
-                                      g_type_name_from_instance ((GTypeInstance *) child_node),
-                                      texture_id);
-  gdk_gl_context_label_object_printf (self->gl_context, GL_FRAMEBUFFER, render_target,
-                                      "Offscreen<%s> FB %d",
-                                      g_type_name_from_instance ((GTypeInstance *) child_node),
-                                      render_target);
+  if (gdk_gl_context_has_debug (self->gl_context))
+    {
+      gdk_gl_context_label_object_printf (self->gl_context, GL_TEXTURE, texture_id,
+                                          "Offscreen<%s> %d",
+                                          g_type_name_from_instance ((GTypeInstance *) child_node),
+                                          texture_id);
+      gdk_gl_context_label_object_printf (self->gl_context, GL_FRAMEBUFFER, render_target,
+                                          "Offscreen<%s> FB %d",
+                                          g_type_name_from_instance ((GTypeInstance *) child_node),
+                                          render_target);
+    }
 
   graphene_matrix_init_ortho (&item_proj,
                               bounds->origin.x * scale,
@@ -3505,6 +3554,7 @@ gsk_gl_renderer_render_ops (GskGLRenderer *self)
           break;
 
         case OP_CLEAR:
+          OP_PRINT ("-> CLEAR");
           glClearColor (0, 0, 0, 0);
           glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
           break;
@@ -3789,11 +3839,12 @@ gsk_gl_renderer_render_texture (GskRenderer           *renderer,
   glGenTextures (1, &texture_id);
   glBindTexture (GL_TEXTURE_2D, texture_id);
 
-  gdk_gl_context_label_object_printf (self->gl_context, GL_TEXTURE, texture_id,
-                                      "Texture %s<%p> %d",
-                                      g_type_name_from_instance ((GTypeInstance *) root),
-                                      root,
-                                      texture_id);
+  if (gdk_gl_context_has_debug (self->gl_context))
+    gdk_gl_context_label_object_printf (self->gl_context, GL_TEXTURE, texture_id,
+                                        "Texture %s<%p> %d",
+                                        g_type_name_from_instance ((GTypeInstance *) root),
+                                        root,
+                                        texture_id);
 
   if (gdk_gl_context_get_use_es (self->gl_context))
     glTexImage2D (GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
@@ -3802,11 +3853,13 @@ gsk_gl_renderer_render_texture (GskRenderer           *renderer,
 
   glGenFramebuffers (1, &fbo_id);
   glBindFramebuffer (GL_FRAMEBUFFER, fbo_id);
-  gdk_gl_context_label_object_printf (self->gl_context, GL_FRAMEBUFFER, fbo_id,
-                                      "FB %s<%p> %d",
-                                      g_type_name_from_instance ((GTypeInstance *) root),
-                                      root,
-                                      fbo_id);
+
+  if (gdk_gl_context_has_debug (self->gl_context))
+    gdk_gl_context_label_object_printf (self->gl_context, GL_FRAMEBUFFER, fbo_id,
+                                        "FB %s<%p> %d",
+                                        g_type_name_from_instance ((GTypeInstance *) root),
+                                        root,
+                                        fbo_id);
   glFramebufferTexture2D (GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture_id, 0);
   g_assert_cmphex (glCheckFramebufferStatus (GL_FRAMEBUFFER), ==, GL_FRAMEBUFFER_COMPLETE);
 

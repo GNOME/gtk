@@ -1215,3 +1215,11 @@ gdk_gl_context_get_current (void)
 
   return current;
 }
+
+gboolean
+gdk_gl_context_has_debug (GdkGLContext *self)
+{
+  GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (self);
+
+  return priv->debug_enabled || priv->use_khr_debug;
+}
