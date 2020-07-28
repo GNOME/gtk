@@ -28,13 +28,13 @@
  * “AT”. Every accessible implementation has:
  *
  *  - a “role”, represented by a value of the #GtkAccessibleRole enumeration
- *  - a “state”, represented by a set of #GtkAccessibleState,
- *       #GtkAccessibleProperty and #GtkAccessibleRelation values
+ *  - an “attribute”, represented by a set of #GtkAccessibleState,
+ *    #GtkAccessibleProperty and #GtkAccessibleRelation values
  *
  * The role cannot be changed after instantiating a #GtkAccessible
  * implementation.
  *
- * The state is updated every time a UI element's state changes in a way that
+ * The attributes are updated every time a UI element's state changes in a way that
  * should be reflected by assistive technologies. For instance, if a #GtkWidget
  * visibility changes, the %GTK_ACCESSIBLE_STATE_HIDDEN state will also change
  * to reflect the #GtkWidget:visible property.
@@ -219,6 +219,29 @@ gtk_accessible_update_state_value (GtkAccessible      *self,
 }
 
 /**
+ * gtk_accessible_reset_state:
+ * @self: a #GtkAccessible
+ * @state: a #GtkAccessibleState
+ *
+ * Resets the accessible @state to its default value.
+ */
+void
+gtk_accessible_reset_state (GtkAccessible      *self,
+                            GtkAccessibleState  state)
+{
+  GtkATContext *context;
+
+  g_return_if_fail (GTK_IS_ACCESSIBLE (self));
+
+  context = gtk_accessible_get_at_context (self);
+  if (context == NULL)
+    return;
+
+  gtk_at_context_set_accessible_state (context, state, NULL);
+  gtk_at_context_update (context);
+}
+
+/**
  * gtk_accessible_update_property:
  * @self: a #GtkAccessible
  * @first_property: the first #GtkAccessibleProperty
@@ -334,6 +357,29 @@ gtk_accessible_update_property_value (GtkAccessible         *self,
 }
 
 /**
+ * gtk_accessible_reset_property:
+ * @self: a #GtkAccessible
+ * @property: a #GtkAccessibleProperty
+ *
+ * Resets the accessible @property to its default value.
+ */
+void
+gtk_accessible_reset_property (GtkAccessible         *self,
+                               GtkAccessibleProperty  property)
+{
+  GtkATContext *context;
+
+  g_return_if_fail (GTK_IS_ACCESSIBLE (self));
+
+  context = gtk_accessible_get_at_context (self);
+  if (context == NULL)
+    return;
+
+  gtk_at_context_set_accessible_property (context, property, NULL);
+  gtk_at_context_update (context);
+}
+
+/**
  * gtk_accessible_update_relation:
  * @self: a #GtkAccessible
  * @first_relation: the first #GtkAccessibleRelation
@@ -436,5 +482,28 @@ gtk_accessible_update_relation_value (GtkAccessible         *self,
   if (real_value != NULL)
     gtk_accessible_value_unref (real_value);
 
+  gtk_at_context_update (context);
+}
+
+/**
+ * gtk_accessible_reset_relation:
+ * @self: a #GtkAccessible
+ * @relation: a #GtkAccessibleRelation
+ *
+ * Resets the accessible @relation to its default value.
+ */
+void
+gtk_accessible_reset_relation (GtkAccessible         *self,
+                               GtkAccessibleRelation  relation)
+{
+  GtkATContext *context;
+
+  g_return_if_fail (GTK_IS_ACCESSIBLE (self));
+
+  context = gtk_accessible_get_at_context (self);
+  if (context == NULL)
+    return;
+
+  gtk_at_context_set_accessible_relation (context, relation, NULL);
   gtk_at_context_update (context);
 }

@@ -7647,10 +7647,13 @@ GtkAccessibleAutocomplete
 GtkAccessibleSort
 gtk_accessible_update_state
 gtk_accessible_update_state_value
+gtk_accessible_reset_state
 gtk_accessible_update_property
 gtk_accessible_update_property_value
+gtk_accessible_reset_property
 gtk_accessible_update_relation
 gtk_accessible_update_relation_value
+gtk_accessible_reset_relation
 
 <SUBSECTION Standard>
 GTK_TYPE_ACCESSIBLE
