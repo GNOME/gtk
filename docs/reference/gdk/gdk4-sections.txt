@@ -355,14 +355,11 @@ gdk_device_get_name
 gdk_device_get_vendor_id
 gdk_device_get_product_id
 gdk_device_get_source
-gdk_device_get_axis_use
 gdk_device_get_associated_device
 gdk_device_list_physical_devices
 gdk_device_get_device_type
 gdk_device_get_display
 gdk_device_get_has_cursor
-gdk_device_get_n_axes
-gdk_device_get_axes
 gdk_device_get_seat
 gdk_device_get_num_touches
 gdk_device_get_device_tool
@@ -374,15 +371,14 @@ gdk_device_get_scroll_lock_state
 gdk_device_has_bidi_layouts
 
 <SUBSECTION>
-gdk_device_get_state
 gdk_device_get_surface_at_position
 GdkTimeCoord
-gdk_device_get_axis
 
 <SUBSECTION>
 gdk_device_tool_get_serial
 gdk_device_tool_get_tool_type
 gdk_device_tool_get_hardware_id
+gdk_device_tool_get_axes
 
 <SUBSECTION Standard>
 GDK_TYPE_AXIS_USE
@@ -439,6 +435,7 @@ gdk_seat_get_capabilities
 gdk_seat_get_pointer
 gdk_seat_get_keyboard
 gdk_seat_get_physical_devices
+gdk_seat_get_tools
 
 <SUBSECTION Standard>
 GDK_SEAT
@@ -478,7 +475,6 @@ gdk_event_unref
 gdk_event_get_event_type
 gdk_event_get_surface
 gdk_event_get_device
-gdk_event_get_source_device
 gdk_event_get_device_tool
 gdk_event_get_time
 gdk_event_get_display

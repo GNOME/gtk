@@ -258,7 +258,7 @@ gtk_event_controller_scroll_handle_event (GtkEventController *controller,
   direction = gdk_scroll_event_get_direction (event);
   if (direction == GDK_SCROLL_SMOOTH)
     {
-      GdkDevice *device = gdk_event_get_source_device (event);
+      GdkDevice *device = gdk_event_get_device (event);
       GdkInputSource input_source = gdk_device_get_source (device);
 
       gdk_scroll_event_get_deltas (event, &dx, &dy);

@@ -201,13 +201,11 @@ generate_focus_event (GdkDeviceManagerWin32 *device_manager,
                       gboolean          in)
 {
   GdkDevice *device;
-  GdkDevice *source_device;
   GdkEvent *event;
 
   device = GDK_DEVICE_MANAGER_WIN32 (device_manager)->core_keyboard;
-  source_device = GDK_DEVICE_MANAGER_WIN32 (device_manager)->system_keyboard;
 
-  event = gdk_focus_event_new (window, device, source_device, in);
+  event = gdk_focus_event_new (window, device, in);
 
   _gdk_win32_append_event (event);
 }
@@ -220,22 +218,14 @@ generate_grab_broken_event (GdkDeviceManagerWin32 *device_manager,
 {
   GdkEvent *event;
   GdkDevice *device;
-  GdkDevice *source_device;
 
   if (keyboard)
-    {
-      device = device_manager->core_keyboard;
-      source_device = device_manager->system_keyboard;
-    }
+    device = device_manager->core_keyboard;
   else
-    {
-      device = device_manager->core_pointer;
-      source_device = device_manager->system_pointer;
-    }
+    device = device_manager->core_pointer;
 
   event = gdk_grab_broken_event_new (window,
                                      device,
-                                     source_device,
                                      grab_window,
                                      FALSE);
 
@@ -1079,7 +1069,6 @@ send_crossing_event (GdkDisplay                 *display,
   event = gdk_crossing_event_new (type,
                                   window,
                                   device_manager->core_pointer,
-                                  device_manager->system_pointer,
                                   _gdk_win32_get_next_tick (time_),
                                   mask,
                                   pt.x / impl->surface_scale,
@@ -1588,7 +1577,6 @@ generate_button_event (GdkEventType      type,
   event = gdk_button_event_new (type,
                                 window,
                                 device_manager->core_pointer,
-                                device_manager->system_pointer,
                                 NULL,
                                 _gdk_win32_get_next_tick (msg->time),
                                 build_pointer_event_state (msg),
@@ -2132,7 +2120,6 @@ gdk_event_translate (MSG *msg,
       event = gdk_key_event_new (GDK_KEY_PRESS,
                                  window,
                                  device_manager_win32->core_keyboard,
-                                 device_manager_win32->system_keyboard,
                                  _gdk_win32_get_next_tick (msg->time),
                                  0,
                                  0,
@@ -2337,7 +2324,6 @@ gdk_event_translate (MSG *msg,
                                    : GDK_KEY_RELEASE,
                                  window,
                                  device_manager_win32->core_keyboard,
-                                 device_manager_win32->system_keyboard,
                                  _gdk_win32_get_next_tick (msg->time),
                                  state,
                                  keycode,
@@ -2412,7 +2398,6 @@ gdk_event_translate (MSG *msg,
           event = gdk_key_event_new (GDK_KEY_PRESS,
                                      window,
                                      device_manager_win32->core_keyboard,
-                                     device_manager_win32->system_keyboard,
                                      _gdk_win32_get_next_tick (msg->time),
                                      build_key_event_state (key_state),
                                      0,
@@ -2426,7 +2411,6 @@ gdk_event_translate (MSG *msg,
           event = gdk_key_event_new (GDK_KEY_RELEASE,
                                      window,
                                      device_manager_win32->core_keyboard,
-                                     device_manager_win32->system_keyboard,
                                      _gdk_win32_get_next_tick (msg->time),
                                      build_key_event_state (key_state),
                                      0,
@@ -2639,7 +2623,6 @@ gdk_event_translate (MSG *msg,
 
 	  event = gdk_motion_event_new (window,
 	                                device_manager_win32->core_pointer,
-	                                device_manager_win32->system_pointer,
                                         NULL,
                                         _gdk_win32_get_next_tick (msg->time),
 	                                build_pointer_event_state (msg),
@@ -2765,7 +2748,6 @@ gdk_event_translate (MSG *msg,
 
       event = gdk_scroll_event_new (window,
                                     device_manager_win32->core_pointer,
-                                    device_manager_win32->system_pointer,
                                     NULL,
                                     _gdk_win32_get_next_tick (msg->time),
                                     build_pointer_event_state (msg),
@@ -2788,7 +2770,6 @@ gdk_event_translate (MSG *msg,
 
       event = gdk_scroll_event_new_discrete (window,
                                              device_manager_win32->core_pointer,
-                                             device_manager_win32->system_pointer,
                                              NULL,
                                              _gdk_win32_get_next_tick (msg->time),
                                              build_pointer_event_state (msg),

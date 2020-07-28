@@ -143,7 +143,7 @@ gtk_gesture_single_handle_event (GtkEventController *controller,
   gboolean retval, test_touchscreen = FALSE;
   GdkEventType event_type;
 
-  source_device = gdk_event_get_source_device (event);
+  source_device = gdk_event_get_device (event);
 
   if (!source_device)
     return FALSE;

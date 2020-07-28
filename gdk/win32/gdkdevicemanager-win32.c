@@ -1044,7 +1044,7 @@ gdk_input_other_event (GdkDisplay *display,
       if (event_type == GDK_BUTTON_PRESS ||
           event_type == GDK_BUTTON_RELEASE)
         {
-          axes = g_new (double, num_axes);
+          axes = g_new (double, GDK_AXIS_LAST);
 
           _gdk_device_wintab_translate_axes (source_device,
                                              window,
@@ -1061,7 +1061,6 @@ gdk_input_other_event (GdkDisplay *display,
           event = gdk_button_event_new (event_type,
                                         window,
                                         device_manager->core_pointer,
-                                        GDK_DEVICE (source_device),
                                         NULL,
                                         _gdk_win32_get_next_tick (msg->time),
                                         event_state,
@@ -1080,7 +1079,7 @@ gdk_input_other_event (GdkDisplay *display,
         }
       else
         {
-          axes = g_new (double, num_axes);
+          axes = g_new (double, GDK_AXIS_LAST);
           _gdk_device_wintab_translate_axes (source_device,
                                              window,
                                              axes,
@@ -1095,7 +1094,6 @@ gdk_input_other_event (GdkDisplay *display,
 
           event = gdk_motion_event_new (window,
                                         device_manager->core_pointer,
-                                        GDK_DEVICE (source_device),
                                         NULL,
                                         _gdk_win32_get_next_tick (msg->time),
                                         event_state,

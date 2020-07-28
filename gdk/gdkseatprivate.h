@@ -57,9 +57,7 @@ struct _GdkSeatClass
   GList *     (* get_physical_devices) (GdkSeat             *seat,
                                         GdkSeatCapabilities  capabilities);
 
-  GdkDeviceTool * (* get_tool) (GdkSeat *seat,
-                                guint64  serial,
-                                guint64  tool_id);
+  GList * (* get_tools) (GdkSeat *seat);
 };
 
 void gdk_seat_device_added   (GdkSeat   *seat,

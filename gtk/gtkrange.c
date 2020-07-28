@@ -1881,7 +1881,7 @@ gtk_range_click_gesture_pressed (GtkGestureClick *gesture,
   state_mask = gdk_event_get_modifier_state (event);
   shift_pressed = (state_mask & GDK_SHIFT_MASK) != 0;
 
-  source_device = gdk_event_get_source_device ((GdkEvent *) event);
+  source_device = gdk_event_get_device ((GdkEvent *) event);
   source = gdk_device_get_source (source_device);
 
   g_object_get (gtk_widget_get_settings (widget),

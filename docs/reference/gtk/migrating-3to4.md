@@ -309,10 +309,9 @@ use the #GtkWindow:modal property of the dialog.
 ### Adapt to coordinate API changes
 
 A number of coordinate APIs in GTK 3 had _double variants: 
-gdk_device_get_position(), gdk_device_get_surface_at_position(),
-gdk_surface_get_device_position(). These have been changed to use
-doubles, and the _double variants have been removed. Update your
-code accordingly.
+gdk_device_get_surface_at_position(), gdk_surface_get_device_position().
+These have been changed to use doubles, and the _double variants
+have been removed. Update your code accordingly.
 
 Any APIs that deal with global (or root) coordinates have been
 removed in GTK 4, since not all backends support them. You should

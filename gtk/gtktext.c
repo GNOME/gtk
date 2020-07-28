@@ -2714,7 +2714,7 @@ gtk_text_click_gesture_pressed (GtkGestureClick *gesture,
       sel_end = priv->current_pos;
       have_selection = sel_start != sel_end;
 
-      source = gdk_event_get_source_device (event);
+      source = gdk_event_get_device (event);
       is_touchscreen = gtk_simulate_touchscreen () ||
                        gdk_device_get_source (source) == GDK_SOURCE_TOUCHSCREEN;
 
@@ -2991,7 +2991,7 @@ gtk_text_drag_gesture_update (GtkGestureDrag *gesture,
       else
         tmp_pos = gtk_text_find_position (self, x);
 
-      source = gdk_event_get_source_device (event);
+      source = gdk_event_get_device (event);
       input_source = gdk_device_get_source (source);
 
       if (priv->select_words)

@@ -202,7 +202,7 @@ gtk_gesture_click_begin (GtkGesture       *gesture,
   priv = gtk_gesture_click_get_instance_private (click);
   event = gtk_gesture_get_last_event (gesture, sequence);
   current = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
-  device = gdk_event_get_source_device (event);
+  device = gdk_event_get_device (event);
   event_type = gdk_event_get_event_type (event);
 
   if (event_type == GDK_BUTTON_PRESS)

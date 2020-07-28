@@ -60,19 +60,6 @@ _gdk_device_virtual_set_active (GdkDevice *device,
 }
 
 static void
-gdk_device_virtual_get_state (GdkDevice       *device,
-			      GdkSurface       *window,
-			      double          *axes,
-			      GdkModifierType *mask)
-{
-  GdkDeviceVirtual *virtual = GDK_DEVICE_VIRTUAL (device);
-  GdkDevice *active = virtual->active_device;
-
-  GDK_DEVICE_GET_CLASS (active)->get_state (active,
-					    window, axes, mask);
-}
-
-static void
 gdk_device_virtual_set_surface_cursor (GdkDevice  *device,
                                        GdkSurface *window,
                                        GdkCursor  *cursor)
@@ -164,7 +151,7 @@ gdk_device_virtual_ungrab (GdkDevice *device,
       ReleaseCapture ();
     }
 
-  _gdk_display_device_grab_update (display, device, device, 0);
+  _gdk_display_device_grab_update (display, device, 0);
 }
 
 static void
@@ -172,7 +159,6 @@ gdk_device_virtual_class_init (GdkDeviceVirtualClass *klass)
 {
   GdkDeviceClass *device_class = GDK_DEVICE_CLASS (klass);
 
-  device_class->get_state = gdk_device_virtual_get_state;
   device_class->set_surface_cursor = gdk_device_virtual_set_surface_cursor;
   device_class->query_state = gdk_device_virtual_query_state;
   device_class->grab = gdk_device_virtual_grab;

@@ -179,7 +179,6 @@ void                _gdk_display_update_last_event    (GdkDisplay     *display,
                                                        GdkEvent       *event);
 void                _gdk_display_device_grab_update   (GdkDisplay *display,
                                                        GdkDevice  *device,
-                                                       GdkDevice  *source_device,
                                                        gulong      current_serial);
 GdkDeviceGrabInfo * _gdk_display_get_last_device_grab (GdkDisplay *display,
                                                        GdkDevice  *device);

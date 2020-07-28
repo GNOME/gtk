@@ -55,33 +55,6 @@ get_current_mask (void)
 }
 
 static void
-gdk_device_wintab_get_state (GdkDevice       *device,
-                             GdkSurface       *window,
-                             double          *axes,
-                             GdkModifierType *mask)
-{
-  GdkDeviceWintab *device_wintab;
-
-  device_wintab = GDK_DEVICE_WINTAB (device);
-
-  /* For now just use the last known button and axis state of the device.
-   * Since graphical tablets send an insane amount of motion events each
-   * second, the info should be fairly up to date */
-  if (mask)
-    {
-      *mask = get_current_mask ();
-      *mask &= 0xFF; /* Mask away core pointer buttons */
-      *mask |= ((device_wintab->button_state << 8)
-                & (GDK_BUTTON1_MASK | GDK_BUTTON2_MASK
-                   | GDK_BUTTON3_MASK | GDK_BUTTON4_MASK
-                   | GDK_BUTTON5_MASK));
-    }
-
-  if (axes && device_wintab->last_axis_data)
-    _gdk_device_wintab_translate_axes (device_wintab, window, axes, NULL, NULL);
-}
-
-static void
 gdk_device_wintab_set_surface_cursor (GdkDevice *device,
                                      GdkSurface *window,
                                      GdkCursor *cursor)
@@ -228,18 +201,18 @@ _gdk_device_wintab_translate_axes (GdkDeviceWintab *device_wintab,
                                                   minfo.rcWork.bottom - minfo.rcWork.top,
                                                   i,
                                                   device_wintab->last_axis_data[i],
-                                                  &axes[i]);
+                                                  &axes[use]);
             }
           if (use == GDK_AXIS_X)
-            temp_x = axes[i];
+            temp_x = axes[use];
           else if (use == GDK_AXIS_Y)
-            temp_y = axes[i];
+            temp_y = axes[use];
 
           break;
         default:
           _gdk_device_translate_axis (device, i,
                                       device_wintab->last_axis_data[i],
-                                      &axes[i]);
+                                      &axes[use]);
           break;
         }
     }
@@ -256,7 +229,6 @@ gdk_device_wintab_class_init (GdkDeviceWintabClass *klass)
 {
   GdkDeviceClass *device_class = GDK_DEVICE_CLASS (klass);
 
-  device_class->get_state = gdk_device_wintab_get_state;
   device_class->set_surface_cursor = gdk_device_wintab_set_surface_cursor;
   device_class->query_state = gdk_device_wintab_query_state;
   device_class->grab = gdk_device_wintab_grab;

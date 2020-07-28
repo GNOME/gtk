@@ -95,7 +95,6 @@ enum {
   PROP_PRODUCT_ID,
   PROP_SEAT,
   PROP_NUM_TOUCHES,
-  PROP_AXES,
   PROP_TOOL,
   PROP_DIRECTION,
   PROP_HAS_BIDI_LAYOUTS,
@@ -265,17 +264,6 @@ gdk_device_class_init (GdkDeviceClass *klass)
                          0,
                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY |
                          G_PARAM_STATIC_STRINGS);
-  /**
-   * GdkDevice:axes:
-   *
-   * The axes currently available for this device.
-   */
-  device_props[PROP_AXES] =
-    g_param_spec_flags ("axes",
-                        P_("Axes"),
-                        P_("Axes"),
-                        GDK_TYPE_AXIS_FLAGS, 0,
-                        G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
   device_props[PROP_TOOL] =
     g_param_spec_object ("tool",
@@ -502,9 +490,6 @@ gdk_device_get_property (GObject    *object,
     case PROP_NUM_TOUCHES:
       g_value_set_uint (value, device->num_touches);
       break;
-    case PROP_AXES:
-      g_value_set_flags (value, device->axis_flags);
-      break;
     case PROP_TOOL:
       g_value_set_object (value, device->last_tool);
       break;
@@ -530,37 +515,6 @@ gdk_device_get_property (GObject    *object,
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
     }
-}
-
-/**
- * gdk_device_get_state: (skip)
- * @device: a #GdkDevice.
- * @surface: a #GdkSurface.
- * @axes: (nullable) (array): an array of doubles to store the values of
- * the axes of @device in, or %NULL.
- * @mask: (optional) (out): location to store the modifiers, or %NULL.
- *
- * Gets the current state of a pointer device relative to @surface. As a
- * physical device’s coordinates are those of its logical pointer, this
- * function may not be called on devices of type %GDK_DEVICE_TYPE_PHYSICAL,
- * unless there is an ongoing grab on them.
- *
- * See also: gdk_seat_grab().
- */
-void
-gdk_device_get_state (GdkDevice       *device,
-                      GdkSurface      *surface,
-                      double          *axes,
-                      GdkModifierType *mask)
-{
-  g_return_if_fail (GDK_IS_DEVICE (device));
-  g_return_if_fail (device->source != GDK_SOURCE_KEYBOARD);
-  g_return_if_fail (GDK_IS_SURFACE (surface));
-  g_return_if_fail (gdk_device_get_device_type (device) != GDK_DEVICE_TYPE_PHYSICAL ||
-                    gdk_display_device_is_grabbed (gdk_device_get_display (device), device));
-
-  if (GDK_DEVICE_GET_CLASS (device)->get_state)
-    GDK_DEVICE_GET_CLASS (device)->get_state (device, surface, axes, mask);
 }
 
 /*
@@ -985,10 +939,7 @@ _gdk_device_reset_axes (GdkDevice *device)
   for (i = device->axes->len - 1; i >= 0; i--)
     g_array_remove_index (device->axes, i);
 
-  device->axis_flags = 0;
-
   g_object_notify_by_pspec (G_OBJECT (device), device_props[PROP_N_AXES]);
-  g_object_notify_by_pspec (G_OBJECT (device), device_props[PROP_AXES]);
 }
 
 guint
@@ -1027,10 +978,7 @@ _gdk_device_add_axis (GdkDevice   *device,
   device->axes = g_array_append_val (device->axes, axis_info);
   pos = device->axes->len - 1;
 
-  device->axis_flags |= (1 << use);
-
   g_object_notify_by_pspec (G_OBJECT (device), device_props[PROP_N_AXES]);
-  g_object_notify_by_pspec (G_OBJECT (device), device_props[PROP_AXES]);
 
   return pos;
 }
@@ -1372,20 +1320,6 @@ gdk_device_get_seat (GdkDevice *device)
   g_return_val_if_fail (GDK_IS_DEVICE (device), NULL);
 
   return device->seat;
-}
-
-/**
- * gdk_device_get_axes:
- * @device: a #GdkDevice
- *
- * Returns the axes currently available on the device.
- **/
-GdkAxisFlags
-gdk_device_get_axes (GdkDevice *device)
-{
-  g_return_val_if_fail (GDK_IS_DEVICE (device), 0);
-
-  return device->axis_flags;
 }
 
 void

@@ -210,7 +210,7 @@ gtk_pad_controller_filter_event (GtkEventController *controller,
     return TRUE;
 
   if (pad_controller->pad &&
-      gdk_event_get_source_device (event) != pad_controller->pad)
+      gdk_event_get_device (event) != pad_controller->pad)
     return TRUE;
 
   return FALSE;
@@ -233,7 +233,7 @@ gtk_pad_controller_handle_event (GtkEventController *controller,
   if (event_type == GDK_PAD_GROUP_MODE)
     {
       gtk_pad_controller_handle_mode_switch (pad_controller,
-                                             gdk_event_get_source_device (event),
+                                             gdk_event_get_device (event),
                                              group,
                                              mode);
       return GDK_EVENT_PROPAGATE;

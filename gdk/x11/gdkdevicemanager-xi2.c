@@ -489,9 +489,7 @@ create_device (GdkX11DeviceManagerXI2 *device_manager,
 
       tmp_name = g_ascii_strdown (dev->name, -1);
 
-      if (strstr (tmp_name, "cursor"))
-        input_source = GDK_SOURCE_CURSOR;
-      else if (strstr (tmp_name, " pad"))
+      if (strstr (tmp_name, " pad"))
         input_source = GDK_SOURCE_TABLET_PAD;
       else if (strstr (tmp_name, "wacom") ||
                strstr (tmp_name, "pen") ||
@@ -1199,7 +1197,7 @@ translate_axes (GdkDevice       *device,
   double *vals;
 
   n_axes = gdk_device_get_n_axes (device);
-  axes = g_new0 (double, n_axes);
+  axes = g_new0 (double, GDK_AXIS_LAST);
   vals = valuators->values;
 
   for (i = 0; i < MIN (valuators->mask_len * 8, n_axes); i++)
@@ -1208,10 +1206,7 @@ translate_axes (GdkDevice       *device,
       double val;
 
       if (!XIMaskIsSet (valuators->mask, i))
-        {
-          axes[i] = gdk_x11_device_xi2_get_last_axis_value (GDK_X11_DEVICE_XI2 (device), i);
-          continue;
-        }
+        continue;
 
       use = gdk_device_get_axis_use (device, i);
       val = *vals++;
@@ -1222,13 +1217,13 @@ translate_axes (GdkDevice       *device,
         case GDK_AXIS_Y:
             {
               if (use == GDK_AXIS_X)
-                axes[i] = x;
+                axes[use] = x;
               else
-                axes[i] = y;
+                axes[use] = y;
             }
           break;
         default:
-          _gdk_device_translate_axis (device, i, val, &axes[i]);
+          _gdk_device_translate_axis (device, i, val, &axes[use]);
           break;
         }
     }
@@ -1445,7 +1440,7 @@ _gdk_device_manager_xi2_handle_focus (GdkSurface *surface,
     {
       GdkEvent *event;
 
-      event = gdk_focus_event_new (surface, device, source_device, focus_in);
+      event = gdk_focus_event_new (surface, device, focus_in);
       gdk_display_put_event (gdk_surface_get_display (surface), event);
       gdk_event_unref (event);
     }
@@ -1586,7 +1581,6 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
                                      : GDK_KEY_RELEASE,
                                    surface,
                                    device,
-                                   source_device,
                                    xev->time,
                                    xev->detail,
                                    state,
@@ -1652,7 +1646,6 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
                                                  GUINT_TO_POINTER (xev->sourceid));
 
             event = gdk_scroll_event_new_discrete (surface,
-                                                   device,
                                                    source_device,
                                                    NULL,
                                                    xev->time,
@@ -1686,7 +1679,6 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
                                             : GDK_BUTTON_RELEASE,
                                           surface,
                                           device,
-                                          source_device,
                                           source_device->last_tool,
                                           xev->time,
                                           _gdk_x11_device_xi2_translate_state (&xev->mods, &xev->buttons, &xev->group),
@@ -1739,7 +1731,6 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
 
             event = gdk_scroll_event_new (surface,
                                           device,
-                                          source_device,
                                           NULL,
                                           xev->time,
                                           _gdk_x11_device_xi2_translate_state (&xev->mods, &xev->buttons, &xev->group),
@@ -1760,7 +1751,6 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
 
         event = gdk_motion_event_new (surface,
                                       device,
-                                      source_device,
                                       source_device->last_tool,
                                       xev->time,
                                       _gdk_x11_device_xi2_translate_state (&xev->mods, &xev->buttons, &xev->group),
@@ -1812,7 +1802,6 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
                                      GUINT_TO_POINTER (xev->detail),
                                      surface,
                                      device,
-                                     source_device,
                                      xev->time,
                                      state,
                                      x, y,
@@ -1860,7 +1849,6 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
                                      GUINT_TO_POINTER (xev->detail),
                                      surface,
                                      device,
-                                     source_device,
                                      xev->time,
                                      state,
                                      x, y,
@@ -1927,7 +1915,6 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
                                           : GDK_LEAVE_NOTIFY,
                                         surface,
                                         device,
-                                        source_device,
                                         xev->time,
                                         state,
                                         (double) xev->event_x / scale,
