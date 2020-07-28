@@ -52,6 +52,7 @@ Each role name is part of the #GtkAccessibleRole enumeration.
 | `COMBOBOX` | A control that can be expanded to show a list of possible values to select | #GtkComboBox |
 | `DIALOG` | A dialog that prompts the user to enter information or require a response | #GtkDialog and subclasses |
 | `IMG` | An image | #GtkImage, #GtkPicture |
+| `LABEL` | A visible name or caption for a user interface component. | #GtkLabel |
 | `PROGRESS_BAR` | An element that display progress | #GtkProgressBar |
 | `RADIO` | A checkable input in a group of radio roles | #GtkRadioButton |
 | `SCROLLBAR` | A graphical object controlling the scolling of content | #GtkScrollbar |

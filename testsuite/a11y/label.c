@@ -1,6 +1,18 @@
 #include <gtk/gtk.h>
 
 static void
+label_role (void)
+{
+  GtkWidget *label = gtk_label_new ("a");
+
+  g_object_ref_sink (label);
+
+  gtk_test_accessible_assert_role (GTK_ACCESSIBLE (label), GTK_ACCESSIBLE_ROLE_LABEL);
+
+  g_object_unref (label);
+}
+
+static void
 label_relations (void)
 {
   GtkWidget *label = gtk_label_new ("a");
@@ -37,6 +49,7 @@ main (int argc, char *argv[])
 {
   gtk_test_init (&argc, &argv, NULL);
 
+  g_test_add_func ("/a11y/label/role", label_role);
   g_test_add_func ("/a11y/label/relations", label_relations);
 
   return g_test_run ();

@@ -1183,7 +1183,7 @@ typedef enum {
  * @GTK_ACCESSIBLE_ROLE_HEADING: Unused
  * @GTK_ACCESSIBLE_ROLE_IMG: An image.
  * @GTK_ACCESSIBLE_ROLE_INPUT: Unused
- * @GTK_ACCESSIBLE_ROLE_LABEL: Unused
+ * @GTK_ACCESSIBLE_ROLE_LABEL: A visible name or caption for a user interface component.
  * @GTK_ACCESSIBLE_ROLE_LANDMARK: Unused
  * @GTK_ACCESSIBLE_ROLE_LEGEND: Unused
  * @GTK_ACCESSIBLE_ROLE_LINK: Unused

@@ -114,6 +114,10 @@
  * sense with translatable attributes. Use markup embedded in the translatable
  * content instead.
  *
+ * # Accessibility
+ *
+ * GtkLabel uses the #GTK_ACCESSIBLE_ROLE_LABEL role.
+ *
  * # Mnemonics
  *
  * Labels may contain “mnemonics”. Mnemonics are
@@ -1073,6 +1077,7 @@ gtk_label_class_init (GtkLabelClass *class)
                                        NULL);
 
   gtk_widget_class_set_css_name (widget_class, I_("label"));
+  gtk_widget_class_set_accessible_role (widget_class, GTK_ACCESSIBLE_ROLE_LABEL);
 
   quark_mnemonics_visible_connected = g_quark_from_static_string ("gtk-label-mnemonics-visible-connected");
 
