@@ -59,6 +59,10 @@
  * # CSS nodes
  *
  * GtkPicture has a single CSS node with the name picture.
+ *
+ * # Accessibility
+ *
+ * GtkImage uses the #GTK_ACCESSIBLE_ROLE_IMG role.
  */
 
 enum
@@ -365,6 +369,7 @@ gtk_picture_class_init (GtkPictureClass *class)
   g_object_class_install_properties (gobject_class, NUM_PROPERTIES, properties);
 
   gtk_widget_class_set_css_name (widget_class, I_("picture"));
+  gtk_widget_class_set_accessible_role (widget_class, GTK_ACCESSIBLE_ROLE_IMG);
 }
 
 static void
