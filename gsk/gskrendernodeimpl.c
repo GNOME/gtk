@@ -661,7 +661,7 @@ gsk_border_node_new (const GskRoundedRect *outline,
   return node;
 }
 
-/** Private */
+/* Private */
 bool
 gsk_border_node_get_uniform (GskRenderNode *self)
 {
