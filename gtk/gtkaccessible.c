@@ -144,13 +144,23 @@ gtk_accessible_update_state (GtkAccessible      *self,
 
   while (state != -1)
     {
-      GtkAccessibleValue *value = gtk_accessible_value_collect_for_state (state, &args);
+      GError *error = NULL;
+      GtkAccessibleValue *value =
+        gtk_accessible_value_collect_for_state (state, &error, &args);
 
-      if (value == NULL)
-        goto out;
+      if (error != NULL)
+        {
+          g_critical ("Unable to collect value for state “%s”: %s",
+                      gtk_accessible_state_get_attribute_name (state),
+                      error->message);
+          g_error_free (error);
+          goto out;
+        }
 
       gtk_at_context_set_accessible_state (context, state, value);
-      gtk_accessible_value_unref (value);
+
+      if (value != NULL)
+        gtk_accessible_value_unref (value);
 
       state = va_arg (args, int);
     }
@@ -187,14 +197,24 @@ gtk_accessible_update_state_value (GtkAccessible      *self,
   if (context == NULL)
     return;
 
+  GError *error = NULL;
   GtkAccessibleValue *real_value =
-    gtk_accessible_value_collect_for_state_value (state, value);
+    gtk_accessible_value_collect_for_state_value (state, value, &error);
 
-  if (real_value == NULL)
-    return;
+  if (error != NULL)
+    {
+      g_critical ("Unable to collect the value for state “%s”: %s",
+                  gtk_accessible_state_get_attribute_name (state),
+                  error->message);
+      g_error_free (error);
+      return;
+    }
 
   gtk_at_context_set_accessible_state (context, state, real_value);
-  gtk_accessible_value_unref (real_value);
+
+  if (real_value != NULL)
+    gtk_accessible_value_unref (real_value);
+
   gtk_at_context_update (context);
 }
 
@@ -239,14 +259,23 @@ gtk_accessible_update_property (GtkAccessible         *self,
 
   while (property != -1)
     {
-      GtkAccessibleValue *value = gtk_accessible_value_collect_for_property (property, &args);
+      GError *error = NULL;
+      GtkAccessibleValue *value =
+        gtk_accessible_value_collect_for_property (property, &error, &args);
 
-      /* gtk_accessible_value_collect_for_property() will warn for us */
-      if (value == NULL)
-        goto out;
+      if (error != NULL)
+        {
+          g_critical ("Unable to collect the value for property “%s”: %s",
+                      gtk_accessible_property_get_attribute_name (property),
+                      error->message);
+          g_error_free (error);
+          goto out;
+        }
 
       gtk_at_context_set_accessible_property (context, property, value);
-      gtk_accessible_value_unref (value);
+
+      if (value != NULL)
+        gtk_accessible_value_unref (value);
 
       property = va_arg (args, int);
     }
@@ -283,14 +312,24 @@ gtk_accessible_update_property_value (GtkAccessible         *self,
   if (context == NULL)
     return;
 
+  GError *error = NULL;
   GtkAccessibleValue *real_value =
-    gtk_accessible_value_collect_for_property_value (property, value);
+    gtk_accessible_value_collect_for_property_value (property, value, &error);
 
-  if (real_value == NULL)
-    return;
+  if (error != NULL)
+    {
+      g_critical ("Unable to collect the value for property “%s”: %s",
+                  gtk_accessible_property_get_attribute_name (property),
+                  error->message);
+      g_error_free (error);
+      return;
+    }
 
   gtk_at_context_set_accessible_property (context, property, real_value);
-  gtk_accessible_value_unref (real_value);
+
+  if (real_value != NULL)
+    gtk_accessible_value_unref (real_value);
+
   gtk_at_context_update (context);
 }
 
@@ -326,14 +365,23 @@ gtk_accessible_update_relation (GtkAccessible         *self,
 
   while (relation != -1)
     {
-      GtkAccessibleValue *value = gtk_accessible_value_collect_for_relation (relation, &args);
+      GError *error = NULL;
+      GtkAccessibleValue *value =
+        gtk_accessible_value_collect_for_relation (relation, &error, &args);
 
-      /* gtk_accessible_value_collect_for_relation() will warn for us */
-      if (value == NULL)
-        goto out;
+      if (error != NULL)
+        {
+          g_critical ("Unable to collect the value for relation “%s”: %s",
+                      gtk_accessible_relation_get_attribute_name (relation),
+                      error->message);
+          g_error_free (error);
+          goto out;
+        }
 
       gtk_at_context_set_accessible_relation (context, relation, value);
-      gtk_accessible_value_unref (value);
+
+      if (value != NULL)
+        gtk_accessible_value_unref (value);
 
       relation = va_arg (args, int);
     }
@@ -370,13 +418,23 @@ gtk_accessible_update_relation_value (GtkAccessible         *self,
   if (context == NULL)
     return;
 
+  GError *error = NULL;
   GtkAccessibleValue *real_value =
-    gtk_accessible_value_collect_for_relation_value (relation, value);
+    gtk_accessible_value_collect_for_relation_value (relation, value, &error);
 
-  if (real_value == NULL)
-    return;
+  if (error != NULL)
+    {
+      g_critical ("Unable to collect the value for relation “%s”: %s",
+                  gtk_accessible_relation_get_attribute_name (relation),
+                  error->message);
+      g_error_free (error);
+      return;
+    }
 
   gtk_at_context_set_accessible_relation (context, relation, real_value);
-  gtk_accessible_value_unref (real_value);
+
+  if (real_value != NULL)
+    gtk_accessible_value_unref (real_value);
+
   gtk_at_context_update (context);
 }
