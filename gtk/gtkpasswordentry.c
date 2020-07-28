@@ -61,6 +61,10 @@
  * a .passwordstyle class. The text Css node below it has a child with
  * name image and style class .caps-lock-indicator for the Caps Lock
  * icon, and possibly other children.
+ *
+ * # Accessibility
+ *
+ * GtkPasswordEntry uses the #GTK_ACCESSIBLE_ROLE_TEXT_BOX role.
  */
 
 typedef struct {
@@ -222,14 +226,27 @@ gtk_password_entry_set_property (GObject      *object,
 {
   GtkPasswordEntry *entry = GTK_PASSWORD_ENTRY (object);
   GtkPasswordEntryPrivate *priv = gtk_password_entry_get_instance_private (entry);
+  const char *text;
 
   if (gtk_editable_delegate_set_property (object, prop_id, value, pspec))
-    return;
+    {
+      if (prop_id == NUM_PROPERTIES + GTK_EDITABLE_PROP_EDITABLE)
+        {
+          gtk_accessible_update_property (GTK_ACCESSIBLE (entry),
+                                          GTK_ACCESSIBLE_PROPERTY_READ_ONLY, !g_value_get_boolean (value),
+                                          -1);
+        }
+      return;
+    }
 
   switch (prop_id)
     {
     case PROP_PLACEHOLDER_TEXT:
-      gtk_text_set_placeholder_text (GTK_TEXT (priv->entry), g_value_get_string (value));
+      text = g_value_get_string (value);
+      gtk_text_set_placeholder_text (GTK_TEXT (priv->entry), text);
+      gtk_accessible_update_property (GTK_ACCESSIBLE (entry),
+                                      GTK_ACCESSIBLE_PROPERTY_PLACEHOLDER, text,
+                                      -1);
       break;
 
     case PROP_ACTIVATES_DEFAULT:
@@ -424,6 +441,7 @@ gtk_password_entry_class_init (GtkPasswordEntryClass *klass)
   gtk_editable_install_properties (object_class, NUM_PROPERTIES);
 
   gtk_widget_class_set_css_name (widget_class, I_("entry"));
+  gtk_widget_class_set_accessible_role (widget_class, GTK_ACCESSIBLE_ROLE_TEXT_BOX);
 }
 
 static GtkEditable *

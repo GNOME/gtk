@@ -60,7 +60,7 @@ Each role name is part of the #GtkAccessibleRole enumeration.
 | `SEPARATOR` | A divider that separates sections of content or groups of items | #GtkSeparator |
 | `SPIN_BUTTON` | A range control that allows seelcting among discrete choices | #GtkSpinButton |
 | `SWITCH` | A control that represents on/off values | #GtkSwitch |
-| `TEXT_BOX` | A type of input that allows free-form text as its value. | #GtkEntry |
+| `TEXT_BOX` | A type of input that allows free-form text as its value. | #GtkEntry, #GtkPasswordEntry |
 | `WINDOW` | An application window | #GtkWindow |
 | `...` | … |
 
