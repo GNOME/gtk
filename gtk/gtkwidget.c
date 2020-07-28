@@ -5583,6 +5583,10 @@ gtk_widget_set_sensitive (GtkWidget *widget,
         }
     }
 
+  gtk_accessible_update_state (GTK_ACCESSIBLE (widget),
+                               GTK_ACCESSIBLE_STATE_DISABLED, !sensitive,
+                               -1);
+
   if (priv->parent == NULL
       || gtk_widget_is_sensitive (priv->parent))
     {
