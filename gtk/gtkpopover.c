@@ -602,7 +602,6 @@ close_menu (GtkPopover *popover)
 static gboolean
 gtk_popover_has_mnemonic_modifier_pressed (GtkPopover *popover)
 {
-  GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
   GList *seats, *s;
   gboolean retval = FALSE;
 
@@ -610,10 +609,10 @@ gtk_popover_has_mnemonic_modifier_pressed (GtkPopover *popover)
 
   for (s = seats; s; s = s->next)
     {
-      GdkDevice *dev = gdk_seat_get_pointer (s->data);
+      GdkDevice *dev = gdk_seat_get_keyboard (s->data);
       GdkModifierType mask;
 
-      gdk_device_get_state (dev, priv->surface, NULL, &mask);
+      mask = gdk_device_get_modifier_state (dev);
       if ((mask & gtk_accelerator_get_default_mod_mask ()) == GDK_ALT_MASK)
         {
           retval = TRUE;
