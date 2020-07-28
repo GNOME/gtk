@@ -209,3 +209,11 @@ gdk_device_tool_get_tool_type (GdkDeviceTool *tool)
 
   return tool->type;
 }
+
+GdkAxisFlags
+gdk_device_tool_get_axes (GdkDeviceTool *tool)
+{
+  g_return_val_if_fail (tool != NULL, 0);
+
+  return tool->tool_axes;
+}

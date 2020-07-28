@@ -71,6 +71,9 @@ guint64 gdk_device_tool_get_hardware_id (GdkDeviceTool *tool);
 GDK_AVAILABLE_IN_ALL
 GdkDeviceToolType gdk_device_tool_get_tool_type (GdkDeviceTool *tool);
 
+GDK_AVAILABLE_IN_ALL
+GdkAxisFlags gdk_device_tool_get_axes (GdkDeviceTool *tool);
+
 G_END_DECLS
 
 #endif /* __GDK_DEVICE_TOOL_H__ */
