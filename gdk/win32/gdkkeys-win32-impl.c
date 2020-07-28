@@ -18,7 +18,7 @@
  * I.e. 32 bits on 32-bit Windows and 64 bits on 64-bit Windows.
  *
  * This is *not* the same as the the bitness of the application, since it is
- * possible to execute 32-bit binaries on either a 32-bit or a 64-bit host.
+ * possible to execute 32-bit binaries on either a 32-bit *or* a 64-bit host.
  * On a 64-bit host, KBD_LONG_PTR will be 64-bits, even if the application 
  * itself is 32-bit. (Whereas on a 32-bit host, it will be 32-bit.)
  *

@@ -595,17 +595,21 @@ update_keymap (GdkWin32Keymap *keymap)
 
           info->file = get_keyboard_layout_file (info->name);
 
-          info->key_entries = g_array_new (FALSE, FALSE, sizeof (KeyEntry));
+          if (load_layout_dll (keymap, info->file, info))
+            {
+              info->key_entries = g_array_new (FALSE, FALSE,
                                                sizeof (GdkWin32KeymapKeyEntry));
 
-          info->reverse_lookup_table = g_hash_table_new (g_direct_hash,
-                                                         g_direct_equal);
-          load_layout_dll (info->file, info);
-          init_vk_lookup_table (info);
+              info->reverse_lookup_table = g_hash_table_new (g_direct_hash,
+                                                             g_direct_equal);
+              init_vk_lookup_table (keymap, info);
+            }
         }
+
       if (info->handle == current_layout)
         keymap->active_layout = i;
     }
+
   if (changed)
     ActivateKeyboardLayout (current_layout, 0);
 
