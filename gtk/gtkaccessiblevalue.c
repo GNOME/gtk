@@ -1332,7 +1332,7 @@ gtk_accessible_value_get_default_for_property (GtkAccessibleProperty property)
     case GTK_ACCESSIBLE_PROPERTY_PLACEHOLDER:
     case GTK_ACCESSIBLE_PROPERTY_ROLE_DESCRIPTION:
     case GTK_ACCESSIBLE_PROPERTY_VALUE_TEXT:
-      return gtk_string_accessible_value_new ("");
+      return gtk_undefined_accessible_value_new ();
 
     /* Token properties */
     case GTK_ACCESSIBLE_PROPERTY_AUTOCOMPLETE:
@@ -1437,7 +1437,7 @@ gtk_accessible_value_get_default_for_relation (GtkAccessibleRelation relation)
     /* Strings */
     case GTK_ACCESSIBLE_RELATION_ROW_INDEX_TEXT:
     case GTK_ACCESSIBLE_RELATION_COL_INDEX_TEXT:
-      return gtk_string_accessible_value_new ("");
+      return gtk_undefined_accessible_value_new ();
 
     default:
       g_critical ("Unknown value for accessible property “%s”", cstate->name);
