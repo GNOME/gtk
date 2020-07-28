@@ -166,6 +166,9 @@ gtk_scrollbar_set_property (GObject      *object,
             gtk_widget_update_orientation (GTK_WIDGET (self), priv->orientation);
             gtk_widget_queue_resize (GTK_WIDGET (self));
             g_object_notify_by_pspec (object, pspec);
+            gtk_accessible_update_property (GTK_ACCESSIBLE (self),
+                                            GTK_ACCESSIBLE_PROPERTY_ORIENTATION, orientation,
+                                            -1);
           }
       }
       break;
@@ -175,11 +178,24 @@ gtk_scrollbar_set_property (GObject      *object,
     }
 }
 
+static void gtk_scrollbar_adjustment_changed       (GtkAdjustment *adjustment,
+                                                    gpointer       data);
+static void gtk_scrollbar_adjustment_value_changed (GtkAdjustment *adjustment,
+                                                    gpointer       data);
+
 static void
 gtk_scrollbar_dispose (GObject *object)
 {
   GtkScrollbar *self = GTK_SCROLLBAR (object);
   GtkScrollbarPrivate *priv = gtk_scrollbar_get_instance_private (self);
+  GtkAdjustment *adj;
+
+  adj = gtk_range_get_adjustment (GTK_RANGE (priv->range));
+  if (adj)
+    {
+      g_signal_handlers_disconnect_by_func (adj, gtk_scrollbar_adjustment_changed, self);
+      g_signal_handlers_disconnect_by_func (adj, gtk_scrollbar_adjustment_value_changed, self);
+    }
 
   g_clear_pointer (&priv->range, gtk_widget_unparent);
 
@@ -224,6 +240,9 @@ gtk_scrollbar_init (GtkScrollbar *self)
   gtk_widget_set_vexpand (priv->range, TRUE);
   gtk_widget_set_parent (priv->range, GTK_WIDGET (self));
   gtk_widget_update_orientation (GTK_WIDGET (self), priv->orientation);
+  gtk_accessible_update_property (GTK_ACCESSIBLE (self),
+                                  GTK_ACCESSIBLE_PROPERTY_ORIENTATION, priv->orientation,
+                                  -1);
 }
 
 /**
@@ -248,6 +267,29 @@ gtk_scrollbar_new (GtkOrientation  orientation,
                        NULL);
 }
 
+static void
+gtk_scrollbar_adjustment_changed (GtkAdjustment *adjustment,
+                                  gpointer       data)
+{
+  GtkScrollbar *self = data;
+
+  gtk_accessible_update_property (GTK_ACCESSIBLE (self),
+                                  GTK_ACCESSIBLE_PROPERTY_VALUE_MAX, gtk_adjustment_get_upper (adjustment),
+                                  GTK_ACCESSIBLE_PROPERTY_VALUE_MIN, gtk_adjustment_get_lower (adjustment),
+                                  -1);
+}
+
+static void
+gtk_scrollbar_adjustment_value_changed (GtkAdjustment *adjustment,
+                                        gpointer       data)
+{
+  GtkScrollbar *self = data;
+
+  gtk_accessible_update_property (GTK_ACCESSIBLE (self),
+                                  GTK_ACCESSIBLE_PROPERTY_VALUE_NOW, gtk_adjustment_get_value (adjustment),
+                                  -1);
+}
+
 /**
  * gtk_scrollbar_set_adjustment:
  * @self: a #GtkScrollbar
@@ -260,12 +302,33 @@ gtk_scrollbar_set_adjustment (GtkScrollbar  *self,
                               GtkAdjustment *adjustment)
 {
   GtkScrollbarPrivate *priv = gtk_scrollbar_get_instance_private (self);
+  GtkAdjustment *adj;
 
   g_return_if_fail (GTK_IS_SCROLLBAR (self));
   g_return_if_fail (adjustment == NULL || GTK_IS_ADJUSTMENT (adjustment));
 
+  adj = gtk_range_get_adjustment (GTK_RANGE (priv->range));
+  if (adj)
+    {
+      g_signal_handlers_disconnect_by_func (adj, gtk_scrollbar_adjustment_changed, self);
+      g_signal_handlers_disconnect_by_func (adj, gtk_scrollbar_adjustment_value_changed, self);
+    }
 
   gtk_range_set_adjustment (GTK_RANGE (priv->range), adjustment);
+
+  if (adjustment)
+    {
+      g_signal_connect (adjustment, "changed",
+                        G_CALLBACK (gtk_scrollbar_adjustment_changed), self);
+      g_signal_connect (adjustment, "value-changed",
+                        G_CALLBACK (gtk_scrollbar_adjustment_value_changed), self);
+
+      gtk_accessible_update_property (GTK_ACCESSIBLE (self),
+                                      GTK_ACCESSIBLE_PROPERTY_VALUE_MAX, gtk_adjustment_get_upper (adjustment),
+                                      GTK_ACCESSIBLE_PROPERTY_VALUE_MIN, gtk_adjustment_get_lower (adjustment),
+                                      GTK_ACCESSIBLE_PROPERTY_VALUE_NOW, gtk_adjustment_get_value (adjustment),
+                                      -1);
+    }
 
   g_object_notify_by_pspec (G_OBJECT (self), props[PROP_ADJUSTMENT]);
 }
