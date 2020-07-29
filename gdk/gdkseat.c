@@ -465,7 +465,7 @@ gdk_seat_get_tool (GdkSeat *seat,
  * gdk_seat_get_tools:
  * @seat: A #GdkSeat
  *
- * Returns all #GdkDeviceTool<!-- -->s that are known to the
+ * Returns all #GdkDeviceTools that are known to the
  * application.
  *
  * Returns: (transfer container) (element-type Gdk.DeviceTool): A list of tools. Free with
