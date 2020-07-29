@@ -72,6 +72,10 @@
  * GtkImage has a single CSS node with the name image. The style classes
  * .normal-icons or .large-icons may appear, depending on the #GtkImage:icon-size
  * property.
+ *
+ * # Accessibility
+ *
+ * GtkImage uses the #GTK_ACCESSIBLE_ROLE_IMG role.
  */
 
 typedef struct _GtkImageClass GtkImageClass;
@@ -261,6 +265,8 @@ gtk_image_class_init (GtkImageClass *class)
   g_object_class_install_properties (gobject_class, NUM_PROPERTIES, image_props);
 
   gtk_widget_class_set_css_name (widget_class, I_("image"));
+
+  gtk_widget_class_set_accessible_role (widget_class, GTK_ACCESSIBLE_ROLE_IMG);
 }
 
 static void

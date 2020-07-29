@@ -50,6 +50,34 @@ scrollbar_properties (void)
   g_object_unref (widget);
 }
 
+static void
+scrollbar_relations (void)
+{
+  GtkWidget *sw = gtk_scrolled_window_new ();
+  GtkWidget *hscrollbar;
+  GtkWidget *vscrollbar;
+  GtkWidget *child;
+  GList *list;
+
+  g_object_ref_sink (sw);
+
+  hscrollbar = gtk_scrolled_window_get_hscrollbar (GTK_SCROLLED_WINDOW (sw));
+  vscrollbar = gtk_scrolled_window_get_vscrollbar (GTK_SCROLLED_WINDOW (sw));
+
+  gtk_test_accessible_assert_relation (hscrollbar, GTK_ACCESSIBLE_RELATION_CONTROLS, NULL);
+  gtk_test_accessible_assert_relation (vscrollbar, GTK_ACCESSIBLE_RELATION_CONTROLS, NULL);
+
+  child = gtk_text_view_new ();
+  gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (sw), child);
+
+  list = g_list_append (NULL, child);
+  gtk_test_accessible_assert_relation (hscrollbar, GTK_ACCESSIBLE_RELATION_CONTROLS, list);
+  gtk_test_accessible_assert_relation (vscrollbar, GTK_ACCESSIBLE_RELATION_CONTROLS, list);
+  g_list_free (list);
+
+  g_object_unref (sw);
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -58,6 +86,7 @@ main (int argc, char *argv[])
   g_test_add_func ("/a11y/scrollbar/role", scrollbar_role);
   g_test_add_func ("/a11y/scrollbar/state", scrollbar_state);
   g_test_add_func ("/a11y/scrollbar/properties", scrollbar_properties);
+  g_test_add_func ("/a11y/scrollbar/relations", scrollbar_relations);
 
   return g_test_run ();
 }

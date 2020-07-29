@@ -51,12 +51,16 @@ Each role name is part of the #GtkAccessibleRole enumeration.
 | `COLUMNHEADER` | The header of a column in a list or grid | - |
 | `COMBOBOX` | A control that can be expanded to show a list of possible values to select | #GtkComboBox |
 | `DIALOG` | A dialog that prompts the user to enter information or require a response | #GtkDialog and subclasses |
+| `IMG` | An image | #GtkImage, #GtkPicture |
+| `LABEL` | A visible name or caption for a user interface component. | #GtkLabel |
 | `PROGRESS_BAR` | An element that display progress | #GtkProgressBar |
 | `RADIO` | A checkable input in a group of radio roles | #GtkRadioButton |
 | `SCROLLBAR` | A graphical object controlling the scolling of content | #GtkScrollbar |
+| `SEARCH_BOX` | A text box for entering search criteria | #GtkSearchEntry |
 | `SEPARATOR` | A divider that separates sections of content or groups of items | #GtkSeparator |
 | `SPIN_BUTTON` | A range control that allows seelcting among discrete choices | #GtkSpinButton |
 | `SWITCH` | A control that represents on/off values | #GtkSwitch |
+| `TEXT_BOX` | A type of input that allows free-form text as its value. | #GtkEntry, #GtkPasswordEntry |
 | `WINDOW` | An application window | #GtkWindow |
 | `...` | … |
 

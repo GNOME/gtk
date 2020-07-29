@@ -1181,9 +1181,9 @@ typedef enum {
  * @GTK_ACCESSIBLE_ROLE_GRID_CELL: Unused
  * @GTK_ACCESSIBLE_ROLE_GROUP: Unused
  * @GTK_ACCESSIBLE_ROLE_HEADING: Unused
- * @GTK_ACCESSIBLE_ROLE_IMG: Unused
+ * @GTK_ACCESSIBLE_ROLE_IMG: An image.
  * @GTK_ACCESSIBLE_ROLE_INPUT: Unused
- * @GTK_ACCESSIBLE_ROLE_LABEL: Unused
+ * @GTK_ACCESSIBLE_ROLE_LABEL: A visible name or caption for a user interface component.
  * @GTK_ACCESSIBLE_ROLE_LANDMARK: Unused
  * @GTK_ACCESSIBLE_ROLE_LEGEND: Unused
  * @GTK_ACCESSIBLE_ROLE_LINK: Unused
@@ -1217,7 +1217,8 @@ typedef enum {
  *    of content within a viewing area, regardless of whether the content is fully
  *    displayed within the viewing area.
  * @GTK_ACCESSIBLE_ROLE_SEARCH: Unused
- * @GTK_ACCESSIBLE_ROLE_SEARCH_BOX: Unused
+ * @GTK_ACCESSIBLE_ROLE_SEARCH_BOX: A type of textbox intended for specifying
+ *    search criteria.
  * @GTK_ACCESSIBLE_ROLE_SECTION: Unused
  * @GTK_ACCESSIBLE_ROLE_SECTION_HEAD: Unused
  * @GTK_ACCESSIBLE_ROLE_SELECT: Unused
@@ -1235,7 +1236,8 @@ typedef enum {
  * @GTK_ACCESSIBLE_ROLE_TABLE: Unused
  * @GTK_ACCESSIBLE_ROLE_TAB_LIST: Unused
  * @GTK_ACCESSIBLE_ROLE_TAB_PANEL: Unused
- * @GTK_ACCESSIBLE_ROLE_TEXT_BOX: Unused
+ * @GTK_ACCESSIBLE_ROLE_TEXT_BOX: A type of input that allows free-form text
+ *    as its value.
  * @GTK_ACCESSIBLE_ROLE_TIME: Unused
  * @GTK_ACCESSIBLE_ROLE_TIMER: Unused
  * @GTK_ACCESSIBLE_ROLE_TOOLBAR: Unused
