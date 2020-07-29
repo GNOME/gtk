@@ -32,6 +32,11 @@
   <update_contact>matthias.clasen_at_gmail.com</update_contact>
   <developer_name>Matthias Clasen and others</developer_name>
   <releases>
+    <release version="3.99.0" date="2020-07-30">
+      <description>
+        <p>A new developers snapshot towards GTK 4.0.</p>
+      </description>
+    </release>
     <release version="3.94.0" date="2018-06-25">
       <description>
         <p>A new developers snapshot towards GTK 4.0.</p>
