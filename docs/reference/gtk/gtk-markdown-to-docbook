@@ -12,6 +12,13 @@ import subprocess
 # The following code is taken from gtk-doc
 
 def ExpandAbbreviations(symbol, text):
+    # Hack!
+    # Strip xlink namespace from hrefs since pandoc insists on
+    # inserting them, and namespace setup doesn't transfer across
+    # xi:include.
+    # Yay for XML!
+    text = re.sub('xlink:href', 'href', text)
+
     # Convert '@param()'
     text = re.sub(r'(\A|[^\\])\@(\w+((\.|->)\w+)*)\s*\(\)', r'\1<parameter>\2()</parameter>', text)
 
@@ -177,7 +184,6 @@ def ConvertToDocbook(infile, outfile):
     subprocess.check_call(["pandoc", infile, "-o", outfile,
                            "--from=" + input_format,
                            "--to=" + output_format,
-                           "--standalone",
                            "--top-level-division=" + division])
 
 def ExpandGtkDocAbbreviations(infile, outfile):
