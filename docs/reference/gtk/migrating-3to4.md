@@ -774,6 +774,14 @@ Instead of a monitor number, #GdkMonitor is now used throughout.
 gdk_display_get_monitors() returns the list of monitors that can be queried
 or observed for monitors to pass to APIs like gtk_window_fullscreen_on_monitor().
 
+### Adapt to monitor API changes
+
+The gdk_monitor_get_workarea() API is gone. Individual backends can still
+provide this information, for example with gdk_x11_monitor_get_workarea().
+
+If you use this information, your code should check which backend is in
+use and then call the appropriate backend API.
+
 ### Adapt to cursor API changes
 
 Use the new gtk_widget_set_cursor() function to set cursors, instead of
