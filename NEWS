@@ -61,11 +61,14 @@ Overview of Changes in GTK 3.99.0
 * Inspector:
  - Improve list model support
  - Add direct navigation between objects
+ - Show accessibility information
 
 * GDK:
  - Compress scroll events
  - Keep a scroll history
  - Clean up GdkDevice api
+ - Drop the master/slave device split
+ - Move axes to GdkDeviceTool
  - Improve frame clock accuracy
  - Add a new macOS backend
 
