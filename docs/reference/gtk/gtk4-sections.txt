@@ -7638,6 +7638,7 @@ GtkAccessibleTristate
 GtkAccessibleInvalidState
 GtkAccessibleAutocomplete
 GtkAccessibleSort
+gtk_accessible_get_accessible_role
 gtk_accessible_update_state
 gtk_accessible_update_state_value
 gtk_accessible_reset_state
