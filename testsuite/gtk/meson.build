@@ -179,7 +179,6 @@ foreach t : tests
        protocol: 'tap',
        timeout: test_timeout,
        env: [
-              'NO_AT_BRIDGE=1',
               'GSK_RENDERER=cairo',
               'G_TEST_SRCDIR=@0@'.format(meson.current_source_dir()),
               'G_TEST_BUILDDIR=@0@'.format(meson.current_build_dir()),
