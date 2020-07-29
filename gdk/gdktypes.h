@@ -39,7 +39,7 @@
 
 #ifdef G_OS_WIN32
 #  ifdef GDK_COMPILATION
-#    define GDKVAR __declspec(dllexport)
+#    define GDKVAR extern __declspec(dllexport)
 #  else
 #    define GDKVAR extern __declspec(dllimport)
 #  endif

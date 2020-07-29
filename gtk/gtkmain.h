@@ -67,7 +67,7 @@ typedef gint	(*GtkKeySnoopFunc)	    (GtkWidget	  *grab_widget,
  */
 #ifdef G_PLATFORM_WIN32
 #ifdef GTK_COMPILATION
-#define GTKMAIN_C_VAR __declspec(dllexport)
+#define GTKMAIN_C_VAR extern __declspec(dllexport)
 #else
 #define GTKMAIN_C_VAR extern __declspec(dllimport)
 #endif

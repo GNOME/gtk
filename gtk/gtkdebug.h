@@ -64,7 +64,7 @@ typedef enum {
 
 #ifdef G_OS_WIN32
 #  ifdef GTK_COMPILATION
-#    define GTKVAR __declspec(dllexport)
+#    define GTKVAR extern __declspec(dllexport)
 #  else
 #    define GTKVAR extern __declspec(dllimport)
 #  endif
