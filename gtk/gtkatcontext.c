@@ -172,6 +172,19 @@ gtk_at_context_class_init (GtkATContextClass *klass)
                          G_PARAM_CONSTRUCT_ONLY |
                          G_PARAM_STATIC_STRINGS);
 
+  /**
+   * GtkATContext::state-change:
+   * @self: the #GtkATContext
+   * @changed_states: flags for the changed states
+   * @changed_properties: flags for the changed properties
+   * @changed_relations,
+   * @states: the new states
+   * @properties: the new properties
+   * @relations: the new relations
+   *
+   * Emitted when the attributes of the accessible for the
+   * #GtkATContext instance change.
+   */
   obj_signals[STATE_CHANGE] =
     g_signal_new ("state-change",
                   G_TYPE_FROM_CLASS (gobject_class),

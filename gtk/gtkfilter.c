@@ -83,7 +83,7 @@ gtk_filter_class_init (GtkFilterClass *class)
   class->get_strictness = gtk_filter_default_get_strictness;
 
   /**
-   * GtkFilter:changed:
+   * GtkFilter::changed:
    * @self: The #GtkFilter
    * @change: how the filter changed
    *

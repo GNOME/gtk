@@ -304,6 +304,11 @@ gtk_file_chooser_dialog_class_init (GtkFileChooserDialogClass *class)
   gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserDialog, buttons);
   gtk_widget_class_bind_template_callback (widget_class, response_cb);
 
+  /**
+   * GtkFileChooserDialog|response.activate:
+   *
+   * Activate the default response of the dialog.
+   */
   gtk_widget_class_install_action (widget_class, "response.activate", NULL, gtk_file_chooser_dialog_activate_response);
 }
 
