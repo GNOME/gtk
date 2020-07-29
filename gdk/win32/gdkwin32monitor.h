@@ -45,6 +45,9 @@ typedef struct _GdkWin32MonitorClass GdkWin32MonitorClass;
 GDK_AVAILABLE_IN_ALL
 GType             gdk_win32_monitor_get_type            (void) G_GNUC_CONST;
 
+void gdk_win32_monitor_get_workarea (GdkMonitor   *monitor,
+                                     GdkRectangle *workarea);
+
 G_END_DECLS
 
 #endif  /* __GDK_WIN32_MONITOR_H__ */

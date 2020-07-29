@@ -1126,7 +1126,6 @@ GDK_TYPE_GL_PROFILE
 GdkMonitor
 gdk_monitor_get_display
 gdk_monitor_get_geometry
-gdk_monitor_get_workarea
 gdk_monitor_get_width_mm
 gdk_monitor_get_height_mm
 gdk_monitor_get_manufacturer

@@ -1534,12 +1534,20 @@ gdk_x11_surface_layout_popup (GdkSurface     *surface,
                               int             height,
                               GdkPopupLayout *layout)
 {
+  GdkMonitor *monitor;
+  GdkRectangle bounds;
   GdkRectangle final_rect;
   int x, y;
+
+  monitor = gdk_surface_get_layout_monitor (surface, layout,
+                                            gdk_x11_monitor_get_workarea);
+  gdk_x11_monitor_get_workarea (monitor, &bounds);
 
   gdk_surface_layout_popup_helper (surface,
                                    width,
                                    height,
+                                   monitor,
+                                   &bounds,
                                    layout,
                                    &final_rect);
 

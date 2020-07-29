@@ -69,9 +69,6 @@ GDK_AVAILABLE_IN_ALL
 void              gdk_monitor_get_geometry        (GdkMonitor   *monitor,
                                                    GdkRectangle *geometry);
 GDK_AVAILABLE_IN_ALL
-void              gdk_monitor_get_workarea        (GdkMonitor   *monitor,
-                                                   GdkRectangle *workarea);
-GDK_AVAILABLE_IN_ALL
 int               gdk_monitor_get_width_mm        (GdkMonitor   *monitor);
 GDK_AVAILABLE_IN_ALL
 int               gdk_monitor_get_height_mm       (GdkMonitor   *monitor);

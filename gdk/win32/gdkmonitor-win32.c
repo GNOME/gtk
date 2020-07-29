@@ -851,7 +851,18 @@ _gdk_win32_monitor_compare (GdkWin32Monitor *a,
   return a == b ? 0 : a < b ? -1 : 1;
 }
 
-static void
+/**
+ * gdk_win32_monitor_get_workarea:
+ * @monitor: a #GdkMonitor
+ * @workarea: (out): a #GdkRectangle to be filled with
+ *     the monitor workarea
+ *
+ * Retrieves the size and position of the “work area” on a monitor
+ * within the display coordinate space. The returned geometry is in
+ * ”application pixels”, not in ”device pixels” (see
+ * gdk_monitor_get_scale_factor()).
+ */
+void
 gdk_win32_monitor_get_workarea (GdkMonitor   *monitor,
                                 GdkRectangle *dest)
 {
@@ -869,6 +880,4 @@ static void
 gdk_win32_monitor_class_init (GdkWin32MonitorClass *class)
 {
   G_OBJECT_CLASS (class)->finalize = gdk_win32_monitor_finalize;
-
-  GDK_MONITOR_CLASS (class)->get_workarea = gdk_win32_monitor_get_workarea;
 }

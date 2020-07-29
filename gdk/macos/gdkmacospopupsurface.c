@@ -45,6 +45,8 @@ gdk_macos_popup_surface_layout (GdkMacosPopupSurface *self,
                                 int                   height,
                                 GdkPopupLayout       *layout)
 {
+  GdkMonitor *monitor;
+  GdkRectangle bounds;
   GdkRectangle final_rect;
   int x, y;
 
@@ -58,9 +60,15 @@ gdk_macos_popup_surface_layout (GdkMacosPopupSurface *self,
       self->layout = gdk_popup_layout_ref (layout);
     }
 
+  monitor = gdk_surface_get_layout_monitor (surface, layout,
+                                            gdk_macos_monitor_get_workarea);
+  gdk_macos_monitor_get_workarea (monitor, &bounds);
+
   gdk_surface_layout_popup_helper (GDK_SURFACE (self),
                                    width,
                                    height,
+                                   monitor,
+                                   &bounds,
                                    layout,
                                    &final_rect);
 

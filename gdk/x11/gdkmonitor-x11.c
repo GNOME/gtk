@@ -61,7 +61,18 @@ gdk_monitor_has_fullscreen_window (GdkMonitor *monitor)
   return has_fullscreen;
 }
 
-static void
+/**
+ * gdk_x11_monitor_get_workarea:
+ * @monitor: a #GdkMonitor
+ * @workarea: (out): a #GdkRectangle to be filled with
+ *     the monitor workarea
+ *
+ * Retrieves the size and position of the “work area” on a monitor
+ * within the display coordinate space. The returned geometry is in
+ * ”application pixels”, not in ”device pixels” (see
+ * gdk_monitor_get_scale_factor()).
+ */
+void
 gdk_x11_monitor_get_workarea (GdkMonitor   *monitor,
                               GdkRectangle *dest)
 {
@@ -101,7 +112,6 @@ gdk_x11_monitor_init (GdkX11Monitor *monitor)
 static void
 gdk_x11_monitor_class_init (GdkX11MonitorClass *class)
 {
-  GDK_MONITOR_CLASS (class)->get_workarea = gdk_x11_monitor_get_workarea;
 }
 
 XID

@@ -173,7 +173,7 @@ _gdk_macos_toplevel_surface_present (GdkToplevel       *toplevel,
             {
               GdkRectangle visible;
 
-              gdk_monitor_get_workarea (monitor, &visible);
+              gdk_macos_monitor_get_workarea (monitor, &visible);
 
               if (x < visible.x)
                 x = visible.x;

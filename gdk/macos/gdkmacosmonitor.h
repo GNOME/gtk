@@ -38,6 +38,9 @@ typedef struct _GdkMacosMonitorClass GdkMacosMonitorClass;
 GDK_AVAILABLE_IN_ALL
 GType gdk_macos_monitor_get_type (void);
 
+void gdk_macos_monitor_get_workarea (GdkMonitor   *monitor,
+                                     GdkRectangle *geometry);
+
 G_END_DECLS
 
 #endif /* __GDK_MACOS_MONITOR_H__ */

@@ -352,8 +352,8 @@
   monitor = _gdk_macos_display_get_monitor_at_display_coords ([self gdkDisplay],
                                                               currentLocation.x,
                                                               currentLocation.y);
-  gdk_monitor_get_geometry (monitor, &geometry);
-  gdk_monitor_get_workarea (monitor, &workarea);
+  gdk_macos_monitor_get_geometry (monitor, &geometry);
+  gdk_macos_monitor_get_workarea (monitor, &workarea);
   _edge_snapping_set_monitor (&self->snapping, &geometry, &workarea);
 
   /* Convert origins to GDK coordinates */
@@ -424,7 +424,7 @@
 
   monitor = _gdk_macos_surface_get_best_monitor ([self gdkSurface]);
   gdk_monitor_get_geometry (monitor, &geometry);
-  gdk_monitor_get_workarea (monitor, &workarea);
+  gdk_macos_monitor_get_workarea (monitor, &workarea);
 
   initialMoveLocation = [NSEvent mouseLocation];
 

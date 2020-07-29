@@ -227,8 +227,8 @@ _gdk_win32_display_init_monitors (GdkWin32Display *win32_display)
         primary_to_move = w32_ex_monitor;
 
       gdk_monitor_get_geometry (m, &geometry);
-      gdk_monitor_get_workarea (m, &workarea);
-      gdk_monitor_get_workarea (ex_monitor, &ex_workarea);
+      gdk_win32_monitor_get_workarea (m, &workarea);
+      gdk_win32_monitor_get_workarea (ex_monitor, &ex_workarea);
 
       if (memcmp (&workarea, &ex_workarea, sizeof (GdkRectangle)) != 0)
         {
