@@ -82,9 +82,12 @@ test_finalize_object (gconstpointer data)
     }
   else if (g_type_is_a (test_type, GTK_TYPE_LAYOUT_CHILD))
     {
+#if 0
+      // See https://github.com/mesonbuild/meson/issues/7515
       char *msg = g_strdup_printf ("Skipping %s", g_type_name (test_type));
       g_test_skip (msg);
       g_free (msg);
+#endif
       return;
     }
   else
