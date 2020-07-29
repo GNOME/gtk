@@ -4023,7 +4023,7 @@ gtk_window_guess_default_size (GtkWindow *window,
   GdkSurface *surface;
   GdkDisplay *display;
   GdkMonitor *monitor;
-  GdkRectangle workarea;
+  GdkRectangle geometry;
   int minimum, natural;
 
   widget = GTK_WIDGET (window);
@@ -4033,25 +4033,25 @@ gtk_window_guess_default_size (GtkWindow *window,
   if (surface)
     {
       monitor = gdk_display_get_monitor_at_surface (display, surface);
-      gdk_monitor_get_workarea (monitor, &workarea);
+      gdk_monitor_get_geometry (monitor, &geometry);
     }
   else
     {
       monitor = g_list_model_get_item (gdk_display_get_monitors (display), 0);
       if (monitor)
         {
-          gdk_monitor_get_workarea (monitor, &workarea);
+          gdk_monitor_get_geometry (monitor, &geometry);
           g_object_unref (monitor);
         }
       else
         {
-          workarea.width = G_MAXINT;
-          workarea.height = G_MAXINT;
+          geometry.width = G_MAXINT;
+          geometry.height = G_MAXINT;
         }
     }
 
-  *width = workarea.width;
-  *height = workarea.height;
+  *width = geometry.width;
+  *height = geometry.height;
 
   if (gtk_widget_get_request_mode (widget) == GTK_SIZE_REQUEST_WIDTH_FOR_HEIGHT)
     {

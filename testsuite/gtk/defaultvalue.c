@@ -200,8 +200,7 @@ test_type (gconstpointer data)
 	continue;
 
       if (g_type_is_a (type, GDK_TYPE_MONITOR) &&
-          (strcmp (pspec->name, "geometry") == 0 ||
-           strcmp (pspec->name, "workarea") == 0))
+          (strcmp (pspec->name, "geometry") == 0))
         continue;
 
       if (g_type_is_a (type, GTK_TYPE_ABOUT_DIALOG) &&

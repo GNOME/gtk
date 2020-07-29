@@ -174,9 +174,16 @@ struct _GdkSurfaceClass
 void gdk_surface_set_state (GdkSurface      *surface,
                             GdkSurfaceState  new_state);
 
+GdkMonitor * gdk_surface_get_layout_monitor (GdkSurface      *surface,
+                                             GdkPopupLayout  *layout,
+                                             void           (*get_bounds) (GdkMonitor   *monitor,
+                                                                           GdkRectangle *bounds));
+
 void gdk_surface_layout_popup_helper (GdkSurface     *surface,
                                       int             width,
                                       int             height,
+                                      GdkMonitor     *monitor,
+                                      GdkRectangle   *bounds,
                                       GdkPopupLayout *layout,
                                       GdkRectangle   *out_final_rect);
 

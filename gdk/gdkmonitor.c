@@ -51,7 +51,6 @@ enum {
   PROP_CONNECTOR,
   PROP_SCALE_FACTOR,
   PROP_GEOMETRY,
-  PROP_WORKAREA,
   PROP_WIDTH_MM,
   PROP_HEIGHT_MM,
   PROP_REFRESH_RATE,
@@ -110,14 +109,6 @@ gdk_monitor_get_property (GObject    *object,
 
     case PROP_GEOMETRY:
       g_value_set_boxed (value, &monitor->geometry);
-      break;
-
-    case PROP_WORKAREA:
-      {
-        GdkRectangle workarea;
-        gdk_monitor_get_workarea (monitor, &workarea);
-        g_value_set_boxed (value, &workarea);
-      }
       break;
 
     case PROP_WIDTH_MM:
@@ -222,12 +213,6 @@ gdk_monitor_class_init (GdkMonitorClass *class)
                         "The geometry of the monitor",
                         GDK_TYPE_RECTANGLE,
                         G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
-  props[PROP_WORKAREA] =
-    g_param_spec_boxed ("workarea",
-                        "Workarea",
-                        "The workarea of the monitor",
-                        GDK_TYPE_RECTANGLE,
-                        G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
   props[PROP_WIDTH_MM] =
     g_param_spec_int ("width-mm",
                       "Physical width",
@@ -314,38 +299,6 @@ gdk_monitor_get_geometry (GdkMonitor   *monitor,
   g_return_if_fail (geometry != NULL);
 
   *geometry = monitor->geometry;
-}
-
-/**
- * gdk_monitor_get_workarea:
- * @monitor: a #GdkMonitor
- * @workarea: (out): a #GdkRectangle to be filled with
- *     the monitor workarea
- *
- * Retrieves the size and position of the “work area” on a monitor
- * within the display coordinate space. The returned geometry is in
- * ”application pixels”, not in ”device pixels” (see
- * gdk_monitor_get_scale_factor()).
- *
- * The work area should be considered when positioning menus and
- * similar popups, to avoid placing them below panels, docks or other
- * desktop components.
- *
- * Note that not all backends may have a concept of workarea. This
- * function will return the monitor geometry if a workarea is not
- * available, or does not apply.
- */
-void
-gdk_monitor_get_workarea (GdkMonitor   *monitor,
-                          GdkRectangle *workarea)
-{
-  g_return_if_fail (GDK_IS_MONITOR (monitor));
-  g_return_if_fail (workarea != NULL);
-
-  if (GDK_MONITOR_GET_CLASS (monitor)->get_workarea)
-    GDK_MONITOR_GET_CLASS (monitor)->get_workarea (monitor, workarea);
-  else
-    *workarea = monitor->geometry;
 }
 
 /**

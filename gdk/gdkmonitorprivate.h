@@ -48,9 +48,6 @@ struct _GdkMonitor {
 
 struct _GdkMonitorClass {
   GObjectClass parent_class;
-
-  void (* get_workarea) (GdkMonitor   *monitor,
-                         GdkRectangle *geometry);
 };
 
 GdkMonitor *    gdk_monitor_new                 (GdkDisplay *display);

@@ -43,6 +43,10 @@ GType             gdk_x11_monitor_get_type            (void) G_GNUC_CONST;
 GDK_AVAILABLE_IN_ALL
 XID               gdk_x11_monitor_get_output          (GdkMonitor *monitor);
 
+GDK_AVAILABLE_IN_ALL
+void              gdk_x11_monitor_get_workarea        (GdkMonitor   *monitor,
+                                                       GdkRectangle *workarea);
+
 G_END_DECLS
 
 #endif  /* __GDK_X11_MONITOR_H__ */

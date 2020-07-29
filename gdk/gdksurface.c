@@ -137,8 +137,10 @@ get_display_for_surface (GdkSurface *primary,
 }
 
 static GdkMonitor *
-get_monitor_for_rect (GdkDisplay         *display,
-                      const GdkRectangle *rect)
+get_monitor_for_rect (GdkDisplay          *display,
+                      const GdkRectangle  *rect,
+                      void               (*get_bounds) (GdkMonitor   *monitor,
+                                                        GdkRectangle *bounds))
 {
   int biggest_area = G_MININT;
   GdkMonitor *best_monitor = NULL;
@@ -152,7 +154,7 @@ get_monitor_for_rect (GdkDisplay         *display,
   for (i = 0; i < g_list_model_get_n_items (monitors); i++)
     {
       monitor = g_list_model_get_item (monitors, i);
-      gdk_monitor_get_workarea (monitor, &workarea);
+      get_bounds (monitor, &workarea);
 
       if (gdk_rectangle_intersect (&workarea, rect, &intersection))
         {
@@ -247,16 +249,35 @@ maybe_flip_position (int       bounds_pos,
   return primary;
 }
 
+GdkMonitor *
+gdk_surface_get_layout_monitor (GdkSurface      *surface,
+                                GdkPopupLayout  *layout,
+                                void           (*get_bounds) (GdkMonitor   *monitor,
+                                                              GdkRectangle *bounds))
+{
+  GdkDisplay *display;
+  GdkRectangle root_rect;
+
+  root_rect = *gdk_popup_layout_get_anchor_rect (layout);
+  gdk_surface_get_root_coords (surface->parent,
+                               root_rect.x,
+                               root_rect.y,
+                               &root_rect.x,
+                               &root_rect.y);
+
+  display = get_display_for_surface (surface, surface->transient_for);
+  return get_monitor_for_rect (display, &root_rect, get_bounds);
+}
+
 void
 gdk_surface_layout_popup_helper (GdkSurface     *surface,
                                  int             width,
                                  int             height,
+                                 GdkMonitor     *monitor,
+                                 GdkRectangle   *bounds,
                                  GdkPopupLayout *layout,
                                  GdkRectangle   *out_final_rect)
 {
-  GdkDisplay *display;
-  GdkMonitor *monitor;
-  GdkRectangle bounds;
   GdkRectangle root_rect;
   GdkGravity rect_anchor;
   GdkGravity surface_anchor;
@@ -277,10 +298,6 @@ gdk_surface_layout_popup_helper (GdkSurface     *surface,
                                &root_rect.x,
                                &root_rect.y);
 
-  display = get_display_for_surface (surface, surface->transient_for);
-  monitor = get_monitor_for_rect (display, &root_rect);
-  gdk_monitor_get_workarea (monitor, &bounds);
-
   rect_anchor = gdk_popup_layout_get_rect_anchor (layout);
   surface_anchor = gdk_popup_layout_get_surface_anchor (layout);
   gdk_popup_layout_get_offset (layout, &rect_anchor_dx, &rect_anchor_dy);
@@ -288,8 +305,8 @@ gdk_surface_layout_popup_helper (GdkSurface     *surface,
 
   final_rect.width = width - surface->shadow_left - surface->shadow_right;
   final_rect.height = height - surface->shadow_top - surface->shadow_bottom;
-  final_rect.x = maybe_flip_position (bounds.x,
-                                      bounds.width,
+  final_rect.x = maybe_flip_position (bounds->x,
+                                      bounds->width,
                                       root_rect.x,
                                       root_rect.width,
                                       final_rect.width,
@@ -298,8 +315,8 @@ gdk_surface_layout_popup_helper (GdkSurface     *surface,
                                       rect_anchor_dx,
                                       anchor_hints & GDK_ANCHOR_FLIP_X,
                                       &flipped_x);
-  final_rect.y = maybe_flip_position (bounds.y,
-                                      bounds.height,
+  final_rect.y = maybe_flip_position (bounds->y,
+                                      bounds->height,
                                       root_rect.y,
                                       root_rect.height,
                                       final_rect.height,
@@ -311,44 +328,44 @@ gdk_surface_layout_popup_helper (GdkSurface     *surface,
 
   if (anchor_hints & GDK_ANCHOR_SLIDE_X)
     {
-      if (final_rect.x + final_rect.width > bounds.x + bounds.width)
-        final_rect.x = bounds.x + bounds.width - final_rect.width;
+      if (final_rect.x + final_rect.width > bounds->x + bounds->width)
+        final_rect.x = bounds->x + bounds->width - final_rect.width;
 
-      if (final_rect.x < bounds.x)
-        final_rect.x = bounds.x;
+      if (final_rect.x < bounds->x)
+        final_rect.x = bounds->x;
     }
 
   if (anchor_hints & GDK_ANCHOR_SLIDE_Y)
     {
-      if (final_rect.y + final_rect.height > bounds.y + bounds.height)
-        final_rect.y = bounds.y + bounds.height - final_rect.height;
+      if (final_rect.y + final_rect.height > bounds->y + bounds->height)
+        final_rect.y = bounds->y + bounds->height - final_rect.height;
 
-      if (final_rect.y < bounds.y)
-        final_rect.y = bounds.y;
+      if (final_rect.y < bounds->y)
+        final_rect.y = bounds->y;
     }
 
   if (anchor_hints & GDK_ANCHOR_RESIZE_X)
     {
-      if (final_rect.x < bounds.x)
+      if (final_rect.x < bounds->x)
         {
-          final_rect.width -= bounds.x - final_rect.x;
-          final_rect.x = bounds.x;
+          final_rect.width -= bounds->x - final_rect.x;
+          final_rect.x = bounds->x;
         }
 
-      if (final_rect.x + final_rect.width > bounds.x + bounds.width)
-        final_rect.width = bounds.x + bounds.width - final_rect.x;
+      if (final_rect.x + final_rect.width > bounds->x + bounds->width)
+        final_rect.width = bounds->x + bounds->width - final_rect.x;
     }
 
   if (anchor_hints & GDK_ANCHOR_RESIZE_Y)
     {
-      if (final_rect.y < bounds.y)
+      if (final_rect.y < bounds->y)
         {
-          final_rect.height -= bounds.y - final_rect.y;
-          final_rect.y = bounds.y;
+          final_rect.height -= bounds->y - final_rect.y;
+          final_rect.y = bounds->y;
         }
 
-      if (final_rect.y + final_rect.height > bounds.y + bounds.height)
-        final_rect.height = bounds.y + bounds.height - final_rect.y;
+      if (final_rect.y + final_rect.height > bounds->y + bounds->height)
+        final_rect.height = bounds->y + bounds->height - final_rect.y;
     }
 
   final_rect.x -= surface->shadow_left;

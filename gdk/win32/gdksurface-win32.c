@@ -1293,12 +1293,20 @@ gdk_win32_surface_layout_popup (GdkSurface     *surface,
                                 int             height,
                                 GdkPopupLayout *layout)
 {
+  GdkMonitor *monitor;
+  GdkRectangle bounds;
   GdkRectangle final_rect;
   int x, y;
+
+  monitor = gdk_surface_get_layout_monitor (surface, layout,
+                                            gdk_win32_monitor_get_workarea);
+  gdk_win32_monitor_get_workarea (monitor, &bounds);
 
   gdk_surface_layout_popup_helper (surface,
                                    width,
                                    height,
+                                   monitor,
+                                   &bounds,
                                    layout,
                                    &final_rect);
 
@@ -2078,7 +2086,7 @@ calculate_aerosnap_regions (GdkW32DragMoveResizeContext *context)
 
       monitor = g_list_model_get_item (monitors, monitor_idx);
       g_object_unref (monitors);
-      gdk_monitor_get_workarea (monitor, &wa);
+      gdk_win32_monitor_get_workarea (monitor, &wa);
       gdk_monitor_get_geometry (monitor, &geometry);
 
       for (other_monitor_idx = 0;
@@ -2095,7 +2103,7 @@ calculate_aerosnap_regions (GdkW32DragMoveResizeContext *context)
 
           other_monitor = g_list_model_get_item (monitors, other_monitor_idx);
           g_object_unref (other_monitor);
-          gdk_monitor_get_workarea (other_monitor, &other_wa);
+          gdk_win32_monitor_get_workarea (other_monitor, &other_wa);
 
           /* An edge triggers AeroSnap only if there are no
            * monitors beyond that edge.
@@ -2239,7 +2247,7 @@ unsnap (GdkSurface  *window,
   if (impl->snap_stash == NULL)
     return;
 
-  gdk_monitor_get_workarea (monitor, &rect);
+  gdk_win32_monitor_get_workarea (monitor, &rect);
 
   GDK_NOTE (MISC, g_print ("Monitor work area %d x %d @ %d : %d\n", rect.width, rect.height, rect.x, rect.y));
 
@@ -2416,7 +2424,7 @@ snap_left (GdkSurface  *window,
 
   impl->snap_state = GDK_WIN32_AEROSNAP_STATE_HALFLEFT;
 
-  gdk_monitor_get_workarea (snap_monitor, &rect);
+  gdk_win32_monitor_get_workarea (snap_monitor, &rect);
 
   stash_window (window, impl);
 
@@ -2444,7 +2452,7 @@ snap_right (GdkSurface  *window,
 
   impl->snap_state = GDK_WIN32_AEROSNAP_STATE_HALFRIGHT;
 
-  gdk_monitor_get_workarea (snap_monitor, &rect);
+  gdk_win32_monitor_get_workarea (snap_monitor, &rect);
 
   stash_window (window, impl);
 
@@ -3207,7 +3215,7 @@ start_indicator (GdkSurface                   *window,
 
   display = gdk_surface_get_display (window);
   monitor = get_monitor_at_point (display, x, y);
-  gdk_monitor_get_workarea (monitor, &workarea);
+  gdk_win32_monitor_get_workarea (monitor, &workarea);
 
   maxysize = GetSystemMetrics (SM_CYVIRTUALSCREEN) / impl->surface_scale;
   start_size.x = start_size.y = 0;
