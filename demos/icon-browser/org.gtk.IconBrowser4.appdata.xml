@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop">
+  <id>org.gtk.IconBrowser4.desktop</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>LGPL-2.0+</project_license>
+  <name>GTK Icon Browser</name>
+  <summary>Program to browse themed icons</summary>
+  <description>
+    <p>
+      GTK Icon Browser is a simple application to show themed icons that
+      are available on the system.
+    </p>
+  </description>
+  <screenshots>
+  </screenshots>
+  <kudos>
+    <kudo>HiDpiIcon</kudo>
+    <kudo>ModernToolkit</kudo>
+  </kudos>
+  <url type="homepage">https://www.gtk.org</url>
+  <translation type="gettext">gtk-4.0</translation>
+  <update_contact>matthias.clasen_at_gmail.com</update_contact>
+  <developer_name>Matthias Clasen and others</developer_name>
+  <releases>
+    <release version="3.94.0" date="2018-06-25">
+      <description>
+        <p>A new developers snapshot towards GTK 4.0.</p>
+      </description>
+    </release>
+  </releases>
+</component>

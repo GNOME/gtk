@@ -18,3 +18,19 @@ executable('gtk4-icon-browser',
            gui_app: true,
            link_args: extra_demo_ldflags,
            install: true)
+
+# icons
+icontheme_dir = join_paths(gtk_datadir, 'icons/hicolor')
+
+foreach size: ['scalable', 'symbolic']
+  install_subdir('data/' + size,
+    install_dir: icontheme_dir
+  )
+endforeach
+
+# desktop file
+install_data('org.gtk.IconBrowser4.desktop', install_dir: gtk_applicationsdir)
+
+# appdata
+install_data('org.gtk.IconBrowser4.appdata.xml', install_dir: gtk_appdatadir)
+
