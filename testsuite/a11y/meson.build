@@ -24,6 +24,7 @@ tests = [
   { 'name': 'separator' },
   { 'name': 'spinbutton' },
   { 'name': 'switch' },
+  { 'name': 'textview' },
   { 'name': 'window' },
 ]
 
