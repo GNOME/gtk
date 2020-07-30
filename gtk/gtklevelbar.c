@@ -116,6 +116,10 @@
  *
  * In horizontal orientation, the nodes are always arranged from left to right,
  * regardless of text direction.
+ *
+ * # Accessibility
+ *
+ * GtkLevelBar uses the #GTK_ACCESSIBLE_ROLE_METER role.
  */
 #include "config.h"
 
@@ -1007,6 +1011,7 @@ gtk_level_bar_class_init (GtkLevelBarClass *klass)
 
   gtk_widget_class_set_layout_manager_type (wclass, GTK_TYPE_BIN_LAYOUT);
   gtk_widget_class_set_css_name (wclass, I_("levelbar"));
+  gtk_widget_class_set_accessible_role (wclass, GTK_ACCESSIBLE_ROLE_METER);
 }
 
 static void
@@ -1041,6 +1046,12 @@ gtk_level_bar_init (GtkLevelBar *self)
   update_mode_style_classes (self);
   update_block_nodes (self);
   update_level_style_classes (self);
+
+  gtk_accessible_update_property (GTK_ACCESSIBLE (self),
+                                  GTK_ACCESSIBLE_PROPERTY_VALUE_MAX, 1.0,
+                                  GTK_ACCESSIBLE_PROPERTY_VALUE_MIN, 0.0,
+                                  GTK_ACCESSIBLE_PROPERTY_VALUE_NOW, 0.0,
+                                  -1);
 }
 
 /**
@@ -1163,6 +1174,12 @@ gtk_level_bar_set_min_value (GtkLevelBar *self,
 
   update_block_nodes (self);
   update_level_style_classes (self);
+
+  gtk_accessible_update_property (GTK_ACCESSIBLE (self),
+                                  GTK_ACCESSIBLE_PROPERTY_VALUE_MIN, self->min_value,
+                                  GTK_ACCESSIBLE_PROPERTY_VALUE_NOW, self->cur_value,
+                                  -1);
+
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_MIN_VALUE]);
 }
 
@@ -1194,6 +1211,12 @@ gtk_level_bar_set_max_value (GtkLevelBar *self,
   gtk_level_bar_ensure_offsets_in_range (self);
   update_block_nodes (self);
   update_level_style_classes (self);
+
+  gtk_accessible_update_property (GTK_ACCESSIBLE (self),
+                                  GTK_ACCESSIBLE_PROPERTY_VALUE_MAX, self->max_value,
+                                  GTK_ACCESSIBLE_PROPERTY_VALUE_NOW, self->cur_value,
+                                  -1);
+
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_MAX_VALUE]);
 }
 
@@ -1216,6 +1239,10 @@ gtk_level_bar_set_value (GtkLevelBar *self,
 
   gtk_level_bar_set_value_internal (self, value);
   update_level_style_classes (self);
+
+  gtk_accessible_update_property (GTK_ACCESSIBLE (self),
+                                  GTK_ACCESSIBLE_PROPERTY_VALUE_NOW, self->cur_value,
+                                  -1);
 }
 
 /**

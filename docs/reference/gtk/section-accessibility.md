@@ -45,14 +45,13 @@ Each role name is part of the #GtkAccessibleRole enumeration.
 
 | Role name | Description | Related GTK widget |
 |-----------|-------------|--------------------|
-| `ALERT` | A message with important information | - |
 | `BUTTON` | A control that performs an action when pressed | #GtkButton, #GtkLinkButton, #GtkExpander |
 | `CHECKBOX` | A control that has three possible value: `true`, `false`, or `undefined` | #GtkCheckButton |
-| `COLUMNHEADER` | The header of a column in a list or grid | - |
 | `COMBOBOX` | A control that can be expanded to show a list of possible values to select | #GtkComboBox |
 | `DIALOG` | A dialog that prompts the user to enter information or require a response | #GtkDialog and subclasses |
 | `IMG` | An image | #GtkImage, #GtkPicture |
-| `LABEL` | A visible name or caption for a user interface component. | #GtkLabel |
+| `LABEL` | A visible name or caption for a user interface component | #GtkLabel |
+| `METER` | Represents a value within a known range | #GtkLevelBar |
 | `PROGRESS_BAR` | An element that display progress | #GtkProgressBar |
 | `RADIO` | A checkable input in a group of radio roles | #GtkRadioButton |
 | `SCROLLBAR` | A graphical object controlling the scolling of content | #GtkScrollbar |

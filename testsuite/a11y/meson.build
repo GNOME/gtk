@@ -18,6 +18,7 @@ tests = [
   { 'name': 'expander' },
   { 'name': 'image' },
   { 'name': 'label' },
+  { 'name': 'levelbar' },
   { 'name': 'passwordentry' },
   { 'name': 'progressbar' },
   { 'name': 'scrollbar' },
