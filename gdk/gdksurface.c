@@ -1429,7 +1429,7 @@ gdk_surface_queue_expose (GdkSurface *surface)
   cairo_region_destroy (region);
 }
 
-/**
+/*
  * gdk_surface_invalidate_region:
  * @surface: a #GdkSurface
  * @region: a #cairo_region_t
@@ -1469,7 +1469,7 @@ gdk_surface_invalidate_region (GdkSurface          *surface,
   cairo_region_destroy (visible_region);
 }
 
-/**
+/*
  * _gdk_surface_clear_update_area:
  * @surface: a #GdkSurface.
  *
@@ -1490,7 +1490,7 @@ _gdk_surface_clear_update_area (GdkSurface *surface)
     }
 }
 
-/**
+/*
  * gdk_surface_freeze_updates:
  * @surface: a #GdkSurface
  *
@@ -1510,7 +1510,7 @@ gdk_surface_freeze_updates (GdkSurface *surface)
     _gdk_frame_clock_uninhibit_freeze (surface->frame_clock);
 }
 
-/**
+/*
  * gdk_surface_thaw_updates:
  * @surface: a #GdkSurface
  *

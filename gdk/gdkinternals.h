@@ -394,6 +394,10 @@ void gdk_surface_begin_move_drag              (GdkSurface     *surface,
                                                int             y,
                                                guint32         timestamp);
 
+void       gdk_surface_freeze_updates      (GdkSurface    *surface);
+void       gdk_surface_thaw_updates        (GdkSurface    *surface);
+
+
 G_END_DECLS
 
 #endif /* __GDK_INTERNALS_H__ */

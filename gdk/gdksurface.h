@@ -209,11 +209,6 @@ GDK_AVAILABLE_IN_ALL
 void       gdk_surface_queue_expose              (GdkSurface          *surface);
 
 GDK_AVAILABLE_IN_ALL
-void       gdk_surface_freeze_updates      (GdkSurface    *surface);
-GDK_AVAILABLE_IN_ALL
-void       gdk_surface_thaw_updates        (GdkSurface    *surface);
-
-GDK_AVAILABLE_IN_ALL
 GdkFrameClock* gdk_surface_get_frame_clock      (GdkSurface     *surface);
 
 GDK_AVAILABLE_IN_ALL
