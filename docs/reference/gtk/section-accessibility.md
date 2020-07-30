@@ -46,7 +46,7 @@ Each role name is part of the #GtkAccessibleRole enumeration.
 | Role name | Description | Related GTK widget |
 |-----------|-------------|--------------------|
 | `ALERT` | A message with important information | - |
-| `BUTTON` | A control that performs an action when pressed | #GtkButton, #GtkLinkButton |
+| `BUTTON` | A control that performs an action when pressed | #GtkButton, #GtkLinkButton, #GtkExpander |
 | `CHECKBOX` | A control that has three possible value: `true`, `false`, or `undefined` | #GtkCheckButton |
 | `COLUMNHEADER` | The header of a column in a list or grid | - |
 | `COMBOBOX` | A control that can be expanded to show a list of possible values to select | #GtkComboBox |
