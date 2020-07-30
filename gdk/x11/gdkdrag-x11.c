@@ -2208,11 +2208,13 @@ gdk_dnd_handle_key_event (GdkDrag  *drag,
   GdkX11Drag *x11_drag = GDK_X11_DRAG (drag);
   GdkModifierType state;
   GdkDevice *pointer;
+  GdkSeat *seat;
   int dx, dy;
 
   dx = dy = 0;
   state = gdk_event_get_modifier_state (event);
-  pointer = gdk_device_get_associated_device (gdk_event_get_device (event));
+  seat = gdk_event_get_seat (event);
+  pointer = gdk_seat_get_pointer (seat);
 
   if (event->event_type == GDK_KEY_PRESS)
     {

@@ -914,7 +914,7 @@ handle_hierarchy_changed (GdkX11DeviceManagerXI2 *device_manager,
       else if (ev->info[i].flags & XISlaveAttached ||
                ev->info[i].flags & XISlaveDetached)
         {
-          GdkDevice *logical, *physical;
+          GdkDevice *logical = NULL, *physical;
           GdkSeat *seat;
 
           physical = g_hash_table_lookup (device_manager->id_table,
@@ -923,17 +923,8 @@ handle_hierarchy_changed (GdkX11DeviceManagerXI2 *device_manager,
           if (!physical)
             continue;
 
-          /* Remove old logical device info */
-          logical = gdk_device_get_associated_device (physical);
-
-          if (logical != NULL)
-            {
-              _gdk_device_remove_physical_device (logical, physical);
-              _gdk_device_set_associated_device (physical, NULL);
-
-              seat = gdk_device_get_seat (logical);
-              gdk_seat_default_remove_physical_device (GDK_SEAT_DEFAULT (seat), physical);
-            }
+          seat = gdk_device_get_seat (physical);
+          gdk_seat_default_remove_physical_device (GDK_SEAT_DEFAULT (seat), physical);
 
           /* Add new logical device if it's an attachment event */
           if (ev->info[i].flags & XISlaveAttached)

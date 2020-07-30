@@ -235,16 +235,6 @@ gdk_x11_device_xi2_query_state (GdkDevice        *device,
       scale = GDK_X11_SURFACE (surface)->surface_scale;
     }
 
-  if (gdk_device_get_device_type (device) == GDK_DEVICE_TYPE_PHYSICAL)
-    {
-      GdkDevice *logical = gdk_device_get_associated_device (device);
-
-      if (logical != NULL)
-        _gdk_device_query_state (logical, surface, child_surface,
-                                 win_x, win_y, mask);
-      return;
-    }
-
   if (!GDK_X11_DISPLAY (display)->trusted_client ||
       !XIQueryPointer (GDK_DISPLAY_XDISPLAY (display),
                        device_xi2->device_id,
