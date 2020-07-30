@@ -1038,8 +1038,10 @@ gdk_display_get_primary_clipboard (GdkDisplay *display)
  * gdk_display_supports_input_shapes:
  * @display: a #GdkDisplay
  *
- * Returns %TRUE if gdk_surface_input_shape_combine_mask() can
+ * Returns %TRUE if gdk_surface_set_input_region() can
  * be used to modify the input shape of surfaces on @display.
+ *
+ * On modern displays, this value is always %TRUE.
  *
  * Returns: %TRUE if surfaces with modified input shape are supported
  */
