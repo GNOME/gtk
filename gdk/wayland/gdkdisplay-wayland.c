@@ -846,14 +846,6 @@ gdk_wayland_display_has_pending (GdkDisplay *display)
   return FALSE;
 }
 
-static GdkSurface *
-gdk_wayland_display_get_default_group (GdkDisplay *display)
-{
-  g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
-
-  return NULL;
-}
-
 static gulong
 gdk_wayland_display_get_next_serial (GdkDisplay *display)
 {
@@ -1012,7 +1004,6 @@ gdk_wayland_display_class_init (GdkWaylandDisplayClass *class)
   display_class->make_default = gdk_wayland_display_make_default;
   display_class->has_pending = gdk_wayland_display_has_pending;
   display_class->queue_events = _gdk_wayland_display_queue_events;
-  display_class->get_default_group = gdk_wayland_display_get_default_group;
   display_class->get_app_launch_context = _gdk_wayland_display_get_app_launch_context;
   display_class->get_next_serial = gdk_wayland_display_get_next_serial;
   display_class->get_startup_notification_id = gdk_wayland_display_get_startup_notification_id;

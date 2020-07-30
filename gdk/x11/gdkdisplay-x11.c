@@ -1829,7 +1829,18 @@ gdk_x11_display_has_pending (GdkDisplay *display)
   return XPending (GDK_DISPLAY_XDISPLAY (display));
 }
 
-static GdkSurface *
+/**
+ * gdk_x11_display_get_default_group:
+ * @display: a #GdkDisplay
+ *
+ * Returns the default group leader surface for all toplevel surfaces
+ * on @display. This surface is implicitly created by GDK.
+ * See gdk_surface_set_group().
+ *
+ * Returns: (transfer none): The default group leader surface
+ * for @display
+ */
+GdkSurface *
 gdk_x11_display_get_default_group (GdkDisplay *display)
 {
   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
@@ -2937,7 +2948,6 @@ gdk_x11_display_class_init (GdkX11DisplayClass * class)
   display_class->make_default = gdk_x11_display_make_default;
   display_class->has_pending = gdk_x11_display_has_pending;
   display_class->queue_events = _gdk_x11_display_queue_events;
-  display_class->get_default_group = gdk_x11_display_get_default_group;
   display_class->get_app_launch_context = _gdk_x11_display_get_app_launch_context;
 
   display_class->get_next_serial = gdk_x11_display_get_next_serial;

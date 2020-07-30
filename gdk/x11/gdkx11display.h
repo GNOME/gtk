@@ -128,6 +128,9 @@ void                           gdk_x11_display_error_trap_pop_ignored (GdkDispla
 GDK_AVAILABLE_IN_ALL
 void        gdk_x11_set_sm_client_id (const char *sm_client_id);
 
+GDK_AVAILABLE_IN_ALL
+GdkSurface * gdk_x11_display_get_default_group (GdkDisplay *display);
+
 G_END_DECLS
 
 #endif /* __GDK_X11_DISPLAY_H__ */

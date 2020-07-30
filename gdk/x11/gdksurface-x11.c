@@ -3392,7 +3392,7 @@ gdk_x11_surface_set_group (GdkSurface *surface,
   toplevel = _gdk_x11_surface_get_toplevel (surface);
 
   if (leader == NULL)
-    leader = gdk_display_get_default_group (gdk_surface_get_display (surface));
+    leader = gdk_x11_display_get_default_group (gdk_surface_get_display (surface));
   
   if (toplevel->group_leader != leader)
     {

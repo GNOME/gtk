@@ -265,14 +265,6 @@ gdk_broadway_display_has_pending (GdkDisplay *display)
   return FALSE;
 }
 
-static GdkSurface *
-gdk_broadway_display_get_default_group (GdkDisplay *display)
-{
-  g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
-
-  return NULL;
-}
-
 static void
 gdk_broadway_display_dispose (GObject *object)
 {
@@ -441,7 +433,6 @@ gdk_broadway_display_class_init (GdkBroadwayDisplayClass * class)
   display_class->flush = gdk_broadway_display_flush;
   display_class->has_pending = gdk_broadway_display_has_pending;
   display_class->queue_events = _gdk_broadway_display_queue_events;
-  display_class->get_default_group = gdk_broadway_display_get_default_group;
 
   display_class->get_next_serial = gdk_broadway_display_get_next_serial;
   display_class->notify_startup_complete = gdk_broadway_display_notify_startup_complete;
