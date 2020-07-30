@@ -65,7 +65,6 @@ test_default_seat (void)
   if ((caps & GDK_SEAT_CAPABILITY_POINTER) != 0)
     {
       g_assert_nonnull (pointer0);
-      g_assert (gdk_device_get_device_type (pointer0) == GDK_DEVICE_TYPE_LOGICAL);
       g_assert (gdk_device_get_display (pointer0) == display);
       g_assert (gdk_device_get_seat (pointer0) == seat0);
 
@@ -73,7 +72,6 @@ test_default_seat (void)
       for (l = physical_devices; l; l = l->next)
         {
           device = l->data;
-          g_assert (gdk_device_get_device_type (device) == GDK_DEVICE_TYPE_PHYSICAL);
           g_assert (gdk_device_get_display (device) == display);
           g_assert (gdk_device_get_seat (device) == seat0);
         }
@@ -91,7 +89,6 @@ test_default_seat (void)
   if ((caps & GDK_SEAT_CAPABILITY_KEYBOARD) != 0)
     {
       g_assert_nonnull (keyboard0);
-      g_assert (gdk_device_get_device_type (keyboard0) == GDK_DEVICE_TYPE_LOGICAL);
       g_assert (gdk_device_get_display (keyboard0) == display);
       g_assert (gdk_device_get_seat (keyboard0) == seat0);
       g_assert (gdk_device_get_source (keyboard0) == GDK_SOURCE_KEYBOARD);
@@ -100,7 +97,6 @@ test_default_seat (void)
       for (l = physical_devices; l; l = l->next)
         {
           device = l->data;
-          g_assert (gdk_device_get_device_type (device) == GDK_DEVICE_TYPE_PHYSICAL);
           g_assert (gdk_device_get_display (device) == display);
           g_assert (gdk_device_get_seat (device) == seat0);
           g_assert (gdk_device_get_source (device) == GDK_SOURCE_KEYBOARD);

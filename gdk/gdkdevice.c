@@ -86,7 +86,6 @@ enum {
   PROP_0,
   PROP_DISPLAY,
   PROP_NAME,
-  PROP_TYPE,
   PROP_SOURCE,
   PROP_HAS_CURSOR,
   PROP_N_AXES,
@@ -140,19 +139,6 @@ gdk_device_class_init (GdkDeviceClass *klass)
                            NULL,
                            G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY |
                            G_PARAM_STATIC_STRINGS);
-  /**
-   * GdkDevice:type:
-   *
-   * Device role in the device manager.
-   */
-  device_props[PROP_TYPE] =
-      g_param_spec_enum ("type",
-                         P_("Device type"),
-                         P_("Device role in the device manager"),
-                         GDK_TYPE_DEVICE_TYPE,
-                         GDK_DEVICE_TYPE_LOGICAL,
-                         G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY |
-                         G_PARAM_STATIC_STRINGS);
 
   /**
    * GdkDevice:source:
@@ -171,8 +157,7 @@ gdk_device_class_init (GdkDeviceClass *klass)
   /**
    * GdkDevice:has-cursor:
    *
-   * Whether the device is represented by a cursor on the screen. Devices of type
-   * %GDK_DEVICE_TYPE_LOGICAL will have %TRUE here.
+   * Whether the device is represented by a cursor on the screen.
    */
   device_props[PROP_HAS_CURSOR] =
       g_param_spec_boolean ("has-cursor",
@@ -368,15 +353,14 @@ gdk_device_dispose (GObject *object)
   GdkDevice *device = GDK_DEVICE (object);
   GdkDevice *associated = device->associated;
 
-  if (associated && device->type == GDK_DEVICE_TYPE_PHYSICAL)
+  if (associated)
     _gdk_device_remove_physical_device (associated, device);
 
   if (associated)
     {
       device->associated = NULL;
 
-      if (device->type == GDK_DEVICE_TYPE_LOGICAL &&
-          associated->associated == device)
+      if (associated->associated == device)
         _gdk_device_set_associated_device (associated, NULL);
 
       g_object_unref (associated);
@@ -404,9 +388,6 @@ gdk_device_set_property (GObject      *object,
       g_free (device->name);
 
       device->name = g_value_dup_string (value);
-      break;
-    case PROP_TYPE:
-      device->type = g_value_get_enum (value);
       break;
     case PROP_SOURCE:
       device->source = g_value_get_enum (value);
@@ -447,9 +428,6 @@ gdk_device_get_property (GObject    *object,
       break;
     case PROP_NAME:
       g_value_set_string (value, device->name);
-      break;
-    case PROP_TYPE:
-      g_value_set_enum (value, device->type);
       break;
     case PROP_SOURCE:
       g_value_set_enum (value, device->source);
@@ -514,8 +492,6 @@ gdk_device_get_position (GdkDevice *device,
 {
   g_return_if_fail (GDK_IS_DEVICE (device));
   g_return_if_fail (device->source != GDK_SOURCE_KEYBOARD);
-  g_return_if_fail (gdk_device_get_device_type (device) != GDK_DEVICE_TYPE_PHYSICAL ||
-                    gdk_display_device_is_grabbed (gdk_device_get_display (device), device));
 
   _gdk_device_query_state (device, NULL, NULL, x, y, NULL);
 }
@@ -532,10 +508,6 @@ gdk_device_get_position (GdkDevice *device,
  * double precision. Returns %NULL if the surface tree under @device is not known to GDK (for example,
  * belongs to another application).
  *
- * As a physical device coordinates are those of its logical pointer, this
- * function may not be called on devices of type %GDK_DEVICE_TYPE_PHYSICAL,
- * unless there is an ongoing grab on them, see gdk_seat_grab().
- *
  * Returns: (nullable) (transfer none): the #GdkSurface under the
  *   device position, or %NULL.
  **/
@@ -549,8 +521,6 @@ gdk_device_get_surface_at_position (GdkDevice *device,
 
   g_return_val_if_fail (GDK_IS_DEVICE (device), NULL);
   g_return_val_if_fail (device->source != GDK_SOURCE_KEYBOARD, NULL);
-  g_return_val_if_fail (gdk_device_get_device_type (device) != GDK_DEVICE_TYPE_PHYSICAL ||
-                        gdk_display_device_is_grabbed (gdk_device_get_display (device), device), NULL);
 
   surface = _gdk_device_surface_at_position (device, &tmp_x, &tmp_y, NULL);
 
@@ -652,18 +622,6 @@ gdk_device_get_display (GdkDevice *device)
   return device->display;
 }
 
-static void
-_gdk_device_set_device_type (GdkDevice     *device,
-                             GdkDeviceType  type)
-{
-  if (device->type != type)
-    {
-      device->type = type;
-
-      g_object_notify_by_pspec (G_OBJECT (device), device_props[PROP_TYPE]);
-    }
-}
-
 void
 _gdk_device_set_associated_device (GdkDevice *device,
                                    GdkDevice *associated)
@@ -682,14 +640,6 @@ _gdk_device_set_associated_device (GdkDevice *device,
 
   if (associated)
     device->associated = g_object_ref (associated);
-
-  if (device->type != GDK_DEVICE_TYPE_LOGICAL)
-    {
-      if (device->associated)
-        _gdk_device_set_device_type (device, GDK_DEVICE_TYPE_PHYSICAL);
-      else
-        _gdk_device_set_device_type (device, GDK_DEVICE_TYPE_FLOATING);
-    }
 }
 
 /**
@@ -706,7 +656,6 @@ GList *
 gdk_device_list_physical_devices (GdkDevice *device)
 {
   g_return_val_if_fail (GDK_IS_DEVICE (device), NULL);
-  g_return_val_if_fail (gdk_device_get_device_type (device) == GDK_DEVICE_TYPE_LOGICAL, NULL);
 
   return g_list_copy (device->physical_devices);
 }
@@ -715,9 +664,6 @@ void
 _gdk_device_add_physical_device (GdkDevice *device,
                                  GdkDevice *physical)
 {
-  g_return_if_fail (gdk_device_get_device_type (device) == GDK_DEVICE_TYPE_LOGICAL);
-  g_return_if_fail (gdk_device_get_device_type (physical) != GDK_DEVICE_TYPE_LOGICAL);
-
   if (!g_list_find (device->physical_devices, physical))
     device->physical_devices = g_list_prepend (device->physical_devices, physical);
 }
@@ -728,30 +674,11 @@ _gdk_device_remove_physical_device (GdkDevice *device,
 {
   GList *elem;
 
-  g_return_if_fail (gdk_device_get_device_type (device) == GDK_DEVICE_TYPE_LOGICAL);
-  g_return_if_fail (gdk_device_get_device_type (physical) != GDK_DEVICE_TYPE_LOGICAL);
-
   elem = g_list_find (device->physical_devices, physical);
   if (elem == NULL)
     return;
 
   device->physical_devices = g_list_delete_link (device->physical_devices, elem);
-}
-
-/**
- * gdk_device_get_device_type:
- * @device: a #GdkDevice
- *
- * Returns the device type for @device.
- *
- * Returns: the #GdkDeviceType for @device.
- **/
-GdkDeviceType
-gdk_device_get_device_type (GdkDevice *device)
-{
-  g_return_val_if_fail (GDK_IS_DEVICE (device), GDK_DEVICE_TYPE_LOGICAL);
-
-  return device->type;
 }
 
 /**
@@ -1225,7 +1152,6 @@ const char *
 gdk_device_get_vendor_id (GdkDevice *device)
 {
   g_return_val_if_fail (GDK_IS_DEVICE (device), NULL);
-  g_return_val_if_fail (gdk_device_get_device_type (device) != GDK_DEVICE_TYPE_LOGICAL, NULL);
 
   return device->vendor_id;
 }
@@ -1244,7 +1170,6 @@ const char *
 gdk_device_get_product_id (GdkDevice *device)
 {
   g_return_val_if_fail (GDK_IS_DEVICE (device), NULL);
-  g_return_val_if_fail (gdk_device_get_device_type (device) != GDK_DEVICE_TYPE_LOGICAL, NULL);
 
   return device->product_id;
 }
@@ -1285,7 +1210,6 @@ gdk_device_update_tool (GdkDevice     *device,
                         GdkDeviceTool *tool)
 {
   g_return_if_fail (GDK_IS_DEVICE (device));
-  g_return_if_fail (gdk_device_get_device_type (device) != GDK_DEVICE_TYPE_LOGICAL);
 
   if (g_set_object (&device->last_tool, tool))
     {

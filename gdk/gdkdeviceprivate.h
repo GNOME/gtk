@@ -39,7 +39,6 @@ struct _GdkDevice
   char *name;
   GdkInputSource source;
   gboolean has_cursor;
-  GdkDeviceType type;
   GdkDisplay *display;
   /* The paired logical device for logical devices,
    * or the associated logical device for physical ones

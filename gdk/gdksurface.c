@@ -1840,7 +1840,6 @@ gdk_surface_get_device_cursor (GdkSurface *surface,
   g_return_val_if_fail (GDK_IS_SURFACE (surface), NULL);
   g_return_val_if_fail (GDK_IS_DEVICE (device), NULL);
   g_return_val_if_fail (gdk_device_get_source (device) != GDK_SOURCE_KEYBOARD, NULL);
-  g_return_val_if_fail (gdk_device_get_device_type (device) == GDK_DEVICE_TYPE_LOGICAL, NULL);
 
   return g_hash_table_lookup (surface->device_cursor, device);
 }
@@ -1866,7 +1865,6 @@ gdk_surface_set_device_cursor (GdkSurface *surface,
   g_return_if_fail (GDK_IS_SURFACE (surface));
   g_return_if_fail (GDK_IS_DEVICE (device));
   g_return_if_fail (gdk_device_get_source (device) != GDK_SOURCE_KEYBOARD);
-  g_return_if_fail (gdk_device_get_device_type (device) == GDK_DEVICE_TYPE_LOGICAL);
 
   if (!cursor)
     g_hash_table_remove (surface->device_cursor, device);
