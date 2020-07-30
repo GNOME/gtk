@@ -177,7 +177,7 @@ gtk_at_context_class_init (GtkATContextClass *klass)
    * @self: the #GtkATContext
    * @changed_states: flags for the changed states
    * @changed_properties: flags for the changed properties
-   * @changed_relations,
+   * @changed_relations:
    * @states: the new states
    * @properties: the new properties
    * @relations: the new relations
