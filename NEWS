@@ -69,9 +69,10 @@ Overview of Changes in GTK 3.99.0
  - Clean up GdkDevice api
  - Drop the master/slave device split
  - Move axes to GdkDeviceTool
+ - Change monitor workarea to be per-backend API
  - Improve frame clock accuracy
  - Add a new macOS backend
- - Change monitor workarea to be per-backend API
+ - Add an ANGLE-based GLES renderer for Windows
 
 * GSK:
  - Use GL_ARB_framebuffer_object
