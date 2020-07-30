@@ -1834,9 +1834,10 @@ gtk_window_root_get_focus (GtkRoot *root)
   return priv->focus_widget;
 }
 
-static void synthesize_focus_change_events (GtkWindow *window,
-                                            GtkWidget *old_focus,
-                                            GtkWidget *new_focus);
+static void synthesize_focus_change_events (GtkWindow       *window,
+                                            GtkWidget       *old_focus,
+                                            GtkWidget       *new_focus,
+                                            GtkCrossingType  type);
 
 static void
 gtk_window_root_set_focus (GtkRoot   *root,
@@ -1859,7 +1860,7 @@ gtk_window_root_set_focus (GtkRoot   *root,
   if (old_focus)
     gtk_widget_set_has_focus (old_focus, FALSE);
 
-  synthesize_focus_change_events (self, old_focus, focus);
+  synthesize_focus_change_events (self, old_focus, focus, GTK_CROSSING_FOCUS);
 
   if (focus)
     gtk_widget_set_has_focus (focus, TRUE);
@@ -4984,9 +4985,10 @@ check_crossing_invariants (GtkWidget *widget,
 }
 
 static void
-synthesize_focus_change_events (GtkWindow *window,
-                                GtkWidget *old_focus,
-                                GtkWidget *new_focus)
+synthesize_focus_change_events (GtkWindow       *window,
+                                GtkWidget       *old_focus,
+                                GtkWidget       *new_focus,
+                                GtkCrossingType  type)
 {
   GtkCrossingData crossing;
   GtkWidget *ancestor;
@@ -5005,7 +5007,7 @@ synthesize_focus_change_events (GtkWindow *window,
   if (gtk_window_get_focus_visible (GTK_WINDOW (window)))
     flags |= GTK_STATE_FLAG_FOCUS_VISIBLE;
 
-  crossing.type = GTK_CROSSING_FOCUS;
+  crossing.type = type;
   crossing.mode = GDK_CROSSING_NORMAL;
   crossing.old_target = old_focus;
   crossing.old_descendent = NULL;
@@ -5038,7 +5040,7 @@ synthesize_focus_change_events (GtkWindow *window,
         {
           crossing.new_descendent = NULL;
         }
-      
+
       check_crossing_invariants (widget, &crossing);
       gtk_widget_handle_crossing (widget, &crossing, 0, 0);
       gtk_widget_unset_state_flags (widget, flags);
@@ -6303,14 +6305,14 @@ gtk_window_keys_changed (GtkWindow *window)
  * _gtk_window_set_is_active:
  * @window: a #GtkWindow
  * @is_active: %TRUE if the window is in the currently active toplevel
- * 
+ *
  * Internal function that sets whether the #GtkWindow is part
  * of the currently active toplevel window (taking into account inter-process
  * embedding.)
  **/
 static void
 _gtk_window_set_is_active (GtkWindow *window,
-			   gboolean   is_active)
+                           gboolean   is_active)
 {
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
 
@@ -6318,6 +6320,20 @@ _gtk_window_set_is_active (GtkWindow *window,
     return;
 
   priv->is_active = is_active;
+
+  if (priv->focus_widget)
+    {
+      GtkWidget *focus;
+
+      focus = g_object_ref (priv->focus_widget);
+
+      if (is_active)
+        synthesize_focus_change_events (window, NULL, focus, GTK_CROSSING_ACTIVE);
+      else
+        synthesize_focus_change_events (window, focus, NULL, GTK_CROSSING_ACTIVE);
+
+      g_object_unref (focus);
+    }
 
   g_object_notify_by_pspec (G_OBJECT (window), window_props[PROP_IS_ACTIVE]);
 }
