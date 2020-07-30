@@ -173,7 +173,7 @@ main (int argc, char **argv)
   node_file = argv[1];
   png_file = argv[2];
 
-  window = gdk_surface_new_toplevel (gdk_display_get_default(), 10 , 10);
+  window = gdk_surface_new_toplevel (gdk_display_get_default());
   renderer = gsk_renderer_new_for_surface (window);
 
   g_print ("Node file: '%s'\n", node_file);

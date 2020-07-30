@@ -47,6 +47,7 @@ gdk_public_sources = files([
   'gdkprofiler.c',
   'gdkpopup.c',
   'gdktoplevellayout.c',
+  'gdktoplevelsize.c',
   'gdktoplevel.c',
   'gdkdragsurface.c',
 ])
@@ -95,6 +96,7 @@ gdk_public_headers = files([
   'gdkpopuplayout.h',
   'gdkpopup.h',
   'gdktoplevellayout.h',
+  'gdktoplevelsize.h',
   'gdktoplevel.h',
   'gdkdragsurface.h',
 ])
@@ -107,6 +109,7 @@ gdk_private_h_sources = files([
   'gdkdevicetoolprivate.h',
   'gdkmonitorprivate.h',
   'gdkseatdefaultprivate.h',
+  'gdktoplevelsizeprivate.h',
 ])
 
 gdk_gresource_xml = configure_file(output : 'gdk.gresource.xml',

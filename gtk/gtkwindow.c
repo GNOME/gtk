@@ -471,9 +471,7 @@ static void _gtk_window_set_is_active (GtkWindow *window,
 			               gboolean   is_active);
 static void gtk_window_present_toplevel (GtkWindow *window);
 static void gtk_window_update_toplevel (GtkWindow *window);
-static GdkToplevelLayout * gtk_window_compute_layout (GtkWindow *window,
-                                                      int        min_width,
-                                                      int        min_height);
+static GdkToplevelLayout * gtk_window_compute_layout (GtkWindow *window);
 
 static void gtk_window_release_application (GtkWindow *window);
 
@@ -3839,14 +3837,12 @@ gtk_window_hide (GtkWidget *widget)
 }
 
 static GdkToplevelLayout *
-gtk_window_compute_layout (GtkWindow *window,
-                           int        min_width,
-                           int        min_height)
+gtk_window_compute_layout (GtkWindow *window)
 {
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
   GdkToplevelLayout *layout;
 
-  layout = gdk_toplevel_layout_new (min_width, min_height);
+  layout = gdk_toplevel_layout_new ();
 
   gdk_toplevel_layout_set_resizable (layout, priv->resizable);
   gdk_toplevel_layout_set_maximized (layout, priv->maximize_initially);
@@ -3861,23 +3857,11 @@ static void
 gtk_window_present_toplevel (GtkWindow *window)
 {
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-  GdkRectangle request;
-  GdkGeometry geometry;
-  GdkSurfaceHints flags;
-
-  gtk_window_compute_configure_request (window, &request,
-                                        &geometry, &flags);
-
-  if (!(flags & GDK_HINT_MIN_SIZE))
-    geometry.min_width = geometry.min_height = 1;
 
   if (!priv->layout)
-    priv->layout = gtk_window_compute_layout (window, geometry.min_width, geometry.min_height);
+    priv->layout = gtk_window_compute_layout (window);
 
-  gdk_toplevel_present (GDK_TOPLEVEL (priv->surface),
-                        request.width,
-                        request.height,
-                        priv->layout);
+  gdk_toplevel_present (GDK_TOPLEVEL (priv->surface), priv->layout);
 }
 
 static void
@@ -3887,22 +3871,10 @@ gtk_window_update_toplevel (GtkWindow *window)
   
   if (priv->surface && gdk_surface_get_mapped (priv->surface))
     {
-      int min_width = 1;
-      int  min_height = 1;
-
-      if (priv->layout)
-        {
-          min_width = gdk_toplevel_layout_get_min_width (priv->layout);
-          min_height = gdk_toplevel_layout_get_min_height (priv->layout);
-        }
-
       g_clear_pointer (&priv->layout, gdk_toplevel_layout_unref);
-      priv->layout = gtk_window_compute_layout (window, min_width, min_height);
+      priv->layout = gtk_window_compute_layout (window);
 
-      gdk_toplevel_present (GDK_TOPLEVEL (priv->surface),
-                            gdk_surface_get_width (priv->surface),
-                            gdk_surface_get_height (priv->surface),
-                            priv->layout);
+      gdk_toplevel_present (GDK_TOPLEVEL (priv->surface), priv->layout);
     }
 }
 
@@ -3929,9 +3901,6 @@ gtk_window_map (GtkWidget *widget)
     gdk_toplevel_minimize (GDK_TOPLEVEL (priv->surface));
 
   gtk_window_set_theme_variant (window);
-
-  /* No longer use the default settings */
-  priv->need_default_size = FALSE;
 
   if (!disable_startup_notification)
     {
@@ -4014,7 +3983,7 @@ gtk_window_guess_default_size (GtkWindow *window,
   GtkWidget *widget;
   GdkSurface *surface;
   GdkDisplay *display;
-  GdkMonitor *monitor;
+  GdkMonitor *monitor = NULL;
   GdkRectangle geometry;
   int minimum, natural;
 
@@ -4025,21 +3994,22 @@ gtk_window_guess_default_size (GtkWindow *window,
   if (surface)
     {
       monitor = gdk_display_get_monitor_at_surface (display, surface);
+      if (monitor)
+        g_object_ref (monitor);
+    }
+
+  if (!monitor)
+    monitor = g_list_model_get_item (gdk_display_get_monitors (display), 0);
+
+  if (monitor)
+    {
       gdk_monitor_get_geometry (monitor, &geometry);
+      g_object_unref (monitor);
     }
   else
     {
-      monitor = g_list_model_get_item (gdk_display_get_monitors (display), 0);
-      if (monitor)
-        {
-          gdk_monitor_get_geometry (monitor, &geometry);
-          g_object_unref (monitor);
-        }
-      else
-        {
-          geometry.width = G_MAXINT;
-          geometry.height = G_MAXINT;
-        }
+      geometry.width = G_MAXINT;
+      geometry.height = G_MAXINT;
     }
 
   *width = geometry.width;
@@ -4278,13 +4248,149 @@ update_realized_window_properties (GtkWindow *window)
 }
 
 static void
+gtk_window_compute_default_size (GtkWindow *window,
+                                 int        max_width,
+                                 int        max_height,
+                                 int       *width,
+                                 int       *height)
+{
+  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
+  GtkWidget *widget = GTK_WIDGET (window);
+
+  *width = max_width;
+  *height = max_height;
+  if (gtk_widget_get_request_mode (widget) == GTK_SIZE_REQUEST_WIDTH_FOR_HEIGHT)
+    {
+      int minimum, natural;
+
+      gtk_widget_measure (widget, GTK_ORIENTATION_VERTICAL, -1,
+                          &minimum, &natural,
+                          NULL, NULL);
+      *height = MAX (minimum, MIN (*height, natural));
+
+      gtk_widget_measure (widget, GTK_ORIENTATION_HORIZONTAL,
+                          *height,
+                          &minimum, &natural,
+                          NULL, NULL);
+      *width = MAX (minimum, MIN (*width, natural));
+    }
+  else /* GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH or CONSTANT_SIZE */
+    {
+      int minimum, natural;
+
+      gtk_widget_measure (widget, GTK_ORIENTATION_HORIZONTAL, -1,
+                          &minimum, &natural,
+                          NULL, NULL);
+      *width = MAX (minimum, MIN (*width, natural));
+
+      gtk_widget_measure (widget, GTK_ORIENTATION_VERTICAL,
+                          *width,
+                          &minimum, &natural,
+                          NULL, NULL);
+      *height = MAX (minimum, MIN (*height, natural));
+    }
+
+  /* No longer use the default settings */
+  priv->need_default_size = FALSE;
+}
+
+static void
+toplevel_compute_size (GdkToplevel     *toplevel,
+                       GdkToplevelSize *size,
+                       GtkWidget       *widget)
+{
+  GtkWindow *window = GTK_WINDOW (widget);
+  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
+  GtkWindowGeometryInfo *info;
+  int width, height;
+  GtkBorder shadow;
+  int min_width, min_height;
+
+  info = gtk_window_get_geometry_info (window, FALSE);
+
+  if (priv->need_default_size)
+    {
+      int remembered_width;
+      int remembered_height;
+      int bounds_width;
+      int bounds_height;
+
+      gdk_toplevel_size_get_bounds (size, &bounds_width, &bounds_height);
+
+      gtk_window_compute_default_size (window,
+                                       bounds_width, bounds_height,
+                                       &width, &height);
+      gtk_window_get_remembered_size (window,
+                                      &remembered_width, &remembered_height);
+      width = MAX (width, remembered_width);
+      height = MAX (height, remembered_height);
+
+      /* Override with default size */
+      if (info)
+        {
+          /* Take width of shadows/headerbar into account. We want to set the
+           * default size of the content area and not the window area.
+           */
+          int default_width_csd = info->default_width;
+          int default_height_csd = info->default_height;
+          gtk_window_update_csd_size (window,
+                                      &default_width_csd, &default_height_csd,
+                                      INCLUDE_CSD_SIZE);
+
+          if (info->default_width > 0)
+            width = default_width_csd;
+          if (info->default_height > 0)
+            height = default_height_csd;
+        }
+    }
+  else
+    {
+      /* Default to keeping current size */
+      gtk_window_get_remembered_size (window, &width, &height);
+    }
+
+  /* Override any size with gtk_window_resize() values */
+  if (priv->maximized || priv->fullscreen)
+    {
+      /* Unless we are maximized or fullscreen */
+      gtk_window_get_remembered_size (window, &width, &height);
+    }
+  else if (info)
+    {
+      int resize_width_csd = info->resize_width;
+      int resize_height_csd = info->resize_height;
+      gtk_window_update_csd_size (window,
+                                  &resize_width_csd, &resize_height_csd,
+                                  INCLUDE_CSD_SIZE);
+
+      if (info->resize_width > 0)
+        width = resize_width_csd;
+      if (info->resize_height > 0)
+        height = resize_height_csd;
+    }
+
+  /* Don't ever request zero width or height, it's not supported by
+     gdk. The size allocation code will round it to 1 anyway but if
+     we do it then the value returned from this function will is
+     not comparable to the size allocation read from the GtkWindow. */
+  width = MAX (width, 1);
+  height = MAX (height, 1);
+
+  gdk_toplevel_size_set_size (size, width, height);
+
+  get_shadow_width (window, &shadow);
+
+  min_width = width + shadow.left + shadow.right;
+  min_height = height + shadow.top + shadow.bottom;
+  gdk_toplevel_size_set_min_size (size, min_width, min_height);
+}
+
+static void
 gtk_window_realize (GtkWidget *widget)
 {
   GtkWindow *window = GTK_WINDOW (widget);
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-  GtkAllocation allocation;
   GdkSurface *surface;
-  GtkBorder shadow;
 
   /* Create default title bar */
   if (!priv->client_decorated && gtk_window_should_use_csd (window))
@@ -4308,32 +4414,7 @@ gtk_window_realize (GtkWidget *widget)
         }
     }
 
-  get_shadow_width (window, &shadow);
-
-  /* ensure widget tree is properly size allocated */
-  if (_gtk_widget_get_alloc_needed (widget))
-    {
-      GdkRectangle request;
-
-      gtk_window_compute_configure_request (window, &request, NULL, NULL);
-
-      allocation.x = shadow.left;
-      allocation.y = shadow.top;
-      allocation.width = request.width - shadow.left - shadow.right;
-      allocation.height = request.height - shadow.top - shadow.bottom;
-
-      gtk_widget_size_allocate (widget, &allocation, -1);
-
-      gtk_widget_queue_resize (widget);
-
-      g_return_if_fail (!_gtk_widget_get_realized (widget));
-    }
-
-  gtk_widget_get_allocation (widget, &allocation);
-
-  surface = gdk_surface_new_toplevel (gtk_widget_get_display (widget),
-                                      MAX (1, allocation.width + shadow.left + shadow.right),
-                                      MAX (1, allocation.height + shadow.top + shadow.bottom));
+  surface = gdk_surface_new_toplevel (gtk_widget_get_display (widget));
   priv->surface = surface;
   gdk_surface_set_widget (surface, widget);
 
@@ -4341,6 +4422,7 @@ gtk_window_realize (GtkWidget *widget)
   g_signal_connect_swapped (surface, "size-changed", G_CALLBACK (surface_size_changed), widget);
   g_signal_connect (surface, "render", G_CALLBACK (surface_render), widget);
   g_signal_connect (surface, "event", G_CALLBACK (surface_event), widget);
+  g_signal_connect (surface, "compute-size", G_CALLBACK (toplevel_compute_size), widget);
 
   GTK_WIDGET_CLASS (gtk_window_parent_class)->realize (widget);
 
@@ -5376,7 +5458,7 @@ gtk_window_move_resize (GtkWindow *window)
     new_geometry.min_width = new_geometry.min_height = 1;
 
   g_clear_pointer (&priv->layout, gdk_toplevel_layout_unref);
-  priv->layout = gtk_window_compute_layout (window, new_geometry.min_width, new_geometry.min_height);
+  priv->layout = gtk_window_compute_layout (window);
 
   /* This check implies the invariant that we never set info->last
    * without setting the hints and sending off a configure request.
@@ -5573,9 +5655,7 @@ gtk_window_move_resize (GtkWindow *window)
       if (configure_request_pos_changed)
         g_warning ("configure request position changed. This should not happen. Ignoring the position");
 
-      gdk_toplevel_present (GDK_TOPLEVEL (priv->surface),
-                            new_request.width, new_request.height,
-                            priv->layout);
+      gdk_toplevel_present (GDK_TOPLEVEL (priv->surface), priv->layout);
     }
   else
     {

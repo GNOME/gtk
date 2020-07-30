@@ -322,7 +322,7 @@ test_trigger_trigger (void)
                                             g_object_ref (trigger[2]));
 
   device = gdk_seat_get_keyboard (seat);
-  surface = gdk_surface_new_toplevel (display, 100, 100);
+  surface = gdk_surface_new_toplevel (display);
 
   for (i = 0; i < G_N_ELEMENTS (tests); i++)
     {

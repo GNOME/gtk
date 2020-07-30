@@ -795,22 +795,18 @@ gdk_surface_new (GdkDisplay     *display,
 /**
  * gdk_surface_new_toplevel: (constructor)
  * @display: the display to create the surface on
- * @width: width of new surface
- * @height: height of new surface
  *
  * Creates a new toplevel surface.
  *
  * Returns: (transfer full): the new #GdkSurface
  **/
 GdkSurface *
-gdk_surface_new_toplevel (GdkDisplay *display,
-                          int         width,
-                          int         height)
+gdk_surface_new_toplevel (GdkDisplay *display)
 {
   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
 
   return gdk_surface_new (display, GDK_SURFACE_TOPLEVEL,
-                          NULL, 0, 0, width, height);
+                          NULL, 0, 0, 0, 0);
 }
 
 /**

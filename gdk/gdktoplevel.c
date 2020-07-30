@@ -23,6 +23,7 @@
 #include "gdk-private.h"
 #include "gdktoplevelprivate.h"
 
+#include <graphene-gobject.h>
 #include <math.h>
 
 /**
@@ -35,10 +36,17 @@
 
 G_DEFINE_INTERFACE (GdkToplevel, gdk_toplevel, GDK_TYPE_SURFACE)
 
+enum
+{
+  COMPUTE_SIZE,
+
+  N_SIGNALS
+};
+
+static guint signals[N_SIGNALS] = { 0 };
+
 static gboolean
 gdk_toplevel_default_present (GdkToplevel       *toplevel,
-                              int                width,
-                              int                height,
                               GdkToplevelLayout *layout)
 {
   return FALSE;
@@ -84,6 +92,13 @@ gdk_toplevel_default_inhibit_system_shortcuts (GdkToplevel *toplevel,
 static void
 gdk_toplevel_default_restore_system_shortcuts (GdkToplevel *toplevel)
 {
+}
+
+void
+gdk_toplevel_notify_compute_size (GdkToplevel     *toplevel,
+                                  GdkToplevelSize *size)
+{
+  g_signal_emit (toplevel, signals[COMPUTE_SIZE], 0, size);
 }
 
 static void
@@ -158,6 +173,37 @@ gdk_toplevel_default_init (GdkToplevelInterface *iface)
                             "Whether keyboard shortcuts are inhibited",
                             FALSE,
                             G_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY));
+
+  /**
+   * GdkToplevel::compute-size:
+   * @toplevel: a #GdkToplevel
+   * @size: (type Gdk.ToplevelSize) (out caller-allocates): a #GdkToplevelSize
+   *
+   * Compute the desired size of the toplevel, given the information passed via
+   * the #GdkToplevelSize object.
+   *
+   * It will normally be emitted during or after gdk_toplevel_present(),
+   * depending on the configuration received by the windowing system. It may
+   * also be emitted at any other point in time, in response to the windowing
+   * system spontaneously changing the configuration.
+   *
+   * It is the responsibility of the GdkToplevel user to handle this signal;
+   * failing to do so will result in an arbitrary fixed size being used as a
+   * result. The signal may be emitted with the pointer to the @size being
+   * %NULL, in which case only the minimum and maximum size needs to be
+   * computed. This could happen for example if the toplevel configuration is in
+   * a state where the size is decided by the windowing system, such as
+   * maximized or fullscreen.
+   */
+  signals[COMPUTE_SIZE] =
+    g_signal_new ("compute-size",
+                  GDK_TYPE_TOPLEVEL,
+                  G_SIGNAL_RUN_LAST,
+                  0,
+                  NULL, NULL,
+                  NULL,
+                  G_TYPE_NONE, 1,
+                  GDK_TYPE_TOPLEVEL_SIZE | G_SIGNAL_TYPE_STATIC_SCOPE);
 }
 
 guint
@@ -181,13 +227,15 @@ gdk_toplevel_install_properties (GObjectClass *object_class,
 /**
  * gdk_toplevel_present:
  * @toplevel: the #GdkToplevel to show
- * @width: the unconstrained toplevel width to layout
- * @height: the unconstrained toplevel height to layout
  * @layout: the #GdkToplevelLayout object used to layout
  *
  * Present @toplevel after having processed the #GdkToplevelLayout rules.
  * If the toplevel was previously not showing, it will be showed,
  * otherwise it will change layout according to @layout.
+ *
+ * GDK may emit the 'compute-size' signal to let the user of this toplevel
+ * compute the preferred size of the toplevel surface. See
+ * #GdkToplevel::compute-size for details.
  *
  * Presenting may fail.
  *
@@ -195,16 +243,12 @@ gdk_toplevel_install_properties (GObjectClass *object_class,
  */
 gboolean
 gdk_toplevel_present (GdkToplevel       *toplevel,
-                      int                width,
-                      int                height,
                       GdkToplevelLayout *layout)
 {
   g_return_val_if_fail (GDK_IS_TOPLEVEL (toplevel), FALSE);
-  g_return_val_if_fail (width > 0, FALSE);
-  g_return_val_if_fail (height > 0, FALSE);
   g_return_val_if_fail (layout != NULL, FALSE);
 
-  return GDK_TOPLEVEL_GET_IFACE (toplevel)->present (toplevel, width, height, layout);
+  return GDK_TOPLEVEL_GET_IFACE (toplevel)->present (toplevel, layout);
 }
 
 /**

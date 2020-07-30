@@ -70,6 +70,7 @@
 #include <gdk/gdktexture.h>
 #include <gdk/gdktoplevel.h>
 #include <gdk/gdktoplevellayout.h>
+#include <gdk/gdktoplevelsize.h>
 #include <gdk/gdktypes.h>
 #include <gdk/gdkversionmacros.h>
 #include <gdk/gdkvulkancontext.h>

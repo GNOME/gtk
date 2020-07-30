@@ -34,13 +34,10 @@ set_fullscreen_monitor_cb (GtkWidget *widget, gpointer user_data)
     monitor = gdk_display_get_monitor_at_surface (display, surface);
   else
     monitor = NULL;
-  layout = gdk_toplevel_layout_new (0, 0);
+  layout = gdk_toplevel_layout_new ();
   gdk_toplevel_layout_set_resizable (layout, TRUE);
   gdk_toplevel_layout_set_fullscreen (layout, TRUE, monitor);
-  gdk_toplevel_present (GDK_TOPLEVEL (surface),
-                        gdk_surface_get_width (surface),
-                        gdk_surface_get_height (surface),
-                        layout);
+  gdk_toplevel_present (GDK_TOPLEVEL (surface), layout);
   gdk_toplevel_layout_unref (layout);
 }
 
@@ -51,13 +48,10 @@ remove_fullscreen_cb (GtkWidget *widget, gpointer user_data)
   GdkToplevelLayout *layout;
 
   surface = gtk_native_get_surface (gtk_widget_get_native (widget));
-  layout = gdk_toplevel_layout_new (0, 0);
+  layout = gdk_toplevel_layout_new ();
   gdk_toplevel_layout_set_resizable (layout, TRUE);
   gdk_toplevel_layout_set_fullscreen (layout, FALSE, NULL);
-  gdk_toplevel_present (GDK_TOPLEVEL (surface),
-                        gdk_surface_get_width (surface),
-                        gdk_surface_get_height (surface),
-                        layout);
+  gdk_toplevel_present (GDK_TOPLEVEL (surface), layout);
   gdk_toplevel_layout_unref (layout);
 }
 

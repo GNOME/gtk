@@ -139,9 +139,7 @@ typedef struct _GdkSurfaceClass GdkSurfaceClass;
 GDK_AVAILABLE_IN_ALL
 GType         gdk_surface_get_type              (void) G_GNUC_CONST;
 GDK_AVAILABLE_IN_ALL
-GdkSurface *   gdk_surface_new_toplevel         (GdkDisplay    *display,
-                                                 int            width,
-                                                 int            height);
+GdkSurface *   gdk_surface_new_toplevel         (GdkDisplay    *display);
 GDK_AVAILABLE_IN_ALL
 GdkSurface *   gdk_surface_new_popup            (GdkSurface    *parent,
                                                  gboolean       autohide);
