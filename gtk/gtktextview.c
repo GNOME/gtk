@@ -89,8 +89,11 @@
  *
  * If a context menu is opened, the window node will appear as a subnode
  * of the main node.
+ *
+ * # Accessibility
+ *
+ * GtkTextView uses the #GTK_ACCESSIBLE_ROLE_TEXT_BOX role.
  */
-
 
 /* How scrolling, validation, exposes, etc. work.
  *
@@ -1801,6 +1804,7 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
                                        "(i)", GTK_DIR_TAB_BACKWARD);
 
   gtk_widget_class_set_css_name (widget_class, I_("textview"));
+  gtk_widget_class_set_accessible_role (widget_class, GTK_ACCESSIBLE_ROLE_TEXT_BOX);
 
   quark_text_selection_data = g_quark_from_static_string ("gtk-text-view-text-selection-data");
   quark_gtk_signal = g_quark_from_static_string ("gtk-signal");
@@ -1942,6 +1946,10 @@ gtk_text_view_init (GtkTextView *text_view)
 
   gtk_widget_action_set_enabled (GTK_WIDGET (text_view), "text.can-redo", FALSE);
   gtk_widget_action_set_enabled (GTK_WIDGET (text_view), "text.can-undo", FALSE);
+
+  gtk_accessible_update_property (GTK_ACCESSIBLE (widget),
+                                  GTK_ACCESSIBLE_PROPERTY_MULTI_LINE, TRUE,
+                                  -1);
 }
 
 GtkCssNode *
@@ -3074,11 +3082,11 @@ gtk_text_view_set_editable (GtkTextView *text_view,
   if (priv->editable != setting)
     {
       if (!setting)
-	{
-	  gtk_text_view_reset_im_context(text_view);
-	  if (gtk_widget_has_focus (GTK_WIDGET (text_view)))
-	    gtk_im_context_focus_out (priv->im_context);
-	}
+        {
+          gtk_text_view_reset_im_context (text_view);
+          if (gtk_widget_has_focus (GTK_WIDGET (text_view)))
+            gtk_im_context_focus_out (priv->im_context);
+        }
 
       priv->editable = setting;
 
@@ -3090,11 +3098,15 @@ gtk_text_view_set_editable (GtkTextView *text_view,
 
       if (priv->layout && priv->layout->default_style)
         {
-	  gtk_text_layout_set_overwrite_mode (priv->layout,
-					      priv->overwrite_mode && priv->editable);
+          gtk_text_layout_set_overwrite_mode (priv->layout,
+                                              priv->overwrite_mode && priv->editable);
           priv->layout->default_style->editable = priv->editable;
           gtk_text_layout_default_style_changed (priv->layout);
         }
+
+      gtk_accessible_update_property (GTK_ACCESSIBLE (text_view),
+                                      GTK_ACCESSIBLE_PROPERTY_READ_ONLY, !setting,
+                                      -1);
 
       g_object_notify (G_OBJECT (text_view), "editable");
     }

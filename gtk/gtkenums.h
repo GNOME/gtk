@@ -1194,7 +1194,7 @@ typedef enum {
  * @GTK_ACCESSIBLE_ROLE_MAIN: Unused
  * @GTK_ACCESSIBLE_ROLE_MARQUEE: Unused
  * @GTK_ACCESSIBLE_ROLE_MATH: Unused
- * @GTK_ACCESSIBLE_ROLE_METER: Unused
+ * @GTK_ACCESSIBLE_ROLE_METER: An element that represents a value within a known range.
  * @GTK_ACCESSIBLE_ROLE_MENU: Unused
  * @GTK_ACCESSIBLE_ROLE_MENU_BAR: Unused
  * @GTK_ACCESSIBLE_ROLE_MENU_ITEM: Unused

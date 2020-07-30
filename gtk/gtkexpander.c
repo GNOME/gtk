@@ -106,6 +106,10 @@
  * GtkExpander has three CSS nodes, the main node with the name expander,
  * a subnode with name title and node below it with name arrow. The arrow of an
  * expander that is showing its child gets the :checked pseudoclass added to it.
+ *
+ * # Accessibility
+ *
+ * GtkExpander uses the #GTK_ACCESSIBLE_ROLE_BUTTON role.
  */
 
 #include "config.h"
@@ -374,6 +378,7 @@ gtk_expander_class_init (GtkExpanderClass *klass)
                   G_TYPE_NONE, 0);
 
   gtk_widget_class_set_css_name (widget_class, I_("expander-widget"));
+  gtk_widget_class_set_accessible_role (widget_class, GTK_ACCESSIBLE_ROLE_BUTTON);
 }
 
 static void
@@ -420,6 +425,10 @@ gtk_expander_init (GtkExpander *expander)
   gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (gesture),
                                               GTK_PHASE_BUBBLE);
   gtk_widget_add_controller (GTK_WIDGET (expander->title_widget), GTK_EVENT_CONTROLLER (gesture));
+
+  gtk_accessible_update_state (GTK_ACCESSIBLE (expander),
+                               GTK_ACCESSIBLE_STATE_EXPANDED, FALSE,
+                               -1);
 }
 
 static GtkBuildableIface *parent_buildable_iface;
@@ -877,6 +886,10 @@ gtk_expander_set_expanded (GtkExpander *expander,
       gtk_expander_resize_toplevel (expander);
     }
 
+  gtk_accessible_update_state (GTK_ACCESSIBLE (expander),
+                               GTK_ACCESSIBLE_STATE_EXPANDED, expanded,
+                               -1);
+
   g_object_notify (G_OBJECT (expander), "expanded");
 }
 
@@ -1164,6 +1177,8 @@ void
 gtk_expander_set_child (GtkExpander *expander,
                         GtkWidget   *child)
 {
+  GList *list = NULL;
+
   g_return_if_fail (GTK_IS_EXPANDER (expander));
   g_return_if_fail (child == NULL || GTK_IS_WIDGET (child));
 
@@ -1187,6 +1202,13 @@ gtk_expander_set_child (GtkExpander *expander,
           g_object_ref (expander->child);
         }
     }
+
+  if (expander->child)
+    list = g_list_append (list, expander->child);
+  gtk_accessible_update_relation (GTK_ACCESSIBLE (expander),
+                                  GTK_ACCESSIBLE_RELATION_CONTROLS, list,
+                                  -1);
+  g_list_free (list);
 
   g_object_notify (G_OBJECT (expander), "child");
 }

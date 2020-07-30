@@ -15,8 +15,10 @@ tests = [
   { 'name': 'checkbutton' },
   { 'name': 'dialog' },
   { 'name': 'entry' },
+  { 'name': 'expander' },
   { 'name': 'image' },
   { 'name': 'label' },
+  { 'name': 'levelbar' },
   { 'name': 'passwordentry' },
   { 'name': 'progressbar' },
   { 'name': 'scrollbar' },
@@ -24,6 +26,7 @@ tests = [
   { 'name': 'separator' },
   { 'name': 'spinbutton' },
   { 'name': 'switch' },
+  { 'name': 'textview' },
   { 'name': 'window' },
 ]
 
