@@ -296,7 +296,6 @@ GdkGLContext *gdk_surface_get_shared_data_gl_context (GdkSurface *surface);
 
 typedef enum
 {
-  GDK_HINT_POS         = 1 << 0,
   GDK_HINT_MIN_SIZE    = 1 << 1,
   GDK_HINT_MAX_SIZE    = 1 << 2,
 } GdkSurfaceHints;

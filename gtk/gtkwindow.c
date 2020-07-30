@@ -5452,17 +5452,6 @@ gtk_window_move_resize (GtkWindow *window)
    * this.
    */
 
-  /* Also, if the initial position was explicitly set, then we always
-   * toggle on PPosition. This makes gtk_window_move(window, 0, 0)
-   * work.
-   */
-
-  if (configure_request_pos_changed)
-    {
-      new_flags |= GDK_HINT_POS;
-      hints_changed = TRUE;
-    }
-
   current_width = gdk_surface_get_width (priv->surface);
   current_height = gdk_surface_get_height (priv->surface);
 
@@ -5542,7 +5531,7 @@ gtk_window_move_resize (GtkWindow *window)
 
       return; /* Bail out, we didn't really process the move/resize */
     }
-  else if ((configure_request_size_changed || hints_changed) &&
+  else if ((configure_request_size_changed || hints_changed || configure_request_pos_changed) &&
            (current_width != new_request.width || current_height != new_request.height))
     {
       /* We are in one of the following situations:
@@ -5725,10 +5714,6 @@ gtk_window_compute_hints (GtkWindow   *window,
   else
     gtk_window_guess_default_size (window, &requisition.width, &requisition.height);
 
-  /* We don't want to set GDK_HINT_POS in here, we just set it
-   * in gtk_window_move_resize() when we want the position
-   * honored.
-   */
   *new_flags = 0;
   
   get_shadow_width (window, &shadow);

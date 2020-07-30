@@ -832,8 +832,6 @@ show_window_internal (GdkSurface *window,
 
   /* For initial map of "normal" windows we want to emulate WM window
    * positioning behaviour, which means:
-   * + Use user specified position if GDK_HINT_POS or GDK_HINT_USER_POS
-   * otherwise:
    * + default to the initial CW_USEDEFAULT placement,
    *   no matter if the user moved the window before showing it.
    * + Certain window types and hints have more elaborate positioning
@@ -841,8 +839,7 @@ show_window_internal (GdkSurface *window,
    */
   surface = GDK_WIN32_SURFACE (window);
   if (!already_mapped &&
-      GDK_IS_TOPLEVEL (window) &&
-      (surface->hint_flags & (GDK_HINT_POS | GDK_HINT_USER_POS)) == 0)
+      GDK_IS_TOPLEVEL (window))
     {
       gboolean center = FALSE;
       RECT window_rect, center_on_rect;
@@ -1418,11 +1415,6 @@ gdk_win32_surface_set_geometry_hints (GdkSurface         *window,
   else
     impl->hint_flags = geom_mask;
   impl->hints = *geometry;
-
-  if (geom_mask & GDK_HINT_POS)
-    {
-      /* even the X11 mplementation doesn't care */
-    }
 
   if (geom_mask & GDK_HINT_MIN_SIZE)
     {

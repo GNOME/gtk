@@ -2150,16 +2150,13 @@ gdk_x11_surface_set_geometry_hints (GdkSurface         *surface,
   
   size_hints.flags = 0;
   
-  if (geom_mask & GDK_HINT_POS)
-    {
-      size_hints.flags |= PPosition;
-      /* We need to initialize the following obsolete fields because KWM 
-       * apparently uses these fields if they are non-zero.
-       * #@#!#!$!.
-       */
-      size_hints.x = 0;
-      size_hints.y = 0;
-    }
+  size_hints.flags |= PPosition;
+  /* We need to initialize the following obsolete fields because KWM 
+   * apparently uses these fields if they are non-zero.
+   * #@#!#!$!.
+   */
+  size_hints.x = 0;
+  size_hints.y = 0;
 
   if (geom_mask & GDK_HINT_MIN_SIZE)
     {
