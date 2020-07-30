@@ -299,7 +299,6 @@ typedef enum
   GDK_HINT_POS         = 1 << 0,
   GDK_HINT_MIN_SIZE    = 1 << 1,
   GDK_HINT_MAX_SIZE    = 1 << 2,
-  GDK_HINT_WIN_GRAVITY = 1 << 6,
 } GdkSurfaceHints;
 
 typedef enum
@@ -328,7 +327,6 @@ struct _GdkGeometry
   int min_height;
   int max_width;
   int max_height;
-  GdkGravity win_gravity;
 };
 
 GDK_AVAILABLE_IN_ALL

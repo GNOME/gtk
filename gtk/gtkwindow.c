@@ -233,7 +233,6 @@ typedef struct
   guint    modal                     : 1;
   guint    resizable                 : 1;
   guint    transient_parent_group    : 1;
-  guint    gravity                   : 5; /* GdkGravity */
   guint    csd_requested             : 1;
   guint    client_decorated          : 1; /* Decorations drawn client-side */
   guint    use_client_shadow         : 1; /* Decorations use client-side shadows */
@@ -1492,7 +1491,6 @@ gtk_window_init (GtkWindow *window)
   priv->configure_notify_received = FALSE;
   priv->need_default_size = TRUE;
   priv->modal = FALSE;
-  priv->gravity = GDK_GRAVITY_NORTH_WEST;
   priv->decorated = TRUE;
   priv->display = gdk_display_get_default ();
 
@@ -5651,10 +5649,6 @@ gtk_window_compare_hints (GdkGeometry *geometry_a,
        geometry_a->max_height != geometry_b->max_height))
     return FALSE;
 
-  if ((flags_a & GDK_HINT_WIN_GRAVITY) &&
-      geometry_a->win_gravity != geometry_b->win_gravity)
-    return FALSE;
-
   return TRUE;
 }
 
@@ -5749,9 +5743,6 @@ gtk_window_compute_hints (GtkWindow   *window,
       new_geometry->max_width = new_geometry->min_width;
       new_geometry->max_height = new_geometry->min_height;
     }
-
-  *new_flags |= GDK_HINT_WIN_GRAVITY;
-  new_geometry->win_gravity = priv->gravity;
 }
 
 #undef INCLUDE_CSD_SIZE

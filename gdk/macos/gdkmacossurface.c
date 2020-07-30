@@ -636,8 +636,6 @@ _gdk_macos_surface_set_geometry_hints (GdkMacosSurface   *self,
   else
     min_size = NSMakeSize (1, 1);
   [self->window setContentMinSize:min_size];
-
-  if (geom_mask & GDK_HINT_WIN_GRAVITY) { /* TODO */ }
 }
 
 void
