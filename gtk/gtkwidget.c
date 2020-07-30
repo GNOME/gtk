@@ -3418,7 +3418,7 @@ gtk_widget_queue_draw (GtkWidget *widget)
       priv->draw_needed = TRUE;
       g_clear_pointer (&priv->render_node, gsk_render_node_unref);
       if (GTK_IS_NATIVE (widget) && _gtk_widget_get_realized (widget))
-        gdk_surface_queue_expose (gtk_native_get_surface (GTK_NATIVE (widget)));
+        gdk_surface_queue_render (gtk_native_get_surface (GTK_NATIVE (widget)));
     }
 }
 

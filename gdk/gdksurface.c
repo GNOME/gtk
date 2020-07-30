@@ -1355,15 +1355,15 @@ gdk_surface_paint_on_clock (GdkFrameClock *clock,
   g_object_unref (surface);
 }
 
-/**
+/*
  * gdk_surface_invalidate_rect:
  * @surface: a #GdkSurface
  * @rect: (allow-none): rectangle to invalidate or %NULL to invalidate the whole
  *      surface
  *
- * A convenience wrapper around gdk_surface_invalidate_region() which
- * invalidates a rectangular region. See
- * gdk_surface_invalidate_region() for details.
+ * A convenience wrapper around gdk_surface_invalidate_region()
+ * which invalidates a rectangular region.
+ * See gdk_surface_invalidate_region() for details.
  **/
 void
 gdk_surface_invalidate_rect (GdkSurface        *surface,
@@ -1406,19 +1406,17 @@ impl_surface_add_update_area (GdkSurface     *impl_surface,
 }
 
 /**
- * gdk_surface_queue_expose:
+ * gdk_surface_queue_render:
  * @surface: a #GdkSurface
  *
- * Forces an expose event for @surface to be scheduled.
- *
- * If the invalid area of @surface is empty, an expose event will
- * still be emitted. Its invalid region will be empty.
+ * Forces a #GdkSurface::render signal emission for @surface
+ * to be scheduled.
  *
  * This function is useful for implementations that track invalid
  * regions on their own.
  **/
 void
-gdk_surface_queue_expose (GdkSurface *surface)
+gdk_surface_queue_render (GdkSurface *surface)
 {
   cairo_region_t *region;
 
@@ -1429,17 +1427,17 @@ gdk_surface_queue_expose (GdkSurface *surface)
   cairo_region_destroy (region);
 }
 
-/**
+/*
  * gdk_surface_invalidate_region:
  * @surface: a #GdkSurface
  * @region: a #cairo_region_t
  *
- * Adds @region to the update area for @surface. The update area is the
- * region that needs to be redrawn, or “dirty region.”
+ * Adds @region to the update area for @surface. The update area is
+ * the region that needs to be redrawn, or “dirty region.”
  *
- * GDK will process all updates whenever the frame clock schedules a redraw,
- * so there’s no need to do forces redraws manually, you just need to
- * invalidate regions that you know should be redrawn.
+ * GDK will process all updates whenever the frame clock schedules a
+ * redraw, so there’s no need to do forces redraws manually, you just
+ * need to invalidate regions that you know should be redrawn.
  **/
 void
 gdk_surface_invalidate_region (GdkSurface          *surface,
@@ -1469,12 +1467,12 @@ gdk_surface_invalidate_region (GdkSurface          *surface,
   cairo_region_destroy (visible_region);
 }
 
-/**
+/*
  * _gdk_surface_clear_update_area:
  * @surface: a #GdkSurface.
  *
- * Internal function to clear the update area for a surface. This
- * is called when the surface is hidden or destroyed.
+ * Internal function to clear the update area for a surface.
+ * This is called when the surface is hidden or destroyed.
  **/
 void
 _gdk_surface_clear_update_area (GdkSurface *surface)
@@ -1490,15 +1488,15 @@ _gdk_surface_clear_update_area (GdkSurface *surface)
     }
 }
 
-/**
+/*
  * gdk_surface_freeze_updates:
  * @surface: a #GdkSurface
  *
  * Temporarily freezes a surface such that it won’t receive expose
  * events.  The surface will begin receiving expose events again when
  * gdk_surface_thaw_updates() is called. If gdk_surface_freeze_updates()
- * has been called more than once, gdk_surface_thaw_updates() must be called
- * an equal number of times to begin processing exposes.
+ * has been called more than once, gdk_surface_thaw_updates() must be
+ * called an equal number of times to begin processing exposes.
  **/
 void
 gdk_surface_freeze_updates (GdkSurface *surface)
@@ -1510,7 +1508,7 @@ gdk_surface_freeze_updates (GdkSurface *surface)
     _gdk_frame_clock_uninhibit_freeze (surface->frame_clock);
 }
 
-/**
+/*
  * gdk_surface_thaw_updates:
  * @surface: a #GdkSurface
  *

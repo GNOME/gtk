@@ -190,9 +190,7 @@ gdk_surface_create_vulkan_context
 gdk_surface_create_cairo_context
 
 <SUBSECTION>
-gdk_surface_queue_expose
-gdk_surface_freeze_updates
-gdk_surface_thaw_updates
+gdk_surface_queue_render
 gdk_surface_get_frame_clock
 
 <SUBSECTION>
