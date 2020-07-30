@@ -135,7 +135,7 @@ _gdk_broadway_surface_grab_check_unmap (GdkSurface *surface,
 
   seat = gdk_display_get_default_seat (display);
 
-  devices = gdk_seat_get_physical_devices (seat, GDK_SEAT_CAPABILITY_ALL);
+  devices = gdk_seat_get_devices (seat, GDK_SEAT_CAPABILITY_ALL);
   devices = g_list_prepend (devices, gdk_seat_get_keyboard (seat));
   devices = g_list_prepend (devices, gdk_seat_get_pointer (seat));
 

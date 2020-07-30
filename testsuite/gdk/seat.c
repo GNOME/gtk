@@ -60,7 +60,7 @@ test_default_seat (void)
   g_assert (caps != GDK_SEAT_CAPABILITY_NONE);
 
   pointer0 = gdk_seat_get_pointer (seat0);
-  physical_devices = gdk_seat_get_physical_devices (seat0, GDK_SEAT_CAPABILITY_POINTER);
+  physical_devices = gdk_seat_get_devices (seat0, GDK_SEAT_CAPABILITY_POINTER);
 
   if ((caps & GDK_SEAT_CAPABILITY_POINTER) != 0)
     {
@@ -84,7 +84,7 @@ test_default_seat (void)
     }
 
   keyboard0 = gdk_seat_get_keyboard (seat0);
-  physical_devices = gdk_seat_get_physical_devices (seat0, GDK_SEAT_CAPABILITY_KEYBOARD);
+  physical_devices = gdk_seat_get_devices (seat0, GDK_SEAT_CAPABILITY_KEYBOARD);
 
   if ((caps & GDK_SEAT_CAPABILITY_KEYBOARD) != 0)
     {

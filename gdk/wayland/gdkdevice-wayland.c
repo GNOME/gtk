@@ -4652,8 +4652,8 @@ gdk_wayland_seat_get_logical_device (GdkSeat             *seat,
 }
 
 static GList *
-gdk_wayland_seat_get_physical_devices (GdkSeat             *seat,
-                                       GdkSeatCapabilities  capabilities)
+gdk_wayland_seat_get_devices (GdkSeat             *seat,
+                              GdkSeatCapabilities  capabilities)
 {
   GdkWaylandSeat *wayland_seat = GDK_WAYLAND_SEAT (seat);
   GList *physical_devices = NULL;
@@ -4725,7 +4725,7 @@ gdk_wayland_seat_class_init (GdkWaylandSeatClass *klass)
   seat_class->grab = gdk_wayland_seat_grab;
   seat_class->ungrab = gdk_wayland_seat_ungrab;
   seat_class->get_logical_device = gdk_wayland_seat_get_logical_device;
-  seat_class->get_physical_devices = gdk_wayland_seat_get_physical_devices;
+  seat_class->get_devices = gdk_wayland_seat_get_devices;
   seat_class->get_tools = gdk_wayland_seat_get_tools;
 }
 

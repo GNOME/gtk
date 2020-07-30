@@ -324,26 +324,26 @@ gdk_seat_ungrab (GdkSeat *seat)
 }
 
 /**
- * gdk_seat_get_physical_devices:
+ * gdk_seat_get_devices:
  * @seat: a #GdkSeat
  * @capabilities: capabilities to get devices for
  *
- * Returns the physical devices that match the given capabilities.
+ * Returns the devices that match the given capabilities.
  *
  * Returns: (transfer container) (element-type GdkDevice): A list of #GdkDevices.
  *          The list must be freed with g_list_free(), the elements are owned
  *          by GDK and must not be freed.
  **/
 GList *
-gdk_seat_get_physical_devices (GdkSeat             *seat,
-                               GdkSeatCapabilities  capabilities)
+gdk_seat_get_devices (GdkSeat             *seat,
+                      GdkSeatCapabilities  capabilities)
 {
   GdkSeatClass *seat_class;
 
   g_return_val_if_fail (GDK_IS_SEAT (seat), NULL);
 
   seat_class = GDK_SEAT_GET_CLASS (seat);
-  return seat_class->get_physical_devices (seat, capabilities);
+  return seat_class->get_devices (seat, capabilities);
 }
 
 /**
