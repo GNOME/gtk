@@ -233,7 +233,6 @@ typedef struct
   guint    modal                     : 1;
   guint    resizable                 : 1;
   guint    transient_parent_group    : 1;
-  guint    gravity                   : 5; /* GdkGravity */
   guint    csd_requested             : 1;
   guint    client_decorated          : 1; /* Decorations drawn client-side */
   guint    use_client_shadow         : 1; /* Decorations use client-side shadows */
@@ -416,13 +415,6 @@ static gboolean gtk_window_compare_hints             (GdkGeometry  *geometry_a,
                                                       guint         flags_a,
                                                       GdkGeometry  *geometry_b,
                                                       guint         flags_b);
-static void     gtk_window_constrain_size            (GtkWindow    *window,
-                                                      GdkGeometry  *geometry,
-                                                      guint         flags,
-                                                      int           width,
-                                                      int           height,
-                                                      int          *new_width,
-                                                      int          *new_height);
 static void     gtk_window_update_fixed_size         (GtkWindow    *window,
                                                       GdkGeometry  *new_geometry,
                                                       int           new_width,
@@ -1499,7 +1491,6 @@ gtk_window_init (GtkWindow *window)
   priv->configure_notify_received = FALSE;
   priv->need_default_size = TRUE;
   priv->modal = FALSE;
-  priv->gravity = GDK_GRAVITY_NORTH_WEST;
   priv->decorated = TRUE;
   priv->display = gdk_display_get_default ();
 
@@ -5304,10 +5295,9 @@ gtk_window_compute_configure_request (GtkWindow    *window,
                                              new_flags,
                                              &w, &h);
   gtk_window_update_fixed_size (window, &new_geometry, w, h);
-  gtk_window_constrain_size (window,
-                             &new_geometry, new_flags,
-                             w, h,
-                             &w, &h);
+  gdk_surface_constrain_size (&new_geometry, new_flags,
+                              w, h,
+                              &w, &h);
 
   info = gtk_window_get_geometry_info (window, FALSE);
 
@@ -5462,17 +5452,6 @@ gtk_window_move_resize (GtkWindow *window)
    * this.
    */
 
-  /* Also, if the initial position was explicitly set, then we always
-   * toggle on PPosition. This makes gtk_window_move(window, 0, 0)
-   * work.
-   */
-
-  if (configure_request_pos_changed)
-    {
-      new_flags |= GDK_HINT_POS;
-      hints_changed = TRUE;
-    }
-
   current_width = gdk_surface_get_width (priv->surface);
   current_height = gdk_surface_get_height (priv->surface);
 
@@ -5552,7 +5531,7 @@ gtk_window_move_resize (GtkWindow *window)
 
       return; /* Bail out, we didn't really process the move/resize */
     }
-  else if ((configure_request_size_changed || hints_changed) &&
+  else if ((configure_request_size_changed || hints_changed || configure_request_pos_changed) &&
            (current_width != new_request.width || current_height != new_request.height))
     {
       /* We are in one of the following situations:
@@ -5659,48 +5638,7 @@ gtk_window_compare_hints (GdkGeometry *geometry_a,
        geometry_a->max_height != geometry_b->max_height))
     return FALSE;
 
-  if ((flags_a & GDK_HINT_BASE_SIZE) &&
-      (geometry_a->base_width != geometry_b->base_width ||
-       geometry_a->base_height != geometry_b->base_height))
-    return FALSE;
-
-  if ((flags_a & GDK_HINT_ASPECT) &&
-      (geometry_a->min_aspect != geometry_b->min_aspect ||
-       geometry_a->max_aspect != geometry_b->max_aspect))
-    return FALSE;
-
-  if ((flags_a & GDK_HINT_RESIZE_INC) &&
-      (geometry_a->width_inc != geometry_b->width_inc ||
-       geometry_a->height_inc != geometry_b->height_inc))
-    return FALSE;
-
-  if ((flags_a & GDK_HINT_WIN_GRAVITY) &&
-      geometry_a->win_gravity != geometry_b->win_gravity)
-    return FALSE;
-
   return TRUE;
-}
-
-static void 
-gtk_window_constrain_size (GtkWindow   *window,
-			   GdkGeometry *geometry,
-			   guint        flags,
-			   int          width,
-			   int          height,
-			   int         *new_width,
-			   int         *new_height)
-{
-  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-  guint geometry_flags;
-
-  /* ignore size increments for windows that fit in a fixed space */
-  if (priv->maximized || priv->fullscreen || priv->tiled)
-    geometry_flags = flags & ~GDK_HINT_RESIZE_INC;
-  else
-    geometry_flags = flags;
-
-  gdk_surface_constrain_size (geometry, geometry_flags, width, height,
-			      new_width, new_height);
 }
 
 /* For non-resizable windows, make sure the given width/height fits
@@ -5776,20 +5714,8 @@ gtk_window_compute_hints (GtkWindow   *window,
   else
     gtk_window_guess_default_size (window, &requisition.width, &requisition.height);
 
-  /* We don't want to set GDK_HINT_POS in here, we just set it
-   * in gtk_window_move_resize() when we want the position
-   * honored.
-   */
   *new_flags = 0;
   
-  /* For simplicity, we always set the base hint, even when we
-   * don't expect it to have any visible effect.
-   * (Note: geometry_size_to_pixels() depends on this.)
-   */
-  *new_flags |= GDK_HINT_BASE_SIZE;
-  new_geometry->base_width = 0;
-  new_geometry->base_height = 0;
-
   get_shadow_width (window, &shadow);
   *new_flags |= GDK_HINT_MIN_SIZE;
   new_geometry->min_width = requisition.width + shadow.left + shadow.right;
@@ -5802,9 +5728,6 @@ gtk_window_compute_hints (GtkWindow   *window,
       new_geometry->max_width = new_geometry->min_width;
       new_geometry->max_height = new_geometry->min_height;
     }
-
-  *new_flags |= GDK_HINT_WIN_GRAVITY;
-  new_geometry->win_gravity = priv->gravity;
 }
 
 #undef INCLUDE_CSD_SIZE

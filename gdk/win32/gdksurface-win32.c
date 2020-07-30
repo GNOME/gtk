@@ -780,75 +780,6 @@ get_outer_rect (GdkSurface *window,
 }
 
 static void
-adjust_for_gravity_hints (GdkSurface *window,
-			  RECT       *outer_rect,
-			  int        *x,
-			  int        *y)
-{
-  GdkWin32Surface *impl = GDK_WIN32_SURFACE (window);
-
-  if (impl->hint_flags & GDK_HINT_WIN_GRAVITY)
-    {
-#ifdef G_ENABLE_DEBUG
-      int orig_x = *x, orig_y = *y;
-#endif
-
-      switch (impl->hints.win_gravity)
-	{
-	case GDK_GRAVITY_NORTH:
-	case GDK_GRAVITY_CENTER:
-	case GDK_GRAVITY_SOUTH:
-	  *x -= (outer_rect->right - outer_rect->left / 2) / impl->surface_scale;
-	  *x += window->width / 2;
-	  break;
-
-	case GDK_GRAVITY_SOUTH_EAST:
-	case GDK_GRAVITY_EAST:
-	case GDK_GRAVITY_NORTH_EAST:
-	  *x -= (outer_rect->right - outer_rect->left) / impl->surface_scale;
-	  *x += window->width;
-	  break;
-
-	case GDK_GRAVITY_STATIC:
-	  *x += outer_rect->left / impl->surface_scale;
-	  break;
-
-	default:
-	  break;
-	}
-
-      switch (impl->hints.win_gravity)
-	{
-	case GDK_GRAVITY_WEST:
-	case GDK_GRAVITY_CENTER:
-	case GDK_GRAVITY_EAST:
-	  *y -= ((outer_rect->bottom - outer_rect->top) / 2) / impl->surface_scale;
-	  *y += window->height / 2;
-	  break;
-
-	case GDK_GRAVITY_SOUTH_WEST:
-	case GDK_GRAVITY_SOUTH:
-	case GDK_GRAVITY_SOUTH_EAST:
-	  *y -= (outer_rect->bottom - outer_rect->top) / impl->surface_scale;
-	  *y += window->height;
-	  break;
-
-	case GDK_GRAVITY_STATIC:
-	  *y += outer_rect->top * impl->surface_scale;
-	  break;
-
-	default:
-	  break;
-	}
-      GDK_NOTE (MISC,
-		(orig_x != *x || orig_y != *y) ?
-		g_print ("adjust_for_gravity_hints: x: %d->%d, y: %d->%d\n",
-			 orig_x, *x, orig_y, *y)
-		  : (void) 0);
-    }
-}
-
-static void
 gdk_win32_surface_fullscreen (GdkSurface *window);
 
 static void
@@ -917,8 +848,6 @@ show_window_internal (GdkSurface *window,
 
   /* For initial map of "normal" windows we want to emulate WM window
    * positioning behaviour, which means:
-   * + Use user specified position if GDK_HINT_POS or GDK_HINT_USER_POS
-   * otherwise:
    * + default to the initial CW_USEDEFAULT placement,
    *   no matter if the user moved the window before showing it.
    * + Certain window types and hints have more elaborate positioning
@@ -926,8 +855,7 @@ show_window_internal (GdkSurface *window,
    */
   surface = GDK_WIN32_SURFACE (window);
   if (!already_mapped &&
-      GDK_IS_TOPLEVEL (window) &&
-      (surface->hint_flags & (GDK_HINT_POS | GDK_HINT_USER_POS)) == 0)
+      GDK_IS_TOPLEVEL (window))
     {
       gboolean center = FALSE;
       RECT window_rect, center_on_rect;
@@ -1141,8 +1069,6 @@ gdk_win32_surface_do_move (GdkSurface *window,
   impl = GDK_WIN32_SURFACE (window);
   get_outer_rect (window, window->width, window->height, &outer_rect);
 
-  adjust_for_gravity_hints (window, &outer_rect, &x, &y);
-
   GDK_NOTE (MISC, g_print ("... SetWindowPos(%p,NULL,%d,%d,0,0,"
                            "NOACTIVATE|NOSIZE|NOZORDER)\n",
                            GDK_SURFACE_HWND (window),
@@ -1226,8 +1152,6 @@ gdk_win32_surface_do_move_resize (GdkSurface *window,
   impl = GDK_WIN32_SURFACE (window);
 
   get_outer_rect (window, width, height, &outer_rect);
-
-  adjust_for_gravity_hints (window, &outer_rect, &x, &y);
 
   GDK_NOTE (MISC, g_print ("... SetWindowPos(%p,NULL,%d,%d,%ld,%ld,"
                            "NOACTIVATE|NOZORDER)\n",
@@ -1510,11 +1434,6 @@ gdk_win32_surface_set_geometry_hints (GdkSurface         *window,
     impl->hint_flags = geom_mask;
   impl->hints = *geometry;
 
-  if (geom_mask & GDK_HINT_POS)
-    {
-      /* even the X11 mplementation doesn't care */
-    }
-
   if (geom_mask & GDK_HINT_MIN_SIZE)
     {
       GDK_NOTE (MISC, g_print ("... MIN_SIZE: %dx%d\n",
@@ -1525,29 +1444,6 @@ gdk_win32_surface_set_geometry_hints (GdkSurface         *window,
     {
       GDK_NOTE (MISC, g_print ("... MAX_SIZE: %dx%d\n",
 			       geometry->max_width, geometry->max_height));
-    }
-
-  if (geom_mask & GDK_HINT_BASE_SIZE)
-    {
-      GDK_NOTE (MISC, g_print ("... BASE_SIZE: %dx%d\n",
-			       geometry->base_width, geometry->base_height));
-    }
-
-  if (geom_mask & GDK_HINT_RESIZE_INC)
-    {
-      GDK_NOTE (MISC, g_print ("... RESIZE_INC: (%d,%d)\n",
-			       geometry->width_inc, geometry->height_inc));
-    }
-
-  if (geom_mask & GDK_HINT_ASPECT)
-    {
-      GDK_NOTE (MISC, g_print ("... ASPECT: %g--%g\n",
-			       geometry->min_aspect, geometry->max_aspect));
-    }
-
-  if (geom_mask & GDK_HINT_WIN_GRAVITY)
-    {
-      GDK_NOTE (MISC, g_print ("... GRAVITY: %d\n", geometry->win_gravity));
     }
 
   _gdk_win32_surface_update_style_bits (window);

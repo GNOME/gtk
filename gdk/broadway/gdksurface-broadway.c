@@ -1137,65 +1137,10 @@ create_moveresize_surface (MoveResizeData *mv_resize,
 static void
 calculate_unmoving_origin (MoveResizeData *mv_resize)
 {
-  int x, y, width, height;
-
-  if (mv_resize->moveresize_geom_mask & GDK_HINT_WIN_GRAVITY &&
-      mv_resize->moveresize_geometry.win_gravity == GDK_GRAVITY_STATIC)
-    {
-      gdk_surface_get_origin (mv_resize->moveresize_surface,
-                             &mv_resize->moveresize_orig_x,
-                             &mv_resize->moveresize_orig_y);
-    }
-  else
-    {
-      gdk_surface_get_geometry (mv_resize->moveresize_surface,
-                                &x, &y, &width, &height);
-
-      switch (mv_resize->moveresize_geometry.win_gravity)
-        {
-        case GDK_GRAVITY_NORTH_WEST:
-          mv_resize->moveresize_orig_x = x;
-          mv_resize->moveresize_orig_y = y;
-          break;
-        case GDK_GRAVITY_NORTH:
-          mv_resize->moveresize_orig_x = x + width / 2;
-          mv_resize->moveresize_orig_y = y;
-          break;
-        case GDK_GRAVITY_NORTH_EAST:
-          mv_resize->moveresize_orig_x = x = width;
-          mv_resize->moveresize_orig_y = y;
-          break;
-        case GDK_GRAVITY_WEST:
-          mv_resize->moveresize_orig_x = x;
-          mv_resize->moveresize_orig_y = y + height / 2;
-          break;
-        case GDK_GRAVITY_CENTER:
-          mv_resize->moveresize_orig_x = x + width / 2;
-          mv_resize->moveresize_orig_y = y + height / 2;
-          break;
-        case GDK_GRAVITY_EAST:
-          mv_resize->moveresize_orig_x = x + width;
-          mv_resize->moveresize_orig_y = y + height / 2;
-          break;
-        case GDK_GRAVITY_SOUTH_WEST:
-          mv_resize->moveresize_orig_x = x + width;
-          mv_resize->moveresize_orig_y = y + height;
-          break;
-        case GDK_GRAVITY_SOUTH:
-          mv_resize->moveresize_orig_x = x + width / 2;
-          mv_resize->moveresize_orig_y = y + height;
-          break;
-        case GDK_GRAVITY_SOUTH_EAST:
-          mv_resize->moveresize_orig_x = x;
-          mv_resize->moveresize_orig_y = y + height;
-          break;
-        case GDK_GRAVITY_STATIC:
-        default:
-          mv_resize->moveresize_orig_x = x;
-          mv_resize->moveresize_orig_y = y;
-          break;
-        }
-    }
+  gdk_surface_get_geometry (mv_resize->moveresize_surface,
+                            &mv_resize->moveresize_orig_x,
+                            &mv_resize->moveresize_orig_y,
+                            NULL, NULL);
 }
 
 static void

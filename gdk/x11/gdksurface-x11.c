@@ -1723,8 +1723,7 @@ _gdk_x11_surface_set_surface_scale (GdkSurface *surface,
   if (toplevel)
     {
       /* These are affected by surface scale: */
-      geom_mask = toplevel->last_geometry_hints_mask &
-        (GDK_HINT_MIN_SIZE | GDK_HINT_MAX_SIZE | GDK_HINT_BASE_SIZE | GDK_HINT_RESIZE_INC);
+      geom_mask = toplevel->last_geometry_hints_mask & (GDK_HINT_MIN_SIZE | GDK_HINT_MAX_SIZE);
       if (geom_mask)
         gdk_x11_surface_set_geometry_hints (surface,
                                             &toplevel->last_geometry_hints,
@@ -2151,27 +2150,14 @@ gdk_x11_surface_set_geometry_hints (GdkSurface         *surface,
   
   size_hints.flags = 0;
   
-  if (geom_mask & GDK_HINT_POS)
-    {
-      size_hints.flags |= PPosition;
-      /* We need to initialize the following obsolete fields because KWM 
-       * apparently uses these fields if they are non-zero.
-       * #@#!#!$!.
-       */
-      size_hints.x = 0;
-      size_hints.y = 0;
-    }
+  size_hints.flags |= PPosition;
+  /* We need to initialize the following obsolete fields because KWM 
+   * apparently uses these fields if they are non-zero.
+   * #@#!#!$!.
+   */
+  size_hints.x = 0;
+  size_hints.y = 0;
 
-  if (geom_mask & GDK_HINT_USER_POS)
-    {
-      size_hints.flags |= USPosition;
-    }
-
-  if (geom_mask & GDK_HINT_USER_SIZE)
-    {
-      size_hints.flags |= USSize;
-    }
-  
   if (geom_mask & GDK_HINT_MIN_SIZE)
     {
       size_hints.flags |= PMinSize;
@@ -2186,19 +2172,6 @@ gdk_x11_surface_set_geometry_hints (GdkSurface         *surface,
       size_hints.max_height = MAX (geometry->max_height, 1) * impl->surface_scale;
     }
   
-  if (geom_mask & GDK_HINT_BASE_SIZE)
-    {
-      size_hints.flags |= PBaseSize;
-      size_hints.base_width = geometry->base_width * impl->surface_scale;
-      size_hints.base_height = geometry->base_height * impl->surface_scale;
-    }
-  
-  if (geom_mask & GDK_HINT_RESIZE_INC)
-    {
-      size_hints.flags |= PResizeInc;
-      size_hints.width_inc = geometry->width_inc * impl->surface_scale;
-      size_hints.height_inc = geometry->height_inc * impl->surface_scale;
-    }
   else if (impl->surface_scale > 1)
     {
       size_hints.flags |= PResizeInc;
@@ -2206,37 +2179,6 @@ gdk_x11_surface_set_geometry_hints (GdkSurface         *surface,
       size_hints.height_inc = impl->surface_scale;
     }
 
-  if (geom_mask & GDK_HINT_ASPECT)
-    {
-      size_hints.flags |= PAspect;
-      if (geometry->min_aspect <= 1)
-	{
-	  size_hints.min_aspect.x = 65536 * geometry->min_aspect;
-	  size_hints.min_aspect.y = 65536;
-	}
-      else
-	{
-	  size_hints.min_aspect.x = 65536;
-	  size_hints.min_aspect.y = 65536 / geometry->min_aspect;;
-	}
-      if (geometry->max_aspect <= 1)
-	{
-	  size_hints.max_aspect.x = 65536 * geometry->max_aspect;
-	  size_hints.max_aspect.y = 65536;
-	}
-      else
-	{
-	  size_hints.max_aspect.x = 65536;
-	  size_hints.max_aspect.y = 65536 / geometry->max_aspect;;
-	}
-    }
-
-  if (geom_mask & GDK_HINT_WIN_GRAVITY)
-    {
-      size_hints.flags |= PWinGravity;
-      size_hints.win_gravity = geometry->win_gravity;
-    }
-  
   /* FIXME: Would it be better to delete this property if
    *        geom_mask == 0? It would save space on the server
    */
@@ -2287,27 +2229,6 @@ gdk_surface_get_geometry_hints (GdkSurface      *surface,
       *geom_mask |= GDK_HINT_MAX_SIZE;
       geometry->max_width = MAX (size_hints->max_width, 1) / impl->surface_scale;
       geometry->max_height = MAX (size_hints->max_height, 1) / impl->surface_scale;
-    }
-
-  if (size_hints->flags & PResizeInc)
-    {
-      *geom_mask |= GDK_HINT_RESIZE_INC;
-      geometry->width_inc = size_hints->width_inc / impl->surface_scale;
-      geometry->height_inc = size_hints->height_inc / impl->surface_scale;
-    }
-
-  if (size_hints->flags & PAspect)
-    {
-      *geom_mask |= GDK_HINT_ASPECT;
-
-      geometry->min_aspect = (double) size_hints->min_aspect.x / (double) size_hints->min_aspect.y;
-      geometry->max_aspect = (double) size_hints->max_aspect.x / (double) size_hints->max_aspect.y;
-    }
-
-  if (size_hints->flags & PWinGravity)
-    {
-      *geom_mask |= GDK_HINT_WIN_GRAVITY;
-      geometry->win_gravity = size_hints->win_gravity;
     }
 
   XFree (size_hints);
@@ -4210,66 +4131,10 @@ static void
 calculate_unmoving_origin (MoveResizeData *mv_resize)
 {
   GdkRectangle rect;
-  int width, height;
 
-  if (mv_resize->moveresize_geom_mask & GDK_HINT_WIN_GRAVITY &&
-      mv_resize->moveresize_geometry.win_gravity == GDK_GRAVITY_STATIC)
-    {
-      gdk_surface_get_origin (mv_resize->moveresize_surface,
-			     &mv_resize->moveresize_orig_x,
-			     &mv_resize->moveresize_orig_y);
-    }
-  else
-    {
-      gdk_x11_surface_get_frame_extents (mv_resize->moveresize_surface, &rect);
-      gdk_surface_get_geometry (mv_resize->moveresize_surface, 
-			       NULL, NULL, &width, &height);
-      
-      switch (mv_resize->moveresize_geometry.win_gravity) 
-	{
-	case GDK_GRAVITY_NORTH_WEST:
-	  mv_resize->moveresize_orig_x = rect.x;
-	  mv_resize->moveresize_orig_y = rect.y;
-	  break;
-	case GDK_GRAVITY_NORTH:
-	  mv_resize->moveresize_orig_x = rect.x + rect.width / 2 - width / 2;
-	  mv_resize->moveresize_orig_y = rect.y;
-	  break;	  
-	case GDK_GRAVITY_NORTH_EAST:
-	  mv_resize->moveresize_orig_x = rect.x + rect.width - width;
-	  mv_resize->moveresize_orig_y = rect.y;
-	  break;
-	case GDK_GRAVITY_WEST:
-	  mv_resize->moveresize_orig_x = rect.x;
-	  mv_resize->moveresize_orig_y = rect.y + rect.height / 2 - height / 2;
-	  break;
-	case GDK_GRAVITY_CENTER:
-	  mv_resize->moveresize_orig_x = rect.x + rect.width / 2 - width / 2;
-	  mv_resize->moveresize_orig_y = rect.y + rect.height / 2 - height / 2;
-	  break;
-	case GDK_GRAVITY_EAST:
-	  mv_resize->moveresize_orig_x = rect.x + rect.width - width;
-	  mv_resize->moveresize_orig_y = rect.y + rect.height / 2 - height / 2;
-	  break;
-	case GDK_GRAVITY_SOUTH_WEST:
-	  mv_resize->moveresize_orig_x = rect.x;
-	  mv_resize->moveresize_orig_y = rect.y + rect.height - height;
-	  break;
-	case GDK_GRAVITY_SOUTH:
-	  mv_resize->moveresize_orig_x = rect.x + rect.width / 2 - width / 2;
-	  mv_resize->moveresize_orig_y = rect.y + rect.height - height;
-	  break;
-	case GDK_GRAVITY_SOUTH_EAST:
-	  mv_resize->moveresize_orig_x = rect.x + rect.width - width;
-	  mv_resize->moveresize_orig_y = rect.y + rect.height - height;
-	  break;
-	case GDK_GRAVITY_STATIC:
-	default:
-	  mv_resize->moveresize_orig_x = rect.x;
-	  mv_resize->moveresize_orig_y = rect.y;
-	  break; 
-	}
-    }  
+  gdk_x11_surface_get_frame_extents (mv_resize->moveresize_surface, &rect);
+  mv_resize->moveresize_orig_x = rect.x;
+  mv_resize->moveresize_orig_y = rect.y;
 }
 
 static void

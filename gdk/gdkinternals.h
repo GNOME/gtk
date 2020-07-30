@@ -296,15 +296,8 @@ GdkGLContext *gdk_surface_get_shared_data_gl_context (GdkSurface *surface);
 
 typedef enum
 {
-  GDK_HINT_POS         = 1 << 0,
   GDK_HINT_MIN_SIZE    = 1 << 1,
   GDK_HINT_MAX_SIZE    = 1 << 2,
-  GDK_HINT_BASE_SIZE   = 1 << 3,
-  GDK_HINT_ASPECT      = 1 << 4,
-  GDK_HINT_RESIZE_INC  = 1 << 5,
-  GDK_HINT_WIN_GRAVITY = 1 << 6,
-  GDK_HINT_USER_POS    = 1 << 7,
-  GDK_HINT_USER_SIZE   = 1 << 8
 } GdkSurfaceHints;
 
 typedef enum
@@ -333,13 +326,6 @@ struct _GdkGeometry
   int min_height;
   int max_width;
   int max_height;
-  int base_width;
-  int base_height;
-  int width_inc;
-  int height_inc;
-  double min_aspect;
-  double max_aspect;
-  GdkGravity win_gravity;
 };
 
 GDK_AVAILABLE_IN_ALL
