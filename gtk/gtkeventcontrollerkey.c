@@ -154,7 +154,8 @@ gtk_event_controller_key_handle_crossing (GtkEventController    *controller,
   gboolean start_crossing, end_crossing;
   gboolean is_focus;
 
-  if (crossing->type != GTK_CROSSING_FOCUS)
+  if (crossing->type != GTK_CROSSING_FOCUS &&
+      crossing->type != GTK_CROSSING_ACTIVE)
     return;
 
   start_crossing = crossing->direction == GTK_CROSSING_OUT &&
