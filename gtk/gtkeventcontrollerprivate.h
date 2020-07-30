@@ -22,12 +22,29 @@
 
 #include "gtkeventcontroller.h"
 
+/* GdkCrossingType:
+ * @GTK_CROSSING_FOCUS: Focus moved from one widget to another
+ * @GTK_CROSSING_ACTIVE: The active window changed (the crossing
+ *    events in this case leave from the old active window's focus
+ *    location to the new active window's one.
+ * @GTK_CROSSING_POINTER: The pointer moved from one widget to another
+ * @GTK_CROSSING_POINTER: An active drag moved from one widget to another
+ *
+ * We emit various kinds of crossing events when the target widget
+ * for keyboard or pointer events changes.
+ */
 typedef enum {
   GTK_CROSSING_FOCUS,
+  GTK_CROSSING_ACTIVE,
   GTK_CROSSING_POINTER,
   GTK_CROSSING_DROP
 } GtkCrossingType;
 
+/*
+ * GdkCrossingirection:
+ * @GTK_CROSSING_IN: the event is on the downward slope, towards the new target
+ * @GTK_CROSSING_OUT: the event is on the upward slope, away from the old target
+ */
 typedef enum {
   GTK_CROSSING_IN,
   GTK_CROSSING_OUT
