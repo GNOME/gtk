@@ -115,9 +115,6 @@ GDK_AVAILABLE_IN_ALL
 GdkDisplay * gdk_device_get_display (GdkDevice      *device);
 
 GDK_AVAILABLE_IN_ALL
-GList *      gdk_device_list_physical_devices (GdkDevice     *device);
-
-GDK_AVAILABLE_IN_ALL
 GdkDeviceType gdk_device_get_device_type (GdkDevice *device);
 
 GDK_AVAILABLE_IN_ALL
