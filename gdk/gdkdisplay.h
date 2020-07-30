@@ -72,9 +72,6 @@ GDK_AVAILABLE_IN_ALL
 GdkDisplay *gdk_display_get_default (void);
 
 GDK_AVAILABLE_IN_ALL
-GdkSurface *gdk_display_get_default_group       (GdkDisplay *display); 
-
-GDK_AVAILABLE_IN_ALL
 GdkClipboard *          gdk_display_get_clipboard               (GdkDisplay     *display);
 GDK_AVAILABLE_IN_ALL
 GdkClipboard *          gdk_display_get_primary_clipboard       (GdkDisplay     *display);

@@ -81,7 +81,6 @@ gdk_display_close
 gdk_display_is_closed
 gdk_display_is_rgba
 gdk_display_is_composited
-gdk_display_get_default_group
 gdk_display_supports_input_shapes
 gdk_display_get_app_launch_context
 gdk_display_notify_startup_complete
@@ -819,6 +818,7 @@ gdk_x11_display_get_xrootwindow
 gdk_x11_display_get_xcursor
 gdk_x11_display_grab
 gdk_x11_display_ungrab
+gdk_x11_display_get_default_group
 gdk_x11_display_error_trap_push
 gdk_x11_display_error_trap_pop
 gdk_x11_display_error_trap_pop_ignored

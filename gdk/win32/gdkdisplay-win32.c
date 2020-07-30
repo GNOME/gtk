@@ -612,16 +612,6 @@ gdk_win32_display_get_name (GdkDisplay *display)
   return display_name_cache;
 }
 
-static GdkSurface *
-gdk_win32_display_get_default_group (GdkDisplay *display)
-{
-  g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
-
-  g_warning ("gdk_display_get_default_group not yet implemented");
-
-  return NULL;
-}
-
 static void
 gdk_win32_display_beep (GdkDisplay *display)
 {
@@ -1061,7 +1051,6 @@ gdk_win32_display_class_init (GdkWin32DisplayClass *klass)
   display_class->flush = gdk_win32_display_flush;
   display_class->has_pending = _gdk_win32_display_has_pending;
   display_class->queue_events = _gdk_win32_display_queue_events;
-  display_class->get_default_group = gdk_win32_display_get_default_group;
 
   //? display_class->get_app_launch_context = _gdk_win32_display_get_app_launch_context;
 

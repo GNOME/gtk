@@ -995,25 +995,6 @@ gdk_display_flush (GdkDisplay *display)
 }
 
 /**
- * gdk_display_get_default_group:
- * @display: a #GdkDisplay
- *
- * Returns the default group leader surface for all toplevel surfaces
- * on @display. This surface is implicitly created by GDK.
- * See gdk_surface_set_group().
- *
- * Returns: (transfer none): The default group leader surface
- * for @display
- **/
-GdkSurface *
-gdk_display_get_default_group (GdkDisplay *display)
-{
-  g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
-
-  return GDK_DISPLAY_GET_CLASS (display)->get_default_group (display);
-}
-
-/**
  * gdk_display_get_clipboard:
  * @display: a #GdkDisplay
  *

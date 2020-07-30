@@ -123,7 +123,6 @@ struct _GdkDisplayClass
   gboolean                   (*has_pending)        (GdkDisplay *display);
   void                       (*queue_events)       (GdkDisplay *display);
   void                       (*make_default)       (GdkDisplay *display);
-  GdkSurface *               (*get_default_group)  (GdkDisplay *display);
 
   GdkAppLaunchContext *      (*get_app_launch_context) (GdkDisplay *display);
 
