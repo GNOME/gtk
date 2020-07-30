@@ -47,6 +47,10 @@
  *
  * GtkLinkButton has a single CSS node with name button. To differentiate
  * it from a plain #GtkButton, it gets the .link style class.
+ *
+ * # Accessibility
+ *
+ * GtkLinkButton uses the #GTK_ACCESSIBKE_ROLE_BUTTON role.
  */
 
 #include "config.h"
@@ -217,6 +221,7 @@ gtk_link_button_class_init (GtkLinkButtonClass *klass)
                   G_TYPE_BOOLEAN, 0);
 
   gtk_widget_class_set_css_name (widget_class, I_("button"));
+  gtk_widget_class_set_accessible_role (widget_class, GTK_ACCESSIBLE_ROLE_BUTTON);
 
   /**
    * GtkLinkButton|clipboard.copy:
