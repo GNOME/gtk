@@ -2381,6 +2381,7 @@ gdk_dnd_handle_key_event (GdkDrag  *drag,
   GdkWin32Drag *drag_win32 = GDK_WIN32_DRAG (drag);
   GdkModifierType state;
   GdkDevice *pointer;
+  GdkSeat *seat;
   int dx, dy;
 
   GDK_NOTE (DND, g_print ("gdk_dnd_handle_key_event: 0x%p\n", drag));
@@ -2388,7 +2389,8 @@ gdk_dnd_handle_key_event (GdkDrag  *drag,
   state = gdk_event_get_modifier_state (event);
 
   dx = dy = 0;
-  pointer = gdk_device_get_associated_device (gdk_event_get_device (event));
+  seat = gdk_event_get_seat (event);
+  pointer = gdk_seat_get_pointer (seat);
 
   if (gdk_event_get_event_type (event) == GDK_KEY_PRESS)
     {
