@@ -4078,18 +4078,10 @@ gtk_window_get_remembered_size (GtkWindow *window,
                                 int       *width,
                                 int       *height)
 {
-  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
   GtkWindowGeometryInfo *info;
 
   *width = 0;
   *height = 0;
-
-  if (priv->surface)
-    {
-      *width = gdk_surface_get_width (priv->surface);
-      *height = gdk_surface_get_height (priv->surface);
-      return;
-    }
 
   info = gtk_window_get_geometry_info (window, FALSE);
   if (info)
