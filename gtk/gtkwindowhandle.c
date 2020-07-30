@@ -157,6 +157,7 @@ do_popup_fallback (GtkWindowHandle *self,
 {
   GdkRectangle rect = { 0, 0, 1, 1 };
   GdkDevice *device;
+  GdkSeat *seat;
   GtkWidget *box, *menuitem;
   GtkWindow *window;
   gboolean maximized, resizable, deletable;
@@ -186,9 +187,10 @@ do_popup_fallback (GtkWindowHandle *self,
 
 
   device = gdk_event_get_device (event);
+  seat = gdk_event_get_seat (event);
 
-  if (device && gdk_device_get_source (device) == GDK_SOURCE_KEYBOARD)
-    device = gdk_device_get_associated_device (device);
+  if (device == gdk_seat_get_keyboard (seat))
+    device = gdk_seat_get_pointer (seat);
 
   if (device)
     {
