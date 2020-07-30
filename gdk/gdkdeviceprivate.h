@@ -39,7 +39,6 @@ struct _GdkDevice
   char *name;
   GdkInputSource source;
   gboolean has_cursor;
-  GdkDeviceType type;
   GdkDisplay *display;
   /* The paired logical device for logical devices,
    * or the associated logical device for physical ones
@@ -130,6 +129,8 @@ gboolean   _gdk_device_translate_axis         (GdkDevice *device,
 
 GdkTimeCoord ** _gdk_device_allocate_history  (GdkDevice *device,
                                                int        n_events);
+
+GList * gdk_device_list_physical_devices        (GdkDevice *device);
 
 void    _gdk_device_add_physical_device         (GdkDevice *device,
                                                  GdkDevice *physical);

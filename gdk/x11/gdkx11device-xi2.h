@@ -32,8 +32,18 @@ G_BEGIN_DECLS
 typedef struct _GdkX11DeviceXI2 GdkX11DeviceXI2;
 typedef struct _GdkX11DeviceXI2Class GdkX11DeviceXI2Class;
 
+typedef enum {
+  GDK_X11_DEVICE_TYPE_LOGICAL,
+  GDK_X11_DEVICE_TYPE_PHYSICAL,
+  GDK_X11_DEVICE_TYPE_FLOATING
+} GdkX11DeviceType;
+
 GDK_AVAILABLE_IN_ALL
 GType gdk_x11_device_xi2_get_type (void) G_GNUC_CONST;
+
+GdkX11DeviceType gdk_x11_device_xi2_get_device_type (GdkX11DeviceXI2 *device);
+void             gdk_x11_device_xi2_set_device_type (GdkX11DeviceXI2  *device,
+                                                     GdkX11DeviceType  type);
 
 G_END_DECLS
 

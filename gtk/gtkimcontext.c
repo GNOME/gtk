@@ -549,7 +549,6 @@ gtk_im_context_filter_key (GtkIMContext    *context,
                            GdkModifierType  state,
                            int              group)
 {
-  GdkDevice *source_device;
   GdkTranslatedKey translated, no_lock;
   GdkEvent *key;
   gboolean ret;
@@ -559,16 +558,6 @@ gtk_im_context_filter_key (GtkIMContext    *context,
   GdkModifierType consumed;
 
   g_return_val_if_fail (GTK_IS_IM_CONTEXT (context), FALSE);
-
-  if (gdk_device_get_device_type (device) == GDK_DEVICE_TYPE_LOGICAL)
-    {
-      source_device = NULL;
-    }
-  else
-    {
-      source_device = device;
-      device = gdk_device_get_associated_device (source_device);
-    }
 
   if (!gdk_display_translate_key (gdk_surface_get_display (surface),
                                   keycode,

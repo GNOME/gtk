@@ -471,7 +471,7 @@ create_device (GdkX11DeviceManagerXI2 *device_manager,
 {
   GdkInputSource input_source;
   GdkInputSource touch_source;
-  GdkDeviceType type;
+  GdkX11DeviceType type;
   GdkDevice *device;
   int num_touches = 0;
   char *vendor_id = NULL, *product_id = NULL;
@@ -515,15 +515,15 @@ create_device (GdkX11DeviceManagerXI2 *device_manager,
     {
     case XIMasterKeyboard:
     case XIMasterPointer:
-      type = GDK_DEVICE_TYPE_LOGICAL;
+      type = GDK_X11_DEVICE_TYPE_LOGICAL;
       break;
     case XISlaveKeyboard:
     case XISlavePointer:
-      type = GDK_DEVICE_TYPE_PHYSICAL;
+      type = GDK_X11_DEVICE_TYPE_PHYSICAL;
       break;
     case XIFloatingSlave:
     default:
-      type = GDK_DEVICE_TYPE_FLOATING;
+      type = GDK_X11_DEVICE_TYPE_FLOATING;
       break;
     }
 
@@ -545,7 +545,6 @@ create_device (GdkX11DeviceManagerXI2 *device_manager,
 
   device = g_object_new (GDK_TYPE_X11_DEVICE_XI2,
                          "name", dev->name,
-                         "type", type,
                          "source", input_source,
                          "has-cursor", (dev->use == XIMasterPointer),
                          "display", display,
@@ -554,6 +553,7 @@ create_device (GdkX11DeviceManagerXI2 *device_manager,
                          "product-id", product_id,
                          "num-touches", num_touches,
                          NULL);
+  gdk_x11_device_xi2_set_device_type ((GdkX11DeviceXI2 *) device, type);
 
   translate_device_classes (display, device, dev->classes, dev->num_classes);
   g_free (vendor_id);
@@ -652,13 +652,14 @@ static void
 detach_from_seat (GdkDevice *device)
 {
   GdkSeat *seat = gdk_device_get_seat (device);
+  GdkX11DeviceXI2 *device_xi2 = (GdkX11DeviceXI2 *) device;
 
   if (!seat)
     return;
 
-  if (gdk_device_get_device_type (device) == GDK_DEVICE_TYPE_LOGICAL)
+  if (gdk_x11_device_xi2_get_device_type (device_xi2) == GDK_X11_DEVICE_TYPE_LOGICAL)
     gdk_display_remove_seat (gdk_device_get_display (device), seat);
-  else if (gdk_device_get_device_type (device) == GDK_DEVICE_TYPE_PHYSICAL)
+  else if (gdk_x11_device_xi2_get_device_type (device_xi2) == GDK_X11_DEVICE_TYPE_PHYSICAL)
     gdk_seat_default_remove_physical_device (GDK_SEAT_DEFAULT (seat), device);
 }
 
@@ -914,7 +915,7 @@ handle_hierarchy_changed (GdkX11DeviceManagerXI2 *device_manager,
       else if (ev->info[i].flags & XISlaveAttached ||
                ev->info[i].flags & XISlaveDetached)
         {
-          GdkDevice *logical, *physical;
+          GdkDevice *logical = NULL, *physical;
           GdkSeat *seat;
 
           physical = g_hash_table_lookup (device_manager->id_table,
@@ -923,17 +924,8 @@ handle_hierarchy_changed (GdkX11DeviceManagerXI2 *device_manager,
           if (!physical)
             continue;
 
-          /* Remove old logical device info */
-          logical = gdk_device_get_associated_device (physical);
-
-          if (logical != NULL)
-            {
-              _gdk_device_remove_physical_device (logical, physical);
-              _gdk_device_set_associated_device (physical, NULL);
-
-              seat = gdk_device_get_seat (logical);
-              gdk_seat_default_remove_physical_device (GDK_SEAT_DEFAULT (seat), physical);
-            }
+          seat = gdk_device_get_seat (physical);
+          gdk_seat_default_remove_physical_device (GDK_SEAT_DEFAULT (seat), physical);
 
           /* Add new logical device if it's an attachment event */
           if (ev->info[i].flags & XISlaveAttached)
@@ -1720,7 +1712,7 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
          * source device, we need to explicitly ignore the first event in
          * order to get the correct delta for the second.
          */
-        if (gdk_device_get_device_type (device) != GDK_DEVICE_TYPE_PHYSICAL &&
+        if (gdk_x11_device_xi2_get_device_type ((GdkX11DeviceXI2 *) device) != GDK_X11_DEVICE_TYPE_PHYSICAL &&
             scroll_valuators_changed (GDK_X11_DEVICE_XI2 (source_device),
                                       &xev->valuators, &delta_x, &delta_y))
           {
@@ -1895,7 +1887,7 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
             xev->detail != XINotifyInferior && xev->mode != XINotifyPassiveUngrab &&
             GDK_IS_TOPLEVEL (surface))
           {
-            if (gdk_device_get_device_type (source_device) != GDK_DEVICE_TYPE_LOGICAL)
+            if (gdk_x11_device_xi2_get_device_type ((GdkX11DeviceXI2 *) device) != GDK_X11_DEVICE_TYPE_LOGICAL)
               _gdk_device_xi2_reset_scroll_valuators (GDK_X11_DEVICE_XI2 (source_device));
             else
               {

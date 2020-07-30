@@ -8628,12 +8628,14 @@ gtk_text_view_do_popup (GtkTextView *text_view,
   if (trigger_event && gdk_event_triggers_context_menu (trigger_event))
     {
       GdkDevice *device;
+      GdkSeat *seat;
       GdkRectangle rect = { 0, 0, 1, 1 };
 
       device = gdk_event_get_device (trigger_event);
+      seat = gdk_event_get_seat (trigger_event);
 
-      if (device && gdk_device_get_source (device) == GDK_SOURCE_KEYBOARD)
-        device = gdk_device_get_associated_device (device);
+      if (device == gdk_seat_get_keyboard (seat))
+        device = gdk_seat_get_pointer (seat);
 
       if (device)
         {

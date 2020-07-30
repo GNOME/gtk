@@ -1686,7 +1686,7 @@ gdk_surface_hide (GdkSurface *surface)
       seat = gdk_display_get_default_seat (display);
       if (seat)
         {
-          devices = gdk_seat_get_physical_devices (seat, GDK_SEAT_CAPABILITY_ALL);
+          devices = gdk_seat_get_devices (seat, GDK_SEAT_CAPABILITY_ALL);
           devices = g_list_prepend (devices, gdk_seat_get_keyboard (seat));
           devices = g_list_prepend (devices, gdk_seat_get_pointer (seat));
         }
@@ -1804,10 +1804,10 @@ gdk_surface_set_cursor (GdkSurface *surface,
           device = gdk_seat_get_pointer (s->data);
           gdk_surface_set_cursor_internal (surface, device, surface->cursor);
 
-          devices = gdk_seat_get_physical_devices (s->data, GDK_SEAT_CAPABILITY_TABLET_STYLUS);
+          devices = gdk_seat_get_devices (s->data, GDK_SEAT_CAPABILITY_TABLET_STYLUS);
           for (d = devices; d; d = d->next)
             {
-              device = gdk_device_get_associated_device (d->data);
+              device = d->data;
               gdk_surface_set_cursor_internal (surface, device, surface->cursor);
             }
           g_list_free (devices);
@@ -1840,7 +1840,6 @@ gdk_surface_get_device_cursor (GdkSurface *surface,
   g_return_val_if_fail (GDK_IS_SURFACE (surface), NULL);
   g_return_val_if_fail (GDK_IS_DEVICE (device), NULL);
   g_return_val_if_fail (gdk_device_get_source (device) != GDK_SOURCE_KEYBOARD, NULL);
-  g_return_val_if_fail (gdk_device_get_device_type (device) == GDK_DEVICE_TYPE_LOGICAL, NULL);
 
   return g_hash_table_lookup (surface->device_cursor, device);
 }
@@ -1866,7 +1865,6 @@ gdk_surface_set_device_cursor (GdkSurface *surface,
   g_return_if_fail (GDK_IS_SURFACE (surface));
   g_return_if_fail (GDK_IS_DEVICE (device));
   g_return_if_fail (gdk_device_get_source (device) != GDK_SOURCE_KEYBOARD);
-  g_return_if_fail (gdk_device_get_device_type (device) == GDK_DEVICE_TYPE_LOGICAL);
 
   if (!cursor)
     g_hash_table_remove (surface->device_cursor, device);

@@ -639,12 +639,7 @@ switch_to_pointer_grab (GdkDisplay        *display,
       if (grab == NULL /* ungrab */ ||
 	  (!last_grab->owner_events && grab->owner_events) /* switched to owner_events */ )
 	{
-          /* Ungrabbed physical devices don't have a position by
-           * itself, rather depend on its logical pointer, so
-           * it doesn't make sense to track any position for
-           * these after the grab
-           */
-          if (grab || gdk_device_get_device_type (device) != GDK_DEVICE_TYPE_PHYSICAL)
+          if (grab)
             new_toplevel = get_current_toplevel (display, device, &x, &y, &state);
 
 	  if (new_toplevel)
@@ -816,9 +811,15 @@ _gdk_display_get_pointer_info (GdkDisplay *display,
                                GdkDevice  *device)
 {
   GdkPointerSurfaceInfo *info;
+  GdkSeat *seat;
 
-  if (device && gdk_device_get_source (device) == GDK_SOURCE_KEYBOARD)
-    device = gdk_device_get_associated_device (device);
+  if (device)
+    {
+      seat = gdk_device_get_seat (device);
+
+      if (device == gdk_seat_get_keyboard (seat))
+        device = gdk_seat_get_pointer (seat);
+    }
 
   if (G_UNLIKELY (!device))
     return NULL;

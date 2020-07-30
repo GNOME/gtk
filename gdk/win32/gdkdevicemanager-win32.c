@@ -74,13 +74,12 @@ static GdkDevice *
 create_pointer (GdkDeviceManagerWin32 *device_manager,
 		GType g_type,
 		const char *name,
-		GdkDeviceType type)
+                gboolean has_cursor)
 {
   return g_object_new (g_type,
                        "name", name,
-                       "type", type,
                        "source", GDK_SOURCE_MOUSE,
-                       "has-cursor", type == GDK_DEVICE_TYPE_LOGICAL,
+                       "has-cursor", has_cursor,
                        "display", _gdk_display,
                        NULL);
 }
@@ -88,12 +87,10 @@ create_pointer (GdkDeviceManagerWin32 *device_manager,
 static GdkDevice *
 create_keyboard (GdkDeviceManagerWin32 *device_manager,
 		 GType g_type,
-		 const char *name,
-		 GdkDeviceType type)
+		 const char *name)
 {
   return g_object_new (g_type,
                        "name", name,
-                       "type", type,
                        "source", GDK_SOURCE_KEYBOARD,
                        "has-cursor", FALSE,
                        "display", _gdk_display,
@@ -555,7 +552,6 @@ wintab_init_check (GdkDeviceManagerWin32 *device_manager)
 
           device = g_object_new (GDK_TYPE_DEVICE_WINTAB,
                                  "name", device_name,
-                                 "type", GDK_DEVICE_TYPE_FLOATING,
                                  "source", GDK_SOURCE_PEN,
                                  "has-cursor", lc.lcOptions & CXO_SYSTEM,
                                  "display", display,
@@ -693,12 +689,12 @@ gdk_device_manager_win32_constructed (GObject *object)
     create_pointer (device_manager,
 		    GDK_TYPE_DEVICE_VIRTUAL,
 		    "Virtual Core Pointer",
-		    GDK_DEVICE_TYPE_LOGICAL);
+                    TRUE);
   device_manager->system_pointer =
     create_pointer (device_manager,
 		    GDK_TYPE_DEVICE_WIN32,
 		    "System Aggregated Pointer",
-		    GDK_DEVICE_TYPE_PHYSICAL);
+                    FALSE);
   _gdk_device_virtual_set_active (device_manager->core_pointer,
 				  device_manager->system_pointer);
   _gdk_device_set_associated_device (device_manager->system_pointer, device_manager->core_pointer);
@@ -707,13 +703,11 @@ gdk_device_manager_win32_constructed (GObject *object)
   device_manager->core_keyboard =
     create_keyboard (device_manager,
 		     GDK_TYPE_DEVICE_VIRTUAL,
-		     "Virtual Core Keyboard",
-		     GDK_DEVICE_TYPE_LOGICAL);
+		     "Virtual Core Keyboard");
   device_manager->system_keyboard =
     create_keyboard (device_manager,
 		    GDK_TYPE_DEVICE_WIN32,
-		     "System Aggregated Keyboard",
-		     GDK_DEVICE_TYPE_PHYSICAL);
+		     "System Aggregated Keyboard");
   _gdk_device_virtual_set_active (device_manager->core_keyboard,
 				  device_manager->system_keyboard);
   _gdk_device_set_associated_device (device_manager->system_keyboard, device_manager->core_keyboard);

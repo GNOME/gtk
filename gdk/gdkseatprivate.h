@@ -54,8 +54,8 @@ struct _GdkSeatClass
 
   GdkDevice * (* get_logical_device) (GdkSeat             *seat,
                                       GdkSeatCapabilities  capability);
-  GList *     (* get_physical_devices) (GdkSeat             *seat,
-                                        GdkSeatCapabilities  capabilities);
+  GList *     (* get_devices) (GdkSeat             *seat,
+                               GdkSeatCapabilities  capabilities);
 
   GList * (* get_tools) (GdkSeat *seat);
 };

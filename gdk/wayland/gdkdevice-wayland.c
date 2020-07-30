@@ -2823,7 +2823,6 @@ tablet_handle_done (void                 *data,
   logical_name = g_strdup_printf ("Logical pointer for %s", tablet->name);
   logical_device = g_object_new (GDK_TYPE_WAYLAND_DEVICE,
                                  "name", logical_name,
-                                 "type", GDK_DEVICE_TYPE_LOGICAL,
                                  "source", GDK_SOURCE_MOUSE,
                                  "has-cursor", TRUE,
                                  "display", display,
@@ -2833,7 +2832,6 @@ tablet_handle_done (void                 *data,
 
   stylus_device = g_object_new (GDK_TYPE_WAYLAND_DEVICE,
                                 "name", tablet->name,
-                                "type", GDK_DEVICE_TYPE_PHYSICAL,
                                 "source", GDK_SOURCE_PEN,
                                 "has-cursor", FALSE,
                                 "display", display,
@@ -2938,7 +2936,6 @@ seat_handle_capabilities (void                    *data,
 
       seat->pointer = g_object_new (GDK_TYPE_WAYLAND_DEVICE,
                                     "name", "Wayland Pointer",
-                                    "type", GDK_DEVICE_TYPE_PHYSICAL,
                                     "source", GDK_SOURCE_MOUSE,
                                     "has-cursor", TRUE,
                                     "display", seat->display,
@@ -3008,7 +3005,6 @@ seat_handle_capabilities (void                    *data,
 
       seat->keyboard = g_object_new (GDK_TYPE_WAYLAND_DEVICE,
                                      "name", "Wayland Keyboard",
-                                     "type", GDK_DEVICE_TYPE_PHYSICAL,
                                      "source", GDK_SOURCE_KEYBOARD,
                                      "has-cursor", FALSE,
                                      "display", seat->display,
@@ -3036,7 +3032,6 @@ seat_handle_capabilities (void                    *data,
 
       seat->logical_touch = g_object_new (GDK_TYPE_WAYLAND_DEVICE,
                                          "name", "Wayland Touch Logical Pointer",
-                                         "type", GDK_DEVICE_TYPE_LOGICAL,
                                          "source", GDK_SOURCE_TOUCHSCREEN,
                                          "has-cursor", TRUE,
                                          "display", seat->display,
@@ -3048,7 +3043,6 @@ seat_handle_capabilities (void                    *data,
 
       seat->touch = g_object_new (GDK_TYPE_WAYLAND_DEVICE,
                                   "name", "Wayland Touch",
-                                  "type", GDK_DEVICE_TYPE_PHYSICAL,
                                   "source", GDK_SOURCE_TOUCHSCREEN,
                                   "has-cursor", FALSE,
                                   "display", seat->display,
@@ -3085,7 +3079,6 @@ get_scroll_device (GdkWaylandSeat              *seat,
         {
           seat->wheel_scrolling = g_object_new (GDK_TYPE_WAYLAND_DEVICE,
                                                 "name", "Wayland Wheel Scrolling",
-                                                "type", GDK_DEVICE_TYPE_LOGICAL,
                                                 "source", GDK_SOURCE_MOUSE,
                                                 "has-cursor", TRUE,
                                                 "display", seat->display,
@@ -3100,7 +3093,6 @@ get_scroll_device (GdkWaylandSeat              *seat,
         {
           seat->finger_scrolling = g_object_new (GDK_TYPE_WAYLAND_DEVICE,
                                                  "name", "Wayland Finger Scrolling",
-                                                 "type", GDK_DEVICE_TYPE_LOGICAL,
                                                  "source", GDK_SOURCE_TOUCHPAD,
                                                  "has-cursor", TRUE,
                                                  "display", seat->display,
@@ -3115,7 +3107,6 @@ get_scroll_device (GdkWaylandSeat              *seat,
         {
           seat->continuous_scrolling = g_object_new (GDK_TYPE_WAYLAND_DEVICE,
                                                      "name", "Wayland Continuous Scrolling",
-                                                     "type", GDK_DEVICE_TYPE_LOGICAL,
                                                      "source", GDK_SOURCE_TRACKPOINT,
                                                      "has-cursor", TRUE,
                                                      "display", seat->display,
@@ -4098,7 +4089,6 @@ tablet_pad_handle_done (void                     *data,
   pad->device =
     g_object_new (GDK_TYPE_WAYLAND_DEVICE_PAD,
                   "name", "Pad device",
-                  "type", GDK_DEVICE_TYPE_PHYSICAL,
                   "source", GDK_SOURCE_TABLET_PAD,
                   "display", gdk_seat_get_display (pad->seat),
                   "seat", pad->seat,
@@ -4276,7 +4266,6 @@ init_devices (GdkWaylandSeat *seat)
   /* pointer */
   seat->logical_pointer = g_object_new (GDK_TYPE_WAYLAND_DEVICE,
                                        "name", "Core Pointer",
-                                       "type", GDK_DEVICE_TYPE_LOGICAL,
                                        "source", GDK_SOURCE_MOUSE,
                                        "has-cursor", TRUE,
                                        "display", seat->display,
@@ -4288,7 +4277,6 @@ init_devices (GdkWaylandSeat *seat)
   /* keyboard */
   seat->logical_keyboard = g_object_new (GDK_TYPE_WAYLAND_DEVICE,
                                         "name", "Core Keyboard",
-                                        "type", GDK_DEVICE_TYPE_LOGICAL,
                                         "source", GDK_SOURCE_KEYBOARD,
                                         "has-cursor", FALSE,
                                         "display", seat->display,
@@ -4664,8 +4652,8 @@ gdk_wayland_seat_get_logical_device (GdkSeat             *seat,
 }
 
 static GList *
-gdk_wayland_seat_get_physical_devices (GdkSeat             *seat,
-                                       GdkSeatCapabilities  capabilities)
+gdk_wayland_seat_get_devices (GdkSeat             *seat,
+                              GdkSeatCapabilities  capabilities)
 {
   GdkWaylandSeat *wayland_seat = GDK_WAYLAND_SEAT (seat);
   GList *physical_devices = NULL;
@@ -4737,7 +4725,7 @@ gdk_wayland_seat_class_init (GdkWaylandSeatClass *klass)
   seat_class->grab = gdk_wayland_seat_grab;
   seat_class->ungrab = gdk_wayland_seat_ungrab;
   seat_class->get_logical_device = gdk_wayland_seat_get_logical_device;
-  seat_class->get_physical_devices = gdk_wayland_seat_get_physical_devices;
+  seat_class->get_devices = gdk_wayland_seat_get_devices;
   seat_class->get_tools = gdk_wayland_seat_get_tools;
 }
 

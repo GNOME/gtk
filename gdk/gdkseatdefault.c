@@ -262,8 +262,8 @@ append_filtered (GList               *list,
 }
 
 static GList *
-gdk_seat_default_get_physical_devices (GdkSeat             *seat,
-                                       GdkSeatCapabilities  capabilities)
+gdk_seat_default_get_devices (GdkSeat             *seat,
+                              GdkSeatCapabilities  capabilities)
 {
   GdkSeatDefaultPrivate *priv;
   GList *devices = NULL;
@@ -315,7 +315,7 @@ gdk_seat_default_class_init (GdkSeatDefaultClass *klass)
   seat_class->ungrab = gdk_seat_default_ungrab;
 
   seat_class->get_logical_device = gdk_seat_default_get_logical_device;
-  seat_class->get_physical_devices = gdk_seat_default_get_physical_devices;
+  seat_class->get_devices = gdk_seat_default_get_devices;
   seat_class->get_tools = gdk_seat_default_get_tools;
 }
 

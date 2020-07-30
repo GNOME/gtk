@@ -38,14 +38,12 @@ _gdk_macos_seat_new (GdkMacosDisplay *display)
 
   core_pointer = g_object_new (GDK_TYPE_MACOS_DEVICE,
                                "name", "Core Pointer",
-                               "type", GDK_DEVICE_TYPE_LOGICAL,
                                "source", GDK_SOURCE_MOUSE,
                                "has-cursor", TRUE,
                                "display", display,
                                NULL);
   core_keyboard = g_object_new (GDK_TYPE_MACOS_DEVICE,
                                 "name", "Core Keyboard",
-                                "type", GDK_DEVICE_TYPE_LOGICAL,
                                 "source", GDK_SOURCE_KEYBOARD,
                                 "has-cursor", FALSE,
                                 "display", display,

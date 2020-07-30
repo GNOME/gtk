@@ -820,7 +820,7 @@ add_seat (GtkInspectorGeneral *gen,
   g_free (text);
   g_free (caps);
 
-  list = gdk_seat_get_physical_devices (seat, GDK_SEAT_CAPABILITY_ALL);
+  list = gdk_seat_get_devices (seat, GDK_SEAT_CAPABILITY_ALL);
 
   for (l = list; l; l = l->next)
     add_device (gen, GDK_DEVICE (l->data));

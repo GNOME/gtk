@@ -50,6 +50,7 @@ struct _GdkX11DeviceXI2
   int device_id;
   GArray *scroll_valuators;
   double *last_axes;
+  GdkX11DeviceType device_type;
 };
 
 struct _GdkX11DeviceXI2Class
@@ -190,7 +191,7 @@ gdk_x11_device_xi2_set_surface_cursor (GdkDevice *device,
   GdkX11DeviceXI2 *device_xi2 = GDK_X11_DEVICE_XI2 (device);
 
   /* Non-logical devices don't have a cursor */
-  if (gdk_device_get_device_type (device) != GDK_DEVICE_TYPE_LOGICAL)
+  if (device_xi2->device_type != GDK_X11_DEVICE_TYPE_LOGICAL)
     return;
 
   if (cursor)
@@ -233,16 +234,6 @@ gdk_x11_device_xi2_query_state (GdkDevice        *device,
     {
       xwindow = GDK_SURFACE_XID (surface);
       scale = GDK_X11_SURFACE (surface)->surface_scale;
-    }
-
-  if (gdk_device_get_device_type (device) == GDK_DEVICE_TYPE_PHYSICAL)
-    {
-      GdkDevice *logical = gdk_device_get_associated_device (device);
-
-      if (logical != NULL)
-        _gdk_device_query_state (logical, surface, child_surface,
-                                 win_x, win_y, mask);
-      return;
     }
 
   if (!GDK_X11_DISPLAY (display)->trusted_client ||
@@ -782,4 +773,17 @@ gdk_x11_device_xi2_store_axes (GdkX11DeviceXI2 *device,
     device->last_axes = g_memdup (axes, sizeof (double) * n_axes);
   else
     device->last_axes = NULL;
+}
+
+GdkX11DeviceType
+gdk_x11_device_xi2_get_device_type (GdkX11DeviceXI2 *device)
+{
+  return device->device_type;
+}
+
+void
+gdk_x11_device_xi2_set_device_type (GdkX11DeviceXI2  *device,
+                                    GdkX11DeviceType  type)
+{
+  device->device_type = type;
 }
