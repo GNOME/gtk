@@ -24,6 +24,10 @@
 
 #include "gdkwin32screen.h"
 #include "gdkwin32cursor.h"
+ 
+#ifdef GDK_WIN32_ENABLE_EGL
+# include <epoxy/egl.h>
+#endif
 
 /* Define values used to set DPI-awareness */
 typedef enum _GdkWin32ProcessDpiAwareness {
@@ -65,6 +69,13 @@ typedef struct _GdkWin32User32DPIFuncs
   funcIsProcessDPIAware isDpiAwareFunc;
 } GdkWin32User32DPIFuncs;
 
+/* Detect running architecture */
+typedef BOOL (WINAPI *funcIsWow64Process2) (HANDLE, USHORT *, USHORT *);
+typedef struct _GdkWin32KernelCPUFuncs
+{
+  funcIsWow64Process2 isWow64Process2;
+} GdkWin32KernelCPUFuncs;
+
 struct _GdkWin32Display
 {
   GdkDisplay display;
@@ -82,6 +93,14 @@ struct _GdkWin32Display
   guint gl_version;
   HWND gl_hwnd;
 
+#ifdef GDK_WIN32_ENABLE_EGL
+  /* EGL (Angle) Items */
+  guint have_egl : 1;
+  guint egl_version;
+  EGLDisplay egl_disp;
+  HDC hdc_egl_temp;
+#endif
+
   GListModel *monitors;
 
   guint hasWglARBCreateContext : 1;
@@ -89,6 +108,12 @@ struct _GdkWin32Display
   guint hasWglOMLSyncControl : 1;
   guint hasWglARBPixelFormat : 1;
   guint hasWglARBmultisample : 1;
+
+#ifdef GDK_WIN32_ENABLE_EGL
+  guint hasEglKHRCreateContext : 1;
+  guint hasEglSurfacelessContext : 1;
+  EGLint egl_min_swap_interval;
+#endif
 
   /* HiDPI Items */
   guint have_at_least_win81 : 1;
@@ -113,6 +138,10 @@ struct _GdkWin32Display
 
   /* Message filters */
   GList *filters;
+
+  /* Running CPU items */
+  guint running_on_arm64 : 1;
+  GdkWin32KernelCPUFuncs cpu_funcs;
 };
 
 struct _GdkWin32DisplayClass

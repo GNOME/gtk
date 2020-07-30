@@ -39,6 +39,13 @@
 #include <dwmapi.h>
 
 #include "gdkwin32langnotification.h"
+#ifdef GDK_WIN32_ENABLE_EGL
+# include <epoxy/egl.h>
+#endif
+
+#ifndef IMAGE_FILE_MACHINE_ARM64
+# define IMAGE_FILE_MACHINE_ARM64 0xAA64
+#endif
 
 static int debug_indent = 0;
 
@@ -641,6 +648,14 @@ gdk_win32_display_dispose (GObject *object)
 {
   GdkWin32Display *display_win32 = GDK_WIN32_DISPLAY (object);
 
+#ifdef GDK_WIN32_ENABLE_EGL
+  if (display_win32->egl_disp != EGL_NO_DISPLAY)
+    {
+      eglTerminate (display_win32->egl_disp);
+      display_win32->egl_disp = EGL_NO_DISPLAY;
+    }
+#endif
+
   if (display_win32->hwnd != NULL)
     {
       DestroyWindow (display_win32->hwnd);
@@ -870,6 +885,40 @@ _gdk_win32_enable_hidpi (GdkWin32Display *display)
 }
 
 static void
+_gdk_win32_check_on_arm64 (GdkWin32Display *display)
+{
+  static gsize checked = 0;
+
+  if (g_once_init_enter (&checked))
+    {
+      HMODULE kernel32 = LoadLibraryW (L"kernel32.dll");
+
+      if (kernel32 != NULL)
+        {
+          display->cpu_funcs.isWow64Process2 =
+            (funcIsWow64Process2) GetProcAddress (kernel32, "IsWow64Process2");
+
+          if (display->cpu_funcs.isWow64Process2 != NULL)
+            {
+              USHORT proc_cpu = 0;
+              USHORT native_cpu = 0;
+
+              display->cpu_funcs.isWow64Process2 (GetCurrentProcess (),
+                                                  &proc_cpu,
+                                                  &native_cpu);
+
+              if (native_cpu == IMAGE_FILE_MACHINE_ARM64)
+                display->running_on_arm64 = TRUE;
+            }
+
+          FreeLibrary (kernel32);
+        }
+
+      g_once_init_leave (&checked, 1);
+    }
+}
+
+static void
 gdk_win32_display_init (GdkWin32Display *display)
 {
   const char *scale_str = g_getenv ("GDK_SCALE");
@@ -877,6 +926,7 @@ gdk_win32_display_init (GdkWin32Display *display)
   display->monitors = G_LIST_MODEL (g_list_store_new (GDK_TYPE_MONITOR));
 
   _gdk_win32_enable_hidpi (display);
+  _gdk_win32_check_on_arm64 (display);
 
   /* if we have DPI awareness, set up fixed scale if set */
   if (display->dpi_aware_type != PROCESS_DPI_UNAWARE &&

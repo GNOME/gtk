@@ -107,6 +107,9 @@ void                    gdk_gl_context_label_object_printf      (GdkGLContext   
                                                                 ...)  G_GNUC_PRINTF (4, 5);
 
 gboolean                gdk_gl_context_has_debug                (GdkGLContext    *self) G_GNUC_PURE;
+
+gboolean                gdk_gl_context_use_es_bgra              (GdkGLContext    *context);
+
 G_END_DECLS
 
 #endif /* __GDK_GL_CONTEXT_PRIVATE_H__ */

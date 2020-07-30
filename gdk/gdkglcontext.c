@@ -92,6 +92,10 @@
 #include "gdkintl.h"
 #include "gdk-private.h"
 
+#ifdef GDK_WINDOWING_WIN32
+# include "gdk/win32/gdkwin32.h"
+#endif
+
 #include <epoxy/gl.h>
 
 typedef struct {
@@ -993,11 +997,14 @@ gdk_gl_context_check_extensions (GdkGLContext *context)
       has_npot = priv->gl_version >= 20;
       has_texture_rectangle = FALSE;
 
-      /* This should check for GL_NV_framebuffer_blit - see extension at:
+      /* This should check for GL_NV_framebuffer_blit as well - see extension at:
        *
        * https://www.khronos.org/registry/gles/extensions/NV/NV_framebuffer_blit.txt
+       *
+       * for ANGLE, we can enable bit blitting if we have the
+       * GL_ANGLE_framebuffer_blit extension
        */
-      priv->has_gl_framebuffer_blit = FALSE;
+      priv->has_gl_framebuffer_blit = epoxy_has_gl_extension ("GL_ANGLE_framebuffer_blit");
 
       /* No OES version */
       priv->has_frame_terminator = FALSE;
@@ -1222,4 +1229,20 @@ gdk_gl_context_has_debug (GdkGLContext *self)
   GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (self);
 
   return priv->debug_enabled || priv->use_khr_debug;
+}
+
+/* This is currently private! */
+/* When using GL/ES, don't flip the 'R' and 'B' bits on Windows/ANGLE for glReadPixels() */
+gboolean
+gdk_gl_context_use_es_bgra (GdkGLContext *context)
+{
+  if (!gdk_gl_context_get_use_es (context))
+    return FALSE;
+
+#ifdef GDK_WINDOWING_WIN32
+  if (GDK_WIN32_IS_GL_CONTEXT (context))
+    return TRUE;
+#endif
+
+  return FALSE;
 }
