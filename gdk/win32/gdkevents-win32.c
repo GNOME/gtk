@@ -1351,17 +1351,6 @@ _gdk_win32_hrgn_to_region (HRGN  hrgn,
 }
 
 static void
-adjust_drag (LONG *drag,
-	     LONG  curr,
-	     int   inc)
-{
-  if (*drag > curr)
-    *drag = curr + ((*drag + inc/2 - curr) / inc) * inc;
-  else
-    *drag = curr - ((curr - *drag + inc/2) / inc) * inc;
-}
-
-static void
 handle_wm_paint (MSG        *msg,
 		 GdkSurface  *window)
 {
@@ -1997,7 +1986,7 @@ static gboolean
 gdk_event_translate (MSG *msg,
 		     int *ret_valp)
 {
-  RECT rect, *drag, orig_drag;
+  RECT rect;
   POINT point;
   MINMAXINFO *mmi;
   HWND hwnd;
@@ -3158,7 +3147,6 @@ gdk_event_translate (MSG *msg,
 
     case WM_SIZING:
       GetWindowRect (GDK_SURFACE_HWND (window), &rect);
-      drag = (RECT *) msg->lParam;
       GDK_NOTE (EVENTS, g_print (" %s curr:%s drag:%s",
 				 (msg->wParam == WMSZ_BOTTOM ? "BOTTOM" :
 				  (msg->wParam == WMSZ_BOTTOMLEFT ? "BOTTOMLEFT" :
@@ -3171,99 +3159,9 @@ gdk_event_translate (MSG *msg,
 					(msg->wParam == WMSZ_BOTTOMRIGHT ? "BOTTOMRIGHT" :
 					 "???")))))))),
 				 _gdk_win32_rect_to_string (&rect),
-				 _gdk_win32_rect_to_string (drag)));
+				 _gdk_win32_rect_to_string ((RECT *) msg->lParam)));
 
       impl = GDK_WIN32_SURFACE (window);
-      orig_drag = *drag;
-      if (impl->hint_flags & GDK_HINT_RESIZE_INC)
-	{
-	  GDK_NOTE (EVENTS, g_print (" (RESIZE_INC)"));
-	  if (impl->hint_flags & GDK_HINT_BASE_SIZE)
-	    {
-	      /* Resize in increments relative to the base size */
-	      rect.left = rect.top = 0;
-	      rect.right = impl->hints.base_width * impl->surface_scale;
-	      rect.bottom = impl->hints.base_height * impl->surface_scale;
-	      _gdk_win32_adjust_client_rect (window, &rect);
-	      point.x = rect.left;
-	      point.y = rect.top;
-	      ClientToScreen (GDK_SURFACE_HWND (window), &point);
-	      rect.left = point.x;
-	      rect.top = point.y;
-	      point.x = rect.right;
-	      point.y = rect.bottom;
-	      ClientToScreen (GDK_SURFACE_HWND (window), &point);
-	      rect.right = point.x;
-	      rect.bottom = point.y;
-
-	      GDK_NOTE (EVENTS, g_print (" (also BASE_SIZE, using %s)",
-					 _gdk_win32_rect_to_string (&rect)));
-	    }
-
-	  switch (msg->wParam)
-	    {
-	    case WMSZ_BOTTOM:
-	      if (drag->bottom == rect.bottom)
-		break;
-        adjust_drag (&drag->bottom, rect.bottom, impl->hints.height_inc * impl->surface_scale);
-	      break;
-
-	    case WMSZ_BOTTOMLEFT:
-	      if (drag->bottom == rect.bottom && drag->left == rect.left)
-		break;
-	      adjust_drag (&drag->bottom, rect.bottom, impl->hints.height_inc * impl->surface_scale);
-	      adjust_drag (&drag->left, rect.left, impl->hints.width_inc * impl->surface_scale);
-	      break;
-
-	    case WMSZ_LEFT:
-	      if (drag->left == rect.left)
-		break;
-	      adjust_drag (&drag->left, rect.left, impl->hints.width_inc * impl->surface_scale);
-	      break;
-
-	    case WMSZ_TOPLEFT:
-	      if (drag->top == rect.top && drag->left == rect.left)
-		break;
-	      adjust_drag (&drag->top, rect.top, impl->hints.height_inc * impl->surface_scale);
-	      adjust_drag (&drag->left, rect.left, impl->hints.width_inc * impl->surface_scale);
-	      break;
-
-	    case WMSZ_TOP:
-	      if (drag->top == rect.top)
-		break;
-	      adjust_drag (&drag->top, rect.top, impl->hints.height_inc * impl->surface_scale);
-	      break;
-
-	    case WMSZ_TOPRIGHT:
-	      if (drag->top == rect.top && drag->right == rect.right)
-		break;
-	      adjust_drag (&drag->top, rect.top, impl->hints.height_inc * impl->surface_scale);
-	      adjust_drag (&drag->right, rect.right, impl->hints.width_inc * impl->surface_scale);
-	      break;
-
-	    case WMSZ_RIGHT:
-	      if (drag->right == rect.right)
-		break;
-	      adjust_drag (&drag->right, rect.right, impl->hints.width_inc * impl->surface_scale);
-	      break;
-
-	    case WMSZ_BOTTOMRIGHT:
-	      if (drag->bottom == rect.bottom && drag->right == rect.right)
-		break;
-	      adjust_drag (&drag->bottom, rect.bottom, impl->hints.height_inc * impl->surface_scale);
-	      adjust_drag (&drag->right, rect.right, impl->hints.width_inc * impl->surface_scale);
-	      break;
-	    }
-
-	  if (drag->bottom != orig_drag.bottom || drag->left != orig_drag.left ||
-	      drag->top != orig_drag.top || drag->right != orig_drag.right)
-	    {
-	      *ret_valp = TRUE;
-	      return_val = TRUE;
-	      GDK_NOTE (EVENTS, g_print (" (handled RESIZE_INC: %s)",
-					 _gdk_win32_rect_to_string (drag)));
-	    }
-	}
 
       /* WM_GETMINMAXINFO handles min_size and max_size hints? */
 

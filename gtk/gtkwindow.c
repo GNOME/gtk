@@ -416,13 +416,6 @@ static gboolean gtk_window_compare_hints             (GdkGeometry  *geometry_a,
                                                       guint         flags_a,
                                                       GdkGeometry  *geometry_b,
                                                       guint         flags_b);
-static void     gtk_window_constrain_size            (GtkWindow    *window,
-                                                      GdkGeometry  *geometry,
-                                                      guint         flags,
-                                                      int           width,
-                                                      int           height,
-                                                      int          *new_width,
-                                                      int          *new_height);
 static void     gtk_window_update_fixed_size         (GtkWindow    *window,
                                                       GdkGeometry  *new_geometry,
                                                       int           new_width,
@@ -5304,10 +5297,9 @@ gtk_window_compute_configure_request (GtkWindow    *window,
                                              new_flags,
                                              &w, &h);
   gtk_window_update_fixed_size (window, &new_geometry, w, h);
-  gtk_window_constrain_size (window,
-                             &new_geometry, new_flags,
-                             w, h,
-                             &w, &h);
+  gdk_surface_constrain_size (&new_geometry, new_flags,
+                              w, h,
+                              &w, &h);
 
   info = gtk_window_get_geometry_info (window, FALSE);
 
@@ -5659,19 +5651,9 @@ gtk_window_compare_hints (GdkGeometry *geometry_a,
        geometry_a->max_height != geometry_b->max_height))
     return FALSE;
 
-  if ((flags_a & GDK_HINT_BASE_SIZE) &&
-      (geometry_a->base_width != geometry_b->base_width ||
-       geometry_a->base_height != geometry_b->base_height))
-    return FALSE;
-
   if ((flags_a & GDK_HINT_ASPECT) &&
       (geometry_a->min_aspect != geometry_b->min_aspect ||
        geometry_a->max_aspect != geometry_b->max_aspect))
-    return FALSE;
-
-  if ((flags_a & GDK_HINT_RESIZE_INC) &&
-      (geometry_a->width_inc != geometry_b->width_inc ||
-       geometry_a->height_inc != geometry_b->height_inc))
     return FALSE;
 
   if ((flags_a & GDK_HINT_WIN_GRAVITY) &&
@@ -5679,28 +5661,6 @@ gtk_window_compare_hints (GdkGeometry *geometry_a,
     return FALSE;
 
   return TRUE;
-}
-
-static void 
-gtk_window_constrain_size (GtkWindow   *window,
-			   GdkGeometry *geometry,
-			   guint        flags,
-			   int          width,
-			   int          height,
-			   int         *new_width,
-			   int         *new_height)
-{
-  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-  guint geometry_flags;
-
-  /* ignore size increments for windows that fit in a fixed space */
-  if (priv->maximized || priv->fullscreen || priv->tiled)
-    geometry_flags = flags & ~GDK_HINT_RESIZE_INC;
-  else
-    geometry_flags = flags;
-
-  gdk_surface_constrain_size (geometry, geometry_flags, width, height,
-			      new_width, new_height);
 }
 
 /* For non-resizable windows, make sure the given width/height fits
@@ -5782,14 +5742,6 @@ gtk_window_compute_hints (GtkWindow   *window,
    */
   *new_flags = 0;
   
-  /* For simplicity, we always set the base hint, even when we
-   * don't expect it to have any visible effect.
-   * (Note: geometry_size_to_pixels() depends on this.)
-   */
-  *new_flags |= GDK_HINT_BASE_SIZE;
-  new_geometry->base_width = 0;
-  new_geometry->base_height = 0;
-
   get_shadow_width (window, &shadow);
   *new_flags |= GDK_HINT_MIN_SIZE;
   new_geometry->min_width = requisition.width + shadow.left + shadow.right;

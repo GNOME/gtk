@@ -1723,8 +1723,7 @@ _gdk_x11_surface_set_surface_scale (GdkSurface *surface,
   if (toplevel)
     {
       /* These are affected by surface scale: */
-      geom_mask = toplevel->last_geometry_hints_mask &
-        (GDK_HINT_MIN_SIZE | GDK_HINT_MAX_SIZE | GDK_HINT_BASE_SIZE | GDK_HINT_RESIZE_INC);
+      geom_mask = toplevel->last_geometry_hints_mask & (GDK_HINT_MIN_SIZE | GDK_HINT_MAX_SIZE);
       if (geom_mask)
         gdk_x11_surface_set_geometry_hints (surface,
                                             &toplevel->last_geometry_hints,
@@ -2186,19 +2185,6 @@ gdk_x11_surface_set_geometry_hints (GdkSurface         *surface,
       size_hints.max_height = MAX (geometry->max_height, 1) * impl->surface_scale;
     }
   
-  if (geom_mask & GDK_HINT_BASE_SIZE)
-    {
-      size_hints.flags |= PBaseSize;
-      size_hints.base_width = geometry->base_width * impl->surface_scale;
-      size_hints.base_height = geometry->base_height * impl->surface_scale;
-    }
-  
-  if (geom_mask & GDK_HINT_RESIZE_INC)
-    {
-      size_hints.flags |= PResizeInc;
-      size_hints.width_inc = geometry->width_inc * impl->surface_scale;
-      size_hints.height_inc = geometry->height_inc * impl->surface_scale;
-    }
   else if (impl->surface_scale > 1)
     {
       size_hints.flags |= PResizeInc;
@@ -2287,13 +2273,6 @@ gdk_surface_get_geometry_hints (GdkSurface      *surface,
       *geom_mask |= GDK_HINT_MAX_SIZE;
       geometry->max_width = MAX (size_hints->max_width, 1) / impl->surface_scale;
       geometry->max_height = MAX (size_hints->max_height, 1) / impl->surface_scale;
-    }
-
-  if (size_hints->flags & PResizeInc)
-    {
-      *geom_mask |= GDK_HINT_RESIZE_INC;
-      geometry->width_inc = size_hints->width_inc / impl->surface_scale;
-      geometry->height_inc = size_hints->height_inc / impl->surface_scale;
     }
 
   if (size_hints->flags & PAspect)

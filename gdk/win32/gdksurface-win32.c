@@ -1509,18 +1509,6 @@ gdk_win32_surface_set_geometry_hints (GdkSurface         *window,
 			       geometry->max_width, geometry->max_height));
     }
 
-  if (geom_mask & GDK_HINT_BASE_SIZE)
-    {
-      GDK_NOTE (MISC, g_print ("... BASE_SIZE: %dx%d\n",
-			       geometry->base_width, geometry->base_height));
-    }
-
-  if (geom_mask & GDK_HINT_RESIZE_INC)
-    {
-      GDK_NOTE (MISC, g_print ("... RESIZE_INC: (%d,%d)\n",
-			       geometry->width_inc, geometry->height_inc));
-    }
-
   if (geom_mask & GDK_HINT_ASPECT)
     {
       GDK_NOTE (MISC, g_print ("... ASPECT: %g--%g\n",

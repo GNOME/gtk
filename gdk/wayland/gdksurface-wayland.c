@@ -1306,9 +1306,6 @@ gdk_wayland_surface_configure_toplevel (GdkSurface *surface)
     {
       GdkSurfaceHints geometry_mask = impl->geometry_mask;
 
-      /* Ignore size increments for maximized/fullscreen surfaces */
-      if (fixed_size)
-        geometry_mask &= ~GDK_HINT_RESIZE_INC;
       if (!saved_size)
         {
           /* Do not reapply constrains if we are restoring original size */
