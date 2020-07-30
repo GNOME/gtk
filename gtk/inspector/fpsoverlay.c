@@ -141,7 +141,7 @@ gtk_fps_overlay_force_redraw (GtkWidget     *widget,
                               GdkFrameClock *clock,
                               gpointer       unused)
 {
-  gdk_surface_queue_expose (gtk_native_get_surface (gtk_widget_get_native (widget)));
+  gdk_surface_queue_render (gtk_native_get_surface (gtk_widget_get_native (widget)));
 
   return G_SOURCE_REMOVE;
 }
@@ -251,7 +251,7 @@ gtk_fps_overlay_queue_draw (GtkInspectorOverlay *overlay)
 
   g_hash_table_iter_init (&iter, self->infos);
   while (g_hash_table_iter_next (&iter, &widget, NULL))
-    gdk_surface_queue_expose (gtk_native_get_surface (gtk_widget_get_native (widget)));
+    gdk_surface_queue_render (gtk_native_get_surface (gtk_widget_get_native (widget)));
 }
 
 static void

@@ -206,7 +206,7 @@ GDK_AVAILABLE_IN_ALL
 void          gdk_surface_beep            (GdkSurface       *surface);
 
 GDK_AVAILABLE_IN_ALL
-void       gdk_surface_queue_expose              (GdkSurface          *surface);
+void       gdk_surface_queue_render       (GdkSurface       *surface);
 
 GDK_AVAILABLE_IN_ALL
 GdkFrameClock* gdk_surface_get_frame_clock      (GdkSurface     *surface);
