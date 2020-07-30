@@ -1608,46 +1608,6 @@ gdk_surface_constrain_size (GdkGeometry    *geometry,
   width = CLAMP (width, min_width, max_width);
   height = CLAMP (height, min_height, max_height);
 
-  /* constrain aspect ratio, according to:
-   *
-   *                width
-   * min_aspect <= -------- <= max_aspect
-   *                height
-   */
-
-  if (flags & GDK_HINT_ASPECT &&
-      geometry->min_aspect > 0 &&
-      geometry->max_aspect > 0)
-    {
-      int delta;
-
-      if (geometry->min_aspect * height > width)
-        {
-          delta = height - width / geometry->min_aspect;
-          if (height - delta >= min_height)
-            height -= delta;
-          else
-            {
-              delta = height * geometry->min_aspect - width;
-              if (width + delta <= max_width)
-                width += delta;
-            }
-        }
-
-      if (geometry->max_aspect * height < width)
-        {
-          delta = width - height * geometry->max_aspect;
-          if (width - delta >= min_width)
-            width -= delta;
-          else
-            {
-              delta = width / geometry->max_aspect - height;
-              if (height + delta <= max_height)
-                height += delta;
-            }
-        }
-    }
-
   *new_width = width;
   *new_height = height;
 }

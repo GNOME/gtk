@@ -2182,31 +2182,6 @@ gdk_x11_surface_set_geometry_hints (GdkSurface         *surface,
       size_hints.height_inc = impl->surface_scale;
     }
 
-  if (geom_mask & GDK_HINT_ASPECT)
-    {
-      size_hints.flags |= PAspect;
-      if (geometry->min_aspect <= 1)
-	{
-	  size_hints.min_aspect.x = 65536 * geometry->min_aspect;
-	  size_hints.min_aspect.y = 65536;
-	}
-      else
-	{
-	  size_hints.min_aspect.x = 65536;
-	  size_hints.min_aspect.y = 65536 / geometry->min_aspect;;
-	}
-      if (geometry->max_aspect <= 1)
-	{
-	  size_hints.max_aspect.x = 65536 * geometry->max_aspect;
-	  size_hints.max_aspect.y = 65536;
-	}
-      else
-	{
-	  size_hints.max_aspect.x = 65536;
-	  size_hints.max_aspect.y = 65536 / geometry->max_aspect;;
-	}
-    }
-
   if (geom_mask & GDK_HINT_WIN_GRAVITY)
     {
       size_hints.flags |= PWinGravity;
@@ -2263,14 +2238,6 @@ gdk_surface_get_geometry_hints (GdkSurface      *surface,
       *geom_mask |= GDK_HINT_MAX_SIZE;
       geometry->max_width = MAX (size_hints->max_width, 1) / impl->surface_scale;
       geometry->max_height = MAX (size_hints->max_height, 1) / impl->surface_scale;
-    }
-
-  if (size_hints->flags & PAspect)
-    {
-      *geom_mask |= GDK_HINT_ASPECT;
-
-      geometry->min_aspect = (double) size_hints->min_aspect.x / (double) size_hints->min_aspect.y;
-      geometry->max_aspect = (double) size_hints->max_aspect.x / (double) size_hints->max_aspect.y;
     }
 
   if (size_hints->flags & PWinGravity)

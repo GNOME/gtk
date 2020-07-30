@@ -1509,12 +1509,6 @@ gdk_win32_surface_set_geometry_hints (GdkSurface         *window,
 			       geometry->max_width, geometry->max_height));
     }
 
-  if (geom_mask & GDK_HINT_ASPECT)
-    {
-      GDK_NOTE (MISC, g_print ("... ASPECT: %g--%g\n",
-			       geometry->min_aspect, geometry->max_aspect));
-    }
-
   if (geom_mask & GDK_HINT_WIN_GRAVITY)
     {
       GDK_NOTE (MISC, g_print ("... GRAVITY: %d\n", geometry->win_gravity));

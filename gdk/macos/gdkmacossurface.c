@@ -637,19 +637,6 @@ _gdk_macos_surface_set_geometry_hints (GdkMacosSurface   *self,
     min_size = NSMakeSize (1, 1);
   [self->window setContentMinSize:min_size];
 
-  if (geom_mask & GDK_HINT_ASPECT)
-    {
-      NSSize size;
-
-      if (geometry->min_aspect != geometry->max_aspect)
-        g_warning ("Only equal minimum and maximum aspect ratios are supported on Mac OS. Using minimum aspect ratio...");
-
-      size.width = geometry->min_aspect;
-      size.height = 1.0;
-
-      [self->window setContentAspectRatio:size];
-    }
-
   if (geom_mask & GDK_HINT_WIN_GRAVITY) { /* TODO */ }
 }
 

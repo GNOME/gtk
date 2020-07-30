@@ -5651,11 +5651,6 @@ gtk_window_compare_hints (GdkGeometry *geometry_a,
        geometry_a->max_height != geometry_b->max_height))
     return FALSE;
 
-  if ((flags_a & GDK_HINT_ASPECT) &&
-      (geometry_a->min_aspect != geometry_b->min_aspect ||
-       geometry_a->max_aspect != geometry_b->max_aspect))
-    return FALSE;
-
   if ((flags_a & GDK_HINT_WIN_GRAVITY) &&
       geometry_a->win_gravity != geometry_b->win_gravity)
     return FALSE;
