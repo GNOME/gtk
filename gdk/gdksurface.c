@@ -1807,7 +1807,7 @@ gdk_surface_set_cursor (GdkSurface *surface,
           devices = gdk_seat_get_physical_devices (s->data, GDK_SEAT_CAPABILITY_TABLET_STYLUS);
           for (d = devices; d; d = d->next)
             {
-              device = gdk_device_get_associated_device (d->data);
+              device = d->data;
               gdk_surface_set_cursor_internal (surface, device, surface->cursor);
             }
           g_list_free (devices);

@@ -816,9 +816,15 @@ _gdk_display_get_pointer_info (GdkDisplay *display,
                                GdkDevice  *device)
 {
   GdkPointerSurfaceInfo *info;
+  GdkSeat *seat;
 
-  if (device && gdk_device_get_source (device) == GDK_SOURCE_KEYBOARD)
-    device = gdk_device_get_associated_device (device);
+  if (device)
+    {
+      seat = gdk_device_get_seat (device);
+
+      if (device == gdk_seat_get_keyboard (seat))
+        device = gdk_seat_get_pointer (seat);
+    }
 
   if (G_UNLIKELY (!device))
     return NULL;
