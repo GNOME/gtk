@@ -498,7 +498,8 @@ static void
 gtk_drag_source_drag_begin (GtkDragSource *source)
 {
   GtkWidget *widget;
-  GdkDevice *device;
+  GdkDevice *device, *pointer;
+  GdkSeat *seat;
   double x, y;
   GtkNative *native;
   GdkSurface *surface;
@@ -508,15 +509,18 @@ gtk_drag_source_drag_begin (GtkDragSource *source)
 
   widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (source));
   device = gtk_gesture_get_device (GTK_GESTURE (source));
+  seat = gdk_device_get_seat (device);
 
-  if (gdk_device_get_source (device) == GDK_SOURCE_KEYBOARD)
-    device = gdk_device_get_associated_device (device);
+  if (device == gdk_seat_get_keyboard (seat))
+    pointer = gdk_seat_get_pointer (seat);
+  else
+    pointer = device;
 
   native = gtk_widget_get_native (widget);
   surface = gtk_native_get_surface (native);
 
   gtk_widget_translate_coordinates (widget, GTK_WIDGET (native), source->start_x, source->start_y, &x, &y);
-  gdk_surface_get_device_position (surface, device, &px, &py, NULL);
+  gdk_surface_get_device_position (surface, pointer, &px, &py, NULL);
 
   dx = round (px - x);
   dy = round (py - y);
@@ -525,7 +529,7 @@ gtk_drag_source_drag_begin (GtkDragSource *source)
   if (!content)
     return;
 
-  source->drag = gdk_drag_begin (surface, device, content, source->actions, dx, dy);
+  source->drag = gdk_drag_begin (surface, pointer, content, source->actions, dx, dy);
 
   g_object_unref (content);
 
