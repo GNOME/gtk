@@ -86,7 +86,6 @@ enum {
   PROP_0,
   PROP_DISPLAY,
   PROP_NAME,
-  PROP_ASSOCIATED_DEVICE,
   PROP_TYPE,
   PROP_SOURCE,
   PROP_HAS_CURSOR,
@@ -154,20 +153,6 @@ gdk_device_class_init (GdkDeviceClass *klass)
                          GDK_DEVICE_TYPE_LOGICAL,
                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY |
                          G_PARAM_STATIC_STRINGS);
-
-  /**
-   * GdkDevice:associated-device:
-   *
-   * Associated pointer or keyboard with this device, if any. Devices of
-   * type #GDK_DEVICE_TYPE_LOGICAL always come in keyboard/pointer pairs.
-   * Other device types will have a %NULL associated device.
-   */
-  device_props[PROP_ASSOCIATED_DEVICE] =
-      g_param_spec_object ("associated-device",
-                           P_("Associated device"),
-                           P_("Associated pointer or keyboard with this device"),
-                           GDK_TYPE_DEVICE,
-                           G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
   /**
    * GdkDevice:source:
@@ -460,9 +445,6 @@ gdk_device_get_property (GObject    *object,
     case PROP_DISPLAY:
       g_value_set_object (value, device->display);
       break;
-    case PROP_ASSOCIATED_DEVICE:
-      g_value_set_object (value, device->associated);
-      break;
     case PROP_NAME:
       g_value_set_string (value, device->name);
       break;
@@ -668,30 +650,6 @@ gdk_device_get_display (GdkDevice *device)
   g_return_val_if_fail (GDK_IS_DEVICE (device), NULL);
 
   return device->display;
-}
-
-/**
- * gdk_device_get_associated_device:
- * @device: a #GdkDevice
- *
- * Returns the #GdkDevice associated to @device:
- *
- *  - if @device is of type %GDK_DEVICE_TYPE_LOGICAL, it will return
- *    the paired pointer or keyboard.
- *  - if @device is of type %GDK_DEVICE_TYPE_PHYSICAL, it will return
- *    the logical device to which @device is attached to.
- *  - if @device is of type %GDK_DEVICE_TYPE_FLOATING, %NULL will be
- *    returned, as there is no associated device.
- *
- * Returns: (nullable) (transfer none): The associated device, or
- *   %NULL
- **/
-GdkDevice *
-gdk_device_get_associated_device (GdkDevice *device)
-{
-  g_return_val_if_fail (GDK_IS_DEVICE (device), NULL);
-
-  return device->associated;
 }
 
 static void
