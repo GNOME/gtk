@@ -2161,16 +2161,6 @@ gdk_x11_surface_set_geometry_hints (GdkSurface         *surface,
       size_hints.y = 0;
     }
 
-  if (geom_mask & GDK_HINT_USER_POS)
-    {
-      size_hints.flags |= USPosition;
-    }
-
-  if (geom_mask & GDK_HINT_USER_SIZE)
-    {
-      size_hints.flags |= USSize;
-    }
-  
   if (geom_mask & GDK_HINT_MIN_SIZE)
     {
       size_hints.flags |= PMinSize;

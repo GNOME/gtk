@@ -624,8 +624,6 @@ _gdk_macos_surface_set_geometry_hints (GdkMacosSurface   *self,
   g_return_if_fail (self->window != NULL);
 
   if (geom_mask & GDK_HINT_POS) { /* TODO */ }
-  if (geom_mask & GDK_HINT_USER_POS) { /* TODO */ }
-  if (geom_mask & GDK_HINT_USER_SIZE) { /* TODO */ }
 
   if (geom_mask & GDK_HINT_MAX_SIZE)
     max_size = NSMakeSize (geometry->max_width, geometry->max_height);
