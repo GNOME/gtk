@@ -17,7 +17,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-07-27 14:47+0000\n"
+"POT-Creation-Date: 2020-07-27 15:46+0000\n"
 "PO-Revision-Date: 2020-07-29 10:18+0200\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: Spanish - Spain <gnome-es-list@gnome.org>\n"
@@ -268,12 +268,11 @@ msgid "Mapped"
 msgstr "Mapeado"
 
 #: gdk/gdktoplevel.c:103 gdk/gdktoplevel.c:104 gtk/gtkcssnode.c:617
-#: gtk/gtkswitch.c:537
+#: gtk/gtkswitch.c:541
 msgid "State"
 msgstr "Estado"
 
 #: gdk/macos/gdkmacosdrag.c:596 gdk/macos/gdkmacosdrag.c:597
-#| msgid "Surface"
 msgid "Drag Surface"
 msgstr "Superficie de arrastre"
 
@@ -464,7 +463,7 @@ msgstr "Ajustar licencia"
 msgid "Whether to wrap the license text."
 msgstr "Indica si se debe ajustar el texto de la licencia."
 
-#: gtk/gtkaccellabel.c:133 gtk/gtkbutton.c:220 gtk/gtkexpander.c:316
+#: gtk/gtkaccellabel.c:133 gtk/gtkbutton.c:224 gtk/gtkexpander.c:316
 #: gtk/gtkframe.c:166 gtk/gtklabel.c:738 gtk/gtkmenubutton.c:399
 msgid "Label"
 msgstr "Etiqueta"
@@ -473,12 +472,12 @@ msgstr "Etiqueta"
 msgid "The text displayed next to the accelerator"
 msgstr "El texto mostrado junto al acelerador"
 
-#: gtk/gtkaccellabel.c:140 gtk/gtkbutton.c:227 gtk/gtkexpander.c:324
+#: gtk/gtkaccellabel.c:140 gtk/gtkbutton.c:231 gtk/gtkexpander.c:324
 #: gtk/gtklabel.c:759 gtk/gtkmenubutton.c:406 gtk/gtkstack.c:383
 msgid "Use underline"
 msgstr "Utilizar subrayado"
 
-#: gtk/gtkaccellabel.c:141 gtk/gtkbutton.c:228 gtk/gtkexpander.c:325
+#: gtk/gtkaccellabel.c:141 gtk/gtkbutton.c:232 gtk/gtkexpander.c:325
 #: gtk/gtklabel.c:760 gtk/gtkmenubutton.c:407
 msgid ""
 "If set, an underline in the text indicates the next character should be used "
@@ -512,7 +511,7 @@ msgid "Controls whether the action bar shows its contents or not"
 msgstr "Controla si la barra de acción muestra o no su contenido"
 
 #: gtk/gtkadjustment.c:139 gtk/gtkcellrendererprogress.c:150
-#: gtk/gtkdroptarget.c:647 gtk/gtkscalebutton.c:205 gtk/gtkspinbutton.c:410
+#: gtk/gtkdroptarget.c:647 gtk/gtkscalebutton.c:205 gtk/gtkspinbutton.c:414
 msgid "Value"
 msgstr "Valor"
 
@@ -738,7 +737,7 @@ msgstr "Obedecer al hijo"
 msgid "Force aspect ratio to match that of the frame’s child"
 msgstr "Forzar la proporción para que coincida con el hijo del marco"
 
-#: gtk/gtkaspectframe.c:166 gtk/gtkbutton.c:248 gtk/gtkcombobox.c:782
+#: gtk/gtkaspectframe.c:166 gtk/gtkbutton.c:252 gtk/gtkcombobox.c:782
 #: gtk/gtkdragicon.c:372 gtk/gtkexpander.c:362 gtk/gtkflowbox.c:509
 #: gtk/gtkframe.c:188 gtk/gtklistbox.c:3448 gtk/gtklistitem.c:185
 #: gtk/gtknotebook.c:568 gtk/gtkoverlay.c:319 gtk/gtkpopover.c:1665
@@ -748,7 +747,7 @@ msgstr "Forzar la proporción para que coincida con el hijo del marco"
 msgid "Child"
 msgstr "Hijo"
 
-#: gtk/gtkaspectframe.c:167 gtk/gtkbutton.c:249 gtk/gtkexpander.c:363
+#: gtk/gtkaspectframe.c:167 gtk/gtkbutton.c:253 gtk/gtkexpander.c:363
 #: gtk/gtkflowbox.c:510 gtk/gtkframe.c:189 gtk/gtklistbox.c:3449
 #: gtk/gtkoverlay.c:320 gtk/gtkpopover.c:1666 gtk/gtkrevealer.c:353
 #: gtk/gtkscrolledwindow.c:757 gtk/gtksearchbar.c:325 gtk/gtkviewport.c:389
@@ -788,11 +787,11 @@ msgstr "Widget hijo"
 msgid "The content the assistant page"
 msgstr "El contenido de la página del asistente"
 
-#: gtk/gtkassistant.c:590 gtk/gtkdialog.c:542
+#: gtk/gtkassistant.c:590 gtk/gtkdialog.c:546
 msgid "Use Header Bar"
 msgstr "Usar barra de cabecera"
 
-#: gtk/gtkassistant.c:591 gtk/gtkdialog.c:543
+#: gtk/gtkassistant.c:591 gtk/gtkdialog.c:547
 msgid "Use Header Bar for actions."
 msgstr "Usar barra de cabecera para las acciones."
 
@@ -843,17 +842,14 @@ msgid "Expression"
 msgstr "Expresión"
 
 #: gtk/gtkboolfilter.c:166
-#| msgid "Expression to compare with"
 msgid "Expression to evaluate"
 msgstr "Expresión que evaluar"
 
 #: gtk/gtkboolfilter.c:176
-#| msgid "Inverted"
 msgid "Invert"
 msgstr "Invertir"
 
 #: gtk/gtkboolfilter.c:177
-#| msgid "TRUE if the Position property should be used"
 msgid "If the expression result should be inverted"
 msgstr "Si se debe invertir el resultado de la expresión"
 
@@ -938,7 +934,7 @@ msgstr "recurso que contiene la definición del IU combinado"
 msgid "scope to use when instantiating listitems"
 msgstr "ámbito que usar al instalar elementos de lista"
 
-#: gtk/gtkbutton.c:221
+#: gtk/gtkbutton.c:225
 msgid ""
 "Text of the label widget inside the button, if the button contains a label "
 "widget"
@@ -946,21 +942,21 @@ msgstr ""
 "Texto del etiqueta del widget dentro del botón, si el botón contiene una "
 "etiqueta del widget"
 
-#: gtk/gtkbutton.c:234 gtk/gtkcombobox.c:669 gtk/gtkentry.c:465
+#: gtk/gtkbutton.c:238 gtk/gtkcombobox.c:669 gtk/gtkentry.c:465
 #: gtk/gtkscrolledwindow.c:638
 msgid "Has Frame"
 msgstr "Tiene marco"
 
-#: gtk/gtkbutton.c:235 gtk/gtkmenubutton.c:414
+#: gtk/gtkbutton.c:239 gtk/gtkmenubutton.c:414
 msgid "Whether the button has a frame"
 msgstr "Indica si el botón tiene un marco"
 
-#: gtk/gtkbutton.c:241 gtk/gtkcellrendererpixbuf.c:209 gtk/gtkimage.c:207
+#: gtk/gtkbutton.c:245 gtk/gtkcellrendererpixbuf.c:209 gtk/gtkimage.c:207
 #: gtk/gtkmenubutton.c:392 gtk/gtkprinter.c:170 gtk/gtkwindow.c:846
 msgid "Icon Name"
 msgstr "Nombre del icono"
 
-#: gtk/gtkbutton.c:242 gtk/gtkmenubutton.c:393
+#: gtk/gtkbutton.c:246 gtk/gtkmenubutton.c:393
 msgid "The name of the icon used to automatically populate the button"
 msgstr "El nombre del icono usado para poblar automáticamente el botón"
 
@@ -1351,7 +1347,7 @@ msgstr "Valor de la barra de progreso"
 
 #: gtk/gtkcellrendererprogress.c:166 gtk/gtkcellrenderertext.c:253
 #: gtk/gtkeditable.c:370 gtk/gtkentrybuffer.c:351 gtk/gtkmessagedialog.c:187
-#: gtk/gtkmodelbutton.c:1104 gtk/gtkprogressbar.c:203 gtk/gtktextbuffer.c:465
+#: gtk/gtkmodelbutton.c:1104 gtk/gtkprogressbar.c:207 gtk/gtktextbuffer.c:465
 msgid "Text"
 msgstr "Texto"
 
@@ -1392,20 +1388,20 @@ msgid "The vertical text alignment, from 0 (top) to 1 (bottom)."
 msgstr "La alineación vertical del texto, desde 0 (superior) a 1 (inferior)."
 
 #: gtk/gtkcellrendererprogress.c:230 gtk/gtklevelbar.c:1001
-#: gtk/gtkprogressbar.c:180 gtk/gtkrange.c:372
+#: gtk/gtkprogressbar.c:184 gtk/gtkrange.c:372
 msgid "Inverted"
 msgstr "Invertido"
 
-#: gtk/gtkcellrendererprogress.c:231 gtk/gtkprogressbar.c:181
+#: gtk/gtkcellrendererprogress.c:231 gtk/gtkprogressbar.c:185
 msgid "Invert the direction in which the progress bar grows"
 msgstr "Invertir la dirección en la que aumentan las barras de progreso"
 
 #: gtk/gtkcellrendererspin.c:132 gtk/gtkrange.c:365 gtk/gtkscalebutton.c:215
-#: gtk/gtkscrollbar.c:197 gtk/gtkspinbutton.c:360
+#: gtk/gtkscrollbar.c:201 gtk/gtkspinbutton.c:364
 msgid "Adjustment"
 msgstr "Ajuste"
 
-#: gtk/gtkcellrendererspin.c:133 gtk/gtkspinbutton.c:361
+#: gtk/gtkcellrendererspin.c:133 gtk/gtkspinbutton.c:365
 msgid "The adjustment that holds the value of the spin button"
 msgstr "El ajuste que mantiene el valor del botón incrementable"
 
@@ -1417,16 +1413,16 @@ msgstr "Tasa de subida"
 msgid "The acceleration rate when you hold down a button"
 msgstr "La tasa de aceleración cuando mantiene apretado un botón"
 
-#: gtk/gtkcellrendererspin.c:158 gtk/gtkscale.c:673 gtk/gtkspinbutton.c:374
+#: gtk/gtkcellrendererspin.c:158 gtk/gtkscale.c:677 gtk/gtkspinbutton.c:378
 msgid "Digits"
 msgstr "Dígitos"
 
-#: gtk/gtkcellrendererspin.c:159 gtk/gtkspinbutton.c:375
+#: gtk/gtkcellrendererspin.c:159 gtk/gtkspinbutton.c:379
 msgid "The number of decimal places to display"
 msgstr "El número de lugares decimales que mostrar"
 
 #: gtk/gtkcellrendererspinner.c:138 gtk/gtkmodelbutton.c:1131
-#: gtk/gtkmodelbutton.c:1132 gtk/gtkswitch.c:524 gtk/gtktogglebutton.c:160
+#: gtk/gtkmodelbutton.c:1132 gtk/gtkswitch.c:528 gtk/gtktogglebutton.c:160
 msgid "Active"
 msgstr "Activo"
 
@@ -1621,7 +1617,7 @@ msgstr ""
 "como una ayuda cuando está renderizando el texto. Si no comprende este "
 "parámetro probablemente no lo necesite"
 
-#: gtk/gtkcellrenderertext.c:444 gtk/gtklabel.c:865 gtk/gtkprogressbar.c:242
+#: gtk/gtkcellrenderertext.c:444 gtk/gtklabel.c:865 gtk/gtkprogressbar.c:246
 msgid "Ellipsize"
 msgstr "Elipsis"
 
@@ -1891,19 +1887,19 @@ msgid "Whether to request enough space for every row in the model"
 msgstr ""
 "Indica si se debe solicitar espacio suficiente para cada fila en el modelo"
 
-#: gtk/gtkcheckbutton.c:219
+#: gtk/gtkcheckbutton.c:223
 msgid "Draw Indicator"
 msgstr "Indicador de dibujo"
 
-#: gtk/gtkcheckbutton.c:220
+#: gtk/gtkcheckbutton.c:224
 msgid "If the indicator part of the button is displayed"
 msgstr "Si se muestra la parte de conmutación del botón"
 
-#: gtk/gtkcheckbutton.c:226
+#: gtk/gtkcheckbutton.c:230
 msgid "Inconsistent"
 msgstr "Inconsistente"
 
-#: gtk/gtkcheckbutton.c:227
+#: gtk/gtkcheckbutton.c:231
 msgid "If the check button is in an “in between” state"
 msgstr "Si el botón de conmutación está en un estado «intermedio»"
 
@@ -2377,12 +2373,10 @@ msgid "The type of elements of this object"
 msgstr "El tipo de elementos de este objeto"
 
 #: gtk/gtkdirectorylist.c:337
-#| msgid "Monitor"
 msgid "monitored"
 msgstr "monitorizado"
 
 #: gtk/gtkdirectorylist.c:338
-#| msgid "The widget to be monitored for accelerator changes"
 msgid "TRUE if the directory is monitored for changes"
 msgstr "Cierto si se monitorizan los cambios de la carpeta"
 
@@ -2427,7 +2421,6 @@ msgid "Contains Pointer"
 msgstr "Contiene un cursor"
 
 #: gtk/gtkdropcontrollermotion.c:227 gtk/gtkeventcontrollermotion.c:224
-#| msgid "Whether the pointer is inthe controllers widget or a descendant"
 msgid "Whether the pointer is in the controllers widget or a descendant"
 msgstr "Indica si el cursor está en el controlador del widget o en un hijo"
 
@@ -3103,22 +3096,18 @@ msgid "Whether to allow multiple files to be selected"
 msgstr "Indica si se permite la selección de múltiples archivos"
 
 #: gtk/gtkfilechooser.c:113
-#| msgid "Filter"
 msgid "Filters"
 msgstr "Filtros"
 
 #: gtk/gtkfilechooser.c:114
-#| msgid "The model being filtered"
 msgid "List model of filters"
 msgstr "Modelo de lista de filtros"
 
 #: gtk/gtkfilechooser.c:129
-#| msgid "Shortcut Type"
 msgid "Shortcut Folders"
 msgstr "Atajos de carpetas"
 
 #: gtk/gtkfilechooser.c:130
-#| msgid "A list model to take shortcuts from"
 msgid "List model of shortcut folders"
 msgstr "modelo de lista de atajos de carpetas"
 
@@ -3169,7 +3158,6 @@ msgid "The filter set for this model"
 msgstr "El filtro establecido para este modelo"
 
 #: gtk/gtkfilterlistmodel.c:577 gtk/gtksortlistmodel.c:780
-#| msgid "Step Increment"
 msgid "Incremental"
 msgstr "Incremental"
 
@@ -3182,12 +3170,10 @@ msgid "The model being filtered"
 msgstr "El modelo filtrado"
 
 #: gtk/gtkfilterlistmodel.c:601 gtk/gtksortlistmodel.c:804
-#| msgid "Heading"
 msgid "Pending"
 msgstr "Pendiente"
 
 #: gtk/gtkfilterlistmodel.c:602
-#| msgid "Number of recently used files"
 msgid "Number of items not yet filtered"
 msgstr "Número de elementos no filtrados"
 
@@ -5180,36 +5166,36 @@ msgstr "Indica si el diálogo soporta selección"
 msgid "Whether the application has a selection"
 msgstr "Indica si la aplicación tiene una selección"
 
-#: gtk/gtkprogressbar.c:187
+#: gtk/gtkprogressbar.c:191
 msgid "Fraction"
 msgstr "Fracción"
 
-#: gtk/gtkprogressbar.c:188
+#: gtk/gtkprogressbar.c:192
 msgid "The fraction of total work that has been completed"
 msgstr "La fracción del trabajo total que ha sido completado"
 
-#: gtk/gtkprogressbar.c:195
+#: gtk/gtkprogressbar.c:199
 msgid "Pulse Step"
 msgstr "Paso del pulso"
 
-#: gtk/gtkprogressbar.c:196
+#: gtk/gtkprogressbar.c:200
 msgid "The fraction of total progress to move the bouncing block when pulsed"
 msgstr ""
 "La fracción del progreso total para mover el bloque rebotador cuando se pulsa"
 
-#: gtk/gtkprogressbar.c:204
+#: gtk/gtkprogressbar.c:208
 msgid "Text to be displayed in the progress bar"
 msgstr "Texto que se mostrará en la barra de progreso"
 
-#: gtk/gtkprogressbar.c:223
+#: gtk/gtkprogressbar.c:227
 msgid "Show text"
 msgstr "Mostrar texto"
 
-#: gtk/gtkprogressbar.c:224
+#: gtk/gtkprogressbar.c:228
 msgid "Whether the progress is shown as text."
 msgstr "Indica si el progreso se muestra como texto."
 
-#: gtk/gtkprogressbar.c:243
+#: gtk/gtkprogressbar.c:247
 msgid ""
 "The preferred place to ellipsize the string, if the progress bar does not "
 "have enough room to display the entire string, if at all."
@@ -5233,11 +5219,11 @@ msgstr "Objeto"
 msgid "The root object"
 msgstr "El objeto raíz"
 
-#: gtk/gtkradiobutton.c:199
+#: gtk/gtkradiobutton.c:203
 msgid "Group"
 msgstr "Grupo"
 
-#: gtk/gtkradiobutton.c:200
+#: gtk/gtkradiobutton.c:204
 msgid "The radio button whose group this widget belongs to."
 msgstr "El botón de radio a cuyo grupo pertenece este widget."
 
@@ -5345,32 +5331,32 @@ msgstr "Iconos"
 msgid "List of icon names"
 msgstr "Lista de nombres de iconos"
 
-#: gtk/gtkscale.c:674
+#: gtk/gtkscale.c:678
 msgid "The number of decimal places that are displayed in the value"
 msgstr "El número de lugares decimales que se mostrarán en el valor"
 
-#: gtk/gtkscale.c:681
+#: gtk/gtkscale.c:685
 msgid "Draw Value"
 msgstr "Dibujar valor"
 
-#: gtk/gtkscale.c:682
+#: gtk/gtkscale.c:686
 msgid "Whether the current value is displayed as a string next to the slider"
 msgstr ""
 "Indica si el valor actual se muestra como una cadena contigua al deslizador"
 
-#: gtk/gtkscale.c:688
+#: gtk/gtkscale.c:692
 msgid "Has Origin"
 msgstr "Tiene origen"
 
-#: gtk/gtkscale.c:689
+#: gtk/gtkscale.c:693
 msgid "Whether the scale has an origin"
 msgstr "Indica si la escala tiene un origen"
 
-#: gtk/gtkscale.c:695
+#: gtk/gtkscale.c:699
 msgid "Value Position"
 msgstr "Posición del valor"
 
-#: gtk/gtkscale.c:696
+#: gtk/gtkscale.c:700
 msgid "The position in which the current value is displayed"
 msgstr "La posición en que se muestra el valor actual"
 
@@ -5408,7 +5394,7 @@ msgstr "Cómo se debería determinar el tamaño del contenido"
 msgid "Vertical Scrollable Policy"
 msgstr "Directiva de desplazamiento vertical"
 
-#: gtk/gtkscrollbar.c:198
+#: gtk/gtkscrollbar.c:202
 msgid "The GtkAdjustment that contains the current value of this scrollbar"
 msgstr ""
 "El GtkAdjustment que contiene el valor actual de esta barra de desplazamiento"
@@ -5534,7 +5520,6 @@ msgstr ""
 "Indica si se debe mostrar el botón de cerrar en la barra de herramientas"
 
 #: gtk/gtksearchbar.c:331 gtk/gtksearchbar.c:332
-#| msgid "Accelerator Widget"
 msgid "Key Capture Widget"
 msgstr "Widget de captura de teclas"
 
@@ -6199,7 +6184,6 @@ msgid "Maximum size of slice"
 msgstr "Tamaño máximo de la parte"
 
 #: gtk/gtksortlistmodel.c:781
-#| msgid "Step Increment"
 msgid "Sort items incrementally"
 msgstr "Ordenar elementos de manera incremental"
 
@@ -6215,19 +6199,19 @@ msgstr "Estimación de elementos restantes sin ordenar"
 msgid "The sorter for this model"
 msgstr "El modo de ordenación para este modelo"
 
-#: gtk/gtkspinbutton.c:367
+#: gtk/gtkspinbutton.c:371
 msgid "Climb Rate"
 msgstr "Tasa de subida"
 
-#: gtk/gtkspinbutton.c:368
+#: gtk/gtkspinbutton.c:372
 msgid "The acceleration rate when you hold down a button or key"
 msgstr "La tasa de aceleración cuando mantiene pulsado un botón o una tecla"
 
-#: gtk/gtkspinbutton.c:381
+#: gtk/gtkspinbutton.c:385
 msgid "Snap to Ticks"
 msgstr "Ajustarse a los ticks"
 
-#: gtk/gtkspinbutton.c:382
+#: gtk/gtkspinbutton.c:386
 msgid ""
 "Whether erroneous values are automatically changed to a spin button’s "
 "nearest step increment"
@@ -6235,35 +6219,35 @@ msgstr ""
 "Indica si los valores erróneos se cambian por el valor más cercano de un "
 "botón incrementable"
 
-#: gtk/gtkspinbutton.c:388
+#: gtk/gtkspinbutton.c:392
 msgid "Numeric"
 msgstr "Numérico"
 
-#: gtk/gtkspinbutton.c:389
+#: gtk/gtkspinbutton.c:393
 msgid "Whether non-numeric characters should be ignored"
 msgstr "Indica si se ignoran los caracteres no numéricos"
 
-#: gtk/gtkspinbutton.c:395
+#: gtk/gtkspinbutton.c:399
 msgid "Wrap"
 msgstr "Volver al inicio"
 
-#: gtk/gtkspinbutton.c:396
+#: gtk/gtkspinbutton.c:400
 msgid "Whether a spin button should wrap upon reaching its limits"
 msgstr ""
 "Indica si un botón giratorio debe volver al inicio al alcanzar sus límites"
 
-#: gtk/gtkspinbutton.c:402
+#: gtk/gtkspinbutton.c:406
 msgid "Update Policy"
 msgstr "Norma de actualización"
 
-#: gtk/gtkspinbutton.c:403
+#: gtk/gtkspinbutton.c:407
 msgid ""
 "Whether the spin button should update always, or only when the value is legal"
 msgstr ""
 "Indica si el botón incrementable se actualiza siempre, o sólo cuando el "
 "valor es legal"
 
-#: gtk/gtkspinbutton.c:411
+#: gtk/gtkspinbutton.c:415
 msgid "Reads the current value, or sets a new value"
 msgstr "Lee el valor actual, o establece un valor nuevo"
 
@@ -6414,11 +6398,11 @@ msgstr "Nombre de la propiedad"
 msgid "The name of the property"
 msgstr "El nombre de la propiedad"
 
-#: gtk/gtkswitch.c:525
+#: gtk/gtkswitch.c:529
 msgid "Whether the switch is on or off"
 msgstr "Indica si el interruptor está encendido o apagado"
 
-#: gtk/gtkswitch.c:538
+#: gtk/gtkswitch.c:542
 msgid "The backend state"
 msgstr "El estado del «backend»"
 

@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-07-27 14:46+0000\n"
+"POT-Creation-Date: 2020-07-27 15:46+0000\n"
 "PO-Revision-Date: 2020-07-29 09:53+0200\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: Spanish - Spain <gnome-es-list@gnome.org>\n"
@@ -466,7 +466,6 @@ msgid "Failed to decode contents with mime-type of '%s'"
 msgstr "Falló al decodificar el contenido con tipo MIME «%s»"
 
 #: gdk/macos/gdkmacosglcontext.c:105
-#| msgid "Unable to create a GL context"
 msgid "Unable to create a GL pixel format"
 msgstr "No se pudo crear un formato de píxel GL"
 
@@ -2704,7 +2703,7 @@ msgstr "De arriba a abajo"
 msgid "Bottom to top"
 msgstr "De abajo a arriba"
 
-#: gtk/gtkprogressbar.c:578
+#: gtk/gtkprogressbar.c:582
 #, c-format
 msgctxt "progress bar label"
 msgid "%.0f %%"
@@ -3490,25 +3489,18 @@ msgid "Refresh action state"
 msgstr "Actualizar estado de la acción"
 
 #: gtk/inspector/window.ui:340
-#| msgctxt "Stock label, media"
-#| msgid "Pre_vious"
 msgid "Previous object"
 msgstr "Objeto anterior"
 
 #: gtk/inspector/window.ui:350
-#| msgid "Child Properties"
 msgid "Child object"
 msgstr "Objeto hijo"
 
 #: gtk/inspector/window.ui:360
-#| msgctxt "Stock label, media"
-#| msgid "Pre_vious"
 msgid "Previous sibling"
 msgstr "Hermano anterior"
 
 #: gtk/inspector/window.ui:369
-#| msgctxt "OpenType layout"
-#| msgid "Cursive Positioning"
 msgid "List Position"
 msgstr "Posición en la lista"
 
