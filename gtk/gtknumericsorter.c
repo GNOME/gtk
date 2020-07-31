@@ -144,6 +144,8 @@ COMPARE_FUNCS(gulong)
 COMPARE_FUNCS(gint64)
 COMPARE_FUNCS(guint64)
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 #define NUMERIC_SORT_KEYS(TYPE, key_type, type, default_value) \
 static void \
 gtk_ ## type ## _sort_keys_init_key (GtkSortKeys *keys, \
@@ -209,6 +211,8 @@ NUMERIC_SORT_KEYS(LONG, long, long, G_MINLONG)
 NUMERIC_SORT_KEYS(ULONG, gulong, ulong, G_MAXLONG)
 NUMERIC_SORT_KEYS(INT64, gint64, int64, G_MININT64)
 NUMERIC_SORT_KEYS(UINT64, guint64, uint64, G_MAXUINT64)
+
+G_GNUC_END_IGNORE_DEPRECATIONS
 
 static GtkSortKeys *
 gtk_numeric_sort_keys_new (GtkNumericSorter *self)
@@ -328,6 +332,8 @@ gtk_numeric_sort_keys_new (GtkNumericSorter *self)
 
   return (GtkSortKeys *) result;
 }
+
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 
 static GtkOrdering
 gtk_numeric_sorter_compare (GtkSorter *sorter,
@@ -449,6 +455,8 @@ out:
 
   return result;
 }
+
+G_GNUC_END_IGNORE_DEPRECATIONS
 
 static GtkSorterOrder
 gtk_numeric_sorter_get_order (GtkSorter *sorter)
