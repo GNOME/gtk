@@ -63,6 +63,13 @@
 #ifdef GDK_WINDOWING_MACOS
 #include <gdk/macos/gdkmacos.h>
 #endif
+#ifdef GDK_WINDOWING_WIN32
+#include <gdk/win32/gdkwin32.h>
+
+/* Remove these lines when OpenGL/ES 2.0 shader is ready */
+#include "win32/gdkprivate-win32.h"
+#include "win32/gdkdisplay-win32.h"
+#endif
 
 typedef struct
 {
@@ -561,6 +568,17 @@ get_renderer_for_backend (GdkSurface *surface)
 #ifdef GDK_WINDOWING_MACOS
   if (GDK_IS_MACOS_SURFACE (surface))
     return GSK_TYPE_GL_RENDERER;
+#endif
+#ifdef GDK_WINDOWING_WIN32
+  if (GDK_IS_WIN32_SURFACE (surface))
+    /* remove check for OpenGL/ES when OpenGL/ES 2.0 shader is ready */
+    {
+      GdkDisplay *display = gdk_surface_get_display (surface);
+
+      if (!(GDK_DISPLAY_DEBUG_CHECK (display, GL_GLES) ||
+            GDK_WIN32_DISPLAY (display)->running_on_arm64))
+        return GSK_TYPE_GL_RENDERER;
+    }
 #endif
 
   return G_TYPE_INVALID;

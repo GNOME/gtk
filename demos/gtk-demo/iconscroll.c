@@ -220,7 +220,7 @@ set_widget_type (int type)
   tick_cb = gtk_widget_add_tick_callback (window, scroll_cb, NULL, NULL);
 }
 
-void
+G_MODULE_EXPORT void
 iconscroll_next_clicked_cb (GtkButton *source,
                             gpointer   user_data)
 {
@@ -235,7 +235,7 @@ iconscroll_next_clicked_cb (GtkButton *source,
   set_widget_type (new_index);
 }
 
-void
+G_MODULE_EXPORT void
 iconscroll_prev_clicked_cb (GtkButton *source,
                             gpointer   user_data)
 {
@@ -249,7 +249,7 @@ iconscroll_prev_clicked_cb (GtkButton *source,
   set_widget_type (new_index);
 }
 
-GtkWidget *
+G_MODULE_EXPORT GtkWidget *
 do_iconscroll (GtkWidget *do_widget)
 {
   if (!window)

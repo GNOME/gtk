@@ -4825,10 +4825,16 @@ gdk_win32_toplevel_set_property (GObject      *object,
       g_object_notify_by_pspec (G_OBJECT (surface), pspec);
       break;
 
+    case LAST_PROP + GDK_TOPLEVEL_PROP_MODAL:
+      _gdk_push_modal_window (surface);
+      break;
+
     case LAST_PROP + GDK_TOPLEVEL_PROP_ICON_LIST:
       break;
 
     case LAST_PROP + GDK_TOPLEVEL_PROP_DECORATED:
+      _gdk_win32_surface_update_style_bits (surface);
+      g_object_notify_by_pspec (G_OBJECT (surface), pspec);
       break;
 
     case LAST_PROP + GDK_TOPLEVEL_PROP_DELETABLE:
@@ -4863,15 +4869,16 @@ gdk_win32_toplevel_get_property (GObject    *object,
       break;
 
     case LAST_PROP + GDK_TOPLEVEL_PROP_TITLE:
-      g_value_set_string (value, "");
       break;
 
     case LAST_PROP + GDK_TOPLEVEL_PROP_STARTUP_ID:
-      g_value_set_string (value, "");
       break;
 
     case LAST_PROP + GDK_TOPLEVEL_PROP_TRANSIENT_FOR:
       g_value_set_object (value, surface->transient_for);
+      break;
+
+    case LAST_PROP + GDK_TOPLEVEL_PROP_MODAL:
       break;
 
     case LAST_PROP + GDK_TOPLEVEL_PROP_ICON_LIST:
@@ -4879,6 +4886,10 @@ gdk_win32_toplevel_get_property (GObject    *object,
       break;
 
     case LAST_PROP + GDK_TOPLEVEL_PROP_DECORATED:
+      {
+        GdkWMDecoration decorations = GDK_DECOR_ALL;
+        g_value_set_boolean (value, get_effective_window_decorations (surface, &decorations));
+      }
       break;
 
     case LAST_PROP + GDK_TOPLEVEL_PROP_DELETABLE:
