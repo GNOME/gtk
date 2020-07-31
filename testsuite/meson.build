@@ -19,13 +19,13 @@ if get_option('debug')
 endif
 
 add_test_setup ('x11',
-                is_default: true,
                 env: common_env + [
                      'GDK_BACKEND=x11',
                      'TEST_OUTPUT_SUBDIR=x11',
                      ])
 
 add_test_setup ('wayland',
+                is_default: true,
                 env: common_env + [
                       'GDK_BACKEND=wayland',
                       'TEST_OUTPUT_SUBDIR=wayland',
