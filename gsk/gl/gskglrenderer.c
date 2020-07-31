@@ -191,7 +191,7 @@ dump_node (GskRenderNode *node,
   cairo_surface_destroy (surface);
 }
 
-static inline bool G_GNUC_PURE __attribute__((always_inline))
+static inline bool G_GNUC_PURE
 node_is_invisible (const GskRenderNode *node)
 {
   return node->bounds.size.width == 0.0f ||
@@ -200,7 +200,7 @@ node_is_invisible (const GskRenderNode *node)
          isnan (node->bounds.size.height);
 }
 
-static inline bool G_GNUC_PURE __attribute__((always_inline))
+static inline bool G_GNUC_PURE
 graphene_rect_intersects (const graphene_rect_t *r1,
                           const graphene_rect_t *r2)
 {
@@ -216,7 +216,7 @@ graphene_rect_intersects (const graphene_rect_t *r1,
   return true;
 }
 
-static inline bool G_GNUC_PURE __attribute__((always_inline))
+static inline bool G_GNUC_PURE
 _graphene_rect_contains_rect (const graphene_rect_t *r1,
                               const graphene_rect_t *r2)
 {
