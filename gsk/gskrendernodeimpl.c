@@ -3643,7 +3643,7 @@ gsk_text_node_peek_color (GskRenderNode *node)
 
 /**
  * gsk_text_node_peek_font:
- * @node: The #GskRenderNode
+ * @node: (type GskTextNode): The #GskRenderNode
  *
  * Returns the font used by the text @node.
  *

@@ -412,7 +412,7 @@ gtk_builder_cscope_init (GtkBuilderCScope *self)
  * Calling this function is only necessary if you want to add custom
  * callbacks via gtk_builder_cscope_add_callback_symbol().
  *
- * Returns: (transfer full): a new #GtkBuilderCScope
+ * Returns: (transfer full) (type GtkBuilderCScope): a new #GtkBuilderCScope
  **/
 GtkBuilderScope *
 gtk_builder_cscope_new (void)

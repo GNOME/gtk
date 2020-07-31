@@ -63,7 +63,7 @@ gdk_monitor_has_fullscreen_window (GdkMonitor *monitor)
 
 /**
  * gdk_x11_monitor_get_workarea:
- * @monitor: a #GdkMonitor
+ * @monitor: (type GdkX11Monitor): a #GdkMonitor
  * @workarea: (out): a #GdkRectangle to be filled with
  *     the monitor workarea
  *
@@ -114,6 +114,10 @@ gdk_x11_monitor_class_init (GdkX11MonitorClass *class)
 {
 }
 
+/**
+ * gdk_x11_monitor_get_output:
+ * @monitor: (type GdkX11Monitor): a #GdkMonitor
+ */
 XID
 gdk_x11_monitor_get_output (GdkMonitor *monitor)
 {
