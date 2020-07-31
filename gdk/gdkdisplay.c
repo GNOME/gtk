@@ -639,8 +639,7 @@ switch_to_pointer_grab (GdkDisplay        *display,
       if (grab == NULL /* ungrab */ ||
 	  (!last_grab->owner_events && grab->owner_events) /* switched to owner_events */ )
 	{
-          if (grab)
-            new_toplevel = get_current_toplevel (display, device, &x, &y, &state);
+          new_toplevel = get_current_toplevel (display, device, &x, &y, &state);
 
 	  if (new_toplevel)
 	    {
