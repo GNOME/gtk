@@ -3270,7 +3270,7 @@ gdk_x11_surface_unfullscreen (GdkSurface *surface)
 
 /**
  * gdk_x11_surface_get_group:
- * @surface: The #GdkSurface
+ * @surface: (type GdkX11Surface): The #GdkSurface
  *
  * Returns the group this surface belongs to.
  *

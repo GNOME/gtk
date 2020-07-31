@@ -1831,7 +1831,7 @@ gdk_x11_display_has_pending (GdkDisplay *display)
 
 /**
  * gdk_x11_display_get_default_group:
- * @display: a #GdkDisplay
+ * @display: (type GdkX11Display): a #GdkDisplay
  *
  * Returns the default group leader surface for all toplevel surfaces
  * on @display. This surface is implicitly created by GDK.
@@ -2773,7 +2773,7 @@ gdk_x11_display_get_max_request_size (GdkDisplay *display)
 
 /**
  * gdk_x11_display_get_screen:
- * @display: a #GdkX11Display
+ * @display: (type GdkX11Display): a #GdkX11Display
  *
  * Retrieves the #GdkX11Screen of the @display.
  *
@@ -2845,7 +2845,7 @@ gdk_x11_display_get_monitors (GdkDisplay *display)
 
 /**
  * gdk_x11_display_get_primary_monitor:
- * @self: a #GdkDisplay
+ * @display: (type GdkX11Display): a #GdkDisplay
  *
  * Gets the primary monitor for the display.
  *
@@ -2968,7 +2968,7 @@ gdk_x11_display_class_init (GdkX11DisplayClass * class)
 
   /**
    * GdkX11Display::xevent:
-   * @display: the object on which the signal is emitted
+   * @display: (type GdkX11Display): the object on which the signal is emitted
    * @xevent: a pointer to the XEvent to process
    *
    * The ::xevent signal is a low level signal that is emitted

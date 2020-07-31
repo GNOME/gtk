@@ -1511,7 +1511,7 @@ gdk_x11_display_make_gl_context_current (GdkDisplay   *display,
 
 /**
  * gdk_x11_display_get_glx_version:
- * @display: a #GdkDisplay
+ * @display: (type GdkX11Display): a #GdkDisplay
  * @major: (out): return location for the GLX major version
  * @minor: (out): return location for the GLX minor version
  *
