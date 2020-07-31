@@ -47,6 +47,12 @@
 #define OP_PRINT(format, ...)
 #endif
 
+#if defined (__GNUC__) || defined (__clang__)
+# define ALWAYS_INLINE __attribute__((always_inline))
+#elif defined (_MSC_VER)
+# define ALWAYS_INLINE __forceinline
+#endif
+
 #define INIT_PROGRAM_UNIFORM_LOCATION(program_name, uniform_basename) \
               G_STMT_START{\
                 programs->program_name ## _program.program_name.uniform_basename ## _location = \
@@ -191,7 +197,7 @@ dump_node (GskRenderNode *node,
   cairo_surface_destroy (surface);
 }
 
-static inline bool G_GNUC_PURE __attribute__((always_inline))
+static inline bool G_GNUC_PURE ALWAYS_INLINE
 node_is_invisible (const GskRenderNode *node)
 {
   return node->bounds.size.width == 0.0f ||
@@ -200,7 +206,7 @@ node_is_invisible (const GskRenderNode *node)
          isnan (node->bounds.size.height);
 }
 
-static inline bool G_GNUC_PURE __attribute__((always_inline))
+static inline bool G_GNUC_PURE ALWAYS_INLINE
 graphene_rect_intersects (const graphene_rect_t *r1,
                           const graphene_rect_t *r2)
 {
@@ -216,7 +222,7 @@ graphene_rect_intersects (const graphene_rect_t *r1,
   return true;
 }
 
-static inline bool G_GNUC_PURE __attribute__((always_inline))
+static inline bool G_GNUC_PURE ALWAYS_INLINE
 _graphene_rect_contains_rect (const graphene_rect_t *r1,
                               const graphene_rect_t *r2)
 {
