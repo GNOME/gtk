@@ -278,6 +278,7 @@ server_list_add_server (GtkPlacesView *view,
   GError *error;
   char *title;
   char *uri;
+  GDateTime *now;
 
   error = NULL;
   bookmarks = server_list_load (view);
@@ -295,7 +296,9 @@ server_list_add_server (GtkPlacesView *view,
   title = g_file_info_get_attribute_as_string (info, G_FILE_ATTRIBUTE_STANDARD_DISPLAY_NAME);
 
   g_bookmark_file_set_title (bookmarks, uri, title);
-  g_bookmark_file_set_visited (bookmarks, uri, -1);
+  now = g_date_time_new_now_utc ();
+  g_bookmark_file_set_visited_date_time (bookmarks, uri, now);
+  g_date_time_unref (now);
   g_bookmark_file_add_application (bookmarks, uri, NULL, NULL);
 
   server_list_save (bookmarks);
