@@ -82,8 +82,6 @@
 #include "gsk/gskrendererprivate.h"
 
 #include <cairo-gobject.h>
-#include <gobject/gobjectnotifyqueue.c>
-#include <gobject/gvaluecollector.h>
 #include <locale.h>
 #include <math.h>
 #include <stdarg.h>

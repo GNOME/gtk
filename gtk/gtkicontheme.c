@@ -332,7 +332,7 @@ struct _GtkIconTheme
   GtkSettings *display_settings;
 
   /* time when we last stat:ed for theme changes */
-  glong last_stat_time;
+  gint64 last_stat_time;
   GArray *dir_mtimes;
 
   gulong theme_changed_idle;
@@ -1966,7 +1966,6 @@ load_themes (GtkIconTheme *self)
   int base;
   char *dir;
   const char *file;
-  GTimeVal tv;
   GStatBuf stat_buf;
   int j;
 
@@ -2029,8 +2028,7 @@ load_themes (GtkIconTheme *self)
 
   self->themes_valid = TRUE;
 
-  g_get_current_time (&tv);
-  self->last_stat_time = tv.tv_sec;
+  self->last_stat_time = g_get_monotonic_time ();
 
   GTK_DISPLAY_NOTE (self->display, ICONTHEME, {
     GList *l;
@@ -2051,14 +2049,13 @@ static gboolean
 ensure_valid_themes (GtkIconTheme *self,
                      gboolean      non_blocking)
 {
-  GTimeVal tv;
   gboolean was_valid = self->themes_valid;
 
   if (self->themes_valid)
     {
-      g_get_current_time (&tv);
+      gint64 now = g_get_monotonic_time ();
 
-      if (ABS (tv.tv_sec - self->last_stat_time) > 5)
+      if ((now - self->last_stat_time) / G_USEC_PER_SEC > 5)
         {
           if (non_blocking)
             return FALSE;
@@ -2749,7 +2746,6 @@ rescan_themes (GtkIconTheme *self)
 {
   int stat_res;
   GStatBuf stat_buf;
-  GTimeVal tv;
   guint i;
 
   for (i = 0; i < self->dir_mtimes->len; i++)
@@ -2771,8 +2767,7 @@ rescan_themes (GtkIconTheme *self)
       return TRUE;
     }
 
-  g_get_current_time (&tv);
-  self->last_stat_time = tv.tv_sec;
+  self->last_stat_time = g_get_monotonic_time ();
 
   return FALSE;
 }

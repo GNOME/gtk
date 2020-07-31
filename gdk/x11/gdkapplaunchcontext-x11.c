@@ -127,13 +127,13 @@ end_startup_notification (GdkDisplay *display,
  * the sequence (don’t use an SnMonitorContext)
  */
 #define STARTUP_TIMEOUT_LENGTH_SECONDS 30
-#define STARTUP_TIMEOUT_LENGTH (STARTUP_TIMEOUT_LENGTH_SECONDS * 1000)
+#define STARTUP_TIMEOUT_LENGTH (STARTUP_TIMEOUT_LENGTH_SECONDS * 1000) /* ms */
 
 typedef struct
 {
   GdkDisplay *display;
   char *startup_id;
-  GTimeVal time;
+  gint64 time;
 } StartupNotificationData;
 
 static void
@@ -175,14 +175,14 @@ startup_timeout (void *data)
 {
   StartupTimeoutData *std;
   GSList *tmp;
-  GTimeVal now;
+  gint64 now;
   int min_timeout;
 
   std = data;
 
   min_timeout = STARTUP_TIMEOUT_LENGTH;
 
-  g_get_current_time (&now);
+  now = g_get_monotonic_time ();
 
   tmp = std->contexts;
   while (tmp != NULL)
@@ -194,9 +194,7 @@ startup_timeout (void *data)
       sn_data = tmp->data;
       next = tmp->next;
 
-      elapsed =
-        ((((double) now.tv_sec - sn_data->time.tv_sec) * G_USEC_PER_SEC +
-          (now.tv_usec - sn_data->time.tv_usec))) / 1000.0;
+      elapsed = (now - sn_data->time) / 1000.0;
 
       if (elapsed >= STARTUP_TIMEOUT_LENGTH)
         {
@@ -246,7 +244,7 @@ add_startup_timeout (GdkX11Screen *screen,
   sn_data = g_new (StartupNotificationData, 1);
   sn_data->display = g_object_ref (GDK_SCREEN_DISPLAY (screen));
   sn_data->startup_id = g_strdup (startup_id);
-  g_get_current_time (&sn_data->time);
+  sn_data->time = g_get_monotonic_time ();
 
   data->contexts = g_slist_prepend (data->contexts, sn_data);
 

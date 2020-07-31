@@ -207,19 +207,19 @@ const char *         gtk_recent_info_get_description      (GtkRecentInfo  *info)
 GDK_AVAILABLE_IN_ALL
 const char *         gtk_recent_info_get_mime_type        (GtkRecentInfo  *info);
 GDK_AVAILABLE_IN_ALL
-time_t                gtk_recent_info_get_added            (GtkRecentInfo  *info);
+GDateTime *          gtk_recent_info_get_added            (GtkRecentInfo  *info);
 GDK_AVAILABLE_IN_ALL
-time_t                gtk_recent_info_get_modified         (GtkRecentInfo  *info);
+GDateTime *          gtk_recent_info_get_modified         (GtkRecentInfo  *info);
 GDK_AVAILABLE_IN_ALL
-time_t                gtk_recent_info_get_visited          (GtkRecentInfo  *info);
+GDateTime *          gtk_recent_info_get_visited          (GtkRecentInfo  *info);
 GDK_AVAILABLE_IN_ALL
-gboolean              gtk_recent_info_get_private_hint     (GtkRecentInfo  *info);
+gboolean             gtk_recent_info_get_private_hint     (GtkRecentInfo  *info);
 GDK_AVAILABLE_IN_ALL
-gboolean              gtk_recent_info_get_application_info (GtkRecentInfo  *info,
-							    const char     *app_name,
-							    const char    **app_exec,
-							    guint          *count,
-							    time_t         *time_);
+gboolean             gtk_recent_info_get_application_info (GtkRecentInfo  *info,
+                                                           const char     *app_name,
+                                                           const char    **app_exec,
+                                                           guint          *count,
+                                                           GDateTime     **stamp);
 GDK_AVAILABLE_IN_ALL
 GAppInfo *            gtk_recent_info_create_app_info      (GtkRecentInfo  *info,
                                                             const char     *app_name,
