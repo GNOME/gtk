@@ -390,7 +390,8 @@ gtk_inspector_a11y_set_object (GtkInspectorA11y *sl,
   GtkWidget *stack;
   GtkStackPage *page;
   GtkATContext *context;
-  if (sl->object)
+
+  if (sl->object && GTK_IS_ACCESSIBLE (sl->object))
     {
       context = gtk_accessible_get_at_context (GTK_ACCESSIBLE (sl->object));
       g_signal_handlers_disconnect_by_func (context, refresh_all, sl);
@@ -426,7 +427,7 @@ dispose (GObject *o)
 {
   GtkInspectorA11y *sl = GTK_INSPECTOR_A11Y (o);
 
-  if (sl->object)
+  if (sl->object && GTK_IS_ACCESSIBLE (sl->object))
     {
       GtkATContext *context;
 
