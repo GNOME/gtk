@@ -1348,14 +1348,17 @@ gtk_stack_add_page (GtkStack     *stack,
 
   g_return_if_fail (child_info->widget != NULL);
 
-  for (l = priv->children; l != NULL; l = l->next)
+  if (child_info->name)
     {
-      GtkStackPage *info = l->data;
-      if (info->name &&
-          g_strcmp0 (info->name, child_info->name) == 0)
+      for (l = priv->children; l != NULL; l = l->next)
         {
-          g_warning ("While adding page: duplicate child name in GtkStack: %s", child_info->name);
-          break;
+          GtkStackPage *info = l->data;
+          if (info->name &&
+              g_strcmp0 (info->name, child_info->name) == 0)
+            {
+              g_warning ("While adding page: duplicate child name in GtkStack: %s", child_info->name);
+              break;
+            }
         }
     }
 
