@@ -2585,6 +2585,22 @@ gtk_list_box_prepend (GtkListBox *box,
 }
 
 /**
+ * gtk_list_box_append:
+ * @box: a #GtkListBox
+ * @child: the #GtkWidget to add
+ *
+ * Append a widget to the list. If a sort function is set, the widget will
+ * actually be inserted at the calculated position and this function has the
+ * same effect of gtk_container_add().
+ */
+void
+gtk_list_box_append (GtkListBox *box,
+                     GtkWidget  *child)
+{
+  gtk_list_box_insert (box, child, -1);
+}
+
+/**
  * gtk_list_box_insert:
  * @box: a #GtkListBox
  * @child: the #GtkWidget to add

@@ -168,6 +168,9 @@ GDK_AVAILABLE_IN_ALL
 void           gtk_list_box_prepend                      (GtkListBox                    *box,
                                                           GtkWidget                     *child);
 GDK_AVAILABLE_IN_ALL
+void           gtk_list_box_append                       (GtkListBox                    *box,
+                                                          GtkWidget                     *child);
+GDK_AVAILABLE_IN_ALL
 void           gtk_list_box_insert                       (GtkListBox                    *box,
                                                           GtkWidget                     *child,
                                                           int                            position);
