@@ -919,9 +919,15 @@ update_go_buttons (GtkInspectorWindow *iw)
   switch (kind)
     {
     case CHILD_KIND_WIDGET:
-      update_go_button (iw->go_down_button, gtk_widget_get_first_child (GTK_WIDGET (object)) != NULL, "First child");
-      update_go_button (iw->go_previous_button, gtk_widget_get_prev_sibling (GTK_WIDGET (object)) != NULL, "Previous sibling");
-      update_go_button (iw->go_next_button, gtk_widget_get_next_sibling (GTK_WIDGET (object)) != NULL, "Next sibling");
+      update_go_button (iw->go_down_button,
+                        GTK_IS_WIDGET (object) &&gtk_widget_get_first_child (GTK_WIDGET (object)) != NULL,
+                        "First child");
+      update_go_button (iw->go_previous_button,
+                        GTK_IS_WIDGET (object) && gtk_widget_get_prev_sibling (GTK_WIDGET (object)) != NULL,
+                        "Previous sibling");
+      update_go_button (iw->go_next_button,
+                        GTK_IS_WIDGET (object) && gtk_widget_get_next_sibling (GTK_WIDGET (object)) != NULL,
+                        "Next sibling");
       gtk_widget_hide (iw->list_position_label);
       break;
     case CHILD_KIND_LISTITEM:
