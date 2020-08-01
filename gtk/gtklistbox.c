@@ -55,7 +55,8 @@
  * button in it).
  *
  * Although a #GtkListBox must have only #GtkListBoxRow children you can
- * add any kind of widget to it via gtk_container_add(), and a #GtkListBoxRow
+ * add any kind of widget to it via gtk_list_box_prepend(),
+ * gtk_list_box_append() and gtk_list_box_insert() and a #GtkListBoxRow
  * widget will automatically be inserted between the list and the widget.
  *
  * #GtkListBoxRows can be marked as activatable or selectable. If a row
@@ -2574,8 +2575,7 @@ gtk_list_box_size_allocate (GtkWidget *widget,
  * @child: the #GtkWidget to add
  *
  * Prepend a widget to the list. If a sort function is set, the widget will
- * actually be inserted at the calculated position and this function has the
- * same effect of gtk_container_add().
+ * actually be inserted at the calculated position.
  */
 void
 gtk_list_box_prepend (GtkListBox *box,
@@ -2590,8 +2590,7 @@ gtk_list_box_prepend (GtkListBox *box,
  * @child: the #GtkWidget to add
  *
  * Append a widget to the list. If a sort function is set, the widget will
- * actually be inserted at the calculated position and this function has the
- * same effect of gtk_container_add().
+ * actually be inserted at the calculated position.
  */
 void
 gtk_list_box_append (GtkListBox *box,
@@ -2607,8 +2606,7 @@ gtk_list_box_append (GtkListBox *box,
  * @position: the position to insert @child in
  *
  * Insert the @child into the @box at @position. If a sort function is
- * set, the widget will actually be inserted at the calculated position and
- * this function has the same effect of gtk_container_add().
+ * set, the widget will actually be inserted at the calculated position.
  *
  * If @position is -1, or larger than the total number of items in the
  * @box, then the @child will be appended to the end.
@@ -3578,7 +3576,7 @@ gtk_list_box_check_model_compat (GtkListBox *box)
  * If @model is %NULL, @box is left empty.
  *
  * It is undefined to add or remove widgets directly (for example, with
- * gtk_list_box_insert() or gtk_container_add()) while @box is bound to a
+ * gtk_list_box_insert()) while @box is bound to a
  * model.
  *
  * Note that using a model is incompatible with the filtering and sorting

@@ -68,12 +68,12 @@
  * Widgets with native scrolling support, i.e. those whose classes implement the
  * #GtkScrollable interface, are added directly. For other types of widget, the
  * class #GtkViewport acts as an adaptor, giving scrollability to other widgets.
- * GtkScrolledWindow’s implementation of gtk_container_add() intelligently
+ * gtk_scrolled_window_set_child() intelligently
  * accounts for whether or not the added child is a #GtkScrollable. If it isn’t,
  * #GtkScrolledWindow wraps the child in a #GtkViewport and adds that for you.
  * Therefore, you can just add any child widget and not worry about the details.
  *
- * If gtk_container_add() has added a #GtkViewport for you, you can remove
+ * If gtk_scrolled_window_set_child() has added a #GtkViewport for you, you can remove
  * both your added child widget from the #GtkViewport, and the #GtkViewport
  * from the GtkScrolledWindow, like this:
  *
