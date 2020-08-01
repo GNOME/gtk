@@ -1270,7 +1270,7 @@ stack_child_visibility_notify_cb (GObject    *obj,
  * gtk_stack_add_titled:
  * @stack: a #GtkStack
  * @child: the widget to add
- * @name: the name for @child
+ * @name: (nullable): the name for @child
  * @title: a human-readable title for @child
  *
  * Adds a child to @stack.
@@ -1282,9 +1282,9 @@ stack_child_visibility_notify_cb (GObject    *obj,
  */
 GtkStackPage *
 gtk_stack_add_titled (GtkStack   *stack,
-                     GtkWidget   *child,
-                     const char *name,
-                     const char *title)
+                      GtkWidget  *child,
+                      const char *name,
+                      const char *title)
 {
   g_return_val_if_fail (GTK_IS_STACK (stack), NULL);
   g_return_val_if_fail (GTK_IS_WIDGET (child), NULL);
@@ -1296,7 +1296,7 @@ gtk_stack_add_titled (GtkStack   *stack,
  * gtk_stack_add_named:
  * @stack: a #GtkStack
  * @child: the widget to add
- * @name: the name for @child
+ * @name: (nullable): the name for @child or %NULL
  *
  * Adds a child to @stack.
  * The child is identified by the @name.
@@ -1305,8 +1305,8 @@ gtk_stack_add_titled (GtkStack   *stack,
  */
 GtkStackPage *
 gtk_stack_add_named (GtkStack   *stack,
-                    GtkWidget   *child,
-                    const char *name)
+                     GtkWidget  *child,
+                     const char *name)
 {
   g_return_val_if_fail (GTK_IS_STACK (stack), NULL);
   g_return_val_if_fail (GTK_IS_WIDGET (child), NULL);
