@@ -68,7 +68,7 @@
  *
  * |[<!-- language="C" -->
  * static void
- * on_response (GtkNativeDialog *dialog,
+ * on_response (GtkNativeDialog *native,
  *              int              response)
  * {
  *   if (response == GTK_RESPONSE_ACCEPT)
@@ -102,12 +102,12 @@
  *
  * |[<!-- language="C" -->
  * static void
- * on_response (GtkNativeDialog *dialog,
+ * on_response (GtkNativeDialog *native,
  *              int              response)
  * {
  *   if (response == GTK_RESPONSE_ACCEPT)
  *     {
- *       GtkFileChooser *chooser = GTK_FILE_CHOOSER (dialog);
+ *       GtkFileChooser *chooser = GTK_FILE_CHOOSER (native);
  *       GFile *file = gtk_file_chooser_get_file (chooser);
  *
  *       save_to_file (file);
@@ -131,11 +131,9 @@
  *   chooser = GTK_FILE_CHOOSER (native);
  *
  *   if (user_edited_a_new_document)
- *     gtk_file_chooser_set_current_name (chooser,
- *                                      _("Untitled document"));
+ *     gtk_file_chooser_set_current_name (chooser, _("Untitled document"));
  *   else
- *     gtk_file_chooser_set_filename (chooser,
- *                                    existing_filename);
+ *     gtk_file_chooser_set_file (chooser, existing_file, NULL);
  *
  *   g_signal_connect (native, "response", G_CALLBACK (on_response), NULL);
  *   gtk_native_dialog_show (GTK_NATIVE_DIALOG (native));

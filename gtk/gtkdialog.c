@@ -730,7 +730,7 @@ gtk_dialog_new_empty (const char      *title,
  *
  * Here’s a simple example:
  * |[<!-- language="C" -->
- *  GtkWidget *main_app_window; // Window the dialog should show up on
+ *  GtkWindow *main_app_window; // Window the dialog should show up on
  *  GtkWidget *dialog;
  *  GtkDialogFlags flags = GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT;
  *  dialog = gtk_dialog_new_with_buttons ("My dialog",

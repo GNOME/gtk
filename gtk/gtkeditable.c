@@ -40,7 +40,7 @@
  * ## Forcing entry to uppercase.
  *
  * |[<!-- language="C" -->
- * #include <ctype.h>;
+ * #include <ctype.h>
  *
  * void
  * insert_text_handler (GtkEditable *editable,
