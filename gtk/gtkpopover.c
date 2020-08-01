@@ -870,8 +870,7 @@ gtk_popover_init (GtkPopover *popover)
   gtk_widget_set_layout_manager (priv->contents_widget, gtk_bin_layout_new ());
   gtk_widget_set_parent (priv->contents_widget, GTK_WIDGET (popover));
 
-  gtk_css_node_add_class (gtk_widget_get_css_node (GTK_WIDGET (popover)),
-                          g_quark_from_static_string (GTK_STYLE_CLASS_BACKGROUND));
+  gtk_widget_add_css_class (widget, "background");
 
   add_actions (popover);
 }

@@ -293,6 +293,7 @@ do_paintable_mediastream (GtkWidget *do_widget)
                               gtk_widget_get_display (do_widget));
       gtk_window_set_title (GTK_WINDOW (window), "Nuclear MediaStream");
       gtk_window_set_default_size (GTK_WINDOW (window), 300, 200);
+      g_object_add_weak_pointer (G_OBJECT (window), (gpointer *)&window);
 
       nuclear = gtk_nuclear_media_stream_new ();
       gtk_media_stream_set_loop (GTK_MEDIA_STREAM (nuclear), TRUE);

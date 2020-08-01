@@ -85,10 +85,12 @@ static guint signals[LAST_SIGNAL] = { 0, };
  * ## Simple GtkDrawingArea usage
  *
  * |[<!-- language="C" -->
- * void
- * draw_function (GtkDrawingArea *area, cairo_t *cr,
- *                int width, int height,
- *                gpointer data)
+ * static void
+ * draw_function (GtkDrawingArea *area,
+ *                cairo_t        *cr,
+ *                int             width,
+ *                int             height,
+ *                gpointer        data)
  * {
  *   GdkRGBA color;
  *   GtkStyleContext *context;
@@ -107,7 +109,8 @@ static guint signals[LAST_SIGNAL] = { 0, };
  *   cairo_fill (cr);
  * }
  *
- * void main (int argc, char **argv)
+ * int
+ * main (int argc, char **argv)
  * {
  *   gtk_init ();
  *
@@ -117,7 +120,7 @@ static guint signals[LAST_SIGNAL] = { 0, };
  *   gtk_drawing_area_set_draw_func (GTK_DRAWING_AREA (area),
  *                                   draw_function,
  *                                   NULL, NULL);
- *
+ *   return 0;
  * }
  * ]|
  *

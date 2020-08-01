@@ -1270,7 +1270,7 @@ stack_child_visibility_notify_cb (GObject    *obj,
  * gtk_stack_add_titled:
  * @stack: a #GtkStack
  * @child: the widget to add
- * @name: the name for @child
+ * @name: (nullable): the name for @child
  * @title: a human-readable title for @child
  *
  * Adds a child to @stack.
@@ -1282,9 +1282,9 @@ stack_child_visibility_notify_cb (GObject    *obj,
  */
 GtkStackPage *
 gtk_stack_add_titled (GtkStack   *stack,
-                     GtkWidget   *child,
-                     const char *name,
-                     const char *title)
+                      GtkWidget  *child,
+                      const char *name,
+                      const char *title)
 {
   g_return_val_if_fail (GTK_IS_STACK (stack), NULL);
   g_return_val_if_fail (GTK_IS_WIDGET (child), NULL);
@@ -1296,7 +1296,7 @@ gtk_stack_add_titled (GtkStack   *stack,
  * gtk_stack_add_named:
  * @stack: a #GtkStack
  * @child: the widget to add
- * @name: the name for @child
+ * @name: (nullable): the name for @child or %NULL
  *
  * Adds a child to @stack.
  * The child is identified by the @name.
@@ -1305,8 +1305,8 @@ gtk_stack_add_titled (GtkStack   *stack,
  */
 GtkStackPage *
 gtk_stack_add_named (GtkStack   *stack,
-                    GtkWidget   *child,
-                    const char *name)
+                     GtkWidget  *child,
+                     const char *name)
 {
   g_return_val_if_fail (GTK_IS_STACK (stack), NULL);
   g_return_val_if_fail (GTK_IS_WIDGET (child), NULL);
@@ -1348,14 +1348,17 @@ gtk_stack_add_page (GtkStack     *stack,
 
   g_return_if_fail (child_info->widget != NULL);
 
-  for (l = priv->children; l != NULL; l = l->next)
+  if (child_info->name)
     {
-      GtkStackPage *info = l->data;
-      if (info->name &&
-          g_strcmp0 (info->name, child_info->name) == 0)
+      for (l = priv->children; l != NULL; l = l->next)
         {
-          g_warning ("While adding page: duplicate child name in GtkStack: %s", child_info->name);
-          break;
+          GtkStackPage *info = l->data;
+          if (info->name &&
+              g_strcmp0 (info->name, child_info->name) == 0)
+            {
+              g_warning ("While adding page: duplicate child name in GtkStack: %s", child_info->name);
+              break;
+            }
         }
     }
 

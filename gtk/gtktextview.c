@@ -3107,6 +3107,7 @@ gtk_text_view_set_editable (GtkTextView *text_view,
       gtk_accessible_update_property (GTK_ACCESSIBLE (text_view),
                                       GTK_ACCESSIBLE_PROPERTY_READ_ONLY, !setting,
                                       -1);
+      gtk_text_view_update_emoji_action (text_view);
 
       g_object_notify (G_OBJECT (text_view), "editable");
     }
@@ -8531,7 +8532,8 @@ static void
 gtk_text_view_update_emoji_action (GtkTextView *text_view)
 {
   gtk_widget_action_set_enabled (GTK_WIDGET (text_view), "misc.insert-emoji",
-                                 (gtk_text_view_get_input_hints (text_view) & GTK_INPUT_HINT_NO_EMOJI) == 0);
+                                 (gtk_text_view_get_input_hints (text_view) & GTK_INPUT_HINT_NO_EMOJI) == 0 &&
+                                 text_view->priv->editable);
 }
 
 static GMenuModel *

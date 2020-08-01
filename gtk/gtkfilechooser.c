@@ -482,17 +482,26 @@ gtk_file_chooser_get_files (GtkFileChooser *chooser)
  * file and is saving it for the first time, do not call this function.
  * Instead, use something similar to this:
  * |[<!-- language="C" -->
- * if (document_is_new)
- *   {
- *     // the user just created a new document
- *     gtk_file_chooser_set_current_folder (chooser, default_file_for_saving);
- *     gtk_file_chooser_set_current_name (chooser, "Untitled document");
- *   }
- * else
- *   {
- *     // the user edited an existing document
- *     gtk_file_chooser_set_file (chooser, existing_file);
- *   }
+ * static void
+ * prepare_file_chooser (GtkFileChooser *chooser,
+ *                       GFile          *existing_file)
+ * {
+ *   gboolean document_is_new = (existing_file == NULL);
+ *
+ *   if (document_is_new)
+ *     {
+ *       GFile *default_file_for_saving = g_file_new_for_path ("./out.txt");
+ *       // the user just created a new document
+ *       gtk_file_chooser_set_current_folder (chooser, default_file_for_saving, NULL);
+ *       gtk_file_chooser_set_current_name (chooser, "Untitled document");
+ *       g_object_unref (default_file_for_saving);
+ *     }
+ *   else
+ *     {
+ *       // the user edited an existing document
+ *       gtk_file_chooser_set_file (chooser, existing_file, NULL);
+ *     }
+ * }
  * ]|
  *
  * Returns: Not useful.

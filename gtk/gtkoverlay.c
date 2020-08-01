@@ -420,7 +420,7 @@ gtk_overlay_new (void)
  * Adds @widget to @overlay.
  *
  * The widget will be stacked on top of the main widget
- * added with gtk_container_add().
+ * added with gtk_overlay_set_child().
  *
  * The position at which @widget is placed is determined
  * from its #GtkWidget:halign and #GtkWidget:valign properties.

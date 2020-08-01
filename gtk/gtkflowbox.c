@@ -48,7 +48,7 @@
  * The children of a GtkFlowBox can be dynamically sorted and filtered.
  *
  * Although a GtkFlowBox must have only #GtkFlowBoxChild children,
- * you can add any kind of widget to it via gtk_container_add(), and
+ * you can add any kind of widget to it via gtk_flow_box_insert(), and
  * a GtkFlowBoxChild widget will automatically be inserted between
  * the box and the widget.
  *
@@ -4042,8 +4042,7 @@ gtk_flow_box_insert_css_node (GtkFlowBox    *box,
  * Inserts the @widget into @box at @position.
  *
  * If a sort function is set, the widget will actually be inserted
- * at the calculated position and this function has the same effect
- * as gtk_container_add().
+ * at the calculated position.
  *
  * If @position is -1, or larger than the total number of children
  * in the @box, then the @widget will be appended to the end.
@@ -4239,7 +4238,7 @@ gtk_flow_box_check_model_compat (GtkFlowBox *box)
  * If @model is %NULL, @box is left empty.
  *
  * It is undefined to add or remove widgets directly (for example, with
- * gtk_flow_box_insert() or gtk_container_add()) while @box is bound to a
+ * gtk_flow_box_insert()) while @box is bound to a
  * model.
  *
  * Note that using a model is incompatible with the filtering and sorting

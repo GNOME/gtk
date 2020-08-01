@@ -84,7 +84,7 @@
  *
  *   button = gtk_file_chooser_button_new (_("Select a file"),
  *                                         GTK_FILE_CHOOSER_ACTION_OPEN);
- *   gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (button), cwd);
+ *   gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (button), cwd, NULL);
  *   g_object_unref (cwd);
  * }
  * ]|
