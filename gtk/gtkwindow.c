@@ -132,8 +132,8 @@
  *
  * |[<!-- language="plain" -->
  * window.background
- * ├── <titlebar child>.titlebar [.default-decoration]
- * ╰── <child>
+ * ├── <child>
+ * ╰── <titlebar child>.titlebar [.default-decoration]
  * ]|
  *
  * GtkWindow has a main CSS node with name window and style class .background.
@@ -2824,7 +2824,7 @@ gtk_window_set_titlebar (GtkWindow *window,
 
   gtk_window_enable_csd (window);
   priv->title_box = titlebar;
-  gtk_widget_insert_after (priv->title_box, widget, NULL);
+  gtk_widget_insert_before (priv->title_box, widget, NULL);
 
   gtk_widget_add_css_class (titlebar, GTK_STYLE_CLASS_TITLEBAR);
 
@@ -4308,7 +4308,7 @@ gtk_window_realize (GtkWidget *widget)
                 gtk_widget_add_css_class (priv->titlebar, GTK_STYLE_CLASS_TITLEBAR);
                 gtk_widget_add_css_class (priv->titlebar, "default-decoration");
 
-                gtk_widget_insert_after (priv->titlebar, widget, NULL);
+                gtk_widget_insert_before (priv->titlebar, widget, NULL);
                 priv->title_box = priv->titlebar;
               }
 
@@ -7084,7 +7084,7 @@ gtk_window_set_child (GtkWindow *window,
   if (child)
     {
       priv->child = child;
-      gtk_widget_set_parent (child, GTK_WIDGET (window));
+      gtk_widget_insert_before (child, GTK_WIDGET (window), priv->title_box);
     }
 
   g_object_notify_by_pspec (G_OBJECT (window), window_props[PROP_CHILD]);
