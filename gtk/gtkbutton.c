@@ -1035,7 +1035,7 @@ gtk_button_set_child (GtkButton *button,
     gtk_widget_set_parent (priv->child, GTK_WIDGET (button));
 
   gtk_button_set_child_type (button, WIDGET_CHILD);
-  g_object_notify (G_OBJECT (button), "child");
+  g_object_notify_by_pspec (G_OBJECT (button), props[PROP_CHILD]);
 }
 
 /**
