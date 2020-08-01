@@ -95,7 +95,10 @@
  * set the title property explicitly when constructing a GtkAboutDialog,
  * as shown in the following example:
  * |[<!-- language="C" -->
- * GdkTexture *example_logo = gdk_texture_new_from_file ("./logo.png", NULL);
+ * GFile *logo_file = g_file_new_for_path ("./logo.png");
+ * GdkTexture *example_logo = gdk_texture_new_from_file (logo_file, NULL);
+ * g_object_unref (logo_file);
+ *
  * gtk_show_about_dialog (NULL,
  *                        "program-name", "ExampleCode",
  *                        "logo", example_logo,
