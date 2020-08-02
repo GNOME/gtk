@@ -5393,8 +5393,6 @@ gtk_text_view_click_gesture_pressed (GtkGestureClick *gesture,
 
   gtk_widget_grab_focus (GTK_WIDGET (text_view));
 
-  gtk_gesture_set_sequence_state (GTK_GESTURE (gesture), sequence,
-                                  GTK_EVENT_SEQUENCE_CLAIMED);
   gtk_text_view_reset_blink_time (text_view);
 
   device = gdk_event_get_device ((GdkEvent *) event);
@@ -5411,11 +5409,15 @@ gtk_text_view_click_gesture_pressed (GtkGestureClick *gesture,
   if (n_press == 1 &&
       gdk_event_triggers_context_menu (event))
     {
+      gtk_gesture_set_sequence_state (GTK_GESTURE (gesture), sequence,
+                                      GTK_EVENT_SEQUENCE_CLAIMED);
       gtk_text_view_do_popup (text_view, event);
     }
   else if (button == GDK_BUTTON_MIDDLE &&
            get_middle_click_paste (text_view))
     {
+      gtk_gesture_set_sequence_state (GTK_GESTURE (gesture), sequence,
+                                      GTK_EVENT_SEQUENCE_CLAIMED);
       get_iter_from_gesture (text_view, GTK_GESTURE (gesture),
                              &iter, NULL, NULL);
       gtk_text_buffer_paste_clipboard (get_buffer (text_view),
@@ -5453,8 +5455,10 @@ gtk_text_view_click_gesture_pressed (GtkGestureClick *gesture,
               {
                 if (is_touchscreen)
                   {
+                    gtk_gesture_set_sequence_state (GTK_GESTURE (gesture), sequence,
+                                                    GTK_EVENT_SEQUENCE_CLAIMED);
                     if (!priv->selection_bubble ||
-			!gtk_widget_get_visible (priv->selection_bubble))
+                        !gtk_widget_get_visible (priv->selection_bubble))
                       {
                         gtk_text_view_selection_bubble_popup_set (text_view);
                         priv->text_handles_enabled = FALSE;
@@ -5475,18 +5479,20 @@ gtk_text_view_click_gesture_pressed (GtkGestureClick *gesture,
                 break;
               }
             else
-	      {
+              {
                 gtk_text_view_selection_bubble_popup_unset (text_view);
 
-		if (is_touchscreen)
+                if (is_touchscreen)
                   {
-		    gtk_text_buffer_place_cursor (get_buffer (text_view), &iter);
+                    gtk_gesture_set_sequence_state (GTK_GESTURE (gesture), sequence,
+                                                    GTK_EVENT_SEQUENCE_CLAIMED);
+                    gtk_text_buffer_place_cursor (get_buffer (text_view), &iter);
                     priv->handle_place_time = g_get_monotonic_time ();
                   }
-		else
-		  gtk_text_view_start_selection_drag (text_view, &iter,
-						      SELECT_CHARACTERS, extends);
-	      }
+                else
+                  gtk_text_view_start_selection_drag (text_view, &iter,
+                                                      SELECT_CHARACTERS, extends);
+              }
             break;
           }
         case 2:
@@ -7246,8 +7252,7 @@ gtk_text_view_drag_gesture_update (GtkGestureDrag *gesture,
       /* If no data is attached, the initial press happened within the current
        * text selection, check for drag and drop to be initiated.
        */
-      if (gtk_drag_check_threshold (GTK_WIDGET (text_view),
-				    start_x, start_y, x, y))
+      if (gtk_drag_check_threshold (GTK_WIDGET (text_view), start_x, start_y, x, y))
         {
           if (!is_touchscreen)
             {
@@ -7426,7 +7431,7 @@ gtk_text_view_start_selection_drag (GtkTextView          *text_view,
       old_start = old_ins;
       old_end = old_bound;
       gtk_text_iter_order (&old_start, &old_end);
-      
+
       /* move the front cursor, if the mouse is in front of the selection. Should the
        * cursor however be inside the selection (this happens on tripple click) then we
        * move the side which was last moved (current insert mark) */
