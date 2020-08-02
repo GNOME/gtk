@@ -189,8 +189,9 @@ gtk_popover_item_activate (GtkWidget *button,
       /* Activating the item could cause the popover
        * to be free'd, for example if it is a Quit item
        */
-      popover = g_object_ref (gtk_widget_get_ancestor (button,
-                                                       GTK_TYPE_POPOVER));
+      popover = gtk_widget_get_ancestor (button, GTK_TYPE_POPOVER);
+      if (popover)
+        g_object_ref (popover);
     }
 
   gtk_menu_tracker_item_activated (item);
