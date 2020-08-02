@@ -1,4 +1,4 @@
-FROM registry.gitlab.gnome.org/gnome/gtk/fedora-base:v20
+FROM registry.gitlab.gnome.org/gnome/gtk/fedora-base:v21
 
 ARG HOST_USER_ID=5555
 ENV HOST_USER_ID ${HOST_USER_ID}

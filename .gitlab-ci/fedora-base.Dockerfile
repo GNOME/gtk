@@ -29,6 +29,7 @@ RUN dnf -y install \
     glib2-static \
     glibc-devel \
     glibc-headers \
+    gnome-desktop-testing \
     gobject-introspection-devel \
     graphene-devel \
     gstreamer1-devel \
