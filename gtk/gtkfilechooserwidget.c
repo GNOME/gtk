@@ -5088,11 +5088,18 @@ gtk_file_chooser_widget_set_current_name (GtkFileChooser *chooser,
                                           const char     *name)
 {
   GtkFileChooserWidget *impl = GTK_FILE_CHOOSER_WIDGET (chooser);
+  GtkEntryCompletion *completion;
 
   g_return_if_fail (impl->action == GTK_FILE_CHOOSER_ACTION_SAVE);
 
   pending_select_files_free (impl);
+
+  completion = gtk_entry_get_completion (GTK_ENTRY (impl->location_entry));
+  gtk_entry_completion_set_popup_completion (completion, FALSE);
+
   gtk_editable_set_text (GTK_EDITABLE (impl->location_entry), name);
+
+  gtk_entry_completion_set_popup_completion (completion, TRUE);
 }
 
 static char *
