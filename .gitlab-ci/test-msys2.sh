@@ -56,7 +56,7 @@ meson \
     -Dwin32-backend=true \
     -Dvulkan=no \
     -Dintrospection=false \
-    --werror \
+    -Dgtk:werror=true \
     _build
 unset CCACHE_DISABLE
 
