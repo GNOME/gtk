@@ -740,8 +740,8 @@ gtk_shortcuts_window_unmap (GtkWidget *widget)
   GtkShortcutsWindow *self = (GtkShortcutsWindow *)widget;
   GtkShortcutsWindowPrivate *priv = gtk_shortcuts_window_get_instance_private (self);
 
-  if (priv->search_bar)
-    gtk_search_bar_set_search_mode (priv->search_bar, FALSE);
+  gtk_search_bar_set_search_mode (priv->search_bar, FALSE);
+  gtk_editable_set_text (GTK_EDITABLE (priv->search_entry), "");
 
   GTK_WIDGET_CLASS (gtk_shortcuts_window_parent_class)->unmap (widget);
 }
