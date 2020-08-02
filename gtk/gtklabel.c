@@ -31,6 +31,7 @@
 #include "gtkcssnodeprivate.h"
 #include "gtkcssstylepropertyprivate.h"
 #include "gtkeventcontrollermotion.h"
+#include "gtkeventcontrollerfocus.h"
 #include "gtkgesturedrag.h"
 #include "gtkgestureclick.h"
 #include "gtkgesturesingle.h"
@@ -359,6 +360,7 @@ struct _GtkLabelSelectionInfo
   GtkGesture *drag_gesture;
   GtkGesture *click_gesture;
   GtkEventController *motion_controller;
+  GtkEventController *focus_controller;
 
   int drag_start_x;
   int drag_start_y;
@@ -4404,6 +4406,13 @@ gtk_label_content_init (GtkLabelContent *content)
 }
 
 static void
+focus_change (GtkEventControllerFocus *controller,
+              GtkLabel                *self)
+{
+  gtk_widget_queue_draw (GTK_WIDGET (self));
+}
+
+static void
 gtk_label_ensure_select_info (GtkLabel *self)
 {
   if (self->select_info == NULL)
@@ -4436,6 +4445,13 @@ gtk_label_ensure_select_info (GtkLabel *self)
                         G_CALLBACK (gtk_label_leave), self);
       gtk_widget_add_controller (GTK_WIDGET (self), self->select_info->motion_controller);
 
+      self->select_info->focus_controller = gtk_event_controller_focus_new ();
+      g_signal_connect (self->select_info->focus_controller, "enter",
+                        G_CALLBACK (focus_change), self);
+      g_signal_connect (self->select_info->focus_controller, "leave",
+                        G_CALLBACK (focus_change), self);
+      gtk_widget_add_controller (GTK_WIDGET (self), GTK_EVENT_CONTROLLER (self->select_info->focus_controller));
+
       self->select_info->provider = g_object_new (GTK_TYPE_LABEL_CONTENT, NULL);
       GTK_LABEL_CONTENT (self->select_info->provider)->label = self;
 
@@ -4454,6 +4470,7 @@ gtk_label_clear_select_info (GtkLabel *self)
       gtk_widget_remove_controller (GTK_WIDGET (self), GTK_EVENT_CONTROLLER (self->select_info->drag_gesture));
       gtk_widget_remove_controller (GTK_WIDGET (self), GTK_EVENT_CONTROLLER (self->select_info->click_gesture));
       gtk_widget_remove_controller (GTK_WIDGET (self), self->select_info->motion_controller);
+      gtk_widget_remove_controller (GTK_WIDGET (self), self->select_info->focus_controller);
       GTK_LABEL_CONTENT (self->select_info->provider)->label = NULL;
       g_object_unref (self->select_info->provider);
 
