@@ -387,6 +387,13 @@ entry {
 
   .linked:not(.vertical) > &:drop(active) + &,
   .linked:not(.vertical) > &:drop(active) + button,
+  .linked:not(.vertical) > &:drop(active) + menubutton > button,
+  .linked:not(.vertical) > &:drop(active) + dropdown > button,
+  .linked:not(.vertical) > &:drop(active) + colorbutton > button,
+  .linked:not(.vertical) > &:drop(active) + fontbutton > button,
+  .linked:not(.vertical) > &:drop(active) + filechooserbutton > button,
+  .linked:not(.vertical) > &:drop(active) + filechooserbutton > combobox > box > button.combo,
+  .linked:not(.vertical) > &:drop(active) + appchooserbutton > combobox > box > button.combo,
   .linked:not(.vertical) > &:drop(active) + combobox > box > button.combo { border-left-color: $drop_target_color; }
 
   // Vertically linked entries
@@ -411,6 +418,13 @@ entry {
       + %entry,
       + entry,
       + button,
+      + menubutton > button,
+      + dropdown > button,
+      + colorbutton > button,
+      + fontbutton > button,
+      + filechooserbutton > button,
+      + filechooserbutton > combobox > box > button.combo,
+      + appchooserbutton > combobox > box > button.combo,
       + combobox > box > button.combo { border-top-color: $drop_target_color; }
     }
   }
@@ -826,6 +840,31 @@ button {
   -gtk-icon-shadow: none;
 }
 
+.linked:not(.vertical) > menubutton,
+.linked:not(.vertical) > dropdown,
+.linked:not(.vertical) > colorbutton,
+.linked:not(.vertical) > fontbutton,
+.linked:not(.vertical) > filechooserbutton {
+  &:dir(ltr) {
+    &:not(:first-child) > button { @extend %linked_not_left; }
+    &:not(:last-child) > button { @extend %linked_not_right; }
+  }
+
+  &:dir(rtl) {
+    &:not(:first-child) > button { @extend %linked_not_right; }
+    &:not(:last-child) > button { @extend %linked_not_left; }
+  }
+}
+
+.linked.vertical > menubutton,
+.linked.vertical > dropdown,
+.linked.vertical > colorbutton,
+.linked.vertical > fontbutton,
+.linked.vertical > filechooserbutton {
+  &:not(:first-child) > button { @extend %linked_not_top; }
+  &:not(:last-child) > button { @extend %linked_not_bottom; }
+}
+
 /* menu buttons */
 modelbutton.flat {
   min-height: 26px;
@@ -1214,6 +1253,8 @@ combobox {
 // work, special case needed. See
 // https://bugzilla.gnome.org/show_bug.cgi?id=733979
 
+.linked:not(.vertical) > filechooserbutton > combobox,
+.linked:not(.vertical) > appchooserbutton > combobox,
 .linked:not(.vertical) > combobox {
   &:dir(ltr) {
     &:not(:first-child) > box > button.combo { @extend %linked_not_left; }
@@ -1226,6 +1267,8 @@ combobox {
   }
 }
 
+.linked.vertical > filechooserbutton > combobox,
+.linked.vertical > appchooserbutton > combobox,
 .linked.vertical > combobox {
   &:not(:first-child) > box > button.combo { @extend %linked_not_top; }
   &:not(:last-child) > box > button.combo { @extend %linked_not_bottom; }
