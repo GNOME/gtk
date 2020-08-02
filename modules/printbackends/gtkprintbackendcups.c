@@ -3415,7 +3415,7 @@ avahi_create_browsers (GObject      *source_object,
   if (!dbus_connection)
     {
       if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
-        g_warning ("Couldn't connect to D-Bus system bus, %s", error->message);
+        g_message ("Couldn't connect to D-Bus system bus, avahi printers will not be available: %s", error->message);
 
       g_error_free (error);
       return;
