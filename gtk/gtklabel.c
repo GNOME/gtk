@@ -3710,9 +3710,12 @@ gtk_label_grab_focus (GtkWidget *widget)
 {
   GtkLabel *self = GTK_LABEL (widget);
   gboolean select_on_focus;
+  GtkWidget *prev_focus;
 
   if (self->select_info == NULL)
     return FALSE;
+
+  prev_focus = gtk_root_get_focus (gtk_widget_get_root (widget));
 
   if (!GTK_WIDGET_CLASS (gtk_label_parent_class)->grab_focus (widget))
     return FALSE;
@@ -3724,12 +3727,14 @@ gtk_label_grab_focus (GtkWidget *widget)
                     &select_on_focus,
                     NULL);
 
-      if (select_on_focus && !self->in_click)
+      if (select_on_focus && !self->in_click &&
+          !(prev_focus && gtk_widget_is_ancestor (prev_focus, widget)))
         gtk_label_select_region (self, 0, -1);
     }
   else
     {
-      if (self->select_info->links && !self->in_click)
+      if (self->select_info->links && !self->in_click &&
+          !(prev_focus && gtk_widget_is_ancestor (prev_focus, widget)))
         {
           guint i;
 
