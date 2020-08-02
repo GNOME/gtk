@@ -12,8 +12,8 @@
             <property name="width_request">30</property>
             <property name="height_request">30</property>
             <layout>
-              <property name="left_attach">0</property>
-              <property name="top_attach">0</property>
+              <property name="column">0</property>
+              <property name="row">0</property>
               <property name="column-span">1</property>
               <property name="row-span">1</property>
             </layout>
@@ -25,8 +25,8 @@
             <property name="width_request">30</property>
             <property name="height_request">30</property>
             <layout>
-              <property name="left_attach">1</property>
-              <property name="top_attach">0</property>
+              <property name="column">1</property>
+              <property name="row">0</property>
               <property name="column-span">1</property>
               <property name="row-span">1</property>
             </layout>
@@ -38,8 +38,8 @@
             <property name="width_request">30</property>
             <property name="height_request">30</property>
             <layout>
-              <property name="left_attach">0</property>
-              <property name="top_attach">1</property>
+              <property name="column">0</property>
+              <property name="row">1</property>
               <property name="column-span">1</property>
               <property name="row-span">1</property>
             </layout>
@@ -51,8 +51,8 @@
             <property name="width_request">30</property>
             <property name="height_request">30</property>
             <layout>
-              <property name="left_attach">1</property>
-              <property name="top_attach">1</property>
+              <property name="column">1</property>
+              <property name="row">1</property>
               <property name="column-span">1</property>
               <property name="row-span">1</property>
             </layout>

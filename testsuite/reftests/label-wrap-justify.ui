@@ -11,8 +11,8 @@ aligning&lt;/tt&gt;</property>
             <property name="use_markup">1</property>
             <property name="wrap">1</property>
             <layout>
-              <property name="left_attach">0</property>
-              <property name="top_attach">0</property>
+              <property name="column">0</property>
+              <property name="row">0</property>
               <property name="column-span">1</property>
               <property name="row-span">1</property>
             </layout>
@@ -26,8 +26,8 @@ aligning&lt;/tt&gt;</property>
             <property name="justify">center</property>
             <property name="wrap">1</property>
             <layout>
-              <property name="left_attach">0</property>
-              <property name="top_attach">1</property>
+              <property name="column">0</property>
+              <property name="row">1</property>
               <property name="column-span">1</property>
               <property name="row-span">1</property>
             </layout>
@@ -41,8 +41,8 @@ aligning&lt;/tt&gt;</property>
             <property name="justify">right</property>
             <property name="wrap">1</property>
             <layout>
-              <property name="left_attach">0</property>
-              <property name="top_attach">2</property>
+              <property name="column">0</property>
+              <property name="row">2</property>
               <property name="column-span">1</property>
               <property name="row-span">1</property>
             </layout>
@@ -53,8 +53,8 @@ aligning&lt;/tt&gt;</property>
             <property name="label" translatable="yes">&lt;tt&gt;Make the widget wide enough&lt;/tt&gt;</property>
             <property name="use_markup">1</property>
             <layout>
-              <property name="left_attach">0</property>
-              <property name="top_attach">3</property>
+              <property name="column">0</property>
+              <property name="row">3</property>
               <property name="column-span">1</property>
               <property name="row-span">1</property>
             </layout>

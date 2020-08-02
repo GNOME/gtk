@@ -8,8 +8,8 @@
           <object class="GtkLabel" id="label1">
             <property name="label" translatable="yes">Spinner</property>
             <layout>
-              <property name="left_attach">0</property>
-              <property name="top_attach">0</property>
+              <property name="column">0</property>
+              <property name="row">0</property>
             </layout>
           </object>
         </child>
@@ -17,8 +17,8 @@
           <object class="GtkLabel" id="label2">
             <property name="label" translatable="yes">Check</property>
             <layout>
-              <property name="left_attach">0</property>
-              <property name="top_attach">1</property>
+              <property name="column">0</property>
+              <property name="row">1</property>
             </layout>
           </object>
         </child>
@@ -26,8 +26,8 @@
           <object class="GtkLabel" id="label3">
             <property name="label" translatable="yes">Option</property>
             <layout>
-              <property name="left_attach">0</property>
-              <property name="top_attach">2</property>
+              <property name="column">0</property>
+              <property name="row">2</property>
             </layout>
           </object>
         </child>
@@ -35,8 +35,8 @@
           <object class="GtkLabel" id="label4">
             <property name="label" translatable="yes">Arrow</property>
             <layout>
-              <property name="left_attach">0</property>
-              <property name="top_attach">3</property>
+              <property name="column">0</property>
+              <property name="row">3</property>
             </layout>
           </object>
         </child>
@@ -44,8 +44,8 @@
           <object class="GtkLabel" id="label5">
             <property name="label" translatable="yes">Expander</property>
             <layout>
-              <property name="left_attach">0</property>
-              <property name="top_attach">4</property>
+              <property name="column">0</property>
+              <property name="row">4</property>
             </layout>
           </object>
         </child>
@@ -56,8 +56,8 @@
             <property name="halign">center</property>
             <property name="valign">center</property>
             <layout>
-              <property name="left_attach">1</property>
-              <property name="top_attach">0</property>
+              <property name="column">1</property>
+              <property name="row">0</property>
             </layout>
           </object>
         </child>
@@ -68,8 +68,8 @@
             <property name="halign">center</property>
             <property name="valign">center</property>
             <layout>
-              <property name="left_attach">1</property>
-              <property name="top_attach">2</property>
+              <property name="column">1</property>
+              <property name="row">2</property>
             </layout>
           </object>
         </child>
@@ -80,8 +80,8 @@
             <property name="halign">center</property>
             <property name="valign">center</property>
             <layout>
-              <property name="left_attach">1</property>
-              <property name="top_attach">1</property>
+              <property name="column">1</property>
+              <property name="row">1</property>
             </layout>
           </object>
         </child>
@@ -92,8 +92,8 @@
             <property name="halign">center</property>
             <property name="valign">center</property>
             <layout>
-              <property name="left_attach">1</property>
-              <property name="top_attach">3</property>
+              <property name="column">1</property>
+              <property name="row">3</property>
             </layout>
           </object>
         </child>
@@ -104,8 +104,8 @@
             <property name="halign">center</property>
             <property name="valign">center</property>
             <layout>
-              <property name="left_attach">1</property>
-              <property name="top_attach">4</property>
+              <property name="column">1</property>
+              <property name="row">4</property>
             </layout>
           </object>
         </child>

@@ -55,8 +55,8 @@
                     <property name="placeholder-text" translatable="yes">Search font name</property>
                     <signal name="stop-search" handler="stop_search_cb" swapped="no"/>
                     <layout>
-                      <property name="left-attach">0</property>
-                      <property name="top-attach">0</property>
+                      <property name="column">0</property>
+                      <property name="row">0</property>
                     </layout>
                   </object>
                 </child>
@@ -115,8 +115,8 @@
                                   </object>
                                 </child>
                                 <layout>
-                                  <property name="left-attach">0</property>
-                                  <property name="top-attach">1</property>
+                                  <property name="column">0</property>
+                                  <property name="row">1</property>
                                   <property name="column-span">3</property>
                                 </layout>
                               </object>
@@ -131,8 +131,8 @@
                                   </object>
                                 </child>
                                 <layout>
-                                  <property name="left-attach">0</property>
-                                  <property name="top-attach">2</property>
+                                  <property name="column">0</property>
+                                  <property name="row">2</property>
                                   <property name="column-span">3</property>
                                 </layout>
                               </object>
@@ -143,8 +143,8 @@
                                 <property name="xalign">0</property>
                                 <property name="valign">baseline</property>
                                 <layout>
-                                  <property name="left-attach">0</property>
-                                  <property name="top-attach">3</property>
+                                  <property name="column">0</property>
+                                  <property name="row">3</property>
                                 </layout>
                               </object>
                             </child>
@@ -161,8 +161,8 @@
                                   </object>
                                 </child>
                                 <layout>
-                                  <property name="left-attach">1</property>
-                                  <property name="top-attach">3</property>
+                                  <property name="column">1</property>
+                                  <property name="row">3</property>
                                 </layout>
                               </object>
                             </child>
@@ -172,8 +172,8 @@
                                 <property name="valign">center</property>
                                 <signal name="output" handler="output_cb"/>
                                 <layout>
-                                  <property name="left-attach">2</property>
-                                  <property name="top-attach">3</property>
+                                  <property name="column">2</property>
+                                  <property name="row">3</property>
                                 </layout>
                               </object>
                             </child>
@@ -199,8 +199,8 @@
                                 <property name="gicon">fonticon</property>
                                 <property name="pixel-size">64</property>
                                 <layout>
-                                  <property name="left-attach">0</property>
-                                  <property name="top-attach">0</property>
+                                  <property name="column">0</property>
+                                  <property name="row">0</property>
                                 </layout>
                               </object>
                             </child>
@@ -212,8 +212,8 @@
                                   <attribute name="scale" value="1.2"></attribute>
                                 </attributes>
                                 <layout>
-                                  <property name="left-attach">0</property>
-                                  <property name="top-attach">1</property>
+                                  <property name="column">0</property>
+                                  <property name="row">1</property>
                                 </layout>
                               </object>
                             </child>
@@ -222,8 +222,8 @@
                       </object>
                     </child>
                     <layout>
-                      <property name="left-attach">0</property>
-                      <property name="top-attach">1</property>
+                      <property name="column">0</property>
+                      <property name="row">1</property>
                     </layout>
                   </object>
                 </child>
@@ -291,8 +291,8 @@
                                 <property name="xalign">0</property>
                                 <property name="valign">baseline</property>
                                 <layout>
-                                  <property name="left-attach">0</property>
-                                  <property name="top-attach">0</property>
+                                  <property name="column">0</property>
+                                  <property name="row">0</property>
                                 </layout>
                               </object>
                             </child>
@@ -303,8 +303,8 @@
                                 <property name="draw-value">0</property>
                                 <property name="round-digits">0</property>
                                 <layout>
-                                  <property name="left-attach">1</property>
-                                  <property name="top-attach">0</property>
+                                  <property name="column">1</property>
+                                  <property name="row">0</property>
                                 </layout>
                               </object>
                             </child>
@@ -314,8 +314,8 @@
                                 <property name="valign">center</property>
                                 <signal name="output" handler="output_cb"/>
                                 <layout>
-                                  <property name="left-attach">2</property>
-                                  <property name="top-attach">0</property>
+                                  <property name="column">2</property>
+                                  <property name="row">0</property>
                                 </layout>
                               </object>
                             </child>

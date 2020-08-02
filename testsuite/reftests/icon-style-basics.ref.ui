@@ -19,8 +19,8 @@
           <object class="GtkImage" id="image1">
             <property name="icon_name">edit-delete</property>
             <layout>
-              <property name="left_attach">1</property>
-              <property name="top_attach">0</property>
+              <property name="column">1</property>
+              <property name="row">0</property>
             </layout>
           </object>
         </child>
@@ -28,8 +28,8 @@
           <object class="GtkLabel" id="label1">
             <property name="label" translatable="yes">icon name</property>
             <layout>
-              <property name="left_attach">0</property>
-              <property name="top_attach">0</property>
+              <property name="column">0</property>
+              <property name="row">0</property>
             </layout>
           </object>
         </child>
@@ -37,8 +37,8 @@
           <object class="GtkLabel" id="label2">
             <property name="label" translatable="yes">symbolic icon name</property>
             <layout>
-              <property name="left_attach">0</property>
-              <property name="top_attach">1</property>
+              <property name="column">0</property>
+              <property name="row">1</property>
             </layout>
           </object>
         </child>
@@ -46,8 +46,8 @@
           <object class="GtkImage" id="image2">
             <property name="icon_name">edit-delete</property>
             <layout>
-              <property name="left_attach">2</property>
-              <property name="top_attach">0</property>
+              <property name="column">2</property>
+              <property name="row">0</property>
             </layout>
           </object>
         </child>
@@ -55,8 +55,8 @@
           <object class="GtkImage" id="image3">
             <property name="icon_name">edit-delete-symbolic</property>
             <layout>
-              <property name="left_attach">3</property>
-              <property name="top_attach">0</property>
+              <property name="column">3</property>
+              <property name="row">0</property>
             </layout>
           </object>
         </child>
@@ -64,8 +64,8 @@
           <object class="GtkImage" id="image4">
             <property name="icon_name">edit-delete-symbolic</property>
             <layout>
-              <property name="left_attach">1</property>
-              <property name="top_attach">1</property>
+              <property name="column">1</property>
+              <property name="row">1</property>
             </layout>
           </object>
         </child>
@@ -73,8 +73,8 @@
           <object class="GtkImage" id="image5">
             <property name="icon_name">edit-delete</property>
             <layout>
-              <property name="left_attach">2</property>
-              <property name="top_attach">1</property>
+              <property name="column">2</property>
+              <property name="row">1</property>
             </layout>
           </object>
         </child>
@@ -82,8 +82,8 @@
           <object class="GtkImage" id="image6">
             <property name="icon_name">edit-delete-symbolic</property>
             <layout>
-              <property name="left_attach">3</property>
-              <property name="top_attach">1</property>
+              <property name="column">3</property>
+              <property name="row">1</property>
             </layout>
           </object>
         </child>
@@ -107,8 +107,8 @@
               </object>
             </child>
             <layout>
-              <property name="left_attach">4</property>
-              <property name="top_attach">0</property>
+              <property name="column">4</property>
+              <property name="row">0</property>
             </layout>
           </object>
         </child>
@@ -133,8 +133,8 @@
               </object>
             </child>
             <layout>
-              <property name="left_attach">5</property>
-              <property name="top_attach">0</property>
+              <property name="column">5</property>
+              <property name="row">0</property>
             </layout>
           </object>
         </child>
@@ -159,8 +159,8 @@
               </object>
             </child>
             <layout>
-              <property name="left_attach">6</property>
-              <property name="top_attach">0</property>
+              <property name="column">6</property>
+              <property name="row">0</property>
             </layout>
           </object>
         </child>
@@ -185,8 +185,8 @@
               </object>
             </child>
             <layout>
-              <property name="left_attach">4</property>
-              <property name="top_attach">1</property>
+              <property name="column">4</property>
+              <property name="row">1</property>
             </layout>
           </object>
         </child>
@@ -211,8 +211,8 @@
               </object>
             </child>
             <layout>
-              <property name="left_attach">5</property>
-              <property name="top_attach">1</property>
+              <property name="column">5</property>
+              <property name="row">1</property>
             </layout>
           </object>
         </child>
@@ -237,8 +237,8 @@
               </object>
             </child>
             <layout>
-              <property name="left_attach">6</property>
-              <property name="top_attach">1</property>
+              <property name="column">6</property>
+              <property name="row">1</property>
             </layout>
           </object>
         </child>
@@ -246,8 +246,8 @@
           <object class="GtkLabel" id="label3">
             <property name="label" translatable="yes">GThemedIcon</property>
             <layout>
-              <property name="left_attach">0</property>
-              <property name="top_attach">2</property>
+              <property name="column">0</property>
+              <property name="row">2</property>
             </layout>
           </object>
         </child>
@@ -255,8 +255,8 @@
           <object class="GtkLabel" id="label4">
             <property name="label" translatable="yes">symbolic GThemedIcon</property>
             <layout>
-              <property name="left_attach">0</property>
-              <property name="top_attach">3</property>
+              <property name="column">0</property>
+              <property name="row">3</property>
             </layout>
           </object>
         </child>
@@ -264,8 +264,8 @@
           <object class="GtkLabel" id="label5">
             <property name="label" translatable="yes">GEmeblemedIcon</property>
             <layout>
-              <property name="left_attach">0</property>
-              <property name="top_attach">4</property>
+              <property name="column">0</property>
+              <property name="row">4</property>
             </layout>
           </object>
         </child>
@@ -273,8 +273,8 @@
           <object class="GtkLabel" id="label6">
             <property name="label" translatable="yes">symbolic GEmblemedIcon</property>
             <layout>
-              <property name="left_attach">0</property>
-              <property name="top_attach">5</property>
+              <property name="column">0</property>
+              <property name="row">5</property>
             </layout>
           </object>
         </child>
@@ -282,8 +282,8 @@
           <object class="GtkImage" id="image7">
             <property name="gicon">themediconsymbolic</property>
             <layout>
-              <property name="left_attach">1</property>
-              <property name="top_attach">3</property>
+              <property name="column">1</property>
+              <property name="row">3</property>
             </layout>
           </object>
         </child>
@@ -291,8 +291,8 @@
           <object class="GtkImage" id="image8">
             <property name="gicon">themedicon</property>
             <layout>
-              <property name="left_attach">1</property>
-              <property name="top_attach">2</property>
+              <property name="column">1</property>
+              <property name="row">2</property>
             </layout>
           </object>
         </child>
@@ -300,8 +300,8 @@
           <object class="GtkImage" id="image9">
             <property name="gicon">emblemedicon</property>
             <layout>
-              <property name="left_attach">1</property>
-              <property name="top_attach">4</property>
+              <property name="column">1</property>
+              <property name="row">4</property>
             </layout>
           </object>
         </child>
@@ -309,8 +309,8 @@
           <object class="GtkImage" id="image10">
             <property name="gicon">emblemediconsymbolic</property>
             <layout>
-              <property name="left_attach">1</property>
-              <property name="top_attach">5</property>
+              <property name="column">1</property>
+              <property name="row">5</property>
             </layout>
           </object>
         </child>
@@ -318,8 +318,8 @@
           <object class="GtkImage" id="image11">
             <property name="gicon">themedicon</property>
             <layout>
-              <property name="left_attach">2</property>
-              <property name="top_attach">2</property>
+              <property name="column">2</property>
+              <property name="row">2</property>
             </layout>
           </object>
         </child>
@@ -327,8 +327,8 @@
           <object class="GtkImage" id="image12">
             <property name="gicon">themedicon</property>
             <layout>
-              <property name="left_attach">2</property>
-              <property name="top_attach">3</property>
+              <property name="column">2</property>
+              <property name="row">3</property>
             </layout>
           </object>
         </child>
@@ -336,8 +336,8 @@
           <object class="GtkImage" id="image13">
             <property name="gicon">emblemedicon</property>
             <layout>
-              <property name="left_attach">2</property>
-              <property name="top_attach">4</property>
+              <property name="column">2</property>
+              <property name="row">4</property>
             </layout>
           </object>
         </child>
@@ -345,8 +345,8 @@
           <object class="GtkImage" id="image14">
             <property name="gicon">emblemedicon</property>
             <layout>
-              <property name="left_attach">2</property>
-              <property name="top_attach">5</property>
+              <property name="column">2</property>
+              <property name="row">5</property>
             </layout>
           </object>
         </child>
@@ -354,8 +354,8 @@
           <object class="GtkImage" id="image15">
             <property name="gicon">themediconsymbolic</property>
             <layout>
-              <property name="left_attach">3</property>
-              <property name="top_attach">2</property>
+              <property name="column">3</property>
+              <property name="row">2</property>
             </layout>
           </object>
         </child>
@@ -363,8 +363,8 @@
           <object class="GtkImage" id="image16">
             <property name="gicon">themediconsymbolic</property>
             <layout>
-              <property name="left_attach">3</property>
-              <property name="top_attach">3</property>
+              <property name="column">3</property>
+              <property name="row">3</property>
             </layout>
           </object>
         </child>
@@ -372,8 +372,8 @@
           <object class="GtkImage" id="image17">
             <property name="gicon">emblemediconsymbolic</property>
             <layout>
-              <property name="left_attach">3</property>
-              <property name="top_attach">4</property>
+              <property name="column">3</property>
+              <property name="row">4</property>
             </layout>
           </object>
         </child>
@@ -381,8 +381,8 @@
           <object class="GtkImage" id="image18">
             <property name="gicon">emblemediconsymbolic</property>
             <layout>
-              <property name="left_attach">3</property>
-              <property name="top_attach">5</property>
+              <property name="column">3</property>
+              <property name="row">5</property>
             </layout>
           </object>
         </child>
@@ -407,8 +407,8 @@
               </object>
             </child>
             <layout>
-              <property name="left_attach">4</property>
-              <property name="top_attach">2</property>
+              <property name="column">4</property>
+              <property name="row">2</property>
             </layout>
           </object>
         </child>
@@ -433,8 +433,8 @@
               </object>
             </child>
             <layout>
-              <property name="left_attach">4</property>
-              <property name="top_attach">3</property>
+              <property name="column">4</property>
+              <property name="row">3</property>
             </layout>
           </object>
         </child>
@@ -459,8 +459,8 @@
               </object>
             </child>
             <layout>
-              <property name="left_attach">4</property>
-              <property name="top_attach">4</property>
+              <property name="column">4</property>
+              <property name="row">4</property>
             </layout>
           </object>
         </child>
@@ -485,8 +485,8 @@
               </object>
             </child>
             <layout>
-              <property name="left_attach">4</property>
-              <property name="top_attach">5</property>
+              <property name="column">4</property>
+              <property name="row">5</property>
             </layout>
           </object>
         </child>
@@ -511,8 +511,8 @@
               </object>
             </child>
             <layout>
-              <property name="left_attach">5</property>
-              <property name="top_attach">2</property>
+              <property name="column">5</property>
+              <property name="row">2</property>
             </layout>
           </object>
         </child>
@@ -537,8 +537,8 @@
               </object>
             </child>
             <layout>
-              <property name="left_attach">5</property>
-              <property name="top_attach">3</property>
+              <property name="column">5</property>
+              <property name="row">3</property>
             </layout>
           </object>
         </child>
@@ -563,8 +563,8 @@
               </object>
             </child>
             <layout>
-              <property name="left_attach">5</property>
-              <property name="top_attach">4</property>
+              <property name="column">5</property>
+              <property name="row">4</property>
             </layout>
           </object>
         </child>
@@ -589,8 +589,8 @@
               </object>
             </child>
             <layout>
-              <property name="left_attach">5</property>
-              <property name="top_attach">5</property>
+              <property name="column">5</property>
+              <property name="row">5</property>
             </layout>
           </object>
         </child>
@@ -615,8 +615,8 @@
               </object>
             </child>
             <layout>
-              <property name="left_attach">6</property>
-              <property name="top_attach">2</property>
+              <property name="column">6</property>
+              <property name="row">2</property>
             </layout>
           </object>
         </child>
@@ -641,8 +641,8 @@
               </object>
             </child>
             <layout>
-              <property name="left_attach">6</property>
-              <property name="top_attach">3</property>
+              <property name="column">6</property>
+              <property name="row">3</property>
             </layout>
           </object>
         </child>
@@ -667,8 +667,8 @@
               </object>
             </child>
             <layout>
-              <property name="left_attach">6</property>
-              <property name="top_attach">4</property>
+              <property name="column">6</property>
+              <property name="row">4</property>
             </layout>
           </object>
         </child>
@@ -693,8 +693,8 @@
               </object>
             </child>
             <layout>
-              <property name="left_attach">6</property>
-              <property name="top_attach">5</property>
+              <property name="column">6</property>
+              <property name="row">5</property>
             </layout>
           </object>
         </child>

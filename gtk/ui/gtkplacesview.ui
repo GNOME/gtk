@@ -70,8 +70,8 @@
                   <attribute name="weight" value="bold"></attribute>
                 </attributes>
                 <layout>
-                  <property name="left-attach">0</property>
-                  <property name="top-attach">0</property>
+                  <property name="column">0</property>
+                  <property name="row">0</property>
                 </layout>
               </object>
             </child>
@@ -83,8 +83,8 @@
                   <attribute name="weight" value="bold"></attribute>
                 </attributes>
                 <layout>
-                  <property name="left-attach">1</property>
-                  <property name="top-attach">0</property>
+                  <property name="column">1</property>
+                  <property name="row">0</property>
                 </layout>
               </object>
             </child>

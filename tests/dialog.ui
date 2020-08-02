@@ -72,8 +72,8 @@
                       <object class="GtkLabel" id="margin">
                         <property name="width_request">24</property>
                         <layout>
-                          <property name="left_attach">0</property>
-                          <property name="top_attach">0</property>
+                          <property name="column">0</property>
+                          <property name="row">0</property>
                         </layout>
                       </object>
                     </child>
@@ -86,8 +86,8 @@
                         <property name="placeholder_text" translatable="yes">optional</property>
                         <property name="input_purpose">password</property>
                         <layout>
-                          <property name="left_attach">2</property>
-                          <property name="top_attach">2</property>
+                          <property name="column">2</property>
+                          <property name="row">2</property>
                           <property name="column-span">2</property>
                         </layout>
                       </object>
@@ -100,8 +100,8 @@
                         <property name="activates_default">1</property>
                         <property name="completion">name_completion</property>
                         <layout>
-                          <property name="left_attach">2</property>
-                          <property name="top_attach">1</property>
+                          <property name="column">2</property>
+                          <property name="row">1</property>
                           <property name="column-span">2</property>
                         </layout>
                       </object>
@@ -128,8 +128,8 @@
                           </object>
                         </child>
                         <layout>
-                          <property name="left_attach">3</property>
-                          <property name="top_attach">0</property>
+                          <property name="column">3</property>
+                          <property name="row">0</property>
                         </layout>
                       </object>
                     </child>
@@ -137,8 +137,8 @@
                       <object class="GtkComboBoxText" id="connection_combo">
                         <property name="hexpand">1</property>
                         <layout>
-                          <property name="left_attach">2</property>
-                          <property name="top_attach">0</property>
+                          <property name="column">2</property>
+                          <property name="row">0</property>
                         </layout>
                       </object>
                     </child>
@@ -149,8 +149,8 @@
                         <property name="use_underline">1</property>
                         <property name="mnemonic_widget">connection_combo</property>
                         <layout>
-                          <property name="left_attach">1</property>
-                          <property name="top_attach">0</property>
+                          <property name="column">1</property>
+                          <property name="row">0</property>
                         </layout>
                       </object>
                     </child>
@@ -162,8 +162,8 @@
                         <property name="use_underline">1</property>
                         <property name="mnemonic_widget">name_entry</property>
                         <layout>
-                          <property name="left_attach">1</property>
-                          <property name="top_attach">1</property>
+                          <property name="column">1</property>
+                          <property name="row">1</property>
                         </layout>
                       </object>
                     </child>
@@ -174,8 +174,8 @@
                         <property name="use_underline">1</property>
                         <property name="mnemonic_widget">password_entry</property>
                         <layout>
-                          <property name="left_attach">1</property>
-                          <property name="top_attach">2</property>
+                          <property name="column">1</property>
+                          <property name="row">2</property>
                         </layout>
                       </object>
                     </child>

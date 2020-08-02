@@ -18,8 +18,8 @@
               <class name="dim-label"/>
             </style>
             <layout>
-              <property name="left-attach">0</property>
-              <property name="top-attach">0</property>
+              <property name="column">0</property>
+              <property name="row">0</property>
             </layout>
           </object>
         </child>
@@ -29,8 +29,8 @@
             <property name="has-frame">1</property>
             <property name="min-content-width">150</property>
             <layout>
-              <property name="left-attach">0</property>
-              <property name="top-attach">1</property>
+              <property name="column">0</property>
+              <property name="row">1</property>
             </layout>
           </object>
         </child>
@@ -40,8 +40,8 @@
             <property name="hexpand">1</property>
             <property name="stack">stack</property>
             <layout>
-              <property name="left-attach">1</property>
-              <property name="top-attach">0</property>
+              <property name="column">1</property>
+              <property name="row">0</property>
             </layout>
           </object>
         </child>
@@ -67,8 +67,8 @@
                       <object class="GtkLabel">
                         <property name="label" translatable="yes">Duck</property>
                         <layout>
-                          <property name="left-attach">0</property>
-                          <property name="top-attach">0</property>
+                          <property name="column">0</property>
+                          <property name="row">0</property>
                         </layout>
                       </object>
                     </child>
@@ -76,8 +76,8 @@
                       <object class="GtkLabel">
                         <property name="label" translatable="yes">Background</property>
                         <layout>
-                          <property name="left-attach">1</property>
-                          <property name="top-attach">0</property>
+                          <property name="column">1</property>
+                          <property name="row">0</property>
                         </layout>
                       </object>
                     </child>
@@ -87,8 +87,8 @@
                           <class name="duck"/>
                         </style>
                         <layout>
-                          <property name="left-attach">0</property>
-                          <property name="top-attach">1</property>
+                          <property name="column">0</property>
+                          <property name="row">1</property>
                         </layout>
                       </object>
                     </child>
@@ -98,8 +98,8 @@
                           <class name="gradient"/>
                         </style>
                         <layout>
-                          <property name="left-attach">1</property>
-                          <property name="top-attach">1</property>
+                          <property name="column">1</property>
+                          <property name="row">1</property>
                         </layout>
                       </object>
                     </child>
@@ -108,8 +108,8 @@
                         <property name="label" translatable="yes">
 Blended picture</property>
                         <layout>
-                          <property name="left-attach">0</property>
-                          <property name="top-attach">2</property>
+                          <property name="column">0</property>
+                          <property name="row">2</property>
                           <property name="column-span">2</property>
                         </layout>
                       </object>
@@ -121,8 +121,8 @@ Blended picture</property>
                           <class name="blend0"/>
                         </style>
                         <layout>
-                          <property name="left-attach">0</property>
-                          <property name="top-attach">3</property>
+                          <property name="column">0</property>
+                          <property name="row">3</property>
                           <property name="column-span">2</property>
                         </layout>
                       </object>
@@ -146,8 +146,8 @@ Blended picture</property>
                       <object class="GtkLabel">
                         <property name="label" translatable="yes">Red</property>
                         <layout>
-                          <property name="left-attach">0</property>
-                          <property name="top-attach">0</property>
+                          <property name="column">0</property>
+                          <property name="row">0</property>
                         </layout>
                       </object>
                     </child>
@@ -155,8 +155,8 @@ Blended picture</property>
                       <object class="GtkLabel">
                         <property name="label" translatable="yes">Blue</property>
                         <layout>
-                          <property name="left-attach">1</property>
-                          <property name="top-attach">0</property>
+                          <property name="column">1</property>
+                          <property name="row">0</property>
                         </layout>
                       </object>
                     </child>
@@ -166,8 +166,8 @@ Blended picture</property>
                           <class name="red"/>
                         </style>
                         <layout>
-                          <property name="left-attach">0</property>
-                          <property name="top-attach">1</property>
+                          <property name="column">0</property>
+                          <property name="row">1</property>
                         </layout>
                       </object>
                     </child>
@@ -177,8 +177,8 @@ Blended picture</property>
                           <class name="blue"/>
                         </style>
                         <layout>
-                          <property name="left-attach">1</property>
-                          <property name="top-attach">1</property>
+                          <property name="column">1</property>
+                          <property name="row">1</property>
                         </layout>
                       </object>
                     </child>
@@ -187,8 +187,8 @@ Blended picture</property>
                         <property name="label" translatable="yes">
 Blended picture</property>
                         <layout>
-                          <property name="left-attach">0</property>
-                          <property name="top-attach">2</property>
+                          <property name="column">0</property>
+                          <property name="row">2</property>
                           <property name="column-span">2</property>
                         </layout>
                       </object>
@@ -200,8 +200,8 @@ Blended picture</property>
                           <class name="blend1"/>
                         </style>
                         <layout>
-                          <property name="left-attach">0</property>
-                          <property name="top-attach">3</property>
+                          <property name="column">0</property>
+                          <property name="row">3</property>
                           <property name="column-span">2</property>
                         </layout>
                       </object>
@@ -228,8 +228,8 @@ Blended picture</property>
                           <class name="cyan"/>
                         </style>
                         <layout>
-                          <property name="left-attach">0</property>
-                          <property name="top-attach">1</property>
+                          <property name="column">0</property>
+                          <property name="row">1</property>
                         </layout>
                       </object>
                     </child>
@@ -239,8 +239,8 @@ Blended picture</property>
                           <class name="magenta"/>
                         </style>
                         <layout>
-                          <property name="left-attach">1</property>
-                          <property name="top-attach">1</property>
+                          <property name="column">1</property>
+                          <property name="row">1</property>
                         </layout>
                       </object>
                     </child>
@@ -250,8 +250,8 @@ Blended picture</property>
                           <class name="yellow"/>
                         </style>
                         <layout>
-                          <property name="left-attach">0</property>
-                          <property name="top-attach">3</property>
+                          <property name="column">0</property>
+                          <property name="row">3</property>
                         </layout>
                       </object>
                     </child>
@@ -262,8 +262,8 @@ Blended picture</property>
                           <class name="blend2"/>
                         </style>
                         <layout>
-                          <property name="left-attach">1</property>
-                          <property name="top-attach">3</property>
+                          <property name="column">1</property>
+                          <property name="row">3</property>
                         </layout>
                       </object>
                     </child>
@@ -275,8 +275,8 @@ Blended picture</property>
                           <class name="dim-label"/>
                         </style>
                         <layout>
-                          <property name="left-attach">0</property>
-                          <property name="top-attach">0</property>
+                          <property name="column">0</property>
+                          <property name="row">0</property>
                         </layout>
                       </object>
                     </child>
@@ -288,8 +288,8 @@ Blended picture</property>
                           <class name="dim-label"/>
                         </style>
                         <layout>
-                          <property name="left-attach">1</property>
-                          <property name="top-attach">0</property>
+                          <property name="column">1</property>
+                          <property name="row">0</property>
                         </layout>
                       </object>
                     </child>
@@ -301,8 +301,8 @@ Blended picture</property>
                           <class name="dim-label"/>
                         </style>
                         <layout>
-                          <property name="left-attach">0</property>
-                          <property name="top-attach">2</property>
+                          <property name="column">0</property>
+                          <property name="row">2</property>
                         </layout>
                       </object>
                     </child>
@@ -314,8 +314,8 @@ Blended picture</property>
                           <attribute name="weight" value="bold"></attribute>
                         </attributes>
                         <layout>
-                          <property name="left-attach">1</property>
-                          <property name="top-attach">2</property>
+                          <property name="column">1</property>
+                          <property name="row">2</property>
                         </layout>
                       </object>
                     </child>
@@ -324,8 +324,8 @@ Blended picture</property>
               </object>
             </child>
             <layout>
-              <property name="left-attach">1</property>
-              <property name="top-attach">1</property>
+              <property name="column">1</property>
+              <property name="row">1</property>
             </layout>
           </object>
         </child>

@@ -12,8 +12,8 @@
             <property name="label" translatable="yes">Please enter your name and email address below. The &quot;optional&quot; fields below do not need to be filled in, unless you wish to include this information in email you send.</property>
             <property name="wrap">1</property>
             <layout>
-              <property name="left_attach">0</property>
-              <property name="top_attach">0</property>
+              <property name="column">0</property>
+              <property name="row">0</property>
               <property name="column-span">2</property>
               <property name="row-span">1</property>
             </layout>
@@ -25,8 +25,8 @@
             <property name="label" translatable="yes">&lt;b&gt;Account Information&lt;/b&gt;</property>
             <property name="use_markup">1</property>
             <layout>
-              <property name="left_attach">0</property>
-              <property name="top_attach">1</property>
+              <property name="column">0</property>
+              <property name="row">1</property>
               <property name="column-span">2</property>
               <property name="row-span">1</property>
             </layout>
@@ -39,8 +39,8 @@
             <property name="label" translatable="yes">Type the name by which you would like to refer to this account.
 For example, &quot;Work&quot; or &quot;Personal&quot;.</property>
             <layout>
-              <property name="left_attach">0</property>
-              <property name="top_attach">2</property>
+              <property name="column">0</property>
+              <property name="row">2</property>
               <property name="column-span">2</property>
               <property name="row-span">1</property>
             </layout>
@@ -54,8 +54,8 @@ For example, &quot;Work&quot; or &quot;Personal&quot;.</property>
             <property name="use_underline">1</property>
             <property name="mnemonic_widget">entry1</property>
             <layout>
-              <property name="left_attach">0</property>
-              <property name="top_attach">3</property>
+              <property name="column">0</property>
+              <property name="row">3</property>
               <property name="column-span">1</property>
               <property name="row-span">1</property>
             </layout>
@@ -66,8 +66,8 @@ For example, &quot;Work&quot; or &quot;Personal&quot;.</property>
             <property name="hexpand">1</property>
             <property name="invisible_char">●</property>
             <layout>
-              <property name="left_attach">1</property>
-              <property name="top_attach">3</property>
+              <property name="column">1</property>
+              <property name="row">3</property>
               <property name="column-span">1</property>
               <property name="row-span">1</property>
             </layout>
@@ -79,8 +79,8 @@ For example, &quot;Work&quot; or &quot;Personal&quot;.</property>
             <property name="label" translatable="yes">&lt;b&gt;Required Information&lt;/b&gt;</property>
             <property name="use_markup">1</property>
             <layout>
-              <property name="left_attach">0</property>
-              <property name="top_attach">4</property>
+              <property name="column">0</property>
+              <property name="row">4</property>
               <property name="column-span">2</property>
               <property name="row-span">1</property>
             </layout>
@@ -94,8 +94,8 @@ For example, &quot;Work&quot; or &quot;Personal&quot;.</property>
             <property name="use_underline">1</property>
             <property name="mnemonic_widget">entry2</property>
             <layout>
-              <property name="left_attach">0</property>
-              <property name="top_attach">5</property>
+              <property name="column">0</property>
+              <property name="row">5</property>
               <property name="column-span">1</property>
               <property name="row-span">1</property>
             </layout>
@@ -106,8 +106,8 @@ For example, &quot;Work&quot; or &quot;Personal&quot;.</property>
             <property name="hexpand">1</property>
             <property name="invisible_char">●</property>
             <layout>
-              <property name="left_attach">1</property>
-              <property name="top_attach">5</property>
+              <property name="column">1</property>
+              <property name="row">5</property>
               <property name="column-span">1</property>
               <property name="row-span">1</property>
             </layout>
@@ -119,8 +119,8 @@ For example, &quot;Work&quot; or &quot;Personal&quot;.</property>
             <property name="label" translatable="yes">Email _Address:</property>
             <property name="use_underline">1</property>
             <layout>
-              <property name="left_attach">0</property>
-              <property name="top_attach">6</property>
+              <property name="column">0</property>
+              <property name="row">6</property>
               <property name="column-span">1</property>
               <property name="row-span">1</property>
             </layout>
@@ -131,8 +131,8 @@ For example, &quot;Work&quot; or &quot;Personal&quot;.</property>
             <property name="hexpand">1</property>
             <property name="invisible_char">●</property>
             <layout>
-              <property name="left_attach">1</property>
-              <property name="top_attach">6</property>
+              <property name="column">1</property>
+              <property name="row">6</property>
               <property name="column-span">1</property>
               <property name="row-span">1</property>
             </layout>
@@ -144,8 +144,8 @@ For example, &quot;Work&quot; or &quot;Personal&quot;.</property>
             <property name="label" translatable="yes">&lt;b&gt;Optional Information&lt;/b&gt;</property>
             <property name="use_markup">1</property>
             <layout>
-              <property name="left_attach">0</property>
-              <property name="top_attach">7</property>
+              <property name="column">0</property>
+              <property name="row">7</property>
               <property name="column-span">2</property>
               <property name="row-span">1</property>
             </layout>
@@ -159,8 +159,8 @@ For example, &quot;Work&quot; or &quot;Personal&quot;.</property>
             <property name="use_underline">1</property>
             <property name="mnemonic_widget">entry4</property>
             <layout>
-              <property name="left_attach">0</property>
-              <property name="top_attach">8</property>
+              <property name="column">0</property>
+              <property name="row">8</property>
               <property name="column-span">1</property>
               <property name="row-span">1</property>
             </layout>
@@ -171,8 +171,8 @@ For example, &quot;Work&quot; or &quot;Personal&quot;.</property>
             <property name="hexpand">1</property>
             <property name="invisible_char">●</property>
             <layout>
-              <property name="left_attach">1</property>
-              <property name="top_attach">8</property>
+              <property name="column">1</property>
+              <property name="row">8</property>
               <property name="column-span">1</property>
               <property name="row-span">1</property>
             </layout>
@@ -186,8 +186,8 @@ For example, &quot;Work&quot; or &quot;Personal&quot;.</property>
             <property name="use_underline">1</property>
             <property name="mnemonic_widget">entry5</property>
             <layout>
-              <property name="left_attach">0</property>
-              <property name="top_attach">9</property>
+              <property name="column">0</property>
+              <property name="row">9</property>
               <property name="column-span">1</property>
               <property name="row-span">1</property>
             </layout>
@@ -197,8 +197,8 @@ For example, &quot;Work&quot; or &quot;Personal&quot;.</property>
           <object class="GtkEntry" id="entry5">
             <property name="invisible_char">●</property>
             <layout>
-              <property name="left_attach">1</property>
-              <property name="top_attach">9</property>
+              <property name="column">1</property>
+              <property name="row">9</property>
               <property name="column-span">1</property>
               <property name="row-span">1</property>
             </layout>

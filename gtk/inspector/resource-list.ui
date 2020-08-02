@@ -119,8 +119,8 @@
                         <property name="halign">end</property>
                         <property name="valign">baseline</property>
                         <layout>
-                          <property name="left-attach">0</property>
-                          <property name="top-attach">0</property>
+                          <property name="column">0</property>
+                          <property name="row">0</property>
                         </layout>
                       </object>
                     </child>
@@ -130,8 +130,8 @@
                         <property name="valign">baseline</property>
                         <property name="selectable">1</property>
                         <layout>
-                          <property name="left-attach">1</property>
-                          <property name="top-attach">0</property>
+                          <property name="column">1</property>
+                          <property name="row">0</property>
                         </layout>
                       </object>
                     </child>
@@ -141,8 +141,8 @@
                         <property name="halign">end</property>
                         <property name="valign">baseline</property>
                         <layout>
-                          <property name="left-attach">0</property>
-                          <property name="top-attach">1</property>
+                          <property name="column">0</property>
+                          <property name="row">1</property>
                         </layout>
                       </object>
                     </child>
@@ -151,8 +151,8 @@
                         <property name="halign">start</property>
                         <property name="valign">baseline</property>
                         <layout>
-                          <property name="left-attach">1</property>
-                          <property name="top-attach">1</property>
+                          <property name="column">1</property>
+                          <property name="row">1</property>
                         </layout>
                       </object>
                     </child>
@@ -162,8 +162,8 @@
                         <property name="halign">end</property>
                         <property name="valign">baseline</property>
                         <layout>
-                          <property name="left-attach">0</property>
-                          <property name="top-attach">2</property>
+                          <property name="column">0</property>
+                          <property name="row">2</property>
                         </layout>
                       </object>
                     </child>
@@ -172,8 +172,8 @@
                         <property name="halign">start</property>
                         <property name="valign">baseline</property>
                         <layout>
-                          <property name="left-attach">1</property>
-                          <property name="top-attach">2</property>
+                          <property name="column">1</property>
+                          <property name="row">2</property>
                         </layout>
                       </object>
                     </child>

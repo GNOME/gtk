@@ -144,11 +144,11 @@ test_simple_row (void)
   gtk_widget_set_parent (GTK_WIDGET (child3), parent);
 
   lc = gtk_layout_manager_get_layout_child (layout, GTK_WIDGET (child1));
-  gtk_grid_layout_child_set_left_attach (GTK_GRID_LAYOUT_CHILD (lc), 0);
+  gtk_grid_layout_child_set_column (GTK_GRID_LAYOUT_CHILD (lc), 0);
   lc = gtk_layout_manager_get_layout_child (layout, GTK_WIDGET (child2));
-  gtk_grid_layout_child_set_left_attach (GTK_GRID_LAYOUT_CHILD (lc), 1);
+  gtk_grid_layout_child_set_column (GTK_GRID_LAYOUT_CHILD (lc), 1);
   lc = gtk_layout_manager_get_layout_child (layout, GTK_WIDGET (child3));
-  gtk_grid_layout_child_set_left_attach (GTK_GRID_LAYOUT_CHILD (lc), 2);
+  gtk_grid_layout_child_set_column (GTK_GRID_LAYOUT_CHILD (lc), 2);
 
   gtk_layout_manager_measure (layout,
                               parent,
@@ -237,11 +237,11 @@ test_simple_column (void)
   gtk_widget_set_parent (GTK_WIDGET (child3), parent);
 
   lc = gtk_layout_manager_get_layout_child (layout, GTK_WIDGET (child1));
-  gtk_grid_layout_child_set_top_attach (GTK_GRID_LAYOUT_CHILD (lc), 0);
+  gtk_grid_layout_child_set_row (GTK_GRID_LAYOUT_CHILD (lc), 0);
   lc = gtk_layout_manager_get_layout_child (layout, GTK_WIDGET (child2));
-  gtk_grid_layout_child_set_top_attach (GTK_GRID_LAYOUT_CHILD (lc), 1);
+  gtk_grid_layout_child_set_row (GTK_GRID_LAYOUT_CHILD (lc), 1);
   lc = gtk_layout_manager_get_layout_child (layout, GTK_WIDGET (child3));
-  gtk_grid_layout_child_set_top_attach (GTK_GRID_LAYOUT_CHILD (lc), 2);
+  gtk_grid_layout_child_set_row (GTK_GRID_LAYOUT_CHILD (lc), 2);
 
   gtk_layout_manager_measure (layout,
                               parent,
@@ -348,22 +348,22 @@ test_spans (void)
   gtk_widget_set_parent (GTK_WIDGET (child4), parent);
 
   lc = gtk_layout_manager_get_layout_child (layout, GTK_WIDGET (child1));
-  gtk_grid_layout_child_set_top_attach (GTK_GRID_LAYOUT_CHILD (lc), 0);
-  gtk_grid_layout_child_set_left_attach (GTK_GRID_LAYOUT_CHILD (lc), 0);
+  gtk_grid_layout_child_set_row (GTK_GRID_LAYOUT_CHILD (lc), 0);
+  gtk_grid_layout_child_set_column (GTK_GRID_LAYOUT_CHILD (lc), 0);
 
   lc = gtk_layout_manager_get_layout_child (layout, GTK_WIDGET (child2));
-  gtk_grid_layout_child_set_top_attach (GTK_GRID_LAYOUT_CHILD (lc), 0);
-  gtk_grid_layout_child_set_left_attach (GTK_GRID_LAYOUT_CHILD (lc), 1);
+  gtk_grid_layout_child_set_row (GTK_GRID_LAYOUT_CHILD (lc), 0);
+  gtk_grid_layout_child_set_column (GTK_GRID_LAYOUT_CHILD (lc), 1);
   gtk_grid_layout_child_set_column_span (GTK_GRID_LAYOUT_CHILD (lc), 2);
 
   lc = gtk_layout_manager_get_layout_child (layout, GTK_WIDGET (child3));
-  gtk_grid_layout_child_set_top_attach (GTK_GRID_LAYOUT_CHILD (lc), 1);
-  gtk_grid_layout_child_set_left_attach (GTK_GRID_LAYOUT_CHILD (lc), 0);
+  gtk_grid_layout_child_set_row (GTK_GRID_LAYOUT_CHILD (lc), 1);
+  gtk_grid_layout_child_set_column (GTK_GRID_LAYOUT_CHILD (lc), 0);
   gtk_grid_layout_child_set_column_span (GTK_GRID_LAYOUT_CHILD (lc), 2);
 
   lc = gtk_layout_manager_get_layout_child (layout, GTK_WIDGET (child4));
-  gtk_grid_layout_child_set_top_attach (GTK_GRID_LAYOUT_CHILD (lc), 1);
-  gtk_grid_layout_child_set_left_attach (GTK_GRID_LAYOUT_CHILD (lc), 2);
+  gtk_grid_layout_child_set_row (GTK_GRID_LAYOUT_CHILD (lc), 1);
+  gtk_grid_layout_child_set_column (GTK_GRID_LAYOUT_CHILD (lc), 2);
 
   gtk_layout_manager_measure (layout,
                               parent,
@@ -466,20 +466,20 @@ test_homogeneous (void)
   gtk_widget_set_parent (GTK_WIDGET (child4), parent);
 
   lc = gtk_layout_manager_get_layout_child (layout, GTK_WIDGET (child1));
-  gtk_grid_layout_child_set_top_attach (GTK_GRID_LAYOUT_CHILD (lc), 0);
-  gtk_grid_layout_child_set_left_attach (GTK_GRID_LAYOUT_CHILD (lc), 0);
+  gtk_grid_layout_child_set_row (GTK_GRID_LAYOUT_CHILD (lc), 0);
+  gtk_grid_layout_child_set_column (GTK_GRID_LAYOUT_CHILD (lc), 0);
 
   lc = gtk_layout_manager_get_layout_child (layout, GTK_WIDGET (child2));
-  gtk_grid_layout_child_set_top_attach (GTK_GRID_LAYOUT_CHILD (lc), 0);
-  gtk_grid_layout_child_set_left_attach (GTK_GRID_LAYOUT_CHILD (lc), 1);
+  gtk_grid_layout_child_set_row (GTK_GRID_LAYOUT_CHILD (lc), 0);
+  gtk_grid_layout_child_set_column (GTK_GRID_LAYOUT_CHILD (lc), 1);
 
   lc = gtk_layout_manager_get_layout_child (layout, GTK_WIDGET (child3));
-  gtk_grid_layout_child_set_top_attach (GTK_GRID_LAYOUT_CHILD (lc), 1);
-  gtk_grid_layout_child_set_left_attach (GTK_GRID_LAYOUT_CHILD (lc), 0);
+  gtk_grid_layout_child_set_row (GTK_GRID_LAYOUT_CHILD (lc), 1);
+  gtk_grid_layout_child_set_column (GTK_GRID_LAYOUT_CHILD (lc), 0);
 
   lc = gtk_layout_manager_get_layout_child (layout, GTK_WIDGET (child4));
-  gtk_grid_layout_child_set_top_attach (GTK_GRID_LAYOUT_CHILD (lc), 1);
-  gtk_grid_layout_child_set_left_attach (GTK_GRID_LAYOUT_CHILD (lc), 1);
+  gtk_grid_layout_child_set_row (GTK_GRID_LAYOUT_CHILD (lc), 1);
+  gtk_grid_layout_child_set_column (GTK_GRID_LAYOUT_CHILD (lc), 1);
 
   gtk_layout_manager_measure (layout,
                               parent,
@@ -584,16 +584,16 @@ test_simple_layout (void)
   gtk_widget_set_parent (GTK_WIDGET (child3), parent);
 
   lc = gtk_layout_manager_get_layout_child (layout, GTK_WIDGET (child1));
-  gtk_grid_layout_child_set_top_attach (GTK_GRID_LAYOUT_CHILD (lc), 0);
-  gtk_grid_layout_child_set_left_attach (GTK_GRID_LAYOUT_CHILD (lc), 0);
+  gtk_grid_layout_child_set_row (GTK_GRID_LAYOUT_CHILD (lc), 0);
+  gtk_grid_layout_child_set_column (GTK_GRID_LAYOUT_CHILD (lc), 0);
 
   lc = gtk_layout_manager_get_layout_child (layout, GTK_WIDGET (child2));
-  gtk_grid_layout_child_set_top_attach (GTK_GRID_LAYOUT_CHILD (lc), 0);
-  gtk_grid_layout_child_set_left_attach (GTK_GRID_LAYOUT_CHILD (lc), 1);
+  gtk_grid_layout_child_set_row (GTK_GRID_LAYOUT_CHILD (lc), 0);
+  gtk_grid_layout_child_set_column (GTK_GRID_LAYOUT_CHILD (lc), 1);
 
   lc = gtk_layout_manager_get_layout_child (layout, GTK_WIDGET (child3));
-  gtk_grid_layout_child_set_top_attach (GTK_GRID_LAYOUT_CHILD (lc), 1);
-  gtk_grid_layout_child_set_left_attach (GTK_GRID_LAYOUT_CHILD (lc), 0);
+  gtk_grid_layout_child_set_row (GTK_GRID_LAYOUT_CHILD (lc), 1);
+  gtk_grid_layout_child_set_column (GTK_GRID_LAYOUT_CHILD (lc), 0);
   gtk_grid_layout_child_set_column_span (GTK_GRID_LAYOUT_CHILD (lc), 2);
 
   gtk_layout_manager_measure (layout,
