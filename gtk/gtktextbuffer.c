@@ -1605,15 +1605,15 @@ insert_range_not_inside_self (GtkTextBuffer     *buffer,
   GtkTextIter end = *orig_end;
   GtkTextIter range_start;
   GtkTextIter range_end;
-  
+
   if (gtk_text_iter_equal (orig_start, orig_end))
     return;
-  
+
   gtk_text_iter_order (&start, &end);
 
   range_start = start;
-  range_end = start;  
-  
+  range_end = start;
+
   while (TRUE)
     {
       int start_offset;
@@ -1621,12 +1621,12 @@ insert_range_not_inside_self (GtkTextBuffer     *buffer,
       GSList *tags;
       GSList *tmp_list;
       Range *r;
-      
+
       if (gtk_text_iter_equal (&range_start, &end))
         break; /* All done */
 
       g_assert (gtk_text_iter_compare (&range_start, &end) < 0);
-      
+
       gtk_text_iter_forward_to_tag_toggle (&range_end, NULL);
 
       g_assert (!gtk_text_iter_equal (&range_start, &range_end));
@@ -1634,33 +1634,32 @@ insert_range_not_inside_self (GtkTextBuffer     *buffer,
       /* Clamp to the end iterator */
       if (gtk_text_iter_compare (&range_end, &end) > 0)
         range_end = end;
-      
+
       /* We have a range with unique tags; insert it, and
        * apply all tags.
        */
       start_offset = gtk_text_iter_get_offset (iter);
 
       r = save_range (&range_start, &range_end, &end);
-      
+
       insert_range_untagged (buffer, iter, &range_start, &range_end, interactive);
 
       restore_range (r);
       r = NULL;
-      
-      gtk_text_buffer_get_iter_at_offset (buffer, &start_iter, start_offset);
-      
-      tags = gtk_text_iter_get_tags (&range_start);
-      tmp_list = tags;
-      while (tmp_list != NULL)
-        {
-          gtk_text_buffer_apply_tag (buffer,
-                                     tmp_list->data,
-                                     &start_iter,
-                                     iter);
 
-          tmp_list = tmp_list->next;
+      if (gtk_text_buffer_get_tag_table (gtk_text_iter_get_buffer (orig_start)) == gtk_text_buffer_get_tag_table (buffer))
+        {
+          gtk_text_buffer_get_iter_at_offset (buffer, &start_iter, start_offset);
+
+          tags = gtk_text_iter_get_tags (&range_start);
+          tmp_list = tags;
+          while (tmp_list != NULL)
+            {
+              gtk_text_buffer_apply_tag (buffer, tmp_list->data, &start_iter, iter);
+              tmp_list = tmp_list->next;
+            }
+          g_slist_free (tags);
         }
-      g_slist_free (tags);
 
       range_start = range_end;
     }
