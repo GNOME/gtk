@@ -271,6 +271,7 @@ if get_option('install-tests')
   endforeach
 
   install_subdir('icons', install_dir: testexecdir)
+  install_subdir('icons2', install_dir: testexecdir)
   install_subdir('ui', install_dir: testexecdir)
 
 endif
