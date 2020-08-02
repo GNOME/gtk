@@ -679,52 +679,37 @@ add_tool (GtkInspectorGeneral *gen,
           GdkDeviceTool       *tool)
 {
   GdkAxisFlags axes;
-  gchar *value;
   GString *str;
+  char *val;
   int i;
-  const char *axis_name[] = {
-    "Ignore",
-    "X",
-    "Y",
-    "Delta X",
-    "Delta Y",
-    "Pressure",
-    "X Tilt",
-    "Y Tilt",
-    "Wheel",
-    "Distance",
-    "Rotation",
-    "Slider"
-  };
-  const char *tool_type[] = {
-    "Unknown",
-    "Pen",
-    "Eraser",
-    "Brush",
-    "Pencil",
-    "Airbrush",
-    "Mouse",
-    "Lens",
-  };
+  GEnumClass *eclass;
+  GEnumValue *evalue;
+  GFlagsClass *fclass;
+  GFlagsValue *fvalue;
 
+  val = g_strdup_printf ("Serial %" G_GUINT64_FORMAT, gdk_device_tool_get_serial (tool));
+  add_label_row (gen, GTK_LIST_BOX (gen->device_box), "Tool", val, 10);
+  g_free (val);
+
+  eclass = g_type_class_ref (GDK_TYPE_DEVICE_TOOL_TYPE);
+  evalue = g_enum_get_value (eclass, gdk_device_tool_get_tool_type (tool));
+  add_label_row (gen, GTK_LIST_BOX (gen->device_box), "Type", evalue->value_nick, 20);
+  g_type_class_unref (eclass);
+
+  fclass = g_type_class_ref (GDK_TYPE_AXIS_FLAGS);
   str = g_string_new ("");
-  value = g_strdup_printf ("Serial %" G_GUINT64_FORMAT, gdk_device_tool_get_serial (tool));
-  add_label_row (gen, GTK_LIST_BOX (gen->device_box), "Tool", value, 10);
-  g_free (value);
-
-  add_label_row (gen, GTK_LIST_BOX (gen->device_box), "Type",
-                 tool_type[gdk_device_tool_get_tool_type (tool)], 20);
-
   axes = gdk_device_tool_get_axes (tool);
   for (i = GDK_AXIS_X; i < GDK_AXIS_LAST; i++)
     {
       if ((axes & (1 << i)) != 0)
         {
+          fvalue = g_flags_get_first_value (fclass, i);
           if (str->len > 0)
             g_string_append (str, ", ");
-          g_string_append (str, axis_name[i]);
+          g_string_append (str, fvalue->value_nick);
         }
     }
+  g_type_class_unref (fclass);
 
   if (str->len > 0)
     add_label_row (gen, GTK_LIST_BOX (gen->device_box), "Axes", str->str, 20);
@@ -736,23 +721,18 @@ static void
 add_device (GtkInspectorGeneral *gen,
             GdkDevice           *device)
 {
-  const char *name, *value;
+  const char *name;
   guint n_touches;
   char *text;
-  const char *source_name[] = {
-    "Mouse",
-    "Pen",
-    "Cursor",
-    "Keyboard",
-    "Touchscreen",
-    "Touchpad",
-    "Trackpoint",
-    "Pad"
-  };
+  GEnumClass *class;
+  GEnumValue *value;
 
   name = gdk_device_get_name (device);
-  value = source_name[gdk_device_get_source (device)];
-  add_label_row (gen, GTK_LIST_BOX (gen->device_box), name, value, 10);
+
+  class = g_type_class_ref (GDK_TYPE_INPUT_SOURCE);
+  value = g_enum_get_value (class, gdk_device_get_source (device));
+
+  add_label_row (gen, GTK_LIST_BOX (gen->device_box), name, value->value_nick, 10);
 
   g_object_get (device, "num-touches", &n_touches, NULL);
   if (n_touches > 0)
@@ -761,6 +741,8 @@ add_device (GtkInspectorGeneral *gen,
       add_label_row (gen, GTK_LIST_BOX (gen->device_box), "Touches", text, 20);
       g_free (text);
     }
+
+  g_type_class_unref (class);
 }
 
 static char *
