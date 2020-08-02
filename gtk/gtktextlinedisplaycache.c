@@ -663,6 +663,12 @@ gtk_text_line_display_cache_invalidate_y_range (GtkTextLineDisplayCache *cache,
 
   STAT_INC (cache->inval_by_y_range);
 
+  if (y < 0)
+    {
+      gtk_text_line_display_cache_invalidate (cache);
+      return;
+    }
+
   btree = _gtk_text_buffer_get_btree (layout->buffer);
   iter = find_iter_at_at_y (cache, layout, y);
 
