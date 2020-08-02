@@ -2419,6 +2419,16 @@ location_switch_to_filename_entry (GtkFileChooserWidget *impl)
   gtk_widget_grab_focus (impl->location_entry);
 }
 
+static LocationMode
+location_mode_get (GtkFileChooserWidget *impl)
+{
+  if (gtk_revealer_get_child_revealed (GTK_REVEALER (impl->browse_header_revealer)) &&
+      strcmp (gtk_stack_get_visible_child_name (GTK_STACK (impl->browse_header_stack)), "location") == 0)
+    return LOCATION_MODE_FILENAME_ENTRY;
+  else
+    return LOCATION_MODE_PATH_BAR;
+}
+
 /* Sets a new location mode.
  */
 static void
@@ -7687,7 +7697,9 @@ captured_key (GtkEventControllerKey *controller,
   GtkFileChooserWidget *impl = data;
   gboolean handled;
 
-  if (impl->operation_mode == OPERATION_MODE_SEARCH)
+  if (impl->operation_mode == OPERATION_MODE_SEARCH ||
+      impl->operation_mode == OPERATION_MODE_OTHER_LOCATIONS ||
+      location_mode_get (impl) == LOCATION_MODE_FILENAME_ENTRY)
     return GDK_EVENT_PROPAGATE;
 
   handled = gtk_event_controller_key_forward (controller, GTK_WIDGET (impl->search_entry));
