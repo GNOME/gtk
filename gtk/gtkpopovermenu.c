@@ -228,7 +228,14 @@ static void
 focus_out (GtkEventController   *controller,
            GtkPopoverMenu       *menu)
 {
-  GtkWidget *new_focus = gtk_root_get_focus (gtk_widget_get_root (GTK_WIDGET (menu)));
+  GtkRoot *root;
+  GtkWidget *new_focus;
+
+  root = gtk_widget_get_root (GTK_WIDGET (menu));
+  if (!root)
+    return;
+
+  new_focus = gtk_root_get_focus (root);
 
   if (!gtk_event_controller_focus_contains_focus (GTK_EVENT_CONTROLLER_FOCUS (controller)) &&
       new_focus != NULL)
