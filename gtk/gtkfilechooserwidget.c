@@ -3470,6 +3470,8 @@ gtk_file_chooser_widget_map (GtkWidget *widget)
 
   add_cwd_to_sidebar_if_needed (impl);
 
+  g_object_set (impl, "search-mode", FALSE, NULL);
+
   if (impl->operation_mode == OPERATION_MODE_BROWSE)
     {
       switch (impl->reload_state)
