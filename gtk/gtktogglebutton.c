@@ -185,8 +185,6 @@ gtk_toggle_button_clicked (GtkButton *button)
   GtkToggleButtonPrivate *priv = gtk_toggle_button_get_instance_private (toggle_button);
 
   gtk_toggle_button_set_active (toggle_button, !priv->active);
-
-  GTK_BUTTON_CLASS (gtk_toggle_button_parent_class)->clicked (button);
 }
 
 static void
