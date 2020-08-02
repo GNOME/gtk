@@ -13,8 +13,8 @@
             <property name="receives_default">1</property>
             <property name="name">a</property>
             <layout>
-              <property name="left_attach">0</property>
-              <property name="top_attach">0</property>
+              <property name="column">0</property>
+              <property name="row">0</property>
               <property name="column-span">1</property>
               <property name="row-span">1</property>
             </layout>
@@ -28,8 +28,8 @@
             <property name="receives_default">1</property>
             <property name="name">b</property>
             <layout>
-              <property name="left_attach">1</property>
-              <property name="top_attach">0</property>
+              <property name="column">1</property>
+              <property name="row">0</property>
               <property name="column-span">1</property>
               <property name="row-span">1</property>
             </layout>
@@ -43,8 +43,8 @@
             <property name="receives_default">1</property>
             <property name="name">c</property>
             <layout>
-              <property name="left_attach">2</property>
-              <property name="top_attach">0</property>
+              <property name="column">2</property>
+              <property name="row">0</property>
               <property name="column-span">1</property>
               <property name="row-span">1</property>
             </layout>
@@ -58,8 +58,8 @@
             <property name="receives_default">1</property>
             <property name="name">d</property>
             <layout>
-              <property name="left_attach">3</property>
-              <property name="top_attach">0</property>
+              <property name="column">3</property>
+              <property name="row">0</property>
               <property name="column-span">1</property>
               <property name="row-span">1</property>
             </layout>
@@ -73,8 +73,8 @@
             <property name="receives_default">1</property>
             <property name="name">e</property>
             <layout>
-              <property name="left_attach">0</property>
-              <property name="top_attach">1</property>
+              <property name="column">0</property>
+              <property name="row">1</property>
               <property name="column-span">1</property>
               <property name="row-span">1</property>
             </layout>
@@ -88,8 +88,8 @@
             <property name="receives_default">1</property>
             <property name="name">f</property>
             <layout>
-              <property name="left_attach">1</property>
-              <property name="top_attach">1</property>
+              <property name="column">1</property>
+              <property name="row">1</property>
               <property name="column-span">1</property>
               <property name="row-span">1</property>
             </layout>
@@ -103,8 +103,8 @@
             <property name="receives_default">1</property>
             <property name="name">g</property>
             <layout>
-              <property name="left_attach">2</property>
-              <property name="top_attach">1</property>
+              <property name="column">2</property>
+              <property name="row">1</property>
               <property name="column-span">1</property>
               <property name="row-span">1</property>
             </layout>
@@ -118,8 +118,8 @@
             <property name="receives_default">1</property>
             <property name="name">h</property>
             <layout>
-              <property name="left_attach">3</property>
-              <property name="top_attach">1</property>
+              <property name="column">3</property>
+              <property name="row">1</property>
               <property name="column-span">1</property>
               <property name="row-span">1</property>
             </layout>
@@ -133,8 +133,8 @@
             <property name="receives_default">1</property>
             <property name="name">i</property>
             <layout>
-              <property name="left_attach">0</property>
-              <property name="top_attach">2</property>
+              <property name="column">0</property>
+              <property name="row">2</property>
               <property name="column-span">1</property>
               <property name="row-span">1</property>
             </layout>
@@ -148,8 +148,8 @@
             <property name="receives_default">1</property>
             <property name="name">j</property>
             <layout>
-              <property name="left_attach">1</property>
-              <property name="top_attach">2</property>
+              <property name="column">1</property>
+              <property name="row">2</property>
               <property name="column-span">1</property>
               <property name="row-span">1</property>
             </layout>
@@ -163,8 +163,8 @@
             <property name="receives_default">1</property>
             <property name="name">k</property>
             <layout>
-              <property name="left_attach">2</property>
-              <property name="top_attach">2</property>
+              <property name="column">2</property>
+              <property name="row">2</property>
               <property name="column-span">1</property>
               <property name="row-span">1</property>
             </layout>
@@ -178,8 +178,8 @@
             <property name="receives_default">1</property>
             <property name="name">l</property>
             <layout>
-              <property name="left_attach">3</property>
-              <property name="top_attach">2</property>
+              <property name="column">3</property>
+              <property name="row">2</property>
               <property name="column-span">1</property>
               <property name="row-span">1</property>
             </layout>

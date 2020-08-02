@@ -9,8 +9,8 @@
             <property name="label">topleft</property>
             <property name="name">topleft</property>
             <layout>
-              <property name="left-attach">0</property>
-              <property name="top-attach">0</property>
+              <property name="column">0</property>
+              <property name="row">0</property>
             </layout>
           </object>
         </child>
@@ -19,8 +19,8 @@
             <property name="label">topright</property>
             <property name="name">topright</property>
             <layout>
-              <property name="left-attach">1</property>
-              <property name="top-attach">0</property>
+              <property name="column">1</property>
+              <property name="row">0</property>
             </layout>
           </object>
         </child>
@@ -29,8 +29,8 @@
             <property name="label">bottomleft</property>
             <property name="name">bottomleft</property>
             <layout>
-              <property name="left-attach">0</property>
-              <property name="top-attach">1</property>
+              <property name="column">0</property>
+              <property name="row">1</property>
             </layout>
           </object>
         </child>
@@ -39,8 +39,8 @@
             <property name="label">bottomright</property>
             <property name="name">bottomright</property>
             <layout>
-              <property name="left-attach">1</property>
-              <property name="top-attach">1</property>
+              <property name="column">1</property>
+              <property name="row">1</property>
             </layout>
           </object>
         </child>

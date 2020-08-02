@@ -268,8 +268,8 @@
  *     <object class="GtkLabel" id="label1">
  *       <property name="label">Description</property>
  *       <layout>
- *         <property name="left-attach">0</property>
- *         <property name="top-attach">0</property>
+ *         <property name="column">0</property>
+ *         <property name="row">0</property>
  *         <property name="row-span">1</property>
  *         <property name="col-span">1</property>
  *       </layout>
@@ -278,8 +278,8 @@
  *   <child>
  *     <object class="GtkEntry" id="description_entry">
  *       <layout>
- *         <property name="left-attach">1</property>
- *         <property name="top-attach">0</property>
+ *         <property name="column">1</property>
+ *         <property name="row">0</property>
  *         <property name="row-span">1</property>
  *         <property name="col-span">1</property>
  *       </layout>

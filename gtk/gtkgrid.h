@@ -66,8 +66,8 @@ GtkWidget* gtk_grid_new                    (void);
 GDK_AVAILABLE_IN_ALL
 void       gtk_grid_attach                 (GtkGrid         *grid,
                                             GtkWidget       *child,
-                                            int              left,
-                                            int              top,
+                                            int              column,
+                                            int              row,
                                             int              width,
                                             int              height);
 GDK_AVAILABLE_IN_ALL
@@ -79,8 +79,8 @@ void       gtk_grid_attach_next_to         (GtkGrid         *grid,
                                             int              height);
 GDK_AVAILABLE_IN_ALL
 GtkWidget *gtk_grid_get_child_at           (GtkGrid         *grid,
-                                            int              left,
-                                            int              top);
+                                            int              column,
+                                            int              row);
 GDK_AVAILABLE_IN_ALL
 void       gtk_grid_remove                 (GtkGrid         *grid,
                                             GtkWidget       *child);
@@ -137,8 +137,8 @@ int        gtk_grid_get_baseline_row       (GtkGrid         *grid);
 GDK_AVAILABLE_IN_ALL
 void       gtk_grid_query_child            (GtkGrid         *grid,
                                             GtkWidget       *child,
-                                            int             *left,
-                                            int             *top,
+                                            int             *column,
+                                            int             *row,
                                             int             *width,
                                             int             *height);
 

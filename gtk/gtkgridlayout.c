@@ -67,14 +67,14 @@ struct _GtkGridLayoutChild
   GridChildAttach attach[2];
 };
 
-#define CHILD_LEFT_ATTACH(child)        ((child)->attach[GTK_ORIENTATION_HORIZONTAL].pos)
-#define CHILD_COL_SPAN(child)           ((child)->attach[GTK_ORIENTATION_HORIZONTAL].span)
-#define CHILD_TOP_ATTACH(child)         ((child)->attach[GTK_ORIENTATION_VERTICAL].pos)
-#define CHILD_ROW_SPAN(child)           ((child)->attach[GTK_ORIENTATION_VERTICAL].span)
+#define CHILD_COLUMN(child)     ((child)->attach[GTK_ORIENTATION_HORIZONTAL].pos)
+#define CHILD_COL_SPAN(child)   ((child)->attach[GTK_ORIENTATION_HORIZONTAL].span)
+#define CHILD_ROW(child)        ((child)->attach[GTK_ORIENTATION_VERTICAL].pos)
+#define CHILD_ROW_SPAN(child)   ((child)->attach[GTK_ORIENTATION_VERTICAL].span)
 
 enum {
-  PROP_CHILD_LEFT_ATTACH = 1,
-  PROP_CHILD_TOP_ATTACH,
+  PROP_CHILD_COLUMN = 1,
+  PROP_CHILD_ROW,
   PROP_CHILD_COLUMN_SPAN,
   PROP_CHILD_ROW_SPAN,
 
@@ -95,12 +95,12 @@ gtk_grid_layout_child_set_property (GObject      *gobject,
 
   switch (prop_id)
     {
-    case PROP_CHILD_LEFT_ATTACH:
-      gtk_grid_layout_child_set_left_attach (self, g_value_get_int (value));
+    case PROP_CHILD_COLUMN:
+      gtk_grid_layout_child_set_column (self, g_value_get_int (value));
       break;
 
-    case PROP_CHILD_TOP_ATTACH:
-      gtk_grid_layout_child_set_top_attach (self, g_value_get_int (value));
+    case PROP_CHILD_ROW :
+      gtk_grid_layout_child_set_row (self, g_value_get_int (value));
       break;
 
     case PROP_CHILD_COLUMN_SPAN:
@@ -127,12 +127,12 @@ gtk_grid_layout_child_get_property (GObject    *gobject,
 
   switch (prop_id)
     {
-    case PROP_CHILD_LEFT_ATTACH:
-      g_value_set_int (value, CHILD_LEFT_ATTACH (self));
+    case PROP_CHILD_COLUMN:
+      g_value_set_int (value, CHILD_COLUMN (self));
       break;
 
-    case PROP_CHILD_TOP_ATTACH:
-      g_value_set_int (value, CHILD_TOP_ATTACH (self));
+    case PROP_CHILD_ROW:
+      g_value_set_int (value, CHILD_ROW (self));
       break;
 
     case PROP_CHILD_COLUMN_SPAN:
@@ -158,26 +158,26 @@ gtk_grid_layout_child_class_init (GtkGridLayoutChildClass *klass)
   gobject_class->get_property = gtk_grid_layout_child_get_property;
 
   /**
-   * GtkGridLayoutChild:left-attach:
+   * GtkGridLayoutChild:column:
    *
-   * The column number to attach the left side of the child to.
+   * The column to place the child in.
    */
-  child_props[PROP_CHILD_LEFT_ATTACH] =
-    g_param_spec_int ("left-attach",
-                      P_("Left attachment"),
-                      P_("The column number to attach the left side of the child to"),
+  child_props[PROP_CHILD_COLUMN] =
+    g_param_spec_int ("column",
+                      P_("Column"),
+                      P_("The column place the child in"),
                       G_MININT, G_MAXINT, 0,
                       GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkGridLayoutChild:top-attach:
+   * GtkGridLayoutChild:row:
    *
-   * The row number to attach the top side of the child to.
+   * The row to place the child in.
    */
-  child_props[PROP_CHILD_TOP_ATTACH] =
-    g_param_spec_int ("top-attach",
-                      P_("Top attachment"),
-                      P_("The row number to attach the top side of a child widget to"),
+  child_props[PROP_CHILD_ROW] =
+    g_param_spec_int ("row",
+                      P_("Row"),
+                      P_("The row to place the child in"),
                       G_MININT, G_MAXINT, 0,
                       GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
@@ -216,30 +216,30 @@ gtk_grid_layout_child_init (GtkGridLayoutChild *self)
 }
 
 /**
- * gtk_grid_layout_child_set_top_attach:
+ * gtk_grid_layout_child_set_row:
  * @child: a #GtkGridLayoutChild
- * @attach: the attach point for @child
+ * @row: the row for @child
  *
- * Sets the row number to attach the top side of @child.
+ * Sets the row to place @child in.
  */
 void
-gtk_grid_layout_child_set_top_attach (GtkGridLayoutChild *child,
-                                      int                 attach)
+gtk_grid_layout_child_set_row (GtkGridLayoutChild *child,
+                               int                 row)
 {
   g_return_if_fail (GTK_IS_GRID_LAYOUT_CHILD (child));
 
-  if (CHILD_TOP_ATTACH (child) == attach)
+  if (CHILD_ROW (child) == row)
     return;
 
-  CHILD_TOP_ATTACH (child) = attach;
+  CHILD_ROW (child) = row;
 
   gtk_layout_manager_layout_changed (gtk_layout_child_get_layout_manager (GTK_LAYOUT_CHILD (child)));
 
-  g_object_notify_by_pspec (G_OBJECT (child), child_props[PROP_CHILD_TOP_ATTACH]);
+  g_object_notify_by_pspec (G_OBJECT (child), child_props[PROP_CHILD_ROW]);
 }
 
 /**
- * gtk_grid_layout_child_get_top_attach:
+ * gtk_grid_layout_child_get_row:
  * @child: a #GtkGridLayoutChild
  *
  * Retrieves the row number to which @child attaches its top side.
@@ -247,38 +247,38 @@ gtk_grid_layout_child_set_top_attach (GtkGridLayoutChild *child,
  * Returns: the row number
  */
 int
-gtk_grid_layout_child_get_top_attach (GtkGridLayoutChild *child)
+gtk_grid_layout_child_get_row (GtkGridLayoutChild *child)
 {
   g_return_val_if_fail (GTK_IS_GRID_LAYOUT_CHILD (child), 0);
 
-  return CHILD_TOP_ATTACH (child);
+  return CHILD_ROW (child);
 }
 
 /**
- * gtk_grid_layout_child_set_left_attach:
+ * gtk_grid_layout_child_set_column:
  * @child: a #GtkGridLayoutChild
- * @attach: the attach point for @child
+ * @column: the attach point for @child
  *
  * Sets the column number to attach the left side of @child.
  */
 void
-gtk_grid_layout_child_set_left_attach (GtkGridLayoutChild *child,
-                                       int                 attach)
+gtk_grid_layout_child_set_column (GtkGridLayoutChild *child,
+                                  int                 column)
 {
   g_return_if_fail (GTK_IS_GRID_LAYOUT_CHILD (child));
 
-  if (CHILD_LEFT_ATTACH (child) == attach)
+  if (CHILD_COLUMN (child) == column)
     return;
 
-  CHILD_LEFT_ATTACH (child) = attach;
+  CHILD_COLUMN (child) = column;
 
   gtk_layout_manager_layout_changed (gtk_layout_child_get_layout_manager (GTK_LAYOUT_CHILD (child)));
 
-  g_object_notify_by_pspec (G_OBJECT (child), child_props[PROP_CHILD_LEFT_ATTACH]);
+  g_object_notify_by_pspec (G_OBJECT (child), child_props[PROP_CHILD_COLUMN]);
 }
 
 /**
- * gtk_grid_layout_child_get_left_attach:
+ * gtk_grid_layout_child_get_column:
  * @child: a #GtkGridLayoutChild
  *
  * Retrieves the column number to which @child attaches its left side.
@@ -286,11 +286,11 @@ gtk_grid_layout_child_set_left_attach (GtkGridLayoutChild *child,
  * Returns: the column number
  */
 int
-gtk_grid_layout_child_get_left_attach (GtkGridLayoutChild *child)
+gtk_grid_layout_child_get_column (GtkGridLayoutChild *child)
 {
   g_return_val_if_fail (GTK_IS_GRID_LAYOUT_CHILD (child), 0);
 
-  return CHILD_LEFT_ATTACH (child);
+  return CHILD_COLUMN (child);
 }
 
 /**

@@ -8,8 +8,8 @@
           <object class="GtkLabel" id="label1">
             <property name="label" translatable="yes">normal</property>
             <layout>
-              <property name="left_attach">0</property>
-              <property name="top_attach">1</property>
+              <property name="column">0</property>
+              <property name="row">1</property>
             </layout>
           </object>
         </child>
@@ -17,8 +17,8 @@
           <object class="GtkLabel" id="label2">
             <property name="label" translatable="yes">reverse</property>
             <layout>
-              <property name="left_attach">0</property>
-              <property name="top_attach">2</property>
+              <property name="column">0</property>
+              <property name="row">2</property>
             </layout>
           </object>
         </child>
@@ -26,8 +26,8 @@
           <object class="GtkLabel" id="label3">
             <property name="label" translatable="yes">alternate</property>
             <layout>
-              <property name="left_attach">0</property>
-              <property name="top_attach">3</property>
+              <property name="column">0</property>
+              <property name="row">3</property>
             </layout>
           </object>
         </child>
@@ -35,8 +35,8 @@
           <object class="GtkLabel" id="label4">
             <property name="label" translatable="yes">alternate-reverse</property>
             <layout>
-              <property name="left_attach">0</property>
-              <property name="top_attach">4</property>
+              <property name="column">0</property>
+              <property name="row">4</property>
             </layout>
           </object>
         </child>
@@ -45,8 +45,8 @@
             <property name="label" translatable="yes">--&gt;
 2⅕x</property>
             <layout>
-              <property name="left_attach">12</property>
-              <property name="top_attach">0</property>
+              <property name="column">12</property>
+              <property name="row">0</property>
             </layout>
           </object>
         </child>
@@ -62,8 +62,8 @@
               <class name="lightorange"/>
             </style>
             <layout>
-              <property name="left_attach">12</property>
-              <property name="top_attach">1</property>
+              <property name="column">12</property>
+              <property name="row">1</property>
             </layout>
           </object>
         </child>
@@ -79,8 +79,8 @@
               <class name="darkorange"/>
             </style>
             <layout>
-              <property name="left_attach">12</property>
-              <property name="top_attach">2</property>
+              <property name="column">12</property>
+              <property name="row">2</property>
             </layout>
           </object>
         </child>
@@ -96,8 +96,8 @@
               <class name="lightorange"/>
             </style>
             <layout>
-              <property name="left_attach">12</property>
-              <property name="top_attach">3</property>
+              <property name="column">12</property>
+              <property name="row">3</property>
             </layout>
           </object>
         </child>
@@ -113,8 +113,8 @@
               <class name="darkorange"/>
             </style>
             <layout>
-              <property name="left_attach">12</property>
-              <property name="top_attach">4</property>
+              <property name="column">12</property>
+              <property name="row">4</property>
             </layout>
           </object>
         </child>
@@ -130,8 +130,8 @@
               <class name="red"/>
             </style>
             <layout>
-              <property name="left_attach">11</property>
-              <property name="top_attach">4</property>
+              <property name="column">11</property>
+              <property name="row">4</property>
             </layout>
           </object>
         </child>
@@ -147,8 +147,8 @@
               <class name="yellow"/>
             </style>
             <layout>
-              <property name="left_attach">11</property>
-              <property name="top_attach">3</property>
+              <property name="column">11</property>
+              <property name="row">3</property>
             </layout>
           </object>
         </child>
@@ -164,8 +164,8 @@
               <class name="red"/>
             </style>
             <layout>
-              <property name="left_attach">11</property>
-              <property name="top_attach">2</property>
+              <property name="column">11</property>
+              <property name="row">2</property>
             </layout>
           </object>
         </child>
@@ -181,8 +181,8 @@
               <class name="yellow"/>
             </style>
             <layout>
-              <property name="left_attach">11</property>
-              <property name="top_attach">1</property>
+              <property name="column">11</property>
+              <property name="row">1</property>
             </layout>
           </object>
         </child>
@@ -191,8 +191,8 @@
             <property name="label" translatable="yes">&lt;--
 2⅕x</property>
             <layout>
-              <property name="left_attach">11</property>
-              <property name="top_attach">0</property>
+              <property name="column">11</property>
+              <property name="row">0</property>
             </layout>
           </object>
         </child>
@@ -201,8 +201,8 @@
             <property name="label" translatable="yes">--&gt;
 2x</property>
             <layout>
-              <property name="left_attach">10</property>
-              <property name="top_attach">0</property>
+              <property name="column">10</property>
+              <property name="row">0</property>
             </layout>
           </object>
         </child>
@@ -218,8 +218,8 @@
               <class name="red"/>
             </style>
             <layout>
-              <property name="left_attach">10</property>
-              <property name="top_attach">1</property>
+              <property name="column">10</property>
+              <property name="row">1</property>
             </layout>
           </object>
         </child>
@@ -235,8 +235,8 @@
               <class name="yellow"/>
             </style>
             <layout>
-              <property name="left_attach">10</property>
-              <property name="top_attach">2</property>
+              <property name="column">10</property>
+              <property name="row">2</property>
             </layout>
           </object>
         </child>
@@ -252,8 +252,8 @@
               <class name="yellow"/>
             </style>
             <layout>
-              <property name="left_attach">10</property>
-              <property name="top_attach">3</property>
+              <property name="column">10</property>
+              <property name="row">3</property>
             </layout>
           </object>
         </child>
@@ -269,8 +269,8 @@
               <class name="red"/>
             </style>
             <layout>
-              <property name="left_attach">10</property>
-              <property name="top_attach">4</property>
+              <property name="column">10</property>
+              <property name="row">4</property>
             </layout>
           </object>
         </child>
@@ -286,8 +286,8 @@
               <class name="red"/>
             </style>
             <layout>
-              <property name="left_attach">9</property>
-              <property name="top_attach">4</property>
+              <property name="column">9</property>
+              <property name="row">4</property>
             </layout>
           </object>
         </child>
@@ -303,8 +303,8 @@
               <class name="yellow"/>
             </style>
             <layout>
-              <property name="left_attach">9</property>
-              <property name="top_attach">3</property>
+              <property name="column">9</property>
+              <property name="row">3</property>
             </layout>
           </object>
         </child>
@@ -320,8 +320,8 @@
               <class name="red"/>
             </style>
             <layout>
-              <property name="left_attach">9</property>
-              <property name="top_attach">2</property>
+              <property name="column">9</property>
+              <property name="row">2</property>
             </layout>
           </object>
         </child>
@@ -337,8 +337,8 @@
               <class name="yellow"/>
             </style>
             <layout>
-              <property name="left_attach">9</property>
-              <property name="top_attach">1</property>
+              <property name="column">9</property>
+              <property name="row">1</property>
             </layout>
           </object>
         </child>
@@ -347,8 +347,8 @@
             <property name="label" translatable="yes">&lt;--
 2x</property>
             <layout>
-              <property name="left_attach">9</property>
-              <property name="top_attach">0</property>
+              <property name="column">9</property>
+              <property name="row">0</property>
             </layout>
           </object>
         </child>
@@ -357,8 +357,8 @@
             <property name="label" translatable="yes">--&gt;
 1⅕x</property>
             <layout>
-              <property name="left_attach">8</property>
-              <property name="top_attach">0</property>
+              <property name="column">8</property>
+              <property name="row">0</property>
             </layout>
           </object>
         </child>
@@ -374,8 +374,8 @@
               <class name="lightorange"/>
             </style>
             <layout>
-              <property name="left_attach">8</property>
-              <property name="top_attach">1</property>
+              <property name="column">8</property>
+              <property name="row">1</property>
             </layout>
           </object>
         </child>
@@ -391,8 +391,8 @@
               <class name="darkorange"/>
             </style>
             <layout>
-              <property name="left_attach">8</property>
-              <property name="top_attach">2</property>
+              <property name="column">8</property>
+              <property name="row">2</property>
             </layout>
           </object>
         </child>
@@ -408,8 +408,8 @@
               <class name="darkorange"/>
             </style>
             <layout>
-              <property name="left_attach">8</property>
-              <property name="top_attach">3</property>
+              <property name="column">8</property>
+              <property name="row">3</property>
             </layout>
           </object>
         </child>
@@ -425,8 +425,8 @@
               <class name="lightorange"/>
             </style>
             <layout>
-              <property name="left_attach">8</property>
-              <property name="top_attach">4</property>
+              <property name="column">8</property>
+              <property name="row">4</property>
             </layout>
           </object>
         </child>
@@ -435,8 +435,8 @@
             <property name="label" translatable="yes">&lt;--
 1⅕x</property>
             <layout>
-              <property name="left_attach">7</property>
-              <property name="top_attach">0</property>
+              <property name="column">7</property>
+              <property name="row">0</property>
             </layout>
           </object>
         </child>
@@ -452,8 +452,8 @@
               <class name="yellow"/>
             </style>
             <layout>
-              <property name="left_attach">7</property>
-              <property name="top_attach">1</property>
+              <property name="column">7</property>
+              <property name="row">1</property>
             </layout>
           </object>
         </child>
@@ -469,8 +469,8 @@
               <class name="red"/>
             </style>
             <layout>
-              <property name="left_attach">7</property>
-              <property name="top_attach">2</property>
+              <property name="column">7</property>
+              <property name="row">2</property>
             </layout>
           </object>
         </child>
@@ -486,8 +486,8 @@
               <class name="yellow"/>
             </style>
             <layout>
-              <property name="left_attach">7</property>
-              <property name="top_attach">3</property>
+              <property name="column">7</property>
+              <property name="row">3</property>
             </layout>
           </object>
         </child>
@@ -503,8 +503,8 @@
               <class name="red"/>
             </style>
             <layout>
-              <property name="left_attach">7</property>
-              <property name="top_attach">4</property>
+              <property name="column">7</property>
+              <property name="row">4</property>
             </layout>
           </object>
         </child>
@@ -513,8 +513,8 @@
             <property name="label" translatable="yes">--&gt;
 1x</property>
             <layout>
-              <property name="left_attach">6</property>
-              <property name="top_attach">0</property>
+              <property name="column">6</property>
+              <property name="row">0</property>
             </layout>
           </object>
         </child>
@@ -530,8 +530,8 @@
               <class name="red"/>
             </style>
             <layout>
-              <property name="left_attach">6</property>
-              <property name="top_attach">1</property>
+              <property name="column">6</property>
+              <property name="row">1</property>
             </layout>
           </object>
         </child>
@@ -547,8 +547,8 @@
               <class name="yellow"/>
             </style>
             <layout>
-              <property name="left_attach">6</property>
-              <property name="top_attach">2</property>
+              <property name="column">6</property>
+              <property name="row">2</property>
             </layout>
           </object>
         </child>
@@ -564,8 +564,8 @@
               <class name="red"/>
             </style>
             <layout>
-              <property name="left_attach">6</property>
-              <property name="top_attach">3</property>
+              <property name="column">6</property>
+              <property name="row">3</property>
             </layout>
           </object>
         </child>
@@ -581,8 +581,8 @@
               <class name="yellow"/>
             </style>
             <layout>
-              <property name="left_attach">6</property>
-              <property name="top_attach">4</property>
+              <property name="column">6</property>
+              <property name="row">4</property>
             </layout>
           </object>
         </child>
@@ -591,8 +591,8 @@
             <property name="label" translatable="yes">&lt;--
 1x</property>
             <layout>
-              <property name="left_attach">5</property>
-              <property name="top_attach">0</property>
+              <property name="column">5</property>
+              <property name="row">0</property>
             </layout>
           </object>
         </child>
@@ -608,8 +608,8 @@
               <class name="yellow"/>
             </style>
             <layout>
-              <property name="left_attach">5</property>
-              <property name="top_attach">1</property>
+              <property name="column">5</property>
+              <property name="row">1</property>
             </layout>
           </object>
         </child>
@@ -625,8 +625,8 @@
               <class name="red"/>
             </style>
             <layout>
-              <property name="left_attach">5</property>
-              <property name="top_attach">2</property>
+              <property name="column">5</property>
+              <property name="row">2</property>
             </layout>
           </object>
         </child>
@@ -642,8 +642,8 @@
               <class name="yellow"/>
             </style>
             <layout>
-              <property name="left_attach">5</property>
-              <property name="top_attach">3</property>
+              <property name="column">5</property>
+              <property name="row">3</property>
             </layout>
           </object>
         </child>
@@ -659,8 +659,8 @@
               <class name="red"/>
             </style>
             <layout>
-              <property name="left_attach">5</property>
-              <property name="top_attach">4</property>
+              <property name="column">5</property>
+              <property name="row">4</property>
             </layout>
           </object>
         </child>
@@ -669,8 +669,8 @@
             <property name="label" translatable="yes">&lt;--
 ⅕x</property>
             <layout>
-              <property name="left_attach">3</property>
-              <property name="top_attach">0</property>
+              <property name="column">3</property>
+              <property name="row">0</property>
             </layout>
           </object>
         </child>
@@ -679,8 +679,8 @@
             <property name="label" translatable="yes">--&gt;
 ⅕x</property>
             <layout>
-              <property name="left_attach">4</property>
-              <property name="top_attach">0</property>
+              <property name="column">4</property>
+              <property name="row">0</property>
             </layout>
           </object>
         </child>
@@ -696,8 +696,8 @@
               <class name="yellow"/>
             </style>
             <layout>
-              <property name="left_attach">3</property>
-              <property name="top_attach">1</property>
+              <property name="column">3</property>
+              <property name="row">1</property>
             </layout>
           </object>
         </child>
@@ -713,8 +713,8 @@
               <class name="lightorange"/>
             </style>
             <layout>
-              <property name="left_attach">4</property>
-              <property name="top_attach">1</property>
+              <property name="column">4</property>
+              <property name="row">1</property>
             </layout>
           </object>
         </child>
@@ -730,8 +730,8 @@
               <class name="red"/>
             </style>
             <layout>
-              <property name="left_attach">3</property>
-              <property name="top_attach">2</property>
+              <property name="column">3</property>
+              <property name="row">2</property>
             </layout>
           </object>
         </child>
@@ -747,8 +747,8 @@
               <class name="darkorange"/>
             </style>
             <layout>
-              <property name="left_attach">4</property>
-              <property name="top_attach">2</property>
+              <property name="column">4</property>
+              <property name="row">2</property>
             </layout>
           </object>
         </child>
@@ -764,8 +764,8 @@
               <class name="yellow"/>
             </style>
             <layout>
-              <property name="left_attach">3</property>
-              <property name="top_attach">3</property>
+              <property name="column">3</property>
+              <property name="row">3</property>
             </layout>
           </object>
         </child>
@@ -781,8 +781,8 @@
               <class name="red"/>
             </style>
             <layout>
-              <property name="left_attach">3</property>
-              <property name="top_attach">4</property>
+              <property name="column">3</property>
+              <property name="row">4</property>
             </layout>
           </object>
         </child>
@@ -798,8 +798,8 @@
               <class name="lightorange"/>
             </style>
             <layout>
-              <property name="left_attach">4</property>
-              <property name="top_attach">3</property>
+              <property name="column">4</property>
+              <property name="row">3</property>
             </layout>
           </object>
         </child>
@@ -815,8 +815,8 @@
               <class name="darkorange"/>
             </style>
             <layout>
-              <property name="left_attach">4</property>
-              <property name="top_attach">4</property>
+              <property name="column">4</property>
+              <property name="row">4</property>
             </layout>
           </object>
         </child>
@@ -825,8 +825,8 @@
             <property name="label" translatable="yes">&lt;--
 0x</property>
             <layout>
-              <property name="left_attach">1</property>
-              <property name="top_attach">0</property>
+              <property name="column">1</property>
+              <property name="row">0</property>
             </layout>
           </object>
         </child>
@@ -835,8 +835,8 @@
             <property name="label" translatable="yes">--&gt;
 0x</property>
             <layout>
-              <property name="left_attach">2</property>
-              <property name="top_attach">0</property>
+              <property name="column">2</property>
+              <property name="row">0</property>
             </layout>
           </object>
         </child>
@@ -852,8 +852,8 @@
               <class name="yellow"/>
             </style>
             <layout>
-              <property name="left_attach">1</property>
-              <property name="top_attach">1</property>
+              <property name="column">1</property>
+              <property name="row">1</property>
             </layout>
           </object>
         </child>
@@ -869,8 +869,8 @@
               <class name="red"/>
             </style>
             <layout>
-              <property name="left_attach">1</property>
-              <property name="top_attach">2</property>
+              <property name="column">1</property>
+              <property name="row">2</property>
             </layout>
           </object>
         </child>
@@ -886,8 +886,8 @@
               <class name="yellow"/>
             </style>
             <layout>
-              <property name="left_attach">1</property>
-              <property name="top_attach">3</property>
+              <property name="column">1</property>
+              <property name="row">3</property>
             </layout>
           </object>
         </child>
@@ -903,8 +903,8 @@
               <class name="red"/>
             </style>
             <layout>
-              <property name="left_attach">1</property>
-              <property name="top_attach">4</property>
+              <property name="column">1</property>
+              <property name="row">4</property>
             </layout>
           </object>
         </child>
@@ -920,8 +920,8 @@
               <class name="red"/>
             </style>
             <layout>
-              <property name="left_attach">2</property>
-              <property name="top_attach">4</property>
+              <property name="column">2</property>
+              <property name="row">4</property>
             </layout>
           </object>
         </child>
@@ -937,8 +937,8 @@
               <class name="yellow"/>
             </style>
             <layout>
-              <property name="left_attach">2</property>
-              <property name="top_attach">3</property>
+              <property name="column">2</property>
+              <property name="row">3</property>
             </layout>
           </object>
         </child>
@@ -954,8 +954,8 @@
               <class name="red"/>
             </style>
             <layout>
-              <property name="left_attach">2</property>
-              <property name="top_attach">2</property>
+              <property name="column">2</property>
+              <property name="row">2</property>
             </layout>
           </object>
         </child>
@@ -971,8 +971,8 @@
               <class name="yellow"/>
             </style>
             <layout>
-              <property name="left_attach">2</property>
-              <property name="top_attach">1</property>
+              <property name="column">2</property>
+              <property name="row">1</property>
             </layout>
           </object>
         </child>

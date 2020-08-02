@@ -286,8 +286,8 @@
                                           <class name="dim-label"/>
                                         </style>
                                         <layout>
-                                          <property name="left-attach">0</property>
-                                          <property name="top-attach">0</property>
+                                          <property name="column">0</property>
+                                          <property name="row">0</property>
                                         </layout>
                                       </object>
                                     </child>
@@ -299,8 +299,8 @@
                                           <attribute name="scale" value="1.44"></attribute>
                                         </attributes>
                                         <layout>
-                                          <property name="left-attach">0</property>
-                                          <property name="top-attach">1</property>
+                                          <property name="column">0</property>
+                                          <property name="row">1</property>
                                         </layout>
                                       </object>
                                     </child>
@@ -311,8 +311,8 @@
                                           <class name="dim-label"/>
                                         </style>
                                         <layout>
-                                          <property name="left-attach">0</property>
-                                          <property name="top-attach">2</property>
+                                          <property name="column">0</property>
+                                          <property name="row">2</property>
                                         </layout>
                                       </object>
                                     </child>
@@ -392,8 +392,8 @@
             <property name="hexpand">1</property>
             <signal name="changed" handler="new_folder_name_changed"/>
             <layout>
-              <property name="left-attach">0</property>
-              <property name="top-attach">1</property>
+              <property name="column">0</property>
+              <property name="row">1</property>
             </layout>
           </object>
         </child>
@@ -407,16 +407,16 @@
               <class name="suggested-action"/>
             </style>
             <layout>
-              <property name="left-attach">1</property>
-              <property name="top-attach">1</property>
+              <property name="column">1</property>
+              <property name="row">1</property>
             </layout>
           </object>
         </child>
         <child>
           <object class="GtkFileChooserErrorStack" id="new_folder_error_stack">
             <layout>
-              <property name="left-attach">0</property>
-              <property name="top-attach">2</property>
+              <property name="column">0</property>
+              <property name="row">2</property>
               <property name="column-span">2</property>
             </layout>
           </object>
@@ -453,8 +453,8 @@
             <property name="hexpand">1</property>
             <signal name="changed" handler="rename_file_name_changed"/>
             <layout>
-              <property name="left-attach">0</property>
-              <property name="top-attach">1</property>
+              <property name="column">0</property>
+              <property name="row">1</property>
             </layout>
           </object>
         </child>
@@ -468,16 +468,16 @@
               <class name="suggested-action"/>
             </style>
             <layout>
-              <property name="left-attach">1</property>
-              <property name="top-attach">1</property>
+              <property name="column">1</property>
+              <property name="row">1</property>
             </layout>
           </object>
         </child>
         <child>
           <object class="GtkFileChooserErrorStack" id="rename_file_error_stack">
             <layout>
-              <property name="left-attach">0</property>
-              <property name="top-attach">2</property>
+              <property name="column">0</property>
+              <property name="row">2</property>
               <property name="column-span">2</property>
             </layout>
           </object>

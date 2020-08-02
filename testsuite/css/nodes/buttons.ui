@@ -11,8 +11,8 @@
             <property name="can_focus">1</property>
             <property name="receives_default">1</property>
             <layout>
-              <property name="left_attach">0</property>
-              <property name="top_attach">0</property>
+              <property name="column">0</property>
+              <property name="row">0</property>
             </layout>
           </object>
         </child>
@@ -22,8 +22,8 @@
             <property name="can_focus">1</property>
             <property name="receives_default">1</property>
             <layout>
-              <property name="left_attach">1</property>
-              <property name="top_attach">0</property>
+              <property name="column">1</property>
+              <property name="row">0</property>
             </layout>
           </object>
         </child>
@@ -34,8 +34,8 @@
             <property name="active">1</property>
             <property name="receives_default">1</property>
             <layout>
-              <property name="left_attach">2</property>
-              <property name="top_attach">0</property>
+              <property name="column">2</property>
+              <property name="row">0</property>
             </layout>
           </object>
         </child>
@@ -46,8 +46,8 @@
             <property name="can_focus">1</property>
             <property name="receives_default">1</property>
             <layout>
-              <property name="left_attach">3</property>
-              <property name="top_attach">0</property>
+              <property name="column">3</property>
+              <property name="row">0</property>
             </layout>
           </object>
         </child>
@@ -57,8 +57,8 @@
             <property name="can_focus">1</property>
             <property name="receives_default">1</property>
             <layout>
-              <property name="left_attach">4</property>
-              <property name="top_attach">0</property>
+              <property name="column">4</property>
+              <property name="row">0</property>
             </layout>
           </object>
         </child>
@@ -67,8 +67,8 @@
             <property name="can_focus">1</property>
             <property name="receives_default">1</property>
             <layout>
-              <property name="left_attach">5</property>
-              <property name="top_attach">0</property>
+              <property name="column">5</property>
+              <property name="row">0</property>
             </layout>
           </object>
         </child>
@@ -78,8 +78,8 @@
             <property name="receives_default">1</property>
             <property name="label">Text Button</property>
             <layout>
-              <property name="left_attach">0</property>
-              <property name="top_attach">1</property>
+              <property name="column">0</property>
+              <property name="row">1</property>
             </layout>
           </object>
         </child>
@@ -91,8 +91,8 @@
             <property name="halign">center</property>
             <property name="valign">center</property>
             <layout>
-              <property name="left_attach">1</property>
-              <property name="top_attach">1</property>
+              <property name="column">1</property>
+              <property name="row">1</property>
             </layout>
           </object>
         </child>
@@ -104,8 +104,8 @@
             <property name="valign">center</property>
             <property name="icon-name">window-close-symbolic</property>
             <layout>
-              <property name="left_attach">2</property>
-              <property name="top_attach">1</property>
+              <property name="column">2</property>
+              <property name="row">1</property>
             </layout>
           </object>
         </child>

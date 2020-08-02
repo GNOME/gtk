@@ -639,8 +639,8 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                   <object class="GtkCheckButton" id="checkbutton2">
                                     <property name="label" translatable="yes">checkbutton</property>
                                     <layout>
-                                      <property name="left-attach">0</property>
-                                      <property name="top-attach">1</property>
+                                      <property name="column">0</property>
+                                      <property name="row">1</property>
                                     </layout>
                                   </object>
                                 </child>
@@ -649,8 +649,8 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                     <property name="label" translatable="yes">checkbutton</property>
                                     <property name="inconsistent">1</property>
                                     <layout>
-                                      <property name="left-attach">0</property>
-                                      <property name="top-attach">2</property>
+                                      <property name="column">0</property>
+                                      <property name="row">2</property>
                                     </layout>
                                   </object>
                                 </child>
@@ -660,8 +660,8 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                     <property name="sensitive">0</property>
                                     <property name="active">1</property>
                                     <layout>
-                                      <property name="left-attach">0</property>
-                                      <property name="top-attach">3</property>
+                                      <property name="column">0</property>
+                                      <property name="row">3</property>
                                     </layout>
                                   </object>
                                 </child>
@@ -670,8 +670,8 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                     <property name="label" translatable="yes">checkbutton</property>
                                     <property name="sensitive">0</property>
                                     <layout>
-                                      <property name="left-attach">0</property>
-                                      <property name="top-attach">4</property>
+                                      <property name="column">0</property>
+                                      <property name="row">4</property>
                                     </layout>
                                   </object>
                                 </child>
@@ -681,8 +681,8 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                     <property name="sensitive">0</property>
                                     <property name="inconsistent">1</property>
                                     <layout>
-                                      <property name="left-attach">0</property>
-                                      <property name="top-attach">5</property>
+                                      <property name="column">0</property>
+                                      <property name="row">5</property>
                                     </layout>
                                   </object>
                                 </child>
@@ -691,8 +691,8 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                     <property name="label" translatable="yes">radiobutton</property>
                                     <property name="active">1</property>
                                     <layout>
-                                      <property name="left-attach">0</property>
-                                      <property name="left-attach">1</property>
+                                      <property name="column">0</property>
+                                      <property name="column">1</property>
                                     </layout>
                                   </object>
                                 </child>
@@ -701,8 +701,8 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                     <property name="label" translatable="yes">radiobutton</property>
                                     <property name="group">radiobutton1</property>
                                     <layout>
-                                      <property name="left-attach">1</property>
-                                      <property name="top-attach">1</property>
+                                      <property name="column">1</property>
+                                      <property name="row">1</property>
                                     </layout>
                                   </object>
                                 </child>
@@ -712,8 +712,8 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                     <property name="inconsistent">1</property>
                                     <property name="group">radiobutton1</property>
                                     <layout>
-                                      <property name="left-attach">1</property>
-                                      <property name="top-attach">2</property>
+                                      <property name="column">1</property>
+                                      <property name="row">2</property>
                                     </layout>
                                   </object>
                                 </child>
@@ -722,8 +722,8 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                     <property name="label" translatable="yes">radiobutton</property>
                                     <property name="sensitive">0</property>
                                     <layout>
-                                      <property name="left-attach">1</property>
-                                      <property name="top-attach">3</property>
+                                      <property name="column">1</property>
+                                      <property name="row">3</property>
                                     </layout>
                                   </object>
                                 </child>
@@ -733,8 +733,8 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                     <property name="sensitive">0</property>
                                     <property name="group">radiobutton3</property>
                                     <layout>
-                                      <property name="left-attach">1</property>
-                                      <property name="top-attach">4</property>
+                                      <property name="column">1</property>
+                                      <property name="row">4</property>
                                     </layout>
                                   </object>
                                 </child>
@@ -745,8 +745,8 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                     <property name="inconsistent">1</property>
                                     <property name="group">radiobutton3</property>
                                     <layout>
-                                      <property name="left-attach">1</property>
-                                      <property name="top-attach">5</property>
+                                      <property name="column">1</property>
+                                      <property name="row">5</property>
                                     </layout>
                                   </object>
                                 </child>
@@ -754,15 +754,15 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                   <object class="GtkSpinner" id="spinner1">
                                     <property name="spinning">1</property>
                                     <layout>
-                                      <property name="left-attach">2</property>
+                                      <property name="column">2</property>
                                     </layout>
                                   </object>
                                 </child>
                                 <child>
                                   <object class="GtkSpinner" id="spinner2">
                                     <layout>
-                                      <property name="left-attach">2</property>
-                                      <property name="top-attach">1</property>
+                                      <property name="column">2</property>
+                                      <property name="row">1</property>
                                     </layout>
                                   </object>
                                 </child>
@@ -771,8 +771,8 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                     <property name="spinning">1</property>
                                     <property name="sensitive">0</property>
                                     <layout>
-                                      <property name="left-attach">2</property>
-                                      <property name="top-attach">3</property>
+                                      <property name="column">2</property>
+                                      <property name="row">3</property>
                                     </layout>
                                   </object>
                                 </child>
@@ -780,8 +780,8 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                   <object class="GtkSpinner" id="spinner4">
                                     <property name="sensitive">0</property>
                                     <layout>
-                                      <property name="left-attach">2</property>
-                                      <property name="top-attach">4</property>
+                                      <property name="column">2</property>
+                                      <property name="row">4</property>
                                     </layout>
                                   </object>
                                 </child>
@@ -1519,8 +1519,8 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                         <property name="value">.5</property>
                                         <property name="halign">center</property>
                                         <layout>
-                                          <property name="left-attach">0</property>
-                                          <property name="top-attach">0</property>
+                                          <property name="column">0</property>
+                                          <property name="row">0</property>
                                         </layout>
                                       </object>
                                     </child>
@@ -1536,8 +1536,8 @@ microphone-sensitivity-medium-symbolic</property>
                                         <property name="halign">center</property>
                                         <signal name="value-changed" handler="on_scale_button_value_changed" swapped="no"/>
                                         <layout>
-                                          <property name="left-attach">0</property>
-                                          <property name="top-attach">1</property>
+                                          <property name="column">0</property>
+                                          <property name="row">1</property>
                                         </layout>
                                       </object>
                                     </child>
@@ -3011,8 +3011,8 @@ bad things might happen.</property>
                   <class name="dim-label"/>
                 </style>
                 <layout>
-                  <property name="left-attach">0</property>
-                  <property name="top-attach">0</property>
+                  <property name="column">0</property>
+                  <property name="row">0</property>
                 </layout>
               </object>
             </child>
@@ -3020,8 +3020,8 @@ bad things might happen.</property>
               <object class="GtkEntry" id="details_entry">
                 <property name="valign">baseline</property>
                 <layout>
-                  <property name="left-attach">1</property>
-                  <property name="top-attach">0</property>
+                  <property name="column">1</property>
+                  <property name="row">0</property>
                 </layout>
               </object>
             </child>
@@ -3036,8 +3036,8 @@ bad things might happen.</property>
                   <class name="dim-label"/>
                 </style>
                 <layout>
-                  <property name="left-attach">0</property>
-                  <property name="top-attach">1</property>
+                  <property name="column">0</property>
+                  <property name="row">1</property>
                 </layout>
               </object>
             </child>
@@ -3045,8 +3045,8 @@ bad things might happen.</property>
               <object class="GtkEntry" id="more_details_entry">
                 <property name="valign">baseline</property>
                 <layout>
-                  <property name="left-attach">1</property>
-                  <property name="top-attach">1</property>
+                  <property name="column">1</property>
+                  <property name="row">1</property>
                 </layout>
               </object>
             </child>
@@ -3061,8 +3061,8 @@ bad things might happen.</property>
                   <class name="dim-label"/>
                 </style>
                 <layout>
-                  <property name="left-attach">0</property>
-                  <property name="top-attach">2</property>
+                  <property name="column">0</property>
+                  <property name="row">2</property>
                 </layout>
               </object>
             </child>
@@ -3072,8 +3072,8 @@ bad things might happen.</property>
                 <property name="draw-value">0</property>
                 <property name="adjustment">adjustment1</property>
                 <layout>
-                  <property name="left-attach">1</property>
-                  <property name="top-attach">2</property>
+                  <property name="column">1</property>
+                  <property name="row">2</property>
                 </layout>
               </object>
             </child>
@@ -3088,8 +3088,8 @@ bad things might happen.</property>
                   <class name="dim-label"/>
                 </style>
                 <layout>
-                  <property name="left-attach">0</property>
-                  <property name="top-attach">3</property>
+                  <property name="column">0</property>
+                  <property name="row">3</property>
                 </layout>
               </object>
             </child>
@@ -3098,8 +3098,8 @@ bad things might happen.</property>
                 <property name="halign">start</property>
                 <property name="valign">baseline</property>
                 <layout>
-                  <property name="left-attach">1</property>
-                  <property name="top-attach">3</property>
+                  <property name="column">1</property>
+                  <property name="row">3</property>
                 </layout>
               </object>
             </child>
@@ -3169,7 +3169,7 @@ bad things might happen.</property>
             <property name="label">Description:</property>
             <property name="xalign">1</property>
             <layout>
-              <property name="top-attach">1</property>
+              <property name="row">1</property>
             </layout>
           </object>
         </child>
@@ -3186,8 +3186,8 @@ bad things might happen.</property>
               </object>
             </child>
             <layout>
-              <property name="left-attach">1</property>
-              <property name="top-attach">1</property>
+              <property name="column">1</property>
+              <property name="row">1</property>
               <property name="column-span">2</property>
             </layout>
           </object>
@@ -3196,7 +3196,7 @@ bad things might happen.</property>
           <object class="GtkEntry" id="open_popover_entry">
             <property name="activates-default">1</property>
             <layout>
-              <property name="left-attach">1</property>
+              <property name="column">1</property>
               <property name="column-span">2</property>
             </layout>
           </object>
@@ -3215,8 +3215,8 @@ bad things might happen.</property>
               </object>
             </child>
             <layout>
-              <property name="left-attach">1</property>
-              <property name="top-attach">2</property>
+              <property name="column">1</property>
+              <property name="row">2</property>
               <property name="column-span">2</property>
             </layout>
           </object>
@@ -3228,8 +3228,8 @@ bad things might happen.</property>
             <property name="menu-model">gear_menu</property>
             <property name="tooltip-text">This is a menu button</property>
             <layout>
-              <property name="left-attach">1</property>
-              <property name="top-attach">3</property>
+              <property name="column">1</property>
+              <property name="row">3</property>
             </layout>
           </object>
         </child>
@@ -3242,8 +3242,8 @@ bad things might happen.</property>
               <class name="suggested-action"/>
             </style>
             <layout>
-              <property name="left-attach">2</property>
-              <property name="top-attach">3</property>
+              <property name="column">2</property>
+              <property name="row">3</property>
             </layout>
           </object>
         </child>

@@ -14,8 +14,8 @@
               <attribute name="foreground" value="#ffff00000000"></attribute>
             </attributes>
             <layout>
-              <property name="left_attach">0</property>
-              <property name="top_attach">0</property>
+              <property name="column">0</property>
+              <property name="row">0</property>
             </layout>
           </object>
         </child>
@@ -27,8 +27,8 @@
               <attribute name="foreground" value="#ffffffff0000"></attribute>
             </attributes>
             <layout>
-              <property name="left_attach">1</property>
-              <property name="top_attach">0</property>
+              <property name="column">1</property>
+              <property name="row">0</property>
             </layout>
           </object>
         </child>
@@ -40,8 +40,8 @@
               <attribute name="foreground" value="#ffff00000000"></attribute>
             </attributes>
             <layout>
-              <property name="left_attach">2</property>
-              <property name="top_attach">0</property>
+              <property name="column">2</property>
+              <property name="row">0</property>
             </layout>
           </object>
         </child>
@@ -53,8 +53,8 @@
               <attribute name="foreground" value="#ffff00000000"></attribute>
             </attributes>
             <layout>
-              <property name="left_attach">4</property>
-              <property name="top_attach">0</property>
+              <property name="column">4</property>
+              <property name="row">0</property>
             </layout>
           </object>
         </child>
@@ -66,8 +66,8 @@
               <attribute name="foreground" value="#ffff00000000"></attribute>
             </attributes>
             <layout>
-              <property name="left_attach">6</property>
-              <property name="top_attach">0</property>
+              <property name="column">6</property>
+              <property name="row">0</property>
             </layout>
           </object>
         </child>
@@ -79,8 +79,8 @@
               <attribute name="foreground" value="#ffff00000000"></attribute>
             </attributes>
             <layout>
-              <property name="left_attach">1</property>
-              <property name="top_attach">1</property>
+              <property name="column">1</property>
+              <property name="row">1</property>
             </layout>
           </object>
         </child>
@@ -92,8 +92,8 @@
               <attribute name="foreground" value="#ffff00000000"></attribute>
             </attributes>
             <layout>
-              <property name="left_attach">3</property>
-              <property name="top_attach">1</property>
+              <property name="column">3</property>
+              <property name="row">1</property>
             </layout>
           </object>
         </child>
@@ -105,8 +105,8 @@
               <attribute name="foreground" value="#ffff00000000"></attribute>
             </attributes>
             <layout>
-              <property name="left_attach">5</property>
-              <property name="top_attach">1</property>
+              <property name="column">5</property>
+              <property name="row">1</property>
             </layout>
           </object>
         </child>
@@ -118,8 +118,8 @@
               <attribute name="foreground" value="#ffff00000000"></attribute>
             </attributes>
             <layout>
-              <property name="left_attach">7</property>
-              <property name="top_attach">1</property>
+              <property name="column">7</property>
+              <property name="row">1</property>
             </layout>
           </object>
         </child>
@@ -131,8 +131,8 @@
               <attribute name="foreground" value="#ffff00000000"></attribute>
             </attributes>
             <layout>
-              <property name="left_attach">0</property>
-              <property name="top_attach">2</property>
+              <property name="column">0</property>
+              <property name="row">2</property>
             </layout>
           </object>
         </child>
@@ -144,8 +144,8 @@
               <attribute name="foreground" value="#ffff00000000"></attribute>
             </attributes>
             <layout>
-              <property name="left_attach">3</property>
-              <property name="top_attach">2</property>
+              <property name="column">3</property>
+              <property name="row">2</property>
             </layout>
           </object>
         </child>
@@ -157,8 +157,8 @@
               <attribute name="foreground" value="#ffff00000000"></attribute>
             </attributes>
             <layout>
-              <property name="left_attach">4</property>
-              <property name="top_attach">2</property>
+              <property name="column">4</property>
+              <property name="row">2</property>
             </layout>
           </object>
         </child>
@@ -170,8 +170,8 @@
               <attribute name="foreground" value="#ffff00000000"></attribute>
             </attributes>
             <layout>
-              <property name="left_attach">7</property>
-              <property name="top_attach">2</property>
+              <property name="column">7</property>
+              <property name="row">2</property>
             </layout>
           </object>
         </child>
@@ -183,8 +183,8 @@
               <attribute name="foreground" value="#ffff00000000"></attribute>
             </attributes>
             <layout>
-              <property name="left_attach">1</property>
-              <property name="top_attach">3</property>
+              <property name="column">1</property>
+              <property name="row">3</property>
             </layout>
           </object>
         </child>
@@ -196,8 +196,8 @@
               <attribute name="foreground" value="#ffff00000000"></attribute>
             </attributes>
             <layout>
-              <property name="left_attach">2</property>
-              <property name="top_attach">3</property>
+              <property name="column">2</property>
+              <property name="row">3</property>
             </layout>
           </object>
         </child>
@@ -209,8 +209,8 @@
               <attribute name="foreground" value="#ffff00000000"></attribute>
             </attributes>
             <layout>
-              <property name="left_attach">5</property>
-              <property name="top_attach">3</property>
+              <property name="column">5</property>
+              <property name="row">3</property>
             </layout>
           </object>
         </child>
@@ -222,8 +222,8 @@
               <attribute name="foreground" value="#ffff00000000"></attribute>
             </attributes>
             <layout>
-              <property name="left_attach">6</property>
-              <property name="top_attach">3</property>
+              <property name="column">6</property>
+              <property name="row">3</property>
             </layout>
           </object>
         </child>
@@ -235,8 +235,8 @@
               <attribute name="foreground" value="#ffffffff0000"></attribute>
             </attributes>
             <layout>
-              <property name="left_attach">3</property>
-              <property name="top_attach">0</property>
+              <property name="column">3</property>
+              <property name="row">0</property>
             </layout>
           </object>
         </child>
@@ -248,8 +248,8 @@
               <attribute name="foreground" value="#ffffffff0000"></attribute>
             </attributes>
             <layout>
-              <property name="left_attach">0</property>
-              <property name="top_attach">1</property>
+              <property name="column">0</property>
+              <property name="row">1</property>
             </layout>
           </object>
         </child>
@@ -261,8 +261,8 @@
               <attribute name="foreground" value="#ffffffff0000"></attribute>
             </attributes>
             <layout>
-              <property name="left_attach">5</property>
-              <property name="top_attach">0</property>
+              <property name="column">5</property>
+              <property name="row">0</property>
             </layout>
           </object>
         </child>
@@ -274,8 +274,8 @@
               <attribute name="foreground" value="#ffffffff0000"></attribute>
             </attributes>
             <layout>
-              <property name="left_attach">6</property>
-              <property name="top_attach">1</property>
+              <property name="column">6</property>
+              <property name="row">1</property>
             </layout>
           </object>
         </child>
@@ -287,8 +287,8 @@
               <attribute name="foreground" value="#ffffffff0000"></attribute>
             </attributes>
             <layout>
-              <property name="left_attach">7</property>
-              <property name="top_attach">0</property>
+              <property name="column">7</property>
+              <property name="row">0</property>
             </layout>
           </object>
         </child>
@@ -300,8 +300,8 @@
               <attribute name="foreground" value="#ffffffff0000"></attribute>
             </attributes>
             <layout>
-              <property name="left_attach">6</property>
-              <property name="top_attach">2</property>
+              <property name="column">6</property>
+              <property name="row">2</property>
             </layout>
           </object>
         </child>
@@ -313,8 +313,8 @@
               <attribute name="foreground" value="#ffffffff0000"></attribute>
             </attributes>
             <layout>
-              <property name="left_attach">4</property>
-              <property name="top_attach">1</property>
+              <property name="column">4</property>
+              <property name="row">1</property>
             </layout>
           </object>
         </child>
@@ -326,8 +326,8 @@
               <attribute name="foreground" value="#ffffffff0000"></attribute>
             </attributes>
             <layout>
-              <property name="left_attach">2</property>
-              <property name="top_attach">1</property>
+              <property name="column">2</property>
+              <property name="row">1</property>
             </layout>
           </object>
         </child>
@@ -339,8 +339,8 @@
               <attribute name="foreground" value="#ffffffff0000"></attribute>
             </attributes>
             <layout>
-              <property name="left_attach">1</property>
-              <property name="top_attach">2</property>
+              <property name="column">1</property>
+              <property name="row">2</property>
             </layout>
           </object>
         </child>
@@ -352,8 +352,8 @@
               <attribute name="foreground" value="#ffffffff0000"></attribute>
             </attributes>
             <layout>
-              <property name="left_attach">0</property>
-              <property name="top_attach">3</property>
+              <property name="column">0</property>
+              <property name="row">3</property>
             </layout>
           </object>
         </child>
@@ -365,8 +365,8 @@
               <attribute name="foreground" value="#ffffffff0000"></attribute>
             </attributes>
             <layout>
-              <property name="left_attach">2</property>
-              <property name="top_attach">2</property>
+              <property name="column">2</property>
+              <property name="row">2</property>
             </layout>
           </object>
         </child>
@@ -378,8 +378,8 @@
               <attribute name="foreground" value="#ffffffff0000"></attribute>
             </attributes>
             <layout>
-              <property name="left_attach">3</property>
-              <property name="top_attach">3</property>
+              <property name="column">3</property>
+              <property name="row">3</property>
             </layout>
           </object>
         </child>
@@ -391,8 +391,8 @@
               <attribute name="foreground" value="#ffffffff0000"></attribute>
             </attributes>
             <layout>
-              <property name="left_attach">4</property>
-              <property name="top_attach">3</property>
+              <property name="column">4</property>
+              <property name="row">3</property>
             </layout>
           </object>
         </child>
@@ -404,8 +404,8 @@
               <attribute name="foreground" value="#ffffffff0000"></attribute>
             </attributes>
             <layout>
-              <property name="left_attach">5</property>
-              <property name="top_attach">2</property>
+              <property name="column">5</property>
+              <property name="row">2</property>
             </layout>
           </object>
         </child>
@@ -417,8 +417,8 @@
               <attribute name="foreground" value="#ffffffff0000"></attribute>
             </attributes>
             <layout>
-              <property name="left_attach">7</property>
-              <property name="top_attach">3</property>
+              <property name="column">7</property>
+              <property name="row">3</property>
             </layout>
           </object>
         </child>

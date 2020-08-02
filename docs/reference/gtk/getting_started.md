@@ -649,8 +649,8 @@ Create a new file with the following content named `builder.ui`.
           <object id="button1" class="GtkButton">
             <property name="label">Button 1</property>
             <layout>
-              <property name="left-attach">0</property>
-              <property name="top-attach">0</property>
+              <property name="column">0</property>
+              <property name="row">0</property>
             </layout>
           </object>
         </child>
@@ -658,8 +658,8 @@ Create a new file with the following content named `builder.ui`.
           <object id="button2" class="GtkButton">
             <property name="label">Button 2</property>
             <layout>
-              <property name="left-attach">1</property>
-              <property name="top-attach">0</property>
+              <property name="column">1</property>
+              <property name="row">0</property>
             </layout>
           </object>
         </child>
@@ -667,8 +667,8 @@ Create a new file with the following content named `builder.ui`.
           <object id="quit" class="GtkButton">
             <property name="label">Quit</property>
             <layout>
-              <property name="left-attach">0</property>
-              <property name="top-attach">1</property>
+              <property name="column">0</property>
+              <property name="row">1</property>
               <property name="column-span">2</property>
             </layout>
           </object>
@@ -1266,16 +1266,16 @@ Lets start with the template.
                 <property name="mnemonic-widget">font</property>
                 <property name="xalign">1</property>
                 <layout>
-                  <property name="left-attach">0</property>
-                  <property name="top-attach">0</property>
+                  <property name="column">0</property>
+                  <property name="row">0</property>
                 </layout>
               </object>
             </child>
             <child>
               <object class="GtkFontButton" id="font">
                 <layout>
-                  <property name="left-attach">1</property>
-                  <property name="top-attach">0</property>
+                  <property name="column">1</property>
+                  <property name="row">0</property>
                 </layout>
               </object>
             </child>
@@ -1286,8 +1286,8 @@ Lets start with the template.
                 <property name="mnemonic-widget">transition</property>
                 <property name="xalign">1</property>
                 <layout>
-                  <property name="left-attach">0</property>
-                  <property name="top-attach">1</property>
+                  <property name="column">0</property>
+                  <property name="row">1</property>
                 </layout>
               </object>
             </child>
@@ -1299,8 +1299,8 @@ Lets start with the template.
                   <item translatable="yes" id="slide-left-right">Slide</item>
                 </items>
                 <layout>
-                  <property name="left-attach">1</property>
-                  <property name="top-attach">1</property>
+                  <property name="column">1</property>
+                  <property name="row">1</property>
                 </layout>
               </object>
             </child>

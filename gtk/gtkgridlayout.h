@@ -78,15 +78,15 @@ GDK_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (GtkGridLayoutChild, gtk_grid_layout_child, GTK, GRID_LAYOUT_CHILD, GtkLayoutChild)
 
 GDK_AVAILABLE_IN_ALL
-void                    gtk_grid_layout_child_set_top_attach            (GtkGridLayoutChild  *child,
-                                                                         int                  attach);
+void                    gtk_grid_layout_child_set_row                   (GtkGridLayoutChild  *child,
+                                                                         int                  row);
 GDK_AVAILABLE_IN_ALL
-int                     gtk_grid_layout_child_get_top_attach            (GtkGridLayoutChild  *child);
+int                     gtk_grid_layout_child_get_row                   (GtkGridLayoutChild  *child);
 GDK_AVAILABLE_IN_ALL
-void                    gtk_grid_layout_child_set_left_attach           (GtkGridLayoutChild  *child,
-                                                                         int                  attach);
+void                    gtk_grid_layout_child_set_column                (GtkGridLayoutChild  *child,
+                                                                         int                  column);
 GDK_AVAILABLE_IN_ALL
-int                     gtk_grid_layout_child_get_left_attach           (GtkGridLayoutChild  *child);
+int                     gtk_grid_layout_child_get_column                (GtkGridLayoutChild  *child);
 GDK_AVAILABLE_IN_ALL
 void                    gtk_grid_layout_child_set_column_span           (GtkGridLayoutChild  *child,
                                                                          int                  span);

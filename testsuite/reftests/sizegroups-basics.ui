@@ -11,8 +11,8 @@
             <child>
               <object class="GtkLabel" id="label1">
                 <layout>
-                  <property name="top-attach">0</property>
-                  <property name="left-attach">0</property>
+                  <property name="row">0</property>
+                  <property name="column">0</property>
                 </layout>
               </object>
             </child>
@@ -20,8 +20,8 @@
               <object class="GtkLabel" id="label2">
                 <property name="label" translatable="yes">medium</property>
                 <layout>
-                  <property name="top-attach">1</property>
-                  <property name="left-attach">1</property>
+                  <property name="row">1</property>
+                  <property name="column">1</property>
                 </layout>
               </object>
             </child>
@@ -30,8 +30,8 @@
                 <property name="label" translatable="yes">wrap this very long text please or I&apos;ll need to write even more</property>
                 <property name="wrap">1</property>
                 <layout>
-                  <property name="top-attach">2</property>
-                  <property name="left-attach">2</property>
+                  <property name="row">2</property>
+                  <property name="column">2</property>
                 </layout>
               </object>
             </child>

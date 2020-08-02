@@ -12,8 +12,8 @@
           <object class="GtkLabel" id="label2">
             <property name="label" translatable="yes">wrap</property>
             <layout>
-              <property name="left_attach">0</property>
-              <property name="top_attach">0</property>
+              <property name="column">0</property>
+              <property name="row">0</property>
             </layout>
           </object>
         </child>
@@ -21,8 +21,8 @@
           <object class="GtkLabel" id="label3">
             <property name="label" translatable="yes">ellipsize</property>
             <layout>
-              <property name="left_attach">1</property>
-              <property name="top_attach">0</property>
+              <property name="column">1</property>
+              <property name="row">0</property>
             </layout>
           </object>
         </child>
@@ -30,8 +30,8 @@
           <object class="GtkLabel" id="label4">
             <property name="label" translatable="yes">width-chars</property>
             <layout>
-              <property name="left_attach">2</property>
-              <property name="top_attach">0</property>
+              <property name="column">2</property>
+              <property name="row">0</property>
             </layout>
           </object>
         </child>
@@ -39,8 +39,8 @@
           <object class="GtkLabel" id="label5">
             <property name="label" translatable="yes">max-width-chars</property>
             <layout>
-              <property name="left_attach">3</property>
-              <property name="top_attach">0</property>
+              <property name="column">3</property>
+              <property name="row">0</property>
             </layout>
           </object>
         </child>
@@ -48,8 +48,8 @@
           <object class="GtkLabel" id="label6">
             <property name="label" translatable="yes">results</property>
             <layout>
-              <property name="left_attach">4</property>
-              <property name="top_attach">0</property>
+              <property name="column">4</property>
+              <property name="row">0</property>
             </layout>
           </object>
         </child>
@@ -57,8 +57,8 @@
           <object class="GtkLabel" id="wrap1">
             <property name="label" translatable="yes">False</property>
             <layout>
-              <property name="left_attach">0</property>
-              <property name="top_attach">1</property>
+              <property name="column">0</property>
+              <property name="row">1</property>
             </layout>
           </object>
         </child>
@@ -66,8 +66,8 @@
           <object class="GtkLabel" id="ellipsize1">
             <property name="label" translatable="yes">none</property>
             <layout>
-              <property name="left_attach">1</property>
-              <property name="top_attach">1</property>
+              <property name="column">1</property>
+              <property name="row">1</property>
             </layout>
           </object>
         </child>
@@ -75,8 +75,8 @@
           <object class="GtkLabel" id="width_chars1">
             <property name="label" translatable="yes">-1</property>
             <layout>
-              <property name="left_attach">2</property>
-              <property name="top_attach">1</property>
+              <property name="column">2</property>
+              <property name="row">1</property>
             </layout>
           </object>
         </child>
@@ -84,8 +84,8 @@
           <object class="GtkLabel" id="max_width_chars1">
             <property name="label" translatable="yes">-1</property>
             <layout>
-              <property name="left_attach">3</property>
-              <property name="top_attach">1</property>
+              <property name="column">3</property>
+              <property name="row">1</property>
             </layout>
           </object>
         </child>
@@ -155,8 +155,8 @@
               </object>
             </child>
             <layout>
-              <property name="left_attach">4</property>
-              <property name="top_attach">1</property>
+              <property name="column">4</property>
+              <property name="row">1</property>
             </layout>
           </object>
         </child>
@@ -164,8 +164,8 @@
           <object class="GtkLabel" id="wrap2">
             <property name="label" translatable="yes">True</property>
             <layout>
-              <property name="left_attach">0</property>
-              <property name="top_attach">2</property>
+              <property name="column">0</property>
+              <property name="row">2</property>
             </layout>
           </object>
         </child>
@@ -173,8 +173,8 @@
           <object class="GtkLabel" id="ellipsize2">
             <property name="label" translatable="yes">none</property>
             <layout>
-              <property name="left_attach">1</property>
-              <property name="top_attach">2</property>
+              <property name="column">1</property>
+              <property name="row">2</property>
             </layout>
           </object>
         </child>
@@ -182,8 +182,8 @@
           <object class="GtkLabel" id="width_chars2">
             <property name="label" translatable="yes">-1</property>
             <layout>
-              <property name="left_attach">2</property>
-              <property name="top_attach">2</property>
+              <property name="column">2</property>
+              <property name="row">2</property>
             </layout>
           </object>
         </child>
@@ -191,8 +191,8 @@
           <object class="GtkLabel" id="max_width_chars2">
             <property name="label" translatable="yes">-1</property>
             <layout>
-              <property name="left_attach">3</property>
-              <property name="top_attach">2</property>
+              <property name="column">3</property>
+              <property name="row">2</property>
             </layout>
           </object>
         </child>
@@ -266,8 +266,8 @@
               </object>
             </child>
             <layout>
-              <property name="left_attach">4</property>
-              <property name="top_attach">2</property>
+              <property name="column">4</property>
+              <property name="row">2</property>
             </layout>
           </object>
         </child>
@@ -275,8 +275,8 @@
           <object class="GtkLabel" id="wrap3">
             <property name="label" translatable="yes">False</property>
             <layout>
-              <property name="left_attach">0</property>
-              <property name="top_attach">3</property>
+              <property name="column">0</property>
+              <property name="row">3</property>
             </layout>
           </object>
         </child>
@@ -284,8 +284,8 @@
           <object class="GtkLabel" id="ellipsize3">
             <property name="label" translatable="yes">end</property>
             <layout>
-              <property name="left_attach">1</property>
-              <property name="top_attach">3</property>
+              <property name="column">1</property>
+              <property name="row">3</property>
             </layout>
           </object>
         </child>
@@ -293,8 +293,8 @@
           <object class="GtkLabel" id="width_chars3">
             <property name="label" translatable="yes">-1</property>
             <layout>
-              <property name="left_attach">2</property>
-              <property name="top_attach">3</property>
+              <property name="column">2</property>
+              <property name="row">3</property>
             </layout>
           </object>
         </child>
@@ -302,8 +302,8 @@
           <object class="GtkLabel" id="max_width_chars3">
             <property name="label" translatable="yes">-1</property>
             <layout>
-              <property name="left_attach">3</property>
-              <property name="top_attach">3</property>
+              <property name="column">3</property>
+              <property name="row">3</property>
             </layout>
           </object>
         </child>
@@ -377,8 +377,8 @@
               </object>
             </child>
             <layout>
-              <property name="left_attach">4</property>
-              <property name="top_attach">3</property>
+              <property name="column">4</property>
+              <property name="row">3</property>
             </layout>
           </object>
         </child>
@@ -386,8 +386,8 @@
           <object class="GtkLabel" id="wrap4">
             <property name="label" translatable="yes">True</property>
             <layout>
-              <property name="left_attach">0</property>
-              <property name="top_attach">4</property>
+              <property name="column">0</property>
+              <property name="row">4</property>
             </layout>
           </object>
         </child>
@@ -395,8 +395,8 @@
           <object class="GtkLabel" id="ellipsize4">
             <property name="label" translatable="yes">end</property>
             <layout>
-              <property name="left_attach">1</property>
-              <property name="top_attach">4</property>
+              <property name="column">1</property>
+              <property name="row">4</property>
             </layout>
           </object>
         </child>
@@ -404,8 +404,8 @@
           <object class="GtkLabel" id="width_chars4">
             <property name="label" translatable="yes">-1</property>
             <layout>
-              <property name="left_attach">2</property>
-              <property name="top_attach">4</property>
+              <property name="column">2</property>
+              <property name="row">4</property>
             </layout>
           </object>
         </child>
@@ -413,8 +413,8 @@
           <object class="GtkLabel" id="max_width_chars4">
             <property name="label" translatable="yes">-1</property>
             <layout>
-              <property name="left_attach">3</property>
-              <property name="top_attach">4</property>
+              <property name="column">3</property>
+              <property name="row">4</property>
             </layout>
           </object>
         </child>
@@ -492,8 +492,8 @@
               </object>
             </child>
             <layout>
-              <property name="left_attach">4</property>
-              <property name="top_attach">4</property>
+              <property name="column">4</property>
+              <property name="row">4</property>
             </layout>
           </object>
         </child>
@@ -501,8 +501,8 @@
           <object class="GtkLabel" id="wrap5">
             <property name="label" translatable="yes">False</property>
             <layout>
-              <property name="left_attach">0</property>
-              <property name="top_attach">5</property>
+              <property name="column">0</property>
+              <property name="row">5</property>
             </layout>
           </object>
         </child>
@@ -510,8 +510,8 @@
           <object class="GtkLabel" id="ellipsize5">
             <property name="label" translatable="yes">none</property>
             <layout>
-              <property name="left_attach">1</property>
-              <property name="top_attach">5</property>
+              <property name="column">1</property>
+              <property name="row">5</property>
             </layout>
           </object>
         </child>
@@ -519,8 +519,8 @@
           <object class="GtkLabel" id="width_chars5">
             <property name="label" translatable="yes">4</property>
             <layout>
-              <property name="left_attach">2</property>
-              <property name="top_attach">5</property>
+              <property name="column">2</property>
+              <property name="row">5</property>
             </layout>
           </object>
         </child>
@@ -528,8 +528,8 @@
           <object class="GtkLabel" id="max_width_chars5">
             <property name="label" translatable="yes">-1</property>
             <layout>
-              <property name="left_attach">3</property>
-              <property name="top_attach">5</property>
+              <property name="column">3</property>
+              <property name="row">5</property>
             </layout>
           </object>
         </child>
@@ -603,8 +603,8 @@
               </object>
             </child>
             <layout>
-              <property name="left_attach">4</property>
-              <property name="top_attach">5</property>
+              <property name="column">4</property>
+              <property name="row">5</property>
             </layout>
           </object>
         </child>
@@ -612,8 +612,8 @@
           <object class="GtkLabel" id="wrap6">
             <property name="label" translatable="yes">True</property>
             <layout>
-              <property name="left_attach">0</property>
-              <property name="top_attach">6</property>
+              <property name="column">0</property>
+              <property name="row">6</property>
             </layout>
           </object>
         </child>
@@ -621,8 +621,8 @@
           <object class="GtkLabel" id="ellipsize6">
             <property name="label" translatable="yes">none</property>
             <layout>
-              <property name="left_attach">1</property>
-              <property name="top_attach">6</property>
+              <property name="column">1</property>
+              <property name="row">6</property>
             </layout>
           </object>
         </child>
@@ -630,8 +630,8 @@
           <object class="GtkLabel" id="width_chars6">
             <property name="label" translatable="yes">4</property>
             <layout>
-              <property name="left_attach">2</property>
-              <property name="top_attach">6</property>
+              <property name="column">2</property>
+              <property name="row">6</property>
             </layout>
           </object>
         </child>
@@ -639,8 +639,8 @@
           <object class="GtkLabel" id="max_width_chars6">
             <property name="label" translatable="yes">-1</property>
             <layout>
-              <property name="left_attach">3</property>
-              <property name="top_attach">6</property>
+              <property name="column">3</property>
+              <property name="row">6</property>
             </layout>
           </object>
         </child>
@@ -718,8 +718,8 @@
               </object>
             </child>
             <layout>
-              <property name="left_attach">4</property>
-              <property name="top_attach">6</property>
+              <property name="column">4</property>
+              <property name="row">6</property>
             </layout>
           </object>
         </child>
@@ -727,8 +727,8 @@
           <object class="GtkLabel" id="wrap7">
             <property name="label" translatable="yes">False</property>
             <layout>
-              <property name="left_attach">0</property>
-              <property name="top_attach">7</property>
+              <property name="column">0</property>
+              <property name="row">7</property>
             </layout>
           </object>
         </child>
@@ -736,8 +736,8 @@
           <object class="GtkLabel" id="ellipsize7">
             <property name="label" translatable="yes">end</property>
             <layout>
-              <property name="left_attach">1</property>
-              <property name="top_attach">7</property>
+              <property name="column">1</property>
+              <property name="row">7</property>
             </layout>
           </object>
         </child>
@@ -745,8 +745,8 @@
           <object class="GtkLabel" id="width_chars7">
             <property name="label" translatable="yes">4</property>
             <layout>
-              <property name="left_attach">2</property>
-              <property name="top_attach">7</property>
+              <property name="column">2</property>
+              <property name="row">7</property>
             </layout>
           </object>
         </child>
@@ -754,8 +754,8 @@
           <object class="GtkLabel" id="max_width_chars7">
             <property name="label" translatable="yes">-1</property>
             <layout>
-              <property name="left_attach">3</property>
-              <property name="top_attach">7</property>
+              <property name="column">3</property>
+              <property name="row">7</property>
             </layout>
           </object>
         </child>
@@ -833,8 +833,8 @@
               </object>
             </child>
             <layout>
-              <property name="left_attach">4</property>
-              <property name="top_attach">7</property>
+              <property name="column">4</property>
+              <property name="row">7</property>
             </layout>
           </object>
         </child>
@@ -842,8 +842,8 @@
           <object class="GtkLabel" id="wrap8">
             <property name="label" translatable="yes">True</property>
             <layout>
-              <property name="left_attach">0</property>
-              <property name="top_attach">8</property>
+              <property name="column">0</property>
+              <property name="row">8</property>
             </layout>
           </object>
         </child>
@@ -851,8 +851,8 @@
           <object class="GtkLabel" id="ellipsize8">
             <property name="label" translatable="yes">end</property>
             <layout>
-              <property name="left_attach">1</property>
-              <property name="top_attach">8</property>
+              <property name="column">1</property>
+              <property name="row">8</property>
             </layout>
           </object>
         </child>
@@ -860,8 +860,8 @@
           <object class="GtkLabel" id="width_chars8">
             <property name="label" translatable="yes">4</property>
             <layout>
-              <property name="left_attach">2</property>
-              <property name="top_attach">8</property>
+              <property name="column">2</property>
+              <property name="row">8</property>
             </layout>
           </object>
         </child>
@@ -869,8 +869,8 @@
           <object class="GtkLabel" id="max_width_chars8">
             <property name="label" translatable="yes">-1</property>
             <layout>
-              <property name="left_attach">3</property>
-              <property name="top_attach">8</property>
+              <property name="column">3</property>
+              <property name="row">8</property>
             </layout>
           </object>
         </child>
@@ -952,8 +952,8 @@
               </object>
             </child>
             <layout>
-              <property name="left_attach">4</property>
-              <property name="top_attach">8</property>
+              <property name="column">4</property>
+              <property name="row">8</property>
             </layout>
           </object>
         </child>
@@ -961,8 +961,8 @@
           <object class="GtkLabel" id="wrap9">
             <property name="label" translatable="yes">False</property>
             <layout>
-              <property name="left_attach">0</property>
-              <property name="top_attach">9</property>
+              <property name="column">0</property>
+              <property name="row">9</property>
             </layout>
           </object>
         </child>
@@ -970,8 +970,8 @@
           <object class="GtkLabel" id="ellipsize9">
             <property name="label" translatable="yes">none</property>
             <layout>
-              <property name="left_attach">1</property>
-              <property name="top_attach">9</property>
+              <property name="column">1</property>
+              <property name="row">9</property>
             </layout>
           </object>
         </child>
@@ -979,8 +979,8 @@
           <object class="GtkLabel" id="width_chars9">
             <property name="label" translatable="yes">8</property>
             <layout>
-              <property name="left_attach">2</property>
-              <property name="top_attach">9</property>
+              <property name="column">2</property>
+              <property name="row">9</property>
             </layout>
           </object>
         </child>
@@ -988,8 +988,8 @@
           <object class="GtkLabel" id="max_width_chars9">
             <property name="label" translatable="yes">-1</property>
             <layout>
-              <property name="left_attach">3</property>
-              <property name="top_attach">9</property>
+              <property name="column">3</property>
+              <property name="row">9</property>
             </layout>
           </object>
         </child>
@@ -1063,8 +1063,8 @@
               </object>
             </child>
             <layout>
-              <property name="left_attach">4</property>
-              <property name="top_attach">9</property>
+              <property name="column">4</property>
+              <property name="row">9</property>
             </layout>
           </object>
         </child>
@@ -1072,8 +1072,8 @@
           <object class="GtkLabel" id="wrap10">
             <property name="label" translatable="yes">True</property>
             <layout>
-              <property name="left_attach">0</property>
-              <property name="top_attach">10</property>
+              <property name="column">0</property>
+              <property name="row">10</property>
             </layout>
           </object>
         </child>
@@ -1081,8 +1081,8 @@
           <object class="GtkLabel" id="ellipsize10">
             <property name="label" translatable="yes">none</property>
             <layout>
-              <property name="left_attach">1</property>
-              <property name="top_attach">10</property>
+              <property name="column">1</property>
+              <property name="row">10</property>
             </layout>
           </object>
         </child>
@@ -1090,8 +1090,8 @@
           <object class="GtkLabel" id="width_chars10">
             <property name="label" translatable="yes">8</property>
             <layout>
-              <property name="left_attach">2</property>
-              <property name="top_attach">10</property>
+              <property name="column">2</property>
+              <property name="row">10</property>
             </layout>
           </object>
         </child>
@@ -1099,8 +1099,8 @@
           <object class="GtkLabel" id="max_width_chars10">
             <property name="label" translatable="yes">-1</property>
             <layout>
-              <property name="left_attach">3</property>
-              <property name="top_attach">10</property>
+              <property name="column">3</property>
+              <property name="row">10</property>
             </layout>
           </object>
         </child>
@@ -1178,8 +1178,8 @@
               </object>
             </child>
             <layout>
-              <property name="left_attach">4</property>
-              <property name="top_attach">10</property>
+              <property name="column">4</property>
+              <property name="row">10</property>
             </layout>
           </object>
         </child>
@@ -1187,8 +1187,8 @@
           <object class="GtkLabel" id="wrap11">
             <property name="label" translatable="yes">False</property>
             <layout>
-              <property name="left_attach">0</property>
-              <property name="top_attach">11</property>
+              <property name="column">0</property>
+              <property name="row">11</property>
             </layout>
           </object>
         </child>
@@ -1196,8 +1196,8 @@
           <object class="GtkLabel" id="ellipsize11">
             <property name="label" translatable="yes">end</property>
             <layout>
-              <property name="left_attach">1</property>
-              <property name="top_attach">11</property>
+              <property name="column">1</property>
+              <property name="row">11</property>
             </layout>
           </object>
         </child>
@@ -1205,8 +1205,8 @@
           <object class="GtkLabel" id="width_chars11">
             <property name="label" translatable="yes">8</property>
             <layout>
-              <property name="left_attach">2</property>
-              <property name="top_attach">11</property>
+              <property name="column">2</property>
+              <property name="row">11</property>
             </layout>
           </object>
         </child>
@@ -1214,8 +1214,8 @@
           <object class="GtkLabel" id="max_width_chars11">
             <property name="label" translatable="yes">-1</property>
             <layout>
-              <property name="left_attach">3</property>
-              <property name="top_attach">11</property>
+              <property name="column">3</property>
+              <property name="row">11</property>
             </layout>
           </object>
         </child>
@@ -1293,8 +1293,8 @@
               </object>
             </child>
             <layout>
-              <property name="left_attach">4</property>
-              <property name="top_attach">11</property>
+              <property name="column">4</property>
+              <property name="row">11</property>
             </layout>
           </object>
         </child>
@@ -1302,8 +1302,8 @@
           <object class="GtkLabel" id="wrap12">
             <property name="label" translatable="yes">True</property>
             <layout>
-              <property name="left_attach">0</property>
-              <property name="top_attach">12</property>
+              <property name="column">0</property>
+              <property name="row">12</property>
             </layout>
           </object>
         </child>
@@ -1311,8 +1311,8 @@
           <object class="GtkLabel" id="ellipsize12">
             <property name="label" translatable="yes">end</property>
             <layout>
-              <property name="left_attach">1</property>
-              <property name="top_attach">12</property>
+              <property name="column">1</property>
+              <property name="row">12</property>
             </layout>
           </object>
         </child>
@@ -1320,8 +1320,8 @@
           <object class="GtkLabel" id="width_chars12">
             <property name="label" translatable="yes">8</property>
             <layout>
-              <property name="left_attach">2</property>
-              <property name="top_attach">12</property>
+              <property name="column">2</property>
+              <property name="row">12</property>
             </layout>
           </object>
         </child>
@@ -1329,8 +1329,8 @@
           <object class="GtkLabel" id="max_width_chars12">
             <property name="label" translatable="yes">-1</property>
             <layout>
-              <property name="left_attach">3</property>
-              <property name="top_attach">12</property>
+              <property name="column">3</property>
+              <property name="row">12</property>
             </layout>
           </object>
         </child>
@@ -1412,8 +1412,8 @@
               </object>
             </child>
             <layout>
-              <property name="left_attach">4</property>
-              <property name="top_attach">12</property>
+              <property name="column">4</property>
+              <property name="row">12</property>
             </layout>
           </object>
         </child>
@@ -1421,8 +1421,8 @@
           <object class="GtkLabel" id="wrap13">
             <property name="label" translatable="yes">False</property>
             <layout>
-              <property name="left_attach">0</property>
-              <property name="top_attach">13</property>
+              <property name="column">0</property>
+              <property name="row">13</property>
             </layout>
           </object>
         </child>
@@ -1430,8 +1430,8 @@
           <object class="GtkLabel" id="ellipsize13">
             <property name="label" translatable="yes">none</property>
             <layout>
-              <property name="left_attach">1</property>
-              <property name="top_attach">13</property>
+              <property name="column">1</property>
+              <property name="row">13</property>
             </layout>
           </object>
         </child>
@@ -1439,8 +1439,8 @@
           <object class="GtkLabel" id="width_chars13">
             <property name="label" translatable="yes">12</property>
             <layout>
-              <property name="left_attach">2</property>
-              <property name="top_attach">13</property>
+              <property name="column">2</property>
+              <property name="row">13</property>
             </layout>
           </object>
         </child>
@@ -1448,8 +1448,8 @@
           <object class="GtkLabel" id="max_width_chars13">
             <property name="label" translatable="yes">-1</property>
             <layout>
-              <property name="left_attach">3</property>
-              <property name="top_attach">13</property>
+              <property name="column">3</property>
+              <property name="row">13</property>
             </layout>
           </object>
         </child>
@@ -1523,8 +1523,8 @@
               </object>
             </child>
             <layout>
-              <property name="left_attach">4</property>
-              <property name="top_attach">13</property>
+              <property name="column">4</property>
+              <property name="row">13</property>
             </layout>
           </object>
         </child>
@@ -1532,8 +1532,8 @@
           <object class="GtkLabel" id="wrap14">
             <property name="label" translatable="yes">True</property>
             <layout>
-              <property name="left_attach">0</property>
-              <property name="top_attach">14</property>
+              <property name="column">0</property>
+              <property name="row">14</property>
             </layout>
           </object>
         </child>
@@ -1541,8 +1541,8 @@
           <object class="GtkLabel" id="ellipsize14">
             <property name="label" translatable="yes">none</property>
             <layout>
-              <property name="left_attach">1</property>
-              <property name="top_attach">14</property>
+              <property name="column">1</property>
+              <property name="row">14</property>
             </layout>
           </object>
         </child>
@@ -1550,8 +1550,8 @@
           <object class="GtkLabel" id="width_chars14">
             <property name="label" translatable="yes">12</property>
             <layout>
-              <property name="left_attach">2</property>
-              <property name="top_attach">14</property>
+              <property name="column">2</property>
+              <property name="row">14</property>
             </layout>
           </object>
         </child>
@@ -1559,8 +1559,8 @@
           <object class="GtkLabel" id="max_width_chars14">
             <property name="label" translatable="yes">-1</property>
             <layout>
-              <property name="left_attach">3</property>
-              <property name="top_attach">14</property>
+              <property name="column">3</property>
+              <property name="row">14</property>
             </layout>
           </object>
         </child>
@@ -1638,8 +1638,8 @@
               </object>
             </child>
             <layout>
-              <property name="left_attach">4</property>
-              <property name="top_attach">14</property>
+              <property name="column">4</property>
+              <property name="row">14</property>
             </layout>
           </object>
         </child>
@@ -1647,8 +1647,8 @@
           <object class="GtkLabel" id="wrap15">
             <property name="label" translatable="yes">False</property>
             <layout>
-              <property name="left_attach">0</property>
-              <property name="top_attach">15</property>
+              <property name="column">0</property>
+              <property name="row">15</property>
             </layout>
           </object>
         </child>
@@ -1656,8 +1656,8 @@
           <object class="GtkLabel" id="ellipsize15">
             <property name="label" translatable="yes">end</property>
             <layout>
-              <property name="left_attach">1</property>
-              <property name="top_attach">15</property>
+              <property name="column">1</property>
+              <property name="row">15</property>
             </layout>
           </object>
         </child>
@@ -1665,8 +1665,8 @@
           <object class="GtkLabel" id="width_chars15">
             <property name="label" translatable="yes">12</property>
             <layout>
-              <property name="left_attach">2</property>
-              <property name="top_attach">15</property>
+              <property name="column">2</property>
+              <property name="row">15</property>
             </layout>
           </object>
         </child>
@@ -1674,8 +1674,8 @@
           <object class="GtkLabel" id="max_width_chars15">
             <property name="label" translatable="yes">-1</property>
             <layout>
-              <property name="left_attach">3</property>
-              <property name="top_attach">15</property>
+              <property name="column">3</property>
+              <property name="row">15</property>
             </layout>
           </object>
         </child>
@@ -1753,8 +1753,8 @@
               </object>
             </child>
             <layout>
-              <property name="left_attach">4</property>
-              <property name="top_attach">15</property>
+              <property name="column">4</property>
+              <property name="row">15</property>
             </layout>
           </object>
         </child>
@@ -1762,8 +1762,8 @@
           <object class="GtkLabel" id="wrap16">
             <property name="label" translatable="yes">True</property>
             <layout>
-              <property name="left_attach">0</property>
-              <property name="top_attach">16</property>
+              <property name="column">0</property>
+              <property name="row">16</property>
             </layout>
           </object>
         </child>
@@ -1771,8 +1771,8 @@
           <object class="GtkLabel" id="ellipsize16">
             <property name="label" translatable="yes">end</property>
             <layout>
-              <property name="left_attach">1</property>
-              <property name="top_attach">16</property>
+              <property name="column">1</property>
+              <property name="row">16</property>
             </layout>
           </object>
         </child>
@@ -1780,8 +1780,8 @@
           <object class="GtkLabel" id="width_chars16">
             <property name="label" translatable="yes">12</property>
             <layout>
-              <property name="left_attach">2</property>
-              <property name="top_attach">16</property>
+              <property name="column">2</property>
+              <property name="row">16</property>
             </layout>
           </object>
         </child>
@@ -1789,8 +1789,8 @@
           <object class="GtkLabel" id="max_width_chars16">
             <property name="label" translatable="yes">-1</property>
             <layout>
-              <property name="left_attach">3</property>
-              <property name="top_attach">16</property>
+              <property name="column">3</property>
+              <property name="row">16</property>
             </layout>
           </object>
         </child>
@@ -1872,8 +1872,8 @@
               </object>
             </child>
             <layout>
-              <property name="left_attach">4</property>
-              <property name="top_attach">16</property>
+              <property name="column">4</property>
+              <property name="row">16</property>
             </layout>
           </object>
         </child>
@@ -1881,8 +1881,8 @@
           <object class="GtkLabel" id="wrap17">
             <property name="label" translatable="yes">False</property>
             <layout>
-              <property name="left_attach">0</property>
-              <property name="top_attach">17</property>
+              <property name="column">0</property>
+              <property name="row">17</property>
             </layout>
           </object>
         </child>
@@ -1890,8 +1890,8 @@
           <object class="GtkLabel" id="ellipsize17">
             <property name="label" translatable="yes">none</property>
             <layout>
-              <property name="left_attach">1</property>
-              <property name="top_attach">17</property>
+              <property name="column">1</property>
+              <property name="row">17</property>
             </layout>
           </object>
         </child>
@@ -1899,8 +1899,8 @@
           <object class="GtkLabel" id="width_chars17">
             <property name="label" translatable="yes">-1</property>
             <layout>
-              <property name="left_attach">2</property>
-              <property name="top_attach">17</property>
+              <property name="column">2</property>
+              <property name="row">17</property>
             </layout>
           </object>
         </child>
@@ -1908,8 +1908,8 @@
           <object class="GtkLabel" id="max_width_chars17">
             <property name="label" translatable="yes">4</property>
             <layout>
-              <property name="left_attach">3</property>
-              <property name="top_attach">17</property>
+              <property name="column">3</property>
+              <property name="row">17</property>
             </layout>
           </object>
         </child>
@@ -1983,8 +1983,8 @@
               </object>
             </child>
             <layout>
-              <property name="left_attach">4</property>
-              <property name="top_attach">17</property>
+              <property name="column">4</property>
+              <property name="row">17</property>
             </layout>
           </object>
         </child>
@@ -1992,8 +1992,8 @@
           <object class="GtkLabel" id="wrap18">
             <property name="label" translatable="yes">True</property>
             <layout>
-              <property name="left_attach">0</property>
-              <property name="top_attach">18</property>
+              <property name="column">0</property>
+              <property name="row">18</property>
             </layout>
           </object>
         </child>
@@ -2001,8 +2001,8 @@
           <object class="GtkLabel" id="ellipsize18">
             <property name="label" translatable="yes">none</property>
             <layout>
-              <property name="left_attach">1</property>
-              <property name="top_attach">18</property>
+              <property name="column">1</property>
+              <property name="row">18</property>
             </layout>
           </object>
         </child>
@@ -2010,8 +2010,8 @@
           <object class="GtkLabel" id="width_chars18">
             <property name="label" translatable="yes">-1</property>
             <layout>
-              <property name="left_attach">2</property>
-              <property name="top_attach">18</property>
+              <property name="column">2</property>
+              <property name="row">18</property>
             </layout>
           </object>
         </child>
@@ -2019,8 +2019,8 @@
           <object class="GtkLabel" id="max_width_chars18">
             <property name="label" translatable="yes">4</property>
             <layout>
-              <property name="left_attach">3</property>
-              <property name="top_attach">18</property>
+              <property name="column">3</property>
+              <property name="row">18</property>
             </layout>
           </object>
         </child>
@@ -2098,8 +2098,8 @@
               </object>
             </child>
             <layout>
-              <property name="left_attach">4</property>
-              <property name="top_attach">18</property>
+              <property name="column">4</property>
+              <property name="row">18</property>
             </layout>
           </object>
         </child>
@@ -2107,8 +2107,8 @@
           <object class="GtkLabel" id="wrap19">
             <property name="label" translatable="yes">False</property>
             <layout>
-              <property name="left_attach">0</property>
-              <property name="top_attach">19</property>
+              <property name="column">0</property>
+              <property name="row">19</property>
             </layout>
           </object>
         </child>
@@ -2116,8 +2116,8 @@
           <object class="GtkLabel" id="ellipsize19">
             <property name="label" translatable="yes">end</property>
             <layout>
-              <property name="left_attach">1</property>
-              <property name="top_attach">19</property>
+              <property name="column">1</property>
+              <property name="row">19</property>
             </layout>
           </object>
         </child>
@@ -2125,8 +2125,8 @@
           <object class="GtkLabel" id="width_chars19">
             <property name="label" translatable="yes">-1</property>
             <layout>
-              <property name="left_attach">2</property>
-              <property name="top_attach">19</property>
+              <property name="column">2</property>
+              <property name="row">19</property>
             </layout>
           </object>
         </child>
@@ -2134,8 +2134,8 @@
           <object class="GtkLabel" id="max_width_chars19">
             <property name="label" translatable="yes">4</property>
             <layout>
-              <property name="left_attach">3</property>
-              <property name="top_attach">19</property>
+              <property name="column">3</property>
+              <property name="row">19</property>
             </layout>
           </object>
         </child>
@@ -2213,8 +2213,8 @@
               </object>
             </child>
             <layout>
-              <property name="left_attach">4</property>
-              <property name="top_attach">19</property>
+              <property name="column">4</property>
+              <property name="row">19</property>
             </layout>
           </object>
         </child>
@@ -2222,8 +2222,8 @@
           <object class="GtkLabel" id="wrap20">
             <property name="label" translatable="yes">True</property>
             <layout>
-              <property name="left_attach">0</property>
-              <property name="top_attach">20</property>
+              <property name="column">0</property>
+              <property name="row">20</property>
             </layout>
           </object>
         </child>
@@ -2231,8 +2231,8 @@
           <object class="GtkLabel" id="ellipsize20">
             <property name="label" translatable="yes">end</property>
             <layout>
-              <property name="left_attach">1</property>
-              <property name="top_attach">20</property>
+              <property name="column">1</property>
+              <property name="row">20</property>
             </layout>
           </object>
         </child>
@@ -2240,8 +2240,8 @@
           <object class="GtkLabel" id="width_chars20">
             <property name="label" translatable="yes">-1</property>
             <layout>
-              <property name="left_attach">2</property>
-              <property name="top_attach">20</property>
+              <property name="column">2</property>
+              <property name="row">20</property>
             </layout>
           </object>
         </child>
@@ -2249,8 +2249,8 @@
           <object class="GtkLabel" id="max_width_chars20">
             <property name="label" translatable="yes">4</property>
             <layout>
-              <property name="left_attach">3</property>
-              <property name="top_attach">20</property>
+              <property name="column">3</property>
+              <property name="row">20</property>
             </layout>
           </object>
         </child>
@@ -2332,8 +2332,8 @@
               </object>
             </child>
             <layout>
-              <property name="left_attach">4</property>
-              <property name="top_attach">20</property>
+              <property name="column">4</property>
+              <property name="row">20</property>
             </layout>
           </object>
         </child>
@@ -2341,8 +2341,8 @@
           <object class="GtkLabel" id="wrap21">
             <property name="label" translatable="yes">False</property>
             <layout>
-              <property name="left_attach">0</property>
-              <property name="top_attach">21</property>
+              <property name="column">0</property>
+              <property name="row">21</property>
             </layout>
           </object>
         </child>
@@ -2350,8 +2350,8 @@
           <object class="GtkLabel" id="ellipsize21">
             <property name="label" translatable="yes">none</property>
             <layout>
-              <property name="left_attach">1</property>
-              <property name="top_attach">21</property>
+              <property name="column">1</property>
+              <property name="row">21</property>
             </layout>
           </object>
         </child>
@@ -2359,8 +2359,8 @@
           <object class="GtkLabel" id="width_chars21">
             <property name="label" translatable="yes">4</property>
             <layout>
-              <property name="left_attach">2</property>
-              <property name="top_attach">21</property>
+              <property name="column">2</property>
+              <property name="row">21</property>
             </layout>
           </object>
         </child>
@@ -2368,8 +2368,8 @@
           <object class="GtkLabel" id="max_width_chars21">
             <property name="label" translatable="yes">4</property>
             <layout>
-              <property name="left_attach">3</property>
-              <property name="top_attach">21</property>
+              <property name="column">3</property>
+              <property name="row">21</property>
             </layout>
           </object>
         </child>
@@ -2447,8 +2447,8 @@
               </object>
             </child>
             <layout>
-              <property name="left_attach">4</property>
-              <property name="top_attach">21</property>
+              <property name="column">4</property>
+              <property name="row">21</property>
             </layout>
           </object>
         </child>
@@ -2456,8 +2456,8 @@
           <object class="GtkLabel" id="wrap22">
             <property name="label" translatable="yes">True</property>
             <layout>
-              <property name="left_attach">0</property>
-              <property name="top_attach">22</property>
+              <property name="column">0</property>
+              <property name="row">22</property>
             </layout>
           </object>
         </child>
@@ -2465,8 +2465,8 @@
           <object class="GtkLabel" id="ellipsize22">
             <property name="label" translatable="yes">none</property>
             <layout>
-              <property name="left_attach">1</property>
-              <property name="top_attach">22</property>
+              <property name="column">1</property>
+              <property name="row">22</property>
             </layout>
           </object>
         </child>
@@ -2474,8 +2474,8 @@
           <object class="GtkLabel" id="width_chars22">
             <property name="label" translatable="yes">4</property>
             <layout>
-              <property name="left_attach">2</property>
-              <property name="top_attach">22</property>
+              <property name="column">2</property>
+              <property name="row">22</property>
             </layout>
           </object>
         </child>
@@ -2483,8 +2483,8 @@
           <object class="GtkLabel" id="max_width_chars22">
             <property name="label" translatable="yes">4</property>
             <layout>
-              <property name="left_attach">3</property>
-              <property name="top_attach">22</property>
+              <property name="column">3</property>
+              <property name="row">22</property>
             </layout>
           </object>
         </child>
@@ -2566,8 +2566,8 @@
               </object>
             </child>
             <layout>
-              <property name="left_attach">4</property>
-              <property name="top_attach">22</property>
+              <property name="column">4</property>
+              <property name="row">22</property>
             </layout>
           </object>
         </child>
@@ -2575,8 +2575,8 @@
           <object class="GtkLabel" id="wrap23">
             <property name="label" translatable="yes">False</property>
             <layout>
-              <property name="left_attach">0</property>
-              <property name="top_attach">23</property>
+              <property name="column">0</property>
+              <property name="row">23</property>
             </layout>
           </object>
         </child>
@@ -2584,8 +2584,8 @@
           <object class="GtkLabel" id="ellipsize23">
             <property name="label" translatable="yes">end</property>
             <layout>
-              <property name="left_attach">1</property>
-              <property name="top_attach">23</property>
+              <property name="column">1</property>
+              <property name="row">23</property>
             </layout>
           </object>
         </child>
@@ -2593,8 +2593,8 @@
           <object class="GtkLabel" id="width_chars23">
             <property name="label" translatable="yes">4</property>
             <layout>
-              <property name="left_attach">2</property>
-              <property name="top_attach">23</property>
+              <property name="column">2</property>
+              <property name="row">23</property>
             </layout>
           </object>
         </child>
@@ -2602,8 +2602,8 @@
           <object class="GtkLabel" id="max_width_chars23">
             <property name="label" translatable="yes">4</property>
             <layout>
-              <property name="left_attach">3</property>
-              <property name="top_attach">23</property>
+              <property name="column">3</property>
+              <property name="row">23</property>
             </layout>
           </object>
         </child>
@@ -2685,8 +2685,8 @@
               </object>
             </child>
             <layout>
-              <property name="left_attach">4</property>
-              <property name="top_attach">23</property>
+              <property name="column">4</property>
+              <property name="row">23</property>
             </layout>
           </object>
         </child>
@@ -2694,8 +2694,8 @@
           <object class="GtkLabel" id="wrap24">
             <property name="label" translatable="yes">True</property>
             <layout>
-              <property name="left_attach">0</property>
-              <property name="top_attach">24</property>
+              <property name="column">0</property>
+              <property name="row">24</property>
             </layout>
           </object>
         </child>
@@ -2703,8 +2703,8 @@
           <object class="GtkLabel" id="ellipsize24">
             <property name="label" translatable="yes">end</property>
             <layout>
-              <property name="left_attach">1</property>
-              <property name="top_attach">24</property>
+              <property name="column">1</property>
+              <property name="row">24</property>
             </layout>
           </object>
         </child>
@@ -2712,8 +2712,8 @@
           <object class="GtkLabel" id="width_chars24">
             <property name="label" translatable="yes">4</property>
             <layout>
-              <property name="left_attach">2</property>
-              <property name="top_attach">24</property>
+              <property name="column">2</property>
+              <property name="row">24</property>
             </layout>
           </object>
         </child>
@@ -2721,8 +2721,8 @@
           <object class="GtkLabel" id="max_width_chars24">
             <property name="label" translatable="yes">4</property>
             <layout>
-              <property name="left_attach">3</property>
-              <property name="top_attach">24</property>
+              <property name="column">3</property>
+              <property name="row">24</property>
             </layout>
           </object>
         </child>
@@ -2808,8 +2808,8 @@
               </object>
             </child>
             <layout>
-              <property name="left_attach">4</property>
-              <property name="top_attach">24</property>
+              <property name="column">4</property>
+              <property name="row">24</property>
             </layout>
           </object>
         </child>
@@ -2817,8 +2817,8 @@
           <object class="GtkLabel" id="wrap25">
             <property name="label" translatable="yes">False</property>
             <layout>
-              <property name="left_attach">0</property>
-              <property name="top_attach">25</property>
+              <property name="column">0</property>
+              <property name="row">25</property>
             </layout>
           </object>
         </child>
@@ -2826,8 +2826,8 @@
           <object class="GtkLabel" id="ellipsize25">
             <property name="label" translatable="yes">none</property>
             <layout>
-              <property name="left_attach">1</property>
-              <property name="top_attach">25</property>
+              <property name="column">1</property>
+              <property name="row">25</property>
             </layout>
           </object>
         </child>
@@ -2835,8 +2835,8 @@
           <object class="GtkLabel" id="width_chars25">
             <property name="label" translatable="yes">8</property>
             <layout>
-              <property name="left_attach">2</property>
-              <property name="top_attach">25</property>
+              <property name="column">2</property>
+              <property name="row">25</property>
             </layout>
           </object>
         </child>
@@ -2844,8 +2844,8 @@
           <object class="GtkLabel" id="max_width_chars25">
             <property name="label" translatable="yes">4</property>
             <layout>
-              <property name="left_attach">3</property>
-              <property name="top_attach">25</property>
+              <property name="column">3</property>
+              <property name="row">25</property>
             </layout>
           </object>
         </child>
@@ -2923,8 +2923,8 @@
               </object>
             </child>
             <layout>
-              <property name="left_attach">4</property>
-              <property name="top_attach">25</property>
+              <property name="column">4</property>
+              <property name="row">25</property>
             </layout>
           </object>
         </child>
@@ -2932,8 +2932,8 @@
           <object class="GtkLabel" id="wrap26">
             <property name="label" translatable="yes">True</property>
             <layout>
-              <property name="left_attach">0</property>
-              <property name="top_attach">26</property>
+              <property name="column">0</property>
+              <property name="row">26</property>
             </layout>
           </object>
         </child>
@@ -2941,8 +2941,8 @@
           <object class="GtkLabel" id="ellipsize26">
             <property name="label" translatable="yes">none</property>
             <layout>
-              <property name="left_attach">1</property>
-              <property name="top_attach">26</property>
+              <property name="column">1</property>
+              <property name="row">26</property>
             </layout>
           </object>
         </child>
@@ -2950,8 +2950,8 @@
           <object class="GtkLabel" id="width_chars26">
             <property name="label" translatable="yes">8</property>
             <layout>
-              <property name="left_attach">2</property>
-              <property name="top_attach">26</property>
+              <property name="column">2</property>
+              <property name="row">26</property>
             </layout>
           </object>
         </child>
@@ -2959,8 +2959,8 @@
           <object class="GtkLabel" id="max_width_chars26">
             <property name="label" translatable="yes">4</property>
             <layout>
-              <property name="left_attach">3</property>
-              <property name="top_attach">26</property>
+              <property name="column">3</property>
+              <property name="row">26</property>
             </layout>
           </object>
         </child>
@@ -3042,8 +3042,8 @@
               </object>
             </child>
             <layout>
-              <property name="left_attach">4</property>
-              <property name="top_attach">26</property>
+              <property name="column">4</property>
+              <property name="row">26</property>
             </layout>
           </object>
         </child>
@@ -3051,8 +3051,8 @@
           <object class="GtkLabel" id="wrap27">
             <property name="label" translatable="yes">False</property>
             <layout>
-              <property name="left_attach">0</property>
-              <property name="top_attach">27</property>
+              <property name="column">0</property>
+              <property name="row">27</property>
             </layout>
           </object>
         </child>
@@ -3060,8 +3060,8 @@
           <object class="GtkLabel" id="ellipsize27">
             <property name="label" translatable="yes">end</property>
             <layout>
-              <property name="left_attach">1</property>
-              <property name="top_attach">27</property>
+              <property name="column">1</property>
+              <property name="row">27</property>
             </layout>
           </object>
         </child>
@@ -3069,8 +3069,8 @@
           <object class="GtkLabel" id="width_chars27">
             <property name="label" translatable="yes">8</property>
             <layout>
-              <property name="left_attach">2</property>
-              <property name="top_attach">27</property>
+              <property name="column">2</property>
+              <property name="row">27</property>
             </layout>
           </object>
         </child>
@@ -3078,8 +3078,8 @@
           <object class="GtkLabel" id="max_width_chars27">
             <property name="label" translatable="yes">4</property>
             <layout>
-              <property name="left_attach">3</property>
-              <property name="top_attach">27</property>
+              <property name="column">3</property>
+              <property name="row">27</property>
             </layout>
           </object>
         </child>
@@ -3161,8 +3161,8 @@
               </object>
             </child>
             <layout>
-              <property name="left_attach">4</property>
-              <property name="top_attach">27</property>
+              <property name="column">4</property>
+              <property name="row">27</property>
             </layout>
           </object>
         </child>
@@ -3170,8 +3170,8 @@
           <object class="GtkLabel" id="wrap28">
             <property name="label" translatable="yes">True</property>
             <layout>
-              <property name="left_attach">0</property>
-              <property name="top_attach">28</property>
+              <property name="column">0</property>
+              <property name="row">28</property>
             </layout>
           </object>
         </child>
@@ -3179,8 +3179,8 @@
           <object class="GtkLabel" id="ellipsize28">
             <property name="label" translatable="yes">end</property>
             <layout>
-              <property name="left_attach">1</property>
-              <property name="top_attach">28</property>
+              <property name="column">1</property>
+              <property name="row">28</property>
             </layout>
           </object>
         </child>
@@ -3188,8 +3188,8 @@
           <object class="GtkLabel" id="width_chars28">
             <property name="label" translatable="yes">8</property>
             <layout>
-              <property name="left_attach">2</property>
-              <property name="top_attach">28</property>
+              <property name="column">2</property>
+              <property name="row">28</property>
             </layout>
           </object>
         </child>
@@ -3197,8 +3197,8 @@
           <object class="GtkLabel" id="max_width_chars28">
             <property name="label" translatable="yes">4</property>
             <layout>
-              <property name="left_attach">3</property>
-              <property name="top_attach">28</property>
+              <property name="column">3</property>
+              <property name="row">28</property>
             </layout>
           </object>
         </child>
@@ -3284,8 +3284,8 @@
               </object>
             </child>
             <layout>
-              <property name="left_attach">4</property>
-              <property name="top_attach">28</property>
+              <property name="column">4</property>
+              <property name="row">28</property>
             </layout>
           </object>
         </child>
@@ -3293,8 +3293,8 @@
           <object class="GtkLabel" id="wrap29">
             <property name="label" translatable="yes">False</property>
             <layout>
-              <property name="left_attach">0</property>
-              <property name="top_attach">29</property>
+              <property name="column">0</property>
+              <property name="row">29</property>
             </layout>
           </object>
         </child>
@@ -3302,8 +3302,8 @@
           <object class="GtkLabel" id="ellipsize29">
             <property name="label" translatable="yes">none</property>
             <layout>
-              <property name="left_attach">1</property>
-              <property name="top_attach">29</property>
+              <property name="column">1</property>
+              <property name="row">29</property>
             </layout>
           </object>
         </child>
@@ -3311,8 +3311,8 @@
           <object class="GtkLabel" id="width_chars29">
             <property name="label" translatable="yes">12</property>
             <layout>
-              <property name="left_attach">2</property>
-              <property name="top_attach">29</property>
+              <property name="column">2</property>
+              <property name="row">29</property>
             </layout>
           </object>
         </child>
@@ -3320,8 +3320,8 @@
           <object class="GtkLabel" id="max_width_chars29">
             <property name="label" translatable="yes">4</property>
             <layout>
-              <property name="left_attach">3</property>
-              <property name="top_attach">29</property>
+              <property name="column">3</property>
+              <property name="row">29</property>
             </layout>
           </object>
         </child>
@@ -3399,8 +3399,8 @@
               </object>
             </child>
             <layout>
-              <property name="left_attach">4</property>
-              <property name="top_attach">29</property>
+              <property name="column">4</property>
+              <property name="row">29</property>
             </layout>
           </object>
         </child>
@@ -3408,8 +3408,8 @@
           <object class="GtkLabel" id="wrap30">
             <property name="label" translatable="yes">True</property>
             <layout>
-              <property name="left_attach">0</property>
-              <property name="top_attach">30</property>
+              <property name="column">0</property>
+              <property name="row">30</property>
             </layout>
           </object>
         </child>
@@ -3417,8 +3417,8 @@
           <object class="GtkLabel" id="ellipsize30">
             <property name="label" translatable="yes">none</property>
             <layout>
-              <property name="left_attach">1</property>
-              <property name="top_attach">30</property>
+              <property name="column">1</property>
+              <property name="row">30</property>
             </layout>
           </object>
         </child>
@@ -3426,8 +3426,8 @@
           <object class="GtkLabel" id="width_chars30">
             <property name="label" translatable="yes">12</property>
             <layout>
-              <property name="left_attach">2</property>
-              <property name="top_attach">30</property>
+              <property name="column">2</property>
+              <property name="row">30</property>
             </layout>
           </object>
         </child>
@@ -3435,8 +3435,8 @@
           <object class="GtkLabel" id="max_width_chars30">
             <property name="label" translatable="yes">4</property>
             <layout>
-              <property name="left_attach">3</property>
-              <property name="top_attach">30</property>
+              <property name="column">3</property>
+              <property name="row">30</property>
             </layout>
           </object>
         </child>
@@ -3518,8 +3518,8 @@
               </object>
             </child>
             <layout>
-              <property name="left_attach">4</property>
-              <property name="top_attach">30</property>
+              <property name="column">4</property>
+              <property name="row">30</property>
             </layout>
           </object>
         </child>
@@ -3527,8 +3527,8 @@
           <object class="GtkLabel" id="wrap31">
             <property name="label" translatable="yes">False</property>
             <layout>
-              <property name="left_attach">0</property>
-              <property name="top_attach">31</property>
+              <property name="column">0</property>
+              <property name="row">31</property>
             </layout>
           </object>
         </child>
@@ -3536,8 +3536,8 @@
           <object class="GtkLabel" id="ellipsize31">
             <property name="label" translatable="yes">end</property>
             <layout>
-              <property name="left_attach">1</property>
-              <property name="top_attach">31</property>
+              <property name="column">1</property>
+              <property name="row">31</property>
             </layout>
           </object>
         </child>
@@ -3545,8 +3545,8 @@
           <object class="GtkLabel" id="width_chars31">
             <property name="label" translatable="yes">12</property>
             <layout>
-              <property name="left_attach">2</property>
-              <property name="top_attach">31</property>
+              <property name="column">2</property>
+              <property name="row">31</property>
             </layout>
           </object>
         </child>
@@ -3554,8 +3554,8 @@
           <object class="GtkLabel" id="max_width_chars31">
             <property name="label" translatable="yes">4</property>
             <layout>
-              <property name="left_attach">3</property>
-              <property name="top_attach">31</property>
+              <property name="column">3</property>
+              <property name="row">31</property>
             </layout>
           </object>
         </child>
@@ -3637,8 +3637,8 @@
               </object>
             </child>
             <layout>
-              <property name="left_attach">4</property>
-              <property name="top_attach">31</property>
+              <property name="column">4</property>
+              <property name="row">31</property>
             </layout>
           </object>
         </child>
@@ -3646,8 +3646,8 @@
           <object class="GtkLabel" id="wrap32">
             <property name="label" translatable="yes">True</property>
             <layout>
-              <property name="left_attach">0</property>
-              <property name="top_attach">32</property>
+              <property name="column">0</property>
+              <property name="row">32</property>
             </layout>
           </object>
         </child>
@@ -3655,8 +3655,8 @@
           <object class="GtkLabel" id="ellipsize32">
             <property name="label" translatable="yes">end</property>
             <layout>
-              <property name="left_attach">1</property>
-              <property name="top_attach">32</property>
+              <property name="column">1</property>
+              <property name="row">32</property>
             </layout>
           </object>
         </child>
@@ -3664,8 +3664,8 @@
           <object class="GtkLabel" id="width_chars32">
             <property name="label" translatable="yes">12</property>
             <layout>
-              <property name="left_attach">2</property>
-              <property name="top_attach">32</property>
+              <property name="column">2</property>
+              <property name="row">32</property>
             </layout>
           </object>
         </child>
@@ -3673,8 +3673,8 @@
           <object class="GtkLabel" id="max_width_chars32">
             <property name="label" translatable="yes">4</property>
             <layout>
-              <property name="left_attach">3</property>
-              <property name="top_attach">32</property>
+              <property name="column">3</property>
+              <property name="row">32</property>
             </layout>
           </object>
         </child>
@@ -3760,8 +3760,8 @@
               </object>
             </child>
             <layout>
-              <property name="left_attach">4</property>
-              <property name="top_attach">32</property>
+              <property name="column">4</property>
+              <property name="row">32</property>
             </layout>
           </object>
         </child>
@@ -3769,8 +3769,8 @@
           <object class="GtkLabel" id="wrap33">
             <property name="label" translatable="yes">False</property>
             <layout>
-              <property name="left_attach">0</property>
-              <property name="top_attach">33</property>
+              <property name="column">0</property>
+              <property name="row">33</property>
             </layout>
           </object>
         </child>
@@ -3778,8 +3778,8 @@
           <object class="GtkLabel" id="ellipsize33">
             <property name="label" translatable="yes">none</property>
             <layout>
-              <property name="left_attach">1</property>
-              <property name="top_attach">33</property>
+              <property name="column">1</property>
+              <property name="row">33</property>
             </layout>
           </object>
         </child>
@@ -3787,8 +3787,8 @@
           <object class="GtkLabel" id="width_chars33">
             <property name="label" translatable="yes">-1</property>
             <layout>
-              <property name="left_attach">2</property>
-              <property name="top_attach">33</property>
+              <property name="column">2</property>
+              <property name="row">33</property>
             </layout>
           </object>
         </child>
@@ -3796,8 +3796,8 @@
           <object class="GtkLabel" id="max_width_chars33">
             <property name="label" translatable="yes">8</property>
             <layout>
-              <property name="left_attach">3</property>
-              <property name="top_attach">33</property>
+              <property name="column">3</property>
+              <property name="row">33</property>
             </layout>
           </object>
         </child>
@@ -3871,8 +3871,8 @@
               </object>
             </child>
             <layout>
-              <property name="left_attach">4</property>
-              <property name="top_attach">33</property>
+              <property name="column">4</property>
+              <property name="row">33</property>
             </layout>
           </object>
         </child>
@@ -3880,8 +3880,8 @@
           <object class="GtkLabel" id="wrap34">
             <property name="label" translatable="yes">True</property>
             <layout>
-              <property name="left_attach">0</property>
-              <property name="top_attach">34</property>
+              <property name="column">0</property>
+              <property name="row">34</property>
             </layout>
           </object>
         </child>
@@ -3889,8 +3889,8 @@
           <object class="GtkLabel" id="ellipsize34">
             <property name="label" translatable="yes">none</property>
             <layout>
-              <property name="left_attach">1</property>
-              <property name="top_attach">34</property>
+              <property name="column">1</property>
+              <property name="row">34</property>
             </layout>
           </object>
         </child>
@@ -3898,8 +3898,8 @@
           <object class="GtkLabel" id="width_chars34">
             <property name="label" translatable="yes">-1</property>
             <layout>
-              <property name="left_attach">2</property>
-              <property name="top_attach">34</property>
+              <property name="column">2</property>
+              <property name="row">34</property>
             </layout>
           </object>
         </child>
@@ -3907,8 +3907,8 @@
           <object class="GtkLabel" id="max_width_chars34">
             <property name="label" translatable="yes">8</property>
             <layout>
-              <property name="left_attach">3</property>
-              <property name="top_attach">34</property>
+              <property name="column">3</property>
+              <property name="row">34</property>
             </layout>
           </object>
         </child>
@@ -3986,8 +3986,8 @@
               </object>
             </child>
             <layout>
-              <property name="left_attach">4</property>
-              <property name="top_attach">34</property>
+              <property name="column">4</property>
+              <property name="row">34</property>
             </layout>
           </object>
         </child>
@@ -3995,8 +3995,8 @@
           <object class="GtkLabel" id="wrap35">
             <property name="label" translatable="yes">False</property>
             <layout>
-              <property name="left_attach">0</property>
-              <property name="top_attach">35</property>
+              <property name="column">0</property>
+              <property name="row">35</property>
             </layout>
           </object>
         </child>
@@ -4004,8 +4004,8 @@
           <object class="GtkLabel" id="ellipsize35">
             <property name="label" translatable="yes">end</property>
             <layout>
-              <property name="left_attach">1</property>
-              <property name="top_attach">35</property>
+              <property name="column">1</property>
+              <property name="row">35</property>
             </layout>
           </object>
         </child>
@@ -4013,8 +4013,8 @@
           <object class="GtkLabel" id="width_chars35">
             <property name="label" translatable="yes">-1</property>
             <layout>
-              <property name="left_attach">2</property>
-              <property name="top_attach">35</property>
+              <property name="column">2</property>
+              <property name="row">35</property>
             </layout>
           </object>
         </child>
@@ -4022,8 +4022,8 @@
           <object class="GtkLabel" id="max_width_chars35">
             <property name="label" translatable="yes">8</property>
             <layout>
-              <property name="left_attach">3</property>
-              <property name="top_attach">35</property>
+              <property name="column">3</property>
+              <property name="row">35</property>
             </layout>
           </object>
         </child>
@@ -4101,8 +4101,8 @@
               </object>
             </child>
             <layout>
-              <property name="left_attach">4</property>
-              <property name="top_attach">35</property>
+              <property name="column">4</property>
+              <property name="row">35</property>
             </layout>
           </object>
         </child>
@@ -4110,8 +4110,8 @@
           <object class="GtkLabel" id="wrap36">
             <property name="label" translatable="yes">True</property>
             <layout>
-              <property name="left_attach">0</property>
-              <property name="top_attach">36</property>
+              <property name="column">0</property>
+              <property name="row">36</property>
             </layout>
           </object>
         </child>
@@ -4119,8 +4119,8 @@
           <object class="GtkLabel" id="ellipsize36">
             <property name="label" translatable="yes">end</property>
             <layout>
-              <property name="left_attach">1</property>
-              <property name="top_attach">36</property>
+              <property name="column">1</property>
+              <property name="row">36</property>
             </layout>
           </object>
         </child>
@@ -4128,8 +4128,8 @@
           <object class="GtkLabel" id="width_chars36">
             <property name="label" translatable="yes">-1</property>
             <layout>
-              <property name="left_attach">2</property>
-              <property name="top_attach">36</property>
+              <property name="column">2</property>
+              <property name="row">36</property>
             </layout>
           </object>
         </child>
@@ -4137,8 +4137,8 @@
           <object class="GtkLabel" id="max_width_chars36">
             <property name="label" translatable="yes">8</property>
             <layout>
-              <property name="left_attach">3</property>
-              <property name="top_attach">36</property>
+              <property name="column">3</property>
+              <property name="row">36</property>
             </layout>
           </object>
         </child>
@@ -4220,8 +4220,8 @@
               </object>
             </child>
             <layout>
-              <property name="left_attach">4</property>
-              <property name="top_attach">36</property>
+              <property name="column">4</property>
+              <property name="row">36</property>
             </layout>
           </object>
         </child>
@@ -4229,8 +4229,8 @@
           <object class="GtkLabel" id="wrap37">
             <property name="label" translatable="yes">False</property>
             <layout>
-              <property name="left_attach">0</property>
-              <property name="top_attach">37</property>
+              <property name="column">0</property>
+              <property name="row">37</property>
             </layout>
           </object>
         </child>
@@ -4238,8 +4238,8 @@
           <object class="GtkLabel" id="ellipsize37">
             <property name="label" translatable="yes">none</property>
             <layout>
-              <property name="left_attach">1</property>
-              <property name="top_attach">37</property>
+              <property name="column">1</property>
+              <property name="row">37</property>
             </layout>
           </object>
         </child>
@@ -4247,8 +4247,8 @@
           <object class="GtkLabel" id="width_chars37">
             <property name="label" translatable="yes">4</property>
             <layout>
-              <property name="left_attach">2</property>
-              <property name="top_attach">37</property>
+              <property name="column">2</property>
+              <property name="row">37</property>
             </layout>
           </object>
         </child>
@@ -4256,8 +4256,8 @@
           <object class="GtkLabel" id="max_width_chars37">
             <property name="label" translatable="yes">8</property>
             <layout>
-              <property name="left_attach">3</property>
-              <property name="top_attach">37</property>
+              <property name="column">3</property>
+              <property name="row">37</property>
             </layout>
           </object>
         </child>
@@ -4335,8 +4335,8 @@
               </object>
             </child>
             <layout>
-              <property name="left_attach">4</property>
-              <property name="top_attach">37</property>
+              <property name="column">4</property>
+              <property name="row">37</property>
             </layout>
           </object>
         </child>
@@ -4344,8 +4344,8 @@
           <object class="GtkLabel" id="wrap38">
             <property name="label" translatable="yes">True</property>
             <layout>
-              <property name="left_attach">0</property>
-              <property name="top_attach">38</property>
+              <property name="column">0</property>
+              <property name="row">38</property>
             </layout>
           </object>
         </child>
@@ -4353,8 +4353,8 @@
           <object class="GtkLabel" id="ellipsize38">
             <property name="label" translatable="yes">none</property>
             <layout>
-              <property name="left_attach">1</property>
-              <property name="top_attach">38</property>
+              <property name="column">1</property>
+              <property name="row">38</property>
             </layout>
           </object>
         </child>
@@ -4362,8 +4362,8 @@
           <object class="GtkLabel" id="width_chars38">
             <property name="label" translatable="yes">4</property>
             <layout>
-              <property name="left_attach">2</property>
-              <property name="top_attach">38</property>
+              <property name="column">2</property>
+              <property name="row">38</property>
             </layout>
           </object>
         </child>
@@ -4371,8 +4371,8 @@
           <object class="GtkLabel" id="max_width_chars38">
             <property name="label" translatable="yes">8</property>
             <layout>
-              <property name="left_attach">3</property>
-              <property name="top_attach">38</property>
+              <property name="column">3</property>
+              <property name="row">38</property>
             </layout>
           </object>
         </child>
@@ -4454,8 +4454,8 @@
               </object>
             </child>
             <layout>
-              <property name="left_attach">4</property>
-              <property name="top_attach">38</property>
+              <property name="column">4</property>
+              <property name="row">38</property>
             </layout>
           </object>
         </child>
@@ -4463,8 +4463,8 @@
           <object class="GtkLabel" id="wrap39">
             <property name="label" translatable="yes">False</property>
             <layout>
-              <property name="left_attach">0</property>
-              <property name="top_attach">39</property>
+              <property name="column">0</property>
+              <property name="row">39</property>
             </layout>
           </object>
         </child>
@@ -4472,8 +4472,8 @@
           <object class="GtkLabel" id="ellipsize39">
             <property name="label" translatable="yes">end</property>
             <layout>
-              <property name="left_attach">1</property>
-              <property name="top_attach">39</property>
+              <property name="column">1</property>
+              <property name="row">39</property>
             </layout>
           </object>
         </child>
@@ -4481,8 +4481,8 @@
           <object class="GtkLabel" id="width_chars39">
             <property name="label" translatable="yes">4</property>
             <layout>
-              <property name="left_attach">2</property>
-              <property name="top_attach">39</property>
+              <property name="column">2</property>
+              <property name="row">39</property>
             </layout>
           </object>
         </child>
@@ -4490,8 +4490,8 @@
           <object class="GtkLabel" id="max_width_chars39">
             <property name="label" translatable="yes">8</property>
             <layout>
-              <property name="left_attach">3</property>
-              <property name="top_attach">39</property>
+              <property name="column">3</property>
+              <property name="row">39</property>
             </layout>
           </object>
         </child>
@@ -4573,8 +4573,8 @@
               </object>
             </child>
             <layout>
-              <property name="left_attach">4</property>
-              <property name="top_attach">39</property>
+              <property name="column">4</property>
+              <property name="row">39</property>
             </layout>
           </object>
         </child>
@@ -4582,8 +4582,8 @@
           <object class="GtkLabel" id="wrap40">
             <property name="label" translatable="yes">True</property>
             <layout>
-              <property name="left_attach">0</property>
-              <property name="top_attach">40</property>
+              <property name="column">0</property>
+              <property name="row">40</property>
             </layout>
           </object>
         </child>
@@ -4591,8 +4591,8 @@
           <object class="GtkLabel" id="ellipsize40">
             <property name="label" translatable="yes">end</property>
             <layout>
-              <property name="left_attach">1</property>
-              <property name="top_attach">40</property>
+              <property name="column">1</property>
+              <property name="row">40</property>
             </layout>
           </object>
         </child>
@@ -4600,8 +4600,8 @@
           <object class="GtkLabel" id="width_chars40">
             <property name="label" translatable="yes">4</property>
             <layout>
-              <property name="left_attach">2</property>
-              <property name="top_attach">40</property>
+              <property name="column">2</property>
+              <property name="row">40</property>
             </layout>
           </object>
         </child>
@@ -4609,8 +4609,8 @@
           <object class="GtkLabel" id="max_width_chars40">
             <property name="label" translatable="yes">8</property>
             <layout>
-              <property name="left_attach">3</property>
-              <property name="top_attach">40</property>
+              <property name="column">3</property>
+              <property name="row">40</property>
             </layout>
           </object>
         </child>
@@ -4696,8 +4696,8 @@
               </object>
             </child>
             <layout>
-              <property name="left_attach">4</property>
-              <property name="top_attach">40</property>
+              <property name="column">4</property>
+              <property name="row">40</property>
             </layout>
           </object>
         </child>
@@ -4705,8 +4705,8 @@
           <object class="GtkLabel" id="wrap41">
             <property name="label" translatable="yes">False</property>
             <layout>
-              <property name="left_attach">0</property>
-              <property name="top_attach">41</property>
+              <property name="column">0</property>
+              <property name="row">41</property>
             </layout>
           </object>
         </child>
@@ -4714,8 +4714,8 @@
           <object class="GtkLabel" id="ellipsize41">
             <property name="label" translatable="yes">none</property>
             <layout>
-              <property name="left_attach">1</property>
-              <property name="top_attach">41</property>
+              <property name="column">1</property>
+              <property name="row">41</property>
             </layout>
           </object>
         </child>
@@ -4723,8 +4723,8 @@
           <object class="GtkLabel" id="width_chars41">
             <property name="label" translatable="yes">8</property>
             <layout>
-              <property name="left_attach">2</property>
-              <property name="top_attach">41</property>
+              <property name="column">2</property>
+              <property name="row">41</property>
             </layout>
           </object>
         </child>
@@ -4732,8 +4732,8 @@
           <object class="GtkLabel" id="max_width_chars41">
             <property name="label" translatable="yes">8</property>
             <layout>
-              <property name="left_attach">3</property>
-              <property name="top_attach">41</property>
+              <property name="column">3</property>
+              <property name="row">41</property>
             </layout>
           </object>
         </child>
@@ -4811,8 +4811,8 @@
               </object>
             </child>
             <layout>
-              <property name="left_attach">4</property>
-              <property name="top_attach">41</property>
+              <property name="column">4</property>
+              <property name="row">41</property>
             </layout>
           </object>
         </child>
@@ -4820,8 +4820,8 @@
           <object class="GtkLabel" id="wrap42">
             <property name="label" translatable="yes">True</property>
             <layout>
-              <property name="left_attach">0</property>
-              <property name="top_attach">42</property>
+              <property name="column">0</property>
+              <property name="row">42</property>
             </layout>
           </object>
         </child>
@@ -4829,8 +4829,8 @@
           <object class="GtkLabel" id="ellipsize42">
             <property name="label" translatable="yes">none</property>
             <layout>
-              <property name="left_attach">1</property>
-              <property name="top_attach">42</property>
+              <property name="column">1</property>
+              <property name="row">42</property>
             </layout>
           </object>
         </child>
@@ -4838,8 +4838,8 @@
           <object class="GtkLabel" id="width_chars42">
             <property name="label" translatable="yes">8</property>
             <layout>
-              <property name="left_attach">2</property>
-              <property name="top_attach">42</property>
+              <property name="column">2</property>
+              <property name="row">42</property>
             </layout>
           </object>
         </child>
@@ -4847,8 +4847,8 @@
           <object class="GtkLabel" id="max_width_chars42">
             <property name="label" translatable="yes">8</property>
             <layout>
-              <property name="left_attach">3</property>
-              <property name="top_attach">42</property>
+              <property name="column">3</property>
+              <property name="row">42</property>
             </layout>
           </object>
         </child>
@@ -4930,8 +4930,8 @@
               </object>
             </child>
             <layout>
-              <property name="left_attach">4</property>
-              <property name="top_attach">42</property>
+              <property name="column">4</property>
+              <property name="row">42</property>
             </layout>
           </object>
         </child>
@@ -4939,8 +4939,8 @@
           <object class="GtkLabel" id="wrap43">
             <property name="label" translatable="yes">False</property>
             <layout>
-              <property name="left_attach">0</property>
-              <property name="top_attach">43</property>
+              <property name="column">0</property>
+              <property name="row">43</property>
             </layout>
           </object>
         </child>
@@ -4948,8 +4948,8 @@
           <object class="GtkLabel" id="ellipsize43">
             <property name="label" translatable="yes">end</property>
             <layout>
-              <property name="left_attach">1</property>
-              <property name="top_attach">43</property>
+              <property name="column">1</property>
+              <property name="row">43</property>
             </layout>
           </object>
         </child>
@@ -4957,8 +4957,8 @@
           <object class="GtkLabel" id="width_chars43">
             <property name="label" translatable="yes">8</property>
             <layout>
-              <property name="left_attach">2</property>
-              <property name="top_attach">43</property>
+              <property name="column">2</property>
+              <property name="row">43</property>
             </layout>
           </object>
         </child>
@@ -4966,8 +4966,8 @@
           <object class="GtkLabel" id="max_width_chars43">
             <property name="label" translatable="yes">8</property>
             <layout>
-              <property name="left_attach">3</property>
-              <property name="top_attach">43</property>
+              <property name="column">3</property>
+              <property name="row">43</property>
             </layout>
           </object>
         </child>
@@ -5049,8 +5049,8 @@
               </object>
             </child>
             <layout>
-              <property name="left_attach">4</property>
-              <property name="top_attach">43</property>
+              <property name="column">4</property>
+              <property name="row">43</property>
             </layout>
           </object>
         </child>
@@ -5058,8 +5058,8 @@
           <object class="GtkLabel" id="wrap44">
             <property name="label" translatable="yes">True</property>
             <layout>
-              <property name="left_attach">0</property>
-              <property name="top_attach">44</property>
+              <property name="column">0</property>
+              <property name="row">44</property>
             </layout>
           </object>
         </child>
@@ -5067,8 +5067,8 @@
           <object class="GtkLabel" id="ellipsize44">
             <property name="label" translatable="yes">end</property>
             <layout>
-              <property name="left_attach">1</property>
-              <property name="top_attach">44</property>
+              <property name="column">1</property>
+              <property name="row">44</property>
             </layout>
           </object>
         </child>
@@ -5076,8 +5076,8 @@
           <object class="GtkLabel" id="width_chars44">
             <property name="label" translatable="yes">8</property>
             <layout>
-              <property name="left_attach">2</property>
-              <property name="top_attach">44</property>
+              <property name="column">2</property>
+              <property name="row">44</property>
             </layout>
           </object>
         </child>
@@ -5085,8 +5085,8 @@
           <object class="GtkLabel" id="max_width_chars44">
             <property name="label" translatable="yes">8</property>
             <layout>
-              <property name="left_attach">3</property>
-              <property name="top_attach">44</property>
+              <property name="column">3</property>
+              <property name="row">44</property>
             </layout>
           </object>
         </child>
@@ -5172,8 +5172,8 @@
               </object>
             </child>
             <layout>
-              <property name="left_attach">4</property>
-              <property name="top_attach">44</property>
+              <property name="column">4</property>
+              <property name="row">44</property>
             </layout>
           </object>
         </child>
@@ -5181,8 +5181,8 @@
           <object class="GtkLabel" id="wrap45">
             <property name="label" translatable="yes">False</property>
             <layout>
-              <property name="left_attach">0</property>
-              <property name="top_attach">45</property>
+              <property name="column">0</property>
+              <property name="row">45</property>
             </layout>
           </object>
         </child>
@@ -5190,8 +5190,8 @@
           <object class="GtkLabel" id="ellipsize45">
             <property name="label" translatable="yes">none</property>
             <layout>
-              <property name="left_attach">1</property>
-              <property name="top_attach">45</property>
+              <property name="column">1</property>
+              <property name="row">45</property>
             </layout>
           </object>
         </child>
@@ -5199,8 +5199,8 @@
           <object class="GtkLabel" id="width_chars45">
             <property name="label" translatable="yes">12</property>
             <layout>
-              <property name="left_attach">2</property>
-              <property name="top_attach">45</property>
+              <property name="column">2</property>
+              <property name="row">45</property>
             </layout>
           </object>
         </child>
@@ -5208,8 +5208,8 @@
           <object class="GtkLabel" id="max_width_chars45">
             <property name="label" translatable="yes">8</property>
             <layout>
-              <property name="left_attach">3</property>
-              <property name="top_attach">45</property>
+              <property name="column">3</property>
+              <property name="row">45</property>
             </layout>
           </object>
         </child>
@@ -5287,8 +5287,8 @@
               </object>
             </child>
             <layout>
-              <property name="left_attach">4</property>
-              <property name="top_attach">45</property>
+              <property name="column">4</property>
+              <property name="row">45</property>
             </layout>
           </object>
         </child>
@@ -5296,8 +5296,8 @@
           <object class="GtkLabel" id="wrap46">
             <property name="label" translatable="yes">True</property>
             <layout>
-              <property name="left_attach">0</property>
-              <property name="top_attach">46</property>
+              <property name="column">0</property>
+              <property name="row">46</property>
             </layout>
           </object>
         </child>
@@ -5305,8 +5305,8 @@
           <object class="GtkLabel" id="ellipsize46">
             <property name="label" translatable="yes">none</property>
             <layout>
-              <property name="left_attach">1</property>
-              <property name="top_attach">46</property>
+              <property name="column">1</property>
+              <property name="row">46</property>
             </layout>
           </object>
         </child>
@@ -5314,8 +5314,8 @@
           <object class="GtkLabel" id="width_chars46">
             <property name="label" translatable="yes">12</property>
             <layout>
-              <property name="left_attach">2</property>
-              <property name="top_attach">46</property>
+              <property name="column">2</property>
+              <property name="row">46</property>
             </layout>
           </object>
         </child>
@@ -5323,8 +5323,8 @@
           <object class="GtkLabel" id="max_width_chars46">
             <property name="label" translatable="yes">8</property>
             <layout>
-              <property name="left_attach">3</property>
-              <property name="top_attach">46</property>
+              <property name="column">3</property>
+              <property name="row">46</property>
             </layout>
           </object>
         </child>
@@ -5406,8 +5406,8 @@
               </object>
             </child>
             <layout>
-              <property name="left_attach">4</property>
-              <property name="top_attach">46</property>
+              <property name="column">4</property>
+              <property name="row">46</property>
             </layout>
           </object>
         </child>
@@ -5415,8 +5415,8 @@
           <object class="GtkLabel" id="wrap47">
             <property name="label" translatable="yes">False</property>
             <layout>
-              <property name="left_attach">0</property>
-              <property name="top_attach">47</property>
+              <property name="column">0</property>
+              <property name="row">47</property>
             </layout>
           </object>
         </child>
@@ -5424,8 +5424,8 @@
           <object class="GtkLabel" id="ellipsize47">
             <property name="label" translatable="yes">end</property>
             <layout>
-              <property name="left_attach">1</property>
-              <property name="top_attach">47</property>
+              <property name="column">1</property>
+              <property name="row">47</property>
             </layout>
           </object>
         </child>
@@ -5433,8 +5433,8 @@
           <object class="GtkLabel" id="width_chars47">
             <property name="label" translatable="yes">12</property>
             <layout>
-              <property name="left_attach">2</property>
-              <property name="top_attach">47</property>
+              <property name="column">2</property>
+              <property name="row">47</property>
             </layout>
           </object>
         </child>
@@ -5442,8 +5442,8 @@
           <object class="GtkLabel" id="max_width_chars47">
             <property name="label" translatable="yes">8</property>
             <layout>
-              <property name="left_attach">3</property>
-              <property name="top_attach">47</property>
+              <property name="column">3</property>
+              <property name="row">47</property>
             </layout>
           </object>
         </child>
@@ -5525,8 +5525,8 @@
               </object>
             </child>
             <layout>
-              <property name="left_attach">4</property>
-              <property name="top_attach">47</property>
+              <property name="column">4</property>
+              <property name="row">47</property>
             </layout>
           </object>
         </child>
@@ -5534,8 +5534,8 @@
           <object class="GtkLabel" id="wrap48">
             <property name="label" translatable="yes">True</property>
             <layout>
-              <property name="left_attach">0</property>
-              <property name="top_attach">48</property>
+              <property name="column">0</property>
+              <property name="row">48</property>
             </layout>
           </object>
         </child>
@@ -5543,8 +5543,8 @@
           <object class="GtkLabel" id="ellipsize48">
             <property name="label" translatable="yes">end</property>
             <layout>
-              <property name="left_attach">1</property>
-              <property name="top_attach">48</property>
+              <property name="column">1</property>
+              <property name="row">48</property>
             </layout>
           </object>
         </child>
@@ -5552,8 +5552,8 @@
           <object class="GtkLabel" id="width_chars48">
             <property name="label" translatable="yes">12</property>
             <layout>
-              <property name="left_attach">2</property>
-              <property name="top_attach">48</property>
+              <property name="column">2</property>
+              <property name="row">48</property>
             </layout>
           </object>
         </child>
@@ -5561,8 +5561,8 @@
           <object class="GtkLabel" id="max_width_chars48">
             <property name="label" translatable="yes">8</property>
             <layout>
-              <property name="left_attach">3</property>
-              <property name="top_attach">48</property>
+              <property name="column">3</property>
+              <property name="row">48</property>
             </layout>
           </object>
         </child>
@@ -5648,8 +5648,8 @@
               </object>
             </child>
             <layout>
-              <property name="left_attach">4</property>
-              <property name="top_attach">48</property>
+              <property name="column">4</property>
+              <property name="row">48</property>
             </layout>
           </object>
         </child>
@@ -5657,8 +5657,8 @@
           <object class="GtkLabel" id="wrap49">
             <property name="label" translatable="yes">False</property>
             <layout>
-              <property name="left_attach">0</property>
-              <property name="top_attach">49</property>
+              <property name="column">0</property>
+              <property name="row">49</property>
             </layout>
           </object>
         </child>
@@ -5666,8 +5666,8 @@
           <object class="GtkLabel" id="ellipsize49">
             <property name="label" translatable="yes">none</property>
             <layout>
-              <property name="left_attach">1</property>
-              <property name="top_attach">49</property>
+              <property name="column">1</property>
+              <property name="row">49</property>
             </layout>
           </object>
         </child>
@@ -5675,8 +5675,8 @@
           <object class="GtkLabel" id="width_chars49">
             <property name="label" translatable="yes">-1</property>
             <layout>
-              <property name="left_attach">2</property>
-              <property name="top_attach">49</property>
+              <property name="column">2</property>
+              <property name="row">49</property>
             </layout>
           </object>
         </child>
@@ -5684,8 +5684,8 @@
           <object class="GtkLabel" id="max_width_chars49">
             <property name="label" translatable="yes">12</property>
             <layout>
-              <property name="left_attach">3</property>
-              <property name="top_attach">49</property>
+              <property name="column">3</property>
+              <property name="row">49</property>
             </layout>
           </object>
         </child>
@@ -5759,8 +5759,8 @@
               </object>
             </child>
             <layout>
-              <property name="left_attach">4</property>
-              <property name="top_attach">49</property>
+              <property name="column">4</property>
+              <property name="row">49</property>
             </layout>
           </object>
         </child>
@@ -5768,8 +5768,8 @@
           <object class="GtkLabel" id="wrap50">
             <property name="label" translatable="yes">True</property>
             <layout>
-              <property name="left_attach">0</property>
-              <property name="top_attach">50</property>
+              <property name="column">0</property>
+              <property name="row">50</property>
             </layout>
           </object>
         </child>
@@ -5777,8 +5777,8 @@
           <object class="GtkLabel" id="ellipsize50">
             <property name="label" translatable="yes">none</property>
             <layout>
-              <property name="left_attach">1</property>
-              <property name="top_attach">50</property>
+              <property name="column">1</property>
+              <property name="row">50</property>
             </layout>
           </object>
         </child>
@@ -5786,8 +5786,8 @@
           <object class="GtkLabel" id="width_chars50">
             <property name="label" translatable="yes">-1</property>
             <layout>
-              <property name="left_attach">2</property>
-              <property name="top_attach">50</property>
+              <property name="column">2</property>
+              <property name="row">50</property>
             </layout>
           </object>
         </child>
@@ -5795,8 +5795,8 @@
           <object class="GtkLabel" id="max_width_chars50">
             <property name="label" translatable="yes">12</property>
             <layout>
-              <property name="left_attach">3</property>
-              <property name="top_attach">50</property>
+              <property name="column">3</property>
+              <property name="row">50</property>
             </layout>
           </object>
         </child>
@@ -5874,8 +5874,8 @@
               </object>
             </child>
             <layout>
-              <property name="left_attach">4</property>
-              <property name="top_attach">50</property>
+              <property name="column">4</property>
+              <property name="row">50</property>
             </layout>
           </object>
         </child>
@@ -5883,8 +5883,8 @@
           <object class="GtkLabel" id="wrap51">
             <property name="label" translatable="yes">False</property>
             <layout>
-              <property name="left_attach">0</property>
-              <property name="top_attach">51</property>
+              <property name="column">0</property>
+              <property name="row">51</property>
             </layout>
           </object>
         </child>
@@ -5892,8 +5892,8 @@
           <object class="GtkLabel" id="ellipsize51">
             <property name="label" translatable="yes">end</property>
             <layout>
-              <property name="left_attach">1</property>
-              <property name="top_attach">51</property>
+              <property name="column">1</property>
+              <property name="row">51</property>
             </layout>
           </object>
         </child>
@@ -5901,8 +5901,8 @@
           <object class="GtkLabel" id="width_chars51">
             <property name="label" translatable="yes">-1</property>
             <layout>
-              <property name="left_attach">2</property>
-              <property name="top_attach">51</property>
+              <property name="column">2</property>
+              <property name="row">51</property>
             </layout>
           </object>
         </child>
@@ -5910,8 +5910,8 @@
           <object class="GtkLabel" id="max_width_chars51">
             <property name="label" translatable="yes">12</property>
             <layout>
-              <property name="left_attach">3</property>
-              <property name="top_attach">51</property>
+              <property name="column">3</property>
+              <property name="row">51</property>
             </layout>
           </object>
         </child>
@@ -5989,8 +5989,8 @@
               </object>
             </child>
             <layout>
-              <property name="left_attach">4</property>
-              <property name="top_attach">51</property>
+              <property name="column">4</property>
+              <property name="row">51</property>
             </layout>
           </object>
         </child>
@@ -5998,8 +5998,8 @@
           <object class="GtkLabel" id="wrap52">
             <property name="label" translatable="yes">True</property>
             <layout>
-              <property name="left_attach">0</property>
-              <property name="top_attach">52</property>
+              <property name="column">0</property>
+              <property name="row">52</property>
             </layout>
           </object>
         </child>
@@ -6007,8 +6007,8 @@
           <object class="GtkLabel" id="ellipsize52">
             <property name="label" translatable="yes">end</property>
             <layout>
-              <property name="left_attach">1</property>
-              <property name="top_attach">52</property>
+              <property name="column">1</property>
+              <property name="row">52</property>
             </layout>
           </object>
         </child>
@@ -6016,8 +6016,8 @@
           <object class="GtkLabel" id="width_chars52">
             <property name="label" translatable="yes">-1</property>
             <layout>
-              <property name="left_attach">2</property>
-              <property name="top_attach">52</property>
+              <property name="column">2</property>
+              <property name="row">52</property>
             </layout>
           </object>
         </child>
@@ -6025,8 +6025,8 @@
           <object class="GtkLabel" id="max_width_chars52">
             <property name="label" translatable="yes">12</property>
             <layout>
-              <property name="left_attach">3</property>
-              <property name="top_attach">52</property>
+              <property name="column">3</property>
+              <property name="row">52</property>
             </layout>
           </object>
         </child>
@@ -6108,8 +6108,8 @@
               </object>
             </child>
             <layout>
-              <property name="left_attach">4</property>
-              <property name="top_attach">52</property>
+              <property name="column">4</property>
+              <property name="row">52</property>
             </layout>
           </object>
         </child>
@@ -6117,8 +6117,8 @@
           <object class="GtkLabel" id="wrap53">
             <property name="label" translatable="yes">False</property>
             <layout>
-              <property name="left_attach">0</property>
-              <property name="top_attach">53</property>
+              <property name="column">0</property>
+              <property name="row">53</property>
             </layout>
           </object>
         </child>
@@ -6126,8 +6126,8 @@
           <object class="GtkLabel" id="ellipsize53">
             <property name="label" translatable="yes">none</property>
             <layout>
-              <property name="left_attach">1</property>
-              <property name="top_attach">53</property>
+              <property name="column">1</property>
+              <property name="row">53</property>
             </layout>
           </object>
         </child>
@@ -6135,8 +6135,8 @@
           <object class="GtkLabel" id="width_chars53">
             <property name="label" translatable="yes">4</property>
             <layout>
-              <property name="left_attach">2</property>
-              <property name="top_attach">53</property>
+              <property name="column">2</property>
+              <property name="row">53</property>
             </layout>
           </object>
         </child>
@@ -6144,8 +6144,8 @@
           <object class="GtkLabel" id="max_width_chars53">
             <property name="label" translatable="yes">12</property>
             <layout>
-              <property name="left_attach">3</property>
-              <property name="top_attach">53</property>
+              <property name="column">3</property>
+              <property name="row">53</property>
             </layout>
           </object>
         </child>
@@ -6223,8 +6223,8 @@
               </object>
             </child>
             <layout>
-              <property name="left_attach">4</property>
-              <property name="top_attach">53</property>
+              <property name="column">4</property>
+              <property name="row">53</property>
             </layout>
           </object>
         </child>
@@ -6232,8 +6232,8 @@
           <object class="GtkLabel" id="wrap54">
             <property name="label" translatable="yes">True</property>
             <layout>
-              <property name="left_attach">0</property>
-              <property name="top_attach">54</property>
+              <property name="column">0</property>
+              <property name="row">54</property>
             </layout>
           </object>
         </child>
@@ -6241,8 +6241,8 @@
           <object class="GtkLabel" id="ellipsize54">
             <property name="label" translatable="yes">none</property>
             <layout>
-              <property name="left_attach">1</property>
-              <property name="top_attach">54</property>
+              <property name="column">1</property>
+              <property name="row">54</property>
             </layout>
           </object>
         </child>
@@ -6250,8 +6250,8 @@
           <object class="GtkLabel" id="width_chars54">
             <property name="label" translatable="yes">4</property>
             <layout>
-              <property name="left_attach">2</property>
-              <property name="top_attach">54</property>
+              <property name="column">2</property>
+              <property name="row">54</property>
             </layout>
           </object>
         </child>
@@ -6259,8 +6259,8 @@
           <object class="GtkLabel" id="max_width_chars54">
             <property name="label" translatable="yes">12</property>
             <layout>
-              <property name="left_attach">3</property>
-              <property name="top_attach">54</property>
+              <property name="column">3</property>
+              <property name="row">54</property>
             </layout>
           </object>
         </child>
@@ -6342,8 +6342,8 @@
               </object>
             </child>
             <layout>
-              <property name="left_attach">4</property>
-              <property name="top_attach">54</property>
+              <property name="column">4</property>
+              <property name="row">54</property>
             </layout>
           </object>
         </child>
@@ -6351,8 +6351,8 @@
           <object class="GtkLabel" id="wrap55">
             <property name="label" translatable="yes">False</property>
             <layout>
-              <property name="left_attach">0</property>
-              <property name="top_attach">55</property>
+              <property name="column">0</property>
+              <property name="row">55</property>
             </layout>
           </object>
         </child>
@@ -6360,8 +6360,8 @@
           <object class="GtkLabel" id="ellipsize55">
             <property name="label" translatable="yes">end</property>
             <layout>
-              <property name="left_attach">1</property>
-              <property name="top_attach">55</property>
+              <property name="column">1</property>
+              <property name="row">55</property>
             </layout>
           </object>
         </child>
@@ -6369,8 +6369,8 @@
           <object class="GtkLabel" id="width_chars55">
             <property name="label" translatable="yes">4</property>
             <layout>
-              <property name="left_attach">2</property>
-              <property name="top_attach">55</property>
+              <property name="column">2</property>
+              <property name="row">55</property>
             </layout>
           </object>
         </child>
@@ -6378,8 +6378,8 @@
           <object class="GtkLabel" id="max_width_chars55">
             <property name="label" translatable="yes">12</property>
             <layout>
-              <property name="left_attach">3</property>
-              <property name="top_attach">55</property>
+              <property name="column">3</property>
+              <property name="row">55</property>
             </layout>
           </object>
         </child>
@@ -6461,8 +6461,8 @@
               </object>
             </child>
             <layout>
-              <property name="left_attach">4</property>
-              <property name="top_attach">55</property>
+              <property name="column">4</property>
+              <property name="row">55</property>
             </layout>
           </object>
         </child>
@@ -6470,8 +6470,8 @@
           <object class="GtkLabel" id="wrap56">
             <property name="label" translatable="yes">True</property>
             <layout>
-              <property name="left_attach">0</property>
-              <property name="top_attach">56</property>
+              <property name="column">0</property>
+              <property name="row">56</property>
             </layout>
           </object>
         </child>
@@ -6479,8 +6479,8 @@
           <object class="GtkLabel" id="ellipsize56">
             <property name="label" translatable="yes">end</property>
             <layout>
-              <property name="left_attach">1</property>
-              <property name="top_attach">56</property>
+              <property name="column">1</property>
+              <property name="row">56</property>
             </layout>
           </object>
         </child>
@@ -6488,8 +6488,8 @@
           <object class="GtkLabel" id="width_chars56">
             <property name="label" translatable="yes">4</property>
             <layout>
-              <property name="left_attach">2</property>
-              <property name="top_attach">56</property>
+              <property name="column">2</property>
+              <property name="row">56</property>
             </layout>
           </object>
         </child>
@@ -6497,8 +6497,8 @@
           <object class="GtkLabel" id="max_width_chars56">
             <property name="label" translatable="yes">12</property>
             <layout>
-              <property name="left_attach">3</property>
-              <property name="top_attach">56</property>
+              <property name="column">3</property>
+              <property name="row">56</property>
             </layout>
           </object>
         </child>
@@ -6584,8 +6584,8 @@
               </object>
             </child>
             <layout>
-              <property name="left_attach">4</property>
-              <property name="top_attach">56</property>
+              <property name="column">4</property>
+              <property name="row">56</property>
             </layout>
           </object>
         </child>
@@ -6593,8 +6593,8 @@
           <object class="GtkLabel" id="wrap57">
             <property name="label" translatable="yes">False</property>
             <layout>
-              <property name="left_attach">0</property>
-              <property name="top_attach">57</property>
+              <property name="column">0</property>
+              <property name="row">57</property>
             </layout>
           </object>
         </child>
@@ -6602,8 +6602,8 @@
           <object class="GtkLabel" id="ellipsize57">
             <property name="label" translatable="yes">none</property>
             <layout>
-              <property name="left_attach">1</property>
-              <property name="top_attach">57</property>
+              <property name="column">1</property>
+              <property name="row">57</property>
             </layout>
           </object>
         </child>
@@ -6611,8 +6611,8 @@
           <object class="GtkLabel" id="width_chars57">
             <property name="label" translatable="yes">8</property>
             <layout>
-              <property name="left_attach">2</property>
-              <property name="top_attach">57</property>
+              <property name="column">2</property>
+              <property name="row">57</property>
             </layout>
           </object>
         </child>
@@ -6620,8 +6620,8 @@
           <object class="GtkLabel" id="max_width_chars57">
             <property name="label" translatable="yes">12</property>
             <layout>
-              <property name="left_attach">3</property>
-              <property name="top_attach">57</property>
+              <property name="column">3</property>
+              <property name="row">57</property>
             </layout>
           </object>
         </child>
@@ -6699,8 +6699,8 @@
               </object>
             </child>
             <layout>
-              <property name="left_attach">4</property>
-              <property name="top_attach">57</property>
+              <property name="column">4</property>
+              <property name="row">57</property>
             </layout>
           </object>
         </child>
@@ -6708,8 +6708,8 @@
           <object class="GtkLabel" id="wrap58">
             <property name="label" translatable="yes">True</property>
             <layout>
-              <property name="left_attach">0</property>
-              <property name="top_attach">58</property>
+              <property name="column">0</property>
+              <property name="row">58</property>
             </layout>
           </object>
         </child>
@@ -6717,8 +6717,8 @@
           <object class="GtkLabel" id="ellipsize58">
             <property name="label" translatable="yes">none</property>
             <layout>
-              <property name="left_attach">1</property>
-              <property name="top_attach">58</property>
+              <property name="column">1</property>
+              <property name="row">58</property>
             </layout>
           </object>
         </child>
@@ -6726,8 +6726,8 @@
           <object class="GtkLabel" id="width_chars58">
             <property name="label" translatable="yes">8</property>
             <layout>
-              <property name="left_attach">2</property>
-              <property name="top_attach">58</property>
+              <property name="column">2</property>
+              <property name="row">58</property>
             </layout>
           </object>
         </child>
@@ -6735,8 +6735,8 @@
           <object class="GtkLabel" id="max_width_chars58">
             <property name="label" translatable="yes">12</property>
             <layout>
-              <property name="left_attach">3</property>
-              <property name="top_attach">58</property>
+              <property name="column">3</property>
+              <property name="row">58</property>
             </layout>
           </object>
         </child>
@@ -6818,8 +6818,8 @@
               </object>
             </child>
             <layout>
-              <property name="left_attach">4</property>
-              <property name="top_attach">58</property>
+              <property name="column">4</property>
+              <property name="row">58</property>
             </layout>
           </object>
         </child>
@@ -6827,8 +6827,8 @@
           <object class="GtkLabel" id="wrap59">
             <property name="label" translatable="yes">False</property>
             <layout>
-              <property name="left_attach">0</property>
-              <property name="top_attach">59</property>
+              <property name="column">0</property>
+              <property name="row">59</property>
             </layout>
           </object>
         </child>
@@ -6836,8 +6836,8 @@
           <object class="GtkLabel" id="ellipsize59">
             <property name="label" translatable="yes">end</property>
             <layout>
-              <property name="left_attach">1</property>
-              <property name="top_attach">59</property>
+              <property name="column">1</property>
+              <property name="row">59</property>
             </layout>
           </object>
         </child>
@@ -6845,8 +6845,8 @@
           <object class="GtkLabel" id="width_chars59">
             <property name="label" translatable="yes">8</property>
             <layout>
-              <property name="left_attach">2</property>
-              <property name="top_attach">59</property>
+              <property name="column">2</property>
+              <property name="row">59</property>
             </layout>
           </object>
         </child>
@@ -6854,8 +6854,8 @@
           <object class="GtkLabel" id="max_width_chars59">
             <property name="label" translatable="yes">12</property>
             <layout>
-              <property name="left_attach">3</property>
-              <property name="top_attach">59</property>
+              <property name="column">3</property>
+              <property name="row">59</property>
             </layout>
           </object>
         </child>
@@ -6937,8 +6937,8 @@
               </object>
             </child>
             <layout>
-              <property name="left_attach">4</property>
-              <property name="top_attach">59</property>
+              <property name="column">4</property>
+              <property name="row">59</property>
             </layout>
           </object>
         </child>
@@ -6946,8 +6946,8 @@
           <object class="GtkLabel" id="wrap60">
             <property name="label" translatable="yes">True</property>
             <layout>
-              <property name="left_attach">0</property>
-              <property name="top_attach">60</property>
+              <property name="column">0</property>
+              <property name="row">60</property>
             </layout>
           </object>
         </child>
@@ -6955,8 +6955,8 @@
           <object class="GtkLabel" id="ellipsize60">
             <property name="label" translatable="yes">end</property>
             <layout>
-              <property name="left_attach">1</property>
-              <property name="top_attach">60</property>
+              <property name="column">1</property>
+              <property name="row">60</property>
             </layout>
           </object>
         </child>
@@ -6964,8 +6964,8 @@
           <object class="GtkLabel" id="width_chars60">
             <property name="label" translatable="yes">8</property>
             <layout>
-              <property name="left_attach">2</property>
-              <property name="top_attach">60</property>
+              <property name="column">2</property>
+              <property name="row">60</property>
             </layout>
           </object>
         </child>
@@ -6973,8 +6973,8 @@
           <object class="GtkLabel" id="max_width_chars60">
             <property name="label" translatable="yes">12</property>
             <layout>
-              <property name="left_attach">3</property>
-              <property name="top_attach">60</property>
+              <property name="column">3</property>
+              <property name="row">60</property>
             </layout>
           </object>
         </child>
@@ -7060,8 +7060,8 @@
               </object>
             </child>
             <layout>
-              <property name="left_attach">4</property>
-              <property name="top_attach">60</property>
+              <property name="column">4</property>
+              <property name="row">60</property>
             </layout>
           </object>
         </child>
@@ -7069,8 +7069,8 @@
           <object class="GtkLabel" id="wrap61">
             <property name="label" translatable="yes">False</property>
             <layout>
-              <property name="left_attach">0</property>
-              <property name="top_attach">61</property>
+              <property name="column">0</property>
+              <property name="row">61</property>
             </layout>
           </object>
         </child>
@@ -7078,8 +7078,8 @@
           <object class="GtkLabel" id="ellipsize61">
             <property name="label" translatable="yes">none</property>
             <layout>
-              <property name="left_attach">1</property>
-              <property name="top_attach">61</property>
+              <property name="column">1</property>
+              <property name="row">61</property>
             </layout>
           </object>
         </child>
@@ -7087,8 +7087,8 @@
           <object class="GtkLabel" id="width_chars61">
             <property name="label" translatable="yes">12</property>
             <layout>
-              <property name="left_attach">2</property>
-              <property name="top_attach">61</property>
+              <property name="column">2</property>
+              <property name="row">61</property>
             </layout>
           </object>
         </child>
@@ -7096,8 +7096,8 @@
           <object class="GtkLabel" id="max_width_chars61">
             <property name="label" translatable="yes">12</property>
             <layout>
-              <property name="left_attach">3</property>
-              <property name="top_attach">61</property>
+              <property name="column">3</property>
+              <property name="row">61</property>
             </layout>
           </object>
         </child>
@@ -7175,8 +7175,8 @@
               </object>
             </child>
             <layout>
-              <property name="left_attach">4</property>
-              <property name="top_attach">61</property>
+              <property name="column">4</property>
+              <property name="row">61</property>
             </layout>
           </object>
         </child>
@@ -7184,8 +7184,8 @@
           <object class="GtkLabel" id="wrap62">
             <property name="label" translatable="yes">True</property>
             <layout>
-              <property name="left_attach">0</property>
-              <property name="top_attach">62</property>
+              <property name="column">0</property>
+              <property name="row">62</property>
             </layout>
           </object>
         </child>
@@ -7193,8 +7193,8 @@
           <object class="GtkLabel" id="ellipsize62">
             <property name="label" translatable="yes">none</property>
             <layout>
-              <property name="left_attach">1</property>
-              <property name="top_attach">62</property>
+              <property name="column">1</property>
+              <property name="row">62</property>
             </layout>
           </object>
         </child>
@@ -7202,8 +7202,8 @@
           <object class="GtkLabel" id="width_chars62">
             <property name="label" translatable="yes">12</property>
             <layout>
-              <property name="left_attach">2</property>
-              <property name="top_attach">62</property>
+              <property name="column">2</property>
+              <property name="row">62</property>
             </layout>
           </object>
         </child>
@@ -7211,8 +7211,8 @@
           <object class="GtkLabel" id="max_width_chars62">
             <property name="label" translatable="yes">12</property>
             <layout>
-              <property name="left_attach">3</property>
-              <property name="top_attach">62</property>
+              <property name="column">3</property>
+              <property name="row">62</property>
             </layout>
           </object>
         </child>
@@ -7294,8 +7294,8 @@
               </object>
             </child>
             <layout>
-              <property name="left_attach">4</property>
-              <property name="top_attach">62</property>
+              <property name="column">4</property>
+              <property name="row">62</property>
             </layout>
           </object>
         </child>
@@ -7303,8 +7303,8 @@
           <object class="GtkLabel" id="wrap63">
             <property name="label" translatable="yes">False</property>
             <layout>
-              <property name="left_attach">0</property>
-              <property name="top_attach">63</property>
+              <property name="column">0</property>
+              <property name="row">63</property>
             </layout>
           </object>
         </child>
@@ -7312,8 +7312,8 @@
           <object class="GtkLabel" id="ellipsize63">
             <property name="label" translatable="yes">end</property>
             <layout>
-              <property name="left_attach">1</property>
-              <property name="top_attach">63</property>
+              <property name="column">1</property>
+              <property name="row">63</property>
             </layout>
           </object>
         </child>
@@ -7321,8 +7321,8 @@
           <object class="GtkLabel" id="width_chars63">
             <property name="label" translatable="yes">12</property>
             <layout>
-              <property name="left_attach">2</property>
-              <property name="top_attach">63</property>
+              <property name="column">2</property>
+              <property name="row">63</property>
             </layout>
           </object>
         </child>
@@ -7330,8 +7330,8 @@
           <object class="GtkLabel" id="max_width_chars63">
             <property name="label" translatable="yes">12</property>
             <layout>
-              <property name="left_attach">3</property>
-              <property name="top_attach">63</property>
+              <property name="column">3</property>
+              <property name="row">63</property>
             </layout>
           </object>
         </child>
@@ -7413,8 +7413,8 @@
               </object>
             </child>
             <layout>
-              <property name="left_attach">4</property>
-              <property name="top_attach">63</property>
+              <property name="column">4</property>
+              <property name="row">63</property>
             </layout>
           </object>
         </child>
@@ -7422,8 +7422,8 @@
           <object class="GtkLabel" id="wrap64">
             <property name="label" translatable="yes">True</property>
             <layout>
-              <property name="left_attach">0</property>
-              <property name="top_attach">64</property>
+              <property name="column">0</property>
+              <property name="row">64</property>
             </layout>
           </object>
         </child>
@@ -7431,8 +7431,8 @@
           <object class="GtkLabel" id="ellipsize64">
             <property name="label" translatable="yes">end</property>
             <layout>
-              <property name="left_attach">1</property>
-              <property name="top_attach">64</property>
+              <property name="column">1</property>
+              <property name="row">64</property>
             </layout>
           </object>
         </child>
@@ -7440,8 +7440,8 @@
           <object class="GtkLabel" id="width_chars64">
             <property name="label" translatable="yes">12</property>
             <layout>
-              <property name="left_attach">2</property>
-              <property name="top_attach">64</property>
+              <property name="column">2</property>
+              <property name="row">64</property>
             </layout>
           </object>
         </child>
@@ -7449,8 +7449,8 @@
           <object class="GtkLabel" id="max_width_chars64">
             <property name="label" translatable="yes">12</property>
             <layout>
-              <property name="left_attach">3</property>
-              <property name="top_attach">64</property>
+              <property name="column">3</property>
+              <property name="row">64</property>
             </layout>
           </object>
         </child>
@@ -7536,8 +7536,8 @@
               </object>
             </child>
             <layout>
-              <property name="left_attach">4</property>
-              <property name="top_attach">64</property>
+              <property name="column">4</property>
+              <property name="row">64</property>
             </layout>
           </object>
         </child>

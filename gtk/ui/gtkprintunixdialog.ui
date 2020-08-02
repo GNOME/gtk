@@ -215,8 +215,8 @@
                                         <property name="use-underline">1</property>
                                         <property name="active">1</property>
                                         <layout>
-                                          <property name="left-attach">0</property>
-                                          <property name="top-attach">0</property>
+                                          <property name="column">0</property>
+                                          <property name="row">0</property>
                                           <property name="column-span">2</property>
                                         </layout>
                                       </object>
@@ -228,8 +228,8 @@
                                         <property name="use-underline">1</property>
                                         <property name="group">all_pages_radio</property>
                                         <layout>
-                                          <property name="left-attach">0</property>
-                                          <property name="top-attach">1</property>
+                                          <property name="column">0</property>
+                                          <property name="row">1</property>
                                           <property name="column-span">2</property>
                                         </layout>
                                       </object>
@@ -241,8 +241,8 @@
                                         <property name="use-underline">1</property>
                                         <property name="group">all_pages_radio</property>
                                         <layout>
-                                          <property name="left-attach">0</property>
-                                          <property name="top-attach">2</property>
+                                          <property name="column">0</property>
+                                          <property name="row">2</property>
                                           <property name="column-span">2</property>
                                         </layout>
                                       </object>
@@ -256,8 +256,8 @@
                                         <property name="group">all_pages_radio</property>
                                         <signal name="toggled" handler="update_page_range_entry_sensitivity" swapped="no"/>
                                         <layout>
-                                          <property name="left-attach">0</property>
-                                          <property name="top-attach">3</property>
+                                          <property name="column">0</property>
+                                          <property name="row">3</property>
                                         </layout>
                                       </object>
                                     </child>
@@ -268,8 +268,8 @@
                                         <property name="activates-default">1</property>
                                         <signal name="notify::has-focus" handler="page_range_entry_focus_changed" swapped="no"/>
                                         <layout>
-                                          <property name="left-attach">1</property>
-                                          <property name="top-attach">3</property>
+                                          <property name="column">1</property>
+                                          <property name="row">3</property>
                                         </layout>
                                       </object>
                                     </child>
@@ -305,8 +305,8 @@
                                         <property name="use-underline">1</property>
                                         <property name="mnemonic-widget">copies_spin</property>
                                         <layout>
-                                          <property name="left-attach">0</property>
-                                          <property name="top-attach">0</property>
+                                          <property name="column">0</property>
+                                          <property name="row">0</property>
                                         </layout>
                                       </object>
                                     </child>
@@ -317,8 +317,8 @@
                                         <signal name="changed" handler="update_dialog_from_capabilities" object="GtkPrintUnixDialog" swapped="yes"/>
                                         <signal name="value-changed" handler="update_dialog_from_capabilities" object="GtkPrintUnixDialog" swapped="yes"/>
                                         <layout>
-                                          <property name="left-attach">1</property>
-                                          <property name="top-attach">0</property>
+                                          <property name="column">1</property>
+                                          <property name="row">0</property>
                                         </layout>
                                       </object>
                                     </child>
@@ -328,8 +328,8 @@
                                         <property name="use-underline">1</property>
                                         <signal name="toggled" handler="update_collate_icon" swapped="no"/>
                                         <layout>
-                                          <property name="left-attach">0</property>
-                                          <property name="top-attach">1</property>
+                                          <property name="column">0</property>
+                                          <property name="row">1</property>
                                         </layout>
                                       </object>
                                     </child>
@@ -339,8 +339,8 @@
                                         <property name="use-underline">1</property>
                                         <signal name="toggled" handler="update_collate_icon" swapped="no"/>
                                         <layout>
-                                          <property name="left-attach">0</property>
-                                          <property name="top-attach">2</property>
+                                          <property name="column">0</property>
+                                          <property name="row">2</property>
                                         </layout>
                                       </object>
                                     </child>
@@ -349,8 +349,8 @@
                                         <property name="content-width">70</property>
                                         <property name="content-height">90</property>
                                         <layout>
-                                          <property name="left-attach">1</property>
-                                          <property name="top-attach">1</property>
+                                          <property name="column">1</property>
+                                          <property name="row">1</property>
                                           <property name="row-span">2</property>
                                         </layout>
                                       </object>
@@ -411,8 +411,8 @@
                                         <property name="use-underline">1</property>
                                         <property name="mnemonic-widget">duplex</property>
                                         <layout>
-                                          <property name="left-attach">0</property>
-                                          <property name="top-attach">0</property>
+                                          <property name="column">0</property>
+                                          <property name="row">0</property>
                                         </layout>
                                       </object>
                                     </child>
@@ -420,8 +420,8 @@
                                       <object class="GtkPrinterOptionWidget" id="duplex">
                                         <property name="valign">baseline</property>
                                         <layout>
-                                          <property name="left-attach">1</property>
-                                          <property name="top-attach">0</property>
+                                          <property name="column">1</property>
+                                          <property name="row">0</property>
                                         </layout>
                                       </object>
                                     </child>
@@ -433,8 +433,8 @@
                                         <property name="use-underline">1</property>
                                         <property name="mnemonic-widget">pages_per_sheet</property>
                                         <layout>
-                                          <property name="left-attach">0</property>
-                                          <property name="top-attach">1</property>
+                                          <property name="column">0</property>
+                                          <property name="row">1</property>
                                         </layout>
                                       </object>
                                     </child>
@@ -444,8 +444,8 @@
                                         <signal name="changed" handler="redraw_page_layout_preview" object="GtkPrintUnixDialog" swapped="yes"/>
                                         <signal name="changed" handler="update_number_up_layout" object="GtkPrintUnixDialog" swapped="yes"/>
                                         <layout>
-                                          <property name="left-attach">1</property>
-                                          <property name="top-attach">1</property>
+                                          <property name="column">1</property>
+                                          <property name="row">1</property>
                                         </layout>
                                       </object>
                                     </child>
@@ -457,8 +457,8 @@
                                         <property name="use-underline">1</property>
                                         <property name="mnemonic-widget">number_up_layout</property>
                                         <layout>
-                                          <property name="left-attach">0</property>
-                                          <property name="top-attach">2</property>
+                                          <property name="column">0</property>
+                                          <property name="row">2</property>
                                         </layout>
                                       </object>
                                     </child>
@@ -467,8 +467,8 @@
                                         <property name="valign">baseline</property>
                                         <signal name="changed" handler="redraw_page_layout_preview" object="GtkPrintUnixDialog" swapped="yes"/>
                                         <layout>
-                                          <property name="left-attach">1</property>
-                                          <property name="top-attach">2</property>
+                                          <property name="column">1</property>
+                                          <property name="row">2</property>
                                         </layout>
                                       </object>
                                     </child>
@@ -480,8 +480,8 @@
                                         <property name="use-underline">1</property>
                                         <property name="mnemonic-widget">page_set_combo</property>
                                         <layout>
-                                          <property name="left-attach">0</property>
-                                          <property name="top-attach">3</property>
+                                          <property name="column">0</property>
+                                          <property name="row">3</property>
                                         </layout>
                                       </object>
                                     </child>
@@ -499,8 +499,8 @@
                                           </object>
                                         </property>
                                         <layout>
-                                          <property name="left-attach">1</property>
-                                          <property name="top-attach">3</property>
+                                          <property name="column">1</property>
+                                          <property name="row">3</property>
                                         </layout>
                                       </object>
                                     </child>
@@ -512,8 +512,8 @@
                                         <property name="use-underline">1</property>
                                         <property name="mnemonic-widget">scale_spin</property>
                                         <layout>
-                                          <property name="left-attach">0</property>
-                                          <property name="top-attach">4</property>
+                                          <property name="column">0</property>
+                                          <property name="row">4</property>
                                         </layout>
                                       </object>
                                     </child>
@@ -535,8 +535,8 @@
                                           </object>
                                         </child>
                                         <layout>
-                                          <property name="left-attach">1</property>
-                                          <property name="top-attach">4</property>
+                                          <property name="column">1</property>
+                                          <property name="row">4</property>
                                         </layout>
                                       </object>
                                     </child>
@@ -572,8 +572,8 @@
                                         <property name="use-underline">1</property>
                                         <property name="mnemonic-widget">paper_type</property>
                                         <layout>
-                                          <property name="left-attach">0</property>
-                                          <property name="top-attach">0</property>
+                                          <property name="column">0</property>
+                                          <property name="row">0</property>
                                         </layout>
                                       </object>
                                     </child>
@@ -581,8 +581,8 @@
                                       <object class="GtkPrinterOptionWidget" id="paper_type">
                                         <property name="valign">baseline</property>
                                         <layout>
-                                          <property name="left-attach">1</property>
-                                          <property name="top-attach">0</property>
+                                          <property name="column">1</property>
+                                          <property name="row">0</property>
                                         </layout>
                                       </object>
                                     </child>
@@ -594,8 +594,8 @@
                                         <property name="use-underline">1</property>
                                         <property name="mnemonic-widget">paper_source</property>
                                         <layout>
-                                          <property name="left-attach">0</property>
-                                          <property name="top-attach">1</property>
+                                          <property name="column">0</property>
+                                          <property name="row">1</property>
                                         </layout>
                                       </object>
                                     </child>
@@ -603,8 +603,8 @@
                                       <object class="GtkPrinterOptionWidget" id="paper_source">
                                         <property name="valign">baseline</property>
                                         <layout>
-                                          <property name="left-attach">1</property>
-                                          <property name="top-attach">1</property>
+                                          <property name="column">1</property>
+                                          <property name="row">1</property>
                                         </layout>
                                       </object>
                                     </child>
@@ -616,8 +616,8 @@
                                         <property name="use-underline">1</property>
                                         <property name="mnemonic-widget">output_tray</property>
                                         <layout>
-                                          <property name="left-attach">0</property>
-                                          <property name="top-attach">2</property>
+                                          <property name="column">0</property>
+                                          <property name="row">2</property>
                                         </layout>
                                       </object>
                                     </child>
@@ -625,8 +625,8 @@
                                       <object class="GtkPrinterOptionWidget" id="output_tray">
                                         <property name="valign">baseline</property>
                                         <layout>
-                                          <property name="left-attach">1</property>
-                                          <property name="top-attach">2</property>
+                                          <property name="column">1</property>
+                                          <property name="row">2</property>
                                         </layout>
                                       </object>
                                     </child>
@@ -638,8 +638,8 @@
                                         <property name="use-underline">1</property>
                                         <property name="mnemonic-widget">paper_size_combo</property>
                                         <layout>
-                                          <property name="left-attach">0</property>
-                                          <property name="top-attach">3</property>
+                                          <property name="column">0</property>
+                                          <property name="row">3</property>
                                         </layout>
                                       </object>
                                     </child>
@@ -648,8 +648,8 @@
                                         <property name="sensitive">0</property>
                                         <property name="valign">baseline</property>
                                         <layout>
-                                          <property name="left-attach">1</property>
-                                          <property name="top-attach">3</property>
+                                          <property name="column">1</property>
+                                          <property name="row">3</property>
                                         </layout>
                                       </object>
                                     </child>
@@ -661,8 +661,8 @@
                                         <property name="use-underline">1</property>
                                         <property name="mnemonic-widget">orientation_combo</property>
                                         <layout>
-                                          <property name="left-attach">0</property>
-                                          <property name="top-attach">4</property>
+                                          <property name="column">0</property>
+                                          <property name="row">4</property>
                                         </layout>
                                       </object>
                                     </child>
@@ -682,8 +682,8 @@
                                           </object>
                                         </property>
                                         <layout>
-                                          <property name="left-attach">1</property>
-                                          <property name="top-attach">4</property>
+                                          <property name="column">1</property>
+                                          <property name="row">4</property>
                                         </layout>
                                       </object>
                                     </child>
@@ -750,16 +750,16 @@
                                     <property name="use-underline">1</property>
                                     <property name="mnemonic-widget">job_prio</property>
                                     <layout>
-                                      <property name="left-attach">0</property>
-                                      <property name="top-attach">0</property>
+                                      <property name="column">0</property>
+                                      <property name="row">0</property>
                                     </layout>
                                   </object>
                                 </child>
                                 <child>
                                   <object class="GtkPrinterOptionWidget" id="job_prio">
                                     <layout>
-                                      <property name="left-attach">1</property>
-                                      <property name="top-attach">0</property>
+                                      <property name="column">1</property>
+                                      <property name="row">0</property>
                                     </layout>
                                   </object>
                                 </child>
@@ -771,24 +771,24 @@
                                     <property name="use-underline">1</property>
                                     <property name="mnemonic-widget">billing_info</property>
                                     <layout>
-                                      <property name="left-attach">0</property>
-                                      <property name="top-attach">1</property>
+                                      <property name="column">0</property>
+                                      <property name="row">1</property>
                                     </layout>
                                   </object>
                                 </child>
                                 <child>
                                   <object class="GtkPrinterOptionWidget" id="billing_info">
                                     <layout>
-                                      <property name="left-attach">1</property>
-                                      <property name="top-attach">1</property>
+                                      <property name="column">1</property>
+                                      <property name="row">1</property>
                                     </layout>
                                   </object>
                                 </child>
                               </object>
                             </child>
                             <layout>
-                              <property name="left-attach">0</property>
-                              <property name="top-attach">0</property>
+                              <property name="column">0</property>
+                              <property name="row">0</property>
                             </layout>
                           </object>
                         </child>
@@ -818,8 +818,8 @@
                                     <property name="active">1</property>
                                     <signal name="toggled" handler="update_print_at_option" object="GtkPrintUnixDialog" swapped="yes"/>
                                     <layout>
-                                      <property name="left-attach">0</property>
-                                      <property name="top-attach">0</property>
+                                      <property name="column">0</property>
+                                      <property name="row">0</property>
                                       <property name="column-span">2</property>
                                     </layout>
                                   </object>
@@ -838,8 +838,8 @@
                                     <signal name="toggled" handler="update_print_at_entry_sensitivity" swapped="no"/>
                                     <signal name="toggled" handler="update_print_at_option" object="GtkPrintUnixDialog" swapped="yes"/>
                                     <layout>
-                                      <property name="left-attach">0</property>
-                                      <property name="top-attach">1</property>
+                                      <property name="column">0</property>
+                                      <property name="row">1</property>
                                     </layout>
                                   </object>
                                 </child>
@@ -853,8 +853,8 @@
  e.g. 15∶30, 2∶35 pm, 14∶15∶20, 11∶46∶30 am, 4 pm</property>
                                     <signal name="changed" handler="update_print_at_option" object="GtkPrintUnixDialog" swapped="yes"/>
                                     <layout>
-                                      <property name="left-attach">1</property>
-                                      <property name="top-attach">1</property>
+                                      <property name="column">1</property>
+                                      <property name="row">1</property>
                                     </layout>
                                   </object>
                                 </child>
@@ -869,8 +869,8 @@
                                     <property name="group">print_now_radio</property>
                                     <signal name="toggled" handler="update_print_at_option" object="GtkPrintUnixDialog" swapped="yes"/>
                                     <layout>
-                                      <property name="left-attach">0</property>
-                                      <property name="top-attach">2</property>
+                                      <property name="column">0</property>
+                                      <property name="row">2</property>
                                       <property name="column-span">2</property>
                                     </layout>
                                   </object>
@@ -878,8 +878,8 @@
                               </object>
                             </child>
                             <layout>
-                              <property name="left-attach">0</property>
-                              <property name="top-attach">1</property>
+                              <property name="column">0</property>
+                              <property name="row">1</property>
                             </layout>
                           </object>
                         </child>
@@ -910,16 +910,16 @@
                                     <property name="use-underline">1</property>
                                     <property name="mnemonic-widget">cover_before</property>
                                     <layout>
-                                      <property name="left-attach">0</property>
-                                      <property name="top-attach">0</property>
+                                      <property name="column">0</property>
+                                      <property name="row">0</property>
                                     </layout>
                                   </object>
                                 </child>
                                 <child>
                                   <object class="GtkPrinterOptionWidget" id="cover_before">
                                     <layout>
-                                      <property name="left-attach">1</property>
-                                      <property name="top-attach">0</property>
+                                      <property name="column">1</property>
+                                      <property name="row">0</property>
                                     </layout>
                                   </object>
                                 </child>
@@ -931,24 +931,24 @@
                                     <property name="use-underline">1</property>
                                     <property name="mnemonic-widget">cover_after</property>
                                     <layout>
-                                      <property name="left-attach">0</property>
-                                      <property name="top-attach">1</property>
+                                      <property name="column">0</property>
+                                      <property name="row">1</property>
                                     </layout>
                                   </object>
                                 </child>
                                 <child>
                                   <object class="GtkPrinterOptionWidget" id="cover_after">
                                     <layout>
-                                      <property name="left-attach">1</property>
-                                      <property name="top-attach">1</property>
+                                      <property name="column">1</property>
+                                      <property name="row">1</property>
                                     </layout>
                                   </object>
                                 </child>
                               </object>
                             </child>
                             <layout>
-                              <property name="left-attach">1</property>
-                              <property name="top-attach">0</property>
+                              <property name="column">1</property>
+                              <property name="row">0</property>
                             </layout>
                           </object>
                         </child>

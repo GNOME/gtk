@@ -35,8 +35,8 @@ Ts</property>
                 <property name="use_underline">1</property>
                 <property name="mnemonic_widget">screen_reader_switch</property>
                 <layout>
-                  <property name="left_attach">0</property>
-                  <property name="top_attach">0</property>
+                  <property name="column">0</property>
+                  <property name="row">0</property>
                   <property name="column-span">1</property>
                   <property name="row-span">1</property>
                 </layout>
@@ -46,8 +46,8 @@ Ts</property>
               <object class="GtkSwitch" id="screen_reader_switch">
                 <property name="halign">end</property>
                 <layout>
-                  <property name="left_attach">1</property>
-                  <property name="top_attach">0</property>
+                  <property name="column">1</property>
+                  <property name="row">0</property>
                   <property name="column-span">1</property>
                   <property name="row-span">1</property>
                 </layout>

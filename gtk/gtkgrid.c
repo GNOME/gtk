@@ -185,8 +185,8 @@ gtk_grid_set_property (GObject      *object,
 static void
 grid_attach (GtkGrid   *grid,
              GtkWidget *widget,
-             int        left,
-             int        top,
+             int        column,
+             int        row,
              int        width,
              int        height)
 {
@@ -196,8 +196,8 @@ grid_attach (GtkGrid   *grid,
   gtk_widget_set_parent (widget, GTK_WIDGET (grid));
 
   grid_child = GTK_GRID_LAYOUT_CHILD (gtk_layout_manager_get_layout_child (priv->layout_manager, widget));
-  gtk_grid_layout_child_set_left_attach (grid_child, left);
-  gtk_grid_layout_child_set_top_attach (grid_child, top);
+  gtk_grid_layout_child_set_column (grid_child, column);
+  gtk_grid_layout_child_set_row (grid_child, row);
   gtk_grid_layout_child_set_column_span (grid_child, width);
   gtk_grid_layout_child_set_row_span (grid_child, height);
 }
@@ -241,16 +241,16 @@ find_attach_position (GtkGrid         *grid,
       switch (orientation)
         {
         case GTK_ORIENTATION_HORIZONTAL:
-          attach_pos = gtk_grid_layout_child_get_left_attach (grid_child);
+          attach_pos = gtk_grid_layout_child_get_column (grid_child);
           attach_span = gtk_grid_layout_child_get_column_span (grid_child);
-          opposite_pos = gtk_grid_layout_child_get_top_attach (grid_child);
+          opposite_pos = gtk_grid_layout_child_get_row (grid_child);
           opposite_span = gtk_grid_layout_child_get_row_span (grid_child);
           break;
 
         case GTK_ORIENTATION_VERTICAL:
-          attach_pos = gtk_grid_layout_child_get_top_attach (grid_child);
+          attach_pos = gtk_grid_layout_child_get_row (grid_child);
           attach_span = gtk_grid_layout_child_get_row_span (grid_child);
-          opposite_pos = gtk_grid_layout_child_get_left_attach (grid_child);
+          opposite_pos = gtk_grid_layout_child_get_column (grid_child);
           opposite_span = gtk_grid_layout_child_get_column_span (grid_child);
           break;
 
@@ -456,22 +456,22 @@ gtk_grid_new (void)
  * gtk_grid_attach:
  * @grid: a #GtkGrid
  * @child: the widget to add
- * @left: the column number to attach the left side of @child to
- * @top: the row number to attach the top side of @child to
+ * @column: the column number to attach the left side of @child to
+ * @row: the row number to attach the top side of @child to
  * @width: the number of columns that @child will span
  * @height: the number of rows that @child will span
  *
  * Adds a widget to the grid.
  *
- * The position of @child is determined by @left and @top. The
- * number of “cells” that @child will occupy is determined by
- * @width and @height.
+ * The position of @child is determined by @column and @row.
+ * The number of “cells” that @child will occupy is determined
+ * by @width and @height.
  */
 void
 gtk_grid_attach (GtkGrid   *grid,
                  GtkWidget *child,
-                 int        left,
-                 int        top,
+                 int        column,
+                 int        row,
                  int        width,
                  int        height)
 {
@@ -481,7 +481,7 @@ gtk_grid_attach (GtkGrid   *grid,
   g_return_if_fail (width > 0);
   g_return_if_fail (height > 0);
 
-  grid_attach (grid, child, left, top, width, height);
+  grid_attach (grid, child, column, row, width, height);
 }
 
 /**
@@ -530,21 +530,21 @@ gtk_grid_attach_next_to (GtkGrid         *grid,
       switch (side)
         {
         case GTK_POS_LEFT:
-          left = gtk_grid_layout_child_get_left_attach (grid_sibling) - width;
-          top = gtk_grid_layout_child_get_top_attach (grid_sibling);
+          left = gtk_grid_layout_child_get_column (grid_sibling) - width;
+          top = gtk_grid_layout_child_get_row (grid_sibling);
           break;
         case GTK_POS_RIGHT:
-          left = gtk_grid_layout_child_get_left_attach (grid_sibling) +
+          left = gtk_grid_layout_child_get_column (grid_sibling) +
                  gtk_grid_layout_child_get_column_span (grid_sibling);
-          top = gtk_grid_layout_child_get_top_attach (grid_sibling);
+          top = gtk_grid_layout_child_get_row (grid_sibling);
           break;
         case GTK_POS_TOP:
-          left = gtk_grid_layout_child_get_left_attach (grid_sibling);
-          top = gtk_grid_layout_child_get_top_attach (grid_sibling) - height;
+          left = gtk_grid_layout_child_get_column (grid_sibling);
+          top = gtk_grid_layout_child_get_row (grid_sibling) - height;
           break;
         case GTK_POS_BOTTOM:
-          left = gtk_grid_layout_child_get_left_attach (grid_sibling);
-          top = gtk_grid_layout_child_get_top_attach (grid_sibling) +
+          left = gtk_grid_layout_child_get_column (grid_sibling);
+          top = gtk_grid_layout_child_get_row (grid_sibling) +
                 gtk_grid_layout_child_get_row_span (grid_sibling);
           break;
         default:
@@ -584,18 +584,18 @@ gtk_grid_attach_next_to (GtkGrid         *grid,
 /**
  * gtk_grid_get_child_at:
  * @grid: a #GtkGrid
- * @left: the left edge of the cell
- * @top: the top edge of the cell
+ * @column: the left edge of the cell
+ * @row: the top edge of the cell
  *
  * Gets the child of @grid whose area covers the grid
- * cell whose upper left corner is at @left, @top.
+ * cell at @column, @row.
  *
  * Returns: (transfer none) (nullable): the child at the given position, or %NULL
  */
 GtkWidget *
 gtk_grid_get_child_at (GtkGrid *grid,
-                       int      left,
-                       int      top)
+                       int      column,
+                       int      row)
 {
   GtkGridPrivate *priv = gtk_grid_get_instance_private (grid);
   GtkWidget *child;
@@ -607,18 +607,16 @@ gtk_grid_get_child_at (GtkGrid *grid,
        child = gtk_widget_get_next_sibling (child))
     {
       GtkGridLayoutChild *grid_child;
-      int child_left, child_top, child_width, child_height;
-      
+      int child_column, child_row, child_width, child_height;
+
       grid_child = GTK_GRID_LAYOUT_CHILD (gtk_layout_manager_get_layout_child (priv->layout_manager, child));
-      child_left = gtk_grid_layout_child_get_left_attach (grid_child);
-      child_top = gtk_grid_layout_child_get_top_attach (grid_child);
+      child_column = gtk_grid_layout_child_get_column (grid_child);
+      child_row = gtk_grid_layout_child_get_row (grid_child);
       child_width = gtk_grid_layout_child_get_column_span (grid_child);
       child_height = gtk_grid_layout_child_get_row_span (grid_child);
 
-      if (child_left <= left &&
-          child_left + child_width > left &&
-          child_top <= top &&
-          child_top + child_height > top)
+      if (child_column <= column && child_column + child_width > column &&
+          child_row <= row && child_row + child_height > row)
         return child;
     }
 
@@ -672,11 +670,11 @@ gtk_grid_insert_row (GtkGrid *grid,
       GtkGridLayoutChild *grid_child;
       
       grid_child = GTK_GRID_LAYOUT_CHILD (gtk_layout_manager_get_layout_child (priv->layout_manager, child));
-      top = gtk_grid_layout_child_get_top_attach (grid_child);
+      top = gtk_grid_layout_child_get_row (grid_child);
       height = gtk_grid_layout_child_get_row_span (grid_child);
 
       if (top >= position)
-        gtk_grid_layout_child_set_top_attach (grid_child, top + 1);
+        gtk_grid_layout_child_set_row (grid_child, top + 1);
       else if (top + height > position)
         gtk_grid_layout_child_set_row_span (grid_child, height + 1);
     }
@@ -711,7 +709,7 @@ gtk_grid_remove_row (GtkGrid *grid,
       int top, height;
 
       grid_child = GTK_GRID_LAYOUT_CHILD (gtk_layout_manager_get_layout_child (priv->layout_manager, child));
-      top = gtk_grid_layout_child_get_top_attach (grid_child);
+      top = gtk_grid_layout_child_get_row (grid_child);
       height = gtk_grid_layout_child_get_row_span (grid_child);
 
       if (top <= position && top + height > position)
@@ -726,7 +724,7 @@ gtk_grid_remove_row (GtkGrid *grid,
       else
         {
           gtk_grid_layout_child_set_row_span (grid_child, height);
-          gtk_grid_layout_child_set_top_attach (grid_child, top);
+          gtk_grid_layout_child_set_row (grid_child, top);
         }
 
       child = next;
@@ -761,11 +759,11 @@ gtk_grid_insert_column (GtkGrid *grid,
       int left, width;
 
       grid_child = GTK_GRID_LAYOUT_CHILD (gtk_layout_manager_get_layout_child (priv->layout_manager, child));
-      left = gtk_grid_layout_child_get_left_attach (grid_child);
+      left = gtk_grid_layout_child_get_column (grid_child);
       width = gtk_grid_layout_child_get_column_span (grid_child);
 
       if (left >= position)
-        gtk_grid_layout_child_set_left_attach (grid_child, left + 1);
+        gtk_grid_layout_child_set_column (grid_child, left + 1);
       else if (left + width > position)
         gtk_grid_layout_child_set_column_span (grid_child, width + 1);
     }
@@ -801,7 +799,7 @@ gtk_grid_remove_column (GtkGrid *grid,
 
       grid_child = GTK_GRID_LAYOUT_CHILD (gtk_layout_manager_get_layout_child (priv->layout_manager, child));
 
-      left = gtk_grid_layout_child_get_left_attach (grid_child);
+      left = gtk_grid_layout_child_get_column (grid_child);
       width = gtk_grid_layout_child_get_column_span (grid_child);
 
       if (left <= position && left + width > position)
@@ -816,7 +814,7 @@ gtk_grid_remove_column (GtkGrid *grid,
       else
         {
           gtk_grid_layout_child_set_column_span (grid_child, width);
-          gtk_grid_layout_child_set_left_attach (grid_child, left);
+          gtk_grid_layout_child_set_column (grid_child, left);
         }
 
       child = next;
@@ -854,21 +852,21 @@ gtk_grid_insert_next_to (GtkGrid         *grid,
   switch (side)
     {
     case GTK_POS_LEFT:
-      gtk_grid_insert_column (grid, gtk_grid_layout_child_get_left_attach (child));
+      gtk_grid_insert_column (grid, gtk_grid_layout_child_get_column (child));
       break;
     case GTK_POS_RIGHT:
       {
-        int col = gtk_grid_layout_child_get_left_attach (child) +
+        int col = gtk_grid_layout_child_get_column (child) +
                   gtk_grid_layout_child_get_column_span (child);
         gtk_grid_insert_column (grid, col);
       }
       break;
     case GTK_POS_TOP:
-      gtk_grid_insert_row (grid, gtk_grid_layout_child_get_top_attach (child));
+      gtk_grid_insert_row (grid, gtk_grid_layout_child_get_row (child));
       break;
     case GTK_POS_BOTTOM:
       {
-        int row = gtk_grid_layout_child_get_top_attach (child) +
+        int row = gtk_grid_layout_child_get_row (child) +
                   gtk_grid_layout_child_get_row_span (child);
         gtk_grid_insert_row (grid, row);
       }
@@ -1142,8 +1140,8 @@ gtk_grid_get_baseline_row (GtkGrid *grid)
  * gtk_grid_query_child:
  * @grid: a #GtkGrid
  * @child: a #GtkWidget child of @grid
- * @left: (out) (optional): the column used to attach the left side of @child
- * @top: (out) (optional): the row used to attach the top side of @child
+ * @column: (out) (optional): the column used to attach the left side of @child
+ * @row: (out) (optional): the row used to attach the top side of @child
  * @width: (out) (optional): the number of columns @child spans
  * @height: (out) (optional): the number of rows @child spans
  *
@@ -1152,8 +1150,8 @@ gtk_grid_get_baseline_row (GtkGrid *grid)
 void
 gtk_grid_query_child (GtkGrid   *grid,
                       GtkWidget *child,
-                      int       *left,
-                      int       *top,
+                      int       *column,
+                      int       *row,
                       int       *width,
                       int       *height)
 {
@@ -1166,10 +1164,10 @@ gtk_grid_query_child (GtkGrid   *grid,
 
   grid_child = GTK_GRID_LAYOUT_CHILD (gtk_layout_manager_get_layout_child (priv->layout_manager, child));
 
-  if (left != NULL)
-    *left = gtk_grid_layout_child_get_left_attach (grid_child);
-  if (top != NULL)
-    *top = gtk_grid_layout_child_get_top_attach (grid_child);
+  if (column != NULL)
+    *column = gtk_grid_layout_child_get_column (grid_child);
+  if (row != NULL)
+    *row = gtk_grid_layout_child_get_row (grid_child);
   if (width != NULL)
     *width = gtk_grid_layout_child_get_column_span (grid_child);
   if (height != NULL)

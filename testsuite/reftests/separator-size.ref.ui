@@ -8,8 +8,8 @@
           <object class="GtkImage" id="image1">
             <property name="icon_name">help-about</property>
             <layout>
-              <property name="left_attach">0</property>
-              <property name="top_attach">2</property>
+              <property name="column">0</property>
+              <property name="row">2</property>
               <property name="column-span">1</property>
               <property name="row-span">1</property>
             </layout>
@@ -19,8 +19,8 @@
           <object class="GtkImage" id="image2">
             <property name="icon_name">help-about</property>
             <layout>
-              <property name="left_attach">2</property>
-              <property name="top_attach">2</property>
+              <property name="column">2</property>
+              <property name="row">2</property>
               <property name="column-span">1</property>
               <property name="row-span">1</property>
             </layout>
@@ -30,8 +30,8 @@
           <object class="GtkImage" id="image3">
             <property name="icon_name">help-about</property>
             <layout>
-              <property name="left_attach">2</property>
-              <property name="top_attach">0</property>
+              <property name="column">2</property>
+              <property name="row">0</property>
               <property name="column-span">1</property>
               <property name="row-span">1</property>
             </layout>
@@ -41,8 +41,8 @@
           <object class="GtkImage" id="image4">
             <property name="icon_name">help-about</property>
             <layout>
-              <property name="left_attach">0</property>
-              <property name="top_attach">0</property>
+              <property name="column">0</property>
+              <property name="row">0</property>
               <property name="column-span">1</property>
               <property name="row-span">1</property>
             </layout>
@@ -52,8 +52,8 @@
           <object class="GtkSeparator" id="separator1">
             <property name="orientation">vertical</property>
             <layout>
-              <property name="left_attach">1</property>
-              <property name="top_attach">0</property>
+              <property name="column">1</property>
+              <property name="row">0</property>
               <property name="column-span">1</property>
               <property name="row-span">1</property>
             </layout>
@@ -62,8 +62,8 @@
         <child>
           <object class="GtkSeparator" id="separator2">
             <layout>
-              <property name="left_attach">0</property>
-              <property name="top_attach">1</property>
+              <property name="column">0</property>
+              <property name="row">1</property>
               <property name="column-span">1</property>
               <property name="row-span">1</property>
             </layout>
@@ -72,8 +72,8 @@
         <child>
           <object class="GtkSeparator" id="separator3">
             <layout>
-              <property name="left_attach">2</property>
-              <property name="top_attach">1</property>
+              <property name="column">2</property>
+              <property name="row">1</property>
               <property name="column-span">1</property>
               <property name="row-span">1</property>
             </layout>
@@ -83,8 +83,8 @@
           <object class="GtkSeparator" id="separator4">
             <property name="orientation">vertical</property>
             <layout>
-              <property name="left_attach">1</property>
-              <property name="top_attach">2</property>
+              <property name="column">1</property>
+              <property name="row">2</property>
               <property name="column-span">1</property>
               <property name="row-span">1</property>
             </layout>

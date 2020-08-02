@@ -8,8 +8,8 @@
           <object id="button1" class="GtkButton">
             <property name="label">Button 1</property>
             <layout>
-              <property name="left-attach">0</property>
-              <property name="top-attach">0</property>
+              <property name="column">0</property>
+              <property name="row">0</property>
             </layout>
           </object>
         </child>
@@ -17,8 +17,8 @@
           <object id="button2" class="GtkButton">
             <property name="label">Button 2</property>
             <layout>
-              <property name="left-attach">1</property>
-              <property name="top-attach">0</property>
+              <property name="column">1</property>
+              <property name="row">0</property>
             </layout>
           </object>
         </child>
@@ -26,8 +26,8 @@
           <object id="quit" class="GtkButton">
             <property name="label">Quit</property>
             <layout>
-              <property name="left-attach">0</property>
-              <property name="top-attach">1</property>
+              <property name="column">0</property>
+              <property name="row">1</property>
               <property name="column-span">2</property>
             </layout>
           </object>
