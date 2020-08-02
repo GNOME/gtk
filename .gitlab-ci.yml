@@ -92,6 +92,27 @@ release-build:
     - ninja -C _build
     - .gitlab-ci/run-tests.sh _build x11
 
+installed-tests:
+  extends: .build-fedora-default
+  stage: build
+  needs: []
+  variables:
+    EXTRA_MESON_FLAGS: "--prefix=/usr --libdir=/usr/lib64 -Dinstall-tests=true"
+  script:
+    - meson ${COMMON_MESON_FLAGS} ${EXTRA_MESON_FLAGS} ${BACKEND_FLAGS} ${FEATURE_FLAGS}
+            _build
+    - ninja -C _build
+    - sudo ninja -C _build install
+    - dbus-run-session xvfb-run -a -s "-screen 0 1024x768x24"
+            gnome-desktop-testing-runner
+                   --report-directory=_build/installed-tests-report/failed/
+                   --parallel=0
+                   gtk-4.0
+  artifacts:
+    paths:
+      - "_build/installed-tests-report/"
+
+
 .mingw-defaults:
   stage: build
   tags:
