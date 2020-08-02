@@ -26,8 +26,8 @@
                       <object class="GtkImage" id="run_image">
                         <property name="vexpand">1</property>
                         <layout>
-                          <property name="left_attach">0</property>
-                          <property name="top_attach">0</property>
+                          <property name="column">0</property>
+                          <property name="row">0</property>
                         </layout>
                       </object>
                     </child>
@@ -41,8 +41,8 @@
 </property>
                         <property name="use_markup">1</property>
                         <layout>
-                          <property name="left_attach">1</property>
-                          <property name="top_attach">1</property>
+                          <property name="column">1</property>
+                          <property name="row">1</property>
                         </layout>
                       </object>
                     </child>
@@ -53,8 +53,8 @@
                           <attribute name="scale" value="2"></attribute>
                         </attributes>
                         <layout>
-                          <property name="left_attach">1</property>
-                          <property name="top_attach">0</property>
+                          <property name="column">1</property>
+                          <property name="row">0</property>
                         </layout>
                       </object>
                     </child>
@@ -81,8 +81,8 @@
                       <object class="GtkImage" id="time_image">
                         <property name="vexpand">1</property>
                         <layout>
-                          <property name="left_attach">1</property>
-                          <property name="top_attach">0</property>
+                          <property name="column">1</property>
+                          <property name="row">0</property>
                         </layout>
                       </object>
                     </child>
@@ -96,8 +96,8 @@
                           <attribute name="font-features" value="tnum 1"></attribute>
                         </attributes>
                         <layout>
-                          <property name="left_attach">0</property>
-                          <property name="top_attach">0</property>
+                          <property name="column">0</property>
+                          <property name="row">0</property>
                         </layout>
                       </object>
                     </child>
@@ -121,8 +121,8 @@
                     <child>
                       <object class="GtkImage" id="trophy_image">
                         <layout>
-                          <property name="left_attach">0</property>
-                          <property name="top_attach">0</property>
+                          <property name="column">0</property>
+                          <property name="row">0</property>
                         </layout>
                       </object>
                     </child>
@@ -176,8 +176,8 @@
                           </packing>
                         </child>
                         <layout>
-                          <property name="left_attach">1</property>
-                          <property name="top_attach">0</property>
+                          <property name="column">1</property>
+                          <property name="row">0</property>
                         </layout>
                       </object>
                     </child>

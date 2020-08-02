@@ -1434,21 +1434,21 @@ rewrite_grid_layout_prop (Element *element,
                           const char *old_value,
                           const char *new_value)
 {
-  char *canonical_name;
-
-  canonical_name = g_strdup (old_value);
-  g_strdelimit (canonical_name, "_", '-');
-
   if (g_str_equal (element->element_name, "property"))
     {
+      char *canonical_name;
+
+      canonical_name = g_strdup (old_value);
+      g_strdelimit (canonical_name, "_", '-');
+
       if (has_attribute (element, attr_name, old_value) ||
           has_attribute (element, attr_name, canonical_name))
         {
           set_attribute_value (element, attr_name, new_value);
         }
-    }
 
-  g_free (canonical_name);
+      g_free (canonical_name);
+    }
 }
 
 static void
@@ -1460,6 +1460,8 @@ rewrite_grid_layout (Element *element,
     const char *old_value;
     const char *new_value;
   } props[] = {
+    { "name", "left_attach", "column", },
+    { "name", "top_attach", "row", },
     { "name", "width", "column-span", },
     { "name", "height", "row-span", },
   };
