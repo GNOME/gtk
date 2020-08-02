@@ -45,6 +45,10 @@
  *
  * To track changes in the selected application, use the
  * #GtkAppChooserButton::changed signal.
+ *
+ * # CSS nodes
+ *
+ * GtkAppChooserButton has a single CSS node with the name “appchooserbutton”.
  */
 #include "config.h"
 
@@ -741,6 +745,7 @@ gtk_app_chooser_button_class_init (GtkAppChooserButtonClass *klass)
                   1, G_TYPE_STRING);
 
 
+  gtk_widget_class_set_css_name (widget_class, I_("appchooserbutton"));
 }
 
 static void
