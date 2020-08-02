@@ -337,9 +337,6 @@ gboolean          gtk_widget_run_controllers               (GtkWidget           
                                                             double               x,
                                                             double               y,
                                                             GtkPropagationPhase  phase);
-
-void              gtk_widget_prepend_controller            (GtkWidget             *widget,
-                                                            GtkEventController    *controller);
 void              gtk_widget_handle_crossing               (GtkWidget             *widget,
                                                             const GtkCrossingData *crossing,
                                                             double                 x,

@@ -10768,23 +10768,6 @@ gtk_widget_add_controller (GtkWidget          *widget,
     gtk_list_list_model_item_added_at (priv->controller_observer, priv->controllers->len - 1);
 }
 
-void
-gtk_widget_prepend_controller (GtkWidget          *widget,
-                               GtkEventController *controller)
-{
-  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
-
-  GTK_EVENT_CONTROLLER_GET_CLASS (controller)->set_widget (controller, widget);
-
-  if (G_UNLIKELY (!priv->controllers))
-    priv->controllers = g_ptr_array_new ();
-
-  g_ptr_array_insert (priv->controllers, 0, controller);
-
-  if (priv->controller_observer)
-    gtk_list_list_model_item_added_at (priv->controller_observer, 0);
-}
-
 /**
  * gtk_widget_remove_controller:
  * @widget: a #GtkWidget
