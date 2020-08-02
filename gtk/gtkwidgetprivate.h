@@ -171,7 +171,7 @@ struct _GtkWidgetPrivate
 
   GSList *paintables;
 
-  GPtrArray *controllers;
+  GList *event_controllers;
 
   /* Widget tree */
   GtkWidget *parent;
