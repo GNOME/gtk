@@ -1605,9 +1605,13 @@ insert_range_not_inside_self (GtkTextBuffer     *buffer,
   GtkTextIter end = *orig_end;
   GtkTextIter range_start;
   GtkTextIter range_end;
+  gboolean insert_tags;
 
   if (gtk_text_iter_equal (orig_start, orig_end))
     return;
+
+  insert_tags = gtk_text_buffer_get_tag_table (gtk_text_iter_get_buffer (orig_start))
+                == gtk_text_buffer_get_tag_table (buffer);
 
   gtk_text_iter_order (&start, &end);
 
@@ -1647,7 +1651,7 @@ insert_range_not_inside_self (GtkTextBuffer     *buffer,
       restore_range (r);
       r = NULL;
 
-      if (gtk_text_buffer_get_tag_table (gtk_text_iter_get_buffer (orig_start)) == gtk_text_buffer_get_tag_table (buffer))
+      if (insert_tags)
         {
           gtk_text_buffer_get_iter_at_offset (buffer, &start_iter, start_offset);
 
