@@ -260,7 +260,7 @@ endforeach
 
 if get_option('install-tests')
   foreach t : tests
-    test_name = t.get(0)
+    test_name = t.get('name')
     conf = configuration_data()
     conf.set('testexecdir', testexecdir)
     conf.set('test', test_name)
