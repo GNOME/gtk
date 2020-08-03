@@ -795,7 +795,8 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
 
       if (!is_substructure)
 	{
-          event = gdk_delete_event_new (surface);
+          if (surface)
+            event = gdk_delete_event_new (surface);
 
 	  if (surface && GDK_SURFACE_XID (surface) != x11_screen->xroot_window)
 	    gdk_surface_destroy_notify (surface);
