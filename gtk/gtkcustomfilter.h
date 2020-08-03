@@ -45,7 +45,7 @@ typedef gboolean (* GtkCustomFilterFunc) (gpointer item, gpointer user_data);
 GDK_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (GtkCustomFilter, gtk_custom_filter, GTK, CUSTOM_FILTER, GtkFilter)
 GDK_AVAILABLE_IN_ALL
-GtkFilter *             gtk_custom_filter_new                   (GtkCustomFilterFunc     match_func,
+GtkCustomFilter *       gtk_custom_filter_new                   (GtkCustomFilterFunc     match_func,
                                                                  gpointer                user_data,
                                                                  GDestroyNotify          user_destroy);
 

@@ -756,7 +756,7 @@ main (int argc, char *argv[])
   sorter = gtk_tree_list_row_sorter_new (g_object_ref (gtk_column_view_get_sorter (GTK_COLUMN_VIEW (view))));
   sort = gtk_sort_list_model_new (G_LIST_MODEL (tree), sorter);
 
-  custom_filter = gtk_custom_filter_new (match_file, g_object_ref (search_entry), g_object_unref);
+  custom_filter = GTK_FILTER (gtk_custom_filter_new (match_file, g_object_ref (search_entry), g_object_unref));
   filter = gtk_filter_list_model_new (G_LIST_MODEL (sort), custom_filter);
   g_signal_connect (search_entry, "search-changed", G_CALLBACK (search_changed_cb), custom_filter);
 

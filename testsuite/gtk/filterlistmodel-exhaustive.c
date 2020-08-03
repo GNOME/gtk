@@ -217,11 +217,11 @@ create_filter (gsize id)
   {
     case 0:
       /* GTK_FILTER_MATCH_ALL */
-      return gtk_string_filter_new (NULL);
+      return GTK_FILTER (gtk_string_filter_new (NULL));
 
     case 1:
       /* GTK_FILTER_MATCH_NONE */
-      filter = gtk_string_filter_new (NULL);
+      filter = GTK_FILTER (gtk_string_filter_new (NULL));
       gtk_string_filter_set_search (GTK_STRING_FILTER (filter), "does not matter, because no expression");
       return filter;
 
@@ -229,7 +229,7 @@ create_filter (gsize id)
     case 3:
     case 4:
       /* match all As, Bs and nothing */
-      filter = gtk_string_filter_new (gtk_property_expression_new (GTK_TYPE_STRING_OBJECT, NULL, "string"));
+      filter = GTK_FILTER (gtk_string_filter_new (gtk_property_expression_new (GTK_TYPE_STRING_OBJECT, NULL, "string")));
       if (id == 2)
         gtk_string_filter_set_search (GTK_STRING_FILTER (filter), "A");
       else if (id == 3)
@@ -302,7 +302,7 @@ test_two_filters (gconstpointer model_id)
   source = create_source_model (10, 10);
   model1 = create_filter_list_model (model_id, source, NULL);
   model2 = create_filter_list_model (model_id, G_LIST_MODEL (model1), NULL);
-  every = gtk_every_filter_new ();
+  every = GTK_FILTER (gtk_every_filter_new ());
   compare = create_filter_list_model (model_id, source, every);
   g_object_unref (every);
   g_object_unref (source);
@@ -364,7 +364,7 @@ test_model_changes (gconstpointer model_id)
   gsize i;
 
   filter = create_random_filter (TRUE);
-  multi = gtk_every_filter_new ();
+  multi = GTK_FILTER (gtk_every_filter_new ());
   if (filter)
     gtk_multi_filter_append (GTK_MULTI_FILTER (multi), filter);
 

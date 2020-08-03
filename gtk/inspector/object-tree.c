@@ -1135,8 +1135,9 @@ toplevel_filter_func (gpointer item,
 static GListModel *
 create_root_model (GdkDisplay *display)
 {
-  GtkFilter *custom_filter;
-  GtkFilterListModel *filter;
+  GtkFilter *filter;
+  GtkFilterListModel *filter_model;
+  GListModel *model;
   GListStore *list, *special;
   gpointer item;
 
@@ -1150,12 +1151,11 @@ create_root_model (GdkDisplay *display)
   g_list_store_append (list, special);
   g_object_unref (special);
 
-  filter = gtk_filter_list_model_new (NULL, NULL);
-  custom_filter = gtk_custom_filter_new (toplevel_filter_func, display, NULL);
-  gtk_filter_list_model_set_filter (filter, custom_filter);
-  gtk_filter_list_model_set_model (filter, gtk_window_get_toplevels ());
-  g_list_store_append (list, filter);
-  g_object_unref (filter);
+  filter = GTK_FILTER (gtk_custom_filter_new (toplevel_filter_func, display, NULL));
+  model = gtk_window_get_toplevels ();
+  filter_model = gtk_filter_list_model_new (g_object_ref (model), filter);
+  g_list_store_append (list, filter_model);
+  g_object_unref (filter_model);
 
   return G_LIST_MODEL (gtk_flatten_list_model_new (G_LIST_MODEL (list)));
 }

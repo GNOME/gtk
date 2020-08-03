@@ -34,7 +34,7 @@ GDK_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (GtkBoolFilter, gtk_bool_filter, GTK, BOOL_FILTER, GtkFilter)
 
 GDK_AVAILABLE_IN_ALL
-GtkFilter *             gtk_bool_filter_new                     (GtkExpression          *expression);
+GtkBoolFilter *         gtk_bool_filter_new                     (GtkExpression          *expression);
 
 GDK_AVAILABLE_IN_ALL
 GtkExpression *         gtk_bool_filter_get_expression          (GtkBoolFilter          *self);

@@ -629,7 +629,7 @@ main (int argc, char *argv[])
                                   NULL, NULL);
   g_object_unref (root);
 
-  custom_filter = gtk_custom_filter_new (match_file, search_entry, NULL);
+  custom_filter = GTK_FILTER (gtk_custom_filter_new (match_file, search_entry, NULL));
   filter = gtk_filter_list_model_new (G_LIST_MODEL (tree), custom_filter);
   g_signal_connect (search_entry, "search-changed", G_CALLBACK (search_changed_cb), custom_filter);
 

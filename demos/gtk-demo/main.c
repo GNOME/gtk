@@ -695,9 +695,11 @@ filter_demo (GtkDemo *demo)
 }
 
 static gboolean
-demo_filter_by_name (GtkTreeListRow     *row,
-                     GtkFilterListModel *model)
+demo_filter_by_name (gpointer item,
+                     gpointer user_data)
 {
+  GtkTreeListRow *row = item;
+  GtkFilterListModel *model = user_data;
   GListModel *children;
   GtkDemo *demo;
   guint i, n;
@@ -865,9 +867,10 @@ activate (GApplication *app)
                                        NULL,
                                        NULL);
   filter_model = gtk_filter_list_model_new (G_LIST_MODEL (treemodel), NULL);
-  filter = gtk_custom_filter_new ((GtkCustomFilterFunc)demo_filter_by_name, filter_model, NULL);
+  filter = GTK_FILTER (gtk_custom_filter_new (demo_filter_by_name, filter_model, NULL));
   gtk_filter_list_model_set_filter (filter_model, filter);
   g_object_unref (filter);
+
   search_entry = GTK_WIDGET (gtk_builder_get_object (builder, "search-entry"));
   g_signal_connect (search_entry, "search-changed", G_CALLBACK (demo_search_changed_cb), filter);
 

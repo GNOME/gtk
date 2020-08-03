@@ -51,7 +51,7 @@ GDK_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (GtkStringFilter, gtk_string_filter, GTK, STRING_FILTER, GtkFilter)
 
 GDK_AVAILABLE_IN_ALL
-GtkFilter *             gtk_string_filter_new                   (GtkExpression          *expression);
+GtkStringFilter *       gtk_string_filter_new                   (GtkExpression          *expression);
 
 GDK_AVAILABLE_IN_ALL
 const char *            gtk_string_filter_get_search            (GtkStringFilter        *self);

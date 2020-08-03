@@ -230,7 +230,7 @@ update_attributes (GtkInspectorA11y *sl)
 {
   GtkATContext *context;
   GListStore *store;
-  GtkFilter *filter;
+  GtkBoolFilter *filter;
   GtkFilterListModel *filter_model;
   GtkNoSelection *selection;
   GObject *obj;
@@ -311,9 +311,9 @@ update_attributes (GtkInspectorA11y *sl)
   g_type_class_unref (eclass);
 
   filter = gtk_bool_filter_new (gtk_property_expression_new (accessible_attribute_get_type (), NULL, "is-default"));
-  gtk_bool_filter_set_invert (GTK_BOOL_FILTER (filter), TRUE);
+  gtk_bool_filter_set_invert (filter, TRUE);
 
-  filter_model = gtk_filter_list_model_new (G_LIST_MODEL (store), filter);
+  filter_model = gtk_filter_list_model_new (G_LIST_MODEL (store), GTK_FILTER (filter));
   selection = gtk_no_selection_new (G_LIST_MODEL (filter_model));
   gtk_column_view_set_model (GTK_COLUMN_VIEW (sl->attributes), GTK_SELECTION_MODEL (selection));
   g_object_unref (selection);

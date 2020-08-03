@@ -302,9 +302,9 @@ gtk_any_filter_init (GtkAnyFilter *self)
  * In particular, this means that if no filter has been added to
  * it, the filter matches no item.
  *
- * Returns: a new #GtkFilter
+ * Returns: a new #GtkAnyFilter
  **/
-GtkFilter *
+GtkAnyFilter *
 gtk_any_filter_new (void)
 {
   return g_object_new (GTK_TYPE_ANY_FILTER, NULL);
@@ -400,9 +400,9 @@ gtk_every_filter_init (GtkEveryFilter *self)
  * In particular, this means that if no filter has been added to
  * it, the filter matches every item.
  *
- * Returns: a new #GtkFilter
+ * Returns: a new #GtkEveryFilter
  **/
-GtkFilter *
+GtkEveryFilter *
 gtk_every_filter_new (void)
 {
   return g_object_new (GTK_TYPE_EVERY_FILTER, NULL);

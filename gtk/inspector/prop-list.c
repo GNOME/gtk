@@ -59,7 +59,7 @@ struct _GtkInspectorPropListPrivate
   GtkWidget *search_entry;
   GtkWidget *search_stack;
   GtkWidget *list;
-  GtkFilter *filter;
+  GtkStringFilter *filter;
   GtkColumnViewColumn *name;
   GtkColumnViewColumn *type;
   GtkColumnViewColumn *origin;
@@ -114,14 +114,14 @@ gtk_inspector_prop_list_init (GtkInspectorPropList *pl)
   pl->priv = gtk_inspector_prop_list_get_instance_private (pl);
   gtk_widget_init_template (GTK_WIDGET (pl));
   pl->priv->filter = gtk_string_filter_new (NULL);
-  gtk_string_filter_set_match_mode (GTK_STRING_FILTER (pl->priv->filter), GTK_STRING_FILTER_MATCH_MODE_SUBSTRING);
+  gtk_string_filter_set_match_mode (pl->priv->filter, GTK_STRING_FILTER_MATCH_MODE_SUBSTRING);
 
   sorter = gtk_string_sorter_new (gtk_cclosure_expression_new (G_TYPE_STRING, NULL,
                                                                0, NULL,
                                                                (GCallback)holder_prop,
                                                                NULL, NULL));
  
-  gtk_string_filter_set_expression (GTK_STRING_FILTER (pl->priv->filter),
+  gtk_string_filter_set_expression (pl->priv->filter,
                                     gtk_string_sorter_get_expression (GTK_STRING_SORTER (sorter)));
 
   gtk_column_view_column_set_sorter (pl->priv->name, sorter);
@@ -217,7 +217,7 @@ update_filter (GtkInspectorPropList *pl,
   const char *text;
 
   text = gtk_editable_get_text (GTK_EDITABLE (entry));
-  gtk_string_filter_set_search (GTK_STRING_FILTER (pl->priv->filter), text);
+  gtk_string_filter_set_search (pl->priv->filter, text);
 }
 
 static void
@@ -622,7 +622,7 @@ gtk_inspector_prop_list_set_object (GtkInspectorPropList *pl,
   if (GTK_IS_WIDGET (object))
     g_signal_connect_object (object, "destroy", G_CALLBACK (cleanup_object), pl, G_CONNECT_SWAPPED);
 
-  filtered = G_LIST_MODEL (gtk_filter_list_model_new (G_LIST_MODEL (store), g_object_ref (pl->priv->filter)));
+  filtered = G_LIST_MODEL (gtk_filter_list_model_new (G_LIST_MODEL (store), g_object_ref (GTK_FILTER (pl->priv->filter))));
   sorted = gtk_sort_list_model_new (filtered, NULL);
   list = G_LIST_MODEL (gtk_no_selection_new (G_LIST_MODEL (sorted)));
 

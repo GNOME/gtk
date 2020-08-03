@@ -357,7 +357,7 @@ icon_browser_window_init (IconBrowserWindow *win)
 
   filter = gtk_filter_list_model_get_filter (GTK_FILTER_LIST_MODEL (win->icon_filter_model));
 
-  win->name_filter = gtk_custom_filter_new (filter_by_icon_name, NULL, NULL);
+  win->name_filter = GTK_FILTER (gtk_custom_filter_new (filter_by_icon_name, NULL, NULL));
 
   gtk_multi_filter_append (GTK_MULTI_FILTER (filter), g_object_ref (win->name_filter));
 }
