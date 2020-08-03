@@ -1979,7 +1979,7 @@ calculate_aerosnap_regions (GdkW32DragMoveResizeContext *context)
   int i;
 #endif
 
-  display = gdk_display_get_default ();
+  display = gdk_surface_get_display (context->window);
   monitors = gdk_display_get_monitors (display);
 
 #define _M_UP 0
@@ -1999,7 +1999,6 @@ calculate_aerosnap_regions (GdkW32DragMoveResizeContext *context)
       GdkMonitor *monitor;
 
       monitor = g_list_model_get_item (monitors, monitor_idx);
-      g_object_unref (monitors);
       gdk_win32_monitor_get_workarea (monitor, &wa);
       gdk_monitor_get_geometry (monitor, &geometry);
 
@@ -3428,8 +3427,8 @@ setup_drag_move_resize_context (GdkSurface                   *window,
                                 GdkSurfaceEdge                edge,
                                 GdkDevice                   *device,
                                 int                          button,
-                                int                          x,
-                                int                          y,
+                                double                       x,
+                                double                       y,
                                 guint32                      timestamp)
 {
   RECT rect;
