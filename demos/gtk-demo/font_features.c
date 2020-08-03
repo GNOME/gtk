@@ -130,6 +130,10 @@ static const char *
 get_feature_display_name (unsigned int tag)
 {
   int i;
+  static char buf[5] = { 0, };
+
+  if (tag == MAKE_TAG ('x', 'x', 'x', 'x'))
+    return _("Default");
 
   for (i = 0; i < G_N_ELEMENTS (open_type_layout_features); i++)
     {
@@ -137,7 +141,10 @@ get_feature_display_name (unsigned int tag)
         return g_dpgettext2 (NULL, "OpenType layout", open_type_layout_features[i].name);
     }
 
-  return NULL;
+  hb_tag_to_string (tag, buf);
+  g_warning ("unknown OpenType layout feature tag: %s", buf);
+
+  return buf;
 }
 
 static void update_display (void);
@@ -1285,8 +1292,7 @@ do_font_features (GtkWidget *do_widget)
                                                                             "palt",
                                                                             "twid",
                                                                             "qwid", NULL });
-      add_check_group (feature_list, _("Alternative Stylistic Sets"), (const char *[]){ "ss00",
-                                                                                        "ss01",
+      add_check_group (feature_list, _("Alternative Stylistic Sets"), (const char *[]){ "ss01",
                                                                                         "ss02",
                                                                                         "ss03",
                                                                                         "ss04",
