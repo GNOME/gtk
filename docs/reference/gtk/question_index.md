@@ -48,7 +48,7 @@ the question you have, this list is a good place to start.
 5.  Why does my program leak memory, if I destroy a widget immediately
     after creating it ?
 
-    If `GtkFooi` isn't a toplevel window, then
+    If `GtkFoo` isn't a toplevel window, then
 
         foo = gtk_foo_new ();
         g_object_unref (foo);
@@ -63,7 +63,7 @@ the question you have, this list is a good place to start.
 
         foo = gtk_foo_new ();
         g_object_ref_sink (foo);
-        
+
     When you immediately add a widget to a container, it takes care of assuming
     the initial floating reference and you don't have to worry about reference
     counting at all ... just remove the widget from the container to get rid of it.
@@ -80,7 +80,7 @@ the question you have, this list is a good place to start.
 
 7.  How do I internationalize a GTK program?
 
-    Most people use <[GNU gettext](https://www.gnu.org/software/gettext/),
+    Most people use [GNU gettext](https://www.gnu.org/software/gettext/),
     already required in order to install GLib. On a UNIX or Linux system with
     gettext installed, type `info gettext` to read the documentation.
 
@@ -108,7 +108,7 @@ the question you have, this list is a good place to start.
 
     Code using these macros ends up looking like this:
 
-        #include &lt;gi18n.h&gt;
+        #include <gi18n.h>
 
         static const char *global_variable = N_("Translate this string");
 
@@ -162,7 +162,7 @@ the question you have, this list is a good place to start.
         if (g_file_get_contents (filename, &amp;text, &amp;length, NULL))
           {
             utf8_text = g_convert (text, length, "UTF-8", "ISO-8859-1",
-                                   NULL, NULL, &amp;error);
+                                   NULL, NULL, &error);
             if (error != NULL)
               {
                 fprintf ("Couldn't convert file %s to UTF-8\n", filename);
@@ -188,9 +188,9 @@ the question you have, this list is a good place to start.
 
       Even if your toolchain can't handle UTF-8 directly, you can still
       encode string literals in UTF-8 by using octal or hexadecimal escapes
-      like `\\212` or `\\xa8` to encode each byte. This is portable, but
+      like `\212` or `\xa8` to encode each byte. This is portable, but
       modifying the escaped strings is not very convenient. Be careful when
-      mixing hexadecimal escapes with ordinary text; `"\\xa8abcd" is a string
+      mixing hexadecimal escapes with ordinary text; `"\xa8abcd" is a string
       of length 1 !
 
     - Runtime conversion
@@ -203,7 +203,7 @@ the question you have, this list is a good place to start.
 
     Here is an example showing the three approaches using the copyright
     sign © which has Unicode and ISO-8859-1 codepoint 169 and is represented
-    in UTF-8 by the two bytes 194, 169, or `"\\302\\251"` as a string literal:
+    in UTF-8 by the two bytes 194, 169, or `"\302\251"` as a string literal:
     
         g_print ("direct UTF-8: ©");
         g_print ("escaped UTF-8: \302\251");
@@ -444,7 +444,7 @@ the question you have, this list is a good place to start.
     So pack both a #GtkCellRendererPixbuf and a #GtkCellRendererText into the
     column.
 
-28. I can set data easily on my #GtkTreeStore/#GtkListStore models using
+28. I can set data easily on my #GtkTreeStore or #GtkListStore models using
     gtk_list_store_set() and gtk_tree_store_set(), but can't read it back?
 
     Both the #GtkTreeStore and the #GtkListStore implement the #GtkTreeModel
