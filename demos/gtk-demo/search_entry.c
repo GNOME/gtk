@@ -54,6 +54,7 @@ finish_search (GtkButton *button)
 static gboolean
 start_search_feedback (gpointer data)
 {
+  gtk_entry_set_progress_fraction (GTK_ENTRY (data), 0.1);
   search_progress_id = g_timeout_add_full (G_PRIORITY_DEFAULT, 100,
                                            (GSourceFunc)search_progress, data,
                                            (GDestroyNotify)search_progress_done);
