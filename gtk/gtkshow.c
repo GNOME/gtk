@@ -91,14 +91,6 @@ window_handle_exported (GtkWindow  *window,
  * This function launches the default application for showing
  * a given uri.
  *
- * The uri must be of a form understood by GIO (i.e. you need
- * to install gvfs to get support for uri schemes such as http://
- * or ftp://, as only local files are handled by GIO itself).
- * Typical examples are
- * - `file:///home/gnome/pict.jpg`
- * - `http://www.gnome.org`
- * - `mailto:me@gnome.org`
- *
  * The @callback will be called when the launch is completed.
  * It should call gtk_show_uri_full_finish() to obtain the result.
  *
@@ -203,14 +195,6 @@ show_uri_done (GObject      *object,
  *
  * This function launches the default application for showing
  * a given uri, or shows an error dialog if that fails.
- *
- * The uri must be of a form understood by GIO (i.e. you need
- * to install gvfs to get support for uri schemes such as http://
- * or ftp://, as only local files are handled by GIO itself).
- * Typical examples are
- * - `file:///home/gnome/pict.jpg`
- * - `http://www.gnome.org`
- * - `mailto:me@gnome.org`
  */
 void
 gtk_show_uri (GtkWindow  *parent,
