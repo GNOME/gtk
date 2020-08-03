@@ -38,7 +38,7 @@
  * ones that the function returns %TRUE for.
  *
  * Filters may change what items they match through their lifetime. In that
- * case, they will emit the #GtkFilter:changed signal to notify that previous
+ * case, they will emit the #GtkFilter::changed signal to notify that previous
  * filter results are no longer valid and that items should be checked again
  * via gtk_filter_match().
  *
@@ -141,7 +141,7 @@ gtk_filter_match (GtkFilter *self,
  * Gets the known strictness of @filters. If the strictness is not known,
  * %GTK_FILTER_MATCH_SOME is returned.
  *
- * This value may change after emission of the #GtkFilter:changed signal.
+ * This value may change after emission of the #GtkFilter::changed signal.
  *
  * This function is meant purely for optimization purposes, filters can
  * choose to omit implementing it, but #GtkFilterListModel uses it.
@@ -161,7 +161,7 @@ gtk_filter_get_strictness (GtkFilter *self)
  * @self: a #GtkFilter
  * @change: How the filter changed
  *
- * Emits the #GtkFilter:changed signal to notify all users of the filter that
+ * Emits the #GtkFilter::changed signal to notify all users of the filter that
  * the filter changed. Users of the filter should then check items again via
  * gtk_filter_match().
  *
