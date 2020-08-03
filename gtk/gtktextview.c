@@ -9617,6 +9617,21 @@ gtk_text_view_get_monospace (GtkTextView *text_view)
 }
 
 static void
+emoji_picked (GtkEmojiChooser *chooser,
+              const char      *text,
+              GtkTextView     *self)
+{
+  GtkTextBuffer *buffer;
+
+  buffer = get_buffer (self);
+
+  gtk_text_buffer_begin_user_action (buffer);
+  gtk_text_buffer_delete_selection (buffer, TRUE, TRUE);
+  gtk_text_buffer_insert_at_cursor (buffer, text, -1);
+  gtk_text_buffer_end_user_action (buffer);
+}
+
+static void
 gtk_text_view_insert_emoji (GtkTextView *text_view)
 {
   GtkWidget *chooser;
@@ -9634,8 +9649,7 @@ gtk_text_view_insert_emoji (GtkTextView *text_view)
       g_object_set_data (G_OBJECT (text_view), "gtk-emoji-chooser", chooser);
 
       gtk_widget_set_parent (chooser, GTK_WIDGET (text_view));
-      g_signal_connect_swapped (chooser, "emoji-picked",
-                                G_CALLBACK (gtk_text_view_insert_at_cursor), text_view);
+      g_signal_connect (chooser, "emoji-picked", G_CALLBACK (emoji_picked), text_view);
     }
 
   buffer = get_buffer (text_view);
