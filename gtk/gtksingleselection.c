@@ -36,8 +36,8 @@
  * used by list widgets in GTK.
  *
  * Note that the selection is *persistent* -- if the selected item is removed
- * and re-added in the same ::items-changed emission, it stays selected. In
- * particular, this means that changing the sort order of an underlying sort
+ * and re-added in the same #GListModel::items-changed emission, it stays selected.
+ * In particular, this means that changing the sort order of an underlying sort
  * model will preserve the selection.
  */
 struct _GtkSingleSelection
@@ -570,11 +570,13 @@ gtk_single_selection_get_selected (GtkSingleSelection *self)
  * @self: a #GtkSingleSelection
  * @position: the item to select or #GTK_INVALID_LIST_POSITION
  *
- * Selects the item at the given position. If the list does not have an item at
- * @position or #GTK_INVALID_LIST_POSITION is given, the behavior depends on the
- * value of the GtkSingleSelection:autoselect property: If it is set, no change
- * will occur and the old item will stay selected. If it is unset, the selection
- * will be unset and no item will be selected.
+ * Selects the item at the given position.
+ *
+ * If the list does not have an item at @position or
+ * #GTK_INVALID_LIST_POSITION is given, the behavior depends on the
+ * value of the #GtkSingleSelection:autoselect property: If it is set,
+ * no change will occur and the old item will stay selected. If it is
+ * unset, the selection will be unset and no item will be selected.
  **/
 void
 gtk_single_selection_set_selected (GtkSingleSelection *self,
@@ -618,8 +620,10 @@ gtk_single_selection_set_selected (GtkSingleSelection *self,
 /**
  * gtk_single_selection_get_selected_item:
  * @self: a #GtkSingleSelection
- * 
- * Gets the selected item. If no item is selected, %NULL is returned.
+ *
+ * Gets the selected item.
+ *
+ * If no item is selected, %NULL is returned.
  *
  * Returns: (transfer none): The selected item
  */
@@ -703,9 +707,9 @@ gtk_single_selection_get_can_unselect (GtkSingleSelection *self)
  * If %TRUE, unselecting the current item via
  * gtk_selection_model_unselect_item() is supported.
  *
- * Note that setting GtkSingleSelection:autoselect will cause the
+ * Note that setting #GtkSingleSelection:autoselect will cause the
  * unselecting to not work, so it practically makes no sense to set
- * both at the same time the same time..
+ * both at the same time the same time.
  **/
 void
 gtk_single_selection_set_can_unselect (GtkSingleSelection *self,

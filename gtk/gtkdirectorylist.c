@@ -34,21 +34,22 @@
  * It presents a #GListModel and fills it asynchronously with the #GFileInfos
  * returned from that function.
  *
- * Enumeration will start automatically when a the GtkDirectoryList:file property
+ * Enumeration will start automatically when a the #GtkDirectoryList:file property
  * is set.
  *
- * While the #GtkDirectoryList is being filled, the GtkDirectoryList:loading
+ * While the #GtkDirectoryList is being filled, the #GtkDirectoryList:loading
  * property will be set to %TRUE. You can listen to that property if you want
  * to show information like a #GtkSpinner or a "Loading..." text.
- * If loading fails at any point, the GtkDirectoryList:error property will be set
- * to give more indication about the failure.
+ *
+ * If loading fails at any point, the #GtkDirectoryList:error property will be
+ * set to give more indication about the failure.
  *
  * The #GFileInfos returned from a #GtkDirectoryList have the "standard::file"
  * attribute set to the #GFile they refer to. This way you can get at the file
  * that is referred to in the same way you would via g_file_enumerator_get_child().
  * This means you do not need access to the #GtkDirectoryList but can access
- * the #GFile directly from the #GFileInfo when operating with a #GtkListView or
- * similar.
+ * the #GFile directly from the #GFileInfo when operating with a #GtkListView
+ * or similar.
  */
 
 /* random number that everyone else seems to use, too */
@@ -817,6 +818,7 @@ gtk_directory_list_get_io_priority (GtkDirectoryList *self)
  *
  * Returns %TRUE if the children enumeration is currently in
  * progress.
+ *
  * Files will be added to @self from time to time while loading is
  * going on. The order in which are added is undefined and may change
  * inbetween runs.

@@ -58,13 +58,11 @@
  *
  * The options are given to GtkDropDown in the form of #GListModel,
  * and how the individual options are represented is determined by
- * a #GtkListItemFactory. The default factory displays simple strings,
- * and expects to obtain these from the model by evaluating an expression
- * that has to be provided via gtk_drop_down_set_expression().
+ * a #GtkListItemFactory. The default factory displays simple strings.
  *
  * GtkDropDown knows how to obtain strings from the items in a
  * #GtkStringList; for other models, you have to provide an expression
- * to find the strings.
+ * to find the strings via gtk_drop_down_set_expression().
  *
  * GtkDropDown can optionally allow search in the popup, which is
  * useful if the list of options is long. To enable the search entry,

@@ -466,11 +466,11 @@ gtk_string_list_new (const char * const *strings)
  * Changes @self by removing @n_removals strings and adding @additions
  * to it.
  *
- * This function is more efficient than gtk_string_list_insert() and
+ * This function is more efficient than gtk_string_list_append() and
  * gtk_string_list_remove(), because it only emits
  * #GListModel::items-changed once for the change.
  *
- * This function takes a ref on each item in @additions.
+ * This function copies the strings in @additions.
  *
  * The parameters @position and @n_removals must be correct (ie:
  * @position + @n_removals must be less than or equal to the length

@@ -163,7 +163,7 @@ gtk_signal_list_item_factory_class_init (GtkSignalListItemFactoryClass *klass)
    * The ::setup signal is emitted when a new listitem has been created and
    * needs to be setup for use. It is the first signal emitted for every listitem.
    *
-   * The GtkSignalListItemFactory::teardown signal is the opposite of this signal
+   * The #GtkSignalListItemFactory::teardown signal is the opposite of this signal
    * and can be used to undo everything done in this signal.
    */
   signals[SETUP] =
@@ -184,13 +184,13 @@ gtk_signal_list_item_factory_class_init (GtkSignalListItemFactoryClass *klass)
    * @self: The #GtkSignalListItemFactory
    * @listitem: The #GtkListItem to bind
    *
-   * The ::bind signal is emitted when a new GtkListItem:item has been set
+   * The ::bind signal is emitted when a new #GtkListItem:item has been set
    * on the @listitem and should be bound for use.
    *
    * After this signal was emitted, the listitem might be shown in a #GtkListView
    * or other list widget.
    *
-   * The GtkSignalListItemFactory::unbind signal is the opposite of this signal
+   * The #GtkSignalListItemFactory::unbind signal is the opposite of this signal
    * and can be used to undo everything done in this signal.
    */
   signals[BIND] =
@@ -212,9 +212,9 @@ gtk_signal_list_item_factory_class_init (GtkSignalListItemFactoryClass *klass)
    * @listitem: The #GtkListItem to unbind
    *
    * The ::unbind signal is emitted when a listitem has been removed from use
-   * in a list widget and its new GtkListItem:item is about to be unset.
+   * in a list widget and its new #GtkListItem:item is about to be unset.
    *
-   * This signal is the opposite of the GtkSignalListItemFactory::bind signal
+   * This signal is the opposite of the #GtkSignalListItemFactory::bind signal
    * and should be used to undo everything done in that signal.
    */
   signals[UNBIND] =
@@ -238,7 +238,7 @@ gtk_signal_list_item_factory_class_init (GtkSignalListItemFactoryClass *klass)
    * The ::teardown signal is emitted when a listitem is about to be destroyed.
    * It is the last signal ever emitted for this @listitem.
    *
-   * This signal is the opposite of the GtkSignalListItemFactory::setup signal
+   * This signal is the opposite of the #GtkSignalListItemFactory::setup signal
    * and should be used to undo everything done in that signal.
    */
   signals[TEARDOWN] =

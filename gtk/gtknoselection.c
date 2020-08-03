@@ -31,7 +31,7 @@
  * @Title: GtkNoSelection
  * @see_also: #GtkSelectionModel
  *
- * GtkNoSelection is an implementation of the #GtkSelectionModel interface 
+ * GtkNoSelection is an implementation of the #GtkSelectionModel interface
  * that does not allow selecting anything.
  *
  * This model is meant to be used as a simple wrapper to #GListModels when a
