@@ -91,6 +91,7 @@ gtk_expander_get_type
 gtk_file_chooser_button_get_type
 gtk_file_chooser_dialog_get_type
 gtk_file_chooser_get_type
+gtk_file_chooser_native_get_type
 gtk_file_chooser_widget_get_type
 gtk_file_filter_get_type
 gtk_filter_get_type
