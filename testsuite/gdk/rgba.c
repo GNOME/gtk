@@ -57,6 +57,14 @@ test_color_parse (void)
   res = gdk_rgba_parse (&color, "rgb(0,0,0)");
   g_assert (res);
   g_assert (gdk_rgba_equal (&color, &expected));
+
+  expected.red = 0.0;
+  expected.green = 0x8080 / 65535.;
+  expected.blue = 1.0;
+  expected.alpha = 0x8888 / 65535.;
+  res = gdk_rgba_parse (&color, "#0080ff88");
+  g_assert (res);
+  g_assert (gdk_rgba_equal (&color, &expected));
 }
 
 static void

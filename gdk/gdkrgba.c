@@ -170,19 +170,21 @@ parse_rgb_value (const char   *str,
  * - A standard name (Taken from the X11 rgb.txt file).
  * - A hexadecimal value in the form “\#rgb”, “\#rrggbb”,
  *   “\#rrrgggbbb” or ”\#rrrrggggbbbb”
+ * - A hexadecimal value in the form “\#rgba”, “\#rrggbbaa”,
+ *   or ”\#rrrrggggbbbbaaaa”
  * - A RGB color in the form “rgb(r,g,b)” (In this case the color will
  *   have full opacity)
  * - A RGBA color in the form “rgba(r,g,b,a)”
  *
  * Where “r”, “g”, “b” and “a” are respectively the red, green, blue and
- * alpha color values. In the last two cases, “r”, “g”, and “b” are either integers
- * in the range 0 to 255 or percentage values in the range 0% to 100%, and
- * a is a floating point value in the range 0 to 1.
+ * alpha color values. In the last two cases, “r”, “g”, and “b” are either
+ * integers in the range 0 to 255 or percentage values in the range 0% to
+ * 100%, and a is a floating point value in the range 0 to 1.
  *
  * Returns: %TRUE if the parsing succeeded
  */
 gboolean
-gdk_rgba_parse (GdkRGBA     *rgba,
+gdk_rgba_parse (GdkRGBA    *rgba,
                 const char *spec)
 {
   gboolean has_alpha;
@@ -207,18 +209,19 @@ gdk_rgba_parse (GdkRGBA     *rgba,
   else
     {
       PangoColor pango_color;
+      guint16 alpha;
 
       /* Resort on PangoColor for rgb.txt color
        * map and '#' prefixed colors
        */
-      if (pango_color_parse (&pango_color, str))
+      if (pango_color_parse_with_alpha (&pango_color, &alpha, str))
         {
           if (rgba)
             {
               rgba->red = pango_color.red / 65535.;
               rgba->green = pango_color.green / 65535.;
               rgba->blue = pango_color.blue / 65535.;
-              rgba->alpha = 1;
+              rgba->alpha = alpha / 65535.;
             }
 
           return TRUE;
