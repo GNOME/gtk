@@ -2764,6 +2764,12 @@ gtk_tree_view_click_gesture_pressed (GtkGestureClick *gesture,
   guint button;
   GList *list;
   gboolean rtl;
+  GtkWidget *target;
+
+  /* check if this is a click in an editing widget */
+  target = gtk_event_controller_get_target (GTK_EVENT_CONTROLLER (gesture));
+  if (priv->edited_column && gtk_widget_is_ancestor (target, widget))
+    return;
 
   gtk_tree_view_stop_editing (tree_view, FALSE);
   button = gtk_gesture_single_get_current_button (GTK_GESTURE_SINGLE (gesture));
