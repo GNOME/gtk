@@ -92,7 +92,8 @@ renderers = [
 
 foreach renderer : renderers
   foreach test : compare_render_tests
-    if (renderer[1] == '' or not test.contains(renderer[1]))
+    if ((renderer[1] == '' or not test.contains(renderer[1])) and
+        (renderer[0] != 'broadway' or broadway_enabled))
       test(renderer[0] + ' ' + test, compare_render,
            args: ['--output', join_paths(meson.current_build_dir(), 'compare', renderer[0]),
                   join_paths(meson.current_source_dir(), 'compare', test + '.node'),
