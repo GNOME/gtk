@@ -28,8 +28,7 @@ struct _DemoTaggedEntry
 {
   GtkWidget parent_instance;
 
-  GtkWidget *box;
-  GtkWidget *entry;
+  GtkWidget *text;
 };
 
 struct _DemoTaggedEntryClass
@@ -45,15 +44,10 @@ G_DEFINE_TYPE_WITH_CODE (DemoTaggedEntry, demo_tagged_entry, GTK_TYPE_WIDGET,
 static void
 demo_tagged_entry_init (DemoTaggedEntry *entry)
 {
-  entry->box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
-  gtk_widget_set_parent (entry->box, GTK_WIDGET (entry));
-
-  entry->entry = gtk_text_new ();
-  gtk_widget_set_hexpand (entry->entry, TRUE);
-  gtk_widget_set_vexpand (entry->entry, TRUE);
-  gtk_widget_set_hexpand (entry->box, FALSE);
-  gtk_widget_set_vexpand (entry->box, FALSE);
-  gtk_box_append (GTK_BOX (entry->box), entry->entry);
+  entry->text = gtk_text_new ();
+  gtk_widget_set_hexpand (entry->text, TRUE);
+  gtk_widget_set_vexpand (entry->text, TRUE);
+  gtk_widget_set_parent (entry->text, GTK_WIDGET (entry));
   gtk_editable_init_delegate (GTK_EDITABLE (entry));
 }
 
@@ -61,12 +55,15 @@ static void
 demo_tagged_entry_dispose (GObject *object)
 {
   DemoTaggedEntry *entry = DEMO_TAGGED_ENTRY (object);
+  GtkWidget *child;
 
-  if (entry->entry)
+  if (entry->text)
     gtk_editable_finish_delegate (GTK_EDITABLE (entry));
 
-  g_clear_pointer (&entry->entry, gtk_widget_unparent);
-  g_clear_pointer (&entry->box, gtk_widget_unparent);
+  while ((child = gtk_widget_get_first_child (GTK_WIDGET (entry))))
+    gtk_widget_unparent (child);
+
+  entry->text = NULL;
 
   G_OBJECT_CLASS (demo_tagged_entry_parent_class)->dispose (object);
 }
@@ -100,7 +97,7 @@ demo_tagged_entry_grab_focus (GtkWidget *widget)
 {
   DemoTaggedEntry *entry = DEMO_TAGGED_ENTRY (widget);
 
-  return gtk_widget_grab_focus (entry->entry);
+  return gtk_widget_grab_focus (entry->text);
 }
 
 static void
@@ -117,14 +114,14 @@ demo_tagged_entry_class_init (DemoTaggedEntryClass *klass)
 
   gtk_editable_install_properties (object_class, 1);
 
-  gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BIN_LAYOUT);
+  gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BOX_LAYOUT);
   gtk_widget_class_set_css_name (widget_class, "entry");
 }
 
 static GtkEditable *
 demo_tagged_entry_get_delegate (GtkEditable *editable)
 {
-  return GTK_EDITABLE (DEMO_TAGGED_ENTRY (editable)->entry);
+  return GTK_EDITABLE (DEMO_TAGGED_ENTRY (editable)->text);
 }
 
 static void
@@ -145,7 +142,7 @@ demo_tagged_entry_add_tag (DemoTaggedEntry *entry,
 {
   g_return_if_fail (DEMO_IS_TAGGED_ENTRY (entry));
 
-  gtk_box_append (GTK_BOX (entry->box), tag);
+  gtk_widget_set_parent (tag, GTK_WIDGET (entry));
 }
 
 void
@@ -155,10 +152,7 @@ demo_tagged_entry_insert_tag_after (DemoTaggedEntry *entry,
 {
   g_return_if_fail (DEMO_IS_TAGGED_ENTRY (entry));
 
-  if (sibling == NULL)
-    gtk_box_append (GTK_BOX (entry->box), tag);
-  else
-    gtk_box_insert_child_after (GTK_BOX (entry->box), tag, sibling);
+  gtk_widget_insert_after (tag, GTK_WIDGET (entry), sibling);
 }
 
 void
@@ -167,7 +161,7 @@ demo_tagged_entry_remove_tag (DemoTaggedEntry *entry,
 {
   g_return_if_fail (DEMO_IS_TAGGED_ENTRY (entry));
 
-  gtk_box_remove (GTK_BOX (entry->box), tag);
+  gtk_widget_unparent (tag);
 }
 
 struct _DemoTaggedEntryTag
