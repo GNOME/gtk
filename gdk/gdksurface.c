@@ -265,6 +265,9 @@ gdk_surface_get_layout_monitor (GdkSurface      *surface,
                                &root_rect.x,
                                &root_rect.y);
 
+  root_rect.width = MAX (1, root_rect.width);
+  root_rect.height = MAX (1, root_rect.height);
+
   display = get_display_for_surface (surface, surface->transient_for);
   return get_monitor_for_rect (display, &root_rect, get_bounds);
 }
