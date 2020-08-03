@@ -5101,3 +5101,49 @@ _gdk_win32_surface_get_egl_surface (GdkSurface *surface,
 
 }
 #endif
+
+void
+gdk_win32_surface_get_queued_window_rect (GdkSurface *surface,
+                                          int         scale,
+                                          RECT       *return_window_rect)
+{
+  RECT window_rect;
+  GdkWin32Surface *impl = GDK_WIN32_SURFACE (surface);
+
+  _gdk_win32_get_window_client_area_rect (surface, scale, &window_rect);
+
+  /* Turn client area into window area */
+  _gdk_win32_adjust_client_rect (surface, &window_rect);
+
+  /* Convert GDK screen coordinates to W32 desktop coordinates */
+  window_rect.left -= _gdk_offset_x * impl->surface_scale;
+  window_rect.right -= _gdk_offset_x * impl->surface_scale;
+  window_rect.top -= _gdk_offset_y * impl->surface_scale;
+  window_rect.bottom -= _gdk_offset_y * impl->surface_scale;
+
+  *return_window_rect = window_rect;
+}
+
+void
+gdk_win32_surface_apply_queued_move_resize (GdkSurface *surface,
+                                            RECT        window_rect)
+{
+  if (!IsIconic (GDK_SURFACE_HWND (surface)))
+    {
+      GDK_NOTE (EVENTS, g_print ("Setting window position ... "));
+
+      API_CALL (SetWindowPos, (GDK_SURFACE_HWND (surface),
+                               SWP_NOZORDER_SPECIFIED,
+                               window_rect.left, window_rect.top,
+                               window_rect.right - window_rect.left,
+                               window_rect.bottom - window_rect.top,
+                               SWP_NOACTIVATE | SWP_NOZORDER | SWP_NOREDRAW));
+
+      GDK_NOTE (EVENTS, g_print (" ... set window position\n"));
+
+      return;
+    }
+
+  /* Don't move iconic windows */
+  /* TODO: use SetWindowPlacement() to change non-minimized window position */
+}
