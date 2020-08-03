@@ -37,6 +37,7 @@ static void
 search_progress_done (GtkEntry *entry)
 {
   gtk_entry_set_progress_fraction (entry, 0.0);
+  g_object_unref (entry);
 }
 
 static gboolean
@@ -54,9 +55,11 @@ finish_search (GtkButton *button)
 static gboolean
 start_search_feedback (gpointer data)
 {
+  gtk_entry_set_progress_fraction (GTK_ENTRY (data), 0.1);
   search_progress_id = g_timeout_add_full (G_PRIORITY_DEFAULT, 100,
-                                           (GSourceFunc)search_progress, data,
+                                           (GSourceFunc)search_progress, g_object_ref (data),
                                            (GDestroyNotify)search_progress_done);
+
   return G_SOURCE_REMOVE;
 }
 
@@ -162,7 +165,8 @@ activate_cb (GtkEntry  *entry,
 }
 
 static void
-search_entry_destroyed (GtkWidget *widget)
+search_entry_destroyed (gpointer  data,
+                        GObject  *widget)
 {
   if (finish_search_id != 0)
     {
@@ -261,8 +265,8 @@ do_search_entry (GtkWidget *do_widget)
       gtk_window_set_display (GTK_WINDOW (window),  gtk_widget_get_display (do_widget));
       gtk_window_set_title (GTK_WINDOW (window), "Search Entry");
       gtk_window_set_resizable (GTK_WINDOW (window), FALSE);
-      g_signal_connect (window, "destroy",
-                        G_CALLBACK (search_entry_destroyed), &window);
+
+      g_object_weak_ref (G_OBJECT (window), search_entry_destroyed, &window);
 
       vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 5);
       gtk_widget_set_margin_start (vbox, 5);
