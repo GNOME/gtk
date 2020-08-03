@@ -18,24 +18,39 @@ if get_option('debug')
   common_env += [ 'GDK_DEBUG=default-settings' ]
 endif
 
-add_test_setup ('x11',
-                env: common_env + [
-                     'GDK_BACKEND=x11',
-                     'TEST_OUTPUT_SUBDIR=x11',
-                     ])
+if x11_enabled
+  add_test_setup ('x11',
+                  env: common_env + [
+                       'GDK_BACKEND=x11',
+                       'TEST_OUTPUT_SUBDIR=x11',
+                       ])
+endif
 
-add_test_setup ('wayland',
-                is_default: true,
-                env: common_env + [
-                      'GDK_BACKEND=wayland',
-                      'TEST_OUTPUT_SUBDIR=wayland',
-                      ])
+if wayland_enabled
+  add_test_setup ('wayland',
+                  is_default: true,
+                  env: common_env + [
+                        'GDK_BACKEND=wayland',
+                        'TEST_OUTPUT_SUBDIR=wayland',
+                        ])
 
-add_test_setup ('broadway',
-                env: common_env + [
-                      'GDK_BACKEND=broadway',
-                      'TEST_OUTPUT_SUBDIR=broadway',
-                      ])
+endif
+
+if os_win32
+  add_test_setup ('win32',
+                  env: common_env + [
+                        'GDK_BACKEND=win32',
+                        'TEST_OUTPUT_SUBDIR=win32',
+                        ])
+endif
+
+if broadway_enabled
+  add_test_setup ('broadway',
+                  env: common_env + [
+                        'GDK_BACKEND=broadway',
+                        'TEST_OUTPUT_SUBDIR=broadway',
+                        ])
+endif
 
 subdir('performance')
 subdir('gdk')
