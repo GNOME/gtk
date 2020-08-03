@@ -116,10 +116,10 @@ gtk_inspector_prop_list_init (GtkInspectorPropList *pl)
   pl->priv->filter = gtk_string_filter_new (NULL);
   gtk_string_filter_set_match_mode (pl->priv->filter, GTK_STRING_FILTER_MATCH_MODE_SUBSTRING);
 
-  sorter = gtk_string_sorter_new (gtk_cclosure_expression_new (G_TYPE_STRING, NULL,
+  sorter = GTK_SORTER (gtk_string_sorter_new (gtk_cclosure_expression_new (G_TYPE_STRING, NULL,
                                                                0, NULL,
                                                                (GCallback)holder_prop,
-                                                               NULL, NULL));
+                                                               NULL, NULL)));
  
   gtk_string_filter_set_expression (pl->priv->filter,
                                     gtk_string_sorter_get_expression (GTK_STRING_SORTER (sorter)));
@@ -127,18 +127,18 @@ gtk_inspector_prop_list_init (GtkInspectorPropList *pl)
   gtk_column_view_column_set_sorter (pl->priv->name, sorter);
   g_object_unref (sorter);
 
-  sorter = gtk_string_sorter_new (gtk_cclosure_expression_new (G_TYPE_STRING, NULL,
+  sorter = GTK_SORTER (gtk_string_sorter_new (gtk_cclosure_expression_new (G_TYPE_STRING, NULL,
                                                                0, NULL,
                                                                (GCallback)holder_type,
-                                                               NULL, NULL));
+                                                               NULL, NULL)));
 
   gtk_column_view_column_set_sorter (pl->priv->type, sorter);
   g_object_unref (sorter);
 
-  sorter = gtk_string_sorter_new (gtk_cclosure_expression_new (G_TYPE_STRING, NULL,
+  sorter = GTK_SORTER (gtk_string_sorter_new (gtk_cclosure_expression_new (G_TYPE_STRING, NULL,
                                                                0, NULL,
                                                                (GCallback)holder_origin,
-                                                               NULL, NULL));
+                                                               NULL, NULL)));
 
   gtk_column_view_column_set_sorter (pl->priv->origin, sorter);
   g_object_unref (sorter);

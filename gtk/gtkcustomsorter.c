@@ -110,9 +110,9 @@ gtk_custom_sorter_init (GtkCustomSorter *self)
  *
  * If @sort_func is %NULL, all items are considered equal.
  *
- * Returns: a new #GtkSorter
+ * Returns: a new #GtkCustomSorter
  */
-GtkSorter *
+GtkCustomSorter *
 gtk_custom_sorter_new (GCompareDataFunc sort_func,
                        gpointer         user_data,
                        GDestroyNotify   user_destroy)
@@ -123,7 +123,7 @@ gtk_custom_sorter_new (GCompareDataFunc sort_func,
 
   gtk_custom_sorter_set_sort_func (sorter, sort_func, user_data, user_destroy);
 
-  return GTK_SORTER (sorter);
+  return sorter;
 }
 
 /**

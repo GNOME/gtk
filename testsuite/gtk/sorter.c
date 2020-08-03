@@ -274,7 +274,7 @@ test_simple (void)
   model = new_model (20, NULL);
   assert_not_model (model, "1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20");
 
-  sorter = gtk_custom_sorter_new (compare_numbers, NULL, NULL);
+  sorter = GTK_SORTER (gtk_custom_sorter_new (compare_numbers, NULL, NULL));
   gtk_sort_list_model_set_sorter (model, sorter);
   g_object_unref (sorter);
 
@@ -296,7 +296,7 @@ test_string (void)
   model = new_model (20, NULL);
   assert_not_model (model, "1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20");
 
-  sorter = gtk_string_sorter_new (gtk_cclosure_expression_new (G_TYPE_STRING, NULL, 0, NULL, (GCallback)get_string, NULL, NULL));
+  sorter = GTK_SORTER (gtk_string_sorter_new (gtk_cclosure_expression_new (G_TYPE_STRING, NULL, 0, NULL, (GCallback)get_string, NULL, NULL)));
 
   gtk_sort_list_model_set_sorter (model, sorter);
   g_object_unref (sorter);
@@ -330,7 +330,7 @@ test_change (void)
   GtkExpression *expression;
   int counter = 0;
 
-  sorter = gtk_string_sorter_new (NULL);
+  sorter = GTK_SORTER (gtk_string_sorter_new (NULL));
   g_signal_connect (sorter, "changed", G_CALLBACK (inc_counter), &counter);
 
   expression = gtk_cclosure_expression_new (G_TYPE_STRING, NULL, 0, NULL, (GCallback)get_string, NULL, NULL);
@@ -360,7 +360,7 @@ test_numeric (void)
   model = new_model (20, NULL);
   assert_not_model (model, "1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20");
 
-  sorter = gtk_numeric_sorter_new (gtk_cclosure_expression_new (G_TYPE_UINT, NULL, 0, NULL, (GCallback)get_number, NULL, NULL));
+  sorter = GTK_SORTER (gtk_numeric_sorter_new (gtk_cclosure_expression_new (G_TYPE_UINT, NULL, 0, NULL, (GCallback)get_number, NULL, NULL)));
   gtk_sort_list_model_set_sorter (model, sorter);
   assert_model (model, "1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20");
 
@@ -409,7 +409,7 @@ test_multi (void)
   model = new_model (20, NULL);
   assert_not_model (model, "1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20");
 
-  sorter2 = gtk_numeric_sorter_new (NULL);
+  sorter2 = GTK_SORTER (gtk_numeric_sorter_new (NULL));
   gtk_sort_list_model_set_sorter (model, sorter2);
   expression = gtk_cclosure_expression_new (G_TYPE_UINT, NULL, 0, NULL, (GCallback)get_number, NULL, NULL);
   gtk_numeric_sorter_set_expression (GTK_NUMERIC_SORTER (sorter2), expression);
@@ -417,10 +417,10 @@ test_multi (void)
 
   assert_model (model, "1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20");
 
-  sorter = gtk_multi_sorter_new ();
+  sorter = GTK_SORTER (gtk_multi_sorter_new ());
   gtk_sort_list_model_set_sorter (model, sorter);
 
-  sorter1 = gtk_custom_sorter_new (compare_even, NULL, NULL);
+  sorter1 = GTK_SORTER (gtk_custom_sorter_new (compare_even, NULL, NULL));
   gtk_multi_sorter_append (GTK_MULTI_SORTER (sorter), sorter1);
   gtk_multi_sorter_append (GTK_MULTI_SORTER (sorter), sorter2);
 
@@ -446,8 +446,8 @@ test_multi_destruct (void)
 {
   GtkSorter *multi, *sorter;
 
-  multi = gtk_multi_sorter_new ();
-  sorter = gtk_numeric_sorter_new (gtk_cclosure_expression_new (G_TYPE_UINT, NULL, 0, NULL, (GCallback)get_number, NULL, NULL));
+  multi = GTK_SORTER (gtk_multi_sorter_new ());
+  sorter = GTK_SORTER (gtk_numeric_sorter_new (gtk_cclosure_expression_new (G_TYPE_UINT, NULL, 0, NULL, (GCallback)get_number, NULL, NULL)));
   gtk_multi_sorter_append (GTK_MULTI_SORTER (multi), g_object_ref (sorter));
   g_object_unref (multi);
 
@@ -470,13 +470,13 @@ test_multi_changes (void)
   model = gtk_sort_list_model_new (G_LIST_MODEL (new_store (1, 20, 1)), NULL);
   assert_model (model, "1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20");
 
-  multi = gtk_multi_sorter_new ();
+  multi = GTK_SORTER (gtk_multi_sorter_new ());
   g_signal_connect (multi, "changed", G_CALLBACK (inc_counter), &counter);
   gtk_sort_list_model_set_sorter (model, multi);
   assert_model (model, "1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20");
   g_assert_cmpint (counter, ==, 0);
 
-  sorter1 = gtk_numeric_sorter_new (NULL);
+  sorter1 = GTK_SORTER (gtk_numeric_sorter_new (NULL));
   gtk_multi_sorter_append (GTK_MULTI_SORTER (multi), sorter1);
   assert_model (model, "1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20");
   g_assert_cmpint (counter, ==, 1);
@@ -491,7 +491,7 @@ test_multi_changes (void)
   assert_model (model, "4 9 14 19 3 8 13 18 2 7 12 17 1 6 11 16 5 10 15 20");
   g_assert_cmpint (counter, ==, 3);
 
-  sorter2 = gtk_custom_sorter_new (compare_even, NULL, NULL);
+  sorter2 = GTK_SORTER (gtk_custom_sorter_new (compare_even, NULL, NULL));
   gtk_multi_sorter_append (GTK_MULTI_SORTER (multi), sorter2);
   assert_model (model, "4 14 9 19 8 18 3 13 2 12 7 17 6 16 1 11 10 20 5 15");
   g_assert_cmpint (counter, ==, 4);
@@ -500,7 +500,7 @@ test_multi_changes (void)
   assert_model (model, "10 20 5 15 6 16 1 11 2 12 7 17 8 18 3 13 4 14 9 19");
   g_assert_cmpint (counter, ==, 5);
 
-  sorter3 = gtk_string_sorter_new (gtk_cclosure_expression_new (G_TYPE_STRING, NULL, 0, NULL, (GCallback)get_spelled_out, NULL, NULL));
+  sorter3 = GTK_SORTER (gtk_string_sorter_new (gtk_cclosure_expression_new (G_TYPE_STRING, NULL, 0, NULL, (GCallback)get_spelled_out, NULL, NULL)));
   gtk_multi_sorter_append (GTK_MULTI_SORTER (multi), sorter3);
   assert_model (model, "10 20 15 5 6 16 11 1 12 2 7 17 8 18 13 3 4 14 9 19");
   g_assert_cmpint (counter, ==, 6);
@@ -524,13 +524,13 @@ test_multi_changes (void)
 static GtkSorter *
 even_odd_sorter_new (void)
 {
-  return gtk_custom_sorter_new (compare_even, NULL, NULL);
+  return GTK_SORTER (gtk_custom_sorter_new (compare_even, NULL, NULL));
 }
 
 static GtkSorter *
 numeric_sorter_new (void)
 {
-  return gtk_numeric_sorter_new (gtk_cclosure_expression_new (G_TYPE_UINT, NULL, 0, NULL, (GCallback)get_number, NULL, NULL));
+  return GTK_SORTER (gtk_numeric_sorter_new (gtk_cclosure_expression_new (G_TYPE_UINT, NULL, 0, NULL, (GCallback)get_number, NULL, NULL)));
 }
 
 static void
@@ -615,8 +615,8 @@ test_stable (void)
   GtkSorter *multi, *a, *b;
   guint i;
 
-  a = gtk_multi_sorter_new ();
-  b = gtk_multi_sorter_new ();
+  a = GTK_SORTER (gtk_multi_sorter_new ());
+  b = GTK_SORTER (gtk_multi_sorter_new ());
   /* We create 2 setups:
    * 1. sortmodel (multisorter [a, b])
    * 2. sortmodel (b) => sortmodel (a)
@@ -627,7 +627,7 @@ test_stable (void)
    * All we do is make a and b random sorters and assert that the 2 setups
    * produce the same order every time.
    */
-  multi = gtk_multi_sorter_new ();
+  multi = GTK_SORTER (gtk_multi_sorter_new ());
   gtk_multi_sorter_append (GTK_MULTI_SORTER (multi), a);
   gtk_multi_sorter_append (GTK_MULTI_SORTER (multi), b);
   model1 = new_model (20, multi);

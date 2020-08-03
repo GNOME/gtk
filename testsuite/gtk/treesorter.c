@@ -175,7 +175,7 @@ test_simple (void)
   model = new_model (3);
   assert_model (model, "1 2 21 3 31 32 321");
 
-  sorter = gtk_tree_list_row_sorter_new (NULL);
+  sorter = GTK_SORTER (gtk_tree_list_row_sorter_new (NULL));
   sort = gtk_sort_list_model_new (model, sorter);
   assert_model (sort, "1 2 21 3 31 32 321");
 
@@ -185,7 +185,7 @@ test_simple (void)
 static GtkSorter *
 new_numeric_sorter (void)
 {
-  return gtk_numeric_sorter_new (gtk_cclosure_expression_new (G_TYPE_UINT, NULL, 0, NULL, (GCallback)get_number, NULL, NULL));
+  return GTK_SORTER (gtk_numeric_sorter_new (gtk_cclosure_expression_new (G_TYPE_UINT, NULL, 0, NULL, (GCallback)get_number, NULL, NULL)));
 }
 
 static void
@@ -198,7 +198,7 @@ test_compare_total_order (void)
   model = new_model (3);
   assert_model (model, "1 2 21 3 31 32 321");
 
-  sorter = gtk_tree_list_row_sorter_new (new_numeric_sorter ());
+  sorter = GTK_SORTER (gtk_tree_list_row_sorter_new (new_numeric_sorter ()));
 
   n = g_list_model_get_n_items (model);
   for (i = 0; i < n; i++)
@@ -228,7 +228,7 @@ test_compare_no_order (void)
   model = new_model (3);
   assert_model (model, "1 2 21 3 31 32 321");
 
-  sorter = gtk_tree_list_row_sorter_new (NULL);
+  sorter = GTK_SORTER (gtk_tree_list_row_sorter_new (NULL));
 
   n = g_list_model_get_n_items (model);
   for (i = 0; i < n; i++)

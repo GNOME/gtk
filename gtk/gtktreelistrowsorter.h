@@ -34,7 +34,7 @@ GDK_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (GtkTreeListRowSorter, gtk_tree_list_row_sorter, GTK, TREE_LIST_ROW_SORTER, GtkSorter)
 
 GDK_AVAILABLE_IN_ALL
-GtkSorter *             gtk_tree_list_row_sorter_new                   (GtkSorter            *sorter);
+GtkTreeListRowSorter *  gtk_tree_list_row_sorter_new                   (GtkSorter            *sorter);
 
 GDK_AVAILABLE_IN_ALL
 GtkSorter *             gtk_tree_list_row_sorter_get_sorter            (GtkTreeListRowSorter *self);

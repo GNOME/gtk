@@ -325,7 +325,7 @@ create_list_model_for_directory (gpointer file)
     return NULL;
 
   dir = create_directory_list (file);
-  sorter = gtk_string_sorter_new (gtk_cclosure_expression_new (G_TYPE_STRING, NULL, 0, NULL, (GCallback) get_file_path, NULL, NULL));
+  sorter = GTK_SORTER (gtk_string_sorter_new (gtk_cclosure_expression_new (G_TYPE_STRING, NULL, 0, NULL, (GCallback) get_file_path, NULL, NULL)));
 
   return G_LIST_MODEL (gtk_sort_list_model_new (G_LIST_MODEL (dir), sorter));
 }

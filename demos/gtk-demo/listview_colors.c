@@ -1022,31 +1022,31 @@ do_listview_colors (GtkWidget *do_widget)
       /* An empty multisorter doesn't do any sorting and the sortmodel is
        * smart enough to know that.
        */
-      sorter = gtk_multi_sorter_new ();
+      sorter = GTK_SORTER (gtk_multi_sorter_new ());
       set_title (sorter, "Unsorted");
       g_list_store_append (sorters, sorter);
       g_object_unref (sorter);
 
-      sorter = gtk_string_sorter_new (gtk_property_expression_new (GTK_TYPE_COLOR, NULL, "name"));
+      sorter = GTK_SORTER (gtk_string_sorter_new (gtk_property_expression_new (GTK_TYPE_COLOR, NULL, "name")));
       set_title (sorter, "Name");
       g_list_store_append (sorters, sorter);
       g_object_unref (sorter);
 
-      multi_sorter = gtk_multi_sorter_new ();
+      multi_sorter = GTK_SORTER (gtk_multi_sorter_new ());
 
-      sorter = gtk_numeric_sorter_new (gtk_property_expression_new (GTK_TYPE_COLOR, NULL, "red"));
+      sorter = GTK_SORTER (gtk_numeric_sorter_new (gtk_property_expression_new (GTK_TYPE_COLOR, NULL, "red")));
       gtk_numeric_sorter_set_sort_order (GTK_NUMERIC_SORTER (sorter), GTK_SORT_DESCENDING);
       set_title (sorter, "Red");
       g_list_store_append (sorters, sorter);
       gtk_multi_sorter_append (GTK_MULTI_SORTER (multi_sorter), sorter);
 
-      sorter = gtk_numeric_sorter_new (gtk_property_expression_new (GTK_TYPE_COLOR, NULL, "green"));
+      sorter = GTK_SORTER (gtk_numeric_sorter_new (gtk_property_expression_new (GTK_TYPE_COLOR, NULL, "green")));
       gtk_numeric_sorter_set_sort_order (GTK_NUMERIC_SORTER (sorter), GTK_SORT_DESCENDING);
       set_title (sorter, "Green");
       g_list_store_append (sorters, sorter);
       gtk_multi_sorter_append (GTK_MULTI_SORTER (multi_sorter), sorter);
 
-      sorter = gtk_numeric_sorter_new (gtk_property_expression_new (GTK_TYPE_COLOR, NULL, "blue"));
+      sorter = GTK_SORTER (gtk_numeric_sorter_new (gtk_property_expression_new (GTK_TYPE_COLOR, NULL, "blue")));
       gtk_numeric_sorter_set_sort_order (GTK_NUMERIC_SORTER (sorter), GTK_SORT_DESCENDING);
       set_title (sorter, "Blue");
       g_list_store_append (sorters, sorter);
@@ -1056,21 +1056,21 @@ do_listview_colors (GtkWidget *do_widget)
       g_list_store_append (sorters, multi_sorter);
       g_object_unref (multi_sorter);
 
-      multi_sorter = gtk_multi_sorter_new ();
+      multi_sorter = GTK_SORTER (gtk_multi_sorter_new ());
 
-      sorter = gtk_numeric_sorter_new (gtk_property_expression_new (GTK_TYPE_COLOR, NULL, "hue"));
+      sorter = GTK_SORTER (gtk_numeric_sorter_new (gtk_property_expression_new (GTK_TYPE_COLOR, NULL, "hue")));
       gtk_numeric_sorter_set_sort_order (GTK_NUMERIC_SORTER (sorter), GTK_SORT_DESCENDING);
       set_title (sorter, "Hue");
       g_list_store_append (sorters, sorter);
       gtk_multi_sorter_append (GTK_MULTI_SORTER (multi_sorter), sorter);
 
-      sorter = gtk_numeric_sorter_new (gtk_property_expression_new (GTK_TYPE_COLOR, NULL, "saturation"));
+      sorter = GTK_SORTER (gtk_numeric_sorter_new (gtk_property_expression_new (GTK_TYPE_COLOR, NULL, "saturation")));
       gtk_numeric_sorter_set_sort_order (GTK_NUMERIC_SORTER (sorter), GTK_SORT_DESCENDING);
       set_title (sorter, "Saturation");
       g_list_store_append (sorters, sorter);
       gtk_multi_sorter_append (GTK_MULTI_SORTER (multi_sorter), sorter);
 
-      sorter = gtk_numeric_sorter_new (gtk_property_expression_new (GTK_TYPE_COLOR, NULL, "value"));
+      sorter = GTK_SORTER (gtk_numeric_sorter_new (gtk_property_expression_new (GTK_TYPE_COLOR, NULL, "value")));
       gtk_numeric_sorter_set_sort_order (GTK_NUMERIC_SORTER (sorter), GTK_SORT_DESCENDING);
       set_title (sorter, "Value");
       g_list_store_append (sorters, sorter);

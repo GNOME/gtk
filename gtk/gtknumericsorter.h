@@ -34,7 +34,7 @@ GDK_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (GtkNumericSorter, gtk_numeric_sorter, GTK, NUMERIC_SORTER, GtkSorter)
 
 GDK_AVAILABLE_IN_ALL
-GtkSorter *             gtk_numeric_sorter_new                   (GtkExpression          *expression);
+GtkNumericSorter *      gtk_numeric_sorter_new                   (GtkExpression          *expression);
 
 GDK_AVAILABLE_IN_ALL
 GtkExpression *         gtk_numeric_sorter_get_expression        (GtkNumericSorter       *self);

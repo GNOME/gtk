@@ -811,7 +811,7 @@ gtk_print_unix_dialog_init (GtkPrintUnixDialog *dialog)
 
   /* Load backends */
   model = load_print_backends (dialog);
-  sorter = gtk_custom_sorter_new (default_printer_list_sort_func, NULL, NULL);
+  sorter = GTK_SORTER (gtk_custom_sorter_new (default_printer_list_sort_func, NULL, NULL));
   sorted = G_LIST_MODEL (gtk_sort_list_model_new (model, sorter));
 
   filter = GTK_FILTER (gtk_every_filter_new ());

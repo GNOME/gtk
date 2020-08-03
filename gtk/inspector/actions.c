@@ -389,11 +389,11 @@ constructed (GObject *object)
   g_signal_connect_swapped (sl->button, "clicked",
                             G_CALLBACK (refresh_all), sl);
 
-  sorter = gtk_string_sorter_new (gtk_cclosure_expression_new (G_TYPE_STRING,
+  sorter = GTK_SORTER (gtk_string_sorter_new (gtk_cclosure_expression_new (G_TYPE_STRING,
                                                                NULL,
                                                                0, NULL,
                                                                (GCallback)holder_name,
-                                                               NULL, NULL));
+                                                               NULL, NULL)));
   gtk_column_view_column_set_sorter (sl->name, sorter);
   g_object_unref (sorter);
 

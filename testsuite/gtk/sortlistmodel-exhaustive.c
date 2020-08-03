@@ -252,12 +252,12 @@ create_sorter (gsize id)
   switch (id)
   {
     case 0:
-      return gtk_string_sorter_new (NULL);
+      return GTK_SORTER (gtk_string_sorter_new (NULL));
 
     case 1:
     case 2:
       /* match all As, Bs and nothing */
-      sorter = gtk_string_sorter_new (gtk_property_expression_new (GTK_TYPE_STRING_OBJECT, NULL, "string"));
+      sorter = GTK_SORTER (gtk_string_sorter_new (gtk_property_expression_new (GTK_TYPE_STRING_OBJECT, NULL, "string")));
       if (id == 1)
         gtk_string_sorter_set_ignore_case (GTK_STRING_SORTER (sorter), TRUE);
       return sorter;
@@ -304,7 +304,7 @@ test_two_sorters (gconstpointer model_id)
   model2 = create_sort_list_model (model_id, TRUE, source, NULL);
   /* can't track changes from a sortmodel, where the same items get reordered */
   model1 = create_sort_list_model (model_id, FALSE, G_LIST_MODEL (model2), NULL);
-  every = gtk_multi_sorter_new ();
+  every = GTK_SORTER (gtk_multi_sorter_new ());
   compare = create_sort_list_model (model_id, TRUE, source, every);
   g_object_unref (every);
   g_object_unref (source);
