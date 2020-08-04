@@ -869,6 +869,7 @@ gtk_popover_init (GtkPopover *popover)
                                          (GtkGizmoGrabFocusFunc)gtk_widget_grab_focus_child);
   gtk_widget_set_layout_manager (priv->contents_widget, gtk_bin_layout_new ());
   gtk_widget_set_parent (priv->contents_widget, GTK_WIDGET (popover));
+  gtk_widget_set_overflow (priv->contents_widget, GTK_OVERFLOW_HIDDEN);
 
   gtk_widget_add_css_class (widget, "background");
 
