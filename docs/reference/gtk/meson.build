@@ -335,7 +335,6 @@ images = [
   'images/panes.png',
   'images/password-entry.png',
   'images/picture.png',
-  'images/placessidebar.png',
   'images/popup-anchors.png',
   'images/popup-at.svg',
   'images/popup-flip.png',

@@ -180,9 +180,6 @@
     <link linkend="GtkPaned">
       <inlinegraphic fileref="panes.png" format="PNG"></inlinegraphic>
     </link>
-    <link linkend="GtkPlacesSidebar">
-      <inlinegraphic fileref="placessidebar.png" format="PNG"></inlinegraphic>
-    </link>
   </para>
 </section>
 
