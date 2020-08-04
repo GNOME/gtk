@@ -186,7 +186,7 @@ gdk_toplevel_install_properties (GObjectClass *object_class,
  * @layout: the #GdkToplevelLayout object used to layout
  *
  * Present @toplevel after having processed the #GdkToplevelLayout rules.
- * If the toplevel was previously now showing, it will be showed,
+ * If the toplevel was previously not showing, it will be showed,
  * otherwise it will change layout according to @layout.
  *
  * Presenting may fail.
