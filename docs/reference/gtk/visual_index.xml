@@ -45,6 +45,15 @@
     <link linkend="GtkGLArea">
       <inlinegraphic fileref="glarea.png" format="PNG"></inlinegraphic>
     </link>
+    <link linkend="GtkPicture">
+      <inlinegraphic fileref="picture.png" format="PNG"></inlinegraphic>
+    </link>
+    <link linkend="GtkVideo">
+      <inlinegraphic fileref="video.png" format="PNG"></inlinegraphic>
+    </link>
+    <link linkend="GtkMediaControls">
+      <inlinegraphic fileref="media-controls.png" format="PNG"></inlinegraphic>
+    </link>
   </para>
 </section>
 
@@ -102,6 +111,9 @@
     <link linkend="GtkFileChooserButton">
       <inlinegraphic fileref="file-button.png" format="PNG"></inlinegraphic>
     </link>
+    <link linkend="GtkDropDown">
+      <inlinegraphic fileref="drop-down.png" format="PNG"></inlinegraphic>
+    </link>
   </para>
 </section>
 
@@ -113,6 +125,12 @@
     </link>
     <link linkend="GtkSearchEntry">
       <inlinegraphic fileref="search-entry.png" format="PNG"></inlinegraphic>
+    </link>
+    <link linkend="GtkPasswordEntry">
+      <inlinegraphic fileref="password-entry.png" format="PNG"></inlinegraphic>
+    </link>
+    <link linkend="GtkEditableLabel">
+      <inlinegraphic fileref="editable-label.png" format="PNG"></inlinegraphic>
     </link>
   </para>
 </section>
