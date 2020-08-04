@@ -137,6 +137,15 @@ main (int argc, char **argv)
 
       gtk_widget_show (info->window);
 
+      if (info->no_focus)
+        {
+          gtk_root_set_focus (GTK_ROOT (info->window), NULL);
+          gdk_clipboard_set_content (gdk_display_get_primary_clipboard (gdk_display_get_default ()),
+                                     NULL);
+        }
+
+      //while (1) g_main_context_iteration (NULL, 1);
+
       surface = snapshot_widget (info->window);
 
       pixbuf = gdk_pixbuf_get_from_surface (surface, 0, 0,
