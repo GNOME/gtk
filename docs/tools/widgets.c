@@ -232,6 +232,23 @@ create_entry (void)
 }
 
 static WidgetInfo *
+create_password_entry (void)
+{
+  GtkWidget *widget;
+
+  widget = gtk_password_entry_new ();
+  gtk_password_entry_set_show_peek_icon (GTK_PASSWORD_ENTRY (widget), TRUE);
+  gtk_widget_set_halign (widget, GTK_ALIGN_FILL);
+  gtk_widget_set_valign (widget, GTK_ALIGN_CENTER);
+  gtk_editable_set_text (GTK_EDITABLE (widget), "Entry");
+  gtk_editable_set_position (GTK_EDITABLE (widget), -1);
+
+  add_margin (widget);
+
+  return  new_widget_info ("password-entry", widget, SMALL);
+}
+
+static WidgetInfo *
 create_search_entry (void)
 {
   GtkWidget *widget;
@@ -1533,6 +1550,7 @@ get_all_widgets (void)
   retval = g_list_prepend (retval, create_video ());
   retval = g_list_prepend (retval, create_media_controls ());
   retval = g_list_prepend (retval, create_picture ());
+  retval = g_list_prepend (retval, create_password_entry ());
 
   return retval;
 }

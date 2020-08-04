@@ -331,6 +331,7 @@ images = [
   'images/options.png',
   'images/pagesetupdialog.png',
   'images/panes.png',
+  'images/password-entry.png',
   'images/picture.png',
   'images/placessidebar.png',
   'images/popup-anchors.png',

@@ -123,6 +123,9 @@
     <link linkend="GtkSearchEntry">
       <inlinegraphic fileref="search-entry.png" format="PNG"></inlinegraphic>
     </link>
+    <link linkend="GtkPasswordEntry">
+      <inlinegraphic fileref="password-entry.png" format="PNG"></inlinegraphic>
+    </link>
   </para>
 </section>
 
