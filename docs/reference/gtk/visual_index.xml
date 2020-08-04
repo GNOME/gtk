@@ -126,6 +126,9 @@
     <link linkend="GtkPasswordEntry">
       <inlinegraphic fileref="password-entry.png" format="PNG"></inlinegraphic>
     </link>
+    <link linkend="GtkEditableLabel">
+      <inlinegraphic fileref="editable-label.png" format="PNG"></inlinegraphic>
+    </link>
   </para>
 </section>
 

@@ -262,6 +262,7 @@ images = [
   'images/ease-in.png',
   'images/ease-out.png',
   'images/ease.png',
+  'images/editable-label.png',
   'images/entry.png',
   'images/exampleapp.png',
   'images/expanders.png',

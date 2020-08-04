@@ -658,6 +658,27 @@ create_file_button (void)
 }
 
 static WidgetInfo *
+create_editable_label (void)
+{
+  GtkWidget *vbox;
+  GtkWidget *widget;
+
+  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 12);
+  widget = gtk_editable_label_new ("Editable Label");
+  gtk_box_append (GTK_BOX (vbox), widget);
+  gtk_box_append (GTK_BOX (vbox), gtk_separator_new (GTK_ORIENTATION_HORIZONTAL));
+  widget = gtk_editable_label_new ("Editable Label");
+  gtk_editable_label_start_editing (GTK_EDITABLE_LABEL (widget));
+  gtk_widget_add_css_class (widget, "frame");
+  gtk_box_append (GTK_BOX (vbox), widget);
+
+  gtk_widget_set_valign (vbox, GTK_ALIGN_CENTER);
+
+  add_margin (vbox);
+
+  return new_widget_info ("editable-label", vbox, MEDIUM);
+}
+static WidgetInfo *
 create_separator (void)
 {
   GtkWidget *hbox;
@@ -1551,6 +1572,7 @@ get_all_widgets (void)
   retval = g_list_prepend (retval, create_media_controls ());
   retval = g_list_prepend (retval, create_picture ());
   retval = g_list_prepend (retval, create_password_entry ());
+  retval = g_list_prepend (retval, create_editable_label ());
 
   return retval;
 }
