@@ -4195,7 +4195,10 @@ gtk_scrolled_window_set_child (GtkScrolledWindow *scrolled_window,
                     NULL);
     }
 
-  list = g_list_append (NULL, priv->child);
+  if (priv->child)
+    list = g_list_append (NULL, priv->child);
+  else
+    list = NULL;
   gtk_accessible_update_relation (GTK_ACCESSIBLE (priv->hscrollbar),
                                   GTK_ACCESSIBLE_RELATION_CONTROLS, list,
                                   -1);
