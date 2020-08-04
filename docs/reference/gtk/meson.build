@@ -257,6 +257,7 @@ images = [
   'images/down-center.png',
   'images/down-end.png',
   'images/down-start.png',
+  'images/drop-down.png',
   'images/drawing.png',
   'images/ease-in-out.png',
   'images/ease-in.png',

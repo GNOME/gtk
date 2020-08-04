@@ -111,6 +111,9 @@
     <link linkend="GtkFileChooserButton">
       <inlinegraphic fileref="file-button.png" format="PNG"></inlinegraphic>
     </link>
+    <link linkend="GtkDropDown">
+      <inlinegraphic fileref="drop-down.png" format="PNG"></inlinegraphic>
+    </link>
   </para>
 </section>
 

@@ -378,6 +378,19 @@ create_combo_box_text (void)
 }
 
 static WidgetInfo *
+create_drop_down (void)
+{
+  GtkWidget *widget;
+
+  widget = gtk_drop_down_new_from_strings ((const char * const []){"Drop Down", "Almost a combo", NULL});
+
+  gtk_widget_set_halign (widget, GTK_ALIGN_CENTER);
+  gtk_widget_set_valign (widget, GTK_ALIGN_CENTER);
+
+  return new_widget_info ("drop-down", widget, SMALL);
+}
+
+static WidgetInfo *
 create_info_bar (void)
 {
   GtkWidget *widget;
@@ -1573,6 +1586,7 @@ get_all_widgets (void)
   retval = g_list_prepend (retval, create_picture ());
   retval = g_list_prepend (retval, create_password_entry ());
   retval = g_list_prepend (retval, create_editable_label ());
+  retval = g_list_prepend (retval, create_drop_down ());
 
   return retval;
 }
