@@ -857,32 +857,25 @@ static gboolean
 set_active_printer (GtkPageSetupUnixDialog *dialog,
                     const char             *printer_name)
 {
-  GtkTreeModel *model;
-  GtkTreeIter iter;
+  guint i, n;
   GtkPrinter *printer;
 
-  model = GTK_TREE_MODEL (dialog->printer_list);
+  if (!printer_name)
+    return FALSE;
 
-  if (gtk_tree_model_get_iter_first (model, &iter))
+  for (i = 0, n = g_list_model_get_n_items (dialog->printer_list); i < n; i++)
     {
-      do
+      printer = g_list_model_get_item (dialog->printer_list, i);
+
+      if (strcmp (gtk_printer_get_name (printer), printer_name) == 0)
         {
-          gtk_tree_model_get (GTK_TREE_MODEL (dialog->printer_list), &iter,
-                              PRINTER_LIST_COL_PRINTER, &printer, -1);
-          if (printer == NULL)
-            continue;
-
-          if (strcmp (gtk_printer_get_name (printer), printer_name) == 0)
-            {
-              gtk_combo_box_set_active_iter (GTK_COMBO_BOX (dialog->printer_combo),
-                                             &iter);
-              g_object_unref (printer);
-              return TRUE;
-            }
-
+          gtk_drop_down_set_selected (GTK_DROP_DOWN (dialog->printer_combo), i);
           g_object_unref (printer);
 
-        } while (gtk_tree_model_iter_next (model, &iter));
+          return TRUE;
+        }
+
+      g_object_unref (printer);
     }
 
   return FALSE;
