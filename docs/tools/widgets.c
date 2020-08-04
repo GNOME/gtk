@@ -1028,6 +1028,73 @@ create_image (void)
 }
 
 static WidgetInfo *
+create_picture (void)
+{
+  GtkWidget *widget;
+  GtkWidget *vbox;
+  GtkIconTheme *theme;
+  GdkPaintable *paintable;
+
+  theme = gtk_icon_theme_get_for_display (gdk_display_get_default ());
+  paintable = GDK_PAINTABLE (gtk_icon_theme_lookup_icon (theme,
+                                                         "applications-graphics",
+                                                         NULL,
+                                                         48, 1, GTK_TEXT_DIR_LTR,
+                                                         0));
+
+  widget = gtk_picture_new_for_paintable (paintable);
+  gtk_picture_set_can_shrink (GTK_PICTURE (widget), TRUE);
+  gtk_widget_set_halign (widget, GTK_ALIGN_CENTER);
+  gtk_widget_set_valign (widget, GTK_ALIGN_CENTER);
+
+  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 3);
+  gtk_box_append (GTK_BOX (vbox), widget);
+  gtk_box_append (GTK_BOX (vbox), gtk_label_new ("Picture"));
+
+  add_margin (vbox);
+
+  return new_widget_info ("picture", vbox, SMALL);
+}
+
+static WidgetInfo *
+create_video (void)
+{
+  GtkWidget *widget;
+  GtkWidget *vbox;
+
+  widget = gtk_video_new_for_filename ("../../demos/gtk-demo/gtk-logo.webm");
+  gtk_widget_set_halign (widget, GTK_ALIGN_CENTER);
+  gtk_widget_set_valign (widget, GTK_ALIGN_CENTER);
+
+  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 3);
+  gtk_box_append (GTK_BOX (vbox), widget);
+  gtk_box_append (GTK_BOX (vbox), gtk_label_new ("Video"));
+
+  add_margin (vbox);
+
+  return new_widget_info ("video", vbox, SMALL);
+}
+
+static WidgetInfo *
+create_media_controls (void)
+{
+  GtkWidget *widget;
+  GtkWidget *vbox;
+
+  widget = gtk_media_controls_new (NULL);
+  gtk_widget_set_halign (widget, GTK_ALIGN_CENTER);
+  gtk_widget_set_valign (widget, GTK_ALIGN_CENTER);
+
+  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 3);
+  gtk_box_append (GTK_BOX (vbox), widget);
+  gtk_box_append (GTK_BOX (vbox), gtk_label_new ("Media Controls"));
+
+  add_margin (vbox);
+
+  return new_widget_info ("media-controls", vbox, SMALL);
+}
+
+static WidgetInfo *
 create_spinner (void)
 {
   GtkWidget *widget;
@@ -1458,6 +1525,9 @@ get_all_widgets (void)
   retval = g_list_prepend (retval, create_info_bar ());
   retval = g_list_prepend (retval, create_gl_area ());
   retval = g_list_prepend (retval, create_sidebar ());
+  retval = g_list_prepend (retval, create_video ());
+  retval = g_list_prepend (retval, create_media_controls ());
+  retval = g_list_prepend (retval, create_picture ());
 
   return retval;
 }

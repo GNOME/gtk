@@ -45,6 +45,15 @@
     <link linkend="GtkGLArea">
       <inlinegraphic fileref="glarea.png" format="PNG"></inlinegraphic>
     </link>
+    <link linkend="GtkPicture">
+      <inlinegraphic fileref="picture.png" format="PNG"></inlinegraphic>
+    </link>
+    <link linkend="GtkVideo">
+      <inlinegraphic fileref="video.png" format="PNG"></inlinegraphic>
+    </link>
+    <link linkend="GtkMediaControls">
+      <inlinegraphic fileref="media-controls.png" format="PNG"></inlinegraphic>
+    </link>
   </para>
 </section>
 
