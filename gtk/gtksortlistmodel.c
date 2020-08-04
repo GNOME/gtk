@@ -61,6 +61,10 @@
  * #GtkSortListModel is a list model that takes a list model and
  * sorts its elements according to a #GtkSorter.
  *
+ * The model can be set up to do incremental sorting, so that
+ * sorting long lists doesn't block the UI. See
+ * gtk_sort_list_model_set_incremental() for details.
+ *
  * #GtkSortListModel is a generic model and because of that it
  * cannot take advantage of any external knowledge when sorting.
  * If you run into performance issues with #GtkSortListModel, it
@@ -978,6 +982,9 @@ gtk_sort_list_model_get_sorter (GtkSortListModel *self)
  * interesting around 10,000 to 100,000 items.
  *
  * By default, incremental sorting is disabled.
+ *
+ * See gtk_sort_list_model_get_pending() for progress information
+ * about an ongoing incremental sorting operation.
  */
 void
 gtk_sort_list_model_set_incremental (GtkSortListModel *self,
@@ -1032,8 +1039,9 @@ gtk_sort_list_model_get_incremental (GtkSortListModel *self)
  *
  * If you want to estimate the progress, you can use code like this:
  * |[<!-- language="C" -->
- * double progress = 1.0 - (double) gtk_sort_list_model_get_pending (self) 
- *                         / MAX (1, g_list_model_get_n_items (G_LIST_MODEL (sort)));
+ *   pending = gtk_sort_list_model_get_pending (self);
+ *   model = gtk_sort_list_model_get_model (self);
+ *   progress = 1.0 - pending / (double) MAX (1, g_list_model_get_n_items (model));
  * ]|
  *
  * If no sort operation is ongoing - in particular when

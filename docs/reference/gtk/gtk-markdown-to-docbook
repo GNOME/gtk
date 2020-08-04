@@ -180,7 +180,7 @@ def ConvertToDocbook(infile, outfile):
     else:
         division='chapter'
     input_format = "markdown" + "".join(MarkdownExtensions)
-    output_format = "docbook"
+    output_format = "docbook4"
     subprocess.check_call(["pandoc", infile, "-o", outfile,
                            "--from=" + input_format,
                            "--to=" + output_format,

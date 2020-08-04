@@ -431,7 +431,7 @@ gtk_single_selection_get_type
 
 <SECTION>
 <FILE>gtkmultiselection</FILE>
-<TITLE>GtkMultiSeledction</TITLE>
+<TITLE>GtkMultiSelection</TITLE>
 GtkMultiSelection
 gtk_multi_selection_new
 gtk_multi_selection_get_model

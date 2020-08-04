@@ -786,6 +786,9 @@ gtk_filter_list_model_get_model (GtkFilterListModel *self)
  * interesting around 10,000 to 100,000 items.
  *
  * By default, incremental filtering is disabled.
+ *
+ * See gtk_filter_list_model_get_pending() for progress information
+ * about an ongoing incremental filtering operation.
  **/
 void
 gtk_filter_list_model_set_incremental (GtkFilterListModel *self,
@@ -837,8 +840,6 @@ gtk_filter_list_model_get_incremental (GtkFilterListModel *self)
  *
  * Returns the number of items that have not been filtered yet.
  *
- * When incremental filtering is not enabled, this always returns 0.
- *
  * You can use this value to check if @self is busy filtering by
  * comparing the return value to 0 or you can compute the percentage
  * of the filter remaining by dividing the return value by the total
@@ -849,6 +850,9 @@ gtk_filter_list_model_get_incremental (GtkFilterListModel *self)
  *   model = gtk_filter_list_model_get_model (self);
  *   percentage = pending / (double) g_list_model_get_n_items (model);
  * ]|
+ *
+ * If no filter operation is ongoing - in particular when
+ * #GtkFilterListModel:incremental is %FALSE - this function returns 0.
  *
  * Returns: The number of items not yet filtered
  **/

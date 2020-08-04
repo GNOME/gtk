@@ -347,7 +347,7 @@ gtk_multi_selection_class_init (GtkMultiSelectionClass *klass)
   gobject_class->dispose = gtk_multi_selection_dispose;
 
   /**
-   * GtkMultiSelection:model
+   * GtkMultiSelection:model:
    *
    * The list managed by this selection
    */

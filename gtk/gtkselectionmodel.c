@@ -31,40 +31,40 @@
  * @Short_description: An extension of the list model interface that handles selections
  * @See_also: #GListModel, #GtkSingleSelection
  *
- * #GtkSelectionModel is an interface that extends the #GListModel interface by adding
- * support for selections. This support is then used by widgets using list models to add
- * the ability to select and unselect various items.
+ * #GtkSelectionModel is an interface that extends the #GListModel interface by
+ * adding support for selections. This support is then used by widgets using list
+ * models to add the ability to select and unselect various items.
  *
- * GTK provides default implementations of the mode common selection modes such as
- * #GtkSingleSelection, so you will only need to implement this interface if you want
- * detailed control about how selections should be handled.
+ * GTK provides default implementations of the most common selection modes such
+ * as #GtkSingleSelection, so you will only need to implement this interface if
+ * you want detailed control about how selections should be handled.
  *
- * A #GtkSelectionModel supports a single boolean per item indicating if an item is selected
- * or not. This can be queried via gtk_selection_model_is_selected(). When the selected
- * state of one or more items changes, the model will emit the
+ * A #GtkSelectionModel supports a single boolean per item indicating if an item
+ * is selected or not. This can be queried via gtk_selection_model_is_selected().
+ * When the selected state of one or more items changes, the model will emit the
  * #GtkSelectionModel::selection-changed signal by calling the
- * gtk_selection_model_selection_changed() function. The positions given in that signal
- * may have their selection state changed, though that is not a requirement.
- * If new items added to the model via the #GListModel::items-changed signal are selected
- * or not is up to the implementation.
+ * gtk_selection_model_selection_changed() function. The positions given in that
+ * signal may have their selection state changed, though that is not a requirement.
+ * If new items added to the model via the #GListModel::items-changed signal are
+ * selected or not is up to the implementation.
  *
  * Note that items added via #GListModel::items-changed may already be selected
  * and no #GtkSelectionModel::selection-changed will be emitted for them. So to
  * track which items are selected, it is necessary to listen to both signals.
  *
- * Additionally, the interface can expose functionality to select and unselect items.
- * If these functions are implemented, GTK's list widgets will allow users to select and
- * unselect items. However, #GtkSelectionModels are free to only implement them
- * partially or not at all. In that case the widgets will not support the unimplemented
- * operations.
+ * Additionally, the interface can expose functionality to select and unselect
+ * items. If these functions are implemented, GTK's list widgets will allow users
+ * to select and unselect items. However, #GtkSelectionModels are free to only
+ * implement them partially or not at all. In that case the widgets will not
+ * support the unimplemented operations.
  *
- * When selecting or unselecting is supported by a model, the return values of the
- * selection functions do NOT indicate if selection or unselection happened. They are
- * only meant to indicate complete failure, like when this mode of selecting is not
- * supported by the model.
+ * When selecting or unselecting is supported by a model, the return values of
+ * the selection functions do *not* indicate if selection or unselection happened.
+ * They are only meant to indicate complete failure, like when this mode of
+ * selecting is not supported by the model.
  *
- * Selections may happen asynchronously, so the only reliable way to find out when an
- * item was selected is to listen to the signals that indicate selection.
+ * Selections may happen asynchronously, so the only reliable way to find out
+ * when an item was selected is to listen to the signals that indicate selection.
  */
 
 G_DEFINE_INTERFACE (GtkSelectionModel, gtk_selection_model, G_TYPE_LIST_MODEL)
@@ -251,7 +251,7 @@ gtk_selection_model_default_init (GtkSelectionModelInterface *iface)
    * Emitted when the selection state of some of the items in @model changes.
    *
    * Note that this signal does not specify the new selection state of the items,
-   * they need to be queried manually.  
+   * they need to be queried manually.
    * It is also not necessary for a model to change the selection state of any of
    * the items in the selection model, though it would be rather useless to emit
    * such a signal.
@@ -318,13 +318,13 @@ gtk_selection_model_get_selection (GtkSelectionModel *model)
  * @position: start of the queired range
  * @n_items: number of items in the queried range
  *
- * Gets a set containing a set where the values in the range [position,
- * position + n_items) match the selected state of the items in that range.
+ * Gets a set containing a set where the values in the range `[position,
+ * position + n_items)` match the selected state of the items in that range.
  * All values outside that range are undefined.
  *
  * This function is an optimization for gtk_selection_model_get_selection() when
  * you are only interested in part of the model's selected state. A common use
- * case is in response to the :selection-changed signal.
+ * case is in response to the #GtkSelectionModel::selection-changed signal.
  *
  * Returns: A #GtkBitset that matches the selection state for the given state
  *     with all other values being undefined.
@@ -495,7 +495,7 @@ gtk_selection_model_unselect_all (GtkSelectionModel *model)
  * are more likely to implement support for those.
  *
  * Requests that the selection state of all positions set in @mask be
- * updated to the respecitve value in the @selected bitmask.  
+ * updated to the respecitve value in the @selected bitmask.
  *
  * In pseudocode, it would look something like this:
  *
@@ -544,8 +544,8 @@ gtk_selection_model_set_selection (GtkSelectionModel *model,
  * @n_items: the number of changed items
  *
  * Helper function for implementations of #GtkSelectionModel.
- * Call this when a the selection changes to emit the ::selection-changed
- * signal.
+ * Call this when a the selection changes to emit the
+ * #GtkSelectionModel::selection-changed signal.
  */
 void
 gtk_selection_model_selection_changed (GtkSelectionModel *model,
