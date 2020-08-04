@@ -987,16 +987,21 @@ create_scales (void)
 {
   GtkWidget *hbox;
   GtkWidget *vbox;
+  GtkWidget *widget;
 
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 3);
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_box_set_homogeneous (GTK_BOX (hbox), TRUE);
-  gtk_box_append (GTK_BOX (hbox),
-		      gtk_scale_new_with_range (GTK_ORIENTATION_HORIZONTAL,
-                                                0.0, 100.0, 1.0));
-  gtk_box_append (GTK_BOX (hbox),
-		      gtk_scale_new_with_range (GTK_ORIENTATION_VERTICAL,
-                                                0.0, 100.0, 1.0));
+  widget = gtk_scale_new_with_range (GTK_ORIENTATION_HORIZONTAL, 0.0, 100.0, 1.0);
+  gtk_scale_set_draw_value (GTK_SCALE (widget), FALSE);
+  gtk_range_set_value (GTK_RANGE (widget), 50.);
+  gtk_widget_set_size_request (widget, 100, -1);
+  gtk_box_append (GTK_BOX (hbox), widget);
+  widget = gtk_scale_new_with_range (GTK_ORIENTATION_VERTICAL, 0.0, 100.0, 1.0);
+  gtk_scale_set_draw_value (GTK_SCALE (widget), FALSE);
+  gtk_widget_set_size_request (widget, -1, 100);
+  gtk_range_set_value (GTK_RANGE (widget), 50.);
+  gtk_box_append (GTK_BOX (hbox), widget);
   gtk_box_append (GTK_BOX (vbox), hbox);
   gtk_box_append (GTK_BOX (vbox),
 		      g_object_new (GTK_TYPE_LABEL,
