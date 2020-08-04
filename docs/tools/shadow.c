@@ -128,12 +128,12 @@ create_shadow (GdkPixbuf *src)
 
 	}
     }
-  
+
   return dest;
 }
 
 GdkPixbuf *
-create_shadowed_pixbuf (GdkPixbuf *src)
+add_shadow (GdkPixbuf *src)
 {
   GdkPixbuf *dest;
   
@@ -145,5 +145,8 @@ create_shadowed_pixbuf (GdkPixbuf *src)
 			gdk_pixbuf_get_height (src),
 			BLUR_RADIUS, BLUR_RADIUS, 1.0, 1.0,
 			GDK_INTERP_NEAREST, 255);
+
+  g_object_unref (src);
+
   return dest;
 }

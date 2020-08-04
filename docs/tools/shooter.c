@@ -21,290 +21,141 @@
 #include "widgets.h"
 #include "shadow.h"
 
-#define MAXIMUM_WM_REPARENTING_DEPTH 4
-#ifndef _
-#define _(x) (x)
-#endif
-
-static void queue_show (void);
-
-static Window
-find_toplevel_window (Window xid)
-{
-  Window root, parent, *children;
-  guint nchildren;
-
-  do
-    {
-      if (XQueryTree (GDK_DISPLAY_XDISPLAY (gdk_display_get_default ()), xid, &root,
-		      &parent, &children, &nchildren) == 0)
-	{
-	  g_warning ("Couldn't find window manager window");
-	  return 0;
-	}
-
-      if (root == parent)
-	return xid;
-
-      xid = parent;
-    }
-  while (TRUE);
-}
-
 static GdkPixbuf *
-add_border_to_shot (GdkPixbuf *pixbuf)
+add_border (GdkPixbuf *pixbuf)
 {
   GdkPixbuf *retval;
-  GdkColorspace colorspace;
-  int bits;
 
-  colorspace = gdk_pixbuf_get_colorspace (pixbuf);
-  bits = gdk_pixbuf_get_bits_per_sample (pixbuf);
-  retval = gdk_pixbuf_new (colorspace, TRUE, bits,
-			   gdk_pixbuf_get_width (pixbuf) + 2,
-			   gdk_pixbuf_get_height (pixbuf) + 2);
+  retval = gdk_pixbuf_new (GDK_COLORSPACE_RGB, TRUE, 8,
+                           gdk_pixbuf_get_width (pixbuf) + 2,
+                           gdk_pixbuf_get_height (pixbuf) + 2);
 
   /* Fill with solid black */
   gdk_pixbuf_fill (retval, 0xFF);
   gdk_pixbuf_copy_area (pixbuf,
-			0, 0,
-			gdk_pixbuf_get_width (pixbuf),
-			gdk_pixbuf_get_height (pixbuf),
-			retval, 1, 1);
+                        0, 0,
+                        gdk_pixbuf_get_width (pixbuf),
+                        gdk_pixbuf_get_height (pixbuf),
+                        retval, 1, 1);
+
+  g_object_unref (pixbuf);
 
   return retval;
 }
 
-static GdkPixbuf *
-remove_shaped_area (GdkPixbuf *pixbuf,
-		    Window     window)
-{
-  GdkPixbuf *retval;
-  XRectangle *rectangles;
-  int rectangle_count, rectangle_order;
-  int i;
-  GdkColorspace colorspace;
-  int bits;
-
-  colorspace = gdk_pixbuf_get_colorspace (pixbuf);
-  bits = gdk_pixbuf_get_bits_per_sample (pixbuf);
-  retval = gdk_pixbuf_new (colorspace, TRUE, bits,
-			   gdk_pixbuf_get_width (pixbuf),
-			   gdk_pixbuf_get_height (pixbuf));
-  
-  gdk_pixbuf_fill (retval, 0);
-  rectangles = XShapeGetRectangles (GDK_DISPLAY_XDISPLAY (gdk_display_get_default ()), window,
-				    ShapeBounding, &rectangle_count, &rectangle_order);
-
-  for (i = 0; i < rectangle_count; i++)
-    {
-      int y, x;
-
-      for (y = rectangles[i].y; y < rectangles[i].y + rectangles[i].height; y++)
-	{
-	  guchar *src_pixels, *dest_pixels;
-
-	  src_pixels = gdk_pixbuf_get_pixels (pixbuf) +
-	    y * gdk_pixbuf_get_rowstride (pixbuf) +
-	    rectangles[i].x * (gdk_pixbuf_get_has_alpha (pixbuf) ? 4 : 3);
-	  dest_pixels = gdk_pixbuf_get_pixels (retval) +
-	    y * gdk_pixbuf_get_rowstride (retval) +
-	    rectangles[i].x * 4;
-
-	  for (x = rectangles[i].x; x < rectangles[i].x + rectangles[i].width; x++)
-	    {
-	      *dest_pixels++ = *src_pixels ++;
-	      *dest_pixels++ = *src_pixels ++;
-	      *dest_pixels++ = *src_pixels ++;
-	      *dest_pixels++ = 255;
-
-	      if (gdk_pixbuf_get_has_alpha (pixbuf))
-		src_pixels++;
-	    }
-	}
-    }
-
-  return retval;
-}
-
-typedef enum {
-  DECOR_NONE,
-  DECOR_FRAME,
-  DECOR_WINDOW_FRAME
-} DecorationType;
-
-static GdkPixbuf *
-take_window_shot (Window         child,
-                  DecorationType decor)
-{
-  cairo_surface_t *surface;
-  XWindowAttributes attrs;
-  Window xid;
-  Display *dpy;
-  int x = 0, y = 0;
-  int width, height;
-
-  GdkPixbuf *tmp, *tmp2;
-  GdkPixbuf *retval = NULL;
-
-  if (decor == DECOR_WINDOW_FRAME)
-    xid = find_toplevel_window (child);
-  else
-    xid = child;
-
-  dpy = gdk_x11_display_get_xdisplay (gdk_display_get_default ());
-  XGetWindowAttributes (dpy, xid, &attrs);
-
-  width = attrs.width;
-  height = attrs.height;
-
-  if (attrs.x < 0)
-    {
-      x = - attrs.x;
-      width = width + attrs.x;
-    }
-
-  if (attrs.y < 0)
-    {
-      y = - attrs.y;
-      height = height + attrs.y;
-    }
-
-  if (attrs.x + x + width > WidthOfScreen (DefaultScreenOfDisplay (dpy)))
-    width = WidthOfScreen (DefaultScreenOfDisplay (dpy)) - attrs.x - x;
-
-  if (attrs.y + y + height > HeightOfScreen (DefaultScreenOfDisplay (dpy)))
-    height = HeightOfScreen (DefaultScreenOfDisplay (dpy)) - attrs.y - y;
-
-  surface = cairo_xlib_surface_create (dpy,
-                                       xid,
-                                       attrs.visual,
-                                       attrs.width,
-                                       attrs.height);
-  tmp = gdk_pixbuf_get_from_surface (surface,
-                                     x, y,
-                                     width, height);
-  cairo_surface_destroy (surface);
-
-  if (tmp != NULL)
-    {
-      if (decor == DECOR_WINDOW_FRAME)
-        tmp2 = remove_shaped_area (tmp, xid);
-      else if (decor == DECOR_FRAME)
-        tmp2 = add_border_to_shot (tmp);
-      else
-        tmp2 = g_object_ref (tmp);
-
-      g_object_unref (tmp);
-
-      if (tmp2 != NULL)
-        {
-          retval = create_shadowed_pixbuf (tmp2);
-          g_object_unref (tmp2);
-        }
-    }
-
-  return retval;
-}
-
-static GList *toplevels;
-static guint shot_id;
+static GMainLoop *loop;
 
 static gboolean
-window_is_csd (GdkSurface *window)
+quit_when_idle (gpointer loop)
 {
-  return TRUE;
-}
-
-static gboolean
-shoot_one (WidgetInfo *info)
-{
-  GdkSurface *window;
-  XID id;
-  GdkPixbuf *screenshot = NULL;
-  DecorationType decor = DECOR_FRAME;
-
-  if (g_list_find (toplevels, info) == NULL)
-    {
-      g_warning ("Widget not found in queue");
-      exit (1);
-    }
-
-  window = gtk_native_get_surface (GTK_NATIVE (info->window));
-  id = gdk_x11_surface_get_xid (window);
-  if (window_is_csd (window))
-    decor = (info->include_decorations) ? DECOR_NONE : DECOR_WINDOW_FRAME;
-  screenshot = take_window_shot (id, decor);
-  if (screenshot != NULL)
-    {
-      char *filename;
-      filename = g_strdup_printf ("./%s.png", info->name);
-      gdk_pixbuf_save (screenshot, filename, "png", NULL, NULL);
-      g_free (filename);
-      g_object_unref (screenshot);
-    }
-  else
-    {
-      g_warning ("unable to save shot of %s", info->name);
-    }
-  gtk_window_destroy (GTK_WINDOW (info->window));
-
-  shot_id = 0;
-
-  /* remove from the queue and try to load up another */
-  toplevels = g_list_remove (toplevels, info);
-  if (toplevels == NULL)
-    exit (0);
-  else
-    queue_show ();
+  g_main_loop_quit (loop);
 
   return G_SOURCE_REMOVE;
 }
 
 static void
-on_show (WidgetInfo *info)
+draw_paintable (GdkPaintable *paintable,
+                gpointer      out_surface)
 {
-  if (shot_id != 0)
+  GtkSnapshot *snapshot;
+  GskRenderNode *node;
+  cairo_surface_t *surface;
+  cairo_t *cr;
+
+  snapshot = gtk_snapshot_new ();
+  gdk_paintable_snapshot (paintable,
+                          snapshot,
+                          gdk_paintable_get_intrinsic_width (paintable),
+                          gdk_paintable_get_intrinsic_height (paintable));
+  node = gtk_snapshot_free_to_node (snapshot);
+
+  /* If the window literally draws nothing, we assume it hasn't been mapped yet and as such
+   * the invalidations were only side effects of resizes.
+   */
+  if (node == NULL)
     return;
 
-  shot_id = g_timeout_add (500, (GSourceFunc) shoot_one, info);
+  surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
+                                        gdk_paintable_get_intrinsic_width (paintable),
+                                        gdk_paintable_get_intrinsic_height (paintable));
+
+  cr = cairo_create (surface);
+  gsk_render_node_draw (node, cr);
+  cairo_destroy (cr);
+  gsk_render_node_unref (node);
+
+  g_signal_handlers_disconnect_by_func (paintable, draw_paintable, out_surface);
+
+  *(cairo_surface_t **) out_surface = surface;
+
+  g_idle_add (quit_when_idle, loop);
 }
 
-static gboolean
-show_one (void)
+static cairo_surface_t *
+snapshot_widget (GtkWidget *widget)
 {
-  WidgetInfo *info = toplevels->data;
+  GdkPaintable *paintable;
+  cairo_surface_t *surface;
 
-  g_message ("shooting %s", info->name);
+  g_assert (gtk_widget_get_realized (widget));
 
-  g_signal_connect_swapped (info->window,
-                            "show",
-                            G_CALLBACK (on_show),
-                            info);
+  loop = g_main_loop_new (NULL, FALSE);
 
-  gtk_widget_show (info->window);
+  /* We wait until the widget is drawn for the first time.
+   *
+   * We also use an inhibit mechanism, to give module functions a chance
+   * to delay the snapshot.
+   */
+  paintable = gtk_widget_paintable_new (widget);
+  g_signal_connect (paintable, "invalidate-contents", G_CALLBACK (draw_paintable), &surface);
+  g_main_loop_run (loop);
 
-  return G_SOURCE_REMOVE;
+  g_main_loop_unref (loop);
+  g_object_unref (paintable);
+  gtk_window_destroy (GTK_WINDOW (widget));
+
+  return surface;
 }
 
-static void
-queue_show (void)
+int
+main (int argc, char **argv)
 {
-  g_idle_add ((GSourceFunc) show_one, NULL);
-}
+  GList *toplevels, *node;
 
-int main (int argc, char **argv)
-{
-  /* If there's no DISPLAY, we silently error out.  We don't want to break
-   * headless builds. */
-  if (! gtk_init_check ())
-    return 0;
+  gtk_init ();
 
   toplevels = get_all_widgets ();
 
-  queue_show ();
-  while (TRUE)
-    g_main_context_iteration (NULL, TRUE);
+  for (node = toplevels; node; node = node->next)
+    {
+      WidgetInfo *info;
+      char *filename;
+      cairo_surface_t *surface;
+      GdkPixbuf *pixbuf;
+
+      info = node->data;
+
+      gtk_widget_show (info->window);
+
+      surface = snapshot_widget (info->window);
+
+      pixbuf = gdk_pixbuf_get_from_surface (surface, 0, 0,
+                                            cairo_image_surface_get_width (surface),
+                                            cairo_image_surface_get_height (surface));
+
+      if (!info->include_decorations)
+        pixbuf = add_border (pixbuf);
+
+      pixbuf = add_shadow (pixbuf);
+
+      filename = g_strdup_printf ("./%s.png", info->name);
+
+      gdk_pixbuf_save (pixbuf, filename, "png", NULL, NULL);
+      g_free (filename);
+
+      g_object_unref (pixbuf);
+      cairo_surface_destroy (surface);
+    }
 
   return 0;
 }

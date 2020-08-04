@@ -1,7 +1,7 @@
 if x11_enabled and get_option('gtk_doc')
   doc_shooter_sources = [
-    'shadow.c',
     'shooter.c',
+    'shadow.c',
     'widgets.c',
     '../../tests/gtkgears.c',
   ]
