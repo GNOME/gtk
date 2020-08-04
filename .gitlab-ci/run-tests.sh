@@ -12,7 +12,7 @@ export LSAN_OPTIONS=suppressions=$srcdir/lsan.supp
 
 case "${backend}" in
   x11)
-    xvfb-run -a -s "-screen 0 1024x768x24" \
+    xvfb-run -a -s "-screen 0 1024x768x24 -noreset" \
           meson test -C ${builddir} \
                 --timeout-multiplier "${MESON_TEST_TIMEOUT_MULTIPLIER}" \
                 --print-errorlogs \
