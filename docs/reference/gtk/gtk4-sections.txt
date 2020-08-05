@@ -7628,7 +7628,6 @@ gtk_string_object_get_string
 <TITLE>GtkSelectionFilterModel</TITLE>
 GtkSelectionFilterModel
 gtk_selection_filter_model_new
-gtk_selection_filter_model_new_for_type
 gtk_selection_filter_model_set_model
 gtk_selection_filter_model_get_model
 </SECTION>
