@@ -327,8 +327,6 @@ click_pressed_cb (GtkGestureClick *gesture,
 
   if (!priv->activate_timeout)
     priv->button_down = TRUE;
-
-  gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
 }
 
 static gboolean
@@ -364,6 +362,7 @@ click_released_cb (GtkGestureClick *gesture,
   GtkButtonPrivate *priv = gtk_button_get_instance_private (button);
   GdkEventSequence *sequence;
 
+  gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
   gtk_button_do_release (button,
                          gtk_widget_is_sensitive (GTK_WIDGET (button)) &&
                          (priv->in_button ||
