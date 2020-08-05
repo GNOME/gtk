@@ -58,9 +58,9 @@ G_BEGIN_DECLS
  * dimension.
  *
  * Alignment only matters if the widget receives a “too large” allocation,
- * for example if you packed the widget with the #GtkWidget:expand
- * flag inside a #GtkBox, then the widget might get extra space.  If
- * you have for example a 16x16 icon inside a 32x32 space, the icon
+ * for example if you packed the widget with the #GtkWidget:hexpand
+ * property inside a #GtkBox, then the widget might get extra space.
+ * If you have for example a 16x16 icon inside a 32x32 space, the icon
  * could be scaled and stretched, it could be centered, or it could be
  * positioned to one side of the space.
  *
@@ -234,8 +234,7 @@ typedef enum
  * @GTK_JUSTIFY_CENTER: The text is placed in the center of the label.
  * @GTK_JUSTIFY_FILL: The text is placed is distributed across the label.
  *
- * Used for justifying the text inside a #GtkLabel widget. (See also
- * #GtkAlignment).
+ * Used for justifying the text inside a #GtkLabel widget.
  */
 typedef enum
 {
@@ -379,9 +378,8 @@ typedef enum
  * @GTK_POS_TOP: The feature is at the top edge.
  * @GTK_POS_BOTTOM: The feature is at the bottom edge.
  *
- * Describes which edge of a widget a certain feature is positioned at, e.g. the
- * tabs of a #GtkNotebook, the handle of a #GtkHandleBox or the label of a
- * #GtkScale.
+ * Describes which edge of a widget a certain feature is positioned at, e.g.
+ * the tabs of a #GtkNotebook, or the label of a #GtkScale.
  */
 typedef enum
 {
@@ -897,10 +895,7 @@ typedef enum
 
 /**
  * GtkPropagationPhase:
- * @GTK_PHASE_NONE: Events are not delivered automatically. Those can be
- *   manually fed through gtk_event_controller_handle_event(). This should
- *   only be used when full control about when, or whether the controller
- *   handles the event is needed.
+ * @GTK_PHASE_NONE: Events are not delivered.
  * @GTK_PHASE_CAPTURE: Events are delivered in the capture phase. The
  *   capture phase happens before the bubble phase, runs from the toplevel down
  *   to the event widget. This option should only be used on containers that

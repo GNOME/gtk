@@ -185,10 +185,9 @@ is to create a menu using a GMenu menu model. GMenu provides an
 abstract way to describe typical menus: nested groups of items
 where each item can have a label, and icon, and an action.
 
-Typical uses of GMenu inside GTK are to set up an application
-menu or menubar with gtk_application_set_app_menu() or
-gtk_application_set_menubar(). Another, maybe more common use
-is to create a popover for a menubutton, using
+A typical use of GMenu inside GTK is to set up an application
+menubar with gtk_application_set_menubar(). Another, maybe more
+common use is to create a popover for a menubutton, using
 gtk_menu_button_set_menu_model().
 
 Unlike traditional menus, those created from menu models don't

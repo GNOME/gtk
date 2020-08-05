@@ -819,7 +819,7 @@ gtk_tree_list_model_get_passthrough (GtkTreeListModel *self)
  *
  * If set to %TRUE, the model will recursively expand all rows that
  * get added to the model. This can be either rows added by changes
- * to the underlying models or via gtk_tree_list_model_set_expanded().
+ * to the underlying models or via gtk_tree_list_row_set_expanded().
  **/
 void
 gtk_tree_list_model_set_autoexpand (GtkTreeListModel *self,
@@ -841,7 +841,7 @@ gtk_tree_list_model_set_autoexpand (GtkTreeListModel *self,
  *
  * Gets whether the model is set to automatically expand new rows
  * that get added. This can be either rows added by changes to the
- * underlying models or via gtk_tree_list_model_set_expanded().
+ * underlying models or via gtk_tree_list_row_set_expanded().
  *
  * Returns: %TRUE if the model is set to autoexpand
  **/

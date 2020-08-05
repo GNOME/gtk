@@ -316,7 +316,7 @@ gtk_event_controller_filter_crossing (GtkEventController    *controller,
   return FALSE;
 }
 
-/**
+/*
  * gtk_event_controller_handle_event:
  * @controller: a #GtkEventController
  * @event: a #GdkEvent

@@ -40,7 +40,7 @@
  * can use all of the methods available there.  It also implements the
  * #GtkTreeSortable interface so it can be sorted by the view.
  * Finally, it also implements the tree
- * [drag and drop][gtk3-GtkTreeView-drag-and-drop]
+ * [drag and drop][gtk4-GtkTreeView-drag-and-drop]
  * interfaces.
  *
  * The #GtkListStore can accept most GObject types as a column type, though

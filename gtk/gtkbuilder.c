@@ -53,9 +53,6 @@
  * Non-widget objects need to be reffed with g_object_ref() to keep them
  * beyond the lifespan of the builder.
  *
- * The function gtk_builder_connect_signals() and variants thereof can be
- * used to connect handlers to the named signals in the description.
- *
  * # GtkBuilder UI Definitions # {#BUILDER-UI}
  *
  * GtkBuilder parses textual descriptions of user interfaces which are
@@ -2717,14 +2714,12 @@ _gtk_builder_get_template_type (GtkBuilder *builder)
  * @object: (nullable): Object to create the closure with
  * @error: (allow-none): return location for an error, or %NULL
  *
- * Creates a closure to invoke the function called @function_name.
+ * Creates a closure to invoke the function called @function_name,
+ * by using the create_closure() implementation of @builder's
+ * #GtkBuilderScope.
  *
- * If a closure function was set via gtk_builder_set_closure_func(),
- * will be invoked.
- * Otherwise, gtk_builder_create_cclosure() will be called.
- *
- * If no closure could be created, %NULL will be returned and @error will
- * be set.
+ * If no closure could be created, %NULL will be returned and @error
+ * will be set.
  *
  * Returns: (nullable): A new closure for invoking @function_name
  **/

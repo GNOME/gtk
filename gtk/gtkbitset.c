@@ -194,9 +194,9 @@ gtk_bitset_get_maximum (const GtkBitset *self)
 
 /**
  * gtk_bitset_get_size:
- * @self: a #GtkBitSet
+ * @self: a #GtkBitset
  *
- * Gets the number of values that were added to the set.  
+ * Gets the number of values that were added to the set.
  * For example, if the set is empty, 0 is returned.
  *
  * Note that this function returns a #guint64, because when all values are
@@ -215,7 +215,7 @@ gtk_bitset_get_size (const GtkBitset *self)
 
 /**
  * gtk_bitset_get_size_in_range:
- * @self: a #GtkBitSet
+ * @self: a #GtkBitset
  * @first: the first element to include
  * @last: the last element to include
  *

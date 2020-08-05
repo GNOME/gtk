@@ -63,10 +63,9 @@
  * SECTION:gtknotebook
  * @Short_description: A tabbed notebook container
  * @Title: GtkNotebook
- * @See_also: #GtkContainer
  *
- * The #GtkNotebook widget is a #GtkContainer whose children are pages that
- * can be switched between using tab labels along one edge.
+ * The #GtkNotebook widget is a layout container whose children are
+ * pages that can be switched between using tab labels along one edge.
  *
  * There are many configuration options for GtkNotebook. Among other
  * things, you can choose on which edge the tabs appear
@@ -3304,7 +3303,7 @@ gtk_notebook_drag_drop (GtkDropTarget *dest,
  *
  * Removes the child from the notebook.
  *
- * This function is very similar to gtk_container_remove(),
+ * This function is very similar to gtk_notebook_remove_page(),
  * but additionally informs the notebook that the removal
  * is happening as part of a tab DND operation, which should
  * not be cancelled.
@@ -3375,7 +3374,7 @@ do_detach_tab (GtkNotebook *from,
   gtk_notebook_set_current_page (to, page_num);
 }
 
-/* Private GtkContainer Methods :
+/* Private methods:
  *
  * gtk_notebook_remove
  * gtk_notebook_focus
@@ -6887,8 +6886,8 @@ gtk_notebook_get_tab_detachable (GtkNotebook *notebook,
  * will fill the selection with a GtkWidget** pointing to the child
  * widget that corresponds to the dropped tab.
  *
- * Note that you should use gtk_notebook_detach_tab() instead
- * of gtk_container_remove() if you want to remove the tab from
+ * Note that you should use gtk_notebook_detach_tab() instead of
+ * gtk_notebook_remove_page() if you want to remove the tab from
  * the source notebook as part of accepting a drop. Otherwise,
  * the source notebook will think that the dragged tab was
  * removed from underneath the ongoing drag operation, and
@@ -6971,9 +6970,6 @@ gtk_notebook_get_action_widget (GtkNotebook *notebook,
  * Sets @widget as one of the action widgets. Depending on the pack type
  * the widget will be placed before or after the tabs. You can use
  * a #GtkBox if you need to pack more than one widget on the same side.
- *
- * Note that action widgets are “internal” children of the notebook and thus
- * not included in the list returned from gtk_container_foreach().
  */
 void
 gtk_notebook_set_action_widget (GtkNotebook *notebook,

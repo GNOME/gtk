@@ -644,6 +644,7 @@ gtk_grid_view_get_type
 <FILE>gtkbuildable</FILE>
 GtkBuildable
 GtkBuildableIface
+GtkBuildableParser
 gtk_buildable_set_name
 gtk_buildable_get_name
 gtk_buildable_add_child
@@ -666,6 +667,10 @@ GTK_BUILDABLE_GET_IFACE
 <SECTION>
 <FILE>gtkbuilderscope</FILE>
 <TITLE>GtkBuilderScope</TITLE>
+GtkBuilderScope
+GtkBuilderClosureFlags
+GtkBuilderScopeInterface
+GtkBuilderCScope
 gtk_builder_cscope_new
 gtk_builder_cscope_add_callback_symbol
 gtk_builder_cscope_add_callback_symbols

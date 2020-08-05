@@ -88,7 +88,7 @@
  * Note that GtkSpinButton will by default make its entry large enough to
  * accomodate the lower and upper bounds of the adjustment. If this is
  * not desired, the automatic sizing can be turned off by explicitly
- * setting #GtkSpinButton::width-chars to a value != -1.
+ * setting #GtkEditable::width-chars to a value != -1.
  *
  * ## Using a GtkSpinButton to get an integer
  *

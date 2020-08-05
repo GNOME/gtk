@@ -653,9 +653,8 @@ gtk_style_context_restore (GtkStyleContext *context)
  * @context: a #GtkStyleContext
  * @class_name: class name to use in styling
  *
- * Adds a style class to @context, so posterior calls to
- * gtk_style_context_get() or any of the gtk_render_*()
- * functions will make use of this new class for styling.
+ * Adds a style class to @context, so later uses of the
+ * style context will make use of this new class for styling.
  *
  * In the CSS file format, a #GtkEntry defining a “search”
  * class, would be matched by:
@@ -866,9 +865,6 @@ gtk_style_context_lookup_color (GtkStyleContext *context,
  * @color: (out): return value for the foreground color
  *
  * Gets the foreground color for a given state.
- *
- * See gtk_style_context_get_property() and
- * #GTK_STYLE_PROPERTY_COLOR for details.
  **/
 void
 gtk_style_context_get_color (GtkStyleContext *context,
@@ -886,9 +882,6 @@ gtk_style_context_get_color (GtkStyleContext *context,
  * @border: (out): return value for the border settings
  *
  * Gets the border for a given state as a #GtkBorder.
- *
- * See gtk_style_context_get_property() and
- * #GTK_STYLE_PROPERTY_BORDER_WIDTH for details.
  **/
 void
 gtk_style_context_get_border (GtkStyleContext *context,
@@ -913,8 +906,6 @@ gtk_style_context_get_border (GtkStyleContext *context,
  * @padding: (out): return value for the padding settings
  *
  * Gets the padding for a given state as a #GtkBorder.
- * See gtk_style_context_get() and #GTK_STYLE_PROPERTY_PADDING
- * for details.
  **/
 void
 gtk_style_context_get_padding (GtkStyleContext *context,
@@ -939,8 +930,6 @@ gtk_style_context_get_padding (GtkStyleContext *context,
  * @margin: (out): return value for the margin settings
  *
  * Gets the margin for a given state as a #GtkBorder.
- * See gtk_style_property_get() and #GTK_STYLE_PROPERTY_MARGIN
- * for details.
  **/
 void
 gtk_style_context_get_margin (GtkStyleContext *context,

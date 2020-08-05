@@ -27,11 +27,6 @@
  * the #GtkGestureClick::pressed signal. Whenever time or distance
  * between clicks exceed the GTK+ defaults, #GtkGestureClick::stopped
  * is emitted, and the click counter is reset.
- *
- * Callers may also restrict the area that is considered valid for a >1
- * touch/button press through gtk_gesture_click_set_area(), so any
- * click happening outside that area is considered to be a first click
- * of its own.
  */
 
 #include "config.h"

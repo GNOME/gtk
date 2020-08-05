@@ -611,7 +611,7 @@ gtk_file_filter_add_pixbuf_formats (GtkFileFilter *filter)
  * @filter: a #GtkFileFilter
  *
  * Gets the attributes that need to be filled in for the #GFileInfo
- * passed to gtk_file_filter_filter()
+ * passed to this filter.
  *
  * This function will not typically be used by applications;
  * it is intended principally for use in the implementation

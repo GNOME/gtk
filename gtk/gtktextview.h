@@ -142,9 +142,7 @@ struct _GtkTextView
  *   view is drawing its own text. Applications can override this vfunc
  *   in a subclass to draw customized content underneath or above the
  *   text. In the %GTK_TEXT_VIEW_LAYER_BELOW_TEXT and %GTK_TEXT_VIEW_LAYER_ABOVE_TEXT
- *   the drawing is done in the buffer coordinate space, but the older (deprecated)
- *   layers %GTK_TEXT_VIEW_LAYER_BELOW and %GTK_TEXT_VIEW_LAYER_ABOVE work in viewport
- *   coordinates, which makes them unnecessarily hard to use.
+ *   layers the drawing is done in the buffer coordinate space.
  * @extend_selection: The class handler for the #GtkTextView::extend-selection signal.
  * @insert_emoji: The class handler for the #GtkTextView::insert-emoji signal.
  */

@@ -1382,10 +1382,11 @@ gtk_text_iter_get_tags (const GtkTextIter *iter)
  * @default_setting: %TRUE if text is editable by default
  *
  * Returns whether the character at @iter is within an editable region
- * of text.  Non-editable text is “locked” and can’t be changed by the
- * user via #GtkTextView. This function is simply a convenience
- * wrapper around gtk_text_iter_get_attributes(). If no tags applied
- * to this text affect editability, @default_setting will be returned.
+ * of text.
+ *
+ * Non-editable text is “locked” and can’t be changed by the
+ * user via #GtkTextView. If no tags applied to this text affect
+ * editability, @default_setting will be returned.
  *
  * You don’t want to use this function to decide whether text can be
  * inserted at @iter, because for insertion you don’t want to know
@@ -1393,7 +1394,7 @@ gtk_text_iter_get_tags (const GtkTextIter *iter)
  * know whether a new character inserted at @iter would be inside an
  * editable range. Use gtk_text_iter_can_insert() to handle this
  * case.
- * 
+ *
  * Returns: whether @iter is inside an editable range
  **/
 gboolean
@@ -1488,10 +1489,10 @@ gtk_text_iter_get_attributes (const GtkTextIter  *iter,
  * gtk_text_iter_get_language:
  * @iter: an iterator
  *
- * A convenience wrapper around gtk_text_iter_get_attributes(),
- * which returns the language in effect at @iter. If no tags affecting
- * language apply to @iter, the return value is identical to that of
- * gtk_get_default_language().
+ * Returns the language in effect at @iter.
+ *
+ * If no tags affecting language apply to @iter, the return
+ * value is identical to that of gtk_get_default_language().
  *
  * Returns: (transfer full): language in effect at @iter
  **/

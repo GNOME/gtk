@@ -131,16 +131,13 @@ static guint signals[LAST_SIGNAL] = { 0, };
  * This will cause the drawing area to call the draw function again.
  *
  * The available routines for drawing are documented on the
- * [GDK Drawing Primitives][gdk3-Cairo-Interaction] page
+ * [GDK Drawing Primitives][gdk4-Cairo-Interaction] page
  * and the cairo documentation.
  *
- * To receive mouse events on a drawing area, you will need to enable
- * them with gtk_widget_add_events(). To receive keyboard events, you
- * will need to set the “can-focus” property on the drawing area, and you
- * should probably draw some user-visible indication that the drawing
- * area is focused. Use gtk_widget_has_focus() in your expose event
- * handler to decide whether to draw the focus indicator. See
- * gtk_render_focus() for one way to draw focus.
+ * To receive mouse events on a drawing area, you will need to use
+ * event controllers. To receive keyboard events, you will need to set
+ * the “can-focus” property on the drawing area, and you should probably
+ * draw some user-visible indication that the drawing area is focused.
  *
  * If you need more complex control over your widget, you should consider
  * creating your own #GtkWidget subclass.

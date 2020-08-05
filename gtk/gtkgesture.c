@@ -34,10 +34,9 @@
  * or more than that number of sequences, it won't check wether the gesture
  * is recognized.
  *
- * As soon as the gesture has the expected number of touches, the gesture will
- * run the #GtkGesture::check signal regularly on input events until the gesture
- * is recognized, the criteria to consider a gesture as "recognized" is left to
- * #GtkGesture subclasses.
+ * As soon as the gesture has the expected number of touches, it will check
+ * regularly if it is recognized, the criteria to consider a gesture as
+ * "recognized" is left to #GtkGesture subclasses.
  *
  * A recognized gesture will then emit the following signals:
  * - #GtkGesture::begin when the gesture is recognized.
@@ -46,17 +45,12 @@
  *
  * ## Event propagation
  *
- * In order to receive events, a gesture needs to either set a propagation phase
- * through gtk_event_controller_set_propagation_phase(), or feed those manually
- * through gtk_event_controller_handle_event().
+ * In order to receive events, a gesture needs to set a propagation phase
+ * through gtk_event_controller_set_propagation_phase().
  *
  * In the capture phase, events are propagated from the toplevel down to the
  * target widget, and gestures that are attached to containers above the widget
  * get a chance to interact with the event before it reaches the target.
- *
- * After the capture phase, GTK+ emits the traditional #GtkWidget::event signal.
- * Gestures with the %GTK_PHASE_TARGET phase are fed events from the default
- * #GtkWidget::event handlers.
  *
  * In the bubble phase, events are propagated up from the target widget to the
  * toplevel, and gestures that are attached to containers above the widget get
@@ -772,8 +766,7 @@ gtk_gesture_class_init (GtkGestureClass *klass)
    * @sequence: the #GdkEventSequence that made the gesture to be recognized
    *
    * This signal is emitted when the gesture is recognized. This means the
-   * number of touch sequences matches #GtkGesture:n-points, and the #GtkGesture::check
-   * handler(s) returned #TRUE.
+   * number of touch sequences matches #GtkGesture:n-points.
    *
    * Note: These conditions may also happen when an extra touch (eg. a third touch
    * on a 2-touches gesture) is lifted, in that situation @sequence won't pertain
@@ -792,9 +785,8 @@ gtk_gesture_class_init (GtkGestureClass *klass)
    * @sequence: the #GdkEventSequence that made gesture recognition to finish
    *
    * This signal is emitted when @gesture either stopped recognizing the event
-   * sequences as something to be handled (the #GtkGesture::check handler returned
-   * %FALSE), or the number of touch sequences became higher or lower than
-   * #GtkGesture:n-points.
+   * sequences as something to be handled, or the number of touch sequences became
+   * higher or lower than #GtkGesture:n-points.
    *
    * Note: @sequence might not pertain to the group of sequences that were
    * previously triggering recognition on @gesture (ie. a just pressed touch
@@ -1383,8 +1375,7 @@ gtk_gesture_is_active (GtkGesture *gesture)
  *
  * Returns %TRUE if the gesture is currently recognized.
  * A gesture is recognized if there are as many interacting
- * touch sequences as required by @gesture, and #GtkGesture::check
- * returned %TRUE for the sequences being currently interpreted.
+ * touch sequences as required by @gesture.
  *
  * Returns: %TRUE if gesture is recognized
  **/

@@ -106,24 +106,6 @@
  *
  * # GtkWindow as GtkBuildable
  *
- * The GtkWindow implementation of the #GtkBuildable interface supports a
- * custom <accel-groups> element, which supports any number of <group>
- * elements representing the #GtkAccelGroup objects you want to add to
- * your window (synonymous with gtk_window_add_accel_group().
- *
- * An example of a UI definition fragment with accel groups:
- * |[
- * <object class="GtkWindow">
- *   <accel-groups>
- *     <group name="accelgroup1"/>
- *   </accel-groups>
- * </object>
- * 
- * ...
- * 
- * <object class="GtkAccelGroup" id="accelgroup1"/>
- * ]|
- * 
  * The GtkWindow implementation of the #GtkBuildable interface supports
  * setting a child as the titlebar by specifying “titlebar” as the “type”
  * attribute of a <child> element.
@@ -2122,8 +2104,9 @@ gtk_window_set_default_widget (GtkWindow *window,
  * gtk_window_get_default_widget:
  * @window: a #GtkWindow
  *
- * Returns the default widget for @window. See
- * gtk_window_set_default() for more details.
+ * Returns the default widget for @window.
+ *
+ * See gtk_window_set_default_widget() for more details.
  *
  * Returns: (nullable) (transfer none): the default widget, or %NULL
  * if there is none.
@@ -3252,9 +3235,8 @@ gtk_window_get_icon_name (GtkWindow *window)
  * gtk_window_set_default_icon_name:
  * @name: the name of the themed icon
  *
- * Sets an icon to be used as fallback for windows that haven't
- * had gtk_window_set_icon_list() called on them from a named
- * themed icon, see gtk_window_set_icon_name().
+ * Sets an icon to be used as fallback for windows that
+ * haven't had gtk_window_set_icon_name() called on them.
  **/
 void
 gtk_window_set_default_icon_name (const char *name)
@@ -3588,20 +3570,6 @@ gtk_window_resize (GtkWindow *window,
  *   // ...
  * }
  * ]|
- *
- * If you are getting a window size in order to position the window
- * on the screen, don't. You should, instead, simply let the window
- * manager place windows. Also, if you set the transient parent of
- * dialogs with gtk_window_set_transient_for() window managers will
- * often center the dialog over its parent window. It's much preferred
- * to let the window manager handle these cases rather than doing it
- * yourself, because all apps will behave consistently and according to
- * user or system preferences, if the window manager handles it. Also,
- * the window manager can take into account the size of the window
- * decorations and border that it may add, and of which GTK+ has no
- * knowledge. Additionally, positioning windows in global screen coordinates
- * may not be allowed by the windowing system. For more information,
- * see: gtk_window_set_position().
  */
 void
 gtk_window_get_size (GtkWindow *window,
@@ -6342,11 +6310,12 @@ _gtk_window_set_is_active (GtkWindow *window,
  * gtk_window_set_auto_startup_notification:
  * @setting: %TRUE to automatically do startup notification
  *
- * By default, after showing the first #GtkWindow, GTK+ calls 
- * gdk_notify_startup_complete().  Call this function to disable 
- * the automatic startup notification. You might do this if your 
- * first window is a splash screen, and you want to delay notification 
- * until after your real main window has been shown, for example.
+ * By default, after showing the first #GtkWindow, GTK calls
+ * gdk_display_notify_startup_complete(). Call this function to
+ * disable the automatic startup notification. You might do this
+ * if your first window is a splash screen, and you want to delay
+ * notification until after your real main window has been shown,
+ * for example.
  *
  * In that example, you would disable startup notification
  * temporarily, show your splash screen, then re-enable it so that
