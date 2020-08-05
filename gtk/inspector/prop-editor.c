@@ -1403,51 +1403,6 @@ action_editor (GObject                *object,
   return box;
 }
 
-/* Note: Slightly nasty that we have to poke at the
- * GSettingsSchemaKey internals here. Keep this in
- * sync with the implementation in GIO!
- */
-struct _GSettingsSchemaKey
-{
-  GSettingsSchema *schema;
-  const char *name;
-
-  guint is_flags : 1;
-  guint is_enum  : 1;
-
-  const guint32 *strinfo;
-  gsize strinfo_length;
-
-  const char *unparsed;
-  char lc_char;
-
-  const GVariantType *type;
-  GVariant *minimum, *maximum;
-  GVariant *default_value;
-
-  int ref_count;
-};
-
-typedef struct
-{
-  GSettingsSchemaKey key;
-  GSettings *settings;
-  GObject *object;
-
-  GSettingsBindGetMapping get_mapping;
-  GSettingsBindSetMapping set_mapping;
-  gpointer user_data;
-  GDestroyNotify destroy;
-
-  guint writable_handler_id;
-  guint property_handler_id;
-  const GParamSpec *property;
-  guint key_handler_id;
-
-  /* prevent recursion */
-  gboolean running;
-} GSettingsBinding;
-
 static void
 add_attribute_info (GtkInspectorPropEditor *self,
                     GParamSpec             *spec)
@@ -1467,71 +1422,9 @@ add_actionable_info (GtkInspectorPropEditor *self)
 }
 
 static void
-add_settings_info (GtkInspectorPropEditor *self)
-{
-  char *key;
-  GSettingsBinding *binding;
-  GObject *object;
-  const char *name;
-  const char *direction;
-  const char *tip;
-  GtkWidget *row;
-  GtkWidget *label;
-  char *str;
-
-  object = self->object;
-  name = self->name;
-
-  key = g_strconcat ("gsettingsbinding-", name, NULL);
-  binding = (GSettingsBinding *)g_object_get_data (object, key);
-  g_free (key);
-
-  if (!binding)
-    return;
-
-  if (binding->key_handler_id && binding->property_handler_id)
-    {
-      direction = "↔";
-      tip = _("bidirectional");
-    }
-  else if (binding->key_handler_id)
-    {
-      direction = "←";
-      tip = NULL;
-    }
-  else if (binding->property_handler_id)
-    {
-      direction = "→";
-      tip = NULL;
-    }
-  else
-    {
-      direction = "?";
-      tip = NULL;
-    }
-
-  row = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
-  gtk_box_append (GTK_BOX (row), gtk_label_new (_("Setting:")));
-  label = gtk_label_new (direction);
-  if (tip)
-    gtk_widget_set_tooltip_text (label, tip);
-  gtk_box_append (GTK_BOX (row), label);
-  
-  str = g_strdup_printf ("%s %s",
-                         g_settings_schema_get_id (binding->key.schema),
-                         binding->key.name);
-  label = gtk_label_new (str);
-  gtk_box_append (GTK_BOX (row), label);
-  g_free (str);
-
-  gtk_box_append (GTK_BOX (self), row);
-}
-
-static void
 reset_setting (GtkInspectorPropEditor *self)
 {
-  gtk_settings_reset_property (GTK_SETTINGS (self->object),
-                               self->name);
+  gtk_settings_reset_property (GTK_SETTINGS (self->object), self->name);
 }
 
 static void
@@ -1662,7 +1555,6 @@ constructed (GObject *object)
 
   add_attribute_info (self, spec);
   add_actionable_info (self);
-  add_settings_info (self);
   add_gtk_settings_info (self);
 }
 
