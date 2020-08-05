@@ -39,7 +39,6 @@
 #include "gtkstylecontextprivate.h"
 #include "gtkbuiltiniconprivate.h"
 #include "gtksizegroup.h"
-#include "gtkaccellabelprivate.h"
 #include "gtkactionable.h"
 #include "gtkeventcontrollermotion.h"
 #include "gtkeventcontrollerkey.h"

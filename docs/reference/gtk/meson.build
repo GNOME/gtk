@@ -228,7 +228,6 @@ private_headers = [
 
 images = [
   'images/aboutdialog.png',
-  'images/accel-label.png',
   'images/action-bar.png',
   'images/appchooserbutton.png',
   'images/appchooserdialog.png',
