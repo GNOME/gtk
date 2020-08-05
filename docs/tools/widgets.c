@@ -295,27 +295,6 @@ create_label (void)
 }
 
 static WidgetInfo *
-create_accel_label (void)
-{
-  WidgetInfo *info;
-  GtkWidget *widget, *box;
-
-  widget = gtk_accel_label_new ("Accel Label");
-  gtk_widget_set_size_request (widget, 148, -1);
-
-  box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-  gtk_box_append (GTK_BOX (box), widget);
-
-  gtk_accel_label_set_accel (GTK_ACCEL_LABEL (widget), GDK_KEY_Q, GDK_CONTROL_MASK);
-
-  add_margin (box);
-
-  info = new_widget_info ("accel-label", box, SMALL);
-
-  return info;
-}
-
-static WidgetInfo *
 create_combo_box_entry (void)
 {
   GtkWidget *widget;
@@ -1534,7 +1513,6 @@ get_all_widgets (void)
   retval = g_list_prepend (retval, create_stack_switcher ());
   retval = g_list_prepend (retval, create_spinner ());
   retval = g_list_prepend (retval, create_about_dialog ());
-  retval = g_list_prepend (retval, create_accel_label ());
   retval = g_list_prepend (retval, create_button ());
   retval = g_list_prepend (retval, create_check_button ());
   retval = g_list_prepend (retval, create_color_button ());

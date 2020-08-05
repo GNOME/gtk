@@ -151,7 +151,6 @@ gtk_private_sources = files([
 gtk_public_sources = files([
   'gtkaboutdialog.c',
   'gtkaccelgroup.c',
-  'gtkaccellabel.c',
   'gtkaccessible.c',
   'gtkactionable.c',
   'gtkactionbar.c',
@@ -441,7 +440,6 @@ gtk_private_type_headers = files([
 gtk_public_headers = files([
   'gtkaboutdialog.h',
   'gtkaccelgroup.h',
-  'gtkaccellabel.h',
   'gtkaccessible.h',
   'gtkactionable.h',
   'gtkactionbar.h',
