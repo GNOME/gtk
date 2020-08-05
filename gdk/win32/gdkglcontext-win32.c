@@ -104,25 +104,6 @@ _gdk_win32_gl_context_dispose (GObject *gobject)
   G_OBJECT_CLASS (gdk_win32_gl_context_parent_class)->dispose (gobject);
 }
 
-static void
-gdk_gl_blit_region (GdkSurface *surface, cairo_region_t *region)
-{
-  int n_rects, i;
-  int scale = gdk_surface_get_scale_factor (surface);
-  int wh = gdk_surface_get_height (surface);
-  cairo_rectangle_int_t rect;
-
-  n_rects = cairo_region_num_rectangles (region);
-  for (i = 0; i < n_rects; i++)
-    {
-      cairo_region_get_rectangle (region, i, &rect);
-      glScissor (rect.x * scale, (wh - rect.y - rect.height) * scale, rect.width * scale, rect.height * scale);
-      glBlitFramebuffer (rect.x * scale, (wh - rect.y - rect.height) * scale, (rect.x + rect.width) * scale, (wh - rect.y) * scale,
-                         rect.x * scale, (wh - rect.y - rect.height) * scale, (rect.x + rect.width) * scale, (wh - rect.y) * scale,
-                         GL_COLOR_BUFFER_BIT, GL_NEAREST);
-    }
-}
-
 #ifdef GDK_WIN32_ENABLE_EGL
 static gboolean
 _get_is_egl_force_redraw (GdkSurface *surface)
@@ -188,24 +169,7 @@ gdk_win32_gl_context_end_frame (GdkDrawContext *draw_context,
             }
         }
 
-      if (cairo_region_contains_rectangle (painted, &whole_window) == CAIRO_REGION_OVERLAP_IN)
-        SwapBuffers (context_win32->gl_hdc);
-      else if (gdk_gl_context_has_framebuffer_blit (context))
-        {
-          glDrawBuffer(GL_FRONT);
-          glReadBuffer(GL_BACK);
-          gdk_gl_blit_region (surface, painted);
-          glDrawBuffer(GL_BACK);
-          glFlush();
-
-          if (gdk_gl_context_has_frame_terminator (context))
-            glFrameTerminatorGREMEDY ();
-        }
-      else
-        {
-          g_warning ("Need to swap whole buffer even thouigh not everything was redrawn. Expect artifacts.");
-          SwapBuffers (context_win32->gl_hdc);
-        }
+      SwapBuffers (context_win32->gl_hdc);
     }
 #ifdef GDK_WIN32_ENABLE_EGL
   else
@@ -224,15 +188,7 @@ gdk_win32_gl_context_end_frame (GdkDrawContext *draw_context,
           _reset_egl_force_redraw (surface);
         }
 
-      if (cairo_region_contains_rectangle (painted, &whole_window) == CAIRO_REGION_OVERLAP_IN || force_egl_redraw_all)
-        eglSwapBuffers (display->egl_disp, egl_surface);
-      else if (gdk_gl_context_has_framebuffer_blit (context))
-        gdk_gl_blit_region (surface, painted);
-      else
-        {
-          g_warning ("Need to swap whole buffer even thouigh not everything was redrawn. Expect artifacts.");
-          eglSwapBuffers (display->egl_disp, egl_surface);
-        }
+      eglSwapBuffers (display->egl_disp, egl_surface);
     }
 #endif
 }
@@ -249,18 +205,6 @@ gdk_win32_gl_context_begin_frame (GdkDrawContext *draw_context,
   gdk_win32_surface_handle_queued_move_resize (draw_context);
 
   GDK_DRAW_CONTEXT_CLASS (gdk_win32_gl_context_parent_class)->begin_frame (draw_context, update_area);
-  if (gdk_gl_context_get_shared_context (context))
-    return;
-
-  if (gdk_gl_context_has_framebuffer_blit (context))
-    return;
-
-  /* If nothing else is known, repaint everything so that the back
-     buffer is fully up-to-date for the swapbuffer */
-  cairo_region_union_rectangle (update_area, &(GdkRectangle) {
-                                                 0, 0,
-                                                 gdk_surface_get_width (surface),
-                                                 gdk_surface_get_height (surface) });
 }
 
 typedef struct
