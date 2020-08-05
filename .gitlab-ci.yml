@@ -72,6 +72,7 @@ fedora-x86_64:
   variables:
     EXTRA_MESON_FLAGS: "--buildtype=debug --default-library=both"
   script:
+    - meson subprojects update
     - meson ${COMMON_MESON_FLAGS} ${EXTRA_MESON_FLAGS} ${BACKEND_FLAGS} ${FEATURE_FLAGS}
             -Dprofiler=true
             _build
@@ -87,6 +88,7 @@ release-build:
   variables:
     EXTRA_MESON_FLAGS: "--buildtype=release"
   script:
+    - meson subprojects update
     - meson ${COMMON_MESON_FLAGS} ${EXTRA_MESON_FLAGS} ${BACKEND_FLAGS} ${FEATURE_FLAGS}
             _build
     - ninja -C _build
@@ -99,6 +101,7 @@ installed-tests:
   variables:
     EXTRA_MESON_FLAGS: "--prefix=/usr --libdir=/usr/lib64 -Dinstall-tests=true"
   script:
+    - meson subprojects update
     - meson ${COMMON_MESON_FLAGS} ${EXTRA_MESON_FLAGS} ${BACKEND_FLAGS} ${FEATURE_FLAGS}
             _build
     - ninja -C _build
