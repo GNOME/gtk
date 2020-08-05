@@ -851,6 +851,8 @@ button_pressed_cb (GtkGestureClick *gesture,
         start_spinning (spin_button, pressed_button, gtk_adjustment_get_step_increment (spin_button->adjustment));
       else if (button == GDK_BUTTON_MIDDLE)
         start_spinning (spin_button, pressed_button, gtk_adjustment_get_page_increment (spin_button->adjustment));
+
+      gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
     }
   else
     {
