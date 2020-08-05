@@ -447,7 +447,7 @@ gtk_at_context_update (GtkATContext *self)
  *
  * If @value is %NULL, the state is unset.
  *
- * This function will accumulate state changes until gtk_at_context_update_state()
+ * This function will accumulate state changes until gtk_at_context_update()
  * is called.
  */
 void
@@ -509,7 +509,7 @@ gtk_at_context_get_accessible_state (GtkATContext       *self,
  *
  * If @value is %NULL, the property is unset.
  *
- * This function will accumulate property changes until gtk_at_context_update_state()
+ * This function will accumulate property changes until gtk_at_context_update()
  * is called.
  */
 void
@@ -571,7 +571,7 @@ gtk_at_context_get_accessible_property (GtkATContext          *self,
  *
  * If @value is %NULL, the relation is unset.
  *
- * This function will accumulate relation changes until gtk_at_context_update_state()
+ * This function will accumulate relation changes until gtk_at_context_update()
  * is called.
  */
 void
