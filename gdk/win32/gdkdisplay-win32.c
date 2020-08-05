@@ -336,12 +336,10 @@ _gdk_win32_display_init_monitors (GdkWin32Display *win32_display)
  * should be taken.
  *
  * If the windowing system supports it, existing cursors created
- * with gdk_cursor_new(), gdk_cursor_new_for_display() and
- * gdk_cursor_new_from_name() are updated to reflect the theme
- * change. Custom cursors constructed with
- * gdk_cursor_new_from_texture() will have to be handled
- * by the application (GTK+ applications can learn about
- * cursor theme changes by listening for change notification
+ * with gdk_cursor_new_from_name() are updated to reflect the theme
+ * change. Custom cursors constructed with gdk_cursor_new_from_texture()
+ * will have to be handled by the application (GTK applications can
+ * learn about cursor theme changes by listening for change notification
  * for the corresponding #GtkSetting).
  */
 void

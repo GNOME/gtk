@@ -345,7 +345,6 @@ GdkAxisUse
 GdkAxisFlags
 GdkDeviceTool
 GdkDeviceToolType
-GdkDeviceType
 
 <SUBSECTION>
 gdk_device_get_name
@@ -684,6 +683,8 @@ gdk_toplevel_get_type
 <TITLE>Textures</TITLE>
 <FILE>textures</FILE>
 GdkTexture
+GdkMemoryTexture
+GdkGLTexture
 gdk_texture_new_for_pixbuf
 gdk_texture_new_from_resource
 gdk_texture_new_from_file
@@ -847,6 +848,8 @@ gdk_x11_surface_move_to_desktop
 gdk_x11_surface_get_desktop
 gdk_x11_surface_set_utf8_property
 gdk_x11_surface_set_frame_sync_enabled
+gdk_x11_surface_set_group
+gdk_x11_surface_get_group
 gdk_x11_keymap_get_group_for_state
 gdk_x11_keymap_key_is_modifier
 gdk_x11_visual_get_xvisual
@@ -1290,4 +1293,3 @@ GDK_CONTENT_DESERIALIZER
 GDK_IS_CONTENT_DESERIALIZER
 gdk_content_deserializer_get_type
 </SECTION>
-

@@ -881,7 +881,7 @@ gdk_wayland_display_get_startup_notification_id (GdkDisplay  *display)
  *
  * The startup ID is also what is used to signal that the startup is
  * complete (for example, when opening a window or when calling
- * gdk_notify_startup_complete()).
+ * gdk_display_notify_startup_complete()).
  **/
 void
 gdk_wayland_display_set_startup_notification_id (GdkDisplay *display,

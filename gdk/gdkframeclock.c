@@ -208,8 +208,8 @@ gdk_frame_clock_class_init (GdkFrameClockClass *klass)
    * This signal is emitted as the third step of toolkit and
    * application processing of the frame. The frame is
    * repainted. GDK normally handles this internally and
-   * produces expose events, which are turned into GTK
-   * #GtkWidget::draw signals.
+   * emits #GdkSurface::render which are turned into
+   * #GtkWidget::snapshot signals by GTK.
    */
   signals[PAINT] =
     g_signal_new (g_intern_static_string ("paint"),

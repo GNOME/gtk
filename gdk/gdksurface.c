@@ -839,8 +839,8 @@ gdk_surface_new_temp (GdkDisplay         *display,
  *
  * Create a new popup surface.
  *
- * The surface will be attached to @parent and can be positioned relative to it
- * using gdk_surface_show_popup() or later using gdk_surface_layout_popup().
+ * The surface will be attached to @parent and can be positioned
+ * relative to it using gdk_popup_present().
  *
  * Returns: (transfer full): a new #GdkSurface
  */
@@ -1021,8 +1021,8 @@ gdk_surface_is_destroyed (GdkSurface *surface)
  * gdk_surface_get_mapped:
  * @surface: a #GdkSurface
  *
- * Checks whether the surface has been mapped (with gdk_surface_show() or
- * gdk_surface_show_unraised()).
+ * Checks whether the surface has been mapped (with gdk_toplevel_present()
+ * or gdk_popup_present()).
  *
  * Returns: %TRUE if the surface is mapped
  **/
@@ -2024,7 +2024,7 @@ gdk_surface_get_root_coords (GdkSurface *surface,
  * and the input region controls where the surface is
  * “clickable”.
  *
- * Use gdk_display_support_input_shapes() to find out if
+ * Use gdk_display_supports_input_shapes() to find out if
  * a particular backend supports input regions.
  */
 void

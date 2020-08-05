@@ -55,13 +55,12 @@ G_DEFINE_BOXED_TYPE (GdkPopupLayout, gdk_popup_layout,
  * @rect_anchor: the point on @anchor_rect to align with @surface's anchor point
  * @surface_anchor: the point on @surface to align with @rect's anchor point
  *
- * Create a popup layout description. Used together with
- * gdk_surface_present_popup() to describe how a popup surface should be placed
- * and behave on-screen.
+ * Create a popup layout description. Used together with gdk_popup_present()
+ * to describe how a popup surface should be placed and behave on-screen.
  *
  * @anchor_rect is relative to the top-left corner of the surface's parent.
- * @rect_anchor and @surface_anchor determine anchor points on @anchor_rect and
- * surface to pin together.
+ * @rect_anchor and @surface_anchor determine anchor points on @anchor_rect
+ * and surface to pin together.
  *
  * The position of @anchor_rect's anchor point can optionally be offset using
  * gdk_popup_layout_set_offset(), which is equivalent to offsetting the

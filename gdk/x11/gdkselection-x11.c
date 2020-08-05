@@ -43,7 +43,7 @@
  * @length: The number of items to transform
  * @list: location to store an  array of strings in
  *    the encoding of the current locale. This array should be
- *    freed using gdk_free_text_list().
+ *    freed using gdk_x11_free_text_list().
  *
  * Convert a text string from the encoding as it is stored
  * in a property into an array of strings in the encoding of

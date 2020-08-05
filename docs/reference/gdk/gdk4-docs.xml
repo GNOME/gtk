@@ -33,6 +33,7 @@
     <xi:include href="xml/gdksurface.xml" />
     <xi:include href="xml/gdktoplevel.xml" />
     <xi:include href="xml/gdktoplevellayout.xml" />
+    <xi:include href="xml/gdktoplevelsize.xml" />
     <xi:include href="xml/gdkpopup.xml" />
     <xi:include href="xml/gdkpopuplayout.xml" />
     <xi:include href="xml/gdkframeclock.xml" />

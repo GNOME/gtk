@@ -54,7 +54,7 @@
  * gdk_display_get_default_seat() and gdk_display_list_seats().
  *
  * Output devices are represented by #GdkMonitor objects, which can be accessed
- * with gdk_display_get_monitor() and similar APIs.
+ * with gdk_display_get_monitor_at_surface() and similar APIs.
  */
 
 /**
@@ -957,9 +957,9 @@ gdk_display_beep (GdkDisplay *display)
  * Flushes any requests queued for the windowing system and waits until all
  * requests have been handled. This is often used for making sure that the
  * display is synchronized with the current state of the program. Calling
- * gdk_display_sync() before gdk_error_trap_pop() makes sure that any errors
- * generated from earlier requests are handled before the error trap is
- * removed.
+ * gdk_display_sync() before gdk_x11_display_error_trap_pop() makes sure
+ * that any errors generated from earlier requests are handled before the
+ * error trap is removed.
  *
  * This is most useful for X11. On windowing systems where requests are
  * handled synchronously, this function will do nothing.
@@ -1319,9 +1319,6 @@ gdk_display_set_composited (GdkDisplay *display,
  * windowing manager and compositing manager must be running to
  * provide appropriate display. Use gdk_display_is_composited()
  * to check if that is the case.
- *
- * For setting an overall opacity for a top-level surface, see
- * gdk_surface_set_opacity().
  *
  * On modern displays, this value is always %TRUE.
  *
