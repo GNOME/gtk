@@ -37,10 +37,10 @@ void                            gtk_accessible_attribute_set_unref              
 
 gsize                           gtk_accessible_attribute_set_get_length         (GtkAccessibleAttributeSet  *self);
 
-void                            gtk_accessible_attribute_set_add                (GtkAccessibleAttributeSet  *self,
+gboolean                        gtk_accessible_attribute_set_add                (GtkAccessibleAttributeSet  *self,
                                                                                  int                         attribute,
                                                                                  GtkAccessibleValue         *value);
-void                            gtk_accessible_attribute_set_remove             (GtkAccessibleAttributeSet  *self,
+gboolean                        gtk_accessible_attribute_set_remove             (GtkAccessibleAttributeSet  *self,
                                                                                  int                         state);
 gboolean                        gtk_accessible_attribute_set_contains           (GtkAccessibleAttributeSet  *self,
                                                                                  int                         state);
