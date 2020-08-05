@@ -360,7 +360,7 @@ gtk_column_view_column_init (GtkColumnViewColumn *self)
  *
  * Creates a new #GtkColumnViewColumn.
  *
- * You most likely want to call gtk_column_add_column() next.
+ * You most likely want to call gtk_column_view_add_column() next.
  *
  * Returns: a new #GtkColumnViewColumn
  **/

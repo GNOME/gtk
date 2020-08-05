@@ -28,7 +28,7 @@
  * SECTION:gtkfilter
  * @Title: GtkFilter
  * @Short_description: Filtering items
- * @See_also: #GtkFilerListModel
+ * @See_also: #GtkFilterListModel
  *
  * A #GtkFilter object describes the filtering to be performed by a
  * #GtkFilterListModel.

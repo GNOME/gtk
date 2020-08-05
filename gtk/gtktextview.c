@@ -889,8 +889,6 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
    * Note that this property is confusingly named. In CSS terms,
    * the value set here is padding, and it is applied in addition
    * to the padding from the theme.
-   *
-   * Don't confuse this property with #GtkWidget:margin-left.
    */
   g_object_class_install_property (gobject_class,
                                    PROP_LEFT_MARGIN,
@@ -909,8 +907,6 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
    * Note that this property is confusingly named. In CSS terms,
    * the value set here is padding, and it is applied in addition
    * to the padding from the theme.
-   *
-   * Don't confuse this property with #GtkWidget:margin-right.
    */
   g_object_class_install_property (gobject_class,
                                    PROP_RIGHT_MARGIN,
@@ -9023,10 +9019,7 @@ text_window_get_height (GtkTextWindow *win)
  * @window_y: (out) (allow-none): window y coordinate return location or %NULL
  *
  * Converts coordinate (@buffer_x, @buffer_y) to coordinates for the window
- * @win, and stores the result in (@window_x, @window_y). 
- *
- * Note that you can’t convert coordinates for a nonexisting window (see 
- * gtk_text_view_set_border_window_size()).
+ * @win, and stores the result in (@window_x, @window_y).
  **/
 void
 gtk_text_view_buffer_to_window_coords (GtkTextView      *text_view,
@@ -9091,9 +9084,6 @@ gtk_text_view_buffer_to_window_coords (GtkTextView      *text_view,
  *
  * Converts coordinates on the window identified by @win to buffer
  * coordinates, storing the result in (@buffer_x,@buffer_y).
- *
- * Note that you can’t convert coordinates for a nonexisting window (see 
- * gtk_text_view_set_border_window_size()).
  **/
 void
 gtk_text_view_window_to_buffer_coords (GtkTextView      *text_view,

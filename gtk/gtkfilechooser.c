@@ -119,7 +119,7 @@ gtk_file_chooser_default_init (GtkFileChooserInterface *iface)
    * GtkFileChooser:shortcut-folders:
    *
    * A #GListModel containing the shortcut folders that have been
-   * added with gtk_file_chooser_add_shortcut().
+   * added with gtk_file_chooser_add_shortcut_folder().
    *
    * The returned object should not be modified. It may
    * or may not be updated for later changes.
@@ -328,12 +328,6 @@ gtk_file_chooser_get_current_name (GtkFileChooser *chooser)
   return GTK_FILE_CHOOSER_GET_IFACE (chooser)->get_current_name (chooser);
 }
 
-/**
- * gtk_file_chooser_select_all:
- * @chooser: a #GtkFileChooser
- * 
- * Selects all the files in the current folder of a file chooser.
- **/
 void
 gtk_file_chooser_select_all (GtkFileChooser *chooser)
 {
@@ -342,12 +336,6 @@ gtk_file_chooser_select_all (GtkFileChooser *chooser)
   GTK_FILE_CHOOSER_GET_IFACE (chooser)->select_all (chooser);
 }
 
-/**
- * gtk_file_chooser_unselect_all:
- * @chooser: a #GtkFileChooser
- * 
- * Unselects all the files in the current folder of a file chooser.
- **/
 void
 gtk_file_chooser_unselect_all (GtkFileChooser *chooser)
 {
@@ -396,16 +384,6 @@ gtk_file_chooser_get_current_folder (GtkFileChooser *chooser)
   return GTK_FILE_CHOOSER_GET_IFACE (chooser)->get_current_folder (chooser);
 }
 
-/**
- * gtk_file_chooser_select_file:
- * @chooser: a #GtkFileChooser
- * @file: the file to select
- * @error: (allow-none): location to store error, or %NULL
- * 
- * Selects the file referred to by @file.
- *
- * Returns: Not useful.
- **/
 gboolean
 gtk_file_chooser_select_file (GtkFileChooser  *chooser,
                               GFile           *file,
@@ -418,14 +396,6 @@ gtk_file_chooser_select_file (GtkFileChooser  *chooser,
   return GTK_FILE_CHOOSER_GET_IFACE (chooser)->select_file (chooser, file, error);
 }
 
-/**
- * gtk_file_chooser_unselect_file:
- * @chooser: a #GtkFileChooser
- * @file: a #GFile
- * 
- * Unselects the file referred to by @file. If the file is not in the current
- * directory, does not exist, or is otherwise not currently selected, does nothing.
- **/
 void
 gtk_file_chooser_unselect_file (GtkFileChooser *chooser,
                                 GFile          *file)
@@ -467,9 +437,7 @@ gtk_file_chooser_get_files (GtkFileChooser *chooser)
  * will also appear in the dialog’s file name entry.
  *
  * If the file name isn’t in the current folder of @chooser, then the current
- * folder of @chooser will be changed to the folder containing @filename. This
- * is equivalent to a sequence of gtk_file_chooser_unselect_all() followed by
- * gtk_file_chooser_select_filename().
+ * folder of @chooser will be changed to the folder containing @filename.
  *
  * Note that the file must exist, or nothing will be done except
  * for the directory change.

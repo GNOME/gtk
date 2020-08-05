@@ -2559,9 +2559,8 @@ gtk_scrolled_window_get_kinetic_scrolling (GtkScrolledWindow *scrolled_window)
  * then later replayed if it is meant to go to the child widget.
  *
  * This should be enabled if any child widgets perform non-reversible
- * actions on button press events. If they don't, and additionally handle
- * #GtkWidget::grab-broken-event, it might be better to set @capture_button_press
- * to %FALSE.
+ * actions on button press events. If they don't, it might be better to
+ * set @capture_button_press to %FALSE.
  *
  * This setting only has an effect if kinetic scrolling is enabled.
  */

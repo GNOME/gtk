@@ -1652,7 +1652,7 @@ GTK_DEFINE_EXPRESSION_TYPE (GtkCClosureExpression,
  * @user_destroy: (nullable): destroy notify for @user_data
  *
  * This function is a variant of gtk_closure_expression_new() that
- * creates a #GClosure by calling gtk_cclosure_new() with the given
+ * creates a #GClosure by calling g_cclosure_new() with the given
  * @callback_func, @user_data and @user_destroy.
  *
  * Returns: a new #GtkExpression

@@ -50,7 +50,7 @@
  * which don’t provide a native page setup dialog, like Unix. It can
  * be used very much like any other GTK dialog, at the cost of
  * the portability offered by the
- * [high-level printing API][gtk3-High-level-Printing-API]
+ * [high-level printing API][gtk4-High-level-Printing-API]
  */
 
 typedef struct _GtkPageSetupUnixDialogClass    GtkPageSetupUnixDialogClass;

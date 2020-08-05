@@ -412,9 +412,6 @@ the question you have, this list is a good place to start.
     text typed in by the user before or after the tagged block will appear in
     the default style.
 
-    To ensure that all text has the desired appearance, use
-    gtk_widget_override_font() to change the default font for the widget.
-
 25. How do I make a text view scroll to the end of the buffer automatically ?
 
     A good way to keep a text buffer scrolled to the end is to place a

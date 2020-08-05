@@ -44,7 +44,7 @@
  * SECTION:gtkcheckbutton
  * @Short_description: Create widgets with a discrete toggle button
  * @Title: GtkCheckButton
- * @See_also: #GtkCheckMenuItem, #GtkButton, #GtkToggleButton, #GtkRadioButton
+ * @See_also: #GtkButton, #GtkToggleButton, #GtkRadioButton
  *
  * A #GtkCheckButton places a discrete #GtkToggleButton next to a widget,
  * (usually a #GtkLabel). See the section on #GtkToggleButton widgets for

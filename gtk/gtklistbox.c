@@ -2690,8 +2690,9 @@ gtk_list_box_drag_unhighlight_row (GtkListBox *box)
  * @row: a #GtkListBoxRow
  *
  * This is a helper function for implementing DnD onto a #GtkListBox.
- * The passed in @row will be highlighted via gtk_drag_highlight(),
- * and any previously highlighted row will be unhighlighted.
+ * The passed in @row will be highlighted by setting the
+ * #GTK_STATE_FLAG_DROP_ACTIVE state and any previously highlighted
+ * row will be unhighlighted.
  *
  * The row will also be unhighlighted when the widget gets
  * a drag leave event.

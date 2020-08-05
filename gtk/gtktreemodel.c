@@ -32,7 +32,7 @@
  * @Title: GtkTreeModel
  * @Short_description: The tree interface used by GtkTreeView
  * @See_also: #GtkTreeView, #GtkTreeStore, #GtkListStore,
- *     [GtkTreeView drag-and-drop][gtk3-GtkTreeView-drag-and-drop]
+ *     [GtkTreeView drag-and-drop][gtk4-GtkTreeView-drag-and-drop]
  *     #GtkTreeSortable
  *
  * The #GtkTreeModel interface defines a generic tree interface for

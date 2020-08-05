@@ -143,7 +143,7 @@ text_changed (GtkEditableLabel *self)
   /* Sync the entry text to the label, unless we are editing.
    *
    * This is necessary to catch apis like gtk_editable_insert_text(),
-   * which don't go through the ::text property.
+   * which don't go through the text property.
    */
   if (!gtk_editable_label_get_editing (self))
     {
@@ -384,7 +384,7 @@ gtk_editable_label_class_init (GtkEditableLabelClass *class)
    * The default bindings for this action are clicking
    * on the widget and the Enter key.
    *
-   * This action is disabled when #GtkEditable:editing
+   * This action is disabled when #GtkEditableLabel:editing
    * is %FALSE.
    */
   gtk_widget_class_install_action (widget_class, "editing.start", NULL, start_editing);
@@ -400,7 +400,7 @@ gtk_editable_label_class_init (GtkEditableLabelClass *class)
    * The default binding for this action is the Escape
    * key.
    *
-   * This action is disabled when #GtkEditable:editing
+   * This action is disabled when #GtkEditableLabel:editing
    * is %FALSE.
    */
   gtk_widget_class_install_action (widget_class, "editing.stop", "b", stop_editing);
@@ -484,9 +484,9 @@ gtk_editable_label_start_editing (GtkEditableLabel *self)
  * @commit: whether to set the edited text on the label
  *
  * Switches the label out of “editing mode”. If @commit is %TRUE,
- * the resulting text is kept as the #GtkEditableLabel:text property
+ * the resulting text is kept as the #GtkEditable:text property
  * value, otherwise the resulting text is discarded and the label
- * will keep its previous #GtkEditableLabel:text property value.
+ * will keep its previous #GtkEditable:text property value.
  */
 void
 gtk_editable_label_stop_editing (GtkEditableLabel *self,

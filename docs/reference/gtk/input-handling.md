@@ -66,7 +66,7 @@ the target widget for event propagation is window's current focus
 widget (see gtk_window_get_focus()).
 
 For pointer events, the target widget is determined by picking
-the widget at the events coordinates (see gtk_window_pick()).
+the widget at the events coordinates (see gtk_widget_pick()).
 
 In the first phase (the “capture” phase) the event is delivered to
 each widget from the top-most (the top-level #GtkWindow or grab widget)

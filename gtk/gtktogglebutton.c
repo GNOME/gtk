@@ -40,7 +40,7 @@
  * SECTION:gtktogglebutton
  * @Short_description: Create buttons which retain their state
  * @Title: GtkToggleButton
- * @See_also: #GtkButton, #GtkCheckButton, #GtkCheckMenuItem
+ * @See_also: #GtkButton, #GtkCheckButton
  *
  * A #GtkToggleButton is a #GtkButton which will remain “pressed-in” when
  * clicked. Clicking again will cause the toggle button to return to its

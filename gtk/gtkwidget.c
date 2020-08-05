@@ -118,8 +118,9 @@
  * itself or its child widgets, the #GtkWidgetClass.get_request_mode()
  * virtual function must be implemented as well and return the widget's
  * preferred request mode. The default implementation of this virtual function
- * returns %GTK_SIZE_REQUEST_CONSTANT_SIZE, which means that the widget will only ever
- * get -1 passed as the for_size value to its #GtkWidgetClass.measure() implementation.
+ * returns %GTK_SIZE_REQUEST_CONSTANT_SIZE, which means that the widget will
+ * only ever get -1 passed as the for_size value to its #GtkWidgetClass.measure()
+ * implementation.
  *
  * The geometry management system will query a widget hierarchy in
  * only one orientation at a time. When widgets are initially queried
@@ -129,18 +130,17 @@
  * For example, when queried in the normal
  * %GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH mode:
  * First, the default minimum and natural width for each widget
- * in the interface will be computed using gtk_widget_measure() with an orientation
- * of %GTK_ORIENTATION_HORIZONTAL and a for_size of -1.
+ * in the interface will be computed using gtk_widget_measure() with an
+ * orientation of %GTK_ORIENTATION_HORIZONTAL and a for_size of -1.
  * Because the preferred widths for each widget depend on the preferred
  * widths of their children, this information propagates up the hierarchy,
  * and finally a minimum and natural width is determined for the entire
  * toplevel. Next, the toplevel will use the minimum width to query for the
  * minimum height contextual to that width using gtk_widget_measure() with an
  * orientation of %GTK_ORIENTATION_VERTICAL and a for_size of the just computed
- * width. This will also be a highly recursive operation.
- * The minimum height for the minimum width is normally
- * used to set the minimum size constraint on the toplevel
- * (unless gtk_window_set_geometry_hints() is explicitly used instead).
+ * width. This will also be a highly recursive operation. The minimum height
+ * for the minimum width is normally used to set the minimum size constraint
+ * on the toplevel.
  *
  * After the toplevel window has initially requested its size in both
  * dimensions it can go on to allocate itself a reasonable size (or a size
@@ -5285,15 +5285,8 @@ gtk_widget_update_state_flags (GtkWidget     *widget,
  * values in the current widget state (insensitive, prelighted, etc.).
  *
  * This function accepts the values %GTK_STATE_FLAG_DIR_LTR and
- * %GTK_STATE_FLAG_DIR_RTL but ignores them. If you want to set the widget's
- * direction, use gtk_widget_set_direction().
- *
- * It is worth mentioning that any other state than %GTK_STATE_FLAG_INSENSITIVE,
- * will be propagated down to all non-internal children if @widget is a
- * #GtkContainer, while %GTK_STATE_FLAG_INSENSITIVE itself will be propagated
- * down to all #GtkContainer children by different means than turning on the
- * state flag down the hierarchy, both gtk_widget_get_state_flags() and
- * gtk_widget_is_sensitive() will make use of these.
+ * %GTK_STATE_FLAG_DIR_RTL but ignores them. If you want to set
+ * the widget's direction, use gtk_widget_set_direction().
  **/
 void
 gtk_widget_set_state_flags (GtkWidget     *widget,
@@ -6499,11 +6492,11 @@ gtk_widget_get_display (GtkWidget *widget)
  * gtk_widget_child_focus() is called by widgets as the user moves
  * around the window using keyboard shortcuts. @direction indicates
  * what kind of motion is taking place (up, down, left, right, tab
- * forward, tab backward). gtk_widget_child_focus() emits the
- * #GtkWidget::focus signal; widgets override the default handler
- * for this signal in order to implement appropriate focus behavior.
+ * forward, tab backward). gtk_widget_child_focus() calls the
+ * #GtkWidgetClass.focus() vfunc; widgets override this vfunc
+ * in order to implement appropriate focus behavior.
  *
- * The default ::focus handler for a widget should return %TRUE if
+ * The default focus() vfunc for a widget should return %TRUE if
  * moving in @direction left the focus on a focusable location inside
  * that widget, and %FALSE if moving in @direction moved the focus
  * outside the widget. If returning %TRUE, widgets normally
@@ -8992,9 +8985,8 @@ gtk_widget_remove_mnemonic_label (GtkWidget *widget,
  * gtk_widget_trigger_tooltip_query:
  * @widget: a #GtkWidget
  *
- * Triggers a tooltip query on the display where the toplevel of @widget
- * is located. See gtk_tooltip_trigger_tooltip_query() for more
- * information.
+ * Triggers a tooltip query on the display where the toplevel
+ * of @widget is located.
  */
 void
 gtk_widget_trigger_tooltip_query (GtkWidget *widget)
@@ -9214,17 +9206,19 @@ gtk_widget_get_has_tooltip (GtkWidget *widget)
  *
  * Retrieves the widget’s allocation.
  *
- * Note, when implementing a #GtkContainer: a widget’s allocation will
- * be its “adjusted” allocation, that is, the widget’s parent
- * container typically calls gtk_widget_size_allocate() with an
- * allocation, and that allocation is then adjusted (to handle margin
+ * Note, when implementing a layout container: a widget’s allocation
+ * will be its “adjusted” allocation, that is, the widget’s parent
+ * typically calls gtk_widget_size_allocate() with an allocation,
+ * and that allocation is then adjusted (to handle margin
  * and alignment for example) before assignment to the widget.
  * gtk_widget_get_allocation() returns the adjusted allocation that
  * was actually assigned to the widget. The adjusted allocation is
  * guaranteed to be completely contained within the
- * gtk_widget_size_allocate() allocation, however. So a #GtkContainer
- * is guaranteed that its children stay inside the assigned bounds,
- * but not that they have exactly the bounds the container assigned.
+ * gtk_widget_size_allocate() allocation, however.
+ *
+ * So a layout container is guaranteed that its children stay inside
+ * the assigned bounds, but not that they have exactly the bounds the
+ * container assigned.
  */
 void
 gtk_widget_get_allocation (GtkWidget     *widget,
@@ -9588,7 +9582,7 @@ gtk_widget_get_allocated_height (GtkWidget *widget)
  * Returns the baseline that has currently been allocated to @widget.
  * This function is intended to be used when implementing handlers
  * for the #GtkWidgetClass.snapshot() function, and when allocating child
- * widgets in #GtkWidget::size_allocate.
+ * widgets in #GtkWidgetClass.size_allocate().
  *
  * Returns: the baseline of the @widget, or -1 if none
  **/
