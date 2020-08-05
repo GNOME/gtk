@@ -33,12 +33,24 @@ pacman --noconfirm -S --needed \
     mingw-w64-$MSYS2_ARCH-gst-plugins-bad \
     mingw-w64-$MSYS2_ARCH-shared-mime-info
 
-# https://gitlab.gnome.org/GNOME/gtk/issues/2243
-wget "https://gitlab.gnome.org/creiter/gitlab-ci-win32-runner-v2/raw/master/pango/mingw-w64-$MSYS2_ARCH-pango-git-1.44.7.90.ge48ae523-1-any.pkg.tar.zst"
-pacman --noconfirm -U "mingw-w64-$MSYS2_ARCH-pango-git-1.44.7.90.ge48ae523-1-any.pkg.tar.zst"
+# https://gitlab.gnome.org/GNOME/gtk/-/issues/2243
+# https://gitlab.gnome.org/GNOME/gtk/-/issues/3002
 
-# https://github.com/msys2/MINGW-packages/pull/6465
-pacman --noconfirm -S --needed mingw-w64-$MSYS2_ARCH-brotli
+if ! pkg-config --atleast-version=2.65.0 glib-2.0; then
+    git clone https://gitlab.gnome.org/GNOME/glib.git _glib
+    meson setup _glib_build _glib
+    meson compile -C _glib_build
+    meson install -C _glib_build
+fi
+pkg-config --modversion glib-2.0
+
+if ! pkg-config --atleast-version=1.45.4 pango; then
+    git clone https://gitlab.gnome.org/GNOME/pango.git _pango
+    meson setup _pango_build _pango
+    meson compile -C _pango_build
+    meson install -C _pango_build
+fi
+pkg-config --modversion pango
 
 mkdir -p _ccache
 export CCACHE_BASEDIR="$(pwd)"
