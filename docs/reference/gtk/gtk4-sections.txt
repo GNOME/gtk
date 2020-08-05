@@ -4406,7 +4406,6 @@ gtk_widget_paintable_get_type
 <TITLE>GtkWidget</TITLE>
 GtkWidget
 GtkWidgetClass
-GtkCallback
 GtkRequisition
 GtkAllocation
 gtk_widget_new

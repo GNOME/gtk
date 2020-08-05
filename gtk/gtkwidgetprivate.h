@@ -306,6 +306,9 @@ void              gtk_widget_adjust_baseline_request       (GtkWidget *widget,
                                                             int       *minimum_baseline,
                                                             int       *natural_baseline);
 
+typedef void    (*GtkCallback)     (GtkWidget        *widget,
+                                    gpointer          data);
+
 void              gtk_widget_forall                        (GtkWidget            *widget,
                                                             GtkCallback           callback,
                                                             gpointer              user_data);

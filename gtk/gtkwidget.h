@@ -71,17 +71,6 @@ typedef struct _GtkWidgetClassPrivate  GtkWidgetClassPrivate;
 typedef         GdkRectangle       GtkAllocation;
 
 /**
- * GtkCallback:
- * @widget: the widget to operate on
- * @data: (closure): user-supplied data
- *
- * The type of the callback functions used for e.g. iterating over
- * the children of a container, see gtk_container_foreach().
- */
-typedef void    (*GtkCallback)     (GtkWidget        *widget,
-                                    gpointer          data);
-
-/**
  * GtkTickCallback:
  * @widget: the widget
  * @frame_clock: the frame clock for the widget (same as calling gtk_widget_get_frame_clock())
