@@ -114,13 +114,26 @@ gtk_accessible_attribute_set_unref (GtkAccessibleAttributeSet *self)
  *
  * If you want to remove @attribute from the set, use gtk_accessible_attribute_set_remove()
  * instead.
+ *
+ * Returns: %TRUE if the set was modified, and %FALSE otherwise
  */
-void
+gboolean
 gtk_accessible_attribute_set_add (GtkAccessibleAttributeSet *self,
                                   int                        attribute,
                                   GtkAccessibleValue        *value)
 {
-  g_return_if_fail (attribute >= 0 && attribute < self->n_attributes);
+  g_return_val_if_fail (attribute >= 0 && attribute < self->n_attributes, FALSE);
+
+  if (value != NULL)
+    {
+      if (gtk_accessible_value_equal (value, self->attribute_values[attribute]))
+        return FALSE;
+    }
+  else
+    {
+      if (!_gtk_bitmask_get (self->attributes_set, attribute))
+        return FALSE;
+    }
 
   g_clear_pointer (&(self->attribute_values[attribute]), gtk_accessible_value_unref);
 
@@ -130,18 +143,34 @@ gtk_accessible_attribute_set_add (GtkAccessibleAttributeSet *self,
     self->attribute_values[attribute] = (* self->default_func) (attribute);
 
   self->attributes_set = _gtk_bitmask_set (self->attributes_set, attribute, TRUE);
+
+  return TRUE;
 }
 
-void
+/*< private >
+ * gtk_accessible_attribute_set_remove:
+ * @self: a #GtkAccessibleAttributeSet
+ * @attribute: the attribute to be removed
+ *
+ * Resets the @attribute in the given #GtkAccessibleAttributeSet to its default value.
+ *
+ * Returns: %TRUE if the set was modified, and %FALSE otherwise
+ */
+gboolean
 gtk_accessible_attribute_set_remove (GtkAccessibleAttributeSet *self,
                                      int                        attribute)
 {
-  g_return_if_fail (attribute >= 0 && attribute < self->n_attributes);
+  g_return_val_if_fail (attribute >= 0 && attribute < self->n_attributes, FALSE);
+
+  if (!_gtk_bitmask_get (self->attributes_set, attribute))
+    return FALSE;
 
   g_clear_pointer (&(self->attribute_values[attribute]), gtk_accessible_value_unref);
 
   self->attribute_values[attribute] = (* self->default_func) (attribute);
   self->attributes_set = _gtk_bitmask_set (self->attributes_set, attribute, FALSE);
+
+  return TRUE;
 }
 
 gboolean
