@@ -16,7 +16,7 @@
             <child>
               <object class="GtkColumnView" id="list">
                 <style>
-                  <class name="list"/>
+                  <class name="data-table"/>
                 </style>
                 <child>
                   <object class="GtkColumnViewColumn" id="name">
