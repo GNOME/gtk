@@ -945,9 +945,9 @@ gdk_event_get_axis (GdkEvent   *event,
  * gdk_event_triggers_context_menu:
  * @event: a #GdkEvent, currently only button events are meaningful values
  *
- * This function returns whether a #GdkEventButton should trigger a
- * context menu, according to platform conventions. The right mouse
- * button always triggers context menus.
+ * This function returns whether a #GdkEvent should trigger a
+ * context menu, according to platform conventions. The right
+ * mouse button always triggers context menus.
  *
  * This function should always be used instead of simply checking for
  * event->button == %GDK_BUTTON_SECONDARY.

@@ -1836,7 +1836,7 @@ gdk_x11_display_has_pending (GdkDisplay *display)
  *
  * Returns the default group leader surface for all toplevel surfaces
  * on @display. This surface is implicitly created by GDK.
- * See gdk_surface_set_group().
+ * See gdk_x11_surface_set_group().
  *
  * Returns: (transfer none): The default group leader surface
  * for @display
@@ -2359,7 +2359,7 @@ gdk_x11_display_get_startup_notification_id (GdkDisplay *display)
  *
  * The startup ID is also what is used to signal that the startup is
  * complete (for example, when opening a window or when calling
- * gdk_notify_startup_complete()).
+ * gdk_display_notify_startup_complete()).
  **/
 void
 gdk_x11_display_set_startup_notification_id (GdkDisplay  *display,
@@ -2542,8 +2542,6 @@ delete_outdated_error_traps (GdkX11Display *display_x11)
  * the application. Use gdk_x11_display_error_trap_pop() or
  * gdk_x11_display_error_trap_pop_ignored()to lift a trap pushed
  * with this function.
- *
- * See also gdk_error_trap_push() to push a trap on all displays.
  */
 void
 gdk_x11_display_error_trap_push (GdkDisplay *display)
@@ -2695,9 +2693,6 @@ gdk_x11_display_set_surface_scale (GdkDisplay *display,
  * If you don’t need to use the return value,
  * gdk_x11_display_error_trap_pop_ignored() would be more efficient.
  *
- * See gdk_error_trap_pop() for the all-displays-at-once
- * equivalent.
- *
  * Returns: X error code or 0 on success
  */
 int
@@ -2716,9 +2711,6 @@ gdk_x11_display_error_trap_pop (GdkDisplay *display)
  * Does not block to see if an error occurred; merely records the
  * range of requests to ignore errors for, and ignores those errors
  * if they arrive asynchronously.
- *
- * See gdk_error_trap_pop_ignored() for the all-displays-at-once
- * equivalent.
  */
 void
 gdk_x11_display_error_trap_pop_ignored (GdkDisplay *display)

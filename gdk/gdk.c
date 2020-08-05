@@ -319,9 +319,8 @@ gdk_pre_parse (void)
  *
  * Opens the default display specified by command line arguments or
  * environment variables, sets it as the default display, and returns
- * it. gdk_parse_args() must have been called first. If the default
- * display has previously been set, simply returns that. An internal
- * function that should not be used by applications.
+ * it. If the default display has previously been set, simply returns
+ * that. An internal function that should not be used by applications.
  *
  * Returns: (nullable) (transfer none): the default display, if it
  *   could be opened, otherwise %NULL.

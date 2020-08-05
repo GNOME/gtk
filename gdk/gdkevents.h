@@ -252,7 +252,7 @@ typedef enum
  * @GDK_SCROLL_LEFT: the surface is scrolled to the left.
  * @GDK_SCROLL_RIGHT: the surface is scrolled to the right.
  * @GDK_SCROLL_SMOOTH: the scrolling is determined by the delta values
- *   in scroll events. See gdk_event_get_scroll_deltas()
+ *   in scroll events. See gdk_scroll_event_get_deltas()
  *
  * Specifies the direction for scroll events.
  */

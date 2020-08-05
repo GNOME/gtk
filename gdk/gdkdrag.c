@@ -105,7 +105,7 @@ G_DEFINE_ABSTRACT_TYPE_WITH_PRIVATE (GdkDrag, gdk_drag, G_TYPE_OBJECT)
  * Possible drop sites get informed about the status of the ongoing drag operation
  * with events of type %GDK_DRAG_ENTER, %GDK_DRAG_LEAVE, %GDK_DRAG_MOTION and
  * %GDK_DROP_START. The #GdkDrop object can be obtained from these #GdkEvents
- * using gdk_event_get_drop().
+ * using gdk_dnd_event_get_drop().
  *
  * The actual data transfer is initiated from the target side via an async
  * read, using one of the GdkDrop functions for this purpose: gdk_drop_read_async()
