@@ -633,13 +633,23 @@ gdk_toplevel_layout_get_maximized
 gdk_toplevel_layout_set_fullscreen
 gdk_toplevel_layout_get_fullscreen
 gdk_toplevel_layout_get_fullscreen_monitor
-gdk_toplevel_layout_get_min_width
-gdk_toplevel_layout_get_min_height
 gdk_toplevel_layout_set_resizable
 gdk_toplevel_layout_get_resizable
 <SUBSECTION Standard>
 GDK_TYPE_TOPLEVEL_LAYOUT
 gdk_toplevel_layout_get_type
+</SECTION>
+
+<SECTION>
+<FILE>gdktoplevelsize</FILE>
+<TITLE>GdkToplevelSize</TITLE>
+GdkToplevelSize
+gdk_toplevel_size_get_bounds
+gdk_toplevel_size_set_size
+gdk_toplevel_size_set_min_size
+<SUBSECTION Standard>
+GDK_TYPE_TOPLEVEL_SIZE
+gdk_toplevel_size_get_type
 </SECTION>
 
 <SECTION>

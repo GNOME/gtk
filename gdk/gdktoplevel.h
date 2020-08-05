@@ -37,8 +37,6 @@ G_DECLARE_INTERFACE (GdkToplevel, gdk_toplevel, GDK, TOPLEVEL, GObject)
 
 GDK_AVAILABLE_IN_ALL
 gboolean        gdk_toplevel_present            (GdkToplevel       *toplevel,
-                                                 int                width,
-                                                 int                height,
                                                  GdkToplevelLayout *layout);
 
 GDK_AVAILABLE_IN_ALL

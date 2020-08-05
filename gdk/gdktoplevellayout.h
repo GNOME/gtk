@@ -42,8 +42,7 @@ GDK_AVAILABLE_IN_ALL
 GType                   gdk_toplevel_layout_get_type    (void);
 
 GDK_AVAILABLE_IN_ALL
-GdkToplevelLayout *     gdk_toplevel_layout_new         (int min_width,
-                                                         int min_height);
+GdkToplevelLayout *     gdk_toplevel_layout_new         (void);
 
 GDK_AVAILABLE_IN_ALL
 GdkToplevelLayout *     gdk_toplevel_layout_ref         (GdkToplevelLayout *layout);
@@ -65,11 +64,6 @@ GDK_AVAILABLE_IN_ALL
 void                    gdk_toplevel_layout_set_fullscreen (GdkToplevelLayout *layout,
                                                             gboolean           fullscreen,
                                                             GdkMonitor        *monitor);
-
-GDK_AVAILABLE_IN_ALL
-int                     gdk_toplevel_layout_get_min_width  (GdkToplevelLayout *layout);
-GDK_AVAILABLE_IN_ALL
-int                     gdk_toplevel_layout_get_min_height (GdkToplevelLayout *layout);
 
 GDK_AVAILABLE_IN_ALL
 gboolean                gdk_toplevel_layout_get_maximized (GdkToplevelLayout *layout);

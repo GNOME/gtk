@@ -39,8 +39,6 @@ struct _GdkToplevelLayout
   /* < private >*/
   grefcount ref_count;
 
-  int min_width;
-  int min_height;
   guint resizable  : 1;
   guint maximized  : 1;
   guint fullscreen : 1;
@@ -53,8 +51,6 @@ G_DEFINE_BOXED_TYPE (GdkToplevelLayout, gdk_toplevel_layout,
 
 /**
  * gdk_toplevel_layout_new: (constructor)
- * @min_width: the minimum width for the layout
- * @min_height: the minimum height for the layout
  *
  * Create a toplevel layout description.
  *
@@ -67,15 +63,12 @@ G_DEFINE_BOXED_TYPE (GdkToplevelLayout, gdk_toplevel_layout,
  * Returns: (transfer full): newly created instance of #GdkToplevelLayout
  */
 GdkToplevelLayout *
-gdk_toplevel_layout_new (int min_width,
-                         int min_height)
+gdk_toplevel_layout_new (void)
 {
   GdkToplevelLayout *layout;
 
   layout = g_new0 (GdkToplevelLayout, 1);
   g_ref_count_init (&layout->ref_count);
-  layout->min_width = min_width;
-  layout->min_height = min_height;
   layout->resizable = TRUE;
   layout->maximized = FALSE;
   layout->fullscreen = FALSE;
@@ -131,8 +124,6 @@ gdk_toplevel_layout_copy (GdkToplevelLayout *layout)
   new_layout = g_new0 (GdkToplevelLayout, 1);
   g_ref_count_init (&new_layout->ref_count);
 
-  new_layout->min_width = layout->min_width;
-  new_layout->min_height = layout->min_height;
   new_layout->resizable = layout->resizable;
   new_layout->maximized = layout->maximized;
   new_layout->fullscreen = layout->fullscreen;
@@ -159,40 +150,10 @@ gdk_toplevel_layout_equal (GdkToplevelLayout *layout,
   g_return_val_if_fail (layout, FALSE);
   g_return_val_if_fail (other, FALSE);
 
-  return layout->min_width == other->min_width &&
-         layout->min_height == other->min_height &&
-         layout->resizable == other->resizable &&
+  return layout->resizable == other->resizable &&
          layout->maximized == other->maximized &&
          layout->fullscreen == other->fullscreen &&
          layout->fullscreen_monitor == other->fullscreen_monitor;
-}
-
-/**
- * gdk_toplevel_layout_get_min_width:
- * @layout: a #GdkToplevelLayout
- *
- * Returns the minimum width of the given layout.
- *
- * Returns: the minimum width of @layout
- */
-int
-gdk_toplevel_layout_get_min_width (GdkToplevelLayout *layout)
-{
-  return layout->min_width;
-}
-
-/**
- * gdk_toplevel_layout_get_min_height:
- * @layout: a #GdkToplevelLayout
- *
- * Returns the minimum height of the given layout.
- *
- * Returns: the minimum height of @layout
- */
-int
-gdk_toplevel_layout_get_min_height (GdkToplevelLayout *layout)
-{
-  return layout->min_height;
 }
 
 /**

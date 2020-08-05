@@ -218,6 +218,16 @@ get_dir_for_file (const char *path)
 }
 
 static gboolean
+quit_iteration_loop (gpointer user_data)
+{
+  gboolean *keep_running = user_data;
+
+  *keep_running = FALSE;
+
+  return G_SOURCE_REMOVE;
+}
+
+static gboolean
 load_ui_file (GFile *ui_file,
               GFile *ref_file,
               const char *ext)
@@ -230,6 +240,8 @@ load_ui_file (GFile *ui_file,
   GError *error = NULL;
   GtkDirectionType dir;
   gboolean success = FALSE;
+  gboolean keep_running = TRUE;
+  guint timeout_handle_id;
 
   ui_path = g_file_get_path (ui_file);
 
@@ -237,6 +249,19 @@ load_ui_file (GFile *ui_file,
   window = GTK_WIDGET (gtk_builder_get_object (builder, "window"));
 
   g_assert (window != NULL);
+
+  gtk_widget_show (window);
+
+  timeout_handle_id = g_timeout_add (2000,
+                                     quit_iteration_loop,
+                                     &keep_running);
+  while (keep_running)
+    {
+      if (!g_main_context_iteration (NULL, FALSE))
+        break;
+    }
+  if (keep_running)
+    g_source_remove (timeout_handle_id);
 
   if (ext)
     {

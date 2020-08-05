@@ -181,7 +181,7 @@ main (int argc, char **argv)
 
   if (write_to_filename != NULL)
     {
-      GdkSurface *surface = gdk_surface_new_toplevel (gdk_display_get_default(), 10 , 10);
+      GdkSurface *surface = gdk_surface_new_toplevel (gdk_display_get_default());
       GskRenderer *renderer = gsk_renderer_new_for_surface (surface);
       GdkTexture *texture = gsk_renderer_render_texture (renderer, GTK_NODE_VIEW (nodeview)->node, NULL);
 
@@ -201,7 +201,7 @@ main (int argc, char **argv)
   if (compare_node)
     {
       GtkWidget *box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 12);
-      GdkSurface *gdk_surface = gdk_surface_new_toplevel (gdk_display_get_default(), 10 , 10);
+      GdkSurface *gdk_surface = gdk_surface_new_toplevel (gdk_display_get_default());
       GskRenderer *renderer = gsk_renderer_new_for_surface (gdk_surface);
       GdkTexture *texture = gsk_renderer_render_texture (renderer, GTK_NODE_VIEW (nodeview)->node, NULL);
       GtkWidget *image = gtk_image_new_from_paintable (GDK_PAINTABLE (texture));

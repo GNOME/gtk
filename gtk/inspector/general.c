@@ -141,7 +141,7 @@ init_version (GtkInspectorGeneral *gen)
 #endif
     backend = "Unknown";
 
-  surface = gdk_surface_new_toplevel (gen->display, 10, 10);
+  surface = gdk_surface_new_toplevel (gen->display);
   gsk_renderer = gsk_renderer_new_for_surface (surface);
   if (strcmp (G_OBJECT_TYPE_NAME (gsk_renderer), "GskVulkanRenderer") == 0)
     renderer = "Vulkan";
@@ -402,7 +402,7 @@ init_vulkan (GtkInspectorGeneral *gen)
   GdkSurface *surface;
   GdkVulkanContext *context;
 
-  surface = gdk_surface_new_toplevel (gen->display, 10, 10);
+  surface = gdk_surface_new_toplevel (gen->display);
   context = gdk_surface_create_vulkan_context (surface, NULL);
   gdk_surface_destroy (surface);
 

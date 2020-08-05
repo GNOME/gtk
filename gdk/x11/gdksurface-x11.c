@@ -43,6 +43,7 @@
 #include "gdktextureprivate.h"
 #include "gdk-private.h"
 
+#include <graphene.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -1017,7 +1018,8 @@ _gdk_x11_display_create_surface (GdkDisplay     *display,
   impl->xid = XCreateWindow (xdisplay, xparent,
                              (surface->x + abs_x) * impl->surface_scale,
                              (surface->y + abs_y) * impl->surface_scale,
-                             surface->width * impl->surface_scale, surface->height * impl->surface_scale,
+                             MAX (1, surface->width * impl->surface_scale),
+                             MAX (1, surface->height * impl->surface_scale),
                              0, depth, class, xvisual,
                              xattributes_mask, &xattributes);
 
@@ -4830,21 +4832,46 @@ gdk_x11_toplevel_class_init (GdkX11ToplevelClass *class)
 
 static gboolean
 gdk_x11_toplevel_present (GdkToplevel       *toplevel,
-                          int                width,
-                          int                height,
                           GdkToplevelLayout *layout)
 {
   GdkSurface *surface = GDK_SURFACE (toplevel);
+  GdkDisplay *display = gdk_surface_get_display (surface);
+  GdkMonitor *monitor;
+  GdkToplevelSize size;
+  int bounds_width, bounds_height;
+  int width, height;
   GdkGeometry geometry;
   GdkSurfaceHints mask;
   gboolean was_mapped;
 
   gdk_x11_surface_unminimize (surface);
 
+  monitor = gdk_display_get_monitor_at_surface (display, surface);
+  if (monitor)
+    {
+      GdkRectangle workarea;
+
+      gdk_x11_monitor_get_workarea (monitor, &workarea);
+      bounds_width = workarea.width;
+      bounds_height = workarea.height;
+    }
+  else
+    {
+      bounds_width = G_MAXINT;
+      bounds_height = G_MAXINT;
+    }
+
+  gdk_toplevel_size_init (&size, bounds_width, bounds_height);
+  gdk_toplevel_notify_compute_size (toplevel, &size);
+  g_warn_if_fail (size.width > 0);
+  g_warn_if_fail (size.height > 0);
+  width = size.width;
+  height = size.height;
+
   if (gdk_toplevel_layout_get_resizable (layout))
     {
-      geometry.min_width = gdk_toplevel_layout_get_min_width (layout);
-      geometry.min_height = gdk_toplevel_layout_get_min_height (layout);
+      geometry.min_width = size.min_width;
+      geometry.min_height = size.min_height;
       mask = GDK_HINT_MIN_SIZE;
     }
   else
@@ -4864,9 +4891,11 @@ gdk_x11_toplevel_present (GdkToplevel       *toplevel,
 
   if (gdk_toplevel_layout_get_fullscreen (layout))
     {
-      GdkMonitor *monitor = gdk_toplevel_layout_get_fullscreen_monitor (layout);
-      if (monitor)
-        gdk_x11_surface_fullscreen_on_monitor (surface, monitor);
+      GdkMonitor *fullscreen_monitor =
+        gdk_toplevel_layout_get_fullscreen_monitor (layout);
+
+      if (fullscreen_monitor)
+        gdk_x11_surface_fullscreen_on_monitor (surface, fullscreen_monitor);
       else
         gdk_x11_surface_fullscreen (surface);
     }

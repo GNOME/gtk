@@ -2,6 +2,9 @@
 #define __GDK_TOPLEVEL_PRIVATE_H__
 
 #include "gdktoplevel.h"
+#include "gdktoplevelsizeprivate.h"
+
+#include <graphene.h>
 
 G_BEGIN_DECLS
 
@@ -11,8 +14,6 @@ struct _GdkToplevelInterface
   GTypeInterface g_iface;
 
   gboolean      (* present)             (GdkToplevel       *toplevel,
-                                         int                width,
-                                         int                height,
                                          GdkToplevelLayout *layout);
   gboolean      (* minimize)            (GdkToplevel       *toplevel);
   gboolean      (* lower)               (GdkToplevel       *toplevel);
@@ -56,6 +57,9 @@ typedef enum
 
 guint gdk_toplevel_install_properties (GObjectClass *object_class,
                                        guint         first_prop);
+
+void gdk_toplevel_notify_compute_size (GdkToplevel     *toplevel,
+                                       GdkToplevelSize *size);
 
 G_END_DECLS
 
