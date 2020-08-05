@@ -20,7 +20,7 @@ msgstr ""
 "Project-Id-Version: gtk+-master-po-properties-gl-77816____.merged\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-08-02 23:18+0000\n"
-"PO-Revision-Date: 2020-08-05 00:10+0200\n"
+"PO-Revision-Date: 2020-08-05 09:42+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.gl>\n"
 "Language-Team: Galician <Proxecto Trasno <proxecto@trasno.gal>>\n"
 "Language: gl\n"
@@ -2559,16 +2559,14 @@ msgid "Preload"
 msgstr "Precargar"
 
 #: gtk/gtkdroptarget.c:631
-#, fuzzy
 #| msgid "Whether tabs should be shown"
 msgid "Whether drop data should be preloaded while hovering"
-msgstr "Indica se deben mostrarse ou non as lapelas"
+msgstr "Indica se os datos de soltar deberían precargarse ao pasar por enriba"
 
 #: gtk/gtkdroptarget.c:648
-#, fuzzy
 #| msgid "The status of the print operation"
 msgid "The value for this drop operation"
-msgstr "O estado da operación de impresión"
+msgstr "O valor para esta operación de soltar"
 
 #: gtk/gtkeditable.c:371
 msgid "The contents of the entry"
@@ -2589,7 +2587,7 @@ msgstr "Activar Desfacer"
 
 #: gtk/gtkeditable.c:386
 msgid "If undo/redo should be enabled for the editable"
-msgstr ""
+msgstr "Se desfacer/refacer debería estar activo para o editábel"
 
 #: gtk/gtkeditable.c:392
 msgid "Selection Bound"
@@ -4277,13 +4275,11 @@ msgid "The popover"
 msgstr "O diálogo superposto"
 
 #: gtk/gtkmenubutton.c:400
-#, fuzzy
 #| msgid "The label on the accept button"
 msgid "The label for the button"
-msgstr "A etiqueta do botón de aceptar"
+msgstr "A etiqueta para o botón"
 
 #: gtk/gtkmenubutton.c:413
-#, fuzzy
 #| msgid "Has Frame"
 msgid "Has frame"
 msgstr "Ten marco"
@@ -4361,10 +4357,9 @@ msgid "The name of the menu to open"
 msgstr "O nome do menú a abrir"
 
 #: gtk/gtkmodelbutton.c:1151
-#, fuzzy
 #| msgid "Popover"
 msgid "Popover to open"
-msgstr "Diálogo superposto"
+msgstr "Diálogo superposto a abrir"
 
 #: gtk/gtkmodelbutton.c:1164
 msgid "Iconic"
@@ -4375,28 +4370,24 @@ msgid "Whether to prefer the icon over text"
 msgstr "Indica se se prefire a icona sobre o texto"
 
 #: gtk/gtkmodelbutton.c:1178
-#, fuzzy
 #| msgid "Title Size Group"
 msgid "Size group"
-msgstr "Grupo de tamaño do título"
+msgstr "Grupo de tamaño"
 
 #: gtk/gtkmodelbutton.c:1179
-#, fuzzy
 #| msgid "Size of check or radio indicator"
 msgid "Size group for checks and radios"
-msgstr "Tamaño do indicador de opción ou de verificación"
+msgstr "Grupo de tamaño para os marcadores e radios"
 
 #: gtk/gtkmodelbutton.c:1184
-#, fuzzy
 #| msgid "Accel Path"
 msgid "Accel"
-msgstr "Ruta de teclas rápidas"
+msgstr "Tecla rápida"
 
 #: gtk/gtkmodelbutton.c:1185
-#, fuzzy
 #| msgid "The type of accelerators"
 msgid "The accelerator"
-msgstr "O tipo de teclas rápidas"
+msgstr "A tecla rápida"
 
 #: gtk/gtkmountoperation.c:176
 msgid "The parent window"
@@ -4416,7 +4407,7 @@ msgstr "A pantalla onde esta xanela se mostrará."
 
 #: gtk/gtkmultiselection.c:357
 msgid "List managed by this selection"
-msgstr ""
+msgstr "Lista xestionada para esta selección"
 
 #: gtk/gtknativedialog.c:214
 msgid "Dialog Title"
@@ -4447,28 +4438,24 @@ msgid "The transient parent of the dialog"
 msgstr "O pai transicional do diálogo"
 
 #: gtk/gtknoselection.c:204 gtk/gtksingleselection.c:439
-#, fuzzy
 #| msgid "The child model"
 msgid "The model"
-msgstr "O modelo fillo"
+msgstr "O modelo"
 
 #: gtk/gtknoselection.c:205 gtk/gtksingleselection.c:440
-#, fuzzy
 #| msgid "The model being mapped"
 msgid "The model being managed"
-msgstr "O modelo sendo mapeado"
+msgstr "O modelo a xestionar"
 
 #: gtk/gtknotebook.c:569
-#, fuzzy
 #| msgid "The child of the page"
 msgid "The child for this page"
-msgstr "O fillo da páxina"
+msgstr "O fillo para esta páxina"
 
 #: gtk/gtknotebook.c:575
-#, fuzzy
 #| msgid "Tabs"
 msgid "Tab"
-msgstr "Lapelas"
+msgstr "Lapela"
 
 #: gtk/gtknotebook.c:576
 msgid "The tab widget for this page"
@@ -4479,30 +4466,27 @@ msgid "Menu"
 msgstr "Menú"
 
 #: gtk/gtknotebook.c:583
-#, fuzzy
 #| msgid "The string displayed in the child’s menu entry"
 msgid "The label widget displayed in the child’s menu entry"
-msgstr "A cadea mostrada na entrada de menú filla"
+msgstr "O trebello de etiqueta mostrado na entrada de menú do fillo"
 
 #: gtk/gtknotebook.c:589
 msgid "Tab label"
 msgstr "Etiqueta da lapela"
 
 #: gtk/gtknotebook.c:590
-#, fuzzy
 #| msgid "The text of the label"
 msgid "The text of the tab widget"
-msgstr "O texto da etiqueta"
+msgstr "O texto do trebello de lapela"
 
 #: gtk/gtknotebook.c:596
 msgid "Menu label"
 msgstr "Etiqueta de menú"
 
 #: gtk/gtknotebook.c:597
-#, fuzzy
 #| msgid "The name of the widget"
 msgid "The text of the menu widget"
-msgstr "O nome do widget"
+msgstr "O texto do trebello de menú"
 
 #: gtk/gtknotebook.c:604
 msgid "The index of the child in the parent"
@@ -4609,17 +4593,16 @@ msgstr "A páxina do caderno de notas."
 #: gtk/gtknumericsorter.c:551 gtk/gtkstringfilter.c:253
 #: gtk/gtkstringsorter.c:297
 msgid "Expression to compare with"
-msgstr ""
+msgstr "Expresión coa que comparar"
 
 #: gtk/gtknumericsorter.c:561 gtk/gtktreeviewcolumn.c:391
 msgid "Sort order"
 msgstr "Orde de clasificación"
 
 #: gtk/gtknumericsorter.c:562
-#, fuzzy
 #| msgid "Whether to reserve space for a subtitle"
 msgid "Whether to sort smaller numbers first"
-msgstr "Indica se reservar espazo para un subtítulo"
+msgstr "Indica se ordenar os números máis pequenos antes"
 
 #: gtk/gtkoverlaylayout.c:146
 msgid "Measure"
@@ -4693,86 +4676,74 @@ msgid "Whether the paned should have a prominent handle"
 msgstr "Indica se o panel debe ter un tirador prominente"
 
 #: gtk/gtkpaned.c:509
-#, fuzzy
 #| msgid "Resize grip"
 msgid "Resize first child"
-msgstr "Tirador de redimensión"
+msgstr "Redimensionar o primeiro fillo"
 
 #: gtk/gtkpaned.c:510
-#, fuzzy
 #| msgid "If TRUE, the child expands and shrinks along with the paned widget"
 msgid ""
 "If TRUE, the first child expands and shrinks along with the paned widget"
-msgstr "Se é TRUE, o fillo expándese e redúcese xunto coa sección do widget"
+msgstr "Se é TRUE, o fillo expándese e redúcese xunto co trebello dividido"
 
 #: gtk/gtkpaned.c:522
-#, fuzzy
 #| msgid "Resize mode"
 msgid "Resize second child"
-msgstr "Modo de redimensionamento"
+msgstr "Redimensionar o segundo fillo"
 
 #: gtk/gtkpaned.c:523
-#, fuzzy
 #| msgid "If TRUE, the child expands and shrinks along with the paned widget"
 msgid ""
 "If TRUE, the second child expands and shrinks along with the paned widget"
-msgstr "Se é TRUE, o fillo expándese e redúcese xunto coa sección do widget"
+msgstr "Se é TRUE, o fillo expándese e redúcese xunto co trebello dividido"
 
 #: gtk/gtkpaned.c:535
 msgid "Shrink first child"
-msgstr ""
+msgstr "Encoller o primeiro fillo"
 
 #: gtk/gtkpaned.c:536
-#, fuzzy
 #| msgid "If TRUE, the child can be made smaller than its requisition"
 msgid "If TRUE, the first child can be made smaller than its requisition"
-msgstr "Se é TRUE, o fillo pode facerse máis pequeno que a súa solicitude"
+msgstr "Se é TRUE, o fillo pode facerse máis pequeno que o seu requisito"
 
 #: gtk/gtkpaned.c:548
 msgid "Shrink second child"
-msgstr ""
+msgstr "Encoller o segundo fillo"
 
 #: gtk/gtkpaned.c:549
-#, fuzzy
 #| msgid "If TRUE, the child can be made smaller than its requisition"
 msgid "If TRUE, the second child can be made smaller than its requisition"
-msgstr "Se é TRUE, o fillo pode facerse máis pequeno que a súa solicitude"
+msgstr "Se é TRUE, o fillo pode facerse máis pequeno que o seu requisito"
 
 #: gtk/gtkpaned.c:555
-#, fuzzy
 #| msgid "Resize grip"
 msgid "First child"
-msgstr "Tirador de redimensión"
+msgstr "Primeiro fillo"
 
 #: gtk/gtkpaned.c:556
-#, fuzzy
 #| msgid "Resize grip"
 msgid "The first child"
-msgstr "Tirador de redimensión"
+msgstr "O primeiro fillo"
 
 #: gtk/gtkpaned.c:562
-#, fuzzy
 #| msgid "Resize mode"
 msgid "Second child"
-msgstr "Modo de redimensionamento"
+msgstr "Segundo fillo"
 
 #: gtk/gtkpaned.c:563
-#, fuzzy
 #| msgid "Resize mode"
 msgid "The second child"
-msgstr "Modo de redimensionamento"
+msgstr "O segundo fillo"
 
 #: gtk/gtkpasswordentry.c:422
-#, fuzzy
 #| msgid "Show Icons"
 msgid "Show Peek Icon"
-msgstr "Mostrar iconas"
+msgstr "Mostrar a icona de ollear"
 
 #: gtk/gtkpasswordentry.c:423
-#, fuzzy
 #| msgid "Whether to show an icon for Emoji"
 msgid "Whether to show an icon for revealing the content"
-msgstr "Indica se se mostra unha icona para Emoji"
+msgstr "Indica se mostrar uha icona para desvelar o contido"
 
 #: gtk/gtkpicture.c:316
 msgid "The GdkPaintable to display"
@@ -4967,52 +4938,45 @@ msgid "Position to place the bubble window"
 msgstr "Posición na que colocar na burbulla"
 
 #: gtk/gtkpopover.c:1636
-#, fuzzy
 #| msgid "Whether the popover is modal"
 msgid "Whether to dismiss the popover on outside clicks"
-msgstr "Indica se o popover é activábel"
+msgstr "Indica se saír da xanela emerxente con clics fóra da área"
 
 #: gtk/gtkpopover.c:1642 gtk/gtkwindow.c:927
-#, fuzzy
 #| msgid "Default Width"
 msgid "Default widget"
-msgstr "Largura predeterminada"
+msgstr "Trebello predeterminado"
 
 #: gtk/gtkpopover.c:1643 gtk/gtkwindow.c:928
-#, fuzzy
 #| msgid "The name of the widget"
 msgid "The default widget"
-msgstr "O nome do widget"
+msgstr "O trebello predeterminado"
 
 #: gtk/gtkpopover.c:1649
-#, fuzzy
 #| msgid "Show Arrow"
 msgid "Has Arrow"
-msgstr "Mostrar frecha"
+msgstr "Ten frecha"
 
 #: gtk/gtkpopover.c:1650
-#, fuzzy
 #| msgid "Whether to show an icon for Emoji"
 msgid "Whether to draw an arrow"
-msgstr "Indica se se mostra unha icona para Emoji"
+msgstr "Indica se debuxar unha frecha"
 
 #: gtk/gtkpopover.c:1656
-#, fuzzy
 #| msgid "Mnemonics Visible"
 msgid "Mnemonics visible"
-msgstr "Mnemónicos visíbeis"
+msgstr "Mnemónico visíbel"
 
 #: gtk/gtkpopover.c:1657
-#, fuzzy
 #| msgid "Whether mnemonics are currently visible in this window"
 msgid "Whether mnemonics are currently visible in this popover"
-msgstr "Indica se os mnemónicos están visíbeis actualmente nesta xanela"
+msgstr ""
+"Indica se os mnemónicos están visíbeis actualmente nesta xanela emerxente"
 
 #: gtk/gtkpopovermenubar.c:594
-#, fuzzy
 #| msgid "The model from which the popup is made."
 msgid "The model from which the bar is made."
-msgstr "O modelo desde o cal se constrúe a xanela emerxente."
+msgstr "O modelo desde o que se crea a barra."
 
 #: gtk/gtkpopovermenu.c:516
 msgid "Visible submenu"
@@ -5023,10 +4987,9 @@ msgid "The name of the visible submenu"
 msgstr "O nome do submenú visíbel"
 
 #: gtk/gtkpopovermenu.c:525
-#, fuzzy
 #| msgid "The model from which the popup is made."
 msgid "The model from which the menu is made."
-msgstr "O modelo desde o cal se constrúe a xanela emerxente."
+msgstr "O modelo desde o que se fai o menú."
 
 #: gtk/gtkprinter.c:122
 msgid "Name of the printer"
@@ -5613,10 +5576,9 @@ msgid "Where the contents are located with respect to the scrollbars."
 msgstr "Onde se colocan os contidos respecto ás barras de desprazamento."
 
 #: gtk/gtkscrolledwindow.c:639
-#, fuzzy
 #| msgid "Whether the combo box draws a frame around the child"
 msgid "Whether to draw a frame around the contents"
-msgstr "Indica se a caixa de combinación debuxa un marco ao redor do fillo"
+msgstr "Indica se debuxar un marco ao redor dos contidos"
 
 #: gtk/gtkscrolledwindow.c:650
 msgid "Minimum Content Width"
@@ -5690,10 +5652,9 @@ msgid "Whether to show the close button in the toolbar"
 msgstr "Indica se mostrar o botón de peche na barra de ferramentas"
 
 #: gtk/gtksearchbar.c:331 gtk/gtksearchbar.c:332
-#, fuzzy
 #| msgid "Accelerator Widget"
 msgid "Key Capture Widget"
-msgstr "Widget do acelerador"
+msgstr "Widget de captura de teclas"
 
 #: gtk/gtksettings.c:329
 msgid "Double Click Time"
@@ -5757,16 +5718,14 @@ msgstr ""
 "a dereita e de dereita a esquerda"
 
 #: gtk/gtksettings.c:391
-#, fuzzy
 #| msgid "Cursor Position"
 msgid "Cursor Aspect Ratio"
-msgstr "Posición do cursor"
+msgstr "Relación de aspecto do cursor"
 
 #: gtk/gtksettings.c:392
-#, fuzzy
 #| msgid "The orientation of the orientable"
 msgid "The aspect ratio of the text caret"
-msgstr "A orientación do orientábel"
+msgstr "A relación de aspecto do cursor de texto"
 
 #: gtk/gtksettings.c:399
 msgid "Theme Name"
@@ -6140,78 +6099,69 @@ msgid "Whether to show cursor in text"
 msgstr "Indica se se mostra o cursor no texto"
 
 #: gtk/gtksettings.c:963 gtk/gtksettings.c:964
-#, fuzzy
 #| msgid "Whether to use symbolic icons"
 msgid "Whether to use overlay scrollbars"
-msgstr "Indica se usar iconas simbólicas"
+msgstr "Indica se usar as barras de desprazamento superpostas"
 
 #: gtk/gtkshortcutaction.c:942
-#, fuzzy
 #| msgid "Section Name"
 msgid "Signal Name"
-msgstr "Nome da sección"
+msgstr "Nome da señal"
 
 #: gtk/gtkshortcutaction.c:943
-#, fuzzy
 #| msgid "The name of the widget"
 msgid "The name of the signal to emit"
-msgstr "O nome do widget"
+msgstr "O nome da sinal a emitir"
 
 #: gtk/gtkshortcutaction.c:1183 gtk/gtkshortcutsshortcut.c:718
 msgid "Action Name"
 msgstr "Nome da acción"
 
 #: gtk/gtkshortcutaction.c:1184
-#, fuzzy
 #| msgid "The name of the action"
 msgid "The name of the action to activate"
-msgstr "O nome da acción"
+msgstr "O nome da acción a activar"
 
 #: gtk/gtkshortcut.c:162
-#, fuzzy
 #| msgid "The texture displayed by this cursor"
 msgid "The action activated by this shortcut"
-msgstr "A textura mostrada por este cursor"
+msgstr "A acción activada para este atallo"
 
 #: gtk/gtkshortcut.c:175
-#, fuzzy
 #| msgid "Alignment"
 msgid "Arguments"
-msgstr "Aliñamentooo"
+msgstr "Argumentos"
 
 #: gtk/gtkshortcut.c:176
 msgid "Arguments passed to activation"
-msgstr ""
+msgstr "Argumentos pasados para a activación"
 
 #: gtk/gtkshortcut.c:188
 msgid "Trigger"
-msgstr ""
+msgstr "Disparador"
 
 #: gtk/gtkshortcut.c:189
-#, fuzzy
 #| msgid "The tab widget for this page"
 msgid "The trigger for this shortcut"
-msgstr "O widget de lapela para esta páxina"
+msgstr "O disparador para este atallo"
 
 #: gtk/gtkshortcutcontroller.c:545
-#, fuzzy
 #| msgid "Mnemonics Visible"
 msgid "Mnemonic modifiers"
-msgstr "Mnemónicos visíbeis"
+msgstr "Modificadores mnemónicos"
 
 #: gtk/gtkshortcutcontroller.c:546
 msgid "The modifiers to be pressed to allow mnemonics activation"
-msgstr ""
+msgstr "Os modificadores a presionar para permitir a activacón de mnemónicos"
 
 #: gtk/gtkshortcutcontroller.c:559
-#, fuzzy
 #| msgid "Child model to take slice from"
 msgid "A list model to take shortcuts from"
-msgstr "O model fillo de onde tomar unha parte"
+msgstr "O modelo de lista de onde obter os atallos"
 
 #: gtk/gtkshortcutcontroller.c:571
 msgid "What scope the shortcuts will be handled in"
-msgstr ""
+msgstr "En que ámbito se xestionarán os atallos"
 
 #: gtk/gtkshortcutlabel.c:485 gtk/gtkshortcutsshortcut.c:579
 msgid "Accelerator"
@@ -6301,59 +6251,55 @@ msgstr "O nome da acción"
 
 #: gtk/gtkshortcuttrigger.c:659 gtk/gtkshortcuttrigger.c:915
 msgid "Key value"
-msgstr ""
+msgstr "Chave valor"
 
 #: gtk/gtkshortcuttrigger.c:660 gtk/gtkshortcuttrigger.c:916
-#, fuzzy
 #| msgid "The model for the tree view"
 msgid "The key value for the trigger"
-msgstr "O modelo para a visualización en árbore"
+msgstr "A chave valor para o disparador"
 
 #: gtk/gtkshortcuttrigger.c:674
 msgid "Modifiers"
-msgstr ""
+msgstr "Modificadores"
 
 #: gtk/gtkshortcuttrigger.c:675
-#, fuzzy
 #| msgid "The model for the tree view"
 msgid "The key modifiers for the trigger"
-msgstr "O modelo para a visualización en árbore"
+msgstr "As teclas modificadores para este trebello"
 
 #: gtk/gtkshortcuttrigger.c:1161
 msgid "First"
-msgstr ""
+msgstr "Primeiro"
 
 #: gtk/gtkshortcuttrigger.c:1162
 msgid "The first trigger to check"
-msgstr ""
+msgstr "O primeiro disparador a comprobar"
 
 #: gtk/gtkshortcuttrigger.c:1174
-#, fuzzy
 #| msgid "Secondary Text"
 msgid "Second"
-msgstr "Texto secundario"
+msgstr "Segundo"
 
 #: gtk/gtkshortcuttrigger.c:1175
 msgid "The second trigger to check"
-msgstr ""
+msgstr "O segundo disparador a comprobar"
 
 #: gtk/gtksingleselection.c:391
 msgid "Autoselect"
-msgstr ""
+msgstr "Autoseleccionar"
 
 #: gtk/gtksingleselection.c:392
 msgid "If the selection will always select an item"
-msgstr ""
+msgstr "Se a selección sempre selecciona un elemento"
 
 #: gtk/gtksingleselection.c:403
-#, fuzzy
 #| msgid "Has selection"
 msgid "Can unselect"
-msgstr "Está selecccionado"
+msgstr "Pode deseleccionarse"
 
 #: gtk/gtksingleselection.c:404
 msgid "If unselecting the selected item is allowed"
-msgstr ""
+msgstr "Se está permitida a deselección dun elemento seleccionado"
 
 #: gtk/gtksizegroup.c:226 gtk/gtktreeselection.c:138
 msgid "Mode"
@@ -6384,10 +6330,9 @@ msgid "Maximum size of slice"
 msgstr "Tamaño máximo do anaco"
 
 #: gtk/gtksortlistmodel.c:781
-#, fuzzy
 #| msgid "Step Increment"
 msgid "Sort items incrementally"
-msgstr "Incremento de paso"
+msgstr "Ordenar elementos de forma incremental"
 
 #: gtk/gtksortlistmodel.c:793
 msgid "The model being sorted"
@@ -6395,13 +6340,12 @@ msgstr "O modelo sendo ordenado"
 
 #: gtk/gtksortlistmodel.c:805
 msgid "Estimate of unsorted items remaining"
-msgstr ""
+msgstr "Estimación dos elementos que faltan por ordenar"
 
 #: gtk/gtksortlistmodel.c:817
-#, fuzzy
 #| msgid "If a filter is set for this model"
 msgid "The sorter for this model"
-msgstr "Se está un filtro estabelecido neste modelo"
+msgstr "O clasificador para este modelo"
 
 #: gtk/gtkspinbutton.c:371
 msgid "Climb Rate"
@@ -6458,13 +6402,12 @@ msgstr "Le o valor actual ou define un valor novo"
 
 #: gtk/gtkspinner.c:239
 msgid "Spinning"
-msgstr ""
+msgstr "Xirando"
 
 #: gtk/gtkspinner.c:240
-#, fuzzy
 #| msgid "Whether the spinner is active"
 msgid "Whether the spinner is spinning"
-msgstr "Indica se o spinner é activábel"
+msgstr "Indica se o contador incremental está xirando"
 
 #: gtk/gtkstack.c:334
 msgid "The child of the page"
@@ -6491,13 +6434,11 @@ msgid "Whether this page needs attention"
 msgstr "Indica se esta páxina precisa atención"
 
 #: gtk/gtkstack.c:377
-#, fuzzy
 #| msgid "Whether the widget is visible"
 msgid "Whether this page is visible"
-msgstr "Indica se o widget é visíbel"
+msgstr "Indica se a páxina é visíbel"
 
 #: gtk/gtkstack.c:384
-#, fuzzy
 #| msgid ""
 #| "If set, an underline in the text indicates the next character should be "
 #| "used for the mnemonic accelerator key"
@@ -6505,7 +6446,7 @@ msgid ""
 "If set, an underline in the title indicates the next character should be "
 "used for the mnemonic accelerator key"
 msgstr ""
-"Se se define, un subliñado no texto indica que o seguinte carácter debería "
+"Se se define, un subliñado no título indica que o seguinte carácter debería "
 "usarse para a tecla rápida mnemónica"
 
 #: gtk/gtkstack.c:706
@@ -6561,10 +6502,9 @@ msgstr ""
 "diferentes tamaños"
 
 #: gtk/gtkstack.c:745
-#, fuzzy
 #| msgid "The toggle action to switch to the tweak page"
 msgid "A selection model with the stacks pages"
-msgstr "A acción de activación para cambiar a páxina de axuste"
+msgstr "Un modo de selección coas páxinas apiladas"
 
 #: gtk/gtkstacksidebar.c:394 gtk/gtkstackswitcher.c:495
 #: gtk/gtkstackswitcher.c:496
@@ -6577,33 +6517,31 @@ msgstr "Rima asociada para este GtkStackSidebar"
 
 #: gtk/gtkstringfilter.c:263 gtk/gtkstringsorter.c:307
 msgid "Ignore case"
-msgstr ""
+msgstr "Ignorar maiúsculas"
 
 #: gtk/gtkstringfilter.c:264 gtk/gtkstringsorter.c:308
 msgid "If matching is case sensitive"
-msgstr ""
+msgstr "Se coincide é sensíbel a maiúsculas"
 
 #: gtk/gtkstringfilter.c:275
-#, fuzzy
 #| msgid "Search mode"
 msgid "Match mode"
-msgstr "Modo busca"
+msgstr "Modo de coincidencia"
 
 #: gtk/gtkstringfilter.c:276
 msgid "If exact matches are necessary or if substrings are allowed"
 msgstr ""
+"Se as coincidencias exactas son precisas ou se as subcadeas están permitidas"
 
 #: gtk/gtkstringfilter.c:288
-#, fuzzy
 #| msgid "Search mode"
 msgid "Search"
-msgstr "Modo busca"
+msgstr "Buscar"
 
 #: gtk/gtkstringfilter.c:289
-#, fuzzy
 #| msgid "The selected year"
 msgid "The search term"
-msgstr "O ano seleccionado"
+msgstr "O termo de busca"
 
 #: gtk/gtkstylecontext.c:146
 msgid "The associated GdkDisplay"
@@ -6647,19 +6585,19 @@ msgstr "Indica se o búfer ten actualmente algún texto seleccionado"
 
 #: gtk/gtktextbuffer.c:490
 msgid "Can Undo"
-msgstr ""
+msgstr "Pode desfacer"
 
 #: gtk/gtktextbuffer.c:491
 msgid "If the buffer can have the last action undone"
-msgstr ""
+msgstr "Se o búfer pode desfacer a última acción"
 
 #: gtk/gtktextbuffer.c:503
 msgid "Can Redo"
-msgstr ""
+msgstr "Pode refacer"
 
 #: gtk/gtktextbuffer.c:504
 msgid "If the buffer can have the last undone action reapplied"
-msgstr ""
+msgstr "Se o búfer pode reaplicar a última acción desfeita"
 
 #: gtk/gtktextbuffer.c:530
 msgid "Cursor position"
@@ -6696,19 +6634,16 @@ msgstr ""
 "destino do DND"
 
 #: gtk/gtktext.c:742
-#, fuzzy
 #| msgid "Text buffer object which actually stores entry text"
 msgid "Text buffer object which actually stores self text"
 msgstr "Obxecto de búfer de texto que almacena actualmente a entrada de texto"
 
 #: gtk/gtktext.c:749
-#, fuzzy
 #| msgid "Maximum number of characters for this entry. Zero if no maximum"
 msgid "Maximum number of characters for this self. Zero if no maximum"
 msgstr "Número máximo de caracteres nesta entrada. É cero se non hai un máximo"
 
 #: gtk/gtktext.c:757
-#, fuzzy
 #| msgid ""
 #| "The character to use when masking entry contents (in “password mode”)"
 msgid "The character to use when masking self contents (in “password mode”)"
@@ -6717,26 +6652,22 @@ msgstr ""
 "contrasinal»)"
 
 #: gtk/gtktext.c:771
-#, fuzzy
 #| msgid "Number of pixels of the entry scrolled off the screen to the left"
 msgid "Number of pixels of the self scrolled off the screen to the left"
 msgstr ""
 "Número de píxeles da entrada desprazados fóra da pantalla e cara á esquerda"
 
 #: gtk/gtktext.c:821
-#, fuzzy
 #| msgid "Show text in the entry when it’s empty and unfocused"
 msgid "Show text in the self when it’s empty and unfocused"
 msgstr "Mostrar texto na entrada cando esta está baleira ou non ten o foco"
 
 #: gtk/gtktext.c:889
-#, fuzzy
 #| msgid "A list of style attributes to apply to the text of the label"
 msgid "A list of style attributes to apply to the text of the self"
 msgstr "Unha lista de atributos de estilos para aplicar ao texto da etiqueta"
 
 #: gtk/gtktext.c:901
-#, fuzzy
 #| msgid "A list of tabstop locations to apply to the text of the entry"
 msgid "A list of tabstop locations to apply to the text of the self"
 msgstr ""
@@ -6744,17 +6675,15 @@ msgstr ""
 "da entrada"
 
 #: gtk/gtktext.c:921
-#, fuzzy
 #| msgid "Propagate Natural Width"
 msgid "Propagate text width"
-msgstr "Propagar a anchura natural"
+msgstr "Propagar a anchura do texto"
 
 #: gtk/gtktext.c:922
-#, fuzzy
 #| msgid ""
 #| "Whether the widget should grab focus when it is clicked with the mouse"
 msgid "Whether the entry should grow and shrink with the content"
-msgstr "Indica se o widget deberia capturar o foco cando se preme co rato"
+msgstr "Indica se o trebello debería capturar o foco cando se preme co rato"
 
 #: gtk/gtktextmark.c:136
 msgid "Mark name"
@@ -6925,28 +6854,24 @@ msgid "Color of underline for this text"
 msgstr "Cor do subliñado para este texto"
 
 #: gtk/gtktexttag.c:516
-#, fuzzy
 #| msgid "Underline"
 msgid "Overline"
-msgstr "Subliñado"
+msgstr "Superliñado"
 
 #: gtk/gtktexttag.c:517
-#, fuzzy
 #| msgid "Style of underline for this text"
 msgid "Style of overline for this text"
-msgstr "Estilo de subliñado para este texto"
+msgstr "Estilo do superliñado para este texto"
 
 #: gtk/gtktexttag.c:525
-#, fuzzy
 #| msgid "Underline RGBA"
 msgid "Overline RGBA"
-msgstr "Subliñado RGBA"
+msgstr "Superliñado RGBA"
 
 #: gtk/gtktexttag.c:526
-#, fuzzy
 #| msgid "Color of underline for this text"
 msgid "Color of overline for this text"
-msgstr "Cor do subliñado para este texto"
+msgstr "Cor do superliñado para este texto"
 
 #: gtk/gtktexttag.c:539
 msgid "Strikethrough RGBA"
@@ -7012,38 +6937,33 @@ msgid "OpenType Font Features to use"
 msgstr "Características do tipo de letra OpenType a usar"
 
 #: gtk/gtktexttag.c:650
-#, fuzzy
 #| msgid "Allowed orientations"
 msgid "Allow Breaks"
-msgstr "Orientacións permitidas"
+msgstr "Permitir rupturas"
 
 #: gtk/gtktexttag.c:651
-#, fuzzy
 #| msgid "Whether font fallback is enabled."
 msgid "Whether breaks are allowed."
-msgstr "Indica se o tipo de letra alternativa está activado."
+msgstr "Indica se están permitidas as rupturas."
 
 #: gtk/gtktexttag.c:658
-#, fuzzy
 #| msgid "Show Expanders"
 msgid "Show spaces"
-msgstr "Mostrar expansores"
+msgstr "Mostrar espacios"
 
 #: gtk/gtktexttag.c:659
-#, fuzzy
 #| msgid "Invisible character"
 msgid "How to render invisible characters."
-msgstr "Carácter invisíbel"
+msgstr "Como renderizar os caracteres non visíbeis."
 
 #: gtk/gtktexttag.c:667
 msgid "Insert hyphens"
-msgstr ""
+msgstr "Inserir guións"
 
 #: gtk/gtktexttag.c:668
-#, fuzzy
 #| msgid "Whether the spinner is active"
 msgid "Whether to insert hyphens at breaks."
-msgstr "Indica se o spinner é activábel"
+msgstr "Indica se inserir guións nas rupturas."
 
 #: gtk/gtktexttag.c:684
 msgid "Margin Accumulates"
@@ -7123,28 +7043,24 @@ msgid "Whether this tag affects underlining color"
 msgstr "Indica se esta marca afecta á cor do subliñado"
 
 #: gtk/gtktexttag.c:791
-#, fuzzy
 #| msgid "Underline set"
 msgid "Overline set"
-msgstr "Definición do subliñado"
+msgstr "Estebelecer o superliñado"
 
 #: gtk/gtktexttag.c:792
-#, fuzzy
 #| msgid "Whether this tag affects underlining"
 msgid "Whether this tag affects overlining"
-msgstr "Indica se esta marca afecta ao subliñado"
+msgstr "Indica se esta etiqueta afeta ao superliñado"
 
 #: gtk/gtktexttag.c:795
-#, fuzzy
 #| msgid "Underline RGBA set"
 msgid "Overline RGBA set"
-msgstr "Subiñado RGBA estabelecido"
+msgstr "Subliñado RGBA estabelecido"
 
 #: gtk/gtktexttag.c:796
-#, fuzzy
 #| msgid "Whether this tag affects underlining color"
 msgid "Whether this tag affects overlining color"
-msgstr "Indica se esta marca afecta á cor do subliñado"
+msgstr "Indica se esta marca afecta á cor do superliñado"
 
 #: gtk/gtktexttag.c:804
 msgid "Strikethrough RGBA set"
@@ -7211,38 +7127,34 @@ msgid "Whether this tag affects font features"
 msgstr "Indica se esta etiqueta afecta ao tipo de letra alternativo"
 
 #: gtk/gtktexttag.c:836
-#, fuzzy
 #| msgid "Fallback set"
 msgid "Allow breaks set"
-msgstr "Alternativa estabelecida"
+msgstr "Mostrar rupturas estebelecido"
 
 #: gtk/gtktexttag.c:837
-#, fuzzy
 #| msgid "Whether this tag affects line wrap mode"
 msgid "Whether this tag affects line breaks"
-msgstr "Indica se esta marca afecta ao modo de axuste de liña"
+msgstr "Indica se esta etiqueta afecta á ruptura de liña"
 
 #: gtk/gtktexttag.c:840
-#, fuzzy
 #| msgid "Show Expanders"
 msgid "Show spaces set"
-msgstr "Mostrar expansores"
+msgstr "Mostrar espacios estabelecido"
 
 #: gtk/gtktexttag.c:841
-#, fuzzy
 #| msgid "Whether this tag affects underlining color"
 msgid "Whether this tag affects rendering of invisible characters"
-msgstr "Indica se esta marca afecta á cor do subliñado"
+msgstr ""
+"Indica se esta etiqueta afecta ao renderizado dos caracteres invisíbeis"
 
 #: gtk/gtktexttag.c:844
 msgid "Insert hyphens set"
-msgstr ""
+msgstr "Inserir guións estabelecido"
 
 #: gtk/gtktexttag.c:845
-#, fuzzy
 #| msgid "Whether this tag affects indentation"
 msgid "Whether this tag affects insertion of hyphens"
-msgstr "Indica se esta marca afecta á sangría"
+msgstr "Indica se esta etiqueta afecta á inserción de guións"
 
 #: gtk/gtktextview.c:836
 msgid "Pixels Above Lines"
@@ -7325,10 +7237,9 @@ msgid "Window Type"
 msgstr "Tipo de xanela"
 
 #: gtk/gtktextviewchild.c:388
-#, fuzzy
 #| msgid "Window Type"
 msgid "The GtkTextWindowType"
-msgstr "Tipo de xanela"
+msgstr "O GtkTextWindowType"
 
 #: gtk/gtktogglebutton.c:209
 msgid "If the toggle button should be pressed in"
@@ -7336,21 +7247,20 @@ msgstr "Se o botón de estado debe estar premido ou non"
 
 #: gtk/gtktreeexpander.c:460
 msgid "The child widget with the actual contents"
-msgstr ""
+msgstr "O trebello fillo co contido actual"
 
 #: gtk/gtktreeexpander.c:472
-#, fuzzy
 #| msgid "The item held in this row"
 msgid "The item held by this expander's row"
-msgstr "O elemento mantido nesta fila"
+msgstr "O elemento mantido nesta fila do expansor"
 
 #: gtk/gtktreeexpander.c:483
 msgid "List row"
-msgstr ""
+msgstr "Fila da lista"
 
 #: gtk/gtktreeexpander.c:484
 msgid "The list row to track for expander state"
-msgstr ""
+msgstr "A fiola da lista na que rastrexar o estado do expansor"
 
 #: gtk/gtktreelistmodel.c:694
 msgid "autoexpand"
@@ -7405,10 +7315,9 @@ msgid "The item held in this row"
 msgstr "O elemento mantido nesta fila"
 
 #: gtk/gtktreelistrowsorter.c:545
-#, fuzzy
 #| msgid "The model being sorted"
 msgid "The underlying sorter"
-msgstr "O modelo sendo ordenado"
+msgstr "O clasificador subxacente"
 
 #: gtk/gtktreemodelfilter.c:532
 msgid "The child model"
@@ -7435,16 +7344,14 @@ msgid "The model for the TreeModelSort to sort"
 msgstr "O modelo para o TreeModelSort que ordenar"
 
 #: gtk/gtktreepopover.c:205
-#, fuzzy
 #| msgid "mode"
 msgid "model"
-msgstr "modo"
+msgstr "modelo"
 
 #: gtk/gtktreepopover.c:206
-#, fuzzy
 #| msgid "The model for the icon view"
 msgid "The model for the popover"
-msgstr "O modelo para a visualización de icona"
+msgstr "O modelo para a xanela emerxente"
 
 #: gtk/gtktreeview.c:995
 msgid "TreeView Model"
@@ -7696,16 +7603,14 @@ msgid "The media stream played"
 msgstr "O fluxo multimedia reproducido"
 
 #: gtk/gtkviewport.c:371
-#, fuzzy
 #| msgid "Scroll offset"
 msgid "Scroll to focus"
-msgstr "Compensación do desprazamento"
+msgstr "Desprazar para enfocar"
 
 #: gtk/gtkviewport.c:372
-#, fuzzy
 #| msgid "Whether to display the column"
 msgid "Whether to scroll when the focus changes"
-msgstr "Indica se se mostra a columna"
+msgstr "Indica se se debe desprazar cando o foco cambia"
 
 #: gtk/gtkvolumebutton.c:174
 msgid "Use symbolic icons"
@@ -7732,16 +7637,14 @@ msgid "The parent widget of this widget."
 msgstr "O widget pai deste widget."
 
 #: gtk/gtkwidget.c:928
-#, fuzzy
 #| msgid "Icon widget"
 msgid "Root widget"
-msgstr "Icona do widget"
+msgstr "Trebello raíz"
 
 #: gtk/gtkwidget.c:929
-#, fuzzy
 #| msgid "The parent widget of this widget."
 msgid "The root widget in the widget tree."
-msgstr "O widget pai deste widget."
+msgstr "O trebello raíz na árbore de trebellos."
 
 #: gtk/gtkwidget.c:935
 msgid "Width request"
@@ -7797,16 +7700,14 @@ msgid "Whether the widget has the input focus"
 msgstr "Indica se o widget ten o foco de entrada"
 
 #: gtk/gtkwidget.c:997
-#, fuzzy
 #| msgid "Copy target list"
 msgid "Can target"
-msgstr "Lista de destinos da copia"
+msgstr "Pode apuntar"
 
 #: gtk/gtkwidget.c:998
-#, fuzzy
 #| msgid "Whether the widget can accept the input focus"
 msgid "Whether the widget can receive pointer events"
-msgstr "Indica se o widget pode aceptar o foco de entrada"
+msgstr "Indica se o trebello pode recibir eventos de punteiro"
 
 #: gtk/gtkwidget.c:1011
 msgid "Focus on click"
@@ -7834,10 +7735,9 @@ msgstr ""
 "Se é TRUE, o widget recibirá a acción predeterminada cando estea enfocado"
 
 #: gtk/gtkwidget.c:1038
-#, fuzzy
 #| msgid "The cursor to show when hoving above widget"
 msgid "The cursor to show when hovering above widget"
-msgstr "O cursor a mostrar ao pasar o rato por enriba do widget"
+msgstr "O punteiro a mostrar ao pasar por enriba do trebello"
 
 #: gtk/gtkwidget.c:1052
 msgid "Has tooltip"
@@ -7964,28 +7864,24 @@ msgid "The name of this widget in the CSS tree"
 msgstr "O nome do widget na árbore CSS"
 
 #: gtk/gtkwidget.c:1307
-#, fuzzy
 #| msgid "Style Classes"
 msgid "CSS Style Classes"
-msgstr "Clases de estilo"
+msgstr "Clases de estilo CSS"
 
 #: gtk/gtkwidget.c:1308
-#, fuzzy
 #| msgid "List of classes"
 msgid "List of CSS classes"
-msgstr "Listado de clases"
+msgstr "Listado de clases CSS"
 
 #: gtk/gtkwidget.c:1320
-#, fuzzy
 #| msgid "Recent Manager"
 msgid "Layout Manager"
-msgstr "Xestionar os recentes"
+msgstr "Xestor de disposición"
 
 #: gtk/gtkwidget.c:1321
-#, fuzzy
 #| msgid "The padding to insert at the left of the widget."
 msgid "The layout manager used to layout children of the widget"
-msgstr "A separación a introducir á esquerda do widget."
+msgstr "O xestor de disposición usado para dispor os fillos do trebello"
 
 #: gtk/gtkwidgetpaintable.c:244
 msgid "Observed widget"
@@ -8129,30 +8025,29 @@ msgid "Focus widget"
 msgstr "Enfocar o trebello"
 
 #: gtk/gtkwindow.c:935
-#, fuzzy
 #| msgid "Mnemonic widget"
 msgid "The focus widget"
-msgstr "Widget mnemónico"
+msgstr "O trebello de foco"
 
 #: gtk/gtkwindowcontrols.c:494
 msgid "Side"
 msgstr "Lado"
 
 #: gtk/gtkwindowcontrols.c:495
-#, fuzzy
 #| msgid "Whether widget wants to expand in both directions"
 msgid "Whether the widget shows start or end portion of the decoration layout"
-msgstr "Indica se o widget quere expandirse en ámbalas dúas direccións"
+msgstr ""
+"Indica se o trebello mostra a porción de inicio ou fin da disposición de "
+"decoración"
 
 #: gtk/gtkwindowcontrols.c:523
 msgid "Empty"
 msgstr "Baleiro"
 
 #: gtk/gtkwindowcontrols.c:524
-#, fuzzy
 #| msgid "Whether the widget has the input focus"
 msgid "Whether the widget has any window buttons"
-msgstr "Indica se o widget ten o foco de entrada"
+msgstr "Indica se o trebello ten algún botón de xanela"
 
 #: modules/media/gtkgstsink.c:241
 msgid "paintable"
