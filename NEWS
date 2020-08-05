@@ -1,3 +1,41 @@
+Overview of Changes in GTK 3.99.1
+=================================
+
+* GtkGridLayout: Rename left-/top-attach to column/row
+
+* Drop GtkAccelLabel - it is no longer used
+
+* GtkTextView:
+ - Fix redraw issues with selections
+ - Make insert-emoji replace the selection
+
+* GtkTreeView:
+ - Fix selection handling in cell editables
+
+* CSS:
+ - Hexadecimal colors can now specify alpha
+
+* Documentation:
+ - Refresh the widget gallery
+ - Add images for new widgets to the gallery
+ - Fix many cross-references
+
+* Demos:
+ - Numerous crash- and bug fixes
+
+* Fix build with cups < 2.3
+
+* win32:
+ - Default to the GL renderer when we can
+
+* Translation updates:
+  Catalan
+  Polish
+  Romanian
+  Spanish
+  Ukrainian
+
+
 Overview of Changes in GTK 3.99.0
 =================================
 
