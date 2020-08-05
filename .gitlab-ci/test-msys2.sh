@@ -33,6 +33,10 @@ pacman --noconfirm -S --needed \
     mingw-w64-$MSYS2_ARCH-gst-plugins-bad \
     mingw-w64-$MSYS2_ARCH-shared-mime-info
 
+mkdir -p _ccache
+export CCACHE_BASEDIR="$(pwd)"
+export CCACHE_DIR="${CCACHE_BASEDIR}/_ccache"
+
 # https://gitlab.gnome.org/GNOME/gtk/-/issues/2243
 # https://gitlab.gnome.org/GNOME/gtk/-/issues/3002
 
@@ -51,10 +55,6 @@ if ! pkg-config --atleast-version=1.45.4 pango; then
     meson install -C _pango_build
 fi
 pkg-config --modversion pango
-
-mkdir -p _ccache
-export CCACHE_BASEDIR="$(pwd)"
-export CCACHE_DIR="${CCACHE_BASEDIR}/_ccache"
 
 # Build
 ccache --zero-stats
