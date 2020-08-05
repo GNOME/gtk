@@ -2053,7 +2053,7 @@ gtk_text_view_set_buffer (GtkTextView   *text_view,
       while (priv->anchored_children.length)
         {
           AnchoredChild *ac = g_queue_peek_head (&priv->anchored_children);
-          gtk_widget_unparent (ac->widget);
+          gtk_text_view_remove (text_view, ac->widget);
           /* ac is now invalid! */
         }
 
