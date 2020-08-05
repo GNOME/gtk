@@ -75,14 +75,18 @@
  * # CSS nodes
  *
  * |[<!-- language="plain" -->
- * list[.separators]
+ * list[.separators][.rich-list][.navigation-sidebar]
  * ╰── row[.activatable]
  * ]|
  *
- * GtkListBox uses a single CSS node named list. It may carry the .separators style
- * class, when the #GtkListBox:show-separators property is set. Each GtkListBoxRow uses
- * a single CSS node named row. The row nodes get the .activatable
- * style class added when appropriate.
+ * GtkListBox uses a single CSS node named list. It may carry the .separators
+ * style class, when the #GtkListBox:show-separators property is set. Each
+ * GtkListBoxRow uses a single CSS node named row. The row nodes get the
+ * .activatable style class added when appropriate.
+ *
+ * The main list node may also carry style classes to select
+ * the style of [list presentation](ListContainers.html#list-styles):
+ * .rich-list, .navigation-sidebar or .data-table.
  */
 
 typedef struct _GtkListBoxClass   GtkListBoxClass;

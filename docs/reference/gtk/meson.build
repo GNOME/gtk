@@ -370,6 +370,9 @@ images = [
   'images/widget-hvalign.png',
   'images/window-default.png',
   'images/window.png',
+  'images/rich-list.png',
+  'images/data-table.png',
+  'images/navigation-sidebar.png'
 ]
 
 content_files = [

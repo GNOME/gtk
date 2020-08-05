@@ -118,7 +118,7 @@
  * # CSS nodes
  *
  * |[<!-- language="plain" -->
- * listview[.separators]
+ * listview[.separators][.rich-list][.navigation-sidebar][.data-table]
  * ├── row
  * │
  * ├── row
@@ -132,6 +132,10 @@
  * .separators style class, when #GtkListView:show-separators property
  * is set. Each child widget uses a single CSS node named row. For
  * rubberband selection, a node with name rubberband is used.
+ *
+ * The main listview node may also carry style classes to select
+ * the style of [list presentation](ListContainers.html#list-styles):
+ * .rich-list, .navigation-sidebar or .data-table.
  */
 
 typedef struct _ListRow ListRow;
