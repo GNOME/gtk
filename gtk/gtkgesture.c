@@ -1014,6 +1014,10 @@ gtk_gesture_set_sequence_state (GtkGesture            *gesture,
       data->state != GTK_EVENT_SEQUENCE_NONE)
     return FALSE;
 
+  if (state == GTK_EVENT_SEQUENCE_DENIED &&
+      data->state == GTK_EVENT_SEQUENCE_CLAIMED)
+    _gtk_gesture_cancel_sequence (gesture, sequence);
+
   data->state = state;
   gtk_widget_cancel_event_sequence (gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (gesture)),
                                     gesture, sequence, state);
