@@ -22,12 +22,6 @@ static PangoContext *context;
 static int scale = 10;
 
 static void
-on_destroy (gpointer data)
-{
-  window = NULL;
-}
-
-static void
 update_image (void)
 {
   const char *text;
@@ -251,9 +245,7 @@ do_fontrendering (GtkWidget *do_widget)
       window = GTK_WIDGET (gtk_builder_get_object (builder, "window"));
       gtk_window_set_display (GTK_WINDOW (window),
                               gtk_widget_get_display (do_widget));
-      g_signal_connect (window, "destroy",
-                        G_CALLBACK (on_destroy), NULL);
-      g_object_set_data_full (G_OBJECT (window), "builder", builder, g_object_unref);
+      g_object_add_weak_pointer (G_OBJECT (window), (gpointer *)&window);
       font_button = GTK_WIDGET (gtk_builder_get_object (builder, "font_button"));
       up_button = GTK_WIDGET (gtk_builder_get_object (builder, "up_button"));
       down_button = GTK_WIDGET (gtk_builder_get_object (builder, "down_button"));
@@ -276,6 +268,8 @@ do_fontrendering (GtkWidget *do_widget)
       g_signal_connect (show_extents, "notify::active", G_CALLBACK (update_image), NULL);
 
       update_image ();
+
+      g_object_unref (builder);
     }
 
   if (!gtk_widget_get_visible (window))
