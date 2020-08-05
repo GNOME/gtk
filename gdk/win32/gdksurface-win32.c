@@ -45,6 +45,7 @@
 #include "gdkwin32cursor.h"
 #include "gdkglcontext-win32.h"
 #include "gdkdisplay-win32.h"
+#include "gdkcairocontext-win32.h"
 
 #include <cairo-win32.h>
 #include <dwmapi.h>
@@ -5146,4 +5147,42 @@ gdk_win32_surface_apply_queued_move_resize (GdkSurface *surface,
 
   /* Don't move iconic windows */
   /* TODO: use SetWindowPlacement() to change non-minimized window position */
+}
+
+RECT
+gdk_win32_surface_handle_queued_move_resize (GdkDrawContext *draw_context)
+{
+  GdkWin32CairoContext *cairo_ctx = NULL;
+  GdkSurface *surface;
+  GdkWin32Surface *impl;
+  int scale;
+  RECT queued_window_rect;
+
+  surface = gdk_draw_context_get_surface (draw_context);
+  impl = GDK_WIN32_SURFACE (surface);
+  scale = gdk_surface_get_scale_factor (surface);
+
+  if (GDK_IS_WIN32_CAIRO_CONTEXT (draw_context))
+    {
+      cairo_ctx = GDK_WIN32_CAIRO_CONTEXT (draw_context);
+      cairo_ctx->layered = impl->layered;
+    }
+
+  gdk_win32_surface_get_queued_window_rect (surface, scale, &queued_window_rect);
+
+  /* Apply queued resizes for non-double-buffered and non-layered windows
+   * before painting them (we paint on the window DC directly,
+   * it must have the right size).
+   * Due to some poorly-undetstood issue delayed
+   * resizing of double-buffered windows can produce weird
+   * artefacts, so these are also resized before we paint.
+   */
+  if (impl->drag_move_resize_context.native_move_resize_pending &&
+      (cairo_ctx == NULL || !cairo_ctx->layered))
+    {
+      impl->drag_move_resize_context.native_move_resize_pending = FALSE;
+      gdk_win32_surface_apply_queued_move_resize (surface, queued_window_rect);
+    }
+
+  return queued_window_rect;
 }
