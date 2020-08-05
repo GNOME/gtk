@@ -425,6 +425,12 @@ gtk_at_context_update (GtkATContext *self)
 {
   g_return_if_fail (GTK_IS_AT_CONTEXT (self));
 
+  /* There's no point in notifying of state changes if there weren't any */
+  if (self->updated_properties == 0 &&
+      self->updated_relations == 0 &&
+      self->updated_states == 0)
+    return;
+
   GtkAccessibleStateChange changed_states =
     gtk_accessible_attribute_set_get_changed (self->states);
   GtkAccessiblePropertyChange changed_properties =
@@ -435,6 +441,10 @@ gtk_at_context_update (GtkATContext *self)
   g_signal_emit (self, obj_signals[STATE_CHANGE], 0,
                  changed_states, changed_properties, changed_relations,
                  self->states, self->properties, self->relations);
+
+  self->updated_properties = 0;
+  self->updated_relations = 0;
+  self->updated_states = 0;
 }
 
 /*< private >
@@ -457,10 +467,15 @@ gtk_at_context_set_accessible_state (GtkATContext       *self,
 {
   g_return_if_fail (GTK_IS_AT_CONTEXT (self));
 
+  gboolean res = FALSE;
+
   if (value != NULL)
-    gtk_accessible_attribute_set_add (self->states, state, value);
+    res = gtk_accessible_attribute_set_add (self->states, state, value);
   else
-    gtk_accessible_attribute_set_remove (self->states, state);
+    res = gtk_accessible_attribute_set_remove (self->states, state);
+
+  if (res)
+    self->updated_states |= (1 << state);
 }
 
 /*< private >
@@ -519,10 +534,15 @@ gtk_at_context_set_accessible_property (GtkATContext          *self,
 {
   g_return_if_fail (GTK_IS_AT_CONTEXT (self));
 
+  gboolean res = FALSE;
+
   if (value != NULL)
-    gtk_accessible_attribute_set_add (self->properties, property, value);
+    res = gtk_accessible_attribute_set_add (self->properties, property, value);
   else
-    gtk_accessible_attribute_set_remove (self->properties, property);
+    res = gtk_accessible_attribute_set_remove (self->properties, property);
+
+  if (res)
+    self->updated_properties |= (1 << property);
 }
 
 /*< private >
@@ -581,10 +601,15 @@ gtk_at_context_set_accessible_relation (GtkATContext          *self,
 {
   g_return_if_fail (GTK_IS_AT_CONTEXT (self));
 
+  gboolean res = FALSE;
+
   if (value != NULL)
-    gtk_accessible_attribute_set_add (self->relations, relation, value);
+    res = gtk_accessible_attribute_set_add (self->relations, relation, value);
   else
-    gtk_accessible_attribute_set_remove (self->relations, relation);
+    res = gtk_accessible_attribute_set_remove (self->relations, relation);
+
+  if (res)
+    self->updated_relations |= (1 << relation);
 }
 
 /*< private >
