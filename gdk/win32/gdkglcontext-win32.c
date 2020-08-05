@@ -243,27 +243,10 @@ gdk_win32_gl_context_begin_frame (GdkDrawContext *draw_context,
 {
   GdkGLContext *context = GDK_GL_CONTEXT (draw_context);
   GdkSurface *surface;
-  GdkWin32Surface *impl;
-  RECT queued_window_rect;
 
   surface = gdk_gl_context_get_surface (context);
-  impl = GDK_WIN32_SURFACE (surface);
 
-  gdk_win32_surface_get_queued_window_rect (surface,
-                                            gdk_surface_get_scale_factor (surface),
-                                            &queued_window_rect);
-
-  /* Apply queued resizes GL windows before painting them
-   *  (we paint on the window DC directly, it must have the right size).
-   * Due to some poorly-understood issue delayed
-   * resizing of double-buffered windows can produce weird
-   * artefacts, so these are also resized before we paint.
-   */
-  if (impl->drag_move_resize_context.native_move_resize_pending)
-    {
-      impl->drag_move_resize_context.native_move_resize_pending = FALSE;
-      gdk_win32_surface_apply_queued_move_resize (surface, queued_window_rect);
-    }
+  gdk_win32_surface_handle_queued_move_resize (draw_context);
 
   GDK_DRAW_CONTEXT_CLASS (gdk_win32_gl_context_parent_class)->begin_frame (draw_context, update_area);
   if (gdk_gl_context_get_shared_context (context))

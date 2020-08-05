@@ -396,15 +396,6 @@ void gdk_win32_surface_move_resize (GdkSurface *window,
 RECT
 gdk_win32_surface_handle_queued_move_resize (GdkDrawContext *draw_context);
 
-void
-gdk_win32_surface_get_queued_window_rect (GdkSurface *surface,
-                                          int         scale,
-                                          RECT       *return_window_rect);
-
-void
-gdk_win32_surface_apply_queued_move_resize (GdkSurface *surface,
-                                            RECT        window_rect);
-
 #ifdef GDK_WIN32_ENABLE_EGL
 EGLSurface _gdk_win32_surface_get_egl_surface (GdkSurface *surface,
                                                EGLConfig   config,

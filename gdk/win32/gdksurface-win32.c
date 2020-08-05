@@ -5103,7 +5103,7 @@ _gdk_win32_surface_get_egl_surface (GdkSurface *surface,
 }
 #endif
 
-void
+static void
 gdk_win32_surface_get_queued_window_rect (GdkSurface *surface,
                                           int         scale,
                                           RECT       *return_window_rect)
@@ -5125,7 +5125,7 @@ gdk_win32_surface_get_queued_window_rect (GdkSurface *surface,
   *return_window_rect = window_rect;
 }
 
-void
+static void
 gdk_win32_surface_apply_queued_move_resize (GdkSurface *surface,
                                             RECT        window_rect)
 {

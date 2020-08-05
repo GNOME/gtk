@@ -107,23 +107,7 @@ gdk_win32_cairo_context_begin_frame (GdkDrawContext *draw_context,
   impl = GDK_WIN32_SURFACE (surface);
   scale = gdk_surface_get_scale_factor (surface);
 
-  self->layered = impl->layered;
-
-  gdk_win32_surface_get_queued_window_rect (surface, scale, &queued_window_rect);
-
-  /* Apply queued resizes for non-double-buffered and non-layered windows
-   * before painting them (we paint on the window DC directly,
-   * it must have the right size).
-   * Due to some poorly-undetstood issue delayed
-   * resizing of double-buffered windows can produce weird
-   * artefacts, so these are also resized before we paint.
-   */
-  if (impl->drag_move_resize_context.native_move_resize_pending &&
-      !self->layered)
-    {
-      impl->drag_move_resize_context.native_move_resize_pending = FALSE;
-      gdk_win32_surface_apply_queued_move_resize (surface, queued_window_rect);
-    }
+  queued_window_rect = gdk_win32_surface_handle_queued_move_resize (draw_context);
 
   width = queued_window_rect.right - queued_window_rect.left;
   height = queued_window_rect.bottom - queued_window_rect.top;
