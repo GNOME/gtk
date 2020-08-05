@@ -217,7 +217,7 @@ _gdk_win32_get_window_client_area_rect (GdkSurface *window,
 {
   int x, y, width, height;
 
-  x = y = 0;
+  gdk_surface_get_geometry (window, &x, &y, NULL, NULL);
   width = gdk_surface_get_width (window);
   height = gdk_surface_get_height (window);
   rect->left = x * scale;
