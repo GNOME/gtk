@@ -73,11 +73,22 @@ gdk_win32_vulkan_context_create_surface (GdkVulkanContext *context,
 }
 
 static void
+gdk_win32_vulkan_context_begin_frame (GdkDrawContext *draw_context,
+                                      cairo_region_t *update_area)
+{
+  gdk_win32_surface_handle_queued_move_resize (draw_context);
+
+  GDK_DRAW_CONTEXT_CLASS (gdk_win32_vulkan_context_parent_class)->begin_frame (draw_context, update_area);
+}
+
+static void
 gdk_win32_vulkan_context_class_init (GdkWin32VulkanContextClass *klass)
 {
   GdkVulkanContextClass *context_class = GDK_VULKAN_CONTEXT_CLASS (klass);
+  GdkDrawContextClass *draw_context_class = GDK_DRAW_CONTEXT_CLASS (klass);
 
   context_class->create_surface = gdk_win32_vulkan_context_create_surface;
+  draw_context_class->begin_frame = gdk_win32_vulkan_context_begin_frame;
 }
 
 static void

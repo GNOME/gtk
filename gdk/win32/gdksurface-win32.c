@@ -45,6 +45,7 @@
 #include "gdkwin32cursor.h"
 #include "gdkglcontext-win32.h"
 #include "gdkdisplay-win32.h"
+#include "gdkcairocontext-win32.h"
 
 #include <cairo-win32.h>
 #include <dwmapi.h>
@@ -216,7 +217,7 @@ _gdk_win32_get_window_client_area_rect (GdkSurface *window,
 {
   int x, y, width, height;
 
-  x = y = 0;
+  gdk_surface_get_geometry (window, &x, &y, NULL, NULL);
   width = gdk_surface_get_width (window);
   height = gdk_surface_get_height (window);
   rect->left = x * scale;
@@ -1979,7 +1980,7 @@ calculate_aerosnap_regions (GdkW32DragMoveResizeContext *context)
   int i;
 #endif
 
-  display = gdk_display_get_default ();
+  display = gdk_surface_get_display (context->window);
   monitors = gdk_display_get_monitors (display);
 
 #define _M_UP 0
@@ -1999,7 +2000,6 @@ calculate_aerosnap_regions (GdkW32DragMoveResizeContext *context)
       GdkMonitor *monitor;
 
       monitor = g_list_model_get_item (monitors, monitor_idx);
-      g_object_unref (monitors);
       gdk_win32_monitor_get_workarea (monitor, &wa);
       gdk_monitor_get_geometry (monitor, &geometry);
 
@@ -3428,8 +3428,8 @@ setup_drag_move_resize_context (GdkSurface                   *window,
                                 GdkSurfaceEdge                edge,
                                 GdkDevice                   *device,
                                 int                          button,
-                                int                          x,
-                                int                          y,
+                                double                       x,
+                                double                       y,
                                 guint32                      timestamp)
 {
   RECT rect;
@@ -5102,3 +5102,87 @@ _gdk_win32_surface_get_egl_surface (GdkSurface *surface,
 
 }
 #endif
+
+static void
+gdk_win32_surface_get_queued_window_rect (GdkSurface *surface,
+                                          int         scale,
+                                          RECT       *return_window_rect)
+{
+  RECT window_rect;
+  GdkWin32Surface *impl = GDK_WIN32_SURFACE (surface);
+
+  _gdk_win32_get_window_client_area_rect (surface, scale, &window_rect);
+
+  /* Turn client area into window area */
+  _gdk_win32_adjust_client_rect (surface, &window_rect);
+
+  /* Convert GDK screen coordinates to W32 desktop coordinates */
+  window_rect.left -= _gdk_offset_x * impl->surface_scale;
+  window_rect.right -= _gdk_offset_x * impl->surface_scale;
+  window_rect.top -= _gdk_offset_y * impl->surface_scale;
+  window_rect.bottom -= _gdk_offset_y * impl->surface_scale;
+
+  *return_window_rect = window_rect;
+}
+
+static void
+gdk_win32_surface_apply_queued_move_resize (GdkSurface *surface,
+                                            RECT        window_rect)
+{
+  if (!IsIconic (GDK_SURFACE_HWND (surface)))
+    {
+      GDK_NOTE (EVENTS, g_print ("Setting window position ... "));
+
+      API_CALL (SetWindowPos, (GDK_SURFACE_HWND (surface),
+                               SWP_NOZORDER_SPECIFIED,
+                               window_rect.left, window_rect.top,
+                               window_rect.right - window_rect.left,
+                               window_rect.bottom - window_rect.top,
+                               SWP_NOACTIVATE | SWP_NOZORDER | SWP_NOREDRAW));
+
+      GDK_NOTE (EVENTS, g_print (" ... set window position\n"));
+
+      return;
+    }
+
+  /* Don't move iconic windows */
+  /* TODO: use SetWindowPlacement() to change non-minimized window position */
+}
+
+RECT
+gdk_win32_surface_handle_queued_move_resize (GdkDrawContext *draw_context)
+{
+  GdkWin32CairoContext *cairo_ctx = NULL;
+  GdkSurface *surface;
+  GdkWin32Surface *impl;
+  int scale;
+  RECT queued_window_rect;
+
+  surface = gdk_draw_context_get_surface (draw_context);
+  impl = GDK_WIN32_SURFACE (surface);
+  scale = gdk_surface_get_scale_factor (surface);
+
+  if (GDK_IS_WIN32_CAIRO_CONTEXT (draw_context))
+    {
+      cairo_ctx = GDK_WIN32_CAIRO_CONTEXT (draw_context);
+      cairo_ctx->layered = impl->layered;
+    }
+
+  gdk_win32_surface_get_queued_window_rect (surface, scale, &queued_window_rect);
+
+  /* Apply queued resizes for non-double-buffered and non-layered windows
+   * before painting them (we paint on the window DC directly,
+   * it must have the right size).
+   * Due to some poorly-undetstood issue delayed
+   * resizing of double-buffered windows can produce weird
+   * artefacts, so these are also resized before we paint.
+   */
+  if (impl->drag_move_resize_context.native_move_resize_pending &&
+      (cairo_ctx == NULL || !cairo_ctx->layered))
+    {
+      impl->drag_move_resize_context.native_move_resize_pending = FALSE;
+      gdk_win32_surface_apply_queued_move_resize (surface, queued_window_rect);
+    }
+
+  return queued_window_rect;
+}

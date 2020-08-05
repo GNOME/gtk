@@ -107,8 +107,6 @@ typedef struct {
 
   guint realized : 1;
   guint use_texture_rectangle : 1;
-  guint has_gl_framebuffer_blit : 1;
-  guint has_frame_terminator : 1;
   guint has_khr_debug : 1;
   guint use_khr_debug : 1;
   guint has_unpack_subimage : 1;
@@ -425,22 +423,6 @@ gdk_gl_context_use_texture_rectangle (GdkGLContext *context)
   GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (context);
 
   return priv->use_texture_rectangle;
-}
-
-gboolean
-gdk_gl_context_has_framebuffer_blit (GdkGLContext *context)
-{
-  GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (context);
-
-  return priv->has_gl_framebuffer_blit;
-}
-
-gboolean
-gdk_gl_context_has_frame_terminator (GdkGLContext *context)
-{
-  GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (context);
-
-  return priv->has_frame_terminator;
 }
 
 void
@@ -997,18 +979,6 @@ gdk_gl_context_check_extensions (GdkGLContext *context)
       has_npot = priv->gl_version >= 20;
       has_texture_rectangle = FALSE;
 
-      /* This should check for GL_NV_framebuffer_blit as well - see extension at:
-       *
-       * https://www.khronos.org/registry/gles/extensions/NV/NV_framebuffer_blit.txt
-       *
-       * for ANGLE, we can enable bit blitting if we have the
-       * GL_ANGLE_framebuffer_blit extension
-       */
-      priv->has_gl_framebuffer_blit = epoxy_has_gl_extension ("GL_ANGLE_framebuffer_blit");
-
-      /* No OES version */
-      priv->has_frame_terminator = FALSE;
-
       priv->has_unpack_subimage = epoxy_has_gl_extension ("GL_EXT_unpack_subimage");
       priv->has_khr_debug = epoxy_has_gl_extension ("GL_KHR_debug");
     }
@@ -1017,8 +987,6 @@ gdk_gl_context_check_extensions (GdkGLContext *context)
       has_npot = priv->gl_version >= 20 || epoxy_has_gl_extension ("GL_ARB_texture_non_power_of_two");
       has_texture_rectangle = priv->gl_version >= 31 || epoxy_has_gl_extension ("GL_ARB_texture_rectangle");
 
-      priv->has_gl_framebuffer_blit = priv->gl_version >= 30 || epoxy_has_gl_extension ("GL_EXT_framebuffer_blit");
-      priv->has_frame_terminator = epoxy_has_gl_extension ("GL_GREMEDY_frame_terminator");
       priv->has_unpack_subimage = TRUE;
       priv->has_khr_debug = epoxy_has_gl_extension ("GL_KHR_debug");
 
@@ -1052,8 +1020,6 @@ gdk_gl_context_check_extensions (GdkGLContext *context)
                        "* Extensions checked:\n"
                        " - GL_ARB_texture_non_power_of_two: %s\n"
                        " - GL_ARB_texture_rectangle: %s\n"
-                       " - GL_EXT_framebuffer_blit: %s\n"
-                       " - GL_GREMEDY_frame_terminator: %s\n"
                        " - GL_KHR_debug: %s\n"
                        "* Using texture rectangle: %s",
                        priv->use_es ? "OpenGL ES" : "OpenGL",
@@ -1062,8 +1028,6 @@ gdk_gl_context_check_extensions (GdkGLContext *context)
                        glGetString (GL_SHADING_LANGUAGE_VERSION),
                        has_npot ? "yes" : "no",
                        has_texture_rectangle ? "yes" : "no",
-                       priv->has_gl_framebuffer_blit ? "yes" : "no",
-                       priv->has_frame_terminator ? "yes" : "no",
                        priv->has_khr_debug ? "yes" : "no",
                        priv->use_texture_rectangle ? "yes" : "no"));
 
