@@ -1660,9 +1660,12 @@ static void
 gsk_cairo_node_finalize (GskRenderNode *node)
 {
   GskCairoNode *self = (GskCairoNode *) node;
+  GskRenderNodeClass *parent_class = g_type_class_peek (g_type_parent (GSK_TYPE_CAIRO_NODE));
 
   if (self->surface)
     cairo_surface_destroy (self->surface);
+
+  parent_class->finalize (node);
 }
 
 static void
