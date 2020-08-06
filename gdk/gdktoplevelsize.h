@@ -29,7 +29,7 @@
 G_BEGIN_DECLS
 
 /**
- * GdkTopLevelSize:
+ * GdkToplevelSize:
  *
  * Struct containing information for computing the size of a #GdkToplevel.
  */
@@ -40,6 +40,7 @@ typedef struct _GdkToplevelSize GdkToplevelSize;
 GDK_AVAILABLE_IN_ALL
 GType                   gdk_toplevel_size_get_type      (void);
 
+GDK_AVAILABLE_IN_ALL
 void                    gdk_toplevel_size_get_bounds    (GdkToplevelSize       *size,
                                                          int                   *bounds_width,
                                                          int                   *bounds_height);
@@ -52,10 +53,6 @@ GDK_AVAILABLE_IN_ALL
 void                    gdk_toplevel_size_set_min_size  (GdkToplevelSize       *size,
                                                          int                    min_width,
                                                          int                    min_height);
-GDK_AVAILABLE_IN_ALL
-void                    gdk_toplevel_size_set_max_size  (GdkToplevelSize       *size,
-                                                         int                    max_width,
-                                                         int                    max_height);
 
 G_END_DECLS
 
