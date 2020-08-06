@@ -141,7 +141,7 @@ if get_option('profiler')
               dependencies: [profiler_dep, platform_gio_dep, libm])
 endif
 
-librsvg = dependency('librsvg-2.0', required: false)
+librsvg = dependency('librsvg-2.0', version: '>= 2.46.0', required: false)
 
 if librsvg.found()
   executable('testsvg', 'testsvg.c',
