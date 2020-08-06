@@ -140,3 +140,12 @@ if get_option('profiler')
   executable('testperf', 'testperf.c',
               dependencies: [profiler_dep, platform_gio_dep, libm])
 endif
+
+librsvg = dependency('librsvg-2.0', required: false)
+
+if librsvg.found()
+  executable('testsvg', 'testsvg.c',
+             include_directories: [confinc, gdkinc],
+             c_args: test_args + common_cflags,
+             dependencies: [libgtk_dep, librsvg, libm])
+endif
