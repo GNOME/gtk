@@ -702,6 +702,8 @@ gdk_event_queue_handle_scroll_compression (GdkDisplay *display)
 
       g_queue_delete_link (&display->queued_events, scrolls);
       g_queue_push_tail (&display->queued_events, event);
+
+      gdk_event_unref (old_event);
     }
 
   if (g_queue_get_length (&display->queued_events) == 1 &&
