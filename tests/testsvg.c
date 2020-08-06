@@ -61,10 +61,34 @@ svg_paintable_snapshot (GdkPaintable *paintable,
   cairo_destroy (cr);
 }
 
+static int
+svg_paintable_get_intrinsic_width (GdkPaintable *paintable)
+{
+  SvgPaintable *self = SVG_PAINTABLE (paintable);
+  RsvgDimensionData data;
+
+  rsvg_handle_get_dimensions (self->handle, &data);
+
+  return data.width;
+}
+
+static int
+svg_paintable_get_intrinsic_height (GdkPaintable *paintable)
+{
+  SvgPaintable *self = SVG_PAINTABLE (paintable);
+  RsvgDimensionData data;
+
+  rsvg_handle_get_dimensions (self->handle, &data);
+
+  return data.height;
+}
+
 static void
 svg_paintable_init_interface (GdkPaintableInterface *iface)
 {
   iface->snapshot = svg_paintable_snapshot;
+  iface->get_intrinsic_width = svg_paintable_get_intrinsic_width;
+  iface->get_intrinsic_height = svg_paintable_get_intrinsic_height;
 }
 
 G_DEFINE_TYPE_WITH_CODE (SvgPaintable, svg_paintable, G_TYPE_OBJECT,
@@ -104,6 +128,8 @@ svg_paintable_set_property (GObject      *object,
                                                               RSVG_HANDLE_FLAGS_NONE,
                                                               NULL,
                                                               NULL);
+        rsvg_handle_set_dpi (handle, 90);
+
         g_set_object (&self->file, file);
         g_set_object (&self->handle, handle);
       }
@@ -194,11 +220,21 @@ main (int argc, char *argv[])
   gtk_header_bar_pack_start (GTK_HEADER_BAR (header), button);
 
   picture = gtk_picture_new ();
+  gtk_picture_set_can_shrink (GTK_PICTURE (picture), TRUE);
+
   g_signal_connect (button, "file-set", G_CALLBACK (file_set), picture);
 
   gtk_window_set_child (GTK_WINDOW (window), picture);
 
   gtk_window_present (GTK_WINDOW (window));
+
+  if (argc > 1)
+    {
+      GFile *file = g_file_new_for_commandline_arg (argv[1]);
+      gtk_file_chooser_set_file (GTK_FILE_CHOOSER (button), file, NULL);
+      file_set (GTK_FILE_CHOOSER_BUTTON (button), picture);
+      g_object_unref (file);
+    }
 
   while (g_list_model_get_n_items (gtk_window_get_toplevels ()) > 0)
     g_main_context_iteration (NULL, TRUE);
