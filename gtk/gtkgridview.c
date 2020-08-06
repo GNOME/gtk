@@ -1167,6 +1167,7 @@ gtk_grid_view_init (GtkGridView *self)
 
   self->min_columns = 1;
   self->max_columns = DEFAULT_MAX_COLUMNS;
+  self->n_columns = 1;
 
   gtk_list_base_set_anchor_max_widgets (GTK_LIST_BASE (self),
                                         self->max_columns * GTK_GRID_VIEW_MAX_VISIBLE_ROWS,
