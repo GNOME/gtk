@@ -3005,11 +3005,15 @@ window.dialog.print {
  **********/
 frame,
 .frame {
-  box-shadow: none;
-  margin: 0;
-  padding: 0;
-  border-radius: 0;
   border: 1px solid $borders_color;
+}
+
+frame {
+  border-radius: $window_radius;
+
+  > label {
+    margin: 4px;
+  }
 }
 
 actionbar > revealer >  box {
@@ -3220,6 +3224,7 @@ expander-widget {
 calendar {
   color: $text_color;
   border: 1px solid $borders_color;
+  border-radius: $window_radius;
 
   > header {
     border-bottom: 1px solid $borders_color;
