@@ -542,6 +542,10 @@ button {
       min-width: 24px;
       padding-left: 5px;
       padding-right: 5px;
+
+      &.circular {
+         min-height: 24px;
+      }
     }
 
     &.text-button {
