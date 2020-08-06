@@ -6427,10 +6427,6 @@ blink_cb (GtkWidget     *widget,
 
   if (!gtk_widget_has_focus (GTK_WIDGET (self)))
     {
-      g_warning ("GtkText - did not receive a focus-out event.\n"
-                 "If you handle this event, you must return\n"
-                 "GDK_EVENT_PROPAGATE so the self gets the event as well");
-
       gtk_text_check_cursor_blink (self);
       return G_SOURCE_REMOVE;
     }
