@@ -236,6 +236,12 @@ typedef struct
   int default_width;
   int default_height;
 
+  /* from last gtk_window_resize () - if > 0, indicates that
+   * we should resize to this size.
+   */
+  int            resize_width;
+  int            resize_height;
+
   GtkGesture *click_gesture;
   GtkEventController *key_controller;
   GtkEventController *application_shortcut_controller;
@@ -320,11 +326,6 @@ typedef struct {
 
 struct _GtkWindowGeometryInfo
 {
-  /* from last gtk_window_resize () - if > 0, indicates that
-   * we should resize to this size.
-   */
-  int            resize_width;  
-  int            resize_height;
 
   GtkWindowLastGeometryInfo last;
 };
@@ -1479,6 +1480,8 @@ gtk_window_init (GtkWindow *window)
 
   priv->default_width = -1;
   priv->default_height = -1;
+  priv->resize_width = -1;
+  priv->resize_height = -1;
 
   g_object_ref_sink (window);
 
@@ -2673,8 +2676,6 @@ gtk_window_get_geometry_info (GtkWindow *window,
     {
       info = g_new0 (GtkWindowGeometryInfo, 1);
 
-      info->resize_width = -1;
-      info->resize_height = -1;
       info->last.configure_request.width = -1;
       info->last.configure_request.height = -1;
       priv->geometry_info = info;
@@ -3430,16 +3431,14 @@ gtk_window_resize (GtkWindow *window,
                    int        width,
                    int        height)
 {
-  GtkWindowGeometryInfo *info;
-  
+  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
+
   g_return_if_fail (GTK_IS_WINDOW (window));
   g_return_if_fail (width > 0);
   g_return_if_fail (height > 0);
 
-  info = gtk_window_get_geometry_info (window, TRUE);
-
-  info->resize_width = width;
-  info->resize_height = height;
+  priv->resize_width = width;
+  priv->resize_height = height;
 
   gtk_widget_queue_resize (GTK_WIDGET (window));
 }
@@ -4198,14 +4197,11 @@ toplevel_compute_size (GdkToplevel     *toplevel,
 {
   GtkWindow *window = GTK_WINDOW (widget);
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-  GtkWindowGeometryInfo *info;
   int width, height;
   GtkBorder shadow;
   int bounds_width, bounds_height;
   int default_width, default_height;
   int min_width, min_height;
-
-  info = gtk_window_get_geometry_info (window, FALSE);
 
   gdk_toplevel_size_get_bounds (size, &bounds_width, &bounds_height);
 
@@ -4253,17 +4249,17 @@ toplevel_compute_size (GdkToplevel     *toplevel,
       /* Unless we are maximized or fullscreen */
       gtk_window_get_remembered_size (window, &width, &height);
     }
-  else if (info)
+  else
     {
-      int resize_width_csd = info->resize_width;
-      int resize_height_csd = info->resize_height;
+      int resize_width_csd = priv->resize_width;
+      int resize_height_csd = priv->resize_height;
       gtk_window_update_csd_size (window,
                                   &resize_width_csd, &resize_height_csd,
                                   INCLUDE_CSD_SIZE);
 
-      if (info->resize_width > 0)
+      if (priv->resize_width > 0)
         width = resize_width_csd;
-      if (info->resize_height > 0)
+      if (priv->resize_height > 0)
         height = resize_height_csd;
     }
 
@@ -4395,11 +4391,11 @@ gtk_window_unrealize (GtkWidget *widget)
    * next time we show the window.
    */
   priv->need_default_size = TRUE;
+  priv->resize_width = -1;
+  priv->resize_height = -1;
   info = gtk_window_get_geometry_info (window, FALSE);
   if (info)
     {
-      info->resize_width = -1;
-      info->resize_height = -1;
       info->last.configure_request.width = -1;
       info->last.configure_request.height = -1;
       /* be sure we reset geom hints on re-realize */
@@ -5173,14 +5169,11 @@ gtk_window_compute_configure_request_size (GtkWindow   *window,
                                            int         *height)
 {
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-  GtkWindowGeometryInfo *info;
   int w, h;
 
   /* Preconditions:
    *  - we've done a size request
    */
-  info = gtk_window_get_geometry_info (window, FALSE);
-
   if (priv->need_default_size)
     {
       int default_width_csd;
@@ -5218,17 +5211,17 @@ gtk_window_compute_configure_request_size (GtkWindow   *window,
       /* Unless we are maximized or fullscreen */
       gtk_window_get_remembered_size (window, width, height);
     }
-  else if (info)
+  else
     {
-      int resize_width_csd = info->resize_width;
-      int resize_height_csd = info->resize_height;
+      int resize_width_csd = priv->resize_width;
+      int resize_height_csd = priv->resize_height;
       gtk_window_update_csd_size (window,
                                   &resize_width_csd, &resize_height_csd,
                                   INCLUDE_CSD_SIZE);
 
-      if (info->resize_width > 0)
+      if (priv->resize_width > 0)
         *width = resize_width_csd;
-      if (info->resize_height > 0)
+      if (priv->resize_height > 0)
         *height = resize_height_csd;
     }
 
@@ -5491,8 +5484,8 @@ gtk_window_move_resize (GtkWindow *window)
       gtk_widget_size_allocate (widget, &allocation, -1);
     }
 
-  info->resize_width = -1;
-  info->resize_height = -1;
+  priv->resize_width = -1;
+  priv->resize_height = -1;
 }
 
 /* Compare two sets of Geometry hints for equality.
