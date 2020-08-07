@@ -175,8 +175,6 @@ typedef struct
 
   guint32  initial_timestamp;
 
-  guint16  configure_request_count;
-
   guint    mnemonics_display_timeout_id;
 
   guint    focus_visible_timeout;
@@ -1466,7 +1464,6 @@ gtk_window_init (GtkWindow *window)
   priv->geometry_info = NULL;
   priv->focus_widget = NULL;
   priv->default_widget = NULL;
-  priv->configure_request_count = 0;
   priv->resizable = TRUE;
   priv->configure_notify_received = FALSE;
   priv->need_default_size = TRUE;
@@ -3909,11 +3906,6 @@ gtk_window_unmap (GtkWidget *widget)
   GTK_WIDGET_CLASS (gtk_window_parent_class)->unmap (widget);
   gdk_surface_hide (priv->surface);
 
-  while (priv->configure_request_count > 0)
-    {
-      priv->configure_request_count--;
-      gdk_surface_thaw_toplevel_updates (priv->surface);
-    }
   priv->configure_notify_received = FALSE;
 
   state = gdk_toplevel_get_state (GDK_TOPLEVEL (priv->surface));
@@ -4739,13 +4731,6 @@ surface_size_changed (GtkWidget *widget,
    * the configure requests. But we will get at least
    * priv->configure_request_count notifies.
    */
-
-  if (priv->configure_request_count > 0)
-    {
-      priv->configure_request_count -= 1;
-
-      gdk_surface_thaw_toplevel_updates (priv->surface);
-    }
 
   /*
    * If we do need to resize, we do that by:
@@ -5592,16 +5577,6 @@ gtk_window_move_resize (GtkWindow *window)
        * the window manager unless it decides to change our requisition. If
        * we don't get the ConfigureNotify back, the resize queue will never be run.
        */
-
-      /* Increment the number of have-not-yet-received-notify requests.
-       * This is done before gdk_surface[_move]_resize(), because
-       * that call might be synchronous (depending on which GDK backend
-       * is being used), so any preparations for its effects must
-       * be done beforehand.
-       */
-      priv->configure_request_count += 1;
-
-      gdk_surface_freeze_toplevel_updates (priv->surface);
 
       /* for GTK_RESIZE_QUEUE toplevels, we are now awaiting a new
        * configure event in response to our resizing request.
