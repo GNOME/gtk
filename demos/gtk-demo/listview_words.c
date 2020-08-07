@@ -177,6 +177,7 @@ do_listview_words (GtkWidget *do_widget)
           stringlist = gtk_string_list_new ((const char **) words);
           g_strfreev (words);
         }
+      g_object_unref (file);
 
       filter = gtk_string_filter_new (gtk_property_expression_new (GTK_TYPE_STRING_OBJECT, NULL, "string"));
       filter_model = gtk_filter_list_model_new (G_LIST_MODEL (stringlist), filter);
