@@ -596,6 +596,18 @@ find_iter_at_at_y (GtkTextLineDisplayCache *cache,
   g_assert (!g_sequence_iter_is_end (left));
   g_assert (!g_sequence_iter_is_end (right));
 
+  /* One of the most common cases is y==0, so special case it. */
+  if (y == 0)
+    {
+      GtkTextLineDisplay *display = g_sequence_get (left);
+
+      g_assert (display != NULL);
+      g_assert (display->line != NULL);
+
+      if (_gtk_text_btree_find_line_top (btree, display->line, layout) <= 0)
+        return left;
+    }
+
   for (;;)
     {
       GtkTextLineDisplay *display;
