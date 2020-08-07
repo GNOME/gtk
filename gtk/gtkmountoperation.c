@@ -558,7 +558,7 @@ gtk_mount_operation_ask_password_do_gtk (GtkMountOperation *operation,
   gboolean   can_anonymous;
   guint      rows;
   gchar *primary;
-  const gchar *secondary;
+  const gchar *secondary = NULL;
   PangoAttrList *attrs;
   gboolean use_header;
 
@@ -618,17 +618,14 @@ G_GNUC_END_IGNORE_DEPRECATIONS
   main_vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 18);
   gtk_box_pack_start (GTK_BOX (hbox), main_vbox, TRUE, TRUE, 0);
 
-  secondary = strstr (message, "\n");
-  if (secondary != NULL)
+  primary = strstr (message, "\n");
+  if (primary)
     {
-      primary = g_strndup (message, secondary - message + 1);
-    }
-  else
-    {
-      primary = g_strdup (message);
+      secondary = primary + 1;
+      primary = g_strndup (message, primary - message);
     }
 
-  label = gtk_label_new (primary);
+  label = gtk_label_new (primary != NULL ? primary : message);
   gtk_widget_set_halign (label, GTK_ALIGN_START);
   gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
   gtk_label_set_line_wrap (GTK_LABEL (label), TRUE);
