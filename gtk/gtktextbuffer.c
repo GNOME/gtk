@@ -4575,6 +4575,8 @@ gtk_text_buffer_insert_with_attributes (GtkTextBuffer *buffer,
       gtk_text_buffer_insert_with_tags (buffer, iter, text + start, end - start, tag, NULL);
 
       gtk_text_buffer_get_iter_at_mark (buffer, iter, mark);
+
+       g_object_unref (tag);
     }
   while (pango_attr_iterator_next (attr));
   
