@@ -234,373 +234,106 @@ activate_run (GSimpleAction *action,
   gtk_demo_run (demo, window);
 }
 
-/* Stupid syntax highlighting.
- *
- * No regex was used in the making of this highlighting.
- * It should only work for simple cases.  This is good, as
- * that's all we should have in the demos.
- */
-/* This code should not be used elsewhere, except perhaps as an example of how
- * to iterate through a text buffer.
- */
-enum {
-  STATE_NORMAL,
-  STATE_IN_COMMENT
-};
-
-static const char *tokens[] =
+static GBytes *
+fontify_text (const char *format,
+              const char *text)
 {
-  "/*",
-  "\"",
-  NULL
-};
+  GSubprocess *subprocess;
+  static gboolean warned = FALSE;
+  GBytes *stdin_buf;
+  GBytes *stdout_buf = NULL;
+  GBytes *stderr_buf = NULL;
+  GError *error = NULL;
+  char *format_arg;
 
-static const char *types[] =
-{
-  "static",
-  "const ",
-  "void",
-  " int ",
-  " char ",
-  "char ",
-  "float",
-  "double",
-  "gint8",
-  "gint16",
-  "gint32",
-  "guint",
-  "guint8",
-  "guint16",
-  "guint32",
-  "guchar",
-  "glong",
-  "gboolean" ,
-  "gshort",
-  "gushort",
-  "gulong",
-  "gpointer",
-  "NULL",
-  "GList",
-  "GSList",
-  "FALSE",
-  "TRUE",
-  "FILE ",
-  "GtkColorSelection ",
-  "GtkWidget ",
-  "GtkButton ",
-  "GdkColor ",
-  "GdkRectangle ",
-  "GdkEventExpose ",
-  "GdkGC ",
-  "GdkPixbufLoader ",
-  "GdkPixbuf ",
-  "GError",
-  "size_t",
-  "GtkAboutDialog ",
-  "GtkAction ",
-  "GtkActionEntry ",
-  "GtkRadioActionEntry ",
-  "GtkIconFactory ",
-  "GtkTextBuffer ",
-  "GtkStatusbar ",
-  "GtkTextIter ",
-  "GtkTextMark ",
-  "GdkEventWindowState ",
-  "GtkActionGroup ",
-  "GtkUIManager ",
-  "GtkRadioAction ",
-  "GtkActionClass ",
-  "GtkToggleActionEntry ",
-  "GtkAssistant ",
-  "GtkBuilder ",
-  "GtkSizeGroup ",
-  "GtkTreeModel ",
-  "GtkTreeSelection ",
-  "GdkDisplay ",
-  "GdkScreen ",
-  "GdkSurface ",
-  "GdkEventButton ",
-  "GdkCursor ",
-  "GtkTreeIter ",
-  "GtkTreeViewColumn ",
-  "GdkDisplayManager ",
-  "GdkClipboard ",
-  "GtkIconSize ",
-  "GtkImage ",
-  "GdkDragContext ",
-  "GtkSelectionData ",
-  "GtkDialog ",
-  "GtkMenuItem ",
-  "GtkListStore ",
-  "GtkCellLayout ",
-  "GtkCellRenderer ",
-  "GtkTreePath ",
-  "GtkTreeStore ",
-  "GtkEntry ",
-  "GtkEditable ",
-  "GtkEditableInterface ",
-  "GdkPixmap ",
-  "GdkEventConfigure ",
-  "GdkEventMotion ",
-  "GdkModifierType ",
-  "GtkEntryCompletion ",
-  "GtkToolItem ",
-  "GDir ",
-  "GtkIconView ",
-  "GtkCellRendererText ",
-  "GtkContainer ",
-  "GtkPaned ",
-  "GtkPrintOperation ",
-  "GtkPrintContext ",
-  "cairo_t ",
-  "PangoLayout "
-  "PangoFontDescription ",
-  "PangoRenderer ",
-  "PangoMatrix ",
-  "PangoContext ",
-  "PangoLayout ",
-  "GtkToggleButton ",
-  "GString ",
-  "GtkIconSize ",
-  "GtkTreeView ",
-  "GtkTextTag ",
-  "GdkEvent ",
-  "GdkEventKey ",
-  "GtkTextView ",
-  "GdkBitmap ",
-  "GtkTextChildAnchor ",
-  "GArray ",
-  "GtkCellEditable ",
-  "GtkCellRendererToggle ",
-  NULL
-};
+  format_arg = g_strconcat ("--syntax=", format, NULL);
+  subprocess = g_subprocess_new (G_SUBPROCESS_FLAGS_STDIN_PIPE |
+                                 G_SUBPROCESS_FLAGS_STDOUT_PIPE |
+                                 G_SUBPROCESS_FLAGS_STDERR_PIPE,
+                                 &error,
+                                 "highlight",
+                                 format_arg,
+                                 "--out-format=pango",
+                                 NULL);
+  g_free (format_arg);
 
-static const char *control[] =
-{
-  " if ",
-  " while ",
-  " else",
-  " do ",
-  " for ",
-  "?",
-  ":",
-  "return ",
-  "goto ",
-  NULL
-};
-void
-parse_chars (char        *text,
-             char       **end_ptr,
-             int         *state,
-             const char **tag,
-             gboolean     start)
-{
-  int i;
-  char *next_token;
-
-  /* Handle comments first */
-  if (*state == STATE_IN_COMMENT)
+  if (!subprocess)
     {
-      *end_ptr = strstr (text, "*/");
-      if (*end_ptr)
+      if (!warned)
         {
-          *end_ptr += 2;
-          *state = STATE_NORMAL;
-          *tag = "comment";
+          g_warning ("%s", error->message);
+          warned = TRUE;
         }
-      return;
+      g_clear_error (&error);
+
+      return NULL;
     }
 
-  *tag = NULL;
-  *end_ptr = NULL;
+  stdin_buf = g_bytes_new_static (text, strlen (text));
 
-  /* check for comment */
-  if (!strncmp (text, "/*", 2))
+  if (!g_subprocess_communicate (subprocess,
+                                 stdin_buf,
+                                 NULL,
+                                 &stdout_buf,
+                                 &stderr_buf,
+                                 &error))
     {
-      *end_ptr = strstr (text, "*/");
-      if (*end_ptr)
-        *end_ptr += 2;
-      else
-        *state = STATE_IN_COMMENT;
-      *tag = "comment";
-      return;
+      g_clear_pointer (&stdin_buf, g_bytes_unref);
+      g_clear_pointer (&stdout_buf, g_bytes_unref);
+      g_clear_pointer (&stderr_buf, g_bytes_unref);
+
+      g_warning ("%s", error->message);
+      g_clear_error (&error);
+
+      return NULL;
     }
 
-  /* check for preprocessor defines */
-  if (*text == '#' && start)
+  g_bytes_unref (stdin_buf);
+
+  if (g_subprocess_get_exit_status (subprocess) != 0)
     {
-      *end_ptr = NULL;
-      *tag = "preprocessor";
-      return;
+      if (stderr_buf)
+        g_warning ("%s", (char *)g_bytes_get_data (stderr_buf, NULL));
+
+      g_clear_pointer (&stdout_buf, g_bytes_unref);
     }
 
-  /* functions */
-  if (start && * text != '\t' && *text != ' ' && *text != '{' && *text != '}')
-    {
-      if (strstr (text, "("))
-        {
-          *end_ptr = strstr (text, "(");
-          *tag = "function";
-          return;
-        }
-    }
-  /* check for types */
-  for (i = 0; types[i] != NULL; i++)
-    if (!strncmp (text, types[i], strlen (types[i])) ||
-        (start && types[i][0] == ' ' && !strncmp (text, types[i] + 1, strlen (types[i]) - 1)))
-      {
-        *end_ptr = text + strlen (types[i]);
-        *tag = "type";
-        return;
-      }
+  g_clear_pointer (&stderr_buf, g_bytes_unref);
 
-  /* check for control */
-  for (i = 0; control[i] != NULL; i++)
-    if (!strncmp (text, control[i], strlen (control[i])))
-      {
-        *end_ptr = text + strlen (control[i]);
-        *tag = "control";
-        return;
-      }
+  g_object_unref (subprocess);
 
-  /* check for string */
-  if (text[0] == '"')
-    {
-      int maybe_escape = FALSE;
-
-      *end_ptr = text + 1;
-      *tag = "string";
-      while (**end_ptr != '\000')
-        {
-          if (**end_ptr == '\"' && !maybe_escape)
-            {
-              *end_ptr += 1;
-              return;
-            }
-          if (**end_ptr == '\\')
-            maybe_escape = TRUE;
-          else
-            maybe_escape = FALSE;
-          *end_ptr += 1;
-        }
-      return;
-    }
-
-  /* not at the start of a tag.  Find the next one. */
-  for (i = 0; tokens[i] != NULL; i++)
-    {
-      next_token = strstr (text, tokens[i]);
-      if (next_token)
-        {
-          if (*end_ptr)
-            *end_ptr = (*end_ptr<next_token)?*end_ptr:next_token;
-          else
-            *end_ptr = next_token;
-        }
-    }
-
-  for (i = 0; types[i] != NULL; i++)
-    {
-      next_token = strstr (text, types[i]);
-      if (next_token)
-        {
-          if (*end_ptr)
-            *end_ptr = (*end_ptr<next_token)?*end_ptr:next_token;
-          else
-            *end_ptr = next_token;
-        }
-    }
-
-  for (i = 0; control[i] != NULL; i++)
-    {
-      next_token = strstr (text, control[i]);
-      if (next_token)
-        {
-          if (*end_ptr)
-            *end_ptr = (*end_ptr<next_token)?*end_ptr:next_token;
-          else
-            *end_ptr = next_token;
-        }
-    }
+  return stdout_buf;
 }
 
-/* While not as cool as c-mode, this will do as a quick attempt at highlighting */
 void
-fontify (GtkTextBuffer *source_buffer)
+fontify (const char    *format,
+         GtkTextBuffer *source_buffer)
 {
-  GtkTextIter start_iter, next_iter, tmp_iter;
-  int state;
+  GtkTextIter start, end;
   char *text;
-  char *start_ptr, *end_ptr;
-  const char *tag;
+  GBytes *bytes;
 
-  gtk_text_buffer_create_tag (source_buffer, "source",
-                              "font", "monospace",
-                              NULL);
-  gtk_text_buffer_create_tag (source_buffer, "comment",
-                              "foreground", "DodgerBlue",
-                              NULL);
-  gtk_text_buffer_create_tag (source_buffer, "type",
-                              "foreground", "ForestGreen",
-                              NULL);
-  gtk_text_buffer_create_tag (source_buffer, "string",
-                              "foreground", "RosyBrown",
-                              "weight", PANGO_WEIGHT_BOLD,
-                              NULL);
-  gtk_text_buffer_create_tag (source_buffer, "control",
-                              "foreground", "purple",
-                              NULL);
-  gtk_text_buffer_create_tag (source_buffer, "preprocessor",
-                              "style", PANGO_STYLE_OBLIQUE,
-                              "foreground", "burlywood4",
-                              NULL);
-  gtk_text_buffer_create_tag (source_buffer, "function",
-                              "weight", PANGO_WEIGHT_BOLD,
-                              "foreground", "DarkGoldenrod4",
-                              NULL);
+  gtk_text_buffer_get_bounds (source_buffer, &start, &end);
+  text = gtk_text_buffer_get_text (source_buffer, &start, &end, TRUE);
 
-  gtk_text_buffer_get_bounds (source_buffer, &start_iter, &tmp_iter);
-  gtk_text_buffer_apply_tag_by_name (source_buffer, "source", &start_iter, &tmp_iter);
-
-  state = STATE_NORMAL;
-
-  gtk_text_buffer_get_iter_at_offset (source_buffer, &start_iter, 0);
-
-  next_iter = start_iter;
-  while (gtk_text_iter_forward_line (&next_iter))
+  bytes = fontify_text (format, text);
+  if (bytes)
     {
-      gboolean start = TRUE;
-      start_ptr = text = gtk_text_iter_get_text (&start_iter, &next_iter);
+      const char *markup;
+      gsize len;
 
-      do
-        {
-          parse_chars (start_ptr, &end_ptr, &state, &tag, start);
-
-          start = FALSE;
-          if (end_ptr)
-            {
-              tmp_iter = start_iter;
-              gtk_text_iter_forward_chars (&tmp_iter, end_ptr - start_ptr);
-            }
-          else
-            {
-              tmp_iter = next_iter;
-            }
-          if (tag)
-            gtk_text_buffer_apply_tag_by_name (source_buffer, tag, &start_iter, &tmp_iter);
-
-          start_iter = tmp_iter;
-          start_ptr = end_ptr;
-        }
-      while (end_ptr);
-
-      g_free (text);
-      start_iter = next_iter;
+      markup = g_bytes_get_data (bytes, &len);
+      gtk_text_buffer_delete (source_buffer, &start, &end);
+      gtk_text_buffer_insert_markup (source_buffer, &start, markup, len);
+      g_bytes_unref (bytes);
     }
+
+  g_free (text);
 }
 
 static GtkWidget *
-display_image (const char *resource)
+display_image (const char *format,
+               const char *resource)
 {
   GtkWidget *sw, *image;
 
@@ -614,7 +347,8 @@ display_image (const char *resource)
 }
 
 static GtkWidget *
-display_text (const char *resource)
+display_text (const char *format,
+              const char *resource)
 {
   GtkTextBuffer *buffer;
   GtkWidget *textview, *sw;
@@ -641,8 +375,10 @@ display_text (const char *resource)
 
   buffer = gtk_text_buffer_new (NULL);
   gtk_text_buffer_set_text (buffer, g_bytes_get_data (bytes, NULL), g_bytes_get_size (bytes));
-  if (g_str_has_suffix (resource, ".c"))
-    fontify (buffer);
+
+  if (format)
+    fontify (format, buffer);
+
   gtk_text_view_set_buffer (GTK_TEXT_VIEW (textview), buffer);
 
   g_bytes_unref (bytes);
@@ -657,7 +393,8 @@ display_text (const char *resource)
 }
 
 static GtkWidget *
-display_video (const char *resource)
+display_video (const char *format,
+               const char *resource)
 {
   GtkWidget *video;
 
@@ -684,18 +421,20 @@ display_nothing (const char *resource)
 
 static struct {
   const char *extension;
-  GtkWidget * (* display_func) (const char *resource);
+  const char *format;
+  GtkWidget * (* display_func) (const char *format,
+                                const char *resource);
 } display_funcs[] = {
-  { ".gif", display_image },
-  { ".jpg", display_image },
-  { ".png", display_image },
-  { ".c", display_text },
-  { ".css", display_text },
-  { ".glsl", display_text },
-  { ".h", display_text },
-  { ".txt", display_text },
-  { ".ui", display_text },
-  { ".webm", display_video }
+  { ".gif", NULL, display_image },
+  { ".jpg", NULL, display_image },
+  { ".png", NULL, display_image },
+  { ".c", "c", display_text },
+  { ".css", "css", display_text },
+  { ".glsl", NULL, display_text },
+  { ".h", "c", display_text },
+  { ".txt", NULL, display_text },
+  { ".ui", "xml", display_text },
+  { ".webm", NULL, display_video }
 };
 
 static void
@@ -725,7 +464,7 @@ add_data_tab (const char *demoname)
         }
 
       if (j < G_N_ELEMENTS(display_funcs))
-        widget = display_funcs[j].display_func (resource_name);
+        widget = display_funcs[j].display_func (display_funcs[j].format, resource_name);
       else
         widget = display_nothing (resource_name);
 
@@ -920,7 +659,7 @@ load_file (const char *demoname,
 
   g_strfreev (lines);
 
-  fontify (source_buffer);
+  fontify ("c", source_buffer);
 
   gtk_text_buffer_end_irreversible_action (source_buffer);
   gtk_text_view_set_buffer (GTK_TEXT_VIEW (source_view), source_buffer);
