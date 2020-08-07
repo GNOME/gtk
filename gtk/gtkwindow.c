@@ -223,6 +223,12 @@ typedef struct
   guint    hide_on_close             : 1;
   guint    in_emit_close_request     : 1;
 
+  guint    icon_realized             : 1;
+  guint    using_default_icon        : 1;
+  guint    using_themed_icon         : 1;
+
+  char  *icon_name;
+
   GtkGesture *click_gesture;
   GtkEventController *key_controller;
   GtkEventController *application_shortcut_controller;
@@ -298,14 +304,6 @@ typedef enum
   GTK_WINDOW_REGION_EDGE_SE,
   GTK_WINDOW_REGION_CONTENT,
 } GtkWindowRegion;
-
-typedef struct
-{
-  char      *icon_name;
-  guint      realized : 1;
-  guint      using_default_icon : 1;
-  guint      using_themed_icon : 1;
-} GtkWindowIconInfo;
 
 typedef struct {
   GdkGeometry    geometry; /* Last set of geometry hints we set */
@@ -459,8 +457,6 @@ static GListStore  *toplevel_list = NULL;
 static guint        window_signals[LAST_SIGNAL] = { 0 };
 static char        *default_icon_name = NULL;
 static gboolean     disable_startup_notification = FALSE;
-
-static GQuark       quark_gtk_window_icon_info = 0;
 
 static GtkBuildableIface *parent_buildable_iface;
 
@@ -682,8 +678,6 @@ gtk_window_class_init (GtkWindowClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
-
-  quark_gtk_window_icon_info = g_quark_from_static_string ("gtk-window-icon-info");
 
   if (toplevel_list == NULL)
     toplevel_list = g_list_store_new (GTK_TYPE_WIDGET);
@@ -2951,39 +2945,6 @@ gtk_window_get_deletable (GtkWindow *window)
   return priv->deletable;
 }
 
-static GtkWindowIconInfo*
-get_icon_info (GtkWindow *window)
-{
-  return g_object_get_qdata (G_OBJECT (window), quark_gtk_window_icon_info);
-}
-     
-static void
-free_icon_info (GtkWindowIconInfo *info)
-{
-  g_free (info->icon_name);
-  g_slice_free (GtkWindowIconInfo, info);
-}
-
-
-static GtkWindowIconInfo*
-ensure_icon_info (GtkWindow *window)
-{
-  GtkWindowIconInfo *info;
-
-  info = get_icon_info (window);
-  
-  if (info == NULL)
-    {
-      info = g_slice_new0 (GtkWindowIconInfo);
-      g_object_set_qdata_full (G_OBJECT (window),
-                              quark_gtk_window_icon_info,
-                              info,
-                              (GDestroyNotify)free_icon_info);
-    }
-
-  return info;
-}
-
 static int
 icon_size_compare (GdkTexture *a,
                    GdkTexture *b)
@@ -3076,40 +3037,37 @@ static void
 gtk_window_realize_icon (GtkWindow *window)
 {
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-  GtkWindowIconInfo *info;
   GList *icon_list = NULL;
 
   g_return_if_fail (priv->surface != NULL);
 
-  info = ensure_icon_info (window);
-
-  if (info->realized)
+  if (priv->icon_realized)
     return;
 
-  info->using_default_icon = FALSE;
-  info->using_themed_icon = FALSE;
+  priv->using_default_icon = FALSE;
+  priv->using_themed_icon = FALSE;
 
   /* Look up themed icon */
-  if (icon_list == NULL && info->icon_name)
+  if (icon_list == NULL && priv->icon_name)
     {
-      icon_list = icon_list_from_theme (window, info->icon_name);
+      icon_list = icon_list_from_theme (window, priv->icon_name);
       if (icon_list)
-        info->using_themed_icon = TRUE;
+        priv->using_themed_icon = TRUE;
     }
 
   /* Look up themed icon */
   if (icon_list == NULL && default_icon_name)
     {
       icon_list = icon_list_from_theme (window, default_icon_name);
-      info->using_default_icon = TRUE;
-      info->using_themed_icon = TRUE;
+      priv->using_default_icon = TRUE;
+      priv->using_themed_icon = TRUE;
     }
 
-  info->realized = TRUE;
+  priv->icon_realized = TRUE;
 
   gdk_toplevel_set_icon_list (GDK_TOPLEVEL (priv->surface), icon_list);
 
-  if (info->using_themed_icon)
+  if (priv->using_themed_icon)
     g_list_free_full (icon_list, g_object_unref);
 }
 
@@ -3141,30 +3099,24 @@ gtk_window_get_icon_for_size (GtkWindow *window,
 static void
 gtk_window_unrealize_icon (GtkWindow *window)
 {
-  GtkWindowIconInfo *info;
+  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
 
-  info = get_icon_info (window);
-
-  if (info == NULL)
-    return;
-  
   /* We don't clear the properties on the window, just figure the
    * window is going away.
    */
 
-  info->realized = FALSE;
-
+  priv->icon_realized = FALSE;
 }
 
-static void 
+static void
 update_themed_icon (GtkWindow *window)
 {
   g_object_notify_by_pspec (G_OBJECT (window), window_props[PROP_ICON_NAME]);
-  
+
   gtk_window_unrealize_icon (window);
-  
+
   if (_gtk_widget_get_realized (GTK_WIDGET (window)))
-    gtk_window_realize_icon (window);  
+    gtk_window_realize_icon (window);
 }
 
 /**
@@ -3176,25 +3128,23 @@ update_themed_icon (GtkWindow *window)
  * See the docs for #GtkIconTheme for more details.
  * On some platforms, the window icon is not used at all.
  *
- * Note that this has nothing to do with the WM_ICON_NAME 
+ * Note that this has nothing to do with the WM_ICON_NAME
  * property which is mentioned in the ICCCM.
  */
-void 
-gtk_window_set_icon_name (GtkWindow   *window,
-			  const char *name)
+void
+gtk_window_set_icon_name (GtkWindow  *window,
+                          const char *name)
 {
-  GtkWindowIconInfo *info;
+  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
   char *tmp;
 
   g_return_if_fail (GTK_IS_WINDOW (window));
 
-  info = ensure_icon_info (window);
-
-  if (g_strcmp0 (info->icon_name, name) == 0)
+  if (g_strcmp0 (priv->icon_name, name) == 0)
     return;
 
-  tmp = info->icon_name;
-  info->icon_name = g_strdup (name);
+  tmp = priv->icon_name;
+  priv->icon_name = g_strdup (name);
   g_free (tmp);
 
   update_themed_icon (window);
@@ -3215,13 +3165,11 @@ gtk_window_set_icon_name (GtkWindow   *window,
 const char *
 gtk_window_get_icon_name (GtkWindow *window)
 {
-  GtkWindowIconInfo *info;
+  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
 
   g_return_val_if_fail (GTK_IS_WINDOW (window), NULL);
 
-  info = ensure_icon_info (window);
-
-  return info->icon_name;
+  return priv->icon_name;
 }
 
 /**
@@ -3245,11 +3193,10 @@ gtk_window_set_default_icon_name (const char *name)
   tmp_list = toplevels;
   while (tmp_list != NULL)
     {
-      GtkWindowIconInfo *info;
       GtkWindow *w = tmp_list->data;
-      
-      info = get_icon_info (w);
-      if (info && info->using_default_icon && info->using_themed_icon)
+      GtkWindowPrivate *priv = gtk_window_get_instance_private (w);
+
+      if (priv->using_default_icon && priv->using_themed_icon)
         {
           gtk_window_unrealize_icon (w);
           if (_gtk_widget_get_realized (GTK_WIDGET (w)))
@@ -3682,6 +3629,8 @@ gtk_window_finalize (GObject *object)
   g_clear_object (&priv->constraint_solver);
   g_clear_object (&priv->renderer);
   g_clear_object (&priv->resize_cursor);
+
+  g_free (priv->icon_name);
 
   G_OBJECT_CLASS (gtk_window_parent_class)->finalize (object);
 }
