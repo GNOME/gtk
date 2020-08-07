@@ -255,11 +255,21 @@ activate_about (GSimpleAction *action,
     "Cosimo Cecchi",
     NULL
   };
+  const char *maintainers[] = {
+    "The GTK Team",
+    NULL
+  };
   char *version;
+  char *os_name;
+  char *os_version;
   GString *s;
 
   s = g_string_new ("");
 
+  os_name = g_get_os_info (G_OS_INFO_KEY_NAME);
+  os_version = g_get_os_info (G_OS_INFO_KEY_VERSION_ID);
+  if (os_name && os_version)
+    g_string_append_printf (s, "OS\t%s %s\n\n", os_name, os_version);
   g_string_append (s, "System libraries\n");
   g_string_append_printf (s, "\tGLib\t%d.%d.%d\n",
                           glib_major_version,
@@ -292,8 +302,13 @@ activate_about (GSimpleAction *action,
                          "system-information", s->str,
                          NULL);
 
+  gtk_about_dialog_add_credit_section (GTK_ABOUT_DIALOG (g_object_get_data (G_OBJECT (gtk_application_get_active_window (app)), "gtk-about-dialog")),
+                                       _("Maintained by"), maintainers);
+
   g_string_free (s, TRUE);
   g_free (version);
+  g_free (os_name);
+  g_free (os_version);
 }
 
 static void

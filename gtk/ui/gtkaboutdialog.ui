@@ -212,8 +212,10 @@
                             <child>
                               <object class="GtkTextView" id="system_view">
                                 <property name="editable">0</property>
-                                <property name="left-margin">8</property>
-                                <property name="right-margin">8</property>
+                                <property name="left-margin">5</property>
+                                <property name="right-margin">5</property>
+                                <property name="top-margin">5</property>
+                                <property name="bottom-margin">5</property>
                                 <property name="cursor-visible">0</property>
                                 <child>
                                   <object class="GtkGestureClick">
