@@ -4811,8 +4811,7 @@ gdk_wayland_toplevel_present (GdkToplevel       *toplevel,
                             &reconfigure_listener,
                             &done);
   while (is_realized_toplevel (surface) &&
-         !impl->initial_configure_received &&
-         !done)
+         (!impl->initial_configure_received || !done))
     wl_display_dispatch_queue (display_wayland->wl_display, impl->event_queue);
 
   if (needs_reconfigure &&
