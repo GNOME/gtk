@@ -29,14 +29,14 @@
           </object>
         </child>
         <child>
+          <object class="GtkSeparator"/>
+        </child>
+        <child>
           <object class="GtkScrolledWindow">
             <property name="vexpand">1</property>
             <child>
               <object class="GtkColumnView" id="attributes">
                 <property name="show-column-separators">1</property>
-                <style>
-                  <class name="frame"/>
-                </style>
                 <child>
                   <object class="GtkColumnViewColumn">
                     <property name="title" translatable="yes">Attribute</property>
