@@ -226,7 +226,7 @@ gtk_color_set_property (GObject      *object,
       break;
 
     case PROP_COLOR:
-      self->color = *(GdkRGBA *) g_value_dup_boxed (value);
+      self->color = *(GdkRGBA *) g_value_get_boxed (value);
       rgb_to_hsv (&self->color, &h, &s, &v);
       self->h = round (360 * h);
       self->s = round (100 * s);
