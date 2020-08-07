@@ -201,6 +201,13 @@ gtk_widget_paintable_unset_widget (GtkWidgetPaintable *self)
                                                    self);
 
   self->widget = NULL;
+
+  g_clear_object (&self->pending_image);
+  if (self->pending_update_cb)
+    {
+      g_source_remove (self->pending_update_cb);
+      self->pending_update_cb = 0;
+    }
 }
 
 static void
@@ -332,19 +339,10 @@ gtk_widget_paintable_set_widget (GtkWidgetPaintable *self,
   self->widget = widget;
 
   if (widget)
-    {
-      widget->priv->paintables = g_slist_prepend (widget->priv->paintables,
-                                                  self);
-    }
+    widget->priv->paintables = g_slist_prepend (widget->priv->paintables, self);
 
   g_object_unref (self->current_image);
   self->current_image = gtk_widget_paintable_snapshot_widget (self);
-  g_clear_object (&self->pending_image);
-  if (self->pending_update_cb)
-    {
-      g_source_remove (self->pending_update_cb);
-      self->pending_update_cb = 0;
-    }
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_WIDGET]);
   gdk_paintable_invalidate_size (GDK_PAINTABLE (self));
