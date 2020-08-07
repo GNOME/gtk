@@ -13156,19 +13156,15 @@ gtk_treeview_snapshot_border (GtkSnapshot           *snapshot,
                               const graphene_rect_t *rect)
 {
   GskRoundedRect rounded;
-  GskRenderNode *border_node;
 
   gsk_rounded_rect_init_from_rect (&rounded, rect, 0);
 
 #define BLACK { 0, 0, 0, 1 }
-  border_node = gsk_border_node_new (&rounded,
-                                     (float[4]) { 1, 1, 1, 1 },
-                                     (GdkRGBA[4]) { BLACK, BLACK, BLACK, BLACK });
+  gtk_snapshot_append_border (snapshot,
+                              &rounded,
+                              (float[4]) { 1, 1, 1, 1 },
+                              (GdkRGBA[4]) { BLACK, BLACK, BLACK, BLACK });
 #undef BLACK
-
-  gtk_snapshot_append_node (snapshot, border_node);
-
-  gsk_render_node_unref (border_node);
 }
 
 /* KEEP IN SYNC WITH GTK_TREE_VIEW_BIN_EXPOSE */
