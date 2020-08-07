@@ -2017,4 +2017,7 @@ read if you used those and something break with a version upgrade you're on your
 @define-color wm_button_active_color_a shade(#353535, 0.85);
 @define-color wm_button_active_color_b shade(#353535, 0.89);
 @define-color wm_button_active_color_c shade(#353535, 0.9);
+/* content view background such as thumbnails view in Photos or Boxes */
 @define-color content_view_bg #2d2d2d;
+/* Very contrasty background for text views (@theme_text_color foreground) */
+@define-color text_view_bg #1e1e1e;
