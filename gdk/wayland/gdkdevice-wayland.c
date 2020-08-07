@@ -1187,6 +1187,8 @@ data_device_enter (void                  *data,
   gdk_wayland_drop_set_source_actions (seat->drop, seat->pending_source_actions);
   gdk_wayland_drop_set_action (seat->drop, seat->pending_action);
 
+  gdk_content_formats_unref (formats);
+
   gdk_wayland_seat_discard_pending_offer (seat);
 
   gdk_surface_get_origin (gdk_drop_get_surface (seat->drop), &origin_x, &origin_y);
