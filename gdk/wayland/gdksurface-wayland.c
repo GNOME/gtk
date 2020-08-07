@@ -4814,6 +4814,9 @@ gdk_wayland_toplevel_present (GdkToplevel       *toplevel,
          (!impl->initial_configure_received || !done))
     wl_display_dispatch_queue (display_wayland->wl_display, impl->event_queue);
 
+  if (!done)
+    wl_callback_destroy (callback);
+
   if (needs_reconfigure &&
       last_configure_serial == impl->last_configure_serial &&
       !(surface->state & (GDK_SURFACE_STATE_MAXIMIZED |
