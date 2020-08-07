@@ -901,24 +901,6 @@ gdk_wayland_surface_finalize (GObject *object)
   G_OBJECT_CLASS (gdk_wayland_surface_parent_class)->finalize (object);
 }
 
-static void
-gdk_wayland_surface_resize (GdkSurface *surface,
-                            int         width,
-                            int         height,
-                            int         scale)
-{
-  GdkDisplay *display;
-  GdkEvent *event;
-
-  event = gdk_configure_event_new (surface, width, height);
-
-  gdk_wayland_surface_update_size (surface, width, height, scale);
-  _gdk_surface_update_size (surface);
-
-  display = gdk_surface_get_display (surface);
-  _gdk_wayland_display_deliver_event (display, event);
-}
-
 static gboolean
 is_realized_shell_surface (GdkSurface *surface)
 {
@@ -944,6 +926,26 @@ is_realized_popup (GdkSurface *surface)
 
   return (impl->display_server.xdg_popup ||
           impl->display_server.zxdg_popup_v6);
+}
+
+static void
+gdk_wayland_surface_resize (GdkSurface *surface,
+                            int         width,
+                            int         height,
+                            int         scale)
+{
+  gdk_wayland_surface_update_size (surface, width, height, scale);
+  _gdk_surface_update_size (surface);
+
+  if (is_realized_shell_surface (surface))
+    {
+      GdkDisplay *display;
+      GdkEvent *event;
+
+      event = gdk_configure_event_new (surface, width, height);
+      display = gdk_surface_get_display (surface);
+      _gdk_wayland_display_deliver_event (display, event);
+    }
 }
 
 static void gdk_wayland_surface_show (GdkSurface *surface,
