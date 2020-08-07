@@ -968,6 +968,7 @@ gtk_deps = [
   epoxy_dep,
   libm,
   graphene_dep,
+  roaring_dep,
 ]
 
 if harfbuzz_dep.found() and pangoft_dep.found()

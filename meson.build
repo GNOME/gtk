@@ -683,6 +683,25 @@ else
   endif
 endif
 
+roaring_dep = []
+
+internal_roaring = get_option('internal_roaring')
+if internal_roaring == 'yes'
+  message('Using bundled copy of libroaring as requested.')
+else
+  roaring_dep = dependency('roaring', required: false)
+  if roaring_dep.found()
+    cdata.set('HAVE_LIBROARING', 1)
+  else
+    if internal_roaring == 'no'
+      error('System copy of libroaring not found, but was explicitly requested.')
+    else
+      message('Using bundled copy of libroaring automatically.')
+      roaring_dep = []
+    endif
+  endif
+endif
+
 cloudproviders_enabled = get_option('cloudproviders')
 if cloudproviders_enabled
   cloudproviders_dep = dependency('cloudproviders',

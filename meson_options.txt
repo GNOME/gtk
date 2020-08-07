@@ -27,6 +27,8 @@ option('profiler', type: 'boolean', value: false,
   description : 'Enable profiler support')
 option('tracker3', type: 'boolean', value: false,
   description : 'Enable Tracker3 filechooser search')
+option('internal_roaring', type : 'combo', choices : ['yes', 'no', 'auto'], value : 'auto',
+  description : 'use bundled copy of libroaring?')
 
 # Print backends
 option('print-backends', type : 'string', value : 'cups,file',

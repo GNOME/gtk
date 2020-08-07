@@ -21,7 +21,11 @@
 
 #include "gtkbitset.h"
 
+#ifdef HAVE_LIBROARING
+#include <roaring/roaring.h>
+#else
 #include "roaring.c"
+#endif
 
 /**
  * SECTION:gtkbitset
