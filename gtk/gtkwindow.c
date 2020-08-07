@@ -2686,8 +2686,6 @@ gtk_window_get_geometry_info (GtkWindow *window,
       info->default_height = -1;
       info->resize_width = -1;
       info->resize_height = -1;
-      info->last.configure_request.x = 0;
-      info->last.configure_request.y = 0;
       info->last.configure_request.width = -1;
       info->last.configure_request.height = -1;
       priv->geometry_info = info;
@@ -4455,8 +4453,6 @@ gtk_window_unrealize (GtkWidget *widget)
   /* On unrealize, we reset the size of the window such
    * that we will re-apply the default sizing stuff
    * next time we show the window.
-   *
-   * Default positioning is reset on unmap, instead of unrealize.
    */
   priv->need_default_size = TRUE;
   info = gtk_window_get_geometry_info (window, FALSE);
@@ -4464,8 +4460,6 @@ gtk_window_unrealize (GtkWidget *widget)
     {
       info->resize_width = -1;
       info->resize_height = -1;
-      info->last.configure_request.x = 0;
-      info->last.configure_request.y = 0;
       info->last.configure_request.width = -1;
       info->last.configure_request.height = -1;
       /* be sure we reset geom hints on re-realize */
@@ -5316,8 +5310,6 @@ gtk_window_compute_configure_request (GtkWindow    *window,
   GdkGeometry new_geometry;
   guint new_flags;
   int w, h;
-  GtkWindowGeometryInfo *info;
-  int x, y;
 
   gtk_window_compute_hints (window, &new_geometry, &new_flags);
   gtk_window_compute_configure_request_size (window,
@@ -5328,22 +5320,6 @@ gtk_window_compute_configure_request (GtkWindow    *window,
                               w, h,
                               &w, &h);
 
-  info = gtk_window_get_geometry_info (window, FALSE);
-
-  /* by default, don't change position requested */
-  if (info)
-    {
-      x = info->last.configure_request.x;
-      y = info->last.configure_request.y;
-    }
-  else
-    {
-      x = 0;
-      y = 0;
-    }
-
-  request->x = x;
-  request->y = y;
   request->width = w;
   request->height = h;
 
@@ -5391,7 +5367,6 @@ gtk_window_move_resize (GtkWindow *window)
   guint new_flags;
   GdkRectangle new_request;
   gboolean configure_request_size_changed;
-  gboolean configure_request_pos_changed;
   gboolean hints_changed; /* do we need to send these again */
   GtkWindowLastGeometryInfo saved_last_info;
   int current_width, current_height;
@@ -5401,7 +5376,6 @@ gtk_window_move_resize (GtkWindow *window)
   info = gtk_window_get_geometry_info (window, TRUE);
 
   configure_request_size_changed = FALSE;
-  configure_request_pos_changed = FALSE;
   hints_changed = FALSE;
 
   gtk_window_compute_configure_request (window, &new_request,
@@ -5419,10 +5393,6 @@ gtk_window_move_resize (GtkWindow *window)
    * If we change info->last without sending the request, we may
    * miss a request.
    */
-  if (info->last.configure_request.x != new_request.x ||
-      info->last.configure_request.y != new_request.y)
-    configure_request_pos_changed = TRUE;
-
   if ((info->last.configure_request.width != new_request.width ||
        info->last.configure_request.height != new_request.height))
     configure_request_size_changed = TRUE;
@@ -5431,45 +5401,6 @@ gtk_window_move_resize (GtkWindow *window)
                                  &new_geometry, new_flags))
     hints_changed = TRUE;
 
-#if 0
-    {
-      GtkAllocation alloc;
-
-      gtk_widget_get_allocation (widget, &alloc);
-
-      g_message ("--- %s ---\n"
-		 "last  : %d,%d\t%d x %d\n"
-		 "this  : %d,%d\t%d x %d\n"
-		 "alloc : %d,%d\t%d x %d\n"
-		 "resize:      \t%d x %d\n" 
-		 "size_changed: %d pos_changed: %d hints_changed: %d\n"
-		 "configure_notify_received: %d\n"
-		 "configure_request_count: %d\n"
-		 "position_constraints_changed: %d",
-		 priv->title ? priv->title : "(no title)",
-		 info->last.configure_request.x,
-		 info->last.configure_request.y,
-		 info->last.configure_request.width,
-		 info->last.configure_request.height,
-		 new_request.x,
-		 new_request.y,
-		 new_request.width,
-		 new_request.height,
-		 alloc.x,
-		 alloc.y,
-		 alloc.width,
-		 alloc.height,
-		 info->resize_width,
-		 info->resize_height,
-		 configure_request_size_changed,
-		 configure_request_pos_changed,
-		 hints_changed,
-		 priv->configure_notify_received,
-		 priv->configure_request_count,
-		 info->position_constraints_changed);
-    }
-#endif
-  
   saved_last_info = info->last;
   info->last.geometry = new_geometry;
   info->last.flags = new_flags;
@@ -5546,8 +5477,7 @@ gtk_window_move_resize (GtkWindow *window)
        * the new size had been set.
        */
 
-      if (configure_request_size_changed ||
-          configure_request_pos_changed)
+      if (configure_request_size_changed)
         {
           /* Don't change the recorded last info after all, because we
            * haven't actually updated to the new info yet - we decided
@@ -5560,7 +5490,7 @@ gtk_window_move_resize (GtkWindow *window)
 
       return; /* Bail out, we didn't really process the move/resize */
     }
-  else if ((configure_request_size_changed || hints_changed || configure_request_pos_changed) &&
+  else if ((configure_request_size_changed || hints_changed) &&
            (current_width != new_request.width || current_height != new_request.height))
     {
       /* We are in one of the following situations:
@@ -5594,10 +5524,6 @@ gtk_window_move_resize (GtkWindow *window)
        * we handle those ourselves upon ->configure_notify_received==TRUE.
        */
 
-      /* Now send the configure request */
-      if (configure_request_pos_changed)
-        g_warning ("configure request position changed. This should not happen. Ignoring the position");
-
       gdk_toplevel_present (GDK_TOPLEVEL (priv->surface), priv->layout);
     }
   else
@@ -5610,11 +5536,6 @@ gtk_window_move_resize (GtkWindow *window)
 
       allocation.x = shadow.left;
       allocation.y = shadow.top;
-
-      /* Handle any position changes.
-       */
-      if (configure_request_pos_changed)
-        g_warning ("configure request position changed. This should not happen. Ignoring the position");
 
       /* Our configure request didn't change size, but maybe some of
        * our child widgets have. Run a size allocate with our current
