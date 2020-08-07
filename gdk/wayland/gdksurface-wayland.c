@@ -934,18 +934,13 @@ gdk_wayland_surface_resize (GdkSurface *surface,
                             int         height,
                             int         scale)
 {
+  GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
+
   gdk_wayland_surface_update_size (surface, width, height, scale);
   _gdk_surface_update_size (surface);
 
-  if (is_realized_shell_surface (surface))
-    {
-      GdkDisplay *display;
-      GdkEvent *event;
-
-      event = gdk_configure_event_new (surface, width, height);
-      display = gdk_surface_get_display (surface);
-      _gdk_wayland_display_deliver_event (display, event);
-    }
+  if (impl->mapped)
+    g_signal_emit_by_name (surface, "size-changed", width, height);
 }
 
 static void gdk_wayland_surface_show (GdkSurface *surface,
