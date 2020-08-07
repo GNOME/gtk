@@ -1118,6 +1118,8 @@ do_listview_colors (GtkWidget *do_widget)
       gtk_header_bar_pack_end (GTK_HEADER_BAR (header), box);
 
       g_object_bind_property (dropdown, "selected-item", gridview, "factory", G_BINDING_SYNC_CREATE);
+
+      g_object_unref (selection);
     }
 
   if (!gtk_widget_get_visible (window))
