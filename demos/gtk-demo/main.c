@@ -319,13 +319,13 @@ fontify (const char    *format,
   bytes = fontify_text (format, text);
   if (bytes)
     {
-      const char *markup;
+      char *markup;
       gsize len;
 
-      markup = g_bytes_get_data (bytes, &len);
+      markup = g_bytes_unref_to_data (bytes, &len);
       gtk_text_buffer_delete (source_buffer, &start, &end);
       gtk_text_buffer_insert_markup (source_buffer, &start, markup, len);
-      g_bytes_unref (bytes);
+      g_free (markup);
     }
 
   g_free (text);
