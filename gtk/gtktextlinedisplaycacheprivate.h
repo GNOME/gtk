@@ -51,7 +51,8 @@ void                     gtk_text_line_display_cache_invalidate_range   (GtkText
 void                     gtk_text_line_display_cache_invalidate_y_range (GtkTextLineDisplayCache *cache,
                                                                          GtkTextLayout           *layout,
                                                                          int                      y,
-                                                                         int                      height,
+                                                                         int                      old_height,
+                                                                         int                      new_height,
                                                                          gboolean                 cursors_only);
 void                     gtk_text_line_display_cache_set_mru_size       (GtkTextLineDisplayCache *cache,
                                                                          guint                    mru_size);

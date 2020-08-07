@@ -656,7 +656,7 @@ gtk_text_layout_changed (GtkTextLayout *layout,
                          int            new_height)
 {
   GtkTextLayoutPrivate *priv = GTK_TEXT_LAYOUT_GET_PRIVATE (layout);
-  gtk_text_line_display_cache_invalidate_y_range (priv->cache, layout, y, old_height, FALSE);
+  gtk_text_line_display_cache_invalidate_y_range (priv->cache, layout, y, old_height, new_height, FALSE);
   gtk_text_layout_emit_changed (layout, y, old_height, new_height);
 }
 
@@ -667,7 +667,7 @@ gtk_text_layout_cursors_changed (GtkTextLayout *layout,
                                  int            new_height)
 {
   GtkTextLayoutPrivate *priv = GTK_TEXT_LAYOUT_GET_PRIVATE (layout);
-  gtk_text_line_display_cache_invalidate_y_range (priv->cache, layout, y, old_height, TRUE);
+  gtk_text_line_display_cache_invalidate_y_range (priv->cache, layout, y, old_height, new_height, TRUE);
   gtk_text_layout_emit_changed (layout, y, old_height, new_height);
 }
 
