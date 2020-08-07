@@ -19,7 +19,7 @@ msgstr ""
 "Project-Id-Version: gtk+ 2.20.1.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-07-14 11:48+0000\n"
-"PO-Revision-Date: 2020-07-15 21:11+0300\n"
+"PO-Revision-Date: 2020-08-07 23:39+0300\n"
 "Last-Translator: Efstathios Iosifidis <eiosifidis@gnome.org>\n"
 "Language-Team: www.gnome.gr\n"
 "Language: el\n"
@@ -621,12 +621,12 @@ msgstr "εγγραφή κλειστής ροής"
 
 #: gdk/win32/gdkhdataoutputstream-win32.c:86
 msgid "g_try_realloc () failed"
-msgstr ""
+msgstr "Το g_try_realloc () απέτυχε"
 
 #: gdk/win32/gdkhdataoutputstream-win32.c:94
 #: gdk/win32/gdkhdataoutputstream-win32.c:232
 msgid "GlobalReAlloc() failed: "
-msgstr ""
+msgstr "Το GlobalReAlloc() απέτυχε: "
 
 #: gdk/win32/gdkhdataoutputstream-win32.c:106
 msgid "Ran out of buffer space (buffer size is fixed)"
@@ -643,11 +643,11 @@ msgstr ""
 
 #: gdk/win32/gdkhdataoutputstream-win32.c:251
 msgid "GlobalLock() failed: "
-msgstr ""
+msgstr "Το GlobalLock() απέτυχε: "
 
 #: gdk/win32/gdkhdataoutputstream-win32.c:365
 msgid "GlobalAlloc() failed: "
-msgstr ""
+msgstr "Το GlobalAlloc() απέτυχε: "
 
 #: gdk/x11/gdkapplaunchcontext-x11.c:292
 #, c-format
@@ -1264,7 +1264,7 @@ msgstr "Εναλλάσσει τον διακόπτη"
 #: gtk/css/gtkcssdataurl.c:70
 #, c-format
 msgid "Not a data: URL"
-msgstr ""
+msgstr "Δεν είναι δεδομένα: URL"
 
 #: gtk/css/gtkcssdataurl.c:83
 #, c-format
@@ -1350,10 +1350,9 @@ msgid "Apache License, Version 2.0"
 msgstr ""
 
 #: gtk/gtkaboutdialog.c:137
-#, fuzzy
 #| msgid "Artistic License 2.0"
 msgid "Mozilla Public License 2.0"
-msgstr "Καλλιτεχνική άδεια 2.0"
+msgstr "Δημόσια άδεια Mozilla 2.0"
 
 #: gtk/gtkaboutdialog.c:729
 msgid "C_redits"
@@ -2680,6 +2679,7 @@ msgstr "Αδυναμία τερματισμού διεργασίας με PID %d
 #: gtk/gtknomediafile.c:48
 msgid "GTK could not find a media module. Check your installation."
 msgstr ""
+"Το GTK δεν μπόρεσε να βρει το άρθρωμα μέσων. Ελέγξτε την εγκατάστασή σας."
 
 #: gtk/gtknotebook.c:4227 gtk/gtknotebook.c:6444
 #, c-format
@@ -3602,9 +3602,8 @@ msgstr "Σύστημα υποστήριξης GDK"
 
 #: gtk/inspector/general.ui:93
 #, fuzzy
-#| msgid "GL Rendering"
 msgid "GSK Renderer"
-msgstr "Απεικόνιση GL"
+msgstr "Απεικόνιση GSK"
 
 #: gtk/inspector/general.ui:123
 msgid "Pango Fontmap"
@@ -3705,7 +3704,7 @@ msgstr "Αφετηρία"
 
 #: gtk/inspector/misc-info.ui:297
 msgid "Surface"
-msgstr ""
+msgstr "Επιφάνεια"
 
 #: gtk/inspector/misc-info.ui:316 gtk/inspector/misc-info.ui:355
 #: gtk/inspector/misc-info.ui:394 gtk/inspector/prop-editor.c:1043
@@ -3970,7 +3969,7 @@ msgstr "Ιεραρχία"
 
 #: gtk/inspector/type-info.ui:35
 msgid "Implements"
-msgstr ""
+msgstr "Εφαρμογές"
 
 #: gtk/inspector/visual.c:613 gtk/inspector/visual.c:632
 msgid "Theme is hardcoded by GTK_THEME"
@@ -4062,7 +4061,7 @@ msgstr "Εμφάνιση αυξομειώσεων των γραφικών στο
 
 #: gtk/inspector/visual.ui:603
 msgid "Show Focus"
-msgstr ""
+msgstr "Εμφάνιση εστίασης"
 
 #: gtk/inspector/visual.ui:643
 msgid "Simulate Touchscreen"
@@ -4104,7 +4103,7 @@ msgstr "Διπλής όψης"
 
 #: gtk/inspector/window.ui:255
 msgid "Refresh action state"
-msgstr ""
+msgstr "Ανανέωση κατάστασης δράσης"
 
 #: gtk/inspector/window.ui:340
 msgid "Previous object"
@@ -4924,7 +4923,7 @@ msgstr ""
 #: gtk/open-type-layout.h:152
 msgctxt "OpenType layout"
 msgid "Slashed Zero"
-msgstr ""
+msgstr "Κομμένο μηδέν"
 
 #: gtk/paper_names_offsets.c:4
 msgctxt "paper size"
@@ -5854,12 +5853,12 @@ msgstr "Μπενγκάλι"
 #: gtk/script-names.c:19
 msgctxt "Script"
 msgid "Bopomofo"
-msgstr ""
+msgstr "Μποπόμοφο"
 
 #: gtk/script-names.c:20
 msgctxt "Script"
 msgid "Cherokee"
-msgstr ""
+msgstr "Τσερόκι"
 
 #: gtk/script-names.c:21
 msgctxt "Script"
@@ -5894,7 +5893,7 @@ msgstr "Γεωργιανά"
 #: gtk/script-names.c:27
 msgctxt "Script"
 msgid "Gothic"
-msgstr ""
+msgstr "Γοτθικά"
 
 #: gtk/script-names.c:28
 msgctxt "Script"
@@ -5994,7 +5993,7 @@ msgstr ""
 #: gtk/script-names.c:47
 msgctxt "Script"
 msgid "Sinhala"
-msgstr ""
+msgstr "Σινάλα"
 
 #: gtk/script-names.c:48
 msgctxt "Script"
@@ -6014,7 +6013,7 @@ msgstr "Τελούγκου"
 #: gtk/script-names.c:51
 msgctxt "Script"
 msgid "Thaana"
-msgstr ""
+msgstr "Θάνα"
 
 #: gtk/script-names.c:52
 msgctxt "Script"
@@ -6049,12 +6048,12 @@ msgstr ""
 #: gtk/script-names.c:58
 msgctxt "Script"
 msgid "Buhid"
-msgstr ""
+msgstr "Μπουχίντ"
 
 #: gtk/script-names.c:59
 msgctxt "Script"
 msgid "Tagbanwa"
-msgstr ""
+msgstr "Ταγκμπάνουα"
 
 #: gtk/script-names.c:60
 msgctxt "Script"
@@ -6064,22 +6063,22 @@ msgstr "Μπράιγ"
 #: gtk/script-names.c:61
 msgctxt "Script"
 msgid "Cypriot"
-msgstr ""
+msgstr "Κυπριακά"
 
 #: gtk/script-names.c:62
 msgctxt "Script"
 msgid "Limbu"
-msgstr ""
+msgstr "Λίμπου"
 
 #: gtk/script-names.c:63
 msgctxt "Script"
 msgid "Osmanya"
-msgstr ""
+msgstr "Οσμάνια"
 
 #: gtk/script-names.c:64
 msgctxt "Script"
 msgid "Shavian"
-msgstr ""
+msgstr "Σάβιαν"
 
 #: gtk/script-names.c:65
 msgctxt "Script"
@@ -6089,12 +6088,12 @@ msgstr "Γραμμική Β"
 #: gtk/script-names.c:66
 msgctxt "Script"
 msgid "Tai Le"
-msgstr ""
+msgstr "Τάι Λε"
 
 #: gtk/script-names.c:67
 msgctxt "Script"
 msgid "Ugaritic"
-msgstr ""
+msgstr "Ουγκαριτικά"
 
 #: gtk/script-names.c:68
 msgctxt "Script"
@@ -6269,12 +6268,12 @@ msgstr ""
 #: gtk/script-names.c:102
 msgctxt "Script"
 msgid "Old South Arabian"
-msgstr ""
+msgstr "Παλιά Νότια Αραβικά"
 
 #: gtk/script-names.c:103
 msgctxt "Script"
 msgid "Old Turkic"
-msgstr ""
+msgstr "Παλιά Τουρκικά"
 
 #: gtk/script-names.c:104
 msgctxt "Script"
@@ -6284,27 +6283,27 @@ msgstr ""
 #: gtk/script-names.c:105
 msgctxt "Script"
 msgid "Tai Tham"
-msgstr ""
+msgstr "Τάι Ταμ"
 
 #: gtk/script-names.c:106
 msgctxt "Script"
 msgid "Tai Viet"
-msgstr ""
+msgstr "Τάι Βιετ"
 
 #: gtk/script-names.c:107
 msgctxt "Script"
 msgid "Batak"
-msgstr ""
+msgstr "Μπατάκ"
 
 #: gtk/script-names.c:108
 msgctxt "Script"
 msgid "Brahmi"
-msgstr ""
+msgstr "Μπράχμι"
 
 #: gtk/script-names.c:109
 msgctxt "Script"
 msgid "Mandaic"
-msgstr ""
+msgstr "Μανταϊκά"
 
 #: gtk/script-names.c:110
 msgctxt "Script"
@@ -6324,7 +6323,7 @@ msgstr ""
 #: gtk/script-names.c:113
 msgctxt "Script"
 msgid "Miao"
-msgstr ""
+msgstr "Μιάο"
 
 #: gtk/script-names.c:114
 msgctxt "Script"
@@ -6339,12 +6338,12 @@ msgstr ""
 #: gtk/script-names.c:116
 msgctxt "Script"
 msgid "Takri"
-msgstr ""
+msgstr "Τάκρι"
 
 #: gtk/script-names.c:117
 msgctxt "Script"
 msgid "Bassa"
-msgstr ""
+msgstr "Μπάσα"
 
 #: gtk/script-names.c:118
 msgctxt "Script"
@@ -6364,7 +6363,7 @@ msgstr ""
 #: gtk/script-names.c:121
 msgctxt "Script"
 msgid "Grantha"
-msgstr ""
+msgstr "Γκράνθα"
 
 #: gtk/script-names.c:122
 msgctxt "Script"
@@ -6384,7 +6383,7 @@ msgstr "Γραμμική Α"
 #: gtk/script-names.c:125
 msgctxt "Script"
 msgid "Mahajani"
-msgstr ""
+msgstr "Μαχατζάνι"
 
 #: gtk/script-names.c:126
 msgctxt "Script"
@@ -6439,27 +6438,27 @@ msgstr ""
 #: gtk/script-names.c:136
 msgctxt "Script"
 msgid "Psalter Pahlavi"
-msgstr ""
+msgstr "Ψαλτέρ Παχλάβι"
 
 #: gtk/script-names.c:137
 msgctxt "Script"
 msgid "Siddham"
-msgstr ""
+msgstr "Σιντάμ"
 
 #: gtk/script-names.c:138
 msgctxt "Script"
 msgid "Tirhuta"
-msgstr ""
+msgstr "Τιρουτά"
 
 #: gtk/script-names.c:139
 msgctxt "Script"
 msgid "Warang Citi"
-msgstr ""
+msgstr "Γουαράνγκ Σίτι"
 
 #: gtk/script-names.c:140
 msgctxt "Script"
 msgid "Ahom"
-msgstr ""
+msgstr "Αχομ"
 
 #: gtk/script-names.c:141
 msgctxt "Script"
@@ -6469,7 +6468,7 @@ msgstr ""
 #: gtk/script-names.c:142
 msgctxt "Script"
 msgid "Hatran"
-msgstr ""
+msgstr "Χατράν"
 
 #: gtk/script-names.c:143
 msgctxt "Script"
@@ -6479,7 +6478,7 @@ msgstr "Μουλτάνι"
 #: gtk/script-names.c:144
 msgctxt "Script"
 msgid "Old Hungarian"
-msgstr ""
+msgstr "Παλιά Ουγγρικά"
 
 #: gtk/script-names.c:145
 msgctxt "Script"
@@ -6494,17 +6493,17 @@ msgstr ""
 #: gtk/script-names.c:147
 msgctxt "Script"
 msgid "Bhaiksuki"
-msgstr ""
+msgstr "Μπαϊκσούκι"
 
 #: gtk/script-names.c:148
 msgctxt "Script"
 msgid "Marchen"
-msgstr ""
+msgstr "Μάρκεεν"
 
 #: gtk/script-names.c:149
 msgctxt "Script"
 msgid "Newa"
-msgstr ""
+msgstr "Νιούα"
 
 #: gtk/script-names.c:150
 msgctxt "Script"
@@ -6514,22 +6513,22 @@ msgstr ""
 #: gtk/script-names.c:151
 msgctxt "Script"
 msgid "Tangut"
-msgstr ""
+msgstr "Τάνγκουτ"
 
 #: gtk/script-names.c:152
 msgctxt "Script"
 msgid "Masaram Gondi"
-msgstr ""
+msgstr "Μασάραμ Γκόντι"
 
 #: gtk/script-names.c:153
 msgctxt "Script"
 msgid "Nushu"
-msgstr ""
+msgstr "Νούσου"
 
 #: gtk/script-names.c:154
 msgctxt "Script"
 msgid "Soyombo"
-msgstr ""
+msgstr "Σόγιαμπο"
 
 #: gtk/script-names.c:155
 msgctxt "Script"
