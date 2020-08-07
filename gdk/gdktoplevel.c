@@ -99,6 +99,7 @@ gdk_toplevel_notify_compute_size (GdkToplevel     *toplevel,
                                   GdkToplevelSize *size)
 {
   g_signal_emit (toplevel, signals[COMPUTE_SIZE], 0, size);
+  gdk_toplevel_size_validate (size);
 }
 
 static void

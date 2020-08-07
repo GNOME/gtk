@@ -117,3 +117,19 @@ gdk_toplevel_size_set_min_size (GdkToplevelSize *size,
   size->min_width = min_width;
   size->min_height = min_height;
 }
+
+void
+gdk_toplevel_size_validate (GdkToplevelSize *size)
+{
+  if (size->min_width > size->bounds_width ||
+      size->min_height > size->bounds_height)
+    g_warning ("GdkToplevelSize: min_size exceeds bounds");
+
+  if (size->width > size->bounds_width ||
+      size->height > size->bounds_height)
+    g_warning ("GdkToplevelSize: size exceeds bounds");
+
+  if (size->min_width > size->width ||
+      size->min_height > size->height)
+    g_warning ("GdkToplevelSize: min_size exceeds size");
+}
