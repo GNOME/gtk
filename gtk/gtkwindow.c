@@ -4348,8 +4348,8 @@ toplevel_compute_size (GdkToplevel     *toplevel,
 
   get_shadow_width (window, &shadow);
 
-  min_width = default_width + shadow.left + shadow.right;
-  min_height = default_height + shadow.top + shadow.bottom;
+  min_width = MIN (default_width + shadow.left + shadow.right, width);
+  min_height = MIN (default_height + shadow.top + shadow.bottom, height);
   gdk_toplevel_size_set_min_size (size, min_width, min_height);
 }
 
