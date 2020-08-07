@@ -27,7 +27,6 @@
 #include "gtkradiobutton.h"
 
 #include "gtkwidgetprivate.h"
-#include "gtkcheckbuttonprivate.h"
 #include "gtklabel.h"
 #include "gtkmarshalers.h"
 #include "gtkprivate.h"
@@ -40,7 +39,7 @@
  * @Title: GtkRadioButton
  * @See_also: #GtkComboBox
  *
- * A single radio button performs the same basic function as a #GtkCheckButton,
+ * A single radio button performs the same basic function as a #GtkToggleButton,
  * as its position in the object hierarchy reflects. It is only when multiple
  * radio buttons are grouped together that they become a different user
  * interface component in their own right.
@@ -134,12 +133,12 @@ typedef struct _GtkRadioButtonClass         GtkRadioButtonClass;
 
 struct _GtkRadioButton
 {
-  GtkCheckButton parent_instance;
+  GtkToggleButton parent_instance;
 };
 
 struct _GtkRadioButtonClass
 {
-  GtkCheckButtonClass parent_class;
+  GtkToggleButtonClass parent_class;
 
   void (*group_changed) (GtkRadioButton *radio_button);
 };
@@ -164,19 +163,53 @@ static GParamSpec *radio_button_props[LAST_PROP] = { NULL, };
 static guint signals[N_SIGNALS] = { 0 };
 
 static void     gtk_radio_button_dispose        (GObject             *object);
-static gboolean gtk_radio_button_focus          (GtkWidget           *widget,
-						 GtkDirectionType     direction);
 static void     gtk_radio_button_clicked        (GtkButton           *button);
-static void     gtk_radio_button_set_property   (GObject             *object,
-						 guint                prop_id,
-						 const GValue        *value,
-						 GParamSpec          *pspec);
-static void     gtk_radio_button_get_property   (GObject             *object,
-						 guint                prop_id,
-						 GValue              *value,
-						 GParamSpec          *pspec);
 
-G_DEFINE_TYPE_WITH_PRIVATE (GtkRadioButton, gtk_radio_button, GTK_TYPE_CHECK_BUTTON)
+G_DEFINE_TYPE_WITH_PRIVATE (GtkRadioButton, gtk_radio_button, GTK_TYPE_TOGGLE_BUTTON)
+
+static void
+gtk_radio_button_set_property (GObject      *object,
+                               guint         prop_id,
+                               const GValue *value,
+                               GParamSpec   *pspec)
+{
+  GtkRadioButton *radio_button;
+
+  radio_button = GTK_RADIO_BUTTON (object);
+
+  switch (prop_id)
+    {
+      GSList *slist;
+      GtkRadioButton *button;
+
+    case PROP_GROUP:
+        button = g_value_get_object (value);
+
+      if (button)
+        slist = gtk_radio_button_get_group (button);
+      else
+        slist = NULL;
+      gtk_radio_button_set_group (radio_button, slist);
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
+}
+
+static void
+gtk_radio_button_get_property (GObject    *object,
+                               guint       prop_id,
+                               GValue     *value,
+                               GParamSpec *pspec)
+{
+  switch (prop_id)
+    {
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
+}
 
 static void
 gtk_radio_button_class_init (GtkRadioButtonClass *class)
@@ -207,8 +240,6 @@ gtk_radio_button_class_init (GtkRadioButtonClass *class)
 
   g_object_class_install_properties (gobject_class, LAST_PROP, radio_button_props);
 
-  widget_class->focus = gtk_radio_button_focus;
-
   button_class->clicked = gtk_radio_button_clicked;
 
   class->group_changed = NULL;
@@ -232,7 +263,6 @@ gtk_radio_button_class_init (GtkRadioButtonClass *class)
                                          NULL,
                                          G_TYPE_NONE, 0);
 
-  gtk_widget_class_set_css_name (widget_class, I_("radiobutton"));
   gtk_widget_class_set_accessible_role (widget_class, GTK_ACCESSIBLE_ROLE_RADIO);
 }
 
@@ -241,62 +271,12 @@ gtk_radio_button_init (GtkRadioButton *self)
 {
   GtkRadioButtonPrivate *priv = gtk_radio_button_get_instance_private (self);
   GtkWidget *widget = GTK_WIDGET (self);
-  GtkCssNode *css_node;
 
   gtk_widget_set_receives_default (widget, FALSE);
 
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (self), TRUE);
 
   priv->group = g_slist_prepend (NULL, self);
-
-  css_node = gtk_widget_get_css_node (widget);
-  gtk_css_node_set_name (css_node, g_quark_from_static_string ("radiobutton"));
-  css_node = gtk_check_button_get_indicator_node (GTK_CHECK_BUTTON (self));
-  gtk_css_node_set_name (css_node, g_quark_from_static_string ("radio"));
-}
-
-static void
-gtk_radio_button_set_property (GObject      *object,
-			       guint         prop_id,
-			       const GValue *value,
-			       GParamSpec   *pspec)
-{
-  GtkRadioButton *radio_button;
-
-  radio_button = GTK_RADIO_BUTTON (object);
-
-  switch (prop_id)
-    {
-      GSList *slist;
-      GtkRadioButton *button;
-
-    case PROP_GROUP:
-        button = g_value_get_object (value);
-
-      if (button)
-	slist = gtk_radio_button_get_group (button);
-      else
-	slist = NULL;
-      gtk_radio_button_set_group (radio_button, slist);
-      break;
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-      break;
-    }
-}
-
-static void
-gtk_radio_button_get_property (GObject    *object,
-			       guint       prop_id,
-			       GValue     *value,
-			       GParamSpec *pspec)
-{
-  switch (prop_id)
-    {
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-      break;
-    }
 }
 
 /**
@@ -631,96 +611,6 @@ gtk_radio_button_dispose (GObject *object)
     g_signal_emit (radio_button, signals[GROUP_CHANGED], 0);
 
   G_OBJECT_CLASS (gtk_radio_button_parent_class)->dispose (object);
-}
-
-static gboolean
-gtk_radio_button_focus (GtkWidget         *widget,
-			GtkDirectionType   direction)
-{
-  GtkRadioButton *radio_button = GTK_RADIO_BUTTON (widget);
-  GtkRadioButtonPrivate *priv = gtk_radio_button_get_instance_private (radio_button);
-  GSList *tmp_slist;
-  GtkRadioButton *selected_button = NULL;
-
-  /* Radio buttons with draw_indicator unset focus "normally", since
-   * they look like buttons to the user.
-   */
-  if (!gtk_check_button_get_draw_indicator (GTK_CHECK_BUTTON (widget)))
-    return GTK_WIDGET_CLASS (gtk_radio_button_parent_class)->focus (widget, direction);
-
-  /* Find the currently active button in the group */
-  tmp_slist = priv->group;
-  while (tmp_slist)
-    {
-      if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (tmp_slist->data)) &&
-          gtk_widget_get_visible (tmp_slist->data))
-        selected_button = tmp_slist->data;
-      tmp_slist = tmp_slist->next;
-    }
-
-  if (gtk_widget_is_focus (widget))
-    {
-      GPtrArray *child_array;
-      GtkWidget *new_focus = NULL;
-      GSList *l;
-      guint index;
-      gboolean found;
-      guint i;
-
-      if (direction == GTK_DIR_TAB_FORWARD ||
-          direction == GTK_DIR_TAB_BACKWARD)
-        return FALSE;
-
-      child_array = g_ptr_array_sized_new (g_slist_length (priv->group));
-      for (l = priv->group; l; l = l->next)
-        g_ptr_array_add (child_array, l->data);
-
-      gtk_widget_focus_sort (widget, direction, child_array);
-      found = g_ptr_array_find (child_array, widget, &index);
-
-      if (found)
-        {
-          /* Start at the *next* widget in the list */
-          if (index < child_array->len - 1)
-            index ++;
-        }
-      else
-        {
-          /* Search from the start of the list */
-          index = 0;
-        }
-
-      for (i = index; i < child_array->len; i ++)
-        {
-          GtkWidget *child = g_ptr_array_index (child_array, i);
-
-          if (gtk_widget_get_mapped (child) && gtk_widget_is_sensitive (child))
-            {
-              new_focus = child;
-              break;
-            }
-        }
-
-
-      if (new_focus)
-        {
-          gtk_widget_grab_focus (new_focus);
-          gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (new_focus), TRUE);
-          if (selected_button && selected_button != (GtkRadioButton *)new_focus)
-            gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (selected_button), FALSE);
-        }
-
-      g_ptr_array_free (child_array, TRUE);
-      return TRUE;
-    }
-  else
-    {
-      if (selected_button && selected_button != radio_button)
-	return FALSE;
-
-      gtk_widget_grab_focus (widget);
-      return TRUE;
-    }
 }
 
 static void

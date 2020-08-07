@@ -279,10 +279,10 @@ items_changed (GtkComboBox   *box,
 }
 
 static void
-homogeneous_toggled (GtkToggleButton *button,
-                     GtkFlowBox      *flowbox)
+homogeneous_toggled (GtkCheckButton *button,
+                     GtkFlowBox     *flowbox)
 {
-  gboolean state = gtk_toggle_button_get_active (button);
+  gboolean state = gtk_check_button_get_active (button);
 
   gtk_flow_box_set_homogeneous (flowbox, state);
 }
@@ -327,10 +327,10 @@ filter_func (GtkFlowBoxChild *child, gpointer user_data)
 }
 
 static void
-filter_toggled (GtkToggleButton *button,
-                GtkFlowBox      *flowbox)
+filter_toggled (GtkCheckButton *button,
+                GtkFlowBox     *flowbox)
 {
-  gboolean state = gtk_toggle_button_get_active (button);
+  gboolean state = gtk_check_button_get_active (button);
 
   if (state)
     gtk_flow_box_set_filter_func (flowbox, filter_func, NULL, NULL);
@@ -351,10 +351,10 @@ sort_func (GtkFlowBoxChild *a,
 }
 
 static void
-sort_toggled (GtkToggleButton *button,
-              GtkFlowBox      *flowbox)
+sort_toggled (GtkCheckButton *button,
+              GtkFlowBox     *flowbox)
 {
-  gboolean state = gtk_toggle_button_get_active (button);
+  gboolean state = gtk_check_button_get_active (button);
 
   if (state)
     gtk_flow_box_set_sort_func (flowbox, sort_func, NULL, NULL);
@@ -409,7 +409,7 @@ create_window (void)
   gtk_box_append (GTK_BOX (vbox), expander);
 
   widget = gtk_check_button_new_with_label ("Homogeneous");
-  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), FALSE);
+  gtk_check_button_set_active (GTK_CHECK_BUTTON (widget), FALSE);
 
   gtk_widget_set_tooltip_text (widget, "Set whether the items should be displayed at the same size");
   gtk_box_append (GTK_BOX (flowbox_cntl), widget);
@@ -418,7 +418,7 @@ create_window (void)
                     G_CALLBACK (homogeneous_toggled), flowbox);
 
   widget = gtk_check_button_new_with_label ("Activate on single click");
-  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), FALSE);
+  gtk_check_button_set_active (GTK_CHECK_BUTTON (widget), FALSE);
   g_object_bind_property (widget, "active",
                           flowbox, "activate-on-single-click",
                           G_BINDING_SYNC_CREATE);
@@ -541,7 +541,7 @@ create_window (void)
   /* filtering and sorting */
 
   widget = gtk_check_button_new_with_label ("Filter");
-  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), FALSE);
+  gtk_check_button_set_active (GTK_CHECK_BUTTON (widget), FALSE);
 
   gtk_widget_set_tooltip_text (widget, "Set whether some items should be filtered out");
   gtk_box_append (GTK_BOX (flowbox_cntl), widget);
@@ -550,7 +550,7 @@ create_window (void)
                     G_CALLBACK (filter_toggled), flowbox);
 
   widget = gtk_check_button_new_with_label ("Sort");
-  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), FALSE);
+  gtk_check_button_set_active (GTK_CHECK_BUTTON (widget), FALSE);
 
   gtk_widget_set_tooltip_text (widget, "Set whether items should be sorted");
   gtk_box_append (GTK_BOX (flowbox_cntl), widget);

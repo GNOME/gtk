@@ -687,8 +687,8 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                   </object>
                                 </child>
                                 <child>
-                                  <object class="GtkRadioButton" id="radiobutton1">
-                                    <property name="label" translatable="yes">radiobutton</property>
+                                  <object class="GtkCheckButton" id="radiobutton1">
+                                    <property name="label" translatable="yes">checkbutton</property>
                                     <property name="active">1</property>
                                     <layout>
                                       <property name="column">1</property>
@@ -697,8 +697,8 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                   </object>
                                 </child>
                                 <child>
-                                  <object class="GtkRadioButton" id="radiobutton2">
-                                    <property name="label" translatable="yes">radiobutton</property>
+                                  <object class="GtkCheckButton">
+                                    <property name="label" translatable="yes">checkbutton</property>
                                     <property name="group">radiobutton1</property>
                                     <layout>
                                       <property name="column">1</property>
@@ -707,8 +707,8 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                   </object>
                                 </child>
                                 <child>
-                                  <object class="GtkRadioButton" id="radiobutton3">
-                                    <property name="label" translatable="yes">radiobutton</property>
+                                  <object class="GtkCheckButton" id="radiobutton3">
+                                    <property name="label" translatable="yes">checkbutton</property>
                                     <property name="inconsistent">1</property>
                                     <property name="group">radiobutton1</property>
                                     <layout>
@@ -718,8 +718,8 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                   </object>
                                 </child>
                                 <child>
-                                  <object class="GtkRadioButton" id="radiobutton4">
-                                    <property name="label" translatable="yes">radiobutton</property>
+                                  <object class="GtkCheckButton" id="radiobutton4">
+                                    <property name="label" translatable="yes">checkbutton</property>
                                     <property name="sensitive">0</property>
                                     <layout>
                                       <property name="column">1</property>
@@ -728,8 +728,8 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                   </object>
                                 </child>
                                 <child>
-                                  <object class="GtkRadioButton" id="radiobutton5">
-                                    <property name="label" translatable="yes">radiobutton</property>
+                                  <object class="GtkCheckButton" id="radiobutton5">
+                                    <property name="label" translatable="yes">checkbutton</property>
                                     <property name="sensitive">0</property>
                                     <property name="group">radiobutton3</property>
                                     <layout>
@@ -739,7 +739,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                   </object>
                                 </child>
                                 <child>
-                                  <object class="GtkRadioButton" id="radiobutton6">
+                                  <object class="GtkCheckButton" id="radiobutton6">
                                     <property name="label" translatable="yes">radiobutton</property>
                                     <property name="sensitive">0</property>
                                     <property name="inconsistent">1</property>
@@ -2228,7 +2228,6 @@ microphone-sensitivity-medium-symbolic</property>
                                     </style>
                                     <child>
                                       <object class="GtkRadioButton" id="grid_button">
-                                        <property name="draw-indicator">0</property>
                                         <property name="active">1</property>
                                         <property name="icon-name">view-grid-symbolic</property>
                                       </object>
@@ -2236,7 +2235,6 @@ microphone-sensitivity-medium-symbolic</property>
                                     <child>
                                       <object class="GtkRadioButton" id="list_button">
                                         <property name="active">1</property>
-                                        <property name="draw-indicator">0</property>
                                         <property name="group">grid_button</property>
                                         <property name="icon-name">view-list-symbolic</property>
                                       </object>
@@ -2889,6 +2887,7 @@ bad things might happen.</property>
         <property name="use-underline">1</property>
       </object>
     </child>
+
     <action-widgets>
       <action-widget response="cancel">cancel_info_dialog</action-widget>
       <action-widget response="ok">doit_info_dialog</action-widget>

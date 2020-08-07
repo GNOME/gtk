@@ -21,13 +21,13 @@ inhibitor_toggled (GtkToggleButton *button, GtkApplication *app)
   reason = gtk_editable_get_text (GTK_EDITABLE (inhibit_entry));
 
   flags = 0;
-  if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (inhibit_logout)))
+  if (gtk_check_button_get_active (GTK_CHECK_BUTTON (inhibit_logout)))
     flags |= GTK_APPLICATION_INHIBIT_LOGOUT;
-  if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (inhibit_switch)))
+  if (gtk_check_button_get_active (GTK_CHECK_BUTTON (inhibit_switch)))
     flags |= GTK_APPLICATION_INHIBIT_SWITCH;
-  if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (inhibit_suspend)))
+  if (gtk_check_button_get_active (GTK_CHECK_BUTTON (inhibit_suspend)))
     flags |= GTK_APPLICATION_INHIBIT_SUSPEND;
-  if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (inhibit_idle)))
+  if (gtk_check_button_get_active (GTK_CHECK_BUTTON (inhibit_idle)))
     flags |= GTK_APPLICATION_INHIBIT_IDLE;
 
   toplevel = GTK_WIDGET (gtk_widget_get_root (GTK_WIDGET (button)));

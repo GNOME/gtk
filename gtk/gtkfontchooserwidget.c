@@ -1340,31 +1340,31 @@ set_inconsistent (GtkCheckButton *button,
 }
 
 static void
-feat_clicked (GtkWidget *feat,
-              gpointer   data)
+feat_pressed (GtkGestureClick *gesture,
+              int              n_press,
+              double           x,
+              double           y,
+              GtkWidget       *feat)
 {
-  g_signal_handlers_block_by_func (feat, feat_clicked, NULL);
+  const guint button = gtk_gesture_single_get_current_button (GTK_GESTURE_SINGLE (gesture));
 
-  if (gtk_check_button_get_inconsistent (GTK_CHECK_BUTTON (feat)))
+  if (button == GDK_BUTTON_PRIMARY)
     {
-      set_inconsistent (GTK_CHECK_BUTTON (feat), FALSE);
-      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (feat), TRUE);
+      g_signal_handlers_block_by_func (feat, feat_pressed, NULL);
+
+      if (gtk_check_button_get_inconsistent (GTK_CHECK_BUTTON (feat)))
+        {
+          set_inconsistent (GTK_CHECK_BUTTON (feat), FALSE);
+          gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (feat), TRUE);
+        }
+
+      g_signal_handlers_unblock_by_func (feat, feat_pressed, NULL);
     }
-
-  g_signal_handlers_unblock_by_func (feat, feat_clicked, NULL);
-}
-
-static void
-feat_pressed (GtkGesture *gesture,
-              int         n_press,
-              double      x,
-              double      y,
-              GtkWidget  *feat)
-{
-  gboolean inconsistent;
-
-  inconsistent = gtk_check_button_get_inconsistent (GTK_CHECK_BUTTON (feat));
-  set_inconsistent (GTK_CHECK_BUTTON (feat), !inconsistent);
+  else if (button == GDK_BUTTON_SECONDARY)
+    {
+      gboolean inconsistent = gtk_check_button_get_inconsistent (GTK_CHECK_BUTTON (feat));
+      set_inconsistent (GTK_CHECK_BUTTON (feat), !inconsistent);
+    }
 }
 
 static char *
@@ -1546,6 +1546,16 @@ update_feature_example (FeatureItem          *item,
 }
 
 static void
+font_feature_toggled_cb (GtkCheckButton *check_button,
+                         gpointer        user_data)
+{
+  GtkFontChooserWidget *fontchooser = user_data;
+
+  set_inconsistent (check_button, FALSE);
+  update_font_features (fontchooser);
+}
+
+static void
 add_check_group (GtkFontChooserWidget *fontchooser,
                  const char  *title,
                  const char **tags)
@@ -1581,9 +1591,8 @@ add_check_group (GtkFontChooserWidget *fontchooser,
 
       feat = gtk_check_button_new_with_label (get_feature_display_name (tag));
       set_inconsistent (GTK_CHECK_BUTTON (feat), TRUE);
-      g_signal_connect_swapped (feat, "notify::active", G_CALLBACK (update_font_features), fontchooser);
+      g_signal_connect (feat, "toggled", G_CALLBACK (font_feature_toggled_cb), fontchooser);
       g_signal_connect_swapped (feat, "notify::inconsistent", G_CALLBACK (update_font_features), fontchooser);
-      g_signal_connect (feat, "clicked", G_CALLBACK (feat_clicked), NULL);
 
       gesture = gtk_gesture_click_new ();
       gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (gesture), GDK_BUTTON_SECONDARY);
@@ -1825,7 +1834,7 @@ update_font_features (GtkFontChooserWidget *fontchooser)
 
           g_string_append_printf (s, "%s\"%s\" %d",
                                   s->len > 0 ? ", " : "", item->name,
-                                  gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (item->feat)));
+                                  gtk_check_button_get_active (GTK_CHECK_BUTTON (item->feat)));
         }
     }
 

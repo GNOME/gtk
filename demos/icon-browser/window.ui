@@ -28,13 +28,11 @@
             </style>
             <child>
               <object class="GtkRadioButton" id="normal_radio">
-                <property name="draw-indicator">0</property>
                 <property name="label" translatable="yes">Normal</property>
               </object>
             </child>
             <child>
               <object class="GtkRadioButton" id="symbolic_radio">
-                <property name="draw-indicator">0</property>
                 <property name="label" translatable="yes">Symbolic</property>
                 <property name="group">normal_radio</property>
                 <signal name="notify::active" handler="symbolic_toggled" swapped="yes" after="yes"/>

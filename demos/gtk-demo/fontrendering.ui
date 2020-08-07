@@ -19,13 +19,11 @@
             </style>
             <child>
               <object class="GtkRadioButton" id="text_radio">
-                <property name="draw-indicator">0</property>
                 <property name="label">Text</property>
               </object>
             </child>
             <child>
               <object class="GtkRadioButton" id="grid_radio">
-                <property name="draw-indicator">0</property>
                 <property name="label">Grid</property>
                 <property name="group">text_radio</property>
               </object>
