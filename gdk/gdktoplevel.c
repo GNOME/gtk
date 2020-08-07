@@ -189,12 +189,7 @@ gdk_toplevel_default_init (GdkToplevelInterface *iface)
    * system spontaneously changing the configuration.
    *
    * It is the responsibility of the GdkToplevel user to handle this signal;
-   * failing to do so will result in an arbitrary fixed size being used as a
-   * result. The signal may be emitted with the pointer to the @size being
-   * %NULL, in which case only the minimum and maximum size needs to be
-   * computed. This could happen for example if the toplevel configuration is in
-   * a state where the size is decided by the windowing system, such as
-   * maximized or fullscreen.
+   * failing to do so will result in an arbitrary size being used as a result.
    */
   signals[COMPUTE_SIZE] =
     g_signal_new ("compute-size",
