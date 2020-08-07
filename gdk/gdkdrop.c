@@ -287,6 +287,8 @@ gdk_drop_finalize (GObject *object)
 
   g_clear_object (&priv->device);
   g_clear_object (&priv->drag);
+  g_clear_object (&priv->surface);
+  g_clear_pointer (&priv->formats, gdk_content_formats_unref);
 
   G_OBJECT_CLASS (gdk_drop_parent_class)->finalize (object);
 }
