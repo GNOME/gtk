@@ -65,6 +65,7 @@ read_lines_cb (GObject      *object,
     {
       g_print ("Could not read data: %s\n", error->message);
       g_clear_error (&error);
+      g_object_unref (stringlist);
       return;
     }
 
@@ -74,6 +75,7 @@ read_lines_cb (GObject      *object,
     {
       if (size)
         gtk_string_list_take (stringlist, g_utf8_make_valid (buffer, size));
+      g_object_unref (stringlist);
       return;
     }
 
@@ -121,6 +123,7 @@ file_is_open_cb (GObject      *file,
     {
       g_print ("Could not open file: %s\n", error->message);
       g_error_free (error);
+      g_object_unref (data);
       return;
     }
 
@@ -134,7 +137,7 @@ load_file (GtkStringList *list,
            GFile         *file)
 {
   gtk_string_list_splice (list, 0, g_list_model_get_n_items (G_LIST_MODEL (list)), NULL);
-  g_file_read_async (file, G_PRIORITY_HIGH_IDLE, NULL, file_is_open_cb, list);
+  g_file_read_async (file, G_PRIORITY_HIGH_IDLE, NULL, file_is_open_cb, g_object_ref (list));
 }
 
 static void
