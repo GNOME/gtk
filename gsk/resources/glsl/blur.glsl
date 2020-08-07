@@ -8,7 +8,7 @@ _OUT_ float pixels_per_side;
 _OUT_ vec3 initial_gaussian;
 
 const float PI = 3.14159265;
-const float RADIUS_MULTIPLIER = 3.0;
+const float RADIUS_MULTIPLIER = 2.0;
 
 void main() {
   gl_Position = u_projection * u_modelview * vec4(aPosition, 0.0, 1.0);
