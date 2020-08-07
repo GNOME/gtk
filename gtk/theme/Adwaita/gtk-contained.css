@@ -2033,4 +2033,7 @@ read if you used those and something break with a version upgrade you're on your
 @define-color wm_button_active_color_a shade(#f6f5f4, 0.85);
 @define-color wm_button_active_color_b shade(#f6f5f4, 0.89);
 @define-color wm_button_active_color_c shade(#f6f5f4, 0.9);
+/* content view background such as thumbnails view in Photos or Boxes */
 @define-color content_view_bg #ffffff;
+/* Very contrasty background for text views (@theme_text_color foreground) */
+@define-color text_view_bg #ffffff;
