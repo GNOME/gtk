@@ -50,6 +50,8 @@ about_activated (GSimpleAction *action,
   char *icon_theme;
   char *version;
   GString *s;
+  char *os_name;
+  char *os_version;
 
   g_object_get (gtk_settings_get_default (),
                 "gtk-icon-theme-name", &icon_theme,
@@ -57,6 +59,10 @@ about_activated (GSimpleAction *action,
 
   s = g_string_new ("");
 
+  os_name = g_get_os_info (G_OS_INFO_KEY_NAME);
+  os_version = g_get_os_info (G_OS_INFO_KEY_VERSION_ID);
+  if (os_name && os_version)
+    g_string_append_printf (s, "OS\t%s %s\n\n", os_name, os_version);
   g_string_append (s, "System libraries\n");
   g_string_append_printf (s, "\tGLib\t%d.%d.%d\n",
                           glib_major_version,
@@ -91,6 +97,8 @@ about_activated (GSimpleAction *action,
   g_string_free (s, TRUE);
   g_free (version);
   g_free (icon_theme);
+  g_free (os_name);
+  g_free (os_version);
 }
 
 static GActionEntry app_entries[] =
