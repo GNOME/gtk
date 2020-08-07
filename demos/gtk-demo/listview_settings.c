@@ -358,6 +358,8 @@ do_listview_settings (GtkWidget *do_widget)
 
       builder = gtk_builder_new ();
       gtk_builder_set_scope (builder, scope);
+      g_object_unref (scope);
+
       gtk_builder_add_from_resource (builder, "/listview_settings/listview_settings.ui", NULL);
 
       window = GTK_WIDGET (gtk_builder_get_object (builder, "window"));
