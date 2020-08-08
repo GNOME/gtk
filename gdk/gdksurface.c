@@ -525,26 +525,6 @@ gdk_surface_class_init (GdkSurfaceClass *klass)
   g_object_class_install_properties (object_class, LAST_PROP, properties);
 
   /**
-   * GdkSurface::popup-layout-changed
-   * @surface: the #GdkSurface that was laid out
-   *
-   * Emitted when the layout of a popup @surface has changed, e.g. if the popup
-   * layout was reactive and after the parent moved causing the popover to end
-   * up partially off-screen.
-   *
-   */
-  signals[POPUP_LAYOUT_CHANGED] =
-    g_signal_new (g_intern_static_string ("popup-layout-changed"),
-                  G_OBJECT_CLASS_TYPE (object_class),
-                  G_SIGNAL_RUN_FIRST,
-                  0,
-                  NULL,
-                  NULL,
-                  NULL,
-                  G_TYPE_NONE,
-                  0);
-
-  /**
    * GdkSurface::size-changed:
    * @surface: the #GdkSurface
    * @width: the new width
