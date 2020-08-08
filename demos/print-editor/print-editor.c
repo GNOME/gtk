@@ -608,6 +608,7 @@ activate_about (GSimpleAction *action,
     "The GTK Team",
     NULL
   };
+  GtkWidget *dialog;
 
   os_name = g_get_os_info (G_OS_INFO_KEY_NAME);
   os_version = g_get_os_info (G_OS_INFO_KEY_VERSION_ID);
@@ -642,7 +643,8 @@ activate_about (GSimpleAction *action,
                              gtk_get_minor_version (),
                              gtk_get_micro_version ());
 
-  gtk_show_about_dialog (GTK_WINDOW (main_window),
+  dialog = g_object_new (GTK_TYPE_ABOUT_DIALOG,
+                         "transient-for", main_window,
                          "program-name", "GTK Print Editor",
                          "version", version,
                          "copyright", "© 2006-2020 Red Hat, Inc",
@@ -654,8 +656,10 @@ activate_about (GSimpleAction *action,
                          "title", "About GTK Print Editor",
                          "system-information", sysinfo->str,
                          NULL);
-  gtk_about_dialog_add_credit_section (GTK_ABOUT_DIALOG (g_object_get_data (G_OBJECT (main_window), "gtk-about-dialog")),
+  gtk_about_dialog_add_credit_section (GTK_ABOUT_DIALOG (dialog),
                                        _("Maintained by"), maintainers);
+
+  gtk_window_present (GTK_WINDOW (dialog));
 
   g_string_free (sysinfo, TRUE);
   g_free (version);
