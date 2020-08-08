@@ -75,7 +75,7 @@ populate_icons (void)
 static char *content;
 static gsize content_len;
 
-extern void fontify (GtkTextBuffer *buffer);
+extern void fontify (const char *format, GtkTextBuffer *buffer);
 
 static void
 populate_text (gboolean hilight)
@@ -95,7 +95,7 @@ populate_text (gboolean hilight)
   gtk_text_buffer_set_text (buffer, content, (int)content_len);
 
   if (hilight)
-    fontify (buffer);
+    fontify ("c", buffer);
 
   textview = gtk_text_view_new ();
   gtk_text_view_set_buffer (GTK_TEXT_VIEW (textview), buffer);
