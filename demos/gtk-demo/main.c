@@ -239,7 +239,6 @@ fontify_text (const char *format,
               const char *text)
 {
   GSubprocess *subprocess;
-  static gboolean warned = FALSE;
   GBytes *stdin_buf;
   GBytes *stdout_buf = NULL;
   GBytes *stderr_buf = NULL;
@@ -259,11 +258,19 @@ fontify_text (const char *format,
 
   if (!subprocess)
     {
-      if (!warned)
+      if (g_error_matches (error, G_SPAWN_ERROR, G_SPAWN_ERROR_NOENT))
         {
-          g_warning ("%s", error->message);
-          warned = TRUE;
+          static gboolean warned = FALSE;
+
+          if (!warned)
+            {
+              warned = TRUE;
+              g_message ("For syntax highlighting, install the “highlight” program");
+            }
         }
+      else
+        g_warning ("%s", error->message);
+
       g_clear_error (&error);
 
       return NULL;
