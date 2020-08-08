@@ -34,6 +34,15 @@
 
 G_DEFINE_INTERFACE (GdkPopup, gdk_popup, GDK_TYPE_SURFACE)
 
+enum
+{
+  POPUP_LAYOUT_CHANGED,
+
+  N_SIGNALS
+};
+
+static guint signals[N_SIGNALS] = { 0 };
+
 static gboolean
 gdk_popup_default_present (GdkPopup       *popup,
                            int             width,
@@ -88,6 +97,25 @@ gdk_popup_default_init (GdkPopupInterface *iface)
                            P_("The parent surface"),
                            FALSE,
                            G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
+
+  /**
+   * GdkPopup::popup-layout-changed
+   * @popup: the #GdkSurface that was laid out
+   *
+   * Emitted when the layout of a popup surface has changed, e.g. if the popup
+   * layout was reactive and after the parent moved causing the popover to end
+   * up partially off-screen.
+   */
+  signals[POPUP_LAYOUT_CHANGED] =
+    g_signal_new (g_intern_static_string ("popup-layout-changed"),
+                  GDK_TYPE_POPUP,
+                  G_SIGNAL_RUN_FIRST,
+                  0,
+                  NULL,
+                  NULL,
+                  NULL,
+                  G_TYPE_NONE,
+                  0);
 }
 
 /**

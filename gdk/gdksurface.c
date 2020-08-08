@@ -84,6 +84,8 @@ enum {
   PROP_DISPLAY,
   PROP_FRAME_CLOCK,
   PROP_MAPPED,
+  PROP_WIDTH,
+  PROP_HEIGHT,
   LAST_PROP
 };
 
@@ -522,27 +524,21 @@ gdk_surface_class_init (GdkSurfaceClass *klass)
                             FALSE,
                             G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
-  g_object_class_install_properties (object_class, LAST_PROP, properties);
+  properties[PROP_WIDTH] =
+      g_param_spec_int ("width",
+                        P_("Width"),
+                        P_("Width"),
+                        0, G_MAXINT, 0,
+                        G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
-  /**
-   * GdkSurface::popup-layout-changed
-   * @surface: the #GdkSurface that was laid out
-   *
-   * Emitted when the layout of a popup @surface has changed, e.g. if the popup
-   * layout was reactive and after the parent moved causing the popover to end
-   * up partially off-screen.
-   *
-   */
-  signals[POPUP_LAYOUT_CHANGED] =
-    g_signal_new (g_intern_static_string ("popup-layout-changed"),
-                  G_OBJECT_CLASS_TYPE (object_class),
-                  G_SIGNAL_RUN_FIRST,
-                  0,
-                  NULL,
-                  NULL,
-                  NULL,
-                  G_TYPE_NONE,
-                  0);
+  properties[PROP_HEIGHT] =
+      g_param_spec_int ("height",
+                        P_("Height"),
+                        P_("Height"),
+                        0, G_MAXINT, 0,
+                        G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
+
+  g_object_class_install_properties (object_class, LAST_PROP, properties);
 
   /**
    * GdkSurface::size-changed:
@@ -762,6 +758,14 @@ gdk_surface_get_property (GObject    *object,
       g_value_set_boolean (value, GDK_SURFACE_IS_MAPPED (surface));
       break;
 
+    case PROP_WIDTH:
+      g_value_set_int (value, surface->width);
+      break;
+
+    case PROP_HEIGHT:
+      g_value_set_int (value, surface->height);
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -775,6 +779,9 @@ _gdk_surface_update_size (GdkSurface *surface)
 
   for (l = surface->draw_contexts; l; l = l->next)
     gdk_draw_context_surface_resized (l->data);
+
+  g_object_notify (G_OBJECT (surface), "width");
+  g_object_notify (G_OBJECT (surface), "height");
 }
 
 static GdkSurface *
