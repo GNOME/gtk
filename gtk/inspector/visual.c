@@ -510,7 +510,7 @@ theme_to_pos (GBinding *binding,
   for (i = 0, n = g_list_model_get_n_items (G_LIST_MODEL (names)); i < n; i++)
     {
       const char *name = gtk_string_list_get_string (names, i);
-      if (strcmp (name, theme) == 0)
+      if (g_strcmp0 (name, theme) == 0)
         {
           g_value_set_uint (to, i);
           return TRUE;
