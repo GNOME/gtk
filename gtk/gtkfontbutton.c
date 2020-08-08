@@ -975,9 +975,7 @@ gtk_font_button_clicked (GtkButton *button,
       gtk_font_chooser_set_font_desc (font_dialog, font_button->font_desc);
     }
 
-  G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   gtk_window_present (GTK_WINDOW (font_button->font_dialog));
-  G_GNUC_END_IGNORE_DEPRECATIONS
 }
 
 

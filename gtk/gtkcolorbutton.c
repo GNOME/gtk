@@ -435,9 +435,7 @@ gtk_color_button_clicked (GtkButton *b,
 
   gtk_color_chooser_set_rgba (GTK_COLOR_CHOOSER (button->cs_dialog), &button->rgba);
 
-  G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   gtk_window_present (GTK_WINDOW (button->cs_dialog));
-  G_GNUC_END_IGNORE_DEPRECATIONS
 }
 
 static void

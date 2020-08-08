@@ -181,9 +181,7 @@ show_uri_done (GObject      *object,
       g_signal_connect (dialog, "response",
                         G_CALLBACK (gtk_window_destroy), NULL);
 
-      G_GNUC_BEGIN_IGNORE_DEPRECATIONS
       gtk_window_present (GTK_WINDOW (dialog));
-      G_GNUC_END_IGNORE_DEPRECATIONS
     }
 }
 
