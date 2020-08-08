@@ -328,7 +328,6 @@ typedef struct {
 
 struct _GtkWindowGeometryInfo
 {
-
   GtkWindowLastGeometryInfo last;
 };
 
@@ -5157,7 +5156,6 @@ _gtk_window_unset_focus_and_default (GtkWindow *window,
 /* This function doesn't constrain to geometry hints */
 static void
 gtk_window_compute_configure_request_size (GtkWindow   *window,
-                                           guint        flags,
                                            int         *width,
                                            int         *height)
 {
@@ -5237,10 +5235,8 @@ gtk_window_compute_configure_request (GtkWindow    *window,
   guint new_flags;
   int w, h;
 
+  gtk_window_compute_configure_request_size (window, &w, &h);
   gtk_window_compute_hints (window, &new_geometry, &new_flags);
-  gtk_window_compute_configure_request_size (window,
-                                             new_flags,
-                                             &w, &h);
   gtk_window_update_fixed_size (window, &new_geometry, w, h);
   gdk_surface_constrain_size (&new_geometry, new_flags,
                               w, h,
