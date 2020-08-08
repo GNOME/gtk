@@ -1636,7 +1636,7 @@ stop_drop_feedback (GtkPlacesSidebar *sidebar)
   if (sidebar->row_placeholder != NULL)
     {
       if (gtk_widget_get_parent (sidebar->row_placeholder) != NULL)
-        gtk_list_box_remove (GTK_LIST_BOX (sidebar), sidebar->row_placeholder);
+        gtk_list_box_remove (GTK_LIST_BOX (sidebar->list_box), sidebar->row_placeholder);
       sidebar->row_placeholder = NULL;
     }
 
