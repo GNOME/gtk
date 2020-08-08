@@ -1846,7 +1846,7 @@ drag_drop_callback (GtkDropTarget    *target,
 
   if (G_VALUE_HOLDS (value, GTK_TYPE_SIDEBAR_ROW))
     {
-      GtkWidget **source_row;
+      GtkWidget *source_row;
       /* A bookmark got reordered */
       if (target_section_type != SECTION_BOOKMARKS)
         goto out;
@@ -1856,7 +1856,7 @@ drag_drop_callback (GtkDropTarget    *target,
       if (sidebar->row_placeholder != NULL)
         g_object_get (sidebar->row_placeholder, "order-index", &target_order_index, NULL);
 
-      reorder_bookmarks (sidebar, GTK_SIDEBAR_ROW (*source_row), target_order_index);
+      reorder_bookmarks (sidebar, GTK_SIDEBAR_ROW (source_row), target_order_index);
       result = TRUE;
     }
   else if (G_VALUE_HOLDS (value, GDK_TYPE_FILE_LIST))
