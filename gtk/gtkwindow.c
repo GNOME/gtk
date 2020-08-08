@@ -239,8 +239,11 @@ typedef struct
   /* from last gtk_window_resize () - if > 0, indicates that
    * we should resize to this size.
    */
-  int            resize_width;
-  int            resize_height;
+  int resize_width;
+  int resize_height;
+
+  int last_width;
+  int last_height;
 
   GtkGesture *click_gesture;
   GtkEventController *key_controller;
@@ -321,7 +324,6 @@ typedef enum
 typedef struct {
   GdkGeometry    geometry; /* Last set of geometry hints we set */
   GdkSurfaceHints flags;
-  GdkRectangle   configure_request;
 } GtkWindowLastGeometryInfo;
 
 struct _GtkWindowGeometryInfo
@@ -1482,6 +1484,8 @@ gtk_window_init (GtkWindow *window)
   priv->default_height = -1;
   priv->resize_width = -1;
   priv->resize_height = -1;
+  priv->last_width = -1;
+  priv->last_height = -1;
 
   g_object_ref_sink (window);
 
@@ -2675,9 +2679,6 @@ gtk_window_get_geometry_info (GtkWindow *window,
   if (!info && create)
     {
       info = g_new0 (GtkWindowGeometryInfo, 1);
-
-      info->last.configure_request.width = -1;
-      info->last.configure_request.height = -1;
       priv->geometry_info = info;
     }
 
@@ -3944,18 +3945,10 @@ gtk_window_get_remembered_size (GtkWindow *window,
                                 int       *width,
                                 int       *height)
 {
-  GtkWindowGeometryInfo *info;
+  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
 
-  *width = 0;
-  *height = 0;
-
-  info = gtk_window_get_geometry_info (window, FALSE);
-  if (info)
-    {
-      /* MAX() works even if the last request is unset with -1 */
-      *width = MAX (*width, info->last.configure_request.width);
-      *height = MAX (*height, info->last.configure_request.height);
-    }
+  *width = MAX (0, priv->last_width);
+  *height = MAX (0, priv->last_height);
 }
 
 static void
@@ -4393,11 +4386,11 @@ gtk_window_unrealize (GtkWidget *widget)
   priv->need_default_size = TRUE;
   priv->resize_width = -1;
   priv->resize_height = -1;
+  priv->last_width = -1;
+  priv->last_height = -1;
   info = gtk_window_get_geometry_info (window, FALSE);
   if (info)
     {
-      info->last.configure_request.width = -1;
-      info->last.configure_request.height = -1;
       /* be sure we reset geom hints on re-realize */
       info->last.flags = 0;
     }
@@ -5302,6 +5295,7 @@ gtk_window_move_resize (GtkWindow *window)
   gboolean configure_request_size_changed;
   gboolean hints_changed; /* do we need to send these again */
   GtkWindowLastGeometryInfo saved_last_info;
+  int saved_last_width, saved_last_height;
   int current_width, current_height;
 
   widget = GTK_WIDGET (window);
@@ -5326,8 +5320,8 @@ gtk_window_move_resize (GtkWindow *window)
    * If we change info->last without sending the request, we may
    * miss a request.
    */
-  if ((info->last.configure_request.width != new_request.width ||
-       info->last.configure_request.height != new_request.height))
+  if (priv->last_width != new_request.width ||
+      priv->last_height != new_request.height)
     configure_request_size_changed = TRUE;
 
   if (!gtk_window_compare_hints (&info->last.geometry, info->last.flags,
@@ -5335,9 +5329,12 @@ gtk_window_move_resize (GtkWindow *window)
     hints_changed = TRUE;
 
   saved_last_info = info->last;
+  saved_last_width = priv->last_width;
+  saved_last_height = priv->last_height;
   info->last.geometry = new_geometry;
   info->last.flags = new_flags;
-  info->last.configure_request = new_request;
+  priv->last_width = new_request.width;
+  priv->last_height = new_request.height;
 
   /* need to set PPosition so the WM will look at our position,
    * but we don't want to count PPosition coming and going as a hints
@@ -5417,6 +5414,8 @@ gtk_window_move_resize (GtkWindow *window)
            * to postpone our configure request until later.
            */
           info->last = saved_last_info;
+          priv->last_width = saved_last_width;
+          priv->last_height = saved_last_height;
           g_clear_pointer (&priv->layout, gdk_toplevel_layout_unref);
           gtk_widget_queue_resize (widget);
         }
