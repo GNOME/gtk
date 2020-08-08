@@ -2859,15 +2859,14 @@ gdk_x11_display_get_primary_monitor (GdkDisplay *display)
   GdkX11Display *self = GDK_X11_DISPLAY (display);
   GdkMonitor *monitor;
 
-  if (0 <= self->primary_monitor)
-    return NULL;
-
   monitor = g_list_model_get_item (G_LIST_MODEL (self->monitors), self->primary_monitor);
   if (monitor == NULL)
-    return NULL;
+    monitor = g_list_model_get_item (G_LIST_MODEL (self->monitors), 0);
 
   /* because g_list_model_get_item() returns a ref */
-  g_object_unref (monitor);
+  if (monitor)
+    g_object_unref (monitor);
+
   return monitor;
 }
 
