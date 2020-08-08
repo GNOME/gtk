@@ -5395,9 +5395,12 @@ gtk_label_update_actions (GtkLabel *self)
       link = gtk_label_get_focus_link (self, NULL);
     }
 
+  gtk_widget_action_set_enabled (widget, "clipboard.cut", FALSE);
   gtk_widget_action_set_enabled (widget, "clipboard.copy", has_selection);
+  gtk_widget_action_set_enabled (widget, "clipboard.paste", FALSE);
   gtk_widget_action_set_enabled (widget, "selection.select-all",
                                  gtk_label_get_selectable (self));
+  gtk_widget_action_set_enabled (widget, "selection.delete", FALSE);
   gtk_widget_action_set_enabled (widget, "link.open", !has_selection && link);
   gtk_widget_action_set_enabled (widget, "link.copy", !has_selection && link);
 }
