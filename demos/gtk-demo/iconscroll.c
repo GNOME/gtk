@@ -75,7 +75,7 @@ populate_icons (void)
 static char *content;
 static gsize content_len;
 
-extern void fontify (GtkTextBuffer *buffer);
+extern void fontify (const char *format, GtkTextBuffer *buffer);
 
 static void
 populate_text (gboolean hilight)
@@ -95,7 +95,7 @@ populate_text (gboolean hilight)
   gtk_text_buffer_set_text (buffer, content, (int)content_len);
 
   if (hilight)
-    fontify (buffer);
+    fontify ("c", buffer);
 
   textview = gtk_text_view_new ();
   gtk_text_view_set_buffer (GTK_TEXT_VIEW (textview), buffer);
@@ -153,13 +153,19 @@ populate_list (void)
 }
 
 extern GtkWidget *create_color_grid (void);
+extern GListModel *gtk_color_list_new (guint size);
 
 static void
 populate_grid (void)
 {
   GtkWidget *list;
+  GtkNoSelection *selection;
 
   list = create_color_grid ();
+
+  selection = gtk_no_selection_new (gtk_color_list_new (2097152));
+  gtk_grid_view_set_model (GTK_GRID_VIEW (list), G_LIST_MODEL (selection));
+  g_object_unref (selection);
 
   hincrement = 0;
   vincrement = 5;

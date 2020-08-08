@@ -686,9 +686,7 @@ paper_size_changed (GtkDropDown            *combo_box,
           /* And show the custom paper dialog */
           custom_paper_dialog = _gtk_custom_paper_unix_dialog_new (GTK_WINDOW (dialog), NULL);
           g_signal_connect (custom_paper_dialog, "response", G_CALLBACK (custom_paper_dialog_response_cb), dialog);
-          G_GNUC_BEGIN_IGNORE_DEPRECATIONS
           gtk_window_present (GTK_WINDOW (custom_paper_dialog));
-          G_GNUC_END_IGNORE_DEPRECATIONS
 
           return;
         }
