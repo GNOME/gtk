@@ -294,6 +294,9 @@ _gtk_bookmarks_manager_new (GtkBookmarksChangedFunc changed_func, gpointer chang
     manager->bookmarks_monitor_changed_id = g_signal_connect (manager->bookmarks_monitor, "changed",
 							      G_CALLBACK (bookmarks_file_changed), manager);
 
+
+  g_file_load_contents_async (bookmarks_file, NULL, read_bookmarks_finish, manager);
+
   g_object_unref (bookmarks_file);
 
   return manager;
