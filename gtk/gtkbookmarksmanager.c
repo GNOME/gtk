@@ -238,10 +238,10 @@ bookmarks_file_changed (GFileMonitor      *monitor,
     case G_FILE_MONITOR_EVENT_CHANGED:
     case G_FILE_MONITOR_EVENT_CHANGES_DONE_HINT:
     case G_FILE_MONITOR_EVENT_CREATED:
-    case G_FILE_MONITOR_EVENT_DELETED:
       g_file_load_contents_async (file, NULL, read_bookmarks_finish, manager);
       break;
 
+    case G_FILE_MONITOR_EVENT_DELETED:
     case G_FILE_MONITOR_EVENT_ATTRIBUTE_CHANGED:
     case G_FILE_MONITOR_EVENT_PRE_UNMOUNT:
     case G_FILE_MONITOR_EVENT_UNMOUNTED:
