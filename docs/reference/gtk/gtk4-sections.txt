@@ -6270,6 +6270,8 @@ gtk_popover_set_autohide
 gtk_popover_get_autohide
 gtk_popover_set_has_arrow
 gtk_popover_get_has_arrow
+gtk_popover_set_offset
+gtk_popover_get_offset
 gtk_popover_set_default_widget
 <SUBSECTION Standard>
 GTK_TYPE_POPOVER

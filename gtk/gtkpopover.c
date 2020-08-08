@@ -150,6 +150,9 @@ typedef struct {
   gboolean mnemonics_visible;
   gboolean disable_auto_mnemonics;
 
+  int x_offset;
+  int y_offset;
+
   guint mnemonics_display_timeout_id;
 
   GtkWidget *child;
@@ -549,6 +552,9 @@ create_popup_layout (GtkPopover *popover)
                                  parent_anchor,
                                  surface_anchor);
   gdk_popup_layout_set_anchor_hints (layout, anchor_hints);
+
+  if (priv->x_offset || priv->y_offset)
+    gdk_popup_layout_set_offset (layout, priv->x_offset, priv->y_offset);
 
   return layout;
 }
@@ -2161,4 +2167,57 @@ gtk_popover_disable_auto_mnemonics (GtkPopover *popover)
   GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
 
   priv->disable_auto_mnemonics = TRUE;
+}
+
+/**
+ * gtk_popover_set_offset:
+ * @popover: a #GtkPopover
+ * @x_offset: the x offset to adjust the position by
+ * @y_offset: the y offset to adjust the position by
+ *
+ * Sets the offset to use when calculating the position of the popover.
+ *
+ * These values are used when preparing the #GtkPopupLayout for positioning
+ * the popover.
+ */
+void
+gtk_popover_set_offset (GtkPopover *popover,
+                        int         x_offset,
+                        int         y_offset)
+{
+  GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
+
+  g_return_if_fail (GTK_IS_POPOVER (popover));
+
+  if (priv->x_offset != x_offset || priv->y_offset != y_offset)
+    {
+      priv->x_offset = x_offset;
+      priv->y_offset = y_offset;
+
+      gtk_widget_queue_resize (GTK_WIDGET (popover));
+    }
+}
+
+/**
+ * gtk_popover_get_offset:
+ * @popover: a #GtkPopover
+ * @x_offset: (out) (nullable): a location for the x_offset
+ * @y_offset: (out) (nullable): a location for the y_offset
+ *
+ * Gets the offset previous set with gtk_popover_set_offset().
+ */
+void
+gtk_popover_get_offset (GtkPopover *popover,
+                        int        *x_offset,
+                        int        *y_offset)
+{
+  GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
+
+  g_return_if_fail (GTK_IS_POPOVER (popover));
+
+  if (x_offset)
+    *x_offset = priv->x_offset;
+
+  if (y_offset)
+    *y_offset = priv->y_offset;
 }
