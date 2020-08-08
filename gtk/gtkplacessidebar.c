@@ -1896,6 +1896,14 @@ dnd_finished_cb (GdkDrag          *drag,
   stop_drop_feedback (sidebar);
 }
 
+static void
+dnd_cancel_cb (GdkDrag             *drag,
+               GdkDragCancelReason  reason,
+               GtkPlacesSidebar    *sidebar)
+{
+  stop_drop_feedback (sidebar);
+}
+
 /* This functions is called every time the drag source leaves
  * the sidebar widget.
  * The problem is that, we start showing hints for drop when the source
@@ -3494,6 +3502,7 @@ on_row_dragged (GtkGestureDrag *gesture,
       g_object_unref (content);
 
       g_signal_connect (drag, "dnd-finished", G_CALLBACK (dnd_finished_cb), sidebar);
+      g_signal_connect (drag, "cancel", G_CALLBACK (dnd_cancel_cb), sidebar);
 
       gtk_widget_get_allocation (sidebar->drag_row, &allocation);
       gtk_widget_hide (sidebar->drag_row);
