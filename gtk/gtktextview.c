@@ -6338,26 +6338,22 @@ gtk_text_view_move_cursor (GtkTextView     *text_view,
   */
   move_cursor (text_view, &newplace, extend_selection);
 
-  if (!gtk_text_iter_equal (&insert, &newplace))
-    {
-      DV(g_print (G_STRLOC": scrolling onscreen\n"));
-      gtk_text_view_scroll_mark_onscreen (text_view,
-                                          gtk_text_buffer_get_insert (get_buffer (text_view)));
+  DV(g_print (G_STRLOC": scrolling onscreen\n"));
+  gtk_text_view_scroll_mark_onscreen (text_view,
+                                      gtk_text_buffer_get_insert (get_buffer (text_view)));
 
-      if (step == GTK_MOVEMENT_DISPLAY_LINES)
-        gtk_text_view_set_virtual_cursor_pos (text_view, cursor_x_pos, -1);
-    }
-  else if (leave_direction != (GtkDirectionType)-1)
+  if (step == GTK_MOVEMENT_DISPLAY_LINES)
+    gtk_text_view_set_virtual_cursor_pos (text_view, cursor_x_pos, -1);
+
+  if (gtk_text_iter_equal (&insert, &newplace))
     {
-      if (!gtk_widget_keynav_failed (GTK_WIDGET (text_view),
-                                     leave_direction))
+      if (leave_direction != (GtkDirectionType)-1)
         {
-          g_signal_emit_by_name (text_view, "move-focus", leave_direction);
+          if (!gtk_widget_keynav_failed (GTK_WIDGET (text_view), leave_direction))
+            g_signal_emit_by_name (text_view, "move-focus", leave_direction);
         }
-    }
-  else if (! cancel_selection)
-    {
-      gtk_widget_error_bell (GTK_WIDGET (text_view));
+      else if (!cancel_selection)
+        gtk_widget_error_bell (GTK_WIDGET (text_view));
     }
 
   gtk_text_view_check_cursor_blink (text_view);
