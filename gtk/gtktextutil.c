@@ -108,10 +108,12 @@ gtk_text_util_create_drag_icon (GtkWidget *widget,
   GtkCssStyle *style;
   GtkSnapshot *snapshot;
   PangoContext *context;
-  PangoLayout  *layout;
+  PangoLayout *layout;
   GdkPaintable *paintable;
-  int           layout_width;
+  int layout_width;
+  int layout_height;
   const GdkRGBA *color;
+  GdkDisplay *display;
 
   g_return_val_if_fail (widget != NULL, NULL);
   g_return_val_if_fail (text != NULL, NULL);
@@ -132,6 +134,24 @@ gtk_text_util_create_drag_icon (GtkWidget *widget,
 
   style = gtk_css_node_get_style (gtk_widget_get_css_node (widget));
   color = gtk_css_color_value_get_rgba (style->core->color);
+
+  display = gtk_widget_get_display (widget);
+
+  if (!gdk_display_is_rgba (display) ||
+      !gdk_display_is_composited (display))
+    {
+      GtkWidget *bg_widget;
+
+      if (GTK_IS_TEXT (widget))
+        bg_widget = gtk_widget_get_parent (widget);
+      else
+        bg_widget = widget;
+      pango_layout_get_size (layout, &layout_width, &layout_height);
+      gtk_snapshot_render_background (snapshot,
+                                      gtk_widget_get_style_context (bg_widget),
+                                      0, 0, layout_width / PANGO_SCALE,
+                                      layout_height / PANGO_SCALE);
+    }
 
   gtk_snapshot_append_layout (snapshot, layout, color);
 
@@ -194,6 +214,7 @@ gtk_text_util_create_rich_drag_icon (GtkWidget     *widget,
   GtkTextAttributes *style;
   PangoContext      *ltr_context, *rtl_context;
   GtkTextIter        iter;
+  GdkDisplay        *display;
 
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
   g_return_val_if_fail (GTK_IS_TEXT_BUFFER (buffer), NULL);
@@ -250,6 +271,16 @@ gtk_text_util_create_rich_drag_icon (GtkWidget     *widget,
   layout_height = MIN (layout_height, DRAG_ICON_MAX_HEIGHT);
 
   snapshot = gtk_snapshot_new ();
+
+  display = gtk_widget_get_display (widget);
+
+  if (!gdk_display_is_rgba (display) ||
+      !gdk_display_is_composited (display))
+    {
+      gtk_snapshot_render_background (snapshot,
+                                      gtk_widget_get_style_context (widget),
+                                      0, 0, layout_width, layout_height);
+    }
 
   gtk_text_layout_snapshot (layout, widget, snapshot, &(GdkRectangle) { 0, 0, layout_width, layout_height }, 1.0);
 
