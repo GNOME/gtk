@@ -1674,7 +1674,7 @@ _gtk_text_btree_get_view_size (GtkTextBTree *tree,
 typedef struct {
   GtkTextIter *iters;
   guint count;
-  guint alloced;
+  guint allocated;
 } IterStack;
 
 static IterStack*
@@ -1684,7 +1684,7 @@ iter_stack_new (void)
   stack = g_slice_new (IterStack);
   stack->iters = NULL;
   stack->count = 0;
-  stack->alloced = 0;
+  stack->allocated = 0;
   return stack;
 }
 
@@ -1693,11 +1693,11 @@ iter_stack_push (IterStack         *stack,
 		 const GtkTextIter *iter)
 {
   stack->count += 1;
-  if (stack->count > stack->alloced)
+  if (stack->count > stack->allocated)
     {
-      stack->alloced = stack->count*2;
+      stack->allocated = stack->count*2;
       stack->iters = g_realloc (stack->iters,
-                                stack->alloced * sizeof (GtkTextIter));
+                                stack->allocated * sizeof (GtkTextIter));
     }
   stack->iters[stack->count-1] = *iter;
 }
