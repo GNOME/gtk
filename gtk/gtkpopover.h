@@ -104,6 +104,15 @@ GDK_AVAILABLE_IN_ALL
 void            gtk_popover_popdown (GtkPopover *popover);
 
 GDK_AVAILABLE_IN_ALL
+void            gtk_popover_set_offset (GtkPopover *popover,
+                                        int         x_offset,
+                                        int         y_offset);
+GDK_AVAILABLE_IN_ALL
+void            gtk_popover_get_offset (GtkPopover *popover,
+                                        int        *x_offset,
+                                        int        *y_offset);
+
+GDK_AVAILABLE_IN_ALL
 void gtk_popover_set_default_widget (GtkPopover *popover,
                                      GtkWidget  *widget);
 
