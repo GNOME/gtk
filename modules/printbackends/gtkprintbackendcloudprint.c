@@ -71,8 +71,6 @@ struct
 } typedef TGOAAccount;
 
 static GObjectClass *backend_parent_class;
-static void                 gtk_print_backend_cloudprint_class_init      (GtkPrintBackendCloudprintClass *class);
-static void                 gtk_print_backend_cloudprint_init            (GtkPrintBackendCloudprint      *impl);
 static void                 gtk_print_backend_cloudprint_finalize	 (GObject *object);
 static void                 cloudprint_printer_get_settings_from_options (GtkPrinter           *printer,
 									  GtkPrinterOptionSet  *options,
