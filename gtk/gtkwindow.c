@@ -200,7 +200,7 @@ typedef struct
   guint    need_default_size         : 1;
 
   guint    builder_visible           : 1;
-  guint    configure_notify_received : 1;
+  guint    need_resize               : 1;
   guint    decorated                 : 1;
   guint    deletable                 : 1;
   guint    destroy_with_parent       : 1;
@@ -391,7 +391,7 @@ static void gtk_window_transient_parent_unrealized (GtkWidget  *parent,
 static GtkWindowGeometryInfo* gtk_window_get_geometry_info         (GtkWindow    *window,
                                                                     gboolean      create);
 
-static void     gtk_window_move_resize               (GtkWindow    *window);
+static void     gtk_window_do_resize                 (GtkWindow    *window);
 static gboolean gtk_window_compare_hints             (GdkGeometry  *geometry_a,
                                                       guint         flags_a,
                                                       GdkGeometry  *geometry_b,
@@ -404,7 +404,8 @@ static void     gtk_window_compute_hints             (GtkWindow    *window,
                                                       GdkGeometry  *new_geometry,
                                                       guint        *new_flags);
 static void     gtk_window_compute_configure_request (GtkWindow    *window,
-                                                      GdkRectangle *request,
+                                                      int          *width,
+                                                      int          *height,
                                                       GdkGeometry  *geometry,
                                                       guint        *flags);
 
@@ -1462,7 +1463,7 @@ gtk_window_init (GtkWindow *window)
   priv->focus_widget = NULL;
   priv->default_widget = NULL;
   priv->resizable = TRUE;
-  priv->configure_notify_received = FALSE;
+  priv->need_resize = FALSE;
   priv->need_default_size = TRUE;
   priv->modal = FALSE;
   priv->decorated = TRUE;
@@ -1872,7 +1873,7 @@ gtk_window_native_check_resize (GtkNative *native)
   if (!_gtk_widget_get_alloc_needed (widget))
     gtk_widget_ensure_allocate (widget);
   else if (gtk_widget_get_visible (widget))
-    gtk_window_move_resize (GTK_WINDOW (native));
+    gtk_window_do_resize (GTK_WINDOW (native));
 
   if (GDK_PROFILER_IS_RUNNING)
     gdk_profiler_end_mark (before, "size allocation", "");
@@ -3520,14 +3521,9 @@ gtk_window_get_size (GtkWindow *window,
     }
   else
     {
-      GdkRectangle configure_request;
-
       gtk_window_compute_configure_request (window,
-                                            &configure_request,
+                                            &w, &h,
                                             NULL, NULL);
-
-      w = configure_request.width;
-      h = configure_request.height;
     }
 
   gtk_window_update_csd_size (window, &w, &h, EXCLUDE_CSD_SIZE);
@@ -3842,7 +3838,7 @@ gtk_window_unmap (GtkWidget *widget)
   GTK_WIDGET_CLASS (gtk_window_parent_class)->unmap (widget);
   gdk_surface_hide (priv->surface);
 
-  priv->configure_notify_received = FALSE;
+  priv->need_resize = FALSE;
 
   state = gdk_toplevel_get_state (GDK_TOPLEVEL (priv->surface));
   priv->minimize_initially = (state & GDK_SURFACE_STATE_MINIMIZED) != 0;
@@ -3853,90 +3849,6 @@ gtk_window_unmap (GtkWidget *widget)
 
   if (child != NULL)
     gtk_widget_unmap (child);
-}
-
-/* (Note: Replace "size" with "width" or "height". Also, the request
- * mode is honoured.)
- * For selecting the default window size, the following conditions
- * should hold (in order of importance):
- * - the size is not below the minimum size
- *   Windows cannot be resized below their minimum size, so we must
- *   ensure we don’t do that either.
- * - the size is not above the natural size
- *   It seems weird to allocate more than this in an initial guess.
- * - the size does not exceed that of a maximized window
- *   We want to see the whole window after all.
- *   (Note that this may not be possible to achieve due to imperfect
- *    information from the windowing system.)
- */
-
-static void
-gtk_window_guess_default_size (GtkWindow *window,
-                               int       *width,
-                               int       *height)
-{
-  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-  GtkWidget *widget;
-  GdkSurface *surface;
-  GdkDisplay *display;
-  GdkMonitor *monitor = NULL;
-  GdkRectangle geometry;
-  int minimum, natural;
-
-  widget = GTK_WIDGET (window);
-  display = gtk_widget_get_display (widget);
-  surface = priv->surface;
-
-  if (surface)
-    {
-      monitor = gdk_display_get_monitor_at_surface (display, surface);
-      if (monitor)
-        g_object_ref (monitor);
-    }
-
-  if (!monitor)
-    monitor = g_list_model_get_item (gdk_display_get_monitors (display), 0);
-
-  if (monitor)
-    {
-      gdk_monitor_get_geometry (monitor, &geometry);
-      g_object_unref (monitor);
-    }
-  else
-    {
-      geometry.width = G_MAXINT;
-      geometry.height = G_MAXINT;
-    }
-
-  *width = geometry.width;
-  *height = geometry.height;
-
-  if (gtk_widget_get_request_mode (widget) == GTK_SIZE_REQUEST_WIDTH_FOR_HEIGHT)
-    {
-      gtk_widget_measure (widget, GTK_ORIENTATION_VERTICAL, -1,
-                          &minimum, &natural,
-                          NULL, NULL);
-      *height = MAX (minimum, MIN (*height, natural));
-
-      gtk_widget_measure (widget, GTK_ORIENTATION_HORIZONTAL,
-                          *height,
-                          &minimum, &natural,
-                          NULL, NULL);
-      *width = MAX (minimum, MIN (*width, natural));
-    }
-  else /* GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH or CONSTANT_SIZE */
-    {
-      gtk_widget_measure (widget, GTK_ORIENTATION_HORIZONTAL, -1,
-                          &minimum, &natural,
-                          NULL, NULL);
-      *width = MAX (minimum, MIN (*width, natural));
-
-      gtk_widget_measure (widget, GTK_ORIENTATION_VERTICAL,
-                          *width,
-                          &minimum, &natural,
-                          NULL, NULL);
-      *height = MAX (minimum, MIN (*height, natural));
-    }
 }
 
 static void
@@ -4635,29 +4547,7 @@ surface_size_changed (GtkWidget *widget,
   GtkWindowPrivate *priv = gtk_window_get_instance_private (GTK_WINDOW (widget));
 
   check_scale_changed (GTK_WINDOW (widget));
-
-  /* priv->configure_request_count incremented for each
-   * configure request, and decremented to a min of 0 for
-   * each configure notify.
-   *
-   * All it means is that we know we will get at least
-   * priv->configure_request_count more configure notifies.
-   * We could get more configure notifies than that; some
-   * of the configure notifies we get may be unrelated to
-   * the configure requests. But we will get at least
-   * priv->configure_request_count notifies.
-   */
-
-  /*
-   * If we do need to resize, we do that by:
-   *   - setting configure_notify_received to TRUE
-   *     for use in gtk_window_move_resize()
-   *   - queueing a resize, leading to invocation of
-   *     gtk_window_move_resize() in an idle handler
-   *
-   */
-  priv->configure_notify_received = TRUE;
-
+  priv->need_resize = TRUE;
   gtk_widget_queue_allocate (widget);
 }
 
@@ -5164,7 +5054,9 @@ gtk_window_compute_configure_request_size (GtkWindow   *window,
       int default_width_csd;
       int default_height_csd;
 
-      gtk_window_guess_default_size (window, width, height);
+      gtk_window_compute_default_size (window,
+                                       G_MAXINT, G_MAXINT,
+                                       width, height);
       gtk_window_get_remembered_size (window, &w, &h);
       *width = MAX (*width, w);
       *height = MAX (*height, h);
@@ -5221,7 +5113,8 @@ gtk_window_compute_configure_request_size (GtkWindow   *window,
 
 static void
 gtk_window_compute_configure_request (GtkWindow    *window,
-                                      GdkRectangle *request,
+                                      int          *width,
+                                      int          *height,
                                       GdkGeometry  *geometry,
                                       guint        *flags)
 {
@@ -5244,8 +5137,8 @@ gtk_window_compute_configure_request (GtkWindow    *window,
       h = new_geometry.min_height;
     }
 
-  request->width = w;
-  request->height = h;
+  *width = w;
+  *height = h;
 
   if (geometry)
     *geometry = new_geometry;
@@ -5254,47 +5147,19 @@ gtk_window_compute_configure_request (GtkWindow    *window,
 }
 
 static void
-gtk_window_move_resize (GtkWindow *window)
+gtk_window_do_resize (GtkWindow *window)
 {
-  /* Overview:
-   *
-   * First we determine whether any information has changed that would
-   * cause us to revise our last configure request.  If we would send
-   * a different configure request from last time, then
-   * configure_request_size_changed = TRUE or
-   * configure_request_pos_changed = TRUE. configure_request_size_changed
-   * may be true due to new hints, a gtk_window_resize(), or whatever.
-   * configure_request_pos_changed may be true due to gtk_window_set_position()
-   * or gtk_window_move().
-   *
-   * If the configure request has changed, we send off a new one.  To
-   * ensure GTK+ invariants are maintained (resize queue does what it
-   * should), we go ahead and size_allocate the requested size in this
-   * function.
-   *
-   * If the configure request has not changed, we don't ever resend
-   * it, because it could mean fighting the user or window manager.
-   *
-   *   To prepare the configure request, we come up with a base size/pos:
-   *      - the one from gtk_window_move()/gtk_window_resize()
-   *      - else default_width, default_height if we haven't ever
-   *        been mapped
-   *      - else the size request if we haven't ever been mapped,
-   *        as a substitute default size
-   *      - else the current size of the window, as received from
-   *        configure notifies (i.e. the current allocation)
-   */
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
   GtkWidget *widget;
   GtkWindowGeometryInfo *info;
   GdkGeometry new_geometry;
   guint new_flags;
-  GdkRectangle new_request;
   gboolean size_changed;
   gboolean hints_changed; /* do we need to send these again */
   GtkWindowLastGeometryInfo saved_last_info;
   int saved_last_width, saved_last_height;
   int current_width, current_height;
+  int new_width, new_height;
 
   widget = GTK_WIDGET (window);
 
@@ -5303,20 +5168,14 @@ gtk_window_move_resize (GtkWindow *window)
   size_changed = FALSE;
   hints_changed = FALSE;
 
-  gtk_window_compute_configure_request (window, &new_request,
+  gtk_window_compute_configure_request (window,
+                                        &new_width, &new_height,
                                         &new_geometry, &new_flags);
 
   g_clear_pointer (&priv->layout, gdk_toplevel_layout_unref);
   priv->layout = gtk_window_compute_layout (window);
 
-  /* This check implies the invariant that we never set info->last
-   * without setting the hints and sending off a configure request.
-   *
-   * If we change info->last without sending the request, we may
-   * miss a request.
-   */
-  if (priv->last_width != new_request.width ||
-      priv->last_height != new_request.height)
+  if (priv->last_width != new_width || priv->last_height != new_height)
     size_changed = TRUE;
 
   if (!gtk_window_compare_hints (&info->last.geometry, info->last.flags,
@@ -5328,38 +5187,19 @@ gtk_window_move_resize (GtkWindow *window)
   saved_last_height = priv->last_height;
   info->last.geometry = new_geometry;
   info->last.flags = new_flags;
-  priv->last_width = new_request.width;
-  priv->last_height = new_request.height;
-
-  /* need to set PPosition so the WM will look at our position,
-   * but we don't want to count PPosition coming and going as a hints
-   * change for future iterations. So we saved info->last prior to
-   * this.
-   */
+  priv->last_width = new_width;
+  priv->last_height = new_height;
 
   current_width = gdk_surface_get_width (priv->surface);
   current_height = gdk_surface_get_height (priv->surface);
 
-  /* handle resizing/moving and widget tree allocation
-   */
-  if (priv->configure_notify_received)
+  if (priv->need_resize)
     {
       GtkAllocation allocation;
       GtkBorder shadow;
       int min;
 
-      /* If we have received a configure event since
-       * the last time in this function, we need to
-       * accept our new size and size_allocate child widgets.
-       * (see gtk_window_configure_event() for more details).
-       *
-       * 1 or more configure notifies may have been received.
-       * Also, configure_notify_received will only be TRUE
-       * if all expected configure notifies have been received
-       * (one per configure request), as an optimization.
-       *
-       */
-      priv->configure_notify_received = FALSE;
+      priv->need_resize = FALSE;
 
       get_shadow_width (window, &shadow);
 
@@ -5375,39 +5215,8 @@ gtk_window_move_resize (GtkWindow *window)
 
       gtk_widget_size_allocate (widget, &allocation, -1);
 
-      /* If the configure request changed, it means that
-       * we either:
-       *   1) coincidentally changed hints or widget properties
-       *      impacting the configure request before getting
-       *      a configure notify, or
-       *   2) some broken widget is changing its size request
-       *      during size allocation, resulting in
-       *      a false appearance of changed configure request.
-       *
-       * For 1), we could just go ahead and ask for the
-       * new size right now, but doing that for 2)
-       * might well be fighting the user (and can even
-       * trigger a loop). Since we really don't want to
-       * do that, we requeue a resize in hopes that
-       * by the time it gets handled, the child has seen
-       * the light and is willing to go along with the
-       * new size. (this happens for the zvt widget, since
-       * the size_allocate() above will have stored the
-       * requisition corresponding to the new size in the
-       * zvt widget)
-       *
-       * This doesn't buy us anything for 1), but it shouldn't
-       * hurt us too badly, since it is what would have
-       * happened if we had gotten the configure event before
-       * the new size had been set.
-       */
-
       if (size_changed)
         {
-          /* Don't change the recorded last info after all, because we
-           * haven't actually updated to the new info yet - we decided
-           * to postpone our configure request until later.
-           */
           info->last = saved_last_info;
           priv->last_width = saved_last_width;
           priv->last_height = saved_last_height;
@@ -5415,42 +5224,11 @@ gtk_window_move_resize (GtkWindow *window)
           gtk_widget_queue_resize (widget);
         }
 
-      return; /* Bail out, we didn't really process the move/resize */
+      return;
     }
   else if ((size_changed || hints_changed) &&
-           (current_width != new_request.width || current_height != new_request.height))
+           (current_width != new_width || current_height != new_height))
     {
-      /* We are in one of the following situations:
-       * A. configure_request_size_changed
-       *    our requisition has changed and we need a different window size,
-       *    so we request it from the window manager.
-       * B. !configure_request_size_changed && hints_changed
-       *    the window manager rejects our size, but we have just changed the
-       *    window manager hints, so there's a chance our request will
-       *    be honoured this time, so we try again.
-       *
-       * However, if the new requisition is the same as the current allocation,
-       * we don't request it again, since we won't get a ConfigureNotify back from
-       * the window manager unless it decides to change our requisition. If
-       * we don't get the ConfigureNotify back, the resize queue will never be run.
-       */
-
-      /* for GTK_RESIZE_QUEUE toplevels, we are now awaiting a new
-       * configure event in response to our resizing request.
-       * the configure event will cause a new resize with
-       * ->configure_notify_received=TRUE.
-       * until then, we want to
-       * - discard expose events
-       * - coalesce resizes for our children
-       * - defer any window resizes until the configure event arrived
-       * to achieve this, we queue a resize for the window, but remove its
-       * resizing handler, so resizing will not be handled from the next
-       * idle handler but when the configure event arrives.
-       *
-       * FIXME: we should also dequeue the pending redraws here, since
-       * we handle those ourselves upon ->configure_notify_received==TRUE.
-       */
-
       gdk_toplevel_present (GDK_TOPLEVEL (priv->surface), priv->layout);
     }
   else
@@ -5464,11 +5242,8 @@ gtk_window_move_resize (GtkWindow *window)
       allocation.x = shadow.left;
       allocation.y = shadow.top;
 
-      /* Our configure request didn't change size, but maybe some of
-       * our child widgets have. Run a size allocate with our current
-       * size to make sure that we re-layout our child widgets. */
-
-      gtk_widget_measure (widget, GTK_ORIENTATION_HORIZONTAL, current_height - shadow.top - shadow.bottom,
+      gtk_widget_measure (widget, GTK_ORIENTATION_HORIZONTAL,
+                          current_height - shadow.top - shadow.bottom,
                           &min_width, NULL, NULL, NULL);
       allocation.width = MAX (current_width - shadow.left - shadow.right, min_width);
 
@@ -5573,7 +5348,9 @@ gtk_window_compute_hints (GtkWindow   *window,
   if (priv->resizable)
     gtk_widget_get_preferred_size (widget, &requisition, NULL);
   else
-    gtk_window_guess_default_size (window, &requisition.width, &requisition.height);
+    gtk_window_compute_default_size (window,
+                                     G_MAXINT, G_MAXINT,
+                                     &requisition.width, &requisition.height);
 
   *new_flags = 0;
 
