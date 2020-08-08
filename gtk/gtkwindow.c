@@ -388,7 +388,7 @@ static void     gtk_window_update_fixed_size         (GtkWindow    *window,
                                                       int          *min_height,
                                                       int           new_width,
                                                       int           new_height);
-static void     gtk_window_compute_configure_request (GtkWindow    *window,
+static void     gtk_window_compute_size              (GtkWindow    *window,
                                                       int          *width,
                                                       int          *height,
                                                       int          *min_width,
@@ -3490,9 +3490,7 @@ gtk_window_get_size (GtkWindow *window,
     }
   else
     {
-      gtk_window_compute_configure_request (window,
-                                            &w, &h,
-                                            NULL, NULL);
+      gtk_window_compute_size (window, &w, &h, NULL, NULL);
     }
 
   gtk_window_update_csd_size (window, &w, &h, EXCLUDE_CSD_SIZE);
@@ -4996,11 +4994,10 @@ _gtk_window_unset_focus_and_default (GtkWindow *window,
  * Functions related to resizing *
  *********************************/
 
-/* This function doesn't constrain to geometry hints */
 static void
-gtk_window_compute_configure_request_size (GtkWindow   *window,
-                                           int         *width,
-                                           int         *height)
+gtk_window_compute_size_request (GtkWindow *window,
+                                 int       *width,
+                                 int       *height)
 {
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
   int w, h;
@@ -5071,17 +5068,17 @@ gtk_window_compute_configure_request_size (GtkWindow   *window,
 }
 
 static void
-gtk_window_compute_configure_request (GtkWindow    *window,
-                                      int          *width,
-                                      int          *height,
-                                      int          *min_width,
-                                      int          *min_height)
+gtk_window_compute_size (GtkWindow *window,
+                         int       *width,
+                         int       *height,
+                         int       *min_width,
+                         int       *min_height)
 {
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
   int mw, mh;
   int w, h;
 
-  gtk_window_compute_configure_request_size (window, &w, &h);
+  gtk_window_compute_size_request (window, &w, &h);
   gtk_window_get_min_size (window, &mw, &mh);
   gtk_window_update_fixed_size (window, &mw, &mh, w, h);
 
@@ -5108,7 +5105,7 @@ gtk_window_do_resize (GtkWindow *window)
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
   GtkWidget *widget;
   gboolean size_changed;
-  gboolean hints_changed; /* do we need to send these again */
+  gboolean min_size_changed;
   int saved_last_width, saved_last_height;
   int saved_min_width, saved_min_height;
   int current_width, current_height;
@@ -5118,11 +5115,11 @@ gtk_window_do_resize (GtkWindow *window)
   widget = GTK_WIDGET (window);
 
   size_changed = FALSE;
-  hints_changed = FALSE;
+  min_size_changed = FALSE;
 
-  gtk_window_compute_configure_request (window,
-                                        &new_width, &new_height,
-                                        &min_width, &min_height);
+  gtk_window_compute_size (window,
+                           &new_width, &new_height,
+                           &min_width, &min_height);
 
   g_clear_pointer (&priv->layout, gdk_toplevel_layout_unref);
   priv->layout = gtk_window_compute_layout (window);
@@ -5131,7 +5128,7 @@ gtk_window_do_resize (GtkWindow *window)
     size_changed = TRUE;
 
   if (priv->min_width != min_width || priv->min_height != min_height)
-    hints_changed = TRUE;
+    min_size_changed = TRUE;
 
   saved_last_width = priv->last_width;
   saved_last_height = priv->last_height;
@@ -5179,7 +5176,7 @@ gtk_window_do_resize (GtkWindow *window)
 
       return;
     }
-  else if ((size_changed || hints_changed) &&
+  else if ((size_changed || min_size_changed) &&
            (current_width != new_width || current_height != new_height))
     {
       gdk_toplevel_present (GDK_TOPLEVEL (priv->surface), priv->layout);
@@ -5203,6 +5200,7 @@ gtk_window_do_resize (GtkWindow *window)
       gtk_widget_measure (widget, GTK_ORIENTATION_VERTICAL, allocation.width,
                           &min, NULL, NULL, NULL);
       allocation.height = MAX (current_height - shadow.top - shadow.bottom, min);
+
       gtk_widget_size_allocate (widget, &allocation, -1);
     }
 
