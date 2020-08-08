@@ -3755,6 +3755,7 @@ gtk_window_map (GtkWidget *widget)
     gtk_widget_map (priv->title_box);
 
   gtk_window_present_toplevel (window);
+  gtk_widget_ensure_allocate (widget);
 
   if (priv->minimize_initially)
     gdk_toplevel_minimize (GDK_TOPLEVEL (priv->surface));
