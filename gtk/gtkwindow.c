@@ -4142,44 +4142,35 @@ gtk_window_compute_default_size (GtkWindow *window,
                                  int       *width,
                                  int       *height)
 {
-  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
   GtkWidget *widget = GTK_WIDGET (window);
+  int minimum, natural;
 
-  *width = max_width;
-  *height = max_height;
   if (gtk_widget_get_request_mode (widget) == GTK_SIZE_REQUEST_WIDTH_FOR_HEIGHT)
     {
-      int minimum, natural;
-
       gtk_widget_measure (widget, GTK_ORIENTATION_VERTICAL, -1,
                           &minimum, &natural,
                           NULL, NULL);
-      *height = MAX (minimum, MIN (*height, natural));
+      *height = MAX (minimum, MIN (max_height, natural));
 
       gtk_widget_measure (widget, GTK_ORIENTATION_HORIZONTAL,
                           *height,
                           &minimum, &natural,
                           NULL, NULL);
-      *width = MAX (minimum, MIN (*width, natural));
+      *width = MAX (minimum, MIN (max_width, natural));
     }
   else /* GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH or CONSTANT_SIZE */
     {
-      int minimum, natural;
-
       gtk_widget_measure (widget, GTK_ORIENTATION_HORIZONTAL, -1,
                           &minimum, &natural,
                           NULL, NULL);
-      *width = MAX (minimum, MIN (*width, natural));
+      *width = MAX (minimum, MIN (max_width, natural));
 
       gtk_widget_measure (widget, GTK_ORIENTATION_VERTICAL,
                           *width,
                           &minimum, &natural,
                           NULL, NULL);
-      *height = MAX (minimum, MIN (*height, natural));
+      *height = MAX (minimum, MIN (max_height, natural));
     }
-
-  /* No longer use the default settings */
-  priv->need_default_size = FALSE;
 }
 
 static void
@@ -4228,6 +4219,9 @@ toplevel_compute_size (GdkToplevel     *toplevel,
         width = min_width = default_width_csd;
       if (priv->default_height > 0)
         height = min_height = default_height_csd;
+
+      /* No longer use the default settings */
+      priv->need_default_size = FALSE;
     }
   else
     {
@@ -5296,7 +5290,7 @@ gtk_window_move_resize (GtkWindow *window)
   GdkGeometry new_geometry;
   guint new_flags;
   GdkRectangle new_request;
-  gboolean configure_request_size_changed;
+  gboolean size_changed;
   gboolean hints_changed; /* do we need to send these again */
   GtkWindowLastGeometryInfo saved_last_info;
   int saved_last_width, saved_last_height;
@@ -5306,7 +5300,7 @@ gtk_window_move_resize (GtkWindow *window)
 
   info = gtk_window_get_geometry_info (window, TRUE);
 
-  configure_request_size_changed = FALSE;
+  size_changed = FALSE;
   hints_changed = FALSE;
 
   gtk_window_compute_configure_request (window, &new_request,
@@ -5323,7 +5317,7 @@ gtk_window_move_resize (GtkWindow *window)
    */
   if (priv->last_width != new_request.width ||
       priv->last_height != new_request.height)
-    configure_request_size_changed = TRUE;
+    size_changed = TRUE;
 
   if (!gtk_window_compare_hints (&info->last.geometry, info->last.flags,
                                  &new_geometry, new_flags))
@@ -5408,7 +5402,7 @@ gtk_window_move_resize (GtkWindow *window)
        * the new size had been set.
        */
 
-      if (configure_request_size_changed)
+      if (size_changed)
         {
           /* Don't change the recorded last info after all, because we
            * haven't actually updated to the new info yet - we decided
@@ -5423,7 +5417,7 @@ gtk_window_move_resize (GtkWindow *window)
 
       return; /* Bail out, we didn't really process the move/resize */
     }
-  else if ((configure_request_size_changed || hints_changed) &&
+  else if ((size_changed || hints_changed) &&
            (current_width != new_request.width || current_height != new_request.height))
     {
       /* We are in one of the following situations:
