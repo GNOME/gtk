@@ -5312,9 +5312,6 @@ gtk_window_move_resize (GtkWindow *window)
   gtk_window_compute_configure_request (window, &new_request,
                                         &new_geometry, &new_flags);
 
-  if (!(new_flags & GDK_HINT_MIN_SIZE))
-    new_geometry.min_width = new_geometry.min_height = 1;
-
   g_clear_pointer (&priv->layout, gdk_toplevel_layout_unref);
   priv->layout = gtk_window_compute_layout (window);
 
