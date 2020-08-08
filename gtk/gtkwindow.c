@@ -5231,6 +5231,7 @@ gtk_window_compute_configure_request (GtkWindow    *window,
                                       GdkGeometry  *geometry,
                                       guint        *flags)
 {
+  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
   GdkGeometry new_geometry;
   guint new_flags;
   int w, h;
@@ -5238,9 +5239,16 @@ gtk_window_compute_configure_request (GtkWindow    *window,
   gtk_window_compute_configure_request_size (window, &w, &h);
   gtk_window_compute_hints (window, &new_geometry, &new_flags);
   gtk_window_update_fixed_size (window, &new_geometry, w, h);
-  gdk_surface_constrain_size (&new_geometry, new_flags,
-                              w, h,
-                              &w, &h);
+  if (priv->resizable)
+    {
+      w = MAX (w, new_geometry.min_width);
+      h = MAX (h, new_geometry.min_height);
+    }
+  else
+    {
+      w = new_geometry.min_width;
+      h = new_geometry.min_height;
+    }
 
   request->width = w;
   request->height = h;
@@ -5577,7 +5585,7 @@ gtk_window_compute_hints (GtkWindow   *window,
     gtk_window_guess_default_size (window, &requisition.width, &requisition.height);
 
   *new_flags = 0;
-  
+
   get_shadow_width (window, &shadow);
   *new_flags |= GDK_HINT_MIN_SIZE;
   new_geometry->min_width = requisition.width + shadow.left + shadow.right;
