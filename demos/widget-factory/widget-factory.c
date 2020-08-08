@@ -263,6 +263,7 @@ activate_about (GSimpleAction *action,
   char *os_name;
   char *os_version;
   GString *s;
+  GtkWidget *dialog;
 
   s = g_string_new ("");
 
@@ -289,7 +290,8 @@ activate_about (GSimpleAction *action,
                              gtk_get_minor_version (),
                              gtk_get_micro_version ());
 
-  gtk_show_about_dialog (GTK_WINDOW (gtk_application_get_active_window (app)),
+  dialog = g_object_new (GTK_TYPE_ABOUT_DIALOG,
+                         "transient-for", gtk_application_get_active_window (app),
                          "program-name", "GTK Widget Factory",
                          "version", version,
                          "copyright", "© 1997—2020 The GTK Team",
@@ -302,8 +304,10 @@ activate_about (GSimpleAction *action,
                          "system-information", s->str,
                          NULL);
 
-  gtk_about_dialog_add_credit_section (GTK_ABOUT_DIALOG (g_object_get_data (G_OBJECT (gtk_application_get_active_window (app)), "gtk-about-dialog")),
+  gtk_about_dialog_add_credit_section (GTK_ABOUT_DIALOG (dialog),
                                        _("Maintained by"), maintainers);
+
+  gtk_window_present (GTK_WINDOW (dialog));
 
   g_string_free (s, TRUE);
   g_free (version);
