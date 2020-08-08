@@ -523,7 +523,7 @@ gtk_color_list_init (GtkColorList *self)
   g_bytes_unref (data);
 }
 
-static GListModel *
+GListModel *
 gtk_color_list_new (guint size)
 {
   return g_object_new (GTK_TYPE_COLOR_LIST,

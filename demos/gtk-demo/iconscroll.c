@@ -153,13 +153,19 @@ populate_list (void)
 }
 
 extern GtkWidget *create_color_grid (void);
+extern GListModel *gtk_color_list_new (guint size);
 
 static void
 populate_grid (void)
 {
   GtkWidget *list;
+  GtkNoSelection *selection;
 
   list = create_color_grid ();
+
+  selection = gtk_no_selection_new (gtk_color_list_new (2097152));
+  gtk_grid_view_set_model (GTK_GRID_VIEW (list), G_LIST_MODEL (selection));
+  g_object_unref (selection);
 
   hincrement = 0;
   vincrement = 5;
