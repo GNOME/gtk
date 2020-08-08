@@ -49,7 +49,6 @@ gsk/gskrendernodeimpl.c
 gtk/css/gtkcssdataurl.c
 gtk/gtkaboutdialog.c
 gtk/gtkaccelgroup.c
-gtk/gtkaccellabel.c
 gtk/gtkaccessible.c
 gtk/gtkactionable.c
 gtk/gtkactionbar.c

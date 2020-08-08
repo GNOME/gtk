@@ -51,6 +51,7 @@ demos/gtk-demo/theming.ui
 demos/icon-browser/window.ui
 demos/node-editor/help-window.ui
 demos/node-editor/node-editor-window.ui
+demos/print-editor/print-editor.c
 demos/widget-factory/menus.ui
 demos/widget-factory/widget-factory.c
 demos/widget-factory/widget-factory.ui
