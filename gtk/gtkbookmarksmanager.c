@@ -280,6 +280,8 @@ _gtk_bookmarks_manager_new (GtkBookmarksChangedFunc changed_func, gpointer chang
 
       g_object_unref (legacy_bookmarks_file);
     }
+  else
+    g_file_load_contents_async (bookmarks_file, NULL, read_bookmarks_finish, manager);
 
   error = NULL;
   manager->bookmarks_monitor = g_file_monitor_file (bookmarks_file,
