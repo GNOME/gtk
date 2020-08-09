@@ -1,5 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
+  <object class="GtkMessageDialog" id="warning">
+    <property name="transient-for">window</property>
+    <property name="modal">1</property>
+    <property name="hide-on-close">1</property>
+    <property name="buttons">ok-cancel</property>
+    <property name="message-type">warning</property>
+    <property name="text" translatable="yes">Warning</property>
+    <property name="secondary-text" translatable="yes">This demo involves rapidly flashing changes and may be hazardous to photosensitive viewers.</property>
+  </object>
   <object class="GtkWindow" id="window">
     <property name="resizable">0</property>
     <child type="titlebar">

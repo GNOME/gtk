@@ -1,6 +1,9 @@
 /* Benchmark/Themes
  *
  * This demo switches themes like a maniac, like some of you.
+ *
+ * Warning: This demo involves rapidly flashing changes and may
+ * be hazardous to photosensitive viewers.
  */
 
 #include <gtk/gtk.h>
@@ -124,50 +127,11 @@ change_theme (GtkWidget     *widget,
 }
 
 static void
-clicked (GtkGestureClick *gesture,
-         int              n_press,
-         double           x,
-         double           y,
-         gpointer         data)
-{
-  GtkWidget *window;
-  GdkEvent *event;
-  GdkModifierType state;
-
-  window = gtk_widget_get_ancestor (gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (gesture)), GTK_TYPE_WINDOW);
-
-  event = gtk_gesture_get_last_event (GTK_GESTURE (gesture), NULL);
-  state = gdk_event_get_modifier_state (event);
-
-  if (state & GDK_CONTROL_MASK)
-    {
-      if (tick_cb)
-        {
-          gtk_widget_remove_tick_callback (window, tick_cb);
-          tick_cb = 0;
-        }
-
-      change_theme (window, NULL, data);
-    }
-  else
-    {
-      if (tick_cb)
-        {
-          gtk_widget_remove_tick_callback (window, tick_cb);
-          tick_cb = 0;
-        }
-      else
-        {
-          tick_cb = gtk_widget_add_tick_callback (window, change_theme, data, NULL);
-        }
-    }
-}
-
-static void
 toggle_cycle (GObject    *button,
               GParamSpec *pspec,
               gpointer    data)
 {
+  GtkWidget *warning = data;
   gboolean active;
   GtkWidget *window;
 
@@ -177,13 +141,32 @@ toggle_cycle (GObject    *button,
 
   if (active && !tick_cb)
     {
-      tick_cb = gtk_widget_add_tick_callback (window, change_theme, data, NULL);
+      gtk_window_present (GTK_WINDOW (warning));
     }
   else if (!active && tick_cb)
     {
       gtk_widget_remove_tick_callback (window, tick_cb);
       tick_cb = 0;
     }
+}
+
+static void
+warning_closed (GtkDialog *warning,
+                int        response_id,
+                gpointer   data)
+{
+  GtkWidget *window;
+  GtkWidget *button;
+
+  gtk_widget_hide (GTK_WIDGET (warning));
+
+  window = gtk_widget_get_ancestor (GTK_WIDGET (data), GTK_TYPE_WINDOW);
+  button = GTK_WIDGET (g_object_get_data (G_OBJECT (window), "button"));
+
+  if (response_id == GTK_RESPONSE_OK)
+    tick_cb = gtk_widget_add_tick_callback (window, change_theme, data, NULL);
+  else
+    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), FALSE);
 }
 
 GtkWidget *
@@ -194,10 +177,9 @@ do_themes (GtkWidget *do_widget)
   if (!window)
     {
       GtkBuilder *builder;
-      GtkWidget *header;
       GtkWidget *button;
       GtkWidget *label;
-      GtkGesture *gesture;
+      GtkWidget *warning;
 
       builder = gtk_builder_new_from_resource ("/themes/themes.ui");
       window = GTK_WIDGET (gtk_builder_get_object (builder, "window"));
@@ -205,15 +187,13 @@ do_themes (GtkWidget *do_widget)
       gtk_window_set_display (GTK_WINDOW (window),
                               gtk_widget_get_display (do_widget));
 
-      header = GTK_WIDGET (gtk_builder_get_object (builder, "header"));
       label = GTK_WIDGET (gtk_builder_get_object (builder, "fps"));
-
-      gesture = gtk_gesture_click_new ();
-      g_signal_connect (gesture, "pressed", G_CALLBACK (clicked), label);
-      gtk_widget_add_controller (header, GTK_EVENT_CONTROLLER (gesture));
+      warning = GTK_WIDGET (gtk_builder_get_object (builder, "warning"));
+      g_signal_connect (warning, "response", G_CALLBACK (warning_closed), label);
 
       button = GTK_WIDGET (gtk_builder_get_object (builder, "toggle"));
-      g_signal_connect (button, "notify::active", G_CALLBACK (toggle_cycle), label);
+      g_object_set_data (G_OBJECT (window), "button", button);
+      g_signal_connect (button, "notify::active", G_CALLBACK (toggle_cycle), warning);
       gtk_widget_realize (window);
 
       g_object_unref (builder);
