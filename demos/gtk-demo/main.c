@@ -244,6 +244,23 @@ fontify_text (const char *format,
   GBytes *stderr_buf = NULL;
   GError *error = NULL;
   char *format_arg;
+  GtkSettings *settings;
+  char *theme;
+  gboolean prefer_dark;
+  const char *style_arg;
+
+  settings = gtk_settings_get_default ();
+  g_object_get (settings,
+                "gtk-theme-name", &theme,
+                "gtk-application-prefer-dark-theme", &prefer_dark,
+                NULL);
+
+  if (prefer_dark || strcmp (theme, "HighContrastInverse") == 0)
+    style_arg = "--style=edit-vim-dark";
+  else
+    style_arg = "--style=edit-kwrite";
+
+  g_free (theme);
 
   format_arg = g_strconcat ("--syntax=", format, NULL);
   subprocess = g_subprocess_new (G_SUBPROCESS_FLAGS_STDIN_PIPE |
@@ -253,6 +270,7 @@ fontify_text (const char *format,
                                  "highlight",
                                  format_arg,
                                  "--out-format=pango",
+                                 style_arg,
                                  NULL);
   g_free (format_arg);
 
@@ -328,8 +346,13 @@ fontify (const char    *format,
     {
       char *markup;
       gsize len;
+      char *p;
 
       markup = g_bytes_unref_to_data (bytes, &len);
+      /* highlight puts a span with font and size around its output,
+       * which we don't want.
+       */
+      for (p = markup + strlen ("<span "); *p != '>'; p++) *p = ' ';
       gtk_text_buffer_delete (source_buffer, &start, &end);
       gtk_text_buffer_insert_markup (source_buffer, &start, markup, len);
       g_free (markup);
@@ -379,6 +402,7 @@ display_text (const char *format,
   gtk_text_view_set_wrap_mode (GTK_TEXT_VIEW (textview), GTK_WRAP_WORD);
   gtk_text_view_set_pixels_above_lines (GTK_TEXT_VIEW (textview), 2);
   gtk_text_view_set_pixels_below_lines (GTK_TEXT_VIEW (textview), 2);
+  gtk_text_view_set_monospace (GTK_TEXT_VIEW (textview), TRUE);
 
   buffer = gtk_text_buffer_new (NULL);
   gtk_text_buffer_set_text (buffer, g_bytes_get_data (bytes, NULL), g_bytes_get_size (bytes));
