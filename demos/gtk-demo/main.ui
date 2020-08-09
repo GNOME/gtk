@@ -70,6 +70,9 @@
 
                 <child>
                   <object class="GtkListView" id="listview">
+                    <style>
+                      <class name="navigation-sidebar"/>
+                    </style>
                     <property name="factory">
                       <object class="GtkBuilderListItemFactory">
                         <property name="resource">/ui/main-listitem.ui</property>
