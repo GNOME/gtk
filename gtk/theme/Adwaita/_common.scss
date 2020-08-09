@@ -3410,6 +3410,11 @@ placessidebar, .navigation-sidebar {
       }
     }
 
+    &:hover {
+      color: $fg_color;
+      background-color: $menu_selected_color;
+    }
+
     &:disabled { color: $insensitive_fg_color; }
 
     image.sidebar-icon {
