@@ -1,4 +1,4 @@
-/* List Box
+/* List Box/Complex list
  *
  * GtkListBox allows lists with complicated layouts, using
  * regular widgets supporting sorting and filtering.
