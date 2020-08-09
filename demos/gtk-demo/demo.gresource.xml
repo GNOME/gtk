@@ -219,6 +219,7 @@
     <file>infobar.c</file>
     <file>links.c</file>
     <file>listbox.c</file>
+    <file>listbox2.c</file>
     <file>listview_applauncher.c</file>
     <file>listview_colors.c</file>
     <file>listview_clocks.c</file>
@@ -277,6 +278,9 @@
     <file>listbox.ui</file>
     <file>messages.txt</file>
     <file>apple-red.png</file>
+  </gresource>
+  <gresource prefix="/listbox2">
+    <file>listbox2.ui</file>
   </gresource>
   <gresource prefix="/glarea">
     <file>glarea-gl.fs.glsl</file>

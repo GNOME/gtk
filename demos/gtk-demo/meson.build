@@ -40,6 +40,7 @@ demos = files([
   'infobar.c',
   'links.c',
   'listbox.c',
+  'listbox2.c',
   'flowbox.c',
   'list_store.c',
   'listview_applauncher.c',
