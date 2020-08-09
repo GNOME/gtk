@@ -766,6 +766,7 @@ demo_filter_by_name (GtkTreeListRow     *row,
   GListModel *children;
   GtkDemo *demo;
   guint i, n;
+  GtkTreeListRow *parent;
 
   /* Show all items if search is empty */
   if (!search_needle || !search_needle[0] || !*search_needle[0])
@@ -774,6 +775,17 @@ demo_filter_by_name (GtkTreeListRow     *row,
   g_assert (GTK_IS_TREE_LIST_ROW (row));
   g_assert (GTK_IS_FILTER_LIST_MODEL (model));
 
+  /* Show a row if itself of any parent matches */
+  for (parent = row; parent; parent = gtk_tree_list_row_get_parent (parent))
+    {
+      demo = gtk_tree_list_row_get_item (parent);
+      g_assert (GTK_IS_DEMO (demo));
+
+      if (filter_demo (demo))
+        return TRUE;
+    }
+
+  /* Show a row if any child matches */
   children = gtk_tree_list_row_get_children (row);
   if (children)
     {
@@ -792,10 +804,7 @@ demo_filter_by_name (GtkTreeListRow     *row,
         }
     }
 
-  demo = gtk_tree_list_row_get_item (row);
-  g_assert (GTK_IS_DEMO (demo));
-
-  return filter_demo (demo);
+  return FALSE;
 }
 
 static void
