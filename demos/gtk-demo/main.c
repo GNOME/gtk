@@ -328,8 +328,13 @@ fontify (const char    *format,
     {
       char *markup;
       gsize len;
+      char *p;
 
       markup = g_bytes_unref_to_data (bytes, &len);
+      /* highlight puts a span with font and size around its output,
+       * which we don't want.
+       */
+      for (p = markup + strlen ("<span "); *p != '>'; p++) *p = ' ';
       gtk_text_buffer_delete (source_buffer, &start, &end);
       gtk_text_buffer_insert_markup (source_buffer, &start, markup, len);
       g_free (markup);
