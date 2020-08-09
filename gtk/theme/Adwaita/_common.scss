@@ -3078,11 +3078,11 @@ list {
   > row.expander .row-header { padding: 2px; }
 
   &.horizontal row.separator:not(:first-child),
-  &.separators.horizontal row:not(:first-child) {
+  &.separators.horizontal > row:not(:first-child) {
     border-left: 1px solid $borders_color;
   }
   &:not(.horizontal) row.separator:not(:first-child),
-  &.separators:not(.horizontal) row:not(:first-child) {
+  &.separators:not(.horizontal) > row:not(:first-child) {
     border-top: 1px solid $borders_color;
   }
 }

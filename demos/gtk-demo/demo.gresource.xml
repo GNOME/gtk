@@ -219,6 +219,7 @@
     <file>infobar.c</file>
     <file>links.c</file>
     <file>listbox.c</file>
+    <file>listbox2.c</file>
     <file>listview_applauncher.c</file>
     <file>listview_colors.c</file>
     <file>listview_clocks.c</file>
@@ -229,7 +230,6 @@
     <file>listview_words.c</file>
     <file>list_store.c</file>
     <file>markup.c</file>
-    <file>modelbutton.c</file>
     <file>overlay.c</file>
     <file>overlay2.c</file>
     <file>paint.c</file>
@@ -279,6 +279,9 @@
     <file>messages.txt</file>
     <file>apple-red.png</file>
   </gresource>
+  <gresource prefix="/listbox2">
+    <file>listbox2.ui</file>
+  </gresource>
   <gresource prefix="/glarea">
     <file>glarea-gl.fs.glsl</file>
     <file>glarea-gl.vs.glsl</file>
@@ -309,9 +312,6 @@
   </gresource>
   <gresource prefix="/scale">
     <file>scale.ui</file>
-  </gresource>
-  <gresource prefix="/modelbutton">
-    <file>modelbutton.ui</file>
   </gresource>
   <gresource prefix="/tagged_entry">
     <file>demotaggedentry.c</file>
