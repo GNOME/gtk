@@ -244,6 +244,23 @@ fontify_text (const char *format,
   GBytes *stderr_buf = NULL;
   GError *error = NULL;
   char *format_arg;
+  GtkSettings *settings;
+  char *theme;
+  gboolean prefer_dark;
+  const char *style_arg;
+
+  settings = gtk_settings_get_default ();
+  g_object_get (settings,
+                "gtk-theme-name", &theme,
+                "gtk-application-prefer-dark-theme", &prefer_dark,
+                NULL);
+
+  if (prefer_dark || strcmp (theme, "HighContrastInverse") == 0)
+    style_arg = "--style=edit-vim-dark";
+  else
+    style_arg = "--style=edit-kwrite";
+
+  g_free (theme);
 
   format_arg = g_strconcat ("--syntax=", format, NULL);
   subprocess = g_subprocess_new (G_SUBPROCESS_FLAGS_STDIN_PIPE |
@@ -253,6 +270,7 @@ fontify_text (const char *format,
                                  "highlight",
                                  format_arg,
                                  "--out-format=pango",
+                                 style_arg,
                                  NULL);
   g_free (format_arg);
 
