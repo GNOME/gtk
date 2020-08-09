@@ -185,54 +185,54 @@ do_spinbutton (GtkWidget *do_widget)
   static GtkWidget *window;
 
   if (!window)
-  {
-    GtkBuilder *builder;
-    GtkAdjustment *adj;
-    GtkWidget *label;
+    {
+      GtkBuilder *builder;
+      GtkAdjustment *adj;
+      GtkWidget *label;
 
-    builder = gtk_builder_new_from_resource ("/spinbutton/spinbutton.ui");
-    window = GTK_WIDGET (gtk_builder_get_object (builder, "window"));
-    gtk_window_set_display (GTK_WINDOW (window),
-                            gtk_widget_get_display (do_widget));
-    gtk_window_set_title (GTK_WINDOW (window), "Spin Buttons");
-    gtk_window_set_resizable (GTK_WINDOW (window), FALSE);
-    g_object_add_weak_pointer (G_OBJECT (window), (gpointer *)&window);
+      builder = gtk_builder_new_from_resource ("/spinbutton/spinbutton.ui");
+      window = GTK_WIDGET (gtk_builder_get_object (builder, "window"));
+      gtk_window_set_display (GTK_WINDOW (window),
+                              gtk_widget_get_display (do_widget));
+      gtk_window_set_title (GTK_WINDOW (window), "Spin Buttons");
+      gtk_window_set_resizable (GTK_WINDOW (window), FALSE);
+      g_object_add_weak_pointer (G_OBJECT (window), (gpointer *)&window);
 
-    adj = GTK_ADJUSTMENT (gtk_builder_get_object (builder, "basic_adjustment"));
-    label = GTK_WIDGET (gtk_builder_get_object (builder, "basic_label"));
-    g_object_bind_property_full (adj, "value",
-                                 label, "label",
-                                 G_BINDING_SYNC_CREATE,
-                                 value_to_label,
-                                 NULL,
-                                 NULL, NULL);
-    adj = GTK_ADJUSTMENT (gtk_builder_get_object (builder, "hex_adjustment"));
-    label = GTK_WIDGET (gtk_builder_get_object (builder, "hex_label"));
-    g_object_bind_property_full (adj, "value",
-                                 label, "label",
-                                 G_BINDING_SYNC_CREATE,
-                                 value_to_label,
-                                 NULL,
-                                 NULL, NULL);
-    adj = GTK_ADJUSTMENT (gtk_builder_get_object (builder, "time_adjustment"));
-    label = GTK_WIDGET (gtk_builder_get_object (builder, "time_label"));
-    g_object_bind_property_full (adj, "value",
-                                 label, "label",
-                                 G_BINDING_SYNC_CREATE,
-                                 value_to_label,
-                                 NULL,
-                                 NULL, NULL);
-    adj = GTK_ADJUSTMENT (gtk_builder_get_object (builder, "month_adjustment"));
-    label = GTK_WIDGET (gtk_builder_get_object (builder, "month_label"));
-    g_object_bind_property_full (adj, "value",
-                                 label, "label",
-                                 G_BINDING_SYNC_CREATE,
-                                 value_to_label,
-                                 NULL,
-                                 NULL, NULL);
+      adj = GTK_ADJUSTMENT (gtk_builder_get_object (builder, "basic_adjustment"));
+      label = GTK_WIDGET (gtk_builder_get_object (builder, "basic_label"));
+      g_object_bind_property_full (adj, "value",
+                                   label, "label",
+                                   G_BINDING_SYNC_CREATE,
+                                   value_to_label,
+                                   NULL,
+                                   NULL, NULL);
+      adj = GTK_ADJUSTMENT (gtk_builder_get_object (builder, "hex_adjustment"));
+      label = GTK_WIDGET (gtk_builder_get_object (builder, "hex_label"));
+      g_object_bind_property_full (adj, "value",
+                                   label, "label",
+                                   G_BINDING_SYNC_CREATE,
+                                   value_to_label,
+                                   NULL,
+                                   NULL, NULL);
+      adj = GTK_ADJUSTMENT (gtk_builder_get_object (builder, "time_adjustment"));
+      label = GTK_WIDGET (gtk_builder_get_object (builder, "time_label"));
+      g_object_bind_property_full (adj, "value",
+                                   label, "label",
+                                   G_BINDING_SYNC_CREATE,
+                                   value_to_label,
+                                   NULL,
+                                   NULL, NULL);
+      adj = GTK_ADJUSTMENT (gtk_builder_get_object (builder, "month_adjustment"));
+      label = GTK_WIDGET (gtk_builder_get_object (builder, "month_label"));
+      g_object_bind_property_full (adj, "value",
+                                   label, "label",
+                                   G_BINDING_SYNC_CREATE,
+                                   value_to_label,
+                                   NULL,
+                                   NULL, NULL);
 
-    g_object_unref (builder);
-  }
+      g_object_unref (builder);
+    }
 
   if (!gtk_widget_get_visible (window))
     gtk_widget_show (window);
