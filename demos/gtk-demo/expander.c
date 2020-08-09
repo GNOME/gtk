@@ -35,6 +35,10 @@ do_expander (GtkWidget *do_widget)
   GtkWidget *sw;
   GtkWidget *tv;
   GtkTextBuffer *buffer;
+  GtkTextIter start;
+  GtkTextIter end;
+  GtkTextTag *tag;
+  GdkPaintable *paintable;
 
   if (!window)
     {
@@ -64,12 +68,25 @@ do_expander (GtkWidget *do_widget)
                                       GTK_POLICY_NEVER,
                                       GTK_POLICY_AUTOMATIC);
       gtk_scrolled_window_set_propagate_natural_height (GTK_SCROLLED_WINDOW (sw), TRUE);
+      gtk_widget_set_vexpand (sw, TRUE);
 
       tv = gtk_text_view_new ();
+
+      g_object_set (tv,
+                    "left-margin", 10,
+                    "right-margin", 10,
+                    "top-margin", 10,
+                    "bottom-margin", 10,
+                    NULL);
+
       buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (tv));
       gtk_text_view_set_editable (GTK_TEXT_VIEW (tv), FALSE);
+      gtk_text_view_set_cursor_visible (GTK_TEXT_VIEW (tv), FALSE);
       gtk_text_view_set_wrap_mode (GTK_TEXT_VIEW (tv), GTK_WRAP_WORD);
-      gtk_text_buffer_set_text (GTK_TEXT_BUFFER (buffer),
+      gtk_text_view_set_pixels_above_lines (GTK_TEXT_VIEW (tv), 2);
+      gtk_text_view_set_pixels_below_lines (GTK_TEXT_VIEW (tv), 2);
+
+      gtk_text_buffer_set_text (buffer,
                                 "Finally, the full story with all details. "
                                 "And all the inside information, including "
                                 "error codes, etc etc. Pages of information, "
@@ -77,7 +94,22 @@ do_expander (GtkWidget *do_widget)
                                 "or even resize the window - it works !\n"
                                 "A second paragraph will contain even more "
                                 "innuendo, just to make you scroll down or "
-                                "resize the window. Do it already !", -1);
+                                "resize the window.\n"
+                                "Do it already!\n", -1);
+
+      gtk_text_buffer_get_end_iter (buffer, &start);
+      paintable = GDK_PAINTABLE (gdk_texture_new_from_resource ("/cursors/gtk_logo_cursor.png"));
+      gtk_text_buffer_insert_paintable (buffer, &start, paintable);
+      g_object_unref (paintable);
+      gtk_text_iter_backward_char (&start);
+
+      gtk_text_buffer_get_end_iter (buffer, &end);
+      tag = gtk_text_buffer_create_tag (buffer, NULL,
+                                        "pixels-above-lines", 200,
+                                        "justification", GTK_JUSTIFY_RIGHT,
+                                        NULL);
+      gtk_text_buffer_apply_tag (buffer, tag, &start, &end);
+
       gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (sw), tv);
       gtk_expander_set_child (GTK_EXPANDER (expander), sw);
       gtk_box_append (GTK_BOX (area), expander);

@@ -19,7 +19,7 @@ static GtkWidget *show_extents = NULL;
 
 static PangoContext *context;
 
-static int scale = 10;
+static int scale = 9;
 
 static void
 update_image (void)
