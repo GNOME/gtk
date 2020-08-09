@@ -51,7 +51,6 @@ demos = files([
   'listview_weather.c',
   'listview_words.c',
   'markup.c',
-  'modelbutton.c',
   'overlay.c',
   'overlay2.c',
   'paint.c',
