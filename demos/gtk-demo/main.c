@@ -384,6 +384,7 @@ display_text (const char *format,
   gtk_text_view_set_wrap_mode (GTK_TEXT_VIEW (textview), GTK_WRAP_WORD);
   gtk_text_view_set_pixels_above_lines (GTK_TEXT_VIEW (textview), 2);
   gtk_text_view_set_pixels_below_lines (GTK_TEXT_VIEW (textview), 2);
+  gtk_text_view_set_monospace (GTK_TEXT_VIEW (textview), TRUE);
 
   buffer = gtk_text_buffer_new (NULL);
   gtk_text_buffer_set_text (buffer, g_bytes_get_data (bytes, NULL), g_bytes_get_size (bytes));
