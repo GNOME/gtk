@@ -2318,8 +2318,8 @@ create_dynamic_positioner (GdkSurface     *surface,
   real_anchor_rect_x = anchor_rect->x - parent->shadow_left;
   real_anchor_rect_y = anchor_rect->y - parent->shadow_top;
 
-  anchor_rect_width = anchor_rect->width;
-  anchor_rect_height = anchor_rect->height;
+  anchor_rect_width = MAX (anchor_rect->width, 1);
+  anchor_rect_height = MAX (anchor_rect->height, 1);
 
   gdk_popup_layout_get_offset (layout, &rect_anchor_dx, &rect_anchor_dy);
 
