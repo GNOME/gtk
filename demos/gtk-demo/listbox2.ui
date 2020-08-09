@@ -120,6 +120,8 @@
                                     <property name="icon-name">object-select-symbolic</property>
                                     <property name="halign">end</property>
                                     <property name="valign">center</property>
+                                    <property name="margin-start">10</property>
+                                    <property name="margin-end">10</property>
                                     <property name="opacity">0</property>
                                   </object>
                                 </child>
