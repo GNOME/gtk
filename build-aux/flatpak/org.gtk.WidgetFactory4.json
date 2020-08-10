@@ -98,7 +98,9 @@
             "buildsystem" : "meson",
             "builddir" : true,
             "config-opts" : [
-                "--libdir=/app/lib"
+                "--libdir=/app/lib",
+                "-Denable_vulkan=no",
+                "-Dbuildtype=debugoptimized"
             ],
             "sources" : [
                 {
@@ -110,7 +112,10 @@
     ],
     "build-options" : {
         "env" : {
-            "DBUS_SESSION_BUS_ADDRESS" : "''"
+            "DBUS_SESSION_BUS_ADDRESS" : "''",
+            "GSK_RENDERER" : "opengl",
+            "GDK_DEBUG" : "vulkan-disable",
+            "G_ENABLE_DEBUG" : "true"
         }
     }
 }

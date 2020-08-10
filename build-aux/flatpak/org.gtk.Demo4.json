@@ -1,29 +1,38 @@
 {
-    "app-id": "org.gtk.Demo4",
-    "runtime": "org.gnome.Platform",
-    "runtime-version": "master",
-    "sdk": "org.gnome.Sdk",
-    "command": "gtk4-demo",
-    "tags": ["devel", "development", "nightly"],
-    "desktop-file-name-prefix": "(Development) ",
-    "finish-args": [
+    "app-id" : "org.gtk.Demo4",
+    "runtime" : "org.gnome.Platform",
+    "runtime-version" : "master",
+    "sdk" : "org.gnome.Sdk",
+    "command" : "gtk4-demo",
+    "tags" : [
+        "devel",
+        "development",
+        "nightly"
+    ],
+    "desktop-file-name-prefix" : "(Development) ",
+    "finish-args" : [
         "--device=dri",
         "--share=ipc",
         "--socket=fallback-x11",
         "--socket=wayland",
-        "--talk-name=org.gtk.vfs", "--talk-name=org.gtk.vfs.*"
+        "--talk-name=org.gtk.vfs",
+        "--talk-name=org.gtk.vfs.*"
     ],
-    "cleanup": [
+    "cleanup" : [
         "/include",
-        "/lib/pkgconfig", "/share/pkgconfig",
+        "/lib/pkgconfig",
+        "/share/pkgconfig",
         "/share/aclocal",
-        "/man", "/share/man", "/share/gtk-doc",
-        "*.la", ".a",
+        "/man",
+        "/share/man",
+        "/share/gtk-doc",
+        "*.la",
+        ".a",
         "/lib/girepository-1.0",
         "/share/gir-1.0",
         "/share/doc"
     ],
-    "modules": [
+    "modules" : [
         {
             "name" : "wayland",
             "buildsystem" : "autotools",
@@ -39,18 +48,18 @@
             ]
         },
         {
-            "name": "graphene",
-            "buildsystem": "meson",
-            "builddir": true,
-            "config-opts": [
+            "name" : "graphene",
+            "buildsystem" : "meson",
+            "builddir" : true,
+            "config-opts" : [
                 "--libdir=/app/lib",
                 "-Dtests=false",
                 "-Dbenchmarks=false"
             ],
-            "sources": [
+            "sources" : [
                 {
-                    "type": "git",
-                    "url": "https://github.com/ebassi/graphene.git"
+                    "type" : "git",
+                    "url" : "https://github.com/ebassi/graphene.git"
                 }
             ]
         },
@@ -58,7 +67,7 @@
             "name" : "libsass",
             "buildsystem" : "meson",
             "builddir" : true,
-            "config-opts": [
+            "config-opts" : [
                 "--libdir=/app/lib"
             ],
             "sources" : [
@@ -73,7 +82,7 @@
             "name" : "sassc",
             "buildsystem" : "meson",
             "builddir" : true,
-            "config-opts": [
+            "config-opts" : [
                 "--libdir=/app/lib"
             ],
             "sources" : [
@@ -85,18 +94,25 @@
             ]
         },
         {
-            "name": "gtk",
-            "buildsystem": "meson",
-            "builddir": true,
-            "config-opts": [
-                "--libdir=/app/lib"
+            "name" : "gtk",
+            "buildsystem" : "meson",
+            "builddir" : true,
+            "config-opts" : [
+                "--libdir=/app/lib",
+                "-Denable_vulkan=no",
+                "-Dbuildtype=debugoptimized"
             ],
-            "sources": [
+            "sources" : [
                 {
-                    "type": "git",
-                    "url": "https://gitlab.gnome.org/GNOME/gtk.git"
+                    "type" : "git",
+                    "url" : "https://gitlab.gnome.org/GNOME/gtk.git"
                 }
             ]
         }
-    ]
+    ],
+    "build-options" : {
+        "env" : {
+            "GSK_RENDERER" : "opengl"
+        }
+    }
 }
