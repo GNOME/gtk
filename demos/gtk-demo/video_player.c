@@ -73,6 +73,7 @@ do_video_player (GtkWidget *do_widget)
       gtk_window_set_display (GTK_WINDOW (window),
                               gtk_widget_get_display (do_widget));
       gtk_window_set_title (GTK_WINDOW (window), "Video Player");
+      gtk_window_set_default_size (GTK_WINDOW (window), 600, 400);
       g_object_add_weak_pointer (G_OBJECT (window), (gpointer *)&window);
 
       video = gtk_video_new ();
