@@ -604,6 +604,10 @@ activate_about (GSimpleAction *action,
     "Alexander Larsson",
     NULL
   };
+  const char *artists[] = {
+    "Jakub Steiner",
+    NULL
+  };
   const char *maintainers[] = {
     "The GTK Team",
     NULL
@@ -657,12 +661,16 @@ activate_about (GSimpleAction *action,
                          "system-information", sysinfo->str,
                          NULL);
   gtk_about_dialog_add_credit_section (GTK_ABOUT_DIALOG (dialog),
+                                       _("Artwork by"), artists);
+  gtk_about_dialog_add_credit_section (GTK_ABOUT_DIALOG (dialog),
                                        _("Maintained by"), maintainers);
 
   gtk_window_present (GTK_WINDOW (dialog));
 
   g_string_free (sysinfo, TRUE);
   g_free (version);
+  g_free (os_name);
+  g_free (os_version);
 }
 
 static void

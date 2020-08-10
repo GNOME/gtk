@@ -4,6 +4,7 @@
  *
  */
 
+#include "config.h"
 #include <gtk/gtk.h>
 
 /* Create an object for the pegs that get moved around in the game.
@@ -114,6 +115,57 @@ solitaire_peg_new (void)
 {
   return g_object_new (SOLITAIRE_TYPE_PEG, NULL);
 }
+
+/*** Helper for finding a win ***/
+
+static void
+ended (GObject *object)
+{
+  g_object_unref (object);
+}
+
+static void
+celebrate (void)
+{
+  char *path;
+  GtkMediaStream *stream;
+
+  path = g_build_filename (GTK_DATADIR, "sounds", "freedesktop", "stereo", "complete.oga", NULL);
+  stream = gtk_media_file_new_for_filename (path);
+  gtk_media_stream_set_volume (stream, 1.0);
+  gtk_media_stream_play (stream);
+
+  g_signal_connect (stream, "notify::ended", G_CALLBACK (ended), NULL);
+  g_free (path);
+}
+
+static void
+check_for_win (GtkGrid *grid)
+{
+  GtkWidget *image;
+  int x, y;
+  int pegs;
+
+  pegs = 0;
+  for (x = 0; x < 7; x++)
+    {
+      for (y = 0; y < 7; y++)
+        {
+          image = gtk_grid_get_child_at (grid, x, y);
+          if (GTK_IS_IMAGE (image) &&
+              SOLITAIRE_IS_PEG (gtk_image_get_paintable (GTK_IMAGE (image))))
+            pegs++;
+        }
+    }
+
+  if (pegs > 1)
+    return;
+
+  image = gtk_grid_get_child_at (grid, 3, 3);
+  if (SOLITAIRE_IS_PEG (gtk_image_get_paintable (GTK_IMAGE (image))))
+    celebrate ();
+}
+
 
 /*** DRAG AND DROP ***/
 
@@ -266,6 +318,9 @@ drop_drop (GtkDropTarget *target,
   /* Add the peg to this image */
   solitaire_peg_set_position (peg, image_x, image_y);
   gtk_image_set_from_paintable (GTK_IMAGE (image), GDK_PAINTABLE (peg));
+
+  /* Maybe we have something to celebrate */
+  check_for_win (grid);
 
   /* Success! */
   return TRUE;
