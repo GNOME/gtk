@@ -240,11 +240,11 @@ progressive_timeout (gpointer data)
 
       pixbuf_loader = gdk_pixbuf_loader_new ();
 
-      g_signal_connect (pixbuf_loader, "area-prepared",
-                        G_CALLBACK (progressive_prepared_callback), picture);
+      g_signal_connect_object (pixbuf_loader, "area-prepared",
+                               G_CALLBACK (progressive_prepared_callback), picture, 0);
 
-      g_signal_connect (pixbuf_loader, "area-updated",
-                        G_CALLBACK (progressive_updated_callback), picture);
+      g_signal_connect_object (pixbuf_loader, "area-updated",
+                               G_CALLBACK (progressive_updated_callback), picture, 0);
     }
 
   /* leave timeout installed */
@@ -261,14 +261,16 @@ start_progressive_loading (GtkWidget *picture)
    * The timeout simply simulates a slow data source by inserting
    * pauses in the reading process.
    */
-  load_timeout = g_timeout_add (150, progressive_timeout, picture);
+  load_timeout = g_timeout_add (1500, progressive_timeout, picture);
   g_source_set_name_by_id (load_timeout, "[gtk] progressive_timeout");
 }
 
 static void
-cleanup_callback (GObject   *object,
-                  gpointer   data)
+cleanup_callback (gpointer  data,
+                  GObject  *former_object)
 {
+  *(gpointer**)data = NULL;
+
   if (load_timeout)
     {
       g_source_remove (load_timeout);
@@ -327,10 +329,7 @@ do_images (GtkWidget *do_widget)
       gtk_window_set_display (GTK_WINDOW (window),
                               gtk_widget_get_display (do_widget));
       gtk_window_set_title (GTK_WINDOW (window), "Images");
-      g_object_add_weak_pointer (G_OBJECT (window), (gpointer *)&window);
-
-      g_signal_connect (window, "destroy",
-                        G_CALLBACK (cleanup_callback), NULL);
+      g_object_weak_ref (G_OBJECT (window), cleanup_callback, &window);
 
       base_vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 8);
       gtk_widget_set_margin_start (base_vbox, 16);
