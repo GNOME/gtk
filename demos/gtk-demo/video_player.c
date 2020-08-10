@@ -31,6 +31,7 @@ open_clicked_cb (GtkWidget *button,
                  GtkWidget *video)
 {
   GtkWidget *dialog;
+  GtkFileFilter *filter;
 
   dialog = gtk_file_chooser_dialog_new ("Select a video",
                                         GTK_WINDOW (gtk_widget_get_root (button)),
@@ -38,6 +39,11 @@ open_clicked_cb (GtkWidget *button,
                                         "_Cancel", GTK_RESPONSE_CANCEL,
                                         "_Open", GTK_RESPONSE_ACCEPT,
                                         NULL);
+  filter = gtk_file_filter_new ();
+  gtk_file_filter_add_mime_type (filter, "video/*");
+  gtk_file_filter_set_name (filter, "Video");
+  gtk_file_chooser_set_filter (GTK_FILE_CHOOSER (dialog), filter);
+  g_object_unref (filter);
   gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_ACCEPT);
   gtk_window_set_modal (GTK_WINDOW (dialog), TRUE);
   g_signal_connect (dialog, "response", G_CALLBACK (open_dialog_response_cb), video);
@@ -67,6 +73,7 @@ do_video_player (GtkWidget *do_widget)
       gtk_window_set_display (GTK_WINDOW (window),
                               gtk_widget_get_display (do_widget));
       gtk_window_set_title (GTK_WINDOW (window), "Video Player");
+      gtk_window_set_default_size (GTK_WINDOW (window), 600, 400);
       g_object_add_weak_pointer (G_OBJECT (window), (gpointer *)&window);
 
       video = gtk_video_new ();
