@@ -4222,7 +4222,6 @@ gtk_window_compute_default_size (GtkWindow *window,
                                  int       *width,
                                  int       *height)
 {
-  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
   GtkWidget *widget = GTK_WIDGET (window);
 
   *width = max_width;
@@ -4257,9 +4256,6 @@ gtk_window_compute_default_size (GtkWindow *window,
                           NULL, NULL);
       *height = MAX (minimum, MIN (*height, natural));
     }
-
-  /* No longer use the default settings */
-  priv->need_default_size = FALSE;
 }
 
 static void
@@ -4288,6 +4284,10 @@ toplevel_compute_size (GdkToplevel     *toplevel,
     {
       int remembered_width;
       int remembered_height;
+
+      /* No longer use the default settings */
+      priv->need_default_size = FALSE;
+
       gtk_window_get_remembered_size (window,
                                       &remembered_width, &remembered_height);
       width = MAX (default_width, remembered_width);
