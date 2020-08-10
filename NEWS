@@ -1,3 +1,37 @@
+Overview of Changes in GTK+ 3.24.22
+===================================
+
+* GtkTextView:
+ - Fix some corner cases of pixelcache invalidation
+ - Make select-all work on touch
+
+* Fix print portal support
+
+* Adwaita:
+ - Tweak title style class
+ - Add a public color for text view background
+
+* Windows:
+ - Limit the size of the corner mask cache
+ - Use native API for keycode conversion
+ - Use GLES on arm64
+
+* Wayland: Add a way to change the application id
+
+* Quartz: Add axes to master devices
+
+* Add --enable-tracker3 option to configure
+
+* Translation updates:
+ Catalan
+ German
+ Indonesian
+ Italian
+ Kazakh
+ Spanish
+ Turkish
+
+
 Overview of Changes in GTK+ 3.24.21
 ===================================
 
