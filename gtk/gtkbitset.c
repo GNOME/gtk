@@ -21,7 +21,7 @@
 
 #include "gtkbitset.h"
 
-#include "roaring.c"
+#include "roaring/roaring.c"
 
 /**
  * SECTION:gtkbitset
