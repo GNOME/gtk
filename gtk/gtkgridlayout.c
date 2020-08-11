@@ -165,7 +165,7 @@ gtk_grid_layout_child_class_init (GtkGridLayoutChildClass *klass)
   child_props[PROP_CHILD_COLUMN] =
     g_param_spec_int ("column",
                       P_("Column"),
-                      P_("The column place the child in"),
+                      P_("The column to place the child in"),
                       G_MININT, G_MAXINT, 0,
                       GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
