@@ -36,6 +36,10 @@
                         <property name="selection-mode">none</property>
                         <property name="show-separators">1</property>
                         <signal name="row-activated" handler="row_activated"/>
+                        <style>
+                          <class name="rich-list"/>
+                        </style>
+
                         <child>
                           <object class="GtkListBoxRow">
                             <child>
@@ -151,6 +155,9 @@
                       <object class="GtkListBox">
                         <property name="selection-mode">none</property>
                         <property name="show-separators">1</property>
+                        <style>
+                          <class name="rich-list"/>
+                        </style>
 
                         <child>
                           <object class="GtkListBoxRow">
