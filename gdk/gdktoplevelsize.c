@@ -123,13 +123,19 @@ gdk_toplevel_size_validate (GdkToplevelSize *size)
 {
   if (size->min_width > size->bounds_width ||
       size->min_height > size->bounds_height)
-    g_warning ("GdkToplevelSize: min_size exceeds bounds");
+    g_warning ("GdkToplevelSize: min_size (%d, %d) exceeds bounds (%d, %d)",
+               size->min_width, size->min_height,
+               size->bounds_width, size->bounds_height);
 
   if (size->width > size->bounds_width ||
       size->height > size->bounds_height)
-    g_warning ("GdkToplevelSize: size exceeds bounds");
+    g_warning ("GdkToplevelSize: size (%d, %d) exceeds bounds (%d, %d)",
+               size->width, size->height,
+               size->bounds_width, size->bounds_height);
 
   if (size->min_width > size->width ||
       size->min_height > size->height)
-    g_warning ("GdkToplevelSize: min_size exceeds size");
+    g_warning ("GdkToplevelSize: min_size (%d, %d) exceeds size (%d, %d)",
+               size->min_width, size->min_height,
+               size->width, size->height);
 }
