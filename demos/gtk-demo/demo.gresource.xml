@@ -165,17 +165,6 @@
     <file>floppybuddy.gif</file>
     <file>gtk-logo.webm</file>
   </gresource>
-  <gresource prefix="/pixbufs">
-    <file>apple-red.png</file>
-    <file>background.jpg</file>
-    <file>gnome-applets.png</file>
-    <file>gnome-calendar.png</file>
-    <file>gnome-foot.png</file>
-    <file>gnome-gmush.png</file>
-    <file>gnome-gimp.png</file>
-    <file>gnome-gsame.png</file>
-    <file>gnu-keys.png</file>
-  </gresource>
   <gresource prefix="/sources">
     <file>application_demo.c</file>
     <file>assistant.c</file>
@@ -241,7 +230,6 @@
     <file>password_entry.c</file>
     <file>peg_solitaire.c</file>
     <file>pickers.c</file>
-    <file>pixbufs.c</file>
     <file>printing.c</file>
     <file>revealer.c</file>
     <file>rotated_text.c</file>

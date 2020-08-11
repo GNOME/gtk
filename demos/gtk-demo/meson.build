@@ -62,7 +62,6 @@ demos = files([
   'password_entry.c',
   'peg_solitaire.c',
   'pickers.c',
-  'pixbufs.c',
   'printing.c',
   'revealer.c',
   'rotated_text.c',
