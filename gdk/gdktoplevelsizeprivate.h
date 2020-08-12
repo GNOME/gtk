@@ -30,6 +30,11 @@ struct _GdkToplevelSize
   int height;
   int min_width;
   int min_height;
+
+  int shadow_left;
+  int shadow_right;
+  int shadow_top;
+  int shadow_bottom;
 };
 
 void gdk_toplevel_size_init (GdkToplevelSize *size,

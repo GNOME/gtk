@@ -118,6 +118,31 @@ gdk_toplevel_size_set_min_size (GdkToplevelSize *size,
   size->min_height = min_height;
 }
 
+/**
+ * gdk_toplevel_size_set_shadow_size:
+ * @size: a #GdkToplevelSize
+ * @left: The left extent
+ * @right: The right extent
+ * @top: The top extent
+ * @bottom: The bottom extent
+ *
+ * Determine the size of the shadow and border area that should be
+ * considered “outside” for the purposes of window placement and
+ * edge snapping.
+ */
+void
+gdk_toplevel_size_set_shadow_size (GdkToplevelSize *size,
+                                   int              left,
+                                   int              right,
+                                   int              top,
+                                   int              bottom)
+{
+  size->shadow_left = left;
+  size->shadow_right = right;
+  size->shadow_top = top;
+  size->shadow_bottom = bottom;
+}
+
 void
 gdk_toplevel_size_validate (GdkToplevelSize *size)
 {
@@ -132,4 +157,7 @@ gdk_toplevel_size_validate (GdkToplevelSize *size)
   if (size->min_width > size->width ||
       size->min_height > size->height)
     g_warning ("GdkToplevelSize: min_size exceeds size");
+
+  if (size->width <= 0 || size->height <= 0)
+    g_warning ("GdkToplevelSize: size can't be zero");
 }
