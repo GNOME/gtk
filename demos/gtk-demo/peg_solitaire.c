@@ -125,12 +125,15 @@ ended (GObject *object)
 }
 
 static void
-celebrate (void)
+celebrate (gboolean win)
 {
   char *path;
   GtkMediaStream *stream;
 
-  path = g_build_filename (GTK_DATADIR, "sounds", "freedesktop", "stereo", "complete.oga", NULL);
+  if (win)
+    path = g_build_filename (GTK_DATADIR, "sounds", "freedesktop", "stereo", "complete.oga", NULL);
+  else
+    path = g_build_filename (GTK_DATADIR, "sounds", "freedesktop", "stereo", "dialog-error.oga", NULL);
   stream = gtk_media_file_new_for_filename (path);
   gtk_media_stream_set_volume (stream, 1.0);
   gtk_media_stream_play (stream);
@@ -139,14 +142,40 @@ celebrate (void)
   g_free (path);
 }
 
+static int
+check_move (GtkGrid *grid,
+            int      x,
+            int      y,
+            int      dx,
+            int      dy)
+{
+  GtkWidget *image;
+  /* We have a peg at x, y.
+   * Check if we can move the peg to x + 2*dx, y + 2*dy
+   */
+  image = gtk_grid_get_child_at (grid, x + dx, y + dy);
+  if (!GTK_IS_IMAGE (image) ||
+      !SOLITAIRE_IS_PEG (gtk_image_get_paintable (GTK_IMAGE (image))))
+    return 0;
+
+  image = gtk_grid_get_child_at (grid, x + 2*dx, y + 2*dy);
+  if (!GTK_IMAGE (image) ||
+      SOLITAIRE_IS_PEG (gtk_image_get_paintable (GTK_IMAGE (image))))
+    return 0;
+
+  return 1;
+}
+
 static void
-check_for_win (GtkGrid *grid)
+check_for_end (GtkGrid *grid)
 {
   GtkWidget *image;
   int x, y;
   int pegs;
+  int moves;
 
   pegs = 0;
+  moves = 0;
   for (x = 0; x < 7; x++)
     {
       for (y = 0; y < 7; y++)
@@ -154,16 +183,25 @@ check_for_win (GtkGrid *grid)
           image = gtk_grid_get_child_at (grid, x, y);
           if (GTK_IS_IMAGE (image) &&
               SOLITAIRE_IS_PEG (gtk_image_get_paintable (GTK_IMAGE (image))))
-            pegs++;
+            {
+              pegs++;
+              moves += check_move (grid, x, y, 1, 0);
+              moves += check_move (grid, x, y, -1, 0);
+              moves += check_move (grid, x, y, 0, 1);
+              moves += check_move (grid, x, y, 0, -1);
+            }
+
+          if (pegs > 1 && moves > 0)
+            break;
         }
     }
 
-  if (pegs > 1)
-    return;
-
   image = gtk_grid_get_child_at (grid, 3, 3);
-  if (SOLITAIRE_IS_PEG (gtk_image_get_paintable (GTK_IMAGE (image))))
-    celebrate ();
+  if (pegs == 1 &&
+      SOLITAIRE_IS_PEG (gtk_image_get_paintable (GTK_IMAGE (image))))
+    celebrate (TRUE);
+  else if (moves == 0)
+    celebrate (FALSE);
 }
 
 
@@ -320,7 +358,7 @@ drop_drop (GtkDropTarget *target,
   gtk_image_set_from_paintable (GTK_IMAGE (image), GDK_PAINTABLE (peg));
 
   /* Maybe we have something to celebrate */
-  check_for_win (grid);
+  check_for_end (grid);
 
   /* Success! */
   return TRUE;
