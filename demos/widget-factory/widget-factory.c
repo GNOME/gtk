@@ -1854,6 +1854,31 @@ set_up_context_popover (GtkWidget *widget,
 }
 
 static void
+age_entry_changed (GtkEntry   *entry,
+                   GParamSpec *pspec,
+                   gpointer    data)
+{
+  const char *text;
+  guint64 age;
+  GError *error = NULL;
+
+  text = gtk_editable_get_text (GTK_EDITABLE (entry));
+
+  if (strlen (text) > 0 &&
+      !g_ascii_string_to_unsigned (text, 10, 16, 666, &age, &error))
+    {
+      gtk_widget_set_tooltip_text (GTK_WIDGET (entry), error->message);
+      gtk_widget_add_css_class (GTK_WIDGET (entry), "error");
+      g_error_free (error);
+    }
+  else
+    {
+      gtk_widget_set_tooltip_text (GTK_WIDGET (entry), "");
+      gtk_widget_remove_css_class (GTK_WIDGET (entry), "error");
+    }
+}
+
+static void
 activate (GApplication *app)
 {
   GtkBuilder *builder;
@@ -1933,6 +1958,7 @@ activate (GApplication *app)
           "decrease_icon_size", (GCallback)decrease_icon_size,
           "reset_icon_size", (GCallback)reset_icon_size,
           "osd_frame_pressed", (GCallback)osd_frame_pressed,
+          "age_entry_changed", (GCallback)age_entry_changed,
           NULL);
   gtk_builder_set_scope (builder, scope);
   g_object_unref (scope);
