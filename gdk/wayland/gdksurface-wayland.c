@@ -1300,8 +1300,11 @@ configure_surface_geometry (GdkSurface *surface)
   gdk_toplevel_notify_compute_size (GDK_TOPLEVEL (surface), &size);
   width = size.width;
   height = size.height;
-  g_warn_if_fail (width > 0);
-  g_warn_if_fail (height > 0);
+
+  impl->margin_left = surface->shadow_left = size.shadow_left;
+  impl->margin_right = surface->shadow_right = size.shadow_right;
+  impl->margin_top = surface->shadow_top = size.shadow_top;
+  impl->margin_bottom = surface->shadow_bottom = size.shadow_bottom;
 
   layout = impl->toplevel.layout;
   if (gdk_toplevel_layout_get_resizable (layout))
