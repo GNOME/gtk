@@ -1555,10 +1555,12 @@ gdk_broadway_toplevel_present (GdkToplevel       *toplevel,
 
   gdk_toplevel_size_init (&size, bounds_width, bounds_height);
   gdk_toplevel_notify_compute_size (toplevel, &size);
-  g_warn_if_fail (size.width > 0);
-  g_warn_if_fail (size.height > 0);
   width = size.width;
   height = size.height;
+  surface->shadow_left = size.shadow_left;
+  surface->shadow_right = size.shadow_right;
+  surface->shadow_top = size.shadow_top;
+  surface->shadow_bottom = size.shadow_bottom;
 
   if (gdk_toplevel_layout_get_resizable (layout))
     {
