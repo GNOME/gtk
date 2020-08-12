@@ -1879,6 +1879,24 @@ age_entry_changed (GtkEntry   *entry,
 }
 
 static void
+validate_more_details (GtkEntry   *entry,
+                       GParamSpec *pspec,
+                       GtkEntry   *details)
+{
+  if (strlen (gtk_editable_get_text (GTK_EDITABLE (entry))) > 0 &&
+      strlen (gtk_editable_get_text (GTK_EDITABLE (details))) == 0)
+    {
+      gtk_widget_set_tooltip_text (GTK_WIDGET (entry), "Must have details first");
+      gtk_widget_add_css_class (GTK_WIDGET (entry), "error");
+    }
+  else
+    {
+      gtk_widget_set_tooltip_text (GTK_WIDGET (entry), "");
+      gtk_widget_remove_css_class (GTK_WIDGET (entry), "error");
+    }
+}
+
+static void
 activate (GApplication *app)
 {
   GtkBuilder *builder;
@@ -1959,6 +1977,7 @@ activate (GApplication *app)
           "reset_icon_size", (GCallback)reset_icon_size,
           "osd_frame_pressed", (GCallback)osd_frame_pressed,
           "age_entry_changed", (GCallback)age_entry_changed,
+          "validate_more_details", (GCallback)validate_more_details,
           NULL);
   gtk_builder_set_scope (builder, scope);
   g_object_unref (scope);
