@@ -42,6 +42,8 @@ gdk_quartz_osx_version (void)
 
       version = [[NSProcessInfo processInfo] operatingSystemVersion];
       minor = version.minorVersion;
+      if (version.majorVersion == 11)
+        minor += 16;
 #endif
     }
 
