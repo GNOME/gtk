@@ -334,6 +334,14 @@ create_board (GtkWidget *window)
   int x, y;
   GtkDragSource *source;
   GtkDropTarget *target;
+  GtkCssProvider *provider;
+  const char css[] =
+    ".solitaire-field {"
+    "  border: 1px solid lightgray;"
+    "}";
+
+  provider = gtk_css_provider_new ();
+  gtk_css_provider_load_from_data (provider, css, -1);
 
   grid = gtk_grid_new ();
   gtk_widget_set_halign (grid, GTK_ALIGN_CENTER);
@@ -352,6 +360,10 @@ create_board (GtkWidget *window)
             continue;
 
           image = gtk_image_new ();
+          gtk_style_context_add_provider (gtk_widget_get_style_context (image),
+                                          GTK_STYLE_PROVIDER (provider),
+                                          800);
+          gtk_widget_add_css_class (image, "solitaire-field");
           gtk_image_set_icon_size (GTK_IMAGE (image), GTK_ICON_SIZE_LARGE);
           if (x != 3 || y != 3)
             {
@@ -393,6 +405,8 @@ create_board (GtkWidget *window)
           gtk_widget_add_controller (image, GTK_EVENT_CONTROLLER (target));
         }
     }
+
+  g_object_unref (provider);
 }
 
 static void
