@@ -38,6 +38,7 @@ demos = files([
   'iconview_edit.c',
   'images.c',
   'infobar.c',
+  'layoutmanager.c',
   'links.c',
   'listbox.c',
   'listbox2.c',
@@ -62,7 +63,6 @@ demos = files([
   'password_entry.c',
   'peg_solitaire.c',
   'pickers.c',
-  'pixbufs.c',
   'printing.c',
   'revealer.c',
   'rotated_text.c',
@@ -99,7 +99,10 @@ extra_demo_sources = files(['main.c',
                             'puzzlepiece.c',
                             'bluroverlay.c',
                             'demoimage.c',
-                            'demotaggedentry.c'])
+                            'demotaggedentry.c',
+                            'demochild.c',
+                            'demolayout.c',
+                            'demowidget.c'])
 
 if harfbuzz_dep.found() and pangoft_dep.found()
   demos += files('font_features.c')
