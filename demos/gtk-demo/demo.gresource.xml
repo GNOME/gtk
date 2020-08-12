@@ -124,6 +124,14 @@
     <file>gnome-fs-directory.png</file>
     <file>gnome-fs-regular.png</file>
   </gresource>
+  <gresource prefix="/layoutmanager">
+    <file>demolayout.h</file>
+    <file>demolayout.c</file>
+    <file>demowidget.h</file>
+    <file>demowidget.c</file>
+    <file>demochild.h</file>
+    <file>demochild.c</file>
+  </gresource>
   <gresource prefix="/listview_filebrowser">
     <file>listview_filebrowser.ui</file>
     <file>listview_filebrowser.css</file>
@@ -206,6 +214,7 @@
     <file>iconview_edit.c</file>
     <file>images.c</file>
     <file>infobar.c</file>
+    <file>layoutmanager.c</file>
     <file>links.c</file>
     <file>listbox.c</file>
     <file>listbox2.c</file>
