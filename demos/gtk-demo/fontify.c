@@ -8,8 +8,10 @@
 #include <gtk/gtk.h>
 #include <glib/gstdio.h>
 
+#ifdef HAVE_GIO_UNIX
 #include <gio/gunixoutputstream.h>
 #include <fcntl.h>
+#endif
 
 
 /* This is the guts of gtk_text_buffer_insert_markup,
@@ -389,6 +391,7 @@ fontify (const char    *format,
   text = gtk_text_buffer_get_text (source_buffer, &start, &end, TRUE);
   bytes = g_bytes_new_static (text, strlen (text));
 
+#ifdef HAVE_GIO_UNIX
   /* Work around https://gitlab.gnome.org/GNOME/glib/-/issues/2182 */
   if (G_IS_UNIX_OUTPUT_STREAM (g_subprocess_get_stdin_pipe (subprocess)))
     {
@@ -396,6 +399,7 @@ fontify (const char    *format,
       int fd = g_unix_output_stream_get_fd (G_UNIX_OUTPUT_STREAM (stdin_pipe));
       fcntl (fd, F_SETFL, O_NONBLOCK);
     }
+#endif
 
   g_subprocess_communicate_async (subprocess,
                                   bytes,
