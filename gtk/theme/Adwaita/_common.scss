@@ -3399,7 +3399,7 @@ placessidebar, .navigation-sidebar {
       background-color: desaturate($selected_bg_color,100%);
       color: $selected_fg_color;
 
-      &:focus {
+      &:focus-visible:focus-within {
         outline-width: 0;
         color: $selected_fg_color;
         background-color: $selected_bg_color;
