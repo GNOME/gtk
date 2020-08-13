@@ -362,8 +362,9 @@ fontify (const char    *format,
 }
 
 static GtkWidget *
-display_image (const char *format,
-               const char *resource)
+display_image (const char  *format,
+               const char  *resource,
+               char       **label)
 {
   GtkWidget *sw, *image;
 
@@ -377,8 +378,56 @@ display_image (const char *format,
 }
 
 static GtkWidget *
-display_text (const char *format,
-              const char *resource)
+display_images (const char  *format,
+                const char  *resource_dir,
+                char       **label)
+{
+  char **resources;
+  GtkWidget *grid;
+  GtkWidget *sw;
+  GtkWidget *widget;
+  guint i;
+
+  resources = g_resources_enumerate_children (resource_dir, 0, NULL);
+  if (resources == NULL)
+    return NULL;
+
+  sw = gtk_scrolled_window_new ();
+  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (sw),
+                                  GTK_POLICY_NEVER,
+                                  GTK_POLICY_AUTOMATIC);
+  grid = gtk_flow_box_new ();
+  gtk_flow_box_set_selection_mode (GTK_FLOW_BOX (grid), GTK_SELECTION_NONE);
+  gtk_widget_set_valign (grid, GTK_ALIGN_START);
+  gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (sw), grid);
+
+  for (i = 0; resources[i]; i++)
+    {
+      char *resource_name;
+      GtkWidget *box;
+
+      resource_name = g_strconcat (resource_dir, "/", resources[i], NULL);
+
+      widget = display_image (NULL, resource_name, NULL);
+      box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
+      gtk_box_append (GTK_BOX (box), widget);
+      gtk_box_append (GTK_BOX (box), gtk_label_new (resources[i]));
+      gtk_flow_box_insert (GTK_FLOW_BOX (grid), box, -1);
+
+      g_free (resource_name);
+    }
+
+  g_strfreev (resources);
+
+  *label = g_strdup ("Images");
+
+  return sw;
+}
+
+static GtkWidget *
+display_text (const char  *format,
+              const char  *resource,
+              char       **label)
 {
   GtkTextBuffer *buffer;
   GtkWidget *textview, *sw;
@@ -424,8 +473,9 @@ display_text (const char *format,
 }
 
 static GtkWidget *
-display_video (const char *format,
-               const char *resource)
+display_video (const char  *format,
+               const char  *resource,
+               char       **label)
 {
   GtkWidget *video;
 
@@ -453,8 +503,9 @@ display_nothing (const char *resource)
 static struct {
   const char *extension;
   const char *format;
-  GtkWidget * (* display_func) (const char *format,
-                                const char *resource);
+  GtkWidget * (* display_func) (const char  *format,
+                                const char  *resource,
+                                char       **label);
 } display_funcs[] = {
   { ".gif", NULL, display_image },
   { ".jpg", NULL, display_image },
@@ -465,7 +516,8 @@ static struct {
   { ".h", "c", display_text },
   { ".txt", NULL, display_text },
   { ".ui", "xml", display_text },
-  { ".webm", NULL, display_video }
+  { ".webm", NULL, display_video },
+  { "images/", NULL, display_images }
 };
 
 static void
@@ -475,6 +527,7 @@ add_data_tab (const char *demoname)
   char **resources;
   GtkWidget *widget, *label;
   guint i, j;
+  char *label_string;
 
   resource_dir = g_strconcat ("/", demoname, NULL);
   resources = g_resources_enumerate_children (resource_dir, 0, NULL);
@@ -488,18 +541,22 @@ add_data_tab (const char *demoname)
     {
       resource_name = g_strconcat (resource_dir, "/", resources[i], NULL);
 
-      for (j = 0; j < G_N_ELEMENTS(display_funcs); j++)
+      for (j = 0; j < G_N_ELEMENTS (display_funcs); j++)
         {
           if (g_str_has_suffix (resource_name, display_funcs[j].extension))
             break;
         }
 
-      if (j < G_N_ELEMENTS(display_funcs))
-        widget = display_funcs[j].display_func (display_funcs[j].format, resource_name);
+      label_string = NULL;
+
+      if (j < G_N_ELEMENTS (display_funcs))
+        widget = display_funcs[j].display_func (display_funcs[j].format,
+                                                resource_name,
+                                                &label_string);
       else
         widget = display_nothing (resource_name);
 
-      label = gtk_label_new (resources[i]);
+      label = gtk_label_new (label_string ? label_string : resources[i]);
       gtk_widget_show (label);
       gtk_notebook_append_page (GTK_NOTEBOOK (notebook), widget, label);
       g_object_set (gtk_notebook_get_page (GTK_NOTEBOOK (notebook), widget),
@@ -507,6 +564,7 @@ add_data_tab (const char *demoname)
                     NULL);
 
       g_free (resource_name);
+      g_free (label_string);
     }
 
   g_strfreev (resources);
