@@ -51,6 +51,8 @@
     <file>cssview.css</file>
     <file>reset.css</file>
     <file>background.jpg</file>
+  </gresource>
+  <gresource prefix="/css_pixbufs/images">
     <file>apple-red.png</file>
     <file>gnome-applets.png</file>
     <file>gnome-calendar.png</file>
@@ -67,6 +69,8 @@
   </gresource>
   <gresource prefix="/cursors">
     <file>cursors.ui</file>
+  </gresource>
+  <gresource prefix="/cursors/images">
     <file>alias_cursor.png</file>
     <file>all_scroll_cursor.png</file>
     <file>cell_cursor.png</file>
