@@ -167,6 +167,10 @@ insert_tags_for_attributes (GtkTextBuffer     *buffer,
 
 typedef struct
 {
+  GMarkupParseContext *parser;
+  char *markup;
+  gsize pos;
+  gsize len;
   GtkTextBuffer *buffer;
   GtkTextIter iter;
   GtkTextMark *mark;
@@ -178,9 +182,11 @@ typedef struct
 static void
 free_markup_data (MarkupData *mdata)
 {
+  g_free (mdata->markup);
+  g_clear_pointer (&mdata->parser, g_markup_parse_context_free);
   gtk_text_buffer_delete_mark (mdata->buffer, mdata->mark);
-  pango_attr_iterator_destroy (mdata->attr);
-  pango_attr_list_unref (mdata->attributes);
+  g_clear_pointer (&mdata->attr, pango_attr_iterator_destroy);
+  g_clear_pointer (&mdata->attributes, pango_attr_list_unref);
   g_free (mdata->text);
   g_object_unref (mdata->buffer);
   g_free (mdata);
@@ -225,51 +231,94 @@ insert_markup_idle (gpointer data)
   return G_SOURCE_REMOVE;
 }
 
+static gboolean
+parse_markup_idle (gpointer data)
+{
+  MarkupData *mdata = data;
+  gint64 begin;
+  GError *error = NULL;
+
+  begin = g_get_monotonic_time ();
+
+  do {
+    if (g_get_monotonic_time () - begin > G_TIME_SPAN_MILLISECOND)
+      {
+        g_idle_add (parse_markup_idle, data);
+        return G_SOURCE_REMOVE;
+      }
+
+    if (!g_markup_parse_context_parse (mdata->parser,
+                                       mdata->markup + mdata->pos,
+                                       MIN (4096, mdata->len - mdata->pos),
+                                       &error))
+      {
+        g_warning ("Invalid markup string: %s", error->message);
+        g_error_free (error);
+        free_markup_data (mdata);
+        return G_SOURCE_REMOVE;
+      }
+
+    mdata->pos += 4096;
+  } while (mdata->pos < mdata->len);
+
+  if (!pango_markup_parser_finish (mdata->parser,
+                                   &mdata->attributes,
+                                   &mdata->text,
+                                   NULL,
+                                   &error))
+    {
+      g_warning ("Invalid markup string: %s", error->message);
+      g_error_free (error);
+      free_markup_data (mdata);
+      return G_SOURCE_REMOVE;
+    }
+
+  if (!mdata->attributes)
+    {
+      gtk_text_buffer_insert (mdata->buffer, &mdata->iter, mdata->text, -1);
+      free_markup_data (mdata);
+      return G_SOURCE_REMOVE;
+    }
+
+  mdata->attr = pango_attr_list_get_iterator (mdata->attributes);
+  insert_markup_idle (data);
+
+  return G_SOURCE_REMOVE;
+}
+
+/* Takes a ref on @buffer while it is operating,
+ * and consumes @markup.
+ */
 static void
 insert_markup (GtkTextBuffer *buffer,
                GtkTextIter   *iter,
-               const char    *markup,
+               char          *markup,
                int            len)
 {
-  char *text;
-  PangoAttrList *attributes;
-  GError *error = NULL;
   MarkupData *data;
 
   g_return_if_fail (GTK_IS_TEXT_BUFFER (buffer));
 
-  if (!pango_parse_markup (markup, len, 0, &attributes, &text, NULL, &error))
-    {
-      g_warning ("Invalid markup string: %s", error->message);
-      g_error_free (error);
-      return;
-    }
-
-  if (!attributes)
-    {
-      gtk_text_buffer_insert (buffer, iter, text, -1);
-      g_free (text);
-      return;
-    }
-
-  data = g_new (MarkupData, 1);
+  data = g_new0 (MarkupData, 1);
 
   data->buffer = g_object_ref (buffer);
   data->iter = *iter;
-  data->attributes = attributes;
-  data->text = text;
+  data->markup = markup;
+  data->len = len;
+
+  data->parser = pango_markup_parser_new (0);
+  data->pos = 0;
 
   /* create mark with right gravity */
   data->mark = gtk_text_buffer_create_mark (buffer, NULL, iter, FALSE);
-  data->attr = pango_attr_list_get_iterator (attributes);
 
-  insert_markup_idle (data);
+  parse_markup_idle (data);
 }
 
 static void
-fontify_finish (GObject *source,
+fontify_finish (GObject      *source,
                 GAsyncResult *result,
-                gpointer data)
+                gpointer      data)
 {
   GSubprocess *subprocess = G_SUBPROCESS (source);
   GtkTextBuffer *buffer = data;
