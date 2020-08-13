@@ -109,7 +109,7 @@ done:
       row = gtk_button_new_with_label (key);
       g_signal_connect (row, "clicked",
                         G_CALLBACK (find_word), win);
-      gtk_box_append (GTK_BOX (win->words), row);
+      gtk_list_box_insert (GTK_LIST_BOX (win->words), row, -1);
     }
 
   g_hash_table_unref (strings);

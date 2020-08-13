@@ -732,7 +732,7 @@ GtkSearchBar, GtkListBox, and more.
 
 The full, buildable sources for these examples can be found in the `examples/`
 directory of the GTK source distribution, or
-[online](https://gitlab.gnome.org/GNOME/gtk/blob/master/examples in the GTK git
+[online](https://gitlab.gnome.org/GNOME/gtk/blob/master/examples) in the GTK git
 repository. You can build each example separately by using make with the
 `Makefile.example` file. For more information, see the `README` included in the
 examples directory.
@@ -976,6 +976,10 @@ into the application together with the other source files. To do so, we use the
 glib-compile-resources exampleapp.gresource.xml --target=resources.c --generate-source
 ```
 
+The gnome module of the meson build system provides the
+[gnome.compile_resources()](https://mesonbuild.com/Gnome-module.html#gnomecompile_resources)
+method for this task.
+
 Our application now looks like this:
 
 ![The application](getting-started-app2.png)
@@ -1037,7 +1041,7 @@ example_app_window_open (ExampleAppWindow *win,
 
   basename = g_file_get_basename (file);
 
-  scrolled = gtk_scrolled_window_new (NULL, NULL);
+  scrolled = gtk_scrolled_window_new ();
   gtk_widget_set_hexpand (scrolled, TRUE);
   gtk_widget_set_vexpand (scrolled, TRUE);
   view = gtk_text_view_new ();
@@ -1204,7 +1208,9 @@ a schema that describes our settings:
 Before we can make use of this schema in our application, we need to compile
 it into the binary form that GSettings expects. GIO provides
 [macros](https://developer.gnome.org/gio/2.36/ch31s06.html) to do this in
-autotools-based projects.
+autotools-based projects, and the gnome module of the meson build system
+provides the [gnome.compile_schemas()](https://mesonbuild.com/Gnome-module.html#gnomecompile_schemas)
+method for this task.
 
 Next, we need to connect our settings to the widgets that they are supposed
 to control. One convenient way to do this is to use GSettings bind

@@ -11,7 +11,7 @@ OBJS = $(BUILT_SRC:.c=.o) $(SRC:.c=.o)
 
 all: exampleapp
 
-resources.c: exampleapp.gresource.xml window.ui app-menu.ui
+resources.c: exampleapp.gresource.xml window.ui
 	$(GLIB_COMPILE_RESOURCES) exampleapp.gresource.xml --target=$@ --sourcedir=. --generate-source
 
 %.o: %.c

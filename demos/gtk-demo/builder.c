@@ -21,15 +21,38 @@ about_activate (GSimpleAction *action,
                 gpointer       user_data)
 {
   GtkWidget *window = user_data;
-  GtkBuilder *builder;
   GtkWidget *about_dlg;
 
-  builder = g_object_get_data (G_OBJECT (window), "builder");
-  about_dlg = GTK_WIDGET (gtk_builder_get_object (builder, "aboutdialog1"));
-  gtk_window_set_transient_for (GTK_WINDOW (about_dlg), GTK_WINDOW (window));
-  gtk_window_set_hide_on_close (GTK_WINDOW (about_dlg), TRUE);
-  g_signal_connect (about_dlg, "response", G_CALLBACK (gtk_widget_hide), NULL);
-  gtk_widget_show (about_dlg);
+  about_dlg = GTK_WIDGET (g_object_get_data (G_OBJECT (window), "about"));
+  gtk_window_present (GTK_WINDOW (about_dlg));
+}
+
+static void
+remove_timeout (gpointer data)
+{
+  guint id = GPOINTER_TO_UINT (data);
+
+  g_source_remove (id);
+}
+
+static gboolean
+pop_status (gpointer data)
+{
+  gtk_statusbar_pop (GTK_STATUSBAR (data), 0);
+  g_object_set_data (G_OBJECT (data), "timeout", NULL);
+  return G_SOURCE_REMOVE;
+}
+
+static void
+status_message (GtkStatusbar *status,
+                const char   *text)
+{
+  guint id;
+
+  gtk_statusbar_push (GTK_STATUSBAR (status), 0, text);
+  id = g_timeout_add (5000, pop_status, status);
+
+  g_object_set_data_full (G_OBJECT (status), "timeout", GUINT_TO_POINTER (id), remove_timeout);
 }
 
 static void
@@ -37,7 +60,10 @@ help_activate (GSimpleAction *action,
                GVariant      *parameter,
                gpointer       user_data)
 {
-  g_print ("Help not available\n");
+  GtkWidget *status;
+
+  status = GTK_WIDGET (g_object_get_data (G_OBJECT (user_data), "status"));
+  status_message (GTK_STATUSBAR (status), "Help not available");
 }
 
 static void
@@ -45,7 +71,13 @@ not_implemented (GSimpleAction *action,
                  GVariant      *parameter,
                  gpointer       user_data)
 {
-  g_print ("Action “%s” not implemented\n", g_action_get_name (G_ACTION (action)));
+  GtkWidget *status;
+  char *text;
+
+  text = g_strdup_printf ("Action “%s” not implemented", g_action_get_name (G_ACTION (action)));
+  status = GTK_WIDGET (g_object_get_data (G_OBJECT (user_data), "status"));
+  status_message (GTK_STATUSBAR (status), text);
+  g_free (text);
 }
 
 static GActionEntry win_entries[] = {
@@ -70,6 +102,8 @@ do_builder (GtkWidget *do_widget)
   if (!window)
     {
       GtkBuilder *builder;
+      GtkWidget *about;
+      GtkWidget *status;
 
       builder = gtk_builder_new_from_resource ("/builder/demo.ui");
 
@@ -82,6 +116,16 @@ do_builder (GtkWidget *do_widget)
                                        win_entries, G_N_ELEMENTS (win_entries),
                                        window);
       gtk_widget_insert_action_group (window, "win", actions);
+
+      about = GTK_WIDGET (gtk_builder_get_object (builder, "aboutdialog1"));
+      gtk_window_set_transient_for (GTK_WINDOW (about), GTK_WINDOW (window));
+      gtk_window_set_hide_on_close (GTK_WINDOW (about), TRUE);
+      g_signal_connect (about, "response", G_CALLBACK (gtk_widget_hide), NULL);
+      g_object_set_data_full (G_OBJECT (window), "about",
+                              about, (GDestroyNotify)gtk_window_destroy);
+
+      status = GTK_WIDGET (gtk_builder_get_object (builder, "statusbar1"));
+      g_object_set_data (G_OBJECT (window), "status", status);
 
       g_object_unref (builder);
     }

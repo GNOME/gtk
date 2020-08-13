@@ -18,7 +18,7 @@ org.gtk.exampleapp.gschema.valid: org.gtk.exampleapp.gschema.xml
 gschemas.compiled: org.gtk.exampleapp.gschema.valid
 	$(GLIB_COMPILE_SCHEMAS) .
 
-resources.c: exampleapp.gresource.xml window.ui app-menu.ui
+resources.c: exampleapp.gresource.xml window.ui
 	$(GLIB_COMPILE_RESOURCES) exampleapp.gresource.xml --target=$@ --sourcedir=. --generate-source
 
 %.o: %.c
