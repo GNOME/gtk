@@ -17,8 +17,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-08-10 17:47+0000\n"
-"PO-Revision-Date: 2020-08-13 10:30+0200\n"
+"POT-Creation-Date: 2020-08-13 08:35+0000\n"
+"PO-Revision-Date: 2020-08-13 10:39+0200\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: Spanish - Spain <gnome-es-list@gnome.org>\n"
 "Language: es_ES\n"
@@ -3451,22 +3451,19 @@ msgstr ""
 "La fila que alinear a la línea base cuando valign es GTK_ALIGN_BASELINE"
 
 #: gtk/gtkgridlayout.c:167
-#| msgid "Columns"
 msgid "Column"
 msgstr "Columna"
 
 #: gtk/gtkgridlayout.c:168
-#| msgid "The icon name of the child page"
-msgid "The column place the child in"
+#| msgid "The column place the child in"
+msgid "The column to place the child in"
 msgstr "La columna en la que colocar el hijo"
 
 #: gtk/gtkgridlayout.c:179
-#| msgid "Rows"
 msgid "Row"
 msgstr "Fila"
 
 #: gtk/gtkgridlayout.c:180
-#| msgid "The amount of space between children"
 msgid "The row to place the child in"
 msgstr "La fila en la que colocar el hijo"
 
