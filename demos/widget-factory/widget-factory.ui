@@ -2812,6 +2812,7 @@ microphone-sensitivity-medium-symbolic</property>
                                 <property name="hexpand">1</property>
                                 <property name="show-emoji-icon">1</property>
                                 <property name="placeholder-text" translatable="yes">Age…</property>
+                                <signal name="notify::text" handler="age_entry_changed"/>
                               </object>
                             </child>
                             <style>
@@ -3022,6 +3023,7 @@ bad things might happen.</property>
                 <layout>
                   <property name="column">1</property>
                   <property name="row">0</property>
+                  <property name="column-span">2</property>
                 </layout>
               </object>
             </child>
@@ -3044,9 +3046,11 @@ bad things might happen.</property>
             <child>
               <object class="GtkEntry" id="more_details_entry">
                 <property name="valign">baseline</property>
+                <signal name="notify::text" handler="validate_more_details" object="details_entry" swapped="no"/>
                 <layout>
                   <property name="column">1</property>
                   <property name="row">1</property>
+                  <property name="column-span">2</property>
                 </layout>
               </object>
             </child>
@@ -3074,6 +3078,7 @@ bad things might happen.</property>
                 <layout>
                   <property name="column">1</property>
                   <property name="row">2</property>
+                  <property name="column-span">2</property>
                 </layout>
               </object>
             </child>
@@ -3099,6 +3104,22 @@ bad things might happen.</property>
                 <property name="valign">baseline</property>
                 <layout>
                   <property name="column">1</property>
+                  <property name="row">3</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel" id="switch_error">
+                <property name="visible">0</property>
+                <property name="halign">start</property>
+                <property name="valign">baseline</property>
+                <property name="label">Error!</property>
+                <property name="visible" bind-source="mode_switch" bind-property="active"></property>
+                <style>
+                  <class name="error"/>
+                </style>
+                <layout>
+                  <property name="column">2</property>
                   <property name="row">3</property>
                 </layout>
               </object>
