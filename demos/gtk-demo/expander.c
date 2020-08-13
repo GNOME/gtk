@@ -98,7 +98,7 @@ do_expander (GtkWidget *do_widget)
                                 "Do it already!\n", -1);
 
       gtk_text_buffer_get_end_iter (buffer, &start);
-      paintable = GDK_PAINTABLE (gdk_texture_new_from_resource ("/cursors/gtk_logo_cursor.png"));
+      paintable = GDK_PAINTABLE (gdk_texture_new_from_resource ("/cursors/images/gtk_logo_cursor.png"));
       gtk_text_buffer_insert_paintable (buffer, &start, paintable);
       g_object_unref (paintable);
       gtk_text_iter_backward_char (&start);
