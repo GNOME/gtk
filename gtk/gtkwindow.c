@@ -51,7 +51,7 @@
 #include "gtkpointerfocusprivate.h"
 #include "gtkprivate.h"
 #include "gtkroot.h"
-#include "gtknative.h"
+#include "gtknativeprivate.h"
 #include "gtksettings.h"
 #include "gtkshortcut.h"
 #include "gtkshortcutcontroller.h"

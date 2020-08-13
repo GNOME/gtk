@@ -7108,7 +7108,6 @@ gtk_root_get_type
 <SECTION>
 <FILE>gtknative</FILE>
 GtkNative
-GtkNativeInterface
 gtk_native_get_for_surface
 gtk_native_get_surface
 gtk_native_get_renderer

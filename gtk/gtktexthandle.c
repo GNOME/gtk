@@ -28,6 +28,7 @@
 #include "gtkcssboxesimplprivate.h"
 #include "gtkcssnumbervalueprivate.h"
 #include "gtkstylecontextprivate.h"
+#include "gtknativeprivate.h"
 #include "gtkintl.h"
 
 #include <gtk/gtk.h>

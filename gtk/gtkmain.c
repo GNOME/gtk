@@ -1227,7 +1227,7 @@ rewrite_event_for_grabs (GdkEvent *event)
     }
 
   event_widget = gtk_get_event_widget (event);
-  grab_widget = gtk_native_get_for_surface (grab_surface);
+  grab_widget = GTK_WIDGET (gtk_native_get_for_surface (grab_surface));
 
   if (grab_widget &&
       gtk_main_get_window_group (grab_widget) != gtk_main_get_window_group (event_widget))
@@ -1990,7 +1990,7 @@ gtk_get_event_widget (GdkEvent *event)
 
   surface = gdk_event_get_surface (event);
   if (surface && !gdk_surface_is_destroyed (surface))
-    return gtk_native_get_for_surface (surface);
+    return GTK_WIDGET (gtk_native_get_for_surface (surface));
 
   return NULL;
 }
