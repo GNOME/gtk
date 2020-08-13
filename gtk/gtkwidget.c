@@ -5109,9 +5109,9 @@ _gtk_widget_set_has_default (GtkWidget *widget,
   priv->has_default = has_default;
 
   if (has_default)
-    gtk_widget_add_css_class (widget, GTK_STYLE_CLASS_DEFAULT);
+    gtk_widget_add_css_class (widget, "default");
   else
-    gtk_widget_remove_css_class (widget, GTK_STYLE_CLASS_DEFAULT);
+    gtk_widget_remove_css_class (widget, "default");
 }
 
 /**
@@ -12084,13 +12084,13 @@ gtk_widget_update_orientation (GtkWidget      *widget,
 
   if (orientation == GTK_ORIENTATION_HORIZONTAL)
     {
-      gtk_widget_add_css_class (widget, GTK_STYLE_CLASS_HORIZONTAL);
-      gtk_widget_remove_css_class (widget, GTK_STYLE_CLASS_VERTICAL);
+      gtk_widget_add_css_class (widget, "horizontal");
+      gtk_widget_remove_css_class (widget, "vertical");
     }
   else
     {
-      gtk_widget_add_css_class (widget, GTK_STYLE_CLASS_VERTICAL);
-      gtk_widget_remove_css_class (widget, GTK_STYLE_CLASS_HORIZONTAL);
+      gtk_widget_add_css_class (widget, "vertical");
+      gtk_widget_remove_css_class (widget, "horizontal");
     }
 }
 

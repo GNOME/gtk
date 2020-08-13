@@ -1400,7 +1400,7 @@ gtk_notebook_init (GtkNotebook *notebook)
   notebook->header_widget = g_object_new (GTK_TYPE_BOX,
                                           "css-name", "header",
                                           NULL);
-  gtk_widget_add_css_class (notebook->header_widget, GTK_STYLE_CLASS_TOP);
+  gtk_widget_add_css_class (notebook->header_widget, "top");
   gtk_widget_hide (notebook->header_widget);
   gtk_widget_set_parent (notebook->header_widget, GTK_WIDGET (notebook));
 
@@ -1437,7 +1437,7 @@ gtk_notebook_init (GtkNotebook *notebook)
   g_signal_connect (controller, "motion", G_CALLBACK (gtk_notebook_motion), notebook);
   gtk_widget_add_controller (GTK_WIDGET (notebook), controller);
 
-  gtk_widget_add_css_class (GTK_WIDGET (notebook), GTK_STYLE_CLASS_FRAME);
+  gtk_widget_add_css_class (GTK_WIDGET (notebook), "frame");
 
   layout = gtk_widget_get_layout_manager (GTK_WIDGET (notebook));
   gtk_orientable_set_orientation (GTK_ORIENTABLE (layout), GTK_ORIENTATION_VERTICAL);
@@ -2641,7 +2641,7 @@ static void
 tab_drag_begin (GtkNotebook     *notebook,
                 GtkNotebookPage *page)
 {
-  gtk_widget_add_css_class (page->tab_widget, GTK_STYLE_CLASS_DND);
+  gtk_widget_add_css_class (page->tab_widget, "dnd");
 }
 
 /* This function undoes the reparenting that happens both when drag_surface
@@ -2659,7 +2659,7 @@ tab_drag_end (GtkNotebook     *notebook,
       g_object_unref (page->tab_label);
     }
 
-  gtk_widget_remove_css_class (page->tab_widget, GTK_STYLE_CLASS_DND);
+  gtk_widget_remove_css_class (page->tab_widget, "dnd");
 }
 
 static void
@@ -5977,9 +5977,9 @@ gtk_notebook_set_show_border (GtkNotebook *notebook,
       notebook->show_border = show_border;
 
       if (show_border)
-        gtk_widget_add_css_class (GTK_WIDGET (notebook), GTK_STYLE_CLASS_FRAME);
+        gtk_widget_add_css_class (GTK_WIDGET (notebook), "frame");
       else
-        gtk_widget_remove_css_class (GTK_WIDGET (notebook), GTK_STYLE_CLASS_FRAME);
+        gtk_widget_remove_css_class (GTK_WIDGET (notebook), "frame");
 
       g_object_notify_by_pspec (G_OBJECT (notebook), properties[PROP_SHOW_BORDER]);
     }
@@ -6085,10 +6085,7 @@ gtk_notebook_update_tab_pos (GtkNotebook *notebook)
   GtkLayoutManager *layout;
   GtkPositionType tab_pos;
   const char *tab_pos_names[] = {
-    GTK_STYLE_CLASS_LEFT,
-    GTK_STYLE_CLASS_RIGHT,
-    GTK_STYLE_CLASS_TOP,
-    GTK_STYLE_CLASS_BOTTOM
+    "left", "right", "top", "bottom",
   };
   int i;
 

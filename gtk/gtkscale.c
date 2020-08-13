@@ -1046,19 +1046,28 @@ update_value_position (GtkScale *scale)
   if (!priv->value_widget)
     return;
 
-  gtk_widget_remove_css_class (priv->value_widget, GTK_STYLE_CLASS_TOP);
-  gtk_widget_remove_css_class (priv->value_widget, GTK_STYLE_CLASS_RIGHT);
-  gtk_widget_remove_css_class (priv->value_widget, GTK_STYLE_CLASS_BOTTOM);
-  gtk_widget_remove_css_class (priv->value_widget, GTK_STYLE_CLASS_LEFT);
+  gtk_widget_remove_css_class (priv->value_widget, "top");
+  gtk_widget_remove_css_class (priv->value_widget, "right");
+  gtk_widget_remove_css_class (priv->value_widget, "bottom");
+  gtk_widget_remove_css_class (priv->value_widget, "left");
 
   switch (priv->value_pos)
     {
-    case GTK_POS_TOP:    gtk_widget_add_css_class (priv->value_widget, GTK_STYLE_CLASS_TOP); break;
-    case GTK_POS_RIGHT:  gtk_widget_add_css_class (priv->value_widget, GTK_STYLE_CLASS_RIGHT); break;
-    case GTK_POS_BOTTOM: gtk_widget_add_css_class (priv->value_widget, GTK_STYLE_CLASS_BOTTOM); break;
-    case GTK_POS_LEFT:   gtk_widget_add_css_class (priv->value_widget, GTK_STYLE_CLASS_LEFT); break;
-
-    default: g_assert_not_reached ();
+    case GTK_POS_TOP:
+      gtk_widget_add_css_class (priv->value_widget, "top");
+      break;
+    case GTK_POS_RIGHT:
+      gtk_widget_add_css_class (priv->value_widget, "right");
+      break;
+    case GTK_POS_BOTTOM:
+      gtk_widget_add_css_class (priv->value_widget, "bottom");
+      break;
+    case GTK_POS_LEFT:
+      gtk_widget_add_css_class (priv->value_widget, "left");
+      break;
+    default:
+      g_assert_not_reached ();
+      break;
     }
 }
 
@@ -1700,7 +1709,7 @@ gtk_scale_add_mark (GtkScale        *scale,
           gtk_widget_insert_after (priv->top_marks_widget,
                                    GTK_WIDGET (scale),
                                    priv->value_widget);
-          gtk_widget_add_css_class (priv->top_marks_widget, GTK_STYLE_CLASS_TOP);
+          gtk_widget_add_css_class (priv->top_marks_widget, "top");
         }
       marks_widget = priv->top_marks_widget;
     }
@@ -1718,7 +1727,7 @@ gtk_scale_add_mark (GtkScale        *scale,
           gtk_widget_insert_before (priv->bottom_marks_widget,
                                     GTK_WIDGET (scale),
                                     gtk_range_get_trough_widget (GTK_RANGE (scale)));
-          gtk_widget_add_css_class (priv->bottom_marks_widget, GTK_STYLE_CLASS_BOTTOM);
+          gtk_widget_add_css_class (priv->bottom_marks_widget, "bottom");
         }
       marks_widget = priv->bottom_marks_widget;
     }

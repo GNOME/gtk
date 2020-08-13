@@ -350,10 +350,10 @@ gtk_overlay_child_update_style_classes (GtkOverlay *overlay,
   gboolean is_left, is_right, is_top, is_bottom;
   gboolean has_left, has_right, has_top, has_bottom;
 
-  has_left = gtk_widget_has_css_class (widget, GTK_STYLE_CLASS_LEFT);
-  has_right = gtk_widget_has_css_class (widget, GTK_STYLE_CLASS_RIGHT);
-  has_top = gtk_widget_has_css_class (widget, GTK_STYLE_CLASS_TOP);
-  has_bottom = gtk_widget_has_css_class (widget, GTK_STYLE_CLASS_BOTTOM);
+  has_left = gtk_widget_has_css_class (widget, "left");
+  has_right = gtk_widget_has_css_class (widget, "right");
+  has_top = gtk_widget_has_css_class (widget, "top");
+  has_bottom = gtk_widget_has_css_class (widget, "bottom");
 
   is_left = is_right = is_top = is_bottom = FALSE;
 
@@ -376,24 +376,24 @@ gtk_overlay_child_update_style_classes (GtkOverlay *overlay,
     is_bottom = (child_allocation->y + child_allocation->height == height);
 
   if (has_left && !is_left)
-    gtk_widget_remove_css_class (widget, GTK_STYLE_CLASS_LEFT);
+    gtk_widget_remove_css_class (widget, "left");
   else if (!has_left && is_left)
-    gtk_widget_add_css_class (widget, GTK_STYLE_CLASS_LEFT);
+    gtk_widget_add_css_class (widget, "left");
 
   if (has_right && !is_right)
-    gtk_widget_remove_css_class (widget, GTK_STYLE_CLASS_RIGHT);
+    gtk_widget_remove_css_class (widget, "right");
   else if (!has_right && is_right)
-    gtk_widget_add_css_class (widget, GTK_STYLE_CLASS_RIGHT);
+    gtk_widget_add_css_class (widget, "right");
 
   if (has_top && !is_top)
-    gtk_widget_remove_css_class (widget, GTK_STYLE_CLASS_TOP);
+    gtk_widget_remove_css_class (widget, "top");
   else if (!has_top && is_top)
-    gtk_widget_add_css_class (widget, GTK_STYLE_CLASS_TOP);
+    gtk_widget_add_css_class (widget, "top");
 
   if (has_bottom && !is_bottom)
-    gtk_widget_remove_css_class (widget, GTK_STYLE_CLASS_BOTTOM);
+    gtk_widget_remove_css_class (widget, "bottom");
   else if (!has_bottom && is_bottom)
-    gtk_widget_add_css_class (widget, GTK_STYLE_CLASS_BOTTOM);
+    gtk_widget_add_css_class (widget, "bottom");
 }
 
 static void

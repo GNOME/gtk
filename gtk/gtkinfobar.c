@@ -1072,10 +1072,10 @@ gtk_info_bar_set_message_type (GtkInfoBar     *info_bar,
   if (info_bar->message_type != message_type)
     {
       const char *type_class[] = {
-        GTK_STYLE_CLASS_INFO,
-        GTK_STYLE_CLASS_WARNING,
-        GTK_STYLE_CLASS_QUESTION,
-        GTK_STYLE_CLASS_ERROR,
+        "info",
+        "warning",
+        "question",
+        "error",
         NULL
       };
 

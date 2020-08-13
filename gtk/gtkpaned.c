@@ -2498,9 +2498,9 @@ gtk_paned_set_wide_handle (GtkPaned *paned,
   if (old_wide != wide)
     {
       if (wide)
-        gtk_widget_add_css_class (paned->handle_widget, GTK_STYLE_CLASS_WIDE);
+        gtk_widget_add_css_class (paned->handle_widget, "wide");
       else
-        gtk_widget_remove_css_class (paned->handle_widget, GTK_STYLE_CLASS_WIDE);
+        gtk_widget_remove_css_class (paned->handle_widget, "wide");
 
       g_object_notify_by_pspec (G_OBJECT (paned), paned_props[PROP_WIDE_HANDLE]);
     }
@@ -2519,5 +2519,5 @@ gtk_paned_get_wide_handle (GtkPaned *paned)
 {
   g_return_val_if_fail (GTK_IS_PANED (paned), FALSE);
 
-  return gtk_widget_has_css_class (paned->handle_widget, GTK_STYLE_CLASS_WIDE);
+  return gtk_widget_has_css_class (paned->handle_widget, "wide");
 }

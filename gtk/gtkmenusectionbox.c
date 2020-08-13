@@ -643,10 +643,10 @@ gtk_menu_section_box_new_section (GtkMenuTrackerItem *item,
 
       title = gtk_label_new (label);
       g_object_bind_property (item, "label", title, "label", G_BINDING_SYNC_CREATE);
-      gtk_widget_add_css_class (title, GTK_STYLE_CLASS_SEPARATOR);
+      gtk_widget_add_css_class (title, "separator");
       gtk_widget_set_halign (title, GTK_ALIGN_START);
       gtk_label_set_xalign (GTK_LABEL (title), 0.0);
-      gtk_widget_add_css_class (title, GTK_STYLE_CLASS_TITLE);
+      gtk_widget_add_css_class (title, "title");
       gtk_box_append (GTK_BOX (box->separator), title);
     }
   else

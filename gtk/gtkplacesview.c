@@ -1887,9 +1887,9 @@ on_address_entry_text_changed (GtkPlacesView *view)
 out:
   gtk_widget_set_sensitive (view->connect_button, supported);
   if (scheme && !supported)
-    gtk_widget_add_css_class (view->address_entry, GTK_STYLE_CLASS_ERROR);
+    gtk_widget_add_css_class (view->address_entry, "error");
   else
-    gtk_widget_remove_css_class (view->address_entry, GTK_STYLE_CLASS_ERROR);
+    gtk_widget_remove_css_class (view->address_entry, "error");
 
   g_free (address);
   g_free (scheme);

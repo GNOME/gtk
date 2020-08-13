@@ -261,7 +261,7 @@ gtk_tree_popover_init (GtkTreePopover *popover)
   gtk_stack_set_interpolate_size (GTK_STACK (stack), TRUE);
   gtk_popover_set_child (GTK_POPOVER (popover), stack);
 
-  gtk_widget_add_css_class (GTK_WIDGET (popover), GTK_STYLE_CLASS_MENU);
+  gtk_widget_add_css_class (GTK_WIDGET (popover), "menu");
 }
 
 static GtkCellArea *

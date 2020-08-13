@@ -713,7 +713,7 @@ gtk_cell_renderer_snapshot (GtkCellRenderer      *cell,
   context = gtk_widget_get_style_context (widget);
 
   gtk_style_context_save (context);
-  gtk_style_context_add_class (context, GTK_STYLE_CLASS_CELL);
+  gtk_style_context_add_class (context, "cell");
 
   state = gtk_cell_renderer_get_state (cell, widget, flags);
   gtk_style_context_set_state (context, state);
@@ -826,7 +826,7 @@ gtk_cell_renderer_start_editing (GtkCellRenderer      *cell,
   if (editable == NULL)
     return NULL;
 
-  gtk_widget_add_css_class (GTK_WIDGET (editable), GTK_STYLE_CLASS_CELL);
+  gtk_widget_add_css_class (GTK_WIDGET (editable), "cell");
 
   g_signal_emit (cell, 
 		 cell_renderer_signals[EDITING_STARTED], 0,

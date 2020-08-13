@@ -179,9 +179,9 @@ update_button (GtkStackSwitcher *self,
   gtk_widget_set_visible (button, visible && (title != NULL || icon_name != NULL));
 
   if (needs_attention)
-    gtk_widget_add_css_class (button, GTK_STYLE_CLASS_NEEDS_ATTENTION);
+    gtk_widget_add_css_class (button, "needs-attention");
   else
-    gtk_widget_remove_css_class (button, GTK_STYLE_CLASS_NEEDS_ATTENTION);
+    gtk_widget_remove_css_class (button, "needs-attention");
 
   g_free (title);
   g_free (icon_name);

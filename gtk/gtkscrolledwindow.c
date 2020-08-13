@@ -497,13 +497,13 @@ update_scrollbar_positions (GtkScrolledWindow *scrolled_window)
       if (priv->window_placement == GTK_CORNER_TOP_LEFT ||
           priv->window_placement == GTK_CORNER_TOP_RIGHT)
         {
-          gtk_widget_add_css_class (priv->hscrollbar, GTK_STYLE_CLASS_BOTTOM);
-          gtk_widget_remove_css_class (priv->hscrollbar, GTK_STYLE_CLASS_TOP);
+          gtk_widget_add_css_class (priv->hscrollbar, "bottom");
+          gtk_widget_remove_css_class (priv->hscrollbar, "top");
         }
       else
         {
-          gtk_widget_add_css_class (priv->hscrollbar, GTK_STYLE_CLASS_TOP);
-          gtk_widget_remove_css_class (priv->hscrollbar, GTK_STYLE_CLASS_BOTTOM);
+          gtk_widget_add_css_class (priv->hscrollbar, "top");
+          gtk_widget_remove_css_class (priv->hscrollbar, "bottom");
         }
     }
 
@@ -517,13 +517,13 @@ update_scrollbar_positions (GtkScrolledWindow *scrolled_window)
           (priv->window_placement == GTK_CORNER_TOP_LEFT ||
            priv->window_placement == GTK_CORNER_BOTTOM_LEFT)))
         {
-          gtk_widget_add_css_class (priv->vscrollbar, GTK_STYLE_CLASS_RIGHT);
-          gtk_widget_remove_css_class (priv->vscrollbar, GTK_STYLE_CLASS_LEFT);
+          gtk_widget_add_css_class (priv->vscrollbar, "right");
+          gtk_widget_remove_css_class (priv->vscrollbar, "left");
         }
       else
         {
-          gtk_widget_add_css_class (priv->vscrollbar, GTK_STYLE_CLASS_LEFT);
-          gtk_widget_remove_css_class (priv->vscrollbar, GTK_STYLE_CLASS_RIGHT);
+          gtk_widget_add_css_class (priv->vscrollbar, "left");
+          gtk_widget_remove_css_class (priv->vscrollbar, "right");
         }
     }
 }
@@ -1955,10 +1955,10 @@ gtk_scrolled_window_init (GtkScrolledWindow *scrolled_window)
   GtkEventController *controller;
   GtkCssNode *widget_node;
   GQuark classes[4] = {
-    g_quark_from_static_string (GTK_STYLE_CLASS_LEFT),
-    g_quark_from_static_string (GTK_STYLE_CLASS_RIGHT),
-    g_quark_from_static_string (GTK_STYLE_CLASS_TOP),
-    g_quark_from_static_string (GTK_STYLE_CLASS_BOTTOM),
+    g_quark_from_static_string ("left"),
+    g_quark_from_static_string ("right"),
+    g_quark_from_static_string ("top"),
+    g_quark_from_static_string ("bottom"),
   };
   int i;
 
@@ -2467,9 +2467,9 @@ gtk_scrolled_window_set_has_frame (GtkScrolledWindow *scrolled_window,
   priv->has_frame = has_frame;
 
   if (has_frame)
-    gtk_widget_add_css_class (GTK_WIDGET (scrolled_window), GTK_STYLE_CLASS_FRAME);
+    gtk_widget_add_css_class (GTK_WIDGET (scrolled_window), "frame");
   else
-    gtk_widget_remove_css_class (GTK_WIDGET (scrolled_window), GTK_STYLE_CLASS_FRAME);
+    gtk_widget_remove_css_class (GTK_WIDGET (scrolled_window), "frame");
 
   g_object_notify_by_pspec (G_OBJECT (scrolled_window), properties[PROP_HAS_FRAME]);
 }

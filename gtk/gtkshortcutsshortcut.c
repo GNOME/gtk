@@ -766,6 +766,6 @@ gtk_shortcuts_shortcut_init (GtkShortcutsShortcut *self)
                                  "visible", FALSE,
                                  "xalign", 0.0f,
                                  NULL);
-  gtk_widget_add_css_class (GTK_WIDGET (self->subtitle), GTK_STYLE_CLASS_DIM_LABEL);
+  gtk_widget_add_css_class (GTK_WIDGET (self->subtitle), "dim-label");
   gtk_box_append (GTK_BOX (self->title_box), GTK_WIDGET (self->subtitle));
 }

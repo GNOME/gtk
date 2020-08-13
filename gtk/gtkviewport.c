@@ -475,7 +475,7 @@ gtk_viewport_init (GtkViewport *viewport)
   viewport->hadjustment = NULL;
   viewport->vadjustment = NULL;
 
-  gtk_widget_add_css_class (widget, GTK_STYLE_CLASS_FRAME);
+  gtk_widget_add_css_class (widget, "frame");
   viewport_set_adjustment (viewport, GTK_ORIENTATION_HORIZONTAL, NULL);
   viewport_set_adjustment (viewport, GTK_ORIENTATION_VERTICAL, NULL);
 }

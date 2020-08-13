@@ -1448,7 +1448,7 @@ update_icon_style (GtkWidget            *widget,
   GtkEntry *entry = GTK_ENTRY (widget);
   GtkEntryPrivate *priv = gtk_entry_get_instance_private (entry);
   EntryIconInfo *icon_info = priv->icons[icon_pos];
-  const char *sides[2] = { GTK_STYLE_CLASS_LEFT, GTK_STYLE_CLASS_RIGHT };
+  const char *sides[2] = { "left", "right" };
 
   if (icon_info == NULL)
     return;
@@ -2321,9 +2321,9 @@ gtk_entry_set_has_frame (GtkEntry *entry,
     return;
 
   if (setting)
-    gtk_widget_remove_css_class (GTK_WIDGET (entry), GTK_STYLE_CLASS_FLAT);
+    gtk_widget_remove_css_class (GTK_WIDGET (entry), "flat");
   else
-    gtk_widget_add_css_class (GTK_WIDGET (entry), GTK_STYLE_CLASS_FLAT);
+    gtk_widget_add_css_class (GTK_WIDGET (entry), "flat");
 
   g_object_notify_by_pspec (G_OBJECT (entry), entry_props[PROP_HAS_FRAME]);
 }
@@ -2341,7 +2341,7 @@ gtk_entry_get_has_frame (GtkEntry *entry)
 {
   g_return_val_if_fail (GTK_IS_ENTRY (entry), FALSE);
 
-  return !gtk_widget_has_css_class (GTK_WIDGET (entry), GTK_STYLE_CLASS_FRAME);
+  return !gtk_widget_has_css_class (GTK_WIDGET (entry), "flat");
 }
 
 /**

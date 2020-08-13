@@ -263,7 +263,7 @@ construct_title_label (GtkHeaderBar *bar)
   g_assert (bar->title_label == NULL);
 
   label = gtk_label_new (NULL);
-  gtk_widget_add_css_class (label, GTK_STYLE_CLASS_TITLE);
+  gtk_widget_add_css_class (label, "title");
   gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
   gtk_label_set_wrap (GTK_LABEL (label), FALSE);
   gtk_label_set_single_line_mode (GTK_LABEL (label), TRUE);

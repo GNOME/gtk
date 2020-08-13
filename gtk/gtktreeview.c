@@ -1675,7 +1675,7 @@ gtk_tree_view_init (GtkTreeView *tree_view)
   gtk_tree_view_do_set_vadjustment (tree_view, NULL);
   gtk_tree_view_do_set_hadjustment (tree_view, NULL);
 
-  gtk_widget_add_css_class (GTK_WIDGET (tree_view), GTK_STYLE_CLASS_VIEW);
+  gtk_widget_add_css_class (GTK_WIDGET (tree_view), "view");
 
   widget_node = gtk_widget_get_css_node (GTK_WIDGET (tree_view));
   priv->header_node = gtk_css_node_new ();
@@ -2714,7 +2714,7 @@ gtk_tree_view_get_expander_size (GtkTreeView *tree_view)
 
   context = gtk_widget_get_style_context (GTK_WIDGET (tree_view));
   gtk_style_context_save (context);
-  gtk_style_context_add_class (context, GTK_STYLE_CLASS_EXPANDER);
+  gtk_style_context_add_class (context, "expander");
 
   style = gtk_style_context_lookup_style (context);
   min_width = _gtk_css_number_value_get (style->size->min_width, 100);
@@ -3171,7 +3171,7 @@ gtk_tree_view_button_release_drag_column (GtkTreeView *tree_view)
   button = gtk_tree_view_column_get_button (priv->drag_column);
 
   context = gtk_widget_get_style_context (button);
-  gtk_style_context_remove_class (context, GTK_STYLE_CLASS_DND);
+  gtk_style_context_remove_class (context, "dnd");
 
   gtk_tree_view_update_button_position (tree_view, priv->drag_column);
   gtk_widget_queue_allocate (widget);
@@ -4433,7 +4433,7 @@ gtk_tree_view_bin_snapshot (GtkWidget   *widget,
   if (gtk_tree_view_get_height (tree_view) < bin_window_height)
     {
       gtk_style_context_save (context);
-      gtk_style_context_add_class (context, GTK_STYLE_CLASS_CELL);
+      gtk_style_context_add_class (context, "cell");
 
       gtk_snapshot_render_background (snapshot, context,
                                       0, gtk_tree_view_get_height (tree_view),
@@ -4634,7 +4634,7 @@ gtk_tree_view_bin_snapshot (GtkWidget   *widget,
           state = gtk_cell_renderer_get_state (NULL, widget, flags);
           gtk_style_context_set_state (context, state);
 
-          gtk_style_context_add_class (context, GTK_STYLE_CLASS_CELL);
+          gtk_style_context_add_class (context, "cell");
 
 	  if (node == priv->cursor_node && has_can_focus_cell
               && ((column == priv->focus_column
@@ -4677,7 +4677,7 @@ gtk_tree_view_bin_snapshot (GtkWidget   *widget,
                   GdkRGBA color;
 
                   gtk_style_context_save (context);
-                  gtk_style_context_add_class (context, GTK_STYLE_CLASS_SEPARATOR);
+                  gtk_style_context_add_class (context, "separator");
 
                   gtk_style_context_get_color (context, &color);
                   gtk_snapshot_append_color (snapshot,
@@ -4717,7 +4717,7 @@ gtk_tree_view_bin_snapshot (GtkWidget   *widget,
                   GdkRGBA color;
 
                   gtk_style_context_save (context);
-                  gtk_style_context_add_class (context, GTK_STYLE_CLASS_SEPARATOR);
+                  gtk_style_context_add_class (context, "separator");
 
                   gtk_style_context_get_color (context, &color);
                   gtk_snapshot_append_color (snapshot,
@@ -5040,7 +5040,7 @@ gtk_tree_view_snapshot (GtkWidget   *widget,
                           ));
 
   gtk_style_context_save (context);
-  gtk_style_context_remove_class (context, GTK_STYLE_CLASS_VIEW);
+  gtk_style_context_remove_class (context, "view");
 
   for (list = priv->columns; list != NULL; list = list->next)
     {
@@ -5545,7 +5545,7 @@ get_separator_height (GtkTreeView *tree_view)
 
   context = gtk_widget_get_style_context (GTK_WIDGET (tree_view));
   gtk_style_context_save (context);
-  gtk_style_context_add_class (context, GTK_STYLE_CLASS_SEPARATOR);
+  gtk_style_context_add_class (context, "separator");
 
   style = gtk_style_context_lookup_style (context);
   d = _gtk_css_number_value_get (style->size->min_height, 100);
@@ -5612,7 +5612,7 @@ validate_row (GtkTreeView   *tree_view,
 
   context = gtk_widget_get_style_context (GTK_WIDGET (tree_view));
   gtk_style_context_save (context);
-  gtk_style_context_add_class (context, GTK_STYLE_CLASS_CELL);
+  gtk_style_context_add_class (context, "cell");
 
   for (list = priv->columns; list; list = list->next)
     {
@@ -9089,7 +9089,7 @@ _gtk_tree_view_column_start_drag (GtkTreeView       *tree_view,
   button = gtk_tree_view_column_get_button (column);
 
   context = gtk_widget_get_style_context (button);
-  gtk_style_context_add_class (context, GTK_STYLE_CLASS_DND);
+  gtk_style_context_add_class (context, "dnd");
 
   gtk_widget_get_allocation (button, &button_allocation);
   priv->drag_column_x = button_allocation.x;
@@ -9247,7 +9247,7 @@ gtk_tree_view_snapshot_arrow (GtkTreeView   *tree_view,
   gtk_style_context_save (context);
 
   gtk_style_context_set_state (context, state);
-  gtk_style_context_add_class (context, GTK_STYLE_CLASS_EXPANDER);
+  gtk_style_context_add_class (context, "expander");
 
   gtk_snapshot_save (snapshot);
   gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (area.x, area.y));
@@ -13284,7 +13284,7 @@ gtk_tree_view_create_row_drag_icon (GtkTreeView  *tree_view,
               GdkRGBA color;
 
               gtk_style_context_save (context);
-              gtk_style_context_add_class (context, GTK_STYLE_CLASS_SEPARATOR);
+              gtk_style_context_add_class (context, "separator");
 
               gtk_style_context_get_color (context, &color);
               gtk_snapshot_append_color (snapshot,

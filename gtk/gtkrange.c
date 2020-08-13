@@ -731,13 +731,13 @@ update_highlight_position (GtkRange *range)
 
   if (should_invert (range))
     {
-      gtk_widget_add_css_class (priv->highlight_widget, GTK_STYLE_CLASS_BOTTOM);
-      gtk_widget_remove_css_class (priv->highlight_widget, GTK_STYLE_CLASS_TOP);
+      gtk_widget_add_css_class (priv->highlight_widget, "bottom");
+      gtk_widget_remove_css_class (priv->highlight_widget, "top");
     }
   else
     {
-      gtk_widget_add_css_class (priv->highlight_widget, GTK_STYLE_CLASS_TOP);
-      gtk_widget_remove_css_class (priv->highlight_widget, GTK_STYLE_CLASS_BOTTOM);
+      gtk_widget_add_css_class (priv->highlight_widget, "top");
+      gtk_widget_remove_css_class (priv->highlight_widget, "bottom");
     }
 }
 
@@ -751,13 +751,13 @@ update_fill_position (GtkRange *range)
 
   if (should_invert (range))
     {
-      gtk_widget_add_css_class (priv->fill_widget, GTK_STYLE_CLASS_BOTTOM);
-      gtk_widget_remove_css_class (priv->fill_widget, GTK_STYLE_CLASS_TOP);
+      gtk_widget_add_css_class (priv->fill_widget, "bottom");
+      gtk_widget_remove_css_class (priv->fill_widget, "top");
     }
   else
     {
-      gtk_widget_add_css_class (priv->fill_widget, GTK_STYLE_CLASS_TOP);
-      gtk_widget_remove_css_class (priv->fill_widget, GTK_STYLE_CLASS_BOTTOM);
+      gtk_widget_add_css_class (priv->fill_widget, "top");
+      gtk_widget_remove_css_class (priv->fill_widget, "bottom");
     }
 }
 
