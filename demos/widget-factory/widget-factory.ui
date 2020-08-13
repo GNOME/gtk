@@ -1624,6 +1624,9 @@ microphone-sensitivity-medium-symbolic</property>
                                   <object class="GtkListBox" id="listbox">
                                     <property name="selection-mode">none</property>
                                     <property name="show-separators">1</property>
+                                    <style>
+                                      <class name="rich-list"/>
+                                    </style>
                                     <child type="placeholder">
                                       <object class="GtkLabel">
                                         <property name="label">No rows found</property>

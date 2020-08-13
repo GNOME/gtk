@@ -5,6 +5,10 @@
  * It demonstrates how to implement support for trees with GtkListView.
  * It also shows how to set up sorting and filtering for columns in a
  * GtkColumnView.
+ *
+ * It also demonstrates different styles of list. The tree on the left
+ * uses the ­.navigation-sidebar style class, the list on the right uses
+ * the ­.data-table style class.
  */
 
 #include <gtk/gtk.h>

@@ -42,6 +42,9 @@
         <child>
           <object class="GtkColumnView" id="list">
             <signal name="activate" handler="on_row_activated"/>
+            <style>
+              <class name="data-table"/>
+            </style>
             <child>
               <object class="GtkColumnViewColumn">
                 <property name="title">Type</property>

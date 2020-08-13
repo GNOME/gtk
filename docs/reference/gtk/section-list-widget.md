@@ -165,6 +165,30 @@ rows and provide a similar experience to #GtkTreeView.
 Developers should refer to those objects' API reference for more discussion
 on the topic.
 
+## List styles {#list-styles}
+
+One of the advantages of the new list widgets over #GtkTreeViews and cell
+renderers is that they are fully themable using GTK CSS. This provides a
+lot of flexibility. The themes that ship with GTK provide a few predefined
+list styles that can be used in many situations:
+
+![Rich list](rich-list.png)
+
+This style of list is low density, spacious and uses an outline focus ring.
+It is suitable for lists of controls, e.g. in preference dialogs or
+settings panels. Use the .rich-list style class.
+
+![Navigation sidebar](navigation-sidebar.png)
+
+This style of list is medium density, using a full background to indicate
+focus and selection. Use the .navigation-sidebar style class.
+
+![Data table](data-table.png)
+
+This style of list is a high density table, similar in style to a traditional
+treeview. Individual cells can be selectable and editable. Use the .data-table
+style class.
+
 ## Comparison to GtkTreeView
 
 Developers familiar with #GtkTreeView may wonder how this way of doing lists

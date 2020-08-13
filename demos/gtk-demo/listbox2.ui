@@ -36,19 +36,18 @@
                         <property name="selection-mode">none</property>
                         <property name="show-separators">1</property>
                         <signal name="row-activated" handler="row_activated"/>
+                        <style>
+                          <class name="rich-list"/>
+                        </style>
+
                         <child>
                           <object class="GtkListBoxRow">
                             <child>
                               <object class="GtkBox">
-                                <property name="margin-start">6</property>
-                                <property name="margin-end">6</property>
-                                <property name="margin-top">6</property>
-                                <property name="margin-bottom">6</property>
-                                <property name="spacing">12</property>
-                                <property name="height-request">34</property>
                                 <child>
                                   <object class="GtkLabel" id="switch_label">
                                     <property name="label" translatable="yes">Switch</property>
+                                    <property name="xalign">0</property>
                                     <property name="halign">start</property>
                                     <property name="valign">center</property>
                                     <property name="hexpand">1</property>
@@ -69,15 +68,10 @@
                           <object class="GtkListBoxRow">
                             <child>
                               <object class="GtkBox">
-                                <property name="margin-start">6</property>
-                                <property name="margin-end">6</property>
-                                <property name="margin-top">6</property>
-                                <property name="margin-bottom">6</property>
-                                <property name="spacing">12</property>
-                                <property name="height-request">34</property>
                                 <child>
                                   <object class="GtkLabel" id="check_label">
                                     <property name="label" translatable="yes">Check</property>
+                                    <property name="xalign">0</property>
                                     <property name="halign">start</property>
                                     <property name="valign">center</property>
                                     <property name="hexpand">1</property>
@@ -101,15 +95,10 @@
                           <object class="GtkListBoxRow">
                             <child>
                               <object class="GtkBox">
-                                <property name="margin-start">6</property>
-                                <property name="margin-end">6</property>
-                                <property name="margin-top">6</property>
-                                <property name="margin-bottom">6</property>
-                                <property name="spacing">12</property>
-                                <property name="height-request">34</property>
                                 <child>
                                   <object class="GtkLabel" id="image_label">
                                     <property name="label" translatable="yes">Click here!</property>
+                                    <property name="xalign">0</property>
                                     <property name="halign">start</property>
                                     <property name="valign">center</property>
                                     <property name="hexpand">1</property>
@@ -151,21 +140,19 @@
                       <object class="GtkListBox">
                         <property name="selection-mode">none</property>
                         <property name="show-separators">1</property>
+                        <style>
+                          <class name="rich-list"/>
+                        </style>
 
                         <child>
                           <object class="GtkListBoxRow">
                             <property name="activatable">0</property>
                             <child>
                               <object class="GtkBox">
-                                <property name="margin-start">6</property>
-                                <property name="margin-end">6</property>
-                                <property name="margin-top">6</property>
-                                <property name="margin-bottom">6</property>
-                                <property name="spacing">12</property>
-                                <property name="height-request">34</property>
                                 <child>
                                   <object class="GtkLabel" id="scale_label">
                                     <property name="label" translatable="yes">Scale</property>
+                                    <property name="xalign">0</property>
                                     <property name="halign">start</property>
                                     <property name="valign">center</property>
                                     <property name="hexpand">1</property>
@@ -197,15 +184,10 @@
                             <property name="activatable">0</property>
                             <child>
                               <object class="GtkBox">
-                                <property name="margin-start">6</property>
-                                <property name="margin-end">6</property>
-                                <property name="margin-top">6</property>
-                                <property name="margin-bottom">6</property>
-                                <property name="spacing">12</property>
-                                <property name="height-request">34</property>
                                 <child>
                                   <object class="GtkLabel" id="spin_label">
                                     <property name="label" translatable="yes">Spinbutton</property>
+                                    <property name="xalign">0</property>
                                     <property name="halign">start</property>
                                     <property name="valign">center</property>
                                     <property name="hexpand">1</property>
@@ -234,15 +216,10 @@
                             <property name="activatable">0</property>
                             <child>
                               <object class="GtkBox">
-                                <property name="margin-start">6</property>
-                                <property name="margin-end">6</property>
-                                <property name="margin-top">6</property>
-                                <property name="margin-bottom">6</property>
-                                <property name="spacing">12</property>
-                                <property name="height-request">34</property>
                                 <child>
                                   <object class="GtkLabel" id="dropdown_label">
                                     <property name="label" translatable="yes">Dropdown</property>
+                                    <property name="xalign">0</property>
                                     <property name="halign">start</property>
                                     <property name="valign">center</property>
                                     <property name="hexpand">1</property>
@@ -274,15 +251,10 @@
                             <property name="activatable">0</property>
                             <child>
                               <object class="GtkBox">
-                                <property name="margin-start">6</property>
-                                <property name="margin-end">6</property>
-                                <property name="margin-top">6</property>
-                                <property name="margin-bottom">6</property>
-                                <property name="spacing">12</property>
-                                <property name="height-request">34</property>
                                 <child>
                                   <object class="GtkLabel" id="entry_label">
                                     <property name="label" translatable="yes">Entry</property>
+                                    <property name="xalign">0</property>
                                     <property name="halign">start</property>
                                     <property name="valign">center</property>
                                     <property name="hexpand">1</property>

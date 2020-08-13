@@ -18,6 +18,9 @@
                 <child>
                   <object class="GtkListBox" id="version_box">
                     <property name="selection-mode">none</property>
+                    <style>
+                      <class name="rich-list"/>
+                    </style>
                     <child>
                       <object class="GtkListBoxRow">
                         <property name="activatable">0</property>
@@ -178,6 +181,9 @@
                 <child>
                   <object class="GtkListBox" id="env_box">
                     <property name="selection-mode">none</property>
+                    <style>
+                      <class name="rich-list"/>
+                    </style>
                     <child>
                       <object class="GtkListBoxRow">
                         <property name="activatable">0</property>
@@ -405,6 +411,9 @@
                 <child>
                   <object class="GtkListBox" id="display_box">
                     <property name="selection-mode">none</property>
+                    <style>
+                      <class name="rich-list"/>
+                    </style>
                     <child>
                       <object class="GtkListBoxRow">
                         <property name="activatable">0</property>
@@ -506,6 +515,9 @@
                 <child>
                   <object class="GtkListBox" id="monitor_box">
                     <property name="selection-mode">none</property>
+                    <style>
+                      <class name="rich-list"/>
+                    </style>
                   </object>
                 </child>
               </object>
@@ -516,6 +528,9 @@
                 <child>
                   <object class="GtkListBox" id="gl_box">
                     <property name="selection-mode">none</property>
+                    <style>
+                      <class name="rich-list"/>
+                    </style>
                     <child>
                       <object class="GtkListBoxRow">
                         <property name="activatable">0</property>
@@ -588,6 +603,9 @@
                 <child>
                   <object class="GtkListBox" id="vulkan_box">
                     <property name="selection-mode">none</property>
+                    <style>
+                      <class name="rich-list"/>
+                    </style>
                     <child>
                       <object class="GtkListBoxRow">
                         <property name="activatable">0</property>
@@ -691,6 +709,9 @@
                 <child>
                   <object class="GtkListBox" id="device_box">
                     <property name="selection-mode">none</property>
+                    <style>
+                      <class name="rich-list"/>
+                    </style>
                   </object>
                 </child>
               </object>

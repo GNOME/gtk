@@ -3066,7 +3066,7 @@ separator {
  * Lists *
  *********/
 listview,
-list {
+list, .rich-list {
   color: $text_color;
   background-color: $base_color;
   border-color: $borders_color;
@@ -3077,7 +3077,7 @@ list {
     border-color: $backdrop_borders_color;
   }
 
-  > row { padding: 2px; }
+  > row { padding: 18px; }
   > row.expander { padding: 0px; }
   > row.expander .row-header { padding: 2px; }
 
@@ -3119,6 +3119,25 @@ row {
     @extend %selected_items;
   }
 }
+
+/********************************************************
+ * Data Tables                                          *
+ * treeview like tables with individual focusable cells *
+ * https://gitlab.gnome.org/GNOME/gtk/-/issues/2929     *
+ ********************************************************/
+
+  .data-table row:not(:selected) cell editablelabel:not(.editing):focus-within {
+    outline: 2px solid $focus_border_color;
+  }
+
+  .data-table row:not(:selected) cell editablelabel.editing:focus-within {
+    outline: 2px solid $selected_bg_color;
+  }
+
+  .data-table row:not(:selected) cell editablelabel.editing text selection {
+    color: $selected_fg_color;
+    background-color: $selected_bg_color;
+  }
 
 
 /*********************
@@ -3361,7 +3380,10 @@ row image.sidebar-icon { opacity: $_placesidebar_icons_opacity; } // dim the sid
                                                                   // see bug #786613 for details 
                                                                   // on this oddity
 
-placessidebar {
+/* this should be more generic, only using .navigation-sidebar
+   https://gitlab.gnome.org/GNOME/gtk/-/issues/2929
+*/
+placessidebar, .navigation-sidebar {
   > scrolledwindow.frame { border-style: none; }
 
   row {
@@ -3377,7 +3399,7 @@ placessidebar {
       background-color: desaturate($selected_bg_color,100%);
       color: $selected_fg_color;
 
-      &:focus {
+      &:focus-visible:focus-within {
         outline-width: 0;
         color: $selected_fg_color;
         background-color: $selected_bg_color;
@@ -3386,6 +3408,11 @@ placessidebar {
         color: $fg_color;
         background-color: $menu_selected_color;
       }
+    }
+
+    &:hover {
+      color: $fg_color;
+      background-color: $menu_selected_color;
     }
 
     &:disabled { color: $insensitive_fg_color; }

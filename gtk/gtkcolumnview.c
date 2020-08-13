@@ -80,7 +80,7 @@
  * # CSS nodes
  *
  * |[<!-- language="plain" -->
- * columnview[.column-separators]
+ * columnview[.column-separators][.rich-list][.navigation-sidebar][.data-table]
  * ├── header
  * │   ├── <column header>
  * ┊   ┊
@@ -101,6 +101,10 @@
  * #GtkColumnView:show-row-separators is set, it will be passed on to the
  * list view, causing its CSS node to carry the .separators style class.
  * For rubberband selection, a node with name rubberband is used.
+ *
+ * The main columnview node may also carry style classes to select
+ * the style of [list presentation](ListContainers.html#list-styles):
+ * .rich-list, .navigation-sidebar or .data-table.
  */
 
 struct _GtkColumnView

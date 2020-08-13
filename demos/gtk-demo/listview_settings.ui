@@ -20,6 +20,9 @@
           <object class="GtkScrolledWindow">
             <child>
               <object class="GtkListView" id="listview">
+                <style>
+                  <class name="navigation-sidebar"/>
+                </style>
                 <property name="factory">
                   <object class="GtkBuilderListItemFactory">
                     <property name="bytes"><![CDATA[
@@ -73,6 +76,9 @@
                 <property name="vexpand">1</property>
                 <child>
                   <object class="GtkColumnView" id="columnview">
+                    <style>
+                      <class name="data-table"/>
+                    </style>
                     <child>
                       <object class="GtkColumnViewColumn" id="name_column">
                         <property name="title">Name</property>

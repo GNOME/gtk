@@ -3783,6 +3783,7 @@ gtk_places_sidebar_init (GtkPlacesSidebar *sidebar)
 
   /* list box */
   sidebar->list_box = gtk_list_box_new ();
+  gtk_widget_add_css_class (sidebar->list_box, "navigation-sidebar");
 
   gtk_list_box_set_header_func (GTK_LIST_BOX (sidebar->list_box),
                                 list_box_header_func, sidebar, NULL);
