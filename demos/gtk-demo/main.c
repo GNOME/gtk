@@ -8,6 +8,9 @@
 #include <gtk/gtk.h>
 #include <glib/gstdio.h>
 
+#include <gio/gunixoutputstream.h>
+#include <fcntl.h>
+
 #include "demos.h"
 
 static GtkWidget *info_view;
@@ -234,20 +237,81 @@ activate_run (GSimpleAction *action,
   gtk_demo_run (demo, window);
 }
 
-static GBytes *
-fontify_text (const char *format,
-              const char *text)
+static void
+fontify_finish (GObject *source,
+                GAsyncResult *result,
+                gpointer data)
 {
-  GSubprocess *subprocess;
-  GBytes *stdin_buf;
+  GSubprocess *subprocess = G_SUBPROCESS (source);
+  GtkTextBuffer *buffer = data;
   GBytes *stdout_buf = NULL;
   GBytes *stderr_buf = NULL;
   GError *error = NULL;
+
+  if (!g_subprocess_communicate_finish (subprocess,
+                                        result,
+                                        &stdout_buf,
+                                        &stderr_buf,
+                                        &error))
+    {
+      g_clear_pointer (&stdout_buf, g_bytes_unref);
+      g_clear_pointer (&stderr_buf, g_bytes_unref);
+
+      g_warning ("%s", error->message);
+      g_clear_error (&error);
+
+      g_object_unref (subprocess);
+      g_object_unref (buffer);
+      return;
+    }
+
+  if (g_subprocess_get_exit_status (subprocess) != 0)
+    {
+      if (stderr_buf)
+        g_warning ("%s", (char *)g_bytes_get_data (stderr_buf, NULL));
+      g_clear_pointer (&stderr_buf, g_bytes_unref);
+    }
+
+  g_object_unref (subprocess);
+
+  g_clear_pointer (&stderr_buf, g_bytes_unref);
+
+  if (stdout_buf)
+    {
+      char *markup;
+      gsize len;
+      char *p;
+      GtkTextIter start;
+
+      gtk_text_buffer_set_text (buffer, "", 0);
+
+      /* highlight puts a span with font and size around its output,
+       * which we don't want.
+       */
+      markup = g_bytes_unref_to_data (stdout_buf, &len);
+      for (p = markup + strlen ("<span "); *p != '>'; p++) *p = ' ';
+
+      gtk_text_buffer_get_start_iter (buffer, &start);
+      gtk_text_buffer_insert_markup (buffer, &start, markup, len);
+   }
+
+  g_object_unref (buffer);
+}
+
+void
+fontify (const char    *format,
+         GtkTextBuffer *source_buffer)
+{
+  GSubprocess *subprocess;
   char *format_arg;
   GtkSettings *settings;
   char *theme;
   gboolean prefer_dark;
   const char *style_arg;
+  const char *text;
+  GtkTextIter start, end;
+  GBytes *bytes;
+  GError *error = NULL;
 
   settings = gtk_settings_get_default ();
   g_object_get (settings,
@@ -291,74 +355,26 @@ fontify_text (const char *format,
 
       g_clear_error (&error);
 
-      return NULL;
+      return;
     }
-
-  stdin_buf = g_bytes_new_static (text, strlen (text));
-
-  if (!g_subprocess_communicate (subprocess,
-                                 stdin_buf,
-                                 NULL,
-                                 &stdout_buf,
-                                 &stderr_buf,
-                                 &error))
-    {
-      g_clear_pointer (&stdin_buf, g_bytes_unref);
-      g_clear_pointer (&stdout_buf, g_bytes_unref);
-      g_clear_pointer (&stderr_buf, g_bytes_unref);
-
-      g_warning ("%s", error->message);
-      g_clear_error (&error);
-
-      return NULL;
-    }
-
-  g_bytes_unref (stdin_buf);
-
-  if (g_subprocess_get_exit_status (subprocess) != 0)
-    {
-      if (stderr_buf)
-        g_warning ("%s", (char *)g_bytes_get_data (stderr_buf, NULL));
-
-      g_clear_pointer (&stdout_buf, g_bytes_unref);
-    }
-
-  g_clear_pointer (&stderr_buf, g_bytes_unref);
-
-  g_object_unref (subprocess);
-
-  return stdout_buf;
-}
-
-void
-fontify (const char    *format,
-         GtkTextBuffer *source_buffer)
-{
-  GtkTextIter start, end;
-  char *text;
-  GBytes *bytes;
 
   gtk_text_buffer_get_bounds (source_buffer, &start, &end);
   text = gtk_text_buffer_get_text (source_buffer, &start, &end, TRUE);
+  bytes = g_bytes_new_static (text, strlen (text));
 
-  bytes = fontify_text (format, text);
-  if (bytes)
+  /* Work around https://gitlab.gnome.org/GNOME/glib/-/issues/2182 */
+  if (G_IS_UNIX_OUTPUT_STREAM (g_subprocess_get_stdin_pipe (subprocess)))
     {
-      char *markup;
-      gsize len;
-      char *p;
-
-      markup = g_bytes_unref_to_data (bytes, &len);
-      /* highlight puts a span with font and size around its output,
-       * which we don't want.
-       */
-      for (p = markup + strlen ("<span "); *p != '>'; p++) *p = ' ';
-      gtk_text_buffer_delete (source_buffer, &start, &end);
-      gtk_text_buffer_insert_markup (source_buffer, &start, markup, len);
-      g_free (markup);
+      GOutputStream *stdin_pipe = g_subprocess_get_stdin_pipe (subprocess);
+      int fd = g_unix_output_stream_get_fd (G_UNIX_OUTPUT_STREAM (stdin_pipe));
+      fcntl (fd, F_SETFL, O_NONBLOCK);
     }
 
-  g_free (text);
+  g_subprocess_communicate_async (subprocess,
+                                  bytes,
+                                  NULL,
+                                  fontify_finish,
+                                  g_object_ref (source_buffer));
 }
 
 static GtkWidget *
@@ -432,6 +448,8 @@ display_text (const char  *format,
   GtkTextBuffer *buffer;
   GtkWidget *textview, *sw;
   GBytes *bytes;
+  const char *text;
+  gsize len;
 
   bytes = g_resources_lookup_data (resource, 0, NULL);
   g_assert (bytes);
@@ -454,14 +472,14 @@ display_text (const char  *format,
   gtk_text_view_set_monospace (GTK_TEXT_VIEW (textview), TRUE);
 
   buffer = gtk_text_buffer_new (NULL);
-  gtk_text_buffer_set_text (buffer, g_bytes_get_data (bytes, NULL), g_bytes_get_size (bytes));
+
+  text = g_bytes_unref_to_data (bytes, &len);
+  gtk_text_buffer_set_text (buffer, text, len);
 
   if (format)
     fontify (format, buffer);
 
   gtk_text_view_set_buffer (GTK_TEXT_VIEW (textview), buffer);
-
-  g_bytes_unref (bytes);
 
   sw = gtk_scrolled_window_new ();
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (sw),
