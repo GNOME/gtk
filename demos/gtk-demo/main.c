@@ -238,6 +238,255 @@ activate_run (GSimpleAction *action,
 }
 
 static void
+insert_tags_for_attributes (GtkTextBuffer     *buffer,
+                            PangoAttrIterator *iter,
+                            GtkTextIter       *start,
+                            GtkTextIter       *end)
+{
+  GtkTextTagTable *table;
+  PangoAttribute *attr;
+  GtkTextTag *tag;
+  char name[256];
+
+  table = gtk_text_buffer_get_tag_table (buffer);
+
+#define STRING_ATTR(pango_attr_name, attr_name) \
+  attr = pango_attr_iterator_get (iter, pango_attr_name); \
+  if (attr) \
+    { \
+      const char *string = ((PangoAttrString*)attr)->value; \
+      g_snprintf (name, 256, #attr_name "=%s", string); \
+      tag = gtk_text_tag_table_lookup (table, name); \
+      if (!tag) \
+        { \
+          tag = gtk_text_tag_new (name); \
+          g_object_set (tag, #attr_name, string, NULL); \
+          gtk_text_tag_table_add (table, tag); \
+          g_object_unref (tag); \
+        } \
+      gtk_text_buffer_apply_tag (buffer, tag, start, end); \
+    }
+
+#define INT_ATTR(pango_attr_name, attr_name) \
+  attr = pango_attr_iterator_get (iter, pango_attr_name); \
+  if (attr) \
+    { \
+      int value = ((PangoAttrInt*)attr)->value; \
+      g_snprintf (name, 256, #attr_name "=%d", value); \
+      tag = gtk_text_tag_table_lookup (table, name); \
+      if (!tag) \
+        { \
+          tag = gtk_text_tag_new (name); \
+          g_object_set (tag, #attr_name, value, NULL); \
+          gtk_text_tag_table_add (table, tag); \
+          g_object_unref (tag); \
+        } \
+      gtk_text_buffer_apply_tag (buffer, tag, start, end); \
+    }
+
+#define FLOAT_ATTR(pango_attr_name, attr_name) \
+  attr = pango_attr_iterator_get (iter, pango_attr_name); \
+  if (attr) \
+    { \
+      float value = ((PangoAttrFloat*)attr)->value; \
+      g_snprintf (name, 256, #attr_name "=%g", value); \
+      tag = gtk_text_tag_table_lookup (table, name); \
+      if (!tag) \
+        { \
+          tag = gtk_text_tag_new (name); \
+          g_object_set (tag, #attr_name, value, NULL); \
+          gtk_text_tag_table_add (table, tag); \
+          g_object_unref (tag); \
+        } \
+      gtk_text_buffer_apply_tag (buffer, tag, start, end); \
+    }
+
+#define RGBA_ATTR(pango_attr_name, attr_name) \
+  attr = pango_attr_iterator_get (iter, pango_attr_name); \
+  if (attr) \
+    { \
+      PangoColor *color; \
+      GdkRGBA rgba; \
+      color = &((PangoAttrColor*)attr)->color; \
+      rgba.red = color->red / 65535.; \
+      rgba.green = color->green / 65535.; \
+      rgba.blue = color->blue / 65535.; \
+      rgba.alpha = 1.; \
+      char *str = gdk_rgba_to_string (&rgba); \
+      g_snprintf (name, 256, #attr_name "=%s", str); \
+      g_free (str); \
+      tag = gtk_text_tag_table_lookup (table, name); \
+      if (!tag) \
+        { \
+          tag = gtk_text_tag_new (name); \
+          g_object_set (tag, #attr_name, &rgba, NULL); \
+          gtk_text_tag_table_add (table, tag); \
+          g_object_unref (tag); \
+        } \
+      gtk_text_buffer_apply_tag (buffer, tag, start, end); \
+    }
+
+  attr = pango_attr_iterator_get (iter, PANGO_ATTR_LANGUAGE);
+  if (attr)
+    {
+      const char *language = pango_language_to_string (((PangoAttrLanguage*)attr)->value);
+      g_snprintf (name, 256, "language=%s", language);
+      tag = gtk_text_tag_table_lookup (table, name);
+      if (!tag)
+        {
+          tag = gtk_text_tag_new (name);
+          g_object_set (tag, "language", language, NULL);
+          gtk_text_tag_table_add (table, tag);
+          g_object_unref (tag);
+        }
+      gtk_text_buffer_apply_tag (buffer, tag, start, end);
+    }
+
+  STRING_ATTR (PANGO_ATTR_FAMILY, family)
+  INT_ATTR    (PANGO_ATTR_STYLE, style)
+  INT_ATTR    (PANGO_ATTR_WEIGHT, weight)
+  INT_ATTR    (PANGO_ATTR_VARIANT, variant)
+  INT_ATTR    (PANGO_ATTR_STRETCH, stretch)
+  INT_ATTR    (PANGO_ATTR_SIZE, size)
+
+  attr = pango_attr_iterator_get (iter, PANGO_ATTR_FONT_DESC);
+  if (attr)
+    {
+      PangoFontDescription *desc = ((PangoAttrFontDesc*)attr)->desc;
+      char *str = pango_font_description_to_string (desc);
+      g_snprintf (name, 256, "font-desc=%s", str);
+      g_free (str);
+      tag = gtk_text_tag_table_lookup (table, name);
+      if (!tag)
+        {
+          tag = gtk_text_tag_new (name);
+          g_object_set (tag, "font-desc", desc, NULL);
+          gtk_text_tag_table_add (table, tag);
+          g_object_unref (tag);
+        }
+      gtk_text_buffer_apply_tag (buffer, tag, start, end);
+    }
+
+  RGBA_ATTR   (PANGO_ATTR_FOREGROUND, foreground_rgba)
+  RGBA_ATTR   (PANGO_ATTR_BACKGROUND, background_rgba)
+  INT_ATTR    (PANGO_ATTR_UNDERLINE, underline)
+  RGBA_ATTR   (PANGO_ATTR_UNDERLINE_COLOR, underline_rgba)
+  INT_ATTR    (PANGO_ATTR_OVERLINE, overline)
+  RGBA_ATTR   (PANGO_ATTR_OVERLINE_COLOR, overline_rgba)
+  INT_ATTR    (PANGO_ATTR_STRIKETHROUGH, strikethrough)
+  RGBA_ATTR   (PANGO_ATTR_STRIKETHROUGH_COLOR, strikethrough_rgba)
+  INT_ATTR    (PANGO_ATTR_RISE, rise)
+  FLOAT_ATTR  (PANGO_ATTR_SCALE, scale)
+  INT_ATTR    (PANGO_ATTR_FALLBACK, fallback)
+  INT_ATTR    (PANGO_ATTR_LETTER_SPACING, letter_spacing)
+  STRING_ATTR (PANGO_ATTR_FONT_FEATURES, font_features)
+  INT_ATTR    (PANGO_ATTR_ALLOW_BREAKS, allow_breaks)
+  INT_ATTR    (PANGO_ATTR_SHOW, show_spaces)
+  INT_ATTR    (PANGO_ATTR_INSERT_HYPHENS, insert_hyphens)
+}
+
+typedef struct
+{
+  GtkTextBuffer *buffer;
+  GtkTextIter iter;
+  GtkTextMark *mark;
+  PangoAttrList *attributes;
+  char *text;
+  PangoAttrIterator *attr;
+} MarkupData;
+
+static void
+free_markup_data (MarkupData *mdata)
+{
+  gtk_text_buffer_delete_mark (mdata->buffer, mdata->mark);
+  pango_attr_iterator_destroy (mdata->attr);
+  pango_attr_list_unref (mdata->attributes);
+  g_free (mdata->text);
+  g_object_unref (mdata->buffer);
+  g_free (mdata);
+}
+
+static gboolean
+insert_markup_idle (gpointer data)
+{
+  MarkupData *mdata = data;
+  gint64 begin;
+
+  begin = g_get_monotonic_time ();
+
+  do
+    {
+      int start, end;
+      int start_offset;
+      GtkTextIter start_iter;
+
+      if (g_get_monotonic_time () - begin > G_TIME_SPAN_MILLISECOND)
+        {
+          g_idle_add (insert_markup_idle, data);
+          return G_SOURCE_REMOVE;
+        }
+
+      pango_attr_iterator_range (mdata->attr, &start, &end);
+
+      if (end == G_MAXINT) /* last chunk */
+        end = start - 1; /* resulting in -1 to be passed to _insert */
+
+      start_offset = gtk_text_iter_get_offset (&mdata->iter);
+      gtk_text_buffer_insert (mdata->buffer, &mdata->iter, mdata->text + start, end - start);
+      gtk_text_buffer_get_iter_at_offset (mdata->buffer, &start_iter, start_offset);
+
+      insert_tags_for_attributes (mdata->buffer, mdata->attr, &start_iter, &mdata->iter);
+
+      gtk_text_buffer_get_iter_at_mark (mdata->buffer, &mdata->iter, mdata->mark);
+    }
+  while (pango_attr_iterator_next (mdata->attr));
+
+  free_markup_data (mdata);
+  return G_SOURCE_REMOVE;
+}
+
+static void
+insert_markup (GtkTextBuffer *buffer,
+               GtkTextIter   *iter,
+               const char    *markup,
+               int            len)
+{
+  char *text;
+  PangoAttrList *attributes;
+  GError *error = NULL;
+  MarkupData *data;
+
+  g_return_if_fail (GTK_IS_TEXT_BUFFER (buffer));
+
+  if (!pango_parse_markup (markup, len, 0, &attributes, &text, NULL, &error))
+    {
+      g_warning ("Invalid markup string: %s", error->message);
+      g_error_free (error);
+      return;
+    }
+
+  if (!attributes)
+    {
+      gtk_text_buffer_insert (buffer, iter, text, -1);
+      g_free (text);
+      return;
+    }
+
+  data = g_new (MarkupData, 1);
+
+  data->buffer = g_object_ref (buffer);
+  data->iter = *iter;
+  data->attributes = attributes;
+  data->text = text;
+
+  /* create mark with right gravity */
+  data->mark = gtk_text_buffer_create_mark (buffer, NULL, iter, FALSE);
+  data->attr = pango_attr_list_get_iterator (attributes);
+
+  insert_markup_idle (data);
+}
+
+static void
 fontify_finish (GObject *source,
                 GAsyncResult *result,
                 gpointer data)
@@ -292,7 +541,7 @@ fontify_finish (GObject *source,
       for (p = markup + strlen ("<span "); *p != '>'; p++) *p = ' ';
 
       gtk_text_buffer_get_start_iter (buffer, &start);
-      gtk_text_buffer_insert_markup (buffer, &start, markup, len);
+      insert_markup (buffer, &start, markup, len);
    }
 
   g_object_unref (buffer);
