@@ -189,7 +189,7 @@ do_rotated_text (GtkWidget *do_widget)
       /* Add a drawing area */
       drawing_area = gtk_drawing_area_new ();
       gtk_box_append (GTK_BOX (box), drawing_area);
-      gtk_widget_add_css_class (drawing_area, GTK_STYLE_CLASS_VIEW);
+      gtk_widget_add_css_class (drawing_area, "view");
 
       gtk_drawing_area_set_draw_func (GTK_DRAWING_AREA (drawing_area),
                                       rotated_text_draw,

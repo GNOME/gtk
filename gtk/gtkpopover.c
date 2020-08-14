@@ -122,7 +122,7 @@
 #include "gtkbuildable.h"
 #include "gtktooltipprivate.h"
 #include "gtkcssboxesimplprivate.h"
-#include "gtknative.h"
+#include "gtknativeprivate.h"
 
 #include "gtkrender.h"
 #include "gtkstylecontextprivate.h"

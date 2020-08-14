@@ -407,7 +407,7 @@ gtk_expander_init (GtkExpander *expander)
   gtk_box_append (GTK_BOX (expander->box), expander->title_widget);
 
   expander->arrow_widget = gtk_builtin_icon_new ("expander");
-  gtk_widget_add_css_class (expander->arrow_widget, GTK_STYLE_CLASS_HORIZONTAL);
+  gtk_widget_add_css_class (expander->arrow_widget, "horizontal");
   gtk_box_append (GTK_BOX (expander->title_widget), expander->arrow_widget);
 
   controller = gtk_drop_controller_motion_new ();

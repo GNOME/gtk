@@ -720,9 +720,9 @@ gtk_button_set_has_frame (GtkButton *button,
     return;
 
   if (has_frame)
-    gtk_widget_remove_css_class (GTK_WIDGET (button), GTK_STYLE_CLASS_FLAT);
+    gtk_widget_remove_css_class (GTK_WIDGET (button), "flat");
   else
-    gtk_widget_add_css_class (GTK_WIDGET (button), GTK_STYLE_CLASS_FLAT);
+    gtk_widget_add_css_class (GTK_WIDGET (button), "flat");
 
   g_object_notify_by_pspec (G_OBJECT (button), props[PROP_HAS_FRAME]);
 }
@@ -740,7 +740,7 @@ gtk_button_get_has_frame (GtkButton *button)
 {
   g_return_val_if_fail (GTK_IS_BUTTON (button), TRUE);
 
-  return !gtk_widget_has_css_class (GTK_WIDGET (button), GTK_STYLE_CLASS_FLAT);
+  return !gtk_widget_has_css_class (GTK_WIDGET (button), "flat");
 }
 
 static void

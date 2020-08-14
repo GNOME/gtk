@@ -200,9 +200,9 @@ update_row (GtkStackSidebar *self,
   gtk_widget_set_visible (row, visible && title != NULL);
 
   if (needs_attention)
-    gtk_widget_add_css_class (row, GTK_STYLE_CLASS_NEEDS_ATTENTION);
+    gtk_widget_add_css_class (row, "needs-attention");
   else
-    gtk_widget_remove_css_class (row, GTK_STYLE_CLASS_NEEDS_ATTENTION);
+    gtk_widget_remove_css_class (row, "needs-attention");
 
   g_free (title);
 }

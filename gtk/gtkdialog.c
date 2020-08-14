@@ -389,10 +389,10 @@ update_suggested_action (GtkDialog *dialog,
 
   if (priv->use_header_bar)
     {
-      if (gtk_widget_has_css_class (child, GTK_STYLE_CLASS_DEFAULT))
-        gtk_widget_add_css_class (child, GTK_STYLE_CLASS_SUGGESTED_ACTION);
+      if (gtk_widget_has_css_class (child, "default"))
+        gtk_widget_add_css_class (child, "suggested-action");
       else
-        gtk_widget_remove_css_class (child, GTK_STYLE_CLASS_SUGGESTED_ACTION);
+        gtk_widget_remove_css_class (child, "suggested-action");
     }
 }
 

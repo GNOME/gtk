@@ -1903,7 +1903,7 @@ gtk_text_init (GtkText *self)
     {
       priv->undershoot_node[i] = gtk_css_node_new ();
       gtk_css_node_set_name (priv->undershoot_node[i], g_quark_from_static_string ("undershoot"));
-      gtk_css_node_add_class (priv->undershoot_node[i], g_quark_from_static_string (i == 0 ? GTK_STYLE_CLASS_LEFT : GTK_STYLE_CLASS_RIGHT));
+      gtk_css_node_add_class (priv->undershoot_node[i], g_quark_from_static_string (i == 0 ? "left" : "right"));
       gtk_css_node_set_parent (priv->undershoot_node[i], widget_node);
       gtk_css_node_set_state (priv->undershoot_node[i], gtk_css_node_get_state (widget_node) & ~GTK_STATE_FLAG_DROP_ACTIVE);
       g_object_unref (priv->undershoot_node[i]);
@@ -5383,11 +5383,11 @@ gtk_text_set_editable (GtkText  *self,
           priv->preedit_length = 0;
           priv->preedit_cursor = 0;
 
-          gtk_widget_remove_css_class (GTK_WIDGET (self), GTK_STYLE_CLASS_READ_ONLY);
+          gtk_widget_remove_css_class (GTK_WIDGET (self), "read-only");
         }
       else
         {
-          gtk_widget_add_css_class (GTK_WIDGET (self), GTK_STYLE_CLASS_READ_ONLY);
+          gtk_widget_add_css_class (GTK_WIDGET (self), "read-only");
         }
 
       priv->editable = is_editable;
@@ -6083,7 +6083,7 @@ gtk_text_selection_bubble_popup_show (gpointer user_data)
 
   priv->selection_bubble = gtk_popover_new ();
   gtk_widget_set_parent (priv->selection_bubble, GTK_WIDGET (self));
-  gtk_widget_add_css_class (priv->selection_bubble, GTK_STYLE_CLASS_TOUCH_SELECTION);
+  gtk_widget_add_css_class (priv->selection_bubble, "touch-selection");
   gtk_popover_set_position (GTK_POPOVER (priv->selection_bubble), GTK_POS_BOTTOM);
   gtk_popover_set_autohide (GTK_POPOVER (priv->selection_bubble), FALSE);
   g_signal_connect (priv->selection_bubble, "notify::visible",

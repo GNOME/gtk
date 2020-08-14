@@ -1519,7 +1519,7 @@ constructed (GObject *object)
 
   if (label)
     {
-      gtk_widget_add_css_class (label, GTK_STYLE_CLASS_DIM_LABEL);
+      gtk_widget_add_css_class (label, "dim-label");
       gtk_box_append (GTK_BOX (box), label);
     }
 
@@ -1533,7 +1533,7 @@ constructed (GObject *object)
   if (!can_modify)
     {
       label = gtk_label_new ("");
-      gtk_widget_add_css_class (label, GTK_STYLE_CLASS_DIM_LABEL);
+      gtk_widget_add_css_class (label, "dim-label");
       gtk_box_append (GTK_BOX (box), label);
 
       readonly_changed (self->object, spec, label);

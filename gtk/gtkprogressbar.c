@@ -336,24 +336,24 @@ update_node_classes (GtkProgressBar *pbar)
     }
 
   if (left)
-    gtk_widget_add_css_class (pbar->progress_widget, GTK_STYLE_CLASS_LEFT);
+    gtk_widget_add_css_class (pbar->progress_widget, "left");
   else
-    gtk_widget_remove_css_class (pbar->progress_widget, GTK_STYLE_CLASS_LEFT);
+    gtk_widget_remove_css_class (pbar->progress_widget, "left");
 
   if (right)
-    gtk_widget_add_css_class (pbar->progress_widget, GTK_STYLE_CLASS_RIGHT);
+    gtk_widget_add_css_class (pbar->progress_widget, "right");
   else
-    gtk_widget_remove_css_class (pbar->progress_widget, GTK_STYLE_CLASS_RIGHT);
+    gtk_widget_remove_css_class (pbar->progress_widget, "right");
 
   if (top)
-    gtk_widget_add_css_class (pbar->progress_widget, GTK_STYLE_CLASS_TOP);
+    gtk_widget_add_css_class (pbar->progress_widget, "top");
   else
-    gtk_widget_remove_css_class (pbar->progress_widget, GTK_STYLE_CLASS_TOP);
+    gtk_widget_remove_css_class (pbar->progress_widget, "top");
 
   if (bottom)
-    gtk_widget_add_css_class (pbar->progress_widget, GTK_STYLE_CLASS_BOTTOM);
+    gtk_widget_add_css_class (pbar->progress_widget, "bottom");
   else
-    gtk_widget_remove_css_class (pbar->progress_widget, GTK_STYLE_CLASS_BOTTOM);
+    gtk_widget_remove_css_class (pbar->progress_widget, "bottom");
 
   update_fraction_classes (pbar);
 }
@@ -661,7 +661,7 @@ gtk_progress_bar_act_mode_enter (GtkProgressBar *pbar)
   GtkWidget *widget = GTK_WIDGET (pbar);
   gboolean inverted;
 
-  gtk_widget_add_css_class (pbar->progress_widget, GTK_STYLE_CLASS_PULSE);
+  gtk_widget_add_css_class (pbar->progress_widget, "pulse");
   gtk_accessible_update_state (GTK_ACCESSIBLE (pbar),
                                GTK_ACCESSIBLE_STATE_BUSY, TRUE,
                                -1);
@@ -705,7 +705,7 @@ gtk_progress_bar_act_mode_leave (GtkProgressBar *pbar)
   gtk_accessible_update_state (GTK_ACCESSIBLE (pbar),
                                GTK_ACCESSIBLE_STATE_BUSY, FALSE,
                                -1);
-  gtk_widget_remove_css_class (pbar->progress_widget, GTK_STYLE_CLASS_PULSE);
+  gtk_widget_remove_css_class (pbar->progress_widget, "pulse");
   update_node_classes (pbar);
 }
 

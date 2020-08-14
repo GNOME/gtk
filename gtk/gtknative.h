@@ -34,29 +34,9 @@ G_BEGIN_DECLS
 GDK_AVAILABLE_IN_ALL
 G_DECLARE_INTERFACE (GtkNative, gtk_native, GTK, NATIVE, GtkWidget)
 
-/**
- * GtkNativeIface:
- *
- * The list of functions that must be implemented for the #GtkNative interface.
- */
-struct _GtkNativeInterface
-{
-  /*< private >*/
-  GTypeInterface g_iface;
-
-  /*< public >*/
-  GdkSurface *  (* get_surface)           (GtkNative    *self);
-  GskRenderer * (* get_renderer)          (GtkNative    *self);
-
-  void          (* get_surface_transform) (GtkNative    *self,
-                                           double       *x,
-                                           double       *y);
-
-  void          (* check_resize)          (GtkNative    *self);
-};
 
 GDK_AVAILABLE_IN_ALL
-GtkWidget * gtk_native_get_for_surface (GdkSurface *surface);
+GtkNative * gtk_native_get_for_surface (GdkSurface *surface);
 
 GDK_AVAILABLE_IN_ALL
 void        gtk_native_check_resize    (GtkNative *self);

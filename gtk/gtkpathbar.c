@@ -223,7 +223,7 @@ gtk_path_bar_init (GtkPathBar *path_bar)
   g_signal_connect_swapped (path_bar->down_slider_button, "clicked",
 			    G_CALLBACK (gtk_path_bar_scroll_down), path_bar);
 
-  gtk_widget_add_css_class (GTK_WIDGET (path_bar), GTK_STYLE_CLASS_LINKED);
+  gtk_widget_add_css_class (GTK_WIDGET (path_bar), "linked");
 
   path_bar->get_info_cancellable = NULL;
   path_bar->cancellables = NULL;

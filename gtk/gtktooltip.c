@@ -416,7 +416,7 @@ _gtk_widget_find_at_coords (GdkSurface *surface,
 
   g_return_val_if_fail (GDK_IS_SURFACE (surface), NULL);
 
-  event_widget = gtk_native_get_for_surface (surface);
+  event_widget = GTK_WIDGET (gtk_native_get_for_surface (surface));
 
   if (!event_widget)
     return NULL;
@@ -490,7 +490,7 @@ gtk_tooltip_set_surface (GtkTooltip *tooltip,
   GtkWidget *native;
 
   if (surface)
-    native = gtk_native_get_for_surface (surface);
+    native = GTK_WIDGET (gtk_native_get_for_surface (surface));
   else
     native = NULL;
 

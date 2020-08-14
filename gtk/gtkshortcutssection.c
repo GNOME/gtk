@@ -393,7 +393,7 @@ gtk_shortcuts_section_init (GtkShortcutsSection *self)
                                  "visible", FALSE,
                                  NULL);
 
-  gtk_widget_remove_css_class (GTK_WIDGET (self->switcher), GTK_STYLE_CLASS_LINKED);
+  gtk_widget_remove_css_class (GTK_WIDGET (self->switcher), "linked");
 
   self->show_all = gtk_button_new_with_mnemonic (_("_Show All"));
   gtk_widget_hide (self->show_all);

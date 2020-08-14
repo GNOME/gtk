@@ -28,6 +28,7 @@
 #include "gtkcssboxesimplprivate.h"
 #include "gtkcssnumbervalueprivate.h"
 #include "gtkstylecontextprivate.h"
+#include "gtknativeprivate.h"
 #include "gtkintl.h"
 
 #include <gtk/gtk.h>
@@ -403,21 +404,21 @@ gtk_text_handle_update_for_role (GtkTextHandle *handle)
 
   if (handle->role == GTK_TEXT_HANDLE_ROLE_CURSOR)
     {
-      gtk_widget_remove_css_class (widget, GTK_STYLE_CLASS_TOP);
-      gtk_widget_add_css_class (widget, GTK_STYLE_CLASS_BOTTOM);
-      gtk_widget_add_css_class (widget, GTK_STYLE_CLASS_INSERTION_CURSOR);
+      gtk_widget_remove_css_class (widget, "top");
+      gtk_widget_add_css_class (widget, "bottom");
+      gtk_widget_add_css_class (widget, "insertion-cursor");
     }
   else if (handle->role == GTK_TEXT_HANDLE_ROLE_SELECTION_END)
     {
-      gtk_widget_remove_css_class (widget, GTK_STYLE_CLASS_TOP);
-      gtk_widget_add_css_class (widget, GTK_STYLE_CLASS_BOTTOM);
-      gtk_widget_remove_css_class (widget, GTK_STYLE_CLASS_INSERTION_CURSOR);
+      gtk_widget_remove_css_class (widget, "top");
+      gtk_widget_add_css_class (widget, "bottom");
+      gtk_widget_remove_css_class (widget, "insertion-cursor");
     }
   else if (handle->role == GTK_TEXT_HANDLE_ROLE_SELECTION_START)
     {
-      gtk_widget_add_css_class (widget, GTK_STYLE_CLASS_TOP);
-      gtk_widget_remove_css_class (widget, GTK_STYLE_CLASS_BOTTOM);
-      gtk_widget_remove_css_class (widget, GTK_STYLE_CLASS_INSERTION_CURSOR);
+      gtk_widget_add_css_class (widget, "top");
+      gtk_widget_remove_css_class (widget, "bottom");
+      gtk_widget_remove_css_class (widget, "insertion-cursor");
     }
 }
 

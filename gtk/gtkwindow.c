@@ -51,7 +51,7 @@
 #include "gtkpointerfocusprivate.h"
 #include "gtkprivate.h"
 #include "gtkroot.h"
-#include "gtknative.h"
+#include "gtknativeprivate.h"
 #include "gtksettings.h"
 #include "gtkshortcut.h"
 #include "gtkshortcutcontroller.h"
@@ -1491,7 +1491,7 @@ gtk_window_init (GtkWindow *window)
                     G_CALLBACK (gtk_window_on_theme_variant_changed), window);
 #endif
 
-  gtk_widget_add_css_class (widget, GTK_STYLE_CLASS_BACKGROUND);
+  gtk_widget_add_css_class (widget, "background");
 
   priv->scale = gtk_widget_get_scale_factor (widget);
 
@@ -2746,7 +2746,7 @@ gtk_window_enable_csd (GtkWindow *window)
 
   /* We need a visual with alpha for client shadows */
   if (priv->use_client_shadow)
-    gtk_widget_add_css_class (widget, GTK_STYLE_CLASS_CSD);
+    gtk_widget_add_css_class (widget, "csd");
   else
     gtk_widget_add_css_class (widget, "solid-csd");
 
@@ -2796,7 +2796,7 @@ gtk_window_set_titlebar (GtkWindow *window,
   if (titlebar == NULL)
     {
       priv->client_decorated = FALSE;
-      gtk_widget_remove_css_class (widget, GTK_STYLE_CLASS_CSD);
+      gtk_widget_remove_css_class (widget, "csd");
 
       goto out;
     }
@@ -2807,7 +2807,7 @@ gtk_window_set_titlebar (GtkWindow *window,
   priv->title_box = titlebar;
   gtk_widget_insert_before (priv->title_box, widget, NULL);
 
-  gtk_widget_add_css_class (titlebar, GTK_STYLE_CLASS_TITLEBAR);
+  gtk_widget_add_css_class (titlebar, "titlebar");
 
 out:
   if (was_mapped)
@@ -4371,7 +4371,7 @@ gtk_window_realize (GtkWidget *widget)
             if (priv->title_box == NULL)
               {
                 priv->titlebar = gtk_header_bar_new ();
-                gtk_widget_add_css_class (priv->titlebar, GTK_STYLE_CLASS_TITLEBAR);
+                gtk_widget_add_css_class (priv->titlebar, "titlebar");
                 gtk_widget_add_css_class (priv->titlebar, "default-decoration");
 
                 gtk_widget_insert_before (priv->titlebar, widget, NULL);

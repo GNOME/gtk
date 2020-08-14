@@ -19,7 +19,7 @@
 
 #include "config.h"
 
-#include "gtknative.h"
+#include "gtknativeprivate.h"
 #include "gtkcssnodeprivate.h"
 #include "gtkwidgetprivate.h"
 #include "gdk/gdk-private.h"
@@ -146,7 +146,7 @@ gtk_native_check_resize (GtkNative *self)
  *
  * Returns: (transfer none): the #GtkNative that is associated with @surface
  */
-GtkWidget *
+GtkNative *
 gtk_native_get_for_surface (GdkSurface *surface)
 {
   GtkWidget *widget;
@@ -154,7 +154,7 @@ gtk_native_get_for_surface (GdkSurface *surface)
   widget = (GtkWidget *)gdk_surface_get_widget (surface);
 
   if (widget && GTK_IS_NATIVE (widget))
-    return widget;
+    return GTK_NATIVE (widget);
 
   return NULL;
 }

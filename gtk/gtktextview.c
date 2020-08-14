@@ -1057,7 +1057,7 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
   /**
    * GtkTextView:monospace:
    *
-   * If %TRUE, set the %GTK_STYLE_CLASS_MONOSPACE style class on the
+   * If %TRUE, set the .monospace style class on the
    * text view to indicate that a monospace font is desired.
    */
   g_object_class_install_property (gobject_class,
@@ -1842,7 +1842,7 @@ gtk_text_view_init (GtkTextView *text_view)
   gtk_widget_set_focusable (widget, TRUE);
   gtk_widget_set_overflow (widget, GTK_OVERFLOW_HIDDEN);
 
-  gtk_widget_add_css_class (widget, GTK_STYLE_CLASS_VIEW);
+  gtk_widget_add_css_class (widget, "view");
 
   gtk_widget_set_cursor_from_name (widget, "text");
 
@@ -8824,7 +8824,7 @@ gtk_text_view_selection_bubble_popup_show (gpointer user_data)
 
   priv->selection_bubble = gtk_popover_new ();
   gtk_widget_set_parent (priv->selection_bubble, GTK_WIDGET (text_view));
-  gtk_widget_add_css_class (priv->selection_bubble, GTK_STYLE_CLASS_TOUCH_SELECTION);
+  gtk_widget_add_css_class (priv->selection_bubble, "touch-selection");
   gtk_popover_set_position (GTK_POPOVER (priv->selection_bubble), GTK_POS_BOTTOM);
   gtk_popover_set_autohide (GTK_POPOVER (priv->selection_bubble), FALSE);
   g_signal_connect (priv->selection_bubble, "notify::visible",
@@ -9578,9 +9578,9 @@ gtk_text_view_set_monospace (GtkTextView *text_view,
   if (has_monospace != monospace)
     {
       if (monospace)
-        gtk_widget_add_css_class (GTK_WIDGET (text_view), GTK_STYLE_CLASS_MONOSPACE);
+        gtk_widget_add_css_class (GTK_WIDGET (text_view), "monospace");
       else
-        gtk_widget_remove_css_class (GTK_WIDGET (text_view), GTK_STYLE_CLASS_MONOSPACE);
+        gtk_widget_remove_css_class (GTK_WIDGET (text_view), "monospace");
 
       g_object_notify (G_OBJECT (text_view), "monospace");
     }
@@ -9599,7 +9599,7 @@ gtk_text_view_get_monospace (GtkTextView *text_view)
 {
   g_return_val_if_fail (GTK_IS_TEXT_VIEW (text_view), FALSE);
 
-  return gtk_widget_has_css_class (GTK_WIDGET (text_view), GTK_STYLE_CLASS_MONOSPACE);
+  return gtk_widget_has_css_class (GTK_WIDGET (text_view), "monospace");
 }
 
 static void

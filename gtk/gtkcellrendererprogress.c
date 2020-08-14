@@ -574,7 +574,7 @@ gtk_cell_renderer_progress_snapshot (GtkCellRenderer      *cell,
   h = cell_area->height - ypad * 2;
 
   gtk_style_context_save (context);
-  gtk_style_context_add_class (context, GTK_STYLE_CLASS_TROUGH);
+  gtk_style_context_add_class (context, "trough");
 
   gtk_snapshot_render_background (snapshot, context, x, y, w, h);
   gtk_snapshot_render_frame (snapshot, context, x, y, w, h);
@@ -632,7 +632,7 @@ gtk_cell_renderer_progress_snapshot (GtkCellRenderer      *cell,
   if (bar_size > 0)
     {
       gtk_style_context_save (context);
-      gtk_style_context_add_class (context, GTK_STYLE_CLASS_PROGRESSBAR);
+      gtk_style_context_add_class (context, "progressbar");
 
       gtk_snapshot_render_background (snapshot, context, clip.x, clip.y, clip.width, clip.height);
       gtk_snapshot_render_frame (snapshot, context, clip.x, clip.y, clip.width, clip.height);
@@ -665,7 +665,7 @@ gtk_cell_renderer_progress_snapshot (GtkCellRenderer      *cell,
                               ));
 
       gtk_style_context_save (context);
-      gtk_style_context_add_class (context, GTK_STYLE_CLASS_PROGRESSBAR);
+      gtk_style_context_add_class (context, "progressbar");
 
       gtk_snapshot_render_layout (snapshot, context,
                                   x_pos, y_pos,
@@ -675,7 +675,7 @@ gtk_cell_renderer_progress_snapshot (GtkCellRenderer      *cell,
       gtk_snapshot_pop (snapshot);
 
       gtk_style_context_save (context);
-      gtk_style_context_add_class (context, GTK_STYLE_CLASS_TROUGH);
+      gtk_style_context_add_class (context, "trough");
 
       if (bar_position > start)
         {

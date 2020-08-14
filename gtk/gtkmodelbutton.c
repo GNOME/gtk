@@ -306,14 +306,14 @@ update_node_ordering (GtkModelButton *button)
     {
       if (button->start_indicator)
         {
-          gtk_widget_add_css_class (button->start_indicator, GTK_STYLE_CLASS_LEFT);
-          gtk_widget_remove_css_class (button->start_indicator, GTK_STYLE_CLASS_RIGHT);
+          gtk_widget_add_css_class (button->start_indicator, "left");
+          gtk_widget_remove_css_class (button->start_indicator, "right");
         }
 
       if (button->end_indicator)
         {
-          gtk_widget_add_css_class (button->end_indicator, GTK_STYLE_CLASS_RIGHT);
-          gtk_widget_remove_css_class (button->end_indicator, GTK_STYLE_CLASS_LEFT);
+          gtk_widget_add_css_class (button->end_indicator, "right");
+          gtk_widget_remove_css_class (button->end_indicator, "left");
         }
 
       child = gtk_widget_get_first_child (GTK_WIDGET (button));
@@ -328,14 +328,14 @@ update_node_ordering (GtkModelButton *button)
     {
       if (button->start_indicator)
         {
-          gtk_widget_add_css_class (button->start_indicator, GTK_STYLE_CLASS_RIGHT);
-          gtk_widget_remove_css_class (button->start_indicator, GTK_STYLE_CLASS_LEFT);
+          gtk_widget_add_css_class (button->start_indicator, "right");
+          gtk_widget_remove_css_class (button->start_indicator, "left");
         }
 
       if (button->end_indicator)
         {
-          gtk_widget_add_css_class (button->end_indicator, GTK_STYLE_CLASS_LEFT);
-          gtk_widget_remove_css_class (button->end_indicator, GTK_STYLE_CLASS_RIGHT);
+          gtk_widget_add_css_class (button->end_indicator, "left");
+          gtk_widget_remove_css_class (button->end_indicator, "right");
 
         }
 
@@ -359,13 +359,13 @@ update_end_indicator (GtkModelButton *self)
 
   if (is_ltr)
     {
-      gtk_widget_add_css_class (self->end_indicator, GTK_STYLE_CLASS_RIGHT);
-      gtk_widget_remove_css_class (self->end_indicator, GTK_STYLE_CLASS_LEFT);
+      gtk_widget_add_css_class (self->end_indicator, "right");
+      gtk_widget_remove_css_class (self->end_indicator, "left");
     }
   else
     {
-      gtk_widget_add_css_class (self->end_indicator, GTK_STYLE_CLASS_LEFT);
-      gtk_widget_remove_css_class (self->end_indicator, GTK_STYLE_CLASS_RIGHT);
+      gtk_widget_add_css_class (self->end_indicator, "left");
+      gtk_widget_remove_css_class (self->end_indicator, "right");
     }
 }
 
@@ -398,13 +398,13 @@ update_start_indicator (GtkModelButton *self)
 
   if (is_ltr)
     {
-      gtk_widget_add_css_class (self->start_indicator, GTK_STYLE_CLASS_LEFT);
-      gtk_widget_remove_css_class (self->start_indicator, GTK_STYLE_CLASS_RIGHT);
+      gtk_widget_add_css_class (self->start_indicator, "left");
+      gtk_widget_remove_css_class (self->start_indicator, "right");
     }
   else
     {
-      gtk_widget_add_css_class (self->start_indicator, GTK_STYLE_CLASS_RIGHT);
-      gtk_widget_remove_css_class (self->start_indicator, GTK_STYLE_CLASS_LEFT);
+      gtk_widget_add_css_class (self->start_indicator, "right");
+      gtk_widget_remove_css_class (self->start_indicator, "left");
     }
 
 }

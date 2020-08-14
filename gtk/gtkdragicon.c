@@ -25,7 +25,7 @@
 #include "gtkcssstyleprivate.h"
 #include "gtkcssnodeprivate.h"
 #include "gtkcsstypesprivate.h"
-#include "gtknative.h"
+#include "gtknativeprivate.h"
 #include "gtkpicture.h"
 #include "gtkcssboxesimplprivate.h"
 #include "gtkcssnumbervalueprivate.h"

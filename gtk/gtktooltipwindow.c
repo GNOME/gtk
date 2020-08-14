@@ -37,7 +37,7 @@
 #include "gtksizerequest.h"
 #include "gtkwindowprivate.h"
 #include "gtkwidgetprivate.h"
-#include "gtknative.h"
+#include "gtknativeprivate.h"
 #include "gtkcssboxesimplprivate.h"
 
 struct _GtkTooltipWindow
