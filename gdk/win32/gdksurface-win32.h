@@ -256,8 +256,6 @@ struct _GdkWin32Surface
    */
   GdkDrop             *drop;
 
-  GdkSurfaceTypeHint type_hint;
-
   GdkSurface *transient_owner;
   GSList    *transient_children;
   int        num_transients;

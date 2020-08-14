@@ -140,7 +140,6 @@ gdk_win32_surface_init (GdkWin32Surface *impl)
   impl->hicon_big = NULL;
   impl->hicon_small = NULL;
   impl->hint_flags = 0;
-  impl->type_hint = GDK_SURFACE_TYPE_HINT_NORMAL;
   impl->transient_owner = NULL;
   impl->transient_children = NULL;
   impl->num_transients = 0;
@@ -332,7 +331,7 @@ get_default_title (void)
  *   get its own class
  */
 static ATOM
-RegisterGdkClass (GdkSurfaceType wtype, GdkSurfaceTypeHint wtype_hint)
+RegisterGdkClass (GdkSurfaceType wtype)
 {
   static ATOM klassTOPLEVEL   = 0;
   static ATOM klassTEMP       = 0;
@@ -613,7 +612,7 @@ _gdk_win32_display_create_surface (GdkDisplay     *display,
    * under the mouse cursor, this will kill any DND.
    */
 
-  klass = RegisterGdkClass (surface_type, impl->type_hint);
+  klass = RegisterGdkClass (surface_type);
 
   wtitle = g_utf8_to_utf16 (title, -1, NULL, NULL, NULL);
 
