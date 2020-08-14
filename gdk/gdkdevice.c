@@ -476,25 +476,6 @@ gdk_device_get_property (GObject    *object,
     }
 }
 
-/*
- * gdk_device_get_position:
- * @device: pointer device to query status about.
- * @x: (out): location to store root window X coordinate of @device
- * @y: (out): location to store root window Y coordinate of @device
- *
- * Gets the current location of @device in double precision.
- */
-void
-gdk_device_get_position (GdkDevice *device,
-                         double    *x,
-                         double    *y)
-{
-  g_return_if_fail (GDK_IS_DEVICE (device));
-  g_return_if_fail (device->source != GDK_SOURCE_KEYBOARD);
-
-  _gdk_device_query_state (device, NULL, NULL, x, y, NULL);
-}
-
 /**
  * gdk_device_get_surface_at_position:
  * @device: pointer #GdkDevice to query info to.

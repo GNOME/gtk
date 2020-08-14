@@ -265,9 +265,6 @@ GdkGrabStatus gdk_device_grab (GdkDevice        *device,
                                guint32           time_);
 void gdk_device_ungrab        (GdkDevice        *device,
                                guint32           time_);
-void gdk_device_get_position  (GdkDevice        *device,
-                               double           *x,
-                               double           *y);
 int gdk_device_get_n_axes     (GdkDevice       *device);
 gboolean gdk_device_get_axis  (GdkDevice         *device,
 			       double            *axes,
