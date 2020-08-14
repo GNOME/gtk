@@ -23,13 +23,13 @@ demos/gtk-demo/font-features.ui
 demos/gtk-demo/fontrendering.ui
 demos/gtk-demo/iconview.c
 demos/gtk-demo/infobar.c
+demos/gtk-demo/listbox2.ui
 demos/gtk-demo/listbox.ui
 demos/gtk-demo/listview_filebrowser.ui
 demos/gtk-demo/listview_minesweeper.ui
 demos/gtk-demo/listview_settings.ui
 demos/gtk-demo/main.ui
 demos/gtk-demo/menus.ui
-demos/gtk-demo/modelbutton.ui
 demos/gtk-demo/offscreen_window2.c
 demos/gtk-demo/paint.c
 demos/gtk-demo/popover.ui
