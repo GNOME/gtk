@@ -1562,7 +1562,7 @@ gdk_surface_thaw_toplevel_updates (GdkSurface *surface)
 
 }
 
-/**
+/*
  * gdk_surface_constrain_size:
  * @geometry: a #GdkGeometry structure
  * @flags: a mask indicating what portions of @geometry are set

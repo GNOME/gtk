@@ -22,7 +22,10 @@
 #include "gdksurface.h"
 #include "gdkcursor.h"
 #include "gdkmonitor.h"
-#include "gdkinternals.h"
+#include "gdkdebug.h"
+#include "gdksurfaceprivate.h"
+#include "gdkkeysprivate.h"
+#include "gdkdeviceprivate.h"
 
 #ifdef GDK_RENDERING_VULKAN
 #include <vulkan/vulkan.h>
@@ -241,6 +244,16 @@ GdkEvent *          gdk_display_get_event             (GdkDisplay       *display
 GdkEvent *          gdk_display_peek_event            (GdkDisplay       *display);
 gboolean            gdk_display_has_pending           (GdkDisplay       *display);
 
+GdkKeymap *  gdk_display_get_keymap  (GdkDisplay *display);
+
+void _gdk_display_set_surface_under_pointer (GdkDisplay *display,
+                                             GdkDevice  *device,
+                                             GdkSurface  *surface);
+
+void _gdk_windowing_got_event                (GdkDisplay       *display,
+                                              GList            *event_link,
+                                              GdkEvent         *event,
+                                              gulong            serial);
 
 G_END_DECLS
 

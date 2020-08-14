@@ -1730,7 +1730,7 @@ _gdk_win32_surface_drag_begin (GdkSurface         *surface,
 
   GDK_NOTE (DND, g_print ("_gdk_win32_surface_drag_begin\n"));
 
-  gdk_device_get_position (device, &px, &py);
+  _gdk_device_query_state (device, NULL, NULL, &px, &py, NULL);
   x_root = round (px + dx);
   y_root = round (py + dy);
 

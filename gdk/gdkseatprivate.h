@@ -23,7 +23,11 @@
 typedef struct _GdkSeatClass GdkSeatClass;
 
 #include "gdkseat.h"
-#include "gdkinternals.h"
+#include "gdkdeviceprivate.h"
+
+typedef void (* GdkSeatGrabPrepareFunc) (GdkSeat   *seat,
+                                         GdkSurface *surface,
+                                         gpointer   user_data);
 
 #define GDK_SEAT_CLASS(c)     (G_TYPE_CHECK_CLASS_CAST ((c), GDK_TYPE_SEAT, GdkSeatClass))
 #define GDK_IS_SEAT_CLASS(c)  (G_TYPE_CHECK_CLASS_TYPE ((c), GDK_TYPE_SEAT))
@@ -74,5 +78,16 @@ GdkDeviceTool *
      gdk_seat_get_tool       (GdkSeat   *seat,
                               guint64    serial,
                               guint64    hw_id);
+
+GdkGrabStatus  gdk_seat_grab             (GdkSeat                *seat,
+                                          GdkSurface              *surface,
+                                          GdkSeatCapabilities     capabilities,
+                                          gboolean                owner_events,
+                                          GdkCursor              *cursor,
+                                          GdkEvent               *event,
+                                          GdkSeatGrabPrepareFunc  prepare_func,
+                                          gpointer                prepare_func_data);
+void           gdk_seat_ungrab           (GdkSeat                *seat);
+
 
 #endif /* __GDK_SEAT_PRIVATE_H__ */

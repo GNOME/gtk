@@ -35,9 +35,8 @@
  * The #GdkDevice object represents a single input device, such
  * as a keyboard, a mouse, a touchpad, etc.
  *
- * See the #GdkSeat documentation for more information
- * about the various kinds of logical and physical devices, and their
- * relationships.
+ * See the #GdkSeat documentation for more information about the
+ * various kinds of devices, and their relationships.
  */
 
 /**
@@ -477,25 +476,6 @@ gdk_device_get_property (GObject    *object,
     }
 }
 
-/*
- * gdk_device_get_position:
- * @device: pointer device to query status about.
- * @x: (out): location to store root window X coordinate of @device
- * @y: (out): location to store root window Y coordinate of @device
- *
- * Gets the current location of @device in double precision.
- */
-void
-gdk_device_get_position (GdkDevice *device,
-                         double    *x,
-                         double    *y)
-{
-  g_return_if_fail (GDK_IS_DEVICE (device));
-  g_return_if_fail (device->source != GDK_SOURCE_KEYBOARD);
-
-  _gdk_device_query_state (device, NULL, NULL, x, y, NULL);
-}
-
 /**
  * gdk_device_get_surface_at_position:
  * @device: pointer #GdkDevice to query info to.
@@ -536,7 +516,8 @@ gdk_device_get_surface_at_position (GdkDevice *device,
  * gdk_device_get_name:
  * @device: a #GdkDevice
  *
- * Determines the name of the device.
+ * Determines the name of the device, suitable
+ * for showing in a user interface.
  *
  * Returns: a name
  **/
@@ -553,7 +534,8 @@ gdk_device_get_name (GdkDevice *device)
  * @device: a #GdkDevice
  *
  * Determines whether the pointer follows device motion.
- * This is not meaningful for keyboard devices, which don't have a pointer.
+ * This is not meaningful for keyboard devices, which
+ * don't have a pointer.
  *
  * Returns: %TRUE if the pointer follows device motion
  **/
@@ -642,7 +624,7 @@ _gdk_device_set_associated_device (GdkDevice *device,
     device->associated = g_object_ref (associated);
 }
 
-/**
+/*
  * gdk_device_list_physical_devices:
  * @device: a logical #GdkDevice
  *
@@ -681,7 +663,7 @@ _gdk_device_remove_physical_device (GdkDevice *device,
   device->physical_devices = g_list_delete_link (device->physical_devices, elem);
 }
 
-/**
+/*
  * gdk_device_get_n_axes:
  * @device: a pointer #GdkDevice
  *
@@ -698,7 +680,7 @@ gdk_device_get_n_axes (GdkDevice *device)
   return device->axes->len;
 }
 
-/**
+/*
  * gdk_device_get_axis: (skip)
  * @device: a #GdkDevice
  * @axes: (array): pointer to an array of axes
@@ -1194,8 +1176,7 @@ gdk_device_set_seat (GdkDevice *device,
  *
  * Returns the #GdkSeat the device belongs to.
  *
- * Returns: (transfer none): A #GdkSeat. This memory is owned by GTK+ and
- *          must not be freed.
+ * Returns: (transfer none): a #GdkSeat
  **/
 GdkSeat *
 gdk_device_get_seat (GdkDevice *device)

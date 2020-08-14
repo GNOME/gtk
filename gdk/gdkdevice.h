@@ -78,57 +78,45 @@ struct _GdkTimeCoord
 };
 
 GDK_AVAILABLE_IN_ALL
-GType                 gdk_device_get_type       (void) G_GNUC_CONST;
+GType               gdk_device_get_type                 (void) G_GNUC_CONST;
 
 GDK_AVAILABLE_IN_ALL
-const char *         gdk_device_get_name       (GdkDevice *device);
+const char *        gdk_device_get_name                 (GdkDevice *device);
 GDK_AVAILABLE_IN_ALL
-gboolean              gdk_device_get_has_cursor (GdkDevice *device);
-
-/* Functions to configure a device */
+const char *        gdk_device_get_vendor_id            (GdkDevice *device);
 GDK_AVAILABLE_IN_ALL
-GdkInputSource gdk_device_get_source (GdkDevice    *device);
+const char *        gdk_device_get_product_id           (GdkDevice *device);
 
 GDK_AVAILABLE_IN_ALL
-GdkSurface * gdk_device_get_surface_at_position (GdkDevice *device,
-                                                 double    *win_x,
-                                                 double    *win_y);
+GdkDisplay *        gdk_device_get_display              (GdkDevice *device);
+GDK_AVAILABLE_IN_ALL
+GdkSeat *           gdk_device_get_seat                 (GdkDevice *device);
+GDK_AVAILABLE_IN_ALL
+GdkDeviceTool *     gdk_device_get_device_tool          (GdkDevice *device);
 
 GDK_AVAILABLE_IN_ALL
-GdkDisplay * gdk_device_get_display (GdkDevice      *device);
+GdkInputSource      gdk_device_get_source               (GdkDevice *device);
+GDK_AVAILABLE_IN_ALL
+gboolean            gdk_device_get_has_cursor           (GdkDevice *device);
+GDK_AVAILABLE_IN_ALL
+guint               gdk_device_get_num_touches          (GdkDevice *device);
+GDK_AVAILABLE_IN_ALL
+GdkModifierType     gdk_device_get_modifier_state       (GdkDevice *device);
+GDK_AVAILABLE_IN_ALL
+PangoDirection      gdk_device_get_direction            (GdkDevice *device);
+GDK_AVAILABLE_IN_ALL
+gboolean            gdk_device_has_bidi_layouts         (GdkDevice *device);
+GDK_AVAILABLE_IN_ALL
+gboolean            gdk_device_get_caps_lock_state      (GdkDevice *device);
+GDK_AVAILABLE_IN_ALL
+gboolean            gdk_device_get_num_lock_state       (GdkDevice *device);
+GDK_AVAILABLE_IN_ALL
+gboolean            gdk_device_get_scroll_lock_state    (GdkDevice *device);
 
 GDK_AVAILABLE_IN_ALL
-const char *gdk_device_get_vendor_id       (GdkDevice *device);
-GDK_AVAILABLE_IN_ALL
-const char *gdk_device_get_product_id      (GdkDevice *device);
-
-GDK_AVAILABLE_IN_ALL
-GdkSeat     *gdk_device_get_seat            (GdkDevice *device);
-
-GDK_AVAILABLE_IN_ALL
-guint           gdk_device_get_num_touches  (GdkDevice *device);
-
-GDK_AVAILABLE_IN_ALL
-GdkDeviceTool * gdk_device_get_device_tool  (GdkDevice *device);
-
-GDK_AVAILABLE_IN_ALL
-gboolean        gdk_device_get_caps_lock_state (GdkDevice *device);
-
-GDK_AVAILABLE_IN_ALL
-gboolean        gdk_device_get_num_lock_state (GdkDevice *device);
-
-GDK_AVAILABLE_IN_ALL
-gboolean        gdk_device_get_scroll_lock_state (GdkDevice *device);
-
-GDK_AVAILABLE_IN_ALL
-GdkModifierType gdk_device_get_modifier_state (GdkDevice *device);
-
-GDK_AVAILABLE_IN_ALL
-PangoDirection  gdk_device_get_direction (GdkDevice *device);
-
-GDK_AVAILABLE_IN_ALL
-gboolean        gdk_device_has_bidi_layouts (GdkDevice *device);
-
+GdkSurface *        gdk_device_get_surface_at_position  (GdkDevice *device,
+                                                         double    *win_x,
+                                                         double    *win_y);
 G_END_DECLS
 
 #endif /* __GDK_DEVICE_H__ */

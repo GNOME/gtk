@@ -232,7 +232,7 @@ gdk_seat_get_capabilities (GdkSeat *seat)
   return seat_class->get_capabilities (seat);
 }
 
-/**
+/*
  * gdk_seat_grab:
  * @seat: a #GdkSeat
  * @surface: the #GdkSurface which will own the grab
@@ -306,7 +306,7 @@ gdk_seat_grab (GdkSeat                *seat,
                            event, prepare_func, prepare_func_data);
 }
 
-/**
+/*
  * gdk_seat_ungrab:
  * @seat: a #GdkSeat
  *
@@ -332,7 +332,7 @@ gdk_seat_ungrab (GdkSeat *seat)
  *
  * Returns: (transfer container) (element-type GdkDevice): A list of #GdkDevices.
  *          The list must be freed with g_list_free(), the elements are owned
- *          by GDK and must not be freed.
+ *          by GTK and must not be freed.
  **/
 GList *
 gdk_seat_get_devices (GdkSeat             *seat,
@@ -350,9 +350,9 @@ gdk_seat_get_devices (GdkSeat             *seat,
  * gdk_seat_get_pointer:
  * @seat: a #GdkSeat
  *
- * Returns the logical device that routes pointer events.
+ * Returns the device that routes pointer events.
  *
- * Returns: (transfer none) (nullable): a logical #GdkDevice with pointer
+ * Returns: (transfer none) (nullable): a #GdkDevice with pointer
  *          capabilities. This object is owned by GTK and must not be freed.
  **/
 GdkDevice *
@@ -370,9 +370,9 @@ gdk_seat_get_pointer (GdkSeat *seat)
  * gdk_seat_get_keyboard:
  * @seat: a #GdkSeat
  *
- * Returns the logical device that routes keyboard events.
+ * Returns the device that routes keyboard events.
  *
- * Returns: (transfer none) (nullable): a logical #GdkDevice with keyboard
+ * Returns: (transfer none) (nullable): a #GdkDevice with keyboard
  *          capabilities. This object is owned by GTK and must not be freed.
  **/
 GdkDevice *
@@ -468,8 +468,8 @@ gdk_seat_get_tool (GdkSeat *seat,
  * Returns all #GdkDeviceTools that are known to the
  * application.
  *
- * Returns: (transfer container) (element-type Gdk.DeviceTool): A list of tools. Free with
- * g_list_free().
+ * Returns: (transfer container) (element-type Gdk.DeviceTool):
+ *     A list of tools. Free with g_list_free().
  **/
 GList *
 gdk_seat_get_tools (GdkSeat *seat)

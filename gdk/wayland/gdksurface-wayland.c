@@ -106,7 +106,6 @@ struct _GdkWaylandSurface
   unsigned int awaiting_frame : 1;
   unsigned int awaiting_frame_frozen : 1;
   unsigned int is_drag_surface : 1;
-  GdkSurfaceTypeHint hint;
 
   int pending_buffer_offset_x;
   int pending_buffer_offset_y;

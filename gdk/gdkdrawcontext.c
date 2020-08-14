@@ -35,7 +35,7 @@
  * rendering methods, such as #GdkGLContext or #GdkVulkanContext. It provides
  * shared functionality between those contexts.
  *
- * You will always interact with one of those s.ubclasses.
+ * You will always interact with one of those subclasses.
  *
  * A GdkDrawContext is always associated with a single toplevel surface.
  */
@@ -161,7 +161,7 @@ gdk_draw_context_class_init (GdkDrawContextClass *klass)
   /**
    * GdkDrawContext:surface:
    *
-   * The #GdkSurface the gl context is bound to.
+   * The #GdkSurface the context is bound to.
    */
   pspecs[PROP_SURFACE] =
     g_param_spec_object ("surface",

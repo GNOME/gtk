@@ -108,6 +108,18 @@ gboolean                gdk_gl_context_has_debug                (GdkGLContext   
 
 gboolean                gdk_gl_context_use_es_bgra              (GdkGLContext    *context);
 
+typedef struct {
+  float x1, y1, x2, y2;
+  float u1, v1, u2, v2;
+} GdkTexturedQuad;
+
+void                    gdk_gl_texture_quads                    (GdkGLContext    *context,
+                                                                 guint            texture_target,
+                                                                 int              n_quads,
+                                                                 GdkTexturedQuad *quads,
+                                                                 gboolean         flip_colors);
+
+
 G_END_DECLS
 
 #endif /* __GDK_GL_CONTEXT_PRIVATE_H__ */
