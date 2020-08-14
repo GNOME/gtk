@@ -34,6 +34,8 @@
 #include "gdkenumtypes.h"
 #include "gdkdragprivate.h"
 #include "gdkkeysprivate.h"
+#include "gdkdeviceprivate.h"
+#include "gdkseatprivate.h"
 
 G_BEGIN_DECLS
 
@@ -110,7 +112,6 @@ typedef enum
 
 typedef struct _GdkSurfacePaint GdkSurfacePaint;
 
-#define GDK_SURFACE_TYPE(d) ((((GdkSurface *)(d)))->surface_type)
 #define GDK_SURFACE_DESTROYED(d) (((GdkSurface *)(d))->destroyed)
 
 GdkEvent* _gdk_event_unqueue (GdkDisplay *display);
@@ -205,74 +206,6 @@ void gdk_synthesize_surface_state (GdkSurface     *surface,
                                    GdkSurfaceState unset_flags,
                                    GdkSurfaceState set_flags);
 
-/**
- * GdkGrabStatus:
- * @GDK_GRAB_SUCCESS: the resource was successfully grabbed.
- * @GDK_GRAB_ALREADY_GRABBED: the resource is actively grabbed by another client.
- * @GDK_GRAB_INVALID_TIME: the resource was grabbed more recently than the
- *  specified time.
- * @GDK_GRAB_NOT_VIEWABLE: the grab surface or the @confine_to surface are not
- *  viewable.
- * @GDK_GRAB_FROZEN: the resource is frozen by an active grab of another client.
- * @GDK_GRAB_FAILED: the grab failed for some other reason
- *
- * Returned by gdk_device_grab() to indicate success or the reason for the
- * failure of the grab attempt.
- */
-typedef enum
-{
-  GDK_GRAB_SUCCESS         = 0,
-  GDK_GRAB_ALREADY_GRABBED = 1,
-  GDK_GRAB_INVALID_TIME    = 2,
-  GDK_GRAB_NOT_VIEWABLE    = 3,
-  GDK_GRAB_FROZEN          = 4,
-  GDK_GRAB_FAILED          = 5
-} GdkGrabStatus;
-
-typedef enum
-{
-  GDK_EXPOSURE_MASK             = 1 << 1,
-  GDK_POINTER_MOTION_MASK       = 1 << 2,
-  GDK_BUTTON_MOTION_MASK        = 1 << 4,
-  GDK_BUTTON1_MOTION_MASK       = 1 << 5,
-  GDK_BUTTON2_MOTION_MASK       = 1 << 6,
-  GDK_BUTTON3_MOTION_MASK       = 1 << 7,
-  GDK_BUTTON_PRESS_MASK         = 1 << 8,
-  GDK_BUTTON_RELEASE_MASK       = 1 << 9,
-  GDK_KEY_PRESS_MASK            = 1 << 10,
-  GDK_KEY_RELEASE_MASK          = 1 << 11,
-  GDK_ENTER_NOTIFY_MASK         = 1 << 12,
-  GDK_LEAVE_NOTIFY_MASK         = 1 << 13,
-  GDK_FOCUS_CHANGE_MASK         = 1 << 14,
-  GDK_STRUCTURE_MASK            = 1 << 15,
-  GDK_PROPERTY_CHANGE_MASK      = 1 << 16,
-  GDK_PROXIMITY_IN_MASK         = 1 << 18,
-  GDK_PROXIMITY_OUT_MASK        = 1 << 19,
-  GDK_SUBSTRUCTURE_MASK         = 1 << 20,
-  GDK_SCROLL_MASK               = 1 << 21,
-  GDK_TOUCH_MASK                = 1 << 22,
-  GDK_SMOOTH_SCROLL_MASK        = 1 << 23,
-  GDK_TOUCHPAD_GESTURE_MASK     = 1 << 24,
-  GDK_TABLET_PAD_MASK           = 1 << 25,
-  GDK_ALL_EVENTS_MASK           = 0x3FFFFFE
-} GdkEventMask;
-
-GdkGrabStatus gdk_device_grab (GdkDevice        *device,
-                               GdkSurface        *surface,
-                               gboolean          owner_events,
-                               GdkEventMask      event_mask,
-                               GdkCursor        *cursor,
-                               guint32           time_);
-void gdk_device_ungrab        (GdkDevice        *device,
-                               guint32           time_);
-int gdk_device_get_n_axes     (GdkDevice       *device);
-gboolean gdk_device_get_axis  (GdkDevice         *device,
-			       double            *axes,
-			       GdkAxisUse         use,
-			       double            *value);
-GdkAxisUse gdk_device_get_axis_use  (GdkDevice         *device,
-				     guint              index_);
-
 void gdk_surface_get_root_coords (GdkSurface *surface,
                                   int         x,
                                   int         y,
@@ -333,30 +266,6 @@ void       gdk_surface_constrain_size      (GdkGeometry    *geometry,
                                             int            *new_width,
                                             int            *new_height);
 
-/*
- * GdkSeatGrabPrepareFunc:
- * @seat: the #GdkSeat being grabbed
- * @surface: the #GdkSurface being grabbed
- * @user_data: user data passed in gdk_seat_grab()
- *
- * Type of the callback used to set up @surface so it can be
- * grabbed. A typical action would be ensuring the surface is
- * visible, although there's room for other initialization
- * actions.
- */
-typedef void (* GdkSeatGrabPrepareFunc) (GdkSeat   *seat,
-                                         GdkSurface *surface,
-                                         gpointer   user_data);
-
-GdkGrabStatus  gdk_seat_grab             (GdkSeat                *seat,
-                                          GdkSurface              *surface,
-                                          GdkSeatCapabilities     capabilities,
-                                          gboolean                owner_events,
-                                          GdkCursor              *cursor,
-                                          GdkEvent               *event,
-                                          GdkSeatGrabPrepareFunc  prepare_func,
-                                          gpointer                prepare_func_data);
-void           gdk_seat_ungrab           (GdkSeat                *seat);
 GdkSurface *   gdk_surface_new_temp             (GdkDisplay    *display,
                                                  const GdkRectangle *position);
 
