@@ -564,11 +564,11 @@ _gdk_event_queue_append (GdkDisplay *display,
   return g_queue_peek_tail_link (&display->queued_events);
 }
 
-/**
+/*
  * _gdk_event_queue_remove_link:
  * @display: a #GdkDisplay
  * @node: node to remove
- * 
+ *
  * Removes a specified list node from the event queue.
  **/
 void
@@ -578,13 +578,13 @@ _gdk_event_queue_remove_link (GdkDisplay *display,
   g_queue_unlink (&display->queued_events, node);
 }
 
-/**
+/*
  * _gdk_event_unqueue:
  * @display: a #GdkDisplay
- * 
+ *
  * Removes and returns the first event from the event
  * queue that is not still being filled in.
- * 
+ *
  * Returns: (nullable): the event, or %NULL. Ownership is transferred
  * to the caller.
  **/

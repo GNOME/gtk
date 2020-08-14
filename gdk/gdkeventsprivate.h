@@ -599,6 +599,34 @@ GdkEvent * gdk_grab_broken_event_new    (GdkSurface      *surface,
 GdkTranslatedKey *      gdk_key_event_get_translated_key        (GdkEvent *event,
                                                                  gboolean  no_lock);
 
+typedef enum
+{
+  /* Following flag is set for events on the event queue during
+   * translation and cleared afterwards.
+   */
+  GDK_EVENT_PENDING = 1 << 0,
+
+  /* When we are ready to draw a frame, we pause event delivery,
+   * mark all events in the queue with this flag, and deliver
+   * only those events until we finish the frame.
+   */
+  GDK_EVENT_FLUSHED = 1 << 2
+} GdkEventFlags;
+
+GdkEvent* _gdk_event_unqueue (GdkDisplay *display);
+
+void   _gdk_event_emit               (GdkEvent   *event);
+GList* _gdk_event_queue_find_first   (GdkDisplay *display);
+void   _gdk_event_queue_remove_link  (GdkDisplay *display,
+                                      GList      *node);
+GList* _gdk_event_queue_append       (GdkDisplay *display,
+                                      GdkEvent   *event);
+
+void    _gdk_event_queue_handle_motion_compression (GdkDisplay *display);
+void    gdk_event_queue_handle_scroll_compression  (GdkDisplay *display);
+void    _gdk_event_queue_flush                     (GdkDisplay       *display);
+
+
 G_END_DECLS
 
 #endif /* __GDK_EVENTS_PRIVATE_H__ */
