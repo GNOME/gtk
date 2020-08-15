@@ -2782,7 +2782,6 @@ gtk_label_get_measuring_layout (GtkLabel    *self,
                                 PangoLayout *existing_layout,
                                 int          width)
 {
-  PangoRectangle rect;
   PangoLayout *copy;
 
   if (existing_layout != NULL)
@@ -2820,13 +2819,17 @@ gtk_label_get_measuring_layout (GtkLabel    *self,
    * can just return the current layout, because for measuring purposes, it will be
    * identical.
    */
-  pango_layout_get_extents (self->layout, NULL, &rect);
-  if ((width == -1 || rect.width <= width) &&
-      !pango_layout_is_wrapped (self->layout) &&
+  if (!pango_layout_is_wrapped (self->layout) &&
       !pango_layout_is_ellipsized (self->layout))
     {
-      g_object_ref (self->layout);
-      return self->layout;
+      PangoRectangle rect;
+
+      if (width == -1)
+        return g_object_ref (self->layout);
+
+      pango_layout_get_extents (self->layout, NULL, &rect);
+      if (rect.width <= width)
+        return g_object_ref (self->layout);
     }
 
   copy = pango_layout_copy (self->layout);
