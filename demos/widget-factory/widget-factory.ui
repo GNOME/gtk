@@ -3989,6 +3989,7 @@ bad things might happen.</property>
               <packing>
                 <property name="left-attach">1</property>
                 <property name="top-attach">0</property>
+                <property name="width">2</property>
               </packing>
             </child>
             <child>
@@ -4012,10 +4013,12 @@ bad things might happen.</property>
               <object class="GtkEntry" id="more_details_entry">
                 <property name="visible">1</property>
                 <property name="valign">baseline</property>
+                <signal name="notify::text" handler="validate_more_details" object="details_entry" swapped="no"/>
               </object>
               <packing>
                 <property name="left-attach">1</property>
                 <property name="top-attach">1</property>
+                <property name="width">2</property>
               </packing>
             </child>
             <child>
@@ -4041,10 +4044,12 @@ bad things might happen.</property>
                 <property name="valign">baseline</property>
                 <property name="draw-value">0</property>
                 <property name="adjustment">adjustment1</property>
+                <signal name="value-changed" handler="level_scale_value_changed"/>
               </object>
               <packing>
                 <property name="left-attach">1</property>
                 <property name="top-attach">2</property>
+                <property name="width">2</property>
               </packing>
             </child>
             <child>
@@ -4069,9 +4074,25 @@ bad things might happen.</property>
                 <property name="visible">1</property>
                 <property name="halign">start</property>
                 <property name="valign">baseline</property>
+                <signal name="state-set" handler="mode_switch_state_set"/>
               </object>
               <packing>
                 <property name="left-attach">1</property>
+                <property name="top-attach">3</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="error_label">
+                <property name="visible">0</property>
+                <property name="halign">start</property>
+                <property name="valign">baseline</property>
+                <property name="label">Level too low</property>
+                <style>
+                  <class name="error"/>
+                </style>
+              </object>
+              <packing>
+                <property name="left-attach">2</property>
                 <property name="top-attach">3</property>
               </packing>
             </child>

@@ -1656,6 +1656,66 @@ adjustment3_value_changed (GtkAdjustment *adj, GtkProgressBar *pbar)
 }
 
 static void
+validate_more_details (GtkEntry   *entry,
+                       GParamSpec *pspec,
+                       GtkEntry   *details)
+{
+  if (strlen (gtk_entry_get_text (entry)) > 0 &&
+      strlen (gtk_entry_get_text (details)) == 0)
+    {
+      gtk_widget_set_tooltip_text (GTK_WIDGET (entry), "Must have details first");
+      gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (entry)), "error");
+    }
+  else
+    {
+      gtk_widget_set_tooltip_text (GTK_WIDGET (entry), "");
+      gtk_style_context_remove_class (gtk_widget_get_style_context (GTK_WIDGET (entry)), "error");
+    }
+}
+
+static gboolean
+mode_switch_state_set (GtkSwitch *sw, gboolean state)
+{
+  GtkWidget *dialog = gtk_widget_get_ancestor (GTK_WIDGET (sw), GTK_TYPE_DIALOG);
+  GtkWidget *scale = GTK_WIDGET (g_object_get_data (G_OBJECT (dialog), "level_scale"));
+  GtkWidget *label = GTK_WIDGET (g_object_get_data (G_OBJECT (dialog), "error_label"));
+
+  if (!state ||
+      (gtk_range_get_value (GTK_RANGE (scale)) > 50))
+    {
+      gtk_widget_hide (label);
+      gtk_switch_set_state (sw, state);
+    }
+  else
+    {
+      gtk_widget_show (label);
+    }
+
+  return TRUE;
+}
+
+static void
+level_scale_value_changed (GtkRange *range)
+{
+  GtkWidget *dialog = gtk_widget_get_ancestor (GTK_WIDGET (range), GTK_TYPE_DIALOG);
+  GtkWidget *sw = GTK_WIDGET (g_object_get_data (G_OBJECT (dialog), "mode_switch"));
+  GtkWidget *label = GTK_WIDGET (g_object_get_data (G_OBJECT (dialog), "error_label"));
+
+  if (gtk_switch_get_active (GTK_SWITCH (sw)) &&
+      !gtk_switch_get_state (GTK_SWITCH (sw)) &&
+      (gtk_range_get_value (range) > 50))
+    {
+      gtk_widget_hide (label);
+      gtk_switch_set_state (GTK_SWITCH (sw), TRUE);
+    }
+  else if (gtk_switch_get_state (GTK_SWITCH (sw)) &&
+          (gtk_range_get_value (range) <= 50))
+    {
+      gtk_switch_set_state (GTK_SWITCH (sw), FALSE);
+    }
+}
+
+static void
 activate (GApplication *app)
 {
   GtkBuilder *builder;
@@ -1722,6 +1782,9 @@ activate (GApplication *app)
   gtk_builder_add_callback_symbol (builder, "reset_icon_size", (GCallback)reset_icon_size);
   gtk_builder_add_callback_symbol (builder, "scale_format_value", (GCallback)scale_format_value);
   gtk_builder_add_callback_symbol (builder, "scale_format_value_blank", (GCallback)scale_format_value_blank);
+  gtk_builder_add_callback_symbol (builder, "validate_more_details", (GCallback)validate_more_details);
+  gtk_builder_add_callback_symbol (builder, "mode_switch_state_set", (GCallback)mode_switch_state_set);
+  gtk_builder_add_callback_symbol (builder, "level_scale_value_changed", (GCallback)level_scale_value_changed);
 
   gtk_builder_connect_signals (builder, NULL);
 
@@ -1819,6 +1882,13 @@ activate (GApplication *app)
   g_signal_connect (widget, "clicked", G_CALLBACK (show_dialog), dialog);
   widget = (GtkWidget *)gtk_builder_get_object (builder, "circular_button");
   g_signal_connect (widget, "clicked", G_CALLBACK (show_dialog), dialog);
+
+  widget = (GtkWidget *)gtk_builder_get_object (builder, "level_scale");
+  g_object_set_data (G_OBJECT (dialog), "level_scale", widget);
+  widget = (GtkWidget *)gtk_builder_get_object (builder, "mode_switch");
+  g_object_set_data (G_OBJECT (dialog), "mode_switch", widget);
+  widget = (GtkWidget *)gtk_builder_get_object (builder, "error_label");
+  g_object_set_data (G_OBJECT (dialog), "error_label", widget);
 
   dialog = (GtkWidget *)gtk_builder_get_object (builder, "selection_dialog");
   g_object_set_data (G_OBJECT (window), "selection_dialog", dialog);
