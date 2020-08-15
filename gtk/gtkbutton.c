@@ -74,6 +74,7 @@
 #include "gtkstylecontext.h"
 #include "gtktypebuiltins.h"
 #include "gtkwidgetprivate.h"
+#include "gtkshortcuttrigger.h"
 
 #include <string.h>
 
@@ -200,8 +201,11 @@ gtk_button_get_request_mode (GtkWidget *widget)
 static void
 gtk_button_class_init (GtkButtonClass *klass)
 {
+  const guint activate_keyvals[] = { GDK_KEY_space, GDK_KEY_KP_Space, GDK_KEY_Return,
+                                     GDK_KEY_ISO_Enter, GDK_KEY_KP_Enter };
   GObjectClass *gobject_class;
   GtkWidgetClass *widget_class;
+  GtkShortcutAction *activate_action;
 
   gobject_class = G_OBJECT_CLASS (klass);
   widget_class = (GtkWidgetClass*) klass;
@@ -292,22 +296,21 @@ gtk_button_class_init (GtkButtonClass *klass)
                   NULL,
                   G_TYPE_NONE, 0);
   widget_class->activate_signal = button_signals[ACTIVATE];
+  activate_action = gtk_signal_action_new ("activate");
 
-  gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BIN_LAYOUT);
-  gtk_widget_class_set_css_name (widget_class, I_("button"));
+  for (guint i = 0; i < G_N_ELEMENTS (activate_keyvals); i++)
+    {
+      GtkShortcut *activate_shortcut = gtk_shortcut_new (gtk_keyval_trigger_new (activate_keyvals[i], 0),
+                                                         g_object_ref (activate_action));
 
-  gtk_widget_class_add_binding_signal (widget_class, GDK_KEY_space, 0,
-                                       "activate", NULL);
-  gtk_widget_class_add_binding_signal (widget_class, GDK_KEY_KP_Space, 0,
-                                       "activate", NULL);
-  gtk_widget_class_add_binding_signal (widget_class, GDK_KEY_Return, 0,
-                                       "activate", NULL);
-  gtk_widget_class_add_binding_signal (widget_class, GDK_KEY_ISO_Enter, 0,
-                                       "activate", NULL);
-  gtk_widget_class_add_binding_signal (widget_class, GDK_KEY_KP_Enter, 0,
-                                       "activate", NULL);
+      gtk_widget_class_add_shortcut (widget_class, activate_shortcut);
+      g_object_unref (activate_shortcut);
+    }
+  g_object_unref (activate_action);
 
   gtk_widget_class_set_accessible_role (widget_class, GTK_ACCESSIBLE_ROLE_BUTTON);
+  gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BIN_LAYOUT);
+  gtk_widget_class_set_css_name (widget_class, I_("button"));
 }
 
 static void
