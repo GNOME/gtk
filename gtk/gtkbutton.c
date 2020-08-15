@@ -138,7 +138,7 @@ static void gtk_button_unrealize (GtkWidget * widget);
 static void gtk_real_button_clicked (GtkButton * button);
 static void gtk_real_button_activate  (GtkButton          *button);
 static void gtk_button_finish_activate (GtkButton         *button,
-					gboolean           do_it);
+                                        gboolean           do_it);
 
 static void gtk_button_state_flags_changed (GtkWidget     *widget,
                                             GtkStateFlags  previous_state);
@@ -267,12 +267,12 @@ gtk_button_class_init (GtkButtonClass *klass)
    */
   button_signals[CLICKED] =
     g_signal_new (I_("clicked"),
-		  G_OBJECT_CLASS_TYPE (gobject_class),
-		  G_SIGNAL_RUN_FIRST | G_SIGNAL_ACTION,
-		  G_STRUCT_OFFSET (GtkButtonClass, clicked),
-		  NULL, NULL,
-		  NULL,
-		  G_TYPE_NONE, 0);
+                  G_OBJECT_CLASS_TYPE (gobject_class),
+                  G_SIGNAL_RUN_FIRST | G_SIGNAL_ACTION,
+                  G_STRUCT_OFFSET (GtkButtonClass, clicked),
+                  NULL, NULL,
+                  NULL,
+                  G_TYPE_NONE, 0);
 
   /**
    * GtkButton::activate:
@@ -285,12 +285,12 @@ gtk_button_class_init (GtkButtonClass *klass)
    */
   button_signals[ACTIVATE] =
     g_signal_new (I_("activate"),
-		  G_OBJECT_CLASS_TYPE (gobject_class),
-		  G_SIGNAL_RUN_FIRST | G_SIGNAL_ACTION,
-		  G_STRUCT_OFFSET (GtkButtonClass, activate),
-		  NULL, NULL,
-		  NULL,
-		  G_TYPE_NONE, 0);
+                  G_OBJECT_CLASS_TYPE (gobject_class),
+                  G_SIGNAL_RUN_FIRST | G_SIGNAL_ACTION,
+                  G_STRUCT_OFFSET (GtkButtonClass, activate),
+                  NULL, NULL,
+                  NULL,
+                  G_TYPE_NONE, 0);
   widget_class->activate_signal = button_signals[ACTIVATE];
 
   gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BIN_LAYOUT);
@@ -766,7 +766,7 @@ gtk_button_do_release (GtkButton *button,
       priv->button_down = FALSE;
 
       if (priv->activate_timeout)
-	return;
+        return;
 
       if (emit_clicked)
         g_signal_emit (button, button_signals[CLICKED], 0);
@@ -806,7 +806,7 @@ gtk_real_button_activate (GtkButton *button)
 
 static void
 gtk_button_finish_activate (GtkButton *button,
-			    gboolean   do_it)
+                            gboolean   do_it)
 {
   GtkButtonPrivate *priv = gtk_button_get_instance_private (button);
 
