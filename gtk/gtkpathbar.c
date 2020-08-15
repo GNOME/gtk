@@ -210,9 +210,11 @@ gtk_path_bar_init (GtkPathBar *path_bar)
   const char *home;
 
   path_bar->up_slider_button = gtk_button_new_from_icon_name ("pan-start-symbolic");
+  gtk_widget_add_css_class (path_bar->up_slider_button, "slider-button");
   gtk_widget_set_parent (path_bar->up_slider_button, GTK_WIDGET (path_bar));
 
   path_bar->down_slider_button = gtk_button_new_from_icon_name ("pan-end-symbolic");
+  gtk_widget_add_css_class (path_bar->down_slider_button, "slider-button");
   gtk_widget_set_parent (path_bar->down_slider_button, GTK_WIDGET (path_bar));
 
   /* GtkBuilder wont let us connect 'swapped' without specifying the signal's
