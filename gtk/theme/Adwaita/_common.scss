@@ -205,6 +205,8 @@ label {
   &:backdrop {
     selection { @extend %selected_items_backdrop; }
   }
+
+  &.error { color: $error_color; }
 }
 
 .dim-label {
@@ -473,6 +475,8 @@ entry {
       + combobox > box > button.combo { border-top-color: $drop_target_color; }
     }
   }
+
+  &.error { color: $error_color; }
 }
 
 treeview entry {
