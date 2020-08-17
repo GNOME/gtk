@@ -180,7 +180,7 @@ label {
 
   &.error {
    color: $error_color;
-   &:disabled { color: $insensitive_fg_color; }
+   &:disabled { color: transparentize($error_color,0.5); }
   }
 }
 
