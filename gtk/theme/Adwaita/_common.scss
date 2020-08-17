@@ -3096,6 +3096,15 @@ list  {
   }
 }
 
+.rich-list { /* rich lists usually containing other widgets than just labels/text */
+  & > row {
+    padding: 6px;
+    & > box {
+      margin: 12px;
+    }
+  }
+}
+
 row {
   transition: all 150ms $ease-out-quad;
 
