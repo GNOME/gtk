@@ -178,7 +178,10 @@ label {
     > selection { @extend %selected_items_disabled; }
   }
 
-  &.error { color: $error_color; }
+  &.error {
+   color: $error_color;
+   &:disabled { color: transparentize($error_color,0.5); }
+  }
 }
 
 .dim-label {
