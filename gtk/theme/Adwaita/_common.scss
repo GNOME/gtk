@@ -3072,7 +3072,7 @@ separator {
  * Lists *
  *********/
 listview,
-list, .rich-list {
+list  {
   color: $text_color;
   background-color: $base_color;
   border-color: $borders_color;
@@ -3083,7 +3083,7 @@ list, .rich-list {
     border-color: $backdrop_borders_color;
   }
 
-  > row { padding: 18px; }
+  > row { padding: 2px; }
   > row.expander { padding: 0px; }
   > row.expander .row-header { padding: 2px; }
 
@@ -3145,6 +3145,23 @@ row {
     background-color: $selected_bg_color;
   }
 
+/*******************************************************
+ * Rich Lists                                          *
+ * Large list usually containing lots of widgets       *
+ * https://gitlab.gnome.org/GNOME/gtk/-/issues/3073    *
+ *******************************************************/
+
+
+.rich-list { /* rich lists usually containing other widgets than just labels/text */
+  & > row {
+    padding: 8px 12px;
+    min-height: 32px; /* should be tall even when only containing a label */
+
+    & > box {
+      border-spacing: 12px;
+    }
+  }
+}
 
 /*********************
  * App Notifications *
