@@ -1514,6 +1514,160 @@ rewrite_grid_layout (Element *element,
     }
 }
 
+
+static Element *
+write_box_prop (Element *element,
+                Element *parent,
+                const char *name,
+                const char *value)
+{
+
+  if (element)
+    g_free (element->data);
+  else
+    {
+      element = g_new0 (Element, 1);
+      element->parent = parent;
+      element->element_name = g_strdup ("property");
+      element->attribute_names = g_new0 (char *, 2);
+      element->attribute_names[0] = g_strdup ("name");
+      element->attribute_values = g_new0 (char *, 2);
+      element->attribute_values[0] = g_strdup (name);
+      parent->children = g_list_prepend (parent->children, element);
+    }
+  element->data = g_strdup (value);
+  return element;
+}
+
+static void
+rewrite_box (Element *element,
+             MyParserData *data)
+{
+  GList *l, *ll;
+  GtkOrientation orientation = GTK_ORIENTATION_HORIZONTAL;
+
+  if (g_str_equal (get_class_name (element), "GtkVBox"))
+    write_box_prop (NULL, element, "orientation", "vertical");
+
+  if (!g_str_equal (get_class_name (element), "GtkBox"))
+    set_attribute_value (element, "class", "GtkBox");
+
+  for (l = element->children; l; l = l->next)
+    {
+      Element *child = l->data;
+
+      if (g_str_equal (child->element_name, "property"))
+        {
+          if (has_attribute (child, "name", "orientation"))
+            {
+              GValue value = G_VALUE_INIT;
+
+              if (gtk_builder_value_from_string_type (data->builder,
+                                                      GTK_TYPE_ORIENTATION,
+                                                      child->data,
+                                                      &value,
+                                                      NULL))
+                orientation = g_value_get_enum (&value);
+            }
+        }
+    }
+
+  for (l = element->children; l; l = l->next)
+    {
+      Element *child = l->data;
+      if (g_str_equal (child->element_name, "child"))
+        {
+          Element *object = NULL;
+          Element *packing = NULL;
+
+          for (ll = child->children; ll; ll = ll->next)
+            {
+              Element *elt2 = ll->data;
+
+              if (g_str_equal (elt2->element_name, "object"))
+                object = elt2;
+
+              if (g_str_equal (elt2->element_name, "packing"))
+                packing = elt2;
+            }
+
+          if (object && packing)
+            {
+              Element *halign = NULL;
+              Element *hexpand = NULL;
+              Element *valign = NULL;
+              Element *vexpand = NULL;
+
+              gboolean expand = FALSE;
+              gboolean fill = TRUE;
+
+              for (ll = object->children; ll; ll = ll->next)
+                {
+                  Element *elt = ll->data;
+                  if (g_str_equal (elt->element_name, "property"))
+                    {
+                      if (has_attribute (elt, "name", "halign"))
+                        halign = elt;
+                      else if (has_attribute (elt, "name", "hexpand"))
+                        hexpand = elt;
+                      else if (has_attribute (elt, "name", "valign"))
+                        valign = elt;
+                      else if (has_attribute (elt, "name", "vexpand"))
+                        vexpand = elt;
+                    }
+                }
+
+              for (ll = packing->children; ll; ll = ll->next)
+                {
+                  Element *elt = ll->data;
+
+                  if (has_attribute (elt, "name", "expand"))
+                    {
+                      GValue value = G_VALUE_INIT;
+
+                      if (gtk_builder_value_from_string_type (data->builder,
+                                                              G_TYPE_BOOLEAN,
+                                                              elt->data,
+                                                              &value,
+                                                              NULL))
+                        expand = g_value_get_boolean (&value);
+                    }
+
+                  if (has_attribute (elt, "name", "fill"))
+                    {
+                      GValue value = G_VALUE_INIT;
+
+                      if (gtk_builder_value_from_string_type (data->builder,
+                                                              G_TYPE_BOOLEAN,
+                                                              elt->data,
+                                                              &value,
+                                                              NULL))
+                        fill = g_value_get_boolean (&value);
+                    }
+                }
+
+              if (orientation == GTK_ORIENTATION_HORIZONTAL)
+                {
+                  if (expand)
+                    hexpand = write_box_prop (hexpand, object, "hexpand", "1");
+                  if (!fill)
+                    halign = write_box_prop (halign, object, "halign", "center");
+                }
+              else if (orientation == GTK_ORIENTATION_VERTICAL)
+                {
+                  if (expand)
+                    vexpand = write_box_prop (vexpand, object, "vexpand", "1");
+                  if (!fill)
+                    valign = write_box_prop (valign, object, "valign", "center");
+                }
+
+              child->children = g_list_remove (child->children, packing);
+              free_element (packing);
+            }
+        }
+    }
+}
+
 static void
 rewrite_bin_child (Element      *element,
                    MyParserData *data)
@@ -1681,6 +1835,12 @@ rewrite_element (Element      *element,
   if (element_is_object_or_template (element) &&
       g_str_equal (get_class_name (element), "GtkGrid"))
     rewrite_grid_layout (element, data);
+
+  if (element_is_object_or_template (element) &&
+      (g_str_equal (get_class_name (element), "GtkHBox") ||
+       g_str_equal (get_class_name (element), "GtkVBox") ||
+       g_str_equal (get_class_name (element), "GtkBox")))
+    rewrite_box (element, data);
 
   if (element_is_object_or_template (element) &&
       g_str_equal (get_class_name (element), "GtkFixed"))

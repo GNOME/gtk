@@ -144,10 +144,6 @@
                               <attribute name="scale" value="1.5"></attribute>
                             </attributes>
                           </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
-                          </packing>
                         </child>
                         <child>
                           <object class="GtkLabel" id="current_time_label">
@@ -157,10 +153,6 @@
                             <property name="use_markup">1</property>
                             <property name="wrap">1</property>
                           </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
-                          </packing>
                         </child>
                         <child>
                           <object class="GtkLabel" id="better_time_label">
@@ -170,10 +162,6 @@
                             <property name="use_markup">1</property>
                             <property name="wrap">1</property>
                           </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
-                          </packing>
                         </child>
                         <layout>
                           <property name="column">1</property>
@@ -191,10 +179,6 @@
               </object>
             </child>
           </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-          </packing>
         </child>
         <child>
           <object class="GtkButton" id="run_button">
@@ -211,10 +195,6 @@
               </object>
             </child>
           </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-          </packing>
         </child>
       </object>
     </property>
