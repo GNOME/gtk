@@ -206,7 +206,11 @@ label {
     selection { @extend %selected_items_backdrop; }
   }
 
-  &.error { color: $error_color; }
+  &.error {
+    color: $error_color;
+    &:disabled { color: transparentize($error_color,0.5); }
+    &:disabled:backdrop { color: transparentize($error_color,0.6); }
+  }
 }
 
 .dim-label {
