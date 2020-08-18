@@ -19,7 +19,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-11 18:07+0000\n"
+"POT-Creation-Date: 2020-08-17 08:40+0000\n"
 "PO-Revision-Date: 2020-05-13 22:00+0900\n"
 "Last-Translator: sicklylife <translation@sicklylife.jp>\n"
 "Language-Team: Japanese <gnome-translation@gnome.gr.jp>\n"
@@ -483,20 +483,20 @@ msgid "Unable to create a GL pixel format"
 msgstr "GL ピクセルフォーマットを生成できません"
 
 #: gdk/quartz/gdkglcontext-quartz.c:133 gdk/wayland/gdkglcontext-wayland.c:208
-#: gdk/win32/gdkglcontext-win32.c:1070 gdk/win32/gdkglcontext-win32.c:1110
-#: gdk/x11/gdkglcontext-x11.c:720 gdk/x11/gdkglcontext-x11.c:770
+#: gdk/win32/gdkglcontext-win32.c:1072 gdk/win32/gdkglcontext-win32.c:1112
+#: gdk/x11/gdkglcontext-x11.c:724 gdk/x11/gdkglcontext-x11.c:774
 msgid "Unable to create a GL context"
 msgstr "GL コンテキストを生成できません"
 
 #: gdk/wayland/gdkglcontext-wayland.c:418
-#: gdk/wayland/gdkglcontext-wayland.c:428 gdk/win32/gdkglcontext-win32.c:908
-#: gdk/win32/gdkglcontext-win32.c:918 gdk/win32/gdkglcontext-win32.c:1035
-#: gdk/x11/gdkglcontext-x11.c:971
+#: gdk/wayland/gdkglcontext-wayland.c:428 gdk/win32/gdkglcontext-win32.c:910
+#: gdk/win32/gdkglcontext-win32.c:920 gdk/win32/gdkglcontext-win32.c:1037
+#: gdk/x11/gdkglcontext-x11.c:975
 msgid "No available configurations for the given pixel format"
 msgstr ""
 
-#: gdk/wayland/gdkglcontext-wayland.c:468 gdk/win32/gdkglcontext-win32.c:1177
-#: gdk/x11/gdkglcontext-x11.c:1277
+#: gdk/wayland/gdkglcontext-wayland.c:468 gdk/win32/gdkglcontext-win32.c:1179
+#: gdk/x11/gdkglcontext-x11.c:1281
 msgid "No GL implementation is available"
 msgstr "利用可能な GL 実装がありません"
 
@@ -550,7 +550,7 @@ msgid "Opening %d Item"
 msgid_plural "Opening %d Items"
 msgstr[0] "%d 個のアイテムを開いています"
 
-#: gdk/x11/gdkglcontext-x11.c:999
+#: gdk/x11/gdkglcontext-x11.c:1003
 #, c-format
 msgid "No available configurations for the given RGBA pixel format"
 msgstr ""
@@ -1234,8 +1234,8 @@ msgstr ""
 "こに保存する”を選択してください"
 
 #: gtk/deprecated/gtkcolorseldialog.c:191 gtk/deprecated/gtkfontsel.c:1689
-#: gtk/gtkfilechoosernative.c:544 gtk/gtkfilechoosernative.c:636
-#: gtk/gtkfilechooserwidget.c:1497 gtk/gtkfilechooserwidget.c:6562
+#: gtk/gtkfilechoosernative.c:545 gtk/gtkfilechoosernative.c:637
+#: gtk/gtkfilechooserwidget.c:1498 gtk/gtkfilechooserwidget.c:6572
 #: gtk/gtkmessagedialog.c:952 gtk/gtkmessagedialog.c:965
 #: gtk/gtkmountoperation.c:594 gtk/gtkpagesetupunixdialog.c:197
 #: gtk/gtkprintbackend.c:779 gtk/gtkprinteroptionwidget.c:545
@@ -1717,7 +1717,7 @@ msgid "Other Applications"
 msgstr "別のアプリケーション"
 
 #: gtk/gtkapplicationwindow.c:345 gtk/gtkprintoperation-unix.c:485
-#: gtk/gtkprintoperation-win32.c:1495 gtk/inspector/prop-editor.c:1686
+#: gtk/gtkprintoperation-win32.c:1521 gtk/inspector/prop-editor.c:1686
 msgid "Application"
 msgstr "アプリケーション"
 
@@ -2218,52 +2218,52 @@ msgstr "右側(_R):"
 msgid "Paper Margins"
 msgstr "用紙のマージン"
 
-#: gtk/gtkentry.c:9590 gtk/gtklabel.c:6680 gtk/gtktextview.c:9502
+#: gtk/gtkentry.c:9591 gtk/gtklabel.c:6680 gtk/gtktextview.c:9520
 msgid "Cu_t"
 msgstr "切り取り(_T)"
 
-#: gtk/gtkentry.c:9594 gtk/gtklabel.c:6681 gtk/gtktextview.c:9506
+#: gtk/gtkentry.c:9595 gtk/gtklabel.c:6681 gtk/gtktextview.c:9524
 msgid "_Copy"
 msgstr "コピー(_C)"
 
-#: gtk/gtkentry.c:9598 gtk/gtklabel.c:6682 gtk/gtktextview.c:9508
+#: gtk/gtkentry.c:9599 gtk/gtklabel.c:6682 gtk/gtktextview.c:9526
 msgid "_Paste"
 msgstr "貼り付け(_P)"
 
-#: gtk/gtkentry.c:9601 gtk/gtkfilechooserwidget.c:1498
-#: gtk/gtkfilechooserwidget.c:2324 gtk/gtklabel.c:6684 gtk/gtktextview.c:9511
+#: gtk/gtkentry.c:9602 gtk/gtkfilechooserwidget.c:1499
+#: gtk/gtkfilechooserwidget.c:2334 gtk/gtklabel.c:6684 gtk/gtktextview.c:9529
 msgid "_Delete"
 msgstr "削除(_D)"
 
-#: gtk/gtkentry.c:9612 gtk/gtklabel.c:6693 gtk/gtktextview.c:9525
+#: gtk/gtkentry.c:9613 gtk/gtklabel.c:6693 gtk/gtktextview.c:9543
 msgid "Select _All"
 msgstr "すべて選択(_A)"
 
-#: gtk/gtkentry.c:9622 gtk/gtktextview.c:9535
+#: gtk/gtkentry.c:9623 gtk/gtktextview.c:9553
 msgid "Insert _Emoji"
 msgstr "絵文字を挿入(_E)"
 
-#: gtk/gtkentry.c:9798 gtk/gtktextview.c:9755
+#: gtk/gtkentry.c:9799 gtk/gtktextview.c:9777
 msgid "Select all"
 msgstr "すべて選択"
 
-#: gtk/gtkentry.c:9801 gtk/gtktextview.c:9758
+#: gtk/gtkentry.c:9802 gtk/gtktextview.c:9780
 msgid "Cut"
 msgstr "切り取り"
 
-#: gtk/gtkentry.c:9804 gtk/gtktextview.c:9761
+#: gtk/gtkentry.c:9805 gtk/gtktextview.c:9783
 msgid "Copy"
 msgstr "コピー"
 
-#: gtk/gtkentry.c:9807 gtk/gtktextview.c:9764
+#: gtk/gtkentry.c:9808 gtk/gtktextview.c:9786
 msgid "Paste"
 msgstr "貼り付け"
 
-#: gtk/gtkentry.c:10879
+#: gtk/gtkentry.c:10880
 msgid "Caps Lock is on"
 msgstr "Caps Lock がオンになっています"
 
-#: gtk/gtkentry.c:11157
+#: gtk/gtkentry.c:11158
 msgid "Insert Emoji"
 msgstr "絵文字を挿入"
 
@@ -2288,13 +2288,13 @@ msgid "_Name"
 msgstr "名前(_N)"
 
 #. Open item is always present
-#: gtk/gtkfilechoosernative.c:545 gtk/gtkfilechoosernative.c:630
+#: gtk/gtkfilechoosernative.c:546 gtk/gtkfilechoosernative.c:631
 #: gtk/gtkplacessidebar.c:3625 gtk/gtkplacessidebar.c:3693
-#: gtk/gtkplacesview.c:1682
+#: gtk/gtkplacesview.c:1696
 msgid "_Open"
 msgstr "開く(_O)"
 
-#: gtk/gtkfilechoosernative.c:630 gtk/inspector/css-editor.c:202
+#: gtk/gtkfilechoosernative.c:631 gtk/inspector/css-editor.c:202
 msgid "_Save"
 msgstr "保存(_S)"
 
@@ -2311,348 +2311,348 @@ msgstr "表示するファイルの種類を選択してください"
 msgid "%1$s on %2$s"
 msgstr "%2$s:%1$s"
 
-#: gtk/gtkfilechooserwidget.c:384
+#: gtk/gtkfilechooserwidget.c:385
 msgid "Type name of new folder"
 msgstr "新しいフォルダー名を入力してください"
 
-#: gtk/gtkfilechooserwidget.c:808
+#: gtk/gtkfilechooserwidget.c:809
 msgid "The folder could not be created"
 msgstr "フォルダーを作成できませんでした"
 
-#: gtk/gtkfilechooserwidget.c:820
+#: gtk/gtkfilechooserwidget.c:821
 msgid ""
 "The folder could not be created, as a file with the same name already exists."
 msgstr ""
 "同名のファイルがすでに存在しているため、そのフォルダーを作成できませんでし"
 "た。"
 
-#: gtk/gtkfilechooserwidget.c:822
+#: gtk/gtkfilechooserwidget.c:823
 msgid "Try using a different name for the folder, or rename the file first."
 msgstr ""
-"別のフォルダー名を使用するか、ファイルの名前を変更するなどして、もう一度"
-"実行してください。"
+"別のフォルダー名を使用するか、ファイルの名前を変更するなどして、もう一度実行"
+"してください。"
 
-#: gtk/gtkfilechooserwidget.c:835
+#: gtk/gtkfilechooserwidget.c:836
 msgid "You need to choose a valid filename."
 msgstr "有効なファイル名を指定してください。"
 
-#: gtk/gtkfilechooserwidget.c:838
+#: gtk/gtkfilechooserwidget.c:839
 #, c-format
 msgid "Cannot create a file under %s as it is not a folder"
 msgstr "%s はフォルダーではないため、その配下にファイルを作成できません"
 
-#: gtk/gtkfilechooserwidget.c:848
+#: gtk/gtkfilechooserwidget.c:849
 msgid "Cannot create file as the filename is too long"
 msgstr "ファイル名が長すぎるためファイルを作成できません"
 
-#: gtk/gtkfilechooserwidget.c:849
+#: gtk/gtkfilechooserwidget.c:850
 msgid "Try using a shorter name."
 msgstr "もっと短い名前を使用してください。"
 
-#: gtk/gtkfilechooserwidget.c:859
+#: gtk/gtkfilechooserwidget.c:860
 msgid "You may only select folders"
 msgstr "フォルダーのみ選択できます"
 
-#: gtk/gtkfilechooserwidget.c:860
+#: gtk/gtkfilechooserwidget.c:861
 msgid "The item that you selected is not a folder try using a different item."
 msgstr ""
 "選択したアイテムはフォルダーではありません。他のアイテムを使用してみてくださ"
 "い。"
 
-#: gtk/gtkfilechooserwidget.c:868
+#: gtk/gtkfilechooserwidget.c:869
 msgid "Invalid file name"
 msgstr "無効なファイル名です"
 
-#: gtk/gtkfilechooserwidget.c:877
+#: gtk/gtkfilechooserwidget.c:878
 msgid "The folder contents could not be displayed"
 msgstr "フォルダーの内容を表示できませんでした"
 
-#: gtk/gtkfilechooserwidget.c:885
+#: gtk/gtkfilechooserwidget.c:886
 msgid "The file could not be deleted"
 msgstr "ファイルを削除できませんでした"
 
-#: gtk/gtkfilechooserwidget.c:893
+#: gtk/gtkfilechooserwidget.c:894
 msgid "The file could not be moved to the Trash"
 msgstr "ファイルをゴミ箱へ移動できませんでした"
 
-#: gtk/gtkfilechooserwidget.c:1038
+#: gtk/gtkfilechooserwidget.c:1039
 msgid "A folder with that name already exists"
 msgstr "同じ名前のフォルダーがすでに存在します"
 
-#: gtk/gtkfilechooserwidget.c:1040
+#: gtk/gtkfilechooserwidget.c:1041
 msgid "A file with that name already exists"
 msgstr "同じ名前のファイルがすでに存在します"
 
-#: gtk/gtkfilechooserwidget.c:1075
+#: gtk/gtkfilechooserwidget.c:1076
 msgid "A folder cannot be called “.”"
 msgstr "“.”という名前のフォルダーは作成できません"
 
-#: gtk/gtkfilechooserwidget.c:1076
+#: gtk/gtkfilechooserwidget.c:1077
 msgid "A file cannot be called “.”"
 msgstr "“.”という名前のファイルは作成できません"
 
-#: gtk/gtkfilechooserwidget.c:1079
+#: gtk/gtkfilechooserwidget.c:1080
 msgid "A folder cannot be called “..”"
 msgstr "“..”という名前のフォルダーは作成できません"
 
-#: gtk/gtkfilechooserwidget.c:1080
+#: gtk/gtkfilechooserwidget.c:1081
 msgid "A file cannot be called “..”"
 msgstr "“..”という名前のファイルは作成できません"
 
-#: gtk/gtkfilechooserwidget.c:1083
+#: gtk/gtkfilechooserwidget.c:1084
 msgid "Folder names cannot contain “/”"
 msgstr "フォルダー名に“/”は含められません"
 
-#: gtk/gtkfilechooserwidget.c:1084
+#: gtk/gtkfilechooserwidget.c:1085
 msgid "File names cannot contain “/”"
 msgstr "ファイル名に“/”は含められません"
 
-#: gtk/gtkfilechooserwidget.c:1110
+#: gtk/gtkfilechooserwidget.c:1111
 msgid "Folder names should not begin with a space"
 msgstr "空白で始まるフォルダー名は推奨されません"
 
-#: gtk/gtkfilechooserwidget.c:1111
+#: gtk/gtkfilechooserwidget.c:1112
 msgid "File names should not begin with a space"
 msgstr "空白で始まるファイル名は推奨されません"
 
-#: gtk/gtkfilechooserwidget.c:1115
+#: gtk/gtkfilechooserwidget.c:1116
 msgid "Folder names should not end with a space"
 msgstr "空白で終わるフォルダー名は推奨されません"
 
-#: gtk/gtkfilechooserwidget.c:1116
+#: gtk/gtkfilechooserwidget.c:1117
 msgid "File names should not end with a space"
 msgstr "空白で終わるファイル名は推奨されません"
 
-#: gtk/gtkfilechooserwidget.c:1119
+#: gtk/gtkfilechooserwidget.c:1120
 msgid "Folder names starting with a “.” are hidden"
 msgstr "“.”で始まるフォルダーは隠しフォルダーになります"
 
-#: gtk/gtkfilechooserwidget.c:1120
+#: gtk/gtkfilechooserwidget.c:1121
 msgid "File names starting with a “.” are hidden"
 msgstr "“.”で始まるファイルは隠しファイルになります"
 
-#: gtk/gtkfilechooserwidget.c:1493
+#: gtk/gtkfilechooserwidget.c:1494
 #, c-format
 msgid "Are you sure you want to permanently delete “%s”?"
 msgstr "本当に“%s”を完全に削除しますか?"
 
-#: gtk/gtkfilechooserwidget.c:1496
+#: gtk/gtkfilechooserwidget.c:1497
 #, c-format
 msgid "If you delete an item, it will be permanently lost."
 msgstr "削除すると、アイテムは完全に失われます。"
 
-#: gtk/gtkfilechooserwidget.c:1633
+#: gtk/gtkfilechooserwidget.c:1634
 msgid "The file could not be renamed"
 msgstr "ファイル名を変更できませんでした"
 
-#: gtk/gtkfilechooserwidget.c:1969
+#: gtk/gtkfilechooserwidget.c:1979
 msgid "Could not select file"
 msgstr "ファイルを選択できませんでした"
 
-#: gtk/gtkfilechooserwidget.c:2319
+#: gtk/gtkfilechooserwidget.c:2329
 msgid "_Visit File"
 msgstr "ファイルの場所に移動する(_V)"
 
-#: gtk/gtkfilechooserwidget.c:2320
+#: gtk/gtkfilechooserwidget.c:2330
 msgid "_Open With File Manager"
 msgstr "ファイルマネージャーで開く(_O)"
 
-#: gtk/gtkfilechooserwidget.c:2321
+#: gtk/gtkfilechooserwidget.c:2331
 msgid "_Copy Location"
 msgstr "場所のコピー(_C)"
 
-#: gtk/gtkfilechooserwidget.c:2322
+#: gtk/gtkfilechooserwidget.c:2332
 msgid "_Add to Bookmarks"
 msgstr "ブックマークへ追加(_A)"
 
-#: gtk/gtkfilechooserwidget.c:2323 gtk/gtkplacessidebar.c:2741
+#: gtk/gtkfilechooserwidget.c:2333 gtk/gtkplacessidebar.c:2741
 #: gtk/ui/gtkfilechooserwidget.ui:539
 msgid "_Rename"
 msgstr "名前の変更(_R)"
 
-#: gtk/gtkfilechooserwidget.c:2325
+#: gtk/gtkfilechooserwidget.c:2335
 msgid "_Move to Trash"
 msgstr "ゴミ箱へ移動する(_M)"
 
-#: gtk/gtkfilechooserwidget.c:2329
+#: gtk/gtkfilechooserwidget.c:2339
 msgid "Show _Hidden Files"
 msgstr "隠しファイルを表示する(_H)"
 
-#: gtk/gtkfilechooserwidget.c:2330
+#: gtk/gtkfilechooserwidget.c:2340
 msgid "Show _Size Column"
 msgstr "サイズを表示する(_S)"
 
-#: gtk/gtkfilechooserwidget.c:2331
+#: gtk/gtkfilechooserwidget.c:2341
 msgid "Show T_ype Column"
 msgstr "種類を表示する(_Y)"
 
-#: gtk/gtkfilechooserwidget.c:2332
+#: gtk/gtkfilechooserwidget.c:2342
 msgid "Show _Time"
 msgstr "時刻を表示する(_T)"
 
-#: gtk/gtkfilechooserwidget.c:2333
+#: gtk/gtkfilechooserwidget.c:2343
 msgid "Sort _Folders before Files"
 msgstr "フォルダーをファイルよりも前に配置する(_F)"
 
 #. this is the header for the location column in the print dialog
-#: gtk/gtkfilechooserwidget.c:2615 gtk/inspector/css-node-tree.ui:141
+#: gtk/gtkfilechooserwidget.c:2625 gtk/inspector/css-node-tree.ui:141
 #: gtk/ui/gtkfilechooserwidget.ui:208 gtk/ui/gtkprintunixdialog.ui:123
 msgid "Location"
 msgstr "場所"
 
 #. Label
-#: gtk/gtkfilechooserwidget.c:2708
+#: gtk/gtkfilechooserwidget.c:2718
 msgid "_Name:"
 msgstr "名前(_N):"
 
-#: gtk/gtkfilechooserwidget.c:3333 gtk/gtkfilechooserwidget.c:3347
+#: gtk/gtkfilechooserwidget.c:3343 gtk/gtkfilechooserwidget.c:3357
 #, c-format
 msgid "Searching in %s"
 msgstr "%s 内を検索"
 
-#: gtk/gtkfilechooserwidget.c:3353
+#: gtk/gtkfilechooserwidget.c:3363
 msgid "Searching"
 msgstr "検索"
 
-#: gtk/gtkfilechooserwidget.c:3360
+#: gtk/gtkfilechooserwidget.c:3370
 msgid "Enter location"
 msgstr "場所を指定する"
 
-#: gtk/gtkfilechooserwidget.c:3362
+#: gtk/gtkfilechooserwidget.c:3372
 msgid "Enter location or URL"
 msgstr "場所または URL を指定する"
 
-#: gtk/gtkfilechooserwidget.c:4440 gtk/gtkfilechooserwidget.c:7481
+#: gtk/gtkfilechooserwidget.c:4450 gtk/gtkfilechooserwidget.c:7492
 #: gtk/ui/gtkfilechooserwidget.ui:248
 msgid "Modified"
 msgstr "更新日時"
 
-#: gtk/gtkfilechooserwidget.c:4718
+#: gtk/gtkfilechooserwidget.c:4728
 #, c-format
 msgid "Could not read the contents of %s"
 msgstr "%s の内容を読み込めませんでした"
 
-#: gtk/gtkfilechooserwidget.c:4722
+#: gtk/gtkfilechooserwidget.c:4732
 msgid "Could not read the contents of the folder"
 msgstr "フォルダーの内容を読み込めませんでした"
 
-#: gtk/gtkfilechooserwidget.c:4882 gtk/gtkfilechooserwidget.c:4930
+#: gtk/gtkfilechooserwidget.c:4892 gtk/gtkfilechooserwidget.c:4940
 msgid "%H:%M"
 msgstr "%H:%M"
 
-#: gtk/gtkfilechooserwidget.c:4884 gtk/gtkfilechooserwidget.c:4932
+#: gtk/gtkfilechooserwidget.c:4894 gtk/gtkfilechooserwidget.c:4942
 msgid "%l:%M %p"
 msgstr "%P%I:%M"
 
-#: gtk/gtkfilechooserwidget.c:4888
+#: gtk/gtkfilechooserwidget.c:4898
 msgid "Yesterday"
 msgstr "昨日"
 
-#: gtk/gtkfilechooserwidget.c:4896
+#: gtk/gtkfilechooserwidget.c:4906
 msgid "%-e %b"
 msgstr "%-m月%-d日"
 
-#: gtk/gtkfilechooserwidget.c:4900
+#: gtk/gtkfilechooserwidget.c:4910
 msgid "%-e %b %Y"
 msgstr "%Y年%-m月%-d日"
 
-#: gtk/gtkfilechooserwidget.c:4999 gtk/gtkfilechooserwidget.c:5007
+#: gtk/gtkfilechooserwidget.c:5009 gtk/gtkfilechooserwidget.c:5017
 msgid "Program"
 msgstr "プログラム"
 
-#: gtk/gtkfilechooserwidget.c:5000
+#: gtk/gtkfilechooserwidget.c:5010
 msgid "Audio"
 msgstr "音声"
 
-#: gtk/gtkfilechooserwidget.c:5001 gtk/inspector/visual.ui:230
+#: gtk/gtkfilechooserwidget.c:5011 gtk/inspector/visual.ui:230
 #: gtk/ui/gtkfontbutton.ui:13
 msgid "Font"
 msgstr "フォント"
 
-#: gtk/gtkfilechooserwidget.c:5002 gtk/inspector/visual.ui:488
+#: gtk/gtkfilechooserwidget.c:5012 gtk/inspector/visual.ui:488
 msgid "Image"
 msgstr "画像"
 
-#: gtk/gtkfilechooserwidget.c:5003
+#: gtk/gtkfilechooserwidget.c:5013
 msgid "Archive"
 msgstr "アーカイブ"
 
-#: gtk/gtkfilechooserwidget.c:5004
+#: gtk/gtkfilechooserwidget.c:5014
 msgid "Markup"
 msgstr "マークアップ"
 
-#: gtk/gtkfilechooserwidget.c:5005 gtk/gtkfilechooserwidget.c:5006
+#: gtk/gtkfilechooserwidget.c:5015 gtk/gtkfilechooserwidget.c:5016
 msgid "Text"
 msgstr "テキスト"
 
-#: gtk/gtkfilechooserwidget.c:5008
+#: gtk/gtkfilechooserwidget.c:5018
 msgid "Video"
 msgstr "動画"
 
-#: gtk/gtkfilechooserwidget.c:5009
+#: gtk/gtkfilechooserwidget.c:5019
 msgid "Contacts"
 msgstr "連絡先"
 
-#: gtk/gtkfilechooserwidget.c:5010
+#: gtk/gtkfilechooserwidget.c:5020
 msgid "Calendar"
 msgstr "カレンダー"
 
-#: gtk/gtkfilechooserwidget.c:5011
+#: gtk/gtkfilechooserwidget.c:5021
 msgid "Document"
 msgstr "ドキュメント"
 
-#: gtk/gtkfilechooserwidget.c:5012
+#: gtk/gtkfilechooserwidget.c:5022
 msgid "Presentation"
 msgstr "プレゼンテーション"
 
-#: gtk/gtkfilechooserwidget.c:5013
+#: gtk/gtkfilechooserwidget.c:5023
 msgid "Spreadsheet"
 msgstr "表計算"
 
 #. Translators: We don't know whether this printer is
 #. * available to print to.
-#: gtk/gtkfilechooserwidget.c:5044 gtk/gtkfilechooserwidget.c:5233
+#: gtk/gtkfilechooserwidget.c:5054 gtk/gtkfilechooserwidget.c:5243
 #: gtk/inspector/prop-editor.c:1689
 #: modules/printbackends/cloudprint/gtkprintbackendcloudprint.c:748
 msgid "Unknown"
 msgstr "不明"
 
-#: gtk/gtkfilechooserwidget.c:5272 gtk/gtkplacessidebar.c:1094
+#: gtk/gtkfilechooserwidget.c:5282 gtk/gtkplacessidebar.c:1094
 msgid "Home"
 msgstr "ホーム"
 
-#: gtk/gtkfilechooserwidget.c:5769
+#: gtk/gtkfilechooserwidget.c:5779
 msgid "Cannot change to folder because it is not local"
 msgstr "ローカルではないので、フォルダーを変更できません"
 
-#: gtk/gtkfilechooserwidget.c:6555 gtk/gtkprintunixdialog.c:665
+#: gtk/gtkfilechooserwidget.c:6565 gtk/gtkprintunixdialog.c:665
 #, c-format
 msgid "A file named “%s” already exists.  Do you want to replace it?"
 msgstr "“%s”というファイルはすでに存在します。上書きしますか?"
 
-#: gtk/gtkfilechooserwidget.c:6558 gtk/gtkprintunixdialog.c:669
+#: gtk/gtkfilechooserwidget.c:6568 gtk/gtkprintunixdialog.c:669
 #, c-format
 msgid ""
 "The file already exists in “%s”.  Replacing it will overwrite its contents."
 msgstr "“%s”にファイルがすでに存在します。すべての内容を上書きします。"
 
-#: gtk/gtkfilechooserwidget.c:6563 gtk/gtkprintunixdialog.c:677
+#: gtk/gtkfilechooserwidget.c:6573 gtk/gtkprintunixdialog.c:677
 msgid "_Replace"
 msgstr "置き換える(_R)"
 
-#: gtk/gtkfilechooserwidget.c:6782
+#: gtk/gtkfilechooserwidget.c:6792
 msgid "You do not have access to the specified folder."
 msgstr "指定したフォルダーへのアクセス権がありません。"
 
-#: gtk/gtkfilechooserwidget.c:7404
+#: gtk/gtkfilechooserwidget.c:7415
 msgid "Could not send the search request"
 msgstr "検索結果をプログラム側に送信できませんでした"
 
-#: gtk/gtkfilechooserwidget.c:7692
+#: gtk/gtkfilechooserwidget.c:7703
 msgid "Accessed"
 msgstr "アクセス日時"
 
-#: gtk/gtkfilechooserwidget.c:8811 gtk/ui/gtkfilechooserwidget.ui:69
+#: gtk/gtkfilechooserwidget.c:8822 gtk/ui/gtkfilechooserwidget.ui:69
 msgid "Create Folder"
 msgstr "フォルダーを作成します"
 
@@ -2949,69 +2949,69 @@ msgstr "はい(_Y)"
 msgid "Co_nnect"
 msgstr "接続する(_N)"
 
-#: gtk/gtkmountoperation.c:671
+#: gtk/gtkmountoperation.c:668
 msgid "Connect As"
 msgstr "接続方法"
 
-#: gtk/gtkmountoperation.c:680
+#: gtk/gtkmountoperation.c:677
 msgid "_Anonymous"
 msgstr "匿名(_A)"
 
-#: gtk/gtkmountoperation.c:689
+#: gtk/gtkmountoperation.c:686
 msgid "Registered U_ser"
 msgstr "登録ユーザー(_S)"
 
-#: gtk/gtkmountoperation.c:700
+#: gtk/gtkmountoperation.c:697
 msgid "_Username"
 msgstr "ユーザー名(_U)"
 
-#: gtk/gtkmountoperation.c:705
+#: gtk/gtkmountoperation.c:702
 msgid "_Domain"
 msgstr "ドメイン(_D)"
 
-#: gtk/gtkmountoperation.c:714
+#: gtk/gtkmountoperation.c:711
 msgid "Volume type"
 msgstr "ボリュームの種類"
 
-#: gtk/gtkmountoperation.c:724
+#: gtk/gtkmountoperation.c:721
 msgid "_Hidden"
 msgstr "隠しボリューム(_H)"
 
-#: gtk/gtkmountoperation.c:727
+#: gtk/gtkmountoperation.c:724
 msgid "_Windows system"
 msgstr "Windows システムボリューム(_W)"
 
-#: gtk/gtkmountoperation.c:730
+#: gtk/gtkmountoperation.c:727
 msgid "_PIM"
 msgstr "PIM(_P)"
 
-#: gtk/gtkmountoperation.c:736
+#: gtk/gtkmountoperation.c:733
 msgid "_Password"
 msgstr "パスワード(_P)"
 
-#: gtk/gtkmountoperation.c:758
+#: gtk/gtkmountoperation.c:755
 msgid "Forget password _immediately"
 msgstr "今すぐパスワードを破棄する(_I)"
 
-#: gtk/gtkmountoperation.c:768
+#: gtk/gtkmountoperation.c:765
 msgid "Remember password until you _logout"
 msgstr "ログアウトするまでパスワードを記憶する(_L)"
 
-#: gtk/gtkmountoperation.c:778
+#: gtk/gtkmountoperation.c:775
 msgid "Remember _forever"
 msgstr "期限なしで記憶する(_F)"
 
-#: gtk/gtkmountoperation.c:1173
+#: gtk/gtkmountoperation.c:1170
 #, c-format
 msgid "Unknown Application (PID %d)"
 msgstr "不明なアプリケーション (PID %d)"
 
-#: gtk/gtkmountoperation.c:1358
+#: gtk/gtkmountoperation.c:1355
 #, c-format
 msgid "Unable to end process"
 msgstr "プロセスを終了できません"
 
-#: gtk/gtkmountoperation.c:1392
+#: gtk/gtkmountoperation.c:1389
 msgid "_End Process"
 msgstr "プロセスを終了(_E)"
 
@@ -3266,12 +3266,12 @@ msgid "Unable to poll “%s” for media changes"
 msgstr "メディアの変更で“%s”を監視できません"
 
 #: gtk/gtkplacessidebar.c:3630 gtk/gtkplacessidebar.c:3696
-#: gtk/gtkplacesview.c:1692
+#: gtk/gtkplacesview.c:1706
 msgid "Open in New _Tab"
 msgstr "新しいタブで開く(_T)"
 
 #: gtk/gtkplacessidebar.c:3636 gtk/gtkplacessidebar.c:3699
-#: gtk/gtkplacesview.c:1703
+#: gtk/gtkplacesview.c:1717
 msgid "Open in New _Window"
 msgstr "新しいウィンドウで開く(_W)"
 
@@ -3287,11 +3287,11 @@ msgstr "削除(_R)"
 msgid "Rename…"
 msgstr "名前の変更…"
 
-#: gtk/gtkplacessidebar.c:3709 gtk/gtkplacesview.c:1737
+#: gtk/gtkplacessidebar.c:3709 gtk/gtkplacesview.c:1751
 msgid "_Mount"
 msgstr "マウント(_M)"
 
-#: gtk/gtkplacessidebar.c:3710 gtk/gtkplacesview.c:1727
+#: gtk/gtkplacessidebar.c:3710 gtk/gtkplacesview.c:1741
 msgid "_Unmount"
 msgstr "アンマウント(_U)"
 
@@ -3316,7 +3316,7 @@ msgid "No network locations found"
 msgstr "ネットワークの場所が見つかりませんでした"
 
 #. if it wasn't cancelled show a dialog
-#: gtk/gtkplacesview.c:1232 gtk/gtkplacesview.c:1307
+#: gtk/gtkplacesview.c:1232 gtk/gtkplacesview.c:1321
 msgid "Unable to access location"
 msgstr "要求された場所にアクセスできません"
 
@@ -3326,71 +3326,71 @@ msgid "Con_nect"
 msgstr "接続(_N)"
 
 #. if it wasn't cancelled show a dialog
-#: gtk/gtkplacesview.c:1370
+#: gtk/gtkplacesview.c:1384
 msgid "Unable to unmount volume"
 msgstr "ボリュームをアンマウントできません"
 
 #. Allow to cancel the operation
-#: gtk/gtkplacesview.c:1471
+#: gtk/gtkplacesview.c:1485
 msgid "Cance_l"
 msgstr "キャンセル(_L)"
 
-#: gtk/gtkplacesview.c:1634
+#: gtk/gtkplacesview.c:1648
 msgid "AppleTalk"
 msgstr "AppleTalk"
 
 #. Translators: do not translate ftp:// and ftps://
-#: gtk/gtkplacesview.c:1638
+#: gtk/gtkplacesview.c:1652
 msgid "File Transfer Protocol"
 msgstr "ファイル転送プロトコル"
 
-#: gtk/gtkplacesview.c:1638
+#: gtk/gtkplacesview.c:1652
 msgid "ftp:// or ftps://"
 msgstr "ftp:// または ftps://"
 
-#: gtk/gtkplacesview.c:1641
+#: gtk/gtkplacesview.c:1655
 msgid "Network File System"
 msgstr "ネットワークファイルシステム"
 
-#: gtk/gtkplacesview.c:1644
+#: gtk/gtkplacesview.c:1658
 msgid "Samba"
 msgstr "Samba"
 
 #. Translators: do not translate sftp:// and ssh://
-#: gtk/gtkplacesview.c:1648
+#: gtk/gtkplacesview.c:1662
 msgid "SSH File Transfer Protocol"
 msgstr "SSH ファイル転送プロトコル"
 
-#: gtk/gtkplacesview.c:1648
+#: gtk/gtkplacesview.c:1662
 msgid "sftp:// or ssh://"
 msgstr "sftp:// または ssh://"
 
 #. Translators: do not translate dav:// and davs://
-#: gtk/gtkplacesview.c:1652
+#: gtk/gtkplacesview.c:1666
 msgid "WebDAV"
 msgstr "WebDAV"
 
-#: gtk/gtkplacesview.c:1652
+#: gtk/gtkplacesview.c:1666
 msgid "dav:// or davs://"
 msgstr "dav:// または davs://"
 
-#: gtk/gtkplacesview.c:1727
+#: gtk/gtkplacesview.c:1741
 msgid "_Disconnect"
 msgstr "切断(_D)"
 
-#: gtk/gtkplacesview.c:1737
+#: gtk/gtkplacesview.c:1751
 msgid "_Connect"
 msgstr "接続(_C)"
 
-#: gtk/gtkplacesview.c:1878
+#: gtk/gtkplacesview.c:1892
 msgid "Unable to get remote server location"
 msgstr "指定したリモートサーバーの場所にアクセスできません"
 
-#: gtk/gtkplacesview.c:2073 gtk/gtkplacesview.c:2082
+#: gtk/gtkplacesview.c:2087 gtk/gtkplacesview.c:2096
 msgid "Networks"
 msgstr "ネットワーク"
 
-#: gtk/gtkplacesview.c:2073 gtk/gtkplacesview.c:2082
+#: gtk/gtkplacesview.c:2087 gtk/gtkplacesview.c:2096
 msgid "On This Computer"
 msgstr "このコンピューター"
 
@@ -3509,63 +3509,63 @@ msgid "The most probable reason is that a temporary file could not be created."
 msgstr "作業用のファイルを生成できないことが一番考えられそうな原因です。"
 
 #. window
-#: gtk/gtkprintoperation-portal.c:231 gtk/gtkprintoperation-portal.c:542
-#: gtk/gtkprintoperation-portal.c:611 gtk/gtkprintunixdialog.c:3415
+#: gtk/gtkprintoperation-portal.c:231 gtk/gtkprintoperation-portal.c:549
+#: gtk/gtkprintoperation-portal.c:618 gtk/gtkprintunixdialog.c:3415
 msgid "Print"
 msgstr "印刷"
 
-#: gtk/gtkprintoperation-win32.c:617
+#: gtk/gtkprintoperation-win32.c:631
 msgid "Printer offline"
 msgstr "プリンターはオフラインです"
 
-#: gtk/gtkprintoperation-win32.c:619
+#: gtk/gtkprintoperation-win32.c:633
 msgid "Out of paper"
 msgstr "用紙の範囲外"
 
 #. Translators: this is a printer status.
-#: gtk/gtkprintoperation-win32.c:621
+#: gtk/gtkprintoperation-win32.c:635
 #: modules/printbackends/cups/gtkprintbackendcups.c:2624
 msgid "Paused"
 msgstr "一時停止"
 
-#: gtk/gtkprintoperation-win32.c:623
+#: gtk/gtkprintoperation-win32.c:637
 msgid "Need user intervention"
 msgstr "ユーザーの操作が必要です"
 
-#: gtk/gtkprintoperation-win32.c:728
+#: gtk/gtkprintoperation-win32.c:742
 msgid "Custom size"
 msgstr "その他のサイズ"
 
-#: gtk/gtkprintoperation-win32.c:1587
+#: gtk/gtkprintoperation-win32.c:1613
 msgid "No printer found"
 msgstr "プリンターが見つかりません"
 
-#: gtk/gtkprintoperation-win32.c:1614
+#: gtk/gtkprintoperation-win32.c:1640
 msgid "Invalid argument to CreateDC"
 msgstr "CreateDC() の引数が無効です"
 
-#: gtk/gtkprintoperation-win32.c:1650 gtk/gtkprintoperation-win32.c:1896
+#: gtk/gtkprintoperation-win32.c:1676 gtk/gtkprintoperation-win32.c:1922
 msgid "Error from StartDoc"
 msgstr "StartDoc() でエラー"
 
-#: gtk/gtkprintoperation-win32.c:1751 gtk/gtkprintoperation-win32.c:1774
-#: gtk/gtkprintoperation-win32.c:1822
+#: gtk/gtkprintoperation-win32.c:1777 gtk/gtkprintoperation-win32.c:1800
+#: gtk/gtkprintoperation-win32.c:1848
 msgid "Not enough free memory"
 msgstr "メモリが足りません"
 
-#: gtk/gtkprintoperation-win32.c:1827
+#: gtk/gtkprintoperation-win32.c:1853
 msgid "Invalid argument to PrintDlgEx"
 msgstr "PrintDlgEx() の引数が無効です"
 
-#: gtk/gtkprintoperation-win32.c:1832
+#: gtk/gtkprintoperation-win32.c:1858
 msgid "Invalid pointer to PrintDlgEx"
 msgstr "PrintDlgEx() を指すポインターが無効です"
 
-#: gtk/gtkprintoperation-win32.c:1837
+#: gtk/gtkprintoperation-win32.c:1863
 msgid "Invalid handle to PrintDlgEx"
 msgstr "PrintDlgEx() のハンドラーが無効です"
 
-#: gtk/gtkprintoperation-win32.c:1842
+#: gtk/gtkprintoperation-win32.c:1868
 msgid "Unspecified error"
 msgstr "原因不明のエラー"
 
@@ -7680,7 +7680,7 @@ msgctxt "input method menu"
 msgid "Multipress"
 msgstr "マルチプレス"
 
-#: modules/input/imquartz.c:61
+#: modules/input/imquartz.c:69
 msgctxt "input method menu"
 msgid "Mac OS X Quartz"
 msgstr "Mac OS X Quartz"
