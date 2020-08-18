@@ -20,7 +20,7 @@ msgstr ""
 "Project-Id-Version: gtk+ master\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-08-17 10:27+0000\n"
-"PO-Revision-Date: 2020-06-10 18:45+0900\n"
+"PO-Revision-Date: 2020-08-18 17:45+0900\n"
 "Last-Translator: sicklylife <translation@sicklylife.jp>\n"
 "Language-Team: Japanese <gnome-translation@gnome.gr.jp>\n"
 "Language: ja\n"
@@ -465,13 +465,11 @@ msgstr "互換性のある転送フォーマットが見つかりませんでし
 #: gdk/macos/gdkmacosclipboard.c:289
 #, c-format
 msgid "Failed to decode contents with mime-type of '%s'"
-msgstr ""
+msgstr "MIME タイプ '%s' の内容のデコードに失敗しました"
 
 #: gdk/macos/gdkmacosglcontext.c:105
-#, fuzzy
-#| msgid "Unable to create a GL context"
 msgid "Unable to create a GL pixel format"
-msgstr "GL コンテキストを生成できません"
+msgstr "GL ピクセルフォーマットを生成できません"
 
 #: gdk/macos/gdkmacosglcontext.c:116 gdk/wayland/gdkglcontext-wayland.c:151
 #: gdk/win32/gdkglcontext-win32.c:947 gdk/win32/gdkglcontext-win32.c:988
@@ -484,7 +482,7 @@ msgstr "GL コンテキストを生成できません"
 #: gdk/win32/gdkglcontext-win32.c:798 gdk/win32/gdkglcontext-win32.c:913
 #: gdk/x11/gdkglcontext-x11.c:1129
 msgid "No available configurations for the given pixel format"
-msgstr "指定したピクセルフォーマットの利用可能な設定はありません"
+msgstr "指定されたピクセルフォーマットの利用可能な設定はありません"
 
 #: gdk/wayland/gdkglcontext-wayland.c:451 gdk/win32/gdkglcontext-win32.c:1072
 #: gdk/x11/gdkglcontext-x11.c:1432
@@ -557,13 +555,11 @@ msgstr ""
 "%lx。"
 
 #: gdk/win32/gdkclipdrop-win32.c:896
-#, fuzzy, c-format
-#| msgid ""
-#| "Cannot get clipboard data. Failed to allocate %lu bytes to store the data."
+#, c-format
 msgid ""
 "Cannot get clipboard data. Failed to allocate %s bytes to store the data."
 msgstr ""
-"クリップボードのデータを取得できません。データを格納するための %lu バイトの確"
+"クリップボードのデータを取得できません。データを格納するための %s バイトの確"
 "保に失敗しました。"
 
 #: gdk/win32/gdkclipdrop-win32.c:928
@@ -620,11 +616,10 @@ msgid "Cannot get DnD data. GlobalSize(0x%p) failed: 0x%lx."
 msgstr "DnD データを取得できません。GlobalSize(0x%p) に失敗しました。: 0x%lx。"
 
 #: gdk/win32/gdkdrop-win32.c:1230
-#, fuzzy, c-format
-#| msgid "Cannot get DnD data. Failed to allocate %lu bytes to store the data."
+#, c-format
 msgid "Cannot get DnD data. Failed to allocate %s bytes to store the data."
 msgstr ""
-"DnD データを取得できません。データを格納するための %lu バイトの確保に失敗しま"
+"DnD データを取得できません。データを格納するための %s バイトの確保に失敗しま"
 "した。"
 
 #: gdk/win32/gdkdrop-win32.c:1298
@@ -635,7 +630,7 @@ msgstr ""
 #: gdk/win32/gdkdrop-win32.c:1305
 #, c-format
 msgid "Target context record 0x%p has no data object"
-msgstr ""
+msgstr "対象のコンテキストレコード 0x%p にはデータオブジェクトがありません"
 
 #: gdk/win32/gdkdrop-win32.c:1343
 #, c-format
@@ -646,10 +641,11 @@ msgstr "IDataObject_GetData (0x%x) に失敗して 0x%lx が返されました"
 #, c-format
 msgid "Failed to transmute DnD data W32 format 0x%x to %p (%s)"
 msgstr ""
+"DnD データを W32 フォーマット 0x%x から %p (%s) に変換できませんでした"
 
 #: gdk/win32/gdkhdataoutputstream-win32.c:64
 msgid "writing a closed stream"
-msgstr ""
+msgstr "閉じたストリームへの書き込みです"
 
 #: gdk/win32/gdkhdataoutputstream-win32.c:86
 msgid "g_try_realloc () failed"
@@ -662,7 +658,7 @@ msgstr "GlobalReAlloc() に失敗しました: "
 
 #: gdk/win32/gdkhdataoutputstream-win32.c:106
 msgid "Ran out of buffer space (buffer size is fixed)"
-msgstr ""
+msgstr "バッファを使い切りました (バッファサイズが固定されています)"
 
 #: gdk/win32/gdkhdataoutputstream-win32.c:204
 msgid "Can’t transmute a single handle"
@@ -671,7 +667,7 @@ msgstr ""
 #: gdk/win32/gdkhdataoutputstream-win32.c:216
 #, c-format
 msgid "Failed to transmute %zu bytes of data from %s to %u"
-msgstr ""
+msgstr "%2$s からのデータの %1$zu バイトを %3$u に変換できませんでした"
 
 #: gdk/win32/gdkhdataoutputstream-win32.c:251
 msgid "GlobalLock() failed: "
@@ -700,15 +696,17 @@ msgstr[0] "%d 個のアイテムを開いています"
 #: gdk/x11/gdkclipboard-x11.c:433
 msgid "Clipboard manager could not store selection."
 msgstr ""
+"クリップボードマネージャーが選択範囲を保存できませんでした。"
 
 #: gdk/x11/gdkclipboard-x11.c:613
 msgid "Cannot store clipboard. No clipboard manager is active."
 msgstr ""
+"クリップボードに保存できません。クリップボードマネージャーが有効ではありません。"
 
 #: gdk/x11/gdkglcontext-x11.c:1157
 #, c-format
 msgid "No available configurations for the given RGBA pixel format"
-msgstr ""
+msgstr "指定された RGBA ピクセルフォーマットの利用可能な設定はありません"
 
 #: gdk/x11/gdkselectioninputstream-x11.c:462
 #, c-format
@@ -2888,10 +2886,8 @@ msgid "Role"
 msgstr ""
 
 #: gtk/inspector/a11y.ui:42
-#, fuzzy
-#| msgid "Attribute:"
 msgid "Attribute"
-msgstr "属性:"
+msgstr "属性"
 
 #: gtk/inspector/a11y.ui:54 gtk/inspector/css-node-tree.ui:119
 #: gtk/inspector/prop-list.ui:56 gtk/inspector/recorder.ui:115
@@ -3210,7 +3206,7 @@ msgstr "項目:"
 #: gtk/inspector/prop-editor.c:1392
 #, c-format
 msgid "Action from: %p (%s)"
-msgstr ""
+msgstr "次のアクション: %p (%s)"
 
 #: gtk/inspector/prop-editor.c:1447
 msgid "Reset"
@@ -3284,7 +3280,7 @@ msgstr "サイズ:"
 
 #: gtk/inspector/shortcuts.ui:17
 msgid "Trigger"
-msgstr ""
+msgstr "トリガー"
 
 #: gtk/inspector/size-groups.c:226
 msgctxt "sizegroup mode"
@@ -3418,19 +3414,19 @@ msgstr "アニメーション"
 
 #: gtk/inspector/visual.ui:378
 msgid "Slowdown"
-msgstr ""
+msgstr "スローダウン"
 
 #: gtk/inspector/visual.ui:432
 msgid "Show fps overlay"
-msgstr ""
+msgstr "FPS をオーバーレイ表示する"
 
 #: gtk/inspector/visual.ui:461
 msgid "Show Graphic Updates"
-msgstr "グラフィックスの更新を表示する"
+msgstr "グラフィックの更新を表示する"
 
 #: gtk/inspector/visual.ui:490
 msgid "Show Fallback Rendering"
-msgstr ""
+msgstr "フォールバックレンダリングを表示する"
 
 #: gtk/inspector/visual.ui:519
 msgid "Show Baselines"
@@ -3438,11 +3434,11 @@ msgstr "ベースラインを表示する"
 
 #: gtk/inspector/visual.ui:548
 msgid "Show Layout Borders"
-msgstr ""
+msgstr "レイアウトの境界を表示する"
 
 #: gtk/inspector/visual.ui:577
 msgid "Show Focus"
-msgstr ""
+msgstr "フォーカスを表示する"
 
 #: gtk/inspector/visual.ui:620
 msgid "Simulate Touchscreen"
@@ -3485,24 +3481,16 @@ msgid "Refresh action state"
 msgstr ""
 
 #: gtk/inspector/window.ui:340
-#, fuzzy
-#| msgctxt "Stock label, media"
-#| msgid "Pre_vious"
 msgid "Previous object"
-msgstr "前(_V)"
+msgstr "前のオブジェクト"
 
 #: gtk/inspector/window.ui:350
-#, fuzzy
-#| msgid "Child Properties"
 msgid "Child object"
-msgstr "子オブジェクトのプロパティ"
+msgstr "子オブジェクト"
 
 #: gtk/inspector/window.ui:360
-#, fuzzy
-#| msgctxt "Stock label, media"
-#| msgid "Pre_vious"
 msgid "Previous sibling"
-msgstr "前(_V)"
+msgstr ""
 
 #: gtk/inspector/window.ui:369
 msgid "List Position"
@@ -3549,10 +3537,8 @@ msgid "Magnifier"
 msgstr "拡大鏡"
 
 #: gtk/inspector/window.ui:530
-#, fuzzy
-#| msgid "Accessible Role"
 msgid "Accessibility"
-msgstr "アクセシブルなロール"
+msgstr "アクセシビリティ"
 
 #: gtk/inspector/window.ui:554
 msgid "Global"
