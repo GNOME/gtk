@@ -1364,7 +1364,9 @@ gtk_css_node_validate (GtkCssNode *cssnode)
 {
   GtkCountingBloomFilter filter = GTK_COUNTING_BLOOM_FILTER_INIT;
   gint64 timestamp;
-  gint64 before = g_get_monotonic_time ();
+  gint64 before G_GNUC_UNUSED;
+
+  before = GDK_PROFILER_CURRENT_TIME;
 
   g_assert (cssnode->parent == NULL);
 
@@ -1374,10 +1376,9 @@ gtk_css_node_validate (GtkCssNode *cssnode)
 
   if (GDK_PROFILER_IS_RUNNING)
     {
-      gint64 after = g_get_monotonic_time ();
-      gdk_profiler_add_mark (before, (after - before), "css validation", "");
-      gdk_profiler_set_int_counter (invalidated_nodes_counter, after, invalidated_nodes);
-      gdk_profiler_set_int_counter (created_styles_counter, after, created_styles);
+      gdk_profiler_end_mark (before,  "css validation", "");
+      gdk_profiler_set_int_counter (invalidated_nodes_counter, invalidated_nodes);
+      gdk_profiler_set_int_counter (created_styles_counter, created_styles);
       invalidated_nodes = 0;
       created_styles = 0;
     }

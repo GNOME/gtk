@@ -718,7 +718,7 @@ if profiler_enabled
     fallback: ['sysprof', 'libsysprof_capture_dep'],
   )
   if profiler_dep.found()
-    cdata.set('HAVE_SYSPROF_CAPTURE', profiler_dep.found())
+    cdata.set('HAVE_SYSPROF', profiler_dep.found())
   else
     error('Profiler support not found, but was explicitly requested.')
   endif

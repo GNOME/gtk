@@ -26,7 +26,6 @@
 
 #include "gdkversionmacros.h"
 
-#include "gdkprofilerprivate.h"
 #include "gdkinternals.h"
 #include "gdkintl.h"
 
@@ -303,11 +302,6 @@ gdk_pre_parse (void)
   if (g_getenv ("GDK_DEBUG"))
     g_warning ("GDK_DEBUG set but ignored because GTK isn't built with G_ENABLE_DEBUG");
 #endif  /* G_ENABLE_DEBUG */
-
-  if (g_getenv ("GTK_TRACE_FD"))
-    gdk_profiler_start (atoi (g_getenv ("GTK_TRACE_FD")));
-  else if (g_getenv ("GTK_TRACE"))
-    gdk_profiler_start (-1);
 
 #ifndef G_HAS_CONSTRUCTORS
   stash_desktop_startup_notification_id ();

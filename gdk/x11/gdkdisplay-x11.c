@@ -842,8 +842,7 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
 
           _gdk_x11_surface_grab_check_unmap (surface, xevent->xany.serial);
 
-          if (GDK_PROFILER_IS_RUNNING)
-            gdk_profiler_add_markf (g_get_monotonic_time (), 0, "unmapped window", "0x%lx", GDK_SURFACE_XID (surface));
+          gdk_profiler_add_markf (GDK_PROFILER_CURRENT_TIME, 0, "unmapped window", "0x%lx", GDK_SURFACE_XID (surface));
         }
 
       break;

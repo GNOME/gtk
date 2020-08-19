@@ -504,7 +504,7 @@ frame_callback (void               *data,
   GdkFrameClock *clock = gdk_surface_get_frame_clock (surface);
   GdkFrameTimings *timings;
 
-  gdk_profiler_add_mark (g_get_monotonic_time (), 0, "wayland", "frame event");
+  gdk_profiler_add_mark (GDK_PROFILER_CURRENT_TIME, 0, "wayland", "frame event");
   GDK_DISPLAY_NOTE (GDK_DISPLAY (display_wayland), EVENTS, g_message ("frame %p", surface));
 
   wl_callback_destroy (callback);
@@ -640,7 +640,7 @@ on_frame_clock_after_paint (GdkFrameClock *clock,
        * before we need to stage any changes, then we can take it back and
        * use it again.
        */
-      gdk_profiler_add_mark (g_get_monotonic_time (), 0, "wayland", "surface commit");
+      gdk_profiler_add_mark (GDK_PROFILER_CURRENT_TIME, 0, "wayland", "surface commit");
       wl_surface_commit (impl->display_server.wl_surface);
 
       impl->pending_commit = FALSE;
@@ -1801,7 +1801,7 @@ gdk_wayland_surface_create_xdg_toplevel (GdkSurface *surface)
   maybe_set_gtk_surface_dbus_properties (surface);
   maybe_set_gtk_surface_modal (surface);
 
-  gdk_profiler_add_mark (g_get_monotonic_time (), 0, "wayland", "surface commit");
+  gdk_profiler_add_mark (GDK_PROFILER_CURRENT_TIME, 0, "wayland", "surface commit");
   wl_surface_commit (impl->display_server.wl_surface);
 }
 
@@ -2558,7 +2558,7 @@ gdk_wayland_surface_create_xdg_popup (GdkSurface     *surface,
         }
     }
 
-  gdk_profiler_add_mark (g_get_monotonic_time (), 0, "wayland", "surface commit");
+  gdk_profiler_add_mark (GDK_PROFILER_CURRENT_TIME, 0, "wayland", "surface commit");
   wl_surface_commit (impl->display_server.wl_surface);
 
   if (GDK_IS_POPUP (surface))

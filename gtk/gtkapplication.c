@@ -252,25 +252,25 @@ gtk_application_startup (GApplication *g_application)
 {
   GtkApplication *application = GTK_APPLICATION (g_application);
   GtkApplicationPrivate *priv = gtk_application_get_instance_private (application);
-  gint64 before = g_get_monotonic_time ();
-  gint64 before2;
+  gint64 before G_GNUC_UNUSED;
+  gint64 before2 G_GNUC_UNUSED;
+
+  before = GDK_PROFILER_CURRENT_TIME;
 
   G_APPLICATION_CLASS (gtk_application_parent_class)->startup (g_application);
 
   gtk_action_muxer_insert (priv->muxer, "app", G_ACTION_GROUP (application));
 
-  before2 = g_get_monotonic_time ();
+  before2 = GDK_PROFILER_CURRENT_TIME;
   gtk_init ();
-  if (GDK_PROFILER_IS_RUNNING)
-    gdk_profiler_end_mark (before2, "gtk init", NULL);
+  gdk_profiler_end_mark (before2, "gtk init", NULL);
 
   priv->impl = gtk_application_impl_new (application, gdk_display_get_default ());
   gtk_application_impl_startup (priv->impl, priv->register_session);
 
   gtk_application_load_resources (application);
 
-  if (GDK_PROFILER_IS_RUNNING)
-    gdk_profiler_end_mark (before, "gtk application startup", NULL);
+  gdk_profiler_end_mark (before, "gtk application startup", NULL);
 }
 
 static void

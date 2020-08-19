@@ -175,17 +175,13 @@ gdk_draw_context_class_init (GdkDrawContextClass *klass)
   g_object_class_install_properties (gobject_class, LAST_PROP, pspecs);
 }
 
-#ifdef G_ENABLE_DEBUG
 static guint pixels_counter;
-#endif
 
 static void
 gdk_draw_context_init (GdkDrawContext *self)
 {
-#ifdef G_ENABLE_DEBUG
   if (pixels_counter == 0)
     pixels_counter = gdk_profiler_define_int_counter ("frame pixels", "Pixels drawn per frame");
-#endif
 }
 
 /**
@@ -325,7 +321,7 @@ gdk_draw_context_begin_frame (GdkDrawContext       *context,
   GDK_DRAW_CONTEXT_GET_CLASS (context)->begin_frame (context, priv->frame_region);
 }
 
-#ifdef G_ENABLE_DEBUG
+#ifdef HAVE_SYSPROF
 static gint64
 region_get_pixels (cairo_region_t *region)
 {
@@ -383,12 +379,7 @@ gdk_draw_context_end_frame (GdkDrawContext *context)
 
   GDK_DRAW_CONTEXT_GET_CLASS (context)->end_frame (context, priv->frame_region);
 
-#ifdef G_ENABLE_DEBUG
-  if (GDK_PROFILER_IS_RUNNING)
-    gdk_profiler_set_int_counter (pixels_counter,
-                                  g_get_monotonic_time (),
-                                  region_get_pixels (priv->frame_region));
-#endif
+  gdk_profiler_set_int_counter (pixels_counter, region_get_pixels (priv->frame_region));
 
   g_clear_pointer (&priv->frame_region, cairo_region_destroy);
   g_clear_object (&priv->surface->paint_context);

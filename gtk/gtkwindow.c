@@ -1873,15 +1873,16 @@ static void
 gtk_window_native_check_resize (GtkNative *native)
 {
   GtkWidget *widget = GTK_WIDGET (native);
-  gint64 before = g_get_monotonic_time ();
+  gint64 before G_GNUC_UNUSED;
+
+  before = GDK_PROFILER_CURRENT_TIME;
 
   if (!_gtk_widget_get_alloc_needed (widget))
     gtk_widget_ensure_allocate (widget);
   else if (gtk_widget_get_visible (widget))
     gtk_window_move_resize (GTK_WINDOW (native));
 
-  if (GDK_PROFILER_IS_RUNNING)
-    gdk_profiler_end_mark (before, "size allocation", "");
+  gdk_profiler_end_mark (before, "size allocation", "");
 }
 
 static void

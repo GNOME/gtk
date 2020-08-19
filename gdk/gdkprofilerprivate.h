@@ -21,52 +21,76 @@
 #include "gdk/gdkframeclock.h"
 #include "gdk/gdkdisplay.h"
 
-G_BEGIN_DECLS
-
 /* Ensure we included config.h as needed for the below HAVE_SYSPROF_CAPTURE check */
 #ifndef GETTEXT_PACKAGE
 #error "config.h was not included before gdkprofilerprivate.h."
 #endif
 
-/* We make this a macro you use as if (GDK_PROFILER_IS_RUNNING) because that
- * way we can ensure all the code is compiled out when not supported, and
- * we can add a G_UNLIKELY() for better codegen if it is.
- */
-#ifdef HAVE_SYSPROF_CAPTURE
-#define GDK_PROFILER_IS_RUNNING G_UNLIKELY (gdk_profiler_is_running ())
-#else
-#define GDK_PROFILER_IS_RUNNING FALSE
+#ifdef HAVE_SYSPROF
+#include <sysprof-capture.h>
 #endif
 
-void     gdk_profiler_start      (int fd);
-void     gdk_profiler_stop       (void);
+G_BEGIN_DECLS
+
+#ifdef HAVE_SYSPROF
+#define GDK_PROFILER_IS_RUNNING (gdk_profiler_is_running ())
+#define GDK_PROFILER_CURRENT_TIME SYSPROF_CAPTURE_CURRENT_TIME
+#else
+#define GDK_PROFILER_IS_RUNNING 0
+#define GDK_PROFILER_CURRENT_TIME 0
+#endif
+
 gboolean gdk_profiler_is_running (void);
-void     gdk_profiler_add_mark   (gint64           start,
-                                  guint64          duration,
-                                  const char      *name,
-                                  const char      *message);
-void     gdk_profiler_add_markf   (gint64           start,
-                                   guint64          duration,
-                                   const char      *name,
-                                   const char      *format,
-                                   ...)  G_GNUC_PRINTF (4, 5);
-void     gdk_profiler_end_mark   (gint64           start,
-                                  const char      *name,
-                                  const char      *message);
-void     gdk_profiler_end_markf   (gint64           start,
-                                   const char      *name,
-                                   const char      *format,
-                                   ...)  G_GNUC_PRINTF (3, 4);
-guint    gdk_profiler_define_counter (const char *name,
-                                      const char *description);
-void     gdk_profiler_set_counter    (guint  id,
-                                      gint64 time,
-                                      double value);
-guint    gdk_profiler_define_int_counter (const char *name,
-                                          const char *description);
-void     gdk_profiler_set_int_counter (guint  id,
-                                       gint64 time,
-                                       gint64 value);
+
+/* Note: Times and durations are in nanoseconds;
+ * g_get_monotonic_time(), and GdkFrameClock times
+ * are in microseconds, so multiply by 1000.
+ */
+void   gdk_profiler_add_mark  (gint64       begin_time,
+                               gint64       duration,
+                               const gchar *name,
+                               const gchar *message);
+void   gdk_profiler_add_markf (gint64       begin_time,
+                               gint64       duration,
+                               const gchar *name,
+                               const gchar *message_format,
+                               ...) G_GNUC_PRINTF (4, 5);
+void   gdk_profiler_end_mark  (gint64       begin_time,
+                               const gchar *name,
+                               const gchar *message);
+void   gdk_profiler_end_markf (gint64       begin_time,
+                               const gchar *name,
+                               const gchar *message_format,
+                               ...) G_GNUC_PRINTF (3, 4);
+
+guint   gdk_profiler_define_counter     (const char *name,
+                                         const char *description);
+guint   gdk_profiler_define_int_counter (const char *name,
+                                         const char *description);
+void    gdk_profiler_set_counter        (guint  id,
+                                         double value);
+void    gdk_profiler_set_int_counter    (guint  id,
+                                         gint64 value);
+
+#ifndef HAVE_SYSPROF
+#define gdk_profiler_add_mark(b, d, n, m)
+#define gdk_profiler_end_mark(b, n, m)
+/* Optimise the whole call out */
+#if defined(G_HAVE_ISO_VARARGS)
+#define gdk_profiler_add_markf(b, d, n, m, ...)
+#define gdk_profiler_end_markf(b, n, m, ...)
+#elif defined(G_HAVE_GNUC_VARARGS)
+#define gdk_profiler_add_markf(b, d, n, m...)
+#define gdk_profiler_end_markf(b, n, m...)
+#else
+/* no varargs macro support; the call will have to be optimised out by the compiler */
+#endif
+
+#define gdk_profiler_define_counter(n, d) 0
+#define gdk_profiler_define_int_counter(n, d) 0
+#define gdk_profiler_set_counter(i, v)
+#define gdk_profiler_set_int_counter(i, v)
+#endif
 
 G_END_DECLS
 
