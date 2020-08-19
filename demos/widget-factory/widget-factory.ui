@@ -3078,6 +3078,7 @@ bad things might happen.</property>
                 <property name="valign">baseline</property>
                 <property name="draw-value">0</property>
                 <property name="adjustment">adjustment1</property>
+                <signal name="value-changed" handler="level_scale_value_changed"/>
                 <layout>
                   <property name="column">1</property>
                   <property name="row">2</property>
@@ -3105,6 +3106,7 @@ bad things might happen.</property>
               <object class="GtkSwitch" id="mode_switch">
                 <property name="halign">start</property>
                 <property name="valign">baseline</property>
+                <signal name="state-set" handler="mode_switch_state_set"/>
                 <layout>
                   <property name="column">1</property>
                   <property name="row">3</property>
@@ -3112,12 +3114,11 @@ bad things might happen.</property>
               </object>
             </child>
             <child>
-              <object class="GtkLabel" id="switch_error">
+              <object class="GtkLabel" id="error_label">
                 <property name="visible">0</property>
                 <property name="halign">start</property>
                 <property name="valign">baseline</property>
-                <property name="label">Error!</property>
-                <property name="visible" bind-source="mode_switch" bind-property="active"></property>
+                <property name="label">Level too low</property>
                 <style>
                   <class name="error"/>
                 </style>

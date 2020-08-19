@@ -1896,6 +1896,48 @@ validate_more_details (GtkEntry   *entry,
     }
 }
 
+static gboolean
+mode_switch_state_set (GtkSwitch *sw, gboolean state)
+{
+  GtkWidget *dialog = gtk_widget_get_ancestor (GTK_WIDGET (sw), GTK_TYPE_DIALOG);
+  GtkWidget *scale = GTK_WIDGET (g_object_get_data (G_OBJECT (dialog), "level_scale"));
+  GtkWidget *label = GTK_WIDGET (g_object_get_data (G_OBJECT (dialog), "error_label"));
+
+  if (!state ||
+      (gtk_range_get_value (GTK_RANGE (scale)) > 50))
+    {
+      gtk_widget_hide (label);
+      gtk_switch_set_state (sw, state);
+    }
+  else
+    {
+      gtk_widget_show (label);
+    }
+
+  return TRUE;
+}
+
+static void
+level_scale_value_changed (GtkRange *range)
+{
+  GtkWidget *dialog = gtk_widget_get_ancestor (GTK_WIDGET (range), GTK_TYPE_DIALOG);
+  GtkWidget *sw = GTK_WIDGET (g_object_get_data (G_OBJECT (dialog), "mode_switch"));
+  GtkWidget *label = GTK_WIDGET (g_object_get_data (G_OBJECT (dialog), "error_label"));
+
+  if (gtk_switch_get_active (GTK_SWITCH (sw)) &&
+      !gtk_switch_get_state (GTK_SWITCH (sw)) &&
+      (gtk_range_get_value (range) > 50))
+    {
+      gtk_widget_hide (label);
+      gtk_switch_set_state (GTK_SWITCH (sw), TRUE);
+    }
+  else if (gtk_switch_get_state (GTK_SWITCH (sw)) &&
+          (gtk_range_get_value (range) <= 50))
+    {
+      gtk_switch_set_state (GTK_SWITCH (sw), FALSE);
+    }
+}
+
 static void
 activate (GApplication *app)
 {
@@ -1978,6 +2020,8 @@ activate (GApplication *app)
           "osd_frame_pressed", (GCallback)osd_frame_pressed,
           "age_entry_changed", (GCallback)age_entry_changed,
           "validate_more_details", (GCallback)validate_more_details,
+          "mode_switch_state_set", (GCallback)mode_switch_state_set,
+          "level_scale_value_changed", (GCallback)level_scale_value_changed,
           NULL);
   gtk_builder_set_scope (builder, scope);
   g_object_unref (scope);
@@ -2100,6 +2144,13 @@ activate (GApplication *app)
   g_signal_connect (widget, "clicked", G_CALLBACK (show_dialog), dialog);
   widget = (GtkWidget *)gtk_builder_get_object (builder, "circular_button");
   g_signal_connect (widget, "clicked", G_CALLBACK (show_dialog), dialog);
+
+  widget = (GtkWidget *)gtk_builder_get_object (builder, "level_scale");
+  g_object_set_data (G_OBJECT (dialog), "level_scale", widget);
+  widget = (GtkWidget *)gtk_builder_get_object (builder, "mode_switch");
+  g_object_set_data (G_OBJECT (dialog), "mode_switch", widget);
+  widget = (GtkWidget *)gtk_builder_get_object (builder, "error_label");
+  g_object_set_data (G_OBJECT (dialog), "error_label", widget);
 
   dialog = (GtkWidget *)gtk_builder_get_object (builder, "selection_dialog");
   g_object_set_data (G_OBJECT (window), "selection_dialog", dialog);
