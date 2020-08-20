@@ -335,17 +335,13 @@ GSettings schema.
 ## Profiling {#profiling}
 
 GTK supports profiling with sysprof. It exports timing information
-about frameclock phases and various characteristics of GskRenders
+about frameclock phases and various characteristics of GskRenderers
 in a format that can be displayed by sysprof or GNOME Builder.
 
-A simple way to capture data is to set the `GTK_TRACE` environment
-variable. When it is set, GTK will write profiling data to a file
-called `gtk.PID.syscap`.
+A simple way to capture data is to run your application under the
+`sysprof-cli` wrapper, which will write profiling data to a file
+called `capture.syscap`.
 
 When launching the application from sysprof, it will set the
 `SYSPROF_TRACE_FD` environment variable to point GTK at a file
 descriptor to write profiling data to.
-
-When GtkApplication registers with D-Bus, it exports the
-`org.gnome.Sysprof2.Profiler` D-Bus interface that lets sysprof
-request profiling data at runtime.
