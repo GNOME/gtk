@@ -394,14 +394,11 @@ list_box_header_func (GtkListBoxRow *row,
   else
     {
       before_section_type = SECTION_INVALID;
-      gtk_widget_set_margin_top (GTK_WIDGET (row), 4);
     }
 
   if (before && before_section_type != row_section_type)
     {
       separator = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
-      gtk_widget_set_margin_top (separator, 4);
-      gtk_widget_set_margin_bottom (separator, 4);
       gtk_list_box_row_set_header (row, separator);
     }
 }

@@ -3392,6 +3392,18 @@ row image.sidebar-icon { opacity: $_placesidebar_icons_opacity; } // dim the sid
 placessidebar, .navigation-sidebar {
   > scrolledwindow.frame { border-style: none; }
 
+  list {
+    padding: 4px 0;
+
+    > row {
+      margin: 1px 0;
+    }
+
+    > separator {
+      margin: 4px 0;
+    }
+  }
+
   row {
     // Needs overriding of the GtkListBoxRow padding
     min-height: 36px;
@@ -3607,10 +3619,14 @@ tooltip {
     color: white;
   }
 
-  padding: 4px;
+  padding: 10px;
   border-radius: 5px;
   box-shadow: none; // otherwise it gets inherited by windowframe.csd
   text-shadow: 0 1px black;
+
+  > box {
+    border-spacing: 6px;
+  }
 }
 
 

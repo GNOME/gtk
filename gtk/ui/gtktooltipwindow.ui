@@ -6,11 +6,6 @@
     </style>
     <child>
       <object class="GtkBox" id="box">
-        <property name="spacing">6</property>
-        <property name="margin-top">6</property>
-        <property name="margin-bottom">6</property>
-        <property name="margin-start">6</property>
-        <property name="margin-end">6</property>
         <child>
           <object class="GtkImage" id="image">
             <property name="icon-name">image-missing</property>
