@@ -3194,8 +3194,8 @@ avahi_service_resolver_cb (GObject      *source_object,
       if (data->resource_path != NULL)
         {
           if (data->got_printer_type &&
-              (g_strcmp0 (data->resource_path, "printers/") == 0 ||
-               g_strcmp0 (data->resource_path, "classes/") == 0))
+              (g_str_has_prefix (data->resource_path, "printers/") ||
+               g_str_has_prefix (data->resource_path, "classes/")))
             {
               /* This is a CUPS printer advertised via Avahi */
               printer_name = g_strrstr (data->resource_path, "/");
