@@ -1643,10 +1643,6 @@ microphone-sensitivity-medium-symbolic</property>
                                                 <property name="label" translatable="yes">Row 1</property>
                                                 <property name="halign">start</property>
                                                 <property name="valign">center</property>
-                                                <property name="margin-start">6</property>
-                                                <property name="margin-end">6</property>
-                                                <property name="margin-top">6</property>
-                                                <property name="margin-bottom">6</property>
                                                 <property name="hexpand">1</property>
                                               </object>
                                             </child>
@@ -1654,10 +1650,6 @@ microphone-sensitivity-medium-symbolic</property>
                                               <object class="GtkSwitch" id="listboxrow1switch">
                                                 <property name="halign">end</property>
                                                 <property name="valign">center</property>
-                                                <property name="margin-top">6</property>
-                                                <property name="margin-bottom">6</property>
-                                                <property name="margin-start">12</property>
-                                                <property name="margin-end">12</property>
                                               </object>
                                             </child>
                                           </object>
@@ -1674,10 +1666,6 @@ microphone-sensitivity-medium-symbolic</property>
                                                 <property name="label" translatable="yes">Row 2</property>
                                                 <property name="halign">start</property>
                                                 <property name="valign">center</property>
-                                                <property name="margin-start">6</property>
-                                                <property name="margin-end">6</property>
-                                                <property name="margin-top">6</property>
-                                                <property name="margin-bottom">6</property>
                                                 <property name="hexpand">1</property>
                                               </object>
                                             </child>
@@ -1685,10 +1673,6 @@ microphone-sensitivity-medium-symbolic</property>
                                               <object class="GtkScale" id="opacity">
                                                 <property name="halign">end</property>
                                                 <property name="valign">center</property>
-                                                <property name="margin-top">6</property>
-                                                <property name="margin-bottom">6</property>
-                                                <property name="margin-start">12</property>
-                                                <property name="margin-end">12</property>
                                                 <property name="draw-value">0</property>
                                                 <property name="width-request">150</property>
                                                 <property name="adjustment">adjustment1</property>
@@ -1707,10 +1691,6 @@ microphone-sensitivity-medium-symbolic</property>
                                                 <property name="label" translatable="yes">Row 3</property>
                                                 <property name="halign">start</property>
                                                 <property name="valign">center</property>
-                                                <property name="margin-start">6</property>
-                                                <property name="margin-end">6</property>
-                                                <property name="margin-top">6</property>
-                                                <property name="margin-bottom">6</property>
                                                 <property name="hexpand">1</property>
                                               </object>
                                             </child>
@@ -1719,10 +1699,6 @@ microphone-sensitivity-medium-symbolic</property>
                                                 <property name="icon-name">object-select-symbolic</property>
                                                 <property name="halign">end</property>
                                                 <property name="valign">center</property>
-                                                <property name="margin-top">6</property>
-                                                <property name="margin-bottom">6</property>
-                                                <property name="margin-start">12</property>
-                                                <property name="margin-end">12</property>
                                                 <property name="opacity">0</property>
                                               </object>
                                             </child>
@@ -1740,10 +1716,6 @@ microphone-sensitivity-medium-symbolic</property>
                                                 <property name="label" translatable="yes">Row 4</property>
                                                 <property name="halign">start</property>
                                                 <property name="valign">center</property>
-                                                <property name="margin-start">6</property>
-                                                <property name="margin-end">6</property>
-                                                <property name="margin-top">6</property>
-                                                <property name="margin-bottom">6</property>
                                                 <property name="hexpand">1</property>
                                               </object>
                                             </child>
@@ -1753,10 +1725,6 @@ microphone-sensitivity-medium-symbolic</property>
                                                 <property name="hexpand">1</property>
                                                 <property name="halign">end</property>
                                                 <property name="valign">center</property>
-                                                <property name="margin-top">6</property>
-                                                <property name="margin-bottom">6</property>
-                                                <property name="margin-start">12</property>
-                                                <property name="margin-end">12</property>
                                               </object>
                                             </child>
                                           </object>
@@ -1773,10 +1741,6 @@ microphone-sensitivity-medium-symbolic</property>
                                                 <property name="label" translatable="yes">Row 5</property>
                                                 <property name="halign">start</property>
                                                 <property name="valign">center</property>
-                                                <property name="margin-start">6</property>
-                                                <property name="margin-end">6</property>
-                                                <property name="margin-top">6</property>
-                                                <property name="margin-bottom">6</property>
                                                 <property name="hexpand">1</property>
                                               </object>
                                             </child>
@@ -1784,10 +1748,6 @@ microphone-sensitivity-medium-symbolic</property>
                                               <object class="GtkButton" id="listboxrow5button">
                                                 <property name="halign">end</property>
                                                 <property name="valign">center</property>
-                                                <property name="margin-top">6</property>
-                                                <property name="margin-bottom">6</property>
-                                                <property name="margin-start">12</property>
-                                                <property name="margin-end">12</property>
                                                 <property name="icon-name">appointment-soon-symbolic</property>
                                               </object>
                                             </child>
@@ -1805,10 +1765,6 @@ microphone-sensitivity-medium-symbolic</property>
                                                 <property name="label" translatable="yes">Row 6</property>
                                                 <property name="halign">start</property>
                                                 <property name="valign">center</property>
-                                                <property name="margin-start">6</property>
-                                                <property name="margin-end">6</property>
-                                                <property name="margin-top">6</property>
-                                                <property name="margin-bottom">6</property>
                                                 <property name="hexpand">1</property>
                                               </object>
                                             </child>
@@ -1816,10 +1772,6 @@ microphone-sensitivity-medium-symbolic</property>
                                               <object class="GtkCheckButton">
                                                 <property name="halign">end</property>
                                                 <property name="valign">center</property>
-                                                <property name="margin-top">6</property>
-                                                <property name="margin-bottom">6</property>
-                                                <property name="margin-start">12</property>
-                                                <property name="margin-end">12</property>
                                               </object>
                                             </child>
                                           </object>
@@ -1835,10 +1787,6 @@ microphone-sensitivity-medium-symbolic</property>
                                                 <property name="label" translatable="yes">Row 7</property>
                                                 <property name="halign">start</property>
                                                 <property name="valign">center</property>
-                                                <property name="margin-start">6</property>
-                                                <property name="margin-end">6</property>
-                                                <property name="margin-top">6</property>
-                                                <property name="margin-bottom">6</property>
                                                 <property name="hexpand">1</property>
                                               </object>
                                             </child>
@@ -1855,10 +1803,7 @@ microphone-sensitivity-medium-symbolic</property>
                                                 <property name="label" translatable="yes">Row 8</property>
                                                 <property name="halign">start</property>
                                                 <property name="valign">center</property>
-                                                <property name="margin-start">6</property>
-                                                <property name="margin-end">6</property>
-                                                <property name="margin-top">6</property>
-                                                <property name="margin-bottom">6</property>
+
                                                 <property name="hexpand">1</property>
                                               </object>
                                             </child>
