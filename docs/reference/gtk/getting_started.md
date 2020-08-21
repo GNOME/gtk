@@ -75,7 +75,7 @@ functions, types and macros required by GTK applications.
 
 Even if GTK installs multiple header files, only the top-level `gtk/gtk.h`
 header can be directly included by third-party code. The compiler will abort
-with an error if any othe header is directly included.
+with an error if any other header is directly included.
 
 In a GTK application, the purpose of the main() function is to create a
 GtkApplication object and run it. In this example a GtkApplication pointer
@@ -205,7 +205,7 @@ variable is created to store a GtkBox, which is GTK's way of controlling
 the size and layout of buttons.
 
 The GtkBox is created with gtk_box_new() which takes a GtkOrientation
-enum as parameter. The buttons which this box will contain can either be layed
+enum as parameter. The buttons which this box will contain can either be laid
 out horizontally or vertically. This does not matter in this particular case,
 as we are dealing with only one button. After initializing box with the newly
 created GtkBox, the code adds the box widget to the window widget using

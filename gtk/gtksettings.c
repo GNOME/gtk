@@ -954,7 +954,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
   /**
    * GtkSettings:gtk-overlay-scrolling:
    *
-   * Whether scrolled windows may use overlayed scrolling indicators.
+   * Whether scrolled windows may use overlaid scrolling indicators.
    * If this is set to %FALSE, scrolled windows will have permanent
    * scrollbars.
    */

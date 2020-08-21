@@ -2510,7 +2510,7 @@ _gtk_text_view_scroll_to_iter (GtkTextView   *text_view,
    * we're doing center alignment we align the center of the
    * character.
    *
-   * The differents cases handle on each direction:
+   * The different cases handle on each direction:
    *   1. cursor outside of the inner area define by within_margin
    *   2. if use_align == TRUE, alignment with xalign and yalign
    *   3. scrolling on the edges dependent of with_border
@@ -7425,7 +7425,7 @@ gtk_text_view_start_selection_drag (GtkTextView          *text_view,
       gtk_text_iter_order (&old_start, &old_end);
 
       /* move the front cursor, if the mouse is in front of the selection. Should the
-       * cursor however be inside the selection (this happens on tripple click) then we
+       * cursor however be inside the selection (this happens on triple click) then we
        * move the side which was last moved (current insert mark) */
       if (gtk_text_iter_compare (&cursor, &old_start) <= 0 ||
           (gtk_text_iter_compare (&cursor, &old_end) < 0 && 
@@ -9241,7 +9241,7 @@ ensure_child (GtkTextView        *text_view,
  *
  * Adds @child at a fixed coordinate in the #GtkTextView's text window. The
  * @xpos and @ypos must be in buffer coordinates (see
- * gtk_text_view_get_iter_location() to conver to buffer coordinates).
+ * gtk_text_view_get_iter_location() to convert to buffer coordinates).
  *
  * @child will scroll with the text view.
  *

@@ -118,7 +118,7 @@ static GPollFD event_poll_fd;
 
 /* Current NSEvents that we've gotten from Cocoa but haven't yet converted
  * to GdkEvents. We wait until our dispatch() function to do the conversion
- * since the conversion can conceivably cause signals to be emmitted
+ * since the conversion can conceivably cause signals to be emitted
  * or other things that shouldn’t happen inside a poll function.
  */
 static GQueue *current_events;
@@ -146,7 +146,7 @@ static NSAutoreleasePool *autorelease_pool;
 
 /* Flag when we've called nextEventMatchingMask ourself; this triggers
  * a run loop iteration, so we need to detect that and avoid triggering
- * our "run the GLib main looop while the run loop is active machinery.
+ * our "run the GLib main loop while the run loop is active machinery.
  */
 static int getting_events = 0;
 

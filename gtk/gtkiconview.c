@@ -3131,7 +3131,7 @@ gtk_icon_view_row_changed (GtkTreeModel *model,
    * and only invalidate a single item and queue a relayout
    * instead of invalidating the whole thing.
    *
-   * For now GtkIconView still cant deal with huge models
+   * For now GtkIconView still can't deal with huge models
    * so just invalidate the whole thing when the model
    * changes.
    */

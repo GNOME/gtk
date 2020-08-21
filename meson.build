@@ -439,7 +439,7 @@ endif
 
 cairo_libs = []
 if cc.get_id() == 'msvc'
-  # Fallback depedency discovery for those on Visual Studio that do not generate
+  # Fallback dependency discovery for those on Visual Studio that do not generate
   # pkg-config files in their build systems for MSVC
   # Fallback for Cairo
   if not cairo_dep.found()

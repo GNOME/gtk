@@ -265,7 +265,7 @@ gtk_statusbar_get_context_id (GtkStatusbar *statusbar,
   g_return_val_if_fail (GTK_IS_STATUSBAR (statusbar), 0);
   g_return_val_if_fail (context_description != NULL, 0);
 
-  /* we need to preserve namespaces on object datas */
+  /* we need to preserve namespaces on object data */
   string = g_strconcat ("gtk-status-bar-context:", context_description, NULL);
 
   id = GPOINTER_TO_UINT (g_object_get_data (G_OBJECT (statusbar), string));

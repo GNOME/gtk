@@ -2902,7 +2902,7 @@ find_printer_by_uuid (GtkPrintBackendCups *backend,
 }
 
 /*
- *  Create new GtkPrinter from informations included in TXT records.
+ *  Create new GtkPrinter from information included in TXT records.
  */
 static void
 create_cups_printer_from_avahi_data (AvahiConnectionTestData *data)

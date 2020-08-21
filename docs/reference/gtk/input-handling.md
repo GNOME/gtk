@@ -128,7 +128,7 @@ Mnmemonics
    They are used in places where a label is associated with a control,
    and are indicated by underlining the letter in the label. As a special
    case, inside menus (i.e. inside #GtkPopoverMenu), mnemonics can be
-   trigered without the modifier.
+   triggered without the modifier.
 Key bindings
  : Key bindings are specific to individual widgets, such as Ctrl-C or
    Ctrl-V in an entry copy to or paste from the clipboard. They are only

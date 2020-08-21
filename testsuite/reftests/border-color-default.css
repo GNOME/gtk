@@ -5,7 +5,7 @@
 }
 
 button {
-  /* using a nonexistant color because that will lead to the default value */
+  /* using a nonexistent color because that will lead to the default value */
   border-color: @doesnotexist;
   color: purple;
 }

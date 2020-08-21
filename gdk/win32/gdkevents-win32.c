@@ -3127,7 +3127,7 @@ gdk_event_translate (MSG *msg,
       if ((windowpos->flags & SWP_HIDEWINDOW) &&
 	  !GDK_SURFACE_DESTROYED (window))
 	{
-	  /* Make transient parent the forground window when window unmaps */
+	  /* Make transient parent the foreground window when window unmaps */
 	  impl = GDK_WIN32_SURFACE (window);
 
 	  if (impl->transient_owner &&

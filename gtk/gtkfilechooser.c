@@ -244,7 +244,7 @@ gtk_file_chooser_get_select_multiple (GtkFileChooser *chooser)
  * @chooser: a #GtkFileChooser
  * @create_folders: %TRUE if the Create Folder button should be displayed
  * 
- * Sets whether file choser will offer to create new folders.
+ * Sets whether file chooser will offer to create new folders.
  * This is only relevant if the action is not set to be 
  * %GTK_FILE_CHOOSER_ACTION_OPEN.
  **/
@@ -261,7 +261,7 @@ gtk_file_chooser_set_create_folders (GtkFileChooser *chooser,
  * gtk_file_chooser_get_create_folders:
  * @chooser: a #GtkFileChooser
  * 
- * Gets whether file choser will offer to create new folders.
+ * Gets whether file chooser will offer to create new folders.
  * See gtk_file_chooser_set_create_folders().
  * 
  * Returns: %TRUE if the Create Folder button should be displayed.

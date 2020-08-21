@@ -382,7 +382,7 @@ gtk_radio_button_set_group (GtkRadioButton *radio_button,
 /**
  * gtk_radio_button_join_group:
  * @radio_button: the #GtkRadioButton object
- * @group_source: (allow-none): a radio button object whos group we are 
+ * @group_source: (allow-none): a radio button object whose group we are 
  *   joining, or %NULL to remove the radio button from its group
  *
  * Joins a #GtkRadioButton object to the group of another #GtkRadioButton object

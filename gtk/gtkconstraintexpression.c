@@ -586,7 +586,7 @@ gtk_constraint_variable_set_iter_next (GtkConstraintVariableSetIter *iter,
  * @first: a #GtkConstraintVariable
  * @second: a #GtkConstraintVariable
  *
- * Creates a new #GtkConstraintVariablePair, containint @first and @second.
+ * Creates a new #GtkConstraintVariablePair, containing @first and @second.
  *
  * The #GtkConstraintVariablePair acquires a reference over the two
  * given #GtkConstraintVariables.

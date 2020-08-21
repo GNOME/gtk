@@ -127,7 +127,7 @@ _gdk_broadway_roundtrip_notify (GdkSurface  *surface,
   if (timings)
     {
       timings->refresh_interval = 33333; /* default to 1/30th of a second */
-      // This isn't quite right, since we've done a rountrip back too, can we do better?
+      // This isn't quite right, since we've done a roundtrip back too, can we do better?
       timings->presentation_time = g_get_monotonic_time ();
       timings->complete = TRUE;
 

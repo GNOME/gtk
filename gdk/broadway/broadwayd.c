@@ -38,7 +38,7 @@ static guint32 client_id_count = 1;
  * between its serials and daemon serials for any outstanding requests.
  *
  * There is some additional complexity in that there may be multiple consecutive web browser
- * sessions, so we need to keep track of the last daemon serial used inbetween each web client
+ * sessions, so we need to keep track of the last daemon serial used in between each web client
  * connection so that the daemon serials can be strictly increasing.
  */
 

@@ -565,7 +565,7 @@ gdk_gl_context_get_debug_enabled (GdkGLContext *context)
  *
  * Sets whether the #GdkGLContext should be forward compatible.
  *
- * Forward compatibile contexts must not support OpenGL functionality that
+ * Forward compatible contexts must not support OpenGL functionality that
  * has been marked as deprecated in the requested version; non-forward
  * compatible contexts, on the other hand, must support both deprecated and
  * non deprecated functionality.

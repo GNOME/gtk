@@ -1766,7 +1766,7 @@ gtk_builder_get_current_object (GtkBuilder *builder)
  *     %NULL for none
  *
  * Sets the current object for the @builder. The current object can be
- * tought of as the `this` object that the builder is working for and
+ * thought of as the `this` object that the builder is working for and
  * will often be used as the default object when an object is optional.
  *
  * gtk_widget_init_template() for example will set the current object to

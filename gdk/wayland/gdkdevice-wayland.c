@@ -699,7 +699,7 @@ gdk_wayland_device_grab (GdkDevice    *device,
       gdk_surface_get_mapped (surface))
     {
       g_warning ("Surface %p is already mapped at the time of grabbing. "
-                 "gdk_seat_grab() should be used to simultanously grab input "
+                 "gdk_seat_grab() should be used to simultaneously grab input "
                  "and show this popup. You may find oddities ahead.",
                  surface);
     }
@@ -1913,7 +1913,7 @@ keyboard_handle_leave (void               *data,
 
   /* gdk_surface_is_destroyed() might already return TRUE for
    * seat->keyboard_focus here, which would happen if we destroyed the
-   * surface before loosing keyboard focus.
+   * surface before losing keyboard focus.
    */
   stop_key_repeat (seat);
 

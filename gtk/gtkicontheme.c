@@ -231,7 +231,7 @@ gtk_string_set_add (GtkStringSet *set,
  * All private functions that take a GtkIconTheme (or one of its
  * private data types (like IconThemeDir, UnthemedIcon, etc) arg are
  * expected to be called with the icon theme lock held, unless the
- * funcion has a _unlocked suffix. Any similar function that must be
+ * function has a _unlocked suffix. Any similar function that must be
  * called on the main thread, will have a _mainthread suffix.
  *
  * So the rules for such functions are:
@@ -1395,7 +1395,7 @@ gtk_icon_theme_dispose (GObject *object)
    * we finalize on a thread and on the main thread some display or
    * setting signal is emitted.
    *
-   * It is possible that before we aquire the lock this happens
+   * It is possible that before we acquire the lock this happens
    * and the other thread refs the icon theme for some reason, but
    * this is ok as it is allowed to resurrect objects in dispose
    * (but not in finalize).

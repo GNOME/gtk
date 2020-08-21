@@ -1,6 +1,6 @@
 #! /bin/bash
 
-# This script extracts the typical xgettext invokation out of
+# This script extracts the typical xgettext invocation out of
 # po/Makefile.in.in, in order for it to be available as a shell
 # command without the need to autogen first. This is needed for
 # translation tools such as the damn lies website.

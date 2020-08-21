@@ -697,7 +697,7 @@ gtk_column_view_column_set_factory (GtkColumnViewColumn *self,
  * @title: (nullable): Title to use for this column
  *
  * Sets the title of this column. The title is displayed in the header of a
- * #GtkColumnView for this column and is therefor user-facing text that should
+ * #GtkColumnView for this column and is therefore user-facing text that should
  * be translated.
  */
 void

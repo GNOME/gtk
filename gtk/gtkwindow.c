@@ -3548,7 +3548,7 @@ gtk_window_resize (GtkWindow *window,
  * excluding the widgets used in client side decorations; there is,
  * however, no guarantee that the result will be completely accurate
  * because client side decoration may include widgets that depend on
- * the user preferences and that may not be visibile at the time you
+ * the user preferences and that may not be visible at the time you
  * call this function.
  *
  * The dimensions returned by this function are suitable for being

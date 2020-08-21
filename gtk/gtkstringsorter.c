@@ -289,7 +289,7 @@ gtk_string_sorter_class_init (GtkStringSorterClass *class)
   /**
    * GtkStringSorter:expression: (type GtkExpression)
    *
-   * The expression to evalute on item to get a string to compare with
+   * The expression to evaluate on item to get a string to compare with
    */
   properties[PROP_EXPRESSION] =
     gtk_param_spec_expression ("expression",

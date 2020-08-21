@@ -151,7 +151,7 @@ handle_event (GtkInspectorWindow *iw, GdkEvent *event)
 
         if (gtk_widget_get_root (widget) == GTK_ROOT (iw))
           {
-            /* Don't hilight things in the inspector window */
+            /* Don't highlight things in the inspector window */
             break;
           }
 

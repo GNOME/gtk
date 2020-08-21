@@ -156,7 +156,7 @@ _cairo_write (void                *closure,
   error = NULL;
 
   GTK_NOTE (PRINTING,
-            g_print ("LPR Backend: Writting %i byte chunk to temp file\n", length));
+            g_print ("LPR Backend: Writing %i byte chunk to temp file\n", length));
 
   while (length > 0) 
     {
@@ -165,7 +165,7 @@ _cairo_write (void                *closure,
       if (error != NULL)
 	{
 	  GTK_NOTE (PRINTING,
-                     g_print ("LPR Backend: Error writting to temp file, %s\n", error->message));
+                     g_print ("LPR Backend: Error writing to temp file, %s\n", error->message));
 
           g_error_free (error);
 	  return CAIRO_STATUS_WRITE_ERROR;
@@ -284,7 +284,7 @@ lpr_write (GIOChannel   *source,
     }
 
   GTK_NOTE (PRINTING,
-            g_print ("LPR Backend: Writting %" G_GSIZE_FORMAT " byte chunk to lpr pipe\n", bytes_read));
+            g_print ("LPR Backend: Writing %" G_GSIZE_FORMAT " byte chunk to lpr pipe\n", bytes_read));
 
 
   return TRUE;

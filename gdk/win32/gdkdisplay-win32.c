@@ -1098,7 +1098,7 @@ _gdk_win32_display_get_monitor_scale_factor (GdkWin32Display *win32_display,
     }
   else
     {
-      /* Go back to GetDeviceCaps() for Windows 8 and earler, or when we don't
+      /* Go back to GetDeviceCaps() for Windows 8 and earlier, or when we don't
        * have a HMONITOR nor a HWND
        */
       HDC hdc = GetDC (hwnd);

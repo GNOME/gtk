@@ -79,7 +79,7 @@ gdk_cairo_context_init (GdkCairoContext *self)
  *
  * Returns: (transfer full) (nullable): a Cairo context to be used
  *   to draw the contents of the #GdkSurface. %NULL is returned
- *   when @contet is not drawing.
+ *   when @context is not drawing.
  */
 cairo_t *
 gdk_cairo_context_cairo_create (GdkCairoContext *self)

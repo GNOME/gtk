@@ -469,7 +469,7 @@ gtk_revealer_size_allocate (GtkWidget *widget,
     }
 
   /* We request a different size than the child requested scaled by
-   * this scale as it will render smaller from the transision.
+   * this scale as it will render smaller from the transition.
    * However, we still want to allocate the child widget with its
    * unscaled size so it renders right instead of e.g. ellipsizing or
    * some other form of clipping. We do this by reverse-applying

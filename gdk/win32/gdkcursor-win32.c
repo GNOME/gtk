@@ -1370,7 +1370,7 @@ pixbuf_to_hbitmaps_normal (GdkPixbuf *pixbuf,
       return FALSE;
     }
 
-  /* rows are always aligned on 4-byte boundarys */
+  /* rows are always aligned on 4-byte boundaries */
   bmstride = size * 3;
   if (bmstride % 4 != 0)
     bmstride += 4 - (bmstride % 4);

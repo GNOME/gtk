@@ -521,7 +521,7 @@ gtk_gl_area_allocate_texture (GtkGLArea *area)
  *
  * Ensures that the @area framebuffer object is made the current draw
  * and read target, and that all the required buffers for the @area
- * are created and bound to the frambuffer.
+ * are created and bound to the framebuffer.
  *
  * This function is automatically called before emitting the
  * #GtkGLArea::render signal, and doesn't normally need to be called
@@ -811,7 +811,7 @@ gtk_gl_area_class_init (GtkGLAreaClass *klass)
    * If set to %FALSE the data from previous rendering is kept around and will
    * be used for drawing the widget the next time, unless the window is resized.
    * In order to force a rendering gtk_gl_area_queue_render() must be called.
-   * This mode is useful when the scene changes seldomly, but takes a long time
+   * This mode is useful when the scene changes seldom, but takes a long time
    * to redraw.
    */
   obj_props[PROP_AUTO_RENDER] =
@@ -1271,7 +1271,7 @@ gtk_gl_area_get_auto_render (GtkGLArea *area)
  * around and will be used for drawing the widget the next time,
  * unless the window is resized. In order to force a rendering
  * gtk_gl_area_queue_render() must be called. This mode is useful when
- * the scene changes seldomly, but takes a long time to redraw.
+ * the scene changes seldom, but takes a long time to redraw.
  */
 void
 gtk_gl_area_set_auto_render (GtkGLArea *area,

@@ -82,7 +82,7 @@
  *
  * GtkLabel has a single CSS node with the name label. A wide variety
  * of style classes may be applied to labels, such as .title, .subtitle,
- * .dim-label, etc. In the #GtkShortcutsWindow, labels are used wth the
+ * .dim-label, etc. In the #GtkShortcutsWindow, labels are used with the
  * .keycap style class.
  *
  * If the label has a selection, it gets a subnode with name selection.
@@ -778,7 +778,7 @@ gtk_label_class_init (GtkLabelClass *class)
   /**
    * GtkLabel:xalign:
    *
-   * The xalign property determines the horizontal aligment of the label text
+   * The xalign property determines the horizontal alignment of the label text
    * inside the labels size allocation. Compare this to #GtkWidget:halign,
    * which determines how the labels size allocation is positioned in the
    * space available for the label.
@@ -794,7 +794,7 @@ gtk_label_class_init (GtkLabelClass *class)
   /**
    * GtkLabel:yalign:
    *
-   * The yalign property determines the vertical aligment of the label text
+   * The yalign property determines the vertical alignment of the label text
    * inside the labels size allocation. Compare this to #GtkWidget:valign,
    * which determines how the labels size allocation is positioned in the
    * space available for the label.

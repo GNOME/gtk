@@ -179,7 +179,7 @@ struct _GdkWin32Clipdrop
    */
   GAsyncQueue      *clipboard_render_queue;
 
-  /* Window handle for the clipboard window tha we
+  /* Window handle for the clipboard window that we
    * receive from the clipboard thread. We use that
    * to wake up the clipboard window main loop by
    * posting a message to it.

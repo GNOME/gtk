@@ -508,7 +508,7 @@ background_area (void)
 
   gtk_window_set_title (GTK_WINDOW (window), "Background Area");
 
-  label = gtk_label_new ("In this example, row spacing gets devided into the background area, "
+  label = gtk_label_new ("In this example, row spacing gets divided into the background area, "
 			 "column spacing is added between each background area, item_padding is "
 			 "prepended space distributed to the background area.");
   gtk_label_set_wrap (GTK_LABEL (label), TRUE);

@@ -69,7 +69,7 @@
  * or its parents. Usually, having a dependency on the state of any child
  * node is not possible, unless references are taken on these explicitly.
  * When no such reference exists, no signals may be received for these child
- * nodes (see reference couting rule number 3 in the #GtkTreeModel section).
+ * nodes (see reference counting rule number 3 in the #GtkTreeModel section).
  *
  * Determining the visibility state of a given node based on the state
  * of its child nodes is a frequently occurring use case. Therefore,

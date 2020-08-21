@@ -109,7 +109,7 @@ struct _GtkTextLayout
    * i.e. pixels we should wrap to fit inside. */
   int screen_width;
 
-  /* width/height of the total logical area being layed out */
+  /* width/height of the total logical area being laid out */
   int width;
   int height;
 

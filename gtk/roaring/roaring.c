@@ -548,7 +548,7 @@ int32_t difference_vector16(const uint16_t *__restrict__ A, size_t s_a,
         return (int32_t)s_a;
     }
     // handle the leading zeroes, it is messy but it allows us to use the fast
-    // _mm_cmpistrm instrinsic safely
+    // _mm_cmpistrm intrinsic safely
     int32_t count = 0;
     if ((A[0] == 0) || (B[0] == 0)) {
         if ((A[0] == 0) && (B[0] == 0)) {
@@ -4255,7 +4255,7 @@ void *container_clone(const void *container, uint8_t typecode) {
         case RUN_CONTAINER_TYPE_CODE:
             return run_container_clone((const run_container_t *)container);
         case SHARED_CONTAINER_TYPE_CODE:
-            printf("shared containers are not cloneable\n");
+            printf("shared containers are not clonable\n");
             assert(false);
             return NULL;
         default:
@@ -5212,10 +5212,10 @@ void array_bitset_container_intersection(const array_container_t *src_1,
          * if (bitset_container_contains(src_2, key)) {
          * dst->array[newcard++] = key;
          * }
-         * but if the result is unpredictible, the processor generates
+         * but if the result is unpredictable, the processor generates
          * many mispredicted branches.
-         * Difference can be huge (from 3 cycles when predictible all the way
-         * to 16 cycles when unpredictible.
+         * Difference can be huge (from 3 cycles when predictable all the way
+         * to 16 cycles when unpredictable.
          * See
          * https://github.com/lemire/Code-used-on-Daniel-Lemire-s-blog/blob/master/extra/bitset/c/arraybitsetintersection.c
          */
@@ -10121,7 +10121,7 @@ bool roaring_bitmap_is_strict_subset(const roaring_bitmap_t *ra1,
  * all containers of respective type.
  *
  * <*_data> and <keys> are kept close together because they are not accessed
- * during deserilization. This may reduce IO in case of large mmaped bitmaps.
+ * during deserilization. This may reduce IO in case of large mapped bitmaps.
  * All members have their native alignments during deserilization except <header>,
  * which is not guaranteed to be aligned by 4 bytes.
  */

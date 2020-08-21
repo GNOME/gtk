@@ -83,7 +83,7 @@
  * gtk_show_uri_on_window() is a convenient way to launch applications for URIs.
  *
  * Another object that is worth mentioning in this context is
- * #GdkAppLaunchContext, which provides visual feedback when lauching
+ * #GdkAppLaunchContext, which provides visual feedback when launching
  * applications.
  */
 

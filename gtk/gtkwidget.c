@@ -9393,7 +9393,7 @@ gtk_widget_do_pick (GtkWidget    *widget,
  * Widgets are however free to customize their picking algorithm.
  *
  * This function is used on the toplevel to determine the widget below
- * the mouse cursor for purposes of hover hilighting and delivering events.
+ * the mouse cursor for purposes of hover highlighting and delivering events.
  *
  * Returns: (nullable) (transfer none): The widget descendant at the given
  *     coordinate or %NULL if none.

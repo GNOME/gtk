@@ -47,7 +47,7 @@ static Bug bugs[] =
   { FALSE, 56925, "Normal",     "Gtkcalender size" },
   { FALSE, 56221, "Normal",     "Selectable label needs right-click copy menu" },
   { TRUE,  50939, "Normal",     "Add shift clicking to GtkTextView" },
-  { FALSE, 6112,  "Enhancement","netscape-like collapsable toolbars" },
+  { FALSE, 6112,  "Enhancement","netscape-like collapsible toolbars" },
   { FALSE, 1,     "Normal",     "First bug :=)" },
 };
 

@@ -156,7 +156,7 @@ gtk_property_lookup_list_model_ensure (GtkPropertyLookupListModel *self,
 
   if (gtk_property_lookup_list_model_append (self, n_items) == n_items)
     {
-      /* readd NULL sentinel */
+      /* re-add NULL sentinel */
       g_ptr_array_add (self->items, NULL);
     }
 }

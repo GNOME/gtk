@@ -1581,7 +1581,7 @@ gtk_flow_box_size_allocate (GtkWidget *widget,
   /* By default flow at the natural item width */
   line_length = avail_size / (nat_item_size + item_spacing);
 
-  /* After the above aproximation, check if we cant fit one more on the line */
+  /* After the above approximation, check if we can't fit one more on the line */
   if (line_length * item_spacing + (line_length + 1) * nat_item_size <= avail_size)
     line_length++;
 
@@ -1621,7 +1621,7 @@ gtk_flow_box_size_allocate (GtkWidget *widget,
       if (line_align != GTK_ALIGN_FILL)
         line_size = MIN (line_size, nat_fixed_line_size);
 
-      /* Get the real extra pixels incase of GTK_ALIGN_START lines */
+      /* Get the real extra pixels in case of GTK_ALIGN_START lines */
       extra_pixels = avail_size - (line_length - 1) * item_spacing - item_size * line_length;
       extra_line_pixels = avail_other_size - (n_lines - 1) * line_spacing - line_size * n_lines;
     }
@@ -2012,7 +2012,7 @@ gtk_flow_box_measure (GtkWidget      *widget,
                       nat_width += nat_line_length;
                     }
                 }
-              else /* In homogeneous mode; horizontally oriented boxs
+              else /* In homogeneous mode; horizontally oriented boxes
                     * give the same width to all children */
                 {
                   get_max_item_size (box, GTK_ORIENTATION_HORIZONTAL,
@@ -2096,7 +2096,7 @@ gtk_flow_box_measure (GtkWidget      *widget,
               /* By default flow at the natural item width */
               line_length = avail_size / (nat_item_height + priv->row_spacing);
 
-              /* After the above aproximation, check if we cant fit one more on the line */
+              /* After the above approximation, check if we can't fit one more on the line */
               if (line_length * priv->row_spacing + (line_length + 1) * nat_item_height <= avail_size)
                 line_length++;
 
@@ -2336,7 +2336,7 @@ gtk_flow_box_measure (GtkWidget      *widget,
               /* By default flow at the natural item width */
               line_length = avail_size / (nat_item_width + priv->column_spacing);
 
-              /* After the above aproximation, check if we cant fit one more on the line */
+              /* After the above approximation, check if we can't fit one more on the line */
               if (line_length * priv->column_spacing + (line_length + 1) * nat_item_width <= avail_size)
                 line_length++;
 
@@ -3690,7 +3690,7 @@ gtk_flow_box_class_init (GtkFlowBoxClass *class)
 
   /**
    * GtkFlowBox::selected-children-changed:
-   * @box: the #GtkFlowBox on wich the signal is emitted
+   * @box: the #GtkFlowBox on which the signal is emitted
    *
    * The ::selected-children-changed signal is emitted when the
    * set of selected children changes.
@@ -3976,7 +3976,7 @@ gtk_flow_box_bound_model_changed (GListModel *list,
     }
 }
 
-/* Buildable implemenation {{{3 */
+/* Buildable implementation {{{3 */
 
 static GtkBuildableIface *parent_buildable_iface;
 

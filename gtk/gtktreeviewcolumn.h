@@ -40,7 +40,7 @@ typedef struct _GtkTreeViewColumn        GtkTreeViewColumn;
 /**
  * GtkTreeViewColumnSizing:
  * @GTK_TREE_VIEW_COLUMN_GROW_ONLY: Columns only get bigger in reaction to changes in the model
- * @GTK_TREE_VIEW_COLUMN_AUTOSIZE: Columns resize to be the optimal size everytime the model changes.
+ * @GTK_TREE_VIEW_COLUMN_AUTOSIZE: Columns resize to be the optimal size every time the model changes.
  * @GTK_TREE_VIEW_COLUMN_FIXED: Columns are a fixed numbers of pixels wide.
  *
  * The sizing method the column uses to determine its width.  Please note

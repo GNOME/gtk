@@ -31,7 +31,7 @@
  *
  *   y'' = -my'
  *
- * With m the resistence factor. For this we use the following 2
+ * With m the resistance factor. For this we use the following 2
  * base solutions:
  *
  *   f1(x) = 1

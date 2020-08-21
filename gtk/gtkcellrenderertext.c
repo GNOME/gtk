@@ -1853,7 +1853,7 @@ gtk_cell_renderer_text_start_editing (GtkCellRenderer      *cell,
  * Sets the height of a renderer to explicitly be determined by the “font” and
  * “y_pad” property set on it.  Further changes in these properties do not
  * affect the height, so they must be accompanied by a subsequent call to this
- * function.  Using this function is unflexible, and should really only be used
+ * function.  Using this function is inflexible, and should really only be used
  * if calculating the size of a cell is too slow (ie, a massive number of cells
  * displayed).  If @number_of_rows is -1, then the fixed height is unset, and
  * the height is determined by the properties again.
@@ -2003,7 +2003,7 @@ gtk_cell_renderer_text_get_preferred_height (GtkCellRenderer *cell,
    * height-for-width and not the opposite. Here we have only to return
    * the height for the base minimum width of the renderer.
    *
-   * Note this code path wont be followed by GtkTreeView which is
+   * Note this code path won't be followed by GtkTreeView which is
    * height-for-width specifically.
    */
   gtk_cell_renderer_get_preferred_width (cell, widget, &min_width, NULL);

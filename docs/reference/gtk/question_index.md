@@ -445,7 +445,7 @@ the question you have, this list is a good place to start.
     gtk_list_store_set() and gtk_tree_store_set(), but can't read it back?
 
     Both the #GtkTreeStore and the #GtkListStore implement the #GtkTreeModel
-    interface. Consequentially, you can use any function this interface
+    interface. As a consequence, you can use any function this interface
     implements. The easiest way to read a set of data back is to use
     gtk_tree_model_get().
 

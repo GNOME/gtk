@@ -42,7 +42,7 @@
  * and #GtkCellAreaContext. A #GtkCellAreaContext can be provided to the 
  * #GtkCellView at construction time in order to keep the cellview in context
  * of a group of cell views, this ensures that the renderers displayed will
- * be properly aligned with eachother (like the aligned cells in the menus
+ * be properly aligned with each other (like the aligned cells in the menus
  * of #GtkComboBox).
  *
  * #GtkCellView is #GtkOrientable in order to decide in which orientation
@@ -268,7 +268,7 @@ gtk_cell_view_class_init (GtkCellViewClass *klass)
    *
    * Whether the view should request enough space to always fit
    * the size of every row in the model (used by the combo box to
-   * ensure the combo box size doesnt change when different items
+   * ensure the combo box size doesn't change when different items
    * are selected).
    *
    * since 3.0
@@ -840,7 +840,7 @@ gtk_cell_view_new (void)
  * Creates a new #GtkCellView widget with a specific #GtkCellArea
  * to layout cells and a specific #GtkCellAreaContext.
  *
- * Specifying the same context for a handfull of cells lets
+ * Specifying the same context for a handful of cells lets
  * the underlying area synchronize the geometry for those cells,
  * in this way alignments with cellviews for other rows are
  * possible.

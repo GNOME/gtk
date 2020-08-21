@@ -312,7 +312,7 @@ gdk_draw_context_begin_frame (GdkDrawContext       *context,
       else
         {
           g_critical ("The surface %p is already being drawn by %s %p. "
-                      "You cannot draw s surface wih multiple contexts at the same time.",
+                      "You cannot draw a surface with multiple contexts at the same time.",
                       priv->surface,
                       G_OBJECT_TYPE_NAME (priv->surface->paint_context), priv->surface->paint_context);
         }
@@ -404,7 +404,7 @@ gdk_draw_context_end_frame (GdkDrawContext *context)
  * a union of the region passed to that function and the area of the surface
  * that the @context determined needs to be repainted.
  *
- * If @context is not inbetween calls to gdk_draw_context_begin_frame() and
+ * If @context is not in between calls to gdk_draw_context_begin_frame() and
  * gdk_draw_context_end_frame(), %NULL will be returned.
  *
  * Returns: (transfer none) (nullable): a Cairo region or %NULL if not drawing

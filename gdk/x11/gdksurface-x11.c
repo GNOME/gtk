@@ -243,7 +243,7 @@ on_surface_changed (void *data)
  * window only when there actually is drawing. To do that we use
  * a technique (hack) suggested by Uli Schlachter - if we set
  * a dummy "mime data" on the cairo surface (this facility is
- * used to attach JPEG data to an imager), then cairo wil flush
+ * used to attach JPEG data to an imager), then cairo will flush
  * and remove the mime data before making any changes to the window.
  */
 

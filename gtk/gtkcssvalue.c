@@ -244,7 +244,7 @@ gboolean
 _gtk_css_value_equal0 (const GtkCssValue *value1,
                        const GtkCssValue *value2)
 {
-  /* Inclues both values being NULL */
+  /* Includes both values being NULL */
   if (value1 == value2)
     return TRUE;
 

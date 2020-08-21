@@ -13068,7 +13068,7 @@
     "aliases_ascii" : [
     ],
     "keywords" : [
-      "accomodation",
+      "accommodation",
       "building",
       "checkin",
       "motel",
@@ -21958,7 +21958,7 @@
   "clock1" : {
     "unicode" : "1f550",
     "unicode_alternates" : "",
-    "name" : "clock face one oclock",
+    "name" : "clock face one o'clock",
     "shortname" : ":clock1:",
     "category" : "symbols",
     "emoji_order" : "1013",
@@ -21978,7 +21978,7 @@
   "clock2" : {
     "unicode" : "1f551",
     "unicode_alternates" : "",
-    "name" : "clock face two oclock",
+    "name" : "clock face two o'clock",
     "shortname" : ":clock2:",
     "category" : "symbols",
     "emoji_order" : "1014",
@@ -21998,7 +21998,7 @@
   "clock3" : {
     "unicode" : "1f552",
     "unicode_alternates" : "",
-    "name" : "clock face three oclock",
+    "name" : "clock face three o'clock",
     "shortname" : ":clock3:",
     "category" : "symbols",
     "emoji_order" : "1015",
@@ -22018,7 +22018,7 @@
   "clock4" : {
     "unicode" : "1f553",
     "unicode_alternates" : "",
-    "name" : "clock face four oclock",
+    "name" : "clock face four o'clock",
     "shortname" : ":clock4:",
     "category" : "symbols",
     "emoji_order" : "1016",
@@ -22038,7 +22038,7 @@
   "clock5" : {
     "unicode" : "1f554",
     "unicode_alternates" : "",
-    "name" : "clock face five oclock",
+    "name" : "clock face five o'clock",
     "shortname" : ":clock5:",
     "category" : "symbols",
     "emoji_order" : "1017",
@@ -22058,7 +22058,7 @@
   "clock6" : {
     "unicode" : "1f555",
     "unicode_alternates" : "",
-    "name" : "clock face six oclock",
+    "name" : "clock face six o'clock",
     "shortname" : ":clock6:",
     "category" : "symbols",
     "emoji_order" : "1018",
@@ -22078,7 +22078,7 @@
   "clock7" : {
     "unicode" : "1f556",
     "unicode_alternates" : "",
-    "name" : "clock face seven oclock",
+    "name" : "clock face seven o'clock",
     "shortname" : ":clock7:",
     "category" : "symbols",
     "emoji_order" : "1019",
@@ -22098,7 +22098,7 @@
   "clock8" : {
     "unicode" : "1f557",
     "unicode_alternates" : "",
-    "name" : "clock face eight oclock",
+    "name" : "clock face eight o'clock",
     "shortname" : ":clock8:",
     "category" : "symbols",
     "emoji_order" : "1020",
@@ -22118,7 +22118,7 @@
   "clock9" : {
     "unicode" : "1f558",
     "unicode_alternates" : "",
-    "name" : "clock face nine oclock",
+    "name" : "clock face nine o'clock",
     "shortname" : ":clock9:",
     "category" : "symbols",
     "emoji_order" : "1021",
@@ -22138,7 +22138,7 @@
   "clock10" : {
     "unicode" : "1f559",
     "unicode_alternates" : "",
-    "name" : "clock face ten oclock",
+    "name" : "clock face ten o'clock",
     "shortname" : ":clock10:",
     "category" : "symbols",
     "emoji_order" : "1022",
@@ -22158,7 +22158,7 @@
   "clock11" : {
     "unicode" : "1f55a",
     "unicode_alternates" : "",
-    "name" : "clock face eleven oclock",
+    "name" : "clock face eleven o'clock",
     "shortname" : ":clock11:",
     "category" : "symbols",
     "emoji_order" : "1023",
@@ -22178,7 +22178,7 @@
   "clock12" : {
     "unicode" : "1f55b",
     "unicode_alternates" : "",
-    "name" : "clock face twelve oclock",
+    "name" : "clock face twelve o'clock",
     "shortname" : ":clock12:",
     "category" : "symbols",
     "emoji_order" : "1024",

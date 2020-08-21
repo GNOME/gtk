@@ -791,7 +791,7 @@ show_help_overlay (GSimpleAction *action,
  * sets up an action with the name win.show-help-overlay to present
  * it.
  *
- * @window takes resposibility for destroying @help_overlay.
+ * @window takes responsibility for destroying @help_overlay.
  */
 void
 gtk_application_window_set_help_overlay (GtkApplicationWindow *window,

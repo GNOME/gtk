@@ -436,7 +436,7 @@ gtk_bitset_remove_range (GtkBitset *self,
  * @last: last value to add
  *
  * Adds the closed range [@first, @last], so @first, @last and all
- * values inbetween. @first must be smaller than @last.
+ * values in between. @first must be smaller than @last.
  **/
 void
 gtk_bitset_add_range_closed (GtkBitset *self,
@@ -456,7 +456,7 @@ gtk_bitset_add_range_closed (GtkBitset *self,
  * @last: last value to remove
  *
  * Removes the closed range [@first, @last], so @first, @last and all
- * values inbetween. @first must be smaller than @last.
+ * values in between. @first must be smaller than @last.
  **/
 void
 gtk_bitset_remove_range_closed (GtkBitset *self,

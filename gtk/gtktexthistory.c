@@ -35,7 +35,7 @@
  * Calling gtk_text_history_begin_irreversible_action() and
  * gtk_text_history_end_irreversible_action() can be used to denote a
  * section of operations that cannot be undone. This will cause all previous
- * changes tracked by the GtkTextHistory to be discared.
+ * changes tracked by the GtkTextHistory to be discarded.
  */
 
 typedef struct _Action     Action;

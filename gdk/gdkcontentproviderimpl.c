@@ -402,7 +402,7 @@ gdk_content_provider_union_init (GdkContentProviderUnion *self)
  * be chosen to provide it.
  *
  * This allows an easy way to support providing data in different formats.
- * For example, an image may be provided by its file and by the iamge
+ * For example, an image may be provided by its file and by the image
  * contents with a call such as
  * |[<!-- language="C" -->
  * gdk_content_provider_new_union ((GdkContentProvider *[2]) {

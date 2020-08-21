@@ -87,7 +87,7 @@ main (int argc, char *argv[])
   gtk_widget_set_vexpand (text_view, TRUE);
   gtk_box_append (GTK_BOX (vbox), text_view);
 
-  button = gtk_check_button_new_with_label ("Inhibit system keyboard shorcuts");
+  button = gtk_check_button_new_with_label ("Inhibit system keyboard shortcuts");
 
   gtk_box_append (GTK_BOX (vbox), button);
   g_signal_connect (G_OBJECT (button), "toggled",

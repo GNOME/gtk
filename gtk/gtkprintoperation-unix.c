@@ -251,7 +251,7 @@ gtk_print_operation_unix_launch_preview (GtkPrintOperation *op,
       gtk_print_settings_set_number_up (print_settings, 1);
       gtk_print_settings_set_number_up_layout (print_settings, GTK_NUMBER_UP_LAYOUT_LEFT_TO_RIGHT_TOP_TO_BOTTOM);
 
-      /*  These removals are neccessary because cups-* settings have higher priority
+      /*  These removals are necessary because cups-* settings have higher priority
        *  than normal settings.
        */
       gtk_print_settings_unset (print_settings, "cups-reverse");

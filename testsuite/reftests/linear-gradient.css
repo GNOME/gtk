@@ -1,6 +1,6 @@
 @import url("reset-to-defaults.css");
 
-/* One caveat that apply to cairo gradients, and make things therefor
+/* One caveat that apply to cairo gradients, and make things therefore
  * untestable:
  *   The start and end points must be identical when drawing
  * This means that you cannot:

@@ -65,7 +65,7 @@ _data_provider_release_cairo_surface (void* info, const void* data, size_t size)
 }
 
 /* Returns a new NSImage or %NULL in case of an error.
- * The device scale factor will be transfered to the NSImage (hidpi)
+ * The device scale factor will be transferred to the NSImage (hidpi)
  */
 NSImage *
 _gtk_quartz_create_image_from_surface (cairo_surface_t *surface)

@@ -543,7 +543,7 @@ gtk_numeric_sorter_class_init (GtkNumericSorterClass *class)
   /**
    * GtkNumericSorter:expression: (type GtkExpression)
    *
-   * The expression to evalute on items to get a number to compare with
+   * The expression to evaluate on items to get a number to compare with
    */
   properties[PROP_EXPRESSION] =
     gtk_param_spec_expression ("expression",

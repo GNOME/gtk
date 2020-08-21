@@ -1112,7 +1112,7 @@ gsk_inset_shadow_node_draw (GskRenderNode *node,
       /* For the blurred case we divide the rendering into 9 parts,
        * 4 of the corners, 4 for the horizonat/vertical lines and
        * one for the interior. We make the non-interior parts
-       * large enought to fit the full radius of the blur, so that
+       * large enough to fit the full radius of the blur, so that
        * the interior part can be drawn solidly.
        */
 
@@ -1415,7 +1415,7 @@ gsk_outset_shadow_node_draw (GskRenderNode *node,
       /* For the blurred case we divide the rendering into 9 parts,
        * 4 of the corners, 4 for the horizonat/vertical lines and
        * one for the interior. We make the non-interior parts
-       * large enought to fit the full radius of the blur, so that
+       * large enough to fit the full radius of the blur, so that
        * the interior part can be drawn solidly.
        */
 

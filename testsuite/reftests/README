@@ -19,7 +19,7 @@ In detail, for every provided TESTFILE the test runner will:
 4) gtk_widget_show() it and take a snapshot image of its contents into
    a cairo surface.
 5) Compare the two images to be bitwise identical. If they are not, a
-   diff image will be created hilighting the differences.
+   diff image will be created highlighting the differences.
 6) Save the images as png files to the output directory named:
    - test.out.png (rendering of test.ui)
    - test.ref.png (rendering of test.ref.ui)

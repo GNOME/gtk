@@ -38,7 +38,7 @@ network-transmit-receive=The icon used data is being both transmitted and receiv
 network-transmit=The icon used when data is being transmitted, while the computing device is connected to a network
 network-receive=The icon used when data is being received, while the computing device is connected to a network
 network-idle=The icon used when no data is being transmitted or received, while the computing device is connected to a network
-network-error=The icon used when an error occurs trying to intialize the network connection of the computing device
+network-error=The icon used when an error occurs trying to initialize the network connection of the computing device
 network-offline=The icon used when the computing device is disconnected from the network
 
 [weather]
@@ -112,7 +112,7 @@ document-edit=The icon for the action to edit a document
 object-flip-horizontal=The icon for the action to flip an object horizontally
 object-flip-vertical=The icon for the action to flip an object vertically
 object-rotate-left=The icon for the rotate left action performed on an object
-object-rotate-right=The icon for the rotate rigt action performed on an object
+object-rotate-right=The icon for the rotate right action performed on an object
 insert-image=The icon for the insert image action of an application
 insert-link=The icon for the insert link action of an application
 insert-object=The icon for the insert object action of an application
@@ -406,7 +406,7 @@ media-zip=
 modem=The icon used for modem devices
 multimedia-player-apple-ipod-touch=
 network-vpn=
-pda=This is the fallback icon for Personal Digial Assistant devices. Primary use of this icon is for PDA devices connected to the PC. Connection medium is not an important aspect of the icon. The metaphor for this fallback icon should be a generic PDA device icon
+pda=This is the fallback icon for Personal Digital Assistant devices. Primary use of this icon is for PDA devices connected to the PC. Connection medium is not an important aspect of the icon. The metaphor for this fallback icon should be a generic PDA device icon
 phone-apple-iphone=
 uninterruptible-power-supply=
 emblem-default=The icon used as an emblem to specify the default selection of a printer for example

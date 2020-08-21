@@ -1712,7 +1712,7 @@ gsk_transform_invert (GskTransform *self)
  *
  * Checks two transforms for equality.
  *
- * Returns: %TRUE if the two transforms peform the same operation.
+ * Returns: %TRUE if the two transforms perform the same operation.
  **/
 gboolean
 gsk_transform_equal (GskTransform *first,

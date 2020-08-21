@@ -32,7 +32,7 @@ typedef struct
 {
   GtkApplicationImplDBusClass parent_class;
 
-  /* stores the dbus version of the overriden methods */
+  /* stores the dbus version of the overridden methods */
   guint (*dbus_inhibit) (GtkApplicationImpl         *impl,
                          GtkWindow                  *window,
                          GtkApplicationInhibitFlags  flags,

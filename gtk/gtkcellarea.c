@@ -186,7 +186,7 @@
  *
  * # Rendering Areas
  *
- * Once area sizes have been aquired at least for the rows in the
+ * Once area sizes have been acquired at least for the rows in the
  * visible area of the layouting widget they can be rendered at
  * #GtkWidgetClass.snapshot() time.
  *
@@ -1330,7 +1330,7 @@ gtk_cell_area_real_get_preferred_height_for_width (GtkCellArea        *area,
                                                    int                *minimum_height,
                                                    int                *natural_height)
 {
-  /* If the area doesnt do height-for-width, fallback on base preferred height */
+  /* If the area doesn't do height-for-width, fallback on base preferred height */
   GTK_CELL_AREA_GET_CLASS (area)->get_preferred_height (area, context, widget, minimum_height, natural_height);
 }
 
@@ -1342,7 +1342,7 @@ gtk_cell_area_real_get_preferred_width_for_height (GtkCellArea        *area,
                                                    int                *minimum_width,
                                                    int                *natural_width)
 {
-  /* If the area doesnt do width-for-height, fallback on base preferred width */
+  /* If the area doesn't do width-for-height, fallback on base preferred width */
   GTK_CELL_AREA_GET_CLASS (area)->get_preferred_width (area, context, widget, minimum_width, natural_width);
 }
 

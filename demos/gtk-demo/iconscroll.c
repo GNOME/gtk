@@ -78,7 +78,7 @@ static gsize content_len;
 extern void fontify (const char *format, GtkTextBuffer *buffer);
 
 static void
-populate_text (gboolean hilight)
+populate_text (gboolean highlight)
 {
   GtkWidget *textview;
   GtkTextBuffer *buffer;
@@ -94,7 +94,7 @@ populate_text (gboolean hilight)
   buffer = gtk_text_buffer_new (NULL);
   gtk_text_buffer_set_text (buffer, content, (int)content_len);
 
-  if (hilight)
+  if (highlight)
     fontify ("c", buffer);
 
   textview = gtk_text_view_new ();

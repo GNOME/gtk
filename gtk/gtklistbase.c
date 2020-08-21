@@ -1600,7 +1600,7 @@ gtk_list_base_stop_rubberband (GtkListBase *self,
           selected = gtk_bitset_new_empty ();
           mask = gtk_bitset_ref (rubberband_selection);
         }
-      else /* no modifer */
+      else /* no modifier */
         {
           /* select the rubberband, clear the rest */
           selected = gtk_bitset_ref (rubberband_selection);
