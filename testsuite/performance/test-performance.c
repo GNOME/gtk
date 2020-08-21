@@ -64,7 +64,6 @@ main (int argc, char *argv[])
   GError *error = NULL;
   Data data;
   SysprofCaptureFrameType type;
-  char fd_str[20];
   gint64 *values;
   gint64 min, max, total;
   int count;
@@ -124,20 +123,31 @@ main (int argc, char *argv[])
       SysprofCaptureReader *reader;
       SysprofCaptureCursor *cursor;
       SysprofCaptureCondition *condition;
+      char **child_argv;
 
       fd = g_file_open_tmp ("gtk.XXXXXX.syscap", &name, &error);
       if (error)
         g_error ("Create syscap file: %s", error->message);
+      close (fd); // sysprof-cli uses O_EXCL
+
+      child_argv = g_new (char *, argc + 6);
+      child_argv[0] = (char *)"sysprof-cli";
+      child_argv[1] = (char *)"--force";
+      child_argv[2] = (char *)"--use-trace-fd";
+      child_argv[3] = name;
+      child_argv[5] = (char *)"--";
+      for (i = 0; i + 1 < argc; i++)
+        child_argv[6 + i] = argv[i + 1];
+      child_argv[6 + argc - 1] = NULL;
 
       launcher = g_subprocess_launcher_new (0);
-      g_subprocess_launcher_take_fd (launcher, fd, fd);
-      g_snprintf (fd_str, sizeof (fd_str), "%d", fd);
-      g_subprocess_launcher_setenv (launcher, "GTK_TRACE_FD", fd_str, TRUE);
       g_subprocess_launcher_setenv (launcher, "GTK_DEBUG_AUTO_QUIT", "1", TRUE);
 
-      subprocess = g_subprocess_launcher_spawnv (launcher, (const char *const *)argv + 1, &error);
+      subprocess = g_subprocess_launcher_spawnv (launcher, (const char *const *)child_argv, &error);
       if (error)
         g_error ("Launch child: %s", error->message);
+
+      g_free (child_argv);
 
       if (!g_subprocess_wait (subprocess, NULL, &error))
         g_error ("Run child: %s", error->message);
