@@ -777,9 +777,9 @@ swipe_gesture_update (GtkGesture       *gesture,
 
 static gboolean
 scroll_controller_scroll (GtkEventControllerScroll *Scroll,
-			  double                    dx,
-			  double                    dy,
-			  GtkWidget                *widget)
+                          double                    dx,
+                          double                    dy,
+                          GtkWidget                *widget)
 {
   GtkSpinButton *spin = GTK_SPIN_BUTTON (widget);
 
