@@ -93,7 +93,6 @@ x11_enabled      = get_option('x11-backend')
 wayland_enabled  = get_option('wayland-backend')
 broadway_enabled = get_option('broadway-backend')
 macos_enabled    = get_option('macos-backend')
-quartz_enabled   = get_option('quartz-backend')
 win32_enabled    = get_option('win32-backend')
 
 os_unix   = false
@@ -392,21 +391,18 @@ if os_unix
   platform_gio_dep = giounix_dep
 endif
 
-tracker3_enabled = get_option('tracker3')
-if tracker3_enabled
-  tracker3_dep = dependency('tracker-sparql-3.0', required: false)
-  if tracker3_dep.found()
-    cdata.set('HAVE_TRACKER3', tracker3_dep.found())
-  else
-    error('Tracker3 not found, but was explicitly requested.')
-  endif
-endif
+tracker3_dep = dependency('tracker-sparql-3.0', required: get_option('tracker'))
+cdata.set('HAVE_TRACKER3', tracker3_dep.found())
+
+colord_dep = dependency('colord', version: '>= 0.1.9', required: get_option('colord'))
+cdata.set('HAVE_COLORD', colord_dep.found())
 
 if iso_codes_dep.found()
   cdata.set_quoted('ISO_CODES_PREFIX', iso_codes_dep.get_pkgconfig_variable('prefix'))
 else
   cdata.set_quoted('ISO_CODES_PREFIX', '/usr')
 endif
+
 
 backend_immodules = []
 
@@ -560,18 +556,17 @@ if x11_enabled
   # Note that we also check that the XIScrollClassInfo struct is defined,
   # because at least Ubuntu Oneiric seems to have XIAllowTouchEvents(),
   #   but not the XIScrollClassInfo struct
-  has_allow_touch_evens = cc.has_function('XIAllowTouchEvents', dependencies: xi_dep)
+  has_allow_touch_events = cc.has_function('XIAllowTouchEvents', dependencies: xi_dep)
   has_scroll_class_info = cc.has_member('XIScrollClassInfo', 'number', dependencies: xi_dep,
                                         prefix: '''#include <X11/Xlib.h>
                                                    #include <X11/extensions/XInput2.h>''')
-  if has_allow_touch_evens and has_scroll_class_info
+  if has_allow_touch_events and has_scroll_class_info
     cdata.set('XINPUT_2_2', 1)
   endif
 
-  enable_xinerama = get_option('xinerama')
-  if enable_xinerama != 'no'
-    want_xinerama = enable_xinerama == 'yes'
-    xinerama_dep = dependency('xinerama', required: want_xinerama)
+  enable_xinerama = get_option('xinerama').enabled()
+  if enable_xinerama
+    xinerama_dep = dependency('xinerama', required: true)
     if xinerama_dep.found() and cc.has_header_symbol('X11/extensions/Xinerama.h', 'XineramaQueryExtension', dependencies: xinerama_dep)
       cdata.set('HAVE_XFREE_XINERAMA', 1)
       x11_pkgs += ['xinerama']
@@ -653,89 +648,66 @@ if os_unix
 endif
 
 # Check for Vulkan support
-# TODO: move to gsk subfolder maybe? Or will it be used elsewhere too?
-have_vulkan = false
-vulkan_pkg_found = false
-vulkan_dep = []
-
-enable_vulkan = get_option('vulkan')
-if enable_vulkan == 'no'
-  message('Vulkan support explicitly disabled')
+vulkan_dep = dependency('vulkan', required: get_option('vulkan'))
+if vulkan_dep.found()
+  have_vulkan = true
+  vulkan_pkg_found = true
 else
-  vulkan_dep = dependency('vulkan', required: false)
-  if vulkan_dep.found()
-    have_vulkan = true
-    vulkan_pkg_found = true
+  have_vulkan = false
+  vulkan_pkg_found = false
+  if cc.get_id() == 'msvc'
+    vulkan_libname = 'vulkan-1'
   else
-    if cc.get_id() == 'msvc'
-      vulkan_libname = 'vulkan-1'
-    else
-      vulkan_libname = 'vulkan'
-    endif
-    vulkan_dep = cc.find_library(vulkan_libname, required: false)
-    if vulkan_dep.found() and cc.has_function('vkCreateInstance', dependencies: vulkan_dep) and cc.has_header('vulkan/vulkan.h')
-      have_vulkan = true
-      pc_gdk_extra_libs += ['-l@0@'.format(vulkan_libname)]
-    endif
+    vulkan_libname = 'vulkan'
   endif
-  if enable_vulkan == 'yes' and not have_vulkan
-    error('Vulkan support not found, but was explicitly requested.')
+  vulkan_dep = cc.find_library(vulkan_libname, required: false)
+  if vulkan_dep.found() and cc.has_function('vkCreateInstance', dependencies: vulkan_dep) and cc.has_header('vulkan/vulkan.h')
+    have_vulkan = true
+    pc_gdk_extra_libs += ['-l@0@'.format(vulkan_libname)]
   endif
 endif
 
-cloudproviders_enabled = get_option('cloudproviders')
-if cloudproviders_enabled
-  cloudproviders_dep = dependency('cloudproviders',
-    version: cloudproviders_req,
-    fallback: [
-      'libcloudproviders',
-      'libcloudproviders_dep',
-    ],
-    default_options: [
-      'vapigen=false',
-    ])
-  if cloudproviders_dep.found()
-    cdata.set('HAVE_CLOUDPROVIDERS', cloudproviders_dep.found())
-  else
-    error('Cloudproviders support not found, but was explicitly requested.')
-  endif
-endif
+cloudproviders_dep = dependency('cloudproviders',
+  required: get_option('cloudproviders'),
+  version: cloudproviders_req,
+  fallback: [
+    'libcloudproviders',
+    'libcloudproviders_dep',
+  ],
+  default_options: [
+    'vapigen=false',
+  ])
+cdata.set('HAVE_CLOUDPROVIDERS', cloudproviders_dep.found())
 
 profiler_enabled = get_option('sysprof').enabled()
-if profiler_enabled
-  # libsysprof-capture support
-  libsysprof_capture_dep = dependency('sysprof-capture-4',
-    required: true,
-    default_options: [
-      'enable_examples=false',
-      'enable_gtk=false',
-      'enable_tests=false',
-      'enable_tools=false',
-      'libsysprof=true',
-      'with_sysprofd=none',
-      'help=false',
-    ],
-    fallback: ['sysprof', 'libsysprof_capture_dep'],
-  )
-  if libsysprof_capture_dep.found()
-    cdata.set('HAVE_SYSPROF', 1)
-  else
-    error('Profiler support not found, but was explicitly requested.')
-  endif
-  libsysprof_dep = dependency('sysprof-4',
-    required: false,
-    default_options: [
-      'enable_examples=false',
-      'enable_gtk=false',
-      'enable_tests=false',
-      'enable_tools=false',
-      'libsysprof=true',
-      'with_sysprofd=none',
-      'help=false',
-    ],
-    fallback: ['sysprof', 'libsysprof_dep'],
-  )
-endif
+# libsysprof-capture support
+libsysprof_capture_dep = dependency('sysprof-capture-4',
+  required: get_option('sysprof'),
+  default_options: [
+    'enable_examples=false',
+    'enable_gtk=false',
+    'enable_tests=false',
+    'enable_tools=false',
+    'libsysprof=true',
+    'with_sysprofd=none',
+    'help=false',
+  ],
+  fallback: ['sysprof', 'libsysprof_capture_dep'],
+)
+cdata.set('HAVE_SYSPROF', libsysprof_capture_dep.found())
+libsysprof_dep = dependency('sysprof-4',
+  required: false,
+  default_options: [
+    'enable_examples=false',
+    'enable_gtk=false',
+    'enable_tests=false',
+    'enable_tools=false',
+    'libsysprof=true',
+    'with_sysprofd=none',
+    'help=false',
+  ],
+  fallback: ['sysprof', 'libsysprof_dep'],
+)
 
 graphene_dep_type = graphene_dep.type_name()
 if graphene_dep_type == 'pkgconfig'
@@ -889,10 +861,12 @@ endif
 summary('Display backends', display_backends)
 summary('Print backends', print_backends)
 summary('Media backends', media_backends)
-summary('Vulkan support', have_vulkan)
-summary('Cloud support', get_option('cloudproviders'))
-summary('Sysprof support', get_option('sysprof').enabled())
-summary('Colord support', get_option('colord'))
+
+summary('Vulkan support', vulkan_dep.found(), section: 'Features')
+summary('Cloud support', cloudproviders_dep.found(), section: 'Features')
+summary('Sysprof support', libsysprof_capture_dep.found(), section: 'Features')
+summary('Colord support', colord_dep.found(), section: 'Features')
+summary('Tracker support', tracker3_dep.found(), section: 'Features')
 
 # Build
 summary('Debugging', get_option('debug'), section: 'Build')

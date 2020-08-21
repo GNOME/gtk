@@ -1,57 +1,111 @@
 # GDK backends
-option('x11-backend', type: 'boolean', value: true,
-  description : 'Enable the X11 gdk backend (only when building on Unix)')
-option('wayland-backend', type: 'boolean', value: true,
-  description : 'Enable the wayland gdk backend (only when building on Unix except for macOS)')
-option('broadway-backend', type: 'boolean', value: false,
-  description : 'Enable the broadway (HTML5) gdk backend')
-option('win32-backend', type: 'boolean', value: true,
-  description : 'Enable the Windows gdk backend (only when building on Windows)')
-option('quartz-backend', type: 'boolean', value: true,
-  description : 'Enable the macOS gdk backend (only when building on macOS)')
-option('macos-backend', type: 'boolean', value: true,
-  description : 'Enable the macOS gdk backend (only when building on macOS)')
+
+option('x11-backend',
+       type: 'boolean',
+       value: true,
+       description : 'Enable the X11 gdk backend (only when building on Unix)')
+
+option('wayland-backend',
+       type: 'boolean',
+       value: true,
+       description : 'Enable the wayland gdk backend (only when building on Unix except for macOS)')
+
+option('broadway-backend',
+       type: 'boolean',
+       value: false,
+       description : 'Enable the broadway (HTML5) gdk backend')
+
+option('win32-backend',
+       type: 'boolean',
+       value: true,
+       description : 'Enable the Windows gdk backend (only when building on Windows)')
+
+option('macos-backend',
+       type: 'boolean',
+       value: true,
+       description : 'Enable the macOS gdk backend (only when building on macOS)')
 
 # Media backends
-option('media', type: 'string', value: 'gstreamer',
-  description : 'Build the specified media engines (comma-separated list, "all", or "none")')
 
-# Optional dependencies
-option('vulkan', type: 'combo', choices : ['yes', 'no', 'auto'], value : 'auto',
-  description : 'Enable support for the Vulkan graphics API')
-option('xinerama', type: 'combo', choices : ['yes', 'no', 'auto'], value : 'auto',
-  description : 'Enable support for the Xinerama extension')
-option('cloudproviders', type: 'boolean', value: false,
-  description : 'Enable the cloudproviders support')
+option('media',
+       type: 'string',
+       value: 'gstreamer',
+       description : 'Build the specified media engines (comma-separated list, "all", or "none")')
+
+# Print backends
+
+option('print',
+       type: 'string',
+       value: 'cups,file',
+       description : 'Build the specified print backends (comma-separated list, "all", or "none")')
+
+# Optional features
+
+option('vulkan',
+       type: 'feature',
+       value: 'enabled',
+       description : 'Enable support for the Vulkan graphics API')
+
+option('xinerama',
+       type: 'feature',
+       value: 'enabled',
+       description : 'Enable support for the X11 Xinerama extension')
+
+option('cloudproviders',
+       type: 'feature',
+       value: 'disabled',
+       description : 'Enable the cloudproviders support')
 
 option('sysprof',
        type: 'feature',
        value: 'disabled',
        description : 'include tracing support for sysprof')
 
-option('tracker3', type: 'boolean', value: false,
-  description : 'Enable Tracker3 filechooser search')
+option('tracker',
+       type: 'feature',
+       value: 'disabled',
+       description : 'Enable Tracker3 filechooser search')
 
-# Print backends
-option('print-backends', type : 'string', value : 'cups,file',
-  description : 'Build the specified print backends (comma-separated list, "all", or "none")')
-option('colord', type: 'combo', choices : ['yes', 'no', 'auto'], value : 'auto',
-  description : 'Build colord support for the CUPS printing backend')
+option('colord',
+       type: 'feature',
+       value : 'disabled',
+       description : 'Build colord support for the CUPS printing backend')
 
 # Documentation and introspection
-option('gtk_doc', type: 'boolean', value: 'false',
-  description : 'Build API reference and tools documentation')
-option('man-pages', type: 'boolean', value: 'false',
-  description : 'Build man pages for installed tools')
-option('introspection', type: 'boolean', value: 'true',
-  description : 'Build introspection data (requires gobject-introspection)')
 
-# Demos and binaries
-option('demos', type: 'boolean', value: 'true',
-  description : 'Build demo programs')
-option('build-examples', type: 'boolean', value: 'true',
-  description : 'Build examples')
-option('build-tests', type: 'boolean', value: 'true',
-  description : 'Build tests')
-option('install-tests', type: 'boolean', value: 'false',
-  description : 'Install tests')
+option('gtk_doc',
+       type: 'boolean',
+       value: 'false',
+       description : 'Build API reference and tools documentation')
+
+option('man-pages',
+       type: 'boolean',
+       value: 'false',
+       description : 'Build man pages for installed tools')
+
+option('introspection',
+       type: 'boolean',
+       value: 'true',
+       description : 'Build introspection data (requires gobject-introspection)')
+
+# Demos, examples and tests
+
+option('demos',
+       type: 'boolean',
+       value: 'true',
+       description : 'Build demo programs')
+
+option('build-examples',
+       type: 'boolean',
+       value: 'true',
+       description : 'Build examples')
+
+option('build-tests',
+       type: 'boolean',
+       value: 'true',
+       description : 'Build tests')
+
+option('install-tests',
+       type: 'boolean',
+       value: 'false',
+       description : 'Install tests')

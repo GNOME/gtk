@@ -741,7 +741,7 @@ foreach p: proto_sources
   endif
 endforeach
 
-if os_unix and tracker3_enabled
+if os_unix and tracker3_dep.found()
   gtk_sources += 'gtksearchenginetracker3.c'
 endif
 
@@ -1023,11 +1023,9 @@ if x11_enabled or wayland_enabled
   gtk_deps += pangoft_dep
 endif
 
-if cloudproviders_enabled
-  gtk_deps += cloudproviders_dep
-endif
+gtk_deps += cloudproviders_dep
 
-if os_unix and tracker3_enabled
+if os_unix
   gtk_deps += tracker3_dep
 endif
 
