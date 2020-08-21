@@ -2,7 +2,7 @@
  *
  * Shows widgets in static positions over a main widget.
  *
- * The overlayed widgets can be interactive controls such
+ * The overlaid widgets can be interactive controls such
  * as the entry in this example, or just decorative, like
  * the big blue label.
  */

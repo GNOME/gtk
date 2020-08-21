@@ -1915,7 +1915,7 @@ dnd_cancel_cb (GdkDrag             *drag,
  * is also not true, since when the drag comes from a different widget than the
  * sidebar, when the drag stops the last drag signal we receive is drag-leave.
  * So here what we will do is restore the state of the sidebar as if no drag
- * is being done (and if the application didnt request for permanent hints with
+ * is being done (and if the application didn't request for permanent hints with
  * gtk_places_sidebar_show_drop_hints) and we will free the drag data next time
  * we build new drag data in drag_data_received.
  */

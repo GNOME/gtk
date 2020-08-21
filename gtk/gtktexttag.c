@@ -496,7 +496,7 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
    * GtkTextTag:underline-rgba:
    *
    * This property modifies the color of underlines. If not set, underlines
-   * will use the forground color.
+   * will use the foreground color.
    *
    * If #GtkTextTag:underline is set to %PANGO_UNDERLINE_ERROR, an alternate
    * color may be applied instead of the foreground. Setting this property
@@ -531,7 +531,7 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
    * GtkTextTag:strikethrough-rgba:
    *
    * This property modifies the color of strikeouts. If not set, strikeouts
-   * will use the forground color.
+   * will use the foreground color.
    */
   g_object_class_install_property (object_class,
                                    PROP_STRIKETHROUGH_RGBA,

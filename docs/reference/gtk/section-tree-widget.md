@@ -128,7 +128,7 @@ GtkWidget *tree;
 tree = gtk_tree_view_new_with_model (GTK_TREE_MODEL (store));
 ```
 
-## Colums and cell renderers
+## Columns and cell renderers
 
 Once the #GtkTreeView widget has a model, it will need to know how
 to display the model. It does this with columns and cell renderers.

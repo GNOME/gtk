@@ -1152,7 +1152,7 @@ build_recent_info (GBookmarkFile *bookmarks,
  * @error: (allow-none): a return location for a #GError, or %NULL
  *
  * Searches for a URI inside the recently used resources list, and
- * returns a #GtkRecentInfo containing informations about the resource
+ * returns a #GtkRecentInfo containing information about the resource
  * like its MIME type, or its display name.
  *
  * Returns: (nullable): a #GtkRecentInfo containing information

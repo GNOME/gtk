@@ -48,7 +48,7 @@ typedef enum
 
 /** 
  * Direction we should be polling the http socket on.
- * We are either reading or writting at each state.
+ * We are either reading or writing at each state.
  * This makes it easy for mainloops to connect to poll.
  */
 typedef enum

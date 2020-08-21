@@ -118,7 +118,7 @@
  * the content is pulled beyond the end, and this situation can be
  * captured with the #GtkScrolledWindow::edge-overshot signal.
  *
- * If no mouse device is present, the scrollbars will overlayed as
+ * If no mouse device is present, the scrollbars will overlaid as
  * narrow, auto-hiding indicators over the content. If traditional
  * scrollbars are desired although no mouse is present, this behaviour
  * can be turned off with the #GtkScrolledWindow:overlay-scrolling
@@ -682,7 +682,7 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
    *
    * Whether overlay scrolling is enabled or not. If it is, the
    * scrollbars are only added as traditional widgets when a mouse
-   * is present. Otherwise, they are overlayed on top of the content,
+   * is present. Otherwise, they are overlaid on top of the content,
    * as narrow indicators.
    *
    * Note that overlay scrolling can also be globally disabled, with

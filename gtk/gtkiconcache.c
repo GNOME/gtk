@@ -95,7 +95,7 @@ gtk_icon_cache_new_for_path (const char *path)
   if (g_stat (cache_filename, &st) < 0 || st.st_size < 4)
     goto done;
 
-  /* Verify cache is uptodate */
+  /* Verify cache is up-to-date */
   if (st.st_mtime < path_st.st_mtime)
     {
       GTK_NOTE (ICONTHEME, g_message ("icon cache outdated"));

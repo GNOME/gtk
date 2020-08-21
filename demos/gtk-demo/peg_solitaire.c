@@ -256,7 +256,7 @@ drag_begin (GtkDragSource *source,
   gtk_image_clear (GTK_IMAGE (image));
 }
 
-/* Thie is called once a drag operation has ended (successfully or not).
+/* This is called once a drag operation has ended (successfully or not).
  * We want to undo what we did in drag_begin() above and react
  * to a potential move of the peg.
  */

@@ -540,7 +540,7 @@ gtk_list_box_class_init (GtkListBoxClass *klass)
 
   /**
    * GtkListBox::selected-rows-changed:
-   * @box: the #GtkListBox on wich the signal is emitted
+   * @box: the #GtkListBox on which the signal is emitted
    *
    * The ::selected-rows-changed signal is emitted when the
    * set of selected rows changes.

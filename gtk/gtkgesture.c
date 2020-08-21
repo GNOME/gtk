@@ -31,7 +31,7 @@
  *
  * The number of touches that a #GtkGesture need to be recognized is controlled
  * by the #GtkGesture:n-points property, if a gesture is keeping track of less
- * or more than that number of sequences, it won't check wether the gesture
+ * or more than that number of sequences, it won't check whether the gesture
  * is recognized.
  *
  * As soon as the gesture has the expected number of touches, it will check

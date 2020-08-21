@@ -671,7 +671,7 @@ gtk_im_context_ime_focus_in (GtkIMContext *context)
   if (!GDK_IS_SURFACE (context_ime->client_surface))
     return;
 
-  /* swtich current context */
+  /* switch current context */
   context_ime->focus = TRUE;
 
   hwnd = gdk_win32_surface_get_impl_hwnd (context_ime->client_surface);
@@ -727,7 +727,7 @@ gtk_im_context_ime_focus_out (GtkIMContext *context)
   if (!GDK_IS_SURFACE (context_ime->client_surface))
     return;
 
-  /* swtich current context */
+  /* switch current context */
   context_ime->focus = FALSE;
 
   hwnd = gdk_win32_surface_get_impl_hwnd (context_ime->client_surface);
@@ -776,7 +776,7 @@ gtk_im_context_ime_focus_out (GtkIMContext *context)
       context_ime->preediting = FALSE;
     }
 
-  /* remove event fileter */
+  /* remove event filter */
   toplevel = context_ime->client_surface;
   if (GDK_IS_SURFACE (toplevel))
     {

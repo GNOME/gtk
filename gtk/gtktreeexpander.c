@@ -558,7 +558,7 @@ gtk_tree_expander_class_init (GtkTreeExpanderClass *klass)
                                        "listitem.toggle-expand", NULL);
 
 #if 0
-  /* These can't be implementes yet. */
+  /* These can't be implements yet. */
   gtk_widget_class_add_binding (widget_class, GDK_KEY_BackSpace, 0, go_to_parent_row, NULL, NULL);
   gtk_widget_class_add_binding (widget_class, GDK_KEY_BackSpace, GDK_CONTROL_MASK, go_to_parent_row, NULL, NULL);
 #endif

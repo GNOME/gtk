@@ -81,7 +81,7 @@
  * have changed. gtk_expression_watch() starts watching an expression, and
  * gtk_expression_watch_unwatch() stops.
  *
- * Watches can be created for automatically updating the propery of an object,
+ * Watches can be created for automatically updating the property of an object,
  * similar to GObject's #GBinding mechanism, by using gtk_expression_bind().
  *
  * # GtkExpression in GObject properties

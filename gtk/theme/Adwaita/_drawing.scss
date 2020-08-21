@@ -134,7 +134,7 @@
 
 @function _button_hilight_color($c) {
 //
-// calculate the right top hilight color for buttons
+// calculate the right top highlight color for buttons
 //
 // $c: base color;
 //
@@ -163,7 +163,7 @@
 // backdrop, backdrop-active, backdrop-insensitive, backdrop-insensitive-active,
 // osd, osd-hover, osd-active, osd-insensitive, osd-backdrop, undecorated
 //
-// This mixin sets the $button_fill global variable which containts the button background-image
+// This mixin sets the $button_fill global variable which contains the button background-image
 //
   $_hilight_color: _button_hilight_color($c);
   $_button_edge: if($edge == none, none, _widget_edge($edge));

@@ -678,7 +678,7 @@ filter_demo (GtkDemo *demo)
 {
   int i;
 
-  /* Show only if the name maches every needle */
+  /* Show only if the name matches every needle */
   for (i = 0; search_needle[i]; i++)
     {
       if (!demo->title)

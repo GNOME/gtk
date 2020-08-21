@@ -1336,7 +1336,7 @@ rename_file_rename_clicked (GtkButton            *button,
             error_dialog (impl, _("The file could not be renamed"), error);
           else
             {
-              /* Rename succeded, save renamed file so it will
+              /* Rename succeeded, save renamed file so it will
                * be revealed by our "row-changed" handler */
               impl->renamed_file = g_object_ref (child);
             }

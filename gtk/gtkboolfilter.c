@@ -158,7 +158,7 @@ gtk_bool_filter_class_init (GtkBoolFilterClass *class)
   /**
    * GtkBoolFilter:expression: (type GtkExpression)
    *
-   * The boolean expression to evalute on item
+   * The boolean expression to evaluate on item
    */
   properties[PROP_EXPRESSION] =
     gtk_param_spec_expression ("expression",

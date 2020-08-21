@@ -2961,7 +2961,7 @@ gsk_gl_renderer_create_programs (GskGLRenderer  *self,
 
 
   /* We initialize the alpha uniform here, since the default value is important.
-   * We can't do it in the shader like a resonable person would because that doesn't
+   * We can't do it in the shader like a reasonable person would because that doesn't
    * work in gles. */
   for (i = 0; i < GL_N_PROGRAMS; i++)
     {
@@ -3196,7 +3196,7 @@ gsk_gl_renderer_add_render_ops (GskGLRenderer   *self,
                                 RenderOpBuilder *builder)
 {
   /* This can still happen, even if the render nodes are created using
-   * GtkSnapshot, so let's juse be safe. */
+   * GtkSnapshot, so let's just be safe. */
   if (node_is_invisible (node))
     return;
 

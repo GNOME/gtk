@@ -1,4 +1,4 @@
-/* gtkaccessibleattributeset.c: Accessible attribute containt
+/* gtkaccessibleattributeset.c: Accessible attribute content
  *
  * Copyright 2020  GNOME Foundation
  *

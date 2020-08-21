@@ -1228,7 +1228,7 @@ gtk_cell_area_box_foreach_alloc (GtkCellArea          *area,
         }
       else
         {
-          /* If the cell we are rendering doesnt fit into the remaining space,
+          /* If the cell we are rendering doesn't fit into the remaining space,
            * clip it so that the underlying renderer has a chance to deal with
            * it (for instance text renderers get a chance to ellipsize).
            */

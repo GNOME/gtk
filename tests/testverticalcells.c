@@ -108,7 +108,7 @@ static TreeEntry other_entries[] =
   {
     { 
       "zoom-fit-best", 
-      "Thats the\n"
+      "That's the\n"
       "perfect fit", 
       "Now fitting foo into bar using frobnicator",
       "using his nifty wide angle lense, he was able to catch a 'dark salmon', it was no flying pig "
@@ -121,7 +121,7 @@ static TreeEntry other_entries[] =
       "format-text-underline", 
       "Under the\n"
       "line", 
-      "Now underlining that this demo would look alot niftier with some real content",
+      "Now underlining that this demo would look a lot niftier with some real content",
       "it was indeed strange to catch a red salmon while fishing for pigs in the deep sky blue.",
       "deep sky blue",
       99,
@@ -204,7 +204,7 @@ static TreeEntry main_entries[] =
       "folder", 
       "The directory", 
       "Currently scanning your directories.",
-      "jill didnt know what to make of the barking pigs either so she fed him sleeping pills",
+      "jill didn't know what to make of the barking pigs either so she fed him sleeping pills",
       "brown",
       20,
       directory_entries
@@ -214,7 +214,7 @@ static TreeEntry main_entries[] =
       "Now deleting\n"
       "the whole thing",
       "Time to delete the sucker",
-      "and he decided to just delete the whole conversation since it didnt make sense to him",
+      "and he decided to just delete the whole conversation since it didn't make sense to him",
       "dark orange",
       26,
       NULL

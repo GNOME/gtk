@@ -245,7 +245,7 @@ gtk_string_filter_class_init (GtkStringFilterClass *class)
   /**
    * GtkStringFilter:expression: (type GtkExpression)
    *
-   * The expression to evalute on item to get a string to compare with
+   * The expression to evaluate on item to get a string to compare with
    */
   properties[PROP_EXPRESSION] =
     gtk_param_spec_expression ("expression",

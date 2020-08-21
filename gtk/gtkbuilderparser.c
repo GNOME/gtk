@@ -2010,9 +2010,9 @@ end_element (GtkBuildableParseContext  *context,
     {
       RequiresInfo *req_info = state_pop_info (data, RequiresInfo);
 
-      /* TODO: Allow third party widget developers to check thier
+      /* TODO: Allow third party widget developers to check their
        * required versions, possibly throw a signal allowing them
-       * to check thier library versions here.
+       * to check their library versions here.
        */
       if (!strcmp (req_info->library, "gtk+"))
         {

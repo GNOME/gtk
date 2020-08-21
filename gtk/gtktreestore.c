@@ -35,7 +35,7 @@
  * @See_also: #GtkTreeModel
  *
  * The #GtkTreeStore object is a list model for use with a #GtkTreeView
- * widget.  It implements the #GtkTreeModel interface, and consequentially,
+ * widget.  It implements the #GtkTreeModel interface, and consequently,
  * can use all of the methods available there.  It also implements the
  * #GtkTreeSortable interface so it can be sorted by the view.  Finally,
  * it also implements the tree
@@ -2393,7 +2393,7 @@ gtk_tree_store_swap (GtkTreeStore *tree_store,
   b_prev = node_b->prev;
   b_next = node_b->next;
 
-  /* fix up links if the nodes are next to eachother */
+  /* fix up links if the nodes are next to each other */
   if (a_prev == node_b)
     a_prev = node_a;
   if (a_next == node_b)

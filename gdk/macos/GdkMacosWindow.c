@@ -385,7 +385,7 @@
   window_gdk.width += shadow_left + shadow_right;
   window_gdk.height += shadow_top + shadow_bottom;
 
-  /* Convert to quartz coordiantes */
+  /* Convert to quartz coordinates */
   _gdk_macos_display_to_display_coords ([self gdkDisplay],
                                         window_gdk.x,
                                         window_gdk.y + window_gdk.height,

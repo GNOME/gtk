@@ -101,7 +101,7 @@ gtk_clock_snapshot (GdkPaintable *paintable,
                               (GdkRGBA [4]) { BLACK, BLACK, BLACK, BLACK });
 
   /* Next, draw the hour hand.
-   * We do this using tranforms again: Instead of computing where the angle
+   * We do this using transforms again: Instead of computing where the angle
    * points to, we just rotate everything and then draw the hand as if it
    * was :00. We don't even need to care about am/pm here because rotations
    * just work.

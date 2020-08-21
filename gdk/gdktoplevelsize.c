@@ -58,7 +58,7 @@ gdk_toplevel_size_init (GdkToplevelSize *size,
  * Retrieves the bounds the toplevel is placed within.
  *
  * The bounds represent the largest size a toplevel may have while still being
- * able to fit within some type of boundery. Depending on the backend, this may
+ * able to fit within some type of boundary. Depending on the backend, this may
  * be equivalent to the dimensions of the work area or the monitor on which the
  * window is being presented on, or something else that limits the way a
  * toplevel can be presented.

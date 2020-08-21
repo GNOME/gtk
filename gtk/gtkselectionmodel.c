@@ -495,7 +495,7 @@ gtk_selection_model_unselect_all (GtkSelectionModel *model)
  * are more likely to implement support for those.
  *
  * Requests that the selection state of all positions set in @mask be
- * updated to the respecitve value in the @selected bitmask.
+ * updated to the respective value in the @selected bitmask.
  *
  * In pseudocode, it would look something like this:
  *

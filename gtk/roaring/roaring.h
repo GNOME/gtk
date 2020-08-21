@@ -2706,8 +2706,8 @@ void run_container_smart_append_exclusive(run_container_t *src,
 
 /**
 * The new container consists of a single run [start,stop).
-* It is required that stop>start, the caller is responsability for this check.
-* It is required that stop <= (1<<16), the caller is responsability for this check.
+* It is required that stop>start, the caller is responsibility for this check.
+* It is required that stop <= (1<<16), the caller is responsibility for this check.
 * The cardinality of the created container is stop - start.
 * Returns NULL on failure
 */
@@ -2921,7 +2921,7 @@ void *convert_run_optimize(void *c, uint8_t typecode_original,
  */
 /* If a conversion occurs, the caller is responsible to free the original
  * container and
- * he becomes reponsible to free the new one. */
+ * he becomes responsible to free the new one. */
 void *convert_run_to_efficient_container(run_container_t *c,
                                          uint8_t *typecode_after);
 // like convert_run_to_efficient_container but frees the old result if needed
@@ -3732,7 +3732,7 @@ static inline uint8_t get_container_type(const void *container, uint8_t type) {
 /**
  * Copies a container, requires a typecode. This allocates new memory, caller
  * is responsible for deallocation. If the container is not shared, then it is
- * physically cloned. Sharable containers are not cloneable.
+ * physically cloned. Shareable containers are not clonable.
  */
 void *container_clone(const void *container, uint8_t typecode);
 

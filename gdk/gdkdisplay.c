@@ -1273,7 +1273,7 @@ gdk_display_set_debug_flags (GdkDisplay    *display,
  *
  * Returns whether surfaces can reasonably be expected to have
  * their alpha channel drawn correctly on the screen. Check
- * gdk_display_is_rgba() for wether the display supports an
+ * gdk_display_is_rgba() for whether the display supports an
  * alpha channel.
  *
  * On X11 this function returns whether a compositing manager is
@@ -1310,7 +1310,7 @@ gdk_display_set_composited (GdkDisplay *display,
  * gdk_display_is_rgba:
  * @display: a #GdkDisplay
  *
- * Returns wether surfaces on this @display are created with an
+ * Returns whether surfaces on this @display are created with an
  * alpha channel.
  *
  * Even if a %TRUE is returned, it is possible that the

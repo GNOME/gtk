@@ -567,7 +567,7 @@ gtk_print_job_set_track_print_status (GtkPrintJob *job,
  * gtk_print_job_get_track_print_status:
  * @job: a #GtkPrintJob
  *
- * Returns wheter jobs will be tracked after printing.
+ * Returns whether jobs will be tracked after printing.
  * For details, see gtk_print_job_set_track_print_status().
  *
  * Returns: %TRUE if print job status will be reported after printing

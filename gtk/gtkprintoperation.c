@@ -1119,7 +1119,7 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
    *
    * This must be set to a positive number
    * before the rendering starts. It may be set in a 
-   * #GtkPrintOperation::begin-print signal hander.
+   * #GtkPrintOperation::begin-print signal handler.
    *
    * Note that the page numbers passed to the 
    * #GtkPrintOperation::request-page-setup and 
@@ -1545,7 +1545,7 @@ gtk_print_operation_set_job_name (GtkPrintOperation *op,
  *
  * This must be set to a positive number
  * before the rendering starts. It may be set in a 
- * #GtkPrintOperation::begin-print signal hander.
+ * #GtkPrintOperation::begin-print signal handler.
  *
  * Note that the page numbers passed to the 
  * #GtkPrintOperation::request-page-setup 
@@ -1874,7 +1874,7 @@ gtk_print_operation_set_custom_tab_label (GtkPrintOperation  *op,
  * @filename: (type filename): the filename for the exported file
  * 
  * Sets up the #GtkPrintOperation to generate a file instead
- * of showing the print dialog. The indended use of this function
+ * of showing the print dialog. The intended use of this function
  * is for implementing “Export to PDF” actions. Currently, PDF
  * is the only supported format.
  *

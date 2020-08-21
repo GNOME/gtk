@@ -169,7 +169,7 @@ recompute_trash_state (GtkTrashMonitor *monitor)
   GFile *file;
 
   /* Rate limit the updates to not flood the gvfsd-trash when too many changes
-   * happenned in a short time.
+   * happened in a short time.
   */
   if (monitor->timeout_id > 0)
     {

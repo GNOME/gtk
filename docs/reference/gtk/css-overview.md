@@ -18,7 +18,7 @@ name, a state and possibly style classes. The children of each node
 are linearly ordered.
 
 Every widget has one or more of these CSS nodes, and determines their
-name, state, style classes and how they are layed out as children and
+name, state, style classes and how they are laid out as children and
 siblings in the overall node tree. The documentation for each widget
 explains what CSS nodes it has.
 

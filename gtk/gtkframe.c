@@ -350,7 +350,7 @@ gtk_frame_set_label (GtkFrame *frame,
  * to gtk_frame_new().)
  * 
  * Returns: (nullable): the text in the label, or %NULL if there
- *               was no label widget or the lable widget was not
+ *               was no label widget or the label widget was not
  *               a #GtkLabel. This string is owned by GTK+ and
  *               must not be modified or freed.
  **/

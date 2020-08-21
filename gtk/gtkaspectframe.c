@@ -446,7 +446,7 @@ gtk_aspect_frame_get_ratio (GtkAspectFrame *self)
  * @obey_child: If %TRUE, @ratio is ignored, and the aspect
  *    ratio is taken from the requistion of the child.
  *
- * Sets whether the aspect ratio of the childs size
+ * Sets whether the aspect ratio of the child's size
  * request should override the set aspect ratio of
  * the #GtkAspectFrame.
  */
@@ -470,10 +470,10 @@ gtk_aspect_frame_set_obey_child (GtkAspectFrame *self,
  * gtk_aspect_frame_get_obey_child:
  * @self: a #GtkAspectFrame
  *
- * Returns whether the childs size request should override
+ * Returns whether the child's size request should override
  * the set aspect ratio of the #GtkAspectFrame.
  *
- * Returns: whether to obey the childs size request
+ * Returns: whether to obey the child's size request
  */
 gboolean
 gtk_aspect_frame_get_obey_child (GtkAspectFrame *self)

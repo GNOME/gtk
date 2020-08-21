@@ -113,7 +113,7 @@ static void gtk_image_measure (GtkWidget      *widget,
 static void gtk_image_css_changed          (GtkWidget    *widget,
                                             GtkCssStyleChange *change);
 static void gtk_image_system_setting_changed (GtkWidget        *widget,
-                                              GtkSystemSetting  seting);
+                                              GtkSystemSetting  setting);
 static void gtk_image_finalize             (GObject      *object);
 
 static void gtk_image_set_property         (GObject      *object,

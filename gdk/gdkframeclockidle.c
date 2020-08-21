@@ -648,7 +648,7 @@ gdk_frame_clock_paint_idle (void *data)
        * Once we do receive "frame drawn" events, smooth_cycle_start will track the vsync, and do so in a more stable
        * way compared to frame_time. If we then no longer receive "frame drawn" events, smooth_cycle_start will again be
        * simply advanced in increments of the refresh interval, but this time we are in sync with the vsync. If we start
-       * receiving "frame drawn" events shortly after loosing them, then we should still be in sync.
+       * receiving "frame drawn" events shortly after losing them, then we should still be in sync.
        */
       gint64 smooth_cycle_start = priv->smoothed_frame_time_base - priv->smoothed_frame_time_phase;
       priv->min_next_frame_time = smooth_cycle_start + priv->smoothed_frame_time_period;

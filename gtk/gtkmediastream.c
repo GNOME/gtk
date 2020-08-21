@@ -752,7 +752,7 @@ gtk_media_stream_get_error (GtkMediaStream *self)
  * in process, the GtkMediaStream:seeking property will be set.
  *
  * When calling gtk_media_stream_seek() during an ongoing seek operation,
- * the new seek wil override any pending seek.
+ * the new seek will override any pending seek.
  **/
 void
 gtk_media_stream_seek (GtkMediaStream *self,

@@ -283,7 +283,7 @@ _cairo_write (void                *closure,
   error = NULL;
 
   GTK_NOTE (PRINTING,
-            g_print ("FILE Backend: Writting %u byte chunk to temp file\n", length));
+            g_print ("FILE Backend: Writing %u byte chunk to temp file\n", length));
 
   while (length > 0) 
     {
@@ -296,7 +296,7 @@ _cairo_write (void                *closure,
           if (error != NULL)
             {
               GTK_NOTE (PRINTING,
-                        g_print ("FILE Backend: Error writting to temp file, %s\n", error->message));
+                        g_print ("FILE Backend: Error writing to temp file, %s\n", error->message));
 
               g_error_free (error);
             }
@@ -446,7 +446,7 @@ file_write (GIOChannel   *source,
     }
 
   GTK_NOTE (PRINTING,
-            g_print ("FILE Backend: Writting %"G_GSIZE_FORMAT" byte chunk to target file\n", bytes_read));
+            g_print ("FILE Backend: Writing %"G_GSIZE_FORMAT" byte chunk to target file\n", bytes_read));
 
   return TRUE;
 }

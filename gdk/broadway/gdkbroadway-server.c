@@ -48,7 +48,7 @@ struct _GdkBroadwayServer {
   guint8 recv_buffer[1024];
 
   guint process_input_idle;
-  GList *incomming;
+  GList *incoming;
 };
 
 struct _GdkBroadwayServerClass
@@ -248,7 +248,7 @@ parse_all_input (GdkBroadwayServer *server)
       reply = g_memdup (p, size);
       p += size;
 
-      server->incomming = g_list_append (server->incomming, reply);
+      server->incoming = g_list_append (server->incoming, reply);
     }
 
   if (p < end)
@@ -314,7 +314,7 @@ find_response_by_serial (GdkBroadwayServer *server, guint32 serial)
 {
   GList *l;
 
-  for (l = server->incomming; l != NULL; l = l->next)
+  for (l = server->incoming; l != NULL; l = l->next)
     {
       BroadwayReply *reply = l->data;
 
@@ -336,12 +336,12 @@ process_input_messages (GdkBroadwayServer *server)
       server->process_input_idle = 0;
     }
 
-  while (server->incomming)
+  while (server->incoming)
     {
-      reply = server->incomming->data;
-      server->incomming =
-        g_list_delete_link (server->incomming,
-                            server->incomming);
+      reply = server->incoming->data;
+      server->incoming =
+        g_list_delete_link (server->incoming,
+                            server->incoming);
 
       if (reply->base.type == BROADWAY_REPLY_EVENT)
         _gdk_broadway_events_got_input (server->display, &reply->event.msg);
@@ -391,7 +391,7 @@ gdk_broadway_server_wait_for_reply (GdkBroadwayServer *server,
       reply = find_response_by_serial (server, serial);
       if (reply)
         {
-          server->incomming = g_list_remove (server->incomming, reply);
+          server->incoming = g_list_remove (server->incoming, reply);
           break;
         }
 

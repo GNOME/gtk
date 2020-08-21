@@ -231,7 +231,7 @@ fail:
   required_len = g_strv_length (task_data->auth_info_required);
   for (i = 0; i < required_len; i++)
     {
-      /* Not all fields of auth_info are neccessarily written so we can not
+      /* Not all fields of auth_info are necessarily written so we can not
          use strfreev here */
       g_free (auth_info[i]);
     }
@@ -402,7 +402,7 @@ prompt_completed_cb (GDBusConnection *connection,
       return;
     }
 
-  /* Prompt successfull, proceed to get or store secret */
+  /* Prompt successful, proceed to get or store secret */
   switch (task_data->action)
     {
       case SECRETS_SERVICE_ACTION_STORE:
@@ -512,7 +512,7 @@ unlock_collection_cb (GObject      *source_object,
             break;
 
           case SECRETS_SERVICE_ACTION_QUERY:
-            /* Prompt successfull proceed to get secret */
+            /* Prompt successful proceed to get secret */
             g_dbus_proxy_call (task_data->item_proxy,
                                "GetSecret",
                                g_variant_new ("(o)",

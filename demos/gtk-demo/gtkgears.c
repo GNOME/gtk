@@ -305,7 +305,7 @@ create_gear (GLfloat inner_radius,
     /* Create the 7 points (only x,y coords) used to draw a tooth */
     struct point p[7];
 
-    /* Calculate needed sin/cos for varius angles */
+    /* Calculate needed sin/cos for various angles */
     sincos(i * 2.0 * G_PI / teeth + da * 0, &s[0], &c[0]);
     sincos(i * 2.0 * M_PI / teeth + da * 1, &s[1], &c[1]);
     sincos(i * 2.0 * M_PI / teeth + da * 2, &s[2], &c[2]);
@@ -800,7 +800,7 @@ gtk_gears_realize (GtkWidget *widget)
   priv->LightSourcePosition_location = glGetUniformLocation(program, "LightSourcePosition");
   priv->MaterialColor_location = glGetUniformLocation(program, "MaterialColor");
 
-  /* Set the LightSourcePosition uniform which is constant throught the program */
+  /* Set the LightSourcePosition uniform which is constant throughout the program */
   glUniform4fv(priv->LightSourcePosition_location, 1, priv->LightSourcePosition);
 
   /* make the gears */

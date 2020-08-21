@@ -6,7 +6,7 @@ window {
 
 box {
   background-color: @doesntexist;
-  box-shadow: @nonexistant 5px 5px;
+  box-shadow: @nonexistent 5px 5px;
   border-image: linear-gradient(to top, @notaavailable, @whatever);
 }
 

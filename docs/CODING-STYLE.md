@@ -5,7 +5,7 @@ This document is intended to be a short description of the preferred
 coding style to be used for the GTK source code. It was strongly
 inspired by Clutter's `CODING_STYLE`.
 
-Coding style is a matter of consistency, readability and maintainance;
+Coding style is a matter of consistency, readability and maintenance;
 coding style is also completely arbitrary and a matter of taste. This
 document will use examples at the very least to provide authoritative
 and consistent answers to common questions regarding the coding style,

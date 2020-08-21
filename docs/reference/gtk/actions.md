@@ -101,7 +101,7 @@ allow use of detailed action names. This is a convenient way of specifying
 an action name and an action target with a single string.
 
 In the case that the action target is a string with no unusual characters
-(ie: only alpha-numeric, plus '-' and '.') then you can use a detailed
+(ie: only alphanumeric, plus '-' and '.') then you can use a detailed
 action name of the form "justify::left" to specify the justify action with
 a target of left.
 

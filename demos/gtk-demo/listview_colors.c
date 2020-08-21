@@ -79,7 +79,7 @@ gtk_color_paintable_init (GdkPaintableInterface *iface)
 
 /*
  * Finally, we define the type. The important part is adding the paintable
- * interface, so GTK knows that this object can indeed be drawm.
+ * interface, so GTK knows that this object can indeed be drawn.
  */
 G_DEFINE_TYPE_WITH_CODE (GtkColor, gtk_color, G_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (GDK_TYPE_PAINTABLE,

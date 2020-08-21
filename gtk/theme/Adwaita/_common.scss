@@ -42,7 +42,7 @@ dnd {
    These wildcard seems unavoidable, need to investigate.
    Wildcards are bad and troublesome, use them with care,
    or better, just don't.
-   Everytime a wildcard is used a kitten dies, painfully.
+   Every time a wildcard is used a kitten dies, painfully.
 */
 
 spinner:disabled,
@@ -489,7 +489,7 @@ button {
     @at-root %button_basic_flat,
     &.flat {
       @include button(undecorated);
-      // to avoid adiacent buttons borders clashing when transitioning, the transition on the normal state is set
+      // to avoid adjacent buttons borders clashing when transitioning, the transition on the normal state is set
       // to none, while it's added back in the hover state, so the button decoration will fade in on hover, but
       // it won't fade out when the pointer leave the button allocation area. To make the transition more evident
       // in this case the duration is increased.
@@ -777,7 +777,7 @@ button {
 }
 
 %needs_attention {
-  // the dot is drawn by using two radial gradient, the first one is the actuall dot, the other
+  // the dot is drawn by using two radial gradient, the first one is the actual dot, the other
   // simulates the shadow labels and icons normally have in buttons.
   animation: needs_attention 150ms ease-in;
 
@@ -2712,7 +2712,7 @@ scale {
       }
 
       > trough > slider {
-        &:dir(ltr), &:dir(rtl) { // specificity bumb
+        &:dir(ltr), &:dir(rtl) { // specificity bump
           &:hover, &:backdrop, &:disabled, &:backdrop:disabled, & {
             margin-bottom: -15px;
             margin-top: 6px;
@@ -3528,7 +3528,7 @@ paned {
     -gtk-icon-source: none; // defeats the ugly default handle decoration
     border-style: none; // just to be sure
     background-color: transparent;
-    // workaround, using background istead of a border since the border will get rendered twice (?)
+    // workaround, using background instead of a border since the border will get rendered twice (?)
     background-image: image($borders_color);
     background-size: 1px 1px;
 
@@ -3630,7 +3630,7 @@ tooltip {
     // see https://bugzilla.gnome.org/show_bug.cgi?id=736155 for details.
     background-color: transparentize(black, 0.2);
     background-clip: padding-box;
-    border: 1px solid $tooltip_borders_color; // this suble border is meant to
+    border: 1px solid $tooltip_borders_color; // this subtle border is meant to
                                               // not make the tooltip melt with
                                               // very dark backgrounds
     color: white;

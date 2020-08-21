@@ -45,7 +45,7 @@ GtkSidebarRow *gtk_sidebar_row_clone  (GtkSidebarRow *self);
 
 /* Use these methods instead of gtk_widget_hide/show to use an animation */
 void           gtk_sidebar_row_hide   (GtkSidebarRow *self,
-                                       gboolean       inmediate);
+                                       gboolean       immediate);
 void           gtk_sidebar_row_reveal (GtkSidebarRow *self);
 
 GtkWidget     *gtk_sidebar_row_get_eject_button (GtkSidebarRow *self);

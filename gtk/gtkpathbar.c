@@ -217,7 +217,7 @@ gtk_path_bar_init (GtkPathBar *path_bar)
   gtk_widget_add_css_class (path_bar->down_slider_button, "slider-button");
   gtk_widget_set_parent (path_bar->down_slider_button, GTK_WIDGET (path_bar));
 
-  /* GtkBuilder wont let us connect 'swapped' without specifying the signal's
+  /* GtkBuilder won't let us connect 'swapped' without specifying the signal's
    * user data in the .ui file
    */
   g_signal_connect_swapped (path_bar->up_slider_button, "clicked",

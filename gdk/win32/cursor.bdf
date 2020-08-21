@@ -1,7 +1,7 @@
 STARTFONT 2.1
 COMMENT 
 COMMENT downloaded from http://webcvs.freedesktop.org/xorg/font/cursor-misc/cursor.bdf?revision=1.1
-COMMENT slighly edited by tml to correct a few gdk cursors on win32
+COMMENT slightly edited by tml to correct a few gdk cursors on win32
 COMMENT 
 COMMENT Created by bitmaptobdf
 FONT cursor

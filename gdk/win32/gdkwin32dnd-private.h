@@ -29,7 +29,7 @@ G_BEGIN_DECLS
 typedef struct _GdkWin32DragUtilityData GdkWin32DragUtilityData;
 
 /* This structure is deliberately designed to be
- * copyable with memcpy(), i.e. no pointers inside.
+ * copiable with memcpy(), i.e. no pointers inside.
  */
 struct _GdkWin32DragUtilityData
 {

@@ -70,7 +70,7 @@ append_below_thousand (GString *s,
 
   if (n >= 20)
     {
-      const char *names[10] = { NULL, NULL, "twenty", "thirty", "fourty", "fifty", "sixty", "seventy", "eighty", "ninety" };
+      const char *names[10] = { NULL, NULL, "twenty", "thirty", "forty", "fifty", "sixty", "seventy", "eighty", "ninety" };
       if (s->len)
         g_string_append_c (s, ' ');
       g_string_append (s, names [n / 10]);

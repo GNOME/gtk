@@ -381,12 +381,12 @@ gtk_sidebar_row_reveal (GtkSidebarRow *self)
 
 void
 gtk_sidebar_row_hide (GtkSidebarRow *self,
-                      gboolean       inmediate)
+                      gboolean       immediate)
 {
   guint transition_duration;
 
   transition_duration = gtk_revealer_get_transition_duration (GTK_REVEALER (self->revealer));
-  if (inmediate)
+  if (immediate)
       gtk_revealer_set_transition_duration (GTK_REVEALER (self->revealer), 0);
 
   gtk_revealer_set_reveal_child (GTK_REVEALER (self->revealer), FALSE);

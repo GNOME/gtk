@@ -73,7 +73,7 @@
  * - The sibling ordering in the CSS node tree is supposed to correspond
  *   to the visible order of content: top-to-bottom and left-to-right.
  *   Reorder your nodes to maintain this correlation. In particular for
- *   horizontally layed out widgets, this will require listening to
+ *   horizontally laid out widgets, this will require listening to
  *   ::direction-changed.
  * - The draw function should just use gtk_style_context_save_to_node() to
  *   'switch' to the right node, not make any other changes to the style

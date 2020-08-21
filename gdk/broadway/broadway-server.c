@@ -709,7 +709,7 @@ parse_input_message (BroadwayInput *input, const unsigned char *message)
       }
 
     if (l == NULL)
-      g_warning ("Got unexpected rountrip reply for id %d, tag %d\n", msg.roundtrip_notify.id, msg.roundtrip_notify.tag);
+      g_warning ("Got unexpected roundtrip reply for id %d, tag %d\n", msg.roundtrip_notify.id, msg.roundtrip_notify.tag);
     else
       {
         BroadwayOutstandingRoundtrip *rt = l->data;

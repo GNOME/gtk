@@ -24,7 +24,7 @@
  * @See_also: #GtkGestureSwipe
  *
  * #GtkGestureDrag is a #GtkGesture implementation that recognizes drag
- * operations. The drag operation itself can be tracked throught the
+ * operations. The drag operation itself can be tracked throughout the
  * #GtkGestureDrag::drag-begin, #GtkGestureDrag::drag-update and
  * #GtkGestureDrag::drag-end signals, or the relevant coordinates be
  * extracted through gtk_gesture_drag_get_offset() and

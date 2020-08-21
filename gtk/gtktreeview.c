@@ -5442,8 +5442,8 @@ gtk_tree_view_forward_controller_key_pressed (GtkEventControllerKey *key,
 
   /* Initially, before the search window is visible, we pass the event to the
    * IM context of the search entry box. If it triggers a commit or a preedit,
-   * we then show the search window without loosing tree view focus.
-   * If the seach window is already visible, we forward the events to it,
+   * we then show the search window without losing tree view focus.
+   * If the search window is already visible, we forward the events to it,
    * keeping the focus on the tree view.
    */
   if (gtk_widget_has_focus (GTK_WIDGET (tree_view))
@@ -8328,7 +8328,7 @@ gtk_tree_view_row_deleted (GtkTreeModel *model,
   /* Ensure we don't have a dangling pointer to a dead node */
   ensure_unprelighted (tree_view);
 
-  /* Cancel editting if we've started */
+  /* Cancel editing if we've started */
   gtk_tree_view_stop_editing (tree_view, TRUE);
 
   /* If the cursor row got deleted, move the cursor to the next row */

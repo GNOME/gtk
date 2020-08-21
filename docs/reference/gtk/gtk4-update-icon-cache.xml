@@ -70,7 +70,7 @@
     <term>--force</term>
     <term>-f</term>
     <listitem><para>Overwrite an existing cache file even if it appears to be
-         uptodate.</para></listitem>
+         up-to-date.</para></listitem>
   </varlistentry>
 
   <varlistentry>

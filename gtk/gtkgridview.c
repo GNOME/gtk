@@ -207,7 +207,7 @@ cell_augment (GtkRbTree *tree,
  * @y into the primary direction. 
  *
  * If y is larger than the height of all cells, %NULL will be returned.
- * In particular that means that for an emtpy grid, %NULL is returned
+ * In particular that means that for an empty grid, %NULL is returned
  * for any value.
  *
  * Returns: (nullable): The first cell at offset y or %NULL if none

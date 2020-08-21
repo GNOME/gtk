@@ -1,4 +1,4 @@
-@define-color nonexistant @idonotexist;
+@define-color nonexistent @idonotexist;
 
 @define-color self @self;
 
@@ -7,5 +7,5 @@
 @define-color cycle2 @cycle1;
 
 .background {
-  background: linear-gradient(to bottom, @nonexistant, @self, @cycle, @undefinedcolor);
+  background: linear-gradient(to bottom, @nonexistent, @self, @cycle, @undefinedcolor);
 }

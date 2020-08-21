@@ -86,7 +86,7 @@
  * properties.
  *
  * Note that GtkSpinButton will by default make its entry large enough to
- * accomodate the lower and upper bounds of the adjustment. If this is
+ * accommodate the lower and upper bounds of the adjustment. If this is
  * not desired, the automatic sizing can be turned off by explicitly
  * setting #GtkEditable::width-chars to a value != -1.
  *
@@ -1447,7 +1447,7 @@ gtk_spin_button_insert_text (GtkEditable *editable,
        * I don't know if the positive sign always gets bogusly set to
        * a digit when the above Registry value is corrupted as
        * described. (In my test case, it got set to "8", and in the
-       * bug report above it presumably was set ot "0".) Probably it
+       * bug report above it presumably was set to "0".) Probably it
        * might get set to almost anything? So how to distinguish a
        * bogus value from some correct one for some locale? That is
        * probably hard, but at least we should filter out the

@@ -779,7 +779,7 @@ gtk_directory_list_get_attributes (GtkDirectoryList *self)
  *
  * The default IO priority is %G_PRIORITY_DEFAULT, which is higher than
  * the GTK redraw priority. If you are loading a lot of directories in
- * parrallel, lowering it to something like %G_PRIORITY_DEFAULT_IDLE
+ * parallel, lowering it to something like %G_PRIORITY_DEFAULT_IDLE
  * may increase responsiveness.
  */
 void
@@ -821,7 +821,7 @@ gtk_directory_list_get_io_priority (GtkDirectoryList *self)
  *
  * Files will be added to @self from time to time while loading is
  * going on. The order in which are added is undefined and may change
- * inbetween runs.
+ * in between runs.
  *
  * Returns: %TRUE if @self is loading
  */

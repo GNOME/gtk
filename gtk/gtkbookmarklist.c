@@ -564,7 +564,7 @@ gtk_bookmark_list_get_io_priority (GtkBookmarkList *self)
  *
  * Files will be added to @self from time to time while loading is
  * going on. The order in which are added is undefined and may change
- * inbetween runs.
+ * in between runs.
  *
  * Returns: %TRUE if @self is loading
  */

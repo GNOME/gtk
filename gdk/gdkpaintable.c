@@ -54,7 +54,7 @@ void            gtk_snapshot_pop                        (GdkSnapshot            
  * always produce the same output for the same snapshot.
  *
  * A #GdkPaintable may change its contents, meaning that it will now produce a
- * different output with the same snpashot. Once that happens, it will call
+ * different output with the same snapshot. Once that happens, it will call
  * gdk_paintable_invalidate_contents() which will emit the
  * #GdkPaintable::invalidate-contents signal. If a paintable is known to never
  * change its contents, it will set the %GDK_PAINTABLE_STATIC_CONTENTS flag.
