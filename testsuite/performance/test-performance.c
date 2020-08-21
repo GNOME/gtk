@@ -135,10 +135,10 @@ main (int argc, char *argv[])
       child_argv[1] = (char *)"--force";
       child_argv[2] = (char *)"--use-trace-fd";
       child_argv[3] = name;
-      child_argv[5] = (char *)"--";
+      child_argv[4] = (char *)"--";
       for (i = 0; i + 1 < argc; i++)
-        child_argv[6 + i] = argv[i + 1];
-      child_argv[6 + argc - 1] = NULL;
+        child_argv[5 + i] = argv[i + 1];
+      child_argv[5 + argc - 1] = NULL;
 
       launcher = g_subprocess_launcher_new (0);
       g_subprocess_launcher_setenv (launcher, "GTK_DEBUG_AUTO_QUIT", "1", TRUE);
