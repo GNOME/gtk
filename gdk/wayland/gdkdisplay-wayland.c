@@ -1109,7 +1109,9 @@ _gdk_wayland_display_load_cursor_theme (GdkWaylandDisplay *display_wayland)
   guint size;
   const char *name;
   GValue v = G_VALUE_INIT;
-  gint64 before = g_get_monotonic_time ();
+  gint64 before G_GNUC_UNUSED;
+
+  before = GDK_PROFILER_CURRENT_TIME;
 
   g_assert (display_wayland);
   g_assert (display_wayland->shm);
@@ -1130,8 +1132,7 @@ _gdk_wayland_display_load_cursor_theme (GdkWaylandDisplay *display_wayland)
   gdk_wayland_display_set_cursor_theme (GDK_DISPLAY (display_wayland), name, size);
   g_value_unset (&v);
 
-  if (GDK_PROFILER_IS_RUNNING)
-    gdk_profiler_end_mark (before, "wayland", "load cursor theme");
+  gdk_profiler_end_mark (before, "wayland", "load cursor theme");
 
 }
 

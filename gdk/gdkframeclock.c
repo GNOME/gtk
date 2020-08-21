@@ -673,34 +673,37 @@ _gdk_frame_clock_emit_before_paint (GdkFrameClock *frame_clock)
 void
 _gdk_frame_clock_emit_update (GdkFrameClock *frame_clock)
 {
-  gint64 before = g_get_monotonic_time ();
+  gint64 before G_GNUC_UNUSED;
+
+  before = GDK_PROFILER_CURRENT_TIME;
 
   g_signal_emit (frame_clock, signals[UPDATE], 0);
 
-  if (GDK_PROFILER_IS_RUNNING)
-    gdk_profiler_end_mark (before, "frameclock update", NULL);
+  gdk_profiler_end_mark (before, "frameclock update", NULL);
 }
 
 void
 _gdk_frame_clock_emit_layout (GdkFrameClock *frame_clock)
 {
-  gint64 before = g_get_monotonic_time ();
+  gint64 before G_GNUC_UNUSED;
+
+  before = GDK_PROFILER_CURRENT_TIME;
 
   g_signal_emit (frame_clock, signals[LAYOUT], 0);
 
-  if (GDK_PROFILER_IS_RUNNING)
-    gdk_profiler_end_mark (before, "frameclock layout", NULL);
+  gdk_profiler_end_mark (before, "frameclock layout", NULL);
 }
 
 void
 _gdk_frame_clock_emit_paint (GdkFrameClock *frame_clock)
 {
-  gint64 before = g_get_monotonic_time ();
+  gint64 before G_GNUC_UNUSED;
+
+  before = GDK_PROFILER_CURRENT_TIME;
 
   g_signal_emit (frame_clock, signals[PAINT], 0);
 
-  if (GDK_PROFILER_IS_RUNNING)
-    gdk_profiler_end_mark (before, "frameclock paint", NULL);
+  gdk_profiler_end_mark (before, "frameclock paint", NULL);
 }
 
 void
@@ -715,6 +718,7 @@ _gdk_frame_clock_emit_resume_events (GdkFrameClock *frame_clock)
   g_signal_emit (frame_clock, signals[RESUME_EVENTS], 0);
 }
 
+#ifdef HAVE_SYSPROF
 static gint64
 guess_refresh_interval (GdkFrameClock *frame_clock)
 {
@@ -780,24 +784,25 @@ frame_clock_get_fps (GdkFrameClock *frame_clock)
       interval = guess_refresh_interval (frame_clock);
       if (interval == 0)
         return 0.0;
-    }   
-    
+    }
+
   return ((double) end_counter - start_counter) * G_USEC_PER_SEC / (end_timestamp - start_timestamp);
 }
+#endif
 
 void
 _gdk_frame_clock_add_timings_to_profiler (GdkFrameClock   *clock,
                                           GdkFrameTimings *timings)
 {
   if (timings->drawn_time != 0)
-    gdk_profiler_add_mark (timings->drawn_time, 0, "drawn window", NULL);
+    {
+      gdk_profiler_add_mark (1000 * timings->drawn_time, 0, "drawn window", NULL);
+    }
 
   if (timings->presentation_time != 0)
-    gdk_profiler_add_mark (timings->presentation_time, 0, "presented window", NULL);
-
-  if (timings->presentation_time != 0 || timings->drawn_time != 0)
     {
-      gint64 time = timings->presentation_time != 0 ? timings->presentation_time : timings->drawn_time;
-      gdk_profiler_set_counter (fps_counter, time, frame_clock_get_fps (clock));
+      gdk_profiler_add_mark (1000 * timings->presentation_time, 0, "presented window", NULL);
     }
+
+  gdk_profiler_set_counter (fps_counter, frame_clock_get_fps (clock));
 }

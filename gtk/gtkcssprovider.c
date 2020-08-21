@@ -978,7 +978,9 @@ gtk_css_provider_postprocess (GtkCssProvider *css_provider)
   GtkCssProviderPrivate *priv = gtk_css_provider_get_instance_private (css_provider);
   GtkCssSelectorTreeBuilder *builder;
   guint i;
-  gint64 before = g_get_monotonic_time ();
+  gint64 before G_GNUC_UNUSED;
+
+  before = GDK_PROFILER_CURRENT_TIME;
 
   g_array_sort (priv->rulesets, gtk_css_provider_compare_rule);
 
@@ -1010,8 +1012,7 @@ gtk_css_provider_postprocess (GtkCssProvider *css_provider)
     }
 #endif
 
-  if (GDK_PROFILER_IS_RUNNING)
-    gdk_profiler_end_mark (before, "create selector tree", NULL);
+  gdk_profiler_end_mark (before, "create selector tree", NULL);
 }
 
 static void
@@ -1020,7 +1021,9 @@ gtk_css_provider_load_internal (GtkCssProvider *self,
                                 GFile          *file,
                                 GBytes         *bytes)
 {
-  gint64 before = g_get_monotonic_time ();
+  gint64 before G_GNUC_UNUSED;
+
+  before = GDK_PROFILER_CURRENT_TIME;
 
   if (bytes == NULL)
     {

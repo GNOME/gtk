@@ -2070,16 +2070,16 @@ ensure_valid_themes (GtkIconTheme *self,
 
   if (!self->themes_valid)
     {
-      gint64 before;
+      gint64 before G_GNUC_UNUSED;
+
       if (non_blocking)
         return FALSE;
 
-       before = g_get_monotonic_time ();
+       before = GDK_PROFILER_CURRENT_TIME;
 
       load_themes (self);
 
-      if (GDK_PROFILER_IS_RUNNING)
-        gdk_profiler_end_mark (before, "icon theme load", self->current_theme);
+      gdk_profiler_end_mark (before, "icon theme load", self->current_theme);
 
       if (was_valid)
         queue_theme_changed (self);
@@ -3720,7 +3720,7 @@ icon_ensure_texture__locked (GtkIconPaintable *icon,
   if (icon->texture)
     return;
 
-  before = g_get_monotonic_time ();
+  before = GDK_PROFILER_CURRENT_TIME;
 
   /* This is the natural pixel size for the requested icon size + scale in this directory.
    * We precalculate this so we can use it as a rasterization size for svgs.
@@ -3825,11 +3825,13 @@ icon_ensure_texture__locked (GtkIconPaintable *icon,
 
   if (GDK_PROFILER_IS_RUNNING)
     {
-      guint64 end = g_get_monotonic_time ();
+      gint64 end = GDK_PROFILER_CURRENT_TIME;
       /* Don't report quick (< 0.5 msec) parses */
-      if (end - before > 500 || !in_thread)
-        gdk_profiler_add_markf (before, (end - before), in_thread ?  "icon load (thread)" : "icon load" ,
-                                "%s size %d@%d", icon->filename, icon->desired_size, icon->desired_scale);
+      if (end - before > 500000 || !in_thread)
+        {
+          gdk_profiler_add_markf (before, (end - before), in_thread ?  "icon load (thread)" : "icon load" ,
+                                  "%s size %d@%d", icon->filename, icon->desired_size, icon->desired_scale);
+        }
     }
 }
 

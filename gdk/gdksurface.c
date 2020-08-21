@@ -2679,11 +2679,12 @@ check_autohide (GdkEvent *event)
   return FALSE;
 }
 
-static void
+static inline void
 add_event_mark (GdkEvent *event,
                 gint64    time,
-                guint64   duration)
+                gint64    end_time)
 {
+#ifdef HAVE_SYSPROF
   char *message = NULL;
   const char *kind;
   GEnumClass *class;
@@ -2772,15 +2773,16 @@ add_event_mark (GdkEvent *event,
       break;
     }
 
-  gdk_profiler_add_mark (time, duration, "event", message ? message : kind);
+  gdk_profiler_add_mark (time, end_time - time, "event", message ? message : kind);
 
   g_free (message);
+#endif
 }
 
 gboolean
 gdk_surface_handle_event (GdkEvent *event)
 {
-  gint64 begin_time = g_get_monotonic_time ();
+  gint64 begin_time = GDK_PROFILER_CURRENT_TIME;
   gboolean handled = FALSE;
 
   if (check_autohide (event))
@@ -2801,7 +2803,7 @@ gdk_surface_handle_event (GdkEvent *event)
     }
 
   if (GDK_PROFILER_IS_RUNNING)
-    add_event_mark (event, begin_time, g_get_monotonic_time () - begin_time);
+    add_event_mark (event, begin_time, GDK_PROFILER_CURRENT_TIME);
 
   return handled;
 }

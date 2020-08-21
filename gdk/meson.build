@@ -194,8 +194,8 @@ gdk_deps = [
 ]
 
 if profiler_enabled
-  if profiler_dep.found()
-    gdk_deps += [profiler_dep]
+  if libsysprof_capture_dep.found()
+    gdk_deps += [libsysprof_capture_dep]
   endif
 endif
 

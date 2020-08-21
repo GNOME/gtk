@@ -3069,8 +3069,9 @@ gsk_gl_renderer_realize (GskRenderer  *renderer,
                          GError      **error)
 {
   GskGLRenderer *self = GSK_GL_RENDERER (renderer);
-  gint64 before = g_get_monotonic_time ();
+  gint64 before G_GNUC_UNUSED;
 
+  before = GDK_PROFILER_CURRENT_TIME;
   /* If we didn't get a GdkGLContext before realization, try creating
    * one now, for our exclusive use.
    */
@@ -3101,8 +3102,7 @@ gsk_gl_renderer_realize (GskRenderer  *renderer,
   self->icon_cache = get_icon_cache_for_display (gdk_surface_get_display (surface), self->atlases);
   gsk_gl_shadow_cache_init (&self->shadow_cache);
 
-  if (GDK_PROFILER_IS_RUNNING)
-    gdk_profiler_end_mark (before, "gl renderer realize", NULL);
+  gdk_profiler_end_mark (before, "gl renderer realize", NULL);
 
   return TRUE;
 }
@@ -3685,7 +3685,8 @@ gsk_gl_renderer_do_render (GskRenderer           *renderer,
   graphene_matrix_t projection;
 #ifdef G_ENABLE_DEBUG
   GskProfiler *profiler;
-  gint64 gpu_time, cpu_time, start_time;
+  gint64 gpu_time, cpu_time;
+  gint64 start_time G_GNUC_UNUSED;
 #endif
   GPtrArray *removed;
 
@@ -3804,9 +3805,7 @@ gsk_gl_renderer_do_render (GskRenderer           *renderer,
 
   gsk_profiler_push_samples (profiler);
 
-  if (GDK_PROFILER_IS_RUNNING)
-    gdk_profiler_add_mark (start_time, cpu_time, "GL render", "");
-
+  gdk_profiler_add_mark (start_time * 1000, cpu_time * 1000, "GL render", "");
 #endif
 }
 

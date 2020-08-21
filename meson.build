@@ -701,27 +701,40 @@ if cloudproviders_enabled
   endif
 endif
 
-profiler_enabled = get_option('profiler')
+profiler_enabled = get_option('sysprof').enabled()
 if profiler_enabled
   # libsysprof-capture support
-  profiler_dep = dependency('sysprof-capture-4',
+  libsysprof_capture_dep = dependency('sysprof-capture-4',
     required: true,
     default_options: [
       'enable_examples=false',
       'enable_gtk=false',
       'enable_tests=false',
       'enable_tools=false',
-      'libsysprof=false',
+      'libsysprof=true',
       'with_sysprofd=none',
       'help=false',
     ],
     fallback: ['sysprof', 'libsysprof_capture_dep'],
   )
-  if profiler_dep.found()
-    cdata.set('HAVE_SYSPROF_CAPTURE', profiler_dep.found())
+  if libsysprof_capture_dep.found()
+    cdata.set('HAVE_SYSPROF', 1)
   else
     error('Profiler support not found, but was explicitly requested.')
   endif
+  libsysprof_dep = dependency('sysprof-4',
+    required: false,
+    default_options: [
+      'enable_examples=false',
+      'enable_gtk=false',
+      'enable_tests=false',
+      'enable_tools=false',
+      'libsysprof=true',
+      'with_sysprofd=none',
+      'help=false',
+    ],
+    fallback: ['sysprof', 'libsysprof_dep'],
+  )
 endif
 
 graphene_dep_type = graphene_dep.type_name()
@@ -878,7 +891,7 @@ summary('Print backends', print_backends)
 summary('Media backends', media_backends)
 summary('Vulkan support', have_vulkan)
 summary('Cloud support', get_option('cloudproviders'))
-summary('Profiler', get_option('profiler'))
+summary('Sysprof support', get_option('sysprof').enabled())
 summary('Colord support', get_option('colord'))
 
 # Build

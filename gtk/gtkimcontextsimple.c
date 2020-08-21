@@ -247,15 +247,16 @@ init_compose_table_thread_cb (GTask            *task,
                               gpointer          task_data,
                               GCancellable     *cancellable)
 {
-  guint64 before = g_get_monotonic_time ();
+  gint64 before G_GNUC_UNUSED;
+
+  before = GDK_PROFILER_CURRENT_TIME;
 
   if (g_task_return_error_if_cancelled (task))
     return;
 
   gtk_im_context_simple_init_compose_table ();
 
-  if (GDK_PROFILER_IS_RUNNING)
-    gdk_profiler_end_mark (before, "im compose table load (thread)", NULL);
+  gdk_profiler_end_mark (before, "im compose table load (thread)", NULL);
 }
 
 static void
