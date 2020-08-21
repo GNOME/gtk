@@ -195,7 +195,7 @@ gtk_layout_manager_real_create_layout_child (GtkLayoutManager *manager,
 
   return g_object_new (manager_class->layout_child_type,
                        "layout-manager", manager,
-                       "child-widget", widget,
+                       "child-widget", child,
                        NULL);
 }
 
