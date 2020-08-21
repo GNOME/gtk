@@ -703,20 +703,34 @@ endif
 
 profiler_enabled = get_option('profiler')
 if profiler_enabled
-  # libsysprof-capture support
-  profiler_dep = dependency('sysprof-capture-4',
+  # Depend on libsysprof-capture if we only need the capture format.
+  # For -Dbuild-tests=true, we need SysprofProfiler to profile processes
+  # which requires sysprof-4 instead of sysprof-capture-4.
+
+  profiler_options = [
+    'enable_examples=false',
+    'enable_gtk=false',
+    'enable_tests=false',
+    'enable_tools=false',
+    'with_sysprofd=none',
+    'help=false',
+  ]
+
+  if get_option('build-tests')
+    profiler_dep_name = 'sysprof-4'
+    profiler_fallback = 'libsysprof_dep'
+  else
+    profiler_dep_name = 'sysprof-capture-4'
+    profiler_fallback = 'libsysprof_capture_dep'
+    profiler_options += ['libsysprof=false']
+  endif
+
+  profiler_dep = dependency(profiler_dep_name,
     required: true,
-    default_options: [
-      'enable_examples=false',
-      'enable_gtk=false',
-      'enable_tests=false',
-      'enable_tools=false',
-      'libsysprof=false',
-      'with_sysprofd=none',
-      'help=false',
-    ],
-    fallback: ['sysprof', 'libsysprof_capture_dep'],
+    default_options: profiler_options,
+    fallback: ['sysprof', profiler_fallback],
   )
+
   if profiler_dep.found()
     cdata.set('HAVE_SYSPROF', profiler_dep.found())
   else

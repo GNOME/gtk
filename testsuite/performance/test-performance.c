@@ -1,9 +1,10 @@
+#include <errno.h>
 #include <stdio.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <errno.h>
-#include <sysprof-capture.h>
+#include <sysprof.h>
 #include <gio/gio.h>
 
 typedef struct {
@@ -46,6 +47,8 @@ static char *opt_detail;
 static char *opt_name;
 static char *opt_output;
 static gboolean opt_start_time;
+static GMainLoop *main_loop;
+static GError *failure;
 
 static GOptionEntry options[] = {
   { "mark", 0, G_OPTION_FLAG_NONE, G_OPTION_ARG_STRING, &opt_mark, "Name of the mark", "NAME" },
@@ -56,6 +59,29 @@ static GOptionEntry options[] = {
   { "output", '0', G_OPTION_FLAG_NONE, G_OPTION_ARG_STRING, &opt_output, "Directory to save syscap files", "DIRECTORY" },
   { NULL, }
 };
+
+static gboolean
+start_in_main (gpointer data)
+{
+  SysprofProfiler *profiler = data;
+  sysprof_profiler_start (profiler);
+  return G_SOURCE_REMOVE;
+}
+
+static void
+on_failure_cb (SysprofProfiler *profiler,
+               const GError    *error)
+{
+  g_propagate_error (&failure, g_error_copy (error));
+  g_main_loop_quit (main_loop);
+}
+
+static void
+on_stopped_cb (SysprofProfiler *profiler)
+{
+  g_clear_error (&failure);
+  g_main_loop_quit (main_loop);
+}
 
 int
 main (int argc, char *argv[])
@@ -68,7 +94,9 @@ main (int argc, char *argv[])
   gint64 min, max, total;
   int count;
   char *output_dir = NULL;
-  int i;
+  char **spawn_env;
+  char *workdir;
+  int i, j;
 
   context = g_option_context_new ("COMMANDLINE");
   g_option_context_add_main_entries (context, options, NULL);
@@ -83,6 +111,12 @@ main (int argc, char *argv[])
 
   if (opt_rep < 1)
     g_error ("COUNT must be a positive number");
+
+  main_loop = g_main_loop_new (NULL, FALSE);
+  workdir = g_get_current_dir ();
+
+  spawn_env = g_get_environ ();
+  spawn_env = g_environ_setenv (spawn_env, "GTK_DEBUG_AUTO_QUIT", "1", TRUE);
 
   if (opt_output)
     {
@@ -116,10 +150,10 @@ main (int argc, char *argv[])
 
   for (i = 0; i < opt_rep; i++)
     {
-      GSubprocessLauncher *launcher;
-      GSubprocess *subprocess;
+      SysprofProfiler *profiler;
       int fd;
       char *name;
+      SysprofCaptureWriter *writer;
       SysprofCaptureReader *reader;
       SysprofCaptureCursor *cursor;
       SysprofCaptureCondition *condition;
@@ -128,39 +162,41 @@ main (int argc, char *argv[])
       fd = g_file_open_tmp ("gtk.XXXXXX.syscap", &name, &error);
       if (error)
         g_error ("Create syscap file: %s", error->message);
-      close (fd); // sysprof-cli uses O_EXCL
 
-      child_argv = g_new (char *, argc + 6);
-      child_argv[0] = (char *)"sysprof-cli";
-      child_argv[1] = (char *)"--force";
-      child_argv[2] = (char *)"--use-trace-fd";
-      child_argv[3] = name;
-      child_argv[4] = (char *)"--";
-      for (i = 0; i + 1 < argc; i++)
-        child_argv[5 + i] = argv[i + 1];
-      child_argv[5 + argc - 1] = NULL;
+      child_argv = g_new (char *, argc);
+      for (j = 0; j + 1 < argc; j++)
+        child_argv[j] = argv[j + 1];
+      child_argv[argc - 1] = NULL;
 
-      launcher = g_subprocess_launcher_new (0);
-      g_subprocess_launcher_setenv (launcher, "GTK_DEBUG_AUTO_QUIT", "1", TRUE);
+      writer = sysprof_capture_writer_new_from_fd (fd, 0);
+      if (!writer)
+        g_error ("Failed to create capture writer: %s", g_strerror (errno));
 
-      subprocess = g_subprocess_launcher_spawnv (launcher, (const char *const *)child_argv, &error);
-      if (error)
-        g_error ("Launch child: %s", error->message);
+      profiler = sysprof_local_profiler_new ();
+      sysprof_profiler_set_whole_system (profiler, FALSE);
+      sysprof_profiler_set_spawn (profiler, TRUE);
+      sysprof_profiler_set_spawn_argv (profiler, (const char * const *)child_argv);
+      sysprof_profiler_set_spawn_cwd (profiler, workdir);
+      sysprof_profiler_set_spawn_env (profiler, (const char * const *)spawn_env);
+      sysprof_profiler_set_writer (profiler, writer);
 
+      sysprof_capture_writer_unref (writer);
       g_free (child_argv);
 
-      if (!g_subprocess_wait (subprocess, NULL, &error))
-        g_error ("Run child: %s", error->message);
+      g_signal_connect_swapped (profiler, "failed", G_CALLBACK (on_failure_cb), NULL);
+      g_signal_connect_swapped (profiler, "stopped", G_CALLBACK (on_stopped_cb), NULL);
 
-      if (!g_subprocess_get_successful (subprocess))
-        g_error ("Child process failed");
+      g_idle_add (start_in_main, profiler);
+      g_main_loop_run (main_loop);
 
-      g_object_unref (subprocess);
-      g_object_unref (launcher);
+      if (failure)
+        g_error ("Run child: %s", failure->message);
 
-      reader = sysprof_capture_reader_new (name);
+      reader = sysprof_capture_writer_create_reader (writer);
       if (!reader)
         g_error ("Opening syscap file: %s", g_strerror (errno));
+
+      sysprof_capture_writer_unref (writer);
 
       data.mark = opt_mark ? opt_mark : "css validation";
       data.detail = opt_detail ? opt_detail : NULL;
@@ -205,6 +241,8 @@ main (int argc, char *argv[])
       /* A poor mans way to try and isolate the runs from each other */
       g_usleep (300000);
     }
+
+  g_free (workdir);
 
   min = G_MAXINT64;
   max = 0;
