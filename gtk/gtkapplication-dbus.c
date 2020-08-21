@@ -25,6 +25,7 @@
 #include "gtkapplicationprivate.h"
 #include "gtksettings.h"
 #include "gtkprivate.h"
+#include "gtkintl.h"
 
 #include "gdk/gdkconstructor.h"
 
@@ -687,12 +688,19 @@ gtk_application_impl_dbus_inhibit (GtkApplicationImpl         *impl,
 
   if (dbus->sm_proxy)
     {
+      if (reason == NULL)
+        /* Translators: This is the 'reason' given when inhibiting
+         * suspend or screen locking, and the caller hasn't specified
+         * a reason.
+         */
+        reason = _("Reason not specified");
+
       res = g_dbus_proxy_call_sync (dbus->sm_proxy,
                                     "Inhibit",
                                     g_variant_new ("(s@usu)",
                                                    dbus->application_id,
                                                    window ? gtk_application_impl_dbus_get_window_system_id (dbus, window) : g_variant_new_uint32 (0),
-                                                   reason ? reason : "",
+                                                   reason,
                                                    flags),
                                     G_DBUS_CALL_FLAGS_NONE,
                                     G_MAXINT,
