@@ -23,8 +23,12 @@ option('xinerama', type: 'combo', choices : ['yes', 'no', 'auto'], value : 'auto
   description : 'Enable support for the Xinerama extension')
 option('cloudproviders', type: 'boolean', value: false,
   description : 'Enable the cloudproviders support')
-option('profiler', type: 'boolean', value: false,
-  description : 'Enable profiler support')
+
+option('sysprof',
+       type: 'feature',
+       value: 'disabled',
+       description : 'include tracing support for sysprof')
+
 option('tracker3', type: 'boolean', value: false,
   description : 'Enable Tracker3 filechooser search')
 

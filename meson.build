@@ -701,7 +701,7 @@ if cloudproviders_enabled
   endif
 endif
 
-profiler_enabled = get_option('profiler')
+profiler_enabled = get_option('sysprof').enabled()
 if profiler_enabled
   # libsysprof-capture support
   libsysprof_capture_dep = dependency('sysprof-capture-4',
@@ -891,7 +891,7 @@ summary('Print backends', print_backends)
 summary('Media backends', media_backends)
 summary('Vulkan support', have_vulkan)
 summary('Cloud support', get_option('cloudproviders'))
-summary('Profiler', get_option('profiler'))
+summary('Sysprof support', get_option('sysprof').enabled())
 summary('Colord support', get_option('colord'))
 
 # Build

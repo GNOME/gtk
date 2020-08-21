@@ -74,7 +74,7 @@ fedora-x86_64:
   script:
     - meson subprojects update
     - meson ${COMMON_MESON_FLAGS} ${EXTRA_MESON_FLAGS} ${BACKEND_FLAGS} ${FEATURE_FLAGS}
-            -Dprofiler=true
+            -Dsysprof=enabled
             _build
     - ninja -C _build
     - .gitlab-ci/run-tests.sh _build x11
