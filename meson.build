@@ -439,7 +439,7 @@ endif
 
 cairo_libs = []
 if cc.get_id() == 'msvc'
-  # Fallback depedency discovery for those on Visual Studio that do not generate
+  # Fallback dependency discovery for those on Visual Studio that do not generate
   # pkg-config files in their build systems for MSVC
   # Fallback for Cairo
   if not cairo_dep.found()
@@ -703,39 +703,38 @@ endif
 
 profiler_enabled = get_option('profiler')
 if profiler_enabled
-  # Depend on libsysprof-capture if we only need the capture format.
-  # For -Dbuild-tests=true, we need SysprofProfiler to profile processes
-  # which requires sysprof-4 instead of sysprof-capture-4.
-
-  profiler_options = [
-    'enable_examples=false',
-    'enable_gtk=false',
-    'enable_tests=false',
-    'enable_tools=false',
-    'with_sysprofd=none',
-    'help=false',
-  ]
-
-  if get_option('build-tests')
-    profiler_dep_name = 'sysprof-4'
-    profiler_fallback = 'libsysprof_dep'
-  else
-    profiler_dep_name = 'sysprof-capture-4'
-    profiler_fallback = 'libsysprof_capture_dep'
-    profiler_options += ['libsysprof=false']
-  endif
-
-  profiler_dep = dependency(profiler_dep_name,
+  # libsysprof-capture support
+  libsysprof_capture_dep = dependency('sysprof-capture-4',
     required: true,
-    default_options: profiler_options,
-    fallback: ['sysprof', profiler_fallback],
+    default_options: [
+      'enable_examples=false',
+      'enable_gtk=false',
+      'enable_tests=false',
+      'enable_tools=false',
+      'libsysprof=true',
+      'with_sysprofd=none',
+      'help=false',
+    ],
+    fallback: ['sysprof', 'libsysprof_capture_dep'],
   )
-
-  if profiler_dep.found()
-    cdata.set('HAVE_SYSPROF', profiler_dep.found())
+  if libsysprof_capture_dep.found()
+    cdata.set('HAVE_SYSPROF', 1)
   else
     error('Profiler support not found, but was explicitly requested.')
   endif
+  libsysprof_dep = dependency('sysprof-4',
+    required: false,
+    default_options: [
+      'enable_examples=false',
+      'enable_gtk=false',
+      'enable_tests=false',
+      'enable_tools=false',
+      'libsysprof=true',
+      'with_sysprofd=none',
+      'help=false',
+    ],
+    fallback: ['sysprof', 'libsysprof_dep'],
+  )
 endif
 
 graphene_dep_type = graphene_dep.type_name()
