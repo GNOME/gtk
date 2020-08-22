@@ -67,7 +67,6 @@
 
 #include "gtkintl.h"
 #include "gtkcellrenderertext.h"
-#include "gtkframe.h"
 #include "gtktreeselection.h"
 #include "gtktreeview.h"
 #include "gtkscrolledwindow.h"
@@ -464,7 +463,6 @@ gtk_entry_completion_constructed (GObject *object)
 {
   GtkEntryCompletion        *completion = GTK_ENTRY_COMPLETION (object);
   GtkTreeSelection          *sel;
-  GtkWidget                 *popup_frame;
   GtkEventController        *controller;
 
   G_OBJECT_CLASS (gtk_entry_completion_parent_class)->constructed (object);
@@ -526,14 +524,11 @@ gtk_entry_completion_constructed (GObject *object)
                             completion);
   gtk_widget_add_controller (completion->popup_window, controller);
 
-  popup_frame = gtk_frame_new (NULL);
-  gtk_popover_set_child (GTK_POPOVER (completion->popup_window), popup_frame);
-
   gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (completion->scrolled_window),
                                  completion->tree_view);
   gtk_widget_set_hexpand (completion->scrolled_window, TRUE);
   gtk_widget_set_vexpand (completion->scrolled_window, TRUE);
-  gtk_frame_set_child (GTK_FRAME (popup_frame), completion->scrolled_window);
+  gtk_popover_set_child (GTK_POPOVER (completion->popup_window), completion->scrolled_window);
 }
 
 
