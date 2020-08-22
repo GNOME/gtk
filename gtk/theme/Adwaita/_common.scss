@@ -3407,8 +3407,6 @@ row image.sidebar-icon { opacity: $_placesidebar_icons_opacity; } // dim the sid
    https://gitlab.gnome.org/GNOME/gtk/-/issues/2929
 */
 placessidebar, .navigation-sidebar {
-  > scrolledwindow.frame { border-style: none; }
-
   list {
     padding: 4px 0;
 
