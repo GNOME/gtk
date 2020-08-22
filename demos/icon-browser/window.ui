@@ -70,6 +70,9 @@
             <property name="hscrollbar-policy">never</property>
             <child>
               <object class="GtkListView">
+                <style>
+                  <class name="navigation-sidebar" />
+                </style>
                 <property name="model">
                   <object class="GtkSingleSelection" id="context_model">
                     <property name="model">
