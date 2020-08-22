@@ -3020,10 +3020,6 @@ actionbar > revealer >  box {
 }
 
 scrolledwindow {
-  > viewport.frame { // avoid double borders when viewport inside scrolled window
-    border-style: none;
-  }
-
   // This is used when content is touch-dragged past boundaries.
   // draws a box on top of the content, the size changes programmatically.
   > overshoot {
@@ -3407,8 +3403,6 @@ row image.sidebar-icon { opacity: $_placesidebar_icons_opacity; } // dim the sid
    https://gitlab.gnome.org/GNOME/gtk/-/issues/2929
 */
 placessidebar, .navigation-sidebar {
-  > scrolledwindow.frame { border-style: none; }
-
   list {
     padding: 4px 0;
 
