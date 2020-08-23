@@ -3441,7 +3441,7 @@ gtk_text_update_cached_style_values (GtkText *self)
 {
   GtkTextPrivate *priv = gtk_text_get_instance_private (self);
 
-  if (!priv->invisible_char_set)
+  if (!priv->visible && !priv->invisible_char_set)
     {
       gunichar ch = find_invisible_char (GTK_WIDGET (self));
 
@@ -5550,11 +5550,13 @@ gtk_text_set_invisible_char (GtkText  *self,
  * @self: a #GtkText
  *
  * Retrieves the character displayed in place of the real characters
- * for entries with visibility set to false.
- * See gtk_text_set_invisible_char().
+ * for entries with visibility set to false. Note that GTK does not
+ * compute this value unless it needs it, so the value returned by
+ * this function is not very useful unless it has been explicitly
+ * set with gtk_text_set_invisible_char()
  *
- * Returns: the current invisible char, or 0, if the self does not
- *               show invisible text at all. 
+ * Returns: the current invisible char, or 0, if @text does not
+ *               show invisible text at all.
  **/
 gunichar
 gtk_text_get_invisible_char (GtkText *self)
