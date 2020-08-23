@@ -3,7 +3,7 @@ all_print_backends = [
   'cloudprint',
 ]
 
-enabled_print_backends = get_option('print-backends').split(',')
+enabled_print_backends = get_option('print').split(',')
 
 if enabled_print_backends.contains('none')
   enabled_print_backends = []
@@ -53,16 +53,6 @@ printbackends_subdir = 'gtk-4.0/@0@/printbackends'.format(gtk_binary_version)
 printbackends_install_dir = join_paths(get_option('libdir'), printbackends_subdir)
 
 cdata.set_quoted('GTK_PRINT_BACKENDS', ','.join(print_backends))
-
-
-enable_colord = get_option('colord')
-if enable_colord != 'no'
-  want_colord = enable_colord == 'yes'
-  colord_dep = dependency('colord', version: '>= 0.1.9', required: want_colord)
-  cdata.set('HAVE_COLORD', colord_dep.found())
-else
-  colord_dep = []
-endif
 
 printbackends_args = [
   '-DGTK_COMPILATION',

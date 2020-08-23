@@ -65,8 +65,8 @@ gtk_builtin_icon_css_changed (GtkWidget         *widget,
     {
       gtk_widget_queue_resize (widget);
     }
-  else if (gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_ICON_TEXTURE) ||
-           gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_ICON_REDRAW))
+  else if (gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_ICON_TEXTURE |
+                                                 GTK_CSS_AFFECTS_ICON_REDRAW))
     {
       gtk_widget_queue_draw (widget);
     }

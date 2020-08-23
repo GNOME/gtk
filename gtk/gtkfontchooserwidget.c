@@ -505,6 +505,7 @@ get_font_attributes (GObject  *ignore,
       font_desc = pango_font_face_describe (face);
       attribute = pango_attr_font_desc_new (font_desc);
       pango_attr_list_insert (attrs, attribute);
+      pango_font_description_free (font_desc);
     }
 
   return attrs;

@@ -206,21 +206,69 @@ all else fails, you can ask for help on the
 
 ## Extra Configuration Options {#extra-configuration-options}
 
-In addition to the normal options provided by Meson,
-GTK defines various arguments that modify what should
-be built. All of these options are passed to `meson`
-as `-Doption=value`. Most of the time, the value can
-be `true` or `false`. To see a summary of all supported
-options and their allowed values, run
+In addition to the normal options provided by Meson, GTK defines various
+arguments that modify what should be built. All of these options are passed
+to `meson` as `-Doption=value`. Most of the time, the value can be `true` or
+`false`, or `enabled`, `disabled` or `auto`.
+
+To see a summary of all supported options and their allowed values, run
 ```
 meson configure builddir
 ```
 
+### `x11-backend`, `win32-backend`, `broadway-backend`, `wayland-backend` and `macos-backend`
+
+Enable specific backends for GDK.  If none of these options
+are given, the Wayland backend will be enabled by default,
+if the platform is Linux; the X11 backend will also be enabled
+by default, unless the platform is Windows, in which case the
+default is win32, or the platform is macOS, in which case the
+default is macOS. If any backend is explicitly enabled or disabled,
+no other platform will be enabled automatically.
+
+### `vulkan`
+
+By default, GTK will try to build with support for the Vulkan graphics
+API in addition to cairo and OpenGL. This option can be used to explicitly
+control whether Vulkan should be used.
+
 ### `xinerama`
 
-By default GTK will try to link against the Xinerama libraries
+By default, GTK will try to link against the Xinerama libraries
 if they are found. This option can be used to explicitly control
 whether Xinerama should be used.
+
+### `media`
+
+By default, GTK will try to build the gstreamer backend for
+media playback support. This option can be used to explicitly
+control which media backends should be built.
+
+### `print`
+
+By default, GTK will try to build various print backends
+if their dependencies are found. This option can be used
+to explicitly control which print backends should be built.
+
+### `cloudproviders`
+
+This option controls whether GTK should use libcloudproviders for
+supporting various Cloud storage APIs in the file chooser.
+
+### `sysprof`
+
+This option controls whether GTK should include support for
+tracing with sysprof.
+
+### `tracker`
+
+This option controls whether GTK should use Tracker for search
+support in the file chooser.
+
+### `colord`
+
+This option controls whether GTK should use colord for color
+calibration support in the cups print backend.
 
 ### `gtk_doc` and `man-pages`
 
@@ -234,22 +282,6 @@ Additionally, some tools provided by GTK have their own
 manual pages generated using a similar set of dependencies;
 if you have *xsltproc* then you can generate manual pages by
 passing `-Dman-pages=true` when configuring the build.
-
-### `print-backends`
-
-By default, GTK will try to build various print backends
-if their dependencies are found. This option can be used
-to explicitly control which print backends should be built.
-
-### `x11-backend`, `win32-backend`, `broadway-backend`, `wayland-backend` and `quartz-backend`
-
-Enable specific backends for GDK.  If none of these options
-are given, the Wayland backend will be enabled by default,
-if the platform is Linux; the X11 backend will also be enabled
-by default, unless the platform is Windows, in which case the
-default is win32, or the platform is macOS, in which case the
-default is quartz. If any backend is explicitly enabled or disabled,
-no other platform will be enabled automatically.
 
 ### `introspection`
 

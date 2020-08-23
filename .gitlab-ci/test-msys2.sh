@@ -66,7 +66,7 @@ meson \
     -Dx11-backend=false \
     -Dwayland-backend=false \
     -Dwin32-backend=true \
-    -Dvulkan=no \
+    -Dvulkan=disabled \
     -Dintrospection=false \
     -Dgtk:werror=true \
     _build
