@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: gtk+-properties 0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-08-20 14:04+0000\n"
-"PO-Revision-Date: 2020-08-23 23:49+0200\n"
+"PO-Revision-Date: 2020-08-24 00:00+0200\n"
 "Last-Translator: gogo <linux.hr@protonmail.com>\n"
 "Language-Team: Croatian <lokalizacija@linux.hr>\n"
 "Language: hr\n"
@@ -3428,7 +3428,7 @@ msgstr "Stupac"
 
 #: gtk/gtkgridlayout.c:168
 msgid "The column to place the child in"
-msgstr "Stupac za smjestiti podređenu stavku"
+msgstr "Stupac za smjestiti podređeni sadržaj"
 
 #: gtk/gtkgridlayout.c:179
 msgid "Row"
@@ -3436,7 +3436,7 @@ msgstr "Redak"
 
 #: gtk/gtkgridlayout.c:180
 msgid "The row to place the child in"
-msgstr "Redak za smjestiti podređenu stavku"
+msgstr "Redak za smjestiti podređeni sadržaj"
 
 #: gtk/gtkgridlayout.c:191
 msgid "Column span"
@@ -3871,11 +3871,11 @@ msgstr "Treba li ovaj redak biti odabran"
 
 #: gtk/gtklistitem.c:174
 msgid "If the item can be activated by the user"
-msgstr "Ako se stavka može aktivirati od strane korisnike"
+msgstr "Ako se stavka može aktivirati od strane korisnika"
 
 #: gtk/gtklistitem.c:186
 msgid "Widget used for display"
-msgstr "Widget ikona za prikaz"
+msgstr "Widget korišten za prikaz"
 
 #: gtk/gtklistitem.c:197 gtk/gtktreeexpander.c:471 gtk/gtktreelistmodel.c:1102
 msgid "Item"
@@ -3896,11 +3896,11 @@ msgstr "Položaj stavke"
 
 #: gtk/gtklistitem.c:222
 msgid "If the item can be selected by the user"
-msgstr "Ako se stavka može odabrati od strane korisnike"
+msgstr "Ako se stavka može odabrati od strane korisnika"
 
 #: gtk/gtklistitem.c:234
 msgid "If the item is currently selected"
-msgstr "Stavka je stavka trenutno odabrana"
+msgstr "Ako je stavka trenutno odabrana"
 
 #: gtk/gtklockbutton.c:265
 msgid "Permission"
@@ -6092,7 +6092,7 @@ msgstr "Model po kojem se razvrstava"
 
 #: gtk/gtksortlistmodel.c:809
 msgid "Estimate of unsorted items remaining"
-msgstr "Procjena nerazvrstani preostalih stavki"
+msgstr "Procjena nerazvrstanih preostalih stavki"
 
 #: gtk/gtksortlistmodel.c:821
 msgid "The sorter for this model"
@@ -6664,7 +6664,7 @@ msgstr "Umetni povlaku"
 
 #: gtk/gtktexttag.c:668
 msgid "Whether to insert hyphens at breaks."
-msgstr "Treba li umetnuti povlaku pri prijelomu radka."
+msgstr "Treba li umetnuti povlaku pri prijelomu redka."
 
 #: gtk/gtktexttag.c:684
 msgid "Margin Accumulates"
