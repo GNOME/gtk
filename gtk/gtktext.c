@@ -309,6 +309,7 @@ static void   gtk_text_dispose              (GObject      *object);
  */
 static void   gtk_text_realize              (GtkWidget        *widget);
 static void   gtk_text_unrealize            (GtkWidget        *widget);
+static void   gtk_text_map                  (GtkWidget        *widget);
 static void   gtk_text_unmap                (GtkWidget        *widget);
 static void   gtk_text_measure              (GtkWidget        *widget,
                                              GtkOrientation    orientation,
@@ -710,6 +711,7 @@ gtk_text_class_init (GtkTextClass *class)
   gobject_class->set_property = gtk_text_set_property;
   gobject_class->get_property = gtk_text_get_property;
 
+  widget_class->map = gtk_text_map;
   widget_class->unmap = gtk_text_unmap;
   widget_class->realize = gtk_text_realize;
   widget_class->unrealize = gtk_text_unrealize;
@@ -2132,6 +2134,16 @@ gtk_text_get_display_text (GtkText *self,
 }
 
 static void
+gtk_text_map (GtkWidget *widget)
+{
+  GtkText *self = GTK_TEXT (widget);
+
+  GTK_WIDGET_CLASS (gtk_text_parent_class)->map (widget);
+
+  gtk_text_recompute (self);
+}
+
+static void
 gtk_text_unmap (GtkWidget *widget)
 {
   GtkText *self = GTK_TEXT (widget);
@@ -3284,8 +3296,6 @@ static void
 gtk_text_root (GtkWidget *widget)
 {
   GTK_WIDGET_CLASS (gtk_text_parent_class)->root (widget);
-
-  gtk_text_recompute (GTK_TEXT (widget));
 }
 
 /* GtkEditable method implementations
@@ -4329,15 +4339,15 @@ static void
 gtk_text_recompute (GtkText *self)
 {
   gtk_text_reset_layout (self);
-  gtk_text_check_cursor_blink (self);
-
-  gtk_text_adjust_scroll (self);
-
-  update_im_cursor_location (self);
-
-  gtk_text_update_handles (self);
-
   gtk_widget_queue_draw (GTK_WIDGET (self));
+
+  if (!gtk_widget_get_mapped (GTK_WIDGET (self)))
+    return;
+
+  gtk_text_check_cursor_blink (self);
+  gtk_text_adjust_scroll (self);
+  update_im_cursor_location (self);
+  gtk_text_update_handles (self);
 }
 
 static PangoLayout *
