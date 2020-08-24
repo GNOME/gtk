@@ -141,12 +141,15 @@ struct _GtkWidget
  *   to be hidden).
  * @root: Called when the widget gets added to a #GtkRoot widget. Must chain up
  * @unroot: Called when the widget is about to be removed from its #GtkRoot widget. Must chain up
- * @size_allocate: Signal emitted to get the widget allocation.
+ * @size_allocate: Called to set the allocation, if the widget does
+ *   not have a layout manager.
  * @state_flags_changed: Signal emitted when the widget state changes,
  *   see gtk_widget_get_state_flags().
  * @direction_changed: Signal emitted when the text direction of a
  *   widget changes.
- * @get_request_mode: This allows a widget to tell its parent container whether
+ * @get_request_mode: Called to get the request mode, if the widget
+ *   does not have a layout manager.
+ *   This allows a widget to tell its parent container whether
  *   it prefers to be allocated in %GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH or
  *   %GTK_SIZE_REQUEST_WIDTH_FOR_HEIGHT mode.
  *   %GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH means the widget prefers to have
@@ -159,10 +162,11 @@ struct _GtkWidget
  *   which trades height-for-width or width-for-height must respond properly
  *   to a for_size value >= -1 passed to #GtkWidgetClass.measure, for both
  *   possible orientations.
- * @measure: This is called by containers to obtain the minimum and natural
- *   size of the widget. Depending on the orientation parameter, the passed
- *   for_size can be interpreted as width or height. A widget will never be
- *   allocated less than its minimum size.
+ * @measure: Called to obtain the minimum and natural size of the widget,
+ *   if the widget does not have a layout manager.
+ *   Depending on the orientation parameter, the passed for_size can be
+ *   interpreted as width or height. A widget will never be allocated less
+ *   than its minimum size.
  * @mnemonic_activate: Activates the @widget if @group_cycling is
  *   %FALSE, and just grabs the focus if @group_cycling is %TRUE.
  * @grab_focus: Causes @widget to have the keyboard focus for the
