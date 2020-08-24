@@ -141,6 +141,8 @@ testdata = [
   'border-style.css',
   'border-style.ref.ui',
   'border-style.ui',
+  'boxlayout-invisible-child.ref.ui',
+  'boxlayout-invisible-child.ui',
   'box-order.css',
   'box-order.ref.ui',
   'box-order.ui',
