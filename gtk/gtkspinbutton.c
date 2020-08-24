@@ -32,6 +32,7 @@
 #include "gtkadjustment.h"
 #include "gtkbox.h"
 #include "gtkbutton.h"
+#include "gtkbuttonprivate.h"
 #include "gtkcssstylepropertyprivate.h"
 #include "gtkeditable.h"
 #include "gtkcelleditable.h"
@@ -966,6 +967,8 @@ gtk_spin_button_init (GtkSpinButton *spin_button)
   g_signal_connect (gesture, "released", G_CALLBACK (button_released_cb), spin_button);
   g_signal_connect (gesture, "cancel", G_CALLBACK (button_cancel_cb), spin_button);
   gtk_widget_add_controller (GTK_WIDGET (spin_button->down_button), GTK_EVENT_CONTROLLER (gesture));
+  gtk_gesture_group (gtk_button_get_gesture (GTK_BUTTON (spin_button->down_button)),
+		     gesture);
 
   spin_button->up_button = gtk_button_new_from_icon_name ("value-increase-symbolic");
   gtk_widget_add_css_class (spin_button->up_button, "up");
@@ -981,6 +984,8 @@ gtk_spin_button_init (GtkSpinButton *spin_button)
   g_signal_connect (gesture, "released", G_CALLBACK (button_released_cb), spin_button);
   g_signal_connect (gesture, "cancel", G_CALLBACK (button_cancel_cb), spin_button);
   gtk_widget_add_controller (GTK_WIDGET (spin_button->up_button), GTK_EVENT_CONTROLLER (gesture));
+  gtk_gesture_group (gtk_button_get_gesture (GTK_BUTTON (spin_button->up_button)),
+		     gesture);
 
   gtk_spin_button_set_adjustment (spin_button, NULL);
 
