@@ -122,9 +122,15 @@ gtk_center_layout_distribute (GtkCenterLayout  *self,
   gboolean end_expand = FALSE;
   int avail;
   int i;
+  int needed_spacing = 0;
 
   /* Usable space is really less... */
-  size -= spacing * 2;
+  for (i = 0; i < 3; i++)
+    {
+      if (self->children[i])
+        needed_spacing += spacing;
+    }
+  needed_spacing -= spacing;
 
   sizes[0].minimum_size = sizes[0].natural_size = 0;
   sizes[1].minimum_size = sizes[1].natural_size = 0;
@@ -140,20 +146,20 @@ gtk_center_layout_distribute (GtkCenterLayout  *self,
 
   if (self->center_widget)
     {
-      center_size = CLAMP (size - (sizes[0].minimum_size + sizes[2].minimum_size), sizes[1].minimum_size, sizes[1].natural_size);
+      center_size = CLAMP (size - needed_spacing - (sizes[0].minimum_size + sizes[2].minimum_size), sizes[1].minimum_size, sizes[1].natural_size);
       center_expand = get_expand (self->center_widget, self->orientation);
     }
 
   if (self->start_widget)
     {
-      avail = MIN ((size - center_size) / 2, size - (center_size + sizes[2].minimum_size));
+      avail = MIN ((size - needed_spacing - center_size) / 2, size - needed_spacing - (center_size + sizes[2].minimum_size));
       start_size = CLAMP (avail, sizes[0].minimum_size, sizes[0].natural_size);
       start_expand = get_expand (self->start_widget, self->orientation);
     }
 
    if (self->end_widget)
     {
-      avail = MIN ((size - center_size) / 2, size - (center_size + sizes[0].minimum_size));
+      avail = MIN ((size - needed_spacing - center_size) / 2, size - needed_spacing - (center_size + sizes[0].minimum_size));
       end_size = CLAMP (avail, sizes[2].minimum_size, sizes[2].natural_size);
       end_expand = get_expand (self->end_widget, self->orientation);
     }
@@ -165,25 +171,25 @@ gtk_center_layout_distribute (GtkCenterLayout  *self,
       center_pos = (size / 2) - (center_size / 2);
 
       /* Push in from start/end */
-      if (start_size > center_pos)
-        center_pos = start_size;
-      else if (size - end_size < center_pos + center_size)
-        center_pos = size - center_size - end_size;
+      if (start_size > 0 && start_size + spacing > center_pos)
+        center_pos = start_size + spacing;
+      else if (end_size > 0 && size - end_size - spacing < center_pos + center_size)
+        center_pos = size - center_size - end_size - spacing;
       else if (center_expand)
         {
           center_size = size - 2 * MAX (start_size, end_size);
-          center_pos = (size / 2) - (center_size / 2);
+          center_pos = (size / 2) - (center_size / 2) + spacing;
         }
 
       if (start_expand)
-        start_size = center_pos;
+        start_size = center_pos - spacing;
 
       if (end_expand)
-        end_size = size - (center_pos + center_size);
+        end_size = size - (center_pos + center_size) - spacing;
     }
   else
     {
-      avail = size - (start_size + end_size);
+      avail = size - needed_spacing - (start_size + end_size);
       if (start_expand && end_expand)
         {
           start_size += avail / 2;
@@ -484,10 +490,10 @@ gtk_center_layout_allocate (GtkLayoutManager *layout_manager,
   if (child[1])
     {
       /* Push in from start/end */
-      if (child_size[0] > child_pos[1])
-        child_pos[1] = child_size[0];
-      else if (size - child_size[2] < child_pos[1] + child_size[1])
-        child_pos[1] = size - child_size[1] - child_size[2];
+      if (child_size[0] > 0 && child_size[0] + spacing > child_pos[1])
+        child_pos[1] = child_size[0] + spacing;
+      else if (child_size[2] > 0 && size - child_size[2] - spacing < child_pos[1] + child_size[1])
+        child_pos[1] = size - child_size[1] - child_size[2] - spacing;
     }
 
   for (i = 0; i < 3; i++)
