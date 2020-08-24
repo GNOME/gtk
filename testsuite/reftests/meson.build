@@ -229,6 +229,8 @@ testdata = [
   'gradient-hard-stop.ref.ui',
   'gradient-hard-stop.ui',
   'green-20x20.png',
+  'gridlayout-invisible-child.ref.ui',
+  'gridlayout-invisible-child.ui',
   'grid-empty-with-spacing.ref.ui',
   'grid-empty-with-spacing.ui',
   'grid-expand.css',
