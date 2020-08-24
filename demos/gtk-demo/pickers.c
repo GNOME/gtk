@@ -6,11 +6,34 @@
 
 #include <gtk/gtk.h>
 
+#define COLOR(r,g,b) { r/255., g/255., b/255., 1.0 }
+
 GtkWidget *
 do_pickers (GtkWidget *do_widget)
 {
   static GtkWidget *window = NULL;
   GtkWidget *table, *label, *picker;
+  GdkRGBA solarized[] = {
+    COLOR (0xff, 0xff, 0xff),
+    COLOR (0x07, 0x36, 0x42),
+    COLOR (0xdc, 0x32, 0x2f),
+    COLOR (0x85, 0x99, 0x00),
+    COLOR (0xb5, 0x89, 0x00),
+    COLOR (0x26, 0x8b, 0xd2),
+    COLOR (0xd3, 0x36, 0x82),
+    COLOR (0x2a, 0xa1, 0x98),
+    COLOR (0xee, 0xe8, 0xd5),
+
+    COLOR (0x00, 0x00, 0x00),
+    COLOR (0x00, 0x2b, 0x36),
+    COLOR (0xcb, 0x4b, 0x16),
+    COLOR (0x58, 0x6e, 0x75),
+    COLOR (0x65, 0x7b, 0x83),
+    COLOR (0x83, 0x94, 0x96),
+    COLOR (0x6c, 0x71, 0xc4),
+    COLOR (0x93, 0xa1, 0xa1),
+    COLOR (0xfd, 0xf6, 0xe3),
+  };
 
   if (!window)
   {
@@ -34,6 +57,13 @@ do_pickers (GtkWidget *do_widget)
     gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
     gtk_widget_set_hexpand (label, TRUE);
     picker = gtk_color_button_new ();
+    gtk_color_button_set_title (GTK_COLOR_BUTTON (picker), "Solarized colors");
+    gtk_color_chooser_add_palette (GTK_COLOR_CHOOSER (picker),
+                                   GTK_ORIENTATION_HORIZONTAL,
+                                   9,
+                                   18,
+                                   solarized);
+
     gtk_grid_attach (GTK_GRID (table), label, 0, 0, 1, 1);
     gtk_grid_attach (GTK_GRID (table), picker, 1, 0, 1, 1);
 
