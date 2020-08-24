@@ -314,6 +314,7 @@ add_palette (GtkColorChooserWidget  *cc,
   gtk_grid_set_row_spacing (GTK_GRID (grid), 2);
   gtk_grid_set_column_spacing (GTK_GRID (grid), 4);
   gtk_box_append (GTK_BOX (cc->palette), grid);
+  
 
   left = 0;
   right = colors_per_line - 1;
@@ -807,6 +808,9 @@ gtk_color_chooser_widget_add_palette (GtkColorChooser *chooser,
 
   remove_default_palette (cc);
   add_palette (cc, orientation, colors_per_line, n_colors, colors, NULL);
+
+  gtk_box_reorder_child_after (GTK_BOX (cc->palette), cc->custom_label, gtk_widget_get_last_child (cc->palette));
+  gtk_box_reorder_child_after (GTK_BOX (cc->palette), cc->custom, cc->custom_label);
 }
 
 static void
