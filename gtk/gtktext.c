@@ -309,6 +309,7 @@ static void   gtk_text_dispose              (GObject      *object);
  */
 static void   gtk_text_realize              (GtkWidget        *widget);
 static void   gtk_text_unrealize            (GtkWidget        *widget);
+static void   gtk_text_map                  (GtkWidget        *widget);
 static void   gtk_text_unmap                (GtkWidget        *widget);
 static void   gtk_text_measure              (GtkWidget        *widget,
                                              GtkOrientation    orientation,
@@ -710,6 +711,7 @@ gtk_text_class_init (GtkTextClass *class)
   gobject_class->set_property = gtk_text_set_property;
   gobject_class->get_property = gtk_text_get_property;
 
+  widget_class->map = gtk_text_map;
   widget_class->unmap = gtk_text_unmap;
   widget_class->realize = gtk_text_realize;
   widget_class->unrealize = gtk_text_unrealize;
@@ -2132,6 +2134,16 @@ gtk_text_get_display_text (GtkText *self,
 }
 
 static void
+gtk_text_map (GtkWidget *widget)
+{
+  GtkText *self = GTK_TEXT (widget);
+
+  GTK_WIDGET_CLASS (gtk_text_parent_class)->map (widget);
+
+  gtk_text_recompute (self);
+}
+
+static void
 gtk_text_unmap (GtkWidget *widget)
 {
   GtkText *self = GTK_TEXT (widget);
@@ -3284,8 +3296,6 @@ static void
 gtk_text_root (GtkWidget *widget)
 {
   GTK_WIDGET_CLASS (gtk_text_parent_class)->root (widget);
-
-  gtk_text_recompute (GTK_TEXT (widget));
 }
 
 /* GtkEditable method implementations
@@ -3431,7 +3441,7 @@ gtk_text_update_cached_style_values (GtkText *self)
 {
   GtkTextPrivate *priv = gtk_text_get_instance_private (self);
 
-  if (!priv->invisible_char_set)
+  if (!priv->visible && !priv->invisible_char_set)
     {
       gunichar ch = find_invisible_char (GTK_WIDGET (self));
 
@@ -4329,15 +4339,15 @@ static void
 gtk_text_recompute (GtkText *self)
 {
   gtk_text_reset_layout (self);
-  gtk_text_check_cursor_blink (self);
-
-  gtk_text_adjust_scroll (self);
-
-  update_im_cursor_location (self);
-
-  gtk_text_update_handles (self);
-
   gtk_widget_queue_draw (GTK_WIDGET (self));
+
+  if (!gtk_widget_get_mapped (GTK_WIDGET (self)))
+    return;
+
+  gtk_text_check_cursor_blink (self);
+  gtk_text_adjust_scroll (self);
+  update_im_cursor_location (self);
+  gtk_text_update_handles (self);
 }
 
 static PangoLayout *
@@ -5540,11 +5550,13 @@ gtk_text_set_invisible_char (GtkText  *self,
  * @self: a #GtkText
  *
  * Retrieves the character displayed in place of the real characters
- * for entries with visibility set to false.
- * See gtk_text_set_invisible_char().
+ * for entries with visibility set to false. Note that GTK does not
+ * compute this value unless it needs it, so the value returned by
+ * this function is not very useful unless it has been explicitly
+ * set with gtk_text_set_invisible_char()
  *
- * Returns: the current invisible char, or 0, if the self does not
- *               show invisible text at all. 
+ * Returns: the current invisible char, or 0, if @text does not
+ *               show invisible text at all.
  **/
 gunichar
 gtk_text_get_invisible_char (GtkText *self)
