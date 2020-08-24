@@ -1000,6 +1000,16 @@ keynav_failed (GtkWidget        *box,
 }
 
 static void
+gtk_emoji_chooser_map (GtkWidget *widget)
+{
+  GtkEmojiChooser *chooser = GTK_EMOJI_CHOOSER (widget);
+
+  GTK_WIDGET_CLASS (gtk_emoji_chooser_parent_class)->map (widget);
+
+  gtk_widget_grab_focus (chooser->search_entry);
+}
+
+static void
 gtk_emoji_chooser_class_init (GtkEmojiChooserClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
@@ -1007,6 +1017,7 @@ gtk_emoji_chooser_class_init (GtkEmojiChooserClass *klass)
 
   object_class->finalize = gtk_emoji_chooser_finalize;
   widget_class->show = gtk_emoji_chooser_show;
+  widget_class->map = gtk_emoji_chooser_map;
 
   /**
    * GtkEmojiChooser::emoji-picked:
