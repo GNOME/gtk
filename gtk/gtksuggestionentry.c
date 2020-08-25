@@ -1129,8 +1129,8 @@ map_func (gpointer item, gpointer user_data)
     }
   else
     {
-      g_critical ("Either GtkSuggestionEntry:factory or GtkSuggestionEntry:expression "
-                  "must be set");
+      g_critical ("Either GtkSuggestionEntry:expression must be set "
+                  "or GtkSuggestionEntry:model must be a GtkStringList");
       g_value_set_string (&value, "No value");
     }
 
