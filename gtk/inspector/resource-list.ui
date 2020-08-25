@@ -183,6 +183,9 @@
                   </object>
                 </child>
                 <child>
+                  <object class="GtkSeparator"/>
+                </child>
+                <child>
                   <object class="GtkStack" id="content">
                     <child>
                       <object class="GtkStackPage">
@@ -191,7 +194,6 @@
                           <object class="GtkScrolledWindow">
                             <property name="hexpand">1</property>
                             <property name="vexpand">1</property>
-                            <property name="has-frame">1</property>
                             <style>
                               <class name="view"/>
                             </style>
@@ -212,7 +214,6 @@
                           <object class="GtkScrolledWindow">
                             <property name="hexpand">1</property>
                             <property name="vexpand">1</property>
-                            <property name="has-frame">1</property>
                             <style>
                               <class name="view"/>
                             </style>
