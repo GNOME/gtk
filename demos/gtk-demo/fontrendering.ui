@@ -199,9 +199,11 @@
           </object>
         </child>
         <child>
+          <object class="GtkSeparator"/>
+        </child>
+        <child>
           <object class="GtkScrolledWindow">
             <property name="propagate-natural-height">1</property>
-            <property name="has-frame">1</property>
             <property name="hexpand">1</property>
             <property name="vexpand">1</property>
             <child>
