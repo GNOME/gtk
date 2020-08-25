@@ -326,6 +326,9 @@ static void   gtk_text_snapshot             (GtkWidget        *widget,
                                              GtkSnapshot      *snapshot);
 static void   gtk_text_focus_in             (GtkWidget            *widget);
 static void   gtk_text_focus_out            (GtkWidget            *widget);
+static void   gtk_text_focus_changed        (GtkEventControllerFocus *focus,
+                                             GParamSpec              *pspec,
+                                             GtkWidget               *widget);
 static gboolean gtk_text_grab_focus         (GtkWidget        *widget);
 static void   gtk_text_css_changed          (GtkWidget        *widget,
                                              GtkCssStyleChange *change);
@@ -1894,10 +1897,8 @@ gtk_text_init (GtkText *self)
 
   controller = gtk_event_controller_focus_new ();
   gtk_event_controller_set_name (controller, "gtk-text-focus-controller");
-  g_signal_connect_swapped (controller, "enter",
-                            G_CALLBACK (gtk_text_focus_in), self);
-  g_signal_connect_swapped (controller, "leave",
-                            G_CALLBACK (gtk_text_focus_out), self);
+  g_signal_connect (controller, "notify::is-focus",
+                    G_CALLBACK (gtk_text_focus_changed), self);
   gtk_widget_add_controller (GTK_WIDGET (self), controller);
 
   widget_node = gtk_widget_get_css_node (GTK_WIDGET (self));
@@ -3194,6 +3195,17 @@ gtk_text_focus_out (GtkWidget *widget)
     }
 
   gtk_text_check_cursor_blink (self);
+}
+
+static void
+gtk_text_focus_changed (GtkEventControllerFocus *controller,
+                        GParamSpec              *pspec,
+                        GtkWidget               *widget)
+{
+  if (gtk_event_controller_focus_is_focus (controller))
+    gtk_text_focus_in (widget);
+  else
+    gtk_text_focus_out (widget);
 }
 
 static gboolean
