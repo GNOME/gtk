@@ -54,6 +54,7 @@
 #include "gtkroot.h"
 #include "gtkfilterlistmodel.h"
 #include "gtkflattenlistmodel.h"
+#include "gtkslicelistmodel.h"
 #include "gtkmaplistmodel.h"
 
 #include <hb-ot.h>
@@ -770,6 +771,40 @@ axis_free (gpointer v)
   g_free (a);
 }
 
+/* We incrementally populate our fontlist to prevent blocking
+ * the font chooser for a long time with expensive FcFontSort
+ * calls in pango for every row in the list).
+ */
+static gboolean
+add_to_fontlist (GtkWidget     *widget,
+                 GdkFrameClock *clock,
+                 gpointer       user_data)
+{
+  GtkFontChooserWidget *self = GTK_FONT_CHOOSER_WIDGET (widget);
+  GtkSliceListModel *model = user_data;
+  GListModel *child_model;
+  guint n;
+
+  if (gtk_filter_list_model_get_model (self->filter_model) != G_LIST_MODEL (model))
+    return G_SOURCE_REMOVE;
+
+  child_model = gtk_slice_list_model_get_model (model);
+
+  n = gtk_slice_list_model_get_size (model);
+
+  n += 10;
+
+  if (n >= g_list_model_get_n_items (child_model))
+    n = G_MAXUINT;
+
+  gtk_slice_list_model_set_size (model, n);
+
+  if (n == G_MAXUINT)
+    return G_SOURCE_REMOVE;
+  else
+    return G_SOURCE_CONTINUE;
+}
+
 static void
 update_fontlist (GtkFontChooserWidget *self)
 {
@@ -784,6 +819,10 @@ update_fontlist (GtkFontChooserWidget *self)
     model = g_object_ref (G_LIST_MODEL (fontmap));
   else
     model = G_LIST_MODEL (gtk_flatten_list_model_new (G_LIST_MODEL (g_object_ref (fontmap))));
+
+  model = G_LIST_MODEL (gtk_slice_list_model_new (model, 0, 20));
+  gtk_widget_add_tick_callback (GTK_WIDGET (self), add_to_fontlist, g_object_ref (model), g_object_unref);
+
   gtk_filter_list_model_set_model (self->filter_model, model);
   g_object_unref (model);
 }
