@@ -175,12 +175,6 @@ gtk_at_context_class_init (GtkATContextClass *klass)
   /**
    * GtkATContext::state-change:
    * @self: the #GtkATContext
-   * @changed_states: flags for the changed states
-   * @changed_properties: flags for the changed properties
-   * @changed_relations: flags for the changed relations
-   * @states: the new states
-   * @properties: the new properties
-   * @relations: the new relations
    *
    * Emitted when the attributes of the accessible for the
    * #GtkATContext instance change.
@@ -189,12 +183,10 @@ gtk_at_context_class_init (GtkATContextClass *klass)
     g_signal_new ("state-change",
                   G_TYPE_FROM_CLASS (gobject_class),
                   G_SIGNAL_RUN_FIRST,
-                  G_STRUCT_OFFSET (GtkATContextClass, state_change),
+                  0,
                   NULL, NULL,
                   NULL,
-                  G_TYPE_NONE, 6,
-                  G_TYPE_UINT, G_TYPE_UINT, G_TYPE_UINT,
-                  G_TYPE_POINTER, G_TYPE_POINTER, G_TYPE_POINTER);
+                  G_TYPE_NONE, 0);
 
   g_object_class_install_properties (gobject_class, N_PROPS, obj_props);
 }
@@ -438,9 +430,10 @@ gtk_at_context_update (GtkATContext *self)
   GtkAccessibleRelationChange changed_relations =
     gtk_accessible_attribute_set_get_changed (self->relations);
 
-  g_signal_emit (self, obj_signals[STATE_CHANGE], 0,
-                 changed_states, changed_properties, changed_relations,
-                 self->states, self->properties, self->relations);
+  GTK_AT_CONTEXT_GET_CLASS (self)->state_change (self,
+                                                 changed_states, changed_properties, changed_relations,
+                                                 self->states, self->properties, self->relations);
+  g_signal_emit (self, obj_signals[STATE_CHANGE], 0);
 
   self->updated_properties = 0;
   self->updated_relations = 0;
