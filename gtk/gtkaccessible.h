@@ -52,16 +52,19 @@ void                    gtk_accessible_update_relation          (GtkAccessible  
                                                                  ...);
 GDK_AVAILABLE_IN_ALL
 void                    gtk_accessible_update_state_value       (GtkAccessible         *self,
-                                                                 GtkAccessibleState     state,
-                                                                 const GValue          *value);
+                                                                 int                    n_states,
+                                                                 GtkAccessibleState     states[],
+                                                                 const GValue           values[]);
 GDK_AVAILABLE_IN_ALL
 void                    gtk_accessible_update_property_value    (GtkAccessible         *self,
-                                                                 GtkAccessibleProperty  property,
-                                                                 const GValue          *value);
+                                                                 int                    n_properties,
+                                                                 GtkAccessibleProperty  properties[],
+                                                                 const GValue           values[]);
 GDK_AVAILABLE_IN_ALL
 void                    gtk_accessible_update_relation_value    (GtkAccessible         *self,
-                                                                 GtkAccessibleRelation  relation,
-                                                                 const GValue          *value);
+                                                                 int                    n_relations,
+                                                                 GtkAccessibleRelation  relations[],
+                                                                 const GValue           values[]);
 
 GDK_AVAILABLE_IN_ALL
 void                    gtk_accessible_reset_state              (GtkAccessible         *self,

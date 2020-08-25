@@ -55,6 +55,13 @@ G_DEFINE_INTERFACE (GtkAccessible, gtk_accessible, G_TYPE_OBJECT)
 static void
 gtk_accessible_default_init (GtkAccessibleInterface *iface)
 {
+  /**
+   * GtkAccessible:accessible-role:
+   *
+   * The accessible role of the given #GtkAccessible implementation.
+   *
+   * The accessible role cannot be changed once set.
+   */
   GParamSpec *pspec =
     g_param_spec_enum ("accessible-role",
                        "Accessible Role",
@@ -172,12 +179,13 @@ out:
 }
 
 /**
- * gtk_accessible_update_state_value:
+ * gtk_accessible_update_state_value: (rename-to gtk_accessible_update_state)
  * @self: a #GtkAccessible
- * @state: a #GtkAccessibleState
- * @value: a #GValue with the value for @state
+ * @n_states: the number of accessible states to set
+ * @states: (array length=n_states): an array of #GtkAccessibleState
+ * @values: (array length=n_states): an array of #GValues, one for each state
  *
- * Updates an accessible state.
+ * Updates an array of accessible states.
  *
  * This function should be called by #GtkWidget types whenever an accessible
  * state change must be communicated to assistive technologies.
@@ -186,34 +194,39 @@ out:
  */
 void
 gtk_accessible_update_state_value (GtkAccessible      *self,
-                                   GtkAccessibleState  state,
-                                   const GValue       *value)
+                                   int                 n_states,
+                                   GtkAccessibleState  states[],
+                                   const GValue        values[])
 {
-  GtkATContext *context;
-
   g_return_if_fail (GTK_IS_ACCESSIBLE (self));
+  g_return_if_fail (n_states > 0);
 
-  context = gtk_accessible_get_at_context (self);
+  GtkATContext *context = gtk_accessible_get_at_context (self);
   if (context == NULL)
     return;
 
-  GError *error = NULL;
-  GtkAccessibleValue *real_value =
-    gtk_accessible_value_collect_for_state_value (state, value, &error);
-
-  if (error != NULL)
+  for (int i = 0; i < n_states; i++)
     {
-      g_critical ("Unable to collect the value for state “%s”: %s",
-                  gtk_accessible_state_get_attribute_name (state),
-                  error->message);
-      g_error_free (error);
-      return;
+      GtkAccessibleState state = states[i];
+      const GValue *value = &(values[i]);
+      GError *error = NULL;
+      GtkAccessibleValue *real_value =
+        gtk_accessible_value_collect_for_state_value (state, value, &error);
+
+      if (error != NULL)
+        {
+          g_critical ("Unable to collect the value for state “%s”: %s",
+                      gtk_accessible_state_get_attribute_name (state),
+                      error->message);
+          g_error_free (error);
+          break;
+        }
+
+      gtk_at_context_set_accessible_state (context, state, real_value);
+
+      if (real_value != NULL)
+        gtk_accessible_value_unref (real_value);
     }
-
-  gtk_at_context_set_accessible_state (context, state, real_value);
-
-  if (real_value != NULL)
-    gtk_accessible_value_unref (real_value);
 
   gtk_at_context_update (context);
 }
@@ -310,12 +323,13 @@ out:
 }
 
 /**
- * gtk_accessible_update_property_value:
+ * gtk_accessible_update_property_value: (rename-to gtk_accessible_update_property)
  * @self: a #GtkAccessible
- * @property: a #GtkAccessibleProperty
- * @value: a #GValue with the value for @property
+ * @n_properties: the number of accessible properties to set
+ * @properties: (array length=n_properties): an array of #GtkAccessibleProperty
+ * @values: (array length=n_properties): an array of #GValues, one for each property
  *
- * Updates an accessible property.
+ * Updates an array of accessible properties.
  *
  * This function should be called by #GtkWidget types whenever an accessible
  * property change must be communicated to assistive technologies.
@@ -324,34 +338,39 @@ out:
  */
 void
 gtk_accessible_update_property_value (GtkAccessible         *self,
-                                      GtkAccessibleProperty  property,
-                                      const GValue          *value)
+                                      int                    n_properties,
+                                      GtkAccessibleProperty  properties[],
+                                      const GValue           values[])
 {
-  GtkATContext *context;
-
   g_return_if_fail (GTK_IS_ACCESSIBLE (self));
+  g_return_if_fail (n_properties > 0);
 
-  context = gtk_accessible_get_at_context (self);
+  GtkATContext *context = gtk_accessible_get_at_context (self);
   if (context == NULL)
     return;
 
-  GError *error = NULL;
-  GtkAccessibleValue *real_value =
-    gtk_accessible_value_collect_for_property_value (property, value, &error);
-
-  if (error != NULL)
+  for (int i = 0; i < n_properties; i++)
     {
-      g_critical ("Unable to collect the value for property “%s”: %s",
-                  gtk_accessible_property_get_attribute_name (property),
-                  error->message);
-      g_error_free (error);
-      return;
+      GtkAccessibleProperty property = properties[i];
+      const GValue *value = &(values[i]);
+      GError *error = NULL;
+      GtkAccessibleValue *real_value =
+        gtk_accessible_value_collect_for_property_value (property, value, &error);
+
+      if (error != NULL)
+        {
+          g_critical ("Unable to collect the value for property “%s”: %s",
+                      gtk_accessible_property_get_attribute_name (property),
+                      error->message);
+          g_error_free (error);
+          break;
+        }
+
+      gtk_at_context_set_accessible_property (context, property, real_value);
+
+      if (real_value != NULL)
+        gtk_accessible_value_unref (real_value);
     }
-
-  gtk_at_context_set_accessible_property (context, property, real_value);
-
-  if (real_value != NULL)
-    gtk_accessible_value_unref (real_value);
 
   gtk_at_context_update (context);
 }
@@ -439,12 +458,13 @@ out:
 }
 
 /**
- * gtk_accessible_update_relation_value:
+ * gtk_accessible_update_relation_value: (rename-to gtk_accessible_update_relation)
  * @self: a #GtkAccessible
- * @relation: a #GtkAccessibleRelation
- * @value: a #GValue with the value for @relation
+ * @n_relations: the number of accessible relations to set
+ * @relations: (array length=n_relations): an array of #GtkAccessibleRelation
+ * @values: (array length=n_relations): an array of #GValues, one for each relation
  *
- * Updates an accessible relation.
+ * Updates an array of accessible relations.
  *
  * This function should be called by #GtkWidget types whenever an accessible
  * relation change must be communicated to assistive technologies.
@@ -453,34 +473,39 @@ out:
  */
 void
 gtk_accessible_update_relation_value (GtkAccessible         *self,
-                                      GtkAccessibleRelation  relation,
-                                      const GValue          *value)
+                                      int                    n_relations,
+                                      GtkAccessibleRelation  relations[],
+                                      const GValue           values[])
 {
-  GtkATContext *context;
-
   g_return_if_fail (GTK_IS_ACCESSIBLE (self));
+  g_return_if_fail (n_relations > 0);
 
-  context = gtk_accessible_get_at_context (self);
+  GtkATContext *context = gtk_accessible_get_at_context (self);
   if (context == NULL)
     return;
 
-  GError *error = NULL;
-  GtkAccessibleValue *real_value =
-    gtk_accessible_value_collect_for_relation_value (relation, value, &error);
-
-  if (error != NULL)
+  for (int i = 0; i < n_relations; i++)
     {
-      g_critical ("Unable to collect the value for relation “%s”: %s",
-                  gtk_accessible_relation_get_attribute_name (relation),
-                  error->message);
-      g_error_free (error);
-      return;
+      GtkAccessibleRelation relation = relations[i];
+      const GValue *value = &(values[i]);
+      GError *error = NULL;
+      GtkAccessibleValue *real_value =
+        gtk_accessible_value_collect_for_relation_value (relation, value, &error);
+
+      if (error != NULL)
+        {
+          g_critical ("Unable to collect the value for relation “%s”: %s",
+                      gtk_accessible_relation_get_attribute_name (relation),
+                      error->message);
+          g_error_free (error);
+          break;
+        }
+
+      gtk_at_context_set_accessible_relation (context, relation, real_value);
+
+      if (real_value != NULL)
+        gtk_accessible_value_unref (real_value);
     }
-
-  gtk_at_context_set_accessible_relation (context, relation, real_value);
-
-  if (real_value != NULL)
-    gtk_accessible_value_unref (real_value);
 
   gtk_at_context_update (context);
 }

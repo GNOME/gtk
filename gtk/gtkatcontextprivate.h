@@ -90,6 +90,10 @@ struct _GtkATContext
   GtkAccessibleAttributeSet *states;
   GtkAccessibleAttributeSet *properties;
   GtkAccessibleAttributeSet *relations;
+
+  GtkAccessibleStateChange updated_states;
+  GtkAccessiblePropertyChange updated_properties;
+  GtkAccessibleRelationChange updated_relations;
 };
 
 struct _GtkATContextClass
