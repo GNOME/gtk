@@ -55,6 +55,13 @@ G_DEFINE_INTERFACE (GtkAccessible, gtk_accessible, G_TYPE_OBJECT)
 static void
 gtk_accessible_default_init (GtkAccessibleInterface *iface)
 {
+  /**
+   * GtkAccessible:accessible-role:
+   *
+   * The accessible role of the given #GtkAccessible implementation.
+   *
+   * The accessible role cannot be changed once set.
+   */
   GParamSpec *pspec =
     g_param_spec_enum ("accessible-role",
                        "Accessible Role",
