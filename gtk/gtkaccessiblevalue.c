@@ -185,6 +185,9 @@ gtk_accessible_value_equal (const GtkAccessibleValue *value_a,
   if (value_a == NULL || value_b == NULL)
     return FALSE;
 
+  if (value_a->value_class != value_b->value_class)
+    return FALSE;
+
   if (value_a->value_class->equal == NULL)
     return FALSE;
 
