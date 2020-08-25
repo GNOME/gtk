@@ -1408,11 +1408,6 @@ headerbar {
     transition: $backdrop_transition;
   }
 
-  box.start,
-  box.end {
-    border-spacing: 6px;
-  }
-
   .title {
     padding-left: 12px;
     padding-right: 12px;
@@ -1488,7 +1483,13 @@ headerbar {
 }
 
 headerbar {
-  border-spacing: 6px;
+  > windowhandle > box {
+    &,
+    > box.start,
+    > box.end {
+      border-spacing: 6px;
+    }
+  }
 
   // add vertical margins to common widget on the headerbar to avoid them spanning the whole height
   entry,
