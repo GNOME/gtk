@@ -1294,14 +1294,13 @@ combobox {
  ************/
 %toolbar {
   padding: 4px;
+  border-spacing: 4px;
   background-color: $bg_color;
 }
 
 .toolbar,
 toolbar {
   @extend %toolbar;
-
-  padding: 4px 3px 3px 4px;
 
   // on OSD
   .osd & { background-color: transparent; }
@@ -1320,21 +1319,19 @@ toolbar {
   }
 
   // toolbar separators
-  &.horizontal separator { margin: 0 7px 1px 6px; }
-  &.vertical separator { margin: 6px 1px 7px 0; }
+  &.horizontal > separator { margin: 4px 0; }
+  &.vertical > separator { margin: 0 4px; }
 }
 
 //searchbar & location-bar
-searchbar {
-  padding: 0px;
-  >revealer>box {
-    padding: 6px;
-    @extend %toolbar;
+searchbar > revealer > box {
+  padding: 6px;
+  border-spacing: 6px;
+  @extend %toolbar;
 
-    @extend %darkbar;
+  @extend %darkbar;
 
-    border-width: 0 0 1px;
-  }
+  border-width: 0 0 1px;
 }
 
 %darkbar {
@@ -3017,8 +3014,9 @@ frame {
   }
 }
 
-actionbar > revealer >  box {
+actionbar > revealer > box {
   padding: 6px;
+  border-spacing: 6px;
   border-top: 1px solid $borders_color;
 }
 
@@ -3165,11 +3163,11 @@ row {
 /*********************
  * App Notifications *
  *********************/
-.app-notification,
-.app-notification.frame {
+.app-notification {
   @extend %osd;
 
   padding: 10px;
+  border-spacing: 10px;
   border-radius: 0 0 5px 5px;
   background-color: $osd_bg_color;
   background-image: linear-gradient(to bottom, transparentize(black, 0.8),
