@@ -179,7 +179,7 @@ out:
 }
 
 /**
- * gtk_accessible_update_state_value:
+ * gtk_accessible_update_state_value: (rename-to gtk_accessible_update_state)
  * @self: a #GtkAccessible
  * @n_states: the number of accessible states to set
  * @states: (array length=n_states): an array of #GtkAccessibleState
@@ -323,7 +323,7 @@ out:
 }
 
 /**
- * gtk_accessible_update_property_value:
+ * gtk_accessible_update_property_value: (rename-to gtk_accessible_update_property)
  * @self: a #GtkAccessible
  * @n_properties: the number of accessible properties to set
  * @properties: (array length=n_properties): an array of #GtkAccessibleProperty
@@ -458,7 +458,7 @@ out:
 }
 
 /**
- * gtk_accessible_update_relation_value:
+ * gtk_accessible_update_relation_value: (rename-to gtk_accessible_update_relation)
  * @self: a #GtkAccessible
  * @n_relations: the number of accessible relations to set
  * @relations: (array length=n_relations): an array of #GtkAccessibleRelation
