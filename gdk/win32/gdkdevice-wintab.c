@@ -61,7 +61,7 @@ gdk_device_wintab_set_surface_cursor (GdkDevice *device,
 {
 }
 
-static void
+void
 gdk_device_wintab_query_state (GdkDevice        *device,
                                GdkSurface       *window,
                                GdkSurface      **child_window,
@@ -230,7 +230,7 @@ gdk_device_wintab_class_init (GdkDeviceWintabClass *klass)
   GdkDeviceClass *device_class = GDK_DEVICE_CLASS (klass);
 
   device_class->set_surface_cursor = gdk_device_wintab_set_surface_cursor;
-  device_class->query_state = gdk_device_wintab_query_state;
+  device_class->query_state = gdk_x11_device_xi2_query_state;
   device_class->grab = gdk_device_wintab_grab;
   device_class->ungrab = gdk_device_wintab_ungrab;
   device_class->surface_at_position = gdk_device_wintab_surface_at_position;

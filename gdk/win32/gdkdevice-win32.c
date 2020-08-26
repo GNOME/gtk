@@ -26,6 +26,8 @@
 #include "gdkdevice-win32.h"
 #include "gdkwin32.h"
 #include "gdkdisplay-win32.h"
+#include "gdkdevice-virtual.h"
+#include "gdkdevice-wintab.h"
 
 G_DEFINE_TYPE (GdkDeviceWin32, gdk_device_win32, GDK_TYPE_DEVICE)
 
@@ -119,6 +121,22 @@ gdk_device_win32_query_state (GdkDevice        *device,
 
   if (mask)
     *mask = get_current_mask ();
+}
+
+void
+_gdk_device_win32_query_state (GdkDevice        *device,
+                               GdkSurface       *window,
+                               GdkSurface      **child_window,
+                               double           *win_x,
+                               double           *win_y,
+                               GdkModifierType  *mask)
+{
+  if (GDK_IS_DEVICE_VIRTUAL (device))
+    gdk_device_virtual_query_state (device, window, child_window, win_x, win_y, mask);
+  else if (GDK_IS_DEVICE_WINTAB (device))
+    gdk_device_wintab_query_state (device, window, child_window, win_x, win_y, mask);
+  else
+    gdk_device_win32_query_state (device, window, child_window, win_x, win_y, mask);
 }
 
 static GdkGrabStatus

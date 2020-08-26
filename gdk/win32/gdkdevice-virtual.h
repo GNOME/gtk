@@ -48,6 +48,15 @@ GType gdk_device_virtual_get_type (void) G_GNUC_CONST;
 void _gdk_device_virtual_set_active (GdkDevice *device,
 				     GdkDevice *new_active);
 
+void
+gdk_device_virtual_query_state (GdkDevice        *device,
+                                GdkSurface       *window,
+                                GdkSurface      **child_window,
+                                double           *win_x,
+                                double           *win_y,
+                                GdkModifierType  *mask);
+
+
 
 G_END_DECLS
 
