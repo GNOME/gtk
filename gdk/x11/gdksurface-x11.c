@@ -2659,19 +2659,18 @@ gdk_x11_surface_get_frame_extents (GdkSurface    *surface,
 }
 
 static gboolean
-gdk_x11_surface_get_device_state (GdkSurface       *surface,
-                                 GdkDevice       *device,
-                                 double          *x,
-                                 double          *y,
-                                 GdkModifierType *mask)
+gdk_x11_surface_get_device_state (GdkSurface     *surface,
+                                  GdkDevice       *device,
+                                  double          *x,
+                                  double          *y,
+                                  GdkModifierType *mask)
 {
-  GdkSurface *child;
-
   if (GDK_SURFACE_DESTROYED (surface))
     return FALSE;
 
-  gdk_x11_device_xi2_query_state (device, surface, &child, x, y, mask);
-  return child != NULL;
+  gdk_x11_device_xi2_query_state (device, surface, NULL, x, y, mask);
+
+  return *x >= 0 && *y >= 0 && *x < surface->width && *y < surface->height;
 }
 
 static void 
