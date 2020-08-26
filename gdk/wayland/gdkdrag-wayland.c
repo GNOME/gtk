@@ -137,7 +137,7 @@ gdk_wayland_drag_set_hotspot (GdkDrag *drag,
     return;
 
   _gdk_wayland_surface_offset_next_wl_buffer (drag_wayland->dnd_surface,
-                                             -hot_x, -hot_y);
+                                             prev_hot_x - hot_x, prev_hot_y - hot_y);
   gdk_surface_invalidate_rect (drag_wayland->dnd_surface, &damage_rect);
 }
 
