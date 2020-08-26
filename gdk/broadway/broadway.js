@@ -396,7 +396,7 @@ TransformNodes.prototype.decode_color = function() {
     var g = (rgba >> 8) & 0xff;
     var b = (rgba >> 0) & 0xff;
     var c;
-    if (a == 0)
+    if (a == 255)
         c = "rgb(" + r + "," + g + "," + b + ")";
     else
         c = "rgba(" + r + "," + g + "," + b + "," + (a / 255.0) + ")";
