@@ -1627,8 +1627,10 @@ gdk_surface_constrain_size (GdkGeometry    *geometry,
  * Obtains the current device position in doubles and modifier state.
  * The position is given in coordinates relative to the upper left
  * corner of @surface.
+ *
+ * Return: %TRUE if the device is over the surface
  **/
-void
+gboolean
 gdk_surface_get_device_position (GdkSurface       *surface,
                                  GdkDevice       *device,
                                  double          *x,
@@ -1637,17 +1639,20 @@ gdk_surface_get_device_position (GdkSurface       *surface,
 {
   double tmp_x, tmp_y;
   GdkModifierType tmp_mask;
+  gboolean ret;
 
-  g_return_if_fail (GDK_IS_SURFACE (surface));
-  g_return_if_fail (GDK_IS_DEVICE (device));
-  g_return_if_fail (gdk_device_get_source (device) != GDK_SOURCE_KEYBOARD);
+  g_return_val_if_fail (GDK_IS_SURFACE (surface), FALSE);
+  g_return_val_if_fail (GDK_IS_DEVICE (device), FALSE);
+  g_return_val_if_fail (gdk_device_get_source (device) != GDK_SOURCE_KEYBOARD, FALSE);
 
-  tmp_x = tmp_y = 0;
+  tmp_x = 0;
+  tmp_y = 0;
   tmp_mask = 0;
-  GDK_SURFACE_GET_CLASS (surface)->get_device_state (surface,
-                                                     device,
-                                                     &tmp_x, &tmp_y,
-                                                     &tmp_mask);
+
+  ret = GDK_SURFACE_GET_CLASS (surface)->get_device_state (surface,
+                                                           device,
+                                                           &tmp_x, &tmp_y,
+                                                           &tmp_mask);
 
   if (x)
     *x = tmp_x;
@@ -1655,6 +1660,8 @@ gdk_surface_get_device_position (GdkSurface       *surface,
     *y = tmp_y;
   if (mask)
     *mask = tmp_mask;
+
+  return ret;
 }
 
 /**
