@@ -374,7 +374,7 @@ gdk_wayland_drag_context_set_hotspot (GdkDragContext *context,
     return;
 
   _gdk_wayland_window_offset_next_wl_buffer (context_wayland->dnd_window,
-                                             -hot_x, -hot_y);
+                                             prev_hot_x - hot_x, prev_hot_y - hot_y);
   gdk_window_invalidate_rect (context_wayland->dnd_window, &damage_rect, FALSE);
 }
 
