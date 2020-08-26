@@ -2011,7 +2011,7 @@ _gdk_x11_surface_drag_begin (GdkSurface         *surface,
 
   precache_target_list (drag);
 
-  gdk_x11_device_xi2_query_state (device, surface, NULL, &px, &py, NULL);
+  gdk_x11_device_xi2_query_state (device, surface, &px, &py, NULL);
 
   gdk_x11_surface_get_root_coords (surface,
                                    round (px + dx),
@@ -2271,7 +2271,7 @@ gdk_dnd_handle_key_event (GdkDrag  *drag,
    * to query it here. We could use XGetModifierMapping, but
    * that would be overkill.
    */
-  gdk_x11_device_xi2_query_state (pointer, NULL, NULL, NULL, NULL, &state);
+  gdk_x11_device_xi2_query_state (pointer, NULL, NULL, NULL, &state);
 
   if (dx != 0 || dy != 0)
     {
