@@ -174,12 +174,6 @@ void    _gdk_device_add_physical_device         (GdkDevice *device,
 void    _gdk_device_remove_physical_device      (GdkDevice *device,
                                                  GdkDevice *physical);
 
-void _gdk_device_query_state                  (GdkDevice        *device,
-                                               GdkSurface        *surface,
-                                               GdkSurface       **child_surface,
-                                               double           *win_x,
-                                               double           *win_y,
-                                               GdkModifierType  *mask);
 GdkSurface * _gdk_device_surface_at_position  (GdkDevice        *device,
                                                double           *win_x,
                                                double           *win_y,
