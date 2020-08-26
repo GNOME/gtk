@@ -30,6 +30,7 @@
 #include "gdkbroadwaydisplay.h"
 #include "gdkdeviceprivate.h"
 #include "gdkdisplay-broadway.h"
+#include "gdkdevice-broadway.h"
 #include "gdkdisplay.h"
 #include "gdkdragsurfaceprivate.h"
 #include "gdkeventsource.h"
@@ -756,9 +757,7 @@ gdk_broadway_surface_get_device_state (GdkSurface      *surface,
   if (GDK_SURFACE_DESTROYED (surface))
     return FALSE;
 
-  GDK_DEVICE_GET_CLASS (device)->query_state (device, surface,
-                                              &child,
-                                              x, y, mask);
+  gdk_broadway_device_query_state (device, surface, &child, x, y, mask);
   return child != NULL;
 }
 
