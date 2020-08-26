@@ -8,7 +8,7 @@ typedef struct  {
     gint32 width, height;
 } BroadwayRect;
 
-typedef enum { /* Sync changes with broadway.js */
+typedef enum { /* Sync changes with broadway.js and node_type_is_container() */
   BROADWAY_NODE_TEXTURE = 0,
   BROADWAY_NODE_CONTAINER = 1,
   BROADWAY_NODE_COLOR = 2,
