@@ -105,12 +105,6 @@ struct _GdkDeviceClass
                               GdkSurface *surface,
                               GdkCursor *cursor);
 
-  void (* query_state)       (GdkDevice       *device,
-                              GdkSurface       *surface,
-                              GdkSurface      **child_surface,
-                              double           *win_x,
-                              double           *win_y,
-                              GdkModifierType  *mask);
   GdkGrabStatus (* grab)     (GdkDevice        *device,
                               GdkSurface        *surface,
                               gboolean          owner_events,
