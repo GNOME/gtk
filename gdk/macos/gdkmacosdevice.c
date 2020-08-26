@@ -29,7 +29,7 @@
 #include "gdkmacoscursor-private.h"
 #include "gdkmacosdevice.h"
 #include "gdkmacosdisplay-private.h"
-#include "gdkmacossurface-private.h"
+#include "gdkmacosdevice-private.h"
 
 struct _GdkMacosDevice
 {
@@ -126,7 +126,7 @@ gdk_macos_device_ungrab (GdkDevice *device,
   _gdk_display_device_grab_update (display, device, 0);
 }
 
-static void
+void
 gdk_macos_device_query_state (GdkDevice        *device,
                               GdkSurface       *surface,
                               GdkSurface      **child_surface,

@@ -32,6 +32,7 @@
 #include "gdksurfaceprivate.h"
 
 #include "gdkmacosdevice.h"
+#include "gdkmacosdevice-private.h"
 #include "gdkmacosdisplay-private.h"
 #include "gdkmacosdrag-private.h"
 #include "gdkmacosdragsurface-private.h"
@@ -307,7 +308,7 @@ gdk_macos_surface_drag_begin (GdkSurface         *surface,
   g_assert (GDK_IS_CONTENT_PROVIDER (content));
 
   seat = gdk_device_get_seat (device);
-  _gdk_device_query_state (device, surface, NULL, &px, &py, NULL);
+  gdk_macos_device_query_state (device, surface, NULL, &px, &py, NULL);
   _gdk_macos_surface_get_root_coords (GDK_MACOS_SURFACE (surface), &sx, &sy);
   drag_surface = _gdk_macos_surface_new (GDK_MACOS_DISPLAY (surface->display),
                                          GDK_SURFACE_TEMP,
