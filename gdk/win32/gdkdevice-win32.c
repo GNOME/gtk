@@ -26,6 +26,8 @@
 #include "gdkdevice-win32.h"
 #include "gdkwin32.h"
 #include "gdkdisplay-win32.h"
+#include "gdkdevice-virtual.h"
+#include "gdkdevice-wintab.h"
 
 G_DEFINE_TYPE (GdkDeviceWin32, gdk_device_win32, GDK_TYPE_DEVICE)
 
@@ -121,6 +123,22 @@ gdk_device_win32_query_state (GdkDevice        *device,
     *mask = get_current_mask ();
 }
 
+void
+_gdk_device_win32_query_state (GdkDevice        *device,
+                               GdkSurface       *window,
+                               GdkSurface      **child_window,
+                               double           *win_x,
+                               double           *win_y,
+                               GdkModifierType  *mask)
+{
+  if (GDK_IS_DEVICE_VIRTUAL (device))
+    gdk_device_virtual_query_state (device, window, child_window, win_x, win_y, mask);
+  else if (GDK_IS_DEVICE_WINTAB (device))
+    gdk_device_wintab_query_state (device, window, child_window, win_x, win_y, mask);
+  else
+    gdk_device_win32_query_state (device, window, child_window, win_x, win_y, mask);
+}
+
 static GdkGrabStatus
 gdk_device_win32_grab (GdkDevice    *device,
                        GdkSurface    *window,
@@ -208,7 +226,6 @@ gdk_device_win32_class_init (GdkDeviceWin32Class *klass)
   GdkDeviceClass *device_class = GDK_DEVICE_CLASS (klass);
 
   device_class->set_surface_cursor = gdk_device_win32_set_surface_cursor;
-  device_class->query_state = gdk_device_win32_query_state;
   device_class->grab = gdk_device_win32_grab;
   device_class->ungrab = gdk_device_win32_ungrab;
   device_class->surface_at_position = _gdk_device_win32_surface_at_position;

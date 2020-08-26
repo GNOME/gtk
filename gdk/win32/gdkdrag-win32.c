@@ -205,6 +205,7 @@
 #include "gdk/gdkdragprivate.h"
 #include "gdkwin32dnd-private.h"
 #include "gdkdisplay-win32.h"
+#include "gdkdevice-win32.h"
 #include "gdkdeviceprivate.h"
 #include "gdkhdataoutputstream-win32.h"
 
@@ -1730,7 +1731,7 @@ _gdk_win32_surface_drag_begin (GdkSurface         *surface,
 
   GDK_NOTE (DND, g_print ("_gdk_win32_surface_drag_begin\n"));
 
-  _gdk_device_query_state (device, NULL, NULL, &px, &py, NULL);
+  _gdk_device_win32_query_state (device, NULL, NULL, &px, &py, NULL);
   x_root = round (px + dx);
   y_root = round (py + dy);
 
@@ -2440,7 +2441,7 @@ gdk_dnd_handle_key_event (GdkDrag  *drag,
   /* The state is not yet updated in the event, so we need
    * to query it here.
    */
-  _gdk_device_query_state (pointer, NULL, NULL, NULL, NULL, &state);
+  _gdk_device_win32_query_state (pointer, NULL, NULL, NULL, NULL, &state);
 
   if (dx != 0 || dy != 0)
     {

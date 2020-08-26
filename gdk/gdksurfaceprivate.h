@@ -108,25 +108,23 @@ struct _GdkSurfaceClass
   GObjectClass parent_class;
 
   cairo_surface_t *
-               (* ref_cairo_surface)    (GdkSurface       *surface);
-
-  void         (* hide)                 (GdkSurface       *surface);
-  void         (* get_geometry)         (GdkSurface       *surface,
+               (* ref_cairo_surface)    (GdkSurface      *surface);
+  void         (* hide)                 (GdkSurface      *surface);
+  void         (* get_geometry)         (GdkSurface      *surface,
                                          int             *x,
                                          int             *y,
                                          int             *width,
                                          int             *height);
-  void         (* get_root_coords)      (GdkSurface       *surface,
+  void         (* get_root_coords)      (GdkSurface      *surface,
                                          int              x,
                                          int              y,
                                          int             *root_x,
                                          int             *root_y);
-  gboolean     (* get_device_state)     (GdkSurface       *surface,
+  gboolean     (* get_device_state)     (GdkSurface      *surface,
                                          GdkDevice       *device,
                                          double          *x,
                                          double          *y,
                                          GdkModifierType *mask);
-
   void         (* set_input_region)     (GdkSurface      *surface,
                                          cairo_region_t  *shape_region);
 

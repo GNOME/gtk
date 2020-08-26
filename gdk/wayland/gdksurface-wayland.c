@@ -36,6 +36,7 @@
 #include "gdkseat-wayland.h"
 #include "gdksurfaceprivate.h"
 #include "gdktoplevelprivate.h"
+#include "gdkdevice-wayland-private.h"
 
 #include <wayland/xdg-shell-unstable-v6-client-protocol.h>
 
@@ -3169,23 +3170,12 @@ gdk_wayland_surface_get_device_state (GdkSurface       *surface,
                                       double           *y,
                                       GdkModifierType  *mask)
 {
-  gboolean return_val;
+  if (GDK_SURFACE_DESTROYED (surface))
+    return FALSE;
 
-  g_return_val_if_fail (surface == NULL || GDK_IS_SURFACE (surface), FALSE);
+  gdk_wayland_device_query_state (device, surface, x, y, mask);
 
-  return_val = TRUE;
-
-  if (!GDK_SURFACE_DESTROYED (surface))
-    {
-      GdkSurface *child;
-
-      GDK_DEVICE_GET_CLASS (device)->query_state (device, surface,
-                                                  &child,
-                                                  x, y, mask);
-      return_val = (child != NULL);
-    }
-
-  return return_val;
+  return *x >= 0 && *y >= 0 && *x < surface->width && *y < surface->height;
 }
 
 static void

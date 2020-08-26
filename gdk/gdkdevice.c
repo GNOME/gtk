@@ -1069,22 +1069,6 @@ _gdk_device_translate_axis (GdkDevice *device,
   return TRUE;
 }
 
-void
-_gdk_device_query_state (GdkDevice        *device,
-                         GdkSurface        *surface,
-                         GdkSurface       **child_surface,
-                         double           *win_x,
-                         double           *win_y,
-                         GdkModifierType  *mask)
-{
-  GDK_DEVICE_GET_CLASS (device)->query_state (device,
-                                              surface,
-                                              child_surface,
-                                              win_x,
-                                              win_y,
-                                              mask);
-}
-
 GdkSurface *
 _gdk_device_surface_at_position (GdkDevice       *device,
                                  double          *win_x,

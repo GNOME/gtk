@@ -26,12 +26,6 @@
 static void gdk_broadway_device_set_surface_cursor (GdkDevice *device,
                                                     GdkSurface *surface,
                                                     GdkCursor *cursor);
-static void gdk_broadway_device_query_state (GdkDevice        *device,
-                                             GdkSurface       *surface,
-                                             GdkSurface      **child_surface,
-                                             double           *win_x,
-                                             double           *win_y,
-                                             GdkModifierType  *mask);
 static GdkGrabStatus gdk_broadway_device_grab   (GdkDevice     *device,
                                                  GdkSurface     *surface,
                                                  gboolean       owner_events,
@@ -55,7 +49,6 @@ gdk_broadway_device_class_init (GdkBroadwayDeviceClass *klass)
   GdkDeviceClass *device_class = GDK_DEVICE_CLASS (klass);
 
   device_class->set_surface_cursor = gdk_broadway_device_set_surface_cursor;
-  device_class->query_state = gdk_broadway_device_query_state;
   device_class->grab = gdk_broadway_device_grab;
   device_class->ungrab = gdk_broadway_device_ungrab;
   device_class->surface_at_position = gdk_broadway_device_surface_at_position;
@@ -79,10 +72,9 @@ gdk_broadway_device_set_surface_cursor (GdkDevice *device,
 {
 }
 
-static void
+void
 gdk_broadway_device_query_state (GdkDevice         *device,
                                  GdkSurface        *surface,
-                                 GdkSurface       **child_surface,
                                  double            *win_x,
                                  double            *win_y,
                                  GdkModifierType   *mask)
@@ -111,18 +103,6 @@ gdk_broadway_device_query_state (GdkDevice         *device,
     *win_y = device_root_y;
   if (mask)
     *mask = mask32;
-  if (child_surface)
-    {
-      GdkSurface *mouse_toplevel;
-
-      mouse_toplevel = g_hash_table_lookup (broadway_display->id_ht, GUINT_TO_POINTER (mouse_toplevel_id));
-      if (surface == NULL)
-        *child_surface = mouse_toplevel;
-      else
-        *child_surface = NULL;
-    }
-
-  return;
 }
 
 void
@@ -253,10 +233,32 @@ gdk_broadway_device_surface_at_position (GdkDevice       *device,
                                          double          *win_y,
                                          GdkModifierType *mask)
 {
-  GdkSurface *surface = NULL;
+  GdkDisplay *display;
+  GdkBroadwayDisplay *broadway_display;
+  gint32 device_root_x, device_root_y;
+  guint32 mouse_toplevel_id;
+  guint32 mask32;
 
-  gdk_broadway_device_query_state (device, NULL, &surface, win_x, win_y, mask);
+  if (gdk_device_get_source (device) != GDK_SOURCE_MOUSE)
+    return NULL;
 
-  return surface;
+  display = gdk_device_get_display (device);
+  broadway_display = GDK_BROADWAY_DISPLAY (display);
+
+  _gdk_broadway_server_query_mouse (broadway_display->server,
+                                    &mouse_toplevel_id,
+                                    &device_root_x,
+                                    &device_root_y,
+                                    &mask32);
+
+  if (win_x)
+    *win_x = device_root_x;
+  if (win_y)
+    *win_y = device_root_y;
+  if (mask)
+    *mask = mask32;
+
+  return g_hash_table_lookup (broadway_display->id_ht,
+                              GUINT_TO_POINTER (mouse_toplevel_id));
 }
 

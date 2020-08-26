@@ -66,6 +66,14 @@ void         _gdk_device_wintab_translate_axes (GdkDeviceWintab *device,
                                                 double          *x,
                                                 double          *y);
 
+void
+gdk_device_wintab_query_state (GdkDevice        *device,
+                               GdkSurface       *window,
+                               GdkSurface      **child_window,
+                               double           *win_x,
+                               double           *win_y,
+                               GdkModifierType  *mask);
+
 G_END_DECLS
 
 #endif /* __GDK_DEVICE_WINTAB_H__ */

@@ -96,21 +96,10 @@ struct _GdkDeviceClass
 {
   GObjectClass parent_class;
 
-  void (* get_state)         (GdkDevice       *device,
-                              GdkSurface       *surface,
-                              double          *axes,
-                              GdkModifierType *mask);
-
   void (* set_surface_cursor)(GdkDevice *device,
                               GdkSurface *surface,
                               GdkCursor *cursor);
 
-  void (* query_state)       (GdkDevice       *device,
-                              GdkSurface       *surface,
-                              GdkSurface      **child_surface,
-                              double           *win_x,
-                              double           *win_y,
-                              GdkModifierType  *mask);
   GdkGrabStatus (* grab)     (GdkDevice        *device,
                               GdkSurface        *surface,
                               gboolean          owner_events,
@@ -174,12 +163,6 @@ void    _gdk_device_add_physical_device         (GdkDevice *device,
 void    _gdk_device_remove_physical_device      (GdkDevice *device,
                                                  GdkDevice *physical);
 
-void _gdk_device_query_state                  (GdkDevice        *device,
-                                               GdkSurface        *surface,
-                                               GdkSurface       **child_surface,
-                                               double           *win_x,
-                                               double           *win_y,
-                                               GdkModifierType  *mask);
 GdkSurface * _gdk_device_surface_at_position  (GdkDevice        *device,
                                                double           *win_x,
                                                double           *win_y,

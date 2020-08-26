@@ -34,6 +34,7 @@
 #include "gdkvisual-x11.h"
 #include "gdkinternals.h"
 #include "gdkdeviceprivate.h"
+#include "gdkdevice-xi2-private.h"
 #include "gdkframeclockidleprivate.h"
 #include "gdkasync.h"
 #include "gdkeventsource.h"
@@ -2658,22 +2659,18 @@ gdk_x11_surface_get_frame_extents (GdkSurface    *surface,
 }
 
 static gboolean
-gdk_x11_surface_get_device_state (GdkSurface       *surface,
-                                 GdkDevice       *device,
-                                 double          *x,
-                                 double          *y,
-                                 GdkModifierType *mask)
+gdk_x11_surface_get_device_state (GdkSurface     *surface,
+                                  GdkDevice       *device,
+                                  double          *x,
+                                  double          *y,
+                                  GdkModifierType *mask)
 {
-  GdkSurface *child;
-
   if (GDK_SURFACE_DESTROYED (surface))
     return FALSE;
 
-  /*HIDPI: handle coords here?*/
-  GDK_DEVICE_GET_CLASS (device)->query_state (device, surface,
-                                              &child,
-                                              x, y, mask);
-  return child != NULL;
+  gdk_x11_device_xi2_query_state (device, surface, x, y, mask);
+
+  return *x >= 0 && *y >= 0 && *x < surface->width && *y < surface->height;
 }
 
 static void 
