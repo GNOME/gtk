@@ -1724,19 +1724,16 @@ gdk_win32_surface_get_root_coords (GdkSurface *window,
 }
 
 static gboolean
-gdk_surface_win32_get_device_state (GdkSurface       *window,
-                                   GdkDevice       *device,
-                                   double          *x,
-                                   double          *y,
-                                   GdkModifierType *mask)
+gdk_surface_win32_get_device_state (GdkSurface     *window,
+                                    GdkDevice       *device,
+                                    double          *x,
+                                    double          *y,
+                                    GdkModifierType *mask)
 {
-  GdkSurface *child;
+  _gdk_device_win32_query_state (device, window, NULL, x, y, mask);
 
-  g_return_val_if_fail (window == NULL || GDK_IS_SURFACE (window), FALSE);
+  return *x >= 0 && *y >= 0 && *x < window->width && *y < window->height;
 
-  _gdk_device_win32_query_state (device, window, &child, x, y, mask);
-
-  return (child != NULL);
 }
 
 static void
