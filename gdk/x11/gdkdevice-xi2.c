@@ -202,7 +202,6 @@ gdk_x11_device_xi2_set_surface_cursor (GdkDevice *device,
 void
 gdk_x11_device_xi2_query_state (GdkDevice        *device,
                                 GdkSurface        *surface,
-                                GdkSurface       **child_surface,
                                 double           *win_x,
                                 double           *win_y,
                                 GdkModifierType  *mask)
@@ -264,9 +263,6 @@ gdk_x11_device_xi2_query_state (GdkDevice        *device,
                       &group_state);
       XDestroyWindow (xdisplay, w);
     }
-
-  if (child_surface)
-    *child_surface = gdk_x11_surface_lookup_for_display (display, xchild_window);
 
   if (win_x)
     *win_x = xwin_x / scale;
