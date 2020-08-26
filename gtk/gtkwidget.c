@@ -4376,11 +4376,29 @@ gtk_widget_handle_crossing (GtkWidget             *widget,
 
   g_object_ref (widget);
 
+  if (crossing->old_target)
+    g_object_ref (crossing->old_target);
+  if (crossing->new_target)
+    g_object_ref (crossing->new_target);
+  if (crossing->old_descendent)
+    g_object_ref (crossing->old_descendent);
+  if (crossing->new_descendent)
+    g_object_ref (crossing->new_descendent);
+
   for (l = priv->event_controllers; l; l = l->next)
     {
       GtkEventController *controller = l->data;
       gtk_event_controller_handle_crossing (controller, crossing, x, y);
     }
+
+  if (crossing->old_target)
+    g_object_unref (crossing->old_target);
+  if (crossing->new_target)
+    g_object_unref (crossing->new_target);
+  if (crossing->old_descendent)
+    g_object_unref (crossing->old_descendent);
+  if (crossing->new_descendent)
+    g_object_unref (crossing->new_descendent);
 
   g_object_unref (widget);
 }
