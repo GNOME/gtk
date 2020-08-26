@@ -750,15 +750,14 @@ gdk_broadway_surface_get_device_state (GdkSurface      *surface,
                                        double          *y,
                                        GdkModifierType *mask)
 {
-  GdkSurface *child;
-
   g_return_val_if_fail (surface == NULL || GDK_IS_SURFACE (surface), FALSE);
 
   if (GDK_SURFACE_DESTROYED (surface))
     return FALSE;
 
-  gdk_broadway_device_query_state (device, surface, &child, x, y, mask);
-  return child != NULL;
+  gdk_broadway_device_query_state (device, surface, NULL, x, y, mask);
+
+  return *x >= 0 && *y >= 0 && *x < surface->width && *y < surface->height;
 }
 
 static void
