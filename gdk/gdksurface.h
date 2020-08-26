@@ -187,7 +187,7 @@ GDK_AVAILABLE_IN_ALL
 int           gdk_surface_get_scale_factor  (GdkSurface     *surface);
 
 GDK_AVAILABLE_IN_ALL
-void          gdk_surface_get_device_position (GdkSurface      *surface,
+gboolean      gdk_surface_get_device_position (GdkSurface      *surface,
                                                GdkDevice       *device,
                                                double          *x,
                                                double          *y,
