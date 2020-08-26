@@ -809,7 +809,7 @@ TransformNodes.prototype.insertNode = function(parent, previousSibling, is_tople
         }
         break;
 
-    case 14:  // DEBUG
+    case BROADWAY_NODE_DEBUG:
         {
             var str = this.decode_string();
             var div = this.createDiv(id);
