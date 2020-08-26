@@ -22,6 +22,7 @@
 #include "gdkdeviceprivate.h"
 #include "gdkintl.h"
 
+#include "gdkmacosdevice-private.h"
 #include "gdkmacoscursor-private.h"
 #include "gdkmacosdisplay-private.h"
 #include "gdkmacosdrag-private.h"
@@ -473,7 +474,7 @@ gdk_dnd_handle_key_event (GdkDrag  *drag,
    * to query it here. We could use XGetModifierMapping, but
    * that would be overkill.
    */
-  _gdk_device_query_state (pointer, NULL, NULL, NULL, NULL, &state);
+  gdk_macos_device_query_state (pointer, NULL, NULL, NULL, NULL, &state);
 
   if (dx != 0 || dy != 0)
     {
