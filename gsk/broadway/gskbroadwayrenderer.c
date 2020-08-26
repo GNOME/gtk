@@ -467,14 +467,21 @@ get_colorized_texture (GdkTexture *texture,
 
 
 /* Note: This tracks the offset so that we can convert
-   the absolute coordinates of the GskRenderNodes to
-   parent-relative which is what the dom uses, and
-   which is good for re-using subtrees. */
+ * the absolute coordinates of the GskRenderNodes to
+ * parent-relative which is what the dom uses, and
+ * which is good for re-using subtrees.
+ *
+ * We also track the clip bounds which is a best-effort
+ * clip region tracking (i.e. can be unset or larger
+ * than real clip, but not smaller). This can be used
+ * to avoid sending completely clipped nodes.
+ */
 static void
 gsk_broadway_renderer_add_node (GskRenderer *renderer,
                                 GskRenderNode *node,
                                 float offset_x,
-                                float offset_y)
+                                float offset_y,
+                                graphene_rect_t *clip_bounds)
 {
   GdkDisplay *display = gdk_surface_get_display (gsk_renderer_get_surface (renderer));
   GdkBroadwayDisplay *broadway_display = GDK_BROADWAY_DISPLAY (display);
@@ -617,7 +624,7 @@ gsk_broadway_renderer_add_node (GskRenderer *renderer,
             }
           gsk_broadway_renderer_add_node (renderer,
                                           gsk_shadow_node_get_child (node),
-                                          offset_x, offset_y);
+                                          offset_x, offset_y, clip_bounds);
         }
       return;
 
@@ -627,7 +634,7 @@ gsk_broadway_renderer_add_node (GskRenderer *renderer,
           add_float (nodes, gsk_opacity_node_get_opacity (node));
           gsk_broadway_renderer_add_node (renderer,
                                           gsk_opacity_node_get_child (node),
-                                          offset_x, offset_y);
+                                          offset_x, offset_y, clip_bounds);
         }
       return;
 
@@ -635,12 +642,17 @@ gsk_broadway_renderer_add_node (GskRenderer *renderer,
       if (add_new_node (renderer, node, BROADWAY_NODE_ROUNDED_CLIP))
         {
           const GskRoundedRect *rclip = gsk_rounded_clip_node_peek_clip (node);
+          graphene_rect_t child_bounds = rclip->bounds;
+
+          if (clip_bounds)
+            graphene_rect_intersection (&child_bounds, clip_bounds, &child_bounds);
 
           add_rounded_rect (nodes, rclip, offset_x, offset_y);
           gsk_broadway_renderer_add_node (renderer,
                                           gsk_rounded_clip_node_get_child (node),
                                           rclip->bounds.origin.x,
-                                          rclip->bounds.origin.y);
+                                          rclip->bounds.origin.y,
+                                          &child_bounds);
         }
       return;
 
@@ -648,12 +660,17 @@ gsk_broadway_renderer_add_node (GskRenderer *renderer,
       if (add_new_node (renderer, node, BROADWAY_NODE_CLIP))
         {
           const graphene_rect_t *clip = gsk_clip_node_peek_clip (node);
+          graphene_rect_t child_bounds = *clip;
+
+          if (clip_bounds)
+            graphene_rect_intersection (&child_bounds, clip_bounds, &child_bounds);
 
           add_rect (nodes, clip, offset_x, offset_y);
           gsk_broadway_renderer_add_node (renderer,
                                           gsk_clip_node_get_child (node),
                                           clip->origin.x,
-                                          clip->origin.y);
+                                          clip->origin.y,
+                                          &child_bounds);
         }
       return;
 
@@ -666,13 +683,22 @@ gsk_broadway_renderer_add_node (GskRenderer *renderer,
           if (category >= GSK_TRANSFORM_CATEGORY_2D_TRANSLATE)
             {
               float dx, dy;
-              gsk_transform_to_translate (transform, &dx, &dy);
+              graphene_rect_t child_bounds;
+              graphene_rect_t *child_bounds_p = NULL;
 
+              gsk_transform_to_translate (transform, &dx, &dy);
               add_uint32 (nodes, 0); // Translate
               add_xy (nodes, dx, dy, 0, 0);
+
+              if (clip_bounds)
+                {
+                  graphene_rect_offset_r (clip_bounds, -dx, -dy, &child_bounds);
+                  child_bounds_p = &child_bounds;
+                }
+
               gsk_broadway_renderer_add_node (renderer,
                                               gsk_transform_node_get_child (node),
-                                              0, 0);
+                                              0, 0, child_bounds_p);
             }
           else
             {
@@ -681,9 +707,10 @@ gsk_broadway_renderer_add_node (GskRenderer *renderer,
               gsk_transform_to_matrix (transform, &matrix);
               add_uint32 (nodes, 1); // General transform
               add_matrix (nodes, &matrix);
+              // We just drop the clip bounds here to make things simpler
               gsk_broadway_renderer_add_node (renderer,
                                               gsk_transform_node_get_child (node),
-                                              0, 0);
+                                              0, 0, NULL);
             }
         }
       }
@@ -695,7 +722,7 @@ gsk_broadway_renderer_add_node (GskRenderer *renderer,
           const char *message = gsk_debug_node_get_message (node);
           add_string (nodes, message);
           gsk_broadway_renderer_add_node (renderer,
-                                          gsk_debug_node_get_child (node), offset_x, offset_y);
+                                          gsk_debug_node_get_child (node), offset_x, offset_y, clip_bounds);
         }
       return;
 
@@ -709,7 +736,7 @@ gsk_broadway_renderer_add_node (GskRenderer *renderer,
           add_uint32 (nodes, gsk_container_node_get_n_children (node));
           for (i = 0; i < gsk_container_node_get_n_children (node); i++)
             gsk_broadway_renderer_add_node (renderer,
-                                            gsk_container_node_get_child (node, i), offset_x, offset_y);
+                                            gsk_container_node_get_child (node, i), offset_x, offset_y, clip_bounds);
         }
       return;
 
@@ -798,7 +825,7 @@ gsk_broadway_renderer_render (GskRenderer          *renderer,
   self->nodes = self->draw_context->nodes;
   self->node_textures = self->draw_context->node_textures;
 
-  gsk_broadway_renderer_add_node (renderer, root, 0, 0);
+  gsk_broadway_renderer_add_node (renderer, root, 0, 0, NULL);
 
   self->nodes = NULL;
   self->node_textures = NULL;
