@@ -199,7 +199,25 @@ gtk_root_layout_cb (GdkFrameClock *clock,
    * since it doesn't cause any actual harm.
    */
   if (gtk_widget_needs_allocate (widget))
-    gtk_native_check_resize (GTK_NATIVE (self));
+    {
+      gtk_native_check_resize (GTK_NATIVE (self));
+      if (GTK_IS_WINDOW (widget))
+        {
+          GdkSeat *seat;
+
+          seat = gdk_display_get_default_seat (gtk_widget_get_display (widget));
+          if (seat)
+            {
+              GdkDevice *device;
+              GtkWidget *focus;
+
+              device = gdk_seat_get_pointer (seat);
+              focus = gtk_window_lookup_pointer_focus_widget (GTK_WINDOW (widget), device, NULL);
+              if (focus)
+                gdk_surface_request_motion (gtk_native_get_surface (gtk_widget_get_native (focus)));
+            }
+        }
+    }
 
   if (!gtk_root_needs_layout (self))
     gtk_root_stop_layout (self);
