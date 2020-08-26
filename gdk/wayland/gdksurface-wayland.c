@@ -3170,21 +3170,12 @@ gdk_wayland_surface_get_device_state (GdkSurface       *surface,
                                       double           *y,
                                       GdkModifierType  *mask)
 {
-  gboolean return_val;
+  if (GDK_SURFACE_DESTROYED (surface))
+    return FALSE;
 
-  g_return_val_if_fail (surface == NULL || GDK_IS_SURFACE (surface), FALSE);
+  gdk_wayland_device_query_state (device, surface, NULL, x, y, mask);
 
-  return_val = TRUE;
-
-  if (!GDK_SURFACE_DESTROYED (surface))
-    {
-      GdkSurface *child;
-
-      gdk_wayland_device_query_state (device, surface, &child, x, y, mask);
-      return_val = (child != NULL);
-    }
-
-  return return_val;
+  return *x >= 0 && *y >= 0 && *x < surface->width && *y < surface->height;
 }
 
 static void
