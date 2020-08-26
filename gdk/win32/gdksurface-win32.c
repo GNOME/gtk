@@ -1734,9 +1734,8 @@ gdk_surface_win32_get_device_state (GdkSurface       *window,
 
   g_return_val_if_fail (window == NULL || GDK_IS_SURFACE (window), FALSE);
 
-  GDK_DEVICE_GET_CLASS (device)->query_state (device, window,
-                                              &child,
-                                              x, y, mask);
+  _gdk_device_win32_query_state (device, window, &child, x, y, mask);
+
   return (child != NULL);
 }
 
