@@ -521,29 +521,32 @@ device_get_modifiers (GdkDevice *device)
 void
 gdk_wayland_device_query_state (GdkDevice        *device,
                                 GdkSurface       *surface,
-                                GdkSurface      **child_surface,
                                 double           *win_x,
                                 double           *win_y,
                                 GdkModifierType  *mask)
 {
   GdkWaylandPointerData *pointer;
-  GList *children = NULL;
+  double x, y;
 
-  if (surface == NULL)
-    children = gdk_wayland_display_get_toplevel_surfaces (gdk_device_get_display (device));
-
-  pointer = GDK_WAYLAND_DEVICE (device)->pointer;
-
-  if (child_surface)
-    /* Set child only if actually a child of the given surface, as XIQueryPointer() does */
-    *child_surface = g_list_find (children, pointer->focus) ? pointer->focus : NULL;
   if (mask)
     *mask = device_get_modifiers (device);
 
+  pointer = GDK_WAYLAND_DEVICE (device)->pointer;
+
+  if (pointer->focus == surface)
+    {
+      x = pointer->surface_x;
+      y = pointer->surface_y;
+    }
+  else
+    {
+      x = y = -1;
+    }
+
   if (win_x)
-    *win_x = pointer->surface_x;
+    *win_x = x;
   if (win_y)
-    *win_y = pointer->surface_y;
+    *win_y = y;
 }
 
 static void

@@ -3173,7 +3173,7 @@ gdk_wayland_surface_get_device_state (GdkSurface       *surface,
   if (GDK_SURFACE_DESTROYED (surface))
     return FALSE;
 
-  gdk_wayland_device_query_state (device, surface, NULL, x, y, mask);
+  gdk_wayland_device_query_state (device, surface, x, y, mask);
 
   return *x >= 0 && *y >= 0 && *x < surface->width && *y < surface->height;
 }
