@@ -31,6 +31,7 @@
 #include "gdkclipboardprivate.h"
 #include "gdkclipboard-x11.h"
 #include "gdkdeviceprivate.h"
+#include "gdkdevice-xi2-private.h"
 #include "gdkdisplay-x11.h"
 #include "gdkdragprivate.h"
 #include "gdksurfaceprivate.h"
@@ -2010,7 +2011,7 @@ _gdk_x11_surface_drag_begin (GdkSurface         *surface,
 
   precache_target_list (drag);
 
-  _gdk_device_query_state (device, surface, NULL, &px, &py, NULL);
+  gdk_x11_device_xi2_query_state (device, surface, NULL, &px, &py, NULL);
 
   gdk_x11_surface_get_root_coords (surface,
                                    round (px + dx),
@@ -2270,7 +2271,7 @@ gdk_dnd_handle_key_event (GdkDrag  *drag,
    * to query it here. We could use XGetModifierMapping, but
    * that would be overkill.
    */
-  _gdk_device_query_state (pointer, NULL, NULL, NULL, NULL, &state);
+  gdk_x11_device_xi2_query_state (pointer, NULL, NULL, NULL, NULL, &state);
 
   if (dx != 0 || dy != 0)
     {
