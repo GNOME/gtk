@@ -96,11 +96,6 @@ struct _GdkDeviceClass
 {
   GObjectClass parent_class;
 
-  void (* get_state)         (GdkDevice       *device,
-                              GdkSurface       *surface,
-                              double          *axes,
-                              GdkModifierType *mask);
-
   void (* set_surface_cursor)(GdkDevice *device,
                               GdkSurface *surface,
                               GdkCursor *cursor);
