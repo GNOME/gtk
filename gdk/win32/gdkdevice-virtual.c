@@ -83,7 +83,7 @@ gdk_device_virtual_set_surface_cursor (GdkDevice  *device,
   g_set_object (&GDK_WIN32_SURFACE (window)->cursor, win32_hcursor);
 }
 
-static void
+void
 gdk_device_virtual_query_state (GdkDevice        *device,
 				GdkSurface        *window,
 				GdkSurface       **child_window,
@@ -93,10 +93,10 @@ gdk_device_virtual_query_state (GdkDevice        *device,
 {
   GdkDeviceVirtual *virtual = GDK_DEVICE_VIRTUAL (device);
 
-  _gdk_device_query_state (virtual->active_device,
-			   window, child_window,
-			   win_x, win_y,
-			   mask);
+  _gdk_device_win32_query_state (virtual->active_device,
+                                 window, child_window,
+                                 win_x, win_y,
+                                 mask);
 }
 
 static GdkGrabStatus

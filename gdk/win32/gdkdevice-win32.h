@@ -48,6 +48,13 @@ GdkSurface *_gdk_device_win32_surface_at_position (GdkDevice       *device,
                                                    double          *win_x,
                                                    double          *win_y,
                                                    GdkModifierType *mask);
+void _gdk_device_win32_query_state             (GdkDevice        *device,
+                                                GdkSurface        *surface,
+                                                GdkSurface       **child_surface,
+                                                double           *win_x,
+                                                double           *win_y,
+                                                GdkModifierType  *mask);
+
 
 G_END_DECLS
 
