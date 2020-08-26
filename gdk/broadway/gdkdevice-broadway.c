@@ -75,7 +75,6 @@ gdk_broadway_device_set_surface_cursor (GdkDevice *device,
 void
 gdk_broadway_device_query_state (GdkDevice         *device,
                                  GdkSurface        *surface,
-                                 GdkSurface       **child_surface,
                                  double            *win_x,
                                  double            *win_y,
                                  GdkModifierType   *mask)
@@ -104,18 +103,6 @@ gdk_broadway_device_query_state (GdkDevice         *device,
     *win_y = device_root_y;
   if (mask)
     *mask = mask32;
-  if (child_surface)
-    {
-      GdkSurface *mouse_toplevel;
-
-      mouse_toplevel = g_hash_table_lookup (broadway_display->id_ht, GUINT_TO_POINTER (mouse_toplevel_id));
-      if (surface == NULL)
-        *child_surface = mouse_toplevel;
-      else
-        *child_surface = NULL;
-    }
-
-  return;
 }
 
 void
@@ -248,7 +235,7 @@ gdk_broadway_device_surface_at_position (GdkDevice       *device,
 {
   GdkSurface *surface = NULL;
 
-  gdk_broadway_device_query_state (device, NULL, &surface, win_x, win_y, mask);
+  gdk_broadway_device_query_state (device, NULL, win_x, win_y, mask);
 
   return surface;
 }
