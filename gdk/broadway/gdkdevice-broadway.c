@@ -233,10 +233,32 @@ gdk_broadway_device_surface_at_position (GdkDevice       *device,
                                          double          *win_y,
                                          GdkModifierType *mask)
 {
-  GdkSurface *surface = NULL;
+  GdkDisplay *display;
+  GdkBroadwayDisplay *broadway_display;
+  gint32 device_root_x, device_root_y;
+  guint32 mouse_toplevel_id;
+  guint32 mask32;
 
-  gdk_broadway_device_query_state (device, NULL, win_x, win_y, mask);
+  if (gdk_device_get_source (device) != GDK_SOURCE_MOUSE)
+    return NULL;
 
-  return surface;
+  display = gdk_device_get_display (device);
+  broadway_display = GDK_BROADWAY_DISPLAY (display);
+
+  _gdk_broadway_server_query_mouse (broadway_display->server,
+                                    &mouse_toplevel_id,
+                                    &device_root_x,
+                                    &device_root_y,
+                                    &mask32);
+
+  if (win_x)
+    *win_x = device_root_x;
+  if (win_y)
+    *win_y = device_root_y;
+  if (mask)
+    *mask = mask32;
+
+  return g_hash_table_lookup (broadway_display->id_ht,
+                              GUINT_TO_POINTER (mouse_toplevel_id));
 }
 
