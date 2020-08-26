@@ -1335,9 +1335,9 @@ gtk_synthesize_crossing_events (GtkRoot         *toplevel,
 
   crossing.type = crossing_type;
   crossing.mode = mode;
-  crossing.old_target = old_target;
+  crossing.old_target = old_target ? g_object_ref (old_target) : NULL;
   crossing.old_descendent = NULL;
-  crossing.new_target = new_target;
+  crossing.new_target = new_target ? g_object_ref (new_target) : NULL;
   crossing.new_descendent = NULL;
   crossing.drop = drop;
 
@@ -1416,6 +1416,9 @@ gtk_synthesize_crossing_events (GtkRoot         *toplevel,
       if (crossing_type == GTK_CROSSING_POINTER)
         gtk_widget_set_state_flags (widget, GTK_STATE_FLAG_PRELIGHT, FALSE);
     }
+
+  g_clear_object (&crossing.old_target);
+  g_clear_object (&crossing.new_target);
 
   gtk_widget_stack_clear (&target_array);
 }
