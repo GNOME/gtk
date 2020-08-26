@@ -108,7 +108,6 @@ gdk_x11_device_xi2_class_init (GdkX11DeviceXI2Class *klass)
   object_class->set_property = gdk_x11_device_xi2_set_property;
 
   device_class->set_surface_cursor = gdk_x11_device_xi2_set_surface_cursor;
-  device_class->query_state = gdk_x11_device_xi2_query_state;
   device_class->grab = gdk_x11_device_xi2_grab;
   device_class->ungrab = gdk_x11_device_xi2_ungrab;
   device_class->surface_at_position = gdk_x11_device_xi2_surface_at_position;
