@@ -320,7 +320,6 @@ struct _GdkGeometry
   int max_height;
 };
 
-GDK_AVAILABLE_IN_ALL
 void       gdk_surface_constrain_size      (GdkGeometry    *geometry,
                                             GdkSurfaceHints  flags,
                                             int             width,
