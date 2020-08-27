@@ -157,7 +157,8 @@ read_bookmarks_finish (GObject      *source,
 
   if (!g_file_load_contents_finish (file, result, &contents, NULL, NULL, &error)) 
     {
-      g_warning ("Failed to load '%s': %s", g_file_peek_path (file), error->message);
+      if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
+        g_warning ("Failed to load '%s': %s", g_file_peek_path (file), error->message);
       g_error_free (error);
       return;
     }
@@ -238,7 +239,7 @@ bookmarks_file_changed (GFileMonitor      *monitor,
     case G_FILE_MONITOR_EVENT_CHANGED:
     case G_FILE_MONITOR_EVENT_CHANGES_DONE_HINT:
     case G_FILE_MONITOR_EVENT_CREATED:
-      g_file_load_contents_async (file, NULL, read_bookmarks_finish, manager);
+      g_file_load_contents_async (file, manager->cancellable, read_bookmarks_finish, manager);
       break;
 
     case G_FILE_MONITOR_EVENT_DELETED:
@@ -267,6 +268,8 @@ _gtk_bookmarks_manager_new (GtkBookmarksChangedFunc changed_func, gpointer chang
   manager->changed_func = changed_func;
   manager->changed_func_data = changed_func_data;
 
+  manager->cancellable = g_cancellable_new ();
+
   bookmarks_file = get_bookmarks_file ();
   if (!g_file_query_exists (bookmarks_file, NULL))
     {
@@ -281,7 +284,7 @@ _gtk_bookmarks_manager_new (GtkBookmarksChangedFunc changed_func, gpointer chang
       g_object_unref (legacy_bookmarks_file);
     }
   else
-    g_file_load_contents_async (bookmarks_file, NULL, read_bookmarks_finish, manager);
+    g_file_load_contents_async (bookmarks_file, manager->cancellable, read_bookmarks_finish, manager);
 
   error = NULL;
   manager->bookmarks_monitor = g_file_monitor_file (bookmarks_file,
@@ -306,6 +309,9 @@ void
 _gtk_bookmarks_manager_free (GtkBookmarksManager *manager)
 {
   g_return_if_fail (manager != NULL);
+
+  g_cancellable_cancel (manager->cancellable);
+  g_object_unref (manager->cancellable);
 
   if (manager->bookmarks_monitor)
     {

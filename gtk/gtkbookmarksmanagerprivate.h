@@ -38,6 +38,8 @@ typedef struct
 
   gpointer changed_func_data;
   GtkBookmarksChangedFunc changed_func;
+
+  GCancellable *cancellable;
 } GtkBookmarksManager;
 
 typedef struct
