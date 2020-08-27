@@ -72,6 +72,7 @@ struct _GdkSurface
   guint frame_clock_events_paused : 1;
   guint autohide : 1;
   guint shortcuts_inhibited : 1;
+  guint request_motion : 1;
 
   struct {
     GdkGravity surface_anchor;
@@ -326,6 +327,9 @@ void       gdk_surface_constrain_size      (GdkGeometry    *geometry,
                                             int             height,
                                             int            *new_width,
                                             int            *new_height);
+
+GDK_AVAILABLE_IN_ALL
+void           gdk_surface_request_motion (GdkSurface *surface);
 
 G_END_DECLS
 
