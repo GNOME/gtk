@@ -17,6 +17,7 @@ case "${backend}" in
                 --timeout-multiplier "${MESON_TEST_TIMEOUT_MULTIPLIER}" \
                 --print-errorlogs \
                 --setup=${backend} \
+                --wrap catchsegv \
                 --suite=gtk \
                 --no-suite=gsk-compare-broadway
 
@@ -36,6 +37,7 @@ case "${backend}" in
                 --timeout-multiplier "${MESON_TEST_TIMEOUT_MULTIPLIER}" \
                 --print-errorlogs \
                 --setup=${backend} \
+                --wrap catchsegv \
                 --suite=gtk \
                 --no-suite=gsk-compare-broadway
 
@@ -54,6 +56,7 @@ case "${backend}" in
                 --timeout-multiplier "${MESON_TEST_TIMEOUT_MULTIPLIER}" \
                 --print-errorlogs \
                 --setup=${backend} \
+                --wrap catchsegv \
                 --suite=gtk \
                 --no-suite=gsk-compare-opengl
 
