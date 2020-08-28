@@ -9,8 +9,8 @@
 msgid ""
 msgstr "Project-Id-Version: gtk+ master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-12 06:41+0000\n"
-"PO-Revision-Date: 2020-06-13 10:00+0100\n"
+"POT-Creation-Date: 2020-08-27 00:09+0000\n"
+"PO-Revision-Date: 2020-08-28 10:00+0100\n"
 "Last-Translator: Asier Sarasua Garmendia <asiersarasua@ni.eus>\n"
 "Language-Team: Basque <librezale@librezale.eus>\n"
 "Language: eu\n"
@@ -55,15 +55,15 @@ msgstr "Ez da onartzen beste aplikazio batzuetatik arrastatu eta jaregitea."
 msgid "No compatible formats to transfer contents."
 msgstr "Ez dago formatu bateragarririk edukiak transferitzeko."
 
-#: gdk/gdksurface.c:1071
+#: gdk/gdksurface.c:1094
 msgid "GL support disabled via GDK_DEBUG"
 msgstr "GL euskarria desgaituta GDK_DEBUG bidez"
 
-#: gdk/gdksurface.c:1082
+#: gdk/gdksurface.c:1105
 msgid "The current backend does not support OpenGL"
 msgstr "Uneko motorrak ez du OpenGL onartzen"
 
-#: gdk/gdksurface.c:1190
+#: gdk/gdksurface.c:1213
 msgid "Vulkan support disabled via GDK_DEBUG"
 msgstr "Vulkan euskarria desgaituta GDK_DEBUG bidez"
 
@@ -444,30 +444,37 @@ msgctxt "keyboard label"
 msgid "Suspend"
 msgstr "Eseki"
 
-#: gdk/quartz/gdkglcontext-quartz.c:37
-msgid "Not implemented on OS X"
-msgstr "Ez dago X SEan garatuta"
-
-#: gdk/wayland/gdkclipboard-wayland.c:231 gdk/wayland/gdkdrop-wayland.c:204
-#: gdk/wayland/gdkprimary-wayland.c:312 gdk/win32/gdkdrop-win32.c:1277
-#: gdk/win32/gdkdrop-win32.c:1322 gdk/x11/gdkclipboard-x11.c:761
-#: gdk/x11/gdkdrop-x11.c:196
+#: gdk/macos/gdkmacosclipboard.c:203 gdk/wayland/gdkclipboard-wayland.c:231
+#: gdk/wayland/gdkdrop-wayland.c:204 gdk/wayland/gdkprimary-wayland.c:312
+#: gdk/win32/gdkdrop-win32.c:1279 gdk/win32/gdkdrop-win32.c:1324
+#: gdk/x11/gdkclipboard-x11.c:763 gdk/x11/gdkdrop-x11.c:196
 msgid "No compatible transfer format found"
 msgstr "Ez da transferentziarako formatu bateragarririk aurkitu"
 
-#: gdk/wayland/gdkglcontext-wayland.c:151 gdk/win32/gdkglcontext-win32.c:725
-#: gdk/x11/gdkglcontext-x11.c:763 gdk/x11/gdkglcontext-x11.c:813
+#: gdk/macos/gdkmacosclipboard.c:289
+#, c-format
+msgid "Failed to decode contents with mime-type of '%s'"
+msgstr "Huts egin du '%s' mime mota duten edukiak deskodetzeak"
+
+#: gdk/macos/gdkmacosglcontext.c:105
+msgid "Unable to create a GL pixel format"
+msgstr "Ezin da GL pixel formatua sortu"
+
+#: gdk/macos/gdkmacosglcontext.c:116 gdk/wayland/gdkglcontext-wayland.c:151
+#: gdk/win32/gdkglcontext-win32.c:947 gdk/win32/gdkglcontext-win32.c:988
+#: gdk/x11/gdkglcontext-x11.c:834 gdk/x11/gdkglcontext-x11.c:884
 msgid "Unable to create a GL context"
 msgstr "Ezin da GL testuingurua sortu"
 
 #: gdk/wayland/gdkglcontext-wayland.c:412
-#: gdk/wayland/gdkglcontext-wayland.c:422 gdk/win32/gdkglcontext-win32.c:679
-#: gdk/x11/gdkglcontext-x11.c:1048
+#: gdk/wayland/gdkglcontext-wayland.c:422 gdk/win32/gdkglcontext-win32.c:788
+#: gdk/win32/gdkglcontext-win32.c:798 gdk/win32/gdkglcontext-win32.c:913
+#: gdk/x11/gdkglcontext-x11.c:1129
 msgid "No available configurations for the given pixel format"
 msgstr "Ez dago emandako pixel formatuaren konfiguraziorik erabilgarri"
 
-#: gdk/wayland/gdkglcontext-wayland.c:451 gdk/win32/gdkglcontext-win32.c:791
-#: gdk/x11/gdkglcontext-x11.c:1351
+#: gdk/wayland/gdkglcontext-wayland.c:451 gdk/win32/gdkglcontext-win32.c:1072
+#: gdk/x11/gdkglcontext-x11.c:1432
 msgid "No GL implementation is available"
 msgstr "Ez dago GL inplementaziorik erabilgarri"
 
@@ -520,39 +527,39 @@ msgstr "Ezin izan da arbelaren datuak eskuratu. GlobalLock(0x%p) prozesuak huts 
 msgid "Cannot get clipboard data. GlobalSize(0x%p) failed: 0x%lx."
 msgstr "Ezin izan da arbelaren datuak eskuratu. GlobalSize(0x%p) prozesuak huts egin du: 0x%lx."
 
-#: gdk/win32/gdkclipdrop-win32.c:895
+#: gdk/win32/gdkclipdrop-win32.c:896
 #, c-format
 msgid ""
-"Cannot get clipboard data. Failed to allocate %lu bytes to store the data."
-msgstr "Ezin izan da arbelaren datuak eskuratu. Huts egin du %lu byte esleitzeak datuak biltegiratzeko."
+"Cannot get clipboard data. Failed to allocate %s bytes to store the data."
+msgstr "Ezin izan da arbelaren datuak eskuratu. Huts egin du %s byte esleitzeak datuak biltegiratzeko."
 
-#: gdk/win32/gdkclipdrop-win32.c:926
+#: gdk/win32/gdkclipdrop-win32.c:928
 #, c-format
 msgid "Cannot get clipboard data. OpenClipboard() timed out."
 msgstr "Ezin izan da arbelaren datuak eskuratu. OpenClipboard() denbora-mugara iritsi da."
 
-#: gdk/win32/gdkclipdrop-win32.c:936
+#: gdk/win32/gdkclipdrop-win32.c:938
 #, c-format
 msgid "Cannot get clipboard data. Clipboard ownership changed."
 msgstr "Ezin izan da arbelaren datuak eskuratu. Arbelaren jabetza aldatu da."
 
-#: gdk/win32/gdkclipdrop-win32.c:946
+#: gdk/win32/gdkclipdrop-win32.c:948
 #, c-format
 msgid ""
 "Cannot get clipboard data. Clipboard data changed before we could get it."
 msgstr "Ezin izan da arbelaren datuak eskuratu. Arbelaren jabetza aldatu da guk eskuratu baino lehen."
 
-#: gdk/win32/gdkclipdrop-win32.c:963
+#: gdk/win32/gdkclipdrop-win32.c:965
 #, c-format
 msgid "Cannot get clipboard data. OpenClipboard() failed: 0x%lx."
 msgstr "Ezin izan da arbelaren datuak eskuratu. OpenClipboard() prozesuak huts egin du: 0x%lx."
 
-#: gdk/win32/gdkclipdrop-win32.c:988
+#: gdk/win32/gdkclipdrop-win32.c:990
 #, c-format
 msgid "Cannot get clipboard data. No compatible transfer format found."
 msgstr "Ezin izan da arbelaren datuak eskuratu. Ez da transferentziarako formatu bateragarririk aurkitu."
 
-#: gdk/win32/gdkclipdrop-win32.c:998
+#: gdk/win32/gdkclipdrop-win32.c:1000
 #, c-format
 msgid "Cannot get clipboard data. GetClipboardData() failed: 0x%lx."
 msgstr "Ezin izan da arbelaren datuak eskuratu. GetClipboardData() prozesuak huts egin du: 0x%lx."
@@ -567,27 +574,27 @@ msgstr "Ezin izan da DnD datuak eskuratu. GlobalLock(0x%p) prozesuak huts egin d
 msgid "Cannot get DnD data. GlobalSize(0x%p) failed: 0x%lx."
 msgstr "Ezin izan da DnD datuak eskuratu. GlobalSize(0x%p) prozesuak huts egin du: 0x%lx."
 
-#: gdk/win32/gdkdrop-win32.c:1229
+#: gdk/win32/gdkdrop-win32.c:1230
 #, c-format
-msgid "Cannot get DnD data. Failed to allocate %lu bytes to store the data."
-msgstr "Ezin izan da DnD datuak eskuratu. Huts egin du %lu byte esleitzeak datuak biltegiratzeko."
+msgid "Cannot get DnD data. Failed to allocate %s bytes to store the data."
+msgstr "Ezin izan da DnD datuak eskuratu. Huts egin du %s byte esleitzeak datuak biltegiratzeko."
 
-#: gdk/win32/gdkdrop-win32.c:1296
+#: gdk/win32/gdkdrop-win32.c:1298
 #, c-format
 msgid "GDK surface 0x%p is not registered as a drop target"
 msgstr "0x%p GDK gainazala ez dago erregistratuta jaregiteko helburu gisa"
 
-#: gdk/win32/gdkdrop-win32.c:1303
+#: gdk/win32/gdkdrop-win32.c:1305
 #, c-format
 msgid "Target context record 0x%p has no data object"
 msgstr "0x%p testuinguruko helburu-erregistroak ez du datu-objekturik"
 
-#: gdk/win32/gdkdrop-win32.c:1341
+#: gdk/win32/gdkdrop-win32.c:1343
 #, c-format
 msgid "IDataObject_GetData (0x%x) failed, returning 0x%lx"
 msgstr "IDataObject_GetData (0x%x) prozesuak huts egin du, 0x%lx itzultzen"
 
-#: gdk/win32/gdkdrop-win32.c:1373
+#: gdk/win32/gdkdrop-win32.c:1375
 #, c-format
 msgid "Failed to transmute DnD data W32 format 0x%x to %p (%s)"
 msgstr "Huts egin du DnD datuen 0x%x W32 formatua  %p formatura bihurtzeak (%s)"
@@ -626,17 +633,17 @@ msgstr "GlobalLock() prozesuak huts egin du: "
 msgid "GlobalAlloc() failed: "
 msgstr "GlobalAlloc() prozesuak huts egin du: "
 
-#: gdk/x11/gdkapplaunchcontext-x11.c:292
+#: gdk/x11/gdkapplaunchcontext-x11.c:290
 #, c-format
 msgid "Starting “%s”"
 msgstr "“%s” abiarazten"
 
-#: gdk/x11/gdkapplaunchcontext-x11.c:305
+#: gdk/x11/gdkapplaunchcontext-x11.c:303
 #, c-format
 msgid "Opening “%s”"
 msgstr "“%s” irekitzen"
 
-#: gdk/x11/gdkapplaunchcontext-x11.c:310
+#: gdk/x11/gdkapplaunchcontext-x11.c:308
 #, c-format
 msgid "Opening %d Item"
 msgid_plural "Opening %d Items"
@@ -651,7 +658,7 @@ msgstr "Arbel-kudeatzaileak ezin izan da hautapena biltegiratu."
 msgid "Cannot store clipboard. No clipboard manager is active."
 msgstr "Ezin da arbela biltegiratu. Ez dago arbel-kudeatzaile aktiborik."
 
-#: gdk/x11/gdkglcontext-x11.c:1076
+#: gdk/x11/gdkglcontext-x11.c:1157
 #, c-format
 msgid "No available configurations for the given RGBA pixel format"
 msgstr "Ez dago emandako RGBA pixel formatuaren konfiguraziorik erabilgarri"
@@ -683,551 +690,6 @@ msgstr "Baliogabeko formatuak testu konposatuaren bihurketan."
 msgid "Unsupported encoding “%s”"
 msgstr "Onartzen ez den kodeketa: “%s”"
 
-#: gtk/a11y/gtkbooleancellaccessible.c:43
-msgctxt "Action description"
-msgid "Toggles the cell"
-msgstr "Gelaxka txandakatzen du"
-
-#: gtk/a11y/gtkbooleancellaccessible.c:63 gtk/a11y/gtkswitchaccessible.c:89
-msgctxt "Action name"
-msgid "Toggle"
-msgstr "Txandakatu"
-
-#: gtk/a11y/gtkbuttonaccessible.c:299
-msgctxt "Action name"
-msgid "Click"
-msgstr "Egin klik"
-
-#: gtk/a11y/gtkbuttonaccessible.c:308
-msgctxt "Action description"
-msgid "Clicks the button"
-msgstr "Botoian klik egiten du"
-
-#: gtk/a11y/gtkcellaccessible.c:257
-msgctxt "Action name"
-msgid "Expand or contract"
-msgstr "Zabaldu edo uzkurtu"
-
-#: gtk/a11y/gtkcellaccessible.c:259
-msgctxt "Action name"
-msgid "Edit"
-msgstr "Editatu"
-
-#: gtk/a11y/gtkcellaccessible.c:261 gtk/a11y/gtkcolorswatchaccessible.c:152
-#: gtk/a11y/gtkentryaccessible.c:1515 gtk/a11y/gtkexpanderaccessible.c:229
-#: gtk/a11y/gtkpasswordentryaccessible.c:434
-#: gtk/a11y/gtksearchentryaccessible.c:981 gtk/a11y/gtktextaccessible.c:994
-msgctxt "Action name"
-msgid "Activate"
-msgstr "Aktibatu"
-
-#: gtk/a11y/gtkcellaccessible.c:274
-msgctxt "Action description"
-msgid "Expands or contracts the row in the tree view containing this cell"
-msgstr "Errenkada zabaltzen edo uzkurtzen du gelaxka hori duen zuhaitz-ikuspegian"
-
-#: gtk/a11y/gtkcellaccessible.c:276
-msgctxt "Action description"
-msgid "Creates a widget in which the contents of the cell can be edited"
-msgstr "Trepeta bat sortzen du, bertan gelaxkaren edukia editatzeko"
-
-#: gtk/a11y/gtkcellaccessible.c:278
-msgctxt "Action description"
-msgid "Activates the cell"
-msgstr "Gelaxka aktibatzen du"
-
-#: gtk/a11y/gtkcolorswatchaccessible.c:151
-msgctxt "Action name"
-msgid "Select"
-msgstr "Hautatu"
-
-#: gtk/a11y/gtkcolorswatchaccessible.c:153
-msgctxt "Action name"
-msgid "Customize"
-msgstr "Pertsonalizatu"
-
-#: gtk/a11y/gtkcolorswatchaccessible.c:164
-msgctxt "Action description"
-msgid "Selects the color"
-msgstr "Kolorea hautatzen du"
-
-#: gtk/a11y/gtkcolorswatchaccessible.c:165
-msgctxt "Action description"
-msgid "Activates the color"
-msgstr "Kolorea aktibatzen du"
-
-#: gtk/a11y/gtkcolorswatchaccessible.c:166
-msgctxt "Action description"
-msgid "Customizes the color"
-msgstr "Kolorea pertsonalizatzen du"
-
-#: gtk/a11y/gtkcomboboxaccessible.c:310
-msgctxt "Action name"
-msgid "Press"
-msgstr "Sakatu"
-
-#: gtk/a11y/gtkcomboboxaccessible.c:319
-msgctxt "Action description"
-msgid "Presses the combobox"
-msgstr "Konbinazio-koadroa sakatzen du"
-
-#: gtk/a11y/gtkentryaccessible.c:1524 gtk/a11y/gtkpasswordentryaccessible.c:446
-#: gtk/a11y/gtksearchentryaccessible.c:993 gtk/a11y/gtktextaccessible.c:1003
-msgctxt "Action description"
-msgid "Activates the entry"
-msgstr "Sarrera aktibatzen du"
-
-#: gtk/a11y/gtkexpanderaccessible.c:238
-msgctxt "Action description"
-msgid "Activates the expander"
-msgstr "Zabaltzailea aktibatzen du"
-
-#: gtk/a11y/gtkimageaccessible.c:53
-msgctxt "Stock label"
-msgid "_About"
-msgstr "Honi _buruz"
-
-#: gtk/a11y/gtkimageaccessible.c:54
-msgctxt "Stock label"
-msgid "_Add"
-msgstr "_Gehitu"
-
-#: gtk/a11y/gtkimageaccessible.c:55
-msgctxt "Stock label"
-msgid "_Bold"
-msgstr "_Lodia"
-
-#: gtk/a11y/gtkimageaccessible.c:56
-msgctxt "Stock label"
-msgid "_CD-ROM"
-msgstr "CD-ROMa"
-
-#: gtk/a11y/gtkimageaccessible.c:57
-msgctxt "Stock label"
-msgid "_Clear"
-msgstr "_Garbitu"
-
-#: gtk/a11y/gtkimageaccessible.c:58
-msgctxt "Stock label"
-msgid "_Close"
-msgstr "It_xi"
-
-#: gtk/a11y/gtkimageaccessible.c:59 gtk/gtkwindowcontrols.c:311
-#: gtk/gtkwindowhandle.c:224
-msgid "Minimize"
-msgstr "Minimizatu"
-
-#: gtk/a11y/gtkimageaccessible.c:60 gtk/gtkwindowcontrols.c:332
-#: gtk/gtkwindowhandle.c:230
-msgid "Maximize"
-msgstr "Maximizatu"
-
-#: gtk/a11y/gtkimageaccessible.c:61 gtk/gtkwindowcontrols.c:332
-#: gtk/gtkwindowhandle.c:217
-msgid "Restore"
-msgstr "Leheneratu"
-
-#: gtk/a11y/gtkimageaccessible.c:62
-msgctxt "Stock label"
-msgid "_Copy"
-msgstr "_Kopiatu"
-
-#: gtk/a11y/gtkimageaccessible.c:63
-msgctxt "Stock label"
-msgid "Cu_t"
-msgstr "_Ebaki"
-
-#: gtk/a11y/gtkimageaccessible.c:64
-msgctxt "Stock label"
-msgid "_Delete"
-msgstr "Ez_abatu"
-
-#: gtk/a11y/gtkimageaccessible.c:65
-msgctxt "Stock label"
-msgid "Error"
-msgstr "Errorea"
-
-#: gtk/a11y/gtkimageaccessible.c:66
-msgctxt "Stock label"
-msgid "Information"
-msgstr "Informazioa"
-
-#: gtk/a11y/gtkimageaccessible.c:67
-msgctxt "Stock label"
-msgid "Question"
-msgstr "Galdera"
-
-#: gtk/a11y/gtkimageaccessible.c:68
-msgctxt "Stock label"
-msgid "Warning"
-msgstr "Abisua"
-
-#: gtk/a11y/gtkimageaccessible.c:69
-msgctxt "Stock label"
-msgid "_Execute"
-msgstr "_Exekutatu"
-
-#: gtk/a11y/gtkimageaccessible.c:70
-msgctxt "Stock label"
-msgid "_File"
-msgstr "_Fitxategia"
-
-#: gtk/a11y/gtkimageaccessible.c:71
-msgctxt "Stock label"
-msgid "_Find"
-msgstr "A_urkitu"
-
-#: gtk/a11y/gtkimageaccessible.c:72
-msgctxt "Stock label"
-msgid "Find and _Replace"
-msgstr "Bilatu eta _ordeztu"
-
-#: gtk/a11y/gtkimageaccessible.c:73
-msgctxt "Stock label"
-msgid "_Floppy"
-msgstr "_Disketea"
-
-#: gtk/a11y/gtkimageaccessible.c:74
-msgctxt "Stock label"
-msgid "_Fullscreen"
-msgstr "_Pantaila osoa"
-
-#: gtk/a11y/gtkimageaccessible.c:75
-msgctxt "Stock label, navigation"
-msgid "_Bottom"
-msgstr "_Behean"
-
-#: gtk/a11y/gtkimageaccessible.c:76
-msgctxt "Stock label, navigation"
-msgid "_First"
-msgstr "_Aurrenekora"
-
-#: gtk/a11y/gtkimageaccessible.c:77
-msgctxt "Stock label, navigation"
-msgid "_Last"
-msgstr "_Azkenera"
-
-#: gtk/a11y/gtkimageaccessible.c:78
-msgctxt "Stock label, navigation"
-msgid "_Top"
-msgstr "_Goian"
-
-#: gtk/a11y/gtkimageaccessible.c:79
-msgctxt "Stock label, navigation"
-msgid "_Back"
-msgstr "At_zera"
-
-#: gtk/a11y/gtkimageaccessible.c:80
-msgctxt "Stock label, navigation"
-msgid "_Down"
-msgstr "_Behera"
-
-#: gtk/a11y/gtkimageaccessible.c:81
-msgctxt "Stock label, navigation"
-msgid "_Forward"
-msgstr "A_urrera"
-
-#: gtk/a11y/gtkimageaccessible.c:82
-msgctxt "Stock label, navigation"
-msgid "_Up"
-msgstr "_Gora"
-
-#: gtk/a11y/gtkimageaccessible.c:83
-msgctxt "Stock label"
-msgid "_Hard Disk"
-msgstr "_Disko gogorra"
-
-#: gtk/a11y/gtkimageaccessible.c:84
-msgctxt "Stock label"
-msgid "_Help"
-msgstr "_Laguntza"
-
-#: gtk/a11y/gtkimageaccessible.c:85
-msgctxt "Stock label"
-msgid "_Home"
-msgstr "_Karpeta nagusia"
-
-#: gtk/a11y/gtkimageaccessible.c:86
-msgctxt "Stock label"
-msgid "Increase Indent"
-msgstr "Handitu koska"
-
-#: gtk/a11y/gtkimageaccessible.c:87
-msgctxt "Stock label"
-msgid "_Italic"
-msgstr "_Etzana"
-
-#: gtk/a11y/gtkimageaccessible.c:88
-msgctxt "Stock label"
-msgid "_Jump to"
-msgstr "_Jauzi hona"
-
-#: gtk/a11y/gtkimageaccessible.c:89
-msgctxt "Stock label"
-msgid "_Center"
-msgstr "_Zentratuta"
-
-#: gtk/a11y/gtkimageaccessible.c:90
-msgctxt "Stock label"
-msgid "_Fill"
-msgstr "_Bete"
-
-#: gtk/a11y/gtkimageaccessible.c:91
-msgctxt "Stock label"
-msgid "_Left"
-msgstr "E_zkerrean"
-
-#: gtk/a11y/gtkimageaccessible.c:92
-msgctxt "Stock label"
-msgid "_Right"
-msgstr "E_skuinean"
-
-#: gtk/a11y/gtkimageaccessible.c:93
-msgctxt "Stock label"
-msgid "_Leave Fullscreen"
-msgstr "_Irten pantaila osotik"
-
-#: gtk/a11y/gtkimageaccessible.c:94
-msgctxt "Stock label, media"
-msgid "_Forward"
-msgstr "A_urrera"
-
-#: gtk/a11y/gtkimageaccessible.c:95
-msgctxt "Stock label, media"
-msgid "_Next"
-msgstr "_Hurrengoa"
-
-#: gtk/a11y/gtkimageaccessible.c:96
-msgctxt "Stock label, media"
-msgid "P_ause"
-msgstr "_Pausatu"
-
-#: gtk/a11y/gtkimageaccessible.c:97
-msgctxt "Stock label, media"
-msgid "_Play"
-msgstr "_Erreproduzitu"
-
-#: gtk/a11y/gtkimageaccessible.c:98
-msgctxt "Stock label, media"
-msgid "Pre_vious"
-msgstr "_Aurrekoa"
-
-#: gtk/a11y/gtkimageaccessible.c:99
-msgctxt "Stock label, media"
-msgid "_Record"
-msgstr "_Grabatu"
-
-#: gtk/a11y/gtkimageaccessible.c:100
-msgctxt "Stock label, media"
-msgid "R_ewind"
-msgstr "_Birbobinatu"
-
-#: gtk/a11y/gtkimageaccessible.c:101
-msgctxt "Stock label, media"
-msgid "_Stop"
-msgstr "_Gelditu"
-
-#: gtk/a11y/gtkimageaccessible.c:102
-msgctxt "Stock label"
-msgid "_Network"
-msgstr "_Sarea"
-
-#: gtk/a11y/gtkimageaccessible.c:103
-msgctxt "Stock label"
-msgid "_New"
-msgstr "_Berria"
-
-#: gtk/a11y/gtkimageaccessible.c:104
-msgctxt "Stock label"
-msgid "_Open"
-msgstr "_Ireki"
-
-#: gtk/a11y/gtkimageaccessible.c:105
-msgctxt "Stock label"
-msgid "_Paste"
-msgstr "_Itsatsi"
-
-#: gtk/a11y/gtkimageaccessible.c:106
-msgctxt "Stock label"
-msgid "_Print"
-msgstr "I_nprimatu"
-
-#: gtk/a11y/gtkimageaccessible.c:107
-msgctxt "Stock label"
-msgid "Print Pre_view"
-msgstr "Inprimatzeko _aurrebista"
-
-#: gtk/a11y/gtkimageaccessible.c:108
-msgctxt "Stock label"
-msgid "_Properties"
-msgstr "_Propietateak"
-
-#: gtk/a11y/gtkimageaccessible.c:109
-msgctxt "Stock label"
-msgid "_Quit"
-msgstr "I_rten"
-
-#: gtk/a11y/gtkimageaccessible.c:110
-msgctxt "Stock label"
-msgid "_Redo"
-msgstr "_Berregin"
-
-#: gtk/a11y/gtkimageaccessible.c:111
-msgctxt "Stock label"
-msgid "_Refresh"
-msgstr "_Freskatu"
-
-#: gtk/a11y/gtkimageaccessible.c:112
-msgctxt "Stock label"
-msgid "_Remove"
-msgstr "_Kendu"
-
-#: gtk/a11y/gtkimageaccessible.c:113
-msgctxt "Stock label"
-msgid "_Revert"
-msgstr "_Leheneratu"
-
-#: gtk/a11y/gtkimageaccessible.c:114
-msgctxt "Stock label"
-msgid "_Save"
-msgstr "_Gorde"
-
-#: gtk/a11y/gtkimageaccessible.c:115
-msgctxt "Stock label"
-msgid "Save _As"
-msgstr "Gorde _honela"
-
-#: gtk/a11y/gtkimageaccessible.c:116
-msgctxt "Stock label"
-msgid "Select _All"
-msgstr "Hautatu _dena"
-
-#: gtk/a11y/gtkimageaccessible.c:117
-msgctxt "Stock label"
-msgid "_Ascending"
-msgstr "Go_rantz"
-
-#: gtk/a11y/gtkimageaccessible.c:118
-msgctxt "Stock label"
-msgid "_Descending"
-msgstr "Be_herantz"
-
-#: gtk/a11y/gtkimageaccessible.c:119
-msgctxt "Stock label"
-msgid "_Spell Check"
-msgstr "Ortogra_fia-egiaztapena"
-
-#: gtk/a11y/gtkimageaccessible.c:120
-msgctxt "Stock label"
-msgid "_Stop"
-msgstr "_Gelditu"
-
-#: gtk/a11y/gtkimageaccessible.c:121
-msgctxt "Stock label"
-msgid "_Strikethrough"
-msgstr "_Marratua"
-
-#: gtk/a11y/gtkimageaccessible.c:122
-msgctxt "Stock label"
-msgid "_Underline"
-msgstr "_Azpimarratua"
-
-#: gtk/a11y/gtkimageaccessible.c:123
-msgctxt "Stock label"
-msgid "_Undo"
-msgstr "_Desegin"
-
-#: gtk/a11y/gtkimageaccessible.c:124
-msgctxt "Stock label"
-msgid "Decrease Indent"
-msgstr "Txikitu koska"
-
-#: gtk/a11y/gtkimageaccessible.c:125
-msgctxt "Stock label"
-msgid "_Normal Size"
-msgstr "Tamaina _normala"
-
-#: gtk/a11y/gtkimageaccessible.c:126
-msgctxt "Stock label"
-msgid "Best _Fit"
-msgstr "_Egokiena"
-
-#: gtk/a11y/gtkimageaccessible.c:127
-msgctxt "Stock label"
-msgid "Zoom _In"
-msgstr "_Zooma handiagotu"
-
-#: gtk/a11y/gtkimageaccessible.c:128
-msgctxt "Stock label"
-msgid "Zoom _Out"
-msgstr "_Txikiagotu"
-
-#: gtk/a11y/gtkmenubuttonaccessible.c:77 gtk/inspector/window.ui:426
-msgid "Menu"
-msgstr "Menua"
-
-#: gtk/a11y/gtkpasswordentryaccessible.c:436
-msgctxt "Action name"
-msgid "Peek"
-msgstr "Begi-kolpea"
-
-#: gtk/a11y/gtkpasswordentryaccessible.c:449
-msgctxt "Action description"
-msgid "Reveals the contents the entry"
-msgstr "Sarreraren edukia agerian uzten du"
-
-#: gtk/a11y/gtkpasswordentryaccessible.c:640
-msgid "Password"
-msgstr "Pasahitza"
-
-#: gtk/a11y/gtkscalebuttonaccessible.c:168
-msgctxt "Action description"
-msgid "Pops up the slider"
-msgstr "Graduatzailea bistaratzen du"
-
-#: gtk/a11y/gtkscalebuttonaccessible.c:170
-msgctxt "Action description"
-msgid "Dismisses the slider"
-msgstr "Graduatzailea ixten du"
-
-#: gtk/a11y/gtkscalebuttonaccessible.c:198
-msgctxt "Action name"
-msgid "Popup"
-msgstr "Bistaratu"
-
-#: gtk/a11y/gtkscalebuttonaccessible.c:200
-msgctxt "Action name"
-msgid "Dismiss"
-msgstr "Baztertu"
-
-#: gtk/a11y/gtksearchentryaccessible.c:278
-msgid "Search"
-msgstr "Bilatu"
-
-#: gtk/a11y/gtksearchentryaccessible.c:983
-msgctxt "Action name"
-msgid "Clear"
-msgstr "Garbitu"
-
-#: gtk/a11y/gtksearchentryaccessible.c:996
-msgctxt "Action description"
-msgid "Clears the entry"
-msgstr "Sarrera garbitzen du"
-
-#: gtk/a11y/gtkspinneraccessible.c:39
-msgctxt "throbbing progress animation widget"
-msgid "Spinner"
-msgstr "Birakaria"
-
-#: gtk/a11y/gtkspinneraccessible.c:40
-msgid "Provides visual indication of progress"
-msgstr "Aurrerapenaren adierazle bisuala eskaintzen du"
-
-#: gtk/a11y/gtkswitchaccessible.c:98
-msgctxt "Action description"
-msgid "Toggles the switch"
-msgstr "Aldatzailea txandakatzen du"
-
 #: gtk/css/gtkcssdataurl.c:70
 #, c-format
 msgid "Not a data: URL"
@@ -1243,120 +705,120 @@ msgstr "Gaizki osatutako datuak: URL"
 msgid "Could not unescape string"
 msgstr "Ezin izan zaio kateari ihesa kendu"
 
-#: gtk/gtkaboutdialog.c:120 gtk/ui/gtkaboutdialog.ui:160
+#: gtk/gtkaboutdialog.c:123 gtk/ui/gtkaboutdialog.ui:159
 msgid "License"
 msgstr "Lizentzia"
 
-#: gtk/gtkaboutdialog.c:121
+#: gtk/gtkaboutdialog.c:124
 msgid "Custom License"
 msgstr "Lizentzia pertsonalizatua"
 
-#: gtk/gtkaboutdialog.c:122
+#: gtk/gtkaboutdialog.c:125
 msgid "GNU General Public License, version 2 or later"
 msgstr "GNUren Lizentzia Publiko Orokorra, 2 bertsioa edo berriagoa"
 
-#: gtk/gtkaboutdialog.c:123
+#: gtk/gtkaboutdialog.c:126
 msgid "GNU General Public License, version 3 or later"
 msgstr "GNUren Lizentzia Publiko Orokorra, 3 bertsioa edo berriagoa"
 
-#: gtk/gtkaboutdialog.c:124
+#: gtk/gtkaboutdialog.c:127
 msgid "GNU Lesser General Public License, version 2.1 or later"
 msgstr "GNU Hedadura Txikiagoko Lizentzia Publiko Orokorra, 2.1. bertsioa edo berriagoa"
 
-#: gtk/gtkaboutdialog.c:125
+#: gtk/gtkaboutdialog.c:128
 msgid "GNU Lesser General Public License, version 3 or later"
 msgstr "GNU Hedadura Txikiagoko Lizentzia Publiko Orokorra, 3. bertsioa edo berriagoa"
 
-#: gtk/gtkaboutdialog.c:126
+#: gtk/gtkaboutdialog.c:129
 msgid "BSD 2-Clause License"
 msgstr "BSD 2-klausula Lizentzia"
 
-#: gtk/gtkaboutdialog.c:127
+#: gtk/gtkaboutdialog.c:130
 msgid "The MIT License (MIT)"
 msgstr "MIT Lizentzia (MIT)"
 
-#: gtk/gtkaboutdialog.c:128
+#: gtk/gtkaboutdialog.c:131
 msgid "Artistic License 2.0"
 msgstr "Lizentzia Artistikoa 2.0"
 
-#: gtk/gtkaboutdialog.c:129
+#: gtk/gtkaboutdialog.c:132
 msgid "GNU General Public License, version 2 only"
 msgstr "GNUren Lizentzia Publiko Orokorra, 2. bertsioa soilik"
 
-#: gtk/gtkaboutdialog.c:130
+#: gtk/gtkaboutdialog.c:133
 msgid "GNU General Public License, version 3 only"
 msgstr "GNUren Lizentzia Publiko Orokorra, 3. bertsioa soilik"
 
-#: gtk/gtkaboutdialog.c:131
+#: gtk/gtkaboutdialog.c:134
 msgid "GNU Lesser General Public License, version 2.1 only"
 msgstr "GNU Hedadura Txikiagoko Lizentzia Publiko Orokorra, 2.1. bertsioa soilik"
 
-#: gtk/gtkaboutdialog.c:132
+#: gtk/gtkaboutdialog.c:135
 msgid "GNU Lesser General Public License, version 3 only"
 msgstr "GNU Hedadura Txikiagoko Lizentzia Publiko Orokorra, 3. bertsioa soilik"
 
-#: gtk/gtkaboutdialog.c:133
+#: gtk/gtkaboutdialog.c:136
 msgid "GNU Affero General Public License, version 3 or later"
 msgstr "GNUren Affero Lizentzia Publiko Orokorra, 3 bertsioa edo berriagoa"
 
-#: gtk/gtkaboutdialog.c:134
+#: gtk/gtkaboutdialog.c:137
 msgid "GNU Affero General Public License, version 3 only"
 msgstr "GNUren Affero Lizentzia Publiko Orokorra, 3. bertsioa soilik"
 
-#: gtk/gtkaboutdialog.c:135
+#: gtk/gtkaboutdialog.c:138
 msgid "BSD 3-Clause License"
 msgstr "BSD 3-klausula lizentzia"
 
-#: gtk/gtkaboutdialog.c:136
+#: gtk/gtkaboutdialog.c:139
 msgid "Apache License, Version 2.0"
 msgstr "Apache lizentzia, 2.0 bertsioa"
 
-#: gtk/gtkaboutdialog.c:137
+#: gtk/gtkaboutdialog.c:140
 msgid "Mozilla Public License 2.0"
 msgstr "Mozilla lizentzia publikoa 2.0"
 
-#: gtk/gtkaboutdialog.c:729
+#: gtk/gtkaboutdialog.c:732
 msgid "C_redits"
 msgstr "_Kredituak"
 
-#: gtk/gtkaboutdialog.c:736
+#: gtk/gtkaboutdialog.c:739
 msgid "_License"
 msgstr "_Lizentzia"
 
-#: gtk/gtkaboutdialog.c:741 gtk/gtkcustompaperunixdialog.c:329
-#: gtk/gtkmessagedialog.c:777 gtk/ui/gtkassistant.ui:38
+#: gtk/gtkaboutdialog.c:744 gtk/gtkcustompaperunixdialog.c:348
+#: gtk/gtkmessagedialog.c:738 gtk/ui/gtkassistant.ui:40
 msgid "_Close"
 msgstr "It_xi"
 
-#: gtk/gtkaboutdialog.c:1008
+#: gtk/gtkaboutdialog.c:1011
 msgid "Website"
 msgstr "Webgunea"
 
-#: gtk/gtkaboutdialog.c:1045 gtk/ui/gtkapplication-quartz.ui:6
+#: gtk/gtkaboutdialog.c:1048 gtk/ui/gtkapplication-quartz.ui:6
 #, c-format
 msgid "About %s"
 msgstr "%s aplikazioari buruz"
 
-#: gtk/gtkaboutdialog.c:2181
+#: gtk/gtkaboutdialog.c:2184
 msgid "Created by"
 msgstr "Sortzaileak"
 
-#: gtk/gtkaboutdialog.c:2184
+#: gtk/gtkaboutdialog.c:2187
 msgid "Documented by"
 msgstr "Dokumentazioaren sortzaileak"
 
-#: gtk/gtkaboutdialog.c:2194
+#: gtk/gtkaboutdialog.c:2197
 msgid "Translated by"
 msgstr "Itzultzaileak"
 
-#: gtk/gtkaboutdialog.c:2199
+#: gtk/gtkaboutdialog.c:2202
 msgid "Design by"
 msgstr "Diseinatzailea"
 
 #. Translators: this is the license preamble; the string at the end
 #. * contains the name of the license as link text.
 #.
-#: gtk/gtkaboutdialog.c:2366
+#: gtk/gtkaboutdialog.c:2367
 #, c-format
 msgid ""
 "This program comes with absolutely no warranty.\n"
@@ -1369,7 +831,7 @@ msgstr "Programa honek ez du inolako bermerik.\n"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccelgroup.c:835 gtk/gtkshortcutlabel.c:102
+#: gtk/gtkaccelgroup.c:834 gtk/gtkshortcutlabel.c:102
 #: gtk/gtkshortcutlabel.c:138
 msgctxt "keyboard label"
 msgid "Shift"
@@ -1380,7 +842,7 @@ msgstr "Shift"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccelgroup.c:854 gtk/gtkshortcutlabel.c:105
+#: gtk/gtkaccelgroup.c:853 gtk/gtkshortcutlabel.c:105
 #: gtk/gtkshortcutlabel.c:140
 msgctxt "keyboard label"
 msgid "Ctrl"
@@ -1391,7 +853,7 @@ msgstr "Ctrl"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccelgroup.c:873 gtk/gtkshortcutlabel.c:108
+#: gtk/gtkaccelgroup.c:872 gtk/gtkshortcutlabel.c:108
 #: gtk/gtkshortcutlabel.c:142
 msgctxt "keyboard label"
 msgid "Alt"
@@ -1402,7 +864,7 @@ msgstr "Alt"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccelgroup.c:891 gtk/gtkshortcutlabel.c:114
+#: gtk/gtkaccelgroup.c:890 gtk/gtkshortcutlabel.c:114
 #: gtk/gtkshortcutlabel.c:144
 msgctxt "keyboard label"
 msgid "Super"
@@ -1413,7 +875,7 @@ msgstr "Super"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccelgroup.c:905 gtk/gtkshortcutlabel.c:117
+#: gtk/gtkaccelgroup.c:904 gtk/gtkshortcutlabel.c:117
 #: gtk/gtkshortcutlabel.c:146
 msgctxt "keyboard label"
 msgid "Hyper"
@@ -1424,7 +886,7 @@ msgstr "Hiper"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccelgroup.c:920 gtk/gtkshortcutlabel.c:111
+#: gtk/gtkaccelgroup.c:919 gtk/gtkshortcutlabel.c:111
 #: gtk/gtkshortcutlabel.c:148
 msgctxt "keyboard label"
 msgid "Meta"
@@ -1434,22 +896,22 @@ msgstr "Meta"
 #. * be used in accelerators such as "Ctrl+Shift+KP 1" in menus,
 #. * and therefore the translation needs to be very short.
 #.
-#: gtk/gtkaccelgroup.c:940
+#: gtk/gtkaccelgroup.c:939
 msgctxt "keyboard label"
 msgid "KP"
 msgstr "Zenbakizko teklatua"
 
-#: gtk/gtkaccelgroup.c:947
+#: gtk/gtkaccelgroup.c:946
 msgctxt "keyboard label"
 msgid "Space"
 msgstr "Zuriunea"
 
-#: gtk/gtkaccelgroup.c:950 gtk/gtkshortcutlabel.c:173
+#: gtk/gtkaccelgroup.c:949 gtk/gtkshortcutlabel.c:173
 msgctxt "keyboard label"
 msgid "Backslash"
 msgstr "Alderantzizko barra"
 
-#: gtk/gtkappchooserbutton.c:310
+#: gtk/gtkappchooserbutton.c:315
 msgid "Other application…"
 msgstr "Beste aplikazioa…"
 
@@ -1505,12 +967,20 @@ msgstr "Zerikusia duten aplikazioak"
 msgid "Other Applications"
 msgstr "Beste aplikazioak"
 
+#. Translators: This is the 'reason' given when inhibiting
+#. * suspend or screen locking, and the caller hasn't specified
+#. * a reason.
+#.
+#: gtk/gtkapplication-dbus.c:696
+msgid "Reason not specified"
+msgstr "Ez da arrazoirik zehaztu"
+
 #: gtk/gtkbookmarksmanager.c:51
 #, c-format
 msgid "%s does not exist in the bookmarks list"
 msgstr "'%s' ez dago laster-marken zerrendan"
 
-#: gtk/gtkbookmarksmanager.c:403
+#: gtk/gtkbookmarksmanager.c:406
 #, c-format
 msgid "%s already exists in the bookmarks list"
 msgstr "'%s' badago lehendik ere laster-marken zerrendan"
@@ -1540,7 +1010,7 @@ msgstr "Testua ezin da <%s>(r)en barruan egon"
 #. * text direction of RTL and specify "calendar:YM", then the year
 #. * will appear to the right of the month.
 #.
-#: gtk/gtkcalendar.c:767
+#: gtk/gtkcalendar.c:766
 msgid "calendar:MY"
 msgstr "calendar:YM"
 
@@ -1548,7 +1018,7 @@ msgstr "calendar:YM"
 #. * first day of the week to calendar:week_start:1 if you want Monday
 #. * to be the first day of the week, and so on.
 #.
-#: gtk/gtkcalendar.c:805
+#: gtk/gtkcalendar.c:804
 msgid "calendar:week_start:0"
 msgstr "calendar:week_start:1"
 
@@ -1558,7 +1028,7 @@ msgstr "calendar:week_start:1"
 #. *
 #. * "%Y" is appropriate for most locales.
 #.
-#: gtk/gtkcalendar.c:1401
+#: gtk/gtkcalendar.c:1400
 msgctxt "calendar year format"
 msgid "%Y"
 msgstr "%Y"
@@ -1573,7 +1043,7 @@ msgstr "%Y"
 #. * digits. That needs support from your system and locale definition
 #. * too.
 #.
-#: gtk/gtkcalendar.c:1438
+#: gtk/gtkcalendar.c:1437
 #, c-format
 msgctxt "calendar:day:digits"
 msgid "%d"
@@ -1587,7 +1057,7 @@ msgstr "%d"
 #. * Note that translating this doesn't guarantee that you get localized
 #. * digits. That needs support from your system and locale definition
 #. * too.
-#: gtk/gtkcalendar.c:1502
+#: gtk/gtkcalendar.c:1501
 #, c-format
 msgctxt "calendar:week:digits"
 msgid "%d"
@@ -1623,238 +1093,196 @@ msgctxt "progress bar label"
 msgid "%d %%"
 msgstr "%%%d"
 
-#: gtk/gtkcolorbutton.c:173 gtk/gtkcolorbutton.c:284
+#: gtk/gtkcolorbutton.c:173 gtk/gtkcolorbutton.c:285
 msgid "Pick a Color"
 msgstr "Hautatu kolorea"
 
-#: gtk/gtkcolorchooserwidget.c:281
-#, c-format
-msgid "Red %d%%, Green %d%%, Blue %d%%, Alpha %d%%"
-msgstr "Gorria %%%d, Berdea %%%d, Urdina %%%d, Alpha %%%d"
-
-#: gtk/gtkcolorchooserwidget.c:287
-#, c-format
-msgid "Red %d%%, Green %d%%, Blue %d%%"
-msgstr "Gorria %%%d, Berdea %%%d, Urdina %%%d"
-
-#: gtk/gtkcolorchooserwidget.c:369
-#, c-format
-msgid "Color: %s"
-msgstr "Kolorea: %s"
-
-#: gtk/gtkcolorchooserwidget.c:426
+#: gtk/gtkcolorchooserwidget.c:383
 msgctxt "Color name"
 msgid "Light Scarlet Red"
 msgstr "Gorri eskarlata argia"
 
-#: gtk/gtkcolorchooserwidget.c:427
+#: gtk/gtkcolorchooserwidget.c:384
 msgctxt "Color name"
 msgid "Scarlet Red"
 msgstr "Gorri eskarlata"
 
-#: gtk/gtkcolorchooserwidget.c:428
+#: gtk/gtkcolorchooserwidget.c:385
 msgctxt "Color name"
 msgid "Dark Scarlet Red"
 msgstr "Gorri eskarlata iluna"
 
-#: gtk/gtkcolorchooserwidget.c:429
+#: gtk/gtkcolorchooserwidget.c:386
 msgctxt "Color name"
 msgid "Light Orange"
 msgstr "Laranja argia"
 
-#: gtk/gtkcolorchooserwidget.c:430
+#: gtk/gtkcolorchooserwidget.c:387
 msgctxt "Color name"
 msgid "Orange"
 msgstr "Laranja"
 
-#: gtk/gtkcolorchooserwidget.c:431
+#: gtk/gtkcolorchooserwidget.c:388
 msgctxt "Color name"
 msgid "Dark Orange"
 msgstr "Laranja iluna"
 
-#: gtk/gtkcolorchooserwidget.c:432
+#: gtk/gtkcolorchooserwidget.c:389
 msgctxt "Color name"
 msgid "Light Butter"
 msgstr "Gurin argia"
 
-#: gtk/gtkcolorchooserwidget.c:433
+#: gtk/gtkcolorchooserwidget.c:390
 msgctxt "Color name"
 msgid "Butter"
 msgstr "Gurina"
 
-#: gtk/gtkcolorchooserwidget.c:434
+#: gtk/gtkcolorchooserwidget.c:391
 msgctxt "Color name"
 msgid "Dark Butter"
 msgstr "Gurin iluna"
 
-#: gtk/gtkcolorchooserwidget.c:435
+#: gtk/gtkcolorchooserwidget.c:392
 msgctxt "Color name"
 msgid "Light Chameleon"
 msgstr "Kameleoi argia"
 
-#: gtk/gtkcolorchooserwidget.c:436
+#: gtk/gtkcolorchooserwidget.c:393
 msgctxt "Color name"
 msgid "Chameleon"
 msgstr "Kameleoia"
 
-#: gtk/gtkcolorchooserwidget.c:437
+#: gtk/gtkcolorchooserwidget.c:394
 msgctxt "Color name"
 msgid "Dark Chameleon"
 msgstr "Kameleoi iluna"
 
-#: gtk/gtkcolorchooserwidget.c:438
+#: gtk/gtkcolorchooserwidget.c:395
 msgctxt "Color name"
 msgid "Light Sky Blue"
 msgstr "Zeru urdin argia"
 
-#: gtk/gtkcolorchooserwidget.c:439
+#: gtk/gtkcolorchooserwidget.c:396
 msgctxt "Color name"
 msgid "Sky Blue"
 msgstr "Zeru urdina"
 
-#: gtk/gtkcolorchooserwidget.c:440
+#: gtk/gtkcolorchooserwidget.c:397
 msgctxt "Color name"
 msgid "Dark Sky Blue"
 msgstr "Zeru urdin iluna"
 
-#: gtk/gtkcolorchooserwidget.c:441
+#: gtk/gtkcolorchooserwidget.c:398
 msgctxt "Color name"
 msgid "Light Plum"
 msgstr "Aran argia"
 
-#: gtk/gtkcolorchooserwidget.c:442
+#: gtk/gtkcolorchooserwidget.c:399
 msgctxt "Color name"
 msgid "Plum"
 msgstr "Arana"
 
-#: gtk/gtkcolorchooserwidget.c:443
+#: gtk/gtkcolorchooserwidget.c:400
 msgctxt "Color name"
 msgid "Dark Plum"
 msgstr "Aran iluna"
 
-#: gtk/gtkcolorchooserwidget.c:444
+#: gtk/gtkcolorchooserwidget.c:401
 msgctxt "Color name"
 msgid "Light Chocolate"
 msgstr "Txokolate argia"
 
-#: gtk/gtkcolorchooserwidget.c:445
+#: gtk/gtkcolorchooserwidget.c:402
 msgctxt "Color name"
 msgid "Chocolate"
 msgstr "Txokolatea"
 
-#: gtk/gtkcolorchooserwidget.c:446
+#: gtk/gtkcolorchooserwidget.c:403
 msgctxt "Color name"
 msgid "Dark Chocolate"
 msgstr "Txokolate iluna"
 
-#: gtk/gtkcolorchooserwidget.c:447
+#: gtk/gtkcolorchooserwidget.c:404
 msgctxt "Color name"
 msgid "Light Aluminum 1"
 msgstr "Aluminio argia 1"
 
-#: gtk/gtkcolorchooserwidget.c:448
+#: gtk/gtkcolorchooserwidget.c:405
 msgctxt "Color name"
 msgid "Aluminum 1"
 msgstr "Aluminioa 1"
 
-#: gtk/gtkcolorchooserwidget.c:449
+#: gtk/gtkcolorchooserwidget.c:406
 msgctxt "Color name"
 msgid "Dark Aluminum 1"
 msgstr "Aluminio iluna 1"
 
-#: gtk/gtkcolorchooserwidget.c:450
+#: gtk/gtkcolorchooserwidget.c:407
 msgctxt "Color name"
 msgid "Light Aluminum 2"
 msgstr "Aluminio argia 2"
 
-#: gtk/gtkcolorchooserwidget.c:451
+#: gtk/gtkcolorchooserwidget.c:408
 msgctxt "Color name"
 msgid "Aluminum 2"
 msgstr "Aluminioa 2"
 
-#: gtk/gtkcolorchooserwidget.c:452
+#: gtk/gtkcolorchooserwidget.c:409
 msgctxt "Color name"
 msgid "Dark Aluminum 2"
 msgstr "Aluminio iluna 2"
 
-#: gtk/gtkcolorchooserwidget.c:466
+#: gtk/gtkcolorchooserwidget.c:423
 msgctxt "Color name"
 msgid "Black"
 msgstr "Beltza"
 
-#: gtk/gtkcolorchooserwidget.c:467
+#: gtk/gtkcolorchooserwidget.c:424
 msgctxt "Color name"
 msgid "Very Dark Gray"
 msgstr "Gris oso iluna"
 
-#: gtk/gtkcolorchooserwidget.c:468
+#: gtk/gtkcolorchooserwidget.c:425
 msgctxt "Color name"
 msgid "Darker Gray"
 msgstr "Gris ilunagoa"
 
-#: gtk/gtkcolorchooserwidget.c:469
+#: gtk/gtkcolorchooserwidget.c:426
 msgctxt "Color name"
 msgid "Dark Gray"
 msgstr "Gris iluna"
 
-#: gtk/gtkcolorchooserwidget.c:470
+#: gtk/gtkcolorchooserwidget.c:427
 msgctxt "Color name"
 msgid "Medium Gray"
 msgstr "Tarteko grisa"
 
-#: gtk/gtkcolorchooserwidget.c:471
+#: gtk/gtkcolorchooserwidget.c:428
 msgctxt "Color name"
 msgid "Light Gray"
 msgstr "Gris argia"
 
-#: gtk/gtkcolorchooserwidget.c:472
+#: gtk/gtkcolorchooserwidget.c:429
 msgctxt "Color name"
 msgid "Lighter Gray"
 msgstr "Gris argiagoa"
 
-#: gtk/gtkcolorchooserwidget.c:473
+#: gtk/gtkcolorchooserwidget.c:430
 msgctxt "Color name"
 msgid "Very Light Gray"
 msgstr "Gris oso argia"
 
-#: gtk/gtkcolorchooserwidget.c:474
+#: gtk/gtkcolorchooserwidget.c:431
 msgctxt "Color name"
 msgid "White"
 msgstr "Zuria"
 
 #. translators: label for the custom section in the color chooser
-#: gtk/gtkcolorchooserwidget.c:557
+#: gtk/gtkcolorchooserwidget.c:512
 msgid "Custom"
 msgstr "Pertsonalizatua"
 
-#: gtk/gtkcolorchooserwidget.c:568
-msgid "Custom color"
-msgstr "Kolore pertsonalizatua"
-
-#: gtk/gtkcolorchooserwidget.c:569
-msgid "Create a custom color"
-msgstr "Sortu kolore pertsonalizatua"
-
-#: gtk/gtkcolorchooserwidget.c:594
-#, c-format
-msgid "Custom color %d: %s"
-msgstr "%d. kolore pertsonalizatua: %s"
-
-#: gtk/gtkcolorplane.c:415
-msgid "Color Plane"
-msgstr "Kolore soila"
-
-#: gtk/gtkcolorscale.c:235
-msgctxt "Color channel"
-msgid "Hue"
-msgstr "Ñabardura"
-
-#: gtk/gtkcolorscale.c:237
-msgctxt "Color channel"
-msgid "Alpha"
-msgstr "Alfa"
-
-#: gtk/gtkcolorswatch.c:222
+#: gtk/gtkcolorswatch.c:219
 msgid "Customize"
 msgstr "Pertsonalizatu"
 
@@ -1864,65 +1292,65 @@ msgstr "Pertsonalizatu"
 #. * Do *not* translate it to "predefinito:mm", if it
 #. * it isn't default:mm or default:inch it will not work
 #.
-#: gtk/gtkcustompaperunixdialog.c:117
+#: gtk/gtkcustompaperunixdialog.c:112
 msgid "default:mm"
 msgstr "default:mm"
 
-#. And show the custom paper dialog
-#: gtk/gtkcustompaperunixdialog.c:403 gtk/gtkprintunixdialog.c:3007
-msgid "Manage Custom Sizes"
-msgstr "Kudeatu tamaina pertsonalak"
-
-#: gtk/gtkcustompaperunixdialog.c:565 gtk/gtkpagesetupunixdialog.c:818
-msgid "inch"
-msgstr "hazbete"
-
-#: gtk/gtkcustompaperunixdialog.c:567 gtk/gtkpagesetupunixdialog.c:816
-msgid "mm"
-msgstr "mm"
-
-#: gtk/gtkcustompaperunixdialog.c:613
+#: gtk/gtkcustompaperunixdialog.c:318
 msgid "Margins from Printer…"
 msgstr "Marjinak inprimagailutik…"
 
-#: gtk/gtkcustompaperunixdialog.c:779
+#. And show the custom paper dialog
+#: gtk/gtkcustompaperunixdialog.c:402 gtk/gtkprintunixdialog.c:2993
+msgid "Manage Custom Sizes"
+msgstr "Kudeatu tamaina pertsonalak"
+
+#: gtk/gtkcustompaperunixdialog.c:466 gtk/gtkpagesetupunixdialog.c:704
+msgid "inch"
+msgstr "hazbete"
+
+#: gtk/gtkcustompaperunixdialog.c:468 gtk/gtkpagesetupunixdialog.c:702
+msgid "mm"
+msgstr "mm"
+
+#: gtk/gtkcustompaperunixdialog.c:625
 #, c-format
 msgid "Custom Size %d"
 msgstr "%d tamaina pertsonalizatua"
 
-#: gtk/gtkcustompaperunixdialog.c:1079
+#: gtk/gtkcustompaperunixdialog.c:939
 msgid "_Width:"
 msgstr "_Zabalera:"
 
-#: gtk/gtkcustompaperunixdialog.c:1090
+#: gtk/gtkcustompaperunixdialog.c:950
 msgid "_Height:"
 msgstr "_Altuera:"
 
-#: gtk/gtkcustompaperunixdialog.c:1101
+#: gtk/gtkcustompaperunixdialog.c:961
 msgid "Paper Size"
 msgstr "Paper-tamaina"
 
-#: gtk/gtkcustompaperunixdialog.c:1110
+#: gtk/gtkcustompaperunixdialog.c:970
 msgid "_Top:"
 msgstr "_Goian:"
 
-#: gtk/gtkcustompaperunixdialog.c:1121
+#: gtk/gtkcustompaperunixdialog.c:981
 msgid "_Bottom:"
 msgstr "_Behean:"
 
-#: gtk/gtkcustompaperunixdialog.c:1132
+#: gtk/gtkcustompaperunixdialog.c:992
 msgid "_Left:"
 msgstr "E_zkerrean:"
 
-#: gtk/gtkcustompaperunixdialog.c:1143
+#: gtk/gtkcustompaperunixdialog.c:1003
 msgid "_Right:"
 msgstr "E_skuinean:"
 
-#: gtk/gtkcustompaperunixdialog.c:1182
+#: gtk/gtkcustompaperunixdialog.c:1039
 msgid "Paper Margins"
 msgstr "Paper-marjinak"
 
-#: gtk/gtkentry.c:3603
+#: gtk/gtkentry.c:3608
 msgid "Insert Emoji"
 msgstr "Txertatu emojia"
 
@@ -1930,19 +1358,19 @@ msgstr "Txertatu emojia"
 msgid "Select a File"
 msgstr "Hautatu fitxategia"
 
-#: gtk/gtkfilechooserbutton.c:114 gtk/gtkplacessidebar.c:1056
+#: gtk/gtkfilechooserbutton.c:114 gtk/gtkplacessidebar.c:1059
 msgid "Desktop"
 msgstr "Mahaigaina"
 
-#: gtk/gtkfilechooserbutton.c:115 gtk/ui/gtkdropdown.ui:19
+#: gtk/gtkfilechooserbutton.c:115 gtk/ui/gtkdropdown.ui:20
 msgid "(None)"
 msgstr "(bat ere ez)"
 
-#: gtk/gtkfilechooserbutton.c:1939
+#: gtk/gtkfilechooserbutton.c:1994
 msgid "Other…"
 msgstr "Bestelakoa…"
 
-#: gtk/gtkfilechooserdialog.c:588
+#: gtk/gtkfilechooserdialog.c:559
 msgid "_Name"
 msgstr "_Izena"
 
@@ -2002,31 +1430,31 @@ msgstr "Direktorio hori badago lehendik ere"
 msgid "A file with that name already exists"
 msgstr "Izen hori duen fitxategia badago lehendik ere"
 
-#: gtk/gtkfilechoosernative.c:528 gtk/gtkfilechoosernative.c:599
-#: gtk/gtkfilechooserwidget.c:1284 gtk/gtkfilechooserwidget.c:5800
-#: gtk/gtkmessagedialog.c:781 gtk/gtkmessagedialog.c:790
-#: gtk/gtkmountoperation.c:607 gtk/gtkpagesetupunixdialog.c:208
-#: gtk/gtkprintbackend.c:643 gtk/gtkprinteroptionwidget.c:521
-#: gtk/gtkprintunixdialog.c:649 gtk/gtkprintunixdialog.c:734
-#: gtk/gtkwindow.c:6673 gtk/inspector/css-editor.c:248
-#: gtk/inspector/recorder.c:1006 gtk/ui/gtkappchooserdialog.ui:45
-#: gtk/ui/gtkassistant.ui:50 gtk/ui/gtkcolorchooserdialog.ui:33
+#: gtk/gtkfilechoosernative.c:505 gtk/gtkfilechoosernative.c:576
+#: gtk/gtkfilechooserwidget.c:1212 gtk/gtkfilechooserwidget.c:5755
+#: gtk/gtkmessagedialog.c:742 gtk/gtkmessagedialog.c:751
+#: gtk/gtkmountoperation.c:608 gtk/gtkpagesetupunixdialog.c:281
+#: gtk/gtkprintbackend.c:643 gtk/gtkprinteroptionwidget.c:713
+#: gtk/gtkprintunixdialog.c:627 gtk/gtkprintunixdialog.c:782
+#: gtk/gtkwindow.c:6649 gtk/inspector/css-editor.c:248
+#: gtk/inspector/recorder.c:1010 gtk/ui/gtkappchooserdialog.ui:45
+#: gtk/ui/gtkassistant.ui:52 gtk/ui/gtkcolorchooserdialog.ui:33
 #: gtk/ui/gtkfontchooserdialog.ui:24
 msgid "_Cancel"
 msgstr "_Utzi"
 
-#: gtk/gtkfilechoosernative.c:529 gtk/gtkfilechoosernative.c:593
-#: gtk/gtkplacessidebar.c:3134 gtk/gtkplacessidebar.c:3219
-#: gtk/gtkplacesview.c:1646
+#: gtk/gtkfilechoosernative.c:506 gtk/gtkfilechoosernative.c:570
+#: gtk/gtkplacessidebar.c:3145 gtk/gtkplacessidebar.c:3230
+#: gtk/gtkplacesview.c:1649
 msgid "_Open"
 msgstr "_Ireki"
 
-#: gtk/gtkfilechoosernative.c:593 gtk/inspector/css-editor.c:249
-#: gtk/inspector/recorder.c:1007
+#: gtk/gtkfilechoosernative.c:570 gtk/inspector/css-editor.c:249
+#: gtk/inspector/recorder.c:1011
 msgid "_Save"
 msgstr "_Gorde"
 
-#: gtk/gtkfilechoosernativequartz.c:324 gtk/ui/gtkfilechooserwidget.ui:350
+#: gtk/gtkfilechoosernativequartz.c:337 gtk/ui/gtkfilechooserwidget.ui:345
 msgid "Select which types of files are shown"
 msgstr "Hautatu erakutsiko diren fitxategi motak"
 
@@ -2034,287 +1462,278 @@ msgstr "Hautatu erakutsiko diren fitxategi motak"
 #. * is a hostname. Nautilus and the panel contain the same string
 #. * to translate.
 #.
-#: gtk/gtkfilechooserutils.c:395
+#: gtk/gtkfilechooserutils.c:359
 #, c-format
 msgid "%1$s on %2$s"
 msgstr "%1$s, %2$s"
 
-#: gtk/gtkfilechooserwidget.c:374
+#: gtk/gtkfilechooserwidget.c:321
 msgid "Type name of new folder"
 msgstr "Idatzi karpeta berriaren izena"
 
-#: gtk/gtkfilechooserwidget.c:796
+#: gtk/gtkfilechooserwidget.c:726
 msgid "The folder could not be created"
 msgstr "Ezin izan da karpeta sortu"
 
-#: gtk/gtkfilechooserwidget.c:809
+#: gtk/gtkfilechooserwidget.c:739
 msgid "You need to choose a valid filename."
 msgstr "Baliozko fitxategi-izena aukeratu behar duzu."
 
-#: gtk/gtkfilechooserwidget.c:812
+#: gtk/gtkfilechooserwidget.c:742
 #, c-format
 msgid "Cannot create a file under %s as it is not a folder"
 msgstr "Ezin da fitxategirik sortu %s barruan, ez baita karpeta bat"
 
-#: gtk/gtkfilechooserwidget.c:822
+#: gtk/gtkfilechooserwidget.c:752
 msgid "Cannot create file as the filename is too long"
 msgstr "Ezin da fitxategirik sortu fitxategi-izena luzeegia delako"
 
-#: gtk/gtkfilechooserwidget.c:823
+#: gtk/gtkfilechooserwidget.c:753
 msgid "Try using a shorter name."
 msgstr "Saiatu izen laburragoa erabiltzen."
 
-#: gtk/gtkfilechooserwidget.c:833
+#: gtk/gtkfilechooserwidget.c:763
 msgid "You may only select folders"
 msgstr "Soilik karpetak hauta behar dituzu"
 
-#: gtk/gtkfilechooserwidget.c:834
+#: gtk/gtkfilechooserwidget.c:764
 msgid "The item that you selected is not a folder try using a different item."
 msgstr "Hautatu duzun elementua ez da karpeta bat. Saiatu bestelako elementu bat erabiltzen."
 
-#: gtk/gtkfilechooserwidget.c:842
+#: gtk/gtkfilechooserwidget.c:772
 msgid "Invalid file name"
 msgstr "Fitxategi-izen baliogabea"
 
-#: gtk/gtkfilechooserwidget.c:851
+#: gtk/gtkfilechooserwidget.c:781
 msgid "The folder contents could not be displayed"
 msgstr "Karpetaren edukia ezin izan da bistaratu"
 
-#: gtk/gtkfilechooserwidget.c:859
+#: gtk/gtkfilechooserwidget.c:789
 msgid "The file could not be deleted"
 msgstr "Ezin izan da fitxategia ezabatu"
 
-#: gtk/gtkfilechooserwidget.c:867
+#: gtk/gtkfilechooserwidget.c:797
 msgid "The file could not be moved to the Trash"
 msgstr "Ezin izan da fitxategia Zakarrontzira bota"
 
-#: gtk/gtkfilechooserwidget.c:1280
+#: gtk/gtkfilechooserwidget.c:1208
 #, c-format
 msgid "Are you sure you want to permanently delete “%s”?"
 msgstr "Ziur zaude “%s” behin betiko ezabatu nahi duzula?"
 
-#: gtk/gtkfilechooserwidget.c:1283
+#: gtk/gtkfilechooserwidget.c:1211
 #, c-format
 msgid "If you delete an item, it will be permanently lost."
 msgstr "Elementu bat ezabatzen baduzu, betirako galduko duzu."
 
-#: gtk/gtkfilechooserwidget.c:1285 gtk/gtkfilechooserwidget.c:1899
-#: gtk/gtklabel.c:5412 gtk/gtktext.c:5932 gtk/gtktextview.c:8552
+#: gtk/gtkfilechooserwidget.c:1213 gtk/gtkfilechooserwidget.c:1829
+#: gtk/gtklabel.c:5423 gtk/gtktext.c:5969 gtk/gtktextview.c:8558
 msgid "_Delete"
 msgstr "Ez_abatu"
 
-#: gtk/gtkfilechooserwidget.c:1408
+#: gtk/gtkfilechooserwidget.c:1336
 msgid "The file could not be renamed"
 msgstr "Ezin izan da fitxategia berrizendatu"
 
-#: gtk/gtkfilechooserwidget.c:1668
+#: gtk/gtkfilechooserwidget.c:1596
 msgid "Could not select file"
 msgstr "Ezin izan da fitxategia hautatu"
 
-#: gtk/gtkfilechooserwidget.c:1879
+#: gtk/gtkfilechooserwidget.c:1809
 msgid "_Visit File"
 msgstr "_Bisitatu fitxategia"
 
-#: gtk/gtkfilechooserwidget.c:1883
+#: gtk/gtkfilechooserwidget.c:1813
 msgid "_Open With File Manager"
 msgstr "_Ireki fitxategi-kudeatzailearekin"
 
-#: gtk/gtkfilechooserwidget.c:1887
+#: gtk/gtkfilechooserwidget.c:1817
 msgid "_Copy Location"
 msgstr "_Kopiatu helbidea"
 
-#: gtk/gtkfilechooserwidget.c:1891
+#: gtk/gtkfilechooserwidget.c:1821
 msgid "_Add to Bookmarks"
 msgstr "_Gehitu laster-markei"
 
-#: gtk/gtkfilechooserwidget.c:1895 gtk/gtkplacessidebar.c:2316
-#: gtk/gtkplacessidebar.c:3255 gtk/ui/gtkfilechooserwidget.ui:469
+#: gtk/gtkfilechooserwidget.c:1825 gtk/gtkplacessidebar.c:2327
+#: gtk/gtkplacessidebar.c:3266 gtk/ui/gtkfilechooserwidget.ui:464
 msgid "_Rename"
 msgstr "_Aldatu izena"
 
-#: gtk/gtkfilechooserwidget.c:1903
+#: gtk/gtkfilechooserwidget.c:1833
 msgid "_Move to Trash"
 msgstr "_Bota zakarrontzira"
 
-#: gtk/gtkfilechooserwidget.c:1912
+#: gtk/gtkfilechooserwidget.c:1842
 msgid "Show _Hidden Files"
 msgstr "Erakutsi fitxategi _ezkutuak"
 
-#: gtk/gtkfilechooserwidget.c:1916
+#: gtk/gtkfilechooserwidget.c:1846
 msgid "Show _Size Column"
 msgstr "Erakutsi zutabearen _tamaina"
 
-#: gtk/gtkfilechooserwidget.c:1920
+#: gtk/gtkfilechooserwidget.c:1850
 msgid "Show T_ype Column"
 msgstr "Erakutsi _motaren zutabea"
 
-#: gtk/gtkfilechooserwidget.c:1924
+#: gtk/gtkfilechooserwidget.c:1854
 msgid "Show _Time"
 msgstr "Erakutsi _ordua"
 
-#: gtk/gtkfilechooserwidget.c:1928
+#: gtk/gtkfilechooserwidget.c:1858
 msgid "Sort _Folders Before Files"
 msgstr "_Ordenatu karpetak fitxategiak baino lehen"
 
 #. this is the header for the location column in the print dialog
-#: gtk/gtkfilechooserwidget.c:2274 gtk/inspector/css-node-tree.ui:135
-#: gtk/ui/gtkfilechooserwidget.ui:190 gtk/ui/gtkprintunixdialog.ui:127
+#: gtk/gtkfilechooserwidget.c:2256 gtk/inspector/css-node-tree.ui:135
+#: gtk/ui/gtkfilechooserwidget.ui:185 gtk/ui/gtkprintunixdialog.ui:116
 msgid "Location"
 msgstr "Kokalekua"
 
 #. Label
-#: gtk/gtkfilechooserwidget.c:2361
+#: gtk/gtkfilechooserwidget.c:2343
 msgid "_Name:"
 msgstr "_Izena:"
 
-#: gtk/gtkfilechooserwidget.c:2904 gtk/gtkfilechooserwidget.c:2918
+#: gtk/gtkfilechooserwidget.c:2880 gtk/gtkfilechooserwidget.c:2894
 #, c-format
 msgid "Searching in %s"
 msgstr "Hemen bilatzen: %s"
 
-#: gtk/gtkfilechooserwidget.c:2924
+#: gtk/gtkfilechooserwidget.c:2900
 msgid "Searching"
 msgstr "Bilaketa"
 
-#: gtk/gtkfilechooserwidget.c:2930
+#: gtk/gtkfilechooserwidget.c:2906
 msgid "Enter location or URL"
 msgstr "Sartu kokalekua edo URLa"
 
-#: gtk/gtkfilechooserwidget.c:3828 gtk/gtkfilechooserwidget.c:6638
-#: gtk/ui/gtkfilechooserwidget.ui:230
+#: gtk/gtkfilechooserwidget.c:3794 gtk/gtkfilechooserwidget.c:6590
+#: gtk/ui/gtkfilechooserwidget.ui:225
 msgid "Modified"
 msgstr "Aldatze-data"
 
-#: gtk/gtkfilechooserwidget.c:4094
+#: gtk/gtkfilechooserwidget.c:4053
 #, c-format
 msgid "Could not read the contents of %s"
 msgstr "Ezin izan da %s(r)en edukia irakurri"
 
-#: gtk/gtkfilechooserwidget.c:4098
+#: gtk/gtkfilechooserwidget.c:4057
 msgid "Could not read the contents of the folder"
 msgstr "Ezin izan da karpetaren edukia irakurri"
 
 #. Translators: see g_date_time_format() for details on the format
-#: gtk/gtkfilechooserwidget.c:4246 gtk/gtkfilechooserwidget.c:4289
+#: gtk/gtkfilechooserwidget.c:4197 gtk/gtkfilechooserwidget.c:4240
 msgid "%H:%M"
 msgstr "%H:%M"
 
-#: gtk/gtkfilechooserwidget.c:4248 gtk/gtkfilechooserwidget.c:4291
+#: gtk/gtkfilechooserwidget.c:4199 gtk/gtkfilechooserwidget.c:4242
 msgid "%l:%M %p"
 msgstr "%l:%M %p%l:%M %p"
 
-#: gtk/gtkfilechooserwidget.c:4252
+#: gtk/gtkfilechooserwidget.c:4203
 msgid "Yesterday"
 msgstr "Atzo"
 
-#: gtk/gtkfilechooserwidget.c:4260
+#: gtk/gtkfilechooserwidget.c:4211
 msgid "%-e %b"
 msgstr "%-e %b"
 
-#: gtk/gtkfilechooserwidget.c:4264
+#: gtk/gtkfilechooserwidget.c:4215
 msgid "%-e %b %Y"
 msgstr "%Y-%b-%-e"
 
-#: gtk/gtkfilechooserwidget.c:4353 gtk/gtkfilechooserwidget.c:4361
+#: gtk/gtkfilechooserwidget.c:4304 gtk/gtkfilechooserwidget.c:4312
 msgid "Program"
 msgstr "Programa"
 
-#: gtk/gtkfilechooserwidget.c:4354
+#: gtk/gtkfilechooserwidget.c:4305
 msgid "Audio"
 msgstr "Audioa"
 
-#: gtk/gtkfilechooserwidget.c:4355 gtk/gtkfontbutton.c:549
+#: gtk/gtkfilechooserwidget.c:4306 gtk/gtkfontbutton.c:549
 #: gtk/inspector/visual.ui:211
 msgid "Font"
 msgstr "Letra-tipoa"
 
-#: gtk/gtkfilechooserwidget.c:4356
+#: gtk/gtkfilechooserwidget.c:4307
 msgid "Image"
 msgstr "Irudia"
 
-#: gtk/gtkfilechooserwidget.c:4357
+#: gtk/gtkfilechooserwidget.c:4308
 msgid "Archive"
 msgstr "Artxiboa"
 
-#: gtk/gtkfilechooserwidget.c:4358
+#: gtk/gtkfilechooserwidget.c:4309
 msgid "Markup"
 msgstr "Markaketa"
 
-#: gtk/gtkfilechooserwidget.c:4359 gtk/gtkfilechooserwidget.c:4360
+#: gtk/gtkfilechooserwidget.c:4310 gtk/gtkfilechooserwidget.c:4311
 msgid "Text"
 msgstr "Testua"
 
-#: gtk/gtkfilechooserwidget.c:4362
+#: gtk/gtkfilechooserwidget.c:4313
 msgid "Video"
 msgstr "Bideoa"
 
-#: gtk/gtkfilechooserwidget.c:4363
+#: gtk/gtkfilechooserwidget.c:4314
 msgid "Contacts"
 msgstr "Kontaktuak"
 
-#: gtk/gtkfilechooserwidget.c:4364
+#: gtk/gtkfilechooserwidget.c:4315
 msgid "Calendar"
 msgstr "Egutegia"
 
-#: gtk/gtkfilechooserwidget.c:4365
+#: gtk/gtkfilechooserwidget.c:4316
 msgid "Document"
 msgstr "Dokumentua"
 
-#: gtk/gtkfilechooserwidget.c:4366
+#: gtk/gtkfilechooserwidget.c:4317
 msgid "Presentation"
 msgstr "Aurkezpena"
 
-#: gtk/gtkfilechooserwidget.c:4367
+#: gtk/gtkfilechooserwidget.c:4318
 msgid "Spreadsheet"
 msgstr "Kalkulu-orria"
 
 #. Translators: We don't know whether this printer is
 #. * available to print to.
-#: gtk/gtkfilechooserwidget.c:4398 gtk/gtkfilechooserwidget.c:4585
-#: gtk/inspector/prop-editor.c:1571
-#: modules/printbackends/gtkprintbackendcloudprint.c:731
+#: gtk/gtkfilechooserwidget.c:4349 gtk/gtkfilechooserwidget.c:4536
+#: gtk/inspector/prop-editor.c:1468
+#: modules/printbackends/gtkprintbackendcloudprint.c:729
 msgid "Unknown"
 msgstr "Ezezaguna"
 
-#: gtk/gtkfilechooserwidget.c:4624 gtk/gtkplacessidebar.c:1041
+#: gtk/gtkfilechooserwidget.c:4575 gtk/gtkplacessidebar.c:1044
 msgid "Home"
 msgstr "Karpeta nagusia"
 
-#: gtk/gtkfilechooserwidget.c:5793 gtk/gtkprintunixdialog.c:640
+#: gtk/gtkfilechooserwidget.c:5748 gtk/gtkprintunixdialog.c:618
 #, c-format
 msgid "A file named “%s” already exists.  Do you want to replace it?"
 msgstr "'%s' izeneko fitxategia badago lehendik. Ordeztea nahi duzu?"
 
-#: gtk/gtkfilechooserwidget.c:5796 gtk/gtkprintunixdialog.c:644
+#: gtk/gtkfilechooserwidget.c:5751 gtk/gtkprintunixdialog.c:622
 #, c-format
 msgid ""
 "The file already exists in “%s”.  Replacing it will overwrite its contents."
 msgstr "'%s'(e)n badago fitxategia lehendik. Hau ordeztean bere eduki guztia gainidatziko da."
 
-#: gtk/gtkfilechooserwidget.c:5801 gtk/gtkprintunixdialog.c:652
+#: gtk/gtkfilechooserwidget.c:5756 gtk/gtkprintunixdialog.c:630
 msgid "_Replace"
 msgstr "_Ordeztu"
 
-#: gtk/gtkfilechooserwidget.c:5967
+#: gtk/gtkfilechooserwidget.c:5917
 msgid "You do not have access to the specified folder."
 msgstr "Ez daukazu atzipenik zehaztutako karpetara."
 
-#: gtk/gtkfilechooserwidget.c:6567
+#: gtk/gtkfilechooserwidget.c:6519
 msgid "Could not send the search request"
 msgstr "Ezin izan da bilaketako eskaera bidali"
 
-#: gtk/gtkfilechooserwidget.c:6877
+#: gtk/gtkfilechooserwidget.c:6829
 msgid "Accessed"
 msgstr "Atzituta"
-
-#. The pointers we return for a GtkFileSystemVolume are opaque tokens; they are
-#. * really pointers to GDrive, GVolume or GMount objects.  We need an extra
-#. * token for the fake “File System” volume.  So, we’ll return a pointer to
-#. * this particular string.
-#.
-#: gtk/gtkfilesystem.c:48
-msgid "File System"
-msgstr "Fitxategi-sistema"
 
 #: gtk/gtkfontbutton.c:386
 msgid "Sans 12"
@@ -2324,56 +1743,56 @@ msgstr "Sans 12"
 msgid "Pick a Font"
 msgstr "Hautatu letra-tipoa"
 
-#: gtk/gtkfontbutton.c:1295
+#: gtk/gtkfontbutton.c:1293
 msgctxt "font"
 msgid "None"
 msgstr "Bat ere ez"
 
-#: gtk/gtkfontchooserwidget.c:1076
+#: gtk/gtkfontchooserwidget.c:1111
 msgid "Width"
 msgstr "Zabalera"
 
-#: gtk/gtkfontchooserwidget.c:1077
+#: gtk/gtkfontchooserwidget.c:1112
 msgid "Weight"
 msgstr "Pisua"
 
-#: gtk/gtkfontchooserwidget.c:1078
+#: gtk/gtkfontchooserwidget.c:1113
 msgid "Italic"
 msgstr "Etzana"
 
-#: gtk/gtkfontchooserwidget.c:1079
+#: gtk/gtkfontchooserwidget.c:1114
 msgid "Slant"
 msgstr "Makurdura"
 
-#: gtk/gtkfontchooserwidget.c:1080
+#: gtk/gtkfontchooserwidget.c:1115
 msgid "Optical Size"
 msgstr "Tamaina optikoa"
 
-#: gtk/gtkfontchooserwidget.c:1618 gtk/inspector/prop-editor.c:1558
+#: gtk/gtkfontchooserwidget.c:1653 gtk/inspector/prop-editor.c:1455
 msgid "Default"
 msgstr "Lehenetsia"
 
-#: gtk/gtkfontchooserwidget.c:1662
+#: gtk/gtkfontchooserwidget.c:1697
 msgid "Ligatures"
 msgstr "Hizki-loturak"
 
-#: gtk/gtkfontchooserwidget.c:1663
+#: gtk/gtkfontchooserwidget.c:1698
 msgid "Letter Case"
 msgstr "Maiuskula/minuskula"
 
-#: gtk/gtkfontchooserwidget.c:1664
+#: gtk/gtkfontchooserwidget.c:1699
 msgid "Number Case"
 msgstr "Zenbakien tamaina"
 
-#: gtk/gtkfontchooserwidget.c:1665
+#: gtk/gtkfontchooserwidget.c:1700
 msgid "Number Spacing"
 msgstr "Zenbakien tartea"
 
-#: gtk/gtkfontchooserwidget.c:1666
+#: gtk/gtkfontchooserwidget.c:1701
 msgid "Number Formatting"
 msgstr "Zenbakien formatua"
 
-#: gtk/gtkfontchooserwidget.c:1667
+#: gtk/gtkfontchooserwidget.c:1702
 msgid "Character Variants"
 msgstr "Karaktere-aldaerak"
 
@@ -2381,77 +1800,61 @@ msgstr "Karaktere-aldaerak"
 msgid "OpenGL context creation failed"
 msgstr "Huts egin du OpenGL-ren testuingurua sortzean"
 
-#: gtk/gtkinfobar.c:1101 gtk/gtkmessagedialog.c:301 gtk/inspector/window.ui:492
-msgid "Information"
-msgstr "Informazioa"
-
-#: gtk/gtkinfobar.c:1105 gtk/gtkmessagedialog.c:305
-msgid "Question"
-msgstr "Galdera"
-
-#: gtk/gtkinfobar.c:1109 gtk/gtkmessagedialog.c:309
-msgid "Warning"
-msgstr "Abisua"
-
-#: gtk/gtkinfobar.c:1113 gtk/gtkmessagedialog.c:313
-msgid "Error"
-msgstr "Errorea"
-
-#: gtk/gtklabel.c:5409 gtk/gtktext.c:5920 gtk/gtktextview.c:8540
+#: gtk/gtklabel.c:5420 gtk/gtktext.c:5957 gtk/gtktextview.c:8546
 msgid "Cu_t"
 msgstr "_Ebaki"
 
-#: gtk/gtklabel.c:5410 gtk/gtktext.c:5924 gtk/gtktextview.c:8544
+#: gtk/gtklabel.c:5421 gtk/gtktext.c:5961 gtk/gtktextview.c:8550
 msgid "_Copy"
 msgstr "_Kopiatu"
 
-#: gtk/gtklabel.c:5411 gtk/gtktext.c:5928 gtk/gtktextview.c:8548
+#: gtk/gtklabel.c:5422 gtk/gtktext.c:5965 gtk/gtktextview.c:8554
 msgid "_Paste"
 msgstr "_Itsatsi"
 
-#: gtk/gtklabel.c:5417 gtk/gtktext.c:5941 gtk/gtktextview.c:8573
+#: gtk/gtklabel.c:5428 gtk/gtktext.c:5978 gtk/gtktextview.c:8579
 msgid "Select _All"
 msgstr "Hautatu _dena"
 
-#: gtk/gtklabel.c:5422
+#: gtk/gtklabel.c:5433
 msgid "_Open Link"
 msgstr "_Ireki esteka"
 
-#: gtk/gtklabel.c:5426
+#: gtk/gtklabel.c:5437
 msgid "Copy _Link Address"
 msgstr "Kopiatu _estekaren helbidea"
 
-#: gtk/gtklinkbutton.c:257
+#: gtk/gtklinkbutton.c:259
 msgid "_Copy URL"
 msgstr "_Kopiatu URLa"
 
-#: gtk/gtklinkbutton.c:542
+#: gtk/gtklinkbutton.c:544
 msgid "Invalid URI"
 msgstr "URI baliogabea"
 
-#: gtk/gtklockbutton.c:279 gtk/ui/gtklockbutton.ui:20
+#: gtk/gtklockbutton.c:275 gtk/ui/gtklockbutton.ui:20
 msgid "Lock"
 msgstr "Blokeatu"
 
-#: gtk/gtklockbutton.c:288 gtk/ui/gtklockbutton.ui:26
+#: gtk/gtklockbutton.c:284 gtk/ui/gtklockbutton.ui:26
 msgid "Unlock"
 msgstr "Desblokeatu"
 
-#: gtk/gtklockbutton.c:297
+#: gtk/gtklockbutton.c:293
 msgid ""
 "Dialog is unlocked.\n"
 "Click to prevent further changes"
 msgstr "Elkarrizketa-koadroa desblokeatuta dago.\n"
 "Egin klik aldaketa gehiago saihesteko."
 
-#: gtk/gtklockbutton.c:306
+#: gtk/gtklockbutton.c:302
 msgid ""
 "Dialog is locked.\n"
 "Click to make changes"
 msgstr "Elkarrizketa-koadroa blokeatuta dago.\n"
 "Egin klik aldaketak egiteko"
 
-#: gtk/gtklockbutton.c:315
+#: gtk/gtklockbutton.c:311
 msgid ""
 "System policy prevents changes.\n"
 "Contact your system administrator"
@@ -2463,7 +1866,7 @@ msgstr "Sistemaren arauek aldaketak saihesten dituzte.\n"
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:967
+#: gtk/gtkmain.c:970
 msgid "default:LTR"
 msgstr "default:LTR"
 
@@ -2515,86 +1918,86 @@ msgctxt "short time format"
 msgid "%d:%02d"
 msgstr "%d:%02d"
 
-#: gtk/gtkmessagedialog.c:773 gtk/gtkmessagedialog.c:791
-#: gtk/gtkprintbackend.c:644 gtk/gtkwindow.c:6674
+#: gtk/gtkmessagedialog.c:734 gtk/gtkmessagedialog.c:752
+#: gtk/gtkprintbackend.c:644 gtk/gtkwindow.c:6650
 msgid "_OK"
 msgstr "_Ados"
 
-#: gtk/gtkmessagedialog.c:785
+#: gtk/gtkmessagedialog.c:746
 msgid "_No"
 msgstr "_Ez"
 
-#: gtk/gtkmessagedialog.c:786
+#: gtk/gtkmessagedialog.c:747
 msgid "_Yes"
 msgstr "_Bai"
 
-#: gtk/gtkmountoperation.c:608
+#: gtk/gtkmountoperation.c:609
 msgid "Co_nnect"
 msgstr "_Konektatu"
 
-#: gtk/gtkmountoperation.c:675
+#: gtk/gtkmountoperation.c:673
 msgid "Connect As"
 msgstr "Konektatu honela"
 
-#: gtk/gtkmountoperation.c:684
+#: gtk/gtkmountoperation.c:682
 msgid "_Anonymous"
 msgstr "_Anonimoa"
 
-#: gtk/gtkmountoperation.c:692
+#: gtk/gtkmountoperation.c:690
 msgid "Registered U_ser"
 msgstr "Harpidetutako _erabiltzailea"
 
-#: gtk/gtkmountoperation.c:702
+#: gtk/gtkmountoperation.c:700
 msgid "_Username"
 msgstr "_Erabiltzaile-izena:"
 
-#: gtk/gtkmountoperation.c:707
+#: gtk/gtkmountoperation.c:705
 msgid "_Domain"
 msgstr "_Domeinua"
 
-#: gtk/gtkmountoperation.c:716
+#: gtk/gtkmountoperation.c:714
 msgid "Volume type"
 msgstr "Bolumen mota"
 
-#: gtk/gtkmountoperation.c:726
+#: gtk/gtkmountoperation.c:724
 msgid "_Hidden"
 msgstr "Ez_kutua"
 
-#: gtk/gtkmountoperation.c:729
+#: gtk/gtkmountoperation.c:727
 msgid "_Windows system"
 msgstr "_Windows sistema"
 
-#: gtk/gtkmountoperation.c:732
+#: gtk/gtkmountoperation.c:730
 msgid "_PIM"
 msgstr "_PIMa"
 
-#: gtk/gtkmountoperation.c:738
+#: gtk/gtkmountoperation.c:736
 msgid "_Password"
 msgstr "_Pasahitza"
 
-#: gtk/gtkmountoperation.c:760
+#: gtk/gtkmountoperation.c:758
 msgid "Forget password _immediately"
 msgstr "Ahaztu pasahitza _berehala"
 
-#: gtk/gtkmountoperation.c:770
+#: gtk/gtkmountoperation.c:768
 msgid "Remember password until you _logout"
 msgstr "Gogoratu pasahitza saioa _amaitu arte"
 
-#: gtk/gtkmountoperation.c:780
+#: gtk/gtkmountoperation.c:778
 msgid "Remember _forever"
 msgstr "_Gogoratu beti"
 
-#: gtk/gtkmountoperation.c:1205
+#: gtk/gtkmountoperation.c:1203
 #, c-format
 msgid "Unknown Application (PID %d)"
 msgstr "Aplikazio ezezaguna (PIDa: %d)"
 
-#: gtk/gtkmountoperation.c:1404
+#: gtk/gtkmountoperation.c:1402
 #, c-format
 msgid "Unable to end process"
 msgstr "Ezin da prozesua amaitu"
 
-#: gtk/gtkmountoperation.c:1434
+#: gtk/gtkmountoperation.c:1432
 msgid "_End Process"
 msgstr "_Amaitu prozesua"
 
@@ -2633,7 +2036,7 @@ msgstr "Ezin da %d PID prozesua amaitu: %s"
 msgid "GTK could not find a media module. Check your installation."
 msgstr "GTK aplikazioak ezin izan da multimedia-modulurik aurkitu. Egiaztatu instalazioa."
 
-#: gtk/gtknotebook.c:4233 gtk/gtknotebook.c:6450
+#: gtk/gtknotebook.c:4223 gtk/gtknotebook.c:6431
 #, c-format
 msgid "Page %u"
 msgstr "%u. orrialdea"
@@ -2642,19 +2045,23 @@ msgstr "%u. orrialdea"
 msgid "Not a valid page setup file"
 msgstr "Ez da orria konfiguratzeko baliozko fitxategia"
 
-#: gtk/gtkpagesetupunixdialog.c:209 gtk/ui/gtkassistant.ui:96
+#: gtk/gtkpagesetupunixdialog.c:200 gtk/gtkprintunixdialog.c:712
+msgid "Manage Custom Sizes…"
+msgstr "Kudeatu tamaina pertsonalizatuak…"
+
+#: gtk/gtkpagesetupunixdialog.c:282 gtk/ui/gtkassistant.ui:98
 msgid "_Apply"
 msgstr "_Aplikatu"
 
-#: gtk/gtkpagesetupunixdialog.c:215
+#: gtk/gtkpagesetupunixdialog.c:316 gtk/gtkpagesetupunixdialog.c:567
 msgid "Any Printer"
 msgstr "Edozein inprimagailu"
 
-#: gtk/gtkpagesetupunixdialog.c:215
+#: gtk/gtkpagesetupunixdialog.c:317
 msgid "For portable documents"
 msgstr "Dokumentu eramangarrientzako"
 
-#: gtk/gtkpagesetupunixdialog.c:836
+#: gtk/gtkpagesetupunixdialog.c:722
 #, c-format
 msgid ""
 "Margins:\n"
@@ -2668,108 +2075,100 @@ msgstr "Marjinak\n"
 " Goian: %s %s\n"
 " Behean: %s %s"
 
-#: gtk/gtkpagesetupunixdialog.c:885 gtk/gtkprintunixdialog.c:3063
-msgid "Manage Custom Sizes…"
-msgstr "Kudeatu tamaina pertsonalizatuak…"
-
-#: gtk/gtkpagesetupunixdialog.c:905 gtk/ui/gtkpagesetupunixdialog.ui:22
-#: gtk/ui/gtkprintunixdialog.ui:753
+#: gtk/gtkpagesetupunixdialog.c:768 gtk/ui/gtkpagesetupunixdialog.ui:5
+#: gtk/ui/gtkprintunixdialog.ui:711
 msgid "Page Setup"
 msgstr "Orrialdearen konfigurazioa"
 
-#: gtk/gtkpasswordentry.c:136
+#: gtk/gtkpasswordentry.c:146
 msgid "Hide text"
 msgstr "Ezkutatu testua"
 
-#: gtk/gtkpasswordentry.c:141 gtk/gtkpasswordentry.c:489
+#: gtk/gtkpasswordentry.c:151 gtk/gtkpasswordentry.c:513
 msgid "Show text"
 msgstr "Erakutsi testua"
 
-#: gtk/gtkpasswordentry.c:160
+#: gtk/gtkpasswordentry.c:170
 msgid "Caps Lock is on"
 msgstr "Blok.maius. aktibatuta dago"
 
-#: gtk/gtkpasswordentry.c:564
+#: gtk/gtkpasswordentry.c:588
 msgid "_Show Text"
 msgstr "_Erakutsi testua"
 
-#: gtk/gtkpathbar.c:1043
-msgid "File System Root"
-msgstr "Erroko fitxategi-sistema"
-
 #. translators: %s is the name of a cloud provider for files
-#: gtk/gtkplacessidebar.c:929
+#: gtk/gtkplacessidebar.c:932
 #, c-format
 msgid "Open %s"
 msgstr "Ireki %s"
 
-#: gtk/gtkplacessidebar.c:1019
+#: gtk/gtkplacessidebar.c:1022
 msgid "Recent"
 msgstr "Duela gutxi erabilita"
 
-#: gtk/gtkplacessidebar.c:1021
+#: gtk/gtkplacessidebar.c:1024
 msgid "Recent files"
 msgstr "Azken fitxategiak"
 
-#: gtk/gtkplacessidebar.c:1030
+#: gtk/gtkplacessidebar.c:1033
 msgid "Starred"
 msgstr "Izarduna"
 
-#: gtk/gtkplacessidebar.c:1032
+#: gtk/gtkplacessidebar.c:1035
 msgid "Starred files"
 msgstr "Izardun fitxategiak"
 
-#: gtk/gtkplacessidebar.c:1043
+#: gtk/gtkplacessidebar.c:1046
 msgid "Open your personal folder"
 msgstr "Ireki zure karpeta pertsonala"
 
-#: gtk/gtkplacessidebar.c:1058
+#: gtk/gtkplacessidebar.c:1061
 msgid "Open the contents of your desktop in a folder"
 msgstr "Ireki mahaigaineko edukia karpeta batean"
 
-#: gtk/gtkplacessidebar.c:1072
+#: gtk/gtkplacessidebar.c:1075
 msgid "Enter Location"
 msgstr "Sartu kokalekua"
 
-#: gtk/gtkplacessidebar.c:1074
+#: gtk/gtkplacessidebar.c:1077
 msgid "Manually enter a location"
 msgstr "Sartu kokalekua eskuz"
 
-#: gtk/gtkplacessidebar.c:1084
+#: gtk/gtkplacessidebar.c:1087
 msgid "Trash"
 msgstr "Zakarrontzia"
 
-#: gtk/gtkplacessidebar.c:1086
+#: gtk/gtkplacessidebar.c:1089
 msgid "Open the trash"
 msgstr "Ireki zakarrontzia"
 
-#: gtk/gtkplacessidebar.c:1197 gtk/gtkplacessidebar.c:1225
-#: gtk/gtkplacessidebar.c:1425
+#: gtk/gtkplacessidebar.c:1200 gtk/gtkplacessidebar.c:1228
+#: gtk/gtkplacessidebar.c:1428
 #, c-format
 msgid "Mount and open “%s”"
 msgstr "Muntatu eta ireki '%s'"
 
-#: gtk/gtkplacessidebar.c:1320
+#: gtk/gtkplacessidebar.c:1323
 msgid "Open the contents of the file system"
 msgstr "Ireki fitxategi-sistemaren edukia"
 
-#: gtk/gtkplacessidebar.c:1403
+#: gtk/gtkplacessidebar.c:1406
 msgid "New bookmark"
 msgstr "Laster-marka berria"
 
-#: gtk/gtkplacessidebar.c:1405
+#: gtk/gtkplacessidebar.c:1408
 msgid "Add a new bookmark"
 msgstr "Gehitu laster-marka berria"
 
-#: gtk/gtkplacessidebar.c:1470
+#: gtk/gtkplacessidebar.c:1473
 msgid "Other Locations"
 msgstr "Beste kokalekuak"
 
-#: gtk/gtkplacessidebar.c:1471
+#: gtk/gtkplacessidebar.c:1474
 msgid "Show other locations"
 msgstr "Erakutsi beste kokalekuak"
 
-#: gtk/gtkplacessidebar.c:1968 gtk/gtkplacessidebar.c:2969
+#: gtk/gtkplacessidebar.c:1979 gtk/gtkplacessidebar.c:2980
 #, c-format
 msgid "Unable to start “%s”"
 msgstr "Ezin da “%s” abiatu"
@@ -2777,214 +2176,214 @@ msgstr "Ezin da “%s” abiatu"
 #. Translators: This means that unlocking an encrypted storage
 #. * device failed. %s is the name of the device.
 #.
-#: gtk/gtkplacessidebar.c:2004
+#: gtk/gtkplacessidebar.c:2015
 #, c-format
 msgid "Error unlocking “%s”"
 msgstr "Errorea “%s” desblokeatzean"
 
-#: gtk/gtkplacessidebar.c:2006
+#: gtk/gtkplacessidebar.c:2017
 #, c-format
 msgid "Unable to access “%s”"
 msgstr "Ezin da “%s” atzitu"
 
-#: gtk/gtkplacessidebar.c:2237
+#: gtk/gtkplacessidebar.c:2248
 msgid "This name is already taken"
 msgstr "Izen hori jadanik erabilita dago"
 
-#: gtk/gtkplacessidebar.c:2310 gtk/inspector/actions.ui:20
+#: gtk/gtkplacessidebar.c:2321 gtk/inspector/actions.ui:19
 #: gtk/inspector/css-node-tree.ui:35 gtk/inspector/prop-list.ui:23
-#: gtk/ui/gtkfilechooserwidget.ui:172 gtk/ui/gtkfilechooserwidget.ui:444
-#: gtk/ui/gtkprintunixdialog.ui:96
+#: gtk/ui/gtkfilechooserwidget.ui:167 gtk/ui/gtkfilechooserwidget.ui:439
+#: gtk/ui/gtkprintunixdialog.ui:85
 msgid "Name"
 msgstr "Izena"
 
-#: gtk/gtkplacessidebar.c:2510
+#: gtk/gtkplacessidebar.c:2521
 #, c-format
 msgid "Unable to unmount “%s”"
 msgstr "Ezin da '%s' desmuntatu"
 
-#: gtk/gtkplacessidebar.c:2686
+#: gtk/gtkplacessidebar.c:2697
 #, c-format
 msgid "Unable to stop “%s”"
 msgstr "Ezin da '%s' gelditu"
 
-#: gtk/gtkplacessidebar.c:2715
+#: gtk/gtkplacessidebar.c:2726
 #, c-format
 msgid "Unable to eject “%s”"
 msgstr "Ezin da “%s” egotzi"
 
-#: gtk/gtkplacessidebar.c:2744 gtk/gtkplacessidebar.c:2773
+#: gtk/gtkplacessidebar.c:2755 gtk/gtkplacessidebar.c:2784
 #, c-format
 msgid "Unable to eject %s"
 msgstr "Ezin da %s egotzi"
 
-#: gtk/gtkplacessidebar.c:2921
+#: gtk/gtkplacessidebar.c:2932
 #, c-format
 msgid "Unable to poll “%s” for media changes"
 msgstr "Ezin da euskarri aldakorren '%s' berreskuratu"
 
-#: gtk/gtkplacessidebar.c:3140 gtk/gtkplacessidebar.c:3227
-#: gtk/gtkplacesview.c:1650
+#: gtk/gtkplacessidebar.c:3151 gtk/gtkplacessidebar.c:3238
+#: gtk/gtkplacesview.c:1653
 msgid "Open in New _Tab"
 msgstr "Ireki _fitxa berrian"
 
-#: gtk/gtkplacessidebar.c:3146 gtk/gtkplacessidebar.c:3236
-#: gtk/gtkplacesview.c:1655
+#: gtk/gtkplacessidebar.c:3157 gtk/gtkplacessidebar.c:3247
+#: gtk/gtkplacesview.c:1658
 msgid "Open in New _Window"
 msgstr "Ireki _leiho berrian"
 
-#: gtk/gtkplacessidebar.c:3247
+#: gtk/gtkplacessidebar.c:3258
 msgid "_Add Bookmark"
 msgstr "_Gehitu laster-marka"
 
-#: gtk/gtkplacessidebar.c:3251
+#: gtk/gtkplacessidebar.c:3262
 msgid "_Remove"
 msgstr "_Kendu"
 
-#: gtk/gtkplacessidebar.c:3267 gtk/gtkplacesview.c:1680
+#: gtk/gtkplacessidebar.c:3278 gtk/gtkplacesview.c:1683
 msgid "_Mount"
 msgstr "_Muntatu"
 
-#: gtk/gtkplacessidebar.c:3276 gtk/gtkplacesview.c:1669
+#: gtk/gtkplacessidebar.c:3287 gtk/gtkplacesview.c:1672
 msgid "_Unmount"
 msgstr "_Desmuntatu"
 
-#: gtk/gtkplacessidebar.c:3283
+#: gtk/gtkplacessidebar.c:3294
 msgid "_Eject"
 msgstr "E_gotzi"
 
-#: gtk/gtkplacessidebar.c:3293
+#: gtk/gtkplacessidebar.c:3304
 msgid "_Detect Media"
 msgstr "_Detektatu euskarria"
 
-#: gtk/gtkplacessidebar.c:3302
+#: gtk/gtkplacessidebar.c:3313
 msgid "_Start"
 msgstr "_Hasi"
 
-#: gtk/gtkplacessidebar.c:3304
+#: gtk/gtkplacessidebar.c:3315
 msgid "_Power On"
 msgstr "_Itzali"
 
-#: gtk/gtkplacessidebar.c:3305
+#: gtk/gtkplacessidebar.c:3316
 msgid "_Connect Drive"
 msgstr "_Konektatu unitatea"
 
-#: gtk/gtkplacessidebar.c:3306
+#: gtk/gtkplacessidebar.c:3317
 msgid "_Start Multi-disk Device"
 msgstr "_Abiatu disko anitzeko gailua"
 
-#: gtk/gtkplacessidebar.c:3307
+#: gtk/gtkplacessidebar.c:3318
 msgid "_Unlock Device"
 msgstr "_Desblokeatu gailua"
 
-#: gtk/gtkplacessidebar.c:3317
+#: gtk/gtkplacessidebar.c:3328
 msgid "_Stop"
 msgstr "_Gelditu"
 
-#: gtk/gtkplacessidebar.c:3319
+#: gtk/gtkplacessidebar.c:3330
 msgid "_Safely Remove Drive"
 msgstr "_Kendu unitatea modu seguruan"
 
-#: gtk/gtkplacessidebar.c:3320
+#: gtk/gtkplacessidebar.c:3331
 msgid "_Disconnect Drive"
 msgstr "_Deskonektatu unitatea"
 
-#: gtk/gtkplacessidebar.c:3321
+#: gtk/gtkplacessidebar.c:3332
 msgid "_Stop Multi-disk Device"
 msgstr "_Gelditu disko anitzeko gailua"
 
-#: gtk/gtkplacessidebar.c:3322
+#: gtk/gtkplacessidebar.c:3333
 msgid "_Lock Device"
 msgstr "_Blokeatu gailua"
 
-#: gtk/gtkplacessidebar.c:3814 gtk/gtkplacesview.c:1102
+#: gtk/gtkplacessidebar.c:3821 gtk/gtkplacesview.c:1105
 msgid "Computer"
 msgstr "Ordenagailua"
 
-#: gtk/gtkplacesview.c:888
+#: gtk/gtkplacesview.c:891
 msgid "Searching for network locations"
 msgstr "Sareko kokalekuak bilatzen"
 
-#: gtk/gtkplacesview.c:895
+#: gtk/gtkplacesview.c:898
 msgid "No network locations found"
 msgstr "Ez da sareko kokalekurik aurkitu"
 
 #. if it wasn't cancelled show a dialog
-#: gtk/gtkplacesview.c:1209 gtk/gtkplacesview.c:1295
+#: gtk/gtkplacesview.c:1212 gtk/gtkplacesview.c:1298
 msgid "Unable to access location"
 msgstr "Ezin da kokalekua atzitu"
 
 #. Restore from Cancel to Connect
-#: gtk/gtkplacesview.c:1225 gtk/ui/gtkplacesview.ui:263
+#: gtk/gtkplacesview.c:1228 gtk/ui/gtkplacesview.ui:263
 msgid "Con_nect"
 msgstr "_Konektatu"
 
 #. if it wasn't cancelled show a dialog
-#: gtk/gtkplacesview.c:1354
+#: gtk/gtkplacesview.c:1357
 msgid "Unable to unmount volume"
 msgstr "Ezin da bolumena desmuntatu"
 
 #. Allow to cancel the operation
-#: gtk/gtkplacesview.c:1446
+#: gtk/gtkplacesview.c:1449
 msgid "Cance_l"
 msgstr "_Utzi"
 
-#: gtk/gtkplacesview.c:1593
+#: gtk/gtkplacesview.c:1596
 msgid "AppleTalk"
 msgstr "AppleTalk"
 
-#: gtk/gtkplacesview.c:1599
+#: gtk/gtkplacesview.c:1602
 msgid "File Transfer Protocol"
 msgstr "Fitxategi-transferentziako protokoloa (FTP)"
 
 #. Translators: do not translate ftp:// and ftps://
-#: gtk/gtkplacesview.c:1601
+#: gtk/gtkplacesview.c:1604
 msgid "ftp:// or ftps://"
 msgstr "ftp:// edo ftps://"
 
-#: gtk/gtkplacesview.c:1607
+#: gtk/gtkplacesview.c:1610
 msgid "Network File System"
 msgstr "Sareko fitxategi-sistema (NFS)"
 
-#: gtk/gtkplacesview.c:1613
+#: gtk/gtkplacesview.c:1616
 msgid "Samba"
 msgstr "Samba"
 
-#: gtk/gtkplacesview.c:1619
+#: gtk/gtkplacesview.c:1622
 msgid "SSH File Transfer Protocol"
 msgstr "SSH fitxategi-transferentziako protokoloa (FTPS)"
 
 #. Translators: do not translate sftp:// and ssh://
-#: gtk/gtkplacesview.c:1621
+#: gtk/gtkplacesview.c:1624
 msgid "sftp:// or ssh://"
 msgstr "sftp:// edo ssh://"
 
-#: gtk/gtkplacesview.c:1627
+#: gtk/gtkplacesview.c:1630
 msgid "WebDAV"
 msgstr "WebDAV"
 
 #. Translators: do not translate dav:// and davs://
-#: gtk/gtkplacesview.c:1629
+#: gtk/gtkplacesview.c:1632
 msgid "dav:// or davs://"
 msgstr "dav:// edo davs://"
 
-#: gtk/gtkplacesview.c:1664
+#: gtk/gtkplacesview.c:1667
 msgid "_Disconnect"
 msgstr "_Deskonektatu"
 
-#: gtk/gtkplacesview.c:1675
+#: gtk/gtkplacesview.c:1678
 msgid "_Connect"
 msgstr "_Konektatu"
 
-#: gtk/gtkplacesview.c:1859
+#: gtk/gtkplacesview.c:1862
 msgid "Unable to get remote server location"
 msgstr "Ezin da urruneko zerbitzariaren kokalekua lortu"
 
-#: gtk/gtkplacesview.c:2002 gtk/gtkplacesview.c:2011
+#: gtk/gtkplacesview.c:2005 gtk/gtkplacesview.c:2014
 msgid "Networks"
 msgstr "Sareak"
 
-#: gtk/gtkplacesview.c:2002 gtk/gtkplacesview.c:2011
+#: gtk/gtkplacesview.c:2005 gtk/gtkplacesview.c:2014
 msgid "On This Computer"
 msgstr "Ordenagailu honetan"
 
@@ -3004,7 +2403,7 @@ msgid "Disconnect"
 msgstr "Deskonektatu"
 
 #: gtk/gtkplacesviewrow.c:484 gtk/ui/gtkplacesviewrow.ui:54
-#: gtk/ui/gtksidebarrow.ui:52
+#: gtk/ui/gtksidebarrow.ui:50
 msgid "Unmount"
 msgstr "Desmuntatu"
 
@@ -3016,16 +2415,16 @@ msgstr "Autentifikazioa"
 msgid "_Remember password"
 msgstr "_Gogoratu pasahitza"
 
-#: gtk/gtkprinteroptionwidget.c:518
+#: gtk/gtkprinteroptionwidget.c:710
 msgid "Select a filename"
 msgstr "Hautatu fitxategia"
 
-#: gtk/gtkprinteroptionwidget.c:522 gtk/ui/gtkappchooserdialog.ui:50
+#: gtk/gtkprinteroptionwidget.c:714 gtk/ui/gtkappchooserdialog.ui:50
 #: gtk/ui/gtkcolorchooserdialog.ui:38 gtk/ui/gtkfontchooserdialog.ui:29
 msgid "_Select"
 msgstr "_Hautatu"
 
-#: gtk/gtkprinteroptionwidget.c:750
+#: gtk/gtkprinteroptionwidget.c:940
 msgid "Not available"
 msgstr "Ez dago erabilgarri"
 
@@ -3088,7 +2487,7 @@ msgstr "Errorearekin amaituta"
 msgid "Preparing %d"
 msgstr "%d prestatzen"
 
-#: gtk/gtkprintoperation.c:2243 gtk/gtkprintoperation.c:2861
+#: gtk/gtkprintoperation.c:2243 gtk/gtkprintoperation.c:2859
 #, c-format
 msgid "Preparing"
 msgstr "Prestatzen"
@@ -3098,24 +2497,24 @@ msgstr "Prestatzen"
 msgid "Printing %d"
 msgstr "%d inprimatzen"
 
-#: gtk/gtkprintoperation.c:2892
+#: gtk/gtkprintoperation.c:2890
 #, c-format
 msgid "Error creating print preview"
 msgstr "Errorea inprimatzeko aurrebista sortzean"
 
-#: gtk/gtkprintoperation.c:2895
+#: gtk/gtkprintoperation.c:2893
 #, c-format
 msgid "The most probable reason is that a temporary file could not be created."
 msgstr "Baliteke aldi baterako fitxategia ezin sortu izatea."
 
 #. window
-#: gtk/gtkprintoperation-portal.c:236 gtk/gtkprintoperation-portal.c:546
-#: gtk/gtkprintoperation-portal.c:615 gtk/gtkprintunixdialog.c:3083
+#: gtk/gtkprintoperation-portal.c:236 gtk/gtkprintoperation-portal.c:554
+#: gtk/gtkprintoperation-portal.c:623 gtk/gtkprintunixdialog.c:3033
 msgid "Print"
 msgstr "Inprimatu"
 
-#: gtk/gtkprintoperation-unix.c:479 gtk/gtkprintoperation-win32.c:1515
-#: gtk/inspector/prop-editor.c:1568
+#: gtk/gtkprintoperation-unix.c:479 gtk/gtkprintoperation-win32.c:1503
+#: gtk/inspector/prop-editor.c:1465
 msgid "Application"
 msgstr "Aplikazioa"
 
@@ -3129,7 +2528,7 @@ msgstr "Paperik ez"
 
 #. Translators: this is a printer status.
 #: gtk/gtkprintoperation-win32.c:638
-#: modules/printbackends/gtkprintbackendcups.c:2603
+#: modules/printbackends/gtkprintbackendcups.c:2605
 msgid "Paused"
 msgstr "Pausatuta"
 
@@ -3141,52 +2540,52 @@ msgstr "Erabiltzailearen laguntza behar da"
 msgid "Custom size"
 msgstr "Tamaina pertsonalizatua"
 
-#: gtk/gtkprintoperation-win32.c:1607
+#: gtk/gtkprintoperation-win32.c:1595
 msgid "No printer found"
 msgstr "Ez da inprimagailurik aurkitu"
 
-#: gtk/gtkprintoperation-win32.c:1634
+#: gtk/gtkprintoperation-win32.c:1622
 msgid "Invalid argument to CreateDC"
 msgstr "CreateDC-ren baliogabeko argumentua"
 
-#: gtk/gtkprintoperation-win32.c:1670 gtk/gtkprintoperation-win32.c:1916
+#: gtk/gtkprintoperation-win32.c:1658 gtk/gtkprintoperation-win32.c:1904
 msgid "Error from StartDoc"
 msgstr "Errorea StartDoc-etik"
 
-#: gtk/gtkprintoperation-win32.c:1771 gtk/gtkprintoperation-win32.c:1794
-#: gtk/gtkprintoperation-win32.c:1842
+#: gtk/gtkprintoperation-win32.c:1759 gtk/gtkprintoperation-win32.c:1782
+#: gtk/gtkprintoperation-win32.c:1830
 msgid "Not enough free memory"
 msgstr "Ez dago nahikoa memoria"
 
-#: gtk/gtkprintoperation-win32.c:1847
+#: gtk/gtkprintoperation-win32.c:1835
 msgid "Invalid argument to PrintDlgEx"
 msgstr "PrintDlgEx-en baliogabeko argumentua"
 
-#: gtk/gtkprintoperation-win32.c:1852
+#: gtk/gtkprintoperation-win32.c:1840
 msgid "Invalid pointer to PrintDlgEx"
 msgstr "PrintDlgEx-en baliogabeko erakuslea"
 
-#: gtk/gtkprintoperation-win32.c:1857
+#: gtk/gtkprintoperation-win32.c:1845
 msgid "Invalid handle to PrintDlgEx"
 msgstr "PrintDlgEx-en baliogabeko kudeatzailea"
 
-#: gtk/gtkprintoperation-win32.c:1862
+#: gtk/gtkprintoperation-win32.c:1850
 msgid "Unspecified error"
 msgstr "Zehaztu gabeko errorea"
 
-#: gtk/gtkprintunixdialog.c:733
+#: gtk/gtkprintunixdialog.c:781
 msgid "Pre_view"
 msgstr "_Aurrebista"
 
-#: gtk/gtkprintunixdialog.c:735
+#: gtk/gtkprintunixdialog.c:783
 msgid "_Print"
 msgstr "I_nprimatu"
 
-#: gtk/gtkprintunixdialog.c:857
+#: gtk/gtkprintunixdialog.c:911
 msgid "Getting printer information failed"
 msgstr "Huts egin du inprimagailuaren informazioa lortzean"
 
-#: gtk/gtkprintunixdialog.c:1854
+#: gtk/gtkprintunixdialog.c:1851
 msgid "Getting printer information…"
 msgstr "Inprimagailuaren informazioa lortzen…"
 
@@ -3196,67 +2595,67 @@ msgstr "Inprimagailuaren informazioa lortzen…"
 #. Translators: These strings name the possible arrangements of
 #. * multiple pages on a sheet when printing
 #.
-#: gtk/gtkprintunixdialog.c:2793
-#: modules/printbackends/gtkprintbackendcups.c:5460
+#: gtk/gtkprintunixdialog.c:2777
+#: modules/printbackends/gtkprintbackendcups.c:5463
 msgid "Left to right, top to bottom"
 msgstr "Ezkerretik eskuinera, goitik behera"
 
-#: gtk/gtkprintunixdialog.c:2793
-#: modules/printbackends/gtkprintbackendcups.c:5460
+#: gtk/gtkprintunixdialog.c:2777
+#: modules/printbackends/gtkprintbackendcups.c:5463
 msgid "Left to right, bottom to top"
 msgstr "Ezkerretik eskuinera, behetik gora"
 
-#: gtk/gtkprintunixdialog.c:2794
-#: modules/printbackends/gtkprintbackendcups.c:5461
+#: gtk/gtkprintunixdialog.c:2778
+#: modules/printbackends/gtkprintbackendcups.c:5464
 msgid "Right to left, top to bottom"
 msgstr "Eskuinetik ezkerrera, goitik behera"
 
-#: gtk/gtkprintunixdialog.c:2794
-#: modules/printbackends/gtkprintbackendcups.c:5461
+#: gtk/gtkprintunixdialog.c:2778
+#: modules/printbackends/gtkprintbackendcups.c:5464
 msgid "Right to left, bottom to top"
 msgstr "Eskuinetik ezkerrera, behetik gora"
 
-#: gtk/gtkprintunixdialog.c:2795
-#: modules/printbackends/gtkprintbackendcups.c:5462
+#: gtk/gtkprintunixdialog.c:2779
+#: modules/printbackends/gtkprintbackendcups.c:5465
 msgid "Top to bottom, left to right"
 msgstr "Goitik behera, ezkerretik eskuinera"
 
-#: gtk/gtkprintunixdialog.c:2795
-#: modules/printbackends/gtkprintbackendcups.c:5462
+#: gtk/gtkprintunixdialog.c:2779
+#: modules/printbackends/gtkprintbackendcups.c:5465
 msgid "Top to bottom, right to left"
 msgstr "Goitik behera, eskuinetik ezkerrera"
 
-#: gtk/gtkprintunixdialog.c:2796
-#: modules/printbackends/gtkprintbackendcups.c:5463
+#: gtk/gtkprintunixdialog.c:2780
+#: modules/printbackends/gtkprintbackendcups.c:5466
 msgid "Bottom to top, left to right"
 msgstr "Behetik gora, ezkerretik eskuinera"
 
-#: gtk/gtkprintunixdialog.c:2796
-#: modules/printbackends/gtkprintbackendcups.c:5463
+#: gtk/gtkprintunixdialog.c:2780
+#: modules/printbackends/gtkprintbackendcups.c:5466
 msgid "Bottom to top, right to left"
 msgstr "Behetik gora, eskuinetik ezkerrera"
 
-#: gtk/gtkprintunixdialog.c:2800 gtk/gtkprintunixdialog.c:2813
+#: gtk/gtkprintunixdialog.c:2784 gtk/gtkprintunixdialog.c:2797
 msgid "Page Ordering"
 msgstr "Orrialdeak ordenatzea"
 
-#: gtk/gtkprintunixdialog.c:2829
+#: gtk/gtkprintunixdialog.c:2813
 msgid "Left to right"
 msgstr "Ezkerretik eskuinera"
 
-#: gtk/gtkprintunixdialog.c:2830
+#: gtk/gtkprintunixdialog.c:2814
 msgid "Right to left"
 msgstr "Eskuinetik ezkerrera"
 
-#: gtk/gtkprintunixdialog.c:2842
+#: gtk/gtkprintunixdialog.c:2826
 msgid "Top to bottom"
 msgstr "Goitik behera"
 
-#: gtk/gtkprintunixdialog.c:2843
+#: gtk/gtkprintunixdialog.c:2827
 msgid "Bottom to top"
 msgstr "Behetik gora"
 
-#: gtk/gtkprogressbar.c:580
+#: gtk/gtkprogressbar.c:597
 #, c-format
 msgctxt "progress bar label"
 msgid "%.0f %%"
@@ -3274,12 +2673,12 @@ msgstr "Ezin izan da “%s” URIa duen elementua aurkitu"
 msgid "Unable to move the item with URI “%s” to “%s”"
 msgstr "Ezin da “%s” URIa duen elementua “%s”(e)ra eraman"
 
-#: gtk/gtkrecentmanager.c:2321
+#: gtk/gtkrecentmanager.c:2319
 #, c-format
 msgid "No registered application with name “%s” for item with URI “%s” found"
 msgstr "Ez da “%s” izenarekin erregistratutako aplikaziorik aurkitu “%s” URIa duen elementuarentzako"
 
-#: gtk/gtksearchentry.c:503
+#: gtk/gtksearchentry.c:528
 msgid "Clear entry"
 msgstr "Garbitu sarrera"
 
@@ -3340,55 +2739,51 @@ msgid "Swipe right"
 msgstr "Eskuinera igarotzea"
 
 #. Translators: This is the window title for the shortcuts window in normal mode
-#: gtk/gtkshortcutswindow.c:900 gtk/inspector/window.ui:457
+#: gtk/gtkshortcutswindow.c:898 gtk/inspector/window.ui:520
 msgid "Shortcuts"
 msgstr "Lasterbideak"
 
 #. Translators: This is the window title for the shortcuts window in search mode
-#: gtk/gtkshortcutswindow.c:905
+#: gtk/gtkshortcutswindow.c:903
 msgid "Search Results"
 msgstr "Bilaketaren emaitza"
 
 #. Translators: This is placeholder text for the search entry in the shortcuts window
-#: gtk/gtkshortcutswindow.c:935
+#: gtk/gtkshortcutswindow.c:933
 msgid "Search Shortcuts"
 msgstr "Bilaketaren lasterbideak"
 
-#: gtk/gtkshortcutswindow.c:994 gtk/ui/gtkemojichooser.ui:338
-#: gtk/ui/gtkfilechooserwidget.ui:301
+#: gtk/gtkshortcutswindow.c:992 gtk/ui/gtkemojichooser.ui:338
+#: gtk/ui/gtkfilechooserwidget.ui:296
 msgid "No Results Found"
 msgstr "Ez da emaitzarik aurkitu"
 
-#: gtk/gtkshortcutswindow.c:1000 gtk/ui/gtkemojichooser.ui:351
-#: gtk/ui/gtkfilechooserwidget.ui:314 gtk/ui/gtkplacesview.ui:231
+#: gtk/gtkshortcutswindow.c:998 gtk/ui/gtkemojichooser.ui:351
+#: gtk/ui/gtkfilechooserwidget.ui:309 gtk/ui/gtkplacesview.ui:231
 msgid "Try a different search"
 msgstr "Saiatu bestelako bilaketa"
 
-#: gtk/gtkshow.c:185
+#: gtk/gtkshow.c:177
 msgid "Could not show link"
 msgstr "Ezin izan da esteka erakutsi"
 
-#: gtk/gtktext.c:5946 gtk/gtktextview.c:8578
+#: gtk/gtktext.c:5983 gtk/gtktextview.c:8584
 msgid "Insert _Emoji"
 msgstr "Txertatu _emojia"
 
-#: gtk/gtktextview.c:8560
+#: gtk/gtktextview.c:8566
 msgid "_Undo"
 msgstr "_Desegin"
 
-#: gtk/gtktextview.c:8564
+#: gtk/gtktextview.c:8570
 msgid "_Redo"
 msgstr "_Berregin"
 
-#: gtk/gtkvolumebutton.c:195
-msgid "Adjusts the volume"
-msgstr "Bolumena doitzen du"
-
-#: gtk/gtkvolumebutton.c:233
+#: gtk/gtkvolumebutton.c:229
 msgid "Muted"
 msgstr "Mutututa"
 
-#: gtk/gtkvolumebutton.c:237
+#: gtk/gtkvolumebutton.c:233
 msgid "Full Volume"
 msgstr "Bolumen osoa"
 
@@ -3397,18 +2792,18 @@ msgstr "Bolumen osoa"
 #. * Translate the "%d" to "%Id" if you want to use localised digits,
 #. * or otherwise translate the "%d" to "%d".
 #.
-#: gtk/gtkvolumebutton.c:250
+#: gtk/gtkvolumebutton.c:246
 #, c-format
 msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%%%d"
 
-#: gtk/gtkwindow.c:6661
+#: gtk/gtkwindow.c:6637
 #, c-format
 msgid "Do you want to use GTK Inspector?"
 msgstr "Nahi duzu GTK ikuskatzailea erabili?"
 
-#: gtk/gtkwindow.c:6663
+#: gtk/gtkwindow.c:6639
 #, c-format
 msgid ""
 "GTK Inspector is an interactive debugger that lets you explore and modify "
@@ -3416,51 +2811,76 @@ msgid ""
 "break or crash."
 msgstr "GTK ikuskatzailea arazketa elkarreragile bat da, edozer GTk aplikazioren barnekoak arakatzea eta aldatzea baimentzen dizu. Hori erabiltzean aplikazioa hondatu edo kraskatu dezakezu."
 
-#: gtk/gtkwindow.c:6668
+#: gtk/gtkwindow.c:6644
 msgid "Don’t show this message again"
 msgstr "Ez erakutsi mezu hau berriro"
 
-#: gtk/gtkwindowcontrols.c:349 gtk/gtkwindowhandle.c:240
+#: gtk/gtkwindowhandle.c:221
+msgid "Restore"
+msgstr "Leheneratu"
+
+#: gtk/gtkwindowhandle.c:228
+msgid "Minimize"
+msgstr "Minimizatu"
+
+#: gtk/gtkwindowhandle.c:234
+msgid "Maximize"
+msgstr "Maximizatu"
+
+#: gtk/gtkwindowhandle.c:244
 msgid "Close"
 msgstr "Itxi"
 
-#: gtk/inspector/action-editor.c:292
+#: gtk/inspector/a11y.ui:16
+msgid "Role"
+msgstr "Funtzioa"
+
+#: gtk/inspector/a11y.ui:42
+msgid "Attribute"
+msgstr "Atributua"
+
+#: gtk/inspector/a11y.ui:54 gtk/inspector/css-node-tree.ui:119
+#: gtk/inspector/prop-list.ui:56 gtk/inspector/recorder.ui:115
+msgid "Value"
+msgstr "Balioa"
+
+#: gtk/inspector/action-editor.c:316
 msgid "Activate"
 msgstr "Aktibatu"
 
-#: gtk/inspector/action-editor.c:312
+#: gtk/inspector/action-editor.c:335
 msgid "Set State"
 msgstr "Ezarri egoera"
 
-#: gtk/inspector/actions.ui:31
+#: gtk/inspector/actions.ui:30
 msgid "Enabled"
 msgstr "Gaituta"
 
-#: gtk/inspector/actions.ui:42
+#: gtk/inspector/actions.ui:41
 msgid "Parameter Type"
 msgstr "Parametro mota"
 
-#: gtk/inspector/actions.ui:53 gtk/inspector/css-node-tree.ui:74
+#: gtk/inspector/actions.ui:52 gtk/inspector/css-node-tree.ui:74
 #: gtk/inspector/misc-info.ui:121
 msgid "State"
 msgstr "Egoera"
 
-#: gtk/inspector/controllers.c:147
+#: gtk/inspector/controllers.c:145
 msgctxt "event phase"
 msgid "None"
 msgstr "Bat ere ez"
 
-#: gtk/inspector/controllers.c:148
+#: gtk/inspector/controllers.c:146
 msgctxt "event phase"
 msgid "Capture"
 msgstr "Kapturatu"
 
-#: gtk/inspector/controllers.c:149
+#: gtk/inspector/controllers.c:147
 msgctxt "event phase"
 msgid "Bubble"
 msgstr "Burbuila"
 
-#: gtk/inspector/controllers.c:150
+#: gtk/inspector/controllers.c:148
 msgctxt "event phase"
 msgid "Target"
 msgstr "Helburua"
@@ -3504,88 +2924,79 @@ msgstr "Estiloaren klaseak"
 msgid "CSS Property"
 msgstr "CSSren propietatea"
 
-#: gtk/inspector/css-node-tree.ui:119 gtk/inspector/prop-list.ui:56
-#: gtk/inspector/recorder.ui:115 gtk/ui/gtkcoloreditor.ui:270
-msgid "Value"
-msgstr "Balioa"
-
-#: gtk/inspector/data-list.ui:14
-msgid "Show data"
-msgstr "Erakutsi datuak"
-
-#: gtk/inspector/general.c:348
+#: gtk/inspector/general.c:355
 msgctxt "GL version"
 msgid "None"
 msgstr "Bat ere ez"
 
-#: gtk/inspector/general.c:349
+#: gtk/inspector/general.c:356
 msgctxt "GL vendor"
 msgid "None"
 msgstr "Bat ere ez"
 
-#: gtk/inspector/general.c:450
+#: gtk/inspector/general.c:457
 msgctxt "Vulkan device"
 msgid "None"
 msgstr "Bat ere ez"
 
-#: gtk/inspector/general.c:451 gtk/inspector/general.c:452
+#: gtk/inspector/general.c:458 gtk/inspector/general.c:459
 msgctxt "Vulkan version"
 msgid "None"
 msgstr "Bat ere ez"
 
-#: gtk/inspector/general.ui:33
+#: gtk/inspector/general.ui:36
 msgid "GTK Version"
 msgstr "GTK bertsioa"
 
-#: gtk/inspector/general.ui:63
+#: gtk/inspector/general.ui:66
 msgid "GDK Backend"
 msgstr "GDK motorra"
 
-#: gtk/inspector/general.ui:93
+#: gtk/inspector/general.ui:96
 msgid "GSK Renderer"
 msgstr "GSK errendatzailea"
 
-#: gtk/inspector/general.ui:123
+#: gtk/inspector/general.ui:126
 msgid "Pango Fontmap"
 msgstr "Pango Fontmap"
 
-#: gtk/inspector/general.ui:153
+#: gtk/inspector/general.ui:156
 msgid "Media Backend"
 msgstr "Multimedia-motorra"
 
-#: gtk/inspector/general.ui:193 gtk/ui/gtkplacesview.ui:80
+#: gtk/inspector/general.ui:199 gtk/ui/gtkplacesview.ui:80
 msgid "Prefix"
 msgstr "Aurrizkia"
 
-#: gtk/inspector/general.ui:420
+#: gtk/inspector/general.ui:429
 msgid "Display"
 msgstr "Pantaila"
 
-#: gtk/inspector/general.ui:451
+#: gtk/inspector/general.ui:460
 msgid "RGBA Visual"
 msgstr "RGBA bisuala"
 
-#: gtk/inspector/general.ui:481
+#: gtk/inspector/general.ui:490
 msgid "Composited"
 msgstr "Konposatua"
 
-#: gtk/inspector/general.ui:531
+#: gtk/inspector/general.ui:546
 msgid "GL Version"
 msgstr "GL bertsioa"
 
-#: gtk/inspector/general.ui:562
+#: gtk/inspector/general.ui:577
 msgid "GL Vendor"
 msgstr "GL hornitzailea"
 
-#: gtk/inspector/general.ui:603
+#: gtk/inspector/general.ui:621
 msgid "Vulkan Device"
 msgstr "Vulkan gailua"
 
-#: gtk/inspector/general.ui:634
+#: gtk/inspector/general.ui:652
 msgid "Vulkan API version"
 msgstr "Vulkan API bertsioa"
 
-#: gtk/inspector/general.ui:665
+#: gtk/inspector/general.ui:683
 msgid "Vulkan driver version"
 msgstr "Vulkan kontrolagailuaren bertsioa"
 
@@ -3614,7 +3025,7 @@ msgid "Address"
 msgstr "Helbidea"
 
 #: gtk/inspector/misc-info.ui:62 gtk/inspector/prop-list.ui:34
-#: gtk/inspector/statistics.ui:46 gtk/ui/gtkfilechooserwidget.ui:218
+#: gtk/inspector/statistics.ui:46 gtk/ui/gtkfilechooserwidget.ui:213
 msgid "Type"
 msgstr "Mota"
 
@@ -3647,9 +3058,8 @@ msgid "Surface"
 msgstr "Gainazala"
 
 #: gtk/inspector/misc-info.ui:316 gtk/inspector/misc-info.ui:355
-#: gtk/inspector/misc-info.ui:394 gtk/inspector/prop-editor.c:791
-#: gtk/inspector/prop-editor.c:1046 gtk/inspector/prop-editor.c:1392
-#: gtk/inspector/window.ui:362
+#: gtk/inspector/misc-info.ui:394 gtk/inspector/prop-editor.c:1039
+#: gtk/inspector/prop-editor.c:1396 gtk/inspector/window.ui:418
 msgid "Properties"
 msgstr "Propietateak"
 
@@ -3674,85 +3084,90 @@ msgid "Frame Rate"
 msgstr "Fotograma-emaria"
 
 #: gtk/inspector/misc-info.ui:502
-msgid "Accessible Role"
-msgstr "Egiteko erabilgarria"
-
-#: gtk/inspector/misc-info.ui:531
-msgid "Accessible Name"
-msgstr "Izen erraza"
-
-#: gtk/inspector/misc-info.ui:562
-msgid "Accessible Description"
-msgstr "Deskribapen erraza"
-
-#: gtk/inspector/misc-info.ui:593
 msgid "Mapped"
 msgstr "Mapatuta"
 
-#: gtk/inspector/misc-info.ui:623
+#: gtk/inspector/misc-info.ui:532
 msgid "Realized"
 msgstr "Osatuta"
 
-#: gtk/inspector/misc-info.ui:653
+#: gtk/inspector/misc-info.ui:562
 msgid "Is Toplevel"
 msgstr "Goi-mailakoa da"
 
-#: gtk/inspector/misc-info.ui:683
+#: gtk/inspector/misc-info.ui:592
 msgid "Child Visible"
 msgstr "Umea ikusgai"
 
-#: gtk/inspector/prop-editor.c:657
+#: gtk/inspector/prop-editor.c:656
 #, c-format
 msgid "Pointer: %p"
 msgstr "Erakuslea: %p"
 
-#: gtk/inspector/prop-editor.c:1103
+#: gtk/inspector/prop-editor.c:785
+#, c-format
+msgid "%s with value \"%s\""
+msgstr "%s honako balioarekin: \"%s\""
+
+#: gtk/inspector/prop-editor.c:793
+#, c-format
+msgid "%s with type %s"
+msgstr "%s honako motarekin: %s"
+
+#: gtk/inspector/prop-editor.c:803
+#, c-format
+msgid "%s for %s %p"
+msgstr "%s honetarako: %s %p"
+
+#: gtk/inspector/prop-editor.c:807
+#, c-format
+msgid "%s"
+msgstr "%s"
+
+#: gtk/inspector/prop-editor.c:827
+#, c-format
+msgid "%s with value type %s"
+msgstr "%s honeko balio motarekin: %s"
+
+#: gtk/inspector/prop-editor.c:1107
 #, c-format
 msgid "Uneditable property type: %s"
 msgstr "Propietate mota ez-editagarria: %s"
 
-#: gtk/inspector/prop-editor.c:1247
+#: gtk/inspector/prop-editor.c:1251
 msgid "None"
 msgstr "Bat ere ez"
 
-#: gtk/inspector/prop-editor.c:1284
+#: gtk/inspector/prop-editor.c:1288
 msgid "Attribute:"
 msgstr "Atributua:"
 
-#: gtk/inspector/prop-editor.c:1287
+#: gtk/inspector/prop-editor.c:1291
 msgid "Model"
 msgstr "Modeloa"
 
-#: gtk/inspector/prop-editor.c:1292
+#: gtk/inspector/prop-editor.c:1296
 msgid "Column:"
 msgstr "Zutabea:"
 
-#: gtk/inspector/prop-editor.c:1388
+#: gtk/inspector/prop-editor.c:1392
 #, c-format
 msgid "Action from: %p (%s)"
 msgstr "Ekintza hemendik: %p (%s)"
 
-#: gtk/inspector/prop-editor.c:1491
-msgid "bidirectional"
-msgstr "bidirekzionala"
-
-#: gtk/inspector/prop-editor.c:1510
-msgid "Setting:"
-msgstr "Ezarpena:"
-
-#: gtk/inspector/prop-editor.c:1550
+#: gtk/inspector/prop-editor.c:1447
 msgid "Reset"
 msgstr "Berrezarri"
 
-#: gtk/inspector/prop-editor.c:1561
+#: gtk/inspector/prop-editor.c:1458
 msgid "Theme"
 msgstr "Gaia"
 
-#: gtk/inspector/prop-editor.c:1564
+#: gtk/inspector/prop-editor.c:1461
 msgid "XSettings"
 msgstr "XSettings"
 
-#: gtk/inspector/prop-editor.c:1574
+#: gtk/inspector/prop-editor.c:1471
 msgid "Source:"
 msgstr "Iturburua:"
 
@@ -3760,7 +3175,7 @@ msgstr "Iturburua:"
 msgid "Defined At"
 msgstr "Hemen definituta"
 
-#: gtk/inspector/recorder.c:977
+#: gtk/inspector/recorder.c:981
 #, c-format
 msgid "Saving RenderNode failed"
 msgstr "Huts gin du RenderNode gordetzean"
@@ -3785,28 +3200,28 @@ msgstr "Gorde hautatutako nodoa"
 msgid "Property"
 msgstr "Propietatea"
 
-#: gtk/inspector/resource-list.ui:64
+#: gtk/inspector/resource-list.ui:59
 msgid "Path"
 msgstr "Bide-izena"
 
-#: gtk/inspector/resource-list.ui:76
+#: gtk/inspector/resource-list.ui:71
 msgid "Count"
 msgstr "Kopurua"
 
-#: gtk/inspector/resource-list.ui:87 gtk/ui/gtkfilechooserwidget.ui:206
+#: gtk/inspector/resource-list.ui:82 gtk/ui/gtkfilechooserwidget.ui:201
 #: gtk/ui/gtkfontchooserwidget.ui:142 gtk/ui/gtkfontchooserwidget.ui:290
 msgid "Size"
 msgstr "Tamaina"
 
-#: gtk/inspector/resource-list.ui:126
+#: gtk/inspector/resource-list.ui:121
 msgid "Name:"
 msgstr "Izena:"
 
-#: gtk/inspector/resource-list.ui:148
+#: gtk/inspector/resource-list.ui:143
 msgid "Type:"
 msgstr "Mota:"
 
-#: gtk/inspector/resource-list.ui:169
+#: gtk/inspector/resource-list.ui:164
 msgid "Size:"
 msgstr "Tamaina:"
 
@@ -3814,31 +3229,31 @@ msgstr "Tamaina:"
 msgid "Trigger"
 msgstr "Abiarazlea"
 
-#: gtk/inspector/size-groups.c:225
+#: gtk/inspector/size-groups.c:226
 msgctxt "sizegroup mode"
 msgid "None"
 msgstr "Bat ere ez"
 
-#: gtk/inspector/size-groups.c:226
+#: gtk/inspector/size-groups.c:227
 msgctxt "sizegroup mode"
 msgid "Horizontal"
 msgstr "Horizontala"
 
-#: gtk/inspector/size-groups.c:227
+#: gtk/inspector/size-groups.c:228
 msgctxt "sizegroup mode"
 msgid "Vertical"
 msgstr "Bertikala"
 
-#: gtk/inspector/size-groups.c:228
+#: gtk/inspector/size-groups.c:229
 msgctxt "sizegroup mode"
 msgid "Both"
 msgstr "Biak"
 
-#: gtk/inspector/size-groups.c:240
+#: gtk/inspector/size-groups.c:241
 msgid "Mode"
 msgstr "Modua"
 
-#: gtk/inspector/statistics.c:399
+#: gtk/inspector/statistics.c:400
 msgid "GLib must be configured with -Dbuildtype=debug"
 msgstr "GLib -Dbuildtype=debug aukerarekin konfiguratu behar da"
 
@@ -3870,6 +3285,10 @@ msgstr "Metakorra"
 msgid "Enable statistics with GOBJECT_DEBUG=instance-count"
 msgstr "Gaitu estatistikak honekin: GOBJECT_DEBUG=instance-count"
 
+#: gtk/inspector/tree-data.ui:13
+msgid "Show data"
+msgstr "Erakutsi datuak"
+
 #: gtk/inspector/type-info.ui:14
 msgid "Hierarchy"
 msgstr "Hierarkia"
@@ -3878,19 +3297,19 @@ msgstr "Hierarkia"
 msgid "Implements"
 msgstr "Inplementatzen du"
 
-#: gtk/inspector/visual.c:613 gtk/inspector/visual.c:632
+#: gtk/inspector/visual.c:602 gtk/inspector/visual.c:621
 msgid "Theme is hardcoded by GTK_THEME"
 msgstr "Gaia GTK_THEME-k kodean txertatuta dago"
 
-#: gtk/inspector/visual.c:846
+#: gtk/inspector/visual.c:833
 msgid "Backend does not support window scaling"
 msgstr "Motorrak ez du leihoa eskalatzea onartzen"
 
-#: gtk/inspector/visual.c:944
+#: gtk/inspector/visual.c:931
 msgid "Setting is hardcoded by GTK_TEST_TOUCHSCREEN"
 msgstr "Ezarpena GTK_TEST_TOUCHSCREEN-ek kodean txertatuta dago"
 
-#: gtk/inspector/visual.c:1052
+#: gtk/inspector/visual.c:1034
 msgid "GL rendering is disabled"
 msgstr "GL errendatzea desgaituta dago"
 
@@ -3922,151 +3341,179 @@ msgstr "Letra-tipoaren eskala"
 msgid "Text Direction"
 msgstr "Testuaren norabidea"
 
-#: gtk/inspector/visual.ui:294
+#: gtk/inspector/visual.ui:296
 msgid "Left-to-Right"
 msgstr "Ezkerretik eskuinera"
 
-#: gtk/inspector/visual.ui:295
+#: gtk/inspector/visual.ui:297
 msgid "Right-to-Left"
 msgstr "Eskuinetik ezkerrera"
 
-#: gtk/inspector/visual.ui:315
+#: gtk/inspector/visual.ui:319
 msgid "Window Scaling"
 msgstr "Leihoa eskalatzea"
 
-#: gtk/inspector/visual.ui:345
+#: gtk/inspector/visual.ui:349
 msgid "Animations"
 msgstr "Animazioak"
 
-#: gtk/inspector/visual.ui:374
+#: gtk/inspector/visual.ui:378
 msgid "Slowdown"
 msgstr "Geldotu"
 
-#: gtk/inspector/visual.ui:425
+#: gtk/inspector/visual.ui:432
 msgid "Show fps overlay"
 msgstr "Erakutsi FPS gainjartzea"
 
-#: gtk/inspector/visual.ui:454
+#: gtk/inspector/visual.ui:461
 msgid "Show Graphic Updates"
 msgstr "Erakutsi eguneraketa grafikoak"
 
-#: gtk/inspector/visual.ui:483
+#: gtk/inspector/visual.ui:490
 msgid "Show Fallback Rendering"
 msgstr "Erakutsi ordezko errendatzea"
 
-#: gtk/inspector/visual.ui:512
+#: gtk/inspector/visual.ui:519
 msgid "Show Baselines"
 msgstr "Erakutsi oinarri-lerroak"
 
-#: gtk/inspector/visual.ui:541
+#: gtk/inspector/visual.ui:548
 msgid "Show Layout Borders"
 msgstr "Erakutsi diseinuaren ertzak"
 
-#: gtk/inspector/visual.ui:570
-msgid "Show Widget Resizes"
-msgstr "Erakutsi trepetaren tamaina-aldaketak"
-
-#: gtk/inspector/visual.ui:599
+#: gtk/inspector/visual.ui:577
 msgid "Show Focus"
 msgstr "Erakutsi fokua"
 
-#: gtk/inspector/visual.ui:639
+#: gtk/inspector/visual.ui:620
 msgid "Simulate Touchscreen"
 msgstr "Simulatu ukipen pantaila"
 
-#: gtk/inspector/visual.ui:667
+#: gtk/inspector/visual.ui:648
 msgid "Software GL"
 msgstr "Software bidezko GL"
 
-#: gtk/inspector/window.ui:28
+#: gtk/inspector/window.ui:30
 msgid "Select an Object"
 msgstr "Hautatu objektua"
 
-#: gtk/inspector/window.ui:43 gtk/inspector/window.ui:108
+#: gtk/inspector/window.ui:45 gtk/inspector/window.ui:110
 msgid "Show Details"
 msgstr "Erakutsi xehetasunak"
 
-#: gtk/inspector/window.ui:58
+#: gtk/inspector/window.ui:60
 msgid "Show all Objects"
 msgstr "Erakutsi objektu guztiak"
 
-#: gtk/inspector/window.ui:122
+#: gtk/inspector/window.ui:124
 msgid "Show all Resources"
 msgstr "Erakutsi baliabide guztiak"
 
-#: gtk/inspector/window.ui:140
+#: gtk/inspector/window.ui:142
 msgid "Collect Statistics"
 msgstr "Bildu estatistikak"
 
-#: gtk/inspector/window.ui:192
+#: gtk/inspector/window.ui:194
 msgid "Objects"
 msgstr "Objektuak"
 
-#: gtk/inspector/window.ui:232
+#: gtk/inspector/window.ui:223
 msgid "Toggle Sidebar"
 msgstr "Txandakatu alboko barra"
 
-#: gtk/inspector/window.ui:265
+#: gtk/inspector/window.ui:255
 msgid "Refresh action state"
 msgstr "Freskatu ekintza-egoera"
 
-#: gtk/inspector/window.ui:351
+#: gtk/inspector/window.ui:340
+msgid "Previous object"
+msgstr "Aurreko objektua"
+
+#: gtk/inspector/window.ui:350
+msgid "Child object"
+msgstr "Objektu haurra"
+
+#: gtk/inspector/window.ui:360
+msgid "Previous sibling"
+msgstr "Aurreko anaia"
+
+#: gtk/inspector/window.ui:369
+msgid "List Position"
+msgstr "Zerrendako posizioa"
+
+#: gtk/inspector/window.ui:375
+msgid "Next sibling"
+msgstr "Hurrengo anaia"
+
+#: gtk/inspector/window.ui:408
 msgid "Miscellaneous"
 msgstr "Bestelakoak"
 
-#: gtk/inspector/window.ui:374 gtk/ui/gtkprintunixdialog.ui:425
+#: gtk/inspector/window.ui:429 gtk/ui/gtkprintunixdialog.ui:395
 msgid "Layout"
 msgstr "Diseinua"
 
-#: gtk/inspector/window.ui:386
+#: gtk/inspector/window.ui:440
 msgid "CSS Nodes"
 msgstr "CSS nodoak"
 
-#: gtk/inspector/window.ui:397
+#: gtk/inspector/window.ui:451
 msgid "Size Groups"
 msgstr "Taldeen tamaina"
 
-#: gtk/inspector/window.ui:406
+#: gtk/inspector/window.ui:460 gtk/inspector/window.ui:469
 msgid "Data"
 msgstr "Datuak"
 
-#: gtk/inspector/window.ui:415
+#: gtk/inspector/window.ui:479
 msgid "Actions"
 msgstr "Ekintzak"
 
-#: gtk/inspector/window.ui:435
+#: gtk/inspector/window.ui:490
+msgid "Menu"
+msgstr "Menua"
+
+#: gtk/inspector/window.ui:499
 msgid "Controllers"
 msgstr "Kontrolatzaileak"
 
-#: gtk/inspector/window.ui:446
+#: gtk/inspector/window.ui:509
 msgid "Magnifier"
 msgstr "Lupa"
 
-#: gtk/inspector/window.ui:479
+#: gtk/inspector/window.ui:530
+msgid "Accessibility"
+msgstr "Erabilerraztasuna"
+
+#: gtk/inspector/window.ui:554
 msgid "Global"
 msgstr "Globala"
 
-#: gtk/inspector/window.ui:501
+#: gtk/inspector/window.ui:567
+msgid "Information"
+msgstr "Informazioa"
+
+#: gtk/inspector/window.ui:576
 msgid "Settings"
 msgstr "Ezarpenak"
 
-#: gtk/inspector/window.ui:510
+#: gtk/inspector/window.ui:585
 msgid "Resources"
 msgstr "Baliabideak"
 
-#: gtk/inspector/window.ui:521
+#: gtk/inspector/window.ui:596
 msgid "Statistics"
 msgstr "Estatistikak"
 
-#: gtk/inspector/window.ui:532
+#: gtk/inspector/window.ui:607
 msgid "Logging"
 msgstr "Egunkaria"
 
-#: gtk/inspector/window.ui:547
+#: gtk/inspector/window.ui:622
 msgid "CSS"
 msgstr "CSSa"
 
-#: gtk/inspector/window.ui:556
+#: gtk/inspector/window.ui:631
 msgid "Recorder"
 msgstr "Grabagailua"
 
@@ -6454,32 +5901,32 @@ msgstr "%s:%d: Ezin izan da '%s' propietatearen balioa analizatu: %s\n"
 msgid "%s:%d: %sproperty %s::%s not found\n"
 msgstr "%s:%d: %spropietatea %s::%s ez da aurkitu\n"
 
-#: gtk/tools/gtk-builder-tool-simplify.c:1884
+#: gtk/tools/gtk-builder-tool-simplify.c:2046
 #, c-format
 msgid "Can’t load “%s”: %s\n"
 msgstr "Ezin da “%s” kargatu: %s\n"
 
-#: gtk/tools/gtk-builder-tool-simplify.c:1895
+#: gtk/tools/gtk-builder-tool-simplify.c:2057
 #, c-format
 msgid "Can’t parse “%s”: %s\n"
 msgstr "Ezin da “%s” analizatu: %s\n"
 
-#: gtk/tools/gtk-builder-tool-simplify.c:1919
+#: gtk/tools/gtk-builder-tool-simplify.c:2081
 #, c-format
 msgid "Failed to read “%s”: %s\n"
 msgstr "Huts egin du “%s” irakurtzeak: %s\n"
 
-#: gtk/tools/gtk-builder-tool-simplify.c:1925
+#: gtk/tools/gtk-builder-tool-simplify.c:2087
 #, c-format
 msgid "Failed to write %s: “%s”\n"
 msgstr "Huts egin du %s idazteak: “%s”\n"
 
-#: gtk/tools/gtk-builder-tool-simplify.c:1965
+#: gtk/tools/gtk-builder-tool-simplify.c:2127
 #, c-format
 msgid "No .ui file specified\n"
 msgstr "Ez da .ui fitxategirik zehaztu\n"
 
-#: gtk/tools/gtk-builder-tool-simplify.c:1971
+#: gtk/tools/gtk-builder-tool-simplify.c:2133
 #, c-format
 msgid "Can only simplify a single .ui file without --replace\n"
 msgstr ".ui fitxategi bakarra sinplifikatu daiteke --replace erabili gabe\n"
@@ -6646,15 +6093,15 @@ msgid ""
 msgstr "Ez dago gaiaren indize fitxategirik “%s”(e)n.\n"
 "Ikono-cache bat sortzea nahi baduzu erabili --ignore-theme-index.\n"
 
-#: gtk/ui/gtkaboutdialog.ui:59
+#: gtk/ui/gtkaboutdialog.ui:58
 msgid "About"
 msgstr "Honi buruz"
 
-#: gtk/ui/gtkaboutdialog.ui:120
+#: gtk/ui/gtkaboutdialog.ui:119
 msgid "Credits"
 msgstr "Kredituak"
 
-#: gtk/ui/gtkaboutdialog.ui:203
+#: gtk/ui/gtkaboutdialog.ui:202
 msgid "System"
 msgstr "Sistema"
 
@@ -6696,15 +6143,15 @@ msgstr "Erakutsi denak"
 msgid "Quit %s"
 msgstr "Irten '%s'(e)tik"
 
-#: gtk/ui/gtkassistant.ui:62
+#: gtk/ui/gtkassistant.ui:64
 msgid "_Finish"
 msgstr "_Amaituta"
 
-#: gtk/ui/gtkassistant.ui:73
+#: gtk/ui/gtkassistant.ui:75
 msgid "_Back"
 msgstr "At_zera"
 
-#: gtk/ui/gtkassistant.ui:84
+#: gtk/ui/gtkassistant.ui:86
 msgid "_Next"
 msgstr "_Hurrengoa"
 
@@ -6716,43 +6163,27 @@ msgstr "Hautatu kolorea"
 msgid "Pick a color from the screen"
 msgstr "Aukeratu kolorea pantailatik"
 
-#: gtk/ui/gtkcoloreditor.ui:71
-msgid "Color Name"
-msgstr "Kolorearen izena"
-
-#: gtk/ui/gtkcoloreditor.ui:148
+#: gtk/ui/gtkcoloreditor.ui:143
 msgctxt "Color channel"
 msgid "A"
 msgstr "A"
 
-#: gtk/ui/gtkcoloreditor.ui:162
-msgid "Alpha"
-msgstr "Alfa"
-
-#: gtk/ui/gtkcoloreditor.ui:189
+#: gtk/ui/gtkcoloreditor.ui:179
 msgctxt "Color channel"
 msgid "H"
 msgstr "H"
 
-#: gtk/ui/gtkcoloreditor.ui:203
-msgid "Hue"
-msgstr "Ñabardura"
-
-#: gtk/ui/gtkcoloreditor.ui:231
+#: gtk/ui/gtkcoloreditor.ui:216
 msgctxt "Color Channel"
 msgid "S"
 msgstr "S"
 
-#: gtk/ui/gtkcoloreditor.ui:240
+#: gtk/ui/gtkcoloreditor.ui:225
 msgctxt "Color Channel"
 msgid "V"
 msgstr "V"
 
-#: gtk/ui/gtkcoloreditor.ui:254
-msgid "Saturation"
-msgstr "Saturazioa"
-
-#: gtk/ui/gtkdropdown.ui:57
+#: gtk/ui/gtkdropdown.ui:62
 msgid "Search…"
 msgstr "Bilatu…"
 
@@ -6810,19 +6241,15 @@ msgstr "Duela gutxi erabilita"
 msgid "Create Folder"
 msgstr "Sortu karpeta"
 
-#: gtk/ui/gtkfilechooserwidget.ui:147
-msgid "Files"
-msgstr "Fitxategiak"
-
-#: gtk/ui/gtkfilechooserwidget.ui:253
+#: gtk/ui/gtkfilechooserwidget.ui:248
 msgid "Remote location — only searching the current folder"
 msgstr "Urruneko kokalekua — soilik uneko karpeta bilatzen"
 
-#: gtk/ui/gtkfilechooserwidget.ui:382
+#: gtk/ui/gtkfilechooserwidget.ui:377
 msgid "Folder Name"
 msgstr "Karpetaren izena"
 
-#: gtk/ui/gtkfilechooserwidget.ui:408
+#: gtk/ui/gtkfilechooserwidget.ui:403
 msgid "_Create"
 msgstr "_Sortu"
 
@@ -6846,31 +6273,31 @@ msgstr "horizontala"
 msgid "No Fonts Found"
 msgstr "Ez da letra-tiporik aurkitu"
 
-#: gtk/ui/gtkpagesetupunixdialog.ui:44
+#: gtk/ui/gtkpagesetupunixdialog.ui:27
 msgid "_Format for:"
 msgstr "_Formatua:"
 
-#: gtk/ui/gtkpagesetupunixdialog.ui:75 gtk/ui/gtkprintunixdialog.ui:674
+#: gtk/ui/gtkpagesetupunixdialog.ui:51 gtk/ui/gtkprintunixdialog.ui:637
 msgid "_Paper size:"
 msgstr "_Paper-tamaina:"
 
-#: gtk/ui/gtkpagesetupunixdialog.ui:114
+#: gtk/ui/gtkpagesetupunixdialog.ui:86
 msgid "_Orientation:"
 msgstr "_Orientazioa:"
 
-#: gtk/ui/gtkpagesetupunixdialog.ui:137 gtk/ui/gtkprintunixdialog.ui:718
+#: gtk/ui/gtkpagesetupunixdialog.ui:109 gtk/ui/gtkprintunixdialog.ui:677
 msgid "Portrait"
 msgstr "Bertikala"
 
-#: gtk/ui/gtkpagesetupunixdialog.ui:163 gtk/ui/gtkprintunixdialog.ui:720
+#: gtk/ui/gtkpagesetupunixdialog.ui:135 gtk/ui/gtkprintunixdialog.ui:679
 msgid "Reverse portrait"
 msgstr "Alderantzizko bertikala"
 
-#: gtk/ui/gtkpagesetupunixdialog.ui:189 gtk/ui/gtkprintunixdialog.ui:719
+#: gtk/ui/gtkpagesetupunixdialog.ui:161 gtk/ui/gtkprintunixdialog.ui:678
 msgid "Landscape"
 msgstr "Horizontala"
 
-#: gtk/ui/gtkpagesetupunixdialog.ui:214 gtk/ui/gtkprintunixdialog.ui:721
+#: gtk/ui/gtkpagesetupunixdialog.ui:186 gtk/ui/gtkprintunixdialog.ui:680
 msgid "Reverse landscape"
 msgstr "Alderantzizko horizontala"
 
@@ -6909,227 +6336,193 @@ msgid "Enter server address…"
 msgstr "Sartu zerbitzariaren helbidea…"
 
 #. this is the header for the printer status column in the print dialog
-#: gtk/ui/gtkprintunixdialog.ui:158
+#: gtk/ui/gtkprintunixdialog.ui:147
 msgid "Status"
 msgstr "Egoera"
 
-#: gtk/ui/gtkprintunixdialog.ui:212
+#: gtk/ui/gtkprintunixdialog.ui:201
 msgid "Range"
 msgstr "Barrutia"
 
-#: gtk/ui/gtkprintunixdialog.ui:228
+#: gtk/ui/gtkprintunixdialog.ui:214
 msgid "_All Pages"
 msgstr "Orrialde _guztiak"
 
-#: gtk/ui/gtkprintunixdialog.ui:240
+#: gtk/ui/gtkprintunixdialog.ui:226
 msgid "C_urrent Page"
 msgstr "_Uneko orrialdea"
 
-#: gtk/ui/gtkprintunixdialog.ui:253
+#: gtk/ui/gtkprintunixdialog.ui:239
 msgid "Se_lection"
 msgstr "_Hautapena"
 
-#: gtk/ui/gtkprintunixdialog.ui:266
+#: gtk/ui/gtkprintunixdialog.ui:252
 msgid "Pag_es:"
 msgstr "_Orrialdeak:"
 
-#: gtk/ui/gtkprintunixdialog.ui:267 gtk/ui/gtkprintunixdialog.ui:280
-#: gtk/ui/gtkprintunixdialog.ui:287
+#: gtk/ui/gtkprintunixdialog.ui:253 gtk/ui/gtkprintunixdialog.ui:266
 msgid ""
 "Specify one or more page ranges,\n"
 " e.g. 1–3, 7, 11"
 msgstr "Zehaztu orrialdeen barruti bat edo gehiago,\n"
 "adib. 1–3, 7, 11"
 
-#: gtk/ui/gtkprintunixdialog.ui:286
-msgid "Pages"
-msgstr "Orrialdeak"
-
-#: gtk/ui/gtkprintunixdialog.ui:313
+#: gtk/ui/gtkprintunixdialog.ui:289
 msgid "Copies"
 msgstr "Kopiak"
 
-#: gtk/ui/gtkprintunixdialog.ui:331
+#: gtk/ui/gtkprintunixdialog.ui:304
 msgid "Copie_s:"
 msgstr "_Kopiak:"
 
-#: gtk/ui/gtkprintunixdialog.ui:354
+#: gtk/ui/gtkprintunixdialog.ui:327
 msgid "C_ollate"
 msgstr "_Alderatu"
 
-#: gtk/ui/gtkprintunixdialog.ui:365
+#: gtk/ui/gtkprintunixdialog.ui:338
 msgid "_Reverse"
 msgstr "_Alderantzikatu"
 
-#: gtk/ui/gtkprintunixdialog.ui:398
+#: gtk/ui/gtkprintunixdialog.ui:368
 msgid "General"
 msgstr "Orokorra"
 
-#: gtk/ui/gtkprintunixdialog.ui:443
+#: gtk/ui/gtkprintunixdialog.ui:410
 msgid "T_wo-sided:"
 msgstr "_Bi aldetatik:"
 
-#: gtk/ui/gtkprintunixdialog.ui:465
+#: gtk/ui/gtkprintunixdialog.ui:432
 msgid "Pages per _side:"
 msgstr "Orrialdeak _aldeko:"
 
-#: gtk/ui/gtkprintunixdialog.ui:489
+#: gtk/ui/gtkprintunixdialog.ui:456
 msgid "Page or_dering:"
 msgstr "Orrialdeen _ordena:"
 
-#: gtk/ui/gtkprintunixdialog.ui:512
+#: gtk/ui/gtkprintunixdialog.ui:479
 msgid "_Only print:"
 msgstr "Inprimatu _soilik:"
 
-#: gtk/ui/gtkprintunixdialog.ui:528
+#: gtk/ui/gtkprintunixdialog.ui:495
 msgid "All sheets"
 msgstr "Orri guztiak"
 
-#: gtk/ui/gtkprintunixdialog.ui:529
+#: gtk/ui/gtkprintunixdialog.ui:496
 msgid "Even sheets"
 msgstr "Orri bikoitiak"
 
-#: gtk/ui/gtkprintunixdialog.ui:530
+#: gtk/ui/gtkprintunixdialog.ui:497
 msgid "Odd sheets"
 msgstr "Orri bakoitiak"
 
-#: gtk/ui/gtkprintunixdialog.ui:542
+#: gtk/ui/gtkprintunixdialog.ui:511
 msgid "Sc_ale:"
 msgstr "E_skala:"
 
-#: gtk/ui/gtkprintunixdialog.ui:590
+#: gtk/ui/gtkprintunixdialog.ui:556
 msgid "Paper"
 msgstr "Papera"
 
-#: gtk/ui/gtkprintunixdialog.ui:608
+#: gtk/ui/gtkprintunixdialog.ui:571
 msgid "Paper _type:"
 msgstr "Paper-_mota:"
 
-#: gtk/ui/gtkprintunixdialog.ui:630
+#: gtk/ui/gtkprintunixdialog.ui:593
 msgid "Paper _source:"
 msgstr "Paper-iturria:"
 
-#: gtk/ui/gtkprintunixdialog.ui:652
+#: gtk/ui/gtkprintunixdialog.ui:615
 msgid "Output t_ray:"
 msgstr "Irteerako _erretilua:"
 
-#: gtk/ui/gtkprintunixdialog.ui:701
+#: gtk/ui/gtkprintunixdialog.ui:660
 msgid "Or_ientation:"
 msgstr "_Orientazioa:"
 
-#: gtk/ui/gtkprintunixdialog.ui:776
+#: gtk/ui/gtkprintunixdialog.ui:734
 msgid "Job Details"
 msgstr "Lanaren xehetasunak"
 
-#: gtk/ui/gtkprintunixdialog.ui:794
+#: gtk/ui/gtkprintunixdialog.ui:749
 msgid "Pri_ority:"
 msgstr "_Lehentasuna:"
 
-#: gtk/ui/gtkprintunixdialog.ui:815
+#: gtk/ui/gtkprintunixdialog.ui:770
 msgid "_Billing info:"
 msgstr "_Fakturaren datuak:"
 
-#: gtk/ui/gtkprintunixdialog.ui:851
+#: gtk/ui/gtkprintunixdialog.ui:803
 msgid "Print Document"
 msgstr "Inprimatu dokumentua"
 
 #. this is one of the choices for the print at option in the print dialog
-#: gtk/ui/gtkprintunixdialog.ui:867
+#: gtk/ui/gtkprintunixdialog.ui:816
 msgid "_Now"
 msgstr "_Orain"
 
 #. this is one of the choices for the print at option in the print dialog. It also serves as the label for an entry that allows the user to enter a time.
-#: gtk/ui/gtkprintunixdialog.ui:881
+#: gtk/ui/gtkprintunixdialog.ui:830
 msgid "A_t:"
 msgstr "_Noiz:"
 
 #. Ability to parse the am/pm format depends on actual locale. You can remove the am/pm values below for your locale if they are not supported.
-#: gtk/ui/gtkprintunixdialog.ui:883 gtk/ui/gtkprintunixdialog.ui:885
-#: gtk/ui/gtkprintunixdialog.ui:901 gtk/ui/gtkprintunixdialog.ui:903
-#: gtk/ui/gtkprintunixdialog.ui:908
+#: gtk/ui/gtkprintunixdialog.ui:832 gtk/ui/gtkprintunixdialog.ui:834
+#: gtk/ui/gtkprintunixdialog.ui:850 gtk/ui/gtkprintunixdialog.ui:852
 msgid ""
 "Specify the time of print,\n"
 " e.g. 15∶30, 2∶35 pm, 14∶15∶20, 11∶46∶30 am, 4 pm"
 msgstr "Zehaztu inprimatze-ordua,\n"
 "adib. 15∶30, 2∶35 pm, 14∶15∶20, 11∶46∶30 am, 4 pm"
 
-#: gtk/ui/gtkprintunixdialog.ui:907
-msgid "Time of print"
-msgstr "Inprimatze-ordua"
-
 #. this is one of the choices for the print at option in the print dialog. It means that the print job will not be printed until it explicitly gets 'released'.
-#: gtk/ui/gtkprintunixdialog.ui:922
+#: gtk/ui/gtkprintunixdialog.ui:864
 msgid "On _hold"
 msgstr "_Itxaron"
 
-#: gtk/ui/gtkprintunixdialog.ui:924 gtk/ui/gtkprintunixdialog.ui:925
+#: gtk/ui/gtkprintunixdialog.ui:866 gtk/ui/gtkprintunixdialog.ui:867
 msgid "Hold the job until it is explicitly released"
 msgstr "Mantendu lana esplizitoki askatu arte"
 
-#: gtk/ui/gtkprintunixdialog.ui:955
+#: gtk/ui/gtkprintunixdialog.ui:894
 msgid "Add Cover Page"
 msgstr "Gehitu gainazaleko orria"
 
 #. this is the label used for the option in the print dialog that controls the front cover page.
-#: gtk/ui/gtkprintunixdialog.ui:973
+#: gtk/ui/gtkprintunixdialog.ui:909
 msgid "Be_fore:"
 msgstr "_Aurretik:"
 
 #. this is the label used for the option in the print dialog that controls the back cover page.
-#: gtk/ui/gtkprintunixdialog.ui:994
+#: gtk/ui/gtkprintunixdialog.ui:930
 msgid "_After:"
 msgstr "_Ondoren:"
 
-#: gtk/ui/gtkprintunixdialog.ui:1026
+#: gtk/ui/gtkprintunixdialog.ui:959
 msgid "Job"
 msgstr "Lana"
 
 #. This will appear as a tab label in the print dialog.
-#: gtk/ui/gtkprintunixdialog.ui:1056
+#: gtk/ui/gtkprintunixdialog.ui:989
 msgid "Image Quality"
 msgstr "Irudiaren kalitatea"
 
 #. This will appear as a tab label in the print dialog.
-#: gtk/ui/gtkprintunixdialog.ui:1085
+#: gtk/ui/gtkprintunixdialog.ui:1018
 msgid "Color"
 msgstr "Kolorea"
 
 #. This will appear as a tab label in the print dialog. It's a typographical term, as in "Binding and finishing"
-#: gtk/ui/gtkprintunixdialog.ui:1114
+#: gtk/ui/gtkprintunixdialog.ui:1047
 msgid "Finishing"
 msgstr "Amaierakoak"
 
-#: gtk/ui/gtkprintunixdialog.ui:1143
+#: gtk/ui/gtkprintunixdialog.ui:1076
 msgid "Advanced"
 msgstr "Aurreratua"
 
-#: gtk/ui/gtkprintunixdialog.ui:1159
+#: gtk/ui/gtkprintunixdialog.ui:1092
 msgid "Some of the settings in the dialog conflict"
 msgstr "Elkarrizketa-koadroko ezarpen batzuk gatazkan daude"
-
-#: gtk/ui/gtkvolumebutton.ui:18
-msgid "Volume"
-msgstr "Bolumena"
-
-#: gtk/ui/gtkvolumebutton.ui:19
-msgid "Turns volume up or down"
-msgstr "Bolumena igo edo jaisten du"
-
-#: gtk/ui/gtkvolumebutton.ui:28
-msgid "Volume Up"
-msgstr "Igo bolumena"
-
-#: gtk/ui/gtkvolumebutton.ui:29
-msgid "Increases the volume"
-msgstr "Bolumena handiagotzen du"
-
-#: gtk/ui/gtkvolumebutton.ui:38
-msgid "Volume Down"
-msgstr "Jaitsi bolumena"
-
-#: gtk/ui/gtkvolumebutton.ui:39
-msgid "Decreases the volume"
-msgstr "Bolumena gutxiagotzen du"
 
 #: modules/media/gtkffmediafile.c:220
 #, c-format
@@ -7150,463 +6543,463 @@ msgstr "Onartzen ez den bideo-kodeka"
 
 #. Translators: The printer status is online, i.e. it is
 #. * ready to print.
-#: modules/printbackends/gtkprintbackendcloudprint.c:727
+#: modules/printbackends/gtkprintbackendcloudprint.c:725
 msgid "Online"
 msgstr "Konektatuta"
 
 #. Translators: The printer is offline.
-#: modules/printbackends/gtkprintbackendcloudprint.c:734
+#: modules/printbackends/gtkprintbackendcloudprint.c:732
 msgid "Offline"
 msgstr "Deskonektatuta"
 
 #. We shouldn't get here because the query omits dormant
 #. * printers by default.
 #. Translators: Printer has been offline for a long time.
-#: modules/printbackends/gtkprintbackendcloudprint.c:740
+#: modules/printbackends/gtkprintbackendcloudprint.c:738
 msgid "Dormant"
 msgstr "Lotan"
 
 #. How many document pages to go onto one side of paper.
-#: modules/printbackends/gtkprintbackendcloudprint.c:922
+#: modules/printbackends/gtkprintbackendcloudprint.c:920
 #: modules/printbackends/gtkprintbackendfile.c:650
 msgid "Pages per _sheet:"
 msgstr "Orrialdeak _orriko:"
 
-#: modules/printbackends/gtkprintbackendcups.c:1119
-#: modules/printbackends/gtkprintbackendcups.c:1428
+#: modules/printbackends/gtkprintbackendcups.c:1121
+#: modules/printbackends/gtkprintbackendcups.c:1430
 msgid "Username:"
 msgstr "Erabiltzaile-izena:"
 
-#: modules/printbackends/gtkprintbackendcups.c:1120
-#: modules/printbackends/gtkprintbackendcups.c:1437
+#: modules/printbackends/gtkprintbackendcups.c:1122
+#: modules/printbackends/gtkprintbackendcups.c:1439
 msgid "Password:"
 msgstr "Pasahitza:"
 
-#: modules/printbackends/gtkprintbackendcups.c:1159
-#: modules/printbackends/gtkprintbackendcups.c:1450
+#: modules/printbackends/gtkprintbackendcups.c:1161
+#: modules/printbackends/gtkprintbackendcups.c:1452
 #, c-format
 msgid "Authentication is required to print document “%s” on printer %s"
 msgstr "Autentifikazioa behar da '%s' dokumentua '%s' inprimagailuan inprimatzeko"
 
-#: modules/printbackends/gtkprintbackendcups.c:1161
+#: modules/printbackends/gtkprintbackendcups.c:1163
 #, c-format
 msgid "Authentication is required to print a document on %s"
 msgstr "Autentifikazioa behar da dokumentu bat '%s'(e)n inprimatzeko"
 
-#: modules/printbackends/gtkprintbackendcups.c:1165
+#: modules/printbackends/gtkprintbackendcups.c:1167
 #, c-format
 msgid "Authentication is required to get attributes of job “%s”"
 msgstr "Autentifikazioa behar da '%s' lanaren atributuak lortzeko"
 
-#: modules/printbackends/gtkprintbackendcups.c:1167
+#: modules/printbackends/gtkprintbackendcups.c:1169
 msgid "Authentication is required to get attributes of a job"
 msgstr "Autentifikazioa behar da lan baten atributuak lortzeko"
 
-#: modules/printbackends/gtkprintbackendcups.c:1171
+#: modules/printbackends/gtkprintbackendcups.c:1173
 #, c-format
 msgid "Authentication is required to get attributes of printer %s"
 msgstr "Autentifikazioa behar da '%s' inprimagailuaren atributuak lortzeko"
 
-#: modules/printbackends/gtkprintbackendcups.c:1173
+#: modules/printbackends/gtkprintbackendcups.c:1175
 msgid "Authentication is required to get attributes of a printer"
 msgstr "Autentifikazioa behar da inprimagailu baten atributuak lortzeko"
 
-#: modules/printbackends/gtkprintbackendcups.c:1176
+#: modules/printbackends/gtkprintbackendcups.c:1178
 #, c-format
 msgid "Authentication is required to get default printer of %s"
 msgstr "Autentifikazioa behar da %s(r)en inprimagailu lehenetsia lortzeko"
 
-#: modules/printbackends/gtkprintbackendcups.c:1179
+#: modules/printbackends/gtkprintbackendcups.c:1181
 #, c-format
 msgid "Authentication is required to get printers from %s"
 msgstr "Autentifikazioa behar da %s(e)tik inprimagailuak lortzeko"
 
-#: modules/printbackends/gtkprintbackendcups.c:1184
+#: modules/printbackends/gtkprintbackendcups.c:1186
 #, c-format
 msgid "Authentication is required to get a file from %s"
 msgstr "Autentifikazioa behar da fitxategia %s(e)tik lortzeko"
 
-#: modules/printbackends/gtkprintbackendcups.c:1186
+#: modules/printbackends/gtkprintbackendcups.c:1188
 #, c-format
 msgid "Authentication is required on %s"
 msgstr "Autentifikazioa behar da %s(e)n"
 
-#: modules/printbackends/gtkprintbackendcups.c:1422
+#: modules/printbackends/gtkprintbackendcups.c:1424
 msgid "Domain:"
 msgstr "Domeinua:"
 
-#: modules/printbackends/gtkprintbackendcups.c:1452
+#: modules/printbackends/gtkprintbackendcups.c:1454
 #, c-format
 msgid "Authentication is required to print document “%s”"
 msgstr "Autentifikazioa behar da '%s' dokumentua inprimatzeko"
 
-#: modules/printbackends/gtkprintbackendcups.c:1457
+#: modules/printbackends/gtkprintbackendcups.c:1459
 #, c-format
 msgid "Authentication is required to print this document on printer %s"
 msgstr "Autentifikazioa behar da dokumentu hau '%s' inprimagailuan inprimatzeko"
 
-#: modules/printbackends/gtkprintbackendcups.c:1459
+#: modules/printbackends/gtkprintbackendcups.c:1461
 msgid "Authentication is required to print this document"
 msgstr "Autentifikazioa behar da dokumentu hau inprimatzeko"
 
-#: modules/printbackends/gtkprintbackendcups.c:2532
+#: modules/printbackends/gtkprintbackendcups.c:2534
 #, c-format
 msgid "Printer “%s” is low on toner."
 msgstr "'%s' inprimagailuak toner baxua du."
 
-#: modules/printbackends/gtkprintbackendcups.c:2536
+#: modules/printbackends/gtkprintbackendcups.c:2538
 #, c-format
 msgid "Printer “%s” has no toner left."
 msgstr "'%s' inprimagailuak ez du tonerrik."
 
 #. Translators: "Developer" like on photo development context
-#: modules/printbackends/gtkprintbackendcups.c:2541
+#: modules/printbackends/gtkprintbackendcups.c:2543
 #, c-format
 msgid "Printer “%s” is low on developer."
 msgstr "'%s' inprimagailuak errebelatzaile baxua du."
 
 #. Translators: "Developer" like on photo development context
-#: modules/printbackends/gtkprintbackendcups.c:2546
+#: modules/printbackends/gtkprintbackendcups.c:2548
 #, c-format
 msgid "Printer “%s” is out of developer."
 msgstr "'%s' inprimagailuak ez du errebelatzailerik."
 
 #. Translators: "marker" is one color bin of the printer
-#: modules/printbackends/gtkprintbackendcups.c:2551
+#: modules/printbackends/gtkprintbackendcups.c:2553
 #, c-format
 msgid "Printer “%s” is low on at least one marker supply."
 msgstr "'%s' inprimagailuak gutxienez tinta-kartutxo bat baxua du."
 
 #. Translators: "marker" is one color bin of the printer
-#: modules/printbackends/gtkprintbackendcups.c:2556
+#: modules/printbackends/gtkprintbackendcups.c:2558
 #, c-format
 msgid "Printer “%s” is out of at least one marker supply."
 msgstr "'%s' inprimagailuak gutxienez tinta-kartutxo bat gabe dago."
 
-#: modules/printbackends/gtkprintbackendcups.c:2560
+#: modules/printbackends/gtkprintbackendcups.c:2562
 #, c-format
 msgid "The cover is open on printer “%s”."
 msgstr "'%s' inprimagailuaren estalkia irekita dago."
 
-#: modules/printbackends/gtkprintbackendcups.c:2564
+#: modules/printbackends/gtkprintbackendcups.c:2566
 #, c-format
 msgid "The door is open on printer “%s”."
 msgstr "'%s' inprimagailuaren atea irekita dago."
 
-#: modules/printbackends/gtkprintbackendcups.c:2568
+#: modules/printbackends/gtkprintbackendcups.c:2570
 #, c-format
 msgid "Printer “%s” is low on paper."
 msgstr "'%s' inprimagailuak paper gutxi du."
 
-#: modules/printbackends/gtkprintbackendcups.c:2572
+#: modules/printbackends/gtkprintbackendcups.c:2574
 #, c-format
 msgid "Printer “%s” is out of paper."
 msgstr "'%s' inprimagailuak ez du paperik."
 
-#: modules/printbackends/gtkprintbackendcups.c:2576
+#: modules/printbackends/gtkprintbackendcups.c:2578
 #, c-format
 msgid "Printer “%s” is currently offline."
 msgstr "'%s' inprimagailua unean lineaz kanpo dago."
 
-#: modules/printbackends/gtkprintbackendcups.c:2580
+#: modules/printbackends/gtkprintbackendcups.c:2582
 #, c-format
 msgid "There is a problem on printer “%s”."
 msgstr "Arazoa dago '%s' inprimagailuarekin."
 
 #. Translators: this is a printer status.
-#: modules/printbackends/gtkprintbackendcups.c:2600
+#: modules/printbackends/gtkprintbackendcups.c:2602
 msgid "Paused; Rejecting Jobs"
 msgstr "Pausarazita; Lanak baztertzen"
 
 #. Translators: this is a printer status.
-#: modules/printbackends/gtkprintbackendcups.c:2606
+#: modules/printbackends/gtkprintbackendcups.c:2608
 msgid "Rejecting Jobs"
 msgstr "Lanak baztertzen"
 
 #. Translators: this string connects multiple printer states together.
-#: modules/printbackends/gtkprintbackendcups.c:2647
+#: modules/printbackends/gtkprintbackendcups.c:2649
 msgid "; "
 msgstr "; "
 
-#: modules/printbackends/gtkprintbackendcups.c:4397
-#: modules/printbackends/gtkprintbackendcups.c:4464
+#: modules/printbackends/gtkprintbackendcups.c:4400
+#: modules/printbackends/gtkprintbackendcups.c:4467
 msgctxt "printing option"
 msgid "Two Sided"
 msgstr "Alde bietatik"
 
-#: modules/printbackends/gtkprintbackendcups.c:4398
+#: modules/printbackends/gtkprintbackendcups.c:4401
 msgctxt "printing option"
 msgid "Paper Type"
 msgstr "Paper mota"
 
-#: modules/printbackends/gtkprintbackendcups.c:4399
+#: modules/printbackends/gtkprintbackendcups.c:4402
 msgctxt "printing option"
 msgid "Paper Source"
 msgstr "Paper-iturria"
 
-#: modules/printbackends/gtkprintbackendcups.c:4400
-#: modules/printbackends/gtkprintbackendcups.c:4465
+#: modules/printbackends/gtkprintbackendcups.c:4403
+#: modules/printbackends/gtkprintbackendcups.c:4468
 msgctxt "printing option"
 msgid "Output Tray"
 msgstr "Irteerako erretilua"
 
-#: modules/printbackends/gtkprintbackendcups.c:4401
+#: modules/printbackends/gtkprintbackendcups.c:4404
 msgctxt "printing option"
 msgid "Resolution"
 msgstr "Bereizmena"
 
-#: modules/printbackends/gtkprintbackendcups.c:4402
+#: modules/printbackends/gtkprintbackendcups.c:4405
 msgctxt "printing option"
 msgid "GhostScript pre-filtering"
 msgstr "GhostScript aurre-iragazketa"
 
-#: modules/printbackends/gtkprintbackendcups.c:4411
+#: modules/printbackends/gtkprintbackendcups.c:4414
 msgctxt "printing option value"
 msgid "One Sided"
 msgstr "Alde batetik"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/gtkprintbackendcups.c:4413
+#: modules/printbackends/gtkprintbackendcups.c:4416
 msgctxt "printing option value"
 msgid "Long Edge (Standard)"
 msgstr "Marjina luzea (estandarra)"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/gtkprintbackendcups.c:4415
+#: modules/printbackends/gtkprintbackendcups.c:4418
 msgctxt "printing option value"
 msgid "Short Edge (Flip)"
 msgstr "Marjina laburra (iraulia)"
 
 #. Translators: this is an option of "Paper Source"
-#: modules/printbackends/gtkprintbackendcups.c:4417
-#: modules/printbackends/gtkprintbackendcups.c:4419
-#: modules/printbackends/gtkprintbackendcups.c:4427
+#: modules/printbackends/gtkprintbackendcups.c:4420
+#: modules/printbackends/gtkprintbackendcups.c:4422
+#: modules/printbackends/gtkprintbackendcups.c:4430
 msgctxt "printing option value"
 msgid "Auto Select"
 msgstr "Hautapen automatikoa"
 
 #. Translators: this is an option of "Paper Source"
 #. Translators: this is an option of "Resolution"
-#: modules/printbackends/gtkprintbackendcups.c:4421
-#: modules/printbackends/gtkprintbackendcups.c:4423
-#: modules/printbackends/gtkprintbackendcups.c:4425
-#: modules/printbackends/gtkprintbackendcups.c:4429
+#: modules/printbackends/gtkprintbackendcups.c:4424
+#: modules/printbackends/gtkprintbackendcups.c:4426
+#: modules/printbackends/gtkprintbackendcups.c:4428
+#: modules/printbackends/gtkprintbackendcups.c:4432
 msgctxt "printing option value"
 msgid "Printer Default"
 msgstr "Inprimagailu lehenetsia"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/gtkprintbackendcups.c:4431
+#: modules/printbackends/gtkprintbackendcups.c:4434
 msgctxt "printing option value"
 msgid "Embed GhostScript fonts only"
 msgstr "Kapsulatutako GhostScript letra-tipoak soilik"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/gtkprintbackendcups.c:4433
+#: modules/printbackends/gtkprintbackendcups.c:4436
 msgctxt "printing option value"
 msgid "Convert to PS level 1"
 msgstr "BIhurtu PS 1. mailara"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/gtkprintbackendcups.c:4435
+#: modules/printbackends/gtkprintbackendcups.c:4438
 msgctxt "printing option value"
 msgid "Convert to PS level 2"
 msgstr "BIhurtu PS 2. mailara"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/gtkprintbackendcups.c:4437
+#: modules/printbackends/gtkprintbackendcups.c:4440
 msgctxt "printing option value"
 msgid "No pre-filtering"
 msgstr "Aurre-iragazketarik ez"
 
 #. Translators: "Miscellaneous" is the label for a button, that opens
 #. up an extra panel of settings in a print dialog.
-#: modules/printbackends/gtkprintbackendcups.c:4446
+#: modules/printbackends/gtkprintbackendcups.c:4449
 msgctxt "printing option group"
 msgid "Miscellaneous"
 msgstr "Bestelakoak"
 
-#: modules/printbackends/gtkprintbackendcups.c:4473
+#: modules/printbackends/gtkprintbackendcups.c:4476
 msgctxt "sides"
 msgid "One Sided"
 msgstr "Alde batetik"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/gtkprintbackendcups.c:4475
+#: modules/printbackends/gtkprintbackendcups.c:4478
 msgctxt "sides"
 msgid "Long Edge (Standard)"
 msgstr "Marjina luzea (estandarra)"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/gtkprintbackendcups.c:4477
+#: modules/printbackends/gtkprintbackendcups.c:4480
 msgctxt "sides"
 msgid "Short Edge (Flip)"
 msgstr "Marjina laburra (iraulia)"
 
 #. Translators: Top output bin
-#: modules/printbackends/gtkprintbackendcups.c:4480
+#: modules/printbackends/gtkprintbackendcups.c:4483
 msgctxt "output-bin"
 msgid "Top Bin"
 msgstr "Goiko edukiontzia"
 
 #. Translators: Middle output bin
-#: modules/printbackends/gtkprintbackendcups.c:4482
+#: modules/printbackends/gtkprintbackendcups.c:4485
 msgctxt "output-bin"
 msgid "Middle Bin"
 msgstr "Erdiko edukiontzia"
 
 #. Translators: Bottom output bin
-#: modules/printbackends/gtkprintbackendcups.c:4484
+#: modules/printbackends/gtkprintbackendcups.c:4487
 msgctxt "output-bin"
 msgid "Bottom Bin"
 msgstr "Beheko edukiontzia"
 
 #. Translators: Side output bin
-#: modules/printbackends/gtkprintbackendcups.c:4486
+#: modules/printbackends/gtkprintbackendcups.c:4489
 msgctxt "output-bin"
 msgid "Side Bin"
 msgstr "Alboko edukiontzia"
 
 #. Translators: Left output bin
-#: modules/printbackends/gtkprintbackendcups.c:4488
+#: modules/printbackends/gtkprintbackendcups.c:4491
 msgctxt "output-bin"
 msgid "Left Bin"
 msgstr "Ezkerreko edukiontzia"
 
 #. Translators: Right output bin
-#: modules/printbackends/gtkprintbackendcups.c:4490
+#: modules/printbackends/gtkprintbackendcups.c:4493
 msgctxt "output-bin"
 msgid "Right Bin"
 msgstr "Eskuineko edukiontzia"
 
 #. Translators: Center output bin
-#: modules/printbackends/gtkprintbackendcups.c:4492
+#: modules/printbackends/gtkprintbackendcups.c:4495
 msgctxt "output-bin"
 msgid "Center Bin"
 msgstr "Zentroko edukiontzia"
 
 #. Translators: Rear output bin
-#: modules/printbackends/gtkprintbackendcups.c:4494
+#: modules/printbackends/gtkprintbackendcups.c:4497
 msgctxt "output-bin"
 msgid "Rear Bin"
 msgstr "Atzeko edukiontzia"
 
 #. Translators: Output bin where one sided output is oriented in the face-up position
-#: modules/printbackends/gtkprintbackendcups.c:4496
+#: modules/printbackends/gtkprintbackendcups.c:4499
 msgctxt "output-bin"
 msgid "Face Up Bin"
 msgstr "Edukiontzia buruz gora"
 
 #. Translators: Output bin where one sided output is oriented in the face-down position
-#: modules/printbackends/gtkprintbackendcups.c:4498
+#: modules/printbackends/gtkprintbackendcups.c:4501
 msgctxt "output-bin"
 msgid "Face Down Bin"
 msgstr "Edukiontzia buruz behera"
 
 #. Translators: Large capacity output bin
-#: modules/printbackends/gtkprintbackendcups.c:4500
+#: modules/printbackends/gtkprintbackendcups.c:4503
 msgctxt "output-bin"
 msgid "Large Capacity Bin"
 msgstr "Tamaina handiko edukiontzia"
 
 #. Translators: Output stacker number %d
-#: modules/printbackends/gtkprintbackendcups.c:4522
+#: modules/printbackends/gtkprintbackendcups.c:4525
 #, c-format
 msgctxt "output-bin"
 msgid "Stacker %d"
 msgstr "%d pilatzailea"
 
 #. Translators: Output mailbox number %d
-#: modules/printbackends/gtkprintbackendcups.c:4526
+#: modules/printbackends/gtkprintbackendcups.c:4529
 #, c-format
 msgctxt "output-bin"
 msgid "Mailbox %d"
 msgstr "%d. postontzia"
 
 #. Translators: Private mailbox
-#: modules/printbackends/gtkprintbackendcups.c:4530
+#: modules/printbackends/gtkprintbackendcups.c:4533
 msgctxt "output-bin"
 msgid "My Mailbox"
 msgstr "Nire postontzia"
 
 #. Translators: Output tray number %d
-#: modules/printbackends/gtkprintbackendcups.c:4534
+#: modules/printbackends/gtkprintbackendcups.c:4537
 #, c-format
 msgctxt "output-bin"
 msgid "Tray %d"
 msgstr "%d. erretilua"
 
-#: modules/printbackends/gtkprintbackendcups.c:5011
+#: modules/printbackends/gtkprintbackendcups.c:5014
 msgid "Printer Default"
 msgstr "Inprimagailu lehenetsia"
 
 #. Translators: These strings name the possible values of the
 #. * job priority option in the print dialog
 #.
-#: modules/printbackends/gtkprintbackendcups.c:5455
+#: modules/printbackends/gtkprintbackendcups.c:5458
 msgid "Urgent"
 msgstr "Presazkoa"
 
-#: modules/printbackends/gtkprintbackendcups.c:5455
+#: modules/printbackends/gtkprintbackendcups.c:5458
 msgid "High"
 msgstr "Altua"
 
-#: modules/printbackends/gtkprintbackendcups.c:5455
+#: modules/printbackends/gtkprintbackendcups.c:5458
 msgid "Medium"
 msgstr "Tartekoa"
 
-#: modules/printbackends/gtkprintbackendcups.c:5455
+#: modules/printbackends/gtkprintbackendcups.c:5458
 msgid "Low"
 msgstr "Baxua"
 
 #. Translators, this string is used to label the job priority option
 #. * in the print dialog
 #.
-#: modules/printbackends/gtkprintbackendcups.c:5485
+#: modules/printbackends/gtkprintbackendcups.c:5488
 msgid "Job Priority"
 msgstr "Lanaren lehentasuna"
 
 #. Translators, this string is used to label the billing info entry
 #. * in the print dialog
 #.
-#: modules/printbackends/gtkprintbackendcups.c:5496
+#: modules/printbackends/gtkprintbackendcups.c:5499
 msgid "Billing Info"
 msgstr "Fakturaren datuak"
 
 #. Translators, these strings are names for various 'standard' cover
 #. * pages that the printing system may support.
 #.
-#: modules/printbackends/gtkprintbackendcups.c:5520
+#: modules/printbackends/gtkprintbackendcups.c:5523
 msgctxt "cover page"
 msgid "None"
 msgstr "Bat ere ez"
 
-#: modules/printbackends/gtkprintbackendcups.c:5521
+#: modules/printbackends/gtkprintbackendcups.c:5524
 msgctxt "cover page"
 msgid "Classified"
 msgstr "Klasifikatuta"
 
-#: modules/printbackends/gtkprintbackendcups.c:5522
+#: modules/printbackends/gtkprintbackendcups.c:5525
 msgctxt "cover page"
 msgid "Confidential"
 msgstr "Konfidentziala"
 
-#: modules/printbackends/gtkprintbackendcups.c:5523
+#: modules/printbackends/gtkprintbackendcups.c:5526
 msgctxt "cover page"
 msgid "Secret"
 msgstr "Ezkutukoa"
 
-#: modules/printbackends/gtkprintbackendcups.c:5524
+#: modules/printbackends/gtkprintbackendcups.c:5527
 msgctxt "cover page"
 msgid "Standard"
 msgstr "Arrunta"
 
-#: modules/printbackends/gtkprintbackendcups.c:5525
+#: modules/printbackends/gtkprintbackendcups.c:5528
 msgctxt "cover page"
 msgid "Top Secret"
 msgstr "Ezkutu gorenekoa"
 
-#: modules/printbackends/gtkprintbackendcups.c:5526
+#: modules/printbackends/gtkprintbackendcups.c:5529
 msgctxt "cover page"
 msgid "Unclassified"
 msgstr "Sailkatu gabe"
@@ -7614,7 +7007,7 @@ msgstr "Sailkatu gabe"
 #. Translators, this string is used to label the pages-per-sheet option
 #. * in the print dialog
 #.
-#: modules/printbackends/gtkprintbackendcups.c:5538
+#: modules/printbackends/gtkprintbackendcups.c:5541
 msgctxt "printer option"
 msgid "Pages per Sheet"
 msgstr "Orrialde orriko"
@@ -7622,7 +7015,7 @@ msgstr "Orrialde orriko"
 #. Translators, this string is used to label the option in the print
 #. * dialog that controls in what order multiple pages are arranged
 #.
-#: modules/printbackends/gtkprintbackendcups.c:5555
+#: modules/printbackends/gtkprintbackendcups.c:5558
 msgctxt "printer option"
 msgid "Page Ordering"
 msgstr "Orrialdeak ordenatzea"
@@ -7630,7 +7023,7 @@ msgstr "Orrialdeak ordenatzea"
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
 #.
-#: modules/printbackends/gtkprintbackendcups.c:5597
+#: modules/printbackends/gtkprintbackendcups.c:5600
 msgctxt "printer option"
 msgid "Before"
 msgstr "Aurretik"
@@ -7638,7 +7031,7 @@ msgstr "Aurretik"
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
 #.
-#: modules/printbackends/gtkprintbackendcups.c:5612
+#: modules/printbackends/gtkprintbackendcups.c:5615
 msgctxt "printer option"
 msgid "After"
 msgstr "Ondoren"
@@ -7647,7 +7040,7 @@ msgstr "Ondoren"
 #. * a print job is printed. Possible values are 'now', a specified time,
 #. * or 'on hold'
 #.
-#: modules/printbackends/gtkprintbackendcups.c:5632
+#: modules/printbackends/gtkprintbackendcups.c:5635
 msgctxt "printer option"
 msgid "Print at"
 msgstr "Noiz inprimatu"
@@ -7655,7 +7048,7 @@ msgstr "Noiz inprimatu"
 #. Translators: this is the name of the option that allows the user
 #. * to specify a time when a print job will be printed.
 #.
-#: modules/printbackends/gtkprintbackendcups.c:5643
+#: modules/printbackends/gtkprintbackendcups.c:5646
 msgctxt "printer option"
 msgid "Print at time"
 msgstr "Noiz inprimatu"
@@ -7665,19 +7058,19 @@ msgstr "Noiz inprimatu"
 #. * the width and height in points. E.g: "Custom
 #. * 230.4x142.9"
 #.
-#: modules/printbackends/gtkprintbackendcups.c:5690
+#: modules/printbackends/gtkprintbackendcups.c:5693
 #, c-format
 msgid "Custom %s×%s"
 msgstr "%sx%s pertsonalizatua"
 
 #. TRANSLATORS: this is the ICC color profile to use for this job
-#: modules/printbackends/gtkprintbackendcups.c:5801
+#: modules/printbackends/gtkprintbackendcups.c:5804
 msgctxt "printer option"
 msgid "Printer Profile"
 msgstr "Inprimagailuaren profila"
 
 #. TRANSLATORS: this is when color profile information is unavailable
-#: modules/printbackends/gtkprintbackendcups.c:5808
+#: modules/printbackends/gtkprintbackendcups.c:5811
 msgctxt "printer option value"
 msgid "Unavailable"
 msgstr "Ez dago erabilgarri"
@@ -7710,15 +7103,15 @@ msgstr "Fitxategia"
 msgid "_Output format"
 msgstr "_Irteerako formatua"
 
-#: modules/printbackends/gtkprintbackendlpr.c:378
+#: modules/printbackends/gtkprintbackendlpr.c:376
 msgid "Print to LPR"
 msgstr "Inprimatu LPRen"
 
-#: modules/printbackends/gtkprintbackendlpr.c:404
+#: modules/printbackends/gtkprintbackendlpr.c:402
 msgid "Pages Per Sheet"
 msgstr "Orrialde orriko"
 
-#: modules/printbackends/gtkprintbackendlpr.c:411
+#: modules/printbackends/gtkprintbackendlpr.c:409
 msgid "Command Line"
 msgstr "Komando-lerroa"
 
@@ -7738,1197 +7131,3 @@ msgstr "Ez dago profilik erabilgarri"
 msgid "Unspecified profile"
 msgstr "Zehaztu gabeko profila"
 
-#~ msgid "Don’t batch GDI requests"
-#~ msgstr "Ez jarri GDI eskaerak batch gisa"
-
-#~ msgid "Don’t use the Wintab API for tablet support"
-#~ msgstr "Ez erabili Wintab APIa taulak onartzeko"
-
-#~ msgid "Same as --no-wintab"
-#~ msgstr "'--no-wintab' bezala ere"
-
-#~ msgid "Do use the Wintab API [default]"
-#~ msgstr "Erabili Wintab APIa [lehenetsia]"
-
-#~ msgid "Size of the palette in 8 bit mode"
-#~ msgstr "8-bit motako paletaren tamaina"
-
-#~ msgid "COLORS"
-#~ msgstr "KOLOREAK"
-
-#~ msgctxt "Action description"
-#~ msgid "Clicks the menuitem"
-#~ msgstr "Menuko elementuan klik egiten du"
-
-#~ msgid "Forget association"
-#~ msgstr "Ahaztu elkarketa"
-
-#~ msgctxt "year measurement template"
-#~ msgid "2000"
-#~ msgstr "2000"
-
-#~ msgid ""
-#~ "The folder could not be created, as a file with the same name already "
-#~ "exists.  Try using a different name for the folder, or rename the file "
-#~ "first."
-#~ msgstr ""
-#~ "Karpeta ezin izan da sortu, izen bereko beste fitxategia badago lehendik. "
-#~ "Saiatu karpeta beste izen batekin sortzen, edo aldatu fitxategiaren izena "
-#~ "lehenbizi."
-
-#~ msgid "Enter location"
-#~ msgstr "Sartu kokalekua"
-
-#~ msgid "Cannot change to folder because it is not local"
-#~ msgstr "Ezin aldatu karpetara, lokala ez delako."
-
-#~ msgid "Application menu"
-#~ msgstr "Aplikazioaren menua"
-
-#~ msgid "Icon “%s” not present in theme %s"
-#~ msgstr "“%s” ikonoa ez dago “%s” gaian"
-
-#~ msgid "Failed to load icon"
-#~ msgstr "Huts egin du ikonoa kargatzean"
-
-#~ msgid "Rename…"
-#~ msgstr "Aldatu izena…"
-
-#~ msgid "LRM _Left-to-right mark"
-#~ msgstr "LRM _Ezkerretik_eskuinera marka"
-
-#~ msgid "RLM _Right-to-left mark"
-#~ msgstr "RLM E_skuinetik_ezkerrera marka"
-
-#~ msgid "LRE Left-to-right _embedding"
-#~ msgstr "LRE Ezkerretik_eskuinera ka_psulatzea"
-
-#~ msgid "RLE Right-to-left e_mbedding"
-#~ msgstr "RLE Eskuinetik_ezkerrera _kapsulatzea"
-
-#~ msgid "LRO Left-to-right _override"
-#~ msgstr "LRO Ezkerretik_eskuinera _gainidaztea"
-
-#~ msgid "RLO Right-to-left o_verride"
-#~ msgstr "RLO Eskuinetik_ezkerrera gai_nidaztea"
-
-#~ msgid "PDF _Pop directional formatting"
-#~ msgstr "PDF _Formateatze direkzionala agertzea"
-
-#~ msgid "ZWS _Zero width space"
-#~ msgstr "ZWS _Zero zabaleraren tartea"
-
-#~ msgid "ZWJ Zero width _joiner"
-#~ msgstr "ZWJ Zero zabaleraren _mihiztatzailea"
-
-#~ msgid "ZWNJ Zero width _non-joiner"
-#~ msgstr "ZWNJ Zero zabaleraren ez-mihiztatzailea"
-
-#~ msgid "Move"
-#~ msgstr "Aldatu lekuz"
-
-#~ msgid "Resize"
-#~ msgstr "Aldatu tamaina"
-
-#~ msgid "Always on Top"
-#~ msgstr "Beti gainean"
-
-#~ msgctxt "property name"
-#~ msgid "None"
-#~ msgstr "Bat ere ez"
-
-#~ msgid "Font Family"
-#~ msgstr "Letra-familia"
-
-#~ msgid "Down Path"
-#~ msgstr "Azpiko bidea"
-
-#~ msgid "Up Path"
-#~ msgstr "Goiko bidea"
-
-#~ msgid "Printer"
-#~ msgstr "Inprimagailua"
-
-#~ msgid "Opening %s"
-#~ msgstr "'%s' irekitzen"
-
-#~ msgid "C_ustomize"
-#~ msgstr "_Pertsonalizatu"
-
-#~ msgid "Select all"
-#~ msgstr "Hautatu dena"
-
-#~ msgid "Cut"
-#~ msgstr "Ebaki"
-
-#~ msgid "Copy"
-#~ msgstr "Kopiatu"
-
-#~ msgid "Paste"
-#~ msgstr "Itsatsi"
-
-#~ msgid "Default Widget"
-#~ msgstr "Trepeta lehenetsia"
-
-#~ msgid "3.2 core GL profile is not available on EGL implementation"
-#~ msgstr "3.2 nukleoa GL profila ez dago erabilgarri EGL inplementazioan"
-
-#~ msgid "Artwork by"
-#~ msgstr "Marrazki lanak"
-
-#~ msgid "Packing property %s::%s not found\n"
-#~ msgstr "Ez da %s::%s paketatze propietatea aurkitu\n"
-
-#~ msgid "Cell property %s::%s not found\n"
-#~ msgstr "Ez da %s::%s gelaxkaren propietatea aurkitu\n"
-
-#~ msgctxt "input method menu"
-#~ msgid "Simple"
-#~ msgstr "Bakuna"
-
-#~ msgctxt "input method menu"
-#~ msgid "None"
-#~ msgstr "Bat ere ez"
-
-#~ msgid "No item for URI “%s” found"
-#~ msgstr "Ez da “%s“ URIaren elementua aurkitu"
-
-#~ msgid "Untitled filter"
-#~ msgstr "Izenik gabeko iragazkia"
-
-#~ msgid "Could not remove item"
-#~ msgstr "Ezin da elementua kendu"
-
-#~ msgid "Copy _Location"
-#~ msgstr "Kopiatu _helbidea"
-
-#~ msgid "_Remove From List"
-#~ msgstr "_Kendu zerrendatik"
-
-#~ msgid "Show _Private Resources"
-#~ msgstr "Erakutsi baliabide _pribatuak"
-
-#~ msgid "No items found"
-#~ msgstr "Ez da elementurik aurkitu"
-
-#~ msgid "No recently used resource found with URI “%s”"
-#~ msgstr "Ez da duela gutxi erabilitako “%s“ URIaren baliabiderik aurkitu"
-
-#~ msgid "Open “%s”"
-#~ msgstr "Ireki “%s“"
-
-#~ msgid "Unknown item"
-#~ msgstr "Elementu ezezaguna"
-
-#~ msgctxt "recent menu label"
-#~ msgid "_%d. %s"
-#~ msgstr "_%d. %s"
-
-#~ msgctxt "recent menu label"
-#~ msgid "%d. %s"
-#~ msgstr "%d. %s"
-
-#~ msgctxt "switch"
-#~ msgid "ON"
-#~ msgstr "❙"
-
-#~ msgctxt "switch"
-#~ msgid "OFF"
-#~ msgstr "○"
-
-#~ msgid "Unknown error when trying to deserialize %s"
-#~ msgstr "Errore ezezaguna %s serietik kentzen saiatzean"
-
-#~ msgid "No deserialize function found for format %s"
-#~ msgstr "Ez da %s formatuaren serietik kentzeko funtziorik aurkitu"
-
-#~ msgid "Both “id” and “name” were found on the <%s> element"
-#~ msgstr "Bai “id“ bai “name“ aurkitu dira <%s> elementuan"
-
-#~ msgid "The attribute “%s” was found twice on the <%s> element"
-#~ msgstr "“%s“ atributua birritan aurkitu da <%s> elementuan"
-
-#~ msgid "<%s> element has invalid ID “%s”"
-#~ msgstr "<%s> elementuak “%s“ ID baliogabea du"
-
-#~ msgid "<%s> element has neither a “name” nor an “id” attribute"
-#~ msgstr "<%s> elementuak ez du “name“ ez “id“ elementurik"
-
-#~ msgid "Attribute “%s” repeated twice on the same <%s> element"
-#~ msgstr "“%s“ atributua birritan errepikatuta <%s> elementu berean"
-
-#~ msgid "Attribute “%s” is invalid on <%s> element in this context"
-#~ msgstr "“%s“ atributua ez da baliozkoa <%s> elementuan testuinguru honetan"
-
-#~ msgid "Tag “%s” has not been defined."
-#~ msgstr "“%s“ etiketa ez da definitu."
-
-#~ msgid "Anonymous tag found and tags can not be created."
-#~ msgstr "Etiketa anonimoa aurkitu da eta etiketak ezin dira sortu."
-
-#~ msgid "Tag “%s” does not exist in buffer and tags can not be created."
-#~ msgstr ""
-#~ "“%s“ etiketa ez da existitzen bufferrean eta etiketak ezin dira sortu."
-
-#~ msgid "Element <%s> is not allowed below <%s>"
-#~ msgstr "Ez da onartzen <%s> elementua <%s>(r)en azpian jartzea"
-
-#~ msgid "“%s” is not a valid attribute type"
-#~ msgstr "“%s“ ez da baliozko atributu-mota"
-
-#~ msgid "“%s” is not a valid attribute name"
-#~ msgstr "“%s“ ez da baliozko atributu-izena"
-
-#~ msgid ""
-#~ "“%s” could not be converted to a value of type “%s” for attribute “%s”"
-#~ msgstr "Ezin izan da “%s“ bihurtu “%s“ atributuaren “%s“ motara"
-
-#~ msgid "“%s” is not a valid value for attribute “%s”"
-#~ msgstr "“%s“ ez da “%s“ atributuaren baliozko balioa"
-
-#~ msgid "Tag “%s” already defined"
-#~ msgstr "“%s“ etiketa lehendik definituta dago"
-
-#~ msgid "Tag “%s” has invalid priority “%s”"
-#~ msgstr "“%s“ etiketak “%s“ lehentasun baliogabea du"
-
-#~ msgid "Outermost element in text must be <text_view_markup> not <%s>"
-#~ msgstr ""
-#~ "Testuko elementu kanpokoena <text_view_markup> izen behar du, ez <%s>"
-
-#~ msgid "A <%s> element has already been specified"
-#~ msgstr "<%s> elementua jadanik zehaztuta dago"
-
-#~ msgid "A <text> element can’t occur before a <tags> element"
-#~ msgstr "<text> elementua ezin da <tags> baino lehenago agertu"
-
-#~ msgid "Serialized data is malformed"
-#~ msgstr "Serieko datuak formatu okerra du"
-
-#~ msgid ""
-#~ "Serialized data is malformed. First section isn’t "
-#~ "GTKTEXTBUFFERCONTENTS-0001"
-#~ msgstr ""
-#~ "Serieko datuak formatu okerra du. Aurreneko atala ez da "
-#~ "GTKTEXTBUFFERCONTENTS-0001"
-
-#~ msgid "Clip Area"
-#~ msgstr "Mozketa-area"
-
-#~ msgid "Object"
-#~ msgstr "Objektua"
-
-#~ msgctxt "type name"
-#~ msgid "Unknown"
-#~ msgstr "Ezezaguna"
-
-#~ msgid "Attribute mapping"
-#~ msgstr "Atributuaren mapaketa"
-
-#~ msgid "%p (%s)"
-#~ msgstr "%p (%s)"
-
-#~ msgid "Defined at: %p (%s)"
-#~ msgstr "Hemen definituta: %p (%s)"
-
-#~ msgid "inverted"
-#~ msgstr "alderantzikatuta"
-
-#~ msgid "bidirectional, inverted"
-#~ msgstr "bidirekzionala, alderantzikatuta"
-
-#~ msgid "Binding:"
-#~ msgstr "Lotura:"
-
-#~ msgid "Selector"
-#~ msgstr "Hautatzailea"
-
-#~ msgid "Yes"
-#~ msgstr "Bai"
-
-#~ msgid "Signal"
-#~ msgstr "Seinalea"
-
-#~ msgid "Connected"
-#~ msgstr "Konektatuta"
-
-#~ msgid ""
-#~ "Not settable at runtime.\n"
-#~ "Use GDK_GL=always or GDK_GL=disable instead"
-#~ msgstr ""
-#~ "Ezin da exekuzio-denbora ezarri.\n"
-#~ "Erabili 'GDK_GL=always' edo 'GDK_GL=disable' horren ordez"
-
-#~ msgid "Rendering Mode"
-#~ msgstr "Errendatze modua"
-
-#~ msgid "Similar"
-#~ msgstr "Antzekoa"
-
-#~ msgid "Recording"
-#~ msgstr "Grabazioa"
-
-#~ msgid "Snapshot Debug Nodes"
-#~ msgstr "Argazkiaren arazketaren nodoak"
-
-#~ msgid "When Needed"
-#~ msgstr "Behar denean"
-
-#~ msgid "Always"
-#~ msgstr "Beti"
-
-#~ msgid "Disabled"
-#~ msgstr "Desgaituta"
-
-#~ msgid "Software Surfaces"
-#~ msgstr "Software bidezko gainazalerak"
-
-#~ msgid "Texture Rectangle Extension"
-#~ msgstr "Testuraren laukizuzenaren hedapena"
-
-#~ msgid "Trace signal emissions on this object"
-#~ msgstr "Jarraitu seinalearen igorpenen aztarnak objektu honetan"
-
-#~ msgid "Clear log"
-#~ msgstr "Garbitu egunkaria"
-
-#~ msgid "Child Properties"
-#~ msgstr "Umearen propietateak"
-
-#~ msgid "CSS Selector"
-#~ msgstr "CSS hautatzailea"
-
-#~ msgid "Gestures"
-#~ msgstr "Keinuak"
-
-#~ msgid "Visual"
-#~ msgstr "Bisuala"
-
-#~ msgid "smb://"
-#~ msgstr "smb://"
-
-#~ msgid "Select which type of documents are shown"
-#~ msgstr "Hautatu erakutsiko diren fitxategi motak"
-
-#~ msgctxt "input method menu"
-#~ msgid "Amharic (EZ+)"
-#~ msgstr "Amharica (EZ+)"
-
-#~ msgctxt "input method menu"
-#~ msgid "Broadway"
-#~ msgstr "Broadway"
-
-#~ msgctxt "input method menu"
-#~ msgid "Cedilla"
-#~ msgstr "Ze hautsia"
-
-#~ msgctxt "input menthod menu"
-#~ msgid "Cyrillic (Transliterated)"
-#~ msgstr "Zirilikoa (Transliteratua)"
-
-#~ msgctxt "input method menu"
-#~ msgid "Inuktitut (Transliterated)"
-#~ msgstr "Inuktitutera (Transliteratua)"
-
-#~ msgctxt "input method menu"
-#~ msgid "IPA"
-#~ msgstr "IPA"
-
-#~ msgctxt "input method menu"
-#~ msgid "Multipress"
-#~ msgstr "Hainbat pultsazio"
-
-#~ msgctxt "input method menu"
-#~ msgid "Mac OS X Quartz"
-#~ msgstr "Mac OS X Quartz"
-
-#~ msgctxt "input method menu"
-#~ msgid "Tigrigna-Eritrean (EZ+)"
-#~ msgstr "Tigrinyera-Eritrearra (EZ+)"
-
-#~ msgctxt "input method menu"
-#~ msgid "Tigrigna-Ethiopian (EZ+)"
-#~ msgstr " Tigrinyera-Etiopiarra (EZ+)"
-
-#~ msgctxt "input method menu"
-#~ msgid "Vietnamese (VIQR)"
-#~ msgstr "Vietnamdarra (VIQR)"
-
-#~ msgctxt "input method menu"
-#~ msgid "X Input Method"
-#~ msgstr "X sarrera-metodoa"
-
-#~ msgid "printer offline"
-#~ msgstr "inprimagailua lineaz kanpo"
-
-#~ msgid "ready to print"
-#~ msgstr "inprimatzeko prest"
-
-#~ msgid "processing job"
-#~ msgstr "lana prozesatzen"
-
-#~ msgid "paused"
-#~ msgstr "pausarazita"
-
-#~ msgid "unknown"
-#~ msgstr "ezezaguna"
-
-#~ msgid "test-output.%s"
-#~ msgstr "irteerako-proba.%s"
-
-#~ msgid "Print to Test Printer"
-#~ msgstr "Inprimatu probako inprimagailuan"
-
-#~ msgid "Could not start the search process"
-#~ msgstr "Ezin izan da bilaketako prozesua abiarazi"
-
-#~ msgid ""
-#~ "The program was not able to create a connection to the indexer daemon. "
-#~ "Please make sure it is running."
-#~ msgstr ""
-#~ "Programak ezin izan du indexatzaile daemonarekin konexiorik sortu. "
-#~ "Ziurtatu exekutatzen ari dela."
-
-#~ msgid "smb://foo.example.com, ssh://192.168.0.1, ftp://[2001:db8::1]"
-#~ msgstr "smb://txoroa.adibidea.com, ssh://192.168.0.1, ftp://[2001:db8::1]"
-
-#~ msgid "Error parsing option --gdk-debug"
-#~ msgstr "Errorea --gdk-debug aukera analizatzean"
-
-#~ msgid "Error parsing option --gdk-no-debug"
-#~ msgstr "Errorea --gdk-no-debug aukera analizatzean"
-
-#~ msgid "Program class as used by the window manager"
-#~ msgstr "Programa-klasea, leiho kudeatzaileak erabiltzen duen bezala"
-
-#~ msgid "CLASS"
-#~ msgstr "KLASEA"
-
-#~ msgid "Program name as used by the window manager"
-#~ msgstr "Programa-izena, leiho kudeatzaileak erabiltzen duen bezala"
-
-#~ msgid "NAME"
-#~ msgstr "IZENA"
-
-#~ msgid "X display to use"
-#~ msgstr "Erabili beharreko X bistaratzea"
-
-#~ msgid "DISPLAY"
-#~ msgstr "BISTARATZEA"
-
-#~ msgid "GDK debugging flags to set"
-#~ msgstr "Ezarri beharreko GDK arazketa-banderak"
-
-#~ msgid "FLAGS"
-#~ msgstr "BANDERAK"
-
-#~ msgid "GDK debugging flags to unset"
-#~ msgstr "Ezarpenetik kendu beharreko GDK arazketa-banderak"
-
-#~ msgid ""
-#~ "The WGL_ARB_create_context extension needed to create core profiles is "
-#~ "not available"
-#~ msgstr ""
-#~ "WGL_ARB_create_context_profile hedapenak eskatzen duen nukleoaren profila "
-#~ "ez dago erabilgarri"
-
-#~ msgid ""
-#~ "Select the color you want from the outer ring. Select the darkness or "
-#~ "lightness of that color using the inner triangle."
-#~ msgstr ""
-#~ "Hautatu nahi duzun kolorea kanpoko biribiletik. Hautatu kolore horren "
-#~ "iluntasuna edo argitasuna barruko triangelua erabiliz"
-
-#~ msgid ""
-#~ "Click the eyedropper, then click a color anywhere on your screen to "
-#~ "select that color."
-#~ msgstr ""
-#~ "Egin klik tanta-kontagailuan, eta egin klik zure pantailako edozein "
-#~ "koloretan kolore hori hautatzeko."
-
-#~ msgid "_Hue:"
-#~ msgstr "_Ñabardura:"
-
-#~ msgid "Position on the color wheel."
-#~ msgstr "Kolore-gurpileko kokalekua."
-
-#~ msgid "S_aturation:"
-#~ msgstr "_Saturazioa:"
-
-#~ msgid "Intensity of the color."
-#~ msgstr "Kolorearen intentsitatea."
-
-#~ msgid "_Value:"
-#~ msgstr "_Balioa:"
-
-#~ msgid "Brightness of the color."
-#~ msgstr "Kolorearen distira."
-
-#~ msgid "_Red:"
-#~ msgstr "_Gorria:"
-
-#~ msgid "Amount of red light in the color."
-#~ msgstr "Argi gorriaren kantitatea kolorean."
-
-#~ msgid "Amount of green light in the color."
-#~ msgstr "Argi berdearen kantitatea kolorean."
-
-#~ msgid "_Blue:"
-#~ msgstr "_Urdina:"
-
-#~ msgid "Amount of blue light in the color."
-#~ msgstr "Argi urdinaren kantitatea kolorean."
-
-#~ msgid "Op_acity:"
-#~ msgstr "_Opakutasuna:"
-
-#~ msgid "Transparency of the color."
-#~ msgstr "Kolorearen gardentasuna."
-
-#~ msgid "Color _name:"
-#~ msgstr "Kolorearen i_zena:"
-
-#~ msgid ""
-#~ "You can enter an HTML-style hexadecimal color value, or simply a color "
-#~ "name such as “orange” in this entry."
-#~ msgstr ""
-#~ "HTML estiloko kolore-balio hamaseitarra sar dezakezu edo bestela kolore  "
-#~ "baten izena, adibidez 'laranja', sarrera honetan."
-
-#~ msgid "_Palette:"
-#~ msgstr "_Paleta:"
-
-#~ msgid "Color Wheel"
-#~ msgstr "Kolore-gurpila"
-
-#~ msgid ""
-#~ "The previously-selected color, for comparison to the color you’re "
-#~ "selecting now. You can drag this color to a palette entry, or select this "
-#~ "color as current by dragging it to the other color swatch alongside."
-#~ msgstr ""
-#~ "Aurrez hautatutako kolorea orain hautatzen ari zaren kolorearekin "
-#~ "konparatzeko. Kolore hori paleta-sarrerara arrasta dezakezu edo kolore "
-#~ "hori uneko kolore gisa hauta dezakezu, koloreen ondoko lagin-multzora "
-#~ "arrastatuz."
-
-#~ msgid ""
-#~ "The color you’ve chosen. You can drag this color to a palette entry to "
-#~ "save it for use in the future."
-#~ msgstr ""
-#~ "Hautatu duzun kolorea. Kolore hori paleta-sarrerara arrasta dezakezu eta "
-#~ "han gorde aurrerago erabiltzeko."
-
-#~ msgid ""
-#~ "The previously-selected color, for comparison to the color you’re "
-#~ "selecting now."
-#~ msgstr ""
-#~ "Aurrez hautatutako kolorea, orain hautatzen ari zaren kolorearekin "
-#~ "konparatzeko."
-
-#~ msgid "The color you’ve chosen."
-#~ msgstr "Aukeratu duzun kolorea."
-
-#~ msgid "_Save color here"
-#~ msgstr "_Gorde kolorea hemen"
-
-#~ msgid ""
-#~ "Click this palette entry to make it the current color. To change this "
-#~ "entry, drag a color swatch here or right-click it and select “Save color "
-#~ "here.”"
-#~ msgstr ""
-#~ "Egin klik paleta-sarrera honetan uneko kolore bihurtzeko. Sarrera hori "
-#~ "aldatzeko, arrastatu koloreen lagin-multzoa hona edo egin klik eskuineko "
-#~ "botoiarekin eta hautatu \"Gorde kolorea hemen.\""
-
-#~ msgid "_Help"
-#~ msgstr "_Laguntza"
-
-#~ msgid "Color Selection"
-#~ msgstr "Kolore-hautapena"
-
-#~ msgid "abcdefghijk ABCDEFGHIJK"
-#~ msgstr "abcdefghijk ABCDEFGHIJK"
-
-#~ msgid "_Style:"
-#~ msgstr "_Estiloa:"
-
-#~ msgid "Si_ze:"
-#~ msgstr "Ta_maina:"
-
-#~ msgid "_Preview:"
-#~ msgstr "_Aurrebista:"
-
-#~ msgid "Font Selection"
-#~ msgstr "Letra-tipoaren hautapena"
-
-#~ msgctxt "Number format"
-#~ msgid "%d"
-#~ msgstr "%d"
-
-#~ msgctxt "Stock label"
-#~ msgid "_Apply"
-#~ msgstr "_Aplikatu"
-
-#~ msgctxt "Stock label"
-#~ msgid "_Cancel"
-#~ msgstr "_Utzi"
-
-#~ msgctxt "Stock label"
-#~ msgid "C_onnect"
-#~ msgstr "_Konektatu"
-
-#~ msgctxt "Stock label"
-#~ msgid "_Convert"
-#~ msgstr "_Bihurtu"
-
-#~ msgctxt "Stock label"
-#~ msgid "_Discard"
-#~ msgstr "_Baztertu"
-
-#~ msgctxt "Stock label"
-#~ msgid "_Disconnect"
-#~ msgstr "_Deskonektatu"
-
-#~ msgctxt "Stock label"
-#~ msgid "_Edit"
-#~ msgstr "_Editatu"
-
-#~ msgctxt "Stock label"
-#~ msgid "_Index"
-#~ msgstr "_Indizea"
-
-#~ msgctxt "Stock label"
-#~ msgid "_Information"
-#~ msgstr "_Informazioa"
-
-#~ msgctxt "Stock label"
-#~ msgid "_No"
-#~ msgstr "_Ez"
-
-#~ msgctxt "Stock label"
-#~ msgid "_OK"
-#~ msgstr "_Ados"
-
-#~ msgctxt "Stock label"
-#~ msgid "Landscape"
-#~ msgstr "Horizontala"
-
-#~ msgctxt "Stock label"
-#~ msgid "Portrait"
-#~ msgstr "Bertikala"
-
-#~ msgctxt "Stock label"
-#~ msgid "Reverse landscape"
-#~ msgstr "Alderantzizko horizontala"
-
-#~ msgctxt "Stock label"
-#~ msgid "Reverse portrait"
-#~ msgstr "Alderantzizko bertikala"
-
-#~ msgctxt "Stock label"
-#~ msgid "Page Set_up"
-#~ msgstr "Prestatu _orrialdea"
-
-#~ msgctxt "Stock label"
-#~ msgid "_Preferences"
-#~ msgstr "_Hobespenak"
-
-#~ msgctxt "Stock label"
-#~ msgid "_Color"
-#~ msgstr "_Kolorea"
-
-#~ msgctxt "Stock label"
-#~ msgid "_Font"
-#~ msgstr "_Letra-tipoa"
-
-#~ msgctxt "Stock label"
-#~ msgid "_Undelete"
-#~ msgstr "_Desezabatu"
-
-#~ msgctxt "Stock label"
-#~ msgid "_Yes"
-#~ msgstr "_Bai"
-
-#~ msgid "Unexpected start tag '%s' on line %d char %d"
-#~ msgstr "Uste gabeko '%s' hasierako etiketa %d lerroan, %d karakterea"
-
-#~ msgid "Unexpected character data on line %d char %d"
-#~ msgstr "Uste gabeko datu-karakterea %d lerroan, %d karakterea"
-
-#~ msgid "Empty"
-#~ msgstr "Hutsik"
-
-#~ msgctxt "input method menu"
-#~ msgid "System (%s)"
-#~ msgstr "Sistema (%s)"
-
-#~ msgid "Load additional GTK+ modules"
-#~ msgstr "Kargatu GTK+ modulu gehigarriak"
-
-#~ msgid "MODULES"
-#~ msgstr "MODULUAK"
-
-#~ msgid "Make all warnings fatal"
-#~ msgstr "Bihurtu abisu guztiak errore larri"
-
-#~ msgid "GTK+ debugging flags to set"
-#~ msgstr "Ezarri beharreko Gtk+ arazketa-banderak"
-
-#~ msgid "GTK+ debugging flags to unset"
-#~ msgstr "Ezarpenetik kendu beharreko Gtk+ arazketa-banderak"
-
-#~ msgid "Cannot open display: %s"
-#~ msgstr "Ezin da pantaila ireki: %s"
-
-#~ msgid "GTK+ Options"
-#~ msgstr "GTK+ aukerak"
-
-#~ msgid "Show GTK+ Options"
-#~ msgstr "Erakutsi GTK+ aukerak"
-
-#~ msgid "Connect to Server"
-#~ msgstr "Konektatu zerbitzarira"
-
-#~ msgid "Connect to a network server address"
-#~ msgstr "Konektatu sareko zerbitzariaren helbidera"
-
-#~ msgid "Ignore hidden"
-#~ msgstr "Ez ikusi egin ezkutukoei"
-
-#~ msgid "Show Pixel Cache"
-#~ msgstr "Erakutsi pixelen cachea"
-
-#~ msgid "Error launching preview"
-#~ msgstr "Errorea aurrebista abiaraztean"
-
-#~ msgid "New class"
-#~ msgstr "Klase berria"
-
-#~ msgid "Cancel"
-#~ msgstr "Utzi"
-
-#~ msgid "Class name"
-#~ msgstr "Klase-izena"
-
-#~ msgid "Changes are applied instantly, only for this selected widget."
-#~ msgstr ""
-#~ "Aldaketak berehala aplikatuko dira, soilik hautatutako trepeta honentzat."
-
-#~ msgid ""
-#~ "The GLX_ARB_create_context_profile extension needed to create core "
-#~ "profiles is not available"
-#~ msgstr ""
-#~ "GLX_ARB_create_context_profile hedapenak eskatzen duen nukleoaren profila "
-#~ "ez dago erabilgarri"
-
-#~ msgid "Add a class"
-#~ msgstr "Gehitu klasea"
-
-#~ msgid "Restore defaults for this widget"
-#~ msgstr "Leheneratu trepeta honen lehenetsiak"
-
-#~| msgid "Class name"
-#~ msgid "Classes"
-#~ msgstr "Klaseak"
-
-#~ msgid "Allocated size"
-#~ msgstr "Esleitutako tamaina"
-
-#~ msgid "Object Hierarchy"
-#~ msgstr "Objektuaren hierarkia"
-
-#~ msgid "Style Properties"
-#~ msgstr "Estiloaren propietateak"
-
-#~ msgid "Invalid object type '%s' on line %d"
-#~ msgstr "'%s' objektu mota baliogabea %d. lerroan"
-
-#~ msgid "Invalid type function on line %d: '%s'"
-#~ msgstr "Funtzio mota baliogabea %d lerroan: '%s'"
-
-#~ msgid "Duplicate object ID '%s' on line %d (previously on line %d)"
-#~ msgstr "Bikoiztutako '%s' ID objektua %d. lerroan (aurrez %d. lerroan)"
-
-#~ msgid "Invalid signal '%s' for type '%s' on line %d"
-#~ msgstr "'%2$s' motaren '%1$s' seinalea baliogabea %3$d. lerroan"
-
-#~ msgid "Invalid root element: <%s>"
-#~ msgstr "Erroko elementua baliogabea: <%s>"
-
-#~ msgid "Unhandled tag: <%s>"
-#~ msgstr "Kudeatu gabeko etiketa: <%s>"
-
-#~ msgid "_Customize"
-#~ msgstr "_Pertsonalizatu"
-
-#~ msgid "Yesterday at %-I:%M %P"
-#~ msgstr "Atzo, %-I:%M %P"
-
-#~ msgid "Devices"
-#~ msgstr "Gailuak"
-
-#~ msgid "Bookmarks"
-#~ msgstr "Laster-markak"
-
-#~ msgid "Browse Network"
-#~ msgstr "Arakatu sarea"
-
-#~ msgid "Remove"
-#~ msgstr "Kendu"
-
-#~ msgid "X display"
-#~ msgstr "X pantaila"
-
-#~ msgid "All Files"
-#~ msgstr "Fitxategi guztiak"
-
-#~ msgid ""
-#~ "No fonts matched your search. You can revise your search and try again."
-#~ msgstr ""
-#~ "Letra-tiporik ez dator bat zure bilaketarekin. Berrikusi zure bilaketa "
-#~ "eta saiatu berriro."
-
-#~ msgid "_Location:"
-#~ msgstr "_Kokalekua:"
-
-#~ msgid "The license of the program"
-#~ msgstr "Programaren lizentzia"
-
-#~ msgctxt "progress bar label"
-#~ msgid "%d %%"
-#~ msgstr "%% %d"
-
-#~ msgctxt "volume percentage"
-#~ msgid "%d %%"
-#~ msgstr "%% %d"
-
-#~ msgid "Unmaximize"
-#~ msgstr "Desmaximizatu"
-
-#~ msgid "Always on Visible Workspace"
-#~ msgstr "Beti laneko area ikusgaian"
-
-#~ msgid "Only on This Workspace"
-#~ msgstr "Laneko area honetan bakarrik"
-
-#~ msgid "Move to Workspace Up"
-#~ msgstr "Eraman gaineko laneko areara"
-
-#~ msgid "Move to Workspace Down"
-#~ msgstr "Eraman azpiko laneko areara"
-
-#~ msgid "Move to Another Workspace"
-#~ msgstr "Eraman beste laneko areara"
-
-#~ msgid "Workspace %d"
-#~ msgstr "%d. laneko area"
-
-#~ msgctxt "paper size"
-#~ msgid "A0x2"
-#~ msgstr "A0x2"
-
-#~ msgctxt "paper size"
-#~ msgid "A0x3"
-#~ msgstr "A0x3"
-
-#~ msgctxt "paper size"
-#~ msgid "A1x3"
-#~ msgstr "A1x3"
-
-#~ msgctxt "paper size"
-#~ msgid "A1x4"
-#~ msgstr "A1x4"
-
-#~ msgctxt "paper size"
-#~ msgid "A2x3"
-#~ msgstr "A2x3"
-
-#~ msgctxt "paper size"
-#~ msgid "A2x4"
-#~ msgstr "A2x4"
-
-#~ msgctxt "paper size"
-#~ msgid "A2x5"
-#~ msgstr "A2x5"
-
-#~ msgctxt "paper size"
-#~ msgid "A3x3"
-#~ msgstr "A3x3"
-
-#~ msgctxt "paper size"
-#~ msgid "A3x4"
-#~ msgstr "A3x4"
-
-#~ msgctxt "paper size"
-#~ msgid "A3x5"
-#~ msgstr "A3x5"
-
-#~ msgctxt "paper size"
-#~ msgid "A3x6"
-#~ msgstr "A3x6"
-
-#~ msgctxt "paper size"
-#~ msgid "A3x7"
-#~ msgstr "A3x7"
-
-#~ msgctxt "paper size"
-#~ msgid "A4x3"
-#~ msgstr "A4x3"
-
-#~ msgctxt "paper size"
-#~ msgid "A4x4"
-#~ msgstr "A4x4"
-
-#~ msgctxt "paper size"
-#~ msgid "A4x5"
-#~ msgstr "A4x5"
-
-#~ msgctxt "paper size"
-#~ msgid "A4x6"
-#~ msgstr "A4x6"
-
-#~ msgctxt "paper size"
-#~ msgid "A4x7"
-#~ msgstr "A4x7"
-
-#~ msgctxt "paper size"
-#~ msgid "A4x8"
-#~ msgstr "A4x8"
-
-#~ msgctxt "paper size"
-#~ msgid "A4x9"
-#~ msgstr "A4x9"
-
-#~ msgctxt "paper size"
-#~ msgid "10x11"
-#~ msgstr "10x11"
-
-#~ msgctxt "paper size"
-#~ msgid "10x13"
-#~ msgstr "10x13"
-
-#~ msgctxt "paper size"
-#~ msgid "10x14"
-#~ msgstr "10x14"
-
-#~ msgctxt "paper size"
-#~ msgid "10x15"
-#~ msgstr "10x15"
-
-#~ msgctxt "paper size"
-#~ msgid "11x12"
-#~ msgstr "11x12"
-
-#~ msgctxt "paper size"
-#~ msgid "11x15"
-#~ msgstr "11x15"
-
-#~ msgctxt "paper size"
-#~ msgid "12x19"
-#~ msgstr "12x19"
-
-#~ msgctxt "paper size"
-#~ msgid "5x7"
-#~ msgstr "5x7"
-
-#~ msgid "Please select a folder below"
-#~ msgstr "Ondoren, hautatu karpeta"
-
-#~ msgid "Please type a file name"
-#~ msgstr "Idatzi fitxategi-izena"
-
-#~ msgid "Recently Used"
-#~ msgstr "Duela gutxi erabilita"
-
-#~ msgid "Search:"
-#~ msgstr "Bilatu:"
-
-#~ msgid "Save in folder:"
-#~ msgstr "Gorde karpetan:"
-
-#~ msgid "Create in folder:"
-#~ msgstr "Sortu karpetan:"
-
-#~ msgid "Places"
-#~ msgstr "Lekuak"
-
-#~ msgid "Type a file name"
-#~ msgstr "Idatzi fitxategi-izena"
-
-#~ msgid "Failed to look for applications online"
-#~ msgstr "Huts egin du lineako aplikazioak bilatzean"
-
-#~ msgid "Select an application to open “%s”"
-#~ msgstr "Hautatu aplikazioa '%s' irekitzeko"
-
-#~ msgid "No applications available to open “%s” files"
-#~ msgstr "Ez dago aplikaziorik erabilgarri '%s' fitxategiak irekitzeko"
-
-#~ msgid ""
-#~ "Click \"Show other applications\", for more options, or \"Find "
-#~ "applications online\" to install a new application"
-#~ msgstr ""
-#~ "Egin klik \"Erakutsi beste aplikazioak\" gainean aukera gehiagorako, edo "
-#~ "\"Bilatu lineako aplikazioak\" aplikazio berri bat instalatzeko"
-
-#~ msgid ""
-#~ "%s cannot quit at this time:\n"
-#~ "\n"
-#~ "%s"
-#~ msgstr ""
-#~ "%s ezin da amaitu oraingoan:\n"
-#~ "\n"
-#~ "%s"
-
-#~ msgid "C_ontinue"
-#~ msgstr "_Jarraitu"
-
-#~ msgid "+"
-#~ msgstr "+"
-
-#~ msgid "-"
-#~ msgstr "-"
-
-#~ msgctxt "light switch widget"
-#~ msgid "Switch"
-#~ msgstr "Kommutadorea"
-
-#~ msgid "Switches between on and off states"
-#~ msgstr "Aktibatuta eta desaktibatuta egoeren artean aldatzen du"
-
-#~ msgid "Could not find '%s'"
-#~ msgstr "Ezin izan da '%s' aurkitu."
-
-#~ msgid "Could not find application"
-#~ msgstr "Ezin izan da aplikazioa aurkitu"
-
-#~ msgid "Input _Methods"
-#~ msgstr "Sartzeko _metodoak"
-
-#~ msgid "_Insert Unicode Control Character"
-#~ msgstr "_Txertatu Unicode kontrol-karakterea"
-
-#~ msgid "Could not retrieve information about the file"
-#~ msgstr "Ezin da fitxategiari buruzko informaziorik lortu"
-
-#~ msgid "Could not add a bookmark"
-#~ msgstr "Ezin da laster-marka gehitu"
-
-#~ msgid "Could not remove bookmark"
-#~ msgstr "Ezin izan da laster-marka ezabatu"
-
-#~ msgid "Add the folder '%s' to the bookmarks"
-#~ msgstr "Gehitu '%s' karpeta laster-markei"
-
-#~ msgid "Add the current folder to the bookmarks"
-#~ msgstr "Gehitu uneko karpeta laster-markei"
-
-#~ msgid "Add the selected folders to the bookmarks"
-#~ msgstr "Gehitu hautatutako karpetak laster-markei"
-
-#~ msgid "Remove the bookmark '%s'"
-#~ msgstr "Kendu '%s' laster-marka"
-
-#~ msgid "Bookmark '%s' cannot be removed"
-#~ msgstr "'%s' laster-marka ezin da kendu"
-
-#~ msgid "Remove the selected bookmark"
-#~ msgstr "Kendu hautatutako laster-marka"
-
-#~ msgid "_Places"
-#~ msgstr "_Lekuak"
-
-#~ msgid "Add the selected folder to the Bookmarks"
-#~ msgstr "Gehitu hautatutako karpetak laster-markei"
-
-#~ msgid "_Copy file’s location"
-#~ msgstr "_Kopiatu fitxategiaren helbidea"
-
-#~ msgid "Save in _folder:"
-#~ msgstr "Gorde _karpetan:"
-
-#~ msgid "Shortcut %s does not exist"
-#~ msgstr "%s lasterbidea ez da existitzen"
-
-#~ msgid "Could not mount %s"
-#~ msgstr "Ezin da %s muntatu"
-
-#~ msgid "Homepage"
-#~ msgstr "Webgune nagusia"
-
-#~ msgid "Caps Lock and Num Lock are on"
-#~ msgstr "Blok. Maius. eta Blok. Zenb. teklak aktibatuta daude"
-
-#~ msgid "Num Lock is on"
-#~ msgstr "Blok. Zenb. aktibatuta dago"
-
-#~ msgid "Connect as u_ser:"
-#~ msgstr "Konektatu _erabiltzaile gisa:"
-
-#~ msgid "Manage Custom Sizes..."
-#~ msgstr "Kudeatu tamaina pertsonalizatuak..."
-
-#~ msgid "Invalid path"
-#~ msgstr "Bide-izen baliogabea"
-
-#~ msgid "No match"
-#~ msgstr "Ez dago bat datorrenik"
-
-#~ msgid "Sole completion"
-#~ msgstr "Osaketa bakarra"
-
-#~ msgid "Complete, but not unique"
-#~ msgstr "Osaketa, baina ez bakarra"
-
-#~ msgid "Completing..."
-#~ msgstr "Osaketa lantzen..."
-
-#~ msgid "Only local files may be selected"
-#~ msgstr "Fitxategi lokalak soilik hauta daitezke"
-
-#~ msgid "Incomplete hostname; end it with '/'"
-#~ msgstr "Ostalari-izena osatu gabea: amaitu '/'-rekin"
-
-#~ msgid "Path does not exist"
-#~ msgstr "Bide-izena ez da existitzen"
-
-#~ msgid "Received invalid color data\n"
-#~ msgstr "Kolore datu baliogabea jaso da\n"
-
-#~ msgid "_Add"
-#~ msgstr "_Gehitu"
-
-#~ msgid "_Browse for other folders"
-#~ msgstr "_Arakatu beste karpetak"
-
-#~ msgid ""
-#~ "Could not find the icon '%s'. The '%s' theme\n"
-#~ "was not found either, perhaps you need to install it.\n"
-#~ "You can get a copy from:\n"
-#~ "\t%s"
-#~ msgstr ""
-#~ "Ezin izan da '%s' ikonoa aurkitu. '%s' gaia\n"
-#~ "ere ez da aurkitu, agian instalatu beharko duzu.\n"
-#~ "Kopia bat hemen lor dezakezu:\n"
-#~ "\t%s"
-
-#~ msgid "Unable to locate image file in pixmap_path: \"%s\""
-#~ msgstr "Ezin izan da irudi-fitxategia pixmap_path-en aurkitu: \"%s\""
-
-#~ msgid "This function is not implemented for widgets of class '%s'"
-#~ msgstr "'%s' klasearen trepeten funtzioa oraindik garatu gabe dago"
-
-#~ msgid "different idatas found for symlinked '%s' and '%s'\n"
-#~ msgstr "'%s' eta '%s' esteken 'idata' ezberdinak aurkitu dira\n"
-
-#~ msgid "Could not get information for file '%s': %s"
-#~ msgstr "Ezin izan da %s fitxategirako informaziorik lortu: %s"
-
-#~ msgid "Failed to open file '%s': %s"
-#~ msgstr "Ezin izan da '%s' fitxategia ireki: %s"
-
-#~ msgid ""
-#~ "Failed to load image '%s': reason not known, probably a corrupt image file"
-#~ msgstr ""
-#~ "Ezin izan da '%s' irudia kargatu: arrazoia ez dakigu, beharbada "
-#~ "hondatutako irudi-fitxategia izango da"
