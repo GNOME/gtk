@@ -719,42 +719,18 @@ button {
     // padding added too.
 
     > label {
-      padding-left: 6px;  // label padding
-      padding-right: 6px; //
+      padding: 0 6px;
+      margin: 0 -6px;
     }
 
     > image {
-      padding-left: 6px;   // image padding
-      padding-right: 6px;  //
-      padding-top: 3px;    //
-      padding-bottom: 3px; //
-    }
-
-    &.text-button {
-      // compensate text-button paddings
-      padding-left: 10px;
-      padding-right: 10px;
-    }
-
-    &.image-button {
-      // we want image buttons to have a 1:1 aspect ratio, so compensation
-      // of the padding added to the GtkImage is needed
-      padding-left: 2px;
-      padding-right: 2px;
+      padding: 3px 6px;
+      margin: -3px -6px;
     }
 
     &.needs-attention {
       > label,
       > image { @extend %needs_attention; }
-
-      &:active,
-      &:checked {
-        > label,
-        > image {
-          animation: none;
-          background-image: none;
-        }
-      }
     }
   }
 
