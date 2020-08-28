@@ -12,27 +12,87 @@ Overview of Changes in GTK 3.99.1
 * GtkTreeView:
  - Fix selection handling in cell editables
 
+* GtkPopover:
+ - Allow setting popup offset
+
+* GtkPlacesSidebar:
+ - Fix DND
+
+* GtkTextview:
+ - Speed up gtk_text_buffer_insert_markup
+
+* GtkFrame:
+ - Set GTK_OVERFLOW_HIDDEN
+
+* GtkSpinButton:
+ - Fix spinning
+
+* GtkFontChooser:
+ - Populate the list incrementally
+
 * CSS:
  - Hexadecimal colors can now specify alpha
+
+* Themes:
+ - Add and document highlevel list styles
+ - Drop the style class defines. Just use string literals
+ - Round frames
 
 * Documentation:
  - Refresh the widget gallery
  - Add images for new widgets to the gallery
  - Fix many cross-references
+ - Make sure tutorial examples are buildable
 
 * Demos:
  - Numerous crash- and bug fixes
+ - Improve about dialogs
+ - gtk4-demo: Modernize source highlighting
+ - gtk4-demo: Improve sidebar filtering
+ - gtk4-demo: Drop some outdated demos
+ - gtk4-demo: Polish a number of existing demos
+ - gtk4-demo: Add several new demos
+ - widget-factory: Show error states
 
-* Fix build with cups < 2.3
+* Tools:
+ - Make gtk4-builder-tool rewrite GtkBox
+ - Rewrite the profiling support, drop support
+   for D-Bus profiler activation, use SYSPROF_TRACE_FD
+
+* Printing:
+ - Fix build with cups < 2.3
 
 * win32:
  - Default to the GL renderer when we can
 
+* Broadway:
+ - Fix handling of opaque colors
+ - Fix handling of debug nodes
+ - Prune clipped render nodes
+
+* Wayland:
+ - Support newer schemas for settings
+ - Fix DND hotspot handling
+
 * Translation updates:
+  Basque
+  Brazilian Portuguese
+  British English
   Catalan
+  Chinese (China)
+  Croatian
+  Galician
+  German
+  Greek
+  Indonesian
+  Japanese
+  Kazakh
+  Lithuanian
   Polish
   Romanian
+  Slovenian
   Spanish
+  Turkish
   Ukrainian
 
 
