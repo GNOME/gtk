@@ -29,8 +29,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-08-22 14:09+0000\n"
-"PO-Revision-Date: 2020-08-22 16:17-0400\n"
+"POT-Creation-Date: 2020-08-29 08:37+0000\n"
+"PO-Revision-Date: 2020-08-29 10:18-0400\n"
 "Last-Translator: Boyuan Yang <073plan@gmail.com>\n"
 "Language-Team: Chinese (China) <i18n-zh@googlegroups.com>\n"
 "Language: zh_CN\n"
@@ -38,7 +38,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 2.4\n"
+"X-Generator: Poedit 2.4.1\n"
 
 #: gdk/broadway/gdkbroadway-server.c:133
 #, c-format
@@ -1001,7 +1001,7 @@ msgstr "未指定原因"
 msgid "%s does not exist in the bookmarks list"
 msgstr "书签列表里没有 %s"
 
-#: gtk/gtkbookmarksmanager.c:406
+#: gtk/gtkbookmarksmanager.c:412
 #, c-format
 msgid "%s already exists in the bookmarks list"
 msgstr "%s 已在书签列表里"
@@ -1118,188 +1118,188 @@ msgstr "%d %%"
 msgid "Pick a Color"
 msgstr "拾取颜色"
 
-#: gtk/gtkcolorchooserwidget.c:382
+#: gtk/gtkcolorchooserwidget.c:383
 msgctxt "Color name"
 msgid "Light Scarlet Red"
 msgstr "浅猩红"
 
-#: gtk/gtkcolorchooserwidget.c:383
+#: gtk/gtkcolorchooserwidget.c:384
 msgctxt "Color name"
 msgid "Scarlet Red"
 msgstr "猩红"
 
-#: gtk/gtkcolorchooserwidget.c:384
+#: gtk/gtkcolorchooserwidget.c:385
 msgctxt "Color name"
 msgid "Dark Scarlet Red"
 msgstr "深猩红"
 
-#: gtk/gtkcolorchooserwidget.c:385
+#: gtk/gtkcolorchooserwidget.c:386
 msgctxt "Color name"
 msgid "Light Orange"
 msgstr "浅橙色"
 
-#: gtk/gtkcolorchooserwidget.c:386
+#: gtk/gtkcolorchooserwidget.c:387
 msgctxt "Color name"
 msgid "Orange"
 msgstr "橙色"
 
-#: gtk/gtkcolorchooserwidget.c:387
+#: gtk/gtkcolorchooserwidget.c:388
 msgctxt "Color name"
 msgid "Dark Orange"
 msgstr "深橙色"
 
-#: gtk/gtkcolorchooserwidget.c:388
+#: gtk/gtkcolorchooserwidget.c:389
 msgctxt "Color name"
 msgid "Light Butter"
 msgstr "浅黄油"
 
-#: gtk/gtkcolorchooserwidget.c:389
+#: gtk/gtkcolorchooserwidget.c:390
 msgctxt "Color name"
 msgid "Butter"
 msgstr "黄油"
 
-#: gtk/gtkcolorchooserwidget.c:390
+#: gtk/gtkcolorchooserwidget.c:391
 msgctxt "Color name"
 msgid "Dark Butter"
 msgstr "深黄油"
 
-#: gtk/gtkcolorchooserwidget.c:391
+#: gtk/gtkcolorchooserwidget.c:392
 msgctxt "Color name"
 msgid "Light Chameleon"
 msgstr "浅变色"
 
-#: gtk/gtkcolorchooserwidget.c:392
+#: gtk/gtkcolorchooserwidget.c:393
 msgctxt "Color name"
 msgid "Chameleon"
 msgstr "变色"
 
-#: gtk/gtkcolorchooserwidget.c:393
+#: gtk/gtkcolorchooserwidget.c:394
 msgctxt "Color name"
 msgid "Dark Chameleon"
 msgstr "深变色"
 
-#: gtk/gtkcolorchooserwidget.c:394
+#: gtk/gtkcolorchooserwidget.c:395
 msgctxt "Color name"
 msgid "Light Sky Blue"
 msgstr "浅天蓝"
 
-#: gtk/gtkcolorchooserwidget.c:395
+#: gtk/gtkcolorchooserwidget.c:396
 msgctxt "Color name"
 msgid "Sky Blue"
 msgstr "天蓝"
 
-#: gtk/gtkcolorchooserwidget.c:396
+#: gtk/gtkcolorchooserwidget.c:397
 msgctxt "Color name"
 msgid "Dark Sky Blue"
 msgstr "深天蓝"
 
-#: gtk/gtkcolorchooserwidget.c:397
+#: gtk/gtkcolorchooserwidget.c:398
 msgctxt "Color name"
 msgid "Light Plum"
 msgstr "浅紫红"
 
-#: gtk/gtkcolorchooserwidget.c:398
+#: gtk/gtkcolorchooserwidget.c:399
 msgctxt "Color name"
 msgid "Plum"
 msgstr "紫红"
 
-#: gtk/gtkcolorchooserwidget.c:399
+#: gtk/gtkcolorchooserwidget.c:400
 msgctxt "Color name"
 msgid "Dark Plum"
 msgstr "深紫红"
 
-#: gtk/gtkcolorchooserwidget.c:400
+#: gtk/gtkcolorchooserwidget.c:401
 msgctxt "Color name"
 msgid "Light Chocolate"
 msgstr "浅巧克力"
 
-#: gtk/gtkcolorchooserwidget.c:401
+#: gtk/gtkcolorchooserwidget.c:402
 msgctxt "Color name"
 msgid "Chocolate"
 msgstr "巧克力"
 
-#: gtk/gtkcolorchooserwidget.c:402
+#: gtk/gtkcolorchooserwidget.c:403
 msgctxt "Color name"
 msgid "Dark Chocolate"
 msgstr "深巧克力"
 
-#: gtk/gtkcolorchooserwidget.c:403
+#: gtk/gtkcolorchooserwidget.c:404
 msgctxt "Color name"
 msgid "Light Aluminum 1"
 msgstr "浅铝灰1"
 
-#: gtk/gtkcolorchooserwidget.c:404
+#: gtk/gtkcolorchooserwidget.c:405
 msgctxt "Color name"
 msgid "Aluminum 1"
 msgstr "铝灰1"
 
-#: gtk/gtkcolorchooserwidget.c:405
+#: gtk/gtkcolorchooserwidget.c:406
 msgctxt "Color name"
 msgid "Dark Aluminum 1"
 msgstr "深铝灰1"
 
-#: gtk/gtkcolorchooserwidget.c:406
+#: gtk/gtkcolorchooserwidget.c:407
 msgctxt "Color name"
 msgid "Light Aluminum 2"
 msgstr "浅铝灰2"
 
-#: gtk/gtkcolorchooserwidget.c:407
+#: gtk/gtkcolorchooserwidget.c:408
 msgctxt "Color name"
 msgid "Aluminum 2"
 msgstr "铝灰2"
 
-#: gtk/gtkcolorchooserwidget.c:408
+#: gtk/gtkcolorchooserwidget.c:409
 msgctxt "Color name"
 msgid "Dark Aluminum 2"
 msgstr "深铝灰2"
 
-#: gtk/gtkcolorchooserwidget.c:422
+#: gtk/gtkcolorchooserwidget.c:423
 msgctxt "Color name"
 msgid "Black"
 msgstr "黑"
 
-#: gtk/gtkcolorchooserwidget.c:423
+#: gtk/gtkcolorchooserwidget.c:424
 msgctxt "Color name"
 msgid "Very Dark Gray"
 msgstr "极深灰"
 
-#: gtk/gtkcolorchooserwidget.c:424
+#: gtk/gtkcolorchooserwidget.c:425
 msgctxt "Color name"
 msgid "Darker Gray"
 msgstr "较深灰"
 
-#: gtk/gtkcolorchooserwidget.c:425
+#: gtk/gtkcolorchooserwidget.c:426
 msgctxt "Color name"
 msgid "Dark Gray"
 msgstr "深灰"
 
-#: gtk/gtkcolorchooserwidget.c:426
+#: gtk/gtkcolorchooserwidget.c:427
 msgctxt "Color name"
 msgid "Medium Gray"
 msgstr "中灰"
 
-#: gtk/gtkcolorchooserwidget.c:427
+#: gtk/gtkcolorchooserwidget.c:428
 msgctxt "Color name"
 msgid "Light Gray"
 msgstr "浅灰"
 
-#: gtk/gtkcolorchooserwidget.c:428
+#: gtk/gtkcolorchooserwidget.c:429
 msgctxt "Color name"
 msgid "Lighter Gray"
 msgstr "较浅灰"
 
-#: gtk/gtkcolorchooserwidget.c:429
+#: gtk/gtkcolorchooserwidget.c:430
 msgctxt "Color name"
 msgid "Very Light Gray"
 msgstr "极浅灰"
 
-#: gtk/gtkcolorchooserwidget.c:430
+#: gtk/gtkcolorchooserwidget.c:431
 msgctxt "Color name"
 msgid "White"
 msgstr "白色"
 
 #. translators: label for the custom section in the color chooser
-#: gtk/gtkcolorchooserwidget.c:511
+#: gtk/gtkcolorchooserwidget.c:512
 msgid "Custom"
 msgstr "自定义"
 
@@ -1548,7 +1548,7 @@ msgid "If you delete an item, it will be permanently lost."
 msgstr "如果您删除一个项目，它将永久丢失。"
 
 #: gtk/gtkfilechooserwidget.c:1213 gtk/gtkfilechooserwidget.c:1829
-#: gtk/gtklabel.c:5423 gtk/gtktext.c:5945 gtk/gtktextview.c:8558
+#: gtk/gtklabel.c:5423 gtk/gtktext.c:5969 gtk/gtktextview.c:8558
 msgid "_Delete"
 msgstr "删除(_D)"
 
@@ -1769,51 +1769,51 @@ msgctxt "font"
 msgid "None"
 msgstr "无"
 
-#: gtk/gtkfontchooserwidget.c:1071
+#: gtk/gtkfontchooserwidget.c:1111
 msgid "Width"
 msgstr "宽度"
 
-#: gtk/gtkfontchooserwidget.c:1072
+#: gtk/gtkfontchooserwidget.c:1112
 msgid "Weight"
 msgstr "字重"
 
-#: gtk/gtkfontchooserwidget.c:1073
+#: gtk/gtkfontchooserwidget.c:1113
 msgid "Italic"
 msgstr "斜体（Italic）"
 
-#: gtk/gtkfontchooserwidget.c:1074
+#: gtk/gtkfontchooserwidget.c:1114
 msgid "Slant"
 msgstr "倾斜（Slant）"
 
-#: gtk/gtkfontchooserwidget.c:1075
+#: gtk/gtkfontchooserwidget.c:1115
 msgid "Optical Size"
 msgstr "视觉尺寸"
 
-#: gtk/gtkfontchooserwidget.c:1613 gtk/inspector/prop-editor.c:1455
+#: gtk/gtkfontchooserwidget.c:1653 gtk/inspector/prop-editor.c:1455
 msgid "Default"
 msgstr "默认"
 
-#: gtk/gtkfontchooserwidget.c:1657
+#: gtk/gtkfontchooserwidget.c:1697
 msgid "Ligatures"
 msgstr "连字"
 
-#: gtk/gtkfontchooserwidget.c:1658
+#: gtk/gtkfontchooserwidget.c:1698
 msgid "Letter Case"
 msgstr "字母大小写"
 
-#: gtk/gtkfontchooserwidget.c:1659
+#: gtk/gtkfontchooserwidget.c:1699
 msgid "Number Case"
 msgstr "数字大小写"
 
-#: gtk/gtkfontchooserwidget.c:1660
+#: gtk/gtkfontchooserwidget.c:1700
 msgid "Number Spacing"
 msgstr "数字间隔"
 
-#: gtk/gtkfontchooserwidget.c:1661
+#: gtk/gtkfontchooserwidget.c:1701
 msgid "Number Formatting"
 msgstr "数字格式"
 
-#: gtk/gtkfontchooserwidget.c:1662
+#: gtk/gtkfontchooserwidget.c:1702
 msgid "Character Variants"
 msgstr "字符变体"
 
@@ -1821,19 +1821,19 @@ msgstr "字符变体"
 msgid "OpenGL context creation failed"
 msgstr "OpenGL 上下文创建失败"
 
-#: gtk/gtklabel.c:5420 gtk/gtktext.c:5933 gtk/gtktextview.c:8546
+#: gtk/gtklabel.c:5420 gtk/gtktext.c:5957 gtk/gtktextview.c:8546
 msgid "Cu_t"
 msgstr "剪切(_T)"
 
-#: gtk/gtklabel.c:5421 gtk/gtktext.c:5937 gtk/gtktextview.c:8550
+#: gtk/gtklabel.c:5421 gtk/gtktext.c:5961 gtk/gtktextview.c:8550
 msgid "_Copy"
 msgstr "复制(_C)"
 
-#: gtk/gtklabel.c:5422 gtk/gtktext.c:5941 gtk/gtktextview.c:8554
+#: gtk/gtklabel.c:5422 gtk/gtktext.c:5965 gtk/gtktextview.c:8554
 msgid "_Paste"
 msgstr "粘贴(_P)"
 
-#: gtk/gtklabel.c:5428 gtk/gtktext.c:5954 gtk/gtktextview.c:8579
+#: gtk/gtklabel.c:5428 gtk/gtktext.c:5978 gtk/gtktextview.c:8579
 msgid "Select _All"
 msgstr "全选(_A)"
 
@@ -2791,7 +2791,7 @@ msgstr "尝试不同的搜索"
 msgid "Could not show link"
 msgstr "无法显示链接"
 
-#: gtk/gtktext.c:5959 gtk/gtktextview.c:8584
+#: gtk/gtktext.c:5983 gtk/gtktextview.c:8584
 msgid "Insert _Emoji"
 msgstr "插入绘文字(_E)"
 
@@ -5852,7 +5852,7 @@ msgstr "索永布文字"
 #: gtk/script-names.c:155
 msgctxt "Script"
 msgid "Zanabazar Square"
-msgstr "札那巴札尔平方"
+msgstr "札那巴札尔方形字母"
 
 #: gtk/tools/encodesymbolic.c:39
 msgid "Output to this directory instead of cwd"
