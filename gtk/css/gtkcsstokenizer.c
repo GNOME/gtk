@@ -1056,13 +1056,12 @@ gtk_css_tokenizer_read_numeric (GtkCssTokenizer *tokenizer,
         }
     }
 
-  if (data + 1 < tokenizer->end && (*data == 'e' || *data == 'E') && 
-      (g_ascii_isdigit (data[1]) || 
-       (data + 2 < tokenizer->end && (data[1] == '+' || data[2] == '-') && g_ascii_isdigit (data[2]))))
+  if (data + 1 < tokenizer->end && (*data == 'e' || *data == 'E') &&
+      (g_ascii_isdigit (data[1]) ||
+       (data + 2 < tokenizer->end && (data[1] == '+' || data[1] == '-') && g_ascii_isdigit (data[2]))))
     {
       is_int = FALSE;
       data++;
-      exponent = g_ascii_digit_value (*data);
 
       if (*data == '-')
         {
