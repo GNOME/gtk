@@ -20,8 +20,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.properties 3.22\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-08-21 14:17+0000\n"
-"PO-Revision-Date: 2020-08-23 11:02-0400\n"
+"POT-Creation-Date: 2020-08-29 08:38+0000\n"
+"PO-Revision-Date: 2020-08-29 11:21-0400\n"
 "Last-Translator: Dingzhong Chen <wsxy162@gmail.com>\n"
 "Language-Team: Chinese (China) <i18n-zh@googlegroups.com>\n"
 "Language: zh_CN\n"
@@ -29,7 +29,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 2.4\n"
+"X-Generator: Poedit 2.4.1\n"
 
 #: gdk/gdkapplaunchcontext.c:133 gdk/gdkdrawcontext.c:155 gdk/gdkseat.c:201
 #: gdk/gdkseat.c:202 gdk/gdksurface.c:508 gdk/gdksurface.c:509
@@ -298,7 +298,7 @@ msgstr "高度"
 msgid "State"
 msgstr "状态"
 
-#: gdk/macos/gdkmacosdrag.c:598 gdk/macos/gdkmacosdrag.c:599
+#: gdk/macos/gdkmacosdrag.c:599 gdk/macos/gdkmacosdrag.c:600
 #, fuzzy
 #| msgid "Surface"
 msgid "Drag Surface"
@@ -323,10 +323,8 @@ msgid "The HCURSOR handle for this cursor"
 msgstr "关联此按钮的 URI"
 
 #: gdk/win32/gdkcursor-win32.c:247
-#, fuzzy
-#| msgid "Deletable"
 msgid "Destroyable"
-msgstr "可删除"
+msgstr "可销毁"
 
 #: gdk/win32/gdkcursor-win32.c:248
 msgid "Whether calling DestroyCursor() is allowed on this cursor"
@@ -356,11 +354,11 @@ msgstr "次"
 msgid "Minor version number"
 msgstr "次版本号"
 
-#: gdk/x11/gdkdevice-xi2.c:124
+#: gdk/x11/gdkdevice-xi2.c:118
 msgid "Device ID"
 msgstr "设备标识"
 
-#: gdk/x11/gdkdevice-xi2.c:125
+#: gdk/x11/gdkdevice-xi2.c:119
 msgid "Device identifier"
 msgstr "设备标识符"
 
@@ -526,7 +524,7 @@ msgid "Controls whether the action bar shows its contents or not"
 msgstr ""
 
 #: gtk/gtkadjustment.c:139 gtk/gtkcellrendererprogress.c:150
-#: gtk/gtkdroptarget.c:647 gtk/gtkscalebutton.c:205 gtk/gtkspinbutton.c:414
+#: gtk/gtkdroptarget.c:647 gtk/gtkscalebutton.c:205 gtk/gtkspinbutton.c:415
 msgid "Value"
 msgstr "值"
 
@@ -680,37 +678,37 @@ msgstr "部件默认的文本"
 msgid "The default text appearing when there are no applications"
 msgstr "当没有应用程序时，显示默认文本"
 
-#: gtk/gtkapplication.c:730
+#: gtk/gtkapplication.c:598
 msgid "Register session"
 msgstr "注册会话"
 
-#: gtk/gtkapplication.c:731
+#: gtk/gtkapplication.c:599
 msgid "Register with the session manager"
 msgstr "向会话管理器注册"
 
-#: gtk/gtkapplication.c:746
+#: gtk/gtkapplication.c:614
 msgid "Screensaver Active"
 msgstr ""
 
-#: gtk/gtkapplication.c:747
+#: gtk/gtkapplication.c:615
 #, fuzzy
 #| msgid "Whether the spinner is active"
 msgid "Whether the screensaver is active"
 msgstr "是否激活微调按钮"
 
-#: gtk/gtkapplication.c:753
+#: gtk/gtkapplication.c:621
 msgid "Menubar"
 msgstr "菜单栏"
 
-#: gtk/gtkapplication.c:754
+#: gtk/gtkapplication.c:622
 msgid "The GMenuModel for the menubar"
 msgstr "菜单栏所使用的 GMenuModel"
 
-#: gtk/gtkapplication.c:760
+#: gtk/gtkapplication.c:628
 msgid "Active window"
 msgstr "活动窗口"
 
-#: gtk/gtkapplication.c:761
+#: gtk/gtkapplication.c:629
 msgid "The window which most recently had focus"
 msgstr "最近具有焦点的窗口"
 
@@ -839,7 +837,7 @@ msgid "Bookmark file to load"
 msgstr ""
 
 #: gtk/gtkbookmarklist.c:224 gtk/gtkcellrenderertext.c:267 gtk/gtkentry.c:890
-#: gtk/gtklabel.c:751 gtk/gtktext.c:888
+#: gtk/gtklabel.c:751 gtk/gtktext.c:893
 msgid "Attributes"
 msgstr "属性"
 
@@ -858,8 +856,6 @@ msgid "Priority used when loading"
 msgstr ""
 
 #: gtk/gtkbookmarklist.c:248 gtk/gtkdirectorylist.c:326
-#, fuzzy
-#| msgid "Loading"
 msgid "loading"
 msgstr "正在加载"
 
@@ -1462,11 +1458,11 @@ msgid "Invert the direction in which the progress bar grows"
 msgstr "反转进度条增长的方向"
 
 #: gtk/gtkcellrendererspin.c:132 gtk/gtkrange.c:365 gtk/gtkscalebutton.c:215
-#: gtk/gtkscrollbar.c:217 gtk/gtkspinbutton.c:364
+#: gtk/gtkscrollbar.c:217 gtk/gtkspinbutton.c:365
 msgid "Adjustment"
 msgstr "调整部件"
 
-#: gtk/gtkcellrendererspin.c:133 gtk/gtkspinbutton.c:365
+#: gtk/gtkcellrendererspin.c:133 gtk/gtkspinbutton.c:366
 msgid "The adjustment that holds the value of the spin button"
 msgstr "保存微调按钮值的调整"
 
@@ -1478,11 +1474,11 @@ msgstr "爬升速率"
 msgid "The acceleration rate when you hold down a button"
 msgstr "当你按住一个按钮时的加速速率"
 
-#: gtk/gtkcellrendererspin.c:158 gtk/gtkscale.c:677 gtk/gtkspinbutton.c:378
+#: gtk/gtkcellrendererspin.c:158 gtk/gtkscale.c:677 gtk/gtkspinbutton.c:379
 msgid "Digits"
 msgstr "数字"
 
-#: gtk/gtkcellrendererspin.c:159 gtk/gtkspinbutton.c:379
+#: gtk/gtkcellrendererspin.c:159 gtk/gtkspinbutton.c:380
 msgid "The number of decimal places to display"
 msgstr "显示的小数点后位数"
 
@@ -1738,7 +1734,7 @@ msgid "How to align the lines"
 msgstr "如何对齐行"
 
 #: gtk/gtkcellrenderertext.c:544 gtk/gtkentry.c:580 gtk/gtkpasswordentry.c:408
-#: gtk/gtksearchentry.c:283 gtk/gtktext.c:820
+#: gtk/gtksearchentry.c:283 gtk/gtktext.c:825
 msgid "Placeholder text"
 msgstr "占位文本"
 
@@ -1914,12 +1910,12 @@ msgstr "CellView 模型"
 msgid "The model for cell view"
 msgstr "单元格视图的模型"
 
-#: gtk/gtkcellview.c:218 gtk/gtkentrycompletion.c:401 gtk/gtkiconview.c:576
+#: gtk/gtkcellview.c:218 gtk/gtkentrycompletion.c:400 gtk/gtkiconview.c:576
 #: gtk/gtktreepopover.c:213 gtk/gtktreeviewcolumn.c:421
 msgid "Cell Area"
 msgstr "单元格大小"
 
-#: gtk/gtkcellview.c:219 gtk/gtkentrycompletion.c:402 gtk/gtkiconview.c:577
+#: gtk/gtkcellview.c:219 gtk/gtkentrycompletion.c:401 gtk/gtkiconview.c:577
 #: gtk/gtktreepopover.c:214 gtk/gtktreeviewcolumn.c:422
 msgid "The GtkCellArea used to layout cells"
 msgstr "用 GtkCellArea 设计单元格"
@@ -2022,7 +2018,7 @@ msgstr "以 GdkRGBA 方式表示的当前颜色"
 msgid "Whether alpha should be shown"
 msgstr "是否应显示透明度"
 
-#: gtk/gtkcolorchooserdialog.c:219 gtk/gtkcolorchooserwidget.c:671
+#: gtk/gtkcolorchooserdialog.c:219 gtk/gtkcolorchooserwidget.c:672
 msgid "Show editor"
 msgstr "显示编辑器"
 
@@ -2119,10 +2115,8 @@ msgid "Single click activate"
 msgstr ""
 
 #: gtk/gtkcolumnview.c:682 gtk/gtkgridview.c:1106 gtk/gtklistview.c:865
-#, fuzzy
-#| msgid "Activate row on a single click"
 msgid "Activate rows on single click"
-msgstr "单击激活行"
+msgstr "单击激活各行"
 
 #: gtk/gtkcolumnview.c:693 gtk/gtkiconview.c:536 gtk/gtktreeview.c:1023
 #: gtk/gtktreeviewcolumn.c:377
@@ -2170,8 +2164,6 @@ msgid "Factory for populating list items"
 msgstr ""
 
 #: gtk/gtkcolumnviewcolumn.c:266
-#, fuzzy
-#| msgid "Text to be displayed in the progress bar"
 msgid "Title displayed in the header"
 msgstr "进度条中显示的文字"
 
@@ -2488,14 +2480,12 @@ msgid "The initial specified value used for this property"
 msgstr "此属性的初始值"
 
 #: gtk/gtkdirectorylist.c:266
-#, fuzzy
-#| msgid "Attributes"
 msgid "attributes"
 msgstr "属性"
 
 #: gtk/gtkdirectorylist.c:278
 msgid "error"
-msgstr ""
+msgstr "错误"
 
 #: gtk/gtkdirectorylist.c:279
 msgid "Error encountered while loading files"
@@ -2555,8 +2545,6 @@ msgid "The content provider for the dragged data"
 msgstr "输入控件的内容"
 
 #: gtk/gtkdragsource.c:296 gtk/gtkdroptargetasync.c:391 gtk/gtkdroptarget.c:578
-#, fuzzy
-#| msgid "Action"
 msgid "Actions"
 msgstr "动作"
 
@@ -2670,7 +2658,7 @@ msgstr ""
 
 #: gtk/gtkdroptargetasync.c:401 gtk/gtkdroptarget.c:602
 msgid "Formats"
-msgstr ""
+msgstr "格式"
 
 #: gtk/gtkdroptarget.c:579
 msgid "The actions supported by this drop target"
@@ -2781,7 +2769,7 @@ msgstr "文字长度"
 msgid "Length of the text currently in the buffer"
 msgstr "当前在缓冲区文本的长度"
 
-#: gtk/gtkentrybuffer.c:375 gtk/gtkentry.c:454 gtk/gtktext.c:748
+#: gtk/gtkentrybuffer.c:375 gtk/gtkentry.c:454 gtk/gtktext.c:753
 msgid "Maximum length"
 msgstr "最大长度"
 
@@ -2789,7 +2777,7 @@ msgstr "最大长度"
 msgid "Maximum number of characters for this entry. Zero if no maximum"
 msgstr "此输入控件中最多可输入的字符数。零代表不限制"
 
-#: gtk/gtkentry.c:447 gtk/gtktext.c:741
+#: gtk/gtkentry.c:447 gtk/gtktext.c:746
 msgid "Text Buffer"
 msgstr "文本缓冲区"
 
@@ -2797,11 +2785,11 @@ msgstr "文本缓冲区"
 msgid "Text buffer object which actually stores entry text"
 msgstr "实际存储输入控件文本的文本缓冲存储对象"
 
-#: gtk/gtkentry.c:462 gtk/gtktext.c:914
+#: gtk/gtkentry.c:462 gtk/gtktext.c:919
 msgid "Visibility"
 msgstr "可见状态"
 
-#: gtk/gtkentry.c:463 gtk/gtktext.c:915
+#: gtk/gtkentry.c:463 gtk/gtktext.c:920
 #, fuzzy
 #| msgid ""
 #| "FALSE displays the \"invisible char\" instead of the actual text "
@@ -2815,7 +2803,7 @@ msgstr "FALSE 表示显示“不可见字符”而不是实际文字(密码模�
 msgid "FALSE removes outside bevel from entry"
 msgstr "FALSE 将去掉输入控件的外层立体效果"
 
-#: gtk/gtkentry.c:476 gtk/gtktext.c:756
+#: gtk/gtkentry.c:476 gtk/gtktext.c:761
 msgid "Invisible character"
 msgstr "不可见字符"
 
@@ -2827,18 +2815,18 @@ msgid "The character to use when masking entry contents (in “password mode”)
 msgstr "用来屏蔽输入内容的字符(在“密码模式”中)"
 
 #: gtk/gtkentry.c:483 gtk/gtkpasswordentry.c:415 gtk/gtksearchentry.c:290
-#: gtk/gtktext.c:763
+#: gtk/gtktext.c:768
 msgid "Activates default"
 msgstr "活动默认"
 
 #: gtk/gtkentry.c:484 gtk/gtkpasswordentry.c:416 gtk/gtksearchentry.c:291
-#: gtk/gtktext.c:764
+#: gtk/gtktext.c:769
 msgid ""
 "Whether to activate the default widget (such as the default button in a "
 "dialog) when Enter is pressed"
 msgstr "键入回车键时，是否激活默认的部件(如对话框中的默认按钮)"
 
-#: gtk/gtkentry.c:490 gtk/gtktext.c:770
+#: gtk/gtkentry.c:490 gtk/gtktext.c:775
 msgid "Scroll offset"
 msgstr "滚动偏移"
 
@@ -2846,19 +2834,19 @@ msgstr "滚动偏移"
 msgid "Number of pixels of the entry scrolled off the screen to the left"
 msgstr "向左滚动项时移动的像素数"
 
-#: gtk/gtkentry.c:503 gtk/gtktext.c:783
+#: gtk/gtkentry.c:503 gtk/gtktext.c:788
 msgid "Truncate multiline"
 msgstr "截断多行"
 
-#: gtk/gtkentry.c:504 gtk/gtktext.c:784
+#: gtk/gtkentry.c:504 gtk/gtktext.c:789
 msgid "Whether to truncate multiline pastes to one line."
 msgstr "是否将多行粘贴截断为一行。"
 
-#: gtk/gtkentry.c:515 gtk/gtktext.c:795 gtk/gtktextview.c:992
+#: gtk/gtkentry.c:515 gtk/gtktext.c:800 gtk/gtktextview.c:992
 msgid "Overwrite mode"
 msgstr "覆盖模式"
 
-#: gtk/gtkentry.c:516 gtk/gtktext.c:796
+#: gtk/gtkentry.c:516 gtk/gtktext.c:801
 msgid "Whether new text overwrites existing text"
 msgstr "新输入的文字是否覆盖已有文字"
 
@@ -2866,11 +2854,11 @@ msgstr "新输入的文字是否覆盖已有文字"
 msgid "Length of the text currently in the entry"
 msgstr "当前在输入控件中的文字长度"
 
-#: gtk/gtkentry.c:540 gtk/gtktext.c:807
+#: gtk/gtkentry.c:540 gtk/gtktext.c:812
 msgid "Invisible character set"
 msgstr "不可见字符"
 
-#: gtk/gtkentry.c:541 gtk/gtktext.c:808
+#: gtk/gtkentry.c:541 gtk/gtktext.c:813
 msgid "Whether the invisible character has been set"
 msgstr "是否设置了不可见字符"
 
@@ -3030,11 +3018,11 @@ msgstr "主要图标工具提示标记"
 msgid "Secondary icon tooltip markup"
 msgstr "次要图标工具提示标记"
 
-#: gtk/gtkentry.c:827 gtk/gtktext.c:837 gtk/gtktextview.c:1018
+#: gtk/gtkentry.c:827 gtk/gtktext.c:842 gtk/gtktextview.c:1018
 msgid "IM module"
 msgstr "输入法模块"
 
-#: gtk/gtkentry.c:828 gtk/gtktext.c:838 gtk/gtktextview.c:1019
+#: gtk/gtkentry.c:828 gtk/gtktext.c:843 gtk/gtktextview.c:1019
 msgid "Which IM module should be used"
 msgstr "使用哪个输入法模块"
 
@@ -3046,22 +3034,22 @@ msgstr "补全"
 msgid "The auxiliary completion object"
 msgstr "辅助补全对象"
 
-#: gtk/gtkentry.c:858 gtk/gtkimcontext.c:337 gtk/gtktext.c:856
+#: gtk/gtkentry.c:858 gtk/gtkimcontext.c:337 gtk/gtktext.c:861
 #: gtk/gtktextview.c:1034
 msgid "Purpose"
 msgstr "目标"
 
-#: gtk/gtkentry.c:859 gtk/gtkimcontext.c:338 gtk/gtktext.c:857
+#: gtk/gtkentry.c:859 gtk/gtkimcontext.c:338 gtk/gtktext.c:862
 #: gtk/gtktextview.c:1035
 msgid "Purpose of the text field"
 msgstr "文本框的目标"
 
-#: gtk/gtkentry.c:872 gtk/gtkimcontext.c:345 gtk/gtktext.c:870
+#: gtk/gtkentry.c:872 gtk/gtkimcontext.c:345 gtk/gtktext.c:875
 #: gtk/gtktextview.c:1050
 msgid "hints"
 msgstr "提示"
 
-#: gtk/gtkentry.c:873 gtk/gtkimcontext.c:346 gtk/gtktext.c:871
+#: gtk/gtkentry.c:873 gtk/gtkimcontext.c:346 gtk/gtktext.c:876
 #: gtk/gtktextview.c:1051
 msgid "Hints for the text field behaviour"
 msgstr "提示该文本框的行为"
@@ -3072,7 +3060,7 @@ msgstr "提示该文本框的行为"
 msgid "A list of style attributes to apply to the text of the entry"
 msgstr "应用于要渲染文字的样式属性列表"
 
-#: gtk/gtkentry.c:902 gtk/gtktext.c:900 gtk/gtktexttag.c:557
+#: gtk/gtkentry.c:902 gtk/gtktext.c:905 gtk/gtktexttag.c:557
 #: gtk/gtktextview.c:968
 msgid "Tabs"
 msgstr "制表符"
@@ -3090,11 +3078,9 @@ msgid "Whether to show an icon for Emoji"
 msgstr "是否显示 Emoji 的图标"
 
 #: gtk/gtkentry.c:928 gtk/gtklabel.c:953 gtk/gtkpasswordentry.c:435
-#: gtk/gtktext.c:934 gtk/gtktextview.c:1074
-#, fuzzy
-#| msgid "Extra widget"
+#: gtk/gtktext.c:939 gtk/gtktextview.c:1074
 msgid "Extra menu"
-msgstr "额外部件"
+msgstr "额外菜单"
 
 #: gtk/gtkentry.c:929 gtk/gtkpasswordentry.c:436
 #, fuzzy
@@ -3102,79 +3088,79 @@ msgstr "额外部件"
 msgid "Model menu to append to the context menu"
 msgstr "用于获取文字的模型列"
 
-#: gtk/gtkentry.c:935 gtk/gtktext.c:907
+#: gtk/gtkentry.c:935 gtk/gtktext.c:912
 #, fuzzy
 #| msgid "Inline completion"
 msgid "Enable Emoji completion"
 msgstr "嵌入补全"
 
-#: gtk/gtkentry.c:936 gtk/gtktext.c:908
+#: gtk/gtkentry.c:936 gtk/gtktext.c:913
 #, fuzzy
 #| msgid "Whether to use a monospace font"
 msgid "Whether to suggest Emoji replacements"
 msgstr "是否使用等宽字体"
 
-#: gtk/gtkentrycompletion.c:296
+#: gtk/gtkentrycompletion.c:295
 msgid "Completion Model"
 msgstr "补全模型"
 
-#: gtk/gtkentrycompletion.c:297
+#: gtk/gtkentrycompletion.c:296
 msgid "The model to find matches in"
 msgstr "查找匹配项的模型"
 
-#: gtk/gtkentrycompletion.c:303
+#: gtk/gtkentrycompletion.c:302
 msgid "Minimum Key Length"
 msgstr "最小键长度"
 
-#: gtk/gtkentrycompletion.c:304
+#: gtk/gtkentrycompletion.c:303
 msgid "Minimum length of the search key in order to look up matches"
 msgstr "查阅匹配项时搜索关键字的最小长度"
 
-#: gtk/gtkentrycompletion.c:316 gtk/gtkiconview.c:394
+#: gtk/gtkentrycompletion.c:315 gtk/gtkiconview.c:394
 msgid "Text column"
 msgstr "文字列"
 
-#: gtk/gtkentrycompletion.c:317
+#: gtk/gtkentrycompletion.c:316
 msgid "The column of the model containing the strings."
 msgstr "模型中包含字符串的列。"
 
-#: gtk/gtkentrycompletion.c:331
+#: gtk/gtkentrycompletion.c:330
 msgid "Inline completion"
 msgstr "嵌入补全"
 
-#: gtk/gtkentrycompletion.c:332
+#: gtk/gtkentrycompletion.c:331
 msgid "Whether the common prefix should be inserted automatically"
 msgstr "是否自动插入常见前缀"
 
-#: gtk/gtkentrycompletion.c:344
+#: gtk/gtkentrycompletion.c:343
 msgid "Popup completion"
 msgstr "弹出补全"
 
-#: gtk/gtkentrycompletion.c:345
+#: gtk/gtkentrycompletion.c:344
 msgid "Whether the completions should be shown in a popup window"
 msgstr "补全是否应该显示在弹出窗口中"
 
-#: gtk/gtkentrycompletion.c:357
+#: gtk/gtkentrycompletion.c:356
 msgid "Popup set width"
 msgstr "弹出宽度设定"
 
-#: gtk/gtkentrycompletion.c:358
+#: gtk/gtkentrycompletion.c:357
 msgid "If TRUE, the popup window will have the same size as the entry"
 msgstr "如果为 TRUE，则弹出将与输入控件有相同的大小"
 
-#: gtk/gtkentrycompletion.c:372
+#: gtk/gtkentrycompletion.c:371
 msgid "Popup single match"
 msgstr "弹出单个匹配"
 
-#: gtk/gtkentrycompletion.c:373
+#: gtk/gtkentrycompletion.c:372
 msgid "If TRUE, the popup window will appear for a single match."
 msgstr "如果为 TRUE，则弹出将显示一个匹配项。"
 
-#: gtk/gtkentrycompletion.c:385
+#: gtk/gtkentrycompletion.c:384
 msgid "Inline selection"
 msgstr "嵌入选择"
 
-#: gtk/gtkentrycompletion.c:386
+#: gtk/gtkentrycompletion.c:385
 msgid "Your description here"
 msgstr "这里写你的描述"
 
@@ -3208,10 +3194,8 @@ msgid "Propagation limit for events handled by this controller"
 msgstr "此控制器运转时的扩展相位"
 
 #: gtk/gtkeventcontroller.c:232
-#, fuzzy
-#| msgid "Name of the printer"
 msgid "Name for this controller"
-msgstr "打印机名称"
+msgstr "该控制器的名称"
 
 #: gtk/gtkeventcontrollerfocus.c:198
 #, fuzzy
@@ -3342,10 +3326,8 @@ msgid "List model of filters"
 msgstr "类的列表"
 
 #: gtk/gtkfilechooser.c:129
-#, fuzzy
-#| msgid "Shortcut Type"
 msgid "Shortcut Folders"
-msgstr "快捷方式类型"
+msgstr "快捷方式文件夹"
 
 #: gtk/gtkfilechooser.c:130
 msgid "List model of shortcut folders"
@@ -3571,13 +3553,13 @@ msgstr "字体特性设置"
 msgid "Language for which features have been selected"
 msgstr ""
 
-#: gtk/gtkfontchooserwidget.c:659
+#: gtk/gtkfontchooserwidget.c:661
 #, fuzzy
 #| msgid "The name of the action"
 msgid "The tweak action"
 msgstr "此动作的名称"
 
-#: gtk/gtkfontchooserwidget.c:660
+#: gtk/gtkfontchooserwidget.c:662
 msgid "The toggle action to switch to the tweak page"
 msgstr ""
 
@@ -3843,8 +3825,6 @@ msgid "Resource path"
 msgstr "资源"
 
 #: gtk/gtkicontheme.c:1058 gtk/gtkicontheme.c:1059
-#, fuzzy
-#| msgid "Theme Name"
 msgid "Theme name"
 msgstr "主题名称"
 
@@ -4149,7 +4129,7 @@ msgstr "行数"
 msgid "The desired number of lines, when ellipsizing a wrapping label"
 msgstr "标签折行超过指定的行数时省略显示"
 
-#: gtk/gtklabel.c:954 gtk/gtktext.c:935 gtk/gtktextview.c:1075
+#: gtk/gtklabel.c:954 gtk/gtktext.c:940 gtk/gtktextview.c:1075
 #, fuzzy
 #| msgid "The model for the tree menu"
 msgid "Menu model to append to the context menu"
@@ -4488,10 +4468,8 @@ msgid "Volume"
 msgstr "音量"
 
 #: gtk/gtkmediastream.c:446
-#, fuzzy
-#| msgid "Value of the progress bar"
 msgid "Volume of the audio stream."
-msgstr "进度栏的值"
+msgstr "音频流的音量。"
 
 #: gtk/gtkmenubutton.c:359 gtk/gtkpopovermenubar.c:593 gtk/gtkpopovermenu.c:524
 msgid "Menu model"
@@ -5065,76 +5043,74 @@ msgstr "收缩"
 msgid "Allow self to be smaller than contents"
 msgstr "内容周围的立体样式"
 
-#: gtk/gtkplacessidebar.c:4344
+#: gtk/gtkplacessidebar.c:4343
 msgid "Location to Select"
 msgstr "要选择的位置"
 
-#: gtk/gtkplacessidebar.c:4345
+#: gtk/gtkplacessidebar.c:4344
 msgid "The location to highlight in the sidebar"
 msgstr "侧边栏要高亮的位置"
 
-#: gtk/gtkplacessidebar.c:4350 gtk/gtkplacesview.c:2253
+#: gtk/gtkplacessidebar.c:4349 gtk/gtkplacesview.c:2253
 msgid "Open Flags"
 msgstr "打开标志"
 
-#: gtk/gtkplacessidebar.c:4351 gtk/gtkplacesview.c:2254
+#: gtk/gtkplacessidebar.c:4350 gtk/gtkplacesview.c:2254
 msgid ""
 "Modes in which the calling application can open locations selected in the "
 "sidebar"
 msgstr "该模式下，调用的程序程序可以打开侧边栏中选中的位置"
 
-#: gtk/gtkplacessidebar.c:4357
+#: gtk/gtkplacessidebar.c:4356
 msgid "Show recent files"
 msgstr "显示最近使用的文件"
 
-#: gtk/gtkplacessidebar.c:4358
+#: gtk/gtkplacessidebar.c:4357
 msgid "Whether the sidebar includes a builtin shortcut for recent files"
 msgstr "侧边栏是否包含内置的最近文件快捷方式"
 
-#: gtk/gtkplacessidebar.c:4363
+#: gtk/gtkplacessidebar.c:4362
 msgid "Show “Desktop”"
 msgstr "显示“桌面”"
 
-#: gtk/gtkplacessidebar.c:4364
+#: gtk/gtkplacessidebar.c:4363
 msgid "Whether the sidebar includes a builtin shortcut to the Desktop folder"
 msgstr "侧边栏是否包含内置的“桌面”快捷方式"
 
 # starred 跟 nautilus 中的翻译统一。
-#: gtk/gtkplacessidebar.c:4369
+#: gtk/gtkplacessidebar.c:4368
 #, fuzzy
 #| msgid "Show “Starred Location”"
 msgid "Show “Enter Location”"
 msgstr "显示“位置收藏”"
 
-#: gtk/gtkplacessidebar.c:4370
+#: gtk/gtkplacessidebar.c:4369
 msgid ""
 "Whether the sidebar includes a builtin shortcut to manually enter a location"
 msgstr "侧边栏是否包含内置的对话框快捷方式，以便手动输入位置"
 
-#: gtk/gtkplacessidebar.c:4375
-#, fuzzy
-#| msgid "Show 'Trash'"
+#: gtk/gtkplacessidebar.c:4374
 msgid "Show “Trash”"
-msgstr "显示“垃圾箱”"
+msgstr "显示“回收站”"
 
-#: gtk/gtkplacessidebar.c:4376
+#: gtk/gtkplacessidebar.c:4375
 msgid "Whether the sidebar includes a builtin shortcut to the Trash location"
 msgstr "侧边栏是否包含内置的回收站快捷方式"
 
-#: gtk/gtkplacessidebar.c:4381
+#: gtk/gtkplacessidebar.c:4380
 msgid "Show “Other locations”"
 msgstr "显示“其他位置”"
 
-#: gtk/gtkplacessidebar.c:4382
+#: gtk/gtkplacessidebar.c:4381
 msgid "Whether the sidebar includes an item to show external locations"
 msgstr "侧边栏是否包含显示外部位置的项目"
 
 # starred 跟 nautilus 中的翻译统一。
-#: gtk/gtkplacessidebar.c:4387
+#: gtk/gtkplacessidebar.c:4386
 msgid "Show “Starred Location”"
 msgstr "显示“位置收藏”"
 
-#: gtk/gtkplacessidebar.c:4388
+#: gtk/gtkplacessidebar.c:4387
 msgid "Whether the sidebar includes an item to show starred files"
 msgstr "侧边栏是否包含显示已收藏位置的项目"
 
@@ -5243,10 +5219,8 @@ msgid "Has Arrow"
 msgstr "显示箭头"
 
 #: gtk/gtkpopover.c:1657
-#, fuzzy
-#| msgid "Whether to show an icon for Emoji"
 msgid "Whether to draw an arrow"
-msgstr "是否显示 Emoji 的图标"
+msgstr "是否绘制一个箭头"
 
 #: gtk/gtkpopover.c:1663
 #, fuzzy
@@ -5633,10 +5607,8 @@ msgid "Object"
 msgstr "对象"
 
 #: gtk/gtkpropertylookuplistmodel.c:401
-#, fuzzy
-#| msgid "The auxiliary completion object"
 msgid "The root object"
-msgstr "辅助补全对象"
+msgstr "根对象"
 
 #: gtk/gtkradiobutton.c:203
 msgid "Group"
@@ -6341,16 +6313,12 @@ msgid "Whether to use overlay scrollbars"
 msgstr "是否是用符号标图"
 
 #: gtk/gtkshortcutaction.c:942
-#, fuzzy
-#| msgid "Section Name"
 msgid "Signal Name"
-msgstr "区块名称"
+msgstr "信号名称"
 
 #: gtk/gtkshortcutaction.c:943
-#, fuzzy
-#| msgid "The name of the widget"
 msgid "The name of the signal to emit"
-msgstr "部件的名称"
+msgstr "要发出信号的名称"
 
 #: gtk/gtkshortcutaction.c:1183 gtk/gtkshortcutsshortcut.c:718
 msgid "Action Name"
@@ -6598,21 +6566,21 @@ msgstr ""
 msgid "The sorter for this model"
 msgstr "子标签的文字"
 
-#: gtk/gtkspinbutton.c:371
+#: gtk/gtkspinbutton.c:372
 msgid "Climb Rate"
 msgstr "爬升速率"
 
-#: gtk/gtkspinbutton.c:372
+#: gtk/gtkspinbutton.c:373
 #, fuzzy
 #| msgid "The acceleration rate when you hold down a button"
 msgid "The acceleration rate when you hold down a button or key"
 msgstr "当你按住一个按钮时的加速速率"
 
-#: gtk/gtkspinbutton.c:385
+#: gtk/gtkspinbutton.c:386
 msgid "Snap to Ticks"
 msgstr "凑整"
 
-#: gtk/gtkspinbutton.c:386
+#: gtk/gtkspinbutton.c:387
 #, fuzzy
 #| msgid ""
 #| "Whether erroneous values are automatically changed to a spin button's "
@@ -6622,32 +6590,32 @@ msgid ""
 "nearest step increment"
 msgstr "错误的输入是否被自动变为调节按钮最接近的步进增量"
 
-#: gtk/gtkspinbutton.c:392
+#: gtk/gtkspinbutton.c:393
 msgid "Numeric"
 msgstr "数字"
 
-#: gtk/gtkspinbutton.c:393
+#: gtk/gtkspinbutton.c:394
 msgid "Whether non-numeric characters should be ignored"
 msgstr "是否忽略非数字的字符"
 
-#: gtk/gtkspinbutton.c:399
+#: gtk/gtkspinbutton.c:400
 msgid "Wrap"
 msgstr "回绕"
 
-#: gtk/gtkspinbutton.c:400
+#: gtk/gtkspinbutton.c:401
 msgid "Whether a spin button should wrap upon reaching its limits"
 msgstr "调节按钮的数值超过限制后是否会回绕"
 
-#: gtk/gtkspinbutton.c:406
+#: gtk/gtkspinbutton.c:407
 msgid "Update Policy"
 msgstr "更新策略"
 
-#: gtk/gtkspinbutton.c:407
+#: gtk/gtkspinbutton.c:408
 msgid ""
 "Whether the spin button should update always, or only when the value is legal"
 msgstr "调节按钮总是更新，还是只在数值合法时更新"
 
-#: gtk/gtkspinbutton.c:415
+#: gtk/gtkspinbutton.c:416
 msgid "Reads the current value, or sets a new value"
 msgstr "读取当前数值，或设置新值"
 
@@ -6880,56 +6848,56 @@ msgid ""
 "destination"
 msgstr "该缓冲区支持的剪贴板粘贴和 DND 目标的列表"
 
-#: gtk/gtktext.c:742
+#: gtk/gtktext.c:747
 #, fuzzy
 #| msgid "Text buffer object which actually stores entry text"
 msgid "Text buffer object which actually stores self text"
 msgstr "实际存储输入控件文本的文本缓冲存储对象"
 
-#: gtk/gtktext.c:749
+#: gtk/gtktext.c:754
 #, fuzzy
 #| msgid "Maximum number of characters for this entry. Zero if no maximum"
 msgid "Maximum number of characters for this self. Zero if no maximum"
 msgstr "此输入控件中最多可输入的字符数。零代表不限制"
 
-#: gtk/gtktext.c:757
+#: gtk/gtktext.c:762
 #, fuzzy
 #| msgid ""
 #| "The character to use when masking entry contents (in \"password mode\")"
 msgid "The character to use when masking self contents (in “password mode”)"
 msgstr "用来屏蔽输入内容的字符(在“密码模式”中)"
 
-#: gtk/gtktext.c:771
+#: gtk/gtktext.c:776
 #, fuzzy
 #| msgid "Number of pixels of the entry scrolled off the screen to the left"
 msgid "Number of pixels of the self scrolled off the screen to the left"
 msgstr "向左滚动项时移动的像素数"
 
-#: gtk/gtktext.c:821
+#: gtk/gtktext.c:826
 #, fuzzy
 #| msgid "Show text in the entry when it's empty and unfocused"
 msgid "Show text in the self when it’s empty and unfocused"
 msgstr "在输入控件内容为空且未获得焦点时显示文本"
 
-#: gtk/gtktext.c:889
+#: gtk/gtktext.c:894
 #, fuzzy
 #| msgid "A list of style attributes to apply to the text of the label"
 msgid "A list of style attributes to apply to the text of the self"
 msgstr "用于标签文字的样式属性的列表"
 
-#: gtk/gtktext.c:901
+#: gtk/gtktext.c:906
 #, fuzzy
 #| msgid "A list of tabstop locations to apply to the text of the entry"
 msgid "A list of tabstop locations to apply to the text of the self"
 msgstr "应用于输入部件文字的制表符位置列表"
 
-#: gtk/gtktext.c:921
+#: gtk/gtktext.c:926
 #, fuzzy
 #| msgid "Propagate Natural Width"
 msgid "Propagate text width"
 msgstr "衍生的自然宽度"
 
-#: gtk/gtktext.c:922
+#: gtk/gtktext.c:927
 #, fuzzy
 #| msgid ""
 #| "Whether the widget should grab focus when it is clicked with the mouse"
@@ -7553,7 +7521,7 @@ msgstr ""
 
 #: gtk/gtktreelistmodel.c:1066
 msgid "Depth"
-msgstr ""
+msgstr "深度"
 
 #: gtk/gtktreelistmodel.c:1067
 #, fuzzy
@@ -7562,10 +7530,8 @@ msgid "Depth in the tree"
 msgstr "要在项目中显示的文字。"
 
 #: gtk/gtktreelistmodel.c:1078
-#, fuzzy
-#| msgid "Expanded"
 msgid "Expandable"
-msgstr "已展开"
+msgstr "可展开"
 
 #: gtk/gtktreelistmodel.c:1079
 #, fuzzy
@@ -8118,10 +8084,8 @@ msgid "The scaling factor of the window"
 msgstr "窗口缩放比例"
 
 #: gtk/gtkwidget.c:1295
-#, fuzzy
-#| msgid "Name"
 msgid "CSS Name"
-msgstr "名称"
+msgstr "CSS 名称"
 
 #: gtk/gtkwidget.c:1296
 #, fuzzy
