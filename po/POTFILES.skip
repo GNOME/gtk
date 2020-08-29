@@ -160,6 +160,8 @@ testsuite/reftests/border-image-url.ref.ui
 testsuite/reftests/border-image-url-scaled.ref.ui
 testsuite/reftests/border-image-url-scaled.ui
 testsuite/reftests/border-image-url.ui
+testsuite/reftests/boxlayout-invisible-child.ref.ui
+testsuite/reftests/boxlayout-invisible-child.ui
 testsuite/reftests/box-order.ref.ui
 testsuite/reftests/box-order.ui
 testsuite/reftests/box-packing.ui
@@ -173,6 +175,10 @@ testsuite/reftests/box-shadow-with-blend-mode.ref.ui
 testsuite/reftests/box-shadow-with-blend-mode.ui
 testsuite/reftests/button-wrapping.ref.ui
 testsuite/reftests/button-wrapping.ui
+testsuite/reftests/centerlayout-invisible-child.ref.ui
+testsuite/reftests/centerlayout-invisible-child.ui
+testsuite/reftests/centerlayout-minsize.ref.ui
+testsuite/reftests/centerlayout-minsize.ui
 testsuite/reftests/css-em-label-size.ref.ui
 testsuite/reftests/css-em-label-size.ui
 testsuite/reftests/css-match-import.ref.ui
@@ -200,6 +206,8 @@ testsuite/reftests/fixed-widget-stacking.ui
 testsuite/reftests/font-sizes-names.ref.ui
 testsuite/reftests/font-sizes-names.ui
 testsuite/reftests/grid-empty-with-spacing.ui
+testsuite/reftests/gridlayout-invisible-child.ref.ui
+testsuite/reftests/gridlayout-invisible-child.ui
 testsuite/reftests/grid-wfh.ref.ui
 testsuite/reftests/grid-wfh.ui
 testsuite/reftests/icon-style-basics.ref.ui
