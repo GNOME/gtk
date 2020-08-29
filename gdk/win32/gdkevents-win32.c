@@ -3742,7 +3742,11 @@ gdk_event_translate (MSG  *msg,
       GDK_NOTE (EVENTS, g_print (" %s thread: %" G_GINT64_FORMAT,
 				 msg->wParam ? "YES" : "NO",
 				 (gint64) msg->lParam));
+      
+      // Clear graphics tablet state
+      _gdk_input_ignore_core = 0;
       break;
+      
     case WM_NCHITTEST:
       /* TODO: pass all messages to DwmDefWindowProc() first! */
       return_val = handle_nchittest (msg->hwnd, window,
