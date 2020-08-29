@@ -18,7 +18,7 @@ void main() {
   pixel_step = (vec2(1.0) / u_blur_size) * u_blur_dir;
   pixels_per_side = floor(u_blur_radius * RADIUS_MULTIPLIER / 2.0);
 
-  float sigma = u_blur_radius; // *shrug*
+  float sigma = u_blur_radius / 2.0; // *shrug*
   initial_gaussian.x = 1.0 / (sqrt(2.0 * PI) * sigma);
   initial_gaussian.y = exp(-0.5 / (sigma * sigma));
   initial_gaussian.z = initial_gaussian.y * initial_gaussian.y;
