@@ -1557,6 +1557,9 @@ update_xft_settings (GdkDisplay *display)
           order = GSD_FONT_RGBA_ORDER_RGB;
         }
 
+      if (schema)
+        g_settings_schema_unref (schema);
+
       dpi = get_dpi_from_gsettings (display_wayland) * 1024;
     }
 
