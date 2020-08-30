@@ -36,7 +36,6 @@
 #include "gtkiconview.h"
 #include "gtklabel.h"
 #include "gtkpopover.h"
-#include "gtkradiobutton.h"
 #include "gtkscrolledwindow.h"
 #include "gtkspinbutton.h"
 #include "gtksettingsprivate.h"
