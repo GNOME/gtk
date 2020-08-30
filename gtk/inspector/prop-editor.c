@@ -782,6 +782,9 @@ describe_expression (GtkExpression *expression)
       g_value_init (&dest, G_TYPE_STRING);
       if (g_value_transform (value, &dest))
         {
+          /* Translators: %s is a type name, for example
+           * GtkPropertyExpression with value \"2.5\"
+           */
           char *res = g_strdup_printf (_("%s with value \"%s\""),
                                        g_type_name (G_TYPE_FROM_INSTANCE (expression)),
                                        g_value_get_string (&dest));
@@ -790,6 +793,9 @@ describe_expression (GtkExpression *expression)
         }
       else
         {
+          /* Translators: Both %s are type names, for example
+           * GtkPropertyExpression with type GObject
+           */
           return g_strdup_printf (_("%s with type %s"),
                                   g_type_name (G_TYPE_FROM_INSTANCE (expression)),
                                   g_type_name (G_VALUE_TYPE (value)));
@@ -800,12 +806,14 @@ describe_expression (GtkExpression *expression)
       gpointer obj = gtk_object_expression_get_object (expression);
 
       if (obj)
+        /* Translators: Both %s are type names, for example
+         * GtkObjectExpression for GtkStringObject 0x23456789
+         */
         return g_strdup_printf (_("%s for %s %p"),
                                 g_type_name (G_TYPE_FROM_INSTANCE (expression)),
                                 G_OBJECT_TYPE_NAME (obj), obj);
       else
-        return g_strdup_printf (_("%s"),
-                                g_type_name (G_TYPE_FROM_INSTANCE (expression)));
+        return g_strdup (g_type_name (G_TYPE_FROM_INSTANCE (expression)));
     }
   else if (G_TYPE_CHECK_INSTANCE_TYPE (expression, GTK_TYPE_PROPERTY_EXPRESSION))
     {
@@ -815,6 +823,10 @@ describe_expression (GtkExpression *expression)
       char *res;
 
       str = describe_expression (expr);
+      /* Translators: The first %s is a type name, %s:%s is a qualified
+       * property name, and is a value, for example
+       * GtkPropertyExpression for property GtkLabellabel on: GObjectExpression ...
+       */
       res = g_strdup_printf ("%s for property %s:%s on: %s",
                              g_type_name (G_TYPE_FROM_INSTANCE (expression)),
                              g_type_name (pspec->owner_type),
@@ -824,6 +836,9 @@ describe_expression (GtkExpression *expression)
       return res;
     }
   else
+    /* Translators: Both %s are type names, for example
+     * GtkPropertyExpression with value type: gchararray
+     */
     return g_strdup_printf (_("%s with value type %s"),
                             g_type_name (G_TYPE_FROM_INSTANCE (expression)),
                             g_type_name (gtk_expression_get_value_type (expression)));
@@ -1248,7 +1263,7 @@ attribute_bind_item (GtkSignalListItemFactory *factory,
       g_free (text);
     }
   else
-    gtk_label_set_label (GTK_LABEL (label), _("None"));
+    gtk_label_set_label (GTK_LABEL (label), C_("column number", "None"));
 
   gtk_list_item_set_selectable (item, holder->sensitive);
   gtk_widget_set_sensitive (label, holder->sensitive);
@@ -1389,6 +1404,9 @@ action_editor (GObject                *object,
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
   if (owner)
     {
+      /* Translators: %s is a type name, for example
+       * Action from 0x2345678 (GtkApplicationWindow)
+       */
       text = g_strdup_printf (_("Action from: %p (%s)"),
                               owner, g_type_name_from_instance ((GTypeInstance *)owner));
       gtk_box_append (GTK_BOX (box), gtk_label_new (text));
@@ -1452,20 +1470,20 @@ add_gtk_settings_info (GtkInspectorPropEditor *self)
   switch (_gtk_settings_get_setting_source (GTK_SETTINGS (object), name))
     {
     case GTK_SETTINGS_SOURCE_DEFAULT:
-      source = _("Default");
+      source = C_("GtkSettings source", "Default");
       break;
     case GTK_SETTINGS_SOURCE_THEME:
-      source = _("Theme");
+      source = C_("GtkSettings source", "Theme");
       break;
     case GTK_SETTINGS_SOURCE_XSETTING:
-      source = _("XSettings");
+      source = C_("GtkSettings source", "XSettings");
       break;
     case GTK_SETTINGS_SOURCE_APPLICATION:
       gtk_widget_set_sensitive (button, TRUE);
-      source = _("Application");
+      source = C_("GtkSettings source", "Application");
       break;
     default:
-      source = _("Unknown");
+      source = C_("GtkSettings source", "Unknown");
       break;
     }
   gtk_box_append (GTK_BOX (row), gtk_label_new (_("Source:")));
