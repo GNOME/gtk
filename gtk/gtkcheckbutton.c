@@ -24,6 +24,8 @@
 
 #include "config.h"
 
+#include "gtkcheckbutton.h"
+
 #include "gtkactionhelperprivate.h"
 #include "gtkboxlayout.h"
 #include "gtkbuiltiniconprivate.h"
@@ -33,7 +35,6 @@
 #include "gtkintl.h"
 #include "gtklabel.h"
 #include "gtkprivate.h"
-#include "gtkradiobutton.h"
 #include "gtkstylecontextprivate.h"
 #include "gtkwidgetprivate.h"
 
