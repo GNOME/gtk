@@ -264,7 +264,7 @@ click_released_cb (GtkGestureClick *gesture,
   GtkCheckButton *self = GTK_CHECK_BUTTON (widget);
   GtkCheckButtonPrivate *priv = gtk_check_button_get_instance_private (self);
 
-  if (priv->active && priv->group_prev)
+  if (priv->active && (priv->group_prev || priv->group_next))
     return;
 
   gtk_check_button_set_active (self, !priv->active);
