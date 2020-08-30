@@ -38,7 +38,6 @@
 #include "gtknotebook.h"
 #include "gtkscrolledwindow.h"
 #include "gtktogglebutton.h"
-#include "gtkradiobutton.h"
 #include "gtkdrawingarea.h"
 #include "gtkbox.h"
 #include "gtkgrid.h"
@@ -1361,9 +1360,9 @@ update_print_at_option (GtkPrintUnixDialog *dialog)
   if (dialog->updating_print_at)
     return;
 
-  if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (dialog->print_at_radio)))
+  if (gtk_check_button_get_active (GTK_CHECK_BUTTON (dialog->print_at_radio)))
     gtk_printer_option_set (option, "at");
-  else if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (dialog->print_hold_radio)))
+  else if (gtk_check_button_get_active (GTK_CHECK_BUTTON (dialog->print_hold_radio)))
     gtk_printer_option_set (option, "on-hold");
   else
     gtk_printer_option_set (option, "now");
@@ -1388,8 +1387,7 @@ setup_print_at (GtkPrintUnixDialog *dialog)
 
   if (option == NULL)
     {
-      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (dialog->print_now_radio),
-                                    TRUE);
+      gtk_check_button_set_active (GTK_CHECK_BUTTON (dialog->print_now_radio), TRUE);
       gtk_widget_set_sensitive (dialog->print_at_radio, FALSE);
       gtk_widget_set_sensitive (dialog->print_at_entry, FALSE);
       gtk_widget_set_sensitive (dialog->print_hold_radio, FALSE);
@@ -1409,14 +1407,11 @@ setup_print_at (GtkPrintUnixDialog *dialog)
   update_print_at_option (dialog);
 
   if (strcmp (option->value, "at") == 0)
-    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (dialog->print_at_radio),
-                                  TRUE);
+    gtk_check_button_set_active (GTK_CHECK_BUTTON (dialog->print_at_radio), TRUE);
   else if (strcmp (option->value, "on-hold") == 0)
-    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (dialog->print_hold_radio),
-                                  TRUE);
+    gtk_check_button_set_active (GTK_CHECK_BUTTON (dialog->print_hold_radio), TRUE);
   else
-    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (dialog->print_now_radio),
-                                  TRUE);
+    gtk_check_button_set_active (GTK_CHECK_BUTTON (dialog->print_now_radio), TRUE);
 
   option = gtk_printer_option_set_lookup (dialog->options, "gtk-print-time-text");
   if (option != NULL)
@@ -2013,7 +2008,7 @@ page_range_entry_focus_changed (GtkWidget          *entry,
                                 GtkPrintUnixDialog *dialog)
 {
   if (gtk_widget_has_focus (entry))
-    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (dialog->page_range_radio), TRUE);
+    gtk_check_button_set_active (GTK_CHECK_BUTTON (dialog->page_range_radio), TRUE);
 
   return FALSE;
 }
@@ -2024,7 +2019,7 @@ update_page_range_entry_sensitivity (GtkWidget *button,
 {
   gboolean active;
 
-  active = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button));
+  active = gtk_check_button_get_active (GTK_CHECK_BUTTON (button));
 
   if (active)
     gtk_widget_grab_focus (dialog->page_range_entry);
@@ -2036,7 +2031,7 @@ update_print_at_entry_sensitivity (GtkWidget *button,
 {
   gboolean active;
 
-  active = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button));
+  active = gtk_check_button_get_active (GTK_CHECK_BUTTON (button));
 
   gtk_widget_set_sensitive (dialog->print_at_entry, active);
 
@@ -2158,11 +2153,11 @@ dialog_set_page_ranges (GtkPrintUnixDialog *dialog,
 static GtkPrintPages
 dialog_get_print_pages (GtkPrintUnixDialog *dialog)
 {
-  if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (dialog->all_pages_radio)))
+  if (gtk_check_button_get_active (GTK_CHECK_BUTTON (dialog->all_pages_radio)))
     return GTK_PRINT_PAGES_ALL;
-  else if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (dialog->current_page_radio)))
+  else if (gtk_check_button_get_active (GTK_CHECK_BUTTON (dialog->current_page_radio)))
     return GTK_PRINT_PAGES_CURRENT;
-  else if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (dialog->selection_radio)))
+  else if (gtk_check_button_get_active (GTK_CHECK_BUTTON (dialog->selection_radio)))
     return GTK_PRINT_PAGES_SELECTION;
   else
     return GTK_PRINT_PAGES_RANGES;
@@ -2173,13 +2168,13 @@ dialog_set_print_pages (GtkPrintUnixDialog *dialog,
                         GtkPrintPages       pages)
 {
   if (pages == GTK_PRINT_PAGES_RANGES)
-    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (dialog->page_range_radio), TRUE);
+    gtk_check_button_set_active (GTK_CHECK_BUTTON (dialog->page_range_radio), TRUE);
   else if (pages == GTK_PRINT_PAGES_CURRENT)
-    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (dialog->current_page_radio), TRUE);
+    gtk_check_button_set_active (GTK_CHECK_BUTTON (dialog->current_page_radio), TRUE);
   else if (pages == GTK_PRINT_PAGES_SELECTION)
-    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (dialog->selection_radio), TRUE);
+    gtk_check_button_set_active (GTK_CHECK_BUTTON (dialog->selection_radio), TRUE);
   else
-    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (dialog->all_pages_radio), TRUE);
+    gtk_check_button_set_active (GTK_CHECK_BUTTON (dialog->all_pages_radio), TRUE);
 }
 
 static double
@@ -2253,7 +2248,7 @@ static gboolean
 dialog_get_collate (GtkPrintUnixDialog *dialog)
 {
   if (gtk_widget_is_sensitive (dialog->collate_check))
-    return gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (dialog->collate_check));
+    return gtk_check_button_get_active (GTK_CHECK_BUTTON (dialog->collate_check));
   return FALSE;
 }
 
@@ -2261,14 +2256,14 @@ static void
 dialog_set_collate (GtkPrintUnixDialog *dialog,
                     gboolean            collate)
 {
-  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (dialog->collate_check), collate);
+  gtk_check_button_set_active (GTK_CHECK_BUTTON (dialog->collate_check), collate);
 }
 
 static gboolean
 dialog_get_reverse (GtkPrintUnixDialog *dialog)
 {
   if (gtk_widget_is_sensitive (dialog->reverse_check))
-    return gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (dialog->reverse_check));
+    return gtk_check_button_get_active (GTK_CHECK_BUTTON (dialog->reverse_check));
   return FALSE;
 }
 
@@ -2276,7 +2271,7 @@ static void
 dialog_set_reverse (GtkPrintUnixDialog *dialog,
                     gboolean            reverse)
 {
-  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (dialog->reverse_check), reverse);
+  gtk_check_button_set_active (GTK_CHECK_BUTTON (dialog->reverse_check), reverse);
 }
 
 static int
