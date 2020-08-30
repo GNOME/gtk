@@ -347,7 +347,7 @@
                                     <child>
                                       <object class="GtkDrawingArea" id="collate_image">
                                         <property name="content-width">70</property>
-                                        <property name="content-height">90</property>
+                                        <property name="content-height">50</property>
                                         <layout>
                                           <property name="column">1</property>
                                           <property name="row">1</property>
