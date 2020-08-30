@@ -158,26 +158,38 @@ set_inconsistent (GtkCheckButton *button,
 }
 
 static void
-feat_clicked (GtkWidget *feat,
-              gpointer   data)
+feat_pressed (GtkGestureClick *gesture,
+              int              n_press,
+              double           x,
+              double           y,
+              GtkWidget       *feat)
 {
-  g_signal_handlers_block_by_func (feat, feat_clicked, NULL);
+  const guint button = gtk_gesture_single_get_current_button (GTK_GESTURE_SINGLE (gesture));
 
-  if (gtk_check_button_get_inconsistent (GTK_CHECK_BUTTON (feat)))
+  if (button == GDK_BUTTON_PRIMARY)
     {
-      set_inconsistent (GTK_CHECK_BUTTON (feat), FALSE);
-      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (feat), TRUE);
-    }
-  else if (!gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (feat)))
-    {
-      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (feat), FALSE);
-    }
-  else
-    {
-      set_inconsistent (GTK_CHECK_BUTTON (feat), TRUE);
-    }
+      g_signal_handlers_block_by_func (feat, feat_pressed, NULL);
 
-  g_signal_handlers_unblock_by_func (feat, feat_clicked, NULL);
+      if (gtk_check_button_get_inconsistent (GTK_CHECK_BUTTON (feat)))
+        {
+          set_inconsistent (GTK_CHECK_BUTTON (feat), FALSE);
+          gtk_check_button_set_active (GTK_CHECK_BUTTON (feat), TRUE);
+        }
+
+      g_signal_handlers_unblock_by_func (feat, feat_pressed, NULL);
+    }
+  else if (button == GDK_BUTTON_SECONDARY)
+    {
+      gboolean inconsistent = gtk_check_button_get_inconsistent (GTK_CHECK_BUTTON (feat));
+      set_inconsistent (GTK_CHECK_BUTTON (feat), !inconsistent);
+    }
+}
+
+static void
+feat_toggled_cb (GtkCheckButton *check_button,
+                 gpointer        data)
+{
+  set_inconsistent (check_button, FALSE);
 }
 
 static void
@@ -208,6 +220,7 @@ add_check_group (GtkWidget   *box,
       unsigned int tag;
       GtkWidget *feat;
       FeatureItem *item;
+      GtkGesture *gesture;
 
       tag = hb_tag_from_string (tags[i], -1);
 
@@ -216,7 +229,12 @@ add_check_group (GtkWidget   *box,
 
       g_signal_connect (feat, "notify::active", G_CALLBACK (update_display), NULL);
       g_signal_connect (feat, "notify::inconsistent", G_CALLBACK (update_display), NULL);
-      g_signal_connect (feat, "clicked", G_CALLBACK (feat_clicked), NULL);
+      g_signal_connect (feat, "toggled", G_CALLBACK (feat_toggled_cb), NULL);
+
+      gesture = gtk_gesture_click_new ();
+      gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (gesture), GDK_BUTTON_SECONDARY);
+      g_signal_connect (gesture, "pressed", G_CALLBACK (feat_pressed), feat);
+      gtk_widget_add_controller (feat, GTK_EVENT_CONTROLLER (gesture));
 
       gtk_box_append (GTK_BOX (group), feat);
 
@@ -267,10 +285,11 @@ add_radio_group (GtkWidget *box,
       tag = hb_tag_from_string (tags[i], -1);
       name = get_feature_display_name (tag);
 
-      feat = gtk_radio_button_new_with_label_from_widget (GTK_RADIO_BUTTON (group_button),
-                                                          name ? name : _("Default"));
+      feat = gtk_check_button_new_with_label (name ? name : _("Default"));
       if (group_button == NULL)
         group_button = feat;
+      else
+        gtk_check_button_set_group (GTK_CHECK_BUTTON (feat), GTK_CHECK_BUTTON (group_button));
 
       g_signal_connect (feat, "notify::active", G_CALLBACK (update_display), NULL);
       g_object_set_data (G_OBJECT (feat), "default", group_button);
@@ -343,31 +362,34 @@ update_display (void)
       if (!gtk_widget_is_sensitive (item->feat))
         continue;
 
-      if (GTK_IS_RADIO_BUTTON (item->feat))
+      if (GTK_IS_CHECK_BUTTON (item->feat))
         {
-          if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (item->feat)) &&
-              strcmp (item->name, "xxxx") != 0)
+          if (g_object_get_data (G_OBJECT (item->feat), "default"))
             {
+              if (gtk_check_button_get_active (GTK_CHECK_BUTTON (item->feat)) &&
+                  strcmp (item->name, "xxxx") != 0)
+                {
+                  if (has_feature)
+                    g_string_append (s, ", ");
+                  g_string_append (s, item->name);
+                  g_string_append (s, " 1");
+                  has_feature = TRUE;
+                }
+            }
+          else
+            {
+              if (gtk_check_button_get_inconsistent (GTK_CHECK_BUTTON (item->feat)))
+                continue;
+
               if (has_feature)
                 g_string_append (s, ", ");
               g_string_append (s, item->name);
-              g_string_append (s, " 1");
+              if (gtk_check_button_get_active (GTK_CHECK_BUTTON (item->feat)))
+                g_string_append (s, " 1");
+              else
+                g_string_append (s, " 0");
               has_feature = TRUE;
             }
-        }
-      else if (GTK_IS_CHECK_BUTTON (item->feat))
-        {
-          if (gtk_check_button_get_inconsistent (GTK_CHECK_BUTTON (item->feat)))
-            continue;
-
-          if (has_feature)
-            g_string_append (s, ", ");
-          g_string_append (s, item->name);
-          if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (item->feat)))
-            g_string_append (s, " 1");
-          else
-            g_string_append (s, " 0");
-          has_feature = TRUE;
         }
     }
 
@@ -614,7 +636,7 @@ update_features (void)
       gtk_widget_hide (item->feat);
       gtk_widget_hide (gtk_widget_get_parent (item->feat));
       if (strcmp (item->name, "xxxx") == 0)
-        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (item->feat), TRUE);
+        gtk_check_button_set_active (GTK_CHECK_BUTTON (item->feat), TRUE);
     }
 
   /* set feature presence checks from the font features */
@@ -668,14 +690,17 @@ update_features (void)
                     {
                       gtk_widget_show (item->feat);
                       gtk_widget_show (gtk_widget_get_parent (item->feat));
-                      if (GTK_IS_RADIO_BUTTON (item->feat))
+                      if (GTK_IS_CHECK_BUTTON (item->feat))
                         {
                           GtkWidget *def = GTK_WIDGET (g_object_get_data (G_OBJECT (item->feat), "default"));
-                          gtk_widget_show (def);
-                        }
-                      else if (GTK_IS_CHECK_BUTTON (item->feat))
-                        {
-                          set_inconsistent (GTK_CHECK_BUTTON (item->feat), TRUE);
+                          if (def)
+                            {
+                              gtk_widget_show (def);
+                              gtk_widget_show (gtk_widget_get_parent (def));
+                              gtk_check_button_set_active (GTK_CHECK_BUTTON (def), TRUE);
+                            }
+                          else
+                            set_inconsistent (GTK_CHECK_BUTTON (item->feat), TRUE);
                         }
                     }
                 }
@@ -697,14 +722,14 @@ update_features (void)
               p = strstr (feat, buf);
               if (p)
                 {
-                  if (GTK_IS_RADIO_BUTTON (item->feat))
+                  if (GTK_IS_CHECK_BUTTON (item->feat) && g_object_get_data (G_OBJECT (item->feat), "default"))
                     {
-                      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (item->feat), p[6] == '1');
+                      gtk_check_button_set_active (GTK_CHECK_BUTTON (item->feat), p[6] == '1');
                     }
                   else if (GTK_IS_CHECK_BUTTON (item->feat))
                     {
                       set_inconsistent (GTK_CHECK_BUTTON (item->feat), FALSE);
-                      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (item->feat), p[6] == '1');
+                      gtk_check_button_set_active (GTK_CHECK_BUTTON (item->feat), p[6] == '1');
                     }
                 }
             }
