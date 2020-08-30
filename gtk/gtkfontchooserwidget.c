@@ -28,6 +28,7 @@
 #include "gtkbuildable.h"
 #include "gtkbox.h"
 #include "gtkbinlayout.h"
+#include "gtkcheckbutton.h"
 #include "gtkcustomfilter.h"
 #include "gtkentry.h"
 #include "gtkfilter.h"
@@ -48,7 +49,6 @@
 #include "gtkwidgetprivate.h"
 #include "gtksettings.h"
 #include "gtkdialog.h"
-#include "gtkradiobutton.h"
 #include "gtkgestureclick.h"
 #include "gtkeventcontrollerscroll.h"
 #include "gtkroot.h"
@@ -1355,7 +1355,7 @@ feat_pressed (GtkGestureClick *gesture,
       if (gtk_check_button_get_inconsistent (GTK_CHECK_BUTTON (feat)))
         {
           set_inconsistent (GTK_CHECK_BUTTON (feat), FALSE);
-          gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (feat), TRUE);
+          gtk_check_button_set_active (GTK_CHECK_BUTTON (feat), TRUE);
         }
 
       g_signal_handlers_unblock_by_func (feat, feat_pressed, NULL);
@@ -1658,10 +1658,11 @@ add_radio_group (GtkFontChooserWidget *fontchooser,
       tag = hb_tag_from_string (tags[i], -1);
       name = get_feature_display_name (tag);
 
-      feat = gtk_radio_button_new_with_label_from_widget (GTK_RADIO_BUTTON (group_button),
-                                                          name ? name : _("Default"));
+      feat = gtk_check_button_new_with_label (name ? name : _("Default"));
       if (group_button == NULL)
         group_button = feat;
+      else
+        gtk_check_button_set_group (GTK_CHECK_BUTTON (feat), GTK_CHECK_BUTTON (group_button));
 
       g_signal_connect_swapped (feat, "notify::active", G_CALLBACK (update_font_features), fontchooser);
       g_object_set_data (G_OBJECT (feat), "default", group_button);
@@ -1786,14 +1787,17 @@ gtk_font_chooser_widget_update_font_features (GtkFontChooserWidget *fontchooser)
 
               update_feature_example (item, hb_font, script_tag, lang_tag, fontchooser->font_desc);
 
-              if (GTK_IS_RADIO_BUTTON (item->feat))
+              if (GTK_IS_CHECK_BUTTON (item->feat))
                 {
                   GtkWidget *def = GTK_WIDGET (g_object_get_data (G_OBJECT (item->feat), "default"));
-                  gtk_widget_show (gtk_widget_get_parent (def));
-                }
-              else if (GTK_IS_CHECK_BUTTON (item->feat))
-                {
-                  set_inconsistent (GTK_CHECK_BUTTON (item->feat), TRUE);
+                  if (def)
+                    {
+                      gtk_widget_show (def);
+                      gtk_widget_show (gtk_widget_get_parent (def));
+                      gtk_check_button_set_active (GTK_CHECK_BUTTON (def), TRUE);
+                    }
+                  else
+                    set_inconsistent (GTK_CHECK_BUTTON (item->feat), TRUE);
                 }
             }
         }
@@ -1819,9 +1823,9 @@ update_font_features (GtkFontChooserWidget *fontchooser)
       if (!gtk_widget_is_sensitive (item->feat))
         continue;
 
-      if (GTK_IS_RADIO_BUTTON (item->feat))
+      if (GTK_IS_CHECK_BUTTON (item->feat) && g_object_get_data (G_OBJECT (item->feat), "default"))
         {
-          if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (item->feat)) &&
+          if (gtk_check_button_get_active (GTK_CHECK_BUTTON (item->feat)) &&
               strcmp (item->name, "xxxx") != 0)
             {
               g_string_append_printf (s, "%s\"%s\" %d", s->len > 0 ? ", " : "", item->name, 1);
