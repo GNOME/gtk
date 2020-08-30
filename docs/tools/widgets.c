@@ -118,13 +118,30 @@ static WidgetInfo *
 create_check_button (void)
 {
   GtkWidget *widget;
+  GtkWidget *button;
+  GtkWidget *group;
 
-  widget = gtk_check_button_new_with_mnemonic ("_Check Button");
-  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), TRUE);
+  widget = gtk_box_new (GTK_ORIENTATION_VERTICAL, 3);
   gtk_widget_set_halign (widget, GTK_ALIGN_CENTER);
   gtk_widget_set_valign (widget, GTK_ALIGN_CENTER);
 
-  return new_widget_info ("check-button", widget, SMALL);
+  button = gtk_check_button_new_with_mnemonic ("_Check Button");
+  gtk_check_button_set_active (GTK_CHECK_BUTTON (button), TRUE);
+  gtk_box_append (GTK_BOX (widget), button);
+
+  button = gtk_check_button_new_with_mnemonic ("_Check Button");
+  gtk_box_append (GTK_BOX (widget), button);
+
+  button = gtk_check_button_new_with_mnemonic ("Radio Button");
+  gtk_check_button_set_active (GTK_CHECK_BUTTON (button), TRUE);
+  gtk_box_append (GTK_BOX (widget), button);
+  group = button;
+
+  button = gtk_check_button_new_with_mnemonic ("Radio Button");
+  gtk_box_append (GTK_BOX (widget), button);
+  gtk_check_button_set_group (GTK_CHECK_BUTTON (button), GTK_CHECK_BUTTON (group));
+
+  return new_widget_info ("check-button", widget, MEDIUM);
 }
 
 static WidgetInfo *
@@ -1400,7 +1417,7 @@ create_list_box (void)
   row = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
   gtk_box_append (GTK_BOX (row), gtk_label_new ("Line One"));
   button = gtk_check_button_new ();
-  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), TRUE);
+  gtk_check_button_set_active (GTK_CHECK_BUTTON (button), TRUE);
   gtk_widget_set_hexpand (button, TRUE);
   gtk_widget_set_halign (button, GTK_ALIGN_END);
   gtk_box_append (GTK_BOX (row), button);
@@ -1452,7 +1469,7 @@ create_flow_box (void)
   child = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
   gtk_box_append (GTK_BOX (child), gtk_label_new ("Child Three"));
   button = gtk_check_button_new ();
-  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), TRUE);
+  gtk_check_button_set_active (GTK_CHECK_BUTTON (button), TRUE);
   gtk_box_append (GTK_BOX (child), button);
   gtk_flow_box_insert (GTK_FLOW_BOX (box), child, -1);
   gtk_flow_box_select_child (GTK_FLOW_BOX (box),
