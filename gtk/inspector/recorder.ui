@@ -38,6 +38,14 @@
               </object>
             </child>
             <child>
+              <object class="GtkToggleButton" id="dark_mode_button">
+                <property name="has-frame">0</property>
+                <property name="icon-name">display-brightness-symbolic</property>
+                <property name="tooltip-text" translatable="yes">Use a dark background</property>
+                <signal name="notify::active" handler="toggle_dark_mode" swapped="0" object="render_node_view"/>
+              </object>
+            </child>
+            <child>
               <object class="GtkButton" id="render_node_save_button">
                 <property name="has-frame">0</property>
                 <property name="sensitive">0</property>
