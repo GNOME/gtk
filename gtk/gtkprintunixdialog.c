@@ -1614,7 +1614,7 @@ set_paper_size (GtkPrintUnixDialog *dialog,
   if (page_setup == NULL)
     return FALSE;
 
-  model = G_LIST_MODEL (dialog->page_setup_list);
+  model = gtk_drop_down_get_model (GTK_DROP_DOWN (dialog->paper_size_combo));
   for (i = 0; i < g_list_model_get_n_items (model); i++)
     {
       list_page_setup = g_list_model_get_item (model, i);
@@ -2901,9 +2901,8 @@ custom_paper_dialog_response_cb (GtkDialog *custom_paper_dialog,
 {
   GtkPrintUnixDialog *dialog = GTK_PRINT_UNIX_DIALOG (user_data);
 
-  gtk_print_load_custom_papers (dialog->custom_paper_list);
-
   dialog->internal_page_setup_change = TRUE;
+  gtk_print_load_custom_papers (dialog->custom_paper_list);
   update_paper_sizes (dialog);
   dialog->internal_page_setup_change = FALSE;
 

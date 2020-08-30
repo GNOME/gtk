@@ -81,6 +81,8 @@ struct _GtkPageSetupUnixDialog
 
   GtkPrintSettings *print_settings;
 
+  gboolean internal_change;
+
   /* Save last setup so we can re-set it after selecting manage custom sizes */
   GtkPageSetup *last_setup;
 };
@@ -273,6 +275,7 @@ gtk_page_setup_unix_dialog_init (GtkPageSetupUnixDialog *dialog)
   GtkFilter *filter;
   GtkPageSetup *page_setup;
 
+  dialog->internal_change = TRUE;
   dialog->print_backends = NULL;
 
   gtk_widget_init_template (GTK_WIDGET (dialog));
@@ -337,6 +340,7 @@ gtk_page_setup_unix_dialog_init (GtkPageSetupUnixDialog *dialog)
   /* Load data */
   gtk_print_load_custom_papers (dialog->custom_paper_list);
   load_print_backends (dialog);
+  dialog->internal_change = FALSE;
 }
 
 static void
@@ -638,11 +642,19 @@ custom_paper_dialog_response_cb (GtkDialog *custom_paper_dialog,
                                  gpointer   user_data)
 {
   GtkPageSetupUnixDialog *dialog = GTK_PAGE_SETUP_UNIX_DIALOG (user_data);
+  GtkPageSetup *last_page_setup;
 
+  dialog->internal_change = TRUE;
   gtk_print_load_custom_papers (dialog->custom_paper_list);
-
-  /* Update printer page list */
   printer_changed_callback (GTK_DROP_DOWN (dialog->printer_combo), NULL, dialog);
+  dialog->internal_change = FALSE;
+
+  if (dialog->last_setup)
+    last_page_setup = g_object_ref (dialog->last_setup);
+  else
+    last_page_setup = gtk_page_setup_new (); /* "good" default */
+  set_paper_size (dialog, last_page_setup, FALSE, TRUE);
+  g_object_unref (last_page_setup);
 
   gtk_window_destroy (GTK_WINDOW (custom_paper_dialog));
 }
@@ -659,6 +671,9 @@ paper_size_changed (GtkDropDown            *combo_box,
   char *top, *bottom, *left, *right;
   GtkLabel *label;
   const char *unit_str;
+
+  if (dialog->internal_change)
+    return;
 
   label = GTK_LABEL (dialog->paper_size_label);
 
