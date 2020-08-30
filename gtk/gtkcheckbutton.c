@@ -680,17 +680,7 @@ gtk_check_button_set_active (GtkCheckButton *self,
       GtkCheckButton *group_first = NULL;
       GtkCheckButton *iter;
 
-      /* Find first in group */
-      iter = self;
-      while (iter)
-        {
-          group_first = iter;
-
-          iter = get_group_prev (iter);
-          if (!iter)
-            break;
-        }
-
+      group_first = get_group_first (self);
       g_assert (group_first);
 
       /* Set all buttons in group to !active */
