@@ -1123,9 +1123,9 @@ update_widgets (GtkPrinterOptionWidget *widget)
     {
     case GTK_PRINTER_OPTION_TYPE_BOOLEAN:
       if (g_ascii_strcasecmp (source->value, "True") == 0)
-	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (priv->check), TRUE);
+	gtk_check_button_set_active (GTK_CHECK_BUTTON (priv->check), TRUE);
       else
-	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (priv->check), FALSE);
+	gtk_check_button_set_active (GTK_CHECK_BUTTON (priv->check), FALSE);
       break;
     case GTK_PRINTER_OPTION_TYPE_PICKONE:
       combo_box_set (priv->combo, source->value);

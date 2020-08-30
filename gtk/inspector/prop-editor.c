@@ -498,7 +498,7 @@ flags_modified (GtkCheckButton *button, ObjectProperty *p)
   int i;
   GValue val = G_VALUE_INIT;
 
-  active = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button));
+  active = gtk_check_button_get_active (button);
   i = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (button), "index"));
   fclass = G_FLAGS_CLASS (g_type_class_peek (p->spec->value_type));
 

@@ -26,7 +26,7 @@
 
 #include "gtkbutton.h"
 #include "gtkscrolledwindow.h"
-#include "gtktogglebutton.h"
+#include "gtkcheckbutton.h"
 #include "gtklabel.h"
 #include "gtkgrid.h"
 #include "gtkcelllayout.h"
@@ -779,11 +779,11 @@ gtk_page_setup_unix_dialog_new (const char *title,
 static GtkPageOrientation
 get_orientation (GtkPageSetupUnixDialog *dialog)
 {
-  if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (dialog->portrait_radio)))
+  if (gtk_check_button_get_active (GTK_CHECK_BUTTON (dialog->portrait_radio)))
     return GTK_PAGE_ORIENTATION_PORTRAIT;
-  if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (dialog->landscape_radio)))
+  if (gtk_check_button_get_active (GTK_CHECK_BUTTON (dialog->landscape_radio)))
     return GTK_PAGE_ORIENTATION_LANDSCAPE;
-  if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (dialog->reverse_landscape_radio)))
+  if (gtk_check_button_get_active (GTK_CHECK_BUTTON (dialog->reverse_landscape_radio)))
     return GTK_PAGE_ORIENTATION_REVERSE_LANDSCAPE;
   return GTK_PAGE_ORIENTATION_REVERSE_PORTRAIT;
 }
@@ -795,16 +795,16 @@ set_orientation (GtkPageSetupUnixDialog *dialog,
   switch (orientation)
     {
     case GTK_PAGE_ORIENTATION_REVERSE_PORTRAIT:
-      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (dialog->reverse_portrait_radio), TRUE);
+      gtk_check_button_set_active (GTK_CHECK_BUTTON (dialog->reverse_portrait_radio), TRUE);
       break;
     case GTK_PAGE_ORIENTATION_PORTRAIT:
-      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (dialog->portrait_radio), TRUE);
+      gtk_check_button_set_active (GTK_CHECK_BUTTON (dialog->portrait_radio), TRUE);
       break;
     case GTK_PAGE_ORIENTATION_LANDSCAPE:
-      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (dialog->landscape_radio), TRUE);
+      gtk_check_button_set_active (GTK_CHECK_BUTTON (dialog->landscape_radio), TRUE);
       break;
     case GTK_PAGE_ORIENTATION_REVERSE_LANDSCAPE:
-      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (dialog->reverse_landscape_radio), TRUE);
+      gtk_check_button_set_active (GTK_CHECK_BUTTON (dialog->reverse_landscape_radio), TRUE);
       break;
     default:
       break;

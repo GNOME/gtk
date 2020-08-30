@@ -59,11 +59,11 @@ update_selected (GtkWidget *widget)
 
   if (gtk_list_box_row_is_selected (GTK_LIST_BOX_ROW (row)))
     {
-      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (row->check), TRUE);
+      gtk_check_button_set_active (GTK_CHECK_BUTTON (row->check), TRUE);
       gtk_widget_unset_state_flags (widget, GTK_STATE_FLAG_SELECTED);
     }
   else
-    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (row->check), FALSE);
+    gtk_check_button_set_active (GTK_CHECK_BUTTON (row->check), FALSE);
 }
 
 static void

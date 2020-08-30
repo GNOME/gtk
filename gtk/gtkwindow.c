@@ -6591,7 +6591,7 @@ warn_response (GtkDialog *dialog,
   display = gtk_inspector_window_get_inspected_display (GTK_INSPECTOR_WINDOW (inspector_window));
 
   check = g_object_get_data (G_OBJECT (dialog), "check");
-  remember = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (check));
+  remember = gtk_check_button_get_active (GTK_CHECK_BUTTON (check));
 
   gtk_window_destroy (GTK_WINDOW (dialog));
   g_object_set_data (G_OBJECT (inspector_window), "warning_dialog", NULL);

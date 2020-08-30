@@ -20,14 +20,14 @@ set_visible_child_name (GtkWidget *button, gpointer data)
 static void
 toggle_hhomogeneous (GtkWidget *button, gpointer data)
 {
-  gboolean active = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button));
+  gboolean active = gtk_check_button_get_active (GTK_CHECK_BUTTON (button));
   gtk_stack_set_hhomogeneous (GTK_STACK (stack), active);
 }
 
 static void
 toggle_vhomogeneous (GtkWidget *button, gpointer data)
 {
-  gboolean active = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button));
+  gboolean active = gtk_check_button_get_active (GTK_CHECK_BUTTON (button));
   gtk_stack_set_vhomogeneous (GTK_STACK (stack), active);
 }
 
@@ -215,14 +215,14 @@ main (int argc,
   g_signal_connect (button, "clicked", (GCallback) set_visible_child_name, (gpointer) "3");
 
   button = gtk_check_button_new ();
-  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button),
-				gtk_stack_get_hhomogeneous (GTK_STACK (stack)));
+  gtk_check_button_set_active (GTK_CHECK_BUTTON (button),
+                               gtk_stack_get_hhomogeneous (GTK_STACK (stack)));
   gtk_box_append (GTK_BOX (hbox), button);
   g_signal_connect (button, "clicked", (GCallback) toggle_hhomogeneous, NULL);
 
   button = gtk_check_button_new_with_label ("homogeneous");
-  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button),
-				gtk_stack_get_vhomogeneous (GTK_STACK (stack)));
+  gtk_check_button_set_active (GTK_CHECK_BUTTON (button),
+                               gtk_stack_get_vhomogeneous (GTK_STACK (stack)));
   gtk_box_append (GTK_BOX (hbox), button);
   g_signal_connect (button, "clicked", (GCallback) toggle_vhomogeneous, NULL);
 

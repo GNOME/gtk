@@ -1166,15 +1166,15 @@ font_features_reset_features (void)
     {
       FeatureItem *item = l->data;
 
-      if (GTK_IS_RADIO_BUTTON (item->feat))
+      if (GTK_IS_CHECK_BUTTON (item->feat))
         {
           if (strcmp (item->name, "xxxx") == 0)
-            gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (item->feat), TRUE);
-        }
-      else if (GTK_IS_CHECK_BUTTON (item->feat))
-        {
-          gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (item->feat), FALSE);
-          set_inconsistent (GTK_CHECK_BUTTON (item->feat), TRUE);
+            gtk_check_button_set_active (GTK_CHECK_BUTTON (item->feat), TRUE);
+          else
+            {
+              gtk_check_button_set_active (GTK_CHECK_BUTTON (item->feat), FALSE);
+              set_inconsistent (GTK_CHECK_BUTTON (item->feat), TRUE);
+            }
         }
     }
 }

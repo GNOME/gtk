@@ -378,10 +378,10 @@ configure_plugins (GSimpleAction *action,
 
   dialog = (GtkWidget *)gtk_builder_get_object (builder, "plugin-dialog");
   check = (GtkWidget *)gtk_builder_get_object (builder, "red-plugin");
-  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check), plugin_enabled ("red"));
+  gtk_check_button_set_active (GTK_CHECK_BUTTON (check), plugin_enabled ("red"));
   g_signal_connect (check, "toggled", G_CALLBACK (enable_or_disable_plugin), (char *) "red");
   check = (GtkWidget *)gtk_builder_get_object (builder, "black-plugin");
-  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check), plugin_enabled ("black"));
+  gtk_check_button_set_active (GTK_CHECK_BUTTON (check), plugin_enabled ("black"));
   g_signal_connect (check, "toggled", G_CALLBACK (enable_or_disable_plugin), (char *) "black");
 
   g_signal_connect (dialog, "response", G_CALLBACK (gtk_window_destroy), NULL);

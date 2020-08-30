@@ -59,7 +59,7 @@ update_image (void)
     hintstyle = CAIRO_HINT_STYLE_DEFAULT;
   cairo_font_options_set_hint_style (fopt, hintstyle);
 
-  if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (hint_metrics)))
+  if (gtk_check_button_get_active (GTK_CHECK_BUTTON (hint_metrics)))
     hintmetrics = CAIRO_HINT_METRICS_ON;
   else
     hintmetrics = CAIRO_HINT_METRICS_OFF;
@@ -69,7 +69,7 @@ update_image (void)
   cairo_font_options_destroy (fopt);
   pango_context_changed (context);
 
-  if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (text_radio)))
+  if (gtk_check_button_get_active (GTK_CHECK_BUTTON (text_radio)))
     {
       layout = pango_layout_new (context);
       pango_layout_set_font_description (layout, desc);
@@ -107,7 +107,7 @@ update_image (void)
       cr = cairo_create (surface);
       cairo_set_line_width (cr, 1);
 
-      if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (show_grid)))
+      if (gtk_check_button_get_active (GTK_CHECK_BUTTON (show_grid)))
         {
           int i;
           cairo_set_source_rgba (cr, 0.2, 0, 0, 0.2);
@@ -125,7 +125,7 @@ update_image (void)
             }
         }
 
-      if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (show_extents)))
+      if (gtk_check_button_get_active (GTK_CHECK_BUTTON (show_extents)))
         {
           cairo_set_source_rgba (cr, 0, 0, 1, 1);
 
