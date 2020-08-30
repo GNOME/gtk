@@ -209,15 +209,15 @@ HTML_IMAGES = \
 	$(top_srcdir)/gtk/stock-icons/24/edit-find-replace.png		\
 	$(top_srcdir)/gtk/stock-icons/24/go-bottom.png			\
 	$(top_srcdir)/gtk/stock-icons/24/go-first-ltr.png		\
-	$(top_srcdir)/gtk/stock-icons/24/go-first-rtl.png		\
+	$(top_builddir)/gtk/stock-icons/24/go-first-rtl.png		\
 	$(top_srcdir)/gtk/stock-icons/24/go-last-ltr.png		\
-	$(top_srcdir)/gtk/stock-icons/24/go-last-rtl.png		\
+	$(top_builddir)/gtk/stock-icons/24/go-last-rtl.png		\
 	$(top_srcdir)/gtk/stock-icons/24/go-top.png			\
 	$(top_srcdir)/gtk/stock-icons/24/go-previous-ltr.png		\
-	$(top_srcdir)/gtk/stock-icons/24/go-previous-rtl.png		\
+	$(top_builddir)/gtk/stock-icons/24/go-previous-rtl.png		\
 	$(top_srcdir)/gtk/stock-icons/24/go-down.png			\
 	$(top_srcdir)/gtk/stock-icons/24/go-next-ltr.png		\
-	$(top_srcdir)/gtk/stock-icons/24/go-next-rtl.png		\
+	$(top_builddir)/gtk/stock-icons/24/go-next-rtl.png		\
 	$(top_srcdir)/gtk/stock-icons/24/go-up.png			\
 	$(top_srcdir)/gtk/stock-icons/24/drive-harddisk.png		\
 	$(top_srcdir)/gtk/stock-icons/24/network-idle.png		\
@@ -261,7 +261,7 @@ HTML_IMAGES = \
 	$(top_srcdir)/gtk/stock-icons/24/document-revert-ltr.png	\
 	$(top_srcdir)/gtk/stock-icons/24/document-revert-rtl.png	\
 	$(top_srcdir)/gtk/stock-icons/24/media-floppy.png		\
-	$(top_srcdir)/gtk/stock-icons/24/document-save.png		\
+	$(top_builddir)/gtk/stock-icons/24/document-save.png		\
 	$(top_srcdir)/gtk/stock-icons/24/document-save-as.png		\
 	$(top_srcdir)/gtk/stock-icons/24/edit-select-all.png		\
 	$(top_srcdir)/gtk/stock-icons/24/gtk-select-color.png		\
@@ -283,17 +283,17 @@ HTML_IMAGES = \
 	$(top_srcdir)/gtk/stock-icons/24/zoom-in.png			\
 	$(top_srcdir)/gtk/stock-icons/24/zoom-out.png			\
 	$(top_srcdir)/gtk/stock-icons/24/media-seek-forward-ltr.png	\
-	$(top_srcdir)/gtk/stock-icons/24/media-seek-forward-rtl.png	\
+	$(top_builddir)/gtk/stock-icons/24/media-seek-forward-rtl.png	\
 	$(top_srcdir)/gtk/stock-icons/24/media-skip-forward-ltr.png	\
-	$(top_srcdir)/gtk/stock-icons/24/media-skip-forward-rtl.png	\
+	$(top_builddir)/gtk/stock-icons/24/media-skip-forward-rtl.png	\
 	$(top_srcdir)/gtk/stock-icons/24/media-playback-pause.png	\
 	$(top_srcdir)/gtk/stock-icons/24/media-playback-start-ltr.png	\
 	$(top_srcdir)/gtk/stock-icons/24/media-playback-start-rtl.png	\
 	$(top_srcdir)/gtk/stock-icons/24/media-seek-backward-ltr.png	\
-	$(top_srcdir)/gtk/stock-icons/24/media-seek-backward-rtl.png	\
+	$(top_builddir)/gtk/stock-icons/24/media-seek-backward-rtl.png	\
 	$(top_srcdir)/gtk/stock-icons/24/media-record.png		\
 	$(top_srcdir)/gtk/stock-icons/24/media-skip-backward-ltr.png	\
-	$(top_srcdir)/gtk/stock-icons/24/media-skip-backward-rtl.png	\
+	$(top_builddir)/gtk/stock-icons/24/media-skip-backward-rtl.png	\
 	$(top_srcdir)/gtk/stock-icons/24/media-playback-stop.png	\
 	$(top_srcdir)/gtk/stock-icons/24/view-fullscreen.png		\
 	$(top_srcdir)/gtk/stock-icons/24/view-restore.png		\
