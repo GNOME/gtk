@@ -1021,6 +1021,25 @@ render_node_save (GtkButton            *button,
   gtk_widget_show (dialog);
 }
 
+static void
+toggle_dark_mode (GtkToggleButton *button,
+                  GParamSpec      *pspec,
+                  gpointer         data)
+{
+  GtkWidget *picture = data;
+
+  if (gtk_toggle_button_get_active (button))
+    {
+      gtk_widget_add_css_class (picture, "dark");
+      gtk_widget_remove_css_class (picture, "light");
+    }
+  else
+    {
+      gtk_widget_remove_css_class (picture, "dark");
+      gtk_widget_add_css_class (picture, "light");
+    }
+}
+
 static GtkWidget *
 gtk_inspector_recorder_recordings_list_create_widget (gpointer item,
                                                       gpointer user_data)
@@ -1216,6 +1235,7 @@ gtk_inspector_recorder_class_init (GtkInspectorRecorderClass *klass)
   gtk_widget_class_bind_template_callback (widget_class, recordings_list_row_selected);
   gtk_widget_class_bind_template_callback (widget_class, render_node_save);
   gtk_widget_class_bind_template_callback (widget_class, node_property_activated);
+  gtk_widget_class_bind_template_callback (widget_class, toggle_dark_mode);
 
   gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BIN_LAYOUT);
 }
