@@ -211,6 +211,14 @@
 }
 
 {
+   FcPatternObjectInsertElt
+   Memcheck:Leak
+   match-leak-kinds: definite
+   fun:malloc
+   fun:FcPatternObjectInsertElt
+}
+
+{
    FcFontRenderPrepare
    Memcheck:Leak
    match-leak-kinds: definite
