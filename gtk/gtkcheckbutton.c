@@ -42,7 +42,7 @@
  * SECTION:gtkcheckbutton
  * @Short_description: Create widgets with a discrete toggle button
  * @Title: GtkCheckButton
- * @See_also: #GtkButton, #GtkToggleButton, #GtkRadioButton
+ * @See_also: #GtkButton, #GtkToggleButton
  *
  * A #GtkCheckButton places a label next to an indicator.
  *

@@ -104,7 +104,7 @@ gtk_render_check (GtkStyleContext *context,
  * @width: rectangle width
  * @height: rectangle height
  *
- * Renders an option mark (as in a #GtkRadioButton), the %GTK_STATE_FLAG_CHECKED
+ * Renders an option mark (as in a radio button), the %GTK_STATE_FLAG_CHECKED
  * state will determine whether the option is on or off, and
  * %GTK_STATE_FLAG_INCONSISTENT whether it should be marked as undefined.
  *

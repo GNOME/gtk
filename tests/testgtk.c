@@ -513,10 +513,6 @@ create_check_buttons (GtkWidget *widget)
     gtk_window_destroy (GTK_WINDOW (window));
 }
 
-/*
- * GtkRadioButton
- */
-
 static void
 create_radio_buttons (GtkWidget *widget)
 {
