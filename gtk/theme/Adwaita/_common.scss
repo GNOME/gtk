@@ -548,11 +548,6 @@ button {
       min-width: 24px;
       padding-left: 5px;
       padding-right: 5px;
-
-      &.circular {
-         min-height: 24px;
-         padding: 4px;
-      }
     }
 
     &.text-button {
@@ -770,7 +765,10 @@ button {
 
   .linked.vertical > & { @extend %linked_vertical; }
 
-  &.circular { // The Bloody Circul Button
+  &.circular { // force circular button shape
+    min-width: 32px;
+    min-height: 32px;
+    padding: 0;
     border-radius: 9999px;
 
     label { padding: 0; }
