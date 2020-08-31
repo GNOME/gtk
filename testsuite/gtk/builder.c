@@ -408,7 +408,7 @@ test_sizegroup (void)
     "          <object class=\"GtkCheckButton\" id=\"radio1\"/>"
     "        </child>"
     "        <child>"
-    "          <object class=\"GtkChekcButton\" id=\"radio2\"/>"
+    "          <object class=\"GtkCheckButton\" id=\"radio2\"/>"
     "        </child>"
     "      </object>"
     "    </child>"
