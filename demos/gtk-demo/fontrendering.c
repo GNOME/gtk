@@ -69,7 +69,7 @@ update_image (void)
   cairo_font_options_destroy (fopt);
   pango_context_changed (context);
 
-  if (gtk_check_button_get_active (GTK_CHECK_BUTTON (text_radio)))
+  if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (text_radio)))
     {
       layout = pango_layout_new (context);
       pango_layout_set_font_description (layout, desc);

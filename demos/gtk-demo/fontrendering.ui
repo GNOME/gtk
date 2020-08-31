@@ -18,12 +18,13 @@
               <class name="linked"/>
             </style>
             <child>
-              <object class="GtkRadioButton" id="text_radio">
+              <object class="GtkToggleButton" id="text_radio">
                 <property name="label">Text</property>
+                <property name="active">1</property>
               </object>
             </child>
             <child>
-              <object class="GtkRadioButton" id="grid_radio">
+              <object class="GtkToggleButton" id="grid_radio">
                 <property name="label">Grid</property>
                 <property name="group">text_radio</property>
               </object>
