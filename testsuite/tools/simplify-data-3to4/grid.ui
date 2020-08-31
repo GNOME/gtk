@@ -58,6 +58,19 @@
           </packing>
         </child>
         <child>
+          <object class="GtkRadioButton" id="button4a">
+            <property name="label" translatable="yes">Hello World!</property>
+            <property name="visible">True</property>
+            <property name="group">button4</property>
+            <property name="draw-indicator">False</property>
+            <property name="receives_default">True</property>
+          </object>
+          <packing>
+            <property name="left_attach">3</property>
+            <property name="top_attach">0</property>
+          </packing>
+        </child>
+        <child>
           <object class="GtkSwitch" id="button5">
             <property name="visible">True</property>
             <property name="active">True</property>
