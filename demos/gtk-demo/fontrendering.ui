@@ -114,14 +114,7 @@
             </child>
             <child>
               <object class="GtkCheckButton" id="hint_metrics">
-                <child>
-                  <object class="GtkLabel">
-                    <property name="label">Hint Metrics</property>
-                    <style>
-                      <class name="dim-label"/>
-                    </style>
-                  </object>
-                </child>
+                <property name="label">Hint Metrics</property>
                 <layout>
                   <property name="column">4</property>
                   <property name="row">1</property>
@@ -130,15 +123,8 @@
             </child>
             <child>
               <object class="GtkCheckButton" id="show_extents">
+                <property name="label">Show Extents</property>
                 <property name="active">1</property>
-                <child>
-                  <object class="GtkLabel">
-                    <property name="label">Show Extents</property>
-                    <style>
-                      <class name="dim-label"/>
-                    </style>
-                  </object>
-                </child>
                 <layout>
                   <property name="column">5</property>
                   <property name="row">0</property>
@@ -148,14 +134,7 @@
             <child>
               <object class="GtkCheckButton" id="show_grid">
                 <property name="active">1</property>
-                <child>
-                  <object class="GtkLabel">
-                    <property name="label">Show Grid</property>
-                    <style>
-                      <class name="dim-label"/>
-                    </style>
-                  </object>
-                </child>
+                <property name="label">Show Grid</property>
                 <layout>
                   <property name="column">5</property>
                   <property name="row">1</property>
