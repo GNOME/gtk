@@ -1772,7 +1772,7 @@ msgid "Can't parse file: %s\n"
 msgstr "ファイルを解析できません: %s\n"
 
 #: gtk/gtk-builder-tool.c:1058
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Usage:\n"
 "  gtk-builder-tool [COMMAND] FILE\n"
@@ -2628,7 +2628,7 @@ msgstr "ローカルではないので、フォルダーを変更できません
 #: gtk/gtkfilechooserwidget.c:6565 gtk/gtkprintunixdialog.c:665
 #, c-format
 msgid "A file named “%s” already exists.  Do you want to replace it?"
-msgstr "“%s”というファイルはすでに存在します。上書きしますか?"
+msgstr "“%s”はすでに存在します。上書きしますか?"
 
 #: gtk/gtkfilechooserwidget.c:6568 gtk/gtkprintunixdialog.c:669
 #, c-format
