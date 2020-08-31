@@ -29,8 +29,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-08-29 08:37+0000\n"
-"PO-Revision-Date: 2020-08-29 10:18-0400\n"
+"POT-Creation-Date: 2020-08-30 22:02+0000\n"
+"PO-Revision-Date: 2020-08-31 09:43-0400\n"
 "Last-Translator: Boyuan Yang <073plan@gmail.com>\n"
 "Language-Team: Chinese (China) <i18n-zh@googlegroups.com>\n"
 "Language: zh_CN\n"
@@ -1322,15 +1322,15 @@ msgid "Margins from Printer…"
 msgstr "打印机边距…"
 
 #. And show the custom paper dialog
-#: gtk/gtkcustompaperunixdialog.c:402 gtk/gtkprintunixdialog.c:2993
+#: gtk/gtkcustompaperunixdialog.c:402 gtk/gtkprintunixdialog.c:2992
 msgid "Manage Custom Sizes"
 msgstr "管理自定义大小"
 
-#: gtk/gtkcustompaperunixdialog.c:466 gtk/gtkpagesetupunixdialog.c:704
+#: gtk/gtkcustompaperunixdialog.c:466 gtk/gtkpagesetupunixdialog.c:719
 msgid "inch"
 msgstr "英寸"
 
-#: gtk/gtkcustompaperunixdialog.c:468 gtk/gtkpagesetupunixdialog.c:702
+#: gtk/gtkcustompaperunixdialog.c:468 gtk/gtkpagesetupunixdialog.c:717
 msgid "mm"
 msgstr "毫米"
 
@@ -1454,7 +1454,7 @@ msgstr "同名文件已存在"
 #: gtk/gtkfilechoosernative.c:505 gtk/gtkfilechoosernative.c:576
 #: gtk/gtkfilechooserwidget.c:1212 gtk/gtkfilechooserwidget.c:5755
 #: gtk/gtkmessagedialog.c:742 gtk/gtkmessagedialog.c:751
-#: gtk/gtkmountoperation.c:608 gtk/gtkpagesetupunixdialog.c:281
+#: gtk/gtkmountoperation.c:608 gtk/gtkpagesetupunixdialog.c:284
 #: gtk/gtkprintbackend.c:643 gtk/gtkprinteroptionwidget.c:713
 #: gtk/gtkprintunixdialog.c:627 gtk/gtkprintunixdialog.c:782
 #: gtk/gtkwindow.c:6649 gtk/inspector/css-editor.c:248
@@ -1720,7 +1720,6 @@ msgstr "工作表"
 #. Translators: We don't know whether this printer is
 #. * available to print to.
 #: gtk/gtkfilechooserwidget.c:4349 gtk/gtkfilechooserwidget.c:4536
-#: gtk/inspector/prop-editor.c:1468
 #: modules/printbackends/gtkprintbackendcloudprint.c:729
 msgid "Unknown"
 msgstr "未知"
@@ -1789,7 +1788,7 @@ msgstr "倾斜（Slant）"
 msgid "Optical Size"
 msgstr "视觉尺寸"
 
-#: gtk/gtkfontchooserwidget.c:1653 gtk/inspector/prop-editor.c:1455
+#: gtk/gtkfontchooserwidget.c:1653
 msgid "Default"
 msgstr "默认"
 
@@ -2069,23 +2068,23 @@ msgstr "第 %u 页"
 msgid "Not a valid page setup file"
 msgstr "非法的页面设置文件"
 
-#: gtk/gtkpagesetupunixdialog.c:200 gtk/gtkprintunixdialog.c:712
+#: gtk/gtkpagesetupunixdialog.c:202 gtk/gtkprintunixdialog.c:712
 msgid "Manage Custom Sizes…"
 msgstr "管理自定义大小…"
 
-#: gtk/gtkpagesetupunixdialog.c:282 gtk/ui/gtkassistant.ui:98
+#: gtk/gtkpagesetupunixdialog.c:285 gtk/ui/gtkassistant.ui:98
 msgid "_Apply"
 msgstr "应用(_A)"
 
-#: gtk/gtkpagesetupunixdialog.c:316 gtk/gtkpagesetupunixdialog.c:567
+#: gtk/gtkpagesetupunixdialog.c:319 gtk/gtkpagesetupunixdialog.c:571
 msgid "Any Printer"
 msgstr "任意打印机"
 
-#: gtk/gtkpagesetupunixdialog.c:317
+#: gtk/gtkpagesetupunixdialog.c:320
 msgid "For portable documents"
 msgstr "用于便携文档"
 
-#: gtk/gtkpagesetupunixdialog.c:722
+#: gtk/gtkpagesetupunixdialog.c:737
 #, c-format
 msgid ""
 "Margins:\n"
@@ -2100,7 +2099,7 @@ msgstr ""
 " 上：%s %s\n"
 " 下：%s %s"
 
-#: gtk/gtkpagesetupunixdialog.c:768 gtk/ui/gtkpagesetupunixdialog.ui:5
+#: gtk/gtkpagesetupunixdialog.c:783 gtk/ui/gtkpagesetupunixdialog.ui:5
 #: gtk/ui/gtkprintunixdialog.ui:711
 msgid "Page Setup"
 msgstr "页面设置"
@@ -2533,12 +2532,11 @@ msgstr "最可能的原因是无法创建临时文件。"
 
 #. window
 #: gtk/gtkprintoperation-portal.c:236 gtk/gtkprintoperation-portal.c:554
-#: gtk/gtkprintoperation-portal.c:623 gtk/gtkprintunixdialog.c:3033
+#: gtk/gtkprintoperation-portal.c:623 gtk/gtkprintunixdialog.c:3032
 msgid "Print"
 msgstr "打印"
 
 #: gtk/gtkprintoperation-unix.c:479 gtk/gtkprintoperation-win32.c:1503
-#: gtk/inspector/prop-editor.c:1465
 msgid "Application"
 msgstr "应用程序"
 
@@ -2867,7 +2865,7 @@ msgid "Attribute"
 msgstr "属性"
 
 #: gtk/inspector/a11y.ui:54 gtk/inspector/css-node-tree.ui:119
-#: gtk/inspector/prop-list.ui:56 gtk/inspector/recorder.ui:115
+#: gtk/inspector/prop-list.ui:56 gtk/inspector/recorder.ui:123
 msgid "Value"
 msgstr "值"
 
@@ -3085,8 +3083,8 @@ msgid "Surface"
 msgstr "表面"
 
 #: gtk/inspector/misc-info.ui:316 gtk/inspector/misc-info.ui:355
-#: gtk/inspector/misc-info.ui:394 gtk/inspector/prop-editor.c:1039
-#: gtk/inspector/prop-editor.c:1396 gtk/inspector/window.ui:418
+#: gtk/inspector/misc-info.ui:394 gtk/inspector/prop-editor.c:1054
+#: gtk/inspector/prop-editor.c:1414 gtk/inspector/window.ui:418
 msgid "Properties"
 msgstr "属性"
 
@@ -3131,70 +3129,98 @@ msgstr "子项可见性"
 msgid "Pointer: %p"
 msgstr "指针：%p"
 
-#: gtk/inspector/prop-editor.c:785
+#. Translators: %s is a type name, for example
+#. * GtkPropertyExpression with value \"2.5\"
+#.
+#: gtk/inspector/prop-editor.c:788
 #, c-format
 msgid "%s with value \"%s\""
 msgstr "%s 具有值“%s”"
 
-#: gtk/inspector/prop-editor.c:793
+#. Translators: Both %s are type names, for example
+#. * GtkPropertyExpression with type GObject
+#.
+#: gtk/inspector/prop-editor.c:799
 #, c-format
 msgid "%s with type %s"
 msgstr "%s 具有类型 %s"
 
-#: gtk/inspector/prop-editor.c:803
+#. Translators: Both %s are type names, for example
+#. * GtkObjectExpression for GtkStringObject 0x23456789
+#.
+#: gtk/inspector/prop-editor.c:812
 #, c-format
 msgid "%s for %s %p"
 msgstr "%s 对于 %s %p"
 
-#: gtk/inspector/prop-editor.c:807
-#, c-format
-msgid "%s"
-msgstr "%s"
-
-#: gtk/inspector/prop-editor.c:827
+#. Translators: Both %s are type names, for example
+#. * GtkPropertyExpression with value type: gchararray
+#.
+#: gtk/inspector/prop-editor.c:842
 #, c-format
 msgid "%s with value type %s"
 msgstr "%s 具有值类型 %s"
 
-#: gtk/inspector/prop-editor.c:1107
+#: gtk/inspector/prop-editor.c:1122
 #, c-format
 msgid "Uneditable property type: %s"
 msgstr "不可编辑的属性类型：%s"
 
-#: gtk/inspector/prop-editor.c:1251
+#: gtk/inspector/prop-editor.c:1266
+msgctxt "column number"
 msgid "None"
 msgstr "无"
 
-#: gtk/inspector/prop-editor.c:1288
+#: gtk/inspector/prop-editor.c:1303
 msgid "Attribute:"
 msgstr "属性："
 
-#: gtk/inspector/prop-editor.c:1291
+#: gtk/inspector/prop-editor.c:1306
 msgid "Model"
 msgstr "型号"
 
-#: gtk/inspector/prop-editor.c:1296
+#: gtk/inspector/prop-editor.c:1311
 msgid "Column:"
 msgstr "列："
 
-#: gtk/inspector/prop-editor.c:1392
+#. Translators: %s is a type name, for example
+#. * Action from 0x2345678 (GtkApplicationWindow)
+#.
+#: gtk/inspector/prop-editor.c:1410
 #, c-format
 msgid "Action from: %p (%s)"
 msgstr "动作来源：%p (%s)"
 
-#: gtk/inspector/prop-editor.c:1447
+#: gtk/inspector/prop-editor.c:1465
 msgid "Reset"
 msgstr "重置"
 
-#: gtk/inspector/prop-editor.c:1458
+#: gtk/inspector/prop-editor.c:1473
+msgctxt "GtkSettings source"
+msgid "Default"
+msgstr "默认"
+
+#: gtk/inspector/prop-editor.c:1476
+msgctxt "GtkSettings source"
 msgid "Theme"
 msgstr "主题"
 
-#: gtk/inspector/prop-editor.c:1461
+#: gtk/inspector/prop-editor.c:1479
+msgctxt "GtkSettings source"
 msgid "XSettings"
 msgstr "XSettings"
 
-#: gtk/inspector/prop-editor.c:1471
+#: gtk/inspector/prop-editor.c:1483
+msgctxt "GtkSettings source"
+msgid "Application"
+msgstr "应用程序"
+
+#: gtk/inspector/prop-editor.c:1486
+msgctxt "GtkSettings source"
+msgid "Unknown"
+msgstr "未知"
+
+#: gtk/inspector/prop-editor.c:1489
 msgid "Source:"
 msgstr "来源："
 
@@ -3219,11 +3245,15 @@ msgstr "清除已记录帧"
 msgid "Add debug nodes"
 msgstr "添加调试节点"
 
-#: gtk/inspector/recorder.ui:45
+#: gtk/inspector/recorder.ui:44
+msgid "Use a dark background"
+msgstr "使用暗色背景"
+
+#: gtk/inspector/recorder.ui:53
 msgid "Save selected node"
 msgstr "保存选中节点"
 
-#: gtk/inspector/recorder.ui:102
+#: gtk/inspector/recorder.ui:110
 msgid "Property"
 msgstr "属性"
 
@@ -7163,6 +7193,9 @@ msgstr "没有可用配置"
 #: modules/printbackends/gtkprintercups.c:298
 msgid "Unspecified profile"
 msgstr "未指定的配置"
+
+#~ msgid "%s"
+#~ msgstr "%s"
 
 #~ msgid "Not implemented on OS X"
 #~ msgstr "尚未在 OS X 上实现"
