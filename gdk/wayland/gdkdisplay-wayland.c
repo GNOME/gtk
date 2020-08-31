@@ -729,6 +729,8 @@ gdk_wayland_display_finalize (GObject *object)
 
   g_ptr_array_free (display_wayland->monitors, TRUE);
 
+  wl_display_disconnect(display_wayland->wl_display);
+
   G_OBJECT_CLASS (gdk_wayland_display_parent_class)->finalize (object);
 }
 
