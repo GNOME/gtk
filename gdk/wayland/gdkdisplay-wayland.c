@@ -755,6 +755,8 @@ gdk_wayland_display_finalize (GObject *object)
 
   g_clear_object (&display_wayland->settings_portal);
 
+  wl_display_disconnect (display_wayland->wl_display);
+
   G_OBJECT_CLASS (gdk_wayland_display_parent_class)->finalize (object);
 }
 
