@@ -20,7 +20,7 @@ msgstr ""
 "Project-Id-Version: gtk+ master\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-08-30 22:02+0000\n"
-"PO-Revision-Date: 2020-08-18 17:45+0900\n"
+"PO-Revision-Date: 2020-08-31 22:55+0900\n"
 "Last-Translator: sicklylife <translation@sicklylife.jp>\n"
 "Language-Team: Japanese <gnome-translation@gnome.gr.jp>\n"
 "Language: ja\n"
@@ -51,12 +51,12 @@ msgstr ""
 #: gdk/gdkcontentproviderimpl.c:531
 #, c-format
 msgid "Cannot provide contents as “%s”"
-msgstr ""
+msgstr "内容を“%s”として提供できません"
 
 #: gdk/gdkcontentprovider.c:129
 #, c-format
 msgid "Cannot provide contents as %s"
-msgstr ""
+msgstr "内容を %s として提供できません"
 
 #: gdk/gdkdrop.c:118
 msgid "Drag’n’drop from other applications is not supported."
@@ -1757,7 +1757,7 @@ msgstr "ホーム"
 #: gtk/gtkfilechooserwidget.c:5748 gtk/gtkprintunixdialog.c:618
 #, c-format
 msgid "A file named “%s” already exists.  Do you want to replace it?"
-msgstr "“%s”というファイルはすでに存在します。上書きしますか?"
+msgstr "“%s”はすでに存在します。上書きしますか?"
 
 #: gtk/gtkfilechooserwidget.c:5751 gtk/gtkprintunixdialog.c:622
 #, c-format
@@ -3200,8 +3200,6 @@ msgid "Uneditable property type: %s"
 msgstr "編集不可能なプロパティ型: %s"
 
 #: gtk/inspector/prop-editor.c:1266
-#, fuzzy
-#| msgid "None"
 msgctxt "column number"
 msgid "None"
 msgstr "なし"
@@ -3231,36 +3229,26 @@ msgid "Reset"
 msgstr "リセット"
 
 #: gtk/inspector/prop-editor.c:1473
-#, fuzzy
-#| msgid "Default"
 msgctxt "GtkSettings source"
 msgid "Default"
 msgstr "デフォルト"
 
 #: gtk/inspector/prop-editor.c:1476
-#, fuzzy
-#| msgid "Theme"
 msgctxt "GtkSettings source"
 msgid "Theme"
 msgstr "テーマ"
 
 #: gtk/inspector/prop-editor.c:1479
-#, fuzzy
-#| msgid "XSettings"
 msgctxt "GtkSettings source"
 msgid "XSettings"
 msgstr "XSettings"
 
 #: gtk/inspector/prop-editor.c:1483
-#, fuzzy
-#| msgid "Application"
 msgctxt "GtkSettings source"
 msgid "Application"
 msgstr "アプリケーション"
 
 #: gtk/inspector/prop-editor.c:1486
-#, fuzzy
-#| msgid "Unknown"
 msgctxt "GtkSettings source"
 msgid "Unknown"
 msgstr "不明"
@@ -5949,7 +5937,7 @@ msgstr "ファイルを読み込めません: %s\n"
 #: gtk/tools/encodesymbolic.c:140 gtk/tools/encodesymbolic.c:146
 #, c-format
 msgid "Can’t save file %s: %s\n"
-msgstr "ファイル %s を保存できません: %s\n"
+msgstr "%s を保存できません: %s\n"
 
 #: gtk/tools/encodesymbolic.c:152
 #, c-format
