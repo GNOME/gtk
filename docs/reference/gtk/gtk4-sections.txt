@@ -3322,6 +3322,7 @@ gtk_toggle_button_new_with_mnemonic
 gtk_toggle_button_toggled
 gtk_toggle_button_get_active
 gtk_toggle_button_set_active
+gtk_toggle_button_set_group
 
 <SUBSECTION Standard>
 GTK_TOGGLE_BUTTON
