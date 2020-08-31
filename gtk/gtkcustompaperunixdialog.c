@@ -513,7 +513,7 @@ update_custom_widgets_from_list (GtkCustomPaperUnixDialog *dialog)
   GListModel *model;
   GtkPageSetup *page_setup;
 
-  model = gtk_list_view_get_model (GTK_LIST_VIEW (dialog->listview));
+  model = G_LIST_MODEL (gtk_list_view_get_model (GTK_LIST_VIEW (dialog->listview)));
   page_setup = gtk_single_selection_get_selected_item (GTK_SINGLE_SELECTION (model));
 
   dialog->non_user_change = TRUE;
@@ -563,7 +563,7 @@ unit_widget_changed (GtkCustomPaperUnixDialog *dialog)
   if (dialog->non_user_change)
     return;
 
-  model = gtk_list_view_get_model (GTK_LIST_VIEW (dialog->listview));
+  model = G_LIST_MODEL (gtk_list_view_get_model (GTK_LIST_VIEW (dialog->listview)));
   page_setup = gtk_single_selection_get_selected_item (GTK_SINGLE_SELECTION (model));
 
   if (page_setup != NULL)
@@ -648,7 +648,7 @@ remove_custom_paper (GtkCustomPaperUnixDialog *dialog)
   GListModel *model;
   guint selected;
 
-  model = gtk_list_view_get_model (GTK_LIST_VIEW (dialog->listview));
+  model = G_LIST_MODEL (gtk_list_view_get_model (GTK_LIST_VIEW (dialog->listview)));
   selected = gtk_single_selection_get_selected (GTK_SINGLE_SELECTION (model));
   if (selected != GTK_INVALID_LIST_POSITION)
     g_list_store_remove (dialog->custom_paper_list, selected);
@@ -867,7 +867,7 @@ populate_dialog (GtkCustomPaperUnixDialog *dialog)
   GtkWidget *grid, *label, *widget, *frame, *combo;
   GtkWidget *hbox, *vbox, *listview, *scrolled, *toolbar, *button;
   GtkUnit user_units;
-  GListModel *model;
+  GtkSelectionModel *model;
   GtkListItemFactory *factory;
 
   content_area = gtk_dialog_get_content_area (cpu_dialog);
@@ -893,7 +893,7 @@ populate_dialog (GtkCustomPaperUnixDialog *dialog)
   gtk_box_append (GTK_BOX (vbox), scrolled);
   gtk_widget_show (scrolled);
 
-  model = G_LIST_MODEL (gtk_single_selection_new (g_object_ref (G_LIST_MODEL (dialog->custom_paper_list))));
+  model = GTK_SELECTION_MODEL (gtk_single_selection_new (g_object_ref (G_LIST_MODEL (dialog->custom_paper_list))));
   g_signal_connect (model, "notify::selected", G_CALLBACK (selected_custom_paper_changed), dialog);
 
   factory = gtk_signal_list_item_factory_new ();

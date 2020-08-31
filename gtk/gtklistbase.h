@@ -25,6 +25,7 @@
 #endif
 
 #include <gtk/gtkwidget.h>
+#include <gtk/gtkselectionmodel.h>
 
 G_BEGIN_DECLS
 

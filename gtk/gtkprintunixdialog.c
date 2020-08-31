@@ -832,7 +832,7 @@ gtk_print_unix_dialog_init (GtkPrintUnixDialog *dialog)
   selection = G_LIST_MODEL (gtk_single_selection_new (filtered));
   gtk_single_selection_set_autoselect (GTK_SINGLE_SELECTION (selection), FALSE);
   gtk_single_selection_set_selected (GTK_SINGLE_SELECTION (selection), GTK_INVALID_LIST_POSITION);
-  gtk_column_view_set_model (GTK_COLUMN_VIEW (dialog->printer_list), selection);
+  gtk_column_view_set_model (GTK_COLUMN_VIEW (dialog->printer_list), GTK_SELECTION_MODEL (selection));
   g_signal_connect (selection, "items-changed", G_CALLBACK (printer_added_cb), dialog);
   g_signal_connect_swapped (selection, "notify::selected", G_CALLBACK (selected_printer_changed), dialog);
   g_object_unref (selection);
@@ -984,7 +984,7 @@ printer_status_cb (GtkPrintBackend    *backend,
    */
   selected_printer_changed (dialog);
 
-  model = gtk_column_view_get_model (GTK_COLUMN_VIEW (dialog->printer_list));
+  model = G_LIST_MODEL (gtk_column_view_get_model (GTK_COLUMN_VIEW (dialog->printer_list)));
 
   if (gtk_print_backend_printer_list_is_done (backend) &&
       gtk_printer_is_default (printer) &&
@@ -1807,7 +1807,7 @@ printer_details_acquired (GtkPrinter         *printer,
 static void
 selected_printer_changed (GtkPrintUnixDialog *dialog)
 {
-  GListModel *model = gtk_column_view_get_model (GTK_COLUMN_VIEW (dialog->printer_list));
+  GListModel *model = G_LIST_MODEL (gtk_column_view_get_model (GTK_COLUMN_VIEW (dialog->printer_list)));
   GtkPrinter *printer;
 
   /* Whenever the user selects a printer we stop looking for
@@ -3152,7 +3152,7 @@ set_active_printer (GtkPrintUnixDialog *dialog,
   GtkPrinter *printer;
   guint i;
 
-  model = gtk_column_view_get_model (GTK_COLUMN_VIEW (dialog->printer_list));
+  model = G_LIST_MODEL (gtk_column_view_get_model (GTK_COLUMN_VIEW (dialog->printer_list)));
 
   for (i = 0; i < g_list_model_get_n_items (model); i++)
     {

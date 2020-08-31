@@ -640,7 +640,8 @@ activate_cb (GtkWidget *widget,
              guint      position,
              gpointer   window)
 {
-  GtkTreeListRow *row = g_list_model_get_item (gtk_list_view_get_model (GTK_LIST_VIEW (widget)), position);
+  GListModel *model = G_LIST_MODEL (gtk_list_view_get_model (GTK_LIST_VIEW (widget)));
+  GtkTreeListRow *row = g_list_model_get_item (model, position);
   GtkDemo *demo = gtk_tree_list_row_get_item (row);
 
   gtk_demo_run (demo, window);
@@ -872,9 +873,10 @@ activate (GApplication *app)
 
   selection = gtk_single_selection_new (G_LIST_MODEL (filter_model));
   g_signal_connect (selection, "notify::selected-item", G_CALLBACK (selection_cb), NULL);
-  gtk_list_view_set_model (GTK_LIST_VIEW (listview), G_LIST_MODEL (selection));
+  gtk_list_view_set_model (GTK_LIST_VIEW (listview), GTK_SELECTION_MODEL (selection));
 
   selection_cb (selection, NULL, NULL);
+  g_object_unref (selection);
 
   g_object_unref (builder);
 }

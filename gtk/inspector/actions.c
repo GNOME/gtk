@@ -401,7 +401,7 @@ constructed (GObject *object)
   sorted = G_LIST_MODEL (gtk_sort_list_model_new (g_object_ref (G_LIST_MODEL (sl->actions)),
                                                   g_object_ref (gtk_column_view_get_sorter (GTK_COLUMN_VIEW (sl->list)))));
   model = G_LIST_MODEL (gtk_no_selection_new (sorted));
-  gtk_column_view_set_model (GTK_COLUMN_VIEW (sl->list), model);
+  gtk_column_view_set_model (GTK_COLUMN_VIEW (sl->list), GTK_SELECTION_MODEL (model));
   g_object_unref (model);
 }
 

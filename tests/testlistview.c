@@ -636,7 +636,7 @@ main (int argc, char *argv[])
   selectionmodel = file_info_selection_new (G_LIST_MODEL (filter));
   g_object_unref (filter);
 
-  gtk_list_view_set_model (GTK_LIST_VIEW (listview), G_LIST_MODEL (selectionmodel));
+  gtk_list_view_set_model (GTK_LIST_VIEW (listview), GTK_SELECTION_MODEL (selectionmodel));
 
   statusbar = gtk_statusbar_new ();
   gtk_widget_add_tick_callback (statusbar, (GtkTickCallback) update_statusbar, NULL, NULL);
