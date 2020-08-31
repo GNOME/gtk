@@ -201,7 +201,6 @@
       <title>Buttons and Toggles</title>
       <xi:include href="xml/gtkbutton.xml" />
       <xi:include href="xml/gtkcheckbutton.xml" />
-      <xi:include href="xml/gtkradiobutton.xml" />
       <xi:include href="xml/gtktogglebutton.xml" />
       <xi:include href="xml/gtklinkbutton.xml" />
       <xi:include href="xml/gtkmenubutton.xml" />
