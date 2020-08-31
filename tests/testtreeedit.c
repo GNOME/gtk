@@ -209,7 +209,7 @@ create_control (GtkWidget *box, int number, int cntl, CallbackData *data)
     }
 
   checkbutton = gtk_check_button_new_with_label (name);
-  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (checkbutton), cntl == CNTL_FIXED);
+  gtk_check_button_set_active (GTK_CHECK_BUTTON (checkbutton), cntl == CNTL_FIXED);
   gtk_box_append (GTK_BOX (box), checkbutton);
 
   g_signal_connect (G_OBJECT (checkbutton), "toggled", callback, data);

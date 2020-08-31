@@ -1546,7 +1546,7 @@ blur_node (GskGLRenderer   *self,
            float           *out_vertex_data[4]) /* min, max, min, max */
 {
   const float scale = ops_get_scale (builder);
-  const float blur_extra = blur_radius * 3.0 / 2.0;
+  const float blur_extra = blur_radius * 2.0; /* 2.0 = shader radius_multiplier */
   float texture_width, texture_height;
   gboolean is_offscreen;
   TextureRegion region;
@@ -1555,12 +1555,12 @@ blur_node (GskGLRenderer   *self,
   g_assert (blur_radius > 0);
 
   /* Increase texture size for the given blur radius and scale it */
-  texture_width  = ceilf ((node->bounds.size.width  + blur_extra * 2));
-  texture_height = ceilf ((node->bounds.size.height + blur_extra * 2));
+  texture_width  = ceilf ((node->bounds.size.width  + blur_extra));
+  texture_height = ceilf ((node->bounds.size.height + blur_extra));
 
   if (!add_offscreen_ops (self, builder,
-                          &GRAPHENE_RECT_INIT (node->bounds.origin.x - blur_extra,
-                                               node->bounds.origin.y - blur_extra,
+                          &GRAPHENE_RECT_INIT (node->bounds.origin.x - (blur_extra / 2.0),
+                                               node->bounds.origin.y - (blur_extra  /2.0),
                                                texture_width, texture_height),
                           node,
                           &region, &is_offscreen,
@@ -1576,10 +1576,10 @@ blur_node (GskGLRenderer   *self,
 
   if (out_vertex_data)
     {
-      *out_vertex_data[0] = builder->dx + node->bounds.origin.x - blur_extra;
-      *out_vertex_data[1] = builder->dx + node->bounds.origin.x + node->bounds.size.width + blur_extra;
-      *out_vertex_data[2] = builder->dy + node->bounds.origin.y - blur_extra;
-      *out_vertex_data[3] = builder->dy + node->bounds.origin.y + node->bounds.size.height + blur_extra;
+      *out_vertex_data[0] = builder->dx + node->bounds.origin.x - (blur_extra / 2.0);
+      *out_vertex_data[1] = builder->dx + node->bounds.origin.x + node->bounds.size.width + (blur_extra / 2.0);
+      *out_vertex_data[2] = builder->dy + node->bounds.origin.y - (blur_extra / 2.0);
+      *out_vertex_data[3] = builder->dy + node->bounds.origin.y + node->bounds.size.height + (blur_extra / 2.0);
     }
 }
 
@@ -1644,7 +1644,7 @@ render_inset_shadow_node (GskGLRenderer   *self,
 {
   const float scale = ops_get_scale (builder);
   const float blur_radius = gsk_inset_shadow_node_get_blur_radius (node);
-  const float blur_extra = blur_radius * 3;
+  const float blur_extra = blur_radius * 2.0; /* 2.0 = shader radius_multiplier */
   const float dx = gsk_inset_shadow_node_get_dx (node);
   const float dy = gsk_inset_shadow_node_get_dy (node);
   const GskRoundedRect *node_outline = gsk_inset_shadow_node_peek_outline (node);
@@ -1805,7 +1805,7 @@ render_outset_shadow_node (GskGLRenderer   *self,
   const GskRoundedRect *outline = gsk_outset_shadow_node_peek_outline (node);
   const GdkRGBA *color = gsk_outset_shadow_node_peek_color (node);
   const float blur_radius = gsk_outset_shadow_node_get_blur_radius (node);
-  const float blur_extra = blur_radius * 3; /* 3 Because we use that in the shader as well */
+  const float blur_extra = blur_radius * 2.0f; /* 2.0 = shader radius_multiplier */
   const int extra_blur_pixels = (int) ceilf(blur_extra / 2.0 * scale);
   const float spread = gsk_outset_shadow_node_get_spread (node);
   const float dx = gsk_outset_shadow_node_get_dx (node);

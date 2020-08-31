@@ -544,8 +544,9 @@ gsk_border_node_diff (GskRenderNode  *node1,
 
   if (self1->uniform &&
       self2->uniform &&
-      gdk_rgba_equal (&self1->border_color[0], &self2->border_color[0]) &&
-      self1->border_width[0] == self2->border_width[0])
+      self1->border_width[0] == self2->border_width[0] &&
+      gsk_rounded_rect_equal (&self1->outline, &self2->outline) &&
+      gdk_rgba_equal (&self1->border_color[0], &self2->border_color[0]))
     return;
 
   if (gsk_rounded_rect_equal (&self1->outline, &self2->outline) &&
@@ -803,13 +804,13 @@ has_empty_clip (cairo_t *cr)
 }
 
 static void
-draw_shadow (cairo_t             *cr,
-             gboolean             inset,
-             const GskRoundedRect*box,
-             const GskRoundedRect*clip_box,
-             float                radius,
-             const GdkRGBA       *color,
-	     GskBlurFlags         blur_flags)
+draw_shadow (cairo_t              *cr,
+             gboolean              inset,
+             const GskRoundedRect *box,
+             const GskRoundedRect *clip_box,
+             float                 radius,
+             const GdkRGBA        *color,
+             GskBlurFlags          blur_flags)
 {
   cairo_t *shadow_cr;
 
@@ -1128,31 +1129,31 @@ gsk_inset_shadow_node_draw (GskRenderNode *node,
 
       /* First do the corners of box */
       for (i = 0; i < 4; i++)
-	{
-	  cairo_save (cr);
+        {
+          cairo_save (cr);
           /* Always clip with remaining to ensure we never draw any area twice */
           gdk_cairo_region (cr, remaining);
           cairo_clip (cr);
-	  draw_shadow_corner (cr, TRUE, &box, &clip_box, self->blur_radius, &self->color, i, &r);
-	  cairo_restore (cr);
+          draw_shadow_corner (cr, TRUE, &box, &clip_box, self->blur_radius, &self->color, i, &r);
+          cairo_restore (cr);
 
-	  /* We drew the region, remove it from remaining */
-	  cairo_region_subtract_rectangle (remaining, &r);
-	}
+          /* We drew the region, remove it from remaining */
+          cairo_region_subtract_rectangle (remaining, &r);
+        }
 
       /* Then the sides */
       for (i = 0; i < 4; i++)
-	{
-	  cairo_save (cr);
+        {
+          cairo_save (cr);
           /* Always clip with remaining to ensure we never draw any area twice */
           gdk_cairo_region (cr, remaining);
           cairo_clip (cr);
-	  draw_shadow_side (cr, TRUE, &box, &clip_box, self->blur_radius, &self->color, i, &r);
-	  cairo_restore (cr);
+          draw_shadow_side (cr, TRUE, &box, &clip_box, self->blur_radius, &self->color, i, &r);
+          cairo_restore (cr);
 
-	  /* We drew the region, remove it from remaining */
-	  cairo_region_subtract_rectangle (remaining, &r);
-	}
+          /* We drew the region, remove it from remaining */
+          cairo_region_subtract_rectangle (remaining, &r);
+        }
 
       /* Then the rest, which needs no blurring */
 
@@ -1430,31 +1431,31 @@ gsk_outset_shadow_node_draw (GskRenderNode *node,
 
       /* First do the corners of box */
       for (i = 0; i < 4; i++)
-	{
-	  cairo_save (cr);
+        {
+          cairo_save (cr);
           /* Always clip with remaining to ensure we never draw any area twice */
           gdk_cairo_region (cr, remaining);
           cairo_clip (cr);
-	  draw_shadow_corner (cr, FALSE, &box, &clip_box, self->blur_radius, &self->color, i, &r);
-	  cairo_restore (cr);
+          draw_shadow_corner (cr, FALSE, &box, &clip_box, self->blur_radius, &self->color, i, &r);
+          cairo_restore (cr);
 
-	  /* We drew the region, remove it from remaining */
-	  cairo_region_subtract_rectangle (remaining, &r);
-	}
+          /* We drew the region, remove it from remaining */
+          cairo_region_subtract_rectangle (remaining, &r);
+        }
 
       /* Then the sides */
       for (i = 0; i < 4; i++)
-	{
-	  cairo_save (cr);
+        {
+          cairo_save (cr);
           /* Always clip with remaining to ensure we never draw any area twice */
           gdk_cairo_region (cr, remaining);
           cairo_clip (cr);
-	  draw_shadow_side (cr, FALSE, &box, &clip_box, self->blur_radius, &self->color, i, &r);
-	  cairo_restore (cr);
+          draw_shadow_side (cr, FALSE, &box, &clip_box, self->blur_radius, &self->color, i, &r);
+          cairo_restore (cr);
 
-	  /* We drew the region, remove it from remaining */
-	  cairo_region_subtract_rectangle (remaining, &r);
-	}
+          /* We drew the region, remove it from remaining */
+          cairo_region_subtract_rectangle (remaining, &r);
+        }
 
       /* Then the rest, which needs no blurring */
 

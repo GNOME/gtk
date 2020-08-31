@@ -19,7 +19,7 @@ check_button_checked (void)
 
   gtk_test_accessible_assert_state (button, GTK_ACCESSIBLE_STATE_CHECKED, GTK_ACCESSIBLE_TRISTATE_FALSE);
 
-  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), TRUE);
+  gtk_check_button_set_active (GTK_CHECK_BUTTON (button), TRUE);
 
   gtk_test_accessible_assert_state (button, GTK_ACCESSIBLE_STATE_CHECKED, GTK_ACCESSIBLE_TRISTATE_TRUE);
 

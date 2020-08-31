@@ -210,7 +210,7 @@
                                     <property name="row-spacing">6</property>
                                     <property name="column-spacing">12</property>
                                     <child>
-                                      <object class="GtkRadioButton" id="all_pages_radio">
+                                      <object class="GtkCheckButton" id="all_pages_radio">
                                         <property name="label" translatable="yes">_All Pages</property>
                                         <property name="use-underline">1</property>
                                         <property name="active">1</property>
@@ -222,7 +222,7 @@
                                       </object>
                                     </child>
                                     <child>
-                                      <object class="GtkRadioButton" id="current_page_radio">
+                                      <object class="GtkCheckButton" id="current_page_radio">
                                         <property name="label" translatable="yes">C_urrent Page</property>
                                         <property name="sensitive">0</property>
                                         <property name="use-underline">1</property>
@@ -235,7 +235,7 @@
                                       </object>
                                     </child>
                                     <child>
-                                      <object class="GtkRadioButton" id="selection_radio">
+                                      <object class="GtkCheckButton" id="selection_radio">
                                         <property name="label" translatable="yes">Se_lection</property>
                                         <property name="sensitive">0</property>
                                         <property name="use-underline">1</property>
@@ -248,7 +248,7 @@
                                       </object>
                                     </child>
                                     <child>
-                                      <object class="GtkRadioButton" id="page_range_radio">
+                                      <object class="GtkCheckButton" id="page_range_radio">
                                         <property name="label" translatable="yes">Pag_es:</property>
                                         <property name="tooltip-text" translatable="yes">Specify one or more page ranges,
  e.g. 1–3, 7, 11</property>
@@ -347,7 +347,7 @@
                                     <child>
                                       <object class="GtkDrawingArea" id="collate_image">
                                         <property name="content-width">70</property>
-                                        <property name="content-height">90</property>
+                                        <property name="content-height">50</property>
                                         <layout>
                                           <property name="column">1</property>
                                           <property name="row">1</property>
@@ -812,7 +812,7 @@
                                 <property name="row-spacing">6</property>
                                 <property name="column-spacing">12</property>
                                 <child>
-                                  <object class="GtkRadioButton" id="print_now_radio">
+                                  <object class="GtkCheckButton" id="print_now_radio">
                                     <property name="label" translatable="yes" comments="this is one of the choices for the print at option in the print dialog">_Now</property>
                                     <property name="use-underline">1</property>
                                     <property name="active">1</property>
@@ -825,7 +825,7 @@
                                   </object>
                                 </child>
                                 <child>
-                                  <object class="GtkRadioButton" id="print_at_radio">
+                                  <object class="GtkCheckButton" id="print_at_radio">
                                     <property name="sensitive">0</property>
                                     <property name="label" translatable="yes" comments="this is one of the choices for the print at option in the print dialog. It also serves as the label for an entry that allows the user to enter a time.">A_t:</property>
                                     <property name="has-tooltip">1</property>
@@ -859,7 +859,7 @@
                                   </object>
                                 </child>
                                 <child>
-                                  <object class="GtkRadioButton" id="print_hold_radio">
+                                  <object class="GtkCheckButton" id="print_hold_radio">
                                     <property name="sensitive">0</property>
                                     <property name="label" translatable="yes" comments="this is one of the choices for the print at option in the print dialog. It means that the print job will not be printed until it explicitly gets &apos;released&apos;.">On _hold</property>
                                     <property name="has-tooltip">1</property>

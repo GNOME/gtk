@@ -36,7 +36,6 @@
 #include "gtkiconview.h"
 #include "gtklabel.h"
 #include "gtkpopover.h"
-#include "gtkradiobutton.h"
 #include "gtkscrolledwindow.h"
 #include "gtkspinbutton.h"
 #include "gtksettingsprivate.h"
@@ -419,12 +418,13 @@ strv_changed (GObject *object, GParamSpec *pspec, gpointer data)
 }
 
 static void
-bool_modified (GtkToggleButton *tb, ObjectProperty *p)
+bool_modified (GtkCheckButton *cb,
+               ObjectProperty *p)
 {
   GValue val = G_VALUE_INIT;
 
   g_value_init (&val, G_TYPE_BOOLEAN);
-  g_value_set_boolean (&val, gtk_toggle_button_get_active (tb));
+  g_value_set_boolean (&val, gtk_check_button_get_active (cb));
   set_property_value (p->obj, p->spec, &val);
   g_value_unset (&val);
 }
@@ -432,17 +432,17 @@ bool_modified (GtkToggleButton *tb, ObjectProperty *p)
 static void
 bool_changed (GObject *object, GParamSpec *pspec, gpointer data)
 {
-  GtkToggleButton *tb = GTK_TOGGLE_BUTTON (data);
+  GtkCheckButton *cb = GTK_CHECK_BUTTON (data);
   GValue val = G_VALUE_INIT;
 
   g_value_init (&val, G_TYPE_BOOLEAN);
   get_property_value (object, pspec, &val);
 
-  if (g_value_get_boolean (&val) != gtk_toggle_button_get_active (tb))
+  if (g_value_get_boolean (&val) != gtk_check_button_get_active (cb))
     {
-      block_controller (G_OBJECT (tb));
-      gtk_toggle_button_set_active (tb, g_value_get_boolean (&val));
-      unblock_controller (G_OBJECT (tb));
+      block_controller (G_OBJECT (cb));
+      gtk_check_button_set_active (cb, g_value_get_boolean (&val));
+      unblock_controller (G_OBJECT (cb));
     }
 
   g_value_unset (&val);
@@ -498,7 +498,7 @@ flags_modified (GtkCheckButton *button, ObjectProperty *p)
   int i;
   GValue val = G_VALUE_INIT;
 
-  active = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button));
+  active = gtk_check_button_get_active (button);
   i = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (button), "index"));
   fclass = G_FLAGS_CLASS (g_type_class_peek (p->spec->value_type));
 
@@ -583,8 +583,8 @@ flags_changed (GObject *object, GParamSpec *pspec, gpointer data)
   for (child = gtk_widget_get_first_child (box), i = 0;
        child != NULL;
        child = gtk_widget_get_next_sibling (child), i++)
-    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (child),
-                                  (fclass->values[i].value & flags) != 0);
+    gtk_check_button_set_active (GTK_CHECK_BUTTON (child),
+                                 (fclass->values[i].value & flags) != 0);
 
   for (child = gtk_widget_get_first_child (box);
        child != NULL;

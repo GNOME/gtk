@@ -1,8 +1,8 @@
 window.background:dir(rtl)
   box.vertical:dir(rtl)
-    checkbutton:dir(rtl)
+    checkbutton.text-button:dir(rtl)
       check:dir(rtl)
       label:dir(rtl)
-    radiobutton:dir(rtl):checked
-      radio:dir(rtl):checked
+    checkbutton.text-button:dir(rtl):checked
+      check:dir(rtl):checked
       label:dir(rtl)

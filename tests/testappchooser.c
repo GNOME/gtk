@@ -81,9 +81,9 @@ prepare_dialog (void)
   gboolean use_file = FALSE;
   char *content_type = NULL;
 
-  if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (radio_file)))
+  if (gtk_check_button_get_active (GTK_CHECK_BUTTON (radio_file)))
     use_file = TRUE;
-  else if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (radio_content)))
+  else if (gtk_check_button_get_active (GTK_CHECK_BUTTON (radio_content)))
     use_file = FALSE;
 
   if (use_file)
@@ -208,9 +208,11 @@ main (int argc, char **argv)
   g_signal_connect (file_l, "clicked",
                     G_CALLBACK (button_clicked), NULL);
 
-  radio_file = gtk_radio_button_new_with_label (NULL, "Use GFile");
-  radio_content = gtk_radio_button_new_with_label_from_widget (GTK_RADIO_BUTTON (radio_file),
-                                                               "Use content type");
+  radio_file = gtk_check_button_new_with_label ("Use GFile");
+  radio_content = gtk_check_button_new_with_label ("Use content type");
+  gtk_check_button_set_group (GTK_CHECK_BUTTON (radio_content), GTK_CHECK_BUTTON (radio_file));
+  gtk_check_button_set_group (GTK_CHECK_BUTTON (radio_file), GTK_CHECK_BUTTON (radio_content));
+  gtk_check_button_set_active (GTK_CHECK_BUTTON (radio_file), TRUE);
 
   gtk_grid_attach (GTK_GRID (grid), radio_file,
                    0, 1, 1, 1);

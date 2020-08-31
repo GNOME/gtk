@@ -238,8 +238,8 @@ single_click_clicked (GtkButton *check, gpointer data)
 {
   GtkListBox *list = data;
 
-  g_print ("single: %d\n", gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (check)));
-  gtk_list_box_set_activate_on_single_click (list, gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (check)));
+  g_print ("single: %d\n", gtk_check_button_get_active (GTK_CHECK_BUTTON (check)));
+  gtk_list_box_set_activate_on_single_click (list, gtk_check_button_get_active (GTK_CHECK_BUTTON (check)));
 }
 
 int
@@ -278,7 +278,7 @@ main (int argc, char *argv[])
   gtk_box_append (GTK_BOX (vbox), combo);
   gtk_combo_box_set_active (GTK_COMBO_BOX (combo), gtk_list_box_get_selection_mode (GTK_LIST_BOX (list)));
   check = gtk_check_button_new_with_label ("single click mode");
-  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check), gtk_list_box_get_activate_on_single_click (GTK_LIST_BOX (list)));
+  gtk_check_button_set_active (GTK_CHECK_BUTTON (check), gtk_list_box_get_activate_on_single_click (GTK_LIST_BOX (list)));
   g_signal_connect (check, "toggled", G_CALLBACK (single_click_clicked), list);
   gtk_box_append (GTK_BOX (vbox), check);
 

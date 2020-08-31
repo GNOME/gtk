@@ -20,8 +20,8 @@ GtkEntry GtkText
 GtkListBoxRow
 GtkToggleButton
 GtkButton
-GtkRadioButton
-GtkRadioButton
+GtkToggleButton
+GtkToggleButton
 GtkToggleButton
 GtkToggleButton
 GtkScrolledWindow

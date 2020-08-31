@@ -23,8 +23,8 @@ row_activated (GtkListBox    *list,
     }
   else if (gtk_widget_is_ancestor (check, GTK_WIDGET (row)))
     {
-      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check),
-                                    !gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (check)));
+      gtk_check_button_set_active (GTK_CHECK_BUTTON (check),
+                                   !gtk_check_button_get_active (GTK_CHECK_BUTTON (check)));
     }
   else if (gtk_widget_is_ancestor (image, GTK_WIDGET (row)))
     {

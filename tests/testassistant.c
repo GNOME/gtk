@@ -41,7 +41,7 @@ complete_cb (GtkWidget *check,
   PageData *pdata = data;
   gboolean complete;
 
-  complete = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (check));
+  complete = gtk_check_button_get_active (GTK_CHECK_BUTTON (check));
 
   gtk_assistant_set_page_complete (pdata->assistant,
 				   pdata->page,
@@ -64,7 +64,7 @@ add_completion_test_page (GtkWidget   *assistant,
   gtk_box_append (GTK_BOX (page), gtk_label_new (text));
   gtk_box_append (GTK_BOX (page), check);
   
-  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check), complete);
+  gtk_check_button_set_active (GTK_CHECK_BUTTON (check), complete);
 
   pdata = g_new (PageData, 1);
   pdata->assistant = GTK_ASSISTANT (assistant);
@@ -231,7 +231,7 @@ visible_cb (GtkWidget *check,
   GtkWidget *page = data;
   gboolean visible;
 
-  visible = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (check));
+  visible = gtk_check_button_get_active (GTK_CHECK_BUTTON (check));
 
   g_object_set (G_OBJECT (page), "visible", visible, NULL);
 }
@@ -268,7 +268,7 @@ create_generous_assistant (GtkWidget *widget)
       next = add_completion_test_page (assistant, "More Content", TRUE, TRUE);
 
       check = gtk_check_button_new_with_label ("Next page visible");
-      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check), TRUE);
+      gtk_check_button_set_active (GTK_CHECK_BUTTON (check), TRUE);
       g_signal_connect (G_OBJECT (check), "toggled", 
                         G_CALLBACK (visible_cb), next);
       gtk_box_append (GTK_BOX (page), check);
@@ -295,9 +295,9 @@ create_generous_assistant (GtkWidget *widget)
       gtk_assistant_set_page_title (GTK_ASSISTANT (assistant), page, "Summary");
       gtk_assistant_set_page_type  (GTK_ASSISTANT (assistant), page, GTK_ASSISTANT_PAGE_SUMMARY);
 
-      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (page),
-                                    gtk_assistant_get_page_complete (GTK_ASSISTANT (assistant),
-                                                                     page));
+      gtk_check_button_set_active (GTK_CHECK_BUTTON (page),
+                                   gtk_assistant_get_page_complete (GTK_ASSISTANT (assistant),
+                                                                    page));
 
       pdata = g_new (PageData, 1);
       pdata->assistant = GTK_ASSISTANT (assistant);
@@ -348,7 +348,7 @@ create_nonlinear_assistant (GtkWidget *widget)
 
   if (!assistant)
     {
-      GtkWidget *page, *button;
+      GtkWidget *page, *button, *group;
 
       assistant = gtk_assistant_new ();
       gtk_window_set_default_size (GTK_WINDOW (assistant), 400, 300);
@@ -368,13 +368,14 @@ create_nonlinear_assistant (GtkWidget *widget)
 
       page = gtk_box_new (GTK_ORIENTATION_VERTICAL, 6);
 
-      button = gtk_radio_button_new_with_label (NULL, "branch A");
+      button = gtk_check_button_new_with_label ("branch A");
       gtk_box_append (GTK_BOX (page), button);
       g_signal_connect (G_OBJECT (button), "toggled", G_CALLBACK (select_branch), GINT_TO_POINTER ('A'));
-      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), TRUE);
+      gtk_check_button_set_active (GTK_CHECK_BUTTON (button), TRUE);
+      group = button;
 
-      button = gtk_radio_button_new_with_label (gtk_radio_button_get_group (GTK_RADIO_BUTTON (button)),
-						"branch B");
+      button = gtk_check_button_new_with_label ("branch B");
+      gtk_check_button_set_group (GTK_CHECK_BUTTON (button), GTK_CHECK_BUTTON (group));
       gtk_box_append (GTK_BOX (page), button);
       g_signal_connect (G_OBJECT (button), "toggled", G_CALLBACK (select_branch), GINT_TO_POINTER ('B'));
 
@@ -427,7 +428,7 @@ looping_assistant_forward_page (int current_page, gpointer data)
 	assistant = (GtkAssistant*) data;
 	page = gtk_assistant_get_nth_page (assistant, current_page);
 
-	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (page)))
+	if (gtk_check_button_get_active (GTK_CHECK_BUTTON (page)))
 	  return 0;
 	else
 	  return 4;

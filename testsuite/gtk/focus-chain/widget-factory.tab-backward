@@ -18,7 +18,7 @@ GtkToggleButton
 GtkToggleButton
 GtkCheckButton
 GtkCheckButton
-GtkRadioButton
+GtkCheckButton
 GtkCheckButton
 GtkSpinButton GtkText
 GtkToggleButton

@@ -87,6 +87,7 @@ main (int    argc,
   int i, j;
   GtkCssProvider *provider;
   gboolean done = FALSE;
+  GtkWidget *group = NULL;
 
   gtk_init ();
 
@@ -225,10 +226,18 @@ main (int    argc,
 	gtk_widget_set_valign (button, GTK_ALIGN_BASELINE);
       gtk_box_append (GTK_BOX (hbox), button);
 
-      button = gtk_radio_button_new_with_label (NULL, "│Xyj,Ö");
+      button = gtk_check_button_new_with_label ("│Xyj,Ö");
       if (j == 0)
 	gtk_widget_set_valign (button, GTK_ALIGN_BASELINE);
       gtk_box_append (GTK_BOX (hbox), button);
+      if (group == NULL)
+        {
+          group = button;
+          gtk_check_button_set_active (GTK_CHECK_BUTTON (button), TRUE);
+        }
+      else
+        gtk_check_button_set_group (GTK_CHECK_BUTTON (button),
+                                    GTK_CHECK_BUTTON (group));
     }
 
 

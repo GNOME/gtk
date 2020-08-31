@@ -5,6 +5,7 @@
 #define COLOR " red;"
 
 static const char *css =
+" window { background-color: white; }\n"
 ".one {"
 "  all: unset;"
 "  min-width: 100px;"

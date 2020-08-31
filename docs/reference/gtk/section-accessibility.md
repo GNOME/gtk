@@ -53,7 +53,7 @@ Each role name is part of the #GtkAccessibleRole enumeration.
 | `LABEL` | A visible name or caption for a user interface component | #GtkLabel |
 | `METER` | Represents a value within a known range | #GtkLevelBar |
 | `PROGRESS_BAR` | An element that display progress | #GtkProgressBar |
-| `RADIO` | A checkable input in a group of radio roles | #GtkRadioButton |
+| `RADIO` | A checkable input in a group of radio roles | #GtkCheckButton |
 | `SCROLLBAR` | A graphical object controlling the scrolling of content | #GtkScrollbar |
 | `SEARCH_BOX` | A text box for entering search criteria | #GtkSearchEntry |
 | `SEPARATOR` | A divider that separates sections of content or groups of items | #GtkSeparator |

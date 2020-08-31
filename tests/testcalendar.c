@@ -134,7 +134,7 @@ flag_toggled_cb (GtkCheckButton *button,
   } *data = user_data;
 
   g_object_set (G_OBJECT (data->calendar), data->prop_name,
-                gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button)),
+                gtk_check_button_get_active (GTK_CHECK_BUTTON (button)),
                 NULL);
 }
 
@@ -255,7 +255,7 @@ create_calendar(void)
       gtk_box_append (GTK_BOX (vbox), toggle);
 
       g_object_get (G_OBJECT (calendar), flags[i].prop_name, &value, NULL);
-      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (toggle), value);
+      gtk_check_button_set_active (GTK_CHECK_BUTTON (toggle), value);
 
       g_signal_connect (toggle, "toggled", G_CALLBACK (flag_toggled_cb), &flags[i]);
     }

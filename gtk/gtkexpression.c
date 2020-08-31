@@ -146,7 +146,7 @@
  * To create a closure expression, use the <closure> element. The `type` and `function`
  * attributes specify what function to use for the closure, the content of the element
  * contains the expressions for the parameters.
- * 
+ *
  * Example:
  * |[
  *   <closure type='gchararray' function='combine_args_somehow'>

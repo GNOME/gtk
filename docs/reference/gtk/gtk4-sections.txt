@@ -2291,31 +2291,6 @@ gtk_progress_bar_get_type
 </SECTION>
 
 <SECTION>
-<FILE>gtkradiobutton</FILE>
-<TITLE>GtkRadioButton</TITLE>
-GtkRadioButton
-gtk_radio_button_new
-gtk_radio_button_new_from_widget
-gtk_radio_button_new_with_label
-gtk_radio_button_new_with_label_from_widget
-gtk_radio_button_new_with_mnemonic
-gtk_radio_button_new_with_mnemonic_from_widget
-gtk_radio_button_set_group
-gtk_radio_button_get_group
-gtk_radio_button_join_group
-<SUBSECTION Standard>
-GTK_RADIO_BUTTON
-GTK_IS_RADIO_BUTTON
-GTK_TYPE_RADIO_BUTTON
-GTK_RADIO_BUTTON_CLASS
-GTK_IS_RADIO_BUTTON_CLASS
-GTK_RADIO_BUTTON_GET_CLASS
-<SUBSECTION Private>
-GtkRadioButtonPrivate
-gtk_radio_button_get_type
-</SECTION>
-
-<SECTION>
 <FILE>gtkrange</FILE>
 <TITLE>GtkRange</TITLE>
 GtkRange
@@ -3322,6 +3297,7 @@ gtk_toggle_button_new_with_mnemonic
 gtk_toggle_button_toggled
 gtk_toggle_button_get_active
 gtk_toggle_button_set_active
+gtk_toggle_button_set_group
 
 <SUBSECTION Standard>
 GTK_TOGGLE_BUTTON

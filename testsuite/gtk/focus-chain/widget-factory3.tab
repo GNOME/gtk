@@ -3,8 +3,8 @@ GtkLabel
 GtkScrolledWindow
 GtkToggleButton
 GtkToggleButton
-GtkRadioButton
-GtkRadioButton
+GtkToggleButton
+GtkToggleButton
 GtkButton
 GtkToggleButton
 GtkListBoxRow

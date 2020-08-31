@@ -30,7 +30,7 @@ show_dialog (void)
   max_width_chars = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (max_width_chars_spin));
   default_width = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (default_width_spin));
   default_height = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (default_height_spin));
-  resizable = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (resizable_check));
+  resizable = gtk_check_button_get_active (GTK_CHECK_BUTTON (resizable_check));
 
   dialog = gtk_dialog_new_with_buttons ("Test", GTK_WINDOW (window),
                                         GTK_DIALOG_MODAL,
