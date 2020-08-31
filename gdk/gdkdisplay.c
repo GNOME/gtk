@@ -278,6 +278,7 @@ free_pointer_info (GdkPointerWindowInfo *info)
 {
   if (info->toplevel_under_pointer)
     g_object_unref (info->toplevel_under_pointer);
+  g_clear_object (&info->last_slave);
   g_slice_free (GdkPointerWindowInfo, info);
 }
 
