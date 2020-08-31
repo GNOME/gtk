@@ -9931,7 +9931,7 @@ _gdk_windowing_got_event (GdkDisplay *display,
 
           if (source_device != pointer_info->last_slave &&
               gdk_device_get_device_type (source_device) == GDK_DEVICE_TYPE_SLAVE)
-            pointer_info->last_slave = source_device;
+            g_set_object (&pointer_info->last_slave, source_device);
           else if (pointer_info->last_slave)
             source_device = pointer_info->last_slave;
         }
