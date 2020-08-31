@@ -281,25 +281,6 @@ create_search_entry (void)
 }
 
 static WidgetInfo *
-create_radio (void)
-{
-  GtkWidget *widget;
-  GtkWidget *radio;
-
-  widget = gtk_box_new (GTK_ORIENTATION_VERTICAL, 3);
-  radio = gtk_radio_button_new_with_mnemonic (NULL, "Radio Button _One");
-  gtk_box_append (GTK_BOX (widget), radio);
-  radio = gtk_radio_button_new_with_mnemonic_from_widget (GTK_RADIO_BUTTON (radio), "Radio Button _Two");
-  gtk_box_append (GTK_BOX (widget), radio);
-  radio = gtk_radio_button_new_with_mnemonic_from_widget (GTK_RADIO_BUTTON (radio), "Radio Button T_hree");
-  gtk_box_append (GTK_BOX (widget), radio);
-  gtk_widget_set_halign (widget, GTK_ALIGN_CENTER);
-  gtk_widget_set_valign (widget, GTK_ALIGN_CENTER);
-
-  return new_widget_info ("radio-group", widget, MEDIUM);
-}
-
-static WidgetInfo *
 create_label (void)
 {
   GtkWidget *widget;
@@ -1548,7 +1529,6 @@ get_all_widgets (void)
   retval = g_list_prepend (retval, create_notebook ());
   retval = g_list_prepend (retval, create_panes ());
   retval = g_list_prepend (retval, create_progressbar ());
-  retval = g_list_prepend (retval, create_radio ());
   retval = g_list_prepend (retval, create_scales ());
   retval = g_list_prepend (retval, create_scrolledwindow ());
   retval = g_list_prepend (retval, create_scrollbar ());
