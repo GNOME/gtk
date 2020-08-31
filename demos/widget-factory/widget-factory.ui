@@ -2228,13 +2228,13 @@ microphone-sensitivity-medium-symbolic</property>
                                       <class name="linked"/>
                                     </style>
                                     <child>
-                                      <object class="GtkRadioButton" id="grid_button">
+                                      <object class="GtkToggleButton" id="grid_button">
                                         <property name="active">1</property>
                                         <property name="icon-name">view-grid-symbolic</property>
                                       </object>
                                     </child>
                                     <child>
-                                      <object class="GtkRadioButton" id="list_button">
+                                      <object class="GtkToggleButton" id="list_button">
                                         <property name="active">1</property>
                                         <property name="group">grid_button</property>
                                         <property name="icon-name">view-list-symbolic</property>
