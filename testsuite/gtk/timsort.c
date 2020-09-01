@@ -19,7 +19,7 @@
 
 #include <gtk/gtk.h>
 
-#include "gtk/gtktimsortprivate.h"
+#include "gtk/timsort/gtktimsortprivate.h"
 
 #define assert_sort_equal(a, b, size, n) \
   g_assert_cmpmem (a, sizeof (size) * n, b, sizeof (size) * n)

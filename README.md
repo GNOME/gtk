@@ -161,3 +161,7 @@ version 2.1 or, at your option, any later version, as published by the Free
 Software Foundation.
 
 Please, see the [`COPYING`](./COPYING) file for further information.
+
+GTK includes a small number of source files under the Apache license:
+- A fork of the roaring bitmaps implementation in [gtk/roaring](./gtk/roaring)
+- An adaptation of timsort from python in [gtk/timsort](./gtk/timsort)
