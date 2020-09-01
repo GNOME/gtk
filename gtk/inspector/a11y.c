@@ -315,7 +315,7 @@ update_attributes (GtkInspectorA11y *sl)
 
   filter_model = gtk_filter_list_model_new (G_LIST_MODEL (store), filter);
   selection = gtk_no_selection_new (G_LIST_MODEL (filter_model));
-  gtk_column_view_set_model (GTK_COLUMN_VIEW (sl->attributes), G_LIST_MODEL (selection));
+  gtk_column_view_set_model (GTK_COLUMN_VIEW (sl->attributes), GTK_SELECTION_MODEL (selection));
   g_object_unref (selection);
 
   if (g_list_model_get_n_items (G_LIST_MODEL (filter_model)) > 0)

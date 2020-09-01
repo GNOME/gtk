@@ -104,7 +104,7 @@ activate_cb (GtkListView  *list,
   GdkAppLaunchContext *context;
   GError *error = NULL;
 
-  app_info = g_list_model_get_item (gtk_list_view_get_model (list), position);
+  app_info = g_list_model_get_item (G_LIST_MODEL (gtk_list_view_get_model (list)), position);
 
   /* Prepare the context for launching the application and launch it. This
    * code is explained in detail in the documentation for #GdkAppLaunchContext
@@ -176,7 +176,7 @@ do_listview_applauncher (GtkWidget *do_widget)
 
       /* Create the list widget here.
        */
-      list = gtk_list_view_new_with_factory (model, factory);
+      list = gtk_list_view_new_with_factory (GTK_SELECTION_MODEL (gtk_single_selection_new (model)), factory);
 
       /* We connect the activate signal here. It's the function we defined
        * above for launching the selected application.

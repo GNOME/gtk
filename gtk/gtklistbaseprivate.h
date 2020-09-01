@@ -71,9 +71,9 @@ GtkListItemManager *   gtk_list_base_get_manager                (GtkListBase    
 GtkScrollablePolicy    gtk_list_base_get_scroll_policy          (GtkListBase            *self,
                                                                  GtkOrientation          orientation);
 guint                  gtk_list_base_get_n_items                (GtkListBase            *self);
-GListModel *           gtk_list_base_get_model                  (GtkListBase            *self);
+GtkSelectionModel *    gtk_list_base_get_model                  (GtkListBase            *self);
 gboolean               gtk_list_base_set_model                  (GtkListBase            *self,
-                                                                 GListModel             *model);
+                                                                 GtkSelectionModel      *model);
 void                   gtk_list_base_update_adjustments         (GtkListBase            *self,
                                                                  int                     total_across,
                                                                  int                     total_along,

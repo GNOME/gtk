@@ -626,7 +626,7 @@ gtk_inspector_prop_list_set_object (GtkInspectorPropList *pl,
   sorted = gtk_sort_list_model_new (filtered, NULL);
   list = G_LIST_MODEL (gtk_no_selection_new (G_LIST_MODEL (sorted)));
 
-  gtk_column_view_set_model (GTK_COLUMN_VIEW (pl->priv->list), list);
+  gtk_column_view_set_model (GTK_COLUMN_VIEW (pl->priv->list), GTK_SELECTION_MODEL (list));
   gtk_sort_list_model_set_sorter (sorted, gtk_column_view_get_sorter (GTK_COLUMN_VIEW (pl->priv->list)));
   gtk_column_view_sort_by_column (GTK_COLUMN_VIEW (pl->priv->list), pl->priv->name, GTK_SORT_ASCENDING);
 

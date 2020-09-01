@@ -164,7 +164,7 @@ populate_grid (void)
   list = create_color_grid ();
 
   selection = gtk_no_selection_new (gtk_color_list_new (2097152));
-  gtk_grid_view_set_model (GTK_GRID_VIEW (list), G_LIST_MODEL (selection));
+  gtk_grid_view_set_model (GTK_GRID_VIEW (list), GTK_SELECTION_MODEL (selection));
   g_object_unref (selection);
 
   hincrement = 0;

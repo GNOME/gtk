@@ -218,7 +218,7 @@ do_listview_words (GtkWidget *do_widget)
       gtk_overlay_set_child (GTK_OVERLAY (overlay), sw);
 
       listview = gtk_list_view_new_with_factory (
-          G_LIST_MODEL (gtk_no_selection_new (G_LIST_MODEL (filter_model))),
+          GTK_SELECTION_MODEL (gtk_no_selection_new (G_LIST_MODEL (filter_model))),
           gtk_builder_list_item_factory_new_from_bytes (NULL,
               g_bytes_new_static (factory_text, strlen (factory_text))));
       gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (sw), listview);
