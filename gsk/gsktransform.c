@@ -1822,7 +1822,7 @@ gsk_transform_transform_bounds (GskTransform          *self,
         graphene_matrix_t mat;
 
         gsk_transform_to_matrix (self, &mat);
-        graphene_matrix_transform_bounds (&mat, rect, out_rect);
+        gsk_matrix_transform_bounds (&mat, rect, out_rect);
       }
       break;
     }
@@ -1878,7 +1878,7 @@ gsk_transform_transform_point (GskTransform           *self,
         graphene_matrix_t mat;
 
         gsk_transform_to_matrix (self, &mat);
-        graphene_matrix_transform_point (&mat, point, out_point);
+        gsk_matrix_transform_point (&mat, point, out_point);
       }
       break;
     }
