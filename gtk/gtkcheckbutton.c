@@ -37,6 +37,7 @@
 #include "gtkprivate.h"
 #include "gtkstylecontextprivate.h"
 #include "gtkwidgetprivate.h"
+#include "gtkmodelbuttonprivate.h"
 
 /**
  * SECTION:gtkcheckbutton
@@ -122,14 +123,39 @@ gtk_check_button_dispose (GObject *object)
 }
 
 static void
+button_role_changed (GtkCheckButton *self)
+{
+  GtkCheckButtonPrivate *priv = gtk_check_button_get_instance_private (self);
+
+  if (gtk_action_helper_get_role (priv->action_helper) == GTK_BUTTON_ROLE_RADIO)
+    gtk_css_node_set_name (gtk_widget_get_css_node (priv->indicator_widget),
+                           g_quark_from_static_string("radio"));
+  else
+    gtk_css_node_set_name (gtk_widget_get_css_node (priv->indicator_widget),
+                           g_quark_from_static_string("check"));
+}
+
+static void
+ensure_action_helper (GtkCheckButton *self)
+{
+  GtkCheckButtonPrivate *priv = gtk_check_button_get_instance_private (self);
+
+  if (priv->action_helper)
+    return;
+
+  priv->action_helper = gtk_action_helper_new (GTK_ACTIONABLE (self));
+  g_signal_connect_swapped (priv->action_helper, "notify::role",
+                            G_CALLBACK (button_role_changed), self);
+}
+
+static void
 gtk_check_button_set_action_name (GtkActionable *actionable,
                                   const char    *action_name)
 {
   GtkCheckButton *self = GTK_CHECK_BUTTON (actionable);
   GtkCheckButtonPrivate *priv = gtk_check_button_get_instance_private (self);
 
-  if (!priv->action_helper)
-    priv->action_helper = gtk_action_helper_new (actionable);
+  ensure_action_helper (self);
 
   gtk_action_helper_set_action_name (priv->action_helper, action_name);
 }
@@ -141,8 +167,7 @@ gtk_check_button_set_action_target_value (GtkActionable *actionable,
   GtkCheckButton *self = GTK_CHECK_BUTTON (actionable);
   GtkCheckButtonPrivate *priv = gtk_check_button_get_instance_private (self);
 
-  if (!priv->action_helper)
-    priv->action_helper = gtk_action_helper_new (actionable);
+  ensure_action_helper (self);
 
   gtk_action_helper_set_action_target_value (priv->action_helper, action_target);
 }
