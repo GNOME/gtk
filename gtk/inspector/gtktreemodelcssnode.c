@@ -345,6 +345,8 @@ gtk_tree_model_css_node_finalize (GObject *object)
       priv->root = NULL;
     }
 
+  g_free (priv->column_types);
+
   G_OBJECT_CLASS (gtk_tree_model_css_node_parent_class)->finalize (object);
 }
 
