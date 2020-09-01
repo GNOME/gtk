@@ -111,6 +111,8 @@ gtk_check_button_dispose (GObject *object)
 {
   GtkCheckButtonPrivate *priv = gtk_check_button_get_instance_private (GTK_CHECK_BUTTON (object));
 
+  g_clear_object (&priv->action_helper);
+
   g_clear_pointer (&priv->indicator_widget, gtk_widget_unparent);
   g_clear_pointer (&priv->label_widget, gtk_widget_unparent);
 
