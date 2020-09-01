@@ -446,6 +446,12 @@ gtk_toggle_button_toggled (GtkToggleButton *toggle_button)
  *
  * Adds @self to the group of @group. In a group of multiple toggle buttons,
  * only one button can be active at a time.
+ *
+ * Note that the same effect can be achieved via the #GtkActionable
+ * api, by using the same action with parameter type and state type 's'
+ * for all buttons in the group, and giving each button its own target
+ * value.
+
  */
 void
 gtk_toggle_button_set_group (GtkToggleButton *self,
