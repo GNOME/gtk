@@ -485,7 +485,7 @@ do_listview_clocks (GtkWidget *do_widget)
       g_signal_connect (factory, "setup", G_CALLBACK (setup_listitem_cb), NULL);
 
       model = GTK_SELECTION_MODEL (gtk_no_selection_new (create_clocks_model ()));
-      gridview = gtk_grid_view_new_with_factory (model, factory);
+      gridview = gtk_grid_view_new (model, factory);
       gtk_scrollable_set_hscroll_policy (GTK_SCROLLABLE (gridview), GTK_SCROLL_NATURAL);
       gtk_scrollable_set_vscroll_policy (GTK_SCROLLABLE (gridview), GTK_SCROLL_NATURAL);
 

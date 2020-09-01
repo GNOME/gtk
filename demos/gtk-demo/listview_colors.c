@@ -663,7 +663,7 @@ create_color_grid (void)
   GtkWidget *gridview;
   GtkListItemFactory *factory;
 
-  gridview = gtk_grid_view_new (NULL);
+  gridview = gtk_grid_view_new (NULL, NULL);
   gtk_scrollable_set_hscroll_policy (GTK_SCROLLABLE (gridview), GTK_SCROLL_NATURAL);
   gtk_scrollable_set_vscroll_policy (GTK_SCROLLABLE (gridview), GTK_SCROLL_NATURAL);
 
@@ -950,7 +950,7 @@ do_listview_colors (GtkWidget *do_widget)
 
       factory = gtk_signal_list_item_factory_new ();
       g_signal_connect (factory, "setup", G_CALLBACK (setup_selection_listitem_cb), NULL);
-      selection_view = gtk_grid_view_new_with_factory (NULL, factory);
+      selection_view = gtk_grid_view_new (NULL, factory);
       gtk_widget_add_css_class (selection_view, "compact");
       gtk_grid_view_set_max_columns (GTK_GRID_VIEW (selection_view), 200);
       gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (sw), selection_view);

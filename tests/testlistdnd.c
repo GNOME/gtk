@@ -348,7 +348,7 @@ main (int argc, char *argv[])
   g_signal_connect (factory, "bind", G_CALLBACK (bind_item), NULL);
   g_signal_connect (factory, "unbind", G_CALLBACK (unbind_item), NULL);
 
-  grid = gtk_grid_view_new_with_factory (GTK_SELECTION_MODEL (gtk_single_selection_new (model)), factory);
+  grid = gtk_grid_view_new (GTK_SELECTION_MODEL (gtk_single_selection_new (model)), factory);
   gtk_grid_view_set_min_columns (GTK_GRID_VIEW (grid), 20);
   gtk_grid_view_set_max_columns (GTK_GRID_VIEW (grid), 20);
 
@@ -359,7 +359,7 @@ main (int argc, char *argv[])
   gtk_scrolled_window_set_has_frame (GTK_SCROLLED_WINDOW (sw), TRUE);
   gtk_stack_add_titled (GTK_STACK (stack), sw, "list", "GtkListView");
 
-  list = gtk_list_view_new (GTK_SELECTION_MODEL (gtk_single_selection_new (create_model (0, 400, 1, FALSE))));
+  list = gtk_list_view_new (GTK_SELECTION_MODEL (gtk_single_selection_new (create_model (0, 400, 1, FALSE))), NULL);
   gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (sw), list);
 
   factory = gtk_signal_list_item_factory_new ();
@@ -401,7 +401,7 @@ main (int argc, char *argv[])
   gtk_scrolled_window_set_has_frame (GTK_SCROLLED_WINDOW (sw), TRUE);
   gtk_stack_add_titled (GTK_STACK (stack), sw, "tree", "Tree");
 
-  list = gtk_list_view_new (GTK_SELECTION_MODEL (gtk_single_selection_new (create_tree_model (20, 20))));
+  list = gtk_list_view_new (GTK_SELECTION_MODEL (gtk_single_selection_new (create_tree_model (20, 20))), NULL);
   gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (sw), list);
 
   factory = gtk_signal_list_item_factory_new ();
