@@ -1,7 +1,7 @@
 GTK — The GTK toolkit
 =====================
 
-[![Build Status](https://gitlab.gnome.org/GNOME/gtk/badges/master/build.svg)](https://gitlab.gnome.org/GNOME/gtk/pipelines)
+[![Build status](https://gitlab.gnome.org/GNOME/gtk/badges/master/pipeline.svg)](https://gitlab.gnome.org/GNOME/gtk/-/commits/master)
 
 General information
 -------------------
@@ -98,7 +98,7 @@ And, finally, you can install GTK using:
 $ sudo ninja install
 ```
 
-Complete information about installing GTK+ and related libraries
+Complete information about installing GTK and related libraries
 can be found in the file:
 
 ```
