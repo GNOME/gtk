@@ -834,7 +834,6 @@ gtk_check_button_set_group (GtkCheckButton *self,
 
       priv->group_next = NULL;
       priv->group_prev = NULL;
-      g_object_notify_by_pspec (G_OBJECT (self), props[PROP_GROUP]);
 
       if (priv->indicator_widget)
         gtk_css_node_set_name (gtk_widget_get_css_node (priv->indicator_widget),
