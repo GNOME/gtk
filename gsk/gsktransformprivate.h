@@ -32,6 +32,16 @@ G_BEGIN_DECLS
 gboolean                gsk_transform_parser_parse              (GtkCssParser           *parser,
                                                                  GskTransform          **out_transform);
 
+void gsk_matrix_transform_point   (const graphene_matrix_t  *m,
+                                   const graphene_point_t   *p,
+                                   graphene_point_t         *res);
+void gsk_matrix_transform_point3d (const graphene_matrix_t  *m,
+                                   const graphene_point3d_t *p,
+                                   graphene_point3d_t       *res);
+void gsk_matrix_transform_bounds  (const graphene_matrix_t  *m,
+                                   const graphene_rect_t    *r,
+                                   graphene_rect_t          *res);
+
 
 G_END_DECLS
 

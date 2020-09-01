@@ -4050,7 +4050,7 @@ gtk_widget_compute_point (GtkWidget              *widget,
       return FALSE;
     }
 
-  graphene_matrix_transform_point (&transform, point, out_point);
+  gsk_matrix_transform_point (&transform, point, out_point);
 
   return TRUE;
 }
@@ -9370,8 +9370,8 @@ gtk_widget_do_pick (GtkWidget    *widget,
               gsk_transform_unref (transform);
               graphene_point3d_init (&p0, x, y, 0);
               graphene_point3d_init (&p1, x, y, 1);
-              graphene_matrix_transform_point3d (&inv, &p0, &p0);
-              graphene_matrix_transform_point3d (&inv, &p1, &p1);
+              gsk_matrix_transform_point3d (&inv, &p0, &p0);
+              gsk_matrix_transform_point3d (&inv, &p1, &p1);
               if (fabs (p0.z - p1.z) < 1.f / 4096)
                 continue;
 
@@ -9547,9 +9547,9 @@ gtk_widget_compute_bounds (GtkWidget       *widget,
     }
 
   gtk_css_boxes_init (&boxes, widget);
-  graphene_matrix_transform_bounds (&transform,
-                                    gtk_css_boxes_get_border_rect (&boxes),
-                                    out_bounds);
+  gsk_matrix_transform_bounds (&transform,
+                               gtk_css_boxes_get_border_rect (&boxes),
+                               out_bounds);
 
   return TRUE;
 }
