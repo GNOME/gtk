@@ -9,8 +9,8 @@
 msgid ""
 msgstr "Project-Id-Version: gtk+ master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-08-27 00:09+0000\n"
-"PO-Revision-Date: 2020-08-28 10:00+0100\n"
+"POT-Creation-Date: 2020-08-31 16:17+0000\n"
+"PO-Revision-Date: 2020-09-01 10:00+0100\n"
 "Last-Translator: Asier Sarasua Garmendia <asiersarasua@ni.eus>\n"
 "Language-Team: Basque <librezale@librezale.eus>\n"
 "Language: eu\n"
@@ -980,7 +980,7 @@ msgstr "Ez da arrazoirik zehaztu"
 msgid "%s does not exist in the bookmarks list"
 msgstr "'%s' ez dago laster-marken zerrendan"
 
-#: gtk/gtkbookmarksmanager.c:406
+#: gtk/gtkbookmarksmanager.c:412
 #, c-format
 msgid "%s already exists in the bookmarks list"
 msgstr "'%s' badago lehendik ere laster-marken zerrendan"
@@ -1301,15 +1301,15 @@ msgid "Margins from Printer…"
 msgstr "Marjinak inprimagailutik…"
 
 #. And show the custom paper dialog
-#: gtk/gtkcustompaperunixdialog.c:402 gtk/gtkprintunixdialog.c:2993
+#: gtk/gtkcustompaperunixdialog.c:402 gtk/gtkprintunixdialog.c:2992
 msgid "Manage Custom Sizes"
 msgstr "Kudeatu tamaina pertsonalak"
 
-#: gtk/gtkcustompaperunixdialog.c:466 gtk/gtkpagesetupunixdialog.c:704
+#: gtk/gtkcustompaperunixdialog.c:466 gtk/gtkpagesetupunixdialog.c:719
 msgid "inch"
 msgstr "hazbete"
 
-#: gtk/gtkcustompaperunixdialog.c:468 gtk/gtkpagesetupunixdialog.c:702
+#: gtk/gtkcustompaperunixdialog.c:468 gtk/gtkpagesetupunixdialog.c:717
 msgid "mm"
 msgstr "mm"
 
@@ -1433,7 +1433,7 @@ msgstr "Izen hori duen fitxategia badago lehendik ere"
 #: gtk/gtkfilechoosernative.c:505 gtk/gtkfilechoosernative.c:576
 #: gtk/gtkfilechooserwidget.c:1212 gtk/gtkfilechooserwidget.c:5755
 #: gtk/gtkmessagedialog.c:742 gtk/gtkmessagedialog.c:751
-#: gtk/gtkmountoperation.c:608 gtk/gtkpagesetupunixdialog.c:281
+#: gtk/gtkmountoperation.c:608 gtk/gtkpagesetupunixdialog.c:284
 #: gtk/gtkprintbackend.c:643 gtk/gtkprinteroptionwidget.c:713
 #: gtk/gtkprintunixdialog.c:627 gtk/gtkprintunixdialog.c:782
 #: gtk/gtkwindow.c:6649 gtk/inspector/css-editor.c:248
@@ -1699,7 +1699,6 @@ msgstr "Kalkulu-orria"
 #. Translators: We don't know whether this printer is
 #. * available to print to.
 #: gtk/gtkfilechooserwidget.c:4349 gtk/gtkfilechooserwidget.c:4536
-#: gtk/inspector/prop-editor.c:1468
 #: modules/printbackends/gtkprintbackendcloudprint.c:729
 msgid "Unknown"
 msgstr "Ezezaguna"
@@ -1768,7 +1767,7 @@ msgstr "Makurdura"
 msgid "Optical Size"
 msgstr "Tamaina optikoa"
 
-#: gtk/gtkfontchooserwidget.c:1653 gtk/inspector/prop-editor.c:1455
+#: gtk/gtkfontchooserwidget.c:1653
 msgid "Default"
 msgstr "Lehenetsia"
 
@@ -2045,23 +2044,23 @@ msgstr "%u. orrialdea"
 msgid "Not a valid page setup file"
 msgstr "Ez da orria konfiguratzeko baliozko fitxategia"
 
-#: gtk/gtkpagesetupunixdialog.c:200 gtk/gtkprintunixdialog.c:712
+#: gtk/gtkpagesetupunixdialog.c:202 gtk/gtkprintunixdialog.c:712
 msgid "Manage Custom Sizes…"
 msgstr "Kudeatu tamaina pertsonalizatuak…"
 
-#: gtk/gtkpagesetupunixdialog.c:282 gtk/ui/gtkassistant.ui:98
+#: gtk/gtkpagesetupunixdialog.c:285 gtk/ui/gtkassistant.ui:98
 msgid "_Apply"
 msgstr "_Aplikatu"
 
-#: gtk/gtkpagesetupunixdialog.c:316 gtk/gtkpagesetupunixdialog.c:567
+#: gtk/gtkpagesetupunixdialog.c:319 gtk/gtkpagesetupunixdialog.c:571
 msgid "Any Printer"
 msgstr "Edozein inprimagailu"
 
-#: gtk/gtkpagesetupunixdialog.c:317
+#: gtk/gtkpagesetupunixdialog.c:320
 msgid "For portable documents"
 msgstr "Dokumentu eramangarrientzako"
 
-#: gtk/gtkpagesetupunixdialog.c:722
+#: gtk/gtkpagesetupunixdialog.c:737
 #, c-format
 msgid ""
 "Margins:\n"
@@ -2075,7 +2074,7 @@ msgstr "Marjinak\n"
 " Goian: %s %s\n"
 " Behean: %s %s"
 
-#: gtk/gtkpagesetupunixdialog.c:768 gtk/ui/gtkpagesetupunixdialog.ui:5
+#: gtk/gtkpagesetupunixdialog.c:783 gtk/ui/gtkpagesetupunixdialog.ui:5
 #: gtk/ui/gtkprintunixdialog.ui:711
 msgid "Page Setup"
 msgstr "Orrialdearen konfigurazioa"
@@ -2509,12 +2508,11 @@ msgstr "Baliteke aldi baterako fitxategia ezin sortu izatea."
 
 #. window
 #: gtk/gtkprintoperation-portal.c:236 gtk/gtkprintoperation-portal.c:554
-#: gtk/gtkprintoperation-portal.c:623 gtk/gtkprintunixdialog.c:3033
+#: gtk/gtkprintoperation-portal.c:623 gtk/gtkprintunixdialog.c:3032
 msgid "Print"
 msgstr "Inprimatu"
 
 #: gtk/gtkprintoperation-unix.c:479 gtk/gtkprintoperation-win32.c:1503
-#: gtk/inspector/prop-editor.c:1465
 msgid "Application"
 msgstr "Aplikazioa"
 
@@ -2840,7 +2838,7 @@ msgid "Attribute"
 msgstr "Atributua"
 
 #: gtk/inspector/a11y.ui:54 gtk/inspector/css-node-tree.ui:119
-#: gtk/inspector/prop-list.ui:56 gtk/inspector/recorder.ui:115
+#: gtk/inspector/prop-list.ui:56 gtk/inspector/recorder.ui:123
 msgid "Value"
 msgstr "Balioa"
 
@@ -3058,8 +3056,8 @@ msgid "Surface"
 msgstr "Gainazala"
 
 #: gtk/inspector/misc-info.ui:316 gtk/inspector/misc-info.ui:355
-#: gtk/inspector/misc-info.ui:394 gtk/inspector/prop-editor.c:1039
-#: gtk/inspector/prop-editor.c:1396 gtk/inspector/window.ui:418
+#: gtk/inspector/misc-info.ui:394 gtk/inspector/prop-editor.c:1054
+#: gtk/inspector/prop-editor.c:1414 gtk/inspector/window.ui:418
 msgid "Properties"
 msgstr "Propietateak"
 
@@ -3104,70 +3102,98 @@ msgstr "Umea ikusgai"
 msgid "Pointer: %p"
 msgstr "Erakuslea: %p"
 
-#: gtk/inspector/prop-editor.c:785
+#. Translators: %s is a type name, for example
+#. * GtkPropertyExpression with value \"2.5\"
+#.
+#: gtk/inspector/prop-editor.c:788
 #, c-format
 msgid "%s with value \"%s\""
 msgstr "%s honako balioarekin: \"%s\""
 
-#: gtk/inspector/prop-editor.c:793
+#. Translators: Both %s are type names, for example
+#. * GtkPropertyExpression with type GObject
+#.
+#: gtk/inspector/prop-editor.c:799
 #, c-format
 msgid "%s with type %s"
 msgstr "%s honako motarekin: %s"
 
-#: gtk/inspector/prop-editor.c:803
+#. Translators: Both %s are type names, for example
+#. * GtkObjectExpression for GtkStringObject 0x23456789
+#.
+#: gtk/inspector/prop-editor.c:812
 #, c-format
 msgid "%s for %s %p"
 msgstr "%s honetarako: %s %p"
 
-#: gtk/inspector/prop-editor.c:807
-#, c-format
-msgid "%s"
-msgstr "%s"
-
-#: gtk/inspector/prop-editor.c:827
+#. Translators: Both %s are type names, for example
+#. * GtkPropertyExpression with value type: gchararray
+#.
+#: gtk/inspector/prop-editor.c:842
 #, c-format
 msgid "%s with value type %s"
-msgstr "%s honeko balio motarekin: %s"
+msgstr "%s honako balio motarekin: %s"
 
-#: gtk/inspector/prop-editor.c:1107
+#: gtk/inspector/prop-editor.c:1122
 #, c-format
 msgid "Uneditable property type: %s"
 msgstr "Propietate mota ez-editagarria: %s"
 
-#: gtk/inspector/prop-editor.c:1251
+#: gtk/inspector/prop-editor.c:1266
+msgctxt "column number"
 msgid "None"
 msgstr "Bat ere ez"
 
-#: gtk/inspector/prop-editor.c:1288
+#: gtk/inspector/prop-editor.c:1303
 msgid "Attribute:"
 msgstr "Atributua:"
 
-#: gtk/inspector/prop-editor.c:1291
+#: gtk/inspector/prop-editor.c:1306
 msgid "Model"
 msgstr "Modeloa"
 
-#: gtk/inspector/prop-editor.c:1296
+#: gtk/inspector/prop-editor.c:1311
 msgid "Column:"
 msgstr "Zutabea:"
 
-#: gtk/inspector/prop-editor.c:1392
+#. Translators: %s is a type name, for example
+#. * Action from 0x2345678 (GtkApplicationWindow)
+#.
+#: gtk/inspector/prop-editor.c:1410
 #, c-format
 msgid "Action from: %p (%s)"
 msgstr "Ekintza hemendik: %p (%s)"
 
-#: gtk/inspector/prop-editor.c:1447
+#: gtk/inspector/prop-editor.c:1465
 msgid "Reset"
 msgstr "Berrezarri"
 
-#: gtk/inspector/prop-editor.c:1458
+#: gtk/inspector/prop-editor.c:1473
+msgctxt "GtkSettings source"
+msgid "Default"
+msgstr "Lehenetsia"
+
+#: gtk/inspector/prop-editor.c:1476
+msgctxt "GtkSettings source"
 msgid "Theme"
 msgstr "Gaia"
 
-#: gtk/inspector/prop-editor.c:1461
+#: gtk/inspector/prop-editor.c:1479
+msgctxt "GtkSettings source"
 msgid "XSettings"
 msgstr "XSettings"
 
-#: gtk/inspector/prop-editor.c:1471
+#: gtk/inspector/prop-editor.c:1483
+msgctxt "GtkSettings source"
+msgid "Application"
+msgstr "Aplikazioa"
+
+#: gtk/inspector/prop-editor.c:1486
+msgctxt "GtkSettings source"
+msgid "Unknown"
+msgstr "Ezezaguna"
+
+#: gtk/inspector/prop-editor.c:1489
 msgid "Source:"
 msgstr "Iturburua:"
 
@@ -3192,11 +3218,15 @@ msgstr "Garbitu grabatutako fotogramak"
 msgid "Add debug nodes"
 msgstr "Gehitu arazketa-nodoak"
 
-#: gtk/inspector/recorder.ui:45
+#: gtk/inspector/recorder.ui:44
+msgid "Use a dark background"
+msgstr "Erabili atzeko plano iluna"
+
+#: gtk/inspector/recorder.ui:53
 msgid "Save selected node"
 msgstr "Gorde hautatutako nodoa"
 
-#: gtk/inspector/recorder.ui:102
+#: gtk/inspector/recorder.ui:110
 msgid "Property"
 msgstr "Propietatea"
 
@@ -7131,3 +7161,5 @@ msgstr "Ez dago profilik erabilgarri"
 msgid "Unspecified profile"
 msgstr "Zehaztu gabeko profila"
 
+#~ msgid "%s"
+#~ msgstr "%s"
