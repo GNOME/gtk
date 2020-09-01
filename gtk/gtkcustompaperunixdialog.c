@@ -901,7 +901,7 @@ populate_dialog (GtkCustomPaperUnixDialog *dialog)
   g_signal_connect (factory, "bind", G_CALLBACK (bind_item), NULL);
   g_signal_connect (factory, "unbind", G_CALLBACK (unbind_item), NULL);
 
-  listview = gtk_list_view_new_with_factory (model, factory);
+  listview = gtk_list_view_new (model, factory);
   gtk_widget_set_size_request (listview, 140, -1);
 
   dialog->listview = listview;

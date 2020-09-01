@@ -176,7 +176,7 @@ do_listview_applauncher (GtkWidget *do_widget)
 
       /* Create the list widget here.
        */
-      list = gtk_list_view_new_with_factory (GTK_SELECTION_MODEL (gtk_single_selection_new (model)), factory);
+      list = gtk_list_view_new (GTK_SELECTION_MODEL (gtk_single_selection_new (model)), factory);
 
       /* We connect the activate signal here. It's the function we defined
        * above for launching the selected application.

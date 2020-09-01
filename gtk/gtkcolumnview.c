@@ -1165,7 +1165,7 @@ gtk_column_view_init (GtkColumnView *self)
 
   self->sorter = gtk_column_view_sorter_new ();
   self->factory = gtk_column_list_item_factory_new (self);
-  self->listview = GTK_LIST_VIEW (gtk_list_view_new_with_factory (NULL,
+  self->listview = GTK_LIST_VIEW (gtk_list_view_new (NULL,
         GTK_LIST_ITEM_FACTORY (g_object_ref (self->factory))));
   gtk_widget_set_hexpand (GTK_WIDGET (self->listview), TRUE);
   gtk_widget_set_vexpand (GTK_WIDGET (self->listview), TRUE);

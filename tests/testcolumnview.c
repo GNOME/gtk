@@ -773,7 +773,7 @@ main (int argc, char *argv[])
 
   g_object_unref (filter);
 
-  list = gtk_list_view_new_with_factory (
+  list = gtk_list_view_new (
              GTK_SELECTION_MODEL (gtk_single_selection_new (g_object_ref (gtk_column_view_get_columns (GTK_COLUMN_VIEW (view))))),
              gtk_builder_list_item_factory_new_from_bytes (scope, g_bytes_new_static (factory_ui, strlen (factory_ui))));
   gtk_box_append (GTK_BOX (hbox), list);
