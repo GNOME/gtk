@@ -802,7 +802,13 @@ gtk_check_button_set_label (GtkCheckButton *self,
  * Setting the group of a check button also changes the css name of the
  * indicator widget's CSS node to 'radio'.
  *
- * The behavior of a checkbutton in a group is also commonly known as a 'radio button'.
+ * The behavior of a checkbutton in a group is also commonly known as
+ * a 'radio button'.
+ *
+ * Note that the same effect can be achieved via the #GtkActionable
+ * api, by using the same action with parameter type and state type 's'
+ * for all buttons in the group, and giving each button its own target
+ * value.
  */
 void
 gtk_check_button_set_group (GtkCheckButton *self,
