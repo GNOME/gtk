@@ -265,6 +265,8 @@ gtk_inspector_controllers_dispose (GObject *object)
 
   gtk_widget_unparent (gtk_widget_get_first_child (GTK_WIDGET (self)));
 
+  g_clear_object (&self->sizegroup);
+
   G_OBJECT_CLASS (gtk_inspector_controllers_parent_class)->dispose (object);
 }
 
@@ -274,7 +276,7 @@ gtk_inspector_controllers_class_init (GtkInspectorControllersClass *klass)
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-  object_class->dispose= gtk_inspector_controllers_dispose;
+  object_class->dispose = gtk_inspector_controllers_dispose;
 
   gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BIN_LAYOUT);
 }
