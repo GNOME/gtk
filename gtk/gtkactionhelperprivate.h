@@ -22,6 +22,7 @@
 
 #include <gtk/gtkapplication.h>
 #include <gtk/gtkactionable.h>
+#include <gtk/gtkmodelbuttonprivate.h>
 
 #define GTK_TYPE_ACTION_HELPER                              (gtk_action_helper_get_type ())
 #define GTK_ACTION_HELPER(inst)                             (G_TYPE_CHECK_INSTANCE_CAST ((inst),                      \
@@ -55,5 +56,8 @@ gboolean                gtk_action_helper_get_active                    (GtkActi
 
 G_GNUC_INTERNAL
 void                    gtk_action_helper_activate                      (GtkActionHelper *helper);
+
+GtkButtonRole           gtk_action_helper_get_role                      (GtkActionHelper *helper);
+
 
 #endif /* __GTK_ACTION_HELPER_H__ */
