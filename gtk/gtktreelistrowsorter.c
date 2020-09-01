@@ -354,7 +354,7 @@ gtk_tree_list_row_sort_keys_new (GtkTreeListRowSorter *self)
                               sizeof (gpointer[MAX_KEY_DEPTH]));
 
   if (self->sorter)
-    result->sort_keys = gtk_sort_keys_ref (gtk_sorter_get_keys (self->sorter));
+    result->sort_keys = gtk_sorter_get_keys (self->sorter);
   result->cached_keys = g_hash_table_new (NULL, NULL);
 
   return (GtkSortKeys *) result;
