@@ -368,6 +368,22 @@ gtk_search_engine_tracker3_new (void)
 {
   GtkSearchEngineTracker3 *engine;
   GError *error = NULL;
+  GModule *self;
+
+  self = g_module_open (NULL, G_MODULE_BIND_LAZY);
+
+  /* Avoid hell from breaking loose if the application links to Tracker 2.x */
+  if (self)
+    {
+      gpointer symbol;
+      gboolean found;
+
+      found = g_module_symbol (self, "tracker_sparql_builder_new", &symbol);
+      g_module_close (self);
+
+      if (found)
+        return NULL;
+    }
 
   g_debug ("Creating GtkSearchEngineTracker3...");
 

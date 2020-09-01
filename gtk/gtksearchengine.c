@@ -28,7 +28,8 @@
 
 #if defined(HAVE_TRACKER3)
 #include "gtksearchenginetracker3.h"
-#elif !defined G_OS_WIN32 /* No tracker on windows */
+#endif
+#if !defined G_OS_WIN32 /* No tracker on windows */
 #include "gtksearchenginetracker.h"
 #define HAVE_TRACKER 1
 #endif
@@ -385,16 +386,21 @@ _gtk_search_engine_new (void)
                                                 g_object_ref (engine->priv->native),
                                                 g_object_unref);
     }
-#elif defined(HAVE_TRACKER)
-  engine->priv->native = _gtk_search_engine_tracker_new ();
-  if (engine->priv->native)
+#endif
+
+#ifdef HAVE_TRACKER
+  if (!engine->priv->native)
     {
-      g_debug ("Using Tracker search engine");
-      connect_engine_signals (engine->priv->native, engine);
-      _gtk_search_engine_simple_set_indexed_cb (GTK_SEARCH_ENGINE_SIMPLE (engine->priv->simple),
-                                                _gtk_search_engine_tracker_is_indexed,
-                                                g_object_ref (engine->priv->native),
-                                                g_object_unref);
+      engine->priv->native = _gtk_search_engine_tracker_new ();
+      if (engine->priv->native)
+        {
+          g_debug ("Using Tracker search engine");
+          connect_engine_signals (engine->priv->native, engine);
+          _gtk_search_engine_simple_set_indexed_cb (GTK_SEARCH_ENGINE_SIMPLE (engine->priv->simple),
+                                                    _gtk_search_engine_tracker_is_indexed,
+                                                    g_object_ref (engine->priv->native),
+                                                    g_object_unref);
+        }
     }
 #endif
 
