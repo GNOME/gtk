@@ -142,7 +142,7 @@ gtk_private_sources = files([
   'gtktextbtree.c',
   'gtktexthistory.c',
   'gtktextviewchild.c',
-  'gtktimsort.c',
+  'timsort/gtktimsort.c',
   'gtktrashmonitor.c',
   'gtktreedatalist.c',
 ])

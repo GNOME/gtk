@@ -104,7 +104,7 @@ tests = [
   { 'name': 'theme-validate' },
   {
     'name': 'timsort',
-    'sources': ['timsort.c', '../../gtk/gtktimsort.c'],
+    'sources': ['timsort.c', '../../gtk/timsort/gtktimsort.c'],
   },
   { 'name': 'tooltips' },
   { 'name': 'treelistmodel' },
