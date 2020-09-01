@@ -2165,3 +2165,80 @@ gsk_transform_parse (const char    *string,
 
   return result; 
 }
+
+/* Some of the graphene_matrix_transform apis yield unexpected
+ * results with projective matrices, since they silently drop
+ * the w component, so we provide working alternatives here.
+ */
+void
+gsk_matrix_transform_point (const graphene_matrix_t *m,
+                            const graphene_point_t  *p,
+                            graphene_point_t        *res)
+{
+  graphene_vec4_t vec4;
+  float w;
+
+  graphene_vec4_init (&vec4, p->x, p->y, 0.0f, 1.0f);
+  graphene_matrix_transform_vec4 (m, &vec4, &vec4);
+
+  w = graphene_vec4_get_w (&vec4);
+  res->x = graphene_vec4_get_x (&vec4) / w;
+  res->y = graphene_vec4_get_y (&vec4) / w;
+}
+
+void
+gsk_matrix_transform_point3d (const graphene_matrix_t  *m,
+                              const graphene_point3d_t *p,
+                              graphene_point3d_t       *res)
+{
+  graphene_vec4_t vec4;
+  float w;
+
+  graphene_vec4_init (&vec4, p->x, p->y, 0.0f, 1.0f);
+  graphene_matrix_transform_vec4 (m, &vec4, &vec4);
+
+  w = graphene_vec4_get_w (&vec4);
+  res->x = graphene_vec4_get_x (&vec4) / w;
+  res->y = graphene_vec4_get_y (&vec4) / w;
+  res->z = graphene_vec4_get_z (&vec4) / w;
+}
+
+void
+gsk_matrix_transform_bounds (const graphene_matrix_t *m,
+                             const graphene_rect_t   *r,
+                             graphene_rect_t         *res)
+{
+  graphene_point_t ret[4];
+  float min_x, min_y;
+  float max_x, max_y;
+  graphene_rect_t rr;
+
+  graphene_rect_normalize_r (r, &rr);
+
+#define TRANSFORM_POINT(matrix, rect, corner, out_p)   do {\
+  graphene_vec4_t __s; \
+  graphene_point_t __p; \
+  float w; \
+  graphene_rect_get_ ## corner (rect, &__p); \
+  graphene_vec4_init (&__s, __p.x, __p.y, 0.f, 1.f); \
+  graphene_matrix_transform_vec4 (matrix, &__s, &__s); \
+  w = graphene_vec4_get_w (&__s); \
+  out_p.x = graphene_vec4_get_x (&__s) / w; \
+  out_p.y = graphene_vec4_get_y (&__s) / w;           } while (0)
+
+  TRANSFORM_POINT (m, &rr, top_left, ret[0]);
+  TRANSFORM_POINT (m, &rr, top_right, ret[1]);
+  TRANSFORM_POINT (m, &rr, bottom_right, ret[2]);
+  TRANSFORM_POINT (m, &rr, bottom_left, ret[3]);
+
+#undef TRANSFORM_POINT
+
+  /* FIXME: graphene doesn't export a fast way to do this */
+  min_x = MIN (MIN (ret[0].x, ret[1].x), MIN (ret[2].x, ret[3].x));
+  min_y = MIN (MIN (ret[0].y, ret[1].y), MIN (ret[2].y, ret[3].y));
+
+  max_x = MAX (MAX (ret[0].x, ret[1].x), MAX (ret[2].x, ret[3].x));
+  max_y = MAX (MAX (ret[0].y, ret[1].y), MAX (ret[2].y, ret[3].y));
+
+  graphene_rect_init (res, min_x, min_y, max_x - min_x, max_y - min_y);
+}
