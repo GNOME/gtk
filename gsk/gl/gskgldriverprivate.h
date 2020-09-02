@@ -45,6 +45,8 @@ int             gsk_gl_driver_create_texture            (GskGLDriver     *driver
 void            gsk_gl_driver_create_render_target      (GskGLDriver     *driver,
                                                          int              width,
                                                          int              height,
+                                                         int              min_filter,
+                                                         int              mag_filter,
                                                          int             *out_texture_id,
                                                          int             *out_render_target_id);
 void            gsk_gl_driver_mark_texture_permanent    (GskGLDriver     *self,
