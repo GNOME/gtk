@@ -32,7 +32,10 @@ Overview of Changes in GTK 3.99.1
 
 * GtkButton: Simplify the button hierarchy; GtkRadioButton
   is gone, GtkCheckButton and GtkToggleButton can be grouped
-  now
+
+* list widgets:
+ - Change apis to make models explicitly GtkSelectionModel
+ - Simplify constructors
 
 * CSS:
  - Hexadecimal colors can now specify alpha
@@ -43,6 +46,9 @@ Overview of Changes in GTK 3.99.1
  - Drop the style class defines. Just use string literals
  - Round the corners of frames
  - Make circular buttons square
+
+* GL renderer:
+ - Fix clipping with projective transforms
 
 * Documentation:
  - Refresh the widget gallery

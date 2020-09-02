@@ -9370,8 +9370,8 @@ gtk_widget_do_pick (GtkWidget    *widget,
               gsk_transform_unref (transform);
               graphene_point3d_init (&p0, x, y, 0);
               graphene_point3d_init (&p1, x, y, 1);
-              gsk_matrix_transform_point3d (&inv, &p0, &p0);
-              gsk_matrix_transform_point3d (&inv, &p1, &p1);
+              graphene_matrix_transform_point3d (&inv, &p0, &p0);
+              graphene_matrix_transform_point3d (&inv, &p1, &p1);
               if (fabs (p0.z - p1.z) < 1.f / 4096)
                 continue;
 

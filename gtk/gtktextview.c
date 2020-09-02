@@ -9623,6 +9623,7 @@ gtk_text_view_insert_emoji (GtkTextView *text_view)
   GtkWidget *chooser;
   GtkTextIter iter;
   GdkRectangle rect;
+  GdkRectangle rect2;
   GtkTextBuffer *buffer;
 
   if (gtk_widget_get_ancestor (GTK_WIDGET (text_view), GTK_TYPE_EMOJI_CHOOSER) != NULL)
@@ -9636,9 +9637,11 @@ gtk_text_view_insert_emoji (GtkTextView *text_view)
 
       gtk_widget_set_parent (chooser, GTK_WIDGET (text_view));
       g_signal_connect (chooser, "emoji-picked", G_CALLBACK (emoji_picked), text_view);
+      g_signal_connect_swapped (chooser, "hide", G_CALLBACK (gtk_widget_grab_focus), text_view);
     }
 
   buffer = get_buffer (text_view);
+
   gtk_text_buffer_get_iter_at_mark (buffer, &iter,
                                     gtk_text_buffer_get_insert (buffer));
 
@@ -9646,6 +9649,18 @@ gtk_text_view_insert_emoji (GtkTextView *text_view)
   gtk_text_view_buffer_to_window_coords (text_view, GTK_TEXT_WINDOW_TEXT,
                                          rect.x, rect.y, &rect.x, &rect.y);
   _text_window_to_widget_coords (text_view, &rect.x, &rect.y);
+  gtk_text_view_get_visible_rect (text_view, &rect2);
+  gtk_text_view_buffer_to_window_coords (text_view, GTK_TEXT_WINDOW_TEXT,
+                                         rect2.x, rect2.y, &rect2.x, &rect2.y);
+  _text_window_to_widget_coords (text_view, &rect2.x, &rect2.y);
+
+  if (!gdk_rectangle_intersect (&rect2, &rect, &rect))
+    {
+      rect.x = rect2.width / 2;
+      rect.y = rect2.height / 2;
+      rect.width = 0;
+      rect.height = 0;
+    }
 
   gtk_popover_set_pointing_to (GTK_POPOVER (chooser), &rect);
 
