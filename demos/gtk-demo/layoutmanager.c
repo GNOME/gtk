@@ -1,10 +1,11 @@
 /* Layout Manager
  *
- * This examples shows a simple example of a custom layout manager
+ * This demo shows a simple example of a custom layout manager
  * and a widget using it. The layout manager places the children
- * of the widget in a grid or a circle, or something in between.
+ * of the widget in a grid or a circle.
  *
  * The widget is animating the transition between the two layouts.
+ *
  * Click to start the transition.
  */
 
@@ -32,7 +33,7 @@ do_layoutmanager (GtkWidget *parent)
       int i;
 
       window = gtk_window_new ();
-      gtk_window_set_title (GTK_WINDOW (window), "Layout Manager");
+      gtk_window_set_title (GTK_WINDOW (window), "Layout Manager—Transition");
       gtk_window_set_default_size (GTK_WINDOW (window), 600, 600);
       g_object_add_weak_pointer (G_OBJECT (window), (gpointer *)&window);
 
