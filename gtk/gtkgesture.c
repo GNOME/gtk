@@ -891,7 +891,7 @@ gtk_gesture_class_init (GtkGestureClass *klass)
   /**
    * GtkGesture::begin:
    * @gesture: the object which received the signal
-   * @sequence: the #GdkEventSequence that made the gesture to be recognized
+   * @sequence: (nullable): the #GdkEventSequence that made the gesture to be recognized
    *
    * This signal is emitted when the gesture is recognized. This means the
    * number of touch sequences matches #GtkGesture:n-points, and the #GtkGesture::check
@@ -913,7 +913,7 @@ gtk_gesture_class_init (GtkGestureClass *klass)
   /**
    * GtkGesture::end:
    * @gesture: the object which received the signal
-   * @sequence: the #GdkEventSequence that made gesture recognition to finish
+   * @sequence: (nullable): the #GdkEventSequence that made gesture recognition to finish
    *
    * This signal is emitted when @gesture either stopped recognizing the event
    * sequences as something to be handled (the #GtkGesture::check handler returned
@@ -937,7 +937,7 @@ gtk_gesture_class_init (GtkGestureClass *klass)
   /**
    * GtkGesture::update:
    * @gesture: the object which received the signal
-   * @sequence: the #GdkEventSequence that was updated
+   * @sequence: (nullable): the #GdkEventSequence that was updated
    *
    * This signal is emitted whenever an event is handled while the gesture is
    * recognized. @sequence is guaranteed to pertain to the set of active touches.
@@ -954,7 +954,7 @@ gtk_gesture_class_init (GtkGestureClass *klass)
   /**
    * GtkGesture::cancel:
    * @gesture: the object which received the signal
-   * @sequence: the #GdkEventSequence that was cancelled
+   * @sequence: (nullable): the #GdkEventSequence that was cancelled
    *
    * This signal is emitted whenever a sequence is cancelled. This usually
    * happens on active touches when gtk_event_controller_reset() is called
@@ -975,7 +975,7 @@ gtk_gesture_class_init (GtkGestureClass *klass)
   /**
    * GtkGesture::sequence-state-changed:
    * @gesture: the object which received the signal
-   * @sequence: the #GdkEventSequence that was cancelled
+   * @sequence: (nullable): the #GdkEventSequence that was cancelled
    * @state: the new sequence state
    *
    * This signal is emitted whenever a sequence state changes. See
