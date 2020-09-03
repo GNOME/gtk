@@ -1,3 +1,39 @@
+Overview of Changes in GTK+ 3.24.23
+===================================
+
+* Adwaita:
+ - Support error states for labels and entries
+
+* Printing:
+ - Use the correct names for remote printers
+
+* File choser:
+ - Default to tracker2 for search to prevent
+   symbol clashes in tracker-using applications
+
+* Wayland:
+ - Support newer schemas for settings
+ - Fix DND hotspot handling
+ - Disconnect on display close
+
+* X11:
+ - Fix a possible crash with disabled devices
+
+* Translation updates:
+ Basque
+ Chinese (China)
+ Croatian
+ Dutch
+ Finnish
+ Friulian
+ Galician
+ Hungarian
+ Japanese
+ Korean
+ Portuguese
+ Serbian
+
+
 Overview of Changes in GTK+ 3.24.22
 ===================================
 
