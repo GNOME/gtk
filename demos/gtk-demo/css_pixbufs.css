@@ -51,14 +51,14 @@
 }
 
 window {
-    background-image: url("resource://css_pixbufs/apple-red.png"),
-                      url("resource://css_pixbufs/gnome-applets.png"),
-                      url("resource://css_pixbufs/gnome-calendar.png"),
-                      url("resource://css_pixbufs/gnome-foot.png"),
-                      url("resource://css_pixbufs/gnome-gmush.png"),
-                      url("resource://css_pixbufs/gnome-gimp.png"),
-                      url("resource://css_pixbufs/gnome-gsame.png"),
-                      url("resource://css_pixbufs/gnu-keys.png"),
+    background-image: url("resource://css_pixbufs/images/apple-red.png"),
+                      url("resource://css_pixbufs/images/gnome-applets.png"),
+                      url("resource://css_pixbufs/images/gnome-calendar.png"),
+                      url("resource://css_pixbufs/images/gnome-foot.png"),
+                      url("resource://css_pixbufs/images/gnome-gmush.png"),
+                      url("resource://css_pixbufs/images/gnome-gimp.png"),
+                      url("resource://css_pixbufs/images/gnome-gsame.png"),
+                      url("resource://css_pixbufs/images/gnu-keys.png"),
                       url("resource://css_pixbufs/background.jpg");
     background-position: 50.00% 75.00%, 67.68% 67.68%, 75.00% 50.00%, 67.68% 32.32%, 50.00% 25.00%, 32.32% 32.32%, 25.00% 50.00%, 32.32% 67.68%, 0% 0%;
     background-repeat: no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, repeat;

@@ -15,6 +15,10 @@
   border: 1px solid;
 }
 
+window {
+  background-color: white;
+}
+
 /* Make sure selections are visible */
 selection {
   background-color: darkGreen;

@@ -180,10 +180,10 @@ update_clicked (GtkButton *button, GtkLockButton *lockbutton)
 
   permission = gtk_lock_button_get_permission (lockbutton);
 
-  allowed = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (allowed_button));
-  can_acquire = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (can_acquire_button));
-  can_release = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (can_release_button));
-  success = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (success_button));
+  allowed = gtk_check_button_get_active (GTK_CHECK_BUTTON (allowed_button));
+  can_acquire = gtk_check_button_get_active (GTK_CHECK_BUTTON (can_acquire_button));
+  can_release = gtk_check_button_get_active (GTK_CHECK_BUTTON (can_release_button));
+  success = gtk_check_button_get_active (GTK_CHECK_BUTTON (success_button));
   g_permission_impl_update (permission, allowed, can_acquire, can_release);
   g_test_permission_set_success (G_TEST_PERMISSION (permission), success);
 }
@@ -202,9 +202,9 @@ permission_changed (GPermission *permission,
                 "can-release", &can_release,
                 NULL);
 
-  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (allowed_button), allowed);
-  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (can_acquire_button), can_acquire);
-  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (can_release_button), can_release);
+  gtk_check_button_set_active (GTK_CHECK_BUTTON (allowed_button), allowed);
+  gtk_check_button_set_active (GTK_CHECK_BUTTON (can_acquire_button), can_acquire);
+  gtk_check_button_set_active (GTK_CHECK_BUTTON (can_release_button), can_release);
 
   gtk_widget_set_sensitive (content, allowed);
 }

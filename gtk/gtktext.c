@@ -6825,6 +6825,7 @@ gtk_text_insert_emoji (GtkText *self)
 
       gtk_widget_set_parent (chooser, GTK_WIDGET (self));
       g_signal_connect (chooser, "emoji-picked", G_CALLBACK (emoji_picked), self);
+      g_signal_connect_swapped (chooser, "hide", G_CALLBACK (gtk_widget_grab_focus), self);
     }
 
   gtk_popover_popup (GTK_POPOVER (chooser));

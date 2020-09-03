@@ -667,7 +667,7 @@ testcase_save_clicked_cb (GtkWidget        *button,
   png_file = g_build_filename (source_dir, png_file_name, NULL);
   g_free (png_file_name);
 
-  if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (self->testcase_cairo_checkbutton)))
+  if (gtk_check_button_get_active (GTK_CHECK_BUTTON (self->testcase_cairo_checkbutton)))
     texture = create_cairo_texture (self);
   else
     texture = create_texture (self);

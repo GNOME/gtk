@@ -598,3 +598,12 @@ gtk_action_helper_activate (GtkActionHelper *helper)
                                     helper->action_name,
                                     helper->target);
 }
+
+GtkButtonRole
+gtk_action_helper_get_role (GtkActionHelper *helper)
+{
+  g_return_val_if_fail (GTK_IS_ACTION_HELPER (helper), GTK_BUTTON_ROLE_NORMAL);
+
+  return helper->role;
+}
+

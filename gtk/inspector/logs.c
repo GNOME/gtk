@@ -29,7 +29,7 @@
 #include "gtktextview.h"
 #include "gtkmessagedialog.h"
 #include "gtkfilechooserdialog.h"
-#include "gtktogglebutton.h"
+#include "gtkcheckbutton.h"
 #include "gtklabel.h"
 #include "gtktooltip.h"
 #include "gtktextiter.h"
@@ -112,7 +112,7 @@ update_flag (GtkWidget *widget,
              guint     *flags,
              guint      flag)
 {
-  if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget)))
+  if (gtk_check_button_get_active (GTK_CHECK_BUTTON (widget)))
     *flags = *flags | flag;
   else
     *flags = *flags & ~flag;

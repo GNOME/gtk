@@ -25,7 +25,7 @@
 #include "gtkintl.h"
 #include "gtkprivate.h"
 #include "gtksorterprivate.h"
-#include "gtktimsortprivate.h"
+#include "timsort/gtktimsortprivate.h"
 
 /* The maximum amount of items to merge for a single merge step
  *

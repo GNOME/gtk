@@ -26,8 +26,7 @@
 
 #include "gtkbutton.h"
 #include "gtkscrolledwindow.h"
-#include "gtktogglebutton.h"
-#include "gtkradiobutton.h"
+#include "gtkcheckbutton.h"
 #include "gtklabel.h"
 #include "gtkgrid.h"
 #include "gtkcelllayout.h"
@@ -80,6 +79,8 @@ struct _GtkPageSetupUnixDialog
   GtkPrinter *request_details_printer;
 
   GtkPrintSettings *print_settings;
+
+  gboolean internal_change;
 
   /* Save last setup so we can re-set it after selecting manage custom sizes */
   GtkPageSetup *last_setup;
@@ -273,6 +274,7 @@ gtk_page_setup_unix_dialog_init (GtkPageSetupUnixDialog *dialog)
   GtkFilter *filter;
   GtkPageSetup *page_setup;
 
+  dialog->internal_change = TRUE;
   dialog->print_backends = NULL;
 
   gtk_widget_init_template (GTK_WIDGET (dialog));
@@ -337,6 +339,7 @@ gtk_page_setup_unix_dialog_init (GtkPageSetupUnixDialog *dialog)
   /* Load data */
   gtk_print_load_custom_papers (dialog->custom_paper_list);
   load_print_backends (dialog);
+  dialog->internal_change = FALSE;
 }
 
 static void
@@ -638,11 +641,19 @@ custom_paper_dialog_response_cb (GtkDialog *custom_paper_dialog,
                                  gpointer   user_data)
 {
   GtkPageSetupUnixDialog *dialog = GTK_PAGE_SETUP_UNIX_DIALOG (user_data);
+  GtkPageSetup *last_page_setup;
 
+  dialog->internal_change = TRUE;
   gtk_print_load_custom_papers (dialog->custom_paper_list);
-
-  /* Update printer page list */
   printer_changed_callback (GTK_DROP_DOWN (dialog->printer_combo), NULL, dialog);
+  dialog->internal_change = FALSE;
+
+  if (dialog->last_setup)
+    last_page_setup = g_object_ref (dialog->last_setup);
+  else
+    last_page_setup = gtk_page_setup_new (); /* "good" default */
+  set_paper_size (dialog, last_page_setup, FALSE, TRUE);
+  g_object_unref (last_page_setup);
 
   gtk_window_destroy (GTK_WINDOW (custom_paper_dialog));
 }
@@ -659,6 +670,9 @@ paper_size_changed (GtkDropDown            *combo_box,
   char *top, *bottom, *left, *right;
   GtkLabel *label;
   const char *unit_str;
+
+  if (dialog->internal_change)
+    return;
 
   label = GTK_LABEL (dialog->paper_size_label);
 
@@ -780,11 +794,11 @@ gtk_page_setup_unix_dialog_new (const char *title,
 static GtkPageOrientation
 get_orientation (GtkPageSetupUnixDialog *dialog)
 {
-  if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (dialog->portrait_radio)))
+  if (gtk_check_button_get_active (GTK_CHECK_BUTTON (dialog->portrait_radio)))
     return GTK_PAGE_ORIENTATION_PORTRAIT;
-  if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (dialog->landscape_radio)))
+  if (gtk_check_button_get_active (GTK_CHECK_BUTTON (dialog->landscape_radio)))
     return GTK_PAGE_ORIENTATION_LANDSCAPE;
-  if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (dialog->reverse_landscape_radio)))
+  if (gtk_check_button_get_active (GTK_CHECK_BUTTON (dialog->reverse_landscape_radio)))
     return GTK_PAGE_ORIENTATION_REVERSE_LANDSCAPE;
   return GTK_PAGE_ORIENTATION_REVERSE_PORTRAIT;
 }
@@ -796,16 +810,16 @@ set_orientation (GtkPageSetupUnixDialog *dialog,
   switch (orientation)
     {
     case GTK_PAGE_ORIENTATION_REVERSE_PORTRAIT:
-      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (dialog->reverse_portrait_radio), TRUE);
+      gtk_check_button_set_active (GTK_CHECK_BUTTON (dialog->reverse_portrait_radio), TRUE);
       break;
     case GTK_PAGE_ORIENTATION_PORTRAIT:
-      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (dialog->portrait_radio), TRUE);
+      gtk_check_button_set_active (GTK_CHECK_BUTTON (dialog->portrait_radio), TRUE);
       break;
     case GTK_PAGE_ORIENTATION_LANDSCAPE:
-      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (dialog->landscape_radio), TRUE);
+      gtk_check_button_set_active (GTK_CHECK_BUTTON (dialog->landscape_radio), TRUE);
       break;
     case GTK_PAGE_ORIENTATION_REVERSE_LANDSCAPE:
-      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (dialog->reverse_landscape_radio), TRUE);
+      gtk_check_button_set_active (GTK_CHECK_BUTTON (dialog->reverse_landscape_radio), TRUE);
       break;
     default:
       break;

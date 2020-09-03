@@ -32,7 +32,7 @@
 #include "gtkimage.h"
 #include "gtklabel.h"
 #include "gtkliststore.h"
-#include "gtkradiobutton.h"
+#include "gtkcheckbutton.h"
 #include "gtkgrid.h"
 #include "gtktogglebutton.h"
 #include "gtkorientable.h"
@@ -867,23 +867,13 @@ radio_changed_cb (GtkWidget              *button,
 {
   GtkPrinterOptionWidgetPrivate *priv = widget->priv;
   char *value;
-  
+ 
   g_signal_handler_block (priv->source, priv->source_changed_handler);
   value = g_object_get_data (G_OBJECT (button), "value");
   if (value)
     gtk_printer_option_set (priv->source, value);
   g_signal_handler_unblock (priv->source, priv->source_changed_handler);
   emit_changed (widget);
-}
-
-static void
-select_maybe (GtkWidget   *widget, 
-	      const char *value)
-{
-  char *v = g_object_get_data (G_OBJECT (widget), "value");
-      
-  if (strcmp (value, v) == 0)
-    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), TRUE);
 }
 
 static void
@@ -895,28 +885,37 @@ alternative_set (GtkWidget   *box,
   for (child = gtk_widget_get_first_child (box);
        child != NULL;
        child = gtk_widget_get_next_sibling (child))
-    select_maybe (child, value);
+    {
+      char *v = g_object_get_data (G_OBJECT (child), "value");
+
+      if (strcmp (value, v) == 0)
+        {
+          gtk_check_button_set_active (GTK_CHECK_BUTTON (child), TRUE);
+          break;
+        }
+    }
 }
 
-static GSList *
+static void
 alternative_append (GtkWidget              *box,
 		    const char             *label,
                     const char             *value,
 		    GtkPrinterOptionWidget *widget,
-		    GSList                 *group)
+		    GtkWidget              **group)
 {
   GtkWidget *button;
 
-  button = gtk_radio_button_new_with_label (group, label);
-  gtk_widget_show (button);
+  button = gtk_check_button_new_with_label (label);
+  if (*group)
+    gtk_check_button_set_group (GTK_CHECK_BUTTON (button), GTK_CHECK_BUTTON (*group));
+  else
+    *group = button;
+
   gtk_widget_set_valign (button, GTK_ALIGN_BASELINE);
   gtk_box_append (GTK_BOX (box), button);
 
   g_object_set_data (G_OBJECT (button), "value", (gpointer)value);
-  g_signal_connect (button, "toggled",
-		    G_CALLBACK (radio_changed_cb), widget);
-
-  return gtk_radio_button_get_group (GTK_RADIO_BUTTON (button));
+  g_signal_connect (button, "toggled", G_CALLBACK (radio_changed_cb), widget);
 }
 
 static void
@@ -926,7 +925,7 @@ construct_widgets (GtkPrinterOptionWidget *widget)
   GtkPrinterOption *source;
   char *text;
   int i;
-  GSList *group;
+  GtkWidget *group;
 
   source = priv->source;
   
@@ -1000,14 +999,14 @@ construct_widgets (GtkPrinterOptionWidget *widget)
       gtk_box_append (GTK_BOX (widget), priv->box);
       for (i = 0; i < source->num_choices; i++)
         {
-	  group = alternative_append (priv->box,
-                                      source->choices_display[i],
-                                      source->choices[i],
-                                      widget,
-                                      group);
+          alternative_append (priv->box,
+                              source->choices_display[i],
+                              source->choices[i],
+                              widget,
+                              &group);
           /* for mnemonic activation */
           if (i == 0)
-            priv->button = group->data;
+            priv->button = group;
         }
 
       if (source->display_text)
@@ -1124,9 +1123,9 @@ update_widgets (GtkPrinterOptionWidget *widget)
     {
     case GTK_PRINTER_OPTION_TYPE_BOOLEAN:
       if (g_ascii_strcasecmp (source->value, "True") == 0)
-	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (priv->check), TRUE);
+	gtk_check_button_set_active (GTK_CHECK_BUTTON (priv->check), TRUE);
       else
-	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (priv->check), FALSE);
+	gtk_check_button_set_active (GTK_CHECK_BUTTON (priv->check), FALSE);
       break;
     case GTK_PRINTER_OPTION_TYPE_PICKONE:
       combo_box_set (priv->combo, source->value);

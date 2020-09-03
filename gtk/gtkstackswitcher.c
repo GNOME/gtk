@@ -27,9 +27,9 @@
 #include "gtkintl.h"
 #include "gtklabel.h"
 #include "gtkprivate.h"
-#include "gtkradiobutton.h"
 #include "gtkselectionmodel.h"
 #include "gtkstylecontext.h"
+#include "gtktogglebutton.h"
 #include "gtktypebuiltins.h"
 #include "gtkwidgetprivate.h"
 

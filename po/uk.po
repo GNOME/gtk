@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-08-22 11:48+0000\n"
-"PO-Revision-Date: 2020-08-22 19:29+0300\n"
+"POT-Creation-Date: 2020-08-30 22:02+0000\n"
+"PO-Revision-Date: 2020-08-31 09:12+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -1023,7 +1023,7 @@ msgstr "Причину не вказано"
 msgid "%s does not exist in the bookmarks list"
 msgstr "%s немає у списку закладок"
 
-#: gtk/gtkbookmarksmanager.c:406
+#: gtk/gtkbookmarksmanager.c:412
 #, c-format
 msgid "%s already exists in the bookmarks list"
 msgstr "%s вже є у списку закладок"
@@ -1140,188 +1140,188 @@ msgstr "%d %%"
 msgid "Pick a Color"
 msgstr "Вибір кольору"
 
-#: gtk/gtkcolorchooserwidget.c:382
+#: gtk/gtkcolorchooserwidget.c:383
 msgctxt "Color name"
 msgid "Light Scarlet Red"
 msgstr "Світло яскраво-червоний"
 
-#: gtk/gtkcolorchooserwidget.c:383
+#: gtk/gtkcolorchooserwidget.c:384
 msgctxt "Color name"
 msgid "Scarlet Red"
 msgstr "Яскраво-червоний"
 
-#: gtk/gtkcolorchooserwidget.c:384
+#: gtk/gtkcolorchooserwidget.c:385
 msgctxt "Color name"
 msgid "Dark Scarlet Red"
 msgstr "Темний яскраво-червоний"
 
-#: gtk/gtkcolorchooserwidget.c:385
+#: gtk/gtkcolorchooserwidget.c:386
 msgctxt "Color name"
 msgid "Light Orange"
 msgstr "Світло-жовтогарячий"
 
-#: gtk/gtkcolorchooserwidget.c:386
+#: gtk/gtkcolorchooserwidget.c:387
 msgctxt "Color name"
 msgid "Orange"
 msgstr "Жовтогарячий"
 
-#: gtk/gtkcolorchooserwidget.c:387
+#: gtk/gtkcolorchooserwidget.c:388
 msgctxt "Color name"
 msgid "Dark Orange"
 msgstr "Темно-жовтогарячий"
 
-#: gtk/gtkcolorchooserwidget.c:388
+#: gtk/gtkcolorchooserwidget.c:389
 msgctxt "Color name"
 msgid "Light Butter"
 msgstr "Світло-масляний"
 
-#: gtk/gtkcolorchooserwidget.c:389
+#: gtk/gtkcolorchooserwidget.c:390
 msgctxt "Color name"
 msgid "Butter"
 msgstr "Масляний"
 
-#: gtk/gtkcolorchooserwidget.c:390
+#: gtk/gtkcolorchooserwidget.c:391
 msgctxt "Color name"
 msgid "Dark Butter"
 msgstr "Темно-масляний"
 
-#: gtk/gtkcolorchooserwidget.c:391
+#: gtk/gtkcolorchooserwidget.c:392
 msgctxt "Color name"
 msgid "Light Chameleon"
 msgstr "Світло-хамелеоновий"
 
-#: gtk/gtkcolorchooserwidget.c:392
+#: gtk/gtkcolorchooserwidget.c:393
 msgctxt "Color name"
 msgid "Chameleon"
 msgstr "Хамелеоновий"
 
-#: gtk/gtkcolorchooserwidget.c:393
+#: gtk/gtkcolorchooserwidget.c:394
 msgctxt "Color name"
 msgid "Dark Chameleon"
 msgstr "Темно-хамелеоновий"
 
-#: gtk/gtkcolorchooserwidget.c:394
+#: gtk/gtkcolorchooserwidget.c:395
 msgctxt "Color name"
 msgid "Light Sky Blue"
 msgstr "Світло-блакитний"
 
-#: gtk/gtkcolorchooserwidget.c:395
+#: gtk/gtkcolorchooserwidget.c:396
 msgctxt "Color name"
 msgid "Sky Blue"
 msgstr "Блакитний"
 
-#: gtk/gtkcolorchooserwidget.c:396
+#: gtk/gtkcolorchooserwidget.c:397
 msgctxt "Color name"
 msgid "Dark Sky Blue"
 msgstr "Темно-блакитний"
 
-#: gtk/gtkcolorchooserwidget.c:397
+#: gtk/gtkcolorchooserwidget.c:398
 msgctxt "Color name"
 msgid "Light Plum"
 msgstr "Світло-сливовий"
 
-#: gtk/gtkcolorchooserwidget.c:398
+#: gtk/gtkcolorchooserwidget.c:399
 msgctxt "Color name"
 msgid "Plum"
 msgstr "Сливовий"
 
-#: gtk/gtkcolorchooserwidget.c:399
+#: gtk/gtkcolorchooserwidget.c:400
 msgctxt "Color name"
 msgid "Dark Plum"
 msgstr "Темно-сливовий"
 
-#: gtk/gtkcolorchooserwidget.c:400
+#: gtk/gtkcolorchooserwidget.c:401
 msgctxt "Color name"
 msgid "Light Chocolate"
 msgstr "Світло-шоколадний"
 
-#: gtk/gtkcolorchooserwidget.c:401
+#: gtk/gtkcolorchooserwidget.c:402
 msgctxt "Color name"
 msgid "Chocolate"
 msgstr "Шоколадний"
 
-#: gtk/gtkcolorchooserwidget.c:402
+#: gtk/gtkcolorchooserwidget.c:403
 msgctxt "Color name"
 msgid "Dark Chocolate"
 msgstr "Темно-шоколадний"
 
-#: gtk/gtkcolorchooserwidget.c:403
+#: gtk/gtkcolorchooserwidget.c:404
 msgctxt "Color name"
 msgid "Light Aluminum 1"
 msgstr "Світло-алюмінієвий 1"
 
-#: gtk/gtkcolorchooserwidget.c:404
+#: gtk/gtkcolorchooserwidget.c:405
 msgctxt "Color name"
 msgid "Aluminum 1"
 msgstr "Алюмінієвий 1"
 
-#: gtk/gtkcolorchooserwidget.c:405
+#: gtk/gtkcolorchooserwidget.c:406
 msgctxt "Color name"
 msgid "Dark Aluminum 1"
 msgstr "Темно-алюмінієвий 1"
 
-#: gtk/gtkcolorchooserwidget.c:406
+#: gtk/gtkcolorchooserwidget.c:407
 msgctxt "Color name"
 msgid "Light Aluminum 2"
 msgstr "Світло-алюмінієвий 2"
 
-#: gtk/gtkcolorchooserwidget.c:407
+#: gtk/gtkcolorchooserwidget.c:408
 msgctxt "Color name"
 msgid "Aluminum 2"
 msgstr "Алюмінієвий 2"
 
-#: gtk/gtkcolorchooserwidget.c:408
+#: gtk/gtkcolorchooserwidget.c:409
 msgctxt "Color name"
 msgid "Dark Aluminum 2"
 msgstr "Темно-алюмінієвий 2"
 
-#: gtk/gtkcolorchooserwidget.c:422
+#: gtk/gtkcolorchooserwidget.c:423
 msgctxt "Color name"
 msgid "Black"
 msgstr "Чорний"
 
-#: gtk/gtkcolorchooserwidget.c:423
+#: gtk/gtkcolorchooserwidget.c:424
 msgctxt "Color name"
 msgid "Very Dark Gray"
 msgstr "Дуже темно-сірий"
 
-#: gtk/gtkcolorchooserwidget.c:424
+#: gtk/gtkcolorchooserwidget.c:425
 msgctxt "Color name"
 msgid "Darker Gray"
 msgstr "Претемний сірий"
 
-#: gtk/gtkcolorchooserwidget.c:425
+#: gtk/gtkcolorchooserwidget.c:426
 msgctxt "Color name"
 msgid "Dark Gray"
 msgstr "Темно-сірий"
 
-#: gtk/gtkcolorchooserwidget.c:426
+#: gtk/gtkcolorchooserwidget.c:427
 msgctxt "Color name"
 msgid "Medium Gray"
 msgstr "Сірий"
 
-#: gtk/gtkcolorchooserwidget.c:427
+#: gtk/gtkcolorchooserwidget.c:428
 msgctxt "Color name"
 msgid "Light Gray"
 msgstr "Світло-сірий"
 
-#: gtk/gtkcolorchooserwidget.c:428
+#: gtk/gtkcolorchooserwidget.c:429
 msgctxt "Color name"
 msgid "Lighter Gray"
 msgstr "Пресвітло-сірий"
 
-#: gtk/gtkcolorchooserwidget.c:429
+#: gtk/gtkcolorchooserwidget.c:430
 msgctxt "Color name"
 msgid "Very Light Gray"
 msgstr "Дуже світло-сірий"
 
-#: gtk/gtkcolorchooserwidget.c:430
+#: gtk/gtkcolorchooserwidget.c:431
 msgctxt "Color name"
 msgid "White"
 msgstr "Білий"
 
 #. translators: label for the custom section in the color chooser
-#: gtk/gtkcolorchooserwidget.c:511
+#: gtk/gtkcolorchooserwidget.c:512
 msgid "Custom"
 msgstr "Власний"
 
@@ -1344,15 +1344,15 @@ msgid "Margins from Printer…"
 msgstr "Поля з принтера…"
 
 #. And show the custom paper dialog
-#: gtk/gtkcustompaperunixdialog.c:402 gtk/gtkprintunixdialog.c:2993
+#: gtk/gtkcustompaperunixdialog.c:402 gtk/gtkprintunixdialog.c:2992
 msgid "Manage Custom Sizes"
 msgstr "Керування власними розмірами"
 
-#: gtk/gtkcustompaperunixdialog.c:466 gtk/gtkpagesetupunixdialog.c:704
+#: gtk/gtkcustompaperunixdialog.c:466 gtk/gtkpagesetupunixdialog.c:719
 msgid "inch"
 msgstr "дюйми"
 
-#: gtk/gtkcustompaperunixdialog.c:468 gtk/gtkpagesetupunixdialog.c:702
+#: gtk/gtkcustompaperunixdialog.c:468 gtk/gtkpagesetupunixdialog.c:717
 msgid "mm"
 msgstr "мм"
 
@@ -1476,7 +1476,7 @@ msgstr "Файл з такою назвою вже існує"
 #: gtk/gtkfilechoosernative.c:505 gtk/gtkfilechoosernative.c:576
 #: gtk/gtkfilechooserwidget.c:1212 gtk/gtkfilechooserwidget.c:5755
 #: gtk/gtkmessagedialog.c:742 gtk/gtkmessagedialog.c:751
-#: gtk/gtkmountoperation.c:608 gtk/gtkpagesetupunixdialog.c:281
+#: gtk/gtkmountoperation.c:608 gtk/gtkpagesetupunixdialog.c:284
 #: gtk/gtkprintbackend.c:643 gtk/gtkprinteroptionwidget.c:713
 #: gtk/gtkprintunixdialog.c:627 gtk/gtkprintunixdialog.c:782
 #: gtk/gtkwindow.c:6649 gtk/inspector/css-editor.c:248
@@ -1570,7 +1570,7 @@ msgid "If you delete an item, it will be permanently lost."
 msgstr "Якщо вилучити об'єкт, його буде втрачено назавжди."
 
 #: gtk/gtkfilechooserwidget.c:1213 gtk/gtkfilechooserwidget.c:1829
-#: gtk/gtklabel.c:5423 gtk/gtktext.c:5945 gtk/gtktextview.c:8558
+#: gtk/gtklabel.c:5423 gtk/gtktext.c:5969 gtk/gtktextview.c:8558
 msgid "_Delete"
 msgstr "В_илучити"
 
@@ -1742,7 +1742,6 @@ msgstr "Електронна таблиця"
 #. Translators: We don't know whether this printer is
 #. * available to print to.
 #: gtk/gtkfilechooserwidget.c:4349 gtk/gtkfilechooserwidget.c:4536
-#: gtk/inspector/prop-editor.c:1468
 #: modules/printbackends/gtkprintbackendcloudprint.c:729
 msgid "Unknown"
 msgstr "Невідомо"
@@ -1791,51 +1790,51 @@ msgctxt "font"
 msgid "None"
 msgstr "Немає"
 
-#: gtk/gtkfontchooserwidget.c:1071
+#: gtk/gtkfontchooserwidget.c:1111
 msgid "Width"
 msgstr "Ширина"
 
-#: gtk/gtkfontchooserwidget.c:1072
+#: gtk/gtkfontchooserwidget.c:1112
 msgid "Weight"
 msgstr "Вага"
 
-#: gtk/gtkfontchooserwidget.c:1073
+#: gtk/gtkfontchooserwidget.c:1113
 msgid "Italic"
 msgstr "Курсив"
 
-#: gtk/gtkfontchooserwidget.c:1074
+#: gtk/gtkfontchooserwidget.c:1114
 msgid "Slant"
 msgstr "Нахил"
 
-#: gtk/gtkfontchooserwidget.c:1075
+#: gtk/gtkfontchooserwidget.c:1115
 msgid "Optical Size"
 msgstr "Оптичний розмір"
 
-#: gtk/gtkfontchooserwidget.c:1613 gtk/inspector/prop-editor.c:1455
+#: gtk/gtkfontchooserwidget.c:1653
 msgid "Default"
 msgstr "Типово"
 
-#: gtk/gtkfontchooserwidget.c:1657
+#: gtk/gtkfontchooserwidget.c:1697
 msgid "Ligatures"
 msgstr "Лігатури"
 
-#: gtk/gtkfontchooserwidget.c:1658
+#: gtk/gtkfontchooserwidget.c:1698
 msgid "Letter Case"
 msgstr "Розмір літер"
 
-#: gtk/gtkfontchooserwidget.c:1659
+#: gtk/gtkfontchooserwidget.c:1699
 msgid "Number Case"
 msgstr "Розмір цифр"
 
-#: gtk/gtkfontchooserwidget.c:1660
+#: gtk/gtkfontchooserwidget.c:1700
 msgid "Number Spacing"
 msgstr "Інтервали між цифрами"
 
-#: gtk/gtkfontchooserwidget.c:1661
+#: gtk/gtkfontchooserwidget.c:1701
 msgid "Number Formatting"
 msgstr "Форматування чисел"
 
-#: gtk/gtkfontchooserwidget.c:1662
+#: gtk/gtkfontchooserwidget.c:1702
 msgid "Character Variants"
 msgstr "Варіанти символів"
 
@@ -1843,19 +1842,19 @@ msgstr "Варіанти символів"
 msgid "OpenGL context creation failed"
 msgstr "Не вдалося створити контекст OpenGL"
 
-#: gtk/gtklabel.c:5420 gtk/gtktext.c:5933 gtk/gtktextview.c:8546
+#: gtk/gtklabel.c:5420 gtk/gtktext.c:5957 gtk/gtktextview.c:8546
 msgid "Cu_t"
 msgstr "Ви_різати"
 
-#: gtk/gtklabel.c:5421 gtk/gtktext.c:5937 gtk/gtktextview.c:8550
+#: gtk/gtklabel.c:5421 gtk/gtktext.c:5961 gtk/gtktextview.c:8550
 msgid "_Copy"
 msgstr "_Копіювати"
 
-#: gtk/gtklabel.c:5422 gtk/gtktext.c:5941 gtk/gtktextview.c:8554
+#: gtk/gtklabel.c:5422 gtk/gtktext.c:5965 gtk/gtktextview.c:8554
 msgid "_Paste"
 msgstr "Вст_авити"
 
-#: gtk/gtklabel.c:5428 gtk/gtktext.c:5954 gtk/gtktextview.c:8579
+#: gtk/gtklabel.c:5428 gtk/gtktext.c:5978 gtk/gtktextview.c:8579
 msgid "Select _All"
 msgstr "Виді_лити все"
 
@@ -2093,23 +2092,23 @@ msgstr "Сторінка %u"
 msgid "Not a valid page setup file"
 msgstr "Некоректний файл налаштування друку"
 
-#: gtk/gtkpagesetupunixdialog.c:200 gtk/gtkprintunixdialog.c:712
+#: gtk/gtkpagesetupunixdialog.c:202 gtk/gtkprintunixdialog.c:712
 msgid "Manage Custom Sizes…"
 msgstr "Організувати власні розміри…"
 
-#: gtk/gtkpagesetupunixdialog.c:282 gtk/ui/gtkassistant.ui:98
+#: gtk/gtkpagesetupunixdialog.c:285 gtk/ui/gtkassistant.ui:98
 msgid "_Apply"
 msgstr "Заст_осувати"
 
-#: gtk/gtkpagesetupunixdialog.c:316 gtk/gtkpagesetupunixdialog.c:567
+#: gtk/gtkpagesetupunixdialog.c:319 gtk/gtkpagesetupunixdialog.c:571
 msgid "Any Printer"
 msgstr "Будь-який принтер"
 
-#: gtk/gtkpagesetupunixdialog.c:317
+#: gtk/gtkpagesetupunixdialog.c:320
 msgid "For portable documents"
 msgstr "Для портативних документів"
 
-#: gtk/gtkpagesetupunixdialog.c:722
+#: gtk/gtkpagesetupunixdialog.c:737
 #, c-format
 msgid ""
 "Margins:\n"
@@ -2124,7 +2123,7 @@ msgstr ""
 " Верхнє: %s %s\n"
 " Нижнє: %s %s"
 
-#: gtk/gtkpagesetupunixdialog.c:768 gtk/ui/gtkpagesetupunixdialog.ui:5
+#: gtk/gtkpagesetupunixdialog.c:783 gtk/ui/gtkpagesetupunixdialog.ui:5
 #: gtk/ui/gtkprintunixdialog.ui:711
 msgid "Page Setup"
 msgstr "Параметри сторінки"
@@ -2345,7 +2344,7 @@ msgstr "З_упинити багатодисковий пристрій"
 msgid "_Lock Device"
 msgstr "За_блокувати пристрій"
 
-#: gtk/gtkplacessidebar.c:3822 gtk/gtkplacesview.c:1105
+#: gtk/gtkplacessidebar.c:3821 gtk/gtkplacesview.c:1105
 msgid "Computer"
 msgstr "Комп'ютер"
 
@@ -2559,12 +2558,11 @@ msgstr "Найімовірніша причина: не вдалось ство�
 
 #. window
 #: gtk/gtkprintoperation-portal.c:236 gtk/gtkprintoperation-portal.c:554
-#: gtk/gtkprintoperation-portal.c:623 gtk/gtkprintunixdialog.c:3033
+#: gtk/gtkprintoperation-portal.c:623 gtk/gtkprintunixdialog.c:3032
 msgid "Print"
 msgstr "Друкувати"
 
 #: gtk/gtkprintoperation-unix.c:479 gtk/gtkprintoperation-win32.c:1503
-#: gtk/inspector/prop-editor.c:1465
 msgid "Application"
 msgstr "Програма"
 
@@ -2818,7 +2816,7 @@ msgstr "Спробуйте пошукати по-інакшому"
 msgid "Could not show link"
 msgstr "Не вдалось показати посилання"
 
-#: gtk/gtktext.c:5959 gtk/gtktextview.c:8584
+#: gtk/gtktext.c:5983 gtk/gtktextview.c:8584
 msgid "Insert _Emoji"
 msgstr "Вставити _емодзі"
 
@@ -2894,7 +2892,7 @@ msgid "Attribute"
 msgstr "Атрибут"
 
 #: gtk/inspector/a11y.ui:54 gtk/inspector/css-node-tree.ui:119
-#: gtk/inspector/prop-list.ui:56 gtk/inspector/recorder.ui:115
+#: gtk/inspector/prop-list.ui:56 gtk/inspector/recorder.ui:123
 msgid "Value"
 msgstr "Значення"
 
@@ -3113,8 +3111,8 @@ msgid "Surface"
 msgstr "Поверхня"
 
 #: gtk/inspector/misc-info.ui:316 gtk/inspector/misc-info.ui:355
-#: gtk/inspector/misc-info.ui:394 gtk/inspector/prop-editor.c:1039
-#: gtk/inspector/prop-editor.c:1396 gtk/inspector/window.ui:418
+#: gtk/inspector/misc-info.ui:394 gtk/inspector/prop-editor.c:1054
+#: gtk/inspector/prop-editor.c:1414 gtk/inspector/window.ui:418
 msgid "Properties"
 msgstr "Властивості"
 
@@ -3159,70 +3157,104 @@ msgstr "Видимі діти"
 msgid "Pointer: %p"
 msgstr "Принтер: %p"
 
-#: gtk/inspector/prop-editor.c:785
+#. Translators: %s is a type name, for example
+#. * GtkPropertyExpression with value \"2.5\"
+#.
+#: gtk/inspector/prop-editor.c:788
 #, c-format
 msgid "%s with value \"%s\""
 msgstr "%s зі значенням «%s»"
 
-#: gtk/inspector/prop-editor.c:793
+#. Translators: Both %s are type names, for example
+#. * GtkPropertyExpression with type GObject
+#.
+#: gtk/inspector/prop-editor.c:799
 #, c-format
 msgid "%s with type %s"
 msgstr "%s з типом %s"
 
-#: gtk/inspector/prop-editor.c:803
+#. Translators: Both %s are type names, for example
+#. * GtkObjectExpression for GtkStringObject 0x23456789
+#.
+#: gtk/inspector/prop-editor.c:812
 #, c-format
 msgid "%s for %s %p"
 msgstr "%s для %s %p"
 
-#: gtk/inspector/prop-editor.c:807
-#, c-format
-msgid "%s"
-msgstr "%s"
-
-#: gtk/inspector/prop-editor.c:827
+#. Translators: Both %s are type names, for example
+#. * GtkPropertyExpression with value type: gchararray
+#.
+#: gtk/inspector/prop-editor.c:842
 #, c-format
 msgid "%s with value type %s"
 msgstr "%s із типом значення %s"
 
-#: gtk/inspector/prop-editor.c:1107
+#: gtk/inspector/prop-editor.c:1122
 #, c-format
 msgid "Uneditable property type: %s"
 msgstr "Неможливо редагувати цей тип властивості: %s"
 
-#: gtk/inspector/prop-editor.c:1251
+#: gtk/inspector/prop-editor.c:1266
+#| msgid "None"
+msgctxt "column number"
 msgid "None"
 msgstr "Немає"
 
-#: gtk/inspector/prop-editor.c:1288
+#: gtk/inspector/prop-editor.c:1303
 msgid "Attribute:"
 msgstr "Атрибут:"
 
-#: gtk/inspector/prop-editor.c:1291
+#: gtk/inspector/prop-editor.c:1306
 msgid "Model"
 msgstr "Модель"
 
-#: gtk/inspector/prop-editor.c:1296
+#: gtk/inspector/prop-editor.c:1311
 msgid "Column:"
 msgstr "Стовпець:"
 
-#: gtk/inspector/prop-editor.c:1392
+#. Translators: %s is a type name, for example
+#. * Action from 0x2345678 (GtkApplicationWindow)
+#.
+#: gtk/inspector/prop-editor.c:1410
 #, c-format
 msgid "Action from: %p (%s)"
 msgstr "Джерело дії: %p (%s)"
 
-#: gtk/inspector/prop-editor.c:1447
+#: gtk/inspector/prop-editor.c:1465
 msgid "Reset"
 msgstr "Скинути"
 
-#: gtk/inspector/prop-editor.c:1458
+#: gtk/inspector/prop-editor.c:1473
+#| msgid "Default"
+msgctxt "GtkSettings source"
+msgid "Default"
+msgstr "Типове"
+
+#: gtk/inspector/prop-editor.c:1476
+#| msgid "Theme"
+msgctxt "GtkSettings source"
 msgid "Theme"
 msgstr "Тема"
 
-#: gtk/inspector/prop-editor.c:1461
+#: gtk/inspector/prop-editor.c:1479
+#| msgid "XSettings"
+msgctxt "GtkSettings source"
 msgid "XSettings"
 msgstr "XSettings"
 
-#: gtk/inspector/prop-editor.c:1471
+#: gtk/inspector/prop-editor.c:1483
+#| msgid "Application"
+msgctxt "GtkSettings source"
+msgid "Application"
+msgstr "Програма"
+
+#: gtk/inspector/prop-editor.c:1486
+#| msgid "Unknown"
+msgctxt "GtkSettings source"
+msgid "Unknown"
+msgstr "Невідоме"
+
+#: gtk/inspector/prop-editor.c:1489
 msgid "Source:"
 msgstr "Джерело:"
 
@@ -3247,11 +3279,15 @@ msgstr "Вилучити записані кадри"
 msgid "Add debug nodes"
 msgstr "Додати діагностичні вузли"
 
-#: gtk/inspector/recorder.ui:45
+#: gtk/inspector/recorder.ui:44
+msgid "Use a dark background"
+msgstr "Використовувати темне тло"
+
+#: gtk/inspector/recorder.ui:53
 msgid "Save selected node"
 msgstr "Зберегти позначений вузол"
 
-#: gtk/inspector/recorder.ui:102
+#: gtk/inspector/recorder.ui:110
 msgid "Property"
 msgstr "Властивість"
 
@@ -7194,564 +7230,3 @@ msgstr "Не знайдено профілю"
 #: modules/printbackends/gtkprintercups.c:298
 msgid "Unspecified profile"
 msgstr "Невизначений профіль"
-
-#~ msgid "bidirectional"
-#~ msgstr "двосторонній"
-
-#~ msgid "Setting:"
-#~ msgstr "Параметр:"
-
-#~ msgctxt "Action description"
-#~ msgid "Toggles the cell"
-#~ msgstr "Перемкнути комірку"
-
-#~ msgctxt "Action name"
-#~ msgid "Toggle"
-#~ msgstr "Перемкнути"
-
-#~ msgctxt "Action name"
-#~ msgid "Click"
-#~ msgstr "Натиснути"
-
-#~ msgctxt "Action description"
-#~ msgid "Clicks the button"
-#~ msgstr "Натиснути на кнопку"
-
-#~ msgctxt "Action name"
-#~ msgid "Expand or contract"
-#~ msgstr "Розширити або скоротити"
-
-#~ msgctxt "Action name"
-#~ msgid "Edit"
-#~ msgstr "Редагувати"
-
-#~ msgctxt "Action name"
-#~ msgid "Activate"
-#~ msgstr "Задіяти"
-
-#~ msgctxt "Action description"
-#~ msgid "Expands or contracts the row in the tree view containing this cell"
-#~ msgstr "Розширює або скорочує рядки в дереві, які містять цю комірку"
-
-#~ msgctxt "Action description"
-#~ msgid "Creates a widget in which the contents of the cell can be edited"
-#~ msgstr "Створює віджет, у котрому вміст комірки можна редагувати"
-
-#~ msgctxt "Action description"
-#~ msgid "Activates the cell"
-#~ msgstr "Задіяти комірку"
-
-#~ msgctxt "Action name"
-#~ msgid "Select"
-#~ msgstr "Вибрати"
-
-#~ msgctxt "Action name"
-#~ msgid "Customize"
-#~ msgstr "Налаштувати"
-
-#~ msgctxt "Action description"
-#~ msgid "Selects the color"
-#~ msgstr "Вибирає колір"
-
-#~ msgctxt "Action description"
-#~ msgid "Activates the color"
-#~ msgstr "Задіює колір"
-
-#~ msgctxt "Action description"
-#~ msgid "Customizes the color"
-#~ msgstr "Налаштовує колір"
-
-#~ msgctxt "Action name"
-#~ msgid "Press"
-#~ msgstr "Притиснути"
-
-#~ msgctxt "Action description"
-#~ msgid "Presses the combobox"
-#~ msgstr "Притискає спадний список"
-
-#~ msgctxt "Action description"
-#~ msgid "Activates the entry"
-#~ msgstr "Задіює запис"
-
-#~ msgctxt "Action description"
-#~ msgid "Activates the expander"
-#~ msgstr "Задіює розширювач"
-
-#~ msgctxt "Stock label"
-#~ msgid "_About"
-#~ msgstr "_Про програму"
-
-#~ msgctxt "Stock label"
-#~ msgid "_Add"
-#~ msgstr "_Додати"
-
-#~ msgctxt "Stock label"
-#~ msgid "_Bold"
-#~ msgstr "Напів_жирний"
-
-#~ msgctxt "Stock label"
-#~ msgid "_CD-ROM"
-#~ msgstr "Ком_пактний диск"
-
-#~ msgctxt "Stock label"
-#~ msgid "_Clear"
-#~ msgstr "О_чистити"
-
-#~ msgctxt "Stock label"
-#~ msgid "_Close"
-#~ msgstr "_Закрити"
-
-#~ msgctxt "Stock label"
-#~ msgid "_Copy"
-#~ msgstr "_Копіювати"
-
-#~ msgctxt "Stock label"
-#~ msgid "Cu_t"
-#~ msgstr "_Вирізати"
-
-#~ msgctxt "Stock label"
-#~ msgid "_Delete"
-#~ msgstr "В_илучити"
-
-#~ msgctxt "Stock label"
-#~ msgid "Error"
-#~ msgstr "Помилка"
-
-#~ msgctxt "Stock label"
-#~ msgid "Information"
-#~ msgstr "Інформація"
-
-#~ msgctxt "Stock label"
-#~ msgid "Question"
-#~ msgstr "Запитання"
-
-#~ msgctxt "Stock label"
-#~ msgid "Warning"
-#~ msgstr "Попередження"
-
-#~ msgctxt "Stock label"
-#~ msgid "_Execute"
-#~ msgstr "Вико_нати"
-
-#~ msgctxt "Stock label"
-#~ msgid "_File"
-#~ msgstr "_Файл"
-
-#~ msgctxt "Stock label"
-#~ msgid "_Find"
-#~ msgstr "З_найти"
-
-#~ msgctxt "Stock label"
-#~ msgid "Find and _Replace"
-#~ msgstr "Знайти й за_мінити"
-
-#~ msgctxt "Stock label"
-#~ msgid "_Floppy"
-#~ msgstr "_Дискета"
-
-#~ msgctxt "Stock label"
-#~ msgid "_Fullscreen"
-#~ msgstr "На весь _екран"
-
-#~ msgctxt "Stock label, navigation"
-#~ msgid "_Bottom"
-#~ msgstr "До_низу"
-
-#~ msgctxt "Stock label, navigation"
-#~ msgid "_First"
-#~ msgstr "На _початок"
-
-#~ msgctxt "Stock label, navigation"
-#~ msgid "_Last"
-#~ msgstr "У _кінець"
-
-#~ msgctxt "Stock label, navigation"
-#~ msgid "_Top"
-#~ msgstr "В_гору"
-
-#~ msgctxt "Stock label, navigation"
-#~ msgid "_Back"
-#~ msgstr "На_зад"
-
-#~ msgctxt "Stock label, navigation"
-#~ msgid "_Down"
-#~ msgstr "В_низ"
-
-#~ msgctxt "Stock label, navigation"
-#~ msgid "_Forward"
-#~ msgstr "В_перед"
-
-#~ msgctxt "Stock label, navigation"
-#~ msgid "_Up"
-#~ msgstr "В_гору"
-
-#~ msgctxt "Stock label"
-#~ msgid "_Hard Disk"
-#~ msgstr "_Жорсткий диск"
-
-#~ msgctxt "Stock label"
-#~ msgid "_Help"
-#~ msgstr "_Довідка"
-
-#~ msgctxt "Stock label"
-#~ msgid "_Home"
-#~ msgstr "_Домівка"
-
-#~ msgctxt "Stock label"
-#~ msgid "Increase Indent"
-#~ msgstr "Збільшити відступ"
-
-#~ msgctxt "Stock label"
-#~ msgid "_Italic"
-#~ msgstr "_Курсив"
-
-#~ msgctxt "Stock label"
-#~ msgid "_Jump to"
-#~ msgstr "Пере_йти до"
-
-#~ msgctxt "Stock label"
-#~ msgid "_Center"
-#~ msgstr "У _центрі"
-
-#~ msgctxt "Stock label"
-#~ msgid "_Fill"
-#~ msgstr "У _ширину"
-
-#~ msgctxt "Stock label"
-#~ msgid "_Left"
-#~ msgstr "_Ліворуч"
-
-#~ msgctxt "Stock label"
-#~ msgid "_Right"
-#~ msgstr "_Праворуч"
-
-#~ msgctxt "Stock label"
-#~ msgid "_Leave Fullscreen"
-#~ msgstr "_Лишити на весь екран"
-
-#~ msgctxt "Stock label, media"
-#~ msgid "_Forward"
-#~ msgstr "В_перед"
-
-#~ msgctxt "Stock label, media"
-#~ msgid "_Next"
-#~ msgstr "_Наступна"
-
-#~ msgctxt "Stock label, media"
-#~ msgid "P_ause"
-#~ msgstr "_Призупинити"
-
-#~ msgctxt "Stock label, media"
-#~ msgid "_Play"
-#~ msgstr "_Відтворити"
-
-#~ msgctxt "Stock label, media"
-#~ msgid "Pre_vious"
-#~ msgstr "_Попередня"
-
-#~ msgctxt "Stock label, media"
-#~ msgid "_Record"
-#~ msgstr "_Запис"
-
-#~ msgctxt "Stock label, media"
-#~ msgid "R_ewind"
-#~ msgstr "_Назад"
-
-#~ msgctxt "Stock label, media"
-#~ msgid "_Stop"
-#~ msgstr "З_упинити"
-
-#~ msgctxt "Stock label"
-#~ msgid "_Network"
-#~ msgstr "_Мережа"
-
-#~ msgctxt "Stock label"
-#~ msgid "_New"
-#~ msgstr "_Створити"
-
-#~ msgctxt "Stock label"
-#~ msgid "_Open"
-#~ msgstr "_Відкрити"
-
-#~ msgctxt "Stock label"
-#~ msgid "_Paste"
-#~ msgstr "Вст_авити"
-
-#~ msgctxt "Stock label"
-#~ msgid "_Print"
-#~ msgstr "Д_рукувати"
-
-#~ msgctxt "Stock label"
-#~ msgid "Print Pre_view"
-#~ msgstr "_Перегляд"
-
-#~ msgctxt "Stock label"
-#~ msgid "_Properties"
-#~ msgstr "В_ластивості"
-
-#~ msgctxt "Stock label"
-#~ msgid "_Quit"
-#~ msgstr "Ви_йти"
-
-#~ msgctxt "Stock label"
-#~ msgid "_Redo"
-#~ msgstr "Пов_торити"
-
-#~ msgctxt "Stock label"
-#~ msgid "_Refresh"
-#~ msgstr "_Оновити"
-
-#~ msgctxt "Stock label"
-#~ msgid "_Remove"
-#~ msgstr "В_илучити"
-
-#~ msgctxt "Stock label"
-#~ msgid "_Revert"
-#~ msgstr "Від_новити"
-
-#~ msgctxt "Stock label"
-#~ msgid "_Save"
-#~ msgstr "З_берегти"
-
-#~ msgctxt "Stock label"
-#~ msgid "Save _As"
-#~ msgstr "Зберегти _як"
-
-#~ msgctxt "Stock label"
-#~ msgid "Select _All"
-#~ msgstr "Виді_лити все"
-
-#~ msgctxt "Stock label"
-#~ msgid "_Ascending"
-#~ msgstr "За _зростанням"
-
-#~ msgctxt "Stock label"
-#~ msgid "_Descending"
-#~ msgstr "За _спаданням"
-
-#~ msgctxt "Stock label"
-#~ msgid "_Spell Check"
-#~ msgstr "Перевірка _орфографії"
-
-#~ msgctxt "Stock label"
-#~ msgid "_Stop"
-#~ msgstr "З_упинити"
-
-#~ msgctxt "Stock label"
-#~ msgid "_Strikethrough"
-#~ msgstr "Зак_реслений"
-
-#~ msgctxt "Stock label"
-#~ msgid "_Underline"
-#~ msgstr "П_ідкреслений"
-
-#~ msgctxt "Stock label"
-#~ msgid "_Undo"
-#~ msgstr "Пов_ернути"
-
-#~ msgctxt "Stock label"
-#~ msgid "Decrease Indent"
-#~ msgstr "Зменшити відступ"
-
-#~ msgctxt "Stock label"
-#~ msgid "_Normal Size"
-#~ msgstr "З_вичайний розмір"
-
-#~ msgctxt "Stock label"
-#~ msgid "Best _Fit"
-#~ msgstr "Найкраще за_повнення"
-
-#~ msgctxt "Stock label"
-#~ msgid "Zoom _In"
-#~ msgstr "З_більшити"
-
-#~ msgctxt "Stock label"
-#~ msgid "Zoom _Out"
-#~ msgstr "З_меншити"
-
-#~ msgctxt "Action name"
-#~ msgid "Peek"
-#~ msgstr "Вибрати"
-
-#~ msgctxt "Action description"
-#~ msgid "Reveals the contents the entry"
-#~ msgstr "Показує вміст запису"
-
-#~ msgid "Password"
-#~ msgstr "Пароль"
-
-#~ msgctxt "Action description"
-#~ msgid "Pops up the slider"
-#~ msgstr "Виринає повзунок"
-
-#~ msgctxt "Action description"
-#~ msgid "Dismisses the slider"
-#~ msgstr "Відкидає повзунок"
-
-#~ msgctxt "Action name"
-#~ msgid "Popup"
-#~ msgstr "Виринання"
-
-#~ msgctxt "Action name"
-#~ msgid "Dismiss"
-#~ msgstr "Відкинути"
-
-#~ msgid "Search"
-#~ msgstr "Пошук"
-
-#~ msgctxt "Action name"
-#~ msgid "Clear"
-#~ msgstr "Очистити"
-
-#~ msgctxt "Action description"
-#~ msgid "Clears the entry"
-#~ msgstr "Спорожняє запис"
-
-#~ msgctxt "throbbing progress animation widget"
-#~ msgid "Spinner"
-#~ msgstr "Поступ"
-
-#~ msgid "Provides visual indication of progress"
-#~ msgstr "Забезпечує візуальну індикацію поступу"
-
-#~ msgctxt "Action description"
-#~ msgid "Toggles the switch"
-#~ msgstr "Перемикає"
-
-#~ msgid "Red %d%%, Green %d%%, Blue %d%%, Alpha %d%%"
-#~ msgstr "Червоний %d%%, Зелений %d%%, Синій %d%%, Альфа %d%%"
-
-#~ msgid "Red %d%%, Green %d%%, Blue %d%%"
-#~ msgstr "Червоний %d%%, Зелений %d%%, Синій %d%%"
-
-#~ msgid "Color: %s"
-#~ msgstr "Колір: %s"
-
-#~ msgid "Custom color"
-#~ msgstr "Власний колір"
-
-#~ msgid "Create a custom color"
-#~ msgstr "Створити власний колір"
-
-#~ msgid "Custom color %d: %s"
-#~ msgstr "Власний колір %d: %s"
-
-#~ msgid "Color Plane"
-#~ msgstr "Рівень кольору"
-
-#~ msgctxt "Color channel"
-#~ msgid "Hue"
-#~ msgstr "Відтінок"
-
-#~ msgctxt "Color channel"
-#~ msgid "Alpha"
-#~ msgstr "Альфа"
-
-#~ msgid "Question"
-#~ msgstr "Питання"
-
-#~ msgid "Warning"
-#~ msgstr "Увага"
-
-#~ msgid "Error"
-#~ msgstr "Помилка"
-
-#~ msgid "File System Root"
-#~ msgstr "Корінь файлової системи"
-
-#~ msgid "Adjusts the volume"
-#~ msgstr "Регулює гучність"
-
-#~ msgid "Accessible Name"
-#~ msgstr "Назва для допоміжних технологій"
-
-#~ msgid "Accessible Description"
-#~ msgstr "Опис для допоміжних технологій"
-
-#~ msgid "Color Name"
-#~ msgstr "Назва кольору"
-
-#~ msgid "Alpha"
-#~ msgstr "Прозорість"
-
-#~ msgid "Hue"
-#~ msgstr "Відтінок"
-
-#~ msgid "Saturation"
-#~ msgstr "Насиченість"
-
-#~ msgid "Files"
-#~ msgstr "Файли"
-
-#~ msgid "Pages"
-#~ msgstr "Сторінки"
-
-#~ msgid "Time of print"
-#~ msgstr "Час друку"
-
-#~ msgid "Volume"
-#~ msgstr "Гучність"
-
-#~ msgid "Turns volume up or down"
-#~ msgstr "Збільшує чи зменшує гучність"
-
-#~ msgid "Volume Up"
-#~ msgstr "Гучніше"
-
-#~ msgid "Increases the volume"
-#~ msgstr "Збільшує гучність"
-
-#~ msgid "Volume Down"
-#~ msgstr "Тихіше"
-
-#~ msgid "Decreases the volume"
-#~ msgstr "Зменшує гучність"
-
-#~ msgid "Not implemented on OS X"
-#~ msgstr "Не реалізовано на OS X"
-
-#~ msgid "Show Widget Resizes"
-#~ msgstr "Показувати зміни розміру віджету"
-
-#~ msgid "File System"
-#~ msgstr "Файлова система"
-
-#~ msgid "Printer"
-#~ msgstr "Принтер"
-
-#~ msgid "Don’t batch GDI requests"
-#~ msgstr "Не об'єднувати запити GDI"
-
-#~ msgid "Don’t use the Wintab API for tablet support"
-#~ msgstr "Не використовувати Wintab API для підтримки планшету"
-
-#~ msgid "Same as --no-wintab"
-#~ msgstr "Те саме що --no-wintab"
-
-#~ msgid "Do use the Wintab API [default]"
-#~ msgstr "Не використовувати Wintab API [типово]"
-
-#~ msgid "Size of the palette in 8 bit mode"
-#~ msgstr "Розмір палітри у 8-и бітному режимі"
-
-#~ msgid "COLORS"
-#~ msgstr "COLORS"
-
-#~ msgctxt "property name"
-#~ msgid "None"
-#~ msgstr "Немає"
-
-#~ msgid "Font Family"
-#~ msgstr "Гарнітура шрифту"
-
-#~ msgid "Move"
-#~ msgstr "Пересунути"
-
-#~ msgid "Resize"
-#~ msgstr "Змінити розмір"
-
-#~ msgid "Always on Top"
-#~ msgstr "Завжди зверху"
-
-#~ msgid "Application menu"
-#~ msgstr "Меню програм"

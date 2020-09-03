@@ -562,7 +562,7 @@ store_auth_info_toggled (GtkCheckButton *chkbtn,
                          gpointer        user_data)
 {
   gboolean *data = (gboolean *) user_data;
-  *data = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (chkbtn));
+  *data = gtk_check_button_get_active (GTK_CHECK_BUTTON (chkbtn));
 }
 
 static void
@@ -670,7 +670,6 @@ request_password (GtkPrintBackend  *backend,
   gtk_widget_set_size_request (GTK_WIDGET (label), 320, -1);
   g_free (markup);
 
-
   /* Packing */
   content_area = gtk_dialog_get_content_area (GTK_DIALOG (dialog));
   gtk_box_append (GTK_BOX (content_area), main_box);
@@ -719,7 +718,7 @@ request_password (GtkPrintBackend  *backend,
       chkbtn = gtk_check_button_new_with_mnemonic (_("_Remember password"));
       gtk_widget_set_margin_top (chkbtn, 6);
       gtk_widget_set_margin_bottom (chkbtn, 6);
-      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (chkbtn), FALSE);
+      gtk_check_button_set_active (GTK_CHECK_BUTTON (chkbtn), FALSE);
       gtk_box_append (GTK_BOX (vbox), chkbtn);
       g_signal_connect (chkbtn, "toggled",
                         G_CALLBACK (store_auth_info_toggled),

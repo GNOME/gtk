@@ -47,16 +47,15 @@ GDK_AVAILABLE_IN_ALL
 GType           gtk_list_view_get_type                          (void) G_GNUC_CONST;
 
 GDK_AVAILABLE_IN_ALL
-GtkWidget *     gtk_list_view_new                               (GListModel             *model);
-GDK_AVAILABLE_IN_ALL
-GtkWidget *     gtk_list_view_new_with_factory                  (GListModel             *model,
+GtkWidget *     gtk_list_view_new                               (GtkSelectionModel      *model,
                                                                  GtkListItemFactory     *factory);
 
 GDK_AVAILABLE_IN_ALL
-GListModel *    gtk_list_view_get_model                         (GtkListView            *self);
+GtkSelectionModel *
+                gtk_list_view_get_model                         (GtkListView            *self);
 GDK_AVAILABLE_IN_ALL
 void            gtk_list_view_set_model                         (GtkListView            *self,
-                                                                 GListModel             *model);
+                                                                 GtkSelectionModel      *model);
 GDK_AVAILABLE_IN_ALL
 void            gtk_list_view_set_factory                       (GtkListView            *self,
                                                                  GtkListItemFactory     *factory);

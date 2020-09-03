@@ -46,7 +46,7 @@
  * SECTION:gtkgridview
  * @title: GtkGridView
  * @short_description: A widget for displaying grids
- * @see_also: #GListModel, #GtkListView, #GtkColumnView
+ * @see_also: #GtkSelectionModel, #GtkListView, #GtkColumnView
  *
  * GtkGridView is a widget to present a view into a large dynamic grid of items.
  *
@@ -1092,7 +1092,7 @@ gtk_grid_view_class_init (GtkGridViewClass *klass)
     g_param_spec_object ("model",
                          P_("Model"),
                          P_("Model for the items displayed"),
-                         G_TYPE_LIST_MODEL,
+                         GTK_TYPE_SELECTION_MODEL,
                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
@@ -1179,54 +1179,27 @@ gtk_grid_view_init (GtkGridView *self)
 /**
  * gtk_grid_view_new:
  * @model: (allow-none) (transfer full): the model to use, or %NULL
- *
- * Creates a new #GtkGridView.
- *
- * You most likely want to call gtk_grid_view_set_factory() to
- * set up a way to map its items to widgets next.
- *
- * Returns: a new #GtkGridView
- **/
-GtkWidget *
-gtk_grid_view_new (GListModel *model)
-{
-  GtkWidget *result;
-
-  g_return_val_if_fail (model == NULL || G_IS_LIST_MODEL (model), NULL);
-
-  result = g_object_new (GTK_TYPE_GRID_VIEW,
-                         "model", model,
-                         NULL);
-
-  /* consume the reference */
-  g_clear_object (&model);
-
-  return result;
-}
-
-/**
- * gtk_grid_view_new_with_factory:
- * @model: (allow-none) (transfer full): the model to use, or %NULL
  * @factory: (allow-none) (transfer full): The factory to populate items with, or %NULL
  *
  * Creates a new #GtkGridView that uses the given @factory for
  * mapping items to widgets.
  *
  * The function takes ownership of the
- * argument, so you can write code like
+ * arguments, so you can write code like
  * ```
- *   grid_view = gtk_grid_view_new_with_factory (create_model (),
+ *   grid_view = gtk_grid_view_new (create_model (),
  *     gtk_builder_list_item_factory_new_from_resource ("/resource.ui"));
  * ```
  *
- * Returns: a new #GtkGridView using the given @factory
+ * Returns: a new #GtkGridView using the given @model and @factory
  **/
 GtkWidget *
-gtk_grid_view_new_with_factory (GListModel         *model,
-                                GtkListItemFactory *factory)
+gtk_grid_view_new (GtkSelectionModel  *model,
+                   GtkListItemFactory *factory)
 {
   GtkWidget *result;
 
+  g_return_val_if_fail (model == NULL || GTK_IS_SELECTION_MODEL (model), NULL);
   g_return_val_if_fail (GTK_IS_LIST_ITEM_FACTORY (factory), NULL);
 
   result = g_object_new (GTK_TYPE_GRID_VIEW,
@@ -1249,7 +1222,7 @@ gtk_grid_view_new_with_factory (GListModel         *model,
  *
  * Returns: (nullable) (transfer none): The model in use
  **/
-GListModel *
+GtkSelectionModel *
 gtk_grid_view_get_model (GtkGridView *self)
 {
   g_return_val_if_fail (GTK_IS_GRID_VIEW (self), NULL);
@@ -1262,14 +1235,14 @@ gtk_grid_view_get_model (GtkGridView *self)
  * @self: a #GtkGridView
  * @model: (allow-none) (transfer none): the model to use or %NULL for none
  *
- * Sets the #GListModel to use for
+ * Sets the #GtkSelectionModel to use for
  **/
 void
-gtk_grid_view_set_model (GtkGridView *self,
-                         GListModel  *model)
+gtk_grid_view_set_model (GtkGridView       *self,
+                         GtkSelectionModel *model)
 {
   g_return_if_fail (GTK_IS_GRID_VIEW (self));
-  g_return_if_fail (model == NULL || G_IS_LIST_MODEL (model));
+  g_return_if_fail (model == NULL || GTK_IS_SELECTION_MODEL (model));
 
   if (!gtk_list_base_set_model (GTK_LIST_BASE (self), model))
     return;

@@ -106,6 +106,7 @@ do_css_shadows (GtkWidget *do_widget)
 
       child = create_toolbar ();
       gtk_paned_set_start_child (GTK_PANED (paned), child);
+      gtk_paned_set_resize_start_child (GTK_PANED (paned), FALSE);
 
       text = gtk_text_buffer_new (NULL);
       gtk_text_buffer_create_tag (text,

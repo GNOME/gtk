@@ -1718,6 +1718,58 @@ rewrite_bin_child (Element      *element,
     }
 }
 
+static gboolean
+remove_boolean_prop (Element      *element,
+                     MyParserData *data,
+                     const char   *prop_name,
+                     gboolean     *value)
+{
+  GList *l;
+
+  for (l = element->children; l; l = l->next)
+    {
+      Element *child = l->data;
+
+      if (g_str_equal (child->element_name, "property") &&
+          has_attribute (child, "name", prop_name))
+        {
+          *value = strcmp (canonical_boolean_value (data, child->data), "1") == 0;
+          element->children = g_list_remove (element->children, child);
+          free_element (child);
+          return TRUE;
+        }
+    }
+
+  return FALSE;
+}
+
+static void
+rewrite_radio_button (Element      *element,
+                      MyParserData *data)
+{
+  int i;
+  gboolean draw_indicator = TRUE;
+  const char *new_class;
+
+  if (!remove_boolean_prop (element, data, "draw-indicator", &draw_indicator))
+    remove_boolean_prop (element, data, "draw_indicator", &draw_indicator);
+
+  if (draw_indicator)
+    new_class = "GtkCheckButton";
+  else
+    new_class = "GtkToggleButton";
+
+  for (i = 0; element->attribute_names[i]; i++)
+    {
+      if (strcmp (element->attribute_names[i], "class") == 0)
+        {
+          g_free (element->attribute_values[i]);
+          element->attribute_values[i] = g_strdup (new_class);
+          break;
+        }
+    }
+}
+
 /* returns TRUE to remove the element from the parent */
 static gboolean
 simplify_element (Element      *element,
@@ -1862,6 +1914,10 @@ rewrite_element (Element      *element,
        g_str_equal (get_class_name (element), "GtkViewport") ||
        g_str_equal (get_class_name (element), "GtkWindow")))
     rewrite_bin_child (element, data);
+
+  if (element_is_object_or_template (element) &&
+      g_str_equal (get_class_name (element), "GtkRadioButton"))
+    rewrite_radio_button (element, data);
 
   if (g_str_equal (element->element_name, "property"))
     maybe_rename_property (element, data);

@@ -15,7 +15,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GDK_CAIRO_PRIVATE_H___
+#ifndef __GDK_CAIRO_PRIVATE_H__
 #define __GDK_CAIRO_PRIVATE_H__
 
 #include <gdk-pixbuf/gdk-pixbuf.h>

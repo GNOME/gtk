@@ -119,6 +119,7 @@ main (int   argc,
   GtkSorter *sorter;
   guint i;
   GtkListItemFactory *factory;
+  GtkSelectionModel *selection;
 
   gtk_init ();
 
@@ -148,7 +149,7 @@ main (int   argc,
   factory = gtk_signal_list_item_factory_new ();
   g_signal_connect (factory, "setup", G_CALLBACK (setup_list_item), NULL);
   g_signal_connect (factory, "bind", G_CALLBACK (bind_list_item), NULL);
-  listview = gtk_list_view_new_with_factory (NULL, factory);
+  listview = gtk_list_view_new (NULL, factory);
 
   gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (sw), listview);
 
@@ -166,7 +167,9 @@ main (int   argc,
   listbox = gtk_list_box_new ();
   gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (sw), listbox);
 
-  gtk_list_view_set_model (GTK_LIST_VIEW (listview), G_LIST_MODEL (sort));
+  selection = GTK_SELECTION_MODEL (gtk_single_selection_new (G_LIST_MODEL (sort)));
+  gtk_list_view_set_model (GTK_LIST_VIEW (listview), selection);
+  g_object_unref (selection);
   gtk_list_box_bind_model (GTK_LIST_BOX (listbox),
                            G_LIST_MODEL (sort),
                            create_widget_for_listbox,

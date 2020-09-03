@@ -44,7 +44,7 @@
  * SECTION:gtklistview
  * @title: GtkListView
  * @short_description: A widget for displaying lists
- * @see_also: #GListModel, #GtkColumnView, #GtkGridView
+ * @see_also: #GtkSelectionModel, #GtkColumnView, #GtkGridView
  *
  * GtkListView is a widget to present a view into a large dynamic list of items.
  *
@@ -108,7 +108,7 @@
  *   g_signal_connect (factory, "setup", G_CALLBACK (setup_listitem_cb), NULL);
  *   g_signal_connect (factory, "bind", G_CALLBACK (bind_listitem_cb), NULL);
  *
- *   list = gtk_list_view_new_with_factory (model, factory);
+ *   list = gtk_list_view_new (model, factory);
  *
  *   g_signal_connect (list, "activate", G_CALLBACK (activate_cb), NULL);
  *
@@ -839,7 +839,7 @@ gtk_list_view_class_init (GtkListViewClass *klass)
     g_param_spec_object ("model",
                          P_("Model"),
                          P_("Model for the items displayed"),
-                         G_TYPE_LIST_MODEL,
+                         GTK_TYPE_SELECTION_MODEL,
                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
@@ -934,55 +934,27 @@ gtk_list_view_init (GtkListView *self)
 /**
  * gtk_list_view_new:
  * @model: (allow-none) (transfer full): the model to use, or %NULL
- *
- * Creates a new #GtkListView.
- *
- * You most likely want to call gtk_list_view_set_factory()
- * to set up a way to map its items to widgets.
- *
- * Returns: a new #GtkListView
- **/
-GtkWidget *
-gtk_list_view_new (GListModel *model)
-{
-  GtkWidget *result;
-
-  g_return_val_if_fail (model == NULL || G_IS_LIST_MODEL (model), NULL);
-
-  result = g_object_new (GTK_TYPE_LIST_VIEW,
-                         "model", model,
-                         NULL);
-
-  /* consume the reference */
-  g_clear_object (&model);
-
-  return result;
-}
-
-/**
- * gtk_list_view_new_with_factory:
- * @model: (allow-none) (transfer full): the model to use, or %NULL
  * @factory: (allow-none) (transfer full): The factory to populate items with, or %NULL
  *
  * Creates a new #GtkListView that uses the given @factory for
  * mapping items to widgets.
  *
  * The function takes ownership of the
- * argument, so you can write code like
+ * arguments, so you can write code like
  * ```
- *   list_view = gtk_list_view_new_with_factory (create_model (),
+ *   list_view = gtk_list_view_new (create_model (),
  *     gtk_builder_list_item_factory_new_from_resource ("/resource.ui"));
  * ```
  *
- * Returns: a new #GtkListView using the given @factory
+ * Returns: a new #GtkListView using the given @model and @factory
  **/
 GtkWidget *
-gtk_list_view_new_with_factory (GListModel         *model,
-                                GtkListItemFactory *factory)
+gtk_list_view_new (GtkSelectionModel  *model,
+                   GtkListItemFactory *factory)
 {
   GtkWidget *result;
 
-  g_return_val_if_fail (model == NULL || G_IS_LIST_MODEL (model), NULL);
+  g_return_val_if_fail (model == NULL || GTK_IS_SELECTION_MODEL (model), NULL);
   g_return_val_if_fail (factory == NULL || GTK_IS_LIST_ITEM_FACTORY (factory), NULL);
 
   result = g_object_new (GTK_TYPE_LIST_VIEW,
@@ -1005,7 +977,7 @@ gtk_list_view_new_with_factory (GListModel         *model,
  *
  * Returns: (nullable) (transfer none): The model in use
  **/
-GListModel *
+GtkSelectionModel *
 gtk_list_view_get_model (GtkListView *self)
 {
   g_return_val_if_fail (GTK_IS_LIST_VIEW (self), NULL);
@@ -1018,17 +990,14 @@ gtk_list_view_get_model (GtkListView *self)
  * @self: a #GtkListView
  * @model: (allow-none) (transfer none): the model to use or %NULL for none
  *
- * Sets the #GListModel to use.
- *
- * If the @model is a #GtkSelectionModel, it is used for managing the selection.
- * Otherwise, @self creates a #GtkSingleSelection for the selection.
+ * Sets the #GtkSelectionModel to use.
  **/
 void
-gtk_list_view_set_model (GtkListView *self,
-                         GListModel  *model)
+gtk_list_view_set_model (GtkListView       *self,
+                         GtkSelectionModel *model)
 {
   g_return_if_fail (GTK_IS_LIST_VIEW (self));
-  g_return_if_fail (model == NULL || G_IS_LIST_MODEL (model));
+  g_return_if_fail (model == NULL || GTK_IS_SELECTION_MODEL (model));
 
   if (!gtk_list_base_set_model (GTK_LIST_BASE (self), model))
     return;

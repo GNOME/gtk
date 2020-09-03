@@ -413,7 +413,7 @@ do_listview_settings (GtkWidget *do_widget)
                                    transform_settings_to_keys,
                                    NULL,
                                    columnview, NULL);
-      gtk_list_view_set_model (GTK_LIST_VIEW (listview), G_LIST_MODEL (selection));
+      gtk_list_view_set_model (GTK_LIST_VIEW (listview), GTK_SELECTION_MODEL (selection));
       g_object_unref (selection);
 
       name_column = GTK_COLUMN_VIEW_COLUMN (gtk_builder_get_object (builder, "name_column"));

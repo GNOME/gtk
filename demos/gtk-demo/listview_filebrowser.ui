@@ -165,8 +165,12 @@
       </object>
     </child>
   </object>
-  <object class="GtkDirectoryList" id="dirlist">
-    <property name="attributes">standard::name,standard::display-name,standard::icon,standard::size,standard::content-type</property>
+  <object class="GtkSingleSelection" id="selection_model">
+    <property name="model">
+      <object class="GtkDirectoryList" id="dirlist">
+        <property name="attributes">standard::name,standard::display-name,standard::icon,standard::size,standard::content-type</property>
+      </object>
+    </property>
   </object>
   <object class="GtkWindow" id="window">
     <property name="title" translatable="yes">File browser</property>
@@ -227,7 +231,7 @@
         <property name="can-focus">1</property>
         <child>
           <object class="GtkGridView" id="view">
-            <property name="model">dirlist</property>
+            <property name="model">selection_model</property>
             <property name="max-columns">15</property>
             <binding name="factory">
               <lookup name="factory" type="FileBrowserView">

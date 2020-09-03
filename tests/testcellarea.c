@@ -124,51 +124,51 @@ orientation_changed (GtkComboBox      *combo,
 }
 
 static void
-align_cell_2_toggled (GtkToggleButton  *toggle,
+align_cell_2_toggled (GtkCheckButton  *toggle,
 		      GtkIconView *iconview)
 {
   GtkCellArea *area = gtk_cell_layout_get_area (GTK_CELL_LAYOUT (iconview));
-  gboolean     align = gtk_toggle_button_get_active (toggle);
+  gboolean     align = gtk_check_button_get_active (toggle);
 
   gtk_cell_area_cell_set (area, cell_2, "align", align, NULL);
 }
 
 static void
-align_cell_3_toggled (GtkToggleButton  *toggle,
+align_cell_3_toggled (GtkCheckButton  *toggle,
 		      GtkIconView *iconview)
 {
   GtkCellArea *area = gtk_cell_layout_get_area (GTK_CELL_LAYOUT (iconview));
-  gboolean     align = gtk_toggle_button_get_active (toggle);
+  gboolean     align = gtk_check_button_get_active (toggle);
 
   gtk_cell_area_cell_set (area, cell_3, "align", align, NULL);
 }
 
 static void
-expand_cell_1_toggled (GtkToggleButton  *toggle,
+expand_cell_1_toggled (GtkCheckButton  *toggle,
 		       GtkIconView *iconview)
 {
   GtkCellArea *area = gtk_cell_layout_get_area (GTK_CELL_LAYOUT (iconview));
-  gboolean     expand = gtk_toggle_button_get_active (toggle);
+  gboolean     expand = gtk_check_button_get_active (toggle);
 
   gtk_cell_area_cell_set (area, cell_1, "expand", expand, NULL);
 }
 
 static void
-expand_cell_2_toggled (GtkToggleButton  *toggle,
+expand_cell_2_toggled (GtkCheckButton  *toggle,
 		       GtkIconView *iconview)
 {
   GtkCellArea *area = gtk_cell_layout_get_area (GTK_CELL_LAYOUT (iconview));
-  gboolean     expand = gtk_toggle_button_get_active (toggle);
+  gboolean     expand = gtk_check_button_get_active (toggle);
 
   gtk_cell_area_cell_set (area, cell_2, "expand", expand, NULL);
 }
 
 static void
-expand_cell_3_toggled (GtkToggleButton  *toggle,
+expand_cell_3_toggled (GtkCheckButton  *toggle,
 		       GtkIconView *iconview)
 {
   GtkCellArea *area = gtk_cell_layout_get_area (GTK_CELL_LAYOUT (iconview));
-  gboolean     expand = gtk_toggle_button_get_active (toggle);
+  gboolean     expand = gtk_check_button_get_active (toggle);
 
   gtk_cell_area_cell_set (area, cell_3, "expand", expand, NULL);
 }
@@ -210,14 +210,14 @@ simple_cell_area (void)
                     G_CALLBACK (orientation_changed), iconview);
 
   widget = gtk_check_button_new_with_label ("Align 2nd Cell");
-  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), FALSE);
+  gtk_check_button_set_active (GTK_CHECK_BUTTON (widget), FALSE);
   gtk_box_append (GTK_BOX (vbox), widget);
 
   g_signal_connect (G_OBJECT (widget), "toggled",
                     G_CALLBACK (align_cell_2_toggled), iconview);
 
   widget = gtk_check_button_new_with_label ("Align 3rd Cell");
-  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), TRUE);
+  gtk_check_button_set_active (GTK_CHECK_BUTTON (widget), TRUE);
   gtk_box_append (GTK_BOX (vbox), widget);
 
   g_signal_connect (G_OBJECT (widget), "toggled",
@@ -225,21 +225,21 @@ simple_cell_area (void)
 
 
   widget = gtk_check_button_new_with_label ("Expand 1st Cell");
-  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), FALSE);
+  gtk_check_button_set_active (GTK_CHECK_BUTTON (widget), FALSE);
   gtk_box_append (GTK_BOX (vbox), widget);
 
   g_signal_connect (G_OBJECT (widget), "toggled",
                     G_CALLBACK (expand_cell_1_toggled), iconview);
 
   widget = gtk_check_button_new_with_label ("Expand 2nd Cell");
-  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), TRUE);
+  gtk_check_button_set_active (GTK_CHECK_BUTTON (widget), TRUE);
   gtk_box_append (GTK_BOX (vbox), widget);
 
   g_signal_connect (G_OBJECT (widget), "toggled",
                     G_CALLBACK (expand_cell_2_toggled), iconview);
 
   widget = gtk_check_button_new_with_label ("Expand 3rd Cell");
-  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), FALSE);
+  gtk_check_button_set_active (GTK_CHECK_BUTTON (widget), FALSE);
   gtk_box_append (GTK_BOX (vbox), widget);
 
   g_signal_connect (G_OBJECT (widget), "toggled",
@@ -394,11 +394,11 @@ focus_iconview (gboolean color_bg, GtkCellRenderer **focus, GtkCellRenderer **si
 }
 
 static void
-focus_sibling_toggled (GtkToggleButton  *toggle,
+focus_sibling_toggled (GtkCheckButton  *toggle,
 		       GtkIconView *iconview)
 {
   GtkCellArea *area = gtk_cell_layout_get_area (GTK_CELL_LAYOUT (iconview));
-  gboolean     active = gtk_toggle_button_get_active (toggle);
+  gboolean     active = gtk_check_button_get_active (toggle);
 
   if (active)
     gtk_cell_area_add_focus_sibling (area, focus_renderer, sibling_renderer);
@@ -445,7 +445,7 @@ focus_cell_area (void)
                     G_CALLBACK (orientation_changed), iconview);
 
   widget = gtk_check_button_new_with_label ("Focus Sibling");
-  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), TRUE);
+  gtk_check_button_set_active (GTK_CHECK_BUTTON (widget), TRUE);
   gtk_box_append (GTK_BOX (vbox), widget);
 
   g_signal_connect (G_OBJECT (widget), "toggled",

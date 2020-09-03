@@ -150,7 +150,7 @@ main (int argc, char *argv[])
   g_object_bind_property (check, "active", popover, "autohide", G_BINDING_SYNC_CREATE);
   g_object_bind_property (check, "active", popover1, "autohide", G_BINDING_SYNC_CREATE);
   g_object_bind_property (check, "active", popover2, "autohide", G_BINDING_SYNC_CREATE);
-  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check), TRUE);
+  gtk_check_button_set_active (GTK_CHECK_BUTTON (check), TRUE);
   gtk_grid_attach (GTK_GRID (grid), label , 1, 3, 1, 1);
   gtk_grid_attach (GTK_GRID (grid), check, 2, 3, 1, 1);
 

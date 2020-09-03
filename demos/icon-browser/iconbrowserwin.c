@@ -172,7 +172,7 @@ item_activated (GtkGridView       *view,
                 guint              position,
                 IconBrowserWindow *win)
 {
-  GListModel *model = gtk_grid_view_get_model (view);
+  GListModel *model = G_LIST_MODEL (gtk_grid_view_get_model (view));
   IbIcon *icon = g_list_model_get_item (model, position);
   const char *name;
   const char *description;

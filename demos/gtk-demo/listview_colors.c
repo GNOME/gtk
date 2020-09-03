@@ -663,7 +663,7 @@ create_color_grid (void)
   GtkWidget *gridview;
   GtkListItemFactory *factory;
 
-  gridview = gtk_grid_view_new (NULL);
+  gridview = gtk_grid_view_new (NULL, NULL);
   gtk_scrollable_set_hscroll_policy (GTK_SCROLLABLE (gridview), GTK_SCROLL_NATURAL);
   gtk_scrollable_set_vscroll_policy (GTK_SCROLLABLE (gridview), GTK_SCROLL_NATURAL);
 
@@ -866,7 +866,7 @@ do_listview_colors (GtkWidget *do_widget)
       guint len;
       GtkWidget *selection_view;
       GListModel *selection_filter;
-      GListModel *no_selection;
+      GtkSelectionModel *no_selection;
       GtkWidget *grid;
       GtkWidget *selection_size_label;
       GtkWidget *selection_average_picture;
@@ -950,7 +950,7 @@ do_listview_colors (GtkWidget *do_widget)
 
       factory = gtk_signal_list_item_factory_new ();
       g_signal_connect (factory, "setup", G_CALLBACK (setup_selection_listitem_cb), NULL);
-      selection_view = gtk_grid_view_new_with_factory (NULL, factory);
+      selection_view = gtk_grid_view_new (NULL, factory);
       gtk_widget_add_css_class (selection_view, "compact");
       gtk_grid_view_set_max_columns (GTK_GRID_VIEW (selection_view), 200);
       gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (sw), selection_view);
@@ -959,7 +959,7 @@ do_listview_colors (GtkWidget *do_widget)
       gtk_box_append (GTK_BOX (box), sw);
 
       gridview = create_color_grid ();
-      gtk_grid_view_set_model (GTK_GRID_VIEW (gridview), G_LIST_MODEL (selection));
+      gtk_grid_view_set_model (GTK_GRID_VIEW (gridview), GTK_SELECTION_MODEL (selection));
       gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (sw), gridview);
       gtk_widget_set_hexpand (sw, TRUE);
       gtk_widget_set_vexpand (sw, TRUE);
@@ -968,7 +968,7 @@ do_listview_colors (GtkWidget *do_widget)
       g_signal_connect (selection_filter, "items-changed", G_CALLBACK (update_selection_count), selection_size_label);
       g_signal_connect (selection_filter, "items-changed", G_CALLBACK (update_selection_average), selection_average_picture);
 
-      no_selection = G_LIST_MODEL (gtk_no_selection_new (selection_filter));
+      no_selection = GTK_SELECTION_MODEL (gtk_no_selection_new (selection_filter));
       gtk_grid_view_set_model (GTK_GRID_VIEW (selection_view), no_selection);
       g_object_unref (no_selection);
 

@@ -367,10 +367,10 @@ test_sizegroup (void)
     "      <object class=\"GtkBox\" id=\"vbox1\">"
     "        <property name=\"orientation\">vertical</property>"
     "        <child>"
-    "          <object class=\"GtkRadioButton\" id=\"radio1\"/>"
+    "          <object class=\"GtkCheckButton\" id=\"radio1\"/>"
     "        </child>"
     "        <child>"
-    "          <object class=\"GtkRadioButton\" id=\"radio2\"/>"
+    "          <object class=\"GtkCheckButton\" id=\"radio2\"/>"
     "        </child>"
     "      </object>"
     "    </child>"
@@ -405,10 +405,10 @@ test_sizegroup (void)
     "      <object class=\"GtkBox\" id=\"vbox1\">"
     "        <property name=\"orientation\">vertical</property>"
     "        <child>"
-    "          <object class=\"GtkRadioButton\" id=\"radio1\"/>"
+    "          <object class=\"GtkCheckButton\" id=\"radio1\"/>"
     "        </child>"
     "        <child>"
-    "          <object class=\"GtkRadioButton\" id=\"radio2\"/>"
+    "          <object class=\"GtkCheckButton\" id=\"radio2\"/>"
     "        </child>"
     "      </object>"
     "    </child>"
@@ -651,7 +651,6 @@ test_types (void)
     "  <object class=\"GtkListStore\" id=\"liststore\"/>"
     "  <object class=\"GtkNotebook\" id=\"notebook\"/>"
     "  <object class=\"GtkProgressBar\" id=\"progressbar\"/>"
-    "  <object class=\"GtkRadioButton\" id=\"radiobutton\"/>"
     "  <object class=\"GtkSizeGroup\" id=\"sizegroup\"/>"
     "  <object class=\"GtkScrolledWindow\" id=\"scrolledwindow\"/>"
     "  <object class=\"GtkSpinButton\" id=\"spinbutton\"/>"
@@ -2199,10 +2198,10 @@ test_property_bindings (void)
   GObject *checkbutton, *button, *button2, *button3, *window;
 
   builder = builder_new_from_string (buffer, -1, NULL);
-  
+
   checkbutton = gtk_builder_get_object (builder, "checkbutton");
   g_assert (GTK_IS_CHECK_BUTTON (checkbutton));
-  g_assert (!gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (checkbutton)));
+  g_assert (!gtk_check_button_get_active (GTK_CHECK_BUTTON (checkbutton)));
 
   button = gtk_builder_get_object (builder, "button");
   g_assert (GTK_IS_BUTTON (button));
@@ -2216,7 +2215,7 @@ test_property_bindings (void)
   g_assert (GTK_IS_BUTTON (button3));
   g_assert (!gtk_widget_get_sensitive (GTK_WIDGET (button3)));
 
-  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (checkbutton), TRUE);
+  gtk_check_button_set_active (GTK_CHECK_BUTTON (checkbutton), TRUE);
   g_assert (gtk_widget_get_sensitive (GTK_WIDGET (button)));
   g_assert (gtk_widget_get_sensitive (GTK_WIDGET (button2)));
   g_assert (gtk_widget_get_sensitive (GTK_WIDGET (button3)));

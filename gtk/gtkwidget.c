@@ -4050,7 +4050,7 @@ gtk_widget_compute_point (GtkWidget              *widget,
       return FALSE;
     }
 
-  graphene_matrix_transform_point (&transform, point, out_point);
+  gsk_matrix_transform_point (&transform, point, out_point);
 
   return TRUE;
 }
@@ -9547,9 +9547,9 @@ gtk_widget_compute_bounds (GtkWidget       *widget,
     }
 
   gtk_css_boxes_init (&boxes, widget);
-  graphene_matrix_transform_bounds (&transform,
-                                    gtk_css_boxes_get_border_rect (&boxes),
-                                    out_bounds);
+  gsk_matrix_transform_bounds (&transform,
+                               gtk_css_boxes_get_border_rect (&boxes),
+                               out_bounds);
 
   return TRUE;
 }

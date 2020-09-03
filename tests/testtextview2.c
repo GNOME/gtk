@@ -147,7 +147,7 @@ update_mark_exists (void)
   pos = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (position_spin));
   gtk_text_buffer_get_iter_at_offset (buffer, &iter, pos);
 
-  if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (mark_check)))
+  if (gtk_check_button_get_active (GTK_CHECK_BUTTON (mark_check)))
     gtk_text_buffer_add_mark (buffer, the_mark, &iter);
   else 
     gtk_text_buffer_delete_mark (buffer, the_mark);
@@ -156,7 +156,7 @@ update_mark_exists (void)
 static void
 update_mark_visible (void)
 {
-  gtk_text_mark_set_visible (the_mark, gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (mark_visible)));
+  gtk_text_mark_set_visible (the_mark, gtk_check_button_get_active (GTK_CHECK_BUTTON (mark_visible)));
 }
 
 static void

@@ -8001,8 +8001,8 @@ gtk_file_chooser_widget_set_choice (GtkFileChooser  *chooser,
             }
         }
     }
-  else if (GTK_IS_TOGGLE_BUTTON (widget))
-    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), g_str_equal (option, "true"));
+  else if (GTK_IS_CHECK_BUTTON (widget))
+    gtk_check_button_set_active (GTK_CHECK_BUTTON (widget), g_str_equal (option, "true"));
 }
 
 static const char *
@@ -8024,8 +8024,8 @@ gtk_file_chooser_widget_get_choice (GtkFileChooser  *chooser,
       return NULL;
     }
 
-  else if (GTK_IS_TOGGLE_BUTTON (widget))
-    return gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget)) ? "true" : "false";
+  else if (GTK_IS_CHECK_BUTTON (widget))
+    return gtk_check_button_get_active (GTK_CHECK_BUTTON (widget)) ? "true" : "false";
 
   return NULL;
 }

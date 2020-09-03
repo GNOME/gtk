@@ -490,6 +490,17 @@ as property. GtkNotebook and GtkAssistant are similar.
 gtk4-builder-tool can help with this conversion, with the --3to4 option
 of the simplify command.
 
+### Adapt to button class hierarchy changes
+
+#GtkCheckButton is no longer derived from #GtkToggleButton. Call
+gtk_check_button_set_active() instead of gtk_toggle_button_set_active().
+
+#GtkRadioButton has been removed, and its grouping functionality has
+been added to #GtkCheckButton and #GtkToggleButton. Use grouped
+check buttons for traditional radio groups, and used grouped toggle
+buttons for view switchers. The new API to set up groups of buttons
+is gtk_check_button_set_group() and gtk_toggle_button_set_group().
+
 ### Adapt to GtkScrolledWindow API changes
 
 The constructor for GtkScrolledWindow no longer takes the adjustments

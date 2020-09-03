@@ -12,7 +12,7 @@ static void
 set_blank (GtkWidget *button,
            GtkEntry  *entry)
 {
-  if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button)))
+  if (gtk_check_button_get_active (GTK_CHECK_BUTTON (button)))
     gtk_entry_set_icon_from_icon_name (entry, GTK_ENTRY_ICON_SECONDARY, NULL);
 }
 
@@ -20,7 +20,7 @@ static void
 set_icon_name (GtkWidget *button,
                GtkEntry  *entry)
 {
-  if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button)))
+  if (gtk_check_button_get_active (GTK_CHECK_BUTTON (button)))
     gtk_entry_set_icon_from_icon_name (entry, GTK_ENTRY_ICON_SECONDARY, "media-floppy");
 }
 
@@ -30,7 +30,7 @@ set_gicon (GtkWidget *button,
 {
   GIcon *icon;
 
- if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button)))
+  if (gtk_check_button_get_active (GTK_CHECK_BUTTON (button)))
     {
       icon = g_themed_icon_new ("gtk-yes");
       gtk_entry_set_icon_from_gicon (entry, GTK_ENTRY_ICON_SECONDARY, icon);
@@ -44,7 +44,7 @@ set_texture (GtkWidget *button,
 {
   GdkTexture *texture;
 
-  if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button)))
+  if (gtk_check_button_get_active (GTK_CHECK_BUTTON (button)))
     {
       texture = gdk_texture_new_from_resource ("/org/gtk/libgtk/inspector/logo.png");
       gtk_entry_set_icon_from_paintable (entry, GTK_ENTRY_ICON_SECONDARY, GDK_PAINTABLE (texture));
@@ -238,23 +238,23 @@ main (int argc, char **argv)
   gtk_widget_set_vexpand (GTK_WIDGET (box), TRUE);
   gtk_grid_attach (GTK_GRID (grid), box, 0, 5, 3, 1);
 
-  button1 = gtk_radio_button_new_with_label (NULL, "Blank");
+  button1 = gtk_check_button_new_with_label ("Blank");
   gtk_widget_set_valign (button1, GTK_ALIGN_START);
   g_signal_connect (button1, "toggled", G_CALLBACK (set_blank), entry);
   gtk_box_append (GTK_BOX (box), button1);
-  button2 = gtk_radio_button_new_with_label (NULL, "Icon Name");
+  button2 = gtk_check_button_new_with_label ("Icon Name");
   gtk_widget_set_valign (button2, GTK_ALIGN_START);
-  gtk_radio_button_join_group (GTK_RADIO_BUTTON (button2), GTK_RADIO_BUTTON (button1));
+  gtk_check_button_set_group (GTK_CHECK_BUTTON (button2), GTK_CHECK_BUTTON (button1));
   g_signal_connect (button2, "toggled", G_CALLBACK (set_icon_name), entry);
   gtk_box_append (GTK_BOX (box), button2);
-  button3 = gtk_radio_button_new_with_label (NULL, "GIcon");
+  button3 = gtk_check_button_new_with_label ("GIcon");
   gtk_widget_set_valign (button3, GTK_ALIGN_START);
-  gtk_radio_button_join_group (GTK_RADIO_BUTTON (button3), GTK_RADIO_BUTTON (button1));
+  gtk_check_button_set_group (GTK_CHECK_BUTTON (button3), GTK_CHECK_BUTTON (button1));
   g_signal_connect (button3, "toggled", G_CALLBACK (set_gicon), entry);
   gtk_box_append (GTK_BOX (box), button3);
-  button4 = gtk_radio_button_new_with_label (NULL, "Texture");
+  button4 = gtk_check_button_new_with_label ("Texture");
   gtk_widget_set_valign (button4, GTK_ALIGN_START);
-  gtk_radio_button_join_group (GTK_RADIO_BUTTON (button4), GTK_RADIO_BUTTON (button1));
+  gtk_check_button_set_group (GTK_CHECK_BUTTON (button4), GTK_CHECK_BUTTON (button1));
   g_signal_connect (button4, "toggled", G_CALLBACK (set_texture), entry);
   gtk_box_append (GTK_BOX (box), button4);
 

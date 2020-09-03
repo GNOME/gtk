@@ -615,7 +615,7 @@ main (int argc, char *argv[])
 
   factory = gtk_signal_list_item_factory_new ();
   g_signal_connect (factory, "setup", G_CALLBACK (setup_widget), NULL);
-  listview = gtk_list_view_new_with_factory (NULL, factory);
+  listview = gtk_list_view_new (NULL, factory);
   gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (sw), listview);
 
   if (argc > 1)
@@ -636,7 +636,7 @@ main (int argc, char *argv[])
   selectionmodel = file_info_selection_new (G_LIST_MODEL (filter));
   g_object_unref (filter);
 
-  gtk_list_view_set_model (GTK_LIST_VIEW (listview), G_LIST_MODEL (selectionmodel));
+  gtk_list_view_set_model (GTK_LIST_VIEW (listview), GTK_SELECTION_MODEL (selectionmodel));
 
   statusbar = gtk_statusbar_new ();
   gtk_widget_add_tick_callback (statusbar, (GtkTickCallback) update_statusbar, NULL, NULL);

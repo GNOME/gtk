@@ -152,7 +152,7 @@ do_sizegroup (GtkWidget *do_widget)
       check_button = gtk_check_button_new_with_mnemonic ("_Enable grouping");
       gtk_box_append (GTK_BOX (vbox), check_button);
 
-      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check_button), TRUE);
+      gtk_check_button_set_active (GTK_CHECK_BUTTON (check_button), TRUE);
       g_signal_connect (check_button, "toggled",
                         G_CALLBACK (toggle_grouping), size_group);
     }

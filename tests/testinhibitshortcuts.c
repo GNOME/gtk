@@ -30,10 +30,10 @@ on_shortcuts_inhibit_change (GdkSurface *surface, GParamSpec *pspec, gpointer da
 
   gtk_check_button_set_inconsistent (GTK_CHECK_BUTTON (button), FALSE);
 
-  button_active = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button));
+  button_active = gtk_check_button_get_active (GTK_CHECK_BUTTON (button));
 
   if (button_active != shortcuts_inhibited)
-    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), shortcuts_inhibited);
+    gtk_check_button_set_active (GTK_CHECK_BUTTON (button), shortcuts_inhibited);
 }
 
 static void
@@ -41,7 +41,7 @@ on_button_toggle (GtkWidget *button, gpointer data)
 {
   GdkSurface *surface = GDK_SURFACE (data);
 
-  if (!gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button)))
+  if (!gtk_check_button_get_active (GTK_CHECK_BUTTON (button)))
     {
       gdk_toplevel_restore_system_shortcuts (GDK_TOPLEVEL (surface));
       return;

@@ -102,9 +102,6 @@
    <link linkend="GtkVolumeButton">
       <inlinegraphic fileref="volumebutton.png" format="PNG"></inlinegraphic>
     </link>
-    <link linkend="GtkRadioButton">
-      <inlinegraphic fileref="radio-group.png" format="PNG"></inlinegraphic>
-    </link>
     <link linkend="GtkFileChooserButton">
       <inlinegraphic fileref="file-button.png" format="PNG"></inlinegraphic>
     </link>
