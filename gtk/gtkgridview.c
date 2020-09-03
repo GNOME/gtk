@@ -1200,7 +1200,7 @@ gtk_grid_view_new (GtkSelectionModel  *model,
   GtkWidget *result;
 
   g_return_val_if_fail (model == NULL || GTK_IS_SELECTION_MODEL (model), NULL);
-  g_return_val_if_fail (GTK_IS_LIST_ITEM_FACTORY (factory), NULL);
+  g_return_val_if_fail (factory == NULL || GTK_IS_LIST_ITEM_FACTORY (factory), NULL);
 
   result = g_object_new (GTK_TYPE_GRID_VIEW,
                          "model", model,
