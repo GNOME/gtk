@@ -1035,11 +1035,10 @@ render_transform_node (GskGLRenderer   *self,
       }
     break;
 
-    case GSK_TRANSFORM_CATEGORY_UNKNOWN:
-    case GSK_TRANSFORM_CATEGORY_ANY:
-    case GSK_TRANSFORM_CATEGORY_3D:
     case GSK_TRANSFORM_CATEGORY_2D:
-    default:
+    case GSK_TRANSFORM_CATEGORY_3D:
+    case GSK_TRANSFORM_CATEGORY_ANY:
+    case GSK_TRANSFORM_CATEGORY_UNKNOWN:
       {
         TextureRegion region;
         gboolean is_offscreen;
@@ -1050,7 +1049,9 @@ render_transform_node (GskGLRenderer   *self,
             gsk_gl_renderer_add_render_ops (self, child, builder);
             ops_pop_modelview (builder);
           }
-        else if (add_offscreen_ops (self, builder,
+        else
+          {
+            if (add_offscreen_ops (self, builder,
                                    &child->bounds,
                                    child,
                                    &region, &is_offscreen,
@@ -1073,6 +1074,11 @@ render_transform_node (GskGLRenderer   *self,
             ops_pop_modelview (builder);
           }
       }
+      break;
+
+    default:
+      g_assert_not_reached ();
+      break;
     }
 }
 
