@@ -41,7 +41,9 @@ void gsk_matrix_transform_point3d (const graphene_matrix_t  *m,
 void gsk_matrix_transform_bounds  (const graphene_matrix_t  *m,
                                    const graphene_rect_t    *r,
                                    graphene_rect_t          *res);
-
+void gsk_matrix_transform_rect    (const graphene_matrix_t  *m,
+                                   const graphene_rect_t    *r,
+                                   graphene_quad_t          *res);
 
 G_END_DECLS
 
