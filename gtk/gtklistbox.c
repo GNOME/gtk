@@ -2272,16 +2272,20 @@ gtk_list_box_row_visibility_changed (GtkListBox    *box,
  * Removes a child from @box.
  */
 void
-gtk_list_box_remove (GtkListBox   *box,
-                     GtkWidget    *child)
+gtk_list_box_remove (GtkListBox *box,
+                     GtkWidget  *child)
 {
-  GtkWidget *widget = GTK_WIDGET (box);
+  GtkWidget *widget;
   gboolean was_visible;
   gboolean was_selected;
   GtkListBoxRow *row;
   GSequenceIter *iter;
   GSequenceIter *next;
 
+  g_return_if_fail (GTK_IS_LIST_BOX (box));
+  g_return_if_fail (GTK_IS_WIDGET (child));
+
+  widget = GTK_WIDGET (box);
   was_visible = gtk_widget_get_visible (child);
 
   if (child == box->placeholder)
