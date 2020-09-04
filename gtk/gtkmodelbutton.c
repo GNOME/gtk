@@ -1336,6 +1336,22 @@ focus_in_cb (GtkEventController   *controller,
 }
 
 static void
+gesture_pressed (GtkGestureClick *gesture,
+                 guint            n_press,
+                 double           x,
+                 double           y,
+                 GtkWidget       *widget)
+{
+  GdkEventSequence *sequence;
+
+  if (gtk_widget_get_focus_on_click (widget) && !gtk_widget_has_focus (widget))
+    gtk_widget_grab_focus (widget);
+
+  sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
+  gtk_gesture_set_sequence_state (GTK_GESTURE (gesture), sequence, GTK_EVENT_SEQUENCE_CLAIMED);
+}
+
+static void
 emit_clicked (GtkModelButton *button)
 {
   g_signal_emit (button, signals[SIGNAL_CLICKED], 0);
@@ -1374,6 +1390,7 @@ gtk_model_button_init (GtkModelButton *self)
   gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (gesture), FALSE);
   gtk_gesture_single_set_exclusive (GTK_GESTURE_SINGLE (gesture), TRUE);
   gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (gesture), GDK_BUTTON_PRIMARY);
+  g_signal_connect (gesture, "pressed", G_CALLBACK (gesture_pressed), self);
   g_signal_connect_swapped (gesture, "released", G_CALLBACK (emit_clicked), self);
   gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (gesture), GTK_PHASE_CAPTURE);
   gtk_widget_add_controller (GTK_WIDGET (self), GTK_EVENT_CONTROLLER (gesture));
