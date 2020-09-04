@@ -106,10 +106,10 @@ demo2_layout_allocate (GtkLayoutManager *layout_manager,
 
       gtk_widget_set_child_visible (child, FALSE);
 
-      graphene_point3d_init (&p1, 0., 0., 1.);
+      graphene_point3d_init (&p1, w, h, 1.);
       graphene_point3d_init (&p2, w, 0., 1.);
-      graphene_point3d_init (&p3, 0., h, 1.);
-      graphene_point3d_init (&p4, w, h, 1.);
+      graphene_point3d_init (&p3, 0., 0., 1.);
+      graphene_point3d_init (&p4, 0., h, 1.);
 
       t_1 = RADIANS (map_offset (offset + 10 * j));
       t_2 = RADIANS (map_offset (offset + 10 * (j + 1)));
@@ -129,8 +129,8 @@ demo2_layout_allocate (GtkLayoutManager *layout_manager,
 
       graphene_point3d_init (&q1, x0 + SX (r, t_1, p_1), y0 + SY (r, t_1, p_1), SZ (r, t_1, p_1));
       graphene_point3d_init (&q2, x0 + SX (r, t_2, p_1), y0 + SY (r, t_2, p_1), SZ (r, t_2, p_1));
-      graphene_point3d_init (&q3, x0 + SX (r, t_1, p_2), y0 + SY (r, t_1, p_2), SZ (r, t_1, p_2));
-      graphene_point3d_init (&q4, x0 + SX (r, t_2, p_2), y0 + SY (r, t_2, p_2), SZ (r, t_2, p_2));
+      graphene_point3d_init (&q3, x0 + SX (r, t_2, p_2), y0 + SY (r, t_2, p_2), SZ (r, t_2, p_2));
+      graphene_point3d_init (&q4, x0 + SX (r, t_1, p_2), y0 + SY (r, t_1, p_2), SZ (r, t_1, p_2));
 
       /* Get a matrix that moves p1 -> q1, p2 -> q2, ... */
       perspective_3d (&p1, &p2, &p3, &p4,
