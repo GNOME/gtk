@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: gtk+ master\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-08-31 16:17+0000\n"
-"PO-Revision-Date: 2020-08-31 21:43+0200\n"
+"PO-Revision-Date: 2020-09-03 21:54+0200\n"
 "Last-Translator: Matej Urbančič <mateju@svn.gnome.org>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
 "Language: sl_SI\n"
@@ -48,10 +48,9 @@ msgid "Cannot provide contents as “%s”"
 msgstr "Ni mogoče določiti vsebine kot »%s«."
 
 #: gdk/gdkcontentprovider.c:129
-#, fuzzy, c-format
-#| msgid "Could not read the contents of %s"
+#, c-format
 msgid "Cannot provide contents as %s"
-msgstr "Vsebine %s ni mogoče prebrati"
+msgstr "Ni mogoče določiti vsebine kot %s."
 
 #: gdk/gdkdrop.c:118
 msgid "Drag’n’drop from other applications is not supported."
@@ -615,12 +614,12 @@ msgstr "Ni mogoče zapreti pretoka"
 
 #: gdk/win32/gdkhdataoutputstream-win32.c:86
 msgid "g_try_realloc () failed"
-msgstr ""
+msgstr "Izvedba g_try_realloc () je spodletela"
 
 #: gdk/win32/gdkhdataoutputstream-win32.c:94
 #: gdk/win32/gdkhdataoutputstream-win32.c:232
 msgid "GlobalReAlloc() failed: "
-msgstr ""
+msgstr "Izvedba GlobalReAlloc() je spodletela:"
 
 #: gdk/win32/gdkhdataoutputstream-win32.c:106
 msgid "Ran out of buffer space (buffer size is fixed)"
@@ -637,11 +636,11 @@ msgstr ""
 
 #: gdk/win32/gdkhdataoutputstream-win32.c:251
 msgid "GlobalLock() failed: "
-msgstr ""
+msgstr "Izvedba GlobalLock() je spodletela:"
 
 #: gdk/win32/gdkhdataoutputstream-win32.c:365
 msgid "GlobalAlloc() failed: "
-msgstr ""
+msgstr "Izvedba GlobalAlloc() je spodletela:"
 
 #: gdk/x11/gdkapplaunchcontext-x11.c:290
 #, c-format
@@ -690,7 +689,6 @@ msgstr ""
 
 #: gdk/x11/gdktextlistconverter-x11.c:216
 #: gdk/x11/gdktextlistconverter-x11.c:250
-#, fuzzy
 msgid "Invalid byte sequence in conversion input"
 msgstr "Neveljavno zaporedje bajtov na vhodu pretvorbe"
 
@@ -706,12 +704,12 @@ msgstr "Nepodprto kodiranje »%s«."
 #: gtk/css/gtkcssdataurl.c:70
 #, c-format
 msgid "Not a data: URL"
-msgstr ""
+msgstr "Ni podatek: naslov URL"
 
 #: gtk/css/gtkcssdataurl.c:83
 #, c-format
 msgid "Malformed data: URL"
-msgstr ""
+msgstr "Napačno oblikovan podatek: naslov URL"
 
 #: gtk/css/gtkcssdataurl.c:141
 #, fuzzy, c-format
@@ -1313,7 +1311,7 @@ msgstr "default:mm"
 
 #: gtk/gtkcustompaperunixdialog.c:318
 msgid "Margins from Printer…"
-msgstr "Robovi pri tiskalniku ..."
+msgstr "Robovi pri tiskalniku …"
 
 #. And show the custom paper dialog
 #: gtk/gtkcustompaperunixdialog.c:402 gtk/gtkprintunixdialog.c:2992
@@ -1383,7 +1381,7 @@ msgstr "(Brez)"
 
 #: gtk/gtkfilechooserbutton.c:1994
 msgid "Other…"
-msgstr "Drugo ..."
+msgstr "Drugo …"
 
 #: gtk/gtkfilechooserdialog.c:559
 msgid "_Name"
@@ -2066,7 +2064,7 @@ msgstr "Ni veljavna datoteka nastavitev strani"
 
 #: gtk/gtkpagesetupunixdialog.c:202 gtk/gtkprintunixdialog.c:712
 msgid "Manage Custom Sizes…"
-msgstr "Upravljanje poljubnih velikosti ..."
+msgstr "Upravljanje poljubnih velikosti …"
 
 #: gtk/gtkpagesetupunixdialog.c:285 gtk/ui/gtkassistant.ui:98
 msgid "_Apply"
@@ -2685,21 +2683,17 @@ msgstr "%.0f %%"
 #: gtk/gtkrecentmanager.c:1032 gtk/gtkrecentmanager.c:1045
 #: gtk/gtkrecentmanager.c:1183 gtk/gtkrecentmanager.c:1193
 #: gtk/gtkrecentmanager.c:1243 gtk/gtkrecentmanager.c:1252
-#, fuzzy, c-format
-#| msgid "Unable to find an item with URI '%s'"
+#, c-format
 msgid "Unable to find an item with URI “%s”"
 msgstr "Predmeta z naslovom URI »%s« ni mogoče najti."
 
 #: gtk/gtkrecentmanager.c:1267
-#, fuzzy, c-format
-#| msgid "Unable to move the item with URI '%s' to '%s'"
+#, c-format
 msgid "Unable to move the item with URI “%s” to “%s”"
 msgstr "Predmeta z naslovom URI »%s« ni mogoče premakniti v »%s«."
 
 #: gtk/gtkrecentmanager.c:2319
-#, fuzzy, c-format
-#| msgid ""
-#| "No registered application with name '%s' for item with URI '%s' found"
+#, c-format
 msgid "No registered application with name “%s” for item with URI “%s” found"
 msgstr ""
 "Ni mogoče najti programa z imenom »%s« za odpiranje predmetov z naslovom URI "
@@ -2826,8 +2820,7 @@ msgid "%d %%"
 msgstr "%d %%"
 
 #: gtk/gtkwindow.c:6637
-#, fuzzy, c-format
-#| msgid "Do you want to use GTK+ Inspector?"
+#, c-format
 msgid "Do you want to use GTK Inspector?"
 msgstr "Ali želite uporabljati nadzorni program GTK+?"
 
@@ -2846,8 +2839,6 @@ msgstr ""
 "nastavitev GTK+. Neustrezna raba lahko povzroči nedelovanje okolja."
 
 #: gtk/gtkwindow.c:6644
-#, fuzzy
-#| msgid "Don't show this message again"
 msgid "Don’t show this message again"
 msgstr "Sporočila ne pokaži več"
 
@@ -2885,10 +2876,8 @@ msgid "Activate"
 msgstr "Omogoči"
 
 #: gtk/inspector/action-editor.c:335
-#, fuzzy
-#| msgid "State"
 msgid "Set State"
-msgstr "Stanje"
+msgstr "Nastavi stanje"
 
 #: gtk/inspector/actions.ui:30
 msgid "Enabled"
@@ -2924,10 +2913,8 @@ msgid "Target"
 msgstr "Cilj"
 
 #: gtk/inspector/css-editor.c:129
-#, fuzzy
-#| msgid "You can type here any CSS rule recognized by GTK+."
 msgid "You can type here any CSS rule recognized by GTK."
-msgstr "Tu je mogoče vpisati katerokoli določilo CSS, ki ga GTK+ prepozna."
+msgstr "Vpisati je mogoče katerokoli pravilo CSS, ki ga GTK prepozna."
 
 #: gtk/inspector/css-editor.c:130
 msgid ""
@@ -2976,20 +2963,14 @@ msgid "None"
 msgstr "Brez"
 
 #: gtk/inspector/general.c:457
-#, fuzzy
-#| msgctxt "font"
-#| msgid "None"
 msgctxt "Vulkan device"
 msgid "None"
-msgstr "Brez"
+msgstr "Neopredeljeno"
 
 #: gtk/inspector/general.c:458 gtk/inspector/general.c:459
-#, fuzzy
-#| msgctxt "font"
-#| msgid "None"
 msgctxt "Vulkan version"
 msgid "None"
-msgstr "Brez"
+msgstr "Neopredeljeno"
 
 #: gtk/inspector/general.ui:36
 msgid "GTK Version"
@@ -3008,10 +2989,8 @@ msgid "Pango Fontmap"
 msgstr "Pango Fontmap"
 
 #: gtk/inspector/general.ui:156
-#, fuzzy
-#| msgid "GDK Backend"
 msgid "Media Backend"
-msgstr "Ozadnji program GDK"
+msgstr "Ozadnji predstavni program"
 
 #: gtk/inspector/general.ui:199 gtk/ui/gtkplacesview.ui:80
 msgid "Prefix"
@@ -3022,8 +3001,6 @@ msgid "Display"
 msgstr "Prikaz"
 
 #: gtk/inspector/general.ui:460
-#, fuzzy
-#| msgid "RGBA visual"
 msgid "RGBA Visual"
 msgstr "Vidni RGBA"
 
@@ -3040,10 +3017,8 @@ msgid "GL Vendor"
 msgstr "Ponudnik GL"
 
 #: gtk/inspector/general.ui:621
-#, fuzzy
-#| msgid "_Unlock Device"
 msgid "Vulkan Device"
-msgstr "_Odkleni napravo"
+msgstr "Naprava Vulkan"
 
 #: gtk/inspector/general.ui:652
 msgid "Vulkan API version"
@@ -3083,8 +3058,6 @@ msgid "Type"
 msgstr "Vrsta"
 
 #: gtk/inspector/misc-info.ui:91
-#, fuzzy
-#| msgid "Reference count"
 msgid "Reference Count"
 msgstr "Števec sklicev"
 
@@ -3097,8 +3070,6 @@ msgid "Mnemonic Label"
 msgstr "Oznaka pomagala"
 
 #: gtk/inspector/misc-info.ui:210
-#, fuzzy
-#| msgid "Request mode"
 msgid "Request Mode"
 msgstr "Način zahteve"
 
@@ -3129,8 +3100,6 @@ msgid "Frame Clock"
 msgstr "Okvir ure"
 
 #: gtk/inspector/misc-info.ui:414
-#, fuzzy
-#| msgid "Tick callback"
 msgid "Tick Callback"
 msgstr "Označi povratni sklic"
 
@@ -3169,7 +3138,7 @@ msgstr "Tiskalnik: %p"
 #: gtk/inspector/prop-editor.c:788
 #, c-format
 msgid "%s with value \"%s\""
-msgstr ""
+msgstr "%s z vrednostjo \"%s\""
 
 #. Translators: Both %s are type names, for example
 #. * GtkPropertyExpression with type GObject
@@ -3177,7 +3146,7 @@ msgstr ""
 #: gtk/inspector/prop-editor.c:799
 #, c-format
 msgid "%s with type %s"
-msgstr ""
+msgstr "%s z vrsto %s"
 
 #. Translators: Both %s are type names, for example
 #. * GtkObjectExpression for GtkStringObject 0x23456789
@@ -3185,7 +3154,7 @@ msgstr ""
 #: gtk/inspector/prop-editor.c:812
 #, c-format
 msgid "%s for %s %p"
-msgstr ""
+msgstr "%s za %s %p"
 
 #. Translators: Both %s are type names, for example
 #. * GtkPropertyExpression with value type: gchararray
@@ -3193,7 +3162,7 @@ msgstr ""
 #: gtk/inspector/prop-editor.c:842
 #, c-format
 msgid "%s with value type %s"
-msgstr ""
+msgstr "%s z vrsto vrednosti %s"
 
 #: gtk/inspector/prop-editor.c:1122
 #, c-format
@@ -3221,10 +3190,9 @@ msgstr "Stolpec:"
 #. * Action from 0x2345678 (GtkApplicationWindow)
 #.
 #: gtk/inspector/prop-editor.c:1410
-#, fuzzy, c-format
-#| msgid "Object: %p (%s)"
+#, c-format
 msgid "Action from: %p (%s)"
-msgstr "Predmet: %p (%s)"
+msgstr "Dejanje: %p (%s)"
 
 #: gtk/inspector/prop-editor.c:1465
 msgid "Reset"
@@ -3323,7 +3291,7 @@ msgstr "Velikost:"
 
 #: gtk/inspector/shortcuts.ui:17
 msgid "Trigger"
-msgstr ""
+msgstr "Sprožilec"
 
 #: gtk/inspector/size-groups.c:226
 msgctxt "sizegroup mode"
@@ -3483,7 +3451,7 @@ msgstr "Pokaži razporeditev okvirjev"
 
 #: gtk/inspector/visual.ui:577
 msgid "Show Focus"
-msgstr ""
+msgstr "Pokaži žarišče"
 
 #: gtk/inspector/visual.ui:620
 #, fuzzy
@@ -3520,36 +3488,24 @@ msgid "Objects"
 msgstr "Predmeti"
 
 #: gtk/inspector/window.ui:223
-#, fuzzy
-#| msgctxt "printing option"
-#| msgid "Two Sided"
 msgid "Toggle Sidebar"
-msgstr "Dvostransko"
+msgstr "Preklopi stransko okno"
 
 #: gtk/inspector/window.ui:255
-#, fuzzy
-#| msgctxt "OpenType layout"
-#| msgid "Required Variation Alternates"
 msgid "Refresh action state"
-msgstr "Zahtevani variacijski znaki"
+msgstr "Osveži stanje dejanja"
 
 #: gtk/inspector/window.ui:340
-#, fuzzy
-#| msgctxt "Stock label, media"
-#| msgid "Pre_vious"
 msgid "Previous object"
-msgstr "Pre_dhodni"
+msgstr "Predhodni predmet"
 
 #: gtk/inspector/window.ui:350
 msgid "Child object"
 msgstr "Podrejeni predmet"
 
 #: gtk/inspector/window.ui:360
-#, fuzzy
-#| msgctxt "Stock label, media"
-#| msgid "Pre_vious"
 msgid "Previous sibling"
-msgstr "Pre_dhodni"
+msgstr "Predhodni podrejeni predmet"
 
 #: gtk/inspector/window.ui:369
 msgid "List Position"
@@ -3589,7 +3545,7 @@ msgstr "Meni"
 
 #: gtk/inspector/window.ui:499
 msgid "Controllers"
-msgstr ""
+msgstr "Nadzorniki"
 
 #: gtk/inspector/window.ui:509
 msgid "Magnifier"
@@ -6048,16 +6004,16 @@ msgstr ""
 "\n"
 
 #: gtk/tools/gtk-builder-tool-simplify.c:2081
-#, fuzzy, c-format
-#| msgid "Failed to open file %s : %s\n"
+#, c-format
 msgid "Failed to read “%s”: %s\n"
-msgstr "Datoteke %s ni mogoče odpreti: %s\n"
+msgstr "Datoteke »%s« ni mogoče prebrati: %s\n"
 
 #: gtk/tools/gtk-builder-tool-simplify.c:2087
-#, fuzzy, c-format
-#| msgid "Failed to open file %s : %s\n"
+#, c-format
 msgid "Failed to write %s: “%s”\n"
-msgstr "Datoteke %s ni mogoče odpreti: %s\n"
+msgstr ""
+"Datoteke »%s« ni mogoče zapisati: %s\n"
+"\n"
 
 #: gtk/tools/gtk-builder-tool-simplify.c:2127
 #, c-format
@@ -6076,10 +6032,8 @@ msgstr "Pokaži različico programa"
 #. Translators: this message will appear immediately after the
 #. usage string - Usage: COMMAND [OPTION…] <THIS_MESSAGE>
 #: gtk/tools/gtk-launch.c:74
-#, fuzzy
-#| msgid "APPLICATION [URI...] — launch an APPLICATION"
 msgid "APPLICATION [URI…] — launch an APPLICATION"
-msgstr "PROGRAM [URI ...] – zagon PROGRAMA z naslovom URI"
+msgstr "PROGRAM [URI ...] – zagon PROGRAMA"
 
 #. Translators: this message will appear after the usage string
 #. and before the list of options.
@@ -6097,8 +6051,7 @@ msgid "Error parsing commandline options: %s\n"
 msgstr "Napaka med razčlenjevanjem možnosti ukazne vrstice: %s\n"
 
 #: gtk/tools/gtk-launch.c:90 gtk/tools/gtk-launch.c:111
-#, fuzzy, c-format
-#| msgid "Try \"%s --help\" for more information."
+#, c-format
 msgid "Try “%s --help” for more information."
 msgstr "Poskusite »%s --help« za več podrobnosti."
 
@@ -6190,8 +6143,6 @@ msgid "Overwrite an existing cache, even if up to date"
 msgstr "Prepiši obstoječi predpomnilnik, tudi če je posodobljen"
 
 #: gtk/tools/updateiconcache.c:1659
-#, fuzzy
-#| msgid "Don't check for the existence of index.theme"
 msgid "Don’t check for the existence of index.theme"
 msgstr "Ne preveri obstoja datoteke index.theme"
 
