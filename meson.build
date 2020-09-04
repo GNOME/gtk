@@ -672,35 +672,41 @@ cloudproviders_dep = dependency('cloudproviders',
   ])
 cdata.set('HAVE_CLOUDPROVIDERS', cloudproviders_dep.found())
 
-profiler_enabled = get_option('sysprof').enabled()
 # libsysprof-capture support
-libsysprof_capture_dep = dependency('sysprof-capture-4',
-  required: get_option('sysprof'),
-  default_options: [
-    'enable_examples=false',
-    'enable_gtk=false',
-    'enable_tests=false',
-    'enable_tools=false',
-    'libsysprof=true',
-    'with_sysprofd=none',
-    'help=false',
-  ],
-  fallback: ['sysprof', 'libsysprof_capture_dep'],
-)
-cdata.set('HAVE_SYSPROF', libsysprof_capture_dep.found())
-libsysprof_dep = dependency('sysprof-4',
-  required: false,
-  default_options: [
-    'enable_examples=false',
-    'enable_gtk=false',
-    'enable_tests=false',
-    'enable_tools=false',
-    'libsysprof=true',
-    'with_sysprofd=none',
-    'help=false',
-  ],
-  fallback: ['sysprof', 'libsysprof_dep'],
-)
+if not get_option('sysprof').disabled()
+  libsysprof_capture_dep = dependency('sysprof-capture-4',
+    required: get_option('sysprof'),
+    default_options: [
+      'enable_examples=false',
+      'enable_gtk=false',
+      'enable_tests=false',
+      'enable_tools=false',
+      'libsysprof=true',
+      'with_sysprofd=none',
+      'help=false',
+    ],
+    fallback: ['sysprof', 'libsysprof_capture_dep'],
+  )
+  cdata.set('HAVE_SYSPROF', libsysprof_capture_dep.found())
+  libsysprof_dep = dependency('sysprof-4',
+    required: false,
+    default_options: [
+      'enable_examples=false',
+      'enable_gtk=false',
+      'enable_tests=false',
+      'enable_tools=false',
+      'libsysprof=true',
+      'with_sysprofd=none',
+      'help=false',
+    ],
+    fallback: ['sysprof', 'libsysprof_dep'],
+  )
+  profiler_enabled = true
+else
+  libsysprof_capture_dep = disabler()
+  libsysprof_dep = disabler()
+  profiler_enabled = false
+endif
 
 graphene_dep_type = graphene_dep.type_name()
 if graphene_dep_type == 'pkgconfig'
