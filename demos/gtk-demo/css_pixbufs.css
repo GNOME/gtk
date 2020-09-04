@@ -46,8 +46,8 @@
 }
 
 @keyframes size-the-image {
-    0% { background-size: 96px, 12px, 96px, 12px, 96px, 12px, 96px, 12px, auto }
-    100% { background-size: 12px, 96px, 12px, 96px, 12px, 96px, 12px, 96px, auto }
+    0% { background-size: 96px, 12px, 96px, 12px, 96px, 12px, 96px, 12px, auto; }
+    100% { background-size: 12px, 96px, 12px, 96px, 12px, 96px, 12px, 96px, auto; }
 }
 
 window {
