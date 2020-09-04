@@ -648,23 +648,16 @@ if os_unix
 endif
 
 # Check for Vulkan support
+# Uses meson's custom vulkan dependency searching. Set the VULKAN_SDK env var
+# to use a custom path for the Vulkan SDK. Bugs that are found with it should
+# be reported upstream and fixed.
 vulkan_dep = dependency('vulkan', required: get_option('vulkan'))
 if vulkan_dep.found()
   have_vulkan = true
-  vulkan_pkg_found = true
+  vulkan_pkg_found = vulkan_dep.type_name() == 'pkgconfig'
 else
   have_vulkan = false
   vulkan_pkg_found = false
-  if cc.get_id() == 'msvc'
-    vulkan_libname = 'vulkan-1'
-  else
-    vulkan_libname = 'vulkan'
-  endif
-  vulkan_dep = cc.find_library(vulkan_libname, required: false)
-  if vulkan_dep.found() and cc.has_function('vkCreateInstance', dependencies: vulkan_dep) and cc.has_header('vulkan/vulkan.h')
-    have_vulkan = true
-    pc_gdk_extra_libs += ['-l@0@'.format(vulkan_libname)]
-  endif
 endif
 
 cloudproviders_dep = dependency('cloudproviders',
