@@ -440,7 +440,7 @@ gtk_toggle_button_toggled (GtkToggleButton *toggle_button)
 
 /**
  * gtk_toggle_button_set_group:
- * @self: a #GtkToggleButton
+ * @toggle_button: a #GtkToggleButton
  * @group: (nullable) (transfer none): another #GtkToggleButton to
  *   form a group with
  *
@@ -454,13 +454,13 @@ gtk_toggle_button_toggled (GtkToggleButton *toggle_button)
 
  */
 void
-gtk_toggle_button_set_group (GtkToggleButton *self,
+gtk_toggle_button_set_group (GtkToggleButton *toggle_button,
                              GtkToggleButton *group)
 {
-  GtkToggleButtonPrivate *priv = gtk_toggle_button_get_instance_private (self);
+  GtkToggleButtonPrivate *priv = gtk_toggle_button_get_instance_private (toggle_button);
   GtkToggleButtonPrivate *group_priv = gtk_toggle_button_get_instance_private (group);
 
-  g_return_if_fail (GTK_IS_TOGGLE_BUTTON (self));
+  g_return_if_fail (GTK_IS_TOGGLE_BUTTON (toggle_button));
 
   if (!group)
     {
@@ -477,7 +477,7 @@ gtk_toggle_button_set_group (GtkToggleButton *self,
 
       priv->group_next = NULL;
       priv->group_prev = NULL;
-      g_object_notify_by_pspec (G_OBJECT (self), toggle_button_props[PROP_GROUP]);
+      g_object_notify_by_pspec (G_OBJECT (toggle_button), toggle_button_props[PROP_GROUP]);
       return;
     }
 
@@ -489,12 +489,12 @@ gtk_toggle_button_set_group (GtkToggleButton *self,
     {
       GtkToggleButtonPrivate *prev = gtk_toggle_button_get_instance_private (group_priv->group_prev);
 
-      prev->group_next = self;
+      prev->group_next = toggle_button;
       priv->group_prev = group_priv->group_prev;
     }
 
-  group_priv->group_prev = self;
+  group_priv->group_prev = toggle_button;
   priv->group_next = group;
 
-  g_object_notify_by_pspec (G_OBJECT (self), toggle_button_props[PROP_GROUP]);
+  g_object_notify_by_pspec (G_OBJECT (toggle_button), toggle_button_props[PROP_GROUP]);
 }
