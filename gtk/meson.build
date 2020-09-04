@@ -121,6 +121,7 @@ gtk_private_sources = files([
   'gtkmenutrackeritem.c',
   'gtkpango.c',
   'gskpango.c',
+  'gtkpasswordentrybuffer.c',
   'gtkpathbar.c',
   'gtkplacessidebar.c',
   'gtkplacesview.c',
