@@ -24,15 +24,16 @@
 
 #include "gtktextprivate.h"
 #include "gtkeditable.h"
+#include "gtkeventcontrollerkey.h"
 #include "gtkgestureclick.h"
 #include "gtkbox.h"
 #include "gtkimage.h"
 #include "gtkintl.h"
-#include "gtkprivate.h"
-#include "gtkwidgetprivate.h"
 #include "gtkmarshalers.h"
+#include "gtkpasswordentrybufferprivate.h"
+#include "gtkprivate.h"
 #include "gtkstylecontext.h"
-#include "gtkeventcontrollerkey.h"
+#include "gtkwidgetprivate.h"
 
 /**
  * SECTION:gtkpasswordentry
@@ -159,8 +160,10 @@ static void
 gtk_password_entry_init (GtkPasswordEntry *entry)
 {
   GtkPasswordEntryPrivate *priv = gtk_password_entry_get_instance_private (entry);
+  GtkEntryBuffer *buffer = gtk_password_entry_buffer_new ();
 
   priv->entry = gtk_text_new ();
+  gtk_text_set_buffer (GTK_TEXT (priv->entry), buffer);
   gtk_text_set_visibility (GTK_TEXT (priv->entry), FALSE);
   gtk_widget_set_parent (priv->entry, GTK_WIDGET (entry));
   gtk_editable_init_delegate (GTK_EDITABLE (entry));
@@ -175,6 +178,9 @@ gtk_password_entry_init (GtkPasswordEntry *entry)
   gtk_widget_add_css_class (GTK_WIDGET (entry), I_("password"));
 
   gtk_password_entry_set_extra_menu (entry, NULL);
+
+  /* Transfer ownership to the GtkText widget */
+  g_object_unref (buffer);
 }
 
 static void
