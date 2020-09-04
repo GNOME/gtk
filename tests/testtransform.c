@@ -36,6 +36,7 @@ int
 main (int argc, char *argv[])
 {
   GtkWidget *window, *fixed, *button;
+  GtkWidget *fixed2, *frame;
   gboolean done = FALSE;
   GskTransform *transform;
 
@@ -52,8 +53,7 @@ main (int argc, char *argv[])
   gtk_widget_set_vexpand (fixed, TRUE);
 
   button = gtk_button_new ();
-  gtk_button_set_label (GTK_BUTTON (button), "Hello world");
-  //gtk_widget_set_size_request (button, 50, 50);
+  gtk_button_set_label (GTK_BUTTON (button), "Button");
   g_signal_connect (button, "clicked", G_CALLBACK (hello), NULL);
 
   gtk_fixed_put (GTK_FIXED (fixed), button, 0, 0);
@@ -62,11 +62,27 @@ main (int argc, char *argv[])
   transform = gsk_transform_translate_3d (transform, &GRAPHENE_POINT3D_INIT (0, 0, 50));
   transform = gsk_transform_perspective (transform, 170);
   transform = gsk_transform_translate_3d (transform, &GRAPHENE_POINT3D_INIT (50, 0, 50));
-  transform = gsk_transform_rotate (transform, 30);
-  transform = gsk_transform_rotate_3d (transform, 30, graphene_vec3_y_axis ());
+  transform = gsk_transform_rotate (transform, 20);
+  transform = gsk_transform_rotate_3d (transform, 20, graphene_vec3_y_axis ());
   gtk_fixed_set_child_transform (GTK_FIXED (fixed), button, transform);
 
-  gtk_window_set_child (GTK_WINDOW (window), fixed);
+  frame = gtk_frame_new ("Frame");
+  gtk_widget_add_css_class (frame, "view");
+  gtk_frame_set_child (GTK_FRAME (frame), fixed);
+
+  fixed2 = gtk_fixed_new ();
+
+  gtk_fixed_put (GTK_FIXED (fixed2), frame, 0, 0);
+
+  transform = NULL;
+  transform = gsk_transform_translate_3d (transform, &GRAPHENE_POINT3D_INIT (0, 0, 50));
+  transform = gsk_transform_perspective (transform, 170);
+  transform = gsk_transform_translate_3d (transform, &GRAPHENE_POINT3D_INIT (50, 0, 50));
+  transform = gsk_transform_rotate (transform, 20);
+  transform = gsk_transform_rotate_3d (transform, 20, graphene_vec3_y_axis ());
+  gtk_fixed_set_child_transform (GTK_FIXED (fixed2), frame, transform);
+
+  gtk_window_set_child (GTK_WINDOW (window), fixed2);
 
   gtk_widget_show (window);
 
