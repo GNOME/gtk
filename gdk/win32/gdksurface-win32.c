@@ -45,6 +45,7 @@
 #include "gdkwin32cursor.h"
 #include "gdkglcontext-win32.h"
 #include "gdkdisplay-win32.h"
+#include "gdkdevice-win32.h"
 #include "gdkcairocontext-win32.h"
 
 #include <cairo-win32.h>
