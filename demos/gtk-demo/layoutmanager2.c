@@ -115,7 +115,7 @@ do_layoutmanager2 (GtkWidget *parent)
         "media-playback-pause-symbolic",
         "media-playback-start-symbolic",
         "media-playback-stop-symbolic",
-        "media-record-symbolic"
+        "media-record-symbolic",
         "media-seek-backward-symbolic",
         "media-seek-forward-symbolic",
         "media-skip-backward-symbolic",
