@@ -1,5 +1,5 @@
 project('gtk', 'c',
-        version: '3.99.0',
+        version: '3.99.1',
         default_options: [
           'buildtype=debugoptimized',
           'warning_level=1',
@@ -382,6 +382,11 @@ graphene_dep   = dependency('graphene-gobject-1.0', version: graphene_req,
                             fallback: ['graphene', 'graphene_dep'])
 iso_codes_dep  = dependency('iso-codes', required: false)
 
+gtk_doc_dep    = dependency('gtk-doc', version: '>=1.99',
+                            fallback: ['gtk-doc', 'dummy_dep'],
+                            default_options: ['tests=false', 'yelp_manual=false'],
+                            required: get_option('gtk_doc'))
+
 fontconfig_dep = [] # only used in x11 backend
 
 if os_win32
@@ -648,23 +653,16 @@ if os_unix
 endif
 
 # Check for Vulkan support
+# Uses meson's custom vulkan dependency searching. Set the VULKAN_SDK env var
+# to use a custom path for the Vulkan SDK. Bugs that are found with it should
+# be reported upstream and fixed.
 vulkan_dep = dependency('vulkan', required: get_option('vulkan'))
 if vulkan_dep.found()
   have_vulkan = true
-  vulkan_pkg_found = true
+  vulkan_pkg_found = vulkan_dep.type_name() == 'pkgconfig'
 else
   have_vulkan = false
   vulkan_pkg_found = false
-  if cc.get_id() == 'msvc'
-    vulkan_libname = 'vulkan-1'
-  else
-    vulkan_libname = 'vulkan'
-  endif
-  vulkan_dep = cc.find_library(vulkan_libname, required: false)
-  if vulkan_dep.found() and cc.has_function('vkCreateInstance', dependencies: vulkan_dep) and cc.has_header('vulkan/vulkan.h')
-    have_vulkan = true
-    pc_gdk_extra_libs += ['-l@0@'.format(vulkan_libname)]
-  endif
 endif
 
 cloudproviders_dep = dependency('cloudproviders',
@@ -679,35 +677,41 @@ cloudproviders_dep = dependency('cloudproviders',
   ])
 cdata.set('HAVE_CLOUDPROVIDERS', cloudproviders_dep.found())
 
-profiler_enabled = get_option('sysprof').enabled()
 # libsysprof-capture support
-libsysprof_capture_dep = dependency('sysprof-capture-4',
-  required: get_option('sysprof'),
-  default_options: [
-    'enable_examples=false',
-    'enable_gtk=false',
-    'enable_tests=false',
-    'enable_tools=false',
-    'libsysprof=true',
-    'with_sysprofd=none',
-    'help=false',
-  ],
-  fallback: ['sysprof', 'libsysprof_capture_dep'],
-)
-cdata.set('HAVE_SYSPROF', libsysprof_capture_dep.found())
-libsysprof_dep = dependency('sysprof-4',
-  required: false,
-  default_options: [
-    'enable_examples=false',
-    'enable_gtk=false',
-    'enable_tests=false',
-    'enable_tools=false',
-    'libsysprof=true',
-    'with_sysprofd=none',
-    'help=false',
-  ],
-  fallback: ['sysprof', 'libsysprof_dep'],
-)
+if not get_option('sysprof').disabled()
+  libsysprof_capture_dep = dependency('sysprof-capture-4',
+    required: get_option('sysprof'),
+    default_options: [
+      'enable_examples=false',
+      'enable_gtk=false',
+      'enable_tests=false',
+      'enable_tools=false',
+      'libsysprof=true',
+      'with_sysprofd=none',
+      'help=false',
+    ],
+    fallback: ['sysprof', 'libsysprof_capture_dep'],
+  )
+  cdata.set('HAVE_SYSPROF', libsysprof_capture_dep.found())
+  libsysprof_dep = dependency('sysprof-4',
+    required: false,
+    default_options: [
+      'enable_examples=false',
+      'enable_gtk=false',
+      'enable_tests=false',
+      'enable_tools=false',
+      'libsysprof=true',
+      'with_sysprofd=none',
+      'help=false',
+    ],
+    fallback: ['sysprof', 'libsysprof_dep'],
+  )
+  profiler_enabled = true
+else
+  libsysprof_capture_dep = disabler()
+  libsysprof_dep = disabler()
+  profiler_enabled = false
+endif
 
 graphene_dep_type = graphene_dep.type_name()
 if graphene_dep_type == 'pkgconfig'
