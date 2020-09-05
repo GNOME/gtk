@@ -242,7 +242,6 @@ gtk/gtkprintoperation-win32.c
 gtk/gtkprintunixdialog.c
 gtk/gtkprogressbar.c
 gtk/gtkpropertylookuplistmodel.c
-gtk/gtkradiobutton.c
 gtk/gtkrange.c
 gtk/gtkrecentmanager.c
 gtk/gtkrevealer.c
