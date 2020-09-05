@@ -43,6 +43,12 @@
 #include "gdk/gdkprofilerprivate.h"
 #include <cairo-gobject.h>
 
+#define GDK_ARRAY_NAME gtk_css_selectors
+#define GDK_ARRAY_TYPE_NAME GtkCssSelectors
+#define GDK_ARRAY_ELEMENT_TYPE GtkCssSelector *
+#define GDK_ARRAY_PREALLOC 64
+#include "gdk/gdkarrayimpl.c"
+
 /**
  * SECTION:gtkcssprovider
  * @Short_description: CSS-like styling for widgets
@@ -551,8 +557,7 @@ gtk_css_provider_new (void)
 
 static void
 css_provider_commit (GtkCssProvider  *css_provider,
-                     GtkCssSelector **selectors,
-                     guint            n_selectors,
+                     GtkCssSelectors *selectors,
                      GtkCssRuleset   *ruleset)
 {
   GtkCssProviderPrivate *priv = gtk_css_provider_get_instance_private (css_provider);
@@ -560,19 +565,19 @@ css_provider_commit (GtkCssProvider  *css_provider,
 
   if (ruleset->styles == NULL)
     {
-      for (i = 0; i < n_selectors; i++)
-        _gtk_css_selector_free (selectors[i]);
+      for (i = 0; i < gtk_css_selectors_get_size (selectors); i++)
+        _gtk_css_selector_free (gtk_css_selectors_get (selectors, i));
       return;
     }
 
-  for (i = 0; i < n_selectors; i++)
+  for (i = 0; i < gtk_css_selectors_get_size (selectors); i++)
     {
       GtkCssRuleset *new;
 
       g_array_set_size (priv->rulesets, priv->rulesets->len + 1);
 
       new = &g_array_index (priv->rulesets, GtkCssRuleset, priv->rulesets->len - 1);
-      gtk_css_ruleset_init_copy (new, ruleset, selectors[i]);
+      gtk_css_ruleset_init_copy (new, ruleset, gtk_css_selectors_get (selectors, i));
     }
 }
 
@@ -758,38 +763,24 @@ parse_at_keyword (GtkCssScanner *scanner)
   gtk_css_parser_end_block (scanner->parser);
 }
 
-static guint
-parse_selector_list (GtkCssScanner  *scanner,
-                     GtkCssSelector *out_selectors[MAX_SELECTOR_LIST_LENGTH])
+static void
+parse_selector_list (GtkCssScanner   *scanner,
+                     GtkCssSelectors *selectors)
 {
-  guint n_selectors = 0;
-
   do {
       GtkCssSelector *select = _gtk_css_selector_parse (scanner->parser);
 
       if (select == NULL)
         {
-          for (int i = 0; i < n_selectors; i++)
-            g_clear_pointer (&out_selectors[i], _gtk_css_selector_free);
-          return 0;
+          for (int i = 0; i < gtk_css_selectors_get_size (selectors); i++)
+            _gtk_css_selector_free (gtk_css_selectors_get (selectors, i));
+          gtk_css_selectors_clear (selectors);
+          return;
         }
 
-      out_selectors[n_selectors] = select;
-      n_selectors++;
-
-      if (G_UNLIKELY (n_selectors > MAX_SELECTOR_LIST_LENGTH))
-        {
-          gtk_css_parser_error_syntax (scanner->parser,
-                                       "Only %u selectors per ruleset allowed",
-                                       MAX_SELECTOR_LIST_LENGTH);
-          for (int i = 0; i < MAX_SELECTOR_LIST_LENGTH; i++)
-            g_clear_pointer (&out_selectors[i], _gtk_css_selector_free);
-          return 0;
-        }
+      gtk_css_selectors_append (selectors, select);
     }
   while (gtk_css_parser_try_token (scanner->parser, GTK_CSS_TOKEN_COMMA));
-
-  return n_selectors;
 }
 
 static void
@@ -899,27 +890,28 @@ parse_declarations (GtkCssScanner *scanner,
 static void
 parse_ruleset (GtkCssScanner *scanner)
 {
-  GtkCssSelector *selectors[MAX_SELECTOR_LIST_LENGTH];
-  guint n_selectors;
+  GtkCssSelectors selectors;
   GtkCssRuleset ruleset = { 0, };
 
-  n_selectors = parse_selector_list (scanner, selectors);
-  if (n_selectors == 0)
+  gtk_css_selectors_init (&selectors);
+
+  parse_selector_list (scanner, &selectors);
+  if (gtk_css_selectors_get_size (&selectors) == 0)
     {
       gtk_css_parser_skip_until (scanner->parser, GTK_CSS_TOKEN_OPEN_CURLY);
       gtk_css_parser_skip (scanner->parser);
-      return;
+      goto out;
     }
 
   if (!gtk_css_parser_has_token (scanner->parser, GTK_CSS_TOKEN_OPEN_CURLY))
     {
       guint i;
       gtk_css_parser_error_syntax (scanner->parser, "Expected '{' after selectors");
-      for (i = 0; i < n_selectors; i++)
-        _gtk_css_selector_free (selectors[i]);
+      for (i = 0; i < gtk_css_selectors_get_size (&selectors); i++)
+        _gtk_css_selector_free (gtk_css_selectors_get (&selectors, i));
       gtk_css_parser_skip_until (scanner->parser, GTK_CSS_TOKEN_OPEN_CURLY);
       gtk_css_parser_skip (scanner->parser);
-      return;
+      goto out;
     }
 
   gtk_css_parser_start_block (scanner->parser);
@@ -928,8 +920,11 @@ parse_ruleset (GtkCssScanner *scanner)
 
   gtk_css_parser_end_block (scanner->parser);
 
-  css_provider_commit (scanner->provider, selectors, n_selectors, &ruleset);
+  css_provider_commit (scanner->provider, &selectors, &ruleset);
   gtk_css_ruleset_clear (&ruleset);
+
+out:
+  gtk_css_selectors_clear (&selectors);
 }
 
 static void
