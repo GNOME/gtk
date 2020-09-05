@@ -15,8 +15,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: lt\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-08-25 18:31+0000\n"
-"PO-Revision-Date: 2020-08-25 23:22+0300\n"
+"POT-Creation-Date: 2020-09-05 09:54+0000\n"
+"PO-Revision-Date: 2020-09-05 19:56+0300\n"
 "Last-Translator: Aurimas Černius <aurisc4@gmail.com>\n"
 "Language-Team: Lietuvių <gnome-lt@lists.akl.lt>\n"
 "Language: lt\n"
@@ -258,8 +258,7 @@ msgstr "Aukštis"
 msgid "State"
 msgstr "Būsena"
 
-#: gdk/macos/gdkmacosdrag.c:598 gdk/macos/gdkmacosdrag.c:599
-#| msgid "Surface"
+#: gdk/macos/gdkmacosdrag.c:599 gdk/macos/gdkmacosdrag.c:600
 msgid "Drag Surface"
 msgstr "Tempiamas paviršius"
 
@@ -307,11 +306,11 @@ msgstr "Antraeilis"
 msgid "Minor version number"
 msgstr "Antraeilis versijos numeris"
 
-#: gdk/x11/gdkdevice-xi2.c:124
+#: gdk/x11/gdkdevice-xi2.c:118
 msgid "Device ID"
 msgstr "Įrenginio ID"
 
-#: gdk/x11/gdkdevice-xi2.c:125
+#: gdk/x11/gdkdevice-xi2.c:119
 msgid "Device identifier"
 msgstr "Įrenginio identifikatorius"
 
@@ -655,11 +654,11 @@ msgstr "Aktyvus langas"
 msgid "The window which most recently had focus"
 msgstr "Langas, kuris paskutinis buvo aktyvus"
 
-#: gtk/gtkapplicationwindow.c:677
+#: gtk/gtkapplicationwindow.c:684
 msgid "Show a menubar"
 msgstr "Rodyti meniu juostą"
 
-#: gtk/gtkapplicationwindow.c:678
+#: gtk/gtkapplicationwindow.c:685
 msgid "TRUE if the window should show a menubar at the top of the window"
 msgstr "TEIGIAMA, jei langas turi rodyti meniu juostą lango viršuje"
 
@@ -695,7 +694,7 @@ msgstr "Klausyti vaikinio objekto"
 msgid "Force aspect ratio to match that of the frame’s child"
 msgstr "Mastelis turi atitikti rėmelio vaikinį objektą"
 
-#: gtk/gtkaspectframe.c:173 gtk/gtkbutton.c:252 gtk/gtkcombobox.c:782
+#: gtk/gtkaspectframe.c:173 gtk/gtkbutton.c:256 gtk/gtkcombobox.c:782
 #: gtk/gtkdragicon.c:372 gtk/gtkexpander.c:366 gtk/gtkflowbox.c:509
 #: gtk/gtkframe.c:191 gtk/gtklistbox.c:3467 gtk/gtklistitem.c:185
 #: gtk/gtknotebook.c:567 gtk/gtkoverlay.c:319 gtk/gtkpopover.c:1670
@@ -705,7 +704,7 @@ msgstr "Mastelis turi atitikti rėmelio vaikinį objektą"
 msgid "Child"
 msgstr "Vaikas"
 
-#: gtk/gtkaspectframe.c:174 gtk/gtkbutton.c:253 gtk/gtkexpander.c:367
+#: gtk/gtkaspectframe.c:174 gtk/gtkbutton.c:257 gtk/gtkexpander.c:367
 #: gtk/gtkflowbox.c:510 gtk/gtkframe.c:192 gtk/gtklistbox.c:3468
 #: gtk/gtkoverlay.c:320 gtk/gtkpopover.c:1671 gtk/gtkrevealer.c:353
 #: gtk/gtkscrolledwindow.c:757 gtk/gtksearchbar.c:325 gtk/gtkviewport.c:381
@@ -800,17 +799,14 @@ msgid "Expression"
 msgstr "Išraiška"
 
 #: gtk/gtkboolfilter.c:166
-#| msgid "Expression to compare with"
 msgid "Expression to evaluate"
 msgstr "Išraiška įvertinimui"
 
 #: gtk/gtkboolfilter.c:176
-#| msgid "Inverted"
 msgid "Invert"
 msgstr "Invertuoti"
 
 #: gtk/gtkboolfilter.c:177
-#| msgid "TRUE if the Position property should be used"
 msgid "If the expression result should be inverted"
 msgstr "Ar išraiškos rezultatas turi būti invertuotas"
 
@@ -895,24 +891,24 @@ msgstr "išteklius su UI aprašu"
 msgid "scope to use when instantiating listitems"
 msgstr "kuriamiems sąrašo elementams naudoti sritis"
 
-#: gtk/gtkbutton.c:224 gtk/gtkexpander.c:320 gtk/gtkframe.c:169
-#: gtk/gtklabel.c:744 gtk/gtkmenubutton.c:399
+#: gtk/gtkbutton.c:228 gtk/gtkcheckbutton.c:472 gtk/gtkexpander.c:320
+#: gtk/gtkframe.c:169 gtk/gtklabel.c:744 gtk/gtkmenubutton.c:399
 msgid "Label"
 msgstr "Žymė"
 
-#: gtk/gtkbutton.c:225
+#: gtk/gtkbutton.c:229 gtk/gtkcheckbutton.c:473
 msgid ""
 "Text of the label widget inside the button, if the button contains a label "
 "widget"
 msgstr "Žymės objekto tekstas ant mygtuko, jei mygtukas turi žymės objektą"
 
-#: gtk/gtkbutton.c:231 gtk/gtkexpander.c:328 gtk/gtklabel.c:765
-#: gtk/gtkmenubutton.c:406 gtk/gtkstack.c:383
+#: gtk/gtkbutton.c:235 gtk/gtkcheckbutton.c:486 gtk/gtkexpander.c:328
+#: gtk/gtklabel.c:765 gtk/gtkmenubutton.c:406 gtk/gtkstack.c:383
 msgid "Use underline"
 msgstr "Naudoti pabraukimą"
 
-#: gtk/gtkbutton.c:232 gtk/gtkexpander.c:329 gtk/gtklabel.c:766
-#: gtk/gtkmenubutton.c:407
+#: gtk/gtkbutton.c:236 gtk/gtkcheckbutton.c:487 gtk/gtkexpander.c:329
+#: gtk/gtklabel.c:766 gtk/gtkmenubutton.c:407
 msgid ""
 "If set, an underline in the text indicates the next character should be used "
 "for the mnemonic accelerator key"
@@ -920,21 +916,21 @@ msgstr ""
 "Jei įjungta, pabraukimo simbolis tekste rodo, kad po jo esantis simbolis "
 "naudojamas kaip mnemoninis spartusis klavišas"
 
-#: gtk/gtkbutton.c:238 gtk/gtkcombobox.c:669 gtk/gtkentry.c:469
+#: gtk/gtkbutton.c:242 gtk/gtkcombobox.c:669 gtk/gtkentry.c:469
 #: gtk/gtkscrolledwindow.c:638
 msgid "Has Frame"
 msgstr "Turi rėmelį"
 
-#: gtk/gtkbutton.c:239 gtk/gtkmenubutton.c:414
+#: gtk/gtkbutton.c:243 gtk/gtkmenubutton.c:414
 msgid "Whether the button has a frame"
 msgstr "Ar mygtukas turi rėmelį"
 
-#: gtk/gtkbutton.c:245 gtk/gtkcellrendererpixbuf.c:209 gtk/gtkimage.c:211
+#: gtk/gtkbutton.c:249 gtk/gtkcellrendererpixbuf.c:209 gtk/gtkimage.c:211
 #: gtk/gtkmenubutton.c:392 gtk/gtkprinter.c:170 gtk/gtkwindow.c:822
 msgid "Icon Name"
 msgstr "Piktogramos pavadinimas"
 
-#: gtk/gtkbutton.c:246 gtk/gtkmenubutton.c:393
+#: gtk/gtkbutton.c:250 gtk/gtkmenubutton.c:393
 msgid "The name of the icon used to automatically populate the button"
 msgstr "Piktogramos pavadinimas automatiniam parodymui mygtuke"
 
@@ -1398,8 +1394,9 @@ msgstr "Skaitmenys"
 msgid "The number of decimal places to display"
 msgstr "Rodomų trumpeninės dalies skaitmenų kiekis"
 
-#: gtk/gtkcellrendererspinner.c:138 gtk/gtkmodelbutton.c:1130
-#: gtk/gtkmodelbutton.c:1131 gtk/gtkswitch.c:528 gtk/gtktogglebutton.c:208
+#: gtk/gtkcellrendererspinner.c:138 gtk/gtkcheckbutton.c:460
+#: gtk/gtkmodelbutton.c:1130 gtk/gtkmodelbutton.c:1131 gtk/gtkswitch.c:528
+#: gtk/gtktogglebutton.c:260
 msgid "Active"
 msgstr "Aktyvus"
 
@@ -1856,19 +1853,24 @@ msgstr "Pritaikyti modelį"
 msgid "Whether to request enough space for every row in the model"
 msgstr "Ar prašyti pakankamai ploto kiekvienai eilutei modelyje"
 
-#: gtk/gtkcheckbutton.c:223
-msgid "Draw Indicator"
-msgstr "Braižymo indikatorius"
+#: gtk/gtkcheckbutton.c:461 gtk/gtktogglebutton.c:261
+msgid "If the toggle button should be pressed in"
+msgstr "Ar paspaudimo mygtukas turi būti paspaustas"
 
-#: gtk/gtkcheckbutton.c:224
-msgid "If the indicator part of the button is displayed"
-msgstr "Ar rodoma mygtuko perjungimo padėtis"
+#: gtk/gtkcheckbutton.c:466 gtk/gtktogglebutton.c:267
+msgid "Group"
+msgstr "Grupė"
 
-#: gtk/gtkcheckbutton.c:230
+#: gtk/gtkcheckbutton.c:467
+#| msgid "The radio button whose group this widget belongs to."
+msgid "The check button whose group this widget belongs to."
+msgstr "Žymimoji akutė, kurios grupei priklauso šis objektas."
+
+#: gtk/gtkcheckbutton.c:479
 msgid "Inconsistent"
 msgstr "Nepastovus"
 
-#: gtk/gtkcheckbutton.c:231
+#: gtk/gtkcheckbutton.c:480
 msgid "If the check button is in an “in between” state"
 msgstr "Ar žymimasis mygtukas yra \"tarpinėje\" būsenoje"
 
@@ -2341,12 +2343,10 @@ msgid "The type of elements of this object"
 msgstr "Šio objekto elementų tipas"
 
 #: gtk/gtkdirectorylist.c:338
-#| msgid "Monitor"
 msgid "monitored"
 msgstr "stebima"
 
 #: gtk/gtkdirectorylist.c:339
-#| msgid "The widget to be monitored for accelerator changes"
 msgid "TRUE if the directory is monitored for changes"
 msgstr "TEIGIAMA, jei katalogo pakeitimai yra stebimi"
 
@@ -2391,7 +2391,6 @@ msgid "Contains Pointer"
 msgstr "Turi žymiklį"
 
 #: gtk/gtkdropcontrollermotion.c:227 gtk/gtkeventcontrollermotion.c:224
-#| msgid "Whether the pointer is inthe controllers widget or a descendant"
 msgid "Whether the pointer is in the controllers widget or a descendant"
 msgstr "Ar žymiklis yra kontrolerio valdiklyje ar jo vaike"
 
@@ -3058,22 +3057,18 @@ msgid "Whether to allow multiple files to be selected"
 msgstr "Ar leidžiama pasirinkti keletą failų"
 
 #: gtk/gtkfilechooser.c:113
-#| msgid "Filter"
 msgid "Filters"
 msgstr "Filtrai"
 
 #: gtk/gtkfilechooser.c:114
-#| msgid "The model being filtered"
 msgid "List model of filters"
 msgstr "Filtrų sąrašo modelis"
 
 #: gtk/gtkfilechooser.c:129
-#| msgid "Shortcut Type"
 msgid "Shortcut Folders"
 msgstr "Trumpinių aplankai"
 
 #: gtk/gtkfilechooser.c:130
-#| msgid "A list model to take shortcuts from"
 msgid "List model of shortcut folders"
 msgstr "Trumpinių aplankų sąrašo modelis"
 
@@ -3121,7 +3116,6 @@ msgid "The filter set for this model"
 msgstr "Šiam modeliui nustatytas filtras"
 
 #: gtk/gtkfilterlistmodel.c:577 gtk/gtksortlistmodel.c:784
-#| msgid "Step Increment"
 msgid "Incremental"
 msgstr "Palaipsninis"
 
@@ -3134,12 +3128,10 @@ msgid "The model being filtered"
 msgstr "Modelis yra filtruojamas"
 
 #: gtk/gtkfilterlistmodel.c:601 gtk/gtksortlistmodel.c:808
-#| msgid "Heading"
 msgid "Pending"
 msgstr "Laukiama"
 
 #: gtk/gtkfilterlistmodel.c:602
-#| msgid "Number of recently used files"
 msgid "Number of items not yet filtered"
 msgstr "Dar nefiltruotų elementų skaičius"
 
@@ -3280,11 +3272,11 @@ msgstr "Šrifto savybės kai simbolių eilutė"
 msgid "Language for which features have been selected"
 msgstr "Kalba, kuriai buvo pasirinktos savybės"
 
-#: gtk/gtkfontchooserwidget.c:660
+#: gtk/gtkfontchooserwidget.c:661
 msgid "The tweak action"
 msgstr "Reguliavimo veiksmas"
 
-#: gtk/gtkfontchooserwidget.c:661
+#: gtk/gtkfontchooserwidget.c:662
 msgid "The toggle action to switch to the tweak page"
 msgstr "Reguliavimo veiksmas persijungimui į reguliavimo puslapį"
 
@@ -3430,22 +3422,18 @@ msgstr ""
 "Eilutė, lygiuojama pagal kontrolinę liniją, kai valign yra GTK_ALIGN_BASELINE"
 
 #: gtk/gtkgridlayout.c:167
-#| msgid "Columns"
 msgid "Column"
 msgstr "Stulpelis"
 
 #: gtk/gtkgridlayout.c:168
-#| msgid "The amount of space between children"
 msgid "The column to place the child in"
 msgstr "Stulpelis, kuriame patalpinti vaiką"
 
 #: gtk/gtkgridlayout.c:179
-#| msgid "Rows"
 msgid "Row"
 msgstr "Eilutė"
 
 #: gtk/gtkgridlayout.c:180
-#| msgid "The amount of space between children"
 msgid "The row to place the child in"
 msgstr "Eilutė, kurioje patalpinti vaiką"
 
@@ -4922,7 +4910,7 @@ msgstr "Nustatymai"
 msgid "Printer settings"
 msgstr "Spausdintuvo nustatymai"
 
-#: gtk/gtkprintjob.c:171 gtk/gtkprintjob.c:172 gtk/gtkprintunixdialog.c:382
+#: gtk/gtkprintjob.c:171 gtk/gtkprintjob.c:172 gtk/gtkprintunixdialog.c:381
 msgid "Page Setup"
 msgstr "Puslapio nustatymai"
 
@@ -4946,11 +4934,11 @@ msgstr "Numatytieji puslapio nustatymai"
 msgid "The GtkPageSetup used by default"
 msgstr "Numatytasis naudojamas GtkPageSetup"
 
-#: gtk/gtkprintoperation.c:1093 gtk/gtkprintunixdialog.c:400
+#: gtk/gtkprintoperation.c:1093 gtk/gtkprintunixdialog.c:399
 msgid "Print Settings"
 msgstr "Spausdinimo nustatymai"
 
-#: gtk/gtkprintoperation.c:1094 gtk/gtkprintunixdialog.c:401
+#: gtk/gtkprintoperation.c:1094 gtk/gtkprintunixdialog.c:400
 msgid "The GtkPrintSettings used for initializing the dialog"
 msgstr "GtkPrintSettings naudojamas dialogo inicializavimui"
 
@@ -4970,11 +4958,11 @@ msgstr "Puslapių skaičius"
 msgid "The number of pages in the document."
 msgstr "Puslapių skaičius dokumente."
 
-#: gtk/gtkprintoperation.c:1153 gtk/gtkprintunixdialog.c:390
+#: gtk/gtkprintoperation.c:1153 gtk/gtkprintunixdialog.c:389
 msgid "Current Page"
 msgstr "Esamas puslapis"
 
-#: gtk/gtkprintoperation.c:1154 gtk/gtkprintunixdialog.c:391
+#: gtk/gtkprintoperation.c:1154 gtk/gtkprintunixdialog.c:390
 msgid "The current page in the document"
 msgstr "Esamas puslapis dokumente"
 
@@ -5051,7 +5039,7 @@ msgstr "Kitos kortelės užrašas"
 msgid "Label for the tab containing custom widgets."
 msgstr "Kortelės, kurioje yra kiti objektai, užrašas."
 
-#: gtk/gtkprintoperation.c:1330 gtk/gtkprintunixdialog.c:425
+#: gtk/gtkprintoperation.c:1330 gtk/gtkprintunixdialog.c:424
 msgid "Support Selection"
 msgstr "Leisti spausdinti atranką"
 
@@ -5059,7 +5047,7 @@ msgstr "Leisti spausdinti atranką"
 msgid "TRUE if the print operation will support print of selection."
 msgstr "TEIGIAMA, jeigu leidžiama spausdinti atranką."
 
-#: gtk/gtkprintoperation.c:1345 gtk/gtkprintunixdialog.c:433
+#: gtk/gtkprintoperation.c:1345 gtk/gtkprintunixdialog.c:432
 msgid "Has Selection"
 msgstr "Atranka yra"
 
@@ -5067,11 +5055,11 @@ msgstr "Atranka yra"
 msgid "TRUE if a selection exists."
 msgstr "TEIGIAMA, jeigu egzistuoja atranka."
 
-#: gtk/gtkprintoperation.c:1359 gtk/gtkprintunixdialog.c:441
+#: gtk/gtkprintoperation.c:1359 gtk/gtkprintunixdialog.c:440
 msgid "Embed Page Setup"
 msgstr "Integruoti puslapio nustatymus"
 
-#: gtk/gtkprintoperation.c:1360 gtk/gtkprintunixdialog.c:442
+#: gtk/gtkprintoperation.c:1360 gtk/gtkprintunixdialog.c:441
 msgid "TRUE if page setup combos are embedded in GtkPrintUnixDialog"
 msgstr ""
 "TEIGIAMA, jei puslapio sąrangos kombinacijos integruotos į GtkPrintUnixDialog"
@@ -5084,31 +5072,31 @@ msgstr "Spausdintinų puslapių skaičius"
 msgid "The number of pages that will be printed."
 msgstr "Puslapių, kurie bus išspausdinti, skaičius."
 
-#: gtk/gtkprintunixdialog.c:383
+#: gtk/gtkprintunixdialog.c:382
 msgid "The GtkPageSetup to use"
 msgstr "Naudotinas GtkPageSetup"
 
-#: gtk/gtkprintunixdialog.c:408
+#: gtk/gtkprintunixdialog.c:407
 msgid "Selected Printer"
 msgstr "Pasirinktas spausdintuvas"
 
-#: gtk/gtkprintunixdialog.c:409
+#: gtk/gtkprintunixdialog.c:408
 msgid "The GtkPrinter which is selected"
 msgstr "Pasirinktas GtkPrinter"
 
-#: gtk/gtkprintunixdialog.c:416
+#: gtk/gtkprintunixdialog.c:415
 msgid "Manual Capabilities"
 msgstr "Rankinės galimybės"
 
-#: gtk/gtkprintunixdialog.c:417
+#: gtk/gtkprintunixdialog.c:416
 msgid "Capabilities the application can handle"
 msgstr "Galimybės, kurias supranta programa"
 
-#: gtk/gtkprintunixdialog.c:426
+#: gtk/gtkprintunixdialog.c:425
 msgid "Whether the dialog supports selection"
 msgstr "Ar dialoge galimas žymėjimas"
 
-#: gtk/gtkprintunixdialog.c:434
+#: gtk/gtkprintunixdialog.c:433
 msgid "Whether the application has a selection"
 msgstr "Ar programoje galimas žymėjimas"
 
@@ -5165,14 +5153,6 @@ msgstr "Objektas"
 #: gtk/gtkpropertylookuplistmodel.c:401
 msgid "The root object"
 msgstr "Šakninis objektas"
-
-#: gtk/gtkradiobutton.c:203
-msgid "Group"
-msgstr "Grupė"
-
-#: gtk/gtkradiobutton.c:204
-msgid "The radio button whose group this widget belongs to."
-msgstr "Žymimoji akutė, kurios grupei priklauso šis objektas."
 
 #: gtk/gtkrange.c:366
 msgid "The GtkAdjustment that contains the current value of this range object"
@@ -5456,7 +5436,6 @@ msgid "Whether to show the close button in the toolbar"
 msgstr "Ar rodyti užvėrimo mygtuką"
 
 #: gtk/gtksearchbar.c:331 gtk/gtksearchbar.c:332
-#| msgid "Accelerator Widget"
 msgid "Key Capture Widget"
 msgstr "Klavišų surinkimo elementas"
 
@@ -6092,7 +6071,6 @@ msgid "Maximum size of slice"
 msgstr "Didžiausias dalies dydis"
 
 #: gtk/gtksortlistmodel.c:785
-#| msgid "Step Increment"
 msgid "Sort items incrementally"
 msgstr "Rikiuoti elementus palaipsniui"
 
@@ -6936,9 +6914,10 @@ msgstr "Lango tipas"
 msgid "The GtkTextWindowType"
 msgstr "GtkTextWindowType"
 
-#: gtk/gtktogglebutton.c:209
-msgid "If the toggle button should be pressed in"
-msgstr "Ar paspaudimo mygtukas turi būti paspaustas"
+#: gtk/gtktogglebutton.c:268
+#| msgid "The radio button whose group this widget belongs to."
+msgid "The toggle button whose group this widget belongs to."
+msgstr "Žymimoji akutė, kurios grupei priklauso šis objektas."
 
 #: gtk/gtktreeexpander.c:460
 msgid "The child widget with the actual contents"
@@ -7734,6 +7713,12 @@ msgstr "Spalvų profilio pavadinimas"
 #: modules/printbackends/gtkprintercups.c:94
 msgid "The title of the color profile to use"
 msgstr "Naudotino spalvų profilio pavadinimas"
+
+#~ msgid "Draw Indicator"
+#~ msgstr "Braižymo indikatorius"
+
+#~ msgid "If the indicator part of the button is displayed"
+#~ msgstr "Ar rodoma mygtuko perjungimo padėtis"
 
 #~ msgid "Device type"
 #~ msgstr "Įrenginio tipas"
