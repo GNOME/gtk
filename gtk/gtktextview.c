@@ -7188,11 +7188,11 @@ selection_data_free (SelectionData *data)
 
 static gboolean
 drag_gesture_get_text_surface_coords (GtkGestureDrag *gesture,
-                                     GtkTextView    *text_view,
-                                     int            *start_x,
-                                     int            *start_y,
-                                     int            *x,
-                                     int            *y)
+                                      GtkTextView    *text_view,
+                                      int            *start_x,
+                                      int            *start_y,
+                                      int            *x,
+                                      int            *y)
 {
   double sx, sy, ox, oy;
 
@@ -7262,6 +7262,10 @@ gtk_text_view_drag_gesture_update (GtkGestureDrag *gesture,
 
               gtk_text_view_start_selection_dnd (text_view, &iter, event,
                                                  start_x, start_y);
+
+              /* Deny the gesture so we don't get further updates */
+              gtk_gesture_set_state (text_view->priv->drag_gesture,
+                                     GTK_EVENT_SEQUENCE_DENIED);
               return;
             }
           else
@@ -7274,6 +7278,8 @@ gtk_text_view_drag_gesture_update (GtkGestureDrag *gesture,
       else
         return;
     }
+
+  g_assert (data != NULL);
 
   /* Text selection */
   if (data->granularity == SELECT_CHARACTERS)
@@ -7783,6 +7789,14 @@ dnd_finished_cb (GdkDrag     *drag,
 }
 
 static void
+dnd_cancel_cb (GdkDrag *drag,
+               GdkDragCancelReason reason,
+               GtkTextView *self)
+{
+  self->priv->drag = NULL;
+}
+
+static void
 gtk_text_view_start_selection_dnd (GtkTextView       *text_view,
                                    const GtkTextIter *iter,
                                    GdkEvent          *event,
@@ -7808,9 +7822,11 @@ gtk_text_view_start_selection_dnd (GtkTextView       *text_view,
   surface = gdk_event_get_surface (event);
   device = gdk_event_get_device (event);
   drag = gdk_drag_begin (surface, device, content, actions, x, y);
+
   g_object_unref (content);
 
   g_signal_connect (drag, "dnd-finished", G_CALLBACK (dnd_finished_cb), text_view);
+  g_signal_connect (drag, "cancel", G_CALLBACK (dnd_cancel_cb), text_view);
 
   if (gtk_text_buffer_get_selection_bounds (buffer, &start, &end))
     {
