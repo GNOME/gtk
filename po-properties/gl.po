@@ -19,7 +19,7 @@ msgstr ""
 "Project-Id-Version: gtk+-master-po-properties-gl-77816____.merged\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-09-06 13:26+0000\n"
-"PO-Revision-Date: 2020-09-07 01:18+0200\n"
+"PO-Revision-Date: 2020-09-07 01:19+0200\n"
 "Last-Translator: fran <frandieguez@gnome.org>\n"
 "Language-Team: proxecto@trasno.net\n"
 "Language: gl\n"
@@ -1875,7 +1875,6 @@ msgid "Group"
 msgstr "Grupo"
 
 #: gtk/gtkcheckbutton.c:467
-#, fuzzy
 #| msgid "The radio button whose group this widget belongs to."
 msgid "The check button whose group this widget belongs to."
 msgstr "A caixa de verificación a cuxo grupo pertence este widget."
