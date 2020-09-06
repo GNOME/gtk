@@ -254,15 +254,11 @@ do_constraints (GtkWidget *do_widget)
 
  if (!window)
    {
-     GtkWidget *header, *box, *grid, *button;
+     GtkWidget *box, *grid;
 
      window = gtk_window_new ();
      gtk_window_set_display (GTK_WINDOW (window), gtk_widget_get_display (do_widget));
      gtk_window_set_title (GTK_WINDOW (window), "Constraints");
-
-     header = gtk_header_bar_new ();
-     gtk_header_bar_set_show_title_buttons (GTK_HEADER_BAR (header), FALSE);
-     gtk_window_set_titlebar (GTK_WINDOW (window), header);
      g_object_add_weak_pointer (G_OBJECT (window), (gpointer *)&window);
 
      box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 12);
@@ -272,12 +268,6 @@ do_constraints (GtkWidget *do_widget)
      gtk_widget_set_hexpand (grid, TRUE);
      gtk_widget_set_vexpand (grid, TRUE);
      gtk_box_append (GTK_BOX (box), grid);
-
-     button = gtk_button_new_with_label ("Close");
-     gtk_box_append (GTK_BOX (box), button);
-     gtk_widget_set_hexpand (grid, TRUE);
-     g_signal_connect_swapped (button, "clicked",
-                               G_CALLBACK (gtk_window_destroy), window);
    }
 
  if (!gtk_widget_get_visible (window))
