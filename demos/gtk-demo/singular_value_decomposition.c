@@ -11,6 +11,20 @@
 
 #define MAX_ITERATION_COUNT 30
 
+/* Perform Householder reduction to bidiagonal form
+ *
+ * Input: Matrix A of size nrows x ncols
+ *
+ * Output: Matrices and vectors such that
+ * A = U*Bidiag(diagonal, superdiagonal)*Vt
+ *
+ * All matrices are allocated by the caller
+ *
+ * Sizes:
+ *  A, U: nrows x ncols
+ *  diagonal, superdiagonal: ncols
+ *  V: ncols x ncols
+ */
 static void
 householder_reduction (double *A,
                        int     nrows,
@@ -160,6 +174,20 @@ householder_reduction (double *A,
     }
 }
 
+/* Perform Givens reduction
+ *
+ * Input: Matrices such that
+ * A = U*Bidiag(diagonal,superdiagonal)*Vt
+ *
+ * Output: The same, with superdiagonal = 0
+ *
+ * All matrices are allocated by the caller
+ *
+ * Sizes:
+ *  U: nrows x ncols
+ *  diagonal, superdiagonal: ncols
+ *  V: ncols x ncols
+ */
 static int
 givens_reduction (int nrows,
                   int ncols,
@@ -298,6 +326,11 @@ givens_reduction (int nrows,
   return 0;
 }
 
+/* Given a singular value decomposition
+ * of an nrows x ncols matrix A = U*Diag(S)*Vt,
+ * sort the values of S by decreasing value,
+ * permuting V to match.
+ */
 static void
 sort_singular_values (int     nrows,
                       int     ncols,
@@ -339,6 +372,16 @@ sort_singular_values (int     nrows,
     }
 }
 
+/* Compute a singular value decomposition of A,
+ * A = U*Diag(S)*Vt
+ *
+ * All matrices are allocated by the caller
+ *
+ * Sizes:
+ *  A, U: nrows x ncols
+ *  S: ncols
+ *  V: ncols x ncols
+ */
 int
 singular_value_decomposition (double *A,
                               int     nrows,
@@ -364,6 +407,18 @@ singular_value_decomposition (double *A,
   return 0;
 }
 
+/*
+ * Given a singular value decomposition of A = U*Diag(S)*Vt,
+ * compute the best approximation x to A*x = B.
+ *
+ * All matrices are allocated by the caller
+ *
+ * Sizes:
+ *  U: nrows x ncols
+ *  S: ncols
+ *  V: ncols x ncols
+ *  B, x: ncols
+ */
 void
 singular_value_decomposition_solve (double *U,
                                     double *S,
