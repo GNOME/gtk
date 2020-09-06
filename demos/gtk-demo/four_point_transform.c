@@ -63,11 +63,15 @@ unit_to (graphene_point3d_t *p1,
   graphene_matrix_multiply (&s, &u, m);
 }
 
-/* Make a 4x4 matrix that maps
+/* Compute a 4x4 matrix m that maps
  * p1 -> q1
  * p2 -> q2
  * p3 -> q3
  * p4 -> q4
+ *
+ * This is not in general possible, because projective
+ * transforms preserve coplanarity. But in the cases we
+ * care about here, both sets of points are always coplanar.
  */
 void
 perspective_3d (graphene_point3d_t *p1,
