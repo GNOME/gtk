@@ -2213,20 +2213,20 @@ transform_to_string (int transform)
 static void
 update_scale (GdkDisplay *display)
 {
-  GList *seats;
-  GList *l;
+  GListModel *seats;
+  guint i, n;
 
   g_list_foreach (gdk_wayland_display_get_toplevel_surfaces (display),
                   (GFunc)gdk_wayland_surface_update_scale,
                   NULL);
-  seats = gdk_display_list_seats (display);
-  for (l = seats; l; l = l->next)
-    {
-      GdkSeat *seat = l->data;
 
+  seats = gdk_display_get_seats (display);
+  for (i = 0, n = g_list_model_get_n_items (seats); i < n; i++)
+    {
+      GdkSeat *seat = g_list_model_get_item (seats, i);
       gdk_wayland_seat_update_cursor_scale (GDK_WAYLAND_SEAT (seat));
+      g_object_unref (seat);
     }
-  g_list_free (seats);
 }
 
 static void

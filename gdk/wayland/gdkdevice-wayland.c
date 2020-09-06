@@ -4819,22 +4819,23 @@ _gdk_wayland_display_remove_seat (GdkWaylandDisplay *display_wayland,
                                   guint32            id)
 {
   GdkDisplay *display = GDK_DISPLAY (display_wayland);
-  GList *l, *seats;
+  GListModel *seats;
+  guint i, n;
+  gboolean removed = FALSE;
 
-  seats = gdk_display_list_seats (display);
-
-  for (l = seats; l != NULL; l = l->next)
+  seats = gdk_display_get_seats (display);
+  for (i = 0, n = g_list_model_get_n_items (seats); i < n && !removed; i++)
     {
-      GdkWaylandSeat *seat = l->data;
+      GdkWaylandSeat *seat = g_list_model_get_item (seats, i);
 
-      if (seat->id != id)
-        continue;
+      if (seat->id == id)
+        {
+          gdk_display_remove_seat (display, GDK_SEAT (seat));
+          removed = TRUE;
+        }
 
-      gdk_display_remove_seat (display, GDK_SEAT (seat));
-      break;
+      g_object_unref (seat);
     }
-
-  g_list_free (seats);
 }
 
 uint32_t

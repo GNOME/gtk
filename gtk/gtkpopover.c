@@ -608,15 +608,19 @@ close_menu (GtkPopover *popover)
 static gboolean
 gtk_popover_has_mnemonic_modifier_pressed (GtkPopover *popover)
 {
-  GList *seats, *s;
+  GListModel *seats;
+  guint i, n;
   gboolean retval = FALSE;
 
-  seats = gdk_display_list_seats (gtk_widget_get_display (GTK_WIDGET (popover)));
+  seats = gdk_display_get_seats (gtk_widget_get_display (GTK_WIDGET (popover)));
 
-  for (s = seats; s; s = s->next)
+  for (i = 0, n = g_list_model_get_n_items (seats); i < n; i++)
     {
-      GdkDevice *dev = gdk_seat_get_keyboard (s->data);
+      GdkSeat *seat = g_list_model_get_item (seats, i);
+      GdkDevice *dev = gdk_seat_get_keyboard (seat);
       GdkModifierType mask;
+
+      g_object_unref (seat);
 
       mask = gdk_device_get_modifier_state (dev);
       if ((mask & gtk_accelerator_get_default_mod_mask ()) == GDK_ALT_MASK)
@@ -625,8 +629,6 @@ gtk_popover_has_mnemonic_modifier_pressed (GtkPopover *popover)
           break;
         }
     }
-
-  g_list_free (seats);
 
   return retval;
 }

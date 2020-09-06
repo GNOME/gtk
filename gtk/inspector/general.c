@@ -828,18 +828,20 @@ static void
 populate_seats (GtkInspectorGeneral *gen)
 {
   GtkWidget *child;
-  GList *list, *l;
-  int i;
+  GListModel *seats;
+  guint i, n;
 
   while ((child = gtk_widget_get_first_child (gen->device_box)))
     gtk_list_box_remove (GTK_LIST_BOX (gen->device_box), child);
 
-  list = gdk_display_list_seats (gen->display);
+  seats = gdk_display_get_seats (gen->display);
 
-  for (l = list, i = 0; l; l = l->next, i++)
-    add_seat (gen, GDK_SEAT (l->data), i);
-
-  g_list_free (list);
+  for (i = 0, n = g_list_model_get_n_items (seats); i < n; i++)
+    {
+      GdkSeat *seat = g_list_model_get_item (seats, i);
+      add_seat (gen, seat, i);
+      g_object_unref (seat);
+    }
 }
 
 static void
@@ -935,17 +937,21 @@ static void
 gtk_inspector_general_dispose (GObject *object)
 {
   GtkInspectorGeneral *gen = GTK_INSPECTOR_GENERAL (object);
-  GList *list, *l;
+  GListModel *seats;
+  guint i, n;
 
   g_clear_pointer (&gen->swin, gtk_widget_unparent);
 
   g_signal_handlers_disconnect_by_func (gen->display, G_CALLBACK (seat_added), gen);
   g_signal_handlers_disconnect_by_func (gen->display, G_CALLBACK (seat_removed), gen);
 
-  list = gdk_display_list_seats (gen->display);
-  for (l = list; l; l = l->next)
-    disconnect_seat (gen, GDK_SEAT (l->data));
-  g_list_free (list);
+  seats = gdk_display_get_seats (gen->display);
+  for (i = 0, n = g_list_model_get_n_items (seats); i < n; i++)
+    {
+      GdkSeat *seat = g_list_model_get_item (seats, i);
+      disconnect_seat (gen, seat);
+      g_object_unref (seat);
+    }
 
   G_OBJECT_CLASS (gtk_inspector_general_parent_class)->dispose (object);
 }

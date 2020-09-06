@@ -2796,33 +2796,28 @@ gdk_x11_display_get_keymap (GdkDisplay *display)
 static GdkSeat *
 gdk_x11_display_get_default_seat (GdkDisplay *display)
 {
-  GList *seats, *l;
+  GListModel *seats;
+  guint i, n;
   int device_id;
   gboolean result = FALSE;
 
-  seats = gdk_display_list_seats (display);
+  seats = gdk_display_get_seats (display);
 
   gdk_x11_display_error_trap_push (display);
   result = XIGetClientPointer (GDK_DISPLAY_XDISPLAY (display),
                                None, &device_id);
   gdk_x11_display_error_trap_pop_ignored (display);
 
-  for (l = seats; l; l = l->next)
+  for (i = 0, n = g_list_model_get_n_items (seats); i < n; i++)
     {
-      GdkDevice *pointer;
+      GdkSeat *seat = g_list_model_get_item (seats, i);
+      GdkDevice *pointer = gdk_seat_get_pointer (seat);
 
-      pointer = gdk_seat_get_pointer (l->data);
+      g_object_unref (seat);
 
       if (gdk_x11_device_get_id (pointer) == device_id || !result)
-        {
-          GdkSeat *seat = l->data;
-          g_list_free (seats);
-
-          return seat;
-        }
+        return seat;
     }
-
-  g_list_free (seats);
 
   return NULL;
 }

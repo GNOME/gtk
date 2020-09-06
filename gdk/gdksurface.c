@@ -1790,7 +1790,7 @@ gdk_surface_get_cursor (GdkSurface *surface)
  */
 void
 gdk_surface_set_cursor (GdkSurface *surface,
-                        GdkCursor *cursor)
+                        GdkCursor  *cursor)
 {
   g_return_if_fail (GDK_IS_SURFACE (surface));
 
@@ -1803,30 +1803,33 @@ gdk_surface_set_cursor (GdkSurface *surface,
   if (!GDK_SURFACE_DESTROYED (surface))
     {
       GdkDevice *device;
-      GList *seats, *s;
+      GListModel *seats;
+      guint i, n;
 
       if (cursor)
         surface->cursor = g_object_ref (cursor);
 
-      seats = gdk_display_list_seats (surface->display);
+      seats = gdk_display_get_seats (surface->display);
 
-      for (s = seats; s; s = s->next)
+      for (i = 0, n = g_list_model_get_n_items (seats); i < n; i++)
         {
+          GdkSeat *seat;
           GList *devices, *d;
 
-          device = gdk_seat_get_pointer (s->data);
+          seat = g_list_model_get_item (seats, i);
+          device = gdk_seat_get_pointer (seat);
           gdk_surface_set_cursor_internal (surface, device, surface->cursor);
 
-          devices = gdk_seat_get_devices (s->data, GDK_SEAT_CAPABILITY_TABLET_STYLUS);
+          devices = gdk_seat_get_devices (seat, GDK_SEAT_CAPABILITY_TABLET_STYLUS);
           for (d = devices; d; d = d->next)
             {
               device = d->data;
               gdk_surface_set_cursor_internal (surface, device, surface->cursor);
             }
           g_list_free (devices);
+          g_object_unref (seat);
         }
 
-      g_list_free (seats);
       g_object_notify_by_pspec (G_OBJECT (surface), properties[PROP_CURSOR]);
     }
 }
