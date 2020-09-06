@@ -2042,6 +2042,8 @@ text_buffer_new (GtkAboutDialog  *about,
   gtk_text_buffer_get_end_iter (buffer, &end_iter);
   gtk_text_buffer_apply_tag (buffer, tag, &start_iter, &end_iter);
 
+  gtk_text_buffer_set_enable_undo (buffer, FALSE);
+
   return buffer;
 }
 
