@@ -51,7 +51,7 @@
  *
  * Most of the input device handling has been factored out into separate #GdkSeat
  * objects. Every display has a one or more seats, which can be accessed with
- * gdk_display_get_default_seat() and gdk_display_list_seats().
+ * gdk_display_get_default_seat() and gdk_display_get_seats().
  *
  * Output devices are represented by #GdkMonitor objects, which can be accessed
  * with gdk_display_get_monitor_at_surface() and similar APIs.
@@ -1421,37 +1421,6 @@ gdk_display_get_default_seat (GdkDisplay *display)
   display_class = GDK_DISPLAY_GET_CLASS (display);
 
   return display_class->get_default_seat (display);
-}
-
-/**
- * gdk_display_list_seats:
- * @display: a #GdkDisplay
- *
- * Returns the list of seats known to @display.
- *
- * Returns: (transfer container) (element-type GdkSeat): the
- *          list of seats known to the #GdkDisplay
- **/
-GList *
-gdk_display_list_seats (GdkDisplay *display)
-{
-  GListModel *seats;
-  guint i, n;
-  GList *list;
-
-  g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
-
-  seats = G_LIST_MODEL (display->seats);
-
-  list = NULL;
-  for (i = 0, n = g_list_model_get_n_items (seats); i < n; i++)
-    {
-      GdkSeat *seat = g_list_model_get_item (seats, i);
-      list = g_list_append (list, seat);
-      g_object_unref (seat);
-    }
-
-  return list;
 }
 
 /**

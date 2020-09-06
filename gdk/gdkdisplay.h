@@ -89,9 +89,6 @@ GDK_AVAILABLE_IN_ALL
 GdkSeat * gdk_display_get_default_seat (GdkDisplay *display);
 
 GDK_AVAILABLE_IN_ALL
-GList   * gdk_display_list_seats       (GdkDisplay *display);
-
-GDK_AVAILABLE_IN_ALL
 GListModel * gdk_display_get_seats     (GdkDisplay *display);
 
 GDK_AVAILABLE_IN_ALL
