@@ -58,10 +58,9 @@
  * separators between the rows or columns.
  *
  * GtkColumnView allows the user to select items according to the selection
- * characteristics of the model. If the provided model is not a #GtkSelectionModel,
- * GtkColumnView will wrap it in a #GtkSingleSelection. For models that allow
- * multiple selected items, it is possible to turn on *rubberband selection*,
- * using #GtkColumnView:enable-rubberband.
+ * characteristics of the model. For models that allow multiple selected items,
+ * it is possible to turn on *rubberband selection*, using
+ * #GtkColumnView:enable-rubberband.
  *
  * The column view supports sorting that can be customized by the user by
  * clicking on column headers. To set this up, the #GtkSorter returned by

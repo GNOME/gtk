@@ -909,7 +909,7 @@ gtk_drop_down_get_enable_search (GtkDropDown *self)
  *
  * Sets the expression that gets evaluated to obtain strings from items
  * when searching in the popup. The expression must have a value type of
- * #GTK_TYPE_STRING.
+ * #G_TYPE_STRING.
  */
 void
 gtk_drop_down_set_expression (GtkDropDown   *self,

@@ -54,10 +54,9 @@
  * between the rows.
  *
  * GtkListView allows the user to select items according to the selection
- * characteristics of the model. If the provided model is not a #GtkSelectionModel,
- * GtkListView will wrap it in a #GtkSingleSelection. For models that allow
- * multiple selected items, it is possible to turn on _rubberband selection_,
- * using #GtkListView:enable-rubberband.
+ * characteristics of the model. For models that allow multiple selected items,
+ * it is possible to turn on _rubberband selection_, using
+ * #GtkListView:enable-rubberband.
  *
  * If you need multiple columns with headers, see #GtkColumnView.
  *
@@ -95,7 +94,7 @@
  * {
  *   GAppInfo *app_info;
  *
- *   app_info = g_list_model_get_item (gtk_list_view_get_model (list), position);
+ *   app_info = g_list_model_get_item (G_LIST_MODEL (gtk_list_view_get_model (list)), position);
  *   g_app_info_launch (app_info, NULL, NULL, NULL);
  *   g_object_unref (app_info);
  * }
@@ -108,7 +107,7 @@
  *   g_signal_connect (factory, "setup", G_CALLBACK (setup_listitem_cb), NULL);
  *   g_signal_connect (factory, "bind", G_CALLBACK (bind_listitem_cb), NULL);
  *
- *   list = gtk_list_view_new (model, factory);
+ *   list = gtk_list_view_new (GTK_SELECTION_MODEL (gtk_single_selection_new (model)), factory);
  *
  *   g_signal_connect (list, "activate", G_CALLBACK (activate_cb), NULL);
  *
