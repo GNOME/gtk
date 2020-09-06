@@ -23,8 +23,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+_properties HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-09-04 11:42+0000\n"
-"PO-Revision-Date: 2020-09-06 11:24+0200\n"
+"POT-Creation-Date: 2020-09-06 09:26+0000\n"
+"PO-Revision-Date: 2020-09-06 13:14+0200\n"
 "Last-Translator: Charles Monzat <charles.monzat@free.fr>\n"
 "Language-Team: GNOME French Team <gnomefr@traduc.org>\n"
 "Language: fr\n"
@@ -53,11 +53,11 @@ msgstr "Écran de ce curseur"
 
 #: gdk/gdkdevice.c:123
 msgid "Device Display"
-msgstr "Écran du périphérique"
+msgstr "Affichage du périphérique"
 
 #: gdk/gdkdevice.c:124
 msgid "Display which the device belongs to"
-msgstr "Écran avec lequel le périphérique est en relation"
+msgstr "Affichage avec lequel le périphérique est en relation"
 
 #: gdk/gdkdevice.c:138
 msgid "Device manager"
@@ -127,7 +127,7 @@ msgstr "Poste"
 
 #: gdk/gdkdevice.c:306 gdk/gdkdevice.c:307
 msgid "Number of concurrent touches"
-msgstr "Nombre de touchés simultanés"
+msgstr "Nombre de touchés simultanées"
 
 #: gdk/gdkdevice.c:321 gdk/gdkdevice.c:322
 msgid "Axes"
@@ -6232,7 +6232,7 @@ msgstr "Chaîne d’état"
 
 #: gtk/gtkprintoperation.c:1357
 msgid "A human-readable description of the status"
-msgstr "Une description de l’état intelligible à l’utilisateur"
+msgstr "Une description intelligible pour l’utilisateur de l’état"
 
 #: gtk/gtkprintoperation.c:1375
 msgid "Custom tab label"
