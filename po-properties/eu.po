@@ -8,8 +8,8 @@
 msgid ""
 msgstr "Project-Id-Version: gtk+_properties master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-08-27 00:10+0000\n"
-"PO-Revision-Date: 2020-08-30 10:00+0100\n"
+"POT-Creation-Date: 2020-09-05 09:54+0000\n"
+"PO-Revision-Date: 2020-09-06 10:00+0100\n"
 "Last-Translator: Asier Sarasua Garmendia <asiersarasua@ni.eus>\n"
 "Language-Team: Basque <librezale@librezale.eus>\n"
 "Language: eu\n"
@@ -656,11 +656,11 @@ msgstr "Leiho aktiboa"
 msgid "The window which most recently had focus"
 msgstr "Azken aldian fokua daukan leihoa"
 
-#: gtk/gtkapplicationwindow.c:677
+#: gtk/gtkapplicationwindow.c:684
 msgid "Show a menubar"
 msgstr "Erakutsi menu-barra"
 
-#: gtk/gtkapplicationwindow.c:678
+#: gtk/gtkapplicationwindow.c:685
 msgid "TRUE if the window should show a menubar at the top of the window"
 msgstr "TRUE (egia) leihoak goian menu-barra erakutsi behar badu"
 
@@ -696,7 +696,7 @@ msgstr "Umeari obeditu"
 msgid "Force aspect ratio to match that of the frame’s child"
 msgstr "Behartu aspektu-erlazioa markoaren haurrarekin bat etor dadin"
 
-#: gtk/gtkaspectframe.c:173 gtk/gtkbutton.c:252 gtk/gtkcombobox.c:782
+#: gtk/gtkaspectframe.c:173 gtk/gtkbutton.c:256 gtk/gtkcombobox.c:782
 #: gtk/gtkdragicon.c:372 gtk/gtkexpander.c:366 gtk/gtkflowbox.c:509
 #: gtk/gtkframe.c:191 gtk/gtklistbox.c:3467 gtk/gtklistitem.c:185
 #: gtk/gtknotebook.c:567 gtk/gtkoverlay.c:319 gtk/gtkpopover.c:1670
@@ -706,7 +706,7 @@ msgstr "Behartu aspektu-erlazioa markoaren haurrarekin bat etor dadin"
 msgid "Child"
 msgstr "Haurra"
 
-#: gtk/gtkaspectframe.c:174 gtk/gtkbutton.c:253 gtk/gtkexpander.c:367
+#: gtk/gtkaspectframe.c:174 gtk/gtkbutton.c:257 gtk/gtkexpander.c:367
 #: gtk/gtkflowbox.c:510 gtk/gtkframe.c:192 gtk/gtklistbox.c:3468
 #: gtk/gtkoverlay.c:320 gtk/gtkpopover.c:1671 gtk/gtkrevealer.c:353
 #: gtk/gtkscrolledwindow.c:757 gtk/gtksearchbar.c:325 gtk/gtkviewport.c:381
@@ -895,44 +895,44 @@ msgstr "UI definizioa duen baliabidea"
 msgid "scope to use when instantiating listitems"
 msgstr "zerrenda-elementuak instantziatzean erabiliko den esparrua"
 
-#: gtk/gtkbutton.c:224 gtk/gtkexpander.c:320 gtk/gtkframe.c:169
-#: gtk/gtklabel.c:744 gtk/gtkmenubutton.c:399
+#: gtk/gtkbutton.c:228 gtk/gtkcheckbutton.c:472 gtk/gtkexpander.c:320
+#: gtk/gtkframe.c:169 gtk/gtklabel.c:744 gtk/gtkmenubutton.c:399
 msgid "Label"
 msgstr "Etiketa"
 
-#: gtk/gtkbutton.c:225
+#: gtk/gtkbutton.c:229 gtk/gtkcheckbutton.c:473
 msgid ""
 "Text of the label widget inside the button, if the button contains a label "
 "widget"
 msgstr "Etiketa-trepetaren testua botoi barruan, botoiak etiketa-trepeta badu"
 
-#: gtk/gtkbutton.c:231 gtk/gtkexpander.c:328 gtk/gtklabel.c:765
-#: gtk/gtkmenubutton.c:406 gtk/gtkstack.c:383
+#: gtk/gtkbutton.c:235 gtk/gtkcheckbutton.c:486 gtk/gtkexpander.c:328
+#: gtk/gtklabel.c:765 gtk/gtkmenubutton.c:406 gtk/gtkstack.c:383
 msgid "Use underline"
 msgstr "Erabili azpimarra"
 
-#: gtk/gtkbutton.c:232 gtk/gtkexpander.c:329 gtk/gtklabel.c:766
-#: gtk/gtkmenubutton.c:407
+#: gtk/gtkbutton.c:236 gtk/gtkcheckbutton.c:487 gtk/gtkexpander.c:329
+#: gtk/gtklabel.c:766 gtk/gtkmenubutton.c:407
 msgid ""
 "If set, an underline in the text indicates the next character should be used "
 "for the mnemonic accelerator key"
 msgstr "Ezartzen bada, testuko azpimarrak adierazten du hurrengo karakterea tekla bizkortzaile mnemoteknikorako erabili behar dela"
 
-#: gtk/gtkbutton.c:238 gtk/gtkcombobox.c:669 gtk/gtkentry.c:469
+#: gtk/gtkbutton.c:242 gtk/gtkcombobox.c:669 gtk/gtkentry.c:469
 #: gtk/gtkscrolledwindow.c:638
 msgid "Has Frame"
 msgstr "Markoa dauka"
 
-#: gtk/gtkbutton.c:239 gtk/gtkmenubutton.c:414
+#: gtk/gtkbutton.c:243 gtk/gtkmenubutton.c:414
 msgid "Whether the button has a frame"
 msgstr "Botoiak markoa duen ala ez"
 
-#: gtk/gtkbutton.c:245 gtk/gtkcellrendererpixbuf.c:209 gtk/gtkimage.c:211
+#: gtk/gtkbutton.c:249 gtk/gtkcellrendererpixbuf.c:209 gtk/gtkimage.c:211
 #: gtk/gtkmenubutton.c:392 gtk/gtkprinter.c:170 gtk/gtkwindow.c:822
 msgid "Icon Name"
 msgstr "Ikono-izena"
 
-#: gtk/gtkbutton.c:246 gtk/gtkmenubutton.c:393
+#: gtk/gtkbutton.c:250 gtk/gtkmenubutton.c:393
 msgid "The name of the icon used to automatically populate the button"
 msgstr "Ikonoaren izena botoia automatikoki betetzeko"
 
@@ -1400,8 +1400,9 @@ msgstr "Digituak"
 msgid "The number of decimal places to display"
 msgstr "Bistaratu beharreko dezimalen kopurua"
 
-#: gtk/gtkcellrendererspinner.c:138 gtk/gtkmodelbutton.c:1130
-#: gtk/gtkmodelbutton.c:1131 gtk/gtkswitch.c:528 gtk/gtktogglebutton.c:208
+#: gtk/gtkcellrendererspinner.c:138 gtk/gtkcheckbutton.c:460
+#: gtk/gtkmodelbutton.c:1130 gtk/gtkmodelbutton.c:1131 gtk/gtkswitch.c:528
+#: gtk/gtktogglebutton.c:260
 msgid "Active"
 msgstr "Aktibo"
 
@@ -1863,22 +1864,26 @@ msgstr "Doitu eredua"
 msgid "Whether to request enough space for every row in the model"
 msgstr "Ereduan errenkada bakoitzarentzako nahiko leku eskatu edo ez"
 
-#: gtk/gtkcheckbutton.c:223
-msgid "Draw Indicator"
-msgstr "Marrazki-adierazlea"
+#: gtk/gtkcheckbutton.c:461 gtk/gtktogglebutton.c:261
+msgid "If the toggle button should be pressed in"
+msgstr "Txandakatze-botoiak sakatuta egon behar duen ala ez"
 
-#: gtk/gtkcheckbutton.c:224
-msgid "If the indicator part of the button is displayed"
-msgstr "Botoiaren adierazle-zatia bistaratuta dagoen"
+#: gtk/gtkcheckbutton.c:466 gtk/gtktogglebutton.c:267
+msgid "Group"
+msgstr "Taldea"
+
+#: gtk/gtkcheckbutton.c:467
+msgid "The check button whose group this widget belongs to."
+msgstr "Trepeta honi dagokion taldearen kontrol-botoia."
 
 #
-#: gtk/gtkcheckbutton.c:230
+#: gtk/gtkcheckbutton.c:479
 msgid "Inconsistent"
 msgstr "Sendotasunik gabea"
 
-#: gtk/gtkcheckbutton.c:231
+#: gtk/gtkcheckbutton.c:480
 msgid "If the check button is in an “in between” state"
-msgstr "Txandakatze-botoia “tarteko” egoeran dagoen"
+msgstr "Kontrol-botoia “tarteko” egoeran dagoen"
 
 #: gtk/gtkcolorbutton.c:158 gtk/gtkcolorchooser.c:83
 msgid "Use alpha"
@@ -4921,7 +4926,7 @@ msgid "Printer settings"
 msgstr "Inprimagailuaren ezarpenak"
 
 #
-#: gtk/gtkprintjob.c:171 gtk/gtkprintjob.c:172 gtk/gtkprintunixdialog.c:382
+#: gtk/gtkprintjob.c:171 gtk/gtkprintjob.c:172 gtk/gtkprintunixdialog.c:381
 msgid "Page Setup"
 msgstr "Orrialdearen konfigurazioa"
 
@@ -4943,11 +4948,11 @@ msgstr "Orriaren konfigurazio lehenetsia"
 msgid "The GtkPageSetup used by default"
 msgstr "GtkPageSetup lehenespenez erabilita"
 
-#: gtk/gtkprintoperation.c:1093 gtk/gtkprintunixdialog.c:400
+#: gtk/gtkprintoperation.c:1093 gtk/gtkprintunixdialog.c:399
 msgid "Print Settings"
 msgstr "Inprimatze-ezarpenak"
 
-#: gtk/gtkprintoperation.c:1094 gtk/gtkprintunixdialog.c:401
+#: gtk/gtkprintoperation.c:1094 gtk/gtkprintunixdialog.c:400
 msgid "The GtkPrintSettings used for initializing the dialog"
 msgstr "GtkPrintSettings elkarrizketa-koadroa hasieratzeko erabilita"
 
@@ -4967,11 +4972,11 @@ msgstr "Orrialde kopurua"
 msgid "The number of pages in the document."
 msgstr "Dokumentuaren orrialde kopurua."
 
-#: gtk/gtkprintoperation.c:1153 gtk/gtkprintunixdialog.c:390
+#: gtk/gtkprintoperation.c:1153 gtk/gtkprintunixdialog.c:389
 msgid "Current Page"
 msgstr "Uneko orrialdea"
 
-#: gtk/gtkprintoperation.c:1154 gtk/gtkprintunixdialog.c:391
+#: gtk/gtkprintoperation.c:1154 gtk/gtkprintunixdialog.c:390
 msgid "The current page in the document"
 msgstr "Dokumentuaren uneko orrialdea"
 
@@ -5043,7 +5048,7 @@ msgstr "Fitxaren etiketa pertsonalizatua"
 msgid "Label for the tab containing custom widgets."
 msgstr "Trepeta pertsonalizatuak dituen fitxaren etiketa."
 
-#: gtk/gtkprintoperation.c:1330 gtk/gtkprintunixdialog.c:425
+#: gtk/gtkprintoperation.c:1330 gtk/gtkprintunixdialog.c:424
 msgid "Support Selection"
 msgstr "Hautapenaren euskarria"
 
@@ -5051,7 +5056,7 @@ msgstr "Hautapenaren euskarria"
 msgid "TRUE if the print operation will support print of selection."
 msgstr "TRUE (egia) inprimatzeko eragiketak hautapena inprimatzea onartzen badu."
 
-#: gtk/gtkprintoperation.c:1345 gtk/gtkprintunixdialog.c:433
+#: gtk/gtkprintoperation.c:1345 gtk/gtkprintunixdialog.c:432
 msgid "Has Selection"
 msgstr "Hautapena du"
 
@@ -5060,11 +5065,11 @@ msgid "TRUE if a selection exists."
 msgstr "TRUE (egia) hautapena existitzen bada."
 
 #
-#: gtk/gtkprintoperation.c:1359 gtk/gtkprintunixdialog.c:441
+#: gtk/gtkprintoperation.c:1359 gtk/gtkprintunixdialog.c:440
 msgid "Embed Page Setup"
 msgstr "Kapsulatutako orriaren konfigurazioa"
 
-#: gtk/gtkprintoperation.c:1360 gtk/gtkprintunixdialog.c:442
+#: gtk/gtkprintoperation.c:1360 gtk/gtkprintunixdialog.c:441
 msgid "TRUE if page setup combos are embedded in GtkPrintUnixDialog"
 msgstr "TRUE (egia) orria konfiguratzeko konbinazio-koadroak GtkPrintUnixDialog-en kapsulatuta badaude"
 
@@ -5076,31 +5081,31 @@ msgstr "Orrialde kopurua inprimatzeko"
 msgid "The number of pages that will be printed."
 msgstr "Inprimatuko diren orrialdeen kopurua."
 
-#: gtk/gtkprintunixdialog.c:383
+#: gtk/gtkprintunixdialog.c:382
 msgid "The GtkPageSetup to use"
 msgstr "GtkPageSetup erabiltzeko"
 
-#: gtk/gtkprintunixdialog.c:408
+#: gtk/gtkprintunixdialog.c:407
 msgid "Selected Printer"
 msgstr "Hautatutako inprimagailua"
 
-#: gtk/gtkprintunixdialog.c:409
+#: gtk/gtkprintunixdialog.c:408
 msgid "The GtkPrinter which is selected"
 msgstr "Hautatutako GtkPrinter"
 
-#: gtk/gtkprintunixdialog.c:416
+#: gtk/gtkprintunixdialog.c:415
 msgid "Manual Capabilities"
 msgstr "Eskuzko gaitasunak"
 
-#: gtk/gtkprintunixdialog.c:417
+#: gtk/gtkprintunixdialog.c:416
 msgid "Capabilities the application can handle"
 msgstr "Aplikazioak kudea ditzakeen gaitasunak"
 
-#: gtk/gtkprintunixdialog.c:426
+#: gtk/gtkprintunixdialog.c:425
 msgid "Whether the dialog supports selection"
 msgstr "Elkarrizketa-koadroak hautapena onartzen duen edo ez"
 
-#: gtk/gtkprintunixdialog.c:434
+#: gtk/gtkprintunixdialog.c:433
 msgid "Whether the application has a selection"
 msgstr "Aplikazioak hautapen bat duen edo ez"
 
@@ -5154,14 +5159,6 @@ msgstr "Objektua"
 #: gtk/gtkpropertylookuplistmodel.c:401
 msgid "The root object"
 msgstr "Erro-objektua"
-
-#: gtk/gtkradiobutton.c:203
-msgid "Group"
-msgstr "Taldea"
-
-#: gtk/gtkradiobutton.c:204
-msgid "The radio button whose group this widget belongs to."
-msgstr "Aukera-botoia (taldeari dagokion trepeta hau)."
 
 #: gtk/gtkrange.c:366
 msgid "The GtkAdjustment that contains the current value of this range object"
@@ -6891,9 +6888,9 @@ msgstr "Leiho-mota"
 msgid "The GtkTextWindowType"
 msgstr "GtkTextWindowType"
 
-#: gtk/gtktogglebutton.c:209
-msgid "If the toggle button should be pressed in"
-msgstr "Txandakatze-botoiak sakatuta egon behar duen ala ez"
+#: gtk/gtktogglebutton.c:268
+msgid "The toggle button whose group this widget belongs to."
+msgstr "Trepeta honi dagokion taldearen txandakatze-botoia."
 
 #: gtk/gtktreeexpander.c:460
 msgid "The child widget with the actual contents"
@@ -7690,6 +7687,12 @@ msgstr "Kolore-profilaren titulua"
 #: modules/printbackends/gtkprintercups.c:94
 msgid "The title of the color profile to use"
 msgstr "Erabiliko den kolore-profilaren titulua"
+
+#~ msgid "Draw Indicator"
+#~ msgstr "Marrazki-adierazlea"
+
+#~ msgid "If the indicator part of the button is displayed"
+#~ msgstr "Botoiaren adierazle-zatia bistaratuta dagoen"
 
 #
 #~ msgid "Device type"
