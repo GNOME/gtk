@@ -1037,6 +1037,8 @@ gtk_text_history_set_enabled (GtkTextHistory *self,
           clear_action_queue (&self->undo_queue);
           clear_action_queue (&self->redo_queue);
         }
+
+      gtk_text_history_update_state (self);
     }
 }
 
