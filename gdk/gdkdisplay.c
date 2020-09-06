@@ -147,10 +147,17 @@ gdk_display_real_event_data_free (GdkDisplay     *display,
 static GdkSeat *
 gdk_display_real_get_default_seat (GdkDisplay *display)
 {
-  if (!display->seats)
+  GListModel *seats;
+  GdkSeat *seat;
+
+  seats = G_LIST_MODEL (display->seats);
+  if (g_list_model_get_n_items (seats) == 0)
     return NULL;
 
-  return display->seats->data;
+  seat = g_list_model_get_item (seats, 0);
+  g_object_unref (seat);
+
+  return seat;
 }
 
 static void
@@ -338,6 +345,8 @@ gdk_display_init (GdkDisplay *display)
   display->composited = TRUE;
   display->rgba = TRUE;
   display->input_shapes = TRUE;
+
+  display->seats = g_list_store_new (GDK_TYPE_SEAT);
 }
 
 static void
@@ -364,7 +373,7 @@ gdk_display_finalize (GObject *object)
 
   g_hash_table_destroy (display->pointers_info);
 
-  g_list_free_full (display->seats, g_object_unref);
+  g_object_unref (display->seats);
 
   G_OBJECT_CLASS (gdk_display_parent_class)->finalize (object);
 }
@@ -1365,7 +1374,7 @@ gdk_display_add_seat (GdkDisplay *display,
   g_return_if_fail (GDK_IS_DISPLAY (display));
   g_return_if_fail (GDK_IS_SEAT (seat));
 
-  display->seats = g_list_append (display->seats, g_object_ref (seat));
+  g_list_store_append (display->seats, seat);
   g_signal_emit (display, signals[SEAT_ADDED], 0, seat);
 
   g_signal_connect (seat, "device-removed", G_CALLBACK (device_removed_cb), display);
@@ -1375,21 +1384,19 @@ void
 gdk_display_remove_seat (GdkDisplay *display,
                          GdkSeat    *seat)
 {
-  GList *link;
+  guint pos;
 
   g_return_if_fail (GDK_IS_DISPLAY (display));
   g_return_if_fail (GDK_IS_SEAT (seat));
 
   g_signal_handlers_disconnect_by_func (seat, G_CALLBACK (device_removed_cb), display);
 
-  link = g_list_find (display->seats, seat);
-
-  if (link)
+  if (g_list_store_find (display->seats, seat, &pos))
     {
-      display->seats = g_list_remove_link (display->seats, link);
+      seat = g_list_model_get_item (G_LIST_MODEL (display->seats), pos);
+      g_list_store_remove (display->seats, pos);
       g_signal_emit (display, signals[SEAT_REMOVED], 0, seat);
-      g_object_unref (link->data);
-      g_list_free (link);
+      g_object_unref (seat);
     }
 }
 
@@ -1428,9 +1435,45 @@ gdk_display_get_default_seat (GdkDisplay *display)
 GList *
 gdk_display_list_seats (GdkDisplay *display)
 {
+  GListModel *seats;
+  guint i, n;
+  GList *list;
+
   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
 
-  return g_list_copy (display->seats);
+  seats = G_LIST_MODEL (display->seats);
+
+  list = NULL;
+  for (i = 0, n = g_list_model_get_n_items (seats); i < n; i++)
+    {
+      GdkSeat *seat = g_list_model_get_item (seats, i);
+      list = g_list_append (list, seat);
+      g_object_unref (seat);
+    }
+
+  return list;
+}
+
+/**
+ * gdk_display_get_seats:
+ * @display: a #GdkDisplay
+ *
+ * Returns the list of seats known to @display.
+ *
+ * Subsequent calls to this function will always return the same list
+ * for the same display.
+ *
+ * You can listen to the #GListModel::items-changed signal on this list
+ * to observe changes to the seats of this display.
+ *
+ * Returns: (transfer none): the list of seats
+ */
+GListModel *
+gdk_display_get_seats (GdkDisplay *display)
+{
+  g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
+
+  return G_LIST_MODEL (display->seats);
 }
 
 /**
@@ -1442,8 +1485,8 @@ gdk_display_list_seats (GdkDisplay *display)
  * Subsequent calls to this function will always return the same list for the
  * same display.
  *
- * You can listen to the GListModel::items-changed signal on this list
- * to monitor changes to the monitor of this display.
+ * You can listen to the #GListModel::items-changed signal on this list
+ * to observe changes to the monitors of this display.
  *
  * Returns: (transfer none): a #GListModel of #GdkMonitor
  */

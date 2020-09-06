@@ -108,7 +108,7 @@ struct _GdkDisplay
 
   GdkDebugFlags debug_flags;
 
-  GList *seats;
+  GListStore *seats;
 };
 
 struct _GdkDisplayClass
