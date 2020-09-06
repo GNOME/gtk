@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-08-28 10:27+0000\n"
-"PO-Revision-Date: 2020-08-31 10:25+0700\n"
+"POT-Creation-Date: 2020-09-05 09:54+0000\n"
+"PO-Revision-Date: 2020-09-06 12:15+0700\n"
 "Last-Translator: Kukuh Syafaat <kukuhsyafaat@gnome.org>\n"
 "Language-Team: Indonesian <gnome@i15n.org>\n"
 "Language: id\n"
@@ -655,11 +655,11 @@ msgstr "Jendela aktif"
 msgid "The window which most recently had focus"
 msgstr "Jendela yang terakhir kali memiliki fokus"
 
-#: gtk/gtkapplicationwindow.c:677
+#: gtk/gtkapplicationwindow.c:684
 msgid "Show a menubar"
 msgstr "Tampilkan bilah menu"
 
-#: gtk/gtkapplicationwindow.c:678
+#: gtk/gtkapplicationwindow.c:685
 msgid "TRUE if the window should show a menubar at the top of the window"
 msgstr ""
 "TRUE jika jendela mesti menampilkan bilah menu di bagian puncak jendela"
@@ -696,7 +696,7 @@ msgstr "Obey child"
 msgid "Force aspect ratio to match that of the frame’s child"
 msgstr "Paksakan rasio aspek agar cocok dengan dengan bingkai anak"
 
-#: gtk/gtkaspectframe.c:173 gtk/gtkbutton.c:252 gtk/gtkcombobox.c:782
+#: gtk/gtkaspectframe.c:173 gtk/gtkbutton.c:256 gtk/gtkcombobox.c:782
 #: gtk/gtkdragicon.c:372 gtk/gtkexpander.c:366 gtk/gtkflowbox.c:509
 #: gtk/gtkframe.c:191 gtk/gtklistbox.c:3467 gtk/gtklistitem.c:185
 #: gtk/gtknotebook.c:567 gtk/gtkoverlay.c:319 gtk/gtkpopover.c:1670
@@ -706,7 +706,7 @@ msgstr "Paksakan rasio aspek agar cocok dengan dengan bingkai anak"
 msgid "Child"
 msgstr "Anak"
 
-#: gtk/gtkaspectframe.c:174 gtk/gtkbutton.c:253 gtk/gtkexpander.c:367
+#: gtk/gtkaspectframe.c:174 gtk/gtkbutton.c:257 gtk/gtkexpander.c:367
 #: gtk/gtkflowbox.c:510 gtk/gtkframe.c:192 gtk/gtklistbox.c:3468
 #: gtk/gtkoverlay.c:320 gtk/gtkpopover.c:1671 gtk/gtkrevealer.c:353
 #: gtk/gtkscrolledwindow.c:757 gtk/gtksearchbar.c:325 gtk/gtkviewport.c:381
@@ -891,25 +891,25 @@ msgstr "sumber daya yang berisi definisi UI"
 msgid "scope to use when instantiating listitems"
 msgstr "lingkup untuk digunakan saat instantiating listitems"
 
-#: gtk/gtkbutton.c:224 gtk/gtkexpander.c:320 gtk/gtkframe.c:169
-#: gtk/gtklabel.c:744 gtk/gtkmenubutton.c:399
+#: gtk/gtkbutton.c:228 gtk/gtkcheckbutton.c:472 gtk/gtkexpander.c:320
+#: gtk/gtkframe.c:169 gtk/gtklabel.c:744 gtk/gtkmenubutton.c:399
 msgid "Label"
 msgstr "Label"
 
-#: gtk/gtkbutton.c:225
+#: gtk/gtkbutton.c:229 gtk/gtkcheckbutton.c:473
 msgid ""
 "Text of the label widget inside the button, if the button contains a label "
 "widget"
 msgstr ""
 "Tulisan pada widget label dalam tombol, (jika tombol berisi widget label"
 
-#: gtk/gtkbutton.c:231 gtk/gtkexpander.c:328 gtk/gtklabel.c:765
-#: gtk/gtkmenubutton.c:406 gtk/gtkstack.c:383
+#: gtk/gtkbutton.c:235 gtk/gtkcheckbutton.c:486 gtk/gtkexpander.c:328
+#: gtk/gtklabel.c:765 gtk/gtkmenubutton.c:406 gtk/gtkstack.c:383
 msgid "Use underline"
 msgstr "Gunakan garis bawah"
 
-#: gtk/gtkbutton.c:232 gtk/gtkexpander.c:329 gtk/gtklabel.c:766
-#: gtk/gtkmenubutton.c:407
+#: gtk/gtkbutton.c:236 gtk/gtkcheckbutton.c:487 gtk/gtkexpander.c:329
+#: gtk/gtklabel.c:766 gtk/gtkmenubutton.c:407
 msgid ""
 "If set, an underline in the text indicates the next character should be used "
 "for the mnemonic accelerator key"
@@ -917,21 +917,21 @@ msgstr ""
 "Jika ini diisi maka ada garis bawah pada teks yang menunjukkan bahwa huruf "
 "tersebut berisi singkatan tombol jalan pintas"
 
-#: gtk/gtkbutton.c:238 gtk/gtkcombobox.c:669 gtk/gtkentry.c:469
+#: gtk/gtkbutton.c:242 gtk/gtkcombobox.c:669 gtk/gtkentry.c:469
 #: gtk/gtkscrolledwindow.c:638
 msgid "Has Frame"
 msgstr "Memiliki bingkai"
 
-#: gtk/gtkbutton.c:239 gtk/gtkmenubutton.c:414
+#: gtk/gtkbutton.c:243 gtk/gtkmenubutton.c:414
 msgid "Whether the button has a frame"
 msgstr "Apakah tombol memiliki bingkai"
 
-#: gtk/gtkbutton.c:245 gtk/gtkcellrendererpixbuf.c:209 gtk/gtkimage.c:211
+#: gtk/gtkbutton.c:249 gtk/gtkcellrendererpixbuf.c:209 gtk/gtkimage.c:211
 #: gtk/gtkmenubutton.c:392 gtk/gtkprinter.c:170 gtk/gtkwindow.c:822
 msgid "Icon Name"
 msgstr "Icon Name"
 
-#: gtk/gtkbutton.c:246 gtk/gtkmenubutton.c:393
+#: gtk/gtkbutton.c:250 gtk/gtkmenubutton.c:393
 msgid "The name of the icon used to automatically populate the button"
 msgstr "Nama ikon yang dipakai untuk mempopulasi tombol secara otomatis"
 
@@ -1398,8 +1398,9 @@ msgstr "Digit"
 msgid "The number of decimal places to display"
 msgstr "Jumlah tempat desimal yang ditampilkan"
 
-#: gtk/gtkcellrendererspinner.c:138 gtk/gtkmodelbutton.c:1130
-#: gtk/gtkmodelbutton.c:1131 gtk/gtkswitch.c:528 gtk/gtktogglebutton.c:208
+#: gtk/gtkcellrendererspinner.c:138 gtk/gtkcheckbutton.c:460
+#: gtk/gtkmodelbutton.c:1130 gtk/gtkmodelbutton.c:1131 gtk/gtkswitch.c:528
+#: gtk/gtktogglebutton.c:260
 msgid "Active"
 msgstr "Aktif"
 
@@ -1859,19 +1860,23 @@ msgstr "Pas Model"
 msgid "Whether to request enough space for every row in the model"
 msgstr "Apakah meminta cukup ruang untuk setiap baris dalam model"
 
-#: gtk/gtkcheckbutton.c:223
-msgid "Draw Indicator"
-msgstr "Indikator gambar"
+#: gtk/gtkcheckbutton.c:461 gtk/gtktogglebutton.c:261
+msgid "If the toggle button should be pressed in"
+msgstr "Apakah tombol jungkit harus ditekan ke dalam"
 
-#: gtk/gtkcheckbutton.c:224
-msgid "If the indicator part of the button is displayed"
-msgstr "Menentukan apakah bagian indikator tombol ditampilkan"
+#: gtk/gtkcheckbutton.c:466 gtk/gtktogglebutton.c:267
+msgid "Group"
+msgstr "Grup"
 
-#: gtk/gtkcheckbutton.c:230
+#: gtk/gtkcheckbutton.c:467
+msgid "The check button whose group this widget belongs to."
+msgstr "Tombol cek tempat grup widget ini berada."
+
+#: gtk/gtkcheckbutton.c:479
 msgid "Inconsistent"
 msgstr "Tidak konsisten"
 
-#: gtk/gtkcheckbutton.c:231
+#: gtk/gtkcheckbutton.c:480
 msgid "If the check button is in an “in between” state"
 msgstr "Menentukan apakah tombol centang ada dalam kondisi \"antara\""
 
@@ -4926,7 +4931,7 @@ msgstr "Pengaturan"
 msgid "Printer settings"
 msgstr "Tatanan pencetak"
 
-#: gtk/gtkprintjob.c:171 gtk/gtkprintjob.c:172 gtk/gtkprintunixdialog.c:382
+#: gtk/gtkprintjob.c:171 gtk/gtkprintjob.c:172 gtk/gtkprintunixdialog.c:381
 msgid "Page Setup"
 msgstr "Atur Halaman"
 
@@ -4950,11 +4955,11 @@ msgstr "Tatanan Halaman Baku"
 msgid "The GtkPageSetup used by default"
 msgstr "GtkPageSetup yang dipakai secara baku"
 
-#: gtk/gtkprintoperation.c:1093 gtk/gtkprintunixdialog.c:400
+#: gtk/gtkprintoperation.c:1093 gtk/gtkprintunixdialog.c:399
 msgid "Print Settings"
 msgstr "Tatanan Pencetakan"
 
-#: gtk/gtkprintoperation.c:1094 gtk/gtkprintunixdialog.c:401
+#: gtk/gtkprintoperation.c:1094 gtk/gtkprintunixdialog.c:400
 msgid "The GtkPrintSettings used for initializing the dialog"
 msgstr "GtkPrintSettings yang dipakai untuk menginisialisasi dialog"
 
@@ -4974,11 +4979,11 @@ msgstr "Cacah Halaman"
 msgid "The number of pages in the document."
 msgstr "Cacah halaman dalam dokumen."
 
-#: gtk/gtkprintoperation.c:1153 gtk/gtkprintunixdialog.c:390
+#: gtk/gtkprintoperation.c:1153 gtk/gtkprintunixdialog.c:389
 msgid "Current Page"
 msgstr "Halaman Kini"
 
-#: gtk/gtkprintoperation.c:1154 gtk/gtkprintunixdialog.c:391
+#: gtk/gtkprintoperation.c:1154 gtk/gtkprintunixdialog.c:390
 msgid "The current page in the document"
 msgstr "Halaman kini dalam dokumen"
 
@@ -5054,7 +5059,7 @@ msgstr "Label tab gubahan"
 msgid "Label for the tab containing custom widgets."
 msgstr "Label bagi tab yang memuat widget gubahan."
 
-#: gtk/gtkprintoperation.c:1330 gtk/gtkprintunixdialog.c:425
+#: gtk/gtkprintoperation.c:1330 gtk/gtkprintunixdialog.c:424
 msgid "Support Selection"
 msgstr "Mendukung Pilihan"
 
@@ -5062,7 +5067,7 @@ msgstr "Mendukung Pilihan"
 msgid "TRUE if the print operation will support print of selection."
 msgstr "TRUE bila operasi pencetakan akan mendukung pencetakan dari pilihan."
 
-#: gtk/gtkprintoperation.c:1345 gtk/gtkprintunixdialog.c:433
+#: gtk/gtkprintoperation.c:1345 gtk/gtkprintunixdialog.c:432
 msgid "Has Selection"
 msgstr "Memiliki Pilihan"
 
@@ -5070,11 +5075,11 @@ msgstr "Memiliki Pilihan"
 msgid "TRUE if a selection exists."
 msgstr "TRUE bila ada pilihan."
 
-#: gtk/gtkprintoperation.c:1359 gtk/gtkprintunixdialog.c:441
+#: gtk/gtkprintoperation.c:1359 gtk/gtkprintunixdialog.c:440
 msgid "Embed Page Setup"
 msgstr "Tanamkan Penyiapan Halaman"
 
-#: gtk/gtkprintoperation.c:1360 gtk/gtkprintunixdialog.c:442
+#: gtk/gtkprintoperation.c:1360 gtk/gtkprintunixdialog.c:441
 msgid "TRUE if page setup combos are embedded in GtkPrintUnixDialog"
 msgstr "TRUE bila kombo penyiapan halaman ditanamkan pada GtkPrintUnixDialog"
 
@@ -5086,31 +5091,31 @@ msgstr "Cacah Halaman Akan Dicetak"
 msgid "The number of pages that will be printed."
 msgstr "Cacah halaman yang akan dicetak."
 
-#: gtk/gtkprintunixdialog.c:383
+#: gtk/gtkprintunixdialog.c:382
 msgid "The GtkPageSetup to use"
 msgstr "GtkPageSetup yang akan dipakai"
 
-#: gtk/gtkprintunixdialog.c:408
+#: gtk/gtkprintunixdialog.c:407
 msgid "Selected Printer"
 msgstr "Pencetak Terpilih"
 
-#: gtk/gtkprintunixdialog.c:409
+#: gtk/gtkprintunixdialog.c:408
 msgid "The GtkPrinter which is selected"
 msgstr "GtkPrinter yang dipilih"
 
-#: gtk/gtkprintunixdialog.c:416
+#: gtk/gtkprintunixdialog.c:415
 msgid "Manual Capabilities"
 msgstr "Kapabilitas Manual"
 
-#: gtk/gtkprintunixdialog.c:417
+#: gtk/gtkprintunixdialog.c:416
 msgid "Capabilities the application can handle"
 msgstr "Kapabilitas yang dapat ditangani aplikasi"
 
-#: gtk/gtkprintunixdialog.c:426
+#: gtk/gtkprintunixdialog.c:425
 msgid "Whether the dialog supports selection"
 msgstr "Apakah dialog mendukung pilihan"
 
-#: gtk/gtkprintunixdialog.c:434
+#: gtk/gtkprintunixdialog.c:433
 msgid "Whether the application has a selection"
 msgstr "Apakah aplikasi memiliki pilihan"
 
@@ -5166,14 +5171,6 @@ msgstr "Objek"
 #: gtk/gtkpropertylookuplistmodel.c:401
 msgid "The root object"
 msgstr "Objek root"
-
-#: gtk/gtkradiobutton.c:203
-msgid "Group"
-msgstr "Grup"
-
-#: gtk/gtkradiobutton.c:204
-msgid "The radio button whose group this widget belongs to."
-msgstr "Tombol radio tempat Grup widget ini berada."
 
 #: gtk/gtkrange.c:366
 msgid "The GtkAdjustment that contains the current value of this range object"
@@ -6956,9 +6953,9 @@ msgstr "Jenis Jendela"
 msgid "The GtkTextWindowType"
 msgstr "GtkTextWindowType"
 
-#: gtk/gtktogglebutton.c:209
-msgid "If the toggle button should be pressed in"
-msgstr "Apakah tombol jungkit harus ditekan ke dalam"
+#: gtk/gtktogglebutton.c:268
+msgid "The toggle button whose group this widget belongs to."
+msgstr "Tombol jungkitkan tempat grup widget ini berada."
 
 #: gtk/gtktreeexpander.c:460
 msgid "The child widget with the actual contents"
@@ -7763,3 +7760,9 @@ msgstr "Judul Profil Warna"
 #: modules/printbackends/gtkprintercups.c:94
 msgid "The title of the color profile to use"
 msgstr "Judul profil warna yang akan dipakai"
+
+#~ msgid "Draw Indicator"
+#~ msgstr "Indikator gambar"
+
+#~ msgid "If the indicator part of the button is displayed"
+#~ msgstr "Menentukan apakah bagian indikator tombol ditampilkan"
