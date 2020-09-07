@@ -3495,7 +3495,19 @@ gdk_window_wayland_move_resize (GdkWindow *window,
       if (!should_use_fixed_size (window->state) ||
           (width == impl->fixed_size_width &&
            height == impl->fixed_size_height))
-        gdk_wayland_window_maybe_configure (window, width, height, impl->scale);
+        {
+          gdk_wayland_window_maybe_configure (window,
+                                              width,
+                                              height,
+                                              impl->scale);
+        }
+      else if (!should_inhibit_resize (window))
+        {
+          gdk_wayland_window_configure (window,
+                                        window->width,
+                                        window->height,
+                                        impl->scale);
+        }
     }
 }
 
