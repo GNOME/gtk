@@ -2986,7 +2986,9 @@ gtk_text_drag_gesture_update (GtkGestureDrag *gesture,
           g_signal_connect (drag, "cancel", G_CALLBACK (dnd_cancel_cb), self);
 
           paintable = gtk_text_util_create_drag_icon (widget, text, -1);
-          gtk_drag_icon_set_from_paintable (drag, paintable, ranges[0], 0);
+          gtk_drag_icon_set_from_paintable (drag, paintable,
+                                            (priv->drag_start_x - ranges[0]),
+                                            priv->drag_start_y);
           g_clear_object (&paintable);
 
           priv->drag = drag;

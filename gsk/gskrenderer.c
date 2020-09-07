@@ -510,6 +510,7 @@ get_renderer_for_name (const char *renderer_name)
 #endif
       g_print ("   cairo - Use the Cairo fallback renderer\n");
       g_print ("  opengl - Use the default OpenGL renderer\n");
+      g_print ("      gl - Same as opengl\n");
 #ifdef GDK_RENDERING_VULKAN
       g_print ("  vulkan - Use the Vulkan renderer\n");
 #else
@@ -636,11 +637,10 @@ gsk_renderer_new_for_surface (GdkSurface *surface)
           return renderer;
         }
 
-      GSK_RENDERER_NOTE (renderer, RENDERER,
-          g_message ("Failed to realize renderer of type '%s' for surface '%s': %s\n",
-                   G_OBJECT_TYPE_NAME (renderer),
-                   G_OBJECT_TYPE_NAME (surface),
-                   error->message));
+      g_message ("Failed to realize renderer of type '%s' for surface '%s': %s\n",
+                 G_OBJECT_TYPE_NAME (renderer),
+                 G_OBJECT_TYPE_NAME (surface),
+                 error->message);
       g_object_unref (renderer);
       g_clear_error (&error);
     }
