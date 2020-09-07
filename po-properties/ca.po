@@ -7,7 +7,7 @@
 # Josep Puigdemont <josep.puigdemont@gmail.com>, 2005, 2006.
 # David Planella <david.planella@gmail.com>, 2008, 2009, 2010.
 # Jordi Serratosa <jordis@softcatala.cat>, 2012.
-# Gil Forcada <gilforcada@guifi.net>, 2011-2014.
+# Gil Forcada <gilforcada@guifi.net>, 2011-2020.
 # Benet R.i Camps <benny@softcatala.org>, 2015
 # Jordi Mas <jmas@softcatala.org>, 2015-2020
 #
@@ -40,16 +40,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.3.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-08-27 00:10+0000\n"
-"PO-Revision-Date: 2020-07-26 20:32+0200\n"
-"Last-Translator: Jordi Serratosa <jordis@softcatala.cat>\n"
+"POT-Creation-Date: 2020-09-06 13:26+0000\n"
+"PO-Revision-Date: 2020-09-07 09:24+0200\n"
+"Last-Translator: Gil Forcada <gilforcada@guifi.net>\n"
 "Language-Team: Catalan <tradgnome@softcatala.org>\n"
 "Language: ca\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Poedit 2.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"X-Generator: Gtranslator 3.36.0\n"
 
 #: gdk/gdkapplaunchcontext.c:133 gdk/gdkdrawcontext.c:155 gdk/gdkseat.c:201
 #: gdk/gdkseat.c:202 gdk/gdksurface.c:508 gdk/gdksurface.c:509
@@ -679,11 +679,11 @@ msgstr "Finestra activa"
 msgid "The window which most recently had focus"
 msgstr "L'última finestra que ha tingut el focus"
 
-#: gtk/gtkapplicationwindow.c:677
+#: gtk/gtkapplicationwindow.c:684
 msgid "Show a menubar"
 msgstr "Mostra la barra de menú"
 
-#: gtk/gtkapplicationwindow.c:678
+#: gtk/gtkapplicationwindow.c:685
 msgid "TRUE if the window should show a menubar at the top of the window"
 msgstr ""
 "«TRUE» (cert) si la finestra hauria de mostrar una barra de menú a dalt de "
@@ -721,7 +721,7 @@ msgstr "Obeeix el fill"
 msgid "Force aspect ratio to match that of the frame’s child"
 msgstr "Força la proporció perquè coincideixi amb el marc del fill"
 
-#: gtk/gtkaspectframe.c:173 gtk/gtkbutton.c:252 gtk/gtkcombobox.c:782
+#: gtk/gtkaspectframe.c:173 gtk/gtkbutton.c:256 gtk/gtkcombobox.c:782
 #: gtk/gtkdragicon.c:372 gtk/gtkexpander.c:366 gtk/gtkflowbox.c:509
 #: gtk/gtkframe.c:191 gtk/gtklistbox.c:3467 gtk/gtklistitem.c:185
 #: gtk/gtknotebook.c:567 gtk/gtkoverlay.c:319 gtk/gtkpopover.c:1670
@@ -731,7 +731,7 @@ msgstr "Força la proporció perquè coincideixi amb el marc del fill"
 msgid "Child"
 msgstr "Fill"
 
-#: gtk/gtkaspectframe.c:174 gtk/gtkbutton.c:253 gtk/gtkexpander.c:367
+#: gtk/gtkaspectframe.c:174 gtk/gtkbutton.c:257 gtk/gtkexpander.c:367
 #: gtk/gtkflowbox.c:510 gtk/gtkframe.c:192 gtk/gtklistbox.c:3468
 #: gtk/gtkoverlay.c:320 gtk/gtkpopover.c:1671 gtk/gtkrevealer.c:353
 #: gtk/gtkscrolledwindow.c:757 gtk/gtksearchbar.c:325 gtk/gtkviewport.c:381
@@ -918,24 +918,24 @@ msgstr "recurs que conté la definició de la IU"
 msgid "scope to use when instantiating listitems"
 msgstr "àmbit a usar quan s'instancia la llista d'elements"
 
-#: gtk/gtkbutton.c:224 gtk/gtkexpander.c:320 gtk/gtkframe.c:169
-#: gtk/gtklabel.c:744 gtk/gtkmenubutton.c:399
+#: gtk/gtkbutton.c:228 gtk/gtkcheckbutton.c:472 gtk/gtkexpander.c:320
+#: gtk/gtkframe.c:169 gtk/gtklabel.c:744 gtk/gtkmenubutton.c:399
 msgid "Label"
 msgstr "Etiqueta"
 
-#: gtk/gtkbutton.c:225
+#: gtk/gtkbutton.c:229 gtk/gtkcheckbutton.c:473
 msgid ""
 "Text of the label widget inside the button, if the button contains a label "
 "widget"
 msgstr "Text de l'etiqueta dins del botó, si el botó conté una etiqueta"
 
-#: gtk/gtkbutton.c:231 gtk/gtkexpander.c:328 gtk/gtklabel.c:765
-#: gtk/gtkmenubutton.c:406 gtk/gtkstack.c:383
+#: gtk/gtkbutton.c:235 gtk/gtkcheckbutton.c:486 gtk/gtkexpander.c:328
+#: gtk/gtklabel.c:765 gtk/gtkmenubutton.c:406 gtk/gtkstack.c:383
 msgid "Use underline"
 msgstr "Utilitza subratllat"
 
-#: gtk/gtkbutton.c:232 gtk/gtkexpander.c:329 gtk/gtklabel.c:766
-#: gtk/gtkmenubutton.c:407
+#: gtk/gtkbutton.c:236 gtk/gtkcheckbutton.c:487 gtk/gtkexpander.c:329
+#: gtk/gtklabel.c:766 gtk/gtkmenubutton.c:407
 msgid ""
 "If set, an underline in the text indicates the next character should be used "
 "for the mnemonic accelerator key"
@@ -943,21 +943,21 @@ msgstr ""
 "Si s'habilita, un subratllat en el text indica que el caràcter següent "
 "s'hauria d'utilitzar per a la tecla de drecera"
 
-#: gtk/gtkbutton.c:238 gtk/gtkcombobox.c:669 gtk/gtkentry.c:469
+#: gtk/gtkbutton.c:242 gtk/gtkcombobox.c:669 gtk/gtkentry.c:469
 #: gtk/gtkscrolledwindow.c:638
 msgid "Has Frame"
 msgstr "Té marc"
 
-#: gtk/gtkbutton.c:239 gtk/gtkmenubutton.c:414
+#: gtk/gtkbutton.c:243 gtk/gtkmenubutton.c:414
 msgid "Whether the button has a frame"
 msgstr "Si el botó té un marc"
 
-#: gtk/gtkbutton.c:245 gtk/gtkcellrendererpixbuf.c:209 gtk/gtkimage.c:211
+#: gtk/gtkbutton.c:249 gtk/gtkcellrendererpixbuf.c:209 gtk/gtkimage.c:211
 #: gtk/gtkmenubutton.c:392 gtk/gtkprinter.c:170 gtk/gtkwindow.c:822
 msgid "Icon Name"
 msgstr "Nom de la icona"
 
-#: gtk/gtkbutton.c:246 gtk/gtkmenubutton.c:393
+#: gtk/gtkbutton.c:250 gtk/gtkmenubutton.c:393
 msgid "The name of the icon used to automatically populate the button"
 msgstr ""
 "El nom de la icona que s'utilitza automàticament per a emplenar el botó"
@@ -1427,8 +1427,9 @@ msgstr "Dígits"
 msgid "The number of decimal places to display"
 msgstr "El nombre de decimals a mostrar"
 
-#: gtk/gtkcellrendererspinner.c:138 gtk/gtkmodelbutton.c:1130
-#: gtk/gtkmodelbutton.c:1131 gtk/gtkswitch.c:528 gtk/gtktogglebutton.c:208
+#: gtk/gtkcellrendererspinner.c:138 gtk/gtkcheckbutton.c:460
+#: gtk/gtkmodelbutton.c:1130 gtk/gtkmodelbutton.c:1131 gtk/gtkswitch.c:528
+#: gtk/gtktogglebutton.c:260
 msgid "Active"
 msgstr "Actiu"
 
@@ -1892,19 +1893,24 @@ msgstr "Model ajustat"
 msgid "Whether to request enough space for every row in the model"
 msgstr "Si s'ha de demanar l'espai necessari per a cada fila del model"
 
-#: gtk/gtkcheckbutton.c:223
-msgid "Draw Indicator"
-msgstr "Indicador de dibuix"
+#: gtk/gtkcheckbutton.c:461 gtk/gtktogglebutton.c:261
+msgid "If the toggle button should be pressed in"
+msgstr "Si el botó de commutació ha d'estar premut cap endins"
 
-#: gtk/gtkcheckbutton.c:224
-msgid "If the indicator part of the button is displayed"
-msgstr "Si la part d'indicació del botó es visualitza"
+#: gtk/gtkcheckbutton.c:466 gtk/gtktogglebutton.c:267
+msgid "Group"
+msgstr "Grup"
 
-#: gtk/gtkcheckbutton.c:230
+#: gtk/gtkcheckbutton.c:467
+#| msgid "The radio button whose group this widget belongs to."
+msgid "The check button whose group this widget belongs to."
+msgstr "El botó de commutació al grup del qual pertany aquest giny."
+
+#: gtk/gtkcheckbutton.c:479
 msgid "Inconsistent"
 msgstr "Inconsistent"
 
-#: gtk/gtkcheckbutton.c:231
+#: gtk/gtkcheckbutton.c:480
 msgid "If the check button is in an “in between” state"
 msgstr "Si el botó de commutació és en un estat «intermedi»"
 
@@ -4984,7 +4990,7 @@ msgstr "Paràmetres"
 msgid "Printer settings"
 msgstr "Paràmetres de la impressora"
 
-#: gtk/gtkprintjob.c:171 gtk/gtkprintjob.c:172 gtk/gtkprintunixdialog.c:382
+#: gtk/gtkprintjob.c:171 gtk/gtkprintjob.c:172 gtk/gtkprintunixdialog.c:381
 msgid "Page Setup"
 msgstr "Configuració de la pàgina"
 
@@ -5009,11 +5015,11 @@ msgstr "Configuració de la pàgina per defecte"
 msgid "The GtkPageSetup used by default"
 msgstr "El GtkPageSetup utilitzat per defecte"
 
-#: gtk/gtkprintoperation.c:1093 gtk/gtkprintunixdialog.c:400
+#: gtk/gtkprintoperation.c:1093 gtk/gtkprintunixdialog.c:399
 msgid "Print Settings"
 msgstr "Paràmetres de la impressora"
 
-#: gtk/gtkprintoperation.c:1094 gtk/gtkprintunixdialog.c:401
+#: gtk/gtkprintoperation.c:1094 gtk/gtkprintunixdialog.c:400
 msgid "The GtkPrintSettings used for initializing the dialog"
 msgstr "El GtkPrintSettings utilitzat per a inicialitzar el diàleg"
 
@@ -5033,11 +5039,11 @@ msgstr "Nombre de pàgines"
 msgid "The number of pages in the document."
 msgstr "El nombre de pàgines del document."
 
-#: gtk/gtkprintoperation.c:1153 gtk/gtkprintunixdialog.c:390
+#: gtk/gtkprintoperation.c:1153 gtk/gtkprintunixdialog.c:389
 msgid "Current Page"
 msgstr "Pàgina actual"
 
-#: gtk/gtkprintoperation.c:1154 gtk/gtkprintunixdialog.c:391
+#: gtk/gtkprintoperation.c:1154 gtk/gtkprintunixdialog.c:390
 msgid "The current page in the document"
 msgstr "La pàgina actual en el document"
 
@@ -5116,7 +5122,7 @@ msgstr "Etiqueta de pestanya personalitzada"
 msgid "Label for the tab containing custom widgets."
 msgstr "Etiqueta per a la pestanya que contingui ginys personalitzats."
 
-#: gtk/gtkprintoperation.c:1330 gtk/gtkprintunixdialog.c:425
+#: gtk/gtkprintoperation.c:1330 gtk/gtkprintunixdialog.c:424
 msgid "Support Selection"
 msgstr "Admet la selecció"
 
@@ -5126,7 +5132,7 @@ msgstr ""
 "«TRUE» (cert) si l'operació d'impressió ha d'admetre la impressió de la "
 "selecció."
 
-#: gtk/gtkprintoperation.c:1345 gtk/gtkprintunixdialog.c:433
+#: gtk/gtkprintoperation.c:1345 gtk/gtkprintunixdialog.c:432
 msgid "Has Selection"
 msgstr "Té selecció"
 
@@ -5134,11 +5140,11 @@ msgstr "Té selecció"
 msgid "TRUE if a selection exists."
 msgstr "«TRUE» (cert) si existeix una selecció."
 
-#: gtk/gtkprintoperation.c:1359 gtk/gtkprintunixdialog.c:441
+#: gtk/gtkprintoperation.c:1359 gtk/gtkprintunixdialog.c:440
 msgid "Embed Page Setup"
 msgstr "Incrusta la configuració de la pàgina"
 
-#: gtk/gtkprintoperation.c:1360 gtk/gtkprintunixdialog.c:442
+#: gtk/gtkprintoperation.c:1360 gtk/gtkprintunixdialog.c:441
 msgid "TRUE if page setup combos are embedded in GtkPrintUnixDialog"
 msgstr ""
 "«TRUE» (cert) si els quadres combinats de la configuració de pàgina estan "
@@ -5152,31 +5158,31 @@ msgstr "Nombre de pàgines a imprimir"
 msgid "The number of pages that will be printed."
 msgstr "El nombre de pàgines que s'imprimiran."
 
-#: gtk/gtkprintunixdialog.c:383
+#: gtk/gtkprintunixdialog.c:382
 msgid "The GtkPageSetup to use"
 msgstr "El GtkPageSetup a utilitzar"
 
-#: gtk/gtkprintunixdialog.c:408
+#: gtk/gtkprintunixdialog.c:407
 msgid "Selected Printer"
 msgstr "Impressora seleccionada"
 
-#: gtk/gtkprintunixdialog.c:409
+#: gtk/gtkprintunixdialog.c:408
 msgid "The GtkPrinter which is selected"
 msgstr "La GtkPrinter seleccionada"
 
-#: gtk/gtkprintunixdialog.c:416
+#: gtk/gtkprintunixdialog.c:415
 msgid "Manual Capabilities"
 msgstr "Capacitats manuals"
 
-#: gtk/gtkprintunixdialog.c:417
+#: gtk/gtkprintunixdialog.c:416
 msgid "Capabilities the application can handle"
 msgstr "Capacitats que l'aplicació admet"
 
-#: gtk/gtkprintunixdialog.c:426
+#: gtk/gtkprintunixdialog.c:425
 msgid "Whether the dialog supports selection"
 msgstr "Si el diàleg admet la selecció"
 
-#: gtk/gtkprintunixdialog.c:434
+#: gtk/gtkprintunixdialog.c:433
 msgid "Whether the application has a selection"
 msgstr "Si l'aplicació té una selecció"
 
@@ -5233,14 +5239,6 @@ msgstr "Objecte"
 #: gtk/gtkpropertylookuplistmodel.c:401
 msgid "The root object"
 msgstr "L'objecte arrel"
-
-#: gtk/gtkradiobutton.c:203
-msgid "Group"
-msgstr "Grup"
-
-#: gtk/gtkradiobutton.c:204
-msgid "The radio button whose group this widget belongs to."
-msgstr "El botó de grup al grup del qual pertany aquest giny."
 
 #: gtk/gtkrange.c:366
 msgid "The GtkAdjustment that contains the current value of this range object"
@@ -7078,9 +7076,10 @@ msgstr "Tipus de finestra"
 msgid "The GtkTextWindowType"
 msgstr "El GtkTextWindowType"
 
-#: gtk/gtktogglebutton.c:209
-msgid "If the toggle button should be pressed in"
-msgstr "Si el botó de commutació ha d'estar premut cap endins"
+#: gtk/gtktogglebutton.c:268
+#| msgid "The radio button whose group this widget belongs to."
+msgid "The toggle button whose group this widget belongs to."
+msgstr "El botó commutat al grup del qual pertany aquest giny."
 
 #: gtk/gtktreeexpander.c:460
 msgid "The child widget with the actual contents"
@@ -7897,6 +7896,12 @@ msgstr "Títol del perfil de color"
 #: modules/printbackends/gtkprintercups.c:94
 msgid "The title of the color profile to use"
 msgstr "El títol del perfil de color a utilitzar"
+
+#~ msgid "Draw Indicator"
+#~ msgstr "Indicador de dibuix"
+
+#~ msgid "If the indicator part of the button is displayed"
+#~ msgstr "Si la part d'indicació del botó es visualitza"
 
 #~ msgid "The text displayed next to the accelerator"
 #~ msgstr "El text que es mostra al costat de l'accelerador"
