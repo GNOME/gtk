@@ -22,6 +22,7 @@ node_parser = executable(
 compare_render_tests = [
   'blend-normal',
   'blend-difference',
+  'clip-coordinates-2d',
   'clip-coordinates-3d',
   'clipped_rounded_clip',
   'color-blur0',

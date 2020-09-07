@@ -71,6 +71,7 @@ typedef enum
   RESET_OPACITY    = 1 << 2,
   DUMP_FRAMEBUFFER = 1 << 3,
   NO_CACHE_PLZ     = 1 << 5,
+  LINEAR_FILTER    = 1 << 6,
 } OffscreenFlags;
 
 static inline void
@@ -1000,6 +1001,38 @@ render_texture_node (GskGLRenderer       *self,
     }
 }
 
+/* Returns TRUE is applying transform to bounds
+ * yields an axis-aligned rectangle
+ */
+static gboolean
+result_is_axis_aligned (GskTransform          *transform,
+                        const graphene_rect_t *bounds)
+{
+  graphene_matrix_t m;
+  graphene_quad_t q;
+  graphene_rect_t b;
+  graphene_point_t b1, b2;
+  const graphene_point_t *p;
+  int i;
+
+  gsk_transform_to_matrix (transform, &m);
+  gsk_matrix_transform_rect (&m, bounds, &q);
+  graphene_quad_bounds (&q, &b);
+  graphene_rect_get_top_left (&b, &b1);
+  graphene_rect_get_bottom_right (&b, &b2);
+
+  for (i = 0; i < 4; i++)
+    {
+      p = graphene_quad_get_point (&q, i);
+      if (fabs (p->x - b1.x) > FLT_EPSILON && fabs (p->x - b2.x) > FLT_EPSILON)
+        return FALSE;
+      if (fabs (p->y - b1.y) > FLT_EPSILON && fabs (p->y - b2.y) > FLT_EPSILON)
+        return FALSE;
+    }
+
+  return TRUE;
+}
+
 static inline void
 render_transform_node (GskGLRenderer   *self,
                        GskRenderNode   *node,
@@ -1035,11 +1068,10 @@ render_transform_node (GskGLRenderer   *self,
       }
     break;
 
-    case GSK_TRANSFORM_CATEGORY_UNKNOWN:
-    case GSK_TRANSFORM_CATEGORY_ANY:
-    case GSK_TRANSFORM_CATEGORY_3D:
     case GSK_TRANSFORM_CATEGORY_2D:
-    default:
+    case GSK_TRANSFORM_CATEGORY_3D:
+    case GSK_TRANSFORM_CATEGORY_ANY:
+    case GSK_TRANSFORM_CATEGORY_UNKNOWN:
       {
         TextureRegion region;
         gboolean is_offscreen;
@@ -1050,29 +1082,42 @@ render_transform_node (GskGLRenderer   *self,
             gsk_gl_renderer_add_render_ops (self, child, builder);
             ops_pop_modelview (builder);
           }
-        else if (add_offscreen_ops (self, builder,
+        else
+          {
+            int filter_flag = 0;
+
+            if (!result_is_axis_aligned (node_transform, &child->bounds))
+              filter_flag = LINEAR_FILTER;
+
+            if (add_offscreen_ops (self, builder,
                                    &child->bounds,
                                    child,
                                    &region, &is_offscreen,
-                                   RESET_CLIP | RESET_OPACITY))
-          {
-            /* For non-trivial transforms, we draw everything on a texture and then
-             * draw the texture transformed. */
-            /* TODO: We should compute a modelview containing only the "non-trivial"
-             *       part (e.g. the rotation) and use that. We want to keep the scale
-             *       for the texture.
-             */
-            ops_push_modelview (builder, node_transform);
-            ops_set_texture (builder, region.texture_id);
-            ops_set_program (builder, &self->programs->blit_program);
+                                   RESET_CLIP | RESET_OPACITY | filter_flag))
+              {
+                /* For non-trivial transforms, we draw everything on a texture and then
+                 * draw the texture transformed. */
+                /* TODO: We should compute a modelview containing only the "non-trivial"
+                 *       part (e.g. the rotation) and use that. We want to keep the scale
+                 *       for the texture.
+                 */
+                ops_push_modelview (builder, node_transform);
+                ops_set_texture (builder, region.texture_id);
+                ops_set_program (builder, &self->programs->blit_program);
 
-            load_vertex_data_with_region (ops_draw (builder, NULL),
-                                          child, builder,
-                                          &region,
-                                          is_offscreen);
-            ops_pop_modelview (builder);
+                load_vertex_data_with_region (ops_draw (builder, NULL),
+                                              child, builder,
+                                              &region,
+                                              is_offscreen);
+                ops_pop_modelview (builder);
+              }
           }
       }
+      break;
+
+    default:
+      g_assert_not_reached ();
+      break;
     }
 }
 
@@ -1451,10 +1496,12 @@ blur_texture (GskGLRenderer       *self,
 
   gsk_gl_driver_create_render_target (self->gl_driver,
                                       texture_to_blur_width, texture_to_blur_height,
+                                      GL_NEAREST, GL_NEAREST,
                                       &pass1_texture_id, &pass1_render_target);
 
   gsk_gl_driver_create_render_target (self->gl_driver,
                                       texture_to_blur_width, texture_to_blur_height,
+                                      GL_NEAREST, GL_NEAREST,
                                       &pass2_texture_id, &pass2_render_target);
 
   graphene_matrix_init_ortho (&item_proj,
@@ -1696,6 +1743,7 @@ render_inset_shadow_node (GskGLRenderer   *self,
 
       gsk_gl_driver_create_render_target (self->gl_driver,
                                           texture_width, texture_height,
+                                          GL_NEAREST, GL_NEAREST,
                                           &texture_id, &render_target);
 
       graphene_matrix_init_ortho (&item_proj,
@@ -1869,7 +1917,9 @@ render_outset_shadow_node (GskGLRenderer   *self,
       graphene_rect_t prev_viewport;
       graphene_matrix_t item_proj;
 
-      gsk_gl_driver_create_render_target (self->gl_driver, texture_width, texture_height,
+      gsk_gl_driver_create_render_target (self->gl_driver,
+                                          texture_width, texture_height,
+                                          GL_NEAREST, GL_NEAREST,
                                           &texture_id, &render_target);
       if (gdk_gl_context_has_debug (self->gl_context))
         {
@@ -3349,6 +3399,7 @@ add_offscreen_ops (GskGLRenderer         *self,
   float prev_opacity = 1.0;
   int texture_id = 0;
   int max_texture_size;
+  int filter;
 
   if (node_is_invisible (child_node))
     {
@@ -3401,7 +3452,14 @@ add_offscreen_ops (GskGLRenderer         *self,
   width  = ceilf (width * scale);
   height = ceilf (height * scale);
 
-  gsk_gl_driver_create_render_target (self->gl_driver, width, height, &texture_id, &render_target);
+  if (flags & LINEAR_FILTER)
+    filter = GL_LINEAR;
+  else
+    filter = GL_NEAREST;
+  gsk_gl_driver_create_render_target (self->gl_driver,
+                                      width, height,
+                                      filter, filter,
+                                      &texture_id, &render_target);
   if (gdk_gl_context_has_debug (self->gl_context))
     {
       gdk_gl_context_label_object_printf (self->gl_context, GL_TEXTURE, texture_id,

@@ -406,6 +406,122 @@ test_print_parse (void)
     }
 }
 
+static void
+gsk_matrix_transform_rect (const graphene_matrix_t *m,
+                           const graphene_rect_t   *r,
+                           graphene_quad_t         *res)
+{
+  graphene_point_t ret[4];
+  graphene_rect_t rr;
+
+  graphene_rect_normalize_r (r, &rr);
+
+#define TRANSFORM_POINT(matrix, rect, corner, out_p)   do {\
+  graphene_vec4_t __s; \
+  graphene_point_t __p; \
+  float w; \
+  graphene_rect_get_ ## corner (rect, &__p); \
+  graphene_vec4_init (&__s, __p.x, __p.y, 0.f, 1.f); \
+  graphene_matrix_transform_vec4 (matrix, &__s, &__s); \
+  w = graphene_vec4_get_w (&__s); \
+  out_p.x = graphene_vec4_get_x (&__s) / w; \
+  out_p.y = graphene_vec4_get_y (&__s) / w;           } while (0)
+
+  TRANSFORM_POINT (m, &rr, top_left, ret[0]);
+  TRANSFORM_POINT (m, &rr, top_right, ret[1]);
+  TRANSFORM_POINT (m, &rr, bottom_right, ret[2]);
+  TRANSFORM_POINT (m, &rr, bottom_left, ret[3]);
+
+#undef TRANSFORM_POINT
+
+  graphene_quad_init (res, &ret[0], &ret[1], &ret[2], &ret[3]);
+}
+
+/* This is an auxiliary function used in the GL renderer to
+ * determine if transforming an axis-aligned rectangle produces
+ * axis-aligned output, to decide whether to use linear
+ * interpolation or not.
+ *
+ * Keep this in sync with gsk/gl/gskglrenderer.c
+ */
+static gboolean
+result_is_axis_aligned (GskTransform          *transform,
+                        const graphene_rect_t *bounds)
+{
+  graphene_matrix_t m;
+  graphene_quad_t q;
+  graphene_rect_t b;
+  graphene_point_t b1, b2;
+  const graphene_point_t *p;
+  int i;
+
+  gsk_transform_to_matrix (transform, &m);
+  gsk_matrix_transform_rect (&m, bounds, &q);
+  graphene_quad_bounds (&q, &b);
+  graphene_rect_get_top_left (&b, &b1);
+  graphene_rect_get_bottom_right (&b, &b2);
+
+  for (i = 0; i < 4; i++)
+    {
+      p = graphene_quad_get_point (&q, i);
+      if (fabs (p->x - b1.x) > FLT_EPSILON && fabs (p->x - b2.x) > FLT_EPSILON)
+        return FALSE;
+      if (fabs (p->y - b1.y) > FLT_EPSILON && fabs (p->y - b2.y) > FLT_EPSILON)
+        return FALSE;
+    }
+
+  return TRUE;
+}
+
+static void
+test_axis_aligned (void)
+{
+  graphene_rect_t r = GRAPHENE_RECT_INIT (0, 0, 10, 10);
+  GskTransform *transform = NULL;
+
+  transform = gsk_transform_translate (NULL, &GRAPHENE_POINT_INIT (10, 10));
+  g_assert_true (result_is_axis_aligned (transform, &r));
+  gsk_transform_unref (transform);
+
+  transform = gsk_transform_translate_3d (NULL, &GRAPHENE_POINT3D_INIT(0, 10, 10));
+  g_assert_true (result_is_axis_aligned (transform, &r));
+  gsk_transform_unref (transform);
+
+  transform = gsk_transform_rotate (NULL, 90);
+  g_assert_true (result_is_axis_aligned (transform, &r));
+  gsk_transform_unref (transform);
+
+  transform = gsk_transform_scale (NULL, 2, 3);
+  g_assert_true (result_is_axis_aligned (transform, &r));
+  gsk_transform_unref (transform);
+
+  /* rotating around the y axis does not affect axis alignedness,
+   * as long as we don't involve perspective
+   */
+  transform = gsk_transform_rotate_3d (NULL, 45, graphene_vec3_y_axis ());
+  g_assert_true (result_is_axis_aligned (transform, &r));
+  gsk_transform_unref (transform);
+
+  /* rotating by 45 around the z axis, not axis aligned */
+  transform = gsk_transform_rotate (NULL, 45);
+  g_assert_false (result_is_axis_aligned (transform, &r));
+  gsk_transform_unref (transform);
+
+  /* perspective is harmless as long as we stay in the z=0 plane */
+  transform = gsk_transform_perspective (NULL, 100);
+  g_assert_true (result_is_axis_aligned (transform, &r));
+  gsk_transform_unref (transform);
+
+  /* a complex transform that makes things look '3d' */
+  transform = gsk_transform_translate_3d (NULL, &GRAPHENE_POINT3D_INIT (0, 0, 50));
+  transform = gsk_transform_perspective (transform, 170);
+  transform = gsk_transform_translate_3d (transform, &GRAPHENE_POINT3D_INIT (50, 0, 50));
+  transform = gsk_transform_rotate (transform, 20);
+  transform = gsk_transform_rotate_3d (transform, 20, graphene_vec3_y_axis ());
+  g_assert_false (result_is_axis_aligned (transform, &r));
+  gsk_transform_unref (transform);
+}
+
 int
 main (int   argc,
       char *argv[])
@@ -418,6 +534,7 @@ main (int   argc,
   g_test_add_func ("/transform/identity-equal", test_identity_equal);
   g_test_add_func ("/transform/invert", test_invert);
   g_test_add_func ("/transform/print-parse", test_print_parse);
+  g_test_add_func ("/transform/check-axis-aligneness", test_axis_aligned);
 
   return g_test_run ();
 }

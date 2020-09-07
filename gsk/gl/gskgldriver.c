@@ -594,6 +594,8 @@ void
 gsk_gl_driver_create_render_target (GskGLDriver *self,
                                     int          width,
                                     int          height,
+                                    int          min_filter,
+                                    int          mag_filter,
                                     int         *out_texture_id,
                                     int         *out_render_target_id)
 {
@@ -604,7 +606,7 @@ gsk_gl_driver_create_render_target (GskGLDriver *self,
 
   texture = create_texture (self, width, height);
   gsk_gl_driver_bind_source_texture (self, texture->texture_id);
-  gsk_gl_driver_init_texture_empty (self, texture->texture_id, GL_NEAREST, GL_NEAREST);
+  gsk_gl_driver_init_texture_empty (self, texture->texture_id, min_filter, mag_filter);
 
   glGenFramebuffers (1, &fbo_id);
   glBindFramebuffer (GL_FRAMEBUFFER, fbo_id);
