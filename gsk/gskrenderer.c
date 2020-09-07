@@ -510,6 +510,7 @@ get_renderer_for_name (const char *renderer_name)
 #endif
       g_print ("   cairo - Use the Cairo fallback renderer\n");
       g_print ("  opengl - Use the default OpenGL renderer\n");
+      g_print ("      gl - Same as opengl\n");
 #ifdef GDK_RENDERING_VULKAN
       g_print ("  vulkan - Use the Vulkan renderer\n");
 #else
