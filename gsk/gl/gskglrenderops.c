@@ -134,52 +134,8 @@ static void
 extract_matrix_metadata (GskTransform      *transform,
                          OpsMatrixMetadata *md)
 {
-  float dummy;
-
-  switch (gsk_transform_get_category (transform))
-    {
-    case GSK_TRANSFORM_CATEGORY_IDENTITY:
-    case GSK_TRANSFORM_CATEGORY_2D_TRANSLATE:
-      md->scale_x = 1;
-      md->scale_y = 1;
-    break;
-
-    case GSK_TRANSFORM_CATEGORY_2D_AFFINE:
-      gsk_transform_to_affine (transform,
-                               &md->scale_x, &md->scale_y,
-                               &dummy, &dummy);
-    break;
-
-    case GSK_TRANSFORM_CATEGORY_UNKNOWN:
-    case GSK_TRANSFORM_CATEGORY_ANY:
-    case GSK_TRANSFORM_CATEGORY_3D:
-    case GSK_TRANSFORM_CATEGORY_2D:
-      {
-        graphene_vec3_t col1;
-        graphene_vec3_t col2;
-        graphene_matrix_t m;
-
-        gsk_transform_to_matrix (transform, &m);
-
-        /* TODO: 90% sure this is incorrect. But we should never hit this code
-         * path anyway. */
-        graphene_vec3_init (&col1,
-                            graphene_matrix_get_value (&m, 0, 0),
-                            graphene_matrix_get_value (&m, 1, 0),
-                            graphene_matrix_get_value (&m, 2, 0));
-
-        graphene_vec3_init (&col2,
-                            graphene_matrix_get_value (&m, 0, 1),
-                            graphene_matrix_get_value (&m, 1, 1),
-                            graphene_matrix_get_value (&m, 2, 1));
-
-        md->scale_x = graphene_vec3_length (&col1);
-        md->scale_y = graphene_vec3_length (&col2);
-      }
-    break;
-    default:
-      {}
-    }
+  md->scale_x = 1;
+  md->scale_y = 1;
 }
 
 void
