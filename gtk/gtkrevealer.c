@@ -163,8 +163,6 @@ gtk_revealer_init (GtkRevealer *revealer)
   priv->transition_duration = 250;
   priv->current_pos = 0.0;
   priv->target_pos = 0.0;
-
-  gtk_widget_set_overflow (GTK_WIDGET (revealer), GTK_OVERFLOW_HIDDEN);
 }
 
 static void
