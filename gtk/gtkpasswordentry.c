@@ -24,15 +24,16 @@
 
 #include "gtktextprivate.h"
 #include "gtkeditable.h"
+#include "gtkeventcontrollerkey.h"
 #include "gtkgestureclick.h"
 #include "gtkbox.h"
 #include "gtkimage.h"
 #include "gtkintl.h"
-#include "gtkprivate.h"
-#include "gtkwidgetprivate.h"
 #include "gtkmarshalers.h"
+#include "gtkpasswordentrybufferprivate.h"
+#include "gtkprivate.h"
 #include "gtkstylecontext.h"
-#include "gtkeventcontrollerkey.h"
+#include "gtkwidgetprivate.h"
 
 /**
  * SECTION:gtkpasswordentry
@@ -41,7 +42,10 @@
  *
  * #GtkPasswordEntry is entry that has been tailored for entering secrets.
  * It does not show its contents in clear text, does not allow to copy it
- * to the clipboard, and it shows a warning when Caps Lock is engaged.
+ * to the clipboard, and it shows a warning when Caps Lock is engaged. If
+ * the underlying platform allows it, GtkPasswordEntry will also place the
+ * text in a non-pageable memory area, to avoid it being written out to
+ * disk by the operating system.
  *
  * Optionally, it can offer a way to reveal the contents in clear text.
  *
@@ -159,8 +163,10 @@ static void
 gtk_password_entry_init (GtkPasswordEntry *entry)
 {
   GtkPasswordEntryPrivate *priv = gtk_password_entry_get_instance_private (entry);
+  GtkEntryBuffer *buffer = gtk_password_entry_buffer_new ();
 
   priv->entry = gtk_text_new ();
+  gtk_text_set_buffer (GTK_TEXT (priv->entry), buffer);
   gtk_text_set_visibility (GTK_TEXT (priv->entry), FALSE);
   gtk_widget_set_parent (priv->entry, GTK_WIDGET (entry));
   gtk_editable_init_delegate (GTK_EDITABLE (entry));
@@ -175,6 +181,9 @@ gtk_password_entry_init (GtkPasswordEntry *entry)
   gtk_widget_add_css_class (GTK_WIDGET (entry), I_("password"));
 
   gtk_password_entry_set_extra_menu (entry, NULL);
+
+  /* Transfer ownership to the GtkText widget */
+  g_object_unref (buffer);
 }
 
 static void
