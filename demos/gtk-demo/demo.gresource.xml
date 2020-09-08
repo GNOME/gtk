@@ -121,6 +121,15 @@
     <file>gtkgears.c</file>
     <file>gtkgears.h</file>
   </gresource>
+  <gresource prefix="/shadertoy">
+    <file>gtkshadertoy.c</file>
+    <file>gtkshadertoy.h</file>
+    <file>alienplanet.glsl</file>
+    <file>mandelbrot.glsl</file>
+    <file>neon.glsl</file>
+    <file>cogs.glsl</file>
+    <file>glowingstars.glsl</file>
+  </gresource>
   <gresource prefix="/iconscroll">
     <file>iconscroll.ui</file>
   </gresource>
@@ -260,6 +269,7 @@
     <file>scale.c</file>
     <file>search_entry.c</file>
     <file>search_entry2.c</file>
+    <file>shadertoy.c</file>
     <file>shortcuts.c</file>
     <file>shortcut_triggers.c</file>
     <file>sizegroup.c</file>
