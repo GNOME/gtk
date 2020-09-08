@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.6\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-02-26 22:23+0000\n"
-"PO-Revision-Date: 2020-02-26 22:57+0000\n"
+"POT-Creation-Date: 2020-09-08 04:53+0000\n"
+"PO-Revision-Date: 2020-09-08 12:04+0000\n"
 "Last-Translator: Arash Mousavi <mousavi.arash@gmail.com>\n"
 "Language-Team: Persian <>\n"
 "Language: fa\n"
@@ -23,55 +23,55 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Poedit-Bookmarks: 133,-1,-1,-1,-1,-1,-1,-1,-1,-1\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"X-Generator: Poedit 2.3\n"
+"X-Generator: Poedit 2.4.1\n"
 
 #: gdk/broadway/gdkbroadway-server.c:144
 #, c-format
 msgid "Broadway display type not supported: %s"
 msgstr "نوع نمایشگر broadway پشتیبانی نمی‌شود: %s"
 
-#: gdk/gdk.c:187
+#: gdk/gdk.c:179
 #, c-format
 msgid "Error parsing option --gdk-debug"
 msgstr "خطا در تجزیهٔ گزینهٔ ‪--gdk-debug"
 
-#: gdk/gdk.c:207
+#: gdk/gdk.c:199
 #, c-format
 msgid "Error parsing option --gdk-no-debug"
 msgstr "خطا در تجزیهٔ گزینهٔ ‪--gdk-no-debug"
 
 #. Description of --class=CLASS in --help output
-#: gdk/gdk.c:236
+#: gdk/gdk.c:228
 msgid "Program class as used by the window manager"
 msgstr "ردهٔ برنامه، به شکل مورد استفادهٔ مدیر پنجره‌ها"
 
 #. Placeholder in --class=CLASS in --help output
-#: gdk/gdk.c:237
+#: gdk/gdk.c:229
 msgid "CLASS"
 msgstr "CLASS"
 
 #. Description of --name=NAME in --help output
-#: gdk/gdk.c:239
+#: gdk/gdk.c:231
 msgid "Program name as used by the window manager"
 msgstr "نام برنامه، به شکل مورد استفادهٔ مدیر پنجره‌ها"
 
 #. Placeholder in --name=NAME in --help output
-#: gdk/gdk.c:240
+#: gdk/gdk.c:232
 msgid "NAME"
 msgstr "NAME"
 
 #. Description of --display=DISPLAY in --help output
-#: gdk/gdk.c:243
+#: gdk/gdk.c:235
 msgid "X display to use"
 msgstr "نمایشگر X مورد استفاده"
 
 #. Placeholder in --display=DISPLAY in --help output
-#: gdk/gdk.c:244
+#: gdk/gdk.c:236
 msgid "DISPLAY"
 msgstr "DISPLAY"
 
 #. Description of --gdk-debug=FLAGS in --help output
-#: gdk/gdk.c:248
+#: gdk/gdk.c:240
 msgid "GDK debugging flags to set"
 msgstr "پرچم‌های اشکال‌زدایی GDK که باید یک شوند"
 
@@ -79,12 +79,12 @@ msgstr "پرچم‌های اشکال‌زدایی GDK که باید یک شون�
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
 #. Placeholder in --gtk-debug=FLAGS in --help output
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
-#: gdk/gdk.c:249 gdk/gdk.c:252 gtk/gtkmain.c:471 gtk/gtkmain.c:474
+#: gdk/gdk.c:241 gdk/gdk.c:244 gtk/gtkmain.c:471 gtk/gtkmain.c:474
 msgid "FLAGS"
 msgstr "FLAGS"
 
 #. Description of --gdk-no-debug=FLAGS in --help output
-#: gdk/gdk.c:251
+#: gdk/gdk.c:243
 msgid "GDK debugging flags to unset"
 msgstr "پرچم‌های اشکال‌زدایی GDK که باید صفر شوند"
 
@@ -478,19 +478,19 @@ msgid "Unable to create a GL pixel format"
 msgstr "ناتوان در ایجاد یک قالب پیکسلی GL"
 
 #: gdk/quartz/gdkglcontext-quartz.c:133 gdk/wayland/gdkglcontext-wayland.c:208
-#: gdk/win32/gdkglcontext-win32.c:1070 gdk/win32/gdkglcontext-win32.c:1110
-#: gdk/x11/gdkglcontext-x11.c:720 gdk/x11/gdkglcontext-x11.c:770
+#: gdk/win32/gdkglcontext-win32.c:1072 gdk/win32/gdkglcontext-win32.c:1112
+#: gdk/x11/gdkglcontext-x11.c:724 gdk/x11/gdkglcontext-x11.c:774
 msgid "Unable to create a GL context"
 msgstr "امکان ساخت زمینه مناسب برای GL نبود"
 
 #: gdk/wayland/gdkglcontext-wayland.c:418 gdk/wayland/gdkglcontext-wayland.c:428
-#: gdk/win32/gdkglcontext-win32.c:908 gdk/win32/gdkglcontext-win32.c:918
-#: gdk/win32/gdkglcontext-win32.c:1035 gdk/x11/gdkglcontext-x11.c:971
+#: gdk/win32/gdkglcontext-win32.c:910 gdk/win32/gdkglcontext-win32.c:920
+#: gdk/win32/gdkglcontext-win32.c:1037 gdk/x11/gdkglcontext-x11.c:975
 msgid "No available configurations for the given pixel format"
 msgstr "هیچ پیکربندی برای قالب نقطه‌ای ارائه شده موجود نیست"
 
-#: gdk/wayland/gdkglcontext-wayland.c:468 gdk/win32/gdkglcontext-win32.c:1177
-#: gdk/x11/gdkglcontext-x11.c:1277
+#: gdk/wayland/gdkglcontext-wayland.c:468 gdk/win32/gdkglcontext-win32.c:1179
+#: gdk/x11/gdkglcontext-x11.c:1281
 msgid "No GL implementation is available"
 msgstr "هیچ پیاده‌سازی GLای پیدا نشد"
 
@@ -544,7 +544,7 @@ msgid "Opening %d Item"
 msgid_plural "Opening %d Items"
 msgstr[0] "درحال گشودن %Id مورد"
 
-#: gdk/x11/gdkglcontext-x11.c:999
+#: gdk/x11/gdkglcontext-x11.c:1003
 #, c-format
 msgid "No available configurations for the given RGBA pixel format"
 msgstr "هیچ پیکربندی‌ای برای قالب نقطه‌ای RGBA وارد شده موجود نیست"
@@ -1228,8 +1228,8 @@ msgstr ""
 "کنید."
 
 #: gtk/deprecated/gtkcolorseldialog.c:191 gtk/deprecated/gtkfontsel.c:1689
-#: gtk/gtkfilechoosernative.c:544 gtk/gtkfilechoosernative.c:636
-#: gtk/gtkfilechooserwidget.c:1494 gtk/gtkfilechooserwidget.c:6548
+#: gtk/gtkfilechoosernative.c:545 gtk/gtkfilechoosernative.c:637
+#: gtk/gtkfilechooserwidget.c:1498 gtk/gtkfilechooserwidget.c:6572
 #: gtk/gtkmessagedialog.c:952 gtk/gtkmessagedialog.c:965
 #: gtk/gtkmountoperation.c:594 gtk/gtkpagesetupunixdialog.c:197
 #: gtk/gtkprintbackend.c:779 gtk/gtkprinteroptionwidget.c:545
@@ -1473,7 +1473,7 @@ msgstr "نگارش ۳ یا بالاتر پروانهٔ کم‌تر جامع هم
 
 #: gtk/gtkaboutdialog.c:120
 msgid "BSD 2-Clause License"
-msgstr "پروانهٔ دو بندی BSD"
+msgstr "پروانهٔ دوبندی BSD"
 
 #: gtk/gtkaboutdialog.c:121
 msgid "The MIT License (MIT)"
@@ -1481,7 +1481,7 @@ msgstr "پروانهٔ MIT"
 
 #: gtk/gtkaboutdialog.c:122
 msgid "Artistic License 2.0"
-msgstr "پروانهٔ Artistic 2.0"
+msgstr "پروانهٔ Artistic ۲٫۰"
 
 #: gtk/gtkaboutdialog.c:123
 msgid "GNU General Public License, version 2 only"
@@ -1507,53 +1507,65 @@ msgstr "نگارش ۳ یا بالاتر پروانهٔ Affero جامع همگا�
 msgid "GNU Affero General Public License, version 3 only"
 msgstr "فقط نگارش ۳ پروانهٔ Affero جامع همگانی گنو"
 
-#: gtk/gtkaboutdialog.c:697
+#: gtk/gtkaboutdialog.c:129
+msgid "BSD 3-Clause License"
+msgstr "پروانهٔ سه‌بندی BSD"
+
+#: gtk/gtkaboutdialog.c:130
+msgid "Apache License, Version 2.0"
+msgstr "نگارش ۲٫۰ پروانهٔ آپاچی"
+
+#: gtk/gtkaboutdialog.c:131
+msgid "Mozilla Public License 2.0"
+msgstr "پروانهٔ عمومی موزیلا ۲٫۰"
+
+#: gtk/gtkaboutdialog.c:703
 msgid "C_redits"
 msgstr "_دست‌اندرکاران"
 
-#: gtk/gtkaboutdialog.c:705
+#: gtk/gtkaboutdialog.c:711
 msgid "_License"
 msgstr "_پروانه"
 
-#: gtk/gtkaboutdialog.c:714 gtk/gtkcustompaperunixdialog.c:329
+#: gtk/gtkaboutdialog.c:720 gtk/gtkcustompaperunixdialog.c:329
 #: gtk/gtkmessagedialog.c:948 gtk/ui/gtkassistant.ui:144
 msgid "_Close"
 msgstr "_بستن"
 
-#: gtk/gtkaboutdialog.c:998
+#: gtk/gtkaboutdialog.c:1004
 msgid "Could not show link"
 msgstr "نتوانست پیوند را نشان دهد"
 
-#: gtk/gtkaboutdialog.c:1037
+#: gtk/gtkaboutdialog.c:1043
 msgid "Website"
 msgstr "پایگاه وب"
 
 #. used for the application menu on MacOS.  %s is replaced with the application name.
-#: gtk/gtkaboutdialog.c:1087 gtk/ui/gtkapplication-quartz.ui:7
+#: gtk/gtkaboutdialog.c:1093 gtk/ui/gtkapplication-quartz.ui:7
 #, c-format
 msgid "About %s"
 msgstr "دربارهٔ %s"
 
-#: gtk/gtkaboutdialog.c:2314
+#: gtk/gtkaboutdialog.c:2320
 msgid "Created by"
 msgstr "ایجاد شده به دست"
 
-#: gtk/gtkaboutdialog.c:2317
+#: gtk/gtkaboutdialog.c:2323
 msgid "Documented by"
 msgstr "مستند شده به دست"
 
-#: gtk/gtkaboutdialog.c:2327
+#: gtk/gtkaboutdialog.c:2333
 msgid "Translated by"
 msgstr "بازگردانی به دست"
 
-#: gtk/gtkaboutdialog.c:2332
+#: gtk/gtkaboutdialog.c:2338
 msgid "Artwork by"
 msgstr "کار هنری به دست"
 
 #. Translators: this is the license preamble; the string at the end
 #. * contains the name of the license as link text.
 #.
-#: gtk/gtkaboutdialog.c:2494
+#: gtk/gtkaboutdialog.c:2500
 #, c-format
 msgid ""
 "This program comes with absolutely no warranty.\n"
@@ -1636,38 +1648,38 @@ msgstr "ممیز وارونه"
 msgid "Other application…"
 msgstr "برنامهٔ دیگر…"
 
-#: gtk/gtkappchooserdialog.c:204 gtk/gtkappchooserdialog.c:211
-#: gtk/gtkappchooserdialog.c:228 gtk/ui/gtkappchooserdialog.ui:5
+#: gtk/gtkappchooserdialog.c:202 gtk/gtkappchooserdialog.c:230
+#: gtk/ui/gtkappchooserdialog.ui:5
 msgid "Select Application"
 msgstr "گزینش برنامه"
 
 #. Translators: %s is a filename
-#: gtk/gtkappchooserdialog.c:206
+#: gtk/gtkappchooserdialog.c:209
 #, c-format
 msgid "Opening “%s”."
 msgstr "درحال گشودن «%s»."
 
-#: gtk/gtkappchooserdialog.c:207
+#: gtk/gtkappchooserdialog.c:210
 #, c-format
 msgid "No applications found for “%s”"
 msgstr "هیچ برنامه‌ای برای «%s» پیدا نشد"
 
 #. Translators: %s is a file type description
-#: gtk/gtkappchooserdialog.c:213
+#: gtk/gtkappchooserdialog.c:215
 #, c-format
 msgid "Opening “%s” files."
 msgstr "در حال گشودن پرونده‌های «%s»."
 
-#: gtk/gtkappchooserdialog.c:215
+#: gtk/gtkappchooserdialog.c:217
 #, c-format
 msgid "No applications found for “%s” files"
 msgstr "هیچ برنامه‌ای برای پرونده‌های «%s» پیدا نشد"
 
-#: gtk/gtkappchooserdialog.c:308
+#: gtk/gtkappchooserdialog.c:310
 msgid "Forget association"
 msgstr "فراموش‌کردن وابستگی‌ها"
 
-#: gtk/gtkappchooserdialog.c:451
+#: gtk/gtkappchooserdialog.c:453
 msgid "Failed to start GNOME Software"
 msgstr "شکست در اجرای نرم‌افزارهای گنوم"
 
@@ -1693,7 +1705,7 @@ msgid "Other Applications"
 msgstr "برنامه‌های دیگر"
 
 #: gtk/gtkapplicationwindow.c:345 gtk/gtkprintoperation-unix.c:485
-#: gtk/gtkprintoperation-win32.c:1495 gtk/inspector/prop-editor.c:1686
+#: gtk/gtkprintoperation-win32.c:1521 gtk/inspector/prop-editor.c:1686
 msgid "Application"
 msgstr "برنامه"
 
@@ -2194,52 +2206,52 @@ msgstr "_راست:"
 msgid "Paper Margins"
 msgstr "حاشیه‌های کاغذ"
 
-#: gtk/gtkentry.c:9590 gtk/gtklabel.c:6680 gtk/gtktextview.c:9502
+#: gtk/gtkentry.c:9591 gtk/gtklabel.c:6680 gtk/gtktextview.c:9520
 msgid "Cu_t"
 msgstr "_برش"
 
-#: gtk/gtkentry.c:9594 gtk/gtklabel.c:6681 gtk/gtktextview.c:9506
+#: gtk/gtkentry.c:9595 gtk/gtklabel.c:6681 gtk/gtktextview.c:9524
 msgid "_Copy"
 msgstr "_رونوشت"
 
-#: gtk/gtkentry.c:9598 gtk/gtklabel.c:6682 gtk/gtktextview.c:9508
+#: gtk/gtkentry.c:9599 gtk/gtklabel.c:6682 gtk/gtktextview.c:9526
 msgid "_Paste"
 msgstr "_چسباندن"
 
-#: gtk/gtkentry.c:9601 gtk/gtkfilechooserwidget.c:1495
-#: gtk/gtkfilechooserwidget.c:2321 gtk/gtklabel.c:6684 gtk/gtktextview.c:9511
+#: gtk/gtkentry.c:9602 gtk/gtkfilechooserwidget.c:1499
+#: gtk/gtkfilechooserwidget.c:2334 gtk/gtklabel.c:6684 gtk/gtktextview.c:9529
 msgid "_Delete"
 msgstr "_حذف"
 
-#: gtk/gtkentry.c:9612 gtk/gtklabel.c:6693 gtk/gtktextview.c:9525
+#: gtk/gtkentry.c:9613 gtk/gtklabel.c:6693 gtk/gtktextview.c:9543
 msgid "Select _All"
 msgstr "انتخاب _همه"
 
-#: gtk/gtkentry.c:9622 gtk/gtktextview.c:9535
+#: gtk/gtkentry.c:9623 gtk/gtktextview.c:9553
 msgid "Insert _Emoji"
 msgstr "درج _ایموجی"
 
-#: gtk/gtkentry.c:9798 gtk/gtktextview.c:9755
+#: gtk/gtkentry.c:9799 gtk/gtktextview.c:9777
 msgid "Select all"
 msgstr "انتخاب همه"
 
-#: gtk/gtkentry.c:9801 gtk/gtktextview.c:9758
+#: gtk/gtkentry.c:9802 gtk/gtktextview.c:9780
 msgid "Cut"
 msgstr "برش"
 
-#: gtk/gtkentry.c:9804 gtk/gtktextview.c:9761
+#: gtk/gtkentry.c:9805 gtk/gtktextview.c:9783
 msgid "Copy"
 msgstr "رونوشت"
 
-#: gtk/gtkentry.c:9807 gtk/gtktextview.c:9764
+#: gtk/gtkentry.c:9808 gtk/gtktextview.c:9786
 msgid "Paste"
 msgstr "چسباندن"
 
-#: gtk/gtkentry.c:10879
+#: gtk/gtkentry.c:10880
 msgid "Caps Lock is on"
 msgstr "قفل تبدیل روشن است"
 
-#: gtk/gtkentry.c:11157
+#: gtk/gtkentry.c:11158
 msgid "Insert Emoji"
 msgstr "درج ایموجی"
 
@@ -2256,7 +2268,7 @@ msgstr "میزکار"
 msgid "(None)"
 msgstr "(هیچ‌کدام)"
 
-#: gtk/gtkfilechooserbutton.c:2163
+#: gtk/gtkfilechooserbutton.c:2162
 msgid "Other…"
 msgstr "غیره…"
 
@@ -2265,16 +2277,16 @@ msgid "_Name"
 msgstr "_نام"
 
 #. Open item is always present
-#: gtk/gtkfilechoosernative.c:545 gtk/gtkfilechoosernative.c:630
-#: gtk/gtkplacessidebar.c:3625 gtk/gtkplacessidebar.c:3693 gtk/gtkplacesview.c:1682
+#: gtk/gtkfilechoosernative.c:546 gtk/gtkfilechoosernative.c:631
+#: gtk/gtkplacessidebar.c:3625 gtk/gtkplacessidebar.c:3693 gtk/gtkplacesview.c:1696
 msgid "_Open"
 msgstr "_گشودن"
 
-#: gtk/gtkfilechoosernative.c:630 gtk/inspector/css-editor.c:202
+#: gtk/gtkfilechoosernative.c:631 gtk/inspector/css-editor.c:202
 msgid "_Save"
 msgstr "_ذخیره"
 
-#: gtk/gtkfilechoosernativequartz.c:331 gtk/ui/gtkfilechooserwidget.ui:404
+#: gtk/gtkfilechoosernativequartz.c:331 gtk/ui/gtkfilechooserwidget.ui:405
 msgid "Select which types of files are shown"
 msgstr "انتخاب این که کدام نوع پرونده‌ها نمایش داده شوند"
 
@@ -2287,343 +2299,344 @@ msgstr "انتخاب این که کدام نوع پرونده‌ها نمایش 
 msgid "%1$s on %2$s"
 msgstr "%1$s روی %2$s"
 
-#: gtk/gtkfilechooserwidget.c:383
+#: gtk/gtkfilechooserwidget.c:385
 msgid "Type name of new folder"
-msgstr "نام پوشهٔ جدید را وارد کنید"
+msgstr "نام شاخهٔ جدید را وارد کنید"
 
-#: gtk/gtkfilechooserwidget.c:807
+#: gtk/gtkfilechooserwidget.c:809
 msgid "The folder could not be created"
-msgstr "نمی‌توان پوشه را ایجاد کرد"
+msgstr "نمی‌توان شاخه را ایجاد کرد"
 
-#: gtk/gtkfilechooserwidget.c:820
+#: gtk/gtkfilechooserwidget.c:821
 msgid ""
-"The folder could not be created, as a file with the same name already exists.  "
-"Try using a different name for the folder, or rename the file first."
-msgstr ""
-"پوشه نمی‌تواند ایجاد شود، چون پرونده‌ای با همین نام از قبل وجود دارد.  از نام‌ "
-"دیگری برای پوشه استفاده کنید، یا نام پرونده را تغییر دهید."
+"The folder could not be created, as a file with the same name already exists."
+msgstr "به دلیل وجود پرونده‌ای با همین نام،‌شاخه نتوانست ایجاد شود."
 
-#: gtk/gtkfilechooserwidget.c:835
+#: gtk/gtkfilechooserwidget.c:823
+msgid "Try using a different name for the folder, or rename the file first."
+msgstr "برای شاخه از نام‌ دیگری استفاده کرده یا نخست، نام پرونده را تغییر دهید."
+
+#: gtk/gtkfilechooserwidget.c:836
 msgid "You need to choose a valid filename."
 msgstr "شما باید یک نام معتبر انتخاب کنید."
 
-#: gtk/gtkfilechooserwidget.c:838
+#: gtk/gtkfilechooserwidget.c:839
 #, c-format
 msgid "Cannot create a file under %s as it is not a folder"
-msgstr "از آنجایی که %s یک پوشه نیست، نمی‌توان یک پرونده در آن ساخت"
+msgstr "از آنجایی که %s یک شاخه نیست، نمی‌توان یک پرونده در آن ساخت"
 
-#: gtk/gtkfilechooserwidget.c:848
+#: gtk/gtkfilechooserwidget.c:849
 msgid "Cannot create file as the filename is too long"
 msgstr "باتوجه به اینکه نام پرونده بسیار بزرگ است، نمی‌توان پرونده را ساخت"
 
-#: gtk/gtkfilechooserwidget.c:849
+#: gtk/gtkfilechooserwidget.c:850
 msgid "Try using a shorter name."
 msgstr "سعی کنید نامی کوتاه‌تر انتخاب کنید."
 
-#: gtk/gtkfilechooserwidget.c:859
-msgid "You may only select folders"
-msgstr "شما می‌توانید از پوشه‌ها انتخاب کنید"
-
 #: gtk/gtkfilechooserwidget.c:860
-msgid "The item that you selected is not a folder try using a different item."
-msgstr "موردی که شما انتخاب کرده‌اید، پوشه نیست، سعی کنید مورد دیگری استفاده کنید."
+msgid "You may only select folders"
+msgstr "شما می‌توانید از شاخه‌ها انتخاب کنید"
 
-#: gtk/gtkfilechooserwidget.c:868
+#: gtk/gtkfilechooserwidget.c:861
+msgid "The item that you selected is not a folder try using a different item."
+msgstr "موردی که شما انتخاب کرده‌اید، شاخه نیست، سعی کنید مورد دیگری استفاده کنید."
+
+#: gtk/gtkfilechooserwidget.c:869
 msgid "Invalid file name"
 msgstr "نام پروندهٔ نامعتبر"
 
-#: gtk/gtkfilechooserwidget.c:877
+#: gtk/gtkfilechooserwidget.c:878
 msgid "The folder contents could not be displayed"
-msgstr "نمی‌توان محتویات پوشه را نمایش داد"
+msgstr "نمی‌توان محتویات شاخه را نمایش داد"
 
-#: gtk/gtkfilechooserwidget.c:885
+#: gtk/gtkfilechooserwidget.c:886
 msgid "The file could not be deleted"
-msgstr "نمی‌توان پوشه را حذف کرد"
+msgstr "نمی‌توان شاخه را حذف کرد"
 
-#: gtk/gtkfilechooserwidget.c:893
+#: gtk/gtkfilechooserwidget.c:894
 msgid "The file could not be moved to the Trash"
 msgstr "پرونده را نمی‌توان به زباله‌دان منتقل کرد"
 
-#: gtk/gtkfilechooserwidget.c:1038
+#: gtk/gtkfilechooserwidget.c:1039
 msgid "A folder with that name already exists"
-msgstr "یک پوشه با همان نام در حال حاضر وجود دارد"
+msgstr "یک شاخه با همان نام در حال حاضر وجود دارد"
 
-#: gtk/gtkfilechooserwidget.c:1040
+#: gtk/gtkfilechooserwidget.c:1041
 msgid "A file with that name already exists"
 msgstr "یک پرونده با همان نام در حال حاضر وجود دارد"
 
-#: gtk/gtkfilechooserwidget.c:1075
-msgid "A folder cannot be called “.”"
-msgstr "نمی‌توان یک پوشه را فراخوانی کرد «.»"
-
 #: gtk/gtkfilechooserwidget.c:1076
+msgid "A folder cannot be called “.”"
+msgstr "نمی‌توان یک شاخه را فراخوانی کرد «.»"
+
+#: gtk/gtkfilechooserwidget.c:1077
 msgid "A file cannot be called “.”"
 msgstr "یک پرونده را نمی‌توان فراخوانی کرد «.»"
 
-#: gtk/gtkfilechooserwidget.c:1079
-msgid "A folder cannot be called “..”"
-msgstr "نمی‌توان یک پوشه را فراخوانی کرد «..»"
-
 #: gtk/gtkfilechooserwidget.c:1080
+msgid "A folder cannot be called “..”"
+msgstr "نمی‌توان یک شاخه را فراخوانی کرد «..»"
+
+#: gtk/gtkfilechooserwidget.c:1081
 msgid "A file cannot be called “..”"
 msgstr "یک پرونده را نمی‌توان فراخوانی کرد «..»"
 
-#: gtk/gtkfilechooserwidget.c:1083
-msgid "Folder names cannot contain “/”"
-msgstr "نام پوشه‌ها نمی‌تواند شامل «/» باشد"
-
 #: gtk/gtkfilechooserwidget.c:1084
+msgid "Folder names cannot contain “/”"
+msgstr "نام شاخه‌ها نمی‌تواند شامل «/» باشد"
+
+#: gtk/gtkfilechooserwidget.c:1085
 msgid "File names cannot contain “/”"
 msgstr "نام پرونده‌ها نمی‌تواند شامل «/» باشد"
 
-#: gtk/gtkfilechooserwidget.c:1110
-msgid "Folder names should not begin with a space"
-msgstr "نام پوشه‌ها نباید با فاصله شروع شوند"
-
 #: gtk/gtkfilechooserwidget.c:1111
+msgid "Folder names should not begin with a space"
+msgstr "نام شاخه‌ها نباید با فاصله شروع شوند"
+
+#: gtk/gtkfilechooserwidget.c:1112
 msgid "File names should not begin with a space"
 msgstr "نام پرونده نباید با فاصله شروع شود"
 
-#: gtk/gtkfilechooserwidget.c:1115
-msgid "Folder names should not end with a space"
-msgstr "نام پوشه‌ها نباید با فاصله خاتمه یابند"
-
 #: gtk/gtkfilechooserwidget.c:1116
+msgid "Folder names should not end with a space"
+msgstr "نام شاخه‌ها نباید با فاصله خاتمه یابند"
+
+#: gtk/gtkfilechooserwidget.c:1117
 msgid "File names should not end with a space"
 msgstr "نام پرونده‌ها نباید با فاصله خاتمه یابد"
 
-#: gtk/gtkfilechooserwidget.c:1119
-msgid "Folder names starting with a “.” are hidden"
-msgstr "پوشه‌هایی نام آنها با «.» شروع شوند مخفی هستند"
-
 #: gtk/gtkfilechooserwidget.c:1120
+msgid "Folder names starting with a “.” are hidden"
+msgstr "شاخه‌هایی نام آنها با «.» شروع شوند مخفی هستند"
+
+#: gtk/gtkfilechooserwidget.c:1121
 msgid "File names starting with a “.” are hidden"
 msgstr "پرونده‌هایی که نام آنها با «.» شروع شود مخفی هستند"
 
-#: gtk/gtkfilechooserwidget.c:1490
+#: gtk/gtkfilechooserwidget.c:1494
 #, c-format
 msgid "Are you sure you want to permanently delete “%s”?"
 msgstr "آیا مطمئنید که می‌خواهید برای همیشه «%s» را پاک کنید؟"
 
-#: gtk/gtkfilechooserwidget.c:1493
+#: gtk/gtkfilechooserwidget.c:1497
 #, c-format
 msgid "If you delete an item, it will be permanently lost."
 msgstr "اگر موردی را پاک کنید، برای همیشه از دست خواهد رفت."
 
-#: gtk/gtkfilechooserwidget.c:1630
+#: gtk/gtkfilechooserwidget.c:1634
 msgid "The file could not be renamed"
 msgstr "نمی‌توان نام پرونده را تغییر داد"
 
-#: gtk/gtkfilechooserwidget.c:1966
+#: gtk/gtkfilechooserwidget.c:1979
 msgid "Could not select file"
 msgstr "انتخاب پرونده ممکن نیست"
 
-#: gtk/gtkfilechooserwidget.c:2316
+#: gtk/gtkfilechooserwidget.c:2329
 msgid "_Visit File"
 msgstr "_مشاهده پرونده"
 
-#: gtk/gtkfilechooserwidget.c:2317
+#: gtk/gtkfilechooserwidget.c:2330
 msgid "_Open With File Manager"
 msgstr "_گشودن با مدیر پرونده‌ها"
 
-#: gtk/gtkfilechooserwidget.c:2318
+#: gtk/gtkfilechooserwidget.c:2331
 msgid "_Copy Location"
 msgstr "_رونوشت از مکان"
 
-#: gtk/gtkfilechooserwidget.c:2319
+#: gtk/gtkfilechooserwidget.c:2332
 msgid "_Add to Bookmarks"
 msgstr "_افزودن به نشانک‌ها"
 
-#: gtk/gtkfilechooserwidget.c:2320 gtk/gtkplacessidebar.c:2741
-#: gtk/ui/gtkfilechooserwidget.ui:538
+#: gtk/gtkfilechooserwidget.c:2333 gtk/gtkplacessidebar.c:2741
+#: gtk/ui/gtkfilechooserwidget.ui:539
 msgid "_Rename"
 msgstr "_تغییر نام"
 
-#: gtk/gtkfilechooserwidget.c:2322
+#: gtk/gtkfilechooserwidget.c:2335
 msgid "_Move to Trash"
 msgstr "_انتقال به زباله‌دان"
 
-#: gtk/gtkfilechooserwidget.c:2326
+#: gtk/gtkfilechooserwidget.c:2339
 msgid "Show _Hidden Files"
 msgstr "نمایش پرونده‌های _مخفی"
 
-#: gtk/gtkfilechooserwidget.c:2327
+#: gtk/gtkfilechooserwidget.c:2340
 msgid "Show _Size Column"
 msgstr "نمایش ستون _اندازه"
 
-#: gtk/gtkfilechooserwidget.c:2328
+#: gtk/gtkfilechooserwidget.c:2341
 msgid "Show T_ype Column"
 msgstr "نمایش ستون _گونه"
 
-#: gtk/gtkfilechooserwidget.c:2329
+#: gtk/gtkfilechooserwidget.c:2342
 msgid "Show _Time"
 msgstr "نمایش _زمان"
 
-#: gtk/gtkfilechooserwidget.c:2330
+#: gtk/gtkfilechooserwidget.c:2343
 msgid "Sort _Folders before Files"
-msgstr "نمایش _پوشه‌ها قبل از پرونده‌ها"
+msgstr "نمایش _شاخه‌ها قبل از پرونده‌ها"
 
 #. this is the header for the location column in the print dialog
-#: gtk/gtkfilechooserwidget.c:2609 gtk/inspector/css-node-tree.ui:141
-#: gtk/ui/gtkfilechooserwidget.ui:207 gtk/ui/gtkprintunixdialog.ui:123
+#: gtk/gtkfilechooserwidget.c:2625 gtk/inspector/css-node-tree.ui:141
+#: gtk/ui/gtkfilechooserwidget.ui:208 gtk/ui/gtkprintunixdialog.ui:123
 msgid "Location"
 msgstr "مکان"
 
 #. Label
-#: gtk/gtkfilechooserwidget.c:2702
+#: gtk/gtkfilechooserwidget.c:2718
 msgid "_Name:"
 msgstr "_نام:"
 
-#: gtk/gtkfilechooserwidget.c:3327 gtk/gtkfilechooserwidget.c:3341
+#: gtk/gtkfilechooserwidget.c:3343 gtk/gtkfilechooserwidget.c:3357
 #, c-format
 msgid "Searching in %s"
 msgstr "در حال جست‌وجو در %s"
 
-#: gtk/gtkfilechooserwidget.c:3347
+#: gtk/gtkfilechooserwidget.c:3363
 msgid "Searching"
 msgstr "درحال جست‌وجو"
 
-#: gtk/gtkfilechooserwidget.c:3354
+#: gtk/gtkfilechooserwidget.c:3370
 msgid "Enter location"
 msgstr "وارد کردن مکان"
 
-#: gtk/gtkfilechooserwidget.c:3356
+#: gtk/gtkfilechooserwidget.c:3372
 msgid "Enter location or URL"
 msgstr "وارد کردن مکان یا URL"
 
-#: gtk/gtkfilechooserwidget.c:4432 gtk/gtkfilechooserwidget.c:7463
-#: gtk/ui/gtkfilechooserwidget.ui:247
+#: gtk/gtkfilechooserwidget.c:4450 gtk/gtkfilechooserwidget.c:7492
+#: gtk/ui/gtkfilechooserwidget.ui:248
 msgid "Modified"
 msgstr "تغییریافته"
 
-#: gtk/gtkfilechooserwidget.c:4710
+#: gtk/gtkfilechooserwidget.c:4728
 #, c-format
 msgid "Could not read the contents of %s"
 msgstr "محتوای %s قابل خواندن نبود"
 
-#: gtk/gtkfilechooserwidget.c:4714
+#: gtk/gtkfilechooserwidget.c:4732
 msgid "Could not read the contents of the folder"
-msgstr "محتوای پوشه قابل خواندن نبود"
+msgstr "محتوای شاخه قابل خواندن نبود"
 
-#: gtk/gtkfilechooserwidget.c:4874 gtk/gtkfilechooserwidget.c:4922
+#: gtk/gtkfilechooserwidget.c:4892 gtk/gtkfilechooserwidget.c:4940
 msgid "%H:%M"
 msgstr "%OH:%OM"
 
-#: gtk/gtkfilechooserwidget.c:4876 gtk/gtkfilechooserwidget.c:4924
+#: gtk/gtkfilechooserwidget.c:4894 gtk/gtkfilechooserwidget.c:4942
 msgid "%l:%M %p"
 msgstr "%OI:%OM %p"
 
-#: gtk/gtkfilechooserwidget.c:4880
+#: gtk/gtkfilechooserwidget.c:4898
 msgid "Yesterday"
 msgstr "دیروز"
 
-#: gtk/gtkfilechooserwidget.c:4888
+#: gtk/gtkfilechooserwidget.c:4906
 msgid "%-e %b"
 msgstr "%O-e %b"
 
-#: gtk/gtkfilechooserwidget.c:4892
+#: gtk/gtkfilechooserwidget.c:4910
 msgid "%-e %b %Y"
 msgstr "%O-e %b %OY"
 
-#: gtk/gtkfilechooserwidget.c:4991 gtk/gtkfilechooserwidget.c:4999
+#: gtk/gtkfilechooserwidget.c:5009 gtk/gtkfilechooserwidget.c:5017
 msgid "Program"
 msgstr "برنامه"
 
-#: gtk/gtkfilechooserwidget.c:4992
+#: gtk/gtkfilechooserwidget.c:5010
 msgid "Audio"
 msgstr "صدا"
 
-#: gtk/gtkfilechooserwidget.c:4993 gtk/inspector/visual.ui:230
+#: gtk/gtkfilechooserwidget.c:5011 gtk/inspector/visual.ui:230
 #: gtk/ui/gtkfontbutton.ui:13
 msgid "Font"
 msgstr "قلم"
 
-#: gtk/gtkfilechooserwidget.c:4994 gtk/inspector/visual.ui:488
+#: gtk/gtkfilechooserwidget.c:5012 gtk/inspector/visual.ui:488
 msgid "Image"
 msgstr "تصویر"
 
-#: gtk/gtkfilechooserwidget.c:4995
+#: gtk/gtkfilechooserwidget.c:5013
 msgid "Archive"
 msgstr "بایگانی"
 
-#: gtk/gtkfilechooserwidget.c:4996
+#: gtk/gtkfilechooserwidget.c:5014
 msgid "Markup"
 msgstr "نشانه‌گذاری"
 
-#: gtk/gtkfilechooserwidget.c:4997 gtk/gtkfilechooserwidget.c:4998
+#: gtk/gtkfilechooserwidget.c:5015 gtk/gtkfilechooserwidget.c:5016
 msgid "Text"
 msgstr "متن"
 
-#: gtk/gtkfilechooserwidget.c:5000
+#: gtk/gtkfilechooserwidget.c:5018
 msgid "Video"
 msgstr "ویدیو"
 
-#: gtk/gtkfilechooserwidget.c:5001
+#: gtk/gtkfilechooserwidget.c:5019
 msgid "Contacts"
 msgstr "آشنایان"
 
-#: gtk/gtkfilechooserwidget.c:5002
+#: gtk/gtkfilechooserwidget.c:5020
 msgid "Calendar"
 msgstr "تقویم"
 
-#: gtk/gtkfilechooserwidget.c:5003
+#: gtk/gtkfilechooserwidget.c:5021
 msgid "Document"
 msgstr "سند"
 
-#: gtk/gtkfilechooserwidget.c:5004
+#: gtk/gtkfilechooserwidget.c:5022
 msgid "Presentation"
 msgstr "ارائه‌"
 
-#: gtk/gtkfilechooserwidget.c:5005
+#: gtk/gtkfilechooserwidget.c:5023
 msgid "Spreadsheet"
 msgstr "صفحهٔ گسترده"
 
 #. Translators: We don't know whether this printer is
 #. * available to print to.
-#: gtk/gtkfilechooserwidget.c:5036 gtk/gtkfilechooserwidget.c:5219
+#: gtk/gtkfilechooserwidget.c:5054 gtk/gtkfilechooserwidget.c:5243
 #: gtk/inspector/prop-editor.c:1689
 #: modules/printbackends/cloudprint/gtkprintbackendcloudprint.c:748
 msgid "Unknown"
 msgstr "نامعلوم"
 
-#: gtk/gtkfilechooserwidget.c:5258 gtk/gtkplacessidebar.c:1094
+#: gtk/gtkfilechooserwidget.c:5282 gtk/gtkplacessidebar.c:1094
 msgid "Home"
 msgstr "خانه"
 
-#: gtk/gtkfilechooserwidget.c:5755
+#: gtk/gtkfilechooserwidget.c:5779
 msgid "Cannot change to folder because it is not local"
-msgstr "نمی‌توان به پوشه رفت چون «محلی» نیست"
+msgstr "نمی‌توان به شاخه رفت چون «محلی» نیست"
 
-#: gtk/gtkfilechooserwidget.c:6541 gtk/gtkprintunixdialog.c:665
+#: gtk/gtkfilechooserwidget.c:6565 gtk/gtkprintunixdialog.c:665
 #, c-format
 msgid "A file named “%s” already exists.  Do you want to replace it?"
 msgstr "پرونده‌ای با نام «%s» از قبل وجود دارد.  می‌خواهید آن را جایگزین کنید؟"
 
-#: gtk/gtkfilechooserwidget.c:6544 gtk/gtkprintunixdialog.c:669
+#: gtk/gtkfilechooserwidget.c:6568 gtk/gtkprintunixdialog.c:669
 #, c-format
 msgid "The file already exists in “%s”.  Replacing it will overwrite its contents."
 msgstr ""
 "پرونده از قبل در «%s» وجود دارد.  با جایگزینی آن تمام محتوایش بازنویسی می‌شود."
 
-#: gtk/gtkfilechooserwidget.c:6549 gtk/gtkprintunixdialog.c:677
+#: gtk/gtkfilechooserwidget.c:6573 gtk/gtkprintunixdialog.c:677
 msgid "_Replace"
 msgstr "_جایگزینی"
 
-#: gtk/gtkfilechooserwidget.c:6763
+#: gtk/gtkfilechooserwidget.c:6792
 msgid "You do not have access to the specified folder."
-msgstr "شما دسترسی به پوشه مشخص شده را ندارید."
+msgstr "شما دسترسی به شاخه مشخص شده را ندارید."
 
-#: gtk/gtkfilechooserwidget.c:7386
+#: gtk/gtkfilechooserwidget.c:7415
 msgid "Could not send the search request"
 msgstr "نمی‌توان درخواست جست‌وجو را ارسال کرد"
 
-#: gtk/gtkfilechooserwidget.c:7674
+#: gtk/gtkfilechooserwidget.c:7703
 msgid "Accessed"
 msgstr "در دسترس"
 
-#: gtk/gtkfilechooserwidget.c:8793 gtk/ui/gtkfilechooserwidget.ui:69
+#: gtk/gtkfilechooserwidget.c:8822 gtk/ui/gtkfilechooserwidget.ui:69
 msgid "Create Folder"
-msgstr "ایجاد پوشه"
+msgstr "ایجاد شاخه"
 
 #. The pointers we return for a GtkFileSystemVolume are opaque tokens; they are
 #. * really pointers to GDrive, GVolume or GMount objects.  We need an extra
@@ -2728,12 +2741,12 @@ msgctxt "input method menu"
 msgid "None"
 msgstr "هیچ‌کدام"
 
-#: gtk/gtkimmulticontext.c:609
+#: gtk/gtkimmulticontext.c:615
 msgctxt "input method menu"
 msgid "System"
 msgstr "سامانه"
 
-#: gtk/gtkimmulticontext.c:688
+#: gtk/gtkimmulticontext.c:694
 #, c-format
 msgctxt "input method menu"
 msgid "System (%s)"
@@ -2902,7 +2915,7 @@ msgstr "نمایش گزینه‌های ‪GTK+"
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:1272
+#: gtk/gtkmain.c:1275
 msgid "default:LTR"
 msgstr "default:RTL"
 
@@ -2918,69 +2931,69 @@ msgstr "_بله"
 msgid "Co_nnect"
 msgstr "اتّ_صال"
 
-#: gtk/gtkmountoperation.c:671
+#: gtk/gtkmountoperation.c:668
 msgid "Connect As"
 msgstr "اتّصال به عنوان"
 
-#: gtk/gtkmountoperation.c:680
+#: gtk/gtkmountoperation.c:677
 msgid "_Anonymous"
 msgstr "_ناشناس"
 
-#: gtk/gtkmountoperation.c:689
+#: gtk/gtkmountoperation.c:686
 msgid "Registered U_ser"
 msgstr "_کاربرِ ثبت شده"
 
-#: gtk/gtkmountoperation.c:700
+#: gtk/gtkmountoperation.c:697
 msgid "_Username"
 msgstr "نام _کاربری"
 
-#: gtk/gtkmountoperation.c:705
+#: gtk/gtkmountoperation.c:702
 msgid "_Domain"
 msgstr "_دامنه"
 
-#: gtk/gtkmountoperation.c:714
+#: gtk/gtkmountoperation.c:711
 msgid "Volume type"
 msgstr "گونهٔ حجم"
 
-#: gtk/gtkmountoperation.c:724
+#: gtk/gtkmountoperation.c:721
 msgid "_Hidden"
 msgstr "_پنهان"
 
-#: gtk/gtkmountoperation.c:727
+#: gtk/gtkmountoperation.c:724
 msgid "_Windows system"
 msgstr "_سامانهٔ ویندوزی"
 
-#: gtk/gtkmountoperation.c:730
+#: gtk/gtkmountoperation.c:727
 msgid "_PIM"
 msgstr "_PIM"
 
-#: gtk/gtkmountoperation.c:736
+#: gtk/gtkmountoperation.c:733
 msgid "_Password"
 msgstr "_گذر‌واژه"
 
-#: gtk/gtkmountoperation.c:758
+#: gtk/gtkmountoperation.c:755
 msgid "Forget password _immediately"
 msgstr "گذرواژه _بی‌درنگ فراموش شود"
 
-#: gtk/gtkmountoperation.c:768
+#: gtk/gtkmountoperation.c:765
 msgid "Remember password until you _logout"
 msgstr "گذرواژه تا هنگام _خروج  به‌خاطر سپرده شود"
 
-#: gtk/gtkmountoperation.c:778
+#: gtk/gtkmountoperation.c:775
 msgid "Remember _forever"
 msgstr "برای _همیشه به‌خاطر سپرده شود"
 
-#: gtk/gtkmountoperation.c:1173
+#: gtk/gtkmountoperation.c:1170
 #, c-format
 msgid "Unknown Application (PID %d)"
 msgstr "برنامهٔ ناشناخته (شناسهٔ فرایند %Id)"
 
-#: gtk/gtkmountoperation.c:1358
+#: gtk/gtkmountoperation.c:1355
 #, c-format
 msgid "Unable to end process"
 msgstr "ناتوان در پایان دادن به فرایند"
 
-#: gtk/gtkmountoperation.c:1392
+#: gtk/gtkmountoperation.c:1389
 msgid "_End Process"
 msgstr "_پایان دادن به فرایند"
 
@@ -3205,7 +3218,7 @@ msgstr "این نام از پیش گرفته شده"
 
 #: gtk/gtkplacessidebar.c:2735 gtk/inspector/actions.ui:43
 #: gtk/inspector/css-node-tree.ui:39 gtk/inspector/object-tree.ui:110
-#: gtk/ui/gtkfilechooserwidget.ui:189 gtk/ui/gtkfilechooserwidget.ui:512
+#: gtk/ui/gtkfilechooserwidget.ui:190 gtk/ui/gtkfilechooserwidget.ui:513
 msgid "Name"
 msgstr "نام"
 
@@ -3234,11 +3247,11 @@ msgstr "نتوانست %s را بیرون دهد"
 msgid "Unable to poll “%s” for media changes"
 msgstr "نتوانست %s را برای تغییرات رسانه‌ای بررسی کند"
 
-#: gtk/gtkplacessidebar.c:3630 gtk/gtkplacessidebar.c:3696 gtk/gtkplacesview.c:1692
+#: gtk/gtkplacessidebar.c:3630 gtk/gtkplacessidebar.c:3696 gtk/gtkplacesview.c:1706
 msgid "Open in New _Tab"
 msgstr "گشودن در _زبانهٔ جدید"
 
-#: gtk/gtkplacessidebar.c:3636 gtk/gtkplacessidebar.c:3699 gtk/gtkplacesview.c:1703
+#: gtk/gtkplacessidebar.c:3636 gtk/gtkplacessidebar.c:3699 gtk/gtkplacesview.c:1717
 msgid "Open in New _Window"
 msgstr "گشودن در _پنجرهٔ جدید"
 
@@ -3254,11 +3267,11 @@ msgstr "_برداشتن"
 msgid "Rename…"
 msgstr "تغییر نام…"
 
-#: gtk/gtkplacessidebar.c:3709 gtk/gtkplacesview.c:1737
+#: gtk/gtkplacessidebar.c:3709 gtk/gtkplacesview.c:1751
 msgid "_Mount"
 msgstr "_سوار کردن"
 
-#: gtk/gtkplacessidebar.c:3710 gtk/gtkplacesview.c:1727
+#: gtk/gtkplacessidebar.c:3710 gtk/gtkplacesview.c:1741
 msgid "_Unmount"
 msgstr "_پیاده کردن"
 
@@ -3283,7 +3296,7 @@ msgid "No network locations found"
 msgstr "هیچ مکان شبکه‌ای پیدا نشد"
 
 #. if it wasn't cancelled show a dialog
-#: gtk/gtkplacesview.c:1232 gtk/gtkplacesview.c:1307
+#: gtk/gtkplacesview.c:1232 gtk/gtkplacesview.c:1321
 msgid "Unable to access location"
 msgstr "نتوانست به موقعیت دسترسی یابد"
 
@@ -3293,71 +3306,71 @@ msgid "Con_nect"
 msgstr "اتّ_صال"
 
 #. if it wasn't cancelled show a dialog
-#: gtk/gtkplacesview.c:1370
+#: gtk/gtkplacesview.c:1384
 msgid "Unable to unmount volume"
 msgstr "نتوانست حجم را پیاده کند"
 
 #. Allow to cancel the operation
-#: gtk/gtkplacesview.c:1471
+#: gtk/gtkplacesview.c:1485
 msgid "Cance_l"
 msgstr "_لغو"
 
-#: gtk/gtkplacesview.c:1634
+#: gtk/gtkplacesview.c:1648
 msgid "AppleTalk"
 msgstr "اپل‌تاک"
 
 #. Translators: do not translate ftp:// and ftps://
-#: gtk/gtkplacesview.c:1638
+#: gtk/gtkplacesview.c:1652
 msgid "File Transfer Protocol"
 msgstr "قرارداد انتقال پرونده"
 
-#: gtk/gtkplacesview.c:1638
+#: gtk/gtkplacesview.c:1652
 msgid "ftp:// or ftps://"
 msgstr "ftp:// یا ftps://"
 
-#: gtk/gtkplacesview.c:1641
+#: gtk/gtkplacesview.c:1655
 msgid "Network File System"
 msgstr "سامانهٔ پروندهٔ شبکه"
 
-#: gtk/gtkplacesview.c:1644
+#: gtk/gtkplacesview.c:1658
 msgid "Samba"
 msgstr "سامبا"
 
 #. Translators: do not translate sftp:// and ssh://
-#: gtk/gtkplacesview.c:1648
+#: gtk/gtkplacesview.c:1662
 msgid "SSH File Transfer Protocol"
 msgstr "قرارداد انتقال پروندهٔ SSH"
 
-#: gtk/gtkplacesview.c:1648
+#: gtk/gtkplacesview.c:1662
 msgid "sftp:// or ssh://"
 msgstr "sftp:// یا ssh://"
 
 #. Translators: do not translate dav:// and davs://
-#: gtk/gtkplacesview.c:1652
+#: gtk/gtkplacesview.c:1666
 msgid "WebDAV"
 msgstr "وب‌دو"
 
-#: gtk/gtkplacesview.c:1652
+#: gtk/gtkplacesview.c:1666
 msgid "dav:// or davs://"
 msgstr "dav:// یا davs://"
 
-#: gtk/gtkplacesview.c:1727
+#: gtk/gtkplacesview.c:1741
 msgid "_Disconnect"
 msgstr "_قطع ارتباط"
 
-#: gtk/gtkplacesview.c:1737
+#: gtk/gtkplacesview.c:1751
 msgid "_Connect"
 msgstr "اتّ_صال"
 
-#: gtk/gtkplacesview.c:1878
+#: gtk/gtkplacesview.c:1892
 msgid "Unable to get remote server location"
 msgstr "نتوانست موقعیت کارساز دوردست را بگیرد"
 
-#: gtk/gtkplacesview.c:2073 gtk/gtkplacesview.c:2082
+#: gtk/gtkplacesview.c:2087 gtk/gtkplacesview.c:2096
 msgid "Networks"
 msgstr "شبکه"
 
-#: gtk/gtkplacesview.c:2073 gtk/gtkplacesview.c:2082
+#: gtk/gtkplacesview.c:2087 gtk/gtkplacesview.c:2096
 msgid "On This Computer"
 msgstr "روی این رایانه"
 
@@ -3376,7 +3389,7 @@ msgid "Disconnect"
 msgstr "قطع ارتباط"
 
 #: gtk/gtkplacesviewrow.c:481 gtk/ui/gtkplacesviewrow.ui:72
-#: gtk/ui/gtksidebarrow.ui:61
+#: gtk/ui/gtksidebarrow.ui:62
 msgid "Unmount"
 msgstr "پیاده کردن"
 
@@ -3476,63 +3489,63 @@ msgid "The most probable reason is that a temporary file could not be created."
 msgstr "محتمل‌ترین دلیل این‌است که نمی‌توان یک پروندهٔ موقت ایجاد کرد."
 
 #. window
-#: gtk/gtkprintoperation-portal.c:231 gtk/gtkprintoperation-portal.c:542
-#: gtk/gtkprintoperation-portal.c:611 gtk/gtkprintunixdialog.c:3415
+#: gtk/gtkprintoperation-portal.c:231 gtk/gtkprintoperation-portal.c:549
+#: gtk/gtkprintoperation-portal.c:618 gtk/gtkprintunixdialog.c:3415
 msgid "Print"
 msgstr "چاپ"
 
-#: gtk/gtkprintoperation-win32.c:617
+#: gtk/gtkprintoperation-win32.c:631
 msgid "Printer offline"
 msgstr "چاپگر برون‌خط"
 
-#: gtk/gtkprintoperation-win32.c:619
+#: gtk/gtkprintoperation-win32.c:633
 msgid "Out of paper"
 msgstr "بدون کاغذ"
 
 #. Translators: this is a printer status.
-#: gtk/gtkprintoperation-win32.c:621
+#: gtk/gtkprintoperation-win32.c:635
 #: modules/printbackends/cups/gtkprintbackendcups.c:2624
 msgid "Paused"
 msgstr "مکث شده"
 
-#: gtk/gtkprintoperation-win32.c:623
+#: gtk/gtkprintoperation-win32.c:637
 msgid "Need user intervention"
 msgstr "نیاز به مداخله کاربر هست"
 
-#: gtk/gtkprintoperation-win32.c:728
+#: gtk/gtkprintoperation-win32.c:742
 msgid "Custom size"
 msgstr "اندازهٔ سفارشی"
 
-#: gtk/gtkprintoperation-win32.c:1587
+#: gtk/gtkprintoperation-win32.c:1613
 msgid "No printer found"
 msgstr "چاپگری پیدا نشد"
 
-#: gtk/gtkprintoperation-win32.c:1614
+#: gtk/gtkprintoperation-win32.c:1640
 msgid "Invalid argument to CreateDC"
 msgstr "نشان‌وند نامعتبر به CreateDC"
 
-#: gtk/gtkprintoperation-win32.c:1650 gtk/gtkprintoperation-win32.c:1896
+#: gtk/gtkprintoperation-win32.c:1676 gtk/gtkprintoperation-win32.c:1922
 msgid "Error from StartDoc"
 msgstr "خطا از StartDoc"
 
-#: gtk/gtkprintoperation-win32.c:1751 gtk/gtkprintoperation-win32.c:1774
-#: gtk/gtkprintoperation-win32.c:1822
+#: gtk/gtkprintoperation-win32.c:1777 gtk/gtkprintoperation-win32.c:1800
+#: gtk/gtkprintoperation-win32.c:1848
 msgid "Not enough free memory"
 msgstr "حافظهٔ آزاد کافی نیست"
 
-#: gtk/gtkprintoperation-win32.c:1827
+#: gtk/gtkprintoperation-win32.c:1853
 msgid "Invalid argument to PrintDlgEx"
 msgstr "نشان‌وند نامعتبر برای PrintDlgEx"
 
-#: gtk/gtkprintoperation-win32.c:1832
+#: gtk/gtkprintoperation-win32.c:1858
 msgid "Invalid pointer to PrintDlgEx"
 msgstr "اشاره‌گر نامعتبر برای PrintDlgEx"
 
-#: gtk/gtkprintoperation-win32.c:1837
+#: gtk/gtkprintoperation-win32.c:1863
 msgid "Invalid handle to PrintDlgEx"
 msgstr "تصدی نامعتبر به PrintDlgEx"
 
-#: gtk/gtkprintoperation-win32.c:1842
+#: gtk/gtkprintoperation-win32.c:1868
 msgid "Unspecified error"
 msgstr "خطای نامشخص"
 
@@ -3787,12 +3800,12 @@ msgid "Search Shortcuts"
 msgstr "میانبرهای جست‌وجو"
 
 #: gtk/gtkshortcutswindow.c:1053 gtk/ui/gtkemojichooser.ui:376
-#: gtk/ui/gtkfilechooserwidget.ui:322
+#: gtk/ui/gtkfilechooserwidget.ui:323
 msgid "No Results Found"
 msgstr "هیچ نتیجه‌ای پیدا نشد"
 
 #: gtk/gtkshortcutswindow.c:1060 gtk/ui/gtkemojichooser.ui:390
-#: gtk/ui/gtkfilechooserwidget.ui:336 gtk/ui/gtkplacesview.ui:274
+#: gtk/ui/gtkfilechooserwidget.ui:337 gtk/ui/gtkplacesview.ui:274
 msgid "Try a different search"
 msgstr "جست‌وجو دیگری را امتحان کنید"
 
@@ -4342,7 +4355,7 @@ msgid "Property"
 msgstr "مشخصه"
 
 #: gtk/inspector/prop-list.ui:68 gtk/inspector/statistics.ui:53
-#: gtk/ui/gtkfilechooserwidget.ui:235
+#: gtk/ui/gtkfilechooserwidget.ui:236
 msgid "Type"
 msgstr "نوع"
 
@@ -4362,7 +4375,7 @@ msgstr "مسیر"
 msgid "Count"
 msgstr "تعداد"
 
-#: gtk/inspector/resource-list.ui:130 gtk/ui/gtkfilechooserwidget.ui:223
+#: gtk/inspector/resource-list.ui:130 gtk/ui/gtkfilechooserwidget.ui:224
 #: gtk/ui/gtkfontchooserwidget.ui:134 gtk/ui/gtkfontchooserwidget.ui:276
 msgid "Size"
 msgstr "اندازه"
@@ -6316,7 +6329,7 @@ msgstr "بنگالی"
 #: gtk/script-names.c:21
 msgctxt "Script"
 msgid "Bopomofo"
-msgstr ""
+msgstr "بوپوموفو"
 
 #: gtk/script-names.c:22
 msgctxt "Script"
@@ -6326,7 +6339,7 @@ msgstr "چروکی"
 #: gtk/script-names.c:23
 msgctxt "Script"
 msgid "Coptic"
-msgstr ""
+msgstr "قبطی"
 
 #: gtk/script-names.c:24
 msgctxt "Script"
@@ -6336,12 +6349,12 @@ msgstr "سریلیک"
 #: gtk/script-names.c:25
 msgctxt "Script"
 msgid "Deseret"
-msgstr ""
+msgstr "ده‌سه‌رت"
 
 #: gtk/script-names.c:26
 msgctxt "Script"
 msgid "Devanagari"
-msgstr ""
+msgstr "دوانگاری"
 
 #: gtk/script-names.c:27
 msgctxt "Script"
@@ -6366,12 +6379,12 @@ msgstr "یونانی"
 #: gtk/script-names.c:31
 msgctxt "Script"
 msgid "Gujarati"
-msgstr ""
+msgstr "گجراتی"
 
 #: gtk/script-names.c:32
 msgctxt "Script"
 msgid "Gurmukhi"
-msgstr ""
+msgstr "گورموکی"
 
 #: gtk/script-names.c:33
 msgctxt "Script"
@@ -6381,7 +6394,7 @@ msgstr "هان"
 #: gtk/script-names.c:34
 msgctxt "Script"
 msgid "Hangul"
-msgstr ""
+msgstr "هانگول"
 
 #: gtk/script-names.c:35
 msgctxt "Script"
@@ -6396,7 +6409,7 @@ msgstr "هیراگانا"
 #: gtk/script-names.c:37
 msgctxt "Script"
 msgid "Kannada"
-msgstr ""
+msgstr "کانادا"
 
 #: gtk/script-names.c:38
 msgctxt "Script"
@@ -6421,7 +6434,7 @@ msgstr "لاتین"
 #: gtk/script-names.c:42
 msgctxt "Script"
 msgid "Malayalam"
-msgstr ""
+msgstr "مالایام"
 
 #: gtk/script-names.c:43
 msgctxt "Script"
@@ -6436,7 +6449,7 @@ msgstr "میانمار"
 #: gtk/script-names.c:45
 msgctxt "Script"
 msgid "Ogham"
-msgstr ""
+msgstr "اوغام"
 
 #: gtk/script-names.c:46
 msgctxt "Script"
@@ -6446,7 +6459,7 @@ msgstr "ایتالیایی باستان"
 #: gtk/script-names.c:47
 msgctxt "Script"
 msgid "Oriya"
-msgstr ""
+msgstr "اوریا"
 
 #: gtk/script-names.c:48
 msgctxt "Script"
@@ -6456,12 +6469,12 @@ msgstr "رونی"
 #: gtk/script-names.c:49
 msgctxt "Script"
 msgid "Sinhala"
-msgstr ""
+msgstr "سری‌لانکایی"
 
 #: gtk/script-names.c:50
 msgctxt "Script"
 msgid "Syriac"
-msgstr ""
+msgstr "سریانی"
 
 #: gtk/script-names.c:51
 msgctxt "Script"
@@ -6471,12 +6484,12 @@ msgstr "تامیل"
 #: gtk/script-names.c:52
 msgctxt "Script"
 msgid "Telugu"
-msgstr ""
+msgstr "تلوگو"
 
 #: gtk/script-names.c:53
 msgctxt "Script"
 msgid "Thaana"
-msgstr ""
+msgstr "تانا"
 
 #: gtk/script-names.c:54
 msgctxt "Script"
@@ -6486,12 +6499,12 @@ msgstr "تایلندی"
 #: gtk/script-names.c:55
 msgctxt "Script"
 msgid "Tibetan"
-msgstr ""
+msgstr "تبّتی"
 
 #: gtk/script-names.c:56
 msgctxt "Script"
 msgid "Canadian Aboriginal"
-msgstr ""
+msgstr "بومی کانادایی"
 
 #: gtk/script-names.c:57
 msgctxt "Script"
@@ -6501,87 +6514,87 @@ msgstr "یی"
 #: gtk/script-names.c:58
 msgctxt "Script"
 msgid "Tagalog"
-msgstr ""
+msgstr "تاگالویی"
 
 #: gtk/script-names.c:59
 msgctxt "Script"
 msgid "Hanunoo"
-msgstr ""
+msgstr "هانونو"
 
 #: gtk/script-names.c:60
 msgctxt "Script"
 msgid "Buhid"
-msgstr ""
+msgstr "فیلیپینی"
 
 #: gtk/script-names.c:61
 msgctxt "Script"
 msgid "Tagbanwa"
-msgstr ""
+msgstr "تاگ‌بان‌وا"
 
 #: gtk/script-names.c:62
 msgctxt "Script"
 msgid "Braille"
-msgstr ""
+msgstr "بریل"
 
 #: gtk/script-names.c:63
 msgctxt "Script"
 msgid "Cypriot"
-msgstr ""
+msgstr "قبرسی"
 
 #: gtk/script-names.c:64
 msgctxt "Script"
 msgid "Limbu"
-msgstr ""
+msgstr "لیم‌بو"
 
 #: gtk/script-names.c:65
 msgctxt "Script"
 msgid "Osmanya"
-msgstr ""
+msgstr "عثمانی"
 
 #: gtk/script-names.c:66
 msgctxt "Script"
 msgid "Shavian"
-msgstr ""
+msgstr "شاوی"
 
 #: gtk/script-names.c:67
 msgctxt "Script"
 msgid "Linear B"
-msgstr ""
+msgstr "خطّی B"
 
 #: gtk/script-names.c:68
 msgctxt "Script"
 msgid "Tai Le"
-msgstr ""
+msgstr "تای‌لی"
 
 #: gtk/script-names.c:69
 msgctxt "Script"
 msgid "Ugaritic"
-msgstr ""
+msgstr "اوگاریتی"
 
 #: gtk/script-names.c:70
 msgctxt "Script"
 msgid "New Tai Lue"
-msgstr ""
+msgstr "تای لوی جدید"
 
 #: gtk/script-names.c:71
 msgctxt "Script"
 msgid "Buginese"
-msgstr ""
+msgstr "بوگینی"
 
 #: gtk/script-names.c:72
 msgctxt "Script"
 msgid "Glagolitic"
-msgstr ""
+msgstr "گالگولیتی"
 
 #: gtk/script-names.c:73
 msgctxt "Script"
 msgid "Tifinagh"
-msgstr ""
+msgstr "تی‌فی‌نا"
 
 #: gtk/script-names.c:74
 msgctxt "Script"
 msgid "Syloti Nagri"
-msgstr ""
+msgstr "ناگری سیلوتی"
 
 #: gtk/script-names.c:75
 msgctxt "Script"
@@ -6591,7 +6604,7 @@ msgstr "پارسی باستان"
 #: gtk/script-names.c:76
 msgctxt "Script"
 msgid "Kharoshthi"
-msgstr ""
+msgstr "خروشتی"
 
 #: gtk/script-names.c:77
 msgctxt "Script"
@@ -6601,82 +6614,82 @@ msgstr "ناشناخته"
 #: gtk/script-names.c:78
 msgctxt "Script"
 msgid "Balinese"
-msgstr ""
+msgstr "بالیایی"
 
 #: gtk/script-names.c:79
 msgctxt "Script"
 msgid "Cuneiform"
-msgstr ""
+msgstr "میخی"
 
 #: gtk/script-names.c:80
 msgctxt "Script"
 msgid "Phoenician"
-msgstr ""
+msgstr "فنیقی"
 
 #: gtk/script-names.c:81
 msgctxt "Script"
 msgid "Phags-pa"
-msgstr ""
+msgstr "فاگزپا"
 
 #: gtk/script-names.c:82
 msgctxt "Script"
 msgid "N'Ko"
-msgstr ""
+msgstr "ان‌کو"
 
 #: gtk/script-names.c:83
 msgctxt "Script"
 msgid "Kayah Li"
-msgstr ""
+msgstr "کایالی"
 
 #: gtk/script-names.c:84
 msgctxt "Script"
 msgid "Lepcha"
-msgstr ""
+msgstr "لپکی"
 
 #: gtk/script-names.c:85
 msgctxt "Script"
 msgid "Rejang"
-msgstr ""
+msgstr "ری‌جانگ"
 
 #: gtk/script-names.c:86
 msgctxt "Script"
 msgid "Sundanese"
-msgstr ""
+msgstr "ساندانسی"
 
 #: gtk/script-names.c:87
 msgctxt "Script"
 msgid "Saurashtra"
-msgstr ""
+msgstr "ساراشترا"
 
 #: gtk/script-names.c:88
 msgctxt "Script"
 msgid "Cham"
-msgstr ""
+msgstr "چام"
 
 #: gtk/script-names.c:89
 msgctxt "Script"
 msgid "Ol Chiki"
-msgstr ""
+msgstr "اول‌چیکی"
 
 #: gtk/script-names.c:90
 msgctxt "Script"
 msgid "Vai"
-msgstr ""
+msgstr "وای"
 
 #: gtk/script-names.c:91
 msgctxt "Script"
 msgid "Carian"
-msgstr ""
+msgstr "کاریایی"
 
 #: gtk/script-names.c:92
 msgctxt "Script"
 msgid "Lycian"
-msgstr ""
+msgstr "لایکیایی"
 
 #: gtk/script-names.c:93
 msgctxt "Script"
 msgid "Lydian"
-msgstr ""
+msgstr "لیده‌ای"
 
 #: gtk/script-names.c:94
 msgctxt "Script"
@@ -6686,7 +6699,7 @@ msgstr "اوستایی"
 #: gtk/script-names.c:95
 msgctxt "Script"
 msgid "Bamum"
-msgstr ""
+msgstr "باموم"
 
 #: gtk/script-names.c:96
 msgctxt "Script"
@@ -6711,27 +6724,27 @@ msgstr "پارتی کتیبه‌ای"
 #: gtk/script-names.c:100
 msgctxt "Script"
 msgid "Javanese"
-msgstr ""
+msgstr "جاوه‌ای"
 
 #: gtk/script-names.c:101
 msgctxt "Script"
 msgid "Kaithi"
-msgstr ""
+msgstr "کای‌تی"
 
 #: gtk/script-names.c:102
 msgctxt "Script"
 msgid "Lisu"
-msgstr ""
+msgstr "لی‌سو"
 
 #: gtk/script-names.c:103
 msgctxt "Script"
 msgid "Meetei Mayek"
-msgstr ""
+msgstr "می‌تی مایک"
 
 #: gtk/script-names.c:104
 msgctxt "Script"
 msgid "Old South Arabian"
-msgstr ""
+msgstr "عربی جنوبی قدیمی"
 
 #: gtk/script-names.c:105
 msgctxt "Script"
@@ -6741,202 +6754,202 @@ msgstr "ترکی باستان"
 #: gtk/script-names.c:106
 msgctxt "Script"
 msgid "Samaritan"
-msgstr ""
+msgstr "سامری"
 
 #: gtk/script-names.c:107
 msgctxt "Script"
 msgid "Tai Tham"
-msgstr ""
+msgstr "تای‌تام"
 
 #: gtk/script-names.c:108
 msgctxt "Script"
 msgid "Tai Viet"
-msgstr ""
+msgstr "تام‌ویت"
 
 #: gtk/script-names.c:109
 msgctxt "Script"
 msgid "Batak"
-msgstr ""
+msgstr "باتاک"
 
 #: gtk/script-names.c:110
 msgctxt "Script"
 msgid "Brahmi"
-msgstr ""
+msgstr "برهمایی"
 
 #: gtk/script-names.c:111
 msgctxt "Script"
 msgid "Mandaic"
-msgstr ""
+msgstr "مندایی"
 
 #: gtk/script-names.c:112
 msgctxt "Script"
 msgid "Chakma"
-msgstr ""
+msgstr "چک‌ما"
 
 #: gtk/script-names.c:113
 msgctxt "Script"
 msgid "Meroitic Cursive"
-msgstr ""
+msgstr "شکستهٔ مروی"
 
 #: gtk/script-names.c:114
 msgctxt "Script"
 msgid "Meroitic Hieroglyphs"
-msgstr ""
+msgstr "هیروگلیف‌های مروی"
 
 #: gtk/script-names.c:115
 msgctxt "Script"
 msgid "Miao"
-msgstr ""
+msgstr "میایویی"
 
 #: gtk/script-names.c:116
 msgctxt "Script"
 msgid "Sharada"
-msgstr ""
+msgstr "شارادا"
 
 #: gtk/script-names.c:117
 msgctxt "Script"
 msgid "Sora Sompeng"
-msgstr ""
+msgstr "سورا سوم‌پنگ"
 
 #: gtk/script-names.c:118
 msgctxt "Script"
 msgid "Takri"
-msgstr ""
+msgstr "تکری"
 
 #: gtk/script-names.c:119
 msgctxt "Script"
 msgid "Bassa"
-msgstr ""
+msgstr "باسا"
 
 #: gtk/script-names.c:120
 msgctxt "Script"
 msgid "Caucasian Albanian"
-msgstr ""
+msgstr "آلبانیایی قفقازی"
 
 #: gtk/script-names.c:121
 msgctxt "Script"
 msgid "Duployan"
-msgstr ""
+msgstr "دوپلویی"
 
 #: gtk/script-names.c:122
 msgctxt "Script"
 msgid "Elbasan"
-msgstr ""
+msgstr "الباسی"
 
 #: gtk/script-names.c:123
 msgctxt "Script"
 msgid "Grantha"
-msgstr ""
+msgstr "گران‌تا"
 
 #: gtk/script-names.c:124
 msgctxt "Script"
 msgid "Khojki"
-msgstr ""
+msgstr "خجکی"
 
 #: gtk/script-names.c:125
 msgctxt "Script"
 msgid "Khudawadi, Sindhi"
-msgstr ""
+msgstr "سندی"
 
 #: gtk/script-names.c:126
 msgctxt "Script"
 msgid "Linear A"
-msgstr ""
+msgstr "خطّی A"
 
 #: gtk/script-names.c:127
 msgctxt "Script"
 msgid "Mahajani"
-msgstr ""
+msgstr "ماهاجانی"
 
 #: gtk/script-names.c:128
 msgctxt "Script"
 msgid "Manichaean"
-msgstr ""
+msgstr "مانوی"
 
 #: gtk/script-names.c:129
 msgctxt "Script"
 msgid "Mende Kikakui"
-msgstr ""
+msgstr "من‌ده کای‌کاکویی"
 
 #: gtk/script-names.c:130
 msgctxt "Script"
 msgid "Modi"
-msgstr ""
+msgstr "مودی"
 
 #: gtk/script-names.c:131
 msgctxt "Script"
 msgid "Mro"
-msgstr ""
+msgstr "مرو"
 
 #: gtk/script-names.c:132
 msgctxt "Script"
 msgid "Nabataean"
-msgstr ""
+msgstr "نبتی"
 
 #: gtk/script-names.c:133
 msgctxt "Script"
 msgid "Old North Arabian"
-msgstr ""
+msgstr "عربی شمالی قدیمی"
 
 #: gtk/script-names.c:134
 msgctxt "Script"
 msgid "Old Permic"
-msgstr ""
+msgstr "پرمی باستان"
 
 #: gtk/script-names.c:135
 msgctxt "Script"
 msgid "Pahawh Hmong"
-msgstr ""
+msgstr "هومونگ پاهاوا"
 
 #: gtk/script-names.c:136
 msgctxt "Script"
 msgid "Palmyrene"
-msgstr ""
+msgstr "پالمیری"
 
 #: gtk/script-names.c:137
 msgctxt "Script"
 msgid "Pau Cin Hau"
-msgstr ""
+msgstr "پاو چین ها"
 
 #: gtk/script-names.c:138
 msgctxt "Script"
 msgid "Psalter Pahlavi"
-msgstr ""
+msgstr "پهلوی کتیبه‌ای"
 
 #: gtk/script-names.c:139
 msgctxt "Script"
 msgid "Siddham"
-msgstr ""
+msgstr "سیدهام"
 
 #: gtk/script-names.c:140
 msgctxt "Script"
 msgid "Tirhuta"
-msgstr ""
+msgstr "تیرهوتا"
 
 #: gtk/script-names.c:141
 msgctxt "Script"
 msgid "Warang Citi"
-msgstr ""
+msgstr "سیتی وارانگ"
 
 #: gtk/script-names.c:142
 msgctxt "Script"
 msgid "Ahom"
-msgstr ""
+msgstr "أهوم"
 
 #: gtk/script-names.c:143
 msgctxt "Script"
 msgid "Anatolian Hieroglyphs"
-msgstr ""
+msgstr "هیروگلیف‌های آناتولیایی"
 
 #: gtk/script-names.c:144
 msgctxt "Script"
 msgid "Hatran"
-msgstr ""
+msgstr "هت‌ران"
 
 #: gtk/script-names.c:145
 msgctxt "Script"
 msgid "Multani"
-msgstr ""
+msgstr "مولتانی"
 
 #: gtk/script-names.c:146
 msgctxt "Script"
@@ -6946,57 +6959,57 @@ msgstr "مجاری باستان"
 #: gtk/script-names.c:147
 msgctxt "Script"
 msgid "Signwriting"
-msgstr ""
+msgstr "علامت‌نگاری"
 
 #: gtk/script-names.c:148
 msgctxt "Script"
 msgid "Adlam"
-msgstr ""
+msgstr "ادلم"
 
 #: gtk/script-names.c:149
 msgctxt "Script"
 msgid "Bhaiksuki"
-msgstr ""
+msgstr "بهایک‌سوکی"
 
 #: gtk/script-names.c:150
 msgctxt "Script"
 msgid "Marchen"
-msgstr ""
+msgstr "مرچن"
 
 #: gtk/script-names.c:151
 msgctxt "Script"
 msgid "Newa"
-msgstr ""
+msgstr "نه‌وا"
 
 #: gtk/script-names.c:152
 msgctxt "Script"
 msgid "Osage"
-msgstr ""
+msgstr "اوساگه‌ای"
 
 #: gtk/script-names.c:153
 msgctxt "Script"
 msgid "Tangut"
-msgstr ""
+msgstr "تن‌گوت"
 
 #: gtk/script-names.c:154
 msgctxt "Script"
 msgid "Masaram Gondi"
-msgstr ""
+msgstr "گندی ماسارام"
 
 #: gtk/script-names.c:155
 msgctxt "Script"
 msgid "Nushu"
-msgstr ""
+msgstr "نوشو"
 
 #: gtk/script-names.c:156
 msgctxt "Script"
 msgid "Soyombo"
-msgstr ""
+msgstr "سویوم‌بو"
 
 #: gtk/script-names.c:157
 msgctxt "Script"
 msgid "Zanabazar Square"
-msgstr ""
+msgstr "اسکوار زنزیبار"
 
 #: gtk/ui/gtkaboutdialog.ui:137
 msgid "About"
@@ -7143,19 +7156,19 @@ msgstr "علائم"
 msgid "Flags"
 msgstr "پرچم‌ها"
 
-#: gtk/ui/gtkfilechooserwidget.ui:168
+#: gtk/ui/gtkfilechooserwidget.ui:169
 msgid "Files"
 msgstr "پرونده‌ها"
 
-#: gtk/ui/gtkfilechooserwidget.ui:273
+#: gtk/ui/gtkfilechooserwidget.ui:274
 msgid "Remote location — only searching the current folder"
-msgstr "مکان دوردست — تنها با جست‌وجو در پوشه فعلی"
+msgstr "مکان دوردست — تنها با جست‌وجو در شاخه فعلی"
 
-#: gtk/ui/gtkfilechooserwidget.ui:445
+#: gtk/ui/gtkfilechooserwidget.ui:446
 msgid "Folder Name"
-msgstr "نام پوشه"
+msgstr "نام شاخه"
 
-#: gtk/ui/gtkfilechooserwidget.ui:473
+#: gtk/ui/gtkfilechooserwidget.ui:474
 msgid "_Create"
 msgstr "_ایجاد"
 
@@ -7246,7 +7259,7 @@ msgstr "اتصال به _کارساز"
 
 #: gtk/ui/gtkplacesview.ui:340
 msgid "Enter server address…"
-msgstr "وارد کردن آدرس کارساز"
+msgstr "ورود نشانی کارساز…"
 
 #: gtk/ui/gtkprintunixdialog.ui:112
 msgid "Printer"
@@ -7494,7 +7507,7 @@ msgstr "نوشتن جدول درهم خراب شد \n"
 #: gtk/updateiconcache.c:1400
 #, c-format
 msgid "Failed to write folder index\n"
-msgstr "نوشتن نمایهٔ پوشه خراب شد\n"
+msgstr "نوشتن نمایهٔ شاخه خراب شد\n"
 
 #: gtk/updateiconcache.c:1408
 #, c-format
@@ -7529,7 +7542,7 @@ msgstr "تغییر نام «%s» به %s ممکن نبود: %s \n"
 #: gtk/updateiconcache.c:1588
 #, c-format
 msgid "Could not rename %s back to %s: %s.\n"
-msgstr "برگشت تغییر نام پوشهٔ %s به %s ممکن نبود: %s \n"
+msgstr "برگشت تغییر نام شاخهٔ %s به %s ممکن نبود: %s \n"
 
 #: gtk/updateiconcache.c:1615
 #, c-format
@@ -7636,7 +7649,7 @@ msgctxt "input method menu"
 msgid "Multipress"
 msgstr "چند فشاره"
 
-#: modules/input/imquartz.c:61
+#: modules/input/imquartz.c:69
 msgctxt "input method menu"
 msgid "Mac OS X Quartz"
 msgstr "Mac OS X Quartz"
