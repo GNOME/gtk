@@ -217,6 +217,11 @@ if cc.compiles(uint128_t_src, name : '__uint128_t available')
   cdata.set('HAVE_UINT128_T', 1)
 endif
 
+# Check for mlock
+if cc.has_function('mlock', prefix: '#include <sys/mman.h>')
+  cdata.set('HAVE_MLOCK', 1)
+endif
+
 # Disable deprecation checks for all libraries we depend on on stable branches.
 # This is so newer versions of those libraries don't cause more warnings with
 # a stable GTK version.
