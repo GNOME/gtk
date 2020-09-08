@@ -417,7 +417,7 @@ do_listview_settings (GtkWidget *do_widget)
       g_object_unref (selection);
 
       name_column = GTK_COLUMN_VIEW_COLUMN (gtk_builder_get_object (builder, "name_column"));
-      sorter = gtk_string_sorter_new (gtk_property_expression_new (SETTINGS_TYPE_KEY, NULL, "name"));
+      sorter = GTK_SORTER (gtk_string_sorter_new (gtk_property_expression_new (SETTINGS_TYPE_KEY, NULL, "name")));
       gtk_column_view_column_set_sorter (name_column, sorter);
       g_object_unref (sorter);
 
