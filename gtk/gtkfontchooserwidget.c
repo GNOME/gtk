@@ -58,6 +58,9 @@
 #include "gtkmaplistmodel.h"
 
 #include <hb-ot.h>
+#if defined(HAVE_PANGOFT) && defined(HAVE_HARFBUZZ)
+#include <pango/pangofc-font.h>
+#endif
 
 #include "language-names.h"
 #include "script-names.h"
@@ -108,6 +111,7 @@ struct _GtkFontChooserWidget
   GtkWidget       *font_name_label;
   char            *preview_text;
   gboolean         show_preview_entry;
+  gboolean         preview_text_set;
 
   GtkWidget *size_label;
   GtkWidget *size_spin;
@@ -210,6 +214,7 @@ gtk_font_chooser_widget_set_property (GObject         *object,
       break;
     case GTK_FONT_CHOOSER_PROP_PREVIEW_TEXT:
       gtk_font_chooser_widget_set_preview_text (fontchooser, g_value_get_string (value));
+      fontchooser->preview_text_set = TRUE;
       break;
     case GTK_FONT_CHOOSER_PROP_SHOW_PREVIEW_ENTRY:
       gtk_font_chooser_widget_set_show_preview_entry (fontchooser, g_value_get_boolean (value));
@@ -433,6 +438,123 @@ resize_by_scroll_cb (GtkEventControllerScroll *controller,
 }
 
 static void
+maybe_update_preview_text (GtkFontChooserWidget *self,
+                           PangoFontFace        *face,
+                           PangoFontDescription *desc)
+{
+#if defined(HAVE_PANGOFT) && defined(HAVE_HARFBUZZ)
+  PangoContext *context;
+  PangoFont *font;
+  const char *sample;
+
+  /* If the user has typed text into the entry, we don't touch it */
+  if (self->preview_text_set)
+    return;
+
+  /* We do the work only once, and cache the result on the PangoFontFace */
+  sample = (const char *)g_object_get_data (G_OBJECT (face), "gtk-sample-text");
+  if (sample)
+    {
+      gtk_font_chooser_widget_set_preview_text (self, sample);
+      return;
+    }
+
+  context = gtk_widget_get_pango_context (GTK_WIDGET (self));
+  font = pango_context_load_font (context, desc);
+
+  if (PANGO_IS_FC_FONT (font))
+    {
+      PangoLanguage **languages;
+      GHashTable *langs = NULL;
+      PangoLanguage *default_lang;
+      PangoLanguage *alt_default = NULL;
+      PangoLanguage *lang = NULL;
+      int i;
+      const char *p;
+
+      default_lang = pango_language_get_default ();
+      p = pango_language_to_string (default_lang);
+
+      /* The default language tends to be of the form en-us.
+       * Since fontconfig languages just have the language part,
+       * and we want to use direct pointer comparisons, we need
+       * an PangoLanguage for the shortened default language.
+       */
+      if (strchr (p, '-'))
+        {
+          char q[10];
+          for (i = 0; p[i] != '-' && i < 9; i++)
+            q[i] = p[i];
+          q[i] = '\0';
+          alt_default = pango_language_from_string (q);
+        }
+
+      languages = pango_fc_font_get_languages (PANGO_FC_FONT (font));
+
+      /* If the font supports the default language, just use it. */
+      for (i = 0; languages[i]; i++)
+        {
+          if (languages[i] == default_lang || languages[i] == alt_default)
+            {
+              lang = default_lang;
+              goto found;
+            }
+        }
+
+      /* Otherwise, we make a list of representative languages */
+      langs = g_hash_table_new (NULL, NULL);
+
+      for (i = 0; languages[i]; i++)
+        {
+          const PangoScript *scripts;
+          int num, j;
+
+          scripts = pango_language_get_scripts (languages[i], &num);
+          for (j = 0; j < num; j++)
+            {
+              lang = pango_script_get_sample_language (scripts[j]);
+              if (lang)
+                g_hash_table_add (langs, lang);
+            }
+        }
+
+      /* ... and compare it to the users default and preferred languages */
+      if (g_hash_table_contains (langs, default_lang) ||
+          g_hash_table_contains (langs, alt_default))
+        {
+          lang = default_lang;
+        }
+      else
+        {
+          PangoLanguage **preferred;
+
+          preferred = pango_language_get_preferred ();
+          if (preferred)
+            {
+              for (i = 0; preferred[i]; i++)
+                {
+                  if (g_hash_table_contains (langs, preferred[i]))
+                    {
+                      lang = preferred[i];
+                      break;
+                    }
+                }
+            }
+        }
+      g_hash_table_unref (langs);
+
+found:
+      sample = pango_language_get_sample_string (lang);
+      gtk_font_chooser_widget_set_preview_text (self, sample);
+      g_object_set_data (G_OBJECT (face), "gtk-sample-text", (gpointer)sample);
+    }
+
+  g_object_unref (font);
+#endif
+}
+
+
+static void
 selection_changed_cb (GtkSingleSelection   *selection,
                       GParamSpec           *pspec,
                       GtkFontChooserWidget *self)
@@ -452,8 +574,11 @@ selection_changed_cb (GtkSingleSelection   *selection,
       desc = pango_font_face_describe (face);
       pango_font_description_set_variations (self->font_desc, NULL);
       gtk_font_chooser_widget_merge_font_desc (self, desc);
-      pango_font_description_free (desc);
       g_simple_action_set_enabled (G_SIMPLE_ACTION (self->tweak_action), TRUE);
+
+      maybe_update_preview_text (self, face, desc);
+
+      pango_font_description_free (desc);
     }
   else
     {
@@ -1933,6 +2058,9 @@ static void
 gtk_font_chooser_widget_set_preview_text (GtkFontChooserWidget *fontchooser,
                                           const char           *text)
 {
+  if (fontchooser->preview_text == text)
+    return;
+
   g_free (fontchooser->preview_text);
   fontchooser->preview_text = g_strdup (text);
 
