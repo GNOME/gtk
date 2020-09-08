@@ -162,7 +162,7 @@ executable('gtk4-demo',
            c_args: gtkdemo_args + demo_cflags,
            dependencies: gtkdemo_deps,
            include_directories: confinc,
-           gui_app: true,
+#           gui_app: true,
            link_args: extra_demo_ldflags,
            install: true)
 
@@ -171,7 +171,7 @@ executable('gtk4-demo-application',
            c_args: gtkdemo_args + common_cflags,
            dependencies: gtkdemo_deps,
            include_directories: confinc,
-           gui_app: true,
+#           gui_app: true,
            link_args: extra_demo_ldflags,
            install: true)
 
