@@ -205,6 +205,7 @@
 #include <gtk/gtkrecentmanager.h>
 #include <gtk/gtkrender.h>
 #include <gtk/gtkrevealer.h>
+#include <gtk/gtkreverselistmodel.h>
 #include <gtk/gtkroot.h>
 #include <gtk/gtkscale.h>
 #include <gtk/gtkscalebutton.h>

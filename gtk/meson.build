@@ -340,6 +340,7 @@ gtk_public_sources = files([
   'gtkrendericon.c',
   'gtkrendernodepaintable.c',
   'gtkrevealer.c',
+  'gtkreverselistmodel.c',
   'gtkroot.c',
   'gtknative.c',
   'gtkroundedbox.c',
