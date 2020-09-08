@@ -44,13 +44,13 @@ void                    gtk_multi_filter_remove                 (GtkMultiFilter 
 GDK_AVAILABLE_IN_ALL
 GDK_DECLARE_INTERNAL_TYPE (GtkAnyFilter, gtk_any_filter, GTK, ANY_FILTER, GtkMultiFilter)
 GDK_AVAILABLE_IN_ALL
-GtkFilter *             gtk_any_filter_new                      (void);
+GtkAnyFilter *          gtk_any_filter_new                      (void);
 
 #define GTK_TYPE_EVERY_FILTER             (gtk_every_filter_get_type ())
 GDK_AVAILABLE_IN_ALL
 GDK_DECLARE_INTERNAL_TYPE (GtkEveryFilter, gtk_every_filter, GTK, EVERY_FILTER, GtkMultiFilter)
 GDK_AVAILABLE_IN_ALL
-GtkFilter *             gtk_every_filter_new                    (void);
+GtkEveryFilter *        gtk_every_filter_new                    (void);
 
 
 G_END_DECLS

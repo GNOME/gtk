@@ -34,7 +34,7 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (GtkColumnViewSorter, gtk_column_view_sorter, GTK, COLUMN_VIEW_SORTER, GtkSorter)
 
-GtkSorter *             gtk_column_view_sorter_new              (void);
+GtkColumnViewSorter *   gtk_column_view_sorter_new              (void);
 
 gboolean                gtk_column_view_sorter_add_column       (GtkColumnViewSorter    *self,
                                                                  GtkColumnViewColumn    *column);

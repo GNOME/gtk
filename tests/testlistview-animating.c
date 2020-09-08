@@ -126,7 +126,7 @@ main (int   argc,
   store = g_list_store_new (G_TYPE_OBJECT);
   for (i = 0; i < AVERAGE; i++)
     add (store);
-  sorter = gtk_numeric_sorter_new (gtk_cclosure_expression_new (G_TYPE_UINT, NULL, 0, NULL, (GCallback)get_number, NULL, NULL));
+  sorter = GTK_SORTER (gtk_numeric_sorter_new (gtk_cclosure_expression_new (G_TYPE_UINT, NULL, 0, NULL, (GCallback)get_number, NULL, NULL)));
   sort = gtk_sort_list_model_new (G_LIST_MODEL (store), sorter);
 
   win = gtk_window_new ();

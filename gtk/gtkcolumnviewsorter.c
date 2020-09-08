@@ -146,7 +146,7 @@ gtk_column_view_sorter_init (GtkColumnViewSorter *self)
   self->sorters = g_sequence_new (free_sorter);
 }
 
-GtkSorter *
+GtkColumnViewSorter *
 gtk_column_view_sorter_new (void)
 {
   return g_object_new (GTK_TYPE_COLUMN_VIEW_SORTER, NULL);

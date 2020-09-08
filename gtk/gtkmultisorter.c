@@ -375,9 +375,9 @@ gtk_multi_sorter_init (GtkMultiSorter *self)
  * no sorter has been added to it, it will always compare
  * items as equal.
  *
- * Returns: a new #GtkSorter
+ * Returns: a new #GtkMultiSorter
  */
-GtkSorter *
+GtkMultiSorter *
 gtk_multi_sorter_new (void)
 {
   return g_object_new (GTK_TYPE_MULTI_SORTER, NULL);

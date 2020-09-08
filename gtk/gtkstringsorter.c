@@ -333,12 +333,12 @@ gtk_string_sorter_init (GtkStringSorter *self)
  * Unless an expression is set on it, this sorter will always
  * compare items as invalid.
  *
- * Returns: a new #GtkSorter
+ * Returns: a new #GtkStringSorter
  */
-GtkSorter *
+GtkStringSorter *
 gtk_string_sorter_new (GtkExpression *expression)
 {
-  GtkSorter *result;
+  GtkStringSorter *result;
 
   result = g_object_new (GTK_TYPE_STRING_SORTER,
                          "expression", expression,

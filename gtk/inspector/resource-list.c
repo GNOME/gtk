@@ -652,26 +652,26 @@ gtk_inspector_resource_list_init (GtkInspectorResourceList *rl)
   gtk_search_bar_connect_entry (GTK_SEARCH_BAR (rl->search_bar),
                                 GTK_EDITABLE (rl->search_entry));
 
-  sorter = gtk_string_sorter_new (gtk_cclosure_expression_new (G_TYPE_STRING, NULL,
+  sorter = GTK_SORTER (gtk_string_sorter_new (gtk_cclosure_expression_new (G_TYPE_STRING, NULL,
                                                                0, NULL,
                                                                (GCallback)holder_name,
-                                                               NULL, NULL));
+                                                               NULL, NULL)));
 
   gtk_column_view_column_set_sorter (rl->path, sorter);
   g_object_unref (sorter);
 
-  sorter = gtk_numeric_sorter_new (gtk_cclosure_expression_new (G_TYPE_INT, NULL,
+  sorter = GTK_SORTER (gtk_numeric_sorter_new (gtk_cclosure_expression_new (G_TYPE_INT, NULL,
                                                                 0, NULL,
                                                                 (GCallback)holder_count,
-                                                                NULL, NULL));
+                                                                NULL, NULL)));
 
   gtk_column_view_column_set_sorter (rl->count, sorter);
   g_object_unref (sorter);
 
-  sorter = gtk_numeric_sorter_new (gtk_cclosure_expression_new (G_TYPE_UINT64, NULL,
+  sorter = GTK_SORTER (gtk_numeric_sorter_new (gtk_cclosure_expression_new (G_TYPE_UINT64, NULL,
                                                                 0, NULL,
                                                                 (GCallback)holder_size,
-                                                                NULL, NULL));
+                                                                NULL, NULL)));
 
   gtk_column_view_column_set_sorter (rl->size, sorter);
   g_object_unref (sorter);
@@ -709,7 +709,7 @@ constructed (GObject *object)
                                             NULL);
 
   column_sorter = gtk_column_view_get_sorter (GTK_COLUMN_VIEW (rl->list));
-  sorter = gtk_tree_list_row_sorter_new (g_object_ref (column_sorter));
+  sorter = GTK_SORTER (gtk_tree_list_row_sorter_new (g_object_ref (column_sorter)));
   sort_model = G_LIST_MODEL (gtk_sort_list_model_new (g_object_ref (G_LIST_MODEL (rl->tree_model)), sorter));
   rl->selection = gtk_single_selection_new (sort_model);
 

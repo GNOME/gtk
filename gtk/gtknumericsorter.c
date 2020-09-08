@@ -587,12 +587,12 @@ gtk_numeric_sorter_init (GtkNumericSorter *self)
  * Smaller numbers will be sorted first. You can call
  * gtk_numeric_sorter_set_sort_order() to change this.
  *
- * Returns: a new #GtkSorter
+ * Returns: a new #GtkNumericSorter
  */
-GtkSorter *
+GtkNumericSorter *
 gtk_numeric_sorter_new (GtkExpression *expression)
 {
-  GtkSorter *result;
+  GtkNumericSorter *result;
 
   result = g_object_new (GTK_TYPE_NUMERIC_SORTER,
                          "expression", expression,

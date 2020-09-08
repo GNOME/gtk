@@ -195,10 +195,10 @@ gtk_bool_filter_init (GtkBoolFilter *self)
  *
  * Returns: a new #GtkBoolFilter
  **/
-GtkFilter *
+GtkBoolFilter *
 gtk_bool_filter_new (GtkExpression *expression)
 {
-  GtkFilter *result;
+  GtkBoolFilter *result;
 
   result = g_object_new (GTK_TYPE_BOOL_FILTER,
                          "expression", expression,

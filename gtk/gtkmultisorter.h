@@ -34,7 +34,7 @@ GDK_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (GtkMultiSorter, gtk_multi_sorter, GTK, MULTI_SORTER, GtkSorter)
 
 GDK_AVAILABLE_IN_ALL
-GtkSorter *             gtk_multi_sorter_new                    (void);
+GtkMultiSorter *        gtk_multi_sorter_new                    (void);
 
 GDK_AVAILABLE_IN_ALL
 void                    gtk_multi_sorter_append                 (GtkMultiSorter         *self,

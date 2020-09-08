@@ -742,7 +742,8 @@ gtk_print_unix_dialog_init (GtkPrintUnixDialog *dialog)
   GListModel *selection;
   GtkSorter *sorter;
   GtkFilter *filter;
-  GtkFilter *filter1;
+  GtkStringFilter *filter1;
+  GtkCustomFilter *filter2;
   GtkListItemFactory *factory;
   GListStore *store;
   GListModel *paper_size_list;
@@ -810,22 +811,22 @@ gtk_print_unix_dialog_init (GtkPrintUnixDialog *dialog)
 
   /* Load backends */
   model = load_print_backends (dialog);
-  sorter = gtk_custom_sorter_new (default_printer_list_sort_func, NULL, NULL);
+  sorter = GTK_SORTER (gtk_custom_sorter_new (default_printer_list_sort_func, NULL, NULL));
   sorted = G_LIST_MODEL (gtk_sort_list_model_new (model, sorter));
 
-  filter = gtk_every_filter_new ();
+  filter = GTK_FILTER (gtk_every_filter_new ());
 
   filter1 = gtk_string_filter_new (
                 gtk_cclosure_expression_new (G_TYPE_STRING,
                                              NULL, 0, NULL,
                                              G_CALLBACK (get_printer_key),
                                              NULL, NULL));
-  gtk_string_filter_set_match_mode (GTK_STRING_FILTER (filter1), GTK_STRING_FILTER_MATCH_MODE_SUBSTRING);
-  gtk_string_filter_set_ignore_case (GTK_STRING_FILTER (filter1), TRUE);
-  gtk_multi_filter_append (GTK_MULTI_FILTER (filter), filter1);
+  gtk_string_filter_set_match_mode (filter1, GTK_STRING_FILTER_MATCH_MODE_SUBSTRING);
+  gtk_string_filter_set_ignore_case (filter1, TRUE);
+  gtk_multi_filter_append (GTK_MULTI_FILTER (filter), GTK_FILTER (filter1));
 
-  filter1 = gtk_custom_filter_new (is_printer_active, dialog, NULL);
-  gtk_multi_filter_append (GTK_MULTI_FILTER (filter), filter1);
+  filter2 = gtk_custom_filter_new (is_printer_active, dialog, NULL);
+  gtk_multi_filter_append (GTK_MULTI_FILTER (filter), GTK_FILTER (filter2));
 
   filtered = G_LIST_MODEL (gtk_filter_list_model_new (sorted, filter));
 

@@ -108,9 +108,9 @@ gtk_custom_filter_init (GtkCustomFilter *self)
  * If the filter func changes its filtering behavior,
  * gtk_filter_changed() needs to be called.
  *
- * Returns: a new #GtkFilter
+ * Returns: a new #GtkCustomFilter
  **/
-GtkFilter *
+GtkCustomFilter *
 gtk_custom_filter_new (GtkCustomFilterFunc match_func,
                        gpointer            user_data,
                        GDestroyNotify      user_destroy)
@@ -121,7 +121,7 @@ gtk_custom_filter_new (GtkCustomFilterFunc match_func,
 
   gtk_custom_filter_set_filter_func (result, match_func, user_data, user_destroy);
 
-  return GTK_FILTER (result);
+  return result;
 }
 
 /**

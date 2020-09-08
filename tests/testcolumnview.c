@@ -665,7 +665,7 @@ add_extra_columns (GtkColumnView   *view,
       column = gtk_column_view_column_new_with_factory (extra_columns[i].title,
           gtk_builder_list_item_factory_new_from_bytes (scope, bytes));
       g_bytes_unref (bytes);
-      sorter = gtk_custom_sorter_new (compare_file_attribute, (gpointer) extra_columns[i].attribute, NULL);
+      sorter = GTK_SORTER (gtk_custom_sorter_new (compare_file_attribute, (gpointer) extra_columns[i].attribute, NULL));
       gtk_column_view_column_set_sorter (column, sorter);
       g_object_unref (sorter);
       gtk_column_view_append_column (view, column);
@@ -753,10 +753,10 @@ main (int argc, char *argv[])
                                   create_list_model_for_file_info,
                                   NULL, NULL);
 
-  sorter = gtk_tree_list_row_sorter_new (g_object_ref (gtk_column_view_get_sorter (GTK_COLUMN_VIEW (view))));
+  sorter = GTK_SORTER (gtk_tree_list_row_sorter_new (g_object_ref (gtk_column_view_get_sorter (GTK_COLUMN_VIEW (view)))));
   sort = gtk_sort_list_model_new (G_LIST_MODEL (tree), sorter);
 
-  custom_filter = gtk_custom_filter_new (match_file, g_object_ref (search_entry), g_object_unref);
+  custom_filter = GTK_FILTER (gtk_custom_filter_new (match_file, g_object_ref (search_entry), g_object_unref));
   filter = gtk_filter_list_model_new (G_LIST_MODEL (sort), custom_filter);
   g_signal_connect (search_entry, "search-changed", G_CALLBACK (search_changed_cb), custom_filter);
 

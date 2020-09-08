@@ -34,7 +34,7 @@ GDK_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (GtkStringSorter, gtk_string_sorter, GTK, STRING_SORTER, GtkSorter)
 
 GDK_AVAILABLE_IN_ALL
-GtkSorter *             gtk_string_sorter_new                   (GtkExpression          *expression);
+GtkStringSorter *       gtk_string_sorter_new                   (GtkExpression          *expression);
 
 GDK_AVAILABLE_IN_ALL
 GtkExpression *         gtk_string_sorter_get_expression        (GtkStringSorter        *self);

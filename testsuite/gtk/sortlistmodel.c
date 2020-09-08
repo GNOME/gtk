@@ -219,7 +219,7 @@ new_model (gpointer model)
     {
       GtkSorter *sorter;
 
-      sorter = gtk_custom_sorter_new (compare, NULL, NULL);
+      sorter = GTK_SORTER (gtk_custom_sorter_new (compare, NULL, NULL));
       result = gtk_sort_list_model_new (g_object_ref (model), sorter);
     }
   else
@@ -312,7 +312,7 @@ test_set_sorter (void)
   assert_model (sort, "2 4 6 8 10");
   assert_changes (sort, "");
 
-  sorter = gtk_custom_sorter_new (compare_modulo, GUINT_TO_POINTER (5), NULL);
+  sorter = GTK_SORTER (gtk_custom_sorter_new (compare_modulo, GUINT_TO_POINTER (5), NULL));
   gtk_sort_list_model_set_sorter (sort, sorter);
   g_object_unref (sorter);
   assert_model (sort, "10 6 2 8 4");
@@ -322,7 +322,7 @@ test_set_sorter (void)
   assert_model (sort, "4 8 2 6 10");
   assert_changes (sort, "0-5+5");
 
-  sorter = gtk_custom_sorter_new (compare, NULL, NULL);
+  sorter = GTK_SORTER (gtk_custom_sorter_new (compare, NULL, NULL));
   gtk_sort_list_model_set_sorter (sort, sorter);
   g_object_unref (sorter);
   assert_model (sort, "2 4 6 8 10");
@@ -424,7 +424,7 @@ test_stability (void)
   assert_model (sort, "1 11 21 31");
   assert_changes (sort, "");
 
-  sorter = gtk_custom_sorter_new (compare_modulo, GUINT_TO_POINTER (5), NULL);
+  sorter = GTK_SORTER (gtk_custom_sorter_new (compare_modulo, GUINT_TO_POINTER (5), NULL));
   gtk_sort_list_model_set_sorter (sort, sorter);
   g_object_unref (sorter);
   assert_model (sort, "11 31 21 1");
@@ -467,7 +467,7 @@ test_incremental_remove (void)
 
   gtk_sort_list_model_set_model (model, G_LIST_MODEL (store));
 
-  sorter = gtk_custom_sorter_new (compare, NULL, NULL);
+  sorter = GTK_SORTER (gtk_custom_sorter_new (compare, NULL, NULL));
   gtk_sort_list_model_set_sorter (model, sorter);
   g_object_unref (sorter);
 

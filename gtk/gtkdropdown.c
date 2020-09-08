@@ -203,11 +203,11 @@ update_filter (GtkDropDown *self)
 
       if (self->expression)
         {
-          filter = gtk_string_filter_new (gtk_expression_ref (self->expression));
+          filter = GTK_FILTER (gtk_string_filter_new (gtk_expression_ref (self->expression)));
           gtk_string_filter_set_match_mode (GTK_STRING_FILTER (filter), GTK_STRING_FILTER_MATCH_MODE_PREFIX);
         }
       else
-        filter = gtk_every_filter_new ();
+        filter = GTK_FILTER (gtk_every_filter_new ());
       gtk_filter_list_model_set_filter (GTK_FILTER_LIST_MODEL (self->filter_model), filter);
       g_object_unref (filter);
     }

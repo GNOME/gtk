@@ -177,11 +177,11 @@ constraint_view_init (ConstraintView *self)
   guides = gtk_constraint_layout_observe_guides (GTK_CONSTRAINT_LAYOUT (manager));
 
   all_constraints = gtk_constraint_layout_observe_constraints (GTK_CONSTRAINT_LAYOUT (manager));
-  filter = gtk_custom_filter_new (omit_internal, NULL, NULL);
+  filter = GTK_FILTER (gtk_custom_filter_new (omit_internal, NULL, NULL));
   constraints = (GListModel *)gtk_filter_list_model_new (all_constraints, filter);
 
   all_children = gtk_widget_observe_children (GTK_WIDGET (self));
-  filter = gtk_custom_filter_new (omit_internal, NULL, NULL);
+  filter = GTK_FILTER (gtk_custom_filter_new (omit_internal, NULL, NULL));
   children = (GListModel *)gtk_filter_list_model_new (all_children, filter);
 
   list = g_list_store_new (G_TYPE_LIST_MODEL);

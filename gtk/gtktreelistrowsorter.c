@@ -567,12 +567,12 @@ gtk_tree_list_row_sorter_init (GtkTreeListRowSorter *self)
  * Note that this sorter relies on #GtkTreeListModel:passthrough
  * being %FALSE as it can only sort #GtkTreeListRows.
  *
- * Returns: a new #GtkSorter
+ * Returns: a new #GtkTreeListRowSorter
  */
-GtkSorter *
+GtkTreeListRowSorter *
 gtk_tree_list_row_sorter_new (GtkSorter *sorter)
 {
-  GtkSorter *result;
+  GtkTreeListRowSorter *result;
 
   g_return_val_if_fail (sorter == NULL || GTK_IS_SORTER (sorter), NULL);
 

@@ -313,10 +313,10 @@ gtk_string_filter_init (GtkStringFilter *self)
  *
  * Returns: a new #GtkStringFilter
  **/
-GtkFilter *
+GtkStringFilter *
 gtk_string_filter_new (GtkExpression *expression)
 {
-  GtkFilter *result;
+  GtkStringFilter *result;
 
   result = g_object_new (GTK_TYPE_STRING_FILTER,
                          "expression", expression,

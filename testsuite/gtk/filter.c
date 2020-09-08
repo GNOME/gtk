@@ -207,7 +207,7 @@ test_simple (void)
   GtkFilterListModel *model;
   GtkFilter *filter;
 
-  filter = gtk_custom_filter_new (divisible_by, GUINT_TO_POINTER (3), NULL);
+  filter = GTK_FILTER (gtk_custom_filter_new (divisible_by, GUINT_TO_POINTER (3), NULL));
   model = new_model (20, filter);
   g_object_unref (filter);
   assert_model (model, "3 6 9 12 15 18");
@@ -220,9 +220,9 @@ test_any_simple (void)
   GtkFilterListModel *model;
   GtkFilter *any, *filter1, *filter2;
 
-  any = gtk_any_filter_new ();
-  filter1 = gtk_custom_filter_new (divisible_by, GUINT_TO_POINTER (3), NULL);
-  filter2 = gtk_custom_filter_new (divisible_by, GUINT_TO_POINTER (5), NULL);
+  any = GTK_FILTER (gtk_any_filter_new ());
+  filter1 = GTK_FILTER (gtk_custom_filter_new (divisible_by, GUINT_TO_POINTER (3), NULL));
+  filter2 = GTK_FILTER (gtk_custom_filter_new (divisible_by, GUINT_TO_POINTER (5), NULL));
 
   model = new_model (20, any);
   assert_model (model, "");
@@ -253,12 +253,12 @@ test_string_simple (void)
   GtkFilterListModel *model;
   GtkFilter *filter;
 
-  filter = gtk_string_filter_new (
+  filter = GTK_FILTER (gtk_string_filter_new (
                gtk_cclosure_expression_new (G_TYPE_STRING,
                                             NULL,
                                             0, NULL,
                                             G_CALLBACK (get_string),
-                                            NULL, NULL));
+                                            NULL, NULL)));
 
   model = new_model (20, filter);
   assert_model (model, "1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20");
@@ -276,12 +276,12 @@ test_string_properties (void)
   GtkFilterListModel *model;
   GtkFilter *filter;
 
-  filter = gtk_string_filter_new (
+  filter = GTK_FILTER (gtk_string_filter_new (
                gtk_cclosure_expression_new (G_TYPE_STRING,
                                             NULL,
                                             0, NULL,
                                             G_CALLBACK (get_spelled_out),
-                                            NULL, NULL));
+                                            NULL, NULL)));
 
   model = new_model (1000, filter);
   gtk_string_filter_set_search (GTK_STRING_FILTER (filter), "thirte");
@@ -316,12 +316,12 @@ test_bool_simple (void)
   GtkExpression *expr;
   GtkFilter *filter;
 
-  filter = gtk_bool_filter_new (
+  filter = GTK_FILTER (gtk_bool_filter_new (
                gtk_cclosure_expression_new (G_TYPE_BOOLEAN,
                                             NULL,
                                             0, NULL,
                                             G_CALLBACK (divisible_by),
-                                            GUINT_TO_POINTER (3), NULL));
+                                            GUINT_TO_POINTER (3), NULL)));
   model = new_model (20, filter);
   assert_model (model, "3 6 9 12 15 18");
 
@@ -358,10 +358,10 @@ test_every_dispose (void)
 {
   GtkFilter *filter, *filter1, *filter2;
 
-  filter = gtk_every_filter_new ();
+  filter = GTK_FILTER (gtk_every_filter_new ());
 
-  filter1 = gtk_custom_filter_new (divisible_by, GUINT_TO_POINTER (3), NULL);
-  filter2 = gtk_custom_filter_new (divisible_by, GUINT_TO_POINTER (5), NULL);
+  filter1 = GTK_FILTER (gtk_custom_filter_new (divisible_by, GUINT_TO_POINTER (3), NULL));
+  filter2 = GTK_FILTER (gtk_custom_filter_new (divisible_by, GUINT_TO_POINTER (5), NULL));
 
   g_object_ref (filter1);
   g_object_ref (filter2);

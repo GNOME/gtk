@@ -179,7 +179,7 @@ do_listview_words (GtkWidget *do_widget)
         }
       g_object_unref (file);
 
-      filter = gtk_string_filter_new (gtk_property_expression_new (GTK_TYPE_STRING_OBJECT, NULL, "string"));
+      filter = GTK_FILTER (gtk_string_filter_new (gtk_property_expression_new (GTK_TYPE_STRING_OBJECT, NULL, "string")));
       filter_model = gtk_filter_list_model_new (G_LIST_MODEL (stringlist), filter);
       gtk_filter_list_model_set_incremental (filter_model, TRUE);
 

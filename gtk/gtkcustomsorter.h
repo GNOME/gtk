@@ -34,7 +34,7 @@ GDK_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (GtkCustomSorter, gtk_custom_sorter, GTK, CUSTOM_SORTER, GtkSorter)
 
 GDK_AVAILABLE_IN_ALL
-GtkSorter *             gtk_custom_sorter_new                   (GCompareDataFunc        sort_func,
+GtkCustomSorter *       gtk_custom_sorter_new                   (GCompareDataFunc        sort_func,
                                                                  gpointer                user_data,
                                                                  GDestroyNotify          user_destroy);
 

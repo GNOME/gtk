@@ -1162,7 +1162,7 @@ gtk_column_view_init (GtkColumnView *self)
   g_signal_connect (controller, "leave", G_CALLBACK (gtk_column_view_drag_leave), NULL);
   gtk_widget_add_controller (GTK_WIDGET (self), controller);
 
-  self->sorter = gtk_column_view_sorter_new ();
+  self->sorter = GTK_SORTER (gtk_column_view_sorter_new ());
   self->factory = gtk_column_list_item_factory_new (self);
   self->listview = GTK_LIST_VIEW (gtk_list_view_new (NULL,
         GTK_LIST_ITEM_FACTORY (g_object_ref (self->factory))));
