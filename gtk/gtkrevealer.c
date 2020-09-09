@@ -491,13 +491,13 @@ gtk_revealer_size_allocate (GtkWidget *widget,
   if (hscale < 1.0)
     {
       g_assert (vscale == 1.0);
-      child_width = MIN (100*width, ceil (width / hscale));
+      child_width = MIN (100 * width, floor (width / hscale));
       child_height = height;
     }
   else if (vscale < 1.0)
     {
       child_width = width;
-      child_height = MIN (100*height, ceil (height / vscale));
+      child_height = MIN (100 * height, floor (height / vscale));
     }
   else
     {
