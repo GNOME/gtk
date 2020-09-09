@@ -1000,6 +1000,7 @@ if win32_enabled
 
   gtk_deps += [cc.find_library('advapi32'),
                cc.find_library('comctl32'),
+               cc.find_library('crypt32'), # For CryptProtectMemory()
                cc.find_library('dwmapi'),
                cc.find_library('imm32'),
                cc.find_library('setupapi'),
