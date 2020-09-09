@@ -3785,6 +3785,28 @@ gtk_widget_allocate (GtkWidget    *widget,
                  "How does the code know the size to allocate?",
                  gtk_widget_get_name (widget), widget);
     }
+  if (!GTK_IS_SCROLLABLE (widget))
+    {
+      int min;
+      gtk_widget_measure (widget, GTK_ORIENTATION_VERTICAL, width, &min, NULL, NULL, NULL);
+      if (min > height)
+        {
+          g_critical ("Allocation height too small. Tried to allocate %dx%d, but %s %p needs "
+                      "at least %dx%d.",
+                      width, height,
+                      gtk_widget_get_name (widget), widget,
+                      width, min);
+        }
+      gtk_widget_measure (widget, GTK_ORIENTATION_HORIZONTAL, height, &min, NULL, NULL, NULL);
+      if (min > width)
+        {
+          g_critical ("Allocation width too small. Tried to allocate %dx%d, but %s %p needs "
+                      "at least %dx%d.",
+                      width, height,
+                      gtk_widget_get_name (widget), widget,
+                      min, height);
+        }
+    }
 #endif /* G_ENABLE_DEBUG */
 
   alloc_needed = priv->alloc_needed;
