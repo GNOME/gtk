@@ -122,6 +122,21 @@ gtk_password_entry_buffer_real_insert_text (GtkEntryBuffer *buffer,
   return n_chars;
 }
 
+static void
+gtk_password_entry_buffer_real_deleted_text (GtkEntryBuffer *buffer,
+                                             guint           position,
+                                             guint           n_chars)
+{
+  GtkPasswordEntryBuffer *self = GTK_PASSWORD_ENTRY_BUFFER (buffer);
+
+  gsize start = g_utf8_offset_to_pointer (self->text, position) - self->text;
+  gsize end = g_utf8_offset_to_pointer (self->text, position + n_chars) - self->text;
+
+  memmove (self->text + start, self->text + end, self->text_bytes + 1 - end);
+  self->text_chars -= n_chars;
+  self->text_bytes -= (end - start);
+}
+
 static guint
 gtk_password_entry_buffer_real_delete_text (GtkEntryBuffer *buffer,
                                             guint           position,
@@ -135,16 +150,7 @@ gtk_password_entry_buffer_real_delete_text (GtkEntryBuffer *buffer,
     n_chars = self->text_chars - position;
 
   if (n_chars > 0)
-    {
-      gsize start = g_utf8_offset_to_pointer (self->text, position) - self->text;
-      gsize end = g_utf8_offset_to_pointer (self->text, position + n_chars) - self->text;
-
-      memmove (self->text + start, self->text + end, self->text_bytes + 1 - end);
-      self->text_chars -= n_chars;
-      self->text_bytes -= (end - start);
-
-      gtk_entry_buffer_emit_deleted_text (buffer, position, n_chars);
-    }
+    gtk_entry_buffer_emit_deleted_text (buffer, position, n_chars);
 
   return n_chars;
 }
@@ -175,6 +181,7 @@ gtk_password_entry_buffer_class_init (GtkPasswordEntryBufferClass *klass)
   buffer_class->get_length = gtk_password_entry_buffer_real_get_length;
   buffer_class->insert_text = gtk_password_entry_buffer_real_insert_text;
   buffer_class->delete_text = gtk_password_entry_buffer_real_delete_text;
+  buffer_class->deleted_text = gtk_password_entry_buffer_real_deleted_text;
 }
 
 static void
