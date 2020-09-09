@@ -572,12 +572,17 @@ render_fallback_node (GskGLRenderer   *self,
   cairo_t *cr;
   int cached_id;
   int texture_id;
+  GskTextureKey key;
 
   if (surface_width <= 0 ||
       surface_height <= 0)
     return;
 
-  cached_id = gsk_gl_driver_get_texture_for_pointer (self->gl_driver, node);
+  key.pointer = node;
+  key.scale = scale;
+  key.filter = GL_NEAREST;
+
+  cached_id = gsk_gl_driver_get_texture_for_key (self->gl_driver, &key);
 
   if (cached_id != 0)
     {
@@ -659,7 +664,7 @@ render_fallback_node (GskGLRenderer   *self,
   cairo_surface_destroy (surface);
   cairo_surface_destroy (rendered_surface);
 
-  gsk_gl_driver_set_texture_for_pointer (self->gl_driver, node, texture_id);
+  gsk_gl_driver_set_texture_for_key (self->gl_driver, &key, texture_id);
 
   ops_set_program (builder, &self->programs->blit_program);
   ops_set_texture (builder, texture_id);
@@ -1638,6 +1643,7 @@ render_blur_node (GskGLRenderer   *self,
   const float blur_radius = gsk_blur_node_get_radius (node);
   GskRenderNode *child = gsk_blur_node_get_child (node);
   TextureRegion blurred_region;
+  GskTextureKey key;
 
   if (node_is_invisible (child))
     return;
@@ -1648,7 +1654,10 @@ render_blur_node (GskGLRenderer   *self,
       return;
     }
 
-  blurred_region.texture_id = gsk_gl_driver_get_texture_for_pointer (self->gl_driver, node);
+  key.pointer = node;
+  key.scale = ops_get_scale (builder);
+  key.filter = GL_NEAREST;
+  blurred_region.texture_id = gsk_gl_driver_get_texture_for_key (self->gl_driver, &key);
   if (blurred_region.texture_id == 0)
     blur_node (self, child, builder, blur_radius, 0, &blurred_region, NULL);
 
@@ -1660,7 +1669,7 @@ render_blur_node (GskGLRenderer   *self,
   load_offscreen_vertex_data (ops_draw (builder, NULL), node, builder); /* Render result to screen */
 
   /* Add to cache for the blur node */
-  gsk_gl_driver_set_texture_for_pointer (self->gl_driver, node, blurred_region.texture_id);
+  gsk_gl_driver_set_texture_for_key (self->gl_driver, &key, blurred_region.texture_id);
 }
 
 static inline void
@@ -1698,13 +1707,17 @@ render_inset_shadow_node (GskGLRenderer   *self,
   float texture_width;
   float texture_height;
   int blurred_texture_id;
+  GskTextureKey key;
 
   g_assert (blur_radius > 0);
 
   texture_width = ceilf ((node_outline->bounds.size.width + blur_extra) * scale);
   texture_height = ceilf ((node_outline->bounds.size.height + blur_extra) * scale);
 
-  blurred_texture_id = gsk_gl_driver_get_texture_for_pointer (self->gl_driver, node);
+  key.pointer = node;
+  key.scale = scale;
+  key.filter = GL_NEAREST;
+  blurred_texture_id = gsk_gl_driver_get_texture_for_key (self->gl_driver, &key);
   if (blurred_texture_id == 0)
     {
       const float spread = gsk_inset_shadow_node_get_spread (node) + (blur_extra / 2.0);
@@ -1800,7 +1813,7 @@ render_inset_shadow_node (GskGLRenderer   *self,
     const float ty1 = blur_extra / 2.0 * scale / texture_height;
     const float ty2 = 1.0 - ty1;
 
-    gsk_gl_driver_set_texture_for_pointer (self->gl_driver, node, blurred_texture_id);
+    gsk_gl_driver_set_texture_for_key (self->gl_driver, &key, blurred_texture_id);
 
     if (needs_clip)
       {
@@ -3400,6 +3413,8 @@ add_offscreen_ops (GskGLRenderer         *self,
   int texture_id = 0;
   int max_texture_size;
   int filter;
+  GskTextureKey key;
+  int cached_id;
 
   if (node_is_invisible (child_node))
     {
@@ -3421,18 +3436,24 @@ add_offscreen_ops (GskGLRenderer         *self,
       return TRUE;
     }
 
-  /* Check if we've already cached the drawn texture. */
-  {
-    const int cached_id = gsk_gl_driver_get_texture_for_pointer (self->gl_driver, child_node);
+  if (flags & LINEAR_FILTER)
+    filter = GL_LINEAR;
+  else
+    filter = GL_NEAREST;
 
-    if (cached_id != 0)
-      {
-        init_full_texture_region (texture_region_out, cached_id);
-        /* We didn't render it offscreen, but hand out an offscreen texture id */
-        *is_offscreen = TRUE;
-        return TRUE;
-      }
-  }
+  /* Check if we've already cached the drawn texture. */
+  key.pointer = child_node;
+  key.scale = ops_get_scale (builder);
+  key.filter = filter;
+  cached_id = gsk_gl_driver_get_texture_for_key (self->gl_driver, &key);
+
+  if (cached_id != 0)
+    {
+      init_full_texture_region (texture_region_out, cached_id);
+      /* We didn't render it offscreen, but hand out an offscreen texture id */
+      *is_offscreen = TRUE;
+      return TRUE;
+    }
 
   scale = ops_get_scale (builder);
   width = bounds->size.width;
@@ -3452,10 +3473,6 @@ add_offscreen_ops (GskGLRenderer         *self,
   width  = ceilf (width * scale);
   height = ceilf (height * scale);
 
-  if (flags & LINEAR_FILTER)
-    filter = GL_LINEAR;
-  else
-    filter = GL_NEAREST;
   gsk_gl_driver_create_render_target (self->gl_driver,
                                       width, height,
                                       filter, filter,
@@ -3534,7 +3551,7 @@ add_offscreen_ops (GskGLRenderer         *self,
   init_full_texture_region (texture_region_out, texture_id);
 
   if ((flags & NO_CACHE_PLZ) == 0)
-    gsk_gl_driver_set_texture_for_pointer (self->gl_driver, child_node, texture_id);
+    gsk_gl_driver_set_texture_for_key (self->gl_driver, &key, texture_id);
 
   return TRUE;
 }

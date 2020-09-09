@@ -541,16 +541,37 @@ gsk_gl_driver_get_texture_for_texture (GskGLDriver *self,
   return t->texture_id;
 }
 
+static guint
+texture_key_hash (gconstpointer v)
+{
+  const GskTextureKey *k = (GskTextureKey *)v;
+
+  return GPOINTER_TO_UINT (k->pointer)
+         + (guint)(k->scale*100)
+         + (guint)k->filter;
+}
+
+static gboolean
+texture_key_equal (gconstpointer v1, gconstpointer v2)
+{
+  const GskTextureKey *k1 = (GskTextureKey *)v1;
+  const GskTextureKey *k2 = (GskTextureKey *)v2;
+
+  return k1->pointer == k2->pointer &&
+         k1->scale == k2->scale &&
+         k1->filter == k2->filter;
+}
+
 int
-gsk_gl_driver_get_texture_for_pointer (GskGLDriver *self,
-                                       gpointer     pointer)
+gsk_gl_driver_get_texture_for_key (GskGLDriver   *self,
+                                   GskTextureKey *key)
 {
   int id = 0;
 
   if (G_UNLIKELY (self->pointer_textures == NULL))
-    self->pointer_textures = g_hash_table_new (NULL, NULL);
+    self->pointer_textures = g_hash_table_new_full (texture_key_hash, texture_key_equal, g_free, NULL);
 
-  id = GPOINTER_TO_INT (g_hash_table_lookup (self->pointer_textures, pointer));
+  id = GPOINTER_TO_INT (g_hash_table_lookup (self->pointer_textures, key));
 
   if (id != 0)
     {
@@ -566,14 +587,19 @@ gsk_gl_driver_get_texture_for_pointer (GskGLDriver *self,
 }
 
 void
-gsk_gl_driver_set_texture_for_pointer (GskGLDriver *self,
-                                       gpointer     pointer,
-                                       int          texture_id)
+gsk_gl_driver_set_texture_for_key (GskGLDriver   *self,
+                                   GskTextureKey *key,
+                                   int            texture_id)
 {
-  if (G_UNLIKELY (self->pointer_textures == NULL))
-    self->pointer_textures = g_hash_table_new (NULL, NULL);
+  GskTextureKey *k;
 
-  g_hash_table_insert (self->pointer_textures, pointer, GINT_TO_POINTER (texture_id));
+  if (G_UNLIKELY (self->pointer_textures == NULL))
+    self->pointer_textures = g_hash_table_new_full (texture_key_hash, texture_key_equal, g_free, NULL);
+
+  k = g_new (GskTextureKey, 1);
+  *k = *key;
+
+  g_hash_table_insert (self->pointer_textures, k, GINT_TO_POINTER (texture_id));
 }
 
 int
