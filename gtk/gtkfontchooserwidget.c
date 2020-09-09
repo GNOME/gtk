@@ -554,6 +554,13 @@ maybe_update_preview_text (GtkFontChooserWidget *self,
   if (self->preview_text_set)
     return;
 
+  if (self->filter_by_language && self->filter_language)
+    {
+      sample = pango_language_get_sample_string (self->filter_language);
+      gtk_font_chooser_widget_set_preview_text (self, sample);
+      return;
+    }
+
   /* We do the work only once, and cache the result on the PangoFontFace */
   sample = (const char *)g_object_get_data (G_OBJECT (face), "gtk-sample-text");
   if (sample)
