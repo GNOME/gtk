@@ -473,26 +473,22 @@ gtk_revealer_size_allocate (GtkWidget *widget,
    * some other form of clipping. We do this by reverse-applying
    * the scale when size allocating the child.
    *
-   * Unfortunately this causes precision issues, because the scaled
-   * size request is always rounded up to an integer.  For instance if
-   * natural with is 100, and scale is 0.001.  we will request a
-   * natural size of ceil(0.1) == 1, but reversing this results in 1 /
-   * 0.001 == 1000 (rather than 100). In the swing case we can get the
-   * scale arbitrarily near 0 causing arbitrary large problems here.
+   * Unfortunately this causes precision issues.
    *
-   * In order to avoid such issue we pick an arbitrary maximum upscale
-   * scale factor of 100. This means that in the case where the allocated
-   * size is 1 we never allocate the child at > 100 px. This means
-   * that in large downscaling cases we may run into the clipping issue
-   * described above. However, at these downscaling levels (100 times!)
-   * we're unlikely to notice much detail anyway.
-   *
-   * On top, we assume that the fully expanded revealer will likely get
+   * So we assume that the fully expanded revealer will likely get
    * an allocation that matches the child's minimum or natural allocation,
    * so we special-case these two values.
    * So when - due to the precision loss - multiple sizes would match
    * the current allocation, we don't pick one at random, we prefer the
    * min and nat size.
+   *
+   * On top, the scaled size request is always rounded up to an integer.
+   * For instance if natural with is 100, and scale is 0.001, we would
+   * request a natural size of ceil(0.1) == 1, but reversing this would
+   * result in 1 / 0.001 == 1000 (rather than 100).
+   * In the swing case we can get the scale arbitrarily near 0 causing
+   * arbitrary large problems.
+   * These also get avoided by the preference.
    */
 
   if (hscale < 1.0)
@@ -505,7 +501,7 @@ gtk_revealer_size_allocate (GtkWidget *widget,
       else if (ceil (min * hscale) == width)
         child_width = min;
       else
-        child_width = MIN (100 * width, floor (width / hscale));
+        child_width = floor (width / hscale);
       child_height = height;
     }
   else if (vscale < 1.0)
@@ -518,7 +514,7 @@ gtk_revealer_size_allocate (GtkWidget *widget,
       else if (ceil (min * vscale) == height)
         child_height = min;
       else
-        child_height = MIN (100 * height, floor (height / vscale));
+        child_height = floor (height / vscale);
     }
   else
     {
