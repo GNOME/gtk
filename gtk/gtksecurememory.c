@@ -44,7 +44,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <errno.h>
+
+#ifdef HAVE_UNISTD_H
 #include <unistd.h>
+#endif
+
 #include <assert.h>
 
 #ifdef WITH_VALGRIND
