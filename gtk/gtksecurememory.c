@@ -84,6 +84,12 @@ typedef struct {
 
 #include <glib.h>
 
+#ifdef G_OS_WIN32
+# define WIN32_LEAN_AND_MEAN
+# include <windows.h>
+# include <dpapi.h> /* for CryptProtectMemory() */
+#endif
+
 #define GTK_SECURE_POOL_VER_STR             "1.0"
 
 static int show_warning = 1;
@@ -940,6 +946,33 @@ sec_acquire_pages (size_t *sz,
 	show_warning = 1;
 	return pages;
 
+#elif defined G_OS_WIN32
+	/* Make sure sz is a multiple of CRYPTPROTECTMEMORY_BLOCK_SIZE in wincrypt.h */
+	*sz = (*sz + CRYPTPROTECTMEMORY_BLOCK_SIZE - 1) & ~(CRYPTPROTECTMEMORY_BLOCK_SIZE - 1);
+
+	void *data = (void *) LocalAlloc (LPTR, *sz);
+
+	if (data == NULL) {
+		if (show_warning && gtk_secure_warnings)
+			fprintf (stderr, "couldn't allocate %lu bytes of memory (%s): %#010X\n",
+			         (unsigned long)*sz, during_tag, GetLastError ());
+		show_warning = 0;
+		return NULL;
+	}
+
+	if (!CryptProtectMemory (data, *sz, CRYPTPROTECTMEMORY_SAME_PROCESS)) {
+		if (show_warning && gtk_secure_warnings)
+			fprintf (stderr, "couldn't encrypt %lu bytes of memory (%s): %#010X\n",
+			         (unsigned long)*sz, during_tag, GetLastError ());
+		show_warning = 0;
+		return NULL;
+	}
+
+	DEBUG_ALLOC ("gtk-secure-memory: new block ", *sz);
+
+	show_warning = 1;
+	return data;
+	
 #else
 	if (show_warning && gtk_secure_warnings)
 		fprintf (stderr, "your system does not support private memory");
@@ -965,6 +998,16 @@ sec_release_pages (void *pages, size_t sz)
 
 	DEBUG_ALLOC ("gtk-secure-memory: freed block ", sz);
 
+#elif defined G_OS_WIN32
+	g_assert (sz % CRYPTPROTECTMEMORY_BLOCK_SIZE == 0);
+
+	if (!CryptUnprotectMemory (pages, sz, CRYPTPROTECTMEMORY_SAME_PROCESS))
+		fprintf (stderr, "couldn't decrypt private memory: %#010X\n", GetLastError ());
+
+	if (LocalFree (pages) != NULL)
+		fprintf (stderr, "couldn't free private anonymous memory: %#010X\n", GetLastError ());
+
+	DEBUG_ALLOC ("gtk-secure-memory: freed block ", sz);
 #else
 	g_assert (FALSE);
 #endif
