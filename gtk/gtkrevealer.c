@@ -457,8 +457,6 @@ gtk_revealer_size_allocate (GtkWidget *widget,
       return;
     }
 
-  child_width = width;
-  child_height = height;
   hscale = get_child_size_scale (revealer, GTK_ORIENTATION_HORIZONTAL);
   vscale = get_child_size_scale (revealer, GTK_ORIENTATION_VERTICAL);
   if (hscale <= 0 || vscale <= 0)
@@ -494,10 +492,17 @@ gtk_revealer_size_allocate (GtkWidget *widget,
     {
       g_assert (vscale == 1.0);
       child_width = MIN (100*width, ceil (width / hscale));
+      child_height = height;
     }
   else if (vscale < 1.0)
     {
+      child_width = width;
       child_height = MIN (100*height, ceil (height / vscale));
+    }
+  else
+    {
+      child_width = width;
+      child_height = height;
     }
 
   transform = NULL;
