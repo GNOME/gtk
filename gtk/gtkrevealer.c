@@ -486,18 +486,39 @@ gtk_revealer_size_allocate (GtkWidget *widget,
    * that in large downscaling cases we may run into the clipping issue
    * described above. However, at these downscaling levels (100 times!)
    * we're unlikely to notice much detail anyway.
+   *
+   * On top, we assume that the fully expanded revealer will likely get
+   * an allocation that matches the child's minimum or natural allocation,
+   * so we special-case these two values.
+   * So when - due to the precision loss - multiple sizes would match
+   * the current allocation, we don't pick one at random, we prefer the
+   * min and nat size.
    */
 
   if (hscale < 1.0)
     {
+      int min, nat;
       g_assert (vscale == 1.0);
-      child_width = MIN (100 * width, floor (width / hscale));
+      gtk_widget_measure (priv->child, GTK_ORIENTATION_HORIZONTAL, height, &min, &nat, NULL, NULL);
+      if (ceil (nat * hscale) == width)
+        child_width = nat;
+      else if (ceil (min * hscale) == width)
+        child_width = min;
+      else
+        child_width = MIN (100 * width, floor (width / hscale));
       child_height = height;
     }
   else if (vscale < 1.0)
     {
+      int min, nat;
       child_width = width;
-      child_height = MIN (100 * height, floor (height / vscale));
+      gtk_widget_measure (priv->child, GTK_ORIENTATION_VERTICAL, width, &min, &nat, NULL, NULL);
+      if (ceil (nat * vscale) == height)
+        child_height = nat;
+      else if (ceil (min * vscale) == height)
+        child_height = min;
+      else
+        child_height = MIN (100 * height, floor (height / vscale));
     }
   else
     {
