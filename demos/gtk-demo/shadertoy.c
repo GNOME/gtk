@@ -29,14 +29,14 @@ run (void)
 
 static void
 run_clicked_cb (GtkWidget *button,
-                    gpointer user_data)
+                gpointer   user_data)
 {
   run ();
 }
 
 static void
 load_clicked_cb (GtkWidget *button,
-                 gpointer user_data)
+                 gpointer   user_data)
 {
   const char *path = user_data;
   GBytes *initial_shader;
@@ -50,7 +50,7 @@ load_clicked_cb (GtkWidget *button,
 
 static void
 clear_clicked_cb (GtkWidget *button,
-                    gpointer user_data)
+                  gpointer   user_data)
 {
   gtk_text_buffer_set_text (textbuffer, "", 0);
 }
@@ -102,7 +102,7 @@ create_shadertoy_window (GtkWidget *do_widget)
   window = gtk_window_new ();
   gtk_window_set_display (GTK_WINDOW (window),  gtk_widget_get_display (do_widget));
   gtk_window_set_title (GTK_WINDOW (window), "Shadertoy");
-  gtk_window_set_default_size (GTK_WINDOW (window), 640, 600);
+  gtk_window_set_default_size (GTK_WINDOW (window), 690, 740);
   g_signal_connect (window, "destroy", G_CALLBACK (close_window), NULL);
 
   box = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE);
@@ -132,6 +132,12 @@ create_shadertoy_window (GtkWidget *do_widget)
 
   textview = gtk_text_view_new ();
   gtk_text_view_set_monospace (GTK_TEXT_VIEW (textview), TRUE);
+  g_object_set (textview,
+                "left-margin", 20,
+                "right-margin", 20,
+                "top-margin", 20,
+                "bottom-margin", 20,
+                NULL);
   gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (sw), textview);
 
   textbuffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (textview));
@@ -146,11 +152,15 @@ create_shadertoy_window (GtkWidget *do_widget)
   gtk_box_set_spacing (GTK_BOX (hbox), 6);
   gtk_center_box_set_start_widget (GTK_CENTER_BOX (centerbox), hbox);
 
-  button = gtk_button_new_from_icon_name ("media-playback-start-symbolic");
+  button = gtk_button_new_from_icon_name ("view-refresh-symbolic");
+  gtk_widget_set_tooltip_text (button, "Restart the demo");
+  gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
   g_signal_connect (button, "clicked", G_CALLBACK (run_clicked_cb), NULL);
   gtk_box_append (GTK_BOX (hbox), button);
 
   button = gtk_button_new_from_icon_name ("edit-clear-all-symbolic");
+  gtk_widget_set_tooltip_text (button, "Clear the text view");
+  gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
   g_signal_connect (button, "clicked", G_CALLBACK (clear_clicked_cb), NULL);
   gtk_box_append (GTK_BOX (hbox), button);
 
