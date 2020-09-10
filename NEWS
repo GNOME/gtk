@@ -1,3 +1,67 @@
+Overview of Changes in GTK 3.99.2
+=================================
+
+* GtkEntry:
+ - Fix issues with Emoji insertion
+ - Fix issues with dnd
+ - Set correct hotspot for dnd icon
+
+* GtkPasswordEntry:
+ - Use non-pageable memory
+
+* GtkSearchEntry:
+ - Don't handle forwarded events twice
+
+* GtkTextView:
+ - Fix dnd
+ - Improve undo state tracking
+
+* GtkRevealer:
+ - Fix clipping issues in the swing transitions
+
+* GL renderer:
+ - Fix clipping with projective transforms
+ - Use linear interpolation for offscreen rendering
+   with non-axis-aligned transforms
+ - Fix texture caching to avoid size mismatches
+
+* CSS:
+ - Allow more than 64 selectors per rule
+
+* API cleanup:
+ - Make filter and sorter constructors return exact
+   types
+
+* Demos:
+ - Bug fixes and cosmetic improvements
+ - Add a Shadertoy demo
+
+* Build:
+ - Fix Vulkan dependency checking
+ - Make sysprof truly optional
+
+* Translation updates:
+ Basque
+ Catalan
+ Croatian
+ Czech
+ Danish
+ French
+ Galician
+ German
+ Hungarian
+ Indonesian
+ Kazakh
+ Lithuanian
+ Persian
+ Polish
+ Slovak
+ Slovenian
+ Spanish
+ Turkish
+ Ukrainian
+
+
 Overview of Changes in GTK 3.99.1
 =================================
 
