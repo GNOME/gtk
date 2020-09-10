@@ -64,20 +64,6 @@ typedef enum
 } GdkSurfaceEdge;
 
 /**
- * GdkFullscreenMode:
- * @GDK_FULLSCREEN_ON_CURRENT_MONITOR: Fullscreen on current monitor only.
- * @GDK_FULLSCREEN_ON_ALL_MONITORS: Span across all monitors when fullscreen.
- *
- * Indicates which monitor (in a multi-head setup) a surface should span over
- * when in fullscreen mode.
- **/
-typedef enum
-{
-  GDK_FULLSCREEN_ON_CURRENT_MONITOR,
-  GDK_FULLSCREEN_ON_ALL_MONITORS
-} GdkFullscreenMode;
-
-/**
  * GdkSurfaceState:
  * @GDK_SURFACE_STATE_WITHDRAWN: the surface is not shown
  * @GDK_SURFACE_STATE_MINIMIZED: the surface is minimized
