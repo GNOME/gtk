@@ -38,31 +38,6 @@
 
 G_BEGIN_DECLS
 
-/**
- * GdkSurfaceEdge:
- * @GDK_SURFACE_EDGE_NORTH_WEST: the top left corner.
- * @GDK_SURFACE_EDGE_NORTH: the top edge.
- * @GDK_SURFACE_EDGE_NORTH_EAST: the top right corner.
- * @GDK_SURFACE_EDGE_WEST: the left edge.
- * @GDK_SURFACE_EDGE_EAST: the right edge.
- * @GDK_SURFACE_EDGE_SOUTH_WEST: the lower left corner.
- * @GDK_SURFACE_EDGE_SOUTH: the lower edge.
- * @GDK_SURFACE_EDGE_SOUTH_EAST: the lower right corner.
- *
- * Determines a surface edge or corner.
- */
-typedef enum
-{
-  GDK_SURFACE_EDGE_NORTH_WEST,
-  GDK_SURFACE_EDGE_NORTH,
-  GDK_SURFACE_EDGE_NORTH_EAST,
-  GDK_SURFACE_EDGE_WEST,
-  GDK_SURFACE_EDGE_EAST,
-  GDK_SURFACE_EDGE_SOUTH_WEST,
-  GDK_SURFACE_EDGE_SOUTH,
-  GDK_SURFACE_EDGE_SOUTH_EAST
-} GdkSurfaceEdge;
-
 typedef struct _GdkSurfaceClass GdkSurfaceClass;
 
 #define GDK_TYPE_SURFACE              (gdk_surface_get_type ())
