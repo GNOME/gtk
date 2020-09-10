@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: gtk+ master\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-08-31 16:17+0000\n"
-"PO-Revision-Date: 2020-09-03 21:54+0200\n"
+"PO-Revision-Date: 2020-09-10 22:00+0200\n"
 "Last-Translator: Matej Urbančič <mateju@svn.gnome.org>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
 "Language: sl_SI\n"
@@ -22,7 +22,7 @@ msgstr ""
 "Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n"
 "%100==4 ? 3 : 0);\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"X-Generator: Poedit 2.3\n"
+"X-Generator: Poedit 2.4.1\n"
 
 #: gdk/broadway/gdkbroadway-server.c:133
 #, c-format
@@ -54,7 +54,7 @@ msgstr "Ni mogoče določiti vsebine kot %s."
 
 #: gdk/gdkdrop.c:118
 msgid "Drag’n’drop from other applications is not supported."
-msgstr ""
+msgstr "Funkcija Poteg/Spust iz drugih programov ni podprta."
 
 #: gdk/gdkdrop.c:151
 msgid "No compatible formats to transfer contents."
@@ -453,15 +453,13 @@ msgstr "V pripravljenost"
 #: gdk/wayland/gdkdrop-wayland.c:204 gdk/wayland/gdkprimary-wayland.c:312
 #: gdk/win32/gdkdrop-win32.c:1279 gdk/win32/gdkdrop-win32.c:1324
 #: gdk/x11/gdkclipboard-x11.c:763 gdk/x11/gdkdrop-x11.c:196
-#, fuzzy
-#| msgid "No compatible formats to transfer contents."
 msgid "No compatible transfer format found"
-msgstr "Ni skladnih zapisov za prenos vsebine."
+msgstr "Ni najdenega skladnega zapisa za prenos."
 
 #: gdk/macos/gdkmacosclipboard.c:289
 #, c-format
 msgid "Failed to decode contents with mime-type of '%s'"
-msgstr ""
+msgstr "Odkodiranje vsebine vrste mime »%s« je spodletelo."
 
 #: gdk/macos/gdkmacosglcontext.c:105
 msgid "Unable to create a GL pixel format"
@@ -493,124 +491,158 @@ msgstr "Jedrni GL ni na voljo v okolju EGL"
 #, c-format
 msgid "Cannot claim clipboard ownership. OpenClipboard() timed out."
 msgstr ""
+"Ni mogoče pridobiti nadzora nad odložiščem. Ukaz OpenClipboard() je časovno "
+"potekel."
 
 #: gdk/win32/gdkclipdrop-win32.c:727
 #, c-format
 msgid "Cannot claim clipboard ownership. Another process claimed it before us."
 msgstr ""
+"Ni mogoče pridobiti nadzora nad odložiščem. Drug program je prej pridobil "
+"dostop."
 
 #: gdk/win32/gdkclipdrop-win32.c:741
 #, c-format
 msgid "Cannot claim clipboard ownership. OpenClipboard() failed: 0x%lx."
 msgstr ""
+"Ni mogoče pridobiti nadzora nad odložiščem. Ukaz OpenClipboard() je "
+"spodletel: 0x%lx."
 
 #: gdk/win32/gdkclipdrop-win32.c:753
 #, c-format
 msgid "Cannot claim clipboard ownership. EmptyClipboard() failed: 0x%lx."
 msgstr ""
+"Ni mogoče pridobiti nadzora nad odložiščem. Ukaz EmptyClipboard() je "
+"spodletel: 0x%lx"
 
 #: gdk/win32/gdkclipdrop-win32.c:796
 #, c-format
 msgid "Cannot set clipboard data. OpenClipboard() timed out."
 msgstr ""
+"Ni mogoče določiti podatkov odložišča. Ukaz OpenClipboard() je časovno "
+"potekel."
 
 #: gdk/win32/gdkclipdrop-win32.c:806 gdk/win32/gdkclipdrop-win32.c:837
 #, c-format
 msgid "Cannot set clipboard data. Another process claimed clipboard ownership."
 msgstr ""
+"Ni mogoče določiti podatkov odložišča. Drug program je prej pridobil dostop."
 
 #: gdk/win32/gdkclipdrop-win32.c:820
 #, c-format
 msgid "Cannot set clipboard data. OpenClipboard() failed: 0x%lx."
 msgstr ""
+"Ni mogoče določiti podatkov odložišča. Ukaz OpenClipboard() je spodletel: 0x"
+"%lx."
 
 #: gdk/win32/gdkclipdrop-win32.c:872
 #, c-format
 msgid "Cannot get clipboard data. GlobalLock(0x%p) failed: 0x%lx."
 msgstr ""
+"Ni mogoče pridobiti podatkov odložišča. Ukaz GlobalLock(0x%p) je spodletel: "
+"0x%lx."
 
 #: gdk/win32/gdkclipdrop-win32.c:883
 #, c-format
 msgid "Cannot get clipboard data. GlobalSize(0x%p) failed: 0x%lx."
 msgstr ""
+"Ni mogoče pridobiti podatkov odložišča. Ukaz GlobalSize(0x%p) je spodletel: "
+"0x%lx."
 
 #: gdk/win32/gdkclipdrop-win32.c:896
 #, c-format
 msgid ""
 "Cannot get clipboard data. Failed to allocate %s bytes to store the data."
 msgstr ""
+"Ni mogoče pridobiti podatkov odložišča. Dodeljevanje %s bajtov v skladišče "
+"podatkov je spodletelo."
 
 #: gdk/win32/gdkclipdrop-win32.c:928
 #, c-format
 msgid "Cannot get clipboard data. OpenClipboard() timed out."
 msgstr ""
+"Ni mogoče pridobiti podatkov odložišča. Ukaz OpenClipboard() je časovno "
+"potekel."
 
 #: gdk/win32/gdkclipdrop-win32.c:938
 #, c-format
 msgid "Cannot get clipboard data. Clipboard ownership changed."
 msgstr ""
+"Ni mogoče pridobiti podatkov odložišča. Lastništvo nad odložiščem je "
+"spremenjeno."
 
 #: gdk/win32/gdkclipdrop-win32.c:948
 #, c-format
 msgid ""
 "Cannot get clipboard data. Clipboard data changed before we could get it."
 msgstr ""
+"Ni mogoče pridobiti podatkov odložišča. Podatki so se spremenili, preden jih "
+"je bilo mogoče pridobiti."
 
 #: gdk/win32/gdkclipdrop-win32.c:965
 #, c-format
 msgid "Cannot get clipboard data. OpenClipboard() failed: 0x%lx."
 msgstr ""
+"Ni mogoče pridobiti podatkov odložišča. Ukaz OpenClipboard() je spodletel: 0x"
+"%lx."
 
 #: gdk/win32/gdkclipdrop-win32.c:990
 #, c-format
 msgid "Cannot get clipboard data. No compatible transfer format found."
 msgstr ""
+"Ni mogoče pridobiti podatkov odložišča. Ni najdenega skladnega zapisa za "
+"prenos."
 
 #: gdk/win32/gdkclipdrop-win32.c:1000
 #, c-format
 msgid "Cannot get clipboard data. GetClipboardData() failed: 0x%lx."
 msgstr ""
+"Ni mogoče pridobiti podatkov odložišča. Ukaz GetClipboardData() je "
+"spodletel: 0x%lx."
 
 #: gdk/win32/gdkdrop-win32.c:1210
 #, c-format
 msgid "Cannot get DnD data. GlobalLock(0x%p) failed: 0x%lx."
 msgstr ""
+"Ni mogoče pridobiti podatkov DnD. Ukaz GlobalLock(0x%p) je spodletel: 0x%lx."
 
 #: gdk/win32/gdkdrop-win32.c:1219
 #, c-format
 msgid "Cannot get DnD data. GlobalSize(0x%p) failed: 0x%lx."
 msgstr ""
+"Ni mogoče pridobiti podatkov DnD. Ukaz GlobalSize(0x%p) je spodletel: 0x%lx."
 
 #: gdk/win32/gdkdrop-win32.c:1230
 #, c-format
 msgid "Cannot get DnD data. Failed to allocate %s bytes to store the data."
 msgstr ""
+"Ni mogoče pridobiti podatkov DnD. Dodeljevanje %s bajtov v skladišče "
+"podatkov je spodletelo."
 
 #: gdk/win32/gdkdrop-win32.c:1298
 #, c-format
 msgid "GDK surface 0x%p is not registered as a drop target"
-msgstr ""
+msgstr "Površina GDK 0x%p ni vpisana kot ciljno mesto"
 
 #: gdk/win32/gdkdrop-win32.c:1305
 #, c-format
 msgid "Target context record 0x%p has no data object"
-msgstr ""
+msgstr "Ciljni zapis vsebine 0x%p je brez podatkov predmeta"
 
 #: gdk/win32/gdkdrop-win32.c:1343
 #, c-format
 msgid "IDataObject_GetData (0x%x) failed, returning 0x%lx"
 msgstr ""
+"Ukaz IDataObject_GetData (0x%x) je spodletel; opravilo bo vrnjeno na 0x%lx"
 
 #: gdk/win32/gdkdrop-win32.c:1375
 #, c-format
 msgid "Failed to transmute DnD data W32 format 0x%x to %p (%s)"
-msgstr ""
+msgstr "Pretvarjanje podatkov DnD za zapis W32 0x%x to %p (%s) je spodletelo."
 
 #: gdk/win32/gdkhdataoutputstream-win32.c:64
-#, fuzzy
-#| msgid "Can't close stream"
 msgid "writing a closed stream"
-msgstr "Ni mogoče zapreti pretoka"
+msgstr "zapisovanje zapretega pretoka"
 
 #: gdk/win32/gdkhdataoutputstream-win32.c:86
 msgid "g_try_realloc () failed"
@@ -619,28 +651,28 @@ msgstr "Izvedba g_try_realloc () je spodletela"
 #: gdk/win32/gdkhdataoutputstream-win32.c:94
 #: gdk/win32/gdkhdataoutputstream-win32.c:232
 msgid "GlobalReAlloc() failed: "
-msgstr "Izvedba GlobalReAlloc() je spodletela:"
+msgstr "Izvedba GlobalReAlloc() je spodletela: "
 
 #: gdk/win32/gdkhdataoutputstream-win32.c:106
 msgid "Ran out of buffer space (buffer size is fixed)"
-msgstr ""
+msgstr "Zmanjkalo je prostora v medpomnilniku (velikost je stalna)"
 
 #: gdk/win32/gdkhdataoutputstream-win32.c:204
 msgid "Can’t transmute a single handle"
-msgstr ""
+msgstr "Ni mogoče pretvoriti enojnega ročnika"
 
 #: gdk/win32/gdkhdataoutputstream-win32.c:216
 #, c-format
 msgid "Failed to transmute %zu bytes of data from %s to %u"
-msgstr ""
+msgstr "Pretvarjanje %zu bajtov podatkov iz %s v %u je spodletelo."
 
 #: gdk/win32/gdkhdataoutputstream-win32.c:251
 msgid "GlobalLock() failed: "
-msgstr "Izvedba GlobalLock() je spodletela:"
+msgstr "Izvedba GlobalLock() je spodletela: "
 
 #: gdk/win32/gdkhdataoutputstream-win32.c:365
 msgid "GlobalAlloc() failed: "
-msgstr "Izvedba GlobalAlloc() je spodletela:"
+msgstr "Izvedba GlobalAlloc() je spodletela: "
 
 #: gdk/x11/gdkapplaunchcontext-x11.c:290
 #, c-format
@@ -663,11 +695,11 @@ msgstr[3] "Odpiranje %d predmetov"
 
 #: gdk/x11/gdkclipboard-x11.c:433
 msgid "Clipboard manager could not store selection."
-msgstr ""
+msgstr "Upravljalnik odložišča ne uspe shraniti izbire."
 
 #: gdk/x11/gdkclipboard-x11.c:613
 msgid "Cannot store clipboard. No clipboard manager is active."
-msgstr ""
+msgstr "Ni mogoče shraniti odložišča. Ni dejavnega upravljalnika."
 
 #: gdk/x11/gdkglcontext-x11.c:1157
 #, c-format
@@ -685,7 +717,7 @@ msgstr "Na ciljnem mestu ni dovolj prostora"
 
 #: gdk/x11/gdktextlistconverter-x11.c:91 gdk/x11/gdktextlistconverter-x11.c:195
 msgid "Need complete input to do conversion"
-msgstr ""
+msgstr "Zahtevan je celoten vhod za izvedbo pretvarjanja"
 
 #: gdk/x11/gdktextlistconverter-x11.c:216
 #: gdk/x11/gdktextlistconverter-x11.c:250
@@ -694,7 +726,7 @@ msgstr "Neveljavno zaporedje bajtov na vhodu pretvorbe"
 
 #: gdk/x11/gdktextlistconverter-x11.c:242
 msgid "Invalid formats in compound text conversion."
-msgstr ""
+msgstr "Neveljavni zapisi pri sestavljeni pretvorbi besedila."
 
 #: gdk/x11/gdktextlistconverter-x11.c:259
 #, c-format
@@ -712,10 +744,9 @@ msgid "Malformed data: URL"
 msgstr "Napačno oblikovan podatek: naslov URL"
 
 #: gtk/css/gtkcssdataurl.c:141
-#, fuzzy, c-format
-#| msgid "Could not clear list"
+#, c-format
 msgid "Could not unescape string"
-msgstr "Seznama ni mogoče počistitit"
+msgstr "Ni mogoče odstraniti ubežnega znaka niza"
 
 #: gtk/gtkaboutdialog.c:123 gtk/ui/gtkaboutdialog.ui:159
 msgid "License"
@@ -1594,8 +1625,6 @@ msgid "Show _Time"
 msgstr "Pokaži _čas"
 
 #: gtk/gtkfilechooserwidget.c:1858
-#, fuzzy
-#| msgid "Sort _Folders before Files"
 msgid "Sort _Folders Before Files"
 msgstr "Razvrsti _mape pred datotekami"
 
@@ -2052,6 +2081,7 @@ msgstr "Opravila s PID %d ni mogoče končati: %s"
 #: gtk/gtknomediafile.c:48
 msgid "GTK could not find a media module. Check your installation."
 msgstr ""
+"Program GTK nima omogočenega predstavnega modula . Preverite namestitev."
 
 #: gtk/gtknotebook.c:4223 gtk/gtknotebook.c:6431
 #, c-format
@@ -2825,18 +2855,15 @@ msgid "Do you want to use GTK Inspector?"
 msgstr "Ali želite uporabljati nadzorni program GTK+?"
 
 #: gtk/gtkwindow.c:6639
-#, fuzzy, c-format
-#| msgid ""
-#| "GTK+ Inspector is an interactive debugger that lets you explore and "
-#| "modify the internals of any GTK+ application. Using it may cause the "
-#| "application to break or crash."
+#, c-format
 msgid ""
 "GTK Inspector is an interactive debugger that lets you explore and modify "
 "the internals of any GTK application. Using it may cause the application to "
 "break or crash."
 msgstr ""
 "Nadzornik GTK+ je razhroščevalnik, ki omogoča raziskovanje in spreminjanje "
-"nastavitev GTK+. Neustrezna raba lahko povzroči nedelovanje okolja."
+"nastavitev kateregakoli programa GTK. Neustrezna raba lahko povzroči napačno "
+"delovanje oziroma sesutje okolja."
 
 #: gtk/gtkwindow.c:6644
 msgid "Don’t show this message again"
@@ -3237,28 +3264,24 @@ msgid "Saving RenderNode failed"
 msgstr "Shranjevanje izrisovanja vozlišča je spodletelo"
 
 #: gtk/inspector/recorder.ui:18
-#, fuzzy
-#| msgid "Recorder"
 msgid "Record frames"
-msgstr "Snemalnik"
+msgstr "Snemanje sličic"
 
 #: gtk/inspector/recorder.ui:26
-#, fuzzy
-#| msgid "Recorder"
 msgid "Clear recorded frames"
-msgstr "Snemalnik"
+msgstr "Počisti posnete sličice"
 
 #: gtk/inspector/recorder.ui:34
 msgid "Add debug nodes"
-msgstr ""
+msgstr "Dodaj razhroščevalna vozlišča"
 
 #: gtk/inspector/recorder.ui:44
 msgid "Use a dark background"
-msgstr ""
+msgstr "Uporabi temno ozadje"
 
 #: gtk/inspector/recorder.ui:53
 msgid "Save selected node"
-msgstr ""
+msgstr "Shrani izbrano vozlišče"
 
 #: gtk/inspector/recorder.ui:110
 msgid "Property"
@@ -3318,10 +3341,9 @@ msgid "Mode"
 msgstr "Način"
 
 #: gtk/inspector/statistics.c:400
-#, fuzzy
-#| msgid "GLib must be configured with --enable-debug"
 msgid "GLib must be configured with -Dbuildtype=debug"
-msgstr "Knjižnica GLib mora biti nastaljena z uporabo zastavice --enable-debug"
+msgstr ""
+"Knjižnica GLib mora biti nastavljena z uporabo zastavice --Dbuildtype=debug"
 
 #: gtk/inspector/statistics.ui:60
 msgid "Self 1"
@@ -3361,7 +3383,7 @@ msgstr "Hierarhija"
 
 #: gtk/inspector/type-info.ui:35
 msgid "Implements"
-msgstr ""
+msgstr "Vgradnje"
 
 #: gtk/inspector/visual.c:602 gtk/inspector/visual.c:621
 msgid "Theme is hardcoded by GTK_THEME"
@@ -3416,8 +3438,6 @@ msgid "Right-to-Left"
 msgstr "Z desne proti levi"
 
 #: gtk/inspector/visual.ui:319
-#, fuzzy
-#| msgid "Window scaling"
 msgid "Window Scaling"
 msgstr "Prilagajanje okna"
 
@@ -3431,7 +3451,7 @@ msgstr "Upočasni"
 
 #: gtk/inspector/visual.ui:432
 msgid "Show fps overlay"
-msgstr ""
+msgstr "Pokaži plast hitrosti sličic"
 
 #: gtk/inspector/visual.ui:461
 msgid "Show Graphic Updates"
@@ -3439,7 +3459,7 @@ msgstr "Pokaži grafične posodobitve"
 
 #: gtk/inspector/visual.ui:490
 msgid "Show Fallback Rendering"
-msgstr ""
+msgstr "Pokaži povratno izrisovanje"
 
 #: gtk/inspector/visual.ui:519
 msgid "Show Baselines"
@@ -3454,8 +3474,6 @@ msgid "Show Focus"
 msgstr "Pokaži žarišče"
 
 #: gtk/inspector/visual.ui:620
-#, fuzzy
-#| msgid "Simulate touchscreen"
 msgid "Simulate Touchscreen"
 msgstr "Simuliraj zaslon na dotik"
 
@@ -3513,7 +3531,7 @@ msgstr "Položaj seznama"
 
 #: gtk/inspector/window.ui:375
 msgid "Next sibling"
-msgstr ""
+msgstr "Naslednji podrejeni predmet"
 
 #: gtk/inspector/window.ui:408
 msgid "Miscellaneous"
@@ -5922,25 +5940,7 @@ msgid "Can’t close stream"
 msgstr "Ni mogoče zapreti pretoka."
 
 #: gtk/tools/gtk-builder-tool.c:34
-#, fuzzy, c-format
-#| msgid ""
-#| "Usage:\n"
-#| "  gtk-builder-tool [COMMAND] FILE\n"
-#| "\n"
-#| "Commands:\n"
-#| "  validate           Validate the file\n"
-#| "  simplify [OPTIONS] Simplify the file\n"
-#| "  enumerate          List all named objects\n"
-#| "  preview [OPTIONS]  Preview the file\n"
-#| "\n"
-#| "Simplify Options:\n"
-#| "  --replace          Replace the file\n"
-#| "\n"
-#| "Preview Options:\n"
-#| "  --id=ID            Preview only the named object\n"
-#| "  --css=FILE         Use style from CSS file\n"
-#| "\n"
-#| "Perform various tasks on GtkBuilder .ui files.\n"
+#, c-format
 msgid ""
 "Usage:\n"
 "  gtk-builder-tool [COMMAND] [OPTION…] FILE\n"
@@ -5962,34 +5962,33 @@ msgid ""
 "Perform various tasks on GtkBuilder .ui files.\n"
 msgstr ""
 "Uporaba:\n"
-"  gtk-builder-tool [UKAZ] DATOTEKA\n"
+"  gtk-builder-tool [UKAZ] [MOŽNOST...]DATOTEKA\n"
 "\n"
 "Ukazi:\n"
 "  validate           preveri veljavnost datoteke\n"
-"  simplify [OPTIONS] poenostavi datoteko\n"
+"  simplify           poenostavi datoteko\n"
 "  enumerate           izpiše seznam vseh poimenovanih predmetov\n"
-"  preview [MOŽNOSTI] omogoči predogled datoteke\n"
+"  preview           omogoči predogled datoteke\n"
 "\n"
 "Možnosti ukaza simplify:\n"
-"  --replace          Zamenjaj datoteko\n"
+"  --replace          zamenja datoteko\n"
+"--3to4       pretvori iz GTK3 v GTK4\n"
 "\n"
 "Možnosti predogleda:\n"
-"  --id=ID            Predogled le poimenovanega predmeta\n"
-"  --css=FILE         Uporabi slog iz datoteke CSS\n"
+"  --id=ID            predogled le poimenovanega predmeta\n"
+"  --css=FILE         uporabi slog iz datoteke CSS\n"
 "\n"
 "Izvajanje različnih ukazov na datotekah GtkBuilder .ui.\n"
 
 #: gtk/tools/gtk-builder-tool-simplify.c:488
-#, fuzzy, c-format
-#| msgid "Couldn't parse value for %s::%s: %s\n"
+#, c-format
 msgid "%s:%d: Couldn’t parse value for property '%s': %s\n"
-msgstr "Ni mogoče razčleniti vrednosti za %s::%s: %s\n"
+msgstr "%s:%d: Ni mogoče razčleniti vrednosti za lastnost »%s«: %s\n"
 
 #: gtk/tools/gtk-builder-tool-simplify.c:624
-#, fuzzy, c-format
-#| msgid "Property %s::%s not found\n"
+#, c-format
 msgid "%s:%d: %sproperty %s::%s not found\n"
-msgstr "Lastnost %s::%s ne obstaja\n"
+msgstr "%s:%d: %s, lastnost %s::%s ne obstaja.\n"
 
 #: gtk/tools/gtk-builder-tool-simplify.c:2046
 #, c-format
@@ -6018,12 +6017,12 @@ msgstr ""
 #: gtk/tools/gtk-builder-tool-simplify.c:2127
 #, c-format
 msgid "No .ui file specified\n"
-msgstr ""
+msgstr "Ni določene datoeke .ui\n"
 
 #: gtk/tools/gtk-builder-tool-simplify.c:2133
 #, c-format
 msgid "Can only simplify a single .ui file without --replace\n"
-msgstr ""
+msgstr "Poenostaviti je mogoče le eno datoteko .ui brez zastavice --replace\n"
 
 #: gtk/tools/gtk-launch.c:40
 msgid "Show program version"
@@ -6147,8 +6146,6 @@ msgid "Don’t check for the existence of index.theme"
 msgstr "Ne preveri obstoja datoteke index.theme"
 
 #: gtk/tools/updateiconcache.c:1660
-#, fuzzy
-#| msgid "Don't include image data in the cache"
 msgid "Don’t include image data in the cache"
 msgstr "Ne vključi slikovnih podatkov v predpomnilnik"
 
@@ -6184,11 +6181,7 @@ msgid "No theme index file.\n"
 msgstr "Ni datoteke kazala teme.\n"
 
 #: gtk/tools/updateiconcache.c:1754
-#, fuzzy, c-format
-#| msgid ""
-#| "No theme index file in '%s'.\n"
-#| "If you really want to create an icon cache here, use --ignore-theme-"
-#| "index.\n"
+#, c-format
 msgid ""
 "No theme index file in “%s”.\n"
 "If you really want to create an icon cache here, use --ignore-theme-index.\n"
@@ -6632,26 +6625,21 @@ msgid "Some of the settings in the dialog conflict"
 msgstr "Nekatere nastavitve v pogovornem oknu so v sporu"
 
 #: modules/media/gtkffmediafile.c:220
-#, fuzzy, c-format
-#| msgid "Unspecified error"
+#, c-format
 msgid "Unspecified error decoding video"
-msgstr "Nedoločena napaka"
+msgstr "Nedoločena napaka odkodiranja videa"
 
 #: modules/media/gtkffmediafile.c:322 modules/media/gtkffmediafile.c:496
 msgid "Not enough memory"
 msgstr "Ni dovolj pomnilnika"
 
 #: modules/media/gtkffmediafile.c:519
-#, fuzzy
-#| msgid "Not a valid page setup file"
 msgid "Not a video file"
-msgstr "Ni veljavna datoteka nastavitev strani"
+msgstr "Datoteka ni video datoteka"
 
 #: modules/media/gtkffmediafile.c:538
-#, fuzzy
-#| msgid "Opening “%s”."
 msgid "Unsupported video codec"
-msgstr "Odpiranje datoteke »%s«."
+msgstr "Nepodprt kodek videa"
 
 #. Translators: The printer status is online, i.e. it is
 #. * ready to print.
@@ -6831,7 +6819,7 @@ msgstr "Zavračanje poslov"
 #. Translators: this string connects multiple printer states together.
 #: modules/printbackends/gtkprintbackendcups.c:2649
 msgid "; "
-msgstr ";"
+msgstr "; "
 
 #: modules/printbackends/gtkprintbackendcups.c:4400
 #: modules/printbackends/gtkprintbackendcups.c:4467
@@ -7213,7 +7201,7 @@ msgstr "Datoteka"
 
 #: modules/printbackends/gtkprintbackendfile.c:720
 msgid "_Output format"
-msgstr "_Izhodna oblika"
+msgstr "_Izhodni zapis"
 
 #: modules/printbackends/gtkprintbackendlpr.c:376
 msgid "Print to LPR"
