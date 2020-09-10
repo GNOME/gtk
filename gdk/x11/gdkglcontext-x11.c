@@ -1483,6 +1483,7 @@ gdk_x11_display_make_gl_context_current (GdkDisplay   *display,
             g_message ("Making GLX context %p current to drawable %lu",
                        context, (unsigned long) drawable));
 
+  glFinish ();
   if (!glXMakeContextCurrent (dpy, drawable, drawable,
                               context_x11->glx_context))
     {
