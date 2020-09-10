@@ -1,4 +1,4 @@
-#'gtk/po-properties/
+# 'gtk/po-properties/
 # Slovenian translation of gtk+-properties.
 # Copyright (C) 1999-2011 Free Software Foundation, Inc.
 # This file is distributed under the same license as the gtk+-properties package.
@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: gtk+-properties master\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-08-31 16:18+0000\n"
-"PO-Revision-Date: 2020-08-31 21:45+0200\n"
+"PO-Revision-Date: 2020-09-08 20:56+0200\n"
 "Last-Translator: Matej Urbančič <mateju@svn.gnome.org>\n"
 "Language-Team: Slovenščina <gnome-si@googlegroups.com>\n"
 "Language: sl\n"
@@ -25,7 +25,7 @@ msgstr ""
 "Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n"
 "%100==4 ? 3 : 0);\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"X-Generator: Poedit 2.3\n"
+"X-Generator: Poedit 2.4.1\n"
 
 #: gdk/gdkapplaunchcontext.c:133 gdk/gdkdrawcontext.c:155 gdk/gdkseat.c:201
 #: gdk/gdkseat.c:202 gdk/gdksurface.c:508 gdk/gdksurface.c:509
@@ -154,50 +154,36 @@ msgid "Whether the keyboard has bidi layouts"
 msgstr "Ali ima označba levo težnost"
 
 #: gdk/gdkdevice.c:260
-#, fuzzy
-#| msgid "Caps Lock warning"
 msgid "Caps lock state"
-msgstr "Opozorilo velikih črk"
+msgstr "Stanje tipke zaklepa velikih črk"
 
 #: gdk/gdkdevice.c:261
-#, fuzzy
-#| msgid "Whether the cell background color is set"
 msgid "Whether the keyboard caps lock is on"
-msgstr "Ali naj bo določena barva ozadja celice"
+msgstr "Ali je tipka za zaklep tipkovnice pritisnjena"
 
 #: gdk/gdkdevice.c:267
 msgid "Num lock state"
-msgstr ""
+msgstr "Stanje zaklepa številčnice"
 
 #: gdk/gdkdevice.c:268
-#, fuzzy
-#| msgid "Whether the view is loading locations"
 msgid "Whether the keyboard num lock is on"
-msgstr "Ali pogled nalaga omrežna mesta"
+msgstr "Ali je tipka za zaklep številčne tipkovnice pritisnjena"
 
 #: gdk/gdkdevice.c:274
-#, fuzzy
-#| msgid "Scroll offset"
 msgid "Scroll lock state"
-msgstr "Drsni odmik"
+msgstr "Stanje zaklepa drsnika"
 
 #: gdk/gdkdevice.c:275
-#, fuzzy
-#| msgid "Whether the border should be shown"
 msgid "Whether the keyboard scroll lock is on"
-msgstr "Ali naj bo obroba prikazana"
+msgstr "Ali je tipka za zaklep drsnika pritisnjena"
 
 #: gdk/gdkdevice.c:281
-#, fuzzy
-#| msgid "Radio state"
 msgid "Modifier state"
-msgstr "Stanje izbirnega gumba"
+msgstr "Stanje spremenilne tipke"
 
 #: gdk/gdkdevice.c:282
-#, fuzzy
-#| msgid "The modifier mask of the accelerator"
 msgid "The modifier state of the keyboard"
-msgstr "Maska spremenilnika za pospeševalnik"
+msgstr "Stanje spremenilne tipke tipkovnice"
 
 #: gdk/gdkdisplay.c:180 gdk/gdkdisplay.c:181
 #, fuzzy
@@ -210,10 +196,8 @@ msgid "RGBA"
 msgstr "RGBA"
 
 #: gdk/gdkdisplay.c:206 gdk/gdkdisplay.c:207
-#, fuzzy
-#| msgid "Input source"
 msgid "Input shapes"
-msgstr "Dovodni vir"
+msgstr ""
 
 #: gdk/gdkdisplaymanager.c:171
 msgid "Default Display"
@@ -273,7 +257,7 @@ msgstr "Ura okna"
 
 #: gdk/gdksurface.c:522 gdk/gdksurface.c:523
 msgid "Mapped"
-msgstr ""
+msgstr "Preslikano"
 
 #: gdk/gdksurface.c:529 gdk/gdksurface.c:530 gtk/gtktreeviewcolumn.c:294
 msgid "Width"
@@ -301,10 +285,8 @@ msgid "The display that will use this cursor"
 msgstr "Prikaz kazalke"
 
 #: gdk/win32/gdkcursor-win32.c:241
-#, fuzzy
-#| msgid "Wide Handle"
 msgid "Handle"
-msgstr "Široka ročica"
+msgstr "Ročica"
 
 #: gdk/win32/gdkcursor-win32.c:242
 #, fuzzy
@@ -839,11 +821,11 @@ msgstr "Atributi"
 
 #: gtk/gtkbookmarklist.c:236 gtk/gtkdirectorylist.c:302
 msgid "IO priority"
-msgstr ""
+msgstr "Prednost V/I"
 
 #: gtk/gtkbookmarklist.c:237 gtk/gtkdirectorylist.c:303
 msgid "Priority used when loading"
-msgstr ""
+msgstr "Prednost, upoštevana med nalaganjem"
 
 #: gtk/gtkbookmarklist.c:248 gtk/gtkdirectorylist.c:326
 msgid "loading"
@@ -898,7 +880,7 @@ msgstr "Položaj z osnovnico poravnanih gradnikov, kadar je prostor na voljo"
 
 #: gtk/gtkboxlayout.c:709
 msgid "Distribute space homogeneously"
-msgstr ""
+msgstr "Porazdeli prostor homogeno"
 
 #: gtk/gtkboxlayout.c:723
 msgid "Spacing between widgets"
@@ -933,7 +915,7 @@ msgstr "Stanje opravila tiskanja"
 
 #: gtk/gtkbuilderlistitemfactory.c:269
 msgid "Bytes"
-msgstr ""
+msgstr "Bajti"
 
 #: gtk/gtkbuilderlistitemfactory.c:270
 #, fuzzy
@@ -2055,10 +2037,8 @@ msgid "Columns"
 msgstr "Stolpci"
 
 #: gtk/gtkcolumnview.c:622
-#, fuzzy
-#| msgid "List of classes"
 msgid "List of columns"
-msgstr "Seznam razredov"
+msgstr "Seznam stolpcev"
 
 #: gtk/gtkcolumnview.c:634 gtk/gtkgridview.c:1094 gtk/gtklistview.c:841
 #, fuzzy
@@ -2074,7 +2054,7 @@ msgstr "Pokaži okraske"
 
 #: gtk/gtkcolumnview.c:646 gtk/gtklistbox.c:513 gtk/gtklistview.c:853
 msgid "Show separators between rows"
-msgstr ""
+msgstr "Pokaži ločilnike med vrsticami"
 
 #: gtk/gtkcolumnview.c:657
 #, fuzzy
@@ -2090,10 +2070,8 @@ msgstr "Prostor, vstavljen med stolpce mreže"
 
 #: gtk/gtkcolumnview.c:669 gtk/gtkcolumnviewcolumn.c:277
 #: gtk/gtksortlistmodel.c:820 gtk/gtktreelistrowsorter.c:544
-#, fuzzy
-#| msgid "Sort order"
 msgid "Sorter"
-msgstr "Vrstni red"
+msgstr "Razvrščevalnik"
 
 #: gtk/gtkcolumnview.c:670
 msgid "Sorter with sorting choices of the user"
@@ -2101,11 +2079,9 @@ msgstr ""
 
 #: gtk/gtkcolumnview.c:681 gtk/gtkgridview.c:1105 gtk/gtklistview.c:864
 msgid "Single click activate"
-msgstr ""
+msgstr "Omogočanje z enim klikom"
 
 #: gtk/gtkcolumnview.c:682 gtk/gtkgridview.c:1106 gtk/gtklistview.c:865
-#, fuzzy
-#| msgid "Activate row on a single click"
 msgid "Activate rows on single click"
 msgstr "Omogoči vrstico ob enojnem kliku"
 
@@ -2115,10 +2091,8 @@ msgid "Reorderable"
 msgstr "Preuredljivo"
 
 #: gtk/gtkcolumnview.c:694
-#, fuzzy
-#| msgid "Whether the column can be reordered around the headers"
 msgid "Whether columns are reorderable"
-msgstr "Ali je lahko stolpec pri glavah drugače urejen"
+msgstr "Ali je stolpce mogoče prerazporediti"
 
 #: gtk/gtkcolumnview.c:705 gtk/gtkgridview.c:1117 gtk/gtklistview.c:876
 #, fuzzy
@@ -2136,10 +2110,8 @@ msgstr ""
 "Ali naj bo z vleko miškinega kazalca omogočena izbira več datotek hkrati"
 
 #: gtk/gtkcolumnviewcolumn.c:241
-#, fuzzy
-#| msgid "Columns"
 msgid "Column view"
-msgstr "Stolpci"
+msgstr "Stolpčni pogled"
 
 #: gtk/gtkcolumnviewcolumn.c:242
 msgid "Column view this column is a part of"
@@ -2156,10 +2128,8 @@ msgid "Factory for populating list items"
 msgstr ""
 
 #: gtk/gtkcolumnviewcolumn.c:266
-#, fuzzy
-#| msgid "Text to be displayed in the progress bar"
 msgid "Title displayed in the header"
-msgstr "Besedilo, ki je prikazano v vrstici napredka."
+msgstr "Naziv, ki naj se pojavi v glavi"
 
 #: gtk/gtkcolumnviewcolumn.c:278
 msgid "Sorter for sorting items according to this column"
@@ -2171,10 +2141,8 @@ msgid "Visible"
 msgstr "Vidno"
 
 #: gtk/gtkcolumnviewcolumn.c:290
-#, fuzzy
-#| msgid "Whether the action is visible."
 msgid "Whether this column is visible"
-msgstr "Ali naj bo dejanje vidno."
+msgstr "Ali naj bo stolpec viden"
 
 #: gtk/gtkcolumnviewcolumn.c:301
 msgid "Header menu"
@@ -2654,11 +2622,11 @@ msgstr "Ali naj se pokaže določilo razvrščanja"
 
 #: gtk/gtkdropdown.c:509
 msgid "Expression to determine strings to search for"
-msgstr ""
+msgstr "Izraz za določanje iskalnega niza"
 
 #: gtk/gtkdroptargetasync.c:401 gtk/gtkdroptarget.c:602
 msgid "Formats"
-msgstr ""
+msgstr "Zapisi"
 
 #: gtk/gtkdroptarget.c:579
 msgid "The actions supported by this drop target"
@@ -2672,11 +2640,11 @@ msgstr "Trenutna barva"
 
 #: gtk/gtkdroptarget.c:603
 msgid "The supported formats"
-msgstr ""
+msgstr "Podprti zapisi"
 
 #: gtk/gtkdroptarget.c:630
 msgid "Preload"
-msgstr ""
+msgstr "Predhodno nalaganje"
 
 #: gtk/gtkdroptarget.c:631
 #, fuzzy
@@ -2708,7 +2676,7 @@ msgstr "Omogoči razveljavitve"
 
 #: gtk/gtkeditable.c:386
 msgid "If undo/redo should be enabled for the editable"
-msgstr ""
+msgstr "Ali naj bo možnost razveljavitve omogočena za ta uredljivi predmet"
 
 #: gtk/gtkeditable.c:392
 msgid "Selection Bound"
@@ -3391,7 +3359,7 @@ msgstr "Povečanje koraka"
 
 #: gtk/gtkfilterlistmodel.c:578
 msgid "Filter items incrementally"
-msgstr ""
+msgstr "Filtriraj predmete naraščajoče"
 
 #: gtk/gtkfilterlistmodel.c:590 gtk/gtkselectionfiltermodel.c:228
 #, fuzzy
@@ -3413,7 +3381,7 @@ msgstr "Število nedavno uporabljenih datotek"
 
 #: gtk/gtkfixedlayout.c:155
 msgid "transform"
-msgstr ""
+msgstr "preoblikuj"
 
 #: gtk/gtkfixedlayout.c:156
 msgid "The transform of a child of a fixed layout"
@@ -4170,11 +4138,11 @@ msgstr "Pokaži okraske"
 
 #: gtk/gtklistbox.c:3449
 msgid "Whether this row can be activated"
-msgstr "Ali je vrstico mogoče omogočiti?"
+msgstr "Ali je vrstico mogoče omogočiti"
 
 #: gtk/gtklistbox.c:3461
 msgid "Whether this row can be selected"
-msgstr "Ali je to vrstico mogoče izbrati?"
+msgstr "Ali je to vrstico mogoče izbrati"
 
 #: gtk/gtklistitem.c:174
 #, fuzzy
@@ -4303,11 +4271,11 @@ msgstr "Način za iskanje zadetkov"
 
 #: gtk/gtkmediacontrols.c:276 gtk/gtkvideo.c:320
 msgid "Media Stream"
-msgstr ""
+msgstr "Predstavni pretok"
 
 #: gtk/gtkmediacontrols.c:277
 msgid "The media stream managed"
-msgstr ""
+msgstr "Upravljan predstavni pretok"
 
 #: gtk/gtkmediafile.c:162
 msgid "File being played back"
@@ -4993,10 +4961,8 @@ msgid "The GdkPaintable to display"
 msgstr "Naslov za prikaz"
 
 #: gtk/gtkpicture.c:328
-#, fuzzy
-#| msgid "Filename to load and display"
 msgid "File to load and display"
-msgstr "Ime datoteke, ki naj se naloži in prikaže"
+msgstr "Datoteka, ki naj se naloži in prikaže"
 
 #: gtk/gtkpicture.c:339
 #, fuzzy
@@ -5009,10 +4975,8 @@ msgid "The alternative textual description"
 msgstr ""
 
 #: gtk/gtkpicture.c:352
-#, fuzzy
-#| msgid "Cursor line aspect ratio"
 msgid "Keep aspect ratio"
-msgstr "Razmerje vrstice kazalke"
+msgstr "Ohrani razmerja velikosti"
 
 #: gtk/gtkpicture.c:353
 msgid "Render contents respecting the aspect ratio"
@@ -5059,8 +5023,6 @@ msgid "Whether the sidebar includes a builtin shortcut for recent files"
 msgstr "Ali bočno okno vključuje tudi vgrajeno bližnjico do nedavnih datotek"
 
 #: gtk/gtkplacessidebar.c:4362
-#, fuzzy
-#| msgid "Show 'Desktop'"
 msgid "Show “Desktop”"
 msgstr "Pokaži »Namizje«"
 
@@ -5069,8 +5031,6 @@ msgid "Whether the sidebar includes a builtin shortcut to the Desktop folder"
 msgstr "Ali naj bočno okno vključuje tudi bližnico do mape namizja"
 
 #: gtk/gtkplacessidebar.c:4368
-#, fuzzy
-#| msgid "Show “Starred Location”"
 msgid "Show “Enter Location”"
 msgstr "Pokaži »Mesta z zvezdico«"
 
@@ -5088,8 +5048,6 @@ msgid "Whether the sidebar includes a builtin shortcut to the Trash location"
 msgstr "Ali bočno okno vključuje tudi vgrajeno bližnjico do Smeti"
 
 #: gtk/gtkplacessidebar.c:4380
-#, fuzzy
-#| msgid "Show 'Other locations'"
 msgid "Show “Other locations”"
 msgstr "Pokaži »Druga mesta«"
 
@@ -5190,28 +5148,20 @@ msgid "Whether to dismiss the popover on outside clicks"
 msgstr "Ali naj se pojavna okna prekličejo ob kliku izven polja okna"
 
 #: gtk/gtkpopover.c:1649 gtk/gtkwindow.c:907
-#, fuzzy
-#| msgid "Default Width"
 msgid "Default widget"
-msgstr "Privzeta širina"
+msgstr "Privzeti gradnik"
 
 #: gtk/gtkpopover.c:1650 gtk/gtkwindow.c:908
-#, fuzzy
-#| msgid "The name of the widget"
 msgid "The default widget"
-msgstr "Ime gradnika"
+msgstr "Privzeti gradnik"
 
 #: gtk/gtkpopover.c:1656
-#, fuzzy
-#| msgid "Show Arrow"
 msgid "Has Arrow"
-msgstr "Pokaži puščico"
+msgstr "Prikaz puščice"
 
 #: gtk/gtkpopover.c:1657
-#, fuzzy
-#| msgid "Whether to show an icon for Emoji"
 msgid "Whether to draw an arrow"
-msgstr "Ali naj se pokaže sličica izraznih ikon"
+msgstr "Ali naj bo prikazana puščica"
 
 #: gtk/gtkpopover.c:1663
 #, fuzzy
@@ -6487,10 +6437,8 @@ msgid "The name of the action"
 msgstr "Ime dejanja"
 
 #: gtk/gtkshortcuttrigger.c:659 gtk/gtkshortcuttrigger.c:915
-#, fuzzy
-#| msgid "The value"
 msgid "Key value"
-msgstr "Vrednost"
+msgstr "Ključna vrednost"
 
 #: gtk/gtkshortcuttrigger.c:660 gtk/gtkshortcuttrigger.c:916
 #, fuzzy
@@ -6793,16 +6741,12 @@ msgid "If exact matches are necessary or if substrings are allowed"
 msgstr ""
 
 #: gtk/gtkstringfilter.c:288
-#, fuzzy
-#| msgid "Search mode"
 msgid "Search"
-msgstr "Iskalni način"
+msgstr "Iskanje"
 
 #: gtk/gtkstringfilter.c:289
-#, fuzzy
-#| msgid "The selected year"
 msgid "The search term"
-msgstr "Izbrano leto"
+msgstr "Iskalni niz"
 
 #: gtk/gtkstylecontext.c:146
 #, fuzzy
@@ -6848,19 +6792,21 @@ msgstr "Ali medpomnilnik trenutno vsebuje izbrano besedilo"
 
 #: gtk/gtktextbuffer.c:490
 msgid "Can Undo"
-msgstr ""
+msgstr "Podpora razveljavitve"
 
 #: gtk/gtktextbuffer.c:491
 msgid "If the buffer can have the last action undone"
-msgstr ""
+msgstr "Ali naj predpomnilnik omogoči razveljavitev zadnjega dejanja"
 
 #: gtk/gtktextbuffer.c:503
 msgid "Can Redo"
-msgstr ""
+msgstr "Podpora ponovne uveljavitve"
 
 #: gtk/gtktextbuffer.c:504
 msgid "If the buffer can have the last undone action reapplied"
 msgstr ""
+"Ali naj predpomnilnik omogoči ponovno uveljavitev nazadnje razveljavljenega "
+"dejanja"
 
 #: gtk/gtktextbuffer.c:530
 msgid "Cursor position"
@@ -7210,10 +7156,8 @@ msgid "Whether breaks are allowed."
 msgstr "Ali naj se uporabijo nadomestne pisave."
 
 #: gtk/gtktexttag.c:658
-#, fuzzy
-#| msgid "Show Expanders"
 msgid "Show spaces"
-msgstr "Pokaži razširjevalnike"
+msgstr "Pokaži presledne znake"
 
 #: gtk/gtktexttag.c:659
 #, fuzzy
@@ -7223,7 +7167,7 @@ msgstr "Nevidni znak"
 
 #: gtk/gtktexttag.c:667
 msgid "Insert hyphens"
-msgstr ""
+msgstr "Vstavi vezaje"
 
 #: gtk/gtktexttag.c:668
 #, fuzzy
@@ -7421,7 +7365,7 @@ msgstr "Ali naj ta oznaka vpliva na barvo podčrtanega"
 
 #: gtk/gtktexttag.c:844
 msgid "Insert hyphens set"
-msgstr ""
+msgstr "Vstavi nabor vezajev"
 
 #: gtk/gtktexttag.c:845
 #, fuzzy
@@ -7521,7 +7465,7 @@ msgstr "Ali naj bo preklopni gumb pritisnjen"
 
 #: gtk/gtktreeexpander.c:460
 msgid "The child widget with the actual contents"
-msgstr ""
+msgstr "Podrejeni gradnik z dejansko vsebino"
 
 #: gtk/gtktreeexpander.c:472
 #, fuzzy
@@ -8158,16 +8102,12 @@ msgid "The name of this widget in the CSS tree"
 msgstr "Ime gradnika v drevesni strukturi CSS"
 
 #: gtk/gtkwidget.c:1307
-#, fuzzy
-#| msgid "Style Classes"
 msgid "CSS Style Classes"
-msgstr "Razredi slogov"
+msgstr "Razredi slogov CSS"
 
 #: gtk/gtkwidget.c:1308
-#, fuzzy
-#| msgid "List of classes"
 msgid "List of CSS classes"
-msgstr "Seznam razredov"
+msgstr "Seznam razredov CSS"
 
 #: gtk/gtkwidget.c:1320
 #, fuzzy
@@ -8274,7 +8214,7 @@ msgstr "Ime tematske ikone tega okna"
 
 #: gtk/gtkwindow.c:830
 msgid "The display that will display this window"
-msgstr ""
+msgstr "Zaslon, na katerem naj bo prikazano okno"
 
 #: gtk/gtkwindow.c:836
 msgid "Is Active"
@@ -8349,10 +8289,8 @@ msgid "Whether the widget has any window buttons"
 msgstr "Ali vključuje gradnik vnosno dejavnost"
 
 #: modules/media/gtkgstsink.c:241
-#, fuzzy
-#| msgid "Editable"
 msgid "paintable"
-msgstr "Uredljivo"
+msgstr "izrisljivo"
 
 #: modules/media/gtkgstsink.c:242
 msgid "Paintable providing the picture"
