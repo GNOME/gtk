@@ -23,6 +23,7 @@
 #include <gdk-pixbuf/gdk-pixbuf.h>
 #include "gdkenumtypes.h"
 #include "gdksurface.h"
+#include "gdktoplevel.h"
 
 G_BEGIN_DECLS
 
