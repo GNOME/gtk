@@ -311,7 +311,7 @@ low_level_keystroke_handler (WPARAM message,
 	  gboolean lshiftdown = GetKeyState (VK_LSHIFT) & 0x8000;
           gboolean rshiftdown = GetKeyState (VK_RSHIFT) & 0x8000;
           gboolean oneshiftdown = (lshiftdown || rshiftdown) && !(lshiftdown && rshiftdown);
-          gboolean maximized = gdk_toplevel_get_state (GDK_TOPLEVEL (toplevel)) & GDK_SURFACE_STATE_MAXIMIZED;
+          gboolean maximized = gdk_toplevel_get_state (GDK_TOPLEVEL (toplevel)) & GDK_TOPLEVEL_STATE_MAXIMIZED;
 
 	  switch (kbdhook->vkCode)
 	    {
@@ -983,9 +983,9 @@ show_window_recurse (GdkSurface *window, gboolean hide_window)
 	{
 	  if (!hide_window)
 	    {
-	      if (gdk_toplevel_get_state (GDK_TOPLEVEL (window)) & GDK_SURFACE_STATE_MINIMIZED)
+	      if (gdk_toplevel_get_state (GDK_TOPLEVEL (window)) & GDK_TOPLEVEL_STATE_MINIMIZED)
 		{
-		  if (gdk_toplevel_get_state (GDK_TOPLEVEL (window)) & GDK_SURFACE_STATE_MAXIMIZED)
+		  if (gdk_toplevel_get_state (GDK_TOPLEVEL (window)) & GDK_TOPLEVEL_STATE_MAXIMIZED)
 		    {
 		      GtkShowWindow (window, SW_SHOWMAXIMIZED);
 		    }
@@ -1590,7 +1590,7 @@ should_window_be_always_on_top (GdkSurface *window)
   DWORD exstyle;
 
   if (GDK_IS_DRAG_SURFACE (window) ||
-      (window->state & GDK_SURFACE_STATE_ABOVE))
+      (window->state & GDK_TOPLEVEL_STATE_ABOVE))
     return TRUE;
 
   exstyle = GetWindowLong (GDK_SURFACE_HWND (window), GWL_EXSTYLE);
@@ -3068,7 +3068,7 @@ gdk_event_translate (MSG *msg,
       /* Update window state */
       if (windowpos->flags & (SWP_STATECHANGED | SWP_SHOWWINDOW | SWP_HIDEWINDOW))
 	{
-	  GdkSurfaceState set_bits, unset_bits, old_state, new_state;
+	  GdkToplevelState set_bits, unset_bits, old_state, new_state;
 
 	  old_state = window->state;
 
@@ -3076,19 +3076,19 @@ gdk_event_translate (MSG *msg,
 	  unset_bits = 0;
 
 	  if (IsWindowVisible (msg->hwnd))
-	    unset_bits |= GDK_SURFACE_STATE_WITHDRAWN;
+	    unset_bits |= GDK_TOPLEVEL_STATE_WITHDRAWN;
 	  else
-	    set_bits |= GDK_SURFACE_STATE_WITHDRAWN;
+	    set_bits |= GDK_TOPLEVEL_STATE_WITHDRAWN;
 
 	  if (IsIconic (msg->hwnd))
-	    set_bits |= GDK_SURFACE_STATE_MINIMIZED;
+	    set_bits |= GDK_TOPLEVEL_STATE_MINIMIZED;
 	  else
-	    unset_bits |= GDK_SURFACE_STATE_MINIMIZED;
+	    unset_bits |= GDK_TOPLEVEL_STATE_MINIMIZED;
 
 	  if (IsZoomed (msg->hwnd))
-	    set_bits |= GDK_SURFACE_STATE_MAXIMIZED;
+	    set_bits |= GDK_TOPLEVEL_STATE_MAXIMIZED;
 	  else
-	    unset_bits |= GDK_SURFACE_STATE_MAXIMIZED;
+	    unset_bits |= GDK_TOPLEVEL_STATE_MAXIMIZED;
 
 	  gdk_synthesize_surface_state (window, unset_bits, set_bits);
 
@@ -3098,15 +3098,15 @@ gdk_event_translate (MSG *msg,
 	   * change the iconified state in all transient related windows,
 	   * as windows doesn't give icons for transient childrens.
 	   */
-	  if ((old_state & GDK_SURFACE_STATE_MINIMIZED) !=
-	      (new_state & GDK_SURFACE_STATE_MINIMIZED))
-	    do_show_window (window, (new_state & GDK_SURFACE_STATE_MINIMIZED));
+	  if ((old_state & GDK_TOPLEVEL_STATE_MINIMIZED) !=
+	      (new_state & GDK_TOPLEVEL_STATE_MINIMIZED))
+	    do_show_window (window, (new_state & GDK_TOPLEVEL_STATE_MINIMIZED));
 
 
 	  /* When un-minimizing, make sure we're stacked under any
 	     transient-type windows. */
-	  if (!(old_state & GDK_SURFACE_STATE_MINIMIZED) &&
-	      (new_state & GDK_SURFACE_STATE_MINIMIZED))
+	  if (!(old_state & GDK_TOPLEVEL_STATE_MINIMIZED) &&
+	      (new_state & GDK_TOPLEVEL_STATE_MINIMIZED))
             {
 	      ensure_stacking_on_unminimize (msg);
 	      restack_children (window);
@@ -3293,9 +3293,9 @@ gdk_event_translate (MSG *msg,
         }
 
       if (LOWORD (msg->wParam) == WA_INACTIVE)
-	gdk_synthesize_surface_state (window, GDK_SURFACE_STATE_FOCUSED, 0);
+	gdk_synthesize_surface_state (window, GDK_TOPLEVEL_STATE_FOCUSED, 0);
       else
-	gdk_synthesize_surface_state (window, 0, GDK_SURFACE_STATE_FOCUSED);
+	gdk_synthesize_surface_state (window, 0, GDK_TOPLEVEL_STATE_FOCUSED);
 
       /* Bring any tablet contexts to the top of the overlap order when
        * one of our windows is activated.

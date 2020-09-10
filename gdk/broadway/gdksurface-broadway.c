@@ -596,7 +596,7 @@ gdk_broadway_surface_layout_popup (GdkSurface     *surface,
 static void
 show_popup (GdkSurface *surface)
 {
-  gdk_synthesize_surface_state (surface, GDK_SURFACE_STATE_WITHDRAWN, 0);
+  gdk_synthesize_surface_state (surface, GDK_TOPLEVEL_STATE_WITHDRAWN, 0);
   gdk_broadway_surface_show (surface, FALSE);
   gdk_surface_invalidate_rect (surface, NULL);
 }
@@ -797,7 +797,7 @@ gdk_broadway_surface_maximize (GdkSurface *surface)
 
   impl->maximized = TRUE;
 
-  gdk_synthesize_surface_state (surface, 0, GDK_SURFACE_STATE_MAXIMIZED);
+  gdk_synthesize_surface_state (surface, 0, GDK_TOPLEVEL_STATE_MAXIMIZED);
 
   impl->pre_maximize_x = surface->x;
   impl->pre_maximize_y = surface->y;
@@ -827,7 +827,7 @@ gdk_broadway_surface_unmaximize (GdkSurface *surface)
 
   impl->maximized = FALSE;
 
-  gdk_synthesize_surface_state (surface, GDK_SURFACE_STATE_MAXIMIZED, 0);
+  gdk_synthesize_surface_state (surface, GDK_TOPLEVEL_STATE_MAXIMIZED, 0);
 
   gdk_broadway_surface_move_resize (surface,
                                     impl->pre_maximize_x,
@@ -1513,7 +1513,7 @@ show_surface (GdkSurface *surface)
   was_mapped = GDK_SURFACE_IS_MAPPED (surface);
 
   if (!was_mapped)
-    gdk_synthesize_surface_state (surface, GDK_SURFACE_STATE_WITHDRAWN, 0);
+    gdk_synthesize_surface_state (surface, GDK_TOPLEVEL_STATE_WITHDRAWN, 0);
 
   gdk_broadway_surface_show (surface, FALSE);
 

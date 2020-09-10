@@ -462,7 +462,7 @@ gdk_surface_init (GdkSurface *surface)
 {
   /* 0-initialization is good for all other fields. */
 
-  surface->state = GDK_SURFACE_STATE_WITHDRAWN;
+  surface->state = GDK_TOPLEVEL_STATE_WITHDRAWN;
   surface->fullscreen_mode = GDK_FULLSCREEN_ON_CURRENT_MONITOR;
   surface->width = 1;
   surface->height = 1;
@@ -730,7 +730,7 @@ gdk_surface_set_property (GObject      *object,
     }
 }
 
-#define GDK_SURFACE_IS_STICKY(surface) (((surface)->state & GDK_SURFACE_STATE_STICKY))
+#define GDK_SURFACE_IS_STICKY(surface) (((surface)->state & GDK_TOPLEVEL_STATE_STICKY))
 
 static void
 gdk_surface_get_property (GObject    *object,
@@ -935,7 +935,7 @@ _gdk_surface_destroy_hierarchy (GdkSurface *surface,
 
   _gdk_surface_clear_update_area (surface);
 
-  surface->state |= GDK_SURFACE_STATE_WITHDRAWN;
+  surface->state |= GDK_TOPLEVEL_STATE_WITHDRAWN;
   surface->destroyed = TRUE;
 
   surface_remove_from_pointer_info (surface, surface->display);
@@ -1686,7 +1686,7 @@ gdk_surface_hide (GdkSurface *surface)
   was_mapped = GDK_SURFACE_IS_MAPPED (surface);
 
   if (GDK_SURFACE_IS_MAPPED (surface))
-    gdk_synthesize_surface_state (surface, 0, GDK_SURFACE_STATE_WITHDRAWN);
+    gdk_synthesize_surface_state (surface, 0, GDK_TOPLEVEL_STATE_WITHDRAWN);
 
   if (was_mapped)
     {
@@ -2632,7 +2632,7 @@ gdk_surface_set_shadow_width (GdkSurface *surface,
 
 void
 gdk_surface_set_state (GdkSurface      *surface,
-                       GdkSurfaceState  new_state)
+                       GdkToplevelState new_state)
 {
   gboolean was_mapped, mapped;
   gboolean was_sticky, sticky;
@@ -2665,9 +2665,9 @@ gdk_surface_set_state (GdkSurface      *surface,
 }
 
 void
-gdk_synthesize_surface_state (GdkSurface     *surface,
-                              GdkSurfaceState unset_flags,
-                              GdkSurfaceState set_flags)
+gdk_synthesize_surface_state (GdkSurface       *surface,
+                              GdkToplevelState  unset_flags,
+                              GdkToplevelState  set_flags)
 {
   gdk_surface_set_state (surface, (surface->state | set_flags) & ~unset_flags);
 }

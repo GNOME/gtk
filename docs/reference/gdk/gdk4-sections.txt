@@ -171,8 +171,6 @@ gdk_rgba_get_type
 <FILE>gdksurface</FILE>
 GdkSurface
 GdkGravity
-GdkSurfaceEdge
-GdkSurfaceState
 gdk_surface_new_toplevel
 gdk_surface_new_popup
 gdk_surface_destroy
@@ -224,7 +222,7 @@ GDK_TYPE_SURFACE_TYPE
 GDK_TYPE_SURFACE_TYPE_HINT
 GDK_TYPE_WM_DECORATION
 GDK_TYPE_WM_FUNCTION
-GDK_TYPE_SURFACE_STATE
+GDK_TYPE_TOPLEVEL_STATE
 
 <SUBSECTION Private>
 gdk_surface_get_type
@@ -655,7 +653,9 @@ gdk_toplevel_size_get_type
 <FILE>gdktoplevel</FILE>
 <TITLE>GdkToplevel</TITLE>
 GdkToplevel
+GdkToplevelState
 GdkFullscreenMode
+GdkSurfaceEdge
 gdk_toplevel_present
 gdk_toplevel_minimize
 gdk_toplevel_lower

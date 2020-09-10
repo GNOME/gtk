@@ -650,7 +650,7 @@ _gdk_macos_surface_resize (GdkMacosSurface *self,
 void
 _gdk_macos_surface_update_fullscreen_state (GdkMacosSurface *self)
 {
-  GdkSurfaceState state;
+  GdkToplevelState state;
   gboolean is_fullscreen;
   gboolean was_fullscreen;
 
@@ -658,14 +658,14 @@ _gdk_macos_surface_update_fullscreen_state (GdkMacosSurface *self)
 
   state = GDK_SURFACE (self)->state;
   is_fullscreen = window_is_fullscreen (self);
-  was_fullscreen = (state & GDK_SURFACE_STATE_FULLSCREEN) != 0;
+  was_fullscreen = (state & GDK_TOPLEVEL_STATE_FULLSCREEN) != 0;
 
   if (is_fullscreen != was_fullscreen)
     {
       if (is_fullscreen)
-        gdk_synthesize_surface_state (GDK_SURFACE (self), 0, GDK_SURFACE_STATE_FULLSCREEN);
+        gdk_synthesize_surface_state (GDK_SURFACE (self), 0, GDK_TOPLEVEL_STATE_FULLSCREEN);
       else
-        gdk_synthesize_surface_state (GDK_SURFACE (self), GDK_SURFACE_STATE_FULLSCREEN, 0);
+        gdk_synthesize_surface_state (GDK_SURFACE (self), GDK_TOPLEVEL_STATE_FULLSCREEN, 0);
     }
 }
 
@@ -740,7 +740,7 @@ _gdk_macos_surface_show (GdkMacosSurface *self)
   was_mapped = GDK_SURFACE_IS_MAPPED (GDK_SURFACE (self));
 
   if (!was_mapped)
-    gdk_synthesize_surface_state (GDK_SURFACE (self), GDK_SURFACE_STATE_WITHDRAWN, 0);
+    gdk_synthesize_surface_state (GDK_SURFACE (self), GDK_TOPLEVEL_STATE_WITHDRAWN, 0);
 
   _gdk_macos_display_clear_sorting (GDK_MACOS_DISPLAY (GDK_SURFACE (self)->display));
 

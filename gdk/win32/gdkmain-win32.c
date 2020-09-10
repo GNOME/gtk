@@ -262,7 +262,7 @@ _gdk_win32_drag_protocol_to_string (GdkDragProtocol protocol)
 }
 
 char *
-_gdk_win32_surface_state_to_string (GdkSurfaceState state)
+_gdk_win32_surface_state_to_string (GdkToplevelState state)
 {
   char buf[100];
   char *bufp = buf;
@@ -271,11 +271,11 @@ _gdk_win32_surface_state_to_string (GdkSurfaceState state)
   buf[0] = '\0';
 
 #define BIT(x)						\
-  if (state & GDK_SURFACE_STATE_ ## x)			\
+  if (state & GDK_TOPLEVEL_STATE_ ## x)			\
     (bufp += sprintf (bufp, "%s" #x, s), s = "|")
 
   /* For clarity, also show the complement of WITHDRAWN, i.e. "MAPPED" */
-  if (!(state & GDK_SURFACE_STATE_WITHDRAWN))
+  if (!(state & GDK_TOPLEVEL_STATE_WITHDRAWN))
     (bufp += sprintf (bufp, "MAPPED"), s = "|");
 
   BIT (WITHDRAWN);

@@ -171,7 +171,7 @@ struct _GdkWaylandSurface
     struct {
       int width;
       int height;
-      GdkSurfaceState state;
+      GdkToplevelState state;
     } toplevel;
 
     struct {
@@ -353,7 +353,7 @@ _gdk_wayland_surface_save_size (GdkSurface *surface)
 {
   GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
 
-  if (surface->state & (GDK_SURFACE_STATE_FULLSCREEN | GDK_SURFACE_STATE_MAXIMIZED))
+  if (surface->state & (GDK_TOPLEVEL_STATE_FULLSCREEN | GDK_TOPLEVEL_STATE_MAXIMIZED))
     return;
 
   impl->saved_width = surface->width - impl->margin_left - impl->margin_right;
@@ -365,7 +365,7 @@ _gdk_wayland_surface_clear_saved_size (GdkSurface *surface)
 {
   GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
 
-  if (surface->state & (GDK_SURFACE_STATE_FULLSCREEN | GDK_SURFACE_STATE_MAXIMIZED))
+  if (surface->state & (GDK_TOPLEVEL_STATE_FULLSCREEN | GDK_TOPLEVEL_STATE_MAXIMIZED))
     return;
 
   impl->saved_width = -1;
@@ -1330,7 +1330,7 @@ gdk_wayland_surface_configure_toplevel (GdkSurface *surface)
   GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
   GdkWaylandDisplay *display_wayland =
     GDK_WAYLAND_DISPLAY (gdk_surface_get_display (surface));
-  GdkSurfaceState new_state;
+  GdkToplevelState new_state;
   int width, height;
   gboolean fixed_size;
   gboolean saved_size;
@@ -1339,9 +1339,9 @@ gdk_wayland_surface_configure_toplevel (GdkSurface *surface)
   impl->pending.toplevel.state = 0;
 
   fixed_size =
-    new_state & (GDK_SURFACE_STATE_MAXIMIZED |
-                 GDK_SURFACE_STATE_FULLSCREEN |
-                 GDK_SURFACE_STATE_TILED);
+    new_state & (GDK_TOPLEVEL_STATE_MAXIMIZED |
+                 GDK_TOPLEVEL_STATE_FULLSCREEN |
+                 GDK_TOPLEVEL_STATE_TILED);
 
   width = impl->pending.toplevel.width;
   height = impl->pending.toplevel.height;
@@ -1389,10 +1389,10 @@ gdk_wayland_surface_configure_toplevel (GdkSurface *surface)
   GDK_DISPLAY_NOTE (gdk_surface_get_display (surface), EVENTS,
             g_message ("configure, surface %p %dx%d,%s%s%s%s",
                        surface, width, height,
-                       (new_state & GDK_SURFACE_STATE_FULLSCREEN) ? " fullscreen" : "",
-                       (new_state & GDK_SURFACE_STATE_MAXIMIZED) ? " maximized" : "",
-                       (new_state & GDK_SURFACE_STATE_FOCUSED) ? " focused" : "",
-                       (new_state & GDK_SURFACE_STATE_TILED) ? " tiled" : ""));
+                       (new_state & GDK_TOPLEVEL_STATE_FULLSCREEN) ? " fullscreen" : "",
+                       (new_state & GDK_TOPLEVEL_STATE_MAXIMIZED) ? " maximized" : "",
+                       (new_state & GDK_TOPLEVEL_STATE_FOCUSED) ? " focused" : "",
+                       (new_state & GDK_TOPLEVEL_STATE_TILED) ? " tiled" : ""));
 
   gdk_surface_set_state (surface, new_state);
 
@@ -1511,7 +1511,7 @@ static void
 gdk_wayland_surface_handle_configure_toplevel (GdkSurface      *surface,
                                                int32_t          width,
                                                int32_t          height,
-                                               GdkSurfaceState  state)
+                                               GdkToplevelState  state)
 {
   GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
 
@@ -1558,7 +1558,7 @@ xdg_toplevel_configure (void                *data,
 {
   GdkSurface *surface = GDK_SURFACE (data);
   uint32_t *p;
-  GdkSurfaceState pending_state = 0;
+  GdkToplevelState pending_state = 0;
 
   wl_array_for_each (p, states)
     {
@@ -1567,13 +1567,13 @@ xdg_toplevel_configure (void                *data,
       switch (state)
         {
         case XDG_TOPLEVEL_STATE_FULLSCREEN:
-          pending_state |= GDK_SURFACE_STATE_FULLSCREEN;
+          pending_state |= GDK_TOPLEVEL_STATE_FULLSCREEN;
           break;
         case XDG_TOPLEVEL_STATE_MAXIMIZED:
-          pending_state |= GDK_SURFACE_STATE_MAXIMIZED;
+          pending_state |= GDK_TOPLEVEL_STATE_MAXIMIZED;
           break;
         case XDG_TOPLEVEL_STATE_ACTIVATED:
-          pending_state |= GDK_SURFACE_STATE_FOCUSED;
+          pending_state |= GDK_TOPLEVEL_STATE_FOCUSED;
           break;
         case XDG_TOPLEVEL_STATE_RESIZING:
           break;
@@ -1647,7 +1647,7 @@ zxdg_toplevel_v6_configure (void                    *data,
 {
   GdkSurface *surface = GDK_SURFACE (data);
   uint32_t *p;
-  GdkSurfaceState pending_state = 0;
+  GdkToplevelState pending_state = 0;
 
   wl_array_for_each (p, states)
     {
@@ -1656,13 +1656,13 @@ zxdg_toplevel_v6_configure (void                    *data,
       switch (state)
         {
         case ZXDG_TOPLEVEL_V6_STATE_FULLSCREEN:
-          pending_state |= GDK_SURFACE_STATE_FULLSCREEN;
+          pending_state |= GDK_TOPLEVEL_STATE_FULLSCREEN;
           break;
         case ZXDG_TOPLEVEL_V6_STATE_MAXIMIZED:
-          pending_state |= GDK_SURFACE_STATE_MAXIMIZED;
+          pending_state |= GDK_TOPLEVEL_STATE_MAXIMIZED;
           break;
         case ZXDG_TOPLEVEL_V6_STATE_ACTIVATED:
-          pending_state |= GDK_SURFACE_STATE_FOCUSED;
+          pending_state |= GDK_TOPLEVEL_STATE_FOCUSED;
           break;
         case ZXDG_TOPLEVEL_V6_STATE_RESIZING:
           break;
@@ -1771,16 +1771,16 @@ gdk_wayland_surface_create_xdg_toplevel (GdkSurface *surface)
   switch (display_wayland->shell_variant)
     {
     case GDK_WAYLAND_SHELL_VARIANT_XDG_SHELL:
-      if (surface->state & GDK_SURFACE_STATE_MAXIMIZED)
+      if (surface->state & GDK_TOPLEVEL_STATE_MAXIMIZED)
         xdg_toplevel_set_maximized (impl->display_server.xdg_toplevel);
-      if (surface->state & GDK_SURFACE_STATE_FULLSCREEN)
+      if (surface->state & GDK_TOPLEVEL_STATE_FULLSCREEN)
         xdg_toplevel_set_fullscreen (impl->display_server.xdg_toplevel,
                                      impl->initial_fullscreen_output);
       break;
     case GDK_WAYLAND_SHELL_VARIANT_ZXDG_SHELL_V6:
-      if (surface->state & GDK_SURFACE_STATE_MAXIMIZED)
+      if (surface->state & GDK_TOPLEVEL_STATE_MAXIMIZED)
         zxdg_toplevel_v6_set_maximized (impl->display_server.zxdg_toplevel_v6);
-      if (surface->state & GDK_SURFACE_STATE_FULLSCREEN)
+      if (surface->state & GDK_TOPLEVEL_STATE_FULLSCREEN)
         zxdg_toplevel_v6_set_fullscreen (impl->display_server.zxdg_toplevel_v6,
                                          impl->initial_fullscreen_output);
       break;
@@ -2975,7 +2975,7 @@ gdk_wayland_surface_map_popup (GdkSurface     *surface,
   impl->popup.unconstrained_height = height;
   impl->mapped = TRUE;
 
-  gdk_synthesize_surface_state (surface, GDK_SURFACE_STATE_WITHDRAWN, 0);
+  gdk_synthesize_surface_state (surface, GDK_TOPLEVEL_STATE_WITHDRAWN, 0);
 }
 
 static void
@@ -3245,7 +3245,7 @@ gtk_surface_configure (void                *data,
 {
   GdkSurface *surface = GDK_SURFACE (data);
   GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
-  GdkSurfaceState new_state = 0;
+  GdkToplevelState new_state = 0;
   uint32_t *p;
 
   wl_array_for_each (p, states)
@@ -3255,21 +3255,21 @@ gtk_surface_configure (void                *data,
       switch (state)
         {
         case GTK_SURFACE1_STATE_TILED:
-          new_state |= GDK_SURFACE_STATE_TILED;
+          new_state |= GDK_TOPLEVEL_STATE_TILED;
           break;
 
         /* Since v2 */
         case GTK_SURFACE1_STATE_TILED_TOP:
-          new_state |= (GDK_SURFACE_STATE_TILED | GDK_SURFACE_STATE_TOP_TILED);
+          new_state |= (GDK_TOPLEVEL_STATE_TILED | GDK_TOPLEVEL_STATE_TOP_TILED);
           break;
         case GTK_SURFACE1_STATE_TILED_RIGHT:
-          new_state |= (GDK_SURFACE_STATE_TILED | GDK_SURFACE_STATE_RIGHT_TILED);
+          new_state |= (GDK_TOPLEVEL_STATE_TILED | GDK_TOPLEVEL_STATE_RIGHT_TILED);
           break;
         case GTK_SURFACE1_STATE_TILED_BOTTOM:
-          new_state |= (GDK_SURFACE_STATE_TILED | GDK_SURFACE_STATE_BOTTOM_TILED);
+          new_state |= (GDK_TOPLEVEL_STATE_TILED | GDK_TOPLEVEL_STATE_BOTTOM_TILED);
           break;
         case GTK_SURFACE1_STATE_TILED_LEFT:
-          new_state |= (GDK_SURFACE_STATE_TILED | GDK_SURFACE_STATE_LEFT_TILED);
+          new_state |= (GDK_TOPLEVEL_STATE_TILED | GDK_TOPLEVEL_STATE_LEFT_TILED);
           break;
         default:
           /* Unknown state */
@@ -3287,7 +3287,7 @@ gtk_surface_configure_edges (void                *data,
 {
   GdkSurface *surface = GDK_SURFACE (data);
   GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
-  GdkSurfaceState new_state = 0;
+  GdkToplevelState new_state = 0;
   uint32_t *p;
 
   wl_array_for_each (p, edge_constraints)
@@ -3297,16 +3297,16 @@ gtk_surface_configure_edges (void                *data,
       switch (constraint)
         {
         case GTK_SURFACE1_EDGE_CONSTRAINT_RESIZABLE_TOP:
-          new_state |= GDK_SURFACE_STATE_TOP_RESIZABLE;
+          new_state |= GDK_TOPLEVEL_STATE_TOP_RESIZABLE;
           break;
         case GTK_SURFACE1_EDGE_CONSTRAINT_RESIZABLE_RIGHT:
-          new_state |= GDK_SURFACE_STATE_RIGHT_RESIZABLE;
+          new_state |= GDK_TOPLEVEL_STATE_RIGHT_RESIZABLE;
           break;
         case GTK_SURFACE1_EDGE_CONSTRAINT_RESIZABLE_BOTTOM:
-          new_state |= GDK_SURFACE_STATE_BOTTOM_RESIZABLE;
+          new_state |= GDK_TOPLEVEL_STATE_BOTTOM_RESIZABLE;
           break;
         case GTK_SURFACE1_EDGE_CONSTRAINT_RESIZABLE_LEFT:
-          new_state |= GDK_SURFACE_STATE_LEFT_RESIZABLE;
+          new_state |= GDK_TOPLEVEL_STATE_LEFT_RESIZABLE;
           break;
         default:
           /* Unknown state */
@@ -3599,7 +3599,7 @@ gdk_wayland_surface_maximize (GdkSurface *surface)
     }
   else
     {
-      gdk_synthesize_surface_state (surface, 0, GDK_SURFACE_STATE_MAXIMIZED);
+      gdk_synthesize_surface_state (surface, 0, GDK_TOPLEVEL_STATE_MAXIMIZED);
     }
 }
 
@@ -3630,7 +3630,7 @@ gdk_wayland_surface_unmaximize (GdkSurface *surface)
     }
   else
     {
-      gdk_synthesize_surface_state (surface, GDK_SURFACE_STATE_MAXIMIZED, 0);
+      gdk_synthesize_surface_state (surface, GDK_TOPLEVEL_STATE_MAXIMIZED, 0);
     }
 }
 
@@ -3667,7 +3667,7 @@ gdk_wayland_surface_fullscreen_on_monitor (GdkSurface *surface,
     }
   else
     {
-      gdk_synthesize_surface_state (surface, 0, GDK_SURFACE_STATE_FULLSCREEN);
+      gdk_synthesize_surface_state (surface, 0, GDK_TOPLEVEL_STATE_FULLSCREEN);
       impl->initial_fullscreen_output = output;
     }
 }
@@ -3705,7 +3705,7 @@ gdk_wayland_surface_fullscreen (GdkSurface *surface)
     }
   else
     {
-      gdk_synthesize_surface_state (surface, 0, GDK_SURFACE_STATE_FULLSCREEN);
+      gdk_synthesize_surface_state (surface, 0, GDK_TOPLEVEL_STATE_FULLSCREEN);
     }
 }
 
@@ -3738,7 +3738,7 @@ gdk_wayland_surface_unfullscreen (GdkSurface *surface)
     }
   else
     {
-      gdk_synthesize_surface_state (surface, GDK_SURFACE_STATE_FULLSCREEN, 0);
+      gdk_synthesize_surface_state (surface, GDK_TOPLEVEL_STATE_FULLSCREEN, 0);
     }
 }
 
@@ -4732,7 +4732,7 @@ show_surface (GdkSurface *surface)
   was_mapped = GDK_SURFACE_IS_MAPPED (surface);
 
   if (!was_mapped)
-    gdk_synthesize_surface_state (surface, GDK_SURFACE_STATE_WITHDRAWN, 0);
+    gdk_synthesize_surface_state (surface, GDK_TOPLEVEL_STATE_WITHDRAWN, 0);
 
   gdk_wayland_surface_show (surface, FALSE);
 
@@ -4807,9 +4807,9 @@ gdk_wayland_toplevel_present (GdkToplevel       *toplevel,
 
   if (needs_reconfigure &&
       last_configure_serial == impl->last_configure_serial &&
-      !(surface->state & (GDK_SURFACE_STATE_MAXIMIZED |
-                          GDK_SURFACE_STATE_FULLSCREEN |
-                          GDK_SURFACE_STATE_TILED)))
+      !(surface->state & (GDK_TOPLEVEL_STATE_MAXIMIZED |
+                          GDK_TOPLEVEL_STATE_FULLSCREEN |
+                          GDK_TOPLEVEL_STATE_TILED)))
     configure_surface_geometry (surface);
 
   return TRUE;

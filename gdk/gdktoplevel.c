@@ -118,7 +118,7 @@ gdk_toplevel_default_init (GdkToplevelInterface *iface)
       g_param_spec_flags ("state",
                           P_("State"),
                           P_("State"),
-                          GDK_TYPE_SURFACE_STATE, GDK_SURFACE_STATE_WITHDRAWN,
+                          GDK_TYPE_TOPLEVEL_STATE, GDK_TOPLEVEL_STATE_WITHDRAWN,
                           G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
   g_object_interface_install_property (iface,
       g_param_spec_string ("title",
@@ -307,14 +307,14 @@ gdk_toplevel_focus (GdkToplevel *toplevel,
  * @toplevel: a #GdkToplevel
  *
  * Gets the bitwise OR of the currently active surface state flags,
- * from the #GdkSurfaceState enumeration.
+ * from the #GdkToplevelState enumeration.
  *
  * Returns: surface state bitfield
  */
-GdkSurfaceState
+GdkToplevelState
 gdk_toplevel_get_state (GdkToplevel *toplevel)
 {
-  GdkSurfaceState state;
+  GdkToplevelState state;
 
   g_return_val_if_fail (GDK_IS_TOPLEVEL (toplevel), 0);
 

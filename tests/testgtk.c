@@ -4527,23 +4527,23 @@ surface_state_callback (GdkSurface  *window,
                        GtkWidget  *label)
 {
   char *msg;
-  GdkSurfaceState new_state;
+  GdkToplevelState new_state;
 
   new_state = gdk_toplevel_get_state (GDK_TOPLEVEL (window));
   msg = g_strconcat ((const char *)g_object_get_data (G_OBJECT (label), "title"), ": ",
-                     (new_state & GDK_SURFACE_STATE_WITHDRAWN) ?
+                     (new_state & GDK_TOPLEVEL_STATE_WITHDRAWN) ?
                      "withdrawn" : "not withdrawn", ", ",
-                     (new_state & GDK_SURFACE_STATE_MINIMIZED) ?
+                     (new_state & GDK_TOPLEVEL_STATE_MINIMIZED) ?
                      "minimized" : "not minimized", ", ",
-                     (new_state & GDK_SURFACE_STATE_STICKY) ?
+                     (new_state & GDK_TOPLEVEL_STATE_STICKY) ?
                      "sticky" : "not sticky", ", ",
-                     (new_state & GDK_SURFACE_STATE_MAXIMIZED) ?
+                     (new_state & GDK_TOPLEVEL_STATE_MAXIMIZED) ?
                      "maximized" : "not maximized", ", ",
-                     (new_state & GDK_SURFACE_STATE_FULLSCREEN) ?
+                     (new_state & GDK_TOPLEVEL_STATE_FULLSCREEN) ?
                      "fullscreen" : "not fullscreen", ", ",
-                     (new_state & GDK_SURFACE_STATE_ABOVE) ?
+                     (new_state & GDK_TOPLEVEL_STATE_ABOVE) ?
                      "above" : "not above", ", ",
-                     (new_state & GDK_SURFACE_STATE_BELOW) ?
+                     (new_state & GDK_TOPLEVEL_STATE_BELOW) ?
                      "below" : "not below", ", ",
                      NULL);
 

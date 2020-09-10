@@ -216,19 +216,19 @@ gdk_x11_display_event_translator_init (GdkEventTranslatorIface *iface)
   iface->translate_event = gdk_x11_display_translate_event;
 }
 
-#define ANY_EDGE_TILED (GDK_SURFACE_STATE_LEFT_TILED | \
-                        GDK_SURFACE_STATE_RIGHT_TILED | \
-                        GDK_SURFACE_STATE_TOP_TILED | \
-                        GDK_SURFACE_STATE_BOTTOM_TILED)
+#define ANY_EDGE_TILED (GDK_TOPLEVEL_STATE_LEFT_TILED | \
+                        GDK_TOPLEVEL_STATE_RIGHT_TILED | \
+                        GDK_TOPLEVEL_STATE_TOP_TILED | \
+                        GDK_TOPLEVEL_STATE_BOTTOM_TILED)
 
 static void
 do_edge_constraint_state_check (GdkSurface      *surface,
-                                GdkSurfaceState  old_state,
-                                GdkSurfaceState *set,
-                                GdkSurfaceState *unset)
+                                GdkToplevelState  old_state,
+                                GdkToplevelState *set,
+                                GdkToplevelState *unset)
 {
   GdkToplevelX11 *toplevel = _gdk_x11_surface_get_toplevel (surface);
-  GdkSurfaceState local_set, local_unset;
+  GdkToplevelState local_set, local_unset;
   guint edge_constraints;
 
   local_set = *set;
@@ -237,7 +237,7 @@ do_edge_constraint_state_check (GdkSurface      *surface,
 
   /* If the WM doesn't support _GTK_EDGE_CONSTRAINTS, rely on the fallback
    * implementation. If it supports _GTK_EDGE_CONSTRAINTS, arrange for
-   * GDK_SURFACE_STATE_TILED to be set if any edge is tiled, and cleared
+   * GDK_TOPLEVEL_STATE_TILED to be set if any edge is tiled, and cleared
    * if no edge is tiled.
    */
   if (!gdk_x11_surface_supports_edge_constraints (surface))
@@ -246,121 +246,121 @@ do_edge_constraint_state_check (GdkSurface      *surface,
        * mutter only tiles horizontally, and sets maxvert when it does
        * and if it tiles, it always affects all edges
        */
-      if (old_state & GDK_SURFACE_STATE_TILED)
+      if (old_state & GDK_TOPLEVEL_STATE_TILED)
         {
           if (!toplevel->have_maxvert)
-            local_unset |= GDK_SURFACE_STATE_TILED;
+            local_unset |= GDK_TOPLEVEL_STATE_TILED;
         }
       else
         {
           if (toplevel->have_maxvert && !toplevel->have_maxhorz)
-            local_set |= GDK_SURFACE_STATE_TILED;
+            local_set |= GDK_TOPLEVEL_STATE_TILED;
         }
     }
   else
     {
-      if (old_state & GDK_SURFACE_STATE_TILED)
+      if (old_state & GDK_TOPLEVEL_STATE_TILED)
         {
           if (!(edge_constraints & ANY_EDGE_TILED))
-            local_unset |= GDK_SURFACE_STATE_TILED;
+            local_unset |= GDK_TOPLEVEL_STATE_TILED;
         }
       else
         {
           if (edge_constraints & ANY_EDGE_TILED)
-            local_set |= GDK_SURFACE_STATE_TILED;
+            local_set |= GDK_TOPLEVEL_STATE_TILED;
         }
     }
 
   /* Top edge */
-  if (old_state & GDK_SURFACE_STATE_TOP_TILED)
+  if (old_state & GDK_TOPLEVEL_STATE_TOP_TILED)
     {
-      if ((edge_constraints & GDK_SURFACE_STATE_TOP_TILED) == 0)
-        local_unset |= GDK_SURFACE_STATE_TOP_TILED;
+      if ((edge_constraints & GDK_TOPLEVEL_STATE_TOP_TILED) == 0)
+        local_unset |= GDK_TOPLEVEL_STATE_TOP_TILED;
     }
   else
     {
-      if (edge_constraints & GDK_SURFACE_STATE_TOP_TILED)
-        local_set |= GDK_SURFACE_STATE_TOP_TILED;
+      if (edge_constraints & GDK_TOPLEVEL_STATE_TOP_TILED)
+        local_set |= GDK_TOPLEVEL_STATE_TOP_TILED;
     }
 
-  if (old_state & GDK_SURFACE_STATE_TOP_RESIZABLE)
+  if (old_state & GDK_TOPLEVEL_STATE_TOP_RESIZABLE)
     {
-      if ((edge_constraints & GDK_SURFACE_STATE_TOP_RESIZABLE) == 0)
-        local_unset |= GDK_SURFACE_STATE_TOP_RESIZABLE;
+      if ((edge_constraints & GDK_TOPLEVEL_STATE_TOP_RESIZABLE) == 0)
+        local_unset |= GDK_TOPLEVEL_STATE_TOP_RESIZABLE;
     }
   else
     {
-      if (edge_constraints & GDK_SURFACE_STATE_TOP_RESIZABLE)
-        local_set |= GDK_SURFACE_STATE_TOP_RESIZABLE;
+      if (edge_constraints & GDK_TOPLEVEL_STATE_TOP_RESIZABLE)
+        local_set |= GDK_TOPLEVEL_STATE_TOP_RESIZABLE;
     }
 
   /* Right edge */
-  if (old_state & GDK_SURFACE_STATE_RIGHT_TILED)
+  if (old_state & GDK_TOPLEVEL_STATE_RIGHT_TILED)
     {
-      if ((edge_constraints & GDK_SURFACE_STATE_RIGHT_TILED) == 0)
-        local_unset |= GDK_SURFACE_STATE_RIGHT_TILED;
+      if ((edge_constraints & GDK_TOPLEVEL_STATE_RIGHT_TILED) == 0)
+        local_unset |= GDK_TOPLEVEL_STATE_RIGHT_TILED;
     }
   else
     {
-      if (edge_constraints & GDK_SURFACE_STATE_RIGHT_TILED)
-        local_set |= GDK_SURFACE_STATE_RIGHT_TILED;
+      if (edge_constraints & GDK_TOPLEVEL_STATE_RIGHT_TILED)
+        local_set |= GDK_TOPLEVEL_STATE_RIGHT_TILED;
     }
 
-  if (old_state & GDK_SURFACE_STATE_RIGHT_RESIZABLE)
+  if (old_state & GDK_TOPLEVEL_STATE_RIGHT_RESIZABLE)
     {
-      if ((edge_constraints & GDK_SURFACE_STATE_RIGHT_RESIZABLE) == 0)
-        local_unset |= GDK_SURFACE_STATE_RIGHT_RESIZABLE;
+      if ((edge_constraints & GDK_TOPLEVEL_STATE_RIGHT_RESIZABLE) == 0)
+        local_unset |= GDK_TOPLEVEL_STATE_RIGHT_RESIZABLE;
     }
   else
     {
-      if (edge_constraints & GDK_SURFACE_STATE_RIGHT_RESIZABLE)
-        local_set |= GDK_SURFACE_STATE_RIGHT_RESIZABLE;
+      if (edge_constraints & GDK_TOPLEVEL_STATE_RIGHT_RESIZABLE)
+        local_set |= GDK_TOPLEVEL_STATE_RIGHT_RESIZABLE;
     }
 
   /* Bottom edge */
-  if (old_state & GDK_SURFACE_STATE_BOTTOM_TILED)
+  if (old_state & GDK_TOPLEVEL_STATE_BOTTOM_TILED)
     {
-      if ((edge_constraints & GDK_SURFACE_STATE_BOTTOM_TILED) == 0)
-        local_unset |= GDK_SURFACE_STATE_BOTTOM_TILED;
+      if ((edge_constraints & GDK_TOPLEVEL_STATE_BOTTOM_TILED) == 0)
+        local_unset |= GDK_TOPLEVEL_STATE_BOTTOM_TILED;
     }
   else
     {
-      if (edge_constraints & GDK_SURFACE_STATE_BOTTOM_TILED)
-        local_set |= GDK_SURFACE_STATE_BOTTOM_TILED;
+      if (edge_constraints & GDK_TOPLEVEL_STATE_BOTTOM_TILED)
+        local_set |= GDK_TOPLEVEL_STATE_BOTTOM_TILED;
     }
 
-  if (old_state & GDK_SURFACE_STATE_BOTTOM_RESIZABLE)
+  if (old_state & GDK_TOPLEVEL_STATE_BOTTOM_RESIZABLE)
     {
-      if ((edge_constraints & GDK_SURFACE_STATE_BOTTOM_RESIZABLE) == 0)
-        local_unset |= GDK_SURFACE_STATE_BOTTOM_RESIZABLE;
+      if ((edge_constraints & GDK_TOPLEVEL_STATE_BOTTOM_RESIZABLE) == 0)
+        local_unset |= GDK_TOPLEVEL_STATE_BOTTOM_RESIZABLE;
     }
   else
     {
-      if (edge_constraints & GDK_SURFACE_STATE_BOTTOM_RESIZABLE)
-        local_set |= GDK_SURFACE_STATE_BOTTOM_RESIZABLE;
+      if (edge_constraints & GDK_TOPLEVEL_STATE_BOTTOM_RESIZABLE)
+        local_set |= GDK_TOPLEVEL_STATE_BOTTOM_RESIZABLE;
     }
 
   /* Left edge */
-  if (old_state & GDK_SURFACE_STATE_LEFT_TILED)
+  if (old_state & GDK_TOPLEVEL_STATE_LEFT_TILED)
     {
-      if ((edge_constraints & GDK_SURFACE_STATE_LEFT_TILED) == 0)
-        local_unset |= GDK_SURFACE_STATE_LEFT_TILED;
+      if ((edge_constraints & GDK_TOPLEVEL_STATE_LEFT_TILED) == 0)
+        local_unset |= GDK_TOPLEVEL_STATE_LEFT_TILED;
     }
   else
     {
-      if (edge_constraints & GDK_SURFACE_STATE_LEFT_TILED)
-        local_set |= GDK_SURFACE_STATE_LEFT_TILED;
+      if (edge_constraints & GDK_TOPLEVEL_STATE_LEFT_TILED)
+        local_set |= GDK_TOPLEVEL_STATE_LEFT_TILED;
     }
 
-  if (old_state & GDK_SURFACE_STATE_LEFT_RESIZABLE)
+  if (old_state & GDK_TOPLEVEL_STATE_LEFT_RESIZABLE)
     {
-      if ((edge_constraints & GDK_SURFACE_STATE_LEFT_RESIZABLE) == 0)
-        local_unset |= GDK_SURFACE_STATE_LEFT_RESIZABLE;
+      if ((edge_constraints & GDK_TOPLEVEL_STATE_LEFT_RESIZABLE) == 0)
+        local_unset |= GDK_TOPLEVEL_STATE_LEFT_RESIZABLE;
     }
   else
     {
-      if (edge_constraints & GDK_SURFACE_STATE_LEFT_RESIZABLE)
-        local_set |= GDK_SURFACE_STATE_LEFT_RESIZABLE;
+      if (edge_constraints & GDK_TOPLEVEL_STATE_LEFT_RESIZABLE)
+        local_set |= GDK_TOPLEVEL_STATE_LEFT_RESIZABLE;
     }
 
   *set = local_set;
@@ -371,7 +371,7 @@ static void
 do_net_wm_state_changes (GdkSurface *surface)
 {
   GdkToplevelX11 *toplevel = _gdk_x11_surface_get_toplevel (surface);
-  GdkSurfaceState old_state, set, unset;
+  GdkToplevelState old_state, set, unset;
 
   if (GDK_SURFACE_DESTROYED (surface) ||
       !GDK_IS_TOPLEVEL (surface))
@@ -381,51 +381,51 @@ do_net_wm_state_changes (GdkSurface *surface)
 
   set = unset = 0;
 
-  if (old_state & GDK_SURFACE_STATE_FULLSCREEN)
+  if (old_state & GDK_TOPLEVEL_STATE_FULLSCREEN)
     {
       if (!toplevel->have_fullscreen)
-        unset |= GDK_SURFACE_STATE_FULLSCREEN;
+        unset |= GDK_TOPLEVEL_STATE_FULLSCREEN;
     }
   else
     {
       if (toplevel->have_fullscreen)
-        set |= GDK_SURFACE_STATE_FULLSCREEN;
+        set |= GDK_TOPLEVEL_STATE_FULLSCREEN;
     }
 
   /* Our "maximized" means both vertical and horizontal; if only one,
    * we don't expose that via GDK
    */
-  if (old_state & GDK_SURFACE_STATE_MAXIMIZED)
+  if (old_state & GDK_TOPLEVEL_STATE_MAXIMIZED)
     {
       if (!(toplevel->have_maxvert && toplevel->have_maxhorz))
-        unset |= GDK_SURFACE_STATE_MAXIMIZED;
+        unset |= GDK_TOPLEVEL_STATE_MAXIMIZED;
     }
   else
     {
       if (toplevel->have_maxvert && toplevel->have_maxhorz)
-        set |= GDK_SURFACE_STATE_MAXIMIZED;
+        set |= GDK_TOPLEVEL_STATE_MAXIMIZED;
     }
 
-  if (old_state & GDK_SURFACE_STATE_FOCUSED)
+  if (old_state & GDK_TOPLEVEL_STATE_FOCUSED)
     {
       if (!toplevel->have_focused)
-        unset |= GDK_SURFACE_STATE_FOCUSED;
+        unset |= GDK_TOPLEVEL_STATE_FOCUSED;
     }
   else
     {
       if (toplevel->have_focused)
-        set |= GDK_SURFACE_STATE_FOCUSED;
+        set |= GDK_TOPLEVEL_STATE_FOCUSED;
     }
 
-  if (old_state & GDK_SURFACE_STATE_MINIMIZED)
+  if (old_state & GDK_TOPLEVEL_STATE_MINIMIZED)
     {
       if (!toplevel->have_hidden)
-        unset |= GDK_SURFACE_STATE_MINIMIZED;
+        unset |= GDK_TOPLEVEL_STATE_MINIMIZED;
     }
   else
     {
       if (toplevel->have_hidden)
-        set |= GDK_SURFACE_STATE_MINIMIZED;
+        set |= GDK_TOPLEVEL_STATE_MINIMIZED;
     }
 
   /* Update edge constraints and tiling */
@@ -827,7 +827,7 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
               if (GDK_SURFACE_IS_MAPPED (surface))
                 gdk_synthesize_surface_state (surface,
                                               0,
-                                              GDK_SURFACE_STATE_MINIMIZED);
+                                              GDK_TOPLEVEL_STATE_MINIMIZED);
             }
 
           if (surface_impl->toplevel &&
@@ -855,9 +855,9 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
       if (surface && !is_substructure)
 	{
 	  /* Unset minimized if it was set */
-	  if (surface->state & GDK_SURFACE_STATE_MINIMIZED)
+	  if (surface->state & GDK_TOPLEVEL_STATE_MINIMIZED)
 	    gdk_synthesize_surface_state (surface,
-				 	  GDK_SURFACE_STATE_MINIMIZED,
+				 	  GDK_TOPLEVEL_STATE_MINIMIZED,
 					  0);
 
 	  if (toplevel)
