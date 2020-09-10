@@ -593,9 +593,9 @@ capture_widget_key_handled (GtkEventControllerKey *controller,
 
   handled = gtk_event_controller_key_forward (controller, entry->entry);
 
-  if (handled && entry->content_changed && !entry->search_stopped)
+  if (handled)
     {
-      if (was_empty)
+      if (was_empty && entry->content_changed && !entry->search_stopped)
         g_signal_emit (entry, signals[SEARCH_STARTED], 0);
 
       return GDK_EVENT_STOP;
