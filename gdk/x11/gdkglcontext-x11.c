@@ -1060,7 +1060,9 @@ gdk_x11_screen_init_gl (GdkX11Screen *screen)
                        "\t* GLX_EXT_texture_from_pixmap: %s\n"
                        "\t* GLX_SGI_video_sync: %s\n"
                        "\t* GLX_EXT_buffer_age: %s\n"
-                       "\t* GLX_OML_sync_control: %s",
+                       "\t* GLX_OML_sync_control: %s"
+                       "\t* GLX_ARB_multisample: %s"
+                       "\t* GLX_EXT_visual_rating: %s",
                      display_x11->glx_version / 10,
                      display_x11->glx_version % 10,
                      glXGetClientString (dpy, GLX_VENDOR),
@@ -1070,7 +1072,9 @@ gdk_x11_screen_init_gl (GdkX11Screen *screen)
                      display_x11->has_glx_texture_from_pixmap ? "yes" : "no",
                      display_x11->has_glx_video_sync ? "yes" : "no",
                      display_x11->has_glx_buffer_age ? "yes" : "no",
-                     display_x11->has_glx_sync_control ? "yes" : "no"));
+                     display_x11->has_glx_sync_control ? "yes" : "no",
+                     display_x11->has_glx_multisample ? "yes" : "no",
+                     display_x11->has_glx_visual_rating ? "yes" : "no"));
 
   return TRUE;
 }
