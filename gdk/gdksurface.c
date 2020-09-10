@@ -813,7 +813,7 @@ gdk_surface_new_toplevel (GdkDisplay *display)
   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
 
   return gdk_surface_new (display, GDK_SURFACE_TOPLEVEL,
-                          NULL, 0, 0, 0, 0);
+                          NULL, 0, 0, 1, 1);
 }
 
 /**

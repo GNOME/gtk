@@ -324,13 +324,13 @@ gdk_vulkan_context_check_swapchain (GdkVulkanContext  *context,
 
   /*
    * Per https://www.khronos.org/registry/vulkan/specs/1.0-wsi_extensions/xhtml/vkspec.html#VkSurfaceCapabilitiesKHR
-   * the current extent may assume a special value, meaning that the extend should assume whatever
+   * the current extent may assume a special value, meaning that the extent should assume whatever
    * value the surface has.
    */
   if (capabilities.currentExtent.width == -1 || capabilities.currentExtent.height == -1)
     {
-      capabilities.currentExtent.width = gdk_surface_get_width (surface) * gdk_surface_get_scale_factor (surface);
-      capabilities.currentExtent.height = gdk_surface_get_height (surface) * gdk_surface_get_scale_factor (surface);
+      capabilities.currentExtent.width = MAX (1, gdk_surface_get_width (surface) * gdk_surface_get_scale_factor (surface));
+      capabilities.currentExtent.height = MAX (1, gdk_surface_get_height (surface) * gdk_surface_get_scale_factor (surface));
     }
 
   res = GDK_VK_CHECK (vkCreateSwapchainKHR, device,
