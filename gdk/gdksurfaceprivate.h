@@ -59,8 +59,8 @@ struct _GdkSurface
      more than we have to, but it represents the "true" damage. */
   cairo_region_t *active_update_area;
 
-  GdkSurfaceState old_state;
-  GdkSurfaceState state;
+  GdkToplevelState old_state;
+  GdkToplevelState state;
 
   guint8 resize_count;
 
@@ -173,11 +173,11 @@ struct _GdkSurfaceClass
 
 #define GDK_SURFACE_DESTROYED(d) (((GdkSurface *)(d))->destroyed)
 
-#define GDK_SURFACE_IS_MAPPED(surface) (((surface)->state & GDK_SURFACE_STATE_WITHDRAWN) == 0)
+#define GDK_SURFACE_IS_MAPPED(surface) (((surface)->state & GDK_TOPLEVEL_STATE_WITHDRAWN) == 0)
 
 
 void gdk_surface_set_state (GdkSurface      *surface,
-                            GdkSurfaceState  new_state);
+                            GdkToplevelState  new_state);
 
 GdkMonitor * gdk_surface_get_layout_monitor (GdkSurface      *surface,
                                              GdkPopupLayout  *layout,
@@ -283,8 +283,8 @@ GdkSurface *   gdk_surface_new_temp             (GdkDisplay    *display,
 void gdk_surface_destroy_notify       (GdkSurface *surface);
 
 void gdk_synthesize_surface_state (GdkSurface     *surface,
-                                   GdkSurfaceState unset_flags,
-                                   GdkSurfaceState set_flags);
+                                   GdkToplevelState unset_flags,
+                                   GdkToplevelState set_flags);
 
 void gdk_surface_get_root_coords (GdkSurface *surface,
                                   int         x,

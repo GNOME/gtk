@@ -1168,14 +1168,14 @@ update_wm_hints (GdkSurface *surface,
 
   if (!force &&
       !toplevel->is_leader &&
-      surface->state & GDK_SURFACE_STATE_WITHDRAWN)
+      surface->state & GDK_TOPLEVEL_STATE_WITHDRAWN)
     return;
 
   wm_hints.flags = StateHint | InputHint;
   wm_hints.input = True;
   wm_hints.initial_state = NormalState;
   
-  if (surface->state & GDK_SURFACE_STATE_MINIMIZED)
+  if (surface->state & GDK_TOPLEVEL_STATE_MINIMIZED)
     {
       wm_hints.flags |= StateHint;
       wm_hints.initial_state = IconicState;
@@ -1234,7 +1234,7 @@ set_initial_hints (GdkSurface *surface)
   
   i = 0;
 
-  if (surface->state & GDK_SURFACE_STATE_MAXIMIZED)
+  if (surface->state & GDK_TOPLEVEL_STATE_MAXIMIZED)
     {
       atoms[i] = gdk_x11_get_xatom_by_name_for_display (display,
 							"_NET_WM_STATE_MAXIMIZED_VERT");
@@ -1245,21 +1245,21 @@ set_initial_hints (GdkSurface *surface)
       toplevel->have_maxhorz = toplevel->have_maxvert = TRUE;
     }
 
-  if (surface->state & GDK_SURFACE_STATE_ABOVE)
+  if (surface->state & GDK_TOPLEVEL_STATE_ABOVE)
     {
       atoms[i] = gdk_x11_get_xatom_by_name_for_display (display,
 							"_NET_WM_STATE_ABOVE");
       ++i;
     }
   
-  if (surface->state & GDK_SURFACE_STATE_BELOW)
+  if (surface->state & GDK_TOPLEVEL_STATE_BELOW)
     {
       atoms[i] = gdk_x11_get_xatom_by_name_for_display (display,
 							"_NET_WM_STATE_BELOW");
       ++i;
     }
   
-  if (surface->state & GDK_SURFACE_STATE_FULLSCREEN)
+  if (surface->state & GDK_TOPLEVEL_STATE_FULLSCREEN)
     {
       atoms[i] = gdk_x11_get_xatom_by_name_for_display (display,
 							"_NET_WM_STATE_FULLSCREEN");
@@ -1288,7 +1288,7 @@ set_initial_hints (GdkSurface *surface)
       ++i;
     }
 
-  if (surface->state & GDK_SURFACE_STATE_MINIMIZED)
+  if (surface->state & GDK_TOPLEVEL_STATE_MINIMIZED)
     {
       atoms[i] = gdk_x11_get_xatom_by_name_for_display (display,
 							"_NET_WM_STATE_HIDDEN");
@@ -1311,7 +1311,7 @@ set_initial_hints (GdkSurface *surface)
 		       gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_STATE"));
     }
 
-  if (surface->state & GDK_SURFACE_STATE_STICKY)
+  if (surface->state & GDK_TOPLEVEL_STATE_STICKY)
     {
       atoms[0] = 0xFFFFFFFF;
       XChangeProperty (xdisplay,
@@ -1377,7 +1377,7 @@ gdk_x11_surface_withdraw (GdkSurface *surface)
       if (GDK_SURFACE_IS_MAPPED (surface))
         gdk_synthesize_surface_state (surface,
                                      0,
-                                     GDK_SURFACE_STATE_WITHDRAWN);
+                                     GDK_TOPLEVEL_STATE_WITHDRAWN);
 
       g_assert (!GDK_SURFACE_IS_MAPPED (surface));
       XWithdrawWindow (GDK_SURFACE_XDISPLAY (surface),
@@ -1596,7 +1596,7 @@ static void
 show_popup (GdkSurface *surface)
 {
   gdk_x11_surface_raise (surface);
-  gdk_synthesize_surface_state (surface, GDK_SURFACE_STATE_WITHDRAWN, 0);
+  gdk_synthesize_surface_state (surface, GDK_TOPLEVEL_STATE_WITHDRAWN, 0);
   gdk_x11_surface_show (surface, FALSE);
   gdk_surface_invalidate_rect (surface, NULL);
 }
@@ -3075,7 +3075,7 @@ gdk_x11_surface_minimize (GdkSurface *surface)
   else
     {
       /* Flip our client side flag, the real work happens on map. */
-      gdk_synthesize_surface_state (surface, 0, GDK_SURFACE_STATE_MINIMIZED);
+      gdk_synthesize_surface_state (surface, 0, GDK_TOPLEVEL_STATE_MINIMIZED);
       gdk_wmspec_change_state (TRUE, surface,
                                "_NET_WM_STATE_HIDDEN",
                                NULL);
@@ -3098,7 +3098,7 @@ gdk_x11_surface_unminimize (GdkSurface *surface)
   else
     {
       /* Flip our client side flag, the real work happens on map. */
-      gdk_synthesize_surface_state (surface, GDK_SURFACE_STATE_MINIMIZED, 0);
+      gdk_synthesize_surface_state (surface, GDK_TOPLEVEL_STATE_MINIMIZED, 0);
       gdk_wmspec_change_state (FALSE, surface,
                                "_NET_WM_STATE_HIDDEN",
                                NULL);
@@ -3118,7 +3118,7 @@ gdk_x11_surface_maximize (GdkSurface *surface)
   else
     gdk_synthesize_surface_state (surface,
 				 0,
-				 GDK_SURFACE_STATE_MAXIMIZED);
+				 GDK_TOPLEVEL_STATE_MAXIMIZED);
 }
 
 static void
@@ -3133,7 +3133,7 @@ gdk_x11_surface_unmaximize (GdkSurface *surface)
 			     "_NET_WM_STATE_MAXIMIZED_HORZ");
   else
     gdk_synthesize_surface_state (surface,
-				 GDK_SURFACE_STATE_MAXIMIZED,
+				 GDK_TOPLEVEL_STATE_MAXIMIZED,
 				 0);
 }
 
@@ -3248,7 +3248,7 @@ gdk_x11_surface_fullscreen (GdkSurface *surface)
   else
     gdk_synthesize_surface_state (surface,
                                  0,
-                                 GDK_SURFACE_STATE_FULLSCREEN);
+                                 GDK_TOPLEVEL_STATE_FULLSCREEN);
 }
 
 static void
@@ -3281,7 +3281,7 @@ gdk_x11_surface_unfullscreen (GdkSurface *surface)
 
   else
     gdk_synthesize_surface_state (surface,
-				 GDK_SURFACE_STATE_FULLSCREEN,
+				 GDK_TOPLEVEL_STATE_FULLSCREEN,
 				 0);
 }
 
@@ -3790,7 +3790,7 @@ check_maximize (MoveResizeData *mv_resize,
                 double          x_root,
                 double          y_root)
 {
-  GdkSurfaceState state;
+  GdkToplevelState state;
   int y;
 
   if (mv_resize->is_resize)
@@ -3798,7 +3798,7 @@ check_maximize (MoveResizeData *mv_resize,
 
   state = gdk_toplevel_get_state (GDK_TOPLEVEL (mv_resize->moveresize_surface));
 
-  if (state & GDK_SURFACE_STATE_MAXIMIZED)
+  if (state & GDK_TOPLEVEL_STATE_MAXIMIZED)
     return;
 
   y = mv_resize->moveresize_orig_y + (y_root - mv_resize->moveresize_y);
@@ -3812,7 +3812,7 @@ check_unmaximize (MoveResizeData *mv_resize,
                   double          x_root,
                   double          y_root)
 {
-  GdkSurfaceState state;
+  GdkToplevelState state;
   int dx, dy;
 
   if (mv_resize->is_resize)
@@ -3820,7 +3820,7 @@ check_unmaximize (MoveResizeData *mv_resize,
 
   state = gdk_toplevel_get_state (GDK_TOPLEVEL (mv_resize->moveresize_surface));
 
-  if ((state & (GDK_SURFACE_STATE_MAXIMIZED | GDK_SURFACE_STATE_TILED)) == 0)
+  if ((state & (GDK_TOPLEVEL_STATE_MAXIMIZED | GDK_TOPLEVEL_STATE_TILED)) == 0)
     return;
 
   dx = x_root - mv_resize->moveresize_x;
@@ -4923,7 +4923,7 @@ gdk_x11_toplevel_present (GdkToplevel       *toplevel,
   was_mapped = GDK_SURFACE_IS_MAPPED (surface);
 
   if (!was_mapped)
-    gdk_synthesize_surface_state (surface, GDK_SURFACE_STATE_WITHDRAWN, 0);
+    gdk_synthesize_surface_state (surface, GDK_TOPLEVEL_STATE_WITHDRAWN, 0);
 
   gdk_x11_surface_show (surface, was_mapped);
 
@@ -4980,7 +4980,7 @@ gdk_x11_toplevel_inhibit_system_shortcuts (GdkToplevel *toplevel,
   if (surface->shortcuts_inhibited)
     return; /* Already inhibited */
 
-  if (!(surface->state & GDK_SURFACE_STATE_FOCUSED))
+  if (!(surface->state & GDK_TOPLEVEL_STATE_FOCUSED))
     return;
 
   gdk_seat = gdk_surface_get_seat_from_event (surface, gdk_event);
@@ -5019,7 +5019,7 @@ gdk_x11_toplevel_restore_system_shortcuts (GdkToplevel *toplevel)
 static void
 gdk_x11_toplevel_state_callback (GdkSurface *surface)
 {
-  if (surface->state & GDK_SURFACE_STATE_FOCUSED)
+  if (surface->state & GDK_TOPLEVEL_STATE_FOCUSED)
     return;
 
   if (surface->shortcuts_inhibited)
@@ -5096,7 +5096,7 @@ gdk_x11_drag_surface_present (GdkDragSurface *drag_surface,
   GdkSurface *surface = GDK_SURFACE (drag_surface);
 
   gdk_x11_surface_toplevel_resize (surface, width, height);
-  gdk_synthesize_surface_state (surface, GDK_SURFACE_STATE_WITHDRAWN, 0);
+  gdk_synthesize_surface_state (surface, GDK_TOPLEVEL_STATE_WITHDRAWN, 0);
   gdk_x11_surface_show (surface, FALSE);
   gdk_surface_invalidate_rect (surface, NULL);
 

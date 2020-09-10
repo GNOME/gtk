@@ -62,7 +62,7 @@
 
 -(void)windowDidMiniaturize:(NSNotification *)aNotification
 {
-  gdk_synthesize_surface_state (GDK_SURFACE (gdk_surface), 0, GDK_SURFACE_STATE_MINIMIZED);
+  gdk_synthesize_surface_state (GDK_SURFACE (gdk_surface), 0, GDK_TOPLEVEL_STATE_MINIMIZED);
 }
 
 -(void)windowDidDeminiaturize:(NSNotification *)aNotification
@@ -72,18 +72,18 @@
   else if (GDK_IS_MACOS_POPUP_SURFACE (gdk_surface))
     _gdk_macos_popup_surface_attach_to_parent (GDK_MACOS_POPUP_SURFACE (gdk_surface));
 
-  gdk_synthesize_surface_state (GDK_SURFACE (gdk_surface), GDK_SURFACE_STATE_MINIMIZED, 0);
+  gdk_synthesize_surface_state (GDK_SURFACE (gdk_surface), GDK_TOPLEVEL_STATE_MINIMIZED, 0);
 }
 
 -(void)windowDidBecomeKey:(NSNotification *)aNotification
 {
-  gdk_synthesize_surface_state (GDK_SURFACE (gdk_surface), 0, GDK_SURFACE_STATE_FOCUSED);
+  gdk_synthesize_surface_state (GDK_SURFACE (gdk_surface), 0, GDK_TOPLEVEL_STATE_FOCUSED);
   _gdk_macos_display_surface_became_key ([self gdkDisplay], gdk_surface);
 }
 
 -(void)windowDidResignKey:(NSNotification *)aNotification
 {
-  gdk_synthesize_surface_state (GDK_SURFACE (gdk_surface), GDK_SURFACE_STATE_FOCUSED, 0);
+  gdk_synthesize_surface_state (GDK_SURFACE (gdk_surface), GDK_TOPLEVEL_STATE_FOCUSED, 0);
   _gdk_macos_display_surface_resigned_key ([self gdkDisplay], gdk_surface);
 }
 
@@ -193,7 +193,7 @@
 {
   NSWindowStyleMask style_mask = [self styleMask];
 
-  gdk_synthesize_surface_state (GDK_SURFACE (gdk_surface), GDK_SURFACE_STATE_MAXIMIZED, 0);
+  gdk_synthesize_surface_state (GDK_SURFACE (gdk_surface), GDK_TOPLEVEL_STATE_MAXIMIZED, 0);
 
   /* If we are using CSD, then we transitioned to an opaque
    * window while we were maximized. Now we need to drop that
@@ -206,7 +206,7 @@
 -(void)windowDidMove:(NSNotification *)aNotification
 {
   GdkSurface *surface = GDK_SURFACE (gdk_surface);
-  gboolean maximized = (surface->state & GDK_SURFACE_STATE_MAXIMIZED) != 0;
+  gboolean maximized = (surface->state & GDK_TOPLEVEL_STATE_MAXIMIZED) != 0;
 
   /* In case the window is changed when maximized remove the maximized state */
   if (maximized && !inMaximizeTransition && !NSEqualRects (lastMaximizedFrame, [self frame]))
@@ -231,7 +231,7 @@
   display = gdk_surface_get_display (surface);
 
   content_rect = [self contentRectForFrameRect:[self frame]];
-  maximized = (surface->state & GDK_SURFACE_STATE_MAXIMIZED) != 0;
+  maximized = (surface->state & GDK_TOPLEVEL_STATE_MAXIMIZED) != 0;
 
   /* see same in windowDidMove */
   if (maximized && !inMaximizeTransition && !NSEqualRects (lastMaximizedFrame, [self frame]))
@@ -627,7 +627,7 @@
 {
   NSRect screenFrame = [[self screen] visibleFrame];
   GdkMacosSurface *surface = gdk_surface;
-  gboolean maximized = GDK_SURFACE (surface)->state & GDK_SURFACE_STATE_MAXIMIZED;
+  gboolean maximized = GDK_SURFACE (surface)->state & GDK_TOPLEVEL_STATE_MAXIMIZED;
 
   if (!maximized)
     return screenFrame;
@@ -639,9 +639,9 @@
                 toFrame:(NSRect)newFrame
 {
   GdkMacosSurface *surface = gdk_surface;
-  GdkSurfaceState state = GDK_SURFACE (surface)->state;
+  GdkToplevelState state = GDK_SURFACE (surface)->state;
 
-  if (state & GDK_SURFACE_STATE_MAXIMIZED)
+  if (state & GDK_TOPLEVEL_STATE_MAXIMIZED)
     {
       lastMaximizedFrame = newFrame;
       [self windowDidUnmaximize];
@@ -649,7 +649,7 @@
   else
     {
       lastUnmaximizedFrame = [nsWindow frame];
-      gdk_synthesize_surface_state (GDK_SURFACE (gdk_surface), 0, GDK_SURFACE_STATE_MAXIMIZED);
+      gdk_synthesize_surface_state (GDK_SURFACE (gdk_surface), 0, GDK_TOPLEVEL_STATE_MAXIMIZED);
     }
 
   inMaximizeTransition = YES;
@@ -659,7 +659,7 @@
 
 -(void)windowDidEndLiveResize:(NSNotification *)aNotification
 {
-  gboolean maximized = GDK_SURFACE (gdk_surface)->state & GDK_SURFACE_STATE_MAXIMIZED;
+  gboolean maximized = GDK_SURFACE (gdk_surface)->state & GDK_TOPLEVEL_STATE_MAXIMIZED;
 
   inMaximizeTransition = NO;
 

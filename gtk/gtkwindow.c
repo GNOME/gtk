@@ -191,7 +191,7 @@ typedef struct
   GdkMonitor *initial_fullscreen_monitor;
   guint      edge_constraints;
 
-  GdkSurfaceState state;
+  GdkToplevelState state;
 
   /* The following flags are initially TRUE (before a window is mapped).
    * They cause us to compute a configure request that involves
@@ -1164,21 +1164,21 @@ constraints_for_edge (GdkSurfaceEdge edge)
   switch (edge)
     {
     case GDK_SURFACE_EDGE_NORTH_WEST:
-      return GDK_SURFACE_STATE_LEFT_RESIZABLE | GDK_SURFACE_STATE_TOP_RESIZABLE;
+      return GDK_TOPLEVEL_STATE_LEFT_RESIZABLE | GDK_TOPLEVEL_STATE_TOP_RESIZABLE;
     case GDK_SURFACE_EDGE_NORTH:
-      return GDK_SURFACE_STATE_TOP_RESIZABLE;
+      return GDK_TOPLEVEL_STATE_TOP_RESIZABLE;
     case GDK_SURFACE_EDGE_NORTH_EAST:
-      return GDK_SURFACE_STATE_RIGHT_RESIZABLE | GDK_SURFACE_STATE_TOP_RESIZABLE;
+      return GDK_TOPLEVEL_STATE_RIGHT_RESIZABLE | GDK_TOPLEVEL_STATE_TOP_RESIZABLE;
     case GDK_SURFACE_EDGE_WEST:
-      return GDK_SURFACE_STATE_LEFT_RESIZABLE;
+      return GDK_TOPLEVEL_STATE_LEFT_RESIZABLE;
     case GDK_SURFACE_EDGE_EAST:
-      return GDK_SURFACE_STATE_RIGHT_RESIZABLE;
+      return GDK_TOPLEVEL_STATE_RIGHT_RESIZABLE;
     case GDK_SURFACE_EDGE_SOUTH_WEST:
-      return GDK_SURFACE_STATE_LEFT_RESIZABLE | GDK_SURFACE_STATE_BOTTOM_RESIZABLE;
+      return GDK_TOPLEVEL_STATE_LEFT_RESIZABLE | GDK_TOPLEVEL_STATE_BOTTOM_RESIZABLE;
     case GDK_SURFACE_EDGE_SOUTH:
-      return GDK_SURFACE_STATE_BOTTOM_RESIZABLE;
+      return GDK_TOPLEVEL_STATE_BOTTOM_RESIZABLE;
     case GDK_SURFACE_EDGE_SOUTH_EAST:
-      return GDK_SURFACE_STATE_RIGHT_RESIZABLE | GDK_SURFACE_STATE_BOTTOM_RESIZABLE;
+      return GDK_TOPLEVEL_STATE_RIGHT_RESIZABLE | GDK_TOPLEVEL_STATE_BOTTOM_RESIZABLE;
     default:
       g_warn_if_reached ();
       return 0;
@@ -1474,7 +1474,7 @@ gtk_window_init (GtkWindow *window)
   priv->decorated = TRUE;
   priv->display = gdk_display_get_default ();
 
-  priv->state = GDK_SURFACE_STATE_WITHDRAWN;
+  priv->state = GDK_TOPLEVEL_STATE_WITHDRAWN;
 
   priv->deletable = TRUE;
   priv->startup_id = NULL;
@@ -3905,7 +3905,7 @@ gtk_window_unmap (GtkWidget *widget)
   GtkWindow *window = GTK_WINDOW (widget);
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
   GtkWidget *child = priv->child;
-  GdkSurfaceState state;
+  GdkToplevelState state;
 
   GTK_WIDGET_CLASS (gtk_window_parent_class)->unmap (widget);
   gdk_surface_hide (priv->surface);
@@ -3918,8 +3918,8 @@ gtk_window_unmap (GtkWidget *widget)
   priv->configure_notify_received = FALSE;
 
   state = gdk_toplevel_get_state (GDK_TOPLEVEL (priv->surface));
-  priv->minimize_initially = (state & GDK_SURFACE_STATE_MINIMIZED) != 0;
-  priv->maximize_initially = (state & GDK_SURFACE_STATE_MAXIMIZED) != 0;
+  priv->minimize_initially = (state & GDK_TOPLEVEL_STATE_MINIMIZED) != 0;
+  priv->maximize_initially = (state & GDK_TOPLEVEL_STATE_MAXIMIZED) != 0;
 
   if (priv->title_box != NULL)
     gtk_widget_unmap (priv->title_box);
@@ -4528,22 +4528,22 @@ update_window_style_classes (GtkWindow *window)
     }
   else
     {
-      if (edge_constraints & GDK_SURFACE_STATE_TOP_TILED)
+      if (edge_constraints & GDK_TOPLEVEL_STATE_TOP_TILED)
         gtk_widget_add_css_class (widget, "tiled-top");
       else
         gtk_widget_remove_css_class (widget, "tiled-top");
 
-      if (edge_constraints & GDK_SURFACE_STATE_RIGHT_TILED)
+      if (edge_constraints & GDK_TOPLEVEL_STATE_RIGHT_TILED)
         gtk_widget_add_css_class (widget, "tiled-right");
       else
         gtk_widget_remove_css_class (widget, "tiled-right");
 
-      if (edge_constraints & GDK_SURFACE_STATE_BOTTOM_TILED)
+      if (edge_constraints & GDK_TOPLEVEL_STATE_BOTTOM_TILED)
         gtk_widget_add_css_class (widget, "tiled-bottom");
       else
         gtk_widget_remove_css_class (widget, "tiled-bottom");
 
-      if (edge_constraints & GDK_SURFACE_STATE_LEFT_TILED)
+      if (edge_constraints & GDK_TOPLEVEL_STATE_LEFT_TILED)
         gtk_widget_add_css_class (widget, "tiled-left");
       else
         gtk_widget_remove_css_class (widget, "tiled-left");
@@ -4656,20 +4656,20 @@ gtk_window_size_allocate (GtkWidget *widget,
 
 static void
 update_edge_constraints (GtkWindow      *window,
-                         GdkSurfaceState  state)
+                         GdkToplevelState  state)
 {
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
 
-  priv->edge_constraints = (state & GDK_SURFACE_STATE_TOP_TILED) |
-                           (state & GDK_SURFACE_STATE_TOP_RESIZABLE) |
-                           (state & GDK_SURFACE_STATE_RIGHT_TILED) |
-                           (state & GDK_SURFACE_STATE_RIGHT_RESIZABLE) |
-                           (state & GDK_SURFACE_STATE_BOTTOM_TILED) |
-                           (state & GDK_SURFACE_STATE_BOTTOM_RESIZABLE) |
-                           (state & GDK_SURFACE_STATE_LEFT_TILED) |
-                           (state & GDK_SURFACE_STATE_LEFT_RESIZABLE);
+  priv->edge_constraints = (state & GDK_TOPLEVEL_STATE_TOP_TILED) |
+                           (state & GDK_TOPLEVEL_STATE_TOP_RESIZABLE) |
+                           (state & GDK_TOPLEVEL_STATE_RIGHT_TILED) |
+                           (state & GDK_TOPLEVEL_STATE_RIGHT_RESIZABLE) |
+                           (state & GDK_TOPLEVEL_STATE_BOTTOM_TILED) |
+                           (state & GDK_TOPLEVEL_STATE_BOTTOM_RESIZABLE) |
+                           (state & GDK_TOPLEVEL_STATE_LEFT_TILED) |
+                           (state & GDK_TOPLEVEL_STATE_LEFT_RESIZABLE);
 
-  priv->tiled = (state & GDK_SURFACE_STATE_TILED) ? 1 : 0;
+  priv->tiled = (state & GDK_TOPLEVEL_STATE_TILED) ? 1 : 0;
 }
 
 static void
@@ -4677,16 +4677,16 @@ surface_state_changed (GtkWidget *widget)
 {
   GtkWindow *window = GTK_WINDOW (widget);
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-  GdkSurfaceState new_surface_state;
-  GdkSurfaceState changed_mask;
+  GdkToplevelState new_surface_state;
+  GdkToplevelState changed_mask;
 
   new_surface_state = gdk_toplevel_get_state (GDK_TOPLEVEL (priv->surface));
   changed_mask = new_surface_state ^ priv->state;
   priv->state = new_surface_state;
 
-  if (changed_mask & GDK_SURFACE_STATE_FOCUSED)
+  if (changed_mask & GDK_TOPLEVEL_STATE_FOCUSED)
     {
-      gboolean focused = new_surface_state & GDK_SURFACE_STATE_FOCUSED;
+      gboolean focused = new_surface_state & GDK_TOPLEVEL_STATE_FOCUSED;
 
       ensure_state_flag_backdrop (widget);
 
@@ -4694,25 +4694,25 @@ surface_state_changed (GtkWidget *widget)
         gtk_window_set_mnemonics_visible (window, FALSE);
     }
 
-  if (changed_mask & GDK_SURFACE_STATE_FULLSCREEN)
-    priv->fullscreen = (new_surface_state & GDK_SURFACE_STATE_FULLSCREEN) ? TRUE : FALSE;
+  if (changed_mask & GDK_TOPLEVEL_STATE_FULLSCREEN)
+    priv->fullscreen = (new_surface_state & GDK_TOPLEVEL_STATE_FULLSCREEN) ? TRUE : FALSE;
 
-  if (changed_mask & GDK_SURFACE_STATE_MAXIMIZED)
+  if (changed_mask & GDK_TOPLEVEL_STATE_MAXIMIZED)
     {
-      priv->maximized = (new_surface_state & GDK_SURFACE_STATE_MAXIMIZED) ? TRUE : FALSE;
+      priv->maximized = (new_surface_state & GDK_TOPLEVEL_STATE_MAXIMIZED) ? TRUE : FALSE;
       g_object_notify_by_pspec (G_OBJECT (widget), window_props[PROP_IS_MAXIMIZED]);
     }
 
   update_edge_constraints (window, new_surface_state);
 
-  if (changed_mask & (GDK_SURFACE_STATE_FULLSCREEN |
-                      GDK_SURFACE_STATE_MAXIMIZED |
-                      GDK_SURFACE_STATE_TILED |
-                      GDK_SURFACE_STATE_TOP_TILED |
-                      GDK_SURFACE_STATE_RIGHT_TILED |
-                      GDK_SURFACE_STATE_BOTTOM_TILED |
-                      GDK_SURFACE_STATE_LEFT_TILED |
-                      GDK_SURFACE_STATE_MINIMIZED))
+  if (changed_mask & (GDK_TOPLEVEL_STATE_FULLSCREEN |
+                      GDK_TOPLEVEL_STATE_MAXIMIZED |
+                      GDK_TOPLEVEL_STATE_TILED |
+                      GDK_TOPLEVEL_STATE_TOP_TILED |
+                      GDK_TOPLEVEL_STATE_RIGHT_TILED |
+                      GDK_TOPLEVEL_STATE_BOTTOM_TILED |
+                      GDK_TOPLEVEL_STATE_LEFT_TILED |
+                      GDK_TOPLEVEL_STATE_MINIMIZED))
     {
       update_window_style_classes (window);
       update_window_actions (window);
@@ -6563,7 +6563,7 @@ ensure_state_flag_backdrop (GtkWidget *widget)
   GtkWindowPrivate *priv = gtk_window_get_instance_private (GTK_WINDOW (widget));
   gboolean surface_focused = TRUE;
 
-  surface_focused = gdk_toplevel_get_state (GDK_TOPLEVEL (priv->surface)) & GDK_SURFACE_STATE_FOCUSED;
+  surface_focused = gdk_toplevel_get_state (GDK_TOPLEVEL (priv->surface)) & GDK_TOPLEVEL_STATE_FOCUSED;
 
   if (!surface_focused)
     gtk_widget_set_state_flags (widget, GTK_STATE_FLAG_BACKDROP, FALSE);

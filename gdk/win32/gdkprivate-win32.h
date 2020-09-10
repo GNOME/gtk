@@ -213,7 +213,7 @@ void   _gdk_win32_print_hpalette       (HPALETTE     hpal);
 void   _gdk_win32_print_dc             (HDC          hdc);
 
 char *_gdk_win32_drag_protocol_to_string (GdkDragProtocol protocol);
-char *_gdk_win32_surface_state_to_string (GdkSurfaceState state);
+char *_gdk_win32_surface_state_to_string (GdkToplevelState state);
 char *_gdk_win32_surface_style_to_string (LONG style);
 char *_gdk_win32_surface_exstyle_to_string (LONG style);
 char *_gdk_win32_surface_pos_bits_to_string (UINT flags);

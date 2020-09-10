@@ -47,7 +47,7 @@ struct _GtkTooltipWindow
   GdkSurface *surface;
   GskRenderer *renderer;
 
-  GdkSurfaceState state;
+  GdkToplevelState state;
   GtkWidget *relative_to;
   GdkRectangle rect;
   GdkGravity rect_anchor;
@@ -173,16 +173,16 @@ static void
 surface_state_changed (GtkWidget *widget)
 {
   GtkTooltipWindow *window = GTK_TOOLTIP_WINDOW (widget);
-  GdkSurfaceState new_surface_state;
-  GdkSurfaceState changed_mask;
+  GdkToplevelState new_surface_state;
+  GdkToplevelState changed_mask;
 
   new_surface_state = gdk_toplevel_get_state (GDK_TOPLEVEL (window->surface));
   changed_mask = new_surface_state ^ window->state;
   window->state = new_surface_state;
 
-  if (changed_mask & GDK_SURFACE_STATE_WITHDRAWN)
+  if (changed_mask & GDK_TOPLEVEL_STATE_WITHDRAWN)
     {
-      if (window->state & GDK_SURFACE_STATE_WITHDRAWN)
+      if (window->state & GDK_TOPLEVEL_STATE_WITHDRAWN)
         gtk_widget_hide (widget);
     }
 }
