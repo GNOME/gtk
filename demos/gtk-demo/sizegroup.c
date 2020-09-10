@@ -59,8 +59,8 @@ add_row (GtkGrid      *table,
 }
 
 static void
-toggle_grouping (GtkToggleButton *check_button,
-                 GtkSizeGroup    *size_group)
+toggle_grouping (GtkCheckButton *check_button,
+                 GtkSizeGroup   *size_group)
 {
   GtkSizeGroupMode new_mode;
 
@@ -68,7 +68,7 @@ toggle_grouping (GtkToggleButton *check_button,
    * here to show the effect of GTK_SIZE_GROUP_HORIZONTAL by
    * contrast.
    */
-  if (gtk_toggle_button_get_active (check_button))
+  if (gtk_check_button_get_active (check_button))
     new_mode = GTK_SIZE_GROUP_HORIZONTAL;
   else
     new_mode = GTK_SIZE_GROUP_NONE;
