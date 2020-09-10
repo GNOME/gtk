@@ -49,6 +49,15 @@ application, e.g.:
 G_ENABLE_DIAGNOSTIC=1 ./your-app
 ```
 
+### Do not use GTK-specific command line arguments
+
+GTK4 does not parse command line arguments any more. If you are using
+command line arguments like `--gtk-debug` you should use the `GTK_DEBUG`
+environment variable instead. If you are using `--g-fatal-warnings` for
+debugging purposes, you should use the `G_DEBUG` environment variable, as
+specified by the
+[GLib documentation](https://developer.gnome.org/glib/stable/glib-running.html).
+
 ### Do not use widget style properties
 
 Style properties do not exist in GTK 4. You should stop using them in
