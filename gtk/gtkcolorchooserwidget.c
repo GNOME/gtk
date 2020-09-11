@@ -31,6 +31,7 @@
 #include "gtkstylecontext.h"
 #include "gtkboxlayout.h"
 #include "gtkwidgetprivate.h"
+#include "gdkrgbaprivate.h"
 
 #include <math.h>
 
@@ -83,6 +84,8 @@ struct _GtkColorChooserWidget
   gboolean has_default_palette;
 
   GSettings *settings;
+
+  int max_custom;
 };
 
 struct _GtkColorChooserWidgetClass
@@ -294,8 +297,7 @@ add_palette (GtkColorChooserWidget  *cc,
              GtkOrientation          orientation,
              int                     colors_per_line,
              int                     n_colors,
-             GdkRGBA                *colors,
-             const char            **names)
+             GdkRGBA                *colors)
 {
   GtkWidget *grid;
   GtkWidget *p;
@@ -314,7 +316,6 @@ add_palette (GtkColorChooserWidget  *cc,
   gtk_grid_set_row_spacing (GTK_GRID (grid), 2);
   gtk_grid_set_column_spacing (GTK_GRID (grid), 4);
   gtk_box_append (GTK_BOX (cc->palette), grid);
-  
 
   left = 0;
   right = colors_per_line - 1;
@@ -353,6 +354,11 @@ add_palette (GtkColorChooserWidget  *cc,
           gtk_grid_attach (GTK_GRID (grid), p, line, pos, 1, 1);
        }
     }
+
+  if (orientation == GTK_ORIENTATION_HORIZONTAL)
+    cc->max_custom = MAX (cc->max_custom, colors_per_line);
+  else
+    cc->max_custom = MAX (cc->max_custom, n_colors / colors_per_line);
 }
 
 static void
@@ -363,86 +369,24 @@ remove_default_palette (GtkColorChooserWidget *cc)
 
   remove_palette (cc);
   cc->has_default_palette = FALSE;
+  cc->max_custom = 0;
 }
 
 static void
 add_default_palette (GtkColorChooserWidget *cc)
 {
-  const char *default_colors[9][3] = {
-    { "#ef2929", "#cc0000", "#a40000" }, /* Scarlet Red */
-    { "#fcaf3e", "#f57900", "#ce5c00" }, /* Orange */
-    { "#fce94f", "#edd400", "#c4a000" }, /* Butter */
-    { "#8ae234", "#73d216", "#4e9a06" }, /* Chameleon */
-    { "#729fcf", "#3465a4", "#204a87" }, /* Sky Blue */
-    { "#ad7fa8", "#75507b", "#5c3566" }, /* Plum */
-    { "#e9b96e", "#c17d11", "#8f5902" }, /* Chocolate */
-    { "#888a85", "#555753", "#2e3436" }, /* Aluminum 1 */
-    { "#eeeeec", "#d3d7cf", "#babdb6" }  /* Aluminum 2 */
+  GdkRGBA colors[8*3] = {
+    GDK_RGBA("99c1f1"), GDK_RGBA("3584e4"), GDK_RGBA("1a5fb4"), /* Blue */
+    GDK_RGBA("8ff0a4"), GDK_RGBA("33d17a"), GDK_RGBA("26a269"), /* Green */
+    GDK_RGBA("f9f06b"), GDK_RGBA("f6d32d"), GDK_RGBA("e5a50a"), /* Yellow */
+    GDK_RGBA("ffbe6f"), GDK_RGBA("ff7800"), GDK_RGBA("c64600"), /* Orange */
+    GDK_RGBA("f66151"), GDK_RGBA("e01b24"), GDK_RGBA("a51d2d"), /* Red */
+    GDK_RGBA("dc8add"), GDK_RGBA("9141ac"), GDK_RGBA("613583"), /* Purple */
+    GDK_RGBA("cdab8f"), GDK_RGBA("986a44"), GDK_RGBA("63452c"), /* Brown */
+    GDK_RGBA("f6f5f4"), GDK_RGBA("9a9996"), GDK_RGBA("3d3846")  /* Neutral */
   };
-  const char *color_names[] = {
-    NC_("Color name", "Light Scarlet Red"),
-    NC_("Color name", "Scarlet Red"),
-    NC_("Color name", "Dark Scarlet Red"),
-    NC_("Color name", "Light Orange"),
-    NC_("Color name", "Orange"),
-    NC_("Color name", "Dark Orange"),
-    NC_("Color name", "Light Butter"),
-    NC_("Color name", "Butter"),
-    NC_("Color name", "Dark Butter"),
-    NC_("Color name", "Light Chameleon"),
-    NC_("Color name", "Chameleon"),
-    NC_("Color name", "Dark Chameleon"),
-    NC_("Color name", "Light Sky Blue"),
-    NC_("Color name", "Sky Blue"),
-    NC_("Color name", "Dark Sky Blue"),
-    NC_("Color name", "Light Plum"),
-    NC_("Color name", "Plum"),
-    NC_("Color name", "Dark Plum"),
-    NC_("Color name", "Light Chocolate"),
-    NC_("Color name", "Chocolate"),
-    NC_("Color name", "Dark Chocolate"),
-    NC_("Color name", "Light Aluminum 1"),
-    NC_("Color name", "Aluminum 1"),
-    NC_("Color name", "Dark Aluminum 1"),
-    NC_("Color name", "Light Aluminum 2"),
-    NC_("Color name", "Aluminum 2"),
-    NC_("Color name", "Dark Aluminum 2")
-  };
-  const char *default_grays[9] = {
-    "#000000", /* black */
-    "#2e3436", /* very dark gray */
-    "#555753", /* darker gray */
-    "#888a85", /* dark gray */
-    "#babdb6", /* medium gray */
-    "#d3d7cf", /* light gray */
-    "#eeeeec", /* lighter gray */
-    "#f3f3f3", /* very light gray */
-    "#ffffff"  /* white */
-  };
-  const char *gray_names[] = {
-    NC_("Color name", "Black"),
-    NC_("Color name", "Very Dark Gray"),
-    NC_("Color name", "Darker Gray"),
-    NC_("Color name", "Dark Gray"),
-    NC_("Color name", "Medium Gray"),
-    NC_("Color name", "Light Gray"),
-    NC_("Color name", "Lighter Gray"),
-    NC_("Color name", "Very Light Gray"),
-    NC_("Color name", "White")
-  };
-  GdkRGBA colors[9*3];
-  int i, j;
 
-  for (i = 0; i < 9; i++)
-    for (j = 0; j < 3; j++)
-      gdk_rgba_parse (&colors[i*3 + j], default_colors[i][j]);
-
-  add_palette (cc, GTK_ORIENTATION_VERTICAL, 3, 9*3, colors, color_names);
-
-  for (i = 0; i < 9; i++)
-    gdk_rgba_parse (&colors[i], default_grays[i]);
-
-  add_palette (cc, GTK_ORIENTATION_HORIZONTAL, 9, 9, colors, gray_names);
+  add_palette (cc, GTK_ORIENTATION_VERTICAL, 3, 8*3, colors);
 
   cc->has_default_palette = TRUE;
 }
@@ -730,16 +674,16 @@ add_custom_color (GtkColorChooserWidget *cc,
                   const GdkRGBA         *color)
 {
   GtkWidget *widget;
-  GList *children;
   GtkWidget *p;
+  int n;
 
-  children = NULL;
+  n = 0;
   for (widget = gtk_widget_get_first_child (cc->custom);
        widget != NULL;
        widget = gtk_widget_get_next_sibling (widget))
-    children = g_list_prepend (children, widget);
+    n++;
 
-  if (g_list_length (children) >= 9)
+  while (n >= cc->max_custom)
     {
       GtkWidget *last = gtk_widget_get_last_child (cc->custom);
 
@@ -747,8 +691,8 @@ add_custom_color (GtkColorChooserWidget *cc,
         cc->current = NULL;
 
       gtk_box_remove (GTK_BOX (cc->custom), last);
+      n--;
     }
-  g_list_free (children);
 
   p = gtk_color_swatch_new ();
   gtk_color_swatch_set_rgba (GTK_COLOR_SWATCH (p), color);
@@ -807,7 +751,7 @@ gtk_color_chooser_widget_add_palette (GtkColorChooser *chooser,
   GtkColorChooserWidget *cc = GTK_COLOR_CHOOSER_WIDGET (chooser);
 
   remove_default_palette (cc);
-  add_palette (cc, orientation, colors_per_line, n_colors, colors, NULL);
+  add_palette (cc, orientation, colors_per_line, n_colors, colors);
 
   gtk_box_reorder_child_after (GTK_BOX (cc->palette), cc->custom_label, gtk_widget_get_last_child (cc->palette));
   gtk_box_reorder_child_after (GTK_BOX (cc->palette), cc->custom, cc->custom_label);
@@ -821,19 +765,3 @@ gtk_color_chooser_widget_iface_init (GtkColorChooserInterface *iface)
   iface->add_palette = gtk_color_chooser_widget_add_palette;
 }
 
-/* Public API {{{1 */
-
-/**
- * gtk_color_chooser_widget_new:
- *
- * Creates a new #GtkColorChooserWidget.
- *
- * Returns: a new #GtkColorChooserWidget
- */
-GtkWidget *
-gtk_color_chooser_widget_new (void)
-{
-  return g_object_new (GTK_TYPE_COLOR_CHOOSER_WIDGET, NULL);
-}
-
-/* vim:set foldmethod=marker: */
