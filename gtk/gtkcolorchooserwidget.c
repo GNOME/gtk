@@ -368,81 +368,51 @@ remove_default_palette (GtkColorChooserWidget *cc)
 static void
 add_default_palette (GtkColorChooserWidget *cc)
 {
-  const char *default_colors[9][3] = {
-    { "#ef2929", "#cc0000", "#a40000" }, /* Scarlet Red */
-    { "#fcaf3e", "#f57900", "#ce5c00" }, /* Orange */
-    { "#fce94f", "#edd400", "#c4a000" }, /* Butter */
-    { "#8ae234", "#73d216", "#4e9a06" }, /* Chameleon */
-    { "#729fcf", "#3465a4", "#204a87" }, /* Sky Blue */
-    { "#ad7fa8", "#75507b", "#5c3566" }, /* Plum */
-    { "#e9b96e", "#c17d11", "#8f5902" }, /* Chocolate */
-    { "#888a85", "#555753", "#2e3436" }, /* Aluminum 1 */
-    { "#eeeeec", "#d3d7cf", "#babdb6" }  /* Aluminum 2 */
+  const char *default_colors[8][3] = {
+    { "#99c1f1", "#3584e4", "#1a5fb4" }, /* Blue */
+    { "#8ff0a4", "#33d17a", "#26a269" }, /* Green */
+    { "#f9f06b", "#f6d32d", "#e5a50a" }, /* Yellow */
+    { "#ffbe6f", "#ff7800", "#c64600" }, /* Orange */
+    { "#f66151", "#e01b24", "#a51d2d" }, /* Red */
+    { "#dc8add", "#9141ac", "#613583" }, /* Purple */
+    { "#cdab8f", "#986a44", "#63452c" }, /* Brown */
+    { "#f6f5f4", "#9a9996", "#3d3846" }  /* Neutral */
   };
   const char *color_names[] = {
-    NC_("Color name", "Light Scarlet Red"),
-    NC_("Color name", "Scarlet Red"),
-    NC_("Color name", "Dark Scarlet Red"),
-    NC_("Color name", "Light Orange"),
-    NC_("Color name", "Orange"),
-    NC_("Color name", "Dark Orange"),
-    NC_("Color name", "Light Butter"),
-    NC_("Color name", "Butter"),
-    NC_("Color name", "Dark Butter"),
-    NC_("Color name", "Light Chameleon"),
-    NC_("Color name", "Chameleon"),
-    NC_("Color name", "Dark Chameleon"),
-    NC_("Color name", "Light Sky Blue"),
-    NC_("Color name", "Sky Blue"),
-    NC_("Color name", "Dark Sky Blue"),
-    NC_("Color name", "Light Plum"),
-    NC_("Color name", "Plum"),
-    NC_("Color name", "Dark Plum"),
-    NC_("Color name", "Light Chocolate"),
-    NC_("Color name", "Chocolate"),
-    NC_("Color name", "Dark Chocolate"),
-    NC_("Color name", "Light Aluminum 1"),
-    NC_("Color name", "Aluminum 1"),
-    NC_("Color name", "Dark Aluminum 1"),
-    NC_("Color name", "Light Aluminum 2"),
-    NC_("Color name", "Aluminum 2"),
-    NC_("Color name", "Dark Aluminum 2")
+    NC_("Color name", "Blue 1"),
+    NC_("Color name", "Blue 2"),
+    NC_("Color name", "Blue 3"),
+    NC_("Color name", "Green 1"),
+    NC_("Color name", "Green 2"),
+    NC_("Color name", "Green 3"),
+    NC_("Color name", "Yellow 1"),
+    NC_("Color name", "Yellow 2"),
+    NC_("Color name", "Yellow 3"),
+    NC_("Color name", "Orange 1"),
+    NC_("Color name", "Orange 2"),
+    NC_("Color name", "Orange 3"),
+    NC_("Color name", "Red 1"),
+    NC_("Color name", "Red 2"),
+    NC_("Color name", "Red 3"),
+    NC_("Color name", "Purple 1"),
+    NC_("Color name", "Purple 2"),
+    NC_("Color name", "Purple 3"),
+    NC_("Color name", "Brown 1"),
+    NC_("Color name", "Brown 2"),
+    NC_("Color name", "Brown 3"),
+    NC_("Color name", "Neutral 1"),
+    NC_("Color name", "Neutral 2"),
+    NC_("Color name", "Neutral 3")
   };
-  const char *default_grays[9] = {
-    "#000000", /* black */
-    "#2e3436", /* very dark gray */
-    "#555753", /* darker gray */
-    "#888a85", /* dark gray */
-    "#babdb6", /* medium gray */
-    "#d3d7cf", /* light gray */
-    "#eeeeec", /* lighter gray */
-    "#f3f3f3", /* very light gray */
-    "#ffffff"  /* white */
-  };
-  const char *gray_names[] = {
-    NC_("Color name", "Black"),
-    NC_("Color name", "Very Dark Gray"),
-    NC_("Color name", "Darker Gray"),
-    NC_("Color name", "Dark Gray"),
-    NC_("Color name", "Medium Gray"),
-    NC_("Color name", "Light Gray"),
-    NC_("Color name", "Lighter Gray"),
-    NC_("Color name", "Very Light Gray"),
-    NC_("Color name", "White")
-  };
-  GdkRGBA colors[9*3];
+
+  GdkRGBA colors[8*3];
   int i, j;
 
-  for (i = 0; i < 9; i++)
+  for (i = 0; i < 8; i++)
     for (j = 0; j < 3; j++)
       gdk_rgba_parse (&colors[i*3 + j], default_colors[i][j]);
 
-  add_palette (cc, GTK_ORIENTATION_VERTICAL, 3, 9*3, colors, color_names);
-
-  for (i = 0; i < 9; i++)
-    gdk_rgba_parse (&colors[i], default_grays[i]);
-
-  add_palette (cc, GTK_ORIENTATION_HORIZONTAL, 9, 9, colors, gray_names);
+  add_palette (cc, GTK_ORIENTATION_VERTICAL, 3, 8*3, colors, color_names);
 
   cc->has_default_palette = TRUE;
 }
@@ -739,7 +709,7 @@ add_custom_color (GtkColorChooserWidget *cc,
        widget = gtk_widget_get_next_sibling (widget))
     children = g_list_prepend (children, widget);
 
-  if (g_list_length (children) >= 9)
+  if (g_list_length (children) >= 8)
     {
       GtkWidget *last = gtk_widget_get_last_child (cc->custom);
 
