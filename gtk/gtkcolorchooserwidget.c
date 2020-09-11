@@ -83,6 +83,8 @@ struct _GtkColorChooserWidget
   gboolean has_default_palette;
 
   GSettings *settings;
+
+  int max_custom;
 };
 
 struct _GtkColorChooserWidgetClass
@@ -314,7 +316,6 @@ add_palette (GtkColorChooserWidget  *cc,
   gtk_grid_set_row_spacing (GTK_GRID (grid), 2);
   gtk_grid_set_column_spacing (GTK_GRID (grid), 4);
   gtk_box_append (GTK_BOX (cc->palette), grid);
-  
 
   left = 0;
   right = colors_per_line - 1;
@@ -353,6 +354,11 @@ add_palette (GtkColorChooserWidget  *cc,
           gtk_grid_attach (GTK_GRID (grid), p, line, pos, 1, 1);
        }
     }
+
+  if (orientation == GTK_ORIENTATION_HORIZONTAL)
+    cc->max_custom = MAX (cc->max_custom, colors_per_line);
+  else
+    cc->max_custom = MAX (cc->max_custom, n_colors / colors_per_line);
 }
 
 static void
@@ -363,6 +369,7 @@ remove_default_palette (GtkColorChooserWidget *cc)
 
   remove_palette (cc);
   cc->has_default_palette = FALSE;
+  cc->max_custom = 0;
 }
 
 static void
@@ -700,16 +707,16 @@ add_custom_color (GtkColorChooserWidget *cc,
                   const GdkRGBA         *color)
 {
   GtkWidget *widget;
-  GList *children;
   GtkWidget *p;
+  int n;
 
-  children = NULL;
+  n = 0;
   for (widget = gtk_widget_get_first_child (cc->custom);
        widget != NULL;
        widget = gtk_widget_get_next_sibling (widget))
-    children = g_list_prepend (children, widget);
+    n++;
 
-  if (g_list_length (children) >= 8)
+  while (n >= cc->max_custom)
     {
       GtkWidget *last = gtk_widget_get_last_child (cc->custom);
 
@@ -717,8 +724,8 @@ add_custom_color (GtkColorChooserWidget *cc,
         cc->current = NULL;
 
       gtk_box_remove (GTK_BOX (cc->custom), last);
+      n--;
     }
-  g_list_free (children);
 
   p = gtk_color_swatch_new ();
   gtk_color_swatch_set_rgba (GTK_COLOR_SWATCH (p), color);
