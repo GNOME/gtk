@@ -296,8 +296,7 @@ add_palette (GtkColorChooserWidget  *cc,
              GtkOrientation          orientation,
              int                     colors_per_line,
              int                     n_colors,
-             GdkRGBA                *colors,
-             const char            **names)
+             GdkRGBA                *colors)
 {
   GtkWidget *grid;
   GtkWidget *p;
@@ -385,32 +384,6 @@ add_default_palette (GtkColorChooserWidget *cc)
     { "#cdab8f", "#986a44", "#63452c" }, /* Brown */
     { "#f6f5f4", "#9a9996", "#3d3846" }  /* Neutral */
   };
-  const char *color_names[] = {
-    NC_("Color name", "Blue 1"),
-    NC_("Color name", "Blue 2"),
-    NC_("Color name", "Blue 3"),
-    NC_("Color name", "Green 1"),
-    NC_("Color name", "Green 2"),
-    NC_("Color name", "Green 3"),
-    NC_("Color name", "Yellow 1"),
-    NC_("Color name", "Yellow 2"),
-    NC_("Color name", "Yellow 3"),
-    NC_("Color name", "Orange 1"),
-    NC_("Color name", "Orange 2"),
-    NC_("Color name", "Orange 3"),
-    NC_("Color name", "Red 1"),
-    NC_("Color name", "Red 2"),
-    NC_("Color name", "Red 3"),
-    NC_("Color name", "Purple 1"),
-    NC_("Color name", "Purple 2"),
-    NC_("Color name", "Purple 3"),
-    NC_("Color name", "Brown 1"),
-    NC_("Color name", "Brown 2"),
-    NC_("Color name", "Brown 3"),
-    NC_("Color name", "Neutral 1"),
-    NC_("Color name", "Neutral 2"),
-    NC_("Color name", "Neutral 3")
-  };
 
   GdkRGBA colors[8*3];
   int i, j;
@@ -419,7 +392,7 @@ add_default_palette (GtkColorChooserWidget *cc)
     for (j = 0; j < 3; j++)
       gdk_rgba_parse (&colors[i*3 + j], default_colors[i][j]);
 
-  add_palette (cc, GTK_ORIENTATION_VERTICAL, 3, 8*3, colors, color_names);
+  add_palette (cc, GTK_ORIENTATION_VERTICAL, 3, 8*3, colors);
 
   cc->has_default_palette = TRUE;
 }
@@ -784,7 +757,7 @@ gtk_color_chooser_widget_add_palette (GtkColorChooser *chooser,
   GtkColorChooserWidget *cc = GTK_COLOR_CHOOSER_WIDGET (chooser);
 
   remove_default_palette (cc);
-  add_palette (cc, orientation, colors_per_line, n_colors, colors, NULL);
+  add_palette (cc, orientation, colors_per_line, n_colors, colors);
 
   gtk_box_reorder_child_after (GTK_BOX (cc->palette), cc->custom_label, gtk_widget_get_last_child (cc->palette));
   gtk_box_reorder_child_after (GTK_BOX (cc->palette), cc->custom, cc->custom_label);
