@@ -354,7 +354,7 @@ gdk_vulkan_context_check_swapchain (GdkVulkanContext  *context,
                                                 },
                                                 .preTransform = capabilities.currentTransform,
                                                 .compositeAlpha = composite_alpha,
-                                                .presentMode = VK_PRESENT_MODE_FIFO_KHR,
+                                                .presentMode = VK_PRESENT_MODE_IMMEDIATE_KHR,
                                                 .clipped = VK_FALSE,
                                                 .oldSwapchain = priv->swapchain
                                             },
