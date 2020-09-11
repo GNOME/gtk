@@ -681,7 +681,7 @@ string_serializer (GdkContentSerializer *serializer)
 
   g_output_stream_write_all_async (filter,
                                    text,
-                                   strlen (text) + 1,
+                                   strlen (text),
                                    gdk_content_serializer_get_priority (serializer),
                                    gdk_content_serializer_get_cancellable (serializer),
                                    string_serializer_finish,
