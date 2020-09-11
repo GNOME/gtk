@@ -439,7 +439,11 @@ gdk_x11_selection_output_stream_flush (GOutputStream  *output_stream,
   g_main_context_invoke (NULL, gdk_x11_selection_output_stream_invoke_flush, stream);
 
   g_mutex_lock (&priv->mutex);
-  if (gdk_x11_selection_output_stream_needs_flush_unlocked (stream))
+  /* We have to check gdk_x11_selection_output_stream_can_flush() because if
+   * we cannot, nothing will necessarily complete our g_cond_wait().
+   */
+  if (!priv->delete_pending &&
+      gdk_x11_selection_output_stream_needs_flush_unlocked (stream))
     g_cond_wait (&priv->cond, &priv->mutex);
   g_mutex_unlock (&priv->mutex);
 
