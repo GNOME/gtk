@@ -31,6 +31,7 @@
 #include "gtkstylecontext.h"
 #include "gtkboxlayout.h"
 #include "gtkwidgetprivate.h"
+#include "gdkrgbaprivate.h"
 
 #include <math.h>
 
@@ -374,23 +375,16 @@ remove_default_palette (GtkColorChooserWidget *cc)
 static void
 add_default_palette (GtkColorChooserWidget *cc)
 {
-  const char *default_colors[8][3] = {
-    { "#99c1f1", "#3584e4", "#1a5fb4" }, /* Blue */
-    { "#8ff0a4", "#33d17a", "#26a269" }, /* Green */
-    { "#f9f06b", "#f6d32d", "#e5a50a" }, /* Yellow */
-    { "#ffbe6f", "#ff7800", "#c64600" }, /* Orange */
-    { "#f66151", "#e01b24", "#a51d2d" }, /* Red */
-    { "#dc8add", "#9141ac", "#613583" }, /* Purple */
-    { "#cdab8f", "#986a44", "#63452c" }, /* Brown */
-    { "#f6f5f4", "#9a9996", "#3d3846" }  /* Neutral */
+  GdkRGBA colors[8*3] = {
+    GDK_RGBA("99c1f1"), GDK_RGBA("3584e4"), GDK_RGBA("1a5fb4"), /* Blue */
+    GDK_RGBA("8ff0a4"), GDK_RGBA("33d17a"), GDK_RGBA("26a269"), /* Green */
+    GDK_RGBA("f9f06b"), GDK_RGBA("f6d32d"), GDK_RGBA("e5a50a"), /* Yellow */
+    GDK_RGBA("ffbe6f"), GDK_RGBA("ff7800"), GDK_RGBA("c64600"), /* Orange */
+    GDK_RGBA("f66151"), GDK_RGBA("e01b24"), GDK_RGBA("a51d2d"), /* Red */
+    GDK_RGBA("dc8add"), GDK_RGBA("9141ac"), GDK_RGBA("613583"), /* Purple */
+    GDK_RGBA("cdab8f"), GDK_RGBA("986a44"), GDK_RGBA("63452c"), /* Brown */
+    GDK_RGBA("f6f5f4"), GDK_RGBA("9a9996"), GDK_RGBA("3d3846")  /* Neutral */
   };
-
-  GdkRGBA colors[8*3];
-  int i, j;
-
-  for (i = 0; i < 8; i++)
-    for (j = 0; j < 3; j++)
-      gdk_rgba_parse (&colors[i*3 + j], default_colors[i][j]);
 
   add_palette (cc, GTK_ORIENTATION_VERTICAL, 3, 8*3, colors);
 
@@ -771,19 +765,3 @@ gtk_color_chooser_widget_iface_init (GtkColorChooserInterface *iface)
   iface->add_palette = gtk_color_chooser_widget_add_palette;
 }
 
-/* Public API {{{1 */
-
-/**
- * gtk_color_chooser_widget_new:
- *
- * Creates a new #GtkColorChooserWidget.
- *
- * Returns: a new #GtkColorChooserWidget
- */
-GtkWidget *
-gtk_color_chooser_widget_new (void)
-{
-  return g_object_new (GTK_TYPE_COLOR_CHOOSER_WIDGET, NULL);
-}
-
-/* vim:set foldmethod=marker: */
