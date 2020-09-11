@@ -964,7 +964,7 @@ gtk_text_layout_validate_yrange (GtkTextLayout *layout,
     y0 = 0;
   if (y1 < 0)
     y1 = 0;
-  
+
   /* Validate backwards from the anchor line to y0
    */
   line = _gtk_text_iter_get_text_line (anchor);
@@ -4138,6 +4138,8 @@ gtk_text_layout_snapshot (GtkTextLayout      *layout,
   GtkStyleContext *context;
   int offset_y;
   GtkTextIter selection_start, selection_end;
+  int selection_start_line;
+  int selection_end_line;
   gboolean have_selection;
   GSList *line_list;
   GSList *tmp_list;
@@ -4173,6 +4175,16 @@ gtk_text_layout_snapshot (GtkTextLayout      *layout,
   have_selection = gtk_text_buffer_get_selection_bounds (layout->buffer,
                                                          &selection_start,
                                                          &selection_end);
+  if (have_selection)
+    {
+      selection_start_line = gtk_text_iter_get_line (&selection_start);
+      selection_end_line = gtk_text_iter_get_line (&selection_end);
+    }
+  else
+    {
+      selection_start_line = -1;
+      selection_end_line = -1;
+    }
 
   tmp_list = line_list;
   while (tmp_list != NULL)
@@ -4190,34 +4202,43 @@ gtk_text_layout_snapshot (GtkTextLayout      *layout,
 
           if (have_selection)
             {
-              GtkTextIter line_start, line_end;
-              int byte_count;
+              GtkTextIter line_start;
+              int current_line;
 
               gtk_text_layout_get_iter_at_line (layout, &line_start, line, 0);
-              line_end = line_start;
-              if (!gtk_text_iter_ends_line (&line_end))
-                gtk_text_iter_forward_to_line_end (&line_end);
-              byte_count = gtk_text_iter_get_visible_line_index (&line_end);
+              current_line = gtk_text_iter_get_line (&line_start);
 
-              if (gtk_text_iter_compare (&selection_start, &line_end) <= 0 &&
-                  gtk_text_iter_compare (&selection_end, &line_start) >= 0)
+              if (selection_start_line < current_line)
+                selection_start_index = -1;
+              else if (selection_start_line == current_line)
+                selection_start_index = gtk_text_iter_get_visible_line_index (&selection_start);
+              else
+                selection_start_index = -1;
+
+              if (selection_end_line < current_line)
                 {
-                  if (gtk_text_iter_compare (&selection_start, &line_start) >= 0)
-                    selection_start_index = gtk_text_iter_get_visible_line_index (&selection_start);
-                  else
-                    selection_start_index = -1;
-
-                  if (gtk_text_iter_compare (&selection_end, &line_end) <= 0)
-                    selection_end_index = gtk_text_iter_get_visible_line_index (&selection_end);
-                  else
-                    selection_end_index = byte_count + 1; /* + 1 to flag past-the-end */
+                  selection_end_index = -1;
+                  have_selection = FALSE;
                 }
+              else if (selection_end_line == current_line)
+                selection_end_index = gtk_text_iter_get_visible_line_index (&selection_end);
+              else if (selection_start_line <= current_line)
+                {
+                  GtkTextIter line_end = line_start;
+                  int byte_count;
+
+                  if (!gtk_text_iter_ends_line (&line_end))
+                    gtk_text_iter_forward_to_line_end (&line_end);
+                  byte_count = gtk_text_iter_get_visible_line_index (&line_end);
+                  selection_end_index = byte_count + 1; /* + 1 to flag past-the-end */
+                }
+              else
+                selection_end_index = -1;
             }
 
           if (line_display->node == NULL)
             {
               gtk_snapshot_push_collect (snapshot);
-
               render_para (crenderer, 0, line_display,
                            selection_start_index, selection_end_index,
                            cursor_alpha);
