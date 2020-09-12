@@ -19,8 +19,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-09-08 12:51+0000\n"
-"PO-Revision-Date: 2020-09-12 09:13+0300\n"
+"POT-Creation-Date: 2020-09-12 14:25+0000\n"
+"PO-Revision-Date: 2020-09-12 20:09+0300\n"
 "Last-Translator: Emin Tufan Çetin <etcetin@gmail.com>\n"
 "Language-Team: Türkçe <gnome-turk@gnome.org>\n"
 "Language: tr\n"
@@ -141,80 +141,60 @@ msgid "Direction"
 msgstr "Yön"
 
 #: gdk/gdkdevice.c:247
-#, fuzzy
-#| msgid "The pack direction of the menubar"
 msgid "The direction of the current layout of the keyboard"
-msgstr "Menü çubuğunun paketleme yönü"
+msgstr "Geçerli klavye düzeninin yönü"
 
 #: gdk/gdkdevice.c:253
 msgid "Has bidi layouts"
-msgstr "Bidi düzenleri var"
+msgstr "Bidi (çift yön) düzenleri var"
 
 #: gdk/gdkdevice.c:254
 msgid "Whether the keyboard has bidi layouts"
-msgstr "Klavyede bidi düzenlerinin olması"
+msgstr "Klavyede bidi (çift yön) düzenlerinin olması"
 
 #: gdk/gdkdevice.c:260
-#, fuzzy
-#| msgid "Caps Lock warning"
 msgid "Caps lock state"
-msgstr "Caps Lock uyarısı"
+msgstr "Büyük harf kilidi (caps lock) durumu"
 
 #: gdk/gdkdevice.c:261
-#, fuzzy
-#| msgid "Whether the cell background color is set"
 msgid "Whether the keyboard caps lock is on"
-msgstr "Hücre arkaplan rengininin ayarlanıp ayarlanmaması"
+msgstr "Klavyenin büyük harf kilidinin (caps lock) açık olması"
 
 #: gdk/gdkdevice.c:267
 msgid "Num lock state"
 msgstr "Rakam kilidi (num lock) durumu"
 
 #: gdk/gdkdevice.c:268
-#, fuzzy
-#| msgid "Whether the view is loading locations"
 msgid "Whether the keyboard num lock is on"
-msgstr "Görünümün konumları yükleyip yüklemediği"
+msgstr "Klavyenin rakam kilidinin (num lock) açık olması"
 
 #: gdk/gdkdevice.c:274
-#, fuzzy
-#| msgid "Scroll offset"
 msgid "Scroll lock state"
-msgstr "Kaydırma ofseti"
+msgstr "Kaydırma kilidi (scroll lock) durumu"
 
 #: gdk/gdkdevice.c:275
-#, fuzzy
-#| msgid "Whether the border should be shown"
 msgid "Whether the keyboard scroll lock is on"
-msgstr "Kenarlıkların gösterilip gösterilmemesi"
+msgstr "Klavyenin kaydırma kilidinin açık olması"
 
 #: gdk/gdkdevice.c:281
-#, fuzzy
-#| msgid "Radio state"
 msgid "Modifier state"
-msgstr "Radyo durumu"
+msgstr "Değiştirici durumu"
 
 #: gdk/gdkdevice.c:282
-#, fuzzy
-#| msgid "The modifier mask of the accelerator"
 msgid "The modifier state of the keyboard"
-msgstr "Hızlandırıcının düzenleyici maskesi"
+msgstr "Klavyenin değiştirici durumu"
 
 #: gdk/gdkdisplay.c:180 gdk/gdkdisplay.c:181
-#, fuzzy
-#| msgid "Composite child"
 msgid "Composited"
-msgstr "Karma alt"
+msgstr ""
 
 #: gdk/gdkdisplay.c:193 gdk/gdkdisplay.c:194
 msgid "RGBA"
 msgstr "RGBA"
 
 #: gdk/gdkdisplay.c:206 gdk/gdkdisplay.c:207
-#, fuzzy
-#| msgid "Input source"
 msgid "Input shapes"
-msgstr "Giriş kaynağı"
+msgstr "Giriş şekilleri"
 
 #: gdk/gdkdisplaymanager.c:171
 msgid "Default Display"
@@ -249,26 +229,20 @@ msgid "Parent"
 msgstr "Üst"
 
 #: gdk/gdkpopup.c:91 gdk/gdkpopup.c:97
-#, fuzzy
-#| msgid "The parent style context"
 msgid "The parent surface"
-msgstr "Ana biçem içeriği"
+msgstr "Ebeveyn yüzey"
 
 #: gdk/gdkpopup.c:96 gtk/gtkpopover.c:1642
-#, fuzzy
-#| msgid "Auto render"
 msgid "Autohide"
-msgstr "Otomatik ekrana çizme"
+msgstr "Kendiliğinden gizle"
 
 #: gdk/gdksurface.c:495 gdk/gdksurface.c:496 gtk/gtkwidget.c:1037
 msgid "Cursor"
 msgstr "İmleç"
 
 #: gdk/gdksurface.c:515 gdk/gdksurface.c:516
-#, fuzzy
-#| msgid "FrameClock"
 msgid "Frame Clock"
-msgstr "ÇerçeveSaat"
+msgstr "Çerçeve Saat"
 
 #: gdk/gdksurface.c:522 gdk/gdksurface.c:523
 msgid "Mapped"
@@ -288,7 +262,6 @@ msgid "State"
 msgstr "Durum"
 
 #: gdk/macos/gdkmacosdrag.c:599 gdk/macos/gdkmacosdrag.c:600
-#, fuzzy
 msgid "Drag Surface"
 msgstr "Sürükleme Yüzeyi"
 
@@ -301,16 +274,12 @@ msgid "Handle"
 msgstr "Tutamaç"
 
 #: gdk/win32/gdkcursor-win32.c:242
-#, fuzzy
-#| msgid "The URI bound to this button"
 msgid "The HCURSOR handle for this cursor"
-msgstr "Bu düğmeye bağlı URI"
+msgstr "Bu imleç için HCURSOR kulbu"
 
 #: gdk/win32/gdkcursor-win32.c:247
-#, fuzzy
-#| msgid "Deletable"
 msgid "Destroyable"
-msgstr "Silinebilir"
+msgstr "Yok edilir"
 
 #: gdk/win32/gdkcursor-win32.c:248
 msgid "Whether calling DestroyCursor() is allowed on this cursor"
@@ -556,7 +525,7 @@ msgstr "Ayarlamanın sayfa boyutu"
 
 #: gtk/gtkappchooserbutton.c:678
 msgid "Include an “Other…” item"
-msgstr "“Other…” ögesi içer"
+msgstr "“Diğer…” ögesi içer"
 
 #: gtk/gtkappchooserbutton.c:679
 msgid ""
@@ -588,13 +557,11 @@ msgstr "Pencerenin en üstünde göstermek için metin"
 #: gtk/gtkfilechooserbutton.c:542 gtk/gtkfontbutton.c:513
 #: gtk/gtknativedialog.c:226 gtk/gtkwindow.c:750
 msgid "Modal"
-msgstr "Yönetsel"
+msgstr ""
 
 #: gtk/gtkappchooserbutton.c:713
-#, fuzzy
-#| msgid "Whether the audio stream should be muted."
 msgid "Whether the dialog should be modal"
-msgstr "Ses akışının sesinin kesilip kesilmemesi."
+msgstr ""
 
 #: gtk/gtkappchooser.c:73
 msgid "Content type"
@@ -742,20 +709,16 @@ msgstr "Çerçevenin altıyla en-boy oranının eşleşmesini sağlar"
 #: gtk/gtkrevealer.c:352 gtk/gtkscrolledwindow.c:756 gtk/gtksearchbar.c:324
 #: gtk/gtkstack.c:333 gtk/gtktreeexpander.c:459 gtk/gtkviewport.c:380
 #: gtk/gtkwindow.c:921 gtk/gtkwindowhandle.c:544
-#, fuzzy
-#| msgid "Child"
 msgid "Child"
-msgstr "Alt"
+msgstr "Çocuk"
 
 #: gtk/gtkaspectframe.c:174 gtk/gtkbutton.c:257 gtk/gtkexpander.c:367
 #: gtk/gtkflowbox.c:510 gtk/gtkframe.c:192 gtk/gtklistbox.c:3468
 #: gtk/gtkoverlay.c:320 gtk/gtkpopover.c:1671 gtk/gtkrevealer.c:353
 #: gtk/gtkscrolledwindow.c:757 gtk/gtksearchbar.c:325 gtk/gtkviewport.c:381
 #: gtk/gtkwindow.c:922 gtk/gtkwindowhandle.c:545
-#, fuzzy
-#| msgid "The child model"
 msgid "The child widget"
-msgstr "Çocuk model"
+msgstr "Çocuk parçacık"
 
 #: gtk/gtkassistant.c:252
 msgid "Page type"
@@ -782,16 +745,12 @@ msgid "Whether all required fields on the page have been filled out"
 msgstr "Sayfadaki gerekli tüm alanların doldurulmuş olması"
 
 #: gtk/gtkassistant.c:288
-#, fuzzy
-#| msgid "Label widget"
 msgid "Child widget"
-msgstr "Etiket parçası"
+msgstr "Çocuk parçacık"
 
 #: gtk/gtkassistant.c:289
-#, fuzzy
-#| msgid "The type of the assistant page"
 msgid "The content the assistant page"
-msgstr "Yardımcı sayfanın türü"
+msgstr "Yardımcı sayfanın içeriği"
 
 #: gtk/gtkassistant.c:590 gtk/gtkdialog.c:546
 msgid "Use Header Bar"
@@ -802,16 +761,12 @@ msgid "Use Header Bar for actions."
 msgstr "Eylemler için Üst Bilgi Çubuğu kullan."
 
 #: gtk/gtkassistant.c:598 gtk/gtknotebook.c:1104 gtk/gtkstack.c:745
-#, fuzzy
-#| msgid "Page"
 msgid "Pages"
-msgstr "Sayfa"
+msgstr "Sayfalar"
 
 #: gtk/gtkassistant.c:599
-#, fuzzy
-#| msgid "The type of the assistant page"
 msgid "The pages of the assistant."
-msgstr "Yardımcı sayfanın türü"
+msgstr "Yardımcının sayfaları."
 
 #: gtk/gtkbookmarklist.c:213 gtk/gtkimage.c:175 gtk/gtkrecentmanager.c:281
 msgid "Filename"
@@ -827,10 +782,8 @@ msgid "Attributes"
 msgstr "Öznitelikler"
 
 #: gtk/gtkbookmarklist.c:225 gtk/gtkdirectorylist.c:267
-#, fuzzy
-#| msgid "Attributes"
 msgid "Attributes to query"
-msgstr "Öznitelikler"
+msgstr "Sorgulanacak öznitelikler"
 
 #: gtk/gtkbookmarklist.c:236 gtk/gtkdirectorylist.c:302
 msgid "IO priority"
@@ -841,39 +794,29 @@ msgid "Priority used when loading"
 msgstr "Yüklerken kullanılan öncelik"
 
 #: gtk/gtkbookmarklist.c:248 gtk/gtkdirectorylist.c:326
-#, fuzzy
-#| msgid "Loading"
 msgid "loading"
-msgstr "Yükleniyor"
+msgstr "yükleniyor"
 
 #: gtk/gtkbookmarklist.c:249 gtk/gtkdirectorylist.c:327
-#, fuzzy
-#| msgid "TRUE if this printer is paused"
 msgid "TRUE if files are being loaded"
-msgstr "TRUE ise bu yazıcı duraklatılmış"
+msgstr "TRUE ise sayfalar yüklenir"
 
 #: gtk/gtkboolfilter.c:165 gtk/gtkdropdown.c:508 gtk/gtknumericsorter.c:550
 #: gtk/gtkstringfilter.c:252 gtk/gtkstringsorter.c:296
-#, fuzzy
-#| msgid "Permission"
 msgid "Expression"
-msgstr "İzin"
+msgstr "İfade"
 
 #: gtk/gtkboolfilter.c:166
 msgid "Expression to evaluate"
 msgstr "Değerlendirilecek ifade"
 
 #: gtk/gtkboolfilter.c:176
-#, fuzzy
-#| msgid "Inverted"
 msgid "Invert"
-msgstr "Tersi"
+msgstr "Evirt"
 
 #: gtk/gtkboolfilter.c:177
-#, fuzzy
-#| msgid "TRUE if the Position property should be used"
 msgid "If the expression result should be inverted"
-msgstr "TRUE ise Position özelliği kullanılacaktır"
+msgstr "İfade sonucu evirtilmeliyse"
 
 #: gtk/gtkbox.c:258 gtk/gtkboxlayout.c:722 gtk/gtkcellareabox.c:317
 #: gtk/gtkiconview.c:465 gtk/gtktreeviewcolumn.c:302
@@ -908,10 +851,8 @@ msgid "Distribute space homogeneously"
 msgstr "Boşluğu homojen dağıt"
 
 #: gtk/gtkboxlayout.c:723
-#, fuzzy
-#| msgid "Spacing between buttons"
 msgid "Spacing between widgets"
-msgstr "Düğmeler arası boşluk"
+msgstr "Parçacıklar arası boşluk"
 
 #: gtk/gtkbuilder.c:305
 msgid "Translation Domain"
@@ -922,10 +863,8 @@ msgid "The translation domain used by gettext"
 msgstr "Gettext tarafından kullanılan tercüme alanı"
 
 #: gtk/gtkbuilder.c:317
-#, fuzzy
-#| msgid "Current Page"
 msgid "Current object"
-msgstr "Geçerli Sayfa"
+msgstr "Geçerli nesne"
 
 #: gtk/gtkbuilder.c:318
 msgid "The object the builder is evaluating for"
@@ -937,30 +876,24 @@ msgid "Scope"
 msgstr ""
 
 #: gtk/gtkbuilder.c:330
-#, fuzzy
-#| msgid "The status of the print operation"
 msgid "The scope the builder is operating in"
-msgstr "Yazdırma işleminin durumu"
+msgstr ""
 
 #: gtk/gtkbuilderlistitemfactory.c:269
 msgid "Bytes"
 msgstr "Bayt"
 
 #: gtk/gtkbuilderlistitemfactory.c:270
-#, fuzzy
-#| msgid "Merged UI definition"
 msgid "bytes containing the UI definition"
-msgstr "Birleşik arayüz tanımı"
+msgstr "UI tanımını içeren baytlar"
 
 #: gtk/gtkbuilderlistitemfactory.c:281 gtk/gtkimage.c:237
 msgid "Resource"
 msgstr "Kaynak"
 
 #: gtk/gtkbuilderlistitemfactory.c:282
-#, fuzzy
-#| msgid "Merged UI definition"
 msgid "resource containing the UI definition"
-msgstr "Birleşik arayüz tanımı"
+msgstr "UI tanımını içeren kaynak"
 
 #: gtk/gtkbuilderlistitemfactory.c:294
 msgid "scope to use when instantiating listitems"
@@ -989,8 +922,8 @@ msgid ""
 "If set, an underline in the text indicates the next character should be used "
 "for the mnemonic accelerator key"
 msgstr ""
-"Eğer seçiliyse; alt çizgiden sonra gelen karakter, anımsatıcı hızlandırıcı "
-"tuşu olarak kullanılacak"
+"Eğer seçiliyse; metindeki alt çizgi, anımsatıcı hızlandırıcı tuş için "
+"kullanılacak sonraki karakteri belirtir."
 
 #: gtk/gtkbutton.c:242 gtk/gtkcombobox.c:669 gtk/gtkentry.c:469
 #: gtk/gtkscrolledwindow.c:638
@@ -998,10 +931,8 @@ msgid "Has Frame"
 msgstr "Çerçeve Var"
 
 #: gtk/gtkbutton.c:243 gtk/gtkmenubutton.c:414
-#, fuzzy
-#| msgid "Whether the menu is a parent"
 msgid "Whether the button has a frame"
-msgstr "Menünün alt menüleri olup olmadığı"
+msgstr "Düğmenin çerçevesinin olup olmaması"
 
 #: gtk/gtkbutton.c:249 gtk/gtkcellrendererpixbuf.c:209 gtk/gtkimage.c:211
 #: gtk/gtkmenubutton.c:392 gtk/gtkprinter.c:170 gtk/gtkwindow.c:822
@@ -1009,10 +940,8 @@ msgid "Icon Name"
 msgstr "Simge Adı"
 
 #: gtk/gtkbutton.c:250 gtk/gtkmenubutton.c:393
-#, fuzzy
-#| msgid "The name of the icon from the icon theme"
 msgid "The name of the icon used to automatically populate the button"
-msgstr "Simge temasından simgenin adı"
+msgstr "Düğmeyi kendiliğinden doldurmada kullanılacak simgenin adı"
 
 #: gtk/gtkcalendar.c:373
 msgid "Year"
@@ -1174,11 +1103,11 @@ msgstr "Hızlandırıcının keyval değeri"
 
 #: gtk/gtkcellrendereraccel.c:192
 msgid "Accelerator modifiers"
-msgstr "Hızlandırıcı düzenleyicileri"
+msgstr "Hızlandırıcı değiştiricileri"
 
 #: gtk/gtkcellrendereraccel.c:193
 msgid "The modifier mask of the accelerator"
-msgstr "Hızlandırıcının düzenleyici maskesi"
+msgstr "Hızlandırıcının değiştirici maskesi"
 
 #: gtk/gtkcellrendereraccel.c:208
 msgid "Accelerator keycode"
@@ -1723,7 +1652,7 @@ msgstr "Hizalama"
 msgid "How to align the lines"
 msgstr "Satırların nasıl hizalanacağı"
 
-#: gtk/gtkcellrenderertext.c:544 gtk/gtkentry.c:580 gtk/gtkpasswordentry.c:408
+#: gtk/gtkcellrenderertext.c:544 gtk/gtkentry.c:580 gtk/gtkpasswordentry.c:417
 #: gtk/gtksearchentry.c:283 gtk/gtktext.c:825
 msgid "Placeholder text"
 msgstr "Ayrılmış bilgi alanı metni"
@@ -1955,10 +1884,8 @@ msgid "Inconsistent"
 msgstr "Tutarsız"
 
 #: gtk/gtkcheckbutton.c:480
-#, fuzzy
-#| msgid "If the toggle button is in an \"in between\" state"
 msgid "If the check button is in an “in between” state"
-msgstr "Seçim düğmesi \"arada\" durumunda ise"
+msgstr "Seçim düğmesi “arada” durumunda ise"
 
 #: gtk/gtkcolorbutton.c:158 gtk/gtkcolorchooser.c:83
 msgid "Use alpha"
@@ -2014,7 +1941,7 @@ msgstr "Bir GdkRGBA olarak şu anki renk"
 msgid "Whether alpha should be shown"
 msgstr "Alfanın gösterilmesinin gerekip gerekmemesi"
 
-#: gtk/gtkcolorchooserdialog.c:219 gtk/gtkcolorchooserwidget.c:672
+#: gtk/gtkcolorchooserdialog.c:219 gtk/gtkcolorchooserwidget.c:616
 msgid "Show editor"
 msgstr "Düzenleyiciyi göster"
 
@@ -2058,51 +1985,37 @@ msgid "Whether the swatch should accept drops"
 msgstr "Renk örneğinin özelleştirme sunup sunmayacağı"
 
 #: gtk/gtkcolumnview.c:620
-#, fuzzy
-#| msgid "Column spacing"
 msgid "Columns"
-msgstr "Sütun aralığı"
+msgstr "Sütunlar"
 
 #: gtk/gtkcolumnview.c:621
-#, fuzzy
-#| msgid "List of classes"
 msgid "List of columns"
-msgstr "Sınıfların listesi"
+msgstr "Sütunların listesi"
 
 #: gtk/gtkcolumnview.c:633 gtk/gtkgridview.c:1093 gtk/gtklistview.c:840
-#, fuzzy
-#| msgid "The sorting order of the items displayed"
 msgid "Model for the items displayed"
-msgstr "Gösterilen ögelerin sıralama türü"
+msgstr "Gösterilen ögelerin modeli"
 
 #: gtk/gtkcolumnview.c:644
-#, fuzzy
-#| msgid "Show decorations"
 msgid "Show row separators"
-msgstr "Süslemeleri göster"
+msgstr "Satır ayraçlarını göster"
 
 #: gtk/gtkcolumnview.c:645 gtk/gtklistbox.c:513 gtk/gtklistview.c:852
 msgid "Show separators between rows"
 msgstr "Satırlar arasında ayraç göster"
 
 #: gtk/gtkcolumnview.c:656
-#, fuzzy
-#| msgid "Show decorations"
 msgid "Show column separators"
-msgstr "Süslemeleri göster"
+msgstr "Sütun ayraçlarını göster"
 
 #: gtk/gtkcolumnview.c:657
-#, fuzzy
-#| msgid "Show decorations"
 msgid "Show separators between columns"
-msgstr "Süslemeleri göster"
+msgstr "Sütunlar arası ayraçları göster"
 
 #: gtk/gtkcolumnview.c:668 gtk/gtkcolumnviewcolumn.c:277
 #: gtk/gtksortlistmodel.c:820 gtk/gtktreelistrowsorter.c:544
-#, fuzzy
-#| msgid "Sort order"
 msgid "Sorter"
-msgstr "Sıralama düzeni"
+msgstr "Sıralayıcı"
 
 #: gtk/gtkcolumnview.c:669
 msgid "Sorter with sorting choices of the user"
@@ -2113,10 +2026,8 @@ msgid "Single click activate"
 msgstr "Tek tık aktifleştirme"
 
 #: gtk/gtkcolumnview.c:681 gtk/gtkgridview.c:1105 gtk/gtklistview.c:864
-#, fuzzy
-#| msgid "Activate row on a single click"
 msgid "Activate rows on single click"
-msgstr "Tek tıklamada satır etkinleştir"
+msgstr "Satırları tek tıkla aktifleştir"
 
 #: gtk/gtkcolumnview.c:692 gtk/gtkiconview.c:536 gtk/gtktreeview.c:1023
 #: gtk/gtktreeviewcolumn.c:377
@@ -2124,31 +2035,20 @@ msgid "Reorderable"
 msgstr "Sıralanabilir"
 
 #: gtk/gtkcolumnview.c:693
-#, fuzzy
-#| msgid "Whether the column can be reordered around the headers"
 msgid "Whether columns are reorderable"
-msgstr "Sütunun başlıklar etrafında sıralanabilirliği"
+msgstr "Sütunların yeniden sıralanırlığı"
 
 #: gtk/gtkcolumnview.c:704 gtk/gtkgridview.c:1116 gtk/gtklistview.c:875
-#, fuzzy
-#| msgid "Inline selection"
 msgid "Enable rubberband selection"
-msgstr "Satır arası seçim"
+msgstr "Paket lastiği seçimi etkinleştir"
 
 #: gtk/gtkcolumnview.c:705 gtk/gtkgridview.c:1117 gtk/gtklistview.c:876
-#, fuzzy
-#| msgid ""
-#| "Whether to enable selection of multiple items by dragging the mouse "
-#| "pointer"
 msgid "Allow selecting items by dragging with the mouse"
-msgstr ""
-"Fare belirtecini sürükleyerek birden fazla öge seçmenin etkinleştirilmesi"
+msgstr "Fareyi sürükleyerek ögeleri seçmeyi sağla"
 
 #: gtk/gtkcolumnviewcolumn.c:241
-#, fuzzy
-#| msgid "Column spacing"
 msgid "Column view"
-msgstr "Sütun aralığı"
+msgstr "Sütun görünümü"
 
 #: gtk/gtkcolumnviewcolumn.c:242
 msgid "Column view this column is a part of"
@@ -2165,10 +2065,8 @@ msgid "Factory for populating list items"
 msgstr ""
 
 #: gtk/gtkcolumnviewcolumn.c:266
-#, fuzzy
-#| msgid "Text to be displayed in the progress bar"
 msgid "Title displayed in the header"
-msgstr "Süreç çubuğunda gösterilecek metin"
+msgstr "Başlıkta gösterilen başlık"
 
 #: gtk/gtkcolumnviewcolumn.c:278
 msgid "Sorter for sorting items according to this column"
@@ -2180,10 +2078,8 @@ msgid "Visible"
 msgstr "Görünür"
 
 #: gtk/gtkcolumnviewcolumn.c:290
-#, fuzzy
-#| msgid "Whether the action is visible."
 msgid "Whether this column is visible"
-msgstr "Eylemin görünür olup olmaması."
+msgstr "Bu sütunun görünür olup olmaması"
 
 #: gtk/gtkcolumnviewcolumn.c:301
 msgid "Header menu"
@@ -2199,16 +2095,12 @@ msgid "Resizable"
 msgstr "Boyutlandırılabilir"
 
 #: gtk/gtkcolumnviewcolumn.c:314
-#, fuzzy
-#| msgid "Whether the action is enabled."
 msgid "Whether this column is resizable"
-msgstr "Eylemin etkin olup olmaması."
+msgstr "Bu sütunun yeniden boyutlanırlığı"
 
 #: gtk/gtkcolumnviewcolumn.c:326
-#, fuzzy
-#| msgid "Column gets share of extra width allocated to the widget"
 msgid "column gets share of extra width"
-msgstr "Parçaya ayrılan ek genişlikten sütunda pay alır"
+msgstr "sütun, ek genişlikten pay alır"
 
 #: gtk/gtkcolumnviewcolumn.c:338
 msgid "Fixed width"
@@ -2317,98 +2209,72 @@ msgstr ""
 "ile eşleşen sabit genişlikte olması gerekliliği"
 
 #: gtk/gtkcombobox.c:783
-#, fuzzy
-#| msgid "The child model"
 msgid "The child_widget"
-msgstr "Çocuk model"
+msgstr ""
 
 #: gtk/gtkconstraint.c:191
 msgid "Target"
 msgstr "Hedef"
 
 #: gtk/gtkconstraint.c:192
-#, fuzzy
-#| msgid "The name of the action"
 msgid "The target of the constraint"
-msgstr "Eylemin adı"
+msgstr "Kısıtın hedefi"
 
 #: gtk/gtkconstraint.c:204
-#, fuzzy
-#| msgid "Attributes"
 msgid "Target Attribute"
-msgstr "Öznitelikler"
+msgstr "Hedef Öznitelik"
 
 #: gtk/gtkconstraint.c:205
 msgid "The attribute of the target set by the constraint"
-msgstr ""
+msgstr "Hedefin kısıtça belirlenmiş özniteliği"
 
 #: gtk/gtkconstraint.c:218
-#, fuzzy
-#| msgid "Ratio"
 msgid "Relation"
-msgstr "Oran"
+msgstr "İlişki"
 
 #: gtk/gtkconstraint.c:219
 msgid "The relation between the source and target attributes"
-msgstr ""
+msgstr "Kaynak ve hedef öznitelikleri arasındaki ilişki"
 
 #: gtk/gtkconstraint.c:235
-#, fuzzy
-#| msgid "Resource"
 msgid "Source"
 msgstr "Kaynak"
 
 #: gtk/gtkconstraint.c:236
-#, fuzzy
-#| msgid "The size of the icon"
 msgid "The source of the constraint"
-msgstr "Simgenin boyutu"
+msgstr "Kısıtın kaynağı"
 
 #: gtk/gtkconstraint.c:248
-#, fuzzy
-#| msgid "Attributes"
 msgid "Source Attribute"
-msgstr "Öznitelikler"
+msgstr "Kaynak Öznitelik"
 
 #: gtk/gtkconstraint.c:249
-#, fuzzy
-#| msgid "The name of the widget currently visible in the stack"
 msgid "The attribute of the source widget set by the constraint"
-msgstr "Yığında şu anda görünür olan programcığın adı"
+msgstr "Kaynak parçacığın kısıtça belirlenmiş özniteliği"
 
 #: gtk/gtkconstraint.c:263
-#, fuzzy
-#| msgid "Select Multiple"
 msgid "Multiplier"
-msgstr "Çoklu Seç"
+msgstr "Çarpan"
 
 #: gtk/gtkconstraint.c:264
 msgid "The multiplication factor to be applied to the source attribute"
-msgstr ""
+msgstr "Kaynak özniteliğine uygulanacak çarpan etkeni"
 
 #: gtk/gtkconstraint.c:276
-#, fuzzy
-#| msgid "Constraint"
 msgid "Constant"
-msgstr "Kısıt"
+msgstr "Sabite"
 
 #: gtk/gtkconstraint.c:277
-#, fuzzy
-#| msgid "The content type used by the open with object"
 msgid "The constant to be added to the source attribute"
-msgstr "Nesne ile açılarak kullanılan içerik türü"
+msgstr "Kaynak özniteliğe eklenecek sabite"
 
 #: gtk/gtkconstraint.c:293
-#, fuzzy
-#| msgid "Slider Length"
 msgid "Strength"
-msgstr "Sürgü Uzunluğu"
+msgstr "Güç"
 
 #: gtk/gtkconstraint.c:294
-#, fuzzy
-#| msgid "The contents of the entry"
 msgid "The strength of the constraint"
-msgstr "Girdi içeriği"
+msgstr "Kısıtın gücü"
 
 #: gtk/gtkcssnode.c:602
 msgid "Style Classes"
@@ -2488,7 +2354,7 @@ msgstr "hata"
 
 #: gtk/gtkdirectorylist.c:279
 msgid "Error encountered while loading files"
-msgstr ""
+msgstr "Dosyalar yüklenirken hata oluştu"
 
 #: gtk/gtkdirectorylist.c:290 gtk/gtkmediafile.c:161 gtk/gtkpicture.c:327
 #: gtk/gtkvideo.c:296
@@ -2508,10 +2374,8 @@ msgid "The type of elements of this object"
 msgstr "Bu nesnenin ögelerinin türü"
 
 #: gtk/gtkdirectorylist.c:338
-#, fuzzy
-#| msgid "Monitor"
 msgid "monitored"
-msgstr "Ekran"
+msgstr ""
 
 #: gtk/gtkdirectorylist.c:339
 msgid "TRUE if the directory is monitored for changes"
@@ -2555,41 +2419,35 @@ msgstr "Gösterilen içerik için istenen yükseklik"
 
 #: gtk/gtkdropcontrollermotion.c:226 gtk/gtkeventcontrollermotion.c:223
 msgid "Contains Pointer"
-msgstr ""
+msgstr "Belirteç İçerir"
 
 #: gtk/gtkdropcontrollermotion.c:227 gtk/gtkeventcontrollermotion.c:224
 msgid "Whether the pointer is in the controllers widget or a descendant"
-msgstr ""
+msgstr "Belirtecin denetleyici parçacığında veya çocuğunda olması"
 
 #: gtk/gtkdropcontrollermotion.c:246 gtk/gtkdroptarget.c:590
 msgid "Drop"
-msgstr ""
+msgstr "Bırak"
 
 #: gtk/gtkdropcontrollermotion.c:247
 msgid "The ongoing drop operation"
 msgstr "Devam eden bırakma işlemi"
 
 #: gtk/gtkdropcontrollermotion.c:264 gtk/gtkeventcontrollermotion.c:206
-#, fuzzy
-#| msgid "Printer"
 msgid "Is Pointer"
-msgstr "Yazıcı"
+msgstr "Belirteç"
 
 #: gtk/gtkdropcontrollermotion.c:265 gtk/gtkeventcontrollermotion.c:207
-#, fuzzy
-#| msgid "Whether the widget is the default widget"
 msgid "Whether the pointer is in the controllers widget"
-msgstr "Parçanın öntanımlı parça olması"
+msgstr "Belirtecin denetleyiciler parçacığında olması"
 
 #: gtk/gtkdropdown.c:442
 msgid "List Factory"
 msgstr ""
 
 #: gtk/gtkdropdown.c:455
-#, fuzzy
-#| msgid "The model for the filtermodel to filter"
 msgid "Model for the displayed items"
-msgstr "filtremodel’in süzgeç uygulayacağı model"
+msgstr "Görüntülenen ögelerin modeli"
 
 #: gtk/gtkdropdown.c:467 gtk/gtklistitem.c:233 gtk/gtksingleselection.c:415
 msgid "Selected"
@@ -2617,7 +2475,7 @@ msgstr "Açılır pencerede arama girişi gösterilmesi"
 
 #: gtk/gtkdropdown.c:509
 msgid "Expression to determine strings to search for"
-msgstr ""
+msgstr "Aranacak dizgeleri saptamak için ifade"
 
 #: gtk/gtkdroptargetasync.c:401 gtk/gtkdroptarget.c:602
 msgid "Formats"
@@ -2637,7 +2495,7 @@ msgstr "Desteklenen biçimler"
 
 #: gtk/gtkdroptarget.c:630
 msgid "Preload"
-msgstr ""
+msgstr "Önyükle"
 
 #: gtk/gtkdroptarget.c:631
 msgid "Whether drop data should be preloaded while hovering"
@@ -2744,15 +2602,11 @@ msgid "Visibility"
 msgstr "Görünürlük"
 
 #: gtk/gtkentry.c:463 gtk/gtktext.c:920
-#, fuzzy
-#| msgid ""
-#| "FALSE displays the \"invisible char\" instead of the actual text "
-#| "(password mode)"
 msgid ""
 "FALSE displays the “invisible char” instead of the actual text (password "
 "mode)"
 msgstr ""
-"FALSE ise gerçek metin yerine \"invisible char\" gösterilir (parola kipi)"
+"FALSE ise gerçek metin yerine “invisible char” gösterilir (parola kipi)"
 
 #: gtk/gtkentry.c:470
 msgid "FALSE removes outside bevel from entry"
@@ -2763,20 +2617,17 @@ msgid "Invisible character"
 msgstr "Görünmez karakter"
 
 #: gtk/gtkentry.c:477
-#, fuzzy
-#| msgid ""
-#| "The character to use when masking entry contents (in \"password mode\")"
 msgid "The character to use when masking entry contents (in “password mode”)"
 msgstr ""
-"Girdi içeriklerini maskelerken kullanılacak karakter (\"parola kipi\" "
+"Girdi içeriklerini maskelerken kullanılacak karakter (“parola kipi” "
 "olduğunda)"
 
-#: gtk/gtkentry.c:483 gtk/gtkpasswordentry.c:415 gtk/gtksearchentry.c:290
+#: gtk/gtkentry.c:483 gtk/gtkpasswordentry.c:424 gtk/gtksearchentry.c:290
 #: gtk/gtktext.c:768
 msgid "Activates default"
 msgstr "Öntanımlıyı etkinleştirir"
 
-#: gtk/gtkentry.c:484 gtk/gtkpasswordentry.c:416 gtk/gtksearchentry.c:291
+#: gtk/gtkentry.c:484 gtk/gtkpasswordentry.c:425 gtk/gtksearchentry.c:291
 #: gtk/gtktext.c:769
 msgid ""
 "Whether to activate the default widget (such as the default button in a "
@@ -2841,9 +2692,7 @@ msgstr ""
 "Her gtk_entry_progress_pulse çağrısında gidip gelen ilerleme bloğunun "
 "taşınması için toplam giriş genişliği bölümü"
 
-#: gtk/gtkentry.c:581 gtk/gtkpasswordentry.c:409 gtk/gtksearchentry.c:284
-#, fuzzy
-#| msgid "Show text in the entry when it's empty and unfocused"
+#: gtk/gtkentry.c:581 gtk/gtkpasswordentry.c:418 gtk/gtksearchentry.c:284
 msgid "Show text in the entry when it’s empty and unfocused"
 msgstr "Boş ve odaklanılmamış olduğunda girdideki metni göster"
 
@@ -3004,10 +2853,8 @@ msgid "Hints for the text field behaviour"
 msgstr "Metin alanı davranışları için ipuçları"
 
 #: gtk/gtkentry.c:891
-#, fuzzy
-#| msgid "A list of style attributes to apply to the text of the renderer"
 msgid "A list of style attributes to apply to the text of the entry"
-msgstr "Tarayıcı metnine uygulanacak biçem özelliklerinin bir listesi"
+msgstr "Girdinin metnine uygulanacak biçem özniteliklerinin listesi"
 
 #: gtk/gtkentry.c:902 gtk/gtktext.c:905 gtk/gtktexttag.c:557
 #: gtk/gtktextview.c:968
@@ -3026,12 +2873,12 @@ msgstr "Emoji simgesi"
 msgid "Whether to show an icon for Emoji"
 msgstr "Emoji için bir simge gösterilmesi"
 
-#: gtk/gtkentry.c:928 gtk/gtklabel.c:953 gtk/gtkpasswordentry.c:435
+#: gtk/gtkentry.c:928 gtk/gtklabel.c:953 gtk/gtkpasswordentry.c:444
 #: gtk/gtktext.c:939 gtk/gtktextview.c:1074
 msgid "Extra menu"
 msgstr "Ek menü"
 
-#: gtk/gtkentry.c:929 gtk/gtkpasswordentry.c:436
+#: gtk/gtkentry.c:929 gtk/gtkpasswordentry.c:445
 msgid "Model menu to append to the context menu"
 msgstr "Bağlam menüsüne eklenecek model menü"
 
@@ -4194,7 +4041,7 @@ msgstr "Kayıttan oynatılacak girdi akışı"
 
 #: gtk/gtkmediastream.c:301
 msgid "Prepared"
-msgstr ""
+msgstr "Hazır"
 
 #: gtk/gtkmediastream.c:302
 msgid "Whether the stream has finished initializing"
@@ -4637,11 +4484,11 @@ msgstr "Boyut ölçümünde içer"
 
 #: gtk/gtkoverlaylayout.c:157
 msgid "Clip Overlay"
-msgstr "Klip Yerleşimi"
+msgstr "Örteni kırp"
 
 #: gtk/gtkoverlaylayout.c:158
 msgid "Clip the overlay child widget so as to fit the parent"
-msgstr ""
+msgstr "Ebeveyne sığması için örten çocuk parçacığı kırp"
 
 #: gtk/gtkpadcontroller.c:369
 msgid "Action group"
@@ -4748,17 +4595,13 @@ msgstr "İkinci çocuk"
 msgid "The second child"
 msgstr "İkinci çocuk"
 
-#: gtk/gtkpasswordentry.c:422
-#, fuzzy
-#| msgid "Show Icons"
+#: gtk/gtkpasswordentry.c:431
 msgid "Show Peek Icon"
-msgstr "Simgeleri Göster"
+msgstr "Göz Simgesini Göster"
 
-#: gtk/gtkpasswordentry.c:423
-#, fuzzy
-#| msgid "Whether to show an icon for Emoji"
+#: gtk/gtkpasswordentry.c:432
 msgid "Whether to show an icon for revealing the content"
-msgstr "Emoji için bir simge gösterilmesi"
+msgstr "İçeriği açığa çıkarmak için simge gösterilip gösterilmemesi"
 
 #: gtk/gtkpicture.c:316
 msgid "The GdkPaintable to display"
@@ -4947,10 +4790,8 @@ msgid "Position to place the bubble window"
 msgstr "Baloncuk pencerenin yerleştirileceği konum"
 
 #: gtk/gtkpopover.c:1643
-#, fuzzy
-#| msgid "Whether the popover is modal"
 msgid "Whether to dismiss the popover on outside clicks"
-msgstr "Açılan kutucuğun kalıcı olup olmadığı"
+msgstr "Açılan kutucuğun dışındaki tıklamaların göz ardı edilip edilmemesi"
 
 #: gtk/gtkpopover.c:1649 gtk/gtkwindow.c:907
 msgid "Default widget"
@@ -4961,28 +4802,20 @@ msgid "The default widget"
 msgstr "Öntanımlı parçacık"
 
 #: gtk/gtkpopover.c:1656
-#, fuzzy
-#| msgid "Show Arrow"
 msgid "Has Arrow"
-msgstr "Oku Göster"
+msgstr "Oku Var"
 
 #: gtk/gtkpopover.c:1657
-#, fuzzy
-#| msgid "Whether to show an icon for Emoji"
 msgid "Whether to draw an arrow"
-msgstr "Emoji için bir simge gösterilmesi"
+msgstr "Ok çizilip çizilmemesi"
 
 #: gtk/gtkpopover.c:1663
-#, fuzzy
-#| msgid "Mnemonics Visible"
 msgid "Mnemonics visible"
-msgstr "Görünür Hatırlatıcı"
+msgstr "Hatırlatıcı görünürlüğü"
 
 #: gtk/gtkpopover.c:1664
-#, fuzzy
-#| msgid "Whether mnemonics are currently visible in this window"
 msgid "Whether mnemonics are currently visible in this popover"
-msgstr "Bu pencerede hatırlatıcıların şu anda görünür olup olmaması"
+msgstr "Bu açılır pencerede hatırlatıcıların şu anda görünür olup olmaması"
 
 #: gtk/gtkpopovermenubar.c:594
 msgid "The model from which the bar is made."
@@ -6021,16 +5854,12 @@ msgid "Dialogs use header bar"
 msgstr "İletişim pencereleri üst bilgi çubuğu kullanır"
 
 #: gtk/gtksettings.c:893
-#, fuzzy
-#| msgid ""
-#| "Whether builtin GTK+ dialogs should use a header bar instead of an action "
-#| "area."
 msgid ""
 "Whether builtin GTK dialogs should use a header bar instead of an action "
 "area."
 msgstr ""
-"Yerleşik GTK+ pencerelerinin eylem alanı yerine bir üst bilgi çubuğu "
-"kullanmasının gerekip gerekmemesi."
+"GTK iletişim pencerelerinin, eylem alanı yerine başlık çubuğu kullanıp "
+"kullanmaması."
 
 #: gtk/gtksettings.c:906
 msgid "Enable primary paste"
@@ -6096,7 +5925,6 @@ msgid "Arguments"
 msgstr "Argümanlar"
 
 #: gtk/gtkshortcut.c:176
-#, fuzzy
 msgid "Arguments passed to activation"
 msgstr "Aktifleştirmeye gönderilen argümanlar"
 
@@ -6109,15 +5937,12 @@ msgid "The trigger for this shortcut"
 msgstr "Bu kısayol için tetikleyici"
 
 #: gtk/gtkshortcutcontroller.c:545
-#, fuzzy
-#| msgid "Mnemonic key"
 msgid "Mnemonic modifiers"
-msgstr "Anımsatıcı tuş"
+msgstr "Anımsatıcı değiştiricileri"
 
 #: gtk/gtkshortcutcontroller.c:546
-#, fuzzy
 msgid "The modifiers to be pressed to allow mnemonics activation"
-msgstr "Anımsatıcı aktifleştirmesini sağlamak için basılacak değiştiriciler"
+msgstr "Anımsatıcı aktifleştirmesini sağlarken basılacak değiştiriciler"
 
 #: gtk/gtkshortcutcontroller.c:559
 msgid "A list model to take shortcuts from"
@@ -6220,14 +6045,12 @@ msgid "The key value for the trigger"
 msgstr "Tetikleyici için anahtar değeri"
 
 #: gtk/gtkshortcuttrigger.c:674
-#, fuzzy
 msgid "Modifiers"
 msgstr "Değiştiriciler"
 
 #: gtk/gtkshortcuttrigger.c:675
-#, fuzzy
 msgid "The key modifiers for the trigger"
-msgstr "Tetikleyici için değiştirici tuşlar"
+msgstr "Tetikleyici için tuş değiştiriciler"
 
 #: gtk/gtkshortcuttrigger.c:1161
 msgid "First"
@@ -6388,22 +6211,16 @@ msgid "Whether this page needs attention"
 msgstr "Bu sayfaların dikkat gerektirip gerektirmemesi"
 
 #: gtk/gtkstack.c:377
-#, fuzzy
-#| msgid "Whether the widget is visible"
 msgid "Whether this page is visible"
-msgstr "Parçanın görünürlüğü"
+msgstr "Sayfanın görünürlüğü"
 
 #: gtk/gtkstack.c:384
-#, fuzzy
-#| msgid ""
-#| "If set, an underline in the text indicates the next character should be "
-#| "used for the mnemonic accelerator key"
 msgid ""
 "If set, an underline in the title indicates the next character should be "
 "used for the mnemonic accelerator key"
 msgstr ""
-"Eğer seçiliyse, altçizgiden sonra gelen karakter hafızada kalıcı "
-"hızlandırıcı tuş olarak kullanılacak"
+"Eğer seçiliyse; başlıktaki alt çizgi, anımsatıcı hızlandırıcı tuş için "
+"kullanılacak sonraki karakteri belirtir."
 
 #: gtk/gtkstack.c:706
 msgid "Horizontally homogeneous"
@@ -6458,10 +6275,8 @@ msgstr ""
 "biçimde değişip değişmeyeceği"
 
 #: gtk/gtkstack.c:745
-#, fuzzy
-#| msgid "The toggle action to switch to the tweak page"
 msgid "A selection model with the stacks pages"
-msgstr "İnce ayar sayfasını değiştirmek için eylem"
+msgstr ""
 
 #: gtk/gtkstacksidebar.c:394 gtk/gtkstackswitcher.c:495
 #: gtk/gtkstackswitcher.c:496
@@ -6473,10 +6288,8 @@ msgid "Associated stack for this GtkStackSidebar"
 msgstr "Bu GtkStackSidebar için ilişkilendirilmiş yığın"
 
 #: gtk/gtkstringfilter.c:263 gtk/gtkstringsorter.c:307
-#, fuzzy
-#| msgid "Ignore hidden"
 msgid "Ignore case"
-msgstr "Gizlileri yok say"
+msgstr ""
 
 #: gtk/gtkstringfilter.c:264 gtk/gtkstringsorter.c:308
 msgid "If matching is case sensitive"
@@ -6599,11 +6412,9 @@ msgstr "Bu girdi için en fazla karakter sayısı. Sınırsız olması için sı
 
 #: gtk/gtktext.c:762
 #, fuzzy
-#| msgid ""
-#| "The character to use when masking entry contents (in \"password mode\")"
 msgid "The character to use when masking self contents (in “password mode”)"
 msgstr ""
-"Girdi içeriklerini maskelerken kullanılacak karakter (\"parola kipi\" "
+"Girdi içeriklerini maskelerken kullanılacak karakter ( “parola kipi” "
 "olduğunda)"
 
 #: gtk/gtktext.c:776
@@ -7168,9 +6979,8 @@ msgstr "GtkTextWindowType"
 
 #: gtk/gtktogglebutton.c:268
 #, fuzzy
-#| msgid "The radio button whose group this widget belongs to."
 msgid "The toggle button whose group this widget belongs to."
-msgstr "Bu parçanın ait olduğu kümenin radyo düğmesi."
+msgstr "Bu parçanın ait olduğu kümenin aç/kapa düğmesi."
 
 #: gtk/gtktreeexpander.c:460
 msgid "The child widget with the actual contents"
