@@ -258,6 +258,7 @@
     <file>pagesetup.c</file>
     <file>paintable.c</file>
     <file>paintable_animated.c</file>
+    <file>paintable_emblem.c</file>
     <file>paintable_mediastream.c</file>
     <file>panes.c</file>
     <file>password_entry.c</file>

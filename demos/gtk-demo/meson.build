@@ -59,6 +59,7 @@ demos = files([
   'paint.c',
   'paintable.c',
   'paintable_animated.c',
+  'paintable_emblem.c',
   'paintable_mediastream.c',
   'panes.c',
   'password_entry.c',
