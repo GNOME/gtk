@@ -205,8 +205,8 @@ GType                   gsk_radial_gradient_node_get_type (void) G_GNUC_CONST;
 GDK_AVAILABLE_IN_ALL
 GskRenderNode *         gsk_radial_gradient_node_new      (const graphene_rect_t    *bounds,
                                                            const graphene_point_t   *center,
-                                                           float                     radius,
-                                                           float                     scale,
+                                                           float                     hradius,
+                                                           float                     vradius,
                                                            float                     start,
                                                            float                     end,
                                                            const GskColorStop       *color_stops,
@@ -219,9 +219,9 @@ const GskColorStop *    gsk_radial_gradient_node_peek_color_stops  (GskRenderNod
 GDK_AVAILABLE_IN_ALL
 const graphene_point_t *gsk_radial_gradient_node_peek_center       (GskRenderNode *node);
 GDK_AVAILABLE_IN_ALL
-float                   gsk_radial_gradient_node_get_radius        (GskRenderNode *node);
+float                   gsk_radial_gradient_node_get_hradius       (GskRenderNode *node);
 GDK_AVAILABLE_IN_ALL
-float                   gsk_radial_gradient_node_get_scale         (GskRenderNode *node);
+float                   gsk_radial_gradient_node_get_vradius       (GskRenderNode *node);
 GDK_AVAILABLE_IN_ALL
 float                   gsk_radial_gradient_node_get_start         (GskRenderNode *node);
 GDK_AVAILABLE_IN_ALL
@@ -232,8 +232,8 @@ GType                   gsk_repeating_radial_gradient_node_get_type (void) G_GNU
 GDK_AVAILABLE_IN_ALL
 GskRenderNode *         gsk_repeating_radial_gradient_node_new      (const graphene_rect_t    *bounds,
                                                                      const graphene_point_t   *center,
-                                                                     float                     radius,
-                                                                     float                     scale,
+                                                                     float                     hradius,
+                                                                     float                     vradius,
                                                                      float                     start,
                                                                      float                     end,
                                                                      const GskColorStop       *color_stops,
