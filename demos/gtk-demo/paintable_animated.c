@@ -33,6 +33,8 @@ struct _GtkNuclearAnimation
 {
   GObject parent_instance;
 
+  gboolean draw_background;
+
   /* This variable stores the progress of our animation.
    * We just count upwards until we hit MAX_PROGRESS and
    * then start from scratch.
@@ -64,7 +66,8 @@ gtk_nuclear_animation_snapshot (GdkPaintable *paintable,
   /* We call the function from the previous example here. */
   gtk_nuclear_snapshot (snapshot,
                         width, height,
-                        2 * G_PI * nuclear->progress / MAX_PROGRESS);
+                        2 * G_PI * nuclear->progress / MAX_PROGRESS,
+                        nuclear->draw_background);
 }
 
 static GdkPaintable *
@@ -175,9 +178,15 @@ gtk_nuclear_animation_init (GtkNuclearAnimation *nuclear)
 
 /* And finally, we add the simple constructor we declared in the header. */
 GdkPaintable *
-gtk_nuclear_animation_new (void)
+gtk_nuclear_animation_new (gboolean draw_background)
 {
-  return g_object_new (GTK_TYPE_NUCLEAR_ANIMATION, NULL);
+  GtkNuclearAnimation *nuclear;
+
+  nuclear = g_object_new (GTK_TYPE_NUCLEAR_ANIMATION, NULL);
+
+  nuclear->draw_background = draw_background;
+
+  return GDK_PAINTABLE (nuclear);
 }
 
 GtkWidget *
@@ -195,7 +204,7 @@ do_paintable_animated (GtkWidget *do_widget)
       gtk_window_set_default_size (GTK_WINDOW (window), 300, 200);
       g_object_add_weak_pointer (G_OBJECT (window), (gpointer *)&window);
 
-      nuclear = gtk_nuclear_animation_new ();
+      nuclear = gtk_nuclear_animation_new (TRUE);
       image = gtk_image_new_from_paintable (nuclear);
       gtk_window_set_child (GTK_WINDOW (window), image);
       g_object_unref (nuclear);

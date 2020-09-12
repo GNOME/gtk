@@ -74,7 +74,8 @@ gtk_nuclear_media_stream_snapshot (GdkPaintable *paintable,
   /* We call the function from the previous example here. */
   gtk_nuclear_snapshot (snapshot,
                         width, height,
-                        2 * G_PI * nuclear->progress / DURATION);
+                        2 * G_PI * nuclear->progress / DURATION,
+                        TRUE);
 }
 
 static GdkPaintable *

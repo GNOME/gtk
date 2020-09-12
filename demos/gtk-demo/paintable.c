@@ -48,15 +48,17 @@ void
 gtk_nuclear_snapshot (GtkSnapshot *snapshot,
                       double       width,
                       double       height,
-                      double       rotation)
+                      double       rotation,
+                      gboolean     draw_background)
 {
 #define RADIUS 0.3
   cairo_t *cr;
   double size;
 
-  gtk_snapshot_append_color (snapshot,
-                             &(GdkRGBA) { 0.9, 0.75, 0.15, 1.0 },
-                             &GRAPHENE_RECT_INIT (0, 0, width, height));
+  if (draw_background)
+    gtk_snapshot_append_color (snapshot,
+                               &(GdkRGBA) { 0.9, 0.75, 0.15, 1.0 },
+                               &GRAPHENE_RECT_INIT (0, 0, width, height));
 
   size = MIN (width, height);
   cr = gtk_snapshot_append_cairo (snapshot,
@@ -93,7 +95,8 @@ gtk_nuclear_icon_snapshot (GdkPaintable *paintable,
 
   gtk_nuclear_snapshot (snapshot,
                         width, height,
-                        nuclear->rotation);
+                        nuclear->rotation,
+                        TRUE);
 }
 
 static GdkPaintableFlags
