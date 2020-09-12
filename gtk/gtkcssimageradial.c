@@ -82,7 +82,7 @@ gtk_css_image_radial_snapshot (GtkCssImage *image,
   GtkCssImageRadial *radial = GTK_CSS_IMAGE_RADIAL (image);
   GskColorStop *stops;
   double x, y;
-  double radius, yscale;
+  double hradius, vradius;
   double start, end;
   double r1, r2, r3, r4, r;
   double offset;
@@ -96,13 +96,13 @@ gtk_css_image_radial_snapshot (GtkCssImage *image,
       switch (radial->size)
         {
         case GTK_CSS_EXPLICIT_SIZE:
-          radius = _gtk_css_number_value_get (radial->sizes[0], width);
+          hradius = _gtk_css_number_value_get (radial->sizes[0], width);
           break;
         case GTK_CSS_CLOSEST_SIDE:
-          radius = MIN (MIN (x, width - x), MIN (y, height - y));
+          hradius = MIN (MIN (x, width - x), MIN (y, height - y));
           break;
         case GTK_CSS_FARTHEST_SIDE:
-          radius = MAX (MAX (x, width - x), MAX (y, height - y));
+          hradius = MAX (MAX (x, width - x), MAX (y, height - y));
           break;
         case GTK_CSS_CLOSEST_CORNER:
         case GTK_CSS_FARTHEST_CORNER:
@@ -114,19 +114,17 @@ gtk_css_image_radial_snapshot (GtkCssImage *image,
             r = MIN ( MIN (r1, r2), MIN (r3, r4));
           else
             r = MAX ( MAX (r1, r2), MAX (r3, r4));
-          radius = sqrt (r);
+          hradius = sqrt (r);
           break;
         default:
           g_assert_not_reached ();
         }
 
-      radius = MAX (1.0, radius);
-      yscale = 1.0;
+      hradius = MAX (1.0, hradius);
+      vradius = hradius;
     }
   else
     {
-      double hradius, vradius;
-
       switch (radial->size)
         {
         case GTK_CSS_EXPLICIT_SIZE:
@@ -155,12 +153,9 @@ gtk_css_image_radial_snapshot (GtkCssImage *image,
 
       hradius = MAX (1.0, hradius);
       vradius = MAX (1.0, vradius);
-
-      radius = hradius;
-      yscale = vradius / hradius;
     }
 
-  gtk_css_image_radial_get_start_end (radial, radius, &start, &end);
+  gtk_css_image_radial_get_start_end (radial, hradius, &start, &end);
 
   offset = start;
   last = -1;
@@ -181,12 +176,9 @@ gtk_css_image_radial_snapshot (GtkCssImage *image,
             continue;
         }
       else
-        {
-          pos = _gtk_css_number_value_get (stop->offset, radius) / radius;
-          pos = CLAMP (pos, 0.0, 1.0);
-        }
+        pos = _gtk_css_number_value_get (stop->offset, hradius) / hradius;
 
-      pos = MAX (pos, offset);
+      pos = MAX (pos, 0);
       step = (pos - offset) / (i - last);
       for (last = last + 1; last <= i; last++)
         {
@@ -206,8 +198,8 @@ gtk_css_image_radial_snapshot (GtkCssImage *image,
    gtk_snapshot_append_repeating_radial_gradient (snapshot,
                                                   &GRAPHENE_RECT_INIT (0, 0, width, height),
                                                   &GRAPHENE_POINT_INIT (x, y),
-                                                  radius,
-                                                  yscale,
+                                                  hradius,
+                                                  vradius,
                                                   start,
                                                   end,
                                                   stops,
@@ -216,8 +208,8 @@ gtk_css_image_radial_snapshot (GtkCssImage *image,
     gtk_snapshot_append_radial_gradient (snapshot,
                                          &GRAPHENE_RECT_INIT (0, 0, width, height),
                                          &GRAPHENE_POINT_INIT (x, y),
-                                         radius,
-                                         yscale,
+                                         hradius,
+                                         vradius,
                                          start,
                                          end,
                                          stops,
