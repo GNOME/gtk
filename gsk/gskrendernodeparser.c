@@ -2017,8 +2017,8 @@ render_node_print (Printer       *p,
 
         append_rect_param (p, "bounds", &node->bounds);
         append_point_param (p, "center", gsk_radial_gradient_node_peek_center (node));
-        append_float_param (p, "radius", gsk_radial_gradient_node_get_radius (node), 0.0f);
-        append_float_param (p, "scale", gsk_radial_gradient_node_get_scale (node), 1.0f);
+        append_float_param (p, "hradius", gsk_radial_gradient_node_get_hradius (node), 0.0f);
+        append_float_param (p, "vradius", gsk_radial_gradient_node_get_vradius (node), 0.0f);
         append_float_param (p, "start", gsk_radial_gradient_node_get_start (node), 0.0f);
         append_float_param (p, "end", gsk_radial_gradient_node_get_end (node), 1.0f);
 

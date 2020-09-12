@@ -396,8 +396,8 @@ struct _GskRadialGradientNode
 
   gboolean circle;
 
-  float radius;
-  float scale;
+  float hradius;
+  float vradius;
   float start;
   float end;
 
@@ -424,15 +424,13 @@ gsk_radial_gradient_node_draw (GskRenderNode *node,
   cairo_pattern_t *pattern;
   cairo_matrix_t matrix;
   gsize i;
-  float offset;
-  int last;
 
-  pattern = cairo_pattern_create_radial (0, 0, self->radius * self->start,
-                                         0, 0, self->radius * self->end);
+  pattern = cairo_pattern_create_radial (0, 0, self->hradius * self->start,
+                                         0, 0, self->hradius * self->end);
 
-  if (self->scale != 1.0)
+  if (self->hradius != self->vradius)
     {
-      cairo_matrix_init_scale (&matrix, 1.0, 1.0 / self->scale);
+      cairo_matrix_init_scale (&matrix, 1.0, self->hradius / self->vradius);
       cairo_pattern_set_matrix (pattern, &matrix);
     }
 
@@ -441,42 +439,13 @@ gsk_radial_gradient_node_draw (GskRenderNode *node,
   else
     cairo_pattern_set_extend (pattern, CAIRO_EXTEND_PAD);
 
-  offset = self->start;
-  last = -1;
-
   for (i = 0; i < self->n_stops; i++)
-    {
-      double pos, step;
-
-      if (self->stops[i].offset == 0.0)
-        {
-          if (i == 0)
-            pos = 0.0;
-          else if (i + 1 == self->n_stops)
-            pos = 1.0;
-          else
-            continue;
-        }
-      else
-        pos = self->stops[i].offset;
-
-      pos = MAX (pos, 0);
-      step = (pos - offset) / (i - last);
-      for (last = last + 1; last <= i; last++)
-        {
-          offset += step;
-
-          cairo_pattern_add_color_stop_rgba (pattern,
-                                             (offset - self->start) / (self->end - self->start),
-                                             self->stops[i].color.red,
-                                             self->stops[i].color.green,
-                                             self->stops[i].color.blue,
-                                             self->stops[i].color.alpha);
-        }
-
-      offset = pos;
-      last = i;
-    }
+    cairo_pattern_add_color_stop_rgba (pattern,
+                                       self->stops[i].offset,
+                                       self->stops[i].color.red,
+                                       self->stops[i].color.green,
+                                       self->stops[i].color.blue,
+                                       self->stops[i].color.alpha);
 
   gsk_cairo_rectangle (cr, &node->bounds);
   cairo_translate (cr, self->center.x, self->center.y);
@@ -495,8 +464,8 @@ gsk_radial_gradient_node_diff (GskRenderNode  *node1,
   GskRadialGradientNode *self2 = (GskRadialGradientNode *) node2;
 
   if (graphene_point_equal (&self1->center, &self2->center) &&
-      self1->radius == self2->radius &&
-      self1->scale == self2->scale &&
+      self1->hradius == self2->hradius &&
+      self1->vradius == self2->vradius &&
       self1->start == self2->start &&
       self1->end == self2->end &&
       self1->n_stops == self2->n_stops)
@@ -525,8 +494,8 @@ gsk_radial_gradient_node_diff (GskRenderNode  *node1,
 GskRenderNode *
 gsk_radial_gradient_node_new (const graphene_rect_t  *bounds,
                               const graphene_point_t *center,
-                              float                   radius,
-                              float                   scale,
+                              float                   hradius,
+                              float                   vradius,
                               float                   start,
                               float                   end,
                               const GskColorStop     *color_stops,
@@ -538,6 +507,10 @@ gsk_radial_gradient_node_new (const graphene_rect_t  *bounds,
 
   g_return_val_if_fail (bounds != NULL, NULL);
   g_return_val_if_fail (center != NULL, NULL);
+  g_return_val_if_fail (hradius > 0., NULL);
+  g_return_val_if_fail (vradius > 0., NULL);
+  g_return_val_if_fail (start > 0., NULL);
+  g_return_val_if_fail (end > 0., NULL);
   g_return_val_if_fail (color_stops != NULL, NULL);
   g_return_val_if_fail (n_color_stops >= 2, NULL);
   g_return_val_if_fail (color_stops[0].offset >= 0, NULL);
@@ -551,8 +524,8 @@ gsk_radial_gradient_node_new (const graphene_rect_t  *bounds,
   graphene_rect_init_from_rect (&node->bounds, bounds);
   graphene_point_init_from_point (&self->center, center);
 
-  self->radius = radius;
-  self->scale = scale;
+  self->hradius = hradius;
+  self->vradius = vradius;
   self->start = start;
   self->end = end;
 
@@ -566,8 +539,8 @@ gsk_radial_gradient_node_new (const graphene_rect_t  *bounds,
 GskRenderNode *
 gsk_repeating_radial_gradient_node_new (const graphene_rect_t  *bounds,
                                         const graphene_point_t *center,
-                                        float                   radius,
-                                        float                   scale,
+                                        float                   hradius,
+                                        float                   vradius,
                                         float                   start,
                                         float                   end,
                                         const GskColorStop     *color_stops,
@@ -579,6 +552,10 @@ gsk_repeating_radial_gradient_node_new (const graphene_rect_t  *bounds,
 
   g_return_val_if_fail (bounds != NULL, NULL);
   g_return_val_if_fail (center != NULL, NULL);
+  g_return_val_if_fail (hradius > 0., NULL);
+  g_return_val_if_fail (vradius > 0., NULL);
+  g_return_val_if_fail (start > 0., NULL);
+  g_return_val_if_fail (end > 0., NULL);
   g_return_val_if_fail (color_stops != NULL, NULL);
   g_return_val_if_fail (n_color_stops >= 2, NULL);
   g_return_val_if_fail (color_stops[0].offset >= 0, NULL);
@@ -592,8 +569,8 @@ gsk_repeating_radial_gradient_node_new (const graphene_rect_t  *bounds,
   graphene_rect_init_from_rect (&node->bounds, bounds);
   graphene_point_init_from_point (&self->center, center);
 
-  self->radius = radius;
-  self->scale = scale;
+  self->hradius = hradius;
+  self->vradius = vradius;
   self->start = start;
   self->end = end;
 
@@ -633,19 +610,19 @@ gsk_radial_gradient_node_peek_center (GskRenderNode *node)
 }
 
 float
-gsk_radial_gradient_node_get_radius (GskRenderNode *node)
+gsk_radial_gradient_node_get_hradius (GskRenderNode *node)
 {
   GskRadialGradientNode *self = (GskRadialGradientNode *) node;
 
-  return self->radius;
+  return self->hradius;
 }
 
 float
-gsk_radial_gradient_node_get_scale (GskRenderNode *node)
+gsk_radial_gradient_node_get_vradius (GskRenderNode *node)
 {
   GskRadialGradientNode *self = (GskRadialGradientNode *) node;
 
-  return self->scale;
+  return self->vradius;
 }
 
 float
