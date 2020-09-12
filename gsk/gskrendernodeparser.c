@@ -2003,6 +2003,42 @@ render_node_print (Printer       *p,
       }
       break;
 
+    case GSK_REPEATING_RADIAL_GRADIENT_NODE:
+    case GSK_RADIAL_GRADIENT_NODE:
+      {
+        const gsize n_stops = gsk_radial_gradient_node_get_n_color_stops (node);
+        const GskColorStop *stops = gsk_radial_gradient_node_peek_color_stops (node, NULL);
+        gsize i;
+
+        if (gsk_render_node_get_node_type (node) == GSK_REPEATING_RADIAL_GRADIENT_NODE)
+          start_node (p, "repeating-radial-gradient");
+        else
+          start_node (p, "radial-gradient");
+
+        append_rect_param (p, "bounds", &node->bounds);
+        append_point_param (p, "center", gsk_radial_gradient_node_peek_center (node));
+        append_float_param (p, "radius", gsk_radial_gradient_node_get_radius (node), 0.0f);
+        append_float_param (p, "scale", gsk_radial_gradient_node_get_scale (node), 1.0f);
+        append_float_param (p, "start", gsk_radial_gradient_node_get_start (node), 0.0f);
+        append_float_param (p, "end", gsk_radial_gradient_node_get_end (node), 1.0f);
+
+        _indent (p);
+        g_string_append (p->str, "stops: ");
+        for (i = 0; i < n_stops; i ++)
+          {
+            if (i > 0)
+              g_string_append (p->str, ", ");
+
+            string_append_double (p->str, stops[i].offset);
+            g_string_append_c (p->str, ' ');
+            append_rgba (p->str, &stops[i].color);
+          }
+        g_string_append (p->str, ";\n");
+
+        end_node (p);
+      }
+      break;
+
     case GSK_OPACITY_NODE:
       {
         start_node (p, "opacity");

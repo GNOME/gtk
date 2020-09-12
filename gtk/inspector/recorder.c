@@ -131,6 +131,8 @@ create_list_model_for_render_node (GskRenderNode *node)
     case GSK_COLOR_NODE:
     case GSK_LINEAR_GRADIENT_NODE:
     case GSK_REPEATING_LINEAR_GRADIENT_NODE:
+    case GSK_RADIAL_GRADIENT_NODE:
+    case GSK_REPEATING_RADIAL_GRADIENT_NODE:
     case GSK_BORDER_NODE:
     case GSK_INSET_SHADOW_NODE:
     case GSK_OUTSET_SHADOW_NODE:
@@ -234,6 +236,10 @@ node_type_name (GskRenderNodeType type)
       return "Linear Gradient";
     case GSK_REPEATING_LINEAR_GRADIENT_NODE:
       return "Repeating Linear Gradient";
+    case GSK_RADIAL_GRADIENT_NODE:
+      return "Radial Gradient";
+    case GSK_REPEATING_RADIAL_GRADIENT_NODE:
+      return "Repeating Radial Gradient";
     case GSK_BORDER_NODE:
       return "Border";
     case GSK_TEXTURE_NODE:
@@ -279,6 +285,8 @@ node_name (GskRenderNode *node)
     case GSK_CAIRO_NODE:
     case GSK_LINEAR_GRADIENT_NODE:
     case GSK_REPEATING_LINEAR_GRADIENT_NODE:
+    case GSK_RADIAL_GRADIENT_NODE:
+    case GSK_REPEATING_RADIAL_GRADIENT_NODE:
     case GSK_BORDER_NODE:
     case GSK_INSET_SHADOW_NODE:
     case GSK_OUTSET_SHADOW_NODE:
@@ -623,6 +631,11 @@ populate_render_node_properties (GtkListStore  *store,
         g_string_free (s, TRUE);
         g_object_unref (texture);
       }
+      break;
+
+    case GSK_RADIAL_GRADIENT_NODE:
+    case GSK_REPEATING_RADIAL_GRADIENT_NODE:
+      /* TODO */
       break;
 
     case GSK_TEXT_NODE:

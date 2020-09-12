@@ -30,6 +30,8 @@
  * @GSK_COLOR_NODE: A node drawing a single color rectangle
  * @GSK_LINEAR_GRADIENT_NODE: A node drawing a linear gradient
  * @GSK_REPEATING_LINEAR_GRADIENT_NODE: A node drawing a repeating linear gradient
+ * @GSK_RADIAL_GRADIENT_NODE: A node drawing a radial gradient
+ * @GSK_REPEATING_RADIAL_GRADIENT_NODE: A node drawing a repeating radial gradient
  * @GSK_BORDER_NODE: A node stroking a border around an area
  * @GSK_TEXTURE_NODE: A node drawing a #GdkTexture
  * @GSK_INSET_SHADOW_NODE: A node drawing an inset shadow
@@ -56,6 +58,8 @@ typedef enum {
   GSK_COLOR_NODE,
   GSK_LINEAR_GRADIENT_NODE,
   GSK_REPEATING_LINEAR_GRADIENT_NODE,
+  GSK_RADIAL_GRADIENT_NODE,
+  GSK_REPEATING_RADIAL_GRADIENT_NODE,
   GSK_BORDER_NODE,
   GSK_TEXTURE_NODE,
   GSK_INSET_SHADOW_NODE,
