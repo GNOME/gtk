@@ -165,6 +165,26 @@ void            gtk_snapshot_append_repeating_linear_gradient (GtkSnapshot      
                                                                const GskColorStop     *stops,
                                                                gsize                   n_stops);
 GDK_AVAILABLE_IN_ALL
+void            gtk_snapshot_append_radial_gradient     (GtkSnapshot            *snapshot,
+                                                         const graphene_rect_t  *bounds,
+                                                         const graphene_point_t *center,
+                                                         float                   radius,
+                                                         float                   scale,
+                                                         float                   start,
+                                                         float                   end,
+                                                         const GskColorStop     *stops,
+                                                         gsize                   n_stops);
+GDK_AVAILABLE_IN_ALL
+void            gtk_snapshot_append_repeating_radial_gradient (GtkSnapshot            *snapshot,
+                                                               const graphene_rect_t  *bounds,
+                                                               const graphene_point_t *center,
+                                                               float                   radius,
+                                                               float                   scale,
+                                                               float                   start,
+                                                               float                   end,
+                                                               const GskColorStop     *stops,
+                                                               gsize                   n_stops);
+GDK_AVAILABLE_IN_ALL
 void            gtk_snapshot_append_border              (GtkSnapshot            *snapshot,
                                                          const GskRoundedRect   *outline,
                                                          const float             border_width[4],
