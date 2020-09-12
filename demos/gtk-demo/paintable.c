@@ -161,6 +161,7 @@ do_paintable (GtkWidget *do_widget)
                               gtk_widget_get_display (do_widget));
       gtk_window_set_title (GTK_WINDOW (window), "Nuclear Icon");
       gtk_window_set_default_size (GTK_WINDOW (window), 300, 200);
+      g_object_add_weak_pointer (G_OBJECT (window), (gpointer *)&window);
 
       nuclear = gtk_nuclear_icon_new (0.0);
       image = gtk_image_new_from_paintable (nuclear);
