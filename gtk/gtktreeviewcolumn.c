@@ -2057,7 +2057,7 @@ _gtk_tree_view_column_allocate (GtkTreeViewColumn *tree_column,
  * “fixed-width” property is not clamped.  If the column sizing is
  * #GTK_TREE_VIEW_COLUMN_GROW_ONLY or #GTK_TREE_VIEW_COLUMN_AUTOSIZE, setting
  * a fixed width overrides the automatically calculated width.  Note that
- * @fixed_width is only a hint to GTK+; the width actually allocated to the
+ * @fixed_width is only a hint to GTK; the width actually allocated to the
  * column may be greater or less than requested.
  *
  * Along with “expand”, the “fixed-width” property changes when the column is

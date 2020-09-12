@@ -36,7 +36,7 @@
  *
  * The #GtkRecentManager acts like a database of all the recently
  * used files. You can create new #GtkRecentManager objects, but
- * it is more efficient to use the default manager created by GTK+.
+ * it is more efficient to use the default manager created by GTK
  *
  * Adding a new recently used file is as simple as:
  *
@@ -81,8 +81,6 @@
  * Note that the maximum age of the recently used files list is
  * controllable through the #GtkSettings:gtk-recent-files-max-age
  * property.
- *
- * Recently used files are supported since GTK+ 2.10.
  */
 
 #include "config.h"

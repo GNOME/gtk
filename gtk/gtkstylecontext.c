@@ -63,7 +63,7 @@
  * gtk_style_context_add_provider_for_display(). The resulting style is a
  * combination of all providers’ information in priority order.
  *
- * For GTK+ widgets, any #GtkStyleContext returned by
+ * For GTK widgets, any #GtkStyleContext returned by
  * gtk_widget_get_style_context() will already have a #GdkDisplay and
  * RTL/LTR information set. The style context will also be updated
  * automatically if any of these settings change on the widget.
@@ -75,7 +75,7 @@
  * which style classes it uses itself, and which style classes may be added by
  * applications to affect their appearance.
  *
- * GTK+ defines macros for a number of style classes.
+ * GTK defines macros for a number of style classes.
  *
  * # Custom styling in UI libraries and applications
  *
@@ -428,7 +428,7 @@ gtk_style_context_remove_provider (GtkStyleContext  *context,
  * Adds a global style provider to @display, which will be used
  * in style construction for all #GtkStyleContexts under @display.
  *
- * GTK+ uses this to make styling information from #GtkSettings
+ * GTK uses this to make styling information from #GtkSettings
  * available.
  *
  * Note: If both priorities are the same, A #GtkStyleProvider
@@ -1337,7 +1337,7 @@ gtk_snapshot_render_insertion_cursor (GtkSnapshot     *snapshot,
  * information may be included.
  *
  * This function is intended for testing and debugging of the
- * CSS implementation in GTK+. There are no guarantees about
+ * CSS implementation in GTK. There are no guarantees about
  * the format of the returned string, it may change.
  *
  * Returns: a newly allocated string representing @context

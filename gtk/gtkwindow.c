@@ -786,7 +786,7 @@ gtk_window_class_init (GtkWindowClass *klass)
    *
    * Whether mnemonics are currently visible in this window.
    *
-   * This property is maintained by GTK+ based on user input,
+   * This property is maintained by GTK based on user input,
    * and should not be set by applications.
    */
   window_props[PROP_MNEMONICS_VISIBLE] =
@@ -801,7 +801,7 @@ gtk_window_class_init (GtkWindowClass *klass)
    *
    * Whether 'focus rectangles' are currently visible in this window.
    *
-   * This property is maintained by GTK+ based on user input
+   * This property is maintained by GTK based on user input
    * and should not be set by applications.
    */
   window_props[PROP_FOCUS_VISIBLE] =
@@ -1996,7 +1996,7 @@ gtk_window_get_title (GtkWindow *window)
  * function before calling gtk_window_present() or any equivalent
  * function generating a window map event.
  *
- * This function is only useful on X11, not with other GTK+ targets.
+ * This function is only useful on X11, not with other GTK targets.
  **/
 void
 gtk_window_set_startup_id (GtkWindow   *window,
@@ -2411,7 +2411,7 @@ gtk_window_unset_transient_for (GtkWindow *window)
  * [window managers][gtk-X11-arch] to e.g. keep the
  * dialog on top of the main window, or center the dialog over the
  * main window. gtk_dialog_new_with_buttons() and other convenience
- * functions in GTK+ will sometimes call
+ * functions in GTK will sometimes call
  * gtk_window_set_transient_for() on your behalf.
  *
  * Passing %NULL for @parent unsets the current transient window.
@@ -2764,7 +2764,7 @@ gtk_window_enable_csd (GtkWindow *window)
  * A typical widget used here is #GtkHeaderBar, as it provides various features
  * expected of a titlebar while allowing the addition of child widgets to it.
  *
- * If you set a custom titlebar, GTK+ will do its best to convince
+ * If you set a custom titlebar, GTK will do its best to convince
  * the window manager not to put its own titlebar on the window.
  * Depending on the system, this function may not work for a window
  * that is already visible, so you set the titlebar before calling
@@ -2845,9 +2845,9 @@ gtk_window_get_titlebar (GtkWindow *window)
  *
  * By default, windows are decorated with a title bar, resize
  * controls, etc.  Some [window managers][gtk-X11-arch]
- * allow GTK+ to disable these decorations, creating a
+ * allow GTK to disable these decorations, creating a
  * borderless window. If you set the decorated property to %FALSE
- * using this function, GTK+ will do its best to convince the window
+ * using this function, GTK will do its best to convince the window
  * manager not to decorate the window. Depending on the system, this
  * function may not have any effect when called on a window that is
  * already visible, so you should call it before calling gtk_widget_show().
@@ -2905,9 +2905,9 @@ gtk_window_get_decorated (GtkWindow *window)
  * @setting: %TRUE to decorate the window as deletable
  *
  * By default, windows have a close button in the window frame. Some 
- * [window managers][gtk-X11-arch] allow GTK+ to 
+ * [window managers][gtk-X11-arch] allow GTK to 
  * disable this button. If you set the deletable property to %FALSE
- * using this function, GTK+ will do its best to convince the window
+ * using this function, GTK will do its best to convince the window
  * manager not to show a close button. Depending on the system, this
  * function may not have any effect when called on a window that is
  * already visible, so you should call it before calling gtk_widget_show().
@@ -3272,7 +3272,7 @@ gtk_window_set_default_icon_name (const char *name)
  *
  * Returns the fallback icon name for windows that has been set
  * with gtk_window_set_default_icon_name(). The returned
- * string is owned by GTK+ and should not be modified. It
+ * string is owned by GTK and should not be modified. It
  * is only valid until the next call to
  * gtk_window_set_default_icon_name().
  *
@@ -3476,7 +3476,7 @@ gtk_window_get_default_size (GtkWindow *window,
  *
  * Windows may not be resized smaller than 1 by 1 pixels.
  * 
- * When using client side decorations, GTK+ will do its best to adjust
+ * When using client side decorations, GTK will do its best to adjust
  * the given size so that the resulting window size matches the
  * requested size without the title bar, borders and shadows added for
  * the client side decorations, but there is no guarantee that the
@@ -3521,7 +3521,7 @@ gtk_window_resize (GtkWindow *window,
  *
  * Obtains the current size of @window.
  *
- * If @window is not visible on screen, this function return the size GTK+
+ * If @window is not visible on screen, this function return the size GTK
  * will suggest to the [window manager][gtk-X11-arch] for the initial window
  * size (but this is not reliably the same as the size the window manager
  * will actually select). See: gtk_window_set_default_size().
@@ -3529,7 +3529,7 @@ gtk_window_resize (GtkWindow *window,
  * Depending on the windowing system and the window manager constraints,
  * the size returned by this function may not match the size set using
  * gtk_window_resize(); additionally, since gtk_window_resize() may be
- * implemented as an asynchronous operation, GTK+ cannot guarantee in any
+ * implemented as an asynchronous operation, GTK cannot guarantee in any
  * way that this code:
  *
  * |[<!-- language="C" -->
@@ -5384,7 +5384,7 @@ gtk_window_move_resize (GtkWindow *window)
    * or gtk_window_move().
    *
    * If the configure request has changed, we send off a new one.  To
-   * ensure GTK+ invariants are maintained (resize queue does what it
+   * ensure GTK invariants are maintained (resize queue does what it
    * should), we go ahead and size_allocate the requested size in this
    * function.
    *

@@ -357,6 +357,28 @@ create_stacked_headerbar (GtkApplication *app)
   gtk_window_present (GTK_WINDOW (win));
 }
 
+/* controls */
+static void
+create_controls (GtkApplication *app)
+{
+  GtkBuilder *builder;
+  GtkWidget *win;
+  const char *ui = "tests/testheadercontrols.ui";
+
+  if (!g_file_test (ui, G_FILE_TEST_EXISTS))
+    {
+      g_warning ("Can't find %s", ui);
+      return;
+    }
+
+  builder = gtk_builder_new_from_file (ui);
+
+  win = (GtkWidget *)gtk_builder_get_object (builder, "window");
+  gtk_window_set_application (GTK_WINDOW (win), app);
+
+  gtk_window_present (GTK_WINDOW (win));
+}
+
 /* technorama */
 
 static const char css[] =
@@ -517,6 +539,7 @@ struct {
     { "Fake headerbar", create_fake_headerbar },
     { "Split headerbar", create_split_headerbar },
     { "Stacked headerbar", create_stacked_headerbar },
+    { "Headerbar with controls", create_controls },
     { "Technorama", create_technorama },
 };
 int n_buttons = sizeof (buttons) / sizeof (buttons[0]);

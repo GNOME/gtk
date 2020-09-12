@@ -33,10 +33,9 @@
  * @See_also: #GtkFontChooserDialog, #GtkFontChooserWidget, #GtkFontButton
  *
  * #GtkFontChooser is an interface that can be implemented by widgets
- * displaying the list of fonts. In GTK+, the main objects
+ * displaying the list of fonts. In GTK, the main objects
  * that implement this interface are #GtkFontChooserWidget,
- * #GtkFontChooserDialog and #GtkFontButton. The GtkFontChooser interface
- * has been introduced in GTK+ 3.2.
+ * #GtkFontChooserDialog and #GtkFontButton.
  */
 
 enum
@@ -458,7 +457,7 @@ _gtk_font_chooser_font_activated (GtkFontChooser *chooser,
  * gtk_font_chooser_set_font_map (font_chooser, fontmap);
  * ]|
  *
- * Note that other GTK+ widgets will only be able to use the application-specific
+ * Note that other GTK widgets will only be able to use the application-specific
  * font if it is present in the font map they use:
  *
  * |[

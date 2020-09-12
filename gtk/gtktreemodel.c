@@ -2323,7 +2323,7 @@ gtk_tree_row_reference_new (GtkTreeModel *model,
  *
  * These functions must be called exactly once per proxy when the
  * corresponding signal on the model is emitted. This single call
- * updates all row references for that proxy. Since built-in GTK+
+ * updates all row references for that proxy. Since built-in GTK
  * objects like #GtkTreeView already use this mechanism internally,
  * using them as the proxy object will produce unpredictable results.
  * Further more, passing the same object as @model and @proxy

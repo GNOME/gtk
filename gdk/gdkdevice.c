@@ -594,7 +594,7 @@ gdk_device_get_axis_use (GdkDevice *device,
  * Returns the #GdkDisplay to which @device pertains.
  *
  * Returns: (transfer none): a #GdkDisplay. This memory is owned
- *          by GTK+, and must not be freed or unreffed.
+ *          by GTK, and must not be freed or unreffed.
  **/
 GdkDisplay *
 gdk_device_get_display (GdkDevice *device)

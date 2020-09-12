@@ -51,8 +51,6 @@
  * It is possible to associate multiple #GtkStackSwitcher widgets
  * with the same #GtkStack widget.
  *
- * The GtkStackSwitcher widget was added in 3.10.
- *
  * # CSS nodes
  *
  * GtkStackSwitcher has a single CSS node named stackswitcher and

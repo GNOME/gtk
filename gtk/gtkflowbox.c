@@ -54,8 +54,6 @@
  *
  * Also see #GtkListBox.
  *
- * GtkFlowBox was added in GTK+ 3.12.
- *
  * # CSS nodes
  *
  * |[<!-- language="plain" -->

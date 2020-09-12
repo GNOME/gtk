@@ -43,7 +43,7 @@
  * @See_also: #GtkWindow, #GtkHeaderBar
  *
  * GtkWindowHandle is a titlebar area widget. When added into a window, it can
- * be dragged to move the window, and handles right click double click and
+ * be dragged to move the window, and handles right click, double click and
  * middle click as expected of a titlebar.
  *
  * # CSS nodes

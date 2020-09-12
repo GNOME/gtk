@@ -34,7 +34,7 @@
 
 /**
  * SECTION:gtkenums
- * @Short_description: Public enumerated types used throughout GTK+
+ * @Short_description: Public enumerated types used throughout GTK
  * @Title: Standard Enumerations
  */
 
@@ -201,7 +201,7 @@ typedef enum
  * @GTK_SENSITIVITY_ON: The arrow is always sensitive
  * @GTK_SENSITIVITY_OFF: The arrow is always insensitive
  *
- * Determines how GTK+ handles the sensitivity of stepper arrows
+ * Determines how GTK handles the sensitivity of stepper arrows
  * at the end of range widgets.
  */
 typedef enum

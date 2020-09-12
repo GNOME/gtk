@@ -88,7 +88,7 @@
  * When using an entry for passwords and other sensitive information,
  * it can be put into “password mode” using gtk_entry_set_visibility().
  * In this mode, entered text is displayed using a “invisible” character.
- * By default, GTK+ picks the best invisible character that is available
+ * By default, GTK picks the best invisible character that is available
  * in the current font, but it can be changed with
  * gtk_entry_set_invisible_char().
  *
@@ -685,7 +685,7 @@ gtk_entry_class_init (GtkEntryClass *class)
    *
    * Whether the primary icon is activatable.
    *
-   * GTK+ emits the #GtkEntry::icon-press and #GtkEntry::icon-release
+   * GTK emits the #GtkEntry::icon-press and #GtkEntry::icon-release
    * signals only on sensitive, activatable icons.
    *
    * Sensitive, but non-activatable icons can be used for purely
@@ -703,7 +703,7 @@ gtk_entry_class_init (GtkEntryClass *class)
    *
    * Whether the secondary icon is activatable.
    *
-   * GTK+ emits the #GtkEntry::icon-press and #GtkEntry::icon-release
+   * GTK emits the #GtkEntry::icon-press and #GtkEntry::icon-release
    * signals only on sensitive, activatable icons.
    *
    * Sensitive, but non-activatable icons can be used for purely
@@ -721,7 +721,7 @@ gtk_entry_class_init (GtkEntryClass *class)
    *
    * Whether the primary icon is sensitive.
    *
-   * An insensitive icon appears grayed out. GTK+ does not emit the
+   * An insensitive icon appears grayed out. GTK does not emit the
    * #GtkEntry::icon-press and #GtkEntry::icon-release signals and
    * does not allow DND from insensitive icons.
    *
@@ -740,7 +740,7 @@ gtk_entry_class_init (GtkEntryClass *class)
    *
    * Whether the secondary icon is sensitive.
    *
-   * An insensitive icon appears grayed out. GTK+ does not emit the
+   * An insensitive icon appears grayed out. GTK does not emit the
    * #GtkEntry::icon-press and #GtkEntry::icon-release signals and
    * does not allow DND from insensitive icons.
    *
@@ -2052,7 +2052,7 @@ gtk_entry_set_buffer (GtkEntry       *entry,
  * as the invisible char, and will also appear that way when
  * the text in the entry widget is copied elsewhere.
  *
- * By default, GTK+ picks the best invisible character available
+ * By default, GTK picks the best invisible character available
  * in the current font, but it can be changed with
  * gtk_entry_set_invisible_char().
  *
@@ -2099,7 +2099,7 @@ gtk_entry_get_visibility (GtkEntry *entry)
  * Sets the character to use in place of the actual text when
  * gtk_entry_set_visibility() has been called to set text visibility
  * to %FALSE. i.e. this is the character used in “password mode” to
- * show the user how many characters have been typed. By default, GTK+
+ * show the user how many characters have been typed. By default, GTK
  * picks the best invisible char available in the current font. If you
  * set the invisible char to 0, then the user will get no feedback
  * at all; there will be no text on the screen as they type.

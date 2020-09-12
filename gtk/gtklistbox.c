@@ -64,8 +64,6 @@
  * the user tries to activate it. If it is selectable, the row will be marked
  * as selected when the user tries to select it.
  *
- * The GtkListBox widget was added in GTK+ 3.10.
- *
  * # GtkListBox as GtkBuildable
  *
  * The GtkListBox implementation of the #GtkBuildable interface supports

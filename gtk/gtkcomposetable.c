@@ -111,7 +111,7 @@ parse_compose_value (GtkComposeData *compose_data,
 
   if (g_utf8_get_char (g_utf8_next_char (words[1])) > 0)
     {
-      g_warning ("GTK+ supports to output one char only: %s: %s", val, line);
+      g_warning ("GTK supports to output one char only: %s: %s", val, line);
       goto fail;
     }
 

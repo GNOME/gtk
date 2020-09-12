@@ -68,7 +68,7 @@
  * @short_description: Functions for working with GIO
  * @Title: Filesystem utilities
  *
- * The functions and objects described here make working with GTK+ and
+ * The functions and objects described here make working with GTK and
  * GIO more convenient.
  *
  * #GtkMountOperation is needed when mounting volumes:

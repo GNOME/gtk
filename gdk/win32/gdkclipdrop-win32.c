@@ -24,9 +24,9 @@
  */
 
 /*
-GTK+ has two clipboards - normal clipboard and primary clipboard
+GTK has two clipboards - normal clipboard and primary clipboard
 Primary clipboard is only handled
-internally by GTK+ (it's not portable to Windows).
+internally by GTK (it's not portable to Windows).
 
 ("C:" means clipboard client (requestor), "S:" means clipboard server (provider))
 ("transmute" here means "change the format of some data"; this term is used here
@@ -34,7 +34,7 @@ internally by GTK+ (it's not portable to Windows).
  which are completely unrelated)
 
 For Clipboard:
-GTK+ calls one of the gdk_clipboard_set* () functions (either supplying
+GTK calls one of the gdk_clipboard_set* () functions (either supplying
 its own content provider, or giving a GTyped data for which GDK will
 create a content provider automatically).
 That function associates the content provider with the clipboard and calls
@@ -53,12 +53,12 @@ No data is sent anywhere.
 The content provider has a callback, which will be invoked every time
 the data from this provider is needed.
 
-GTK+ might also call gdk_clipboard_store_async(), which instructs
+GTK might also call gdk_clipboard_store_async(), which instructs
 the backend to put the data into the OS clipboard manager (if
 supported and available) so that it remains available for other
 processes after the clipboard owner terminates.
 
-When something needs to be obtained from clipboard, GTK+ calls
+When something needs to be obtained from clipboard, GTK calls
 C: gdk_clipboard_read_async () -> gdk_clipboard_read_internal (),
 providing it with a string-array of mime/types, which is internally
 converted into a GdkContentFormats object.
@@ -118,7 +118,7 @@ The thread remembers the fact that it has clipboard open, and does
 not try to close & reopen it, unless that is strictly necessary.
 The clipboard is closed after each queue processing run.
 
-GTK+ calls one of the gdk_clipboard_set* () functions (either supplying
+GTK calls one of the gdk_clipboard_set* () functions (either supplying
 its own content provider, or giving a GTyped data for which GDK will
 create a content provider automatically).
 That function associates the content provider with the clipboard and calls
@@ -145,7 +145,7 @@ No data is sent anywhere.
 The content provider has a callback, which will be invoked every time
 the data from this provider is needed.
 
-GTK+ might also call gdk_clipboard_store_async(), which instructs
+GTK might also call gdk_clipboard_store_async(), which instructs
 the W32 backend to put the data into the OS clipboard manager by
 sending WM_RENDERALLFORMATS to itself and then handling it normally.
 
@@ -168,7 +168,7 @@ The cached remote formats are then mapped into GDK contentformats.
 This map is separate from the one that maps supported GDK contentformats
 to W32 formats for locally-claimed clipboards.
 
-When something needs to be obtained from clipboard, GTK+ calls
+When something needs to be obtained from clipboard, GTK calls
 C: gdk_clipboard_read_async () -> gdk_clipboard_read_internal (),
 providing it with a string-array of mime/types, which is internally
 converted into a GdkContentFormats object.
@@ -233,7 +233,7 @@ functions that read arbitrary GTypes (as long as they are serializable),
 texts (strings) or textures (GdkPixbufs) this way.
 
 If data must be stored on the clipboard, because the application is quitting,
-GTK+ will call
+GTK will call
 S: gdk_clipboard_store_async()
 on all the clipboards it owns. This creates multiple write stream (one for each
 format being stored), each backed by a HGLOBAL memory object. Once all memory
@@ -1572,7 +1572,7 @@ gdk_win32_clipdrop_init (GdkWin32Clipdrop *win32_clipdrop)
   _gdk_atom_array_index (atoms, GDK_WIN32_ATOM_INDEX_JFIF) = g_intern_static_string ("JFIF");
   _gdk_atom_array_index (atoms, GDK_WIN32_ATOM_INDEX_GIF) = g_intern_static_string ("GIF");
 
-  /* These are a bit unusual. It's here to allow GTK+ applications
+  /* These are a bit unusual. It's here to allow GTK applications
    * to actually support CF_DIB and Shell ID List clipboard formats on their own,
    * instead of allowing GDK to use them internally for interoperability.
    */
@@ -1634,7 +1634,7 @@ gdk_win32_clipdrop_init (GdkWin32Clipdrop *win32_clipdrop)
 
   win32_clipdrop->compatibility_w32formats = g_hash_table_new_full (NULL, NULL, NULL, (GDestroyNotify) g_array_unref);
 
-  /* GTK+ actually has more text formats, but it's unlikely that we'd
+  /* GTK actually has more text formats, but it's unlikely that we'd
    * get anything other than UTF8_STRING these days.
    * GTKTEXTBUFFERCONTENTS format can potentially be converted to
    * W32-compatible rich text format, but that's too complex to address right now.

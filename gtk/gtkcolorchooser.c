@@ -36,7 +36,7 @@
  * for choosing colors. Depending on the situation, colors may be
  * allowed to have alpha (translucency).
  *
- * In GTK+, the main widgets that implement this interface are
+ * In GTK, the main widgets that implement this interface are
  * #GtkColorChooserWidget, #GtkColorChooserDialog and #GtkColorButton.
  */
 

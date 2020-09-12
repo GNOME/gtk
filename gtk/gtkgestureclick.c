@@ -25,7 +25,7 @@
  * #GtkGestureClick is a #GtkGesture implementation able to recognize
  * multiple clicks on a nearby zone, which can be listened for through
  * the #GtkGestureClick::pressed signal. Whenever time or distance
- * between clicks exceed the GTK+ defaults, #GtkGestureClick::stopped
+ * between clicks exceed the GTK defaults, #GtkGestureClick::stopped
  * is emitted, and the click counter is reset.
  */
 

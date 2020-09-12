@@ -40,8 +40,6 @@
  * #GtkCellRendererAccel displays a keyboard accelerator (i.e. a key
  * combination like `Control + a`). If the cell renderer is editable,
  * the accelerator can be changed by simply typing the new combination.
- *
- * The #GtkCellRendererAccel cell renderer was added in GTK+ 2.10.
  */
 
 
@@ -215,9 +213,9 @@ gtk_cell_renderer_accel_class_init (GtkCellRendererAccelClass *cell_accel_class)
   /**
    * GtkCellRendererAccel:accel-mode:
    *
-   * Determines if the edited accelerators are GTK+ accelerators. If
+   * Determines if the edited accelerators are GTK accelerators. If
    * they are, consumed modifiers are suppressed, only accelerators
-   * accepted by GTK+ are allowed, and the accelerators are rendered
+   * accepted by GTK are allowed, and the accelerators are rendered
    * in the same way as they are in menus.
    */
   g_object_class_install_property (object_class,

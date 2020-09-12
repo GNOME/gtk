@@ -40,11 +40,11 @@
  * @See_also: #GtkPrintContext, #GtkPrintUnixDialog
  *
  * GtkPrintOperation is the high-level, portable printing API.
- * It looks a bit different than other GTK+ dialogs such as the
+ * It looks a bit different than other GTK dialogs such as the
  * #GtkFileChooser, since some platforms don’t expose enough
  * infrastructure to implement a good print dialog. On such
  * platforms, GtkPrintOperation uses the native print dialog.
- * On platforms which do not provide a native print dialog, GTK+
+ * On platforms which do not provide a native print dialog, GTK
  * uses its own, see #GtkPrintUnixDialog.
  *
  * The typical way to use the high-level printing API is to create
@@ -1101,7 +1101,7 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
    * A string used to identify the job (e.g. in monitoring 
    * applications like eggcups). 
    * 
-   * If you don't set a job name, GTK+ picks a default one 
+   * If you don't set a job name, GTK picks a default one 
    * by numbering successive print jobs.
    */
   g_object_class_install_property (gobject_class,
@@ -1308,7 +1308,7 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
    * Used as the label of the tab containing custom widgets.
    * Note that this property may be ignored on some platforms.
    * 
-   * If this is %NULL, GTK+ uses a default label.
+   * If this is %NULL, GTK uses a default label.
    */
   g_object_class_install_property (gobject_class,
 				   PROP_CUSTOM_TAB_LABEL,
@@ -1515,7 +1515,7 @@ gtk_print_operation_get_print_settings (GtkPrintOperation *op)
  * Sets the name of the print job. The name is used to identify 
  * the job (e.g. in monitoring applications like eggcups). 
  * 
- * If you don’t set a job name, GTK+ picks a default one by 
+ * If you don’t set a job name, GTK picks a default one by 
  * numbering successive print jobs.
  **/
 void

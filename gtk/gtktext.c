@@ -3011,6 +3011,8 @@ gtk_text_drag_gesture_update (GtkGestureDrag *gesture,
       guint length;
       int tmp_pos;
 
+      gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
+
       length = gtk_entry_buffer_get_length (get_buffer (self));
 
       if (y < 0)

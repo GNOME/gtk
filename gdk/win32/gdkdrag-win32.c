@@ -46,27 +46,27 @@
  * the window.
  *
  * There's a mismatch between data types supported by W32 (W32 formats)
- * and by GTK+ (GDK contentformats).
+ * and by GTK (GDK contentformats).
  * To account for it the data is transmuted back and forth. There are two
  * main points of transmutation:
- * * GdkWin32HDATAOutputStream: transmutes GTK+ data to W32 data
- * * GdkWin32Drop: transmutes W32 data to GTK+ data
+ * * GdkWin32HDATAOutputStream: transmutes GTK data to W32 data
+ * * GdkWin32Drop: transmutes W32 data to GTK data
  *
  * There are also two points where data formats are considered:
  * * When source drag context is created, it gets a list of GDK contentformats
  *   that it supports, these are matched to the W32 formats they
  *   correspond to (possibly with transmutation). New W32 formats for
- *   GTK+-specific contentformats are also created here (see below).
+ *   GTK-specific contentformats are also created here (see below).
  * * When target drop context is created, it queries the IDataObject
  *   for the list of W32 formats it supports and matches these to
  *   corresponding GDK contentformats that it will be able to provide
  *   (possibly with transmutation) later. Missing GDK contentformats for
  *   W32-specific formats are also created here (see below).
  *
- * W32 formats are integers (CLIPFORMAT), while GTK+ contentformats
+ * W32 formats are integers (CLIPFORMAT), while GTK contentformats
  * are mime/type strings, and cannot be used interchangeably.
  *
- * To accommodate advanced GTK+ applications the code allows them to
+ * To accommodate advanced GTK applications the code allows them to
  * register drop targets that accept W32 data formats, and to register
  * drag sources that provide W32 data formats. To do that they must
  * register with the mime/type "application/x.windows.ZZZ", where
@@ -77,36 +77,36 @@
  * If such contentformat is accepted/provided, GDK will not try to
  * transmute it to/from something else. Otherwise GDK will do the following
  * transmutation:
- * * If GTK+ application provides image/png, image/gif or image/jpeg,
+ * * If GTK application provides image/png, image/gif or image/jpeg,
  *   GDK will claim to also provide "PNG", "GIF" or "JFIF" respectively,
  *   and will pass these along verbatim.
- * * If GTK+ application provides any GdkPixbuf-compatible contentformat,
+ * * If GTK application provides any GdkPixbuf-compatible contentformat,
  *   GDK will also offer "PNG" and CF_DIB W32 formats.
- * * If GTK+ application provides text/plain;charset=utf8, GDK will also offer
+ * * If GTK application provides text/plain;charset=utf8, GDK will also offer
  *   CF_UNICODETEXT (UTF-16-encoded) and CF_TEXT (encoded with thread-
  *   and locale-dependent codepage), and will do the conversion when such
  *   data is requested.
- * * If GTK+ application accepts image/png, image/gif or image/jpeg,
+ * * If GTK application accepts image/png, image/gif or image/jpeg,
  *   GDK will claim to also accept "PNG", "GIF" or "JFIF" respectively,
  *   and will pass these along verbatim.
- * * If GTK+ application accepts image/bmp, GDK will
+ * * If GTK application accepts image/bmp, GDK will
  *   claim to accept CF_DIB W32 format, and will convert
  *   it, changing the header, when such data is provided.
- * * If GTK+ application accepts text/plain;charset=utf8, GDK will
+ * * If GTK application accepts text/plain;charset=utf8, GDK will
  *   claim to accept CF_UNICODETEXT and CF_TEXT, and will do
  *   the conversion when such data is provided.
- * * If GTK+ application accepts text/uri-list, GDK will
+ * * If GTK application accepts text/uri-list, GDK will
  *   claim to accept "Shell IDList Array", and will do the
  *   conversion when such data is provided.
  *
  * Currently the conversion from text/uri-list to "Shell IDList Array" is not
- * implemented, so it's not possible to drag & drop files from GTK+
- * applications to non-GTK+ applications the same way one can drag files
+ * implemented, so it's not possible to drag & drop files from GTK
+ * applications to non-GTK applications the same way one can drag files
  * from Windows Explorer.
  *
- * To increase inter-GTK compatibility, GDK will register GTK+-specific
+ * To increase inter-GTK compatibility, GDK will register GTK-specific
  * formats by their mime/types, as-is (i.e "text/plain;charset=utf-8", for example).
- * That way two GTK+ applications can exchange data in their native formats
+ * That way two GTK applications can exchange data in their native formats
  * (both well-known ones, such as text/plain;charset=utf8, and special,
  * known only to specific applications). This will work just
  * fine as long as both applications agree on what kind of data is stored
@@ -118,7 +118,7 @@
  * If more flexibility is needed, register one format that has some
  * internal indicators of the kind of data it contains, then write the application
  * in such a way that it requests the data and inspects its header before deciding
- * whether to accept it or not. For details see GTK+ drag & drop documentation
+ * whether to accept it or not. For details see GTK drag & drop documentation
  * on the "drag-motion" and "drag-data-received" signals.
  *
  * How managed DnD works:

@@ -692,7 +692,7 @@ binding_compose_params (GtkWidget     *widget,
 
               g_type_class_unref (class);
             }
-          /* This is just a hack for compatibility with GTK+-1.2 where a string
+          /* This is just a hack for compatibility with GTK 1.2 where a string
            * could be used for a single flag value / without the support for multiple
            * values in gtk_rc_parse_flags(), this isn't very useful.
            */

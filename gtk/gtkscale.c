@@ -1657,7 +1657,7 @@ gtk_scale_clear_marks (GtkScale *scale)
  * Adds a mark at @value.
  *
  * A mark is indicated visually by drawing a tick mark next to the scale,
- * and GTK+ makes it easy for the user to position the scale exactly at the
+ * and GTK makes it easy for the user to position the scale exactly at the
  * marks value.
  *
  * If @markup is not %NULL, text is shown next to the tick mark.

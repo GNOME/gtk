@@ -299,7 +299,7 @@ gtk_shortcuts_group_class_init (GtkShortcutsGroupClass *klass)
    *
    * The size group for the accelerator portion of shortcuts in this group.
    *
-   * This is used internally by GTK+, and must not be modified by applications.
+   * This is used internally by GTK, and must not be modified by applications.
    */
   properties[PROP_ACCEL_SIZE_GROUP] =
     g_param_spec_object ("accel-size-group",
@@ -313,7 +313,7 @@ gtk_shortcuts_group_class_init (GtkShortcutsGroupClass *klass)
    *
    * The size group for the textual portion of shortcuts in this group.
    *
-   * This is used internally by GTK+, and must not be modified by applications.
+   * This is used internally by GTK, and must not be modified by applications.
    */
   properties[PROP_TITLE_SIZE_GROUP] =
     g_param_spec_object ("title-size-group",
@@ -327,7 +327,7 @@ gtk_shortcuts_group_class_init (GtkShortcutsGroupClass *klass)
    *
    * A rough measure for the number of lines in this group.
    *
-   * This is used internally by GTK+, and is not useful for applications.
+   * This is used internally by GTK, and is not useful for applications.
    */
   properties[PROP_HEIGHT] =
     g_param_spec_uint ("height", P_("Height"), P_("Height"),

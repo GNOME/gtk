@@ -27,7 +27,7 @@
  * parsing custom tags and constructing child objects.
  *
  * The GtkBuildable interface is implemented by all widgets and
- * many of the non-widget objects that are provided by GTK+. The
+ * many of the non-widget objects that are provided by GTK. The
  * main user of this interface is #GtkBuilder. There should be
  * very little need for applications to call any of these functions directly.
  *

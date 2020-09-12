@@ -1073,7 +1073,7 @@ gtk_gesture_set_state (GtkGesture            *gesture,
  * by @gesture.
  *
  * Returns: (transfer container) (element-type GdkEventSequence): A list
- *          of #GdkEventSequences, the list elements are owned by GTK+
+ *          of #GdkEventSequences, the list elements are owned by GTK
  *          and must not be freed or modified, the list itself must be deleted
  *          through g_list_free()
  **/

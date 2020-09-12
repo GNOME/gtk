@@ -1,6 +1,6 @@
 /*
  * gtkinfobar.h
- * This file is part of GTK+
+ * This file is part of GTK
  *
  * Copyright (C) 2005 - Paolo Maggi
  *

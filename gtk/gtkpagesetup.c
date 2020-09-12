@@ -70,8 +70,6 @@
  *   page_setup = new_page_setup;
  * }
  * ]|
- *
- * Printing support was added in GTK+ 2.10.
  */
 
 #define KEYFILE_GROUP_NAME "Page Setup"

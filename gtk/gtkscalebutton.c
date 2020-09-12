@@ -67,7 +67,7 @@
  *
  * #GtkScaleButton provides a button which pops up a scale widget.
  * This kind of widget is commonly used for volume controls in multimedia
- * applications, and GTK+ provides a #GtkVolumeButton subclass that
+ * applications, and GTK provides a #GtkVolumeButton subclass that
  * is tailored for this use case.
  *
  * # CSS nodes
@@ -190,10 +190,9 @@ gtk_scale_button_class_init (GtkScaleButtonClass *klass)
    *
    * The orientation of the #GtkScaleButton's popup window.
    *
-   * Note that since GTK+ 2.16, #GtkScaleButton implements the
-   * #GtkOrientable interface which has its own @orientation
-   * property. However we redefine the property here in order to
-   * override its default horizontal orientation.
+   * Note that #GtkScaleButton implements the #GtkOrientable interface
+   * which has its own @orientation property. However, we redefine the
+   * property here in order to override its default horizontal orientation.
    **/
   g_object_class_override_property (gobject_class,
 				    PROP_ORIENTATION,

@@ -45,12 +45,9 @@ typedef struct _GtkImage              GtkImage;
 /**
  * GtkImageType:
  * @GTK_IMAGE_EMPTY: there is no image displayed by the widget
- * @GTK_IMAGE_ICON_NAME: the widget contains a named icon.
- *  This image type was added in GTK+ 2.6
- * @GTK_IMAGE_GICON: the widget contains a #GIcon.
- *  This image type was added in GTK+ 2.14
- * @GTK_IMAGE_PAINTABLE: the widget contains a #GdkPaintable.
- *  This image type was added in GTK+ 3.96
+ * @GTK_IMAGE_ICON_NAME: the widget contains a named icon
+ * @GTK_IMAGE_GICON: the widget contains a #GIcon
+ * @GTK_IMAGE_PAINTABLE: the widget contains a #GdkPaintable
  *
  * Describes the image data representation used by a #GtkImage. If you
  * want to get the image from the widget, you can only get the

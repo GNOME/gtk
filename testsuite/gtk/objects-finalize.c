@@ -101,7 +101,7 @@ test_finalize_object (gconstpointer data)
   /* Assert that the object finalizes properly */
   g_object_weak_ref (object, check_finalized, &finalized);
 
-  /* Toplevels are owned by GTK+, just tell GTK+ to destroy it */
+  /* Toplevels are owned by GTK, just tell GTK to destroy it */
   if (GTK_IS_WINDOW (object))
     gtk_window_destroy (GTK_WINDOW (object));
   else

@@ -525,7 +525,7 @@
 
   [self setFrame:new_frame display:YES];
 
-  /* Let the resizing be handled by GTK+. */
+  /* Let the resizing be handled by GTK. */
   if (g_main_context_pending (NULL))
     g_main_context_iteration (NULL, FALSE);
 

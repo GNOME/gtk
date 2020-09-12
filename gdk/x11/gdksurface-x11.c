@@ -2845,14 +2845,14 @@ gdk_x11_surface_set_shadow_width (GdkSurface *surface,
  * @surface: (type GdkX11Surface): a #GdkSurface
  * @variant: the theme variant to export
  *
- * GTK+ applications can request a dark theme variant. In order to
- * make other applications - namely window managers using GTK+ for
- * themeing - aware of this choice, GTK+ uses this function to
+ * GTK applications can request a dark theme variant. In order to
+ * make other applications - namely window managers using GTK for
+ * themeing - aware of this choice, GTK uses this function to
  * export the requested theme variant as _GTK_THEME_VARIANT property
  * on toplevel surfaces.
  *
- * Note that this property is automatically updated by GTK+, so this
- * function should only be used by applications which do not use GTK+
+ * Note that this property is automatically updated by GTK, so this
+ * function should only be used by applications which do not use GTK
  * to create toplevel surfaces.
  */
 void

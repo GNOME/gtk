@@ -46,7 +46,7 @@
 
 /**
  * SECTION:gtktesting
- * @Short_description: Utilities for testing GTK+ applications
+ * @Short_description: Utilities for testing GTK applications
  * @Title: Testing
  */
 
@@ -60,7 +60,7 @@
  *        stripped before return.
  * @...: currently unused
  *
- * This function is used to initialize a GTK+ test program.
+ * This function is used to initialize a GTK test program.
  *
  * It will in turn call g_test_init() and gtk_init() to properly
  * initialize the testing framework and graphical toolkit. It’ll 

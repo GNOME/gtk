@@ -262,7 +262,7 @@ gtk_gesture_stylus_get_axes (GtkGestureStylus  *gesture,
  * @backlog: (out) (array length=n_elems): coordinates and times for the backlog events
  * @n_elems: (out): return location for the number of elements
  *
- * By default, GTK+ will limit rate of input events. On stylus input where
+ * By default, GTK will limit rate of input events. On stylus input where
  * accuracy of strokes is paramount, this function returns the accumulated
  * coordinate/timing state before the emission of the current
  * #GtkGestureStylus::motion signal.

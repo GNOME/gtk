@@ -606,7 +606,7 @@ popover_destroy_cb (GtkMenuButton *menu_button)
  * be changed to an arrow if it was customized.
  *
  * If the does not fit in the available space in the given direction,
- * GTK+ will its best to keep it inside the screen and fully visible.
+ * GTK will its best to keep it inside the screen and fully visible.
  *
  * If you pass %GTK_ARROW_NONE for a @direction, the popup will behave
  * as if you passed %GTK_ARROW_DOWN (although you won’t see any arrows).

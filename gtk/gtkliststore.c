@@ -106,13 +106,13 @@
  *
  * # Performance Considerations
  *
- * Internally, the #GtkListStore was implemented with a linked list with
- * a tail pointer prior to GTK+ 2.6.  As a result, it was fast at data
- * insertion and deletion, and not fast at random data access.  The
- * #GtkListStore sets the #GTK_TREE_MODEL_ITERS_PERSIST flag, which means
- * that #GtkTreeIters can be cached while the row exists.  Thus, if
- * access to a particular row is needed often and your code is expected to
- * run on older versions of GTK+, it is worth keeping the iter around.
+ * Internally, the #GtkListStore was originally implemented with a linked list
+ * with a tail pointer.  As a result, it was fast at data insertion and deletion,
+ * and not fast at random data access.  The #GtkListStore sets the
+ * #GTK_TREE_MODEL_ITERS_PERSIST flag, which means that #GtkTreeIters can be
+ * cached while the row exists.  Thus, if access to a particular row is needed
+ * often and your code is expected to run on older versions of GTK, it is worth
+ * keeping the iter around.
  *
  * # Atomic Operations
  *

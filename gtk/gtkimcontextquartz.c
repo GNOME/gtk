@@ -280,7 +280,7 @@ quartz_focus_out (GtkIMContext *context)
   GtkIMContextQuartz *qc = GTK_IM_CONTEXT_QUARTZ (context);
   qc->focused = FALSE;
 
-  /* Commit any partially built strings or it'll mess up other GTK+ widgets in the window */
+  /* Commit any partially built strings or it'll mess up other widgets in the window */
   discard_preedit (context);
 }
 

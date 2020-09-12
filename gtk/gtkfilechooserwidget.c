@@ -2322,6 +2322,7 @@ save_widgets_create (GtkFileChooserWidget *impl)
     {
       location_entry_disconnect (impl);
       impl->location_entry = impl->external_entry;
+      g_object_add_weak_pointer (impl->external_entry, (gpointer *)&impl->location_entry);
       location_entry_setup (impl);
 
       g_signal_connect_after (gtk_entry_get_key_controller (GTK_ENTRY (impl->external_entry)),
@@ -7849,7 +7850,7 @@ gtk_file_chooser_widget_init (GtkFileChooserWidget *impl)
   impl->auto_selecting_first_row = FALSE;
   impl->renamed_file = NULL;
 
-  /* Ensure GTK+ private types used by the template
+  /* Ensure private types used by the template
    * definition before calling gtk_widget_init_template()
    */
   g_type_ensure (GTK_TYPE_PATH_BAR);

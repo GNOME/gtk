@@ -971,7 +971,7 @@ gtk_icon_theme_class_init (GtkIconThemeClass *klass)
    * GtkIconTheme::changed:
    * @self: the icon theme
    *
-   * Emitted when the current icon theme is switched or GTK+ detects
+   * Emitted when the current icon theme is switched or GTK detects
    * that a change has occurred in the contents of the current
    * icon theme.
    */
