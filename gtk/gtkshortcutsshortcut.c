@@ -586,7 +586,7 @@ gtk_shortcuts_shortcut_class_init (GtkShortcutsShortcutClass *klass)
    *
    * An icon to represent the shortcut or gesture. This property is used if
    * #GtkShortcutsShortcut:shortcut-type is set to #GTK_SHORTCUT_GESTURE.
-   * For the other predefined gesture types, GTK+ provides an icon on its own.
+   * For the other predefined gesture types, GTK provides an icon on its own.
    */
   properties[PROP_ICON] =
     g_param_spec_object ("icon",
@@ -627,7 +627,7 @@ gtk_shortcuts_shortcut_class_init (GtkShortcutsShortcutClass *klass)
    *
    * This is typically used for gestures and should be a short, one-line
    * text that describes the gesture itself. For the predefined gesture
-   * types, GTK+ provides a subtitle on its own.
+   * types, GTK provides a subtitle on its own.
    */
   properties[PROP_SUBTITLE] =
     g_param_spec_string ("subtitle",
@@ -653,7 +653,7 @@ gtk_shortcuts_shortcut_class_init (GtkShortcutsShortcutClass *klass)
    *
    * The size group for the accelerator portion of this shortcut.
    *
-   * This is used internally by GTK+, and must not be modified by applications.
+   * This is used internally by GTK, and must not be modified by applications.
    */
   properties[PROP_ACCEL_SIZE_GROUP] =
     g_param_spec_object ("accel-size-group",
@@ -667,7 +667,7 @@ gtk_shortcuts_shortcut_class_init (GtkShortcutsShortcutClass *klass)
    *
    * The size group for the textual portion of this shortcut.
    *
-   * This is used internally by GTK+, and must not be modified by applications.
+   * This is used internally by GTK, and must not be modified by applications.
    */
   properties[PROP_TITLE_SIZE_GROUP] =
     g_param_spec_object ("title-size-group",
@@ -708,7 +708,7 @@ gtk_shortcuts_shortcut_class_init (GtkShortcutsShortcutClass *klass)
    * GtkShortcutsShortcut:action-name:
    *
    * A detailed action name. If this is set for a shortcut
-   * of type %GTK_SHORTCUT_ACCELERATOR, then GTK+ will use
+   * of type %GTK_SHORTCUT_ACCELERATOR, then GTK will use
    * the accelerators that are associated with the action
    * via gtk_application_set_accels_for_action(), and setting
    * #GtkShortcutsShortcut:accelerator is not necessary.

@@ -44,8 +44,6 @@
  * the settings for the next time your app runs, or even store them in a
  * document. The predefined keys try to use shared values as much as possible
  * so that moving such a document between systems still works.
- *
- * Printing support was added in GTK+ 2.10.
  */
 
 typedef struct _GtkPrintSettingsClass GtkPrintSettingsClass;

@@ -55,19 +55,19 @@ typedef enum
  * GtkResponseType:
  * @GTK_RESPONSE_NONE: Returned if an action widget has no response id,
  *     or if the dialog gets programmatically hidden or destroyed
- * @GTK_RESPONSE_REJECT: Generic response id, not used by GTK+ dialogs
- * @GTK_RESPONSE_ACCEPT: Generic response id, not used by GTK+ dialogs
+ * @GTK_RESPONSE_REJECT: Generic response id, not used by GTK dialogs
+ * @GTK_RESPONSE_ACCEPT: Generic response id, not used by GTK dialogs
  * @GTK_RESPONSE_DELETE_EVENT: Returned if the dialog is deleted
- * @GTK_RESPONSE_OK: Returned by OK buttons in GTK+ dialogs
- * @GTK_RESPONSE_CANCEL: Returned by Cancel buttons in GTK+ dialogs
- * @GTK_RESPONSE_CLOSE: Returned by Close buttons in GTK+ dialogs
- * @GTK_RESPONSE_YES: Returned by Yes buttons in GTK+ dialogs
- * @GTK_RESPONSE_NO: Returned by No buttons in GTK+ dialogs
- * @GTK_RESPONSE_APPLY: Returned by Apply buttons in GTK+ dialogs
- * @GTK_RESPONSE_HELP: Returned by Help buttons in GTK+ dialogs
+ * @GTK_RESPONSE_OK: Returned by OK buttons in GTK dialogs
+ * @GTK_RESPONSE_CANCEL: Returned by Cancel buttons in GTK dialogs
+ * @GTK_RESPONSE_CLOSE: Returned by Close buttons in GTK dialogs
+ * @GTK_RESPONSE_YES: Returned by Yes buttons in GTK dialogs
+ * @GTK_RESPONSE_NO: Returned by No buttons in GTK dialogs
+ * @GTK_RESPONSE_APPLY: Returned by Apply buttons in GTK dialogs
+ * @GTK_RESPONSE_HELP: Returned by Help buttons in GTK dialogs
  *
  * Predefined values for use as response ids in gtk_dialog_add_button().
- * All predefined values are negative; GTK+ leaves values of 0 or greater for
+ * All predefined values are negative; GTK leaves values of 0 or greater for
  * application-defined response ids.
  */
 typedef enum

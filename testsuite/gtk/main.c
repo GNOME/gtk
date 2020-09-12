@@ -12,7 +12,7 @@ test_init (void)
 int
 main (int argc, char *argv[])
 {
-  /* Don't use gtk_test_init here because it implicitly initializes GTK+. */
+  /* Don't use gtk_test_init here because it implicitly initializes GTK. */
   g_test_init (&argc, &argv, NULL);
   gtk_disable_setlocale();
   setlocale (LC_ALL, "C");

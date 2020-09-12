@@ -35,7 +35,7 @@
  * values 0.25, 0.75 and 1.0 respectively.
  *
  * Note that it is your responsibility to update preexisting offsets
- * when changing the minimum or maximum value. GTK+ will simply clamp
+ * when changing the minimum or maximum value. GTK will simply clamp
  * them to the new range.
  *
  * ## Adding a custom offset on the bar
@@ -86,8 +86,6 @@
  * For instance, to build a bar rendered with five blocks, it’s sufficient to
  * set the minimum value to 0 and the maximum value to 5 after changing the indicator
  * mode to discrete.
- *
- * GtkLevelBar was introduced in GTK+ 3.6.
  *
  * # GtkLevelBar as GtkBuildable
  *

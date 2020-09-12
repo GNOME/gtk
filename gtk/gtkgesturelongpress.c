@@ -290,7 +290,7 @@ gtk_gesture_long_press_class_init (GtkGestureLongPressClass *klass)
    * @y: the Y coordinate where the press happened, relative to the widget allocation
    *
    * This signal is emitted whenever a press goes unmoved/unreleased longer than
-   * what the GTK+ defaults tell.
+   * what the GTK defaults tell.
    */
   signals[PRESSED] =
     g_signal_new (I_("pressed"),

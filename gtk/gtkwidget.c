@@ -92,19 +92,19 @@
  * @Short_description: Base class for all widgets
  * @Title: GtkWidget
  *
- * GtkWidget is the base class all widgets in GTK+ derive from. It manages the
+ * GtkWidget is the base class all widgets in GTK derive from. It manages the
  * widget lifecycle, states and style.
  *
  * # Height-for-width Geometry Management # {#geometry-management}
  *
- * GTK+ uses a height-for-width (and width-for-height) geometry management
+ * GTK uses a height-for-width (and width-for-height) geometry management
  * system. Height-for-width means that a widget can change how much
  * vertical space it needs, depending on the amount of horizontal space
  * that it is given (and similar for width-for-height). The most common
  * example is a label that reflows to fill up the available width, wraps
  * to fewer lines, and therefore needs less height.
  *
- * Height-for-width geometry management is implemented in GTK+ by way
+ * Height-for-width geometry management is implemented in GTK by way
  * of two virtual methods:
  *
  * - #GtkWidgetClass.get_request_mode()
@@ -223,7 +223,7 @@
  * as well as its CSS style.
  * If a widget used the wrappers inside its virtual method implementations,
  * then the adjustments (such as widget margins) would be applied
- * twice. GTK+ therefore does not allow this and will warn if you try
+ * twice. GTK therefore does not allow this and will warn if you try
  * to do it.
  *
  * Of course if you are getting the size request for
@@ -231,7 +231,7 @@
  * Otherwise, you would not properly consider widget margins,
  * #GtkSizeGroup, and so forth.
  *
- * GTK+ also supports baseline vertical alignment of widgets. This
+ * GTK also supports baseline vertical alignment of widgets. This
  * means that widgets are positioned such that the typographical baseline of
  * widgets in the same row are aligned. This happens if a widget supports baselines,
  * has a vertical alignment of %GTK_ALIGN_BASELINE, and is inside a widget
@@ -5271,7 +5271,7 @@ gtk_widget_set_name (GtkWidget	 *widget,
  * Retrieves the name of a widget. See gtk_widget_set_name() for the
  * significance of widget names.
  *
- * Returns: name of the widget. This string is owned by GTK+ and
+ * Returns: name of the widget. This string is owned by GTK and
  * should not be modified or freed
  **/
 const char *
@@ -7465,7 +7465,7 @@ gtk_widget_adjust_baseline_request (GtkWidget *widget,
  *
  * Returns the list of pointer #GdkDevices that are currently
  * on top of @widget. Free the list
- * with g_free(), the elements are owned by GTK+ and must
+ * with g_free(), the elements are owned by GTK and must
  * not be freed.
  */
 GdkDevice **
@@ -7500,7 +7500,7 @@ _gtk_widget_list_devices (GtkWidget *widget,
  * @to: the #GtkWidget the virtual pointer is moving to.
  * @mode: the #GdkCrossingMode to place on the synthesized events.
  *
- * Generate crossing event(s) on widget state (sensitivity) or GTK+ grab change.
+ * Generate crossing event(s) on widget state (sensitivity) or GTK grab change.
  */
 void
 _gtk_widget_synthesize_crossing (GtkWidget       *from,
@@ -10436,7 +10436,7 @@ gtk_widget_class_set_template_from_resource (GtkWidgetClass    *widget_class,
   g_return_if_fail (resource_name && resource_name[0]);
 
   /* This is a hack, because class initializers now access resources
-   * and GIR/gtk-doc initializes classes without initializing GTK+,
+   * and GIR/gtk-doc initializes classes without initializing GTK,
    * we ensure that our base resources are registered here and
    * avoid warnings which building GIRs/documentation.
    */

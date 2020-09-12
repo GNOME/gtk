@@ -39,7 +39,7 @@
  *
  * As outlined in
  * [GtkWidget’s geometry management section][geometry-management],
- * GTK+ uses a height-for-width
+ * GTK uses a height-for-width
  * geometry management system to compute the sizes of widgets and user
  * interfaces. #GtkCellArea uses the same semantics to calculate the
  * size of an area for an arbitrary number of #GtkTreeModel rows.

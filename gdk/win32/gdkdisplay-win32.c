@@ -57,7 +57,7 @@ static int debug_indent = 0;
  *
  * Adds an event filter to @window, allowing you to intercept messages
  * before they reach GDK. This is a low-level operation and makes it
- * easy to break GDK and/or GTK+, so you have to know what you're
+ * easy to break GDK and/or GTK, so you have to know what you're
  * doing.
  **/
 void

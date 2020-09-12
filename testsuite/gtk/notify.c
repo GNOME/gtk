@@ -372,7 +372,7 @@ test_type (gconstpointer data)
   if (!g_type_is_a (type, G_TYPE_OBJECT))
     return;
 
-  /* non-GTK+ */
+  /* non-GTK */
   if (g_str_equal (g_type_name (type), "GdkPixbufSimpleAnim"))
     return;
 
@@ -503,7 +503,7 @@ test_type (gconstpointer data)
       if ((pspec->flags & G_PARAM_CONSTRUCT_ONLY) != 0)
         continue;
 
-      /* non-GTK+ */
+      /* non-GTK */
       if (g_str_equal (g_type_name (pspec->owner_type), "GdkPixbufSimpleAnim") || 
           g_str_equal (g_type_name (pspec->owner_type), "GMountOperation")) 
         continue;

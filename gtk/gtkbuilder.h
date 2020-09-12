@@ -56,7 +56,7 @@ typedef struct _GtkBuilderClass   GtkBuilderClass;
  * @GTK_BUILDER_ERROR_INVALID_VALUE: #GtkBuilder couldn’t parse
  *  some attribute value.
  * @GTK_BUILDER_ERROR_VERSION_MISMATCH: The input file requires a newer version
- *  of GTK+.
+ *  of GTK.
  * @GTK_BUILDER_ERROR_DUPLICATE_ID: An object id occurred twice.
  * @GTK_BUILDER_ERROR_OBJECT_TYPE_REFUSED: A specified object type is of the same type or
  *  derived from the type of the composite class being extended with builder XML.

@@ -205,7 +205,7 @@ struct _GtkPrintOperationClass
  *     or paper size from a key file.
  *
  * Error codes that identify various errors that can occur while
- * using the GTK+ printing support.
+ * using the GTK printing support.
  */
 typedef enum
 {

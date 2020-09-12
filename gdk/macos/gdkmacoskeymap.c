@@ -300,7 +300,7 @@ gdk_macos_keymap_update (GdkMacosKeymap *self)
                     }
                 }
 
-              /* Special-case shift-tab since GTK+ expects
+              /* Special-case shift-tab since GTK expects
                * GDK_KEY_ISO_Left_Tab for that.
                */
               if (found && p[j] == GDK_KEY_Tab && modifiers[j] == shiftKey)

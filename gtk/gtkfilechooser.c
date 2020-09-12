@@ -32,7 +32,7 @@
  * @See_also: #GtkFileChooserDialog, #GtkFileChooserWidget, #GtkFileChooserButton
  *
  * #GtkFileChooser is an interface that can be implemented by file
- * selection widgets.  In GTK+, the main objects that implement this
+ * selection widgets.  In GTK, the main objects that implement this
  * interface are #GtkFileChooserWidget, #GtkFileChooserDialog, and
  * #GtkFileChooserButton.  You do not need to write an object that
  * implements the #GtkFileChooser interface unless you are trying to

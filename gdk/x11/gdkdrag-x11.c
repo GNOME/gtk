@@ -1422,13 +1422,13 @@ gdk_x11_drag_drag_motion (GdkDrag *drag,
 
   if (protocol == GDK_DRAG_PROTO_XDND && drag_x11->version == 0)
     {
-      /* This ugly hack is necessary since GTK+ doesn't know about
+      /* This ugly hack is necessary since GTK doesn't know about
        * the XDND protocol version, and in particular doesn't know
        * that gdk_drag_find_window() has the side-effect
        * of setting drag_x11->version, and therefore sometimes call
        * gdk_x11_drag_drag_motion() without a prior call to
        * gdk_drag_find_window(). This happens, e.g.
-       * when GTK+ is proxying DND events to embedded windows.
+       * when GTK is proxying DND events to embedded windows.
        */
       if (proxy_xid)
         {
@@ -1517,7 +1517,7 @@ gdk_x11_drag_drag_motion (GdkDrag *drag,
             case GDK_DRAG_PROTO_ROOTWIN:
               {
                 GdkContentFormats *formats = gdk_drag_get_formats (drag);
-                /* GTK+ traditionally has used application/x-rootwin-drop,
+                /* GTK traditionally has used application/x-rootwin-drop,
                  * but the XDND spec specifies x-rootwindow-drop.
                  */
                 if (gdk_content_formats_contain_mime_type (formats, "application/x-rootwindow-drop") ||

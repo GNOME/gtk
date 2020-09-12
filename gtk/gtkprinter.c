@@ -41,8 +41,6 @@
  * such as its description, its location, the number of queued jobs,
  * etc. Most importantly, a #GtkPrinter object can be used to create
  * a #GtkPrintJob object, which lets you print to the printer.
- *
- * Printing support was added in GTK+ 2.10.
  */
 
 

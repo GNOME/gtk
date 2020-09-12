@@ -1007,7 +1007,7 @@ gdk_dropfiles_filter (GdkWin32Display *display,
       /* Awful hack to recognize temp files corresponding to
        * images dragged from Firefox... Open the file right here
        * so that it is less likely that Firefox manages to delete
-       * it before the GTK+-using app (typically GIMP) has opened
+       * it before the GTK-using app (typically GIMP) has opened
        * it.
        *
        * Not compiled in for now, because it means images dragged

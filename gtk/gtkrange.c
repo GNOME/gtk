@@ -336,12 +336,12 @@ gtk_range_class_init (GtkRangeClass *class)
    * type of scroll event that occurred and the resultant new value.
    * The application can handle the event itself and return %TRUE to
    * prevent further processing.  Or, by returning %FALSE, it can pass
-   * the event to other handlers until the default GTK+ handler is
+   * the event to other handlers until the default GTK handler is
    * reached.
    *
    * The value parameter is unrounded.  An application that overrides
    * the GtkRange::change-value signal is responsible for clamping the
-   * value to the desired number of decimal digits; the default GTK+
+   * value to the desired number of decimal digits; the default GTK
    * handler clamps the value based on #GtkRange:round-digits.
    *
    * Returns: %TRUE to prevent other handlers from being invoked for
@@ -1668,7 +1668,7 @@ range_grab_add (GtkRange  *range,
 {
   GtkRangePrivate *priv = gtk_range_get_instance_private (range);
 
-  /* Don't perform any GDK/GTK+ grab here. Since a button
+  /* Don't perform any GDK/GTK grab here. Since a button
    * is down, there's an ongoing implicit grab on
    * the widget, which pretty much guarantees this
    * is the only widget receiving the pointer events.

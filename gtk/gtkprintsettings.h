@@ -195,7 +195,7 @@ void              gtk_print_settings_set_int                 (GtkPrintSettings  
  * GTK_PRINT_SETTINGS_OUTPUT_URI:
  *
  * The key used by the “Print to file” printer to store the URI
- * to which the output should be written. GTK+ itself supports
+ * to which the output should be written. GTK itself supports
  * only “file://” URIs.
  */
 #define GTK_PRINT_SETTINGS_OUTPUT_URI          "output-uri"

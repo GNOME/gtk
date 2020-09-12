@@ -90,8 +90,6 @@
  *   g_object_unref (layout);
  * }
  * ]|
- *
- * Printing support was added in GTK+ 2.10.
  */
 
 
@@ -192,7 +190,7 @@ _gtk_print_context_get_fontmap (GtkPrintContext *context)
  * 
  * This function is intended to be used when implementing
  * an internal print preview, it is not needed for printing,
- * since GTK+ itself creates a suitable cairo context in that
+ * since GTK itself creates a suitable cairo context in that
  * case.
  */
 void

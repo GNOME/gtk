@@ -26,10 +26,10 @@
  * @Short_description: Interfaces for drag-and-drop support in GtkTreeView
  * @Title: GtkTreeView drag-and-drop
  *
- * GTK+ supports Drag-and-Drop in tree views with a high-level and a low-level
+ * GTK supports Drag-and-Drop in tree views with a high-level and a low-level
  * API.
  *
- * The low-level API consists of the GTK+ DND API, augmented by some treeview
+ * The low-level API consists of the GTK DND API, augmented by some treeview
  * utility functions: gtk_tree_view_set_drag_dest_row(),
  * gtk_tree_view_get_drag_dest_row(), gtk_tree_view_get_dest_row_at_pos(),
  * gtk_tree_view_create_row_drag_icon(), gtk_tree_set_row_drag_data() and

@@ -5662,8 +5662,8 @@ check_model_dnd (GtkTreeModel *model,
                  "g_signal_stop_emission_by_name() in your signal handler to prevent "
                  "the default handler from running. Look at the source code "
                  "for the default handler in gtkiconview.c to get an idea what "
-                 "your handler should do. (gtkiconview.c is in the GTK+ source "
-                 "code.) If you're using GTK+ from a language other than C, "
+                 "your handler should do. (gtkiconview.c is in the GTK source "
+                 "code.) If you're using GTK from a language other than C, "
                  "there may be a more natural way to override default handlers, e.g. via derivation.",
                  signal, g_type_name (required_iface), signal);
       return FALSE;

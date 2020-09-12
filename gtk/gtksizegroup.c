@@ -60,7 +60,7 @@
  * group; when all widgets have been removed, the size group will be
  * freed.
  *
- * Widgets can be part of multiple size groups; GTK+ will compute the
+ * Widgets can be part of multiple size groups; GTK will compute the
  * horizontal size of a widget from the horizontal requisition of all
  * widgets that can be reached from the widget by a chain of size groups
  * of type %GTK_SIZE_GROUP_HORIZONTAL or %GTK_SIZE_GROUP_BOTH, and the
@@ -429,7 +429,7 @@ gtk_size_group_remove_widget (GtkSizeGroup *size_group,
  * Returns the list of widgets associated with @size_group.
  *
  * Returns:  (element-type GtkWidget) (transfer none): a #GSList of
- *   widgets. The list is owned by GTK+ and should not be modified.
+ *   widgets. The list is owned by GTK and should not be modified.
  **/
 GSList *
 gtk_size_group_get_widgets (GtkSizeGroup *size_group)

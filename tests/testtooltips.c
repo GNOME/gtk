@@ -1,4 +1,4 @@
-/* testtooltips.c: Test application for GTK+ >= 2.12 tooltips code
+/* testtooltips.c: Test application for GTK >= 2.12 tooltips code
  *
  * Copyright (C) 2006-2007  Imendio AB
  * Contact: Kristian Rietveld <kris@imendio.com>

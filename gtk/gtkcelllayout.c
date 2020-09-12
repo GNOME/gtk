@@ -58,7 +58,7 @@
  * ]|
  *
  * Furthermore for implementations of GtkCellLayout that use a #GtkCellArea
- * to lay out cells (all GtkCellLayouts in GTK+ use a GtkCellArea)
+ * to lay out cells (all GtkCellLayouts in GTK use a GtkCellArea)
  * [cell properties][cell-properties] can also be defined in the format by
  * specifying the custom <cell-packing> attribute which can contain multiple
  * <property> elements defined in the normal way.

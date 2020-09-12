@@ -55,7 +55,7 @@
  * of input, e.g. to display a message, ask a question, or anything else
  * that does not require extensive effort on the user’s part.
  *
- * GTK+ treats a dialog as a window split vertically. The top section is a
+ * GTK treats a dialog as a window split vertically. The top section is a
  * #GtkBox, and is where widgets such as a #GtkLabel or a #GtkEntry should
  * be packed. The bottom area is known as the
  * “action area”. This is generally used for
@@ -76,7 +76,7 @@
  * If you add buttons to #GtkDialog using gtk_dialog_new_with_buttons(),
  * gtk_dialog_add_button(), gtk_dialog_add_buttons(), or
  * gtk_dialog_add_action_widget(), clicking the button will emit a signal
- * called #GtkDialog::response with a response ID that you specified. GTK+
+ * called #GtkDialog::response with a response ID that you specified. GTK
  * will never assign a meaning to positive response IDs; these are entirely
  * user-defined. But for convenience, you can use the response IDs in the
  * #GtkResponseType enumeration (these all have values less than zero). If

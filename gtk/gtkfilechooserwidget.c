@@ -7850,7 +7850,7 @@ gtk_file_chooser_widget_init (GtkFileChooserWidget *impl)
   impl->auto_selecting_first_row = FALSE;
   impl->renamed_file = NULL;
 
-  /* Ensure GTK+ private types used by the template
+  /* Ensure private types used by the template
    * definition before calling gtk_widget_init_template()
    */
   g_type_ensure (GTK_TYPE_PATH_BAR);

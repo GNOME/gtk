@@ -301,9 +301,9 @@ typedef enum
  * @GDK_CROSSING_NORMAL: crossing because of pointer motion.
  * @GDK_CROSSING_GRAB: crossing because a grab is activated.
  * @GDK_CROSSING_UNGRAB: crossing because a grab is deactivated.
- * @GDK_CROSSING_GTK_GRAB: crossing because a GTK+ grab is activated.
- * @GDK_CROSSING_GTK_UNGRAB: crossing because a GTK+ grab is deactivated.
- * @GDK_CROSSING_STATE_CHANGED: crossing because a GTK+ widget changed
+ * @GDK_CROSSING_GTK_GRAB: crossing because a GTK grab is activated.
+ * @GDK_CROSSING_GTK_UNGRAB: crossing because a GTK grab is deactivated.
+ * @GDK_CROSSING_STATE_CHANGED: crossing because a GTK widget changed
  *   state (e.g. sensitivity).
  * @GDK_CROSSING_TOUCH_BEGIN: crossing because a touch sequence has begun,
  *   this event is synthetic as the pointer might have not left the surface.

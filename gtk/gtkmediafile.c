@@ -36,9 +36,9 @@
  *
  * This provides a simple way to play back video files with GTK.
  *
- * GTK+ provides a GIO extension point for #GtkMediaFile implementations
+ * GTK provides a GIO extension point for #GtkMediaFile implementations
  * to allow for external implementations using various media frameworks.
- * GTK+ itself includes implementations using GStreamer and ffmpeg.
+ * GTK itself includes implementations using GStreamer and ffmpeg.
  */
 
 typedef struct _GtkMediaFilePrivate GtkMediaFilePrivate;

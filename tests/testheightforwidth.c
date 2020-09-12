@@ -112,7 +112,7 @@ static TestInterface interfaces[] = {
     "                <property name=\"label\">Long label</property>"
     "                <child>"
     "                  <object class=\"GtkLabel\" id=\"label1\">"
-    "                    <property name=\"label\" translatable=\"yes\">This is a really long label for the purpose of testing line wrapping is working correctly in conjunction with height-for-width support in GTK+</property>"
+    "                    <property name=\"label\" translatable=\"yes\">This is a really long label for the purpose of testing line wrapping is working correctly in conjunction with height-for-width support in GTK</property>"
     "                    <property name=\"wrap\">True</property>"
     "                    <property name=\"max_width_chars\">30</property>"
     "                    <attributes>"

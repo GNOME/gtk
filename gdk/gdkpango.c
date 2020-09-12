@@ -30,13 +30,13 @@
  * @Short_description: Using Pango in GDK
  * @Title: Pango Interaction
  *
- * Pango is the text layout system used by GDK and GTK+. The functions
+ * Pango is the text layout system used by GDK and GTK. The functions
  * and types in this section are used to obtain clip regions for
  * #PangoLayouts, and to get #PangoContexts that can be used with
  * GDK.
  *
  * Creating a #PangoLayout object is the first step in rendering text,
- * and requires getting a handle to a #PangoContext. For GTK+ programs,
+ * and requires getting a handle to a #PangoContext. For GTK programs,
  * you’ll usually want to use gtk_widget_get_pango_context(), or
  * gtk_widget_create_pango_layout(). Once you have a #PangoLayout,
  * you can set the text and attributes of it with Pango functions like

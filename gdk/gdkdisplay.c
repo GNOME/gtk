@@ -1145,7 +1145,7 @@ _gdk_display_get_next_serial (GdkDisplay *display)
  * Indicates to the GUI environment that the application has
  * finished loading, using a given identifier.
  *
- * GTK+ will call this function automatically for #GtkWindow
+ * GTK will call this function automatically for #GtkWindow
  * with custom startup-notification identifier unless
  * gtk_window_set_auto_startup_notification() is called to
  * disable that feature.

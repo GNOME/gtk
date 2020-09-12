@@ -1795,7 +1795,7 @@ gdk_wayland_surface_create_xdg_toplevel (GdkSurface *surface)
     app_id = g_get_prgname ();
 
   if (app_id == NULL)
-    app_id = "GTK+ Application";
+    app_id = "GTK Application";
 
   gdk_wayland_surface_set_application_id (surface, app_id);
 
@@ -2587,7 +2587,7 @@ find_grab_input_seat (GdkSurface *surface,
   GdkWaylandSurface *tmp_impl;
 
   /* Use the device that was used for the grab as the device for
-   * the popup surface setup - so this relies on GTK+ taking the
+   * the popup surface setup - so this relies on GTK taking the
    * grab before showing the popup surface.
    */
   if (impl->grab_input_seat)
@@ -2611,7 +2611,7 @@ should_be_mapped (GdkSurface *surface)
 {
   GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
 
-  /* Don't map crazy temp that GTK+ uses for internal X11 shenanigans. */
+  /* Don't map crazy temp that GTK uses for internal X11 shenanigans. */
   if (GDK_IS_DRAG_SURFACE (surface) && surface->x < 0 && surface->y < 0)
     return FALSE;
 

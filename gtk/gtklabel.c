@@ -227,9 +227,9 @@
  *
  * # Links
  *
- * GTK+ supports markup for clickable hyperlinks in addition
+ * GTK supports markup for clickable hyperlinks in addition
  * to regular Pango markup. The markup for links is borrowed from HTML,
- * using the `<a>` with “href“, “title“ and “class“ attributes. GTK+ renders links
+ * using the `<a>` with “href“, “title“ and “class“ attributes. GTK renders links
  * similar to the way they appear in web browsers, with colored, underlined
  * text. The “title“ attribute is displayed as a tooltip on the link. The “class“
  * attribute is used as style class on the CSS node for the link.
@@ -240,7 +240,7 @@
  * const char *text =
  * "Go to the"
  * "<a href=\"http://www.gtk.org title=\"&lt;i&gt;Our&lt;/i&gt; website\">"
- * "GTK+ website</a> for more...";
+ * "GTK website</a> for more...";
  * GtkWidget *label = gtk_label_new (NULL);
  * gtk_label_set_markup (GTK_LABEL (label), text);
  * ]|
@@ -2644,7 +2644,7 @@ gtk_label_get_max_width_chars (GtkLabel *self)
  * by the edge of the widget if it exceeds the widget size.
  *
  * Note that setting line wrapping to %TRUE does not make the label
- * wrap at its parent container’s width, because GTK+ widgets
+ * wrap at its parent container’s width, because GTK widgets
  * conceptually can’t make their requisition depend on the parent
  * container’s size. For a label that wraps at a specific position,
  * set the label’s width using gtk_widget_set_size_request().
@@ -5577,7 +5577,7 @@ gtk_label_activate_current_link (GtkLabel *self)
  * or for use in a #GtkWidget::query-tooltip handler.
  *
  * Returns: (nullable): the currently active URI or %NULL if there is none.
- *   The string is owned by GTK+ and must not be freed or modified.
+ *   The string is owned by GTK and must not be freed or modified.
  */
 const char *
 gtk_label_get_current_uri (GtkLabel *self)

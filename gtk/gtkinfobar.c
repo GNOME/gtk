@@ -1,6 +1,6 @@
 /*
  * gtkinfobar.c
- * This file is part of GTK+
+ * This file is part of GTK
  *
  * Copyright (C) 2005 - Paolo Maggi
  *
@@ -71,7 +71,7 @@
  *
  * Similar to #GtkMessageDialog, the contents of a #GtkInfoBar can by
  * classified as error message, warning, informational message, etc,
- * by using gtk_info_bar_set_message_type(). GTK+ may use the message type
+ * by using gtk_info_bar_set_message_type(). GTK may use the message type
  * to determine how the message is displayed.
  *
  * A simple example for using a #GtkInfoBar:
@@ -1061,7 +1061,7 @@ gtk_info_bar_buildable_add_child (GtkBuildable *buildable,
  *
  * Sets the message type of the message area.
  *
- * GTK+ uses this type to determine how the message is displayed.
+ * GTK uses this type to determine how the message is displayed.
  */
 void
 gtk_info_bar_set_message_type (GtkInfoBar     *info_bar,

@@ -2460,10 +2460,10 @@ render_node_print (Printer       *p,
  *
  * Serializes the @node for later deserialization via
  * gsk_render_node_deserialize(). No guarantees are made about the format
- * used other than that the same version of GTK+ will be able to deserialize
+ * used other than that the same version of GTK will be able to deserialize
  * the result of a call to gsk_render_node_serialize() and
  * gsk_render_node_deserialize() will correctly reject files it cannot open
- * that were created with previous versions of GTK+.
+ * that were created with previous versions of GTK.
  *
  * The intended use of this functions is testing, benchmarking and debugging.
  * The format is not meant as a permanent storage format.

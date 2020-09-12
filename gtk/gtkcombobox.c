@@ -1373,8 +1373,8 @@ gtk_combo_box_popup (GtkComboBox *combo_box)
  * @device: a #GdkDevice
  *
  * Pops up the menu of @combo_box. Note that currently this does not do anything
- * with the device, as it was previously only used for list-mode ComboBoxes,
- * and those were removed in GTK+ 4. However, it is retained in case similar
+ * with the device, as it was previously only used for list-mode combo boxes,
+ * and those were removed in GTK 4. However, it is retained in case similar
  * functionality is added back later.
  **/
 void

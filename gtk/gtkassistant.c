@@ -272,7 +272,7 @@ gtk_assistant_page_class_init (GtkAssistantPageClass *class)
    * GtkAssistantPage:complete:
    *
    * Setting the "complete" property to %TRUE marks a page as
-   * complete (i.e.: all the required fields are filled out). GTK+ uses
+   * complete (i.e.: all the required fields are filled out). GTK uses
    * this information to control the sensitivity of the navigation buttons.
    */
   g_object_class_install_property (object_class,
@@ -2042,7 +2042,7 @@ gtk_assistant_get_page_complete (GtkAssistant *assistant,
  *
  * Forces @assistant to recompute the buttons state.
  *
- * GTK+ automatically takes care of this in most situations,
+ * GTK automatically takes care of this in most situations,
  * e.g. when the user goes to a different page, or when the
  * visibility or completeness of a page changes.
  *
