@@ -142,7 +142,7 @@ insert_text (GtkTextView *view)
                                      32, 1,
                                      gtk_widget_get_direction (widget),
                                      0);
-  nuclear = gtk_nuclear_animation_new ();
+  nuclear = gtk_nuclear_animation_new (TRUE);
 
   /* get start of buffer; each insertion will revalidate the
    * iterator to point to just after the inserted text.
