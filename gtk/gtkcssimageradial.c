@@ -80,18 +80,13 @@ gtk_css_image_radial_snapshot (GtkCssImage *image,
                                double       height)
 {
   GtkCssImageRadial *radial = GTK_CSS_IMAGE_RADIAL (image);
-  cairo_pattern_t *pattern;
-  cairo_matrix_t matrix;
+  GskColorStop *stops;
   double x, y;
   double radius, yscale;
   double start, end;
   double r1, r2, r3, r4, r;
   double offset;
   int i, last;
-  cairo_t *cr;
-
-  cr = gtk_snapshot_append_cairo (snapshot,
-                                  &GRAPHENE_RECT_INIT (0, 0, width, height));
 
   x = _gtk_css_position_value_get_x (radial->position, width);
   y = _gtk_css_position_value_get_y (radial->position, height);
@@ -167,20 +162,10 @@ gtk_css_image_radial_snapshot (GtkCssImage *image,
 
   gtk_css_image_radial_get_start_end (radial, radius, &start, &end);
 
-  pattern = cairo_pattern_create_radial (0, 0, radius * start, 0, 0, radius * end);
-  if (yscale != 1.0)
-    {
-      cairo_matrix_init_scale (&matrix, 1.0, 1.0 / yscale);
-      cairo_pattern_set_matrix (pattern, &matrix);
-    }
-
- if (radial->repeating)
-    cairo_pattern_set_extend (pattern, CAIRO_EXTEND_REPEAT);
-  else
-    cairo_pattern_set_extend (pattern, CAIRO_EXTEND_PAD);
-
   offset = start;
   last = -1;
+  stops = g_newa (GskColorStop, radial->n_stops);
+
   for (i = 0; i < radial->n_stops; i++)
     {
       const GtkCssImageRadialColorStop *stop = &radial->color_stops[i];
@@ -196,39 +181,47 @@ gtk_css_image_radial_snapshot (GtkCssImage *image,
             continue;
         }
       else
-        pos = _gtk_css_number_value_get (stop->offset, radius) / radius;
+        {
+          pos = _gtk_css_number_value_get (stop->offset, radius) / radius;
+          pos = CLAMP (pos, 0.0, 1.0);
+        }
 
-      pos = MAX (pos, 0);
+      pos = MAX (pos, offset);
       step = (pos - offset) / (i - last);
       for (last = last + 1; last <= i; last++)
         {
-          const GdkRGBA *rgba;
-
           stop = &radial->color_stops[last];
 
-          rgba = gtk_css_color_value_get_rgba (stop->color);
           offset += step;
 
-          cairo_pattern_add_color_stop_rgba (pattern,
-                                             (offset - start) / (end - start),
-                                             rgba->red,
-                                             rgba->green,
-                                             rgba->blue,
-                                             rgba->alpha);
+          stops[last].offset = (offset - start) / (end - start);
+          stops[last].color = *gtk_css_color_value_get_rgba (stop->color);
         }
 
       offset = pos;
       last = i;
     }
 
-  cairo_rectangle (cr, 0, 0, width, height);
-  cairo_translate (cr, x, y);
-  cairo_set_source (cr, pattern);
-  cairo_fill (cr);
-
-  cairo_pattern_destroy (pattern);
-
-  cairo_destroy (cr);
+ if (radial->repeating)
+   gtk_snapshot_append_repeating_radial_gradient (snapshot,
+                                                  &GRAPHENE_RECT_INIT (0, 0, width, height),
+                                                  &GRAPHENE_POINT_INIT (x, y),
+                                                  radius,
+                                                  yscale,
+                                                  start,
+                                                  end,
+                                                  stops,
+                                                  radial->n_stops);
+  else
+    gtk_snapshot_append_radial_gradient (snapshot,
+                                         &GRAPHENE_RECT_INIT (0, 0, width, height),
+                                         &GRAPHENE_POINT_INIT (x, y),
+                                         radius,
+                                         yscale,
+                                         start,
+                                         end,
+                                         stops,
+                                         radial->n_stops);
 }
 
 static guint
