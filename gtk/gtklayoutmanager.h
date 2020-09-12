@@ -77,6 +77,16 @@ struct _GtkLayoutManagerClass
 
   GType              layout_child_type;
 
+  /**
+   * GtkLayoutManagerClass::create_layout_child:
+   * @manager: the #GtkLayoutManager
+   * @widget: the widget using the @manager
+   * @for_child: the child of @widget
+   *
+   * Create a #GtkLayoutChild instance for the given @for_child widget.
+   *
+   * Returns: (transfer full): a #GtkLayoutChild
+   */
   GtkLayoutChild *   (* create_layout_child) (GtkLayoutManager *manager,
                                               GtkWidget        *widget,
                                               GtkWidget        *for_child);
