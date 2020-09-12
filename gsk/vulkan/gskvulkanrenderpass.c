@@ -257,6 +257,8 @@ gsk_vulkan_render_pass_add_node (GskVulkanRenderPass           *self,
       g_assert_not_reached ();
       return;
     case GSK_SHADOW_NODE:
+    case GSK_RADIAL_GRADIENT_NODE:
+    case GSK_REPEATING_RADIAL_GRADIENT_NODE:
     default:
       FALLBACK ("Unsupported node '%s'", g_type_name_from_instance ((GTypeInstance *) node));
 
