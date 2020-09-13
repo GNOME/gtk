@@ -1,4 +1,6 @@
 /* Video Player
+ * #Keywords: GtkVideo, GtkMediaStream, GtkMediaFile, GdkPaintable
+ * #Keywords: GtkMediaControls
  *
  * This is a simple video player using just GTK widgets.
  */

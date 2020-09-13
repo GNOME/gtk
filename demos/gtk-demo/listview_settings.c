@@ -1,4 +1,5 @@
 /* Lists/Settings
+ * #Keywords: GtkListItemFactory, GListModel
  *
  * This demo shows a settings viewer for GSettings.
  *

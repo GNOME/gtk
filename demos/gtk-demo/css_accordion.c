@@ -1,7 +1,6 @@
 /* Theming/CSS Accordion
  *
  * A simple accordion demo written using CSS transitions and multiple backgrounds
- *
  */
 
 #include <gtk/gtk.h>

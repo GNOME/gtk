@@ -1,4 +1,5 @@
 /* Dialogs
+ * #Keywords: GtkMessageDialog
  *
  * Dialogs are used to pop up transient windows for information
  * and user feedback.

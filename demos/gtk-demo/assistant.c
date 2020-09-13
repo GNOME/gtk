@@ -1,8 +1,8 @@
 /* Assistant
  *
- * Demonstrates a sample multi-step assistant. Assistants are used to divide
- * an operation into several simpler sequential steps, and to guide the user
- * through these steps.
+ * Demonstrates a sample multi-step assistant with GtkAssistant. Assistants
+ * are used to divide an operation into several simpler sequential steps,
+ * and to guide the user through these steps.
  */
 
 #include <gtk/gtk.h>

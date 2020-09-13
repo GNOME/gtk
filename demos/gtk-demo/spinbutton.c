@@ -1,4 +1,5 @@
 /* Spin Buttons
+ * #Keywords: GtkEntry
  *
  * GtkSpinButton provides convenient ways to input data
  * that can be seen as a value in a range. The examples

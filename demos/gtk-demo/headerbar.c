@@ -1,4 +1,5 @@
 /* Header Bar
+ * #Keywords: GtkWindowHandle, GtkWindowControls
  *
  * GtkHeaderBar is a container that is suitable for implementing
  * window titlebars. One of its features is that it can position

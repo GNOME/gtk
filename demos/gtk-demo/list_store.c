@@ -3,7 +3,6 @@
  * The GtkListStore is used to store data in list form, to be used
  * later on by a GtkTreeView to display it. This demo builds a
  * simple GtkListStore and displays it.
- *
  */
 
 #include <gtk/gtk.h>

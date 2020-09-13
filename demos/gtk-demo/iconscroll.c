@@ -1,4 +1,5 @@
 /* Benchmark/Scrolling
+ * #Keywords: GtkScrolledWindow
  *
  * This demo scrolls a view with various content.
  */

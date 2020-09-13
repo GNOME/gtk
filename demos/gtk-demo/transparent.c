@@ -1,4 +1,5 @@
 /* Overlay/Transparency
+ * #Keywords: GtkOverlay, GtkSnapshot
  *
  * Blur the background behind an overlay.
  */

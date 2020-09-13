@@ -1,9 +1,13 @@
 /* Entry/Delayed Search Entry
  *
- * GtkSearchEntry sets up GtkEntries ready for search. Search entries
- * have their "changed" signal delayed and should be used
- * when the searched operation is slow such as loads of entries
- * to search, or online searches.
+ * GtkSearchEntry provides an entry that is ready for search.
+ *
+ * Search entries have their "changed" signal delayed and should
+ * be used when the searched operation is slow such as loads of
+ * entries to search, or online searches.
+ *
+ * GtkSearchBar allows have a hidden search entry that 'springs
+ * into action' upon keyboard input.
  */
 
 #include <gtk/gtk.h>

@@ -1,4 +1,5 @@
 /* Fixed Layout
+ * #Keywords: GtkLayoutManager
  *
  * GtkFixed is a container that allows placing and transforming
  * widgets manually.

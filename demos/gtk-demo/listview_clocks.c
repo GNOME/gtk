@@ -1,10 +1,11 @@
 /* Lists/Clocks
+ * #Keywords: GtkGridView, GtkListItemFactory, GListModel
  *
  * This demo displays the time in different timezones.
  *
  * The goal is to show how to set up expressions that track changes
  * in objects and make them update widgets. For that, we create a
- * GtkClock object that updates its time every second and then use
+ * clock object that updates its time every second and then use
  * various ways to display that time.
  *
  * Typically, this will be done using GtkBuilder .ui files with the

@@ -1,4 +1,5 @@
 /* Shortcuts
+ * #Keywords: GtkShortcutController
  *
  * GtkShortcut is the abstraction used by GTK to handle shortcuts from
  * keyboard or other input devices.
