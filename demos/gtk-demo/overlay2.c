@@ -1,4 +1,5 @@
 /* Overlay/Decorative Overlay
+ * #Keywords: GtkOverlay
  *
  * Another example of an overlay with some decorative
  * and some interactive controls.

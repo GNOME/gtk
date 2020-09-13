@@ -1,4 +1,5 @@
 /* Lists/Colors
+ * #Keywords: GtkSortListModel, GtkMultiSelection
  *
  * This demo displays a grid of colors.
  *

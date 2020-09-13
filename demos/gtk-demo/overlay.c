@@ -1,4 +1,5 @@
 /* Overlay/Interactive Overlay
+ * #Keywords: GtkOverlay
  *
  * Shows widgets in static positions over a main widget.
  *

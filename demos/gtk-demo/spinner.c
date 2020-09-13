@@ -1,7 +1,6 @@
 /* Spinner
  *
  * GtkSpinner allows to show that background activity is on-going.
- *
  */
 
 #include <glib/gi18n.h>

@@ -2,7 +2,6 @@
  *
  * GtkPrintOperation offers a simple API to support printing
  * in a cross-platform way.
- *
  */
 
 #include <math.h>

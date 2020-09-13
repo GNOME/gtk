@@ -1,4 +1,5 @@
 /* Layout Manager/Transition
+ * #Keywords: GtkLayoutManager
  *
  * This demo shows a simple example of a custom layout manager
  * and a widget using it. The layout manager places the children

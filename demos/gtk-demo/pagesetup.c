@@ -1,4 +1,5 @@
 /* Printing/Page Setup
+ * #Keywords: GtkPageSetup
  *
  * GtkPageSetupUnixDialog can be used if page setup is needed
  * independent of a full printing dialog.

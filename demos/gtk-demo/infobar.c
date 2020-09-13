@@ -1,4 +1,5 @@
 /* Info Bars
+ * #Keywords: GtkInfoBar
  *
  * Info bar widgets are used to report important messages to the user.
  */

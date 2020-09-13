@@ -1,4 +1,5 @@
 /* Drawing Area
+ * #Keywords: GtkDrawingArea
  *
  * GtkDrawingArea is a blank area where you can draw custom displays
  * of various kinds.

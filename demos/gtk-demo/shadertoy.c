@@ -1,4 +1,5 @@
 /* OpenGL/Shadertoy
+ * #Keywords: GtkGLArea
  *
  * Generate pixels using a custom fragment shader.
  *

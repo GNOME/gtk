@@ -2,7 +2,6 @@
  *
  * GtkListBox allows lists with complicated layouts, using
  * regular widgets supporting sorting and filtering.
- *
  */
 
 #include <gtk/gtk.h>

@@ -1,4 +1,5 @@
 /* Lists/Application launcher
+ * #Keywords: GtkListItemFactory, GListModel
  *
  * This demo uses the GtkListView widget as a fancy application launcher.
  *

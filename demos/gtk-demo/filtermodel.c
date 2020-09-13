@@ -1,4 +1,5 @@
 /* Tree View/Filter Model
+ * #Keywords: GtkTreeView
  *
  * This example demonstrates how GtkTreeModelFilter can be used not
  * just to show a subset of the rows, but also to compute columns

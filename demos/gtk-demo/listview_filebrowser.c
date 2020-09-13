@@ -1,4 +1,5 @@
 /* Lists/File browser
+ * #Keywords: GListModel
  *
  * This demo shows off the different layouts that are quickly achievable
  * with GtkListview and GtkGridView by implementing a file browser with

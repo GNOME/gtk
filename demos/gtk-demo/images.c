@@ -1,4 +1,5 @@
 /* Images
+ * #Keywords: GdkPaintable, GtkWidgetPaintable
  *
  * GtkImage and GtkPicture are used to display an image; the image can be
  * in a number of formats.

@@ -1,4 +1,5 @@
 /* Paint
+ * #Keywords: GdkDrawingArea, GtkGesture
  *
  * Demonstrates practical handling of drawing tablets in a real world
  * usecase.

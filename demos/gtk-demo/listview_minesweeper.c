@@ -1,7 +1,8 @@
 /* Lists/Minesweeper
+ * #Keywords: GtkGridView, GListModel, game
  *
  * This demo shows how to develop a user interface for small game using a
- * gridview.
+ * grid view.
  *
  * It demonstrates how to use the activate signal and single-press behavior
  * to implement rather different interaction behavior to a typical list.

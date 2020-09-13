@@ -1,4 +1,5 @@
 /* Layout Manager/Transformation
+ * #Keywords: GtkLayoutManager, GskTransform
  *
  * This demo shows how to use transforms in a nontrivial
  * way with a custom layout manager. The layout manager places

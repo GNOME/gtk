@@ -1,4 +1,5 @@
 /* Constraints/Simple
+ * #Keywords: GtkLayoutManager
  *
  * GtkConstraintLayout provides a layout manager that uses relations
  * between widgets (also known as "constraints") to compute the position

@@ -1,4 +1,5 @@
 /* Combo Boxes
+ * #Keywords: GtkCellRenderer
  *
  * The GtkComboBox widget allows to select one option out of a list.
  * The GtkComboBoxEntry additionally allows the user to enter a value
