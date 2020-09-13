@@ -1,3 +1,17 @@
+/* GTK Demo
+ *
+ * GTK Demo is a collection of useful examples to demonstrate
+ * GTK widgets and features. It is a useful example in itself.
+ *
+ * You can select examples in the sidebar or search for them by
+ * typing a search term. Double-clicking or hitting the “Run” button
+ * will run the demo. The source code and other resources used in the
+ * demo are shown in this area.
+ *
+ * You can also use the GTK Inspector, available from the menu on the
+ * top right, to poke at the running demos, and see how they are put
+ * together.
+ */
 #include <errno.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -798,10 +812,20 @@ create_demo_model (void)
 {
   GListStore *store = g_list_store_new (GTK_TYPE_DEMO);
   DemoData *demo = gtk_demos;
+  GtkDemo *d;
+
+  d = GTK_DEMO (g_object_new (GTK_TYPE_DEMO, NULL));
+  d->name = "main";
+  d->title = "GTK Demo";
+  d->keywords = NULL;
+  d->filename = "main.c";
+  d->func = NULL;
+
+  g_list_store_append (store, d);
 
   while (demo->title)
     {
-      GtkDemo *d = GTK_DEMO (g_object_new (GTK_TYPE_DEMO, NULL));
+      d = GTK_DEMO (g_object_new (GTK_TYPE_DEMO, NULL));
       DemoData *children = demo->children;
 
       d->name = demo->name;
