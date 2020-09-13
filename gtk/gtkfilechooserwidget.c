@@ -6856,7 +6856,7 @@ set_current_filter (GtkFileChooserWidget *impl,
       if (filter)
         {
           if (!g_list_store_find (impl->filters, filter, &filter_index))
-            return;
+            filter_index = GTK_INVALID_LIST_POSITION;
         }
       else
         {
