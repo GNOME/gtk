@@ -685,6 +685,7 @@ selection_cb (GtkSingleSelection *sel,
 {
   GtkTreeListRow *row = gtk_single_selection_get_selected_item (sel);
   GtkDemo *demo;
+  GAction *action;
 
   gtk_widget_set_sensitive (GTK_WIDGET (notebook), !!row);
 
@@ -699,6 +700,9 @@ selection_cb (GtkSingleSelection *sel,
 
   if (demo->filename)
     load_file (demo->name, demo->filename);
+
+  action = g_action_map_lookup_action (G_ACTION_MAP (toplevel), "run");
+  g_simple_action_set_enabled (G_SIMPLE_ACTION (action), demo->func != NULL);
 
   gtk_window_set_title (GTK_WINDOW (toplevel), demo->title);
 }
@@ -892,18 +896,16 @@ activate (GApplication *app)
   GtkWidget *window, *listview, *search_entry, *search_bar;
   GtkFilterListModel *filter_model;
   GtkFilter *filter;
-
-  static GActionEntry win_entries[] = {
-    { "run", activate_run, NULL, NULL, NULL }
-  };
+  GSimpleAction *action;
 
   builder = gtk_builder_new_from_resource ("/ui/main.ui");
 
   window = (GtkWidget *)gtk_builder_get_object (builder, "window");
   gtk_application_add_window (GTK_APPLICATION (app), GTK_WINDOW (window));
-  g_action_map_add_action_entries (G_ACTION_MAP (window),
-                                   win_entries, G_N_ELEMENTS (win_entries),
-                                   window);
+
+  action = g_simple_action_new ("run", NULL);
+  g_signal_connect (action, "activate", G_CALLBACK (activate_run), window);
+  g_action_map_add_action (G_ACTION_MAP (window), G_ACTION (action));
 
   notebook = GTK_WIDGET (gtk_builder_get_object (builder, "notebook"));
 
