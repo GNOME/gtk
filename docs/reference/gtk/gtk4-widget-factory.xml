@@ -53,6 +53,10 @@ and states.
     <term><option>-h</option>, <option>--help</option></term>
       <listitem><para>Show help options</para></listitem>
     </varlistentry>
+    <varlistentry>
+    <term><option>--version</option></term>
+      <listitem><para>Show program version</para></listitem>
+    </varlistentry>
   </variablelist>
 </refsect1>
 
