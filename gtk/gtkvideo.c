@@ -654,9 +654,9 @@ gtk_video_set_file (GtkVideo *self,
 
       stream = gtk_media_file_new ();
 
-      gtk_video_set_media_stream (self, stream);
       if (gtk_widget_get_realized (GTK_WIDGET (self)))
         gtk_media_file_set_file (GTK_MEDIA_FILE (stream), file);
+      gtk_video_set_media_stream (self, stream);
 
       g_object_unref (stream);
     }
