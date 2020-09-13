@@ -82,6 +82,25 @@ fullscreen_clicked_cb (GtkWidget *button,
   gtk_window_fullscreen (GTK_WINDOW (widget_window));
 }
 
+static gboolean
+toggle_fullscreen (GtkWidget *widget,
+                   GVariant  *args,
+                   gpointer   data)
+{
+  GdkSurface *surface;
+  GdkToplevelState state;
+
+  surface = gtk_native_get_surface (GTK_NATIVE (widget));
+  state = gdk_toplevel_get_state (GDK_TOPLEVEL (surface));
+
+  if (state & GDK_TOPLEVEL_STATE_FULLSCREEN)
+    gtk_window_unfullscreen (GTK_WINDOW (widget));
+  else
+    gtk_window_fullscreen (GTK_WINDOW (widget));
+
+  return TRUE;
+}
+
 GtkWidget *
 do_video_player (GtkWidget *do_widget)
 {
@@ -90,6 +109,7 @@ do_video_player (GtkWidget *do_widget)
   GtkWidget *button;
   GtkWidget *image;
   GtkWidget *fullscreen_button;
+  GtkEventController *controller;
 
   if (!window)
     {
@@ -128,6 +148,14 @@ do_video_player (GtkWidget *do_widget)
       fullscreen_button = gtk_button_new_from_icon_name ("view-fullscreen-symbolic");
       g_signal_connect (fullscreen_button, "clicked", G_CALLBACK (fullscreen_clicked_cb), NULL);
       gtk_header_bar_pack_end (GTK_HEADER_BAR (title), fullscreen_button);
+
+      controller = gtk_shortcut_controller_new ();
+      gtk_shortcut_controller_set_scope (GTK_SHORTCUT_CONTROLLER (controller),
+                                         GTK_SHORTCUT_SCOPE_GLOBAL);
+      gtk_widget_add_controller (window, controller);
+      gtk_shortcut_controller_add_shortcut (GTK_SHORTCUT_CONTROLLER (controller),
+           gtk_shortcut_new (gtk_keyval_trigger_new (GDK_KEY_F11, 0),
+                             gtk_callback_action_new (toggle_fullscreen, NULL, NULL)));
     }
 
   if (!gtk_widget_get_visible (window))
