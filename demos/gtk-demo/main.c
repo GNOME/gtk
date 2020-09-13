@@ -1,3 +1,17 @@
+/* GTK Demo
+ *
+ * GTK Demo is a collection of useful examples to demonstrate
+ * GTK widgets and features. It is a useful example in itself.
+ *
+ * You can select examples in the sidebar or search for them by
+ * typing a search term. Double-clicking or hitting the “Run” button
+ * will run the demo. The source code and other resources used in the
+ * demo are shown in this area.
+ *
+ * You can also use the GTK Inspector, available from the menu on the
+ * top right, to poke at the running demos, and see how they are put
+ * together.
+ */
 #include <errno.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -671,6 +685,7 @@ selection_cb (GtkSingleSelection *sel,
 {
   GtkTreeListRow *row = gtk_single_selection_get_selected_item (sel);
   GtkDemo *demo;
+  GAction *action;
 
   gtk_widget_set_sensitive (GTK_WIDGET (notebook), !!row);
 
@@ -685,6 +700,9 @@ selection_cb (GtkSingleSelection *sel,
 
   if (demo->filename)
     load_file (demo->name, demo->filename);
+
+  action = g_action_map_lookup_action (G_ACTION_MAP (toplevel), "run");
+  g_simple_action_set_enabled (G_SIMPLE_ACTION (action), demo->func != NULL);
 
   gtk_window_set_title (GTK_WINDOW (toplevel), demo->title);
 }
@@ -798,10 +816,20 @@ create_demo_model (void)
 {
   GListStore *store = g_list_store_new (GTK_TYPE_DEMO);
   DemoData *demo = gtk_demos;
+  GtkDemo *d;
+
+  d = GTK_DEMO (g_object_new (GTK_TYPE_DEMO, NULL));
+  d->name = "main";
+  d->title = "GTK Demo";
+  d->keywords = NULL;
+  d->filename = "main.c";
+  d->func = NULL;
+
+  g_list_store_append (store, d);
 
   while (demo->title)
     {
-      GtkDemo *d = GTK_DEMO (g_object_new (GTK_TYPE_DEMO, NULL));
+      d = GTK_DEMO (g_object_new (GTK_TYPE_DEMO, NULL));
       DemoData *children = demo->children;
 
       d->name = demo->name;
@@ -868,18 +896,16 @@ activate (GApplication *app)
   GtkWidget *window, *listview, *search_entry, *search_bar;
   GtkFilterListModel *filter_model;
   GtkFilter *filter;
-
-  static GActionEntry win_entries[] = {
-    { "run", activate_run, NULL, NULL, NULL }
-  };
+  GSimpleAction *action;
 
   builder = gtk_builder_new_from_resource ("/ui/main.ui");
 
   window = (GtkWidget *)gtk_builder_get_object (builder, "window");
   gtk_application_add_window (GTK_APPLICATION (app), GTK_WINDOW (window));
-  g_action_map_add_action_entries (G_ACTION_MAP (window),
-                                   win_entries, G_N_ELEMENTS (win_entries),
-                                   window);
+
+  action = g_simple_action_new ("run", NULL);
+  g_signal_connect (action, "activate", G_CALLBACK (activate_run), window);
+  g_action_map_add_action (G_ACTION_MAP (window), G_ACTION (action));
 
   notebook = GTK_WIDGET (gtk_builder_get_object (builder, "notebook"));
 

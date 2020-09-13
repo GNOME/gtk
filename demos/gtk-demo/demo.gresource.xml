@@ -176,6 +176,11 @@
     <file compressed="true">color.names.txt</file>
     <file>listview_colors.css</file>
   </gresource>
+  <gresource prefix="/main">
+    <file>fontify.c</file>
+    <file>fontify.h</file>
+    <file>main.ui</file>
+  </gresource>
   <gresource prefix="/shortcuts">
     <file>shortcuts.ui</file>
     <file>shortcuts-builder.ui</file>
@@ -258,6 +263,7 @@
     <file>listview_weather.c</file>
     <file>listview_words.c</file>
     <file>list_store.c</file>
+    <file>main.c</file>
     <file>markup.c</file>
     <file>overlay.c</file>
     <file>overlay2.c</file>
