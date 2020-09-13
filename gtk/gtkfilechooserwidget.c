@@ -2322,7 +2322,7 @@ save_widgets_create (GtkFileChooserWidget *impl)
     {
       location_entry_disconnect (impl);
       impl->location_entry = impl->external_entry;
-      g_object_add_weak_pointer (impl->external_entry, (gpointer *)&impl->location_entry);
+      g_object_add_weak_pointer (G_OBJECT (impl->external_entry), (gpointer *)&impl->location_entry);
       location_entry_setup (impl);
 
       g_signal_connect_after (gtk_entry_get_key_controller (GTK_ENTRY (impl->external_entry)),
