@@ -28,6 +28,7 @@ struct _GtkDemo
 
   const char *name;
   const char *title;
+  const char **keywords;
   const char *filename;
   GDoDemoFunc func;
   GListModel *children_model;
@@ -38,6 +39,7 @@ enum {
   PROP_FILENAME,
   PROP_NAME,
   PROP_TITLE,
+  PROP_KEYWORDS,
 
   N_PROPS
 };
@@ -70,6 +72,10 @@ gtk_demo_get_property (GObject    *object,
       g_value_set_string (value, self->title);
       break;
 
+    case PROP_KEYWORDS:
+      g_value_set_boxed (value, self->keywords);
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
       break;
@@ -98,6 +104,12 @@ static void gtk_demo_class_init (GtkDemoClass *klass)
     g_param_spec_string ("title",
                          "title",
                          "title",
+                         NULL,
+                         G_PARAM_READABLE);
+  properties[PROP_KEYWORDS] =
+    g_param_spec_string ("keywords",
+                         "keywords",
+                         "keywords",
                          NULL,
                          G_PARAM_READABLE);
 
@@ -691,6 +703,21 @@ filter_demo (GtkDemo *demo)
       if (g_str_match_string (search_needle[i], demo->title, TRUE))
         continue;
 
+      if (demo->keywords)
+        {
+          int j;
+          gboolean found = FALSE;
+
+          for (j = 0; !found && demo->keywords[j]; j++)
+            {
+              if (strstr (demo->keywords[j], search_needle[i]))
+                found = TRUE;
+            }
+
+          if (found)
+            continue;
+        }
+
       return FALSE;
     }
 
@@ -761,7 +788,7 @@ demo_search_changed_cb (GtkSearchEntry *entry,
   g_clear_pointer (&search_needle, g_strfreev);
 
   if (text && *text)
-    search_needle = g_strsplit (text, " ", 0);
+    search_needle = g_str_tokenize_and_fold (text, NULL, NULL);
 
   gtk_filter_changed (filter, GTK_FILTER_CHANGE_DIFFERENT);
 }
@@ -779,6 +806,7 @@ create_demo_model (void)
 
       d->name = demo->name;
       d->title = demo->title;
+      d->keywords = demo->keywords;
       d->filename = demo->filename;
       d->func = demo->func;
 
@@ -794,6 +822,7 @@ create_demo_model (void)
 
               child->name = children->name;
               child->title = children->title;
+              child->keywords = children->keywords;
               child->filename = children->filename;
               child->func = children->func;
 
