@@ -39,6 +39,7 @@ open_clicked_cb (GtkWidget *button,
                                         "_Cancel", GTK_RESPONSE_CANCEL,
                                         "_Open", GTK_RESPONSE_ACCEPT,
                                         NULL);
+
   filter = gtk_file_filter_new ();
   gtk_file_filter_add_mime_type (filter, "video/*");
   gtk_file_filter_set_name (filter, "Video");
@@ -48,6 +49,28 @@ open_clicked_cb (GtkWidget *button,
   gtk_window_set_modal (GTK_WINDOW (dialog), TRUE);
   g_signal_connect (dialog, "response", G_CALLBACK (open_dialog_response_cb), video);
   gtk_widget_show (dialog);
+}
+
+static void
+logo_clicked_cb (GtkWidget *button,
+                 gpointer   video)
+{
+  GFile *file;
+
+  file = g_file_new_for_uri ("resource:///images/gtk-logo.webm");
+  gtk_video_set_file (GTK_VIDEO (video), file);
+  g_object_unref (file);
+}
+
+static void
+bbb_clicked_cb (GtkWidget *button,
+                gpointer   video)
+{
+  GFile *file;
+
+  file = g_file_new_for_uri ("https://download.blender.org/peach/trailer/trailer_400p.ogg");
+  gtk_video_set_file (GTK_VIDEO (video), file);
+  g_object_unref (file);
 }
 
 static void
@@ -64,7 +87,8 @@ do_video_player (GtkWidget *do_widget)
 {
   GtkWidget *title;
   GtkWidget *video;
-  GtkWidget *open_button;
+  GtkWidget *button;
+  GtkWidget *image;
   GtkWidget *fullscreen_button;
 
   if (!window)
@@ -77,14 +101,29 @@ do_video_player (GtkWidget *do_widget)
       g_object_add_weak_pointer (G_OBJECT (window), (gpointer *)&window);
 
       video = gtk_video_new ();
+      gtk_video_set_autoplay (GTK_VIDEO (video), TRUE);
       gtk_window_set_child (GTK_WINDOW (window), video);
 
       title = gtk_header_bar_new ();
       gtk_window_set_titlebar (GTK_WINDOW (window), title);
 
-      open_button = gtk_button_new_with_mnemonic ("_Open");
-      g_signal_connect (open_button, "clicked", G_CALLBACK (open_clicked_cb), video);
-      gtk_header_bar_pack_start (GTK_HEADER_BAR (title), open_button);
+      button = gtk_button_new_with_mnemonic ("_Open");
+      g_signal_connect (button, "clicked", G_CALLBACK (open_clicked_cb), video);
+      gtk_header_bar_pack_start (GTK_HEADER_BAR (title), button);
+
+      button = gtk_button_new ();
+      image = gtk_image_new_from_resource ("/cursors/images/gtk_logo_cursor.png");
+      gtk_image_set_pixel_size (GTK_IMAGE (image), 24);
+      gtk_button_set_child (GTK_BUTTON (button), image);
+      g_signal_connect (button, "clicked", G_CALLBACK (logo_clicked_cb), video);
+      gtk_header_bar_pack_start (GTK_HEADER_BAR (title), button);
+
+      button = gtk_button_new ();
+      image = gtk_image_new_from_resource ("/video-player/bbb.png");
+      gtk_image_set_pixel_size (GTK_IMAGE (image), 24);
+      gtk_button_set_child (GTK_BUTTON (button), image);
+      g_signal_connect (button, "clicked", G_CALLBACK (bbb_clicked_cb), video);
+      gtk_header_bar_pack_start (GTK_HEADER_BAR (title), button);
 
       fullscreen_button = gtk_button_new_from_icon_name ("view-fullscreen-symbolic");
       g_signal_connect (fullscreen_button, "clicked", G_CALLBACK (fullscreen_clicked_cb), NULL);

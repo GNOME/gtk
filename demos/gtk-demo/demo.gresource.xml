@@ -196,6 +196,9 @@
     <file>floppybuddy.gif</file>
     <file>gtk-logo.webm</file>
   </gresource>
+  <gresource prefix="/video-player">
+    <file>bbb.png</file>
+  </gresource>
   <gresource prefix="/sources">
     <file>application_demo.c</file>
     <file>assistant.c</file>
