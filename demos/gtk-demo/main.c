@@ -581,6 +581,9 @@ load_file (const char *demoname,
               while (g_ascii_isspace (*(p + len - 1)))
                 len--;
 
+              if (*p == '#')
+                break;
+
               if (len > 0)
                 {
                   if (in_para)
