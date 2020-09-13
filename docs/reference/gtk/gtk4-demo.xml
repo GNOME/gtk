@@ -31,6 +31,7 @@
 <cmdsynopsis>
 <command>gtk4-demo</command>
 <arg choice="opt">--help</arg>
+<arg choice="opt">--version</arg>
 <arg choice="opt">--list</arg>
 <arg choice="opt">--run <replaceable>EXAMPLE</replaceable></arg>
 <arg choice="opt">--autoquit</arg>
@@ -55,6 +56,10 @@ other used resources, such as ui files and icons.
     <varlistentry>
     <term><option>-h</option>, <option>--help</option></term>
       <listitem><para>Show help options</para></listitem>
+    </varlistentry>
+    <varlistentry>
+    <term><option>--version</option></term>
+      <listitem><para>Show program version</para></listitem>
     </varlistentry>
     <varlistentry>
     <term><option>--list</option></term>

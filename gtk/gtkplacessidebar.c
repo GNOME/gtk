@@ -661,22 +661,6 @@ get_desktop_directory_uri (void)
 }
 
 static gboolean
-should_show_file (GtkPlacesSidebar *sidebar,
-                  GFile            *file)
-{
-  char *path;
-
-  path = g_file_get_path (file);
-  if (path)
-    {
-      g_free (path);
-      return TRUE;
-    }
-
-  return FALSE;
-}
-
-static gboolean
 file_is_shown (GtkPlacesSidebar *sidebar,
                GFile            *file)
 {
@@ -764,9 +748,6 @@ add_application_shortcuts (GtkPlacesSidebar *sidebar)
       ShortcutData *data;
 
       g_object_unref (file);
-
-      if (!should_show_file (sidebar, file))
-        continue;
 
       if (file_is_shown (sidebar, file))
         continue;

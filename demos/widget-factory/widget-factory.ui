@@ -2968,6 +2968,7 @@ bad things might happen.</property>
             <child>
               <object class="GtkEntry" id="details_entry">
                 <property name="valign">baseline</property>
+                <signal name="notify::text" handler="validate_more_details" object="more_details_entry" swapped="yes"/>
                 <layout>
                   <property name="column">1</property>
                   <property name="row">0</property>
