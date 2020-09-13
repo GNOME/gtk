@@ -375,18 +375,19 @@ remove_default_palette (GtkColorChooserWidget *cc)
 static void
 add_default_palette (GtkColorChooserWidget *cc)
 {
-  GdkRGBA colors[8*3] = {
-    GDK_RGBA("99c1f1"), GDK_RGBA("3584e4"), GDK_RGBA("1a5fb4"), /* Blue */
-    GDK_RGBA("8ff0a4"), GDK_RGBA("33d17a"), GDK_RGBA("26a269"), /* Green */
-    GDK_RGBA("f9f06b"), GDK_RGBA("f6d32d"), GDK_RGBA("e5a50a"), /* Yellow */
-    GDK_RGBA("ffbe6f"), GDK_RGBA("ff7800"), GDK_RGBA("c64600"), /* Orange */
-    GDK_RGBA("f66151"), GDK_RGBA("e01b24"), GDK_RGBA("a51d2d"), /* Red */
-    GDK_RGBA("dc8add"), GDK_RGBA("9141ac"), GDK_RGBA("613583"), /* Purple */
-    GDK_RGBA("cdab8f"), GDK_RGBA("986a44"), GDK_RGBA("63452c"), /* Brown */
-    GDK_RGBA("f6f5f4"), GDK_RGBA("9a9996"), GDK_RGBA("3d3846")  /* Neutral */
+  GdkRGBA colors[9*5] = {
+    GDK_RGBA("99c1f1"), GDK_RGBA("62a0ea"), GDK_RGBA("3584e4"), GDK_RGBA("1c71d8"), GDK_RGBA("1a5fb4"), /* Blue */
+    GDK_RGBA("8ff0a4"), GDK_RGBA("57e389"), GDK_RGBA("33d17a"), GDK_RGBA("2ec27e"), GDK_RGBA("26a269"), /* Green */
+    GDK_RGBA("f9f06b"), GDK_RGBA("f8e45c"), GDK_RGBA("f6d32d"), GDK_RGBA("f5c211"), GDK_RGBA("e5a50a"), /* Yellow */
+    GDK_RGBA("ffbe6f"), GDK_RGBA("ffa348"), GDK_RGBA("ff7800"), GDK_RGBA("e66100"), GDK_RGBA("c64600"), /* Orange */
+    GDK_RGBA("f66151"), GDK_RGBA("ed333b"), GDK_RGBA("e01b24"), GDK_RGBA("c01c28"), GDK_RGBA("a51d2d"), /* Red */
+    GDK_RGBA("dc8add"), GDK_RGBA("c061cb"), GDK_RGBA("9141ac"), GDK_RGBA("813d9c"), GDK_RGBA("613583"), /* Purple */
+    GDK_RGBA("cdab8f"), GDK_RGBA("b5835a"), GDK_RGBA("986a44"), GDK_RGBA("865e3c"), GDK_RGBA("63452c"), /* Brown */
+    GDK_RGBA("ffffff"), GDK_RGBA("f6f5f4"), GDK_RGBA("deddda"), GDK_RGBA("c0bfbc"), GDK_RGBA("9a9996"), /* Light */
+    GDK_RGBA("77767b"), GDK_RGBA("5e5c64"), GDK_RGBA("3d3846"), GDK_RGBA("241f31"), GDK_RGBA("000000")  /* Dark */
   };
 
-  add_palette (cc, GTK_ORIENTATION_VERTICAL, 3, 8*3, colors);
+  add_palette (cc, GTK_ORIENTATION_VERTICAL, 5, 9*5, colors);
 
   cc->has_default_palette = TRUE;
 }
