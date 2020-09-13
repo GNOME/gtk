@@ -21,8 +21,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-09-07 17:03+0000\n"
-"PO-Revision-Date: 2020-08-30 11:47+0200\n"
+"POT-Creation-Date: 2020-09-12 14:24+0000\n"
+"PO-Revision-Date: 2020-09-13 10:47+0200\n"
 "Last-Translator: Baylard Gérard <geodebay@gmail.com>\n"
 "Language-Team: GNOME French Team <gnomefr@traduc.org>\n"
 "Language: fr\n"
@@ -482,12 +482,12 @@ msgstr "Impossible de créer un contexte GL"
 #: gdk/wayland/gdkglcontext-wayland.c:412
 #: gdk/wayland/gdkglcontext-wayland.c:422 gdk/win32/gdkglcontext-win32.c:788
 #: gdk/win32/gdkglcontext-win32.c:798 gdk/win32/gdkglcontext-win32.c:913
-#: gdk/x11/gdkglcontext-x11.c:1129
+#: gdk/x11/gdkglcontext-x11.c:1133
 msgid "No available configurations for the given pixel format"
 msgstr "Pas de configuration disponible pour le format de pixel donné"
 
 #: gdk/wayland/gdkglcontext-wayland.c:451 gdk/win32/gdkglcontext-win32.c:1072
-#: gdk/x11/gdkglcontext-x11.c:1432
+#: gdk/x11/gdkglcontext-x11.c:1436
 msgid "No GL implementation is available"
 msgstr "Aucune implémentation GL disponible"
 
@@ -712,7 +712,7 @@ msgstr ""
 "Impossible de stocker le presse-papiers. Aucun gestionnaire de presse-"
 "papiers n’est actif."
 
-#: gdk/x11/gdkglcontext-x11.c:1157
+#: gdk/x11/gdkglcontext-x11.c:1161
 #, c-format
 msgid "No available configurations for the given RGBA pixel format"
 msgstr "Pas de configuration disponible pour le format de pixel RGBA donné"
@@ -1152,188 +1152,8 @@ msgstr "%d %%"
 msgid "Pick a Color"
 msgstr "Choisissez une couleur"
 
-#: gtk/gtkcolorchooserwidget.c:383
-msgctxt "Color name"
-msgid "Light Scarlet Red"
-msgstr "Rouge écarlate clair"
-
-#: gtk/gtkcolorchooserwidget.c:384
-msgctxt "Color name"
-msgid "Scarlet Red"
-msgstr "Rouge écarlate"
-
-#: gtk/gtkcolorchooserwidget.c:385
-msgctxt "Color name"
-msgid "Dark Scarlet Red"
-msgstr "Rouge écarlate foncé"
-
-#: gtk/gtkcolorchooserwidget.c:386
-msgctxt "Color name"
-msgid "Light Orange"
-msgstr "Orange clair"
-
-#: gtk/gtkcolorchooserwidget.c:387
-msgctxt "Color name"
-msgid "Orange"
-msgstr "Orange"
-
-#: gtk/gtkcolorchooserwidget.c:388
-msgctxt "Color name"
-msgid "Dark Orange"
-msgstr "Orange foncé"
-
-#: gtk/gtkcolorchooserwidget.c:389
-msgctxt "Color name"
-msgid "Light Butter"
-msgstr "Beurre clair"
-
-#: gtk/gtkcolorchooserwidget.c:390
-msgctxt "Color name"
-msgid "Butter"
-msgstr "Beurre"
-
-#: gtk/gtkcolorchooserwidget.c:391
-msgctxt "Color name"
-msgid "Dark Butter"
-msgstr "Beurre foncé"
-
-#: gtk/gtkcolorchooserwidget.c:392
-msgctxt "Color name"
-msgid "Light Chameleon"
-msgstr "Caméléon clair"
-
-#: gtk/gtkcolorchooserwidget.c:393
-msgctxt "Color name"
-msgid "Chameleon"
-msgstr "Caméléon"
-
-#: gtk/gtkcolorchooserwidget.c:394
-msgctxt "Color name"
-msgid "Dark Chameleon"
-msgstr "Caméléon foncé"
-
-#: gtk/gtkcolorchooserwidget.c:395
-msgctxt "Color name"
-msgid "Light Sky Blue"
-msgstr "Bleu ciel clair"
-
-#: gtk/gtkcolorchooserwidget.c:396
-msgctxt "Color name"
-msgid "Sky Blue"
-msgstr "Bleu ciel"
-
-#: gtk/gtkcolorchooserwidget.c:397
-msgctxt "Color name"
-msgid "Dark Sky Blue"
-msgstr "Bleu ciel foncé"
-
-#: gtk/gtkcolorchooserwidget.c:398
-msgctxt "Color name"
-msgid "Light Plum"
-msgstr "Prune clair"
-
-#: gtk/gtkcolorchooserwidget.c:399
-msgctxt "Color name"
-msgid "Plum"
-msgstr "Prune"
-
-#: gtk/gtkcolorchooserwidget.c:400
-msgctxt "Color name"
-msgid "Dark Plum"
-msgstr "Prune foncé"
-
-#: gtk/gtkcolorchooserwidget.c:401
-msgctxt "Color name"
-msgid "Light Chocolate"
-msgstr "Chocolat clair"
-
-#: gtk/gtkcolorchooserwidget.c:402
-msgctxt "Color name"
-msgid "Chocolate"
-msgstr "Chocolat"
-
-#: gtk/gtkcolorchooserwidget.c:403
-msgctxt "Color name"
-msgid "Dark Chocolate"
-msgstr "Chocolat foncé"
-
-#: gtk/gtkcolorchooserwidget.c:404
-msgctxt "Color name"
-msgid "Light Aluminum 1"
-msgstr "Aluminium clair 1"
-
-#: gtk/gtkcolorchooserwidget.c:405
-msgctxt "Color name"
-msgid "Aluminum 1"
-msgstr "Aluminium 1"
-
-#: gtk/gtkcolorchooserwidget.c:406
-msgctxt "Color name"
-msgid "Dark Aluminum 1"
-msgstr "Aluminium foncé 1"
-
-#: gtk/gtkcolorchooserwidget.c:407
-msgctxt "Color name"
-msgid "Light Aluminum 2"
-msgstr "Aluminium clair 2"
-
-#: gtk/gtkcolorchooserwidget.c:408
-msgctxt "Color name"
-msgid "Aluminum 2"
-msgstr "Aluminium 2"
-
-#: gtk/gtkcolorchooserwidget.c:409
-msgctxt "Color name"
-msgid "Dark Aluminum 2"
-msgstr "Aluminium foncé 2"
-
-#: gtk/gtkcolorchooserwidget.c:423
-msgctxt "Color name"
-msgid "Black"
-msgstr "Noir"
-
-#: gtk/gtkcolorchooserwidget.c:424
-msgctxt "Color name"
-msgid "Very Dark Gray"
-msgstr "Gris très foncé"
-
-#: gtk/gtkcolorchooserwidget.c:425
-msgctxt "Color name"
-msgid "Darker Gray"
-msgstr "Gris plus foncé"
-
-#: gtk/gtkcolorchooserwidget.c:426
-msgctxt "Color name"
-msgid "Dark Gray"
-msgstr "Gris foncé"
-
-#: gtk/gtkcolorchooserwidget.c:427
-msgctxt "Color name"
-msgid "Medium Gray"
-msgstr "Gris moyen"
-
-#: gtk/gtkcolorchooserwidget.c:428
-msgctxt "Color name"
-msgid "Light Gray"
-msgstr "Gris clair"
-
-#: gtk/gtkcolorchooserwidget.c:429
-msgctxt "Color name"
-msgid "Lighter Gray"
-msgstr "Gris plus clair"
-
-#: gtk/gtkcolorchooserwidget.c:430
-msgctxt "Color name"
-msgid "Very Light Gray"
-msgstr "Gris très clair"
-
-#: gtk/gtkcolorchooserwidget.c:431
-msgctxt "Color name"
-msgid "White"
-msgstr "Blanc"
-
 #. translators: label for the custom section in the color chooser
-#: gtk/gtkcolorchooserwidget.c:512
+#: gtk/gtkcolorchooserwidget.c:456
 msgid "Custom"
 msgstr "Personnalisée"
 
@@ -1356,7 +1176,7 @@ msgid "Margins from Printer…"
 msgstr "Marges de l’imprimante…"
 
 #. And show the custom paper dialog
-#: gtk/gtkcustompaperunixdialog.c:402 gtk/gtkprintunixdialog.c:2987
+#: gtk/gtkcustompaperunixdialog.c:402 gtk/gtkprintunixdialog.c:2988
 msgid "Manage Custom Sizes"
 msgstr "Gérer les tailles personnalisées"
 
@@ -1490,7 +1310,7 @@ msgstr "Un fichier avec ce nom existe déjà"
 #: gtk/gtkmessagedialog.c:742 gtk/gtkmessagedialog.c:751
 #: gtk/gtkmountoperation.c:608 gtk/gtkpagesetupunixdialog.c:283
 #: gtk/gtkprintbackend.c:643 gtk/gtkprinteroptionwidget.c:713
-#: gtk/gtkprintunixdialog.c:626 gtk/gtkprintunixdialog.c:781
+#: gtk/gtkprintunixdialog.c:626 gtk/gtkprintunixdialog.c:782
 #: gtk/gtkwindow.c:6649 gtk/inspector/css-editor.c:248
 #: gtk/inspector/recorder.c:1010 gtk/ui/gtkappchooserdialog.ui:45
 #: gtk/ui/gtkassistant.ui:52 gtk/ui/gtkcolorchooserdialog.ui:33
@@ -2142,19 +1962,19 @@ msgstr ""
 msgid "Page Setup"
 msgstr "Mise en page"
 
-#: gtk/gtkpasswordentry.c:146
+#: gtk/gtkpasswordentry.c:150
 msgid "Hide text"
 msgstr "Masquer le texte"
 
-#: gtk/gtkpasswordentry.c:151 gtk/gtkpasswordentry.c:513
+#: gtk/gtkpasswordentry.c:155 gtk/gtkpasswordentry.c:522
 msgid "Show text"
 msgstr "Afficher le texte"
 
-#: gtk/gtkpasswordentry.c:170
+#: gtk/gtkpasswordentry.c:176
 msgid "Caps Lock is on"
 msgstr "Verr. maj. est activé"
 
-#: gtk/gtkpasswordentry.c:588
+#: gtk/gtkpasswordentry.c:597
 msgid "_Show Text"
 msgstr "Afficher le _texte"
 
@@ -2575,7 +2395,7 @@ msgstr ""
 
 #. window
 #: gtk/gtkprintoperation-portal.c:236 gtk/gtkprintoperation-portal.c:554
-#: gtk/gtkprintoperation-portal.c:623 gtk/gtkprintunixdialog.c:3027
+#: gtk/gtkprintoperation-portal.c:623 gtk/gtkprintunixdialog.c:3028
 msgid "Print"
 msgstr "Imprimer"
 
@@ -2638,19 +2458,19 @@ msgstr "Identificateur non valide pour PrintDlgEx"
 msgid "Unspecified error"
 msgstr "Erreur non précisée"
 
-#: gtk/gtkprintunixdialog.c:780
+#: gtk/gtkprintunixdialog.c:781
 msgid "Pre_view"
 msgstr "_Aperçu"
 
-#: gtk/gtkprintunixdialog.c:782
+#: gtk/gtkprintunixdialog.c:783
 msgid "_Print"
 msgstr "_Imprimer"
 
-#: gtk/gtkprintunixdialog.c:910
+#: gtk/gtkprintunixdialog.c:911
 msgid "Getting printer information failed"
 msgstr "Impossible d’obtenir des informations sur l’imprimante"
 
-#: gtk/gtkprintunixdialog.c:1846
+#: gtk/gtkprintunixdialog.c:1847
 msgid "Getting printer information…"
 msgstr "Récupération des informations sur l’imprimante…"
 
@@ -2661,63 +2481,63 @@ msgstr "Récupération des informations sur l’imprimante…"
 #. Translators: These strings name the possible arrangements of
 #. * multiple pages on a sheet when printing
 #.
-#: gtk/gtkprintunixdialog.c:2772
+#: gtk/gtkprintunixdialog.c:2773
 #: modules/printbackends/gtkprintbackendcups.c:5463
 msgid "Left to right, top to bottom"
 msgstr "De gauche à droite, du haut vers le bas"
 
-#: gtk/gtkprintunixdialog.c:2772
+#: gtk/gtkprintunixdialog.c:2773
 #: modules/printbackends/gtkprintbackendcups.c:5463
 msgid "Left to right, bottom to top"
 msgstr "De gauche à droite, du bas vers le haut"
 
-#: gtk/gtkprintunixdialog.c:2773
+#: gtk/gtkprintunixdialog.c:2774
 #: modules/printbackends/gtkprintbackendcups.c:5464
 msgid "Right to left, top to bottom"
 msgstr "De droite à gauche, du haut vers le bas"
 
-#: gtk/gtkprintunixdialog.c:2773
+#: gtk/gtkprintunixdialog.c:2774
 #: modules/printbackends/gtkprintbackendcups.c:5464
 msgid "Right to left, bottom to top"
 msgstr "De droite à gauche, du bas vers le haut"
 
-#: gtk/gtkprintunixdialog.c:2774
+#: gtk/gtkprintunixdialog.c:2775
 #: modules/printbackends/gtkprintbackendcups.c:5465
 msgid "Top to bottom, left to right"
 msgstr "Du haut vers le bas, de gauche à droite"
 
-#: gtk/gtkprintunixdialog.c:2774
+#: gtk/gtkprintunixdialog.c:2775
 #: modules/printbackends/gtkprintbackendcups.c:5465
 msgid "Top to bottom, right to left"
 msgstr "Du haut vers le bas, de droite à gauche"
 
-#: gtk/gtkprintunixdialog.c:2775
+#: gtk/gtkprintunixdialog.c:2776
 #: modules/printbackends/gtkprintbackendcups.c:5466
 msgid "Bottom to top, left to right"
 msgstr "Du bas vers le haut, de gauche à droite"
 
-#: gtk/gtkprintunixdialog.c:2775
+#: gtk/gtkprintunixdialog.c:2776
 #: modules/printbackends/gtkprintbackendcups.c:5466
 msgid "Bottom to top, right to left"
 msgstr "Du bas vers le haut, de droite à gauche"
 
-#: gtk/gtkprintunixdialog.c:2779 gtk/gtkprintunixdialog.c:2792
+#: gtk/gtkprintunixdialog.c:2780 gtk/gtkprintunixdialog.c:2793
 msgid "Page Ordering"
 msgstr "Ordre des pages"
 
-#: gtk/gtkprintunixdialog.c:2808
+#: gtk/gtkprintunixdialog.c:2809
 msgid "Left to right"
 msgstr "De gauche à droite"
 
-#: gtk/gtkprintunixdialog.c:2809
+#: gtk/gtkprintunixdialog.c:2810
 msgid "Right to left"
 msgstr "De droite à gauche"
 
-#: gtk/gtkprintunixdialog.c:2821
+#: gtk/gtkprintunixdialog.c:2822
 msgid "Top to bottom"
 msgstr "De haut en bas"
 
-#: gtk/gtkprintunixdialog.c:2822
+#: gtk/gtkprintunixdialog.c:2823
 msgid "Bottom to top"
 msgstr "De bas en haut"
 
@@ -3217,8 +3037,6 @@ msgid "Uneditable property type: %s"
 msgstr "Type de propriété non éditable : %s"
 
 #: gtk/inspector/prop-editor.c:1266
-#, fuzzy
-#| msgid "None"
 msgctxt "column number"
 msgid "None"
 msgstr "Aucun"
@@ -3248,39 +3066,29 @@ msgid "Reset"
 msgstr "Réinitialiser"
 
 #: gtk/inspector/prop-editor.c:1473
-#, fuzzy
-#| msgid "Default"
 msgctxt "GtkSettings source"
 msgid "Default"
 msgstr "Par défaut"
 
 #: gtk/inspector/prop-editor.c:1476
-#, fuzzy
-#| msgid "Theme"
 msgctxt "GtkSettings source"
 msgid "Theme"
 msgstr "Thème"
 
 #: gtk/inspector/prop-editor.c:1479
-#, fuzzy
-#| msgid "XSettings"
 msgctxt "GtkSettings source"
 msgid "XSettings"
 msgstr "Paramètres X"
 
 #: gtk/inspector/prop-editor.c:1483
-#, fuzzy
-#| msgid "Application"
 msgctxt "GtkSettings source"
 msgid "Application"
 msgstr "Application"
 
 #: gtk/inspector/prop-editor.c:1486
-#, fuzzy
-#| msgid "Unknown"
 msgctxt "GtkSettings source"
 msgid "Unknown"
-msgstr "Inconnu"
+msgstr "Inconnue"
 
 #: gtk/inspector/prop-editor.c:1489
 msgid "Source:"
@@ -3309,7 +3117,7 @@ msgstr "Ajouter les nœuds de débogage"
 
 #: gtk/inspector/recorder.ui:44
 msgid "Use a dark background"
-msgstr ""
+msgstr "Utiliser un arrière-plan sombre"
 
 #: gtk/inspector/recorder.ui:53
 msgid "Save selected node"
@@ -7269,5 +7077,146 @@ msgstr "Aucun profil disponible"
 msgid "Unspecified profile"
 msgstr "Profil non précisé"
 
-#~ msgid "%s"
-#~ msgstr "%s"
+#~ msgctxt "Color name"
+#~ msgid "Light Scarlet Red"
+#~ msgstr "Rouge écarlate clair"
+
+#~ msgctxt "Color name"
+#~ msgid "Scarlet Red"
+#~ msgstr "Rouge écarlate"
+
+#~ msgctxt "Color name"
+#~ msgid "Dark Scarlet Red"
+#~ msgstr "Rouge écarlate foncé"
+
+#~ msgctxt "Color name"
+#~ msgid "Light Orange"
+#~ msgstr "Orange clair"
+
+#~ msgctxt "Color name"
+#~ msgid "Orange"
+#~ msgstr "Orange"
+
+#~ msgctxt "Color name"
+#~ msgid "Dark Orange"
+#~ msgstr "Orange foncé"
+
+#~ msgctxt "Color name"
+#~ msgid "Light Butter"
+#~ msgstr "Beurre clair"
+
+#~ msgctxt "Color name"
+#~ msgid "Butter"
+#~ msgstr "Beurre"
+
+#~ msgctxt "Color name"
+#~ msgid "Dark Butter"
+#~ msgstr "Beurre foncé"
+
+#~ msgctxt "Color name"
+#~ msgid "Light Chameleon"
+#~ msgstr "Caméléon clair"
+
+#~ msgctxt "Color name"
+#~ msgid "Chameleon"
+#~ msgstr "Caméléon"
+
+#~ msgctxt "Color name"
+#~ msgid "Dark Chameleon"
+#~ msgstr "Caméléon foncé"
+
+#~ msgctxt "Color name"
+#~ msgid "Light Sky Blue"
+#~ msgstr "Bleu ciel clair"
+
+#~ msgctxt "Color name"
+#~ msgid "Sky Blue"
+#~ msgstr "Bleu ciel"
+
+#~ msgctxt "Color name"
+#~ msgid "Dark Sky Blue"
+#~ msgstr "Bleu ciel foncé"
+
+#~ msgctxt "Color name"
+#~ msgid "Light Plum"
+#~ msgstr "Prune clair"
+
+#~ msgctxt "Color name"
+#~ msgid "Plum"
+#~ msgstr "Prune"
+
+#~ msgctxt "Color name"
+#~ msgid "Dark Plum"
+#~ msgstr "Prune foncé"
+
+#~ msgctxt "Color name"
+#~ msgid "Light Chocolate"
+#~ msgstr "Chocolat clair"
+
+#~ msgctxt "Color name"
+#~ msgid "Chocolate"
+#~ msgstr "Chocolat"
+
+#~ msgctxt "Color name"
+#~ msgid "Dark Chocolate"
+#~ msgstr "Chocolat foncé"
+
+#~ msgctxt "Color name"
+#~ msgid "Light Aluminum 1"
+#~ msgstr "Aluminium clair 1"
+
+#~ msgctxt "Color name"
+#~ msgid "Aluminum 1"
+#~ msgstr "Aluminium 1"
+
+#~ msgctxt "Color name"
+#~ msgid "Dark Aluminum 1"
+#~ msgstr "Aluminium foncé 1"
+
+#~ msgctxt "Color name"
+#~ msgid "Light Aluminum 2"
+#~ msgstr "Aluminium clair 2"
+
+#~ msgctxt "Color name"
+#~ msgid "Aluminum 2"
+#~ msgstr "Aluminium 2"
+
+#~ msgctxt "Color name"
+#~ msgid "Dark Aluminum 2"
+#~ msgstr "Aluminium foncé 2"
+
+#~ msgctxt "Color name"
+#~ msgid "Black"
+#~ msgstr "Noir"
+
+#~ msgctxt "Color name"
+#~ msgid "Very Dark Gray"
+#~ msgstr "Gris très foncé"
+
+#~ msgctxt "Color name"
+#~ msgid "Darker Gray"
+#~ msgstr "Gris plus foncé"
+
+#~ msgctxt "Color name"
+#~ msgid "Dark Gray"
+#~ msgstr "Gris foncé"
+
+#~ msgctxt "Color name"
+#~ msgid "Medium Gray"
+#~ msgstr "Gris moyen"
+
+#~ msgctxt "Color name"
+#~ msgid "Light Gray"
+#~ msgstr "Gris clair"
+
+#~ msgctxt "Color name"
+#~ msgid "Lighter Gray"
+#~ msgstr "Gris plus clair"
+
+#~ msgctxt "Color name"
+#~ msgid "Very Light Gray"
+#~ msgstr "Gris très clair"
+
+#~ msgctxt "Color name"
+#~ msgid "White"
+#~ msgstr "Blanc"
