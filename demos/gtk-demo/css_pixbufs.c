@@ -1,6 +1,7 @@
 /* Theming/Animated Backgrounds
  *
- * This demo is done in honour of the Pixbufs demo further down.
+ * This demo is in honour of a classic Pixbufs demo.
+ *
  * It is done exclusively with CSS as the background of the window.
  */
 
