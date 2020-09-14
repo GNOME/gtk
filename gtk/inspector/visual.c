@@ -901,7 +901,7 @@ init_slowdown (GtkInspectorVisual *vis)
 static void
 update_touchscreen (GtkSwitch *sw)
 {
-  GtkDebugFlag flags;
+  GtkDebugFlags flags;
 
   flags = gtk_get_debug_flags ();
 

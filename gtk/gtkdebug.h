@@ -53,7 +53,7 @@ typedef enum {
   GTK_DEBUG_CONSTRAINTS     = 1 << 15,
   GTK_DEBUG_BUILDER_OBJECTS = 1 << 16,
   GTK_DEBUG_A11Y            = 1 << 17,
-} GtkDebugFlag;
+} GtkDebugFlags;
 
 #ifdef G_ENABLE_DEBUG
 
@@ -71,9 +71,9 @@ typedef enum {
 #endif /* G_ENABLE_DEBUG */
 
 GDK_AVAILABLE_IN_ALL
-guint gtk_get_debug_flags (void);
+GtkDebugFlags gtk_get_debug_flags (void);
 GDK_AVAILABLE_IN_ALL
-void  gtk_set_debug_flags  (guint flags);
+void          gtk_set_debug_flags (GtkDebugFlags flags);
 
 G_END_DECLS
 

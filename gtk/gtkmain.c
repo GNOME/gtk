@@ -342,7 +342,7 @@ check_setugid (void)
 #ifndef G_OS_WIN32
   uid_t ruid, euid, suid; /* Real, effective and saved user ID's */
   gid_t rgid, egid, sgid; /* Real, effective and saved group ID's */
-  
+
 #ifdef HAVE_GETRESUID
   if (getresuid (&ruid, &euid, &suid) != 0 ||
       getresgid (&rgid, &egid, &sgid) != 0)
@@ -387,7 +387,7 @@ gtk_disable_setlocale (void)
 {
   if (pre_initialized)
     g_warning ("gtk_disable_setlocale() must be called before gtk_init()");
-    
+
   do_setlocale = FALSE;
 }
 
@@ -687,7 +687,7 @@ do_post_parse_initialization (void)
                     NULL);
 }
 
-guint
+GtkDebugFlags
 gtk_get_display_debug_flags (GdkDisplay *display)
 {
   int i;
@@ -698,7 +698,7 @@ gtk_get_display_debug_flags (GdkDisplay *display)
   for (i = 0; i < N_DEBUG_DISPLAYS; i++)
     {
       if (debug_flags[i].display == display)
-        return debug_flags[i].flags;
+        return (GtkDebugFlags)debug_flags[i].flags;
     }
 
   return 0;
@@ -711,8 +711,8 @@ gtk_get_any_display_debug_flag_set (void)
 }
 
 void
-gtk_set_display_debug_flags (GdkDisplay *display,
-                             guint       flags)
+gtk_set_display_debug_flags (GdkDisplay    *display,
+                             GtkDebugFlags  flags)
 {
   int i;
 
@@ -735,14 +735,14 @@ gtk_set_display_debug_flags (GdkDisplay *display,
 /**
  * gtk_get_debug_flags:
  *
- * Returns the GTK debug flags.
+ * Returns the GTK debug flags that are currently active.
  *
  * This function is intended for GTK modules that want
  * to adjust their debug output based on GTK debug flags.
  *
  * Returns: the GTK debug flags.
  */
-guint
+GtkDebugFlags
 gtk_get_debug_flags (void)
 {
   if (gtk_get_any_display_debug_flag_set ())
@@ -753,11 +753,12 @@ gtk_get_debug_flags (void)
 
 /**
  * gtk_set_debug_flags:
+ * @flags: the debug flags to set
  *
  * Sets the GTK debug flags.
  */
 void
-gtk_set_debug_flags (guint flags)
+gtk_set_debug_flags (GtkDebugFlags flags)
 {
   gtk_set_display_debug_flags (gdk_display_get_default (), flags);
 }
