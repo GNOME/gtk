@@ -1,8 +1,12 @@
 /* Drag-and-Drop
+ * #Keywords: dnd, menu, popover, gesture
  *
  * This demo shows dragging colors and widgets.
  * The items in this demo can be moved, recolored
  * and rotated.
+ *
+ * The demo also has an example for creating a
+ * menu-like popover without using a menu model.
  */
 
 #include <gtk/gtk.h>
