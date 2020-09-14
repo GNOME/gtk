@@ -103,6 +103,9 @@ void gdk_frame_clock_get_refresh_info (GdkFrameClock *frame_clock,
                                        gint64        *refresh_interval_return,
                                        gint64        *presentation_time_return);
 
+GDK_AVAILABLE_IN_ALL
+double gdk_frame_clock_get_fps (GdkFrameClock *frame_clock);
+
 G_END_DECLS
 
 #endif /* __GDK_FRAME_CLOCK_H__ */

@@ -718,7 +718,6 @@ _gdk_frame_clock_emit_resume_events (GdkFrameClock *frame_clock)
   g_signal_emit (frame_clock, signals[RESUME_EVENTS], 0);
 }
 
-#ifdef HAVE_SYSPROF
 static gint64
 guess_refresh_interval (GdkFrameClock *frame_clock)
 {
@@ -753,8 +752,17 @@ guess_refresh_interval (GdkFrameClock *frame_clock)
   return interval;
 }
 
-static double
-frame_clock_get_fps (GdkFrameClock *frame_clock)
+/**
+ * gdk_frame_clock_get_fps:
+ * @frame_clock: a #GdkFrameClock
+ *
+ * Calculates the current frames-per-second, based on the
+ * frame timings of @frame_clock.
+ *
+ * Returns: the current fps, as a double
+ */
+double
+gdk_frame_clock_get_fps (GdkFrameClock *frame_clock)
 {
   GdkFrameTimings *start, *end;
   gint64 start_counter, end_counter;
@@ -788,7 +796,6 @@ frame_clock_get_fps (GdkFrameClock *frame_clock)
 
   return ((double) end_counter - start_counter) * G_USEC_PER_SEC / (end_timestamp - start_timestamp);
 }
-#endif
 
 void
 _gdk_frame_clock_add_timings_to_profiler (GdkFrameClock   *clock,
@@ -804,5 +811,5 @@ _gdk_frame_clock_add_timings_to_profiler (GdkFrameClock   *clock,
       gdk_profiler_add_mark (1000 * timings->presentation_time, 0, "presented window", NULL);
     }
 
-  gdk_profiler_set_counter (fps_counter, frame_clock_get_fps (clock));
+  gdk_profiler_set_counter (fps_counter, gdk_frame_clock_get_fps (clock));
 }
