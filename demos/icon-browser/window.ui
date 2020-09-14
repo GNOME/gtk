@@ -132,6 +132,9 @@
                 <property name="hscrollbar-policy">never</property>
                 <child>
                   <object class="GtkGridView" id="list">
+                    <style>
+                      <class name="content-view"/>
+                    </style>
                     <signal name="activate" handler="item_activated"/>
                     <property name="single-click-activate">1</property>
                     <property name="model">
