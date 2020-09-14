@@ -162,6 +162,88 @@ DisplayDebugFlags debug_flags[N_DEBUG_DISPLAYS];
  * hot paths. */
 gboolean any_display_debug_flags_set = FALSE;
 
+GtkDebugFlags
+gtk_get_display_debug_flags (GdkDisplay *display)
+{
+  int i;
+
+  if (display == NULL)
+    display = gdk_display_get_default ();
+
+  for (i = 0; i < N_DEBUG_DISPLAYS; i++)
+    {
+      if (debug_flags[i].display == display)
+        return (GtkDebugFlags)debug_flags[i].flags;
+    }
+
+  return 0;
+}
+
+gboolean
+gtk_get_any_display_debug_flag_set (void)
+{
+  return any_display_debug_flags_set;
+}
+
+void
+gtk_set_display_debug_flags (GdkDisplay    *display,
+                             GtkDebugFlags  flags)
+{
+  int i;
+
+  for (i = 0; i < N_DEBUG_DISPLAYS; i++)
+    {
+      if (debug_flags[i].display == NULL)
+        debug_flags[i].display = display;
+
+      if (debug_flags[i].display == display)
+        {
+          debug_flags[i].flags = flags;
+          if (flags > 0)
+            any_display_debug_flags_set = TRUE;
+
+          return;
+        }
+    }
+}
+
+/**
+ * gtk_get_debug_flags:
+ *
+ * Returns the GTK debug flags that are currently active.
+ *
+ * This function is intended for GTK modules that want
+ * to adjust their debug output based on GTK debug flags.
+ *
+ * Returns: the GTK debug flags.
+ */
+GtkDebugFlags
+gtk_get_debug_flags (void)
+{
+  if (gtk_get_any_display_debug_flag_set ())
+    return gtk_get_display_debug_flags (gdk_display_get_default ());
+
+  return 0;
+}
+
+/**
+ * gtk_set_debug_flags:
+ * @flags: the debug flags to set
+ *
+ * Sets the GTK debug flags.
+ */
+void
+gtk_set_debug_flags (GtkDebugFlags flags)
+{
+  gtk_set_display_debug_flags (gdk_display_get_default (), flags);
+}
+
+gboolean
+gtk_simulate_touchscreen (void)
+{
+  return (gtk_get_debug_flags () & GTK_DEBUG_TOUCHSCREEN) != 0;
+}
+
 #ifdef G_ENABLE_DEBUG
 static const GdkDebugKey gtk_debug_keys[] = {
   { "keybindings", GTK_DEBUG_KEYBINDINGS, "Information about keyboard shortcuts" },
@@ -542,88 +624,6 @@ do_post_parse_initialization (void)
   g_signal_connect (display_manager, "notify::default-display",
                     G_CALLBACK (default_display_notify_cb),
                     NULL);
-}
-
-GtkDebugFlags
-gtk_get_display_debug_flags (GdkDisplay *display)
-{
-  int i;
-
-  if (display == NULL)
-    display = gdk_display_get_default ();
-
-  for (i = 0; i < N_DEBUG_DISPLAYS; i++)
-    {
-      if (debug_flags[i].display == display)
-        return (GtkDebugFlags)debug_flags[i].flags;
-    }
-
-  return 0;
-}
-
-gboolean
-gtk_get_any_display_debug_flag_set (void)
-{
-  return any_display_debug_flags_set;
-}
-
-void
-gtk_set_display_debug_flags (GdkDisplay    *display,
-                             GtkDebugFlags  flags)
-{
-  int i;
-
-  for (i = 0; i < N_DEBUG_DISPLAYS; i++)
-    {
-      if (debug_flags[i].display == NULL)
-        debug_flags[i].display = display;
-
-      if (debug_flags[i].display == display)
-        {
-          debug_flags[i].flags = flags;
-          if (flags > 0)
-            any_display_debug_flags_set = TRUE;
-
-          return;
-        }
-    }
-}
-
-/**
- * gtk_get_debug_flags:
- *
- * Returns the GTK debug flags that are currently active.
- *
- * This function is intended for GTK modules that want
- * to adjust their debug output based on GTK debug flags.
- *
- * Returns: the GTK debug flags.
- */
-GtkDebugFlags
-gtk_get_debug_flags (void)
-{
-  if (gtk_get_any_display_debug_flag_set ())
-    return gtk_get_display_debug_flags (gdk_display_get_default ());
-
-  return 0;
-}
-
-/**
- * gtk_set_debug_flags:
- * @flags: the debug flags to set
- *
- * Sets the GTK debug flags.
- */
-void
-gtk_set_debug_flags (GtkDebugFlags flags)
-{
-  gtk_set_display_debug_flags (gdk_display_get_default (), flags);
-}
-
-gboolean
-gtk_simulate_touchscreen (void)
-{
-  return (gtk_get_debug_flags () & GTK_DEBUG_TOUCHSCREEN) != 0;
 }
 
 #ifdef G_PLATFORM_WIN32
