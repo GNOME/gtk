@@ -1,6 +1,7 @@
 /* Builder
  *
- * Demonstrates an interface loaded from a XML description.
+ * Demonstrates a traditional interface, loaded from a XML description,
+ * and shows how to connect actions to the menu items and toolbar buttons.
  */
 
 #include <gtk/gtk.h>
