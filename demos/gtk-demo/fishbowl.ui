@@ -33,6 +33,9 @@
                 <lookup name="framerate">bowl</lookup>
               </closure>
             </binding>
+            <attributes>
+              <attribute name="font-features" value="tnum=1"/>
+            </attributes>
           </object>
         </child>
         <child type="end">
