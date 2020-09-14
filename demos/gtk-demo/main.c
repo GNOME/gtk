@@ -341,12 +341,10 @@ display_text (const char  *format,
   g_assert (g_utf8_validate (g_bytes_get_data (bytes, NULL), g_bytes_get_size (bytes), NULL));
 
   textview = gtk_text_view_new ();
-  g_object_set (textview,
-                "left-margin", 20,
-                "right-margin", 20,
-                "top-margin", 20,
-                "bottom-margin", 20,
-                NULL);
+  gtk_text_view_set_left_margin (GTK_TEXT_VIEW (textview), 20);
+  gtk_text_view_set_right_margin (GTK_TEXT_VIEW (textview), 20);
+  gtk_text_view_set_top_margin (GTK_TEXT_VIEW (textview), 20);
+  gtk_text_view_set_bottom_margin (GTK_TEXT_VIEW (textview), 20);
   gtk_text_view_set_editable (GTK_TEXT_VIEW (textview), FALSE);
   gtk_text_view_set_cursor_visible (GTK_TEXT_VIEW (textview), FALSE);
   /* Make it a bit nicer for text. */
