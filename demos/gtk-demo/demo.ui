@@ -110,6 +110,9 @@
         </child>
         <child>
           <object class="GtkBox" id="toolbar1">
+            <style>
+              <class name="toolbar"/>
+            </style>
             <child>
               <object class="GtkButton">
                 <property name="label" translatable="yes">New</property>
