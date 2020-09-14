@@ -1577,7 +1577,7 @@ GTK_DEFINE_EXPRESSION_TYPE (GtkClosureExpression,
  * @value_type: the type of the value that this expression evaluates to
  * @closure: closure to call when evaluating this expression. If closure is floating, it is adopted
  * @n_params: the number of params needed for evaluating @closure
- * @params: (array length=n_params) (transfer full): expressions for each parameter
+ * @params: (nullable) (array length=n_params) (transfer full): expressions for each parameter
  *
  * Creates a GtkExpression that calls @closure when it is evaluated.
  * @closure is called with the @this object and the results of evaluating
