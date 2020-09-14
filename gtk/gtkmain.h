@@ -50,25 +50,6 @@ G_BEGIN_DECLS
  */
 #define GTK_PRIORITY_RESIZE (G_PRIORITY_HIGH_IDLE + 10)
 
-/* GTK+ version
- */
-GDK_AVAILABLE_IN_ALL
-guint gtk_get_major_version (void) G_GNUC_CONST;
-GDK_AVAILABLE_IN_ALL
-guint gtk_get_minor_version (void) G_GNUC_CONST;
-GDK_AVAILABLE_IN_ALL
-guint gtk_get_micro_version (void) G_GNUC_CONST;
-GDK_AVAILABLE_IN_ALL
-guint gtk_get_binary_age    (void) G_GNUC_CONST;
-GDK_AVAILABLE_IN_ALL
-guint gtk_get_interface_age (void) G_GNUC_CONST;
-
-GDK_AVAILABLE_IN_ALL
-const char * gtk_check_version (guint   required_major,
-                                guint   required_minor,
-                                guint   required_micro);
-
-
 /* Initialization, exit, mainloop and miscellaneous routines
  */
 
@@ -101,11 +82,11 @@ gboolean gtk_init_check_abi_check (int     num_checks,
 #endif
 
 GDK_AVAILABLE_IN_ALL
-void           gtk_disable_setlocale    (void);
+void              gtk_disable_setlocale    (void);
 GDK_AVAILABLE_IN_ALL
-PangoLanguage *gtk_get_default_language (void);
+PangoLanguage *   gtk_get_default_language (void);
 GDK_AVAILABLE_IN_ALL
-GtkTextDirection gtk_get_locale_direction (void);
+GtkTextDirection  gtk_get_locale_direction (void);
 
 
 G_END_DECLS

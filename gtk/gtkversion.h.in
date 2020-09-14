@@ -29,15 +29,9 @@
 #ifndef __GTK_VERSION_H__
 #define __GTK_VERSION_H__
 
-/**
- * SECTION:gtkfeatures
- * @Short_description: Variables and functions to check the GTK version
- * @Title: Version Information
- *
- * GTK provides version information, primarily useful in configure checks
- * for builds that have a configure script. Applications will not typically
- * use the features described here.
- */
+#include <gdk/gdk.h>
+
+G_BEGIN_DECLS
 
 /**
  * GTK_MAJOR_VERSION:
@@ -100,5 +94,23 @@
      (GTK_MAJOR_VERSION == (major) && GTK_MINOR_VERSION > (minor)) || \
      (GTK_MAJOR_VERSION == (major) && GTK_MINOR_VERSION == (minor) && \
       GTK_MICRO_VERSION >= (micro)))
+
+GDK_AVAILABLE_IN_ALL
+guint gtk_get_major_version (void) G_GNUC_CONST;
+GDK_AVAILABLE_IN_ALL
+guint gtk_get_minor_version (void) G_GNUC_CONST;
+GDK_AVAILABLE_IN_ALL
+guint gtk_get_micro_version (void) G_GNUC_CONST;
+GDK_AVAILABLE_IN_ALL
+guint gtk_get_binary_age    (void) G_GNUC_CONST;
+GDK_AVAILABLE_IN_ALL
+guint gtk_get_interface_age (void) G_GNUC_CONST;
+
+GDK_AVAILABLE_IN_ALL
+const char * gtk_check_version (guint   required_major,
+                                guint   required_minor,
+                                guint   required_micro);
+
+G_END_DECLS
 
 #endif /* __GTK_VERSION_H__ */
