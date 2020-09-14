@@ -25,6 +25,13 @@
             </child>
           </object>
         </child>
+        <child type="end">
+          <object class="GtkLabel" id="fps_label">
+            <attributes>
+              <attribute name="font-features" value="tnum=1"/>
+            </attributes>
+          </object>
+        </child>
       </object>
     </child>
     <child>

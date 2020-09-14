@@ -256,12 +256,38 @@ iconscroll_prev_clicked_cb (GtkButton *source,
   set_widget_type (new_index);
 }
 
+static gboolean
+update_fps (gpointer data)
+{
+  GtkWidget *label = data;
+  GdkFrameClock *frame_clock;
+  double fps;
+  char *str;
+
+  frame_clock = gtk_widget_get_frame_clock (label);
+
+  fps = gdk_frame_clock_get_fps (frame_clock);
+  str = g_strdup_printf ("%.2f fps", fps);
+  gtk_label_set_label (GTK_LABEL (label), str);
+  g_free (str);
+
+  return G_SOURCE_CONTINUE;
+}
+
+static void
+remove_timeout (gpointer data)
+{
+  g_source_remove (GPOINTER_TO_UINT (data));
+}
+
 G_MODULE_EXPORT GtkWidget *
 do_iconscroll (GtkWidget *do_widget)
 {
   if (!window)
     {
       GtkBuilder *builder;
+      GtkWidget *label;
+      guint id;
 
       builder = gtk_builder_new_from_resource ("/iconscroll/iconscroll.ui");
       window = GTK_WIDGET (gtk_builder_get_object (builder, "window"));
@@ -274,6 +300,11 @@ do_iconscroll (GtkWidget *do_widget)
       hadjustment = GTK_ADJUSTMENT (gtk_builder_get_object (builder, "hadjustment"));
       vadjustment = GTK_ADJUSTMENT (gtk_builder_get_object (builder, "vadjustment"));
       set_widget_type (0);
+
+      label = GTK_WIDGET (gtk_builder_get_object (builder, "fps_label"));
+      id = g_timeout_add (500, update_fps, label);
+      g_object_set_data_full (G_OBJECT (label), "timeout",
+                              GUINT_TO_POINTER (id), remove_timeout);
 
       g_object_unref (builder);
     }
