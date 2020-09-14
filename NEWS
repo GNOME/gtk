@@ -15,9 +15,20 @@ Overview of Changes in GTK 3.99.2
 * GtkTextView:
  - Fix dnd
  - Improve undo state tracking
+ - Speed rendering in the presence of selections
 
 * GtkRevealer:
  - Fix clipping issues in the swing transitions
+
+* GtkColorChooser:
+ - Update the default palette
+
+* GtkFileChooser:
+ - Fix a crash
+ - Fix setting unlisted filters
+
+* GtkVideo:
+ - Make autoplay work
 
 * GL renderer:
  - Fix clipping with projective transforms
@@ -25,16 +36,24 @@ Overview of Changes in GTK 3.99.2
    with non-axis-aligned transforms
  - Fix texture caching to avoid size mismatches
 
+* Vulkan renderer:
+ - Fix swapchain creation
+
 * CSS:
  - Allow more than 64 selectors per rule
 
 * API cleanup:
- - Make filter and sorter constructors return exact
-   types
+ - Make filter and sorter constructors return exact types
+ - Rename GdkSurfaceState to GdkToplevelState
 
 * Demos:
- - Bug fixes and cosmetic improvements
+ - Bug and crash fixes
+ - Cosmetic improvements for several demos
+ - Improve search in the sidebar
  - Add a Shadertoy demo
+ - Add an Emblem demo
+ - Add a demo for input validation and error states
+ - Make gtk-demo demo itself
 
 * Build:
  - Fix Vulkan dependency checking
@@ -51,7 +70,9 @@ Overview of Changes in GTK 3.99.2
  German
  Hungarian
  Indonesian
+ Italian
  Kazakh
+ Latvian
  Lithuanian
  Persian
  Polish

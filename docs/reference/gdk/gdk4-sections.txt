@@ -1036,6 +1036,7 @@ gdk_frame_clock_get_history_start
 gdk_frame_clock_get_timings
 gdk_frame_clock_get_current_timings
 gdk_frame_clock_get_refresh_info
+gdk_frame_clock_get_fps
 
 <SUBSECTION Private>
 GDK_FRAME_CLOCK

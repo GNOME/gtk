@@ -10,76 +10,6 @@
 
 static guint tick_cb;
 
-static gint64
-guess_refresh_interval (GdkFrameClock *frame_clock)
-{
-  gint64 interval;
-  gint64 i;
-
-  interval = G_MAXINT64;
-
-  for (i = gdk_frame_clock_get_history_start (frame_clock);
-       i < gdk_frame_clock_get_frame_counter (frame_clock);
-       i++)
-    {
-      GdkFrameTimings *t, *before;
-      gint64 ts, before_ts;
-
-      t = gdk_frame_clock_get_timings (frame_clock, i);
-      before = gdk_frame_clock_get_timings (frame_clock, i - 1);
-      if (t == NULL || before == NULL)
-        continue;
-
-      ts = gdk_frame_timings_get_frame_time (t);
-      before_ts = gdk_frame_timings_get_frame_time (before);
-      if (ts == 0 || before_ts == 0)
-        continue;
-
-      interval = MIN (interval, ts - before_ts);
-    }
-
-  if (interval == G_MAXINT64)
-    return 0;
-
-  return interval;
-}
-
-static double
-frame_clock_get_fps (GdkFrameClock *frame_clock)
-{
-  GdkFrameTimings *start, *end;
-  gint64 start_counter, end_counter;
-  gint64 start_timestamp, end_timestamp;
-  gint64 interval;
-
-  start_counter = gdk_frame_clock_get_history_start (frame_clock);
-  end_counter = gdk_frame_clock_get_frame_counter (frame_clock);
-  start = gdk_frame_clock_get_timings (frame_clock, start_counter);
-  for (end = gdk_frame_clock_get_timings (frame_clock, end_counter);
-       end_counter > start_counter && end != NULL && !gdk_frame_timings_get_complete (end);
-       end = gdk_frame_clock_get_timings (frame_clock, end_counter))
-    end_counter--;
-  if (end_counter - start_counter < 4)
-    return 0.0;
-
-  start_timestamp = gdk_frame_timings_get_presentation_time (start);
-  end_timestamp = gdk_frame_timings_get_presentation_time (end);
-  if (start_timestamp == 0 || end_timestamp == 0)
-    {
-      start_timestamp = gdk_frame_timings_get_frame_time (start);
-      end_timestamp = gdk_frame_timings_get_frame_time (end);
-    }
-  interval = gdk_frame_timings_get_refresh_interval (end);
-  if (interval == 0)
-    {
-      interval = guess_refresh_interval (frame_clock);
-      if (interval == 0)
-        return 0.0;
-    }
-
-  return ((double) end_counter - start_counter) * G_USEC_PER_SEC / (end_timestamp - start_timestamp);
-}
-
 typedef struct {
   const char *name;
   gboolean dark;
@@ -116,7 +46,7 @@ change_theme (GtkWidget     *widget,
     {
       char *fps;
 
-      fps = g_strdup_printf ("%.2f fps", frame_clock_get_fps (frame_clock));
+      fps = g_strdup_printf ("%.2f fps", gdk_frame_clock_get_fps (frame_clock));
       gtk_label_set_label (GTK_LABEL (label), fps);
       g_free (fps);
     }

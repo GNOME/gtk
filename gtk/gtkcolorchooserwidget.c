@@ -766,3 +766,19 @@ gtk_color_chooser_widget_iface_init (GtkColorChooserInterface *iface)
   iface->add_palette = gtk_color_chooser_widget_add_palette;
 }
 
+/* Public API {{{1 */
+
+/**
+ * gtk_color_chooser_widget_new:
+ *
+ * Creates a new #GtkColorChooserWidget.
+ *
+ * Returns: a new #GtkColorChooserWidget
+ */
+GtkWidget *
+gtk_color_chooser_widget_new (void)
+{
+  return g_object_new (GTK_TYPE_COLOR_CHOOSER_WIDGET, NULL);
+}
+
+/* vim:set foldmethod=marker: */

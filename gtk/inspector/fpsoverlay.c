@@ -98,42 +98,12 @@ static double
 gtk_fps_overlay_get_fps (GtkWidget *widget)
 {
   GdkFrameClock *frame_clock;
-  GdkFrameTimings *start, *end;
-  gint64 start_counter, end_counter;
-  gint64 start_timestamp, end_timestamp;
-  gint64 interval;
 
   frame_clock = gtk_widget_get_frame_clock (widget);
   if (frame_clock == NULL)
     return 0.0;
 
-  start_counter = gdk_frame_clock_get_history_start (frame_clock);
-  end_counter = gdk_frame_clock_get_frame_counter (frame_clock);
-  start = gdk_frame_clock_get_timings (frame_clock, start_counter);
-  for (end = gdk_frame_clock_get_timings (frame_clock, end_counter);
-       end_counter > start_counter && end != NULL && !gdk_frame_timings_get_complete (end);
-       end = gdk_frame_clock_get_timings (frame_clock, end_counter))
-    end_counter--;
-  if (end_counter - start_counter < 4)
-    return 0.0;
-
-  start_timestamp = gdk_frame_timings_get_presentation_time (start);
-  end_timestamp = gdk_frame_timings_get_presentation_time (end);
-  if (start_timestamp == 0 || end_timestamp == 0)
-    {
-      start_timestamp = gdk_frame_timings_get_frame_time (start);
-      end_timestamp = gdk_frame_timings_get_frame_time (end);
-    }
-
-  interval = gdk_frame_timings_get_refresh_interval (end);
-  if (interval == 0)
-    {
-      interval = guess_refresh_interval (frame_clock);
-      if (interval == 0)
-        return 0.0;
-    }
-
-  return ((double) end_counter - start_counter) * G_USEC_PER_SEC / (end_timestamp - start_timestamp);
+  return gdk_frame_clock_get_fps (frame_clock);
 }
 
 static gboolean

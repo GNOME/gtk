@@ -64,31 +64,6 @@ gtk_accelerator_get_default_mod_mask
 </SECTION>
 
 <SECTION>
-<FILE>gtkaccellabel</FILE>
-<TITLE>GtkAccelLabel</TITLE>
-GtkAccelLabel
-gtk_accel_label_new
-gtk_accel_label_get_accel_width
-gtk_accel_label_set_accel
-gtk_accel_label_get_accel
-gtk_accel_label_refetch
-gtk_accel_label_set_label
-gtk_accel_label_get_label
-gtk_accel_label_get_use_underline
-gtk_accel_label_set_use_underline
-<SUBSECTION Standard>
-GTK_ACCEL_LABEL
-GTK_IS_ACCEL_LABEL
-GTK_TYPE_ACCEL_LABEL
-GTK_ACCEL_LABEL_CLASS
-GTK_IS_ACCEL_LABEL_CLASS
-GTK_ACCEL_LABEL_GET_CLASS
-<SUBSECTION Private>
-GtkAccelLabelPrivate
-gtk_accel_label_get_type
-</SECTION>
-
-<SECTION>
 <FILE>gtkadjustment</FILE>
 <TITLE>GtkAdjustment</TITLE>
 GtkAdjustment
@@ -809,8 +784,13 @@ GtkCheckButton
 gtk_check_button_new
 gtk_check_button_new_with_label
 gtk_check_button_new_with_mnemonic
-gtk_check_button_get_draw_indicator
-gtk_check_button_set_draw_indicator
+gtk_check_button_get_label
+gtk_check_button_set_label
+gtk_check_button_get_use_underline
+gtk_check_button_set_use_underline
+gtk_check_button_set_group
+gtk_check_button_get_active
+gtk_check_button_set_active
 gtk_check_button_get_inconsistent
 gtk_check_button_set_inconsistent
 <SUBSECTION Standard>
@@ -3031,6 +3011,7 @@ gtk_text_iter_get_slice
 gtk_text_iter_get_text
 gtk_text_iter_get_visible_slice
 gtk_text_iter_get_visible_text
+gtk_text_iter_get_paintable
 gtk_text_iter_get_marks
 gtk_text_iter_get_toggled_tags
 gtk_text_iter_get_child_anchor
@@ -4443,6 +4424,7 @@ gtk_widget_set_cursor
 gtk_widget_set_cursor_from_name
 gtk_widget_mnemonic_activate
 gtk_widget_class_set_accessible_role
+gtk_widget_class_get_accessible_role
 gtk_widget_child_focus
 gtk_widget_get_child_visible
 gtk_widget_get_parent
@@ -4765,9 +4747,15 @@ gtk_get_default_language
 gtk_get_locale_direction
 gtk_init
 gtk_init_check
+gtk_is_initialized
 
 <SUBSECTION>
 GTK_PRIORITY_RESIZE
+
+<SUBSECTION>
+GtkDebugFlag
+gtk_get_debug_flags
+gtk_set_debug_flags
 
 <SUBSECTION Private>
 gtk_init_abi_check
@@ -5639,6 +5627,7 @@ gtk_grid_attach
 gtk_grid_attach_next_to
 gtk_grid_remove
 gtk_grid_get_child_at
+gtk_grid_query_child
 gtk_grid_insert_row
 gtk_grid_insert_column
 gtk_grid_remove_row

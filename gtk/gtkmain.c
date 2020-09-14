@@ -125,7 +125,6 @@
 #include "gtkrecentmanager.h"
 #include "gtksettingsprivate.h"
 #include "gtktooltipprivate.h"
-#include "gtkversion.h"
 #include "gtkwidgetprivate.h"
 #include "gtkwindowprivate.h"
 #include "gtkwindowgroup.h"
@@ -163,6 +162,88 @@ DisplayDebugFlags debug_flags[N_DEBUG_DISPLAYS];
  * hot paths. */
 gboolean any_display_debug_flags_set = FALSE;
 
+GtkDebugFlags
+gtk_get_display_debug_flags (GdkDisplay *display)
+{
+  int i;
+
+  if (display == NULL)
+    display = gdk_display_get_default ();
+
+  for (i = 0; i < N_DEBUG_DISPLAYS; i++)
+    {
+      if (debug_flags[i].display == display)
+        return (GtkDebugFlags)debug_flags[i].flags;
+    }
+
+  return 0;
+}
+
+gboolean
+gtk_get_any_display_debug_flag_set (void)
+{
+  return any_display_debug_flags_set;
+}
+
+void
+gtk_set_display_debug_flags (GdkDisplay    *display,
+                             GtkDebugFlags  flags)
+{
+  int i;
+
+  for (i = 0; i < N_DEBUG_DISPLAYS; i++)
+    {
+      if (debug_flags[i].display == NULL)
+        debug_flags[i].display = display;
+
+      if (debug_flags[i].display == display)
+        {
+          debug_flags[i].flags = flags;
+          if (flags > 0)
+            any_display_debug_flags_set = TRUE;
+
+          return;
+        }
+    }
+}
+
+/**
+ * gtk_get_debug_flags:
+ *
+ * Returns the GTK debug flags that are currently active.
+ *
+ * This function is intended for GTK modules that want
+ * to adjust their debug output based on GTK debug flags.
+ *
+ * Returns: the GTK debug flags.
+ */
+GtkDebugFlags
+gtk_get_debug_flags (void)
+{
+  if (gtk_get_any_display_debug_flag_set ())
+    return gtk_get_display_debug_flags (gdk_display_get_default ());
+
+  return 0;
+}
+
+/**
+ * gtk_set_debug_flags:
+ * @flags: the debug flags to set
+ *
+ * Sets the GTK debug flags.
+ */
+void
+gtk_set_debug_flags (GtkDebugFlags flags)
+{
+  gtk_set_display_debug_flags (gdk_display_get_default (), flags);
+}
+
+gboolean
+gtk_simulate_touchscreen (void)
+{
+  return (gtk_get_debug_flags () & GTK_DEBUG_TOUCHSCREEN) != 0;
+}
+
 #ifdef G_ENABLE_DEBUG
 static const GdkDebugKey gtk_debug_keys[] = {
   { "keybindings", GTK_DEBUG_KEYBINDINGS, "Information about keyboard shortcuts" },
@@ -186,148 +267,6 @@ static const GdkDebugKey gtk_debug_keys[] = {
 };
 #endif /* G_ENABLE_DEBUG */
 
-/**
- * gtk_get_major_version:
- *
- * Returns the major version number of the GTK library.
- * (e.g. in GTK version 3.1.5 this is 3.)
- *
- * This function is in the library, so it represents the GTK library
- * your code is running against. Contrast with the #GTK_MAJOR_VERSION
- * macro, which represents the major version of the GTK headers you
- * have included when compiling your code.
- *
- * Returns: the major version number of the GTK library
- */
-guint
-gtk_get_major_version (void)
-{
-  return GTK_MAJOR_VERSION;
-}
-
-/**
- * gtk_get_minor_version:
- *
- * Returns the minor version number of the GTK library.
- * (e.g. in GTK version 3.1.5 this is 1.)
- *
- * This function is in the library, so it represents the GTK library
- * your code is are running against. Contrast with the
- * #GTK_MINOR_VERSION macro, which represents the minor version of the
- * GTK headers you have included when compiling your code.
- *
- * Returns: the minor version number of the GTK library
- */
-guint
-gtk_get_minor_version (void)
-{
-  return GTK_MINOR_VERSION;
-}
-
-/**
- * gtk_get_micro_version:
- *
- * Returns the micro version number of the GTK library.
- * (e.g. in GTK version 3.1.5 this is 5.)
- *
- * This function is in the library, so it represents the GTK library
- * your code is are running against. Contrast with the
- * #GTK_MICRO_VERSION macro, which represents the micro version of the
- * GTK headers you have included when compiling your code.
- *
- * Returns: the micro version number of the GTK library
- */
-guint
-gtk_get_micro_version (void)
-{
-  return GTK_MICRO_VERSION;
-}
-
-/**
- * gtk_get_binary_age:
- *
- * Returns the binary age as passed to `libtool`
- * when building the GTK library the process is running against.
- * If `libtool` means nothing to you, don't
- * worry about it.
- *
- * Returns: the binary age of the GTK library
- */
-guint
-gtk_get_binary_age (void)
-{
-  return GTK_BINARY_AGE;
-}
-
-/**
- * gtk_get_interface_age:
- *
- * Returns the interface age as passed to `libtool`
- * when building the GTK library the process is running against.
- * If `libtool` means nothing to you, don't
- * worry about it.
- *
- * Returns: the interface age of the GTK library
- */
-guint
-gtk_get_interface_age (void)
-{
-  return GTK_INTERFACE_AGE;
-}
-
-/**
- * gtk_check_version:
- * @required_major: the required major version
- * @required_minor: the required minor version
- * @required_micro: the required micro version
- *
- * Checks that the GTK library in use is compatible with the
- * given version. Generally you would pass in the constants
- * #GTK_MAJOR_VERSION, #GTK_MINOR_VERSION, #GTK_MICRO_VERSION
- * as the three arguments to this function; that produces
- * a check that the library in use is compatible with
- * the version of GTK the application or module was compiled
- * against.
- *
- * Compatibility is defined by two things: first the version
- * of the running library is newer than the version
- * @required_major.required_minor.@required_micro. Second
- * the running library must be binary compatible with the
- * version @required_major.required_minor.@required_micro
- * (same major version.)
- *
- * This function is primarily for GTK modules; the module
- * can call this function to check that it wasn’t loaded
- * into an incompatible version of GTK. However, such a
- * check isn’t completely reliable, since the module may be
- * linked against an old version of GTK and calling the
- * old version of gtk_check_version(), but still get loaded
- * into an application using a newer version of GTK.
- *
- * Returns: (nullable): %NULL if the GTK library is compatible with the
- *   given version, or a string describing the version mismatch.
- *   The returned string is owned by GTK and should not be modified
- *   or freed.
- */
-const char *
-gtk_check_version (guint required_major,
-                   guint required_minor,
-                   guint required_micro)
-{
-  int gtk_effective_micro = 100 * GTK_MINOR_VERSION + GTK_MICRO_VERSION;
-  int required_effective_micro = 100 * required_minor + required_micro;
-
-  if (required_major > GTK_MAJOR_VERSION)
-    return "GTK version too old (major mismatch)";
-  if (required_major < GTK_MAJOR_VERSION)
-    return "GTK version too new (major mismatch)";
-  if (required_effective_micro < gtk_effective_micro - GTK_BINARY_AGE)
-    return "GTK version too new (micro mismatch)";
-  if (required_effective_micro > gtk_effective_micro)
-    return "GTK version too old (micro mismatch)";
-  return NULL;
-}
-
 /* This checks to see if the process is running suid or sgid
  * at the current time. If so, we don’t allow GTK to be initialized.
  * This is meant to be a mild check - we only error out if we
@@ -342,7 +281,7 @@ check_setugid (void)
 #ifndef G_OS_WIN32
   uid_t ruid, euid, suid; /* Real, effective and saved user ID's */
   gid_t rgid, egid, sgid; /* Real, effective and saved group ID's */
-  
+
 #ifdef HAVE_GETRESUID
   if (getresuid (&ruid, &euid, &suid) != 0 ||
       getresgid (&rgid, &egid, &sgid) != 0)
@@ -387,7 +326,7 @@ gtk_disable_setlocale (void)
 {
   if (pre_initialized)
     g_warning ("gtk_disable_setlocale() must be called before gtk_init()");
-    
+
   do_setlocale = FALSE;
 }
 
@@ -686,92 +625,6 @@ do_post_parse_initialization (void)
                     G_CALLBACK (default_display_notify_cb),
                     NULL);
 }
-
-guint
-gtk_get_display_debug_flags (GdkDisplay *display)
-{
-  int i;
-
-  if (display == NULL)
-    display = gdk_display_get_default ();
-
-  for (i = 0; i < N_DEBUG_DISPLAYS; i++)
-    {
-      if (debug_flags[i].display == display)
-        return debug_flags[i].flags;
-    }
-
-  return 0;
-}
-
-gboolean
-gtk_get_any_display_debug_flag_set (void)
-{
-  return any_display_debug_flags_set;
-}
-
-void
-gtk_set_display_debug_flags (GdkDisplay *display,
-                             guint       flags)
-{
-  int i;
-
-  for (i = 0; i < N_DEBUG_DISPLAYS; i++)
-    {
-      if (debug_flags[i].display == NULL)
-        debug_flags[i].display = display;
-
-      if (debug_flags[i].display == display)
-        {
-          debug_flags[i].flags = flags;
-          if (flags > 0)
-            any_display_debug_flags_set = TRUE;
-
-          return;
-        }
-    }
-}
-
-/**
- * gtk_get_debug_flags:
- *
- * Returns the GTK debug flags.
- *
- * This function is intended for GTK modules that want
- * to adjust their debug output based on GTK debug flags.
- *
- * Returns: the GTK debug flags.
- */
-guint
-gtk_get_debug_flags (void)
-{
-  if (gtk_get_any_display_debug_flag_set ())
-    return gtk_get_display_debug_flags (gdk_display_get_default ());
-
-  return 0;
-}
-
-/**
- * gtk_set_debug_flags:
- *
- * Sets the GTK debug flags.
- */
-void
-gtk_set_debug_flags (guint flags)
-{
-  gtk_set_display_debug_flags (gdk_display_get_default (), flags);
-}
-
-gboolean
-gtk_simulate_touchscreen (void)
-{
-  static int test_touchscreen;
-
-  if (test_touchscreen == 0)
-    test_touchscreen = g_getenv ("GTK_TEST_TOUCHSCREEN") != NULL ? 1 : -1;
-
-  return test_touchscreen > 0 || (gtk_get_debug_flags () & GTK_DEBUG_TOUCHSCREEN) != 0;
- }
 
 #ifdef G_PLATFORM_WIN32
 #undef gtk_init_check

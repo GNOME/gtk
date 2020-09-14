@@ -301,9 +301,9 @@ GdkEvent is now a strictly read-only type, and you can no longer
 change any of its fields, or construct new events. All event fields
 have accessors that you will have to use.
 
-Event compression is always enabled in GTK 4. If you need to see
-the uncoalesced motion history, use gdk_motion_event_get_history()
-on the latest motion event.
+Event compression is always enabled in GTK 4, for both motion and
+scroll events. If you need to see the uncoalesced motion or scroll
+history, use gdk_event_get_history() on the latest event.
 
 ### Stop using grabs
 
@@ -464,7 +464,7 @@ the title of the window, so if you were setting the title of the header
 bar, consider setting the window title instead. If you need to show a
 title that's different from the window title, use the
 #GtkHeaderBar:title-widget property to add a #GtkLabel as shown in the
-example in #GtkHeaderBar documentation.
+example in the #GtkHeaderBar documentation.
 
 The gtk_header_bar_set_subtitle() function has been removed along with
 its corresponding getter and the property. The old "subtitle" behavior
@@ -478,6 +478,10 @@ with its corresponding getter and the property. Its behavior can be
 replicated by setting the #GtkHeaderBar:title-widget property to a
 #GtkStack with #GtkStack:vhomogeneous property set to %TRUE and two
 pages, each with a #GtkBox with title and subtitle as described above.
+
+Some of the internal structure of #GtkHeaderBar has been made available
+as public API: #GtkWindowHandle and #GtkWindowControls. If you have
+unusual needs for custom headerbars, these might be useful to you.
 
 The ::pack-type child properties of GtkHeaderBar and GtkActionBar have
 been removed. If you need to programmatically place children, use the
@@ -494,7 +498,7 @@ converted into child meta objects.
 Instead of gtk_container_child_set (stack, child, …), you can now use
 g_object_set (gtk_stack_get_page (stack, child), …). In .ui files, the
 GtkStackPage objects must be created explicitly, and take the child widget
-as property. GtkNotebook and GtkAssistant are similar.
+as property. The changes to GtkNotebook and GtkAssistant are similar.
 
 gtk4-builder-tool can help with this conversion, with the --3to4 option
 of the simplify command.
@@ -509,6 +513,9 @@ been added to #GtkCheckButton and #GtkToggleButton. Use grouped
 check buttons for traditional radio groups, and used grouped toggle
 buttons for view switchers. The new API to set up groups of buttons
 is gtk_check_button_set_group() and gtk_toggle_button_set_group().
+
+gtk4-builder-tool can help with this conversion, with the --3to4 option
+of the simplify command.
 
 ### Adapt to GtkScrolledWindow API changes
 
@@ -581,14 +588,14 @@ using child properties. If you have custom widgets using child properties,
 they will have to be converted either to layout properties provided
 by a layout manager (if they are layout-related), or handled in some
 other way. One possibility is to use child meta objects, as seen with
-GtkAssistantPage, GtkStackPage and the like.
+#GtkAssistantPage, #GtkStackPage and the like.
 
 The replacements for gtk_container_add() are:
 
 | Widget | Replacement |
 | ------ | ----------- |
 | GtkActionBar    | gtk_action_bar_pack_start(), gtk_action_bar_pack_end() |
-| GtkBox          | gtk_box_append() |
+| GtkBox          | gtk_box_prepend(), gtk_box_append() |
 | GtkExpander     | gtk_expander_set_child() |
 | GtkFixed        | gtk_fixed_put() |
 | GtkFlowBox      | gtk_flow_box_insert() |
@@ -608,14 +615,14 @@ The replacements for gtk_container_add() are:
 GTK 4 has removed the #GtkContainer::border-width property (together
 with the rest of GtkContainer). Use other means to influence the spacing
 of your containers, such as the CSS margin and padding properties on child
-widgets.
+widgets, or the CSS border-spacing property on containers.
 
 ### Adapt to gtk_widget_destroy() removal
 
 The function gtk_widget_destroy() has been removed. To explicitly destroy
 a toplevel window, use gtk_window_destroy(). To destroy a widget that is
 part of a hierarchy, remove it from its parent using a container-specific
-remove api, such as gtk_box_remove() or gtk_stack_remove(). To destroy
+remove API, such as gtk_box_remove() or gtk_stack_remove(). To destroy
 a freestanding non-toplevel widget, use g_object_unref() to drop your
 reference.
 
@@ -689,13 +696,18 @@ gradients, just use those.
 
 ### Don't use -gtk-icon-effect in your CSS
 
-GTK now supports a more versatile -gtk-icon-filter instead. Replace
--gtk-icon-effect: dim; with -gtk-icon-filter: opacity(0.5); and
--gtk-icon-effect: highlight; with -gtk-icon-filter: brightness(1.2);.
+GTK now supports a more versatile -gtk-icon-filter instead.
+
+Replace
+
+| Old | Replacement |
+| ------ | ----------- |
+| -gtk-icon-effect: dim | -gtk-icon-filter: opacity(0.5) |
+| -gtk-icon-effect: highlight | -gtk-icon-filter: brightness(1.2) |
 
 ### Don't use -gtk-icon-theme in your CSS
 
-GTK now uses the current icon theme, without a way to change this.
+GTK 4 always uses the current icon theme, with no way to change this.
 
 ### Don't use -gtk-outline-...-radius in your CSS
 
@@ -746,15 +758,16 @@ using them.
 Widgets that appear and disappear with an animation, such as GtkPopover,
 GtkInfoBar, GtkRevealer no longer use gtk_widget_show() and gtk_widget_hide()
 for this, but have gained dedicated APIs for this purpose that you should
-use.
+use instead.
 
 ### Stop passing commandline arguments to gtk_init
 
 The gtk_init() and gtk_init_check() functions no longer accept commandline
 arguments. Just call them without arguments. Other initialization functions
 that were purely related to commandline argument handling, such as
-gtk_parse_args() and gtk_get_option_group(), are gone. The APIs to
-initialize GDK separately are also gone, but it is very unlikely
+gtk_parse_args() and gtk_get_option_group(), are gone.
+
+The APIs to initialize GDK separately are also gone, but it is very unlikely
 that you are affected by that.
 
 ### GdkPixbuf is deemphasized
@@ -768,7 +781,8 @@ gdk_texture_new_for_pixbuf() to convert them to texture objects where needed.
 
 Event controllers and #GtkGestures have already been introduced in GTK 3 to handle
 input for many cases. In GTK 4, the traditional widget signals for handling input,
-such as #GtkWidget::motion-event or #GtkWidget::event have been removed.
+such as #GtkWidget::motion-event or #GtkWidget::event have been removed. All event
+handling is done via event controllers now.
 
 ### Invalidation handling has changed
 
@@ -1022,10 +1036,10 @@ that are not under the toolkit or the application developer's
 control. Additionally, "stop-the-world" functions do not fit
 the event-driven programming model of GTK.
 
-You can replace calls to <function>gtk_dialog_run()</function>
-by specifying that the #GtkDialog must be modal using
-gtk_window_set_modal() or the %GTK_DIALOG_MODAL flag, and
-connecting to the #GtkDialog::response signal.
+You can replace calls to gtk_dialog_run() by specifying that the
+#GtkDialog must be modal using gtk_window_set_modal() or the
+%GTK_DIALOG_MODAL flag, and connecting to the #GtkDialog::response
+signal.
 
 ## Changes to consider after the switch
 
