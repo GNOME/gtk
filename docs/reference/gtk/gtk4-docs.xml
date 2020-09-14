@@ -185,7 +185,6 @@
       <xi:include href="xml/gtkprogressbar.xml" />
       <xi:include href="xml/gtklevelbar.xml" />
       <xi:include href="xml/gtkstatusbar.xml" />
-      <xi:include href="xml/gtkaccellabel.xml" />
       <xi:include href="xml/gtkcalendar.xml" />
     </chapter>
 
