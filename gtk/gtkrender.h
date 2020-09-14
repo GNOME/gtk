@@ -95,14 +95,6 @@ void        gtk_render_line        (GtkStyleContext     *context,
                                     double               x1,
                                     double               y1);
 GDK_AVAILABLE_IN_ALL
-void        gtk_render_slider      (GtkStyleContext     *context,
-                                    cairo_t             *cr,
-                                    double               x,
-                                    double               y,
-                                    double               width,
-                                    double               height,
-                                    GtkOrientation       orientation);
-GDK_AVAILABLE_IN_ALL
 void        gtk_render_handle      (GtkStyleContext     *context,
                                     cairo_t             *cr,
                                     double               x,
