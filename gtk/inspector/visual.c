@@ -919,17 +919,6 @@ init_touchscreen (GtkInspectorVisual *vis)
   gtk_switch_set_active (GTK_SWITCH (vis->touchscreen_switch), (gtk_get_debug_flags () & GTK_DEBUG_TOUCHSCREEN) != 0);
   g_signal_connect (vis->touchscreen_switch, "notify::active",
                     G_CALLBACK (update_touchscreen), NULL);
-
-  if (g_getenv ("GTK_TEST_TOUCHSCREEN") != 0)
-    {
-      GtkWidget *row;
-
-      /* hardcoded, nothing we can do */
-      gtk_switch_set_active (GTK_SWITCH (vis->touchscreen_switch), TRUE);
-      gtk_widget_set_sensitive (vis->touchscreen_switch, FALSE);
-      row = gtk_widget_get_ancestor (vis->touchscreen_switch, GTK_TYPE_LIST_BOX_ROW);
-      gtk_widget_set_tooltip_text (row, _("Setting is hardcoded by GTK_TEST_TOUCHSCREEN"));
-    }
 }
 
 static gboolean

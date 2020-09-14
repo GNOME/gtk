@@ -623,13 +623,8 @@ gtk_set_debug_flags (GtkDebugFlags flags)
 gboolean
 gtk_simulate_touchscreen (void)
 {
-  static int test_touchscreen;
-
-  if (test_touchscreen == 0)
-    test_touchscreen = g_getenv ("GTK_TEST_TOUCHSCREEN") != NULL ? 1 : -1;
-
-  return test_touchscreen > 0 || (gtk_get_debug_flags () & GTK_DEBUG_TOUCHSCREEN) != 0;
- }
+  return (gtk_get_debug_flags () & GTK_DEBUG_TOUCHSCREEN) != 0;
+}
 
 #ifdef G_PLATFORM_WIN32
 #undef gtk_init_check
