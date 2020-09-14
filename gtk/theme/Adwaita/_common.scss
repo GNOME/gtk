@@ -3389,35 +3389,16 @@ separator.sidebar {
 }
 
 
-/****************
- * File chooser *
- ****************/
-$_placesidebar_icons_opacity: 0.7;
+/**********************
+ * Navigation Sidebar *
+ **********************/
 
-row image.sidebar-icon { opacity: $_placesidebar_icons_opacity; } // dim the sidebar icons
-                                                                  // see bug #786613 for details 
-                                                                  // on this oddity
+.navigation-sidebar {
 
-/* this should be more generic, only using .navigation-sidebar
-   https://gitlab.gnome.org/GNOME/gtk/-/issues/2929
-*/
-placessidebar, .navigation-sidebar {
-  list {
-    padding: 4px 0;
-
-    > row {
-      margin: 1px 0;
-    }
-
-    > separator {
-      margin: 4px 0;
-    }
-  }
-
-  row {
+  > row {
     // Needs overriding of the GtkListBoxRow padding
     min-height: 36px;
-    padding: 0px;
+    padding: 0px 8px;
 
     // Using margins/padding directly in the SidebarRow
     // will make the animation of the new bookmark row jump
@@ -3444,6 +3425,27 @@ placessidebar, .navigation-sidebar {
     }
 
     &:disabled { color: $insensitive_fg_color; }
+  }
+}
+
+
+/****************
+ * File chooser *
+ ****************/
+
+$_placesidebar_icons_opacity: 0.7;
+
+row image.sidebar-icon { opacity: $_placesidebar_icons_opacity; } // dim the sidebar icons
+                                                                  // see bug #786613 for details
+                                                                  // on this oddity
+
+/* this should be more generic, only using .navigation-sidebar
+   https://gitlab.gnome.org/GNOME/gtk/-/issues/2929
+*/
+
+placessidebar {
+  row:not(:last-child) { //FIXME: specificty bump hack
+    padding: 0;
 
     image.sidebar-icon {
       &:dir(ltr) { padding-right: 8px; }
@@ -3798,6 +3800,7 @@ colorchooser .popover.osd { border-radius: 5px; }
   &:hover { -gtk-icon-filter: brightness(1.2); }
 
   > rubberband { @extend rubberband; }
+
 }
 
 .scale-popup {
