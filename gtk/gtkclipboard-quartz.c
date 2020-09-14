@@ -33,6 +33,7 @@
 #include "gtktextbuffer.h"
 #include "gtkquartz.h"
 #include "gtkalias.h"
+#include <gdk/quartz/gdkquartz.h>
 
 enum {
   OWNER_CHANGE,
