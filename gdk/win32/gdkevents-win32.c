@@ -3276,34 +3276,38 @@ gdk_event_translate (MSG *msg,
 	  break;
 	}
 
-      if (LOWORD (msg->wParam) == WA_INACTIVE && msg->lParam != 0)
+      if (LOWORD (msg->wParam) == WA_INACTIVE)
         {
-          GdkSurface *other_surface = gdk_win32_handle_table_lookup ((HWND) msg->lParam);
-          if (other_surface != NULL &&
-              (GDK_IS_POPUP (other_surface) || GDK_IS_DRAG_SURFACE (other_surface)))
+          if (msg->lParam != 0)
             {
-              /* We're being deactivated in favour of some popup or temp window.
-               * Since only toplevels can have visual focus, pretend that
-               * nothing happened.
-               */
-              *ret_valp = 0;
-              return_val = TRUE;
-              break;
+               GdkSurface *other_surface = gdk_win32_handle_table_lookup ((HWND) msg->lParam);
+               if (other_surface != NULL &&
+                   (GDK_IS_POPUP (other_surface) || GDK_IS_DRAG_SURFACE (other_surface)))
+                {
+                  /* We're being deactivated in favour of some popup or temp window.
+                   * Since only toplevels can have visual focus, pretend that
+                   * nothing happened.
+                   */
+                  *ret_valp = 0;
+                  return_val = TRUE;
+                  break;
+                }
             }
+
+          gdk_synthesize_surface_state (window, GDK_TOPLEVEL_STATE_FOCUSED, 0);
+        }
+      else
+        {
+          gdk_synthesize_surface_state (window, 0, GDK_TOPLEVEL_STATE_FOCUSED);
+
+          /* Bring any tablet contexts to the top of the overlap order when
+           * one of our windows is activated.
+           * NOTE: It doesn't seem to work well if it is done in WM_ACTIVATEAPP
+           * instead
+           */
+          _gdk_input_set_tablet_active ();
         }
 
-      if (LOWORD (msg->wParam) == WA_INACTIVE)
-	gdk_synthesize_surface_state (window, GDK_TOPLEVEL_STATE_FOCUSED, 0);
-      else
-	gdk_synthesize_surface_state (window, 0, GDK_TOPLEVEL_STATE_FOCUSED);
-
-      /* Bring any tablet contexts to the top of the overlap order when
-       * one of our windows is activated.
-       * NOTE: It doesn't seem to work well if it is done in WM_ACTIVATEAPP
-       * instead
-       */
-      if (LOWORD(msg->wParam) != WA_INACTIVE)
-	_gdk_input_set_tablet_active ();
       break;
 
     case WM_ACTIVATEAPP:

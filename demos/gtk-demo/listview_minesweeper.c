@@ -429,7 +429,7 @@ sweeper_game_reveal_cell (SweeperGame *self,
   sweeper_game_check_finished (self);
 }
 
-void
+G_MODULE_EXPORT void
 minesweeper_cell_clicked_cb (GtkGridView *gridview,
                              guint        pos,
                              SweeperGame *game)
@@ -437,7 +437,7 @@ minesweeper_cell_clicked_cb (GtkGridView *gridview,
   sweeper_game_reveal_cell (game, pos);
 }
 
-void
+G_MODULE_EXPORT void
 minesweeper_new_game_cb (GtkButton   *button,
                          SweeperGame *game)
 {

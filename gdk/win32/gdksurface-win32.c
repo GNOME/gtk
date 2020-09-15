@@ -193,8 +193,6 @@ gdk_surface_win32_finalize (GObject *object)
       surface->hicon_small = NULL;
     }
 
-  g_free (surface->decorations);
-
   if (surface->cache_surface)
     {
       cairo_surface_destroy (surface->cache_surface);
@@ -1381,9 +1379,11 @@ get_effective_window_decorations (GdkSurface       *window,
   *decoration = 0;
 
   if (!GDK_IS_TOPLEVEL (window))
-    {
-      return FALSE;
-    }
+    return FALSE;
+
+  /* we want to apply the "no decorations", if decorations are disabled */
+  if (!GDK_WIN32_SURFACE (window)->decorate_all)
+    return TRUE;
 
   if ((impl->hint_flags & GDK_HINT_MIN_SIZE) &&
       (impl->hint_flags & GDK_HINT_MAX_SIZE) &&
@@ -1779,8 +1779,7 @@ _gdk_win32_surface_lacks_wm_decorations (GdkSurface *window)
    * even though GdkWMDecoration docs indicate that 0 does NOT mean
    * "no decorations".
    */
-  if (impl->decorations &&
-      *impl->decorations == 0)
+  if (!impl->decorate_all)
     return TRUE;
 
   if (GDK_SURFACE_HWND (window) == 0)
@@ -1880,6 +1879,7 @@ _gdk_win32_surface_update_style_bits (GdkSurface *window)
   if (get_effective_window_decorations (window, &decorations))
     {
       all = (decorations & GDK_DECOR_ALL);
+
       /* Keep this in sync with the test in _gdk_win32_surface_lacks_wm_decorations() */
       update_single_bit (&new_style, all, decorations & GDK_DECOR_BORDER, WS_BORDER);
       update_single_bit (&new_style, all, decorations & GDK_DECOR_RESIZEH, WS_THICKFRAME);
@@ -4829,6 +4829,7 @@ gdk_win32_toplevel_set_property (GObject      *object,
       break;
 
     case LAST_PROP + GDK_TOPLEVEL_PROP_DECORATED:
+      GDK_WIN32_SURFACE (surface)->decorate_all = g_value_get_boolean (value);
       _gdk_win32_surface_update_style_bits (surface);
       g_object_notify_by_pspec (G_OBJECT (surface), pspec);
       break;
@@ -4882,10 +4883,7 @@ gdk_win32_toplevel_get_property (GObject    *object,
       break;
 
     case LAST_PROP + GDK_TOPLEVEL_PROP_DECORATED:
-      {
-        GdkWMDecoration decorations = GDK_DECOR_ALL;
-        g_value_set_boolean (value, get_effective_window_decorations (surface, &decorations));
-      }
+      g_value_set_boolean (value, GDK_WIN32_SURFACE (surface)->decorate_all);
       break;
 
     case LAST_PROP + GDK_TOPLEVEL_PROP_DELETABLE:
