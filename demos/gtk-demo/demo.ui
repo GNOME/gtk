@@ -29,29 +29,24 @@
         <item>
           <attribute name="label" translatable="yes">_New</attribute>
           <attribute name="action">win.new</attribute>
-          <attribute name="accel">&lt;Control&gt;n</attribute>
         </item>
         <item>
           <attribute name="label" translatable="yes">_Open</attribute>
           <attribute name="action">win.open</attribute>
-          <attribute name="accel">&lt;Control&gt;o</attribute>
         </item>
         <item>
           <attribute name="label" translatable="yes">_Save</attribute>
           <attribute name="action">win.save</attribute>
-          <attribute name="accel">&lt;Control&gt;s</attribute>
         </item>
         <item>
           <attribute name="label" translatable="yes">Save _As</attribute>
           <attribute name="action">win.save-as</attribute>
-          <attribute name="accel">&lt;Control&gt;q</attribute>
         </item>
       </section>
       <section>
         <item>
           <attribute name="label" translatable="yes">_Quit</attribute>
           <attribute name="action">win.quit</attribute>
-          <attribute name="accel">&lt;Control&gt;&lt;Shift&gt;s</attribute>
         </item>
       </section>
     </submenu>
@@ -61,17 +56,14 @@
         <item>
           <attribute name="label" translatable="yes">_Copy</attribute>
           <attribute name="action">win.copy</attribute>
-          <attribute name="accel">&lt;Control&gt;c</attribute>
         </item>
         <item>
           <attribute name="label" translatable="yes">_Cut</attribute>
           <attribute name="action">win.cut</attribute>
-          <attribute name="accel">&lt;Control&gt;x</attribute>
         </item>
         <item>
           <attribute name="label" translatable="yes">_Paste</attribute>
           <attribute name="action">win.paste</attribute>
-          <attribute name="accel">&lt;Control&gt;v</attribute>
         </item>
       </section>
     </submenu>
@@ -81,12 +73,10 @@
         <item>
           <attribute name="label" translatable="yes">_Help</attribute>
           <attribute name="action">win.help</attribute>
-          <attribute name="accel">F1</attribute>
         </item>
         <item>
           <attribute name="label" translatable="yes">_About</attribute>
           <attribute name="action">win.about</attribute>
-          <attribute name="accel">F7</attribute>
         </item>
       </section>
     </submenu>
@@ -110,11 +100,15 @@
         </child>
         <child>
           <object class="GtkBox" id="toolbar1">
+            <style>
+              <class name="toolbar"/>
+            </style>
             <child>
               <object class="GtkButton">
                 <property name="label" translatable="yes">New</property>
                 <property name="tooltip-text" translatable="yes">Create a new file</property>
                 <property name="icon-name">document-new</property>
+                <property name="action-name">win.new</property>
               </object>
             </child>
             <child>
@@ -122,6 +116,7 @@
                 <property name="label" translatable="yes">Open</property>
                 <property name="tooltip-text" translatable="yes">Open a file</property>
                 <property name="icon-name">document-open</property>
+                <property name="action-name">win.open</property>
               </object>
             </child>
             <child>
@@ -129,6 +124,7 @@
                 <property name="label" translatable="yes">Save</property>
                 <property name="tooltip-text" translatable="yes">Save a file</property>
                 <property name="icon-name">document-save</property>
+                <property name="action-name">win.save</property>
               </object>
             </child>
             <child>
@@ -139,6 +135,7 @@
                 <property name="label" translatable="yes">Copy</property>
                 <property name="tooltip-text" translatable="yes">Copy selected object into the clipboard</property>
                 <property name="icon-name">edit-copy</property>
+                <property name="action-name">win.copy</property>
               </object>
             </child>
             <child>
@@ -146,6 +143,7 @@
                 <property name="label" translatable="yes">Cut</property>
                 <property name="tooltip-text" translatable="yes">Cut selected object into the clipboard</property>
                 <property name="icon-name">edit-cut</property>
+                <property name="action-name">win.cut</property>
               </object>
             </child>
             <child>
@@ -153,6 +151,7 @@
                 <property name="label" translatable="yes">Paste</property>
                 <property name="tooltip-text" translatable="yes">Paste object from the clipboard</property>
                 <property name="icon-name">edit-paste</property>
+                <property name="action-name">win.paste</property>
               </object>
             </child>
           </object>

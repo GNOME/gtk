@@ -11156,6 +11156,8 @@ gtk_widget_observe_controllers (GtkWidget *widget)
  *
  * Returns the widgets first child.
  *
+ * This API is primarily meant for widget implementations.
+ *
  * Returns: (transfer none) (nullable): The widget's first child
  */
 GtkWidget *
@@ -11173,6 +11175,8 @@ gtk_widget_get_first_child (GtkWidget *widget)
  * @widget: a #GtkWidget
  *
  * Returns the widgets last child.
+ *
+ * This API is primarily meant for widget implementations.
  *
  * Returns: (transfer none) (nullable): The widget's last child
  */
@@ -11192,6 +11196,8 @@ gtk_widget_get_last_child (GtkWidget *widget)
  *
  * Returns the widgets next sibling.
  *
+ * This API is primarily meant for widget implementations.
+ *
  * Returns: (transfer none) (nullable): The widget's next sibling
  */
 GtkWidget *
@@ -11209,6 +11215,8 @@ gtk_widget_get_next_sibling (GtkWidget *widget)
  * @widget: a #GtkWidget
  *
  * Returns the widgets previous sibling.
+ *
+ * This API is primarily meant for widget implementations.
  *
  * Returns: (transfer none) (nullable): The widget's previous sibling
  */
@@ -11229,12 +11237,18 @@ gtk_widget_get_prev_sibling (GtkWidget *widget)
  * @previous_sibling: (nullable): the new previous sibling of @widget or %NULL
  *
  * Inserts @widget into the child widget list of @parent.
- * It will be placed after @previous_sibling, or at the beginning if @previous_sibling is %NULL.
  *
- * After calling this function, gtk_widget_get_prev_sibling(widget) will return @previous_sibling.
+ * It will be placed after @previous_sibling, or at the beginning if
+ * @previous_sibling is %NULL.
  *
- * If @parent is already set as the parent widget of @widget, this function can also be used
- * to reorder @widget in the child widget list of @parent.
+ * After calling this function, gtk_widget_get_prev_sibling(widget) will
+ * return @previous_sibling.
+ *
+ * If @parent is already set as the parent widget of @widget, this function
+ * can also be used to reorder @widget in the child widget list of @parent.
+ *
+ * This API is primarily meant for widget implementations; if you are
+ * just using a widget, you *must* use its own API for adding children.
  */
 void
 gtk_widget_insert_after (GtkWidget *widget,
@@ -11265,12 +11279,18 @@ gtk_widget_insert_after (GtkWidget *widget,
  * @next_sibling: (nullable): the new next sibling of @widget or %NULL
  *
  * Inserts @widget into the child widget list of @parent.
- * It will be placed before @next_sibling, or at the end if @next_sibling is %NULL.
  *
- * After calling this function, gtk_widget_get_next_sibling(widget) will return @next_sibling.
+ * It will be placed before @next_sibling, or at the end if
+ * @next_sibling is %NULL.
  *
- * If @parent is already set as the parent widget of @widget, this function can also be used
- * to reorder @widget in the child widget list of @parent.
+ * After calling this function, gtk_widget_get_next_sibling(widget)
+ * will return @next_sibling.
+ *
+ * If @parent is already set as the parent widget of @widget, this function
+ * can also be used to reorder @widget in the child widget list of @parent.
+ *
+ * This API is primarily meant for widget implementations; if you are
+ * just using a widget, you *must* use its own API for adding children.
  */
 void
 gtk_widget_insert_before (GtkWidget *widget,
