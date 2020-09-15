@@ -5975,6 +5975,7 @@ gtk_stack_page_set_icon_name
 gtk_stack_page_get_child
 GtkStack
 gtk_stack_new
+gtk_stack_add_child
 gtk_stack_add_named
 gtk_stack_add_titled
 gtk_stack_remove
