@@ -414,14 +414,16 @@ update_popover_layout (GtkPopover     *popover,
     }
 
   if (priv->final_position != position)
-    gtk_widget_queue_allocate (GTK_WIDGET (popover));
+    {
+      gtk_widget_queue_allocate (GTK_WIDGET (popover));
+      g_clear_pointer (&priv->arrow_render_node, gsk_render_node_unref);
+    }
 
   gtk_widget_allocate (GTK_WIDGET (popover),
                        gdk_surface_get_width (priv->surface),
                        gdk_surface_get_height (priv->surface),
                        -1, NULL);
 
-  g_clear_pointer (&priv->arrow_render_node, gsk_render_node_unref);
   gtk_widget_queue_draw (GTK_WIDGET (popover));
 }
 

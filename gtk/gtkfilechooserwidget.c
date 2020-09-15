@@ -5453,7 +5453,10 @@ gtk_file_chooser_widget_get_files (GtkFileChooser *chooser)
         return NULL;
 
       if (info.file_from_entry)
-        g_list_store_append (info.result, info.file_from_entry);
+        {
+          g_list_store_append (info.result, info.file_from_entry);
+          g_object_unref (info.file_from_entry);
+        }
       else if (!file_list_seen)
         goto file_list;
       else

@@ -1832,9 +1832,9 @@ gtk_list_box_click_gesture_released (GtkGestureClick *gesture,
     {
       gboolean focus_on_click = gtk_widget_get_focus_on_click (GTK_WIDGET (box->active_row));
 
-      if (n_press == 1 && box->activate_single_click)
+      if (box->activate_single_click)
         gtk_list_box_select_and_activate_full (box, box->active_row, focus_on_click);
-      else
+      else if (n_press == 2)
         {
           GdkEventSequence *sequence;
           GdkInputSource source;
@@ -2272,16 +2272,20 @@ gtk_list_box_row_visibility_changed (GtkListBox    *box,
  * Removes a child from @box.
  */
 void
-gtk_list_box_remove (GtkListBox   *box,
-                     GtkWidget    *child)
+gtk_list_box_remove (GtkListBox *box,
+                     GtkWidget  *child)
 {
-  GtkWidget *widget = GTK_WIDGET (box);
+  GtkWidget *widget;
   gboolean was_visible;
   gboolean was_selected;
   GtkListBoxRow *row;
   GSequenceIter *iter;
   GSequenceIter *next;
 
+  g_return_if_fail (GTK_IS_LIST_BOX (box));
+  g_return_if_fail (GTK_IS_WIDGET (child));
+
+  widget = GTK_WIDGET (box);
   was_visible = gtk_widget_get_visible (child);
 
   if (child == box->placeholder)

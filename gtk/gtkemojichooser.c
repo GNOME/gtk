@@ -54,7 +54,7 @@
  * |[<!-- language="plain" -->
  * popover
  * ╰── box.emoji-toolbar
- *     ├── button.iamge-button.emoji-section
+ *     ├── button.image-button.emoji-section
  *     ├── ...
  *     ╰── button.image-button.emoji-section
  * ]|

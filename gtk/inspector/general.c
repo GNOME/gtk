@@ -171,12 +171,7 @@ add_check_row (GtkInspectorGeneral *gen,
   GtkWidget *row, *box, *label, *check;
 
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 40);
-  g_object_set (box,
-                "margin-start", 10 + indent,
-                "margin-end", 10,
-                "margin-top", 10,
-                "margin-bottom", 10,
-                NULL);
+  g_object_set (box, "margin-start", indent, NULL);
 
   label = gtk_label_new (name);
   gtk_widget_set_halign (label, GTK_ALIGN_START);
@@ -213,12 +208,7 @@ add_label_row (GtkInspectorGeneral *gen,
   GtkWidget *row;
 
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 40);
-  g_object_set (box,
-                "margin-start", 10 + indent,
-                "margin-end", 10,
-                "margin-top", 10,
-                "margin-bottom", 10,
-                NULL);
+  g_object_set (box, "margin-start", indent, NULL);
 
   label = gtk_label_new (name);
   gtk_widget_set_halign (label, GTK_ALIGN_START);
@@ -572,6 +562,7 @@ populate_monitor (gpointer item,
   const char *model;
 
   list = GTK_LIST_BOX (gtk_list_box_new ());
+  gtk_widget_add_css_class (GTK_WIDGET (list), "rich-list");
   gtk_list_box_set_selection_mode (list, GTK_SELECTION_NONE);
 
   /* XXX: add monitor # here when porting to listview */ 
