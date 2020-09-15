@@ -337,8 +337,8 @@ struct _GdkWin32Surface
   /* Also remember the same position, but in absolute form. */
   GdkRectangle *snap_stash_int;
 
-  /* Decorations set by gdk_surface_set_decorations() or NULL if unset */
-  GdkWMDecoration* decorations;
+  /* Enable all decorations? */
+  gboolean decorate_all;
 
   /* No. of windows to force layered windows off */
   guint suppress_layered;
