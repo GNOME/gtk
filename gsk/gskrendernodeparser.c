@@ -1013,6 +1013,63 @@ parse_repeating_linear_gradient_node (GtkCssParser *parser)
 }
 
 static GskRenderNode *
+parse_radial_gradient_node_internal (GtkCssParser *parser,
+                                     gboolean      repeating)
+{
+  graphene_rect_t bounds = GRAPHENE_RECT_INIT (0, 0, 50, 50);
+  graphene_point_t center = GRAPHENE_POINT_INIT (25, 25);
+  double hradius = 25.0;
+  double vradius = 25.0;
+  double start = 0.5;
+  double end = 1.0;
+  GArray *stops = NULL;
+  const Declaration declarations[] = {
+    { "bounds", parse_rect, NULL, &bounds },
+    { "center", parse_point, NULL, &center },
+    { "hradius", parse_double, NULL, &hradius },
+    { "vradius", parse_double, NULL, &vradius },
+    { "start", parse_double, NULL, &start },
+    { "end", parse_double, NULL, &end },
+    { "stops", parse_stops, clear_stops, &stops },
+  };
+  GskRenderNode *result;
+
+  parse_declarations (parser, declarations, G_N_ELEMENTS(declarations));
+  if (stops == NULL)
+    {
+      GskColorStop from = { 0.0, GDK_RGBA("AAFF00") };
+      GskColorStop to = { 1.0, GDK_RGBA("FF00CC") };
+
+      stops = g_array_new (FALSE, FALSE, sizeof (GskColorStop));
+      g_array_append_val (stops, from);
+      g_array_append_val (stops, to);
+    }
+
+  if (repeating)
+    result = gsk_repeating_radial_gradient_node_new (&bounds, &center, hradius, vradius, start, end,
+                                                     (GskColorStop *) stops->data, stops->len);
+  else
+    result = gsk_radial_gradient_node_new (&bounds, &center, hradius, vradius, start, end,
+                                           (GskColorStop *) stops->data, stops->len);
+
+  g_array_free (stops, TRUE);
+
+  return result;
+}
+
+static GskRenderNode *
+parse_radial_gradient_node (GtkCssParser *parser)
+{
+  return parse_radial_gradient_node_internal (parser, FALSE);
+}
+
+static GskRenderNode *
+parse_repeating_radial_gradient_node (GtkCssParser *parser)
+{
+  return parse_radial_gradient_node_internal (parser, TRUE);
+}
+
+static GskRenderNode *
 parse_inset_shadow_node (GtkCssParser *parser)
 {
   GskRoundedRect outline = GSK_ROUNDED_RECT_INIT (0, 0, 50, 50);
@@ -1535,10 +1592,12 @@ parse_node (GtkCssParser *parser,
     { "debug", parse_debug_node },
     { "inset-shadow", parse_inset_shadow_node },
     { "linear-gradient", parse_linear_gradient_node },
+    { "radial-gradient", parse_radial_gradient_node },
     { "opacity", parse_opacity_node },
     { "outset-shadow", parse_outset_shadow_node },
     { "repeat", parse_repeat_node },
     { "repeating-linear-gradient", parse_repeating_linear_gradient_node },
+    { "repeating-radial-gradient", parse_repeating_radial_gradient_node },
     { "rounded-clip", parse_rounded_clip_node },
     { "shadow", parse_shadow_node },
     { "text", parse_text_node },
