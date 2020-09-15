@@ -60,40 +60,6 @@ gtk_fps_info_free (gpointer data)
   g_slice_free (GtkFpsInfo, info);
 }
 
-static gint64
-guess_refresh_interval (GdkFrameClock *frame_clock)
-{
-  gint64 interval;
-  gint64 i;
-
-  interval = G_MAXINT64;
-
-  for (i = gdk_frame_clock_get_history_start (frame_clock);
-       i < gdk_frame_clock_get_frame_counter (frame_clock);
-       i++)
-    {
-      GdkFrameTimings *t, *before;
-      gint64 ts, before_ts;
-
-      t = gdk_frame_clock_get_timings (frame_clock, i);
-      before = gdk_frame_clock_get_timings (frame_clock, i - 1);
-      if (t == NULL || before == NULL)
-        continue;
-
-      ts = gdk_frame_timings_get_frame_time (t);
-      before_ts = gdk_frame_timings_get_frame_time (before);
-      if (ts == 0 || before_ts == 0)
-        continue;
-
-      interval = MIN (interval, ts - before_ts);
-    }
-
-  if (interval == G_MAXINT64)
-    return 0;
-
-  return interval;
-}
-
 static double
 gtk_fps_overlay_get_fps (GtkWidget *widget)
 {
