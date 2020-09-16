@@ -606,7 +606,7 @@ The replacements for gtk_container_add() are:
 | GtkListBox      | gtk_list_box_insert() |
 | GtkNotebook     | gtk_notebook_append_page() |
 | GtkPaned        | gtk_paned_set_start_child(), gtk_paned_set_end_child() |
-| GtkStack        | gtk_stack_add_named() |
+| GtkStack        | gtk_stack_add_child() |
 | GtkTextView     | gtk_text_view_add_child_at_anchor(), gtk_text_view_add_overlay() |
 | GtkTreeView     | - |
 

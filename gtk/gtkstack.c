@@ -1293,6 +1293,25 @@ gtk_stack_add_titled (GtkStack   *stack,
 }
 
 /**
+ * gtk_stack_add_child:
+ * @stack: a #GtkStack
+ * @child: the widget to add
+ *
+ * Adds a child to @stack.
+ *
+ * Returns: (transfer none): the #GtkStackPage for @child
+ */
+GtkStackPage *
+gtk_stack_add_child (GtkStack   *stack,
+                     GtkWidget  *child)
+{
+  g_return_val_if_fail (GTK_IS_STACK (stack), NULL);
+  g_return_val_if_fail (GTK_IS_WIDGET (child), NULL);
+
+  return gtk_stack_add_internal (stack, child, NULL, NULL);
+}
+
+/**
  * gtk_stack_add_named:
  * @stack: a #GtkStack
  * @child: the widget to add
