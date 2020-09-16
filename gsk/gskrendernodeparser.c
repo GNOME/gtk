@@ -1020,7 +1020,7 @@ parse_radial_gradient_node_internal (GtkCssParser *parser,
   graphene_point_t center = GRAPHENE_POINT_INIT (25, 25);
   double hradius = 25.0;
   double vradius = 25.0;
-  double start = 0.5;
+  double start = 0;
   double end = 1.0;
   GArray *stops = NULL;
   const Declaration declarations[] = {
