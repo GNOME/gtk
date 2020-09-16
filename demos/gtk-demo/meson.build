@@ -44,6 +44,7 @@ demos = files([
   'links.c',
   'listbox.c',
   'listbox2.c',
+  'menu.c',
   'flowbox.c',
   'list_store.c',
   'listview_applauncher.c',
@@ -112,7 +113,8 @@ extra_demo_sources = files(['main.c',
                             'demo2layout.c',
                             'singular_value_decomposition.c',
                             'four_point_transform.c',
-                            'demo2widget.c'])
+                            'demo2widget.c',
+                            'demo3widget.c'])
 
 if harfbuzz_dep.found() and pangoft_dep.found()
   demos += files('font_features.c')

@@ -1,0 +1,30 @@
+<interface>
+  <menu id="model">
+    <item>
+      <attribute name="label">Zoom Out</attribute>
+      <attribute name="action">zoom.out</attribute>
+    </item>
+    <item>
+      <attribute name="label">Zoom In</attribute>
+      <attribute name="action">zoom.in</attribute>
+    </item>
+    <item>
+      <attribute name="label">1∶1</attribute>
+      <attribute name="action">zoom.reset</attribute>
+    </item>
+  </menu>
+  <template class="Demo3Widget">
+    <child>
+      <object class="GtkPopoverMenu" id="menu">
+        <property name="has-arrow">0</property>
+        <property name="menu-model">model</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkGestureClick">
+        <property name="button">3</property>
+        <signal name="pressed" handler="pressed_cb"/>
+      </object>
+    </child>
+  </template>
+</interface>
