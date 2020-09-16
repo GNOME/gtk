@@ -635,7 +635,48 @@ populate_render_node_properties (GtkListStore  *store,
 
     case GSK_RADIAL_GRADIENT_NODE:
     case GSK_REPEATING_RADIAL_GRADIENT_NODE:
-      /* TODO */
+      {
+        const graphene_point_t *center = gsk_radial_gradient_node_peek_center (node);
+        const float start = gsk_radial_gradient_node_get_start (node);
+        const float end = gsk_radial_gradient_node_get_end (node);
+        const float hradius = gsk_radial_gradient_node_get_hradius (node);
+        const float vradius = gsk_radial_gradient_node_get_vradius (node);
+        const gsize n_stops = gsk_radial_gradient_node_get_n_color_stops (node);
+        const GskColorStop *stops = gsk_radial_gradient_node_peek_color_stops (node, NULL);
+        int i;
+        GString *s;
+        GdkTexture *texture;
+
+        tmp = g_strdup_printf ("%.2f, %.2f", center->x, center->y);
+        add_text_row (store, "Center", tmp);
+        g_free (tmp);
+
+        tmp = g_strdup_printf ("%.2f ⟶  %.2f", start, end);
+        add_text_row (store, "Direction", tmp);
+        g_free (tmp);
+
+        tmp = g_strdup_printf ("%.2f, %.2f", hradius, vradius);
+        add_text_row (store, "Radius", tmp);
+        g_free (tmp);
+
+        s = g_string_new ("");
+        for (i = 0; i < n_stops; i++)
+          {
+            tmp = gdk_rgba_to_string (&stops[i].color);
+            g_string_append_printf (s, "%.2f, %s\n", stops[i].offset, tmp);
+            g_free (tmp);
+          }
+
+        texture = get_linear_gradient_texture (n_stops, stops);
+        gtk_list_store_insert_with_values (store, NULL, -1,
+                                           0, "Color Stops",
+                                           1, s->str,
+                                           2, TRUE,
+                                           3, texture,
+                                           -1);
+        g_string_free (s, TRUE);
+        g_object_unref (texture);
+      }
       break;
 
     case GSK_TEXT_NODE:
