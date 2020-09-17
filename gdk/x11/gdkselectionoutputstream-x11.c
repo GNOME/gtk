@@ -556,7 +556,7 @@ gdk_x11_selection_output_stream_close_async (GOutputStream       *stream,
   g_task_set_source_tag (task, gdk_x11_selection_output_stream_close_async);
   g_task_set_priority (task, io_priority);
 
-  gdk_x11_selection_output_stream_invoke_close (stream);
+  gdk_x11_selection_output_stream_invoke_close (g_object_ref (stream));
   g_task_return_boolean (task, TRUE);
 
   g_object_unref (task);
