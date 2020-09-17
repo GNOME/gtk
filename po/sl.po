@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-01 17:58+0000\n"
-"PO-Revision-Date: 2020-06-01 21:40+0200\n"
+"POT-Creation-Date: 2020-09-17 15:39+0000\n"
+"PO-Revision-Date: 2020-09-17 22:04+0200\n"
 "Last-Translator: Matej Urbančič <mateju@svn.gnome.org>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
 "Language: sl_SI\n"
@@ -22,7 +22,7 @@ msgstr ""
 "Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n"
 "%100==4 ? 3 : 0);\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"X-Generator: Poedit 2.3\n"
+"X-Generator: Poedit 2.4.1\n"
 
 #: gdk/broadway/gdkbroadway-server.c:144
 #, c-format
@@ -477,19 +477,19 @@ msgid "Unable to create a GL pixel format"
 msgstr "Ni mogoče ustvariti zapis sličice GL"
 
 #: gdk/quartz/gdkglcontext-quartz.c:133 gdk/wayland/gdkglcontext-wayland.c:208
-#: gdk/win32/gdkglcontext-win32.c:1070 gdk/win32/gdkglcontext-win32.c:1110
+#: gdk/win32/gdkglcontext-win32.c:1072 gdk/win32/gdkglcontext-win32.c:1112
 #: gdk/x11/gdkglcontext-x11.c:724 gdk/x11/gdkglcontext-x11.c:774
 msgid "Unable to create a GL context"
 msgstr "Ni mogoče ustvariti vsebine GL"
 
 #: gdk/wayland/gdkglcontext-wayland.c:418
-#: gdk/wayland/gdkglcontext-wayland.c:428 gdk/win32/gdkglcontext-win32.c:908
-#: gdk/win32/gdkglcontext-win32.c:918 gdk/win32/gdkglcontext-win32.c:1035
+#: gdk/wayland/gdkglcontext-wayland.c:428 gdk/win32/gdkglcontext-win32.c:910
+#: gdk/win32/gdkglcontext-win32.c:920 gdk/win32/gdkglcontext-win32.c:1037
 #: gdk/x11/gdkglcontext-x11.c:975
 msgid "No available configurations for the given pixel format"
 msgstr "Ni navedenih nastavitev za podan točkovni zapis"
 
-#: gdk/wayland/gdkglcontext-wayland.c:468 gdk/win32/gdkglcontext-win32.c:1177
+#: gdk/wayland/gdkglcontext-wayland.c:468 gdk/win32/gdkglcontext-win32.c:1179
 #: gdk/x11/gdkglcontext-x11.c:1281
 msgid "No GL implementation is available"
 msgstr "Okolje GL ni na voljo"
@@ -1230,7 +1230,7 @@ msgstr ""
 "in izberite »Shrani barvo«."
 
 #: gtk/deprecated/gtkcolorseldialog.c:191 gtk/deprecated/gtkfontsel.c:1689
-#: gtk/gtkfilechoosernative.c:544 gtk/gtkfilechoosernative.c:636
+#: gtk/gtkfilechoosernative.c:545 gtk/gtkfilechoosernative.c:637
 #: gtk/gtkfilechooserwidget.c:1498 gtk/gtkfilechooserwidget.c:6572
 #: gtk/gtkmessagedialog.c:952 gtk/gtkmessagedialog.c:965
 #: gtk/gtkmountoperation.c:594 gtk/gtkpagesetupunixdialog.c:197
@@ -1934,200 +1934,83 @@ msgstr "Rdeča %d%%, zelena %d%%, modra %d%%"
 msgid "Color: %s"
 msgstr "Barva: %s"
 
-#: gtk/gtkcolorchooserwidget.c:446
+#: gtk/gtkcolorchooserwidget.c:446 gtk/gtkcolorchooserwidget.c:447
+#: gtk/gtkcolorchooserwidget.c:448 gtk/gtkcolorchooserwidget.c:449
+#: gtk/gtkcolorchooserwidget.c:450 gtk/gtkcolorchooserwidget.c:451
 msgctxt "Color name"
-msgid "Light Scarlet Red"
-msgstr "svetlo škrlatno rdeča"
+msgid "Blue"
+msgstr "Modra"
 
-#: gtk/gtkcolorchooserwidget.c:447
+#: gtk/gtkcolorchooserwidget.c:452 gtk/gtkcolorchooserwidget.c:453
+#: gtk/gtkcolorchooserwidget.c:454 gtk/gtkcolorchooserwidget.c:455
+#: gtk/gtkcolorchooserwidget.c:456 gtk/gtkcolorchooserwidget.c:457
 msgctxt "Color name"
-msgid "Scarlet Red"
-msgstr "škrlatno rdeča"
+msgid "Green"
+msgstr "Zelena"
 
-#: gtk/gtkcolorchooserwidget.c:448
+#: gtk/gtkcolorchooserwidget.c:458 gtk/gtkcolorchooserwidget.c:459
+#: gtk/gtkcolorchooserwidget.c:460 gtk/gtkcolorchooserwidget.c:461
+#: gtk/gtkcolorchooserwidget.c:462 gtk/gtkcolorchooserwidget.c:463
 msgctxt "Color name"
-msgid "Dark Scarlet Red"
-msgstr "temno škrlatno rdeča"
+msgid "Yellow"
+msgstr "Rumena"
 
-#: gtk/gtkcolorchooserwidget.c:449
-msgctxt "Color name"
-msgid "Light Orange"
-msgstr "svetlo oranžna"
-
-#: gtk/gtkcolorchooserwidget.c:450
+#: gtk/gtkcolorchooserwidget.c:464 gtk/gtkcolorchooserwidget.c:465
+#: gtk/gtkcolorchooserwidget.c:466 gtk/gtkcolorchooserwidget.c:467
+#: gtk/gtkcolorchooserwidget.c:468 gtk/gtkcolorchooserwidget.c:469
 msgctxt "Color name"
 msgid "Orange"
 msgstr "oranžna"
 
-#: gtk/gtkcolorchooserwidget.c:451
+#: gtk/gtkcolorchooserwidget.c:470 gtk/gtkcolorchooserwidget.c:471
+#: gtk/gtkcolorchooserwidget.c:472 gtk/gtkcolorchooserwidget.c:473
+#: gtk/gtkcolorchooserwidget.c:474
 msgctxt "Color name"
-msgid "Dark Orange"
-msgstr "temno oranžna"
+msgid "Red"
+msgstr "Rdeča"
 
-#: gtk/gtkcolorchooserwidget.c:452
+#: gtk/gtkcolorchooserwidget.c:475 gtk/gtkcolorchooserwidget.c:476
+#: gtk/gtkcolorchooserwidget.c:477 gtk/gtkcolorchooserwidget.c:478
+#: gtk/gtkcolorchooserwidget.c:479
 msgctxt "Color name"
-msgid "Light Butter"
-msgstr "svetlo maslena"
+msgid "Purple"
+msgstr "Škrlatna"
 
-#: gtk/gtkcolorchooserwidget.c:453
+#: gtk/gtkcolorchooserwidget.c:480 gtk/gtkcolorchooserwidget.c:481
+#: gtk/gtkcolorchooserwidget.c:482 gtk/gtkcolorchooserwidget.c:483
+#: gtk/gtkcolorchooserwidget.c:484
 msgctxt "Color name"
-msgid "Butter"
-msgstr "maslena"
+msgid "Brown"
+msgstr "Rjava"
 
-#: gtk/gtkcolorchooserwidget.c:454
-msgctxt "Color name"
-msgid "Dark Butter"
-msgstr "temno maslena"
-
-#: gtk/gtkcolorchooserwidget.c:455
-msgctxt "Color name"
-msgid "Light Chameleon"
-msgstr "svetla kameleonska"
-
-#: gtk/gtkcolorchooserwidget.c:456
-msgctxt "Color name"
-msgid "Chameleon"
-msgstr "kameleonska"
-
-#: gtk/gtkcolorchooserwidget.c:457
-msgctxt "Color name"
-msgid "Dark Chameleon"
-msgstr "temna kameleonska"
-
-#: gtk/gtkcolorchooserwidget.c:458
-msgctxt "Color name"
-msgid "Light Sky Blue"
-msgstr "svetlo nebesno modra"
-
-#: gtk/gtkcolorchooserwidget.c:459
-msgctxt "Color name"
-msgid "Sky Blue"
-msgstr "nebesno modra"
-
-#: gtk/gtkcolorchooserwidget.c:460
-msgctxt "Color name"
-msgid "Dark Sky Blue"
-msgstr "temno nebesno modra"
-
-#: gtk/gtkcolorchooserwidget.c:461
-msgctxt "Color name"
-msgid "Light Plum"
-msgstr "svetla slivno vijolična"
-
-#: gtk/gtkcolorchooserwidget.c:462
-msgctxt "Color name"
-msgid "Plum"
-msgstr "slivno vijolična"
-
-#: gtk/gtkcolorchooserwidget.c:463
-msgctxt "Color name"
-msgid "Dark Plum"
-msgstr "temo slivno vijolična"
-
-#: gtk/gtkcolorchooserwidget.c:464
-msgctxt "Color name"
-msgid "Light Chocolate"
-msgstr "svetla čokoladno rjava"
-
-#: gtk/gtkcolorchooserwidget.c:465
-msgctxt "Color name"
-msgid "Chocolate"
-msgstr "čokoladno rjava"
-
-#: gtk/gtkcolorchooserwidget.c:466
-msgctxt "Color name"
-msgid "Dark Chocolate"
-msgstr "temno čokoladno rjava"
-
-#: gtk/gtkcolorchooserwidget.c:467
-msgctxt "Color name"
-msgid "Light Aluminum 1"
-msgstr "svetlobna leta"
-
-#: gtk/gtkcolorchooserwidget.c:468
-msgctxt "Color name"
-msgid "Aluminum 1"
-msgstr "kovinska 1"
-
-#: gtk/gtkcolorchooserwidget.c:469
-msgctxt "Color name"
-msgid "Dark Aluminum 1"
-msgstr "temna kovinska 1"
-
-#: gtk/gtkcolorchooserwidget.c:470
-msgctxt "Color name"
-msgid "Light Aluminum 2"
-msgstr "svetla kovinska 2"
-
-#: gtk/gtkcolorchooserwidget.c:471
-msgctxt "Color name"
-msgid "Aluminum 2"
-msgstr "kovinska 2"
-
-#: gtk/gtkcolorchooserwidget.c:472
-msgctxt "Color name"
-msgid "Dark Aluminum 2"
-msgstr "svetla kovinska 2"
-
-#: gtk/gtkcolorchooserwidget.c:486
-msgctxt "Color name"
-msgid "Black"
-msgstr "črna"
-
-#: gtk/gtkcolorchooserwidget.c:487
-msgctxt "Color name"
-msgid "Very Dark Gray"
-msgstr "zelo temno siva"
-
-#: gtk/gtkcolorchooserwidget.c:488
-msgctxt "Color name"
-msgid "Darker Gray"
-msgstr "temnejša siva"
-
+#: gtk/gtkcolorchooserwidget.c:485 gtk/gtkcolorchooserwidget.c:486
+#: gtk/gtkcolorchooserwidget.c:487 gtk/gtkcolorchooserwidget.c:488
 #: gtk/gtkcolorchooserwidget.c:489
 msgctxt "Color name"
-msgid "Dark Gray"
-msgstr "temnosiva"
+msgid "Light"
+msgstr "Svetla"
 
-#: gtk/gtkcolorchooserwidget.c:490
-msgctxt "Color name"
-msgid "Medium Gray"
-msgstr "srednje siva"
-
-#: gtk/gtkcolorchooserwidget.c:491
-msgctxt "Color name"
-msgid "Light Gray"
-msgstr "svetlosiva"
-
-#: gtk/gtkcolorchooserwidget.c:492
-msgctxt "Color name"
-msgid "Lighter Gray"
-msgstr "svetlejša siva"
-
-#: gtk/gtkcolorchooserwidget.c:493
-msgctxt "Color name"
-msgid "Very Light Gray"
-msgstr "zelo svetla siva"
-
+#: gtk/gtkcolorchooserwidget.c:490 gtk/gtkcolorchooserwidget.c:491
+#: gtk/gtkcolorchooserwidget.c:492 gtk/gtkcolorchooserwidget.c:493
 #: gtk/gtkcolorchooserwidget.c:494
 msgctxt "Color name"
-msgid "White"
-msgstr "bela"
+msgid "Dark"
+msgstr "Temna"
 
 #. translators: label for the custom section in the color chooser
-#: gtk/gtkcolorchooserwidget.c:543
+#: gtk/gtkcolorchooserwidget.c:538
 msgid "Custom"
 msgstr "Po meri"
 
-#: gtk/gtkcolorchooserwidget.c:550
+#: gtk/gtkcolorchooserwidget.c:545
 msgid "Custom color"
 msgstr "Barva po meri"
 
-#: gtk/gtkcolorchooserwidget.c:551
+#: gtk/gtkcolorchooserwidget.c:546
 msgid "Create a custom color"
 msgstr "Ustvari barvo po meri"
 
-#: gtk/gtkcolorchooserwidget.c:570
+#: gtk/gtkcolorchooserwidget.c:565
 #, c-format
 msgid "Custom color %d: %s"
 msgstr "Barva po meri %d: %s"
@@ -2214,52 +2097,52 @@ msgstr "_Desno:"
 msgid "Paper Margins"
 msgstr "Robovi papirja"
 
-#: gtk/gtkentry.c:9590 gtk/gtklabel.c:6680 gtk/gtktextview.c:9502
+#: gtk/gtkentry.c:9591 gtk/gtklabel.c:6680 gtk/gtktextview.c:9520
 msgid "Cu_t"
 msgstr "Iz_reži"
 
-#: gtk/gtkentry.c:9594 gtk/gtklabel.c:6681 gtk/gtktextview.c:9506
+#: gtk/gtkentry.c:9595 gtk/gtklabel.c:6681 gtk/gtktextview.c:9524
 msgid "_Copy"
 msgstr "_Kopiraj"
 
-#: gtk/gtkentry.c:9598 gtk/gtklabel.c:6682 gtk/gtktextview.c:9508
+#: gtk/gtkentry.c:9599 gtk/gtklabel.c:6682 gtk/gtktextview.c:9526
 msgid "_Paste"
 msgstr "Pr_ilepi"
 
-#: gtk/gtkentry.c:9601 gtk/gtkfilechooserwidget.c:1499
-#: gtk/gtkfilechooserwidget.c:2334 gtk/gtklabel.c:6684 gtk/gtktextview.c:9511
+#: gtk/gtkentry.c:9602 gtk/gtkfilechooserwidget.c:1499
+#: gtk/gtkfilechooserwidget.c:2334 gtk/gtklabel.c:6684 gtk/gtktextview.c:9529
 msgid "_Delete"
 msgstr "_Izbriši"
 
-#: gtk/gtkentry.c:9612 gtk/gtklabel.c:6693 gtk/gtktextview.c:9525
+#: gtk/gtkentry.c:9613 gtk/gtklabel.c:6693 gtk/gtktextview.c:9543
 msgid "Select _All"
 msgstr "Izberi _vse"
 
-#: gtk/gtkentry.c:9622 gtk/gtktextview.c:9535
+#: gtk/gtkentry.c:9623 gtk/gtktextview.c:9553
 msgid "Insert _Emoji"
 msgstr "Vstavi izrazno _ikono"
 
-#: gtk/gtkentry.c:9798 gtk/gtktextview.c:9755
+#: gtk/gtkentry.c:9799 gtk/gtktextview.c:9777
 msgid "Select all"
 msgstr "Izberi vse"
 
-#: gtk/gtkentry.c:9801 gtk/gtktextview.c:9758
+#: gtk/gtkentry.c:9802 gtk/gtktextview.c:9780
 msgid "Cut"
 msgstr "Izreži"
 
-#: gtk/gtkentry.c:9804 gtk/gtktextview.c:9761
+#: gtk/gtkentry.c:9805 gtk/gtktextview.c:9783
 msgid "Copy"
 msgstr "Kopiraj"
 
-#: gtk/gtkentry.c:9807 gtk/gtktextview.c:9764
+#: gtk/gtkentry.c:9808 gtk/gtktextview.c:9786
 msgid "Paste"
 msgstr "Prilepi"
 
-#: gtk/gtkentry.c:10879
+#: gtk/gtkentry.c:10880
 msgid "Caps Lock is on"
 msgstr "Tipka Caps Lock je vključena"
 
-#: gtk/gtkentry.c:11157
+#: gtk/gtkentry.c:11158
 msgid "Insert Emoji"
 msgstr "Vstavi izrazno ikono"
 
@@ -2284,13 +2167,13 @@ msgid "_Name"
 msgstr "_Ime"
 
 #. Open item is always present
-#: gtk/gtkfilechoosernative.c:545 gtk/gtkfilechoosernative.c:630
+#: gtk/gtkfilechoosernative.c:546 gtk/gtkfilechoosernative.c:631
 #: gtk/gtkplacessidebar.c:3625 gtk/gtkplacessidebar.c:3693
-#: gtk/gtkplacesview.c:1682
+#: gtk/gtkplacesview.c:1696
 msgid "_Open"
 msgstr "_Odpri"
 
-#: gtk/gtkfilechoosernative.c:630 gtk/inspector/css-editor.c:202
+#: gtk/gtkfilechoosernative.c:631 gtk/inspector/css-editor.c:202
 msgid "_Save"
 msgstr "_Shrani"
 
@@ -2939,69 +2822,69 @@ msgstr "_Da"
 msgid "Co_nnect"
 msgstr "_Poveži"
 
-#: gtk/gtkmountoperation.c:671
+#: gtk/gtkmountoperation.c:668
 msgid "Connect As"
 msgstr "Poveži kot"
 
-#: gtk/gtkmountoperation.c:680
+#: gtk/gtkmountoperation.c:677
 msgid "_Anonymous"
 msgstr "_Brezimno"
 
-#: gtk/gtkmountoperation.c:689
+#: gtk/gtkmountoperation.c:686
 msgid "Registered U_ser"
 msgstr "Vpisan _uporabnik"
 
-#: gtk/gtkmountoperation.c:700
+#: gtk/gtkmountoperation.c:697
 msgid "_Username"
 msgstr "_Uporabniško ime"
 
-#: gtk/gtkmountoperation.c:705
+#: gtk/gtkmountoperation.c:702
 msgid "_Domain"
 msgstr "_Domena"
 
-#: gtk/gtkmountoperation.c:714
+#: gtk/gtkmountoperation.c:711
 msgid "Volume type"
 msgstr "Vrsta nosilca"
 
-#: gtk/gtkmountoperation.c:724
+#: gtk/gtkmountoperation.c:721
 msgid "_Hidden"
 msgstr "_Skrito"
 
-#: gtk/gtkmountoperation.c:727
+#: gtk/gtkmountoperation.c:724
 msgid "_Windows system"
 msgstr "Sistem _Windows"
 
-#: gtk/gtkmountoperation.c:730
+#: gtk/gtkmountoperation.c:727
 msgid "_PIM"
 msgstr "_PIM"
 
-#: gtk/gtkmountoperation.c:736
+#: gtk/gtkmountoperation.c:733
 msgid "_Password"
 msgstr "_Geslo"
 
-#: gtk/gtkmountoperation.c:758
+#: gtk/gtkmountoperation.c:755
 msgid "Forget password _immediately"
 msgstr "_Takoj pozabi geslo"
 
-#: gtk/gtkmountoperation.c:768
+#: gtk/gtkmountoperation.c:765
 msgid "Remember password until you _logout"
 msgstr "Zapomni si geslo do _odjave"
 
-#: gtk/gtkmountoperation.c:778
+#: gtk/gtkmountoperation.c:775
 msgid "Remember _forever"
 msgstr "_Zapomni si za vedno"
 
-#: gtk/gtkmountoperation.c:1173
+#: gtk/gtkmountoperation.c:1170
 #, c-format
 msgid "Unknown Application (PID %d)"
 msgstr "Neznan program (PID %d)"
 
-#: gtk/gtkmountoperation.c:1358
+#: gtk/gtkmountoperation.c:1355
 #, c-format
 msgid "Unable to end process"
 msgstr "Opravila ni mogoče končati"
 
-#: gtk/gtkmountoperation.c:1392
+#: gtk/gtkmountoperation.c:1389
 msgid "_End Process"
 msgstr "_Končaj opravilo"
 
@@ -3256,12 +3139,12 @@ msgid "Unable to poll “%s” for media changes"
 msgstr "Ni mogoče preveriti »%s« za spremembe nosilca"
 
 #: gtk/gtkplacessidebar.c:3630 gtk/gtkplacessidebar.c:3696
-#: gtk/gtkplacesview.c:1692
+#: gtk/gtkplacesview.c:1706
 msgid "Open in New _Tab"
 msgstr "Odpri v novem _zavihku"
 
 #: gtk/gtkplacessidebar.c:3636 gtk/gtkplacessidebar.c:3699
-#: gtk/gtkplacesview.c:1703
+#: gtk/gtkplacesview.c:1717
 msgid "Open in New _Window"
 msgstr "Odpri v novem _oknu"
 
@@ -3277,11 +3160,11 @@ msgstr "_Odstrani"
 msgid "Rename…"
 msgstr "Preimenuj …"
 
-#: gtk/gtkplacessidebar.c:3709 gtk/gtkplacesview.c:1737
+#: gtk/gtkplacessidebar.c:3709 gtk/gtkplacesview.c:1751
 msgid "_Mount"
 msgstr "_Priklopi"
 
-#: gtk/gtkplacessidebar.c:3710 gtk/gtkplacesview.c:1727
+#: gtk/gtkplacessidebar.c:3710 gtk/gtkplacesview.c:1741
 msgid "_Unmount"
 msgstr "_Odklopi"
 
@@ -3306,7 +3189,7 @@ msgid "No network locations found"
 msgstr "Ni omrežnih mest"
 
 #. if it wasn't cancelled show a dialog
-#: gtk/gtkplacesview.c:1232 gtk/gtkplacesview.c:1307
+#: gtk/gtkplacesview.c:1232 gtk/gtkplacesview.c:1321
 msgid "Unable to access location"
 msgstr "Dostop do mesta ni mogoč"
 
@@ -3316,71 +3199,71 @@ msgid "Con_nect"
 msgstr "_Poveži"
 
 #. if it wasn't cancelled show a dialog
-#: gtk/gtkplacesview.c:1370
+#: gtk/gtkplacesview.c:1384
 msgid "Unable to unmount volume"
 msgstr "Ni mogoče priklopiti nosilca"
 
 #. Allow to cancel the operation
-#: gtk/gtkplacesview.c:1471
+#: gtk/gtkplacesview.c:1485
 msgid "Cance_l"
 msgstr "_Prekliči"
 
-#: gtk/gtkplacesview.c:1634
+#: gtk/gtkplacesview.c:1648
 msgid "AppleTalk"
 msgstr "AppleTalk"
 
 #. Translators: do not translate ftp:// and ftps://
-#: gtk/gtkplacesview.c:1638
+#: gtk/gtkplacesview.c:1652
 msgid "File Transfer Protocol"
 msgstr "Protokol prenosa datotek FTP"
 
-#: gtk/gtkplacesview.c:1638
+#: gtk/gtkplacesview.c:1652
 msgid "ftp:// or ftps://"
 msgstr "ftp:// ali ftps://"
 
-#: gtk/gtkplacesview.c:1641
+#: gtk/gtkplacesview.c:1655
 msgid "Network File System"
 msgstr "Omrežni datotečni sistem"
 
-#: gtk/gtkplacesview.c:1644
+#: gtk/gtkplacesview.c:1658
 msgid "Samba"
 msgstr "Samba"
 
 #. Translators: do not translate sftp:// and ssh://
-#: gtk/gtkplacesview.c:1648
+#: gtk/gtkplacesview.c:1662
 msgid "SSH File Transfer Protocol"
 msgstr "Protokol prenosa datotek SSH"
 
-#: gtk/gtkplacesview.c:1648
+#: gtk/gtkplacesview.c:1662
 msgid "sftp:// or ssh://"
 msgstr "sftp:// ali ssh://"
 
 #. Translators: do not translate dav:// and davs://
-#: gtk/gtkplacesview.c:1652
+#: gtk/gtkplacesview.c:1666
 msgid "WebDAV"
 msgstr "WebDAV"
 
-#: gtk/gtkplacesview.c:1652
+#: gtk/gtkplacesview.c:1666
 msgid "dav:// or davs://"
 msgstr "dav:// ali davs://"
 
-#: gtk/gtkplacesview.c:1727
+#: gtk/gtkplacesview.c:1741
 msgid "_Disconnect"
 msgstr "_Prekini povezavo"
 
-#: gtk/gtkplacesview.c:1737
+#: gtk/gtkplacesview.c:1751
 msgid "_Connect"
 msgstr "_Poveži"
 
-#: gtk/gtkplacesview.c:1878
+#: gtk/gtkplacesview.c:1892
 msgid "Unable to get remote server location"
 msgstr "Oddaljenega mesta strežnika ni mogoče najti"
 
-#: gtk/gtkplacesview.c:2073 gtk/gtkplacesview.c:2082
+#: gtk/gtkplacesview.c:2087 gtk/gtkplacesview.c:2096
 msgid "Networks"
 msgstr "Omrežja"
 
-#: gtk/gtkplacesview.c:2073 gtk/gtkplacesview.c:2082
+#: gtk/gtkplacesview.c:2087 gtk/gtkplacesview.c:2096
 msgid "On This Computer"
 msgstr "Na tem računalniku"
 
@@ -3502,8 +3385,8 @@ msgid "The most probable reason is that a temporary file could not be created."
 msgstr "Najverjetnejši razlog je, da začasne datoteke ni mogoče ustvariti"
 
 #. window
-#: gtk/gtkprintoperation-portal.c:231 gtk/gtkprintoperation-portal.c:542
-#: gtk/gtkprintoperation-portal.c:611 gtk/gtkprintunixdialog.c:3415
+#: gtk/gtkprintoperation-portal.c:231 gtk/gtkprintoperation-portal.c:549
+#: gtk/gtkprintoperation-portal.c:618 gtk/gtkprintunixdialog.c:3415
 msgid "Print"
 msgstr "Natisni"
 
@@ -7664,7 +7547,7 @@ msgctxt "input method menu"
 msgid "Multipress"
 msgstr "Multipress"
 
-#: modules/input/imquartz.c:61
+#: modules/input/imquartz.c:69
 msgctxt "input method menu"
 msgid "Mac OS X Quartz"
 msgstr "Mac OS X Quartz"
@@ -8332,6 +8215,142 @@ msgstr "preizkusni-izhod.%s"
 #: modules/printbackends/test/gtkprintbackendtest.c:465
 msgid "Print to Test Printer"
 msgstr "Natisni na preizkusnem tiskalniku"
+
+#~ msgctxt "Color name"
+#~ msgid "Light Scarlet Red"
+#~ msgstr "svetlo škrlatno rdeča"
+
+#~ msgctxt "Color name"
+#~ msgid "Scarlet Red"
+#~ msgstr "škrlatno rdeča"
+
+#~ msgctxt "Color name"
+#~ msgid "Dark Scarlet Red"
+#~ msgstr "temno škrlatno rdeča"
+
+#~ msgctxt "Color name"
+#~ msgid "Light Orange"
+#~ msgstr "svetlo oranžna"
+
+#~ msgctxt "Color name"
+#~ msgid "Dark Orange"
+#~ msgstr "temno oranžna"
+
+#~ msgctxt "Color name"
+#~ msgid "Light Butter"
+#~ msgstr "svetlo maslena"
+
+#~ msgctxt "Color name"
+#~ msgid "Butter"
+#~ msgstr "maslena"
+
+#~ msgctxt "Color name"
+#~ msgid "Dark Butter"
+#~ msgstr "temno maslena"
+
+#~ msgctxt "Color name"
+#~ msgid "Light Chameleon"
+#~ msgstr "svetla kameleonska"
+
+#~ msgctxt "Color name"
+#~ msgid "Chameleon"
+#~ msgstr "kameleonska"
+
+#~ msgctxt "Color name"
+#~ msgid "Dark Chameleon"
+#~ msgstr "temna kameleonska"
+
+#~ msgctxt "Color name"
+#~ msgid "Light Sky Blue"
+#~ msgstr "svetlo nebesno modra"
+
+#~ msgctxt "Color name"
+#~ msgid "Sky Blue"
+#~ msgstr "nebesno modra"
+
+#~ msgctxt "Color name"
+#~ msgid "Dark Sky Blue"
+#~ msgstr "temno nebesno modra"
+
+#~ msgctxt "Color name"
+#~ msgid "Light Plum"
+#~ msgstr "svetla slivno vijolična"
+
+#~ msgctxt "Color name"
+#~ msgid "Plum"
+#~ msgstr "slivno vijolična"
+
+#~ msgctxt "Color name"
+#~ msgid "Light Chocolate"
+#~ msgstr "svetla čokoladno rjava"
+
+#~ msgctxt "Color name"
+#~ msgid "Chocolate"
+#~ msgstr "čokoladno rjava"
+
+#~ msgctxt "Color name"
+#~ msgid "Dark Chocolate"
+#~ msgstr "temno čokoladno rjava"
+
+#~ msgctxt "Color name"
+#~ msgid "Light Aluminum 1"
+#~ msgstr "svetlobna leta"
+
+#~ msgctxt "Color name"
+#~ msgid "Aluminum 1"
+#~ msgstr "kovinska 1"
+
+#~ msgctxt "Color name"
+#~ msgid "Dark Aluminum 1"
+#~ msgstr "temna kovinska 1"
+
+#~ msgctxt "Color name"
+#~ msgid "Light Aluminum 2"
+#~ msgstr "svetla kovinska 2"
+
+#~ msgctxt "Color name"
+#~ msgid "Aluminum 2"
+#~ msgstr "kovinska 2"
+
+#~ msgctxt "Color name"
+#~ msgid "Dark Aluminum 2"
+#~ msgstr "svetla kovinska 2"
+
+#~ msgctxt "Color name"
+#~ msgid "Black"
+#~ msgstr "črna"
+
+#~ msgctxt "Color name"
+#~ msgid "Very Dark Gray"
+#~ msgstr "zelo temno siva"
+
+#~ msgctxt "Color name"
+#~ msgid "Darker Gray"
+#~ msgstr "temnejša siva"
+
+#~ msgctxt "Color name"
+#~ msgid "Dark Gray"
+#~ msgstr "temnosiva"
+
+#~ msgctxt "Color name"
+#~ msgid "Medium Gray"
+#~ msgstr "srednje siva"
+
+#~ msgctxt "Color name"
+#~ msgid "Light Gray"
+#~ msgstr "svetlosiva"
+
+#~ msgctxt "Color name"
+#~ msgid "Lighter Gray"
+#~ msgstr "svetlejša siva"
+
+#~ msgctxt "Color name"
+#~ msgid "Very Light Gray"
+#~ msgstr "zelo svetla siva"
+
+#~ msgctxt "Color name"
+#~ msgid "White"
+#~ msgstr "bela"
 
 #~ msgid "3.2 core GL profile is not available on EGL implementation"
 #~ msgstr "Profil jedra GL 3.2 ni na voljo v okolju EGL"
