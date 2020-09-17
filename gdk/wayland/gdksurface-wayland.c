@@ -45,14 +45,6 @@
 #include <string.h>
 #include <errno.h>
 
-enum {
-  COMMITTED,
-
-  LAST_SIGNAL
-};
-
-static guint signals[LAST_SIGNAL];
-
 #define SURFACE_IS_TOPLEVEL(surface)  TRUE
 
 #define MAX_WL_BUFFER_SIZE (4083) /* 4096 minus header, string argument length and NUL byte */
@@ -645,8 +637,6 @@ on_frame_clock_after_paint (GdkFrameClock *clock,
       wl_surface_commit (impl->display_server.wl_surface);
 
       impl->pending_commit = FALSE;
-
-      g_signal_emit (impl, signals[COMMITTED], 0);
     }
 
   if (impl->awaiting_frame &&
@@ -4026,13 +4016,6 @@ gdk_wayland_surface_class_init (GdkWaylandSurfaceClass *klass)
   impl_class->set_opaque_region = gdk_wayland_surface_set_opaque_region;
   impl_class->set_shadow_width = gdk_wayland_surface_set_shadow_width;
   impl_class->create_gl_context = gdk_wayland_surface_create_gl_context;
-
-  signals[COMMITTED] = g_signal_new (g_intern_static_string ("committed"),
-                                     G_TYPE_FROM_CLASS (object_class),
-                                     G_SIGNAL_RUN_LAST,
-                                     0,
-                                     NULL, NULL, NULL,
-                                     G_TYPE_NONE, 0);
 }
 
 void
