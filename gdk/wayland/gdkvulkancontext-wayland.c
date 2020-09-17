@@ -69,6 +69,8 @@ gdk_vulkan_context_wayland_end_frame (GdkDrawContext *context,
   gdk_wayland_surface_request_frame (surface);
 
   GDK_DRAW_CONTEXT_CLASS (gdk_wayland_vulkan_context_parent_class)->end_frame (context, painted);
+
+  gdk_wayland_surface_notify_committed (surface);
 }
 
 static void

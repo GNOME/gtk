@@ -94,6 +94,7 @@ struct _GdkWaylandSurface
   PopupState popup_state;
 
   unsigned int initial_configure_received : 1;
+  unsigned int has_uncommitted_ack_configure : 1;
   unsigned int mapped : 1;
   unsigned int awaiting_frame : 1;
   unsigned int awaiting_frame_frozen : 1;
@@ -622,11 +623,25 @@ gdk_wayland_surface_commit (GdkSurface *surface)
   wl_surface_commit (impl->display_server.wl_surface);
 }
 
+void
+gdk_wayland_surface_notify_committed (GdkSurface *surface)
+{
+  GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
+
+  impl->has_uncommitted_ack_configure = FALSE;
+}
+
 static void
 on_frame_clock_after_paint (GdkFrameClock *clock,
                             GdkSurface    *surface)
 {
   GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
+
+  if (surface->update_freeze_count == 0 && impl->has_uncommitted_ack_configure)
+    {
+      gdk_wayland_surface_commit (surface);
+      gdk_wayland_surface_notify_committed (surface);
+    }
 
   if (impl->awaiting_frame &&
       impl->pending_frame_counter == gdk_frame_clock_get_frame_counter (clock))
@@ -1457,6 +1472,8 @@ gdk_wayland_surface_configure (GdkSurface *surface)
       impl->initial_configure_received = TRUE;
       impl->pending.is_initial_configure = TRUE;
     }
+
+  impl->has_uncommitted_ack_configure = TRUE;
 
   if (is_realized_popup (surface))
     gdk_wayland_surface_configure_popup (surface);

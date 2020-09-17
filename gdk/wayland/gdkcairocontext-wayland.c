@@ -185,6 +185,7 @@ gdk_wayland_cairo_context_end_frame (GdkDrawContext *draw_context,
 
   gdk_profiler_add_mark (GDK_PROFILER_CURRENT_TIME, 0, "wayland", "surface commit");
   gdk_wayland_surface_commit (surface);
+  gdk_wayland_surface_notify_committed (surface);
 
   gdk_wayland_cairo_context_surface_clear_region (self->paint_surface);
   self->paint_surface = NULL;
