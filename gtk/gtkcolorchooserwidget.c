@@ -431,81 +431,76 @@ remove_default_palette (GtkColorChooserWidget *cc)
 static void
 add_default_palette (GtkColorChooserWidget *cc)
 {
-  const gchar *default_colors[9][3] = {
-    { "#ef2929", "#cc0000", "#a40000" }, /* Scarlet Red */
-    { "#fcaf3e", "#f57900", "#ce5c00" }, /* Orange */
-    { "#fce94f", "#edd400", "#c4a000" }, /* Butter */
-    { "#8ae234", "#73d216", "#4e9a06" }, /* Chameleon */
-    { "#729fcf", "#3465a4", "#204a87" }, /* Sky Blue */
-    { "#ad7fa8", "#75507b", "#5c3566" }, /* Plum */
-    { "#e9b96e", "#c17d11", "#8f5902" }, /* Chocolate */
-    { "#888a85", "#555753", "#2e3436" }, /* Aluminum 1 */
-    { "#eeeeec", "#d3d7cf", "#babdb6" }  /* Aluminum 2 */
+  const gchar *default_colors[9][5] = {
+    { "#99c1f1", "#62a0ea", "#3584e4", "#1c71d8", "#1a5fb4" }, /* Blue */
+    { "#8ff0a4", "#57e389", "#33d17a", "#2ec27e", "#26a269" }, /* Green */
+    { "#f9f06b", "#f8e45c", "#f6d32d", "#f5c211", "#e5a50a" }, /* Yellow */
+    { "#ffbe6f", "#ffa348", "#ff7800", "#e66100", "#c64600" }, /* Orange */
+    { "#f66151", "#ed333b", "#e01b24", "#c01c28", "#a51d2d" }, /* Red */
+    { "#dc8add", "#c061cb", "#9141ac", "#813d9c", "#613583" }, /* Purple */
+    { "#cdab8f", "#b5835a", "#986a44", "#865e3c", "#63452c" }, /* Brown */
+    { "#ffffff", "#f6f5f4", "#deddda", "#c0bfbc", "#9a9996" }, /* Light */
+    { "#77767b", "#5e5c64", "#3d3846", "#241f31", "#000000" } /* Dark */
   };
   const gchar *color_names[] = {
-    NC_("Color name", "Light Scarlet Red"),
-    NC_("Color name", "Scarlet Red"),
-    NC_("Color name", "Dark Scarlet Red"),
-    NC_("Color name", "Light Orange"),
+    NC_("Color name", "Blue"),
+    NC_("Color name", "Blue"),
+    NC_("Color name", "Blue"),
+    NC_("Color name", "Blue"),
+    NC_("Color name", "Blue"),
+    NC_("Color name", "Blue"),
+    NC_("Color name", "Green"),
+    NC_("Color name", "Green"),
+    NC_("Color name", "Green"),
+    NC_("Color name", "Green"),
+    NC_("Color name", "Green"),
+    NC_("Color name", "Green"),
+    NC_("Color name", "Yellow"),
+    NC_("Color name", "Yellow"),
+    NC_("Color name", "Yellow"),
+    NC_("Color name", "Yellow"),
+    NC_("Color name", "Yellow"),
+    NC_("Color name", "Yellow"),
     NC_("Color name", "Orange"),
-    NC_("Color name", "Dark Orange"),
-    NC_("Color name", "Light Butter"),
-    NC_("Color name", "Butter"),
-    NC_("Color name", "Dark Butter"),
-    NC_("Color name", "Light Chameleon"),
-    NC_("Color name", "Chameleon"),
-    NC_("Color name", "Dark Chameleon"),
-    NC_("Color name", "Light Sky Blue"),
-    NC_("Color name", "Sky Blue"),
-    NC_("Color name", "Dark Sky Blue"),
-    NC_("Color name", "Light Plum"),
-    NC_("Color name", "Plum"),
-    NC_("Color name", "Dark Plum"),
-    NC_("Color name", "Light Chocolate"),
-    NC_("Color name", "Chocolate"),
-    NC_("Color name", "Dark Chocolate"),
-    NC_("Color name", "Light Aluminum 1"),
-    NC_("Color name", "Aluminum 1"),
-    NC_("Color name", "Dark Aluminum 1"),
-    NC_("Color name", "Light Aluminum 2"),
-    NC_("Color name", "Aluminum 2"),
-    NC_("Color name", "Dark Aluminum 2")
+    NC_("Color name", "Orange"),
+    NC_("Color name", "Orange"),
+    NC_("Color name", "Orange"),
+    NC_("Color name", "Orange"),
+    NC_("Color name", "Orange"),
+    NC_("Color name", "Red"),
+    NC_("Color name", "Red"),
+    NC_("Color name", "Red"),
+    NC_("Color name", "Red"),
+    NC_("Color name", "Red"),
+    NC_("Color name", "Purple"),
+    NC_("Color name", "Purple"),
+    NC_("Color name", "Purple"),
+    NC_("Color name", "Purple"),
+    NC_("Color name", "Purple"),
+    NC_("Color name", "Brown"),
+    NC_("Color name", "Brown"),
+    NC_("Color name", "Brown"),
+    NC_("Color name", "Brown"),
+    NC_("Color name", "Brown"),
+    NC_("Color name", "Light"),
+    NC_("Color name", "Light"),
+    NC_("Color name", "Light"),
+    NC_("Color name", "Light"),
+    NC_("Color name", "Light"),
+    NC_("Color name", "Dark"),
+    NC_("Color name", "Dark"),
+    NC_("Color name", "Dark"),
+    NC_("Color name", "Dark"),
+    NC_("Color name", "Dark"),
   };
-  const gchar *default_grays[9] = {
-    "#000000", /* black */
-    "#2e3436", /* very dark gray */
-    "#555753", /* darker gray */
-    "#888a85", /* dark gray */
-    "#babdb6", /* medium gray */
-    "#d3d7cf", /* light gray */
-    "#eeeeec", /* lighter gray */
-    "#f3f3f3", /* very light gray */
-    "#ffffff"  /* white */
-  };
-  const gchar *gray_names[] = {
-    NC_("Color name", "Black"),
-    NC_("Color name", "Very Dark Gray"),
-    NC_("Color name", "Darker Gray"),
-    NC_("Color name", "Dark Gray"),
-    NC_("Color name", "Medium Gray"),
-    NC_("Color name", "Light Gray"),
-    NC_("Color name", "Lighter Gray"),
-    NC_("Color name", "Very Light Gray"),
-    NC_("Color name", "White")
-  };
-  GdkRGBA colors[9*3];
+  GdkRGBA colors[9*5];
   gint i, j;
 
   for (i = 0; i < 9; i++)
-    for (j = 0; j < 3; j++)
-      gdk_rgba_parse (&colors[i*3 + j], default_colors[i][j]);
+    for (j = 0; j < 5; j++)
+      gdk_rgba_parse (&colors[i*5 + j], default_colors[i][j]);
 
-  add_palette (cc, GTK_ORIENTATION_VERTICAL, 3, 9*3, colors, color_names);
-
-  for (i = 0; i < 9; i++)
-    gdk_rgba_parse (&colors[i], default_grays[i]);
-
-  add_palette (cc, GTK_ORIENTATION_HORIZONTAL, 9, 9, colors, gray_names);
+  add_palette (cc, GTK_ORIENTATION_VERTICAL, 5, 9*5, colors, color_names);
 
   cc->priv->has_default_palette = TRUE;
 }
