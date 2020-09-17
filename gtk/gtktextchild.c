@@ -236,8 +236,8 @@ child_segment_delete_func (GtkTextLineSegment *seg,
     {
       GtkWidget *child = tmp_list->data;
 
-      gtk_widget_unparent (child);
-      
+      gtk_text_view_remove (GTK_TEXT_VIEW (gtk_widget_get_parent (child)), child);
+
       tmp_list = tmp_list->next;
     }
 
