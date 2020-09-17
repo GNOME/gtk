@@ -26,13 +26,20 @@ do_textundo (GtkWidget *do_widget)
       window = gtk_window_new ();
       gtk_window_set_display (GTK_WINDOW (window),
                               gtk_widget_get_display (do_widget));
-      gtk_window_set_default_size (GTK_WINDOW (window), 450, 450);
+      gtk_window_set_default_size (GTK_WINDOW (window), 330, 330);
+      gtk_window_set_resizable (GTK_WINDOW (window), FALSE);
       g_object_add_weak_pointer (G_OBJECT (window), (gpointer *)&window);
 
       gtk_window_set_title (GTK_WINDOW (window), "Undo and Redo");
 
       view = gtk_text_view_new ();
       gtk_text_view_set_wrap_mode (GTK_TEXT_VIEW (view), GTK_WRAP_WORD);
+      gtk_text_view_set_pixels_below_lines (GTK_TEXT_VIEW (view), 10);
+      gtk_text_view_set_left_margin (GTK_TEXT_VIEW (view), 20);
+      gtk_text_view_set_right_margin (GTK_TEXT_VIEW (view), 20);
+      gtk_text_view_set_top_margin (GTK_TEXT_VIEW (view), 20);
+      gtk_text_view_set_bottom_margin (GTK_TEXT_VIEW (view), 20);
+
       buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view));
       gtk_text_buffer_set_enable_undo (buffer, TRUE);
 
@@ -40,10 +47,13 @@ do_textundo (GtkWidget *do_widget)
       gtk_text_buffer_begin_irreversible_action (buffer);
       gtk_text_buffer_get_start_iter (buffer, &iter);
       gtk_text_buffer_insert (buffer, &iter,
-                              "Type to add more text.\n"
-                              "Use Primary+Z to undo and Primary+Shift+Z to redo a previously undone action.\n"
-                              "\n",
-                              -1);
+          "The GtkTextView supports undo and redo through the use of a "
+          "GtkTextBuffer. You can enable or disable undo support using "
+          "gtk_text_buffer_set_enable_undo().\n"
+          "Type to add more text.\n"
+          "Use Control+z to undo and Control+Shift+z or Control+y to "
+          "redo previously undone operations.",
+          -1);
       gtk_text_buffer_end_irreversible_action (buffer);
 
       sw = gtk_scrolled_window_new ();
