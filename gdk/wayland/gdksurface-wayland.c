@@ -95,7 +95,6 @@ struct _GdkWaylandSurface
 
   unsigned int initial_configure_received : 1;
   unsigned int mapped : 1;
-  unsigned int pending_commit : 1;
   unsigned int awaiting_frame : 1;
   unsigned int awaiting_frame_frozen : 1;
   unsigned int is_drag_surface : 1;
@@ -615,29 +614,19 @@ gdk_wayland_surface_request_frame (GdkSurface *surface)
   impl->awaiting_frame = TRUE;
 }
 
+void
+gdk_wayland_surface_commit (GdkSurface *surface)
+{
+  GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
+
+  wl_surface_commit (impl->display_server.wl_surface);
+}
+
 static void
 on_frame_clock_after_paint (GdkFrameClock *clock,
                             GdkSurface    *surface)
 {
   GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
-
-  if (impl->pending_commit && surface->update_freeze_count == 0)
-    {
-      gdk_wayland_surface_request_frame (surface);
-
-      /* From this commit forward, we can't write to the buffer,
-       * it's "live".  In the future, if we need to stage more changes
-       * we have to allocate a new staging buffer and draw to it instead.
-       *
-       * Our one saving grace is if the compositor releases the buffer
-       * before we need to stage any changes, then we can take it back and
-       * use it again.
-       */
-      gdk_profiler_add_mark (GDK_PROFILER_CURRENT_TIME, 0, "wayland", "surface commit");
-      wl_surface_commit (impl->display_server.wl_surface);
-
-      impl->pending_commit = FALSE;
-    }
 
   if (impl->awaiting_frame &&
       impl->pending_frame_counter == gdk_frame_clock_get_frame_counter (clock))
@@ -804,7 +793,6 @@ gdk_wayland_surface_attach_image (GdkSurface           *surface,
       cairo_region_get_rectangle (damage, i, &rect);
       wl_surface_damage (impl->display_server.wl_surface, rect.x, rect.y, rect.width, rect.height);
     }
-  impl->pending_commit = TRUE;
 }
 
 void
@@ -2789,7 +2777,6 @@ gdk_wayland_surface_hide_surface (GdkSurface *surface)
   unset_transient_for_exported (surface);
 
   _gdk_wayland_surface_clear_saved_size (surface);
-  impl->pending_commit = FALSE;
   impl->mapped = FALSE;
 }
 
