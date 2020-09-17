@@ -45,14 +45,6 @@
 #include <string.h>
 #include <errno.h>
 
-enum {
-  COMMITTED,
-
-  LAST_SIGNAL
-};
-
-static guint signals[LAST_SIGNAL];
-
 #define SURFACE_IS_TOPLEVEL(surface)  TRUE
 
 #define MAX_WL_BUFFER_SIZE (4083) /* 4096 minus header, string argument length and NUL byte */
@@ -102,8 +94,8 @@ struct _GdkWaylandSurface
   PopupState popup_state;
 
   unsigned int initial_configure_received : 1;
+  unsigned int has_uncommitted_ack_configure : 1;
   unsigned int mapped : 1;
-  unsigned int pending_commit : 1;
   unsigned int awaiting_frame : 1;
   unsigned int awaiting_frame_frozen : 1;
   unsigned int is_drag_surface : 1;
@@ -623,30 +615,32 @@ gdk_wayland_surface_request_frame (GdkSurface *surface)
   impl->awaiting_frame = TRUE;
 }
 
+void
+gdk_wayland_surface_commit (GdkSurface *surface)
+{
+  GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
+
+  wl_surface_commit (impl->display_server.wl_surface);
+}
+
+void
+gdk_wayland_surface_notify_committed (GdkSurface *surface)
+{
+  GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
+
+  impl->has_uncommitted_ack_configure = FALSE;
+}
+
 static void
 on_frame_clock_after_paint (GdkFrameClock *clock,
                             GdkSurface    *surface)
 {
   GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
 
-  if (impl->pending_commit && surface->update_freeze_count == 0)
+  if (surface->update_freeze_count == 0 && impl->has_uncommitted_ack_configure)
     {
-      gdk_wayland_surface_request_frame (surface);
-
-      /* From this commit forward, we can't write to the buffer,
-       * it's "live".  In the future, if we need to stage more changes
-       * we have to allocate a new staging buffer and draw to it instead.
-       *
-       * Our one saving grace is if the compositor releases the buffer
-       * before we need to stage any changes, then we can take it back and
-       * use it again.
-       */
-      gdk_profiler_add_mark (GDK_PROFILER_CURRENT_TIME, 0, "wayland", "surface commit");
-      wl_surface_commit (impl->display_server.wl_surface);
-
-      impl->pending_commit = FALSE;
-
-      g_signal_emit (impl, signals[COMMITTED], 0);
+      gdk_wayland_surface_commit (surface);
+      gdk_wayland_surface_notify_committed (surface);
     }
 
   if (impl->awaiting_frame &&
@@ -814,7 +808,6 @@ gdk_wayland_surface_attach_image (GdkSurface           *surface,
       cairo_region_get_rectangle (damage, i, &rect);
       wl_surface_damage (impl->display_server.wl_surface, rect.x, rect.y, rect.width, rect.height);
     }
-  impl->pending_commit = TRUE;
 }
 
 void
@@ -1479,6 +1472,8 @@ gdk_wayland_surface_configure (GdkSurface *surface)
       impl->initial_configure_received = TRUE;
       impl->pending.is_initial_configure = TRUE;
     }
+
+  impl->has_uncommitted_ack_configure = TRUE;
 
   if (is_realized_popup (surface))
     gdk_wayland_surface_configure_popup (surface);
@@ -2799,7 +2794,6 @@ gdk_wayland_surface_hide_surface (GdkSurface *surface)
   unset_transient_for_exported (surface);
 
   _gdk_wayland_surface_clear_saved_size (surface);
-  impl->pending_commit = FALSE;
   impl->mapped = FALSE;
 }
 
@@ -4026,13 +4020,6 @@ gdk_wayland_surface_class_init (GdkWaylandSurfaceClass *klass)
   impl_class->set_opaque_region = gdk_wayland_surface_set_opaque_region;
   impl_class->set_shadow_width = gdk_wayland_surface_set_shadow_width;
   impl_class->create_gl_context = gdk_wayland_surface_create_gl_context;
-
-  signals[COMMITTED] = g_signal_new (g_intern_static_string ("committed"),
-                                     G_TYPE_FROM_CLASS (object_class),
-                                     G_SIGNAL_RUN_LAST,
-                                     0,
-                                     NULL, NULL, NULL,
-                                     G_TYPE_NONE, 0);
 }
 
 void

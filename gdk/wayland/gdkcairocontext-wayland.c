@@ -23,6 +23,7 @@
 #include "gdkprivate-wayland.h"
 
 #include "gdkinternals.h"
+#include "gdkprofilerprivate.h"
 
 static const cairo_user_data_key_t gdk_wayland_cairo_context_key;
 static const cairo_user_data_key_t gdk_wayland_cairo_region_key;
@@ -180,6 +181,11 @@ gdk_wayland_cairo_context_end_frame (GdkDrawContext *draw_context,
 
   gdk_wayland_surface_attach_image (surface, self->paint_surface, painted);
   gdk_wayland_surface_sync (surface);
+  gdk_wayland_surface_request_frame (surface);
+
+  gdk_profiler_add_mark (GDK_PROFILER_CURRENT_TIME, 0, "wayland", "surface commit");
+  gdk_wayland_surface_commit (surface);
+  gdk_wayland_surface_notify_committed (surface);
 
   gdk_wayland_cairo_context_surface_clear_region (self->paint_surface);
   self->paint_surface = NULL;
