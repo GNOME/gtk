@@ -439,8 +439,33 @@ gdk_x11_selection_output_stream_flush (GOutputStream  *output_stream,
   g_main_context_invoke (NULL, gdk_x11_selection_output_stream_invoke_flush, stream);
 
   g_mutex_lock (&priv->mutex);
-  if (gdk_x11_selection_output_stream_needs_flush_unlocked (stream))
-    g_cond_wait (&priv->cond, &priv->mutex);
+  while (gdk_x11_selection_output_stream_needs_flush_unlocked (stream))
+    {
+      /* We cannot do sync flushes as we need to run the main loop to do the flushing. */
+      if (g_main_context_is_owner (NULL))
+        {
+#define ERROR_MESSAGE \
+   "Synchronous flushing of X11 data streams from the main loop is not possible.\n" \
+   "Use g_output_stream_flush_async() or g_output_stream_close_async() to avoid data loss."
+  
+          g_mutex_unlock (&priv->mutex);
+
+          g_set_error (error, G_IO_ERROR, G_IO_ERROR_NOT_SUPPORTED, ERROR_MESSAGE);
+
+          /* We also warn here instead of just erroring out because this happens when people forget
+           * to explicitly close a data stream and just unref() it as dispose() runs a sync close()
+           * which does a sync flush().
+           */
+          g_warning (ERROR_MESSAGE);
+                        
+          return FALSE;
+#undef ERROR_MESSAGE
+        }
+      else
+        {
+          g_cond_wait (&priv->cond, &priv->mutex);
+        }
+    }
   g_mutex_unlock (&priv->mutex);
 
   return TRUE;
