@@ -14,9 +14,9 @@ static GtkWidget *view;
 static GtkWidget *view2;
 
 static void
-source_toggled (GtkToggleButton *button)
+source_toggled (GtkCheckButton *button)
 {
-  if (gtk_toggle_button_get_active (button))
+  if (gtk_check_button_get_active (button))
     gtk_stack_set_visible_child_name (GTK_STACK (stack), "source");
   else
     {
