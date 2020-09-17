@@ -182,6 +182,8 @@ show_uri_done (GObject      *object,
                         G_CALLBACK (gtk_window_destroy), NULL);
 
       gtk_window_present (GTK_WINDOW (dialog));
+
+      g_error_free (error);
     }
 }
 

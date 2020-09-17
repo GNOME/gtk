@@ -5,6 +5,9 @@
  * bold or colored or underlined. But tags are not restricted to appearance.
  * They can also affect the behavior of mouse and key presses, as this demo
  * shows.
+ *
+ * We also demonstrate adding other things to a text view, such as
+ * clickable icons.
  */
 
 #include <gtk/gtk.h>
@@ -31,35 +34,103 @@ insert_link (GtkTextBuffer *buffer,
   gtk_text_buffer_insert_with_tags (buffer, iter, text, -1, tag, NULL);
 }
 
+/* Quick-and-dirty text-to-speech for a single word. If you don't hear
+ * anything, you are missing espeak-ng on your system.
+ */
+static void
+say_word (GtkGestureClick *gesture,
+          guint            n_press,
+          double           x,
+          double           y,
+          const char      *word)
+{
+  const char *argv[3];
+
+  argv[0] = "espeak-ng";
+  argv[1] = word;
+  argv[2] = NULL;
+
+  g_spawn_async (NULL, (char **)argv, NULL, G_SPAWN_SEARCH_PATH, NULL, NULL, NULL, NULL);
+}
+
 /* Fills the buffer with text and interspersed links. In any real
  * hypertext app, this method would parse a file to identify the links.
  */
 static void
-show_page (GtkTextBuffer *buffer,
-           int            page)
+show_page (GtkTextView *text_view,
+           int          page)
 {
+  GtkTextBuffer *buffer;
   GtkTextIter iter;
+  GtkWidget *child;
+  GtkTextChildAnchor *anchor;
+  GtkEventController *controller;
 
+  buffer = gtk_text_view_get_buffer (text_view);
   gtk_text_buffer_set_text (buffer, "", 0);
   gtk_text_buffer_get_iter_at_offset (buffer, &iter, 0);
   gtk_text_buffer_begin_irreversible_action (buffer);
   if (page == 1)
     {
+      GtkIconPaintable *icon;
+      GtkIconTheme *theme;
+
       gtk_text_buffer_insert (buffer, &iter, "Some text to show that simple ", -1);
-      insert_link (buffer, &iter, "hyper text", 3);
+      insert_link (buffer, &iter, "hypertext", 3);
       gtk_text_buffer_insert (buffer, &iter, " can easily be realized with ", -1);
       insert_link (buffer, &iter, "tags", 2);
+      gtk_text_buffer_insert (buffer, &iter, ".\n", -1);
+      gtk_text_buffer_insert (buffer, &iter,
+          "Of course you can also embed Emoji 😋, "
+          "icons ", -1);
+
+      theme = gtk_icon_theme_get_for_display (gtk_widget_get_display (GTK_WIDGET (text_view)));
+      icon = gtk_icon_theme_lookup_icon (theme,
+                                         "microphone-sensitivity-high-symbolic",
+                                         NULL,
+                                         16,
+                                         1,
+                                         GTK_TEXT_DIR_LTR,
+                                         0);
+      gtk_text_buffer_insert_paintable (buffer, &iter, GDK_PAINTABLE (icon));
+      g_object_unref (icon);
+      gtk_text_buffer_insert (buffer, &iter, ", or even widgets ", -1);
+      anchor = gtk_text_buffer_create_child_anchor (buffer, &iter);
+      child = gtk_level_bar_new_for_interval (0, 100);
+      gtk_level_bar_set_value (GTK_LEVEL_BAR (child), 50);
+      gtk_widget_set_size_request (child, 100, -1);
+      gtk_text_view_add_child_at_anchor (text_view, child, anchor);
       gtk_text_buffer_insert (buffer, &iter, ".", -1);
     }
   else if (page == 2)
     {
-      gtk_text_buffer_insert (buffer, &iter,
-                              "A tag is an attribute that can be applied to some range of text. "
-                              "For example, a tag might be called \"bold\" and make the text inside "
-                              "the tag bold. However, the tag concept is more general than that; "
-                              "tags don't have to affect appearance. They can instead affect the "
-                              "behavior of mouse and key presses, \"lock\" a range of text so the "
-                              "user can't edit it, or countless other things.\n", -1);
+      GtkTextTag *tag;
+
+      tag = gtk_text_buffer_create_tag (buffer, NULL,
+                                        "weight", PANGO_WEIGHT_BOLD,
+                                        "scale", PANGO_SCALE_X_LARGE,
+                                        NULL);
+      gtk_text_buffer_insert_with_tags (buffer, &iter, "tag", -1, tag, NULL);
+      tag = gtk_text_buffer_create_tag (buffer, NULL,
+                                        "family", "monospace",
+                                        NULL);
+      gtk_text_buffer_insert_with_tags (buffer, &iter, " / tag / ", -1, tag, NULL);
+
+      anchor = gtk_text_buffer_create_child_anchor (buffer, &iter);
+      child = gtk_image_new_from_icon_name ("audio-volume-high-symbolic");
+      gtk_widget_set_cursor_from_name (child, "pointer");
+      controller = GTK_EVENT_CONTROLLER (gtk_gesture_click_new ());
+      g_signal_connect (controller, "pressed", G_CALLBACK (say_word), (gpointer)"tag");
+      gtk_widget_add_controller (child, controller);
+      gtk_text_view_add_child_at_anchor (text_view, child, anchor);
+
+      gtk_text_buffer_insert (buffer, &iter, "\n"
+          "An attribute that can be applied to some range of text. For example, "
+          "a tag might be called “bold” and make the text inside the tag bold.\n"
+          "However, the tag concept is more general than that; "
+          "tags don't have to affect appearance. They can instead affect the "
+          "behavior of mouse and key presses, “lock” a range of text so the "
+          "user can't edit it, or countless other things.\n", -1);
       insert_link (buffer, &iter, "Go back", 1);
     }
   else if (page == 3)
@@ -68,11 +139,25 @@ show_page (GtkTextBuffer *buffer,
 
       tag = gtk_text_buffer_create_tag (buffer, NULL,
                                         "weight", PANGO_WEIGHT_BOLD,
+                                        "scale", PANGO_SCALE_X_LARGE,
                                         NULL);
-      gtk_text_buffer_insert_with_tags (buffer, &iter, "hypertext:\n", -1, tag, NULL);
-      gtk_text_buffer_insert (buffer, &iter,
-                              "machine-readable text that is not sequential but is organized "
-                              "so that related items of information are connected.\n", -1);
+      gtk_text_buffer_insert_with_tags (buffer, &iter, "hypertext", -1, tag, NULL);
+      tag = gtk_text_buffer_create_tag (buffer, NULL,
+                                        "family", "monospace",
+                                        NULL);
+      gtk_text_buffer_insert_with_tags (buffer, &iter, " / ˈhaɪ pərˌtɛkst / ", -1, tag, NULL);
+
+      anchor = gtk_text_buffer_create_child_anchor (buffer, &iter);
+      child = gtk_image_new_from_icon_name ("audio-volume-high-symbolic");
+      gtk_widget_set_cursor_from_name (child, "pointer");
+      controller = GTK_EVENT_CONTROLLER (gtk_gesture_click_new ());
+      g_signal_connect (controller, "pressed", G_CALLBACK (say_word), (gpointer)"hypertext");
+      gtk_widget_add_controller (child, controller);
+      gtk_text_view_add_child_at_anchor (text_view, child, anchor);
+
+      gtk_text_buffer_insert (buffer, &iter, "\n"
+          "Machine-readable text that is not sequential but is organized "
+          "so that related items of information are connected.\n", -1);
       insert_link (buffer, &iter, "Go back", 1);
     }
   gtk_text_buffer_end_irreversible_action (buffer);
@@ -96,7 +181,7 @@ follow_if_link (GtkWidget   *text_view,
 
       if (page != 0)
         {
-          show_page (gtk_text_view_get_buffer (GTK_TEXT_VIEW (text_view)), page);
+          show_page (GTK_TEXT_VIEW (text_view), page);
           break;
         }
     }
@@ -163,7 +248,7 @@ released_cb (GtkGestureClick *gesture,
   if (gtk_text_iter_get_offset (&start) != gtk_text_iter_get_offset (&end))
     return;
 
-  if (gtk_text_view_get_iter_at_location (GTK_TEXT_VIEW (text_view), &iter, x, y))
+  if (gtk_text_view_get_iter_at_location (GTK_TEXT_VIEW (text_view), &iter, tx, ty))
     follow_if_link (text_view, &iter);
 }
 
@@ -173,7 +258,13 @@ motion_cb (GtkEventControllerMotion *controller,
            double                    y,
            GtkTextView              *text_view)
 {
-  set_cursor_if_appropriate (text_view, x, y);
+  int tx, ty;
+
+  gtk_text_view_window_to_buffer_coords (text_view,
+                                         GTK_TEXT_WINDOW_WIDGET,
+                                         x, y, &tx, &ty);
+
+  set_cursor_if_appropriate (text_view, tx, ty);
 }
 
 static gboolean hovering_over_link = FALSE;
@@ -183,9 +274,9 @@ static gboolean hovering_over_link = FALSE;
  * typically used by web browsers.
  */
 static void
-set_cursor_if_appropriate (GtkTextView    *text_view,
-                           int             x,
-                           int             y)
+set_cursor_if_appropriate (GtkTextView *text_view,
+                           int          x,
+                           int          y)
 {
   GSList *tags = NULL, *tagp = NULL;
   GtkTextIter iter;
@@ -237,13 +328,17 @@ do_hypertext (GtkWidget *do_widget)
       gtk_window_set_title (GTK_WINDOW (window), "Hypertext");
       gtk_window_set_display (GTK_WINDOW (window),
                               gtk_widget_get_display (do_widget));
-      gtk_window_set_default_size (GTK_WINDOW (window), 450, 450);
+      gtk_window_set_default_size (GTK_WINDOW (window), 330, 330);
+      gtk_window_set_resizable (GTK_WINDOW (window), FALSE);
       g_object_add_weak_pointer (G_OBJECT (window), (gpointer *)&window);
 
       view = gtk_text_view_new ();
       gtk_text_view_set_wrap_mode (GTK_TEXT_VIEW (view), GTK_WRAP_WORD);
+      gtk_text_view_set_top_margin (GTK_TEXT_VIEW (view), 20);
+      gtk_text_view_set_bottom_margin (GTK_TEXT_VIEW (view), 20);
       gtk_text_view_set_left_margin (GTK_TEXT_VIEW (view), 20);
       gtk_text_view_set_right_margin (GTK_TEXT_VIEW (view), 20);
+      gtk_text_view_set_pixels_below_lines (GTK_TEXT_VIEW (view), 10);
       controller = gtk_event_controller_key_new ();
       g_signal_connect (controller, "key-pressed", G_CALLBACK (key_pressed), view);
       gtk_widget_add_controller (view, controller);
@@ -268,7 +363,7 @@ do_hypertext (GtkWidget *do_widget)
       gtk_window_set_child (GTK_WINDOW (window), sw);
       gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (sw), view);
 
-      show_page (buffer, 1);
+      show_page (GTK_TEXT_VIEW (view), 1);
     }
 
   if (!gtk_widget_get_visible (window))

@@ -7466,8 +7466,8 @@ gtk_text_view_start_selection_drag (GtkTextView          *text_view,
   g_object_set_qdata_full (G_OBJECT (priv->drag_gesture),
                            quark_text_selection_data,
                            data, (GDestroyNotify) selection_data_free);
-  gtk_gesture_set_state (priv->drag_gesture,
-                         GTK_EVENT_SEQUENCE_CLAIMED);
+//  gtk_gesture_set_state (priv->drag_gesture,
+//                         GTK_EVENT_SEQUENCE_CLAIMED);
 }
 
 /* returns whether we were really dragging */
