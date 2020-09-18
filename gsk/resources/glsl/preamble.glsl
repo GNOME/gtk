@@ -5,15 +5,15 @@ precision highp float;
 #if defined(GSK_GLES) || defined(GSK_LEGACY)
 #define _OUT_ varying
 #define _IN_ varying
-#define _ROUNDED_RECT_UNIFORM_ vec4[3]
+#define _GSK_ROUNDED_RECT_UNIFORM_ vec4[3]
 #else
 #define _OUT_ out
 #define _IN_ in
-#define _ROUNDED_RECT_UNIFORM_ RoundedRect
+#define _GSK_ROUNDED_RECT_UNIFORM_ GskRoundedRect
 #endif
 
 
-struct RoundedRect
+struct GskRoundedRect
 {
   vec4 bounds;
   // Look, arrays can't be in structs if you want to return the struct
@@ -22,9 +22,9 @@ struct RoundedRect
   vec4 corner_points2; // xy = bottom right, zw = bottom left
 };
 
-// Transform from a GskRoundedRect to a RoundedRect as we need it.
-RoundedRect
-create_rect(vec4[3] data)
+// Transform from a C GskRoundedRect to what we need.
+GskRoundedRect
+gsk_create_rect(vec4[3] data)
 {
   vec4 bounds = vec4(data[0].xy, data[0].xy + data[0].zw);
 
@@ -33,9 +33,9 @@ create_rect(vec4[3] data)
   vec4 corner_points2 = vec4(bounds.zw + (data[2].xy * vec2(-1, -1)),
                              bounds.xw + vec2(data[2].zw * vec2(1, -1)));
 
-  return RoundedRect(bounds, corner_points1, corner_points2);
+  return GskRoundedRect(bounds, corner_points1, corner_points2);
 }
 
-vec4 premultiply(vec4 c) {
+vec4 gsk_premultiply(vec4 c) {
   return vec4(c.rgb * c.a, c.a);
 }

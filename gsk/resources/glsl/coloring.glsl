@@ -8,7 +8,7 @@ void main() {
 
   vUv = vec2(aUv.x, aUv.y);
 
-  final_color = premultiply(u_color) * u_alpha;
+  final_color = gsk_premultiply(u_color) * u_alpha;
 }
 
 // FRAGMENT_SHADER:
@@ -16,7 +16,7 @@ void main() {
 _IN_ vec4 final_color;
 
 void main() {
-  vec4 diffuse = Texture(u_source, vUv);
+  vec4 diffuse = GskTexture(u_source, vUv);
 
-  setOutputColor(final_color * diffuse.a);
+  gskSetOutputColor(final_color * diffuse.a);
 }

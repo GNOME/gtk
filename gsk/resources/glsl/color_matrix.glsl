@@ -10,7 +10,7 @@ uniform mat4 u_color_matrix;
 uniform vec4 u_color_offset;
 
 void main() {
-  vec4 color = Texture(u_source, vUv);
+  vec4 color = GskTexture(u_source, vUv);
 
   // Un-premultilpy
   if (color.a != 0.0)
@@ -21,5 +21,5 @@ void main() {
 
   color.rgb *= color.a;
 
-  setOutputColor(color * u_alpha);
+  gskSetOutputColor(color * u_alpha);
 }
