@@ -21,10 +21,10 @@ void main() {
 
   for (int i = 0; i < u_num_color_stops; i ++) {
     color_offsets[i] = u_color_stops[(i * 5) + 0];
-    color_stops[i].r = u_color_stops[(i * 5) + 1];
-    color_stops[i].g = u_color_stops[(i * 5) + 2];
-    color_stops[i].b = u_color_stops[(i * 5) + 3];
-    color_stops[i].a = u_color_stops[(i * 5) + 4];
+    color_stops[i] = premultiply(vec4(u_color_stops[(i * 5) + 1],
+                                      u_color_stops[(i * 5) + 2],
+                                      u_color_stops[(i * 5) + 3],
+                                      u_color_stops[(i * 5) + 4]));
   }
 }
 
@@ -50,23 +50,18 @@ float abs_offset(float offset)  {
   return start + ((end - start) * offset);
 }
 
-vec4 premultiply(vec4 c) {
-  vec4 k = vec4(c.rgb * c.a, c.a);
-  return k;
-}
-
 void main() {
   vec2 pixel = get_frag_coord();
   vec2 rel = (center - pixel) / (u_radius);
   float d = sqrt(dot(rel, rel));
 
   if (d < abs_offset (color_offsets[0])) {
-    setOutputColor(premultiply(color_stops[0]) * u_alpha);
+    setOutputColor(color_stops[0] * u_alpha);
     return;
   }
 
   if (d > end) {
-    setOutputColor(premultiply(color_stops[u_num_color_stops - 1]) * u_alpha);
+    setOutputColor(color_stops[u_num_color_stops - 1] * u_alpha);
     return;
   }
 
@@ -85,5 +80,5 @@ void main() {
     }
   }
 
-  setOutputColor(premultiply(color) * u_alpha);
+  setOutputColor(color * u_alpha);
 }

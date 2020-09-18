@@ -35,3 +35,7 @@ create_rect(vec4[3] data)
 
   return RoundedRect(bounds, corner_points1, corner_points2);
 }
+
+vec4 premultiply(vec4 c) {
+  return vec4(c.rgb * c.a, c.a);
+}

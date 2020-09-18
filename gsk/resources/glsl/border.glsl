@@ -10,9 +10,7 @@ _OUT_ _ROUNDED_RECT_UNIFORM_ transformed_inside_outline;
 void main() {
   gl_Position = u_projection * u_modelview * vec4(aPosition, 0.0, 1.0);
 
-  final_color = u_color;
-  final_color.rgb *= final_color.a; // pre-multiply
-  final_color *= u_alpha;
+  final_color = premultiply(u_color) * u_alpha;
 
   RoundedRect outside = create_rect(u_outline_rect);
   RoundedRect inside = rounded_rect_shrink (outside, u_widths);
