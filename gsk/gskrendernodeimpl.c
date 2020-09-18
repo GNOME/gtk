@@ -510,6 +510,7 @@ gsk_radial_gradient_node_new (const graphene_rect_t  *bounds,
   g_return_val_if_fail (vradius > 0., NULL);
   g_return_val_if_fail (start >= 0., NULL);
   g_return_val_if_fail (end >= 0., NULL);
+  g_return_val_if_fail (end > start, NULL);
   g_return_val_if_fail (color_stops != NULL, NULL);
   g_return_val_if_fail (n_color_stops >= 2, NULL);
   g_return_val_if_fail (color_stops[0].offset >= 0, NULL);
@@ -555,6 +556,7 @@ gsk_repeating_radial_gradient_node_new (const graphene_rect_t  *bounds,
   g_return_val_if_fail (vradius > 0., NULL);
   g_return_val_if_fail (start >= 0., NULL);
   g_return_val_if_fail (end >= 0., NULL);
+  g_return_val_if_fail (end > start, NULL);
   g_return_val_if_fail (color_stops != NULL, NULL);
   g_return_val_if_fail (n_color_stops >= 2, NULL);
   g_return_val_if_fail (color_stops[0].offset >= 0, NULL);
