@@ -171,6 +171,25 @@ create_list_model_for_render_node (GskRenderNode *node)
       return create_render_node_list_model ((GskRenderNode *[2]) { gsk_cross_fade_node_get_start_child (node),
                                                                    gsk_cross_fade_node_get_end_child (node) }, 2);
 
+    case GSK_GLSHADER_NODE:
+      {
+        GListStore *store = G_LIST_STORE (create_render_node_list_model ((GskRenderNode *[1]) { gsk_glshader_node_get_fallback_child (node) }, 1));
+
+        for (guint i = 0; i < gsk_glshader_node_get_n_children (node); i++)
+          {
+            GskRenderNode *child = gsk_glshader_node_get_child (node, i);
+            graphene_rect_t bounds;
+            GdkPaintable *paintable;
+
+            gsk_render_node_get_bounds (child, &bounds);
+            paintable = gtk_render_node_paintable_new (child, &bounds);
+            g_list_store_append (store, paintable);
+            g_object_unref (paintable);
+          }
+
+        return G_LIST_MODEL (store);
+      }
+
     case GSK_CONTAINER_NODE:
       {
         GListStore *store;
@@ -270,6 +289,8 @@ node_type_name (GskRenderNodeType type)
       return "Text";
     case GSK_BLUR_NODE:
       return "Blur";
+    case GSK_GLSHADER_NODE:
+      return "GLShader";
     }
 }
 
@@ -301,6 +322,7 @@ node_name (GskRenderNode *node)
     case GSK_CROSS_FADE_NODE:
     case GSK_TEXT_NODE:
     case GSK_BLUR_NODE:
+    case GSK_GLSHADER_NODE:
       return g_strdup (node_type_name (gsk_render_node_get_node_type (node)));
 
     case GSK_DEBUG_NODE:
@@ -757,6 +779,9 @@ populate_render_node_properties (GtkListStore  *store,
 
     case GSK_BLUR_NODE:
       add_float_row (store, "Radius", gsk_blur_node_get_radius (node));
+      break;
+
+    case GSK_GLSHADER_NODE:
       break;
 
     case GSK_INSET_SHADOW_NODE:
