@@ -84,7 +84,7 @@ typedef struct
 
 struct _Program
 {
-  int index;        /* Into the renderer's program array */
+  int index;        /* Into the renderer's program array -1 for custom */
 
   int id;
   /* Common locations (gl_common)*/
@@ -159,6 +159,12 @@ struct _Program
       int child_bounds_location;
       int texture_rect_location;
     } repeat;
+    struct {
+      int size_location;
+      int args_locations[8];
+      int texture_locations[4];
+      GError *compile_error;
+    } glshader;
   };
   ProgramState state;
 };
@@ -184,7 +190,7 @@ typedef struct {
       Program unblurred_outset_shadow_program;
     };
   };
-  ProgramState state[GL_N_PROGRAMS];
+  GHashTable *custom_programs; /* GskGLShader -> Program* */
 } GskGLRendererPrograms;
 
 typedef struct
@@ -256,6 +262,9 @@ graphene_rect_t   ops_set_viewport       (RenderOpBuilder         *builder,
 
 void              ops_set_texture        (RenderOpBuilder         *builder,
                                           int                      texture_id);
+void              ops_set_extra_texture  (RenderOpBuilder         *builder,
+                                          int                      texture_id,
+                                          int                      idx);
 
 int               ops_set_render_target  (RenderOpBuilder         *builder,
                                           int                      render_target_id);
@@ -282,6 +291,11 @@ void              ops_set_inset_shadow   (RenderOpBuilder         *self,
                                           const GdkRGBA           *color,
                                           float                    dx,
                                           float                    dy);
+void              ops_set_gl_shader_args (RenderOpBuilder         *builder,
+                                          GskGLShader             *shader,
+                                          float                    width,
+                                          float                    height,
+                                          const guchar            *uniform_data);
 void              ops_set_unblurred_outset_shadow   (RenderOpBuilder         *self,
                                                      const GskRoundedRect     outline,
                                                      float                    spread,
