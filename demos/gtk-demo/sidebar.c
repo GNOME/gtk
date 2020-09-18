@@ -1,9 +1,9 @@
 /* Stack Sidebar
  *
  * GtkStackSidebar provides an automatic sidebar widget to control
- * navigation of a GtkStack object. This widget automatically updates it
- * content based on what is presently available in the GtkStack object,
- * and using the "title" child property to set the display labels.
+ * navigation of a GtkStack object. This widget automatically updates
+ * its content based on what is presently available in the GtkStack
+ * object, and using the "title" child property to set the display labels.
  */
 
 #include <glib/gi18n.h>
@@ -37,7 +37,6 @@ do_sidebar (GtkWidget *do_widget)
     {
       window = gtk_window_new ();
       gtk_window_set_resizable (GTK_WINDOW (window), TRUE);
-      gtk_widget_set_size_request (window, 500, 350);
 
       header = gtk_header_bar_new ();
       gtk_window_set_titlebar (GTK_WINDOW(window), header);
