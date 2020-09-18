@@ -79,6 +79,10 @@ typedef struct
       float end;
       float radius[2]; /* h/v */
     } radial_gradient;
+    struct {
+      graphene_vec2_t size;
+      graphene_vec4_t args;
+    } custom;
   };
 } ProgramState;
 
@@ -159,6 +163,11 @@ struct _Program
       int child_bounds_location;
       int texture_rect_location;
     } repeat;
+    struct {
+      int size_location;
+      int args_location;
+      int extra_source_locations[3];
+    } glshader;
   };
 
   ProgramState state;
@@ -185,7 +194,7 @@ typedef struct {
       Program unblurred_outset_shadow_program;
     };
   };
-  ProgramState state[GL_N_PROGRAMS];
+  GHashTable *custom_programs; /* GskGLShader -> Program* */
 } GskGLRendererPrograms;
 
 typedef struct
@@ -257,6 +266,9 @@ graphene_rect_t   ops_set_viewport       (RenderOpBuilder         *builder,
 
 void              ops_set_texture        (RenderOpBuilder         *builder,
                                           int                      texture_id);
+void              ops_set_extra_texture  (RenderOpBuilder         *builder,
+                                          int                      texture_id,
+                                          int                      idx);
 
 int               ops_set_render_target  (RenderOpBuilder         *builder,
                                           int                      render_target_id);
@@ -283,6 +295,9 @@ void              ops_set_inset_shadow   (RenderOpBuilder         *self,
                                           const GdkRGBA           *color,
                                           float                    dx,
                                           float                    dy);
+void              ops_set_glshader_args  (RenderOpBuilder         *builder,
+                                          const graphene_vec2_t   *size,
+                                          const graphene_vec4_t   *args);
 void              ops_set_unblurred_outset_shadow   (RenderOpBuilder         *self,
                                                      const GskRoundedRect     outline,
                                                      float                    spread,

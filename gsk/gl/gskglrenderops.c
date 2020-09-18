@@ -558,6 +558,18 @@ ops_set_texture (RenderOpBuilder *builder,
   builder->current_texture = texture_id;
 }
 
+void
+ops_set_extra_texture (RenderOpBuilder *builder,
+                       int              texture_id,
+                       int              idx)
+{
+  OpExtraTexture *op;
+
+  op = ops_begin (builder, OP_CHANGE_EXTRA_SOURCE_TEXTURE);
+  op->texture_id = texture_id;
+  op->idx = idx;
+}
+
 int
 ops_set_render_target (RenderOpBuilder *builder,
                        int              render_target_id)
@@ -619,6 +631,26 @@ ops_set_color (RenderOpBuilder *builder,
 
   op = ops_begin (builder, OP_CHANGE_COLOR);
   op->rgba = color;
+}
+
+void
+ops_set_glshader_args (RenderOpBuilder       *builder,
+                       const graphene_vec2_t *size,
+                       const graphene_vec4_t *args)
+{
+  ProgramState *current_program_state = get_current_program_state (builder);
+  OpGLShader *op;
+
+  if (graphene_vec2_equal (size, &current_program_state->custom.size) &&
+      graphene_vec4_equal (args, &current_program_state->custom.args))
+    return;
+
+  current_program_state->custom.size = *size;
+  current_program_state->custom.args = *args;
+
+  op = ops_begin (builder, OP_CHANGE_GLSHADER_ARGS);
+  graphene_vec4_to_float (args, &op->args[0]);
+  graphene_vec2_to_float (size, &op->size[0]);
 }
 
 void
