@@ -99,6 +99,12 @@ GDK_AVAILABLE_IN_ALL
 void            gtk_snapshot_push_cross_fade            (GtkSnapshot            *snapshot,
                                                          double                  progress);
 GDK_AVAILABLE_IN_ALL
+void            gtk_snapshot_push_glshader              (GtkSnapshot            *snapshot,
+                                                         GskGLShader            *shader,
+                                                         const graphene_vec4_t  *args,
+                                                         const graphene_rect_t  *bounds,
+                                                         int                     n_children);
+GDK_AVAILABLE_IN_ALL
 void            gtk_snapshot_pop                        (GtkSnapshot            *snapshot);
 
 GDK_AVAILABLE_IN_ALL
