@@ -317,17 +317,23 @@ gdk_content_serializer_get_task_data (GdkContentSerializer *serializer)
   return serializer->task_data;
 }
 
-static gboolean
-gdk_content_serializer_emit_callback (gpointer data)
+static void
+gdk_content_serializer_close_finish (GObject      *stream,
+                                     GAsyncResult *res,
+                                     gpointer      data)
 {
   GdkContentSerializer *serializer = data;
+
+  g_output_stream_close_finish (G_OUTPUT_STREAM (stream),
+                                res,
+                                serializer->error ? NULL : &serializer->error);
 
   if (serializer->callback)
     {
       serializer->callback (NULL, G_ASYNC_RESULT (serializer), serializer->callback_data);
     }
 
-  return G_SOURCE_REMOVE;
+  g_object_unref (serializer);
 }
 
 /**
@@ -335,6 +341,8 @@ gdk_content_serializer_emit_callback (gpointer data)
  * @serializer: a #GdkContentSerializer
  *
  * Indicate that the serialization has been successfully completed.
+ *
+ * The serializer will close the output stream and report success to the callback.
  */
 void
 gdk_content_serializer_return_success (GdkContentSerializer *serializer)
@@ -343,11 +351,11 @@ gdk_content_serializer_return_success (GdkContentSerializer *serializer)
   g_return_if_fail (!serializer->returned);
 
   serializer->returned = TRUE;
-  g_idle_add_full (serializer->priority,
-                   gdk_content_serializer_emit_callback,
-                   serializer,
-                   g_object_unref);
-  /* NB: the idle will destroy our reference */
+  g_output_stream_close_async (serializer->stream,
+                               serializer->priority,
+                               serializer->cancellable,
+                               gdk_content_serializer_close_finish,
+                               serializer);
 }
 
 /**
@@ -523,8 +531,9 @@ serialize_not_found (GdkContentSerializer *serializer)
  * @user_data: (closure): data to pass to the callback function
  *
  * Serialize content and write it to the given output stream, asynchronously.
- * When the operation is finished, @callback will be called. You can then
- * call gdk_content_serialize_finish() to get the result of the operation.
+ * When the operation is finished, the @stream will be closed and @callback
+ * will be called. You can then call gdk_content_serialize_finish() to get
+ * the result of the operation.
  */
 void
 gdk_content_serialize_async (GOutputStream       *stream,
