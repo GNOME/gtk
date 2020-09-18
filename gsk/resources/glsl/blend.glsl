@@ -267,8 +267,8 @@ luminosity (vec4 Cs, vec4 Cb)
 }
 
 void main() {
-  vec4 bottom_color = Texture(u_source, vUv);
-  vec4 top_color = Texture(u_source2, vUv);
+  vec4 bottom_color = GskTexture(u_source, vUv);
+  vec4 top_color = GskTexture(u_source2, vUv);
 
   vec4 result;
   if (u_mode == 0)
@@ -306,5 +306,5 @@ void main() {
   else
     discard;
 
-  setOutputColor(result * u_alpha);
+  gskSetOutputColor(result * u_alpha);
 }

@@ -39,14 +39,14 @@ void main() {
   vec3 incrementalGaussian = initial_gaussian;
 
   float coefficientSum = 0.0;
-  vec4 sum = Texture(u_source, vUv) * incrementalGaussian.x;
+  vec4 sum = GskTexture(u_source, vUv) * incrementalGaussian.x;
   coefficientSum += incrementalGaussian.x;
   incrementalGaussian.xy *= incrementalGaussian.yz;
 
   vec2 p = pixel_step;
   for (int i = 1; i <= int(pixels_per_side); i++) {
-    sum += Texture(u_source, vUv - p) * incrementalGaussian.x;
-    sum += Texture(u_source, vUv + p) * incrementalGaussian.x;
+    sum += GskTexture(u_source, vUv - p) * incrementalGaussian.x;
+    sum += GskTexture(u_source, vUv + p) * incrementalGaussian.x;
 
     coefficientSum += 2.0 * incrementalGaussian.x;
     incrementalGaussian.xy *= incrementalGaussian.yz;
@@ -54,5 +54,5 @@ void main() {
     p += pixel_step;
   }
 
-  setOutputColor(sum / coefficientSum);
+  gskSetOutputColor(sum / coefficientSum);
 }

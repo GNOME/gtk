@@ -35,7 +35,7 @@ void main() {
   tp.x = u_texture_rect.x + (wrapped_x * tw);
   tp.y = u_texture_rect.y + (wrapped_y * th);
 
-  vec4 diffuse = Texture(u_source, tp);
+  vec4 diffuse = GskTexture(u_source, tp);
 
-  setOutputColor(diffuse * u_alpha);
+  gskSetOutputColor(diffuse * u_alpha);
 }

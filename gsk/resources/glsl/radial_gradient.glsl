@@ -21,10 +21,10 @@ void main() {
 
   for (int i = 0; i < u_num_color_stops; i ++) {
     color_offsets[i] = u_color_stops[(i * 5) + 0];
-    color_stops[i] = premultiply(vec4(u_color_stops[(i * 5) + 1],
-                                      u_color_stops[(i * 5) + 2],
-                                      u_color_stops[(i * 5) + 3],
-                                      u_color_stops[(i * 5) + 4]));
+    color_stops[i] = gsk_premultiply(vec4(u_color_stops[(i * 5) + 1],
+                                          u_color_stops[(i * 5) + 2],
+                                          u_color_stops[(i * 5) + 3],
+                                          u_color_stops[(i * 5) + 4]));
   }
 }
 
@@ -51,17 +51,17 @@ float abs_offset(float offset)  {
 }
 
 void main() {
-  vec2 pixel = get_frag_coord();
+  vec2 pixel = gsk_get_frag_coord();
   vec2 rel = (center - pixel) / (u_radius);
   float d = sqrt(dot(rel, rel));
 
   if (d < abs_offset (color_offsets[0])) {
-    setOutputColor(color_stops[0] * u_alpha);
+    gskSetOutputColor(color_stops[0] * u_alpha);
     return;
   }
 
   if (d > end) {
-    setOutputColor(color_stops[u_num_color_stops - 1] * u_alpha);
+    gskSetOutputColor(color_stops[u_num_color_stops - 1] * u_alpha);
     return;
   }
 
@@ -80,5 +80,5 @@ void main() {
     }
   }
 
-  setOutputColor(color * u_alpha);
+  gskSetOutputColor(color * u_alpha);
 }
