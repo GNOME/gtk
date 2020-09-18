@@ -48,6 +48,7 @@
  * @GSK_TEXT_NODE: A node containing a glyph string
  * @GSK_BLUR_NODE: A node that applies a blur
  * @GSK_DEBUG_NODE: Debug information that does not affect the rendering
+ * @GSK_GL_SHADER_NODE: A node that uses OpenGL fragment shaders to render
  
  * The type of a node determines what the node is rendering.
  */
@@ -75,7 +76,8 @@ typedef enum {
   GSK_CROSS_FADE_NODE,
   GSK_TEXT_NODE,
   GSK_BLUR_NODE,
-  GSK_DEBUG_NODE
+  GSK_DEBUG_NODE,
+  GSK_GL_SHADER_NODE
 } GskRenderNodeType;
 
 /**
@@ -217,5 +219,33 @@ typedef enum
   GSK_TRANSFORM_CATEGORY_2D_TRANSLATE,
   GSK_TRANSFORM_CATEGORY_IDENTITY
 } GskTransformCategory;
+
+/**
+ * GskGLUniformType:
+ * @GSK_GLUNIFORM_TYPE_NONE: No type, used for uninitialized or unspecified values.
+ * @GSK_GLUNIFORM_TYPE_FLOAT: A float uniform
+ * @GSK_GLUNIFORM_TYPE_INT: A GLSL int / gint32 uniform
+ * @GSK_GLUNIFORM_TYPE_UINT: A GLSL uint / guint32 uniform
+ * @GSK_GLUNIFORM_TYPE_BOOL: A GLSL bool / gboolean uniform
+ * @GSK_GLUNIFORM_TYPE_VEC2: A GLSL vec2 / graphene_vec2_t uniform
+ * @GSK_GLUNIFORM_TYPE_VEC3: A GLSL vec3 / graphene_vec3_t uniform
+ * @GSK_GLUNIFORM_TYPE_VEC4: A GLSL vec4 / graphene_vec4_t uniform
+ *
+ * This defines the types of the uniforms that #GskGLShaders
+ * declare. It defines both what the type is called in the GLSL shader
+ * code, and what the corresponding C type is on the Gtk side.
+ */
+typedef enum
+{
+  GSK_GLUNIFORM_TYPE_NONE,
+  GSK_GLUNIFORM_TYPE_FLOAT,
+  GSK_GLUNIFORM_TYPE_INT,
+  GSK_GLUNIFORM_TYPE_UINT,
+  GSK_GLUNIFORM_TYPE_BOOL,
+  GSK_GLUNIFORM_TYPE_VEC2,
+  GSK_GLUNIFORM_TYPE_VEC3,
+  GSK_GLUNIFORM_TYPE_VEC4,
+} GskGLUniformType;
+
 
 #endif /* __GSK_TYPES_H__ */
