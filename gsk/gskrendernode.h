@@ -53,6 +53,11 @@ struct _GskShadow
   float radius;
 };
 
+#define GSK_TYPE_GLSHADER (gsk_glshader_get_type ())
+
+GDK_AVAILABLE_IN_ALL
+G_DECLARE_FINAL_TYPE (GskGLShader, gsk_glshader, GSK, GLSHADER, GObject)
+
 /**
  * GskParseErrorFunc:
  * @section: the #GtkCssSection where the error occurred
@@ -71,6 +76,12 @@ GType                   gsk_render_node_get_type                (void) G_GNUC_CO
 
 GDK_AVAILABLE_IN_ALL
 GQuark                  gsk_serialization_error_quark           (void);
+
+
+GDK_AVAILABLE_IN_ALL
+GskGLShader *           gsk_glshader_new                        (const char   *source);
+GDK_AVAILABLE_IN_ALL
+const char *            gsk_glshader_peek_source                (GskGLShader  *shader);
 
 GDK_AVAILABLE_IN_ALL
 GskRenderNode *         gsk_render_node_ref                     (GskRenderNode *node);
@@ -122,6 +133,7 @@ GskRenderNode *         gsk_render_node_deserialize             (GBytes         
 #define GSK_TYPE_CROSS_FADE_NODE                (gsk_cross_fade_node_get_type())
 #define GSK_TYPE_TEXT_NODE                      (gsk_text_node_get_type())
 #define GSK_TYPE_BLUR_NODE                      (gsk_blur_node_get_type())
+#define GSK_TYPE_GLSHADER_NODE                  (gsk_glshader_node_get_type())
 
 typedef struct _GskDebugNode                    GskDebugNode;
 typedef struct _GskColorNode                    GskColorNode;
@@ -146,6 +158,7 @@ typedef struct _GskBlendNode                    GskBlendNode;
 typedef struct _GskCrossFadeNode                GskCrossFadeNode;
 typedef struct _GskTextNode                     GskTextNode;
 typedef struct _GskBlurNode                     GskBlurNode;
+typedef struct _GskGLShaderNode                 GskGLShaderNode;
 
 GDK_AVAILABLE_IN_ALL
 GType                   gsk_debug_node_get_type                 (void) G_GNUC_CONST;
@@ -450,6 +463,29 @@ GDK_AVAILABLE_IN_ALL
 GskRenderNode *         gsk_blur_node_get_child                 (GskRenderNode            *node);
 GDK_AVAILABLE_IN_ALL
 float                   gsk_blur_node_get_radius                (GskRenderNode            *node);
+
+GDK_AVAILABLE_IN_ALL
+GType                   gsk_glshader_node_get_type              (void) G_GNUC_CONST;
+GDK_AVAILABLE_IN_ALL
+GskRenderNode *         gsk_glshader_node_new                   (GskGLShader              *shader,
+                                                                 const graphene_vec4_t    *args,
+                                                                 const graphene_rect_t    *bounds,
+                                                                 GskRenderNode            *fallback,
+                                                                 GskRenderNode           **children,
+                                                                 int                       n_children);
+GDK_AVAILABLE_IN_ALL
+GskRenderNode *         gsk_glshader_node_get_fallback_child    (GskRenderNode            *node);
+GDK_AVAILABLE_IN_ALL
+guint                   gsk_glshader_node_get_n_children        (GskRenderNode            *node);
+GDK_AVAILABLE_IN_ALL
+GskRenderNode *         gsk_glshader_node_get_child             (GskRenderNode            *node,
+                                                                 int                       idx);
+GDK_AVAILABLE_IN_ALL
+void                    gsk_glshader_node_get_args              (GskRenderNode            *node,
+                                                                 graphene_vec4_t          *out_args);
+GDK_AVAILABLE_IN_ALL
+GskGLShader *           gsk_glshader_node_get_shader            (GskRenderNode            *node);
+
 
 G_END_DECLS
 

@@ -1089,6 +1089,15 @@ parse_inset_shadow_node (GtkCssParser *parser)
   return gsk_inset_shadow_node_new (&outline, &color, dx, dy, spread, blur);
 }
 
+
+static GskRenderNode *
+parse_glshader_node (GtkCssParser *parser)
+{
+  /* TODO */
+  gtk_css_parser_error_syntax (parser, "glshader node parsing not implemented yet");
+  return NULL;
+}
+
 static GskRenderNode *
 parse_border_node (GtkCssParser *parser)
 {
@@ -1603,6 +1612,7 @@ parse_node (GtkCssParser *parser,
     { "text", parse_text_node },
     { "texture", parse_texture_node },
     { "transform", parse_transform_node },
+    { "glshader", parse_glshader_node },
   };
   GskRenderNode **node_p = out_node;
   guint i;
@@ -1838,6 +1848,19 @@ append_point (GString                *str,
 }
 
 static void
+append_string (GString    *str,
+               const char *value)
+{
+  char *escaped = g_strescape (value, NULL);
+
+  g_string_append_c (str, '"');
+  g_string_append (str, escaped);
+  g_string_append_c (str, '"');
+
+  g_free (escaped);
+}
+
+static void
 append_vec4 (GString               *str,
              const graphene_vec4_t *v)
 {
@@ -1910,6 +1933,18 @@ append_point_param (Printer                *p,
   _indent (p);
   g_string_append_printf (p->str, "%s: ", param_name);
   append_point (p->str, value);
+  g_string_append_c (p->str, ';');
+  g_string_append_c (p->str, '\n');
+}
+
+static void
+append_string_param (Printer    *p,
+                     const char *param_name,
+                     const char *value)
+{
+  _indent (p);
+  g_string_append_printf (p->str, "%s: ", param_name);
+  append_string (p->str, value);
   g_string_append_c (p->str, ';');
   g_string_append_c (p->str, '\n');
 }
@@ -2436,6 +2471,27 @@ render_node_print (Printer       *p,
 
         append_float_param (p, "blur", gsk_blur_node_get_radius (node), 1.0f);
         append_node_param (p, "child", gsk_blur_node_get_child (node));
+
+        end_node (p);
+      }
+      break;
+
+    case GSK_GLSHADER_NODE:
+      {
+        start_node (p, "glshader");
+
+        GskGLShader *shader = gsk_glshader_node_get_shader (node);
+        append_string_param (p, "shader", gsk_glshader_peek_source (shader));
+        graphene_vec4_t args;
+        gsk_glshader_node_get_args (node, &args);
+        append_vec4_param (p, "args", &args);
+        append_node_param (p, "fallback", gsk_glshader_node_get_fallback_child (node));
+        for (guint i = 0; i < gsk_glshader_node_get_n_children (node); i ++)
+          {
+            GskRenderNode *child = gsk_glshader_node_get_child (node, i);
+            _indent (p);
+            render_node_print (p, child);
+          }
 
         end_node (p);
       }

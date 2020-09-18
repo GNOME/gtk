@@ -4470,6 +4470,323 @@ gsk_debug_node_get_message (GskRenderNode *node)
   return self->message;
 }
 
+/*** GSK_GLSHADER_NODE ***/
+struct _GskGLShader
+{
+  GObject parent_instance;
+  char *source;
+};
+
+G_DEFINE_TYPE (GskGLShader, gsk_glshader, G_TYPE_OBJECT)
+
+enum {
+  GLSHADER_PROP_0,
+  GLSHADER_PROP_SOURCE,
+  GLSHADER_N_PROPS
+};
+static GParamSpec *gsk_glshader_properties[GLSHADER_N_PROPS];
+
+static void
+gsk_glshader_get_property (GObject    *object,
+                           guint       prop_id,
+                           GValue     *value,
+                           GParamSpec *pspec)
+{
+  GskGLShader *shader = GSK_GLSHADER (object);
+
+  switch (prop_id)
+    {
+    case GLSHADER_PROP_SOURCE:
+      g_value_set_string (value, shader->source);
+      break;
+
+    default:
+      g_assert_not_reached ();
+    }
+}
+
+static void
+gsk_glshader_set_property (GObject      *object,
+                           guint         prop_id,
+                           const GValue *value,
+                           GParamSpec   *pspec)
+{
+  GskGLShader *shader = GSK_GLSHADER (object);
+
+  switch (prop_id)
+    {
+    case GLSHADER_PROP_SOURCE:
+      g_free (shader->source);
+      shader->source = g_value_dup_string (value);
+      break;
+
+    default:
+      g_assert_not_reached ();
+    }
+}
+
+static void
+gsk_glshader_finalize (GObject *object)
+{
+  GskGLShader *shader = GSK_GLSHADER (object);
+
+  g_free (shader->source);
+
+  G_OBJECT_CLASS (gsk_glshader_parent_class)->finalize (object);
+}
+
+static void
+gsk_glshader_class_init (GskGLShaderClass *klass)
+{
+   GObjectClass *object_class = G_OBJECT_CLASS (klass);
+
+  object_class->get_property = gsk_glshader_get_property;
+  object_class->set_property = gsk_glshader_set_property;
+  object_class->finalize = gsk_glshader_finalize;
+
+  /**
+   * GskGLShader:source:
+   *
+   * The source code for the shader.
+   */
+  gsk_glshader_properties[GLSHADER_PROP_SOURCE] =
+    g_param_spec_string ("source",
+                         "Source",
+                         "The source code for the shader",
+                         NULL,
+                         G_PARAM_READWRITE |
+                         G_PARAM_CONSTRUCT_ONLY |
+                         G_PARAM_STATIC_STRINGS);
+
+  g_object_class_install_properties (object_class, GLSHADER_N_PROPS, gsk_glshader_properties);
+}
+
+static void
+gsk_glshader_init (GskGLShader *shader)
+{
+}
+
+GskGLShader *
+gsk_glshader_new (const char *source)
+{
+   GskGLShader *shader = g_object_new (GSK_TYPE_GLSHADER,
+                                       "source", source,
+                                       NULL);
+   return shader;
+}
+
+const char *
+gsk_glshader_peek_source (GskGLShader *shader)
+{
+  return shader->source;
+}
+
+struct _GskGLShaderNode
+{
+  GskRenderNode render_node;
+
+  GskGLShader *shader;
+  graphene_vec4_t args;
+  GskRenderNode *fallback;
+  guint n_children;
+  GskRenderNode **children;
+};
+
+static void
+gsk_glshader_node_finalize (GskRenderNode *node)
+{
+  GskGLShaderNode *self = (GskGLShaderNode *) node;
+  GskRenderNodeClass *parent_class = g_type_class_peek (g_type_parent (GSK_TYPE_GLSHADER_NODE));
+
+  for (guint i = 0; i < self->n_children; i++)
+    gsk_render_node_unref (self->children[i]);
+  g_free (self->children);
+
+  gsk_render_node_unref (self->fallback);
+
+  g_object_unref (self->shader);
+
+  parent_class->finalize (node);
+}
+
+static void
+gsk_glshader_node_draw (GskRenderNode *node,
+                        cairo_t       *cr)
+{
+  GskGLShaderNode *self = (GskGLShaderNode *) node;
+
+  gsk_render_node_draw (self->fallback, cr);
+}
+
+static void
+gsk_glshader_node_diff (GskRenderNode  *node1,
+                        GskRenderNode  *node2,
+                        cairo_region_t *region)
+{
+  GskGLShaderNode *self1 = (GskGLShaderNode *) node1;
+  GskGLShaderNode *self2 = (GskGLShaderNode *) node2;
+
+  if (graphene_rect_equal (&node1->bounds, &node2->bounds) &&
+      self1->shader == self2->shader &&
+      graphene_vec4_equal (&self1->args, &self2->args) &&
+      self1->n_children == self2->n_children)
+    {
+      gsk_render_node_diff (self1->fallback, self2->fallback, region);
+
+      for (guint i = 0; i < self1->n_children; i++)
+        {
+          if (self1->children[i] != self2->children[i])
+            {
+              gsk_render_node_diff_impossible (node1, node2, region);
+              break;
+            }
+        }
+    }
+  else
+    {
+      gsk_render_node_diff_impossible (node1, node2, region);
+    }
+}
+
+/**
+ * gsk_glshader_node_new:
+ * @shader: the shader glsl code
+ * @args: a vec4 argument to the shader
+ * @bounds: the rectangle to render the glshader into
+ * @fallback: Render node to use if OpenGL is not supported
+ * @children: List of child nodes, these will be rendered to textures and used as input.
+ * @n_children: Length of @children (currenly the GL backend only supports max 4 children)
+ *
+ * Creates a #GskRenderNode that will render the given @gl_program into the area given by @bounds.
+ *
+ * Returns: (transfer full) (type GskGLShaderNode): A new #GskRenderNode
+ */
+GskRenderNode *
+gsk_glshader_node_new (GskGLShader           *shader,
+                       const graphene_vec4_t *args,
+                       const graphene_rect_t *bounds,
+                       GskRenderNode         *fallback,
+                       GskRenderNode        **children,
+                       int                    n_children)
+{
+  GskGLShaderNode *self;
+  GskRenderNode *node;
+
+  g_return_val_if_fail (bounds != NULL, NULL);
+
+  self = gsk_render_node_alloc (GSK_GLSHADER_NODE);
+  node = (GskRenderNode *) self;
+
+  graphene_rect_init_from_rect (&node->bounds, bounds);
+  self->shader = g_object_ref (shader);
+  self->args = *args;
+
+  self->fallback = gsk_render_node_ref (fallback);
+
+  self->n_children = n_children;
+  if (n_children > 0)
+    {
+      self->children = g_malloc_n (n_children, sizeof (GskRenderNode *));
+      for (guint i = 0; i < n_children; i++)
+        self->children[i] = gsk_render_node_ref (children[i]);
+    }
+
+  return node;
+}
+
+/**
+ * gsk_glshader_node_get_fallback_child:
+ * @node: (type GskGLShaderNode): a #GskRenderNode for a gl shader
+ *
+ * Gets the fallback child node
+ *
+ * Returns: (transfer none): The fallback node
+ */
+GskRenderNode *
+gsk_glshader_node_get_fallback_child (GskRenderNode *node)
+{
+  GskGLShaderNode *self = (GskGLShaderNode *) node;
+
+  g_return_val_if_fail (GSK_IS_RENDER_NODE_TYPE (node, GSK_GLSHADER_NODE), NULL);
+
+  return self->fallback;
+}
+
+/**
+ * gsk_glshader_node_get_n_children:
+ * @node: (type GskGLShaderNode): a #GskRenderNode for a gl shader
+ *
+ * Returns the number of (non-fallback) children
+ *
+ * Returns: The number of children
+ */
+guint
+gsk_glshader_node_get_n_children (GskRenderNode *node)
+{
+  GskGLShaderNode *self = (GskGLShaderNode *) node;
+
+  g_return_val_if_fail (GSK_IS_RENDER_NODE_TYPE (node, GSK_GLSHADER_NODE), 0);
+
+  return self->n_children;
+}
+
+/**
+ * gsk_glshader_node_get_child:
+ * @node: (type GskGLShaderNode): a #GskRenderNode for a gl shader
+ * @idx: the position of the child to get
+ *
+ * Gets one of the (non-fallback) children.
+ *
+ * Returns: (transfer none): the @idx'th child of @node
+ */
+GskRenderNode *
+gsk_glshader_node_get_child (GskRenderNode *node,
+                             int            idx)
+{
+  GskGLShaderNode *self = (GskGLShaderNode *) node;
+
+  g_return_val_if_fail (GSK_IS_RENDER_NODE_TYPE (node, GSK_GLSHADER_NODE), NULL);
+  g_return_val_if_fail (idx < self->n_children, NULL);
+
+  return self->children[idx];
+}
+
+/**
+ * gsk_glshader_node_get_shader:
+ * @node: (type GskGLShaderNode): a #GskRenderNode for a gl shader
+ *
+ * Gets shader code for the node.
+ *
+ * Returns: (transfer none): the #GskGLShader shader
+ */
+GskGLShader *
+gsk_glshader_node_get_shader (GskRenderNode *node)
+{
+  GskGLShaderNode *self = (GskGLShaderNode *) node;
+
+  g_return_val_if_fail (GSK_IS_RENDER_NODE_TYPE (node, GSK_GLSHADER_NODE), 0);
+
+  return self->shader;
+}
+
+/**
+ * gsk_glshader_node_get_args:
+ * @node: (type GskGLShaderNode): a #GskRenderNode for a gl shader
+ * @out_args: Location to write results to.
+ *
+ * Gets args for the node.
+ */
+void
+gsk_glshader_node_get_args (GskRenderNode   *node,
+                            graphene_vec4_t *out_args)
+{
+  GskGLShaderNode *self = (GskGLShaderNode *) node;
+
+  g_return_if_fail (GSK_IS_RENDER_NODE_TYPE (node, GSK_GLSHADER_NODE));
+
+  *out_args = self->args;
+}
+
 GType gsk_render_node_types[GSK_RENDER_NODE_TYPE_N_TYPES];
 
 #ifndef I_
@@ -4506,6 +4823,7 @@ GSK_DEFINE_RENDER_NODE_TYPE (gsk_blend_node, GSK_BLEND_NODE)
 GSK_DEFINE_RENDER_NODE_TYPE (gsk_cross_fade_node, GSK_CROSS_FADE_NODE)
 GSK_DEFINE_RENDER_NODE_TYPE (gsk_text_node, GSK_TEXT_NODE)
 GSK_DEFINE_RENDER_NODE_TYPE (gsk_blur_node, GSK_BLUR_NODE)
+GSK_DEFINE_RENDER_NODE_TYPE (gsk_glshader_node, GSK_GLSHADER_NODE)
 GSK_DEFINE_RENDER_NODE_TYPE (gsk_debug_node, GSK_DEBUG_NODE)
 
 static void
@@ -4861,6 +5179,22 @@ gsk_render_node_init_types_once (void)
 
     GType node_type = gsk_render_node_type_register_static (I_("GskBlurNode"), &node_info);
     gsk_render_node_types[GSK_BLUR_NODE] = node_type;
+  }
+
+  {
+    const GskRenderNodeTypeInfo node_info =
+    {
+      GSK_GLSHADER_NODE,
+      sizeof (GskGLShaderNode),
+      NULL,
+      gsk_glshader_node_finalize,
+      gsk_glshader_node_draw,
+      NULL,
+      gsk_glshader_node_diff,
+    };
+
+    GType node_type = gsk_render_node_type_register_static (I_("GskGLShaderNode"), &node_info);
+    gsk_render_node_types[GSK_GLSHADER_NODE] = node_type;
   }
 
   {
