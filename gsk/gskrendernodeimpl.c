@@ -422,7 +422,6 @@ gsk_radial_gradient_node_draw (GskRenderNode *node,
 {
   GskRadialGradientNode *self = (GskRadialGradientNode *) node;
   cairo_pattern_t *pattern;
-  cairo_matrix_t matrix;
   gsize i;
 
   pattern = cairo_pattern_create_radial (0, 0, self->hradius * self->start,
@@ -430,6 +429,8 @@ gsk_radial_gradient_node_draw (GskRenderNode *node,
 
   if (self->hradius != self->vradius)
     {
+      cairo_matrix_t matrix;
+
       cairo_matrix_init_scale (&matrix, 1.0, self->hradius / self->vradius);
       cairo_pattern_set_matrix (pattern, &matrix);
     }
