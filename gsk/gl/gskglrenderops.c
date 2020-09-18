@@ -60,7 +60,7 @@ get_current_program_state (RenderOpBuilder *builder)
   if (!builder->current_program)
     return NULL;
 
-  return &builder->programs->state[builder->current_program->index];
+  return &builder->current_program->state;
 }
 
 void
@@ -218,10 +218,10 @@ ops_free (RenderOpBuilder *builder)
 
 void
 ops_set_program (RenderOpBuilder *builder,
-                 const Program   *program)
+                 Program   *program)
 {
   OpProgram *op;
-  ProgramState *program_state;
+  ProgramState *program_state = NULL;
 
   if (builder->current_program == program)
     return;
@@ -231,7 +231,7 @@ ops_set_program (RenderOpBuilder *builder,
 
   builder->current_program = program;
 
-  program_state = &builder->programs->state[program->index];
+  program_state = &program->state;
 
   if (memcmp (&builder->current_projection, &program_state->projection, sizeof (graphene_matrix_t)) != 0)
     {

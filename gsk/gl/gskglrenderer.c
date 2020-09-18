@@ -2919,7 +2919,7 @@ gsk_gl_renderer_programs_new (void)
   programs->ref_count = 1;
   for (i = 0; i < GL_N_PROGRAMS; i ++)
     {
-      programs->state[i].opacity = 1.0f;
+      programs->programs[i].state.opacity = 1.0f;
     }
 
   return programs;
@@ -2944,7 +2944,7 @@ gsk_gl_renderer_programs_unref (GskGLRendererPrograms *programs)
         {
           if (programs->programs[i].id > 0)
             glDeleteProgram (programs->programs[i].id);
-          gsk_transform_unref (programs->state[i].modelview);
+          gsk_transform_unref (programs->programs[i].state.modelview);
         }
       g_free (programs);
     }

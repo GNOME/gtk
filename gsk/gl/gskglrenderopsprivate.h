@@ -31,6 +31,57 @@ typedef struct
   OpsMatrixMetadata metadata;
 } MatrixStackEntry;
 
+typedef struct
+{
+  GskTransform *modelview;
+  GskRoundedRect clip;
+  graphene_matrix_t projection;
+  int source_texture;
+  graphene_rect_t viewport;
+  float opacity;
+  /* Per-program state */
+  union {
+    GdkRGBA color;
+    struct {
+      graphene_matrix_t matrix;
+      graphene_vec4_t offset;
+    } color_matrix;
+    struct {
+      float widths[4];
+      GdkRGBA color;
+      GskRoundedRect outline;
+    } border;
+    struct {
+      GskRoundedRect outline;
+      float dx;
+      float dy;
+      float spread;
+      GdkRGBA color;
+    } inset_shadow;
+    struct {
+      GskRoundedRect outline;
+      float dx;
+      float dy;
+      float spread;
+      GdkRGBA color;
+    } unblurred_outset_shadow;
+    struct {
+      int n_color_stops;
+      GskColorStop color_stops[GL_MAX_GRADIENT_STOPS];
+      float start_point[2];
+      float end_point[2];
+    } linear_gradient;
+    struct {
+      int n_color_stops;
+      GskColorStop color_stops[GL_MAX_GRADIENT_STOPS];
+      float center[2];
+      float start;
+      float end;
+      float radius[2]; /* h/v */
+    } radial_gradient;
+  };
+} ProgramState;
+
 struct _Program
 {
   int index;        /* Into the renderer's program array */
@@ -109,58 +160,8 @@ struct _Program
       int texture_rect_location;
     } repeat;
   };
+  ProgramState state;
 };
-
-typedef struct
-{
-  GskTransform *modelview;
-  GskRoundedRect clip;
-  graphene_matrix_t projection;
-  int source_texture;
-  graphene_rect_t viewport;
-  float opacity;
-  /* Per-program state */
-  union {
-    GdkRGBA color;
-    struct {
-      graphene_matrix_t matrix;
-      graphene_vec4_t offset;
-    } color_matrix;
-    struct {
-      float widths[4];
-      GdkRGBA color;
-      GskRoundedRect outline;
-    } border;
-    struct {
-      GskRoundedRect outline;
-      float dx;
-      float dy;
-      float spread;
-      GdkRGBA color;
-    } inset_shadow;
-    struct {
-      GskRoundedRect outline;
-      float dx;
-      float dy;
-      float spread;
-      GdkRGBA color;
-    } unblurred_outset_shadow;
-    struct {
-      int n_color_stops;
-      GskColorStop color_stops[GL_MAX_GRADIENT_STOPS];
-      float start_point[2];
-      float end_point[2];
-    } linear_gradient;
-    struct {
-      int n_color_stops;
-      GskColorStop color_stops[GL_MAX_GRADIENT_STOPS];
-      float center[2];
-      float start;
-      float end;
-      float radius[2]; /* h/v */
-    } radial_gradient;
-  };
-} ProgramState;
 
 typedef struct {
   int ref_count;
@@ -189,7 +190,7 @@ typedef struct {
 typedef struct
 {
   GskGLRendererPrograms *programs;
-  const Program *current_program;
+  Program *current_program;
   int current_render_target;
   int current_texture;
 
@@ -236,7 +237,7 @@ void              ops_pop_modelview      (RenderOpBuilder         *builder);
 float             ops_get_scale          (const RenderOpBuilder   *builder);
 
 void              ops_set_program        (RenderOpBuilder         *builder,
-                                          const Program           *program);
+                                          Program                 *program);
 
 void              ops_push_clip          (RenderOpBuilder         *builder,
                                           const GskRoundedRect    *clip);
