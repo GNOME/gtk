@@ -31,6 +31,8 @@ static guint op_sizes[OP_LAST] = {
   sizeof (OpDebugGroup),
   0,
   sizeof (OpBlend),
+  sizeof (OpGLShader),
+  sizeof (OpExtraTexture),
 };
 
 void

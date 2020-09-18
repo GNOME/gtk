@@ -19,6 +19,7 @@
 #include "gskglnodesampleprivate.h"
 #include "gsktransform.h"
 #include "glutilsprivate.h"
+#include "gskglshaderprivate.h"
 
 #include "gskprivate.h"
 
@@ -63,6 +64,11 @@
                 program_ptr->uniform_basename ## _location =  \
                               glGetUniformLocation(program_ptr->id, "u_" #uniform_basename);\
               }G_STMT_END
+
+static Program *gsk_gl_renderer_lookup_custom_program (GskGLRenderer  *self,
+                                                       GskGLShader *shader);
+static Program *gsk_gl_renderer_create_custom_program (GskGLRenderer  *self,
+                                                       GskGLShader *shader);
 
 typedef enum
 {
@@ -128,6 +134,13 @@ print_render_node_tree (GskRenderNode *root, int level)
       case GSK_SHADOW_NODE:
         g_print ("%*s Shadow\n", level * INDENT, " ");
         print_render_node_tree (gsk_shadow_node_get_child (root), level + 1);
+        break;
+
+      case GSK_GLSHADER_NODE:
+        g_print ("%*s GLShader\n", level * INDENT, " ");
+        print_render_node_tree (gsk_glshader_node_get_fallback_child (root), level + 1);
+        for (i = 0; i < gsk_glshader_node_get_n_children (root); i++)
+          print_render_node_tree (gsk_glshader_node_get_child (root, i), level + 1);
         break;
 
       case GSK_TEXTURE_NODE:
@@ -494,6 +507,40 @@ struct _GskGLRendererClass
 };
 
 G_DEFINE_TYPE (GskGLRenderer, gsk_gl_renderer, GSK_TYPE_RENDERER)
+
+static void
+init_shader_builder (GskGLRenderer       *self,
+                     GskGLShaderBuilder  *shader_builder)
+{
+#ifdef G_ENABLE_DEBUG
+  if (GSK_RENDERER_DEBUG_CHECK (GSK_RENDERER (self), SHADERS))
+    shader_builder->debugging = TRUE;
+#endif
+
+  if (gdk_gl_context_get_use_es (self->gl_context))
+    {
+      gsk_gl_shader_builder_set_glsl_version (shader_builder, SHADER_VERSION_GLES);
+      shader_builder->gles = TRUE;
+    }
+  else if (gdk_gl_context_is_legacy (self->gl_context))
+    {
+      int maj, min;
+
+      gdk_gl_context_get_version (self->gl_context, &maj, &min);
+
+      if (maj == 3)
+        gsk_gl_shader_builder_set_glsl_version (shader_builder, SHADER_VERSION_GL3_LEGACY);
+      else
+        gsk_gl_shader_builder_set_glsl_version (shader_builder, SHADER_VERSION_GL2_LEGACY);
+
+      shader_builder->legacy = TRUE;
+        }
+  else
+    {
+      gsk_gl_shader_builder_set_glsl_version (shader_builder, SHADER_VERSION_GL3);
+      shader_builder->gl3 = TRUE;
+    }
+}
 
 static void G_GNUC_UNUSED
 add_rect_ops (RenderOpBuilder       *builder,
@@ -1003,6 +1050,128 @@ render_texture_node (GskGLRenderer       *self,
                                     node, builder,
                                     &r,
                                     FALSE);
+    }
+}
+
+static inline void
+render_glshader_node (GskGLRenderer       *self,
+                      GskRenderNode       *node,
+                      RenderOpBuilder     *builder)
+{
+  GskGLShader *shader = gsk_glshader_node_get_shader (node);
+  Program *program = gsk_gl_renderer_lookup_custom_program (self, shader);
+  GskRenderNode *fallback = gsk_glshader_node_get_fallback_child (node);
+  int n_children = gsk_glshader_node_get_n_children (node);
+
+  if (program == NULL)
+    {
+      GskGLShaderBuilder shader_builder;
+      const char *shader_source;
+      GError *error = NULL;
+      int n_uniforms;
+      const GskGLUniform *uniforms;
+      int n_required_sources = gsk_glshader_get_n_required_sources (shader);
+
+      /* We always create the program, so that any compiler warnings or other is only reported once */
+      program = gsk_gl_renderer_create_custom_program (self, shader);
+
+      shader_source = gsk_glshader_get_sourcecode (shader);
+      uniforms = gsk_glshader_get_uniforms (shader, &n_uniforms);
+
+      if (n_uniforms > G_N_ELEMENTS (program->glshader.args_locations))
+        {
+          g_set_error (&error, GDK_GL_ERROR, GDK_GL_ERROR_UNSUPPORTED_FORMAT,
+                       "GLShaderNode supports max %d custom uniforms", (int)G_N_ELEMENTS (program->glshader.args_locations));
+        }
+      else if (n_required_sources > 1 + G_N_ELEMENTS (program->glshader.extra_source_locations))
+        {
+          g_set_error (&error, GDK_GL_ERROR, GDK_GL_ERROR_UNSUPPORTED_FORMAT,
+                       "GLShaderNode supports max %d texture sources", (int)(1 + G_N_ELEMENTS (program->glshader.extra_source_locations)));
+        }
+      else
+        {
+          gsk_gl_shader_builder_init (&shader_builder,
+                                      "/org/gtk/libgsk/glsl/preamble.glsl",
+                                      "/org/gtk/libgsk/glsl/preamble.vs.glsl",
+                                      "/org/gtk/libgsk/glsl/preamble.fs.glsl");
+
+          init_shader_builder (self, &shader_builder);
+
+          program->id = gsk_gl_shader_builder_create_program (&shader_builder,
+                                                              "/org/gtk/libgsk/glsl/custom.glsl",
+                                                              shader_source,
+                                                              &error);
+          gsk_gl_shader_builder_finish (&shader_builder);
+
+          if (program->id >= 0)
+            {
+              INIT_COMMON_UNIFORM_LOCATION (program, alpha);
+              INIT_COMMON_UNIFORM_LOCATION (program, source);
+              INIT_COMMON_UNIFORM_LOCATION (program, clip_rect);
+              INIT_COMMON_UNIFORM_LOCATION (program, viewport);
+              INIT_COMMON_UNIFORM_LOCATION (program, projection);
+              INIT_COMMON_UNIFORM_LOCATION (program, modelview);
+              program->glshader.size_location = glGetUniformLocation(program->id, "u_size");
+              program->glshader.extra_source_locations[0] = glGetUniformLocation(program->id, "u_source2");
+              program->glshader.extra_source_locations[1] = glGetUniformLocation(program->id, "u_source3");
+              program->glshader.extra_source_locations[2] = glGetUniformLocation(program->id, "u_source4");
+              for (int i = 0; i < G_N_ELEMENTS (program->glshader.args_locations); i++)
+                {
+                  if (i < n_uniforms)
+                    {
+                      program->glshader.args_locations[i] = glGetUniformLocation(program->id, uniforms[i].name);
+                      if (program->glshader.args_locations[i] == -1)
+                        g_warning ("Expected uniform `%s` not found in shader", uniforms[i].name);
+                    }
+                  else
+                    program->glshader.args_locations[i] = -1;
+                }
+            }
+        }
+
+      if (program->id <= 0)
+        {
+          g_warning ("Failed to compile gl shader: %s\n", error->message);
+          g_error_free (error);
+        }
+    }
+
+  if (program->id >= 0 && n_children <= 4)
+    {
+      const guchar *uniform_data;
+      TextureRegion regions[4];
+      gboolean is_offscreen[4];
+
+      for (guint i = 0; i < n_children; i++)
+        {
+          GskRenderNode *child = gsk_glshader_node_get_child (node, i);
+          if (!add_offscreen_ops (self, builder,
+                                  &node->bounds,
+                                  child,
+                                  &regions[i], &is_offscreen[i],
+                                  FORCE_OFFSCREEN | RESET_CLIP | RESET_OPACITY))
+            {
+              if (fallback)
+                gsk_gl_renderer_add_render_ops (self, fallback, builder);
+              return;
+            }
+        }
+
+      uniform_data = gsk_glshader_node_get_uniform_data (node);
+      ops_set_program (builder, program);
+
+      ops_set_glshader_args (builder, shader, node->bounds.size.width, node->bounds.size.height, uniform_data);
+      if (n_children >= 0)
+        ops_set_texture (builder, regions[0].texture_id);
+      for (guint i = 1; i < n_children; i++)
+        ops_set_extra_texture (builder, regions[i].texture_id, i-1);
+
+      load_offscreen_vertex_data (ops_draw (builder, NULL), node, builder);
+    }
+  else
+    {
+      if (fallback)
+        gsk_gl_renderer_add_render_ops (self, fallback, builder);
     }
 }
 
@@ -2672,6 +2841,18 @@ apply_source_texture_op (const Program   *program,
 }
 
 static inline void
+apply_source_extra_texture_op (const Program        *program,
+                               const OpExtraTexture *op)
+{
+  g_assert(op->texture_id != 0);
+  OP_PRINT (" -> New extra texture %d: %d", op->idx, op->texture_id);
+  /* Use texture unit 1 + op->idx for the source */
+  glUniform1i (program->glshader.extra_source_locations[op->idx], 1 + op->idx);
+  glActiveTexture (GL_TEXTURE0 + 1 + op->idx);
+  glBindTexture (GL_TEXTURE_2D, op->texture_id);
+}
+
+static inline void
 apply_color_matrix_op (const Program       *program,
                        const OpColorMatrix *op)
 {
@@ -2816,6 +2997,51 @@ apply_border_op (const Program  *program,
 }
 
 static inline void
+apply_glshader_args_op (const Program  *program,
+                        const OpGLShader *op)
+{
+  int n_uniforms, i;
+  const GskGLUniform *uniforms;
+
+  OP_PRINT (" -> GLShader Args");
+
+  glUniform2fv (program->glshader.size_location, 1, op->size);
+
+  uniforms = gsk_glshader_get_uniforms (op->shader, &n_uniforms);
+  for (i = 0; i < n_uniforms; i++)
+    {
+      const GskGLUniform *u = &uniforms[i];
+      const guchar *data = op->uniform_data + u->offset;
+
+      switch (u->type)
+        {
+        default:
+        case GSK_GLUNIFORM_TYPE_NONE:
+          break;
+        case GSK_GLUNIFORM_TYPE_FLOAT:
+          glUniform1fv (program->glshader.args_locations[i], 1, (const float *)data);
+          break;
+        case GSK_GLUNIFORM_TYPE_INT:
+          glUniform1iv (program->glshader.args_locations[i], 1, (const gint32 *)data);
+          break;
+        case GSK_GLUNIFORM_TYPE_UINT:
+        case GSK_GLUNIFORM_TYPE_BOOL:
+          glUniform1uiv (program->glshader.args_locations[i], 1, (const guint32 *) data);
+          break;
+        case GSK_GLUNIFORM_TYPE_VEC2:
+          glUniform2fv (program->glshader.args_locations[i], 1, (const float *)data);
+          break;
+        case GSK_GLUNIFORM_TYPE_VEC3:
+          glUniform3fv (program->glshader.args_locations[i], 1, (const float *)data);
+          break;
+        case GSK_GLUNIFORM_TYPE_VEC4:
+          glUniform4fv (program->glshader.args_locations[i], 1, (const float *)data);
+          break;
+        }
+    }
+}
+
+static inline void
 apply_border_width_op (const Program  *program,
                        const OpBorder *op)
 {
@@ -2886,6 +3112,28 @@ gsk_gl_renderer_dispose (GObject *gobject)
   G_OBJECT_CLASS (gsk_gl_renderer_parent_class)->dispose (gobject);
 }
 
+static void
+program_init (Program *program)
+{
+  program->index = -1;
+  program->state.opacity = 1.0f;
+}
+
+static void
+program_finalize (Program *program)
+{
+  if (program->id > 0)
+    glDeleteProgram (program->id);
+  gsk_transform_unref (program->state.modelview);
+}
+
+static void
+program_free (Program *program)
+{
+  program_finalize (program);
+  g_free (program);
+}
+
 static GskGLRendererPrograms *
 gsk_gl_renderer_programs_new (void)
 {
@@ -2895,9 +3143,11 @@ gsk_gl_renderer_programs_new (void)
   programs = g_new0 (GskGLRendererPrograms, 1);
   programs->ref_count = 1;
   for (i = 0; i < GL_N_PROGRAMS; i ++)
-    {
-      programs->programs[i].state.opacity = 1.0f;
-    }
+    program_init (&programs->programs[i]);
+
+  /* We use direct hash for performance, not string hash on the source, because we assume each caller
+   * reuses a single GskGLShader for all uses and different callers will use different source content. */
+  programs->custom_programs = g_hash_table_new_full (g_direct_hash, g_direct_equal, (GDestroyNotify)g_object_unref, (GDestroyNotify)program_free);
 
   return programs;
 }
@@ -2918,13 +3168,31 @@ gsk_gl_renderer_programs_unref (GskGLRendererPrograms *programs)
   if (programs->ref_count == 0)
     {
       for (i = 0; i < GL_N_PROGRAMS; i ++)
-        {
-          if (programs->programs[i].id > 0)
-            glDeleteProgram (programs->programs[i].id);
-          gsk_transform_unref (programs->programs[i].state.modelview);
-        }
+        program_finalize (&programs->programs[i]);
+
+      g_hash_table_destroy (programs->custom_programs);
       g_free (programs);
     }
+}
+
+static Program *
+gsk_gl_renderer_lookup_custom_program (GskGLRenderer  *self,
+                                       GskGLShader *shader)
+{
+  return g_hash_table_lookup (self->programs->custom_programs, shader);
+}
+
+static Program *
+gsk_gl_renderer_create_custom_program (GskGLRenderer  *self,
+                                       GskGLShader *shader)
+{
+  Program *program = g_new0 (Program, 1);
+
+  program_init (program);
+
+  g_hash_table_insert (self->programs->custom_programs, g_object_ref (shader), program);
+
+  return program;
 }
 
 static GskGLRendererPrograms *
@@ -2961,35 +3229,7 @@ gsk_gl_renderer_create_programs (GskGLRenderer  *self,
 
   g_assert (G_N_ELEMENTS (program_definitions) == GL_N_PROGRAMS);
 
-#ifdef G_ENABLE_DEBUG
-  if (GSK_RENDERER_DEBUG_CHECK (GSK_RENDERER (self), SHADERS))
-    shader_builder.debugging = TRUE;
-#endif
-
-  if (gdk_gl_context_get_use_es (self->gl_context))
-    {
-
-      gsk_gl_shader_builder_set_glsl_version (&shader_builder, SHADER_VERSION_GLES);
-      shader_builder.gles = TRUE;
-    }
-  else if (gdk_gl_context_is_legacy (self->gl_context))
-    {
-      int maj, min;
-
-      gdk_gl_context_get_version (self->gl_context, &maj, &min);
-
-      if (maj == 3)
-        gsk_gl_shader_builder_set_glsl_version (&shader_builder, SHADER_VERSION_GL3_LEGACY);
-      else
-        gsk_gl_shader_builder_set_glsl_version (&shader_builder, SHADER_VERSION_GL2_LEGACY);
-
-      shader_builder.legacy = TRUE;
-    }
-  else
-    {
-      gsk_gl_shader_builder_set_glsl_version (&shader_builder, SHADER_VERSION_GL3);
-      shader_builder.gl3 = TRUE;
-    }
+  init_shader_builder (self, &shader_builder);
 
   programs = gsk_gl_renderer_programs_new ();
 
@@ -3000,7 +3240,7 @@ gsk_gl_renderer_create_programs (GskGLRenderer  *self,
       prog->index = i;
       prog->id = gsk_gl_shader_builder_create_program (&shader_builder,
                                                        program_definitions[i].resource_path,
-                                                       error);
+                                                       NULL, error);
       if (prog->id < 0)
         {
           g_clear_pointer (&programs, gsk_gl_renderer_programs_unref);
@@ -3445,6 +3685,10 @@ gsk_gl_renderer_add_render_ops (GskGLRenderer   *self,
       render_repeat_node (self, node, builder);
     break;
 
+    case GSK_GLSHADER_NODE:
+      render_glshader_node (self, node, builder);
+    break;
+
     case GSK_REPEATING_LINEAR_GRADIENT_NODE:
     case GSK_REPEATING_RADIAL_GRADIENT_NODE:
     case GSK_CAIRO_NODE:
@@ -3727,6 +3971,10 @@ gsk_gl_renderer_render_ops (GskGLRenderer *self)
           apply_source_texture_op (program, ptr);
           break;
 
+        case OP_CHANGE_EXTRA_SOURCE_TEXTURE:
+          apply_source_extra_texture_op (program, ptr);
+          break;
+
         case OP_CHANGE_CROSS_FADE:
           g_assert (program == &self->programs->cross_fade_program);
           apply_cross_fade_op (program, ptr);
@@ -3771,6 +4019,10 @@ gsk_gl_renderer_render_ops (GskGLRenderer *self)
 
         case OP_CHANGE_REPEAT:
           apply_repeat_op (program, ptr);
+          break;
+
+        case OP_CHANGE_GLSHADER_ARGS:
+          apply_glshader_args_op (program, ptr);
           break;
 
         case OP_DRAW:

@@ -96,6 +96,7 @@ check_shader_error (int     shader_id,
 int
 gsk_gl_shader_builder_create_program (GskGLShaderBuilder  *self,
                                       const char          *resource_path,
+                                      const char          *extra_fragment_snippet,
                                       GError             **error)
 {
 
@@ -156,7 +157,7 @@ gsk_gl_shader_builder_create_program (GskGLShaderBuilder  *self,
     }
 
   fragment_id = glCreateShader (GL_FRAGMENT_SHADER);
-  glShaderSource (fragment_id, 8,
+  glShaderSource (fragment_id, 9,
                   (const char *[]) {
                     version_buffer,
                     self->debugging ? "#define GSK_DEBUG 1\n" : "",
@@ -165,9 +166,11 @@ gsk_gl_shader_builder_create_program (GskGLShaderBuilder  *self,
                     self->gles ? "#define GSK_GLES 1\n" : "",
                     g_bytes_get_data (self->preamble, NULL),
                     g_bytes_get_data (self->fs_preamble, NULL),
-                    fragment_shader_start
+                    fragment_shader_start,
+                    extra_fragment_snippet ? extra_fragment_snippet : ""
                   },
                   (int[]) {
+                    -1,
                     -1,
                     -1,
                     -1,

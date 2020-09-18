@@ -558,6 +558,18 @@ ops_set_texture (RenderOpBuilder *builder,
   builder->current_texture = texture_id;
 }
 
+void
+ops_set_extra_texture (RenderOpBuilder *builder,
+                       int              texture_id,
+                       int              idx)
+{
+  OpExtraTexture *op;
+
+  op = ops_begin (builder, OP_CHANGE_EXTRA_SOURCE_TEXTURE);
+  op->texture_id = texture_id;
+  op->idx = idx;
+}
+
 int
 ops_set_render_target (RenderOpBuilder *builder,
                        int              render_target_id)
@@ -619,6 +631,22 @@ ops_set_color (RenderOpBuilder *builder,
 
   op = ops_begin (builder, OP_CHANGE_COLOR);
   op->rgba = color;
+}
+
+void
+ops_set_glshader_args (RenderOpBuilder       *builder,
+                       GskGLShader           *shader,
+                       float                  width,
+                       float                  height,
+                       const guchar          *uniform_data)
+{
+  OpGLShader *op;
+
+  op = ops_begin (builder, OP_CHANGE_GLSHADER_ARGS);
+  op->shader = shader;
+  op->size[0] = width;
+  op->size[1] = height;
+  op->uniform_data = uniform_data;
 }
 
 void

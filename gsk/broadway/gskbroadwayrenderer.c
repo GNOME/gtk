@@ -272,6 +272,11 @@ collect_reused_child_nodes (GskRenderer *renderer,
 
       /* Bin nodes */
 
+    case GSK_GLSHADER_NODE:
+      collect_reused_node (renderer,
+                           gsk_glshader_node_get_fallback_child (node));
+      break;
+
     case GSK_SHADOW_NODE:
       collect_reused_node (renderer,
                            gsk_shadow_node_get_child (node));
@@ -790,6 +795,11 @@ gsk_broadway_renderer_add_node (GskRenderer *renderer,
           gsk_broadway_renderer_add_node (renderer,
                                           gsk_debug_node_get_child (node), offset_x, offset_y, clip_bounds);
         }
+      return;
+
+    case GSK_GLSHADER_NODE:
+      gsk_broadway_renderer_add_node (renderer,
+                                      gsk_glshader_node_get_fallback_child (node), offset_x, offset_y, clip_bounds);
       return;
 
       /* Generic nodes */
