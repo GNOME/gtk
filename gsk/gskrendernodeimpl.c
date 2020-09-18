@@ -226,6 +226,8 @@ gsk_linear_gradient_node_diff (GskRenderNode  *node1,
  * @start: the point at which the linear gradient will begin
  * @end: the point at which the linear gradient will finish
  * @color_stops: (array length=n_color_stops): a pointer to an array of #GskColorStop defining the gradient
+ *   The offsets of all color steps must be increasing. The first stop's offset must be >= 0 and the last
+ *   stop's offset must be <= 1.
  * @n_color_stops: the number of elements in @color_stops
  *
  * Creates a #GskRenderNode that will create a linear gradient from the given
@@ -274,6 +276,8 @@ gsk_linear_gradient_node_new (const graphene_rect_t  *bounds,
  * @start: the point at which the linear gradient will begin
  * @end: the point at which the linear gradient will finish
  * @color_stops: (array length=n_color_stops): a pointer to an array of #GskColorStop defining the gradient
+ *   The offsets of all color steps must be increasing. The first stop's offset must be >= 0 and the last
+ *   stop's offset must be <= 1.
  * @n_color_stops: the number of elements in @color_stops
  *
  * Creates a #GskRenderNode that will create a repeating linear gradient
@@ -499,6 +503,8 @@ gsk_radial_gradient_node_diff (GskRenderNode  *node1,
  * @start: a percentage >= 0 that defines the start of the gradient around @center
  * @end: a percentage >= 0 that defines the end of the gradient around @center
  * @color_stops: (array length=n_color_stops): a pointer to an array of #GskColorStop defining the gradient
+ *   The offsets of all color steps must be increasing. The first stop's offset must be >= 0 and the last
+ *   stop's offset must be <= 1.
  * @n_color_stops: the number of elements in @color_stops
  *
  * Creates a #GskRenderNode that draws a radial gradient. The radial gradient
@@ -562,6 +568,8 @@ gsk_radial_gradient_node_new (const graphene_rect_t  *bounds,
  * @start: a percentage >= 0 that defines the start of the gradient around @center
  * @end: a percentage >= 0 that defines the end of the gradient around @center
  * @color_stops: (array length=n_color_stops): a pointer to an array of #GskColorStop defining the gradient
+ *   The offsets of all color steps must be increasing. The first stop's offset must be >= 0 and the last
+ *   stop's offset must be <= 1.
  * @n_color_stops: the number of elements in @color_stops
  *
  * Creates a #GskRenderNode that draws a repeating radial gradient. The radial gradient
