@@ -490,6 +490,23 @@ gsk_radial_gradient_node_diff (GskRenderNode  *node1,
   gsk_render_node_diff_impossible (node1, node2, region);
 }
 
+/**
+ * gsk_radial_gradient_node_new:
+ * @bounds: the bounds of the node
+ * @center: the center of the gradient
+ * @hradius: the horizontal radius
+ * @vradius: the vertical radius
+ * @start: a percentage >= 0 that defines the start of the gradient around @center
+ * @end: a percentage >= 0 that defines the end of the gradient around @center
+ * @color_stops: (array length=n_color_stops): a pointer to an array of #GskColorStop defining the gradient
+ * @n_color_stops: the number of elements in @color_stops
+ *
+ * Creates a #GskRenderNode that draws a radial gradient. The radial gradient
+ * starts around @center. The size of the gradient is dictated by @hradius
+ * in horizontal orientation and by @vradius in vertial orientation.
+ *
+ * Returns: (transfer full) (type GskRadialGradientNode): A new #GskRenderNode
+ */
 GskRenderNode *
 gsk_radial_gradient_node_new (const graphene_rect_t  *bounds,
                               const graphene_point_t *center,
@@ -536,6 +553,23 @@ gsk_radial_gradient_node_new (const graphene_rect_t  *bounds,
   return node;
 }
 
+/**
+ * gsk_repeating_radial_gradient_node_new:
+ * @bounds: the bounds of the node
+ * @center: the center of the gradient
+ * @hradius: the horizontal radius
+ * @vradius: the vertical radius
+ * @start: a percentage >= 0 that defines the start of the gradient around @center
+ * @end: a percentage >= 0 that defines the end of the gradient around @center
+ * @color_stops: (array length=n_color_stops): a pointer to an array of #GskColorStop defining the gradient
+ * @n_color_stops: the number of elements in @color_stops
+ *
+ * Creates a #GskRenderNode that draws a repeating radial gradient. The radial gradient
+ * starts around @center. The size of the gradient is dictated by @hradius
+ * in horizontal orientation and by @vradius in vertial orientation.
+ *
+ * Returns: (transfer full) (type GskRepeatingRadialGradientNode): A new #GskRenderNode
+ */
 GskRenderNode *
 gsk_repeating_radial_gradient_node_new (const graphene_rect_t  *bounds,
                                         const graphene_point_t *center,
