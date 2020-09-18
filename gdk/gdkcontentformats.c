@@ -121,6 +121,9 @@ gdk_content_formats_new_take (GType *      gtypes,
   GdkContentFormats *result = g_slice_new0 (GdkContentFormats);
   result->ref_count = 1;
 
+  g_assert (n_mime_types > 0 || mime_types == NULL);
+  g_assert (n_gtypes > 0 || gtypes == NULL);
+
   result->gtypes = gtypes;
   result->n_gtypes = n_gtypes;
   result->mime_types = mime_types;
@@ -650,19 +653,33 @@ gdk_content_formats_builder_to_formats (GdkContentFormatsBuilder *builder)
 
   g_return_val_if_fail (builder != NULL, NULL);
 
-  gtypes = g_new (GType, builder->n_gtypes + 1);
-  i = builder->n_gtypes;
-  gtypes[i--] = G_TYPE_INVALID;
-  /* add backwards because most important type is last in the list */
-  for (l = builder->gtypes; l; l = l->next)
-    gtypes[i--] = GPOINTER_TO_SIZE (l->data);
+  if (builder->n_gtypes == 0)
+    {
+      gtypes = NULL;
+    }
+  else
+    {
+      gtypes = g_new (GType, builder->n_gtypes + 1);
+      i = builder->n_gtypes;
+      gtypes[i--] = G_TYPE_INVALID;
+      /* add backwards because most important type is last in the list */
+      for (l = builder->gtypes; l; l = l->next)
+        gtypes[i--] = GPOINTER_TO_SIZE (l->data);
+    }
 
-  mime_types = g_new (const char *, builder->n_mime_types + 1);
-  i = builder->n_mime_types;
-  mime_types[i--] = NULL;
-  /* add backwards because most important type is last in the list */
-  for (l = builder->mime_types; l; l = l->next)
-    mime_types[i--] = l->data;
+  if (builder->n_mime_types == 0)
+    {
+      mime_types = NULL;
+    }
+  else
+    {
+      mime_types = g_new (const char *, builder->n_mime_types + 1);
+      i = builder->n_mime_types;
+      mime_types[i--] = NULL;
+      /* add backwards because most important type is last in the list */
+      for (l = builder->mime_types; l; l = l->next)
+        mime_types[i--] = l->data;
+    }
 
   result = gdk_content_formats_new_take (gtypes, builder->n_gtypes,
                                          mime_types, builder->n_mime_types);
