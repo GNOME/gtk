@@ -960,3 +960,32 @@ ops_set_linear_gradient (RenderOpBuilder     *self,
   op->end_point[0] = end_x;
   op->end_point[1] = end_y;
 }
+
+void
+ops_set_radial_gradient (RenderOpBuilder    *self,
+                         guint               n_color_stops,
+                         const GskColorStop *color_stops,
+                         float               center_x,
+                         float               center_y,
+                         float               start,
+                         float               end,
+                         float               hradius,
+                         float               vradius)
+{
+  const guint real_n_color_stops = MIN (MAX_GRADIENT_STOPS, n_color_stops);
+  OpRadialGradient *op;
+
+  /* TODO: State tracking? */
+
+  op = ops_begin (self, OP_CHANGE_RADIAL_GRADIENT);
+  op->n_color_stops.value = real_n_color_stops;
+  op->n_color_stops.send = true;
+  op->color_stops.value = color_stops;
+  op->color_stops.send = true;
+  op->center[0] = center_x;
+  op->center[1] = center_y;
+  op->radius[0] = hradius;
+  op->radius[1] = vradius;
+  op->start = start;
+  op->end = end;
+}

@@ -13,7 +13,7 @@
 #include "opbuffer.h"
 
 #define GL_N_VERTICES 6
-#define GL_N_PROGRAMS 13
+#define GL_N_PROGRAMS 14
 #define MAX_GRADIENT_STOPS 8
 
 typedef struct
@@ -62,6 +62,14 @@ struct _Program
       int start_point_location;
       int end_point_location;
     } linear_gradient;
+    struct {
+      int num_color_stops_location;
+      int color_stops_location;
+      int center_location;
+      int start_location;
+      int end_location;
+      int radius_location;
+    } radial_gradient;
     struct {
       int blur_radius_location;
       int blur_size_location;
@@ -143,6 +151,14 @@ typedef struct
       float start_point[2];
       float end_point[2];
     } linear_gradient;
+    struct {
+      int n_color_stops;
+      GskColorStop color_stops[MAX_GRADIENT_STOPS];
+      float center[2];
+      float start;
+      float end;
+      float radius[2]; /* h/v */
+    } radial_gradient;
   };
 } ProgramState;
 
@@ -161,6 +177,7 @@ typedef struct {
       Program cross_fade_program;
       Program inset_shadow_program;
       Program linear_gradient_program;
+      Program radial_gradient_program;
       Program outset_shadow_program;
       Program repeat_program;
       Program unblurred_outset_shadow_program;
@@ -278,6 +295,15 @@ void              ops_set_linear_gradient (RenderOpBuilder     *self,
                                            float                start_y,
                                            float                end_x,
                                            float                end_y);
+void              ops_set_radial_gradient (RenderOpBuilder        *self,
+                                           guint                   n_color_stops,
+                                           const GskColorStop     *color_stops,
+                                           float                   center_x,
+                                           float                   center_y,
+                                           float                   start,
+                                           float                   end,
+                                           float                   hradius,
+                                           float                   vradius);
 
 GskQuadVertex *   ops_draw               (RenderOpBuilder        *builder,
                                           const GskQuadVertex     vertex_data[GL_N_VERTICES]);

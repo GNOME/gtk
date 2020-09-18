@@ -394,8 +394,6 @@ struct _GskRadialGradientNode
 
   graphene_point_t center;
 
-  gboolean circle;
-
   float hradius;
   float vradius;
   float start;
