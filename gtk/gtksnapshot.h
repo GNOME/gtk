@@ -99,6 +99,24 @@ GDK_AVAILABLE_IN_ALL
 void            gtk_snapshot_push_cross_fade            (GtkSnapshot            *snapshot,
                                                          double                  progress);
 GDK_AVAILABLE_IN_ALL
+void            gtk_snapshot_push_glshader              (GtkSnapshot            *snapshot,
+                                                         GskGLShader            *shader,
+                                                         const graphene_rect_t  *bounds,
+                                                         GBytes                 *uniform_data,
+                                                         int                     n_children);
+GDK_AVAILABLE_IN_ALL
+void            gtk_snapshot_push_glshader_v            (GtkSnapshot            *snapshot,
+                                                         GskGLShader            *shader,
+                                                         const graphene_rect_t  *bounds,
+                                                         int                     n_children,
+                                                         ...) G_GNUC_NULL_TERMINATED;
+GDK_AVAILABLE_IN_ALL
+void            gtk_snapshot_push_glshader_va           (GtkSnapshot            *snapshot,
+                                                         GskGLShader            *shader,
+                                                         const graphene_rect_t  *bounds,
+                                                         int                     n_children,
+                                                         va_list                 uniforms);
+GDK_AVAILABLE_IN_ALL
 void            gtk_snapshot_pop                        (GtkSnapshot            *snapshot);
 
 GDK_AVAILABLE_IN_ALL
