@@ -188,6 +188,7 @@ gsk_gl_shader_builder_create_program (GskGLShaderBuilder  *self,
       g_free (buffer);
 
       glDeleteProgram (program_id);
+      program_id = -1;
 
       goto out;
     }
