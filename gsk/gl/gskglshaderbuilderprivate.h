@@ -33,6 +33,8 @@ void   gsk_gl_shader_builder_set_glsl_version (GskGLShaderBuilder  *self,
 
 int    gsk_gl_shader_builder_create_program   (GskGLShaderBuilder  *self,
                                                const char          *resource_path,
+                                               const char          *extra_fragment_snippet,
+                                               gsize                extra_fragment_length,
                                                GError             **error);
 
 G_END_DECLS
