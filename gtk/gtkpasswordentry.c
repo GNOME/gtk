@@ -88,6 +88,13 @@ struct _GtkPasswordEntryClass
 };
 
 enum {
+  ACTIVATE,
+  LAST_SIGNAL
+};
+
+static guint signals[LAST_SIGNAL] = { 0, };
+
+enum {
   PROP_PLACEHOLDER_TEXT = 1,
   PROP_ACTIVATES_DEFAULT,
   PROP_SHOW_PEEK_ICON,
@@ -157,6 +164,12 @@ visibility_toggled (GObject          *object,
 }
 
 static void
+activate_cb (GtkPasswordEntry *entry)
+{
+  g_signal_emit (entry, signals[ACTIVATE], 0);
+}
+
+static void
 gtk_password_entry_init (GtkPasswordEntry *entry)
 {
   GtkEntryBuffer *buffer = gtk_password_entry_buffer_new ();
@@ -167,6 +180,7 @@ gtk_password_entry_init (GtkPasswordEntry *entry)
   gtk_widget_set_parent (entry->entry, GTK_WIDGET (entry));
   gtk_editable_init_delegate (GTK_EDITABLE (entry));
   g_signal_connect_swapped (entry->entry, "notify::has-focus", G_CALLBACK (focus_changed), entry);
+  g_signal_connect_swapped (entry->entry, "activate", G_CALLBACK (activate_cb), entry);
 
   entry->icon = gtk_image_new_from_icon_name ("caps-lock-symbolic");
   gtk_widget_set_tooltip_text (entry->icon, _("Caps Lock is on"));
@@ -437,6 +451,15 @@ gtk_password_entry_class_init (GtkPasswordEntryClass *klass)
 
   g_object_class_install_properties (object_class, NUM_PROPERTIES, props);
   gtk_editable_install_properties (object_class, NUM_PROPERTIES);
+
+  signals[ACTIVATE] =
+    g_signal_new (I_("activate"),
+                  G_OBJECT_CLASS_TYPE (object_class),
+                  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                  0,
+                  NULL, NULL,
+                  NULL,
+                  G_TYPE_NONE, 0);
 
   gtk_widget_class_set_css_name (widget_class, I_("entry"));
   gtk_widget_class_set_accessible_role (widget_class, GTK_ACCESSIBLE_ROLE_TEXT_BOX);
