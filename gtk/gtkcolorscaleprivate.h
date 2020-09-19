@@ -24,30 +24,10 @@ G_BEGIN_DECLS
 
 #define GTK_TYPE_COLOR_SCALE            (gtk_color_scale_get_type ())
 #define GTK_COLOR_SCALE(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_COLOR_SCALE, GtkColorScale))
-#define GTK_COLOR_SCALE_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_COLOR_SCALE, GtkColorScaleClass))
 #define GTK_IS_COLOR_SCALE(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_COLOR_SCALE))
-#define GTK_IS_COLOR_SCALE_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_COLOR_SCALE))
-#define GTK_COLOR_SCALE_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_COLOR_SCALE, GtkColorScaleClass))
 
 
-typedef struct _GtkColorScale         GtkColorScale;
-typedef struct _GtkColorScaleClass    GtkColorScaleClass;
-
-struct _GtkColorScale
-{
-  GtkScale parent_instance;
-};
-
-struct _GtkColorScaleClass
-{
-  GtkScaleClass parent_class;
-
-  /* Padding for future expansion */
-  void (*_gtk_reserved1) (void);
-  void (*_gtk_reserved2) (void);
-  void (*_gtk_reserved3) (void);
-  void (*_gtk_reserved4) (void);
-};
+typedef struct _GtkColorScale GtkColorScale;
 
 typedef enum
 {
@@ -55,16 +35,16 @@ typedef enum
   GTK_COLOR_SCALE_ALPHA
 } GtkColorScaleType;
 
-GType       gtk_color_scale_get_type (void) G_GNUC_CONST;
-GtkWidget * gtk_color_scale_new      (GtkAdjustment     *adjustment,
-                                      GtkColorScaleType  type);
-void        gtk_color_scale_set_rgba (GtkColorScale     *scale,
-                                      const GdkRGBA     *color);
+GType       gtk_color_scale_get_type        (void) G_GNUC_CONST;
+GtkWidget * gtk_color_scale_new             (GtkAdjustment     *adjustment,
+                                             GtkColorScaleType  type);
+void        gtk_color_scale_set_rgba        (GtkColorScale     *scale,
+                                             const GdkRGBA     *color);
 
-void        gtk_color_scale_snapshot_trough (GtkColorScale  *scale,
-                                             GtkSnapshot    *snapshot,
-                                             int             width,
-                                             int             height);
+void        gtk_color_scale_snapshot_trough (GtkColorScale     *scale,
+                                             GtkSnapshot       *snapshot,
+                                             int                width,
+                                             int                height);
 
 G_END_DECLS
 
