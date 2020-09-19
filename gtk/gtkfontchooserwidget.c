@@ -62,6 +62,7 @@
 #include "gtklistview.h"
 #include "gtksortlistmodel.h"
 #include "gtkstringsorter.h"
+#include "gtkspinner.h"
 
 #include <hb-ot.h>
 #if defined(HAVE_PANGOFT) && defined(HAVE_HARFBUZZ)
@@ -112,6 +113,8 @@ struct _GtkFontChooserWidget
   GtkCustomFilter      *custom_filter;
   GtkCustomFilter      *user_filter;
   GtkFilterListModel   *filter_model;
+  GtkWidget *spinner;
+  guint      spinner_timeout;
 
   GtkWidget       *preview;
   GtkWidget       *preview2;
@@ -204,6 +207,7 @@ static GtkFontChooserLevel gtk_font_chooser_widget_get_level (GtkFontChooserWidg
 static void                gtk_font_chooser_widget_set_language (GtkFontChooserWidget *fontchooser,
                                                                  const char           *language);
 static void update_font_features (GtkFontChooserWidget *fontchooser);
+static void update_spinner       (GtkFontChooserWidget *self);
 
 static void gtk_font_chooser_widget_iface_init (GtkFontChooserIface *iface);
 
@@ -856,8 +860,14 @@ gtk_font_chooser_widget_dispose (GObject *object)
 {
   GtkFontChooserWidget *self = GTK_FONT_CHOOSER_WIDGET (object);
 
+  if (self->spinner_timeout)
+    {
+      g_source_remove (self->spinner_timeout);
+      self->spinner_timeout = 0;
+    }
   g_signal_handlers_disconnect_by_func (self->selection, rows_changed_cb, self);
   g_signal_handlers_disconnect_by_func (self->filter_model, rows_changed_cb, self);
+  g_signal_handlers_disconnect_by_func (self->filter_model, update_spinner, self);
 
   self->filter_func = NULL;
   g_clear_pointer (&self->filter_data, self->filter_data_destroy);
@@ -1237,6 +1247,56 @@ setup_language_list (GtkFontChooserWidget *self)
   g_object_unref (factory);
 }
 
+static gboolean
+show_spinner (gpointer data)
+{
+  GtkFontChooserWidget *self = data;
+
+  gtk_spinner_set_spinning (GTK_SPINNER (self->spinner), TRUE);
+  gtk_widget_set_child_visible (self->spinner, TRUE);
+
+  self->spinner_timeout = 0;
+
+  return G_SOURCE_REMOVE;
+}
+
+static void
+update_spinner (GtkFontChooserWidget *self)
+{
+  guint pending = gtk_filter_list_model_get_pending (self->filter_model);
+
+  if (pending != 0)
+    {
+      if (!self->spinner_timeout)
+        self->spinner_timeout = g_timeout_add (250, show_spinner, self);
+    }
+  else
+    {
+      if (self->spinner_timeout)
+        {
+          g_source_remove (self->spinner_timeout);
+          self->spinner_timeout = 0;
+        }
+      gtk_spinner_set_spinning (GTK_SPINNER (self->spinner), FALSE);
+      gtk_widget_set_child_visible (self->spinner, FALSE);
+    }
+}
+
+static void
+setup_search_entry (GtkFontChooserWidget *self)
+{
+  /* A bit nasty, we insert our spinner into the search entry */
+  self->spinner = gtk_spinner_new ();
+  gtk_widget_set_margin_end (self->spinner, 10);
+  gtk_widget_set_child_visible (self->spinner, FALSE);
+  gtk_widget_insert_before (self->spinner,
+                            self->search_entry,
+                            gtk_widget_get_last_child (self->search_entry));
+
+  g_signal_connect_swapped (self->filter_model, "notify::pending",
+                            G_CALLBACK (update_spinner), self);
+}
+
 static void
 gtk_font_chooser_widget_init (GtkFontChooserWidget *self)
 {
@@ -1276,6 +1336,7 @@ gtk_font_chooser_widget_init (GtkFontChooserWidget *self)
 
   gtk_custom_filter_set_filter_func (self->user_filter, user_filter_cb, self, NULL);
   setup_language_list (self);
+  setup_search_entry (self);
 }
 
 /**
