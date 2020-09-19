@@ -24,15 +24,29 @@ insert_tags_for_attributes (GtkTextBuffer     *buffer,
                             GtkTextIter       *end)
 {
   GtkTextTagTable *table;
-  PangoAttribute *attr;
+  GSList *attrs, *l;
   GtkTextTag *tag;
   char name[256];
+  float fg_alpha, bg_alpha;
 
   table = gtk_text_buffer_get_tag_table (buffer);
 
-#define STRING_ATTR(pango_attr_name, attr_name) \
-  attr = pango_attr_iterator_get (iter, pango_attr_name); \
-  if (attr) \
+#define LANGUAGE_ATTR(attr_name) \
+    { \
+      const char *language = pango_language_to_string (((PangoAttrLanguage*)attr)->value); \
+      g_snprintf (name, 256, "language=%s", language); \
+      tag = gtk_text_tag_table_lookup (table, name); \
+      if (!tag) \
+        { \
+          tag = gtk_text_tag_new (name); \
+          g_object_set (tag, #attr_name, language, NULL); \
+          gtk_text_tag_table_add (table, tag); \
+          g_object_unref (tag); \
+        } \
+      gtk_text_buffer_apply_tag (buffer, tag, start, end); \
+    }
+
+#define STRING_ATTR(attr_name) \
     { \
       const char *string = ((PangoAttrString*)attr)->value; \
       g_snprintf (name, 256, #attr_name "=%s", string); \
@@ -47,9 +61,7 @@ insert_tags_for_attributes (GtkTextBuffer     *buffer,
       gtk_text_buffer_apply_tag (buffer, tag, start, end); \
     }
 
-#define INT_ATTR(pango_attr_name, attr_name) \
-  attr = pango_attr_iterator_get (iter, pango_attr_name); \
-  if (attr) \
+#define INT_ATTR(attr_name) \
     { \
       int value = ((PangoAttrInt*)attr)->value; \
       g_snprintf (name, 256, #attr_name "=%d", value); \
@@ -64,9 +76,24 @@ insert_tags_for_attributes (GtkTextBuffer     *buffer,
       gtk_text_buffer_apply_tag (buffer, tag, start, end); \
     }
 
-#define FLOAT_ATTR(pango_attr_name, attr_name) \
-  attr = pango_attr_iterator_get (iter, pango_attr_name); \
-  if (attr) \
+#define FONT_ATTR(attr_name) \
+    { \
+      PangoFontDescription *desc = ((PangoAttrFontDesc*)attr)->desc; \
+      char *str = pango_font_description_to_string (desc); \
+      g_snprintf (name, 256, "font-desc=%s", str); \
+      g_free (str); \
+      tag = gtk_text_tag_table_lookup (table, name); \
+      if (!tag) \
+        { \
+          tag = gtk_text_tag_new (name); \
+          g_object_set (tag, #attr_name, desc, NULL); \
+          gtk_text_tag_table_add (table, tag); \
+          g_object_unref (tag); \
+        } \
+      gtk_text_buffer_apply_tag (buffer, tag, start, end); \
+    }
+
+#define FLOAT_ATTR(attr_name) \
     { \
       float value = ((PangoAttrFloat*)attr)->value; \
       g_snprintf (name, 256, #attr_name "=%g", value); \
@@ -81,9 +108,7 @@ insert_tags_for_attributes (GtkTextBuffer     *buffer,
       gtk_text_buffer_apply_tag (buffer, tag, start, end); \
     }
 
-#define RGBA_ATTR(pango_attr_name, attr_name) \
-  attr = pango_attr_iterator_get (iter, pango_attr_name); \
-  if (attr) \
+#define RGBA_ATTR(attr_name, alpha_value) \
     { \
       PangoColor *color; \
       GdkRGBA rgba; \
@@ -91,7 +116,7 @@ insert_tags_for_attributes (GtkTextBuffer     *buffer,
       rgba.red = color->red / 65535.; \
       rgba.green = color->green / 65535.; \
       rgba.blue = color->blue / 65535.; \
-      rgba.alpha = 1.; \
+      rgba.alpha = alpha_value; \
       char *str = gdk_rgba_to_string (&rgba); \
       g_snprintf (name, 256, #attr_name "=%s", str); \
       g_free (str); \
@@ -106,63 +131,153 @@ insert_tags_for_attributes (GtkTextBuffer     *buffer,
       gtk_text_buffer_apply_tag (buffer, tag, start, end); \
     }
 
-  attr = pango_attr_iterator_get (iter, PANGO_ATTR_LANGUAGE);
-  if (attr)
+  fg_alpha = bg_alpha = 1.;
+
+  attrs = pango_attr_iterator_get_attrs (iter);
+  for (l = attrs; l; l = l->next)
     {
-      const char *language = pango_language_to_string (((PangoAttrLanguage*)attr)->value);
-      g_snprintf (name, 256, "language=%s", language);
-      tag = gtk_text_tag_table_lookup (table, name);
-      if (!tag)
+      PangoAttribute *attr = l->data;
+
+      switch ((int)attr->klass->type)
         {
-          tag = gtk_text_tag_new (name);
-          g_object_set (tag, "language", language, NULL);
-          gtk_text_tag_table_add (table, tag);
-          g_object_unref (tag);
+        case PANGO_ATTR_FOREGROUND_ALPHA:
+          fg_alpha = ((PangoAttrInt*)attr)->value / 65535.;
+          break;
+
+        case PANGO_ATTR_BACKGROUND_ALPHA:
+          bg_alpha = ((PangoAttrInt*)attr)->value / 65535.;
+          break;
+
+        default:
+          break;
         }
-      gtk_text_buffer_apply_tag (buffer, tag, start, end);
     }
 
-  STRING_ATTR (PANGO_ATTR_FAMILY, family)
-  INT_ATTR    (PANGO_ATTR_STYLE, style)
-  INT_ATTR    (PANGO_ATTR_WEIGHT, weight)
-  INT_ATTR    (PANGO_ATTR_VARIANT, variant)
-  INT_ATTR    (PANGO_ATTR_STRETCH, stretch)
-  INT_ATTR    (PANGO_ATTR_SIZE, size)
-
-  attr = pango_attr_iterator_get (iter, PANGO_ATTR_FONT_DESC);
-  if (attr)
+  for (l = attrs; l; l = l->next)
     {
-      PangoFontDescription *desc = ((PangoAttrFontDesc*)attr)->desc;
-      char *str = pango_font_description_to_string (desc);
-      g_snprintf (name, 256, "font-desc=%s", str);
-      g_free (str);
-      tag = gtk_text_tag_table_lookup (table, name);
-      if (!tag)
+      PangoAttribute *attr = l->data;
+
+      switch (attr->klass->type)
         {
-          tag = gtk_text_tag_new (name);
-          g_object_set (tag, "font-desc", desc, NULL);
-          gtk_text_tag_table_add (table, tag);
-          g_object_unref (tag);
+        case PANGO_ATTR_LANGUAGE:
+          LANGUAGE_ATTR (language);
+          break;
+
+        case PANGO_ATTR_FAMILY:
+          STRING_ATTR (family);
+          break;
+
+        case PANGO_ATTR_STYLE:
+          INT_ATTR (style);
+          break;
+
+        case PANGO_ATTR_WEIGHT:
+          INT_ATTR (weight);
+          break;
+
+        case PANGO_ATTR_VARIANT:
+          INT_ATTR (variant);
+          break;
+
+        case PANGO_ATTR_STRETCH:
+          INT_ATTR (stretch);
+          break;
+
+        case PANGO_ATTR_SIZE:
+          INT_ATTR (size);
+          break;
+
+        case PANGO_ATTR_FONT_DESC:
+          FONT_ATTR (font-desc);
+          break;
+
+        case PANGO_ATTR_FOREGROUND:
+          RGBA_ATTR (foreground_rgba, fg_alpha);
+          break;
+
+        case PANGO_ATTR_BACKGROUND:
+          RGBA_ATTR (background_rgba, bg_alpha);
+          break;
+
+        case PANGO_ATTR_UNDERLINE:
+          INT_ATTR (underline);
+          break;
+
+        case PANGO_ATTR_UNDERLINE_COLOR:
+          RGBA_ATTR (underline_rgba, fg_alpha);
+          break;
+
+        case PANGO_ATTR_OVERLINE:
+          INT_ATTR (overline);
+          break;
+
+        case PANGO_ATTR_OVERLINE_COLOR:
+          RGBA_ATTR (overline_rgba, fg_alpha);
+          break;
+
+        case PANGO_ATTR_STRIKETHROUGH:
+          INT_ATTR (strikethrough);
+          break;
+
+        case PANGO_ATTR_STRIKETHROUGH_COLOR:
+          RGBA_ATTR (strikethrough_rgba, fg_alpha);
+          break;
+
+        case PANGO_ATTR_RISE:
+          INT_ATTR (rise);
+          break;
+
+        case PANGO_ATTR_SCALE:
+          FLOAT_ATTR (scale);
+          break;
+
+        case PANGO_ATTR_FALLBACK:
+          INT_ATTR (fallback);
+          break;
+
+        case PANGO_ATTR_LETTER_SPACING:
+          INT_ATTR (letter_spacing);
+          break;
+
+        case PANGO_ATTR_FONT_FEATURES:
+          STRING_ATTR (font_features);
+          break;
+
+        case PANGO_ATTR_ALLOW_BREAKS:
+          INT_ATTR (allow_breaks);
+          break;
+
+        case PANGO_ATTR_SHOW:
+          INT_ATTR (show_spaces);
+          break;
+
+        case PANGO_ATTR_INSERT_HYPHENS:
+          INT_ATTR (insert_hyphens);
+          break;
+
+        case PANGO_ATTR_SHAPE:
+        case PANGO_ATTR_ABSOLUTE_SIZE:
+        case PANGO_ATTR_GRAVITY:
+        case PANGO_ATTR_GRAVITY_HINT:
+        case PANGO_ATTR_FOREGROUND_ALPHA:
+        case PANGO_ATTR_BACKGROUND_ALPHA:
+          break;
+
+        case PANGO_ATTR_INVALID:
+        default:
+          g_assert_not_reached ();
+          break;
         }
-      gtk_text_buffer_apply_tag (buffer, tag, start, end);
     }
 
-  RGBA_ATTR   (PANGO_ATTR_FOREGROUND, foreground_rgba)
-  RGBA_ATTR   (PANGO_ATTR_BACKGROUND, background_rgba)
-  INT_ATTR    (PANGO_ATTR_UNDERLINE, underline)
-  RGBA_ATTR   (PANGO_ATTR_UNDERLINE_COLOR, underline_rgba)
-  INT_ATTR    (PANGO_ATTR_OVERLINE, overline)
-  RGBA_ATTR   (PANGO_ATTR_OVERLINE_COLOR, overline_rgba)
-  INT_ATTR    (PANGO_ATTR_STRIKETHROUGH, strikethrough)
-  RGBA_ATTR   (PANGO_ATTR_STRIKETHROUGH_COLOR, strikethrough_rgba)
-  INT_ATTR    (PANGO_ATTR_RISE, rise)
-  FLOAT_ATTR  (PANGO_ATTR_SCALE, scale)
-  INT_ATTR    (PANGO_ATTR_FALLBACK, fallback)
-  INT_ATTR    (PANGO_ATTR_LETTER_SPACING, letter_spacing)
-  STRING_ATTR (PANGO_ATTR_FONT_FEATURES, font_features)
-  INT_ATTR    (PANGO_ATTR_ALLOW_BREAKS, allow_breaks)
-  INT_ATTR    (PANGO_ATTR_SHOW, show_spaces)
-  INT_ATTR    (PANGO_ATTR_INSERT_HYPHENS, insert_hyphens)
+  g_slist_free_full (attrs, (GDestroyNotify)pango_attribute_destroy);
+
+#undef LANGUAGE_ATTR
+#undef STRING_ATTR
+#undef INT_ATTR
+#undef FONT_ATTR
+#undef FLOAT_ATTR
+#undef RGBA_ATTR
 }
 
 typedef struct
