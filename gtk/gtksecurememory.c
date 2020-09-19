@@ -954,7 +954,7 @@ sec_acquire_pages (size_t *sz,
 
 	if (data == NULL) {
 		if (show_warning && gtk_secure_warnings)
-			fprintf (stderr, "couldn't allocate %lu bytes of memory (%s): %#010X\n",
+			fprintf (stderr, "couldn't allocate %lu bytes of memory (%s): %#010lX\n",
 			         (unsigned long)*sz, during_tag, GetLastError ());
 		show_warning = 0;
 		return NULL;
@@ -962,7 +962,7 @@ sec_acquire_pages (size_t *sz,
 
 	if (!CryptProtectMemory (data, *sz, CRYPTPROTECTMEMORY_SAME_PROCESS)) {
 		if (show_warning && gtk_secure_warnings)
-			fprintf (stderr, "couldn't encrypt %lu bytes of memory (%s): %#010X\n",
+			fprintf (stderr, "couldn't encrypt %lu bytes of memory (%s): %#010lX\n",
 			         (unsigned long)*sz, during_tag, GetLastError ());
 		show_warning = 0;
 		return NULL;
@@ -1002,10 +1002,10 @@ sec_release_pages (void *pages, size_t sz)
 	g_assert (sz % CRYPTPROTECTMEMORY_BLOCK_SIZE == 0);
 
 	if (!CryptUnprotectMemory (pages, sz, CRYPTPROTECTMEMORY_SAME_PROCESS))
-		fprintf (stderr, "couldn't decrypt private memory: %#010X\n", GetLastError ());
+		fprintf (stderr, "couldn't decrypt private memory: %#010lX\n", GetLastError ());
 
 	if (LocalFree (pages) != NULL)
-		fprintf (stderr, "couldn't free private anonymous memory: %#010X\n", GetLastError ());
+		fprintf (stderr, "couldn't free private anonymous memory: %#010lX\n", GetLastError ());
 
 	DEBUG_ALLOC ("gtk-secure-memory: freed block ", sz);
 #else
