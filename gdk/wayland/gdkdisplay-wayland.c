@@ -388,8 +388,10 @@ gboolean
 gdk_wayland_display_prefers_ssd (GdkDisplay *display)
 {
   GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
+
   if (display_wayland->server_decoration_manager)
     return display_wayland->server_decoration_mode == ORG_KDE_KWIN_SERVER_DECORATION_MANAGER_MODE_SERVER;
+
   return FALSE;
 }
 
