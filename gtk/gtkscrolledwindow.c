@@ -1250,6 +1250,9 @@ captured_motion (GtkEventController *controller,
   if (!priv->use_indicators)
     return;
 
+  if (!priv->child)
+    return;
+
   target = gtk_event_controller_get_target (controller);
   state = gtk_event_controller_get_current_event_state (controller);
   event = gtk_event_controller_get_current_event (controller);

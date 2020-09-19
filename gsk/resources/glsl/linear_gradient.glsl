@@ -25,10 +25,10 @@ void main() {
 
   for (int i = 0; i < u_num_color_stops; i ++) {
     color_offsets[i] = u_color_stops[(i * 5) + 0];
-    color_stops[i].r = u_color_stops[(i * 5) + 1];
-    color_stops[i].g = u_color_stops[(i * 5) + 2];
-    color_stops[i].b = u_color_stops[(i * 5) + 3];
-    color_stops[i].a = u_color_stops[(i * 5) + 4];
+    color_stops[i] = premultiply(vec4(u_color_stops[(i * 5) + 1],
+                                      u_color_stops[(i * 5) + 2],
+                                      u_color_stops[(i * 5) + 3],
+                                      u_color_stops[(i * 5) + 4]));
   }
 }
 
@@ -65,9 +65,6 @@ void main() {
       color = mix(color_stops[i - 1], color_stops[i], clamp(o, 0.0, 1.0));
     }
   }
-
-  /* Pre-multiply */
-  color.rgb *= color.a;
 
   setOutputColor(color * u_alpha);
 }

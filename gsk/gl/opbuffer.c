@@ -15,6 +15,7 @@ static guint op_sizes[OP_LAST] = {
   sizeof (OpTexture),
   sizeof (OpRepeat),
   sizeof (OpLinearGradient),
+  sizeof (OpRadialGradient),
   sizeof (OpColorMatrix),
   sizeof (OpBlur),
   sizeof (OpShadow),

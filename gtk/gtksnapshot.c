@@ -1967,6 +1967,82 @@ gtk_snapshot_append_repeating_linear_gradient (GtkSnapshot            *snapshot,
   gtk_snapshot_append_node_internal (snapshot, node);
 }
 
+void
+gtk_snapshot_append_radial_gradient (GtkSnapshot            *snapshot,
+                                     const graphene_rect_t  *bounds,
+                                     const graphene_point_t *center,
+                                     float                   hradius,
+                                     float                   vradius,
+                                     float                   start,
+                                     float                   end,
+                                     const GskColorStop     *stops,
+                                     gsize                   n_stops)
+{
+  GskRenderNode *node;
+  graphene_rect_t real_bounds;
+  graphene_point_t real_center;
+  float scale_x, scale_y, dx, dy;
+
+  g_return_if_fail (snapshot != NULL);
+  g_return_if_fail (center != NULL);
+  g_return_if_fail (stops != NULL);
+  g_return_if_fail (n_stops > 1);
+
+  gtk_snapshot_ensure_affine (snapshot, &scale_x, &scale_y, &dx, &dy);
+  gtk_graphene_rect_scale_affine (bounds, scale_x, scale_y, dx, dy, &real_bounds);
+  real_center.x = scale_x * center->x + dx;
+  real_center.y = scale_y * center->y + dy;
+
+  node = gsk_radial_gradient_node_new (&real_bounds,
+                                       &real_center,
+                                       hradius * scale_x,
+                                       vradius * scale_y,
+                                       start,
+                                       end,
+                                       stops,
+                                       n_stops);
+
+  gtk_snapshot_append_node_internal (snapshot, node);
+}
+
+void
+gtk_snapshot_append_repeating_radial_gradient (GtkSnapshot            *snapshot,
+                                               const graphene_rect_t  *bounds,
+                                               const graphene_point_t *center,
+                                               float                   hradius,
+                                               float                   vradius,
+                                               float                   start,
+                                               float                   end,
+                                               const GskColorStop     *stops,
+                                               gsize                   n_stops)
+{
+  GskRenderNode *node;
+  graphene_rect_t real_bounds;
+  graphene_point_t real_center;
+  float scale_x, scale_y, dx, dy;
+
+  g_return_if_fail (snapshot != NULL);
+  g_return_if_fail (center != NULL);
+  g_return_if_fail (stops != NULL);
+  g_return_if_fail (n_stops > 1);
+
+  gtk_snapshot_ensure_affine (snapshot, &scale_x, &scale_y, &dx, &dy);
+  gtk_graphene_rect_scale_affine (bounds, scale_x, scale_y, dx, dy, &real_bounds);
+  real_center.x = scale_x * center->x + dx;
+  real_center.y = scale_y * center->y + dy;
+
+  node = gsk_repeating_radial_gradient_node_new (&real_bounds,
+                                                 &real_center,
+                                                 hradius * scale_x,
+                                                 vradius * scale_y,
+                                                 start,
+                                                 end,
+                                                 stops,
+                                                 n_stops);
+
+  gtk_snapshot_append_node_internal (snapshot, node);
+}
+
 /**
  * gtk_snapshot_append_border:
  * @snapshot: a #GtkSnapshot

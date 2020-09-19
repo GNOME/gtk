@@ -104,6 +104,8 @@ GskRenderNode *         gsk_render_node_deserialize             (GBytes         
 #define GSK_TYPE_TEXTURE_NODE                   (gsk_texture_node_get_type())
 #define GSK_TYPE_LINEAR_GRADIENT_NODE           (gsk_linear_gradient_node_get_type())
 #define GSK_TYPE_REPEATING_LINEAR_GRADIENT_NODE (gsk_repeating_linear_gradient_node_get_type())
+#define GSK_TYPE_RADIAL_GRADIENT_NODE           (gsk_radial_gradient_node_get_type())
+#define GSK_TYPE_REPEATING_RADIAL_GRADIENT_NODE (gsk_repeating_radial_gradient_node_get_type())
 #define GSK_TYPE_BORDER_NODE                    (gsk_border_node_get_type())
 #define GSK_TYPE_INSET_SHADOW_NODE              (gsk_inset_shadow_node_get_type())
 #define GSK_TYPE_OUTSET_SHADOW_NODE             (gsk_outset_shadow_node_get_type())
@@ -126,6 +128,8 @@ typedef struct _GskColorNode                    GskColorNode;
 typedef struct _GskTextureNode                  GskTextureNode;
 typedef struct _GskLinearGradientNode           GskLinearGradientNode;
 typedef struct _GskRepeatingLinearGradientNode  GskRepeatingLinearGradientNode;
+typedef struct _GskRadialGradientNode           GskRadialGradientNode;
+typedef struct _GskRepeatingRadialGradientNode  GskRepeatingRadialGradientNode;
 typedef struct _GskBorderNode                   GskBorderNode;
 typedef struct _GskInsetShadowNode              GskInsetShadowNode;
 typedef struct _GskOutsetShadowNode             GskOutsetShadowNode;
@@ -193,6 +197,45 @@ GDK_AVAILABLE_IN_ALL
 GskRenderNode *         gsk_repeating_linear_gradient_node_new      (const graphene_rect_t    *bounds,
                                                                      const graphene_point_t   *start,
                                                                      const graphene_point_t   *end,
+                                                                     const GskColorStop       *color_stops,
+                                                                     gsize                     n_color_stops);
+
+GDK_AVAILABLE_IN_ALL
+GType                   gsk_radial_gradient_node_get_type (void) G_GNUC_CONST;
+GDK_AVAILABLE_IN_ALL
+GskRenderNode *         gsk_radial_gradient_node_new      (const graphene_rect_t    *bounds,
+                                                           const graphene_point_t   *center,
+                                                           float                     hradius,
+                                                           float                     vradius,
+                                                           float                     start,
+                                                           float                     end,
+                                                           const GskColorStop       *color_stops,
+                                                           gsize                     n_color_stops);
+GDK_AVAILABLE_IN_ALL
+gsize                   gsk_radial_gradient_node_get_n_color_stops (GskRenderNode *node);
+GDK_AVAILABLE_IN_ALL
+const GskColorStop *    gsk_radial_gradient_node_peek_color_stops  (GskRenderNode *node,
+                                                                    gsize         *n_stops);
+GDK_AVAILABLE_IN_ALL
+const graphene_point_t *gsk_radial_gradient_node_peek_center       (GskRenderNode *node);
+GDK_AVAILABLE_IN_ALL
+float                   gsk_radial_gradient_node_get_hradius       (GskRenderNode *node);
+GDK_AVAILABLE_IN_ALL
+float                   gsk_radial_gradient_node_get_vradius       (GskRenderNode *node);
+GDK_AVAILABLE_IN_ALL
+float                   gsk_radial_gradient_node_get_start         (GskRenderNode *node);
+GDK_AVAILABLE_IN_ALL
+float                   gsk_radial_gradient_node_get_end           (GskRenderNode *node);
+
+GDK_AVAILABLE_IN_ALL
+GType                   gsk_repeating_radial_gradient_node_get_type (void) G_GNUC_CONST;
+GDK_AVAILABLE_IN_ALL
+GskRenderNode *         gsk_repeating_radial_gradient_node_new      (const graphene_rect_t    *bounds,
+                                                                     const graphene_point_t   *center,
+                                                                     float                     hradius,
+                                                                     float                     vradius,
+                                                                     float                     start,
+                                                                     float                     end,
                                                                      const GskColorStop       *color_stops,
                                                                      gsize                     n_color_stops);
 

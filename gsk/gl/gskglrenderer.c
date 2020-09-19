@@ -1192,6 +1192,32 @@ render_linear_gradient_node (GskGLRenderer   *self,
   load_vertex_data (ops_draw (builder, NULL), node, builder);
 }
 
+static inline void
+render_radial_gradient_node (GskGLRenderer   *self,
+                             GskRenderNode   *node,
+                             RenderOpBuilder *builder)
+{
+  const float scale = ops_get_scale (builder);
+  const int n_color_stops = MIN (8, gsk_radial_gradient_node_get_n_color_stops (node));
+  const GskColorStop *stops = gsk_radial_gradient_node_peek_color_stops (node, NULL);
+  const graphene_point_t *center = gsk_radial_gradient_node_peek_center (node);
+  const float start = gsk_radial_gradient_node_get_start (node);
+  const float end = gsk_radial_gradient_node_get_end (node);
+  const float hradius = gsk_radial_gradient_node_get_hradius (node);
+  const float vradius = gsk_radial_gradient_node_get_vradius (node);
+
+  ops_set_program (builder, &self->programs->radial_gradient_program);
+  ops_set_radial_gradient (builder,
+                           n_color_stops,
+                           stops,
+                           builder->dx + center->x,
+                           builder->dy + center->y,
+                           start, end,
+                           hradius * scale, vradius * scale);
+
+  load_vertex_data (ops_draw (builder, NULL), node, builder);
+}
+
 static inline gboolean
 rounded_inner_rect_contains_rect (const GskRoundedRect  *rounded,
                                   const graphene_rect_t *rect)
@@ -2762,6 +2788,25 @@ apply_linear_gradient_op (const Program          *program,
 }
 
 static inline void
+apply_radial_gradient_op (const Program          *program,
+                          const OpRadialGradient *op)
+{
+  OP_PRINT (" -> Radial gradient");
+  if (op->n_color_stops.send)
+    glUniform1i (program->radial_gradient.num_color_stops_location, op->n_color_stops.value);
+
+  if (op->color_stops.send)
+    glUniform1fv (program->radial_gradient.color_stops_location,
+                  op->n_color_stops.value * 5,
+                  (float *)op->color_stops.value);
+
+  glUniform1f (program->radial_gradient.start_location, op->start);
+  glUniform1f (program->radial_gradient.end_location, op->end);
+  glUniform2f (program->radial_gradient.radius_location, op->radius[0], op->radius[1]);
+  glUniform2f (program->radial_gradient.center_location, op->center[0], op->center[1]);
+}
+
+static inline void
 apply_border_op (const Program  *program,
                  const OpBorder *op)
 {
@@ -2903,6 +2948,7 @@ gsk_gl_renderer_create_programs (GskGLRenderer  *self,
     { "/org/gtk/libgsk/glsl/cross_fade.glsl",                "cross fade" },
     { "/org/gtk/libgsk/glsl/inset_shadow.glsl",              "inset shadow" },
     { "/org/gtk/libgsk/glsl/linear_gradient.glsl",           "linear gradient" },
+    { "/org/gtk/libgsk/glsl/radial_gradient.glsl",           "radial gradient" },
     { "/org/gtk/libgsk/glsl/outset_shadow.glsl",             "outset shadow" },
     { "/org/gtk/libgsk/glsl/repeat.glsl",                    "repeat" },
     { "/org/gtk/libgsk/glsl/unblurred_outset_shadow.glsl",   "unblurred_outset shadow" },
@@ -2984,6 +3030,14 @@ gsk_gl_renderer_create_programs (GskGLRenderer  *self,
   INIT_PROGRAM_UNIFORM_LOCATION (linear_gradient, start_point);
   INIT_PROGRAM_UNIFORM_LOCATION (linear_gradient, end_point);
 
+  /* radial gradient */
+  INIT_PROGRAM_UNIFORM_LOCATION (radial_gradient, color_stops);
+  INIT_PROGRAM_UNIFORM_LOCATION (radial_gradient, num_color_stops);
+  INIT_PROGRAM_UNIFORM_LOCATION (radial_gradient, center);
+  INIT_PROGRAM_UNIFORM_LOCATION (radial_gradient, start);
+  INIT_PROGRAM_UNIFORM_LOCATION (radial_gradient, end);
+  INIT_PROGRAM_UNIFORM_LOCATION (radial_gradient, radius);
+
   /* blur */
   INIT_PROGRAM_UNIFORM_LOCATION (blur, blur_radius);
   INIT_PROGRAM_UNIFORM_LOCATION (blur, blur_size);
@@ -3034,6 +3088,10 @@ gsk_gl_renderer_create_programs (GskGLRenderer  *self,
 
 out:
   gsk_gl_shader_builder_finish (&shader_builder);
+
+  if (error && !(*error))
+    g_set_error (error, GDK_GL_ERROR, GDK_GL_ERROR_COMPILATION_FAILED,
+                 "Failed to compile all shader programs"); /* Probably, eh. */
 
   return programs;
 }
@@ -3328,6 +3386,10 @@ gsk_gl_renderer_add_render_ops (GskGLRenderer   *self,
       render_linear_gradient_node (self, node, builder);
     break;
 
+    case GSK_RADIAL_GRADIENT_NODE:
+      render_radial_gradient_node (self, node, builder);
+    break;
+
     case GSK_CLIP_NODE:
       render_clip_node (self, node, builder);
     break;
@@ -3384,6 +3446,7 @@ gsk_gl_renderer_add_render_ops (GskGLRenderer   *self,
     break;
 
     case GSK_REPEATING_LINEAR_GRADIENT_NODE:
+    case GSK_REPEATING_RADIAL_GRADIENT_NODE:
     case GSK_CAIRO_NODE:
     default:
       {
@@ -3676,6 +3739,10 @@ gsk_gl_renderer_render_ops (GskGLRenderer *self)
 
         case OP_CHANGE_LINEAR_GRADIENT:
           apply_linear_gradient_op (program, ptr);
+          break;
+
+        case OP_CHANGE_RADIAL_GRADIENT:
+          apply_radial_gradient_op (program, ptr);
           break;
 
         case OP_CHANGE_BLUR:

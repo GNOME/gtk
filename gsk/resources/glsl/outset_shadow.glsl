@@ -10,10 +10,7 @@ void main() {
 
   vUv = vec2(aUv.x, aUv.y);
 
-  final_color = u_color;
-  // pre-multiply
-  final_color.rgb *= final_color.a;
-  final_color *= u_alpha;
+  final_color = premultiply(u_color) * u_alpha;
 
   RoundedRect outline = create_rect(u_outline_rect);
   rounded_rect_transform(outline, u_modelview);

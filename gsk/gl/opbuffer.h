@@ -23,21 +23,22 @@ typedef enum
   OP_CHANGE_SOURCE_TEXTURE             =  9,
   OP_CHANGE_REPEAT                     = 10,
   OP_CHANGE_LINEAR_GRADIENT            = 11,
-  OP_CHANGE_COLOR_MATRIX               = 12,
-  OP_CHANGE_BLUR                       = 13,
-  OP_CHANGE_INSET_SHADOW               = 14,
-  OP_CHANGE_OUTSET_SHADOW              = 15,
-  OP_CHANGE_BORDER                     = 16,
-  OP_CHANGE_BORDER_COLOR               = 17,
-  OP_CHANGE_BORDER_WIDTH               = 18,
-  OP_CHANGE_CROSS_FADE                 = 19,
-  OP_CHANGE_UNBLURRED_OUTSET_SHADOW    = 20,
-  OP_CLEAR                             = 21,
-  OP_DRAW                              = 22,
-  OP_DUMP_FRAMEBUFFER                  = 23,
-  OP_PUSH_DEBUG_GROUP                  = 24,
-  OP_POP_DEBUG_GROUP                   = 25,
-  OP_CHANGE_BLEND                      = 26,
+  OP_CHANGE_RADIAL_GRADIENT            = 12,
+  OP_CHANGE_COLOR_MATRIX               = 13,
+  OP_CHANGE_BLUR                       = 14,
+  OP_CHANGE_INSET_SHADOW               = 15,
+  OP_CHANGE_OUTSET_SHADOW              = 16,
+  OP_CHANGE_BORDER                     = 17,
+  OP_CHANGE_BORDER_COLOR               = 18,
+  OP_CHANGE_BORDER_WIDTH               = 19,
+  OP_CHANGE_CROSS_FADE                 = 20,
+  OP_CHANGE_UNBLURRED_OUTSET_SHADOW    = 21,
+  OP_CLEAR                             = 22,
+  OP_DRAW                              = 23,
+  OP_DUMP_FRAMEBUFFER                  = 24,
+  OP_PUSH_DEBUG_GROUP                  = 25,
+  OP_POP_DEBUG_GROUP                   = 26,
+  OP_CHANGE_BLEND                      = 27,
   OP_LAST
 } OpKind;
 
@@ -136,6 +137,16 @@ typedef struct
   float start_point[2];
   float end_point[2];
 } OpLinearGradient;
+
+typedef struct
+{
+  ColorStopUniformValue color_stops;
+  IntUniformValue n_color_stops;
+  float start;
+  float end;
+  float radius[2];
+  float center[2];
+} OpRadialGradient;
 
 typedef struct
 {

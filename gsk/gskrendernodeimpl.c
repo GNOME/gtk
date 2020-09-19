@@ -226,6 +226,8 @@ gsk_linear_gradient_node_diff (GskRenderNode  *node1,
  * @start: the point at which the linear gradient will begin
  * @end: the point at which the linear gradient will finish
  * @color_stops: (array length=n_color_stops): a pointer to an array of #GskColorStop defining the gradient
+ *   The offsets of all color steps must be increasing. The first stop's offset must be >= 0 and the last
+ *   stop's offset must be <= 1.
  * @n_color_stops: the number of elements in @color_stops
  *
  * Creates a #GskRenderNode that will create a linear gradient from the given
@@ -274,6 +276,8 @@ gsk_linear_gradient_node_new (const graphene_rect_t  *bounds,
  * @start: the point at which the linear gradient will begin
  * @end: the point at which the linear gradient will finish
  * @color_stops: (array length=n_color_stops): a pointer to an array of #GskColorStop defining the gradient
+ *   The offsets of all color steps must be increasing. The first stop's offset must be >= 0 and the last
+ *   stop's offset must be <= 1.
  * @n_color_stops: the number of elements in @color_stops
  *
  * Creates a #GskRenderNode that will create a repeating linear gradient
@@ -384,6 +388,300 @@ gsk_linear_gradient_node_peek_color_stops (GskRenderNode *node,
     *n_stops = self->n_stops;
 
   return self->stops;
+}
+
+/*** GSK_RADIAL_GRADIENT_NODE ***/
+
+struct _GskRadialGradientNode
+{
+  GskRenderNode render_node;
+
+  graphene_point_t center;
+
+  float hradius;
+  float vradius;
+  float start;
+  float end;
+
+  gsize n_stops;
+  GskColorStop *stops;
+};
+
+static void
+gsk_radial_gradient_node_finalize (GskRenderNode *node)
+{
+  GskRadialGradientNode *self = (GskRadialGradientNode *) node;
+  GskRenderNodeClass *parent_class = g_type_class_peek (g_type_parent (GSK_TYPE_RADIAL_GRADIENT_NODE));
+
+  g_free (self->stops);
+
+  parent_class->finalize (node);
+}
+
+static void
+gsk_radial_gradient_node_draw (GskRenderNode *node,
+                               cairo_t       *cr)
+{
+  GskRadialGradientNode *self = (GskRadialGradientNode *) node;
+  cairo_pattern_t *pattern;
+  gsize i;
+
+  pattern = cairo_pattern_create_radial (0, 0, self->hradius * self->start,
+                                         0, 0, self->hradius * self->end);
+
+  if (self->hradius != self->vradius)
+    {
+      cairo_matrix_t matrix;
+
+      cairo_matrix_init_scale (&matrix, 1.0, self->hradius / self->vradius);
+      cairo_pattern_set_matrix (pattern, &matrix);
+    }
+
+  if (gsk_render_node_get_node_type (node) == GSK_REPEATING_RADIAL_GRADIENT_NODE)
+    cairo_pattern_set_extend (pattern, CAIRO_EXTEND_REPEAT);
+  else
+    cairo_pattern_set_extend (pattern, CAIRO_EXTEND_PAD);
+
+  for (i = 0; i < self->n_stops; i++)
+    cairo_pattern_add_color_stop_rgba (pattern,
+                                       self->stops[i].offset,
+                                       self->stops[i].color.red,
+                                       self->stops[i].color.green,
+                                       self->stops[i].color.blue,
+                                       self->stops[i].color.alpha);
+
+  gsk_cairo_rectangle (cr, &node->bounds);
+  cairo_translate (cr, self->center.x, self->center.y);
+  cairo_set_source (cr, pattern);
+  cairo_fill (cr);
+
+  cairo_pattern_destroy (pattern);
+}
+
+static void
+gsk_radial_gradient_node_diff (GskRenderNode  *node1,
+                               GskRenderNode  *node2,
+                               cairo_region_t *region)
+{
+  GskRadialGradientNode *self1 = (GskRadialGradientNode *) node1;
+  GskRadialGradientNode *self2 = (GskRadialGradientNode *) node2;
+
+  if (graphene_point_equal (&self1->center, &self2->center) &&
+      self1->hradius == self2->hradius &&
+      self1->vradius == self2->vradius &&
+      self1->start == self2->start &&
+      self1->end == self2->end &&
+      self1->n_stops == self2->n_stops)
+    {
+      gsize i;
+
+      for (i = 0; i < self1->n_stops; i++)
+        {
+          GskColorStop *stop1 = &self1->stops[i];
+          GskColorStop *stop2 = &self2->stops[i];
+
+          if (stop1->offset == stop2->offset &&
+              gdk_rgba_equal (&stop1->color, &stop2->color))
+            continue;
+
+          gsk_render_node_diff_impossible (node1, node2, region);
+          return;
+        }
+
+      return;
+    }
+
+  gsk_render_node_diff_impossible (node1, node2, region);
+}
+
+/**
+ * gsk_radial_gradient_node_new:
+ * @bounds: the bounds of the node
+ * @center: the center of the gradient
+ * @hradius: the horizontal radius
+ * @vradius: the vertical radius
+ * @start: a percentage >= 0 that defines the start of the gradient around @center
+ * @end: a percentage >= 0 that defines the end of the gradient around @center
+ * @color_stops: (array length=n_color_stops): a pointer to an array of #GskColorStop defining the gradient
+ *   The offsets of all color steps must be increasing. The first stop's offset must be >= 0 and the last
+ *   stop's offset must be <= 1.
+ * @n_color_stops: the number of elements in @color_stops
+ *
+ * Creates a #GskRenderNode that draws a radial gradient. The radial gradient
+ * starts around @center. The size of the gradient is dictated by @hradius
+ * in horizontal orientation and by @vradius in vertial orientation.
+ *
+ * Returns: (transfer full) (type GskRadialGradientNode): A new #GskRenderNode
+ */
+GskRenderNode *
+gsk_radial_gradient_node_new (const graphene_rect_t  *bounds,
+                              const graphene_point_t *center,
+                              float                   hradius,
+                              float                   vradius,
+                              float                   start,
+                              float                   end,
+                              const GskColorStop     *color_stops,
+                              gsize                   n_color_stops)
+{
+  GskRadialGradientNode *self;
+  GskRenderNode *node;
+  gsize i;
+
+  g_return_val_if_fail (bounds != NULL, NULL);
+  g_return_val_if_fail (center != NULL, NULL);
+  g_return_val_if_fail (hradius > 0., NULL);
+  g_return_val_if_fail (vradius > 0., NULL);
+  g_return_val_if_fail (start >= 0., NULL);
+  g_return_val_if_fail (end >= 0., NULL);
+  g_return_val_if_fail (end > start, NULL);
+  g_return_val_if_fail (color_stops != NULL, NULL);
+  g_return_val_if_fail (n_color_stops >= 2, NULL);
+  g_return_val_if_fail (color_stops[0].offset >= 0, NULL);
+  for (i = 1; i < n_color_stops; i++)
+    g_return_val_if_fail (color_stops[i].offset >= color_stops[i - 1].offset, NULL);
+  g_return_val_if_fail (color_stops[n_color_stops - 1].offset <= 1, NULL);
+
+  self = gsk_render_node_alloc (GSK_RADIAL_GRADIENT_NODE);
+  node = (GskRenderNode *) self;
+
+  graphene_rect_init_from_rect (&node->bounds, bounds);
+  graphene_point_init_from_point (&self->center, center);
+
+  self->hradius = hradius;
+  self->vradius = vradius;
+  self->start = start;
+  self->end = end;
+
+  self->n_stops = n_color_stops;
+  self->stops = g_malloc_n (n_color_stops, sizeof (GskColorStop));
+  memcpy (self->stops, color_stops, n_color_stops * sizeof (GskColorStop));
+
+  return node;
+}
+
+/**
+ * gsk_repeating_radial_gradient_node_new:
+ * @bounds: the bounds of the node
+ * @center: the center of the gradient
+ * @hradius: the horizontal radius
+ * @vradius: the vertical radius
+ * @start: a percentage >= 0 that defines the start of the gradient around @center
+ * @end: a percentage >= 0 that defines the end of the gradient around @center
+ * @color_stops: (array length=n_color_stops): a pointer to an array of #GskColorStop defining the gradient
+ *   The offsets of all color steps must be increasing. The first stop's offset must be >= 0 and the last
+ *   stop's offset must be <= 1.
+ * @n_color_stops: the number of elements in @color_stops
+ *
+ * Creates a #GskRenderNode that draws a repeating radial gradient. The radial gradient
+ * starts around @center. The size of the gradient is dictated by @hradius
+ * in horizontal orientation and by @vradius in vertial orientation.
+ *
+ * Returns: (transfer full) (type GskRepeatingRadialGradientNode): A new #GskRenderNode
+ */
+GskRenderNode *
+gsk_repeating_radial_gradient_node_new (const graphene_rect_t  *bounds,
+                                        const graphene_point_t *center,
+                                        float                   hradius,
+                                        float                   vradius,
+                                        float                   start,
+                                        float                   end,
+                                        const GskColorStop     *color_stops,
+                                        gsize                   n_color_stops)
+{
+  GskRadialGradientNode *self;
+  GskRenderNode *node;
+  gsize i;
+
+  g_return_val_if_fail (bounds != NULL, NULL);
+  g_return_val_if_fail (center != NULL, NULL);
+  g_return_val_if_fail (hradius > 0., NULL);
+  g_return_val_if_fail (vradius > 0., NULL);
+  g_return_val_if_fail (start >= 0., NULL);
+  g_return_val_if_fail (end >= 0., NULL);
+  g_return_val_if_fail (end > start, NULL);
+  g_return_val_if_fail (color_stops != NULL, NULL);
+  g_return_val_if_fail (n_color_stops >= 2, NULL);
+  g_return_val_if_fail (color_stops[0].offset >= 0, NULL);
+  for (i = 1; i < n_color_stops; i++)
+    g_return_val_if_fail (color_stops[i].offset >= color_stops[i - 1].offset, NULL);
+  g_return_val_if_fail (color_stops[n_color_stops - 1].offset <= 1, NULL);
+
+  self = gsk_render_node_alloc (GSK_REPEATING_RADIAL_GRADIENT_NODE);
+  node = (GskRenderNode *) self;
+
+  graphene_rect_init_from_rect (&node->bounds, bounds);
+  graphene_point_init_from_point (&self->center, center);
+
+  self->hradius = hradius;
+  self->vradius = vradius;
+  self->start = start;
+  self->end = end;
+
+  self->n_stops = n_color_stops;
+  self->stops = g_malloc_n (n_color_stops, sizeof (GskColorStop));
+  memcpy (self->stops, color_stops, n_color_stops * sizeof (GskColorStop));
+
+  return node;
+}
+
+gsize
+gsk_radial_gradient_node_get_n_color_stops (GskRenderNode *node)
+{
+  GskRadialGradientNode *self = (GskRadialGradientNode *) node;
+
+  return self->n_stops;
+}
+
+const GskColorStop *
+gsk_radial_gradient_node_peek_color_stops (GskRenderNode *node,
+                                           gsize         *n_stops)
+{
+  GskRadialGradientNode *self = (GskRadialGradientNode *) node;
+
+  if (n_stops != NULL)
+    *n_stops = self->n_stops;
+
+  return self->stops;
+}
+
+const graphene_point_t *
+gsk_radial_gradient_node_peek_center (GskRenderNode *node)
+{
+  GskRadialGradientNode *self = (GskRadialGradientNode *) node;
+
+  return &self->center;
+}
+
+float
+gsk_radial_gradient_node_get_hradius (GskRenderNode *node)
+{
+  GskRadialGradientNode *self = (GskRadialGradientNode *) node;
+
+  return self->hradius;
+}
+
+float
+gsk_radial_gradient_node_get_vradius (GskRenderNode *node)
+{
+  GskRadialGradientNode *self = (GskRadialGradientNode *) node;
+
+  return self->vradius;
+}
+
+float
+gsk_radial_gradient_node_get_start (GskRenderNode *node)
+{
+  GskRadialGradientNode *self = (GskRadialGradientNode *) node;
+
+  return self->start;
+}
+
+float
+gsk_radial_gradient_node_get_end (GskRenderNode *node)
+{
+  GskRadialGradientNode *self = (GskRadialGradientNode *) node;
+
+  return self->end;
 }
 
 /*** GSK_BORDER_NODE ***/
@@ -4191,6 +4489,8 @@ GSK_DEFINE_RENDER_NODE_TYPE (gsk_cairo_node, GSK_CAIRO_NODE)
 GSK_DEFINE_RENDER_NODE_TYPE (gsk_color_node, GSK_COLOR_NODE)
 GSK_DEFINE_RENDER_NODE_TYPE (gsk_linear_gradient_node, GSK_LINEAR_GRADIENT_NODE)
 GSK_DEFINE_RENDER_NODE_TYPE (gsk_repeating_linear_gradient_node, GSK_REPEATING_LINEAR_GRADIENT_NODE)
+GSK_DEFINE_RENDER_NODE_TYPE (gsk_radial_gradient_node, GSK_RADIAL_GRADIENT_NODE)
+GSK_DEFINE_RENDER_NODE_TYPE (gsk_repeating_radial_gradient_node, GSK_REPEATING_RADIAL_GRADIENT_NODE)
 GSK_DEFINE_RENDER_NODE_TYPE (gsk_border_node, GSK_BORDER_NODE)
 GSK_DEFINE_RENDER_NODE_TYPE (gsk_texture_node, GSK_TEXTURE_NODE)
 GSK_DEFINE_RENDER_NODE_TYPE (gsk_inset_shadow_node, GSK_INSET_SHADOW_NODE)
@@ -4289,6 +4589,38 @@ gsk_render_node_init_types_once (void)
 
     GType node_type = gsk_render_node_type_register_static (I_("GskRepeatingLinearGradientNode"), &node_info);
     gsk_render_node_types[GSK_REPEATING_LINEAR_GRADIENT_NODE] = node_type;
+  }
+
+  {
+    const GskRenderNodeTypeInfo node_info =
+    {
+      GSK_RADIAL_GRADIENT_NODE,
+      sizeof (GskRadialGradientNode),
+      NULL,
+      gsk_radial_gradient_node_finalize,
+      gsk_radial_gradient_node_draw,
+      NULL,
+      gsk_radial_gradient_node_diff,
+    };
+
+    GType node_type = gsk_render_node_type_register_static (I_("GskRadialGradientNode"), &node_info);
+    gsk_render_node_types[GSK_RADIAL_GRADIENT_NODE] = node_type;
+  }
+
+  {
+    const GskRenderNodeTypeInfo node_info =
+    {
+      GSK_REPEATING_RADIAL_GRADIENT_NODE,
+      sizeof (GskRadialGradientNode),
+      NULL,
+      gsk_radial_gradient_node_finalize,
+      gsk_radial_gradient_node_draw,
+      NULL,
+      gsk_radial_gradient_node_diff,
+    };
+
+    GType node_type = gsk_render_node_type_register_static (I_("GskRepeatingRadialGradientNode"), &node_info);
+    gsk_render_node_types[GSK_REPEATING_RADIAL_GRADIENT_NODE] = node_type;
   }
 
   {
