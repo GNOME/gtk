@@ -1197,7 +1197,6 @@ render_radial_gradient_node (GskGLRenderer   *self,
                              GskRenderNode   *node,
                              RenderOpBuilder *builder)
 {
-  const float scale = ops_get_scale (builder);
   const int n_color_stops = MIN (8, gsk_radial_gradient_node_get_n_color_stops (node));
   const GskColorStop *stops = gsk_radial_gradient_node_peek_color_stops (node, NULL);
   const graphene_point_t *center = gsk_radial_gradient_node_peek_center (node);
@@ -1213,7 +1212,8 @@ render_radial_gradient_node (GskGLRenderer   *self,
                            builder->dx + center->x,
                            builder->dy + center->y,
                            start, end,
-                           hradius * scale, vradius * scale);
+                           hradius * builder->scale_x,
+                           vradius * builder->scale_y);
 
   load_vertex_data (ops_draw (builder, NULL), node, builder);
 }
