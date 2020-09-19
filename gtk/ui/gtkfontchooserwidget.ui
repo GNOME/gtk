@@ -5,6 +5,7 @@
     <signal name="items-changed" handler="rows_changed_cb" object="GtkFontChooserWidget" swapped="1" />
     <property name="model">
       <object class="GtkFilterListModel" id="filter_model">
+        <signal name="notify::pending" handler="rows_changed_cb" object="GtkFontChooserWidget" swapped="1" />
         <property name="incremental">1</property>
         <property name="filter">
           <object class="GtkEveryFilter">

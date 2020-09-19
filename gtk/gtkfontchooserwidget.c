@@ -774,7 +774,8 @@ rows_changed_cb (GtkFontChooserWidget *self)
 {
   const char *page;
 
-  if (g_list_model_get_n_items (G_LIST_MODEL (self->selection)) == 0)
+  if (g_list_model_get_n_items (G_LIST_MODEL (self->selection)) == 0 &&
+      gtk_filter_list_model_get_pending (GTK_FILTER_LIST_MODEL (self->filter_model)) == 0)
     page = "empty";
   else
     page = "list";
