@@ -78,14 +78,14 @@ gtk_application_impl_wayland_handle_window_realize (GtkApplicationImpl *impl,
 
   gdk_surface = gtk_native_get_surface (GTK_NATIVE (window));
 
-  if (!GDK_IS_WAYLAND_SURFACE (gdk_surface))
+  if (!GDK_IS_WAYLAND_TOPLEVEL (gdk_surface))
     return;
 
   window_path = gtk_application_impl_dbus_get_window_path (dbus, window);
 
-  gdk_wayland_surface_set_dbus_properties_libgtk_only (gdk_surface,
-                                                      dbus->application_id, dbus->app_menu_path, dbus->menubar_path,
-                                                      window_path, dbus->object_path, dbus->unique_name);
+  gdk_wayland_toplevel_set_dbus_properties_libgtk_only (GDK_TOPLEVEL (gdk_surface),
+                                                        dbus->application_id, dbus->app_menu_path, dbus->menubar_path,
+                                                        window_path, dbus->object_path, dbus->unique_name);
 
   g_free (window_path);
 
@@ -125,9 +125,9 @@ gtk_application_impl_wayland_inhibit (GtkApplicationImpl         *impl,
   if (flags & GTK_APPLICATION_INHIBIT_IDLE)
     {
       surface = gtk_native_get_surface (GTK_NATIVE (window));
-      if (GDK_IS_WAYLAND_SURFACE (surface))
+      if (GDK_IS_WAYLAND_TOPLEVEL (surface))
         {
-          success = gdk_wayland_surface_inhibit_idle (surface);
+          success = gdk_wayland_toplevel_inhibit_idle (GDK_TOPLEVEL (surface));
           if (success)
             {
               flags &= ~GTK_APPLICATION_INHIBIT_IDLE;
@@ -157,7 +157,7 @@ gtk_application_impl_wayland_uninhibit (GtkApplicationImpl *impl,
           if (inhibitor->dbus_cookie)
             ((GtkApplicationImplWaylandClass *) G_OBJECT_GET_CLASS (wayland))->dbus_uninhibit (impl, inhibitor->dbus_cookie);
           if (inhibitor->surface)
-            gdk_wayland_surface_uninhibit_idle (inhibitor->surface);
+            gdk_wayland_toplevel_uninhibit_idle (GDK_TOPLEVEL (inhibitor->surface));
           gtk_application_wayland_inhibitor_free (inhibitor);
           wayland->inhibitors = g_slist_delete_link (wayland->inhibitors, iter);
           return;

@@ -4415,7 +4415,7 @@ gtk_window_realize (GtkWidget *widget)
 
 #ifdef GDK_WINDOWING_WAYLAND
   if (priv->client_decorated && GDK_IS_WAYLAND_SURFACE (surface))
-    gdk_wayland_surface_announce_csd (surface);
+    gdk_wayland_toplevel_announce_csd (GDK_TOPLEVEL (surface));
 #endif
 
   gdk_toplevel_set_modal (GDK_TOPLEVEL (surface), priv->modal);
@@ -6749,9 +6749,9 @@ typedef struct {
 } WaylandSurfaceHandleExportedData;
 
 static void
-wayland_surface_handle_exported (GdkSurface  *window,
-				 const char *wayland_handle_str,
-				 gpointer    user_data)
+wayland_surface_handle_exported (GdkToplevel *toplevel,
+				 const char  *wayland_handle_str,
+				 gpointer     user_data)
 {
   WaylandSurfaceHandleExportedData *data = user_data;
   char *handle_str;
@@ -6792,10 +6792,10 @@ gtk_window_export_handle (GtkWindow               *window,
       data->callback = callback;
       data->user_data = user_data;
 
-      if (!gdk_wayland_surface_export_handle (priv->surface,
-					      wayland_surface_handle_exported,
-					      data,
-					      g_free))
+      if (!gdk_wayland_toplevel_export_handle (GDK_TOPLEVEL (priv->surface),
+					       wayland_surface_handle_exported,
+					       data,
+					       g_free))
         {
           g_free (data);
           return FALSE;
@@ -6821,7 +6821,7 @@ gtk_window_unexport_handle (GtkWindow *window)
 #ifdef GDK_WINDOWING_WAYLAND
   if (GDK_IS_WAYLAND_DISPLAY (gtk_widget_get_display (GTK_WIDGET (window))))
     {
-      gdk_wayland_surface_unexport_handle (priv->surface);
+      gdk_wayland_toplevel_unexport_handle (GDK_TOPLEVEL (priv->surface));
       return;
     }
 #endif
