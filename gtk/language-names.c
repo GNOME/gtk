@@ -85,6 +85,15 @@ languages_parse_start_tag (GMarkupParseContext  *ctx,
   const char *ccode_id;
   const char *lang_name;
   char *display_name;
+  const char *long_names[] = {
+    "Dogri",
+    "Greek, Modern",
+    "Interlingua",
+    "Konkani",
+    "Tonga",
+    "Turkish, Ottoman",
+  };
+  int i;
 
   if (!(g_str_equal (element_name, "iso_639_entry") ||
         g_str_equal (element_name, "iso_639_3_entry")) ||
@@ -150,6 +159,14 @@ languages_parse_start_tag (GMarkupParseContext  *ctx,
     return;
 
   display_name = get_display_name (lang_name);
+
+  /* Fix up some egregious names */
+  for (i = 0; i < G_N_ELEMENTS (long_names); i++)
+    {
+      if (g_str_has_prefix (display_name, long_names[i]))
+        display_name[strlen (long_names[i]) + 1] = '\0';
+    }
+
 
   if (ccode != NULL)
     g_hash_table_insert (language_map,
