@@ -3091,7 +3091,7 @@ gsk_gl_renderer_create_programs (GskGLRenderer  *self,
 out:
   gsk_gl_shader_builder_finish (&shader_builder);
 
-  if (error && !(*error))
+  if (error && !(*error) && !programs)
     g_set_error (error, GDK_GL_ERROR, GDK_GL_ERROR_COMPILATION_FAILED,
                  "Failed to compile all shader programs"); /* Probably, eh. */
 
