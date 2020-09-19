@@ -1375,7 +1375,8 @@ render_rounded_clip_node (GskGLRenderer       *self,
                           GskRenderNode       *node,
                           RenderOpBuilder     *builder)
 {
-  const float scale = ops_get_scale (builder);
+  const float scale_x = builder->scale_x;
+  const float scale_y = builder->scale_y;
   const GskRoundedRect *clip = gsk_rounded_clip_node_peek_clip (node);
   GskRenderNode *child = gsk_rounded_clip_node_get_child (node);
   GskRoundedRect transformed_clip;
@@ -1388,8 +1389,8 @@ render_rounded_clip_node (GskGLRenderer       *self,
   ops_transform_bounds_modelview (builder, &clip->bounds, &transformed_clip.bounds);
   for (i = 0; i < 4; i ++)
     {
-      transformed_clip.corner[i].width = clip->corner[i].width * scale;
-      transformed_clip.corner[i].height = clip->corner[i].height * scale;
+      transformed_clip.corner[i].width = clip->corner[i].width * scale_x;
+      transformed_clip.corner[i].height = clip->corner[i].height * scale_y;
     }
 
   if (builder->clip_is_rectilinear)
@@ -1447,16 +1448,16 @@ render_rounded_clip_node (GskGLRenderer       *self,
        *
        *       We do, however, apply the scale factor to the child clip of course.
        */
-      scaled_clip.bounds.origin.x = clip->bounds.origin.x * scale;
-      scaled_clip.bounds.origin.y = clip->bounds.origin.y * scale;
-      scaled_clip.bounds.size.width = clip->bounds.size.width * scale;
-      scaled_clip.bounds.size.height = clip->bounds.size.height * scale;
+      scaled_clip.bounds.origin.x = clip->bounds.origin.x * scale_x;
+      scaled_clip.bounds.origin.y = clip->bounds.origin.y * scale_y;
+      scaled_clip.bounds.size.width = clip->bounds.size.width * scale_x;
+      scaled_clip.bounds.size.height = clip->bounds.size.height * scale_y;
 
       /* Increase corner radius size by scale factor */
       for (i = 0; i < 4; i ++)
         {
-          scaled_clip.corner[i].width = clip->corner[i].width * scale;
-          scaled_clip.corner[i].height = clip->corner[i].height * scale;
+          scaled_clip.corner[i].width = clip->corner[i].width * scale_x;
+          scaled_clip.corner[i].height = clip->corner[i].height * scale_y;
         }
 
       ops_push_clip (builder, &scaled_clip);
