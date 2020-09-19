@@ -4368,7 +4368,6 @@ GtkWidget
 GtkWidgetClass
 GtkRequisition
 GtkAllocation
-gtk_widget_new
 gtk_widget_in_destruction
 gtk_widget_unparent
 gtk_widget_show

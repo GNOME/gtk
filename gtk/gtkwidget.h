@@ -275,10 +275,6 @@ struct _GtkWidgetClass
 GDK_AVAILABLE_IN_ALL
 GType      gtk_widget_get_type            (void) G_GNUC_CONST;
 GDK_AVAILABLE_IN_ALL
-GtkWidget* gtk_widget_new                 (GType                type,
-                                           const char          *first_property_name,
-                                           ...);
-GDK_AVAILABLE_IN_ALL
 void       gtk_widget_unparent            (GtkWidget           *widget);
 GDK_AVAILABLE_IN_ALL
 void       gtk_widget_show                (GtkWidget           *widget);
