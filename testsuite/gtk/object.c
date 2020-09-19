@@ -280,7 +280,7 @@ widget_property_tests (gconstpointer test_data)
 {
   GType wtype = (GType) test_data;
   /* create widget */
-  GtkWidget *widget = gtk_widget_new (wtype, NULL);
+  GtkWidget *widget = g_object_new (wtype, NULL);
   g_object_ref_sink (widget);
   widget_fixups (widget);
   /* test property values */

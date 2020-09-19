@@ -2294,39 +2294,6 @@ gtk_widget_init (GTypeInstance *instance, gpointer g_class)
     }
 }
 
-/**
- * gtk_widget_new:
- * @type: type ID of the widget to create
- * @first_property_name: name of first property to set
- * @...: value of first property, followed by more properties,
- *     %NULL-terminated
- *
- * This is a convenience function for creating a widget and setting
- * its properties in one go. For example you might write:
- * `gtk_widget_new (GTK_TYPE_LABEL, "label", "Hello World", "xalign",
- * 0.0, NULL)` to create a left-aligned label. Equivalent to
- * g_object_new(), but returns a widget so you don’t have to
- * cast the object yourself.
- *
- * Returns: a new #GtkWidget of type @widget_type
- **/
-GtkWidget*
-gtk_widget_new (GType        type,
-		const char *first_property_name,
-		...)
-{
-  GtkWidget *widget;
-  va_list var_args;
-
-  g_return_val_if_fail (g_type_is_a (type, GTK_TYPE_WIDGET), NULL);
-
-  va_start (var_args, first_property_name);
-  widget = (GtkWidget *)g_object_new_valist (type, first_property_name, var_args);
-  va_end (var_args);
-
-  return widget;
-}
-
 void
 gtk_widget_root (GtkWidget *widget)
 {
