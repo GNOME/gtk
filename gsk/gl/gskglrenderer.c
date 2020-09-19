@@ -1332,17 +1332,18 @@ render_clipped_child (GskGLRenderer         *self,
   else
     {
       /* well fuck */
-      const float scale = ops_get_scale (builder);
+      const float scale_x = builder->scale_x;
+      const float scale_y = builder->scale_y;
       gboolean is_offscreen;
       TextureRegion region;
       GskRoundedRect scaled_clip;
 
       memset (&scaled_clip, 0, sizeof (GskRoundedRect));
 
-      scaled_clip.bounds.origin.x = clip->origin.x * scale;
-      scaled_clip.bounds.origin.y = clip->origin.y * scale;
-      scaled_clip.bounds.size.width = clip->size.width * scale;
-      scaled_clip.bounds.size.height = clip->size.height * scale;
+      scaled_clip.bounds.origin.x = clip->origin.x * scale_x;
+      scaled_clip.bounds.origin.y = clip->origin.y * scale_y;
+      scaled_clip.bounds.size.width = clip->size.width * scale_x;
+      scaled_clip.bounds.size.height = clip->size.height * scale_y;
 
       ops_push_clip (builder, &scaled_clip);
       if (!add_offscreen_ops (self, builder, &child->bounds,
