@@ -5,6 +5,8 @@
     <signal name="items-changed" handler="rows_changed_cb" object="GtkFontChooserWidget" swapped="1" />
     <property name="model">
       <object class="GtkFilterListModel" id="filter_model">
+        <signal name="notify::pending" handler="rows_changed_cb" object="GtkFontChooserWidget" swapped="1" />
+        <property name="incremental">1</property>
         <property name="filter">
           <object class="GtkEveryFilter">
             <child>
@@ -18,8 +20,10 @@
               </object>
             </child>
             <child>
-              <object class="GtkCustomFilter" id="custom_filter">
-              </object>
+              <object class="GtkCustomFilter" id="custom_filter"/>
+            </child>
+            <child>
+              <object class="GtkCustomFilter" id="user_filter"/>
             </child>
           </object>
         </property>
@@ -49,11 +53,71 @@
                 <property name="row-spacing">6</property>
                 <property name="column-spacing">6</property>
                 <child>
-                  <object class="GtkSearchEntry" id="search_entry">
-                    <property name="hexpand">1</property>
-                    <property name="activates-default">1</property>
-                    <property name="placeholder-text" translatable="yes">Search font name</property>
-                    <signal name="stop-search" handler="stop_search_cb" swapped="no"/>
+                  <object class="GtkBox">
+                    <style>
+                      <class name="linked"/>
+                    </style>
+                    <child>
+                      <object class="GtkSearchEntry" id="search_entry">
+                        <property name="hexpand">1</property>
+                        <property name="activates-default">1</property>
+                        <property name="placeholder-text" translatable="yes">Search font name</property>
+                        <signal name="stop-search" handler="stop_search_cb" swapped="no"/>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkMenuButton">
+                        <property name="icon-name">pan-down-symbolic</property>
+                        <property name="popover">
+                          <object class="GtkPopover">
+                            <child>
+                              <object class="GtkBox">
+                                <property name="orientation">vertical</property>
+                                <property name="spacing">6</property>
+                                <child>
+                                  <object class="GtkLabel">
+                                    <property name="label" translatable="yes">Filter by</property>
+                                    <property name="width-chars">20</property>
+                                    <property name="margin-bottom">10</property>
+                                    <style>
+                                      <class name="title-4"/>
+                                    </style>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkCheckButton" id="monospace_button">
+                                    <property name="label" translatable="yes">Monospace</property>
+                                    <signal name="notify::active" handler="monospace_check_changed"/>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkCheckButton" id="language_button">
+                                    <property name="label" translatable="yes">Language</property>
+                                    <signal name="notify::active" handler="language_check_changed"/>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkFrame">
+                                    <property name="margin-start">12</property>
+                                    <child>
+                                      <object class="GtkScrolledWindow">
+                                        <property name="min-content-height">200</property>
+                                        <property name="hscrollbar-policy">never</property>
+                                        <property name="vscrollbar-policy">automatic</property>
+                                        <child>
+                                          <object class="GtkListView" id="language_list">
+                                          </object>
+                                        </child>
+                                      </object>
+                                    </child>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
+                          </object>
+                        </property>
+                      </object>
+                    </child>
                     <layout>
                       <property name="column">0</property>
                       <property name="row">0</property>
