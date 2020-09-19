@@ -310,6 +310,7 @@ gtk_text_buffer_deserialize_text_plain_finish (GObject      *source,
   GtkTextIter start, end;
   GError *error = NULL;
   gssize written;
+  char *data;
 
   written = g_output_stream_splice_finish (stream, result, &error);
   if (written < 0)
@@ -318,15 +319,19 @@ gtk_text_buffer_deserialize_text_plain_finish (GObject      *source,
       return;
     }
 
-  buffer = g_value_get_object (gdk_content_deserializer_get_value (deserializer));
-  gtk_text_buffer_get_end_iter (buffer, &end);
-  gtk_text_buffer_insert (buffer, 
-                          &end,
-                          g_memory_output_stream_steal_data (G_MEMORY_OUTPUT_STREAM (
-                               g_filter_output_stream_get_base_stream (G_FILTER_OUTPUT_STREAM (stream)))),
-                          -1);
-  gtk_text_buffer_get_bounds (buffer, &start, &end);
-  gtk_text_buffer_select_range (buffer, &start, &end);
+  data = g_memory_output_stream_steal_data (G_MEMORY_OUTPUT_STREAM (
+                               g_filter_output_stream_get_base_stream (G_FILTER_OUTPUT_STREAM (stream))));
+
+  if (data)
+    {
+      buffer = g_value_get_object (gdk_content_deserializer_get_value (deserializer));
+      gtk_text_buffer_get_end_iter (buffer, &end);
+      gtk_text_buffer_insert (buffer, &end, data, -1);
+      gtk_text_buffer_get_bounds (buffer, &start, &end);
+      gtk_text_buffer_select_range (buffer, &start, &end);
+
+      g_free (data);
+    }
 
   gdk_content_deserializer_return_success (deserializer);
 }
