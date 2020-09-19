@@ -856,6 +856,9 @@ gtk_font_chooser_widget_dispose (GObject *object)
 {
   GtkFontChooserWidget *self = GTK_FONT_CHOOSER_WIDGET (object);
 
+  g_signal_handlers_disconnect_by_func (self->selection, rows_changed_cb, self);
+  g_signal_handlers_disconnect_by_func (self->filter_model, rows_changed_cb, self);
+
   self->filter_func = NULL;
   g_clear_pointer (&self->filter_data, self->filter_data_destroy);
 
