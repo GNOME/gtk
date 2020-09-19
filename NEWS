@@ -12,6 +12,9 @@ Overview of Changes in GTK 3.99.2
 * GtkSearchEntry:
  - Don't handle forwarded events twice
 
+* GtkPasswordEntry:
+ - Add an ::activate signal
+
 * GtkTextView:
  - Fix dnd
  - Improve undo state tracking
@@ -33,6 +36,9 @@ Overview of Changes in GTK 3.99.2
  - Determine sample text based on font coverage
  - Allow filtering by language
 
+* GtkStack:
+ - Add gtk_stack_add_child
+
 * GtkVideo:
  - Make autoplay work
 
@@ -43,6 +49,9 @@ Overview of Changes in GTK 3.99.2
  - Improve gesture graphics
  - Tweak DND highlight color
  - Add spacing to .navigation-sidebar
+
+* GDK:
+ - Add gdk_frame_clock_get_fps
 
 * GSK:
  - Add radial gradient nodes
@@ -66,8 +75,7 @@ Overview of Changes in GTK 3.99.2
  - Make filter and sorter constructors return exact types
  - Rename GdkSurfaceState to GdkToplevelState
  - Remove GdkWaylandSurface::committed
- - Add gdk_frame_clock_get_fps
- - Add gtk_stack_add_child
+ - Make Wayland backend api take GdkToplevel
 
 * Demos:
  - Bug and crash fixes

@@ -72,27 +72,10 @@
  * when the child of a #GtkRevealer widget is shown or hidden.
  */
 
-enum  {
-  PROP_0,
-  PROP_TRANSITION_TYPE,
-  PROP_TRANSITION_DURATION,
-  PROP_REVEAL_CHILD,
-  PROP_CHILD_REVEALED,
-  PROP_CHILD,
-  LAST_PROP
-};
-
-typedef struct _GtkRevealerClass GtkRevealerClass;
-
-struct _GtkRevealer {
+struct _GtkRevealer
+{
   GtkWidget parent_instance;
-};
 
-struct _GtkRevealerClass {
-  GtkWidgetClass parent_class;
-};
-
-typedef struct {
   GtkWidget *child;
 
   GtkRevealerTransitionType transition_type;
@@ -104,7 +87,22 @@ typedef struct {
 
   guint tick_id;
   GtkProgressTracker tracker;
-} GtkRevealerPrivate;
+};
+
+typedef struct
+{
+  GtkWidgetClass parent_class;
+} GtkRevealerClass;
+
+enum  {
+  PROP_0,
+  PROP_TRANSITION_TYPE,
+  PROP_TRANSITION_DURATION,
+  PROP_REVEAL_CHILD,
+  PROP_CHILD_REVEALED,
+  PROP_CHILD,
+  LAST_PROP
+};
 
 static GParamSpec *props[LAST_PROP] = { NULL, };
 
@@ -126,7 +124,6 @@ static void     gtk_revealer_set_position (GtkRevealer *revealer,
 static void gtk_revealer_buildable_iface_init (GtkBuildableIface *iface);
 
 G_DEFINE_TYPE_WITH_CODE (GtkRevealer, gtk_revealer, GTK_TYPE_WIDGET,
-                         G_ADD_PRIVATE (GtkRevealer)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
                                                 gtk_revealer_buildable_iface_init))
 
@@ -155,12 +152,10 @@ gtk_revealer_buildable_iface_init (GtkBuildableIface *iface)
 static void
 gtk_revealer_init (GtkRevealer *revealer)
 {
-  GtkRevealerPrivate *priv = gtk_revealer_get_instance_private (revealer);
-
-  priv->transition_type = GTK_REVEALER_TRANSITION_TYPE_SLIDE_DOWN;
-  priv->transition_duration = 250;
-  priv->current_pos = 0.0;
-  priv->target_pos = 0.0;
+  revealer->transition_type = GTK_REVEALER_TRANSITION_TYPE_SLIDE_DOWN;
+  revealer->transition_duration = 250;
+  revealer->current_pos = 0.0;
+  revealer->target_pos = 0.0;
 
   gtk_widget_set_overflow (GTK_WIDGET (revealer), GTK_OVERFLOW_HIDDEN);
 }
@@ -169,9 +164,8 @@ static void
 gtk_revealer_dispose (GObject *obj)
 {
   GtkRevealer *revealer = GTK_REVEALER (obj);
-  GtkRevealerPrivate *priv = gtk_revealer_get_instance_private (revealer);
 
-  g_clear_pointer (&priv->child, gtk_widget_unparent);
+  g_clear_pointer (&revealer->child, gtk_widget_unparent);
 
   G_OBJECT_CLASS (gtk_revealer_parent_class)->dispose (obj);
 }
@@ -180,11 +174,10 @@ static void
 gtk_revealer_finalize (GObject *obj)
 {
   GtkRevealer *revealer = GTK_REVEALER (obj);
-  GtkRevealerPrivate *priv = gtk_revealer_get_instance_private (revealer);
 
-  if (priv->tick_id != 0)
-    gtk_widget_remove_tick_callback (GTK_WIDGET (revealer), priv->tick_id);
-  priv->tick_id = 0;
+  if (revealer->tick_id != 0)
+    gtk_widget_remove_tick_callback (GTK_WIDGET (revealer), revealer->tick_id);
+  revealer->tick_id = 0;
 
   G_OBJECT_CLASS (gtk_revealer_parent_class)->finalize (obj);
 }
@@ -252,18 +245,17 @@ static void
 gtk_revealer_unmap (GtkWidget *widget)
 {
   GtkRevealer *revealer = GTK_REVEALER (widget);
-  GtkRevealerPrivate *priv = gtk_revealer_get_instance_private (revealer);
 
   GTK_WIDGET_CLASS (gtk_revealer_parent_class)->unmap (widget);
 
   /* Finish & stop the animation */
-  if (priv->current_pos != priv->target_pos)
-    gtk_revealer_set_position (revealer, priv->target_pos);
+  if (revealer->current_pos != revealer->target_pos)
+    gtk_revealer_set_position (revealer, revealer->target_pos);
 
-  if (priv->tick_id != 0)
+  if (revealer->tick_id != 0)
     {
-      gtk_widget_remove_tick_callback (GTK_WIDGET (revealer), priv->tick_id);
-      priv->tick_id = 0;
+      gtk_widget_remove_tick_callback (GTK_WIDGET (revealer), revealer->tick_id);
+      revealer->tick_id = 0;
     }
 }
 
@@ -273,12 +265,11 @@ gtk_revealer_compute_expand (GtkWidget *widget,
                              gboolean  *vexpand)
 {
   GtkRevealer *revealer = GTK_REVEALER (widget);
-  GtkRevealerPrivate *priv = gtk_revealer_get_instance_private (revealer);
 
-  if (priv->child)
+  if (revealer->child)
     {
-      *hexpand = gtk_widget_compute_expand (priv->child, GTK_ORIENTATION_HORIZONTAL);
-      *vexpand = gtk_widget_compute_expand (priv->child, GTK_ORIENTATION_VERTICAL);
+      *hexpand = gtk_widget_compute_expand (revealer->child, GTK_ORIENTATION_HORIZONTAL);
+      *vexpand = gtk_widget_compute_expand (revealer->child, GTK_ORIENTATION_VERTICAL);
     }
   else
     {
@@ -291,10 +282,9 @@ static GtkSizeRequestMode
 gtk_revealer_get_request_mode (GtkWidget *widget)
 {
   GtkRevealer *revealer = GTK_REVEALER (widget);
-  GtkRevealerPrivate *priv = gtk_revealer_get_instance_private (revealer);
 
-  if (priv->child)
-    return gtk_widget_get_request_mode (priv->child);
+  if (revealer->child)
+    return gtk_widget_get_request_mode (revealer->child);
   else
     return GTK_SIZE_REQUEST_CONSTANT_SIZE;
 }
@@ -374,56 +364,52 @@ gtk_revealer_new (void)
 static GtkRevealerTransitionType
 effective_transition (GtkRevealer *revealer)
 {
-  GtkRevealerPrivate *priv = gtk_revealer_get_instance_private (revealer);
-
   if (gtk_widget_get_direction (GTK_WIDGET (revealer)) == GTK_TEXT_DIR_RTL)
     {
-      if (priv->transition_type == GTK_REVEALER_TRANSITION_TYPE_SLIDE_LEFT)
+      if (revealer->transition_type == GTK_REVEALER_TRANSITION_TYPE_SLIDE_LEFT)
         return GTK_REVEALER_TRANSITION_TYPE_SLIDE_RIGHT;
-      else if (priv->transition_type == GTK_REVEALER_TRANSITION_TYPE_SLIDE_RIGHT)
+      else if (revealer->transition_type == GTK_REVEALER_TRANSITION_TYPE_SLIDE_RIGHT)
         return GTK_REVEALER_TRANSITION_TYPE_SLIDE_LEFT;
-      if (priv->transition_type == GTK_REVEALER_TRANSITION_TYPE_SWING_LEFT)
+      if (revealer->transition_type == GTK_REVEALER_TRANSITION_TYPE_SWING_LEFT)
         return GTK_REVEALER_TRANSITION_TYPE_SWING_RIGHT;
-      else if (priv->transition_type == GTK_REVEALER_TRANSITION_TYPE_SWING_RIGHT)
+      else if (revealer->transition_type == GTK_REVEALER_TRANSITION_TYPE_SWING_RIGHT)
         return GTK_REVEALER_TRANSITION_TYPE_SWING_LEFT;
     }
 
-  return priv->transition_type;
+  return revealer->transition_type;
 }
 
 static double
 get_child_size_scale (GtkRevealer    *revealer,
                       GtkOrientation  orientation)
 {
-  GtkRevealerPrivate *priv = gtk_revealer_get_instance_private (revealer);
-
   switch (effective_transition (revealer))
     {
     case GTK_REVEALER_TRANSITION_TYPE_SLIDE_RIGHT:
     case GTK_REVEALER_TRANSITION_TYPE_SLIDE_LEFT:
       if (orientation == GTK_ORIENTATION_HORIZONTAL)
-        return priv->current_pos;
+        return revealer->current_pos;
       else
         return 1.0;
 
     case GTK_REVEALER_TRANSITION_TYPE_SLIDE_DOWN:
     case GTK_REVEALER_TRANSITION_TYPE_SLIDE_UP:
       if (orientation == GTK_ORIENTATION_VERTICAL)
-        return priv->current_pos;
+        return revealer->current_pos;
       else
         return 1.0;
 
     case GTK_REVEALER_TRANSITION_TYPE_SWING_RIGHT:
     case GTK_REVEALER_TRANSITION_TYPE_SWING_LEFT:
       if (orientation == GTK_ORIENTATION_HORIZONTAL)
-        return sin (G_PI * priv->current_pos / 2);
+        return sin (G_PI * revealer->current_pos / 2);
       else
         return 1.0;
 
     case GTK_REVEALER_TRANSITION_TYPE_SWING_DOWN:
     case GTK_REVEALER_TRANSITION_TYPE_SWING_UP:
       if (orientation == GTK_ORIENTATION_VERTICAL)
-        return sin (G_PI * priv->current_pos / 2);
+        return sin (G_PI * revealer->current_pos / 2);
       else
         return 1.0;
 
@@ -441,17 +427,16 @@ gtk_revealer_size_allocate (GtkWidget *widget,
                             int        baseline)
 {
   GtkRevealer *revealer = GTK_REVEALER (widget);
-  GtkRevealerPrivate *priv = gtk_revealer_get_instance_private (revealer);
   GskTransform *transform;
   double hscale, vscale;
   int child_width, child_height;
 
-  if (priv->child == NULL || !gtk_widget_get_visible (priv->child))
+  if (revealer->child == NULL || !gtk_widget_get_visible (revealer->child))
     return;
 
-  if (priv->current_pos >= 1.0)
+  if (revealer->current_pos >= 1.0)
     {
-      gtk_widget_allocate (priv->child, width, height, baseline, NULL);
+      gtk_widget_allocate (revealer->child, width, height, baseline, NULL);
       return;
     }
 
@@ -493,7 +478,7 @@ gtk_revealer_size_allocate (GtkWidget *widget,
     {
       int min, nat;
       g_assert (vscale == 1.0);
-      gtk_widget_measure (priv->child, GTK_ORIENTATION_HORIZONTAL, height, &min, &nat, NULL, NULL);
+      gtk_widget_measure (revealer->child, GTK_ORIENTATION_HORIZONTAL, height, &min, &nat, NULL, NULL);
       if (ceil (nat * hscale) == width)
         child_width = nat;
       else if (ceil (min * hscale) == width)
@@ -506,7 +491,7 @@ gtk_revealer_size_allocate (GtkWidget *widget,
     {
       int min, nat;
       child_width = width;
-      gtk_widget_measure (priv->child, GTK_ORIENTATION_VERTICAL, width, &min, &nat, NULL, NULL);
+      gtk_widget_measure (revealer->child, GTK_ORIENTATION_VERTICAL, width, &min, &nat, NULL, NULL);
       if (ceil (nat * vscale) == height)
         child_height = nat;
       else if (ceil (min * vscale) == height)
@@ -534,28 +519,28 @@ gtk_revealer_size_allocate (GtkWidget *widget,
     case GTK_REVEALER_TRANSITION_TYPE_SWING_LEFT:
       transform = gsk_transform_translate (transform, &GRAPHENE_POINT_INIT (width, height / 2));
       transform = gsk_transform_perspective (transform, 2 * MAX (width, height));
-      transform = gsk_transform_rotate_3d (transform, -90 * (1.0 - priv->current_pos), graphene_vec3_y_axis ());
+      transform = gsk_transform_rotate_3d (transform, -90 * (1.0 - revealer->current_pos), graphene_vec3_y_axis ());
       transform = gsk_transform_translate (transform, &GRAPHENE_POINT_INIT (- child_width, - child_height / 2));
       break;
 
     case GTK_REVEALER_TRANSITION_TYPE_SWING_RIGHT:
       transform = gsk_transform_translate (transform, &GRAPHENE_POINT_INIT (0, height / 2));
       transform = gsk_transform_perspective (transform, 2 * MAX (width, height));
-      transform = gsk_transform_rotate_3d (transform, 90 * (1.0 - priv->current_pos), graphene_vec3_y_axis ());
+      transform = gsk_transform_rotate_3d (transform, 90 * (1.0 - revealer->current_pos), graphene_vec3_y_axis ());
       transform = gsk_transform_translate (transform, &GRAPHENE_POINT_INIT (0, - child_height / 2));
       break;
 
     case GTK_REVEALER_TRANSITION_TYPE_SWING_DOWN:
       transform = gsk_transform_translate (transform, &GRAPHENE_POINT_INIT (width / 2, 0));
       transform = gsk_transform_perspective (transform, 2 * MAX (width, height));
-      transform = gsk_transform_rotate_3d (transform, -90 * (1.0 - priv->current_pos), graphene_vec3_x_axis ());
+      transform = gsk_transform_rotate_3d (transform, -90 * (1.0 - revealer->current_pos), graphene_vec3_x_axis ());
       transform = gsk_transform_translate (transform, &GRAPHENE_POINT_INIT (- child_width / 2, 0));
       break;
 
     case GTK_REVEALER_TRANSITION_TYPE_SWING_UP:
       transform = gsk_transform_translate (transform, &GRAPHENE_POINT_INIT (width / 2, height));
       transform = gsk_transform_perspective (transform, 2 * MAX (width, height));
-      transform = gsk_transform_rotate_3d (transform, 90 * (1.0 - priv->current_pos), graphene_vec3_x_axis ());
+      transform = gsk_transform_rotate_3d (transform, 90 * (1.0 - revealer->current_pos), graphene_vec3_x_axis ());
       transform = gsk_transform_translate (transform, &GRAPHENE_POINT_INIT (- child_width / 2, - child_height));
       break;
 
@@ -567,25 +552,24 @@ gtk_revealer_size_allocate (GtkWidget *widget,
       break;
     }
 
-  gtk_widget_allocate (priv->child, child_width, child_height, -1, transform);
+  gtk_widget_allocate (revealer->child, child_width, child_height, -1, transform);
 }
 
 static void
 gtk_revealer_set_position (GtkRevealer *revealer,
                            double       pos)
 {
-  GtkRevealerPrivate *priv = gtk_revealer_get_instance_private (revealer);
   gboolean new_visible;
   GtkRevealerTransitionType transition;
 
-  priv->current_pos = pos;
+  revealer->current_pos = pos;
 
-  new_visible = priv->current_pos != 0.0;
+  new_visible = revealer->current_pos != 0.0;
 
-  if (priv->child != NULL &&
-      new_visible != gtk_widget_get_child_visible (priv->child))
+  if (revealer->child != NULL &&
+      new_visible != gtk_widget_get_child_visible (revealer->child))
     {
-      gtk_widget_set_child_visible (priv->child, new_visible);
+      gtk_widget_set_child_visible (revealer->child, new_visible);
       gtk_widget_queue_resize (GTK_WIDGET (revealer));
     }
 
@@ -596,7 +580,7 @@ gtk_revealer_set_position (GtkRevealer *revealer,
     }
   else if (transition == GTK_REVEALER_TRANSITION_TYPE_CROSSFADE)
     {
-      gtk_widget_set_opacity (GTK_WIDGET (revealer), priv->current_pos);
+      gtk_widget_set_opacity (GTK_WIDGET (revealer), revealer->current_pos);
       gtk_widget_queue_draw (GTK_WIDGET (revealer));
     }
   else
@@ -604,7 +588,7 @@ gtk_revealer_set_position (GtkRevealer *revealer,
       gtk_widget_queue_resize (GTK_WIDGET (revealer));
     }
 
-  if (priv->current_pos == priv->target_pos)
+  if (revealer->current_pos == revealer->target_pos)
     g_object_notify_by_pspec (G_OBJECT (revealer), props[PROP_CHILD_REVEALED]);
 }
 
@@ -614,18 +598,17 @@ gtk_revealer_animate_cb (GtkWidget     *widget,
                          gpointer       user_data)
 {
   GtkRevealer *revealer = GTK_REVEALER (widget);
-  GtkRevealerPrivate *priv = gtk_revealer_get_instance_private (revealer);
   double ease;
 
-  gtk_progress_tracker_advance_frame (&priv->tracker,
+  gtk_progress_tracker_advance_frame (&revealer->tracker,
                                       gdk_frame_clock_get_frame_time (frame_clock));
-  ease = gtk_progress_tracker_get_ease_out_cubic (&priv->tracker, FALSE);
+  ease = gtk_progress_tracker_get_ease_out_cubic (&revealer->tracker, FALSE);
   gtk_revealer_set_position (revealer,
-                             priv->source_pos + (ease * (priv->target_pos - priv->source_pos)));
+                             revealer->source_pos + (ease * (revealer->target_pos - revealer->source_pos)));
 
-  if (gtk_progress_tracker_get_state (&priv->tracker) == GTK_PROGRESS_STATE_AFTER)
+  if (gtk_progress_tracker_get_state (&revealer->tracker) == GTK_PROGRESS_STATE_AFTER)
     {
-      priv->tick_id = 0;
+      revealer->tick_id = 0;
       return FALSE;
     }
 
@@ -636,28 +619,27 @@ static void
 gtk_revealer_start_animation (GtkRevealer *revealer,
                               double       target)
 {
-  GtkRevealerPrivate *priv = gtk_revealer_get_instance_private (revealer);
   GtkWidget *widget = GTK_WIDGET (revealer);
   GtkRevealerTransitionType transition;
 
-  if (priv->target_pos == target)
+  if (revealer->target_pos == target)
     return;
 
-  priv->target_pos = target;
+  revealer->target_pos = target;
   g_object_notify_by_pspec (G_OBJECT (revealer), props[PROP_REVEAL_CHILD]);
 
   transition = effective_transition (revealer);
   if (gtk_widget_get_mapped (widget) &&
-      priv->transition_duration != 0 &&
+      revealer->transition_duration != 0 &&
       transition != GTK_REVEALER_TRANSITION_TYPE_NONE &&
       gtk_settings_get_enable_animations (gtk_widget_get_settings (widget)))
     {
-      priv->source_pos = priv->current_pos;
-      if (priv->tick_id == 0)
-        priv->tick_id =
+      revealer->source_pos = revealer->current_pos;
+      if (revealer->tick_id == 0)
+        revealer->tick_id =
           gtk_widget_add_tick_callback (widget, gtk_revealer_animate_cb, revealer, NULL);
-      gtk_progress_tracker_start (&priv->tracker,
-                                  priv->transition_duration * 1000,
+      gtk_progress_tracker_start (&revealer->tracker,
+                                  revealer->transition_duration * 1000,
                                   0,
                                   1.0);
     }
@@ -706,11 +688,9 @@ gtk_revealer_set_reveal_child (GtkRevealer *revealer,
 gboolean
 gtk_revealer_get_reveal_child (GtkRevealer *revealer)
 {
-  GtkRevealerPrivate *priv = gtk_revealer_get_instance_private (revealer);
-
   g_return_val_if_fail (GTK_IS_REVEALER (revealer), FALSE);
 
-  return priv->target_pos != 0.0;
+  return revealer->target_pos != 0.0;
 }
 
 /**
@@ -725,8 +705,7 @@ gtk_revealer_get_reveal_child (GtkRevealer *revealer)
 gboolean
 gtk_revealer_get_child_revealed (GtkRevealer *revealer)
 {
-  GtkRevealerPrivate *priv = gtk_revealer_get_instance_private (revealer);
-  gboolean animation_finished = (priv->target_pos == priv->current_pos);
+  gboolean animation_finished = (revealer->target_pos == revealer->current_pos);
   gboolean reveal_child = gtk_revealer_get_reveal_child (revealer);
 
   if (animation_finished)
@@ -744,11 +723,10 @@ gtk_revealer_measure (GtkWidget      *widget,
                       int            *minimum_baseline,
                       int            *natural_baseline)
 {
-  GtkRevealer *self = GTK_REVEALER (widget);
-  GtkRevealerPrivate *priv = gtk_revealer_get_instance_private (self);
+  GtkRevealer *revealer = GTK_REVEALER (widget);
   double scale;
 
-  scale = get_child_size_scale (self, OPPOSITE_ORIENTATION (orientation));
+  scale = get_child_size_scale (revealer, OPPOSITE_ORIENTATION (orientation));
 
   if (for_size >= 0)
     {
@@ -758,9 +736,9 @@ gtk_revealer_measure (GtkWidget      *widget,
         for_size = MIN (G_MAXINT, ceil (for_size / scale));
     }
 
-  if (priv->child != NULL && _gtk_widget_get_visible (priv->child))
+  if (revealer->child != NULL && _gtk_widget_get_visible (revealer->child))
     {
-      gtk_widget_measure (priv->child,
+      gtk_widget_measure (revealer->child,
                           orientation,
                           for_size,
                           minimum, natural,
@@ -772,7 +750,7 @@ gtk_revealer_measure (GtkWidget      *widget,
       *natural = 0;
     }
 
-  scale = get_child_size_scale (self, orientation);
+  scale = get_child_size_scale (revealer, orientation);
   *minimum = ceil (*minimum * scale);
   *natural = ceil (*natural * scale);
 }
@@ -789,11 +767,9 @@ gtk_revealer_measure (GtkWidget      *widget,
 guint
 gtk_revealer_get_transition_duration (GtkRevealer *revealer)
 {
-  GtkRevealerPrivate *priv = gtk_revealer_get_instance_private (revealer);
-
   g_return_val_if_fail (GTK_IS_REVEALER (revealer), 0);
 
-  return priv->transition_duration;
+  return revealer->transition_duration;
 }
 
 /**
@@ -807,14 +783,12 @@ void
 gtk_revealer_set_transition_duration (GtkRevealer *revealer,
                                       guint        value)
 {
-  GtkRevealerPrivate *priv = gtk_revealer_get_instance_private (revealer);
-
   g_return_if_fail (GTK_IS_REVEALER (revealer));
 
-  if (priv->transition_duration == value)
+  if (revealer->transition_duration == value)
     return;
 
-  priv->transition_duration = value;
+  revealer->transition_duration = value;
   g_object_notify_by_pspec (G_OBJECT (revealer), props[PROP_TRANSITION_DURATION]);
 }
 
@@ -830,11 +804,9 @@ gtk_revealer_set_transition_duration (GtkRevealer *revealer,
 GtkRevealerTransitionType
 gtk_revealer_get_transition_type (GtkRevealer *revealer)
 {
-  GtkRevealerPrivate *priv = gtk_revealer_get_instance_private (revealer);
-
   g_return_val_if_fail (GTK_IS_REVEALER (revealer), GTK_REVEALER_TRANSITION_TYPE_NONE);
 
-  return priv->transition_type;
+  return revealer->transition_type;
 }
 
 /**
@@ -850,14 +822,12 @@ void
 gtk_revealer_set_transition_type (GtkRevealer               *revealer,
                                   GtkRevealerTransitionType  transition)
 {
-  GtkRevealerPrivate *priv = gtk_revealer_get_instance_private (revealer);
-
   g_return_if_fail (GTK_IS_REVEALER (revealer));
 
-  if (priv->transition_type == transition)
+  if (revealer->transition_type == transition)
     return;
 
-  priv->transition_type = transition;
+  revealer->transition_type = transition;
   gtk_widget_queue_resize (GTK_WIDGET (revealer));
   g_object_notify_by_pspec (G_OBJECT (revealer), props[PROP_TRANSITION_TYPE]);
 }
@@ -873,18 +843,16 @@ void
 gtk_revealer_set_child (GtkRevealer *revealer,
                         GtkWidget   *child)
 {
-  GtkRevealerPrivate *priv = gtk_revealer_get_instance_private (revealer);
-
   g_return_if_fail (GTK_IS_REVEALER (revealer));
   g_return_if_fail (child == NULL || GTK_IS_WIDGET (child));
 
-  g_clear_pointer (&priv->child, gtk_widget_unparent);
+  g_clear_pointer (&revealer->child, gtk_widget_unparent);
 
   if (child)
     {
       gtk_widget_set_parent (child, GTK_WIDGET (revealer));
-      gtk_widget_set_child_visible (child, priv->current_pos != 0.0);
-      priv->child = child;
+      gtk_widget_set_child_visible (child, revealer->current_pos != 0.0);
+      revealer->child = child;
    }
 
   g_object_notify_by_pspec (G_OBJECT (revealer), props[PROP_CHILD]);
@@ -901,9 +869,7 @@ gtk_revealer_set_child (GtkRevealer *revealer,
 GtkWidget *
 gtk_revealer_get_child (GtkRevealer *revealer)
 {
-  GtkRevealerPrivate *priv = gtk_revealer_get_instance_private (revealer);
-
   g_return_val_if_fail (GTK_IS_REVEALER (revealer), NULL);
 
-  return priv->child;
+  return revealer->child;
 }

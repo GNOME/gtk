@@ -28,10 +28,10 @@ enum {
   PROP_MAGNIFICATION
 };
 
-typedef struct _GtkMagnifierPrivate GtkMagnifierPrivate;
-
-struct _GtkMagnifierPrivate
+struct _GtkMagnifier
 {
+  GtkWidget parent_instance;
+
   GdkPaintable *paintable;
   double magnification;
   int x;
@@ -39,8 +39,12 @@ struct _GtkMagnifierPrivate
   gboolean resize;
 };
 
-G_DEFINE_TYPE_WITH_PRIVATE (GtkMagnifier, gtk_magnifier,
-                            GTK_TYPE_WIDGET)
+typedef struct
+{
+  GtkWidgetClass parent_class;
+} GtkMagnifierClass;
+
+G_DEFINE_TYPE (GtkMagnifier, gtk_magnifier, GTK_TYPE_WIDGET)
 
 static void
 _gtk_magnifier_set_property (GObject      *object,
@@ -48,20 +52,22 @@ _gtk_magnifier_set_property (GObject      *object,
                              const GValue *value,
                              GParamSpec   *pspec)
 {
+  GtkMagnifier *magnifier = GTK_MAGNIFIER (object);
+
   switch (param_id)
     {
     case PROP_INSPECTED:
-      _gtk_magnifier_set_inspected (GTK_MAGNIFIER (object),
-                                    g_value_get_object (value));
+      _gtk_magnifier_set_inspected (magnifier, g_value_get_object (value));
       break;
+
     case PROP_MAGNIFICATION:
-      _gtk_magnifier_set_magnification (GTK_MAGNIFIER (object),
-                                        g_value_get_double (value));
+      _gtk_magnifier_set_magnification (magnifier, g_value_get_double (value));
       break;
+
     case PROP_RESIZE:
-      _gtk_magnifier_set_resize (GTK_MAGNIFIER (object),
-                                 g_value_get_boolean (value));
+      _gtk_magnifier_set_resize (magnifier, g_value_get_boolean (value));
       break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
     }
@@ -73,23 +79,22 @@ _gtk_magnifier_get_property (GObject    *object,
                              GValue     *value,
                              GParamSpec *pspec)
 {
-  GtkMagnifier *magnifier;
-  GtkMagnifierPrivate *priv;
-
-  magnifier = GTK_MAGNIFIER (object);
-  priv = gtk_magnifier_get_instance_private (magnifier);
+  GtkMagnifier *magnifier = GTK_MAGNIFIER (object);
 
   switch (param_id)
     {
     case PROP_INSPECTED:
-      g_value_set_object (value, gtk_widget_paintable_get_widget (GTK_WIDGET_PAINTABLE (priv->paintable)));
+      g_value_set_object (value, gtk_widget_paintable_get_widget (GTK_WIDGET_PAINTABLE (magnifier->paintable)));
       break;
+
     case PROP_MAGNIFICATION:
-      g_value_set_double (value, priv->magnification);
+      g_value_set_double (value, magnifier->magnification);
       break;
+
     case PROP_RESIZE:
-      g_value_set_boolean (value, priv->resize);
+      g_value_set_boolean (value, magnifier->resize);
       break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
     }
@@ -100,28 +105,27 @@ gtk_magnifier_snapshot (GtkWidget   *widget,
                         GtkSnapshot *snapshot)
 {
   GtkMagnifier *magnifier = GTK_MAGNIFIER (widget);
-  GtkMagnifierPrivate *priv = gtk_magnifier_get_instance_private (magnifier);
   double width, height, paintable_width, paintable_height;
 
-  if (gtk_widget_paintable_get_widget (GTK_WIDGET_PAINTABLE (priv->paintable)) == NULL)
+  if (gtk_widget_paintable_get_widget (GTK_WIDGET_PAINTABLE (magnifier->paintable)) == NULL)
     return;
 
   width = gtk_widget_get_width (widget);
   height = gtk_widget_get_height (widget);
-  paintable_width = gdk_paintable_get_intrinsic_width (priv->paintable);
-  paintable_height = gdk_paintable_get_intrinsic_height (priv->paintable);
+  paintable_width = gdk_paintable_get_intrinsic_width (magnifier->paintable);
+  paintable_height = gdk_paintable_get_intrinsic_height (magnifier->paintable);
   if (paintable_width <= 0.0 || paintable_height <= 0.0)
     return;
 
   gtk_snapshot_save (snapshot);
-  if (!priv->resize)
+  if (!magnifier->resize)
     gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (width / 2, height / 2));
-  gtk_snapshot_scale (snapshot, priv->magnification, priv->magnification);
+  gtk_snapshot_scale (snapshot, magnifier->magnification, magnifier->magnification);
   gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (
-                          - CLAMP (priv->x, 0, paintable_width),
-                          - CLAMP (priv->y, 0, paintable_height)));
+                          - CLAMP (magnifier->x, 0, paintable_width),
+                          - CLAMP (magnifier->y, 0, paintable_height)));
 
-  gdk_paintable_snapshot (priv->paintable, snapshot, paintable_width, paintable_height);
+  gdk_paintable_snapshot (magnifier->paintable, snapshot, paintable_width, paintable_height);
   gtk_snapshot_restore (snapshot);
 }
 
@@ -135,15 +139,14 @@ gtk_magnifier_measure (GtkWidget      *widget,
                        int            *natural_baseline)
 {
   GtkMagnifier *magnifier = GTK_MAGNIFIER (widget);
-  GtkMagnifierPrivate *priv = gtk_magnifier_get_instance_private (magnifier);
   int size;
 
-  if (priv->resize)
+  if (magnifier->resize)
     {
       if (orientation == GTK_ORIENTATION_HORIZONTAL)
-        size = priv->magnification * gdk_paintable_get_intrinsic_width (priv->paintable);
+        size = magnifier->magnification * gdk_paintable_get_intrinsic_width (magnifier->paintable);
       else
-        size = priv->magnification * gdk_paintable_get_intrinsic_height (priv->paintable);
+        size = magnifier->magnification * gdk_paintable_get_intrinsic_height (magnifier->paintable);
     }
   else
     size = 0;
@@ -155,13 +158,12 @@ gtk_magnifier_measure (GtkWidget      *widget,
 static void
 gtk_magnifier_dispose (GObject *object)
 {
-  GtkMagnifier *self = GTK_MAGNIFIER (object);
-  GtkMagnifierPrivate *priv = gtk_magnifier_get_instance_private (self);
+  GtkMagnifier *magnifier = GTK_MAGNIFIER (object);
 
-  if (priv->paintable)
-    _gtk_magnifier_set_inspected (self, NULL);
+  if (magnifier->paintable)
+    _gtk_magnifier_set_inspected (magnifier, NULL);
 
-  g_clear_object (&priv->paintable);
+  g_clear_object (&magnifier->paintable);
 
   G_OBJECT_CLASS (gtk_magnifier_parent_class)->dispose (object);
 }
@@ -203,18 +205,17 @@ gtk_magnifier_class_init (GtkMagnifierClass *klass)
 }
 
 static void
-gtk_magnifier_init (GtkMagnifier *self)
+gtk_magnifier_init (GtkMagnifier *magnifier)
 {
-  GtkMagnifierPrivate *priv = gtk_magnifier_get_instance_private (self);
-  GtkWidget *widget = GTK_WIDGET (self);
+  GtkWidget *widget = GTK_WIDGET (magnifier);
 
   gtk_widget_set_overflow (widget, GTK_OVERFLOW_HIDDEN);
 
-  priv->magnification = 1;
-  priv->resize = FALSE;
-  priv->paintable = gtk_widget_paintable_new (NULL);
-  g_signal_connect_swapped (priv->paintable, "invalidate-contents", G_CALLBACK (gtk_widget_queue_draw), self);
-  g_signal_connect_swapped (priv->paintable, "invalidate-size", G_CALLBACK (gtk_widget_queue_resize), self);
+  magnifier->magnification = 1;
+  magnifier->resize = FALSE;
+  magnifier->paintable = gtk_widget_paintable_new (NULL);
+  g_signal_connect_swapped (magnifier->paintable, "invalidate-contents", G_CALLBACK (gtk_widget_queue_draw), magnifier);
+  g_signal_connect_swapped (magnifier->paintable, "invalidate-size", G_CALLBACK (gtk_widget_queue_resize), magnifier);
 }
 
 GtkWidget *
@@ -230,23 +231,19 @@ _gtk_magnifier_new (GtkWidget *inspected)
 GtkWidget *
 _gtk_magnifier_get_inspected (GtkMagnifier *magnifier)
 {
-  GtkMagnifierPrivate *priv = gtk_magnifier_get_instance_private (magnifier);
-
   g_return_val_if_fail (GTK_IS_MAGNIFIER (magnifier), NULL);
 
-  return gtk_widget_paintable_get_widget (GTK_WIDGET_PAINTABLE (priv->paintable));
+  return gtk_widget_paintable_get_widget (GTK_WIDGET_PAINTABLE (magnifier->paintable));
 }
 
 void
 _gtk_magnifier_set_inspected (GtkMagnifier *magnifier,
                               GtkWidget    *inspected)
 {
-  GtkMagnifierPrivate *priv = gtk_magnifier_get_instance_private (magnifier);
-
   g_return_if_fail (GTK_IS_MAGNIFIER (magnifier));
   g_return_if_fail (inspected == NULL || GTK_IS_WIDGET (inspected));
 
-  gtk_widget_paintable_set_widget (GTK_WIDGET_PAINTABLE (priv->paintable), inspected);
+  gtk_widget_paintable_set_widget (GTK_WIDGET_PAINTABLE (magnifier->paintable), inspected);
 
   g_object_notify (G_OBJECT (magnifier), "inspected");
 }
@@ -256,17 +253,13 @@ _gtk_magnifier_set_coords (GtkMagnifier *magnifier,
                            double        x,
                            double        y)
 {
-  GtkMagnifierPrivate *priv;
-
   g_return_if_fail (GTK_IS_MAGNIFIER (magnifier));
 
-  priv = gtk_magnifier_get_instance_private (magnifier);
-
-  if (priv->x == x && priv->y == y)
+  if (magnifier->x == x && magnifier->y == y)
     return;
 
-  priv->x = x;
-  priv->y = y;
+  magnifier->x = x;
+  magnifier->y = y;
 
   if (gtk_widget_is_visible (GTK_WIDGET (magnifier)))
     gtk_widget_queue_draw (GTK_WIDGET (magnifier));
@@ -277,36 +270,28 @@ _gtk_magnifier_get_coords (GtkMagnifier *magnifier,
                            double       *x,
                            double       *y)
 {
-  GtkMagnifierPrivate *priv;
-
   g_return_if_fail (GTK_IS_MAGNIFIER (magnifier));
 
-  priv = gtk_magnifier_get_instance_private (magnifier);
-
   if (x)
-    *x = priv->x;
+    *x = magnifier->x;
 
   if (y)
-    *y = priv->y;
+    *y = magnifier->y;
 }
 
 void
 _gtk_magnifier_set_magnification (GtkMagnifier *magnifier,
                                   double        magnification)
 {
-  GtkMagnifierPrivate *priv;
-
   g_return_if_fail (GTK_IS_MAGNIFIER (magnifier));
 
-  priv = gtk_magnifier_get_instance_private (magnifier);
-
-  if (priv->magnification == magnification)
+  if (magnifier->magnification == magnification)
     return;
 
-  priv->magnification = magnification;
+  magnifier->magnification = magnification;
   g_object_notify (G_OBJECT (magnifier), "magnification");
 
-  if (priv->resize)
+  if (magnifier->resize)
     gtk_widget_queue_resize (GTK_WIDGET (magnifier));
 
   if (gtk_widget_is_visible (GTK_WIDGET (magnifier)))
@@ -316,29 +301,21 @@ _gtk_magnifier_set_magnification (GtkMagnifier *magnifier,
 double
 _gtk_magnifier_get_magnification (GtkMagnifier *magnifier)
 {
-  GtkMagnifierPrivate *priv;
-
   g_return_val_if_fail (GTK_IS_MAGNIFIER (magnifier), 1);
 
-  priv = gtk_magnifier_get_instance_private (magnifier);
-
-  return priv->magnification;
+  return magnifier->magnification;
 }
 
 void
 _gtk_magnifier_set_resize (GtkMagnifier *magnifier,
                            gboolean      resize)
 {
-  GtkMagnifierPrivate *priv;
-
   g_return_if_fail (GTK_IS_MAGNIFIER (magnifier));
 
-  priv = gtk_magnifier_get_instance_private (magnifier);
-
-  if (priv->resize == resize)
+  if (magnifier->resize == resize)
     return;
 
-  priv->resize = resize;
+  magnifier->resize = resize;
 
   gtk_widget_queue_resize (GTK_WIDGET (magnifier));
 }
@@ -346,11 +323,7 @@ _gtk_magnifier_set_resize (GtkMagnifier *magnifier,
 gboolean
 _gtk_magnifier_get_resize (GtkMagnifier *magnifier)
 {
-  GtkMagnifierPrivate *priv;
-
   g_return_val_if_fail (GTK_IS_MAGNIFIER (magnifier), FALSE);
 
-  priv = gtk_magnifier_get_instance_private (magnifier);
-
-  return priv->resize;
+  return magnifier->resize;
 }
