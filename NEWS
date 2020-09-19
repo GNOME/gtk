@@ -16,6 +16,8 @@ Overview of Changes in GTK 3.99.2
  - Fix dnd
  - Improve undo state tracking
  - Speed rendering in the presence of selections
+ - Make clickable links work again
+ - Fix handling of anchored children
 
 * GtkRevealer:
  - Fix clipping issues in the swing transitions
@@ -27,8 +29,23 @@ Overview of Changes in GTK 3.99.2
  - Fix a crash
  - Fix setting unlisted filters
 
+* GtkFontChooser:
+ - Determine sample text based on font coverage
+ - Allow filtering by language
+
 * GtkVideo:
  - Make autoplay work
+
+* CSS:
+ - Allow more than 64 selectors per rule
+
+* Adwaita:
+ - Improve gesture graphics
+ - Tweak DND highlight color
+ - Add spacing to .navigation-sidebar
+
+* GSK:
+ - Add radial gradient nodes
 
 * GL renderer:
  - Fix clipping with projective transforms
@@ -39,12 +56,18 @@ Overview of Changes in GTK 3.99.2
 * Vulkan renderer:
  - Fix swapchain creation
 
-* CSS:
- - Allow more than 64 selectors per rule
+* Windows:
+ - Fix display of CSD windows
 
-* API cleanup:
+* Wayland
+ - Always ack configure to avoid jumping windows
+
+* API cleanups:
  - Make filter and sorter constructors return exact types
  - Rename GdkSurfaceState to GdkToplevelState
+ - Remove GdkWaylandSurface::committed
+ - Add gdk_frame_clock_get_fps
+ - Add gtk_stack_add_child
 
 * Demos:
  - Bug and crash fixes
@@ -53,6 +76,7 @@ Overview of Changes in GTK 3.99.2
  - Add a Shadertoy demo
  - Add an Emblem demo
  - Add a demo for input validation and error states
+ - Add a demo for context menus
  - Make gtk-demo demo itself
 
 * Build:
@@ -61,6 +85,7 @@ Overview of Changes in GTK 3.99.2
 
 * Translation updates:
  Basque
+ British English
  Catalan
  Croatian
  Czech
