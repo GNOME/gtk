@@ -30,58 +30,72 @@ G_BEGIN_DECLS
 
 #ifdef GTK_COMPILATION
 typedef struct _GdkWaylandSurface GdkWaylandSurface;
+typedef struct _GdkWaylandToplevel GdkWaylandToplevel;
+typedef struct _GdkWaylandPopup GdkWaylandPopup;
 #else
 typedef GdkSurface GdkWaylandSurface;
+typedef GdkToplevel GdkWaylandToplevel;
+typedef GdkPopup GdkWaylandPopup;
 #endif
-typedef struct _GdkWaylandSurfaceClass GdkWaylandSurfaceClass;
 
 #define GDK_TYPE_WAYLAND_SURFACE              (gdk_wayland_surface_get_type())
 #define GDK_WAYLAND_SURFACE(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_WAYLAND_SURFACE, GdkWaylandSurface))
-#define GDK_WAYLAND_SURFACE_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GDK_TYPE_WAYLAND_SURFACE, GdkWaylandSurfaceClass))
 #define GDK_IS_WAYLAND_SURFACE(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_WAYLAND_SURFACE))
-#define GDK_IS_WAYLAND_SURFACE_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_WAYLAND_SURFACE))
-#define GDK_WAYLAND_SURFACE_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_WAYLAND_SURFACE, GdkWaylandSurfaceClass))
+
+#define GDK_TYPE_WAYLAND_TOPLEVEL             (gdk_wayland_toplevel_get_type())
+#define GDK_WAYLAND_TOPLEVEL(object)          (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_WAYLAND_TOPLEVEL, GdkWaylandToplevel))
+#define GDK_IS_WAYLAND_TOPLEVEL(object)       (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_WAYLAND_TOPLEVEL))
+
+#define GDK_TYPE_WAYLAND_POPUP                (gdk_wayland_popup_get_type())
+#define GDK_WAYLAND_POPUP(object)             (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_WAYLAND_POPUP, GdkWaylandPopup))
+#define GDK_IS_WAYLAND_POPUP(object)          (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_WAYLAND_POPUP))
 
 GDK_AVAILABLE_IN_ALL
 GType                    gdk_wayland_surface_get_type             (void);
 
 GDK_AVAILABLE_IN_ALL
+GType                    gdk_wayland_toplevel_get_type            (void);
+
+GDK_AVAILABLE_IN_ALL
+GType                    gdk_wayland_popup_get_type               (void);
+
+GDK_AVAILABLE_IN_ALL
 struct wl_surface       *gdk_wayland_surface_get_wl_surface       (GdkSurface *surface);
 
 GDK_AVAILABLE_IN_ALL
-void                     gdk_wayland_surface_set_dbus_properties_libgtk_only (GdkSurface  *surface,
-                                                                              const char *application_id,
-                                                                              const char *app_menu_path,
-                                                                              const char *menubar_path,
-                                                                              const char *window_object_path,
-                                                                              const char *application_object_path,
-                                                                              const char *unique_bus_name);
+void                     gdk_wayland_toplevel_set_dbus_properties_libgtk_only (GdkToplevel *toplevel,
+                                                                               const char  *application_id,
+                                                                               const char  *app_menu_path,
+                                                                               const char  *menubar_path,
+                                                                               const char  *window_object_path,
+                                                                               const char  *application_object_path,
+                                                                               const char  *unique_bus_name);
 
-typedef void (*GdkWaylandSurfaceExported) (GdkSurface  *surface,
-                                          const char *handle,
-                                          gpointer    user_data);
-
-GDK_AVAILABLE_IN_ALL
-gboolean                 gdk_wayland_surface_export_handle (GdkSurface               *surface,
-                                                            GdkWaylandSurfaceExported callback,
-                                                            gpointer                 user_data,
-                                                            GDestroyNotify           destroy_func);
+typedef void (*GdkWaylandToplevelExported) (GdkToplevel *toplevel,
+                                            const char  *handle,
+                                            gpointer     user_data);
 
 GDK_AVAILABLE_IN_ALL
-void                     gdk_wayland_surface_unexport_handle (GdkSurface *surface);
+gboolean                 gdk_wayland_toplevel_export_handle (GdkToplevel              *toplevel,
+                                                             GdkWaylandToplevelExported callback,
+                                                             gpointer                 user_data,
+                                                             GDestroyNotify           destroy_func);
 
 GDK_AVAILABLE_IN_ALL
-gboolean                 gdk_wayland_surface_set_transient_for_exported (GdkSurface *surface,
-                                                                         char      *parent_handle_str);
+void                     gdk_wayland_toplevel_unexport_handle (GdkToplevel *toplevel);
 
 GDK_AVAILABLE_IN_ALL
-void                     gdk_wayland_surface_set_application_id (GdkSurface *surface,
-                                                                 const char *application_id);
+gboolean                 gdk_wayland_toplevel_set_transient_for_exported (GdkToplevel *toplevel,
+                                                                         const char   *parent_handle_str);
 
-void gdk_wayland_surface_announce_csd                        (GdkSurface *surface);
+GDK_AVAILABLE_IN_ALL
+void                     gdk_wayland_toplevel_set_application_id (GdkToplevel *toplevel,
+                                                                  const char  *application_id);
 
-gboolean gdk_wayland_surface_inhibit_idle                    (GdkSurface *surface);
-void gdk_wayland_surface_uninhibit_idle                      (GdkSurface *surface);
+void                     gdk_wayland_toplevel_announce_csd       (GdkToplevel *toplevel);
+
+gboolean                 gdk_wayland_toplevel_inhibit_idle       (GdkToplevel *toplevel);
+void                     gdk_wayland_toplevel_uninhibit_idle     (GdkToplevel *toplevel);
 
 G_END_DECLS
 

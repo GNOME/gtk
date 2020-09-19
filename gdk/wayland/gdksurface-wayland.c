@@ -186,7 +186,7 @@ struct _GdkWaylandSurface
   int state_freeze_count;
 
   struct {
-    GdkWaylandSurfaceExported callback;
+    GdkWaylandToplevelExported callback;
     gpointer user_data;
     GDestroyNotify destroy_func;
   } exported;
@@ -198,6 +198,7 @@ struct _GdkWaylandSurface
   size_t idle_inhibitor_refcount;
 };
 
+typedef struct _GdkWaylandSurfaceClass GdkWaylandSurfaceClass;
 struct _GdkWaylandSurfaceClass
 {
   GdkSurfaceClass parent_class;
@@ -205,7 +206,6 @@ struct _GdkWaylandSurfaceClass
 
 G_DEFINE_TYPE (GdkWaylandSurface, gdk_wayland_surface, GDK_TYPE_SURFACE)
 
-typedef struct _GdkWaylandToplevel GdkWaylandToplevel;
 struct _GdkWaylandToplevel
 {
   GdkWaylandSurface parent_instance;
@@ -220,20 +220,14 @@ typedef struct
 
 static void gdk_wayland_toplevel_iface_init (GdkToplevelInterface *iface);
 
-GType gdk_wayland_toplevel_get_type (void) G_GNUC_CONST;
-
-#define GDK_IS_WAYLAND_TOPLEVEL(object) (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_WAYLAND_TOPLEVEL))
-#define GDK_WAYLAND_TOPLEVEL(object) (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_WAYLAND_TOPLEVEL, GdkWaylandToplevel))
-
-#define GDK_TYPE_WAYLAND_TOPLEVEL (gdk_wayland_toplevel_get_type ())
 G_DEFINE_TYPE_WITH_CODE (GdkWaylandToplevel, gdk_wayland_toplevel, GDK_TYPE_WAYLAND_SURFACE,
                          G_IMPLEMENT_INTERFACE (GDK_TYPE_TOPLEVEL,
                                                 gdk_wayland_toplevel_iface_init))
 
-typedef struct
+struct _GdkWaylandPopup
 {
   GdkWaylandSurface parent_instance;
-} GdkWaylandPopup;
+};
 
 typedef struct
 {
@@ -242,12 +236,6 @@ typedef struct
 
 static void gdk_wayland_popup_iface_init (GdkPopupInterface *iface);
 
-GType gdk_wayland_popup_get_type (void) G_GNUC_CONST;
-
-#define GDK_IS_WAYLAND_POPUP(object) (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_WAYLAND_POPUP))
-#define GDK_WAYLAND_POPUP(object) (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_WAYLAND_POPUP, GdkWaylandPopup))
-
-#define GDK_TYPE_WAYLAND_POPUP (gdk_wayland_popup_get_type ())
 G_DEFINE_TYPE_WITH_CODE (GdkWaylandPopup, gdk_wayland_popup, GDK_TYPE_WAYLAND_SURFACE,
                          G_IMPLEMENT_INTERFACE (GDK_TYPE_POPUP,
                                                 gdk_wayland_popup_iface_init))
@@ -280,7 +268,7 @@ static void gdk_wayland_surface_maybe_resize (GdkSurface *surface,
 
 static void gdk_wayland_surface_configure (GdkSurface *surface);
 
-static void maybe_set_gtk_surface_dbus_properties (GdkSurface *surface);
+static void maybe_set_gtk_surface_dbus_properties (GdkWaylandSurface *impl);
 static void maybe_set_gtk_surface_modal (GdkSurface *surface);
 
 static void gdk_wayland_surface_sync_margin (GdkSurface *surface);
@@ -302,7 +290,7 @@ static void update_popup_layout_state (GdkSurface     *surface,
                                        int             height,
                                        GdkPopupLayout *layout);
 
-static gboolean gdk_wayland_surface_is_exported (GdkSurface *surface);
+static gboolean gdk_wayland_surface_is_exported (GdkWaylandSurface *impl);
 
 static void
 gdk_wayland_surface_init (GdkWaylandSurface *impl)
@@ -868,15 +856,14 @@ gdk_wayland_surface_dispose (GObject *object)
 static void
 gdk_wayland_surface_finalize (GObject *object)
 {
-  GdkSurface *surface = GDK_SURFACE (object);
   GdkWaylandSurface *impl;
 
   g_return_if_fail (GDK_IS_WAYLAND_SURFACE (object));
 
   impl = GDK_WAYLAND_SURFACE (object);
 
-  if (gdk_wayland_surface_is_exported (surface))
-    gdk_wayland_surface_unexport_handle (surface);
+  if (gdk_wayland_surface_is_exported (impl))
+    gdk_wayland_toplevel_unexport_handle (GDK_TOPLEVEL (impl));
 
   g_free (impl->title);
 
@@ -913,28 +900,22 @@ gdk_wayland_surface_resize (GdkSurface *surface,
 }
 
 static gboolean
-is_realized_shell_surface (GdkSurface *surface)
+is_realized_shell_surface (GdkWaylandSurface *impl)
 {
-  GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
-
   return (impl->display_server.xdg_surface ||
           impl->display_server.zxdg_surface_v6);
 }
 
 static gboolean
-is_realized_toplevel (GdkSurface *surface)
+is_realized_toplevel (GdkWaylandSurface *impl)
 {
-  GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
-
   return (impl->display_server.xdg_toplevel ||
           impl->display_server.zxdg_toplevel_v6);
 }
 
 static gboolean
-is_realized_popup (GdkSurface *surface)
+is_realized_popup (GdkWaylandSurface *impl)
 {
-  GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
-
   return (impl->display_server.xdg_popup ||
           impl->display_server.zxdg_popup_v6);
 }
@@ -964,7 +945,7 @@ gdk_wayland_surface_maybe_resize (GdkSurface *surface,
    * force the new size onto the compositor. See bug #772505.
    */
 
-  is_xdg_popup = is_realized_popup (surface);
+  is_xdg_popup = is_realized_popup (impl);
   is_visible = gdk_surface_get_mapped (surface);
 
   if (is_xdg_popup && is_visible && !impl->initial_configure_received)
@@ -989,7 +970,7 @@ gdk_wayland_surface_sync_parent (GdkSurface *surface,
   g_assert (parent == NULL ||
             gdk_surface_get_display (surface) == gdk_surface_get_display (parent));
 
-  if (!is_realized_toplevel (surface))
+  if (!is_realized_toplevel (impl))
     return;
 
   if (toplevel->transient_for)
@@ -1036,17 +1017,15 @@ gdk_wayland_surface_sync_parent (GdkSurface *surface,
 }
 
 static void
-gdk_wayland_surface_sync_parent_of_imported (GdkSurface *surface)
+gdk_wayland_surface_sync_parent_of_imported (GdkWaylandSurface *impl)
 {
-  GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
-
   if (!impl->display_server.wl_surface)
     return;
 
   if (!impl->imported_transient_for)
     return;
 
-  if (!is_realized_toplevel (surface))
+  if (!is_realized_toplevel (impl))
     return;
 
   zxdg_imported_v1_set_parent_of (impl->imported_transient_for,
@@ -1060,7 +1039,7 @@ gdk_wayland_surface_sync_title (GdkSurface *surface)
   GdkWaylandDisplay *display_wayland =
     GDK_WAYLAND_DISPLAY (gdk_surface_get_display (surface));
 
-  if (!is_realized_toplevel (surface))
+  if (!is_realized_toplevel (impl))
     return;
 
   if (!impl->title)
@@ -1095,7 +1074,7 @@ gdk_wayland_surface_get_window_geometry (GdkSurface   *surface,
   };
 }
 
-static void gdk_wayland_surface_set_geometry_hints (GdkSurface         *surface,
+static void gdk_wayland_surface_set_geometry_hints (GdkWaylandSurface  *impl,
                                                     const GdkGeometry  *geometry,
                                                     GdkSurfaceHints     geom_mask);
 
@@ -1107,11 +1086,11 @@ gdk_wayland_surface_sync_margin (GdkSurface *surface)
     GDK_WAYLAND_DISPLAY (gdk_surface_get_display (surface));
   GdkRectangle geometry;
 
-  if (!is_realized_shell_surface (surface))
+  if (!is_realized_shell_surface (impl))
     return;
 
   gdk_wayland_surface_get_window_geometry (surface, &geometry);
-  gdk_wayland_surface_set_geometry_hints (surface,
+  gdk_wayland_surface_set_geometry_hints (impl,
                                           &impl->geometry_hints,
                                           impl->geometry_mask);
 
@@ -1312,7 +1291,7 @@ configure_surface_geometry (GdkSurface *surface)
       geometry.max_height = geometry.min_height = height;
       mask = GDK_HINT_MIN_SIZE | GDK_HINT_MAX_SIZE;
     }
-  gdk_wayland_surface_set_geometry_hints (surface, &geometry, mask);
+  gdk_wayland_surface_set_geometry_hints (impl, &geometry, mask);
   gdk_surface_constrain_size (&geometry, mask, width, height, &width, &height);
   gdk_wayland_surface_resize (surface, width, height, impl->scale);
 }
@@ -1475,9 +1454,9 @@ gdk_wayland_surface_configure (GdkSurface *surface)
 
   impl->has_uncommitted_ack_configure = TRUE;
 
-  if (is_realized_popup (surface))
+  if (is_realized_popup (impl))
     gdk_wayland_surface_configure_popup (surface);
-  else if (is_realized_toplevel (surface))
+  else if (is_realized_toplevel (impl))
     gdk_wayland_surface_configure_toplevel (surface);
   else
     g_warn_if_reached ();
@@ -1707,21 +1686,25 @@ create_zxdg_toplevel_v6_resources (GdkSurface *surface)
 }
 
 void
-gdk_wayland_surface_set_application_id (GdkSurface *surface, const char* application_id)
+gdk_wayland_toplevel_set_application_id (GdkToplevel *toplevel,
+                                         const char  *application_id)
 {
   GdkWaylandSurface *impl;
   GdkWaylandDisplay *display_wayland;
 
+  g_return_if_fail (GDK_IS_WAYLAND_TOPLEVEL (toplevel));
+
   g_return_if_fail (application_id != NULL);
 
-  if (GDK_SURFACE_DESTROYED (surface))
+  if (GDK_SURFACE_DESTROYED (toplevel))
     return;
 
-  if (!is_realized_toplevel (surface))
+  impl = GDK_WAYLAND_SURFACE (toplevel);
+
+  if (!is_realized_toplevel (impl))
     return;
 
-  display_wayland = GDK_WAYLAND_DISPLAY (gdk_surface_get_display (surface));
-  impl = GDK_WAYLAND_SURFACE (surface);
+  display_wayland = GDK_WAYLAND_DISPLAY (gdk_surface_get_display (GDK_SURFACE (toplevel)));
 
   switch (display_wayland->shell_variant)
     {
@@ -1760,7 +1743,7 @@ gdk_wayland_surface_create_xdg_toplevel (GdkSurface *surface)
     }
 
   gdk_wayland_surface_sync_parent (surface, NULL);
-  gdk_wayland_surface_sync_parent_of_imported (surface);
+  gdk_wayland_surface_sync_parent_of_imported (impl);
   gdk_wayland_surface_sync_title (surface);
 
   switch (display_wayland->shell_variant)
@@ -1792,9 +1775,9 @@ gdk_wayland_surface_create_xdg_toplevel (GdkSurface *surface)
   if (app_id == NULL)
     app_id = "GTK Application";
 
-  gdk_wayland_surface_set_application_id (surface, app_id);
+  gdk_wayland_toplevel_set_application_id (GDK_TOPLEVEL (impl), app_id);
 
-  maybe_set_gtk_surface_dbus_properties (surface);
+  maybe_set_gtk_surface_dbus_properties (impl);
   maybe_set_gtk_surface_modal (surface);
 
   gdk_profiler_add_mark (GDK_PROFILER_CURRENT_TIME, 0, "wayland", "surface commit");
@@ -2028,10 +2011,13 @@ surface_anchor_to_gravity_legacy (GdkGravity rect_anchor)
 }
 
 void
-gdk_wayland_surface_announce_csd (GdkSurface *surface)
+gdk_wayland_toplevel_announce_csd (GdkToplevel *toplevel)
 {
-  GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (gdk_surface_get_display (surface));
-  GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
+  GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (gdk_surface_get_display (GDK_SURFACE (toplevel)));
+  GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (toplevel);
+
+  g_return_if_fail (GDK_IS_WAYLAND_TOPLEVEL (toplevel));
+
   if (!display_wayland->server_decoration_manager)
     return;
   impl->display_server.server_decoration =
@@ -2043,13 +2029,16 @@ gdk_wayland_surface_announce_csd (GdkSurface *surface)
 }
 
 gboolean
-gdk_wayland_surface_inhibit_idle (GdkSurface *surface)
+gdk_wayland_toplevel_inhibit_idle (GdkToplevel *toplevel)
 {
-  GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (gdk_surface_get_display (surface));
-  GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
+  GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (gdk_surface_get_display (GDK_SURFACE (toplevel)));
+  GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (toplevel);
+
+  g_return_val_if_fail (GDK_IS_WAYLAND_TOPLEVEL (toplevel), FALSE);
 
   if (!display_wayland->idle_inhibit_manager)
-    return false;
+    return FALSE;
+
   if (!impl->idle_inhibitor)
     {
       g_assert (impl->idle_inhibitor_refcount == 0);
@@ -2058,13 +2047,16 @@ gdk_wayland_surface_inhibit_idle (GdkSurface *surface)
                                                      impl->display_server.wl_surface);
     }
   ++impl->idle_inhibitor_refcount;
-  return true;
+
+  return TRUE;
 }
 
 void
-gdk_wayland_surface_uninhibit_idle (GdkSurface *surface)
+gdk_wayland_toplevel_uninhibit_idle (GdkToplevel *toplevel)
 {
-  GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
+  GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (toplevel);
+
+  g_return_if_fail (GDK_IS_WAYLAND_TOPLEVEL (toplevel));
 
   g_assert (impl->idle_inhibitor && impl->idle_inhibitor_refcount > 0);
 
@@ -2467,15 +2459,15 @@ gdk_wayland_surface_create_xdg_popup (GdkSurface     *surface,
   if (!impl->display_server.wl_surface)
     return FALSE;
 
-  if (!is_realized_shell_surface (parent))
+  if (!is_realized_shell_surface (impl))
     return FALSE;
 
-  if (is_realized_toplevel (surface))
+  if (is_realized_toplevel (impl))
     {
       g_warning ("Can't map popup, already mapped as toplevel");
       return FALSE;
     }
-  if (is_realized_popup (surface))
+  if (is_realized_popup (impl))
     {
       g_warning ("Can't map popup, already mapped");
       return FALSE;
@@ -2874,7 +2866,7 @@ do_queue_relayout (GdkSurface     *surface,
   GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
   struct xdg_positioner *positioner;
 
-  g_assert (is_realized_popup (surface));
+  g_assert (is_realized_popup (impl));
   g_assert (impl->popup_state == POPUP_STATE_IDLE ||
             impl->popup_state == POPUP_STATE_WAITING_FOR_FRAME);
 
@@ -3317,15 +3309,14 @@ static const struct gtk_surface1_listener gtk_surface_listener = {
 };
 
 static void
-gdk_wayland_surface_init_gtk_surface (GdkSurface *surface)
+gdk_wayland_surface_init_gtk_surface (GdkWaylandSurface *impl)
 {
-  GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
   GdkWaylandDisplay *display =
-    GDK_WAYLAND_DISPLAY (gdk_surface_get_display (surface));
+    GDK_WAYLAND_DISPLAY (gdk_surface_get_display (GDK_SURFACE (impl)));
 
   if (impl->display_server.gtk_surface != NULL)
     return;
-  if (!is_realized_toplevel (surface))
+  if (!is_realized_toplevel (impl))
     return;
   if (display->gtk_shell == NULL)
     return;
@@ -3335,12 +3326,12 @@ gdk_wayland_surface_init_gtk_surface (GdkSurface *surface)
                                 impl->display_server.wl_surface);
   wl_proxy_set_queue ((struct wl_proxy *) impl->display_server.gtk_surface,
                       impl->event_queue);
-  gdk_wayland_surface_set_geometry_hints (surface,
+  gdk_wayland_surface_set_geometry_hints (impl,
                                           &impl->geometry_hints,
                                           impl->geometry_mask);
   gtk_surface1_add_listener (impl->display_server.gtk_surface,
                              &gtk_surface_listener,
-                             surface);
+                             impl);
 }
 
 static void
@@ -3348,7 +3339,7 @@ maybe_set_gtk_surface_modal (GdkSurface *surface)
 {
   GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
 
-  gdk_wayland_surface_init_gtk_surface (surface);
+  gdk_wayland_surface_init_gtk_surface (impl);
   if (impl->display_server.gtk_surface == NULL)
     return;
 
@@ -3368,26 +3359,24 @@ gdk_wayland_surface_set_modal_hint (GdkSurface *surface,
 }
 
 static void
-gdk_wayland_surface_set_geometry_hints (GdkSurface         *surface,
+gdk_wayland_surface_set_geometry_hints (GdkWaylandSurface  *impl,
                                         const GdkGeometry  *geometry,
                                         GdkSurfaceHints     geom_mask)
 {
   GdkWaylandDisplay *display_wayland;
-  GdkWaylandSurface *impl;
   int min_width, min_height;
   int max_width, max_height;
 
-  if (GDK_SURFACE_DESTROYED (surface) ||
-      !SURFACE_IS_TOPLEVEL (surface))
+  if (GDK_SURFACE_DESTROYED (impl) ||
+      !SURFACE_IS_TOPLEVEL (impl))
     return;
 
-  impl = GDK_WAYLAND_SURFACE (surface);
-  display_wayland = GDK_WAYLAND_DISPLAY (gdk_surface_get_display (surface));
+  display_wayland = GDK_WAYLAND_DISPLAY (gdk_surface_get_display (GDK_SURFACE (impl)));
 
   impl->geometry_hints = *geometry;
   impl->geometry_mask = geom_mask;
 
-  if (!is_realized_toplevel (surface))
+  if (!is_realized_toplevel (impl))
     return;
 
   if (geom_mask & GDK_HINT_MIN_SIZE)
@@ -3538,7 +3527,7 @@ gdk_wayland_surface_minimize (GdkSurface *surface)
       !SURFACE_IS_TOPLEVEL (surface))
     return;
 
-  if (!is_realized_toplevel (surface))
+  if (!is_realized_toplevel (GDK_WAYLAND_SURFACE (surface)))
     return;
 
 #if 0
@@ -3574,7 +3563,7 @@ gdk_wayland_surface_maximize (GdkSurface *surface)
 
   _gdk_wayland_surface_save_size (surface);
 
-  if (is_realized_toplevel (surface))
+  if (is_realized_toplevel (impl))
     {
       GdkWaylandDisplay *display_wayland =
         GDK_WAYLAND_DISPLAY (gdk_surface_get_display (surface));
@@ -3605,7 +3594,7 @@ gdk_wayland_surface_unmaximize (GdkSurface *surface)
   if (GDK_SURFACE_DESTROYED (surface))
     return;
 
-  if (is_realized_toplevel (surface))
+  if (is_realized_toplevel (impl))
     {
       GdkWaylandDisplay *display_wayland =
         GDK_WAYLAND_DISPLAY (gdk_surface_get_display (surface));
@@ -3640,7 +3629,7 @@ gdk_wayland_surface_fullscreen_on_monitor (GdkSurface *surface,
 
   _gdk_wayland_surface_save_size (surface);
 
-  if (is_realized_toplevel (surface))
+  if (is_realized_toplevel (impl))
     {
       GdkWaylandDisplay *display_wayland =
         GDK_WAYLAND_DISPLAY (gdk_surface_get_display (surface));
@@ -3678,7 +3667,7 @@ gdk_wayland_surface_fullscreen (GdkSurface *surface)
 
   _gdk_wayland_surface_save_size (surface);
 
-  if (is_realized_toplevel (surface))
+  if (is_realized_toplevel (impl))
     {
       GdkWaylandDisplay *display_wayland =
         GDK_WAYLAND_DISPLAY (gdk_surface_get_display (surface));
@@ -3713,7 +3702,7 @@ gdk_wayland_surface_unfullscreen (GdkSurface *surface)
 
   impl->initial_fullscreen_output = NULL;
 
-  if (is_realized_toplevel (surface))
+  if (is_realized_toplevel (impl))
     {
       GdkWaylandDisplay *display_wayland =
         GDK_WAYLAND_DISPLAY (gdk_surface_get_display (surface));
@@ -3797,7 +3786,7 @@ gdk_wayland_toplevel_begin_resize (GdkToplevel    *toplevel,
   impl = GDK_WAYLAND_SURFACE (surface);
   display_wayland = GDK_WAYLAND_DISPLAY (gdk_surface_get_display (surface));
 
-  if (!is_realized_toplevel (surface))
+  if (!is_realized_toplevel (impl))
     return;
 
   serial = _gdk_wayland_seat_get_last_implicit_grab_serial (GDK_WAYLAND_SEAT (gdk_device_get_seat (device)),
@@ -3844,7 +3833,7 @@ gdk_wayland_toplevel_begin_move (GdkToplevel *toplevel,
   impl = GDK_WAYLAND_SURFACE (surface);
   display_wayland = GDK_WAYLAND_DISPLAY (gdk_surface_get_display (surface));
 
-  if (!is_realized_toplevel (surface))
+  if (!is_realized_toplevel (impl))
     return;
 
   serial = _gdk_wayland_seat_get_last_implicit_grab_serial (GDK_WAYLAND_SEAT (gdk_device_get_seat (device)),
@@ -3958,7 +3947,7 @@ gdk_wayland_surface_show_window_menu (GdkSurface *surface,
       return FALSE;
     }
 
-  if (!is_realized_toplevel (surface))
+  if (!is_realized_toplevel (impl))
     return FALSE;
 
   seat = gdk_event_get_seat (event);
@@ -4137,10 +4126,8 @@ gdk_wayland_surface_get_gtk_surface (GdkSurface *surface)
 }
 
 static void
-maybe_set_gtk_surface_dbus_properties (GdkSurface *surface)
+maybe_set_gtk_surface_dbus_properties (GdkWaylandSurface *impl)
 {
-  GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
-
   if (impl->application.was_set)
     return;
 
@@ -4152,7 +4139,7 @@ maybe_set_gtk_surface_dbus_properties (GdkSurface *surface)
       impl->application.unique_bus_name == NULL)
     return;
 
-  gdk_wayland_surface_init_gtk_surface (surface);
+  gdk_wayland_surface_init_gtk_surface (impl);
   if (impl->display_server.gtk_surface == NULL)
     return;
 
@@ -4167,19 +4154,19 @@ maybe_set_gtk_surface_dbus_properties (GdkSurface *surface)
 }
 
 void
-gdk_wayland_surface_set_dbus_properties_libgtk_only (GdkSurface *surface,
-                                                     const char *application_id,
-                                                     const char *app_menu_path,
-                                                     const char *menubar_path,
-                                                     const char *window_object_path,
-                                                     const char *application_object_path,
-                                                     const char *unique_bus_name)
+gdk_wayland_toplevel_set_dbus_properties_libgtk_only (GdkToplevel *toplevel,
+                                                      const char  *application_id,
+                                                      const char  *app_menu_path,
+                                                      const char  *menubar_path,
+                                                      const char  *window_object_path,
+                                                      const char  *application_object_path,
+                                                      const char *unique_bus_name)
 {
   GdkWaylandSurface *impl;
 
-  g_return_if_fail (GDK_IS_WAYLAND_SURFACE (surface));
+  g_return_if_fail (GDK_IS_WAYLAND_TOPLEVEL (toplevel));
 
-  impl = GDK_WAYLAND_SURFACE (surface);
+  impl = GDK_WAYLAND_SURFACE (toplevel);
 
   impl->application.application_id = g_strdup (application_id);
   impl->application.app_menu_path = g_strdup (app_menu_path);
@@ -4189,7 +4176,7 @@ gdk_wayland_surface_set_dbus_properties_libgtk_only (GdkSurface *surface,
     g_strdup (application_object_path);
   impl->application.unique_bus_name = g_strdup (unique_bus_name);
 
-  maybe_set_gtk_surface_dbus_properties (surface);
+  maybe_set_gtk_surface_dbus_properties (impl);
 }
 
 void
@@ -4212,10 +4199,10 @@ xdg_exported_handle (void                    *data,
                      struct zxdg_exported_v1 *zxdg_exported_v1,
                      const char              *handle)
 {
-  GdkSurface *surface = data;
-  GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
+  GdkToplevel *toplevel = data;
+  GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (toplevel);
 
-  impl->exported.callback (surface, handle, impl->exported.user_data);
+  impl->exported.callback (toplevel, handle, impl->exported.user_data);
   if (impl->exported.destroy_func)
     {
       g_clear_pointer (&impl->exported.user_data,
@@ -4228,10 +4215,10 @@ static const struct zxdg_exported_v1_listener xdg_exported_listener = {
 };
 
 /**
- * GdkWaylandSurfaceExported:
- * @surface: the #GdkSurface that is exported
+ * GdkWaylandToplevelExported:
+ * @toplevel: the #GdkToplevel that is exported
  * @handle: the handle
- * @user_data: user data that was passed to gdk_wayland_surface_export_handle()
+ * @user_data: user data that was passed to gdk_wayland_toplevel_export_handle()
  *
  * Callback that gets called when the handle for a surface has been
  * obtained from the Wayland compositor. The handle can be passed
@@ -4240,16 +4227,14 @@ static const struct zxdg_exported_v1_listener xdg_exported_listener = {
  */
 
 static gboolean
-gdk_wayland_surface_is_exported (GdkSurface *surface)
+gdk_wayland_surface_is_exported (GdkWaylandSurface *impl)
 {
-  GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
-
   return !!impl->display_server.xdg_exported;
 }
 
 /**
- * gdk_wayland_surface_export_handle:
- * @surface: the #GdkSurface to obtain a handle for
+ * gdk_wayland_toplevel_export_handle:
+ * @toplevel: the #GdkToplevel to obtain a handle for
  * @callback: callback to call with the handle
  * @user_data: (closure): user data for @callback
  * @destroy_func: destroy notify for @user_data
@@ -4261,12 +4246,12 @@ gdk_wayland_surface_is_exported (GdkSurface *surface)
  * It is an error to call this function on a surface that is already
  * exported.
  *
- * When the handle is no longer needed, gdk_wayland_surface_unexport_handle()
+ * When the handle is no longer needed, gdk_wayland_toplevel_unexport_handle()
  * should be called to clean up resources.
  *
  * The main purpose for obtaining a handle is to mark a surface
  * from another surface as transient for this one, see
- * gdk_wayland_surface_set_transient_for_exported().
+ * gdk_wayland_toplevel_set_transient_for_exported().
  *
  * Note that this API depends on an unstable Wayland protocol,
  * and thus may require changes in the future.
@@ -4275,20 +4260,20 @@ gdk_wayland_surface_is_exported (GdkSurface *surface)
  *     an error occurred.
  */
 gboolean
-gdk_wayland_surface_export_handle (GdkSurface                *surface,
-                                   GdkWaylandSurfaceExported  callback,
-                                   gpointer                   user_data,
-                                   GDestroyNotify             destroy_func)
+gdk_wayland_toplevel_export_handle (GdkToplevel                *toplevel,
+                                    GdkWaylandToplevelExported  callback,
+                                    gpointer                    user_data,
+                                    GDestroyNotify              destroy_func)
 {
   GdkWaylandSurface *impl;
   GdkWaylandDisplay *display_wayland;
-  GdkDisplay *display = gdk_surface_get_display (surface);
+  GdkDisplay *display = gdk_surface_get_display (GDK_SURFACE (toplevel));
   struct zxdg_exported_v1 *xdg_exported;
 
-  g_return_val_if_fail (GDK_IS_WAYLAND_SURFACE (surface), FALSE);
+  g_return_val_if_fail (GDK_IS_WAYLAND_TOPLEVEL (toplevel), FALSE);
   g_return_val_if_fail (GDK_IS_WAYLAND_DISPLAY (display), FALSE);
 
-  impl = GDK_WAYLAND_SURFACE (surface);
+  impl = GDK_WAYLAND_SURFACE (toplevel);
   display_wayland = GDK_WAYLAND_DISPLAY (display);
 
   g_return_val_if_fail (!impl->display_server.xdg_exported, FALSE);
@@ -4301,7 +4286,7 @@ gdk_wayland_surface_export_handle (GdkSurface                *surface,
 
   xdg_exported = zxdg_exporter_v1_export (display_wayland->xdg_exporter,
                                           impl->display_server.wl_surface);
-  zxdg_exported_v1_add_listener (xdg_exported,  &xdg_exported_listener, surface);
+  zxdg_exported_v1_add_listener (xdg_exported,  &xdg_exported_listener, impl);
 
   impl->display_server.xdg_exported = xdg_exported;
   impl->exported.callback = callback;
@@ -4312,11 +4297,11 @@ gdk_wayland_surface_export_handle (GdkSurface                *surface,
 }
 
 /**
- * gdk_wayland_surface_unexport_handle:
- * @surface: the #GdkSurface to unexport
+ * gdk_wayland_toplevel_unexport_handle:
+ * @toplevel: the #GdkToplevel to unexport
  *
  * Destroys the handle that was obtained with
- * gdk_wayland_surface_export_handle().
+ * gdk_wayland_toplevel_export_handle().
  *
  * It is an error to call this function on a surface that
  * does not have a handle.
@@ -4325,13 +4310,13 @@ gdk_wayland_surface_export_handle (GdkSurface                *surface,
  * and thus may require changes in the future.
  */
 void
-gdk_wayland_surface_unexport_handle (GdkSurface *surface)
+gdk_wayland_toplevel_unexport_handle (GdkToplevel *toplevel)
 {
   GdkWaylandSurface *impl;
 
-  g_return_if_fail (GDK_IS_WAYLAND_SURFACE (surface));
+  g_return_if_fail (GDK_IS_WAYLAND_TOPLEVEL (toplevel));
 
-  impl = GDK_WAYLAND_SURFACE (surface);
+  impl = GDK_WAYLAND_SURFACE (toplevel);
 
   g_return_if_fail (impl->display_server.xdg_exported);
 
@@ -4366,13 +4351,13 @@ static const struct zxdg_imported_v1_listener xdg_imported_listener = {
 };
 
 /**
- * gdk_wayland_surface_set_transient_for_exported:
- * @surface: the #GdkSurface to make as transient
+ * gdk_wayland_toplevel_set_transient_for_exported:
+ * @toplevel: the #GdkToplevel to make as transient
  * @parent_handle_str: an exported handle for a surface
  *
- * Marks @surface as transient for the surface to which the given
+ * Marks @toplevel as transient for the surface to which the given
  * @parent_handle_str refers. Typically, the handle will originate
- * from a gdk_wayland_surface_export_handle() call in another process.
+ * from a gdk_wayland_toplevel_export_handle() call in another process.
  *
  * Note that this API depends on an unstable Wayland protocol,
  * and thus may require changes in the future.
@@ -4381,17 +4366,17 @@ static const struct zxdg_imported_v1_listener xdg_imported_listener = {
  *     %FALSE if an error occurred.
  */
 gboolean
-gdk_wayland_surface_set_transient_for_exported (GdkSurface *surface,
-                                                char       *parent_handle_str)
+gdk_wayland_toplevel_set_transient_for_exported (GdkToplevel *toplevel,
+                                                 const char  *parent_handle_str)
 {
   GdkWaylandSurface *impl;
   GdkWaylandDisplay *display_wayland;
-  GdkDisplay *display = gdk_surface_get_display (surface);
+  GdkDisplay *display = gdk_surface_get_display (GDK_SURFACE (toplevel));
 
-  g_return_val_if_fail (GDK_IS_WAYLAND_SURFACE (surface), FALSE);
+  g_return_val_if_fail (GDK_IS_WAYLAND_TOPLEVEL (toplevel), FALSE);
   g_return_val_if_fail (GDK_IS_WAYLAND_DISPLAY (display), FALSE);
 
-  impl = GDK_WAYLAND_SURFACE (surface);
+  impl = GDK_WAYLAND_SURFACE (toplevel);
   display_wayland = GDK_WAYLAND_DISPLAY (display);
 
   if (!display_wayland->xdg_importer)
@@ -4406,9 +4391,9 @@ gdk_wayland_surface_set_transient_for_exported (GdkSurface *surface,
     zxdg_importer_v1_import (display_wayland->xdg_importer, parent_handle_str);
   zxdg_imported_v1_add_listener (impl->imported_transient_for,
                                  &xdg_imported_listener,
-                                 surface);
+                                 toplevel);
 
-  gdk_wayland_surface_sync_parent_of_imported (surface);
+  gdk_wayland_surface_sync_parent_of_imported (impl);
 
   return TRUE;
 }
@@ -4786,7 +4771,7 @@ gdk_wayland_toplevel_present (GdkToplevel       *toplevel,
   wl_callback_add_listener (callback,
                             &reconfigure_listener,
                             &done);
-  while (is_realized_toplevel (surface) &&
+  while (is_realized_toplevel (impl) &&
          (!impl->initial_configure_received || !done))
     wl_display_dispatch_queue (display_wayland->wl_display, impl->event_queue);
 
