@@ -115,6 +115,8 @@ static void gtk_color_button_get_property  (GObject          *object,
                                             GValue           *value,
                                             GParamSpec       *pspec);
 
+static void gtk_color_button_root          (GtkWidget        *widget);
+
 /* gtkbutton signals */
 static void gtk_color_button_clicked       (GtkButton        *button,
                                             gpointer          user_data);
@@ -143,6 +145,7 @@ gtk_color_button_class_init (GtkColorButtonClass *klass)
 
   widget_class->grab_focus = gtk_widget_grab_focus_child;
   widget_class->focus = gtk_widget_focus_child;
+  widget_class->root = gtk_color_button_root;
 
   klass->color_set = NULL;
 
@@ -378,7 +381,6 @@ dialog_response (GtkDialog *dialog,
       gtk_color_swatch_set_rgba (GTK_COLOR_SWATCH (button->swatch), &button->rgba);
 
       gtk_widget_hide (GTK_WIDGET (dialog));
-
       g_object_ref (button);
       g_signal_emit (button, color_button_signals[COLOR_SET], 0);
 
@@ -405,13 +407,13 @@ ensure_dialog (GtkColorButton *button)
   gtk_window_set_modal (GTK_WINDOW (dialog), button->modal);
 
   if (GTK_IS_WINDOW (parent))
-  {
-    if (GTK_WINDOW (parent) != gtk_window_get_transient_for (GTK_WINDOW (dialog)))
-      gtk_window_set_transient_for (GTK_WINDOW (dialog), GTK_WINDOW (parent));
+    {
+      if (GTK_WINDOW (parent) != gtk_window_get_transient_for (GTK_WINDOW (dialog)))
+        gtk_window_set_transient_for (GTK_WINDOW (dialog), GTK_WINDOW (parent));
 
-    if (gtk_window_get_modal (GTK_WINDOW (parent)))
-      gtk_window_set_modal (GTK_WINDOW (dialog), TRUE);
-  }
+      if (gtk_window_get_modal (GTK_WINDOW (parent)))
+        gtk_window_set_modal (GTK_WINDOW (dialog), TRUE);
+    }
 
   g_signal_connect (dialog, "response",
                     G_CALLBACK (dialog_response), button);
@@ -419,6 +421,27 @@ ensure_dialog (GtkColorButton *button)
                     G_CALLBACK (dialog_destroy), button);
 }
 
+static void
+gtk_color_button_root (GtkWidget *widget)
+{
+  GtkColorButton *button = GTK_COLOR_BUTTON (widget);
+  GtkWidget *parent;
+
+  GTK_WIDGET_CLASS (gtk_color_button_parent_class)->root (widget);
+
+  if (!button->cs_dialog)
+    return;
+
+  parent = GTK_WIDGET (gtk_widget_get_root (GTK_WIDGET (button)));
+  if (GTK_IS_WINDOW (parent))
+    {
+      if (GTK_WINDOW (parent) != gtk_window_get_transient_for (GTK_WINDOW (button->cs_dialog)))
+        gtk_window_set_transient_for (GTK_WINDOW (button->cs_dialog), GTK_WINDOW (parent));
+
+      if (gtk_window_get_modal (GTK_WINDOW (parent)))
+        gtk_window_set_modal (GTK_WINDOW (button->cs_dialog), TRUE);
+    }
+}
 
 static void
 gtk_color_button_clicked (GtkButton *b,
