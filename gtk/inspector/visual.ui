@@ -89,7 +89,7 @@
                                 <child>
                                   <object class="GtkSwitch" id="dark_switch">
                                     <property name="halign">end</property>
-                                    <property name="valign">baseline</property>
+                                    <property name="valign">center</property>
                                     <property name="hexpand">1</property>
                                   </object>
                                 </child>
@@ -315,7 +315,7 @@
                                 <child>
                                   <object class="GtkSwitch" id="animation_switch">
                                     <property name="halign">end</property>
-                                    <property name="valign">baseline</property>
+                                    <property name="valign">center</property>
                                     <property name="hexpand">1</property>
                                   </object>
                                 </child>
@@ -390,7 +390,7 @@
                                 <child>
                                   <object class="GtkSwitch" id="fps_switch">
                                     <property name="halign">end</property>
-                                    <property name="valign">baseline</property>
+                                    <property name="valign">center</property>
                                     <property name="hexpand">1</property>
                                     <signal name="notify::active" handler="fps_activate"/>
                                   </object>
@@ -415,7 +415,7 @@
                                 <child>
                                   <object class="GtkSwitch" id="updates_switch">
                                     <property name="halign">end</property>
-                                    <property name="valign">baseline</property>
+                                    <property name="valign">center</property>
                                     <property name="hexpand">1</property>
                                     <signal name="notify::active" handler="updates_activate"/>
                                   </object>
@@ -440,7 +440,7 @@
                                 <child>
                                   <object class="GtkSwitch" id="fallback_switch">
                                     <property name="halign">end</property>
-                                    <property name="valign">baseline</property>
+                                    <property name="valign">center</property>
                                     <property name="hexpand">1</property>
                                     <signal name="notify::active" handler="fallback_activate"/>
                                   </object>
@@ -465,7 +465,7 @@
                                 <child>
                                   <object class="GtkSwitch" id="baselines_switch">
                                     <property name="halign">end</property>
-                                    <property name="valign">baseline</property>
+                                    <property name="valign">center</property>
                                     <property name="hexpand">1</property>
                                     <signal name="notify::active" handler="baselines_activate"/>
                                   </object>
@@ -490,7 +490,7 @@
                                 <child>
                                   <object class="GtkSwitch" id="layout_switch">
                                     <property name="halign">end</property>
-                                    <property name="valign">baseline</property>
+                                    <property name="valign">center</property>
                                     <property name="hexpand">1</property>
                                     <signal name="notify::active" handler="layout_activate"/>
                                   </object>
@@ -515,7 +515,7 @@
                                 <child>
                                   <object class="GtkSwitch" id="focus_switch">
                                     <property name="halign">end</property>
-                                    <property name="valign">baseline</property>
+                                    <property name="valign">center</property>
                                     <property name="hexpand">1</property>
                                     <signal name="notify::active" handler="focus_activate"/>
                                   </object>
@@ -554,7 +554,7 @@
                                 <child>
                                   <object class="GtkSwitch" id="touchscreen_switch">
                                     <property name="halign">end</property>
-                                    <property name="valign">baseline</property>
+                                    <property name="valign">center</property>
                                     <property name="hexpand">1</property>
                                   </object>
                                 </child>
@@ -578,7 +578,7 @@
                                 <child>
                                   <object class="GtkSwitch" id="software_gl_switch">
                                     <property name="halign">end</property>
-                                    <property name="valign">baseline</property>
+                                    <property name="valign">center</property>
                                     <property name="hexpand">1</property>
                                     <signal name="notify::active" handler="software_gl_activate"/>
                                   </object>
