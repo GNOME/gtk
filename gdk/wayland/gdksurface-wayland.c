@@ -2459,7 +2459,7 @@ gdk_wayland_surface_create_xdg_popup (GdkSurface     *surface,
   if (!impl->display_server.wl_surface)
     return FALSE;
 
-  if (!is_realized_shell_surface (impl))
+  if (!is_realized_shell_surface (parent_impl))
     return FALSE;
 
   if (is_realized_toplevel (impl))
