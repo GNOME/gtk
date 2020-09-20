@@ -738,10 +738,13 @@ get_font_attributes (GObject  *ignore,
         face = pango_font_family_get_face (item, NULL);
       else
         face = item;
-      font_desc = pango_font_face_describe (face);
-      attribute = pango_attr_font_desc_new (font_desc);
-      pango_attr_list_insert (attrs, attribute);
-      pango_font_description_free (font_desc);
+      if (face)
+        {
+          font_desc = pango_font_face_describe (face);
+          attribute = pango_attr_font_desc_new (font_desc);
+          pango_attr_list_insert (attrs, attribute);
+          pango_font_description_free (font_desc);
+        }
     }
 
   return attrs;
@@ -1043,6 +1046,9 @@ add_languages_from_font (GtkFontChooserWidget *self,
     face = pango_font_family_get_face (PANGO_FONT_FAMILY (item), NULL);
   else
     face = PANGO_FONT_FACE (item);
+
+  if (!face)
+    return;
 
   desc = pango_font_face_describe (face);
   pango_font_description_set_size (desc, 20);
