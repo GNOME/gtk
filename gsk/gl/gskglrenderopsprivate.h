@@ -14,7 +14,7 @@
 
 #define GL_N_VERTICES 6
 #define GL_N_PROGRAMS 14
-#define GL_MAX_GRADIENT_STOPS 8
+#define GL_MAX_GRADIENT_STOPS 6
 
 typedef struct
 {

@@ -1,7 +1,7 @@
 // VERTEX_SHADER
 uniform float u_start;
 uniform float u_end;
-uniform float u_color_stops[8 * 5];
+uniform float u_color_stops[6 * 5];
 uniform int u_num_color_stops;
 uniform vec2 u_radius;
 uniform vec2 u_center;
