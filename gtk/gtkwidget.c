@@ -6209,8 +6209,12 @@ gtk_widget_set_font_map_recurse (GtkWidget *widget, gpointer user_data)
  * @font_map: (allow-none): a #PangoFontMap, or %NULL to unset any previously
  *     set font map
  *
- * Sets the font map to use for Pango rendering. When not set, the widget
- * will inherit the font map from its parent.
+ * Sets the font map to use for Pango rendering. The font map is the
+ * object that is used to look up fonts. Setting a custom font map
+ * can be useful in special situations, e.g. when you need to add
+ * application-specific fonts to the set of available fonts.
+ *
+ * When not set, the widget will inherit the font map from its parent.
  */
 void
 gtk_widget_set_font_map (GtkWidget    *widget,

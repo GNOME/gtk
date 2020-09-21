@@ -183,6 +183,8 @@ setup_tweak_button (GtkFontChooserDialog *dialog)
       gtk_header_bar_pack_end (GTK_HEADER_BAR (header), button);
 
       dialog->tweak_button = button;
+
+      update_tweak_button (dialog);
     }
 }
 

@@ -7933,7 +7933,9 @@ gtk_file_chooser_widget_add_choice (GtkFileChooser  *chooser,
       box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
       gtk_box_append (GTK_BOX (box), gtk_label_new (label));
 
-      combo = gtk_drop_down_new_from_strings ((const char * const *)options);
+      combo = gtk_drop_down_new_from_strings ((const char * const *)option_labels);
+      g_object_set_data_full (G_OBJECT (combo), "options",
+                              g_strdupv ((char **)options), (GDestroyNotify)g_strfreev);
       g_hash_table_insert (impl->choices, g_strdup (id), combo);
       gtk_box_append (GTK_BOX (box), combo);
 
@@ -7988,19 +7990,20 @@ gtk_file_chooser_widget_set_choice (GtkFileChooser  *chooser,
 
   widget = (GtkWidget *)g_hash_table_lookup (impl->choices, id);
 
-  if (GTK_IS_DROP_DOWN (widget))
+  if (GTK_IS_BOX (widget))
     {
-      guint i, n;
-      GListModel *model;
+      guint i;
+      const char **choices;
+      GtkWidget *dropdown;
 
-      model = gtk_drop_down_get_model (GTK_DROP_DOWN (widget));
-      n = g_list_model_get_n_items (model);
-      for (i = 0; i < n; i++)
+      dropdown = gtk_widget_get_last_child (widget);
+
+      choices = (const char **) g_object_get_data (G_OBJECT (dropdown), "choices");
+      for (i = 0; choices[i]; i++)
         {
-          const char *string = gtk_string_list_get_string (GTK_STRING_LIST (model), i);
-          if (strcmp (string, option) == 0)
+          if (strcmp (option, choices[i]) == 0)
             {
-              gtk_drop_down_set_selected (GTK_DROP_DOWN (widget), i);
+              gtk_drop_down_set_selected (GTK_DROP_DOWN (dropdown), i);
               break;
             }
         }

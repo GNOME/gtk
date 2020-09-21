@@ -4,9 +4,33 @@
  *
  * These widgets are mainly intended for use in preference dialogs.
  * They allow to select colors, fonts, files, directories and applications.
+ *
+ * This demo shows both the default appearance for these dialogs,
+ * as well as some of the customizations that are possible.
  */
 
 #include <gtk/gtk.h>
+
+static gboolean
+filter_font_cb (const PangoFontFamily *family,
+                const PangoFontFace   *face,
+                gpointer               data)
+{
+  const char *alias_families[] = {
+    "Cursive",
+    "Fantasy",
+    "Monospace",
+    "Sans",
+    "Serif",
+    "System-ui",
+    NULL
+  };
+  const char *family_name;
+
+  family_name = pango_font_family_get_name (PANGO_FONT_FAMILY (family));
+
+  return g_strv_contains (alias_families, family_name);
+}
 
 #define COLOR(r,g,b) { r/255., g/255., b/255., 1.0 }
 
@@ -39,6 +63,9 @@ do_pickers (GtkWidget *do_widget)
 
   if (!window)
   {
+    char *dir;
+    GFile *file;
+
     window = gtk_window_new ();
     gtk_window_set_display (GTK_WINDOW (window),
                             gtk_widget_get_display (do_widget));
@@ -54,10 +81,22 @@ do_pickers (GtkWidget *do_widget)
     gtk_grid_set_column_spacing (GTK_GRID (table), 10);
     gtk_window_set_child (GTK_WINDOW (window), table);
 
+    label = gtk_label_new ("Standard");
+    gtk_widget_add_css_class (label, "title-4");
+    gtk_grid_attach (GTK_GRID (table), label, 1, -1, 1, 1);
+    label = gtk_label_new ("Custom");
+    gtk_widget_add_css_class (label, "title-4");
+    gtk_grid_attach (GTK_GRID (table), label, 2, -1, 1, 1);
+
     label = gtk_label_new ("Color:");
     gtk_widget_set_halign (label, GTK_ALIGN_START);
     gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
     gtk_widget_set_hexpand (label, TRUE);
+    gtk_grid_attach (GTK_GRID (table), label, 0, 0, 1, 1);
+
+    picker = gtk_color_button_new ();
+    gtk_grid_attach (GTK_GRID (table), picker, 1, 0, 1, 1);
+
     picker = gtk_color_button_new ();
     gtk_color_button_set_title (GTK_COLOR_BUTTON (picker), "Solarized colors");
     gtk_color_chooser_add_palette (GTK_COLOR_CHOOSER (picker),
@@ -65,26 +104,57 @@ do_pickers (GtkWidget *do_widget)
                                    9,
                                    18,
                                    solarized);
-
-    gtk_grid_attach (GTK_GRID (table), label, 0, 0, 1, 1);
-    gtk_grid_attach (GTK_GRID (table), picker, 1, 0, 1, 1);
+    gtk_grid_attach (GTK_GRID (table), picker, 2, 0, 1, 1);
 
     label = gtk_label_new ("Font:");
     gtk_widget_set_halign (label, GTK_ALIGN_START);
     gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
     gtk_widget_set_hexpand (label, TRUE);
-    picker = gtk_font_button_new ();
     gtk_grid_attach (GTK_GRID (table), label, 0, 1, 1, 1);
+
+    picker = gtk_font_button_new ();
     gtk_grid_attach (GTK_GRID (table), picker, 1, 1, 1, 1);
+
+    picker = gtk_font_button_new ();
+    gtk_font_chooser_set_level (GTK_FONT_CHOOSER (picker),
+                                GTK_FONT_CHOOSER_LEVEL_FAMILY |
+                                GTK_FONT_CHOOSER_LEVEL_SIZE);
+    gtk_font_chooser_set_filter_func (GTK_FONT_CHOOSER (picker), filter_font_cb, NULL, NULL);
+
+    gtk_grid_attach (GTK_GRID (table), picker, 2, 1, 1, 1);
 
     label = gtk_label_new ("File:");
     gtk_widget_set_halign (label, GTK_ALIGN_START);
     gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
     gtk_widget_set_hexpand (label, TRUE);
+    gtk_grid_attach (GTK_GRID (table), label, 0, 2, 1, 1);
+
     picker = gtk_file_chooser_button_new ("Pick a File",
                                           GTK_FILE_CHOOSER_ACTION_OPEN);
-    gtk_grid_attach (GTK_GRID (table), label, 0, 2, 1, 1);
     gtk_grid_attach (GTK_GRID (table), picker, 1, 2, 1, 1);
+
+    picker = gtk_file_chooser_button_new ("Pick a File",
+                                          GTK_FILE_CHOOSER_ACTION_OPEN);
+
+    dir = g_get_current_dir ();
+    file = g_file_new_for_path (dir);
+    gtk_file_chooser_add_shortcut_folder (GTK_FILE_CHOOSER (picker), file, NULL);
+    g_object_unref (file);
+    g_free (dir);
+
+    gtk_file_chooser_add_choice (GTK_FILE_CHOOSER (picker),
+                                 "choice",
+                                 "Encoding",
+                                 (const char *[]) { "option1", "option2", NULL },
+                                 (const char *[]) { "UTF-8", "Other Encoding", NULL });
+    gtk_file_chooser_set_choice (GTK_FILE_CHOOSER (picker), "choice", "option1");
+    gtk_file_chooser_add_choice (GTK_FILE_CHOOSER (picker),
+                                 "check",
+                                 "Read backwards",
+                                 NULL, NULL);
+    gtk_file_chooser_set_choice (GTK_FILE_CHOOSER (picker), "check", "false");
+
+    gtk_grid_attach (GTK_GRID (table), picker, 2, 2, 1, 1);
 
     label = gtk_label_new ("Folder:");
     gtk_widget_set_halign (label, GTK_ALIGN_START);
