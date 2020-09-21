@@ -10,10 +10,6 @@
 echo EXPORTS &gt; $(DefDir)\gdk.def
 cl /EP -DGDK_WINDOWING_WIN32 -DALL_FILES -DG_GNUC_CONST= ..\..\..\gdk\gdk.symbols &gt;&gt; $(DefDir)\gdk.def
     </GtkGenerateGdkDef>
-    <GtkGenerateGtkDefW64>
-echo EXPORTS &gt; $(DefDir)\gtk.def
-cl /EP -DINCLUDE_VARIABLES -DG_OS_WIN32 -D_WIN64 -DALL_FILES -DG_GNUC_MALLOC= -DG_GNUC_CONST= -DG_GNUC_NULL_TERMINATED= -DG_GNUC_PRINTF=;G_GNUC_PRINTF ..\..\..\gtk\gtk.symbols &gt;&gt; $(DefDir)\gtk.def
-    </GtkGenerateGtkDefW64>
     <GtkGenerateGtkDef>
 echo EXPORTS &gt; $(DefDir)\gtk.def
 cl /EP -DINCLUDE_VARIABLES -DG_OS_WIN32 -DALL_FILES -DG_GNUC_MALLOC= -DG_GNUC_CONST= -DG_GNUC_NULL_TERMINATED= -DG_GNUC_PRINTF=;G_GNUC_PRINTF ..\..\..\gtk\gtk.symbols &gt;&gt; $(DefDir)\gtk.def
@@ -31,9 +27,6 @@ cl /EP -DINCLUDE_VARIABLES -DG_OS_WIN32 -DALL_FILES -DG_GNUC_MALLOC= -DG_GNUC_CO
     </BuildMacro>
     <BuildMacro Include="GtkGenerateGdkDef">
       <Value>$(GtkGenerateGdkDef)</Value>
-    </BuildMacro>
-    <BuildMacro Include="GtkGenerateGtkDefW64">
-      <Value>$(GtkGenerateGtkDefW64)</Value>
     </BuildMacro>
     <BuildMacro Include="GtkGenerateGtkDef">
       <Value>$(GtkGenerateGtkDef)</Value>

@@ -65,10 +65,7 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
-    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</LinkIncremental>
-    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</LinkIncremental>
-    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</LinkIncremental>
-    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</LinkIncremental>
+    <LinkIncremental>true</LinkIncremental>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -166,18 +163,9 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <CustomBuild Include="..\..\..\gdk\gtk.symbols">
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Generating gtk.def</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(GtkGenerateGtkDef)</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)gtk.def;%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Generating gtk.def</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(GtkGenerateGtkDefW64)</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(IntDir)gtk.def;%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Generating gtk.def</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(GtkGenerateGtkDef)</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)gtk.def;%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Generating gtk.def</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(GtkGenerateGtkDefW64)</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(IntDir)gtk.def;%(Outputs)</Outputs>
+      <Message>Generating gtk.def</Message>
+      <Command>$(GtkGenerateGtkDef)</Command>
+      <Outputs>$(IntDir)gtk.def;%(Outputs)</Outputs>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
