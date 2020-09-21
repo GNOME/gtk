@@ -133,6 +133,18 @@
     <file>cogs.glsl</file>
     <file>glowingstars.glsl</file>
   </gresource>
+  <gresource prefix="/gltransition">
+    <file>gtkshaderstack.c</file>
+    <file>gtkshaderstack.h</file>
+    <file>gtkshaderbin.h</file>
+    <file>gtkshaderbin.c</file>
+    <file>fire.glsl</file>
+    <file>transition1.glsl</file>
+    <file>transition2.glsl</file>
+    <file>transition3.glsl</file>
+    <file>transition4.glsl</file>
+    <file>cogs2.glsl</file>
+  </gresource>
   <gresource prefix="/iconscroll">
     <file>iconscroll.ui</file>
   </gresource>
@@ -247,6 +259,7 @@
     <file>gears.c</file>
     <file>gestures.c</file>
     <file>glarea.c</file>
+    <file>gltransition.c</file>
     <file>headerbar.c</file>
     <file>hypertext.c</file>
     <file>iconscroll.c</file>
