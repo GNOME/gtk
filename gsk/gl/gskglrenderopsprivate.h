@@ -14,7 +14,7 @@
 
 #define GL_N_VERTICES 6
 #define GL_N_PROGRAMS 14
-#define MAX_GRADIENT_STOPS 8
+#define GL_MAX_GRADIENT_STOPS 8
 
 typedef struct
 {
@@ -147,13 +147,13 @@ typedef struct
     } unblurred_outset_shadow;
     struct {
       int n_color_stops;
-      GskColorStop color_stops[MAX_GRADIENT_STOPS];
+      GskColorStop color_stops[GL_MAX_GRADIENT_STOPS];
       float start_point[2];
       float end_point[2];
     } linear_gradient;
     struct {
       int n_color_stops;
-      GskColorStop color_stops[MAX_GRADIENT_STOPS];
+      GskColorStop color_stops[GL_MAX_GRADIENT_STOPS];
       float center[2];
       float start;
       float end;

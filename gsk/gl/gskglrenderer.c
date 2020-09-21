@@ -1175,21 +1175,29 @@ render_linear_gradient_node (GskGLRenderer   *self,
                              GskRenderNode   *node,
                              RenderOpBuilder *builder)
 {
-  const int n_color_stops = MIN (8, gsk_linear_gradient_node_get_n_color_stops (node));
-  const GskColorStop *stops = gsk_linear_gradient_node_peek_color_stops (node, NULL);
-  const graphene_point_t *start = gsk_linear_gradient_node_peek_start (node);
-  const graphene_point_t *end = gsk_linear_gradient_node_peek_end (node);
+  const int n_color_stops = gsk_linear_gradient_node_get_n_color_stops (node);
 
-  ops_set_program (builder, &self->programs->linear_gradient_program);
-  ops_set_linear_gradient (builder,
-                           n_color_stops,
-                           stops,
-                           builder->dx + start->x,
-                           builder->dy + start->y,
-                           builder->dx + end->x,
-                           builder->dy + end->y);
+  if (n_color_stops < GL_MAX_GRADIENT_STOPS)
+    {
+      const GskColorStop *stops = gsk_linear_gradient_node_peek_color_stops (node, NULL);
+      const graphene_point_t *start = gsk_linear_gradient_node_peek_start (node);
+      const graphene_point_t *end = gsk_linear_gradient_node_peek_end (node);
 
-  load_vertex_data (ops_draw (builder, NULL), node, builder);
+      ops_set_program (builder, &self->programs->linear_gradient_program);
+      ops_set_linear_gradient (builder,
+                               n_color_stops,
+                               stops,
+                               builder->dx + start->x,
+                               builder->dy + start->y,
+                               builder->dx + end->x,
+                               builder->dy + end->y);
+
+      load_vertex_data (ops_draw (builder, NULL), node, builder);
+    }
+  else
+    {
+      render_fallback_node (self, node, builder);
+    }
 }
 
 static inline void
@@ -1197,25 +1205,33 @@ render_radial_gradient_node (GskGLRenderer   *self,
                              GskRenderNode   *node,
                              RenderOpBuilder *builder)
 {
-  const int n_color_stops = MIN (8, gsk_radial_gradient_node_get_n_color_stops (node));
-  const GskColorStop *stops = gsk_radial_gradient_node_peek_color_stops (node, NULL);
-  const graphene_point_t *center = gsk_radial_gradient_node_peek_center (node);
-  const float start = gsk_radial_gradient_node_get_start (node);
-  const float end = gsk_radial_gradient_node_get_end (node);
-  const float hradius = gsk_radial_gradient_node_get_hradius (node);
-  const float vradius = gsk_radial_gradient_node_get_vradius (node);
+  const int n_color_stops = gsk_radial_gradient_node_get_n_color_stops (node);
 
-  ops_set_program (builder, &self->programs->radial_gradient_program);
-  ops_set_radial_gradient (builder,
-                           n_color_stops,
-                           stops,
-                           builder->dx + center->x,
-                           builder->dy + center->y,
-                           start, end,
-                           hradius * builder->scale_x,
-                           vradius * builder->scale_y);
+  if (n_color_stops < GL_MAX_GRADIENT_STOPS)
+    {
+      const GskColorStop *stops = gsk_radial_gradient_node_peek_color_stops (node, NULL);
+      const graphene_point_t *center = gsk_radial_gradient_node_peek_center (node);
+      const float start = gsk_radial_gradient_node_get_start (node);
+      const float end = gsk_radial_gradient_node_get_end (node);
+      const float hradius = gsk_radial_gradient_node_get_hradius (node);
+      const float vradius = gsk_radial_gradient_node_get_vradius (node);
 
-  load_vertex_data (ops_draw (builder, NULL), node, builder);
+      ops_set_program (builder, &self->programs->radial_gradient_program);
+      ops_set_radial_gradient (builder,
+                               n_color_stops,
+                               stops,
+                               builder->dx + center->x,
+                               builder->dy + center->y,
+                               start, end,
+                               hradius * builder->scale_x,
+                               vradius * builder->scale_y);
+
+      load_vertex_data (ops_draw (builder, NULL), node, builder);
+    }
+  else
+    {
+      render_fallback_node (self, node, builder);
+    }
 }
 
 static inline gboolean
