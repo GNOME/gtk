@@ -1477,17 +1477,19 @@ handle_pointing_event (GdkEvent *event)
                                                                  device,
                                                                  sequence);
       gtk_window_set_pointer_focus_grab (toplevel, device, sequence,
-                                         type == GDK_BUTTON_PRESS ?
-                                         target : NULL);
+                                         type == GDK_BUTTON_PRESS ?  target : NULL);
 
       if (type == GDK_BUTTON_RELEASE)
         {
           GtkWidget *new_target = gtk_widget_pick (native, x, y, GTK_PICK_DEFAULT);
+
           if (new_target == NULL)
             new_target = GTK_WIDGET (toplevel);
+
           gtk_synthesize_crossing_events (GTK_ROOT (toplevel), GTK_CROSSING_POINTER, target, new_target,
                                           event, GDK_CROSSING_UNGRAB, NULL);
           gtk_window_maybe_update_cursor (toplevel, NULL, device);
+          update_pointer_focus_state (toplevel, event, new_target);
         }
 
       set_widget_active_state (target, type == GDK_BUTTON_RELEASE);
