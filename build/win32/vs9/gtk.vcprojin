@@ -183,7 +183,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Generating gtk.def"
-						CommandLine="$(GtkGenerateGtkDefW64)"
+						CommandLine="$(GtkGenerateGtkDef)"
 						Outputs="$(IntDir)\gtk.def"
 					/>
 				</FileConfiguration>
@@ -203,7 +203,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Generating gtk.def"
-						CommandLine="$(GtkGenerateGtkDefW64)"
+						CommandLine="$(GtkGenerateGtkDef)"
 						Outputs="$(IntDir)\gtk.def"
 					/>
 				</FileConfiguration>
