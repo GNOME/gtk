@@ -18,8 +18,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk gtk-3.24\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-09-06 12:47+0000\n"
-"PO-Revision-Date: 2020-09-07 10:08+0200\n"
+"POT-Creation-Date: 2020-09-20 03:06+0000\n"
+"PO-Revision-Date: 2020-09-21 08:23+0200\n"
 "Last-Translator: Marek Černocký <marek@manet.cz>\n"
 "Language-Team: čeština <gnome-cs-list@gnome.org>\n"
 "Language: cs\n"
@@ -1939,200 +1939,83 @@ msgstr "Červená %d%%, zelená %d%%, modrá %d%%"
 msgid "Color: %s"
 msgstr "Barva: %s"
 
-#: gtk/gtkcolorchooserwidget.c:446
+#: gtk/gtkcolorchooserwidget.c:446 gtk/gtkcolorchooserwidget.c:447
+#: gtk/gtkcolorchooserwidget.c:448 gtk/gtkcolorchooserwidget.c:449
+#: gtk/gtkcolorchooserwidget.c:450 gtk/gtkcolorchooserwidget.c:451
 msgctxt "Color name"
-msgid "Light Scarlet Red"
-msgstr "světle šarlatová"
+msgid "Blue"
+msgstr "Modrá"
 
-#: gtk/gtkcolorchooserwidget.c:447
+#: gtk/gtkcolorchooserwidget.c:452 gtk/gtkcolorchooserwidget.c:453
+#: gtk/gtkcolorchooserwidget.c:454 gtk/gtkcolorchooserwidget.c:455
+#: gtk/gtkcolorchooserwidget.c:456 gtk/gtkcolorchooserwidget.c:457
 msgctxt "Color name"
-msgid "Scarlet Red"
-msgstr "šarlatová"
+msgid "Green"
+msgstr "Zelená"
 
-#: gtk/gtkcolorchooserwidget.c:448
+#: gtk/gtkcolorchooserwidget.c:458 gtk/gtkcolorchooserwidget.c:459
+#: gtk/gtkcolorchooserwidget.c:460 gtk/gtkcolorchooserwidget.c:461
+#: gtk/gtkcolorchooserwidget.c:462 gtk/gtkcolorchooserwidget.c:463
 msgctxt "Color name"
-msgid "Dark Scarlet Red"
-msgstr "tmavě šarlatová"
+msgid "Yellow"
+msgstr "Žlutá"
 
-#: gtk/gtkcolorchooserwidget.c:449
-msgctxt "Color name"
-msgid "Light Orange"
-msgstr "světle oranžová"
-
-#: gtk/gtkcolorchooserwidget.c:450
+#: gtk/gtkcolorchooserwidget.c:464 gtk/gtkcolorchooserwidget.c:465
+#: gtk/gtkcolorchooserwidget.c:466 gtk/gtkcolorchooserwidget.c:467
+#: gtk/gtkcolorchooserwidget.c:468 gtk/gtkcolorchooserwidget.c:469
 msgctxt "Color name"
 msgid "Orange"
-msgstr "oranžová"
+msgstr "Oranžová"
 
-#: gtk/gtkcolorchooserwidget.c:451
+#: gtk/gtkcolorchooserwidget.c:470 gtk/gtkcolorchooserwidget.c:471
+#: gtk/gtkcolorchooserwidget.c:472 gtk/gtkcolorchooserwidget.c:473
+#: gtk/gtkcolorchooserwidget.c:474
 msgctxt "Color name"
-msgid "Dark Orange"
-msgstr "tmavě oranžová"
+msgid "Red"
+msgstr "Červená"
 
-#: gtk/gtkcolorchooserwidget.c:452
+#: gtk/gtkcolorchooserwidget.c:475 gtk/gtkcolorchooserwidget.c:476
+#: gtk/gtkcolorchooserwidget.c:477 gtk/gtkcolorchooserwidget.c:478
+#: gtk/gtkcolorchooserwidget.c:479
 msgctxt "Color name"
-msgid "Light Butter"
-msgstr "světle krémová"
+msgid "Purple"
+msgstr "Fialová"
 
-#: gtk/gtkcolorchooserwidget.c:453
+#: gtk/gtkcolorchooserwidget.c:480 gtk/gtkcolorchooserwidget.c:481
+#: gtk/gtkcolorchooserwidget.c:482 gtk/gtkcolorchooserwidget.c:483
+#: gtk/gtkcolorchooserwidget.c:484
 msgctxt "Color name"
-msgid "Butter"
-msgstr "krémová"
+msgid "Brown"
+msgstr "Hnědá"
 
-#: gtk/gtkcolorchooserwidget.c:454
-msgctxt "Color name"
-msgid "Dark Butter"
-msgstr "tmavě krémová"
-
-#: gtk/gtkcolorchooserwidget.c:455
-msgctxt "Color name"
-msgid "Light Chameleon"
-msgstr "světle hrášková"
-
-#: gtk/gtkcolorchooserwidget.c:456
-msgctxt "Color name"
-msgid "Chameleon"
-msgstr "hrášková"
-
-#: gtk/gtkcolorchooserwidget.c:457
-msgctxt "Color name"
-msgid "Dark Chameleon"
-msgstr "tmavě hrášková"
-
-#: gtk/gtkcolorchooserwidget.c:458
-msgctxt "Color name"
-msgid "Light Sky Blue"
-msgstr "světlá nebeská modř"
-
-#: gtk/gtkcolorchooserwidget.c:459
-msgctxt "Color name"
-msgid "Sky Blue"
-msgstr "nebeská modř"
-
-#: gtk/gtkcolorchooserwidget.c:460
-msgctxt "Color name"
-msgid "Dark Sky Blue"
-msgstr "tmavá nebeská modř"
-
-#: gtk/gtkcolorchooserwidget.c:461
-msgctxt "Color name"
-msgid "Light Plum"
-msgstr "světle švestková"
-
-#: gtk/gtkcolorchooserwidget.c:462
-msgctxt "Color name"
-msgid "Plum"
-msgstr "švestková"
-
-#: gtk/gtkcolorchooserwidget.c:463
-msgctxt "Color name"
-msgid "Dark Plum"
-msgstr "tmavě švestková"
-
-#: gtk/gtkcolorchooserwidget.c:464
-msgctxt "Color name"
-msgid "Light Chocolate"
-msgstr "světle čokoládová"
-
-#: gtk/gtkcolorchooserwidget.c:465
-msgctxt "Color name"
-msgid "Chocolate"
-msgstr "čokoládová"
-
-#: gtk/gtkcolorchooserwidget.c:466
-msgctxt "Color name"
-msgid "Dark Chocolate"
-msgstr "tmavě čokoládová"
-
-#: gtk/gtkcolorchooserwidget.c:467
-msgctxt "Color name"
-msgid "Light Aluminum 1"
-msgstr "světle hliníková 1"
-
-#: gtk/gtkcolorchooserwidget.c:468
-msgctxt "Color name"
-msgid "Aluminum 1"
-msgstr "hliníková 1"
-
-#: gtk/gtkcolorchooserwidget.c:469
-msgctxt "Color name"
-msgid "Dark Aluminum 1"
-msgstr "tmavě hliníková 1"
-
-#: gtk/gtkcolorchooserwidget.c:470
-msgctxt "Color name"
-msgid "Light Aluminum 2"
-msgstr "světle hliníková 2"
-
-#: gtk/gtkcolorchooserwidget.c:471
-msgctxt "Color name"
-msgid "Aluminum 2"
-msgstr "hliníková 2"
-
-#: gtk/gtkcolorchooserwidget.c:472
-msgctxt "Color name"
-msgid "Dark Aluminum 2"
-msgstr "tmavě hliníková 2"
-
-#: gtk/gtkcolorchooserwidget.c:486
-msgctxt "Color name"
-msgid "Black"
-msgstr "černá"
-
-#: gtk/gtkcolorchooserwidget.c:487
-msgctxt "Color name"
-msgid "Very Dark Gray"
-msgstr "velmi tmavě šedá"
-
-#: gtk/gtkcolorchooserwidget.c:488
-msgctxt "Color name"
-msgid "Darker Gray"
-msgstr "tmavější šedá"
-
+#: gtk/gtkcolorchooserwidget.c:485 gtk/gtkcolorchooserwidget.c:486
+#: gtk/gtkcolorchooserwidget.c:487 gtk/gtkcolorchooserwidget.c:488
 #: gtk/gtkcolorchooserwidget.c:489
 msgctxt "Color name"
-msgid "Dark Gray"
-msgstr "tmavě šedá"
+msgid "Light"
+msgstr "Světlá"
 
-#: gtk/gtkcolorchooserwidget.c:490
-msgctxt "Color name"
-msgid "Medium Gray"
-msgstr "středně šedá"
-
-#: gtk/gtkcolorchooserwidget.c:491
-msgctxt "Color name"
-msgid "Light Gray"
-msgstr "světle šedá"
-
-#: gtk/gtkcolorchooserwidget.c:492
-msgctxt "Color name"
-msgid "Lighter Gray"
-msgstr "světleji šedá"
-
-#: gtk/gtkcolorchooserwidget.c:493
-msgctxt "Color name"
-msgid "Very Light Gray"
-msgstr "velmi světle šedá"
-
+#: gtk/gtkcolorchooserwidget.c:490 gtk/gtkcolorchooserwidget.c:491
+#: gtk/gtkcolorchooserwidget.c:492 gtk/gtkcolorchooserwidget.c:493
 #: gtk/gtkcolorchooserwidget.c:494
 msgctxt "Color name"
-msgid "White"
-msgstr "bílá"
+msgid "Dark"
+msgstr "Tmavá"
 
 #. translators: label for the custom section in the color chooser
-#: gtk/gtkcolorchooserwidget.c:543
+#: gtk/gtkcolorchooserwidget.c:538
 msgid "Custom"
 msgstr "Vlastní"
 
-#: gtk/gtkcolorchooserwidget.c:550
+#: gtk/gtkcolorchooserwidget.c:545
 msgid "Custom color"
 msgstr "Vlastní barva"
 
-#: gtk/gtkcolorchooserwidget.c:551
+#: gtk/gtkcolorchooserwidget.c:546
 msgid "Create a custom color"
 msgstr "Vytvořit vlastní barvu"
 
-#: gtk/gtkcolorchooserwidget.c:570
+#: gtk/gtkcolorchooserwidget.c:565
 #, c-format
 msgid "Custom color %d: %s"
 msgstr "Vlastní barva %d: %s"
