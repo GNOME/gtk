@@ -47,7 +47,9 @@ check_shader_error (int     shader_id,
   int log_len;
   char *buffer;
   int code_len;
-  char *code;
+  int line;
+  char *code, *p;
+  GString *s;
 
   glGetShaderiv (shader_id, GL_COMPILE_STATUS, &status);
 
@@ -62,11 +64,29 @@ check_shader_error (int     shader_id,
   code = g_malloc0 (code_len + 1);
   glGetShaderSource (shader_id, code_len, NULL, code);
 
+  s = g_string_new ("");
+  p = code;
+  line = 1;
+  while (*p)
+    {
+      char *end = strchr (p, '\n');
+      if (end)
+        end = end + 1; /* Include newline */
+      else
+        end = p + strlen (p);
+
+      g_string_append_printf (s, "%3d| ", line++);
+      g_string_append_len (s, p, end - p);
+
+      p = end;
+    }
+
   g_set_error (error, GDK_GL_ERROR, GDK_GL_ERROR_COMPILATION_FAILED,
                "Compilation failure in shader.\nError message: %s\n\nSource code:\n%s\n\n",
                buffer,
-               code);
+               s->str);
 
+  g_string_free (s, TRUE);
   g_free (buffer);
   g_free (code);
 
