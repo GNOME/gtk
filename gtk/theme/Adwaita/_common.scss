@@ -3062,7 +3062,7 @@ separator {
  * Lists *
  *********/
 listview,
-list  {
+list {
   color: $text_color;
   background-color: $base_color;
   border-color: $borders_color;
@@ -3079,11 +3079,11 @@ list  {
 
   &.horizontal row.separator:not(:first-child),
   &.separators.horizontal > row:not(:first-child) {
-    border-left: 1px solid $borders_color;
+    border-left: 1px solid $_treeview_borders_color;
   }
   &:not(.horizontal) row.separator:not(:first-child),
   &.separators:not(.horizontal) > row:not(:first-child) {
-    border-top: 1px solid $borders_color;
+    border-top: 1px solid $_treeview_borders_color;
   }
 }
 
@@ -3116,24 +3116,51 @@ row {
   }
 }
 
+columnview {
+  // move padding to child cells
+  > listview > row {
+    padding: 0;
+
+    // align horizontal sizing with header buttons
+    > cell {
+      padding: 8px 6px;
+
+      &:not(:last-child) {
+        border-right: 1px solid transparent;
+      }
+    }
+  }
+
+  // make column separators visible when :show-column-separators is true
+  &.column-separators > listview > row > cell {
+    border-right-color: $_treeview_borders_color;
+  }
+
+  // shrink vertically for .data-table
+  &.data-table > listview > row > cell {
+    padding-top: 2px;
+    padding-bottom: 2px;
+  }
+}
+
 /********************************************************
  * Data Tables                                          *
  * treeview like tables with individual focusable cells *
  * https://gitlab.gnome.org/GNOME/gtk/-/issues/2929     *
  ********************************************************/
 
-  .data-table row:not(:selected) cell editablelabel:not(.editing):focus-within {
-    outline: 2px solid $focus_border_color;
-  }
+columnview row:not(:selected) cell editablelabel:not(.editing):focus-within {
+  outline: 2px solid $focus_border_color;
+}
 
-  .data-table row:not(:selected) cell editablelabel.editing:focus-within {
-    outline: 2px solid $selected_bg_color;
-  }
+columnview row:not(:selected) cell editablelabel.editing:focus-within {
+  outline: 2px solid $selected_bg_color;
+}
 
-  .data-table row:not(:selected) cell editablelabel.editing text selection {
-    color: $selected_fg_color;
-    background-color: $selected_bg_color;
-  }
+columnview row:not(:selected) cell editablelabel.editing text selection {
+  color: $selected_fg_color;
+  background-color: $selected_bg_color;
+}
 
 /*******************************************************
  * Rich Lists                                          *
