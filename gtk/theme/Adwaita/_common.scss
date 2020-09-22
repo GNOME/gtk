@@ -3149,18 +3149,18 @@ columnview {
  * https://gitlab.gnome.org/GNOME/gtk/-/issues/2929     *
  ********************************************************/
 
-  .data-table row:not(:selected) cell editablelabel:not(.editing):focus-within {
-    outline: 2px solid $focus_border_color;
-  }
+columnview row:not(:selected) cell editablelabel:not(.editing):focus-within {
+  outline: 2px solid $focus_border_color;
+}
 
-  .data-table row:not(:selected) cell editablelabel.editing:focus-within {
-    outline: 2px solid $selected_bg_color;
-  }
+columnview row:not(:selected) cell editablelabel.editing:focus-within {
+  outline: 2px solid $selected_bg_color;
+}
 
-  .data-table row:not(:selected) cell editablelabel.editing text selection {
-    color: $selected_fg_color;
-    background-color: $selected_bg_color;
-  }
+columnview row:not(:selected) cell editablelabel.editing text selection {
+  color: $selected_fg_color;
+  background-color: $selected_bg_color;
+}
 
 /*******************************************************
  * Rich Lists                                          *
