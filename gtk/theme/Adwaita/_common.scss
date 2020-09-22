@@ -3062,7 +3062,7 @@ separator {
  * Lists *
  *********/
 listview,
-list  {
+list {
   color: $text_color;
   background-color: $base_color;
   border-color: $borders_color;
@@ -3079,11 +3079,11 @@ list  {
 
   &.horizontal row.separator:not(:first-child),
   &.separators.horizontal > row:not(:first-child) {
-    border-left: 1px solid $borders_color;
+    border-left: 1px solid $_treeview_borders_color;
   }
   &:not(.horizontal) row.separator:not(:first-child),
   &.separators:not(.horizontal) > row:not(:first-child) {
-    border-top: 1px solid $borders_color;
+    border-top: 1px solid $_treeview_borders_color;
   }
 }
 
