@@ -136,6 +136,14 @@
   <gresource prefix="/glshader">
     <file>fire.glsl</file>
   </gresource>
+  <gresource prefix="/gltransition">
+    <file>gtkshaderstack.c</file>
+    <file>gtkshaderstack.h</file>
+    <file>transition1.glsl</file>
+    <file>transition2.glsl</file>
+    <file>transition3.glsl</file>
+    <file>transition4.glsl</file>
+  </gresource>
   <gresource prefix="/iconscroll">
     <file>iconscroll.ui</file>
   </gresource>
@@ -251,6 +259,7 @@
     <file>gestures.c</file>
     <file>glarea.c</file>
     <file>glshader.c</file>
+    <file>gltransition.c</file>
     <file>headerbar.c</file>
     <file>hypertext.c</file>
     <file>iconscroll.c</file>
