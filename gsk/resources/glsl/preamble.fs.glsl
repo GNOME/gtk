@@ -77,11 +77,21 @@ rounded_rect_coverage (RoundedRect r, vec2 p)
 }
 
 vec4 Texture(sampler2D sampler, vec2 texCoords) {
+  vec4 res;
+  float c;
 #if defined(GSK_GLES) || defined(GSK_LEGACY)
-  return texture2D(sampler, texCoords);
+  res = texture2D(sampler, texCoords);
 #else
-  return texture(sampler, texCoords);
+  res = texture(sampler, texCoords);
 #endif
+
+#if defined (GSK_GLES)
+  c = vec4.w;
+  vec4.w = vec4.z;
+  vec4.z = c;
+#endif
+
+  return res;
 }
 
 #ifdef GSK_GL3
