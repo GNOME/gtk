@@ -359,6 +359,13 @@ parse_double (GtkCssParser *parser,
 }
 
 static gboolean
+parse_int (GtkCssParser *parser,
+           gpointer      out_int)
+{
+  return gtk_css_parser_consume_integer (parser, out_int);
+}
+
+static gboolean
 parse_point (GtkCssParser *parser,
              gpointer      out_point)
 {
@@ -824,9 +831,9 @@ clear_node (gpointer inout_node)
 static GskRenderNode *
 parse_container_node (GtkCssParser *parser)
 {
-  GskRenderNode *node;
   GPtrArray *nodes;
   const GtkCssToken *token;
+  GskRenderNode *node;
 
   nodes = g_ptr_array_new_with_free_func ((GDestroyNotify) gsk_render_node_unref);
 
@@ -1089,13 +1096,249 @@ parse_inset_shadow_node (GtkCssParser *parser)
   return gsk_inset_shadow_node_new (&outline, &color, dx, dy, spread, blur);
 }
 
+typedef struct {
+  GskGLUniformType type;
+  char *name;
+  union {
+    int i;
+    double v[4];
+  } value;
+} Uniform;
+
+static gboolean
+parse_uniform_decl (GtkCssParser *parser, Uniform *decl)
+{
+  Uniform decls[] = {
+    { GSK_GLUNIFORM_TYPE_FLOAT, (char *) "float" },
+    { GSK_GLUNIFORM_TYPE_INT, (char *) "int" },
+    { GSK_GLUNIFORM_TYPE_UINT, (char*) "uint" },
+    { GSK_GLUNIFORM_TYPE_BOOL, (char *) "bool" },
+    { GSK_GLUNIFORM_TYPE_VEC2, (char *) "vec2" },
+    { GSK_GLUNIFORM_TYPE_VEC3, (char *) "vec3" },
+    { GSK_GLUNIFORM_TYPE_VEC4, (char *) "vec4" },
+  };
+  int i;
+
+  for (i = 0; i < G_N_ELEMENTS (decls); i++)
+    {
+      if (gtk_css_parser_try_ident (parser, decls[i].name))
+        {
+          decl->type = decls[i].type;
+          decl->name = gtk_css_parser_consume_ident (parser);
+
+          gtk_css_parser_try_token (parser, GTK_CSS_TOKEN_COMMA);
+
+          return TRUE;
+        }
+    }
+
+  return FALSE;
+}
+
+static void
+clear_uniform_decl (gpointer data)
+{
+  Uniform *decl = data;
+  g_free (decl->name);
+}
+
+static gboolean
+parse_uniforms (GtkCssParser *parser, gpointer data)
+{
+  GArray *uniforms = data;
+  Uniform decl;
+
+  while (parse_uniform_decl (parser, &decl))
+    g_array_append_val (uniforms, decl);
+
+  return TRUE;
+}
+
+static void
+clear_array (gpointer data)
+{
+  GArray *array = data;
+  g_array_set_size (array, 0);
+}
+
+static gboolean
+parse_uniform_value (GtkCssParser *parser, Uniform *uniform)
+{
+  switch (uniform->type)
+    {
+    case GSK_GLUNIFORM_TYPE_FLOAT:
+      if (!gtk_css_parser_consume_number (parser, &uniform->value.v[0]))
+        return FALSE;
+      break;
+
+    case GSK_GLUNIFORM_TYPE_INT:
+      if (!gtk_css_parser_consume_integer (parser, &uniform->value.i))
+        return FALSE;
+      break;
+
+    case GSK_GLUNIFORM_TYPE_UINT:
+      if (!gtk_css_parser_consume_integer (parser, &uniform->value.i) ||
+          uniform->value.i < 0)
+        return FALSE;
+      break;
+
+    case GSK_GLUNIFORM_TYPE_BOOL:
+      if (!gtk_css_parser_consume_integer (parser, &uniform->value.i) ||
+          (uniform->value.i != 0 && uniform->value.i != 1))
+        return FALSE;
+      break;
+
+    case GSK_GLUNIFORM_TYPE_VEC2:
+      if (!gtk_css_parser_consume_number (parser, &uniform->value.v[0]) ||
+          !gtk_css_parser_consume_number (parser, &uniform->value.v[1]))
+          return FALSE;
+      break;
+
+    case GSK_GLUNIFORM_TYPE_VEC3:
+      if (!gtk_css_parser_consume_number (parser, &uniform->value.v[0]) ||
+          !gtk_css_parser_consume_number (parser, &uniform->value.v[1]) ||
+          !gtk_css_parser_consume_number (parser, &uniform->value.v[2]))
+        return FALSE;
+      break;
+
+    case GSK_GLUNIFORM_TYPE_VEC4:
+      if (!gtk_css_parser_consume_number (parser, &uniform->value.v[0]) ||
+          !gtk_css_parser_consume_number (parser, &uniform->value.v[1]) ||
+          !gtk_css_parser_consume_number (parser, &uniform->value.v[2]) ||
+          !gtk_css_parser_consume_number (parser, &uniform->value.v[3]))
+        return FALSE;
+      break;
+
+    case GSK_GLUNIFORM_TYPE_NONE:
+    default:
+      g_assert_not_reached ();
+      break;
+    }
+
+  gtk_css_parser_try_token (parser, GTK_CSS_TOKEN_COMMA);
+
+  return TRUE;
+}
+
+static gboolean
+parse_uniform_data (GtkCssParser *parser, gpointer data)
+{
+  GArray *uniforms = data;
+  int i;
+
+  for (i = 0; i < uniforms->len; i++)
+    {
+      Uniform *uniform = &g_array_index (uniforms, Uniform, i);
+      if (!parse_uniform_value (parser, uniform))
+        return FALSE;
+    }
+
+  return TRUE;
+}
 
 static GskRenderNode *
 parse_glshader_node (GtkCssParser *parser)
 {
-  /* TODO */
-  gtk_css_parser_error_syntax (parser, "glshader node parsing not implemented yet");
-  return NULL;
+  graphene_rect_t bounds = GRAPHENE_RECT_INIT (0, 0, 50, 50);
+  char *sourcecode = NULL;
+  int required_sources = 0;
+  GskRenderNode *fallback = NULL;
+  GskRenderNode *child[4] = { NULL, };
+  GArray *uniforms = g_array_new (FALSE, FALSE, sizeof (Uniform));
+  const Declaration declarations[] = {
+    { "bounds", parse_rect, NULL, &bounds },
+    { "sourcecode", parse_string, NULL, &sourcecode },
+    { "required-sources", parse_int, NULL, &required_sources },
+    { "uniforms", parse_uniforms, clear_array, uniforms },
+    { "uniform-data", parse_uniform_data, clear_array, uniforms },
+    { "fallback", parse_node, clear_node, &fallback },
+    { "child1", parse_node, clear_node, &child[0] },
+    { "child2", parse_node, clear_node, &child[1] },
+    { "child3", parse_node, clear_node, &child[2] },
+    { "child4", parse_node, clear_node, &child[3] },
+  };
+  GskGLShader *shader;
+  GskRenderNode *node;
+  guchar *uniform_data;
+  int len, i;
+
+  g_array_set_clear_func (uniforms, clear_uniform_decl);
+
+  parse_declarations (parser, declarations, G_N_ELEMENTS(declarations));
+
+  for (len = 0; len < 4; len++)
+    {
+      if (child[len] == NULL)
+        break;
+    }
+
+  shader = gsk_glshader_new (sourcecode);
+  gsk_glshader_set_n_required_sources (shader, required_sources);
+  for (i = 0; i < uniforms->len; i++)
+    {
+      Uniform *uniform = &g_array_index (uniforms, Uniform, i);
+      gsk_glshader_add_uniform (shader, uniform->name, uniform->type);
+    }
+
+  uniform_data = g_new (guchar, gsk_glshader_get_uniforms_size (shader));
+  for (i = 0; i < uniforms->len; i++)
+    {
+      Uniform *uniform = &g_array_index (uniforms, Uniform, i);
+      guchar *dest;
+
+      dest = uniform_data + gsk_glshader_get_uniform_offset (shader, i);
+
+      switch (uniform->type)
+        {
+        case GSK_GLUNIFORM_TYPE_FLOAT:
+          *(float *)dest = uniform->value.v[0];
+          break;
+
+        case GSK_GLUNIFORM_TYPE_INT:
+          *(gint32 *)dest = uniform->value.i;
+          break;
+
+        case GSK_GLUNIFORM_TYPE_UINT:
+          *(guint32 *)dest = uniform->value.i;
+          break;
+
+        case GSK_GLUNIFORM_TYPE_BOOL:
+          *(guint32 *)dest = uniform->value.i;
+          break;
+
+        case GSK_GLUNIFORM_TYPE_VEC4:
+          ((float *)dest)[3] = uniform->value.v[3];
+          G_GNUC_FALLTHROUGH;
+
+        case GSK_GLUNIFORM_TYPE_VEC3:
+          ((float *)dest)[2] = uniform->value.v[2];
+          G_GNUC_FALLTHROUGH;
+
+        case GSK_GLUNIFORM_TYPE_VEC2:
+          ((float *)dest)[1] = uniform->value.v[1];
+          ((float *)dest)[0] = uniform->value.v[0];
+          break;
+
+        case GSK_GLUNIFORM_TYPE_NONE:
+        default:
+          g_assert_not_reached ();
+        }
+    }
+
+  node = gsk_glshader_node_new (shader, &bounds, uniform_data,
+                                fallback, child, len);
+
+  g_array_unref (uniforms);
+  g_free (uniform_data);
+  g_object_unref (shader);
+
+  for (i = 0; i < 4; i++)
+    {
+      if (child[i])
+        gsk_render_node_unref (child[i]);
+    }
+
+  return node;
 }
 
 static GskRenderNode *
@@ -1849,15 +2092,47 @@ append_point (GString                *str,
 
 static void
 append_string (GString    *str,
-               const char *value)
+               const char *string)
 {
-  char *escaped = g_strescape (value, NULL);
+  gsize len;
+
+  g_return_if_fail (str != NULL);
+  g_return_if_fail (string != NULL);
 
   g_string_append_c (str, '"');
-  g_string_append (str, escaped);
-  g_string_append_c (str, '"');
 
-  g_free (escaped);
+  do {
+    len = strcspn (string, "\\\"\n\r\f");
+    g_string_append_len (str, string, len);
+    string += len;
+    switch (*string)
+      {
+      case '\0':
+        goto out;
+      case '\n':
+        g_string_append (str, "\\A ");
+        break;
+      case '\r':
+        g_string_append (str, "\\D ");
+        break;
+      case '\f':
+        g_string_append (str, "\\C ");
+        break;
+      case '\"':
+        g_string_append (str, "\\\"");
+        break;
+      case '\\':
+        g_string_append (str, "\\\\");
+        break;
+      default:
+        g_assert_not_reached ();
+        break;
+      }
+    string++;
+  } while (*string);
+
+out:
+  g_string_append_c (str, '"');
 }
 
 static void
@@ -1887,6 +2162,19 @@ append_float_param (Printer    *p,
   g_string_append_printf (p->str, "%s: ", param_name);
   string_append_double (p->str, value);
   g_string_append (p->str, ";\n");
+}
+
+static void
+append_int_param (Printer    *p,
+                  const char *param_name,
+                  int         value,
+                  int         default_value)
+{
+  if (value == default_value)
+    return;
+
+  _indent (p);
+  g_string_append_printf (p->str, "%s: %d;\n", param_name, value);
 }
 
 static void
@@ -2478,16 +2766,123 @@ render_node_print (Printer       *p,
 
     case GSK_GLSHADER_NODE:
       {
+        GskGLShader *shader = gsk_glshader_node_get_shader (node);
+        const guchar *uniform_data = gsk_glshader_node_get_uniform_data (node);
+
         start_node (p, "glshader");
 
-        GskGLShader *shader = gsk_glshader_node_get_shader (node);
-        append_string_param (p, "shader", gsk_glshader_get_sourcecode (shader));
+        append_rect_param (p, "bounds", &node->bounds);
+
+        append_string_param (p, "sourcecode", gsk_glshader_get_sourcecode (shader));
+        append_int_param (p, "required-sources", gsk_glshader_get_n_required_sources (shader), 0);
+
+        if (gsk_glshader_get_n_uniforms (shader) > 0)
+          {
+            GString *decl = g_string_new ("");
+            GString *data = g_string_new ("");
+
+            for (guint i = 0; i < gsk_glshader_get_n_uniforms (shader); i++)
+              {
+                const char *name = gsk_glshader_get_uniform_name (shader, i);
+                int offset = gsk_glshader_get_uniform_offset (shader, i);
+
+                if (i > 0)
+                  {
+                    g_string_append (decl, ", ");
+                    g_string_append (data, ", ");
+                  }
+
+                switch (gsk_glshader_get_uniform_type (shader, i))
+                  {
+                  case GSK_GLUNIFORM_TYPE_NONE:
+                  default:
+                    g_assert_not_reached ();
+                    break;
+
+                  case GSK_GLUNIFORM_TYPE_FLOAT:
+                    {
+                      float value = *(float *)(uniform_data + offset);
+                      g_string_append_printf (decl, "float %s", name);
+                      g_string_append_printf (data, "%f", value);
+                    }
+                    break;
+
+                  case GSK_GLUNIFORM_TYPE_INT:
+                    {
+                      gint32 value = *(gint32 *)(uniform_data + offset);
+                      g_string_append_printf (decl, "int %s", name);
+                      g_string_append_printf (data, "%d", value);
+                    }
+                    break;
+
+                  case GSK_GLUNIFORM_TYPE_UINT:
+                    {
+                      guint32 value = *(guint32 *)(uniform_data + offset);
+                      g_string_append_printf (decl, "uint %s", name);
+                      g_string_append_printf (data, "%u", value);
+                    }
+                    break;
+
+                  case GSK_GLUNIFORM_TYPE_BOOL:
+                    {
+                      gboolean value = *(gboolean *)(uniform_data + offset);
+                      g_string_append_printf (decl, "bool %s", name);
+                      g_string_append_printf (data, "%d", value);
+                    }
+                    break;
+
+                  case GSK_GLUNIFORM_TYPE_VEC2:
+                    {
+                      graphene_vec2_t *v = (graphene_vec2_t *)(uniform_data + offset);
+                      g_string_append_printf (decl, "vec2 %s", name);
+                      g_string_append_printf (data, "%f %f",
+                                              graphene_vec2_get_x (v),
+                                              graphene_vec2_get_y (v));
+                    }
+                    break;
+
+                  case GSK_GLUNIFORM_TYPE_VEC3:
+                    {
+                      graphene_vec3_t *v = (graphene_vec3_t *)(uniform_data + offset);
+                      g_string_append_printf (decl, "vec3 %s", name);
+                      g_string_append_printf (data, "%f %f %f",
+                                              graphene_vec3_get_x (v),
+                                              graphene_vec3_get_y (v),
+                                              graphene_vec3_get_z (v));
+                    }
+                    break;
+
+                  case GSK_GLUNIFORM_TYPE_VEC4:
+                    {
+                      graphene_vec4_t *v = (graphene_vec4_t *)(uniform_data + offset);
+                      g_string_append_printf (decl, "vec4 %s", name);
+                      g_string_append_printf (data, "%f %f %f %f",
+                                              graphene_vec4_get_x (v),
+                                              graphene_vec4_get_y (v),
+                                              graphene_vec4_get_z (v),
+                                              graphene_vec4_get_w (v));
+                    }
+                    break;
+                  }
+              }
+            _indent (p);
+            g_string_append_printf (p->str, "uniforms: %s;\n", decl->str);
+            _indent (p);
+            g_string_append_printf (p->str, "uniform-data: %s;\n", data->str);
+
+            g_string_free (decl, TRUE);
+            g_string_free (data, TRUE);
+          }
+
         append_node_param (p, "fallback", gsk_glshader_node_get_fallback_child (node));
         for (guint i = 0; i < gsk_glshader_node_get_n_children (node); i ++)
           {
             GskRenderNode *child = gsk_glshader_node_get_child (node, i);
-            _indent (p);
-            render_node_print (p, child);
+            char *name;
+
+            name = g_strdup_printf ("child%d", i + 1);
+            append_node_param (p, name, child);
+            g_free (name);
           }
 
         end_node (p);
