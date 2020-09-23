@@ -392,7 +392,7 @@ gsk_gl_shader_constructed (GObject *object)
 #define OPT_SPACE_RE "[ \\t]*"
 #define UNIFORM_TYPE_RE "(int|uint|bool|float|vec2|vec3|vec4|sampler2D)"
 #define UNIFORM_NAME_RE "([\\w]+)"
-#define OPT_INIT_VALUE_RE "[\\w(),. ]+" // This is a bit simple, but will match most initializers
+#define OPT_INIT_VALUE_RE "[-\\w(),. ]+" // This is a bit simple, but will match most initializers
 #define OPT_COMMENT_RE "(//.*)?"
 #define OPT_INITIALIZER_RE  "(" OPT_SPACE_RE "=" OPT_SPACE_RE  OPT_INIT_VALUE_RE ")?"
 #define UNIFORM_MATCHER_RE "^uniform" SPACE_RE UNIFORM_TYPE_RE SPACE_RE UNIFORM_NAME_RE OPT_INITIALIZER_RE OPT_SPACE_RE ";" OPT_SPACE_RE OPT_COMMENT_RE "$"
