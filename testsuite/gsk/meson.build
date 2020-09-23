@@ -188,6 +188,7 @@ endforeach
 tests = [
   ['rounded-rect'],
   ['transform'],
+  ['shader'],
 ]
 
 test_cargs = []
