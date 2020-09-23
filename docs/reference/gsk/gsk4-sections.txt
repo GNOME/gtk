@@ -48,6 +48,7 @@ GskShadowNode
 GskTextNode
 GskTextureNode
 GskTransformNode
+GskGLShaderNode
 gsk_render_node_ref
 gsk_render_node_unref
 GskRenderNodeType
@@ -152,6 +153,12 @@ gsk_blur_node_get_radius
 gsk_debug_node_new
 gsk_debug_node_get_child
 gsk_debug_node_get_message
+gsk_gl_shader_node_new
+gsk_gl_shader_node_get_fallback_child
+gsk_gl_shader_node_get_n_children
+gsk_gl_shader_node_get_child
+gsk_gl_shader_node_get_uniform_data
+gsk_gl_shader_node_get_shader
 <SUBSECTION Standard>
 GSK_IS_RENDER_NODE
 GSK_RENDER_NODE
@@ -177,6 +184,7 @@ GSK_TYPE_SHADOW_NODE
 GSK_TYPE_TEXT_NODE
 GSK_TYPE_TEXTURE_NODE
 GSK_TYPE_TRANSFORM_NODE
+GSK_TYPE_GLSHADER_NODE
 GskRenderNodeClass
 gsk_blend_node_get_type
 gsk_blur_node_get_type
@@ -202,6 +210,7 @@ gsk_shadow_node_get_type
 gsk_text_node_get_type
 gsk_texture_node_get_type
 gsk_transform_node_get_type
+gsk_gl_shader_node_get_type
 GSK_TYPE_BLEND_MODE
 <SUBSECTION Standard>
 gsk_serialization_error_quark
@@ -266,3 +275,43 @@ gsk_transform_get_type
 gsk_transform_new
 </SECTION>
 
+<SECTION>
+<FILE>GskGLShader</FILE>
+GskGLShader
+gsk_gl_shader_new_from_bytes
+gsk_gl_shader_new_from_resource
+gsk_gl_shader_get_bytes
+gsk_gl_shader_get_n_required_textures
+gsk_gl_shader_get_n_uniforms
+gsk_gl_shader_get_uniform_name
+gsk_gl_shader_find_uniform_by_name
+gsk_gl_shader_get_uniform_type
+gsk_gl_shader_get_uniform_offset
+gsk_gl_shader_get_uniforms_size
+
+<SUBSECTION Uniform Data>
+gsk_gl_shader_get_uniform_data_float
+gsk_gl_shader_get_uniform_data_int
+gsk_gl_shader_get_uniform_data_uint
+gsk_gl_shader_get_uniform_data_bool
+gsk_gl_shader_get_uniform_data_vec2
+gsk_gl_shader_get_uniform_data_vec3
+gsk_gl_shader_get_uniform_data_vec4
+gsk_gl_shader_format_uniform_data_va
+
+<SUBSECTION Uniform Data Builder>
+GskUniformDataBuilder
+
+gsk_gl_shader_build_uniform_data
+gsk_uniform_data_builder_finish
+gsk_uniform_data_builder_free
+gsk_uniform_data_builder_copy
+
+gsk_uniform_data_builder_set_float
+gsk_uniform_data_builder_set_int
+gsk_uniform_data_builder_set_uint
+gsk_uniform_data_builder_set_bool
+gsk_uniform_data_builder_set_vec2
+gsk_uniform_data_builder_set_vec3
+gsk_uniform_data_builder_set_vec4
+</SECTION>
