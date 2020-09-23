@@ -111,6 +111,7 @@
 #include "config.h"
 #include "gskglshader.h"
 #include "gskglshaderprivate.h"
+#include "gskdebugprivate.h"
 
 static GskGLUniformType
 uniform_type_from_glsl (const char *str)
@@ -131,6 +132,39 @@ uniform_type_from_glsl (const char *str)
     return GSK_GLUNIFORM_TYPE_VEC4;
 
   return  GSK_GLUNIFORM_TYPE_NONE;
+}
+
+static const char *
+uniform_type_name (GskGLUniformType type)
+{
+  switch (type)
+    {
+    case GSK_GLUNIFORM_TYPE_FLOAT:
+      return "float";
+
+    case GSK_GLUNIFORM_TYPE_INT:
+      return "int";
+
+    case GSK_GLUNIFORM_TYPE_UINT:
+      return "uint";
+
+    case GSK_GLUNIFORM_TYPE_BOOL:
+      return "bool";
+
+    case GSK_GLUNIFORM_TYPE_VEC2:
+      return "vec2";
+
+    case GSK_GLUNIFORM_TYPE_VEC3:
+      return "vec3";
+
+    case GSK_GLUNIFORM_TYPE_VEC4:
+      return "vec4";
+
+    case GSK_GLUNIFORM_TYPE_NONE:
+    default:
+      g_assert_not_reached ();
+      return NULL;
+    }
 }
 
 static int
@@ -334,6 +368,24 @@ gsk_gl_shader_constructed (GObject *object)
   g_match_info_free (match_info);
 
   shader->n_required_textures = max_texture_seen;
+
+  if (GSK_DEBUG_CHECK(SHADERS))
+    {
+      GString *s;
+
+      s = g_string_new ("");
+      for (int i = 0; i < shader->uniforms->len; i++)
+        {
+          GskGLUniform *u = &g_array_index (shader->uniforms, GskGLUniform, i);
+          if (i > 0)
+            g_string_append (s, ", ");
+          g_string_append_printf (s, "%s %s", uniform_type_name (u->type), u->name);
+        }
+      g_message ("Shader constructed: %d textures, %d uniforms (%s)",
+                 shader->n_required_textures, shader->uniforms->len,
+                 s->str);
+      g_string_free (s, TRUE);
+    }
 }
 
 #define SPACE_RE "[ \\t]+" // Don't use \s, we don't want to match newlines
