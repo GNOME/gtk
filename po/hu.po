@@ -11,9 +11,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-09-06 13:26+0000\n"
-"PO-Revision-Date: 2020-09-06 22:30+0200\n"
-"Last-Translator: Balázs Úr <ur.balazs at fsf dot hu>\n"
+"POT-Creation-Date: 2020-09-23 11:37+0000\n"
+"PO-Revision-Date: 2020-09-23 16:38+0200\n"
+"Last-Translator: Balázs Úr <<ur.balazs at fsf dot hu>\n"
 "Language-Team: Hungarian <gnome-hu-list at gnome dot org>\n"
 "Language: hu\n"
 "MIME-Version: 1.0\n"
@@ -460,7 +460,6 @@ msgid "Failed to decode contents with mime-type of '%s'"
 msgstr "A tartalom dekódolása a(z) „%s” MIME-típussal sikertelen"
 
 #: gdk/macos/gdkmacosglcontext.c:105
-#| msgid "Unable to create a GL context"
 msgid "Unable to create a GL pixel format"
 msgstr "Nem lehet létrehozni GL képpontformátumot"
 
@@ -470,19 +469,19 @@ msgstr "Nem lehet létrehozni GL képpontformátumot"
 msgid "Unable to create a GL context"
 msgstr "Nem lehet létrehozni GL környezetet"
 
-#: gdk/wayland/gdkglcontext-wayland.c:412
-#: gdk/wayland/gdkglcontext-wayland.c:422 gdk/win32/gdkglcontext-win32.c:788
+#: gdk/wayland/gdkglcontext-wayland.c:414
+#: gdk/wayland/gdkglcontext-wayland.c:424 gdk/win32/gdkglcontext-win32.c:788
 #: gdk/win32/gdkglcontext-win32.c:798 gdk/win32/gdkglcontext-win32.c:913
-#: gdk/x11/gdkglcontext-x11.c:1129
+#: gdk/x11/gdkglcontext-x11.c:1133
 msgid "No available configurations for the given pixel format"
 msgstr "Nincs elérhető beállítás a megadott képpontformátumhoz"
 
-#: gdk/wayland/gdkglcontext-wayland.c:451 gdk/win32/gdkglcontext-win32.c:1072
-#: gdk/x11/gdkglcontext-x11.c:1432
+#: gdk/wayland/gdkglcontext-wayland.c:453 gdk/win32/gdkglcontext-win32.c:1072
+#: gdk/x11/gdkglcontext-x11.c:1436
 msgid "No GL implementation is available"
 msgstr "Nem érhető el GL megvalósítás"
 
-#: gdk/wayland/gdkglcontext-wayland.c:459
+#: gdk/wayland/gdkglcontext-wayland.c:461
 msgid "Core GL is not available on EGL implementation"
 msgstr "Az alap GL nem érhető el az EGL megvalósításban"
 
@@ -548,8 +547,6 @@ msgstr ""
 
 #: gdk/win32/gdkclipdrop-win32.c:896
 #, c-format
-#| msgid ""
-#| "Cannot get clipboard data. Failed to allocate %lu bytes to store the data."
 msgid ""
 "Cannot get clipboard data. Failed to allocate %s bytes to store the data."
 msgstr ""
@@ -608,7 +605,6 @@ msgstr "Nem lehet lekérni a DnD adatait. A GlobalSize(0x%p) meghiúsult: 0x%lx.
 
 #: gdk/win32/gdkdrop-win32.c:1230
 #, c-format
-#| msgid "Cannot get DnD data. Failed to allocate %lu bytes to store the data."
 msgid "Cannot get DnD data. Failed to allocate %s bytes to store the data."
 msgstr ""
 "Nem lehet lekérni a DnD adatait. Nem sikerült %s bájtot lefoglalni az adatok "
@@ -694,7 +690,7 @@ msgstr "A vágólapkezelő nem tudta tárolni a kiválasztást."
 msgid "Cannot store clipboard. No clipboard manager is active."
 msgstr "A vágólap nem tárolható. Nincs aktív vágólapkezelő."
 
-#: gdk/x11/gdkglcontext-x11.c:1157
+#: gdk/x11/gdkglcontext-x11.c:1161
 #, c-format
 msgid "No available configurations for the given RGBA pixel format"
 msgstr "Nincs elérhető beállítás a megadott RGBA képpontformátumhoz"
@@ -802,7 +798,6 @@ msgid "GNU Affero General Public License, version 3 only"
 msgstr "GNU Affero General Public License, csak 3. verzió"
 
 #: gtk/gtkaboutdialog.c:138
-#| msgid "BSD 2-Clause License"
 msgid "BSD 3-Clause License"
 msgstr "BSD 3 cikkelyes licenc"
 
@@ -811,7 +806,6 @@ msgid "Apache License, Version 2.0"
 msgstr "Apache License, 2.0-s verzió"
 
 #: gtk/gtkaboutdialog.c:140
-#| msgid "Artistic License 2.0"
 msgid "Mozilla Public License 2.0"
 msgstr "Mozilla Public License 2.0"
 
@@ -837,26 +831,26 @@ msgstr "Weboldal"
 msgid "About %s"
 msgstr "%s névjegye"
 
-#: gtk/gtkaboutdialog.c:2184
+#: gtk/gtkaboutdialog.c:2186
 msgid "Created by"
 msgstr "Készítették"
 
-#: gtk/gtkaboutdialog.c:2187
+#: gtk/gtkaboutdialog.c:2189
 msgid "Documented by"
 msgstr "Dokumentáció"
 
-#: gtk/gtkaboutdialog.c:2197
+#: gtk/gtkaboutdialog.c:2199
 msgid "Translated by"
 msgstr "Fordította"
 
-#: gtk/gtkaboutdialog.c:2202
+#: gtk/gtkaboutdialog.c:2204
 msgid "Design by"
 msgstr "Tervezte"
 
 #. Translators: this is the license preamble; the string at the end
 #. * contains the name of the license as link text.
 #.
-#: gtk/gtkaboutdialog.c:2367
+#: gtk/gtkaboutdialog.c:2369
 #, c-format
 msgid ""
 "This program comes with absolutely no warranty.\n"
@@ -1106,7 +1100,7 @@ msgstr "%d"
 #. This label is displayed in a treeview cell displaying
 #. * a disabled accelerator key combination.
 #.
-#: gtk/gtkcellrendereraccel.c:297
+#: gtk/gtkcellrendereraccel.c:295
 msgctxt "Accelerator"
 msgid "Disabled"
 msgstr "Tiltva"
@@ -1115,7 +1109,7 @@ msgstr "Tiltva"
 #. * an accelerator key combination that is not valid according
 #. * to gtk_accelerator_valid().
 #.
-#: gtk/gtkcellrendereraccel.c:307
+#: gtk/gtkcellrendereraccel.c:305
 msgctxt "Accelerator"
 msgid "Invalid"
 msgstr "Érvénytelen"
@@ -1123,202 +1117,22 @@ msgstr "Érvénytelen"
 #. This label is displayed in a treeview cell displaying an accelerator
 #. * when the cell is clicked to change the acelerator.
 #.
-#: gtk/gtkcellrendereraccel.c:439 gtk/gtkcellrendereraccel.c:732
+#: gtk/gtkcellrendereraccel.c:437 gtk/gtkcellrendereraccel.c:730
 msgid "New accelerator…"
 msgstr "Új gyorsbillentyű…"
 
-#: gtk/gtkcellrendererprogress.c:376 gtk/gtkcellrendererprogress.c:472
+#: gtk/gtkcellrendererprogress.c:374 gtk/gtkcellrendererprogress.c:470
 #, c-format
 msgctxt "progress bar label"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: gtk/gtkcolorbutton.c:173 gtk/gtkcolorbutton.c:285
+#: gtk/gtkcolorbutton.c:176 gtk/gtkcolorbutton.c:288
 msgid "Pick a Color"
 msgstr "Válasszon színt"
 
-#: gtk/gtkcolorchooserwidget.c:383
-msgctxt "Color name"
-msgid "Light Scarlet Red"
-msgstr "Világos skarlátvörös"
-
-#: gtk/gtkcolorchooserwidget.c:384
-msgctxt "Color name"
-msgid "Scarlet Red"
-msgstr "Skarlátvörös"
-
-#: gtk/gtkcolorchooserwidget.c:385
-msgctxt "Color name"
-msgid "Dark Scarlet Red"
-msgstr "Sötét skarlátvörös"
-
-#: gtk/gtkcolorchooserwidget.c:386
-msgctxt "Color name"
-msgid "Light Orange"
-msgstr "Világos narancs"
-
-#: gtk/gtkcolorchooserwidget.c:387
-msgctxt "Color name"
-msgid "Orange"
-msgstr "Narancs"
-
-#: gtk/gtkcolorchooserwidget.c:388
-msgctxt "Color name"
-msgid "Dark Orange"
-msgstr "Sötét narancs"
-
-#: gtk/gtkcolorchooserwidget.c:389
-msgctxt "Color name"
-msgid "Light Butter"
-msgstr "Világos vajszín"
-
-#: gtk/gtkcolorchooserwidget.c:390
-msgctxt "Color name"
-msgid "Butter"
-msgstr "Vajszín"
-
-#: gtk/gtkcolorchooserwidget.c:391
-msgctxt "Color name"
-msgid "Dark Butter"
-msgstr "Sötét vajszín"
-
-#: gtk/gtkcolorchooserwidget.c:392
-msgctxt "Color name"
-msgid "Light Chameleon"
-msgstr "Világos kaméleon"
-
-#: gtk/gtkcolorchooserwidget.c:393
-msgctxt "Color name"
-msgid "Chameleon"
-msgstr "Kaméleon"
-
-#: gtk/gtkcolorchooserwidget.c:394
-msgctxt "Color name"
-msgid "Dark Chameleon"
-msgstr "Sötét kaméleon"
-
-#: gtk/gtkcolorchooserwidget.c:395
-msgctxt "Color name"
-msgid "Light Sky Blue"
-msgstr "Világos égkék"
-
-#: gtk/gtkcolorchooserwidget.c:396
-msgctxt "Color name"
-msgid "Sky Blue"
-msgstr "Égkék"
-
-#: gtk/gtkcolorchooserwidget.c:397
-msgctxt "Color name"
-msgid "Dark Sky Blue"
-msgstr "Sötét égkék"
-
-#: gtk/gtkcolorchooserwidget.c:398
-msgctxt "Color name"
-msgid "Light Plum"
-msgstr "Világos szilva"
-
-#: gtk/gtkcolorchooserwidget.c:399
-msgctxt "Color name"
-msgid "Plum"
-msgstr "Szilva"
-
-#: gtk/gtkcolorchooserwidget.c:400
-msgctxt "Color name"
-msgid "Dark Plum"
-msgstr "Sötét szilva"
-
-#: gtk/gtkcolorchooserwidget.c:401
-msgctxt "Color name"
-msgid "Light Chocolate"
-msgstr "Világos csokoládé"
-
-#: gtk/gtkcolorchooserwidget.c:402
-msgctxt "Color name"
-msgid "Chocolate"
-msgstr "Csokoládé"
-
-#: gtk/gtkcolorchooserwidget.c:403
-msgctxt "Color name"
-msgid "Dark Chocolate"
-msgstr "Sötét csokoládé"
-
-#: gtk/gtkcolorchooserwidget.c:404
-msgctxt "Color name"
-msgid "Light Aluminum 1"
-msgstr "Világos alumínium 1"
-
-#: gtk/gtkcolorchooserwidget.c:405
-msgctxt "Color name"
-msgid "Aluminum 1"
-msgstr "Alumínium 1"
-
-#: gtk/gtkcolorchooserwidget.c:406
-msgctxt "Color name"
-msgid "Dark Aluminum 1"
-msgstr "Sötét alumínium 1"
-
-#: gtk/gtkcolorchooserwidget.c:407
-msgctxt "Color name"
-msgid "Light Aluminum 2"
-msgstr "Világos alumínium 2"
-
-#: gtk/gtkcolorchooserwidget.c:408
-msgctxt "Color name"
-msgid "Aluminum 2"
-msgstr "Alumínium 2"
-
-#: gtk/gtkcolorchooserwidget.c:409
-msgctxt "Color name"
-msgid "Dark Aluminum 2"
-msgstr "Sötét alumínium 2"
-
-#: gtk/gtkcolorchooserwidget.c:423
-msgctxt "Color name"
-msgid "Black"
-msgstr "Fekete"
-
-#: gtk/gtkcolorchooserwidget.c:424
-msgctxt "Color name"
-msgid "Very Dark Gray"
-msgstr "Nagyon sötét szürke"
-
-#: gtk/gtkcolorchooserwidget.c:425
-msgctxt "Color name"
-msgid "Darker Gray"
-msgstr "Sötétebb szürke"
-
-#: gtk/gtkcolorchooserwidget.c:426
-msgctxt "Color name"
-msgid "Dark Gray"
-msgstr "Sötétszürke"
-
-#: gtk/gtkcolorchooserwidget.c:427
-msgctxt "Color name"
-msgid "Medium Gray"
-msgstr "Közepesszürke"
-
-#: gtk/gtkcolorchooserwidget.c:428
-msgctxt "Color name"
-msgid "Light Gray"
-msgstr "Világosszürke"
-
-#: gtk/gtkcolorchooserwidget.c:429
-msgctxt "Color name"
-msgid "Lighter Gray"
-msgstr "Világosabb szürke"
-
-#: gtk/gtkcolorchooserwidget.c:430
-msgctxt "Color name"
-msgid "Very Light Gray"
-msgstr "Nagyon világos szürke"
-
-#: gtk/gtkcolorchooserwidget.c:431
-msgctxt "Color name"
-msgid "White"
-msgstr "Fehér"
-
 #. translators: label for the custom section in the color chooser
-#: gtk/gtkcolorchooserwidget.c:512
+#: gtk/gtkcolorchooserwidget.c:456
 msgid "Custom"
 msgstr "Egyéni"
 
@@ -1341,7 +1155,7 @@ msgid "Margins from Printer…"
 msgstr "Margók a nyomtatótól…"
 
 #. And show the custom paper dialog
-#: gtk/gtkcustompaperunixdialog.c:402 gtk/gtkprintunixdialog.c:2987
+#: gtk/gtkcustompaperunixdialog.c:402 gtk/gtkprintunixdialog.c:2988
 msgid "Manage Custom Sizes"
 msgstr "Egyéni méretek kezelése"
 
@@ -1398,7 +1212,7 @@ msgstr "Emodzsi beszúrása"
 msgid "Select a File"
 msgstr "Válasszon ki egy fájlt"
 
-#: gtk/gtkfilechooserbutton.c:114 gtk/gtkplacessidebar.c:1059
+#: gtk/gtkfilechooserbutton.c:114 gtk/gtkplacessidebar.c:1040
 msgid "Desktop"
 msgstr "Asztal"
 
@@ -1471,26 +1285,26 @@ msgid "A file with that name already exists"
 msgstr "Már létezik egy ugyanilyen nevű fájl"
 
 #: gtk/gtkfilechoosernative.c:505 gtk/gtkfilechoosernative.c:576
-#: gtk/gtkfilechooserwidget.c:1212 gtk/gtkfilechooserwidget.c:5755
+#: gtk/gtkfilechooserwidget.c:1212 gtk/gtkfilechooserwidget.c:5759
 #: gtk/gtkmessagedialog.c:742 gtk/gtkmessagedialog.c:751
 #: gtk/gtkmountoperation.c:608 gtk/gtkpagesetupunixdialog.c:283
 #: gtk/gtkprintbackend.c:643 gtk/gtkprinteroptionwidget.c:713
-#: gtk/gtkprintunixdialog.c:626 gtk/gtkprintunixdialog.c:781
+#: gtk/gtkprintunixdialog.c:626 gtk/gtkprintunixdialog.c:782
 #: gtk/gtkwindow.c:6649 gtk/inspector/css-editor.c:248
-#: gtk/inspector/recorder.c:1010 gtk/ui/gtkappchooserdialog.ui:45
+#: gtk/inspector/recorder.c:1064 gtk/ui/gtkappchooserdialog.ui:45
 #: gtk/ui/gtkassistant.ui:52 gtk/ui/gtkcolorchooserdialog.ui:33
 #: gtk/ui/gtkfontchooserdialog.ui:24
 msgid "_Cancel"
 msgstr "Mé_gse"
 
 #: gtk/gtkfilechoosernative.c:506 gtk/gtkfilechoosernative.c:570
-#: gtk/gtkplacessidebar.c:3145 gtk/gtkplacessidebar.c:3230
+#: gtk/gtkplacessidebar.c:3126 gtk/gtkplacessidebar.c:3211
 #: gtk/gtkplacesview.c:1649
 msgid "_Open"
 msgstr "_Megnyitás"
 
 #: gtk/gtkfilechoosernative.c:570 gtk/inspector/css-editor.c:249
-#: gtk/inspector/recorder.c:1011
+#: gtk/inspector/recorder.c:1065
 msgid "_Save"
 msgstr "M_entés"
 
@@ -1567,7 +1381,7 @@ msgid "If you delete an item, it will be permanently lost."
 msgstr "Ha töröl egy elemet, akkor az véglegesen elvész."
 
 #: gtk/gtkfilechooserwidget.c:1213 gtk/gtkfilechooserwidget.c:1829
-#: gtk/gtklabel.c:5423 gtk/gtktext.c:5969 gtk/gtktextview.c:8558
+#: gtk/gtklabel.c:5423 gtk/gtktext.c:5987 gtk/gtktextview.c:8574
 msgid "_Delete"
 msgstr "_Törlés"
 
@@ -1595,8 +1409,8 @@ msgstr "Hely _másolása"
 msgid "_Add to Bookmarks"
 msgstr "Hozzá_adás a könyvjelzőkhöz"
 
-#: gtk/gtkfilechooserwidget.c:1825 gtk/gtkplacessidebar.c:2327
-#: gtk/gtkplacessidebar.c:3266 gtk/ui/gtkfilechooserwidget.ui:464
+#: gtk/gtkfilechooserwidget.c:1825 gtk/gtkplacessidebar.c:2308
+#: gtk/gtkplacessidebar.c:3247 gtk/ui/gtkfilechooserwidget.ui:464
 msgid "_Rename"
 msgstr "Át_nevezés"
 
@@ -1621,7 +1435,6 @@ msgid "Show _Time"
 msgstr "I_dő megjelenítése"
 
 #: gtk/gtkfilechooserwidget.c:1858
-#| msgid "Sort _Folders before Files"
 msgid "Sort _Folders Before Files"
 msgstr "_Mappák rendezése a fájlok előtt"
 
@@ -1632,128 +1445,128 @@ msgid "Location"
 msgstr "Hely"
 
 #. Label
-#: gtk/gtkfilechooserwidget.c:2343
+#: gtk/gtkfilechooserwidget.c:2344
 msgid "_Name:"
 msgstr "_Név:"
 
-#: gtk/gtkfilechooserwidget.c:2880 gtk/gtkfilechooserwidget.c:2894
+#: gtk/gtkfilechooserwidget.c:2881 gtk/gtkfilechooserwidget.c:2895
 #, c-format
 msgid "Searching in %s"
 msgstr "Keresés ebben: %s"
 
-#: gtk/gtkfilechooserwidget.c:2900
+#: gtk/gtkfilechooserwidget.c:2901
 msgid "Searching"
 msgstr "Keresés"
 
-#: gtk/gtkfilechooserwidget.c:2906
+#: gtk/gtkfilechooserwidget.c:2907
 msgid "Enter location or URL"
 msgstr "Adja meg a helyet vagy URL-címet"
 
-#: gtk/gtkfilechooserwidget.c:3794 gtk/gtkfilechooserwidget.c:6590
+#: gtk/gtkfilechooserwidget.c:3795 gtk/gtkfilechooserwidget.c:6594
 #: gtk/ui/gtkfilechooserwidget.ui:225
 msgid "Modified"
 msgstr "Módosítva"
 
-#: gtk/gtkfilechooserwidget.c:4053
+#: gtk/gtkfilechooserwidget.c:4054
 #, c-format
 msgid "Could not read the contents of %s"
 msgstr "Nem sikerült „%s” tartalmát beolvasni"
 
-#: gtk/gtkfilechooserwidget.c:4057
+#: gtk/gtkfilechooserwidget.c:4058
 msgid "Could not read the contents of the folder"
 msgstr "Nem sikerült beolvasni a mappa tartalmát"
 
 #. Translators: see g_date_time_format() for details on the format
-#: gtk/gtkfilechooserwidget.c:4197 gtk/gtkfilechooserwidget.c:4240
+#: gtk/gtkfilechooserwidget.c:4198 gtk/gtkfilechooserwidget.c:4241
 msgid "%H:%M"
 msgstr "%H:%M"
 
-#: gtk/gtkfilechooserwidget.c:4199 gtk/gtkfilechooserwidget.c:4242
+#: gtk/gtkfilechooserwidget.c:4200 gtk/gtkfilechooserwidget.c:4243
 msgid "%l:%M %p"
 msgstr "%H:%M"
 
-#: gtk/gtkfilechooserwidget.c:4203
+#: gtk/gtkfilechooserwidget.c:4204
 msgid "Yesterday"
 msgstr "Tegnap"
 
-#: gtk/gtkfilechooserwidget.c:4211
+#: gtk/gtkfilechooserwidget.c:4212
 msgid "%-e %b"
 msgstr "%b. %-e."
 
-#: gtk/gtkfilechooserwidget.c:4215
+#: gtk/gtkfilechooserwidget.c:4216
 msgid "%-e %b %Y"
 msgstr "%Y. %b. %-e."
 
-#: gtk/gtkfilechooserwidget.c:4304 gtk/gtkfilechooserwidget.c:4312
+#: gtk/gtkfilechooserwidget.c:4305 gtk/gtkfilechooserwidget.c:4313
 msgid "Program"
 msgstr "Program"
 
-#: gtk/gtkfilechooserwidget.c:4305
+#: gtk/gtkfilechooserwidget.c:4306
 msgid "Audio"
 msgstr "Hang"
 
-#: gtk/gtkfilechooserwidget.c:4306 gtk/gtkfontbutton.c:549
-#: gtk/inspector/visual.ui:211
+#: gtk/gtkfilechooserwidget.c:4307 gtk/gtkfontbutton.c:549
+#: gtk/inspector/visual.ui:187
 msgid "Font"
 msgstr "Betűkészlet"
 
-#: gtk/gtkfilechooserwidget.c:4307
+#: gtk/gtkfilechooserwidget.c:4308
 msgid "Image"
 msgstr "Kép"
 
-#: gtk/gtkfilechooserwidget.c:4308
+#: gtk/gtkfilechooserwidget.c:4309
 msgid "Archive"
 msgstr "Archívum"
 
-#: gtk/gtkfilechooserwidget.c:4309
+#: gtk/gtkfilechooserwidget.c:4310
 msgid "Markup"
 msgstr "Jelölőnyelv"
 
-#: gtk/gtkfilechooserwidget.c:4310 gtk/gtkfilechooserwidget.c:4311
+#: gtk/gtkfilechooserwidget.c:4311 gtk/gtkfilechooserwidget.c:4312
 msgid "Text"
 msgstr "Szöveg"
 
-#: gtk/gtkfilechooserwidget.c:4313
+#: gtk/gtkfilechooserwidget.c:4314
 msgid "Video"
 msgstr "Videó"
 
-#: gtk/gtkfilechooserwidget.c:4314
+#: gtk/gtkfilechooserwidget.c:4315
 msgid "Contacts"
 msgstr "Partnerek"
 
-#: gtk/gtkfilechooserwidget.c:4315
+#: gtk/gtkfilechooserwidget.c:4316
 msgid "Calendar"
 msgstr "Naptár"
 
-#: gtk/gtkfilechooserwidget.c:4316
+#: gtk/gtkfilechooserwidget.c:4317
 msgid "Document"
 msgstr "Dokumentum"
 
-#: gtk/gtkfilechooserwidget.c:4317
+#: gtk/gtkfilechooserwidget.c:4318
 msgid "Presentation"
 msgstr "Bemutató"
 
-#: gtk/gtkfilechooserwidget.c:4318
+#: gtk/gtkfilechooserwidget.c:4319
 msgid "Spreadsheet"
 msgstr "Munkafüzet"
 
 #. Translators: We don't know whether this printer is
 #. * available to print to.
-#: gtk/gtkfilechooserwidget.c:4349 gtk/gtkfilechooserwidget.c:4536
+#: gtk/gtkfilechooserwidget.c:4350 gtk/gtkfilechooserwidget.c:4537
 #: modules/printbackends/gtkprintbackendcloudprint.c:729
 msgid "Unknown"
 msgstr "Ismeretlen"
 
-#: gtk/gtkfilechooserwidget.c:4575 gtk/gtkplacessidebar.c:1044
+#: gtk/gtkfilechooserwidget.c:4576 gtk/gtkplacessidebar.c:1025
 msgid "Home"
 msgstr "Saját mappa"
 
-#: gtk/gtkfilechooserwidget.c:5748 gtk/gtkprintunixdialog.c:617
+#: gtk/gtkfilechooserwidget.c:5752 gtk/gtkprintunixdialog.c:617
 #, c-format
 msgid "A file named “%s” already exists.  Do you want to replace it?"
 msgstr "A(z) „%s” nevű fájl már létezik. Le akarja cserélni?"
 
-#: gtk/gtkfilechooserwidget.c:5751 gtk/gtkprintunixdialog.c:621
+#: gtk/gtkfilechooserwidget.c:5755 gtk/gtkprintunixdialog.c:621
 #, c-format
 msgid ""
 "The file already exists in “%s”.  Replacing it will overwrite its contents."
@@ -1761,19 +1574,19 @@ msgstr ""
 "A fájl már létezik a(z) „%s” helyen. Lecserélésével a tartalma felül lesz "
 "írva."
 
-#: gtk/gtkfilechooserwidget.c:5756 gtk/gtkprintunixdialog.c:629
+#: gtk/gtkfilechooserwidget.c:5760 gtk/gtkprintunixdialog.c:629
 msgid "_Replace"
 msgstr "_Csere"
 
-#: gtk/gtkfilechooserwidget.c:5917
+#: gtk/gtkfilechooserwidget.c:5921
 msgid "You do not have access to the specified folder."
 msgstr "Nem férhet hozzá a megadott mappához."
 
-#: gtk/gtkfilechooserwidget.c:6519
+#: gtk/gtkfilechooserwidget.c:6523
 msgid "Could not send the search request"
 msgstr "Nem lehet elküldeni a keresési kérést"
 
-#: gtk/gtkfilechooserwidget.c:6829
+#: gtk/gtkfilechooserwidget.c:6833
 msgid "Accessed"
 msgstr "Elérés"
 
@@ -1790,51 +1603,51 @@ msgctxt "font"
 msgid "None"
 msgstr "Nincs"
 
-#: gtk/gtkfontchooserwidget.c:1111
+#: gtk/gtkfontchooserwidget.c:1530
 msgid "Width"
 msgstr "Szélesség"
 
-#: gtk/gtkfontchooserwidget.c:1112
+#: gtk/gtkfontchooserwidget.c:1531
 msgid "Weight"
 msgstr "Súly"
 
-#: gtk/gtkfontchooserwidget.c:1113
+#: gtk/gtkfontchooserwidget.c:1532
 msgid "Italic"
 msgstr "Dőlt"
 
-#: gtk/gtkfontchooserwidget.c:1114
+#: gtk/gtkfontchooserwidget.c:1533
 msgid "Slant"
 msgstr "Döntött"
 
-#: gtk/gtkfontchooserwidget.c:1115
+#: gtk/gtkfontchooserwidget.c:1534
 msgid "Optical Size"
 msgstr "Optikai méret"
 
-#: gtk/gtkfontchooserwidget.c:1661
+#: gtk/gtkfontchooserwidget.c:2080
 msgid "Default"
 msgstr "Alapértelmezett"
 
-#: gtk/gtkfontchooserwidget.c:1707
+#: gtk/gtkfontchooserwidget.c:2126
 msgid "Ligatures"
 msgstr "Ligatúrák"
 
-#: gtk/gtkfontchooserwidget.c:1708
+#: gtk/gtkfontchooserwidget.c:2127
 msgid "Letter Case"
 msgstr "Kis- és nagybetűk"
 
-#: gtk/gtkfontchooserwidget.c:1709
+#: gtk/gtkfontchooserwidget.c:2128
 msgid "Number Case"
 msgstr "Számok mérete"
 
-#: gtk/gtkfontchooserwidget.c:1710
+#: gtk/gtkfontchooserwidget.c:2129
 msgid "Number Spacing"
 msgstr "Számok távolsága"
 
-#: gtk/gtkfontchooserwidget.c:1711
+#: gtk/gtkfontchooserwidget.c:2130
 msgid "Number Formatting"
 msgstr "Számformázás"
 
-#: gtk/gtkfontchooserwidget.c:1712
+#: gtk/gtkfontchooserwidget.c:2131
 msgid "Character Variants"
 msgstr "Karakterváltozatok"
 
@@ -1842,19 +1655,19 @@ msgstr "Karakterváltozatok"
 msgid "OpenGL context creation failed"
 msgstr "Az OpenGL környezet létrehozása meghiúsult"
 
-#: gtk/gtklabel.c:5420 gtk/gtktext.c:5957 gtk/gtktextview.c:8546
+#: gtk/gtklabel.c:5420 gtk/gtktext.c:5975 gtk/gtktextview.c:8562
 msgid "Cu_t"
 msgstr "_Kivágás"
 
-#: gtk/gtklabel.c:5421 gtk/gtktext.c:5961 gtk/gtktextview.c:8550
+#: gtk/gtklabel.c:5421 gtk/gtktext.c:5979 gtk/gtktextview.c:8566
 msgid "_Copy"
 msgstr "_Másolás"
 
-#: gtk/gtklabel.c:5422 gtk/gtktext.c:5965 gtk/gtktextview.c:8554
+#: gtk/gtklabel.c:5422 gtk/gtktext.c:5983 gtk/gtktextview.c:8570
 msgid "_Paste"
 msgstr "_Beillesztés"
 
-#: gtk/gtklabel.c:5428 gtk/gtktext.c:5978 gtk/gtktextview.c:8579
+#: gtk/gtklabel.c:5428 gtk/gtktext.c:5996 gtk/gtktextview.c:8595
 msgid "Select _All"
 msgstr "Ö_sszes kijelölése"
 
@@ -1911,7 +1724,7 @@ msgstr ""
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:970
+#: gtk/gtkmain.c:823
 msgid "default:LTR"
 msgstr "default:LTR"
 
@@ -2087,7 +1900,7 @@ msgstr "A GTK nem talált médiamodult. Ellenőrizze a telepítést."
 msgid "Page %u"
 msgstr "%u. oldal"
 
-#: gtk/gtkpagesetup.c:608 gtk/gtkpapersize.c:946 gtk/gtkpapersize.c:986
+#: gtk/gtkpagesetup.c:606 gtk/gtkpapersize.c:944 gtk/gtkpapersize.c:984
 msgid "Not a valid page setup file"
 msgstr "Nem érvényes oldalbeállítási fájl"
 
@@ -2127,95 +1940,95 @@ msgstr ""
 msgid "Page Setup"
 msgstr "Oldalbeállítás"
 
-#: gtk/gtkpasswordentry.c:146
+#: gtk/gtkpasswordentry.c:154
 msgid "Hide text"
 msgstr "Szöveg elrejtése"
 
-#: gtk/gtkpasswordentry.c:151 gtk/gtkpasswordentry.c:513
+#: gtk/gtkpasswordentry.c:159 gtk/gtkpasswordentry.c:529
 msgid "Show text"
 msgstr "Szöveg megjelenítése"
 
-#: gtk/gtkpasswordentry.c:170
+#: gtk/gtkpasswordentry.c:186
 msgid "Caps Lock is on"
 msgstr "A Caps Lock be van kapcsolva"
 
-#: gtk/gtkpasswordentry.c:588
+#: gtk/gtkpasswordentry.c:601
 msgid "_Show Text"
 msgstr "Szöveg _megjelenítése"
 
 #. translators: %s is the name of a cloud provider for files
-#: gtk/gtkplacessidebar.c:932
+#: gtk/gtkplacessidebar.c:913
 #, c-format
 msgid "Open %s"
 msgstr "%s megnyitása"
 
-#: gtk/gtkplacessidebar.c:1022
+#: gtk/gtkplacessidebar.c:1003
 msgid "Recent"
 msgstr "Legutóbbi"
 
-#: gtk/gtkplacessidebar.c:1024
+#: gtk/gtkplacessidebar.c:1005
 msgid "Recent files"
 msgstr "Legutóbbi fájlok"
 
-#: gtk/gtkplacessidebar.c:1033
+#: gtk/gtkplacessidebar.c:1014
 msgid "Starred"
 msgstr "Csillagozott"
 
-#: gtk/gtkplacessidebar.c:1035
+#: gtk/gtkplacessidebar.c:1016
 msgid "Starred files"
 msgstr "Csillagozott fájlok"
 
-#: gtk/gtkplacessidebar.c:1046
+#: gtk/gtkplacessidebar.c:1027
 msgid "Open your personal folder"
 msgstr "A személyes mappájának megnyitása"
 
-#: gtk/gtkplacessidebar.c:1061
+#: gtk/gtkplacessidebar.c:1042
 msgid "Open the contents of your desktop in a folder"
 msgstr "Az Asztal tartalmának megnyitása mappaként"
 
-#: gtk/gtkplacessidebar.c:1075
+#: gtk/gtkplacessidebar.c:1056
 msgid "Enter Location"
 msgstr "Hely megadása"
 
-#: gtk/gtkplacessidebar.c:1077
+#: gtk/gtkplacessidebar.c:1058
 msgid "Manually enter a location"
 msgstr "Írjon be egy helyet"
 
-#: gtk/gtkplacessidebar.c:1087
+#: gtk/gtkplacessidebar.c:1068
 msgid "Trash"
 msgstr "Kuka"
 
-#: gtk/gtkplacessidebar.c:1089
+#: gtk/gtkplacessidebar.c:1070
 msgid "Open the trash"
 msgstr "A Kuka megnyitása"
 
-#: gtk/gtkplacessidebar.c:1200 gtk/gtkplacessidebar.c:1228
-#: gtk/gtkplacessidebar.c:1428
+#: gtk/gtkplacessidebar.c:1181 gtk/gtkplacessidebar.c:1209
+#: gtk/gtkplacessidebar.c:1409
 #, c-format
 msgid "Mount and open “%s”"
 msgstr "„%s” csatolása és megnyitása"
 
-#: gtk/gtkplacessidebar.c:1323
+#: gtk/gtkplacessidebar.c:1304
 msgid "Open the contents of the file system"
 msgstr "A fájlrendszer tartalmának megnyitása"
 
-#: gtk/gtkplacessidebar.c:1406
+#: gtk/gtkplacessidebar.c:1387
 msgid "New bookmark"
 msgstr "Új könyvjelző"
 
-#: gtk/gtkplacessidebar.c:1408
+#: gtk/gtkplacessidebar.c:1389
 msgid "Add a new bookmark"
 msgstr "Új könyvjelző hozzáadása"
 
-#: gtk/gtkplacessidebar.c:1473
+#: gtk/gtkplacessidebar.c:1454
 msgid "Other Locations"
 msgstr "Egyéb helyek"
 
-#: gtk/gtkplacessidebar.c:1474
+#: gtk/gtkplacessidebar.c:1455
 msgid "Show other locations"
 msgstr "Más helyek megjelenítése"
 
-#: gtk/gtkplacessidebar.c:1979 gtk/gtkplacessidebar.c:2980
+#: gtk/gtkplacessidebar.c:1960 gtk/gtkplacessidebar.c:2961
 #, c-format
 msgid "Unable to start “%s”"
 msgstr "„%s” nem indítható"
@@ -2223,127 +2036,127 @@ msgstr "„%s” nem indítható"
 #. Translators: This means that unlocking an encrypted storage
 #. * device failed. %s is the name of the device.
 #.
-#: gtk/gtkplacessidebar.c:2015
+#: gtk/gtkplacessidebar.c:1996
 #, c-format
 msgid "Error unlocking “%s”"
 msgstr "Hiba a(z) „%s” feloldásakor"
 
-#: gtk/gtkplacessidebar.c:2017
+#: gtk/gtkplacessidebar.c:1998
 #, c-format
 msgid "Unable to access “%s”"
 msgstr "„%s” nem érhető el"
 
-#: gtk/gtkplacessidebar.c:2248
+#: gtk/gtkplacessidebar.c:2229
 msgid "This name is already taken"
 msgstr "A név már létezik"
 
-#: gtk/gtkplacessidebar.c:2321 gtk/inspector/actions.ui:19
+#: gtk/gtkplacessidebar.c:2302 gtk/inspector/actions.ui:19
 #: gtk/inspector/css-node-tree.ui:35 gtk/inspector/prop-list.ui:23
 #: gtk/ui/gtkfilechooserwidget.ui:167 gtk/ui/gtkfilechooserwidget.ui:439
 #: gtk/ui/gtkprintunixdialog.ui:85
 msgid "Name"
 msgstr "Név"
 
-#: gtk/gtkplacessidebar.c:2521
+#: gtk/gtkplacessidebar.c:2502
 #, c-format
 msgid "Unable to unmount “%s”"
 msgstr "„%s” nem választható le"
 
-#: gtk/gtkplacessidebar.c:2697
+#: gtk/gtkplacessidebar.c:2678
 #, c-format
 msgid "Unable to stop “%s”"
 msgstr "„%s” nem állítható le"
 
-#: gtk/gtkplacessidebar.c:2726
+#: gtk/gtkplacessidebar.c:2707
 #, c-format
 msgid "Unable to eject “%s”"
 msgstr "„%s” nem adható ki"
 
-#: gtk/gtkplacessidebar.c:2755 gtk/gtkplacessidebar.c:2784
+#: gtk/gtkplacessidebar.c:2736 gtk/gtkplacessidebar.c:2765
 #, c-format
 msgid "Unable to eject %s"
 msgstr "%s nem adható ki"
 
-#: gtk/gtkplacessidebar.c:2932
+#: gtk/gtkplacessidebar.c:2913
 #, c-format
 msgid "Unable to poll “%s” for media changes"
 msgstr "A(z) „%s” adathordozó-változásai nem kérdezhetők le"
 
-#: gtk/gtkplacessidebar.c:3151 gtk/gtkplacessidebar.c:3238
+#: gtk/gtkplacessidebar.c:3132 gtk/gtkplacessidebar.c:3219
 #: gtk/gtkplacesview.c:1653
 msgid "Open in New _Tab"
 msgstr "Megnyi_tás új lapon"
 
-#: gtk/gtkplacessidebar.c:3157 gtk/gtkplacessidebar.c:3247
+#: gtk/gtkplacessidebar.c:3138 gtk/gtkplacessidebar.c:3228
 #: gtk/gtkplacesview.c:1658
 msgid "Open in New _Window"
 msgstr "Megnyitás új _ablakban"
 
-#: gtk/gtkplacessidebar.c:3258
+#: gtk/gtkplacessidebar.c:3239
 msgid "_Add Bookmark"
 msgstr "Könyvjelző hozzá_adása"
 
-#: gtk/gtkplacessidebar.c:3262
+#: gtk/gtkplacessidebar.c:3243
 msgid "_Remove"
 msgstr "_Eltávolítás"
 
-#: gtk/gtkplacessidebar.c:3278 gtk/gtkplacesview.c:1683
+#: gtk/gtkplacessidebar.c:3259 gtk/gtkplacesview.c:1683
 msgid "_Mount"
 msgstr "_Csatolás"
 
-#: gtk/gtkplacessidebar.c:3287 gtk/gtkplacesview.c:1672
+#: gtk/gtkplacessidebar.c:3268 gtk/gtkplacesview.c:1672
 msgid "_Unmount"
 msgstr "_Leválasztás"
 
-#: gtk/gtkplacessidebar.c:3294
+#: gtk/gtkplacessidebar.c:3275
 msgid "_Eject"
 msgstr "_Kiadás"
 
-#: gtk/gtkplacessidebar.c:3304
+#: gtk/gtkplacessidebar.c:3285
 msgid "_Detect Media"
 msgstr "A_dathordozó felismerése"
 
-#: gtk/gtkplacessidebar.c:3313
+#: gtk/gtkplacessidebar.c:3294
 msgid "_Start"
 msgstr "In_dítás"
 
-#: gtk/gtkplacessidebar.c:3315
+#: gtk/gtkplacessidebar.c:3296
 msgid "_Power On"
 msgstr "Be_kapcsolás"
 
-#: gtk/gtkplacessidebar.c:3316
+#: gtk/gtkplacessidebar.c:3297
 msgid "_Connect Drive"
 msgstr "Meghajtó _csatlakoztatása"
 
-#: gtk/gtkplacessidebar.c:3317
+#: gtk/gtkplacessidebar.c:3298
 msgid "_Start Multi-disk Device"
 msgstr "_Többlemezes eszköz indítása"
 
-#: gtk/gtkplacessidebar.c:3318
+#: gtk/gtkplacessidebar.c:3299
 msgid "_Unlock Device"
 msgstr "Eszköz fel_oldása"
 
-#: gtk/gtkplacessidebar.c:3328
+#: gtk/gtkplacessidebar.c:3309
 msgid "_Stop"
 msgstr "_Leállítás"
 
-#: gtk/gtkplacessidebar.c:3330
+#: gtk/gtkplacessidebar.c:3311
 msgid "_Safely Remove Drive"
 msgstr "Meghajtó _biztonságos eltávolítása"
 
-#: gtk/gtkplacessidebar.c:3331
+#: gtk/gtkplacessidebar.c:3312
 msgid "_Disconnect Drive"
 msgstr "_Kapcsolat bontása a meghajtóval"
 
-#: gtk/gtkplacessidebar.c:3332
+#: gtk/gtkplacessidebar.c:3313
 msgid "_Stop Multi-disk Device"
 msgstr "_Többlemezes eszköz leállítása"
 
-#: gtk/gtkplacessidebar.c:3333
+#: gtk/gtkplacessidebar.c:3314
 msgid "_Lock Device"
 msgstr "Eszköz _zárolása"
 
-#: gtk/gtkplacessidebar.c:3821 gtk/gtkplacesview.c:1105
+#: gtk/gtkplacessidebar.c:3802 gtk/gtkplacesview.c:1105
 msgid "Computer"
 msgstr "Számítógép"
 
@@ -2557,7 +2370,7 @@ msgstr "A legvalószínűbb ok, hogy egy ideiglenes fájl nem hozható létre."
 
 #. window
 #: gtk/gtkprintoperation-portal.c:236 gtk/gtkprintoperation-portal.c:554
-#: gtk/gtkprintoperation-portal.c:623 gtk/gtkprintunixdialog.c:3027
+#: gtk/gtkprintoperation-portal.c:623 gtk/gtkprintunixdialog.c:3028
 msgid "Print"
 msgstr "Nyomtatás"
 
@@ -2620,19 +2433,19 @@ msgstr "Érvénytelen kezelő a PrintDlgEx-re"
 msgid "Unspecified error"
 msgstr "Meghatározatlan hiba"
 
-#: gtk/gtkprintunixdialog.c:780
+#: gtk/gtkprintunixdialog.c:781
 msgid "Pre_view"
 msgstr "_Előnézet"
 
-#: gtk/gtkprintunixdialog.c:782
+#: gtk/gtkprintunixdialog.c:783
 msgid "_Print"
 msgstr "_Nyomtatás"
 
-#: gtk/gtkprintunixdialog.c:910
+#: gtk/gtkprintunixdialog.c:911
 msgid "Getting printer information failed"
 msgstr "Nyomtatóinformációk lekérése meghiúsult"
 
-#: gtk/gtkprintunixdialog.c:1846
+#: gtk/gtkprintunixdialog.c:1847
 msgid "Getting printer information…"
 msgstr "Nyomtatóinformációk lekérése…"
 
@@ -2642,63 +2455,63 @@ msgstr "Nyomtatóinformációk lekérése…"
 #. Translators: These strings name the possible arrangements of
 #. * multiple pages on a sheet when printing
 #.
-#: gtk/gtkprintunixdialog.c:2772
+#: gtk/gtkprintunixdialog.c:2773
 #: modules/printbackends/gtkprintbackendcups.c:5463
 msgid "Left to right, top to bottom"
 msgstr "Balról jobbra, fentről le"
 
-#: gtk/gtkprintunixdialog.c:2772
+#: gtk/gtkprintunixdialog.c:2773
 #: modules/printbackends/gtkprintbackendcups.c:5463
 msgid "Left to right, bottom to top"
 msgstr "Balról jobbra, lentről fel"
 
-#: gtk/gtkprintunixdialog.c:2773
+#: gtk/gtkprintunixdialog.c:2774
 #: modules/printbackends/gtkprintbackendcups.c:5464
 msgid "Right to left, top to bottom"
 msgstr "Jobbról balra, fentről le"
 
-#: gtk/gtkprintunixdialog.c:2773
+#: gtk/gtkprintunixdialog.c:2774
 #: modules/printbackends/gtkprintbackendcups.c:5464
 msgid "Right to left, bottom to top"
 msgstr "Jobbról balra, lentről fel"
 
-#: gtk/gtkprintunixdialog.c:2774
+#: gtk/gtkprintunixdialog.c:2775
 #: modules/printbackends/gtkprintbackendcups.c:5465
 msgid "Top to bottom, left to right"
 msgstr "Fentről le, balról jobbra"
 
-#: gtk/gtkprintunixdialog.c:2774
+#: gtk/gtkprintunixdialog.c:2775
 #: modules/printbackends/gtkprintbackendcups.c:5465
 msgid "Top to bottom, right to left"
 msgstr "Fentről le, jobbról balra"
 
-#: gtk/gtkprintunixdialog.c:2775
+#: gtk/gtkprintunixdialog.c:2776
 #: modules/printbackends/gtkprintbackendcups.c:5466
 msgid "Bottom to top, left to right"
 msgstr "Lentről fel, balról jobbra"
 
-#: gtk/gtkprintunixdialog.c:2775
+#: gtk/gtkprintunixdialog.c:2776
 #: modules/printbackends/gtkprintbackendcups.c:5466
 msgid "Bottom to top, right to left"
 msgstr "Lentről fel, jobbról balra"
 
-#: gtk/gtkprintunixdialog.c:2779 gtk/gtkprintunixdialog.c:2792
+#: gtk/gtkprintunixdialog.c:2780 gtk/gtkprintunixdialog.c:2793
 msgid "Page Ordering"
 msgstr "Oldalsorrend"
 
-#: gtk/gtkprintunixdialog.c:2808
+#: gtk/gtkprintunixdialog.c:2809
 msgid "Left to right"
 msgstr "Balról jobbra"
 
-#: gtk/gtkprintunixdialog.c:2809
+#: gtk/gtkprintunixdialog.c:2810
 msgid "Right to left"
 msgstr "Jobbról balra"
 
-#: gtk/gtkprintunixdialog.c:2821
+#: gtk/gtkprintunixdialog.c:2822
 msgid "Top to bottom"
 msgstr "Fentről le"
 
-#: gtk/gtkprintunixdialog.c:2822
+#: gtk/gtkprintunixdialog.c:2823
 msgid "Bottom to top"
 msgstr "Lentről fel"
 
@@ -2708,19 +2521,19 @@ msgctxt "progress bar label"
 msgid "%.0f %%"
 msgstr "%.0f %%"
 
-#: gtk/gtkrecentmanager.c:1032 gtk/gtkrecentmanager.c:1045
-#: gtk/gtkrecentmanager.c:1183 gtk/gtkrecentmanager.c:1193
-#: gtk/gtkrecentmanager.c:1243 gtk/gtkrecentmanager.c:1252
+#: gtk/gtkrecentmanager.c:1030 gtk/gtkrecentmanager.c:1043
+#: gtk/gtkrecentmanager.c:1181 gtk/gtkrecentmanager.c:1191
+#: gtk/gtkrecentmanager.c:1241 gtk/gtkrecentmanager.c:1250
 #, c-format
 msgid "Unable to find an item with URI “%s”"
 msgstr "Nem található a következő URI című elem: „%s”"
 
-#: gtk/gtkrecentmanager.c:1267
+#: gtk/gtkrecentmanager.c:1265
 #, c-format
 msgid "Unable to move the item with URI “%s” to “%s”"
 msgstr "Nem helyezhető át a következő URI című elem: „%s” ide: „%s”"
 
-#: gtk/gtkrecentmanager.c:2319
+#: gtk/gtkrecentmanager.c:2317
 #, c-format
 msgid "No registered application with name “%s” for item with URI “%s” found"
 msgstr ""
@@ -2787,26 +2600,26 @@ msgid "Swipe right"
 msgstr "Húzás jobbra"
 
 #. Translators: This is the window title for the shortcuts window in normal mode
-#: gtk/gtkshortcutswindow.c:898 gtk/inspector/window.ui:520
+#: gtk/gtkshortcutswindow.c:876 gtk/inspector/window.ui:520
 msgid "Shortcuts"
 msgstr "Gyorsbillentyűk"
 
 #. Translators: This is the window title for the shortcuts window in search mode
-#: gtk/gtkshortcutswindow.c:903
+#: gtk/gtkshortcutswindow.c:881
 msgid "Search Results"
 msgstr "Találatok"
 
 #. Translators: This is placeholder text for the search entry in the shortcuts window
-#: gtk/gtkshortcutswindow.c:933
+#: gtk/gtkshortcutswindow.c:911
 msgid "Search Shortcuts"
 msgstr "Gyorsbillentyűk keresése"
 
-#: gtk/gtkshortcutswindow.c:992 gtk/ui/gtkemojichooser.ui:338
+#: gtk/gtkshortcutswindow.c:970 gtk/ui/gtkemojichooser.ui:338
 #: gtk/ui/gtkfilechooserwidget.ui:296
 msgid "No Results Found"
 msgstr "Nincs találat"
 
-#: gtk/gtkshortcutswindow.c:998 gtk/ui/gtkemojichooser.ui:351
+#: gtk/gtkshortcutswindow.c:976 gtk/ui/gtkemojichooser.ui:351
 #: gtk/ui/gtkfilechooserwidget.ui:309 gtk/ui/gtkplacesview.ui:231
 msgid "Try a different search"
 msgstr "Próbáljon mást keresni"
@@ -2815,19 +2628,15 @@ msgstr "Próbáljon mást keresni"
 msgid "Could not show link"
 msgstr "Nem jeleníthető meg a hivatkozás"
 
-#: gtk/gtktext.c:5983 gtk/gtktextview.c:8584
+#: gtk/gtktext.c:6001 gtk/gtktextview.c:8600
 msgid "Insert _Emoji"
 msgstr "_Emodzsi beszúrása"
 
-#: gtk/gtktextview.c:8566
-#| msgctxt "Stock label"
-#| msgid "_Undo"
+#: gtk/gtktextview.c:8582
 msgid "_Undo"
 msgstr "_Visszavonás"
 
-#: gtk/gtktextview.c:8570
-#| msgctxt "Stock label"
-#| msgid "_Redo"
+#: gtk/gtktextview.c:8586
 msgid "_Redo"
 msgstr "Mé_gis"
 
@@ -2891,7 +2700,6 @@ msgid "Role"
 msgstr "Szerep"
 
 #: gtk/inspector/a11y.ui:42
-#| msgid "Attribute:"
 msgid "Attribute"
 msgstr "Attribútum"
 
@@ -2983,80 +2791,79 @@ msgstr "Stílusosztályok"
 msgid "CSS Property"
 msgstr "CSS tulajdonság"
 
-#: gtk/inspector/general.c:355
+#: gtk/inspector/general.c:345
 msgctxt "GL version"
 msgid "None"
 msgstr "Nincs"
 
-#: gtk/inspector/general.c:356
+#: gtk/inspector/general.c:346
 msgctxt "GL vendor"
 msgid "None"
 msgstr "Nincs"
 
-#: gtk/inspector/general.c:457
+#: gtk/inspector/general.c:447
 msgctxt "Vulkan device"
 msgid "None"
 msgstr "Nincs"
 
-#: gtk/inspector/general.c:458 gtk/inspector/general.c:459
+#: gtk/inspector/general.c:448 gtk/inspector/general.c:449
 msgctxt "Vulkan version"
 msgid "None"
 msgstr "Nincs"
 
-#: gtk/inspector/general.ui:36
+#: gtk/inspector/general.ui:32
 msgid "GTK Version"
 msgstr "GTK verzió"
 
-#: gtk/inspector/general.ui:66
+#: gtk/inspector/general.ui:58
 msgid "GDK Backend"
 msgstr "GDK háttérprogram"
 
-#: gtk/inspector/general.ui:96
+#: gtk/inspector/general.ui:84
 msgid "GSK Renderer"
 msgstr "GSK megjelenítő"
 
-#: gtk/inspector/general.ui:126
+#: gtk/inspector/general.ui:110
 msgid "Pango Fontmap"
 msgstr "Pango betűkészlettérkép"
 
-#: gtk/inspector/general.ui:156
-#| msgid "GDK Backend"
+#: gtk/inspector/general.ui:136
 msgid "Media Backend"
 msgstr "Média-háttérprogram"
 
-#: gtk/inspector/general.ui:199 gtk/ui/gtkplacesview.ui:80
+#: gtk/inspector/general.ui:175 gtk/ui/gtkplacesview.ui:80
 msgid "Prefix"
 msgstr "Előtag"
 
-#: gtk/inspector/general.ui:429
+#: gtk/inspector/general.ui:377
 msgid "Display"
 msgstr "Kijelző"
 
-#: gtk/inspector/general.ui:460
+#: gtk/inspector/general.ui:404
 msgid "RGBA Visual"
 msgstr "RGBA vizuális"
 
-#: gtk/inspector/general.ui:490
+#: gtk/inspector/general.ui:430
 msgid "Composited"
 msgstr "Kompozitált"
 
-#: gtk/inspector/general.ui:546
+#: gtk/inspector/general.ui:482
 msgid "GL Version"
 msgstr "GL verzió"
 
-#: gtk/inspector/general.ui:577
+#: gtk/inspector/general.ui:509
 msgid "GL Vendor"
 msgstr "GL gyártó"
 
-#: gtk/inspector/general.ui:621
+#: gtk/inspector/general.ui:549
 msgid "Vulkan Device"
 msgstr "Vulkan eszköz"
 
-#: gtk/inspector/general.ui:652
+#: gtk/inspector/general.ui:576
 msgid "Vulkan API version"
 msgstr "Vulkan API verzió"
 
-#: gtk/inspector/general.ui:683
+#: gtk/inspector/general.ui:603
 msgid "Vulkan driver version"
 msgstr "Vulkan meghajtó verziója"
 
@@ -3202,8 +3009,6 @@ msgid "Uneditable property type: %s"
 msgstr "Nem szerkeszthető tulajdonságtípus: %s"
 
 #: gtk/inspector/prop-editor.c:1266
-#| msgctxt "font"
-#| msgid "None"
 msgctxt "column number"
 msgid "None"
 msgstr "Nincs"
@@ -3233,31 +3038,26 @@ msgid "Reset"
 msgstr "Visszaállítás"
 
 #: gtk/inspector/prop-editor.c:1473
-#| msgid "Default"
 msgctxt "GtkSettings source"
 msgid "Default"
 msgstr "Alapértelmezett"
 
 #: gtk/inspector/prop-editor.c:1476
-#| msgid "Theme"
 msgctxt "GtkSettings source"
 msgid "Theme"
 msgstr "Téma"
 
 #: gtk/inspector/prop-editor.c:1479
-#| msgid "XSettings"
 msgctxt "GtkSettings source"
 msgid "XSettings"
 msgstr "X beállítások"
 
 #: gtk/inspector/prop-editor.c:1483
-#| msgid "Application"
 msgctxt "GtkSettings source"
 msgid "Application"
 msgstr "Alkalmazás"
 
 #: gtk/inspector/prop-editor.c:1486
-#| msgid "Unknown"
 msgctxt "GtkSettings source"
 msgid "Unknown"
 msgstr "Ismeretlen"
@@ -3270,7 +3070,7 @@ msgstr "Forrás:"
 msgid "Defined At"
 msgstr "Meghatározva itt:"
 
-#: gtk/inspector/recorder.c:981
+#: gtk/inspector/recorder.c:1035
 #, c-format
 msgid "Saving RenderNode failed"
 msgstr "A RenderNode mentése meghiúsult"
@@ -3308,7 +3108,7 @@ msgid "Count"
 msgstr "Szám"
 
 #: gtk/inspector/resource-list.ui:82 gtk/ui/gtkfilechooserwidget.ui:201
-#: gtk/ui/gtkfontchooserwidget.ui:142 gtk/ui/gtkfontchooserwidget.ui:290
+#: gtk/ui/gtkfontchooserwidget.ui:206 gtk/ui/gtkfontchooserwidget.ui:354
 msgid "Size"
 msgstr "Méret"
 
@@ -3353,7 +3153,6 @@ msgid "Mode"
 msgstr "Mód"
 
 #: gtk/inspector/statistics.c:400
-#| msgid "GLib must be configured with --enable-debug"
 msgid "GLib must be configured with -Dbuildtype=debug"
 msgstr "A GLibet a -Dbuildtype=debug kapcsolóval kell konfigurálni"
 
@@ -3405,91 +3204,87 @@ msgstr "A téma bedrótozva a GTK_THEME-ben"
 msgid "Backend does not support window scaling"
 msgstr "A háttérprogram nem támogatja az ablak átméretezését"
 
-#: gtk/inspector/visual.c:931
-msgid "Setting is hardcoded by GTK_TEST_TOUCHSCREEN"
-msgstr "A beállítás bedrótozva a GTK_TEST_TOUCHSCREEN-ben"
-
-#: gtk/inspector/visual.c:1034
+#: gtk/inspector/visual.c:1023
 msgid "GL rendering is disabled"
 msgstr "GL megjelenítés ki van kapcsolva"
 
-#: gtk/inspector/visual.ui:63
+#: gtk/inspector/visual.ui:59
 msgid "GTK Theme"
 msgstr "GTK téma"
 
-#: gtk/inspector/visual.ui:91
+#: gtk/inspector/visual.ui:83
 msgid "Dark Variant"
 msgstr "Sötét változat"
 
-#: gtk/inspector/visual.ui:120
+#: gtk/inspector/visual.ui:108
 msgid "Cursor Theme"
 msgstr "Kurzortéma"
 
-#: gtk/inspector/visual.ui:149
+#: gtk/inspector/visual.ui:133
 msgid "Cursor Size"
 msgstr "Kurzorméret"
 
-#: gtk/inspector/visual.ui:182
+#: gtk/inspector/visual.ui:162
 msgid "Icon Theme"
 msgstr "Ikontéma"
 
-#: gtk/inspector/visual.ui:240
+#: gtk/inspector/visual.ui:212
 msgid "Font Scale"
 msgstr "Betűkészlet méretezése"
 
-#: gtk/inspector/visual.ui:281
+#: gtk/inspector/visual.ui:249
 msgid "Text Direction"
 msgstr "Szövegirány"
 
-#: gtk/inspector/visual.ui:296
+#: gtk/inspector/visual.ui:264
 msgid "Left-to-Right"
 msgstr "Balról jobbra"
 
-#: gtk/inspector/visual.ui:297
+#: gtk/inspector/visual.ui:265
 msgid "Right-to-Left"
 msgstr "Jobbról balra"
 
-#: gtk/inspector/visual.ui:319
+#: gtk/inspector/visual.ui:283
 msgid "Window Scaling"
 msgstr "Ablakok méretezése"
 
-#: gtk/inspector/visual.ui:349
+#: gtk/inspector/visual.ui:309
 msgid "Animations"
 msgstr "Animációk"
 
-#: gtk/inspector/visual.ui:378
+#: gtk/inspector/visual.ui:334
 msgid "Slowdown"
 msgstr "Lassulás"
 
-#: gtk/inspector/visual.ui:432
+#: gtk/inspector/visual.ui:384
 msgid "Show fps overlay"
 msgstr "Másodpercenkénti képkockaszám rátét megjelenítése"
 
-#: gtk/inspector/visual.ui:461
+#: gtk/inspector/visual.ui:409
 msgid "Show Graphic Updates"
 msgstr "Grafikai frissítések megjelenítése"
 
-#: gtk/inspector/visual.ui:490
+#: gtk/inspector/visual.ui:434
 msgid "Show Fallback Rendering"
 msgstr "Tartalék renderelés megjelenítése"
 
-#: gtk/inspector/visual.ui:519
+#: gtk/inspector/visual.ui:459
 msgid "Show Baselines"
 msgstr "Alapvonalak megjelenítése"
 
-#: gtk/inspector/visual.ui:548
+#: gtk/inspector/visual.ui:484
 msgid "Show Layout Borders"
 msgstr "Elrendezési határvonalak megjelenítése"
 
-#: gtk/inspector/visual.ui:577
+#: gtk/inspector/visual.ui:509
 msgid "Show Focus"
 msgstr "Fókusz megjelenítése"
 
-#: gtk/inspector/visual.ui:620
+#: gtk/inspector/visual.ui:548
 msgid "Simulate Touchscreen"
 msgstr "Érintőképernyő szimulálása"
 
-#: gtk/inspector/visual.ui:648
+#: gtk/inspector/visual.ui:572
 msgid "Software GL"
 msgstr "Szoftveres GL"
 
@@ -3526,25 +3321,18 @@ msgid "Refresh action state"
 msgstr "Műveletállapot frissítése"
 
 #: gtk/inspector/window.ui:340
-#| msgctxt "Stock label, media"
-#| msgid "Pre_vious"
 msgid "Previous object"
 msgstr "Előző objektum"
 
 #: gtk/inspector/window.ui:350
-#| msgid "Child Visible"
 msgid "Child object"
 msgstr "Gyermekobjektum"
 
 #: gtk/inspector/window.ui:360
-#| msgctxt "Stock label, media"
-#| msgid "Pre_vious"
 msgid "Previous sibling"
 msgstr "Előző testvér"
 
 #: gtk/inspector/window.ui:369
-#| msgctxt "OpenType layout"
-#| msgid "Cursive Positioning"
 msgid "List Position"
 msgstr "Listapozíció"
 
@@ -3589,7 +3377,6 @@ msgid "Magnifier"
 msgstr "Nagyító"
 
 #: gtk/inspector/window.ui:530
-#| msgid "Accessible Role"
 msgid "Accessibility"
 msgstr "Akadálymentesítés"
 
@@ -6002,14 +5789,12 @@ msgstr ""
 
 #: gtk/tools/gtk-builder-tool-simplify.c:488
 #, c-format
-#| msgid "%s: Couldn’t parse value for %s: %s\n"
 msgid "%s:%d: Couldn’t parse value for property '%s': %s\n"
 msgstr ""
 "%s:%d: Nem sikerült feldolgozni az értéket a(z) „%s” tulajdonsághoz: %s\n"
 
 #: gtk/tools/gtk-builder-tool-simplify.c:624
 #, c-format
-#| msgid "%s: %sproperty %s::%s not found\n"
 msgid "%s:%d: %sproperty %s::%s not found\n"
 msgstr "%s:%d: %stulajdonság %s::%s nem található\n"
 
@@ -6302,7 +6087,6 @@ msgid "V"
 msgstr "V"
 
 #: gtk/ui/gtkdropdown.ui:62
-#| msgid "Search"
 msgid "Search…"
 msgstr "Keresés…"
 
@@ -6376,19 +6160,31 @@ msgstr "_Létrehozás"
 msgid "Select Font"
 msgstr "Betűkészlet kiválasztása"
 
-#: gtk/ui/gtkfontchooserwidget.ui:55
+#: gtk/ui/gtkfontchooserwidget.ui:64
 msgid "Search font name"
 msgstr "Betűkészletnév keresése"
 
-#: gtk/ui/gtkfontchooserwidget.ui:126 gtk/ui/gtkfontchooserwidget.ui:263
+#: gtk/ui/gtkfontchooserwidget.ui:79
+msgid "Filter by"
+msgstr "Szűrési szempont"
+
+#: gtk/ui/gtkfontchooserwidget.ui:89
+msgid "Monospace"
+msgstr "Rögzített szélességű"
+
+#: gtk/ui/gtkfontchooserwidget.ui:95
+msgid "Language"
+msgstr "Nyelv"
+
+#: gtk/ui/gtkfontchooserwidget.ui:190 gtk/ui/gtkfontchooserwidget.ui:327
 msgid "Preview text"
 msgstr "Mintaszöveg"
 
-#: gtk/ui/gtkfontchooserwidget.ui:129 gtk/ui/gtkfontchooserwidget.ui:159
+#: gtk/ui/gtkfontchooserwidget.ui:193 gtk/ui/gtkfontchooserwidget.ui:223
 msgid "horizontal"
 msgstr "vízszintes"
 
-#: gtk/ui/gtkfontchooserwidget.ui:209
+#: gtk/ui/gtkfontchooserwidget.ui:273
 msgid "No Fonts Found"
 msgstr "Nem találhatók betűkészletek"
 
@@ -7256,6 +7052,153 @@ msgstr "Nem érhető el profil"
 #: modules/printbackends/gtkprintercups.c:298
 msgid "Unspecified profile"
 msgstr "Meghatározatlan profil"
+
+#~ msgctxt "Color name"
+#~ msgid "Light Scarlet Red"
+#~ msgstr "Világos skarlátvörös"
+
+#~ msgctxt "Color name"
+#~ msgid "Scarlet Red"
+#~ msgstr "Skarlátvörös"
+
+#~ msgctxt "Color name"
+#~ msgid "Dark Scarlet Red"
+#~ msgstr "Sötét skarlátvörös"
+
+#~ msgctxt "Color name"
+#~ msgid "Light Orange"
+#~ msgstr "Világos narancs"
+
+#~ msgctxt "Color name"
+#~ msgid "Orange"
+#~ msgstr "Narancs"
+
+#~ msgctxt "Color name"
+#~ msgid "Dark Orange"
+#~ msgstr "Sötét narancs"
+
+#~ msgctxt "Color name"
+#~ msgid "Light Butter"
+#~ msgstr "Világos vajszín"
+
+#~ msgctxt "Color name"
+#~ msgid "Butter"
+#~ msgstr "Vajszín"
+
+#~ msgctxt "Color name"
+#~ msgid "Dark Butter"
+#~ msgstr "Sötét vajszín"
+
+#~ msgctxt "Color name"
+#~ msgid "Light Chameleon"
+#~ msgstr "Világos kaméleon"
+
+#~ msgctxt "Color name"
+#~ msgid "Chameleon"
+#~ msgstr "Kaméleon"
+
+#~ msgctxt "Color name"
+#~ msgid "Dark Chameleon"
+#~ msgstr "Sötét kaméleon"
+
+#~ msgctxt "Color name"
+#~ msgid "Light Sky Blue"
+#~ msgstr "Világos égkék"
+
+#~ msgctxt "Color name"
+#~ msgid "Sky Blue"
+#~ msgstr "Égkék"
+
+#~ msgctxt "Color name"
+#~ msgid "Dark Sky Blue"
+#~ msgstr "Sötét égkék"
+
+#~ msgctxt "Color name"
+#~ msgid "Light Plum"
+#~ msgstr "Világos szilva"
+
+#~ msgctxt "Color name"
+#~ msgid "Plum"
+#~ msgstr "Szilva"
+
+#~ msgctxt "Color name"
+#~ msgid "Dark Plum"
+#~ msgstr "Sötét szilva"
+
+#~ msgctxt "Color name"
+#~ msgid "Light Chocolate"
+#~ msgstr "Világos csokoládé"
+
+#~ msgctxt "Color name"
+#~ msgid "Chocolate"
+#~ msgstr "Csokoládé"
+
+#~ msgctxt "Color name"
+#~ msgid "Dark Chocolate"
+#~ msgstr "Sötét csokoládé"
+
+#~ msgctxt "Color name"
+#~ msgid "Light Aluminum 1"
+#~ msgstr "Világos alumínium 1"
+
+#~ msgctxt "Color name"
+#~ msgid "Aluminum 1"
+#~ msgstr "Alumínium 1"
+
+#~ msgctxt "Color name"
+#~ msgid "Dark Aluminum 1"
+#~ msgstr "Sötét alumínium 1"
+
+#~ msgctxt "Color name"
+#~ msgid "Light Aluminum 2"
+#~ msgstr "Világos alumínium 2"
+
+#~ msgctxt "Color name"
+#~ msgid "Aluminum 2"
+#~ msgstr "Alumínium 2"
+
+#~ msgctxt "Color name"
+#~ msgid "Dark Aluminum 2"
+#~ msgstr "Sötét alumínium 2"
+
+#~ msgctxt "Color name"
+#~ msgid "Black"
+#~ msgstr "Fekete"
+
+#~ msgctxt "Color name"
+#~ msgid "Very Dark Gray"
+#~ msgstr "Nagyon sötét szürke"
+
+#~ msgctxt "Color name"
+#~ msgid "Darker Gray"
+#~ msgstr "Sötétebb szürke"
+
+#~ msgctxt "Color name"
+#~ msgid "Dark Gray"
+#~ msgstr "Sötétszürke"
+
+#~ msgctxt "Color name"
+#~ msgid "Medium Gray"
+#~ msgstr "Közepesszürke"
+
+#~ msgctxt "Color name"
+#~ msgid "Light Gray"
+#~ msgstr "Világosszürke"
+
+#~ msgctxt "Color name"
+#~ msgid "Lighter Gray"
+#~ msgstr "Világosabb szürke"
+
+#~ msgctxt "Color name"
+#~ msgid "Very Light Gray"
+#~ msgstr "Nagyon világos szürke"
+
+#~ msgctxt "Color name"
+#~ msgid "White"
+#~ msgstr "Fehér"
+
+#~ msgid "Setting is hardcoded by GTK_TEST_TOUCHSCREEN"
+#~ msgstr "A beállítás bedrótozva a GTK_TEST_TOUCHSCREEN-ben"
 
 #~ msgid "Not implemented on OS X"
 #~ msgstr "Nincs megvalósítva OS X rendszeren"
