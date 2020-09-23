@@ -3255,6 +3255,9 @@ calendar {
       background: none;
       border-radius: 0;
     }
+    > button:backdrop {
+      background: none;
+    }
   }
 
   > grid {
