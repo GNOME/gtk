@@ -834,10 +834,10 @@ maybe_clip (GskRenderNode         *node,
 }
 
 static GskRenderNode *
-gtk_snapshot_collect_glshader (GtkSnapshot      *snapshot,
-                               GtkSnapshotState *state,
-                               GskRenderNode   **nodes,
-                               guint             n_nodes)
+gtk_snapshot_collect_gl_shader (GtkSnapshot      *snapshot,
+                                GtkSnapshotState *state,
+                                GskRenderNode   **nodes,
+                                guint             n_nodes)
 {
   GskRenderNode *shader_node = NULL, *child_node;
   GdkRGBA transparent = { 0, 0, 0, 0 };
@@ -880,7 +880,7 @@ gtk_snapshot_collect_glshader (GtkSnapshot      *snapshot,
 }
 
 /**
- * gtk_snapshot_push_glshader:
+ * gtk_snapshot_push_gl_shader:
  * @snapshot: a #GtkSnapshot
  * @shader: The code to run
  * @bounds: the rectangle to render into
@@ -893,21 +893,22 @@ gtk_snapshot_collect_glshader (GtkSnapshot      *snapshot,
  *
  * The fallback node is used if GLSL shaders are not supported by the backend, or if
  * there is any problem compiling the shader. The fallback node needs to be pushed
- * directly after the gtk_snapshot_push_glshader() call up until the first  call to gtk_snapshot_pop().
+ * directly after the gtk_snapshot_push_gl_shader() call up until the first  call
+ * to gtk_snapshot_pop().
  *
- * If @n_children > 0, then it is expected that you (after the fallback call gtk_snapshot_pop()
- * @n_children times. Each of these will generate a node that is added as a child to the
- * glshader node, which in turn will render these to textures and pass as arguments to the
- * shader.
+ * If @n_children > 0, then it is expected that you (after the fallback call
+ * gtk_snapshot_pop() @n_children times. Each of these will generate a node that
+ * is added as a child to the gl shader node, which in turn will render these to
+ * textures and pass as arguments to the shader.
  *
  * For details on how to write shaders, see #GskGLShader.
  */
 void
-gtk_snapshot_push_glshader (GtkSnapshot           *snapshot,
-                            GskGLShader           *shader,
-                            const graphene_rect_t *bounds,
-                            GBytes                *uniform_data,
-                            int                    n_children)
+gtk_snapshot_push_gl_shader (GtkSnapshot           *snapshot,
+                             GskGLShader           *shader,
+                             const graphene_rect_t *bounds,
+                             GBytes                *uniform_data,
+                             int                    n_children)
 {
   GtkSnapshotState *state;
   float scale_x, scale_y, dx, dy;
@@ -919,7 +920,7 @@ gtk_snapshot_push_glshader (GtkSnapshot           *snapshot,
 
   state = gtk_snapshot_push_state (snapshot,
                                    gtk_snapshot_get_current_state (snapshot)->transform,
-                                   gtk_snapshot_collect_glshader);
+                                   gtk_snapshot_collect_gl_shader);
   gtk_graphene_rect_scale_affine (bounds, scale_x, scale_y, dx, dy, &transformed_bounds);
   state->data.glshader.bounds = transformed_bounds;
   state->data.glshader.shader = g_object_ref (shader);
@@ -935,7 +936,7 @@ gtk_snapshot_push_glshader (GtkSnapshot           *snapshot,
     {
       state = gtk_snapshot_push_state (snapshot,
                                        gtk_snapshot_get_current_state (snapshot)->transform,
-                                       gtk_snapshot_collect_glshader);
+                                       gtk_snapshot_collect_gl_shader);
       state->data.glshader.node_idx = node_idx--;
       state->data.glshader.n_children = n_children;
       state->data.glshader.nodes = nodes;
@@ -945,7 +946,7 @@ gtk_snapshot_push_glshader (GtkSnapshot           *snapshot,
 
 
 /**
- * gtk_snapshot_push_glshader_va:
+ * gtk_snapshot_push_gl_shader_va:
  * @snapshot: a #GtkSnapshot
  * @shader: The code to run
  * @bounds: the rectangle to render into
@@ -953,28 +954,29 @@ gtk_snapshot_push_glshader (GtkSnapshot           *snapshot,
  * @uniforms: Name-Value pairs for the uniforms of @shader, ending with a %NULL name, all values are passed by reference.
  *
  * Renders a rectangle with output from a GLSL shader. This is the same as
- * gtk_snapshot_push_glshader() but it takes a var-arg list of uniform variables
- * to make it easier to use from C. See gtk_snapshot_push_glshader() for details
+ * gtk_snapshot_push_gl_shader() but it takes a var-arg list of uniform variables
+ * to make it easier to use from C. See gtk_snapshot_push_gl_shader() for details
  * of the behaviour not related to the varargs.
  *
- * The @uniforms argument is a %NULL separated list of Name-Value pairs for the uniforms of @shader.
- * All the values are passed by reference, so you will need to pass a pointer to a float, etc.
+ * The @uniforms argument is a %NULL separated list of Name-Value pairs for the
+ * uniforms of @shader. All the values are passed by reference, so you will need
+ * to pass a pointer to a float, etc.
  */
 void
-gtk_snapshot_push_glshader_va (GtkSnapshot           *snapshot,
-                               GskGLShader           *shader,
-                               const graphene_rect_t *bounds,
-                               int                    n_children,
-                               va_list                uniforms)
+gtk_snapshot_push_gl_shader_va (GtkSnapshot           *snapshot,
+                                GskGLShader           *shader,
+                                const graphene_rect_t *bounds,
+                                int                    n_children,
+                                va_list                uniforms)
 {
   GBytes *uniform_data = gsk_gl_shader_format_uniform_data_va (shader, uniforms);
-  gtk_snapshot_push_glshader (snapshot, shader, bounds,
-                              uniform_data, n_children);
+  gtk_snapshot_push_gl_shader (snapshot, shader, bounds,
+                               uniform_data, n_children);
   g_bytes_unref (uniform_data);
 }
 
 /**
- * gtk_snapshot_push_glshader_v:
+ * gtk_snapshot_push_gl_shader_v:
  * @snapshot: a #GtkSnapshot
  * @shader: The code to run
  * @bounds: the rectangle to render into
@@ -982,24 +984,25 @@ gtk_snapshot_push_glshader_va (GtkSnapshot           *snapshot,
  * @...: Name-Value pairs for the uniforms of @shader, ending with a %NULL name, all values are passed by reference.
  *
  * Renders a rectangle with output from a GLSL shader. This is the same as
- * gtk_snapshot_push_glshader() but it takes a var-arg list of uniform variables
- * to make it easier to use from C. See gtk_snapshot_push_glshader() for details
+ * gtk_snapshot_push_gl_shader() but it takes a var-arg list of uniform variables
+ * to make it easier to use from C. See gtk_snapshot_push_gl_shader() for details
  * of the behaviour not related to the varargs.
  *
- * The @... argument is a %NULL separated list of Name-Value pairs for the uniforms of @shader.
- * All the values are passed by reference, so you will need to pass a pointer to a float, etc.
+ * The @... argument is a %NULL separated list of Name-Value pairs for the
+ * uniforms of @shader. All the values are passed by reference, so you will
+ * need to pass a pointer to a float, etc.
  */
 void
-gtk_snapshot_push_glshader_v (GtkSnapshot           *snapshot,
-                              GskGLShader           *shader,
-                              const graphene_rect_t *bounds,
-                              int                    n_children,
-                              ...)
+gtk_snapshot_push_gl_shader_v (GtkSnapshot           *snapshot,
+                               GskGLShader           *shader,
+                               const graphene_rect_t *bounds,
+                               int                    n_children,
+                               ...)
 {
   va_list args;
 
   va_start (args, n_children);
-  gtk_snapshot_push_glshader_va (snapshot, shader, bounds, n_children, args);
+  gtk_snapshot_push_gl_shader_va (snapshot, shader, bounds, n_children, args);
   va_end (args);
 }
 

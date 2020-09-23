@@ -236,12 +236,12 @@ gtk_shader_stack_snapshot (GtkWidget   *widget,
           progress = 1. - progress;
         }
 
-      gtk_snapshot_push_glshader_v (snapshot,
-                                    self->shader,
-                                    &GRAPHENE_RECT_INIT(0, 0, width, height),
-                                    2,
-                                    "progress", &progress,
-                                    NULL);
+      gtk_snapshot_push_gl_shader_v (snapshot,
+                                     self->shader,
+                                     &GRAPHENE_RECT_INIT(0, 0, width, height),
+                                     2,
+                                     "progress", &progress,
+                                     NULL);
       gtk_widget_snapshot_child (widget, next, snapshot);
       gtk_snapshot_pop (snapshot); /* Fallback */
       gtk_widget_snapshot_child (widget, current, snapshot);
