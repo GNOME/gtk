@@ -779,7 +779,7 @@ gsk_gl_shader_get_uniform_data_vec2 (GskGLShader           *shader,
   g_assert (size == shader->uniforms_size);
   g_assert (idx < shader->uniforms->len);
   u = &g_array_index (shader->uniforms, GskGLUniform, idx);
-  g_assert (u->type == GSK_GLUNIFORM_TYPE_FLOAT);
+  g_assert (u->type == GSK_GLUNIFORM_TYPE_VEC2);
 
   args_src = data + u->offset;
   graphene_vec2_init_from_float (out_value, (float *)args_src);
@@ -809,7 +809,7 @@ gsk_gl_shader_get_uniform_data_vec3 (GskGLShader           *shader,
   g_assert (size == shader->uniforms_size);
   g_assert (idx < shader->uniforms->len);
   u = &g_array_index (shader->uniforms, GskGLUniform, idx);
-  g_assert (u->type == GSK_GLUNIFORM_TYPE_FLOAT);
+  g_assert (u->type == GSK_GLUNIFORM_TYPE_VEC3);
 
   args_src = data + u->offset;
   graphene_vec3_init_from_float (out_value, (float *)args_src);
@@ -839,7 +839,7 @@ gsk_gl_shader_get_uniform_data_vec4 (GskGLShader           *shader,
   g_assert (size == shader->uniforms_size);
   g_assert (idx < shader->uniforms->len);
   u = &g_array_index (shader->uniforms, GskGLUniform, idx);
-  g_assert (u->type == GSK_GLUNIFORM_TYPE_FLOAT);
+  g_assert (u->type == GSK_GLUNIFORM_TYPE_VEC4);
 
   args_src = data + u->offset;
   graphene_vec4_init_from_float (out_value, (float *)args_src);
@@ -1127,7 +1127,7 @@ gsk_uniform_data_builder_set_vec2 (GskUniformDataBuilder *builder,
 
   g_assert (idx < shader->uniforms->len);
   u = &g_array_index (shader->uniforms, GskGLUniform, idx);
-  g_assert (u->type == GSK_GLUNIFORM_TYPE_FLOAT);
+  g_assert (u->type == GSK_GLUNIFORM_TYPE_VEC2);
 
   args_dest = builder->data + u->offset;
   graphene_vec2_to_float (value, (float *)args_dest);
@@ -1153,7 +1153,7 @@ gsk_uniform_data_builder_set_vec3 (GskUniformDataBuilder *builder,
 
   g_assert (idx < shader->uniforms->len);
   u = &g_array_index (shader->uniforms, GskGLUniform, idx);
-  g_assert (u->type == GSK_GLUNIFORM_TYPE_FLOAT);
+  g_assert (u->type == GSK_GLUNIFORM_TYPE_VEC3);
 
   args_dest = builder->data + u->offset;
   graphene_vec3_to_float (value, (float *)args_dest);
@@ -1179,7 +1179,7 @@ gsk_uniform_data_builder_set_vec4 (GskUniformDataBuilder *builder,
 
   g_assert (idx < shader->uniforms->len);
   u = &g_array_index (shader->uniforms, GskGLUniform, idx);
-  g_assert (u->type == GSK_GLUNIFORM_TYPE_FLOAT);
+  g_assert (u->type == GSK_GLUNIFORM_TYPE_VEC4);
 
   args_dest = builder->data + u->offset;
   graphene_vec4_to_float (value, (float *)args_dest);
