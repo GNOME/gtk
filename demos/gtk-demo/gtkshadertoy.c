@@ -56,13 +56,15 @@ const char *fragment_prefix =
   "uniform float     iSampleRate;           // sound sample rate (i.e., 44100)\n"
   "\n"
   "in vec2 fragCoord;\n"
-  "out vec4 fragColor;\n";
+  "out vec4 vFragColor;\n";
 
 
 // Fragment shader suffix
 const char *fragment_suffix =
   "    void main() {\n"
-  "        mainImage(fragColor, fragCoord);\n"
+  "        vec4 c;\n"
+  "        mainImage(c, fragCoord);\n"
+  "         vFragColor = c;\n"
   "    }\n";
 
 typedef struct {
