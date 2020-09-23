@@ -39,6 +39,30 @@ gsk_gl_shader_builder_set_glsl_version (GskGLShaderBuilder *self,
   self->version = version;
 }
 
+static void
+prepend_line_numbers (char    *code,
+                      GString *s)
+{
+  char *p;
+  int line;
+
+  p = code;
+  line = 1;
+  while (*p)
+    {
+      char *end = strchr (p, '\n');
+      if (end)
+        end = end + 1; /* Include newline */
+      else
+        end = p + strlen (p);
+
+      g_string_append_printf (s, "%3d| ", line++);
+      g_string_append_len (s, p, end - p);
+
+      p = end;
+    }
+}
+
 static gboolean
 check_shader_error (int     shader_id,
                     GError **error)
@@ -47,8 +71,7 @@ check_shader_error (int     shader_id,
   int log_len;
   char *buffer;
   int code_len;
-  int line;
-  char *code, *p;
+  char *code;
   GString *s;
 
   glGetShaderiv (shader_id, GL_COMPILE_STATUS, &status);
@@ -65,21 +88,7 @@ check_shader_error (int     shader_id,
   glGetShaderSource (shader_id, code_len, NULL, code);
 
   s = g_string_new ("");
-  p = code;
-  line = 1;
-  while (*p)
-    {
-      char *end = strchr (p, '\n');
-      if (end)
-        end = end + 1; /* Include newline */
-      else
-        end = p + strlen (p);
-
-      g_string_append_printf (s, "%3d| ", line++);
-      g_string_append_len (s, p, end - p);
-
-      p = end;
-    }
+  prepend_line_numbers (code, s);
 
   g_set_error (error, GDK_GL_ERROR, GDK_GL_ERROR_COMPILATION_FAILED,
                "Compilation failure in shader.\nError message: %s\n\nSource code:\n%s\n\n",
@@ -91,6 +100,30 @@ check_shader_error (int     shader_id,
   g_free (code);
 
   return FALSE;
+}
+
+static void
+print_shader_info (const char *prefix,
+                   int         shader_id,
+                   const char *resource_path)
+{
+  if (GSK_DEBUG_CHECK(SHADERS))
+    {
+      int code_len;
+      char *code;
+      GString *s;
+
+      glGetShaderiv (shader_id, GL_SHADER_SOURCE_LENGTH, &code_len);
+      code = g_malloc0 (code_len + 1);
+      glGetShaderSource (shader_id, code_len, NULL, code);
+
+      s = g_string_new ("");
+      prepend_line_numbers (code, s);
+
+      g_message ("%s %d, %s:\n%s", prefix, shader_id, resource_path, s->str);
+      g_string_free (s,  TRUE);
+      g_free (code);
+    }
 }
 
 int
@@ -157,6 +190,8 @@ gsk_gl_shader_builder_create_program (GskGLShaderBuilder  *self,
       goto out;
     }
 
+  print_shader_info ("Vertex shader", vertex_id, resource_path);
+
   fragment_id = glCreateShader (GL_FRAGMENT_SHADER);
   glShaderSource (fragment_id, 9,
                   (const char *[]) {
@@ -188,6 +223,8 @@ gsk_gl_shader_builder_create_program (GskGLShaderBuilder  *self,
       glDeleteShader (fragment_id);
       goto out;
     }
+
+  print_shader_info ("Fragment shader", vertex_id, resource_path);
 
   program_id = glCreateProgram ();
   glAttachShader (program_id, vertex_id);
