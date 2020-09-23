@@ -44,6 +44,8 @@
  * Returns: %TRUE on success, %FALSE on error
  *
  * Since: 2.14
+ *
+ * Deprecated: 3.22: Use gtk_show_uri_on_window() instead.
  */
 gboolean
 gtk_show_uri (GdkScreen    *screen,
