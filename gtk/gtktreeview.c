@@ -8616,13 +8616,13 @@ gtk_tree_view_build_tree (GtkTreeView   *tree_view,
 	  else
 	    gtk_tree_path_next (path);
 
-	  if (gtk_tree_model_iter_children (priv->model, &child, iter))
+	  if (gtk_tree_model_iter_has_child (priv->model, iter))
 	    {
 	      gboolean expand;
 
 	      g_signal_emit (tree_view, tree_view_signals[TEST_EXPAND_ROW], 0, iter, path, &expand);
 
-	      if (gtk_tree_model_iter_has_child (priv->model, iter)
+	      if (gtk_tree_model_iter_children (priv->model, &child, iter)
 		  && !expand)
 	        {
 	          temp->children = gtk_tree_rbtree_new ();
