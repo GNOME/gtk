@@ -149,10 +149,10 @@ gtk_css_image_fallback_compute (GtkCssImage      *image,
 
       if (fallback->color)
           computed_color= _gtk_css_value_compute (fallback->color,
-                                                           property_id,
-                                                           provider,
-                                                           style,
-                                                           parent_style);
+                                                  property_id,
+                                                  provider,
+                                                  style,
+                                                  parent_style);
 
       /* image($color) that didn't change */
       if (computed_color && !fallback->images &&
