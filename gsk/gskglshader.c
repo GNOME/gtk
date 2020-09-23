@@ -19,12 +19,12 @@
 /**
  * SECTION:GskGLShader
  * @Title: GskGLShader
- * @Short_description: A description of GskGLShader
+ * @Short_description: Fragment shaders for GSK
  *
  * A #GskGLShader is a snippet of GLSL that is meant to run in the
- * fragment shader of the rendering pipeline. A fragment shader it
+ * fragment shader of the rendering pipeline. A fragment shader
  * gets the coordinates being rendered as input and produces the
- * pixel values for that particular pixel. Additionally the
+ * pixel values for that particular pixel. Additionally, the
  * shader can declare a set of other input arguments, called
  * uniforms (as they are uniform over all the calls to your shader in
  * each instance of use). A shader can also receive up to 4
