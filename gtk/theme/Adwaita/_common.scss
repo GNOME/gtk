@@ -1078,7 +1078,8 @@ spinbutton {
       @extend %spinbutton_horz_entry;
     }
 
-    > button {
+    > button.image-button.up:not(.flat),
+    > button.image-button.down:not(.flat) {
       @include button(undecorated);
 
       color: $osd_fg_color;
