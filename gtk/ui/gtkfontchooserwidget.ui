@@ -159,6 +159,7 @@
         <property name="margin-top">10</property>
         <property name="margin-bottom">10</property>
         <property name="ellipsize">end</property>
+        <property name="xalign">0</property>
         <binding name="label">
           <closure type="gchararray" function="get_font_name">
             <lookup name="item">GtkListItem</lookup>
