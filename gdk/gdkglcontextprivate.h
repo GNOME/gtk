@@ -23,6 +23,7 @@
 
 #include "gdkglcontext.h"
 #include "gdkdrawcontextprivate.h"
+#include "gdkmemorytexture.h"
 
 G_BEGIN_DECLS
 
@@ -84,6 +85,7 @@ void                    gdk_gl_context_upload_texture           (GdkGLContext   
                                                                  int              width,
                                                                  int              height,
                                                                  int              stride,
+                                                                 GdkMemoryFormat  data_format,
                                                                  guint            texture_target);
 GdkGLContextPaintData * gdk_gl_context_get_paint_data           (GdkGLContext    *context);
 gboolean                gdk_gl_context_use_texture_rectangle    (GdkGLContext    *context);

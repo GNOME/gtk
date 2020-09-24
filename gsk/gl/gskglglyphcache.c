@@ -7,6 +7,7 @@
 #include "gskgltextureatlasprivate.h"
 
 #include "gdk/gdkglcontextprivate.h"
+#include "gdk/gdkmemorytextureprivate.h"
 
 #include <graphene.h>
 #include <cairo.h>
@@ -186,6 +187,10 @@ upload_glyph (GlyphCacheKey    *key,
               GskGLCachedGlyph *value)
 {
   GskImageRegion r;
+  guchar *pixel_data;
+  guchar *free_data = NULL;
+  guint gl_format;
+  guint gl_type;
 
   gdk_gl_context_push_debug_group_printf (gdk_gl_context_get_current (),
                                           "Uploading glyph %d",
@@ -197,15 +202,27 @@ upload_glyph (GlyphCacheKey    *key,
       glBindTexture (GL_TEXTURE_2D, value->texture_id);
 
       if (gdk_gl_context_get_use_es (gdk_gl_context_get_current ()))
-        glTexSubImage2D (GL_TEXTURE_2D, 0, r.x, r.y, r.width, r.height,
-                         GL_RGBA, GL_UNSIGNED_BYTE,
-                         r.data);
+        {
+          pixel_data = free_data = g_malloc (r.width * r.height * 4);
+          gdk_memory_convert (pixel_data, r.width * 4,
+                              GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
+                              r.data, r.width * 4,
+                              GDK_MEMORY_DEFAULT, r.width, r.height);
+          gl_format = GL_RGBA;
+          gl_type = GL_UNSIGNED_BYTE;
+        }
       else
-        glTexSubImage2D (GL_TEXTURE_2D, 0, r.x, r.y, r.width, r.height,
-                         GL_BGRA, GL_UNSIGNED_INT_8_8_8_8_REV,
-                         r.data);
+        {
+          pixel_data = r.data;
+          gl_format = GL_BGRA;
+          gl_type = GL_UNSIGNED_INT_8_8_8_8_REV;
+        }
+
+      glTexSubImage2D (GL_TEXTURE_2D, 0, r.x, r.y, r.width, r.height,
+                       gl_format, gl_type, pixel_data);
       glPixelStorei (GL_UNPACK_ROW_LENGTH, 0);
       g_free (r.data);
+      g_free (free_data);
     }
 
   gdk_gl_context_pop_debug_group (gdk_gl_context_get_current ());

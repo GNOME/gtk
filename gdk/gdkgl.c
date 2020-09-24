@@ -482,6 +482,7 @@ gdk_cairo_surface_upload_to_gl (cairo_surface_t *surface,
                                  rect.width,
                                  rect.height,
                                  cairo_image_surface_get_stride (tmp),
+                                 GDK_MEMORY_DEFAULT,
                                  target);
 
   cairo_surface_unmap_image (surface, tmp);
