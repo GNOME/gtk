@@ -130,28 +130,6 @@ gdk_texture_real_download (GdkTexture         *self,
   GDK_TEXTURE_WARN_NOT_IMPLEMENTED_METHOD (self, download);
 }
 
-static cairo_surface_t *
-gdk_texture_real_download_surface (GdkTexture *texture)
-{
-  cairo_surface_t *surface;
-  cairo_status_t surface_status;
-
-  surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
-                                        texture->width, texture->height);
-
-  surface_status = cairo_surface_status (surface);
-  if (surface_status != CAIRO_STATUS_SUCCESS)
-    g_warning ("%s: surface error: %s", __FUNCTION__,
-               cairo_status_to_string (surface_status));
-
-  gdk_texture_download (texture,
-                        cairo_image_surface_get_data (surface),
-                        cairo_image_surface_get_stride (surface));
-  cairo_surface_mark_dirty (surface);
-
-  return surface;
-}
-
 static void
 gdk_texture_set_property (GObject      *gobject,
                           guint         prop_id,
@@ -216,7 +194,6 @@ gdk_texture_class_init (GdkTextureClass *klass)
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
 
   klass->download = gdk_texture_real_download;
-  klass->download_surface = gdk_texture_real_download_surface;
 
   gobject_class->set_property = gdk_texture_set_property;
   gobject_class->get_property = gdk_texture_get_property;
@@ -438,7 +415,23 @@ gdk_texture_get_height (GdkTexture *texture)
 cairo_surface_t *
 gdk_texture_download_surface (GdkTexture *texture)
 {
-  return GDK_TEXTURE_GET_CLASS (texture)->download_surface (texture);
+  cairo_surface_t *surface;
+  cairo_status_t surface_status;
+
+  surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
+                                        texture->width, texture->height);
+
+  surface_status = cairo_surface_status (surface);
+  if (surface_status != CAIRO_STATUS_SUCCESS)
+    g_warning ("%s: surface error: %s", __FUNCTION__,
+               cairo_status_to_string (surface_status));
+
+  gdk_texture_download (texture,
+                        cairo_image_surface_get_data (surface),
+                        cairo_image_surface_get_stride (surface));
+  cairo_surface_mark_dirty (surface);
+
+  return surface;
 }
 
 void
