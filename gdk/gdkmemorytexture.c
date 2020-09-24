@@ -45,6 +45,7 @@ gdk_memory_format_bytes_per_pixel (GdkMemoryFormat format)
     {
     case GDK_MEMORY_B8G8R8A8_PREMULTIPLIED:
     case GDK_MEMORY_A8R8G8B8_PREMULTIPLIED:
+    case GDK_MEMORY_R8G8B8A8_PREMULTIPLIED:
     case GDK_MEMORY_B8G8R8A8:
     case GDK_MEMORY_A8R8G8B8:
     case GDK_MEMORY_R8G8B8A8:
@@ -199,6 +200,9 @@ convert_swizzle ## A ## R ## G ## B (guchar       *dest_data, \
 }
 
 SWIZZLE(3,2,1,0)
+SWIZZLE(2,1,0,3)
+SWIZZLE(3,0,1,2)
+SWIZZLE(1,2,3,0)
 
 #define SWIZZLE_OPAQUE(A,R,G,B) \
 static void \
@@ -267,6 +271,10 @@ SWIZZLE_PREMULTIPLY (3,2,1,0, 3,0,1,2)
 SWIZZLE_PREMULTIPLY (0,1,2,3, 3,0,1,2)
 SWIZZLE_PREMULTIPLY (3,2,1,0, 0,3,2,1)
 SWIZZLE_PREMULTIPLY (0,1,2,3, 0,3,2,1)
+SWIZZLE_PREMULTIPLY (3,0,1,2, 3,2,1,0)
+SWIZZLE_PREMULTIPLY (3,0,1,2, 0,1,2,3)
+SWIZZLE_PREMULTIPLY (3,0,1,2, 3,0,1,2)
+SWIZZLE_PREMULTIPLY (3,0,1,2, 0,3,2,1)
 
 typedef void (* ConversionFunc) (guchar       *dest_data,
                                  gsize         dest_stride,
@@ -275,16 +283,17 @@ typedef void (* ConversionFunc) (guchar       *dest_data,
                                  gsize         width,
                                  gsize         height);
 
-static ConversionFunc converters[GDK_MEMORY_N_FORMATS][2] =
+static ConversionFunc converters[GDK_MEMORY_N_FORMATS][3] =
 {
-  { convert_memcpy, convert_swizzle3210 },
-  { convert_swizzle3210, convert_memcpy },
-  { convert_swizzle_premultiply_3210_3210, convert_swizzle_premultiply_0123_3210 },
-  { convert_swizzle_premultiply_3210_0123, convert_swizzle_premultiply_0123_0123 },
-  { convert_swizzle_premultiply_3210_3012, convert_swizzle_premultiply_0123_3012 },
-  { convert_swizzle_premultiply_3210_0321, convert_swizzle_premultiply_0123_0321 },
-  { convert_swizzle_opaque_3210, convert_swizzle_opaque_0123 },
-  { convert_swizzle_opaque_3012, convert_swizzle_opaque_0321 }
+  { convert_memcpy, convert_swizzle3210, convert_swizzle2103 },
+  { convert_swizzle3210, convert_memcpy, convert_swizzle3012 },
+  { convert_swizzle2103, convert_swizzle1230, convert_memcpy },
+  { convert_swizzle_premultiply_3210_3210, convert_swizzle_premultiply_0123_3210, convert_swizzle_premultiply_3012_3210,  },
+  { convert_swizzle_premultiply_3210_0123, convert_swizzle_premultiply_0123_0123, convert_swizzle_premultiply_3012_0123 },
+  { convert_swizzle_premultiply_3210_3012, convert_swizzle_premultiply_0123_3012, convert_swizzle_premultiply_3012_3012 },
+  { convert_swizzle_premultiply_3210_0321, convert_swizzle_premultiply_0123_0321, convert_swizzle_premultiply_3012_0321 },
+  { convert_swizzle_opaque_3210, convert_swizzle_opaque_0123, convert_swizzle_opaque_3012 },
+  { convert_swizzle_opaque_3012, convert_swizzle_opaque_0321, convert_swizzle_opaque_3210 }
 };
 
 void
@@ -297,7 +306,7 @@ gdk_memory_convert (guchar          *dest_data,
                     gsize            width,
                     gsize            height)
 {
-  g_assert (dest_format < 2);
+  g_assert (dest_format < 3);
   g_assert (src_format < GDK_MEMORY_N_FORMATS);
 
   converters[src_format][dest_format] (dest_data, dest_stride, src_data, src_stride, width, height);
