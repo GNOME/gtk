@@ -994,8 +994,6 @@ void
 gtk_column_view_column_set_fixed_width (GtkColumnViewColumn *self,
                                         int                  fixed_width)
 {
-  GtkOverflow overflow;
-
   g_return_if_fail (GTK_IS_COLUMN_VIEW_COLUMN (self));
   g_return_if_fail (fixed_width >= -1);
 
@@ -1003,22 +1001,6 @@ gtk_column_view_column_set_fixed_width (GtkColumnViewColumn *self,
     return;
 
   self->fixed_width = fixed_width;
-
-  if (fixed_width > -1)
-    overflow = GTK_OVERFLOW_HIDDEN;
-  else
-    overflow = GTK_OVERFLOW_VISIBLE;
-
-  if (self->header &&
-      overflow != gtk_widget_get_overflow (GTK_WIDGET (self->header)))
-    {
-      GtkColumnViewCell *cell;
-
-      gtk_widget_set_overflow (GTK_WIDGET (self->header), overflow);
-
-      for (cell = self->first_cell; cell; cell = gtk_column_view_cell_get_next (cell))
-        gtk_widget_set_overflow (GTK_WIDGET (cell), overflow);
-    }
 
   gtk_column_view_column_queue_resize (self);
 

@@ -629,10 +629,13 @@ gtk_list_item_widget_reorder_child (GtkListItemWidget *self,
         }
     }
 
-  gtk_widget_insert_after (child, widget, sibling);
-  gtk_css_node_insert_after (gtk_widget_get_css_node (widget),
-                             gtk_widget_get_css_node (child),
-                             sibling ? gtk_widget_get_css_node (sibling) : NULL);
+  if (child != sibling)
+    {
+      gtk_widget_insert_after (child, widget, sibling);
+      gtk_css_node_insert_after (gtk_widget_get_css_node (widget),
+                                 gtk_widget_get_css_node (child),
+                                 sibling ? gtk_widget_get_css_node (sibling) : NULL);
+    }
 }
 
 void

@@ -128,7 +128,7 @@ gtk_column_view_layout_allocate (GtkLayoutManager *layout_manager,
        child = _gtk_widget_get_next_sibling (child))
     {
       GtkColumnViewColumn *column;
-      int col_x, col_width;
+      int col_x, col_width, min;
 
       if (!gtk_widget_should_layout (child))
         continue;
@@ -144,7 +144,9 @@ gtk_column_view_layout_allocate (GtkLayoutManager *layout_manager,
           gtk_column_view_column_get_header_allocation (column, &col_x, &col_width);
         }
 
-      gtk_widget_size_allocate (child, &(GtkAllocation) { col_x, 0, col_width, height }, baseline);
+      gtk_widget_measure (child, GTK_ORIENTATION_HORIZONTAL, -1, &min, NULL, NULL, NULL);
+
+      gtk_widget_size_allocate (child, &(GtkAllocation) { col_x, 0, MAX (min, col_width), height }, baseline);
     }
 }
 

@@ -25,6 +25,9 @@
 #include "gtkintl.h"
 #include "gtklistitemwidgetprivate.h"
 #include "gtkwidgetprivate.h"
+#include "gtkcssnodeprivate.h"
+#include "gtkcssnumbervalueprivate.h"
+
 
 struct _GtkColumnViewCell
 {
@@ -44,6 +47,37 @@ struct _GtkColumnViewCellClass
 
 G_DEFINE_TYPE (GtkColumnViewCell, gtk_column_view_cell, GTK_TYPE_LIST_ITEM_WIDGET)
 
+static int
+get_number (GtkCssValue *value)
+{
+  double d = _gtk_css_number_value_get (value, 100);
+
+  if (d < 1)
+    return ceil (d);
+  else
+    return floor (d);
+}
+
+static int
+unadjust_width (GtkWidget *widget,
+                int        width)
+{
+  GtkCssStyle *style;
+  int widget_margins;
+  int css_extra;
+
+  style = gtk_css_node_get_style (gtk_widget_get_css_node (widget));
+  css_extra = get_number (style->size->margin_left) +
+              get_number (style->size->margin_right) +
+              get_number (style->border->border_left_width) +
+              get_number (style->border->border_right_width) +
+              get_number (style->size->padding_left) +
+              get_number (style->size->padding_right);
+  widget_margins = widget->priv->margin.left + widget->priv->margin.right;
+
+  return MAX (0, width - widget_margins - css_extra);
+}
+
 static void
 gtk_column_view_cell_measure (GtkWidget      *widget,
                               GtkOrientation  orientation,
@@ -56,15 +90,18 @@ gtk_column_view_cell_measure (GtkWidget      *widget,
   GtkColumnViewCell *cell = GTK_COLUMN_VIEW_CELL (widget);
   GtkWidget *child = gtk_widget_get_first_child (widget);
   int fixed_width = gtk_column_view_column_get_fixed_width (cell->column);
+  int unadj_width;
+
+  unadj_width = unadjust_width (widget, fixed_width);
 
   if (orientation == GTK_ORIENTATION_VERTICAL)
     {
       if (fixed_width > -1)
         {
           if (for_size == -1)
-            for_size = fixed_width;
+            for_size = unadj_width;
           else
-            for_size = MIN (for_size, fixed_width);
+            for_size = MIN (for_size, unadj_width);
         }
     }
 
@@ -74,7 +111,10 @@ gtk_column_view_cell_measure (GtkWidget      *widget,
   if (orientation == GTK_ORIENTATION_HORIZONTAL)
     {
       if (fixed_width > -1)
-        *minimum = *natural = fixed_width;
+        {
+          *minimum = 0;
+          *natural = unadj_width;
+        }
     }
 }
 
@@ -84,10 +124,16 @@ gtk_column_view_cell_size_allocate (GtkWidget *widget,
                                     int        height,
                                     int        baseline)
 {
+  GtkColumnViewCell *self = GTK_COLUMN_VIEW_CELL (widget);
   GtkWidget *child = gtk_widget_get_first_child (widget);
 
   if (child)
-    gtk_widget_allocate (child, width, height, baseline, NULL);
+    {
+      if (gtk_column_view_column_get_fixed_width (self->column) > -1)
+        gtk_widget_measure (child, GTK_ORIENTATION_HORIZONTAL, height, NULL, &width, NULL, NULL);
+
+      gtk_widget_allocate (child, width, height, baseline, NULL);
+    }
 }
 
 static void
@@ -175,6 +221,7 @@ gtk_column_view_cell_init (GtkColumnViewCell *self)
   GtkWidget *widget = GTK_WIDGET (self);
 
   gtk_widget_set_focusable (widget, FALSE);
+  gtk_widget_set_overflow (widget, GTK_OVERFLOW_HIDDEN);
   /* FIXME: Figure out if setting the manager class to INVALID should work */
   gtk_widget_set_layout_manager (widget, NULL);
   widget->priv->resize_func = gtk_column_view_cell_resize_func;
