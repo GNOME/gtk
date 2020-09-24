@@ -256,6 +256,8 @@ gtk_column_view_title_init (GtkColumnViewTitle *self)
 
   widget->priv->resize_func = gtk_column_view_title_resize_func;
 
+  gtk_widget_set_overflow (widget, GTK_OVERFLOW_HIDDEN);
+
   self->box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_widget_set_parent (self->box, widget);
 

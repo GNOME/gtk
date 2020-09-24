@@ -221,6 +221,7 @@ gtk_column_view_cell_init (GtkColumnViewCell *self)
   GtkWidget *widget = GTK_WIDGET (self);
 
   gtk_widget_set_focusable (widget, FALSE);
+  gtk_widget_set_overflow (widget, GTK_OVERFLOW_HIDDEN);
   /* FIXME: Figure out if setting the manager class to INVALID should work */
   gtk_widget_set_layout_manager (widget, NULL);
   widget->priv->resize_func = gtk_column_view_cell_resize_func;
