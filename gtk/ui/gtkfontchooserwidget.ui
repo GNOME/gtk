@@ -97,7 +97,7 @@
                                   </object>
                                 </child>
                                 <child>
-                                  <object class="GtkFrame">
+                                  <object class="GtkFrame" id="language_frame">
                                     <property name="margin-start">12</property>
                                     <child>
                                       <object class="GtkScrolledWindow">
