@@ -1007,7 +1007,9 @@ scrolled_window_drag_update_cb (GtkScrolledWindow *scrolled_window,
   GtkScrolledWindowPrivate *priv = scrolled_window->priv;
   GtkAdjustment *hadjustment;
   GtkAdjustment *vadjustment;
-  gdouble dx, dy;
+  GtkScrollable *child;
+  GtkBorder border;
+  double dx, dy, scale, size;
 
   gtk_scrolled_window_invalidate_overshoot (scrolled_window);
 
@@ -1020,10 +1022,25 @@ scrolled_window_drag_update_cb (GtkScrolledWindow *scrolled_window,
                                       GTK_EVENT_SEQUENCE_CLAIMED);
     }
 
+  child = GTK_SCROLLABLE (gtk_bin_get_child (GTK_BIN (scrolled_window)));
+
   hadjustment = gtk_range_get_adjustment (GTK_RANGE (priv->hscrollbar));
   if (hadjustment && may_hscroll (scrolled_window))
     {
-      dx = priv->drag_start_x - offset_x;
+      if (child && gtk_widget_get_visible (child))
+        {
+          size = gtk_widget_get_allocated_width (GTK_WIDGET (child));
+          if (gtk_scrollable_get_border (child, &border))
+            size -= border.left + border.right;
+
+          scale = gtk_adjustment_get_page_size (hadjustment) / size;
+        }
+      else
+        {
+          scale = 1.0;
+        }
+
+      dx = priv->drag_start_x - offset_x * scale;
       _gtk_scrolled_window_set_adjustment_value (scrolled_window,
                                                  hadjustment, dx);
     }
@@ -1031,7 +1048,20 @@ scrolled_window_drag_update_cb (GtkScrolledWindow *scrolled_window,
   vadjustment = gtk_range_get_adjustment (GTK_RANGE (priv->vscrollbar));
   if (vadjustment && may_vscroll (scrolled_window))
     {
-      dy = priv->drag_start_y - offset_y;
+      if (child && gtk_widget_get_visible (child))
+        {
+          size = gtk_widget_get_allocated_height (GTK_WIDGET (child));
+          if (gtk_scrollable_get_border (child, &border))
+            size -= border.top + border.bottom;
+
+          scale = gtk_adjustment_get_page_size (vadjustment) / size;
+        }
+      else
+        {
+          scale = 1.0;
+        }
+
+      dy = priv->drag_start_y - offset_y * scale;
       _gtk_scrolled_window_set_adjustment_value (scrolled_window,
                                                  vadjustment, dy);
     }
