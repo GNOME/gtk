@@ -38,7 +38,7 @@ struct _GdkMemoryTextureClass
 
 G_DEFINE_TYPE (GdkMemoryTexture, gdk_memory_texture, GDK_TYPE_TEXTURE)
 
-static gsize
+gsize
 gdk_memory_format_bytes_per_pixel (GdkMemoryFormat format)
 {
   switch (format)

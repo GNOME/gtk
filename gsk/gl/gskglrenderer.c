@@ -564,6 +564,7 @@ render_fallback_node (GskGLRenderer   *self,
                       GskRenderNode   *node,
                       RenderOpBuilder *builder)
 {
+  GdkTexture *texture;
   const float scale = ops_get_scale (builder);
   const int surface_width = ceilf (node->bounds.size.width * scale);
   const int surface_height = ceilf (node->bounds.size.height * scale);
@@ -645,15 +646,18 @@ render_fallback_node (GskGLRenderer   *self,
 #endif
   cairo_destroy (cr);
 
+
   /* Upload the Cairo surface to a GL texture */
   texture_id = gsk_gl_driver_create_texture (self->gl_driver,
                                              surface_width,
                                              surface_height);
   gsk_gl_driver_bind_source_texture (self->gl_driver, texture_id);
-  gsk_gl_driver_init_texture_with_surface (self->gl_driver,
-                                           texture_id,
-                                           surface,
-                                           GL_NEAREST, GL_NEAREST);
+
+  texture = gdk_texture_new_for_surface (surface);
+  gsk_gl_driver_init_texture (self->gl_driver,
+                              texture_id,
+                              texture,
+                              GL_NEAREST, GL_NEAREST);
 
   if (gdk_gl_context_has_debug (self->gl_context))
     gdk_gl_context_label_object_printf  (self->gl_context, GL_TEXTURE, texture_id,
@@ -661,6 +665,7 @@ render_fallback_node (GskGLRenderer   *self,
                                          g_type_name_from_instance ((GTypeInstance *) node),
                                          texture_id);
 
+  g_object_unref (texture);
   cairo_surface_destroy (surface);
   cairo_surface_destroy (rendered_surface);
 

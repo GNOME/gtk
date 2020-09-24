@@ -31,6 +31,8 @@ G_BEGIN_DECLS
 
 #define GDK_MEMORY_CAIRO_FORMAT_ARGB32 GDK_MEMORY_DEFAULT
 
+gsize                   gdk_memory_format_bytes_per_pixel   (GdkMemoryFormat    format);
+
 GdkMemoryFormat         gdk_memory_texture_get_format       (GdkMemoryTexture  *self);
 const guchar *          gdk_memory_texture_get_data         (GdkMemoryTexture  *self);
 gsize                   gdk_memory_texture_get_stride       (GdkMemoryTexture  *self);
