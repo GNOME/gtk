@@ -235,6 +235,7 @@ gdk_gl_context_upload_texture (GdkGLContext    *context,
   guchar *copy = NULL;
   guint gl_format;
   guint gl_type;
+  guint bpp;
 
   g_return_if_fail (GDK_IS_GL_CONTEXT (context));
 
@@ -252,6 +253,7 @@ gdk_gl_context_upload_texture (GdkGLContext    *context,
           data = copy;
         }
 
+      bpp = 4;
       gl_format = GL_RGBA;
       gl_type = GL_UNSIGNED_BYTE;
     }
@@ -261,6 +263,13 @@ gdk_gl_context_upload_texture (GdkGLContext    *context,
         {
           gl_format = GL_BGRA;
           gl_type = GL_UNSIGNED_INT_8_8_8_8_REV;
+          bpp = 4;
+        }
+      else if (data_format == GDK_MEMORY_R8G8B8) /* Pixmap non-alpha data */
+        {
+          gl_format = GL_RGB;
+          gl_type = GL_UNSIGNED_BYTE;
+          bpp = 3;
         }
       else /* Fall-back, convert to cairo-surface-format */
         {
@@ -270,25 +279,25 @@ gdk_gl_context_upload_texture (GdkGLContext    *context,
                               data, stride, data_format,
                               width, height);
           stride = width * 4;
+          bpp = 4;
           data = copy;
           gl_format = GL_BGRA;
           gl_type = GL_UNSIGNED_INT_8_8_8_8_REV;
         }
     }
 
-
   /* GL_UNPACK_ROW_LENGTH is available on desktop GL, OpenGL ES >= 3.0, or if
    * the GL_EXT_unpack_subimage extension for OpenGL ES 2.0 is available
    */
-  if (stride == width * 4)
+  if (stride == width * bpp)
     {
       glTexImage2D (texture_target, 0, GL_RGBA, width, height, 0, gl_format, gl_type, data);
     }
-  else if (!priv->use_es ||
-           (priv->use_es && (priv->gl_version >= 30 || priv->has_unpack_subimage)))
+  else if ((!priv->use_es ||
+            (priv->use_es && (priv->gl_version >= 30 || priv->has_unpack_subimage))))
     {
-      glPixelStorei (GL_UNPACK_ALIGNMENT, 4);
-      glPixelStorei (GL_UNPACK_ROW_LENGTH, stride / 4);
+      glPixelStorei (GL_UNPACK_ALIGNMENT, bpp);
+      glPixelStorei (GL_UNPACK_ROW_LENGTH, stride / bpp);
 
       glTexImage2D (texture_target, 0, GL_RGBA, width, height, 0, gl_format, gl_type, data);
 
