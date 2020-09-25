@@ -29,6 +29,7 @@
 #include "gtkadjustment.h"
 #include "gtkadjustmentprivate.h"
 #include "gtkbuildable.h"
+#include "gtkdragsource.h"
 #include "gtkeventcontrollermotion.h"
 #include "gtkeventcontrollerscroll.h"
 #include "gtkeventcontrollerprivate.h"
@@ -901,7 +902,6 @@ scrolled_window_drag_begin_cb (GtkScrolledWindow *scrolled_window,
                                GtkGesture        *gesture)
 {
   GtkScrolledWindowPrivate *priv = gtk_scrolled_window_get_instance_private (scrolled_window);
-  GtkEventSequenceState state;
   GdkEventSequence *sequence;
   GtkWidget *event_widget;
 
@@ -914,11 +914,7 @@ scrolled_window_drag_begin_cb (GtkScrolledWindow *scrolled_window,
 
   if (event_widget == priv->vscrollbar || event_widget == priv->hscrollbar ||
       (!may_hscroll (scrolled_window) && !may_vscroll (scrolled_window)))
-    state = GTK_EVENT_SEQUENCE_DENIED;
-  else
-    state = GTK_EVENT_SEQUENCE_CLAIMED;
-
-  gtk_gesture_set_sequence_state (gesture, sequence, state);
+    gtk_gesture_set_sequence_state (gesture, sequence, GTK_EVENT_SEQUENCE_DENIED);
 }
 
 static void
@@ -950,7 +946,12 @@ scrolled_window_drag_update_cb (GtkScrolledWindow *scrolled_window,
   GtkAdjustment *vadjustment;
   double dx, dy;
 
+  if (!gtk_drag_check_threshold (GTK_WIDGET (scrolled_window),
+                                 0, 0, offset_x, offset_y))
+    return;
+
   gtk_scrolled_window_invalidate_overshoot (scrolled_window);
+  gtk_gesture_set_state (gesture, GTK_EVENT_SEQUENCE_CLAIMED);
 
   hadjustment = gtk_scrollbar_get_adjustment (GTK_SCROLLBAR (priv->hscrollbar));
   if (hadjustment && may_hscroll (scrolled_window))
