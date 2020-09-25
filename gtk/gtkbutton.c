@@ -336,28 +336,6 @@ click_pressed_cb (GtkGestureClick *gesture,
     priv->button_down = TRUE;
 }
 
-static gboolean
-touch_release_in_button (GtkGestureClick *gesture,
-                         GtkWidget       *widget,
-                         double           x,
-                         double           y)
-{
-  GdkEvent *event;
-
-  event = gtk_event_controller_get_current_event (GTK_EVENT_CONTROLLER (gesture));
-
-  if (!event)
-    return FALSE;
-
-  if (gdk_event_get_event_type (event) != GDK_TOUCH_END)
-    return FALSE;
-
-  if (!gtk_widget_contains (widget, x, y))
-    return FALSE;
-
-  return TRUE;
-}
-
 static void
 click_released_cb (GtkGestureClick *gesture,
                    guint            n_press,
@@ -366,14 +344,12 @@ click_released_cb (GtkGestureClick *gesture,
                    GtkWidget       *widget)
 {
   GtkButton *button = GTK_BUTTON (widget);
-  GtkButtonPrivate *priv = gtk_button_get_instance_private (button);
   GdkEventSequence *sequence;
 
   gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
   gtk_button_do_release (button,
                          gtk_widget_is_sensitive (GTK_WIDGET (button)) &&
-                         (priv->in_button ||
-                          touch_release_in_button (gesture, widget, x, y)));
+                         gtk_widget_contains (widget, x, y));
 
   sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
 
