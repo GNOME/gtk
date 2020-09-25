@@ -175,9 +175,9 @@ create_texture (GtkColorPlane *plane)
 
   bytes = g_bytes_new_take (data, height * stride);
   plane->texture = gdk_memory_texture_new (width, height,
-                                                 GDK_MEMORY_DEFAULT,
-                                                 bytes,
-                                                 stride);
+                                           GDK_MEMORY_DEFAULT,
+                                           bytes,
+                                           stride);
   g_bytes_unref (bytes);
 }
 
