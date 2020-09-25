@@ -5480,8 +5480,6 @@ gtk_text_view_click_gesture_pressed (GtkGestureClick *gesture,
 
                 if (is_touchscreen)
                   {
-                    gtk_gesture_set_sequence_state (GTK_GESTURE (gesture), sequence,
-                                                    GTK_EVENT_SEQUENCE_CLAIMED);
                     gtk_text_buffer_place_cursor (get_buffer (text_view), &iter);
                     priv->handle_place_time = g_get_monotonic_time ();
                   }

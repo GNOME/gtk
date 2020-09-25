@@ -94,7 +94,6 @@ struct _GtkButtonPrivate
   guint                  activate_timeout;
 
   guint          button_down           : 1;
-  guint          in_button             : 1;
   guint          use_underline         : 1;
   guint          child_type            : 2;
 };
@@ -159,16 +158,6 @@ G_DEFINE_TYPE_WITH_CODE (GtkButton, gtk_button, GTK_TYPE_WIDGET,
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_ACTIONABLE, gtk_button_actionable_iface_init))
 
 static void
-gtk_button_unmap (GtkWidget *widget)
-{
-  GtkButtonPrivate *priv = gtk_button_get_instance_private (GTK_BUTTON (widget));
-
-  priv->in_button = FALSE;
-
-  GTK_WIDGET_CLASS (gtk_button_parent_class)->unmap (widget);
-}
-
-static void
 gtk_button_compute_expand (GtkWidget *widget,
                            gboolean  *hexpand,
                            gboolean  *vexpand)
@@ -216,7 +205,6 @@ gtk_button_class_init (GtkButtonClass *klass)
 
   widget_class->unrealize = gtk_button_unrealize;
   widget_class->state_flags_changed = gtk_button_state_flags_changed;
-  widget_class->unmap = gtk_button_unmap;
   widget_class->compute_expand = gtk_button_compute_expand;
   widget_class->get_request_mode = gtk_button_get_request_mode;
 
@@ -327,35 +315,11 @@ click_pressed_cb (GtkGestureClick *gesture,
   if (gtk_widget_get_focus_on_click (widget) && !gtk_widget_has_focus (widget))
     gtk_widget_grab_focus (widget);
 
-  priv->in_button = TRUE;
-
   sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
   gtk_gesture_set_sequence_state (GTK_GESTURE (gesture), sequence, GTK_EVENT_SEQUENCE_CLAIMED);
 
   if (!priv->activate_timeout)
     priv->button_down = TRUE;
-}
-
-static gboolean
-touch_release_in_button (GtkGestureClick *gesture,
-                         GtkWidget       *widget,
-                         double           x,
-                         double           y)
-{
-  GdkEvent *event;
-
-  event = gtk_event_controller_get_current_event (GTK_EVENT_CONTROLLER (gesture));
-
-  if (!event)
-    return FALSE;
-
-  if (gdk_event_get_event_type (event) != GDK_TOUCH_END)
-    return FALSE;
-
-  if (!gtk_widget_contains (widget, x, y))
-    return FALSE;
-
-  return TRUE;
 }
 
 static void
@@ -366,19 +330,11 @@ click_released_cb (GtkGestureClick *gesture,
                    GtkWidget       *widget)
 {
   GtkButton *button = GTK_BUTTON (widget);
-  GtkButtonPrivate *priv = gtk_button_get_instance_private (button);
-  GdkEventSequence *sequence;
 
   gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
   gtk_button_do_release (button,
                          gtk_widget_is_sensitive (GTK_WIDGET (button)) &&
-                         (priv->in_button ||
-                          touch_release_in_button (gesture, widget, x, y)));
-
-  sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
-
-  if (sequence)
-    priv->in_button = FALSE;
+                         gtk_widget_contains (widget, x, y));
 }
 
 static void
@@ -444,7 +400,6 @@ gtk_button_init (GtkButton *button)
   gtk_widget_set_focusable (GTK_WIDGET (button), TRUE);
   gtk_widget_set_receives_default (GTK_WIDGET (button), TRUE);
 
-  priv->in_button = FALSE;
   priv->button_down = FALSE;
   priv->use_underline = FALSE;
   priv->child_type = WIDGET_CHILD;
