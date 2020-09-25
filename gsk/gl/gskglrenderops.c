@@ -909,7 +909,7 @@ ops_set_linear_gradient (RenderOpBuilder     *self,
 {
   ProgramState *current_program_state = get_current_program_state (self);
   OpLinearGradient *op;
-  const guint real_n_color_stops = MIN (MAX_GRADIENT_STOPS, n_color_stops);
+  const guint real_n_color_stops = MIN (GL_MAX_GRADIENT_STOPS, n_color_stops);
 
   g_assert (current_program_state);
 
@@ -972,7 +972,7 @@ ops_set_radial_gradient (RenderOpBuilder    *self,
                          float               hradius,
                          float               vradius)
 {
-  const guint real_n_color_stops = MIN (MAX_GRADIENT_STOPS, n_color_stops);
+  const guint real_n_color_stops = MIN (GL_MAX_GRADIENT_STOPS, n_color_stops);
   OpRadialGradient *op;
 
   /* TODO: State tracking? */

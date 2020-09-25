@@ -149,10 +149,10 @@ gtk_css_image_fallback_compute (GtkCssImage      *image,
 
       if (fallback->color)
           computed_color= _gtk_css_value_compute (fallback->color,
-                                                           property_id,
-                                                           provider,
-                                                           style,
-                                                           parent_style);
+                                                  property_id,
+                                                  provider,
+                                                  style,
+                                                  parent_style);
 
       /* image($color) that didn't change */
       if (computed_color && !fallback->images &&
@@ -209,6 +209,9 @@ gtk_css_image_fallback_parse_arg (GtkCssParser *parser,
       if (image == NULL)
         return 0;
 
+      if (!data->images)
+        data->images = g_ptr_array_new_with_free_func (g_object_unref);
+
       g_ptr_array_add (data->images, image);
       return 1;
     }
@@ -235,18 +238,25 @@ gtk_css_image_fallback_parse (GtkCssImage  *image,
       return FALSE;
     }
 
-  data.images = g_ptr_array_new_with_free_func (g_object_unref);
-
   if (!gtk_css_parser_consume_function (parser, 1, G_MAXUINT, gtk_css_image_fallback_parse_arg, &data))
     {
       g_clear_pointer (&data.color, _gtk_css_value_unref);
-      g_ptr_array_free (data.images, TRUE);
+      if (data.images)
+        g_ptr_array_free (data.images, TRUE);
       return FALSE;
     }
 
   self->color = data.color;
-  self->n_images = data.images->len;
-  self->images = (GtkCssImage **) g_ptr_array_free (data.images, FALSE);
+  if (data.images)
+    {
+      self->n_images = data.images->len;
+      self->images = (GtkCssImage **) g_ptr_array_free (data.images, FALSE);
+    }
+  else
+    {
+      self->n_images = 0;
+      self->images = NULL;
+    }
 
   return TRUE;
 }

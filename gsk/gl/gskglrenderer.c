@@ -1175,21 +1175,29 @@ render_linear_gradient_node (GskGLRenderer   *self,
                              GskRenderNode   *node,
                              RenderOpBuilder *builder)
 {
-  const int n_color_stops = MIN (8, gsk_linear_gradient_node_get_n_color_stops (node));
-  const GskColorStop *stops = gsk_linear_gradient_node_peek_color_stops (node, NULL);
-  const graphene_point_t *start = gsk_linear_gradient_node_peek_start (node);
-  const graphene_point_t *end = gsk_linear_gradient_node_peek_end (node);
+  const int n_color_stops = gsk_linear_gradient_node_get_n_color_stops (node);
 
-  ops_set_program (builder, &self->programs->linear_gradient_program);
-  ops_set_linear_gradient (builder,
-                           n_color_stops,
-                           stops,
-                           builder->dx + start->x,
-                           builder->dy + start->y,
-                           builder->dx + end->x,
-                           builder->dy + end->y);
+  if (n_color_stops < GL_MAX_GRADIENT_STOPS)
+    {
+      const GskColorStop *stops = gsk_linear_gradient_node_peek_color_stops (node, NULL);
+      const graphene_point_t *start = gsk_linear_gradient_node_peek_start (node);
+      const graphene_point_t *end = gsk_linear_gradient_node_peek_end (node);
 
-  load_vertex_data (ops_draw (builder, NULL), node, builder);
+      ops_set_program (builder, &self->programs->linear_gradient_program);
+      ops_set_linear_gradient (builder,
+                               n_color_stops,
+                               stops,
+                               builder->dx + start->x,
+                               builder->dy + start->y,
+                               builder->dx + end->x,
+                               builder->dy + end->y);
+
+      load_vertex_data (ops_draw (builder, NULL), node, builder);
+    }
+  else
+    {
+      render_fallback_node (self, node, builder);
+    }
 }
 
 static inline void
@@ -1197,25 +1205,33 @@ render_radial_gradient_node (GskGLRenderer   *self,
                              GskRenderNode   *node,
                              RenderOpBuilder *builder)
 {
-  const float scale = ops_get_scale (builder);
-  const int n_color_stops = MIN (8, gsk_radial_gradient_node_get_n_color_stops (node));
-  const GskColorStop *stops = gsk_radial_gradient_node_peek_color_stops (node, NULL);
-  const graphene_point_t *center = gsk_radial_gradient_node_peek_center (node);
-  const float start = gsk_radial_gradient_node_get_start (node);
-  const float end = gsk_radial_gradient_node_get_end (node);
-  const float hradius = gsk_radial_gradient_node_get_hradius (node);
-  const float vradius = gsk_radial_gradient_node_get_vradius (node);
+  const int n_color_stops = gsk_radial_gradient_node_get_n_color_stops (node);
 
-  ops_set_program (builder, &self->programs->radial_gradient_program);
-  ops_set_radial_gradient (builder,
-                           n_color_stops,
-                           stops,
-                           builder->dx + center->x,
-                           builder->dy + center->y,
-                           start, end,
-                           hradius * scale, vradius * scale);
+  if (n_color_stops < GL_MAX_GRADIENT_STOPS)
+    {
+      const GskColorStop *stops = gsk_radial_gradient_node_peek_color_stops (node, NULL);
+      const graphene_point_t *center = gsk_radial_gradient_node_peek_center (node);
+      const float start = gsk_radial_gradient_node_get_start (node);
+      const float end = gsk_radial_gradient_node_get_end (node);
+      const float hradius = gsk_radial_gradient_node_get_hradius (node);
+      const float vradius = gsk_radial_gradient_node_get_vradius (node);
 
-  load_vertex_data (ops_draw (builder, NULL), node, builder);
+      ops_set_program (builder, &self->programs->radial_gradient_program);
+      ops_set_radial_gradient (builder,
+                               n_color_stops,
+                               stops,
+                               builder->dx + center->x,
+                               builder->dy + center->y,
+                               start, end,
+                               hradius * builder->scale_x,
+                               vradius * builder->scale_y);
+
+      load_vertex_data (ops_draw (builder, NULL), node, builder);
+    }
+  else
+    {
+      render_fallback_node (self, node, builder);
+    }
 }
 
 static inline gboolean
@@ -1332,17 +1348,18 @@ render_clipped_child (GskGLRenderer         *self,
   else
     {
       /* well fuck */
-      const float scale = ops_get_scale (builder);
+      const float scale_x = builder->scale_x;
+      const float scale_y = builder->scale_y;
       gboolean is_offscreen;
       TextureRegion region;
       GskRoundedRect scaled_clip;
 
       memset (&scaled_clip, 0, sizeof (GskRoundedRect));
 
-      scaled_clip.bounds.origin.x = clip->origin.x * scale;
-      scaled_clip.bounds.origin.y = clip->origin.y * scale;
-      scaled_clip.bounds.size.width = clip->size.width * scale;
-      scaled_clip.bounds.size.height = clip->size.height * scale;
+      scaled_clip.bounds.origin.x = clip->origin.x * scale_x;
+      scaled_clip.bounds.origin.y = clip->origin.y * scale_y;
+      scaled_clip.bounds.size.width = clip->size.width * scale_x;
+      scaled_clip.bounds.size.height = clip->size.height * scale_y;
 
       ops_push_clip (builder, &scaled_clip);
       if (!add_offscreen_ops (self, builder, &child->bounds,
@@ -1375,7 +1392,8 @@ render_rounded_clip_node (GskGLRenderer       *self,
                           GskRenderNode       *node,
                           RenderOpBuilder     *builder)
 {
-  const float scale = ops_get_scale (builder);
+  const float scale_x = builder->scale_x;
+  const float scale_y = builder->scale_y;
   const GskRoundedRect *clip = gsk_rounded_clip_node_peek_clip (node);
   GskRenderNode *child = gsk_rounded_clip_node_get_child (node);
   GskRoundedRect transformed_clip;
@@ -1388,8 +1406,8 @@ render_rounded_clip_node (GskGLRenderer       *self,
   ops_transform_bounds_modelview (builder, &clip->bounds, &transformed_clip.bounds);
   for (i = 0; i < 4; i ++)
     {
-      transformed_clip.corner[i].width = clip->corner[i].width * scale;
-      transformed_clip.corner[i].height = clip->corner[i].height * scale;
+      transformed_clip.corner[i].width = clip->corner[i].width * scale_x;
+      transformed_clip.corner[i].height = clip->corner[i].height * scale_y;
     }
 
   if (builder->clip_is_rectilinear)
@@ -1447,16 +1465,16 @@ render_rounded_clip_node (GskGLRenderer       *self,
        *
        *       We do, however, apply the scale factor to the child clip of course.
        */
-      scaled_clip.bounds.origin.x = clip->bounds.origin.x * scale;
-      scaled_clip.bounds.origin.y = clip->bounds.origin.y * scale;
-      scaled_clip.bounds.size.width = clip->bounds.size.width * scale;
-      scaled_clip.bounds.size.height = clip->bounds.size.height * scale;
+      scaled_clip.bounds.origin.x = clip->bounds.origin.x * scale_x;
+      scaled_clip.bounds.origin.y = clip->bounds.origin.y * scale_y;
+      scaled_clip.bounds.size.width = clip->bounds.size.width * scale_x;
+      scaled_clip.bounds.size.height = clip->bounds.size.height * scale_y;
 
       /* Increase corner radius size by scale factor */
       for (i = 0; i < 4; i ++)
         {
-          scaled_clip.corner[i].width = clip->corner[i].width * scale;
-          scaled_clip.corner[i].height = clip->corner[i].height * scale;
+          scaled_clip.corner[i].width = clip->corner[i].width * scale_x;
+          scaled_clip.corner[i].height = clip->corner[i].height * scale_y;
         }
 
       ops_push_clip (builder, &scaled_clip);
@@ -3089,7 +3107,7 @@ gsk_gl_renderer_create_programs (GskGLRenderer  *self,
 out:
   gsk_gl_shader_builder_finish (&shader_builder);
 
-  if (error && !(*error))
+  if (error && !(*error) && !programs)
     g_set_error (error, GDK_GL_ERROR, GDK_GL_ERROR_COMPILATION_FAILED,
                  "Failed to compile all shader programs"); /* Probably, eh. */
 
