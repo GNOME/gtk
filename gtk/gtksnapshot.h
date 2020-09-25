@@ -102,7 +102,7 @@ GDK_AVAILABLE_IN_ALL
 void            gtk_snapshot_push_gl_shader             (GtkSnapshot            *snapshot,
                                                          GskGLShader            *shader,
                                                          const graphene_rect_t  *bounds,
-                                                         GBytes                 *args,
+                                                         GBytes                 *take_args,
                                                          int                     n_children);
 GDK_AVAILABLE_IN_ALL
 void            gtk_snapshot_push_gl_shader_v           (GtkSnapshot            *snapshot,
