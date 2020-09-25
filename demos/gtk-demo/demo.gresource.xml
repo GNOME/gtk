@@ -143,6 +143,7 @@
     <file>transition2.glsl</file>
     <file>transition3.glsl</file>
     <file>transition4.glsl</file>
+    <file>cogs2.glsl</file>
   </gresource>
   <gresource prefix="/iconscroll">
     <file>iconscroll.ui</file>

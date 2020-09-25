@@ -109,10 +109,26 @@ new_shadertoy (const char *path)
   return toy;
 }
 
+static gboolean
+update_paintable (GtkWidget     *widget,
+                  GdkFrameClock *frame_clock,
+                  gpointer       user_data)
+{
+  GskShaderPaintable *paintable;
+  gint64 frame_time;
+
+  paintable = GSK_SHADER_PAINTABLE (gtk_picture_get_paintable (GTK_PICTURE (widget)));
+  frame_time = gdk_frame_clock_get_frame_time (frame_clock);
+  gsk_shader_paintable_update_time (paintable, 0, frame_time);
+
+  return G_SOURCE_CONTINUE;
+}
+
 static GtkWidget *
-make_shader_stack (const char *name,
-                   const char *resource_path,
-                   GtkWidget  *scale)
+make_shader_stack (const char    *name,
+                   const char    *resource_path,
+                   GtkWidget     *scale,
+                   GdkFrameClock *frame_clock)
 {
   GtkWidget *stack, *child, *widget, *vbox, *hbox, *bin;
   GtkWidget *label, *button, *tv;
@@ -124,6 +140,7 @@ make_shader_stack (const char *name,
   GBytes *bytes;
   GtkEventController *controller;
   GtkCssProvider *provider;
+  GdkPaintable *paintable;
 
   stack = gtk_shader_stack_new ();
   shader = gsk_gl_shader_new_from_resource (resource_path);
@@ -131,6 +148,14 @@ make_shader_stack (const char *name,
   g_object_unref (shader);
 
   child = gtk_picture_new_for_resource ("/css_pixbufs/background.jpg");
+  gtk_picture_set_can_shrink (GTK_PICTURE (child), TRUE);
+  gtk_shader_stack_add_child (GTK_SHADER_STACK (stack), child);
+
+  shader = gsk_gl_shader_new_from_resource ("/gltransition/cogs2.glsl");
+  paintable = gsk_shader_paintable_new (shader, NULL);
+
+  child = gtk_picture_new_for_paintable (paintable);
+  gtk_widget_add_tick_callback (child, update_paintable, NULL, NULL);
   gtk_picture_set_can_shrink (GTK_PICTURE (child), TRUE);
   gtk_shader_stack_add_child (GTK_SHADER_STACK (stack), child);
 
@@ -243,6 +268,7 @@ static GtkWidget *
 create_gltransition_window (GtkWidget *do_widget)
 {
   GtkWidget *window, *headerbar, *scale, *grid;
+  GdkFrameClock *frame_clock;
 
   window = gtk_window_new ();
   gtk_window_set_display (GTK_WINDOW (window),  gtk_widget_get_display (do_widget));
@@ -270,17 +296,20 @@ create_gltransition_window (GtkWidget *do_widget)
   gtk_grid_set_row_homogeneous (GTK_GRID (grid), TRUE);
   gtk_grid_set_column_homogeneous (GTK_GRID (grid), TRUE);
 
+  gtk_widget_realize (window);
+  frame_clock = gtk_widget_get_frame_clock (window);
+
   gtk_grid_attach (GTK_GRID (grid),
-                   make_shader_stack ("Wind", "/gltransition/transition1.glsl", scale),
+                   make_shader_stack ("Wind", "/gltransition/transition1.glsl", scale, frame_clock),
                    0, 0, 1, 1);
   gtk_grid_attach (GTK_GRID (grid),
-                   make_shader_stack ("Radial", "/gltransition/transition2.glsl", scale),
+                   make_shader_stack ("Radial", "/gltransition/transition2.glsl", scale, frame_clock),
                    1, 0, 1, 1);
   gtk_grid_attach (GTK_GRID (grid),
-                   make_shader_stack ("Crosswarp", "/gltransition/transition3.glsl", scale),
+                   make_shader_stack ("Crosswarp", "/gltransition/transition3.glsl", scale, frame_clock),
                    0, 1, 1, 1);
   gtk_grid_attach (GTK_GRID (grid),
-                   make_shader_stack ("Kaleidoscope", "/gltransition/transition4.glsl", scale),
+                   make_shader_stack ("Kaleidoscope", "/gltransition/transition4.glsl", scale, frame_clock),
                    1, 1, 1, 1);
 
   return window;
