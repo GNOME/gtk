@@ -1041,6 +1041,13 @@ You can replace calls to gtk_dialog_run() by specifying that the
 %GTK_DIALOG_MODAL flag, and connecting to the #GtkDialog::response
 signal.
 
+### Stop using GtkBuildable API
+
+All the GtkBuildable API was made private, except for the
+getter function to retrieve the buildable ID. If you are
+using gtk_buildable_get_name() you should replace it with
+gtk_buildable_get_buildable_id().
+
 ## Changes to consider after the switch
 
 GTK 4 has a number of new features that you may want to take
