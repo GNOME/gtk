@@ -28,7 +28,6 @@ struct _GdkTextureClass {
                                                          const GdkRectangle     *area,
                                                          guchar                 *data,
                                                          gsize                   stride);
-  cairo_surface_t *     (* download_surface)            (GdkTexture             *texture);
 };
 
 gpointer                gdk_texture_new                 (const GdkTextureClass  *klass,
