@@ -291,6 +291,8 @@ gdk_gl_context_upload_texture (GdkGLContext    *context,
    */
   if (stride == width * bpp)
     {
+      glPixelStorei (GL_UNPACK_ALIGNMENT, 1);
+
       glTexImage2D (texture_target, 0, GL_RGBA, width, height, 0, gl_format, gl_type, data);
     }
   else if ((!priv->use_es ||
