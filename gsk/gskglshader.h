@@ -30,6 +30,10 @@
 
 G_BEGIN_DECLS
 
+#define GSK_TYPE_SHADER_ARGS_BUILDER    (gsk_shader_args_builder_get_type ())
+
+typedef struct _GskShaderArgsBuilder GskShaderArgsBuilder;
+
 #define GSK_TYPE_GL_SHADER (gsk_gl_shader_get_type ())
 
 GDK_AVAILABLE_IN_ALL
@@ -62,94 +66,91 @@ GDK_AVAILABLE_IN_ALL
 int              gsk_gl_shader_get_uniform_offset      (GskGLShader      *shader,
                                                        int               idx);
 GDK_AVAILABLE_IN_ALL
-int              gsk_gl_shader_get_uniforms_size       (GskGLShader      *shader);
+int              gsk_gl_shader_get_args_size       (GskGLShader      *shader);
 
 
-/* Helpers for managing uniform data */
+/* Helpers for managing shader args */
 
 GDK_AVAILABLE_IN_ALL
-float    gsk_gl_shader_get_uniform_data_float (GskGLShader     *shader,
-                                               GBytes          *uniform_data,
-                                               int              idx);
+GBytes * gsk_gl_shader_format_args_va (GskGLShader     *shader,
+                                       va_list          uniforms);
 GDK_AVAILABLE_IN_ALL
-gint32   gsk_gl_shader_get_uniform_data_int   (GskGLShader     *shader,
-                                               GBytes          *uniform_data,
-                                               int              idx);
-GDK_AVAILABLE_IN_ALL
-guint32  gsk_gl_shader_get_uniform_data_uint  (GskGLShader     *shader,
-                                               GBytes          *uniform_data,
-                                               int              idx);
-GDK_AVAILABLE_IN_ALL
-gboolean gsk_gl_shader_get_uniform_data_bool  (GskGLShader     *shader,
-                                               GBytes          *uniform_data,
-                                               int              idx);
-GDK_AVAILABLE_IN_ALL
-void     gsk_gl_shader_get_uniform_data_vec2  (GskGLShader     *shader,
-                                               GBytes          *uniform_data,
-                                               int              idx,
-                                               graphene_vec2_t *out_value);
-GDK_AVAILABLE_IN_ALL
-void     gsk_gl_shader_get_uniform_data_vec3  (GskGLShader     *shader,
-                                               GBytes          *uniform_data,
-                                               int              idx,
-                                               graphene_vec3_t *out_value);
-GDK_AVAILABLE_IN_ALL
-void     gsk_gl_shader_get_uniform_data_vec4  (GskGLShader     *shader,
-                                               GBytes          *uniform_data,
-                                               int              idx,
-                                               graphene_vec4_t *out_value);
-GDK_AVAILABLE_IN_ALL
-GBytes * gsk_gl_shader_format_uniform_data_va (GskGLShader     *shader,
-                                               va_list          uniforms);
-
-typedef struct _GskUniformDataBuilder GskUniformDataBuilder;
+GBytes * gsk_gl_shader_format_args    (GskGLShader     *shader,
+                                       ...) G_GNUC_NULL_TERMINATED;
 
 GDK_AVAILABLE_IN_ALL
-GskUniformDataBuilder *gsk_gl_shader_build_uniform_data (GskGLShader *shader);
+float    gsk_gl_shader_get_arg_float (GskGLShader     *shader,
+                                      GBytes          *args,
+                                      int              idx);
+GDK_AVAILABLE_IN_ALL
+gint32   gsk_gl_shader_get_arg_int   (GskGLShader     *shader,
+                                      GBytes          *args,
+                                      int              idx);
+GDK_AVAILABLE_IN_ALL
+guint32  gsk_gl_shader_get_arg_uint  (GskGLShader     *shader,
+                                      GBytes          *args,
+                                      int              idx);
+GDK_AVAILABLE_IN_ALL
+gboolean gsk_gl_shader_get_arg_bool  (GskGLShader     *shader,
+                                      GBytes          *args,
+                                      int              idx);
+GDK_AVAILABLE_IN_ALL
+void     gsk_gl_shader_get_arg_vec2  (GskGLShader     *shader,
+                                      GBytes          *args,
+                                      int              idx,
+                                      graphene_vec2_t *out_value);
+GDK_AVAILABLE_IN_ALL
+void     gsk_gl_shader_get_arg_vec3  (GskGLShader     *shader,
+                                      GBytes          *args,
+                                      int              idx,
+                                      graphene_vec3_t *out_value);
+GDK_AVAILABLE_IN_ALL
+void     gsk_gl_shader_get_arg_vec4  (GskGLShader     *shader,
+                                      GBytes          *args,
+                                      int              idx,
+                                      graphene_vec4_t *out_value);
 
-
-#define GSK_TYPE_UNIFORM_DATA_BUILDER    (gsk_uniform_data_builder_get_type ())
-
 GDK_AVAILABLE_IN_ALL
-GType   gsk_uniform_data_builder_get_type  (void) G_GNUC_CONST;
+GskShaderArgsBuilder *gsk_gl_shader_build_args (GskGLShader *shader);
 
 GDK_AVAILABLE_IN_ALL
-GBytes *               gsk_uniform_data_builder_finish (GskUniformDataBuilder *builder);
-GDK_AVAILABLE_IN_ALL
-void                   gsk_uniform_data_builder_free   (GskUniformDataBuilder *builder);
-GDK_AVAILABLE_IN_ALL
-GskUniformDataBuilder *gsk_uniform_data_builder_copy   (GskUniformDataBuilder *builder);
+GType   gsk_shader_args_builder_get_type  (void) G_GNUC_CONST;
 
 GDK_AVAILABLE_IN_ALL
-void    gsk_uniform_data_builder_set_float (GskUniformDataBuilder *builder,
-                                            int                    idx,
-                                            float                  value);
+GBytes *               gsk_shader_args_builder_finish (GskShaderArgsBuilder *builder);
 GDK_AVAILABLE_IN_ALL
-void    gsk_uniform_data_builder_set_int   (GskUniformDataBuilder *builder,
-                                            int                    idx,
-                                            gint32                 value);
+void                   gsk_shader_args_builder_free   (GskShaderArgsBuilder *builder);
 GDK_AVAILABLE_IN_ALL
-void    gsk_uniform_data_builder_set_uint  (GskUniformDataBuilder *builder,
-                                            int                    idx,
-                                            guint32                value);
-GDK_AVAILABLE_IN_ALL
-void    gsk_uniform_data_builder_set_bool  (GskUniformDataBuilder *builder,
-                                            int                    idx,
-                                            gboolean               value);
-GDK_AVAILABLE_IN_ALL
-void    gsk_uniform_data_builder_set_vec2  (GskUniformDataBuilder *builder,
-                                            int                    idx,
-                                            const graphene_vec2_t *value);
-GDK_AVAILABLE_IN_ALL
-void    gsk_uniform_data_builder_set_vec3  (GskUniformDataBuilder *builder,
-                                            int                    idx,
-                                            const graphene_vec3_t *value);
-GDK_AVAILABLE_IN_ALL
-void    gsk_uniform_data_builder_set_vec4  (GskUniformDataBuilder *builder,
-                                            int                    idx,
-                                            const graphene_vec4_t *value);
+GskShaderArgsBuilder  *gsk_shader_args_builder_copy   (GskShaderArgsBuilder *builder);
 
-
+GDK_AVAILABLE_IN_ALL
+void    gsk_shader_args_builder_set_float (GskShaderArgsBuilder *builder,
+                                           int                    idx,
+                                           float                  value);
+GDK_AVAILABLE_IN_ALL
+void    gsk_shader_args_builder_set_int   (GskShaderArgsBuilder *builder,
+                                           int                    idx,
+                                           gint32                 value);
+GDK_AVAILABLE_IN_ALL
+void    gsk_shader_args_builder_set_uint  (GskShaderArgsBuilder *builder,
+                                           int                    idx,
+                                           guint32                value);
+GDK_AVAILABLE_IN_ALL
+void    gsk_shader_args_builder_set_bool  (GskShaderArgsBuilder *builder,
+                                           int                    idx,
+                                           gboolean               value);
+GDK_AVAILABLE_IN_ALL
+void    gsk_shader_args_builder_set_vec2  (GskShaderArgsBuilder *builder,
+                                           int                    idx,
+                                           const graphene_vec2_t *value);
+GDK_AVAILABLE_IN_ALL
+void    gsk_shader_args_builder_set_vec3  (GskShaderArgsBuilder *builder,
+                                           int                    idx,
+                                           const graphene_vec3_t *value);
+GDK_AVAILABLE_IN_ALL
+void    gsk_shader_args_builder_set_vec4  (GskShaderArgsBuilder *builder,
+                                           int                    idx,
+                                           const graphene_vec4_t *value);
 
 
 G_END_DECLS

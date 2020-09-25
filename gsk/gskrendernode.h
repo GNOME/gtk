@@ -459,7 +459,7 @@ GType                   gsk_gl_shader_node_get_type              (void) G_GNUC_C
 GDK_AVAILABLE_IN_ALL
 GskRenderNode *         gsk_gl_shader_node_new                  (GskGLShader              *shader,
                                                                  const graphene_rect_t    *bounds,
-                                                                 GBytes                   *uniform_data,
+                                                                 GBytes                   *args,
                                                                  GskRenderNode           **children,
                                                                  int                       n_children);
 GDK_AVAILABLE_IN_ALL
@@ -468,10 +468,9 @@ GDK_AVAILABLE_IN_ALL
 GskRenderNode *         gsk_gl_shader_node_get_child            (GskRenderNode            *node,
                                                                  int                       idx);
 GDK_AVAILABLE_IN_ALL
-GBytes *                gsk_gl_shader_node_get_uniform_data     (GskRenderNode            *node);
+GBytes *                gsk_gl_shader_node_get_args             (GskRenderNode            *node);
 GDK_AVAILABLE_IN_ALL
 GskGLShader *           gsk_gl_shader_node_get_shader           (GskRenderNode            *node);
-
 
 G_END_DECLS
 

@@ -1189,7 +1189,7 @@ parse_uniform_value (GtkCssParser *parser,
 }
 
 static gboolean
-parse_uniform_data (GtkCssParser *parser, gpointer data)
+parse_shader_args (GtkCssParser *parser, gpointer data)
 {
   ShaderInfo *shader_info = data;
   int n_uniforms = gsk_gl_shader_get_n_uniforms (shader_info->shader);
@@ -1221,7 +1221,7 @@ parse_glshader_node (GtkCssParser *parser)
   const Declaration declarations[] = {
     { "bounds", parse_rect, NULL, &bounds },
     { "sourcecode", parse_shader, NULL, &shader_info },
-    { "uniform-data", parse_uniform_data, clear_shader_info, &shader_info },
+    { "uniform-data", parse_shader_args, clear_shader_info, &shader_info },
     { "child1", parse_node, clear_node, &child[0] },
     { "child2", parse_node, clear_node, &child[1] },
     { "child3", parse_node, clear_node, &child[2] },
@@ -1229,8 +1229,8 @@ parse_glshader_node (GtkCssParser *parser)
   };
   GskGLShader *shader;
   GskRenderNode *node;
-  GskUniformDataBuilder *builder;
-  GBytes *uniform_data = NULL;
+  GskShaderArgsBuilder *builder;
+  GBytes *args = NULL;
   int len, i;
 
   parse_declarations (parser, declarations, G_N_ELEMENTS(declarations));
@@ -1243,7 +1243,7 @@ parse_glshader_node (GtkCssParser *parser)
 
   shader = shader_info.shader;
 
-  builder = gsk_gl_shader_build_uniform_data (shader);
+  builder = gsk_gl_shader_build_args (shader);
   for (i = 0; i < shader_info.uniform_values->len; i++)
     {
       GskGLUniformType uniform_type = gsk_gl_shader_get_uniform_type (shader, i);
@@ -1252,26 +1252,26 @@ parse_glshader_node (GtkCssParser *parser)
       switch (uniform_type)
         {
         case GSK_GL_UNIFORM_TYPE_FLOAT:
-          gsk_uniform_data_builder_set_float (builder, i, value->v[0]);
+          gsk_shader_args_builder_set_float (builder, i, value->v[0]);
           break;
 
         case GSK_GL_UNIFORM_TYPE_INT:
-          gsk_uniform_data_builder_set_int (builder, i, value->i);
+          gsk_shader_args_builder_set_int (builder, i, value->i);
           break;
 
         case GSK_GL_UNIFORM_TYPE_UINT:
-          gsk_uniform_data_builder_set_uint (builder, i, value->i);
+          gsk_shader_args_builder_set_uint (builder, i, value->i);
           break;
 
         case GSK_GL_UNIFORM_TYPE_BOOL:
-          gsk_uniform_data_builder_set_bool (builder, i, value->i);
+          gsk_shader_args_builder_set_bool (builder, i, value->i);
           break;
 
         case GSK_GL_UNIFORM_TYPE_VEC2:
           {
             graphene_vec2_t v;
             graphene_vec2_init (&v, value->v[0], value->v[1]);
-            gsk_uniform_data_builder_set_vec2 (builder, i, &v);
+            gsk_shader_args_builder_set_vec2 (builder, i, &v);
           }
           break;
 
@@ -1279,7 +1279,7 @@ parse_glshader_node (GtkCssParser *parser)
           {
             graphene_vec3_t v;
             graphene_vec3_init (&v, value->v[0], value->v[1], value->v[2]);
-            gsk_uniform_data_builder_set_vec3 (builder, i, &v);
+            gsk_shader_args_builder_set_vec3 (builder, i, &v);
           }
           break;
 
@@ -1287,7 +1287,7 @@ parse_glshader_node (GtkCssParser *parser)
           {
             graphene_vec4_t v;
             graphene_vec4_init (&v, value->v[0], value->v[1], value->v[2], value->v[3]);
-            gsk_uniform_data_builder_set_vec4 (builder, i, &v);
+            gsk_shader_args_builder_set_vec4 (builder, i, &v);
           }
           break;
 
@@ -1297,14 +1297,14 @@ parse_glshader_node (GtkCssParser *parser)
         }
     }
 
-  uniform_data = gsk_uniform_data_builder_finish (builder);
-  gsk_uniform_data_builder_free (builder);
+  args = gsk_shader_args_builder_finish (builder);
+  gsk_shader_args_builder_free (builder);
 
-  node = gsk_gl_shader_node_new (shader, &bounds, uniform_data,
+  node = gsk_gl_shader_node_new (shader, &bounds, args,
                                  child, len);
 
   g_array_unref (shader_info.uniform_values);
-  g_bytes_unref (uniform_data);
+  g_bytes_unref (args);
   g_object_unref (shader);
 
   for (i = 0; i < 4; i++)
@@ -2729,7 +2729,7 @@ render_node_print (Printer       *p,
     case GSK_GL_SHADER_NODE:
       {
         GskGLShader *shader = gsk_gl_shader_node_get_shader (node);
-        GBytes *uniform_data = gsk_gl_shader_node_get_uniform_data (node);
+        GBytes *args = gsk_gl_shader_node_get_args (node);
 
         start_node (p, "glshader");
 
@@ -2759,28 +2759,28 @@ render_node_print (Printer       *p,
 
                   case GSK_GL_UNIFORM_TYPE_FLOAT:
                     {
-                      float value = gsk_gl_shader_get_uniform_data_float (shader, uniform_data, i);
+                      float value = gsk_gl_shader_get_arg_float (shader, args, i);
                       string_append_double (data, value);
                     }
                     break;
 
                   case GSK_GL_UNIFORM_TYPE_INT:
                     {
-                      gint32 value = gsk_gl_shader_get_uniform_data_int (shader, uniform_data, i);
+                      gint32 value = gsk_gl_shader_get_arg_int (shader, args, i);
                       g_string_append_printf (data, "%d", value);
                     }
                     break;
 
                   case GSK_GL_UNIFORM_TYPE_UINT:
                     {
-                      guint32 value = gsk_gl_shader_get_uniform_data_uint (shader, uniform_data, i);
+                      guint32 value = gsk_gl_shader_get_arg_uint (shader, args, i);
                       g_string_append_printf (data, "%u", value);
                     }
                     break;
 
                   case GSK_GL_UNIFORM_TYPE_BOOL:
                     {
-                      gboolean value = gsk_gl_shader_get_uniform_data_bool (shader, uniform_data, i);
+                      gboolean value = gsk_gl_shader_get_arg_bool (shader, args, i);
                       g_string_append_printf (data, "%d", value);
                     }
                     break;
@@ -2788,8 +2788,8 @@ render_node_print (Printer       *p,
                   case GSK_GL_UNIFORM_TYPE_VEC2:
                     {
                       graphene_vec2_t value;
-                      gsk_gl_shader_get_uniform_data_vec2 (shader, uniform_data, i,
-                                                          &value);
+                      gsk_gl_shader_get_arg_vec2 (shader, args, i,
+                                                  &value);
                       string_append_double (data, graphene_vec2_get_x (&value));
                       g_string_append (data, " ");
                       string_append_double (data, graphene_vec2_get_y (&value));
@@ -2799,8 +2799,8 @@ render_node_print (Printer       *p,
                   case GSK_GL_UNIFORM_TYPE_VEC3:
                     {
                       graphene_vec3_t value;
-                      gsk_gl_shader_get_uniform_data_vec3 (shader, uniform_data, i,
-                                                          &value);
+                      gsk_gl_shader_get_arg_vec3 (shader, args, i,
+                                                  &value);
                       string_append_double (data, graphene_vec3_get_x (&value));
                       g_string_append (data, " ");
                       string_append_double (data, graphene_vec3_get_y (&value));
@@ -2812,8 +2812,8 @@ render_node_print (Printer       *p,
                   case GSK_GL_UNIFORM_TYPE_VEC4:
                     {
                       graphene_vec4_t value;
-                      gsk_gl_shader_get_uniform_data_vec4 (shader, uniform_data, i,
-                                                          &value);
+                      gsk_gl_shader_get_arg_vec4 (shader, args, i,
+                                                  &value);
                       string_append_double (data, graphene_vec4_get_x (&value));
                       g_string_append (data, " ");
                       string_append_double (data, graphene_vec4_get_y (&value));

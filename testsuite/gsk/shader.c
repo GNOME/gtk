@@ -109,7 +109,7 @@ test_create_data (void)
 {
   GBytes *bytes;
   GskGLShader *shader;
-  GskUniformDataBuilder *builder;
+  GskShaderArgsBuilder *builder;
   graphene_vec2_t v2, vv2;
   graphene_vec3_t v3, vv3;
   graphene_vec4_t v4, vv4;
@@ -119,40 +119,40 @@ test_create_data (void)
   g_assert_nonnull (shader);
   g_clear_pointer (&bytes, g_bytes_unref);
 
-  builder = gsk_gl_shader_build_uniform_data (shader);
+  builder = gsk_gl_shader_build_args (shader);
   g_assert_nonnull (builder);
 
   graphene_vec2_init (&v2, 20, 30);
   graphene_vec3_init (&v3, -1, -2, -3);
   graphene_vec4_init (&v4, 100, 0, -100, 10);
-  gsk_uniform_data_builder_set_float (builder, 0, 0.5);
-  gsk_uniform_data_builder_set_float (builder, 1, 20.0);
-  gsk_uniform_data_builder_set_vec2 (builder, 2, &v2);
-  gsk_uniform_data_builder_set_int (builder, 3, -99);
-  gsk_uniform_data_builder_set_uint (builder, 4, 99);
-  gsk_uniform_data_builder_set_bool (builder, 5, 1);
-  gsk_uniform_data_builder_set_vec3 (builder, 6, &v3);
-  gsk_uniform_data_builder_set_vec4 (builder, 7, &v4);
+  gsk_shader_args_builder_set_float (builder, 0, 0.5);
+  gsk_shader_args_builder_set_float (builder, 1, 20.0);
+  gsk_shader_args_builder_set_vec2 (builder, 2, &v2);
+  gsk_shader_args_builder_set_int (builder, 3, -99);
+  gsk_shader_args_builder_set_uint (builder, 4, 99);
+  gsk_shader_args_builder_set_bool (builder, 5, 1);
+  gsk_shader_args_builder_set_vec3 (builder, 6, &v3);
+  gsk_shader_args_builder_set_vec4 (builder, 7, &v4);
 
-  bytes = gsk_uniform_data_builder_finish (builder);
+  bytes = gsk_shader_args_builder_finish (builder);
 
-  g_assert_cmpfloat (gsk_gl_shader_get_uniform_data_float (shader, bytes, 0), ==, 0.5);
-  g_assert_cmpfloat (gsk_gl_shader_get_uniform_data_float (shader, bytes, 1), ==, 20.0);
-  gsk_gl_shader_get_uniform_data_vec2 (shader, bytes, 2, &vv2);
+  g_assert_cmpfloat (gsk_gl_shader_get_arg_float (shader, bytes, 0), ==, 0.5);
+  g_assert_cmpfloat (gsk_gl_shader_get_arg_float (shader, bytes, 1), ==, 20.0);
+  gsk_gl_shader_get_arg_vec2 (shader, bytes, 2, &vv2);
   g_assert_true (graphene_vec2_equal (&v2, &vv2));
 
-  g_assert_cmpint (gsk_gl_shader_get_uniform_data_int (shader, bytes, 3), ==, -99);
-  g_assert_cmpuint (gsk_gl_shader_get_uniform_data_uint (shader, bytes, 4), ==, 99);
-  g_assert_cmpint (gsk_gl_shader_get_uniform_data_bool (shader, bytes, 5), ==, 1);
+  g_assert_cmpint (gsk_gl_shader_get_arg_int (shader, bytes, 3), ==, -99);
+  g_assert_cmpuint (gsk_gl_shader_get_arg_uint (shader, bytes, 4), ==, 99);
+  g_assert_cmpint (gsk_gl_shader_get_arg_bool (shader, bytes, 5), ==, 1);
 
-  gsk_gl_shader_get_uniform_data_vec3 (shader, bytes, 6, &vv3);
+  gsk_gl_shader_get_arg_vec3 (shader, bytes, 6, &vv3);
   g_assert_true (graphene_vec3_equal (&v3, &vv3));
-  gsk_gl_shader_get_uniform_data_vec4 (shader, bytes, 7, &vv4);
+  gsk_gl_shader_get_arg_vec4 (shader, bytes, 7, &vv4);
   g_assert_true (graphene_vec4_equal (&v4, &vv4));
 
   g_bytes_unref (bytes);
 
-  gsk_uniform_data_builder_free (builder);
+  gsk_shader_args_builder_free (builder);
 
   g_object_unref (shader);
 }

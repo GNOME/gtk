@@ -812,7 +812,7 @@ populate_render_node_properties (GtkListStore  *store,
     case GSK_GL_SHADER_NODE:
       {
         GskGLShader *shader = gsk_gl_shader_node_get_shader (node);
-        GBytes *uniform_data = gsk_gl_shader_node_get_uniform_data (node);
+        GBytes *args = gsk_gl_shader_node_get_args (node);
         int i;
 
         add_int_row (store, "Required textures", gsk_gl_shader_get_n_required_textures (shader));
@@ -833,28 +833,28 @@ populate_render_node_properties (GtkListStore  *store,
 
               case GSK_GL_UNIFORM_TYPE_FLOAT:
                 add_float_row (store, title,
-                               gsk_gl_shader_get_uniform_data_float (shader, uniform_data, i));
+                               gsk_gl_shader_get_arg_float (shader, args, i));
                 break;
 
               case GSK_GL_UNIFORM_TYPE_INT:
                 add_int_row (store, title,
-                             gsk_gl_shader_get_uniform_data_int (shader, uniform_data, i));
+                             gsk_gl_shader_get_arg_int (shader, args, i));
                 break;
 
               case GSK_GL_UNIFORM_TYPE_UINT:
                 add_uint_row (store, title,
-                              gsk_gl_shader_get_uniform_data_uint (shader, uniform_data, i));
+                              gsk_gl_shader_get_arg_uint (shader, args, i));
                 break;
 
               case GSK_GL_UNIFORM_TYPE_BOOL:
                 add_boolean_row (store, title,
-                                 gsk_gl_shader_get_uniform_data_bool (shader, uniform_data, i));
+                                 gsk_gl_shader_get_arg_bool (shader, args, i));
                 break;
 
               case GSK_GL_UNIFORM_TYPE_VEC2:
                 {
                   graphene_vec2_t v;
-                  gsk_gl_shader_get_uniform_data_vec2 (shader, uniform_data, i, &v);
+                  gsk_gl_shader_get_arg_vec2 (shader, args, i, &v);
                   float x = graphene_vec2_get_x (&v);
                   float y = graphene_vec2_get_x (&v);
                   char *s = g_strdup_printf ("%.2f %.2f", x, y);
@@ -866,7 +866,7 @@ populate_render_node_properties (GtkListStore  *store,
               case GSK_GL_UNIFORM_TYPE_VEC3:
                 {
                   graphene_vec3_t v;
-                  gsk_gl_shader_get_uniform_data_vec3 (shader, uniform_data, i, &v);
+                  gsk_gl_shader_get_arg_vec3 (shader, args, i, &v);
                   float x = graphene_vec3_get_x (&v);
                   float y = graphene_vec3_get_y (&v);
                   float z = graphene_vec3_get_z (&v);
@@ -879,7 +879,7 @@ populate_render_node_properties (GtkListStore  *store,
               case GSK_GL_UNIFORM_TYPE_VEC4:
                 {
                   graphene_vec4_t v;
-                  gsk_gl_shader_get_uniform_data_vec4 (shader, uniform_data, i, &v);
+                  gsk_gl_shader_get_arg_vec4 (shader, args, i, &v);
                   float x = graphene_vec4_get_x (&v);
                   float y = graphene_vec4_get_y (&v);
                   float z = graphene_vec4_get_z (&v);

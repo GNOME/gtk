@@ -644,15 +644,15 @@ gsk_gl_shader_get_uniforms (GskGLShader *shader,
 }
 
 /**
- * gsk_gl_shader_get_uniforms_size:
+ * gsk_gl_shader_get_args_size:
  * @shader: A #GskGLShader
  *
- * Get the size of the data block used to specify uniform data for this shader.
+ * Get the size of the data block used to specify arguments for this shader.
  *
  * Returns: The size of the data block
  */
 int
-gsk_gl_shader_get_uniforms_size (GskGLShader *shader)
+gsk_gl_shader_get_args_size (GskGLShader *shader)
 {
   return shader->uniforms_size;
 }
@@ -672,25 +672,25 @@ gsk_gl_shader_find_uniform (GskGLShader *shader,
 }
 
 /**
- * gsk_gl_shader_get_uniform_data_float:
+ * gsk_gl_shader_get_arg_float:
  * @shader: A #GskGLShader
- * @uniform_data: The uniform data block
+ * @args: The uniform arguments
  * @idx: The index of the uniform
  *
- * Gets the value of the uniform @idx in the @uniform_data block.
+ * Gets the value of the uniform @idx in the @args block.
  * The uniform must be of float type.
  *
  * Returns: The value
  */
 float
-gsk_gl_shader_get_uniform_data_float (GskGLShader *shader,
-                                      GBytes       *uniform_data,
-                                      int          idx)
+gsk_gl_shader_get_arg_float (GskGLShader *shader,
+                             GBytes       *args,
+                             int          idx)
 {
   const GskGLUniform *u;
   const guchar *args_src;
   gsize size;
-  const guchar *data = g_bytes_get_data (uniform_data, &size);
+  const guchar *data = g_bytes_get_data (args, &size);
 
   g_assert (size == shader->uniforms_size);
   g_assert (idx < shader->uniforms->len);
@@ -702,25 +702,25 @@ gsk_gl_shader_get_uniform_data_float (GskGLShader *shader,
 }
 
 /**
- * gsk_gl_shader_get_uniform_data_int:
+ * gsk_gl_shader_get_arg_int:
  * @shader: A #GskGLShader
- * @uniform_data: The uniform data block
+ * @args: The uniform arguments
  * @idx: The index of the uniform
  *
- * Gets the value of the uniform @idx in the @uniform_data block.
+ * Gets the value of the uniform @idx in the @args block.
  * The uniform must be of int type.
  *
  * Returns: The value
  */
 gint32
-gsk_gl_shader_get_uniform_data_int (GskGLShader *shader,
-                                    GBytes       *uniform_data,
-                                    int          idx)
+gsk_gl_shader_get_arg_int (GskGLShader *shader,
+                           GBytes       *args,
+                           int          idx)
 {
   const GskGLUniform *u;
   const guchar *args_src;
   gsize size;
-  const guchar *data = g_bytes_get_data (uniform_data, &size);
+  const guchar *data = g_bytes_get_data (args, &size);
 
   g_assert (size == shader->uniforms_size);
   g_assert (idx < shader->uniforms->len);
@@ -732,25 +732,25 @@ gsk_gl_shader_get_uniform_data_int (GskGLShader *shader,
 }
 
 /**
- * gsk_gl_shader_get_uniform_data_uint:
+ * gsk_gl_shader_get_arg_uint:
  * @shader: A #GskGLShader
- * @uniform_data: The uniform data block
+ * @args: The uniform arguments
  * @idx: The index of the uniform
  *
- * Gets the value of the uniform @idx in the @uniform_data block.
+ * Gets the value of the uniform @idx in the @args block.
  * The uniform must be of uint type.
  *
  * Returns: The value
  */
 guint32
-gsk_gl_shader_get_uniform_data_uint (GskGLShader *shader,
-                                     GBytes       *uniform_data,
-                                     int          idx)
+gsk_gl_shader_get_arg_uint (GskGLShader *shader,
+                            GBytes       *args,
+                            int          idx)
 {
   const GskGLUniform *u;
   const guchar *args_src;
   gsize size;
-  const guchar *data = g_bytes_get_data (uniform_data, &size);
+  const guchar *data = g_bytes_get_data (args, &size);
 
   g_assert (size == shader->uniforms_size);
   g_assert (idx < shader->uniforms->len);
@@ -762,25 +762,25 @@ gsk_gl_shader_get_uniform_data_uint (GskGLShader *shader,
 }
 
 /**
- * gsk_gl_shader_get_uniform_data_bool:
+ * gsk_gl_shader_get_arg_bool:
  * @shader: A #GskGLShader
- * @uniform_data: The uniform data block
+ * @args: The uniform arguments
  * @idx: The index of the uniform
  *
- * Gets the value of the uniform @idx in the @uniform_data block.
+ * Gets the value of the uniform @idx in the @args block.
  * The uniform must be of bool type.
  *
  * Returns: The value
  */
 gboolean
-gsk_gl_shader_get_uniform_data_bool (GskGLShader *shader,
-                                     GBytes       *uniform_data,
-                                     int          idx)
+gsk_gl_shader_get_arg_bool (GskGLShader *shader,
+                            GBytes       *args,
+                            int          idx)
 {
   const GskGLUniform *u;
   const guchar *args_src;
   gsize size;
-  const guchar *data = g_bytes_get_data (uniform_data, &size);
+  const guchar *data = g_bytes_get_data (args, &size);
 
   g_assert (size == shader->uniforms_size);
   g_assert (idx < shader->uniforms->len);
@@ -792,25 +792,25 @@ gsk_gl_shader_get_uniform_data_bool (GskGLShader *shader,
 }
 
 /**
- * gsk_gl_shader_get_uniform_data_vec2:
+ * gsk_gl_shader_get_arg_vec2:
  * @shader: A #GskGLShader
- * @uniform_data: The uniform data block
+ * @args: The uniform arguments
  * @idx: The index of the uniform
  * @out_value: Location to store set the uniform value too
  *
- * Gets the value of the uniform @idx in the @uniform_data block.
+ * Gets the value of the uniform @idx in the @args block.
  * The uniform must be of vec2 type.
  */
 void
-gsk_gl_shader_get_uniform_data_vec2 (GskGLShader           *shader,
-                                     GBytes                *uniform_data,
-                                     int                    idx,
-                                     graphene_vec2_t       *out_value)
+gsk_gl_shader_get_arg_vec2 (GskGLShader           *shader,
+                            GBytes                *args,
+                            int                    idx,
+                            graphene_vec2_t       *out_value)
 {
   const GskGLUniform *u;
   const guchar *args_src;
   gsize size;
-  const guchar *data = g_bytes_get_data (uniform_data, &size);
+  const guchar *data = g_bytes_get_data (args, &size);
 
   g_assert (size == shader->uniforms_size);
   g_assert (idx < shader->uniforms->len);
@@ -822,25 +822,25 @@ gsk_gl_shader_get_uniform_data_vec2 (GskGLShader           *shader,
 }
 
 /**
- * gsk_gl_shader_get_uniform_data_vec3:
+ * gsk_gl_shader_get_arg_vec3:
  * @shader: A #GskGLShader
- * @uniform_data: The uniform data block
+ * @args: The uniform arguments
  * @idx: The index of the uniform
  * @out_value: Location to store set the uniform value too
  *
- * Gets the value of the uniform @idx in the @uniform_data block.
+ * Gets the value of the uniform @idx in the @args block.
  * The uniform must be of vec3 type.
  */
 void
-gsk_gl_shader_get_uniform_data_vec3 (GskGLShader           *shader,
-                                     GBytes                *uniform_data,
+gsk_gl_shader_get_arg_vec3 (GskGLShader           *shader,
+                                     GBytes                *args,
                                      int                    idx,
                                      graphene_vec3_t       *out_value)
 {
   const GskGLUniform *u;
   const guchar *args_src;
   gsize size;
-  const guchar *data = g_bytes_get_data (uniform_data, &size);
+  const guchar *data = g_bytes_get_data (args, &size);
 
   g_assert (size == shader->uniforms_size);
   g_assert (idx < shader->uniforms->len);
@@ -852,25 +852,25 @@ gsk_gl_shader_get_uniform_data_vec3 (GskGLShader           *shader,
 }
 
 /**
- * gsk_gl_shader_get_uniform_data_vec4:
+ * gsk_gl_shader_get_arg_vec4:
  * @shader: A #GskGLShader
- * @uniform_data: The uniform data block
+ * @args: The uniform arguments
  * @idx: The index of the uniform
  * @out_value: Location to store set the uniform value too
  *
- * Gets the value of the uniform @idx in the @uniform_data block.
+ * Gets the value of the uniform @idx in the @args block.
  * The uniform must be of vec4 type.
  */
 void
-gsk_gl_shader_get_uniform_data_vec4 (GskGLShader           *shader,
-                                     GBytes                *uniform_data,
-                                     int                    idx,
-                                     graphene_vec4_t       *out_value)
+gsk_gl_shader_get_arg_vec4 (GskGLShader           *shader,
+                            GBytes                *args,
+                            int                    idx,
+                            graphene_vec4_t       *out_value)
 {
   const GskGLUniform *u;
   const guchar *args_src;
   gsize size;
-  const guchar *data = g_bytes_get_data (uniform_data, &size);
+  const guchar *data = g_bytes_get_data (args, &size);
 
   g_assert (size == shader->uniforms_size);
   g_assert (idx < shader->uniforms->len);
@@ -882,7 +882,7 @@ gsk_gl_shader_get_uniform_data_vec4 (GskGLShader           *shader,
 }
 
 /**
- * gsk_gl_shader_format_uniform_data_va:
+ * gsk_gl_shader_format_args_va:
  * @shader: A #GskGLShader
  * @uniforms: Name-Value pairs for the uniforms of @shader, ending with a %NULL name, all values are passed by reference.
  *
@@ -894,8 +894,8 @@ gsk_gl_shader_get_uniform_data_vec4 (GskGLShader           *shader,
  * Returns: (transfer full): A newly allocated block of data which can be passed to gsk_gl_shader_node_new().
  */
 GBytes *
-gsk_gl_shader_format_uniform_data_va (GskGLShader *shader,
-                                      va_list uniforms)
+gsk_gl_shader_format_args_va (GskGLShader *shader,
+                              va_list uniforms)
 {
   guchar *args = g_malloc0 (shader->uniforms_size);
   const char *name;
@@ -963,29 +963,55 @@ gsk_gl_shader_format_uniform_data_va (GskGLShader *shader,
   return g_bytes_new_take (args, shader->uniforms_size);
 }
 
-struct _GskUniformDataBuilder {
+/**
+ * gsk_gl_shader_format_args:
+ * @shader: A #GskGLShader
+ * @...: Name-Value pairs for the uniforms of @shader, ending with a %NULL name, all values are passed by reference.
+ *
+ * Formats the uniform data as needed for feeding the named uniforms values into the shader.
+ * The argument list is a list of pairs of names, and pointers to data of the types
+ * that match the declared uniforms (i.e. `float *` for float uniforms and `graphene_vec4_t *` f
+ * or vec3 uniforms).
+ *
+ * Returns: (transfer full): A newly allocated block of data which can be passed to gsk_gl_shader_node_new().
+ */
+GBytes *
+gsk_gl_shader_format_args (GskGLShader *shader,
+                           ...)
+{
+  GBytes *bytes;
+  va_list args;
+
+  va_start (args, shader);
+  bytes = gsk_gl_shader_format_args_va (shader, args);
+  va_end (args);
+
+  return bytes;
+}
+
+struct _GskShaderArgsBuilder {
   GskGLShader *shader;
   guchar *data;
 };
 
-G_DEFINE_BOXED_TYPE (GskUniformDataBuilder, gsk_uniform_data_builder,
-                     gsk_uniform_data_builder_copy,
-                     gsk_uniform_data_builder_free);
+G_DEFINE_BOXED_TYPE (GskShaderArgsBuilder, gsk_shader_args_builder,
+                     gsk_shader_args_builder_copy,
+                     gsk_shader_args_builder_free);
 
 
 /**
- * gsk_gl_shader_build_uniform_data:
+ * gsk_gl_shader_build_args:
  * @shader: A #GskGLShader
  *
  * Allocates a builder that can be used to construct a new uniform data
  * chunk.
  *
- * Returns: (transfer full): The newly allocated builder, free with gsk_uniform_data_builder_free()
+ * Returns: (transfer full): The newly allocated builder, free with gsk_shader_args_builder_free()
  */
-GskUniformDataBuilder *
-gsk_gl_shader_build_uniform_data (GskGLShader *shader)
+GskShaderArgsBuilder *
+gsk_gl_shader_build_args (GskGLShader *shader)
 {
-  GskUniformDataBuilder *builder = g_new0 (GskUniformDataBuilder, 1);
+  GskShaderArgsBuilder *builder = g_new0 (GskShaderArgsBuilder, 1);
   builder->shader = g_object_ref (shader);
   builder->data = g_malloc0 (shader->uniforms_size);
 
@@ -993,29 +1019,29 @@ gsk_gl_shader_build_uniform_data (GskGLShader *shader)
 }
 
 /**
- * gsk_uniform_data_builder_finish:
- * @builder: A #GskUniformDataBuilder
+ * gsk_shader_args_builder_finish:
+ * @builder: A #GskShaderArgsBuilder
  *
  * Finishes building the uniform data and returns it as a GBytes. Once this
  * is called the builder can not be used anymore.
  *
- * Returns: (transfer full): The newly allocated builder, free with gsk_uniform_data_builder_free()
+ * Returns: (transfer full): The newly allocated builder, free with gsk_shader_args_builder_free()
  */
 GBytes *
-gsk_uniform_data_builder_finish (GskUniformDataBuilder *builder)
+gsk_shader_args_builder_finish (GskShaderArgsBuilder *builder)
 {
   return g_bytes_new_take (g_steal_pointer (&builder->data),
                            builder->shader->uniforms_size);
 }
 
 /**
- * gsk_uniform_data_builder_free:
- * @builder: A #GskUniformDataBuilder
+ * gsk_shader_args_builder_free:
+ * @builder: A #GskShaderArgsBuilder
  *
  * Frees the builder.
  */
 void
-gsk_uniform_data_builder_free (GskUniformDataBuilder *builder)
+gsk_shader_args_builder_free (GskShaderArgsBuilder *builder)
 {
   g_object_unref (builder->shader);
   g_free (builder->data);
@@ -1023,25 +1049,25 @@ gsk_uniform_data_builder_free (GskUniformDataBuilder *builder)
 }
 
 /**
- * gsk_uniform_data_builder_copy:
- * @builder: A #GskUniformDataBuilder
+ * gsk_shader_args_builder_copy:
+ * @builder: A #GskShaderArgsBuilder
  *
  * Makes a copy of the builder.
  *
- * Returns: (transfer full): A copy of the builder, free with gsk_uniform_data_builder_free().
+ * Returns: (transfer full): A copy of the builder, free with gsk_shader_args_builder_free().
  */
-GskUniformDataBuilder *
-gsk_uniform_data_builder_copy (GskUniformDataBuilder *builder)
+GskShaderArgsBuilder *
+gsk_shader_args_builder_copy (GskShaderArgsBuilder *builder)
 {
-  GskUniformDataBuilder *new = g_new0 (GskUniformDataBuilder, 1);
+  GskShaderArgsBuilder *new = g_new0 (GskShaderArgsBuilder, 1);
   new->data = g_memdup (builder->data, builder->shader->uniforms_size);
   new->shader = g_object_ref (builder->shader);
   return new;
 }
 
 /**
- * gsk_uniform_data_builder_set_float:
- * @builder: A #GskUniformDataBuilder
+ * gsk_shader_args_builder_set_float:
+ * @builder: A #GskShaderArgsBuilder
  * @idx: The index of the uniform
  * @value: The value to set the uniform too
  *
@@ -1049,7 +1075,7 @@ gsk_uniform_data_builder_copy (GskUniformDataBuilder *builder)
  * The uniform must be of float type.
  */
 void
-gsk_uniform_data_builder_set_float (GskUniformDataBuilder *builder,
+gsk_shader_args_builder_set_float (GskShaderArgsBuilder *builder,
                                     int                    idx,
                                     float                  value)
 {
@@ -1066,8 +1092,8 @@ gsk_uniform_data_builder_set_float (GskUniformDataBuilder *builder,
 }
 
 /**
- * gsk_uniform_data_builder_set_int:
- * @builder: A #GskUniformDataBuilder
+ * gsk_shader_args_builder_set_int:
+ * @builder: A #GskShaderArgsBuilder
  * @idx: The index of the uniform
  * @value: The value to set the uniform too
  *
@@ -1075,9 +1101,9 @@ gsk_uniform_data_builder_set_float (GskUniformDataBuilder *builder,
  * The uniform must be of int type.
  */
 void
-gsk_uniform_data_builder_set_int (GskUniformDataBuilder *builder,
-                                  int                    idx,
-                                  gint32                 value)
+gsk_shader_args_builder_set_int (GskShaderArgsBuilder *builder,
+                                 int                    idx,
+                                 gint32                 value)
 {
   GskGLShader *shader = builder->shader;
   const GskGLUniform *u;
@@ -1092,8 +1118,8 @@ gsk_uniform_data_builder_set_int (GskUniformDataBuilder *builder,
 }
 
 /**
- * gsk_uniform_data_builder_set_uint:
- * @builder: A #GskUniformDataBuilder
+ * gsk_shader_args_builder_set_uint:
+ * @builder: A #GskShaderArgsBuilder
  * @idx: The index of the uniform
  * @value: The value to set the uniform too
  *
@@ -1101,9 +1127,9 @@ gsk_uniform_data_builder_set_int (GskUniformDataBuilder *builder,
  * The uniform must be of uint type.
  */
 void
-gsk_uniform_data_builder_set_uint (GskUniformDataBuilder *builder,
-                                   int                    idx,
-                                   guint32                value)
+gsk_shader_args_builder_set_uint (GskShaderArgsBuilder *builder,
+                                  int                    idx,
+                                  guint32                value)
 {
   GskGLShader *shader = builder->shader;
   const GskGLUniform *u;
@@ -1118,8 +1144,8 @@ gsk_uniform_data_builder_set_uint (GskUniformDataBuilder *builder,
 }
 
 /**
- * gsk_uniform_data_builder_set_bool:
- * @builder: A #GskUniformDataBuilder
+ * gsk_shader_args_builder_set_bool:
+ * @builder: A #GskShaderArgsBuilder
  * @idx: The index of the uniform
  * @value: The value to set the uniform too
  *
@@ -1127,9 +1153,9 @@ gsk_uniform_data_builder_set_uint (GskUniformDataBuilder *builder,
  * The uniform must be of bool type.
  */
 void
-gsk_uniform_data_builder_set_bool (GskUniformDataBuilder *builder,
-                                   int                    idx,
-                                   gboolean               value)
+gsk_shader_args_builder_set_bool (GskShaderArgsBuilder *builder,
+                                  int                    idx,
+                                  gboolean               value)
 {
   GskGLShader *shader = builder->shader;
   const GskGLUniform *u;
@@ -1144,8 +1170,8 @@ gsk_uniform_data_builder_set_bool (GskUniformDataBuilder *builder,
 }
 
 /**
- * gsk_uniform_data_builder_set_vec2:
- * @builder: A #GskUniformDataBuilder
+ * gsk_shader_args_builder_set_vec2:
+ * @builder: A #GskShaderArgsBuilder
  * @idx: The index of the uniform
  * @value: The value to set the uniform too
  *
@@ -1153,9 +1179,9 @@ gsk_uniform_data_builder_set_bool (GskUniformDataBuilder *builder,
  * The uniform must be of vec2 type.
  */
 void
-gsk_uniform_data_builder_set_vec2 (GskUniformDataBuilder *builder,
-                                   int                    idx,
-                                   const graphene_vec2_t *value)
+gsk_shader_args_builder_set_vec2 (GskShaderArgsBuilder *builder,
+                                  int                    idx,
+                                  const graphene_vec2_t *value)
 {
   GskGLShader *shader = builder->shader;
   const GskGLUniform *u;
@@ -1170,8 +1196,8 @@ gsk_uniform_data_builder_set_vec2 (GskUniformDataBuilder *builder,
 }
 
 /**
- * gsk_uniform_data_builder_set_vec3:
- * @builder: A #GskUniformDataBuilder
+ * gsk_shader_args_builder_set_vec3:
+ * @builder: A #GskShaderArgsBuilder
  * @idx: The index of the uniform
  * @value: The value to set the uniform too
  *
@@ -1179,9 +1205,9 @@ gsk_uniform_data_builder_set_vec2 (GskUniformDataBuilder *builder,
  * The uniform must be of vec3 type.
  */
 void
-gsk_uniform_data_builder_set_vec3 (GskUniformDataBuilder *builder,
-                                   int                    idx,
-                                   const graphene_vec3_t *value)
+gsk_shader_args_builder_set_vec3 (GskShaderArgsBuilder *builder,
+                                  int                    idx,
+                                  const graphene_vec3_t *value)
 {
   GskGLShader *shader = builder->shader;
   const GskGLUniform *u;
@@ -1196,8 +1222,8 @@ gsk_uniform_data_builder_set_vec3 (GskUniformDataBuilder *builder,
 }
 
 /**
- * gsk_uniform_data_builder_set_vec4:
- * @builder: A #GskUniformDataBuilder
+ * gsk_shader_args_builder_set_vec4:
+ * @builder: A #GskShaderArgsBuilder
  * @idx: The index of the uniform
  * @value: The value to set the uniform too
  *
@@ -1205,9 +1231,9 @@ gsk_uniform_data_builder_set_vec3 (GskUniformDataBuilder *builder,
  * The uniform must be of vec4 type.
  */
 void
-gsk_uniform_data_builder_set_vec4 (GskUniformDataBuilder *builder,
-                                   int                    idx,
-                                   const graphene_vec4_t *value)
+gsk_shader_args_builder_set_vec4 (GskShaderArgsBuilder *builder,
+                                  int                    idx,
+                                  const graphene_vec4_t *value)
 {
   GskGLShader *shader = builder->shader;
   const GskGLUniform *u;

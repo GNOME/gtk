@@ -93,7 +93,7 @@ struct _GtkSnapshotState {
     } clip;
     struct {
       GskGLShader *shader;
-      GBytes *uniform_data;
+      GBytes *args;
       graphene_rect_t bounds;
       int n_children;
       int node_idx;
@@ -848,13 +848,13 @@ gtk_snapshot_collect_gl_shader (GtkSnapshot      *snapshot,
     {
       shader_node = gsk_gl_shader_node_new (state->data.glshader.shader,
                                             &state->data.glshader.bounds,
-                                            state->data.glshader.uniform_data,
+                                            state->data.glshader.args,
                                             &state->data.glshader.nodes[0],
                                             state->data.glshader.n_children);
     }
 
   g_object_unref (state->data.glshader.shader);
-  g_bytes_unref (state->data.glshader.uniform_data);
+  g_bytes_unref (state->data.glshader.args);
   for (guint i = 0; i  < state->data.glshader.n_children; i++)
     gsk_render_node_unref (state->data.glshader.nodes[i]);
   g_free (state->data.glshader.nodes);
@@ -867,7 +867,7 @@ gtk_snapshot_collect_gl_shader (GtkSnapshot      *snapshot,
  * @snapshot: a #GtkSnapshot
  * @shader: The code to run
  * @bounds: the rectangle to render into
- * @uniform_data: Data block with uniform data for the shader.
+ * @args: Data block with uniform data for the shader.
  * @n_children: The number of extra nodes given as argument to the shader as textures.
  *
  * Push a #GskGLShaderNode with a specific #GskGLShader and a set of uniform values
@@ -890,7 +890,7 @@ void
 gtk_snapshot_push_gl_shader (GtkSnapshot           *snapshot,
                              GskGLShader           *shader,
                              const graphene_rect_t *bounds,
-                             GBytes                *uniform_data,
+                             GBytes                *args,
                              int                    n_children)
 {
   GtkSnapshotState *state;
@@ -907,7 +907,7 @@ gtk_snapshot_push_gl_shader (GtkSnapshot           *snapshot,
   gtk_graphene_rect_scale_affine (bounds, scale_x, scale_y, dx, dy, &transformed_bounds);
   state->data.glshader.bounds = transformed_bounds;
   state->data.glshader.shader = g_object_ref (shader);
-  state->data.glshader.uniform_data = g_bytes_ref (uniform_data);
+  state->data.glshader.args = g_bytes_ref (args);
   state->data.glshader.n_children = n_children;
   nodes = g_new0 (GskRenderNode *, n_children);
   node_idx = n_children-1; /* We pop in reverse order */
@@ -952,10 +952,10 @@ gtk_snapshot_push_gl_shader_va (GtkSnapshot           *snapshot,
                                 int                    n_children,
                                 va_list                uniforms)
 {
-  GBytes *uniform_data = gsk_gl_shader_format_uniform_data_va (shader, uniforms);
+  GBytes *args = gsk_gl_shader_format_args_va (shader, uniforms);
   gtk_snapshot_push_gl_shader (snapshot, shader, bounds,
-                               uniform_data, n_children);
-  g_bytes_unref (uniform_data);
+                               args, n_children);
+  g_bytes_unref (args);
 }
 
 /**

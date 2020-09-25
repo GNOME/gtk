@@ -1187,7 +1187,7 @@ render_gl_shader_node (GskGLRenderer       *self,
 
   if (program->id >= 0 && n_children <= G_N_ELEMENTS (program->glshader.texture_locations))
     {
-      GBytes *uniform_data;
+      GBytes *args;
       TextureRegion regions[4];
       gboolean is_offscreen[4];
       for (guint i = 0; i < n_children; i++)
@@ -1201,10 +1201,10 @@ render_gl_shader_node (GskGLRenderer       *self,
             return;
         }
 
-      uniform_data = gsk_gl_shader_node_get_uniform_data (node);
+      args = gsk_gl_shader_node_get_args (node);
       ops_set_program (builder, program);
 
-      ops_set_gl_shader_args (builder, shader, node->bounds.size.width, node->bounds.size.height, g_bytes_get_data (uniform_data, NULL));
+      ops_set_gl_shader_args (builder, shader, node->bounds.size.width, node->bounds.size.height, g_bytes_get_data (args, NULL));
       for (guint i = 0; i < n_children; i++)
         {
           if (i == 0)
