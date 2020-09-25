@@ -662,7 +662,7 @@ add_extra_columns (GtkColumnView   *view,
   for (i = 0; i < G_N_ELEMENTS(extra_columns); i++)
     {
       bytes = g_bytes_new_static (extra_columns[i].factory_xml, strlen (extra_columns[i].factory_xml));
-      column = gtk_column_view_column_new_with_factory (extra_columns[i].title,
+      column = gtk_column_view_column_new (extra_columns[i].title,
           gtk_builder_list_item_factory_new_from_bytes (scope, bytes));
       g_bytes_unref (bytes);
       sorter = GTK_SORTER (gtk_custom_sorter_new (compare_file_attribute, (gpointer) extra_columns[i].attribute, NULL));

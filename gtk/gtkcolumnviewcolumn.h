@@ -47,9 +47,7 @@ GDK_AVAILABLE_IN_ALL
 GType                   gtk_column_view_column_get_type                 (void) G_GNUC_CONST;
 
 GDK_AVAILABLE_IN_ALL
-GtkColumnViewColumn *   gtk_column_view_column_new                      (const char             *title);
-GDK_AVAILABLE_IN_ALL
-GtkColumnViewColumn *   gtk_column_view_column_new_with_factory         (const char             *title,
+GtkColumnViewColumn *   gtk_column_view_column_new                      (const char             *title,
                                                                          GtkListItemFactory     *factory);
 
 GDK_AVAILABLE_IN_ALL
