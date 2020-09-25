@@ -144,7 +144,7 @@ preview_file (const char *filename,
       window = gtk_window_new ();
 
       if (GTK_IS_BUILDABLE (object))
-        id = gtk_buildable_get_name (GTK_BUILDABLE (object));
+        id = gtk_buildable_get_buildable_id (GTK_BUILDABLE (object));
 
       set_window_title (GTK_WINDOW (window), filename, id);
 

@@ -76,12 +76,12 @@ struct _GtkBuildableParser
 /**
  * GtkBuildableIface:
  * @g_iface: the parent class
- * @set_name: Stores the name attribute given in the GtkBuilder UI definition.
+ * @set_id: Stores the id attribute given in the GtkBuilder UI definition.
  *  #GtkWidget stores the name as object data. Implement this method if your
- *  object has some notion of “name” and it makes sense to map the XML name
+ *  object has some notion of “ID” and it makes sense to map the XML id
  *  attribute to it.
- * @get_name: The getter corresponding to @set_name. Implement this
- *  if you implement @set_name.
+ * @get_id: The getter corresponding to @set_id. Implement this
+ *  if you implement @set_id.
  * @add_child: Adds a child. The @type parameter can be used to
  *  differentiate the kind of child. #GtkWidget implements this
  *  to add event controllers to the widget, #GtkNotebook uses
@@ -126,9 +126,9 @@ struct _GtkBuildableIface
   GTypeInterface g_iface;
 
   /* virtual table */
-  void          (* set_name)               (GtkBuildable       *buildable,
-                                            const char         *name);
-  const char * (* get_name)               (GtkBuildable       *buildable);
+  void          (* set_id)                 (GtkBuildable       *buildable,
+                                            const char         *id);
+  const char * (* get_id)                  (GtkBuildable       *buildable);
   void          (* add_child)              (GtkBuildable       *buildable,
                                             GtkBuilder         *builder,
                                             GObject            *child,
@@ -169,10 +169,10 @@ GDK_AVAILABLE_IN_ALL
 GType     gtk_buildable_get_type               (void) G_GNUC_CONST;
 
 GDK_AVAILABLE_IN_ALL
-void      gtk_buildable_set_name               (GtkBuildable        *buildable,
-						const char          *name);
+void      gtk_buildable_set_buildable_id       (GtkBuildable        *buildable,
+						const char          *id);
 GDK_AVAILABLE_IN_ALL
-const char * gtk_buildable_get_name           (GtkBuildable        *buildable);
+const char * gtk_buildable_get_buildable_id    (GtkBuildable        *buildable);
 GDK_AVAILABLE_IN_ALL
 void      gtk_buildable_add_child              (GtkBuildable        *buildable,
 						GtkBuilder          *builder,

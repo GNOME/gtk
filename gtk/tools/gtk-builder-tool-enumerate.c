@@ -29,12 +29,12 @@
 #include "gtk-builder-tool.h"
 
 static const char *
-object_get_name (GObject *object)
+object_get_id (GObject *object)
 {
   if (GTK_IS_BUILDABLE (object))
-    return gtk_buildable_get_name (GTK_BUILDABLE (object));
+    return gtk_buildable_get_buildable_id (GTK_BUILDABLE (object));
   else
-    return g_object_get_data (object, "gtk-builder-name");
+    return g_object_get_data (object, "gtk-builder-id");
 }
 
 void
@@ -63,7 +63,7 @@ do_enumerate (int *argc, const char ***argv)
   for (l = list; l; l = l->next)
     {
       object = l->data;
-      name = object_get_name (object);
+      name = object_get_id (object);
       if (g_str_has_prefix (name, "___") && g_str_has_suffix (name, "___"))
         continue;
 

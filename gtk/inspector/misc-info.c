@@ -353,7 +353,7 @@ update_info (gpointer data)
   if (GTK_IS_BUILDABLE (sl->object))
     {
       gtk_label_set_text (GTK_LABEL (sl->buildable_id),
-                          gtk_buildable_get_name (GTK_BUILDABLE (sl->object)));
+                          gtk_buildable_get_buildable_id (GTK_BUILDABLE (sl->object)));
     }
 
   if (GDK_IS_FRAME_CLOCK (sl->object))

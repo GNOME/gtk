@@ -617,8 +617,8 @@ gtk_grid_view_get_type
 GtkBuildable
 GtkBuildableIface
 GtkBuildableParser
-gtk_buildable_set_name
-gtk_buildable_get_name
+gtk_buildable_set_buildable_id
+gtk_buildable_get_buildable_id
 gtk_buildable_add_child
 gtk_buildable_set_buildable_property
 gtk_buildable_construct_child

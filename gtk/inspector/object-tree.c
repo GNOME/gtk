@@ -633,7 +633,7 @@ gtk_inspector_get_object_name (GObject *object)
     {
       const char *id;
 
-      id = gtk_buildable_get_name (GTK_BUILDABLE (object));
+      id = gtk_buildable_get_buildable_id (GTK_BUILDABLE (object));
       if (id != NULL && !g_str_has_prefix (id, "___object_"))
         return id;
     }

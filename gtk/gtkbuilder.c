@@ -623,12 +623,12 @@ gtk_builder_get_parameters (GtkBuilder         *builder,
 }
 
 static const char *
-object_get_name (GObject *object)
+object_get_id (GObject *object)
 {
   if (GTK_IS_BUILDABLE (object))
-    return gtk_buildable_get_name (GTK_BUILDABLE (object));
+    return gtk_buildable_get_buildable_id (GTK_BUILDABLE (object));
   else
-    return g_object_get_data (object, "gtk-builder-name");
+    return g_object_get_data (object, "gtk-builder-id");
 }
 
 static GObject *
@@ -650,7 +650,7 @@ gtk_builder_get_internal_child (GtkBuilder   *builder,
 
       GTK_NOTE (BUILDER,
                 g_message ("Trying to get internal child %s from %s",
-                           childname, object_get_name (info->object)));
+                           childname, object_get_id (info->object)));
 
       if (GTK_IS_BUILDABLE (info->object))
           obj = gtk_buildable_get_internal_child (GTK_BUILDABLE (info->object),
@@ -669,13 +669,13 @@ gtk_builder_get_internal_child (GtkBuilder   *builder,
 }
 
 static inline void
-object_set_name (GObject     *object,
-                 const char *name)
+object_set_id (GObject     *object,
+                 const char *id)
 {
   if (GTK_IS_BUILDABLE (object))
-    gtk_buildable_set_name (GTK_BUILDABLE (object), name);
+    gtk_buildable_set_buildable_id (GTK_BUILDABLE (object), id);
   else
-    g_object_set_data_full (object, "gtk-builder-name", g_strdup (name), g_free);
+    g_object_set_data_full (object, "gtk-builder-id", g_strdup (id), g_free);
 }
 
 void
@@ -685,7 +685,7 @@ _gtk_builder_add_object (GtkBuilder  *builder,
 {
   GtkBuilderPrivate *priv = gtk_builder_get_instance_private (builder);
 
-  object_set_name (object, id);
+  object_set_id (object, id);
   g_hash_table_insert (priv->objects, g_strdup (id), g_object_ref (object));
 }
 
@@ -984,7 +984,7 @@ _gtk_builder_add (GtkBuilder *builder,
 
   if (!child_info->parent)
     {
-      g_warning ("%s: Not adding, No parent", object_get_name (object));
+      g_warning ("%s: Not adding, No parent", object_get_id (object));
       return;
     }
 
@@ -993,7 +993,7 @@ _gtk_builder_add (GtkBuilder *builder,
   parent = ((ObjectInfo*)child_info->parent)->object;
 
   GTK_NOTE (BUILDER,
-            g_message ("adding %s to %s", object_get_name (object), object_get_name (parent)));
+            g_message ("adding %s to %s", object_get_id (object), object_get_id (parent)));
 
   if (G_IS_LIST_STORE (parent))
     {
@@ -1735,7 +1735,7 @@ gtk_builder_expose_object (GtkBuilder    *builder,
   g_return_if_fail (name && name[0]);
   g_return_if_fail (!g_hash_table_contains (priv->objects, name));
 
-  object_set_name (object, name);
+  object_set_id (object, name);
   g_hash_table_insert (priv->objects,
                        g_strdup (name),
                        g_object_ref (object));
