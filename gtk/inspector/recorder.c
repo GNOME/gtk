@@ -173,7 +173,7 @@ create_list_model_for_render_node (GskRenderNode *node)
 
     case GSK_GL_SHADER_NODE:
       {
-        GListStore *store = G_LIST_STORE (create_render_node_list_model ((GskRenderNode *[1]) { gsk_gl_shader_node_get_fallback_child (node) }, 1));
+        GListStore *store = g_list_store_new (GDK_TYPE_PAINTABLE);
 
         for (guint i = 0; i < gsk_gl_shader_node_get_n_children (node); i++)
           {

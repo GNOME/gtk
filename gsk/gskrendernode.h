@@ -460,11 +460,8 @@ GDK_AVAILABLE_IN_ALL
 GskRenderNode *         gsk_gl_shader_node_new                  (GskGLShader              *shader,
                                                                  const graphene_rect_t    *bounds,
                                                                  GBytes                   *uniform_data,
-                                                                 GskRenderNode            *fallback,
                                                                  GskRenderNode           **children,
                                                                  int                       n_children);
-GDK_AVAILABLE_IN_ALL
-GskRenderNode *         gsk_gl_shader_node_get_fallback_child   (GskRenderNode            *node);
 GDK_AVAILABLE_IN_ALL
 guint                   gsk_gl_shader_node_get_n_children       (GskRenderNode            *node);
 GDK_AVAILABLE_IN_ALL

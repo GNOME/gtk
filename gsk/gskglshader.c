@@ -112,6 +112,7 @@
 #include "gskglshader.h"
 #include "gskglshaderprivate.h"
 #include "gskdebugprivate.h"
+#include "gl/gskglrendererprivate.h"
 
 static GskGLUniformType
 uniform_type_from_glsl (const char *str)
@@ -482,6 +483,40 @@ gsk_gl_shader_new_from_resource (const char      *resource_path)
                        "resource", resource_path,
                        NULL);
 }
+
+/**
+ * gsk_gl_shader_try_compile_for:
+ * @shader: A #GskGLShader
+ * @renderer: A #GskRenderer
+ * @error: Location to store error int
+ *
+ * Tries to compile the @shader for the given @renderer, and reports
+ * %FALSE with an error if there is a problem. You should use this
+ * before relying on the shader for rendering and use a fallback with
+ * a simpler shader or without shaders if it fails.
+ *
+ * Note that this will modify the rendering state (for example
+ * change the current GL context) and requires the renderer to be
+ * set up. This means that the widget has to be realized. Commonly you
+ * want to call this from the realize signal of a widget, or during
+ * widget snapshot.
+ *
+ * Returns: %TRUE on success, %FALSE if an error occurred
+ */
+gboolean
+gsk_gl_shader_try_compile_for (GskGLShader      *shader,
+                               GskRenderer      *renderer,
+                               GError          **error)
+{
+  if (GSK_IS_GL_RENDERER (renderer))
+    return gsk_gl_render_try_compile_gl_shader (GSK_GL_RENDERER (renderer),
+                                                shader, error);
+
+  g_set_error (error, G_IO_ERROR, G_IO_ERROR_NOT_SUPPORTED,
+               "The renderer does not support gl shaders");
+  return FALSE;
+}
+
 
 /**
  * gsk_gl_shader_get_sourcecode:

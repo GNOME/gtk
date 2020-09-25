@@ -821,19 +821,6 @@ gtk_snapshot_push_clip (GtkSnapshot           *snapshot,
 }
 
 static GskRenderNode *
-maybe_clip (GskRenderNode         *node,
-            const graphene_rect_t *bounds)
-{
-  if (node &&
-      !graphene_rect_contains_rect (bounds, &node->bounds))
-    {
-      return gsk_clip_node_new (node, bounds);
-    }
-
-  return gsk_render_node_ref (node);
-}
-
-static GskRenderNode *
 gtk_snapshot_collect_gl_shader (GtkSnapshot      *snapshot,
                                 GtkSnapshotState *state,
                                 GskRenderNode   **nodes,
@@ -849,7 +836,7 @@ gtk_snapshot_collect_gl_shader (GtkSnapshot      *snapshot,
 
   state->data.glshader.nodes[state->data.glshader.node_idx] = child_node;
 
-  if (state->data.glshader.node_idx != state->data.glshader.n_children)
+  if (state->data.glshader.node_idx != state->data.glshader.n_children - 1)
     return NULL; /* Not last */
 
   /* This is the last pop */
@@ -859,20 +846,16 @@ gtk_snapshot_collect_gl_shader (GtkSnapshot      *snapshot,
   if (state->data.glshader.bounds.size.width != 0 &&
       state->data.glshader.bounds.size.height != 0)
     {
-      GskRenderNode *fallback_node = maybe_clip (state->data.glshader.nodes[0],
-                                                 &state->data.glshader.bounds);
       shader_node = gsk_gl_shader_node_new (state->data.glshader.shader,
                                             &state->data.glshader.bounds,
                                             state->data.glshader.uniform_data,
-                                            fallback_node,
-                                            &state->data.glshader.nodes[1],
+                                            &state->data.glshader.nodes[0],
                                             state->data.glshader.n_children);
-      gsk_render_node_unref (fallback_node);
     }
 
   g_object_unref (state->data.glshader.shader);
   g_bytes_unref (state->data.glshader.uniform_data);
-  for (guint i = 0; i  < state->data.glshader.n_children + 1; i++)
+  for (guint i = 0; i  < state->data.glshader.n_children; i++)
     gsk_render_node_unref (state->data.glshader.nodes[i]);
   g_free (state->data.glshader.nodes);
 
@@ -888,13 +871,13 @@ gtk_snapshot_collect_gl_shader (GtkSnapshot      *snapshot,
  * @n_children: The number of extra nodes given as argument to the shader as textures.
  *
  * Push a #GskGLShaderNode with a specific #GskGLShader and a set of uniform values
- * to use while rendering. Additionally this takes a fallback node and a list of
- * @n_children other nodes which will be passed to the #GskGLShaderNode.
+ * to use while rendering. Additionally this takes a list of @n_children other nodes
+ * which will be passed to the #GskGLShaderNode.
  *
- * The fallback node is used if GLSL shaders are not supported by the backend, or if
- * there is any problem compiling the shader. The fallback node needs to be pushed
- * directly after the gtk_snapshot_push_gl_shader() call up until the first  call
- * to gtk_snapshot_pop().
+ * If the renderer doesn't support GL shaders, or if there is any problem when
+ * compiling the shader, then the node will draw pink. You should use
+ * gsk_gl_shader_try_compile_for() to ensure the @shader will work for the renderer
+ * before using it.
  *
  * If @n_children > 0, then it is expected that you (after the fallback call
  * gtk_snapshot_pop() @n_children times. Each of these will generate a node that
@@ -926,13 +909,13 @@ gtk_snapshot_push_gl_shader (GtkSnapshot           *snapshot,
   state->data.glshader.shader = g_object_ref (shader);
   state->data.glshader.uniform_data = g_bytes_ref (uniform_data);
   state->data.glshader.n_children = n_children;
-  nodes = g_new0 (GskRenderNode *, n_children + 1);
-  node_idx = n_children; /* We pop in reverse order */
+  nodes = g_new0 (GskRenderNode *, n_children);
+  node_idx = n_children-1; /* We pop in reverse order */
 
   state->data.glshader.node_idx = node_idx--;
   state->data.glshader.nodes = nodes;
 
-  for (int i = 0; i  < n_children; i++)
+  for (int i = 0; i  < n_children-1; i++)
     {
       state = gtk_snapshot_push_state (snapshot,
                                        gtk_snapshot_get_current_state (snapshot)->transform,

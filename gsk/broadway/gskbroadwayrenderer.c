@@ -258,6 +258,7 @@ collect_reused_child_nodes (GskRenderer *renderer,
     case GSK_LINEAR_GRADIENT_NODE:
 
       /* Fallbacks (=> leaf for now */
+    case GSK_GL_SHADER_NODE:
     case GSK_COLOR_MATRIX_NODE:
     case GSK_TEXT_NODE:
     case GSK_REPEATING_LINEAR_GRADIENT_NODE:
@@ -271,11 +272,6 @@ collect_reused_child_nodes (GskRenderer *renderer,
       break;
 
       /* Bin nodes */
-
-    case GSK_GL_SHADER_NODE:
-      collect_reused_node (renderer,
-                           gsk_gl_shader_node_get_fallback_child (node));
-      break;
 
     case GSK_SHADOW_NODE:
       collect_reused_node (renderer,
@@ -797,11 +793,6 @@ gsk_broadway_renderer_add_node (GskRenderer *renderer,
         }
       return;
 
-    case GSK_GL_SHADER_NODE:
-      gsk_broadway_renderer_add_node (renderer,
-                                      gsk_gl_shader_node_get_fallback_child (node), offset_x, offset_y, clip_bounds);
-      return;
-
       /* Generic nodes */
 
     case GSK_CONTAINER_NODE:
@@ -857,6 +848,7 @@ gsk_broadway_renderer_add_node (GskRenderer *renderer,
     case GSK_BLEND_NODE:
     case GSK_CROSS_FADE_NODE:
     case GSK_BLUR_NODE:
+    case GSK_GL_SHADER_NODE:
     default:
       break; /* Fallback */
     }

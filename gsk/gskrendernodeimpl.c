@@ -4478,7 +4478,6 @@ struct _GskGLShaderNode
 
   GskGLShader *shader;
   GBytes *uniform_data;
-  GskRenderNode *fallback;
   GskRenderNode **children;
   guint n_children;
 };
@@ -4493,7 +4492,6 @@ gsk_gl_shader_node_finalize (GskRenderNode *node)
     gsk_render_node_unref (self->children[i]);
   g_free (self->children);
 
-  gsk_render_node_unref (self->fallback);
   g_bytes_unref (self->uniform_data);
 
   g_object_unref (self->shader);
@@ -4505,9 +4503,9 @@ static void
 gsk_gl_shader_node_draw (GskRenderNode *node,
                          cairo_t       *cr)
 {
-  GskGLShaderNode *self = (GskGLShaderNode *) node;
-
-  gsk_render_node_draw (self->fallback, cr);
+  cairo_set_source_rgb (cr, 255 / 255., 105 / 255., 180 / 255.);
+  gsk_cairo_rectangle (cr, &node->bounds);
+  cairo_fill (cr);
 }
 
 static void
@@ -4523,8 +4521,6 @@ gsk_gl_shader_node_diff (GskRenderNode  *node1,
       g_bytes_compare (self1->uniform_data, self2->uniform_data) == 0 &&
       self1->n_children == self2->n_children)
     {
-      gsk_render_node_diff (self1->fallback, self2->fallback, region);
-
       for (guint i = 0; i < self1->n_children; i++)
         {
           if (self1->children[i] != self2->children[i])
@@ -4545,7 +4541,6 @@ gsk_gl_shader_node_diff (GskRenderNode  *node1,
  * @shader: the #GskGLShader
  * @bounds: the rectangle to render the shader into
  * @uniform_data: Data for the uniforms
- * @fallback: Render node to use if OpenGL is not supported
  * @children: List of child nodes, these will be rendered to textures and used as input.
  * @n_children: Length of @children (currenly the GL backend only supports max 4 children)
  *
@@ -4560,8 +4555,10 @@ gsk_gl_shader_node_diff (GskRenderNode  *node1,
  * #GskTextureNodes, which will be used directly). These textures will be
  * sent as input to the shader.
  *
- * If the backend doesn't support GL shaders, or if there is any problem when
- * compiling the shader, then the fallback shader node will be used instead.
+ * If the renderer doesn't support GL shaders, or if there is any problem when
+ * compiling the shader, then the node will draw pink. You should use
+ * gsk_gl_shader_try_compile_for() to ensure the @shader will work for the renderer
+ * before using it.
  *
  * Returns: (transfer full) (type GskGLShaderNode): A new #GskRenderNode
  */
@@ -4569,7 +4566,6 @@ GskRenderNode *
 gsk_gl_shader_node_new (GskGLShader           *shader,
                         const graphene_rect_t *bounds,
                         GBytes                *uniform_data,
-                        GskRenderNode         *fallback,
                         GskRenderNode        **children,
                         int                    n_children)
 {
@@ -4589,7 +4585,6 @@ gsk_gl_shader_node_new (GskGLShader           *shader,
   g_assert (g_bytes_get_size (uniform_data) == uniforms_size);
 
   self->uniform_data = g_bytes_ref (uniform_data);
-  self->fallback = gsk_render_node_ref (fallback);
 
   self->n_children = n_children;
   if (n_children > 0)
@@ -4600,24 +4595,6 @@ gsk_gl_shader_node_new (GskGLShader           *shader,
     }
 
   return node;
-}
-
-/**
- * gsk_gl_shader_node_get_fallback_child:
- * @node: (type GskGLShaderNode): a #GskRenderNode for a gl shader
- *
- * Gets the fallback child node
- *
- * Returns: (transfer none): The fallback node
- */
-GskRenderNode *
-gsk_gl_shader_node_get_fallback_child (GskRenderNode *node)
-{
-  GskGLShaderNode *self = (GskGLShaderNode *) node;
-
-  g_return_val_if_fail (GSK_IS_RENDER_NODE_TYPE (node, GSK_GL_SHADER_NODE), NULL);
-
-  return self->fallback;
 }
 
 /**

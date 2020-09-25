@@ -256,6 +256,7 @@ gsk_vulkan_render_pass_add_node (GskVulkanRenderPass           *self,
     case GSK_NOT_A_RENDER_NODE:
       g_assert_not_reached ();
       return;
+    case GSK_GL_SHADER_NODE:
     case GSK_SHADOW_NODE:
     case GSK_RADIAL_GRADIENT_NODE:
     case GSK_REPEATING_RADIAL_GRADIENT_NODE:
@@ -537,10 +538,6 @@ gsk_vulkan_render_pass_add_node (GskVulkanRenderPass           *self,
             gsk_vulkan_render_pass_add_node (self, render, constants, gsk_container_node_get_child (node, i));
           }
       }
-      return;
-
-    case GSK_GL_SHADER_NODE:
-     gsk_vulkan_render_pass_add_node (self, render, constants, gsk_gl_shader_node_get_fallback_child (node));
       return;
 
     case GSK_DEBUG_NODE:

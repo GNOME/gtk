@@ -40,6 +40,10 @@ GskGLShader *    gsk_gl_shader_new_from_bytes          (GBytes           *source
 GDK_AVAILABLE_IN_ALL
 GskGLShader *    gsk_gl_shader_new_from_resource       (const char       *resource_path);
 GDK_AVAILABLE_IN_ALL
+gboolean         gsk_gl_shader_try_compile_for         (GskGLShader      *shader,
+                                                        GskRenderer      *renderer,
+                                                        GError          **error);
+GDK_AVAILABLE_IN_ALL
 GBytes *         gsk_gl_shader_get_bytes               (GskGLShader      *shader);
 GDK_AVAILABLE_IN_ALL
 int              gsk_gl_shader_get_n_required_textures (GskGLShader      *shader);

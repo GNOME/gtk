@@ -222,6 +222,8 @@ gtk_shader_stack_snapshot (GtkWidget   *widget,
     }
   else
     {
+      GtkNative *native = gtk_widget_get_native (widget);
+      GskRenderer *renderer = gtk_native_get_renderer (native);
       float progress;
 
       next = g_ptr_array_index (self->children, self->next);
@@ -236,18 +238,25 @@ gtk_shader_stack_snapshot (GtkWidget   *widget,
           progress = 1. - progress;
         }
 
-      gtk_snapshot_push_gl_shader_v (snapshot,
-                                     self->shader,
-                                     &GRAPHENE_RECT_INIT(0, 0, width, height),
-                                     2,
-                                     "progress", &progress,
-                                     NULL);
-      gtk_widget_snapshot_child (widget, next, snapshot);
-      gtk_snapshot_pop (snapshot); /* Fallback */
-      gtk_widget_snapshot_child (widget, current, snapshot);
-      gtk_snapshot_pop (snapshot); /* current child */
-      gtk_widget_snapshot_child (widget, next, snapshot);
-      gtk_snapshot_pop (snapshot); /* next child */
+      if (gsk_gl_shader_try_compile_for (self->shader,
+                                         renderer, NULL))
+        {
+          gtk_snapshot_push_gl_shader_v (snapshot,
+                                         self->shader,
+                                         &GRAPHENE_RECT_INIT(0, 0, width, height),
+                                         2,
+                                         "progress", &progress,
+                                         NULL);
+          gtk_widget_snapshot_child (widget, current, snapshot);
+          gtk_snapshot_pop (snapshot); /* current child */
+          gtk_widget_snapshot_child (widget, next, snapshot);
+          gtk_snapshot_pop (snapshot); /* next child */
+        }
+      else
+        {
+          /* Non-shader fallback */
+          gtk_widget_snapshot_child (widget, current, snapshot);
+        }
     }
 }
 

@@ -84,7 +84,7 @@ typedef struct
 
 struct _Program
 {
-  int index;        /* Into the renderer's program array */
+  int index;        /* Into the renderer's program array -1 for custom */
 
   int id;
   /* Common locations (gl_common)*/
@@ -163,6 +163,7 @@ struct _Program
       int size_location;
       int args_locations[8];
       int texture_locations[4];
+      GError *compile_error;
     } glshader;
   };
 

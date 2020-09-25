@@ -4,13 +4,15 @@ typedef struct {
   GskGLShader *shader;
   GtkStateFlags state;
   GtkStateFlags state_mask;
+  gboolean compiled;
+  gboolean compiled_ok;
 } ShaderInfo;
 
 struct _GtkShaderBin
 {
   GtkWidget parent_instance;
   GtkWidget *child;
-  GskGLShader *active_shader;
+  ShaderInfo *active_shader;
   GPtrArray *shaders;
   guint tick_id;
   float time;
@@ -79,7 +81,7 @@ void
 gtk_shader_bin_update_active_shader (GtkShaderBin *self)
 {
   GtkStateFlags new_state = gtk_widget_get_state_flags (GTK_WIDGET (self));
-  GskGLShader *new_shader = NULL;
+  ShaderInfo *new_shader = NULL;
 
   for (int i = 0; i < self->shaders->len; i++)
     {
@@ -87,7 +89,7 @@ gtk_shader_bin_update_active_shader (GtkShaderBin *self)
 
       if ((info->state_mask & new_state) == info->state)
         {
-          new_shader = info->shader;
+          new_shader = info;
           break;
         }
     }
@@ -177,20 +179,39 @@ gtk_shader_bin_snapshot (GtkWidget   *widget,
 
   if (self->active_shader)
     {
-      gtk_snapshot_push_gl_shader_v (snapshot, self->active_shader,
-                                     &GRAPHENE_RECT_INIT(0, 0, width, height),
-                                     1,
-                                     "u_time", &self->time,
-                                     NULL);
-      gtk_widget_snapshot_child (widget, self->child, snapshot);
-      gtk_snapshot_pop (snapshot); /* Fallback */
-      gtk_widget_snapshot_child (widget, self->child, snapshot);
-      gtk_snapshot_pop (snapshot); /* Shader node child 1 */
+      if (!self->active_shader->compiled)
+        {
+          GtkNative *native = gtk_widget_get_native (widget);
+          GskRenderer *renderer = gtk_native_get_renderer (native);
+          GError *error = NULL;
+
+          self->active_shader->compiled = TRUE;
+          self->active_shader->compiled_ok =
+            gsk_gl_shader_try_compile_for (self->active_shader->shader,
+                                           renderer, &error);
+          if (!self->active_shader->compiled_ok)
+            {
+              g_warning ("GtkShaderBin failed to compile shader: %s", error->message);
+              g_error_free (error);
+            }
+        }
+
+      if (self->active_shader->compiled_ok)
+        {
+          gtk_snapshot_push_gl_shader_v (snapshot, self->active_shader->shader,
+                                         &GRAPHENE_RECT_INIT(0, 0, width, height),
+                                         1,
+                                         "u_time", &self->time,
+                                         NULL);
+          gtk_widget_snapshot_child (widget, self->child, snapshot);
+          gtk_snapshot_pop (snapshot);
+
+          return;
+        }
     }
-  else
-    {
-      gtk_widget_snapshot_child (widget, self->child, snapshot);
-    }
+
+  /* Non-shader fallback */
+  gtk_widget_snapshot_child (widget, self->child, snapshot);
 }
 
 static void

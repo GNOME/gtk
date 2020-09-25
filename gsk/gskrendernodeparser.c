@@ -1213,7 +1213,6 @@ static GskRenderNode *
 parse_glshader_node (GtkCssParser *parser)
 {
   graphene_rect_t bounds = GRAPHENE_RECT_INIT (0, 0, 50, 50);
-  GskRenderNode *fallback = NULL;
   GskRenderNode *child[4] = { NULL, };
   ShaderInfo shader_info = {
     NULL,
@@ -1223,7 +1222,6 @@ parse_glshader_node (GtkCssParser *parser)
     { "bounds", parse_rect, NULL, &bounds },
     { "sourcecode", parse_shader, NULL, &shader_info },
     { "uniform-data", parse_uniform_data, clear_shader_info, &shader_info },
-    { "fallback", parse_node, clear_node, &fallback },
     { "child1", parse_node, clear_node, &child[0] },
     { "child2", parse_node, clear_node, &child[1] },
     { "child3", parse_node, clear_node, &child[2] },
@@ -1303,7 +1301,7 @@ parse_glshader_node (GtkCssParser *parser)
   gsk_uniform_data_builder_free (builder);
 
   node = gsk_gl_shader_node_new (shader, &bounds, uniform_data,
-                                fallback, child, len);
+                                 child, len);
 
   g_array_unref (shader_info.uniform_values);
   g_bytes_unref (uniform_data);
@@ -2832,7 +2830,6 @@ render_node_print (Printer       *p,
             g_string_free (data, TRUE);
           }
 
-        append_node_param (p, "fallback", gsk_gl_shader_node_get_fallback_child (node));
         for (guint i = 0; i < gsk_gl_shader_node_get_n_children (node); i ++)
           {
             GskRenderNode *child = gsk_gl_shader_node_get_child (node, i);
