@@ -1067,6 +1067,7 @@ gdk_gl_context_check_extensions (GdkGLContext *context)
                        " - GL_ARB_texture_non_power_of_two: %s\n"
                        " - GL_ARB_texture_rectangle: %s\n"
                        " - GL_KHR_debug: %s\n"
+                       " - GL_EXT_unpack_subimage: %s\n"
                        "* Using texture rectangle: %s",
                        priv->use_es ? "OpenGL ES" : "OpenGL",
                        priv->gl_version / 10, priv->gl_version % 10,
@@ -1075,6 +1076,7 @@ gdk_gl_context_check_extensions (GdkGLContext *context)
                        has_npot ? "yes" : "no",
                        has_texture_rectangle ? "yes" : "no",
                        priv->has_khr_debug ? "yes" : "no",
+                       priv->has_unpack_subimage ? "yes" : "no",
                        priv->use_texture_rectangle ? "yes" : "no"));
 
   priv->extensions_checked = TRUE;
