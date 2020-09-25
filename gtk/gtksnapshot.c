@@ -933,67 +933,6 @@ gtk_snapshot_push_gl_shader (GtkSnapshot           *snapshot,
     }
 }
 
-
-/**
- * gtk_snapshot_push_gl_shader_va:
- * @snapshot: a #GtkSnapshot
- * @shader: The code to run
- * @bounds: the rectangle to render into
- * @n_children: The number of extra nodes given as argument to the shader as textures.
- * @uniforms: Name-Value pairs for the uniforms of @shader, ending with a %NULL name, all values are passed by reference.
- *
- * Renders a rectangle with output from a GLSL shader. This is the same as
- * gtk_snapshot_push_gl_shader() but it takes a var-arg list of uniform variables
- * to make it easier to use from C. See gtk_snapshot_push_gl_shader() for details
- * of the behaviour not related to the varargs.
- *
- * The @uniforms argument is a %NULL separated list of Name-Value pairs for the
- * uniforms of @shader. All the values are passed by reference, so you will need
- * to pass a pointer to a float, etc.
- */
-void
-gtk_snapshot_push_gl_shader_va (GtkSnapshot           *snapshot,
-                                GskGLShader           *shader,
-                                const graphene_rect_t *bounds,
-                                int                    n_children,
-                                va_list                uniforms)
-{
-  GBytes *args = gsk_gl_shader_format_args_va (shader, uniforms);
-  gtk_snapshot_push_gl_shader (snapshot, shader, bounds,
-                               args, n_children);
-}
-
-/**
- * gtk_snapshot_push_gl_shader_v:
- * @snapshot: a #GtkSnapshot
- * @shader: The code to run
- * @bounds: the rectangle to render into
- * @n_children: The number of extra nodes given as argument to the shader as textures.
- * @...: Name-Value pairs for the uniforms of @shader, ending with a %NULL name, all values are passed by reference.
- *
- * Renders a rectangle with output from a GLSL shader. This is the same as
- * gtk_snapshot_push_gl_shader() but it takes a var-arg list of uniform variables
- * to make it easier to use from C. See gtk_snapshot_push_gl_shader() for details
- * of the behaviour not related to the varargs.
- *
- * The @... argument is a %NULL separated list of Name-Value pairs for the
- * uniforms of @shader. All the values are passed by reference, so you will
- * need to pass a pointer to a float, etc.
- */
-void
-gtk_snapshot_push_gl_shader_v (GtkSnapshot           *snapshot,
-                               GskGLShader           *shader,
-                               const graphene_rect_t *bounds,
-                               int                    n_children,
-                               ...)
-{
-  va_list args;
-
-  va_start (args, n_children);
-  gtk_snapshot_push_gl_shader_va (snapshot, shader, bounds, n_children, args);
-  va_end (args);
-}
-
 static GskRenderNode *
 gtk_snapshot_collect_rounded_clip (GtkSnapshot      *snapshot,
                                    GtkSnapshotState *state,

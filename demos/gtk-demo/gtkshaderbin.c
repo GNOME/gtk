@@ -198,11 +198,12 @@ gtk_shader_bin_snapshot (GtkWidget   *widget,
 
       if (self->active_shader->compiled_ok)
         {
-          gtk_snapshot_push_gl_shader_v (snapshot, self->active_shader->shader,
-                                         &GRAPHENE_RECT_INIT(0, 0, width, height),
-                                         1,
-                                         "u_time", &self->time,
-                                         NULL);
+          gtk_snapshot_push_gl_shader (snapshot, self->active_shader->shader,
+                                       &GRAPHENE_RECT_INIT(0, 0, width, height),
+                                       gsk_gl_shader_format_args (self->active_shader->shader,
+                                                                  "u_time", &self->time,
+                                                                  NULL),
+                                       1);
           gtk_widget_snapshot_child (widget, self->child, snapshot);
           gtk_snapshot_pop (snapshot);
 

@@ -105,18 +105,6 @@ void            gtk_snapshot_push_gl_shader             (GtkSnapshot            
                                                          GBytes                 *take_args,
                                                          int                     n_children);
 GDK_AVAILABLE_IN_ALL
-void            gtk_snapshot_push_gl_shader_v           (GtkSnapshot            *snapshot,
-                                                         GskGLShader            *shader,
-                                                         const graphene_rect_t  *bounds,
-                                                         int                     n_children,
-                                                         ...) G_GNUC_NULL_TERMINATED;
-GDK_AVAILABLE_IN_ALL
-void            gtk_snapshot_push_gl_shader_va          (GtkSnapshot            *snapshot,
-                                                         GskGLShader            *shader,
-                                                         const graphene_rect_t  *bounds,
-                                                         int                     n_children,
-                                                         va_list                 uniforms);
-GDK_AVAILABLE_IN_ALL
 void            gtk_snapshot_pop                        (GtkSnapshot            *snapshot);
 
 GDK_AVAILABLE_IN_ALL
