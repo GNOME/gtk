@@ -9,6 +9,7 @@
 
 #include "gtkfishbowl.h"
 #include "gtkgears.h"
+#include "gskshaderpaintable.h"
 
 const char *const css =
 ".blurred-button {"

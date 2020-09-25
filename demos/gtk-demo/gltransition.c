@@ -13,6 +13,7 @@
 #include "gtkshaderstack.h"
 #include "gtkshaderbin.h"
 #include "gtkshadertoy.h"
+#include "gskshaderpaintable.h"
 
 static GtkWidget *demo_window = NULL;
 
