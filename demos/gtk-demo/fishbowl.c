@@ -150,6 +150,37 @@ create_switch (void)
   return w;
 }
 
+static gboolean
+update_paintable (GtkWidget     *widget,
+                  GdkFrameClock *frame_clock,
+                  gpointer       user_data)
+{
+  GskShaderPaintable *paintable;
+  gint64 frame_time;
+
+  paintable = GSK_SHADER_PAINTABLE (gtk_picture_get_paintable (GTK_PICTURE (widget)));
+  frame_time = gdk_frame_clock_get_frame_time (frame_clock);
+  gsk_shader_paintable_update_time (paintable, 0, frame_time);
+
+  return G_SOURCE_CONTINUE;
+}
+
+static GtkWidget *
+create_cogs (void)
+{
+  GtkWidget *picture;
+  GskGLShader *shader;
+  GdkPaintable *paintable;
+
+  shader = gsk_gl_shader_new_from_resource ("/gltransition/cogs2.glsl");
+  paintable = gsk_shader_paintable_new (shader, NULL);
+  picture = gtk_picture_new_for_paintable (paintable);
+  gtk_widget_set_size_request (picture, 150, 75);
+  gtk_widget_add_tick_callback (picture, update_paintable, NULL, NULL);
+
+  return picture;
+}
+
 static void
 mapped (GtkWidget *w)
 {
@@ -186,6 +217,7 @@ static const struct {
   { "Gears",      create_gears          },
   { "Switch",     create_switch         },
   { "Menubutton", create_menu_button    },
+  { "Shader",     create_cogs           },
 };
 
 static int selected_widget_type = -1;
