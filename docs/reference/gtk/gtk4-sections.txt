@@ -617,16 +617,7 @@ gtk_grid_view_get_type
 GtkBuildable
 GtkBuildableIface
 GtkBuildableParser
-gtk_buildable_set_buildable_id
 gtk_buildable_get_buildable_id
-gtk_buildable_add_child
-gtk_buildable_set_buildable_property
-gtk_buildable_construct_child
-gtk_buildable_custom_tag_start
-gtk_buildable_custom_tag_end
-gtk_buildable_custom_finished
-gtk_buildable_parser_finished
-gtk_buildable_get_internal_child
 <SUBSECTION Standard>
 GTK_BUILDABLE
 GTK_IS_BUILDABLE

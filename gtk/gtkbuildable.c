@@ -36,7 +36,7 @@
  */
 
 #include "config.h"
-#include "gtkbuildable.h"
+#include "gtkbuildableprivate.h"
 #include "gtkintl.h"
 
 
