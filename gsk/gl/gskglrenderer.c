@@ -3064,25 +3064,25 @@ apply_gl_shader_args_op (const Program  *program,
       switch (u->type)
         {
         default:
-        case GSK_GLUNIFORM_TYPE_NONE:
+        case GSK_GL_UNIFORM_TYPE_NONE:
           break;
-        case GSK_GLUNIFORM_TYPE_FLOAT:
+        case GSK_GL_UNIFORM_TYPE_FLOAT:
           glUniform1fv (program->glshader.args_locations[i], 1, (const float *)data);
           break;
-        case GSK_GLUNIFORM_TYPE_INT:
+        case GSK_GL_UNIFORM_TYPE_INT:
           glUniform1iv (program->glshader.args_locations[i], 1, (const gint32 *)data);
           break;
-        case GSK_GLUNIFORM_TYPE_UINT:
-        case GSK_GLUNIFORM_TYPE_BOOL:
+        case GSK_GL_UNIFORM_TYPE_UINT:
+        case GSK_GL_UNIFORM_TYPE_BOOL:
           glUniform1uiv (program->glshader.args_locations[i], 1, (const guint32 *) data);
           break;
-        case GSK_GLUNIFORM_TYPE_VEC2:
+        case GSK_GL_UNIFORM_TYPE_VEC2:
           glUniform2fv (program->glshader.args_locations[i], 1, (const float *)data);
           break;
-        case GSK_GLUNIFORM_TYPE_VEC3:
+        case GSK_GL_UNIFORM_TYPE_VEC3:
           glUniform3fv (program->glshader.args_locations[i], 1, (const float *)data);
           break;
-        case GSK_GLUNIFORM_TYPE_VEC4:
+        case GSK_GL_UNIFORM_TYPE_VEC4:
           glUniform4fv (program->glshader.args_locations[i], 1, (const float *)data);
           break;
         }

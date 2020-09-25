@@ -222,14 +222,14 @@ typedef enum
 
 /**
  * GskGLUniformType:
- * @GSK_GLUNIFORM_TYPE_NONE: No type, used for uninitialized or unspecified values.
- * @GSK_GLUNIFORM_TYPE_FLOAT: A float uniform
- * @GSK_GLUNIFORM_TYPE_INT: A GLSL int / gint32 uniform
- * @GSK_GLUNIFORM_TYPE_UINT: A GLSL uint / guint32 uniform
- * @GSK_GLUNIFORM_TYPE_BOOL: A GLSL bool / gboolean uniform
- * @GSK_GLUNIFORM_TYPE_VEC2: A GLSL vec2 / graphene_vec2_t uniform
- * @GSK_GLUNIFORM_TYPE_VEC3: A GLSL vec3 / graphene_vec3_t uniform
- * @GSK_GLUNIFORM_TYPE_VEC4: A GLSL vec4 / graphene_vec4_t uniform
+ * @GSK_GL_UNIFORM_TYPE_NONE: No type, used for uninitialized or unspecified values.
+ * @GSK_GL_UNIFORM_TYPE_FLOAT: A float uniform
+ * @GSK_GL_UNIFORM_TYPE_INT: A GLSL int / gint32 uniform
+ * @GSK_GL_UNIFORM_TYPE_UINT: A GLSL uint / guint32 uniform
+ * @GSK_GL_UNIFORM_TYPE_BOOL: A GLSL bool / gboolean uniform
+ * @GSK_GL_UNIFORM_TYPE_VEC2: A GLSL vec2 / graphene_vec2_t uniform
+ * @GSK_GL_UNIFORM_TYPE_VEC3: A GLSL vec3 / graphene_vec3_t uniform
+ * @GSK_GL_UNIFORM_TYPE_VEC4: A GLSL vec4 / graphene_vec4_t uniform
  *
  * This defines the types of the uniforms that #GskGLShaders
  * declare. It defines both what the type is called in the GLSL shader
@@ -237,14 +237,14 @@ typedef enum
  */
 typedef enum
 {
-  GSK_GLUNIFORM_TYPE_NONE,
-  GSK_GLUNIFORM_TYPE_FLOAT,
-  GSK_GLUNIFORM_TYPE_INT,
-  GSK_GLUNIFORM_TYPE_UINT,
-  GSK_GLUNIFORM_TYPE_BOOL,
-  GSK_GLUNIFORM_TYPE_VEC2,
-  GSK_GLUNIFORM_TYPE_VEC3,
-  GSK_GLUNIFORM_TYPE_VEC4,
+  GSK_GL_UNIFORM_TYPE_NONE,
+  GSK_GL_UNIFORM_TYPE_FLOAT,
+  GSK_GL_UNIFORM_TYPE_INT,
+  GSK_GL_UNIFORM_TYPE_UINT,
+  GSK_GL_UNIFORM_TYPE_BOOL,
+  GSK_GL_UNIFORM_TYPE_VEC2,
+  GSK_GL_UNIFORM_TYPE_VEC3,
+  GSK_GL_UNIFORM_TYPE_VEC4,
 } GskGLUniformType;
 
 

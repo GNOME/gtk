@@ -4486,7 +4486,7 @@ static void
 gsk_gl_shader_node_finalize (GskRenderNode *node)
 {
   GskGLShaderNode *self = (GskGLShaderNode *) node;
-  GskRenderNodeClass *parent_class = g_type_class_peek (g_type_parent (GSK_TYPE_GLSHADER_NODE));
+  GskRenderNodeClass *parent_class = g_type_class_peek (g_type_parent (GSK_TYPE_GL_SHADER_NODE));
 
   for (guint i = 0; i < self->n_children; i++)
     gsk_render_node_unref (self->children[i]);

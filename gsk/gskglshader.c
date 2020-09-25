@@ -118,21 +118,21 @@ static GskGLUniformType
 uniform_type_from_glsl (const char *str)
 {
   if (strcmp (str, "int") == 0)
-    return GSK_GLUNIFORM_TYPE_INT;
+    return GSK_GL_UNIFORM_TYPE_INT;
   if (strcmp (str, "uint") == 0)
-    return GSK_GLUNIFORM_TYPE_UINT;
+    return GSK_GL_UNIFORM_TYPE_UINT;
   if (strcmp (str, "bool") == 0)
-    return GSK_GLUNIFORM_TYPE_BOOL;
+    return GSK_GL_UNIFORM_TYPE_BOOL;
   if (strcmp (str, "float") == 0)
-    return GSK_GLUNIFORM_TYPE_FLOAT;
+    return GSK_GL_UNIFORM_TYPE_FLOAT;
   if (strcmp (str, "vec2") == 0)
-    return GSK_GLUNIFORM_TYPE_VEC2;
+    return GSK_GL_UNIFORM_TYPE_VEC2;
   if (strcmp (str, "vec3") == 0)
-    return GSK_GLUNIFORM_TYPE_VEC3;
+    return GSK_GL_UNIFORM_TYPE_VEC3;
   if (strcmp (str, "vec4") == 0)
-    return GSK_GLUNIFORM_TYPE_VEC4;
+    return GSK_GL_UNIFORM_TYPE_VEC4;
 
-  return  GSK_GLUNIFORM_TYPE_NONE;
+  return  GSK_GL_UNIFORM_TYPE_NONE;
 }
 
 static const char *
@@ -140,28 +140,28 @@ uniform_type_name (GskGLUniformType type)
 {
   switch (type)
     {
-    case GSK_GLUNIFORM_TYPE_FLOAT:
+    case GSK_GL_UNIFORM_TYPE_FLOAT:
       return "float";
 
-    case GSK_GLUNIFORM_TYPE_INT:
+    case GSK_GL_UNIFORM_TYPE_INT:
       return "int";
 
-    case GSK_GLUNIFORM_TYPE_UINT:
+    case GSK_GL_UNIFORM_TYPE_UINT:
       return "uint";
 
-    case GSK_GLUNIFORM_TYPE_BOOL:
+    case GSK_GL_UNIFORM_TYPE_BOOL:
       return "bool";
 
-    case GSK_GLUNIFORM_TYPE_VEC2:
+    case GSK_GL_UNIFORM_TYPE_VEC2:
       return "vec2";
 
-    case GSK_GLUNIFORM_TYPE_VEC3:
+    case GSK_GL_UNIFORM_TYPE_VEC3:
       return "vec3";
 
-    case GSK_GLUNIFORM_TYPE_VEC4:
+    case GSK_GL_UNIFORM_TYPE_VEC4:
       return "vec4";
 
-    case GSK_GLUNIFORM_TYPE_NONE:
+    case GSK_GL_UNIFORM_TYPE_NONE:
     default:
       g_assert_not_reached ();
       return NULL;
@@ -173,26 +173,26 @@ uniform_type_size (GskGLUniformType type)
 {
   switch (type)
     {
-    case GSK_GLUNIFORM_TYPE_FLOAT:
+    case GSK_GL_UNIFORM_TYPE_FLOAT:
       return sizeof (float);
 
-    case GSK_GLUNIFORM_TYPE_INT:
+    case GSK_GL_UNIFORM_TYPE_INT:
       return sizeof (gint32);
 
-    case GSK_GLUNIFORM_TYPE_UINT:
-    case GSK_GLUNIFORM_TYPE_BOOL:
+    case GSK_GL_UNIFORM_TYPE_UINT:
+    case GSK_GL_UNIFORM_TYPE_BOOL:
       return sizeof (guint32);
 
-    case GSK_GLUNIFORM_TYPE_VEC2:
+    case GSK_GL_UNIFORM_TYPE_VEC2:
       return sizeof (float) * 2;
 
-    case GSK_GLUNIFORM_TYPE_VEC3:
+    case GSK_GL_UNIFORM_TYPE_VEC3:
       return sizeof (float) * 3;
 
-    case GSK_GLUNIFORM_TYPE_VEC4:
+    case GSK_GL_UNIFORM_TYPE_VEC4:
       return sizeof (float) * 4;
 
-    case GSK_GLUNIFORM_TYPE_NONE:
+    case GSK_GL_UNIFORM_TYPE_NONE:
     default:
       g_assert_not_reached ();
       return 0;
@@ -356,7 +356,7 @@ gsk_gl_shader_constructed (GObject *object)
       else
         {
           GskGLUniformType utype = uniform_type_from_glsl (type);
-          g_assert (utype != GSK_GLUNIFORM_TYPE_NONE); // Shouldn't have matched the regexp
+          g_assert (utype != GSK_GL_UNIFORM_TYPE_NONE); // Shouldn't have matched the regexp
           gsk_gl_shader_add_uniform (shader, name, utype);
         }
 
@@ -461,7 +461,7 @@ gsk_gl_shader_new_from_bytes (GBytes *sourcecode)
 {
   g_return_val_if_fail (sourcecode != NULL, NULL);
 
-  return g_object_new (GSK_TYPE_GLSHADER,
+  return g_object_new (GSK_TYPE_GL_SHADER,
                        "bytes", sourcecode,
                        NULL);
 }
@@ -479,7 +479,7 @@ gsk_gl_shader_new_from_resource (const char      *resource_path)
 {
   g_return_val_if_fail (resource_path != NULL, NULL);
 
-  return g_object_new (GSK_TYPE_GLSHADER,
+  return g_object_new (GSK_TYPE_GL_SHADER,
                        "resource", resource_path,
                        NULL);
 }
@@ -695,7 +695,7 @@ gsk_gl_shader_get_uniform_data_float (GskGLShader *shader,
   g_assert (size == shader->uniforms_size);
   g_assert (idx < shader->uniforms->len);
   u = &g_array_index (shader->uniforms, GskGLUniform, idx);
-  g_assert (u->type == GSK_GLUNIFORM_TYPE_FLOAT);
+  g_assert (u->type == GSK_GL_UNIFORM_TYPE_FLOAT);
 
   args_src = data + u->offset;
   return *(float *)args_src;
@@ -725,7 +725,7 @@ gsk_gl_shader_get_uniform_data_int (GskGLShader *shader,
   g_assert (size == shader->uniforms_size);
   g_assert (idx < shader->uniforms->len);
   u = &g_array_index (shader->uniforms, GskGLUniform, idx);
-  g_assert (u->type == GSK_GLUNIFORM_TYPE_INT);
+  g_assert (u->type == GSK_GL_UNIFORM_TYPE_INT);
 
   args_src = data + u->offset;
   return *(gint32 *)args_src;
@@ -755,7 +755,7 @@ gsk_gl_shader_get_uniform_data_uint (GskGLShader *shader,
   g_assert (size == shader->uniforms_size);
   g_assert (idx < shader->uniforms->len);
   u = &g_array_index (shader->uniforms, GskGLUniform, idx);
-  g_assert (u->type == GSK_GLUNIFORM_TYPE_UINT);
+  g_assert (u->type == GSK_GL_UNIFORM_TYPE_UINT);
 
   args_src = data + u->offset;
   return *(guint32 *)args_src;
@@ -785,7 +785,7 @@ gsk_gl_shader_get_uniform_data_bool (GskGLShader *shader,
   g_assert (size == shader->uniforms_size);
   g_assert (idx < shader->uniforms->len);
   u = &g_array_index (shader->uniforms, GskGLUniform, idx);
-  g_assert (u->type == GSK_GLUNIFORM_TYPE_BOOL);
+  g_assert (u->type == GSK_GL_UNIFORM_TYPE_BOOL);
 
   args_src = data + u->offset;
   return *(guint32 *)args_src;
@@ -815,7 +815,7 @@ gsk_gl_shader_get_uniform_data_vec2 (GskGLShader           *shader,
   g_assert (size == shader->uniforms_size);
   g_assert (idx < shader->uniforms->len);
   u = &g_array_index (shader->uniforms, GskGLUniform, idx);
-  g_assert (u->type == GSK_GLUNIFORM_TYPE_VEC2);
+  g_assert (u->type == GSK_GL_UNIFORM_TYPE_VEC2);
 
   args_src = data + u->offset;
   graphene_vec2_init_from_float (out_value, (float *)args_src);
@@ -845,7 +845,7 @@ gsk_gl_shader_get_uniform_data_vec3 (GskGLShader           *shader,
   g_assert (size == shader->uniforms_size);
   g_assert (idx < shader->uniforms->len);
   u = &g_array_index (shader->uniforms, GskGLUniform, idx);
-  g_assert (u->type == GSK_GLUNIFORM_TYPE_VEC3);
+  g_assert (u->type == GSK_GL_UNIFORM_TYPE_VEC3);
 
   args_src = data + u->offset;
   graphene_vec3_init_from_float (out_value, (float *)args_src);
@@ -875,7 +875,7 @@ gsk_gl_shader_get_uniform_data_vec4 (GskGLShader           *shader,
   g_assert (size == shader->uniforms_size);
   g_assert (idx < shader->uniforms->len);
   u = &g_array_index (shader->uniforms, GskGLUniform, idx);
-  g_assert (u->type == GSK_GLUNIFORM_TYPE_VEC4);
+  g_assert (u->type == GSK_GL_UNIFORM_TYPE_VEC4);
 
   args_src = data + u->offset;
   graphene_vec4_init_from_float (out_value, (float *)args_src);
@@ -923,38 +923,38 @@ gsk_gl_shader_format_uniform_data_va (GskGLShader *shader,
 
       switch (u->type)
         {
-        case GSK_GLUNIFORM_TYPE_FLOAT:
+        case GSK_GL_UNIFORM_TYPE_FLOAT:
           *(float *)args_dest = *(float *)value;
           break;
 
-        case GSK_GLUNIFORM_TYPE_INT:
+        case GSK_GL_UNIFORM_TYPE_INT:
           *(gint32 *)args_dest = *(gint32 *)value;
           break;
 
-        case GSK_GLUNIFORM_TYPE_UINT:
+        case GSK_GL_UNIFORM_TYPE_UINT:
           *(guint32 *)args_dest = *(guint32 *)value;
           break;
 
-        case GSK_GLUNIFORM_TYPE_BOOL:
+        case GSK_GL_UNIFORM_TYPE_BOOL:
           *(guint32 *)args_dest = *(gboolean *)value;
           break;
 
-        case GSK_GLUNIFORM_TYPE_VEC2:
+        case GSK_GL_UNIFORM_TYPE_VEC2:
           graphene_vec2_to_float ((const graphene_vec2_t *)value,
                                   (float *)args_dest);
           break;
 
-        case GSK_GLUNIFORM_TYPE_VEC3:
+        case GSK_GL_UNIFORM_TYPE_VEC3:
           graphene_vec3_to_float ((const graphene_vec3_t *)value,
                                   (float *)args_dest);
           break;
 
-        case GSK_GLUNIFORM_TYPE_VEC4:
+        case GSK_GL_UNIFORM_TYPE_VEC4:
           graphene_vec4_to_float ((const graphene_vec4_t *)value,
                                   (float *)args_dest);
           break;
 
-        case GSK_GLUNIFORM_TYPE_NONE:
+        case GSK_GL_UNIFORM_TYPE_NONE:
         default:
           g_assert_not_reached ();
         }
@@ -1059,7 +1059,7 @@ gsk_uniform_data_builder_set_float (GskUniformDataBuilder *builder,
 
   g_assert (idx < shader->uniforms->len);
   u = &g_array_index (shader->uniforms, GskGLUniform, idx);
-  g_assert (u->type == GSK_GLUNIFORM_TYPE_FLOAT);
+  g_assert (u->type == GSK_GL_UNIFORM_TYPE_FLOAT);
 
   args_dest = builder->data + u->offset;
   *(float *)args_dest = value;
@@ -1085,7 +1085,7 @@ gsk_uniform_data_builder_set_int (GskUniformDataBuilder *builder,
 
   g_assert (idx < shader->uniforms->len);
   u = &g_array_index (shader->uniforms, GskGLUniform, idx);
-  g_assert (u->type == GSK_GLUNIFORM_TYPE_INT);
+  g_assert (u->type == GSK_GL_UNIFORM_TYPE_INT);
 
   args_dest = builder->data + u->offset;
   *(gint32 *)args_dest = value;
@@ -1111,7 +1111,7 @@ gsk_uniform_data_builder_set_uint (GskUniformDataBuilder *builder,
 
   g_assert (idx < shader->uniforms->len);
   u = &g_array_index (shader->uniforms, GskGLUniform, idx);
-  g_assert (u->type == GSK_GLUNIFORM_TYPE_UINT);
+  g_assert (u->type == GSK_GL_UNIFORM_TYPE_UINT);
 
   args_dest = builder->data + u->offset;
   *(guint32 *)args_dest = value;
@@ -1137,7 +1137,7 @@ gsk_uniform_data_builder_set_bool (GskUniformDataBuilder *builder,
 
   g_assert (idx < shader->uniforms->len);
   u = &g_array_index (shader->uniforms, GskGLUniform, idx);
-  g_assert (u->type == GSK_GLUNIFORM_TYPE_BOOL);
+  g_assert (u->type == GSK_GL_UNIFORM_TYPE_BOOL);
 
   args_dest = builder->data + u->offset;
   *(guint32 *)args_dest = !!value;
@@ -1163,7 +1163,7 @@ gsk_uniform_data_builder_set_vec2 (GskUniformDataBuilder *builder,
 
   g_assert (idx < shader->uniforms->len);
   u = &g_array_index (shader->uniforms, GskGLUniform, idx);
-  g_assert (u->type == GSK_GLUNIFORM_TYPE_VEC2);
+  g_assert (u->type == GSK_GL_UNIFORM_TYPE_VEC2);
 
   args_dest = builder->data + u->offset;
   graphene_vec2_to_float (value, (float *)args_dest);
@@ -1189,7 +1189,7 @@ gsk_uniform_data_builder_set_vec3 (GskUniformDataBuilder *builder,
 
   g_assert (idx < shader->uniforms->len);
   u = &g_array_index (shader->uniforms, GskGLUniform, idx);
-  g_assert (u->type == GSK_GLUNIFORM_TYPE_VEC3);
+  g_assert (u->type == GSK_GL_UNIFORM_TYPE_VEC3);
 
   args_dest = builder->data + u->offset;
   graphene_vec3_to_float (value, (float *)args_dest);
@@ -1215,7 +1215,7 @@ gsk_uniform_data_builder_set_vec4 (GskUniformDataBuilder *builder,
 
   g_assert (idx < shader->uniforms->len);
   u = &g_array_index (shader->uniforms, GskGLUniform, idx);
-  g_assert (u->type == GSK_GLUNIFORM_TYPE_VEC4);
+  g_assert (u->type == GSK_GL_UNIFORM_TYPE_VEC4);
 
   args_dest = builder->data + u->offset;
   graphene_vec4_to_float (value, (float *)args_dest);

@@ -1134,42 +1134,42 @@ parse_uniform_value (GtkCssParser *parser,
 {
   switch (uniform_type)
     {
-    case GSK_GLUNIFORM_TYPE_FLOAT:
+    case GSK_GL_UNIFORM_TYPE_FLOAT:
       if (!gtk_css_parser_consume_number (parser, &value->v[0]))
         return FALSE;
       break;
 
-    case GSK_GLUNIFORM_TYPE_INT:
+    case GSK_GL_UNIFORM_TYPE_INT:
       if (!gtk_css_parser_consume_integer (parser, &value->i))
         return FALSE;
       break;
 
-    case GSK_GLUNIFORM_TYPE_UINT:
+    case GSK_GL_UNIFORM_TYPE_UINT:
       if (!gtk_css_parser_consume_integer (parser, &value->i) ||
           value->i < 0)
         return FALSE;
       break;
 
-    case GSK_GLUNIFORM_TYPE_BOOL:
+    case GSK_GL_UNIFORM_TYPE_BOOL:
       if (!gtk_css_parser_consume_integer (parser, &value->i) ||
           (value->i != 0 && value->i != 1))
         return FALSE;
       break;
 
-    case GSK_GLUNIFORM_TYPE_VEC2:
+    case GSK_GL_UNIFORM_TYPE_VEC2:
       if (!gtk_css_parser_consume_number (parser, &value->v[0]) ||
           !gtk_css_parser_consume_number (parser, &value->v[1]))
           return FALSE;
       break;
 
-    case GSK_GLUNIFORM_TYPE_VEC3:
+    case GSK_GL_UNIFORM_TYPE_VEC3:
       if (!gtk_css_parser_consume_number (parser, &value->v[0]) ||
           !gtk_css_parser_consume_number (parser, &value->v[1]) ||
           !gtk_css_parser_consume_number (parser, &value->v[2]))
         return FALSE;
       break;
 
-    case GSK_GLUNIFORM_TYPE_VEC4:
+    case GSK_GL_UNIFORM_TYPE_VEC4:
       if (!gtk_css_parser_consume_number (parser, &value->v[0]) ||
           !gtk_css_parser_consume_number (parser, &value->v[1]) ||
           !gtk_css_parser_consume_number (parser, &value->v[2]) ||
@@ -1177,7 +1177,7 @@ parse_uniform_value (GtkCssParser *parser,
         return FALSE;
       break;
 
-    case GSK_GLUNIFORM_TYPE_NONE:
+    case GSK_GL_UNIFORM_TYPE_NONE:
     default:
       g_assert_not_reached ();
       break;
@@ -1251,23 +1251,23 @@ parse_glshader_node (GtkCssParser *parser)
 
       switch (uniform_type)
         {
-        case GSK_GLUNIFORM_TYPE_FLOAT:
+        case GSK_GL_UNIFORM_TYPE_FLOAT:
           gsk_uniform_data_builder_set_float (builder, i, value->v[0]);
           break;
 
-        case GSK_GLUNIFORM_TYPE_INT:
+        case GSK_GL_UNIFORM_TYPE_INT:
           gsk_uniform_data_builder_set_int (builder, i, value->i);
           break;
 
-        case GSK_GLUNIFORM_TYPE_UINT:
+        case GSK_GL_UNIFORM_TYPE_UINT:
           gsk_uniform_data_builder_set_uint (builder, i, value->i);
           break;
 
-        case GSK_GLUNIFORM_TYPE_BOOL:
+        case GSK_GL_UNIFORM_TYPE_BOOL:
           gsk_uniform_data_builder_set_bool (builder, i, value->i);
           break;
 
-        case GSK_GLUNIFORM_TYPE_VEC2:
+        case GSK_GL_UNIFORM_TYPE_VEC2:
           {
             graphene_vec2_t v;
             graphene_vec2_init (&v, value->v[0], value->v[1]);
@@ -1275,7 +1275,7 @@ parse_glshader_node (GtkCssParser *parser)
           }
           break;
 
-        case GSK_GLUNIFORM_TYPE_VEC3:
+        case GSK_GL_UNIFORM_TYPE_VEC3:
           {
             graphene_vec3_t v;
             graphene_vec3_init (&v, value->v[0], value->v[1], value->v[2]);
@@ -1283,7 +1283,7 @@ parse_glshader_node (GtkCssParser *parser)
           }
           break;
 
-        case GSK_GLUNIFORM_TYPE_VEC4:
+        case GSK_GL_UNIFORM_TYPE_VEC4:
           {
             graphene_vec4_t v;
             graphene_vec4_init (&v, value->v[0], value->v[1], value->v[2], value->v[3]);
@@ -1291,7 +1291,7 @@ parse_glshader_node (GtkCssParser *parser)
           }
           break;
 
-        case GSK_GLUNIFORM_TYPE_NONE:
+        case GSK_GL_UNIFORM_TYPE_NONE:
         default:
           g_assert_not_reached ();
         }
@@ -2752,40 +2752,40 @@ render_node_print (Printer       *p,
 
                 switch (gsk_gl_shader_get_uniform_type (shader, i))
                   {
-                  case GSK_GLUNIFORM_TYPE_NONE:
+                  case GSK_GL_UNIFORM_TYPE_NONE:
                   default:
                     g_assert_not_reached ();
                     break;
 
-                  case GSK_GLUNIFORM_TYPE_FLOAT:
+                  case GSK_GL_UNIFORM_TYPE_FLOAT:
                     {
                       float value = gsk_gl_shader_get_uniform_data_float (shader, uniform_data, i);
                       string_append_double (data, value);
                     }
                     break;
 
-                  case GSK_GLUNIFORM_TYPE_INT:
+                  case GSK_GL_UNIFORM_TYPE_INT:
                     {
                       gint32 value = gsk_gl_shader_get_uniform_data_int (shader, uniform_data, i);
                       g_string_append_printf (data, "%d", value);
                     }
                     break;
 
-                  case GSK_GLUNIFORM_TYPE_UINT:
+                  case GSK_GL_UNIFORM_TYPE_UINT:
                     {
                       guint32 value = gsk_gl_shader_get_uniform_data_uint (shader, uniform_data, i);
                       g_string_append_printf (data, "%u", value);
                     }
                     break;
 
-                  case GSK_GLUNIFORM_TYPE_BOOL:
+                  case GSK_GL_UNIFORM_TYPE_BOOL:
                     {
                       gboolean value = gsk_gl_shader_get_uniform_data_bool (shader, uniform_data, i);
                       g_string_append_printf (data, "%d", value);
                     }
                     break;
 
-                  case GSK_GLUNIFORM_TYPE_VEC2:
+                  case GSK_GL_UNIFORM_TYPE_VEC2:
                     {
                       graphene_vec2_t value;
                       gsk_gl_shader_get_uniform_data_vec2 (shader, uniform_data, i,
@@ -2796,7 +2796,7 @@ render_node_print (Printer       *p,
                     }
                     break;
 
-                  case GSK_GLUNIFORM_TYPE_VEC3:
+                  case GSK_GL_UNIFORM_TYPE_VEC3:
                     {
                       graphene_vec3_t value;
                       gsk_gl_shader_get_uniform_data_vec3 (shader, uniform_data, i,
@@ -2809,7 +2809,7 @@ render_node_print (Printer       *p,
                     }
                     break;
 
-                  case GSK_GLUNIFORM_TYPE_VEC4:
+                  case GSK_GL_UNIFORM_TYPE_VEC4:
                     {
                       graphene_vec4_t value;
                       gsk_gl_shader_get_uniform_data_vec4 (shader, uniform_data, i,

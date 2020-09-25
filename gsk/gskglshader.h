@@ -30,7 +30,7 @@
 
 G_BEGIN_DECLS
 
-#define GSK_TYPE_GLSHADER (gsk_gl_shader_get_type ())
+#define GSK_TYPE_GL_SHADER (gsk_gl_shader_get_type ())
 
 GDK_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (GskGLShader, gsk_gl_shader, GSK, GL_SHADER, GObject)
