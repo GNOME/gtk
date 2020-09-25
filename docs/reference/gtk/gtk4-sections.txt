@@ -555,7 +555,6 @@ gtk_column_view_get_type
 <TITLE>GtkColumnViewColumn</TITLE>
 GtkColumnViewColumn
 gtk_column_view_column_new
-gtk_column_view_column_new_with_factory
 gtk_column_view_column_get_column_view
 gtk_column_view_column_set_factory
 gtk_column_view_column_get_factory

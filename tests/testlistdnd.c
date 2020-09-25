@@ -388,7 +388,7 @@ main (int argc, char *argv[])
       g_signal_connect (factory, "unbind", G_CALLBACK (unbind_item), NULL);
 
       title = g_strdup_printf ("Column %u", i);
-      column = gtk_column_view_column_new_with_factory (title, factory);
+      column = gtk_column_view_column_new (title, factory);
       gtk_column_view_append_column (GTK_COLUMN_VIEW (cv), column);
       g_object_unref (column);
       g_free (title);
