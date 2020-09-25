@@ -95,6 +95,12 @@ GDK_AVAILABLE_IN_ALL
 gboolean       gtk_menu_button_get_has_frame (GtkMenuButton  *menu_button);
 
 GDK_AVAILABLE_IN_ALL
+void           gtk_menu_button_set_active (GtkMenuButton *menu_button,
+                                           gboolean       active);
+GDK_AVAILABLE_IN_ALL
+gboolean       gtk_menu_button_get_active (GtkMenuButton *menu_button);
+
+GDK_AVAILABLE_IN_ALL
 void          gtk_menu_button_popup (GtkMenuButton *menu_button);
 GDK_AVAILABLE_IN_ALL
 void          gtk_menu_button_popdown (GtkMenuButton *menu_button);

@@ -27,6 +27,11 @@
  * This popup can be provided either as a #GtkPopover or as an abstract
  * #GMenuModel.
  *
+ * A #GtkMenuButton can be toggled using gtk_menu_button_popup() and
+ * gtk_menu_button_popdown(). Alternatively, its state can be set
+ * specifically using gtk_menu_button_set_active(), and retrieved using
+ * gtk_menu_button_get_active().
+ *
  * The #GtkMenuButton widget can show either an icon (set with the
  * #GtkMenuButton:icon-name property) or a label (set with the
  * #GtkMenuButton:label property). If neither is explicitly set,
@@ -162,6 +167,7 @@ enum
   PROP_LABEL,
   PROP_USE_UNDERLINE,
   PROP_HAS_FRAME,
+  PROP_ACTIVE,
   LAST_PROP
 };
 
@@ -202,6 +208,9 @@ gtk_menu_button_set_property (GObject      *object,
       case PROP_HAS_FRAME:
         gtk_menu_button_set_has_frame (self, g_value_get_boolean (value));
         break;
+      case PROP_ACTIVE:
+        gtk_menu_button_set_active (self, g_value_get_boolean (value));
+        break;
       default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
     }
@@ -238,6 +247,9 @@ gtk_menu_button_get_property (GObject    *object,
       case PROP_HAS_FRAME:
         g_value_set_boolean (value, gtk_menu_button_get_has_frame (GTK_MENU_BUTTON (object)));
         break;
+      case PROP_ACTIVE:
+        g_value_set_boolean (value, gtk_menu_button_get_active (GTK_MENU_BUTTON (object)));
+        break;
       default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
     }
@@ -257,10 +269,8 @@ gtk_menu_button_state_flags_changed (GtkWidget    *widget,
 }
 
 static void
-gtk_menu_button_toggled (GtkMenuButton *self)
+gtk_menu_button_set_popover_state (GtkMenuButton *self, gboolean active)
 {
-  const gboolean active = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (self->button));
-
   /* Might set a new menu/popover */
   if (active && self->create_popup_func)
     {
@@ -274,6 +284,17 @@ gtk_menu_button_toggled (GtkMenuButton *self)
       else
         gtk_popover_popdown (GTK_POPOVER (self->popover));
     }
+}
+
+static void
+gtk_menu_button_toggled (GtkMenuButton *self)
+{
+  const gboolean active = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (self->button));
+
+  gtk_menu_button_set_popover_state (self, active);
+
+  if (active != gtk_menu_button_get_active (self))
+    gtk_menu_button_set_active (self, active);
 }
 
 static void
@@ -415,6 +436,13 @@ gtk_menu_button_class_init (GtkMenuButtonClass *klass)
                           TRUE,
                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
+  menu_button_props[PROP_ACTIVE] =
+    g_param_spec_boolean ("active",
+                          P_("Active"),
+                          P_("The button state"),
+                          FALSE,
+                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+
   g_object_class_install_properties (gobject_class, LAST_PROP, menu_button_props);
 
   gtk_widget_class_set_css_name (widget_class, I_("menubutton"));
@@ -471,6 +499,7 @@ gtk_menu_button_init (GtkMenuButton *self)
   self->button = gtk_toggle_button_new ();
   gtk_widget_set_parent (self->button, GTK_WIDGET (self));
   g_signal_connect_swapped (self->button, "toggled", G_CALLBACK (gtk_menu_button_toggled), self);
+  g_object_bind_property (self->button, "active", GTK_WIDGET (self), "active", G_BINDING_SYNC_CREATE);
   add_arrow (self);
 
   gtk_widget_set_sensitive (self->button, FALSE);
@@ -889,6 +918,47 @@ gtk_menu_button_get_has_frame (GtkMenuButton *menu_button)
 }
 
 /**
+ * gtk_menu_button_set_active:
+ * @menu_button: a #GtkMenuButton
+ * @active: the button state
+ *
+ * Sets the state of the button.
+ */
+void
+gtk_menu_button_set_active (GtkMenuButton *menu_button,
+                            gboolean       active)
+{
+  g_return_if_fail (GTK_IS_MENU_BUTTON (menu_button));
+
+/*  if (gtk_menu_button_get_active (GTK_MENU_BUTTON (menu_button)) == gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (menu_button->button)))*/
+/*    return;*/
+
+/*  if (active != gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (menu_button->button)))*/
+
+  gtk_menu_button_set_popover_state (menu_button, active);
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (menu_button->button), active);
+
+/*  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (menu_button->button), active);*/
+  g_object_notify_by_pspec (G_OBJECT (menu_button), menu_button_props[PROP_ACTIVE]);
+}
+
+/**
+ * gtk_menu_button_get_active:
+ * @menu_button: a #GtkMenuButton
+ *
+ * Returns the state of the button.
+ *
+ * Returns: %TRUE if the button is active
+ */
+gboolean
+gtk_menu_button_get_active (GtkMenuButton *menu_button)
+{
+  g_return_val_if_fail (GTK_IS_MENU_BUTTON (menu_button), TRUE);
+
+  return gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (menu_button->button));
+}
+
+/**
  * gtk_menu_button_popup:
  * @menu_button: a #GtkMenuButton
  *
@@ -900,6 +970,7 @@ gtk_menu_button_popup (GtkMenuButton *menu_button)
   g_return_if_fail (GTK_IS_MENU_BUTTON (menu_button));
 
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (menu_button->button), TRUE);
+/*  gtk_menu_button_set_active (GTK_MENU_BUTTON (menu_button), TRUE);*/
 }
 
 /**
@@ -914,6 +985,7 @@ gtk_menu_button_popdown (GtkMenuButton *menu_button)
   g_return_if_fail (GTK_IS_MENU_BUTTON (menu_button));
 
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (menu_button->button), FALSE);
+/*  gtk_menu_button_set_active (GTK_MENU_BUTTON (menu_button), FALSE);*/
 }
 
 /**
