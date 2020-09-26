@@ -157,6 +157,50 @@ test_create_data (void)
   g_object_unref (shader);
 }
 
+static void
+test_format_args (void)
+{
+  GBytes *bytes;
+  GskGLShader *shader;
+  graphene_vec2_t v2, vv2;
+  graphene_vec3_t v3, vv3;
+  graphene_vec4_t v4, vv4;
+  float f1, f2;
+  GBytes *args;
+
+  bytes = g_bytes_new_static (shader1, sizeof (shader1));
+  shader = gsk_gl_shader_new_from_bytes (bytes);
+  g_assert_nonnull (shader);
+  g_clear_pointer (&bytes, g_bytes_unref);
+
+  graphene_vec2_init (&v2, 20, 30);
+  graphene_vec3_init (&v3, -1, -2, -3);
+  graphene_vec4_init (&v4, 100, 0, -100, 10);
+
+  f1 = 0.5;
+  f2 = 20.0;
+  args = gsk_gl_shader_format_args (shader,
+                                    "progress", &f1,
+                                    "dots", &f2,
+                                    "center", &v2,
+                                    "test4", &v3,
+                                    "test5", &v4,
+                                    NULL);
+
+  g_assert_cmpfloat (gsk_gl_shader_get_arg_float (shader, args, 0), ==, 0.5);
+  g_assert_cmpfloat (gsk_gl_shader_get_arg_float (shader, args, 1), ==, 20.0);
+  gsk_gl_shader_get_arg_vec2 (shader, args, 2, &vv2);
+  g_assert_true (graphene_vec2_equal (&v2, &vv2));
+  gsk_gl_shader_get_arg_vec3 (shader, args, 6, &vv3);
+  g_assert_true (graphene_vec3_equal (&v3, &vv3));
+  gsk_gl_shader_get_arg_vec4 (shader, args, 7, &vv4);
+  g_assert_true (graphene_vec4_equal (&v4, &vv4));
+
+  g_bytes_unref (args);
+
+  g_object_unref (shader);
+}
+
 int
 main (int   argc,
       char *argv[])
@@ -165,6 +209,7 @@ main (int   argc,
 
   g_test_add_func ("/shader/create/simple", test_create_simple);
   g_test_add_func ("/shader/create/data", test_create_data);
+  g_test_add_func ("/shader/format-args", test_format_args);
 
   return g_test_run ();
 }
