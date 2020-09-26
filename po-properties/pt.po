@@ -7,21 +7,22 @@
 # Sérgio Cardeira <cardeira dot sergio at gmail dot com>, 2016.
 # Tiago Santos <tiagofsantos81@sapo.pt>, 2014 - 2016.
 # Juliano Camargo <julianosc@pm.me>, 2020.
+# Juliano de Souza Camargo <julianosc@pm.me>, 2020.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: 3.12\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-27 10:07+0000\n"
-"PO-Revision-Date: 2020-08-23 23:32+0100\n"
-"Last-Translator: Juliano Camargo <julianosc@pm.me>\n"
-"Language-Team: Portuguese <gnome_pt@yahoogroups.com>\n"
+"POT-Creation-Date: 2020-09-26 12:01+0000\n"
+"PO-Revision-Date: 2020-09-26 13:43+0100\n"
+"Last-Translator: Juliano de Souza Camargo <julianosc@pm.me>\n"
+"Language-Team: Portuguese <>\n"
 "Language: pt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"X-Generator: Gtranslator 3.36.0\n"
+"X-Generator: Gtranslator 3.38.0\n"
 "X-Language: pt_PT\n"
 "X-Source-Language: C\n"
 
@@ -1488,7 +1489,6 @@ msgid "Screensaver Active"
 msgstr "Protetor de Ecrã Ativo"
 
 #: gtk/gtkapplication.c:864
-#| msgid "Whether the spinner is active"
 msgid "Whether the screensaver is active"
 msgstr "Se o protetor de ecrã está ativo"
 
@@ -2954,7 +2954,7 @@ msgstr "Cor atual, como uma GdkRGBA"
 msgid "Whether alpha should be shown"
 msgstr "Se o alfa deverá ou não ser mostrado"
 
-#: gtk/gtkcolorchooserdialog.c:213 gtk/gtkcolorchooserwidget.c:704
+#: gtk/gtkcolorchooserdialog.c:213 gtk/gtkcolorchooserwidget.c:699
 msgid "Show editor"
 msgstr "Mostrar editor"
 
@@ -3331,7 +3331,7 @@ msgid ""
 "mode)"
 msgstr ""
 "FALSO mostra o \"carácter de invisibilidade\" em vez do texto real (modo "
-"senha)"
+"palavra-passe)"
 
 #: gtk/gtkentry.c:884
 msgid "FALSE removes outside bevel from entry"
@@ -3350,7 +3350,8 @@ msgstr "Carácter de invisibilidade"
 #: gtk/gtkentry.c:907 gtk/gtkentry.c:1604
 msgid "The character to use when masking entry contents (in \"password mode\")"
 msgstr ""
-"O carácter a utilizar para mascarar entradas de conteúdo (em \"modo senha\")"
+"O carácter a utilizar para mascarar entradas de conteúdo (em \"modo palavra-"
+"passe\")"
 
 #: gtk/gtkentry.c:913
 msgid "Activates default"
@@ -3433,8 +3434,8 @@ msgstr "Aviso de Caps Lock"
 #: gtk/gtkentry.c:1064
 msgid "Whether password entries will show a warning when Caps Lock is on"
 msgstr ""
-"Se campos de introdução de senha mostrarão ou não um aviso quando o Caps "
-"Lock está ativo"
+"Se campos de introdução de palavra-passe mostrarão ou não um aviso quando o "
+"Caps Lock está ativo"
 
 #: gtk/gtkentry.c:1077
 msgid "Progress Fraction"
@@ -3654,17 +3655,14 @@ msgid "Emoji icon"
 msgstr "Ícone Emoji"
 
 #: gtk/gtkentry.c:1538
-#| msgid "Whether to show a sort indicator"
 msgid "Whether to show an icon for Emoji"
 msgstr "Se mostra ou não um ícone para o Emoji"
 
 #: gtk/gtkentry.c:1544
-#| msgid "Inline completion"
 msgid "Enable Emoji completion"
 msgstr "Ativa completação de Emoji"
 
 #: gtk/gtkentry.c:1545
-#| msgid "Whether to use a monospace font"
 msgid "Whether to suggest Emoji replacements"
 msgstr "Se deve sugerir substituições de Emoji"
 
@@ -3792,7 +3790,6 @@ msgid "Propagation phase at which this controller is run"
 msgstr "Fase de propagação a que este controlador é executado"
 
 #: gtk/gtkeventcontrollerscroll.c:373 gtk/gtkeventcontrollerscroll.c:374
-#| msgid "Open Flags"
 msgid "Flags"
 msgstr "Opções"
 
@@ -3895,7 +3892,7 @@ msgid "The current filter for selecting which files are displayed"
 msgstr "O filtro atual para selecionar que ficheiros são mostrados"
 
 #: gtk/gtkfilechooser.c:388 gtk/gtkplacessidebar.c:4836
-#: gtk/gtkplacesview.c:2322
+#: gtk/gtkplacesview.c:2336
 msgid "Local Only"
 msgstr "Só local"
 
@@ -4132,22 +4129,18 @@ msgid "Whether the preview text entry is shown or not"
 msgstr "Se a entrada de antevisão de texto é ou não mostrada"
 
 #: gtk/gtkfontchooser.c:118
-#| msgid "Selection mode"
 msgid "Selection level"
 msgstr "Modo de seleção"
 
 #: gtk/gtkfontchooser.c:119
-#| msgid "Whether to use a monospace font"
 msgid "Whether to select family, face or font"
 msgstr "Se deve selecionar família, face ou letra"
 
 #: gtk/gtkfontchooser.c:137
-#| msgid "Font Features"
 msgid "Font features"
 msgstr "Funcionalidades de letras"
 
 #: gtk/gtkfontchooser.c:138
-#| msgid "Font features set"
 msgid "Font features as a string"
 msgstr "Funcionalidades de letras como texto"
 
@@ -4156,7 +4149,6 @@ msgid "Language for which features have been selected"
 msgstr "Idioma no qual as funcionalidades foram selecionadas"
 
 #: gtk/gtkfontchooserwidget.c:697
-#| msgid "The name of the action"
 msgid "The tweak action"
 msgstr "A ação de truques"
 
@@ -4580,7 +4572,6 @@ msgid "Whether to include a standard close button"
 msgstr "Se incluir ou não um botão de fechar padrão"
 
 #: gtk/gtkinfobar.c:472
-#| msgid "Reveal Child"
 msgid "Reveal"
 msgstr "Revelar"
 
@@ -5256,7 +5247,6 @@ msgid "The text"
 msgstr "O texto"
 
 #: gtk/gtkmodelbutton.c:1197
-#| msgid "The text of the label includes XML markup. See pango_parse_markup()"
 msgid "The text of the button includes XML markup. See pango_parse_markup()"
 msgstr "O texto do botão inclui código XML. Consulte pango_parse_markup()"
 
@@ -5638,11 +5628,11 @@ msgstr "Localização a selecionar"
 msgid "The location to highlight in the sidebar"
 msgstr "A localização a realçar na barra lateral"
 
-#: gtk/gtkplacessidebar.c:4805 gtk/gtkplacesview.c:2343
+#: gtk/gtkplacessidebar.c:4805 gtk/gtkplacesview.c:2357
 msgid "Open Flags"
 msgstr "Parâmetros de abertura"
 
-#: gtk/gtkplacessidebar.c:4806 gtk/gtkplacesview.c:2344
+#: gtk/gtkplacessidebar.c:4806 gtk/gtkplacesview.c:2358
 msgid ""
 "Modes in which the calling application can open locations selected in the "
 "sidebar"
@@ -5691,7 +5681,7 @@ msgstr ""
 "Se a barra lateral inclui um atalho incorporado para um diálogo \"Inserir "
 "localização\""
 
-#: gtk/gtkplacessidebar.c:4837 gtk/gtkplacesview.c:2323
+#: gtk/gtkplacessidebar.c:4837 gtk/gtkplacesview.c:2337
 msgid "Whether the sidebar only includes local files"
 msgstr "Se a barra lateral só inclui ficheiros locais"
 
@@ -5713,12 +5703,10 @@ msgid "Whether the sidebar includes an item to show external locations"
 msgstr "Se a barra lateral inclui um item para mostrar localizações externas"
 
 #: gtk/gtkplacessidebar.c:4854
-#| msgid "Show 'Enter Location'"
 msgid "Show “Starred Location”"
 msgstr "Mostrar \"Localização com Estrela\""
 
 #: gtk/gtkplacessidebar.c:4855
-#| msgid "Whether the sidebar includes an item to show external locations"
 msgid "Whether the sidebar includes an item to show starred files"
 msgstr ""
 "Se a barra lateral deve incluir um item para mostrar ficheiros com estrela"
@@ -5727,19 +5715,19 @@ msgstr ""
 msgid "Whether to emit ::populate-popup for popups that are not menus"
 msgstr "Se emitir ou não ::populate-popup para balões que não são menus"
 
-#: gtk/gtkplacesview.c:2329
+#: gtk/gtkplacesview.c:2343
 msgid "Loading"
 msgstr "A carregar"
 
-#: gtk/gtkplacesview.c:2330
+#: gtk/gtkplacesview.c:2344
 msgid "Whether the view is loading locations"
 msgstr "Se a vista está a carregar localizações"
 
-#: gtk/gtkplacesview.c:2336
+#: gtk/gtkplacesview.c:2350
 msgid "Fetching networks"
 msgstr "A obter redes"
 
-#: gtk/gtkplacesview.c:2337
+#: gtk/gtkplacesview.c:2351
 msgid "Whether the view is fetching networks"
 msgstr "Se a vista está a obter redes"
 
@@ -6870,12 +6858,10 @@ msgstr ""
 "direita e direita-para-esquerda"
 
 #: gtk/gtksettings.c:461
-#| msgid "Cursor line aspect ratio"
 msgid "Cursor Aspect Ratio"
 msgstr "Razão de proporção do Cursor"
 
 #: gtk/gtksettings.c:462
-#| msgid "The orientation of the orientable"
 msgid "The aspect ratio of the text caret"
 msgstr "A razão de proporção da marca de texto"
 
@@ -7362,7 +7348,7 @@ msgstr "Se selecionar ou não o conteúdo da entrada quando esta obtém o foco"
 
 #: gtk/gtksettings.c:1395
 msgid "Password Hint Timeout"
-msgstr "Tempo de expiração da dica de senha"
+msgstr "Tempo de expiração da dica de palavra-passe"
 
 #: gtk/gtksettings.c:1396
 msgid "How long to show the last input character in hidden entries"
@@ -7570,7 +7556,6 @@ msgid "Whether to show cursor in text"
 msgstr "Se mostra ou não o cursor no texto"
 
 #: gtk/gtksettings.c:1793 gtk/gtksettings.c:1794
-#| msgid "Whether to use symbolic icons"
 msgid "Whether to use overlay scrollbars"
 msgstr "Se deve utilizar barras de deslocamento sobrepostas"
 
@@ -7688,7 +7673,6 @@ msgid "Climb Rate"
 msgstr "Taxa de incremento"
 
 #: gtk/gtkspinbutton.c:388
-#| msgid "The acceleration rate when you hold down a button"
 msgid "The acceleration rate when you hold down a button or key"
 msgstr "A taxa de aceleração quando se mantém um botão premido"
 
