@@ -40,7 +40,9 @@ BUILT_SOURCES = 				\
 	server-decoration-client-protocol.h		\
 	server-decoration-protocol.c			\
 	gtk-shell-client-protocol.h		\
-	gtk-shell-protocol.c
+	gtk-shell-protocol.c			\
+	primary-selection-unstable-v1-client-protocol.h		\
+	primary-selection-unstable-v1-protocol.c
 
 nodist_libgdk_wayland_la_SOURCES =		\
 	$(BUILT_SOURCES)

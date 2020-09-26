@@ -191,8 +191,8 @@ struct wl_data_device * gdk_wayland_device_get_data_device (GdkDevice *gdk_devic
 void gdk_wayland_seat_set_selection (GdkSeat               *seat,
                                      struct wl_data_source *source);
 
-void gdk_wayland_seat_set_primary (GdkSeat                             *seat,
-                                   struct gtk_primary_selection_source *source);
+void gdk_wayland_seat_set_primary (GdkSeat  *seat,
+                                   gpointer  source);
 
 GdkDragContext * gdk_wayland_device_get_drop_context (GdkDevice *gdk_device);
 
@@ -249,8 +249,8 @@ void gdk_wayland_selection_free (GdkWaylandSelection *selection);
 
 void gdk_wayland_selection_ensure_offer (GdkDisplay           *display,
                                          struct wl_data_offer *wl_offer);
-void gdk_wayland_selection_ensure_primary_offer (GdkDisplay                         *display,
-                                                 struct gtk_primary_selection_offer *wp_offer);
+void gdk_wayland_selection_ensure_primary_offer (GdkDisplay *display,
+                                                 gpointer    wp_offer);
 
 void gdk_wayland_selection_set_offer (GdkDisplay           *display,
                                       GdkAtom               selection,
