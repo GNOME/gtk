@@ -121,50 +121,43 @@ plane_snapshot (GtkWidget   *widget,
 }
 
 static void
-create_texture (GtkColorPlane *plane)
+create_texture (GtkWidget *widget)
 {
-  GtkWidget *widget = GTK_WIDGET (plane);
+  const int width = gtk_widget_get_width (widget);
+  const int height = gtk_widget_get_height (widget);
+  const int stride = width * 3;
+  GtkColorPlane *plane = GTK_COLOR_PLANE (widget);
   GBytes *bytes;
-  int width, height, stride;
-  guint red, green, blue;
-  guint32 *data, *p;
-  float h, s, v;
-  float r, g, b;
-  double sf, vf;
-  int x, y;
+  guint8 *data;
 
-  if (!gtk_widget_get_realized (widget))
+  if (!gtk_widget_get_mapped (widget))
     return;
-
-  width = gtk_widget_get_width (widget);
-  height = gtk_widget_get_height (widget);
 
   if (width == 0 || height == 0)
     return;
 
   g_clear_object (&plane->texture);
 
-  stride = width * 4;
-
   data = g_malloc (height * stride);
-
   if (width > 1 && height > 1)
     {
-      h = gtk_adjustment_get_value (plane->h_adj);
-      sf = 1.0 / (height - 1);
-      vf = 1.0 / (width - 1);
+      const float h = gtk_adjustment_get_value (plane->h_adj);
+      int x, y;
+
       for (y = 0; y < height; y++)
         {
-          s = CLAMP (1.0 - y * sf, 0.0, 1.0);
-          p = data + y * (stride / 4);
+          const float s = 1.0 - (float)y / (height - 1);
+
           for (x = 0; x < width; x++)
             {
-              v = x * vf;
+              const float v = (float)x / (width - 1);
+              float r, g, b;
+
               gtk_hsv_to_rgb (h, s, v, &r, &g, &b);
-              red = CLAMP (r * 255, 0, 255);
-              green = CLAMP (g * 255, 0, 255);
-              blue = CLAMP (b * 255, 0, 255);
-              p[x] = (0xff << 24) | (red << 16) | (green << 8) | blue;
+
+              data[(y * stride) + (x * 3) + 0] = r * 255;
+              data[(y * stride) + (x * 3) + 1] = g * 255;
+              data[(y * stride) + (x * 3) + 2] = b * 255;
             }
         }
     }
@@ -175,7 +168,7 @@ create_texture (GtkColorPlane *plane)
 
   bytes = g_bytes_new_take (data, height * stride);
   plane->texture = gdk_memory_texture_new (width, height,
-                                           GDK_MEMORY_DEFAULT,
+                                           GDK_MEMORY_R8G8B8,
                                            bytes,
                                            stride);
   g_bytes_unref (bytes);
@@ -187,9 +180,7 @@ plane_size_allocate (GtkWidget *widget,
                      int        height,
                      int        baseline)
 {
-  GtkColorPlane *plane = GTK_COLOR_PLANE (widget);
-
-  create_texture (plane);
+  create_texture (widget);
 }
 
 static void
@@ -197,7 +188,7 @@ plane_realize (GtkWidget *widget)
 {
   GTK_WIDGET_CLASS (gtk_color_plane_parent_class)->realize (widget);
 
-  create_texture (GTK_COLOR_PLANE (widget));
+  create_texture (widget);
 }
 
 static void
@@ -221,10 +212,10 @@ set_cross_cursor (GtkWidget *widget,
 }
 
 static void
-h_changed (GtkColorPlane *plane)
+h_changed (GtkWidget *plane)
 {
   create_texture (plane);
-  gtk_widget_queue_draw (GTK_WIDGET (plane));
+  gtk_widget_queue_draw (plane);
 }
 
 static void
