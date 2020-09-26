@@ -1,5 +1,6 @@
 gtk_tests = [
   # testname, optional extra sources
+  ['testupload'],
   ['testtransform'],
   ['testdropdown'],
   ['rendernode'],
