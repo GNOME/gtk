@@ -184,24 +184,6 @@ plane_size_allocate (GtkWidget *widget,
 }
 
 static void
-plane_realize (GtkWidget *widget)
-{
-  GTK_WIDGET_CLASS (gtk_color_plane_parent_class)->realize (widget);
-
-  create_texture (widget);
-}
-
-static void
-plane_unrealize (GtkWidget *widget)
-{
-  GtkColorPlane *plane = GTK_COLOR_PLANE (widget);
-
-  g_clear_object (&plane->texture);
-
-  GTK_WIDGET_CLASS (gtk_color_plane_parent_class)->unrealize (widget);
-}
-
-static void
 set_cross_cursor (GtkWidget *widget,
                   gboolean   enabled)
 {
@@ -502,8 +484,6 @@ gtk_color_plane_class_init (GtkColorPlaneClass *class)
 
   widget_class->snapshot = plane_snapshot;
   widget_class->size_allocate = plane_size_allocate;
-  widget_class->realize = plane_realize;
-  widget_class->unrealize = plane_unrealize;
 
   g_object_class_install_property (object_class,
                                    PROP_H_ADJUSTMENT,
