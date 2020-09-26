@@ -88,39 +88,35 @@ gtk_color_scale_snapshot_trough (GtkColorScale  *scale,
     {
       if (!scale->hue_texture)
         {
-          GdkTexture *texture;
-          int stride;
+          const int stride = width * 3;
           GBytes *bytes;
           guchar *data, *p;
-          double h;
-          float r, g, b;
-          double f;
           int hue_x, hue_y;
 
-          stride = width * 3;
-          data = g_malloc (width * height * 3);
+          data = g_malloc (height * stride);
 
-          f = 1.0 / (height - 1);
           for (hue_y = 0; hue_y < height; hue_y++)
             {
-              h = CLAMP (hue_y * f, 0.0, 1.0);
+              const float h = CLAMP ((float)hue_y / (height - 1), 0.0, 1.0);
+              float r, g, b;
+
+              gtk_hsv_to_rgb (h, 1, 1, &r, &g, &b);
+
               p = data + hue_y * stride;
               for (hue_x = 0; hue_x < stride; hue_x += 3)
                 {
-                  gtk_hsv_to_rgb (h, 1, 1, &r, &g, &b);
-                  p[hue_x + 0] = CLAMP (r * 255, 0, 255);
-                  p[hue_x + 1] = CLAMP (g * 255, 0, 255);
-                  p[hue_x + 2] = CLAMP (b * 255, 0, 255);
+                  p[hue_x + 0] = r * 255;
+                  p[hue_x + 1] = g * 255;
+                  p[hue_x + 2] = b * 255;
                 }
             }
 
-          bytes = g_bytes_new_take (data, width * height * 3);
-          texture = gdk_memory_texture_new (width, height,
-                                            GDK_MEMORY_R8G8B8,
-                                            bytes,
-                                            stride);
+          bytes = g_bytes_new_take (data, height * stride);
+          scale->hue_texture = gdk_memory_texture_new (width, height,
+                                                       GDK_MEMORY_R8G8B8,
+                                                       bytes,
+                                                       stride);
           g_bytes_unref (bytes);
-          scale->hue_texture = texture;
         }
 
       gtk_snapshot_append_texture (snapshot,
