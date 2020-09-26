@@ -94,7 +94,7 @@ gdk_popup_default_init (GdkPopupInterface *iface)
   g_object_interface_install_property (iface,
       g_param_spec_boolean ("autohide",
                            P_("Autohide"),
-                           P_("The parent surface"),
+                           P_("Whether to hide on outside clicks"),
                            FALSE,
                            G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
