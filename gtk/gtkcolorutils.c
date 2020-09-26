@@ -34,80 +34,6 @@
 
 #include "gtkcolorutils.h"
 
-
-/* Converts from HSV to RGB */
-static void
-hsv_to_rgb (float *h,
-            float *s,
-            float *v)
-{
-  float hue, saturation, value;
-  float f, p, q, t;
-
-  if (*s == 0.0)
-    {
-      *h = *v;
-      *s = *v;
-      *v = *v; /* heh */
-    }
-  else
-    {
-      hue = *h * 6.0;
-      saturation = *s;
-      value = *v;
-
-      if (hue == 6.0)
-        hue = 0.0;
-
-      f = hue - (int) hue;
-      p = value * (1.0 - saturation);
-      q = value * (1.0 - saturation * f);
-      t = value * (1.0 - saturation * (1.0 - f));
-
-      switch ((int) hue)
-        {
-        case 0:
-          *h = value;
-          *s = t;
-          *v = p;
-          break;
-
-        case 1:
-          *h = q;
-          *s = value;
-          *v = p;
-          break;
-
-        case 2:
-          *h = p;
-          *s = value;
-          *v = t;
-          break;
-
-        case 3:
-          *h = p;
-          *s = q;
-          *v = value;
-          break;
-
-        case 4:
-          *h = t;
-          *s = p;
-          *v = value;
-          break;
-
-        case 5:
-          *h = value;
-          *s = p;
-          *v = q;
-          break;
-
-        default:
-          g_assert_not_reached ();
-        }
-    }
-}
-
 /* Converts from RGB to HSV */
 static void
 rgb_to_hsv (float *r,
@@ -201,20 +127,70 @@ void
 gtk_hsv_to_rgb (float  h, float  s, float  v,
                 float *r, float *g, float *b)
 {
+  float hue;
+  float f, p;
+  int ihue;
+
   g_return_if_fail (h >= 0.0 && h <= 1.0);
   g_return_if_fail (s >= 0.0 && s <= 1.0);
   g_return_if_fail (v >= 0.0 && v <= 1.0);
+  g_return_if_fail (r);
+  g_return_if_fail (g);
+  g_return_if_fail (b);
 
-  hsv_to_rgb (&h, &s, &v);
+  if (s == 0.0)
+    {
+      *r = v;
+      *g = v;
+      *b = v;
+      return;
+    }
 
-  if (r)
-    *r = h;
+  hue = h * 6.0;
 
-  if (g)
-    *g = s;
+  if (hue == 6.0)
+    hue = 0.0;
 
-  if (b)
-    *b = v;
+  ihue = (int)hue;
+  f = hue - ihue;
+  p = v * (1.0 - s);
+
+  if (ihue == 0)
+    {
+      *r = v;
+      *g = v * (1.0 - s * (1.0 - f));
+      *b = p;
+    }
+  else if (ihue == 1)
+    {
+      *r = v * (1.0 - s * f);
+      *g = v;
+      *b = p;
+    }
+  else if (ihue == 2)
+    {
+      *r = p;
+      *g = v;
+      *b = v * (1.0 - s * (1.0 - f));
+    }
+  else if (ihue == 3)
+    {
+      *r = p;
+      *g = v * (1.0 - s * f);
+      *b = v;
+    }
+  else if (ihue == 4)
+    {
+      *r = v * (1.0 - s * (1.0 - f));
+      *g = p;
+      *b = v;
+    }
+  else if (ihue == 5)
+    {
+      *r = v;
+      *g = p;
+      *b = v * (1.0 - s * f);
+    }
 }
 
 /**
