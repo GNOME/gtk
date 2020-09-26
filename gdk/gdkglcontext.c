@@ -111,6 +111,7 @@ typedef struct {
   guint has_khr_debug : 1;
   guint use_khr_debug : 1;
   guint has_unpack_subimage : 1;
+  guint has_texture_format_bgra : 1;
   guint has_debug_output : 1;
   guint extensions_checked : 1;
   guint debug_enabled : 1;
@@ -241,8 +242,23 @@ gdk_gl_context_upload_texture (GdkGLContext    *context,
 
   if (priv->use_es)
     {
-      /* GLES only supports rgba, so convert if necessary */
-      if (data_format != GDK_MEMORY_R8G8B8A8_PREMULTIPLIED)
+      /* GLES only supports rgba (and sometime bgra),
+       * so convert if necessary
+       */
+      if (data_format == GDK_MEMORY_R8G8B8A8_PREMULTIPLIED)
+        {
+          bpp = 4;
+          gl_format = GL_RGBA;
+          gl_type = GL_UNSIGNED_BYTE;
+        }
+      else if (data_format == GDK_MEMORY_B8G8R8A8_PREMULTIPLIED &&
+               priv->has_texture_format_bgra)
+        {
+          bpp = 4;
+          gl_format = GL_BGRA_EXT;
+          gl_type = GL_UNSIGNED_BYTE;
+        }
+      else
         {
           copy = g_malloc (width * height * 4);
           gdk_memory_convert (copy, width * 4,
@@ -251,11 +267,11 @@ gdk_gl_context_upload_texture (GdkGLContext    *context,
                               width, height);
           stride = width * 4;
           data = copy;
-        }
 
-      bpp = 4;
-      gl_format = GL_RGBA;
-      gl_type = GL_UNSIGNED_BYTE;
+          bpp = 4;
+          gl_format = GL_RGBA;
+          gl_type = GL_UNSIGNED_BYTE;
+        }
     }
   else
     {
@@ -1024,6 +1040,7 @@ gdk_gl_context_check_extensions (GdkGLContext *context)
       has_texture_rectangle = FALSE;
 
       priv->has_unpack_subimage = epoxy_has_gl_extension ("GL_EXT_unpack_subimage");
+      priv->has_texture_format_bgra = epoxy_has_gl_extension ("GL_EXT_texture_format_BGRA8888");
       priv->has_khr_debug = epoxy_has_gl_extension ("GL_KHR_debug");
     }
   else
@@ -1066,6 +1083,7 @@ gdk_gl_context_check_extensions (GdkGLContext *context)
                        " - GL_ARB_texture_rectangle: %s\n"
                        " - GL_KHR_debug: %s\n"
                        " - GL_EXT_unpack_subimage: %s\n"
+                       " - GL_EXT_texture_format_BGRA8888: %s\n"
                        "* Using texture rectangle: %s",
                        priv->use_es ? "OpenGL ES" : "OpenGL",
                        priv->gl_version / 10, priv->gl_version % 10,
@@ -1075,6 +1093,7 @@ gdk_gl_context_check_extensions (GdkGLContext *context)
                        has_texture_rectangle ? "yes" : "no",
                        priv->has_khr_debug ? "yes" : "no",
                        priv->has_unpack_subimage ? "yes" : "no",
+                       priv->has_texture_format_bgra ? "yes" : "no",
                        priv->use_texture_rectangle ? "yes" : "no"));
 
   priv->extensions_checked = TRUE;
