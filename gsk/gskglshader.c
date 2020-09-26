@@ -81,7 +81,7 @@
  * automatically clipped to the clip region of the glshader node.
  *
  * In addition to the function arguments the shader can define
- * up to 4 uniforms for tetxures which must be called u_textureN
+ * up to 4 uniforms for textures which must be called u_textureN
  * (i.e. u_texture1 to u_texture4) as well as any custom uniforms
  * you want of types int, uint, bool, float, vec2, vec3 or vec4.
  *
@@ -106,6 +106,24 @@
  * This samples a texture (e.g. u_texture1) at the specified
  * coordinates, and containes some helper ifdefs to ensure that
  * it works on all OpenGL versions.
+ *
+ * # An example shader
+ *
+ * |[<!-- language="plain" -->
+ * uniform float position;
+ * uniform sampler2D u_texture1;
+ * uniform sampler2D u_texture2;
+ *
+ * void mainImage(out vec4 fragColor,
+ *                in vec2 fragCoord,
+ *                in vec2 resolution,
+ *                in vec2 uv) {
+ *   vec4 source1 = GskTexture(u_texture1, uv);
+ *   vec4 source2 = GskTexture(u_texture2, uv);
+ *
+ *   fragColor = t * source1 + (1.0 - t) * source2;
+ * }
+ * ]|
  */
 
 #include "config.h"
