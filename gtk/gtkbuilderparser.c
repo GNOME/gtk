@@ -20,7 +20,7 @@
 
 #include "gtkbuilderprivate.h"
 
-#include "gtkbuildable.h"
+#include "gtkbuildableprivate.h"
 #include "gtkbuilderscopeprivate.h"
 #include "gtkdebug.h"
 #include "gtkintl.h"

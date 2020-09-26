@@ -1398,7 +1398,7 @@ handle_insert (GtkWidget *button, GtkWidget *textview)
   const char *id;
   const char *text;
 
-  id = gtk_buildable_get_name (GTK_BUILDABLE (button));
+  id = gtk_buildable_get_buildable_id (GTK_BUILDABLE (button));
 
   if (strcmp (id, "toolbutton1") == 0)
     text = "⌘";
@@ -1424,7 +1424,7 @@ handle_cutcopypaste (GtkWidget *button, GtkWidget *textview)
 
   clipboard = gtk_widget_get_clipboard (textview);
   buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (textview));
-  id = gtk_buildable_get_name (GTK_BUILDABLE (button));
+  id = gtk_buildable_get_buildable_id (GTK_BUILDABLE (button));
 
   if (strcmp (id, "cutbutton") == 0)
     gtk_text_buffer_cut_clipboard (buffer, clipboard, TRUE);
@@ -1442,7 +1442,7 @@ clipboard_formats_notify (GdkClipboard *clipboard, GdkEvent *event, GtkWidget *b
   const char *id;
   gboolean has_text;
 
-  id = gtk_buildable_get_name (GTK_BUILDABLE (button));
+  id = gtk_buildable_get_buildable_id (GTK_BUILDABLE (button));
   has_text = gdk_content_formats_contain_gtype (gdk_clipboard_get_formats (clipboard), GTK_TYPE_TEXT_BUFFER);
 
   if (strcmp (id, "pastebutton") == 0)
@@ -1455,7 +1455,7 @@ textbuffer_notify_selection (GObject *object, GParamSpec *pspec, GtkWidget *butt
   const char *id;
   gboolean has_selection;
 
-  id = gtk_buildable_get_name (GTK_BUILDABLE (button));
+  id = gtk_buildable_get_buildable_id (GTK_BUILDABLE (button));
   has_selection = gtk_text_buffer_get_has_selection (GTK_TEXT_BUFFER (object));
 
   if (strcmp (id, "cutbutton") == 0 ||

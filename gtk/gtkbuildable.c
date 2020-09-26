@@ -36,7 +36,7 @@
  */
 
 #include "config.h"
-#include "gtkbuildable.h"
+#include "gtkbuildableprivate.h"
 #include "gtkintl.h"
 
 
@@ -49,46 +49,46 @@ gtk_buildable_default_init (GtkBuildableInterface *iface)
 }
 
 /**
- * gtk_buildable_set_name:
+ * gtk_buildable_set_buildable_id:
  * @buildable: a #GtkBuildable
- * @name: name to set
+ * @id: name to set
  *
- * Sets the name of the @buildable object.
+ * Sets the ID of the @buildable object.
  **/
 void
-gtk_buildable_set_name (GtkBuildable *buildable,
-                        const char   *name)
+gtk_buildable_set_buildable_id (GtkBuildable *buildable,
+                      const char   *id)
 {
   GtkBuildableIface *iface;
 
   g_return_if_fail (GTK_IS_BUILDABLE (buildable));
-  g_return_if_fail (name != NULL);
+  g_return_if_fail (id != NULL);
 
   iface = GTK_BUILDABLE_GET_IFACE (buildable);
 
-  if (iface->set_name)
-    (* iface->set_name) (buildable, name);
+  if (iface->set_id)
+    (* iface->set_id) (buildable, id);
   else
     g_object_set_data_full (G_OBJECT (buildable),
-			    "gtk-builder-name",
-			    g_strdup (name),
+			    "gtk-builder-id",
+			    g_strdup (id),
 			    g_free);
 }
 
 /**
- * gtk_buildable_get_name:
+ * gtk_buildable_get_buildable_id:
  * @buildable: a #GtkBuildable
  *
- * Gets the name of the @buildable object. 
+ * Gets the ID of the @buildable object.
  * 
  * #GtkBuilder sets the name based on the
  * [GtkBuilder UI definition][BUILDER-UI] 
  * used to construct the @buildable.
  *
- * Returns: the name set with gtk_buildable_set_name()
+ * Returns: the ID set with gtk_buildable_set_buildable_id()
  **/
 const char *
-gtk_buildable_get_name (GtkBuildable *buildable)
+gtk_buildable_get_buildable_id (GtkBuildable *buildable)
 {
   GtkBuildableIface *iface;
 
@@ -96,11 +96,11 @@ gtk_buildable_get_name (GtkBuildable *buildable)
 
   iface = GTK_BUILDABLE_GET_IFACE (buildable);
 
-  if (iface->get_name)
-    return (* iface->get_name) (buildable);
+  if (iface->get_id)
+    return (* iface->get_id) (buildable);
   else
     return (const char *)g_object_get_data (G_OBJECT (buildable),
-					    "gtk-builder-name");
+					    "gtk-builder-id");
 }
 
 /**

@@ -20,6 +20,7 @@
 #include "config.h"
 
 #include "gtkbuilderprivate.h"
+#include "gtkbuildableprivate.h"
 #include "gtkintl.h"
 
 #include <gio/gio.h>

@@ -21,7 +21,7 @@
 #include <gio/gio.h>
 #include "gtkbuilderprivate.h"
 #include "gtkbuilder.h"
-#include "gtkbuildable.h"
+#include "gtkbuildableprivate.h"
 
 /*****************************************  Record a GMarkup parser call ***************************/
 
