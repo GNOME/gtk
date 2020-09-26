@@ -9,8 +9,8 @@ _OUT_ vec2 endPoint;
 _OUT_ float maxDist;
 _OUT_ vec2 gradient;
 _OUT_ float gradientLength;
-_OUT_ vec4 color_stops[8];
-_OUT_ float color_offsets[8];
+_OUT_ vec4 color_stops[6];
+_OUT_ float color_offsets[6];
 
 void main() {
   gl_Position = u_projection * u_modelview * vec4(aPosition, 0.0, 1.0);
@@ -44,8 +44,8 @@ _IN_ vec2 endPoint;
 _IN_ float maxDist;
 _IN_ vec2 gradient;
 _IN_ float gradientLength;
-_IN_ vec4 color_stops[8];
-_IN_ float color_offsets[8];
+_IN_ vec4 color_stops[6];
+_IN_ float color_offsets[6];
 
 void main() {
   // Position relative to startPoint
