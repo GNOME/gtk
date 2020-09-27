@@ -104,7 +104,7 @@ struct _GdkWaylandSelection
   GArray *source_targets;
   GdkAtom requested_target;
 
-  struct gtk_primary_selection_source *primary_source;
+  gpointer primary_source;
   GdkWindow *primary_owner;
 
   struct wl_data_source *clipboard_source;
@@ -434,6 +434,18 @@ gdk_wayland_selection_new (void)
   return selection;
 }
 
+static void
+primary_selection_source_destroy (gpointer primary_source)
+{
+  GdkDisplay *display = gdk_display_get_default ();
+  GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
+
+  if (display_wayland->zwp_primary_selection_manager_v1)
+    zwp_primary_selection_source_v1_destroy (primary_source);
+  else if (display_wayland->gtk_primary_selection_manager)
+    gtk_primary_selection_source_destroy (primary_source);
+}
+
 void
 gdk_wayland_selection_free (GdkWaylandSelection *selection)
 {
@@ -448,7 +460,7 @@ gdk_wayland_selection_free (GdkWaylandSelection *selection)
   g_ptr_array_unref (selection->stored_selections);
 
   if (selection->primary_source)
-    gtk_primary_selection_source_destroy (selection->primary_source);
+    primary_selection_source_destroy (selection->primary_source);
   if (selection->clipboard_source)
     wl_data_source_destroy (selection->clipboard_source);
   if (selection->dnd_source)
@@ -546,27 +558,47 @@ static const struct wl_data_offer_listener data_offer_listener = {
 };
 
 static void
-primary_offer_offer (void                               *data,
-                     struct gtk_primary_selection_offer *gtk_offer,
-                     const char                         *type)
+primary_offer_offer (void       *data,
+                     gpointer    offer,
+                     const char *type)
 {
   GdkWaylandSelection *selection = data;
   DataOfferData *info;
   GdkAtom atom = gdk_atom_intern (type, FALSE);
 
-  info = g_hash_table_lookup (selection->offers, gtk_offer);
+  info = g_hash_table_lookup (selection->offers, offer);
 
   if (!info || g_list_find (info->targets, atom))
     return;
 
   GDK_NOTE (EVENTS,
-            g_message ("primary offer offer, offer %p, type = %s", gtk_offer, type));
+            g_message ("primary offer offer, offer %p, type = %s", offer, type));
 
   info->targets = g_list_prepend (info->targets, atom);
 }
 
-static const struct gtk_primary_selection_offer_listener primary_offer_listener = {
-  primary_offer_offer,
+static void
+gtk_primary_offer_offer (void                               *data,
+                         struct gtk_primary_selection_offer *offer,
+                         const char                         *type)
+{
+  primary_offer_offer (data, (gpointer) offer, type);
+}
+
+static void
+zwp_primary_offer_v1_offer (void                                  *data,
+                            struct zwp_primary_selection_offer_v1 *offer,
+                            const char                            *type)
+{
+  primary_offer_offer (data, (gpointer) offer, type);
+}
+
+static const struct gtk_primary_selection_offer_listener gtk_primary_offer_listener = {
+  gtk_primary_offer_offer,
+};
+
+static const struct zwp_primary_selection_offer_v1_listener zwp_primary_offer_listener_v1 = {
+  zwp_primary_offer_v1_offer,
 };
 
 SelectionData *
@@ -604,9 +636,10 @@ gdk_wayland_selection_ensure_offer (GdkDisplay           *display,
 }
 
 void
-gdk_wayland_selection_ensure_primary_offer (GdkDisplay                         *display,
-                                            struct gtk_primary_selection_offer *gtk_offer)
+gdk_wayland_selection_ensure_primary_offer (GdkDisplay *display,
+                                            gpointer    gtk_offer)
 {
+  GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
   GdkWaylandSelection *selection = gdk_wayland_display_get_selection (display);
   DataOfferData *info;
 
@@ -614,12 +647,24 @@ gdk_wayland_selection_ensure_primary_offer (GdkDisplay                         *
 
   if (!info)
     {
-      info = data_offer_data_new (gtk_offer,
-                                  (GDestroyNotify) gtk_primary_selection_offer_destroy);
-      g_hash_table_insert (selection->offers, gtk_offer, info);
-      gtk_primary_selection_offer_add_listener (gtk_offer,
-                                                &primary_offer_listener,
-                                                selection);
+      if (display_wayland->zwp_primary_selection_manager_v1)
+        {
+          info = data_offer_data_new (gtk_offer,
+                                      (GDestroyNotify) zwp_primary_selection_offer_v1_destroy);
+          g_hash_table_insert (selection->offers, gtk_offer, info);
+          zwp_primary_selection_offer_v1_add_listener (gtk_offer,
+                                                       &zwp_primary_offer_listener_v1,
+                                                       selection);
+        }
+      else if (display_wayland->gtk_primary_selection_manager)
+        {
+          info = data_offer_data_new (gtk_offer,
+                                      (GDestroyNotify) gtk_primary_selection_offer_destroy);
+          g_hash_table_insert (selection->offers, gtk_offer, info);
+          gtk_primary_selection_offer_add_listener (gtk_offer,
+                                                    &gtk_primary_offer_listener,
+                                                    selection);
+        }
     }
 }
 
@@ -1138,10 +1183,10 @@ static const struct wl_data_source_listener data_source_listener = {
 };
 
 static void
-primary_source_send (void                                *data,
-                     struct gtk_primary_selection_source *source,
-                     const char                          *mime_type,
-                     int32_t                              fd)
+primary_source_send (void       *data,
+                     gpointer    source,
+                     const char *mime_type,
+                     int32_t     fd)
 {
   GdkWaylandSelection *wayland_selection = data;
 
@@ -1163,8 +1208,26 @@ primary_source_send (void                                *data,
 }
 
 static void
-primary_source_cancelled (void                                *data,
-                          struct gtk_primary_selection_source *source)
+gtk_primary_source_send (void                                *data,
+                         struct gtk_primary_selection_source *source,
+                         const char                          *mime_type,
+                         int32_t                              fd)
+{
+  primary_source_send (data, (gpointer) source, mime_type, fd);
+}
+
+static void
+zwp_primary_source_v1_send (void                                   *data,
+                            struct zwp_primary_selection_source_v1 *source,
+                            const char                             *mime_type,
+                            int32_t                                 fd)
+{
+  primary_source_send (data, (gpointer) source, mime_type, fd);
+}
+
+static void
+primary_source_cancelled (void     *data,
+                          gpointer  source)
 {
   GdkDisplay *display;
   GdkAtom atom;
@@ -1180,9 +1243,28 @@ primary_source_cancelled (void                                *data,
   gdk_wayland_selection_unset_data_source (display, atom);
 }
 
-static const struct gtk_primary_selection_source_listener primary_source_listener = {
-  primary_source_send,
-  primary_source_cancelled,
+static void
+gtk_primary_source_cancelled (void                                *data,
+                              struct gtk_primary_selection_source *source)
+{
+  primary_source_cancelled (data, source);
+}
+
+static void
+zwp_primary_source_v1_cancelled (void                                   *data,
+                                 struct zwp_primary_selection_source_v1 *source)
+{
+  primary_source_cancelled (data, source);
+}
+
+static const struct gtk_primary_selection_source_listener gtk_primary_source_listener = {
+  gtk_primary_source_send,
+  gtk_primary_source_cancelled,
+};
+
+static const struct zwp_primary_selection_source_v1_listener zwp_primary_source_v1_listener = {
+  zwp_primary_source_v1_send,
+  zwp_primary_source_v1_cancelled,
 };
 
 struct wl_data_source *
@@ -1204,11 +1286,11 @@ gdk_wayland_selection_get_data_source (GdkWindow *owner,
     {
       if (wayland_selection->primary_source &&
           (!owner || owner == wayland_selection->primary_owner))
-        return (gpointer) wayland_selection->primary_source;
+        return wayland_selection->primary_source;
 
       if (wayland_selection->primary_source)
         {
-          gtk_primary_selection_source_destroy (wayland_selection->primary_source);
+          primary_selection_source_destroy (wayland_selection->primary_source);
           wayland_selection->primary_source = NULL;
         }
     }
@@ -1234,11 +1316,18 @@ gdk_wayland_selection_get_data_source (GdkWindow *owner,
 
   if (selection == atoms[ATOM_PRIMARY])
     {
-      if (display_wayland->primary_selection_manager)
+      if (display_wayland->zwp_primary_selection_manager_v1)
         {
-          source = gtk_primary_selection_device_manager_create_source (display_wayland->primary_selection_manager);
+          source = zwp_primary_selection_device_manager_v1_create_source (display_wayland->zwp_primary_selection_manager_v1);
+          zwp_primary_selection_source_v1_add_listener (source,
+                                                        &zwp_primary_source_v1_listener,
+                                                        wayland_selection);
+        }
+      else if (display_wayland->gtk_primary_selection_manager)
+        {
+          source = gtk_primary_selection_device_manager_create_source (display_wayland->gtk_primary_selection_manager);
           gtk_primary_selection_source_add_listener (source,
-                                                     &primary_source_listener,
+                                                     &gtk_primary_source_listener,
                                                      wayland_selection);
         }
     }
@@ -1278,7 +1367,7 @@ gdk_wayland_selection_unset_data_source (GdkDisplay *display,
     {
       if (wayland_selection->primary_source)
         {
-          gtk_primary_selection_source_destroy (wayland_selection->primary_source);
+          primary_selection_source_destroy (wayland_selection->primary_source);
           wayland_selection->primary_source = NULL;
         }
     }
@@ -1449,6 +1538,7 @@ _gdk_wayland_display_convert_selection (GdkDisplay *display,
                                         GdkAtom     target,
                                         guint32     time)
 {
+  GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
   GdkWaylandSelection *wayland_selection = gdk_wayland_display_get_selection (display);
   const SelectionData *selection_data;
   SelectionBuffer *buffer_data;
@@ -1514,9 +1604,16 @@ _gdk_wayland_display_convert_selection (GdkDisplay *display,
           g_unix_open_pipe (pipe_fd, FD_CLOEXEC, NULL);
 
           if (selection == atoms[ATOM_PRIMARY])
-            gtk_primary_selection_offer_receive (offer, mimetype, pipe_fd[1]);
+            {
+              if (display_wayland->zwp_primary_selection_manager_v1)
+                zwp_primary_selection_offer_v1_receive (offer, mimetype, pipe_fd[1]);
+              else if (display_wayland->gtk_primary_selection_manager)
+                gtk_primary_selection_offer_receive (offer, mimetype, pipe_fd[1]);
+            }
           else
-            wl_data_offer_receive (offer, mimetype, pipe_fd[1]);
+            {
+              wl_data_offer_receive (offer, mimetype, pipe_fd[1]);
+            }
 
           stream = g_unix_input_stream_new (pipe_fd[0], TRUE);
           close (pipe_fd[1]);
