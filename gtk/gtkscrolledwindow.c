@@ -412,6 +412,7 @@ static void     indicator_start_fade (Indicator *indicator,
                                       gdouble    pos);
 static void     indicator_set_over   (Indicator *indicator,
                                       gboolean   over);
+static void     uninstall_scroll_cursor (GtkScrolledWindow *scrolled_window);
 
 
 static guint signals[LAST_SIGNAL] = {0};
@@ -2806,6 +2807,7 @@ gtk_scrolled_window_destroy (GtkWidget *widget)
 
   remove_indicator (scrolled_window, &priv->hindicator);
   remove_indicator (scrolled_window, &priv->vindicator);
+  uninstall_scroll_cursor (scrolled_window);
 
   if (priv->hscrollbar)
     {
@@ -3408,6 +3410,21 @@ gtk_scrolled_window_size_allocate (GtkWidget     *widget,
 }
 
 static void
+clear_scroll_window (GtkScrolledWindow *scrolled_window)
+{
+  GtkScrolledWindowPrivate *priv = scrolled_window->priv;
+  priv->scroll_window = NULL;
+  g_clear_object (&priv->scroll_cursor);
+}
+
+static void
+finalize_scroll_window (gpointer data,
+                        GObject *where_the_object_was)
+{
+  clear_scroll_window ((GtkScrolledWindow *) data);
+}
+
+static void
 install_scroll_cursor (GtkScrolledWindow *scrolled_window,
                        GdkWindow         *window)
 {
@@ -3419,6 +3436,8 @@ install_scroll_cursor (GtkScrolledWindow *scrolled_window,
     return;
 
   priv->scroll_window = window;
+  g_object_weak_ref (G_OBJECT (priv->scroll_window), finalize_scroll_window, scrolled_window);
+
   priv->scroll_cursor = gdk_window_get_cursor (priv->scroll_window);
   if (priv->scroll_cursor)
     g_object_ref (priv->scroll_cursor);
@@ -3437,8 +3456,8 @@ uninstall_scroll_cursor (GtkScrolledWindow *scrolled_window)
   if (priv->scroll_window)
     {
       gdk_window_set_cursor (priv->scroll_window, priv->scroll_cursor);
-      priv->scroll_window = NULL;
-      g_clear_object (&priv->scroll_cursor);
+      g_object_weak_unref (G_OBJECT (priv->scroll_window), finalize_scroll_window, scrolled_window);
+      clear_scroll_window (scrolled_window);
     }
 }
 
