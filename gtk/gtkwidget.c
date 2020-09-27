@@ -965,6 +965,9 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    *
    * Whether the widget or any of its descendents can accept
    * the input focus.
+   *
+   * This property is meant to be set by widget implementations,
+   * typically in their instance init function.
    */
   widget_props[PROP_CAN_FOCUS] =
       g_param_spec_boolean ("can-focus",
@@ -1262,6 +1265,9 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    * GtkWidget:overflow:
    *
    * How content outside the widget's content area is treated.
+   *
+   * This property is meant to be set by widget implementations,
+   * typically in their instance init function.
    */
   widget_props[PROP_OVERFLOW] =
       g_param_spec_enum ("overflow",
@@ -1289,6 +1295,9 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    * GtkWidget:css-name:
    *
    * The name of this widget in the CSS tree.
+   *
+   * This property is meant to be set by widget implementations,
+   * typically in their instance init function.
    */
   widget_props[PROP_CSS_NAME] =
       g_param_spec_string ("css-name",
@@ -1314,6 +1323,9 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    *
    * The #GtkLayoutManager instance to use to compute the preferred size
    * of the widget, and allocate its children.
+   *
+   * This property is meant to be set by widget implementations,
+   * typically in their instance init function.
    */
   widget_props[PROP_LAYOUT_MANAGER] =
     g_param_spec_object ("layout-manager",
@@ -2369,8 +2381,8 @@ gtk_widget_unroot (GtkWidget *widget)
  * @widget: a #GtkWidget
  *
  * This function is only for use in widget implementations.
- * Should be called by parent widgets to dissociate @widget
- * from the parent.
+ * It should be called by parent widgets to dissociate @widget
+ * from the parent, typically in dispose.
  **/
 void
 gtk_widget_unparent (GtkWidget *widget)
@@ -5785,6 +5797,7 @@ gtk_widget_reposition_after (GtkWidget *widget,
  *
  * This function is useful only when implementing subclasses of
  * #GtkWidget.
+ *
  * Sets @parent as the parent widget of @widget, and takes care of
  * some details such as updating the state and style of the child
  * to reflect its new location and resizing the parent. The opposite
