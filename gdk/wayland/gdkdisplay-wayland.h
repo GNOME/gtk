@@ -36,6 +36,7 @@
 #include <gdk/wayland/server-decoration-client-protocol.h>
 #include <gdk/wayland/xdg-output-unstable-v1-client-protocol.h>
 #include <gdk/wayland/idle-inhibit-unstable-v1-client-protocol.h>
+#include <gdk/wayland/primary-selection-unstable-v1-client-protocol.h>
 
 #include <glib.h>
 #include <gdk/gdkkeys.h>
@@ -103,7 +104,7 @@ struct _GdkWaylandDisplay
   struct wl_data_device_manager *data_device_manager;
   struct wl_subcompositor *subcompositor;
   struct zwp_pointer_gestures_v1 *pointer_gestures;
-  struct gtk_primary_selection_device_manager *primary_selection_manager;
+  struct zwp_primary_selection_device_manager_v1 *primary_selection_manager;
   struct zwp_tablet_manager_v2 *tablet_manager;
   struct zxdg_exporter_v1 *xdg_exporter;
   struct zxdg_importer_v1 *xdg_importer;

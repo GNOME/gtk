@@ -35,15 +35,15 @@ struct _GdkWaylandPrimary
 {
   GdkClipboard parent;
 
-  struct gtk_primary_selection_device *primary_data_device;
+  struct zwp_primary_selection_device_v1 *primary_data_device;
 
-  struct gtk_primary_selection_offer *pending;
+  struct zwp_primary_selection_offer_v1 *pending;
   GdkContentFormatsBuilder *pending_builder;
 
-  struct gtk_primary_selection_offer *offer;
+  struct zwp_primary_selection_offer_v1 *offer;
   GdkContentFormats *offer_formats;
 
-  struct gtk_primary_selection_source *source;
+  struct zwp_primary_selection_source_v1 *source;
 };
 
 struct _GdkWaylandPrimaryClass
@@ -62,20 +62,20 @@ gdk_wayland_primary_discard_pending (GdkWaylandPrimary *cb)
       gdk_content_formats_unref (ignore);
       cb->pending_builder = NULL;
     }
-  g_clear_pointer (&cb->pending, gtk_primary_selection_offer_destroy);
+  g_clear_pointer (&cb->pending, zwp_primary_selection_offer_v1_destroy);
 }
 
 static void
 gdk_wayland_primary_discard_offer (GdkWaylandPrimary *cb)
 {
   g_clear_pointer (&cb->offer_formats, gdk_content_formats_unref);
-  g_clear_pointer (&cb->offer, gtk_primary_selection_offer_destroy);
+  g_clear_pointer (&cb->offer, zwp_primary_selection_offer_v1_destroy);
 }
 
 static void
 gdk_wayland_primary_discard_source (GdkWaylandPrimary *cb)
 {
-  g_clear_pointer (&cb->source, gtk_primary_selection_source_destroy);
+  g_clear_pointer (&cb->source, zwp_primary_selection_source_v1_destroy);
 }
 
 static void
@@ -91,9 +91,9 @@ gdk_wayland_primary_finalize (GObject *object)
 }
 
 static void
-gdk_wayland_primary_claim_remote (GdkWaylandPrimary                  *cb,
-                                  struct gtk_primary_selection_offer *offer,
-                                  GdkContentFormats                  *formats)
+gdk_wayland_primary_claim_remote (GdkWaylandPrimary                     *cb,
+                                  struct zwp_primary_selection_offer_v1 *offer,
+                                  GdkContentFormats                     *formats)
 {
   g_return_if_fail (GDK_IS_WAYLAND_PRIMARY (cb));
 
@@ -117,9 +117,9 @@ gdk_wayland_primary_claim_remote (GdkWaylandPrimary                  *cb,
 }
 
 static void
-primary_offer_offer (void                               *data,
-                     struct gtk_primary_selection_offer *offer,
-                     const char                         *type)
+primary_offer_offer (void                                  *data,
+                     struct zwp_primary_selection_offer_v1 *offer,
+                     const char                            *type)
 {
   GdkWaylandPrimary *cb = data;
 
@@ -133,14 +133,14 @@ primary_offer_offer (void                               *data,
   gdk_content_formats_builder_add_mime_type (cb->pending_builder, type);
 }
 
-static const struct gtk_primary_selection_offer_listener primary_offer_listener = {
+static const struct zwp_primary_selection_offer_v1_listener primary_offer_listener = {
   primary_offer_offer,
 };
 
 static void
-primary_selection_data_offer (void                                *data,
-                              struct gtk_primary_selection_device *device,
-                              struct gtk_primary_selection_offer  *offer)
+primary_selection_data_offer (void                                   *data,
+                              struct zwp_primary_selection_device_v1 *device,
+                              struct zwp_primary_selection_offer_v1  *offer)
 {
   GdkWaylandPrimary *cb = data;
 
@@ -150,17 +150,17 @@ primary_selection_data_offer (void                                *data,
   gdk_wayland_primary_discard_pending (cb);
 
   cb->pending = offer;
-  gtk_primary_selection_offer_add_listener (offer,
-                                            &primary_offer_listener,
-                                            cb);
+  zwp_primary_selection_offer_v1_add_listener (offer,
+                                               &primary_offer_listener,
+                                               cb);
 
   cb->pending_builder = gdk_content_formats_builder_new ();
 }
 
 static void
-primary_selection_selection (void                                *data,
-                             struct gtk_primary_selection_device *device,
-                             struct gtk_primary_selection_offer  *offer)
+primary_selection_selection (void                                   *data,
+                             struct zwp_primary_selection_device_v1 *device,
+                             struct zwp_primary_selection_offer_v1  *offer)
 {
   GdkWaylandPrimary *cb = data;
   GdkContentFormats *formats;
@@ -185,7 +185,7 @@ primary_selection_selection (void                                *data,
   gdk_wayland_primary_claim_remote (cb, offer, formats);
 }
 
-static const struct gtk_primary_selection_device_listener primary_selection_device_listener = {
+static const struct zwp_primary_selection_device_v1_listener primary_selection_device_listener = {
   primary_selection_data_offer,
   primary_selection_selection,
 };
@@ -205,10 +205,10 @@ gdk_wayland_primary_write_done (GObject      *clipboard,
 }
 
 static void
-gdk_wayland_primary_data_source_send (void                                *data,
-                                      struct gtk_primary_selection_source *source,
-                                      const char                          *mime_type,
-                                      int32_t                              fd)
+gdk_wayland_primary_data_source_send (void                                   *data,
+                                      struct zwp_primary_selection_source_v1 *source,
+                                      const char                             *mime_type,
+                                      int32_t                                 fd)
 {
   GdkWaylandPrimary *cb = GDK_WAYLAND_PRIMARY (data);
   GOutputStream *stream;
@@ -230,8 +230,8 @@ gdk_wayland_primary_data_source_send (void                                *data,
 }
 
 static void
-gdk_wayland_primary_data_source_cancelled (void                                *data,
-                                           struct gtk_primary_selection_source *source)
+gdk_wayland_primary_data_source_cancelled (void                                   *data,
+                                           struct zwp_primary_selection_source_v1 *source)
 {
   GdkWaylandPrimary *cb = GDK_WAYLAND_PRIMARY (data);
 
@@ -244,7 +244,7 @@ gdk_wayland_primary_data_source_cancelled (void                                *
     }
 }
 
-static const struct gtk_primary_selection_source_listener primary_source_listener = {
+static const struct zwp_primary_selection_source_v1_listener primary_source_listener = {
   gdk_wayland_primary_data_source_send,
   gdk_wayland_primary_data_source_cancelled,
 };
@@ -266,18 +266,18 @@ gdk_wayland_primary_claim (GdkClipboard       *clipboard,
       gdk_wayland_primary_discard_offer (cb);
       gdk_wayland_primary_discard_source (cb);
 
-      cb->source = gtk_primary_selection_device_manager_create_source (wdisplay->primary_selection_manager);
-      gtk_primary_selection_source_add_listener (cb->source, &primary_source_listener, cb);
+      cb->source = zwp_primary_selection_device_manager_v1_create_source (wdisplay->primary_selection_manager);
+      zwp_primary_selection_source_v1_add_listener (cb->source, &primary_source_listener, cb);
 
       mime_types = gdk_content_formats_get_mime_types (formats, &n_mime_types);
       for (i = 0; i < n_mime_types; i++)
         {
-          gtk_primary_selection_source_offer (cb->source, mime_types[i]);
+          zwp_primary_selection_source_v1_offer (cb->source, mime_types[i]);
         }
 
-      gtk_primary_selection_device_set_selection (cb->primary_data_device,
-                                                  cb->source,
-                                                  _gdk_wayland_display_get_serial (wdisplay));
+      zwp_primary_selection_device_v1_set_selection (cb->primary_data_device,
+                                                     cb->source,
+                                                     _gdk_wayland_display_get_serial (wdisplay));
     }
 
   return GDK_CLIPBOARD_CLASS (gdk_wayland_primary_parent_class)->claim (clipboard, formats, local, content);
@@ -323,7 +323,7 @@ gdk_wayland_primary_read_async (GdkClipboard        *clipboard,
       return;
     }
 
-  gtk_primary_selection_offer_receive (cb->offer, mime_type, pipe_fd[1]);
+  zwp_primary_selection_offer_v1_receive (cb->offer, mime_type, pipe_fd[1]);
   stream = g_unix_input_stream_new (pipe_fd[0], TRUE);
   close (pipe_fd[1]);
   g_task_return_pointer (task, stream, g_object_unref);
@@ -390,10 +390,10 @@ gdk_wayland_primary_new (GdkWaylandSeat *seat)
                      NULL);
 
   cb->primary_data_device =
-        gtk_primary_selection_device_manager_get_device (wdisplay->primary_selection_manager,
-                                                         gdk_wayland_seat_get_wl_seat (GDK_SEAT (seat)));
-  gtk_primary_selection_device_add_listener (cb->primary_data_device,
-                                             &primary_selection_device_listener, cb);
+        zwp_primary_selection_device_manager_v1_get_device (wdisplay->primary_selection_manager,
+                                                            gdk_wayland_seat_get_wl_seat (GDK_SEAT (seat)));
+  zwp_primary_selection_device_v1_add_listener (cb->primary_data_device,
+                                                &primary_selection_device_listener, cb);
 
   return GDK_CLIPBOARD (cb);
 }
