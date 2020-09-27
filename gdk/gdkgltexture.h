@@ -44,6 +44,7 @@ GType                   gdk_gl_texture_get_type                (void) G_GNUC_CON
 GDK_AVAILABLE_IN_ALL
 GdkTexture *            gdk_gl_texture_new                     (GdkGLContext    *context,
                                                                 guint            id,
+                                                                gboolean         is_fbo,
                                                                 int              width,
                                                                 int              height,
                                                                 GDestroyNotify   destroy,
@@ -52,6 +53,8 @@ GdkTexture *            gdk_gl_texture_new                     (GdkGLContext    
 GDK_AVAILABLE_IN_ALL
 void                    gdk_gl_texture_release                 (GdkGLTexture    *self);
 
+GDK_AVAILABLE_IN_ALL
+gboolean                gdk_gl_texture_is_fbo                  (GdkGLTexture    *self);
 
 G_END_DECLS
 

@@ -30,6 +30,7 @@ struct _GdkGLTexture {
 
   GdkGLContext *context;
   guint id;
+  gboolean is_fbo;
 
   cairo_surface_t *saved;
 
@@ -196,6 +197,7 @@ gdk_gl_texture_release (GdkGLTexture *self)
 GdkTexture *
 gdk_gl_texture_new (GdkGLContext   *context,
                     guint           id,
+                    gboolean        is_fbo,
                     int             width,
                     int             height,
                     GDestroyNotify  destroy,
@@ -215,9 +217,15 @@ gdk_gl_texture_new (GdkGLContext   *context,
 
   self->context = g_object_ref (context);
   self->id = id;
+  self->is_fbo = is_fbo;
   self->destroy = destroy;
   self->data = data;
 
   return GDK_TEXTURE (self);
 }
 
+gboolean
+gdk_gl_texture_is_fbo (GdkGLTexture *texture)
+{
+  return texture->is_fbo;
+}

@@ -740,10 +740,14 @@ gtk_gl_area_snapshot (GtkWidget   *widget,
 
       texture->holder = gdk_gl_texture_new (priv->context,
                                             texture->id,
+                                            TRUE,
                                             texture->width,
                                             texture->height,
                                             release_texture, texture);
 
+      /* Our texture is backed by an FBO, and those are drawn upside-down,
+       * compared to screen buffer. Yay, OpenGL
+       */
       gtk_snapshot_append_texture (snapshot,
                                    texture->holder,
                                    &GRAPHENE_RECT_INIT (0, 0,

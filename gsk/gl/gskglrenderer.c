@@ -943,10 +943,21 @@ upload_texture (GskGLRenderer *self,
                                                  GL_LINEAR,
                                                  GL_LINEAR);
 
-      out_region->x  = 0;
-      out_region->y  = 0;
-      out_region->x2 = 1;
-      out_region->y2 = 1;
+      if (GDK_IS_GL_TEXTURE (texture) &&
+          gdk_gl_texture_is_fbo (GDK_GL_TEXTURE (texture)))
+        {
+          out_region->x  = 0;
+          out_region->y  = 1;
+          out_region->x2 = 1;
+          out_region->y2 = 0;
+        }
+      else
+        {
+          out_region->x  = 0;
+          out_region->y  = 0;
+          out_region->x2 = 1;
+          out_region->y2 = 1;
+        }
     }
 }
 
@@ -4032,6 +4043,7 @@ gsk_gl_renderer_render_texture (GskRenderer           *renderer,
 
   texture = gdk_gl_texture_new (self->gl_context,
                                 texture_id,
+                                TRUE,
                                 width, height,
                                 NULL, NULL);
 
