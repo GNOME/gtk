@@ -4089,7 +4089,9 @@ cut_or_copy (GtkTextBuffer *buffer,
  * gtk_text_buffer_get_selection_content:
  * @buffer: a #GtkTextBuffer
  *
- * Get a content provider for this buffer.
+ * Get a content provider for this buffer. It can be
+ * used to make the content of @buffer available in a
+ * #GdkClipboard, see gdk_clipboard_set_content().
  *
  * Returns: (transfer full): a new #GdkContentProvider.
  **/
