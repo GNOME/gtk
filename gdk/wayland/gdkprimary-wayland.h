@@ -22,7 +22,6 @@
 
 #include "gdkseat-wayland.h"
 #include <wayland-client.h>
-#include "gtk-primary-selection-client-protocol.h"
 
 G_BEGIN_DECLS
 

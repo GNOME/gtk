@@ -45,7 +45,7 @@ wayland_scanner = find_program('wayland-scanner')
 #  - protocol version (if stability is 'unstable')
 proto_sources = [
   ['gtk-shell', 'private', ],
-  ['gtk-primary-selection', 'private', ],
+  ['primary-selection', 'unstable', 'v1', ],
   ['pointer-gestures', 'unstable', 'v1', ],
   ['xdg-shell', 'unstable', 'v6', ],
   ['xdg-shell', 'stable', ],
