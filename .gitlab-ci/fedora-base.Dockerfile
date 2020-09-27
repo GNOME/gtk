@@ -44,6 +44,7 @@ RUN dnf -y install \
     lcov \
     libasan \
     libattr-devel \
+    libcloudproviders-devel \
     libepoxy-devel \
     libffi-devel \
     libmount-devel \
