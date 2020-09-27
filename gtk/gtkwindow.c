@@ -7015,16 +7015,18 @@ update_cursor (GtkWindow *toplevel,
 {
   GtkWindowPrivate *priv = gtk_window_get_instance_private (toplevel);
   GdkCursor *cursor = NULL;
+  GtkNative *native;
   GdkSurface *surface;
 
-  surface = gtk_native_get_surface (gtk_widget_get_native (target));
+  native = gtk_widget_get_native (target);
+  surface = gtk_native_get_surface (native);
 
   if (grab_widget && !gtk_widget_is_ancestor (target, grab_widget) && target != grab_widget)
     {
       /* Outside the grab widget, cursor stays to whatever the grab
        * widget says.
        */
-      if (gtk_native_get_surface (gtk_widget_get_native (grab_widget)) == surface)
+      if (gtk_widget_get_native (grab_widget) == native)
         cursor = gtk_widget_get_cursor (grab_widget);
       else
         cursor = NULL;
@@ -7037,7 +7039,7 @@ update_cursor (GtkWindow *toplevel,
       while (target)
         {
           /* Don't inherit cursors across surfaces */
-          if (surface != gtk_native_get_surface (gtk_widget_get_native (target)))
+          if (native != gtk_widget_get_native (target))
             break;
 
           if (target == GTK_WIDGET (toplevel) && priv->resize_cursor != NULL)
