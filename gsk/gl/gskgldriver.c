@@ -521,8 +521,15 @@ gsk_gl_driver_get_texture_for_texture (GskGLDriver *self,
   if (GDK_IS_GL_TEXTURE (texture))
     {
       GdkGLContext *texture_context = gdk_gl_texture_get_context ((GdkGLTexture *)texture);
+      GdkGLContext *shared_context = gdk_gl_context_get_shared_context (self->gl_context);
 
-      if (texture_context != self->gl_context)
+      if (texture_context == self->gl_context ||
+          (gdk_gl_context_get_shared_context (texture_context) == shared_context && shared_context != NULL))
+        {
+          /* A GL texture from the same GL context is a simple task... */
+          return gdk_gl_texture_get_id ((GdkGLTexture *)texture);
+        }
+      else
         {
           cairo_surface_t *surface;
 
@@ -538,11 +545,6 @@ gsk_gl_driver_get_texture_for_texture (GskGLDriver *self,
           gdk_gl_context_make_current (self->gl_context);
 
           source_texture = downloaded_texture;
-        }
-      else
-        {
-          /* A GL texture from the same GL context is a simple task... */
-          return gdk_gl_texture_get_id ((GdkGLTexture *)texture);
         }
     }
   else
