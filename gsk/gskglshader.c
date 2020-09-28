@@ -904,10 +904,13 @@ gsk_gl_shader_get_arg_vec4 (GskGLShader           *shader,
  * @shader: A #GskGLShader
  * @uniforms: Name-Value pairs for the uniforms of @shader, ending with a %NULL name, all values are passed by reference.
  *
- * Formats the uniform data as needed for feeding the named uniforms values into the shader.
- * The argument list is a list of pairs of names, and pointers to data of the types
- * that match the declared uniforms (i.e. `float *` for float uniforms and `graphene_vec4_t *` f
- * or vec3 uniforms).
+ * Formats the uniform data as needed for feeding the named uniforms
+ * values into the shader.  The argument list is a list of pairs of
+ * names, and values for the types that match the declared uniforms
+ * (i.e. double/int/guint/gboolean for primitive values and
+ * `graphene_vecN_t *` for vecN uniforms).
+ *
+ * It is an error to pass a uniform name that is not declared by the shader
  *
  * Returns: (transfer full): A newly allocated block of data which can be passed to gsk_gl_shader_node_new().
  */
@@ -921,17 +924,13 @@ gsk_gl_shader_format_args_va (GskGLShader *shader,
   while ((name = va_arg (uniforms, const char *)) != NULL)
     {
       const GskGLUniform *u;
-      gpointer value = va_arg (uniforms, gpointer);
       guchar *args_dest;
 
       u = gsk_gl_shader_find_uniform (shader, name);
       if (u == NULL)
         {
-          /* This isn't really an error, because we can easily imaging
-             a shader interface that have input which isn't needed for
-             a particular shader */
-          g_debug ("No uniform named `%s` in shader", name);
-          continue;
+          g_warning ("No uniform named `%s` in shader", name);
+          break;
         }
 
       args_dest = args + u->offset;
@@ -942,33 +941,33 @@ gsk_gl_shader_format_args_va (GskGLShader *shader,
       switch (u->type)
         {
         case GSK_GL_UNIFORM_TYPE_FLOAT:
-          *(float *)args_dest = *(float *)value;
+          *(float *)args_dest = (float)va_arg (uniforms, double); /* floats are promoted to double in varargs */
           break;
 
         case GSK_GL_UNIFORM_TYPE_INT:
-          *(gint32 *)args_dest = *(gint32 *)value;
+          *(gint32 *)args_dest = (gint32)va_arg (uniforms, int);
           break;
 
         case GSK_GL_UNIFORM_TYPE_UINT:
-          *(guint32 *)args_dest = *(guint32 *)value;
+          *(guint32 *)args_dest = (guint32)va_arg (uniforms, guint);
           break;
 
         case GSK_GL_UNIFORM_TYPE_BOOL:
-          *(guint32 *)args_dest = *(gboolean *)value;
+          *(guint32 *)args_dest = (gboolean)va_arg (uniforms, gboolean);
           break;
 
         case GSK_GL_UNIFORM_TYPE_VEC2:
-          graphene_vec2_to_float ((const graphene_vec2_t *)value,
+          graphene_vec2_to_float (va_arg (uniforms, const graphene_vec2_t *),
                                   (float *)args_dest);
           break;
 
         case GSK_GL_UNIFORM_TYPE_VEC3:
-          graphene_vec3_to_float ((const graphene_vec3_t *)value,
+          graphene_vec3_to_float (va_arg (uniforms, const graphene_vec3_t *),
                                   (float *)args_dest);
           break;
 
         case GSK_GL_UNIFORM_TYPE_VEC4:
-          graphene_vec4_to_float ((const graphene_vec4_t *)value,
+          graphene_vec4_to_float (va_arg (uniforms, const graphene_vec4_t *),
                                   (float *)args_dest);
           break;
 
@@ -986,10 +985,11 @@ gsk_gl_shader_format_args_va (GskGLShader *shader,
  * @shader: A #GskGLShader
  * @...: Name-Value pairs for the uniforms of @shader, ending with a %NULL name, all values are passed by reference.
  *
- * Formats the uniform data as needed for feeding the named uniforms values into the shader.
- * The argument list is a list of pairs of names, and pointers to data of the types
- * that match the declared uniforms (i.e. `float *` for float uniforms and `graphene_vec4_t *` f
- * or vec3 uniforms).
+ * Formats the uniform data as needed for feeding the named uniforms
+ * values into the shader.  The argument list is a list of pairs of
+ * names, and values for the types that match the declared uniforms
+ * (i.e. double/int/guint/gboolean for primitive values and
+ * `graphene_vecN_t *` for vecN uniforms).
  *
  * Returns: (transfer full): A newly allocated block of data which can be passed to gsk_gl_shader_node_new().
  */

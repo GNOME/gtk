@@ -180,8 +180,8 @@ test_format_args (void)
   f1 = 0.5;
   f2 = 20.0;
   args = gsk_gl_shader_format_args (shader,
-                                    "progress", &f1,
-                                    "dots", &f2,
+                                    "progress", f1,
+                                    "dots", f2,
                                     "center", &v2,
                                     "test4", &v3,
                                     "test5", &v4,

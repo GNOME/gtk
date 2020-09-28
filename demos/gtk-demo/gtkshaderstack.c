@@ -245,7 +245,7 @@ gtk_shader_stack_snapshot (GtkWidget   *widget,
                                        self->shader,
                                        &GRAPHENE_RECT_INIT(0, 0, width, height),
                                        gsk_gl_shader_format_args (self->shader,
-                                                                  "progress", &progress,
+                                                                  "progress", progress,
                                                                   NULL));
 
           gtk_widget_snapshot_child (widget, current, snapshot);
