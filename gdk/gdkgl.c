@@ -328,7 +328,6 @@ gdk_cairo_draw_from_gl (cairo_t              *cr,
 {
   GdkGLContext *paint_context;
   cairo_surface_t *image;
-  cairo_matrix_t matrix;
   guint framebuffer;
   int alpha_size = 0;
   cairo_region_t *clip_region;
@@ -371,8 +370,6 @@ gdk_cairo_draw_from_gl (cairo_t              *cr,
       g_warning ("Unsupported gl source type %d\n", source_type);
       return;
     }
-
-  cairo_get_matrix (cr, &matrix);
 
   gdk_gl_context_get_version (paint_context, &major, &minor);
   version = major * 100 + minor;
