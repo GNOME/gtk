@@ -129,10 +129,9 @@ update_paintable (GtkWidget     *widget,
 }
 
 static GtkWidget *
-make_shader_stack (const char    *name,
-                   const char    *resource_path,
-                   GtkWidget     *scale,
-                   GdkFrameClock *frame_clock)
+make_shader_stack (const char *name,
+                   const char *resource_path,
+                   GtkWidget  *scale)
 {
   GtkWidget *stack, *child, *widget, *vbox, *hbox, *bin;
   GtkWidget *label, *button, *tv;
@@ -272,7 +271,6 @@ static GtkWidget *
 create_gltransition_window (GtkWidget *do_widget)
 {
   GtkWidget *window, *headerbar, *scale, *grid;
-  GdkFrameClock *frame_clock;
 
   window = gtk_window_new ();
   gtk_window_set_display (GTK_WINDOW (window),  gtk_widget_get_display (do_widget));
@@ -300,20 +298,17 @@ create_gltransition_window (GtkWidget *do_widget)
   gtk_grid_set_row_homogeneous (GTK_GRID (grid), TRUE);
   gtk_grid_set_column_homogeneous (GTK_GRID (grid), TRUE);
 
-  gtk_widget_realize (window);
-  frame_clock = gtk_widget_get_frame_clock (window);
-
   gtk_grid_attach (GTK_GRID (grid),
-                   make_shader_stack ("Wind", "/gltransition/transition1.glsl", scale, frame_clock),
+                   make_shader_stack ("Wind", "/gltransition/transition1.glsl", scale),
                    0, 0, 1, 1);
   gtk_grid_attach (GTK_GRID (grid),
-                   make_shader_stack ("Radial", "/gltransition/transition2.glsl", scale, frame_clock),
+                   make_shader_stack ("Radial", "/gltransition/transition2.glsl", scale),
                    1, 0, 1, 1);
   gtk_grid_attach (GTK_GRID (grid),
-                   make_shader_stack ("Crosswarp", "/gltransition/transition3.glsl", scale, frame_clock),
+                   make_shader_stack ("Crosswarp", "/gltransition/transition3.glsl", scale),
                    0, 1, 1, 1);
   gtk_grid_attach (GTK_GRID (grid),
-                   make_shader_stack ("Kaleidoscope", "/gltransition/transition4.glsl", scale, frame_clock),
+                   make_shader_stack ("Kaleidoscope", "/gltransition/transition4.glsl", scale),
                    1, 1, 1, 1);
 
   return window;
