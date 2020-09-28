@@ -119,7 +119,7 @@ test_create_data (void)
   g_assert_nonnull (shader);
   g_clear_pointer (&bytes, g_bytes_unref);
 
-  builder = gsk_gl_shader_build_args (shader);
+  builder = gsk_shader_args_builder_new (shader);
   g_assert_nonnull (builder);
 
   graphene_vec2_init (&v2, 20, 30);
@@ -134,7 +134,7 @@ test_create_data (void)
   gsk_shader_args_builder_set_vec3 (builder, 6, &v3);
   gsk_shader_args_builder_set_vec4 (builder, 7, &v4);
 
-  bytes = gsk_shader_args_builder_finish (builder);
+  bytes = gsk_shader_args_builder_to_args (builder);
 
   g_assert_cmpfloat (gsk_gl_shader_get_arg_float (shader, bytes, 0), ==, 0.5);
   g_assert_cmpfloat (gsk_gl_shader_get_arg_float (shader, bytes, 1), ==, 20.0);
@@ -152,7 +152,7 @@ test_create_data (void)
 
   g_bytes_unref (bytes);
 
-  gsk_shader_args_builder_free (builder);
+  gsk_shader_args_builder_unref (builder);
 
   g_object_unref (shader);
 }

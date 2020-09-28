@@ -1243,7 +1243,7 @@ parse_glshader_node (GtkCssParser *parser)
 
   shader = shader_info.shader;
 
-  builder = gsk_gl_shader_build_args (shader);
+  builder = gsk_shader_args_builder_new (shader);
   for (i = 0; i < shader_info.uniform_values->len; i++)
     {
       GskGLUniformType uniform_type = gsk_gl_shader_get_uniform_type (shader, i);
@@ -1297,9 +1297,7 @@ parse_glshader_node (GtkCssParser *parser)
         }
     }
 
-  args = gsk_shader_args_builder_finish (builder);
-  gsk_shader_args_builder_free (builder);
-
+  args = gsk_shader_args_builder_free_to_args (builder);
   node = gsk_gl_shader_node_new (shader, &bounds, args,
                                  child, len);
 

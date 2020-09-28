@@ -111,17 +111,18 @@ void     gsk_gl_shader_get_arg_vec4  (GskGLShader     *shader,
                                       graphene_vec4_t *out_value);
 
 GDK_AVAILABLE_IN_ALL
-GskShaderArgsBuilder *gsk_gl_shader_build_args (GskGLShader *shader);
-
-GDK_AVAILABLE_IN_ALL
 GType   gsk_shader_args_builder_get_type  (void) G_GNUC_CONST;
 
 GDK_AVAILABLE_IN_ALL
-GBytes *               gsk_shader_args_builder_finish (GskShaderArgsBuilder *builder);
+GskShaderArgsBuilder *gsk_shader_args_builder_new           (GskGLShader *shader);
 GDK_AVAILABLE_IN_ALL
-void                   gsk_shader_args_builder_free   (GskShaderArgsBuilder *builder);
+GBytes *               gsk_shader_args_builder_to_args      (GskShaderArgsBuilder *builder);
 GDK_AVAILABLE_IN_ALL
-GskShaderArgsBuilder  *gsk_shader_args_builder_copy   (GskShaderArgsBuilder *builder);
+GBytes *               gsk_shader_args_builder_free_to_args (GskShaderArgsBuilder *builder);
+GDK_AVAILABLE_IN_ALL
+GskShaderArgsBuilder  *gsk_shader_args_builder_ref          (GskShaderArgsBuilder *builder);
+GDK_AVAILABLE_IN_ALL
+void                   gsk_shader_args_builder_unref        (GskShaderArgsBuilder *builder);
 
 GDK_AVAILABLE_IN_ALL
 void    gsk_shader_args_builder_set_float (GskShaderArgsBuilder *builder,

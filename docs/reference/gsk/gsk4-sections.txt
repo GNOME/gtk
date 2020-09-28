@@ -303,10 +303,11 @@ gsk_gl_shader_format_args
 <SUBSECTION Shader Args Builder>
 GskShaderArgsBuilder
 
-gsk_gl_shader_build_args
-gsk_shader_args_builder_finish
-gsk_shader_args_builder_free
-gsk_shader_args_builder_copy
+gsk_shader_args_builder_new
+gsk_shader_args_builder_to_args
+gsk_shader_args_builder_free_to_args
+gsk_shader_args_builder_unref
+gsk_shader_args_builder_ref
 
 gsk_shader_args_builder_set_float
 gsk_shader_args_builder_set_int

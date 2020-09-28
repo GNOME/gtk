@@ -1008,13 +1008,14 @@ gsk_gl_shader_format_args (GskGLShader *shader,
 }
 
 struct _GskShaderArgsBuilder {
+  guint ref_count;
   GskGLShader *shader;
   guchar *data;
 };
 
 G_DEFINE_BOXED_TYPE (GskShaderArgsBuilder, gsk_shader_args_builder,
-                     gsk_shader_args_builder_copy,
-                     gsk_shader_args_builder_free);
+                     gsk_shader_args_builder_ref,
+                     gsk_shader_args_builder_unref);
 
 
 /**
@@ -1027,9 +1028,10 @@ G_DEFINE_BOXED_TYPE (GskShaderArgsBuilder, gsk_shader_args_builder,
  * Returns: (transfer full): The newly allocated builder, free with gsk_shader_args_builder_free()
  */
 GskShaderArgsBuilder *
-gsk_gl_shader_build_args (GskGLShader *shader)
+gsk_shader_args_builder_new (GskGLShader *shader)
 {
   GskShaderArgsBuilder *builder = g_new0 (GskShaderArgsBuilder, 1);
+  builder->ref_count = 1;
   builder->shader = g_object_ref (shader);
   builder->data = g_malloc0 (shader->uniforms_size);
 
@@ -1037,50 +1039,91 @@ gsk_gl_shader_build_args (GskGLShader *shader)
 }
 
 /**
- * gsk_shader_args_builder_finish:
+ * gsk_shader_args_builder_to_args:
  * @builder: A #GskShaderArgsBuilder
  *
- * Finishes building the uniform data and returns it as a GBytes. Once this
- * is called the builder can not be used anymore.
+ * Creates a new #GBytes args from the current state of the
+ * given @builder
+ *
+ * The given #GskShaderArgsBuilder is reset once this function returns;
+ * you cannot call this function multiple times on the same @builder instance.
+ *
+ * This function is intended primarily for bindings. C code should use
+ * gsk_shader_args_builder_free_to_args().
+ *
  *
  * Returns: (transfer full): The newly allocated builder, free with gsk_shader_args_builder_free()
  */
 GBytes *
-gsk_shader_args_builder_finish (GskShaderArgsBuilder *builder)
+gsk_shader_args_builder_to_args (GskShaderArgsBuilder *builder)
 {
   return g_bytes_new_take (g_steal_pointer (&builder->data),
                            builder->shader->uniforms_size);
 }
 
 /**
- * gsk_shader_args_builder_free:
+ * gdk_content_formats_builder_free_to_formats: (skip)
+ * @builder: a #GdkContentFormatsBuilder
+ *
+ * Creates a new #GBytes args from the current state of the
+ * given @builder, and frees the @builder instance.
+ *
+ * Returns: (transfer full): the newly created #GBytes
+ *   with all the args added to @builder
+ */
+GBytes *
+gsk_shader_args_builder_free_to_args (GskShaderArgsBuilder *builder)
+{
+  GBytes *res;
+
+  g_return_val_if_fail (builder != NULL, NULL);
+
+  res = gsk_shader_args_builder_to_args (builder);
+
+  gsk_shader_args_builder_unref (builder);
+
+  return res;
+}
+
+
+/**
+ * gsk_shader_args_builder_unref:
  * @builder: A #GskShaderArgsBuilder
  *
- * Frees the builder.
+ * Decreases the reference count of a #GskShaderArgBuilder by one.
+ * If the resulting reference count is zero, frees the builder.
  */
 void
-gsk_shader_args_builder_free (GskShaderArgsBuilder *builder)
+gsk_shader_args_builder_unref (GskShaderArgsBuilder *builder)
+
 {
+  g_return_if_fail (builder != NULL);
+  g_return_if_fail (builder->ref_count > 0);
+
+  builder->ref_count--;
+  if (builder->ref_count > 0)
+    return;
+
   g_object_unref (builder->shader);
   g_free (builder->data);
   g_free (builder);
 }
 
 /**
- * gsk_shader_args_builder_copy:
+ * gsk_shader_args_builder_ref:
  * @builder: A #GskShaderArgsBuilder
  *
- * Makes a copy of the builder.
+ * Increases the reference count of a #GskShaderArgsBuilder by one.
  *
- * Returns: (transfer full): A copy of the builder, free with gsk_shader_args_builder_free().
+ * Returns: the passed in #GskShaderArgsBuilder.
  */
 GskShaderArgsBuilder *
-gsk_shader_args_builder_copy (GskShaderArgsBuilder *builder)
+gsk_shader_args_builder_ref (GskShaderArgsBuilder *builder)
 {
-  GskShaderArgsBuilder *new = g_new0 (GskShaderArgsBuilder, 1);
-  new->data = g_memdup (builder->data, builder->shader->uniforms_size);
-  new->shader = g_object_ref (builder->shader);
-  return new;
+  g_return_val_if_fail (builder != NULL, NULL);
+
+  builder->ref_count++;
+  return builder;
 }
 
 /**
@@ -1101,6 +1144,7 @@ gsk_shader_args_builder_set_float (GskShaderArgsBuilder *builder,
   const GskGLUniform *u;
   guchar *args_dest;
 
+  g_assert (builder->data != NULL);
   g_assert (idx < shader->uniforms->len);
   u = &g_array_index (shader->uniforms, GskGLUniform, idx);
   g_assert (u->type == GSK_GL_UNIFORM_TYPE_FLOAT);
@@ -1127,6 +1171,7 @@ gsk_shader_args_builder_set_int (GskShaderArgsBuilder *builder,
   const GskGLUniform *u;
   guchar *args_dest;
 
+  g_assert (builder->data != NULL);
   g_assert (idx < shader->uniforms->len);
   u = &g_array_index (shader->uniforms, GskGLUniform, idx);
   g_assert (u->type == GSK_GL_UNIFORM_TYPE_INT);
@@ -1153,6 +1198,7 @@ gsk_shader_args_builder_set_uint (GskShaderArgsBuilder *builder,
   const GskGLUniform *u;
   guchar *args_dest;
 
+  g_assert (builder->data != NULL);
   g_assert (idx < shader->uniforms->len);
   u = &g_array_index (shader->uniforms, GskGLUniform, idx);
   g_assert (u->type == GSK_GL_UNIFORM_TYPE_UINT);
@@ -1179,6 +1225,7 @@ gsk_shader_args_builder_set_bool (GskShaderArgsBuilder *builder,
   const GskGLUniform *u;
   guchar *args_dest;
 
+  g_assert (builder->data != NULL);
   g_assert (idx < shader->uniforms->len);
   u = &g_array_index (shader->uniforms, GskGLUniform, idx);
   g_assert (u->type == GSK_GL_UNIFORM_TYPE_BOOL);
@@ -1205,6 +1252,7 @@ gsk_shader_args_builder_set_vec2 (GskShaderArgsBuilder *builder,
   const GskGLUniform *u;
   guchar *args_dest;
 
+  g_assert (builder->data != NULL);
   g_assert (idx < shader->uniforms->len);
   u = &g_array_index (shader->uniforms, GskGLUniform, idx);
   g_assert (u->type == GSK_GL_UNIFORM_TYPE_VEC2);
@@ -1231,6 +1279,7 @@ gsk_shader_args_builder_set_vec3 (GskShaderArgsBuilder *builder,
   const GskGLUniform *u;
   guchar *args_dest;
 
+  g_assert (builder->data != NULL);
   g_assert (idx < shader->uniforms->len);
   u = &g_array_index (shader->uniforms, GskGLUniform, idx);
   g_assert (u->type == GSK_GL_UNIFORM_TYPE_VEC3);
@@ -1257,6 +1306,7 @@ gsk_shader_args_builder_set_vec4 (GskShaderArgsBuilder *builder,
   const GskGLUniform *u;
   guchar *args_dest;
 
+  g_assert (builder->data != NULL);
   g_assert (idx < shader->uniforms->len);
   u = &g_array_index (shader->uniforms, GskGLUniform, idx);
   g_assert (u->type == GSK_GL_UNIFORM_TYPE_VEC4);
