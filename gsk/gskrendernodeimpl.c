@@ -4571,18 +4571,19 @@ gsk_gl_shader_node_new (GskGLShader           *shader,
 {
   GskGLShaderNode *self;
   GskRenderNode *node;
-  int uniforms_size;
 
+  g_return_val_if_fail (GSK_IS_GL_SHADER (shader), NULL);
   g_return_val_if_fail (bounds != NULL, NULL);
+  g_return_val_if_fail ((args == NULL && gsk_gl_shader_get_n_uniforms (shader) == 0) ||
+                        (args != NULL && g_bytes_get_size (args) == gsk_gl_shader_get_args_size (shader)), NULL);
+  g_return_val_if_fail ((children == NULL && n_children == 0) ||
+                        (children != NULL && n_children == gsk_gl_shader_get_n_required_textures (shader)), NULL);
 
   self = gsk_render_node_alloc (GSK_GL_SHADER_NODE);
   node = (GskRenderNode *) self;
 
   graphene_rect_init_from_rect (&node->bounds, bounds);
   self->shader = g_object_ref (shader);
-
-  uniforms_size = gsk_gl_shader_get_args_size (shader);
-  g_assert (g_bytes_get_size (args) == uniforms_size);
 
   self->args = g_bytes_ref (args);
 
