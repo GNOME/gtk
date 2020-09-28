@@ -2064,51 +2064,6 @@ append_point (GString                *str,
 }
 
 static void
-append_string (GString    *str,
-               const char *string)
-{
-  gsize len;
-
-  g_return_if_fail (str != NULL);
-  g_return_if_fail (string != NULL);
-
-  g_string_append_c (str, '"');
-
-  do {
-    len = strcspn (string, "\\\"\n\r\f");
-    g_string_append_len (str, string, len);
-    string += len;
-    switch (*string)
-      {
-      case '\0':
-        goto out;
-      case '\n':
-        g_string_append (str, "\\A ");
-        break;
-      case '\r':
-        g_string_append (str, "\\D ");
-        break;
-      case '\f':
-        g_string_append (str, "\\C ");
-        break;
-      case '\"':
-        g_string_append (str, "\\\"");
-        break;
-      case '\\':
-        g_string_append (str, "\\\\");
-        break;
-      default:
-        g_assert_not_reached ();
-        break;
-      }
-    string++;
-  } while (*string);
-
-out:
-  g_string_append_c (str, '"');
-}
-
-static void
 append_vec4 (GString               *str,
              const graphene_vec4_t *v)
 {
@@ -2192,7 +2147,7 @@ append_string_param (Printer    *p,
 {
   _indent (p);
   g_string_append_printf (p->str, "%s: ", param_name);
-  append_string (p->str, value);
+  _gtk_css_print_string (p->str, value);
   g_string_append_c (p->str, ';');
   g_string_append_c (p->str, '\n');
 }
