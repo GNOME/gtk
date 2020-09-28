@@ -422,7 +422,8 @@ gtk_menu_button_class_init (GtkMenuButtonClass *klass)
 
 static void
 set_arrow_type (GtkImage     *image,
-                GtkArrowType  arrow_type)
+                GtkArrowType  arrow_type,
+                gboolean      visible)
 {
   switch (arrow_type)
     {
@@ -444,6 +445,11 @@ set_arrow_type (GtkImage     *image,
     default:
       break;
     }
+
+  if (visible)
+    gtk_widget_show (GTK_WIDGET (image));
+  else
+    gtk_widget_hide (GTK_WIDGET (image));
 }
 
 static void
@@ -452,7 +458,7 @@ add_arrow (GtkMenuButton *self)
   GtkWidget *arrow;
 
   arrow = gtk_image_new ();
-  set_arrow_type (GTK_IMAGE (arrow), self->arrow_type);
+  set_arrow_type (GTK_IMAGE (arrow), self->arrow_type, TRUE);
   gtk_button_set_child (GTK_BUTTON (self->button), arrow);
   self->arrow_widget = arrow;
 }
@@ -615,6 +621,8 @@ void
 gtk_menu_button_set_direction (GtkMenuButton *menu_button,
                                GtkArrowType   direction)
 {
+  gboolean is_image_button;
+
   g_return_if_fail (GTK_IS_MENU_BUTTON (menu_button));
 
   if (menu_button->arrow_type == direction)
@@ -624,10 +632,13 @@ gtk_menu_button_set_direction (GtkMenuButton *menu_button,
   g_object_notify_by_pspec (G_OBJECT (menu_button), menu_button_props[PROP_DIRECTION]);
 
   /* Is it custom content? We don't change that */
-  if (menu_button->arrow_widget != gtk_button_get_child (GTK_BUTTON (menu_button->button)))
+  is_image_button = menu_button->label_widget == NULL;
+  if (is_image_button && (menu_button->arrow_widget != gtk_button_get_child (GTK_BUTTON (menu_button->button))))
     return;
 
-  set_arrow_type (GTK_IMAGE (menu_button->arrow_widget), menu_button->arrow_type);
+  set_arrow_type (GTK_IMAGE (menu_button->arrow_widget),
+                  menu_button->arrow_type,
+                  is_image_button || (menu_button->arrow_type != GTK_ARROW_NONE));
   update_popover_direction (menu_button);
 }
 
@@ -793,7 +804,7 @@ gtk_menu_button_set_label (GtkMenuButton *menu_button,
 {
   GtkWidget *box;
   GtkWidget *label_widget;
-  GtkWidget *image;
+  GtkWidget *arrow;
 
   g_return_if_fail (GTK_IS_MENU_BUTTON (menu_button));
 
@@ -804,9 +815,12 @@ gtk_menu_button_set_label (GtkMenuButton *menu_button,
   gtk_label_set_use_underline (GTK_LABEL (label_widget),
                                gtk_button_get_use_underline (GTK_BUTTON (menu_button->button)));
   gtk_widget_set_hexpand (label_widget, TRUE);
-  image = gtk_image_new_from_icon_name ("pan-down-symbolic");
+  gtk_widget_set_halign (label_widget, GTK_ALIGN_CENTER);
+  arrow = gtk_image_new ();
+  menu_button->arrow_widget = arrow;
+  set_arrow_type (GTK_IMAGE (arrow), menu_button->arrow_type, menu_button->arrow_type != GTK_ARROW_NONE);
   gtk_box_append (GTK_BOX (box), label_widget);
-  gtk_box_append (GTK_BOX (box), image);
+  gtk_box_append (GTK_BOX (box), arrow);
   gtk_button_set_child (GTK_BUTTON (menu_button->button), box);
   menu_button->label_widget = label_widget;
 
