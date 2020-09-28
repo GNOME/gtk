@@ -697,9 +697,22 @@ gtk_snapshot_ensure_affine (GtkSnapshot *snapshot,
     {
       gtk_snapshot_autopush_transform (snapshot);
       state = gtk_snapshot_get_current_state (snapshot);
+      gsk_transform_to_affine (state->transform, scale_x, scale_y, dx, dy);
     }
-  
-  gsk_transform_to_affine (state->transform, scale_x, scale_y, dx, dy);
+  else if (gsk_transform_get_category (state->transform) == GSK_TRANSFORM_CATEGORY_2D_AFFINE)
+    {
+      gsk_transform_to_affine (state->transform, scale_x, scale_y, dx, dy);
+      if (*scale_x < 0.0 || *scale_y < 0.0)
+        {
+          gtk_snapshot_autopush_transform (snapshot);
+          state = gtk_snapshot_get_current_state (snapshot);
+          gsk_transform_to_affine (state->transform, scale_x, scale_y, dx, dy);
+        }
+    }
+  else
+    {
+      gsk_transform_to_affine (state->transform, scale_x, scale_y, dx, dy);
+    }
 }
 
 static void
