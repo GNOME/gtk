@@ -76,12 +76,7 @@ gsk_shader_paintable_paintable_snapshot (GdkPaintable *paintable,
 {
   GskShaderPaintable *self = GSK_SHADER_PAINTABLE (paintable);
 
-  /* FIXME: We have to add a pointless extra child here to
-   * keep GtkSnapshot from blowing up. We really want n_children = 0,
-   * but then we would pop() 0 times, and... no pop, no node.
-   */
-  gtk_snapshot_push_gl_shader (snapshot, self->shader, &GRAPHENE_RECT_INIT(0, 0, width, height), g_bytes_ref (self->uniform_data), 1);
-  gtk_snapshot_append_color (snapshot, &(GdkRGBA){1.0, 0.5, 0.6, 1.0}, &GRAPHENE_RECT_INIT(0, 0, width, height));
+  gtk_snapshot_push_gl_shader (snapshot, self->shader, &GRAPHENE_RECT_INIT(0, 0, width, height), g_bytes_ref (self->uniform_data));
   gtk_snapshot_pop (snapshot);
 }
 

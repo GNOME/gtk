@@ -202,9 +202,9 @@ gtk_shader_bin_snapshot (GtkWidget   *widget,
                                        &GRAPHENE_RECT_INIT(0, 0, width, height),
                                        gsk_gl_shader_format_args (self->active_shader->shader,
                                                                   "u_time", &self->time,
-                                                                  NULL),
-                                       1);
+                                                                  NULL));
           gtk_widget_snapshot_child (widget, self->child, snapshot);
+          gtk_snapshot_gl_shader_pop_texture (snapshot);
           gtk_snapshot_pop (snapshot);
 
           return;

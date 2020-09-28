@@ -95,10 +95,14 @@ struct _GtkSnapshotState {
       GskGLShader *shader;
       GBytes *args;
       graphene_rect_t bounds;
-      int n_children;
-      int node_idx;
       GskRenderNode **nodes;
+      GskRenderNode *internal_nodes[4];
     } glshader;
+    struct {
+      graphene_rect_t bounds;
+      int node_idx;
+      int n_children;
+    } glshader_texture;
     struct {
       GskRoundedRect bounds;
     } rounded_clip;
@@ -236,6 +240,18 @@ gtk_snapshot_get_previous_state (const GtkSnapshot *snapshot)
   g_assert (size > 1);
 
   return gtk_snapshot_states_get (&snapshot->state_stack, size - 2);
+}
+
+/* n == 0 => current, n == 1, previous, etc */
+static GtkSnapshotState *
+gtk_snapshot_get_nth_previous_state (const GtkSnapshot *snapshot,
+                                     int n)
+{
+  gsize size = gtk_snapshot_states_get_size (&snapshot->state_stack);
+
+  g_assert (size > n);
+
+  return gtk_snapshot_states_get (&snapshot->state_stack, size - (1 + n));
 }
 
 static void
@@ -823,43 +839,73 @@ gtk_snapshot_push_clip (GtkSnapshot           *snapshot,
 static GskRenderNode *
 gtk_snapshot_collect_gl_shader (GtkSnapshot      *snapshot,
                                 GtkSnapshotState *state,
-                                GskRenderNode   **nodes,
-                                guint             n_nodes)
+                                GskRenderNode   **collected_nodes,
+                                guint             n_collected_nodes)
 {
-  GskRenderNode *shader_node = NULL, *child_node;
+  GskRenderNode *shader_node = NULL;
+  GskRenderNode **nodes;
+  int n_children;
+
+  n_children = gsk_gl_shader_get_n_required_textures (state->data.glshader.shader);
+  shader_node = NULL;
+
+  if (n_collected_nodes != 0)
+    g_warning ("Unexpected children when poping gl shader.");
+
+  if (state->data.glshader.nodes)
+    nodes = state->data.glshader.nodes;
+  else
+    nodes = &state->data.glshader.internal_nodes[0];
+
+  if (state->data.glshader.bounds.size.width != 0 &&
+      state->data.glshader.bounds.size.height != 0)
+    shader_node = gsk_gl_shader_node_new (state->data.glshader.shader,
+                                          &state->data.glshader.bounds,
+                                          state->data.glshader.args,
+                                          nodes, n_children);
+
+  g_object_unref (state->data.glshader.shader);
+  g_bytes_unref (state->data.glshader.args);
+
+  for (guint i = 0; i  < n_children; i++)
+    gsk_render_node_unref (nodes[i]);
+
+  g_free (state->data.glshader.nodes);
+
+  return shader_node;
+}
+
+static GskRenderNode *
+gtk_snapshot_collect_gl_shader_texture (GtkSnapshot      *snapshot,
+                                        GtkSnapshotState *state,
+                                        GskRenderNode   **nodes,
+                                        guint             n_nodes)
+{
+  GskRenderNode *child_node;
   GdkRGBA transparent = { 0, 0, 0, 0 };
+  int n_children, node_idx;
+  GtkSnapshotState *glshader_state;
+  GskRenderNode **out_nodes;
 
   child_node = gtk_snapshot_collect_default (snapshot, state, nodes, n_nodes);
 
   if (child_node == NULL)
-    child_node = gsk_color_node_new (&transparent, &state->data.glshader.bounds);
+    child_node = gsk_color_node_new (&transparent, &state->data.glshader_texture.bounds);
 
-  state->data.glshader.nodes[state->data.glshader.node_idx] = child_node;
+  n_children = state->data.glshader_texture.n_children;
+  node_idx = state->data.glshader_texture.node_idx;
 
-  if (state->data.glshader.node_idx != state->data.glshader.n_children - 1)
-    return NULL; /* Not last */
+  glshader_state = gtk_snapshot_get_nth_previous_state (snapshot, n_children - node_idx);
+  g_assert (glshader_state->collect_func == gtk_snapshot_collect_gl_shader);
 
-  /* This is the last pop */
+  if (glshader_state->data.glshader.nodes)
+    out_nodes = glshader_state->data.glshader.nodes;
+  else
+    out_nodes = &glshader_state->data.glshader.internal_nodes[0];
 
-  shader_node = NULL;
+  out_nodes[node_idx] = child_node;
 
-  if (state->data.glshader.bounds.size.width != 0 &&
-      state->data.glshader.bounds.size.height != 0)
-    {
-      shader_node = gsk_gl_shader_node_new (state->data.glshader.shader,
-                                            &state->data.glshader.bounds,
-                                            state->data.glshader.args,
-                                            &state->data.glshader.nodes[0],
-                                            state->data.glshader.n_children);
-    }
-
-  g_object_unref (state->data.glshader.shader);
-  g_bytes_unref (state->data.glshader.args);
-  for (guint i = 0; i  < state->data.glshader.n_children; i++)
-    gsk_render_node_unref (state->data.glshader.nodes[i]);
-  g_free (state->data.glshader.nodes);
-
-  return shader_node;
+  return NULL;
 }
 
 /**
@@ -868,14 +914,13 @@ gtk_snapshot_collect_gl_shader (GtkSnapshot      *snapshot,
  * @shader: The code to run
  * @bounds: the rectangle to render into
  * @take_args: (transfer full): Data block with arguments for the shader.
- * @n_children: The number of extra nodes given as argument to the shader as textures.
  *
  * Push a #GskGLShaderNode with a specific #GskGLShader and a set of uniform values
  * to use while rendering. Additionally this takes a list of @n_children other nodes
  * which will be passed to the #GskGLShaderNode.
  *
  * The @take_args argument is a block of data to use for uniform
- * input, as per types and offsets defined by the @shader. Normally this is
+ * arguments, as per types and offsets defined by the @shader. Normally this is
  * generated by gsk_gl_shader_format_args() or #GskGLShaderArgBuilder.
  * The snapshotter takes ownership of @take_args, so the caller should not free it
  * after this.
@@ -885,10 +930,16 @@ gtk_snapshot_collect_gl_shader (GtkSnapshot      *snapshot,
  * gsk_gl_shader_try_compile_for() to ensure the @shader will work for the renderer
  * before using it.
  *
- * If @n_children > 0, then it is expected that you (after the fallback call
- * gtk_snapshot_pop() @n_children times. Each of these will generate a node that
- * is added as a child to the gl shader node, which in turn will render these to
- * textures and pass as arguments to the shader.
+ * If the shader requires textures (see gsk_gl_shader_get_n_required_textures()), then it is
+ * expected that you call gtk_snapshot_gl_shader_pop_texture() the number of times that are
+ * required. Each of these calls will generate a node that is added as a child to the gl shader
+ * node, which in turn will render these offscreen and pass as a texture to the shader.
+ *
+ * Once all textures (if any) are pop:ed, you must call the regular gtk_snapshot_pop().
+ *
+ * If you want to use pre-existing textures as input to the shader rather than
+ * rendering new ones, use gtk_snapshot_append_texture() to push a texture node. These
+ * will be used directly rather than being re-rendered.
  *
  * For details on how to write shaders, see #GskGLShader.
  */
@@ -896,14 +947,12 @@ void
 gtk_snapshot_push_gl_shader (GtkSnapshot           *snapshot,
                              GskGLShader           *shader,
                              const graphene_rect_t *bounds,
-                             GBytes                *take_args,
-                             int                    n_children)
+                             GBytes                *take_args)
 {
   GtkSnapshotState *state;
   float scale_x, scale_y, dx, dy;
-  GskRenderNode **nodes;
-  int node_idx;
   graphene_rect_t transformed_bounds;
+  int n_children = gsk_gl_shader_get_n_required_textures (shader);
 
   gtk_snapshot_ensure_affine (snapshot, &scale_x, &scale_y, &dx, &dy);
 
@@ -914,22 +963,19 @@ gtk_snapshot_push_gl_shader (GtkSnapshot           *snapshot,
   state->data.glshader.bounds = transformed_bounds;
   state->data.glshader.shader = g_object_ref (shader);
   state->data.glshader.args = take_args; /* Takes ownership */
-  state->data.glshader.n_children = n_children;
-  nodes = g_new0 (GskRenderNode *, n_children);
-  node_idx = n_children-1; /* We pop in reverse order */
+  if (n_children <= G_N_ELEMENTS (state->data.glshader.internal_nodes))
+    state->data.glshader.nodes = NULL;
+  else
+    state->data.glshader.nodes = g_new (GskRenderNode *, n_children);
 
-  state->data.glshader.node_idx = node_idx--;
-  state->data.glshader.nodes = nodes;
-
-  for (int i = 0; i  < n_children-1; i++)
+  for (int i = 0; i  < n_children; i++)
     {
       state = gtk_snapshot_push_state (snapshot,
                                        gtk_snapshot_get_current_state (snapshot)->transform,
-                                       gtk_snapshot_collect_gl_shader);
-      state->data.glshader.node_idx = node_idx--;
-      state->data.glshader.n_children = n_children;
-      state->data.glshader.nodes = nodes;
-      state->data.glshader.bounds = transformed_bounds;
+                                       gtk_snapshot_collect_gl_shader_texture);
+      state->data.glshader_texture.bounds = transformed_bounds;
+      state->data.glshader_texture.node_idx = n_children - 1 - i;/* We pop in reverse order */
+      state->data.glshader_texture.n_children = n_children;
     }
 }
 
@@ -1433,13 +1479,45 @@ gtk_snapshot_to_paintable (GtkSnapshot           *snapshot,
 void
 gtk_snapshot_pop (GtkSnapshot *snapshot)
 {
+  GtkSnapshotState *state = gtk_snapshot_get_current_state (snapshot);
   GskRenderNode *node;
+
+  if (state->collect_func == gtk_snapshot_collect_gl_shader_texture)
+    g_warning ("Not enough calls to gtk_snapshot_gl_shader_pop_texture().");
 
   node = gtk_snapshot_pop_internal (snapshot);
 
   if (node)
     gtk_snapshot_append_node_internal (snapshot, node);
 }
+
+/**
+ * gtk_snapshot_gl_shader_pop_texture:
+ * @snapshot: a #GtkSnapshot
+ *
+ * Removes the top element from the stack of render nodes and
+ * adds it to the nearest GskGLShaderNode below it. This must be called the
+ * same number of times as the number of textures is needed for the
+ * shader in gtk_snapshot_push_gl_shader().
+ */
+void
+gtk_snapshot_gl_shader_pop_texture (GtkSnapshot *snapshot)
+{
+  GtkSnapshotState *state = gtk_snapshot_get_current_state (snapshot);
+  GskRenderNode *node;
+
+  if (state->collect_func != gtk_snapshot_collect_gl_shader_texture)
+    {
+      g_warning ("Too many calls to gtk_snapshot_gl_shader_pop_texture().");
+      return;
+    }
+
+  g_assert (state->collect_func == gtk_snapshot_collect_gl_shader_texture);
+
+  node = gtk_snapshot_pop_internal (snapshot);
+  g_assert (node == NULL);
+}
+
 
 /**
  * gtk_snapshot_save:

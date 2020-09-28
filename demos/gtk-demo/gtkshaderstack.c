@@ -246,13 +246,13 @@ gtk_shader_stack_snapshot (GtkWidget   *widget,
                                        &GRAPHENE_RECT_INIT(0, 0, width, height),
                                        gsk_gl_shader_format_args (self->shader,
                                                                   "progress", &progress,
-                                                                  NULL),
-                                       2);
+                                                                  NULL));
 
           gtk_widget_snapshot_child (widget, current, snapshot);
-          gtk_snapshot_pop (snapshot); /* current child */
+          gtk_snapshot_gl_shader_pop_texture (snapshot); /* current child */
           gtk_widget_snapshot_child (widget, next, snapshot);
-          gtk_snapshot_pop (snapshot); /* next child */
+          gtk_snapshot_gl_shader_pop_texture (snapshot); /* next child */
+          gtk_snapshot_pop (snapshot);
         }
       else
         {
