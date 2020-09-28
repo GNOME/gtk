@@ -1851,7 +1851,7 @@ gtk_entry_class_init (GtkEntryClass *class)
    * GtkEntry::icon-press:
    * @entry: The entry on which the signal is emitted
    * @icon_pos: The position of the clicked icon
-   * @event: (type Gdk.EventButton): the button press event
+   * @event: the button press event
    *
    * The ::icon-press signal is emitted when an activatable icon
    * is clicked.
@@ -1873,7 +1873,7 @@ gtk_entry_class_init (GtkEntryClass *class)
    * GtkEntry::icon-release:
    * @entry: The entry on which the signal is emitted
    * @icon_pos: The position of the clicked icon
-   * @event: (type Gdk.EventButton): the button release event
+   * @event: the button release event
    *
    * The ::icon-release signal is emitted on the button release from a
    * mouse click over an activatable icon.
