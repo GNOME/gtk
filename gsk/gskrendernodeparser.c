@@ -1096,14 +1096,15 @@ typedef union {
 
 typedef struct {
   GskGLShader *shader;
-  GArray *uniform_values;
+  GskShaderArgsBuilder *args;
 } ShaderInfo;
 
 static void
 clear_shader_info (gpointer data)
 {
   ShaderInfo *info = data;
-  g_array_set_size (info->uniform_values, 0);
+  g_clear_object (&info->shader);
+  g_clear_pointer (&info->args, gsk_shader_args_builder_unref);
 }
 
 static gboolean
@@ -1129,52 +1130,84 @@ parse_shader (GtkCssParser *parser,
 
 static gboolean
 parse_uniform_value (GtkCssParser *parser,
-                     GskGLUniformType uniform_type,
-                     UniformValue *value)
+                     int           idx,
+                     ShaderInfo   *shader_info)
 {
-  switch (uniform_type)
+  switch (gsk_gl_shader_get_uniform_type (shader_info->shader, idx))
     {
     case GSK_GL_UNIFORM_TYPE_FLOAT:
-      if (!gtk_css_parser_consume_number (parser, &value->v[0]))
-        return FALSE;
+      {
+        double f;
+        if (!gtk_css_parser_consume_number (parser, &f))
+          return FALSE;
+        gsk_shader_args_builder_set_float (shader_info->args, idx, f);
+      }
       break;
 
     case GSK_GL_UNIFORM_TYPE_INT:
-      if (!gtk_css_parser_consume_integer (parser, &value->i))
-        return FALSE;
+      {
+        int i;
+        if (!gtk_css_parser_consume_integer (parser, &i))
+          return FALSE;
+        gsk_shader_args_builder_set_int (shader_info->args, idx, i);
+      }
       break;
 
     case GSK_GL_UNIFORM_TYPE_UINT:
-      if (!gtk_css_parser_consume_integer (parser, &value->i) ||
-          value->i < 0)
-        return FALSE;
+      {
+        int i;
+        if (!gtk_css_parser_consume_integer (parser, &i) || i < 0)
+          return FALSE;
+        gsk_shader_args_builder_set_uint (shader_info->args, idx, i);
+      }
       break;
 
     case GSK_GL_UNIFORM_TYPE_BOOL:
-      if (!gtk_css_parser_consume_integer (parser, &value->i) ||
-          (value->i != 0 && value->i != 1))
-        return FALSE;
+      {
+        int i;
+        if (!gtk_css_parser_consume_integer (parser, &i) || (i != 0 && i != 1))
+          return FALSE;
+        gsk_shader_args_builder_set_bool (shader_info->args, idx, i);
+      }
       break;
 
     case GSK_GL_UNIFORM_TYPE_VEC2:
-      if (!gtk_css_parser_consume_number (parser, &value->v[0]) ||
-          !gtk_css_parser_consume_number (parser, &value->v[1]))
+      {
+        double f0, f1;
+        graphene_vec2_t v;
+        if (!gtk_css_parser_consume_number (parser, &f0) ||
+            !gtk_css_parser_consume_number (parser, &f1))
           return FALSE;
+        graphene_vec2_init (&v, f0, f1);
+        gsk_shader_args_builder_set_vec2 (shader_info->args, idx, &v);
+      }
       break;
 
     case GSK_GL_UNIFORM_TYPE_VEC3:
-      if (!gtk_css_parser_consume_number (parser, &value->v[0]) ||
-          !gtk_css_parser_consume_number (parser, &value->v[1]) ||
-          !gtk_css_parser_consume_number (parser, &value->v[2]))
-        return FALSE;
+      {
+        double f0, f1, f2;
+        graphene_vec3_t v;
+        if (!gtk_css_parser_consume_number (parser, &f0) ||
+            !gtk_css_parser_consume_number (parser, &f1) ||
+            !gtk_css_parser_consume_number (parser, &f2))
+          return FALSE;
+        graphene_vec3_init (&v, f0, f1, f2);
+        gsk_shader_args_builder_set_vec3 (shader_info->args, idx, &v);
+      }
       break;
 
     case GSK_GL_UNIFORM_TYPE_VEC4:
-      if (!gtk_css_parser_consume_number (parser, &value->v[0]) ||
-          !gtk_css_parser_consume_number (parser, &value->v[1]) ||
-          !gtk_css_parser_consume_number (parser, &value->v[2]) ||
-          !gtk_css_parser_consume_number (parser, &value->v[3]))
-        return FALSE;
+      {
+        double f0, f1, f2, f3;
+        graphene_vec4_t v;
+        if (!gtk_css_parser_consume_number (parser, &f0) ||
+            !gtk_css_parser_consume_number (parser, &f1) ||
+            !gtk_css_parser_consume_number (parser, &f2) ||
+            !gtk_css_parser_consume_number (parser, &f3))
+          return FALSE;
+        graphene_vec4_init (&v, f0, f1, f2, f3);
+        gsk_shader_args_builder_set_vec4 (shader_info->args, idx, &v);
+      }
       break;
 
     case GSK_GL_UNIFORM_TYPE_NONE:
@@ -1183,7 +1216,11 @@ parse_uniform_value (GtkCssParser *parser,
       break;
     }
 
-  gtk_css_parser_try_token (parser, GTK_CSS_TOKEN_COMMA);
+  if (idx < gsk_gl_shader_get_n_uniforms (shader_info->shader))
+    {
+      if (!gtk_css_parser_try_token (parser, GTK_CSS_TOKEN_COMMA))
+        return FALSE;
+    }
 
   return TRUE;
 }
@@ -1192,17 +1229,15 @@ static gboolean
 parse_shader_args (GtkCssParser *parser, gpointer data)
 {
   ShaderInfo *shader_info = data;
-  int n_uniforms = gsk_gl_shader_get_n_uniforms (shader_info->shader);
+  int n_uniforms;
   int i;
 
-  g_array_set_size (shader_info->uniform_values, n_uniforms);
+  shader_info->args = gsk_shader_args_builder_new (shader_info->shader);
+  n_uniforms = gsk_gl_shader_get_n_uniforms (shader_info->shader);
 
   for (i = 0; i < n_uniforms; i++)
     {
-      GskGLUniformType uniform_type = gsk_gl_shader_get_uniform_type (shader_info->shader, i);
-      UniformValue *uniform_value = &g_array_index (shader_info->uniform_values, UniformValue, i);
-
-      if (!parse_uniform_value (parser, uniform_type, uniform_value))
+      if (!parse_uniform_value (parser, i, shader_info))
         return FALSE;
     }
 
@@ -1216,7 +1251,7 @@ parse_glshader_node (GtkCssParser *parser)
   GskRenderNode *child[4] = { NULL, };
   ShaderInfo shader_info = {
     NULL,
-    g_array_new (FALSE, FALSE, sizeof (UniformValue))
+    NULL,
   };
   const Declaration declarations[] = {
     { "bounds", parse_rect, NULL, &bounds },
@@ -1229,7 +1264,6 @@ parse_glshader_node (GtkCssParser *parser)
   };
   GskGLShader *shader;
   GskRenderNode *node;
-  GskShaderArgsBuilder *builder;
   GBytes *args = NULL;
   int len, i;
 
@@ -1242,66 +1276,10 @@ parse_glshader_node (GtkCssParser *parser)
     }
 
   shader = shader_info.shader;
+  args = gsk_shader_args_builder_free_to_args (shader_info.args);
 
-  builder = gsk_shader_args_builder_new (shader);
-  for (i = 0; i < shader_info.uniform_values->len; i++)
-    {
-      GskGLUniformType uniform_type = gsk_gl_shader_get_uniform_type (shader, i);
-      UniformValue *value = &g_array_index (shader_info.uniform_values, UniformValue, i);
+  node = gsk_gl_shader_node_new (shader, &bounds, args, child, len);
 
-      switch (uniform_type)
-        {
-        case GSK_GL_UNIFORM_TYPE_FLOAT:
-          gsk_shader_args_builder_set_float (builder, i, value->v[0]);
-          break;
-
-        case GSK_GL_UNIFORM_TYPE_INT:
-          gsk_shader_args_builder_set_int (builder, i, value->i);
-          break;
-
-        case GSK_GL_UNIFORM_TYPE_UINT:
-          gsk_shader_args_builder_set_uint (builder, i, value->i);
-          break;
-
-        case GSK_GL_UNIFORM_TYPE_BOOL:
-          gsk_shader_args_builder_set_bool (builder, i, value->i);
-          break;
-
-        case GSK_GL_UNIFORM_TYPE_VEC2:
-          {
-            graphene_vec2_t v;
-            graphene_vec2_init (&v, value->v[0], value->v[1]);
-            gsk_shader_args_builder_set_vec2 (builder, i, &v);
-          }
-          break;
-
-        case GSK_GL_UNIFORM_TYPE_VEC3:
-          {
-            graphene_vec3_t v;
-            graphene_vec3_init (&v, value->v[0], value->v[1], value->v[2]);
-            gsk_shader_args_builder_set_vec3 (builder, i, &v);
-          }
-          break;
-
-        case GSK_GL_UNIFORM_TYPE_VEC4:
-          {
-            graphene_vec4_t v;
-            graphene_vec4_init (&v, value->v[0], value->v[1], value->v[2], value->v[3]);
-            gsk_shader_args_builder_set_vec4 (builder, i, &v);
-          }
-          break;
-
-        case GSK_GL_UNIFORM_TYPE_NONE:
-        default:
-          g_assert_not_reached ();
-        }
-    }
-
-  args = gsk_shader_args_builder_free_to_args (builder);
-  node = gsk_gl_shader_node_new (shader, &bounds, args,
-                                 child, len);
-
-  g_array_unref (shader_info.uniform_values);
   g_bytes_unref (args);
   g_object_unref (shader);
 
