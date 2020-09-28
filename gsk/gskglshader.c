@@ -121,7 +121,7 @@
  *   vec4 source1 = GskTexture(u_texture1, uv);
  *   vec4 source2 = GskTexture(u_texture2, uv);
  *
- *   fragColor = t * source1 + (1.0 - t) * source2;
+ *   fragColor = position * source1 + (1.0 - position) * source2;
  * }
  * ]|
  */
