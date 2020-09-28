@@ -263,9 +263,7 @@ gtk_event_controller_scroll_handle_event (GtkEventController *controller,
 
       gdk_scroll_event_get_deltas (event, &dx, &dy);
 
-      if (!scroll->active &&
-          (input_source == GDK_SOURCE_TRACKPOINT ||
-           input_source == GDK_SOURCE_TOUCHPAD))
+      if (!scroll->active)
         {
           g_signal_emit (controller, signals[SCROLL_BEGIN], 0);
           scroll_history_reset (scroll);
