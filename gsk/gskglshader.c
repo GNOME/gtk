@@ -902,7 +902,8 @@ gsk_gl_shader_get_arg_vec4 (GskGLShader           *shader,
 /**
  * gsk_gl_shader_format_args_va:
  * @shader: A #GskGLShader
- * @uniforms: Name-Value pairs for the uniforms of @shader, ending with a %NULL name, all values are passed by reference.
+ * @uniforms: Name-Value pairs for the uniforms of @shader, ending with a
+ *     %NULL name, all values are passed by reference.
  *
  * Formats the uniform data as needed for feeding the named uniforms
  * values into the shader.  The argument list is a list of pairs of
@@ -910,9 +911,13 @@ gsk_gl_shader_get_arg_vec4 (GskGLShader           *shader,
  * (i.e. double/int/guint/gboolean for primitive values and
  * `graphene_vecN_t *` for vecN uniforms).
  *
- * It is an error to pass a uniform name that is not declared by the shader
+ * It is an error to pass a uniform name that is not declared by the shader.
  *
- * Returns: (transfer full): A newly allocated block of data which can be passed to gsk_gl_shader_node_new().
+ * Any uniforms of the shader that are not included in the argument list
+ * are zero-initialized.
+ *
+ * Returns: (transfer full): A newly allocated block of data which can be
+ *     passed to gsk_gl_shader_node_new().
  */
 GBytes *
 gsk_gl_shader_format_args_va (GskGLShader *shader,
@@ -983,15 +988,20 @@ gsk_gl_shader_format_args_va (GskGLShader *shader,
 /**
  * gsk_gl_shader_format_args:
  * @shader: A #GskGLShader
- * @...: Name-Value pairs for the uniforms of @shader, ending with a %NULL name, all values are passed by reference.
+ * @...: Name-Value pairs for the uniforms of @shader, ending with a %NULL
+ *     name, all values are passed by reference.
  *
  * Formats the uniform data as needed for feeding the named uniforms
- * values into the shader.  The argument list is a list of pairs of
+ * values into the shader. The argument list is a list of pairs of
  * names, and values for the types that match the declared uniforms
  * (i.e. double/int/guint/gboolean for primitive values and
  * `graphene_vecN_t *` for vecN uniforms).
  *
- * Returns: (transfer full): A newly allocated block of data which can be passed to gsk_gl_shader_node_new().
+ * Any uniforms of the shader that are not included in the argument list
+ * are zero-initialized.
+ *
+ * Returns: (transfer full): A newly allocated block of data which can be
+ *     passed to gsk_gl_shader_node_new().
  */
 GBytes *
 gsk_gl_shader_format_args (GskGLShader *shader,
@@ -1025,7 +1035,8 @@ G_DEFINE_BOXED_TYPE (GskShaderArgsBuilder, gsk_shader_args_builder,
  * Allocates a builder that can be used to construct a new uniform data
  * chunk.
  *
- * Returns: (transfer full): The newly allocated builder, free with gsk_shader_args_builder_free()
+ * Returns: (transfer full): The newly allocated builder, free with
+ *     gsk_shader_args_builder_free()
  */
 GskShaderArgsBuilder *
 gsk_shader_args_builder_new (GskGLShader *shader)
@@ -1043,7 +1054,8 @@ gsk_shader_args_builder_new (GskGLShader *shader)
  * @builder: A #GskShaderArgsBuilder
  *
  * Creates a new #GBytes args from the current state of the
- * given @builder
+ * given @builder. Any uniforms of the shader that have not
+ * been explicitly set on the @builder are zero-initialized.
  *
  * The given #GskShaderArgsBuilder is reset once this function returns;
  * you cannot call this function multiple times on the same @builder instance.
@@ -1052,7 +1064,8 @@ gsk_shader_args_builder_new (GskGLShader *shader)
  * gsk_shader_args_builder_free_to_args().
  *
  *
- * Returns: (transfer full): The newly allocated builder, free with gsk_shader_args_builder_free()
+ * Returns: (transfer full): The newly allocated builder, free with
+ *     gsk_shader_args_builder_free()
  */
 GBytes *
 gsk_shader_args_builder_to_args (GskShaderArgsBuilder *builder)
@@ -1062,11 +1075,13 @@ gsk_shader_args_builder_to_args (GskShaderArgsBuilder *builder)
 }
 
 /**
- * gdk_content_formats_builder_free_to_formats: (skip)
+ * gdk_content_formats_builder_free_to_args: (skip)
  * @builder: a #GdkContentFormatsBuilder
  *
  * Creates a new #GBytes args from the current state of the
- * given @builder, and frees the @builder instance.
+ * given @builder, and frees the @builder instance. Any uniforms
+ * of the shader that have not been explicitly set on the @builder
+ * are zero-initialized.
  *
  * Returns: (transfer full): the newly created #GBytes
  *   with all the args added to @builder
