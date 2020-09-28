@@ -4569,7 +4569,7 @@ gsk_gl_shader_node_new (GskGLShader           *shader,
                         const graphene_rect_t *bounds,
                         GBytes                *args,
                         GskRenderNode        **children,
-                        int                    n_children)
+                        guint                  n_children)
 {
   GskGLShaderNode *self;
   GskRenderNode *node;
@@ -4629,7 +4629,7 @@ gsk_gl_shader_node_get_n_children (GskRenderNode *node)
  */
 GskRenderNode *
 gsk_gl_shader_node_get_child (GskRenderNode *node,
-                              int            idx)
+                              guint          idx)
 {
   GskGLShaderNode *self = (GskGLShaderNode *) node;
 

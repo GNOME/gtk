@@ -461,12 +461,12 @@ GskRenderNode *         gsk_gl_shader_node_new                  (GskGLShader    
                                                                  const graphene_rect_t    *bounds,
                                                                  GBytes                   *args,
                                                                  GskRenderNode           **children,
-                                                                 int                       n_children);
+                                                                 guint                     n_children);
 GDK_AVAILABLE_IN_ALL
 guint                   gsk_gl_shader_node_get_n_children       (GskRenderNode            *node);
 GDK_AVAILABLE_IN_ALL
 GskRenderNode *         gsk_gl_shader_node_get_child            (GskRenderNode            *node,
-                                                                 int                       idx);
+                                                                 guint                     idx);
 GDK_AVAILABLE_IN_ALL
 GBytes *                gsk_gl_shader_node_get_args             (GskRenderNode            *node);
 GDK_AVAILABLE_IN_ALL
