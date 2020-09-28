@@ -2,10 +2,14 @@
  * #Keywords: OpenGL, shader
  *
  * Create transitions between pages using a custom fragment shader.
- * The examples here are taken from gl-transitions.com, and you
- * can edit the transision code itself on the last page of the stack.
  *
- * It also shows some sample fire effects on the buttons.
+ * The example transitions here are taken from gl-transitions.com, and you
+ * can edit the shader code itself on the last page of the stack.
+ *
+ * The transitions work with arbitrary content. We use images, shaders
+ * GL areas and plain old widgets to demonstrate this.
+ *
+ * The demo also shows some sample fire effects on the buttons.
  */
 
 #include <math.h>
