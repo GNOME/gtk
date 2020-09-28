@@ -1221,7 +1221,7 @@ parse_glshader_node (GtkCssParser *parser)
   const Declaration declarations[] = {
     { "bounds", parse_rect, NULL, &bounds },
     { "sourcecode", parse_shader, NULL, &shader_info },
-    { "uniform-data", parse_shader_args, clear_shader_info, &shader_info },
+    { "args", parse_shader_args, clear_shader_info, &shader_info },
     { "child1", parse_node, clear_node, &child[0] },
     { "child2", parse_node, clear_node, &child[1] },
     { "child3", parse_node, clear_node, &child[2] },
@@ -2824,7 +2824,7 @@ render_node_print (Printer       *p,
                   }
               }
             _indent (p);
-            g_string_append_printf (p->str, "uniform-data: %s;\n", data->str);
+            g_string_append_printf (p->str, "args: %s;\n", data->str);
             g_string_free (data, TRUE);
           }
 
