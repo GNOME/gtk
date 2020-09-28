@@ -30,14 +30,12 @@
  * each instance of use). A shader can also receive up to 4
  * textures that it can use as input when producing the pixel data.
  *
- * The typical way a #GskGLShader is used is as an argument to a
- * #GskGLShaderNode in the rendering hierarchy, and then the textures
- * it gets as input are constructed by rendering the child nodes to
- * textures before rendering the shader node itself. (Although you can
- * also pass texture nodes as children if you want to directly use a
- * texture as input). Note that the #GskGLShaderNode API is a bit
- * lowlevel, and highlevel code normally uses
- * gtk_snapshot_push_glshader() to produce the nodes.
+  #GskGLShader is usually used with gtk_snapshot_push_gl_shader()
+* to produce a #GskGLShaderNode in the rendering hierarchy, and then
+* its input textures are constructed by rendering the child nodes to
+* textures before rendering the shader node itself. (You can pass
+* texture nodes as children if you want to directly use a texture
+* as input).
  *
  * The actual shader code is GLSL code that gets combined with
  * some other code into the fragment shader. Since the exact
@@ -56,7 +54,7 @@
  * the shader language version is set to 150, and GSK_GL3 will be defined
  * in the shader.
  *
- * The main function the shader should implement is:
+ * The main function the shader must implement is:
  *
  * |[<!-- language="plain" -->
  *  void mainImage(out vec4 fragColor,
