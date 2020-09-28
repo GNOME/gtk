@@ -4623,7 +4623,7 @@ gsk_gl_shader_node_get_n_children (GskRenderNode *node)
  * @node: (type GskGLShaderNode): a #GskRenderNode for a gl shader
  * @idx: the position of the child to get
  *
- * Gets one of the (non-fallback) children.
+ * Gets one of the children.
  *
  * Returns: (transfer none): the @idx'th child of @node
  */
