@@ -24,13 +24,4 @@
 #include "gtk/css/gtkcsstokenizerprivate.h"
 #include "gtk/css/gtkcssparserprivate.h"
 
-G_BEGIN_DECLS
-
-/* XXX: Find better place to put it? */
-void            _gtk_css_print_string             (GString               *str,
-                                                   const char            *string);
-
-
-G_END_DECLS
-
 #endif /* __GTK_CSS_PARSER_PRIVATE_H__ */
