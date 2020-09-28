@@ -1,8 +1,5 @@
 uniform float iTime;
 
-in vec2 fragCoord;
-out vec4 vFragColor;
-
 // Originally from: https://www.shadertoy.com/view/3ljyDD
 // License CC0: Hexagonal tiling + cog wheels
 //  Nothing fancy, just hexagonal tiling + cog wheels

@@ -169,11 +169,12 @@ static GtkWidget *
 create_cogs (void)
 {
   GtkWidget *picture;
-  GskGLShader *shader;
+  static GskGLShader *cog_shader = NULL;
   GdkPaintable *paintable;
 
-  shader = gsk_gl_shader_new_from_resource ("/gltransition/cogs2.glsl");
-  paintable = gsk_shader_paintable_new (shader, NULL);
+ if (cog_shader == NULL)
+    cog_shader = gsk_gl_shader_new_from_resource ("/gltransition/cogs2.glsl");
+  paintable = gsk_shader_paintable_new (g_object_ref (cog_shader), NULL);
   picture = gtk_picture_new_for_paintable (paintable);
   gtk_widget_set_size_request (picture, 150, 75);
   gtk_widget_add_tick_callback (picture, update_paintable, NULL, NULL);
