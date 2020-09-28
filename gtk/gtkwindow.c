@@ -4387,6 +4387,9 @@ gtk_window_realize (GtkWidget *widget)
   priv->surface = surface;
   gdk_surface_set_widget (surface, widget);
 
+  if (priv->renderer == NULL)
+    priv->renderer = gsk_renderer_new_for_surface (surface);
+
   g_signal_connect_swapped (surface, "notify::state", G_CALLBACK (surface_state_changed), widget);
   g_signal_connect_swapped (surface, "size-changed", G_CALLBACK (surface_size_changed), widget);
   g_signal_connect (surface, "render", G_CALLBACK (surface_render), widget);
@@ -4396,9 +4399,6 @@ gtk_window_realize (GtkWidget *widget)
   GTK_WIDGET_CLASS (gtk_window_parent_class)->realize (widget);
 
   gtk_root_start_layout (GTK_ROOT (window));
-
-  if (priv->renderer == NULL)
-    priv->renderer = gsk_renderer_new_for_surface (surface);
 
   if (priv->transient_parent &&
       _gtk_widget_get_realized (GTK_WIDGET (priv->transient_parent)))
