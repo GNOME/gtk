@@ -13,8 +13,8 @@ _OUT_ vec2 vUv;
 #endif
 
 // amount is: top, right, bottom, left
-RoundedRect
-rounded_rect_shrink (RoundedRect r, vec4 amount)
+GskRoundedRect
+gsk_rounded_rect_shrink (GskRoundedRect r, vec4 amount)
 {
   vec4 new_bounds = r.bounds + vec4(1.0,1.0,-1.0,-1.0) * amount.wxyz;
   vec4 new_corner_points1 = r.corner_points1;
@@ -25,11 +25,11 @@ rounded_rect_shrink (RoundedRect r, vec4 amount)
   if (r.corner_points2.xy == r.bounds.zw) new_corner_points2.xy = new_bounds.zw;
   if (r.corner_points2.zw == r.bounds.xw) new_corner_points2.zw = new_bounds.xw;
 
-  return RoundedRect (new_bounds, new_corner_points1, new_corner_points2);
+  return GskRoundedRect (new_bounds, new_corner_points1, new_corner_points2);
 }
 
 void
-rounded_rect_offset(inout RoundedRect r, vec2 offset)
+gsk_rounded_rect_offset(inout GskRoundedRect r, vec2 offset)
 {
   r.bounds.xy += offset;
   r.bounds.zw += offset;
@@ -39,7 +39,7 @@ rounded_rect_offset(inout RoundedRect r, vec2 offset)
   r.corner_points2.zw += offset;
 }
 
-void rounded_rect_transform(inout RoundedRect r, mat4 mat)
+void gsk_rounded_rect_transform(inout GskRoundedRect r, mat4 mat)
 {
   r.bounds.xy = (mat * vec4(r.bounds.xy, 0.0, 1.0)).xy;
   r.bounds.zw = (mat * vec4(r.bounds.zw, 0.0, 1.0)).xy;
@@ -53,9 +53,9 @@ void rounded_rect_transform(inout RoundedRect r, mat4 mat)
 
 #if defined(GSK_LEGACY)
 // Can't have out or inout array parameters...
-#define rounded_rect_encode(r, uni) uni[0] = r.bounds; uni[1] = r.corner_points1; uni[2] = r.corner_points2;
+#define gsk_rounded_rect_encode(r, uni) uni[0] = r.bounds; uni[1] = r.corner_points1; uni[2] = r.corner_points2;
 #else
-void rounded_rect_encode(RoundedRect r, out _ROUNDED_RECT_UNIFORM_ out_r)
+void gsk_rounded_rect_encode(GskRoundedRect r, out _GSK_ROUNDED_RECT_UNIFORM_ out_r)
 {
 #if defined(GSK_GLES)
   out_r[0] = r.bounds;

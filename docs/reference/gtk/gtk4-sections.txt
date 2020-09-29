@@ -4299,6 +4299,7 @@ gtk_snapshot_push_blend
 gtk_snapshot_push_blur
 gtk_snapshot_push_shadow
 gtk_snapshot_push_debug
+gtk_snapshot_push_gl_shader
 gtk_snapshot_pop
 gtk_snapshot_save
 gtk_snapshot_restore

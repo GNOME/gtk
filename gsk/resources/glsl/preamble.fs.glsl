@@ -16,17 +16,17 @@ _IN_ vec2 vUv;
 
 
 
-RoundedRect decode_rect(_ROUNDED_RECT_UNIFORM_ r)
+GskRoundedRect gsk_decode_rect(_GSK_ROUNDED_RECT_UNIFORM_ r)
 {
 #if defined(GSK_GLES) || defined(GSK_LEGACY)
-  return RoundedRect(r[0], r[1], r[2]);
+  return GskRoundedRect(r[0], r[1], r[2]);
 #else
   return r;
 #endif
 }
 
 float
-ellipsis_dist (vec2 p, vec2 radius)
+gsk_ellipsis_dist (vec2 p, vec2 radius)
 {
   if (radius == vec2(0, 0))
     return 0.0;
@@ -38,14 +38,14 @@ ellipsis_dist (vec2 p, vec2 radius)
 }
 
 float
-ellipsis_coverage (vec2 point, vec2 center, vec2 radius)
+gsk_ellipsis_coverage (vec2 point, vec2 center, vec2 radius)
 {
-  float d = ellipsis_dist (point - center, radius);
+  float d = gsk_ellipsis_dist (point - center, radius);
   return clamp (0.5 - d, 0.0, 1.0);
 }
 
 float
-rounded_rect_coverage (RoundedRect r, vec2 p)
+gsk_rounded_rect_coverage (GskRoundedRect r, vec2 p)
 {
   if (p.x < r.bounds.x || p.y < r.bounds.y ||
       p.x >= r.bounds.z || p.y >= r.bounds.w)
@@ -61,10 +61,10 @@ rounded_rect_coverage (RoundedRect r, vec2 p)
   vec2 ref_br = r.corner_points2.xy;
   vec2 ref_bl = r.corner_points2.zw;
 
-  float d_tl = ellipsis_coverage(p, ref_tl, rad_tl);
-  float d_tr = ellipsis_coverage(p, ref_tr, rad_tr);
-  float d_br = ellipsis_coverage(p, ref_br, rad_br);
-  float d_bl = ellipsis_coverage(p, ref_bl, rad_bl);
+  float d_tl = gsk_ellipsis_coverage(p, ref_tl, rad_tl);
+  float d_tr = gsk_ellipsis_coverage(p, ref_tr, rad_tr);
+  float d_br = gsk_ellipsis_coverage(p, ref_br, rad_br);
+  float d_bl = gsk_ellipsis_coverage(p, ref_bl, rad_bl);
 
   vec4 corner_coverages = 1.0 - vec4(d_tl, d_tr, d_br, d_bl);
 
@@ -76,7 +76,7 @@ rounded_rect_coverage (RoundedRect r, vec2 p)
   return 1.0 - dot(vec4(is_out), corner_coverages);
 }
 
-vec4 Texture(sampler2D sampler, vec2 texCoords) {
+vec4 GskTexture(sampler2D sampler, vec2 texCoords) {
 #if defined(GSK_GLES) || defined(GSK_LEGACY)
   return texture2D(sampler, texCoords);
 #else
@@ -88,7 +88,7 @@ vec4 Texture(sampler2D sampler, vec2 texCoords) {
 layout(origin_upper_left) in vec4 gl_FragCoord;
 #endif
 
-vec2 get_frag_coord() {
+vec2 gsk_get_frag_coord() {
   vec2 fc = gl_FragCoord.xy;
 
 #ifdef GSK_GL3
@@ -101,15 +101,15 @@ vec2 get_frag_coord() {
   return fc;
 }
 
-void setOutputColor(vec4 color) {
-  vec2 f = get_frag_coord();
+void gskSetOutputColor(vec4 color) {
+  vec2 f = gsk_get_frag_coord();
 
   // We do *NOT* transform the clip rect here since we already
   // need to do that on the CPU.
 #if defined(GSK_GLES) || defined(GSK_LEGACY)
-  gl_FragColor = color * rounded_rect_coverage(create_rect(u_clip_rect), f);
+  gl_FragColor = color * gsk_rounded_rect_coverage(gsk_create_rect(u_clip_rect), f);
 #else
-  outputColor = color * rounded_rect_coverage(create_rect(u_clip_rect), f);
+  outputColor = color * gsk_rounded_rect_coverage(gsk_create_rect(u_clip_rect), f);
 #endif
   /*outputColor = color;*/
 }

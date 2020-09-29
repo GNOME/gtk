@@ -7,7 +7,7 @@ void main() {
 
 // FRAGMENT_SHADER:
 void main() {
-  vec4 diffuse = Texture(u_source, vUv);
+  vec4 diffuse = GskTexture(u_source, vUv);
 
-  setOutputColor(diffuse * u_alpha);
+  gskSetOutputColor(diffuse * u_alpha);
 }

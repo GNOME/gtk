@@ -39,6 +39,8 @@ typedef enum
   OP_PUSH_DEBUG_GROUP                  = 25,
   OP_POP_DEBUG_GROUP                   = 26,
   OP_CHANGE_BLEND                      = 27,
+  OP_CHANGE_GL_SHADER_ARGS             = 28,
+  OP_CHANGE_EXTRA_SOURCE_TEXTURE       = 29,
   OP_LAST
 } OpKind;
 
@@ -126,6 +128,12 @@ typedef struct
 
 typedef struct
 {
+  int texture_id;
+  int idx;
+} OpExtraTexture;
+
+typedef struct
+{
   gsize vao_offset;
   gsize vao_size;
 } OpDraw;
@@ -197,6 +205,13 @@ typedef struct
   float child_bounds[4];
   float texture_rect[4];
 } OpRepeat;
+
+typedef struct
+{
+  float size[2];
+  GskGLShader *shader;
+  const guchar *uniform_data;
+} OpGLShader;
 
 void     op_buffer_init            (OpBuffer *buffer);
 void     op_buffer_destroy         (OpBuffer *buffer);

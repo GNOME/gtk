@@ -48,6 +48,7 @@ GskShadowNode
 GskTextNode
 GskTextureNode
 GskTransformNode
+GskGLShaderNode
 gsk_render_node_ref
 gsk_render_node_unref
 GskRenderNodeType
@@ -152,6 +153,11 @@ gsk_blur_node_get_radius
 gsk_debug_node_new
 gsk_debug_node_get_child
 gsk_debug_node_get_message
+gsk_gl_shader_node_new
+gsk_gl_shader_node_get_n_children
+gsk_gl_shader_node_get_child
+gsk_gl_shader_node_get_args
+gsk_gl_shader_node_get_shader
 <SUBSECTION Standard>
 GSK_IS_RENDER_NODE
 GSK_RENDER_NODE
@@ -177,6 +183,7 @@ GSK_TYPE_SHADOW_NODE
 GSK_TYPE_TEXT_NODE
 GSK_TYPE_TEXTURE_NODE
 GSK_TYPE_TRANSFORM_NODE
+GSK_TYPE_GLSHADER_NODE
 GskRenderNodeClass
 gsk_blend_node_get_type
 gsk_blur_node_get_type
@@ -202,6 +209,7 @@ gsk_shadow_node_get_type
 gsk_text_node_get_type
 gsk_texture_node_get_type
 gsk_transform_node_get_type
+gsk_gl_shader_node_get_type
 GSK_TYPE_BLEND_MODE
 <SUBSECTION Standard>
 gsk_serialization_error_quark
@@ -266,3 +274,46 @@ gsk_transform_get_type
 gsk_transform_new
 </SECTION>
 
+<SECTION>
+<FILE>GskGLShader</FILE>
+GskGLShader
+gsk_gl_shader_new_from_bytes
+gsk_gl_shader_new_from_resource
+gsk_gl_shader_compile
+gsk_gl_shader_get_source
+gsk_gl_shader_get_n_textures
+gsk_gl_shader_get_n_uniforms
+gsk_gl_shader_get_uniform_name
+gsk_gl_shader_find_uniform_by_name
+gsk_gl_shader_get_uniform_type
+gsk_gl_shader_get_uniform_offset
+gsk_gl_shader_get_args_size
+
+<SUBSECTION Uniform Data>
+gsk_gl_shader_get_arg_float
+gsk_gl_shader_get_arg_int
+gsk_gl_shader_get_arg_uint
+gsk_gl_shader_get_arg_bool
+gsk_gl_shader_get_arg_vec2
+gsk_gl_shader_get_arg_vec3
+gsk_gl_shader_get_arg_vec4
+gsk_gl_shader_format_args_va
+gsk_gl_shader_format_args
+
+<SUBSECTION Shader Args Builder>
+GskShaderArgsBuilder
+
+gsk_shader_args_builder_new
+gsk_shader_args_builder_to_args
+gsk_shader_args_builder_free_to_args
+gsk_shader_args_builder_unref
+gsk_shader_args_builder_ref
+
+gsk_shader_args_builder_set_float
+gsk_shader_args_builder_set_int
+gsk_shader_args_builder_set_uint
+gsk_shader_args_builder_set_bool
+gsk_shader_args_builder_set_vec2
+gsk_shader_args_builder_set_vec3
+gsk_shader_args_builder_set_vec4
+</SECTION>
