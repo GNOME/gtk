@@ -208,8 +208,10 @@ gdk_array(splice) (GdkArray *self,
         memcpy (gdk_array(index) (self, pos),
                 additions,
                 added * sizeof (_T_));
+#ifndef GDK_ARRAY_NO_MEMSET
       else
         memset (gdk_array(index) (self, pos), 0, added * sizeof (_T_));
+#endif
     }
 
 
@@ -279,5 +281,5 @@ gdk_array(get) (const GdkArray *self,
 #undef GDK_ARRAY_NULL_TERMINATED
 #undef GDK_ARRAY_PREALLOC
 #undef GDK_ARRAY_TYPE_NAME
-
+#undef GDK_ARRAY_NO_MEMSET
 #endif
