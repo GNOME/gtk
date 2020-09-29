@@ -7,4 +7,8 @@ endif
 
 if gtk_a11y_backends.contains('atspi')
   subdir('atspi')
+
+  gtk_a11y_src += files([
+    'gtkatspicontext.c',
+  ])
 endif
