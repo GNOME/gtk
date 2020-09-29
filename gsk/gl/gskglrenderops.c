@@ -640,7 +640,28 @@ ops_set_gl_shader_args (RenderOpBuilder       *builder,
                         float                  height,
                         const guchar          *uniform_data)
 {
+  ProgramState *current_program_state = get_current_program_state (builder);
   OpGLShader *op;
+  gsize args_size = gsk_gl_shader_get_args_size (shader);
+
+  if (current_program_state)
+    {
+      if (current_program_state->gl_shader.width == width &&
+          current_program_state->gl_shader.height == height &&
+          current_program_state->gl_shader.uniform_data_len == args_size &&
+          memcmp (current_program_state->gl_shader.uniform_data, uniform_data, args_size) == 0)
+        return;
+
+      current_program_state->gl_shader.width = width;
+      current_program_state->gl_shader.height = height;
+      if (args_size > sizeof (current_program_state->gl_shader.uniform_data))
+        current_program_state->gl_shader.uniform_data_len = 0;
+      else
+        {
+          current_program_state->gl_shader.uniform_data_len = args_size;
+          memcpy (current_program_state->gl_shader.uniform_data, uniform_data, args_size);
+        }
+    }
 
   op = ops_begin (builder, OP_CHANGE_GL_SHADER_ARGS);
   op->shader = shader;
