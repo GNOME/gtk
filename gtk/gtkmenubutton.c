@@ -916,13 +916,6 @@ gtk_menu_button_popdown (GtkMenuButton *menu_button)
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (menu_button->button), FALSE);
 }
 
-void
-gtk_menu_button_add_child (GtkMenuButton *menu_button,
-                           GtkWidget     *new_child)
-{
-  gtk_button_set_child (GTK_BUTTON (menu_button->button), new_child);
-}
-
 /**
  * gtk_menu_button_set_create_popup_func:
  * @menu_button: a #GtkMenuButton
