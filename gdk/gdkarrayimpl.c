@@ -141,7 +141,7 @@ gdk_array(is_empty) (const GdkArray *self)
   return self->end == self->start;
 }
 
-G_GNUC_UNUSED static void
+G_GNUC_UNUSED static inline void
 gdk_array(reserve) (GdkArray *self,
                     gsize      n)
 {
@@ -178,7 +178,7 @@ gdk_array(reserve) (GdkArray *self,
 #endif
 }
 
-G_GNUC_UNUSED static void
+G_GNUC_UNUSED static inline void
 gdk_array(splice) (GdkArray *self,
                    gsize      pos,
                    gsize      removed,
