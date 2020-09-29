@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<node name="/node">
+<interface name="org.a11y.atspi.TableCell">
+
+  <property access="read" name="ColumnSpan" type="i" />
+
+  <property access="read" name="Position" type="(ii)" />
+
+  <property access="read" name="RowSpan" type="i" />
+
+  <property access="read" name="Table" type="(so)" />
+
+  <method name="GetRowColumnSpan">
+    <arg direction="out" type="b" />
+    <arg direction="out" name="row" type="i" />
+    <arg direction="out" name="col" type="i" />
+    <arg direction="out" name="row_extents" type="i" />
+    <arg direction="out" name="col_extents" type="i" />
+  </method>
+
+</interface>
+</node>
