@@ -25,9 +25,6 @@
 
 G_BEGIN_DECLS
 
-void   gtk_menu_button_add_child (GtkMenuButton *button,
-                                  GtkWidget     *child);
-
 G_END_DECLS
 
 #endif /* __GTK_MENU_BUTTON_PRIVATE_H__ */
