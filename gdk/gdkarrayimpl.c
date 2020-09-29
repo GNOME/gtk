@@ -141,7 +141,7 @@ gdk_array(is_empty) (const GdkArray *self)
   return self->end == self->start;
 }
 
-G_GNUC_UNUSED static void
+G_GNUC_UNUSED static inline void
 gdk_array(reserve) (GdkArray *self,
                     gsize      n)
 {
@@ -178,7 +178,7 @@ gdk_array(reserve) (GdkArray *self,
 #endif
 }
 
-G_GNUC_UNUSED static void
+G_GNUC_UNUSED static inline void
 gdk_array(splice) (GdkArray *self,
                    gsize      pos,
                    gsize      removed,
@@ -208,8 +208,10 @@ gdk_array(splice) (GdkArray *self,
         memcpy (gdk_array(index) (self, pos),
                 additions,
                 added * sizeof (_T_));
+#ifndef GDK_ARRAY_NO_MEMSET
       else
         memset (gdk_array(index) (self, pos), 0, added * sizeof (_T_));
+#endif
     }
 
 
@@ -279,5 +281,5 @@ gdk_array(get) (const GdkArray *self,
 #undef GDK_ARRAY_NULL_TERMINATED
 #undef GDK_ARRAY_PREALLOC
 #undef GDK_ARRAY_TYPE_NAME
-
+#undef GDK_ARRAY_NO_MEMSET
 #endif

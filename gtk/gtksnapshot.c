@@ -132,6 +132,8 @@ static void gtk_snapshot_state_clear (GtkSnapshotState *state);
 #define GDK_ARRAY_ELEMENT_TYPE GtkSnapshotState
 #define GDK_ARRAY_FREE_FUNC gtk_snapshot_state_clear
 #define GDK_ARRAY_BY_VALUE 1
+#define GDK_ARRAY_PREALLOC 16
+#define GDK_ARRAY_NO_MEMSET 1
 #include "gdk/gdkarrayimpl.c"
 
 /* This is a nasty little hack. We typedef GtkSnapshot to the fake object GdkSnapshot
