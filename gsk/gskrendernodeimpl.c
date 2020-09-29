@@ -624,6 +624,14 @@ gsk_repeating_radial_gradient_node_new (const graphene_rect_t  *bounds,
   return node;
 }
 
+/**
+ * gsk_radial_gradient_node_get_n_color_stops:
+ * @node: (type GskRadialGradientNode): a #GskRenderNode for a radial gradient
+ *
+ * Retrieves the number of color stops in the gradient.
+ *
+ * Returns: the number of color stops
+ */
 gsize
 gsk_radial_gradient_node_get_n_color_stops (GskRenderNode *node)
 {
@@ -632,6 +640,15 @@ gsk_radial_gradient_node_get_n_color_stops (GskRenderNode *node)
   return self->n_stops;
 }
 
+/**
+ * gsk_radial_gradient_node_peek_color_stops:
+ * @node: (type GskRadialGradientNode): a #GskRenderNode for a radial gradient
+ * @n_stops: (out) (optional): the number of color stops in the returned array
+ *
+ * Retrieves the color stops in the gradient.
+ *
+ * Returns: (array length=n_stops): the color stops in the gradient
+ */
 const GskColorStop *
 gsk_radial_gradient_node_peek_color_stops (GskRenderNode *node,
                                            gsize         *n_stops)
@@ -644,6 +661,14 @@ gsk_radial_gradient_node_peek_color_stops (GskRenderNode *node,
   return self->stops;
 }
 
+/**
+ * gsk_radial_gradient_node_peek_center:
+ * @node: (type GskRadialGradientNode): a #GskRenderNode for a radial gradient
+ *
+ * Retrieves the center pointer for the gradient.
+ *
+ * Returns: the center point for the gradient
+ */
 const graphene_point_t *
 gsk_radial_gradient_node_peek_center (GskRenderNode *node)
 {
@@ -652,6 +677,14 @@ gsk_radial_gradient_node_peek_center (GskRenderNode *node)
   return &self->center;
 }
 
+/**
+ * gsk_radial_gradient_node_get_hradius:
+ * @node: (type GskRadialGradientNode): a #GskRenderNode for a radial gradient
+ *
+ * Retrieves the horizonal radius for the gradient.
+ *
+ * Returns: the horizontal radius for the gradient
+ */
 float
 gsk_radial_gradient_node_get_hradius (GskRenderNode *node)
 {
@@ -660,6 +693,14 @@ gsk_radial_gradient_node_get_hradius (GskRenderNode *node)
   return self->hradius;
 }
 
+/**
+ * gsk_radial_gradient_node_get_vradius:
+ * @node: (type GskRadialGradientNode): a #GskRenderNode for a radial gradient
+ *
+ * Retrieves the vertical radius for the gradient.
+ *
+ * Returns: the vertical radius for the gradient
+ */
 float
 gsk_radial_gradient_node_get_vradius (GskRenderNode *node)
 {
@@ -668,6 +709,14 @@ gsk_radial_gradient_node_get_vradius (GskRenderNode *node)
   return self->vradius;
 }
 
+/**
+ * gsk_radial_gradient_node_get_start:
+ * @node: (type GskRadialGradientNode): a #GskRenderNode for a radial gradient
+ *
+ * Retrieves the start value for the gradient.
+ *
+ * Returns: the start value for the gradient
+ */
 float
 gsk_radial_gradient_node_get_start (GskRenderNode *node)
 {
@@ -676,6 +725,14 @@ gsk_radial_gradient_node_get_start (GskRenderNode *node)
   return self->start;
 }
 
+/**
+ * gsk_radial_gradient_node_get_end:
+ * @node: (type GskRadialGradientNode): a #GskRenderNode for a radial gradient
+ *
+ * Retrieves the end value for the gradient.
+ *
+ * Returns: the end value for the gradient
+ */
 float
 gsk_radial_gradient_node_get_end (GskRenderNode *node)
 {
