@@ -489,15 +489,7 @@ gtk_statusbar_remove_all (GtkStatusbar *statusbar,
     }
 }
 
-/* < private >
- * gtk_statusbar_get_message_area:
- * @statusbar: a #GtkStatusbar
- *
- * Retrieves the box containing the label widget.
- *
- * Returns: (type Gtk.Box) (transfer none): a #GtkBox
- */
-const char*
+const char *
 gtk_statusbar_get_message (GtkStatusbar *statusbar)
 {
   g_return_val_if_fail (GTK_IS_STATUSBAR (statusbar), NULL);
