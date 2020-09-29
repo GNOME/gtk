@@ -79,6 +79,12 @@ typedef struct
       float end;
       float radius[2]; /* h/v */
     } radial_gradient;
+    struct {
+      float width;
+      float height;
+      gint uniform_data_len;
+      guchar uniform_data[32];
+    } gl_shader;
   };
 } ProgramState;
 
