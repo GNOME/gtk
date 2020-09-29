@@ -42,6 +42,7 @@ GtkAccessibleRole       gtk_at_context_get_accessible_role      (GtkATContext   
 
 GDK_AVAILABLE_IN_ALL
 GtkATContext *          gtk_at_context_create                   (GtkAccessibleRole  accessible_role,
-                                                                 GtkAccessible     *accessible);
+                                                                 GtkAccessible     *accessible,
+                                                                 GdkDisplay        *display);
 
 G_END_DECLS

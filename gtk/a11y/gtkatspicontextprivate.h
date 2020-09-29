@@ -29,7 +29,8 @@ G_BEGIN_DECLS
 G_DECLARE_FINAL_TYPE (GtkAtSpiContext, gtk_at_spi_context, GTK, AT_SPI_CONTEXT, GtkATContext)
 
 GtkATContext *
-gtk_at_spi_context_new (GtkAccessibleRole  accessible_role,
-                        GtkAccessible     *accessible);
+gtk_at_spi_create_context (GtkAccessibleRole  accessible_role,
+                           GtkAccessible     *accessible,
+                           GdkDisplay        *display);
 
 G_END_DECLS

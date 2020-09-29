@@ -29,7 +29,9 @@ test_object_accessible_get_at_context (GtkAccessible *accessible)
   TestObject *self = (TestObject*)accessible;
 
   if (self->at_context == NULL)
-    self->at_context = gtk_at_context_create (self->role, accessible);
+    self->at_context = gtk_at_context_create (self->role,
+                                              accessible,
+                                              gdk_display_get_default ());
 
   return self->at_context;
 }
