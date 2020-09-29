@@ -452,6 +452,14 @@ gtk_password_entry_class_init (GtkPasswordEntryClass *klass)
   g_object_class_install_properties (object_class, NUM_PROPERTIES, props);
   gtk_editable_install_properties (object_class, NUM_PROPERTIES);
 
+  /**
+   * GtkPasswordEntry:activate:
+   * @self: The widget on which the signal is emitted
+   *
+   * The ::activate signal is forwarded from the
+   * #GtkText::activated signal, which is a keybinding
+   * signal for all forms of the Enter key.
+   */
   signals[ACTIVATE] =
     g_signal_new (I_("activate"),
                   G_OBJECT_CLASS_TYPE (object_class),

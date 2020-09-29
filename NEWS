@@ -1,19 +1,44 @@
 Overview of Changes in GTK 3.99.2
 =================================
 
+* GtkButton:
+ - Check coordinates for button releases
+
+* GtkColorChooser:
+ - Update the default palette
+
 * GtkEntry:
  - Fix issues with Emoji insertion
  - Fix issues with dnd
  - Set correct hotspot for dnd icon
 
+* GtkFileChooser:
+ - Fix a crash
+ - Fix setting unlisted filters
+
+* GtkFontChooser:
+ - Determine sample text based on font coverage (requires fontconfig)
+ - Allow filtering by language (requires fontconfig)
+ - Don't center the list
+
+* GtkMenuButton:
+ - Always use the direction property for the arrow
+
 * GtkPasswordEntry:
  - Use non-pageable memory
+ - Add an ::activate signal
+
+* GtkRevealer:
+ - Fix clipping issues in the swing transitions
+
+* GtkScrolledWindow:
+ - Fix kinetic scrolling in X11
 
 * GtkSearchEntry:
  - Don't handle forwarded events twice
 
-* GtkPasswordEntry:
- - Add an ::activate signal
+* GtkStack:
+ - Add gtk_stack_add_child
 
 * GtkTextView:
  - Fix dnd
@@ -22,29 +47,8 @@ Overview of Changes in GTK 3.99.2
  - Make clickable links work again
  - Fix handling of anchored children
 
-* GtkRevealer:
- - Fix clipping issues in the swing transitions
-
-* GtkColorChooser:
- - Update the default palette
-
-* GtkFileChooser:
- - Fix a crash
- - Fix setting unlisted filters
-
-* GtkFontChooser:
- - Determine sample text based on font coverage
- - Allow filtering by language
- - Don't center the list
-
-* GtkStack:
- - Add gtk_stack_add_child
-
 * GtkVideo:
  - Make autoplay work
-
-* GtkButton:
- - Check coordinates for button releases
 
 * CSS:
  - Allow more than 64 selectors per rule
@@ -62,12 +66,15 @@ Overview of Changes in GTK 3.99.2
 
 * GSK:
  - Add radial gradient nodes
+ - Add GskGLShader and shader nodes
 
 * GL renderer:
  - Fix clipping with projective transforms
  - Use linear interpolation for offscreen rendering
    with non-axis-aligned transforms
  - Fix texture caching to avoid size mismatches
+ - Avoid downloading GL textures when possible,
+   improving GtkGLArea performance
 
 * Vulkan renderer:
  - Fix swapchain creation
@@ -77,6 +84,7 @@ Overview of Changes in GTK 3.99.2
 
 * Wayland
  - Always ack configure to avoid jumping windows
+ - Use the primary-selection-unstable-v1 protocol
 
 * API cleanups:
  - Make filter and sorter constructors return exact types
@@ -95,6 +103,7 @@ Overview of Changes in GTK 3.99.2
  - Cosmetic improvements for several demos
  - Improve search in the sidebar
  - Add a Shadertoy demo
+ - Add a OpenGL transitions demo
  - Add an Emblem demo
  - Add a demo for input validation and error states
  - Add a demo for context menus
@@ -114,6 +123,7 @@ Overview of Changes in GTK 3.99.2
  French
  Galician
  German
+ Hebrew
  Hungarian
  Indonesian
  Italian

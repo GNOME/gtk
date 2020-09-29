@@ -2179,6 +2179,20 @@ gtk_snapshot_append_repeating_linear_gradient (GtkSnapshot            *snapshot,
   gtk_snapshot_append_node_internal (snapshot, node);
 }
 
+/**
+ * gtk_snapshot_append_radial_gradient:
+ * @snapshot: a #GtkSnapshot
+ * @bounds: the rectangle to render the readial gradient into
+ * @center: the center point for the radial gradient
+ * @hradius: the horizontal radius
+ * @vradius: the vertical radius
+ * @start: the start position (on the horizontal axis)
+ * @end: the end position (on the horizontal axis)
+ * @stops: (array length=n_stops): a pointer to an array of #GskColorStop defining the gradient
+ * @n_stops: the number of elements in @stops
+ *
+ * Appends a radial gradient node with the given stops to @snapshot.
+ */
 void
 gtk_snapshot_append_radial_gradient (GtkSnapshot            *snapshot,
                                      const graphene_rect_t  *bounds,
@@ -2217,6 +2231,20 @@ gtk_snapshot_append_radial_gradient (GtkSnapshot            *snapshot,
   gtk_snapshot_append_node_internal (snapshot, node);
 }
 
+/**
+ * gtk_snapshot_append_repeating_radial_gradient:
+ * @snapshot: a #GtkSnapshot
+ * @bounds: the rectangle to render the readial gradient into
+ * @center: the center point for the radial gradient
+ * @hradius: the horizontal radius
+ * @vradius: the vertical radius
+ * @start: the start position (on the horizontal axis)
+ * @end: the end position (on the horizontal axis)
+ * @stops: (array length=n_stops): a pointer to an array of #GskColorStop defining the gradient
+ * @n_stops: the number of elements in @stops
+ *
+ * Appends a repeating radial gradient node with the given stops to @snapshot.
+ */
 void
 gtk_snapshot_append_repeating_radial_gradient (GtkSnapshot            *snapshot,
                                                const graphene_rect_t  *bounds,

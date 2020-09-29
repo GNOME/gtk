@@ -941,6 +941,14 @@ gtk_entry_class_init (GtkEntryClass *class)
   g_object_class_override_property (gobject_class, PROP_EDITING_CANCELED, "editing-canceled");
   gtk_editable_install_properties (gobject_class, PROP_EDITING_CANCELED + 1);
 
+  /**
+   * GtkEntry:activate:
+   * @self: The widget on which the signal is emitted
+   *
+   * The ::activate signal is forwarded from the
+   * #GtkText::activated signal, which is a keybinding
+   * signal for all forms of the Enter key.
+   */
   signals[ACTIVATE] =
     g_signal_new (I_("activate"),
                   G_OBJECT_CLASS_TYPE (gobject_class),
