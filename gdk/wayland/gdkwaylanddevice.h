@@ -60,8 +60,8 @@ const char          *gdk_wayland_device_get_node_path       (GdkDevice *device);
 
 GDK_AVAILABLE_IN_ALL
 void                 gdk_wayland_device_pad_set_feedback (GdkDevice           *device,
-                                                          GdkDevicePadFeature  element,
-                                                          guint                idx,
+                                                          GdkDevicePadFeature  feature,
+                                                          guint                feature_idx,
                                                           const char          *label);
 
 G_END_DECLS
