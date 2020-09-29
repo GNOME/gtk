@@ -406,6 +406,7 @@ create_glarea_window (GtkWidget *do_widget)
   gl_area = gtk_gl_area_new ();
   gtk_widget_set_hexpand (gl_area, TRUE);
   gtk_widget_set_vexpand (gl_area, TRUE);
+  gtk_widget_set_size_request (gl_area, 100, 200);
   gtk_box_append (GTK_BOX (box), gl_area);
 
   /* We need to initialize and free GL resources, so we use
