@@ -226,7 +226,7 @@ gdk_cursor_get_cursor_type (GdkCursor *cursor)
  *
  * Creates a new cursor from the set of builtin cursors.
  *
- * Returns: a new #GdkCursor
+ * Returns: (nullable) (transfer full): a new #GdkCursor, or %NULL on failure
  *
  * Since: 2.2
  **/
