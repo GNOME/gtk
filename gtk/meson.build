@@ -1,3 +1,4 @@
+subdir('a11y')
 subdir('deprecated')
 subdir('inspector')
 
@@ -961,6 +962,7 @@ gtk_gen_headers = [
 ]
 
 gtk_sources += [
+  gtk_a11y_src,
   gtk_dbus_src,
   gtk_deprecated_sources,
   inspector_sources,

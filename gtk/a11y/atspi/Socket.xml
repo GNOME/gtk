@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<node name="/node">
+<interface name="org.a11y.atspi.Socket">
+
+  <method name="Embed">
+    <arg direction="in" name="plug" type="(so)">
+      <annotation name="com.trolltech.QtDBus.QtTypeName.In0" value="QSpiObjectReference"/>
+    </arg>
+    <arg direction="out" name="socket" type="(so)">
+      <annotation name="com.trolltech.QtDBus.QtTypeName.Out0" value="QSpiObjectReference"/>
+    </arg>
+  </method>
+
+  <method name="Unembed">
+    <arg direction="in" name="plug" type="(so)">
+      <annotation name="com.trolltech.QtDBus.QtTypeName.In0" value="QSpiObjectReference"/>
+    </arg>
+  </method>
+
+  <signal name="Available">
+    <arg direction="in" name="socket" type="(so)">
+      <annotation name="com.trolltech.QtDBus.QtTypeName.In0" value="QSpiObjectReference"/>
+    </arg>
+  </signal>
+
+</interface>
+</node>
