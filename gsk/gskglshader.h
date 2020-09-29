@@ -57,18 +57,18 @@ GDK_AVAILABLE_IN_ALL
 int              gsk_gl_shader_get_n_uniforms          (GskGLShader      *shader);
 GDK_AVAILABLE_IN_ALL
 const char *     gsk_gl_shader_get_uniform_name        (GskGLShader      *shader,
-                                                       int               idx);
+                                                        int               idx);
 GDK_AVAILABLE_IN_ALL
 int              gsk_gl_shader_find_uniform_by_name    (GskGLShader      *shader,
-                                                       const char       *name);
+                                                        const char       *name);
 GDK_AVAILABLE_IN_ALL
 GskGLUniformType gsk_gl_shader_get_uniform_type        (GskGLShader      *shader,
-                                                       int               idx);
+                                                        int               idx);
 GDK_AVAILABLE_IN_ALL
 int              gsk_gl_shader_get_uniform_offset      (GskGLShader      *shader,
-                                                       int               idx);
+                                                        int               idx);
 GDK_AVAILABLE_IN_ALL
-gsize            gsk_gl_shader_get_args_size       (GskGLShader      *shader);
+gsize            gsk_gl_shader_get_args_size           (GskGLShader      *shader);
 
 
 /* Helpers for managing shader args */
