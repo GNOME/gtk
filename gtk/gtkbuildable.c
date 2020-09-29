@@ -57,7 +57,7 @@ gtk_buildable_default_init (GtkBuildableInterface *iface)
  */
 void
 gtk_buildable_set_buildable_id (GtkBuildable *buildable,
-                      const char   *id)
+                                const char   *id)
 {
   GtkBuildableIface *iface;
 
@@ -108,7 +108,7 @@ gtk_buildable_get_buildable_id (GtkBuildable *buildable)
  * @buildable: a #GtkBuildable
  * @builder: a #GtkBuilder
  * @child: child to add
- * @type: (allow-none): kind of child or %NULL
+ * @type: (nullable): kind of child or %NULL
  *
  * Adds a child to @buildable. @type is an optional string
  * describing how the child should be added.
