@@ -36,8 +36,13 @@
 #include "gtkatcontextprivate.h"
 
 #include "gtkaccessiblevalueprivate.h"
+#include "gtkdebug.h"
 #include "gtktestatcontextprivate.h"
 #include "gtktypebuiltins.h"
+
+#if defined(GDK_WINDOWING_X11) || defined(GDK_WINDOWING_WAYLAND)
+#include "a11y/gtkatspicontextprivate.h"
+#endif
 
 G_DEFINE_ABSTRACT_TYPE (GtkATContext, gtk_at_context, G_TYPE_OBJECT)
 
@@ -354,6 +359,20 @@ gtk_at_context_get_accessible_role (GtkATContext *self)
   return self->accessible_role;
 }
 
+static const struct {
+  const char *name;
+  GtkATContext * (* create_context) (GtkAccessibleRole accessible_role,
+                                     GtkAccessible    *accessible);
+} a11y_backends[] = {
+#if defined(GDK_WINDOWING_WAYLAND)
+  { "AT-SPI", _gtk_at_spi_context_new },
+#endif
+#if defined(GDK_WINDOWING_X11)
+  { "AT-SPI", gtk_at_spi_context_new },
+#endif
+  { NULL, NULL },
+};
+
 /**
  * gtk_at_context_create: (constructor)
  * @accessible_role: the accessible role used by the #GtkATContext
@@ -401,8 +420,23 @@ gtk_at_context_create (GtkAccessibleRole  accessible_role,
   if (gtk_no_a11y[0] == '1')
     return NULL;
 
+  GtkATContext *res = NULL;
+
+  for (guint i = 0; i < G_N_ELEMENTS (a11y_backends); i++)
+    {
+      GTK_NOTE (A11Y, g_message ("Trying %s a11y backend", a11y_backends[i].name));
+      if (a11y_backends[i].create_context != NULL)
+        {
+          res = a11y_backends[i].create_context (accessible_role, accessible);
+          break;
+        }
+    }
+
+  if (res == NULL)
+    res = gtk_test_at_context_new (accessible_role, accessible);
+
   /* FIXME: Add GIOExtension for AT contexts */
-  return gtk_test_at_context_new (accessible_role, accessible);
+  return res;
 }
 
 /*< private >
