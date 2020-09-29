@@ -949,7 +949,7 @@ gtk_text_class_init (GtkTextClass *class)
   
   /**
    * GtkText::activate:
-   * @self: The self on which the signal is emitted
+   * @self: The widget on which the signal is emitted
    *
    * The ::activate signal is emitted when the user hits
    * the Enter key.
