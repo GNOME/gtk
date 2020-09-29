@@ -22,6 +22,13 @@
 
 #include "gtkatspicontextprivate.h"
 
+#if defined(GDK_WINDOWING_WAYLAND)
+# include <gdk/wayland/gdkwaylanddisplay.h>
+#endif
+#if defined(GDK_WINDOWING_X11)
+# include <gdk/x11/gdkx11display.h>
+#endif
+
 struct _GtkAtSpiContext
 {
   GtkATContext parent_instance;
@@ -62,24 +69,30 @@ gtk_at_spi_context_init (GtkAtSpiContext *self)
 {
 }
 
-/*< private >
- * gtk_at_spi_context_new:
- * @accessible_role: the accessible role for the AT context
- * @accessible: the #GtkAccessible instance which owns the context
- *
- * Creates a new #GtkAtSpiContext instance for @accessible, using the
- * given @accessible_role.
- *
- * Returns: (transfer full): the newly created #GtkAtSpiContext
- */
 GtkATContext *
-gtk_at_spi_context_new (GtkAccessibleRole  accessible_role,
-                        GtkAccessible *    accessible)
+gtk_at_spi_create_context (GtkAccessibleRole  accessible_role,
+                           GtkAccessible     *accessible,
+                           GdkDisplay        *display)
 {
   g_return_val_if_fail (GTK_IS_ACCESSIBLE (accessible), NULL);
+  g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
 
-  return g_object_new (GTK_TYPE_AT_SPI_CONTEXT,
-                       "accessible-role", accessible_role,
-                       "accessible", accessible,
-                       NULL);
+#if defined(GDK_WINDOWING_WAYLAND)
+  if (GDK_IS_WAYLAND_DISPLAY (display))
+    return g_object_new (GTK_TYPE_AT_SPI_CONTEXT,
+                         "accessible-role", accessible_role,
+                         "accessible", accessible,
+                         "display", display,
+                         NULL);
+#endif
+#if defined(GDK_WINDOWING_X11)
+  if (GDK_IS_X11_DISPLAY (display))
+    return g_object_new (GTK_TYPE_AT_SPI_CONTEXT,
+                         "accessible-role", accessible_role,
+                         "accessible", accessible,
+                         "display", display,
+                         NULL);
+#endif
+
+  return NULL;
 }

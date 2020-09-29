@@ -86,6 +86,7 @@ struct _GtkATContext
 
   GtkAccessibleRole accessible_role;
   GtkAccessible *accessible;
+  GdkDisplay *display;
 
   GtkAccessibleAttributeSet *states;
   GtkAccessibleAttributeSet *properties;
@@ -108,6 +109,8 @@ struct _GtkATContextClass
                          GtkAccessibleAttributeSet   *properties,
                          GtkAccessibleAttributeSet   *relations);
 };
+
+GdkDisplay *            gtk_at_context_get_display              (GtkATContext          *self);
 
 void                    gtk_at_context_update                   (GtkATContext          *self);
 

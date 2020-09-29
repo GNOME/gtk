@@ -8095,6 +8095,7 @@ gtk_widget_accessible_get_at_context (GtkAccessible *accessible)
     {
       GtkWidgetClass *widget_class = GTK_WIDGET_GET_CLASS (self);
       GtkWidgetClassPrivate *class_priv = widget_class->priv;
+      GdkDisplay *display = _gtk_widget_get_display (self);
       GtkAccessibleRole role;
 
       /* Widgets have two options to set the accessible role: either they
@@ -8111,7 +8112,7 @@ gtk_widget_accessible_get_at_context (GtkAccessible *accessible)
         role = class_priv->accessible_role;
 
       priv->accessible_role = role;
-      priv->at_context = gtk_at_context_create (role, accessible);
+      priv->at_context = gtk_at_context_create (role, accessible, display);
     }
 
   return priv->at_context;

@@ -50,6 +50,7 @@ enum
 {
   PROP_ACCESSIBLE_ROLE = 1,
   PROP_ACCESSIBLE,
+  PROP_DISPLAY,
 
   N_PROPS
 };
@@ -95,6 +96,10 @@ gtk_at_context_set_property (GObject      *gobject,
       self->accessible = g_value_get_object (value);
       break;
 
+    case PROP_DISPLAY:
+      self->display = g_value_get_object (value);
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (gobject, prop_id, pspec);
     }
@@ -116,6 +121,10 @@ gtk_at_context_get_property (GObject    *gobject,
 
     case PROP_ACCESSIBLE:
       g_value_set_object (value, self->accessible);
+      break;
+
+    case PROP_DISPLAY:
+      g_value_set_object (value, self->display);
       break;
 
     default:
@@ -173,6 +182,20 @@ gtk_at_context_class_init (GtkATContextClass *klass)
                          "Accessible",
                          "The accessible implementation",
                          GTK_TYPE_ACCESSIBLE,
+                         G_PARAM_READWRITE |
+                         G_PARAM_CONSTRUCT_ONLY |
+                         G_PARAM_STATIC_STRINGS);
+
+  /**
+   * GtkATContext:display:
+   *
+   * The #GdkDisplay for the #GtkATContext.
+   */
+  obj_props[PROP_DISPLAY] =
+    g_param_spec_object ("display",
+                         "Display",
+                         "The display connection",
+                         GDK_TYPE_DISPLAY,
                          G_PARAM_READWRITE |
                          G_PARAM_CONSTRUCT_ONLY |
                          G_PARAM_STATIC_STRINGS);
@@ -359,16 +382,33 @@ gtk_at_context_get_accessible_role (GtkATContext *self)
   return self->accessible_role;
 }
 
+/*< private >
+ * gtk_at_context_get_display:
+ * @self: a #GtkATContext
+ *
+ * Retrieves the #GdkDisplay used to create the context.
+ *
+ * Returns: (transfer none): a #GdkDisplay
+ */
+GdkDisplay *
+gtk_at_context_get_display (GtkATContext *self)
+{
+  g_return_val_if_fail (GTK_IS_AT_CONTEXT (self), NULL);
+
+  return self->display;
+}
+
 static const struct {
   const char *name;
   GtkATContext * (* create_context) (GtkAccessibleRole accessible_role,
-                                     GtkAccessible    *accessible);
+                                     GtkAccessible    *accessible,
+                                     GdkDisplay       *display);
 } a11y_backends[] = {
 #if defined(GDK_WINDOWING_WAYLAND)
-  { "AT-SPI", _gtk_at_spi_context_new },
+  { "AT-SPI (Wayland)", gtk_at_spi_create_context },
 #endif
 #if defined(GDK_WINDOWING_X11)
-  { "AT-SPI", gtk_at_spi_context_new },
+  { "AT-SPI (X11)", gtk_at_spi_create_context },
 #endif
   { NULL, NULL },
 };
@@ -377,9 +417,10 @@ static const struct {
  * gtk_at_context_create: (constructor)
  * @accessible_role: the accessible role used by the #GtkATContext
  * @accessible: the #GtkAccessible implementation using the #GtkATContext
+ * @display: the #GdkDisplay used by the #GtkATContext
  *
- * Creates a new #GtkATContext instance for the given accessible role and
- * accessible instance.
+ * Creates a new #GtkATContext instance for the given accessible role,
+ * accessible instance, and display connection.
  *
  * The #GtkATContext implementation being instantiated will depend on the
  * platform.
@@ -388,7 +429,8 @@ static const struct {
  */
 GtkATContext *
 gtk_at_context_create (GtkAccessibleRole  accessible_role,
-                       GtkAccessible     *accessible)
+                       GtkAccessible     *accessible,
+                       GdkDisplay        *display)
 {
   static const char *gtk_test_accessible;
   static const char *gtk_no_a11y;
@@ -424,16 +466,25 @@ gtk_at_context_create (GtkAccessibleRole  accessible_role,
 
   for (guint i = 0; i < G_N_ELEMENTS (a11y_backends); i++)
     {
+      if (a11y_backends[i].name == NULL)
+        break;
+
       GTK_NOTE (A11Y, g_message ("Trying %s a11y backend", a11y_backends[i].name));
       if (a11y_backends[i].create_context != NULL)
         {
-          res = a11y_backends[i].create_context (accessible_role, accessible);
-          break;
+          res = a11y_backends[i].create_context (accessible_role, accessible, display);
+          if (res != NULL)
+            break;
         }
     }
 
+  /* Fall back to the test context, so we can get debugging data */
   if (res == NULL)
-    res = gtk_test_at_context_new (accessible_role, accessible);
+    res = g_object_new (GTK_TYPE_TEST_AT_CONTEXT,
+                        "accessible_role", accessible_role,
+                        "accessible", accessible,
+                        "display", display,
+                        NULL);
 
   /* FIXME: Add GIOExtension for AT contexts */
   return res;
