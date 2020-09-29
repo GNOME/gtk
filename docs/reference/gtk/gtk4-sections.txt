@@ -4741,7 +4741,7 @@ gtk_is_initialized
 GTK_PRIORITY_RESIZE
 
 <SUBSECTION>
-GtkDebugFlag
+GtkDebugFlags
 gtk_get_debug_flags
 gtk_set_debug_flags
 
