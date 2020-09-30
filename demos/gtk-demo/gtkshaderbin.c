@@ -4,6 +4,7 @@ typedef struct {
   GskGLShader *shader;
   GtkStateFlags state;
   GtkStateFlags state_mask;
+  float extra_border;
   gboolean compiled;
   gboolean compiled_ok;
 } ShaderInfo;
@@ -16,6 +17,7 @@ struct _GtkShaderBin
   GPtrArray *shaders;
   guint tick_id;
   float time;
+  float mouse_x, mouse_y;
   gint64 first_frame_time;
 };
 
@@ -72,9 +74,24 @@ gtk_shader_bin_tick (GtkWidget     *widget,
 }
 
 static void
+motion_cb (GtkEventControllerMotion *controller,
+           double                    x,
+           double                    y,
+           GtkShaderBin             *self)
+{
+  self->mouse_x = x;
+  self->mouse_y = y;
+}
+
+static void
 gtk_shader_bin_init (GtkShaderBin *self)
 {
+  GtkEventController *controller;
   self->shaders = g_ptr_array_new_with_free_func ((GDestroyNotify)shader_info_free);
+
+  controller = gtk_event_controller_motion_new ();
+  g_signal_connect (controller, "motion", G_CALLBACK (motion_cb), self);
+  gtk_widget_add_controller (GTK_WIDGET (self), controller);
 }
 
 void
@@ -132,12 +149,14 @@ void
 gtk_shader_bin_add_shader (GtkShaderBin *self,
                            GskGLShader  *shader,
                            GtkStateFlags state,
-                           GtkStateFlags state_mask)
+                           GtkStateFlags state_mask,
+                           float         extra_border)
 {
   ShaderInfo *info = g_new0 (ShaderInfo, 1);
   info->shader = g_object_ref (shader);
   info->state = state;
   info->state_mask = state_mask;
+  info->extra_border = extra_border;
 
   g_ptr_array_add (self->shaders, info);
 
@@ -198,10 +217,14 @@ gtk_shader_bin_snapshot (GtkWidget   *widget,
 
       if (self->active_shader->compiled_ok)
         {
+          float border = self->active_shader->extra_border;
+          graphene_vec2_t mouse;
+          graphene_vec2_init (&mouse, self->mouse_x + border, self->mouse_y + border);
           gtk_snapshot_push_gl_shader (snapshot, self->active_shader->shader,
-                                       &GRAPHENE_RECT_INIT(0, 0, width, height),
+                                       &GRAPHENE_RECT_INIT(-border, -border, width+2*border, height+2*border),
                                        gsk_gl_shader_format_args (self->active_shader->shader,
                                                                   "u_time", self->time,
+                                                                  "u_mouse", &mouse,
                                                                   NULL));
           gtk_widget_snapshot_child (widget, self->child, snapshot);
           gtk_snapshot_gl_shader_pop_texture (snapshot);

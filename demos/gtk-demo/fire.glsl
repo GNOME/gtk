@@ -1,5 +1,4 @@
 uniform float u_time;
-uniform sampler2D u_texture1;
 
 /* 2D -> [0..1] random number generator */
 float random(vec2 st) {
@@ -67,6 +66,5 @@ void mainImage(out vec4 fragColor, in vec2 fragCoord, in vec2 resolution, in vec
   vec3 color = 1.0 / (w*w/c + 1.0);
 
   // Mix in widget
-  vec4 widget = GskTexture(u_texture1,uv);
-  fragColor = gsk_premultiply(mix(vec4(color,1), widget, 1.0-color.x));
+  fragColor = gsk_premultiply(vec4(color, color.x));
 }

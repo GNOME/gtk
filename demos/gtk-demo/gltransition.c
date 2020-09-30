@@ -85,15 +85,15 @@ clicked_cb (GtkGestureClick *gesture,
 }
 
 static GtkWidget *
-fire_bin_new (void)
+ripple_bin_new (void)
 {
   GtkWidget *bin = gtk_shader_bin_new ();
   static GskGLShader *shader = NULL;
 
   if (shader == NULL)
-    shader = gsk_gl_shader_new_from_resource ("/gltransition/fire.glsl");
+    shader = gsk_gl_shader_new_from_resource ("/gltransition/ripple.glsl");
 
-  gtk_shader_bin_add_shader (GTK_SHADER_BIN (bin), shader, GTK_STATE_FLAG_PRELIGHT, GTK_STATE_FLAG_PRELIGHT);
+  gtk_shader_bin_add_shader (GTK_SHADER_BIN (bin), shader, GTK_STATE_FLAG_PRELIGHT, GTK_STATE_FLAG_PRELIGHT, 20);
 
   return bin;
 }
@@ -131,6 +131,7 @@ update_paintable (GtkWidget     *widget,
 static GtkWidget *
 make_shader_stack (const char *name,
                    const char *resource_path,
+                   int active_child,
                    GtkWidget  *scale)
 {
   GtkWidget *stack, *child, *widget, *vbox, *hbox, *bin;
@@ -219,6 +220,8 @@ make_shader_stack (const char *name,
 
   gtk_shader_stack_add_child (GTK_SHADER_STACK (stack), child);
 
+  gtk_shader_stack_set_active (GTK_SHADER_STACK (stack), active_child);
+
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 6);
 
   widget = gtk_center_box_new ();
@@ -245,7 +248,10 @@ make_shader_stack (const char *name,
 
   gtk_box_append (GTK_BOX (vbox), widget);
 
-  gtk_box_append (GTK_BOX (vbox), stack);
+  GtkWidget *bin2 = ripple_bin_new ();
+  gtk_shader_bin_set_child (GTK_SHADER_BIN (bin2), stack);
+
+  gtk_box_append (GTK_BOX (vbox), bin2);
 
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
   gtk_widget_set_halign (hbox, GTK_ALIGN_CENTER);
@@ -254,13 +260,13 @@ make_shader_stack (const char *name,
 
   button = gtk_button_new_from_icon_name ("go-previous");
   g_signal_connect (button, "clicked", G_CALLBACK (go_back), stack);
-  bin = fire_bin_new ();
+  bin = ripple_bin_new ();
   gtk_shader_bin_set_child (GTK_SHADER_BIN (bin), button);
   gtk_box_append (GTK_BOX (hbox), bin);
 
   button = gtk_button_new_from_icon_name ("go-next");
   g_signal_connect (button, "clicked", G_CALLBACK (go_forward), stack);
-  bin = fire_bin_new ();
+  bin = ripple_bin_new ();
   gtk_shader_bin_set_child (GTK_SHADER_BIN (bin), button);
   gtk_box_append (GTK_BOX (hbox), bin);
 
@@ -270,7 +276,8 @@ make_shader_stack (const char *name,
 static GtkWidget *
 create_gltransition_window (GtkWidget *do_widget)
 {
-  GtkWidget *window, *headerbar, *scale, *grid;
+  GtkWidget *window, *headerbar, *scale, *outer_grid, *grid, *background;
+  GdkPaintable *paintable;
 
   window = gtk_window_new ();
   gtk_window_set_display (GTK_WINDOW (window),  gtk_widget_get_display (do_widget));
@@ -284,8 +291,21 @@ create_gltransition_window (GtkWidget *do_widget)
   gtk_window_set_default_size (GTK_WINDOW (window), 800, 600);
   g_signal_connect (window, "destroy", G_CALLBACK (close_window), NULL);
 
+  outer_grid = gtk_grid_new ();
+  gtk_window_set_child (GTK_WINDOW (window), outer_grid);
+
+  paintable = gsk_shader_paintable_new (gsk_gl_shader_new_from_resource ("/gltransition/fire.glsl"), NULL);
+  background = gtk_picture_new_for_paintable (paintable);
+  gtk_widget_add_tick_callback (background, update_paintable, NULL, NULL);
+
+  gtk_grid_attach (GTK_GRID (outer_grid),
+                   background,
+                   0, 0, 1, 1);
+
   grid = gtk_grid_new ();
-  gtk_window_set_child (GTK_WINDOW (window), grid);
+  gtk_grid_attach (GTK_GRID (outer_grid),
+                   grid,
+                   0, 0, 1, 1);
 
   gtk_widget_set_halign (grid, GTK_ALIGN_CENTER);
   gtk_widget_set_valign (grid, GTK_ALIGN_CENTER);
@@ -299,16 +319,16 @@ create_gltransition_window (GtkWidget *do_widget)
   gtk_grid_set_column_homogeneous (GTK_GRID (grid), TRUE);
 
   gtk_grid_attach (GTK_GRID (grid),
-                   make_shader_stack ("Wind", "/gltransition/transition1.glsl", scale),
+                   make_shader_stack ("Wind", "/gltransition/transition1.glsl", 0, scale),
                    0, 0, 1, 1);
   gtk_grid_attach (GTK_GRID (grid),
-                   make_shader_stack ("Radial", "/gltransition/transition2.glsl", scale),
+                   make_shader_stack ("Radial", "/gltransition/transition2.glsl", 1, scale),
                    1, 0, 1, 1);
   gtk_grid_attach (GTK_GRID (grid),
-                   make_shader_stack ("Crosswarp", "/gltransition/transition3.glsl", scale),
+                   make_shader_stack ("Crosswarp", "/gltransition/transition3.glsl", 2, scale),
                    0, 1, 1, 1);
   gtk_grid_attach (GTK_GRID (grid),
-                   make_shader_stack ("Kaleidoscope", "/gltransition/transition4.glsl", scale),
+                   make_shader_stack ("Kaleidoscope", "/gltransition/transition4.glsl", 3, scale),
                    1, 1, 1, 1);
 
   return window;
