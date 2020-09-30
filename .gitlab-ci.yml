@@ -16,7 +16,7 @@ stages:
 
 # Common variables
 variables:
-  COMMON_MESON_FLAGS: "--fatal-meson-warnings -Dgtk:werror=true"
+  COMMON_MESON_FLAGS: "--fatal-meson-warnings -Dwerror=true -Dglib:werror=false -Dpango:werror=false -Dgtk-doc:werror=false -Dwayland-protocols:werror=false -Dsysprof:werror=false"
   BACKEND_FLAGS: "-Dx11-backend=true -Dwayland-backend=true -Dbroadway-backend=true"
   FEATURE_FLAGS: "-Dvulkan=enabled -Dcloudproviders=enabled"
   MESON_TEST_TIMEOUT_MULTIPLIER: 3
