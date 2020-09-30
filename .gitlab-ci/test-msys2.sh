@@ -67,7 +67,7 @@ meson \
     -Dwayland-backend=false \
     -Dwin32-backend=true \
     -Dvulkan=disabled \
-    -Dintrospection=false \
+    -Dintrospection=disabled \
     -Dgtk:werror=true \
     _build
 unset CCACHE_DISABLE
