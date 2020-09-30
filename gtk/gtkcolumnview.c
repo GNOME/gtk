@@ -227,7 +227,7 @@ gtk_column_view_measure (GtkWidget      *widget,
     {
       int header_min, header_nat, list_min, list_nat;
 
-      gtk_widget_measure (GTK_WIDGET (self->listview),
+      gtk_widget_measure (GTK_WIDGET (self->header),
                           orientation, for_size,
                           &header_min, &header_nat,
                           NULL, NULL);
