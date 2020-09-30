@@ -87,5 +87,5 @@ RUN dnf -y install \
     xorg-x11-server-Xvfb \
  && dnf clean all
 
-RUN pip3 install meson==0.53.1
+RUN pip3 install meson==0.54.3
 

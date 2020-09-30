@@ -1,4 +1,4 @@
-FROM registry.gitlab.gnome.org/gnome/gtk/fedora-base:v19
+FROM registry.gitlab.gnome.org/gnome/gtk/fedora-base:v24
 
 RUN dnf -y install pandoc
 
