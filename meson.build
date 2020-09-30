@@ -876,7 +876,7 @@ summary('Tracker support', tracker3_dep.found(), section: 'Features')
 # Build
 summary('Debugging', get_option('debug'), section: 'Build')
 summary('Optimization', get_option('optimization'), section: 'Build')
-summary('Introspection', get_option('introspection'), section: 'Build')
+summary('Introspection', build_gir, section: 'Build')
 summary('Documentation', get_option('gtk_doc'), section: 'Build')
 summary('Man pages', get_option('man-pages'), section: 'Build')
 summary('Tests', get_option('build-tests'), section: 'Build')

@@ -223,7 +223,7 @@ asan-build:
   needs: []
   variables:
   script:
-    - CC=clang meson --buildtype=debugoptimized -Db_sanitize=address -Db_lundef=false -Dintrospection=false _build
+    - CC=clang meson --buildtype=debugoptimized -Db_sanitize=address -Db_lundef=false -Dintrospection=disabled _build
     - ninja -C _build
     - .gitlab-ci/run-tests.sh _build wayland
   artifacts:
