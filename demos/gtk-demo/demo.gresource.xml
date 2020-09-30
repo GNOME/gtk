@@ -138,8 +138,9 @@
     <file>gtkshaderstack.h</file>
     <file>gtkshaderbin.h</file>
     <file>gtkshaderbin.c</file>
-    <file>fire.glsl</file>
-    <file>transition1.glsl</file>
+    <file>ripple.glsl</file>
+    <file>background.glsl</file>
+   <file>transition1.glsl</file>
     <file>transition2.glsl</file>
     <file>transition3.glsl</file>
     <file>transition4.glsl</file>

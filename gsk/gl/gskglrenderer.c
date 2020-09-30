@@ -626,6 +626,7 @@ render_fallback_node (GskGLRenderer   *self,
     return;
 
   key.pointer = node;
+  key.pointer_is_child = FALSE;
   key.scale = scale;
   key.filter = GL_NEAREST;
 
@@ -1922,6 +1923,7 @@ render_blur_node (GskGLRenderer   *self,
     }
 
   key.pointer = node;
+  key.pointer_is_child = FALSE;
   key.scale = ops_get_scale (builder);
   key.filter = GL_NEAREST;
   blurred_region.texture_id = gsk_gl_driver_get_texture_for_key (self->gl_driver, &key);
@@ -1982,6 +1984,7 @@ render_inset_shadow_node (GskGLRenderer   *self,
   texture_height = ceilf ((node_outline->bounds.size.height + blur_extra) * scale);
 
   key.pointer = node;
+  key.pointer_is_child = FALSE;
   key.scale = scale;
   key.filter = GL_NEAREST;
   blurred_texture_id = gsk_gl_driver_get_texture_for_key (self->gl_driver, &key);
@@ -3812,7 +3815,6 @@ add_offscreen_ops (GskGLRenderer         *self,
       (flags & FORCE_OFFSCREEN) == 0)
     {
       GdkTexture *texture = gsk_texture_node_get_texture (child_node);
-
       upload_texture (self, texture, texture_region_out);
       *is_offscreen = FALSE;
       return TRUE;
@@ -3825,6 +3827,7 @@ add_offscreen_ops (GskGLRenderer         *self,
 
   /* Check if we've already cached the drawn texture. */
   key.pointer = child_node;
+  key.pointer_is_child = TRUE; /* Don't conflict with the child using the cache too */
   key.scale = ops_get_scale (builder);
   key.filter = filter;
   cached_id = gsk_gl_driver_get_texture_for_key (self->gl_driver, &key);

@@ -14,7 +14,9 @@ void        gtk_shader_stack_set_shader   (GtkShaderStack *self,
 void        gtk_shader_stack_add_child    (GtkShaderStack *self,
                                            GtkWidget      *child);
 void        gtk_shader_stack_transition   (GtkShaderStack *self,
-                                           gboolean       forward);
+                                           gboolean        forward);
+void        gtk_shader_stack_set_active   (GtkShaderStack *self,
+                                           int             index);
 
 G_END_DECLS
 

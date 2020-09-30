@@ -350,3 +350,12 @@ gtk_shader_stack_add_child (GtkShaderStack *self,
   else
     gtk_widget_set_child_visible (child, FALSE);
 }
+
+void
+gtk_shader_stack_set_active (GtkShaderStack *self,
+                             int             index)
+{
+  stop_transition (self);
+  self->current = MIN (index, self->children->len);
+  update_child_visible (self);
+}
