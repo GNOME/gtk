@@ -294,7 +294,7 @@ create_gltransition_window (GtkWidget *do_widget)
   outer_grid = gtk_grid_new ();
   gtk_window_set_child (GTK_WINDOW (window), outer_grid);
 
-  paintable = gsk_shader_paintable_new (gsk_gl_shader_new_from_resource ("/gltransition/fire.glsl"), NULL);
+  paintable = gsk_shader_paintable_new (gsk_gl_shader_new_from_resource ("/gltransition/background.glsl"), NULL);
   background = gtk_picture_new_for_paintable (paintable);
   gtk_widget_add_tick_callback (background, update_paintable, NULL, NULL);
 

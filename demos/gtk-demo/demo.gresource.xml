@@ -139,7 +139,7 @@
     <file>gtkshaderbin.h</file>
     <file>gtkshaderbin.c</file>
     <file>ripple.glsl</file>
-    <file>fire.glsl</file>
+    <file>background.glsl</file>
    <file>transition1.glsl</file>
     <file>transition2.glsl</file>
     <file>transition3.glsl</file>
