@@ -166,7 +166,7 @@ maybe_flip_position (gint      bounds_pos,
   *flipped = TRUE;
   secondary = rect_pos + (1 - rect_sign) * rect_size / 2 - offset - (1 - window_sign) * window_size / 2;
 
-  if (secondary >= bounds_pos && secondary + window_size <= bounds_pos + bounds_size)
+  if (secondary >= bounds_pos && secondary + window_size <= bounds_pos + bounds_size || primary > bounds_pos + bounds_size)
     return secondary;
 
   *flipped = FALSE;
