@@ -151,7 +151,7 @@ make_shader_stack (const char *name,
   gtk_shader_stack_set_shader (GTK_SHADER_STACK (stack), shader);
   g_object_unref (shader);
 
-  child = gtk_picture_new_for_resource ("/css_pixbufs/background.jpg");
+  child = gtk_picture_new_for_resource ("/css_blendmodes/ducky.png");
   gtk_picture_set_can_shrink (GTK_PICTURE (child), TRUE);
   gtk_shader_stack_add_child (GTK_SHADER_STACK (stack), child);
 
