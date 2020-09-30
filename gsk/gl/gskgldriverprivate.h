@@ -25,6 +25,8 @@ typedef struct {
   gpointer pointer;
   float scale;
   int filter;
+  int pointer_is_child;
+  graphene_rect_t parent_rect; /* Only set if pointer_is_child */
 } GskTextureKey;
 
 GskGLDriver *   gsk_gl_driver_new                       (GdkGLContext    *context);
