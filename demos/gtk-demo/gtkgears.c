@@ -764,7 +764,7 @@ gtk_gears_realize (GtkWidget *widget)
   glShaderSource(v, 1, &p, NULL);
   glCompileShader(v);
   glGetShaderInfoLog(v, sizeof msg, NULL, msg);
-  g_print ("vertex shader info: %s\n", msg);
+  g_debug ("vertex shader info: %s\n", msg);
 
   /* Compile the fragment shader */
   if (gdk_gl_context_get_use_es (context))
@@ -775,7 +775,7 @@ gtk_gears_realize (GtkWidget *widget)
   glShaderSource(f, 1, &p, NULL);
   glCompileShader(f);
   glGetShaderInfoLog(f, sizeof msg, NULL, msg);
-  g_print ("fragment shader info: %s\n", msg);
+  g_debug ("fragment shader info: %s\n", msg);
 
   /* Create and link the shader program */
   program = glCreateProgram();
@@ -786,7 +786,7 @@ gtk_gears_realize (GtkWidget *widget)
 
   glLinkProgram(program);
   glGetProgramInfoLog(program, sizeof msg, NULL, msg);
-  g_print ("program info: %s\n", msg);
+  g_debug ("program info: %s\n", msg);
   glDeleteShader (v);
   glDeleteShader (f);
 
