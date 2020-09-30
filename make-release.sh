@@ -19,9 +19,9 @@ meson dist -C${release_build_dir} --include-subprojects || exit
 meson configure -Dgtk_doc=true ${release_build_dir} || exit
 ninja -C${release_build_dir} gdk4-doc gsk4-doc gtk4-doc || exit
 
-tar -C ${release_build_dir} cf meson-dist/gdk-docs-${version}.tar.xz docs/reference/gdk
-tar -C ${release_build_dir} cf meson-dist/gsk-docs-${version}.tar.xz docs/reference/gsk
-tar -C ${release_build_dir} cf meson-dist/gtk-docs-${version}.tar.xz docs/reference/gtk
+tar cf ${release_build_dir}/meson-dist/gdk-docs-${version}.tar.xz -C${release_build_dir} docs/reference/gdk
+tar cf ${release_build_dir}/meson-dist/gsk-docs-${version}.tar.xz -C${release_build_dir} docs/reference/gsk
+tar cf ${release_build_dir}/meson-dist/gtk-docs-${version}.tar.xz -C${release_build_dir} docs/reference/gtk
 
 echo -e "\n\nGTK ${version} release on branch ${branch} in ./${release_build_dir}/:\n"
 
