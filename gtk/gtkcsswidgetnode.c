@@ -235,6 +235,7 @@ gtk_css_widget_node_get_style_provider (GtkCssNode *node)
   GtkCssWidgetNode *widget_node = GTK_CSS_WIDGET_NODE (node);
   GtkStyleContext *context;
   GtkStyleCascade *cascade;
+  GtkSettings *settings;
 
   if (widget_node->widget == NULL)
     return NULL;
@@ -242,6 +243,10 @@ gtk_css_widget_node_get_style_provider (GtkCssNode *node)
   context = _gtk_widget_peek_style_context (widget_node->widget);
   if (context)
     return gtk_style_context_get_style_provider (context);
+
+  settings = gtk_widget_get_settings (widget_node->widget);
+  if (!settings)
+    return NULL;
 
   cascade = _gtk_settings_get_style_cascade (gtk_widget_get_settings (widget_node->widget),
                                              gtk_widget_get_scale_factor (widget_node->widget));

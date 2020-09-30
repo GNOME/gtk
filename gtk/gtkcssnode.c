@@ -1432,6 +1432,7 @@ GtkStyleProviderPrivate *
 gtk_css_node_get_style_provider (GtkCssNode *cssnode)
 {
   GtkStyleProviderPrivate *result;
+  GtkSettings *settings;
 
   result = gtk_css_node_get_style_provider_or_null (cssnode);
   if (result)
@@ -1440,7 +1441,11 @@ gtk_css_node_get_style_provider (GtkCssNode *cssnode)
   if (cssnode->parent)
     return gtk_css_node_get_style_provider (cssnode->parent);
 
-  return GTK_STYLE_PROVIDER_PRIVATE (_gtk_settings_get_style_cascade (gtk_settings_get_default (), 1));
+  settings = gtk_settings_get_default ();
+  if (!settings)
+    return NULL;
+
+  return GTK_STYLE_PROVIDER_PRIVATE (_gtk_settings_get_style_cascade (settings, 1));
 }
 
 void
