@@ -1542,9 +1542,12 @@ gtk_icon_theme_add_search_path (GtkIconTheme *self,
  *
  * The resources are considered as part of the hicolor icon theme
  * and must be located in subdirectories that are defined in the
- * hicolor icon theme, such as `@path/16x16/actions/run.png`.
+ * hicolor icon theme, such as `@path/16x16/actions/run.png`
+ * or `@path/scalable/actions/run.svg`.
+ *
  * Icons that are directly placed in the resource path instead
- * of a subdirectory are also considered as ultimate fallback.
+ * of a subdirectory are also considered as ultimate fallback,
+ * but they are treated like unthemed icons.
  */
 void
 gtk_icon_theme_set_resource_path (GtkIconTheme       *self,
