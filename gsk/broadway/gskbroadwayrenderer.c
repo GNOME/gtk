@@ -261,7 +261,9 @@ collect_reused_child_nodes (GskRenderer *renderer,
     case GSK_GL_SHADER_NODE:
     case GSK_COLOR_MATRIX_NODE:
     case GSK_TEXT_NODE:
+    case GSK_RADIAL_GRADIENT_NODE:
     case GSK_REPEATING_LINEAR_GRADIENT_NODE:
+    case GSK_REPEATING_RADIAL_GRADIENT_NODE:
     case GSK_REPEAT_NODE:
     case GSK_BLEND_NODE:
     case GSK_CROSS_FADE_NODE:
@@ -843,7 +845,9 @@ gsk_broadway_renderer_add_node (GskRenderer *renderer,
       break; /* Fallback */
 
     case GSK_TEXT_NODE:
+    case GSK_RADIAL_GRADIENT_NODE:
     case GSK_REPEATING_LINEAR_GRADIENT_NODE:
+    case GSK_REPEATING_RADIAL_GRADIENT_NODE:
     case GSK_REPEAT_NODE:
     case GSK_BLEND_NODE:
     case GSK_CROSS_FADE_NODE:
