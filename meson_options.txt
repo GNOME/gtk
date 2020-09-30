@@ -84,8 +84,9 @@ option('man-pages',
        description : 'Build man pages for installed tools')
 
 option('introspection',
-       type: 'boolean',
-       value: 'true',
+       type: 'feature',
+       value: 'auto',
+       yield: true,
        description : 'Build introspection data (requires gobject-introspection)')
 
 # Demos, examples and tests

@@ -22,7 +22,7 @@ flatpak build ${builddir} meson \
                 -Dprint-backends=file \
                 -Dbuild-tests=false \
                 -Dbuild-examples=false \
-                -Dintrospection=false \
+                -Dintrospection=disabled \
                 -Ddemos=true \
                 _flatpak_build
 
