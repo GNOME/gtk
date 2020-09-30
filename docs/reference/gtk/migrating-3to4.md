@@ -220,6 +220,18 @@ replace many uses of gtk_container_add() with equivalent container-specific
 APIs such as gtk_box_pack_start() or gtk_grid_attach(), and thereby reduce
 the amount of work you have to do at the time of the switch.
 
+### Review your use of icon resources
+
+When using icons as resources, the behavior of GTK 4 is different in one
+respect: Icons that are directly in $APP_ID/icons/ are treated as unthemed
+icons, which also means that symbolic icons are not recolored. If you want
+your icon resources to have icon theme semantics, they need to be placed
+into theme subdirectories such as $APP_ID/icons/16x16/actions or
+$APP_ID/icons/scalable/status.
+
+This location works fine in GTK 3 too, so you can prepare for this change
+before switching to GTK 4.
+
 ## Changes that need to be done at the time of the switch
 
 This section outlines porting tasks that you need to tackle when
