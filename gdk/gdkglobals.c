@@ -30,4 +30,3 @@
 #include <stdio.h>
 
 guint               _gdk_debug_flags = 0;
-GList              *_gdk_default_filters = NULL;
