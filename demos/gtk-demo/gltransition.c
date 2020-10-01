@@ -259,13 +259,13 @@ make_shader_stack (const char *name,
 
   gtk_box_append (GTK_BOX (vbox), hbox);
 
-  button = gtk_button_new_from_icon_name ("go-previous");
+  button = gtk_button_new_from_icon_name ("go-previous-symbolic");
   g_signal_connect (button, "clicked", G_CALLBACK (go_back), stack);
   bin = ripple_bin_new ();
   gtk_shader_bin_set_child (GTK_SHADER_BIN (bin), button);
   gtk_box_append (GTK_BOX (hbox), bin);
 
-  button = gtk_button_new_from_icon_name ("go-next");
+  button = gtk_button_new_from_icon_name ("go-next-symbolic");
   g_signal_connect (button, "clicked", G_CALLBACK (go_forward), stack);
   bin = ripple_bin_new ();
   gtk_shader_bin_set_child (GTK_SHADER_BIN (bin), button);

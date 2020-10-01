@@ -16,13 +16,13 @@ stages:
 
 # Common variables
 variables:
-  COMMON_MESON_FLAGS: "--fatal-meson-warnings -Dgtk:werror=true"
+  COMMON_MESON_FLAGS: "-Dwerror=true -Dglib:werror=false -Dpango:werror=false -Dgtk-doc:werror=false -Dwayland-protocols:werror=false -Dsysprof:werror=false"
   BACKEND_FLAGS: "-Dx11-backend=true -Dwayland-backend=true -Dbroadway-backend=true"
   FEATURE_FLAGS: "-Dvulkan=enabled -Dcloudproviders=enabled"
   MESON_TEST_TIMEOUT_MULTIPLIER: 3
-  FEDORA_IMAGE: "registry.gitlab.gnome.org/gnome/gtk/fedora:v23"
+  FEDORA_IMAGE: "registry.gitlab.gnome.org/gnome/gtk/fedora:v25"
   FLATPAK_IMAGE: "registry.gitlab.gnome.org/gnome/gnome-runtime-images/gnome:master"
-  DOCS_IMAGE: "registry.gitlab.gnome.org/gnome/gtk/fedora-docs:v19"
+  DOCS_IMAGE: "registry.gitlab.gnome.org/gnome/gtk/fedora-docs:v25"
 
 .only-default:
   only:
@@ -74,7 +74,6 @@ fedora-x86_64:
   script:
     - meson subprojects update
     - meson ${COMMON_MESON_FLAGS} ${EXTRA_MESON_FLAGS} ${BACKEND_FLAGS} ${FEATURE_FLAGS}
-            -Dsysprof=enabled
             _build
     - ninja -C _build
     - .gitlab-ci/run-tests.sh _build x11

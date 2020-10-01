@@ -647,9 +647,7 @@ add_cups_options (const char *key,
                           custom_value = TRUE;
                           break;
 
-#if CUPS_VERSION_MAJOR == 2 && CUPS_VERSION_MINOR >= 3
                         case PPD_CUSTOM_UNKNOWN:
-#endif
                         default :
                           custom_value = FALSE;
                         }
