@@ -1120,7 +1120,7 @@ compile_glshader (GskGLRenderer  *self,
   program->glshader.texture_locations[2] = glGetUniformLocation(program->id, "u_texture3");
   program->glshader.texture_locations[3] = glGetUniformLocation(program->id, "u_texture4");
 
-  /* We use u_textue1 for the texture 0 in the glshaders, so alias it here so we can use the regular setters */
+  /* We use u_texture1 for the texture 0 in the glshaders, so alias it here so we can use the regular setters */
   program->source_location = program->glshader.texture_locations[0];
 
   for (int i = 0; i < G_N_ELEMENTS (program->glshader.args_locations); i++)
