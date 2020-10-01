@@ -1375,20 +1375,24 @@ render_opacity_node (GskGLRenderer   *self,
       prev_opacity = ops_set_opacity (builder,
                                       builder->current_opacity * opacity);
 
-      ops_set_program (builder, &self->programs->blit_program);
-      ops_set_texture (builder, region.texture_id);
+      if (builder->current_opacity >= ((float) 0x00ff / (float) 0xffff))
+        {
+          ops_set_program (builder, &self->programs->blit_program);
+          ops_set_texture (builder, region.texture_id);
 
-      load_vertex_data_with_region (ops_draw (builder, NULL),
-                                    node, builder,
-                                    &region,
-                                    is_offscreen);
+          load_vertex_data_with_region (ops_draw (builder, NULL),
+                                        node, builder,
+                                        &region,
+                                        is_offscreen);
+        }
     }
   else
     {
       prev_opacity = ops_set_opacity (builder,
                                       builder->current_opacity * opacity);
 
-      gsk_gl_renderer_add_render_ops (self, child, builder);
+      if (builder->current_opacity >= ((float) 0x00ff / (float) 0xffff))
+        gsk_gl_renderer_add_render_ops (self, child, builder);
     }
 
   ops_set_opacity (builder, prev_opacity);
