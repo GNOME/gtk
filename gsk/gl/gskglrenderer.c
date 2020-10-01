@@ -274,6 +274,20 @@ sort_border_sides (const GdkRGBA *colors,
     }
 }
 
+static inline void
+init_projection_matrix (graphene_matrix_t     *out_proj,
+                        const graphene_rect_t *viewport)
+{
+  graphene_matrix_init_ortho (out_proj,
+                              viewport->origin.x,
+                              viewport->origin.x + viewport->size.width,
+                              viewport->origin.y,
+                              viewport->origin.y + viewport->size.height,
+                              ORTHO_NEAR_PLANE,
+                              ORTHO_FAR_PLANE);
+  graphene_matrix_scale (out_proj, 1, -1, 1);
+}
+
 static inline gboolean G_GNUC_PURE
 color_matrix_modifies_alpha (GskRenderNode *node)
 {
@@ -1781,10 +1795,8 @@ blur_texture (GskGLRenderer       *self,
                                       GL_NEAREST, GL_NEAREST,
                                       &pass2_texture_id, &pass2_render_target);
 
-  graphene_matrix_init_ortho (&item_proj,
-                              0, texture_to_blur_width, 0, texture_to_blur_height,
-                              ORTHO_NEAR_PLANE, ORTHO_FAR_PLANE);
-  graphene_matrix_scale (&item_proj, 1, -1, 1);
+  init_projection_matrix (&item_proj,
+                          &GRAPHENE_RECT_INIT (0, 0, texture_to_blur_width, texture_to_blur_height));
 
   prev_projection = ops_set_projection (builder, &item_proj);
   ops_set_modelview (builder, NULL);
@@ -2033,10 +2045,8 @@ render_inset_shadow_node (GskGLRenderer   *self,
                                           GL_NEAREST, GL_NEAREST,
                                           &texture_id, &render_target);
 
-      graphene_matrix_init_ortho (&item_proj,
-                                  0, texture_width, 0, texture_height,
-                                  ORTHO_NEAR_PLANE, ORTHO_FAR_PLANE);
-      graphene_matrix_scale (&item_proj, 1, -1, 1);
+      init_projection_matrix (&item_proj,
+                              &GRAPHENE_RECT_INIT (0, 0, texture_width, texture_height));
 
       prev_projection = ops_set_projection (builder, &item_proj);
       ops_set_modelview (builder, NULL);
@@ -2217,10 +2227,8 @@ render_outset_shadow_node (GskGLRenderer   *self,
         }
 
       ops_set_program (builder, &self->programs->color_program);
-      graphene_matrix_init_ortho (&item_proj,
-                                  0, texture_width, 0, texture_height,
-                                  ORTHO_NEAR_PLANE, ORTHO_FAR_PLANE);
-      graphene_matrix_scale (&item_proj, 1, -1, 1);
+      init_projection_matrix (&item_proj,
+                              &GRAPHENE_RECT_INIT (0, 0, texture_width, texture_height));
 
       prev_render_target = ops_set_render_target (builder, render_target);
       ops_begin (builder, OP_CLEAR);
@@ -3879,13 +3887,12 @@ add_offscreen_ops (GskGLRenderer         *self,
                                           render_target);
     }
 
-  graphene_matrix_init_ortho (&item_proj,
-                              bounds->origin.x * scale,
-                              (bounds->origin.x + bounds->size.width) * scale,
-                              bounds->origin.y * scale,
-                              (bounds->origin.y + bounds->size.height) * scale,
-                              ORTHO_NEAR_PLANE, ORTHO_FAR_PLANE);
-  graphene_matrix_scale (&item_proj, 1, -1, 1);
+  init_projection_matrix (&item_proj,
+                          &GRAPHENE_RECT_INIT (
+                            bounds->origin.x * scale,
+                            bounds->origin.y * scale,
+                            width, height
+                         ));
 
   prev_render_target = ops_set_render_target (builder, render_target);
   /* Clear since we use this rendertarget for the first time */
@@ -4179,16 +4186,6 @@ gsk_gl_renderer_do_render (GskRenderer           *renderer,
 
   g_assert (gsk_gl_driver_in_frame (self->gl_driver));
 
-  /* Set up the modelview and projection matrices to fit our viewport */
-  graphene_matrix_init_ortho (&projection,
-                              viewport->origin.x,
-                              viewport->origin.x + viewport->size.width,
-                              viewport->origin.y,
-                              viewport->origin.y + viewport->size.height,
-                              ORTHO_NEAR_PLANE,
-                              ORTHO_FAR_PLANE);
-  graphene_matrix_scale (&projection, 1, -1, 1);
-
   removed = g_ptr_array_new ();
   gsk_gl_texture_atlases_begin_frame (self->atlases, removed);
   gsk_gl_glyph_cache_begin_frame (self->glyph_cache, self->gl_driver, removed);
@@ -4196,6 +4193,8 @@ gsk_gl_renderer_do_render (GskRenderer           *renderer,
   gsk_gl_shadow_cache_begin_frame (&self->shadow_cache, self->gl_driver);
   g_ptr_array_unref (removed);
 
+  /* Set up the modelview and projection matrices to fit our viewport */
+  init_projection_matrix (&projection, viewport);
   ops_set_projection (&self->op_builder, &projection);
   ops_set_viewport (&self->op_builder, viewport);
   ops_set_modelview (&self->op_builder, gsk_transform_scale (NULL, scale_factor, scale_factor));
