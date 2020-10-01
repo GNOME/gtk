@@ -91,9 +91,9 @@ check_shader_error (int     shader_id,
   prepend_line_numbers (code, s);
 
   g_set_error (error, GDK_GL_ERROR, GDK_GL_ERROR_COMPILATION_FAILED,
-               "Compilation failure in shader.\nError message: %s\n\nSource code:\n%s\n\n",
-               buffer,
-               s->str);
+               "Compilation failure in shader.\nSource Code: %s\n\nError Message:\n%s\n\n",
+               s->str,
+               buffer);
 
   g_string_free (s, TRUE);
   g_free (buffer);
