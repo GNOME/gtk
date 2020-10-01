@@ -330,7 +330,6 @@ gdk_cairo_draw_from_gl (cairo_t              *cr,
   cairo_surface_t *image;
   guint framebuffer;
   int alpha_size = 0;
-  cairo_region_t *clip_region;
   GdkGLContextPaintData *paint_data;
   int major, minor, version;
   gboolean es_use_bgra = FALSE;
@@ -342,7 +341,6 @@ gdk_cairo_draw_from_gl (cairo_t              *cr,
       return;
     }
 
-  clip_region = gdk_cairo_region_from_clip (cr);
   es_use_bgra = gdk_gl_context_use_es_bgra (paint_context);
 
   gdk_gl_context_make_current (paint_context);
@@ -379,7 +377,7 @@ gdk_cairo_draw_from_gl (cairo_t              *cr,
    */
   if (gdk_gl_context_get_use_es (paint_context) &&
       !(version >= 300 || gdk_gl_context_has_unpack_subimage (paint_context)))
-    goto out;
+    return;
 
   /* TODO: avoid reading back non-required data due to dest clip */
   image = cairo_surface_create_similar_image (cairo_get_target (cr),
@@ -430,8 +428,4 @@ gdk_cairo_draw_from_gl (cairo_t              *cr,
   cairo_paint (cr);
 
   cairo_surface_destroy (image);
-
-out:
-  if (clip_region)
-    cairo_region_destroy (clip_region);
 }
