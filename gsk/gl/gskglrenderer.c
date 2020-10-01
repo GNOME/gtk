@@ -4369,11 +4369,13 @@ gsk_gl_renderer_render (GskRenderer          *renderer,
   if (self->gl_context == NULL)
     return;
 
+  surface = gsk_renderer_get_surface (renderer);
+  self->scale_factor = gdk_surface_get_scale_factor (surface);
+
   gdk_gl_context_make_current (self->gl_context);
   gdk_gl_context_push_debug_group_printf (self->gl_context,
                                           "Render root node %p", root);
 
-  surface = gsk_renderer_get_surface (renderer);
   whole_surface = (GdkRectangle) {
                       0, 0,
                       gdk_surface_get_width (surface) * self->scale_factor,
@@ -4401,13 +4403,12 @@ gsk_gl_renderer_render (GskRenderer          *renderer,
         self->render_region = cairo_region_create_rectangle (&extents);
     }
 
-  self->scale_factor = gdk_surface_get_scale_factor (surface);
   gdk_gl_context_make_current (self->gl_context);
 
   viewport.origin.x = 0;
   viewport.origin.y = 0;
-  viewport.size.width = gdk_surface_get_width (surface) * self->scale_factor;
-  viewport.size.height = gdk_surface_get_height (surface) * self->scale_factor;
+  viewport.size.width = whole_surface.width;
+  viewport.size.height = whole_surface.height;
 
   gsk_gl_driver_begin_frame (self->gl_driver);
   gsk_gl_renderer_do_render (renderer, root, &viewport, 0, self->scale_factor);
