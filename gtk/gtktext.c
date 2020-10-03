@@ -526,8 +526,6 @@ static void         gtk_text_get_scroll_limits        (GtkText        *self,
                                                        int            *min_offset,
                                                        int            *max_offset);
 static GtkEntryBuffer *get_buffer                      (GtkText       *self);
-static void         set_enable_emoji_completion        (GtkText       *self,
-                                                        gboolean       value);
 static void         set_text_cursor                    (GtkWidget     *widget);
 static void         update_placeholder_visibility      (GtkText       *self);
 
@@ -1597,11 +1595,7 @@ gtk_text_set_property (GObject      *object,
       break;
 
     case PROP_TRUNCATE_MULTILINE:
-      if (priv->truncate_multiline != g_value_get_boolean (value))
-        {
-          priv->truncate_multiline = g_value_get_boolean (value);
-          g_object_notify_by_pspec (object, pspec);
-        }
+      gtk_text_set_truncate_multiline (self, g_value_get_boolean (value));
       break;
 
     case PROP_OVERWRITE_MODE:
@@ -1644,16 +1638,11 @@ gtk_text_set_property (GObject      *object,
       break;
 
     case PROP_ENABLE_EMOJI_COMPLETION:
-      set_enable_emoji_completion (self, g_value_get_boolean (value));
+      gtk_text_set_enable_emoji_completion (self, g_value_get_boolean (value));
       break;
 
     case PROP_PROPAGATE_TEXT_WIDTH:
-      if (priv->propagate_text_width != g_value_get_boolean (value))
-        {
-          priv->propagate_text_width = g_value_get_boolean (value);
-          gtk_widget_queue_resize (GTK_WIDGET (self));
-          g_object_notify_by_pspec (object, pspec);
-        }
+      gtk_text_set_propagate_text_width (self, g_value_get_boolean (value));
       break;
 
     case PROP_EXTRA_MENU:
@@ -6850,25 +6839,6 @@ gtk_text_insert_emoji (GtkText *self)
 }
 
 static void
-set_enable_emoji_completion (GtkText  *self,
-                             gboolean  value)
-{
-  GtkTextPrivate *priv = gtk_text_get_instance_private (self);
-
-  if (priv->enable_emoji_completion == value)
-    return;
-
-  priv->enable_emoji_completion = value;
-
-  if (priv->enable_emoji_completion)
-    priv->emoji_completion = gtk_emoji_completion_new (self);
-  else
-    g_clear_pointer (&priv->emoji_completion, gtk_widget_unparent);
-
-  g_object_notify_by_pspec (G_OBJECT (self), text_props[PROP_ENABLE_EMOJI_COMPLETION]);
-}
-
-static void
 set_text_cursor (GtkWidget *widget)
 {
   gtk_widget_set_cursor_from_name (widget, "text");
@@ -6922,6 +6892,142 @@ gtk_text_get_extra_menu (GtkText *self)
   g_return_val_if_fail (GTK_IS_TEXT (self), NULL);
 
   return priv->extra_menu;
+}
+
+/**
+ * gtk_text_set_enable_emoji_completion:
+ * @self: a #GtkText
+ * @enable_emoji_completion: %TRUE to enable Emoji completion
+ *
+ * Sets whether Emoji completion is enabled. If it is,
+ * typing ':', followed by a recognized keyword, will pop
+ * up a window with suggested Emojis matching the keyword.
+ */
+void
+gtk_text_set_enable_emoji_completion (GtkText  *self,
+                                      gboolean  enable_emoji_completion)
+{
+  GtkTextPrivate *priv = gtk_text_get_instance_private (self);
+
+  g_return_if_fail (GTK_IS_TEXT (self));
+
+  if (priv->enable_emoji_completion == enable_emoji_completion)
+    return;
+
+  priv->enable_emoji_completion = enable_emoji_completion;
+
+  if (priv->enable_emoji_completion)
+    priv->emoji_completion = gtk_emoji_completion_new (self);
+  else
+    g_clear_pointer (&priv->emoji_completion, gtk_widget_unparent);
+
+  g_object_notify_by_pspec (G_OBJECT (self), text_props[PROP_ENABLE_EMOJI_COMPLETION]);
+}
+
+/**
+ * gtk_text_get_enable_emoji_completion:
+ * @self: a #GtkText
+ *
+ * Returns whether Emoji completion is enabled for this
+ * GtkText widget.
+ *
+ * Returns: %TRUE if Emoji completion is enabled
+ */
+gboolean
+gtk_text_get_enable_emoji_completion (GtkText *self)
+{
+  GtkTextPrivate *priv = gtk_text_get_instance_private (self);
+
+  g_return_val_if_fail (GTK_IS_TEXT (self), FALSE);
+
+  return priv->enable_emoji_completion;
+}
+
+/**
+ * gtk_text_set_propagate_text_width:
+ * @self: a #GtkText
+ * @propagate_text_width: %TRUE to propagate the text width
+ *
+ * Sets whether the GtkText should grow and shrink with the content.
+ */
+void
+gtk_text_set_propagate_text_width (GtkText  *self,
+                                   gboolean  propagate_text_width)
+{
+  GtkTextPrivate *priv = gtk_text_get_instance_private (self);
+
+  g_return_if_fail (GTK_IS_TEXT (self));
+
+  if (priv->propagate_text_width == propagate_text_width)
+    return;
+
+  priv->propagate_text_width = propagate_text_width;
+
+  gtk_widget_queue_resize (GTK_WIDGET (self));
+
+  g_object_notify_by_pspec (G_OBJECT (self), text_props[PROP_PROPAGATE_TEXT_WIDTH]);
+}
+
+/**
+ * gtk_text_get_propagate_text_width:
+ * @self: a #GtkText
+ *
+ * Returns whether the #GtkText will grow and shrink
+ * with the content.
+ *
+ * Returns: %TRUE if @self will propagate the text width
+ */
+gboolean
+gtk_text_get_propagate_text_width (GtkText *self)
+{
+  GtkTextPrivate *priv = gtk_text_get_instance_private (self);
+
+  g_return_val_if_fail (GTK_IS_TEXT (self), FALSE);
+
+  return priv->propagate_text_width;
+}
+
+/**
+ * gtk_text_set_truncate_multiline:
+ * @self: a #GtkText
+ * @truncate_multiline: %TRUE to truncate multi-line text
+ *
+ * Sets whether the GtkText should truncate multi-line text
+ * that is pasted into the widget.
+ */
+void
+gtk_text_set_truncate_multiline (GtkText  *self,
+                                 gboolean  truncate_multiline)
+{
+  GtkTextPrivate *priv = gtk_text_get_instance_private (self);
+
+  g_return_if_fail (GTK_IS_TEXT (self));
+
+  if (priv->truncate_multiline == truncate_multiline)
+    return;
+
+  priv->truncate_multiline = truncate_multiline;
+
+  g_object_notify_by_pspec (G_OBJECT (self), text_props[PROP_TRUNCATE_MULTILINE]);
+}
+
+/**
+ * gtk_text_get_truncate_multiline:
+ * @self: a #GtkText
+ *
+ * Returns whether the #GtkText will truncate multi-line text
+ * that is pasted into the widget
+ *
+ * Returns: %TRUE if @self will truncate multi-line text
+ */
+gboolean
+gtk_text_get_truncate_multiline (GtkText *self)
+{
+  GtkTextPrivate *priv = gtk_text_get_instance_private (self);
+
+  g_return_val_if_fail (GTK_IS_TEXT (self), FALSE);
+
+  return priv->truncate_multiline;
 }
 
 static void

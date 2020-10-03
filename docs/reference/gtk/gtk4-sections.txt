@@ -1030,6 +1030,12 @@ gtk_text_get_tabs
 gtk_text_grab_focus_without_selecting
 gtk_text_set_extra_menu
 gtk_text_get_extra_menu
+gtk_text_set_enable_emoji_completion
+gtk_text_get_enable_emoji_completion
+gtk_text_set_propagate_text_width
+gtk_text_get_propagate_text_width
+gtk_text_set_truncate_multiline
+gtk_text_get_truncate_multiline
 <SUBSECTION Private>
 gtk_text_get_type
 </SECTION>
