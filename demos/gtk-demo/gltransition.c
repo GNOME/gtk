@@ -10,7 +10,7 @@
  * GL areas and plain old widgets to demonstrate this.
  *
  * The demo also shows some over-the-top effects like wobbly widgets,
- * and a an animated background.
+ * and animated backgrounds.
  */
 
 #include <math.h>
