@@ -320,16 +320,16 @@ create_gltransition_window (GtkWidget *do_widget)
   gtk_grid_set_column_homogeneous (GTK_GRID (grid), TRUE);
 
   gtk_grid_attach (GTK_GRID (grid),
-                   make_shader_stack ("Wind", "/gltransition/transition1.glsl", 0, scale),
+                   make_shader_stack ("Wind", "/gltransition/wind.glsl", 0, scale),
                    0, 0, 1, 1);
   gtk_grid_attach (GTK_GRID (grid),
-                   make_shader_stack ("Radial", "/gltransition/transition2.glsl", 1, scale),
+                   make_shader_stack ("Radial", "/gltransition/radial.glsl", 1, scale),
                    1, 0, 1, 1);
   gtk_grid_attach (GTK_GRID (grid),
-                   make_shader_stack ("Crosswarp", "/gltransition/transition3.glsl", 2, scale),
+                   make_shader_stack ("Crosswarp", "/gltransition/crosswarp.glsl", 2, scale),
                    0, 1, 1, 1);
   gtk_grid_attach (GTK_GRID (grid),
-                   make_shader_stack ("Kaleidoscope", "/gltransition/transition4.glsl", 3, scale),
+                   make_shader_stack ("Kaleidoscope", "/gltransition/kaleidoscope.glsl", 3, scale),
                    1, 1, 1, 1);
 
   return window;
