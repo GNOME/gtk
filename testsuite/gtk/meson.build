@@ -21,6 +21,8 @@ endif
 #  - 'suites': (array): additional test suites
 tests = [
   { 'name': 'accel' },
+# sadly, mesons xfail support seems busted
+#  { 'name': 'accessor-apis' },
   { 'name': 'action' },
   { 'name': 'adjustment' },
   { 'name': 'bitset' },
@@ -132,6 +134,8 @@ tests = [
 
 # Tests that are expected to fail
 xfail = [
+  # we are still missing some accessors
+  'accessor-apis',
   # one of the window resizing tests fails after
   # the GdkToplevel refactoring, and needs a big
   # gtkwindow.c configure request cleanup

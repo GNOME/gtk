@@ -2203,9 +2203,56 @@ cairo_destroy_array (gpointer array)
 }
 
 static void
+append_escaping_newlines (GString    *str,
+                          const char *string)
+{
+  gsize len;
+
+  do {
+    len = strcspn (string, "\n");
+    g_string_append_len (str, string, len);
+    string += len;
+    g_string_append (str, "\\\n");
+    string++;
+  } while (*string);
+}
+
+/* like g_base64 encode, but breaks lines
+ * in CSS-compatible way
+ */
+static char *
+base64_encode_with_linebreaks (const guchar *data,
+                               gsize         len)
+{
+  gsize max;
+  char *out;
+  int state = 0, outlen;
+  int save = 0;
+
+  g_return_val_if_fail (data != NULL || len == 0, NULL);
+
+  /* We can use a smaller limit here, since we know the saved state is 0,
+     +1 is needed for trailing \0, also check for unlikely integer overflow */
+  g_return_val_if_fail (len < ((G_MAXSIZE - 1) / 4 - 1) * 3, NULL);
+
+  max = (len / 3 + 1) * 4 + 1;
+  max += 2 * (max / 76);
+
+  out = g_malloc (max);
+
+  outlen = g_base64_encode_step (data, len, TRUE, out, &state, &save);
+  outlen += g_base64_encode_close (TRUE, out + outlen, &state, &save);
+  out[outlen] = '\0';
+
+  return out;
+}
+
+static void
 render_node_print (Printer       *p,
                    GskRenderNode *node)
 {
+  char *b64;
+
   switch (gsk_render_node_get_node_type (node))
     {
     case GSK_CONTAINER_NODE:
@@ -2518,7 +2565,6 @@ render_node_print (Printer       *p,
         GdkTexture *texture = gsk_texture_node_get_texture (node);
         cairo_surface_t *surface;
         GByteArray *array;
-        char *b64;
 
         start_node (p, "texture");
         append_rect_param (p, "bounds", &node->bounds);
@@ -2526,13 +2572,15 @@ render_node_print (Printer       *p,
         surface = gdk_texture_download_surface (texture);
         array = g_byte_array_new ();
         cairo_surface_write_to_png_stream (surface, cairo_write_array, array);
-        b64 = g_base64_encode (array->data, array->len);
 
         _indent (p);
-        g_string_append_printf (p->str, "texture: url(\"data:image/png;base64,%s\");\n", b64);
+        g_string_append (p->str, "texture: url(\"data:image/png;base64,");
+        b64 = base64_encode_with_linebreaks (array->data, array->len);
+        append_escaping_newlines (p->str, b64);
+        g_free (b64);
+        g_string_append (p->str, "\");\n");
         end_node (p);
 
-        g_free (b64);
         g_byte_array_free (array, TRUE);
         cairo_surface_destroy (surface);
       }
@@ -2828,7 +2876,6 @@ render_node_print (Printer       *p,
       {
         cairo_surface_t *surface = gsk_cairo_node_peek_surface (node);
         GByteArray *array;
-        char *b64;
 
         start_node (p, "cairo");
         append_rect_param (p, "bounds", &node->bounds);
@@ -2837,12 +2884,14 @@ render_node_print (Printer       *p,
           {
             array = g_byte_array_new ();
             cairo_surface_write_to_png_stream (surface, cairo_write_array, array);
-            b64 = g_base64_encode (array->data, array->len);
 
             _indent (p);
-            g_string_append_printf (p->str, "pixels: url(\"data:image/png;base64,%s\");\n", b64);
-
+            g_string_append (p->str, "pixels: url(\"data:image/png;base64,");
+            b64 = base64_encode_with_linebreaks (array->data, array->len);
+            append_escaping_newlines (p->str, b64);
             g_free (b64);
+            g_string_append (p->str, "\");\n");
+
             g_byte_array_free (array, TRUE);
 
 #ifdef CAIRO_HAS_SCRIPT_SURFACE
@@ -2856,10 +2905,12 @@ render_node_print (Printer       *p,
 
                 if (cairo_script_from_recording_surface (script, surface) == CAIRO_STATUS_SUCCESS)
                   {
-                    b64 = g_base64_encode (array->data, array->len);
                     _indent (p);
-                    g_string_append_printf (p->str, "script: url(\"data:;base64,%s\");\n", b64);
+                    g_string_append (p->str, "script: url(\"data:;base64,");
+                    b64 = base64_encode_with_linebreaks (array->data, array->len);
+                    append_escaping_newlines (p->str, b64);
                     g_free (b64);
+                    g_string_append (p->str, "\");\n");
                   }
 
                 /* because Cairo is stupid and writes to the device after we finished it,

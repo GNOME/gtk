@@ -140,6 +140,27 @@ void            gtk_text_set_extra_menu                 (GtkText         *self,
 GDK_AVAILABLE_IN_ALL
 GMenuModel *    gtk_text_get_extra_menu                 (GtkText         *self);
 
+GDK_AVAILABLE_IN_ALL
+void            gtk_text_set_enable_emoji_completion    (GtkText         *self,
+                                                         gboolean         enable_emoji_completion);
+GDK_AVAILABLE_IN_ALL
+gboolean        gtk_text_get_enable_emoji_completion    (GtkText         *self);
+
+
+GDK_AVAILABLE_IN_ALL
+void            gtk_text_set_propagate_text_width       (GtkText         *self,
+                                                         gboolean         propagate_text_width);
+GDK_AVAILABLE_IN_ALL
+gboolean        gtk_text_get_propagate_text_width       (GtkText         *self);
+
+GDK_AVAILABLE_IN_ALL
+void            gtk_text_set_truncate_multiline         (GtkText         *self,
+                                                         gboolean         truncate_multiline);
+GDK_AVAILABLE_IN_ALL
+gboolean        gtk_text_get_truncate_multiline         (GtkText         *self);
+
+
+
 G_END_DECLS
 
 #endif /* __GTK_TEXT_H__ */

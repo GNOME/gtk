@@ -2148,6 +2148,45 @@ gtk_spin_button_get_snap_to_ticks (GtkSpinButton *spin_button)
 }
 
 /**
+ * gtk_spin_button_set_climb_rate:
+ * @spin_button: a #GtkSpinButton
+ * @climb_rate: the rate of acceleration, must be >= 0
+ *
+ * Sets the acceleration rate for repeated changes when you
+ * hold down a button or key.
+ */
+void
+gtk_spin_button_set_climb_rate (GtkSpinButton  *spin_button,
+                                double          climb_rate)
+{
+  g_return_if_fail (GTK_IS_SPIN_BUTTON (spin_button));
+  g_return_if_fail (0.0 <= climb_rate);
+
+  if (spin_button->climb_rate == climb_rate)
+    return;
+
+  spin_button->climb_rate = climb_rate;
+
+  g_object_notify_by_pspec (G_OBJECT (spin_button), spinbutton_props[PROP_CLIMB_RATE]);
+}
+
+/**
+ * gtk_spin_button_get_climb_rate:
+ * @spin_button: a #GtkSpinButton
+ *
+ * Returns the acceleration rate for repeated changes.
+ *
+ * Returns: the acceleration rate
+ */
+double
+gtk_spin_button_get_climb_rate (GtkSpinButton  *spin_button)
+{
+  g_return_val_if_fail (GTK_IS_SPIN_BUTTON (spin_button), 0.0);
+
+  return spin_button->climb_rate;
+}
+
+/**
  * gtk_spin_button_spin:
  * @spin_button: a #GtkSpinButton
  * @direction: a #GtkSpinType indicating the direction to spin

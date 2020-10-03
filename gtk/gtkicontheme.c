@@ -4136,3 +4136,21 @@ gtk_icon_theme_lookup_by_gicon (GtkIconTheme       *self,
 
   return icon;
 }
+
+/**
+ * gtk_icon_theme_get_display:
+ * @self: a #GtkIconTheme
+ *
+ * Returns the display that the GtkIconTheme object was
+ * created for.
+ *
+ * Returns: (nullable) (transfer none): the display of @icon_theme
+ */
+GdkDisplay *
+gtk_icon_theme_get_display (GtkIconTheme *self)
+{
+  g_return_val_if_fail (GTK_IS_ICON_THEME (self), NULL);
+
+  return self->display;
+}
+

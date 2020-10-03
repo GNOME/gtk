@@ -61,7 +61,6 @@ enum {
   PROP_ERROR,
   PROP_FILE,
   PROP_IO_PRIORITY,
-  PROP_ITEM_TYPE,
   PROP_LOADING,
   PROP_MONITORED,
   NUM_PROPERTIES
@@ -187,10 +186,6 @@ gtk_directory_list_get_property (GObject     *object,
       g_value_set_int (value, self->io_priority);
       break;
 
-    case PROP_ITEM_TYPE:
-      g_value_set_gtype (value, G_TYPE_FILE_INFO);
-      break;
-
     case PROP_LOADING:
       g_value_set_boolean (value, gtk_directory_list_is_loading (self));
       break;
@@ -303,18 +298,6 @@ gtk_directory_list_class_init (GtkDirectoryListClass *class)
                         P_("Priority used when loading"),
                         -G_MAXINT, G_MAXINT, G_PRIORITY_DEFAULT,
                         GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
-
-  /**
-   * GtkDirectoryList:item-type:
-   *
-   * The #GType for elements of this object
-   */
-  properties[PROP_ITEM_TYPE] =
-      g_param_spec_gtype ("item-type",
-                          P_("Item type"),
-                          P_("The type of elements of this object"),
-                          G_TYPE_FILE_INFO,
-                          GTK_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkDirectoryList:loading:

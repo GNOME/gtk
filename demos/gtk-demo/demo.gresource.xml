@@ -140,13 +140,13 @@
     <file>gtkshaderbin.c</file>
     <file>gskshaderpaintable.h</file>
     <file>gskshaderpaintable.c</file>
+    <file>wind.glsl</file>
+    <file>radial.glsl</file>
+    <file>crosswarp.glsl</file>
+    <file>kaleidoscope.glsl</file>
+    <file>cogs2.glsl</file>
     <file>ripple.glsl</file>
     <file>background.glsl</file>
-   <file>transition1.glsl</file>
-    <file>transition2.glsl</file>
-    <file>transition3.glsl</file>
-    <file>transition4.glsl</file>
-    <file>cogs2.glsl</file>
   </gresource>
   <gresource prefix="/iconscroll">
     <file>iconscroll.ui</file>
