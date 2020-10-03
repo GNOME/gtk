@@ -419,10 +419,6 @@ gdk_cairo_draw_from_gl (cairo_t              *cr,
 
   cairo_surface_mark_dirty (image);
 
-  /* Invert due to opengl having different origin */
-  cairo_scale (cr, 1, -1);
-  cairo_translate (cr, 0, -height / buffer_scale);
-
   cairo_set_source_surface (cr, image, 0, 0);
   cairo_set_operator (cr, CAIRO_OPERATOR_OVER);
   cairo_paint (cr);
