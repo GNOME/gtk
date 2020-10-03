@@ -17,11 +17,15 @@
 
 #include "config.h"
 
-#include "gtkcssparserprivate.h"
+#include "gtkcssserializerprivate.h"
 
+/* Escape a string so that it can be parsed
+ * as a css string again.
+ */
 void
-_gtk_css_print_string (GString    *str,
-                       const char *string)
+gtk_css_print_string (GString    *str,
+                      const char *string,
+                      gboolean    multiline)
 {
   gsize len;
 
@@ -39,7 +43,10 @@ _gtk_css_print_string (GString    *str,
       case '\0':
         goto out;
       case '\n':
-        g_string_append (str, "\\A ");
+        if (multiline)
+          g_string_append (str, "\\A\\\n");
+        else
+          g_string_append (str, "\\A ");
         break;
       case '\r':
         g_string_append (str, "\\D ");
@@ -63,4 +70,3 @@ _gtk_css_print_string (GString    *str,
 out:
   g_string_append_c (str, '"');
 }
-

@@ -23,9 +23,11 @@
 #include <cairo.h>
 #include <pango/pango.h>
 
+#include <gtk/css/gtkcss.h>
+#include "gtk/css/gtkcsstokenizerprivate.h"
+#include "gtk/css/gtkcssparserprivate.h"
 #include "gtkborder.h"
 #include "gtktypes.h"
-#include "gtkcssparserprivate.h"
 #include "gtkcssvalueprivate.h"
 #include "gtkroundedboxprivate.h"
 #include "gtksnapshot.h"

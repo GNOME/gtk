@@ -18,9 +18,11 @@
 #ifndef __GTK_CSS_SELECTOR_PRIVATE_H__
 #define __GTK_CSS_SELECTOR_PRIVATE_H__
 
+#include <gtk/css/gtkcss.h>
+#include "gtk/css/gtkcsstokenizerprivate.h"
+#include "gtk/css/gtkcssparserprivate.h"
 #include "gtk/gtkcountingbloomfilterprivate.h"
 #include "gtk/gtkcsstypesprivate.h"
-#include "gtk/gtkcssparserprivate.h"
 
 #define GDK_ARRAY_ELEMENT_TYPE gpointer
 #define GDK_ARRAY_TYPE_NAME GtkCssSelectorMatches

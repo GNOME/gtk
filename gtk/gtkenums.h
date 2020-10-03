@@ -866,6 +866,8 @@ typedef enum
  * @GTK_INPUT_HINT_VERTICAL_WRITING: The text is vertical
  * @GTK_INPUT_HINT_EMOJI: Suggest offering Emoji support
  * @GTK_INPUT_HINT_NO_EMOJI: Suggest not offering Emoji support
+ * @GTK_INPUT_HINT_PRIVATE: Request that the input method should not
+ *    update personalized data (like typing history)
  *
  * Describes hints that might be taken into account by input methods
  * or applications. Note that input methods may already tailor their
@@ -890,7 +892,8 @@ typedef enum
   GTK_INPUT_HINT_INHIBIT_OSK         = 1 << 7,
   GTK_INPUT_HINT_VERTICAL_WRITING    = 1 << 8,
   GTK_INPUT_HINT_EMOJI               = 1 << 9,
-  GTK_INPUT_HINT_NO_EMOJI            = 1 << 10
+  GTK_INPUT_HINT_NO_EMOJI            = 1 << 10,
+  GTK_INPUT_HINT_PRIVATE             = 1 << 11,
 } GtkInputHints;
 
 /**

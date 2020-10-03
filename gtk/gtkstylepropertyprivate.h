@@ -18,7 +18,9 @@
 #ifndef __GTK_STYLEPROPERTY_PRIVATE_H__
 #define __GTK_STYLEPROPERTY_PRIVATE_H__
 
-#include "gtkcssparserprivate.h"
+#include <gtk/css/gtkcss.h>
+#include "gtk/css/gtkcsstokenizerprivate.h"
+#include "gtk/css/gtkcssparserprivate.h"
 #include "gtkstylecontextprivate.h"
 #include "gtkcssvalueprivate.h"
 

@@ -18,6 +18,7 @@
 #include "config.h"
 
 #include "gtkcssstringvalueprivate.h"
+#include "gtk/css/gtkcssserializerprivate.h"
 
 #include <string.h>
 
@@ -69,7 +70,7 @@ gtk_css_value_string_print (const GtkCssValue *value,
       return;
     }
 
-  _gtk_css_print_string (str, value->string);
+  gtk_css_print_string (str, value->string, FALSE);
 }
 
 static void

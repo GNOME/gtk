@@ -10,10 +10,10 @@ if [ -d ${release_build_dir} ]; then
 fi
 
 # we include gtk-doc since we need the gtk-doc-for-gtk4 branch
-meson setup --force-fallback-for gtk-doc ${release_build_dir} || exit
+meson setup ${release_build_dir} || exit
 
 # make the release tarball
-meson dist -C${release_build_dir} --include-subprojects || exit
+meson dist -C${release_build_dir} || exit
 
 # now build the docs
 meson configure -Dgtk_doc=true ${release_build_dir} || exit

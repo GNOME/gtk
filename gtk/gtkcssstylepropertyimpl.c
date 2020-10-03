@@ -23,7 +23,9 @@
 #include <gdk-pixbuf/gdk-pixbuf.h>
 #include <math.h>
 
-#include "gtkcssparserprivate.h"
+#include <gtk/css/gtkcss.h>
+#include "gtk/css/gtkcsstokenizerprivate.h"
+#include "gtk/css/gtkcssparserprivate.h"
 #include "gtkcssstylepropertyprivate.h"
 #include "gtkcsstypesprivate.h"
 #include "gtkintl.h"

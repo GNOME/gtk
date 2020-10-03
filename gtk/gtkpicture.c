@@ -62,7 +62,7 @@
  *
  * # Accessibility
  *
- * GtkImage uses the #GTK_ACCESSIBLE_ROLE_IMG role.
+ * GtkPicture uses the #GTK_ACCESSIBLE_ROLE_IMG role.
  */
 
 enum

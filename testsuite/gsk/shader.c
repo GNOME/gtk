@@ -201,6 +201,40 @@ test_format_args (void)
   g_object_unref (shader);
 }
 
+static void
+test_compile (void)
+{
+  GBytes *bytes;
+  GskGLShader *shader;
+  GdkSurface *surface;
+  GskRenderer *renderer;
+  GError *error = NULL;
+  gboolean ret;
+
+  bytes = g_bytes_new_static ("blaat", 6);
+  shader = gsk_gl_shader_new_from_bytes (bytes);
+  g_assert_nonnull (shader);
+
+  surface = gdk_surface_new_toplevel (gdk_display_get_default ());
+  renderer = gsk_renderer_new_for_surface (surface);
+  g_assert_nonnull (renderer);
+
+  ret = gsk_gl_shader_compile (shader, renderer, &error);
+
+  g_assert_false (ret);
+  g_assert_nonnull (error);
+  if (g_str_equal (G_OBJECT_TYPE_NAME (renderer), "GskGLRenderer"))
+    g_assert_nonnull (strstr (error->message, "blaat"));
+  else
+    g_error_matches (error, G_IO_ERROR, G_IO_ERROR_NOT_SUPPORTED);
+  g_clear_error (&error);
+
+  gsk_renderer_unrealize (renderer);
+  g_object_unref (renderer);
+  g_object_unref (surface);
+  g_bytes_unref (bytes);
+}
+
 int
 main (int   argc,
       char *argv[])
@@ -210,6 +244,7 @@ main (int   argc,
   g_test_add_func ("/shader/create/simple", test_create_simple);
   g_test_add_func ("/shader/create/data", test_create_data);
   g_test_add_func ("/shader/format-args", test_format_args);
+  g_test_add_func ("/shader/compile", test_compile);
 
   return g_test_run ();
 }

@@ -1,5 +1,5 @@
 [wrap-git]
 directory=gtk-doc
 url=https://gitlab.gnome.org/GNOME/gtk-doc.git
-revision=gtk-doc-for-gtk4
+revision=master
 depth=1

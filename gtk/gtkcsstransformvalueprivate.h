@@ -20,7 +20,9 @@
 #ifndef __GTK_CSS_TRANSFORM_VALUE_PRIVATE_H__
 #define __GTK_CSS_TRANSFORM_VALUE_PRIVATE_H__
 
-#include "gtkcssparserprivate.h"
+#include <gtk/css/gtkcss.h>
+#include "gtk/css/gtkcsstokenizerprivate.h"
+#include "gtk/css/gtkcssparserprivate.h"
 #include "gtkcssvalueprivate.h"
 
 G_BEGIN_DECLS

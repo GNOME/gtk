@@ -19,11 +19,13 @@
 
 #include "gtkcssproviderprivate.h"
 
+#include <gtk/css/gtkcss.h>
+#include "gtk/css/gtkcsstokenizerprivate.h"
+#include "gtk/css/gtkcssparserprivate.h"
 #include "gtkbitmaskprivate.h"
 #include "gtkcssarrayvalueprivate.h"
 #include "gtkcsscolorvalueprivate.h"
 #include "gtkcsskeyframesprivate.h"
-#include "gtkcssparserprivate.h"
 #include "gtkcssselectorprivate.h"
 #include "gtkcssshorthandpropertyprivate.h"
 #include "gtksettingsprivate.h"

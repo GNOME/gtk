@@ -378,6 +378,22 @@ add_recent_item (GtkEmojiChooser *chooser,
   g_variant_unref (item);
 }
 
+static gboolean
+should_close (GtkEmojiChooser *chooser)
+{
+  GdkDisplay *display;
+  GdkSeat *seat;
+  GdkDevice *device;
+  GdkModifierType state;
+
+  display = gtk_widget_get_display (GTK_WIDGET (chooser));
+  seat = gdk_display_get_default_seat (display);
+  device = gdk_seat_get_keyboard (seat);
+  state = gdk_device_get_modifier_state (device);
+
+  return (state & GDK_CONTROL_MASK) == 0;
+}
+
 static void
 emoji_activated (GtkFlowBox      *box,
                  GtkFlowBoxChild *child,
@@ -389,7 +405,16 @@ emoji_activated (GtkFlowBox      *box,
   GVariant *item;
   gunichar modifier;
 
-  gtk_popover_popdown (GTK_POPOVER (chooser));
+  if (should_close (chooser))
+    gtk_popover_popdown (GTK_POPOVER (chooser));
+  else
+    {
+      GtkWidget *popover;
+
+      popover = gtk_widget_get_ancestor (GTK_WIDGET (box), GTK_TYPE_POPOVER);
+      if (popover != GTK_WIDGET (chooser))
+        gtk_popover_popdown (GTK_POPOVER (popover));
+    }
 
   label = gtk_flow_box_child_get_child (child);
   text = g_strdup (gtk_label_get_label (GTK_LABEL (label)));
