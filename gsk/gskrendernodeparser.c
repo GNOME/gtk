@@ -2126,7 +2126,7 @@ append_string_param (Printer    *p,
 {
   _indent (p);
   g_string_append_printf (p->str, "%s: ", param_name);
-  _gtk_css_print_string (p->str, value);
+  gtk_css_print_string (p->str, value, TRUE);
   g_string_append_c (p->str, ';');
   g_string_append_c (p->str, '\n');
 }

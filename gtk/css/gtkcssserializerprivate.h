@@ -25,8 +25,9 @@
 
 G_BEGIN_DECLS
 
-void _gtk_css_print_string (GString    *str,
-                            const char *string);
+void gtk_css_print_string (GString    *str,
+                           const char *string,
+                           gboolean    multiline);
 
 G_END_DECLS
 

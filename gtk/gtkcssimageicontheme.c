@@ -133,7 +133,7 @@ gtk_css_image_icon_theme_print (GtkCssImage *image,
   GtkCssImageIconTheme *icon_theme = GTK_CSS_IMAGE_ICON_THEME (image);
 
   g_string_append (string, "-gtk-icontheme(");
-  _gtk_css_print_string (string, icon_theme->name);
+  gtk_css_print_string (string, icon_theme->name, FALSE);
   g_string_append (string, ")");
 }
 
