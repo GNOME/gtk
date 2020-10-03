@@ -149,19 +149,8 @@ gtk_color_button_class_init (GtkColorButtonClass *klass)
 
   klass->color_set = NULL;
 
-  /**
-   * GtkColorButton:use-alpha:
-   *
-   * If this property is set to %TRUE, the color swatch on the button is
-   * rendered against a checkerboard background to show its opacity and
-   * the opacity slider is displayed in the color selection dialog.
-   */
-  g_object_class_install_property (gobject_class,
-                                   PROP_USE_ALPHA,
-                                   g_param_spec_boolean ("use-alpha", P_("Use alpha"),
-                                                         P_("Whether to give the color an alpha value"),
-                                                         FALSE,
-                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+  g_object_class_override_property (gobject_class, PROP_RGBA, "rgba");
+  g_object_class_override_property (gobject_class, PROP_USE_ALPHA, "use-alpha");
 
   /**
    * GtkColorButton:title:
@@ -175,19 +164,6 @@ gtk_color_button_class_init (GtkColorButtonClass *klass)
                                                         P_("The title of the color selection dialog"),
                                                         _("Pick a Color"),
                                                         GTK_PARAM_READWRITE));
-
-  /**
-   * GtkColorButton:rgba:
-   *
-   * The RGBA color.
-   */
-  g_object_class_install_property (gobject_class,
-                                   PROP_RGBA,
-                                   g_param_spec_boxed ("rgba",
-                                                       P_("Current RGBA Color"),
-                                                       P_("The selected RGBA color"),
-                                                       GDK_TYPE_RGBA,
-                                                       GTK_PARAM_READWRITE));
 
 
   /**
