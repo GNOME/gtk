@@ -32,6 +32,7 @@
 #include <gtk/css/gtkcss.h>
 #include "gtk/css/gtkcssdataurlprivate.h"
 #include "gtk/css/gtkcssparserprivate.h"
+#include "gtk/css/gtkcssserializerprivate.h"
 
 #ifdef CAIRO_HAS_SCRIPT_SURFACE
 #include <cairo-script.h>

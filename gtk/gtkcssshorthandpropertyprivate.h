@@ -22,7 +22,9 @@
 
 #include <glib-object.h>
 
-#include "gtk/gtkcssparserprivate.h"
+#include <gtk/css/gtkcss.h>
+#include "gtk/css/gtkcsstokenizerprivate.h"
+#include "gtk/css/gtkcssparserprivate.h"
 #include "gtk/gtkcssstylepropertyprivate.h"
 #include "gtk/gtkstylepropertyprivate.h"
 

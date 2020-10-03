@@ -18,6 +18,7 @@
 #include "config.h"
 
 #include "gtkcssstringvalueprivate.h"
+#include "gtk/css/gtkcssserializerprivate.h"
 
 #include <string.h>
 

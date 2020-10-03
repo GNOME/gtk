@@ -23,6 +23,7 @@
 
 #include <math.h>
 
+#include "gtk/css/gtkcssserializerprivate.h"
 #include "gtksettingsprivate.h"
 #include "gtksnapshot.h"
 #include "gtkstyleproviderprivate.h"

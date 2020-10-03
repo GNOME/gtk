@@ -23,7 +23,9 @@
 #include <cairo.h>
 #include <glib-object.h>
 
-#include "gtk/gtkcssparserprivate.h"
+#include <gtk/css/gtkcss.h>
+#include "gtk/css/gtkcsstokenizerprivate.h"
+#include "gtk/css/gtkcssparserprivate.h"
 #include "gtk/gtkcsstypesprivate.h"
 #include "gtk/gtksnapshot.h"
 #include "gtk/gtkstyleprovider.h"

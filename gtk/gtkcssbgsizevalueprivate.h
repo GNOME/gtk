@@ -20,7 +20,9 @@
 #ifndef __GTK_CSS_BG_SIZE_VALUE_PRIVATE_H__
 #define __GTK_CSS_BG_SIZE_VALUE_PRIVATE_H__
 
-#include "gtkcssparserprivate.h"
+#include <gtk/css/gtkcss.h>
+#include "gtk/css/gtkcsstokenizerprivate.h"
+#include "gtk/css/gtkcssparserprivate.h"
 #include "gtkcssimageprivate.h"
 #include "gtkcssvalueprivate.h"
 

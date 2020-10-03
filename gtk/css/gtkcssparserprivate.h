@@ -151,9 +151,6 @@ gsize                   gtk_css_parser_consume_any              (GtkCssParser   
                                                                  gsize                           n_options,
                                                                  gpointer                        user_data);
 
-
-void            _gtk_css_print_string             (GString               *str,
-                                                   const char            *string);
 G_END_DECLS
 
 #endif /* __GTK_CSS_PARSER_H__ */

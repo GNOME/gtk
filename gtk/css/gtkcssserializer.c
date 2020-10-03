@@ -17,8 +17,11 @@
 
 #include "config.h"
 
-#include "gtkcssparserprivate.h"
+#include "gtkcssserializerprivate.h"
 
+/* Escape a string so that it can be parsed
+ * as a css string again.
+ */
 void
 _gtk_css_print_string (GString    *str,
                        const char *string)
@@ -63,4 +66,3 @@ _gtk_css_print_string (GString    *str,
 out:
   g_string_append_c (str, '"');
 }
-
