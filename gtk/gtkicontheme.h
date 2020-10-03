@@ -87,6 +87,9 @@ GDK_AVAILABLE_IN_ALL
 GtkIconTheme    *gtk_icon_theme_get_for_display      (GdkDisplay                  *display);
 
 GDK_AVAILABLE_IN_ALL
+GdkDisplay *     gtk_icon_theme_get_display          (GtkIconTheme                *self);
+
+GDK_AVAILABLE_IN_ALL
 void             gtk_icon_theme_set_search_path      (GtkIconTheme                *self,
                                                       const char * const          *path);
 GDK_AVAILABLE_IN_ALL
