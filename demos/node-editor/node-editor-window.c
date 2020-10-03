@@ -171,6 +171,8 @@ text_changed (GtkTextBuffer    *buffer,
   GskRenderNode *node;
   char *text;
   GBytes *bytes;
+  GtkTextIter iter;
+  GtkTextIter start, end;
 
   g_array_remove_range (self->errors, 0, self->errors->len);
   text = get_current_text (self->text_buffer);
@@ -207,8 +209,6 @@ text_changed (GtkTextBuffer    *buffer,
     {
       gtk_picture_set_paintable (GTK_PICTURE (self->picture), NULL);
     }
-
-  GtkTextIter iter;
 
   gtk_text_buffer_get_start_iter (self->text_buffer, &iter);
 
@@ -272,6 +272,10 @@ text_changed (GtkTextBuffer    *buffer,
 
       gtk_text_iter_forward_char (&iter);
     }
+
+  gtk_text_buffer_get_bounds (self->text_buffer, &start, &end);
+  gtk_text_buffer_apply_tag_by_name (self->text_buffer, "no-hyphens",
+                                     &start, &end);
 }
 
 static gboolean
@@ -897,6 +901,11 @@ node_editor_window_init (NodeEditorWindow *self)
                           g_object_new (GTK_TYPE_TEXT_TAG,
                                         "name", "number",
                                         "foreground-rgba", &(GdkRGBA) { 0.8, 0.52, 0.43, 1},
+                                        NULL));
+  gtk_text_tag_table_add (self->tag_table,
+                          g_object_new (GTK_TYPE_TEXT_TAG,
+                                        "name", "no-hyphens",
+                                        "insert-hyphens", FALSE,
                                         NULL));
 
   self->text_buffer = gtk_text_buffer_new (self->tag_table);
