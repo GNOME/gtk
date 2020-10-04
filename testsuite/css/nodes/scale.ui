@@ -23,6 +23,7 @@
             <property name="visible">True</property>
             <property name="orientation">horizontal</property>
             <property name="adjustment">adjustment1</property>
+            <property name="draw-value">1</property>
           </object>
         </child>
         <child>
@@ -31,6 +32,7 @@
             <property name="orientation">horizontal</property>
             <property name="adjustment">adjustment1</property>
             <property name="value-pos">bottom</property>
+            <property name="draw-value">1</property>
           </object>
         </child>
         <child>

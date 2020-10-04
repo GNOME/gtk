@@ -1014,6 +1014,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                         <property name="restrict-to-fill-level">0</property>
                                         <property name="fill-level">75</property>
                                         <property name="digits">-1</property>
+                                        <property name="draw-value">1</property>
                                         <property name="halign">end</property>
                                       </object>
                                     </child>
@@ -1026,6 +1027,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                         <property name="restrict-to-fill-level">0</property>
                                         <property name="fill-level">75</property>
                                         <property name="digits">-1</property>
+                                        <property name="draw-value">1</property>
                                         <property name="halign">start</property>
                                       </object>
                                     </child>

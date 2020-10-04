@@ -891,6 +891,15 @@ gtk_search_entry_handle_event() has been dropped and replaced by
 gtk_search_entry_set_key_capture_widget() and
 gtk_event_controller_key_forward().
 
+### Adapt to GtkScale changes
+
+The default value of #GtkScale:draw-value has been changed to %FALSE.
+If you want your scales to draw values, you will have to set this
+property explicitly now.
+
+gtk4-builder-tool can help with this conversion, with the --3to4 option
+of the simplify command.
+
 ### Stop using gtk_window_activate_default()
 
 The handling of default widgets has been changed, and activating

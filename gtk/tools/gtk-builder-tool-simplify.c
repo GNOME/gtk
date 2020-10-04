@@ -1770,6 +1770,45 @@ rewrite_radio_button (Element      *element,
     }
 }
 
+static gboolean
+has_prop (Element      *element,
+          MyParserData *data,
+          const char   *prop_name)
+{
+  GList *l;
+
+  for (l = element->children; l; l = l->next)
+    {
+      Element *child = l->data;
+
+      if (g_str_equal (child->element_name, "property") &&
+          has_attribute (child, "name", prop_name))
+        return TRUE;
+    }
+
+  return FALSE;
+}
+
+static void
+rewrite_scale (Element      *element,
+               MyParserData *data)
+{
+  if (!has_prop (element, data, "draw-value") &&
+      !has_prop (element, data, "draw_value"))
+    {
+      Element *child;
+      child = g_new0 (Element, 1);
+      child->parent = element;
+      child->element_name = g_strdup ("property");
+      child->attribute_names = g_new0 (char *, 2);
+      child->attribute_names[0] = g_strdup ("name");
+      child->attribute_values = g_new0 (char *, 2);
+      child->attribute_values[0] = g_strdup ("draw-value");
+      child->data = g_strdup ("1");
+      element->children = g_list_prepend (element->children, child);
+    }
+}
+
 /* returns TRUE to remove the element from the parent */
 static gboolean
 simplify_element (Element      *element,
@@ -1918,6 +1957,10 @@ rewrite_element (Element      *element,
   if (element_is_object_or_template (element) &&
       g_str_equal (get_class_name (element), "GtkRadioButton"))
     rewrite_radio_button (element, data);
+
+  if (element_is_object_or_template (element) &&
+      g_str_equal (get_class_name (element), "GtkScale"))
+    rewrite_scale (element, data);
 
   if (g_str_equal (element->element_name, "property"))
     maybe_rename_property (element, data);

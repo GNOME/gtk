@@ -474,7 +474,7 @@ add_emoji_variation (GtkWidget *box,
   if (modifier != 0)
     g_object_set_data (G_OBJECT (child), "modifier", GUINT_TO_POINTER (modifier));
 
-  gtk_box_append (GTK_BOX (child), label);
+  gtk_flow_box_child_set_child (GTK_FLOW_BOX_CHILD (child), label);
   gtk_flow_box_insert (GTK_FLOW_BOX (box), child, -1);
 }
 
@@ -504,7 +504,7 @@ add_emoji (GtkWidget          *list,
   child = g_object_new (GTK_TYPE_LIST_BOX_ROW, "css-name", "emoji-completion-row", NULL);
   gtk_widget_set_focus_on_click (child, FALSE);
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
-  gtk_box_append (GTK_BOX (child), box);
+  gtk_list_box_row_set_child (GTK_LIST_BOX_ROW (child), box);
   gtk_box_append (GTK_BOX (box), label);
   g_object_set_data (G_OBJECT (child), "base", label);
 
