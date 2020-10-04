@@ -18,26 +18,40 @@
 /* Build with gcc -o convert-emoji convert-emoji.c `pkg-config --cflags --libs json-glib-1.0`
  */
 
-/* The format of the generated data is: a(auss).
+/* Reads data from the json files in emojibase, expecting
+ * language-specific data.raw.json as input
+ */
+
+/* The format of the generated data is: a(ausasu).
  * Each member of the array has the following fields:
  * au - sequence of unicode codepoints. If the
  *      sequence contains a 0, it marks the point
  *      where skin tone modifiers should be inserted
  * s  - name, e.g. "man worker"
  * as - keywords, e.g. "man", "worker"
+ * u  - the group that this item belongs to:
+ *      0: smileys-emotion
+ *      1: people-body
+ *      2: component
+ *      3: animals-nature
+ *      4: food-drink
+ *      5: travel-places
+ *      6: activities
+ *      7: objects
+ *      8: symbols
+ *      9: flags
  */
 #include <json-glib/json-glib.h>
 #include <string.h>
 
 gboolean
 parse_code (GVariantBuilder *b,
-            const char      *code,
-            GString         *name_key)
+            const char      *code)
 {
   g_auto(GStrv) strv = NULL;
   int j;
 
-  strv = g_strsplit (code, " ", -1);
+  strv = g_strsplit (code, "-", -1);
   for (j = 0; strv[j]; j++)
     {
       guint32 u;
@@ -52,12 +66,7 @@ parse_code (GVariantBuilder *b,
       if (0x1f3fb <= u && u <= 0x1f3ff)
         g_variant_builder_add (b, "u", 0);
       else
-        {
-          g_variant_builder_add (b, "u", u);
-          if (j > 0)
-            g_string_append_c (name_key, '-');
-          g_string_append_printf (name_key, "%x", u);
-        }
+        g_variant_builder_add (b, "u", u);
     }
 
   return TRUE;
@@ -68,10 +77,10 @@ main (int argc, char *argv[])
 {
   JsonParser *parser;
   JsonNode *root;
-  JsonArray *array;
   JsonObject *ro;
+  JsonArray *array;
   JsonNode *node;
-  const char *name;
+  const char *unicode;
   JsonObjectIter iter;
   GError *error = NULL;
   guint length, i;
@@ -81,37 +90,11 @@ main (int argc, char *argv[])
   GHashTable *names;
   GString *name_key;
 
-  if (argc != 4)
+  if (argc != 3)
     {
-      g_print ("Usage: emoji-convert INPUT INPUT1 OUTPUT\n");
+      g_print ("Usage: emoji-convert INPUT OUTPUT\n");
       return 1;
     }
-
-  parser = json_parser_new ();
-
-  if (!json_parser_load_from_file (parser, argv[2], &error))
-    {
-      g_error ("%s", error->message);
-      return 1;
-    }
-
-  root = json_parser_get_root (parser);
-  ro = json_node_get_object (root);
-  json_object_iter_init (&iter, ro);
-
-  names = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, (GDestroyNotify)json_object_unref);
-  name_key = g_string_new ("");
-
-  while (json_object_iter_next (&iter, &name, &node))
-    {
-      JsonObject *obj = json_node_get_object (node);
-      const char *unicode;
-
-      unicode = json_object_get_string_member (obj, "unicode");
-      g_hash_table_insert (names, g_strdup (unicode), json_object_ref (obj));
-    }
-
-  g_object_unref (parser);
 
   parser = json_parser_new ();
 
@@ -125,101 +108,59 @@ main (int argc, char *argv[])
   array = json_node_get_array (root);
   length = json_array_get_length (array);
 
-  g_variant_builder_init (&builder, G_VARIANT_TYPE ("a(ausas)"));
-  i = 0;
-  while (i < length)
+  g_variant_builder_init (&builder, G_VARIANT_TYPE ("a(ausasu)"));
+  for (i = 0; i < length; i++)
     {
-      JsonNode *node = json_array_get_element (array, i);
-      JsonObject *obj = json_node_get_object (node);
+      JsonObject *obj = json_array_get_object_element (array, i);
       GVariantBuilder b1;
       GVariantBuilder b2;
+      guint group;
       const char *name;
       char *code;
-      int j, k;
-      gboolean skip;
-      gboolean has_variations;
-      JsonObject *obj2;
-      JsonArray *kw;
-      char **name_tokens;
 
-      i++;
+      if (!json_object_has_member (obj, "group"))
+        continue;
+
+      group = json_object_get_int_member (obj, "group");
+      name = json_object_get_string_member (obj, "annotation");
+
+      if (json_object_has_member (obj, "skins"))
+        {
+          JsonArray *a2 = json_object_get_array_member (obj, "skins");
+          JsonNode *n2 = json_array_get_element (a2, 0);
+          JsonObject *o2 = json_node_get_object (n2);
+          code = g_strdup (json_object_get_string_member (o2, "hexcode"));
+        }
+      else
+        {
+          code = g_strdup (json_object_get_string_member (obj, "hexcode"));
+        }
 
       g_variant_builder_init (&b1, G_VARIANT_TYPE ("au"));
 
-      name = json_object_get_string_member (obj, "name");
-      code = g_strdup (json_object_get_string_member (obj, "code"));
-
-      has_variations = FALSE;
-      while (i < length)
-        {
-          JsonNode *node2 = json_array_get_element (array, i);
-          JsonObject *obj2 = json_node_get_object (node2);
-          const char *name2;
-          const char *code2;
-
-          name2 = json_object_get_string_member (obj2, "name");
-          code2 = json_object_get_string_member (obj2, "code");
-
-          if (!strstr (name2, "skin tone") || !g_str_has_prefix (name2, name))
-            break;
-
-          if (!has_variations)
-            {
-              has_variations = TRUE;
-              g_free (code);
-              code = g_strdup (code2);
-            }
-          i++;
-        }
-
-      g_string_set_size (name_key, 0);
-      if (!parse_code (&b1, code, name_key))
+      if (!parse_code (&b1, code))
         return 1;
 
       g_variant_builder_init (&b2, G_VARIANT_TYPE ("as"));
-      name_tokens = g_str_tokenize_and_fold (name, "en", NULL);
-      for (j = 0; j < g_strv_length (name_tokens); j++)
-        g_variant_builder_add (&b2, "s", name_tokens[j]);
-
-      obj2 = g_hash_table_lookup (names, name_key->str);
-      if (obj2)
+      if (json_object_has_member (obj, "tags"))
         {
-          kw = json_object_get_array_member (obj2, "keywords");
-          for (k = 0; k < json_array_get_length (kw); k++)
-            {
-              char **folded;
-              char **ascii;
-
-              folded = g_str_tokenize_and_fold (json_array_get_string_element (kw, k), "en", &ascii);
-              for (j = 0; j < g_strv_length (folded); j++)
-                {
-                  if (!g_strv_contains ((const char * const *)name_tokens, folded[j]))
-                    g_variant_builder_add (&b2, "s", folded[j]);
-                }
-              for (j = 0; j < g_strv_length (ascii); j++)
-                {
-                  if (!g_strv_contains ((const char * const *)name_tokens, ascii[j]))
-                    g_variant_builder_add (&b2, "s", ascii[j]);
-                }
-              g_strfreev (folded);
-              g_strfreev (ascii);
-            }
+          JsonArray *tags = json_object_get_array_member (obj, "tags");
+          for (int j = 0; j < json_array_get_length (tags); j++)
+            g_variant_builder_add (&b2, "s", json_array_get_string_element (tags, j));
         }
 
-      g_strfreev (name_tokens);
-
-      g_variant_builder_add (&builder, "(ausas)", &b1, name, &b2);
+      g_variant_builder_add (&builder, "(ausasu)", &b1, name, &b2, group);
     }
 
   v = g_variant_builder_end (&builder);
-  if (g_str_has_suffix (argv[3], ".json"))
+  if (g_str_has_suffix (argv[2], ".json"))
     {
       JsonNode *node;
       char *out;
 
       node = json_gvariant_serialize (v);
       out = json_to_string (node, TRUE);
-      if (!g_file_set_contents (argv[3], out, -1, &error))
+      if (!g_file_set_contents (argv[2], out, -1, &error))
         {
           g_error ("%s", error->message);
           return 1;
@@ -230,7 +171,7 @@ main (int argc, char *argv[])
       GBytes *bytes;
 
       bytes = g_variant_get_data_as_bytes (v);
-      if (!g_file_set_contents (argv[3], g_bytes_get_data (bytes, NULL), g_bytes_get_size (bytes), &error))
+      if (!g_file_set_contents (argv[2], g_bytes_get_data (bytes, NULL), g_bytes_get_size (bytes), &error))
         {
           g_error ("%s", error->message);
           return 1;
