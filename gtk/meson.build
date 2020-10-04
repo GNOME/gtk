@@ -861,6 +861,23 @@ gtkresources = gnome.compile_resources('gtkresources',
   extra_args: '--manual-register',
 )
 
+foreach lang : [ 'de', 'fr', 'es', 'zh' ]
+  conf = configuration_data()
+  conf.set('lang', lang)
+  resxml = configure_file(input: 'emoji/gresource.xml.in',
+                          output: lang + '.gresource.xml',
+                          configuration: conf
+  )
+
+  gnome.compile_resources(lang,
+    resxml,
+    source_dir: 'emoji',
+    gresource_bundle: true,
+    install: true,
+    install_dir: join_paths(gtk_datadir, 'gtk-4.0', 'emoji')
+  )
+endforeach
+
 gtk_x11_sources = files([
   'gtkapplication-x11.c',
   'gtkmountoperation-x11.c',
