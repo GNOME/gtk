@@ -38,6 +38,8 @@
 #include "gtknative.h"
 #include "gtkwidgetprivate.h"
 #include "gdk/gdkprofilerprivate.h"
+#include "gtkmain.h"
+#include "gtkprivate.h"
 
 /**
  * SECTION:gtkemojichooser
@@ -184,7 +186,7 @@ typedef struct {
   GtkWidget *box;
   GtkWidget *heading;
   GtkWidget *button;
-  const char *first;
+  int group;
   gunichar label;
   gboolean empty;
 } EmojiSection;
@@ -337,8 +339,8 @@ add_recent_item (GtkEmojiChooser *chooser,
 
   g_variant_ref (item);
 
-  g_variant_builder_init (&builder, G_VARIANT_TYPE ("a((ausas)u)"));
-  g_variant_builder_add (&builder, "(@(ausas)u)", item, modifier);
+  g_variant_builder_init (&builder, G_VARIANT_TYPE ("a((ausasu)u)"));
+  g_variant_builder_add (&builder, "(@(ausasu)u)", item, modifier);
 
   children = NULL;
   for (child = gtk_widget_get_last_child (chooser->recent.box);
@@ -363,7 +365,7 @@ add_recent_item (GtkEmojiChooser *chooser,
           continue;
         }
 
-      g_variant_builder_add (&builder, "(@(ausas)u)", item2, modifier2);
+      g_variant_builder_add (&builder, "(@(ausasu)u)", item2, modifier2);
     }
   g_list_free (children);
 
@@ -591,6 +593,79 @@ add_emoji (GtkWidget    *box,
   gtk_flow_box_insert (GTK_FLOW_BOX (box), child, prepend ? 0 : -1);
 }
 
+GBytes *
+get_emoji_data (void)
+{
+  GBytes *bytes;
+  const char *lang;
+  char q[10];
+  char *path;
+  GError *error = NULL;
+
+  lang = pango_language_to_string (gtk_get_default_language ());
+  if (strchr (lang, '-'))
+    {
+      int i;
+      for (i = 0; lang[i] != '-' && i < 9; i++)
+        q[i] = lang[i];
+      q[i] = '\0';
+      lang = q;
+    }
+
+  path = g_strconcat ("/org/gtk/libgtk/emoji/", lang, ".data", NULL);
+  bytes = g_resources_lookup_data (path, 0, &error);
+  if (bytes)
+    {
+      g_debug ("Found emoji data for %s in resource %s", lang, path);
+      g_free (path);
+      return bytes;
+    }
+
+  if (g_error_matches (error, G_RESOURCE_ERROR, G_RESOURCE_ERROR_NOT_FOUND))
+    {
+      char *filename;
+      GMappedFile *file;
+
+      g_clear_error (&error);
+
+      filename = g_strconcat ("/usr/share/gtk-4.0/emoji/", lang, ".gresource", NULL);
+      file = g_mapped_file_new (filename, FALSE, NULL);
+
+      if (file)
+        {
+          GBytes *data;
+          GResource *resource;
+
+          data = g_mapped_file_get_bytes (file);
+          g_mapped_file_unref (file);
+
+          resource = g_resource_new_from_data (data, NULL);
+          g_bytes_unref (data);
+
+          g_debug ("Registering resource for Emoji data for %s from file %s", lang, filename);
+          g_resources_register (resource);
+          g_resource_unref (resource);
+
+          bytes = g_resources_lookup_data (path, 0, NULL);
+          if (bytes)
+            {
+              g_debug ("Found emoji data for %s in resource %s", lang, path);
+              g_free (path);
+              g_free (filename);
+              return bytes;
+            }
+        }
+
+      g_free (filename);
+    }
+
+  g_clear_error (&error);
+
+  g_free (path);
+
+  return g_resources_lookup_data ("/org/gtk/libgtk/emoji/en.data", 0, NULL);
+}
+
 static gboolean
 populate_emoji_chooser (gpointer data)
 {
@@ -602,8 +677,11 @@ populate_emoji_chooser (gpointer data)
 
   if (!chooser->data)
     {
-      GBytes *bytes = g_resources_lookup_data ("/org/gtk/libgtk/emoji/emoji.data", 0, NULL);
-      chooser->data = g_variant_ref_sink (g_variant_new_from_bytes (G_VARIANT_TYPE ("a(ausas)"), bytes, TRUE));
+      GBytes *bytes;
+
+      bytes = get_emoji_data ();
+
+      chooser->data = g_variant_ref_sink (g_variant_new_from_bytes (G_VARIANT_TYPE ("a(ausasu)"), bytes, TRUE));
       g_bytes_unref (bytes);
     }
 
@@ -615,25 +693,27 @@ populate_emoji_chooser (gpointer data)
 
   while ((item = g_variant_iter_next_value (chooser->iter)))
     {
-      const char *name;
+      guint group;
 
-      g_variant_get_child (item, 1, "&s", &name);
+      g_variant_get_child (item, 3, "u", &group);
 
-      if (strcmp (name, chooser->body.first) == 0)
+      if (group == chooser->people.group)
+        chooser->box = chooser->people.box;
+      else if (group == chooser->body.group)
         chooser->box = chooser->body.box;
-      else if (strcmp (name, chooser->nature.first) == 0)
+      else if (group == chooser->nature.group)
         chooser->box = chooser->nature.box;
-      else if (strcmp (name, chooser->food.first) == 0)
+      else if (group == chooser->food.group)
         chooser->box = chooser->food.box;
-      else if (strcmp (name, chooser->travel.first) == 0)
+      else if (group == chooser->travel.group)
         chooser->box = chooser->travel.box;
-      else if (strcmp (name, chooser->activities.first) == 0)
+      else if (group == chooser->activities.group)
         chooser->box = chooser->activities.box;
-      else if (strcmp (name, chooser->objects.first) == 0)
+      else if (group == chooser->objects.group)
         chooser->box = chooser->objects.box;
-      else if (strcmp (name, chooser->symbols.first) == 0)
+      else if (group == chooser->symbols.group)
         chooser->box = chooser->symbols.box;
-      else if (strcmp (name, chooser->flags.first) == 0)
+      else if (group == chooser->flags.group)
         chooser->box = chooser->flags.box;
 
       add_emoji (chooser->box, FALSE, item, 0, chooser);
@@ -848,11 +928,11 @@ stop_search (GtkEntry *entry,
 
 static void
 setup_section (GtkEmojiChooser *chooser,
-               EmojiSection   *section,
-               const char     *first,
-               const char     *icon)
+               EmojiSection    *section,
+               int              group,
+               const char      *icon)
 {
-  section->first = first;
+  section->group = group;
 
   gtk_button_set_icon_name (GTK_BUTTON (section->button), icon);
 
@@ -898,16 +978,16 @@ gtk_emoji_chooser_init (GtkEmojiChooser *chooser)
   adj = gtk_scrolled_window_get_vadjustment (GTK_SCROLLED_WINDOW (chooser->scrolled_window));
   g_signal_connect (adj, "value-changed", G_CALLBACK (adj_value_changed), chooser);
 
-  setup_section (chooser, &chooser->recent, NULL, "emoji-recent-symbolic");
-  setup_section (chooser, &chooser->people, "grinning face", "emoji-people-symbolic");
-  setup_section (chooser, &chooser->body, "selfie", "emoji-body-symbolic");
-  setup_section (chooser, &chooser->nature, "monkey face", "emoji-nature-symbolic");
-  setup_section (chooser, &chooser->food, "grapes", "emoji-food-symbolic");
-  setup_section (chooser, &chooser->travel, "globe showing Europe-Africa", "emoji-travel-symbolic");
-  setup_section (chooser, &chooser->activities, "jack-o-lantern", "emoji-activities-symbolic");
-  setup_section (chooser, &chooser->objects, "muted speaker", "emoji-objects-symbolic");
-  setup_section (chooser, &chooser->symbols, "ATM sign", "emoji-symbols-symbolic");
-  setup_section (chooser, &chooser->flags, "chequered flag", "emoji-flags-symbolic");
+  setup_section (chooser, &chooser->recent, -1, "emoji-recent-symbolic");
+  setup_section (chooser, &chooser->people, 0, "emoji-people-symbolic");
+  setup_section (chooser, &chooser->body, 1, "emoji-body-symbolic");
+  setup_section (chooser, &chooser->nature, 3, "emoji-nature-symbolic");
+  setup_section (chooser, &chooser->food, 4, "emoji-food-symbolic");
+  setup_section (chooser, &chooser->travel, 5, "emoji-travel-symbolic");
+  setup_section (chooser, &chooser->activities, 6, "emoji-activities-symbolic");
+  setup_section (chooser, &chooser->objects, 7, "emoji-objects-symbolic");
+  setup_section (chooser, &chooser->symbols, 8, "emoji-symbols-symbolic");
+  setup_section (chooser, &chooser->flags, 9, "emoji-flags-symbolic");
 
   populate_recent_section (chooser);
 

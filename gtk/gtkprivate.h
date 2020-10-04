@@ -126,6 +126,8 @@ void  gtk_set_display_debug_flags (GdkDisplay *display,
 guint gtk_get_display_debug_flags (GdkDisplay *display);
 gboolean gtk_get_any_display_debug_flag_set (void);
 
+GBytes *get_emoji_data (void);
+
 #ifdef G_ENABLE_DEBUG
 
 #define GTK_DISPLAY_DEBUG_CHECK(display,type) (gtk_get_any_display_debug_flag_set () && G_UNLIKELY (gtk_get_display_debug_flags (display) & GTK_DEBUG_##type))

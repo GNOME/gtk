@@ -623,8 +623,8 @@ gtk_emoji_completion_init (GtkEmojiCompletion *completion)
 
   gtk_widget_init_template (GTK_WIDGET (completion));
 
-  bytes = g_resources_lookup_data ("/org/gtk/libgtk/emoji/emoji.data", 0, NULL);
-  completion->data = g_variant_ref_sink (g_variant_new_from_bytes (G_VARIANT_TYPE ("a(ausas)"), bytes, TRUE));
+  bytes = get_emoji_data ();
+  completion->data = g_variant_ref_sink (g_variant_new_from_bytes (G_VARIANT_TYPE ("a(ausasu)"), bytes, TRUE));
 
   g_bytes_unref (bytes);
 
