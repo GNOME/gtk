@@ -684,7 +684,7 @@ gtk_scale_class_init (GtkScaleClass *class)
       g_param_spec_boolean ("draw-value",
                             P_("Draw Value"),
                             P_("Whether the current value is displayed as a string next to the slider"),
-                            TRUE,
+                            FALSE,
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   properties[PROP_HAS_ORIGIN] =
@@ -839,7 +839,6 @@ gtk_scale_init (GtkScale *scale)
 
   _gtk_range_set_has_origin (range, TRUE);
 
-  gtk_scale_set_draw_value (scale, TRUE);
   gtk_range_set_round_digits (range, priv->digits);
 
   gtk_range_set_flippable (range, TRUE);
